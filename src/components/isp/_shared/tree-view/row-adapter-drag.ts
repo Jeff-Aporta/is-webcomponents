@@ -1,15 +1,36 @@
-var __defProp = Object.defineProperty;
-var __defNormalProp = (obj, key, value) => key in obj ? __defProp(obj, key, { enumerable: true, configurable: true, writable: true, value }) : obj[key] = value;
-var __publicField = (obj, key, value) => __defNormalProp(obj, typeof key !== "symbol" ? key + "" : key, value);
 import { TRABase } from "./row-adapter-base.js";
-class TRADrag extends TRABase {
-  constructor() {
-    super(...arguments);
-    __publicField(this, "_lastDragOverKey", "");
-    __publicField(this, "_cachedSummaryRect", null);
-    __publicField(this, "_syncRafId", 0);
-  }
-  requestRowUiSyncRaf() {
+
+/**
+ * Posición relativa al target durante una operación de drag & drop.
+ * Coincide con `DropPosition` en `_types.ts`, redeclarada localmente para no
+ * importar (lock WT-0051).
+ */
+type DragOverPosition = "before" | "after" | "into";
+
+/**
+ * Summary rect cacheado durante un drag activo.
+ */
+interface SummaryRect {
+  top: number;
+  height: number;
+}
+
+/**
+ * TRADrag — extiende TRABase con la lógica de drag & drop (handle, placeholders,
+ * overlay feedback, drop). Mantiene tres caches internos: el último dragOverKey
+ * (para evitar repaint), el rect del summary actual y el RAF id.
+ */
+export class TRADrag extends TRABase {
+  // Estado privado de drag (cache / rAF).
+  _lastDragOverKey = "";
+  _cachedSummaryRect: SummaryRect | null = null;
+  _syncRafId = 0;
+
+  /**
+   * Agenda un sync de UI (forzando `forceRefresh`) en el próximo RAF.
+   * Se cancela implícitamente al programar otro antes de que dispare.
+   */
+  requestRowUiSyncRaf(): void {
     if (this._syncRafId) return;
     this._syncRafId = requestAnimationFrame(() => {
       this._syncRafId = 0;
@@ -17,57 +38,75 @@ class TRADrag extends TRABase {
       this.requestRowUiSync();
     });
   }
-  get shouldFlash() {
+
+  get shouldFlash(): boolean {
     return !!this.flatPath && (this.treeAdapter.flashFlatPaths ?? []).includes(this.flatPath);
   }
-  get shouldFlashError() {
+
+  get shouldFlashError(): boolean {
     return !!this.flatPath && (this.treeAdapter.flashErrorFlatPaths ?? []).includes(this.flatPath);
   }
-  ondragstart(e) {
+
+  ondragstart(e: DragEvent): void {
     try {
       if (!this.isDraggable) {
         e.preventDefault();
         this.treeAdapter.flashRowErrorFlatPaths([this.flatPath]);
         return;
       }
-      e.dataTransfer.effectAllowed = "move";
-      e.dataTransfer.setData("text/plain", this.flatPath);
-      this.treeAdapter.currentDragFlatPath = this.flatPath;
-      const sourceSummary = e.currentTarget.closest?.("summary.trvwr-itm-sum") ?? e.currentTarget;
+      const dt = e.dataTransfer;
+      if (dt) {
+        dt.effectAllowed = "move";
+        dt.setData("text/plain", this.flatPath);
+      }
+      // `currentDragFlatPath` está declarado read-only en TreeAdapterLike para
+      // todos los consumidores excepto este adapter; aquí lo reasignamos vía
+      // cast porque es la única fuente legítima.
+      (this.treeAdapter as { currentDragFlatPath: string }).currentDragFlatPath = this.flatPath;
+
+      const target = e.currentTarget;
+      const sourceSummary = (target instanceof Element ? target.closest("summary.trvwr-itm-sum") : null)
+        ?? (target instanceof HTMLElement ? target : null);
+      if (!sourceSummary) return;
       const sourceHeight = Math.max(24, Math.round(sourceSummary.getBoundingClientRect().height));
-      e.dataTransfer.setData("application/x-trvwr-row-height", String(sourceHeight));
+      if (dt) dt.setData("application/x-trvwr-row-height", String(sourceHeight));
       const details = sourceSummary.closest?.("details.trvwr-itm");
       details?.classList.add("trvwr-itm--dragging");
       this.treeAdapter._domRoot?.classList.add("trvwr--dragging");
-      const label = sourceSummary.querySelector<HTMLElement>(".trvwr-itm-content")?.textContent?.trim() || this.flatPath;
+      const labelEl = sourceSummary.querySelector<HTMLElement>(".trvwr-itm-content");
+      const label = (labelEl?.textContent?.trim() || this.flatPath);
       const ghost = document.createElement("div");
       ghost.textContent = label;
       ghost.style.cssText = "position:absolute;top:-1000px;left:-1000px;padding:0.3rem 0.7rem;border-radius:0.35rem;font:600 13px/1.2 system-ui,sans-serif;background:var(--is-accent,#1976d2);color:#fff;box-shadow:0 4px 12px #0004;white-space:nowrap;pointer-events:none;z-index:99999;";
       document.body.appendChild(ghost);
-      e.dataTransfer.setDragImage(ghost, 16, 14);
+      if (dt) dt.setDragImage(ghost, 16, 14);
       setTimeout(() => ghost.remove(), 50);
     } finally {
       this.requestRowUiSync();
     }
   }
-  ondragend() {
+
+  ondragend(): void {
     this.treeAdapter.clearDragOverlays();
   }
-  onsummarydragenter(e) {
+
+  onsummarydragenter(e: DragEvent): void {
     try {
       if (this.mergedDisabled) return;
-      const rel = e?.relatedTarget;
-      if (rel && e.currentTarget.contains(rel)) return;
+      const rel = e?.relatedTarget as Node | null;
+      const target = e.currentTarget;
+      if (rel && target instanceof Node && target.contains(rel)) return;
       this.dragEnterCount++;
       this._cachedSummaryRect = null;
     } finally {
       this.requestRowUiSync();
     }
   }
-  onsummarydragover(e) {
+
+  onsummarydragover(e: DragEvent): void {
     if (this.mergedDisabled) return;
     e.preventDefault();
-    e.dataTransfer.dropEffect = "move";
+    if (e.dataTransfer) e.dataTransfer.dropEffect = "move";
     const sourceFlatPath = this.treeAdapter.currentDragFlatPath;
     if (sourceFlatPath && sourceFlatPath === this.flatPath) {
       if (this.dragOver === null && !this.dragForbidden && !this.dragPlaceholderHeight) return;
@@ -85,13 +124,15 @@ class TRADrag extends TRABase {
     }
     let rect = this._cachedSummaryRect;
     if (!rect) {
-      const r = e.currentTarget.getBoundingClientRect();
+      const target = e.currentTarget;
+      if (!(target instanceof Element)) return;
+      const r = target.getBoundingClientRect();
       rect = { top: r.top, height: r.height };
       this._cachedSummaryRect = rect;
     }
     const node = this.rowNode;
     const isGrouper = !!node && this.treeAdapter.isGrouper(node);
-    let nextOver;
+    let nextOver: DragOverPosition;
     if (isGrouper) {
       const y = e.clientY - rect.top;
       const topBand = rect.height * 0.25;
@@ -106,13 +147,17 @@ class TRADrag extends TRABase {
     this._lastDragOverKey = key;
     this.treeAdapter.clearOtherDragOverlays(this.flatPath);
     this.dragOver = nextOver;
-    this.dragForbidden = sourceFlatPath ? !this.treeAdapter.canDrop(sourceFlatPath, this.flatPath, nextOver) : false;
+    this.dragForbidden = sourceFlatPath
+      ? !this.treeAdapter.canDrop(sourceFlatPath, this.flatPath, nextOver)
+      : false;
     this.requestRowUiSyncRaf();
   }
-  onsummarydragleave(e) {
+
+  onsummarydragleave(e: DragEvent): void {
     try {
-      const rel = e?.relatedTarget;
-      if (rel && e.currentTarget.contains(rel)) return;
+      const rel = e?.relatedTarget as Node | null;
+      const target = e.currentTarget;
+      if (rel && target instanceof Node && target.contains(rel)) return;
       this.dragEnterCount--;
       if (this.dragEnterCount <= 0) {
         this.dragOver = null;
@@ -126,7 +171,8 @@ class TRADrag extends TRABase {
       this.requestRowUiSync();
     }
   }
-  ondrop(e) {
+
+  ondrop(e: DragEvent): void {
     e.preventDefault();
     const sourceFlatPath = e.dataTransfer?.getData("text/plain") || this.treeAdapter.currentDragFlatPath;
     const wasForbidden = this.dragForbidden;
@@ -134,7 +180,9 @@ class TRADrag extends TRABase {
     this.treeAdapter.clearDragOverlays();
     if (!sourceFlatPath || sourceFlatPath === this.flatPath || this.mergedDisabled || wasForbidden || !pos) {
       if (wasForbidden) {
-        const flatPaths = sourceFlatPath && sourceFlatPath !== this.flatPath ? [sourceFlatPath, this.flatPath] : [this.flatPath];
+        const flatPaths = sourceFlatPath && sourceFlatPath !== this.flatPath
+          ? [sourceFlatPath, this.flatPath]
+          : [this.flatPath];
         this.treeAdapter.flashRowErrorFlatPaths(flatPaths);
       }
       return;
@@ -142,6 +190,3 @@ class TRADrag extends TRABase {
     this.treeAdapter.onrowreorder(sourceFlatPath, this.flatPath, pos);
   }
 }
-export {
-  TRADrag
-};

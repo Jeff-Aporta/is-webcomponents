@@ -28,6 +28,14 @@ import { setStringAttr, setOptionalAttr } from '../_shared/reflect.js';
  * Events: is-change { value }
  */
 
+// Subset tipado de <is-radio> (lo que el grupo necesita saber de cada hijo).
+interface IsRadioElement extends HTMLElement {
+  value: string;
+  checked: boolean;
+  disabled: boolean;
+  syncFromGroup?(): void;
+}
+
 (() => {
   const TEMPLATE = document.createElement('template');
   TEMPLATE.innerHTML = /* html */ `
@@ -58,7 +66,7 @@ import { setStringAttr, setOptionalAttr } from '../_shared/reflect.js';
     static formAssociated = true;
     static get observedAttributes(): string[] { return [...OBSERVED, 'accent']; }
 
-    #internals = null;
+    #internals: ElementInternals | null = null;
     #base!: HTMLElement;
     #labelEl!: HTMLElement;
     #labelSlot!: HTMLSlotElement;
@@ -68,7 +76,7 @@ import { setStringAttr, setOptionalAttr } from '../_shared/reflect.js';
     #errorSlot!: HTMLSlotElement;
     #formDisabled = false;
     #defaultsRead = false;
-    #defaultValue = null;
+    #defaultValue: string | null = null;
 
     constructor() {
       super();
@@ -85,7 +93,7 @@ import { setStringAttr, setOptionalAttr } from '../_shared/reflect.js';
       this.#errorSlot = shadow.querySelector<HTMLSlotElement>('slot[name="error-text"]')!;
       this.#internals = attachFormInternals(this);
 
-      shadow.querySelector<HTMLSlotElement>('.base slot').addEventListener('slotchange', this.#onSlotChange);
+      shadow.querySelector<HTMLSlotElement>('.base slot')!.addEventListener('slotchange', this.#onSlotChange);
       this.#labelSlot.addEventListener('slotchange', this.#syncMeta);
       this.#hintSlot.addEventListener('slotchange', this.#syncMeta);
       this.#errorSlot.addEventListener('slotchange', this.#onErrorSlotChange);
@@ -93,7 +101,7 @@ import { setStringAttr, setOptionalAttr } from '../_shared/reflect.js';
       this.addEventListener('keydown', this.#onKey);
     }
 
-    onConnected() {
+    onConnected(): void {
       if (!this.#defaultsRead) {
         this.#defaultsRead = true;
         this.#defaultValue = this.getAttribute('value');
@@ -102,121 +110,121 @@ import { setStringAttr, setOptionalAttr } from '../_shared/reflect.js';
       this.#sync();
     }
 
-    onAttributeChanged(name: string, oldVal: string | null, newVal: string | null) {
+    onAttributeChanged(name: string, _oldVal: string | null, _newVal: string | null): void {
       if (name === 'label' || name === 'hint' || name === 'error-text') this.#syncMeta();
       if (name !== 'label' && name !== 'hint') this.#sync();
     }
 
-    get value() { return this.getAttribute('value') ?? ''; }
-    set value(v) { setStringAttr(this, 'value', v); }
+    get value(): string { return this.getAttribute('value') ?? ''; }
+    set value(v: string) { setStringAttr(this, 'value', v); }
 
-    get name() { return this.getAttribute('name') ?? ''; }
-    set name(v) { setStringAttr(this, 'name', v); }
+    get name(): string { return this.getAttribute('name') ?? ''; }
+    set name(v: string) { setStringAttr(this, 'name', v); }
 
-    get disabled() { return this.hasAttribute('disabled'); }
-    set disabled(v) { this.toggleAttribute('disabled', !!v); }
+    get disabled(): boolean { return this.hasAttribute('disabled'); }
+    set disabled(v: boolean) { this.toggleAttribute('disabled', !!v); }
 
-    get required() { return this.hasAttribute('required'); }
-    set required(v) { this.toggleAttribute('required', !!v); }
+    get required(): boolean { return this.hasAttribute('required'); }
+    set required(v: boolean) { this.toggleAttribute('required', !!v); }
 
-    get readonly() { return this.hasAttribute('readonly'); }
-    set readonly(v) { this.toggleAttribute('readonly', !!v); }
+    get readonly(): boolean { return this.hasAttribute('readonly'); }
+    set readonly(v: boolean) { this.toggleAttribute('readonly', !!v); }
 
     /** Un mensaje de error implica error aunque no esté el booleano. */
-    get error() { return this.hasAttribute('error') || !!this.errorText || this.#errorEl?.hidden === false; }
-    set error(v) { this.toggleAttribute('error', !!v); }
+    get error(): boolean { return this.hasAttribute('error') || !!this.errorText || this.#errorEl?.hidden === false; }
+    set error(v: boolean) { this.toggleAttribute('error', !!v); }
 
-    get errorText() { return (this.getAttribute('error-text') ?? '').trim(); }
-    set errorText(v) {
+    get errorText(): string { return (this.getAttribute('error-text') ?? '').trim(); }
+    set errorText(v: string | null | undefined) {
       if (v == null || v === '') this.removeAttribute('error-text');
       else this.setAttribute('error-text', String(v));
     }
 
-    get label() { return this.getAttribute('label') ?? ''; }
-    set label(v) { setOptionalAttr(this, 'label', v); }
+    get label(): string { return this.getAttribute('label') ?? ''; }
+    set label(v: string | null | undefined) { setOptionalAttr(this, 'label', v); }
 
-    get hint() { return this.getAttribute('hint') ?? ''; }
-    set hint(v) { setOptionalAttr(this, 'hint', v); }
+    get hint(): string { return this.getAttribute('hint') ?? ''; }
+    set hint(v: string | null | undefined) { setOptionalAttr(this, 'hint', v); }
 
     /** `row` solo decide cuando no hay orientation explícita. */
-    get orientation() {
+    get orientation(): 'horizontal' | 'vertical' {
       const o = this.getAttribute('orientation');
       if (o === 'horizontal' || o === 'vertical') return o;
       return this.hasAttribute('row') ? 'horizontal' : 'vertical';
     }
-    set orientation(v) { this.setAttribute('orientation', v === 'horizontal' ? 'horizontal' : 'vertical'); }
+    set orientation(v: 'horizontal' | 'vertical') { this.setAttribute('orientation', v === 'horizontal' ? 'horizontal' : 'vertical'); }
 
-    get row() { return this.orientation === 'horizontal'; }
-    set row(v) { this.toggleAttribute('row', !!v); }
+    get row(): boolean { return this.orientation === 'horizontal'; }
+    set row(v: boolean) { this.toggleAttribute('row', !!v); }
 
-    get color() {
+    get color(): string {
       const v = this.getAttribute('color');
-      return VARIANTS.includes(v) ? v : 'brand';
+      return VARIANTS.includes(v ?? '') ? (v as string) : 'brand';
     }
-    set color(v) {
+    set color(v: string) {
       if (VARIANTS.includes(v)) this.setAttribute('color', v);
       else this.removeAttribute('color');
     }
 
-    get labelPlacement() {
+    get labelPlacement(): string {
       const v = this.getAttribute('label-placement');
-      return PLACEMENTS.includes(v) ? v : 'end';
+      return PLACEMENTS.includes(v ?? '') ? (v as string) : 'end';
     }
-    set labelPlacement(v) {
+    set labelPlacement(v: string) {
       if (PLACEMENTS.includes(v)) this.setAttribute('label-placement', v);
       else this.removeAttribute('label-placement');
     }
 
-    get radios() { return this.#radios(); }
+    get radios(): IsRadioElement[] { return this.#radios(); }
 
-    get form() { return this.#internals?.form ?? null; }
-    get validity() { return this.#internals?.validity ?? null; }
-    get validationMessage() { return this.#internals?.validationMessage ?? ''; }
+    get form(): HTMLFormElement | null { return this.#internals?.form ?? null; }
+    get validity(): ValidityState | null { return this.#internals?.validity ?? null; }
+    get validationMessage(): string { return this.#internals?.validationMessage ?? ''; }
 
-    checkValidity() { return this.#internals?.checkValidity() ?? true; }
-    reportValidity() { return this.#internals?.reportValidity() ?? true; }
-    setCustomValidity(msg) {
+    checkValidity(): boolean { return this.#internals?.checkValidity() ?? true; }
+    reportValidity(): boolean { return this.#internals?.reportValidity() ?? true; }
+    setCustomValidity(msg: string): void {
       if (msg) setValidity(this.#internals, { customError: true }, msg, this.#base);
       else this.#updateValidity();
     }
 
-    focus(options) {
+    focus(options?: FocusOptions): void {
       const radios = this.#radios();
       const target = radios.find((r) => r.getAttribute('tabindex') === '0') ?? radios.find((r) => !r.disabled);
       target?.focus(options);
     }
 
-    formResetCallback() {
+    formResetCallback(): void {
       if (this.#defaultValue == null) this.removeAttribute('value');
       else this.setAttribute('value', this.#defaultValue);
       this.#sync();
     }
 
-    formDisabledCallback(disabled) {
+    formDisabledCallback(disabled: boolean): void {
       this.#formDisabled = !!disabled;
       this.#sync();
     }
 
-    get #isDisabled() { return this.disabled || this.#formDisabled; }
+    get #isDisabled(): boolean { return this.disabled || this.#formDisabled; }
 
     /** Ni click ni teclado cambian el valor. */
-    get #isInert() { return this.#isDisabled || this.readonly; }
+    get #isInert(): boolean { return this.#isDisabled || this.readonly; }
 
     /** Radios propios: ignora los de un grupo anidado. */
-    #radios() {
-      return [...this.querySelectorAll<HTMLElement>('is-radio')].filter((r) => r.closest('is-radio-group') === this);
+    #radios(): IsRadioElement[] {
+      return [...this.querySelectorAll<HTMLElement>('is-radio')].filter((r) => r.closest('is-radio-group') === this) as IsRadioElement[];
     }
 
     /** Muestra el texto del atributo salvo que el slot homónimo traiga contenido. */
-    #applyMeta(el, slot, text) {
+    #applyMeta(el: HTMLElement, slot: HTMLSlotElement, text: string | null): void {
       const value = (text || '').trim();
       const slotted = slot.assignedNodes({ flatten: true })
-        .some((n) => n.nodeType === 1 || n.textContent.trim());
+        .some((n: Node) => n.nodeType === 1 || !!n.textContent?.trim());
       if (!slotted) slot.textContent = value;
       el.hidden = !value && !slotted;
     }
 
-    #syncMeta = () => {
+    #syncMeta = (): void => {
       const label = this.label;
       this.#applyMeta(this.#labelEl, this.#labelSlot, label);
       this.#applyMeta(this.#hintEl, this.#hintSlot, this.hint);
@@ -227,12 +235,12 @@ import { setStringAttr, setOptionalAttr } from '../_shared/reflect.js';
       if (label) this.#base.setAttribute('aria-label', label);
       else this.#base.removeAttribute('aria-label');
 
-      const described = [!this.#hintEl.hidden && 'hint', !this.#errorEl.hidden && 'error'].filter(Boolean);
+      const described = [!this.#hintEl.hidden && 'hint', !this.#errorEl.hidden && 'error'].filter(Boolean) as string[];
       if (described.length) this.#base.setAttribute('aria-describedby', described.join(' '));
       else this.#base.removeAttribute('aria-describedby');
     };
 
-    #sync() {
+    #sync(): void {
       const disabled = this.#isDisabled;
       this.#base.setAttribute('aria-disabled', String(disabled));
       this.#base.setAttribute('aria-orientation', this.orientation);
@@ -244,15 +252,15 @@ import { setStringAttr, setOptionalAttr } from '../_shared/reflect.js';
       setCustomState(this.#internals, 'error', this.error);
       setCustomState(this.#internals, 'blank', !this.value);
       this.#syncRadios();
-      setFormValue(this.#internals, this.value || null);
+      setFormValue(this.#internals, this.value || null, null);
       this.#updateValidity();
     }
 
     /** Marca el radio del value actual, propaga herencia y reparte el roving tabindex. */
-    #syncRadios() {
+    #syncRadios(): void {
       const radios = this.#radios();
       const value = this.value;
-      let focusable = null;
+      let focusable: IsRadioElement | null = null;
       for (const r of radios) {
         const on = value !== '' && r.value === value;
         if (r.checked !== on) r.checked = on;
@@ -266,7 +274,7 @@ import { setStringAttr, setOptionalAttr } from '../_shared/reflect.js';
       }
     }
 
-    #updateValidity() {
+    #updateValidity(): void {
       if (this.required && !this.value) {
         setValidity(this.#internals, { valueMissing: true }, 'Seleccione una opción', this.#base);
         return;
@@ -274,7 +282,7 @@ import { setStringAttr, setOptionalAttr } from '../_shared/reflect.js';
       clearValidity(this.#internals, this.#base);
     }
 
-    #select(value) {
+    #select(value: string): void {
       if (this.#isInert) return;
       const changed = this.value !== value;
       this.value = value;
@@ -283,35 +291,37 @@ import { setStringAttr, setOptionalAttr } from '../_shared/reflect.js';
     }
 
     /** Mueve foco (y selección, salvo readonly) al radio habilitado vecino, con wrap. */
-    #move(from, delta: number) {
+    #move(from: IsRadioElement, delta: number): void {
       const usable = this.#radios().filter((r) => !r.disabled);
       if (!usable.length) return;
       let idx = usable.indexOf(from);
       if (idx < 0) idx = delta > 0 ? -1 : 0;
       const next = usable[(((idx + delta) % usable.length) + usable.length) % usable.length];
-      this.#focusRadio(next);
+      if (next) this.#focusRadio(next);
     }
 
-    #focusRadio(radio) {
+    #focusRadio(radio: IsRadioElement | undefined): void {
       if (!radio) return;
       this.#select(radio.value);
       radio.focus();
     }
 
-    #onSlotChange = () => { this.#sync(); };
+    #onSlotChange = (): void => { this.#sync(); };
 
-    #onErrorSlotChange = () => { this.#syncMeta(); this.#sync(); };
+    #onErrorSlotChange = (): void => { this.#syncMeta(); this.#sync(); };
 
-    #onRadioSelect = (e: Event) => {
-      const radio = e.target.closest?.('is-radio');
+    #onRadioSelect = (e: Event): void => {
+      const target = e.target as HTMLElement | null;
+      const radio = target?.closest('is-radio') as IsRadioElement | null;
       if (!radio || radio.closest('is-radio-group') !== this) return;
       e.stopPropagation();
       this.#select(radio.value);
     };
 
-    #onKey = (e: KeyboardEvent) => {
+    #onKey = (e: KeyboardEvent): void => {
       if (this.#isDisabled) return;
-      const radio = e.target.closest?.('is-radio');
+      const target = e.target as HTMLElement | null;
+      const radio = target?.closest('is-radio') as IsRadioElement | null;
       if (!radio || radio.closest('is-radio-group') !== this) return;
       if (NEXT_KEYS.includes(e.key)) {
         e.preventDefault();

@@ -1,0 +1,124 @@
+<!doctype html>
+<html lang="es" class="theme-dark" data-theme="dark">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>Demo de <is-dock> · is-webcomponents</title>
+<meta name="description" content="Dock tipo macOS con magnification al pasar el puntero. is-dock-item acepta icon, label, href, active. Eventos is-select." />
+<style>
+  html, body { margin: 0; padding: 0; min-height: 100vh; background: #0c1118; color: #e2e8f0; font-family: ui-sans-serif, system-ui, sans-serif; }
+  body { display: grid; grid-template-rows: auto 1fr auto; min-height: 100vh; }
+  header { padding: 16px 20px; border-bottom: 1px solid rgba(255,255,255,0.1); background: #0f1620; }
+  header h1 { font-size: 16px; font-weight: 700; margin: 0; }
+  header p { font-size: 12px; color: #94a3b8; margin: 4px 0 0 0; }
+  main { padding: 20px; display: grid; gap: 14px; }
+  section { background: #0f1620; border: 1px solid rgba(255,255,255,0.1); border-radius: 8px; padding: 16px; }
+  section h2 { font-size: 11px; text-transform: uppercase; letter-spacing: 0.08em; margin: 0 0 12px 0; color: #94a3b8; }
+  is-dock:not(:defined), is-dock-item:not(:defined) { visibility: hidden; }
+  /* Forzar posición bottom en el dock dentro de cada section para que no se salga del viewport. */
+  section is-dock { display: block; }
+  #log { padding: 10px; font: 11px ui-monospace, Menlo, Consolas, monospace; color: #94a3b8; white-space: pre-wrap; max-height: 160px; overflow: auto; }
+  footer { padding: 12px 20px; border-top: 1px solid rgba(255,255,255,0.1); background: #0f1620; font-size: 11px; color: #94a3b8; }
+  footer code { background: rgba(255,255,255,0.06); padding: 1px 5px; border-radius: 3px; font: 11px ui-monospace, Menlo, Consolas, monospace; }
+</style>
+<script type="module">
+  await import('../../../dist/cdn/layout/dock.min.js');
+  await customElements.whenDefined('is-dock');
+  await customElements.whenDefined('is-dock-item');
+
+  // (1) Dock bottom (default) con 5 items.
+  const dock = document.createElement('is-dock');
+  dock.setAttribute('position', 'bottom');
+  dock.id = 'dock-main';
+  const items = [
+    { label: 'Inicio', icon: 'mdi:home', active: true },
+    { label: 'Buscar', icon: 'mdi:magnify' },
+    { label: 'Mensajes', icon: 'mdi:message-text-outline' },
+    { label: 'Ajustes', icon: 'mdi:cog-outline' },
+    { label: 'Ayuda', icon: 'mdi:help-circle-outline' },
+  ];
+  for (const it of items) {
+    const di = document.createElement('is-dock-item');
+    di.setAttribute('label', it.label);
+    di.setAttribute('icon', it.icon);
+    if (it.active) di.setAttribute('active', '');
+    di.id = `item-${it.label.toLowerCase()}`;
+    dock.appendChild(di);
+  }
+  document.getElementById('host-1').appendChild(dock);
+
+  // (2) Dock top.
+  const dockTop = document.createElement('is-dock');
+  dockTop.setAttribute('position', 'top');
+  dockTop.id = 'dock-top';
+  for (const it of [
+    { label: 'Archivo', icon: 'mdi:file-outline' },
+    { label: 'Editar', icon: 'mdi:pencil-outline' },
+    { label: 'Ver', icon: 'mdi:eye-outline' },
+  ]) {
+    const di = document.createElement('is-dock-item');
+    di.setAttribute('label', it.label);
+    di.setAttribute('icon', it.icon);
+    dockTop.appendChild(di);
+  }
+  document.getElementById('host-2').appendChild(dockTop);
+
+  // (3) Dock con max-scale custom.
+  const dockHigh = document.createElement('is-dock');
+  dockHigh.setAttribute('position', 'bottom');
+  dockHigh.setAttribute('max-scale', '2.4');
+  dockHigh.setAttribute('range', '140');
+  dockHigh.id = 'dock-high';
+  for (const it of [
+    { label: 'A', icon: 'mdi:alpha-a-circle' },
+    { label: 'B', icon: 'mdi:alpha-b-circle' },
+    { label: 'C', icon: 'mdi:alpha-c-circle' },
+  ]) {
+    const di = document.createElement('is-dock-item');
+    di.setAttribute('label', it.label);
+    di.setAttribute('icon', it.icon);
+    dockHigh.appendChild(di);
+  }
+  document.getElementById('host-3').appendChild(dockHigh);
+
+  // (4) Listener global de is-select.
+  const log = document.getElementById('log');
+  const append = (line) => { log.textContent = line + '\n' + log.textContent; };
+  [dock, dockTop, dockHigh].forEach((d) => {
+    d.addEventListener('is-select', (e) => {
+      const it = e.detail?.item;
+      append(`is-select ← ${it?.getAttribute?.('label') ?? '?'} (id=${it?.id ?? '?'})`);
+    });
+  });
+
+  document.documentElement.dataset.dockReady = '1';
+</script>
+</head>
+<body>
+<header>
+  <h1>Demo — <code>&lt;is-dock&gt;</code></h1>
+  <p>Dock tipo macOS: cada <code>is-dock-item</code> se redimensiona según la proximidad del cursor. <code>max-scale</code> y <code>range</code> controlan la magnificación. Evento <code>is-select</code> al click.</p>
+</header>
+<main>
+  <section>
+    <h2>Dock bottom (default)</h2>
+    <div id="host-1" style="height: 100px;"></div>
+  </section>
+  <section>
+    <h2>Dock top</h2>
+    <div id="host-2" style="height: 100px;"></div>
+  </section>
+  <section>
+    <h2>Dock con max-scale=2.4</h2>
+    <div id="host-3" style="height: 120px;"></div>
+  </section>
+  <section>
+    <h2>Eventos is-select</h2>
+    <pre id="log"></pre>
+  </section>
+</main>
+<footer>
+  Estado: <code>customElements.whenDefined('is-dock')</code> y <code>is-dock-item</code> resueltos.
+</footer>
+</body>
+</html>

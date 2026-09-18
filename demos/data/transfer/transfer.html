@@ -1,0 +1,162 @@
+<!doctype html>
+<html lang="es" class="theme-dark" data-theme="dark">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>Demo — <is-transfer> doble lista · is-webcomponents</title>
+<meta name="description" content="Doble lista de selección: mueve elementos entre origen y destino, con buscador, max-target e items deshabilitados." />
+<style>
+  html, body { margin: 0; padding: 0; min-height: 100%; background: #0c1118; color: #e2e8f0; font-family: ui-sans-serif, system-ui, sans-serif; }
+  body { display: grid; grid-template-rows: auto 1fr auto; }
+  header { padding: 16px 20px; border-bottom: 1px solid rgba(255,255,255,0.1); background: #0f1620; }
+  header h1 { font-size: 16px; font-weight: 700; margin: 0; }
+  header p { font-size: 12px; color: #94a3b8; margin: 4px 0 0 0; }
+  main { padding: 20px; display: grid; grid-template-columns: repeat(auto-fit, minmax(420px, 1fr)); gap: 16px; }
+  section { background: #0f1620; border: 1px solid rgba(255,255,255,0.1); border-radius: 8px; padding: 16px; }
+  section h2 { font-size: 11px; text-transform: uppercase; letter-spacing: 0.08em; margin: 0 0 12px 0; color: #94a3b8; }
+  is-transfer { display: block; }
+  is-transfer:not(:defined) { visibility: hidden; }
+  .log { font: 11px ui-monospace, Menlo, Consolas, monospace; background: rgba(0,0,0,0.3); padding: 8px; border-radius: 4px; min-height: 40px; max-height: 120px; overflow: auto; color: #94a3b8; margin-top: 8px; }
+  footer { padding: 12px 20px; border-top: 1px solid rgba(255,255,255,0.1); background: #0f1620; font-size: 11px; color: #94a3b8; }
+  footer code { background: rgba(255,255,255,0.06); padding: 1px 5px; border-radius: 3px; font: 11px ui-monospace, Menlo, Consolas, monospace; }
+</style>
+<script type="module">
+  await import('../../../dist/cdn/data/transfer.min.js');
+  await customElements.whenDefined('is-transfer');
+
+  // Helper: crea un transfer con items declarativos.
+  function buildTransfer({ items, sourceTitle, targetTitle, searchable, maxTarget, withoutButtons, withoutHeadings }) {
+    const t = document.createElement('is-transfer');
+    if (sourceTitle) t.setAttribute('source-title', sourceTitle);
+    if (targetTitle) t.setAttribute('target-title', targetTitle);
+    if (searchable) t.setAttribute('searchable', '');
+    if (maxTarget) t.setAttribute('max-target', String(maxTarget));
+    if (withoutButtons) t.setAttribute('without-buttons', '');
+    if (withoutHeadings) t.setAttribute('without-headings', '');
+    for (const it of items) {
+      const ti = document.createElement('is-transfer-item');
+      ti.setAttribute('value', it.value);
+      if (it.selected) ti.setAttribute('selected', '');
+      if (it.disabled) ti.setAttribute('disabled', '');
+      ti.textContent = it.label;
+      t.appendChild(ti);
+    }
+    return t;
+  }
+
+  // (1) Básico: 6 items, 2 pre-seleccionados.
+  const basicItems = [
+    { value: 'a', label: 'Alpha' },
+    { value: 'b', label: 'Beta', selected: true },
+    { value: 'c', label: 'Gamma' },
+    { value: 'd', label: 'Delta', selected: true },
+    { value: 'e', label: 'Epsilon' },
+    { value: 'f', label: 'Zeta' },
+  ];
+  const basic = buildTransfer({
+    items: basicItems,
+    sourceTitle: 'Disponibles',
+    targetTitle: 'Asignados',
+  });
+  document.getElementById('basic').appendChild(basic);
+
+  // (2) Searchable + max-target=3.
+  const limItems = [
+    { value: 'js', label: 'JavaScript' },
+    { value: 'ts', label: 'TypeScript', selected: true },
+    { value: 'py', label: 'Python' },
+    { value: 'go', label: 'Go', selected: true },
+    { value: 'rs', label: 'Rust' },
+    { value: 'rb', label: 'Ruby', selected: true },
+    { value: 'kt', label: 'Kotlin' },
+  ];
+  const lim = buildTransfer({
+    items: limItems,
+    sourceTitle: 'Lenguajes (origen)',
+    targetTitle: 'Lenguajes (destino)',
+    searchable: true,
+    maxTarget: 3,
+  });
+  document.getElementById('limited').appendChild(lim);
+
+  // (3) Con items deshabilitados.
+  const disItems = [
+    { value: 'admin', label: 'admin (sólo lectura)', disabled: true, selected: true },
+    { value: 'editor', label: 'editor' },
+    { value: 'viewer', label: 'viewer', selected: true },
+    { value: 'guest', label: 'guest' },
+    { value: 'banned', label: 'banned (sólo lectura)', disabled: true },
+  ];
+  const dis = buildTransfer({
+    items: disItems,
+    sourceTitle: 'Roles disponibles',
+    targetTitle: 'Roles asignados',
+  });
+  document.getElementById('disabled').appendChild(dis);
+
+  // (4) Minimal: sin headings, sin botones (sólo click en items).
+  const minItems = [
+    { value: 'x', label: 'X' },
+    { value: 'y', label: 'Y', selected: true },
+    { value: 'z', label: 'Z' },
+  ];
+  const min = buildTransfer({
+    items: minItems,
+    withoutHeadings: true,
+    withoutButtons: true,
+  });
+  document.getElementById('minimal').appendChild(min);
+
+  // (5) Event logging: nos suscribimos a is-transfer-change para exponer
+  // el cambio en el log visible (útil para tests visuales).
+  function attachLog(transfer, logEl) {
+    transfer.addEventListener('is-transfer-change', (e) => {
+      const { item, source, target, values } = e.detail || {};
+      const value = item?.getAttribute?.('value');
+      const line = `change: value="${value}" source=${source} target=${target} values=${JSON.stringify(values)}`;
+      logEl.textContent = `${line}\n${logEl.textContent || ''}`.slice(0, 800);
+      // Exponer el último estado en dataset para tests deterministas.
+      logEl.dataset.lastValues = JSON.stringify(values || []);
+      logEl.dataset.lastCount = String((values || []).length);
+    });
+  }
+  attachLog(basic, document.getElementById('log-basic'));
+  attachLog(lim, document.getElementById('log-limited'));
+  attachLog(dis, document.getElementById('log-disabled'));
+  attachLog(min, document.getElementById('log-minimal'));
+
+  document.documentElement.dataset.transferReady = '1';
+</script>
+</head>
+<body>
+<header>
+  <h1>Demo — <code>&lt;is-transfer&gt;</code> doble lista</h1>
+  <p>Selecciona con doble-click en items o usa los botones centrales. Soporta buscador, <code>max-target</code> e items deshabilitados.</p>
+</header>
+<main>
+  <section>
+    <h2>Básico</h2>
+    <div id="basic"></div>
+    <div class="log" id="log-basic"></div>
+  </section>
+  <section>
+    <h2>Searchable + max-target=3</h2>
+    <div id="limited"></div>
+    <div class="log" id="log-limited"></div>
+  </section>
+  <section>
+    <h2>Items deshabilitados</h2>
+    <div id="disabled"></div>
+    <div class="log" id="log-disabled"></div>
+  </section>
+  <section>
+    <h2>Sin headings, sin botones (sólo click)</h2>
+    <div id="minimal"></div>
+    <div class="log" id="log-minimal"></div>
+  </section>
+</main>
+<footer>
+  Eventos: <code>is-transfer-change</code> con detalle <code>{ item, source, target, values }</code>.
+</footer>
+</body>
+</html>

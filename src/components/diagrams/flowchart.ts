@@ -1,13 +1,24 @@
 import { adoptCss, defineElement, emit, emitCancelable } from '../../core/element.js';
 import { DiagramElementBase } from '../_shared/diagram-element-base.js';
 import { resolveFlowchartSpec, computeFlowchartLayout, shapePath } from './flowchart-spec.js';
+import type {
+  FlowLayout,
+  FlowLayoutNode,
+  FlowLayoutEdge,
+  FlowLayoutOverrides,
+  FlowResolvedSpec,
+  FlowNodeSpec,
+} from './flowchart-spec.js';
 import { sequenceThemeDark, sequenceThemeLight } from './sequence-spec.js';
 import { SequenceTurtle } from './sequence-turtle.js';
+import type { PathTurtle } from '../_shared/path-turtle.js';
 import { tkHueToHex } from '../_shared/tk-hue.js';
 import { edgeStrokeHex, edgeChipFill, edgeChipText } from '../_shared/diagram-edge-style.js';
+import type { DiagramTheme } from './diagram-types.js';
 import { inlineMdWeb } from '../_shared/tk-inline-md.js';
 import { svgIconGroup } from '../_shared/tk-icon-inline.js';
 import { wrapText, buildTspans } from '../_shared/diagram-text-wrap.js';
+import type { TSpanSpec } from '../_shared/diagram-text-wrap.js';
 import { registerDiagramKind } from './diagram-kinds.js';
 import { svgEl } from '../_shared/svg-chart-engine.js';
 import { svgArrowHead } from '../_shared/diagram-arrow.js';
@@ -20,6 +31,7 @@ import {
   snap as snapToGrid,
   openInlineEditor,
 } from '../_shared/diagram-edit.js';
+import type { DiagramOverrides } from '../_shared/diagram-edit.js';
 /**
  * <is-flowchart> — diagrama de flujo en SVG, sin Mermaid.
  *
@@ -43,12 +55,34 @@ import {
 const SVG_NS = 'http://www.w3.org/2000/svg';
 
 /** Tokens de `animation` conocidos (otros se ignoran para no romper). */
-const VALID_ANIMATION = new Set(['flow']);
+const VALID_ANIMATION: Set<string> = new Set(['flow']);
 
-function parseAnimationTokens(raw) {
-  const out = [];
-  const seen = new Set();
-  for (const t of String(raw || '').trim().split(/\s+/)) {
+/** Estado del callback `onState` del motor de tortuga (path-turtle). */
+interface TurtleState {
+  playing: boolean;
+  idx: number;
+  total: number;
+  replay: number;
+}
+
+/** Nodo cacheado en el SVG para aplicar hover sin reconstruir el DOM. */
+interface NodeNodeEntry {
+  n: FlowLayoutNode;
+  g: SVGGElement;
+  box: SVGPathElement;
+}
+
+/** Arista cacheada en el SVG para aplicar hover sin reconstruir el DOM. */
+interface EdgeNodeEntry {
+  e: FlowLayoutEdge;
+  g: SVGGElement;
+  path: SVGPathElement;
+}
+
+function parseAnimationTokens(raw: string | null | undefined): string[] {
+  const out: string[] = [];
+  const seen = new Set<string>();
+  for (const t of String(raw ?? '').trim().split(/\s+/)) {
     if (!t || !VALID_ANIMATION.has(t) || seen.has(t)) continue;
     seen.add(t);
     out.push(t);
@@ -61,14 +95,14 @@ class IsFlowchart extends DiagramElementBase {
     return [...DiagramElementBase.observedAttributes, 'mode', 'persist', 'storage-key', 'animation'];
   }
 
-  #theme = null;
-  #turtle = null;
-  #hiddenGroups = new Set();
-  #nodeNodes = new Map();
-  #edgeNodes = new Map();
-  #hoverId = null;
-  #overrides = null;
-  #dragDetach = null;
+  #theme: DiagramTheme | null = null;
+  #turtle: PathTurtle | null = null;
+  #hiddenGroups: Set<string> = new Set<string>();
+  #nodeNodes: Map<string, NodeNodeEntry> = new Map();
+  #edgeNodes: Map<string, EdgeNodeEntry> = new Map();
+  #hoverId: string | null = null;
+  #overrides: FlowLayoutOverrides | null = null;
+  #dragDetach: (() => void) | null = null;
 
   constructor() {
     super();
@@ -76,55 +110,58 @@ class IsFlowchart extends DiagramElementBase {
     adoptCss(this.shadowRoot!, import.meta.url);
   }
 
-  onDiagramConnected() {
-    this.#overrides = loadOverrides(this, this.getAttribute('storage-key')) || { nodes: {}, edges: {} };
-    this.wrap.addEventListener('mousemove', this.#onMouseMove);
-    this.wrap.addEventListener('mouseleave', this.#onMouseLeave);
-    this.wrap.addEventListener('click', this.#onClick);
+  onDiagramConnected(): void {
+    this.#overrides = loadOverrides(this, this.getAttribute('storage-key') ?? '') || { nodes: {}, edges: {} };
+    this.wrap.addEventListener('mousemove', this.#onMouseMove as EventListener);
+    this.wrap.addEventListener('mouseleave', this.#onMouseLeave as EventListener);
+    this.wrap.addEventListener('click', this.#onClick as EventListener);
   }
 
-  onDiagramDisconnected() {
+  onDiagramDisconnected(): void {
     this.#turtle?.destroy();
     this.#turtle = null;
-    this.wrap.removeEventListener('mousemove', this.#onMouseMove);
-    this.wrap.removeEventListener('mouseleave', this.#onMouseLeave);
-    this.wrap.removeEventListener('click', this.#onClick);
+    this.wrap.removeEventListener('mousemove', this.#onMouseMove as EventListener);
+    this.wrap.removeEventListener('mouseleave', this.#onMouseLeave as EventListener);
+    this.wrap.removeEventListener('click', this.#onClick as EventListener);
   }
 
-  onPayloadChanged() { this.#hiddenGroups = new Set(); }
+  onPayloadChanged(): void { this.#hiddenGroups = new Set(); }
 
-  get mode() { return this.getAttribute('mode') || 'read'; }
-  set mode(v) { this.setAttribute('mode', v); }
-  get overrides() { return this.#overrides; }
-  set overrides(v) { this.#overrides = v || { nodes: {}, edges: {} }; this.queueRender(); }
+  get mode(): string { return this.getAttribute('mode') || 'read'; }
+  set mode(v: string) { this.setAttribute('mode', v); }
+  get overrides(): FlowLayoutOverrides | null { return this.#overrides; }
+  set overrides(v: FlowLayoutOverrides | null) {
+    this.#overrides = v || { nodes: {}, edges: {} };
+    this.queueRender();
+  }
 
   /**
    * Tokens de animación activos (`flow`, …). Ausente / vacío = sin animación.
    * Espacio-separados para sumar efectos futuros: `animation="flow pulse"`.
    */
-  get animation() {
+  get animation(): string {
     return parseAnimationTokens(this.getAttribute('animation')).join(' ');
   }
-  set animation(v) {
+  set animation(v: string) {
     const next = parseAnimationTokens(v).join(' ');
     if (next) this.setAttribute('animation', next);
     else this.removeAttribute('animation');
   }
 
   /** @param {string} token */
-  hasAnimation(token) {
+  hasAnimation(token: string): boolean {
     return parseAnimationTokens(this.getAttribute('animation')).includes(token);
   }
 
-  get turtle() { return this.#turtle; }
-  get hiddenGroups() { return this.#hiddenGroups; }
-  set hiddenGroups(v) {
-    this.#hiddenGroups = v instanceof Set ? v : new Set(v || []);
+  get turtle(): PathTurtle | null { return this.#turtle; }
+  get hiddenGroups(): Set<string> { return this.#hiddenGroups; }
+  set hiddenGroups(v: Set<string> | Iterable<string> | null | undefined) {
+    this.#hiddenGroups = v instanceof Set ? v : new Set(v ?? []);
     this.queueRender();
   }
 
-  renderDiagram() {
-    const spec = resolveFlowchartSpec(this.payload ?? {});
+  renderDiagram(): void {
+    const spec: FlowResolvedSpec | null = resolveFlowchartSpec(this.payload ?? {});
     this.spec = spec;
     if (!spec) {
       this.svg.innerHTML = '';
@@ -135,9 +172,9 @@ class IsFlowchart extends DiagramElementBase {
 
     // Ocultar un grupo quita sus nodos y las aristas que los tocan.
     const hidden = this.#hiddenGroups;
-    let visible = spec;
+    let visible: FlowResolvedSpec = spec;
     if (hidden.size) {
-      const nodes = spec.nodes.filter((n) => !n.group || !hidden.has(n.group));
+      const nodes: FlowNodeSpec[] = spec.nodes.filter((n) => !n.group || !hidden.has(n.group));
       const keep = new Set(nodes.map((n) => n.id));
       visible = { ...spec, nodes, edges: spec.edges.filter((e) => keep.has(e.from) && keep.has(e.to)) };
     }
@@ -148,11 +185,11 @@ class IsFlowchart extends DiagramElementBase {
     }
 
     const dark = this.isDarkTheme;
-    const theme = dark ? sequenceThemeDark() : sequenceThemeLight();
+    const theme: DiagramTheme = dark ? sequenceThemeDark() : sequenceThemeLight();
     this.#theme = theme;
     this.syncThemeAttr();
 
-    const layout = computeFlowchartLayout(visible, this.#overrides);
+    const layout: FlowLayout = computeFlowchartLayout(visible, this.#overrides);
     this.layout = layout;
     this.#buildSvg(layout, theme);
     this.wrap.classList.toggle('is-viewer', this.isViewer);
@@ -160,7 +197,7 @@ class IsFlowchart extends DiagramElementBase {
     if (this.mode === 'edit') this.#installEditInteractions();
   }
 
-  #buildSvg(layout, theme) {
+  #buildSvg(layout: FlowLayout, theme: DiagramTheme): void {
     const { width: W, height: H } = layout;
     this.svg.setAttribute('viewBox', `0 0 ${W} ${H}`);
     this.svg.setAttribute('preserveAspectRatio', 'xMidYMid meet');
@@ -195,25 +232,26 @@ class IsFlowchart extends DiagramElementBase {
     const turtleGroup = svgEl('g');
     this.svg.appendChild(turtleGroup);
     this.#turtle?.destroy();
-    this.#turtle = new SequenceTurtle(turtleGroup);
+    this.#turtle = new SequenceTurtle(turtleGroup as unknown as HTMLElement);
     // La tortuga recorre las aristas en orden; reutiliza el motor del secuencia.
     this.#turtle.setData({
       messages: layout.edges.map((e, i: number) => ({
         path: e.path, step: i + 1, log: e.label || '', groupHue: e.hue,
       })),
-      theme,
+      theme: theme as unknown as { accent: string; [key: string]: unknown },
       viewW: W,
       viewH: H,
       autoLoop: this.isViewer,
-      onState: (state) => emit(this, 'is-turtle-state', state),
+      onState: (state: TurtleState) => emit(this, 'is-turtle-state', state),
     });
 
     emit(this, 'is-render', { layout, svg: this.svg });
   }
 
-  #buildLegend(layout, theme) {
+  #buildLegend(layout: FlowLayout, theme: DiagramTheme): void {
     const g = svgEl('g', { class: 'flow-legend' });
-    layout.groups.forEach((grp, gi: number) => {
+    const groups = layout.groups ?? [];
+    groups.forEach((grp, gi: number) => {
       const ly = (layout.subtitleY || layout.titleY || 22) + 18 + gi * 16;
       const color = tkHueToHex(grp.hue) ?? theme.accent;
       const off = this.#hiddenGroups.has(grp.id);
@@ -240,7 +278,7 @@ class IsFlowchart extends DiagramElementBase {
     this.svg.appendChild(g);
   }
 
-  #buildEdges(layout, theme) {
+  #buildEdges(layout: FlowLayout, theme: DiagramTheme): void {
     const flowAnim = this.hasAnimation('flow');
     for (const e of layout.edges) {
       const color = edgeStrokeHex(e.hue, theme.accent);
@@ -271,18 +309,26 @@ class IsFlowchart extends DiagramElementBase {
 
       // Punta orientada por el último tramo REAL del path (no por el lado de
       // entrada planificado, que el router puede no respetar).
-      g.appendChild(svgArrowHead({
+      // Cast: svgArrowHead tiene firma heredada con `any`; añadimos la clase
+      // CSS al resultado en vez de pasarla por el parámetro tipado a null.
+      const head = (svgArrowHead as unknown as (opts: {
+        d: string; tip: { x: number; y: number }; color: string;
+        len?: number; halfWidth?: number;
+      }) => SVGElement)({
         d: e.path,
         tip: { x: e.arrowTipX, y: e.arrowTipY },
         color,
         len: 8,
         halfWidth: 4,
-        className: 'flow-edge__head',
-      }));
+      });
+      head.classList.add('flow-edge__head');
+      g.appendChild(head);
 
       if (e.label) {
         const pad = 4;
-        const w = e.labelW ?? (e.label.length * 5.6 + pad * 2);
+        // `labelW` no está declarado en FlowLayoutEdge; el spec lo añade
+        // opcionalmente en runtime. Cast para preservar comportamiento.
+        const w = (e as { labelW?: number }).labelW ?? (e.label.length * 5.6 + pad * 2);
         g.appendChild(svgEl('rect', {
           x: e.labelX - w / 2, y: e.labelY - 8, width: w, height: 16, rx: 4,
           fill: edgeChipFill(e.hue), class: 'flow-edge__chip',
@@ -296,11 +342,11 @@ class IsFlowchart extends DiagramElementBase {
       }
 
       this.svg.appendChild(g);
-      this.#edgeNodes.set(e.id, { e, g, path });
+      this.#edgeNodes.set(e.id, { e, g: g as SVGGElement, path: path as SVGPathElement });
     }
   }
 
-  #buildNodes(layout, theme) {
+  #buildNodes(layout: FlowLayout, theme: DiagramTheme): void {
     for (const n of layout.nodes) {
       const color = (n.hue != null && tkHueToHex(n.hue)) || theme.accent;
       const g = svgEl('g', { class: 'flow-node' });
@@ -323,7 +369,7 @@ class IsFlowchart extends DiagramElementBase {
       const textRight = n.x + n.w - 10;
 
       if (hasIcon) {
-        g.appendChild(svgIconGroup(n.icon, {
+        g.appendChild(svgIconGroup(n.icon ?? '', {
           x: n.x + 8, y: n.y + n.h / 2 - 8, size: 16, hue: n.hue,
         }));
       }
@@ -346,15 +392,19 @@ class IsFlowchart extends DiagramElementBase {
         g.appendChild(fo);
       } else {
         // Wrap con el helper compartido: respeta `n.overflow` (grow/ellipsis).
+        // `overflow` no está declarado en FlowLayoutNode; cast para leer.
+        const rawOverflow = (n as { overflow?: string }).overflow;
+        const overflow: 'grow' | 'ellipsis' =
+          (rawOverflow === 'grow' || rawOverflow === 'ellipsis') ? rawOverflow : 'grow';
         const result = wrapText({
           text: n.label,
           maxWidth: Math.max(textRight - textLeft, 8),
           maxHeight: n.h,
           fontSize: 11,
           fontFamily: 'Tahoma,Arial,sans-serif',
-          overflow: n.overflow ?? 'grow',
+          overflow,
         });
-        const tspans = buildTspans(
+        const tspans: TSpanSpec[] = buildTspans(
           result.lines,
           n.x, n.y, n.w, n.h,
           'middle', 11, 1.2,
@@ -375,27 +425,30 @@ class IsFlowchart extends DiagramElementBase {
       }
 
       this.svg.appendChild(g);
-      this.#nodeNodes.set(n.id, { n, g, box });
+      this.#nodeNodes.set(n.id, { n, g: g as SVGGElement, box: box as SVGPathElement });
     }
   }
 
   /* ── hover ── */
 
-  #onClick = (e: PointerEvent) => {
+  #onClick = (e: PointerEvent): void => {
     // Modo edición: doble click en nodo → editor inline.
     if (this.mode === 'edit') {
-      const nodeEl = e.composedPath().find((x) => x?.dataset?.nodeId);
+      const nodeEl = e.composedPath().find((x: EventTarget | null) => (x as HTMLElement | undefined)?.dataset?.nodeId);
       if (nodeEl && e.detail === 2) {
         e.preventDefault();
-        const entry = this.#nodeNodes.get(nodeEl.dataset.nodeId);
-        if (entry) this.#openEditorForNode(entry.n);
+        const nodeId = (nodeEl as HTMLElement).dataset.nodeId;
+        if (nodeId) {
+          const entry = this.#nodeNodes.get(nodeId);
+          if (entry) this.#openEditorForNode(entry.n);
+        }
       }
       return;
     }
     if (this.isViewer) {
-      const item = e.composedPath().find((x) => x?.dataset?.groupId);
+      const item = e.composedPath().find((x: EventTarget | null) => (x as HTMLElement | undefined)?.dataset?.groupId);
       if (item) {
-        emitCancelable(this, 'is-toggle-group', { id: item.dataset.groupId });
+        emitCancelable(this, 'is-toggle-group', { id: (item as HTMLElement).dataset.groupId });
       }
       return;
     }
@@ -411,15 +464,24 @@ class IsFlowchart extends DiagramElementBase {
 
   /* ── edit mode: drag de nodos + editor inline ── */
 
-  #installEditInteractions() {
+  #installEditInteractions(): void {
     this.#dragDetach?.();
     this.#dragDetach = null;
-    for (const { g, n } of this.#nodeNodes.values()) {
+    if (!this.#overrides) this.#overrides = { nodes: {}, edges: {} };
+    for (const entry of this.#nodeNodes.values()) {
+      const { g, n } = entry;
       g.style.cursor = 'grab';
-      const entry = this.#nodeNodes.get(g.dataset.nodeId);
-      const detach = attachNodeDrag(
-        g,
-        (dx, dy) => {
+      const nodeId = g.dataset.nodeId;
+      if (!nodeId) continue;
+      // Cast a HTMLElement: attachNodeDrag viene de `_shared/diagram-edit.js`
+      // con tipos heredados `any`; la SVGGElement es estructuralmente válida.
+      const detach = (attachNodeDrag as unknown as (
+        el: HTMLElement,
+        onMove: (dx: number, dy: number) => void,
+        onEnd: () => void,
+      ) => () => void)(
+        g as unknown as HTMLElement,
+        (dx: number, dy: number) => {
           // Preview: trasladamos el grupo en SVG coords. Como el viewBox
           // está en SVG coords (1:1 con layout interno), usamos dx/dy tal
           // cual. Si el SVG está escalado por CSS, la sensación es que el
@@ -432,38 +494,49 @@ class IsFlowchart extends DiagramElementBase {
           const cur = entry.n;
           cur.x = snapToGrid(cur.x);
           cur.y = snapToGrid(cur.y);
-          this.#overrides.nodes[cur.id] ??= {};
-          this.#overrides.nodes[cur.id].x = cur.x;
-          this.#overrides.nodes[cur.id].y = cur.y;
-          saveOverrides(this, this.getAttribute('storage-key'), this.#overrides);
+          if (!this.#overrides!.nodes) this.#overrides!.nodes = {};
+          this.#overrides!.nodes![cur.id] ??= {};
+          this.#overrides!.nodes![cur.id].x = cur.x;
+          this.#overrides!.nodes![cur.id].y = cur.y;
+          saveOverrides(this, this.getAttribute('storage-key') ?? '', (this.#overrides ?? {}) as DiagramOverrides);
           emitLayoutChange(this, { nodeId: cur.id, x: cur.x, y: cur.y, overrides: this.#overrides });
           this.queueRender();
         },
       );
       this.#dragDetach = detach;
+      // n referencia no usada en esta rama; solo tipa para evitar unused-var.
+      void n;
     }
   }
 
-  #openEditorForNode(node) {
+  #openEditorForNode(node: FlowLayoutNode): void {
     const rect = this.getBoundingClientRect();
-    openInlineEditor({
+    // Cast: openInlineEditor viene de `_shared/diagram-edit.js` con tipos
+    // heredados `any`. Pasamos nuestro objeto tipado.
+    (openInlineEditor as unknown as (opts: {
+      anchor: { x: number; y: number };
+      initial: { label?: string; hue?: number };
+      onSave: (v: { label: string; hue: number }) => void;
+    }) => void)({
       anchor: { x: rect.left + node.x, y: rect.top + node.y - 36 },
       initial: { label: node.label, hue: node.hue },
-      onSave: ({ label, hue }) => {
+      onSave: ({ label, hue }: { label: string; hue: number }) => {
+        if (!this.#overrides) this.#overrides = { nodes: {}, edges: {} };
+        if (!this.#overrides.nodes) this.#overrides.nodes = {};
         if (!this.#overrides.nodes[node.id]) this.#overrides.nodes[node.id] = {};
         if (label) this.#overrides.nodes[node.id].label = label;
         if (Number.isFinite(hue)) this.#overrides.nodes[node.id].hue = hue;
-        saveOverrides(this, this.getAttribute('storage-key'), this.#overrides);
+        saveOverrides(this, this.getAttribute('storage-key') ?? '', this.#overrides);
         emitLayoutChange(this, { nodeId: node.id, overrides: this.#overrides });
         this.queueRender();
       },
     });
   }
 
-  #onMouseMove = (e: PointerEvent) => {
+  #onMouseMove = (e: PointerEvent): void => {
     if (!this.isViewer) return;
-    const g = e.composedPath().find((n) => n?.dataset?.nodeId);
-    const id = g?.dataset.nodeId ?? null;
+    const g = e.composedPath().find((n: EventTarget | null) => (n as HTMLElement | undefined)?.dataset?.nodeId);
+    const id: string | null = (g as HTMLElement | undefined)?.dataset.nodeId ?? null;
     if (id !== this.#hoverId) this.#applyHover(id);
     if (id) {
       const rect = this.wrap.getBoundingClientRect();
@@ -473,12 +546,12 @@ class IsFlowchart extends DiagramElementBase {
     }
   };
 
-  #onMouseLeave = () => {
+  #onMouseLeave = (_e: MouseEvent): void => {
     if (!this.isViewer) return;
     this.#applyHover(null);
   };
 
-  #applyHover(id) {
+  #applyHover(id: string | null): void {
     this.#hoverId = id;
     const entry = id ? this.#nodeNodes.get(id) : null;
 
@@ -487,7 +560,7 @@ class IsFlowchart extends DiagramElementBase {
       const active = nodeId === id;
       node.g.classList.toggle('is-active', active);
       node.g.classList.toggle('is-dim', !!id && !active);
-      node.box.setAttribute('stroke-width', active ? 2.1 : 1.3);
+      node.box.setAttribute('stroke-width', String(active ? 2.1 : 1.3));
     }
     for (const [, edge] of this.#edgeNodes) {
       const touches = !!id && (edge.e.from === id || edge.e.to === id);

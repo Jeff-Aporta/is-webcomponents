@@ -1,0 +1,114 @@
+<!doctype html>
+<html lang="es" class="theme-dark" data-theme="dark">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>Paleta de comandos de <is-command-palette> · is-webcomponents</title>
+<meta name="description" content="Paleta modal al estilo Cmd+K / Ctrl+K con búsqueda difusa, atajos de teclado y cierre por Escape." />
+<style>
+  html, body { margin: 0; padding: 0; height: 100%; background: #0c1118; color: #e2e8f0; font-family: ui-sans-serif, system-ui, sans-serif; }
+  body { display: grid; grid-template-rows: auto 1fr; }
+  header {
+    padding: 16px 20px; border-bottom: 1px solid rgba(255,255,255,0.1);
+    display: flex; align-items: center; gap: 14px; background: #0f1620;
+  }
+  header h1 { font-size: 16px; font-weight: 700; margin: 0; }
+  header p { font-size: 12px; color: #94a3b8; margin: 0; }
+  header .spacer { flex: 1; }
+  header code { background: rgba(255,255,255,0.06); padding: 2px 6px; border-radius: 4px; font: 12px ui-monospace, Menlo, Consolas, monospace; }
+  main { display: grid; place-items: stretch; min-height: 0; padding: 12px; }
+  main .hero {
+    background: #0f1620; border: 1px dashed var(--is-border, rgba(255,255,255,0.1));
+    border-radius: var(--is-radius, 8px);
+    display: grid; place-items: center; text-align: center; padding: 1rem;
+  }
+  main .hero h3 { margin: 0; font-size: 1.4rem; }
+  main .hero p { color: #94a3b8; margin: .35rem 0 0; }
+  main .hero kbd {
+    font: 12px ui-monospace, Menlo, Consolas, monospace;
+    padding: .15rem .5rem; border-radius: 6px;
+    border: 1px solid rgba(255,255,255,0.18); background: rgba(255,255,255,0.06);
+  }
+  .trigger-btn {
+    margin-top: .85rem;
+    font: inherit; padding: .55rem 1rem; border-radius: 999px;
+    border: 1px solid rgba(255,255,255,0.18);
+    background: rgba(255,255,255,0.04); color: inherit; cursor: pointer;
+  }
+  .trigger-btn:hover { border-color: var(--is-accent, #38bdf8); color: var(--is-accent, #38bdf8); }
+  /* Anti-FOUC */
+  is-command-palette:not(:defined) { visibility: hidden; }
+</style>
+<script type="module">
+  // Cargar solo los tags que necesitamos, desde los bundles pre-construidos en
+  // dist/cdn/. Esto hace funcionar los demos con cualquier servidor estático
+  // (incluido VS Code Live Server), no solo con el dev server que transpila TS.
+  await import('../../../dist/cdn/overlays/command-palette.min.js');
+  await customElements.whenDefined('is-command-palette');
+
+  // Comandos declarados como JSON hijo (script[ type="application/json" ]).
+  // El componente los parsea al montarse y los expone como `palette.commands`.
+  const palette = document.createElement('is-command-palette');
+  palette.setAttribute('placeholder', 'Buscar comando…');
+  palette.setAttribute('empty-text', 'Sin coincidencias');
+  palette.setAttribute('max-results', '8');
+  // Footer opcional vía slot.
+  const footer = document.createElement('span');
+  footer.setAttribute('slot', 'footer');
+  footer.textContent = 'Insoft Studio · v1';
+  palette.appendChild(footer);
+  palette.appendChild(Object.assign(document.createElement('script'), {
+    type: 'application/json',
+    textContent: JSON.stringify([
+        { id: 'new',         title: 'Nuevo documento',  group: 'Archivo', icon: 'mdi:file-plus-outline',   hint: 'Crear archivo en blanco',         keys: ['Ctrl', 'N'], keywords: ['crear', 'blank'] },
+        { id: 'open',        title: 'Abrir…',           group: 'Archivo', icon: 'mdi:folder-open-outline',  hint: 'Abrir archivo existente',         keys: ['Ctrl', 'O'] },
+        { id: 'save',        title: 'Guardar',          group: 'Archivo', icon: 'mdi:content-save-outline',  hint: 'Guardar el archivo actual',       keys: ['Ctrl', 'S'] },
+        { id: 'export-pdf',  title: 'Exportar PDF',     group: 'Archivo', icon: 'mdi:file-pdf-box',         hint: 'PDF listo para enviar' },
+        { id: 'duplicate',   title: 'Duplicar',         group: 'Edición', icon: 'mdi:content-duplicate',    hint: 'Clonar y abrir nueva pestaña',    keys: ['Ctrl', 'D'] },
+        { id: 'rename',      title: 'Renombrar',        group: 'Edición', icon: 'mdi:rename-box',          hint: 'Cambiar el nombre del archivo',   keys: ['F2'] },
+        { id: 'find',        title: 'Buscar en archivo',group: 'Edición', icon: 'mdi:magnify',             hint: 'Abre el editor de búsqueda',     keys: ['Ctrl', 'F'] },
+        { id: 'preferences', title: 'Preferencias',     group: 'Configuración', icon: 'mdi:cog-outline',   hint: 'Ajustes del espacio de trabajo',  keys: ['Ctrl', ','] },
+        { id: 'theme',       title: 'Cambiar tema',     group: 'Configuración', icon: 'mdi:theme-light-dark', hint: 'Alternar claro / oscuro',         keys: ['Ctrl', 'Shift', 'L'] },
+        { id: 'docs',        title: 'Documentación',    group: 'Ayuda',   icon: 'mdi:book-open-page-variant-outline', hint: 'Abrir el manual en otra pestaña', keywords: ['docs', 'manual'] },
+        { id: 'shortcuts',   title: 'Atajos de teclado',group: 'Ayuda',   icon: 'mdi:keyboard-outline',    hint: 'Ver lista completa de atajos',    keys: ['Ctrl', 'K', 'S'] },
+      ]),
+  }));
+
+  // Botón "Abrir paleta" además del hotkey Ctrl/Cmd+K.
+  const openBtn = document.getElementById('openBtn');
+  openBtn.addEventListener('click', () => palette.open());
+
+  // Logging de eventos (útil en tests para verificar select/show/hide).
+  const log = document.getElementById('log');
+  const append = (line) => { log.textContent = line + '\n' + log.textContent; };
+  palette.addEventListener('is-show', () => append('[is-show]'));
+  palette.addEventListener('is-after-show', () => append('[is-after-show]'));
+  palette.addEventListener('is-hide', () => append('[is-hide]'));
+  palette.addEventListener('is-after-hide', () => append('[is-after-hide]'));
+  palette.addEventListener('is-select', (e) => append(`[is-select] id=${e.detail.id}`));
+
+  document.querySelector('main .hero').appendChild(palette);
+  document.documentElement.dataset.commandPaletteReady = '1';
+</script>
+</head>
+<body>
+<header>
+  <div>
+    <h1>Paleta de comandos — <code>&lt;is-command-palette&gt;</code></h1>
+    <p>Pulsa <code>Ctrl</code>+<code>K</code> (o <code>⌘</code>+<code>K</code>) para abrir · <code>↑</code>/<code>↓</code> navega · <code>↵</code> ejecuta · <code>Esc</code> cierra</p>
+  </div>
+  <div class="spacer"></div>
+  <code data-readout="results">results: —</code>
+</header>
+<main>
+  <section class="hero">
+    <div>
+      <h3>Busca un comando</h3>
+      <p style="color:var(--is-text-soft)">Pulsa <kbd>⌘K</kbd> / <kbd>Ctrl</kbd>+<kbd>K</kbd>, o:</p>
+      <button class="trigger-btn" id="openBtn">Abrir paleta</button>
+      <pre id="log" hidden></pre>
+    </div>
+  </section>
+</main>
+</body>
+</html>

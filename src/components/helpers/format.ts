@@ -25,10 +25,44 @@ import { parseLooseDate } from './format-date.js';
  * text:   case = upper|lower|title|capitalize ; truncate ; pad-start/pad-end + pad-length
  */
 
+// ── Tipos de presets (discriminated union sobre `kind`) ──────────────────
+type NumberPreset = {
+  kind: 'number';
+  opts: Intl.NumberFormatOptions;
+};
+type CurrencyPreset = {
+  kind: 'currency';
+  digits: number;
+  currency?: string;
+};
+type AccountingPreset = {
+  kind: 'accounting';
+  digits: number;
+  currency?: string;
+};
+type FractionPreset = {
+  kind: 'fraction';
+  maxDen: number;
+};
+type TextPreset = {
+  kind: 'text';
+};
+type DatePreset = {
+  kind: 'date';
+  opts: Intl.DateTimeFormatOptions;
+};
+type ExcelPreset =
+  | NumberPreset
+  | CurrencyPreset
+  | AccountingPreset
+  | FractionPreset
+  | TextPreset
+  | DatePreset;
+
 const TEMPLATE = document.createElement('template');
 TEMPLATE.innerHTML = /* html */ `<span part="value" class="value"></span>`;
 
-const OBSERVED = [
+const OBSERVED: readonly string[] = [
   'type', 'value', 'date', 'locale', 'format', 'pattern',
   // date
   'weekday', 'era', 'year', 'month', 'day',
@@ -43,7 +77,7 @@ const OBSERVED = [
   'case', 'truncate', 'pad-start', 'pad-end', 'pad-length',
 ];
 
-const DATE_ATTR_TO_OPT = {
+const DATE_ATTR_TO_OPT: Record<string, keyof Intl.DateTimeFormatOptions> = {
   weekday: 'weekday',
   era: 'era',
   year: 'year',
@@ -56,7 +90,8 @@ const DATE_ATTR_TO_OPT = {
   'time-zone-name': 'timeZoneName',
 };
 
-const RELATIVE_UNITS = [
+type RelativeUnit = Intl.RelativeTimeFormatUnit;
+const RELATIVE_UNITS: ReadonlyArray<readonly [RelativeUnit, number]> = [
   ['year', 31536000],
   ['month', 2592000],
   ['week', 604800],
@@ -65,19 +100,24 @@ const RELATIVE_UNITS = [
   ['minute', 60],
   ['second', 1],
 ];
-const NUMBER_VALID_FORMAT = [
+type NumberFormatKind = 'decimal' | 'currency' | 'percent' | 'unit' | 'scientific' | 'compact' | 'integer' | 'accounting';
+const NUMBER_VALID_FORMAT: readonly NumberFormatKind[] = [
   'decimal', 'currency', 'percent', 'unit', 'scientific', 'compact', 'integer', 'accounting',
 ];
-const RELATIVE_VALID_STYLE = ['long', 'short', 'narrow'];
-const RELATIVE_VALID_NUMERIC = ['always', 'auto'];
-const TEXT_CASES = ['upper', 'lower', 'title', 'capitalize'];
-const TYPE_PARTS = {
+type RelativeStyle = 'long' | 'short' | 'narrow';
+const RELATIVE_VALID_STYLE: readonly RelativeStyle[] = ['long', 'short', 'narrow'];
+type RelativeNumeric = 'always' | 'auto';
+const RELATIVE_VALID_NUMERIC: readonly RelativeNumeric[] = ['always', 'auto'];
+type TextCase = 'upper' | 'lower' | 'title' | 'capitalize';
+const TEXT_CASES: readonly TextCase[] = ['upper', 'lower', 'title', 'capitalize'];
+type FormatType = 'date' | 'number' | 'bytes' | 'relative' | 'text';
+const TYPE_PARTS: Record<FormatType, string> = {
   date: 'date', number: 'number', bytes: 'bytes', relative: 'time', text: 'text',
 };
-const VALID_TYPES = ['date', 'number', 'bytes', 'relative', 'text'];
+const VALID_TYPES: readonly FormatType[] = ['date', 'number', 'bytes', 'relative', 'text'];
 
 /** Presets inspirados en categorías de formato de Excel. Claves normalizadas en minúsculas. */
-const EXCEL_PATTERNS = {
+const EXCEL_PATTERNS: Record<string, ExcelPreset> = {
   // General / Number
   general: { kind: 'number', opts: {} },
   '0': { kind: 'number', opts: { maximumFractionDigits: 0, minimumFractionDigits: 0, useGrouping: false } },
@@ -139,12 +179,12 @@ const EXCEL_PATTERNS = {
   },
 };
 
-function normalizePattern(raw) {
+function normalizePattern(raw: string | null | undefined): string {
   return String(raw ?? '').trim().toLowerCase().replace(/\s+/g, ' ');
 }
 
 /** Aproxima un decimal a fracción a/b con denominador ≤ maxDen (estilo Excel). */
-function toFraction(n: number, maxDen) {
+function toFraction(n: number, maxDen: number): string {
   const sign = n < 0 ? '-' : '';
   const abs = Math.abs(n);
   const whole = Math.floor(abs);
@@ -167,15 +207,23 @@ function toFraction(n: number, maxDen) {
   return whole > 0 ? `${sign}${whole} ${bestN}/${bestD}` : `${sign}${bestN}/${bestD}`;
 }
 
-function titleCase(s: string) {
+function titleCase(s: string): string {
   return s.replace(/\S+/g, (w) => w.charAt(0).toUpperCase() + w.slice(1).toLowerCase());
 }
 
+// Subset declarado de `formatBytes` (en format-bytes.ts) porque ese archivo
+// sigue siendo JSDoc-only y no expone la opción `locale` en su tipo inferido.
+type FormatBytesOpts = {
+  locale?: string;
+  display?: 'short' | 'long';
+  autofit?: boolean;
+};
+
 class FormatElement extends ElementBase {
-  static get observedAttributes(): string[] { return OBSERVED; }
+  static override get observedAttributes(): string[] { return [...OBSERVED]; }
 
   #el!: HTMLElement;
-  #timer = null;
+  #timer: ReturnType<typeof setInterval> | null = null;
 
   constructor() {
     super();
@@ -185,17 +233,17 @@ class FormatElement extends ElementBase {
     this.#el = shadow.querySelector<HTMLElement>('.value')!;
   }
 
-  onConnected() {
+  override onConnected(): void {
     this.#syncPart();
     this.#render();
     this.#setupSync();
   }
 
-  onDisconnected() {
+  override onDisconnected(): void {
     this.#clearSync();
   }
 
-  onAttributeChanged(name) {
+  override onAttributeChanged(name: string): void {
     if (name === 'type') {
       this.#syncPart();
       this.#clearSync();
@@ -209,54 +257,54 @@ class FormatElement extends ElementBase {
     }
   }
 
-  get type() {
+  get type(): FormatType {
     const v = this.getAttribute('type');
-    return VALID_TYPES.includes(v) ? v : 'date';
+    return (v && (VALID_TYPES as readonly string[]).includes(v)) ? (v as FormatType) : 'date';
   }
-  set type(v) {
+  set type(v: FormatType | '' | null) {
     if (v == null || v === '') this.removeAttribute('type');
     else this.setAttribute('type', v);
   }
 
-  get value() { return this.getAttribute('value') ?? ''; }
-  set value(v) {
+  get value(): string { return this.getAttribute('value') ?? ''; }
+  set value(v: string | number | null) {
     if (v == null || v === '') this.removeAttribute('value');
     else this.setAttribute('value', String(v));
   }
 
-  get date() { return this.getAttribute('date') ?? ''; }
-  set date(v) {
+  get date(): string { return this.getAttribute('date') ?? ''; }
+  set date(v: string | null) {
     if (v == null || v === '') this.removeAttribute('date');
     else this.setAttribute('date', String(v));
   }
 
-  get locale() {
+  get locale(): string {
     return resolveLocale(this.getAttribute('locale'));
   }
-  set locale(v) {
+  set locale(v: string | null) {
     if (v == null || v === '') this.removeAttribute('locale');
     else this.setAttribute('locale', String(v));
   }
 
-  get pattern() { return this.getAttribute('pattern') ?? ''; }
-  set pattern(v) {
+  get pattern(): string { return this.getAttribute('pattern') ?? ''; }
+  set pattern(v: string | null) {
     if (v == null || v === '') this.removeAttribute('pattern');
     else this.setAttribute('pattern', String(v));
   }
 
-  #syncPart() {
+  #syncPart(): void {
     const part = TYPE_PARTS[this.type] || 'value';
     this.#el.setAttribute('part', part);
     this.dataset.type = this.type;
   }
 
-  #resolvePattern() {
+  #resolvePattern(): ExcelPreset | null {
     const key = normalizePattern(this.pattern);
     if (!key) return null;
-    return EXCEL_PATTERNS[key] || null;
+    return EXCEL_PATTERNS[key] ?? null;
   }
 
-  #formatWithIntlNumber(n: string, opts) {
+  #formatWithIntlNumber(n: number, opts: Intl.NumberFormatOptions): void {
     try {
       this.#el.textContent = new Intl.NumberFormat(this.locale, opts).format(n);
     } catch {
@@ -264,7 +312,7 @@ class FormatElement extends ElementBase {
     }
   }
 
-  #applyExcelPattern(preset) {
+  #applyExcelPattern(preset: ExcelPreset): boolean {
     const raw = this.getAttribute('value');
     if (preset.kind === 'text') {
       this.#renderText(raw ?? '');
@@ -278,7 +326,9 @@ class FormatElement extends ElementBase {
       } catch {
         this.#el.textContent = d.toLocaleString(this.locale);
       }
-      this.#el.dateTime = d.toISOString();
+      // `dateTime` requiere HTMLTimeElement; el template usa `<span>` pero
+      // permitimos el set via cast (silencioso si no existe el atributo).
+      (this.#el as HTMLTimeElement).dateTime = d.toISOString();
       return true;
     }
     if (raw == null || raw === '') { this.#el.textContent = ''; return true; }
@@ -286,18 +336,20 @@ class FormatElement extends ElementBase {
     if (!Number.isFinite(n)) { this.#el.textContent = ''; return true; }
 
     if (preset.kind === 'fraction') {
-      this.#el.textContent = toFraction(n, preset.maxDen || 9);
+      this.#el.textContent = toFraction(n, preset.maxDen);
       return true;
     }
     if (preset.kind === 'currency' || preset.kind === 'accounting') {
       const currency = preset.currency || this.getAttribute('currency') || 'USD';
-      const opts = {
+      const opts: Intl.NumberFormatOptions = {
         style: 'currency',
         currency,
-        minimumFractionDigits: preset.digits ?? 2,
-        maximumFractionDigits: preset.digits ?? 2,
+        minimumFractionDigits: preset.digits,
+        maximumFractionDigits: preset.digits,
       };
-      if (preset.kind === 'accounting') opts.currencySign = 'accounting';
+      if (preset.kind === 'accounting') {
+        (opts as Intl.NumberFormatOptions & { currencySign?: string }).currencySign = 'accounting';
+      }
       this.#formatWithIntlNumber(n, opts);
       return true;
     }
@@ -308,7 +360,7 @@ class FormatElement extends ElementBase {
     return false;
   }
 
-  #renderDate() {
+  #renderDate(): void {
     const preset = this.#resolvePattern();
     if (preset?.kind === 'date' || preset?.kind === 'text') {
       this.#applyExcelPattern(preset);
@@ -320,10 +372,10 @@ class FormatElement extends ElementBase {
       this.#el.removeAttribute('datetime');
       return;
     }
-    const opts = {};
+    const opts: Intl.DateTimeFormatOptions = {};
     for (const [attr, key] of Object.entries(DATE_ATTR_TO_OPT)) {
       const v = this.getAttribute(attr);
-      if (v) opts[key] = v;
+      if (v) (opts as Record<string, string>)[key] = v;
     }
     const hf = this.getAttribute('hour-format');
     if (hf === '12') opts.hour12 = true;
@@ -337,10 +389,10 @@ class FormatElement extends ElementBase {
     } catch {
       this.#el.textContent = d.toLocaleString(this.locale);
     }
-    this.#el.dateTime = d.toISOString();
+    (this.#el as HTMLTimeElement).dateTime = d.toISOString();
   }
 
-  #renderNumber() {
+  #renderNumber(): void {
     const preset = this.#resolvePattern();
     if (preset) {
       this.#applyExcelPattern(preset);
@@ -357,8 +409,11 @@ class FormatElement extends ElementBase {
       return;
     }
     const fmtAttr = this.getAttribute('format');
-    const style = NUMBER_VALID_FORMAT.includes(fmtAttr) ? fmtAttr : 'decimal';
-    const opts = {};
+    const style: NumberFormatKind =
+      fmtAttr && (NUMBER_VALID_FORMAT as readonly string[]).includes(fmtAttr)
+        ? (fmtAttr as NumberFormatKind)
+        : 'decimal';
+    const opts: Intl.NumberFormatOptions = {};
     switch (style) {
       case 'currency':
         opts.style = 'currency';
@@ -367,7 +422,7 @@ class FormatElement extends ElementBase {
       case 'accounting':
         opts.style = 'currency';
         opts.currency = this.getAttribute('currency') || 'USD';
-        opts.currencySign = 'accounting';
+        (opts as Intl.NumberFormatOptions & { currencySign?: string }).currencySign = 'accounting';
         break;
       case 'percent':
         opts.style = 'percent';
@@ -401,7 +456,7 @@ class FormatElement extends ElementBase {
     this.#formatWithIntlNumber(n, opts);
   }
 
-  #renderBytes() {
+  #renderBytes(): void {
     const raw = this.getAttribute('value');
     if (raw == null || raw === '') {
       this.#el.textContent = '';
@@ -412,26 +467,33 @@ class FormatElement extends ElementBase {
       this.#el.textContent = '';
       return;
     }
-    this.#el.textContent = formatBytes(toBytes(n, this.getAttribute('unit') || 'byte'), {
+    // `formatBytes` (de format-bytes.ts) es JSDoc-only; usamos el tipo local
+    // `FormatBytesOpts` que ya documentamos arriba (incluye `locale`).
+    const opts: FormatBytesOpts = {
       locale: this.locale,
       display: this.getAttribute('display') === 'long' ? 'long' : 'short',
       autofit: this.hasAttribute('autofit'),
-    });
+    };
+    this.#el.textContent = formatBytes(toBytes(n, this.getAttribute('unit') || 'byte'), opts);
   }
 
-  #renderRelative() {
+  #renderRelative(): void {
     const d = parseLooseDate(this.date || this.value);
     if (!d) {
       this.#el.textContent = '';
       this.#el.removeAttribute('datetime');
       return;
     }
-    const style = RELATIVE_VALID_STYLE.includes(this.getAttribute('style') ?? '')
-      ? this.getAttribute('style')
-      : 'long';
-    const numeric = RELATIVE_VALID_NUMERIC.includes(this.getAttribute('numeric') ?? '')
-      ? this.getAttribute('numeric')
-      : 'auto';
+    const styleAttr = this.getAttribute('style');
+    const style: RelativeStyle =
+      styleAttr && (RELATIVE_VALID_STYLE as readonly string[]).includes(styleAttr)
+        ? (styleAttr as RelativeStyle)
+        : 'long';
+    const numericAttr = this.getAttribute('numeric');
+    const numeric: RelativeNumeric =
+      numericAttr && (RELATIVE_VALID_NUMERIC as readonly string[]).includes(numericAttr)
+        ? (numericAttr as RelativeNumeric)
+        : 'auto';
     const now = Date.now();
     const diffSec = Math.round((d.getTime() - now) / 1000);
     const abs = Math.abs(diffSec);
@@ -446,17 +508,18 @@ class FormatElement extends ElementBase {
     } catch {
       this.#el.textContent = d.toLocaleString(this.locale);
     }
-    this.#el.dateTime = d.toISOString();
+    (this.#el as HTMLTimeElement).dateTime = d.toISOString();
   }
 
-  #renderText(override: string) {
+  #renderText(override: string): void {
     let s = override != null ? String(override) : (this.getAttribute('value') ?? '');
     const c = this.getAttribute('case');
-    if (TEXT_CASES.includes(c)) {
-      if (c === 'upper') s = s.toUpperCase();
-      else if (c === 'lower') s = s.toLowerCase();
-      else if (c === 'title') s = titleCase(s);
-      else if (c === 'capitalize') s = s.charAt(0).toUpperCase() + s.slice(1);
+    if (c && (TEXT_CASES as readonly string[]).includes(c)) {
+      const cc = c as TextCase;
+      if (cc === 'upper') s = s.toUpperCase();
+      else if (cc === 'lower') s = s.toLowerCase();
+      else if (cc === 'title') s = titleCase(s);
+      else if (cc === 'capitalize') s = s.charAt(0).toUpperCase() + s.slice(1);
     }
     const trunc = this.getAttribute('truncate');
     const truncN = trunc != null && trunc !== '' ? parseInt(trunc, 10) : NaN;
@@ -479,13 +542,13 @@ class FormatElement extends ElementBase {
     this.#el.removeAttribute('datetime');
   }
 
-  #render() {
+  #render(): void {
     const preset = this.#resolvePattern();
     // pattern puede forzar rama (p.ej. type=number + pattern fecha).
     if (preset && (preset.kind === 'date' || preset.kind === 'text' || preset.kind === 'fraction'
       || preset.kind === 'currency' || preset.kind === 'accounting' || preset.kind === 'number')) {
       if (this.type === 'text' && preset.kind === 'text') {
-        this.#renderText();
+        this.#renderText(this.getAttribute('value') ?? '');
         return;
       }
       if (this.type === 'date' && preset.kind === 'date') {
@@ -502,20 +565,20 @@ class FormatElement extends ElementBase {
       case 'number': this.#renderNumber(); break;
       case 'bytes': this.#renderBytes(); break;
       case 'relative': this.#renderRelative(); break;
-      case 'text': this.#renderText(); break;
+      case 'text': this.#renderText(this.getAttribute('value') ?? ''); break;
       case 'date':
       default: this.#renderDate();
     }
   }
 
-  #clearSync() {
+  #clearSync(): void {
     if (this.#timer != null) {
       clearInterval(this.#timer);
       this.#timer = null;
     }
   }
 
-  #setupSync() {
+  #setupSync(): void {
     this.#clearSync();
     if (this.type === 'relative' && this.hasAttribute('sync')) {
       this.#timer = setInterval(() => this.#render(), 30000);
@@ -528,7 +591,7 @@ defineElement('is-format', FormatElement, 'IsFormat');
 /**
  * @param {'date'|'number'|'bytes'|'relative'|'text'} defaultType
  */
-export function createFormatElement(defaultType: 'date'|'number'|'bytes'|'relative'|'text') {
+export function createFormatElement(defaultType: FormatType): new () => FormatElement {
   class PrefixedFormat extends FormatElement {
     constructor() {
       super();

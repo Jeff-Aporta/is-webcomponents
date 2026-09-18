@@ -27,7 +27,7 @@ import { defineElement, emit } from '../../core/element.js';
  */
 (() => {
   class IsDemo extends HTMLElement {
-    #headingEl = null;
+    #headingEl: HTMLElement | null = null;
 
     connectedCallback(): void {
       this.classList.add('demo');
@@ -41,11 +41,11 @@ import { defineElement, emit } from '../../core/element.js';
 
     static get observedAttributes(): string[] { return ['heading']; }
 
-    attributeChangedCallback() {
+    attributeChangedCallback(): void {
       if (this.isConnected) this.#syncHeading();
     }
 
-    #syncHeading() {
+    #syncHeading(): void {
       const text = this.getAttribute('heading') || '';
       if (!text) {
         this.#headingEl?.remove();
@@ -53,9 +53,10 @@ import { defineElement, emit } from '../../core/element.js';
         return;
       }
       if (!this.#headingEl) {
-        this.#headingEl = document.createElement('p');
-        this.#headingEl.className = 'demo__heading';
-        this.prepend(this.#headingEl);
+        const el = document.createElement('p');
+        el.className = 'demo__heading';
+        this.#headingEl = el;
+        this.prepend(el);
       }
       this.#headingEl.textContent = text;
     }

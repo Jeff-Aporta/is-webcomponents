@@ -1,0 +1,153 @@
+<!doctype html>
+<html lang="es" class="theme-dark" data-theme="dark">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>&lt;is-form&gt; · is-webcomponents</title>
+<meta name="description" content="Ficha declarativa con header/content/footer, cuerpo en JSON compacto y eventos is-submit / is-cancel." />
+<style>
+  html, body { margin: 0; padding: 0; min-height: 100%; background: #0c1118; color: #e2e8f0; font-family: ui-sans-serif, system-ui, sans-serif; }
+  body { display: grid; grid-template-rows: auto 1fr; min-height: 100vh; }
+  header {
+    padding: 16px 20px; border-bottom: 1px solid rgba(255,255,255,0.1);
+    display: flex; align-items: center; gap: 14px; background: #0f1620;
+  }
+  header h1 { font-size: 16px; font-weight: 700; margin: 0; }
+  header p { font-size: 12px; color: #94a3b8; margin: 0; }
+  header .spacer { flex: 1; }
+  main { display: grid; gap: 24px; padding: 20px; max-width: 900px; margin: 0 auto; width: 100%; box-sizing: border-box; }
+  section h2 { font-size: 14px; font-weight: 600; margin: 0 0 8px; color: #94a3b8; }
+  .log { font: 12px ui-monospace, Menlo, Consolas, monospace; background: rgba(0,0,0,0.3); padding: 8px; border-radius: 4px; min-height: 60px; white-space: pre-wrap; }
+  button.btn { padding: 6px 12px; background: #1e293b; color: #e2e8f0; border: 1px solid #334155; border-radius: 4px; cursor: pointer; margin-right: 6px; }
+  is-form { border: 1px solid rgba(255,255,255,0.1); border-radius: 6px; overflow: hidden; }
+  is-form:not(:defined) { visibility: hidden; }
+</style>
+<script type="module">
+  // Dependencias de <is-form>.
+  await import('../../../dist/cdn/actions/button.min.js');
+  await import('../../../dist/cdn/forms/input.min.js');
+  await import('../../../dist/cdn/forms/textarea.min.js');
+  await import('../../../dist/cdn/forms/select.min.js');
+  await import('../../../dist/cdn/forms/option.min.js');
+  await import('../../../dist/cdn/forms/checkbox.min.js');
+  await import('../../../dist/cdn/forms/switch.js');
+  await import('../../../dist/cdn/forms/radio.min.js');
+  await import('../../../dist/cdn/isp/form.min.js');
+  await customElements.whenDefined('is-form');
+
+  const eventLog = document.getElementById('event-log');
+  const log = (m) => { eventLog.textContent += new Date().toISOString().slice(11, 19) + ' ' + m + '\n'; };
+
+  // ── Demo 1: declarativo (light DOM) ─────────────────────────────────
+  const formA = document.getElementById('form-a');
+  formA.addEventListener('is-submit', (e) => log(`formA submit values=${JSON.stringify(e.detail.values)}`));
+  formA.addEventListener('is-cancel', (e) => log(`formA cancel`));
+
+  // ── Demo 2: declarado vía fromJSON (codec compacto) ────────────────
+  const formB = document.getElementById('form-b');
+  formB.fromJSON({
+    mode: 'edit',
+    submitLabel: 'Guardar',
+    body: [
+      ['h3', { slot: 'header' }, 'Tercero (desde JSON)'],
+      ['div', { slot: 'content', style: 'padding: 12px; display: grid; gap: 8px;' },
+        ['is-input', { name: 'nit', label: 'NIT', required: true }],
+        ['is-input', { name: 'razon', label: 'Razón social', required: true }],
+        ['is-switch', { name: 'activo' }, 'Activo'],
+      ],
+    ],
+    values: { nit: '900123456', razon: 'Demo S.A.S', activo: true },
+  });
+  formB.addEventListener('is-submit', (e) => log(`formB submit values=${JSON.stringify(e.detail.values)}`));
+
+  // ── Botones de utilidad ──────────────────────────────────────────────
+  document.getElementById('btn-mode').addEventListener('click', () => {
+    const f = document.getElementById('form-b');
+    f.mode = f.mode === 'edit' ? 'view' : 'edit';
+    log(`formB mode → ${f.mode}`);
+  });
+  document.getElementById('btn-serialize').addEventListener('click', () => {
+    const f = document.getElementById('form-b');
+    console.log('toJSON:', JSON.stringify(f.toJSON(), null, 2));
+    log(`formB toJSON() serializado en consola`);
+  });
+  document.getElementById('btn-load-edit').addEventListener('click', () => {
+    const f = document.getElementById('form-b');
+    f.fromJSON({
+      mode: 'edit',
+      body: [
+        ['h3', { slot: 'header' }, 'Tercero'],
+        ['div', { slot: 'content', style: 'padding: 12px; display: grid; gap: 8px;' },
+          ['is-input', { name: 'nit', label: 'NIT' }],
+          ['is-input', { name: 'email', label: 'Email' }],
+        ],
+      ],
+      values: { nit: '800111222', email: 'ops@empresa.co' },
+    });
+  });
+
+  // ── Demo 3: inline JSON via <script> ─────────────────────────────────
+  // El script tag se procesa automáticamente en connectedCallback.
+
+  document.documentElement.dataset.formReady = '1';
+</script>
+</head>
+<body>
+<header>
+  <div>
+    <h1>&lt;is-form&gt; — ficha declarativa</h1>
+    <p>Header / content / footer. Cuerpo en JSON compacto (mismo codec que <is-block-layout>).</p>
+  </div>
+  <div class="spacer"></div>
+  <code>is-form</code>
+</header>
+<main>
+  <section>
+    <h2>Demo A — declarativo en light DOM</h2>
+    <is-form id="form-a" submit-label="Guardar">
+      <h3 slot="header">Curso</h3>
+      <div slot="content" style="padding: 12px; display: grid; gap: 8px;">
+        <is-input name="icurso" label="Código" required></is-input>
+        <is-input name="titulo" label="Título" required></is-input>
+        <is-switch name="activo">Activo</is-switch>
+      </div>
+    </is-form>
+  </section>
+
+  <section>
+    <h2>Demo B — desde <code>fromJSON()</code> + botones de utilidad</h2>
+    <is-form id="form-b"></is-form>
+    <div style="margin-top: 12px;">
+      <button id="btn-mode" type="button" class="btn">Toggle mode (edit/view)</button>
+      <button id="btn-serialize" type="button" class="btn">toJSON() en consola</button>
+      <button id="btn-load-edit" type="button" class="btn">Recargar fromJSON</button>
+    </div>
+  </section>
+
+  <section>
+    <h2>Demo C — inline JSON via <code>&lt;script type="application/json"&gt;</code></h2>
+    <is-form id="form-c" submit-label="Crear">
+      <script type="application/json">
+        {
+          "mode": "edit",
+          "submitLabel": "Crear",
+          "body": [
+            ["h3", { "slot": "header" }, "Nuevo item"],
+            ["div", { "slot": "content", "style": "padding: 12px; display: grid; gap: 8px;" },
+              ["is-input", { "name": "codigo", "label": "Código", "required": true }],
+              ["is-input", { "name": "descripcion", "label": "Descripción", "required": true }]
+            ]
+          ],
+          "values": { "codigo": "AUTO", "descripcion": "Cargado desde <script>" }
+        }
+      </script>
+    </is-form>
+  </section>
+
+  <section>
+    <h2>Eventos</h2>
+    <pre id="event-log" class="log"></pre>
+  </section>
+</main>
+</body>
+</html>

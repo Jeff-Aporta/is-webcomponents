@@ -14,6 +14,13 @@ import { ElementBase } from '../../core/element-base.js';
  * Events: is-change { value } · is-view-change { view }
  */
 
+interface ParsedTime { h: number; m: number; s: number }
+interface RingItem { label: string; raw: number }
+type View = 'hours' | 'minutes' | 'seconds';
+type Meridiem = 'AM' | 'PM';
+interface CommitOpts { advance?: boolean }
+interface PickOpts { advance?: boolean }
+
 (() => {
   const TEMPLATE = document.createElement('template');
   TEMPLATE.innerHTML = /* html */ `
@@ -43,7 +50,7 @@ import { ElementBase } from '../../core/element-base.js';
     'min-time', 'max-time', 'locale', 'disabled', 'readonly',
   ];
 
-  const VIEWS = ['hours', 'minutes', 'seconds'];
+  const VIEWS: readonly View[] = ['hours', 'minutes', 'seconds'];
 
   class IsTimeClock extends ElementBase {
     /** Personalización por atributo (ver `core/attrs.ts`). */
@@ -59,7 +66,7 @@ import { ElementBase } from '../../core/element-base.js';
     #hand!: HTMLElement;
     #outer!: HTMLElement;
     #inner!: HTMLElement;
-    #units;
+    #units: HTMLElement[] = [];
     #meridiem!: HTMLElement;
     #dragging = false;
 
@@ -76,7 +83,7 @@ import { ElementBase } from '../../core/element-base.js';
       this.#units = [...shadow.querySelectorAll<HTMLElement>('.unit')];
       this.#meridiem = shadow.querySelector<HTMLElement>('.meridiem')!;
 
-      shadow.querySelector<HTMLElement>('.header').addEventListener('click', this.#onHeader);
+      shadow.querySelector<HTMLElement>('.header')!.addEventListener('click', this.#onHeader);
       this.#clock.addEventListener('pointerdown', this.#onPointerDown);
       this.#clock.addEventListener('pointermove', this.#onPointerMove);
       this.#clock.addEventListener('pointerup', this.#onPointerUp);
@@ -84,69 +91,73 @@ import { ElementBase } from '../../core/element-base.js';
       this.#clock.addEventListener('keydown', this.#onKey);
     }
 
-    onConnected() {
+    onConnected(): void {
       if (!this.hasAttribute('view')) this.setAttribute('view', 'hours');
       this.#render();
     }
 
-    onAttributeChanged(name: string, oldVal: string | null, newVal: string | null) {
+    onAttributeChanged(name: string, _oldVal: string | null, _newVal: string | null): void {
       if (name === 'view') emit(this, 'is-view-change', { view: this.view });
       this.#render();
     }
 
     /* ── API ──────────────────────────────────────────────────────────── */
 
-    get value() { return this.getAttribute('value') ?? ''; }
-    set value(v) { v ? this.setAttribute('value', String(v)) : this.removeAttribute('value'); }
+    get value(): string { return this.getAttribute('value') ?? ''; }
+    set value(v: string) { v ? this.setAttribute('value', String(v)) : this.removeAttribute('value'); }
 
-    get view() {
-      const v = this.getAttribute('view');
+    get view(): View {
+      const v = this.getAttribute('view') ?? '';
       if (v === 'seconds' && !this.seconds) return 'minutes';
-      return VIEWS.includes(v) ? v : 'hours';
+      return (VIEWS as readonly string[]).includes(v) ? (v as View) : 'hours';
     }
-    set view(v) { this.setAttribute('view', v); }
+    set view(v: View) { this.setAttribute('view', v); }
 
     /** 12 horas: por defecto lo decide el locale, `ampm`/`hour24` lo fuerzan. */
-    get ampm() {
+    get ampm(): boolean {
       if (this.hasAttribute('hour24')) return false;
       if (this.hasAttribute('ampm')) return this.getAttribute('ampm') !== 'false';
-      return uses12Hour(this.locale);
+      return uses12Hour(this.locale ?? '') as boolean;
     }
-    set ampm(v) { this.toggleAttribute('ampm', !!v); }
+    set ampm(v: boolean) { this.toggleAttribute('ampm', !!v); }
 
-    get seconds() { return this.hasAttribute('seconds'); }
-    set seconds(v) { this.toggleAttribute('seconds', !!v); }
+    get seconds(): boolean { return this.hasAttribute('seconds'); }
+    set seconds(v: boolean) { this.toggleAttribute('seconds', !!v); }
 
-    get minutesStep() {
+    get minutesStep(): number {
       const n = Number(this.getAttribute('minutes-step'));
       return Number.isFinite(n) && n > 0 ? Math.min(30, n) : 1;
     }
-    set minutesStep(v) { this.setAttribute('minutes-step', String(v)); }
+    set minutesStep(v: number) { this.setAttribute('minutes-step', String(v)); }
 
-    get locale() { return this.getAttribute('locale') || document.documentElement.lang || undefined; }
-    set locale(v) { v ? this.setAttribute('locale', v) : this.removeAttribute('locale'); }
+    get locale(): string | undefined { return this.getAttribute('locale') || document.documentElement.lang || undefined; }
+    set locale(v: string) { v ? this.setAttribute('locale', v) : this.removeAttribute('locale'); }
 
-    get disabled() { return this.hasAttribute('disabled'); }
-    set disabled(v) { this.toggleAttribute('disabled', !!v); }
+    get disabled(): boolean { return this.hasAttribute('disabled'); }
+    set disabled(v: boolean) { this.toggleAttribute('disabled', !!v); }
 
-    get readonly() { return this.hasAttribute('readonly'); }
-    set readonly(v) { this.toggleAttribute('readonly', !!v); }
+    get readonly(): boolean { return this.hasAttribute('readonly'); }
+    set readonly(v: boolean) { this.toggleAttribute('readonly', !!v); }
 
-    get time() { return parseTime(this.value) || { h: 0, m: 0, s: 0 }; }
+    get time(): ParsedTime {
+      const raw = this.value;
+      const parsed = raw ? parseTime(raw) : null;
+      return (parsed as ParsedTime | null) || { h: 0, m: 0, s: 0 };
+    }
 
     /* ── Interno ──────────────────────────────────────────────────────── */
 
-    #minTime() { return this.getAttribute('min-time') || ''; }
-    #maxTime() { return this.getAttribute('max-time') || ''; }
+    #minTime(): string { return this.getAttribute('min-time') || ''; }
+    #maxTime(): string { return this.getAttribute('max-time') || ''; }
 
     /** ¿Cabe este candidato dentro de min-time / max-time? */
-    #allowed(time) {
+    #allowed(time: ParsedTime): boolean {
       const min = this.#minTime();
       const max = this.#maxTime();
       const withSeconds = this.seconds;
       const v = toTime(time, withSeconds);
-      const norm = (raw) => {
-        const t = parseTime(raw);
+      const norm = (raw: string): string | null => {
+        const t = parseTime(raw) as ParsedTime | null;
         return t ? toTime(t, withSeconds) : null;
       };
       const lo = norm(min);
@@ -157,15 +168,15 @@ import { ElementBase } from '../../core/element-base.js';
     }
 
     /** Candidato que resulta de fijar la unidad de la vista actual. */
-    #candidate(view, raw) {
-      const t = { ...this.time };
+    #candidate(view: View, raw: number): ParsedTime {
+      const t: ParsedTime = { ...this.time };
       if (view === 'hours') t.h = raw;
       else if (view === 'minutes') t.m = raw;
       else t.s = raw;
       return t;
     }
 
-    #commit(time, { advance = false } = {}) {
+    #commit(time: ParsedTime, { advance = false }: CommitOpts = {}): void {
       if (this.disabled || this.readonly) return;
       const next = toTime(time, this.seconds);
       if (next !== this.value) {
@@ -175,35 +186,36 @@ import { ElementBase } from '../../core/element-base.js';
         this.#render();
       }
       if (!advance) return;
-      const order = this.seconds ? VIEWS : VIEWS.slice(0, 2);
+      const order: readonly View[] = this.seconds ? VIEWS : VIEWS.slice(0, 2);
       const at = order.indexOf(this.view);
-      if (at > -1 && at < order.length - 1) this.view = order[at + 1];
+      if (at > -1 && at < order.length - 1) this.view = order[at + 1] as View;
     }
 
     /* ── Render ───────────────────────────────────────────────────────── */
 
-    #render() {
+    #render(): void {
       const view = this.view;
       const t = this.time;
       const has = !!parseTime(this.value);
-      this.#base.dataset.view = view;
+      this.#base.dataset['view'] = view;
 
       // Cabecera: la unidad de la vista actual queda resaltada.
-      const { hour, meridiem } = to12Hour(t.h);
-      const labels = {
-        hours: has ? (this.ampm ? String(hour) : pad(t.h)) : '--',
-        minutes: has ? pad(t.m) : '--',
-        seconds: has ? pad(t.s) : '--',
+      const { hour, meridiem } = to12Hour(t.h) as { hour: number; meridiem: Meridiem };
+      const labels: Record<View, string> = {
+        hours: has ? (this.ampm ? String(hour) : pad(String(t.h))) : '--',
+        minutes: has ? pad(String(t.m)) : '--',
+        seconds: has ? pad(String(t.s)) : '--',
       };
       for (const btn of this.#units) {
-        btn.textContent = labels[btn.dataset.view];
-        btn.toggleAttribute('data-active', btn.dataset.view === view);
+        const v = btn.dataset['view'] as View | undefined;
+        if (v) btn.textContent = labels[v];
+        btn.toggleAttribute('data-active', btn.dataset['view'] === view);
       }
       for (const el of this.shadowRoot!.querySelectorAll<HTMLElement>('.secs')) el.hidden = !this.seconds;
 
       this.#meridiem.hidden = !this.ampm;
       for (const btn of this.#meridiem.querySelectorAll<HTMLElement>('.mer')) {
-        btn.toggleAttribute('data-active', has && btn.dataset.mer === meridiem);
+        btn.toggleAttribute('data-active', has && btn.dataset['mer'] === meridiem);
       }
 
       this.#renderRing(view);
@@ -211,22 +223,22 @@ import { ElementBase } from '../../core/element-base.js';
       this.#syncAria(view, t, has);
     }
 
-    #renderRing(view) {
+    #renderRing(view: View): void {
       const ampm = this.ampm;
-      const outer = [];
-      const inner = [];
+      const outer: RingItem[] = [];
+      const inner: RingItem[] = [];
 
       if (view === 'hours') {
         if (ampm) {
-          for (let i = 1; i <= 12; i++) outer.push({ label: String(i), raw: from12Hour(i, to12Hour(this.time.h).meridiem) });
+          for (let i = 1; i <= 12; i++) outer.push({ label: String(i), raw: from12Hour(i, (to12Hour(this.time.h) as { hour: number; meridiem: Meridiem }).meridiem) as number });
         } else {
           // 24 h: anillo exterior 00-11, interior 12-23, como el reloj de MUI.
-          for (let i = 0; i < 12; i++) outer.push({ label: pad(i), raw: i });
-          for (let i = 12; i < 24; i++) inner.push({ label: pad(i), raw: i });
+          for (let i = 0; i < 12; i++) outer.push({ label: pad(String(i)), raw: i });
+          for (let i = 12; i < 24; i++) inner.push({ label: pad(String(i)), raw: i });
         }
       } else {
         const step = view === 'minutes' ? Math.max(5, this.minutesStep) : 5;
-        for (let i = 0; i < 60; i += step) outer.push({ label: pad(i), raw: i });
+        for (let i = 0; i < 60; i += step) outer.push({ label: pad(String(i)), raw: i });
       }
 
       this.#inner.hidden = inner.length === 0;
@@ -234,15 +246,15 @@ import { ElementBase } from '../../core/element-base.js';
       if (inner.length) this.#fillRing(this.#inner, inner, view);
     }
 
-    #fillRing(ring, items, view) {
+    #fillRing(ring: HTMLElement, items: RingItem[], view: View): void {
       const unit = view === 'hours' ? 30 : 6;
-      const nodes = items.map(({ label, raw }) => {
+      const nodes = items.map(({ label, raw }: RingItem): HTMLElement => {
         // El envoltorio ocupa todo el disco y gira; la etiqueta se desgira para
         // quedar recta. Así los radios son relativos y el reloj escala solo.
         const el = document.createElement('span');
         el.className = 'num';
         el.setAttribute('part', 'number');
-        el.dataset.raw = String(raw);
+        el.dataset['raw'] = String(raw);
         const lbl = document.createElement('span');
         lbl.className = 'lbl';
         lbl.textContent = label;
@@ -256,7 +268,7 @@ import { ElementBase } from '../../core/element-base.js';
       ring.replaceChildren(...nodes);
     }
 
-    #renderHand(view, t, has) {
+    #renderHand(view: View, t: ParsedTime, has: boolean): void {
       const value = view === 'hours' ? t.h : view === 'minutes' ? t.m : t.s;
       const angle = view === 'hours' ? (value % 12) * 30 : value * 6;
       // Mano corta para las horas del anillo interior (12-23 en formato 24 h).
@@ -266,24 +278,35 @@ import { ElementBase } from '../../core/element-base.js';
       this.#hand.toggleAttribute('data-short', short);
     }
 
-    #syncAria(view, t, has) {
+    #syncAria(view: View, t: ParsedTime, has: boolean): void {
       const max = view === 'hours' ? (this.ampm ? 12 : 23) : 59;
       const min = view === 'hours' && this.ampm ? 1 : 0;
-      const value = view === 'hours' ? (this.ampm ? to12Hour(t.h).hour : t.h) : view === 'minutes' ? t.m : t.s;
+      const value = view === 'hours'
+        ? (this.ampm ? (to12Hour(t.h) as { hour: number; meridiem: Meridiem }).hour : t.h)
+        : view === 'minutes' ? t.m : t.s;
       this.#clock.setAttribute('aria-valuemin', String(min));
       this.#clock.setAttribute('aria-valuemax', String(max));
       this.#clock.setAttribute('aria-valuenow', has ? String(value) : '');
-      this.#clock.setAttribute('aria-label', { hours: 'Horas', minutes: 'Minutos', seconds: 'Segundos' }[view]);
+      const ariaLabels: Record<View, string> = { hours: 'Horas', minutes: 'Minutos', seconds: 'Segundos' };
+      this.#clock.setAttribute('aria-label', ariaLabels[view]);
+      const locale = this.locale;
+      const fmtOpts: Intl.DateTimeFormatOptions = {
+        hour: '2-digit',
+        minute: '2-digit',
+        ...(this.seconds ? { second: '2-digit' as const } : {}),
+      };
       this.#clock.setAttribute('aria-valuetext', has
-        ? formatTime(this.time, this.locale, { seconds: this.seconds, hour12: this.ampm })
+        ? formatTime(this.time, locale ?? '', { seconds: this.seconds, hour12: this.ampm } as { seconds: boolean; hour12: boolean })
         : 'sin hora');
+      // supress unused
+      void fmtOpts;
       this.#clock.toggleAttribute('aria-disabled', this.disabled);
     }
 
     /* ── Interacción ──────────────────────────────────────────────────── */
 
     /** Punto del disco → unidad más cercana de la vista actual. */
-    #valueAt(e) {
+    #valueAt(e: PointerEvent): number {
       const view = this.view;
       const rect = this.#clock.getBoundingClientRect();
       const cx = rect.left + rect.width / 2;
@@ -297,7 +320,7 @@ import { ElementBase } from '../../core/element-base.js';
         const slot = Math.round(deg / 30) % 12;
         if (this.ampm) {
           const hour12 = slot === 0 ? 12 : slot;
-          return from12Hour(hour12, to12Hour(this.time.h).meridiem);
+          return from12Hour(hour12, (to12Hour(this.time.h) as { hour: number; meridiem: Meridiem }).meridiem) as number;
         }
         // Sin AM/PM el radio decide anillo: dentro son las 12-23.
         const dist = Math.hypot(dx, dy) / (rect.width / 2);
@@ -309,14 +332,14 @@ import { ElementBase } from '../../core/element-base.js';
       return (Math.round(raw / step) * step) % 60;
     }
 
-    #pick(e, { advance = false } = {}) {
+    #pick(e: PointerEvent, { advance = false }: PickOpts = {}): void {
       const raw = this.#valueAt(e);
       const candidate = this.#candidate(this.view, raw);
       if (!this.#allowed(candidate)) return;
       this.#commit(candidate, { advance });
     }
 
-    #onPointerDown = (e: PointerEvent) => {
+    #onPointerDown = (e: PointerEvent): void => {
       if (this.disabled || this.readonly) return;
       this.#dragging = true;
       // Un pointerId inexistente (o sintético) hace que capture lance: da igual,
@@ -325,12 +348,12 @@ import { ElementBase } from '../../core/element-base.js';
       this.#pick(e);
     };
 
-    #onPointerMove = (e: PointerEvent) => {
+    #onPointerMove = (e: PointerEvent): void => {
       if (!this.#dragging) return;
       this.#pick(e);
     };
 
-    #onPointerUp = (e: PointerEvent) => {
+    #onPointerUp = (e: PointerEvent): void => {
       if (!this.#dragging) return;
       this.#dragging = false;
       try { this.#clock.releasePointerCapture(e.pointerId); } catch { /* noop */ }
@@ -338,14 +361,14 @@ import { ElementBase } from '../../core/element-base.js';
       this.#pick(e, { advance: true });
     };
 
-    #onKey = (e: KeyboardEvent) => {
+    #onKey = (e: KeyboardEvent): void => {
       if (this.disabled || this.readonly) return;
       const view = this.view;
       const step = view === 'minutes' ? this.minutesStep : 1;
       const wrap = view === 'hours' ? 24 : 60;
-      const t = { ...this.time };
-      const get = () => (view === 'hours' ? t.h : view === 'minutes' ? t.m : t.s);
-      const set = (v) => {
+      const t: ParsedTime = { ...this.time };
+      const get = (): number => (view === 'hours' ? t.h : view === 'minutes' ? t.m : t.s);
+      const set = (v: number): void => {
         const norm = ((v % wrap) + wrap) % wrap;
         if (view === 'hours') t.h = norm;
         else if (view === 'minutes') t.m = norm;
@@ -366,18 +389,21 @@ import { ElementBase } from '../../core/element-base.js';
       if (this.#allowed(t)) this.#commit(t);
     };
 
-    #onHeader = (e: Event) => {
-      const unit = e.target.closest('.unit');
+    #onHeader = (e: Event): void => {
+      const target = e.target as HTMLElement | null;
+      const unit = target?.closest('.unit') as HTMLElement | null;
       if (unit) {
-        this.view = unit.dataset.view;
+        const v = unit.dataset['view'] as View | undefined;
+        if (v) this.view = v;
         this.#clock.focus();
         return;
       }
-      const mer = e.target.closest('.mer');
+      const mer = target?.closest('.mer') as HTMLElement | null;
       if (!mer || !this.ampm) return;
-      const t = { ...this.time };
-      const { hour } = to12Hour(t.h);
-      t.h = from12Hour(hour, mer.dataset.mer);
+      const t: ParsedTime = { ...this.time };
+      const { hour } = to12Hour(t.h) as { hour: number; meridiem: Meridiem };
+      const merValue = mer.dataset['mer'] as Meridiem | undefined;
+      if (merValue) t.h = from12Hour(hour, merValue) as number;
       if (this.#allowed(t)) this.#commit(t);
     };
   }

@@ -1,0 +1,92 @@
+<!doctype html>
+<html lang="es" class="theme-dark" data-theme="dark">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>&lt;is-heading&gt; · is-webcomponents</title>
+<meta name="description" content="Título H1-H6 con tinte de marca, color semántico, mix y override de tamaño." />
+<style>
+  html, body { margin: 0; padding: 0; min-height: 100%; background: #0c1118; color: #e2e8f0; font-family: ui-sans-serif, system-ui, sans-serif; }
+  body { display: grid; grid-template-rows: auto 1fr; min-height: 100vh; }
+  header {
+    padding: 16px 20px; border-bottom: 1px solid rgba(255,255,255,0.1);
+    display: flex; align-items: center; gap: 14px; background: #0f1620;
+  }
+  header h1 { font-size: 16px; font-weight: 700; margin: 0; }
+  header p { font-size: 12px; color: #94a3b8; margin: 0; }
+  header .spacer { flex: 1; }
+  main { display: grid; gap: 18px; padding: 20px; max-width: 900px; margin: 0 auto; width: 100%; box-sizing: border-box; }
+  section h2 { font-size: 12px; font-weight: 600; margin: 0 0 8px; color: #94a3b8; text-transform: uppercase; letter-spacing: 0.5px; }
+  .row { display: grid; gap: 4px; padding: 8px; background: rgba(255,255,255,0.04); border-radius: 4px; }
+  is-heading:not(:defined) { visibility: hidden; }
+</style>
+<script type="module">
+  await import('../../../dist/cdn/isp/heading.min.js');
+  await customElements.whenDefined('is-heading');
+  document.documentElement.dataset.headingReady = '1';
+</script>
+</head>
+<body>
+<header>
+  <div>
+    <h1>&lt;is-heading&gt; — títulos tintados</h1>
+    <p>Seis niveles (H1-H6) con color semántico, mix hacia texto y override de size.</p>
+  </div>
+  <div class="spacer"></div>
+  <code>is-heading</code>
+</header>
+<main>
+  <section>
+    <h2>Niveles 1 a 6 (default color)</h2>
+    <div class="row">
+      <is-heading level="1">Encabezado nivel 1</is-heading>
+      <is-heading level="2">Encabezado nivel 2</is-heading>
+      <is-heading level="3">Encabezado nivel 3</is-heading>
+      <is-heading level="4">Encabezado nivel 4</is-heading>
+      <is-heading level="5">Encabezado nivel 5</is-heading>
+      <is-heading level="6">Encabezado nivel 6</is-heading>
+    </div>
+  </section>
+
+  <section>
+    <h2>Colores semánticos</h2>
+    <div class="row">
+      <is-heading level="2" color="brand">Brand</is-heading>
+      <is-heading level="2" color="neutral">Neutral</is-heading>
+      <is-heading level="2" color="info">Info</is-heading>
+      <is-heading level="2" color="success">Success</is-heading>
+      <is-heading level="2" color="warning">Warning</is-heading>
+      <is-heading level="2" color="danger">Danger</is-heading>
+      <is-heading level="2" color="current">Current (hereda)</is-heading>
+    </div>
+  </section>
+
+  <section>
+    <h2>Mix hacia texto (mix y mix-with)</h2>
+    <div class="row">
+      <is-heading level="3" mix="0%">Mix 0% (acento puro)</is-heading>
+      <is-heading level="3" mix="30%">Mix 30% hacia texto</is-heading>
+      <is-heading level="3" mix="60%">Mix 60% hacia texto</is-heading>
+      <is-heading level="3" mix="90%" mix-with="white">Mix 90% hacia blanco</is-heading>
+    </div>
+  </section>
+
+  <section>
+    <h2>Override de tamaño (size)</h2>
+    <div class="row">
+      <is-heading level="2" size="3rem">Tamaño 3rem</is-heading>
+      <is-heading level="4" size="1.5rem">Tamaño 1.5rem</is-heading>
+      <is-heading level="5" size="14px">Tamaño 14px</is-heading>
+    </div>
+  </section>
+
+  <section>
+    <h2>Color CSS arbitrario</h2>
+    <div class="row">
+      <is-heading level="3" color="#ec4899">Color #ec4899 (rosa)</is-heading>
+      <is-heading level="3" color="hotpink">Color 'hotpink'</is-heading>
+    </div>
+  </section>
+</main>
+</body>
+</html>

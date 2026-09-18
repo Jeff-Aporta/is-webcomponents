@@ -2,26 +2,32 @@
  * Playground <is-flex-layout>: switches booleanos + selects + snippet en vivo.
  * @param {import('../../previews/_kit/types.d.ts').PreviewMountContext} ctx
  */
-export async function mount(ctx: import('../../previews/_kit/types.d.ts').PreviewMountContext) {
+
+interface InputLike extends HTMLElement {
+  value: string;
+  checked: boolean;
+}
+
+export async function mount(ctx: import('../../previews/_kit/types.d.ts').PreviewMountContext): Promise<void> {
   const root = ctx.main;
   const flex = root.querySelector<HTMLElement>('#fxPlay');
   if (!flex) return;
 
-  const dir = root.querySelector<HTMLElement>('#fxDirection');
-  const justify = root.querySelector<HTMLElement>('#fxJustify');
-  const align = root.querySelector<HTMLElement>('#fxAlign');
-  const gap = root.querySelector<HTMLElement>('#fxGap');
-  const wrap = root.querySelector<HTMLElement>('#fxWrap');
-  const grow = root.querySelector<HTMLElement>('#fxGrow');
-  const inline = root.querySelector<HTMLElement>('#fxInline');
+  const dir = root.querySelector<HTMLElement>('#fxDirection') as InputLike | null;
+  const justify = root.querySelector<HTMLElement>('#fxJustify') as InputLike | null;
+  const align = root.querySelector<HTMLElement>('#fxAlign') as InputLike | null;
+  const gap = root.querySelector<HTMLElement>('#fxGap') as InputLike | null;
+  const wrap = root.querySelector<HTMLElement>('#fxWrap') as InputLike | null;
+  const grow = root.querySelector<HTMLElement>('#fxGrow') as InputLike | null;
+  const inline = root.querySelector<HTMLElement>('#fxInline') as InputLike | null;
   const snippet = root.querySelector<HTMLElement>('#fxAttrSnippet');
 
-  const setOrRemove = (el: HTMLElement, attr, value) => {
+  const setOrRemove = (el: HTMLElement, attr: string, value: string | null | undefined): void => {
     if (value == null || value === '') el.removeAttribute(attr);
     else el.setAttribute(attr, value);
   };
 
-  const sync = () => {
+  const sync = (): void => {
     if (dir?.value && dir.value !== 'row') flex.setAttribute('direction', dir.value);
     else flex.removeAttribute('direction');
 
@@ -46,7 +52,7 @@ export async function mount(ctx: import('../../previews/_kit/types.d.ts').Previe
   sync();
 }
 
-function buildSnippet(el: HTMLElement) {
+function buildSnippet(el: HTMLElement): string {
   const parts = ['<is-flex-layout'];
   for (const name of [
     'direction', 'justify', 'align', 'gap',
@@ -61,6 +67,6 @@ function buildSnippet(el: HTMLElement) {
   return parts.join('');
 }
 
-export function unmount() {
+export function unmount(): void {
   /* no-op */
 }

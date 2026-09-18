@@ -1,0 +1,143 @@
+<!doctype html>
+<html lang="es" class="theme-dark" data-theme="dark">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>Demo — <is-kanban> tablero · is-webcomponents</title>
+<meta name="description" content="Tablero kanban: columnas con cards drag-and-drop entre stacks, badges, accents y orientación configurable." />
+<style>
+  html, body { margin: 0; padding: 0; min-height: 100%; background: #0c1118; color: #e2e8f0; font-family: ui-sans-serif, system-ui, sans-serif; }
+  body { display: grid; grid-template-rows: auto 1fr auto; }
+  header { padding: 16px 20px; border-bottom: 1px solid rgba(255,255,255,0.1); background: #0f1620; }
+  header h1 { font-size: 16px; font-weight: 700; margin: 0; }
+  header p { font-size: 12px; color: #94a3b8; margin: 4px 0 0 0; }
+  main { padding: 20px; display: grid; gap: 20px; }
+  section { background: #0f1620; border: 1px solid rgba(255,255,255,0.1); border-radius: 8px; padding: 16px; }
+  section h2 { font-size: 11px; text-transform: uppercase; letter-spacing: 0.08em; margin: 0 0 12px 0; color: #94a3b8; }
+  is-kanban:not(:defined),
+  is-kanban-column:not(:defined),
+  is-kanban-card:not(:defined) { visibility: hidden; }
+  is-kanban { display: block; min-height: 200px; }
+  .log { font: 11px ui-monospace, Menlo, Consolas, monospace; background: rgba(0,0,0,0.3); padding: 8px; border-radius: 4px; min-height: 40px; max-height: 100px; overflow: auto; color: #94a3b8; margin-top: 8px; }
+  footer { padding: 12px 20px; border-top: 1px solid rgba(255,255,255,0.1); background: #0f1620; font-size: 11px; color: #94a3b8; }
+  footer code { background: rgba(255,255,255,0.06); padding: 1px 5px; border-radius: 3px; font: 11px ui-monospace, Menlo, Consolas, monospace; }
+</style>
+<script type="module">
+  await import('../../../dist/cdn/data/kanban.min.js');
+  await Promise.all([
+    customElements.whenDefined('is-kanban'),
+    customElements.whenDefined('is-kanban-column'),
+    customElements.whenDefined('is-kanban-card'),
+  ]);
+
+  function card(heading, opts = {}) {
+    const c = document.createElement('is-kanban-card');
+    c.setAttribute('heading', heading);
+    if (opts.meta) c.setAttribute('meta', opts.meta);
+    if (opts.tag) c.setAttribute('tag', opts.tag);
+    if (opts.tagColor) c.setAttribute('tag-color', opts.tagColor);
+    if (opts.cover) c.setAttribute('cover', opts.cover);
+    if (opts.withoutShadow) c.setAttribute('without-shadow', '');
+    c.textContent = opts.body || '';
+    return c;
+  }
+
+  function column(title, opts, ...children) {
+    const col = document.createElement('is-kanban-column');
+    col.setAttribute('title', title);
+    if (opts?.accent) col.setAttribute('accent', opts.accent);
+    if (opts?.badge != null) col.setAttribute('badge', String(opts.badge));
+    children.forEach((ch) => col.appendChild(ch));
+    return col;
+  }
+
+  // ── (1) Básico: 3 columnas, varias cards, distintos tag-colors
+  const basic = document.createElement('is-kanban');
+  basic.appendChild(column('Pendiente', {},
+    card('Diseñar API REST', { meta: 'Backend', tag: 'back', tagColor: 'brand' }),
+    card('Configurar CI', { meta: 'DevOps', tag: 'ops', tagColor: 'warning' }),
+    card('Reunión cliente', { meta: 'PM', tag: 'meet', tagColor: 'neutral' }),
+  ));
+  basic.appendChild(column('En curso', { accent: '#0bb783' },
+    card('Refactor auth', { meta: 'Backend', tag: 'wip', tagColor: 'success' }),
+    card('A/B test landing', { meta: 'Growth', tag: 'exp', tagColor: 'warning' }),
+  ));
+  basic.appendChild(column('Hecho', { accent: '#a78bfa' },
+    card('Setup repo', { meta: 'DevOps', tag: 'done', tagColor: 'success' }),
+    card('Diseñar logos', { meta: 'Diseño', tag: 'design', tagColor: 'brand' }),
+    card('Onboarding docs', { meta: 'Docs', tag: 'done', tagColor: 'success' }),
+  ));
+  document.getElementById('basic').appendChild(basic);
+
+  // ── (2) Con cards sin sombra + cover (demo)
+  const styled = document.createElement('is-kanban');
+  styled.appendChild(column('Backlog', { badge: '0' },
+    card('Sin sombra', { withoutShadow: true, body: 'Esta card no tiene shadow' }),
+    card('Cover image', { cover: 'data:image/svg+xml;utf8,<svg xmlns=%22http://www.w3.org/2000/svg%22 width=%22120%22 height=%2240%22><rect fill=%22%230bb783%22 width=%22120%22 height=%2240%22/></svg>', tag: 'demo', tagColor: 'success', body: 'Card con cover SVG' }),
+  ));
+  document.getElementById('styled').appendChild(styled);
+
+  // ── (3) Orientation row
+  const row = document.createElement('is-kanban');
+  row.setAttribute('orientation', 'row');
+  row.appendChild(column('Stack A', {},
+    card('row card 1', { tag: 'a', tagColor: 'brand' }),
+    card('row card 2', { tag: 'a', tagColor: 'brand' }),
+  ));
+  row.appendChild(column('Stack B', {},
+    card('row card 3', { tag: 'b', tagColor: 'success' }),
+  ));
+  document.getElementById('row').appendChild(row);
+
+  // ── Log de eventos para los tests
+  function attachLog(kanban, logEl) {
+    kanban.addEventListener('is-kanban-card-click', (e) => {
+      const heading = e.detail?.card?.getAttribute('heading');
+      const line = `click: card="${heading}"`;
+      logEl.textContent = `${line}\n${logEl.textContent || ''}`.slice(0, 600);
+    });
+    kanban.addEventListener('is-kanban-move', (e) => {
+      const card = e.detail?.card;
+      const from = e.detail?.from?.getAttribute?.('title');
+      const to = e.detail?.to?.getAttribute?.('title');
+      const heading = card?.getAttribute?.('heading');
+      const line = `move: "${heading}" ${from} → ${to}`;
+      logEl.textContent = `${line}\n${logEl.textContent || ''}`.slice(0, 600);
+      logEl.dataset.lastMove = `${from}→${to}`;
+      logEl.dataset.lastHeading = heading || '';
+    });
+  }
+  attachLog(basic, document.getElementById('log-basic'));
+  attachLog(styled, document.getElementById('log-styled'));
+  attachLog(row, document.getElementById('log-row'));
+
+  document.documentElement.dataset.kanbanReady = '1';
+</script>
+</head>
+<body>
+<header>
+  <h1>Demo — <code>&lt;is-kanban&gt;</code> tablero</h1>
+  <p>Drag &amp; drop entre columnas, badges por columna, accents y orientación <code>column</code>/<code>row</code>.</p>
+</header>
+<main>
+  <section>
+    <h2>Básico (3 columnas)</h2>
+    <div id="basic"></div>
+    <div class="log" id="log-basic"></div>
+  </section>
+  <section>
+    <h2>Sin sombra + cover</h2>
+    <div id="styled"></div>
+    <div class="log" id="log-styled"></div>
+  </section>
+  <section>
+    <h2>Orientación row</h2>
+    <div id="row"></div>
+    <div class="log" id="log-row"></div>
+  </section>
+</main>
+<footer>
+  Eventos: <code>is-kanban-card-click</code>, <code>is-kanban-move</code>. Arrastra con `pull` lateral.
+</footer>
+</body>
+</html>

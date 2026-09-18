@@ -15,22 +15,22 @@
  */
 
 /**
- * @param {unknown} json
- * @param {ParentNode} [parent]  si se pasa, append y devuelve parent; si no, DocumentFragment
- * @returns {ParentNode}
+ * @param json Estructura JSON a renderizar.
+ * @param parent Si se pasa, append y devuelve parent; si no, DocumentFragment.
  */
-export function json2html(json: unknown, parent: ParentNode) {
+export function json2html(json: unknown, parent?: ParentNode): ParentNode {
   const target = parent || document.createDocumentFragment();
   appendJson(target, json);
   return target;
 }
 
+export type Html2JsonOpts = { trim?: boolean; deep?: boolean };
+
 /**
- * @param {Node|ParentNode|string} node  Element, Fragment, o HTML string
- * @param {{ trim?: boolean, deep?: boolean }} [opts]
- * @returns {unknown} Node JSON (string | array | array de roots)
+ * @param node Element, Fragment, o HTML string.
+ * @param opts Opciones de serialización.
  */
-export function html2json(node: Node|ParentNode|string, opts = {}) {
+export function html2json(node: Node | ParentNode | string | null | undefined, opts: Html2JsonOpts = {}): unknown {
   const trim = opts.trim !== false;
   if (typeof node === 'string') {
     const t = document.createElement('template');
@@ -42,32 +42,32 @@ export function html2json(node: Node|ParentNode|string, opts = {}) {
     return nodesToJson([...node.childNodes], trim);
   }
   if (node.nodeType === 3 /* Text */) {
-    const t = trim ? node.textContent.replace(/\s+/g, ' ').trim() : node.textContent;
+    const raw = node.textContent ?? '';
+    const t = trim ? raw.replace(/\s+/g, ' ').trim() : raw;
     return t || null;
   }
   if (node.nodeType === 1 /* Element */) {
-    return elementToJson(/** @type {Element} */ (node), trim);
+    return elementToJson(node as Element, trim);
   }
   // Host con hijos light DOM (custom element)
-  if (typeof node.childNodes !== 'undefined') {
+  if (typeof (node as Node).childNodes !== 'undefined') {
     return nodesToJson([...node.childNodes], trim);
   }
   return null;
 }
 
 /** Alias: crea nodos sin padre. */
-export function json2dom(json) {
+export function json2dom(json: unknown): ParentNode {
   return json2html(json);
 }
+
+export type ApplyJsonBodyOpts = { replace?: boolean };
 
 /**
  * Vuelca JSON en un host: si el root es el mismo tag que el host, aplica attrs
  * al host y monta solo los hijos (no anida otro host).
- * @param {HTMLElement} host
- * @param {unknown} json
- * @param {{ replace?: boolean }} [opts]
  */
-export function applyJsonBody(host: HTMLElement, json: unknown, opts = {}) {
+export function applyJsonBody(host: HTMLElement, json: unknown, opts: ApplyJsonBodyOpts = {}): HTMLElement {
   if (!host || json == null) return host;
   const replace = opts.replace !== false;
   const roots = asList(json);
@@ -75,10 +75,10 @@ export function applyJsonBody(host: HTMLElement, json: unknown, opts = {}) {
   if (
     roots.length === 1
     && Array.isArray(roots[0])
-    && typeof roots[0][0] === 'string'
-    && roots[0][0].toLowerCase() === host.localName
+    && typeof (roots[0] as unknown[])[0] === 'string'
+    && ((roots[0] as unknown[])[0] as string).toLowerCase() === host.localName
   ) {
-    const parsed = parseElementTuple(roots[0]);
+    const parsed = parseElementTuple(roots[0] as ElementTuple);
     applyAttrs(host, parsed.attrs);
     if (replace) host.replaceChildren();
     for (const child of parsed.children) appendJson(host, child);
@@ -90,29 +90,39 @@ export function applyJsonBody(host: HTMLElement, json: unknown, opts = {}) {
   return host;
 }
 
+export type HostToJsonOpts = { self?: boolean; trim?: boolean };
+
 /**
  * Serializa el light DOM (hijos) de un host. Si `self` es true, incluye el host.
- * @param {HTMLElement} host
- * @param {{ self?: boolean, trim?: boolean }} [opts]
  */
-export function hostToJson(host: HTMLElement, opts = {}) {
+export function hostToJson(host: HTMLElement | null | undefined, opts: HostToJsonOpts = {}): unknown {
   if (!host) return null;
-  if (opts.self) return elementToJson(host, opts.trim !== false);
-  return nodesToJson([...host.childNodes], opts.trim !== false);
+  const trim = opts.trim !== false;
+  if (opts.self) return elementToJson(host, trim);
+  return nodesToJson([...host.childNodes], trim);
 }
 
 // ── internals ──────────────────────────────────────────────────────────────
 
-function asList(json) {
+/** Atributos que admite `json2html`: booleanos, numéricos, strings. */
+type JsonAttrs = Record<string, string | number | boolean | { [k: string]: string } | null | undefined>;
+
+/** Forma verbose opcional: `{ t: tag, a: attrs, c: children }`. */
+type VerboseNode = { t: string; a?: JsonAttrs; c?: unknown[] };
+
+/** Tupla que produce `parseElementTuple`: `[tag, attrs?, ...children]`. */
+type ElementTuple = [string, JsonAttrs?, ...unknown[]];
+
+function asList(json: unknown): unknown[] {
   if (json == null) return [];
   // Fragment: varios roots en un array cuyo primer item NO es string tag
   if (Array.isArray(json) && (json.length === 0 || typeof json[0] !== 'string')) {
-    return json;
+    return json as unknown[];
   }
   return [json];
 }
 
-function appendJson(parent, json) {
+function appendJson(parent: ParentNode, json: unknown): void {
   if (json == null || json === false) return;
   if (typeof json === 'string' || typeof json === 'number') {
     parent.appendChild(document.createTextNode(String(json)));
@@ -122,22 +132,23 @@ function appendJson(parent, json) {
     // Fragment de siblings: [[...],[...]] o ["tag", ...]
     if (json.length === 0) return;
     if (typeof json[0] === 'string') {
-      parent.appendChild(createElementFromTuple(json));
+      parent.appendChild(createElementFromTuple(json as ElementTuple));
       return;
     }
     for (const item of json) appendJson(parent, item);
     return;
   }
-  if (typeof json === 'object' && json.t) {
+  if (typeof json === 'object' && json && (json as VerboseNode).t) {
     // Forma verbose opcional: { t, a, c }
-    const tuple = [json.t, json.a || {}, ...(json.c || [])];
+    const v = json as VerboseNode;
+    const tuple: unknown[] = [v.t, v.a || {}, ...(v.c || [])];
     appendJson(parent, tuple);
   }
 }
 
-function parseElementTuple(tuple: string) {
+function parseElementTuple(tuple: ElementTuple): { tag: string; attrs: JsonAttrs | null; children: unknown[] } {
   const tag = String(tuple[0]).toLowerCase();
-  let attrs = null;
+  let attrs: JsonAttrs | null = null;
   let start = 1;
   if (
     tuple.length > 1
@@ -148,29 +159,27 @@ function parseElementTuple(tuple: string) {
     attrs = tuple[1];
     start = 2;
   }
-  return { tag, attrs, children: tuple.slice(start) };
+  return { tag, attrs, children: tuple.slice(start) as unknown[] };
 }
 
-function createElementFromTuple(tuple) {
+function createElementFromTuple(tuple: ElementTuple): HTMLElement {
   const { tag, attrs, children } = parseElementTuple(tuple);
-  const el = tag.includes('-') || tag === 'svg' || tag === 'path'
-    ? document.createElement(tag)
-    : document.createElement(tag);
+  const el = document.createElement(tag);
   applyAttrs(el, attrs);
   for (const child of children) appendJson(el, child);
   return el;
 }
 
-function applyAttrs(el: HTMLElement, attrs) {
+function applyAttrs(el: HTMLElement, attrs: JsonAttrs | null): void {
   if (!attrs) return;
   for (const [key, val] of Object.entries(attrs)) {
     if (val == null || val === false) continue;
     if (key === 'style' && val && typeof val === 'object' && !Array.isArray(val)) {
-      Object.assign(el.style, val);
+      Object.assign(el.style, val as Partial<CSSStyleDeclaration>);
       continue;
     }
     if (key === 'dataset' && val && typeof val === 'object') {
-      Object.assign(el.dataset, val);
+      Object.assign(el.dataset, val as DOMStringMap);
       continue;
     }
     if (key === 'className' || key === 'class') {
@@ -185,11 +194,10 @@ function applyAttrs(el: HTMLElement, attrs) {
   }
 }
 
-function elementToJson(el, trim) {
+function elementToJson(el: Element, trim: boolean): unknown[] {
   const tag = el.localName;
   const attrs = attrsToObject(el);
-  /** @type {unknown[]} */
-  const kids = [];
+  const kids: unknown[] = [];
   for (const n of el.childNodes) {
     if (n.nodeType === 3) {
       let t = n.textContent ?? '';
@@ -200,17 +208,16 @@ function elementToJson(el, trim) {
       if (t) kids.push(t);
       continue;
     }
-    if (n.nodeType === 1) kids.push(elementToJson(/** @type {Element} */ (n), trim));
+    if (n.nodeType === 1) kids.push(elementToJson(n as Element, trim));
   }
-  const out = [tag];
+  const out: unknown[] = [tag];
   if (attrs && Object.keys(attrs).length) out.push(attrs);
   out.push(...kids);
   return out;
 }
 
-function nodesToJson(nodes, trim) {
-  /** @type {unknown[]} */
-  const out = [];
+function nodesToJson(nodes: readonly ChildNode[], trim: boolean): unknown {
+  const out: unknown[] = [];
   for (const n of nodes) {
     if (n.nodeType === 3) {
       let t = n.textContent ?? '';
@@ -221,17 +228,16 @@ function nodesToJson(nodes, trim) {
       if (t) out.push(t);
       continue;
     }
-    if (n.nodeType === 1) out.push(elementToJson(/** @type {Element} */ (n), trim));
+    if (n.nodeType === 1) out.push(elementToJson(n as Element, trim));
   }
   if (out.length === 0) return [];
   if (out.length === 1) return out[0];
   return out;
 }
 
-function attrsToObject(el) {
+function attrsToObject(el: Element): Record<string, string | boolean> | null {
   if (!el.hasAttributes()) return null;
-  /** @type {Record<string, string|boolean>} */
-  const obj = {};
+  const obj: Record<string, string | boolean> = {};
   for (const attr of el.attributes) {
     const name = attr.name;
     if ((name === 'class' || name === 'style') && !attr.value) continue;

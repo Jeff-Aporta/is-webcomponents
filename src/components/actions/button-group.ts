@@ -180,7 +180,7 @@ import { withStyleAttrs } from '../../core/attrs.js';
       // `children` es `Element[]`, pero un `is-button-group` solo agrupa HTML:
       // acotar aqui evita repetir el cast en los seis sitios que lo consumen.
       return [...this.children].filter(
-        (el: HTMLElement): el is HTMLElement => el instanceof HTMLElement && !el.hasAttribute('slot'));
+        (el: Element): el is HTMLElement => el instanceof HTMLElement && !el.hasAttribute('slot'));
     }
 
     #valueOf(el: HTMLElement, index: number): string {

@@ -1,0 +1,129 @@
+<!doctype html>
+<html lang="es" class="theme-dark" data-theme="dark">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>Demo — <is-stat> KPI card · is-webcomponents</title>
+<meta name="description" content="Bloque para KPI en dashboards: label, valor, helper, trend e icono." />
+<style>
+  html, body { margin: 0; padding: 0; min-height: 100%; background: #0c1118; color: #e2e8f0; font-family: ui-sans-serif, system-ui, sans-serif; }
+  body { display: grid; grid-template-rows: auto 1fr auto; }
+  header { padding: 16px 20px; border-bottom: 1px solid rgba(255,255,255,0.1); background: #0f1620; }
+  header h1 { font-size: 16px; font-weight: 700; margin: 0; }
+  header p { font-size: 12px; color: #94a3b8; margin: 4px 0 0 0; }
+  main { padding: 20px; display: grid; grid-template-columns: repeat(auto-fit, minmax(220px, 1fr)); gap: 16px; }
+  section { background: #0f1620; border: 1px solid rgba(255,255,255,0.1); border-radius: 8px; padding: 16px; }
+  section h2 { font-size: 11px; text-transform: uppercase; letter-spacing: 0.08em; margin: 0 0 12px 0; color: #94a3b8; }
+  is-stat { width: 100%; }
+  is-stat:not(:defined) { visibility: hidden; }
+  footer { padding: 12px 20px; border-top: 1px solid rgba(255,255,255,0.1); background: #0f1620; font-size: 11px; color: #94a3b8; }
+  footer code { background: rgba(255,255,255,0.06); padding: 1px 5px; border-radius: 3px; font: 11px ui-monospace, Menlo, Consolas, monospace; }
+</style>
+<script type="module">
+  await import('../../../dist/cdn/data/stat.min.js');
+  await customElements.whenDefined('is-stat');
+
+  // Helper para crear stat con label/value/helper/trend y color opcional.
+  function buildStat({ label, value, helper, trend, color, trendDirection }) {
+    const s = document.createElement('is-stat');
+    if (label) s.setAttribute('label', label);
+    if (value) s.setAttribute('value', value);
+    if (helper) s.setAttribute('helper', helper);
+    if (trend) s.setAttribute('trend', trend);
+    if (color) s.setAttribute('color', color);
+    if (trendDirection) s.setAttribute('trend-direction', trendDirection);
+    return s;
+  }
+
+  // (1) Stat básico: ingresos.
+  document.getElementById('basic').appendChild(buildStat({
+    label: 'Ingresos',
+    value: '€ 1.249,00',
+    helper: 'vs mes anterior',
+  }));
+
+  // (2) Trend positivo (auto-detect desde "+").
+  document.getElementById('trend-up').appendChild(buildStat({
+    label: 'Usuarios activos',
+    value: '8.412',
+    helper: 'últimos 7 días',
+    trend: '+12.5%',
+    color: 'success',
+  }));
+
+  // (3) Trend negativo (auto-detect desde "-").
+  document.getElementById('trend-down').appendChild(buildStat({
+    label: 'Tasa de error',
+    value: '0.84%',
+    helper: 'vs semana pasada',
+    trend: '-3.2%',
+    color: 'danger',
+  }));
+
+  // (4) Trend-direction explícito (override del auto-detect).
+  document.getElementById('trend-explicit').appendChild(buildStat({
+    label: 'Tickets',
+    value: '42',
+    trend: '↔',
+    trendDirection: 'flat',
+    color: 'neutral',
+  }));
+
+  // (5) Warning color.
+  document.getElementById('warning').appendChild(buildStat({
+    label: 'Pendientes',
+    value: '17',
+    helper: 'requieren atención',
+    color: 'warning',
+  }));
+
+  // (6) Slot override (texto crudo HTML dentro del slot value).
+  const custom = document.createElement('is-stat');
+  custom.setAttribute('label', 'Ventas netas');
+  custom.setAttribute('helper', 'año fiscal 2026');
+  custom.setAttribute('color', 'brand');
+  const slot = document.createElement('span');
+  slot.setAttribute('slot', 'value');
+  slot.textContent = '$ 3.4M';
+  custom.appendChild(slot);
+  document.getElementById('slot').appendChild(custom);
+
+  document.documentElement.dataset.statReady = '1';
+</script>
+</head>
+<body>
+<header>
+  <h1>Demo — <code>&lt;is-stat&gt;</code> KPI card</h1>
+  <p>Bloque para KPI en dashboards: label, valor, helper, trend e icono. Auto-detecta dirección del trend desde <code>+</code>/<code>-</code>.</p>
+</header>
+<main>
+  <section>
+    <h2>Básico</h2>
+    <div id="basic"></div>
+  </section>
+  <section>
+    <h2>Trend positivo</h2>
+    <div id="trend-up"></div>
+  </section>
+  <section>
+    <h2>Trend negativo</h2>
+    <div id="trend-down"></div>
+  </section>
+  <section>
+    <h2>Trend plano (explícito)</h2>
+    <div id="trend-explicit"></div>
+  </section>
+  <section>
+    <h2>Warning</h2>
+    <div id="warning"></div>
+  </section>
+  <section>
+    <h2>Slot override</h2>
+    <div id="slot"></div>
+  </section>
+</main>
+<footer>
+  Estado: <code>customElements.whenDefined('is-stat')</code> resuelto. Tendencias por atributo <code>trend</code> con prefijo <code>+</code> / <code>-</code>.
+</footer>
+</body>
+</html>

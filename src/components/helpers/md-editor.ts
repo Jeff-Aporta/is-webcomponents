@@ -16,6 +16,36 @@ import {
   normalizeDocument,
   parseApiConfig,
 } from './md-editor-api.js';
+// Tipos del contrato — declarados aquí localmente (en lugar de re-exportarlos
+// desde md-editor-api.js, que sigue siendo JSDoc-only). El `.d.ts` paralelo
+// sigue siendo la documentación canónica del consumidor externo.
+interface IsMdEditorDocument {
+  id?: string;
+  filename?: string;
+  content: string;
+  contentType?: string;
+  updatedAt?: string;
+  updatedBy?: string;
+  sizeBytes?: number;
+  meta?: Record<string, string | number | boolean | null>;
+}
+interface IsMdEditorApiConfig {
+  baseUrl?: string;
+  endpoints?: {
+    get?: string;
+    put?: string;
+    post?: string;
+    delete?: string;
+  };
+  headers?: Record<string, string> | (() => Record<string, string>);
+  token?: string | (() => string);
+  fieldMap?: Partial<Record<string, keyof IsMdEditorDocument>>;
+}
+interface IsMdEditorActions {
+  load?: () => Promise<IsMdEditorDocument | string>;
+  persist?: (doc: IsMdEditorDocument) => Promise<IsMdEditorDocument | void>;
+  delete?: (doc: IsMdEditorDocument) => Promise<void>;
+}
 import '../layout/dialog.js';
 import '../actions/button.js';
 import '../actions/copy-button.js';
@@ -38,8 +68,41 @@ import '../media/icon.js';
  * Tipos: `md-editor-api.d.ts`. Preview inline: preferir `<is-md-render>`.
  */
 
+// ── Subset del contrato público de <is-dialog> que este wrapper usa ────────
+// No usamos `extends HTMLElement` para evitar colisiones con `open`/`matches`
+// que aparecen en distintos mixins del lib.dom; nos basta con el contrato
+// mínimo que este wrapper consume.
+type DialogElement = HTMLElement & {
+  open: boolean;
+  show(): void;
+  hide(): void;
+  showPopover?: () => void;
+  hidePopover?: () => void;
+};
+
+// ── Subset del contrato público de <is-switch> ────────────────────────────
+interface SwitchElement extends HTMLElement {
+  checked: boolean;
+}
+
+// ── Subset del contrato público de <is-copy-button> ───────────────────────
+interface CopyButtonElement extends HTMLElement {
+  value: string;
+}
+
+// ── Subset del contrato público de <is-textarea> (<textarea> host) ────────
+interface TextareaElement extends HTMLElement {
+  value: string;
+}
+
+// ── Forma del historial de undo/redo ──────────────────────────────────────
+interface EditorHistory {
+  past: string[];
+  future: string[];
+}
+
 (() => {
-  const TOOLS = [
+  const TOOLS: Array<{ cmd: string; icon: string; title: string } | { sep: true }> = [
     { cmd: 'undo', icon: 'mdi:undo', title: 'Deshacer (Ctrl+Z)' },
     { cmd: 'redo', icon: 'mdi:redo', title: 'Rehacer (Ctrl+Y)' },
     { sep: true },
@@ -59,10 +122,10 @@ import '../media/icon.js';
     { cmd: 'link', icon: 'mdi:link-variant', title: 'Enlace' },
   ];
 
-  function buildToolbarHtml() {
+  function buildToolbarHtml(): string {
     let html = '';
     for (const t of TOOLS) {
-      if (t.sep) {
+      if ('sep' in t) {
         html += '<span class="tb-sep" aria-hidden="true"></span>';
         continue;
       }
@@ -105,13 +168,13 @@ import '../media/icon.js';
     </is-dialog>
   `;
 
-  const OBSERVED = [
+  const OBSERVED: readonly string[] = [
     'value', 'can-edit', 'readonly', 'label', 'placeholder', 'edit-block-reason', 'open',
     'fullscreen-scope', 'src', 'api', 'filename',
   ];
   const MAX_UNDO = 80;
 
-  function getCaretOffset(root, targetNode, targetOffset) {
+  function getCaretOffset(root: Node, targetNode: Node, targetOffset: number): number {
     const walker = document.createTreeWalker(root, NodeFilter.SHOW_TEXT);
     let offset = 0;
     let node = walker.nextNode();
@@ -123,7 +186,7 @@ import '../media/icon.js';
     return offset;
   }
 
-  function setCaretOffset(root, offset: number) {
+  function setCaretOffset(root: Node, offset: number): void {
     const walker = document.createTreeWalker(root, NodeFilter.SHOW_TEXT);
     let remain = Math.max(0, offset ?? 0);
     let node = walker.nextNode();
@@ -149,7 +212,7 @@ import '../media/icon.js';
     sel?.addRange(range);
   }
 
-  function saveSurfaceCaret(root) {
+  function saveSurfaceCaret(root: Node | null): number | null {
     const sel = window.getSelection();
     if (!sel?.rangeCount || !root) return null;
     const range = sel.getRangeAt(0);
@@ -157,12 +220,12 @@ import '../media/icon.js';
     return getCaretOffset(root, range.startContainer, range.startOffset);
   }
 
-  function restoreSurfaceCaret(root, offset) {
+  function restoreSurfaceCaret(root: Node | null, offset: number | null): void {
     if (offset == null || !root) return;
     requestAnimationFrame(() => setCaretOffset(root, offset));
   }
 
-  function formatWhen(iso: string) {
+  function formatWhen(iso: string): string {
     if (!iso) return '';
     try {
       const d = new Date(iso);
@@ -173,43 +236,79 @@ import '../media/icon.js';
     }
   }
 
+  function escapeText(s: string): string {
+    return String(s)
+      .replace(/&/g, '&amp;')
+      .replace(/</g, '&lt;')
+      .replace(/>/g, '&gt;')
+      .replace(/"/g, '&quot;');
+  }
+
+  // ── Detalle del evento `is-change` que llega del <is-switch> ───────────
+  interface SwitchChangeDetail {
+    checked: boolean;
+    value?: string;
+  }
+
+  // ── Detalle de los eventos de error personalizados ─────────────────────
+  interface ErrorDetail {
+    action: 'load' | 'persist' | 'delete';
+    error: string;
+  }
+
+  // ── Detalle del evento `is-load` ──────────────────────────────────────
+  interface LoadDetail {
+    document: IsMdEditorDocument;
+  }
+
+  // ── Detalle de `is-persist` ───────────────────────────────────────────
+  interface PersistDetail {
+    value: string;
+    document: IsMdEditorDocument;
+  }
+
+  // ── Detalle de `is-download` ──────────────────────────────────────────
+  interface DownloadDetail {
+    filename: string;
+    bytes: number;
+  }
+
   class IsMdEditor extends ElementBase {
     /** Personalización por atributo (ver `core/attrs.ts`). */
     static styleAttrs = {
-    'preview-max-height': '--is-md-editor-preview-max-height',
+      'preview-max-height': '--is-md-editor-preview-max-height',
     };
 
-    static get observedAttributes(): string[] { return [...OBSERVED, 'preview-max-height']; }
+    static override get observedAttributes(): string[] {
+      return [...OBSERVED, 'preview-max-height'];
+    }
 
     #preview!: HTMLElement;
     #previewBody!: HTMLElement;
     #previewEmpty!: HTMLElement;
-    #copyBtn!: HTMLElement;
-    #dlg!: HTMLElement;
+    #copyBtn!: CopyButtonElement;
+    #dlg!: DialogElement;
     #dlgLabel!: HTMLElement;
     #dlgFilename!: HTMLElement;
     #toolbar!: HTMLElement;
     #undoBtn!: HTMLElement;
     #redoBtn!: HTMLElement;
-    #plainSwitch!: HTMLElement;
+    #plainSwitch!: SwitchElement;
     #varsWrap!: HTMLElement;
     #varsList!: HTMLElement;
     #surface!: HTMLElement;
-    #plainTextarea!: HTMLElement;
+    #plainTextarea!: TextareaElement;
     #ftMeta!: HTMLElement;
     #ftDownload!: HTMLElement;
     #ftDiscard!: HTMLElement;
     #ftSave!: HTMLElement;
     #draft = '';
     #plain = false;
-    #history = { past: [], future: [] };
-    #scopeAnchor = null;
-    /** @type {import('./md-editor-api.d.ts').IsMdEditorDocument} */
-    #document = { content: '' };
-    /** @type {import('./md-editor-api.d.ts').IsMdEditorApiConfig|null} */
-    #api = null;
-    /** @type {import('./md-editor-api.d.ts').IsMdEditorActions|null} */
-    #actions = null;
+    #history: EditorHistory = { past: [], future: [] };
+    #scopeAnchor: HTMLElement | null = null;
+    #document: IsMdEditorDocument = { content: '' };
+    #api: IsMdEditorApiConfig | null = null;
+    #actions: IsMdEditorActions | null = null;
 
     constructor() {
       super();
@@ -220,27 +319,27 @@ import '../media/icon.js';
       this.#preview = shadow.querySelector<HTMLElement>('.preview')!;
       this.#previewBody = shadow.querySelector<HTMLElement>('.preview-body')!;
       this.#previewEmpty = shadow.querySelector<HTMLElement>('.preview-empty')!;
-      this.#copyBtn = shadow.querySelector<HTMLElement>('.copy')!;
-      this.#dlg = shadow.querySelector<HTMLElement>('.dlg')!;
+      this.#copyBtn = shadow.querySelector<HTMLElement>('.copy') as CopyButtonElement;
+      this.#dlg = shadow.querySelector<HTMLElement>('.dlg') as DialogElement;
       this.#dlg.style.setProperty('--width', 'min(96vw, 56rem)');
       this.#dlgLabel = shadow.querySelector<HTMLElement>('.dlg-label')!;
       this.#dlgFilename = shadow.querySelector<HTMLElement>('.dlg-filename')!;
       this.#toolbar = shadow.querySelector<HTMLElement>('.toolbar')!;
       this.#undoBtn = shadow.querySelector<HTMLElement>('[data-cmd="undo"]')!;
       this.#redoBtn = shadow.querySelector<HTMLElement>('[data-cmd="redo"]')!;
-      this.#plainSwitch = shadow.querySelector<HTMLElement>('.tb-plain')!;
+      this.#plainSwitch = shadow.querySelector<HTMLElement>('.tb-plain') as SwitchElement;
       this.#varsWrap = shadow.querySelector<HTMLElement>('.vars')!;
       this.#varsList = shadow.querySelector<HTMLElement>('.vars-list')!;
       this.#surface = shadow.querySelector<HTMLElement>('.surface')!;
-      this.#plainTextarea = shadow.querySelector<HTMLElement>('.plain')!;
+      this.#plainTextarea = shadow.querySelector<HTMLElement>('.plain') as TextareaElement;
       this.#ftMeta = shadow.querySelector<HTMLElement>('.ft-meta')!;
       this.#ftDownload = shadow.querySelector<HTMLElement>('[data-action="download"]')!;
       this.#ftDiscard = shadow.querySelector<HTMLElement>('[data-action="discard"]')!;
       this.#ftSave = shadow.querySelector<HTMLElement>('[data-action="save"]')!;
 
-      this.#preview.addEventListener('click', (e) => this.#onPreviewActivate(e));
-      this.#preview.addEventListener('dblclick', (e) => this.#onPreviewActivate(e));
-      this.#preview.addEventListener('keydown', (e) => {
+      this.#preview.addEventListener('click', (e: MouseEvent) => this.#onPreviewActivate(e));
+      this.#preview.addEventListener('dblclick', (e: MouseEvent) => this.#onPreviewActivate(e));
+      this.#preview.addEventListener('keydown', (e: KeyboardEvent) => {
         if (e.target !== this.#preview) return;
         if (e.key === 'Enter' || e.key === ' ') { e.preventDefault(); this.open(); }
       });
@@ -257,32 +356,36 @@ import '../media/icon.js';
         emit(this, 'is-close', {});
       });
 
-      this.#toolbar.addEventListener('mousedown', (e) => {
-        if (e.target.closest('is-button[data-cmd]')) e.preventDefault();
+      this.#toolbar.addEventListener('mousedown', (e: MouseEvent) => {
+        const target = e.target;
+        if (target instanceof Element && target.closest('is-button[data-cmd]')) e.preventDefault();
       });
-      this.#toolbar.addEventListener('click', (e) => {
-        const btn = e.target.closest('is-button[data-cmd]');
-        if (btn && !btn.disabled) this.#runCommand(btn.dataset.cmd);
+      this.#toolbar.addEventListener('click', (e: MouseEvent) => {
+        const target = e.target;
+        if (!(target instanceof Element)) return;
+        const btn = target.closest('is-button[data-cmd]');
+        if (btn && !(btn as HTMLElement & { disabled?: boolean }).disabled) this.#runCommand(btn.getAttribute('data-cmd'));
       });
-      this.#plainSwitch.addEventListener('is-change', (e) => {
+      this.#plainSwitch.addEventListener('is-change', (e: Event) => {
         if (!this.canEdit) {
           this.#plainSwitch.checked = false;
           return;
         }
-        this.#setPlainMode(!!e.detail?.checked);
+        const detail = (e as CustomEvent<SwitchChangeDetail>).detail;
+        this.#setPlainMode(!!detail?.checked);
       });
 
       this.#surface.addEventListener('input', () => this.#onSurfaceInput());
-      this.#surface.addEventListener('keydown', (e) => this.#onEditorKeyDown(e));
+      this.#surface.addEventListener('keydown', (e: KeyboardEvent) => this.#onEditorKeyDown(e));
       this.#plainTextarea.addEventListener('input', () => this.#onPlainInput());
-      this.#plainTextarea.addEventListener('keydown', (e) => this.#onEditorKeyDown(e));
+      this.#plainTextarea.addEventListener('keydown', (e: KeyboardEvent) => this.#onEditorKeyDown(e));
 
       this.#ftDownload.addEventListener('click', () => this.download());
       this.#ftDiscard.addEventListener('click', () => this.#dlg.hide());
       this.#ftSave.addEventListener('click', () => void this.#save());
     }
 
-    onConnected() {
+    override onConnected(): void {
       this.#api = parseApiConfig(this.getAttribute('api')) || this.#api;
       this.#hydrateValueFromChild();
       this.#syncDocumentFromValue();
@@ -293,11 +396,11 @@ import '../media/icon.js';
       if (this.#actions?.load || this.src || this.#api?.endpoints?.get) void this.load();
     }
 
-    onDisconnected() {
+    override onDisconnected(): void {
       this.#releaseScopeAnchor();
     }
 
-    #hydrateValueFromChild() {
+    #hydrateValueFromChild(): void {
       if (this.hasAttribute('value')) return;
       const area = this.querySelector<HTMLTextAreaElement>(':scope > textarea[data-md-source]');
       if (area) {
@@ -305,7 +408,7 @@ import '../media/icon.js';
         if (body) this.value = body;
         return;
       }
-      const script = [...this.children].find((c: HTMLElement) => {
+      const script = [...this.children].find((c: Element): c is HTMLScriptElement => {
         if (c.tagName !== 'SCRIPT') return false;
         const t = (c.getAttribute('type') || '').toLowerCase();
         return t === 'text/markdown' || t === 'text/plain' || t === 'text/md';
@@ -315,7 +418,7 @@ import '../media/icon.js';
       if (body) this.value = body;
     }
 
-    onAttributeChanged(name) {
+    override onAttributeChanged(name: string): void {
       if (name === 'value' || name === 'placeholder') {
         if (name === 'value') this.#syncDocumentFromValue();
         this.#renderPreview();
@@ -334,19 +437,19 @@ import '../media/icon.js';
 
     // ---- public properties ----
 
-    get value() { return this.getAttribute('value') ?? ''; }
+    get value(): string { return this.getAttribute('value') ?? ''; }
     set value(v) { setOptionalAttr(this, 'value', v); }
 
-    get canEdit() { return this.hasAttribute('can-edit') && !this.hasAttribute('readonly'); }
+    get canEdit(): boolean { return this.hasAttribute('can-edit') && !this.hasAttribute('readonly'); }
     set canEdit(v) { this.toggleAttribute('can-edit', !!v); }
 
-    get readonly() { return this.hasAttribute('readonly'); }
+    get readonly(): boolean { return this.hasAttribute('readonly'); }
     set readonly(v) { this.toggleAttribute('readonly', !!v); }
 
-    get label() { return this.getAttribute('label') ?? ''; }
+    get label(): string { return this.getAttribute('label') ?? ''; }
     set label(v) { setStringAttr(this, 'label', v); }
 
-    get filename() {
+    get filename(): string {
       return this.getAttribute('filename') || this.#document.filename || '';
     }
     set filename(v) {
@@ -355,74 +458,71 @@ import '../media/icon.js';
       this.#syncDialogLabel();
     }
 
-    get placeholder() { return this.getAttribute('placeholder') ?? ''; }
+    get placeholder(): string { return this.getAttribute('placeholder') ?? ''; }
     set placeholder(v) { setStringAttr(this, 'placeholder', v); }
 
-    get editBlockReason() { return this.getAttribute('edit-block-reason') ?? ''; }
+    get editBlockReason(): string { return this.getAttribute('edit-block-reason') ?? ''; }
     set editBlockReason(v) { setStringAttr(this, 'edit-block-reason', v); }
 
-    get fullscreenScope() {
+    get fullscreenScope(): 'local' | 'global' {
       return this.getAttribute('fullscreen-scope') === 'local' ? 'local' : 'global';
     }
-    set fullscreenScope(v) {
+    set fullscreenScope(v: 'local' | 'global') {
       setStringAttr(this, 'fullscreen-scope', v === 'local' ? 'local' : null);
     }
 
-    get src() { return this.getAttribute('src') || ''; }
+    get src(): string { return this.getAttribute('src') || ''; }
     set src(v) { setOptionalAttr(this, 'src', v); }
 
-    get api() { return this.#api; }
-    set api(v) {
-      this.#api = parseApiConfig(v);
-      if (this.#api) this.setAttribute('api', JSON.stringify({
-        baseUrl: this.#api.baseUrl,
-        endpoints: this.#api.endpoints,
-      }));
-      else this.removeAttribute('api');
+    get api(): IsMdEditorApiConfig | null { return this.#api; }
+    set api(v: IsMdEditorApiConfig | null | undefined) {
+      this.#api = parseApiConfig(v ?? null);
+      if (this.#api) {
+        this.setAttribute('api', JSON.stringify({
+          baseUrl: this.#api.baseUrl,
+          endpoints: this.#api.endpoints,
+        }));
+      } else this.removeAttribute('api');
     }
 
     /**
      * Callbacks custom (JS only). Prioridad sobre `api`/`src`.
-     * @type {import('./md-editor-api.d.ts').IsMdEditorActions|null}
      */
-    get actions() { return this.#actions; }
-    set actions(v) {
+    get actions(): IsMdEditorActions | null { return this.#actions; }
+    set actions(v: IsMdEditorActions | null) {
       this.#actions = v && typeof v === 'object' ? v : null;
     }
 
     /** Documento canónico (meta + content). */
-    get document() {
+    get document(): IsMdEditorDocument {
       return {
         ...this.#document,
         content: this.value,
         sizeBytes: byteLength(this.value),
-        filename: this.filename || this.#document.filename,
+        filename: this.filename || this.#document.filename || '',
       };
     }
-    set document(doc) {
+    set document(doc: IsMdEditorDocument | string) {
       this.setDocument(doc);
     }
 
     // ---- public methods ----
 
-    open() {
+    open(): void {
       if (this.#dlg.open) return;
       this.#enterTopLayer();
       this.#dlg.show();
     }
 
-    close() {
+    close(): void {
       if (!this.#dlg.open) return;
       if (this.canEdit) this.#commitDraft('is-change');
       this.#dlg.hide();
       this.#leaveTopLayer();
     }
 
-    /**
-     * @param {import('./md-editor-api.d.ts').IsMdEditorDocument|string} doc
-     */
-    setDocument(doc) {
-      const normalized = normalizeDocument(doc, this.#api || {});
+    setDocument(doc: IsMdEditorDocument | string): this {
+      const normalized = normalizeDocument(doc, this.#api || {}) as IsMdEditorDocument;
       this.#document = normalized;
       this.value = normalized.content || '';
       if (normalized.filename) this.setAttribute('filename', normalized.filename);
@@ -441,22 +541,23 @@ import '../media/icon.js';
      * Carga: `actions.load` → `src` / `api.endpoints.get`.
      * Sin ninguna fuente remota → no-op (`null`).
      */
-    async load() {
+    async load(): Promise<IsMdEditorDocument | null> {
       try {
         if (typeof this.#actions?.load === 'function') {
           const raw = await this.#actions.load();
           this.setDocument(raw);
-          emit(this, 'is-load', { document: this.document });
+          emit<LoadDetail>(this, 'is-load', { document: this.document });
           return this.document;
         }
         const cfg = this.#resolveApiForGet();
         if (!cfg) return null;
-        const doc = await apiRequest(cfg, 'get');
-        this.setDocument(doc);
-        emit(this, 'is-load', { document: this.document });
+        const doc = await apiRequest(cfg, 'get', { content: '' });
+        this.setDocument(doc ?? { content: '' });
+        emit<LoadDetail>(this, 'is-load', { document: this.document });
         return this.document;
       } catch (err) {
-        emit(this, 'is-error', { action: 'load', error: String(err?.message || err) });
+        const message = err instanceof Error ? err.message : String(err);
+        emit<ErrorDetail>(this, 'is-error', { action: 'load', error: message });
         throw err;
       }
     }
@@ -465,7 +566,7 @@ import '../media/icon.js';
      * Persiste: `actions.persist` → PUT/POST de `api.endpoints`.
      * Sin handler remoto lanza (el guardado local ya emitió `is-persist` en `#save`).
      */
-    async persistRemote() {
+    async persistRemote(): Promise<IsMdEditorDocument> {
       const doc = this.document;
       try {
         if (typeof this.#actions?.persist === 'function') {
@@ -474,48 +575,50 @@ import '../media/icon.js';
             const normalized = normalizeDocument(saved, this.#api || {});
             this.setDocument({ ...doc, ...normalized, content: normalized.content || doc.content });
           }
-          emit(this, 'is-persist', { value: this.value, document: this.document });
+          emit<PersistDetail>(this, 'is-persist', { value: this.value, document: this.document });
           return this.document;
         }
         const cfg = this.#api;
         if (!cfg?.endpoints?.put && !cfg?.endpoints?.post) {
           throw new Error('Sin actions.persist ni endpoints put/post');
         }
-        const method = cfg.endpoints.put ? 'put' : 'post';
+        const method: 'put' | 'post' = cfg.endpoints.put ? 'put' : 'post';
         const saved = await apiRequest(cfg, method, doc);
         if (saved) this.setDocument({ ...doc, ...saved, content: saved.content ?? doc.content });
-        emit(this, 'is-persist', { value: this.value, document: this.document });
+        emit<PersistDetail>(this, 'is-persist', { value: this.value, document: this.document });
         return this.document;
       } catch (err) {
-        emit(this, 'is-error', { action: 'persist', error: String(err?.message || err) });
+        const message = err instanceof Error ? err.message : String(err);
+        emit<ErrorDetail>(this, 'is-error', { action: 'persist', error: message });
         throw err;
       }
     }
 
-    async removeRemote() {
+    async removeRemote(): Promise<void> {
       try {
         if (typeof this.#actions?.delete === 'function') {
           await this.#actions.delete(this.document);
-          emit(this, 'is-delete', { document: this.document });
+          emit<LoadDetail>(this, 'is-delete', { document: this.document });
           return;
         }
         const cfg = this.#api;
         if (!cfg?.endpoints?.delete) throw new Error('Sin actions.delete ni endpoint delete');
         await apiRequest(cfg, 'delete', this.document);
-        emit(this, 'is-delete', { document: this.document });
+        emit<LoadDetail>(this, 'is-delete', { document: this.document });
       } catch (err) {
-        emit(this, 'is-error', { action: 'delete', error: String(err?.message || err) });
+        const message = err instanceof Error ? err.message : String(err);
+        emit<ErrorDetail>(this, 'is-error', { action: 'delete', error: message });
         throw err;
       }
     }
 
-    #hasRemotePersist() {
+    #hasRemotePersist(): boolean {
       return typeof this.#actions?.persist === 'function'
         || !!(this.#api?.endpoints?.put || this.#api?.endpoints?.post);
     }
 
     /** Descarga el markdown actual (siempre disponible). */
-    download() {
+    download(): void {
       const text = this.#dlg.open ? this.#draft : this.value;
       const name = (this.filename || this.label || 'documento').replace(/[^\w.\-áéíóúñü]+/gi, '_');
       const filename = /\.md$/i.test(name) ? name : `${name}.md`;
@@ -526,12 +629,12 @@ import '../media/icon.js';
       a.download = filename;
       a.click();
       URL.revokeObjectURL(url);
-      emit(this, 'is-download', { filename, bytes: byteLength(text) });
+      emit<DownloadDetail>(this, 'is-download', { filename, bytes: byteLength(text) });
     }
 
     // ---- private helpers ----
 
-    #resolveApiForGet() {
+    #resolveApiForGet(): IsMdEditorApiConfig | null {
       if (this.#api?.endpoints?.get) return this.#api;
       if (this.src) {
         return {
@@ -542,23 +645,25 @@ import '../media/icon.js';
       return null;
     }
 
-    #syncDocumentFromValue() {
-      this.#document = {
+    #syncDocumentFromValue(): void {
+      const next: IsMdEditorDocument = {
         ...this.#document,
         content: this.value,
         sizeBytes: byteLength(this.value),
-        filename: this.getAttribute('filename') || this.#document.filename,
+        filename: this.getAttribute('filename') || this.#document.filename || '',
       };
+      this.#document = next;
     }
 
-    #onPreviewActivate(e) {
-      if (e.target.closest('is-copy-button')) return;
+    #onPreviewActivate(e: MouseEvent): void {
+      const target = e.target;
+      if (target instanceof Element && target.closest('is-copy-button')) return;
       const sel = window.getSelection();
       if (sel && !sel.isCollapsed && this.#previewBody.contains(sel.anchorNode)) return;
       this.open();
     }
 
-    #renderPreview() {
+    #renderPreview(): void {
       const value = this.value;
       const html = bodyPreviewHtml(value);
       this.#copyBtn.value = value;
@@ -572,26 +677,26 @@ import '../media/icon.js';
         : (this.editBlockReason || 'Clic para revisar');
     }
 
-    #syncOpenAttr() {
+    #syncOpenAttr(): void {
       const want = this.hasAttribute('open');
       if (want && !this.#dlg.open) this.open();
       else if (!want && this.#dlg.open) this.close();
     }
 
-    #syncDialogLabel() {
+    #syncDialogLabel(): void {
       this.#dlgLabel.textContent = this.label || this.getAttribute('title') || 'Documento';
       const fn = this.filename;
       this.#dlgFilename.textContent = fn || '';
     }
 
-    #applyFullscreenScope() {
+    #applyFullscreenScope(): void {
       const local = this.fullscreenScope === 'local';
       this.#dlg.style.position = local ? 'absolute' : '';
       this.#releaseScopeAnchor();
       if (!local) return;
       this.#leaveTopLayer();
       const scope = this.closest('[data-md-editor-scope]');
-      if (scope) this.#claimScopeAnchor(scope);
+      if (scope instanceof HTMLElement) this.#claimScopeAnchor(scope);
       else if (getComputedStyle(this).position === 'static') {
         this.style.position = 'relative';
         this.dataset.mdEditorAutoRelative = '1';
@@ -599,7 +704,7 @@ import '../media/icon.js';
     }
 
     /** Top layer escapa containing blocks (overflow/filter/transform en padres). */
-    #enterTopLayer() {
+    #enterTopLayer(): void {
       if (this.fullscreenScope === 'local') return;
       if (typeof this.#dlg.showPopover !== 'function') return;
       try {
@@ -608,7 +713,7 @@ import '../media/icon.js';
       } catch { /* popover no disponible o ya abierto */ }
     }
 
-    #leaveTopLayer() {
+    #leaveTopLayer(): void {
       if (typeof this.#dlg.hidePopover !== 'function') return;
       try {
         if (this.#dlg.matches(':popover-open')) this.#dlg.hidePopover();
@@ -616,7 +721,7 @@ import '../media/icon.js';
       this.#dlg.removeAttribute('popover');
     }
 
-    #claimScopeAnchor(scope: HTMLElement) {
+    #claimScopeAnchor(scope: HTMLElement): void {
       if (this.#scopeAnchor === scope) return;
       if (getComputedStyle(scope).position === 'static') {
         scope.style.position = 'relative';
@@ -625,10 +730,11 @@ import '../media/icon.js';
       this.#scopeAnchor = scope;
     }
 
-    #releaseScopeAnchor() {
-      if (this.#scopeAnchor?.dataset.mdEditorAutoRelative) {
-        this.#scopeAnchor.style.position = '';
-        delete this.#scopeAnchor.dataset.mdEditorAutoRelative;
+    #releaseScopeAnchor(): void {
+      const anchor = this.#scopeAnchor;
+      if (anchor && anchor.dataset.mdEditorAutoRelative) {
+        anchor.style.position = '';
+        delete anchor.dataset.mdEditorAutoRelative;
       }
       this.#scopeAnchor = null;
       if (this.dataset.mdEditorAutoRelative) {
@@ -637,18 +743,18 @@ import '../media/icon.js';
       }
     }
 
-    #commitIfEditable() {
+    #commitIfEditable(): void {
       if (this.canEdit) this.#commitDraft('is-change');
     }
 
-    #commitDraft(eventType) {
+    #commitDraft(eventType: 'is-change' | 'is-persist' | string): void {
       const value = this.#draft;
       this.value = value;
       this.#syncDocumentFromValue();
-      emit(this, eventType, { value, document: this.document });
+      emit<PersistDetail>(this, eventType, { value, document: this.document });
     }
 
-    async #save() {
+    async #save(): Promise<void> {
       if (!this.#dlg.open || !this.canEdit) return;
       const value = this.#draft;
       this.value = value;
@@ -656,12 +762,12 @@ import '../media/icon.js';
       if (this.#hasRemotePersist()) {
         try { await this.persistRemote(); } catch { /* is-error ya emitido */ }
       } else {
-        emit(this, 'is-persist', { value, document: this.document });
+        emit<PersistDetail>(this, 'is-persist', { value, document: this.document });
       }
       this.#dlg.hide();
     }
 
-    #buildEditorState() {
+    #buildEditorState(): void {
       this.#draft = this.value;
       this.#history = { past: [], future: [] };
       this.#plain = false;
@@ -673,7 +779,7 @@ import '../media/icon.js';
     }
 
     /** Toolbar siempre visible; botones disabled si !canEdit. */
-    #syncCanEditUi() {
+    #syncCanEditUi(): void {
       const canEdit = this.canEdit;
       this.#toolbar.hidden = false;
       for (const btn of this.#toolbar.querySelectorAll<HTMLElement>('is-button[data-cmd]')) {
@@ -692,7 +798,7 @@ import '../media/icon.js';
       this.#syncHistoryButtons();
     }
 
-    #syncFooterMeta() {
+    #syncFooterMeta(): void {
       const text = this.#dlg.open ? this.#draft : this.value;
       const chars = [...text].length;
       const bytes = this.#document.sizeBytes ?? byteLength(text);
@@ -701,7 +807,7 @@ import '../media/icon.js';
         `<span class="ft-meta-item"><strong>${formatBytes(bytes)}</strong></span>`,
       ];
       if (this.#document.updatedAt) {
-        parts.push(`<span class="ft-meta-item">Editado <strong>${formatWhen(this.#document.updatedAt)}</strong></span>`);
+        parts.push(`<span class="ft-meta-item">Editado <strong>${escapeText(formatWhen(this.#document.updatedAt))}</strong></span>`);
       }
       if (this.#document.updatedBy) {
         parts.push(`<span class="ft-meta-item">por <strong>${escapeText(this.#document.updatedBy)}</strong></span>`);
@@ -709,15 +815,15 @@ import '../media/icon.js';
       this.#ftMeta.innerHTML = parts.join('');
     }
 
-    #renderVars() {
-      const vars = extractPromptVariables(this.#draft);
+    #renderVars(): void {
+      const vars = extractPromptVariables(this.#draft).filter((n): n is string => typeof n === 'string');
       this.#varsWrap.hidden = vars.length === 0;
       this.#varsList.innerHTML = vars
-        .map((name) => `<span class="prompt-var-chip prompt-var-chip--static" style="${varToneStyleAttr(name)}">{{${name}}}</span>`)
+        .map((name: string) => `<span class="prompt-var-chip prompt-var-chip--static" style="${varToneStyleAttr(name)}">{{${name}}}</span>`)
         .join('');
     }
 
-    #renderSurfaceFromDraft() {
+    #renderSurfaceFromDraft(): void {
       const canEdit = this.canEdit;
       if (canEdit && this.#plain) {
         this.#surface.hidden = true;
@@ -733,7 +839,7 @@ import '../media/icon.js';
         : (bodyPreviewHtml(this.#draft) || '<p></p>');
     }
 
-    #setPlainMode(on) {
+    #setPlainMode(on: boolean): void {
       if (on === this.#plain) return;
       if (on) this.#draft = editorHtmlToBody(this.#surface);
       this.#plain = on && this.canEdit;
@@ -742,7 +848,7 @@ import '../media/icon.js';
       this.#syncFooterMeta();
     }
 
-    #onSurfaceInput() {
+    #onSurfaceInput(): void {
       const next = editorHtmlToBody(this.#surface);
       this.#pushHistory(this.#draft);
       this.#draft = next;
@@ -756,7 +862,7 @@ import '../media/icon.js';
       this.#syncHistoryButtons();
     }
 
-    #onPlainInput() {
+    #onPlainInput(): void {
       this.#pushHistory(this.#draft);
       this.#draft = this.#plainTextarea.value;
       this.#renderVars();
@@ -764,7 +870,7 @@ import '../media/icon.js';
       this.#syncHistoryButtons();
     }
 
-    #onEditorKeyDown(e) {
+    #onEditorKeyDown(e: KeyboardEvent): void {
       if (!this.canEdit) return;
       const mod = e.ctrlKey || e.metaKey;
       if (!mod) return;
@@ -775,7 +881,8 @@ import '../media/icon.js';
       else if (key === 'i') { e.preventDefault(); this.#runCommand('italic'); }
     }
 
-    #runCommand(cmd) {
+    #runCommand(cmd: string | null): void {
+      if (!cmd) return;
       if (cmd === 'undo') { this.#undo(); return; }
       if (cmd === 'redo') { this.#redo(); return; }
       if (!this.canEdit || this.#plain) return;
@@ -798,55 +905,51 @@ import '../media/icon.js';
       this.#onSurfaceInput();
     }
 
-    #wrapInline(tag) {
+    #wrapInline(tag: string): void {
       const sel = window.getSelection();
       if (!sel?.rangeCount) return;
       document.execCommand('insertHTML', false, `<${tag}>${sel.toString() || 'código'}</${tag}>`);
     }
 
-    #pushHistory(prev) {
+    #pushHistory(prev: string): void {
       this.#history.past.push(prev);
       if (this.#history.past.length > MAX_UNDO) this.#history.past.shift();
       this.#history.future = [];
     }
 
-    #undo() {
+    #undo(): void {
       if (!this.canEdit) return;
       const { past } = this.#history;
       if (!past.length) return;
+      const nextDraft = past.pop();
+      if (nextDraft === undefined) return;
       this.#history.future.push(this.#draft);
-      this.#draft = past.pop();
+      this.#draft = nextDraft;
       this.#renderVars();
       this.#renderSurfaceFromDraft();
       this.#syncHistoryButtons();
       this.#syncFooterMeta();
     }
 
-    #redo() {
+    #redo(): void {
       if (!this.canEdit) return;
       const { future } = this.#history;
       if (!future.length) return;
+      const nextDraft = future.pop();
+      if (nextDraft === undefined) return;
       this.#history.past.push(this.#draft);
-      this.#draft = future.pop();
+      this.#draft = nextDraft;
       this.#renderVars();
       this.#renderSurfaceFromDraft();
       this.#syncHistoryButtons();
       this.#syncFooterMeta();
     }
 
-    #syncHistoryButtons() {
+    #syncHistoryButtons(): void {
       const canEdit = this.canEdit;
       this.#undoBtn?.toggleAttribute('disabled', !canEdit || this.#history.past.length === 0);
       this.#redoBtn?.toggleAttribute('disabled', !canEdit || this.#history.future.length === 0);
     }
-  }
-
-  function escapeText(s: string) {
-    return String(s)
-      .replace(/&/g, '&amp;')
-      .replace(/</g, '&lt;')
-      .replace(/>/g, '&gt;')
-      .replace(/"/g, '&quot;');
   }
 
   defineElement('is-md-editor', IsMdEditor, 'IsMdEditor');

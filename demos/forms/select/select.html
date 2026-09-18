@@ -1,0 +1,119 @@
+<!doctype html>
+<html lang="es" class="theme-dark" data-theme="dark">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>Lista desplegable &lt;is-select&gt; · is-webcomponents</title>
+<meta name="description" content="Select form-associated con listbox en top-layer dialog, modo único y múltiple, tags, clearable, typeahead y grupos." />
+<style>
+  html, body { margin: 0; padding: 0; min-height: 100%; background: #0c1118; color: #e2e8f0; font-family: ui-sans-serif, system-ui, sans-serif; }
+  body { display: grid; place-items: start center; padding: 32px 20px; }
+  main { max-width: 720px; width: 100%; display: grid; gap: 22px; }
+  header h1 { font-size: 18px; font-weight: 700; margin: 0 0 4px 0; }
+  header p { font-size: 12px; color: #94a3b8; margin: 0; }
+  section { background: #131a24; border: 1px solid rgba(255,255,255,0.08); border-radius: 10px; padding: 16px; display: grid; gap: 10px; }
+  section h2 { font-size: 13px; margin: 0; font-weight: 600; color: #cbd5e1; }
+  section .desc { font-size: 12px; color: #94a3b8; margin: 0; }
+  is-select { width: 100%; }
+  code { background: rgba(255,255,255,0.06); padding: 1px 5px; border-radius: 3px; font: 12px ui-monospace, Menlo, Consolas, monospace; }
+  /* Anti-FOUC */
+  is-select:not(:defined) { visibility: hidden; }
+</style>
+<script type="module">
+  await import('../../../dist/cdn/forms/select.min.js');
+  await import('../../../dist/cdn/forms/option.min.js');
+  await customElements.whenDefined('is-select');
+
+  // (1) Básico single-value
+  const basico = document.createElement('is-select');
+  basico.setAttribute('label', 'Idioma');
+  basico.setAttribute('name', 'lang');
+  basico.placeholder = 'Selecciona un idioma';
+  basico.setAttribute('hint', 'Pulsa ↓ para abrir la lista');
+  basico.value = 'es';
+  basico.innerHTML = `
+    <is-option value="es">Español</is-option>
+    <is-option value="en">English</is-option>
+    <is-option value="fr">Français</is-option>
+    <is-option value="pt">Português</is-option>
+    <is-option value="de">Deutsch</is-option>
+  `;
+  document.querySelector('#sec-basico').appendChild(basico);
+
+  // (2) Múltiple con tags y clearable
+  const multi = document.createElement('is-select');
+  multi.setAttribute('label', 'Etiquetas');
+  multi.setAttribute('name', 'tags');
+  multi.multiple = true;
+  multi.clearable = true;
+  multi.placeholder = 'Selecciona etiquetas';
+  multi.setAttribute('hint', 'Multiselección: chips por selección');
+  multi.value = 'frontend,design';
+  multi.innerHTML = `
+    <is-option value="frontend">Frontend</is-option>
+    <is-option value="backend">Backend</is-option>
+    <is-option value="design">Diseño</is-option>
+    <is-option value="devops">DevOps</is-option>
+    <is-option value="qa">QA</is-option>
+    <is-option value="data">Data</is-option>
+  `;
+  document.querySelector('#sec-multi').appendChild(multi);
+
+  // (3) Con grupos
+  const grupos = document.createElement('is-select');
+  grupos.setAttribute('label', 'Producto');
+  grupos.setAttribute('name', 'product');
+  grupos.placeholder = 'Selecciona un producto';
+  grupos.setAttribute('hint', 'Opciones agrupadas por categoría');
+  grupos.innerHTML = `
+    <is-option value="starter" group="Planes">Starter</is-option>
+    <is-option value="pro" group="Planes">Pro</is-option>
+    <is-option value="enterprise" group="Planes">Enterprise</is-option>
+    <is-option value="training" group="Servicios">Formación</is-option>
+    <is-option value="support" group="Servicios" disabled>Soporte (no disponible)</is-option>
+    <is-option value="audit" group="Servicios">Auditoría</is-option>
+  `;
+  document.querySelector('#sec-grupos').appendChild(grupos);
+
+  // (4) Deshabilitado
+  const deshabilitado = document.createElement('is-select');
+  deshabilitado.setAttribute('label', 'Categoría (bloqueada)');
+  deshabilitado.disabled = true;
+  deshabilitado.value = 'legacy';
+  deshabilitado.innerHTML = `
+    <is-option value="legacy">Legacy</is-option>
+  `;
+  document.querySelector('#sec-disabled').appendChild(deshabilitado);
+
+  document.documentElement.dataset.selectReady = '1';
+</script>
+</head>
+<body>
+<main>
+  <header>
+    <h1>&lt;is-select&gt; · Listbox en top-layer dialog</h1>
+    <p>Single/multi · tags · typeahead · grupos · <code>ArrowUp/Down</code>, <code>Home/End</code>, <code>Enter</code>, <code>Escape</code>.</p>
+  </header>
+
+  <section id="sec-basico">
+    <h2>Selección simple</h2>
+    <p class="desc">Atributo <code>value</code>, <code>placeholder</code>, navegación por teclado y typeahead.</p>
+  </section>
+
+  <section id="sec-multi">
+    <h2>Selección múltiple (tags + clearable)</h2>
+    <p class="desc"><code>multiple</code> con <code>selection-display="tags"</code> (default) y botón limpiar.</p>
+  </section>
+
+  <section id="sec-grupos">
+    <h2>Opciones agrupadas</h2>
+    <p class="desc">Atributo <code>group</code> en <code>&lt;is-option&gt;</code> crea cabeceras de grupo.</p>
+  </section>
+
+  <section id="sec-disabled">
+    <h2>Deshabilitado</h2>
+    <p class="desc">No abre el listbox; ignora teclado.</p>
+  </section>
+</main>
+</body>
+</html>

@@ -18,6 +18,10 @@ import './drawer.js';
 import '../actions/button.js';
 import '../media/icon.js';
 import { defineElement } from '../../core/element.js';
+import type {
+  ISComponentPreviewLike,
+  PreviewMountContext,
+} from '../../previews/_kit/types.d.ts';
 
 /** Ancho a partir del cual el TOC deja de caber al lado del contenido. */
 const COMPACT_QUERY = '(max-width: 900px)';
@@ -36,6 +40,11 @@ TEMPLATE.innerHTML = /* html */ `
              label="Índice"></is-drawer>
 `;
 
+interface DrawerEl extends HTMLElement {
+  show?(): void;
+  hide?(): void;
+}
+
 class IsPreviewComponent extends withStyleAttrs(HTMLElement) {
     /** Personalización por atributo (ver `core/attrs.ts`). */
     static styleAttrs = {
@@ -43,16 +52,14 @@ class IsPreviewComponent extends withStyleAttrs(HTMLElement) {
     spacing: '--is-preview-spacing',
     };
 
-  /** @type {import('../../previews/_kit/types.d.ts').ISComponentPreviewLike | null} */
-  #preview = null;
-  /** @type {import('../../previews/_kit/types.d.ts').PreviewMountContext | null} */
-  #ctx = null;
-  #styleEl = null;
+  #preview: ISComponentPreviewLike | null = null;
+  #ctx: PreviewMountContext | null = null;
+  #styleEl: HTMLStyleElement | null = null;
   #mounted = false;
   /** Invalida mounts en vuelo al cambiar de preview a mitad de un `await`. */
   #paintGen = 0;
-  #compactMql = null;
-  #onCompactChange = () => this.#syncLayout();
+  #compactMql: MediaQueryList | null = null;
+  #onCompactChange = (): void => { this.#syncLayout(); };
 
   static get observedAttributes(): string[] {
     return ['storage-key', ...IsPreviewComponent.styleAttrNames];
@@ -95,17 +102,11 @@ class IsPreviewComponent extends withStyleAttrs(HTMLElement) {
     this.#mounted = false;
   }
 
-  /**
-   * @returns {import('../../previews/_kit/types.d.ts').ISComponentPreviewLike | null}
-   */
-  get preview() {
+  get preview(): ISComponentPreviewLike | null {
     return this.#preview;
   }
 
-  /**
-   * @param {import('../../previews/_kit/types.d.ts').ISComponentPreviewLike | null} value
-   */
-  set preview(value) {
+  set preview(value: ISComponentPreviewLike | null) {
     this.#teardown();
     this.#preview = value;
     if (!value) {
@@ -118,29 +119,29 @@ class IsPreviewComponent extends withStyleAttrs(HTMLElement) {
     if (this.#mounted) this.#paint();
   }
 
-  #panel() {
+  #panel(): HTMLElement | null {
     return this.querySelector<HTMLElement>(':scope > is-split-panel');
   }
 
-  #main() {
+  #main(): HTMLElement | null {
     return this.querySelector<HTMLElement>('is-main');
   }
 
-  #aside() {
+  #aside(): HTMLElement | null {
     return this.querySelector<HTMLElement>('aside.sidebar');
   }
 
-  #drawer() {
+  #drawer(): HTMLElement | null {
     return this.querySelector<HTMLElement>(':scope > is-drawer.toc-drawer');
   }
 
-  #toggle() {
+  #toggle(): HTMLElement | null {
     return this.querySelector<HTMLElement>(':scope > is-button.toc-toggle, :scope > button.toc-toggle');
   }
 
   /** Hamburguesa + drawer del TOC: solo hace falta atarlos una vez. */
-  #wireCompactChrome() {
-    const drawer = this.#drawer();
+  #wireCompactChrome(): void {
+    const drawer = this.#drawer() as DrawerEl | null;
     const toggle = this.#toggle();
     if (!drawer || !toggle) return;
 
@@ -150,7 +151,8 @@ class IsPreviewComponent extends withStyleAttrs(HTMLElement) {
       drawer.addEventListener('is-after-hide', () => toggle.setAttribute('aria-expanded', 'false'));
       // Ir a una sección cierra el índice: en compacto el drawer tapa el texto.
       drawer.addEventListener('click', (e: Event) => {
-        if (e.target.closest('a')) drawer.hide?.();
+        const target = e.target as Element | null;
+        if (target?.closest('a')) drawer.hide?.();
       });
       this.#compactMql = window.matchMedia(COMPACT_QUERY);
       this.#compactMql.addEventListener('change', this.#onCompactChange);
@@ -163,10 +165,10 @@ class IsPreviewComponent extends withStyleAttrs(HTMLElement) {
    * drawer derecho y el split cede todo el ancho al contenido.
    * `withoutToc` en la definición: sin índice ni panel derecho (home).
    */
-  #syncLayout() {
+  #syncLayout(): void {
     const panel = this.#panel();
     const aside = this.#aside();
-    const drawer = this.#drawer();
+    const drawer = this.#drawer() as DrawerEl | null;
     const toggle = this.#toggle();
     if (!panel || !aside || !drawer || !toggle) return;
 
@@ -206,11 +208,11 @@ class IsPreviewComponent extends withStyleAttrs(HTMLElement) {
     panel.removeAttribute('collapse');
   }
 
-  #teardown() {
+  #teardown(): void {
     if (this.#ctx && this.#preview?.unmount) {
       try {
         this.#preview.unmount(this.#ctx);
-      } catch (err) {
+      } catch (err: unknown) {
         console.error('[is-preview-component] unmount', err);
       }
     }
@@ -219,7 +221,7 @@ class IsPreviewComponent extends withStyleAttrs(HTMLElement) {
     this.#styleEl = null;
   }
 
-  async #paint() {
+  async #paint(): Promise<void> {
     const preview = this.#preview;
     const main = this.#main();
     const aside = this.#aside();
@@ -229,7 +231,7 @@ class IsPreviewComponent extends withStyleAttrs(HTMLElement) {
     const gen = ++this.#paintGen;
 
     // Cambiar de componente cierra el índice, igual que resetea el scroll.
-    this.#drawer()?.hide?.();
+    (this.#drawer() as DrawerEl | null)?.hide?.();
 
     const def = preview.definition;
     const storageKey =
@@ -261,7 +263,7 @@ class IsPreviewComponent extends withStyleAttrs(HTMLElement) {
 
     try {
       await preview.mount(this.#ctx);
-    } catch (err) {
+    } catch (err: unknown) {
       console.error(`[is-preview-component] mount ${def.tag}`, err);
     }
 

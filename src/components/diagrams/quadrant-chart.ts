@@ -2,6 +2,7 @@ import { adoptCss, defineElement, emit, emitCancelable } from '../../core/elemen
 import { DiagramElementBase } from '../_shared/diagram-element-base.js';
 import { resolveQuadrantSpec, computeQuadrantLayout } from './quadrant-spec.js';
 import { sequenceThemeDark, sequenceThemeLight } from './sequence-spec.js';
+import type { DiagramTheme } from './diagram-types.js';
 import { tkHueToHex } from '../_shared/tk-hue.js';
 import { inlineMdWeb } from '../_shared/tk-inline-md.js';
 import { wrapText, buildTspans } from '../_shared/diagram-text-wrap.js';
@@ -25,10 +26,56 @@ import { svgEl } from '../_shared/svg-chart-engine.js';
  * Eventos: is-render, is-open-viewer, is-toggle-group
  */
 
+interface QdGroup { id: string; name: string; hue?: number; }
+interface QdAxisLabel { text: string; x: number; y: number; }
+interface QdAxes {
+  midX: number;
+  midY: number;
+  xLeft?: QdAxisLabel;
+  xRight?: QdAxisLabel;
+  yBottom?: QdAxisLabel;
+  yTop?: QdAxisLabel;
+}
+interface QdLayoutPoint {
+  id: string;
+  name: string;
+  label: string;
+  group?: string;
+  x: number;
+  y: number;
+  hue?: number;
+  description?: string;
+  cx: number;
+  cy: number;
+  r: number;
+  labelDy: number;
+}
+interface QdLayoutQuadrant {
+  id: string;
+  name: string;
+  cx: number;
+  cy: number;
+}
+interface QdLayout {
+  width: number;
+  height: number;
+  plot: { x: number; y: number; w: number; h: number };
+  points: QdLayoutPoint[];
+  quadrants: QdLayoutQuadrant[];
+  axes: QdAxes;
+  groups?: QdGroup[];
+  title?: string;
+  subtitle?: string;
+  titleY: number;
+  subtitleY: number;
+  legendX: number;
+}
+interface PointEntry { pt: QdLayoutPoint; g: SVGGElement; }
+
 class IsQuadrantChart extends DiagramElementBase {
-  #hiddenGroups = new Set();
-  #pointNodes = new Map();
-  #hoverId = null;
+  #hiddenGroups = new Set<string>();
+  #pointNodes = new Map<string, PointEntry>();
+  #hoverId: string | null = null;
 
   constructor() {
     super();
@@ -48,15 +95,15 @@ class IsQuadrantChart extends DiagramElementBase {
     this.wrap.removeEventListener('click', this.#onClick);
   }
 
-  onPayloadChanged() { this.#hiddenGroups = new Set(); }
+  onPayloadChanged(): void { this.#hiddenGroups = new Set(); }
 
-  get hiddenGroups() { return this.#hiddenGroups; }
-  set hiddenGroups(v) {
-    this.#hiddenGroups = v instanceof Set ? v : new Set(v || []);
+  get hiddenGroups(): Set<string> { return this.#hiddenGroups; }
+  set hiddenGroups(v: Set<string> | string[] | null | undefined) {
+    this.#hiddenGroups = v instanceof Set ? new Set(v) : new Set(v || []);
     this.queueRender();
   }
 
-  renderDiagram() {
+  renderDiagram(): void {
     const spec = resolveQuadrantSpec(this.payload ?? {});
     this.spec = spec;
     if (!spec) {
@@ -81,13 +128,13 @@ class IsQuadrantChart extends DiagramElementBase {
     const theme = this.isDarkTheme ? sequenceThemeDark() : sequenceThemeLight();
     this.syncThemeAttr();
 
-    const layout = computeQuadrantLayout(visible);
+    const layout = computeQuadrantLayout(visible) as unknown as QdLayout;
     this.layout = layout;
     this.#buildSvg(layout, theme);
     this.wrap.classList.toggle('is-viewer', this.isViewer);
   }
 
-  #buildSvg(layout, theme) {
+  #buildSvg(layout: QdLayout, theme: DiagramTheme): void {
     const { width: W, height: H } = layout;
     this.svg.setAttribute('viewBox', `0 0 ${W} ${H}`);
     this.svg.setAttribute('preserveAspectRatio', 'xMidYMid meet');
@@ -121,7 +168,7 @@ class IsQuadrantChart extends DiagramElementBase {
     emit(this, 'is-render', { layout, svg: this.svg });
   }
 
-  #buildFrame(layout, theme) {
+  #buildFrame(layout: QdLayout, theme: DiagramTheme): void {
     const { plot, axes } = layout;
     const g = svgEl('g', { class: 'qd-frame' });
 
@@ -157,7 +204,7 @@ class IsQuadrantChart extends DiagramElementBase {
       g.appendChild(t);
     }
 
-    const axisText = (spec, anchor, rotate) => {
+    const axisText = (spec: QdAxisLabel | undefined, anchor: 'start' | 'end' | 'middle', rotate: boolean): void => {
       if (!spec) return;
       const t = svgEl('text', {
         x: spec.x, y: spec.y, 'text-anchor': anchor, fill: theme.muted,
@@ -176,9 +223,9 @@ class IsQuadrantChart extends DiagramElementBase {
     this.svg.appendChild(g);
   }
 
-  #buildLegend(layout, theme) {
+  #buildLegend(layout: QdLayout, theme: DiagramTheme): void {
     const g = svgEl('g', { class: 'qd-legend' });
-    layout.groups.forEach((grp, gi: number) => {
+    (layout.groups ?? []).forEach((grp, gi: number) => {
       const ly = layout.plot.y + 10 + gi * 16;
       const color = tkHueToHex(grp.hue) ?? theme.accent;
       const off = this.#hiddenGroups.has(grp.id);
@@ -205,7 +252,7 @@ class IsQuadrantChart extends DiagramElementBase {
     this.svg.appendChild(g);
   }
 
-  #buildPoints(layout, theme) {
+  #buildPoints(layout: QdLayout, theme: DiagramTheme): void {
     const groupHue = new Map((layout.groups ?? []).map((grp) => [grp.id, grp.hue]));
     for (const pt of layout.points) {
       const hue = pt.hue ?? (pt.group ? groupHue.get(pt.group) : undefined);
@@ -233,9 +280,9 @@ class IsQuadrantChart extends DiagramElementBase {
 
   /* ── interacción ── */
 
-  #onClick = (e: PointerEvent) => {
+  #onClick = (e: MouseEvent) => {
     if (this.isViewer) {
-      const item = e.composedPath().find((x) => x?.dataset?.groupId);
+      const item = e.composedPath().find((x): x is HTMLElement => x instanceof HTMLElement && !!x.dataset?.groupId);
       if (item) emitCancelable(this, 'is-toggle-group', { id: item.dataset.groupId });
       return;
     }
@@ -249,9 +296,9 @@ class IsQuadrantChart extends DiagramElementBase {
     if (!ev.defaultPrevented) this.openOwnViewer('quadrant');
   };
 
-  #onMouseMove = (e: PointerEvent) => {
+  #onMouseMove = (e: MouseEvent) => {
     if (!this.isViewer) return;
-    const g = e.composedPath().find((n) => n?.dataset?.pointId);
+    const g = e.composedPath().find((n): n is HTMLElement => n instanceof HTMLElement && !!n.dataset?.pointId);
     const id = g?.dataset.pointId ?? null;
     if (id !== this.#hoverId) this.#applyHover(id);
     if (id) {
@@ -267,7 +314,7 @@ class IsQuadrantChart extends DiagramElementBase {
     this.#applyHover(null);
   };
 
-  #applyHover(id) {
+  #applyHover(id: string | null): void {
     this.#hoverId = id;
     const entry = id ? this.#pointNodes.get(id) : null;
 

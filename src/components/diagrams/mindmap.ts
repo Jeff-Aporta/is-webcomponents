@@ -2,6 +2,7 @@ import { adoptCss, defineElement, emit } from '../../core/element.js';
 import { DiagramElementBase } from '../_shared/diagram-element-base.js';
 import { resolveMindmapSpec, computeMindmapLayout } from './mindmap-spec.js';
 import { sequenceThemeDark, sequenceThemeLight } from './sequence-spec.js';
+import type { DiagramTheme } from './diagram-types.js';
 import { tkHueToHex } from '../_shared/tk-hue.js';
 import { inlineMdWeb } from '../_shared/tk-inline-md.js';
 import { svgIconGroup } from '../_shared/tk-icon-inline.js';
@@ -26,12 +27,47 @@ import { svgEl } from '../_shared/svg-chart-engine.js';
  * Eventos: is-render, is-open-viewer
  */
 
-const SVG_NS = 'http://www.w3.org/2000/svg';
+type MindmapNodeKind = 'root' | 'branch' | 'leaf';
+interface MmLayoutNode {
+  id: string;
+  x: number;
+  y: number;
+  w: number;
+  h: number;
+  depth: number;
+  kind: MindmapNodeKind;
+  label: string;
+  icon?: string;
+  description?: string;
+  hue?: number;
+  overflow?: 'grow' | 'ellipsis' | 'shrink';
+}
+interface MmLayoutEdge {
+  id: string;
+  from: string;
+  to: string;
+  path: string;
+  hue?: number;
+  width: number;
+}
+interface MmLayout {
+  width: number;
+  height: number;
+  nodes: MmLayoutNode[];
+  edges: MmLayoutEdge[];
+  title?: string;
+  subtitle?: string;
+  titleY: number;
+  subtitleY: number;
+}
+
+interface NodeEntry { n: MmLayoutNode; g: SVGGElement; }
+interface EdgeEntry { e: MmLayoutEdge; path: SVGPathElement; }
 
 class IsMindmap extends DiagramElementBase {
-  #nodeNodes = new Map();
-  #edgeNodes = new Map();
-  #hoverId = null;
+  #nodeNodes = new Map<string, NodeEntry>();
+  #edgeNodes = new Map<string, EdgeEntry>();
+  #hoverId: string | null = null;
 
   constructor() {
     super();
@@ -51,6 +87,11 @@ class IsMindmap extends DiagramElementBase {
     this.wrap.removeEventListener('click', this.#onClick);
   }
 
+  // Las firmas usan `MouseEvent` (no `PointerEvent`) porque
+  // `wrap.addEventListener('mousemove', …)` espera un handler de MouseEvent
+  // y PointerEvent↦MouseEvent es contravariante: no se puede asignar una
+  // función `(e: PointerEvent)` a un slot `(e: MouseEvent)`.
+
   renderDiagram() {
     const spec = resolveMindmapSpec(this.payload ?? {});
     this.spec = spec;
@@ -65,13 +106,13 @@ class IsMindmap extends DiagramElementBase {
     const theme = dark ? sequenceThemeDark() : sequenceThemeLight();
     this.syncThemeAttr();
 
-    const layout = computeMindmapLayout(spec);
+    const layout = computeMindmapLayout(spec) as unknown as MmLayout;
     this.layout = layout;
     this.#buildSvg(layout, theme);
     this.wrap.classList.toggle('is-viewer', this.isViewer);
   }
 
-  #buildSvg(layout, theme) {
+  #buildSvg(layout: MmLayout, theme: DiagramTheme): void {
     const { width: W, height: H } = layout;
     this.svg.setAttribute('viewBox', `0 0 ${W} ${H}`);
     this.svg.setAttribute('preserveAspectRatio', 'xMidYMid meet');
@@ -105,7 +146,7 @@ class IsMindmap extends DiagramElementBase {
     emit(this, 'is-render', { layout, svg: this.svg });
   }
 
-  #buildEdges(layout, theme) {
+  #buildEdges(layout: MmLayout, theme: DiagramTheme): void {
     for (const e of layout.edges) {
       const color = (e.hue != null && tkHueToHex(e.hue)) || theme.accent;
       const path = svgEl('path', {
@@ -118,7 +159,7 @@ class IsMindmap extends DiagramElementBase {
     }
   }
 
-  #buildNodes(layout, theme) {
+  #buildNodes(layout: MmLayout, theme: DiagramTheme): void {
     // Las hojas van primero (por debajo visualmente no aplica en SVG, pero
     // mantener el orden del árbol favorece que el hover de un padre no tape
     // el subrayado de sus hijos).
@@ -149,7 +190,7 @@ class IsMindmap extends DiagramElementBase {
       const textRight = n.x + n.w - (n.kind === 'leaf' ? 2 : 10);
 
       if (hasIcon) {
-        g.appendChild(svgIconGroup(n.icon, {
+        g.appendChild(svgIconGroup(n.icon ?? '', {
           x: n.x + (n.kind === 'leaf' ? 0 : 8), y: n.y + n.h / 2 - 8, size: 16, hue: n.hue,
         }));
       }
@@ -189,7 +230,7 @@ class IsMindmap extends DiagramElementBase {
           maxHeight: n.h - 4,
           fontSize,
           fontFamily: 'Tahoma,Arial,sans-serif',
-          overflow: n.overflow ?? 'grow',
+          overflow: (n.overflow ?? 'grow') as 'ellipsis' | 'grow',
         });
         const mtspans = buildTspans(
           mresult.lines,
@@ -226,9 +267,9 @@ class IsMindmap extends DiagramElementBase {
     if (!ev.defaultPrevented) this.openOwnViewer('mindmap');
   };
 
-  #onMouseMove = (e: PointerEvent) => {
+  #onMouseMove = (e: MouseEvent) => {
     if (!this.isViewer) return;
-    const g = e.composedPath().find((n) => n?.dataset?.nodeId);
+    const g = e.composedPath().find((n): n is HTMLElement => n instanceof HTMLElement && !!n.dataset?.nodeId);
     const id = g?.dataset.nodeId ?? null;
     if (id !== this.#hoverId) this.#applyHover(id);
     if (id) {
@@ -244,7 +285,7 @@ class IsMindmap extends DiagramElementBase {
     this.#applyHover(null);
   };
 
-  #applyHover(id) {
+  #applyHover(id: string | null): void {
     this.#hoverId = id;
     const entry = id ? this.#nodeNodes.get(id) : null;
 

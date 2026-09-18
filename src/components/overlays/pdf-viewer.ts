@@ -56,7 +56,7 @@ import { setOptionalAttr } from '../_shared/reflect.js';
         </div>
       `;
       adoptCss(this.shadowRoot!, import.meta.url);
-      this.#iframe = this.shadowRoot!.getElementById('frame')!;
+      this.#iframe = this.shadowRoot!.getElementById('frame') as HTMLIFrameElement;
       this.#dl = this.shadowRoot!.getElementById('dl')!;
       this.#print = this.shadowRoot!.getElementById('print')!;
       this.#dl.addEventListener('click', () => this.#download());
@@ -115,7 +115,7 @@ import { setOptionalAttr } from '../_shared/reflect.js';
       } catch { /* CORS may block; users can right-click → print */ }
     }
 
-    #iframe!: HTMLElement;
+    #iframe!: HTMLIFrameElement;
     #dl!: HTMLElement;
     #print!: HTMLElement;
   }

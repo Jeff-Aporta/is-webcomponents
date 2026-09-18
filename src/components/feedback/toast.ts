@@ -46,14 +46,51 @@ import { normalizeIntent } from '../_shared/intent.js';
   const VALID_PLACEMENT = [
     'top-start', 'top-center', 'top-end',
     'bottom-start', 'bottom-center', 'bottom-end'
-  ];
-  const DEFAULT_ICONS = {
+  ] as const;
+  type Placement = (typeof VALID_PLACEMENT)[number];
+
+  type ToastColor = 'brand' | 'success' | 'warning' | 'danger' | 'neutral';
+  const DEFAULT_ICONS: Record<ToastColor, string> = {
     brand: 'mdi:information',
     success: 'mdi:check-circle',
     warning: 'mdi:alert',
     danger: 'mdi:alert-circle',
     neutral: 'mdi:information-outline'
   };
+
+  interface ToastCreateOptions {
+    color?: string;
+    variant?: string;
+    icon?: string | boolean | null;
+    duration?: number | null;
+    allowHtml?: boolean;
+    caption?: string;
+    log?: unknown;
+  }
+
+  interface ToastPromiseCallbacks {
+    loading?: string | ToastPromiseMsg | ((value: unknown) => unknown);
+    success?: string | ToastPromiseMsg | ((value: unknown) => unknown);
+    error?: string | ToastPromiseMsg | ((value: unknown) => unknown);
+  }
+
+  interface ToastPromiseMsg {
+    message: string;
+    options?: ToastCreateOptions;
+  }
+
+  interface NormalizedMsg {
+    message: string;
+    options: ToastCreateOptions;
+  }
+
+  interface IsToastItemEl extends HTMLElement {
+    color?: string;
+    duration?: number;
+    log?: unknown;
+    show(): void;
+    restartTimer?(): void;
+  }
 
   class IsToast extends ElementBase {
     static get observedAttributes(): string[] { return OBSERVED; }
@@ -67,33 +104,28 @@ import { normalizeIntent } from '../_shared/intent.js';
       this.addEventListener('is-after-hide', this.#onItemHide);
     }
 
-    onConnected() {
+    onConnected(): void {
       if (!this.hasAttribute('placement')) this.setAttribute('placement', 'bottom-end');
     }
 
-    onAttributeChanged(name: string, oldVal: string | null, newVal: string | null) {
-      if (name === 'placement' && newVal && !VALID_PLACEMENT.includes(newVal)) {
+    onAttributeChanged(name: string, oldVal: string | null, newVal: string | null): void {
+      if (name === 'placement' && newVal && !VALID_PLACEMENT.includes(newVal as Placement)) {
         this.setAttribute('placement', 'bottom-end');
       }
     }
 
-    get placement() {
+    get placement(): Placement {
       const v = this.getAttribute('placement');
-      return VALID_PLACEMENT.includes(v) ? v : 'bottom-end';
+      return (VALID_PLACEMENT as readonly string[]).includes(v ?? '') ? (v as Placement) : 'bottom-end';
     }
-    set placement(v) {
-      this.setAttribute('placement', VALID_PLACEMENT.includes(v) ? v : 'bottom-end');
+    set placement(v: string) {
+      this.setAttribute('placement', (VALID_PLACEMENT as readonly string[]).includes(v) ? v : 'bottom-end');
     }
 
-    /**
-     * @param {string} message
-     * @param {{ color?: string, icon?: string|boolean, duration?: number, allowHtml?: boolean, caption?: string, log?: unknown }} [options]
-     * @returns {Promise<HTMLElement>}
-     */
-    async create(message, options = {}) {
+    async create(message: string, options: ToastCreateOptions = {}): Promise<IsToastItemEl> {
       await customElements.whenDefined('is-toast-item');
-      const item = document.createElement('is-toast-item');
-      const color = normalizeIntent(options.color ?? options.variant, 'neutral');
+      const item = document.createElement('is-toast-item') as IsToastItemEl;
+      const color = normalizeIntent(options.color ?? options.variant, 'neutral') as ToastColor;
       item.color = color;
 
       const duration = options.duration != null ? Number(options.duration) : 5000;
@@ -114,7 +146,7 @@ import { normalizeIntent } from '../_shared/intent.js';
 
       this.appendChild(item);
       // Wait a frame so CSS/layout settle before show
-      await new Promise((r) => requestAnimationFrame(() => r()));
+      await new Promise<void>((r) => requestAnimationFrame(() => r()));
       item.show();
       return item;
     }
@@ -129,13 +161,8 @@ import { normalizeIntent } from '../_shared/intent.js';
      *
      * Cada callback acepta string | fn(valor) | { message, options }.
      * Reusa el MISMO toast (update) en vez de crear otro.
-     *
-     * @template T
-     * @param {Promise<T>} p
-     * @param {{ loading?: any, success?: any, error?: any }} [callbacks]
-     * @returns {Promise<T>} la promesa original (re-throw en error)
      */
-    async promise(p, callbacks = {}) {
+    async promise<T>(p: Promise<T>, callbacks: ToastPromiseCallbacks = {}): Promise<T> {
       const loading = this.#normalizePromiseMsg(callbacks.loading, undefined, 'Cargando…');
       const item = await this.create(loading.message, {
         variant: 'neutral',
@@ -149,7 +176,7 @@ import { normalizeIntent } from '../_shared/intent.js';
         const ok = this.#normalizePromiseMsg(callbacks.success, data, 'Listo');
         this.#update(item, ok.message, { variant: 'success', icon: DEFAULT_ICONS.success, ...ok.options });
         return data;
-      } catch (err) {
+      } catch (err: unknown) {
         const bad = this.#normalizePromiseMsg(callbacks.error, err, 'Algo salió mal');
         this.#update(item, bad.message, { variant: 'danger', icon: DEFAULT_ICONS.danger, ...bad.options });
         throw err;
@@ -157,13 +184,19 @@ import { normalizeIntent } from '../_shared/intent.js';
     }
 
     /** string | fn(valor) | { message, options } → { message, options } */
-    #normalizePromiseMsg(cb, value, fallback) {
+    #normalizePromiseMsg(
+      cb: string | ToastPromiseMsg | ((value: unknown) => unknown) | undefined,
+      value: unknown,
+      fallback: string,
+    ): NormalizedMsg {
       if (typeof cb === 'function') return { message: String(cb(value)), options: {} };
-      if (cb && typeof cb === 'object') return { message: String(cb.message ?? fallback), options: cb.options || {} };
+      if (cb && typeof cb === 'object') {
+        return { message: String(cb.message ?? fallback), options: cb.options || {} };
+      }
       return { message: String(cb ?? fallback), options: {} };
     }
 
-    #writeCopy(item, message, options = {}) {
+    #writeCopy(item: IsToastItemEl, message: string, options: ToastCreateOptions = {}): void {
       for (const n of [...item.childNodes]) {
         if (n.nodeType === Node.TEXT_NODE || (n instanceof HTMLElement && n.slot !== 'icon')) n.remove();
       }
@@ -180,15 +213,18 @@ import { normalizeIntent } from '../_shared/intent.js';
     }
 
     /** Actualiza un toast vivo: mensaje, color, icono y relanza el timer. */
-    #update(item, message, options = {}) {
+    #update(item: IsToastItemEl, message: string, options: ToastCreateOptions = {}): void {
       if (!item?.isConnected) return;
-      const color = normalizeIntent(options.color ?? options.variant ?? item.color, 'neutral');
+      const color = normalizeIntent(
+        options.color ?? options.variant ?? item.color,
+        'neutral',
+      ) as ToastColor;
       item.color = color;
       this.#writeCopy(item, message, options);
       const iconEl = item.querySelector<HTMLElement>('is-icon[slot="icon"]');
       if (iconEl) {
         iconEl.removeAttribute('data-loading');
-        if (options.icon) iconEl.setAttribute('icon', options.icon);
+        if (options.icon) iconEl.setAttribute('icon', String(options.icon));
       }
       const duration = options.duration != null ? Number(options.duration) : 5000;
       item.duration = Number.isFinite(duration) ? Math.max(0, duration) : 5000;
@@ -201,12 +237,12 @@ import { normalizeIntent } from '../_shared/intent.js';
     // (o crean) un único <is-toast> en el documento.
 
     /** Toaster singleton del documento; lo crea si aún no existe. */
-    static host() {
-      let el = document.querySelector<HTMLElement>('is-toast[data-default-toaster]');
+    static host(): IsToast {
+      let el = document.querySelector<HTMLElement>('is-toast[data-default-toaster]') as IsToast | null;
       if (!el) {
-        el = document.querySelector<HTMLElement>('is-toast');
+        el = document.querySelector<HTMLElement>('is-toast') as IsToast | null;
         if (!el) {
-          el = document.createElement('is-toast');
+          el = document.createElement('is-toast') as IsToast;
           el.setAttribute('data-default-toaster', '');
           document.body.appendChild(el);
         }
@@ -214,26 +250,30 @@ import { normalizeIntent } from '../_shared/intent.js';
       return el;
     }
 
-    static error(message, duration = 5000) {
+    static error(message: string, duration: number | ToastCreateOptions = 5000): Promise<IsToastItemEl> {
       const extra = duration && typeof duration === 'object' ? duration : { duration };
       return IsToast.host().create(message, { variant: 'danger', ...extra });
     }
 
-    static success(message, duration = 3000) {
+    static success(message: string, duration: number = 3000): Promise<IsToastItemEl> {
       return IsToast.host().create(message, { variant: 'success', duration });
     }
 
     /** Sin duración: se cierra con IsToast.remove(item). */
-    static loading(message) {
+    static loading(message: string): Promise<IsToastItemEl> {
       return IsToast.host().create(message, { variant: 'neutral', icon: 'mdi:loading', duration: 0 });
     }
 
-    static remove(item) { item?.remove?.(); }
+    static remove(item: IsToastItemEl | HTMLElement | null | undefined): void {
+      (item as { remove?: () => void } | null)?.remove?.();
+    }
 
     /** @see IsToast.prototype.promise */
-    static promise(p, callbacks = {}) { return IsToast.host().promise(p, callbacks); }
+    static promise<T>(p: Promise<T>, callbacks: ToastPromiseCallbacks = {}): Promise<T> {
+      return IsToast.host().promise(p, callbacks);
+    }
 
-    #onItemHide = (e: Event) => {
+    #onItemHide = (e: Event): void => {
       const item = e.target;
       if (!(item instanceof HTMLElement) || item.localName !== 'is-toast-item') return;
       if (item.parentNode === this) {

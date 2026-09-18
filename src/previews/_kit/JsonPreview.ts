@@ -6,6 +6,8 @@
 import { ISComponentPreview } from './ISComponentPreview.js';
 import { montarControles } from '../../utils/system/controles.js';
 
+import type { PreviewDefinition, PreviewMountContext } from './types.d.ts';
+
 /** Forma mínima de la definición (is-preview/v1). */
 type DefinicionPreview = { tag: string; category?: string; $schema?: string; sections?: Array<{ id?: string; blocks?: Array<Record<string, unknown>> }>; };
 
@@ -22,10 +24,12 @@ export class JsonPreview extends ISComponentPreview {
   #behavior: ModuloBehavior | null = null;
 
   constructor(definition: DefinicionPreview, behavior: ModuloBehavior | null = null) {
-    const normalized: DefinicionPreview = {
+    const normalized: PreviewDefinition = {
       ...definition,
       category: definition.category ?? '',
-      $schema: definition.$schema || 'is-preview/v1',
+      $schema: (definition.$schema || 'is-preview/v1') as 'is-preview/v1',
+      title: definition.tag,
+      sections: [],
     };
     if (normalized.$schema !== 'is-preview/v1') {
       throw new Error(`JsonPreview(${normalized.tag}): $schema debe ser "is-preview/v1"`);
@@ -34,7 +38,7 @@ export class JsonPreview extends ISComponentPreview {
     this.#behavior = behavior;
   }
 
-  async mount(ctx: CtxMontaje): Promise<void> {
+  async mount(ctx: PreviewMountContext): Promise<void> {
     if (this.#behavior?.mount) await this.#behavior.mount(ctx, this);
     // Playground JSON-driven: paneles de controles de los bloques demo/html
     // que declaren `controls` (se aplican vía JSON -> prop/attr del host).
@@ -46,7 +50,7 @@ export class JsonPreview extends ISComponentPreview {
     }
   }
 
-  unmount(ctx: CtxMontaje): void {
+  unmount(ctx: PreviewMountContext): void {
     try {
       this.#behavior?.unmount?.(ctx, this);
     } finally {

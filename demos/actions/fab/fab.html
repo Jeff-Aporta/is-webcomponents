@@ -1,0 +1,76 @@
+<!doctype html>
+<html lang="es">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Demo: <is-fab> · is-webcomponents</title>
+  <meta name="description" content="Demo de <is-fab>: floating action button con positions, color, pulse, extended, sin-shadow." />
+  <style>
+    html, body {
+      margin: 0; padding: 0; min-height: 100%;
+      background: #0c1118; color: #e2e8f0;
+      font-family: ui-sans-serif, system-ui, sans-serif;
+    }
+    body {
+      display: grid; place-items: center; min-height: 100vh;
+    }
+    .stage {
+      position: relative;
+      width: 100vw; height: 100vh;
+      max-width: 100%; max-height: 100%;
+      overflow: hidden;
+      background: linear-gradient(135deg, #0c1118, #15203a);
+    }
+    .caption {
+      position: absolute; top: 20px; left: 20px;
+      background: rgba(0,0,0,0.4); padding: 12px 16px; border-radius: 8px;
+      font-size: 12px; color: #94a3b8; max-width: 360px;
+    }
+    .caption h1 { margin: 0 0 4px 0; font-size: 16px; color: #e2e8f0; }
+    pre { background: rgba(0,0,0,0.4); padding: 8px; border-radius: 6px; font: 11px ui-monospace, Menlo, Consolas, monospace; color: #cbd5e1; }
+    /* Anti-FOUC */
+    is-fab:not(:defined) { visibility: hidden; }
+  </style>
+</head>
+<body>
+  <div class="stage">
+    <div class="caption">
+      <h1>Demo: <code>&lt;is-fab&gt;</code></h1>
+      <p>Floating action button. <code>position</code> por defecto <code>bottom-end</code>.</p>
+      <pre id="log">clicks: 0</pre>
+    </div>
+
+    <!-- Bottom-end (default) -->
+    <is-fab id="fab1" icon="mdi:plus" label="Crear nuevo">Crear</is-fab>
+
+    <!-- Bottom-start -->
+    <is-fab id="fab2" position="bottom-start" icon="mdi:chat" color="info" label="Chat"></is-fab>
+
+    <!-- Top-end con pulse -->
+    <is-fab id="fab3" position="top-end" icon="mdi:bell-ring" color="warning" pulse label="Notificaciones"></is-fab>
+
+    <!-- Extended -->
+    <is-fab id="fab4" position="inline" icon="mdi:content-save" color="success" extended without-shadow label="Guardar">Guardar</is-fab>
+
+    <!-- Top-start -->
+    <is-fab id="fab5" position="top-start" icon="mdi:cog" color="neutral" label="Ajustes"></is-fab>
+  </div>
+
+  <script type="module">
+    await import('../../../dist/cdn/actions/fab.min.js');
+    await import('../../../dist/cdn/actions/button.min.js');
+    await customElements.whenDefined('is-fab');
+
+    const log = document.getElementById('log');
+    let clicks = 0;
+    document.querySelectorAll('is-fab').forEach((fab) => {
+      fab.addEventListener('is-fab-click', () => {
+        clicks += 1;
+        log.textContent = `clicks: ${clicks}`;
+      });
+    });
+
+    document.documentElement.dataset.fabReady = '1';
+  </script>
+</body>
+</html>

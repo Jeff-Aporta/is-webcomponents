@@ -1,0 +1,135 @@
+<!doctype html>
+<html lang="es" class="theme-dark" data-theme="dark">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>Demo de <is-drawer> · is-webcomponents</title>
+<meta name="description" content="Panel deslizable desde un borde (start/end/top/bottom). Focus trap + Escape + light-dismiss + restore de foco. Eventos is-show/is-after-show/is-hide/is-after-hide." />
+<style>
+  html, body { margin: 0; padding: 0; min-height: 100vh; background: #0c1118; color: #e2e8f0; font-family: ui-sans-serif, system-ui, sans-serif; }
+  body { display: grid; grid-template-rows: auto 1fr auto; }
+  header { padding: 16px 20px; border-bottom: 1px solid rgba(255,255,255,0.1); background: #0f1620; }
+  header h1 { font-size: 16px; font-weight: 700; margin: 0; }
+  header p { font-size: 12px; color: #94a3b8; margin: 4px 0 0 0; }
+  main { padding: 20px; display: grid; gap: 14px; }
+  section { background: #0f1620; border: 1px solid rgba(255,255,255,0.1); border-radius: 8px; padding: 16px; }
+  section h2 { font-size: 11px; text-transform: uppercase; letter-spacing: 0.08em; margin: 0 0 12px 0; color: #94a3b8; }
+  is-drawer:not(:defined) { visibility: hidden; }
+  #log { padding: 10px; font: 11px ui-monospace, Menlo, Consolas, monospace; color: #94a3b8; white-space: pre-wrap; max-height: 200px; overflow: auto; }
+  footer { padding: 12px 20px; border-top: 1px solid rgba(255,255,255,0.1); background: #0f1620; font-size: 11px; color: #94a3b8; }
+  footer code { background: rgba(255,255,255,0.06); padding: 1px 5px; border-radius: 3px; font: 11px ui-monospace, Menlo, Consolas, monospace; }
+</style>
+<script type="module">
+  await import('../../../dist/cdn/layout/drawer.min.js');
+  await customElements.whenDefined('is-drawer');
+
+  // (1) Drawer end (default).
+  const dEnd = document.createElement('is-drawer');
+  dEnd.setAttribute('label', 'Drawer end (default)');
+  dEnd.setAttribute('placement', 'end');
+  dEnd.setAttribute('light-dismiss', '');
+  dEnd.id = 'd-end';
+  dEnd.innerHTML = `
+    <p>Se desliza desde la derecha.</p>
+    <input id="d-end-input" placeholder="(autofocus)" autofocus />
+    <div slot="footer">
+      <button type="button" data-drawer="close">OK</button>
+    </div>
+  `;
+  document.body.appendChild(dEnd);
+
+  // (2) Drawer start.
+  const dStart = document.createElement('is-drawer');
+  dStart.setAttribute('label', 'Drawer start');
+  dStart.setAttribute('placement', 'start');
+  dStart.id = 'd-start';
+  dStart.innerHTML = `
+    <p>Desde la izquierda.</p>
+    <div slot="footer">
+      <button type="button" data-drawer="close">Cerrar</button>
+    </div>
+  `;
+  document.body.appendChild(dStart);
+
+  // (3) Drawer top.
+  const dTop = document.createElement('is-drawer');
+  dTop.setAttribute('label', 'Drawer top');
+  dTop.setAttribute('placement', 'top');
+  dTop.id = 'd-top';
+  dTop.innerHTML = `
+    <p>Desde arriba.</p>
+    <div slot="footer">
+      <button type="button" data-drawer="close">OK</button>
+    </div>
+  `;
+  document.body.appendChild(dTop);
+
+  // (4) Drawer bottom.
+  const dBottom = document.createElement('is-drawer');
+  dBottom.setAttribute('label', 'Drawer bottom');
+  dBottom.setAttribute('placement', 'bottom');
+  dBottom.id = 'd-bottom';
+  dBottom.innerHTML = `
+    <p>Desde abajo.</p>
+    <div slot="footer">
+      <button type="button" data-drawer="close">OK</button>
+    </div>
+  `;
+  document.body.appendChild(dBottom);
+
+  // (5) Drawer without-header.
+  const dNoHeader = document.createElement('is-drawer');
+  dNoHeader.setAttribute('without-header', '');
+  dNoHeader.setAttribute('placement', 'end');
+  dNoHeader.id = 'd-noheader';
+  dNoHeader.innerHTML = `
+    <p>Sin header. Escape sigue cerrando.</p>
+    <div slot="footer">
+      <button type="button" data-drawer="close">OK</button>
+    </div>
+  `;
+  document.body.appendChild(dNoHeader);
+
+  // Log de eventos.
+  const log = document.getElementById('log');
+  const appendLog = (line) => { log.textContent = line + '\n' + log.textContent; };
+  [dEnd, dStart, dTop, dBottom, dNoHeader].forEach((d) => {
+    ['is-show', 'is-after-show', 'is-hide', 'is-after-hide'].forEach((evt) => {
+      d.addEventListener(evt, () => appendLog(`${evt} ← ${d.id}`));
+    });
+  });
+
+  // Botones de UI.
+  document.getElementById('btn-end').addEventListener('click', () => dEnd.show());
+  document.getElementById('btn-start').addEventListener('click', () => dStart.show());
+  document.getElementById('btn-top').addEventListener('click', () => dTop.show());
+  document.getElementById('btn-bottom').addEventListener('click', () => dBottom.show());
+  document.getElementById('btn-noheader').addEventListener('click', () => dNoHeader.show());
+
+  document.documentElement.dataset.drawerReady = '1';
+</script>
+</head>
+<body>
+<header>
+  <h1>Demo — <code>&lt;is-drawer&gt;</code></h1>
+  <p>Panel deslizable desde un borde: <code>start</code> / <code>end</code> / <code>top</code> / <code>bottom</code>. Focus trap + Escape + light-dismiss + restore de foco.</p>
+</header>
+<main>
+  <section>
+    <h2>Placements</h2>
+    <button id="btn-start" type="button">Abrir start</button>
+    <button id="btn-end" type="button">Abrir end</button>
+    <button id="btn-top" type="button">Abrir top</button>
+    <button id="btn-bottom" type="button">Abrir bottom</button>
+    <button id="btn-noheader" type="button">Abrir without-header</button>
+  </section>
+  <section>
+    <h2>Eventos</h2>
+    <pre id="log"></pre>
+  </section>
+</main>
+<footer>
+  Estado: <code>customElements.whenDefined('is-drawer')</code> resuelto.
+</footer>
+</body>
+</html>

@@ -12,20 +12,26 @@
  * vez para migrar y se borra; nunca se escribe.
  */
 
+/** Forma del root de prefs: mapa de `tag -> key -> prefs`. */
+export type PrefsRoot = Record<string, Record<string, Record<string, unknown>>>;
+
+/** Entrada individual: objeto plano `{ clave: valor }`. */
+export type PrefsEntry = Record<string, unknown>;
+
 const ROOT_KEY = 'is-webcomponents';
 const LEGACY_ROOT_KEY = 'is-components';
 
-function parseRoot(raw) {
+function parseRoot(raw: string | null): PrefsRoot | null {
   if (!raw) return null;
   try {
-    const data = JSON.parse(raw);
-    return data && typeof data === 'object' && !Array.isArray(data) ? data : null;
+    const data: unknown = JSON.parse(raw);
+    return data && typeof data === 'object' && !Array.isArray(data) ? data as PrefsRoot : null;
   } catch {
     return null;
   }
 }
 
-function readRoot() {
+function readRoot(): PrefsRoot {
   try {
     const current = parseRoot(localStorage.getItem(ROOT_KEY));
     if (current) return current;
@@ -43,7 +49,7 @@ function readRoot() {
   }
 }
 
-function writeRoot(data) {
+function writeRoot(data: PrefsRoot): void {
   try {
     localStorage.setItem(ROOT_KEY, JSON.stringify(data));
   } catch {
@@ -51,8 +57,8 @@ function writeRoot(data) {
   }
 }
 
-/** @returns {object | null} */
-export function getComponentPrefs(tag, key) {
+/** Devuelve la entrada prefs de `(tag, key)`, o `null` si no existe. */
+export function getComponentPrefs(tag: string, key: string): PrefsEntry | null {
   if (!tag || !key) return null;
   const root = readRoot();
   const bucket = root[tag];
@@ -62,11 +68,12 @@ export function getComponentPrefs(tag, key) {
 }
 
 /** Merge shallow de `patch` en la entrada tag/key. */
-export function setComponentPrefs(tag, key, patch) {
+export function setComponentPrefs(tag: string, key: string, patch: PrefsEntry): void {
   if (!tag || !key || !patch || typeof patch !== 'object') return;
   const root = readRoot();
   const bucket = root[tag] && typeof root[tag] === 'object' ? { ...root[tag] } : {};
-  bucket[key] = { ...(bucket[key] && typeof bucket[key] === 'object' ? bucket[key] : {}), ...patch };
+  const existing = bucket[key] && typeof bucket[key] === 'object' ? bucket[key] as PrefsEntry : {};
+  bucket[key] = { ...existing, ...patch };
   root[tag] = bucket;
   writeRoot(root);
 }
@@ -74,7 +81,7 @@ export function setComponentPrefs(tag, key, patch) {
 /** Reemplaza la entrada completa: sin merge, para snapshots que deben quedar
  *  exactamente como se guardan (estado de grid, donde un merge dejaría
  *  columnas o filtros viejos que ya no existen). */
-export function replaceComponentPrefs(tag, key, value) {
+export function replaceComponentPrefs(tag: string, key: string, value: PrefsEntry): void {
   if (!tag || !key || !value || typeof value !== 'object') return;
   const root = readRoot();
   const bucket = root[tag] && typeof root[tag] === 'object' ? { ...root[tag] } : {};
@@ -84,7 +91,7 @@ export function replaceComponentPrefs(tag, key, value) {
 }
 
 /** Borra la entrada tag/key (y el bucket si queda vacío). */
-export function removeComponentPrefs(tag, key) {
+export function removeComponentPrefs(tag: string, key: string): void {
   if (!tag || !key) return;
   const root = readRoot();
   const bucket = root[tag];
@@ -97,16 +104,17 @@ export function removeComponentPrefs(tag, key) {
 }
 
 /** Snapshot del root (solo lectura; para auditoría). */
-export function peekComponentPrefsRoot() {
+export function peekComponentPrefsRoot(): PrefsRoot {
   return readRoot();
 }
+
+export type ClearAllPrefsResult = { cleared: boolean; tags: string[] };
 
 /**
  * Limpia TODA la memoria de componentes (`is-webcomponents` + legacy).
  * Splits, scrolls, grids, etc. Vuelve a los defaults del markup.
- * @returns {{ cleared: boolean, tags: string[] }}
  */
-export function clearAllComponentPrefs() {
+export function clearAllComponentPrefs(): ClearAllPrefsResult {
   const before = readRoot();
   const tags = Object.keys(before || {});
   try {
@@ -118,10 +126,10 @@ export function clearAllComponentPrefs() {
   return { cleared: true, tags };
 }
 
-export function getPrefsRootKey() {
+export function getPrefsRootKey(): string {
   return ROOT_KEY;
 }
 
-export function getLegacyPrefsRootKey() {
+export function getLegacyPrefsRootKey(): string {
   return LEGACY_ROOT_KEY;
 }

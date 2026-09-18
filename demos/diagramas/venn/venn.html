@@ -1,0 +1,54 @@
+<!doctype html>
+<html lang="es" class="theme-dark" data-theme="dark">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>Demo — <is-venn-diagram> 2 conjuntos</title>
+<meta name="description" content="Demo funcional del componente is-venn-diagram con dos conjuntos y una región compartida." />
+<style>
+  html, body { margin: 0; padding: 0; min-height: 100%; background: #0c1118; color: #e2e8f0; font-family: ui-sans-serif, system-ui, sans-serif; }
+  body { display: grid; grid-template-rows: auto 1fr auto; }
+  header { padding: 16px 20px; border-bottom: 1px solid rgba(255,255,255,0.1); background: #0f1620; }
+  header h1 { font-size: 16px; font-weight: 700; margin: 0; }
+  header p { font-size: 12px; color: #94a3b8; margin: 4px 0 0 0; }
+  main { padding: 20px; display: grid; place-items: center; }
+  is-venn-diagram { width: 720px; height: 480px; display: block; }
+  is-venn-diagram:not(:defined) { visibility: hidden; }
+  footer { padding: 12px 20px; border-top: 1px solid rgba(255,255,255,0.1); background: #0f1620; font-size: 11px; color: #94a3b8; }
+</style>
+<script type="module">
+  await import('../../../src/components/diagrams/venn-diagram.ts');
+  await customElements.whenDefined('is-venn-diagram');
+
+  const el = document.createElement('is-venn-diagram');
+  el.payload = {
+    title: 'Back-end vs Front-end',
+    subtitle: 'Lenguajes comunes en cada lado',
+    sets: [
+      { id: 'fe', label: 'Front-end' },
+      { id: 'be', label: 'Back-end' },
+    ],
+    regions: [
+      { sets: ['fe'], label: 'JS / TS / HTML' },
+      { sets: ['be'], label: 'Go / Java / Rust' },
+      { sets: ['fe', 'be'], label: 'TypeScript' },
+    ],
+  };
+  document.getElementById('host').appendChild(el);
+
+  document.documentElement.dataset.vennReady = '1';
+</script>
+</head>
+<body>
+<header>
+  <h1>Demo funcional — <code>&lt;is-venn-diagram&gt;</code></h1>
+  <p>Dos conjuntos (Front-end / Back-end) con regiones exclusivas e intersección.</p>
+</header>
+<main>
+  <div id="host"></div>
+</main>
+<footer>
+  Estado: spec normalizada vía <code>resolveVennSpec</code>; layout vía <code>computeVennLayout</code>.
+</footer>
+</body>
+</html>

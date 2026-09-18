@@ -23,7 +23,8 @@
 
 import { existsSync } from 'node:fs';
 import { join } from 'node:path';
-import type { Hallazgo, EntradaCatalogo } from '../motor/types.js';
+import type { Hallazgo } from '../motor/types.js';
+import type { EntradaCatalogo } from '../motor/catalog.js';
 import { leerDefinicion } from './cargar.js';
 
 /** Estado del browser que supervisa el motor. */
@@ -70,7 +71,7 @@ export interface ReportePagina {
  * (Mirror del formato ?s=<base64url> que usa gallery/app.ts.)
  */
 export function urlPreview(baseUrl: string, tag: string, opts: { theme?: string; palette?: string } = {}): string {
-  const state = { component: tag };
+  const state: { component: string; theme?: string; palette?: string } = { component: tag };
   if (opts.theme) state.theme = opts.theme;
   if (opts.palette) state.palette = opts.palette;
   const enc = btoa(JSON.stringify(state)).replace(/=+$/, '').replace(/\+/g, '-').replace(/\//g, '_');

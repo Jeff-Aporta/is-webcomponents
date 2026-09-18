@@ -28,17 +28,29 @@ import {
   resolveTagId,
   isTagCovered,
   tagKey,
+  type TagEntry,
+  type Catalog,
 } from './load-plan.js';
-import { installSheetCache, getSheetCache, createSheetCache } from './sheet-cache.js';
+import type { LoadJob } from './load-plan.js';
+import { installSheetCache, getSheetCache, createSheetCache, type SheetCacheApi } from './sheet-cache.js';
 import { ensureElement, isElementReady } from './ensure-element.js';
 
-/** @typedef {{ category: string, file: string }} TagEntry */
-/** @typedef {{ categories: Record<string, string[]>, tags: Record<string, TagEntry>, aliases: Record<string, string> }} Catalog */
-/** @typedef {{ id: string, label?: string, hint?: string, pin?: boolean, base: (ref?: string) => string }} Mirror */
-/** @typedef {{ href: string, css?: string | string[] }} AppComponentEntry */
+declare const __IS_LOADER_CATALOG__: Catalog;
 
-/** @type {Catalog} */
-const CATALOG = __IS_LOADER_CATALOG__;
+export interface Mirror {
+  id: string;
+  label?: string;
+  hint?: string;
+  pin?: boolean;
+  base: (ref?: string) => string;
+}
+
+export interface AppComponentEntry {
+  href: string;
+  css?: string | string[];
+}
+
+const CATALOG: Catalog = __IS_LOADER_CATALOG__;
 
 const SELF_BASE = new URL('./', import.meta.url).href.replace(/\/?$/, '/');
 
@@ -47,41 +59,40 @@ const CDN_ROOT = /\/core\/$/i.test(SELF_BASE)
   ? new URL('../', SELF_BASE).href.replace(/\/?$/, '/')
   : SELF_BASE;
 
-/** @type {{ ref: string | null, mirrors: Mirror[], preferSelf: boolean, host: string | null, query: Record<string, string> }} */
-const state = {
+interface LoaderState {
+  ref: string | null;
+  mirrors: Mirror[];
+  preferSelf: boolean;
+  /** Raíz `dist/cdn/` forzada por el consumidor (githack, local, SHA…). */
+  host: string | null;
+  /** Query de cache-bust en cada asset (`?v=2`). */
+  query: Record<string, string>;
+}
+
+const state: LoaderState = {
   ref: null,
   mirrors: DEFAULT_MIRRORS.map((m) => ({ ...m })),
   preferSelf: true,
-  /** Raíz `dist/cdn/` forzada por el consumidor (githack, local, SHA…). */
   host: null,
-  /** Query de cache-bust en cada asset (`?v=2`). */
-  query: /** @type {Record<string, string>} */ ({}),
+  query: {},
 };
 
 /** Registro de lo ya cargado en esta página (anti-redundancia). */
 const registry = createRegistry();
 
 /** Tags de la app consumidora (fuera del catálogo del kit). */
-/** @type {Map<string, AppComponentEntry>} */
-const appComponents = new Map();
+const appComponents = new Map<string, AppComponentEntry>();
 
-/** @type {Set<string>} */
-const cssDone = new Set();
-/** @type {Map<string, Promise<void>>} */
-const jsDone = new Map();
+const cssDone = new Set<string>();
+const jsDone = new Map<string, Promise<void>>();
 
-const slash = (u) => (u.endsWith('/') ? u : `${u}/`);
+const slash = (u: string): string => (u.endsWith('/') ? u : `${u}/`);
 
-/**
- * @param {unknown} input
- * @returns {Record<string, string>}
- */
 function normalizeQuery(input: unknown): Record<string, string> {
   if (input == null || input === '') return {};
   if (typeof input === 'string') {
     const q = input.replace(/^\?/, '');
-    /** @type {Record<string, string>} */
-    const out = {};
+    const out: Record<string, string> = {};
     for (const part of q.split('&')) {
       if (!part) continue;
       const eq = part.indexOf('=');
@@ -97,9 +108,8 @@ function normalizeQuery(input: unknown): Record<string, string> {
     return out;
   }
   if (typeof input === 'object' && !Array.isArray(input)) {
-    /** @type {Record<string, string>} */
-    const out = {};
-    for (const [k, val] of Object.entries(/** @type {Record<string, unknown>} */ (input))) {
+    const out: Record<string, string> = {};
+    for (const [k, val] of Object.entries(input as Record<string, unknown>)) {
       if (val == null || val === '') continue;
       out[k] = String(val);
     }
@@ -119,20 +129,17 @@ function withQuery(href: string): string {
   return u.href;
 }
 
-/** @param {string} base @param {string} rel */
 function assetHref(base: string, rel: string): string {
   return withQuery(new URL(rel.replace(/^\//, ''), slash(base)).href);
 }
 
 /**
  * Bases del entry + CSS base (misma carpeta que loader.min.js).
- * @param {string} [forcedRef]
  */
-async function coreAssetBases(forcedRef?: string) {
+async function coreAssetBases(forcedRef?: string): Promise<string[]> {
   const ref = forcedRef ?? state.ref ?? (await resolveRef());
-  /** @type {string[]} */
-  const out = [];
-  const push = (b: string) => {
+  const out: string[] = [];
+  const push = (b: string): void => {
     const n = slash(b);
     if (!out.includes(n)) out.push(n);
   };
@@ -158,15 +165,10 @@ async function coreAssetBases(forcedRef?: string) {
   return out;
 }
 
-/**
- * @param {string} [forcedRef]
- * @returns {Promise<string[]>}
- */
-async function cdnBases(forcedRef?: string) {
+async function cdnBases(forcedRef?: string): Promise<string[]> {
   const ref = forcedRef ?? state.ref ?? (await resolveRef());
-  /** @type {string[]} */
-  const out = [];
-  const push = (b: string) => {
+  const out: string[] = [];
+  const push = (b: string): void => {
     const n = slash(b);
     if (!out.includes(n)) out.push(n);
   };
@@ -180,11 +182,7 @@ async function cdnBases(forcedRef?: string) {
   return out;
 }
 
-/**
- * @param {string} href
- * @returns {Promise<void>}
- */
-function injectStylesheet(href: string) {
+function injectStylesheet(href: string): Promise<void> {
   if (cssDone.has(href)) return Promise.resolve();
   if (typeof document === 'undefined') {
     cssDone.add(href);
@@ -195,7 +193,7 @@ function injectStylesheet(href: string) {
     cssDone.add(href);
     return Promise.resolve();
   }
-  return new Promise((resolve, reject) => {
+  return new Promise<void>((resolve, reject) => {
     const link = document.createElement('link');
     link.rel = 'stylesheet';
     link.href = href;
@@ -209,19 +207,15 @@ function injectStylesheet(href: string) {
   });
 }
 
-/**
- * @param {string} rel
- */
-async function injectCdnStylesheet(rel: string) {
+async function injectCdnStylesheet(rel: string): Promise<string> {
   const bases = await coreAssetBases();
-  /** @type {Error | null} */
-  let last = null;
+  let last: Error | null = null;
   for (const base of bases) {
     const href = assetHref(base, rel);
     try {
       await injectStylesheet(href);
       return href;
-    } catch (e) {
+    } catch (e: unknown) {
       last = e instanceof Error ? e : new Error(String(e));
       cssDone.delete(href);
       document.head.querySelector<HTMLElement>(`link[data-is-cdn-css="${href}"]`)?.remove();
@@ -230,14 +224,10 @@ async function injectCdnStylesheet(rel: string) {
   throw last || new Error(`ISWebComponentsLoader: no hay espejo para ${rel}`);
 }
 
-/**
- * @param {string} href
- * @returns {Promise<void>}
- */
-function importOnce(href: string) {
+function importOnce(href: string): Promise<void> {
   let p = jsDone.get(href);
   if (p) return p;
-  p = import(/* @vite-ignore */ href).then(() => undefined, (err) => {
+  p = import(/* @vite-ignore */ href).then(() => undefined, (err: unknown) => {
     jsDone.delete(href);
     throw err;
   });
@@ -245,37 +235,30 @@ function importOnce(href: string) {
   return p;
 }
 
-/**
- * @param {string} rel
- * @returns {Promise<string>}
- */
-async function importCdn(rel: string) {
+async function importCdn(rel: string): Promise<string> {
   const bases = await cdnBases();
-  /** @type {Error | null} */
-  let last = null;
+  let last: Error | null = null;
   for (const base of bases) {
     const href = assetHref(base, rel);
     try {
       await importOnce(href);
       return href;
-    } catch (e) {
+    } catch (e: unknown) {
       last = e instanceof Error ? e : new Error(String(e));
     }
   }
   throw last || new Error(`ISWebComponentsLoader: no hay espejo para ${rel}`);
 }
 
-/**
- * @param {...(string | Record<string, unknown>)} args
- */
-function parseArgs(...args: (string | Record<string, unknown>)[]) {
-  /** @type {string[]} */
-  const ids = [];
-  /** @type {Record<string, unknown>} */
-  let opts = {};
+function parseArgs(...args: (string | Record<string, unknown>)[]): {
+  ids: string[];
+  opts: Record<string, unknown>;
+} {
+  const ids: string[] = [];
+  let opts: Record<string, unknown> = {};
   for (const a of args) {
     if (a && typeof a === 'object' && !Array.isArray(a)) {
-      opts = /** @type {Record<string, unknown>} */ (a);
+      opts = a;
     } else if (typeof a === 'string' && a.trim()) {
       ids.push(a.trim());
     }
@@ -283,14 +266,9 @@ function parseArgs(...args: (string | Record<string, unknown>)[]) {
   return { ids, opts };
 }
 
-/**
- * @param {string | Mirror | (string | Mirror)[]} input
- * @returns {Mirror[]}
- */
-function normalizeMirrors(input: string | Mirror | (string | Mirror)[]) {
+function normalizeMirrors(input: string | Mirror | (string | Mirror)[]): Mirror[] {
   const list = Array.isArray(input) ? input : [input];
-  /** @type {Mirror[]} */
-  const out = [];
+  const out: Mirror[] = [];
   for (const item of list) {
     if (typeof item === 'string') {
       if (item === 'jsdelivr') {
@@ -318,16 +296,14 @@ function normalizeMirrors(input: string | Mirror | (string | Mirror)[]) {
   return out.length ? out : DEFAULT_MIRRORS.map((m) => ({ ...m }));
 }
 
-/** @param {string} id */
-function normTag(id: string) {
+function normTag(id: string): string {
   return String(id || '').trim().toLowerCase();
 }
 
-/** @param {AppComponentEntry} entry */
-async function warmEntryCss(entry: AppComponentEntry) {
-  const sheets = getSheetCache();
+async function warmEntryCss(entry: AppComponentEntry): Promise<void> {
+  const sheets = getSheetCache() as (SheetCacheApi & { calentar?: (list: string[]) => Promise<void> }) | null;
   if (!sheets?.calentar) return;
-  const list = [];
+  const list: string[] = [];
   if (entry.css) {
     const css = Array.isArray(entry.css) ? entry.css : [entry.css];
     list.push(...css);
@@ -337,27 +313,54 @@ async function warmEntryCss(entry: AppComponentEntry) {
   if (list.length) await sheets.calentar(list);
 }
 
+export interface ConfigureOpts {
+  ref?: string | null;
+  mirrors?: string | Mirror | (string | Mirror)[];
+  preferSelf?: boolean;
+  host?: string | null;
+  query?: string | Record<string, string> | null;
+  v?: string | number | null;
+}
+
+export interface LoadResult {
+  loaded: string[];
+  skipped: string[];
+}
+
+export interface LoadedSnapshot {
+  all: boolean;
+  categories: string[];
+  tags: string[];
+  app: string[];
+}
+
+export interface LoaderSheets {
+  install(opts?: { cacheName?: string }): SheetCacheApi | null;
+  get(): SheetCacheApi | null;
+  warm(hrefs: string[]): Promise<unknown>;
+  warmFromCache(): Promise<unknown>;
+  warmFromManifest(url: string, opts?: { base?: string; key?: string }): Promise<unknown>;
+}
+
 export const ISWebComponentsLoader = {
-  get catalog() { return CATALOG; },
-  get repo() { return GH_REPO; },
-  get mirrors() { return state.mirrors.slice(); },
-  get selfBase() { return SELF_BASE; },
+  get catalog(): Catalog { return CATALOG; },
+  get repo(): string { return GH_REPO; },
+  get mirrors(): Mirror[] { return state.mirrors.slice(); },
+  get selfBase(): string { return SELF_BASE; },
   /** Raíz CDN forzada por `configure({ host })`, o null. */
-  get host() { return state.host; },
+  get host(): string | null { return state.host; },
   /** Query de bust activa (`{ v: '2' }` → `?v=2`). */
-  get query() { return { ...state.query }; },
+  get query(): Record<string, string> { return { ...state.query }; },
 
   /** API de caché de hojas (adoptedStyleSheets + Cache Storage). */
   sheets: {
-    /** @param {{ cacheName?: string }} [opts] */
-    install(opts = {}) {
+    install(opts: { cacheName?: string } = {}) {
       return installSheetCache(opts);
     },
     get() {
       return getSheetCache();
     },
-    /** @param {string[]} hrefs */
-    warm(hrefs) {
+    warm(hrefs: string[]) {
       const s = getSheetCache() || installSheetCache();
       return s ? s.calentar(hrefs) : Promise.resolve();
     },
@@ -365,32 +368,18 @@ export const ISWebComponentsLoader = {
       const s = getSheetCache() || installSheetCache();
       return s ? s.calentarDesdeCache() : Promise.resolve();
     },
-    /**
-     * @param {string} url
-     * @param {{ base?: string, key?: string }} [opts]
-     */
-    warmFromManifest(url, opts = {}) {
+    warmFromManifest(url: string, opts: { base?: string; key?: string } = {}) {
       const s = getSheetCache() || installSheetCache();
       return s ? s.calentarDesdeManifiesto(url, opts) : Promise.resolve();
     },
-  },
+  } satisfies LoaderSheets,
 
-  async baseUrl() {
+  async baseUrl(): Promise<string> {
     const bases = await cdnBases();
     return bases[0];
   },
 
-  /**
-   * @param {{
-   *   ref?: string | null,
-   *   mirrors?: string | Mirror | (string | Mirror)[],
-   *   preferSelf?: boolean,
-   *   host?: string | null,
-   *   query?: string | Record<string, string> | null,
-   *   v?: string | number | null,
-   * }} opts
-   */
-  configure(opts = {}) {
+  configure(opts: ConfigureOpts = {}) {
     if ('ref' in opts) state.ref = opts.ref == null || opts.ref === '' ? null : String(opts.ref);
     if ('mirrors' in opts && opts.mirrors != null) state.mirrors = normalizeMirrors(opts.mirrors);
     if (typeof opts.preferSelf === 'boolean') state.preferSelf = opts.preferSelf;
@@ -419,15 +408,15 @@ export const ISWebComponentsLoader = {
     return this;
   },
 
-  async resolvePin() {
+  async resolvePin(): Promise<string> {
     return state.ref ?? (await resolveRef());
   },
 
-  async listBases() {
+  async listBases(): Promise<string[]> {
     return cdnBases();
   },
 
-  async fallbackBases() {
+  async fallbackBases(): Promise<string[]> {
     const ref = await this.resolvePin();
     return fallbackBases(ref);
   },
@@ -435,11 +424,11 @@ export const ISWebComponentsLoader = {
   /**
    * Registra tags de la app (fuera del catálogo del kit). Luego `load('mi-tag')`
    * importa su `href` y calienta CSS vía sheet-cache si está instalado.
-   *
-   * @param {Record<string, string | AppComponentEntry>} map
-   * @param {{ cacheName?: string, installSheets?: boolean }} [opts]
    */
-  registerApp(map, opts = {}) {
+  registerApp(
+    map: Record<string, string | AppComponentEntry>,
+    opts: { cacheName?: string; installSheets?: boolean } = {},
+  ) {
     if (opts.installSheets !== false) {
       installSheetCache({ cacheName: opts.cacheName || 'is-sheets-v1' });
     } else if (opts.cacheName) {
@@ -449,12 +438,12 @@ export const ISWebComponentsLoader = {
     for (const [raw, value] of Object.entries(map || {})) {
       const tag = normTag(raw);
       if (!tag) continue;
-      const entry = typeof value === 'string'
+      const entry: AppComponentEntry = typeof value === 'string'
         ? { href: new URL(value, baseDoc).href }
         : {
             href: new URL(value.href, baseDoc).href,
             css: value.css
-              ? (Array.isArray(value.css) ? value.css : [value.css]).map((c) => new URL(c, baseDoc).href)
+              ? (Array.isArray(value.css) ? value.css : [value.css]).map((c: string) => new URL(c, baseDoc).href)
               : undefined,
           };
       appComponents.set(tag, entry);
@@ -463,15 +452,14 @@ export const ISWebComponentsLoader = {
   },
 
   /** Tags registrados por la app. */
-  getAppComponents() {
+  getAppComponents(): Record<string, AppComponentEntry> {
     return Object.fromEntries([...appComponents.entries()].map(([k, v]) => [k, { ...v }]));
   },
 
   /**
    * ¿Ya está cubierto (por tag, su categoría, `all`, o app registry cargado)?
-   * @param {string} id
    */
-  has(id) {
+  has(id: string): boolean {
     if (id === 'all' || id === '*') return registry.all;
     const raw = normTag(id);
     const aliased = CATALOG.aliases[raw] || raw;
@@ -484,7 +472,7 @@ export const ISWebComponentsLoader = {
   },
 
   /** Snapshot del registro anti-redundancia. */
-  getLoaded() {
+  getLoaded(): LoadedSnapshot {
     return {
       all: registry.all,
       categories: [...registry.cats].sort(),
@@ -509,10 +497,7 @@ export const ISWebComponentsLoader = {
     return injectCdnStylesheet('palettes.min.css');
   },
 
-  /**
-   * @param {string[]} hrefs
-   */
-  async loadPageStyles(hrefs) {
+  async loadPageStyles(hrefs: string[]) {
     const jobs = (hrefs || []).map((h) => {
       const abs = new URL(h, typeof location !== 'undefined' ? location.href : SELF_BASE).href;
       return injectStylesheet(abs);
@@ -520,10 +505,7 @@ export const ISWebComponentsLoader = {
     await Promise.all(jobs);
   },
 
-  /**
-   * @param {string[]} hrefs
-   */
-  async loadPageModules(hrefs) {
+  async loadPageModules(hrefs: string[]) {
     const jobs = (hrefs || []).map((h) => {
       const abs = new URL(h, typeof location !== 'undefined' ? location.href : SELF_BASE).href;
       return importOnce(abs);
@@ -533,22 +515,17 @@ export const ISWebComponentsLoader = {
 
   /**
    * Carga tags/categorías/`all` (kit) y tags registrados con `registerApp`.
-   * @param {...(string | Record<string, unknown>)} args
-   * @returns {Promise<{ loaded: string[], skipped: string[] }>}
    */
-  async load(...args) {
+  async load(...args: (string | Record<string, unknown>)[]): Promise<LoadResult> {
     // parseArgs es rest: pasar `args` suelto (no el array como único argumento)
     // o `ids` sale siempre vacío y load() no carga nada (regresión del paso a
     // TS: `parseArgs(args)` con firma `(...args)` → ids=[] en silencio).
     const { ids } = parseArgs(...args);
     if (!ids.length) return { loaded: [], skipped: [] };
 
-    /** @type {string[]} */
-    const kitIds = [];
-    /** @type {string[]} */
-    const appIds = [];
-    /** @type {string[]} */
-    const skipped = [];
+    const kitIds: string[] = [];
+    const appIds: string[] = [];
+    const skipped: string[] = [];
 
     for (const id of ids) {
       const raw = normTag(id);
@@ -560,15 +537,14 @@ export const ISWebComponentsLoader = {
       kitIds.push(id);
     }
 
-    /** @type {string[]} */
-    const loaded = [];
+    const loaded: string[] = [];
 
     if (kitIds.length) {
       const planned = planLoads(kitIds, registry, CATALOG);
       skipped.push(...planned.skipped);
-      await Promise.all(planned.jobs.map((j) => importCdn(j.path)));
+      await Promise.all(planned.jobs.map((j: LoadJob) => importCdn(j.path)));
       commitLoads(planned.jobs, registry, CATALOG);
-      loaded.push(...planned.jobs.map((j) => j.path));
+      loaded.push(...planned.jobs.map((j: LoadJob) => j.path));
     }
 
     for (const tag of appIds) {
@@ -585,10 +561,8 @@ export const ISWebComponentsLoader = {
 
   /**
    * Asegura que el custom element esté definido: load(tag) si hace falta + whenDefined.
-   * @param {string} tag
-   * @param {{ href?: string }} [opts]
    */
-  async ensure(tag, opts = {}) {
+  async ensure(tag: string, opts: { href?: string } = {}): Promise<boolean> {
     const name = normTag(tag);
     if (isElementReady(name)) return true;
 
@@ -618,7 +592,7 @@ export const ISWebComponentsLoader = {
 };
 
 if (typeof globalThis !== 'undefined') {
-  globalThis.ISWebComponentsLoader = ISWebComponentsLoader;
+  (globalThis as Record<string, unknown>).ISWebComponentsLoader = ISWebComponentsLoader;
 }
 
 export default ISWebComponentsLoader;

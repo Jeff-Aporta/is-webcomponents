@@ -100,6 +100,7 @@ export function enumerarCatalogo(raiz: string, opciones: OpcionesEnumerador = {}
       tieneModulo: false,
       esPagina: true,
       tieneBehavior: false,
+      esModulo: false,
     });
     seen.add(tag);
   }
@@ -269,6 +270,7 @@ function leerCatalog(archivo: string, raiz: string): EntradaCatalogo[] {
       tieneModulo: behaviorRel ? existeTsOJs(join(raiz, behaviorRel)) : false,
       esPagina: tag === 'home' || tag === 'theming' || tag === 'ecosystem' || tag === 'phase7',
       tieneBehavior: Boolean(behaviorRel),
+      esModulo: false,
     });
   }
   return entradas;

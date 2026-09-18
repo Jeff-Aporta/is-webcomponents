@@ -1,0 +1,48 @@
+<!doctype html>
+<html lang="es" class="theme-dark" data-theme="dark">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>Demo <is-palette-selector> · is-webcomponents</title>
+<meta name="description" content="Demo de <is-palette-selector>: 3 paletas por defecto, cambio de tema, persistencia localStorage y slot para opciones custom." />
+<style>
+  html, body { margin: 0; padding: 0; background: #0c1118; color: #e2e8f0; font-family: ui-sans-serif, system-ui, sans-serif; }
+  body { padding: 24px; display: grid; gap: 24px; }
+  header h1 { font-size: 18px; margin: 0 0 4px; }
+  header p  { font-size: 13px; color: #94a3b8; margin: 0; }
+  section { background: #0f1620; border: 1px solid rgba(255,255,255,0.08); border-radius: 10px; padding: 18px; }
+  section h2 { font-size: 14px; margin: 0 0 12px; color: #94a3b8; font-weight: 600; text-transform: uppercase; letter-spacing: 0.05em; }
+  .container { background: var(--is-bg, #fff); color: var(--is-fg, #111); padding: 24px; border-radius: 10px; }
+  is-palette-selector:not(:defined) { visibility: hidden; }
+</style>
+<script type="module">
+  await import('../../../dist/cdn/feedback/palette-selector.min.js');
+
+  await customElements.whenDefined('is-palette-selector');
+  document.documentElement.dataset.paletteSelectorReady = '1';
+</script>
+</head>
+<body>
+<header>
+  <h1>is-palette-selector</h1>
+  <p>Selector de paletas (contapyme / insoft / agrowin por defecto). Persiste en localStorage, refleja <code>data-palette</code> en <code>&lt;html&gt;</code>, soporta slot trigger + slot option.</p>
+</header>
+
+<section>
+  <h2>Default (3 paletas built-in)</h2>
+  <is-palette-selector></is-palette-selector>
+  <div class="container" id="sample-1" style="margin-top:16px;">
+    <h3>Vista previa</h3>
+    <p>Esta caja usa las CSS variables de la paleta activa. Cambiá la paleta arriba para ver el efecto.</p>
+  </div>
+</section>
+
+<section>
+  <h2>Con paletas custom (atributo <code>palettes</code> JSON)</h2>
+  <is-palette-selector id="custom"
+    storage-key="is-palette-custom"
+    palettes='[{"value":"midnight","label":"Midnight","accent":"#7c3aed","bg":"#0f0f1e","fg":"#fff"},{"value":"sand","label":"Sand","accent":"#d97706","bg":"#fdf6e3","fg":"#3a2a1a"}]'
+  ></is-palette-selector>
+</section>
+</body>
+</html>

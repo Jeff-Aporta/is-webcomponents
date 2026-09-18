@@ -1,0 +1,121 @@
+<!doctype html>
+<html lang="es" class="theme-dark" data-theme="dark">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>Demo de <is-demo> · is-webcomponents</title>
+<meta name="description" content="Shell de demo para documentación. Light DOM, atributo heading, emite is-demo-connected. Wrapper neutro para ejemplos." />
+<style>
+  html, body { margin: 0; padding: 0; min-height: 100%; background: #0c1118; color: #e2e8f0; font-family: ui-sans-serif, system-ui, sans-serif; }
+  body { display: grid; grid-template-rows: auto 1fr auto; }
+  header { padding: 16px 20px; border-bottom: 1px solid rgba(255,255,255,0.1); background: #0f1620; }
+  header h1 { font-size: 16px; font-weight: 700; margin: 0; }
+  header p { font-size: 12px; color: #94a3b8; margin: 4px 0 0 0; }
+  main { padding: 20px; display: grid; gap: 18px; }
+  section { background: #0f1620; border: 1px solid rgba(255,255,255,0.1); border-radius: 8px; padding: 16px; }
+  section h2 { font-size: 11px; text-transform: uppercase; letter-spacing: 0.08em; margin: 0 0 12px 0; color: #94a3b8; }
+  is-demo { display: block; padding: 14px; border: 1px dashed rgba(255,255,255,0.25); border-radius: 6px; min-height: 60px; }
+  is-demo.with-heading { border-style: solid; border-color: rgba(255,255,255,0.15); background: #0a121b; }
+  .demo__heading { margin: 0 0 10px 0; font-size: 11px; text-transform: uppercase; letter-spacing: 0.08em; color: #94a3b8; font-weight: 600; }
+  .row { display: flex; gap: 12px; flex-wrap: wrap; align-items: center; }
+  .actions { display: flex; gap: 8px; margin-top: 8px; flex-wrap: wrap; }
+  footer { padding: 12px 20px; border-top: 1px solid rgba(255,255,255,0.1); background: #0f1620; font-size: 11px; color: #94a3b8; }
+  footer code { background: rgba(255,255,255,0.06); padding: 1px 5px; border-radius: 3px; font: 11px ui-monospace, Menlo, Consolas, monospace; }
+</style>
+<script type="module">
+  await import('../../../dist/cdn/layout/demo.min.js');
+  await customElements.whenDefined('is-demo');
+
+  // (4) Listener para verificar que se emite `is-demo-connected`.
+  //     Hay que registrar ANTES de crear los <is-demo> para no perder el
+  //     evento de connectedCallback de los primeros.
+  const eventLog = document.getElementById('event-log');
+  document.addEventListener('is-demo-connected', (e) => {
+    const tag = e.target.id || '(sin id)';
+    eventLog.textContent = `is-demo-connected ← ${tag}\n` + eventLog.textContent;
+    window.__demoConnectedFired = (window.__demoConnectedFired ?? 0) + 1;
+  });
+
+  // (1) Demo con heading.
+  const d1 = document.createElement('is-demo');
+  d1.setAttribute('heading', 'Botones primarios');
+  d1.classList.add('with-heading');
+  d1.id = 'd1';
+  const t1 = document.createElement('span');
+  t1.textContent = 'Aquí va el ejemplo (light DOM). El extractor de código ve el markup real.';
+  d1.appendChild(t1);
+  document.getElementById('host-1').appendChild(d1);
+
+  // (2) Demo sin heading — no debe aparecer el <p class="demo__heading">.
+  const d2 = document.createElement('is-demo');
+  d2.id = 'd2';
+  d2.textContent = 'Demo sin heading. La clase demo se aplica automáticamente al <is-demo>.';
+  document.getElementById('host-2').appendChild(d2);
+
+  // (3) Demo con heading dinámico (cambia en caliente).
+  const d3 = document.createElement('is-demo');
+  d3.setAttribute('heading', 'Heading inicial');
+  d3.id = 'd3';
+  d3.classList.add('with-heading');
+  d3.textContent = 'Cambia el heading arriba y observa cómo se reescribe el <p> interno.';
+  document.getElementById('host-3').appendChild(d3);
+
+  // (3b) Demo extra con variant de heading distinta — cuenta hacia el
+  //      total de emisiones de is-demo-connected.
+  const d3b = document.createElement('is-demo');
+  d3b.setAttribute('heading', 'Otro heading');
+  d3b.id = 'd3b';
+  d3b.classList.add('with-heading');
+  d3b.textContent = 'Cuarto demo para llegar a >=4 emisiones de is-demo-connected.';
+  document.getElementById('host-3b').appendChild(d3b);
+
+  // (5) Acciones interactivas.
+  document.getElementById('btn-heading').addEventListener('click', () => {
+    d3.setAttribute('heading', `Heading ${Date.now() % 100000}`);
+    document.getElementById('log').textContent = `heading → "${d3.getAttribute('heading')}"`;
+  });
+  document.getElementById('btn-clear').addEventListener('click', () => {
+    d3.removeAttribute('heading');
+    document.getElementById('log').textContent = 'heading eliminado';
+  });
+
+  document.documentElement.dataset.demoReady = '1';
+</script>
+</head>
+<body>
+<header>
+  <h1>Demo — <code>&lt;is-demo&gt;</code></h1>
+  <p>Shell de demo de documentación. Light DOM (los selectores de la página ven el markup real). Atributo <code>heading</code> opcional. Emite <code>is-demo-connected</code> al conectarse.</p>
+</header>
+<main>
+  <section>
+    <h2>Con heading</h2>
+    <div id="host-1"></div>
+  </section>
+  <section>
+    <h2>Sin heading</h2>
+    <div id="host-2"></div>
+  </section>
+  <section>
+    <h2>Heading dinámico</h2>
+    <div id="host-3"></div>
+    <div class="actions">
+      <button id="btn-heading" type="button">Cambiar heading</button>
+      <button id="btn-clear" type="button">Quitar heading</button>
+    </div>
+    <pre id="log" style="margin-top:8px;font:11px ui-monospace,monospace;color:#94a3b8;"></pre>
+  </section>
+  <section>
+    <h2>Cuarto demo</h2>
+    <div id="host-3b"></div>
+  </section>
+  <section>
+    <h2>Eventos</h2>
+    <pre id="event-log" style="margin:0;font:11px ui-monospace,monospace;color:#94a3b8;white-space:pre-wrap;"></pre>
+  </section>
+</main>
+<footer>
+  Estado: <code>customElements.whenDefined('is-demo')</code> resuelto. Light DOM: los estilos se aplican al propio <code>&lt;is-demo&gt;</code>.
+</footer>
+</body>
+</html>

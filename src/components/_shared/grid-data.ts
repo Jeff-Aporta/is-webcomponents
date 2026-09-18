@@ -15,17 +15,70 @@ import {
   stringComparator,
   typeOf,
 } from './grid-types.js';
+import type { CellValue, ColumnDef, ColumnType, Comparator, Operator, Row } from './grid-types.js';
+
+/** Columna con los defaults aplicados: misma forma que `ColumnDef` pero mutable,
+ * porque `normalizeColumns` la construye con spreads + assigns. */
+export type ResolvedColumn = {
+  field: string;
+  headerName: string;
+  align: string;
+  headerAlign: string;
+  width: number;
+  minWidth: number;
+  maxWidth: number;
+  flex: number;
+  sortable: boolean;
+  filterable: boolean;
+  hideable: boolean;
+  resizable: boolean;
+  editable: boolean;
+  groupable: boolean;
+  aggregable: boolean;
+  comparator: Comparator;
+  operators: readonly Operator[];
+  type: string;
+  valueFormatter?: ColumnDef['valueFormatter'];
+};
+
+export type NormalizeOptions = { defaultWidth?: number; editableAll?: boolean };
+
+export type PivotModel = {
+  rows?: readonly string[];
+  columns?: readonly string[];
+  values?: readonly { field: string; fn: string }[];
+};
+
+export type SortModelItem = { field: string; sort: 'asc' | 'desc' };
+
+export type FilterModel = {
+  items?: readonly { field?: string; operator?: string; value?: CellValue }[];
+  logicOperator?: 'and' | 'or';
+};
+
+export type AggregationModel = Record<string, string>;
+
+export type BuildTreeOpts = {
+  paths: (row: Row, i: number) => readonly (string | number)[];
+  getRowId: (row: Row, i: number) => CellValue;
+};
+
+export type FilterCtx = unknown;
 
 /* ── Columnas ─────────────────────────────────────────────────────────── */
 
 /** Aplica los defaults del tipo y del grid a cada definición de columna. */
-export function normalizeColumns(columns, opts = {}) {
+export function normalizeColumns(columns: readonly ColumnDef[], opts: NormalizeOptions = {}): ResolvedColumn[] {
   const { defaultWidth = 120, editableAll = false } = opts;
-  return (columns || []).map((raw) => {
+  return (columns || []).map((raw: ColumnDef) => {
     const type = typeOf(raw);
-    const meta = COLUMN_TYPES[type];
-    const col = { ...meta, ...raw, type };
-    col.field = raw.field;
+    const meta: ColumnType = COLUMN_TYPES[type];
+    const col = {
+      ...meta,
+      ...raw,
+      type,
+    } as ResolvedColumn;
+    col.field = raw.field ?? '';
     col.headerName = raw.headerName ?? raw.field ?? '';
     col.align = raw.align ?? meta.align ?? 'left';
     col.headerAlign = raw.headerAlign ?? meta.headerAlign ?? col.align;
@@ -40,22 +93,22 @@ export function normalizeColumns(columns, opts = {}) {
     col.editable = raw.editable ?? meta.editable ?? editableAll;
     col.groupable = raw.groupable ?? (type !== 'actions');
     col.aggregable = raw.aggregable ?? (type !== 'actions');
-    col.comparator = raw.sortComparator ?? meta.comparator ?? stringComparator;
+    col.comparator = (raw as { sortComparator?: Comparator }).sortComparator ?? meta.comparator ?? stringComparator;
     col.operators = operatorsFor(col);
     return col;
   });
 }
 
 /** Ancho final de cada columna repartiendo el espacio libre entre las flex. */
-export function resolveWidths(cols, available: number, overrides = {}) {
-  const fixed = cols.filter((c) => !c.flex || overrides[c.field] != null);
-  const flexed = cols.filter((c) => c.flex && overrides[c.field] == null);
-  const used = fixed.reduce((sum, c) => sum + (overrides[c.field] ?? c.width), 0);
-  const totalFlex = flexed.reduce((sum, c) => sum + c.flex, 0);
+export function resolveWidths(cols: readonly ResolvedColumn[], available: number, overrides: Record<string, number> = {}): Record<string, number> {
+  const fixed = cols.filter((c: ResolvedColumn) => !c.flex || overrides[c.field] != null);
+  const flexed = cols.filter((c: ResolvedColumn) => c.flex && overrides[c.field] == null);
+  const used = fixed.reduce((sum: number, c: ResolvedColumn) => sum + (overrides[c.field] ?? c.width), 0);
+  const totalFlex = flexed.reduce((sum: number, c: ResolvedColumn) => sum + c.flex, 0);
   const free = Math.max(0, available - used);
-  const out = {};
+  const out: Record<string, number> = {};
   for (const c of cols) {
-    if (overrides[c.field] != null) out[c.field] = overrides[c.field];
+    if (overrides[c.field] != null) out[c.field] = overrides[c.field] as number;
     else if (!c.flex) out[c.field] = c.width;
     else {
       const share = totalFlex ? (free * c.flex) / totalFlex : 0;
@@ -67,27 +120,28 @@ export function resolveWidths(cols, available: number, overrides = {}) {
 
 /* ── Valores ──────────────────────────────────────────────────────────── */
 
-export function rawValue(row, col) {
-  if (!row || !col?.field) return undefined;
-  if (col.field.includes('.')) {
-    return col.field.split('.').reduce((acc, key) => (acc == null ? acc : acc[key]), row);
+export function rawValue(row: Row, col: ColumnDef): CellValue {
+  const field = col.field;
+  if (!row || !field) return undefined;
+  if (field.includes('.')) {
+    return field.split('.').reduce((acc: CellValue, key: string) => (acc == null ? acc : (acc as Record<string, CellValue>)[key]), row);
   }
-  return row[col.field];
+  return row[field];
 }
 
 /** Valor usado para filtrar, ordenar y agrupar (respeta valueGetter). */
-export function cellValue(row, col, ctx) {
+export function cellValue(row: Row, col: ColumnDef, ctx: FilterCtx): CellValue {
   const raw = rawValue(row, col);
   return typeof col.valueGetter === 'function' ? col.valueGetter(raw, row, col, ctx) : raw;
 }
 
 /** Texto mostrado (valueFormatter, si no el formato del tipo). */
-export function formattedValue(value: string, row, col, ctx) {
+export function formattedValue(value: CellValue, row: Row, col: ColumnDef, ctx: FilterCtx): string {
   if (typeof col.valueFormatter === 'function') {
     const out = col.valueFormatter(value, row, col, ctx);
     return out == null ? '' : String(out);
   }
-  if (typeof col.format === 'function') return col.format(value, row, col);
+  if (typeof col.format === 'function') return col.format(value);
   return value == null ? '' : String(value);
 }
 
@@ -97,78 +151,102 @@ export function formattedValue(value: string, row, col, ctx) {
  * Aplica el filterModel (reglas + and/or) y el quick filter.
  * Las palabras del quick filter se exigen todas (AND) contra cualquier columna.
  */
-export function applyFilters(rows, { model, quick, columns, ctx, quickLogic = 'and' }) {
-  const items = (model?.items || [])
-    .map((item) => {
-      const col = columns.find((c) => c.field === item.field);
+export type ApplyFiltersOpts = {
+  model?: FilterModel;
+  quick?: string;
+  columns: readonly ResolvedColumn[];
+  ctx: FilterCtx;
+  quickLogic?: 'and' | 'or';
+};
+
+export function applyFilters(rows: readonly Row[], { model, quick, columns, ctx, quickLogic = 'and' }: ApplyFiltersOpts): Row[] {
+  const items: { col: ResolvedColumn; test: (v: CellValue) => boolean }[] = (model?.items || [])
+    .map((item: { field?: string; operator?: string; value?: CellValue }) => {
+      const col = columns.find((c: ResolvedColumn) => c.field === item.field);
       if (!col || col.filterable === false) return null;
       const test = filterTest(item, col);
       return test ? { col, test } : null;
     })
-    .filter(Boolean);
+    .filter((x): x is { col: ResolvedColumn; test: (v: CellValue) => boolean } => x !== null);
 
   const words = String(quick || '').trim().toLowerCase().split(/\s+/).filter(Boolean);
-  const quickCols = columns.filter((c) => c.filterable !== false && c.type !== 'actions');
-  if (!items.length && !words.length) return rows;
+  const quickCols = columns.filter((c: ResolvedColumn) => c.filterable !== false && c.type !== 'actions');
+  if (!items.length && !words.length) return [...rows];
 
   const logic = model?.logicOperator === LOGIC.OR ? LOGIC.OR : LOGIC.AND;
 
-  return rows.filter((row) => {
+  return rows.filter((row: Row) => {
     if (items.length) {
-      const results = items.map(({ col, test }) => test(cellValue(row, col, ctx), row, col));
+      const results = items.map(({ col, test }: { col: ResolvedColumn; test: (v: CellValue) => boolean }) => test(cellValue(row, col, ctx)));
       const ok = logic === LOGIC.OR ? results.some(Boolean) : results.every(Boolean);
       if (!ok) return false;
     }
     if (!words.length) return true;
     const haystack = quickCols
-      .map((col) => formattedValue(cellValue(row, col, ctx), row, col, ctx).toLowerCase())
+      .map((col: ResolvedColumn) => formattedValue(cellValue(row, col, ctx), row, col, ctx).toLowerCase())
       .join(' ');
     return quickLogic === 'or'
-      ? words.some((w) => haystack.includes(w))
-      : words.every((w) => haystack.includes(w));
+      ? words.some((w: string) => haystack.includes(w))
+      : words.every((w: string) => haystack.includes(w));
   });
 }
 
 /* ── Ordenación ───────────────────────────────────────────────────────── */
 
-export function applySort(rows, sortModel, columns, ctx) {
+export function applySort(rows: readonly Row[], sortModel: readonly SortModelItem[] | undefined, columns: readonly ResolvedColumn[], ctx: FilterCtx): Row[] {
   const active = (sortModel || [])
-    .map((s) => ({ col: columns.find((c) => c.field === s.field), sort: s.sort }))
-    .filter((s) => s.col && s.sort);
-  if (!active.length) return rows;
+    .map((s: SortModelItem) => ({ col: columns.find((c: ResolvedColumn) => c.field === s.field), sort: s.sort }))
+    .filter((s: { col?: ResolvedColumn; sort?: string }) => s.col && s.sort);
+  if (!active.length) return [...rows];
   // Índice original como criterio final: ordenación estable y reproducible.
   return rows
-    .map((row, i) => ({ row, i }))
-    .sort((a, b) => {
-      for (const { col, sort } of active) {
+    .map((row: Row, i: number) => ({ row, i }))
+    .sort((a: { row: Row; i: number }, b: { row: Row; i: number }) => {
+      for (const { col, sort } of active as { col: ResolvedColumn; sort: string }[]) {
         const dir = sort === 'desc' ? -1 : 1;
-        const diff = col.comparator(cellValue(a.row, col, ctx), cellValue(b.row, col, ctx), a.row, b.row) * dir;
+        const diff = col.comparator(cellValue(a.row, col, ctx), cellValue(b.row, col, ctx)) * dir;
         if (diff) return diff;
       }
       return a.i - b.i;
     })
-    .map((entry) => entry.row);
+    .map((entry: { row: Row; i: number }) => entry.row);
 }
 
 /* ── Árbol y agrupación ───────────────────────────────────────────────── */
+
+/** Nodo del árbol construido por `buildTree`. */
+export type TreeNode = {
+  kind: 'leaf' | 'group';
+  id: CellValue;
+  key?: string | number;
+  depth: number;
+  path: readonly (string | number)[];
+  parent: TreeNode | null;
+  children: TreeNode[];
+  rows: Row[];
+  row?: Row;
+  leafRow?: Row | null;
+  aggregates?: Record<string, { value: CellValue; fn: string }>;
+};
 
 /**
  * Construye el árbol de nodos. `paths` viene de getTreeDataPath (tree data) o
  * de las columnas de rowGroupingModel. Devuelve la raíz como array de nodos.
  */
-export function buildTree(rows, { paths, getRowId }) {
-  const root = [];
-  const index = new Map();
+export function buildTree(rows: readonly Row[], { paths, getRowId }: BuildTreeOpts): TreeNode[] {
+  const root: TreeNode[] = [];
+  const index = new Map<string, TreeNode>();
 
-  rows.forEach((row, i) => {
+  rows.forEach((row: Row, i: number) => {
     const path = paths(row, i) || [];
     if (!path.length) {
-      root.push({ kind: 'leaf', id: getRowId(row, i), row, depth: 0, path: [], parent: null });
+      const leaf: TreeNode = { kind: 'leaf', id: getRowId(row, i), row, depth: 0, path: [], parent: null, children: [], rows: [], leafRow: null };
+      root.push(leaf);
       return;
     }
-    let level = root;
-    let parent = null;
-    path.forEach((key, depth: number) => {
+    let level: TreeNode[] = root;
+    let parent: TreeNode | null = null;
+    path.forEach((key: string | number, depth: number) => {
       const isLast = depth === path.length - 1;
       const groupKey = `${parent ? parent.id : ''}/${key}`;
       let node = index.get(groupKey);
@@ -191,14 +269,18 @@ export function buildTree(rows, { paths, getRowId }) {
         // En tree data la última rama ES la fila; en row grouping es un grupo
         // que contiene hojas.
         node.leafRow = node.leafRow ?? null;
-        node.children.push({
+        const child: TreeNode = {
           kind: 'leaf',
           id: getRowId(row, i),
           row,
           depth: depth + 1,
           parent: node,
           path,
-        });
+          children: [],
+          rows: [],
+          leafRow: null,
+        };
+        node.children.push(child);
       }
       parent = node;
       level = node.children;
@@ -209,7 +291,7 @@ export function buildTree(rows, { paths, getRowId }) {
 }
 
 /** Aplana el árbol respetando los grupos colapsados. */
-export function flattenTree(nodes, expanded, out = []) {
+export function flattenTree(nodes: readonly TreeNode[], expanded: ReadonlySet<CellValue>, out: TreeNode[] = []): TreeNode[] {
   for (const node of nodes) {
     out.push(node);
     if (node.kind !== 'group') continue;
@@ -220,77 +302,87 @@ export function flattenTree(nodes, expanded, out = []) {
 }
 
 /** Hojas de un nodo (para agregar y para seleccionar en cascada). */
-export function leavesOf(node, out = []) {
+export function leavesOf<T extends { kind: string; children?: T[]; row?: Row }>(node: T, out: T[] = []): T[] {
   if (node.kind === 'leaf') {
     out.push(node);
     return out;
   }
-  for (const child of node.children) leavesOf(child, out);
+  for (const child of node.children ?? []) leavesOf(child, out);
   return out;
 }
 
 /* ── Agregación ───────────────────────────────────────────────────────── */
 
 /** { field: 'sum' } → { field: valorAgregado } sobre un conjunto de filas. */
-export function aggregateRows(rows, model, columns, ctx) {
-  const out = {};
+export function aggregateRows(rows: readonly Row[], model: AggregationModel | undefined, columns: readonly ResolvedColumn[], ctx: FilterCtx): Record<string, { value: CellValue; fn: string }> {
+  const out: Record<string, { value: CellValue; fn: string }> = {};
   for (const [field, fnName] of Object.entries(model || {})) {
-    const col = columns.find((c) => c.field === field);
+    const col = columns.find((c: ResolvedColumn) => c.field === field);
     const fn = AGGREGATION_FNS[fnName];
     if (!col || !fn) continue;
-    const values = rows.map((row) => cellValue(row, col, ctx));
+    const values = rows.map((row: Row) => cellValue(row, col, ctx));
     out[field] = { value: fn.apply(values, col.type), fn: fnName };
   }
   return out;
 }
 
 /** Rellena node.aggregates en cada grupo del árbol. */
-export function aggregateTree(nodes, model, columns, ctx) {
+export function aggregateTree(nodes: readonly TreeNode[], model: AggregationModel | undefined, columns: readonly ResolvedColumn[], ctx: FilterCtx): void {
   for (const node of nodes) {
     if (node.kind !== 'group') continue;
     aggregateTree(node.children, model, columns, ctx);
     // Se agregan los descendientes; en tree data la fila del propio nodo no
     // entra (una carpeta no se suma a sí misma).
-    const rows = (node.rows || leavesOf(node).map((leaf) => leaf.row))
-      .filter((row) => row !== node.row);
+    const rows = (node.rows.length ? node.rows : leavesOf(node).map((leaf) => leaf.row))
+      .filter((row: Row | undefined): row is Row => row != null && row !== node.row);
     node.aggregates = aggregateRows(rows, model, columns, ctx);
   }
 }
 
 /* ── Pivot ────────────────────────────────────────────────────────────── */
 
+export type PivotResult = {
+  rows: Row[];
+  columns: ColumnDef[];
+  colKeys: string[];
+};
+
 /**
  * Pivot simple: filas agrupadas por `rows`, una columna por cada combinación
  * de valores de `columns` × `values`. Devuelve { rows, columns } listos para
  * alimentar el grid.
  */
-export function pivotData(rows, pivotModel, columns, ctx) {
+export function pivotData(rows: readonly Row[], pivotModel: PivotModel | undefined, columns: readonly ResolvedColumn[], ctx: FilterCtx): PivotResult | null {
   const rowFields = pivotModel?.rows || [];
   const colFields = pivotModel?.columns || [];
   const values = pivotModel?.values || [];
   if (!values.length) return null;
 
-  const colOf = (field) => columns.find((c) => c.field === field);
-  const keyOf = (row, fields) => fields
-    .map((f) => formattedValue(cellValue(row, colOf(f), ctx), row, colOf(f), ctx))
+  const colOf = (field: string): ResolvedColumn | undefined => columns.find((c: ResolvedColumn) => c.field === field);
+  const keyOf = (row: Row, fields: readonly string[]) => fields
+    .map((f: string) => {
+      const c = colOf(f);
+      if (!c) return '';
+      return formattedValue(cellValue(row, c, ctx), row, c, ctx);
+    })
     .join(' · ');
 
-  const groups = new Map();
-  const colKeys = new Set();
+  const groups = new Map<string, { __pivotGroup: string; __buckets: Map<string, Row[]> }>();
+  const colKeys = new Set<string>();
 
   for (const row of rows) {
     const rowKey = keyOf(row, rowFields) || 'Total';
     const colKey = keyOf(row, colFields);
     colKeys.add(colKey);
     if (!groups.has(rowKey)) groups.set(rowKey, { __pivotGroup: rowKey, __buckets: new Map() });
-    const bucket = groups.get(rowKey).__buckets;
+    const bucket = groups.get(rowKey)!.__buckets;
     if (!bucket.has(colKey)) bucket.set(colKey, []);
-    bucket.get(colKey).push(row);
+    bucket.get(colKey)!.push(row);
   }
 
-  const outColumns = [{
+  const outColumns: ColumnDef[] = [{
     field: '__pivotGroup',
-    headerName: rowFields.map((f) => colOf(f)?.headerName || f).join(' / ') || 'Grupo',
+    headerName: rowFields.map((f: string) => colOf(f)?.headerName || f).join(' / ') || 'Grupo',
     width: 200,
   }];
   const sortedColKeys = [...colKeys].sort(stringComparator);
@@ -303,7 +395,6 @@ export function pivotData(rows, pivotModel, columns, ctx) {
       outColumns.push({
         field,
         headerName: values.length > 1 ? `${col.headerName} (${AGGREGATION_FNS[v.fn]?.label || v.fn})` : colKey || col.headerName,
-        group: colKey,
         type: 'number',
         // El cruce se muestra con el formato de la columna de origen.
         valueFormatter: col.valueFormatter,
@@ -311,8 +402,8 @@ export function pivotData(rows, pivotModel, columns, ctx) {
     }
   }
 
-  const outRows = [...groups.values()].map((group) => {
-    const out = { id: `pivot:${group.__pivotGroup}`, __pivotGroup: group.__pivotGroup };
+  const outRows = [...groups.values()].map((group: { __pivotGroup: string; __buckets: Map<string, Row[]> }) => {
+    const out: Row = { id: `pivot:${group.__pivotGroup}`, __pivotGroup: group.__pivotGroup };
     for (const colKey of sortedColKeys) {
       for (const v of values) {
         const col = colOf(v.field);
@@ -321,7 +412,7 @@ export function pivotData(rows, pivotModel, columns, ctx) {
         const bucketRows = group.__buckets.get(colKey);
         // Sin datos en el cruce se deja vacío, no un cero engañoso.
         out[`${colKey}|${v.field}`] = bucketRows
-          ? fn.apply(bucketRows.map((r) => cellValue(r, col, ctx)), col.type)
+          ? fn.apply(bucketRows.map((r: Row) => cellValue(r, col, ctx)), col.type)
           : null;
       }
     }
@@ -333,31 +424,31 @@ export function pivotData(rows, pivotModel, columns, ctx) {
 
 /* ── Serialización ────────────────────────────────────────────────────── */
 
-function escapeCsv(text, delimiter) {
+function escapeCsv(text: CellValue, delimiter: string): string {
   const s = String(text ?? '');
   return /["\n\r]|^\s|\s$/.test(s) || s.includes(delimiter) ? `"${s.replace(/"/g, '""')}"` : s;
 }
 
-export function toDelimited(matrix, delimiter = ',') {
-  return matrix.map((line) => line.map((cell) => escapeCsv(cell, delimiter)).join(delimiter)).join('\r\n');
+export function toDelimited(matrix: readonly (readonly CellValue[])[], delimiter = ','): string {
+  return matrix.map((line: readonly CellValue[]) => line.map((cell: CellValue) => escapeCsv(cell, delimiter)).join(delimiter)).join('\r\n');
 }
 
 /** SpreadsheetML 2003: Excel lo abre nativo y no necesita dependencias. */
-export function toSpreadsheetXml(matrix, sheetName = 'Datos') {
-  const esc = (s) => String(s ?? '')
+export function toSpreadsheetXml(matrix: readonly (readonly CellValue[])[], sheetName = 'Datos'): string {
+  const esc = (s: CellValue) => String(s ?? '')
     .replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;')
     .replace(/"/g, '&quot;');
-  const cell = (v) => {
+  const cell = (v: CellValue) => {
     const isNum = typeof v === 'number' && Number.isFinite(v);
     return `<Cell><Data ss:Type="${isNum ? 'Number' : 'String'}">${esc(v)}</Data></Cell>`;
   };
-  const rows = matrix.map((line) => `<Row>${line.map(cell).join('')}</Row>`).join('');
+  const rows = matrix.map((line: readonly CellValue[]) => `<Row>${line.map(cell).join('')}</Row>`).join('');
   return `<?xml version="1.0"?>
 <Workbook xmlns="urn:schemas-microsoft-com:office:spreadsheet" xmlns:ss="urn:schemas-microsoft-com:office:spreadsheet">
 <Worksheet ss:Name="${esc(sheetName)}"><Table>${rows}</Table></Worksheet></Workbook>`;
 }
 
-export function download(filename, content, mime: string) {
+export function download(filename: string, content: BlobPart, mime: string): void {
   const blob = new Blob([content], { type: `${mime};charset=utf-8;` });
   const url = URL.createObjectURL(blob);
   const a = document.createElement('a');

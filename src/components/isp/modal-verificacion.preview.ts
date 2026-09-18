@@ -1,14 +1,30 @@
 /**
  * Playground <is-modal-verificacion>: mock controller + botón Verificar.
- * @param {import('../../previews/_kit/types.d.ts').PreviewMountContext} ctx
- * @param {import('../../previews/_kit/types.d.ts').ISComponentPreviewLike} preview
  */
-export async function mount(ctx: import('../../previews/_kit/types.d.ts').PreviewMountContext, preview: import('../../previews/_kit/types.d.ts').ISComponentPreviewLike) {
+import type { PreviewMountContext, ISComponentPreviewLike } from '../../previews/_kit/types.d.ts';
+
+interface MensajeItem {
+  itdmensaje: string;
+  mensaje: string;
+}
+
+interface VerificationController {
+  entrie: string;
+  actVerificar(record: { nit?: string; razon?: string } | null | undefined): Promise<{ mensajes: MensajeItem[] }>;
+}
+
+interface ModalVerificacionEl extends HTMLElement {
+  controller: VerificationController;
+  record: { nit: string; razon: string };
+  show(): void;
+}
+
+export async function mount(ctx: PreviewMountContext, preview: ISComponentPreviewLike): Promise<void> {
   const root = ctx.main;
   const signal = preview?.signal;
   const opts = signal ? { signal } : undefined;
 
-  const modal = root.querySelector<HTMLElement>('#mvDemo');
+  const modal = root.querySelector<ModalVerificacionEl>('#mvDemo');
   const btn = root.querySelector<HTMLElement>('#mvBtn');
   if (!modal || !btn) return;
 
@@ -30,6 +46,6 @@ export async function mount(ctx: import('../../previews/_kit/types.d.ts').Previe
   btn.addEventListener('click', () => modal.show(), opts);
 }
 
-export function unmount() {
+export function unmount(): void {
   /* AbortSignal del preview limpia listeners */
 }

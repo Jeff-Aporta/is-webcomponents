@@ -1,0 +1,112 @@
+<!doctype html>
+<html lang="es" class="theme-dark" data-theme="dark">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>Calendario completo &lt;is-full-calendar&gt; · is-webcomponents</title>
+<meta name="description" content="Calendario con vistas mes / semana / día, eventos y toolbar con prev/next/today." />
+<style>
+  html, body { margin: 0; padding: 0; min-height: 100%; background: #0c1118; color: #e2e8f0; font-family: ui-sans-serif, system-ui, sans-serif; }
+  body { display: grid; place-items: start center; padding: 32px 20px; }
+  main { max-width: 980px; width: 100%; display: grid; gap: 22px; }
+  header h1 { font-size: 18px; font-weight: 700; margin: 0 0 4px 0; }
+  header p { font-size: 12px; color: #94a3b8; margin: 0; }
+  section { background: #131a24; border: 1px solid rgba(255,255,255,0.08); border-radius: 10px; padding: 16px; display: grid; gap: 10px; }
+  section h2 { font-size: 13px; margin: 0; font-weight: 600; color: #cbd5e1; }
+  section .desc { font-size: 12px; color: #94a3b8; margin: 0; }
+  is-full-calendar { width: 100%; min-height: 480px; }
+  is-full-calendar + div { margin-top: 8px; font: 12px ui-monospace, Menlo, Consolas, monospace; color: #94a3b8; }
+  code { background: rgba(255,255,255,0.06); padding: 1px 5px; border-radius: 3px; font: 12px ui-monospace, Menlo, Consolas, monospace; }
+  /* Anti-FOUC */
+  is-full-calendar:not(:defined) { visibility: hidden; }
+</style>
+<script type="module">
+  // full-calendar importa is-button internamente.
+  await import('../../../dist/cdn/actions/button.min.js');
+  await import('../../../dist/cdn/forms/full-calendar.min.js');
+  await customElements.whenDefined('is-full-calendar');
+
+  // (1) vista mes con eventos de ejemplo
+  const mes = document.createElement('is-full-calendar');
+  mes.id = 'mes';
+  mes.view = 'month';
+  mes.label = 'Agenda del mes';
+  mes.hint = 'Click en un día o evento para navegar';
+  mes.addEventListener('is-day-click', (e) => {
+    document.getElementById('mes-day').textContent = `Día clickeado: ${e.detail.date}`;
+  });
+  mes.addEventListener('is-event-click', (e) => {
+    document.getElementById('mes-ev').textContent = `Evento: ${e.detail.event.title}`;
+  });
+  const events = [
+    { id: 'e1', title: 'Standup', date: ymd(new Date()), start: '09:00', end: '09:30', color: '#22c55e' },
+    { id: 'e2', title: 'Demo cliente', date: ymd(addDays(new Date(), 2)), start: '15:00', end: '16:00', color: '#3b82f6' },
+    { id: 'e3', title: 'Sprint review', date: ymd(addDays(new Date(), 5)), start: '11:00', end: '12:00', color: '#a855f7' },
+    { id: 'e4', title: '1:1 manager', date: ymd(addDays(new Date(), 7)), start: '10:00', end: '10:30', color: '#f59e0b' },
+    { id: 'e5', title: 'Café con diseño', date: ymd(addDays(new Date(), 10)), color: '#ec4899' },
+  ];
+  // Sembrar eventos como <script type="application/json">
+  const s = document.createElement('script');
+  s.type = 'application/json';
+  s.textContent = JSON.stringify({ events });
+  mes.appendChild(s);
+  document.querySelector('#sec-mes').appendChild(mes);
+
+  // (2) vista semana
+  const semana = document.createElement('is-full-calendar');
+  semana.id = 'semana';
+  semana.view = 'week';
+  semana.label = 'Vista semanal';
+  semana.hint = '7 días con eventos posicionados';
+  document.querySelector('#sec-semana').appendChild(semana);
+
+  // (3) vista día
+  const dia = document.createElement('is-full-calendar');
+  dia.id = 'dia';
+  dia.view = 'day';
+  dia.label = 'Vista de un día';
+  dia.hoursStart = 6;
+  dia.hoursEnd = 22;
+  dia.hint = 'Franja horaria configurable (6–22)';
+  document.querySelector('#sec-dia').appendChild(dia);
+
+  document.documentElement.dataset.fullCalendarReady = '1';
+
+  // helpers
+  function ymd(d) {
+    const p = (n) => String(n).padStart(2, '0');
+    return `${d.getFullYear()}-${p(d.getMonth() + 1)}-${p(d.getDate())}`;
+  }
+  function addDays(d, n) {
+    const r = new Date(d);
+    r.setDate(d.getDate() + n);
+    return r;
+  }
+</script>
+</head>
+<body>
+<main>
+  <header>
+    <h1>&lt;is-full-calendar&gt; · Vista mes / semana / día con eventos</h1>
+    <p>Toolbar con prev/next/today + 3 botones de vista. Eventos se cargan desde <code>&lt;script type="application/json"&gt;</code> con <code>{ events: [...] }</code>. Emite <code>is-day-click</code> y <code>is-event-click</code>.</p>
+  </header>
+
+  <section id="sec-mes">
+    <h2>Vista mes</h2>
+    <p class="desc">Click en una día → <code>is-day-click</code>. Click en un evento → <code>is-event-click</code>.</p>
+    <div id="mes-day">—</div>
+    <div id="mes-ev">—</div>
+  </section>
+
+  <section id="sec-semana">
+    <h2>Vista semana</h2>
+    <p class="desc"><code>view="week"</code>. <code>ArrowLeft/Right</code> navega semana a semana, <code>Home/End</code> salta al inicio/fin.</p>
+  </section>
+
+  <section id="sec-dia">
+    <h2>Vista día (con franja horaria 6–22)</h2>
+    <p class="desc"><code>view="day"</code> con <code>hours-start</code> y <code>hours-end</code>.</p>
+  </section>
+</main>
+</body>
+</html>

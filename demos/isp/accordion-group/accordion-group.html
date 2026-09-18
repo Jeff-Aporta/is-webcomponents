@@ -1,0 +1,101 @@
+<!doctype html>
+<html lang="es" class="theme-dark" data-theme="dark">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>&lt;is-accordion-group&gt; · is-webcomponents</title>
+<meta name="description" content="Coordinador de varios <is-details>: comportamiento de acordeón (single por defecto, multiple opcional)." />
+<style>
+  html, body { margin: 0; padding: 0; min-height: 100%; background: #0c1118; color: #e2e8f0; font-family: ui-sans-serif, system-ui, sans-serif; }
+  body { display: grid; grid-template-rows: auto 1fr; min-height: 100vh; }
+  header {
+    padding: 16px 20px; border-bottom: 1px solid rgba(255,255,255,0.1);
+    display: flex; align-items: center; gap: 14px; background: #0f1620;
+  }
+  header h1 { font-size: 16px; font-weight: 700; margin: 0; }
+  header p { font-size: 12px; color: #94a3b8; margin: 0; }
+  header .spacer { flex: 1; }
+  header code { background: rgba(255,255,255,0.06); padding: 2px 6px; border-radius: 4px; font: 12px ui-monospace, Menlo, Consolas, monospace; }
+  main { display: grid; place-items: stretch; padding: 20px; gap: 24px; max-width: 900px; margin: 0 auto; width: 100%; box-sizing: border-box; }
+  section { display: grid; gap: 12px; }
+  section h2 { font-size: 14px; font-weight: 600; margin: 0; color: #94a3b8; }
+  .log { font: 12px ui-monospace, Menlo, Consolas, monospace; background: rgba(0,0,0,0.3); padding: 8px; border-radius: 4px; min-height: 60px; white-space: pre-wrap; }
+  is-accordion-group:not(:defined) { visibility: hidden; }
+  is-details:not(:defined) { visibility: hidden; }
+</style>
+<script type="module">
+  // Cargar los bundles pre-construidos de dist/cdn/.
+  await import('../../../dist/cdn/layout/details.min.js');
+  await import('../../../dist/cdn/isp/accordion-group.min.js');
+
+  await customElements.whenDefined('is-accordion-group');
+  await customElements.whenDefined('is-details');
+
+  // Log de eventos is-accordion-change en pantalla.
+  const eventLog = document.getElementById('event-log');
+  const log = (msg) => {
+    eventLog.textContent += new Date().toISOString().slice(11, 19) + ' ' + msg + '\n';
+  };
+
+  // ── Acordeón modo single ─────────────────────────────────────────────
+  const single = document.getElementById('single');
+  single.addEventListener('is-accordion-change', (e) => {
+    log(`[single] opened=${e.detail.opened?.summary || '∅'} closed=${e.detail.closed?.summary || '∅'}`);
+  });
+
+  // ── Acordeón modo multiple ───────────────────────────────────────────
+  const multi = document.getElementById('multi');
+  multi.addEventListener('is-accordion-change', (e) => {
+    log(`[multi ] opened=${e.detail.opened?.summary || '∅'} closed=${e.detail.closed?.summary || '∅'}`);
+  });
+
+  document.documentElement.dataset.accordionReady = '1';
+</script>
+</head>
+<body>
+<header>
+  <div>
+    <h1>&lt;is-accordion-group&gt; — coordinador de disclosures</h1>
+    <p>Abrir un panel cierra los demás (single) o permite varios a la vez (multiple).</p>
+  </div>
+  <div class="spacer"></div>
+  <code>is-accordion-group</code>
+</header>
+<main>
+  <section>
+    <h2>Modo single (default)</h2>
+    <is-accordion-group id="single">
+      <is-details summary="Datos básicos" open>
+        <p style="margin: 0; padding: 12px;">Nombre, NIT, dirección, ciudad…</p>
+      </is-details>
+      <is-details summary="Contacto">
+        <p style="margin: 0; padding: 12px;">Email, teléfono, persona de contacto…</p>
+      </is-details>
+      <is-details summary="Financiero">
+        <p style="margin: 0; padding: 12px;">Banco, cuenta, condiciones de pago…</p>
+      </is-details>
+    </is-accordion-group>
+  </section>
+
+  <section>
+    <h2>Modo multiple</h2>
+    <is-accordion-group id="multi" multiple>
+      <is-details summary="Filtrar por fecha">
+        <p style="margin: 0; padding: 12px;">Desde / hasta, comparación…</p>
+      </is-details>
+      <is-details summary="Filtrar por estado">
+        <p style="margin: 0; padding: 12px;">Activo, anulado, en proceso…</p>
+      </is-details>
+      <is-details summary="Filtrar por monto">
+        <p style="margin: 0; padding: 12px;">Rango, moneda, redondeo…</p>
+      </is-details>
+    </is-accordion-group>
+  </section>
+
+  <section>
+    <h2>Eventos <code>is-accordion-change</code></h2>
+    <pre id="event-log" class="log"></pre>
+  </section>
+</main>
+</body>
+</html>

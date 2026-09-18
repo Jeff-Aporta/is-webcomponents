@@ -26,6 +26,12 @@ import { computePosition } from '../_shared/position.js';
  * Events: is-input { value }, is-change { value }
  */
 
+// Declaración local de la API EyeDropper (Chromium ≥95, no está en lib.dom).
+interface EyeDropperOpenResult { sRGBHex: string }
+interface EyeDropperInterface { open(): Promise<EyeDropperOpenResult> }
+interface EyeDropperConstructor { new(): EyeDropperInterface }
+interface WindowWithEyeDropper { EyeDropper?: EyeDropperConstructor }
+
 (() => {
   const DEFAULT_VALUE = '#808080';
   const DEFAULT_SWATCHES = [
@@ -65,7 +71,7 @@ import { computePosition } from '../_shared/position.js';
   const OBSERVED = ['name', 'value', 'label', 'hint', 'disabled', 'required', 'swatches'];
 
   /** Normaliza a #rrggbb en minúsculas; devuelve '' si no es un hex válido. */
-  function normalizeHex(raw: string) {
+  function normalizeHex(raw: string | null): string {
     if (raw == null) return '';
     let s = String(raw).trim().toLowerCase();
     if (s.startsWith('#')) s = s.slice(1);
@@ -86,24 +92,24 @@ import { computePosition } from '../_shared/position.js';
     static formAssociated = true;
     static get observedAttributes(): string[] { return [...OBSERVED, 'radius', 'border-color', 'bg', 'text-color', 'focus-color']; }
 
-    #internals = null;
-    #trigger!: HTMLElement;
+    #internals: ElementInternals | null = null;
+    #trigger!: HTMLButtonElement;
     #swatch!: HTMLElement;
     #hexText!: HTMLElement;
     #labelEl!: HTMLElement;
     #labelSlot!: HTMLSlotElement;
     #hintEl!: HTMLElement;
     #hintSlot!: HTMLSlotElement;
-    #dialog!: HTMLElement;
+    #dialog!: HTMLDialogElement;
     #panel!: HTMLElement;
-    #native!: HTMLElement;
-    #hexInput!: HTMLElement;
-    #dropper!: HTMLElement;
+    #native!: HTMLInputElement;
+    #hexInput!: HTMLInputElement;
+    #dropper!: HTMLButtonElement;
     #swatchesEl!: HTMLElement;
     #open = false;
     #formDisabled = false;
     #defaultsRead = false;
-    #defaultValue = DEFAULT_VALUE;
+    #defaultValue: string = DEFAULT_VALUE;
     #writingValue = false;
 
     constructor() {
@@ -112,18 +118,18 @@ import { computePosition } from '../_shared/position.js';
       adoptCss(shadow, import.meta.url);
       shadow.appendChild(TEMPLATE.content.cloneNode(true));
 
-      this.#trigger = shadow.querySelector<HTMLElement>('.trigger')!;
+      this.#trigger = shadow.querySelector<HTMLButtonElement>('.trigger')!;
       this.#swatch = shadow.querySelector<HTMLElement>('.swatch')!;
       this.#hexText = shadow.querySelector<HTMLElement>('.hex-text')!;
       this.#labelEl = shadow.querySelector<HTMLElement>('.label')!;
       this.#labelSlot = shadow.querySelector<HTMLSlotElement>('slot[name="label"]')!;
       this.#hintEl = shadow.querySelector<HTMLElement>('.hint')!;
       this.#hintSlot = shadow.querySelector<HTMLSlotElement>('slot[name="hint"]')!;
-      this.#dialog = shadow.querySelector<HTMLElement>('.popup')!;
+      this.#dialog = shadow.querySelector<HTMLDialogElement>('.popup')!;
       this.#panel = shadow.querySelector<HTMLElement>('.panel')!;
-      this.#native = shadow.querySelector<HTMLElement>('.native')!;
-      this.#hexInput = shadow.querySelector<HTMLElement>('.hex')!;
-      this.#dropper = shadow.querySelector<HTMLElement>('.eyedropper')!;
+      this.#native = shadow.querySelector<HTMLInputElement>('.native')!;
+      this.#hexInput = shadow.querySelector<HTMLInputElement>('.hex')!;
+      this.#dropper = shadow.querySelector<HTMLButtonElement>('.eyedropper')!;
       this.#swatchesEl = shadow.querySelector<HTMLElement>('.swatches')!;
 
       this.#internals = attachFormInternals(this);
@@ -143,7 +149,7 @@ import { computePosition } from '../_shared/position.js';
       this.#hintSlot.addEventListener('slotchange', () => this.#syncMeta());
     }
 
-    onConnected() {
+    onConnected(): void {
       const initial = normalizeHex(this.getAttribute('value')) || DEFAULT_VALUE;
       this.#writeValueAttr(initial);
       if (!this.#defaultsRead) {
@@ -154,18 +160,18 @@ import { computePosition } from '../_shared/position.js';
       this.#renderSwatches();
       this.#sync();
       this.#syncDisabled();
-      this.#dropper.hidden = typeof window.EyeDropper !== 'function';
+      this.#dropper.hidden = typeof (window as WindowWithEyeDropper).EyeDropper !== 'function';
       addEventListener('resize', this.#onReposition, { passive: true });
       addEventListener('scroll', this.#onReposition, true);
     }
 
-    onDisconnected() {
+    onDisconnected(): void {
       removeEventListener('resize', this.#onReposition);
       removeEventListener('scroll', this.#onReposition, true);
       if (this.#dialog.open) this.#dialog.close();
     }
 
-    onAttributeChanged(name: string, oldVal: string | null, newVal: string | null) {
+    onAttributeChanged(name: string, oldVal: string | null, newVal: string | null): void {
       if (name === 'value') {
         if (this.#writingValue) return;
         const norm = normalizeHex(newVal) || DEFAULT_VALUE;
@@ -186,40 +192,40 @@ import { computePosition } from '../_shared/position.js';
       else this.#syncMeta();
     }
 
-    get value() { return normalizeHex(this.getAttribute('value')) || DEFAULT_VALUE; }
-    set value(v) {
+    get value(): string { return normalizeHex(this.getAttribute('value')) || DEFAULT_VALUE; }
+    set value(v: string) {
       const norm = normalizeHex(v);
       if (!norm) this.removeAttribute('value');
       else this.setAttribute('value', norm);
     }
 
-    get disabled() { return this.hasAttribute('disabled'); }
-    set disabled(v) { this.toggleAttribute('disabled', !!v); }
+    get disabled(): boolean { return this.hasAttribute('disabled'); }
+    set disabled(v: boolean) { this.toggleAttribute('disabled', !!v); }
 
-    get required() { return this.hasAttribute('required'); }
-    set required(v) { this.toggleAttribute('required', !!v); }
+    get required(): boolean { return this.hasAttribute('required'); }
+    set required(v: boolean) { this.toggleAttribute('required', !!v); }
 
-    get name() { return this.getAttribute('name') ?? ''; }
-    set name(v) { setStringAttr(this, 'name', v); }
+    get name(): string { return this.getAttribute('name') ?? ''; }
+    set name(v: string) { setStringAttr(this, 'name', v); }
 
-    /** @returns {string[]} paleta activa */
-    get swatches() {
+    /** Paleta activa (`string[]`). */
+    get swatches(): string[] {
       const raw = this.getAttribute('swatches');
       if (!raw) return [...DEFAULT_SWATCHES];
       const list = raw.split(',').map((s) => normalizeHex(s)).filter(Boolean);
       return list.length ? list : [...DEFAULT_SWATCHES];
     }
-    set swatches(list) {
+    set swatches(list: string[]) {
       if (!Array.isArray(list) || !list.length) this.removeAttribute('swatches');
       else this.setAttribute('swatches', list.join(','));
     }
 
-    get open() { return this.#open; }
-    get form() { return this.#internals?.form ?? null; }
-    get validity() { return this.#internals?.validity ?? null; }
-    get validationMessage() { return this.#internals?.validationMessage ?? ''; }
+    get open(): boolean { return this.#open; }
+    get form(): HTMLFormElement | null { return this.#internals?.form ?? null; }
+    get validity(): ValidityState | null { return this.#internals?.validity ?? null; }
+    get validationMessage(): string { return this.#internals?.validationMessage ?? ''; }
 
-    show() {
+    show(): void {
       if (this.#isDisabled || this.#open) return;
       this.#open = true;
       setCustomState(this.#internals, 'open', true);
@@ -234,7 +240,7 @@ import { computePosition } from '../_shared/position.js';
       });
     }
 
-    hide() {
+    hide(): void {
       if (!this.#open) return;
       this.#open = false;
       setCustomState(this.#internals, 'open', false);
@@ -245,40 +251,40 @@ import { computePosition } from '../_shared/position.js';
       });
     }
 
-    checkValidity() { return this.#internals?.checkValidity() ?? true; }
-    reportValidity() { return this.#internals?.reportValidity() ?? true; }
-    setCustomValidity(msg) {
+    checkValidity(): boolean { return this.#internals?.checkValidity() ?? true; }
+    reportValidity(): boolean { return this.#internals?.reportValidity() ?? true; }
+    setCustomValidity(msg: string): void {
       if (msg) setValidity(this.#internals, { customError: true }, msg, this.#trigger);
       else this.#updateValidity();
     }
 
-    formResetCallback() {
+    formResetCallback(): void {
       this.#writeValueAttr(this.#defaultValue);
       this.#sync();
     }
 
-    formDisabledCallback(disabled) {
+    formDisabledCallback(disabled: boolean): void {
       this.#formDisabled = !!disabled;
       this.#syncDisabled();
     }
 
-    get #isDisabled() { return this.disabled || this.#formDisabled; }
+    get #isDisabled(): boolean { return this.disabled || this.#formDisabled; }
 
-    #writeValueAttr(hex) {
+    #writeValueAttr(hex: string): void {
       this.#writingValue = true;
       this.setAttribute('value', hex);
       this.#writingValue = false;
     }
 
-    #syncMeta() {
+    #syncMeta(): void {
       const labelAttr = this.getAttribute('label') || '';
       const labelSlotted = this.#labelSlot.assignedNodes({ flatten: true }).length > 0;
-      this.#labelEl.querySelector<HTMLElement>('.label-text').textContent = labelAttr;
+      this.#labelEl.querySelector<HTMLElement>('.label-text')!.textContent = labelAttr;
       this.#labelEl.hidden = !labelAttr && !labelSlotted;
 
       const hintAttr = this.getAttribute('hint') || '';
       const hintSlotted = this.#hintSlot.assignedNodes({ flatten: true }).length > 0;
-      this.#hintEl.querySelector<HTMLElement>('.hint-text').textContent = hintAttr;
+      this.#hintEl.querySelector<HTMLElement>('.hint-text')!.textContent = hintAttr;
       this.#hintEl.hidden = !hintAttr && !hintSlotted;
 
       if (labelAttr) this.#trigger.setAttribute('aria-label', labelAttr);
@@ -286,7 +292,7 @@ import { computePosition } from '../_shared/position.js';
       else this.#trigger.removeAttribute('aria-required');
     }
 
-    #syncDisabled() {
+    #syncDisabled(): void {
       const disabled = this.#isDisabled;
       this.#trigger.disabled = disabled;
       this.#native.disabled = disabled;
@@ -297,7 +303,7 @@ import { computePosition } from '../_shared/position.js';
     }
 
     /** Refleja el valor en trigger, inputs, swatches, FormData y validez. */
-    #sync() {
+    #sync(): void {
       const v = this.value;
       this.#swatch.style.background = v;
       this.#hexText.textContent = v;
@@ -306,14 +312,15 @@ import { computePosition } from '../_shared/position.js';
         this.#hexInput.value = v;
       }
       for (const btn of this.#swatchesEl.children) {
-        btn.toggleAttribute('data-selected', btn.dataset.value === v);
-        btn.setAttribute('aria-pressed', String(btn.dataset.value === v));
+        const htmlBtn = btn as HTMLElement;
+        htmlBtn.toggleAttribute('data-selected', htmlBtn.dataset['value'] === v);
+        htmlBtn.setAttribute('aria-pressed', String(htmlBtn.dataset['value'] === v));
       }
-      setFormValue(this.#internals, v || null);
+      setFormValue(this.#internals, v || null, null);
       this.#updateValidity();
     }
 
-    #updateValidity() {
+    #updateValidity(): void {
       if (this.required && !normalizeHex(this.getAttribute('value'))) {
         setValidity(this.#internals, { valueMissing: true }, 'Seleccione un color', this.#trigger);
         return;
@@ -321,14 +328,14 @@ import { computePosition } from '../_shared/position.js';
       clearValidity(this.#internals, this.#trigger);
     }
 
-    #renderSwatches() {
+    #renderSwatches(): void {
       this.#swatchesEl.replaceChildren();
       for (const hex of this.swatches) {
         const btn = document.createElement('button');
         btn.type = 'button';
         btn.className = 'swatch-btn';
         btn.setAttribute('part', 'swatch');
-        btn.dataset.value = hex;
+        btn.dataset['value'] = hex;
         btn.style.background = hex;
         btn.title = hex;
         btn.setAttribute('aria-label', hex);
@@ -337,8 +344,8 @@ import { computePosition } from '../_shared/position.js';
       this.#sync();
     }
 
-    /** @param {string} hex @param {boolean} committed dispara también is-change */
-    #setValue(hex, committed) {
+    /** @param hex Código hex. @param committed dispara también is-change. */
+    #setValue(hex: string, committed: boolean): void {
       const norm = normalizeHex(hex);
       if (!norm) return;
       const prev = this.value;
@@ -348,7 +355,7 @@ import { computePosition } from '../_shared/position.js';
       if (committed && norm !== prev) emit(this, 'is-change', { value: norm });
     }
 
-    #positionPanel() {
+    #positionPanel(): void {
       if (!this.#dialog.open) return;
 
       // Ancho del panel ≈ ancho del trigger (mín. cómodo, máx. viewport).
@@ -383,46 +390,47 @@ import { computePosition } from '../_shared/position.js';
       });
     }
 
-    #onReposition = () => { if (this.#open) this.#positionPanel(); };
+    #onReposition = (): void => { if (this.#open) this.#positionPanel(); };
 
-    #onTrigger = (e: Event) => {
+    #onTrigger = (e: Event): void => {
       e.preventDefault();
       if (this.#isDisabled) return;
       if (this.#open) this.hide();
       else this.show();
     };
 
-    #onTriggerKey = (e: KeyboardEvent) => {
+    #onTriggerKey = (e: KeyboardEvent): void => {
       if (e.key !== 'ArrowDown' || this.#open) return;
       e.preventDefault();
       this.show();
     };
 
-    #onEyedrop = async (e: Event) => {
+    #onEyedrop = async (e: Event): Promise<void> => {
       e.preventDefault();
       e.stopPropagation();
-      if (this.#isDisabled || typeof window.EyeDropper !== 'function') return;
+      const w = window as WindowWithEyeDropper;
+      if (this.#isDisabled || typeof w.EyeDropper !== 'function') return;
       try {
-        const result = await new window.EyeDropper().open();
+        const result = await new w.EyeDropper!().open();
         this.#setValue(result.sRGBHex, true);
       } catch { /* usuario canceló */ }
     };
 
-    #onNativeInput = () => this.#setValue(this.#native.value, false);
-    #onNativeChange = () => this.#setValue(this.#native.value, true);
+    #onNativeInput = (): void => this.#setValue(this.#native.value, false);
+    #onNativeChange = (): void => this.#setValue(this.#native.value, true);
 
-    #onHexInput = () => {
+    #onHexInput = (): void => {
       const norm = normalizeHex(this.#hexInput.value);
       if (norm) this.#setValue(norm, false);
     };
 
-    #onHexChange = () => {
+    #onHexChange = (): void => {
       const norm = normalizeHex(this.#hexInput.value);
       if (norm) this.#setValue(norm, true);
       else this.#hexInput.value = this.value;
     };
 
-    #onHexKey = (e: KeyboardEvent) => {
+    #onHexKey = (e: KeyboardEvent): void => {
       if (e.key !== 'Enter') return;
       e.preventDefault();
       const norm = normalizeHex(this.#hexInput.value);
@@ -430,20 +438,21 @@ import { computePosition } from '../_shared/position.js';
       this.hide();
     };
 
-    #onSwatchClick = (e: PointerEvent) => {
-      const btn = e.target.closest('.swatch-btn');
+    #onSwatchClick = (e: PointerEvent): void => {
+      const target = e.target as Element | null;
+      const btn = target?.closest('.swatch-btn') as HTMLElement | null;
       if (!btn) return;
       e.preventDefault();
-      this.#setValue(btn.dataset.value, true);
+      this.#setValue(btn.dataset['value'] ?? '', true);
       this.hide();
     };
 
-    #onDialogClick = (e: PointerEvent) => {
+    #onDialogClick = (e: PointerEvent): void => {
       if (e.target !== this.#dialog) return;
       this.hide();
     };
 
-    #onDialogCancel = (e: Event) => {
+    #onDialogCancel = (e: Event): void => {
       e.preventDefault();
       this.hide();
     };

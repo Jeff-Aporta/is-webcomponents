@@ -32,17 +32,30 @@ import '../actions/button.js';
  *   is-error          detail: { id, file, reason }
  */
 (() => {
-  const OBSERVED = ['accept', 'multiple', 'max-files', 'max-size', 'chunked'];
+  const OBSERVED: string[] = ['accept', 'multiple', 'max-files', 'max-size', 'chunked'];
 
   let nextId = 0;
-  const newId = () => `f${(nextId++)}_${Date.now().toString(36)}`;
+  const newId = (): string => `f${(nextId++)}_${Date.now().toString(36)}`;
+
+  type FileStatus = 'queued' | 'uploading' | 'done' | 'error';
+  interface FileRecord {
+    id: string;
+    file: File;
+    name: string;
+    size: number;
+    type: string;
+    status: FileStatus;
+    progress: number;
+    url: string;
+    error?: string;
+  }
 
   class IsDropzone extends HTMLElement {
     static get observedAttributes(): string[] { return OBSERVED; }
-    #files = [];
+    #files: FileRecord[] = [];
     #counter = 0;
     #zone!: HTMLElement;
-    #input!: HTMLElement;
+    #input!: HTMLInputElement;
     #queueEl!: HTMLElement;
 
     constructor() {
@@ -61,14 +74,14 @@ import '../actions/button.js';
       `;
       adoptCss(this.shadowRoot!, import.meta.url);
       this.#zone = this.shadowRoot!.querySelector<HTMLElement>('.zone')!;
-      this.#input = this.shadowRoot!.getElementById('fileInput')!;
+      this.#input = this.shadowRoot!.getElementById('fileInput') as HTMLInputElement;
       this.#queueEl = this.shadowRoot!.getElementById('queue')!;
 
       this.#zone.addEventListener('click', () => this.#input.click());
-      this.#zone.addEventListener('keydown', (e) => { if (e.key === 'Enter' || e.key === ' ') { e.preventDefault(); this.#input.click(); } });
-      this.#zone.addEventListener('dragover', (e) => { e.preventDefault(); this.#zone.classList.add('is-over'); });
+      this.#zone.addEventListener('keydown', (e: KeyboardEvent) => { if (e.key === 'Enter' || e.key === ' ') { e.preventDefault(); this.#input.click(); } });
+      this.#zone.addEventListener('dragover', (e: DragEvent) => { e.preventDefault(); this.#zone.classList.add('is-over'); });
       this.#zone.addEventListener('dragleave', () => this.#zone.classList.remove('is-over'));
-      this.#zone.addEventListener('drop', (e) => {
+      this.#zone.addEventListener('drop', (e: DragEvent) => {
         e.preventDefault();
         this.#zone.classList.remove('is-over');
         if (!e.dataTransfer) return;
@@ -76,14 +89,14 @@ import '../actions/button.js';
         this.addFiles(files);
       });
       this.#input.addEventListener('change', () => {
-        this.addFiles([...this.#input.files]);
+        this.addFiles(this.#input.files ? [...this.#input.files] : []);
         this.#input.value = '';
       });
     }
 
     connectedCallback(): void { this.#sync(); this.#render(); }
 
-    attributeChangedCallback() {
+    attributeChangedCallback(): void {
       if (this.hasAttribute('multiple')) this.#input.multiple = true;
       if (!this.hasAttribute('multiple')) this.#input.multiple = false;
       const accept = this.getAttribute('accept');
@@ -91,11 +104,11 @@ import '../actions/button.js';
       this.#render();
     }
 
-    get files() { return this.#files; }
+    get files(): FileRecord[] { return this.#files; }
 
-    addFile(file) { this.addFiles([file]); }
+    addFile(file: File): void { this.addFiles([file]); }
 
-    addFiles(files) {
+    addFiles(files: File[]): void {
       const max = Number(this.getAttribute('max-files')) || Infinity;
       const maxSize = Number(this.getAttribute('max-size')) || Infinity;
       const accept = this.getAttribute('accept');
@@ -112,7 +125,7 @@ import '../actions/button.js';
           emit(this, 'is-error', { id: null, file: f, reason: 'accept' });
           continue;
         }
-        const rec = { id: newId(), file: f, name: f.name, size: f.size, type: f.type, status: 'queued', progress: 0, url: '' };
+        const rec: FileRecord = { id: newId(), file: f, name: f.name, size: f.size, type: f.type, status: 'queued', progress: 0, url: '' };
         if (f.type.startsWith('image/')) {
           try { rec.url = URL.createObjectURL(f); } catch { /* noop */ }
         }
@@ -122,7 +135,7 @@ import '../actions/button.js';
       this.#emitFiles();
     }
 
-    removeFile(id) {
+    removeFile(id: string): void {
       const rec = this.#files.find((r) => r.id === id);
       if (rec?.url) URL.revokeObjectURL(rec.url);
       this.#files = this.#files.filter((r) => r.id !== id);
@@ -130,7 +143,7 @@ import '../actions/button.js';
       this.#emitFiles();
     }
 
-    async upload() {
+    async upload(): Promise<void> {
       // simulación chunked
       const queue = this.#files.filter((r) => r.status === 'queued');
       for (const rec of queue) {
@@ -139,7 +152,7 @@ import '../actions/button.js';
         emit(this, 'is-upload-start', { id: rec.id, file: rec.file });
         const steps = 24;
         for (let i = 1; i <= steps; i++) {
-          await new Promise((r) => setTimeout(r, 30 + Math.random() * 60));
+          await new Promise<void>((r) => setTimeout(() => r(), 30 + Math.random() * 60));
           rec.progress = Math.round((i / steps) * 100);
           this.#patch(rec);
           emit(this, 'is-upload-progress', { id: rec.id, file: rec.file, progress: rec.progress });
@@ -151,11 +164,11 @@ import '../actions/button.js';
       }
     }
 
-    #emitFiles() {
+    #emitFiles(): void {
       emit(this, 'is-files-change', { files: this.#files });
     }
 
-    #patch(rec) {
+    #patch(rec: FileRecord): void {
       const li = this.#queueEl.querySelector<HTMLElement>(`[data-id="${rec.id}"]`);
       if (!li) return this.#render();
       const bar = li.querySelector<HTMLProgressElement>('progress');
@@ -164,16 +177,16 @@ import '../actions/button.js';
       if (status) status.textContent = `${rec.status} ${rec.progress}%`;
     }
 
-    #sync() {
+    #sync(): void {
       if (this.hasAttribute('multiple')) this.#input.multiple = true;
     }
 
-    #render() {
+    #render(): void {
       this.#queueEl.innerHTML = '';
       for (const rec of this.#files) this.#queueEl.appendChild(this.#row(rec));
     }
 
-    #row(rec) {
+    #row(rec: FileRecord): HTMLLIElement {
       const li = document.createElement('li');
       li.className = `row status-${rec.status}`;
       li.dataset.id = rec.id;
@@ -189,12 +202,13 @@ import '../actions/button.js';
           <is-icon icon="mdi:close" aria-hidden="true"></is-icon>
         </is-button>
       `;
-      li.querySelector<HTMLElement>('.del').addEventListener('click', (e) => { e.stopPropagation(); this.removeFile(rec.id); });
+      const delEl = li.querySelector<HTMLElement>('.del');
+      if (delEl) delEl.addEventListener('click', (e: Event) => { e.stopPropagation(); this.removeFile(rec.id); });
       return li;
     }
   }
 
-  function iconForType(t: string) {
+  function iconForType(t: string): string {
     if (!t) return 'mdi:file-outline';
     if (t.startsWith('image/')) return 'mdi:image-outline';
     if (t.startsWith('video/')) return 'mdi:video-outline';
@@ -204,7 +218,7 @@ import '../actions/button.js';
     return 'mdi:file-document-outline';
   }
 
-  function matchesAccept(file, accept: string) {
+  function matchesAccept(file: File, accept: string): boolean {
     const rules = accept.split(',').map((s: string) => s.trim()).filter(Boolean);
     for (const r of rules) {
       if (!r) continue;
@@ -215,7 +229,7 @@ import '../actions/button.js';
     return false;
   }
 
-  function formatSize(n: number) {
+  function formatSize(n: number): string {
     if (n < 1024) return `${n} B`;
     if (n < 1024 * 1024) return `${(n / 1024).toFixed(1)} KB`;
     return `${(n / 1024 / 1024).toFixed(1)} MB`;

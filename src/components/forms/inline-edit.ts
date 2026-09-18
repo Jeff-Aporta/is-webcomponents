@@ -36,22 +36,24 @@ import { setOptionalAttr } from '../_shared/reflect.js';
  *   --is-inline-edit-radius
  */
 (() => {
-  const STATES = ['idle', 'editing', 'saved', 'cancelled'];
+  const STATES: string[] = ['idle', 'editing', 'saved', 'cancelled'];
 
-  const OBSERVED = [
+  const OBSERVED: string[] = [
     'value', 'placeholder', 'name', 'mode',
     'disabled', 'readonly', 'required', 'cancel-on-blur',
     'maxlength', 'rows', 'max-rows', 'variant',
   ];
 
+  type InlineState = 'idle' | 'editing' | 'saved' | 'cancelled';
+
   class IsInlineEdit extends HTMLElement {
     static get observedAttributes(): string[] { return OBSERVED; }
 
-    #internals;
+    #internals: ElementInternals | null;
     #mounted = false;
-    #state = 'idle';
-    #snapshot = null;
-    #stateTimer = null;
+    #state: InlineState = 'idle';
+    #snapshot: string | null = null;
+    #stateTimer: ReturnType<typeof setTimeout> | null = null;
 
     constructor() {
       super();
@@ -59,8 +61,8 @@ import { setOptionalAttr } from '../_shared/reflect.js';
       this.#internals = attachFormInternals(this);
       this.#render();
       adoptCss(this.shadowRoot!, import.meta.url);
-      this.addEventListener('click', (e) => this.#onClick(e));
-      this.addEventListener('keydown', (e) => this.#onKeyDown(e));
+      this.addEventListener('click', (e: MouseEvent) => this.#onClick(e));
+      this.addEventListener('keydown', (e: KeyboardEvent) => this.#onKeyDown(e));
     }
 
     connectedCallback(): void {
@@ -81,15 +83,15 @@ import { setOptionalAttr } from '../_shared/reflect.js';
       }
     }
 
-    get value() { return this.getAttribute('value') ?? ''; }
-    set value(v) {
+    get value(): string { return this.getAttribute('value') ?? ''; }
+    set value(v: string | null) {
       setOptionalAttr(this, 'value', v);
     }
 
-    get editing() { return this.#state === 'editing'; }
+    get editing(): boolean { return this.#state === 'editing'; }
 
     /** Modo lectura. */
-    cancel() {
+    cancel(): void {
       if (this.#state !== 'editing') return;
       if (this.#snapshot !== null) this.value = this.#snapshot;
       this.#dispatch('is-cancel', { value: this.value, previous: this.#snapshot });
@@ -98,9 +100,9 @@ import { setOptionalAttr } from '../_shared/reflect.js';
     }
 
     /** Sale guardando. */
-    save() {
+    save(): void {
       if (this.#state !== 'editing') return;
-      const input = this.shadowRoot!.querySelector<HTMLElement>('input,textarea');
+      const input = this.shadowRoot!.querySelector<HTMLInputElement | HTMLTextAreaElement>('input,textarea');
       if (!input) return;
       this.#dispatch('is-save', { value: input.value, previous: this.#snapshot });
       this.value = input.value;
@@ -109,12 +111,12 @@ import { setOptionalAttr } from '../_shared/reflect.js';
     }
 
     /** Entra en modo edición. */
-    edit() {
+    edit(): void {
       if (this.hasAttribute('disabled') || this.hasAttribute('readonly')) return;
       this.#snapshot = this.value;
       this.#setState('editing');
       this.#render();
-      const input = this.shadowRoot!.querySelector<HTMLElement>('input,textarea');
+      const input = this.shadowRoot!.querySelector<HTMLInputElement | HTMLTextAreaElement>('input,textarea');
       if (input) {
         input.focus();
         // cursor al final
@@ -124,13 +126,13 @@ import { setOptionalAttr } from '../_shared/reflect.js';
       this.#dispatch('is-edit', {});
     }
 
-    #onClick(e) {
+    #onClick(_e: MouseEvent): void {
       if (this.#state === 'editing') return;
       // ignorar clicks en el slot display personalizado (que aún así se edita)
       this.edit();
     }
 
-    #onKeyDown(e) {
+    #onKeyDown(e: KeyboardEvent): void {
       if (this.#state !== 'editing') return;
       if (e.key === 'Enter' && this.getAttribute('mode') !== 'textarea') {
         e.preventDefault();
@@ -141,7 +143,7 @@ import { setOptionalAttr } from '../_shared/reflect.js';
       }
     }
 
-    #sync() {
+    #sync(): void {
       setFormValue(this.#internals, this.value);
       // Escribir sobre [part="display"] borraría el <slot name="display">; el
       // texto plano vive en el .text hermano.
@@ -150,17 +152,17 @@ import { setOptionalAttr } from '../_shared/reflect.js';
       setCustomState(this.#internals, 'blank', !this.value);
     }
 
-    #syncDisabled() {
+    #syncDisabled(): void {
       const dis = this.hasAttribute('disabled');
       const ro = this.hasAttribute('readonly');
-      const input = this.shadowRoot!.querySelector<HTMLElement>('input,textarea');
+      const input = this.shadowRoot!.querySelector<HTMLInputElement | HTMLTextAreaElement>('input,textarea');
       if (input) {
         input.disabled = dis;
         input.readOnly = ro;
       }
     }
 
-    #render() {
+    #render(): void {
       const mode = this.getAttribute('mode') || 'text';
       const placeholder = this.getAttribute('placeholder') || '';
       const value = this.value;
@@ -198,10 +200,10 @@ import { setOptionalAttr } from '../_shared/reflect.js';
         </div>
       `;
       // texto del display re-poblado
-      this.shadowRoot!.querySelector<HTMLElement>('[part="display"] .text').textContent =
-        value || placeholder || '';
+      const displayText = this.shadowRoot!.querySelector<HTMLElement>('[part="display"] .text');
+      if (displayText) displayText.textContent = value || placeholder || '';
 
-      const input = this.shadowRoot!.querySelector<HTMLElement>('input,textarea');
+      const input = this.shadowRoot!.querySelector<HTMLInputElement | HTMLTextAreaElement>('input,textarea');
       if (input) {
         input.addEventListener('blur', () => {
           if (!this.#mounted) return;
@@ -213,7 +215,7 @@ import { setOptionalAttr } from '../_shared/reflect.js';
       }
     }
 
-    #setState(name, autoRevertMs) {
+    #setState(name: InlineState, autoRevertMs?: number): void {
       this.#state = name;
       // Los estados son excluyentes: limpiar todos antes de marcar el activo,
       // si no `editing` sobrevive a `save()` y el selector :state(editing)
@@ -223,19 +225,19 @@ import { setOptionalAttr } from '../_shared/reflect.js';
       }
       this.#syncStateClass();
       if (autoRevertMs) {
-        clearTimeout(this.#stateTimer);
+        if (this.#stateTimer != null) clearTimeout(this.#stateTimer);
         this.#stateTimer = setTimeout(() => {
           if (this.#state === name) this.#setState('idle');
         }, autoRevertMs);
       }
     }
 
-    #syncStateClass() {
+    #syncStateClass(): void {
       const root = this.shadowRoot!.querySelector<HTMLElement>('.root');
       if (root) root.className = `root is-${this.#state}`;
     }
 
-    #dispatch(name, detail) {
+    #dispatch(name: string, detail: unknown): void {
       emit(this, name, detail);
     }
 

@@ -37,9 +37,13 @@ import { adoptCss, defineElement, emit } from '../../core/element.js';
  *   Tab / Shift+Tab indenta nivel (todo)
  */
 (() => {
-  const OBSERVED = ['value', 'placeholder'];
+  const OBSERVED: string[] = ['value', 'placeholder'];
 
-  const TYPES = {
+  type BlockType = 'paragraph' | 'heading-1' | 'heading-2' | 'heading-3' | 'bullet-list' | 'todo' | 'numbered-list' | 'quote' | 'code' | 'divider';
+  interface Block { id: string; type: BlockType; text: string; checked: boolean }
+  interface BlockDef { tag: string; item?: string; placeholder?: string }
+
+  const TYPES: Record<BlockType, BlockDef> = {
     paragraph:     { tag: 'p',  placeholder: 'Escribe algo…' },
     'heading-1':   { tag: 'h1', placeholder: 'Título 1' },
     'heading-2':   { tag: 'h2', placeholder: 'Título 2' },
@@ -55,7 +59,7 @@ import { adoptCss, defineElement, emit } from '../../core/element.js';
   class IsDocEditor extends HTMLElement {
     static get observedAttributes(): string[] { return OBSERVED; }
     #mounted = false;
-    #blocks = [];
+    #blocks: Block[] = [];
 
     constructor() {
       super();
@@ -70,7 +74,7 @@ import { adoptCss, defineElement, emit } from '../../core/element.js';
       this.#blocksEl = this.shadowRoot!.querySelector<HTMLElement>('.blocks')!;
       this.#menu = this.shadowRoot!.querySelector<HTMLElement>('.menu')!;
 
-      this.#onDocPointerDown = (e: PointerEvent) => {
+      this.#onDocPointerDown = (e: PointerEvent): void => {
         if (!e.composedPath().includes(this)) this.#hideMenu();
       };
     }
@@ -87,47 +91,55 @@ import { adoptCss, defineElement, emit } from '../../core/element.js';
       document.removeEventListener('pointerdown', this.#onDocPointerDown, true);
     }
 
-    attributeChangedCallback() {
+    attributeChangedCallback(): void {
       if (this.#mounted) {
         this.#readInitial();
         this.#renderAll();
       }
     }
 
-    get value() {
+    get value(): string {
       this.#syncDirty();
       return JSON.stringify(this.#blocks);
     }
-    set value(v) {
+    set value(v: string | Block[] | null | undefined) {
       this.setAttribute('value', typeof v === 'string' ? v : JSON.stringify(v || []));
     }
 
-    get blocks() { return this.#blocks; }
+    get blocks(): Block[] { return this.#blocks; }
 
-    #readInitial() {
+    #readInitial(): void {
       const v = this.getAttribute('value') ?? this.#inlineJson();
-      if (!v) { this.#blocks = [{ id: 'b0', type: 'paragraph', text: '' }]; return; }
+      if (!v) { this.#blocks = [{ id: 'b0', type: 'paragraph', text: '', checked: false }]; return; }
       try {
         const data = typeof v === 'string' ? JSON.parse(v) : v;
-        if (Array.isArray(data)) this.#blocks = data.filter((b) => TYPES[b.type]).map((b, i) => ({ id: b.id || crypto.randomUUID?.() || `b${Date.now()}_${i}`, text: b.text || '', checked: !!b.checked, type: b.type }));
-        else this.#blocks = [];
+        if (Array.isArray(data)) {
+          this.#blocks = (data as Block[])
+            .filter((b): b is Block => !!b && !!TYPES[(b as Block).type as BlockType])
+            .map((b, i: number) => ({
+              id: b.id || (crypto.randomUUID?.() ?? `b${Date.now()}_${i}`),
+              text: b.text || '',
+              checked: !!b.checked,
+              type: b.type,
+            }));
+        } else this.#blocks = [];
       } catch { this.#blocks = []; }
-      if (!this.#blocks.length) this.#blocks = [{ id: 'b0', type: 'paragraph', text: '' }];
+      if (!this.#blocks.length) this.#blocks = [{ id: 'b0', type: 'paragraph', text: '', checked: false }];
     }
 
     /** Semilla declarativa: mismo convenio que el resto del kit. */
-    #inlineJson() {
+    #inlineJson(): string | null {
       const script = this.querySelector<HTMLElement>('script[type="application/json"]');
       const texto = script?.textContent?.trim();
       return texto || null;
     }
 
-    #renderAll() {
+    #renderAll(): void {
       this.#blocksEl.innerHTML = '';
-      this.#blocks.forEach((b) => this.#appendBlockEl(b));
+      this.#blocks.forEach((b: Block) => this.#appendBlockEl(b));
     }
 
-    #appendBlockEl(block) {
+    #appendBlockEl(block: Block): void {
       const def = TYPES[block.type] || TYPES.paragraph;
       const root = document.createElement('div');
       root.className = `block block-${block.type}`;
@@ -142,7 +154,7 @@ import { adoptCss, defineElement, emit } from '../../core/element.js';
         check.checked = !!block.checked;
         check.addEventListener('change', () => { block.checked = check.checked; ed.classList.toggle('is-checked', block.checked); this.#emit(); });
         ed.contentEditable = 'true';
-        ed.dataset.placeholder = def.placeholder;
+        ed.dataset.placeholder = def.placeholder ?? '';
         ed.textContent = block.text;
         const wrap = document.createElement('div');
         wrap.className = 'row';
@@ -153,7 +165,7 @@ import { adoptCss, defineElement, emit } from '../../core/element.js';
       } else if (def.item === 'li' || def.item === 'li-todo') {
         const li = document.createElement('li');
         li.contentEditable = 'true';
-        li.dataset.placeholder = def.placeholder;
+        li.dataset.placeholder = def.placeholder ?? '';
         li.textContent = block.text;
         const list = document.createElement(def.tag);
         list.appendChild(li);
@@ -161,7 +173,7 @@ import { adoptCss, defineElement, emit } from '../../core/element.js';
         this.#bindEditable(li, block);
       } else {
         ed.contentEditable = 'true';
-        ed.dataset.placeholder = def.placeholder;
+        ed.dataset.placeholder = def.placeholder ?? '';
         ed.textContent = block.text;
         root.appendChild(ed);
         this.#bindEditable(ed, block);
@@ -169,18 +181,18 @@ import { adoptCss, defineElement, emit } from '../../core/element.js';
       this.#blocksEl.appendChild(root);
     }
 
-    #bindEditable(el: HTMLElement, block) {
-      const onInput = () => { block.text = el.textContent; this.#emit(); };
+    #bindEditable(el: HTMLElement, block: Block): void {
+      const onInput = (): void => { block.text = el.textContent ?? ''; this.#emit(); };
       el.addEventListener('input', onInput);
       el.addEventListener('focus', () => emit(this, 'is-focus', { id: block.id }));
-      el.addEventListener('keydown', (e) => this.#onKey(e, el, block));
+      el.addEventListener('keydown', (e: KeyboardEvent) => this.#onKey(e, el, block));
     }
 
-    #onKey(e, el, block) {
+    #onKey(e: KeyboardEvent, el: HTMLElement, block: Block): void {
       const idx = this.#blocks.findIndex((b) => b.id === block.id);
       if (e.key === 'Enter' && !e.shiftKey) {
         e.preventDefault();
-        const newBlock = { id: 'b' + Date.now() + Math.random().toString(36).slice(2, 6), type: block.type === 'divider' ? 'paragraph' : block.type, text: '' };
+        const newBlock: Block = { id: 'b' + Date.now() + Math.random().toString(36).slice(2, 6), type: block.type === 'divider' ? 'paragraph' : block.type, text: '', checked: false };
         this.#blocks.splice(idx + 1, 0, newBlock);
         this.#renderAll();
         this.#focusById(newBlock.id);
@@ -192,7 +204,8 @@ import { adoptCss, defineElement, emit } from '../../core/element.js';
         const target = this.#blocks[Math.max(0, idx - 1)];
         if (target) this.#focusById(target.id);
       } else if (e.key === '/') {
-        const isStart = (el.textContent || '').slice(0, el.selectionStart).trim() === '';
+        const selectionStart = (el as HTMLElement & { selectionStart?: number }).selectionStart ?? 0;
+        const isStart = ((el.textContent ?? '').slice(0, selectionStart)).trim() === '';
         if (isStart) {
           e.preventDefault();
           this.#showMenu(el, block);
@@ -202,18 +215,18 @@ import { adoptCss, defineElement, emit } from '../../core/element.js';
       }
     }
 
-    #showMenu(el, block) {
+    #showMenu(el: HTMLElement, block: Block): void {
       const rect = el.getBoundingClientRect();
       const root = this.getBoundingClientRect();
       this.#menu.style.left = `${rect.left - root.left}px`;
       this.#menu.style.top = `${rect.bottom - root.top + 4}px`;
       this.#menu.innerHTML = '';
-      for (const type of Object.keys(TYPES)) {
+      for (const type of Object.keys(TYPES) as BlockType[]) {
         const opt = document.createElement('button');
         opt.type = 'button';
         opt.className = 'opt';
         opt.textContent = type;
-        opt.addEventListener('mousedown', (e) => e.preventDefault());
+        opt.addEventListener('mousedown', (e: Event) => e.preventDefault());
         opt.addEventListener('click', () => {
           block.type = type;
           block.text = '';
@@ -226,24 +239,24 @@ import { adoptCss, defineElement, emit } from '../../core/element.js';
       this.#menu.hidden = false;
     }
 
-    #hideMenu() { this.#menu.hidden = true; this.#menu.innerHTML = ''; }
+    #hideMenu(): void { this.#menu.hidden = true; this.#menu.innerHTML = ''; }
 
-    #focusById(id) {
+    #focusById(id: string): void {
       requestAnimationFrame(() => {
         const ed = this.shadowRoot!.querySelector<HTMLElement>(`[data-id="${id}"] [contenteditable="true"]`);
         if (ed) ed.focus();
       });
     }
 
-    #syncDirty() { /* placeholder for any deferred sync */ }
+    #syncDirty(): void { /* placeholder for any deferred sync */ }
 
-    #emit() {
+    #emit(): void {
       emit(this, 'is-change', { blocks: structuredClone(this.#blocks) });
     }
 
     #blocksEl!: HTMLElement;
     #menu!: HTMLElement;
-    #onDocPointerDown;
+    #onDocPointerDown!: (e: PointerEvent) => void;
   }
 
   defineElement('is-doc-editor', IsDocEditor);

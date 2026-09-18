@@ -25,13 +25,17 @@ import {
  * Atributos: inline, cscroll, remember-scroll, storage-key, scroll-ttl
  */
 
-export const BREAKPOINTS = ['xs', 'sm', 'md', 'lg', 'xl'];
+export const BREAKPOINTS = ['xs', 'sm', 'md', 'lg', 'xl'] as const;
+export type Breakpoint = typeof BREAKPOINTS[number];
 
 /** Anchos ancla de cada breakpoint (idénticos a ISP). */
-export const BREAKPOINT_W = { xs: 0, sm: 480, md: 600, lg: 800, xl: 1200 };
+export const BREAKPOINT_W: Record<string, number> = { xs: 0, sm: 480, md: 600, lg: 800, xl: 1200 };
+
+/** Bandera acumulativa por breakpoint: `boolszw[bp] === BREAKPOINTS.indexOf(bp) <= idx`. */
+export type BreakpointFlags = Record<string, boolean>;
 
 /** Misma escalera de comparaciones que ISP (ojo: `<` en xs y xl, `<=` en el resto). */
-export function sizewFor(width: number) {
+export function sizewFor(width: number): Breakpoint {
   return width < 480 ? 'xs'
     : width <= 600 ? 'sm'
       : width <= 800 ? 'md'
@@ -39,21 +43,24 @@ export function sizewFor(width: number) {
 }
 
 /** `boolszw` de ISP: acumulativo, todo breakpoint <= al actual va en true. */
-export function flagsFor(sizew) {
-  const idx = BREAKPOINTS.indexOf(sizew);
-  const flags = {};
+export function flagsFor(sizew: string): BreakpointFlags {
+  const idx = BREAKPOINTS.indexOf(sizew as Breakpoint);
+  const flags: BreakpointFlags = {};
   for (const bp of BREAKPOINTS) flags[bp] = BREAKPOINTS.indexOf(bp) <= idx;
   return flags;
 }
 
 /** `lerpw` de ISP: progreso lineal (sin recortar) del ancho entre dos anclas. */
-export function lerpFor(width, b0 = 'sm', b1 = 'xl') {
+export function lerpFor(width: number, b0: string = 'sm', b1: string = 'xl'): number {
   const w0 = BREAKPOINT_W[b0] ?? 0;
   const w1 = BREAKPOINT_W[b1] ?? 0;
   return w1 === w0 ? 0 : (width - w0) / (w1 - w0);
 }
 
 export { SCROLL_MEMORY_ATTRS };
+
+/** Callback que `lerpw` entrega dentro del evento `is-breakpoint`. */
+type LerpwFn = (b0?: string, b1?: string) => number;
 
 /**
  * Base compartida: observa el tamaño propio y publica el breakpoint.
@@ -62,29 +69,31 @@ export { SCROLL_MEMORY_ATTRS };
  * Geometría y memoria de scroll viven aquí para que block/flex/grid las hereden.
  */
 export class BreakpointHost extends ElementBase {
-  #ro = null;
+  #ro: ResizeObserver | null = null;
   #width = -1;
   #height = -1;
-  #scroll = null;
+  #scroll: ScrollMemory | null = null;
 
   /** Subclases deben concatenar esto a su observedAttributes. */
   static get scrollMemoryAttrs() { return SCROLL_MEMORY_ATTRS; }
 
-  onConnected() {
-    this.#ro = new ResizeObserver(() => this.measureSize());
-    this.#ro.observe(this);
+  onConnected(): void {
+    const ro = new ResizeObserver(() => this.measureSize());
+    this.#ro = ro;
+    ro.observe(this);
     this.measureSize();
     if (!this.#scroll) {
-      this.#scroll = new ScrollMemory(this, {
+      const sm = new ScrollMemory(this, {
         tag: this.localName || 'is-layout',
         restorePolicy: 'always',
       });
-      bindScrollMemoryApi(this, this.#scroll);
+      this.#scroll = sm;
+      bindScrollMemoryApi(this, sm);
     }
     this.#scroll.connect();
   }
 
-  onDisconnected() {
+  onDisconnected(): void {
     this.#scroll?.disconnect();
     this.#ro?.disconnect();
     this.#ro = null;
@@ -92,37 +101,36 @@ export class BreakpointHost extends ElementBase {
     this.#height = -1;
   }
 
-  onAttributeChanged(name, prev, next) {
+  onAttributeChanged(name: string, prev: string | null, next: string | null): void {
     if (SCROLL_MEMORY_ATTRS.includes(name)) {
       this.#scroll?.onAttributeChanged(name, prev, next);
     }
   }
 
-  get clientWidthMeasured() { return Math.max(0, this.#width); }
+  get clientWidthMeasured(): number { return Math.max(0, this.#width); }
 
-  get clientHeightMeasured() { return Math.max(0, this.#height); }
+  get clientHeightMeasured(): number { return Math.max(0, this.#height); }
 
-  get sizew() { return sizewFor(this.clientWidthMeasured); }
+  get sizew(): Breakpoint { return sizewFor(this.clientWidthMeasured); }
 
-  get boolszw() { return flagsFor(this.sizew); }
+  get boolszw(): BreakpointFlags { return flagsFor(this.sizew); }
 
-  lerpw(b0 = 'sm', b1 = 'xl') { return lerpFor(this.clientWidthMeasured, b0, b1); }
+  lerpw(b0: string = 'sm', b1: string = 'xl'): number { return lerpFor(this.clientWidthMeasured, b0, b1); }
 
   /** Ancho del host en px (medido; cae a clientWidth si aún no hay RO). */
-  getWidth() {
+  getWidth(): number {
     return this.#width >= 0 ? Math.max(0, this.#width) : Math.max(0, this.clientWidth);
   }
 
   /** Alto del host en px (medido; cae a clientHeight si aún no hay RO). */
-  getHeight() {
+  getHeight(): number {
     return this.#height >= 0 ? Math.max(0, this.#height) : Math.max(0, this.clientHeight);
   }
 
   /**
    * Rectángulo del host en viewport (DOMRect-like plano).
-   * @returns {{ x: number, y: number, width: number, height: number, top: number, left: number, right: number, bottom: number }}
    */
-  rect() {
+  rect(): { x: number; y: number; width: number; height: number; top: number; left: number; right: number; bottom: number } {
     const r = this.getBoundingClientRect();
     return {
       x: r.x, y: r.y, width: r.width, height: r.height,
@@ -131,12 +139,12 @@ export class BreakpointHost extends ElementBase {
   }
 
   /** Alias de `rect()`. */
-  getRect() { return this.rect(); }
+  getRect(): { x: number; y: number; width: number; height: number; top: number; left: number; right: number; bottom: number } { return this.rect(); }
 
   /** @deprecated usar measureSize — se mantiene por compat. */
-  measureWidth() { this.measureSize(); }
+  measureWidth(): void { this.measureSize(); }
 
-  measureSize() {
+  measureSize(): void {
     const width = this.clientWidth;
     const height = this.clientHeight;
     const same = width === this.#width && height === this.#height;
@@ -155,9 +163,10 @@ export class BreakpointHost extends ElementBase {
     this.style.setProperty('--clienth', String(height));
     this.style.setProperty('--lerpw', String(Math.round(lerpw * 1e4) / 1e4));
 
+    const lerpwFn: LerpwFn = (b0?: string, b1?: string) => lerpFor(width, b0, b1);
     emit(this, 'is-breakpoint', {
       width, height, sizew, boolszw,
-      lerpw: (b0, b1) => lerpFor(width, b0, b1),
+      lerpw: lerpwFn,
     });
   }
 }
@@ -183,29 +192,29 @@ export class BreakpointHost extends ElementBase {
       adoptCss(this.shadowRoot!, import.meta.url);
     }
 
-    onConnected() {
+    onConnected(): void {
       super.onConnected();
       this.#applyInlineJson();
     }
 
-    get inline() { return this.hasAttribute('inline'); }
-    set inline(v) { this.setBooleanAttr('inline', v); }
+    get inline(): boolean { return this.hasAttribute('inline'); }
+    set inline(v: unknown) { this.setBooleanAttr('inline', v); }
 
-    get cscroll() { return this.hasAttribute('cscroll'); }
-    set cscroll(v) { this.setBooleanAttr('cscroll', v); }
+    get cscroll(): boolean { return this.hasAttribute('cscroll'); }
+    set cscroll(v: unknown) { this.setBooleanAttr('cscroll', v); }
 
     /** Monta el light DOM desde JSON compacto. */
-    json2html(body, opts) {
-      applyJsonBody(this, body, opts);
+    json2html(body: unknown, opts?: Parameters<typeof applyJsonBody>[2]): this {
+      applyJsonBody(this, body, opts ?? {});
       return this;
     }
 
     /** Serializa el light DOM a JSON compacto. */
-    html2json(opts) {
-      return hostToJson(this, opts);
+    html2json(opts?: Parameters<typeof hostToJson>[1]): unknown {
+      return hostToJson(this, opts ?? {});
     }
 
-    toJSON() {
+    toJSON(): { inline: boolean; cscroll: boolean; body: unknown } {
       return {
         inline: this.inline,
         cscroll: this.cscroll,
@@ -213,22 +222,23 @@ export class BreakpointHost extends ElementBase {
       };
     }
 
-    fromJSON(json, opts) {
+    fromJSON(json: unknown, opts?: Parameters<typeof applyJsonBody>[2]): this {
       if (!json || typeof json !== 'object') return this;
-      if (json.inline != null) this.inline = !!json.inline;
-      if (json.cscroll != null) this.cscroll = !!json.cscroll;
-      const body = json.body ?? json.html ?? (Array.isArray(json) ? json : null);
-      if (body != null) applyJsonBody(this, body, opts);
+      const j = json as { inline?: unknown; cscroll?: unknown; body?: unknown; html?: unknown };
+      if (j.inline != null) this.inline = !!j.inline;
+      if (j.cscroll != null) this.cscroll = !!j.cscroll;
+      const body = j.body ?? j.html ?? (Array.isArray(j) ? j : null);
+      if (body != null) applyJsonBody(this, body, opts ?? {});
       return this;
     }
 
-    #applyInlineJson() {
+    #applyInlineJson(): void {
       if (this.#inlineApplied) return;
       const script = this.querySelector<HTMLElement>(':scope > script[type="application/json"]');
       if (!script) return;
       this.#inlineApplied = true;
       try {
-        const json = JSON.parse(script.textContent || 'null');
+        const json: unknown = JSON.parse(script.textContent || 'null');
         if (json && typeof json === 'object') this.fromJSON(json);
       } catch {
         console.warn('<is-block-layout> script JSON inválido');

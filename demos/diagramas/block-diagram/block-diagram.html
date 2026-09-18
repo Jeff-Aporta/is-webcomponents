@@ -1,0 +1,58 @@
+<!doctype html>
+<html lang="es" class="theme-dark" data-theme="dark">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>Demo — <is-block-diagram> · is-webcomponents</title>
+<meta name="description" content="Diagrama de bloques (rejilla + aristas A*) sin Mermaid. Mismo esqueleto que el flowchart pero con layout en columnas." />
+<style>
+  html, body { margin: 0; padding: 0; min-height: 100%; background: #0c1118; color: #e2e8f0; font-family: ui-sans-serif, system-ui, sans-serif; }
+  body { display: grid; grid-template-rows: auto 1fr; }
+  header { padding: 16px 20px; border-bottom: 1px solid rgba(255,255,255,0.1); background: #0f1620; }
+  header h1 { font-size: 16px; font-weight: 700; margin: 0; }
+  header p { font-size: 12px; color: #94a3b8; margin: 4px 0 0 0; }
+  main { display: grid; place-items: stretch; min-height: 0; padding: 12px; }
+  is-block-diagram { width: 100%; height: 100%; min-height: 480px; display: block; }
+  is-block-diagram:not(:defined) { visibility: hidden; }
+</style>
+<script type="module">
+  // Cargar el bundle pre-construido (compatible con cualquier servidor estático).
+  await import('../../../dist/cdn/diagrams/block-diagram.min.js');
+  await customElements.whenDefined('is-block-diagram');
+
+  const el = document.createElement('is-block-diagram');
+  el.payload = {
+    blockDiagram: {
+      title: 'Pipeline de procesamiento',
+      subtitle: '3 columnas · 6 bloques · 5 aristas',
+      columns: 3,
+      blocks: [
+        { id: 'src', label: 'Fuente', hue: 210 },
+        { id: 'ingest', label: 'Ingesta', hue: 239 },
+        { id: 'parse', label: 'Parser', hue: 160, span: 2 },
+        { id: 'enrich', label: 'Enriquecer', hue: 38 },
+        { id: 'sink', label: 'Destino', hue: 280 },
+        { id: 'dlq', label: 'Errores', hue: 199 },
+      ],
+      edges: [
+        { id: 'e1', from: 'src', to: 'ingest' },
+        { id: 'e2', from: 'ingest', to: 'parse' },
+        { id: 'e3', from: 'parse', to: 'enrich' },
+        { id: 'e4', from: 'enrich', to: 'sink', label: 'ok' },
+        { id: 'e5', from: 'enrich', to: 'dlq', label: 'fallo', kind: 'dashed' },
+      ],
+    },
+  };
+  document.querySelector('main').appendChild(el);
+
+  document.documentElement.dataset.blockDiagramReady = '1';
+</script>
+</head>
+<body>
+  <header>
+    <h1>Demo — <code>&lt;is-block-diagram&gt;</code></h1>
+    <p>Layout en rejilla explícita (no node-link). Aristas ruteadas con A* sobre rejilla de costos.</p>
+  </header>
+  <main></main>
+</body>
+</html>

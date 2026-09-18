@@ -13,21 +13,26 @@ export const PROMPT_VAR_PATTERN = /\{\{\s*([A-Za-z_][A-Za-z0-9_]*)\s*\}\}/g;
 /** `{{nombre}` sin la segunda `}` de cierre (typo histórico). */
 export const MALFORMED_PROMPT_VAR_PATTERN = /\{\{\s*([A-Za-z_][A-Za-z0-9_]*)\s*\}(?!\})/g;
 
-export function isValidVarName(name) {
+/** Segmentos del body partido por variables `{{…}}`. */
+export type BodySegment =
+  | { type: 'text'; value: string }
+  | { type: 'var'; name: string };
+
+export function isValidVarName(name: unknown): boolean {
   return /^[A-Za-z_][A-Za-z0-9_]*$/.test(String(name ?? '').trim());
 }
 
 /** Segmentos `{ type: 'text'|'var', value|name }` en orden de aparición. */
-export function splitBodyWithVars(text) {
+export function splitBodyWithVars(text: unknown): BodySegment[] {
   const src = String(text ?? '');
   if (!src) return [];
-  const out = [];
+  const out: BodySegment[] = [];
   const re = new RegExp(PROMPT_VAR_PATTERN.source, 'g');
   let last = 0;
-  let m;
+  let m: RegExpExecArray | null;
   while ((m = re.exec(src))) {
     if (m.index > last) out.push({ type: 'text', value: src.slice(last, m.index) });
-    out.push({ type: 'var', name: m[1] });
+    out.push({ type: 'var', name: m[1]! });
     last = m.index + m[0].length;
   }
   if (last < src.length) out.push({ type: 'text', value: src.slice(last) });
@@ -35,9 +40,9 @@ export function splitBodyWithVars(text) {
 }
 
 /** Lista única de variables presentes (orden de primera aparición). */
-export function extractPromptVariables(text) {
-  const seen = new Set();
-  const out = [];
+export function extractPromptVariables(text: unknown): string[] {
+  const seen = new Set<string>();
+  const out: string[] = [];
   for (const seg of splitBodyWithVars(text)) {
     if (seg.type !== 'var' || seen.has(seg.name)) continue;
     seen.add(seg.name);
@@ -47,7 +52,7 @@ export function extractPromptVariables(text) {
 }
 
 /** Tono (hue 0–359) determinista a partir del nombre de la variable. */
-export function varNameToHue(name) {
+export function varNameToHue(name: unknown): number {
   let h = 2166136261;
   const s = String(name ?? '').trim().toLowerCase();
   for (let i = 0; i < s.length; i += 1) {
@@ -59,38 +64,38 @@ export function varNameToHue(name) {
 }
 
 /** Valor del atributo `style` con `--var-tone-h` para chips/badges. */
-export function varToneStyleAttr(name) {
+export function varToneStyleAttr(name: unknown): string {
   return `--var-tone-h:${varNameToHue(name)}`;
 }
 
-function varReplaceRe(name: string) {
+function varReplaceRe(name: string): RegExp {
   return new RegExp(`\\{\\{\\s*${String(name).replace(/[.*+?^${}()|[\]\\]/g, '\\$&')}\\s*\\}\\}`, 'gi');
 }
 
-export function renamePromptVariable(text, oldName, newName) {
+export function renamePromptVariable(text: unknown, oldName: string, newName: unknown): string {
   const next = String(newName ?? '').trim();
-  if (!isValidVarName(next)) return text;
+  if (!isValidVarName(next)) return String(text ?? '');
   return String(text ?? '').replace(varReplaceRe(oldName), `{{${next}}}`);
 }
 
-export function deletePromptVariable(text, name) {
+export function deletePromptVariable(text: unknown, name: string): string {
   return String(text ?? '').replace(varReplaceRe(name), '');
 }
 
-export function insertPromptVariable(text, offset: number, name: string) {
+export function insertPromptVariable(text: string, offset: number, name: string): string {
   const token = `{{${name}}}`;
   const pos = Math.max(0, Math.min(offset, text.length));
   return text.slice(0, pos) + token + text.slice(pos);
 }
 
 /** Corrige `{{var}` → `{{var}}` antes de renderizar o guardar. */
-export function repairPromptVarBraces(text) {
-  return String(text ?? '').replace(MALFORMED_PROMPT_VAR_PATTERN, (_m, name) => `{{${name}}}`);
+export function repairPromptVarBraces(text: unknown): string {
+  return String(text ?? '').replace(MALFORMED_PROMPT_VAR_PATTERN, (_m: string, name: string) => `{{${name}}}`);
 }
 
 // ---- render MD/HTML híbrido + chips de variable -----------------------
 
-function escAttr(s: string) {
+function escAttr(s: string): string {
   return String(s)
     .replace(/&/g, '&amp;')
     .replace(/"/g, '&quot;')
@@ -98,21 +103,23 @@ function escAttr(s: string) {
 }
 
 /** HTML de un chip `{{nombre}}` con tono determinista por nombre. */
-export function varChipHtml(name) {
+export function varChipHtml(name: string): string {
   return (
     `<span class="prompt-var-chip" contenteditable="false" data-var="${escAttr(name)}" style="${varToneStyleAttr(name)}" title="${escAttr(name)}">`
     + `<span class="prompt-var-chip__label">{{${escAttr(name)}}}</span></span>`
   );
 }
 
+type VarPlaceholder = { token: string; name: string };
+
 /** Sustituye {{vars}} por tokens, renderiza MD+HTML una vez y reemplaza por chips. */
-function renderBodyWithVarChips(body) {
-  const src = repairPromptVarBraces(String(body ?? ''));
+function renderBodyWithVarChips(body: unknown): string {
+  const src = repairPromptVarBraces(body);
   if (!src) return '';
 
-  const placeholders = [];
+  const placeholders: VarPlaceholder[] = [];
   let idx = 0;
-  const mdSrc = src.replace(PROMPT_VAR_PATTERN, (_m, name) => {
+  const mdSrc = src.replace(PROMPT_VAR_PATTERN, (_m: string, name: string) => {
     const token = `\uE000PV${idx}\uE001`;
     idx += 1;
     placeholders.push({ token, name });
@@ -127,58 +134,62 @@ function renderBodyWithVarChips(body) {
 }
 
 /** Vista previa de solo lectura: markdown + HTML + chips de variable inline. */
-export function bodyPreviewHtml(body) {
+export function bodyPreviewHtml(body: unknown): string {
   const src = String(body ?? '');
   if (!src) return '';
   return renderBodyWithVarChips(src);
 }
 
 /** HTML editable para contenteditable (mismo render, chips no editables inline). */
-export function bodyToEditorHtml(body) {
+export function bodyToEditorHtml(body: unknown): string {
   const html = renderBodyWithVarChips(body);
   return html || '<p><br></p>';
 }
 
-const MD_BLOCK_TAGS = new Set(['h1', 'h2', 'h3', 'h4', 'h5', 'h6', 'p', 'ul', 'ol', 'li', 'pre', 'blockquote', 'hr']);
-const MD_INLINE_TAGS = new Set(['strong', 'b', 'em', 'i', 'code', 'a', 'br', 'img']);
+const MD_BLOCK_TAGS: ReadonlySet<string> = new Set([
+  'h1', 'h2', 'h3', 'h4', 'h5', 'h6', 'p', 'ul', 'ol', 'li', 'pre', 'blockquote', 'hr',
+]);
+const MD_INLINE_TAGS: ReadonlySet<string> = new Set([
+  'strong', 'b', 'em', 'i', 'code', 'a', 'br', 'img',
+]);
 
-function preserveHtml(el) {
+function preserveHtml(el: Element): string {
   return el.outerHTML;
 }
 
-function varChipSource(el: HTMLElement) {
-  return el.dataset.var ? `{{${el.dataset.var}}}` : '';
+function varChipSource(el: HTMLElement): string {
+  return el.dataset['var'] ? `{{${el.dataset['var']}}}` : '';
 }
 
-function tableCellSource(td: HTMLElement) {
+function tableCellSource(td: HTMLElement): string {
   if (td.classList?.contains('prompt-var-chip')) return varChipSource(td);
   return [...td.childNodes].map((n) => inlineMd(n)).join('').trim();
 }
 
-function tableHtmlToGfm(table) {
+function tableHtmlToGfm(table: HTMLTableElement): string {
   const rowEls = [...table.querySelectorAll<HTMLTableRowElement>('tr')];
   if (!rowEls.length) return preserveHtml(table);
-  const lines = [];
-  const firstCells = [...rowEls[0].querySelectorAll<HTMLElement>('th,td')].map(tableCellSource);
+  const lines: string[] = [];
+  const firstCells = [...rowEls[0]!.querySelectorAll<HTMLElement>('th,td')].map(tableCellSource);
   lines.push(`| ${firstCells.join(' | ')} |`);
   lines.push(`| ${firstCells.map(() => '---').join(' | ')} |`);
   for (let i = 1; i < rowEls.length; i += 1) {
-    const cells = [...rowEls[i].querySelectorAll<HTMLElement>('th,td')].map(tableCellSource);
+    const cells = [...rowEls[i]!.querySelectorAll<HTMLElement>('th,td')].map(tableCellSource);
     lines.push(`| ${cells.join(' | ')} |`);
   }
   return lines.join('\n');
 }
 
-function inlineMd(node) {
+function inlineMd(node: Node): string {
   if (node.nodeType === Node.TEXT_NODE) return node.textContent || '';
   if (node.nodeType !== Node.ELEMENT_NODE) return '';
-  const el = node;
+  const el = node as HTMLElement;
   if (el.classList?.contains('prompt-var-chip')) return varChipSource(el);
 
   const tag = el.tagName.toLowerCase();
-  const inner = () => [...el.childNodes].map(inlineMd).join('');
+  const inner = (): string => [...el.childNodes].map(inlineMd).join('');
 
-  if (!MD_INLINE_TAGS.has(tag)) return preserveHtml(el);
+  if (!(MD_INLINE_TAGS as Set<string>).has(tag)) return preserveHtml(el);
 
   switch (tag) {
     case 'strong':
@@ -206,18 +217,18 @@ function inlineMd(node) {
   }
 }
 
-function blockMd(el: HTMLElement) {
+function blockMd(el: HTMLElement): string {
   const tag = el.tagName.toLowerCase();
-  const inner = () => [...el.childNodes].map((n) => inlineMd(n)).join('');
+  const inner = (): string => [...el.childNodes].map((n) => inlineMd(n)).join('');
 
   if (el.classList?.contains('prompt-var-chip')) return varChipSource(el);
 
-  if (!MD_BLOCK_TAGS.has(tag)) {
+  if (!(MD_BLOCK_TAGS as Set<string>).has(tag)) {
     if (tag === 'div' && el.classList.contains('md-table-wrap')) {
       const table = el.querySelector<HTMLTableElement>(':scope > table');
       if (table) return `${tableHtmlToGfm(table)}\n\n`;
     }
-    if (tag === 'table') return `${tableHtmlToGfm(el)}\n\n`;
+    if (tag === 'table') return `${tableHtmlToGfm(el as HTMLTableElement)}\n\n`;
     return `${preserveHtml(el)}\n\n`;
   }
 
@@ -236,7 +247,7 @@ function blockMd(el: HTMLElement) {
     }
     case 'ul':
     case 'ol':
-      return [...el.children].map((c) => blockMd(c)).join('') + '\n';
+      return [...el.children].map((c) => blockMd(c as HTMLElement)).join('') + '\n';
     case 'pre': {
       const code = el.querySelector<HTMLElement>('code');
       const text = code?.textContent ?? el.textContent ?? '';
@@ -255,11 +266,11 @@ function blockMd(el: HTMLElement) {
       if (
         el.attributes.length > 0
         || el.classList.length > 0
-        || children.some((c) => !MD_BLOCK_TAGS.has(c.tagName.toLowerCase()))
+        || children.some((c) => !(MD_BLOCK_TAGS as Set<string>).has(c.tagName.toLowerCase()))
       ) {
         return `${preserveHtml(el)}\n\n`;
       }
-      return children.map((c) => blockMd(c)).join('');
+      return children.map((c) => blockMd(c as HTMLElement)).join('');
     }
     default:
       return `${preserveHtml(el)}\n\n`;
@@ -267,10 +278,10 @@ function blockMd(el: HTMLElement) {
 }
 
 /** Serializa el contenteditable → markdown/HTML fuente con {{variables}}. */
-export function editorHtmlToBody(root) {
+export function editorHtmlToBody(root: Element): string {
   let out = '';
   for (const node of root.childNodes) {
-    if (node.nodeType === Node.ELEMENT_NODE) out += blockMd(node);
+    if (node.nodeType === Node.ELEMENT_NODE) out += blockMd(node as HTMLElement);
     else if (node.nodeType === Node.TEXT_NODE) out += node.textContent || '';
   }
   return out.replace(/\n{3,}/g, '\n\n').trimEnd();
@@ -279,12 +290,12 @@ export function editorHtmlToBody(root) {
 const RAW_VAR_IN_TEXT = /\{\{\s*[A-Za-z_]\w*\s*\}\}/;
 
 /** true si hay `{{var}}` en texto plano del surface aún sin convertir a chip. */
-export function surfaceHasRawVarTokens(root) {
+export function surfaceHasRawVarTokens(root: Element | null): boolean {
   if (!root) return false;
   const walker = document.createTreeWalker(root, NodeFilter.SHOW_TEXT);
-  let node = walker.nextNode();
+  let node: Node | null = walker.nextNode();
   while (node) {
-    if (!node.parentElement?.closest('.prompt-var-chip') && RAW_VAR_IN_TEXT.test(node.textContent ?? '')) return true;
+    if (!node.parentElement?.closest('.prompt-var-chip') && RAW_VAR_IN_TEXT.test((node as Text).textContent ?? '')) return true;
     node = walker.nextNode();
   }
   return false;

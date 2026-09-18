@@ -1,0 +1,53 @@
+<!doctype html>
+<html lang="es" class="theme-dark" data-theme="dark">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>Demo — <is-gantt> · is-webcomponents</title>
+<meta name="description" content="Diagrama de Gantt con fechas, dependencias, milestones y grupos." />
+<style>
+  html, body { margin: 0; padding: 0; min-height: 100%; background: #0c1118; color: #e2e8f0; font-family: ui-sans-serif, system-ui, sans-serif; }
+  body { display: grid; grid-template-rows: auto 1fr; }
+  header { padding: 16px 20px; border-bottom: 1px solid rgba(255,255,255,0.1); background: #0f1620; }
+  header h1 { font-size: 16px; font-weight: 700; margin: 0; }
+  header p { font-size: 12px; color: #94a3b8; margin: 4px 0 0 0; }
+  main { display: grid; place-items: stretch; min-height: 0; padding: 12px; }
+  is-gantt { width: 100%; height: 100%; min-height: 480px; display: block; }
+  is-gantt:not(:defined) { visibility: hidden; }
+</style>
+<script type="module">
+  await import('../../../dist/cdn/diagrams/gantt.min.js');
+  await customElements.whenDefined('is-gantt');
+
+  const el = document.createElement('is-gantt');
+  el.payload = {
+    gantt: {
+      title: 'Roadmap Q1',
+      subtitle: '5 tareas · 1 milestone · 3 dependencias',
+      dateFormat: 'YYYY-MM-DD',
+      groups: [
+        { id: 'design', name: 'Diseño', hue: 239 },
+        { id: 'build', name: 'Construcción', hue: 160 },
+      ],
+      tasks: [
+        { id: 't1', label: 'Wireframes', start: '2025-01-06', duration: '3d', group: 'design' },
+        { id: 't2', label: 'Diseño UI', start: '2025-01-09', duration: '5d', after: ['t1'], group: 'design' },
+        { id: 't3', label: 'API backend', start: '2025-01-13', duration: '7d', after: ['t2'], group: 'build' },
+        { id: 't4', label: 'Frontend', start: '2025-01-20', duration: '6d', after: ['t2'], group: 'build', progress: 30 },
+        { id: 't5', label: 'Release', start: '2025-01-28', after: ['t3', 't4'], milestone: true },
+      ],
+    },
+  };
+  document.querySelector('main').appendChild(el);
+
+  document.documentElement.dataset.ganttReady = '1';
+</script>
+</head>
+<body>
+  <header>
+    <h1>Demo — <code>&lt;is-gantt&gt;</code></h1>
+    <p>Diagrama de Gantt: tareas con fechas/duración, dependencias (flechas A*) y milestones (diamante).</p>
+  </header>
+  <main></main>
+</body>
+</html>

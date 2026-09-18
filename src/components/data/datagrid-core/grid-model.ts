@@ -75,7 +75,7 @@ export function createGridModel(options: GridOptions) {
     return new Map(s.columns.map((c) => [c.colId, c]));
   }
 
-  function compute() {
+  function compute(): GridState {
     const byId = colById();
     const filtered = filterRows(s.nodes, s.filterModel, s.quickFilter, s.columns, byId);
     const sorted = sortRows(filtered, s.sortModel, byId);

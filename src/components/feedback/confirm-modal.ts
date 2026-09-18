@@ -61,9 +61,9 @@ import '../actions/button.js';
     #backdrop!: HTMLElement;
     #modal!: HTMLElement;
     #heading!: HTMLElement;
-    #trigger = null;
-    #onTriggerClick = null;
-    #lastFocus = null;
+    #trigger: HTMLElement | null = null;
+    #onTriggerClick: (() => void) | null = null;
+    #lastFocus: HTMLElement | null = null;
 
     // El click fuera lo resuelve el propio backdrop (ver constructor), así que
     // aquí solo vive el Escape. scrollLock: el modal bloquea el fondo.
@@ -90,11 +90,13 @@ import '../actions/button.js';
         else if (path.some((n) => n instanceof HTMLElement && n.hasAttribute?.('data-confirm-cancel'))) this.#cancel();
       });
       // Slots confirm/cancel: cualquier elemento slotted dispara su acción.
-      shadow.querySelector<HTMLElement>('.confirm-wrap').addEventListener('click', (e: Event) => {
-        if (e.target.closest('[slot="confirm"]')) this.#confirm();
+      shadow.querySelector<HTMLElement>('.confirm-wrap')?.addEventListener('click', (e: Event) => {
+        const target = e.target as Element | null;
+        if (target?.closest('[slot="confirm"]')) this.#confirm();
       });
-      shadow.querySelector<HTMLElement>('.cancel-wrap').addEventListener('click', (e: Event) => {
-        if (e.target.closest('[slot="cancel"]')) this.#cancel();
+      shadow.querySelector<HTMLElement>('.cancel-wrap')?.addEventListener('click', (e: Event) => {
+        const target = e.target as Element | null;
+        if (target?.closest('[slot="cancel"]')) this.#cancel();
       });
     }
 
@@ -142,13 +144,13 @@ import '../actions/button.js';
       this.hide();
     }
 
-    #emit(type) {
+    #emit(type: string): void {
       emit(this, type, { trigger: this.#trigger });
     }
 
-    #showUI() {
+    #showUI(): void {
       this.#dismiss.attach();
-      this.#lastFocus = document.activeElement;
+      this.#lastFocus = document.activeElement as HTMLElement | null;
       this.#backdrop.hidden = false;
       requestAnimationFrame(() => {
         const btn = this.querySelector<HTMLElement>('[slot="confirm"]')
@@ -157,20 +159,21 @@ import '../actions/button.js';
       });
     }
 
-    #hideUI() {
+    #hideUI(): void {
       this.#dismiss.detach();
       this.#backdrop.hidden = true;
       this.#lastFocus?.focus?.();
       this.#lastFocus = null;
     }
 
-    #bindTrigger() {
+    #bindTrigger(): void {
       const id = this.getAttribute('for');
       if (!id) return;
-      const trigger = this.getRootNode().getElementById?.(id) || document.getElementById(id);
+      const root = this.getRootNode() as Document | ShadowRoot;
+      const trigger = root.getElementById?.(id) || document.getElementById(id);
       if (!trigger) return;
       this.#trigger = trigger;
-      this.#onTriggerClick = () => this.show();
+      this.#onTriggerClick = (): void => { this.show(); };
       trigger.addEventListener('click', this.#onTriggerClick);
       trigger.setAttribute('aria-haspopup', 'dialog');
     }
@@ -189,11 +192,11 @@ import '../actions/button.js';
       this.#heading.hidden = !text;
     }
 
-    #syncMessage() {
+    #syncMessage(): void {
       const slot = this.shadowRoot!.querySelector<HTMLSlotElement>('slot[name="message"]');
-      const hasSlotted = slot.assignedNodes().length > 0;
+      const hasSlotted = slot ? slot.assignedNodes().length > 0 : false;
       const textEl = this.shadowRoot!.querySelector<HTMLElement>('.message-text');
-      textEl.textContent = hasSlotted ? '' : (this.getAttribute('message') || '');
+      if (textEl) textEl.textContent = hasSlotted ? '' : (this.getAttribute('message') || '');
     }
   }
 

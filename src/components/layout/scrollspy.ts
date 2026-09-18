@@ -60,32 +60,38 @@ import { adoptCss, defineElement, emit } from '../../core/element.js';
     threshold: 0,
   };
 
-  const DEFAULT_TARGET_SELECTORS = [
+  const DEFAULT_TARGET_SELECTORS: readonly string[] = [
     'is-main',
     'main',
     '[role="main"]',
   ];
 
-  const DEFAULT_TRIGGER_SELECTORS = [
+  const DEFAULT_TRIGGER_SELECTORS: readonly string[] = [
     'section[id]',
     'article[id]',
     '[data-scrollspy-trigger]',
   ];
+
+  interface TriggerEntry {
+    el: HTMLElement;
+    ratio: number;
+    active: boolean;
+  }
 
   class IsScrollspy extends HTMLElement {
     static get observedAttributes(): string[] {
       return ['target', 'trigger', 'root-margin', 'threshold'];
     }
 
-    #target = null;
-    #targetSelector = null;
-    #triggerSelector = null;
-    #observer = null;
-    #links = [];
-    #triggerEntries = new Map(); // id -> { el, ratio, active }
-    #activeId = null;
+    #target: HTMLElement | null = null;
+    #targetSelector: string | null = null;
+    #triggerSelector: string | null = null;
+    #observer: IntersectionObserver | null = null;
+    #links: HTMLElement[] = [];
+    #triggerEntries: Map<string, TriggerEntry> = new Map(); // id -> { el, ratio, active }
+    #activeId: string | null = null;
     #mounted = false;
-    #mutation = null;
+    #mutation: MutationObserver | null = null;
 
     constructor() {
       super();
@@ -93,7 +99,7 @@ import { adoptCss, defineElement, emit } from '../../core/element.js';
       shadow.innerHTML = '<slot></slot>';
       adoptCss(shadow, import.meta.url);
 
-      shadow.querySelector<HTMLSlotElement>('slot').addEventListener('slotchange', () => {
+      shadow.querySelector<HTMLSlotElement>('slot')?.addEventListener('slotchange', () => {
         if (this.#mounted) this.#refreshLinks();
       });
 
@@ -121,17 +127,17 @@ import { adoptCss, defineElement, emit } from '../../core/element.js';
     // ---- público ----------------------------------------------------------
 
     /** Resuelve manualmente el target (sin esperar al siguiente setup). */
-    refresh() {
+    refresh(): void {
       this.#setup();
       this.#refreshLinks();
     }
 
     /** Fuerza la marca del enlace de un id (no hace scroll). */
-    activate(id) {
+    activate(id: string | null): void {
       this.#setActive(id);
     }
 
-    get triggers() {
+    get triggers(): HTMLElement[] {
       if (!this.#target) return [];
       const sel = this.#triggerSelector || DEFAULT_TRIGGER_SELECTORS.join(',');
       try {
@@ -141,18 +147,18 @@ import { adoptCss, defineElement, emit } from '../../core/element.js';
       }
     }
 
-    get active() { return this.#activeId; }
+    get active(): string | null { return this.#activeId; }
 
     // ---- privados --------------------------------------------------------
 
-    #findTarget() {
+    #findTarget(): HTMLElement | null {
       if (this.#targetSelector) {
         const found = document.querySelector<HTMLElement>(this.#targetSelector);
         if (found) return found;
       }
       for (const sel of DEFAULT_TARGET_SELECTORS) {
         const found = this.closest(sel);
-        if (found) return found;
+        if (found) return found as HTMLElement;
       }
       // Fallback: split-panel → main split sibling.
       const sp = this.closest('is-split-panel');
@@ -163,7 +169,7 @@ import { adoptCss, defineElement, emit } from '../../core/element.js';
       return null;
     }
 
-    #setup() {
+    #setup(): void {
       this.#teardown();
       const target = this.#findTarget();
       if (!target) return;
@@ -188,7 +194,7 @@ import { adoptCss, defineElement, emit } from '../../core/element.js';
         rootMargin: this.getAttribute('root-margin') || DEFAULTS.rootMargin,
         threshold: this.#readThreshold(),
       });
-      triggers.forEach((t) => this.#observer.observe(t));
+      triggers.forEach((t) => { if (this.#observer) this.#observer.observe(t); });
       // Marca inicial sin esperar al primer scroll ni al primer callback del
       // observer (que puede tardar un frame o llegar con el layout a medias).
       requestAnimationFrame(() => { if (this.#mounted) this.#pickActive(); });
@@ -204,7 +210,7 @@ import { adoptCss, defineElement, emit } from '../../core/element.js';
         for (const el of fresh) {
           if (!this.#triggerEntries.has(el.id)) {
             this.#triggerEntries.set(el.id, { el, ratio: 0, active: false });
-            this.#observer.observe(el);
+            this.#observer?.observe(el);
           }
         }
         this.#refreshLinks();
@@ -212,27 +218,28 @@ import { adoptCss, defineElement, emit } from '../../core/element.js';
       this.#mutation.observe(this.#target, { childList: true, subtree: true });
     }
 
-    #teardown() {
+    #teardown(): void {
       this.#observer?.disconnect();
       this.#observer = null;
       this.#triggerEntries.clear();
     }
 
-    #readThreshold() {
+    #readThreshold(): number {
       const raw = Number(this.getAttribute('threshold'));
       return Number.isFinite(raw) ? Math.min(1, Math.max(0, raw)) : DEFAULTS.threshold;
     }
 
-    #onIntersect = (entries) => {
+    #onIntersect = (entries: IntersectionObserverEntry[]): void => {
       for (const entry of entries) {
-        const t = this.#triggerEntries.get(entry.target.id);
+        const id = (entry.target as HTMLElement).id;
+        const t = this.#triggerEntries.get(id);
         if (!t) continue;
         t.ratio = entry.isIntersecting ? entry.intersectionRatio : 0;
       }
       this.#pickActive();
     };
 
-    #pickActive() {
+    #pickActive(): void {
       // El trigger activo es el ÚLTIMO cuya parte superior ya pasó por
       // el umbral superior del rootMargin (en píxeles: el -30% interno).
       // Así "intro" se marca cuando su título entra en la zona caliente,
@@ -246,8 +253,8 @@ import { adoptCss, defineElement, emit } from '../../core/element.js';
       const topPct = m ? Math.abs(parseFloat(m[0])) / 100 : 0.3;
       const cutoff = rootRect.top + rootRect.height * topPct;
 
-      let best = null;
-      let first = null;
+      let best: TriggerEntry | null = null;
+      let first: TriggerEntry | null = null;
       for (const t of this.#triggerEntries.values()) {
         const top = t.el.getBoundingClientRect().top;
         if (!first || top < first.el.getBoundingClientRect().top) first = t;
@@ -260,7 +267,7 @@ import { adoptCss, defineElement, emit } from '../../core/element.js';
       this.#setActive(best ? best.el.id : (first ? first.el.id : null));
     }
 
-    #setActive(id) {
+    #setActive(id: string | null): void {
       if (id === this.#activeId) { this.#paintActive(); return; }
       const prev = this.#activeId;
       const prevLink = prev ? this.#linkFor(prev) : null;
@@ -280,19 +287,19 @@ import { adoptCss, defineElement, emit } from '../../core/element.js';
       }
     }
 
-    #linkFor(id) {
+    #linkFor(id: string | null): HTMLElement | null {
       if (!id) return null;
       const hash = `#${id}`;
-      return this.#links.find((a: HTMLElement) => a.getAttribute('href') === hash) || null;
+      return this.#links.find((a) => a.getAttribute('href') === hash) ?? null;
     }
 
-    #refreshLinks = () => {
+    #refreshLinks = (): void => {
       const slot = this.shadowRoot?.querySelector<HTMLSlotElement>('slot');
       if (!slot) return;
       this.#links = slot
         .assignedElements({ flatten: true })
-        .filter((el) => el.tagName === 'A');
-      this.#links.forEach((a: HTMLElement) => {
+        .filter((el): el is HTMLElement => el.tagName === 'A');
+      this.#links.forEach((a) => {
         if (!a.hasAttribute('href')) return;
         a.classList.remove('is-scrollspy-active');
         a.removeAttribute('aria-current');
@@ -306,7 +313,7 @@ import { adoptCss, defineElement, emit } from '../../core/element.js';
     };
 
     /** Aplica la marca al enlace del id activo (idempotente). */
-    #paintActive() {
+    #paintActive(): void {
       if (!this.#activeId) return;
       const link = this.#linkFor(this.#activeId);
       if (!link) return;
@@ -314,10 +321,11 @@ import { adoptCss, defineElement, emit } from '../../core/element.js';
       link.setAttribute('aria-current', 'location');
     }
 
-    #onClick = (e: PointerEvent) => {
-      const a = e.target.closest('a[href^="#"]');
+    #onClick = (e: PointerEvent): void => {
+      const a = (e.target as Element | null)?.closest('a[href^="#"]') as HTMLElement | null;
       if (!a) return;
-      const id = a.getAttribute('href').slice(1);
+      const href = a.getAttribute('href');
+      const id = href ? href.slice(1) : null;
       if (!id) return;
       // Optimista: refleja el click inmediatamente. El IO lo confirmará.
       this.#setActive(id);

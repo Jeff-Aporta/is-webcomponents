@@ -1,0 +1,84 @@
+<!doctype html>
+<html lang="es" class="theme-dark" data-theme="dark">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>Demo <is-badge> · is-webcomponents</title>
+<meta name="description" content="Demo de <is-badge>: colores semánticos, variantes, pill, slots y atención (pulse/bounce)." />
+<style>
+  html, body { margin: 0; padding: 0; background: #0c1118; color: #e2e8f0; font-family: ui-sans-serif, system-ui, sans-serif; }
+  body { padding: 24px; display: grid; gap: 24px; }
+  header h1 { font-size: 18px; margin: 0 0 4px; }
+  header p  { font-size: 13px; color: #94a3b8; margin: 0; }
+  section { background: #0f1620; border: 1px solid rgba(255,255,255,0.08); border-radius: 10px; padding: 18px; }
+  section h2 { font-size: 14px; margin: 0 0 12px; color: #94a3b8; font-weight: 600; text-transform: uppercase; letter-spacing: 0.05em; }
+  .row { display: flex; flex-wrap: wrap; gap: 12px; align-items: center; }
+  is-badge:not(:defined) { visibility: hidden; }
+</style>
+<script type="module">
+  await import('../../../dist/cdn/feedback/badge.min.js');
+
+  await customElements.whenDefined('is-badge');
+  document.documentElement.dataset.badgeReady = '1';
+</script>
+</head>
+<body>
+<header>
+  <h1>is-badge</h1>
+  <p>Etiqueta compacta con colores semánticos. Variantes: accent / filled / outlined / filled-outlined · Pill · Pulse · Bounce.</p>
+</header>
+
+<section>
+  <h2>Colores</h2>
+  <div class="row">
+    <is-badge color="brand">Brand</is-badge>
+    <is-badge color="neutral">Neutral</is-badge>
+    <is-badge color="success">Success</is-badge>
+    <is-badge color="warning">Warning</is-badge>
+    <is-badge color="danger">Danger</is-badge>
+  </div>
+</section>
+
+<section>
+  <h2>Variantes</h2>
+  <div class="row">
+    <is-badge variant="accent" color="brand">Accent</is-badge>
+    <is-badge variant="filled" color="brand">Filled</is-badge>
+    <is-badge variant="outlined" color="brand">Outlined</is-badge>
+    <is-badge variant="filled-outlined" color="brand">Filled-outlined</is-badge>
+  </div>
+</section>
+
+<section>
+  <h2>Pill</h2>
+  <div class="row">
+    <is-badge pill color="success">Aprobado</is-badge>
+    <is-badge pill color="warning">Pendiente</is-badge>
+    <is-badge pill color="danger">Rechazado</is-badge>
+  </div>
+</section>
+
+<section>
+  <h2>Atención (pulse / bounce)</h2>
+  <div class="row">
+    <is-badge color="warning" attention="pulse">Atención pulse</is-badge>
+    <is-badge color="danger"  attention="bounce">Atención bounce</is-badge>
+  </div>
+</section>
+
+<section>
+  <h2>Slots (start / end)</h2>
+  <div class="row">
+    <is-badge color="brand" variant="filled">
+      <span slot="start" aria-hidden="true">★</span>
+      Destacado
+      <span slot="end" aria-hidden="true">→</span>
+    </is-badge>
+    <is-badge color="success" pill>
+      <span slot="start" aria-hidden="true">●</span>
+      En línea
+    </is-badge>
+  </div>
+</section>
+</body>
+</html>

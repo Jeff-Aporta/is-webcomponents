@@ -125,8 +125,8 @@ import { hasSlotted } from '../_shared/dom-utils.js';
     static formAssociated = true;
     static get observedAttributes(): string[] { return [...OBSERVED, 'radius', 'border-color', 'bg', 'text-color', 'focus-color', 'danger-color']; }
 
-    #internals = null;
-    #input!: HTMLElement;
+    #internals: ElementInternals | null = null;
+    #input!: HTMLInputElement;
     #labelEl!: HTMLElement;
     #supportEl!: HTMLElement;
     #hintEl!: HTMLElement;
@@ -146,8 +146,8 @@ import { hasSlotted } from '../_shared/dom-utils.js';
     #passwordVisible = false;
     #hasHint = false;
     #touched = false;
-    #typingTimer = null;
-    #otpAbort = null;
+    #typingTimer: ReturnType<typeof setTimeout> | null = null;
+    #otpAbort: AbortController | null = null;
 
     constructor() {
       super();
@@ -155,7 +155,7 @@ import { hasSlotted } from '../_shared/dom-utils.js';
       adoptCss(shadow, import.meta.url);
       shadow.appendChild(TEMPLATE.content.cloneNode(true));
 
-      this.#input = shadow.getElementById('input')!;
+      this.#input = shadow.getElementById('input') as HTMLInputElement;
       this.#labelEl = shadow.getElementById('label')!;
       this.#supportEl = shadow.getElementById('support')!;
       this.#hintEl = shadow.getElementById('hint')!;
@@ -180,19 +180,20 @@ import { hasSlotted } from '../_shared/dom-utils.js';
       this.#input.addEventListener('focus', this.#onFocus);
       this.#input.addEventListener('blur', this.#onBlur);
       this.#clearBtn.addEventListener('click', this.#onClear);
-      this.#toggleBtn.addEventListener('is-change', this.#onTogglePassword);
+      this.#toggleBtn.addEventListener('is-change', this.#onTogglePassword as EventListener);
       for (const slot of shadow.querySelectorAll<HTMLSlotElement>('slot')) {
         slot.addEventListener('slotchange', this.#syncSlots);
       }
     }
 
-    onConnected() {
+    onConnected(): void {
       upgradeProperties(this, EXTRA_UPGRADE_ATTRS);
+      const self = this as unknown as Record<string, unknown>;
       for (const p of EXTRA_UPGRADE_PROPS) {
         if (Object.prototype.hasOwnProperty.call(this, p)) {
-          const v = this[p];
-          delete this[p];
-          if (v != null) this[p] = v;
+          const v = self[p];
+          delete self[p];
+          if (v != null) self[p] = v;
         }
       }
       this.#value = this.getAttribute('value') ?? '';
@@ -203,7 +204,7 @@ import { hasSlotted } from '../_shared/dom-utils.js';
       this.#listenOtp();
     }
 
-    onDisconnected() {
+    onDisconnected(): void {
       // El debounce de `is-typing-end` no debe sobrevivir al desmontaje.
       if (this.#typingTimer != null) {
         clearTimeout(this.#typingTimer);
@@ -234,13 +235,14 @@ import { hasSlotted } from '../_shared/dom-utils.js';
       }
     }
 
-    #listenOtp() {
+    #listenOtp(): void {
       this.#otpAbort?.abort();
       this.#otpAbort = null;
       const ac = String(this.getAttribute('autocomplete') || '');
       if (!isOtpAutocomplete(ac)) return;
-      this.#otpAbort = new AbortController();
-      listenWebOtp(this.#otpAbort.signal, (code) => {
+      const ctrl = new AbortController();
+      this.#otpAbort = ctrl;
+      listenWebOtp(ctrl.signal, (code) => {
         this.value = code;
         emit(this, 'is-otp', { code });
       });
@@ -288,13 +290,13 @@ import { hasSlotted } from '../_shared/dom-utils.js';
      * Debounce (ms) del evento `is-typing-end`. Config declarativa por `data-*`
      * según la convención del repo: `data-typing-delay="300"`.
      */
-    get typingDelay() {
+    get typingDelay(): number {
       const raw = this.dataset.typingDelay;
       if (raw == null || raw === '') return DEFAULT_TYPING_DELAY;
       const n = Number(raw);
       return Number.isFinite(n) && n >= 0 ? n : DEFAULT_TYPING_DELAY;
     }
-    set typingDelay(v) {
+    set typingDelay(v: number | string | null) {
       if (v == null || v === '') delete this.dataset.typingDelay;
       else this.dataset.typingDelay = String(v);
     }
@@ -365,21 +367,23 @@ import { hasSlotted } from '../_shared/dom-utils.js';
 
     // ---- API pública -----------------------------------------------------
 
-    focus(options) { this.#input.focus(options); }
-    blur() { this.#input.blur(); }
-    select() { this.#input.select?.(); }
-    setSelectionRange(...args) { this.#input.setSelectionRange?.(...args); }
+    focus(options?: FocusOptions): void { this.#input.focus(options); }
+    blur(): void { this.#input.blur(); }
+    select(): void { this.#input.select?.(); }
+    setSelectionRange(...args: Parameters<HTMLInputElement['setSelectionRange']>): void {
+      this.#input.setSelectionRange?.(...args);
+    }
 
-    get validity() { return this.#internals?.validity; }
-    get validationMessage() { return this.#internals?.validationMessage ?? ''; }
-    get willValidate() { return this.#internals?.willValidate ?? false; }
-    checkValidity() { return this.#internals?.checkValidity() ?? true; }
-    reportValidity() {
+    get validity(): ValidityState | undefined { return this.#internals?.validity; }
+    get validationMessage(): string { return this.#internals?.validationMessage ?? ''; }
+    get willValidate(): boolean { return this.#internals?.willValidate ?? false; }
+    checkValidity(): boolean { return this.#internals?.checkValidity() ?? true; }
+    reportValidity(): boolean {
       this.#touched = true;
       this.#syncSupport();
       return this.#internals?.reportValidity() ?? true;
     }
-    setCustomValidity(msg) {
+    setCustomValidity(msg: string): void {
       if (msg) {
         setValidity(this.#internals, { customError: true }, msg, this.#input);
         this.#syncSupport();
@@ -388,19 +392,19 @@ import { hasSlotted } from '../_shared/dom-utils.js';
 
     // ---- form-associated callbacks --------------------------------------
 
-    formResetCallback() {
+    formResetCallback(): void {
       this.#value = this.defaultValue;
       this.#input.value = this.#value;
       this.#touched = false;
       this.#update();
     }
 
-    formDisabledCallback(disabled) {
+    formDisabledCallback(disabled: boolean): void {
       this.#syncDisabled(disabled);
       this.#update();
     }
 
-    formStateRestoreCallback(state) {
+    formStateRestoreCallback(state: string | File | null): void {
       if (typeof state === 'string') this.value = state;
     }
 
@@ -441,13 +445,13 @@ import { hasSlotted } from '../_shared/dom-utils.js';
       if (input.value !== this.#value) input.value = this.#value;
     }
 
-    #syncDisabled(formDisabled) {
+    #syncDisabled(formDisabled?: boolean): void {
       const disabled = !!formDisabled || this.disabled;
       const readonly = this.readonly;
       this.#input.disabled = disabled;
       this.#input.readOnly = readonly;
-      this.#clearBtn.disabled = disabled;
-      this.#toggleBtn.disabled = disabled;
+      this.#clearBtn.toggleAttribute('disabled', disabled);
+      this.#toggleBtn.toggleAttribute('disabled', disabled);
       setCustomState(this.#internals, 'disabled', disabled);
       setCustomState(this.#internals, 'readonly', readonly);
     }
@@ -466,7 +470,7 @@ import { hasSlotted } from '../_shared/dom-utils.js';
       this.#syncSupport();
     }
 
-    #updateValidity() {
+    #updateValidity(): void {
       if (!this.#internals) return;
       const v = this.#value;
       if (this.required && v === '') {
@@ -476,8 +480,8 @@ import { hasSlotted } from '../_shared/dom-utils.js';
       }
       const native = this.#input.validity;
       if (v !== '' && native && !native.valid) {
-        const flags = {};
-        for (const f of MIRRORED_FLAGS) if (native[f]) flags[f] = true;
+        const flags: ValidityStateFlags = {};
+        for (const f of MIRRORED_FLAGS) if (native[f as keyof ValidityState]) flags[f as keyof ValidityStateFlags] = true;
         if (Object.keys(flags).length) {
           setValidity(this.#internals, flags, this.#input.validationMessage, this.#input);
           this.#input.setAttribute('aria-invalid', 'true');
@@ -511,7 +515,7 @@ import { hasSlotted } from '../_shared/dom-utils.js';
       this.#supportEl.hidden = this.#hintEl.hidden && this.#errorEl.hidden && this.#countEl.hidden;
     }
 
-    #onInput = () => {
+    #onInput = (): void => {
       this.#value = this.#input.value;
       this.#update();
       this.dispatchEvent(new Event('input', { bubbles: true, composed: true }));
@@ -520,7 +524,7 @@ import { hasSlotted } from '../_shared/dom-utils.js';
     };
 
     /** Debounce equivalente al `onTypingEnd` de ISP: un solo timer por elemento. */
-    #scheduleTypingEnd() {
+    #scheduleTypingEnd(): void {
       if (this.#typingTimer != null) clearTimeout(this.#typingTimer);
       this.#typingTimer = setTimeout(() => {
         this.#typingTimer = null;
@@ -528,7 +532,7 @@ import { hasSlotted } from '../_shared/dom-utils.js';
       }, this.typingDelay);
     }
 
-    #onChange = () => {
+    #onChange = (): void => {
       this.#value = this.#input.value;
       this.#touched = true;
       this.#update();
@@ -536,21 +540,21 @@ import { hasSlotted } from '../_shared/dom-utils.js';
       emit(this, 'is-change', { value: this.#value });
     };
 
-    #onKeydown = (e) => {
+    #onKeydown = (e: KeyboardEvent): void => {
       if (e.key !== 'Enter') return;
       this.#value = this.#input.value;
       emit(this, 'is-enter', { value: this.#value });
     };
 
-    #onFocus = () => { setCustomState(this.#internals, 'focused', true); };
+    #onFocus = (): void => { setCustomState(this.#internals, 'focused', true); };
 
-    #onBlur = () => {
+    #onBlur = (): void => {
       setCustomState(this.#internals, 'focused', false);
       this.#touched = true;
       this.#syncSupport();
     };
 
-    #onClear = (e) => {
+    #onClear = (e: Event): void => {
       e.preventDefault();
       e.stopPropagation();
       if (this.#value === '') return;
@@ -565,7 +569,7 @@ import { hasSlotted } from '../_shared/dom-utils.js';
       this.#scheduleTypingEnd();
     };
 
-    #onTogglePassword = (e) => {
+    #onTogglePassword = (e: CustomEvent<{ checked?: boolean }>): void => {
       this.#passwordVisible = !!e.detail?.checked;
       setCustomState(this.#internals, 'password-visible', this.#passwordVisible);
       this.#syncNative();

@@ -29,29 +29,30 @@ import {
   class IsMain extends HTMLElement {
     static get observedAttributes(): string[] { return [...SCROLL_MEMORY_ATTRS]; }
 
-    #memory = null;
+    #memory: ScrollMemory | null = null;
     #mounted = false;
 
     constructor() {
       super();
-      this.#memory = new ScrollMemory(this, { tag: TAG, restorePolicy: 'reload' });
-      bindScrollMemoryApi(this, this.#memory);
+      const memory = new ScrollMemory(this, { tag: TAG, restorePolicy: 'reload' });
+      this.#memory = memory;
+      bindScrollMemoryApi(this, memory);
     }
 
     connectedCallback(): void {
       this.#mounted = true;
       if (!this.hasAttribute('role')) this.setAttribute('role', 'main');
-      this.#memory.connect();
+      this.#memory?.connect();
     }
 
     disconnectedCallback(): void {
       this.#mounted = false;
-      this.#memory.disconnect();
+      this.#memory?.disconnect();
     }
 
     attributeChangedCallback(name: string, prev: string | null, next: string | null): void {
       if (!this.#mounted) return;
-      this.#memory.onAttributeChanged(name, prev, next);
+      this.#memory?.onAttributeChanged(name, prev, next);
     }
   }
 

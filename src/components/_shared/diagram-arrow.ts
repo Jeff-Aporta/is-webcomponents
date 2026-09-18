@@ -9,27 +9,28 @@
  */
 import { svgEl } from './svg-chart-engine.js';
 
+/** Punto en píxeles. */
+export type ArrowPoint = { x: number; y: number };
+
 /**
  * Puntos absolutos de un path ortogonal (`M`/`L`/`H`/`V`, may/min).
  * Solo se usan comandos de línea: los diagramas del kit no emiten curvas.
- * @param {string} d
- * @returns {{ x: number, y: number }[]}
  */
-export function pathPoints(d: string) {
-  const points = [];
+export function pathPoints(d: string): ArrowPoint[] {
+  const points: ArrowPoint[] = [];
   let x = 0;
   let y = 0;
   const tokens = String(d || '').match(/[MmLlHhVv][^MmLlHhVvZz]*/g) || [];
   for (const token of tokens) {
-    const cmd = token[0];
+    const cmd = token[0]!;
     const nums = (token.slice(1).match(/-?\d*\.?\d+(?:e[-+]?\d+)?/gi) || []).map(Number);
     const rel = cmd === cmd.toLowerCase();
     switch (cmd.toUpperCase()) {
       case 'M':
       case 'L':
         for (let i = 0; i + 1 < nums.length; i += 2) {
-          x = rel ? x + nums[i] : nums[i];
-          y = rel ? y + nums[i + 1] : nums[i + 1];
+          x = rel ? x + nums[i]! : nums[i]!;
+          y = rel ? y + nums[i + 1]! : nums[i + 1]!;
           points.push({ x, y });
         }
         break;
@@ -55,15 +56,13 @@ export function pathPoints(d: string) {
 /**
  * Vector unitario del último tramo con longitud real del path.
  * Si el path no da información utilizable, cae al `fallback`.
- * @param {string} d
- * @param {{ x: number, y: number }} [fallback] por defecto, hacia la derecha
- * @returns {{ x: number, y: number }}
+ * Por defecto el fallback apunta hacia la derecha.
  */
-export function pathEndDirection(d, fallback = { x: 1, y: 0 }) {
+export function pathEndDirection(d: string, fallback: ArrowPoint = { x: 1, y: 0 }): ArrowPoint {
   const points = pathPoints(d);
   for (let i = points.length - 1; i > 0; i -= 1) {
-    const dx = points[i].x - points[i - 1].x;
-    const dy = points[i].y - points[i - 1].y;
+    const dx = points[i]!.x - points[i - 1]!.x;
+    const dy = points[i]!.y - points[i - 1]!.y;
     const len = Math.hypot(dx, dy);
     if (len > 0.01) return { x: dx / len, y: dy / len };
   }
@@ -72,9 +71,9 @@ export function pathEndDirection(d, fallback = { x: 1, y: 0 }) {
 
 /**
  * Triángulo con vértice en `tip`, apuntando según `dir`.
- * @returns {string} atributo `points` de un `<polygon>`
+ * @returns Atributo `points` de un `<polygon>`.
  */
-export function arrowHeadPoints(tip, dir, len = 7, halfWidth = 3.5) {
+export function arrowHeadPoints(tip: ArrowPoint, dir: ArrowPoint, len: number = 7, halfWidth: number = 3.5): string {
   // Perpendicular en 2D: (-dy, dx).
   const baseX = tip.x - dir.x * len;
   const baseY = tip.y - dir.y * len;
@@ -87,15 +86,22 @@ export function arrowHeadPoints(tip, dir, len = 7, halfWidth = 3.5) {
   ].join(' ');
 }
 
+export type SvgArrowHeadOpts = {
+  d: string;
+  tip: ArrowPoint;
+  color: string;
+  len?: number;
+  halfWidth?: number;
+  className?: string | null;
+  fallbackDir?: ArrowPoint;
+};
+
 /**
  * `<polygon>` de cabeza de flecha ya orientado contra el final del path.
- * @param {{ d: string, tip: {x:number,y:number}, color: string,
- *           len?: number, halfWidth?: number, className?: string,
- *           fallbackDir?: {x:number,y:number} }} options
  */
 export function svgArrowHead({
   d, tip, color, len = 7, halfWidth = 3.5, className = null, fallbackDir,
-}) {
+}: SvgArrowHeadOpts): SVGElement {
   const dir = pathEndDirection(d, fallbackDir);
   return svgEl('polygon', {
     points: arrowHeadPoints(tip, dir, len, halfWidth),
@@ -107,9 +113,9 @@ export function svgArrowHead({
 /**
  * Pata de gallo (crow's foot) de los diagramas ER: tres trazos que se abren
  * desde el nodo hacia la entidad, para la cardinalidad "muchos".
- * @returns {string} atributo `d` de un `<path>`
+ * @returns Atributo `d` de un `<path>`.
  */
-export function crowFootPath(tip, dir, len = 9, halfWidth = 5) {
+export function crowFootPath(tip: ArrowPoint, dir: ArrowPoint, len: number = 9, halfWidth: number = 5): string {
   const baseX = tip.x - dir.x * len;
   const baseY = tip.y - dir.y * len;
   const px = -dir.y * halfWidth;

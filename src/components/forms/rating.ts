@@ -67,14 +67,14 @@ import { clampTo, tidyToStep } from '../_shared/misc-utils.js';
     'clearable', 'disabled', 'readonly', 'required', 'label',
   ];
 
-  const EXTRA_UPGRADE_PROPS = ['labels', 'getLabelText'];
+  const EXTRA_UPGRADE_PROPS: string[] = ['labels', 'getLabelText'];
 
   const VARIANTS = ['brand', 'neutral', 'success', 'warning', 'danger'];
 
   const ICON_FULL = 'mdi:star';
   const ICON_EMPTY = 'mdi:star-outline';
 
-  /** Quita el ruido float que dejan las sumas de precisiones decimales. */
+  type LabelFn = (value: number) => string;
 
   class IsRating extends ElementBase {
     /** Personalización por atributo (ver `core/attrs.ts`). */
@@ -89,18 +89,18 @@ import { clampTo, tidyToStep } from '../_shared/misc-utils.js';
     static formAssociated = true;
     static get observedAttributes(): string[] { return [...OBSERVED, 'size', 'gap', 'color', 'empty-color', 'focus-color']; }
 
-    #internals = null;
+    #internals: ElementInternals | null = null;
     #base!: HTMLElement;
     #labelEl!: HTMLElement;
     #labelSlot!: HTMLSlotElement;
     #hoverLabel!: HTMLElement;
-    #stars = [];
-    #fullIcons = [];
-    #emptyIcons = [];
+    #stars: HTMLElement[] = [];
+    #fullIcons: HTMLElement[] = [];
+    #emptyIcons: HTMLElement[] = [];
     #value = 0;
-    #hover = null;
-    #labels = null;
-    #getLabelText = null;
+    #hover: number | null = null;
+    #labels: string[] | null = null;
+    #getLabelText: LabelFn | null = null;
 
     constructor() {
       super();
@@ -122,24 +122,24 @@ import { clampTo, tidyToStep } from '../_shared/misc-utils.js';
       this.#labelSlot.addEventListener('slotchange', this.#syncSlots);
     }
 
-    onConnected() {
+    onConnected(): void {
       for (const p of EXTRA_UPGRADE_PROPS) {
         if (Object.prototype.hasOwnProperty.call(this, p)) {
-          const v = this[p];
-          delete this[p];
-          if (v != null) this[p] = v;
+          const v = (this as unknown as Record<string, unknown>)[p];
+          delete (this as unknown as Record<string, unknown>)[p];
+          if (v != null) (this as unknown as Record<string, unknown>)[p] = v;
         }
       }
-      this.#value = this.#coerce(Number(this.getAttribute('value') ?? 0));
+      this.#value = this.#coerce(Number(this.getAttribute('value') ?? '0'));
       this.#syncSlots();
       this.#buildStars();
       this.#syncDisabled();
       this.#render();
     }
 
-    onAttributeChanged(name: string, oldVal: string | null, newVal: string | null) {
+    onAttributeChanged(name: string, _oldVal: string | null, newVal: string | null): void {
       if (name === 'value') {
-        this.#value = this.#coerce(Number(newVal ?? 0));
+        this.#value = this.#coerce(Number(newVal ?? '0'));
         this.#render();
       } else if (name === 'max') {
         this.#value = this.#coerce(this.#value);
@@ -158,128 +158,128 @@ import { clampTo, tidyToStep } from '../_shared/misc-utils.js';
 
     // ---- propiedades ----------------------------------------------------
 
-    get value() { return this.#value; }
-    set value(v) {
+    get value(): number { return this.#value; }
+    set value(v: number | string) {
       const next = this.#coerce(Number(v));
       if (next === this.#value) return;
       this.#value = next;
       this.#render();
     }
 
-    get max() {
-      const n = Number(this.getAttribute('max') ?? 5);
+    get max(): number {
+      const n = Number(this.getAttribute('max') ?? '5');
       return Number.isFinite(n) && n > 0 ? Math.floor(n) : 5;
     }
-    set max(v) { this.setAttribute('max', String(v)); }
+    set max(v: number | string) { this.setAttribute('max', String(v)); }
 
     /** Granularidad del valor; `allow-half` es el alias histórico de 0.5. */
-    get precision() {
+    get precision(): number {
       const n = Number(this.getAttribute('precision'));
       if (Number.isFinite(n) && n > 0 && n <= 1) return n;
       return this.hasAttribute('allow-half') ? 0.5 : 1;
     }
-    set precision(v) { this.setAttribute('precision', String(v)); }
+    set precision(v: number | string) { this.setAttribute('precision', String(v)); }
 
-    get allowHalf() { return this.hasAttribute('allow-half'); }
-    set allowHalf(v) { this.toggleAttribute('allow-half', !!v); }
+    get allowHalf(): boolean { return this.hasAttribute('allow-half'); }
+    set allowHalf(v: boolean) { this.toggleAttribute('allow-half', !!v); }
 
-    get icon() { return this.getAttribute('icon') || ICON_FULL; }
-    set icon(v) { setStringAttr(this, 'icon', v); }
+    get icon(): string { return this.getAttribute('icon') || ICON_FULL; }
+    set icon(v: string) { setStringAttr(this, 'icon', v); }
 
     /** Sin `empty-icon`, un `icon` propio se reutiliza para el hueco (como MUI). */
-    get emptyIcon() {
+    get emptyIcon(): string {
       return this.getAttribute('empty-icon') || (this.hasAttribute('icon') ? this.icon : ICON_EMPTY);
     }
-    set emptyIcon(v) {
+    set emptyIcon(v: string) {
       setStringAttr(this, 'empty-icon', v);
     }
 
-    get highlightSelectedOnly() { return this.hasAttribute('highlight-selected-only'); }
-    set highlightSelectedOnly(v) { this.toggleAttribute('highlight-selected-only', !!v); }
+    get highlightSelectedOnly(): boolean { return this.hasAttribute('highlight-selected-only'); }
+    set highlightSelectedOnly(v: boolean) { this.toggleAttribute('highlight-selected-only', !!v); }
 
-    get color() {
+    get color(): string {
       const v = this.getAttribute('color');
-      return VARIANTS.includes(v) ? v : 'brand';
+      return VARIANTS.includes(v ?? '') ? (v as string) : 'brand';
     }
-    set color(v) { this.setAttribute('color', VARIANTS.includes(v) ? v : 'brand'); }
+    set color(v: string) { this.setAttribute('color', VARIANTS.includes(v) ? v : 'brand'); }
 
     /** Textos por valor entero: índice 0 = valor 1. */
-    get labels() { return this.#labels ? this.#labels.slice() : null; }
-    set labels(v) {
+    get labels(): string[] | null { return this.#labels ? this.#labels.slice() : null; }
+    set labels(v: string[] | null) {
       this.#labels = Array.isArray(v) ? v.slice() : null;
       this.#render();
     }
 
-    get labelFormat() { return this.getAttribute('label-format') ?? ''; }
-    set labelFormat(v) {
+    get labelFormat(): string { return this.getAttribute('label-format') ?? ''; }
+    set labelFormat(v: string | null | undefined) {
       setOptionalAttr(this, 'label-format', v);
     }
 
-    get getLabelText() { return this.#getLabelText; }
-    set getLabelText(fn) {
+    get getLabelText(): LabelFn | null { return this.#getLabelText; }
+    set getLabelText(fn: LabelFn | null | undefined) {
       this.#getLabelText = typeof fn === 'function' ? fn : null;
       this.#render();
     }
 
-    get showLabel() { return this.hasAttribute('show-label'); }
-    set showLabel(v) { this.toggleAttribute('show-label', !!v); }
+    get showLabel(): boolean { return this.hasAttribute('show-label'); }
+    set showLabel(v: boolean) { this.toggleAttribute('show-label', !!v); }
 
-    get clearable() { return this.hasAttribute('clearable'); }
-    set clearable(v) { this.toggleAttribute('clearable', !!v); }
+    get clearable(): boolean { return this.hasAttribute('clearable'); }
+    set clearable(v: boolean) { this.toggleAttribute('clearable', !!v); }
 
-    get name() { return this.getAttribute('name') ?? ''; }
-    set name(v) { setStringAttr(this, 'name', v); }
+    get name(): string { return this.getAttribute('name') ?? ''; }
+    set name(v: string) { setStringAttr(this, 'name', v); }
 
-    get disabled() { return this.hasAttribute('disabled'); }
-    set disabled(v) { this.toggleAttribute('disabled', !!v); }
+    get disabled(): boolean { return this.hasAttribute('disabled'); }
+    set disabled(v: boolean) { this.toggleAttribute('disabled', !!v); }
 
-    get readonly() { return this.hasAttribute('readonly'); }
-    set readonly(v) { this.toggleAttribute('readonly', !!v); }
+    get readonly(): boolean { return this.hasAttribute('readonly'); }
+    set readonly(v: boolean) { this.toggleAttribute('readonly', !!v); }
 
-    get required() { return this.hasAttribute('required'); }
-    set required(v) { this.toggleAttribute('required', !!v); }
+    get required(): boolean { return this.hasAttribute('required'); }
+    set required(v: boolean) { this.toggleAttribute('required', !!v); }
 
-    get label() { return this.getAttribute('label') ?? ''; }
-    set label(v) { setOptionalAttr(this, 'label', v); }
+    get label(): string { return this.getAttribute('label') ?? ''; }
+    set label(v: string | null | undefined) { setOptionalAttr(this, 'label', v); }
 
     // ---- API pública -----------------------------------------------------
 
-    focus(options) { this.#base.focus(options); }
-    blur() { this.#base.blur(); }
+    focus(options?: FocusOptions): void { this.#base.focus(options); }
+    blur(): void { this.#base.blur(); }
 
-    clear() { this.#commit(0); }
+    clear(): void { this.#commit(0); }
 
-    get validity() { return this.#internals?.validity; }
-    get validationMessage() { return this.#internals?.validationMessage ?? ''; }
-    get willValidate() { return this.#internals?.willValidate ?? false; }
-    checkValidity() { return this.#internals?.checkValidity() ?? true; }
-    reportValidity() { return this.#internals?.reportValidity() ?? true; }
-    setCustomValidity(msg) {
+    get validity(): ValidityState | null | undefined { return this.#internals?.validity; }
+    get validationMessage(): string { return this.#internals?.validationMessage ?? ''; }
+    get willValidate(): boolean { return this.#internals?.willValidate ?? false; }
+    checkValidity(): boolean { return this.#internals?.checkValidity() ?? true; }
+    reportValidity(): boolean { return this.#internals?.reportValidity() ?? true; }
+    setCustomValidity(msg: string): void {
       if (msg) setValidity(this.#internals, { customError: true }, msg, this.#base);
       else this.#updateValidity();
     }
 
     // ---- form-associated callbacks --------------------------------------
 
-    formResetCallback() {
-      this.#value = this.#coerce(Number(this.getAttribute('value') ?? 0));
+    formResetCallback(): void {
+      this.#value = this.#coerce(Number(this.getAttribute('value') ?? '0'));
       this.#hover = null;
       this.#render();
     }
 
-    formDisabledCallback(disabled) {
+    formDisabledCallback(disabled: boolean): void {
       this.#syncDisabled(disabled);
       this.#render();
     }
 
-    formStateRestoreCallback(state) {
+    formStateRestoreCallback(state: string | File | FormData | null): void {
       if (state != null) this.value = Number(state);
     }
 
     // ---- privados --------------------------------------------------------
 
     /** Ajusta a `precision`; en readonly se admite cualquier fracción (ej. 3.7). */
-    #coerce(n: number) {
+    #coerce(n: number): number {
       if (!Number.isFinite(n) || n <= 0) return 0;
       const max = this.max;
       if (this.readonly) return Math.min(max, n);
@@ -287,7 +287,7 @@ import { clampTo, tidyToStep } from '../_shared/misc-utils.js';
       return Math.min(max, tidyToStep(Math.round(n / unit) * unit, unit));
     }
 
-    #labelText(v) {
+    #labelText(v: number): string {
       if (this.#getLabelText) return String(this.#getLabelText(v));
       const text = this.#labels?.[Math.ceil(v) - 1];
       if (text != null && text !== '') return String(text);
@@ -296,30 +296,32 @@ import { clampTo, tidyToStep } from '../_shared/misc-utils.js';
       return `${v} de ${this.max}`;
     }
 
-    #syncSlots = () => {
+    #syncSlots = (): void => {
       const labelAttr = this.label.trim();
       const hasLabelSlot = hasSlotted(this.#labelSlot);
       if (!hasLabelSlot) this.#labelSlot.textContent = labelAttr;
       this.#labelEl.hidden = !labelAttr && !hasLabelSlot;
     };
 
-    #buildStars() {
+    #buildStars(): void {
       const max = this.max;
       this.#base.replaceChildren();
       this.#stars = [];
       this.#fullIcons = [];
       this.#emptyIcons = [];
       for (let i = 0; i < max; i++) {
-        const star = STAR_TEMPLATE.content.cloneNode(true).firstElementChild;
-        star.dataset.index = String(i + 1);
+        const star = (STAR_TEMPLATE.content.cloneNode(true) as DocumentFragment).firstElementChild as HTMLElement;
+        star.dataset['index'] = String(i + 1);
         this.#base.appendChild(star);
         this.#stars.push(star);
-        this.#emptyIcons.push(star.querySelector<HTMLElement>('.layer-empty is-icon'));
-        this.#fullIcons.push(star.querySelector<HTMLElement>('.layer-fill is-icon'));
+        const emptyIcon = star.querySelector<HTMLElement>('.layer-empty is-icon');
+        const fullIcon = star.querySelector<HTMLElement>('.layer-fill is-icon');
+        if (emptyIcon) this.#emptyIcons.push(emptyIcon);
+        if (fullIcon) this.#fullIcons.push(fullIcon);
       }
     }
 
-    #syncDisabled(formDisabled) {
+    #syncDisabled(formDisabled?: boolean): void {
       const disabled = !!formDisabled || this.disabled;
       const inert = disabled || this.readonly;
       this.#base.setAttribute('aria-disabled', String(disabled));
@@ -330,7 +332,7 @@ import { clampTo, tidyToStep } from '../_shared/misc-utils.js';
       if (inert) this.#hover = null;
     }
 
-    #render() {
+    #render(): void {
       const display = this.#hover ?? this.#value;
       const only = this.highlightSelectedOnly;
       const selected = Math.ceil(display);
@@ -346,8 +348,8 @@ import { clampTo, tidyToStep } from '../_shared/misc-utils.js';
         star.toggleAttribute('data-filled', fill >= 1);
         star.toggleAttribute('data-half', fill > 0 && fill < 1);
         star.setAttribute('aria-label', this.#labelText(n));
-        this.#fullIcons[i].setAttribute('icon', icon);
-        this.#emptyIcons[i].setAttribute('icon', emptyIcon);
+        this.#fullIcons[i]?.setAttribute('icon', icon);
+        this.#emptyIcons[i]?.setAttribute('icon', emptyIcon);
       });
 
       const text = this.showLabel && display > 0 ? this.#labelText(display) : '';
@@ -358,11 +360,11 @@ import { clampTo, tidyToStep } from '../_shared/misc-utils.js';
       this.#base.setAttribute('aria-valuenow', String(this.#value));
       this.#base.setAttribute('aria-valuetext', this.#labelText(this.#value));
       setCustomState(this.#internals, 'blank', this.#value === 0);
-      setFormValue(this.#internals, this.#value > 0 ? String(this.#value) : null);
+      setFormValue(this.#internals, this.#value > 0 ? String(this.#value) : null, null);
       this.#updateValidity();
     }
 
-    #updateValidity() {
+    #updateValidity(): void {
       if (!this.#internals) return;
       if (this.required && this.#value === 0) {
         setValidity(this.#internals, { valueMissing: true }, 'Seleccione una valoración', this.#base);
@@ -371,11 +373,11 @@ import { clampTo, tidyToStep } from '../_shared/misc-utils.js';
       clearValidity(this.#internals, this.#base);
     }
 
-    #interactive() {
+    #interactive(): boolean {
       return !this.disabled && !this.readonly && this.#base.getAttribute('aria-disabled') !== 'true';
     }
 
-    #commit(next) {
+    #commit(next: number): void {
       const v = this.#coerce(next);
       this.#hover = null;
       if (v === this.#value) { this.#render(); return; }
@@ -386,10 +388,10 @@ import { clampTo, tidyToStep } from '../_shared/misc-utils.js';
     }
 
     /** El primer paso dentro de un icono ya cuenta como `precision`, nunca 0. */
-    #valueFromPointer(clientX) {
+    #valueFromPointer(clientX: number): number {
       const unit = this.precision;
       for (let i = 0; i < this.#stars.length; i++) {
-        const rect = this.#stars[i].getBoundingClientRect();
+        const rect = this.#stars[i]!.getBoundingClientRect();
         if (clientX <= rect.right || i === this.#stars.length - 1) {
           if (!rect.width) return i + 1;
           const ratio = clampTo((clientX - rect.left) / rect.width, 0, 1);
@@ -400,7 +402,7 @@ import { clampTo, tidyToStep } from '../_shared/misc-utils.js';
       return 0;
     }
 
-    #onPointerMove = (e: PointerEvent) => {
+    #onPointerMove = (e: PointerEvent): void => {
       if (!this.#interactive()) return;
       const next = this.#valueFromPointer(e.clientX);
       if (next === this.#hover) return;
@@ -409,25 +411,25 @@ import { clampTo, tidyToStep } from '../_shared/misc-utils.js';
       emit(this, 'is-hover', { value: this.#value, phantomValue: next, label: this.#labelText(next) });
     };
 
-    #onPointerLeave = () => {
+    #onPointerLeave = (): void => {
       if (this.#hover === null) return;
       this.#hover = null;
       this.#render();
       emit(this, 'is-hover', { value: this.#value, phantomValue: null, label: this.#labelText(this.#value) });
     };
 
-    #onClick = (e: PointerEvent) => {
+    #onClick = (e: PointerEvent): void => {
       if (!this.#interactive()) return;
       const next = this.#valueFromPointer(e.clientX);
       const clear = this.clearable && this.#value >= 1 && next === this.#value;
       this.#commit(clear ? 0 : next);
     };
 
-    #onKeyDown = (e: KeyboardEvent) => {
+    #onKeyDown = (e: KeyboardEvent): void => {
       if (!this.#interactive()) return;
       const unit = this.precision;
       const from = this.#coerce(this.#value);
-      let next = null;
+      let next: number | null = null;
 
       switch (e.key) {
         case 'ArrowLeft':

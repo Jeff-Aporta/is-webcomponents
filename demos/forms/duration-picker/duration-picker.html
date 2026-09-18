@@ -1,0 +1,97 @@
+<!doctype html>
+<html lang="es" class="theme-dark" data-theme="dark">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>Selector de duración &lt;is-duration-picker&gt; · is-webcomponents</title>
+<meta name="description" content="Selector de duración HH:MM:SS con botones +/−, edición por celdas y atajos de teclado." />
+<style>
+  html, body { margin: 0; padding: 0; min-height: 100%; background: #0c1118; color: #e2e8f0; font-family: ui-sans-serif, system-ui, sans-serif; }
+  body { display: grid; place-items: start center; padding: 32px 20px; }
+  main { max-width: 720px; width: 100%; display: grid; gap: 22px; }
+  header h1 { font-size: 18px; font-weight: 700; margin: 0 0 4px 0; }
+  header p { font-size: 12px; color: #94a3b8; margin: 0; }
+  section { background: #131a24; border: 1px solid rgba(255,255,255,0.08); border-radius: 10px; padding: 16px; display: grid; gap: 10px; }
+  section h2 { font-size: 13px; margin: 0; font-weight: 600; color: #cbd5e1; }
+  section .desc { font-size: 12px; color: #94a3b8; margin: 0; }
+  is-duration-picker { display: inline-block; }
+  code { background: rgba(255,255,255,0.06); padding: 1px 5px; border-radius: 3px; font: 12px ui-monospace, Menlo, Consolas, monospace; }
+  .row { display: flex; gap: 8px; align-items: center; }
+  pre { background: rgba(0,0,0,0.35); color: #94a3b8; padding: 10px; border-radius: 6px; font: 11px ui-monospace, Menlo, Consolas, monospace; white-space: pre-wrap; margin: 0; }
+  /* Anti-FOUC */
+  is-duration-picker:not(:defined) { visibility: hidden; }
+</style>
+<script type="module">
+  await import('../../../dist/cdn/forms/duration-picker.min.js');
+  await customElements.whenDefined('is-duration-picker');
+
+  // (1) básico: 1h 30m = 5400 s
+  const basico = document.createElement('is-duration-picker');
+  basico.setAttribute('name', 'duration');
+  basico.value = 5400;
+  document.querySelector('#sec-basic').appendChild(basico);
+
+  // (2) con límites
+  const limited = document.createElement('is-duration-picker');
+  limited.setAttribute('name', 'timer');
+  limited.setAttribute('min', '0');
+  limited.setAttribute('max', '3600'); // máximo 1h
+  limited.setAttribute('step', '5');
+  limited.value = 600;
+  document.querySelector('#sec-limited').appendChild(limited);
+
+  // (3) usando set() con h/m/s
+  const programmatic = document.createElement('is-duration-picker');
+  programmatic.setAttribute('name', 'programmatic');
+  programmatic.setAttribute('value', '0');
+  document.querySelector('#sec-programmatic').appendChild(programmatic);
+
+  // Acción: programar 2h 45m 30s
+  document.querySelector('#btn-set').addEventListener('click', () => {
+    programmatic.set(2, 45, 30);
+  });
+
+  // Acción: leer text formateado
+  const out = document.querySelector('#out');
+  document.querySelector('#btn-read').addEventListener('click', () => {
+    out.textContent = `value=${basico.value}s · text="${basico.text}" · h=${basico.hours} m=${basico.minutes} s=${basico.seconds}`;
+  });
+
+  // Eventos
+  [basico, limited, programmatic].forEach((p) => {
+    p.addEventListener('is-input', () => console.log('[duration] input'));
+    p.addEventListener('is-change', (e) => console.log('[duration] change', e.detail?.text));
+  });
+
+  document.documentElement.dataset.durationPickerReady = '1';
+</script>
+</head>
+<body>
+<main>
+  <header>
+    <h1>&lt;is-duration-picker&gt; · Selector de duración HH:MM:SS</h1>
+    <p>Botones +/− por celda · edición directa en horas / minutos / segundos · <code>tick()</code> suma respetando límites · eventos <code>is-input</code> y <code>is-change</code>.</p>
+  </header>
+
+  <section id="sec-basic">
+    <h2>Básico (1h 30m)</h2>
+    <p class="desc">Atributo <code>value</code> en segundos. El getter <code>text</code> devuelve <code>HH:MM:SS</code> (o <code>MM:SS</code> si horas=0).</p>
+  </section>
+
+  <section id="sec-limited">
+    <h2>Con límites y step</h2>
+    <p class="desc"><code>min</code>=0, <code>max</code>=3600 (1h), <code>step</code>=5. Las pulsaciones rápidas respetan el límite superior.</p>
+  </section>
+
+  <section id="sec-programmatic">
+    <h2>Control programático (set / text)</h2>
+    <p class="desc"><code>set(h, m, s)</code> asigna; <code>text</code> devuelve el formato legible.</p>
+    <div class="row">
+      <button id="btn-set" type="button" style="background:#1e293b;color:#e2e8f0;border:1px solid rgba(255,255,255,0.1);border-radius:6px;padding:6px 10px;font-size:12px;cursor:pointer;">Setear 2h 45m 30s</button>
+      <button id="btn-read" type="button" style="background:#1e293b;color:#e2e8f0;border:1px solid rgba(255,255,255,0.1);border-radius:6px;padding:6px 10px;font-size:12px;cursor:pointer;">Leer básico</button>
+    </div>
+    <pre id="out">Pulsa "Leer básico" para inspeccionar el valor.</pre>
+  </section>
+</main>
+</body>
+</html>

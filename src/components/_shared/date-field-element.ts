@@ -43,17 +43,27 @@ const OBSERVED = [
   'readonly', 'locale', 'ampm', 'hour24', 'seconds', 'clearable', 'invalid',
 ];
 
-export function defineDateField({ tag, kind, cssUrl }) {
+/** Tipo de campo por secciones: solo fecha, hora o ambas. */
+export type DateFieldKind = 'date' | 'time' | 'datetime';
+
+/** Opciones de `defineDateField`. */
+export type DefineDateFieldOpts = {
+  tag: string;
+  kind: DateFieldKind;
+  cssUrl: string;
+};
+
+export function defineDateField({ tag, kind, cssUrl }: DefineDateFieldOpts): typeof HTMLElement {
   class IsDateFieldBase extends HTMLElement {
     static formAssociated = true;
     static get observedAttributes(): string[] { return OBSERVED; }
 
-    #internals = null;
+    #internals: ElementInternals | null = null;
     #labelEl!: HTMLElement;
     #hintEl!: HTMLElement;
     #base!: HTMLElement;
     #clearBtn!: HTMLElement;
-    #field;
+    #field!: SectionField;
     #mounted = false;
     #silent = false;
     #writing = false;
@@ -74,12 +84,12 @@ export function defineDateField({ tag, kind, cssUrl }) {
       }
 
       this.#field = new SectionField({
-        container: shadow.querySelector<HTMLElement>('.sections'),
+        container: shadow.querySelector<HTMLElement>('.sections')!,
         kind,
         locale: this.locale,
         ampm: this.ampm,
         seconds: this.seconds,
-        onChange: (value) => this.#onEdit(value),
+        onChange: (value: string) => this.#onEdit(value),
       });
 
       this.#clearBtn.addEventListener('click', () => {
@@ -137,59 +147,59 @@ export function defineDateField({ tag, kind, cssUrl }) {
 
     /* ── API ──────────────────────────────────────────────────────────── */
 
-    get value() { return this.getAttribute('value') ?? ''; }
+    get value(): string { return this.getAttribute('value') ?? ''; }
     set value(v: string) { v ? this.setAttribute('value', String(v)) : this.removeAttribute('value'); }
 
-    get kind() { return kind; }
+    get kind(): DateFieldKind { return kind; }
 
-    get name() { return this.getAttribute('name') ?? ''; }
-    set name(v) { v ? this.setAttribute('name', v) : this.removeAttribute('name'); }
+    get name(): string { return this.getAttribute('name') ?? ''; }
+    set name(v: string) { v ? this.setAttribute('name', v) : this.removeAttribute('name'); }
 
-    get min() { return this.getAttribute('min') ?? ''; }
-    set min(v) { v ? this.setAttribute('min', v) : this.removeAttribute('min'); }
+    get min(): string { return this.getAttribute('min') ?? ''; }
+    set min(v: string) { v ? this.setAttribute('min', v) : this.removeAttribute('min'); }
 
-    get max() { return this.getAttribute('max') ?? ''; }
-    set max(v) { v ? this.setAttribute('max', v) : this.removeAttribute('max'); }
+    get max(): string { return this.getAttribute('max') ?? ''; }
+    set max(v: string) { v ? this.setAttribute('max', v) : this.removeAttribute('max'); }
 
-    get required() { return this.hasAttribute('required'); }
-    set required(v) { this.toggleAttribute('required', !!v); }
+    get required(): boolean { return this.hasAttribute('required'); }
+    set required(v: boolean) { this.toggleAttribute('required', !!v); }
 
-    get disabled() { return this.hasAttribute('disabled'); }
-    set disabled(v) { this.toggleAttribute('disabled', !!v); }
+    get disabled(): boolean { return this.hasAttribute('disabled'); }
+    set disabled(v: boolean) { this.toggleAttribute('disabled', !!v); }
 
-    get readonly() { return this.hasAttribute('readonly'); }
-    set readonly(v) { this.toggleAttribute('readonly', !!v); }
+    get readonly(): boolean { return this.hasAttribute('readonly'); }
+    set readonly(v: boolean) { this.toggleAttribute('readonly', !!v); }
 
-    get clearable() { return this.hasAttribute('clearable'); }
-    set clearable(v) { this.toggleAttribute('clearable', !!v); }
+    get clearable(): boolean { return this.hasAttribute('clearable'); }
+    set clearable(v: boolean) { this.toggleAttribute('clearable', !!v); }
 
-    get locale() { return resolveLocale(this.getAttribute('locale')); }
-    set locale(v) { v ? this.setAttribute('locale', v) : this.removeAttribute('locale'); }
+    get locale(): string { return resolveLocale(this.getAttribute('locale')); }
+    set locale(v: string) { v ? this.setAttribute('locale', v) : this.removeAttribute('locale'); }
 
     /** 12 horas: lo decide el locale salvo que `ampm`/`hour24` lo fuercen. */
-    get ampm() {
+    get ampm(): boolean {
       if (kind === 'date') return false;
       if (this.hasAttribute('hour24')) return false;
       if (this.hasAttribute('ampm')) return this.getAttribute('ampm') !== 'false';
       return uses12Hour(this.locale);
     }
-    set ampm(v) { this.toggleAttribute('ampm', !!v); }
+    set ampm(v: boolean) { this.toggleAttribute('ampm', !!v); }
 
-    get seconds() { return kind !== 'date' && this.hasAttribute('seconds'); }
-    set seconds(v) { this.toggleAttribute('seconds', !!v); }
+    get seconds(): boolean { return kind !== 'date' && this.hasAttribute('seconds'); }
+    set seconds(v: boolean) { this.toggleAttribute('seconds', !!v); }
 
     /** ¿Hay algo escrito a medias? (aa/mm sin año, por ejemplo) */
-    get incomplete() { return this.#field.incomplete; }
+    get incomplete(): boolean { return this.#field.incomplete; }
 
-    focus(opts) {
-      this.#field.focusFirst(opts);
+    focus(): void {
+      this.#field.focusFirst();
     }
 
-    clear() {
+    clear(): void {
       this.#field.clear();
     }
 
-    formResetCallback() {
+    formResetCallback(): void {
       const initial = this.getAttribute('value') || '';
       this.#silent = true;
       this.#field.value = initial;
@@ -199,25 +209,25 @@ export function defineDateField({ tag, kind, cssUrl }) {
       this.#updateValidity();
     }
 
-    formDisabledCallback(disabled) { this.#syncDisabled(disabled); }
+    formDisabledCallback(disabled: boolean): void { this.#syncDisabled(disabled); }
 
-    checkValidity() { return this.#internals?.checkValidity() ?? true; }
-    reportValidity() { return this.#internals?.reportValidity() ?? true; }
-    setCustomValidity(msg) {
+    checkValidity(): boolean { return this.#internals?.checkValidity() ?? true; }
+    reportValidity(): boolean { return this.#internals?.reportValidity() ?? true; }
+    setCustomValidity(msg: string): void {
       if (!this.#internals) return;
       this.#internals.setValidity(msg ? { customError: true } : {}, msg || '', this.#base);
     }
 
     /* ── Interno ──────────────────────────────────────────────────────── */
 
-    #setState(name, on) {
+    #setState(name: string, on: boolean): void {
       const s = this.#internals?.states;
       if (!s) return;
       if (on) s.add(name);
       else s.delete(name);
     }
 
-    #onEdit(value) {
+    #onEdit(value: string): void {
       this.#writing = true;
       if (value) this.setAttribute('value', value);
       else this.removeAttribute('value');
@@ -230,7 +240,7 @@ export function defineDateField({ tag, kind, cssUrl }) {
       emit(this, 'is-change', { value });
     }
 
-    #syncMeta() {
+    #syncMeta(): void {
       const label = this.getAttribute('label');
       this.#labelEl.hidden = !label;
       this.#labelEl.textContent = label || '';
@@ -239,7 +249,7 @@ export function defineDateField({ tag, kind, cssUrl }) {
       this.#hintEl.textContent = hint || '';
     }
 
-    #syncDisabled(formDisabled) {
+    #syncDisabled(formDisabled?: boolean): void {
       const disabled = !!formDisabled || this.disabled;
       this.#setState('disabled', disabled);
       this.#base.toggleAttribute('data-disabled', disabled);
@@ -251,16 +261,16 @@ export function defineDateField({ tag, kind, cssUrl }) {
       }
     }
 
-    #syncClear() {
+    #syncClear(): void {
       this.#clearBtn.hidden = !this.clearable || this.disabled || this.readonly || !this.value;
     }
 
-    #setFormValue() {
+    #setFormValue(): void {
       this.#internals?.setFormValue(this.value || null);
     }
 
     /** El valor es una cadena ordenable, así que min/max se comparan directo. */
-    #updateValidity() {
+    #updateValidity(): void {
       if (!this.#internals) return;
       const value = this.value;
       const invalidFlag = this.hasAttribute('invalid');
@@ -293,13 +303,13 @@ export function defineDateField({ tag, kind, cssUrl }) {
     }
 
     /** Compara valor y límite en la misma granularidad. */
-    #compare(value, limit, datePart) {
+    #compare(value: string, limit: string, datePart: string): number {
       if (kind === 'datetime' && !limit.includes('T')) return datePart.localeCompare(limit);
       return value.localeCompare(limit);
     }
 
-    #fail(flags, message) {
-      this.#internals.setValidity(flags, message, this.#base);
+    #fail(flags: ValidityStateFlags, message: string): void {
+      this.#internals?.setValidity(flags, message, this.#base);
       this.#setState('invalid', true);
       this.#base.setAttribute('data-invalid', '');
     }

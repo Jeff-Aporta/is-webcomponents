@@ -2,6 +2,7 @@ import { richTextPlain } from '../_shared/tk-rich-text.js';
 import { resolveTkHue } from '../_shared/tk-hue.js';
 import { applyEdgeActorLayout } from '../_shared/diagram-edge-actors.js';
 import { assignEdgeHues } from '../_shared/diagram-edge-style.js';
+import type { EdgeWithHue } from '../_shared/diagram-edge-style.js';
 
 /**
  * Especificación y layout de diagramas de casos de uso (UML), sin Mermaid.
@@ -17,7 +18,7 @@ import { assignEdgeHues } from '../_shared/diagram-edge-style.js';
  * diagrama de componentes, el autor manda sobre el motor.
  */
 
-const DEFAULT_HUES = [210, 239, 160, 38, 280, 199];
+const DEFAULT_HUES: number[] = [210, 239, 160, 38, 280, 199];
 
 const ACTOR_W = 96;
 const ACTOR_H = 74;
@@ -29,53 +30,162 @@ const COL_GAP = 60;
 const SYS_PAD = { x: 26, top: 34, bottom: 24 };
 const MARGIN = { top: 16, right: 20, bottom: 22, left: 20 };
 
-export const LINK_KINDS = new Set(['association', 'include', 'extend', 'generalization']);
+export const LINK_KINDS: Set<string> = new Set(['association', 'include', 'extend', 'generalization']);
 
-function asRecord(v) {
-  return v && typeof v === 'object' ? v : {};
+export type UseCaseActorSide = 'left' | 'right';
+export type UseCaseLinkKind = 'association' | 'include' | 'extend' | 'generalization';
+
+function asRecord(v: unknown): Record<string, unknown> {
+  return v && typeof v === 'object' && !Array.isArray(v) ? (v as Record<string, unknown>) : {};
 }
 
-function readActor(raw, i: number) {
-  const r = asRecord(raw);
-  const side = String(r.side ?? '').toLowerCase();
+export interface UseCaseActorSpec {
+  id: string;
+  label: string;
+  side: UseCaseActorSide;
+  external: boolean;
+  hue?: number;
+  description?: string;
+}
+
+export interface UseCaseCaseSpec {
+  id: string;
+  label: string;
+  group?: string;
+  hue?: number;
+  description?: string;
+}
+
+export interface UseCaseLinkSpec {
+  id: string;
+  from: string;
+  to: string;
+  kind: UseCaseLinkKind;
+  label?: string;
+}
+
+export interface UseCaseGroupSpec {
+  id: string;
+  name: string;
+  hue: number;
+}
+
+export interface UseCaseResolvedSpec {
+  title?: string;
+  subtitle?: string;
+  system?: string;
+  groups?: UseCaseGroupSpec[];
+  actors: UseCaseActorSpec[];
+  cases: UseCaseCaseSpec[];
+  links: UseCaseLinkSpec[];
+}
+
+export interface UseCaseLayoutActor {
+  id: string;
+  label: string;
+  description?: string;
+  external: boolean;
+  hue?: number;
+  side: UseCaseActorSide;
+  x: number;
+  y: number;
+  w: number;
+  h: number;
+}
+
+export interface UseCaseLayoutCase {
+  id: string;
+  label: string;
+  description?: string;
+  group?: string;
+  hue?: number;
+  x: number;
+  y: number;
+  w: number;
+  h: number;
+}
+
+export interface UseCaseLayoutLink {
+  id: string;
+  from: string;
+  to: string;
+  kind: UseCaseLinkKind;
+  label?: string;
+  stereotype?: string;
+  path: string;
+  x1: number;
+  y1: number;
+  x2: number;
+  y2: number;
+  labelX: number;
+  labelY: number;
+  hue?: number;
+}
+
+export interface UseCaseLayoutSystem {
+  x: number;
+  y: number;
+  w: number;
+  h: number;
+  name?: string;
+  labelX: number;
+  labelY: number;
+}
+
+export interface UseCaseLayout {
+  width: number;
+  height: number;
+  actors: UseCaseLayoutActor[];
+  cases: UseCaseLayoutCase[];
+  links: UseCaseLayoutLink[];
+  system: UseCaseLayoutSystem;
+  groups?: UseCaseGroupSpec[];
+  title?: string;
+  subtitle?: string;
+  titleY: number;
+  subtitleY: number;
+  legendX: number;
+}
+
+function readActor(raw: Record<string, unknown>, i: number): UseCaseActorSpec {
+  const sideRaw = String(raw.side ?? '').toLowerCase();
   return {
-    id: String(r.id ?? `a${i}`),
-    label: String(r.label ?? r.name ?? r.id ?? `Actor ${i + 1}`),
-    side: side === 'right' ? 'right' : 'left',
+    id: String(raw.id ?? `a${i}`),
+    label: String(raw.label ?? raw.name ?? raw.id ?? `Actor ${i + 1}`),
+    side: (sideRaw === 'right' ? 'right' : 'left') as UseCaseActorSide,
     // Un actor secundario (sistema externo) se dibuja con trazo punteado.
-    external: r.external === true || String(r.kind ?? '') === 'system',
-    hue: r.hue != null ? resolveTkHue(r) : undefined,
-    description: String(r.desc ?? r.description ?? '').trim() || undefined,
+    external: raw.external === true || String(raw.kind ?? '') === 'system',
+    hue: raw.hue != null ? resolveTkHue(raw) : undefined,
+    description: String(raw.desc ?? raw.description ?? '').trim() || undefined,
   };
 }
 
-function readCase(raw, i: number) {
-  const r = asRecord(raw);
+function readCase(raw: Record<string, unknown>, i: number): UseCaseCaseSpec {
   return {
-    id: String(r.id ?? `uc${i}`),
-    label: String(r.label ?? r.name ?? r.id ?? `Caso ${i + 1}`),
-    group: String(r.group ?? '') || undefined,
-    hue: r.hue != null ? resolveTkHue(r) : undefined,
-    description: String(r.desc ?? r.description ?? '').trim() || undefined,
+    id: String(raw.id ?? `uc${i}`),
+    label: String(raw.label ?? raw.name ?? raw.id ?? `Caso ${i + 1}`),
+    group: String(raw.group ?? '') || undefined,
+    hue: raw.hue != null ? resolveTkHue(raw) : undefined,
+    description: String(raw.desc ?? raw.description ?? '').trim() || undefined,
   };
 }
 
-function readLink(raw, i) {
-  const r = asRecord(raw);
-  const kind = String(r.kind ?? r.type ?? 'association').toLowerCase();
+function readLink(raw: Record<string, unknown>, i: number): UseCaseLinkSpec {
+  const kind = String(raw.kind ?? raw.type ?? 'association').toLowerCase();
   return {
-    id: String(r.id ?? `l${i}`),
-    from: String(r.from ?? r.source ?? ''),
-    to: String(r.to ?? r.target ?? ''),
-    kind: LINK_KINDS.has(kind) ? kind : 'association',
-    label: String(r.label ?? '').trim() || undefined,
+    id: String(raw.id ?? `l${i}`),
+    from: String(raw.from ?? raw.source ?? ''),
+    to: String(raw.to ?? raw.target ?? ''),
+    kind: (LINK_KINDS.has(kind) ? kind : 'association') as UseCaseLinkKind,
+    label: String(raw.label ?? '').trim() || undefined,
   };
 }
 
-function readGroups(src) {
-  const raw = src.groups ?? [];
-  if (!Array.isArray(raw) || !raw.length) return undefined;
-  return raw.map((g, i: number) => {
+function readGroups(src: Record<string, unknown>): UseCaseGroupSpec[] | undefined {
+  const raw = src.groups;
+  const list = Array.isArray(raw) ? raw : [];
+  if (!list.length) return undefined;
+  return list.map((g: unknown, i: number) => {
     const r = asRecord(g);
     return {
       id: String(r.id ?? `grp-${i}`),
@@ -86,24 +196,33 @@ function readGroups(src) {
 }
 
 /** payload → spec normalizada, o null si no hay casos de uso. */
-export function resolveUseCaseSpec(payload) {
+export function resolveUseCaseSpec(payload: unknown): UseCaseResolvedSpec | null {
   const p = asRecord(payload);
   const src = asRecord(p.useCase ?? p.useCaseDiagram ?? p);
-  const rawCases = src.cases ?? src.useCases ?? [];
+  const rawCases = src.cases ?? src.useCases;
   if (!Array.isArray(rawCases) || !rawCases.length) return null;
 
-  const cases = rawCases.map(readCase);
-  const actors = (Array.isArray(src.actors) ? src.actors : []).map(readActor);
-  const known = new Set([...cases.map((c) => c.id), ...actors.map((a) => a.id)]);
+  const cases: UseCaseCaseSpec[] = rawCases.map((raw: unknown, i: number) => readCase(asRecord(raw), i));
+  const actors: UseCaseActorSpec[] = (Array.isArray(src.actors) ? src.actors : [])
+    .map((raw: unknown, i: number) => readActor(asRecord(raw), i));
+  const known = new Set<string>([...cases.map((c) => c.id), ...actors.map((a) => a.id)]);
   // Igual que en estados: una relación colgante rompería el layout, se descarta.
-  const links = (Array.isArray(src.links ?? src.relations) ? (src.links ?? src.relations) : [])
-    .map(readLink)
+  const linksSrc: unknown[] = Array.isArray(src.links) ? src.links
+    : Array.isArray(src.relations) ? src.relations
+    : [];
+  const links: UseCaseLinkSpec[] = linksSrc
+    .map((raw: unknown, i: number) => readLink(asRecord(raw), i))
     .filter((l) => known.has(l.from) && known.has(l.to) && l.from !== l.to);
+
+  const sysRaw = src.system;
+  const systemName = typeof sysRaw === 'string'
+    ? sysRaw
+    : String(asRecord(sysRaw).name ?? '');
 
   return {
     title: String(src.title ?? p.title ?? '') || undefined,
     subtitle: String(src.subtitle ?? p.subtitle ?? '') || undefined,
-    system: String(asRecord(src.system).name ?? src.system ?? '') || undefined,
+    system: systemName || undefined,
     groups: readGroups(src),
     actors,
     cases,
@@ -112,41 +231,41 @@ export function resolveUseCaseSpec(payload) {
 }
 
 /** spec → objeto `useCase` listo para persistir / mostrar en el editor. */
-export function useCaseSpecToJson(spec) {
-  const out = { actors: [], cases: [], links: [] };
+export function useCaseSpecToJson(spec: UseCaseResolvedSpec): Record<string, unknown> {
+  const out: Record<string, unknown> = { actors: [], cases: [], links: [] };
   if (spec.title) out.title = spec.title;
   if (spec.subtitle) out.subtitle = spec.subtitle;
   if (spec.system) out.system = { name: spec.system };
   if (spec.groups?.length) out.groups = spec.groups;
   out.actors = spec.actors.map((a) => {
-    const row = { id: a.id, label: a.label, side: a.side };
+    const row: Record<string, unknown> = { id: a.id, label: a.label, side: a.side };
     if (a.external) row.external = true;
     if (a.description) row.desc = a.description;
     return row;
   });
   out.cases = spec.cases.map((c) => {
-    const row = { id: c.id, label: c.label };
+    const row: Record<string, unknown> = { id: c.id, label: c.label };
     if (c.group) row.group = c.group;
     if (c.description) row.desc = c.description;
     return row;
   });
   out.links = spec.links.map((l) => {
-    const row = { from: l.from, to: l.to };
+    const row: Record<string, unknown> = { from: l.from, to: l.to };
     if (l.kind !== 'association') row.kind = l.kind;
     if (l.label) row.label = l.label;
     return row;
   });
-  if (!out.actors.length) delete out.actors;
+  if (!out.actors || !(out.actors as unknown[]).length) delete out.actors;
   return out;
 }
 
-function caseWidth(label) {
+function caseWidth(label: string): number {
   const plain = richTextPlain(label);
   return Math.min(CASE_MAX_W, Math.max(CASE_MIN_W, Math.ceil(plain.length * 6.6) + 34));
 }
 
 /** Punto del borde de una elipse en dirección a otro punto. */
-function ellipsePoint(node, tx, ty) {
+function ellipsePoint(node: { x: number; y: number; w: number; h: number }, tx: number, ty: number): { x: number; y: number } {
   const cx = node.x + node.w / 2;
   const cy = node.y + node.h / 2;
   const dx = tx - cx;
@@ -156,7 +275,7 @@ function ellipsePoint(node, tx, ty) {
 }
 
 /** Punto del borde del monigote (caja envolvente) en dirección a otro punto. */
-function actorPoint(node, tx, ty) {
+function actorPoint(node: { x: number; y: number; w: number; h: number }, tx: number, ty: number): { x: number; y: number } {
   const cx = node.x + node.w / 2;
   const cy = node.y + node.h / 2;
   const side = tx >= cx ? 1 : -1;
@@ -165,17 +284,16 @@ function actorPoint(node, tx, ty) {
 
 /**
  * spec → geometría lista para pintar.
- * @returns {{width:number, height:number, actors:Array, cases:Array, links:Array, system:object, groups?:Array, title?:string, subtitle?:string, titleY:number, subtitleY:number, legendX:number}}
  */
-export function computeUseCaseLayout(spec) {
+export function computeUseCaseLayout(spec: UseCaseResolvedSpec): UseCaseLayout {
   const title = spec.title ?? '';
   const subtitle = spec.subtitle ?? '';
   const titleY = title ? 22 : 14;
   const subtitleY = title ? 40 : 24;
   const headerH = title || subtitle ? (subtitle ? 54 : 36) : 0;
 
-  const left = spec.actors.filter((a) => a.side === 'left');
-  const right = spec.actors.filter((a) => a.side === 'right');
+  const left: UseCaseActorSpec[] = spec.actors.filter((a) => a.side === 'left');
+  const right: UseCaseActorSpec[] = spec.actors.filter((a) => a.side === 'right');
 
   const caseW = Math.max(...spec.cases.map((c) => caseWidth(c.label)));
   const casesH = spec.cases.length * CASE_H + (spec.cases.length - 1) * CASE_GAP;
@@ -191,7 +309,7 @@ export function computeUseCaseLayout(spec) {
   const sysX = originX + leftW;
   const sysY = originY;
 
-  const system = {
+  const system: UseCaseLayoutSystem = {
     x: sysX,
     y: sysY,
     w: sysW,
@@ -201,10 +319,10 @@ export function computeUseCaseLayout(spec) {
     labelY: sysY + 20,
   };
 
-  const groupHue = new Map((spec.groups ?? []).map((g) => [g.id, g.hue]));
+  const groupHue = new Map<string, number>((spec.groups ?? []).map((g) => [g.id, g.hue]));
 
   const casesTop = sysY + SYS_PAD.top + Math.max(0, (bodyH - SYS_PAD.top - SYS_PAD.bottom - casesH) / 2);
-  const cases = spec.cases.map((c, i) => ({
+  const cases: UseCaseLayoutCase[] = spec.cases.map((c, i) => ({
     id: c.id,
     label: c.label,
     description: c.description,
@@ -216,7 +334,7 @@ export function computeUseCaseLayout(spec) {
     h: CASE_H,
   }));
 
-  const placeActors = (list, x) => list.map((a, i) => {
+  const placeActors = (list: UseCaseActorSpec[], x: number): UseCaseLayoutActor[] => list.map((a, i) => {
     const spread = list.length * (ACTOR_H + CASE_GAP) - CASE_GAP;
     const top = sysY + Math.max(0, (bodyH - spread) / 2);
     return {
@@ -232,17 +350,34 @@ export function computeUseCaseLayout(spec) {
       h: ACTOR_H,
     };
   });
-  const actors = [
+  const actors: UseCaseLayoutActor[] = [
     ...placeActors(left, originX),
     ...placeActors(right, sysX + sysW + COL_GAP),
   ];
 
-  const byId = new Map([...actors, ...cases].map((n) => [n.id, n]));
-  const isActor = new Set(actors.map((a) => a.id));
+  const byId = new Map<string, UseCaseLayoutActor | UseCaseLayoutCase>(
+    [...actors, ...cases].map((n) => [n.id, n]),
+  );
+  const isActor = new Set<string>(actors.map((a) => a.id));
 
-  const links = spec.links.map((l, i) => {
+  const links: UseCaseLayoutLink[] = spec.links.map((l, i) => {
     const from = byId.get(l.from);
     const to = byId.get(l.to);
+    if (!from || !to) {
+      // Arista colgante: filtrada en resolveUseCaseSpec, defensivo.
+      return {
+        id: l.id ?? `l${i}`,
+        from: l.from,
+        to: l.to,
+        kind: l.kind,
+        label: l.label,
+        stereotype: undefined,
+        path: '',
+        x1: 0, y1: 0, x2: 0, y2: 0,
+        labelX: 0, labelY: 0,
+        hue: undefined,
+      };
+    }
     const fc = { x: from.x + from.w / 2, y: from.y + from.h / 2 };
     const tc = { x: to.x + to.w / 2, y: to.y + to.h / 2 };
     const a = isActor.has(l.from) ? actorPoint(from, tc.x, tc.y) : ellipsePoint(from, tc.x, tc.y);
@@ -272,8 +407,8 @@ export function computeUseCaseLayout(spec) {
   const height = originY + bodyH + MARGIN.bottom;
   const legendX = legendGroups ? Math.max(8, width - legendW - 8) : 0;
 
-  assignEdgeHues(links);
-  const layout = {
+  assignEdgeHues(links as unknown as readonly EdgeWithHue[]);
+  const layout: UseCaseLayout = {
     width,
     height,
     actors,

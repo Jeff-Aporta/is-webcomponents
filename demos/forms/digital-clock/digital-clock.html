@@ -1,0 +1,94 @@
+<!doctype html>
+<html lang="es" class="theme-dark" data-theme="dark">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>Reloj digital &lt;is-digital-clock&gt; · is-webcomponents</title>
+<meta name="description" content="Selector de hora en lista o en columnas (horas/minutos/segundos/AM-PM) con teclado y scroll-to-selection." />
+<style>
+  html, body { margin: 0; padding: 0; min-height: 100%; background: #0c1118; color: #e2e8f0; font-family: ui-sans-serif, system-ui, sans-serif; }
+  body { display: grid; place-items: start center; padding: 32px 20px; }
+  main { max-width: 720px; width: 100%; display: grid; gap: 22px; }
+  header h1 { font-size: 18px; font-weight: 700; margin: 0 0 4px 0; }
+  header p { font-size: 12px; color: #94a3b8; margin: 0; }
+  section { background: #131a24; border: 1px solid rgba(255,255,255,0.08); border-radius: 10px; padding: 16px; display: grid; gap: 10px; }
+  section h2 { font-size: 13px; margin: 0; font-weight: 600; color: #cbd5e1; }
+  section .desc { font-size: 12px; color: #94a3b8; margin: 0; }
+  is-digital-clock { width: 100%; min-height: 220px; }
+  .row { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; }
+  code { background: rgba(255,255,255,0.06); padding: 1px 5px; border-radius: 3px; font: 12px ui-monospace, Menlo, Consolas, monospace; }
+  /* Anti-FOUC */
+  is-digital-clock:not(:defined) { visibility: hidden; }
+</style>
+<script type="module">
+  await import('../../../dist/cdn/forms/digital-clock.min.js');
+  await customElements.whenDefined('is-digital-clock');
+
+  // (1) lista por defecto (cada 30 min)
+  const lista = document.createElement('is-digital-clock');
+  lista.label = 'Hora de la cita';
+  lista.value = '09:30';
+  lista.hint = 'Lista con paso de 30 minutos';
+  document.querySelector('#sec-lista').appendChild(lista);
+
+  // (2) layout sections: horas, minutos, segundos y AM/PM
+  const secciones = document.createElement('is-digital-clock');
+  secciones.layout = 'sections';
+  secciones.value = '14:30:00';
+  secciones.seconds = true;
+  secciones.ampm = true;
+  secciones.label = 'Encuentro con cliente';
+  secciones.hint = 'Columnas hour/min/sec + AM/PM';
+  document.querySelector('#sec-sections').appendChild(secciones);
+
+  // (3) modo 24h
+  const reloj24 = document.createElement('is-digital-clock');
+  reloj24.value = '18:45';
+  reloj24.ampm = false;
+  reloj24.step = 15;
+  reloj24.label = '24 horas (paso 15 min)';
+  reloj24.hint = 'Lista 24h, paso 15 minutos';
+  document.querySelector('#sec-24h').appendChild(reloj24);
+
+  // (4) deshabilitado
+  const bloqueado = document.createElement('is-digital-clock');
+  bloqueado.value = '10:00';
+  bloqueado.disabled = true;
+  bloqueado.label = 'Hora bloqueada';
+  bloqueado.hint = 'No editable';
+  document.querySelector('#sec-disabled').appendChild(bloqueado);
+
+  // Estado visible por tests: data-digital-clock-ready en <html>
+  document.documentElement.dataset.digitalClockReady = '1';
+</script>
+</head>
+<body>
+<main>
+  <header>
+    <h1>&lt;is-digital-clock&gt; · Selector de hora en lista / secciones</h1>
+    <p>Lista plana (MUI <code>DigitalClock</code>) o columnas hour/min/sec + AM/PM (<code>MultiSectionDigitalClock</code>). Emite <code>is-change</code> al confirmar.</p>
+  </header>
+
+  <section id="sec-lista">
+    <h2>Lista con paso de 30 minutos</h2>
+    <p class="desc">Atributo <code>value</code> en formato <code>HH:mm</code>, click o Arrow Up/Down para cambiar.</p>
+  </section>
+
+  <section id="sec-sections">
+    <h2>Columnas (secciones) con segundos y AM/PM</h2>
+    <p class="desc">Atributos <code>layout=sections</code>, <code>seconds</code> y <code>ampm</code>.</p>
+  </section>
+
+  <div class="row">
+    <section id="sec-24h">
+      <h2>24 horas (paso 15)</h2>
+      <p class="desc"><code>ampm=false</code> y <code>step=15</code> ajusta la granularidad de la lista.</p>
+    </section>
+    <section id="sec-disabled">
+      <h2>Deshabilitado</h2>
+      <p class="desc"><code>disabled</code> cierra la interacción y atenúa el control.</p>
+    </section>
+  </div>
+</main>
+</body>
+</html>

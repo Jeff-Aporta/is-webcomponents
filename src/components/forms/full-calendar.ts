@@ -26,14 +26,26 @@ import { escapeHtml } from '../_shared/dom-utils.js';
  *   is-event-click     detail: { event, date }
  *   is-view-change     detail: { view, date }
  */
+
+interface CalEvent {
+  id: string;
+  title: string;
+  date: string;
+  start?: string;
+  end?: string;
+  color?: string;
+}
+
+type View = 'month' | 'week' | 'day';
+
 (() => {
   const OBSERVED = ['view', 'date', 'first-day', 'locale', 'hours-start', 'hours-end'];
 
   class IsFullCalendar extends HTMLElement {
     static get observedAttributes(): string[] { return OBSERVED; }
     #mounted = false;
-    #events = [];
-    #cursor = new Date();
+    #events: CalEvent[] = [];
+    #cursor: Date = new Date();
     #title!: HTMLElement;
     #grid!: HTMLElement;
 
@@ -59,7 +71,7 @@ import { escapeHtml } from '../_shared/dom-utils.js';
       this.#title = this.shadowRoot!.getElementById('ttl')!;
       this.#grid = this.shadowRoot!.getElementById('grid')!;
       this.#grid.addEventListener('click', (e) => this.#onClick(e));
-      this.shadowRoot!.querySelector<HTMLElement>('.toolbar').addEventListener('click', (e) => this.#onToolbar(e));
+      this.shadowRoot!.querySelector<HTMLElement>('.toolbar')!.addEventListener('click', (e) => this.#onToolbar(e));
     }
 
     connectedCallback(): void {
@@ -71,49 +83,56 @@ import { escapeHtml } from '../_shared/dom-utils.js';
       this.#render();
     }
 
-    attributeChangedCallback() {
+    attributeChangedCallback(): void {
       if (!this.#mounted) return;
       this.#render();
     }
 
-    get events() { return this.#events; }
-    set events(list) {
+    get events(): CalEvent[] { return this.#events; }
+    set events(list: CalEvent[]) {
       this.#events = Array.isArray(list) ? list : [];
       if (this.#mounted) this.#render();
     }
 
-    setDate(iso) { this.setAttribute('date', iso); }
-    setView(v) { this.setAttribute('view', v); }
-    prev() { this.#cursor = shift(this.#cursor, this.getAttribute('view') || 'month', -1); this.#render(); }
-    next() { this.#cursor = shift(this.#cursor, this.getAttribute('view') || 'month', +1); this.#render(); }
-    today() { this.#cursor = new Date(); this.#render(); }
+    setDate(iso: string): void { this.setAttribute('date', iso); }
+    setView(v: View): void { this.setAttribute('view', v); }
+    prev(): void { this.#cursor = shift(this.#cursor, this.getAttribute('view') || 'month', -1); this.#render(); }
+    next(): void { this.#cursor = shift(this.#cursor, this.getAttribute('view') || 'month', +1); this.#render(); }
+    today(): void { this.#cursor = new Date(); this.#render(); }
 
-    #readEvents() {
-      const script = [...this.children].find((c) => c.tagName === 'SCRIPT' && /json/i.test(c.type || ''));
+    #readEvents(): void {
+      const script = [...this.children].find((c) => c.tagName === 'SCRIPT' && /json/i.test((c as HTMLScriptElement).type || '')) as HTMLScriptElement | undefined;
       if (!script) { this.#events = []; return; }
-      try { this.#events = (JSON.parse(script.textContent)).events || []; }
+      try {
+        const parsed = JSON.parse(script.textContent ?? '') as { events?: CalEvent[] };
+        this.#events = parsed.events || [];
+      }
       catch { this.#events = []; }
     }
 
-    #onToolbar(e) {
+    #onToolbar(e: Event): void {
       // `is-button` es el host: el click no llega como <button>.
-      const btn = e.target.closest('[data-act],[data-view]');
+      const target = e.target as HTMLElement | null;
+      const btn = target?.closest('[data-act],[data-view]');
       if (!btn) return;
-      if (btn.dataset.act === 'prev') this.prev();
-      else if (btn.dataset.act === 'next') this.next();
-      else if (btn.dataset.act === 'today') this.today();
-      else if (btn.dataset.view) {
-        this.setView(btn.dataset.view);
-        this.#syncViewButtons(btn.dataset.view);
-        emit(this, 'is-view-change', { view: btn.dataset.view, date: this.#cursor.toISOString() });
+      const htmlBtn = btn as HTMLElement;
+      const act = htmlBtn.dataset['act'];
+      const v = htmlBtn.dataset['view'] as View | undefined;
+      if (act === 'prev') this.prev();
+      else if (act === 'next') this.next();
+      else if (act === 'today') this.today();
+      else if (v) {
+        this.setView(v);
+        this.#syncViewButtons(v);
+        emit(this, 'is-view-change', { view: v, date: this.#cursor.toISOString() });
       }
     }
 
     /** El botón activo se marca con la variante de `is-button`, no repintando
      *  fondo desde este CSS: eso caería en el host y no en su <button>. */
-    #syncViewButtons(view) {
+    #syncViewButtons(view: string): void {
       this.shadowRoot!.querySelectorAll<HTMLElement>('.view-btn').forEach((b: HTMLElement) => {
-        const active = b.dataset.view === view;
+        const active = b.dataset['view'] === view;
         b.classList.toggle('is-active', active);
         b.setAttribute('variant', active ? 'filled' : 'outlined');
         if (active) b.setAttribute('color', 'brand');
@@ -121,19 +140,21 @@ import { escapeHtml } from '../_shared/dom-utils.js';
       });
     }
 
-    #onClick(e) {
-      const cell = e.target.closest('[data-iso]');
+    #onClick(e: Event): void {
+      const target = e.target as HTMLElement | null;
+      const cell = target?.closest('[data-iso]');
       if (!cell) return;
-      const iso = cell.dataset.iso;
+      const iso = (cell as HTMLElement).dataset['iso'] ?? '';
       emit(this, 'is-day-click', { date: iso });
-      const ev = e.target.closest('[data-evid]');
+      const ev = target?.closest('[data-evid]');
       if (ev) {
-        const evt = this.#events.find((x) => x.id === ev.dataset.evid);
+        const evId = (ev as HTMLElement).dataset['evid'] ?? '';
+        const evt = this.#events.find((x) => x.id === evId);
         emit(this, 'is-event-click', { event: evt, date: iso });
       }
     }
 
-    #render() {
+    #render(): void {
       const view = this.getAttribute('view') || 'month';
       const locale = this.getAttribute('locale') || 'es';
       this.#title.textContent = titleFor(this.#cursor, view, locale);
@@ -141,7 +162,7 @@ import { escapeHtml } from '../_shared/dom-utils.js';
       else this.#renderWeekOrDay(view, locale);
     }
 
-    #renderMonth(locale) {
+    #renderMonth(locale: string): void {
       const firstDay = Number(this.getAttribute('first-day') ?? 1);
       const monthStart = new Date(this.#cursor.getFullYear(), this.#cursor.getMonth(), 1);
       const monthEnd = new Date(this.#cursor.getFullYear(), this.#cursor.getMonth() + 1, 0);
@@ -150,7 +171,7 @@ import { escapeHtml } from '../_shared/dom-utils.js';
       const totalDays = Math.ceil((offset + monthEnd.getDate()) / 7) * 7;
       const today = new Date();
       const wd = ['Lun','Mar','Mié','Jue','Vie','Sáb','Dom'];
-      const dayOffset = (i) => wd[(i + firstDay - 1) % 7];
+      const dayOffset = (i: number): string => wd[(i + firstDay - 1) % 7] ?? '';
       let html = `<div class="month">`;
       for (let i = 0; i < 7; i++) html += `<div class="wk-head">${dayOffset(i)}</div>`;
       for (let i = 0; i < totalDays; i++) {
@@ -158,18 +179,18 @@ import { escapeHtml } from '../_shared/dom-utils.js';
         const iso = ymd(d);
         const inMonth = d.getMonth() === this.#cursor.getMonth();
         const isToday = sameDay(d, today);
-        const events = this.#events.filter((e) => e.date === iso).slice(0, 3);
+        const events = this.#events.filter((e: CalEvent) => e.date === iso).slice(0, 3);
         html += `<button class="day ${inMonth ? '' : 'out'} ${isToday ? 'today' : ''}" data-iso="${iso}">
           <span class="num">${d.getDate()}</span>
-          <ul class="events">${events.map((e) => `<li class="ev" data-evid="${e.id}" style="--c:${e.color || 'var(--is-accent)'}">${escapeHtml(e.title)}</li>`).join('')}</ul>
+          <ul class="events">${events.map((e: CalEvent) => `<li class="ev" data-evid="${e.id}" style="--c:${e.color || 'var(--is-accent)'}">${escapeHtml(e.title)}</li>`).join('')}</ul>
         </button>`;
       }
       html += `</div>`;
       this.#grid.innerHTML = html;
-      this.#grid.dataset.view = 'month';
+      this.#grid.dataset['view'] = 'month';
     }
 
-    #renderWeekOrDay(view, locale) {
+    #renderWeekOrDay(view: string, locale: string): void {
       const firstDay = Number(this.getAttribute('first-day') ?? 1);
       const startHour = Number(this.getAttribute('hours-start') ?? 7);
       const endHour = Number(this.getAttribute('hours-end') ?? 20);
@@ -179,7 +200,7 @@ import { escapeHtml } from '../_shared/dom-utils.js';
       const offset = (day - firstDay + 7) % 7;
       const weekStart = new Date(refDate); weekStart.setDate(refDate.getDate() - offset);
       const daysCount = view === 'week' ? 7 : 1;
-      const headerDay = (i) => {
+      const headerDay = (i: number): Date => {
         const d = new Date(weekStart);
         if (view === 'day') return new Date(refDate);
         d.setDate(weekStart.getDate() + i);
@@ -193,22 +214,22 @@ import { escapeHtml } from '../_shared/dom-utils.js';
       }
       html += `</div><div class="hours">`;
       html += `<div class="axis">`;
-      for (let h = startHour; h < endHour; h++) html += `<div class="hour">${pad(h)}:00</div>`;
+      for (let h = startHour; h < endHour; h++) html += `<div class="hour">${pad(String(h))}:00</div>`;
       html += `</div>`;
       for (let i = 0; i < daysCount; i++) {
         const d = headerDay(i);
         const iso = ymd(d);
         html += `<div class="day-col" data-iso="${iso}">`;
         for (let h = startHour; h < endHour; h++) {
-          html += `<button class="cell-hour" data-iso="${iso}" data-hour="${h}" aria-label="${iso} ${pad(h)}:00"></button>`;
+          html += `<button class="cell-hour" data-iso="${iso}" data-hour="${h}" aria-label="${iso} ${pad(String(h))}:00"></button>`;
         }
         // eventos del día
-        const events = this.#events.filter((e) => e.date === iso);
+        const events = this.#events.filter((e: CalEvent) => e.date === iso);
         for (const e of events) {
           if (!e.start) continue;
           const [hh, mm] = (e.start || '00:00').split(':').map(Number);
           const topPct = ((hh - startHour) + mm / 60) / (endHour - startHour);
-          const endMin = e.end ? (() => { const [eh, em] = e.end.split(':').map(Number); return (eh - startHour) + em / 60; })() : (hh - startHour) + 1;
+          const endMin = e.end ? (() => { const [eh, em] = (e.end ?? '').split(':').map(Number); return (eh - startHour) + em / 60; })() : (hh - startHour) + 1;
           const heightPct = Math.max(((endMin) / (endHour - startHour)) - topPct, 1 / (endHour - startHour));
           html += `<div class="ev-block" data-evid="${e.id}" data-iso="${iso}" style="top:${(topPct * 100).toFixed(2)}%; height:${(heightPct * 100).toFixed(2)}%; --c:${e.color || 'var(--is-accent)'}">
             <strong>${escapeHtml(e.title)}</strong>
@@ -219,11 +240,11 @@ import { escapeHtml } from '../_shared/dom-utils.js';
       }
       html += `</div>`;
       this.#grid.innerHTML = html;
-      this.#grid.dataset.view = view;
+      this.#grid.dataset['view'] = view;
     }
   }
 
-  function shift(date, view, dir: number) {
+  function shift(date: Date, view: string, dir: number): Date {
     const d = new Date(date);
     if (view === 'month') d.setMonth(d.getMonth() + dir);
     else if (view === 'week') d.setDate(d.getDate() + 7 * dir);
@@ -231,24 +252,24 @@ import { escapeHtml } from '../_shared/dom-utils.js';
     return d;
   }
 
-  function titleFor(d, view, locale) {
+  function titleFor(d: Date, view: string, locale: string): string {
     if (view === 'month') return d.toLocaleDateString(locale, { month: 'long', year: 'numeric' });
     if (view === 'week') {
       const day = d.getDay();
       const offset = (day + 6) % 7;
       const start = new Date(d); start.setDate(start.getDate() - offset);
       const end = new Date(start); end.setDate(start.getDate() + 6);
-      const fmt = { day: '2-digit', month: 'short' };
+      const fmt: Intl.DateTimeFormatOptions = { day: '2-digit', month: 'short' };
       return `${start.toLocaleDateString(locale, fmt)} – ${end.toLocaleDateString(locale, fmt)}`;
     }
     return d.toLocaleDateString(locale, { weekday: 'long', day: '2-digit', month: 'long', year: 'numeric' });
   }
 
-  function pad(n: string) { return String(n).padStart(2, '0'); }
-  function ymd(d) {
+  function pad(n: number | string): string { return String(n).padStart(2, '0'); }
+  function ymd(d: Date): string {
     return `${d.getFullYear()}-${pad(d.getMonth() + 1)}-${pad(d.getDate())}`;
   }
-  function sameDay(a, b) {
+  function sameDay(a: Date, b: Date): boolean {
     return a.getFullYear() === b.getFullYear() && a.getMonth() === b.getMonth() && a.getDate() === b.getDate();
   }
   defineElement('is-full-calendar', IsFullCalendar);

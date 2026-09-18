@@ -6,9 +6,13 @@
 export async function mount(ctx: import('../../previews/_kit/types.d.ts').PreviewMountContext) {
   const root = ctx.main;
   void root;
-  document.getElementById('dd')?.addEventListener('is-select', (e) => {
-        document.getElementById('log').textContent = `selección: ${e.detail.item.value}`;
-      });
+  const dd = document.getElementById('dd');
+  const log = document.getElementById('log');
+  if (!dd || !log) return;
+  dd.addEventListener('is-select', (e: Event) => {
+    const detail = (e as CustomEvent<{ item: { value: string } }>).detail;
+    log.textContent = `selección: ${detail.item.value}`;
+  });
 }
 
 export function unmount() {

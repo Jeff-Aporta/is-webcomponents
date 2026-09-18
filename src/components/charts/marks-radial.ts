@@ -1,4 +1,5 @@
 import { pathArc, polarToCartesian, svgEl } from '../_shared/svg-chart-engine.js';
+import type { ChartCtx, ChartDataset } from './chart.js';
 
 /**
  * Marks radiales (pie, doughnut, polarArea, radar).
@@ -9,33 +10,46 @@ import { pathArc, polarToCartesian, svgEl } from '../_shared/svg-chart-engine.js
 
 const TAU = Math.PI * 2;
 
-function sliceColor(ds, index, colors) {
-  if (Array.isArray(ds.backgroundColor)) return ds.backgroundColor[index % ds.backgroundColor.length];
-  if (typeof ds.backgroundColor === 'string') return ds.backgroundColor;
-  return colors[index % colors.length];
+/** Dataset con los colores extendidos que el cliente puede pasar por atributo. */
+type RadialDataset = ChartDataset & {
+  backgroundColor?: string | string[];
+  borderColor?: string;
+  __i?: number;
+};
+
+/** Rebanada visible: valor + índice original (clave para color). */
+type Slice = { value: number; index: number; label: string };
+
+function sliceColor(ds: RadialDataset, index: number, colors: readonly string[]): string {
+  const bg = ds.backgroundColor;
+  if (Array.isArray(bg)) return bg[index % bg.length] ?? '';
+  if (typeof bg === 'string') return bg;
+  return colors[index % colors.length] ?? '';
 }
 
 /** Rebanadas visibles con su valor y su índice original (para el color). */
-function visibleSlices(ctx) {
-  const ds = ctx.data.datasets[0];
-  if (!ds) return { ds: null, slices: [] };
+function visibleSlices(ctx: ChartCtx): { ds: RadialDataset | null; slices: Slice[] } {
+  const raw = ctx.data.datasets[0];
+  if (!raw) return { ds: null, slices: [] };
+  const ds = raw as RadialDataset;
   const mask = ctx.sliceMask;
-  const slices = [];
-  ds.data.forEach((raw, i) => {
+  const slices: Slice[] = [];
+  ds.data.forEach((rawPoint, i: number) => {
     if (mask && !mask[i]) return;
-    const value = Number(raw);
+    const value = Number(rawPoint);
     if (!Number.isFinite(value)) return;
     slices.push({ value, index: i, label: String(ctx.data.labels[i] ?? '') });
   });
   return { ds, slices };
 }
 
-function drawSliceChart(ctx, innerRatio) {
+function drawSliceChart(ctx: ChartCtx, innerRatio: number): void {
   const { group, radial, colors, style, addHit, fmt } = ctx;
+  if (!radial) return;
   const { ds, slices } = visibleSlices(ctx);
   if (!ds || !slices.length) return;
 
-  const total = slices.reduce((sum, s: number) => sum + Math.abs(s.value), 0) || 1;
+  const total = slices.reduce((sum, s: Slice) => sum + Math.abs(s.value), 0) || 1;
   const rOuter = radial.rMax;
   const rInner = rOuter * (innerRatio || 0);
 
@@ -48,7 +62,7 @@ function drawSliceChart(ctx, innerRatio) {
 
     const color = sliceColor(ds, slice.index, colors);
     const el = svgEl('path', {
-      d: pathArc(radial.cx, radial.cy, rOuter, rInner, start, end),
+      d: pathArc(String(radial.cx), String(radial.cy), String(rOuter), rInner, start, end),
       fill: color,
       class: 'mark mark-slice',
       'stroke-width': slices.length > 1 ? style.sliceGap : 0,
@@ -100,20 +114,22 @@ function drawSliceChart(ctx, innerRatio) {
   }
 }
 
-export function drawPieMarks(ctx) {
+export function drawPieMarks(ctx: ChartCtx): void {
   drawSliceChart(ctx, 0);
 }
 
-export function drawDoughnutMarks(ctx) {
+export function drawDoughnutMarks(ctx: ChartCtx): void {
+  if (!ctx.radial) return;
   drawSliceChart(ctx, ctx.radial.innerRatio);
 }
 
-export function drawPolarAreaMarks(ctx) {
+export function drawPolarAreaMarks(ctx: ChartCtx): void {
   const { group, radial, colors, style, addHit, fmt, grid } = ctx;
+  if (!radial) return;
   const { ds, slices } = visibleSlices(ctx);
   if (!ds || !slices.length) return;
 
-  const max = Math.max(...slices.map((s: number) => Math.abs(s.value)), 1);
+  const max = Math.max(...slices.map((s: Slice) => Math.abs(s.value)), 1);
   const sweep = TAU / slices.length;
 
   // Anillos de referencia: sin ellos no se puede leer la magnitud del radio.
@@ -123,14 +139,14 @@ export function drawPolarAreaMarks(ctx) {
     }));
   }
 
-  slices.forEach((slice, i) => {
+  slices.forEach((slice: Slice, i: number) => {
     const r = (Math.abs(slice.value) / max) * radial.rMax;
     const start = i * sweep;
     const end = start + sweep;
     const color = sliceColor(ds, slice.index, colors);
 
     const el = svgEl('path', {
-      d: pathArc(radial.cx, radial.cy, r, 0, start, end),
+      d: pathArc(String(radial.cx), String(radial.cy), String(r), 0, start, end),
       fill: color,
       class: 'mark mark-slice',
       'stroke-width': style.sliceGap,
@@ -152,19 +168,22 @@ export function drawPolarAreaMarks(ctx) {
   });
 }
 
-export function drawRadarMarks(ctx) {
+export function drawRadarMarks(ctx: ChartCtx): void {
   const { group, data, radial, colors, fills, style, grid, addHit, fmt } = ctx;
+  if (!radial) return;
   const labels = data.labels;
   const axes = labels.length;
   if (!axes) return;
 
-  const values = data.datasets.flatMap((d) => d.data.map((v: number) => Math.abs(Number(v)))).filter(Number.isFinite);
+  const values = data.datasets
+    .flatMap((d: ChartDataset) => d.data.map((v) => Math.abs(Number(v))))
+    .filter(Number.isFinite);
   const max = Math.max(...values, 1);
-  const angleAt = (i) => (i / axes) * TAU - Math.PI / 2;
+  const angleAt = (i: number): number => (i / axes) * TAU - Math.PI / 2;
 
   // Rejilla poligonal + radios
   for (const f of [0.25, 0.5, 0.75, 1]) {
-    const pts = labels.map((_, i) => polarToCartesian(radial.cx, radial.cy, radial.rMax * f, angleAt(i)));
+    const pts = labels.map((_l, i) => polarToCartesian(radial.cx, radial.cy, radial.rMax * f, angleAt(i)));
     group.appendChild(svgEl('path', {
       d: `${pts.map((p, i) => `${i === 0 ? 'M' : 'L'}${p.x},${p.y}`).join(' ')} Z`,
       fill: 'none',
@@ -173,7 +192,7 @@ export function drawRadarMarks(ctx) {
     }));
   }
 
-  labels.forEach((label: string, i) => {
+  labels.forEach((label: string, i: number) => {
     const angle = angleAt(i);
     const end = polarToCartesian(radial.cx, radial.cy, radial.rMax, angle);
     group.appendChild(svgEl('line', {
@@ -182,7 +201,8 @@ export function drawRadarMarks(ctx) {
 
     const at = polarToCartesian(radial.cx, radial.cy, radial.rMax + 16, angle);
     const cos = Math.cos(angle);
-    const anchor = Math.abs(cos) < 0.3 ? 'middle' : cos > 0 ? 'start' : 'end';
+    const anchor: 'middle' | 'start' | 'end' =
+      Math.abs(cos) < 0.3 ? 'middle' : cos > 0 ? 'start' : 'end';
     const t = svgEl('text', {
       x: at.x, y: at.y, 'text-anchor': anchor, 'dominant-baseline': 'middle', class: 'tick-label',
     });
@@ -190,9 +210,13 @@ export function drawRadarMarks(ctx) {
     group.appendChild(t);
   });
 
-  data.datasets.forEach((ds) => {
-    const color = ds.borderColor || colors[ds.__i % colors.length];
-    const fill = ds.backgroundColor || fills[ds.__i % fills.length];
+  data.datasets.forEach((raw: ChartDataset) => {
+    const ds = raw as RadialDataset;
+    const color = ds.borderColor || colors[(ds.__i ?? 0) % colors.length] || '';
+    const bg = ds.backgroundColor;
+    const fill: string = Array.isArray(bg)
+      ? (bg[(ds.__i ?? 0) % bg.length] ?? '')
+      : (bg || fills[(ds.__i ?? 0) % fills.length] || '');
     const pts = ds.data.map((v, i) => {
       const value = Number(v) || 0;
       return {
@@ -208,7 +232,7 @@ export function drawRadarMarks(ctx) {
     const poly = svgEl('path', {
       d, fill, stroke: color, 'stroke-width': style.lineWidth, class: 'mark mark-radar',
     });
-    if (ds.label) poly.dataset.seriesLabel = ds.label;
+    if (ds.label) poly.dataset['seriesLabel'] = ds.label;
     group.appendChild(poly);
 
     pts.forEach((p) => {

@@ -1,0 +1,105 @@
+<!doctype html>
+<html lang="es" class="theme-dark" data-theme="dark">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>Demo <is-toast> · is-webcomponents</title>
+<meta name="description" content="Demo de <is-toast>: contenedor de toasts con placements, API estática (success/error/loading/promise) y sanitización." />
+<style>
+  html, body { margin: 0; padding: 0; background: #0c1118; color: #e2e8f0; font-family: ui-sans-serif, system-ui, sans-serif; }
+  body { padding: 24px; display: grid; gap: 24px; }
+  header h1 { font-size: 18px; margin: 0 0 4px; }
+  header p  { font-size: 13px; color: #94a3b8; margin: 0; }
+  section { background: #0f1620; border: 1px solid rgba(255,255,255,0.08); border-radius: 10px; padding: 18px; }
+  section h2 { font-size: 14px; margin: 0 0 12px; color: #94a3b8; font-weight: 600; text-transform: uppercase; letter-spacing: 0.05em; }
+  .row { display: flex; flex-wrap: wrap; gap: 12px; align-items: center; }
+  button { background: #1a2532; color: #e2e8f0; border: 1px solid rgba(255,255,255,0.1); border-radius: 6px; padding: 8px 12px; cursor: pointer; font: inherit; }
+  button:hover { background: #25303f; }
+  code { background: rgba(0,0,0,0.3); padding: 2px 6px; border-radius: 4px; font: 12px ui-monospace, Menlo, Consolas, monospace; }
+  is-toast:not(:defined) { visibility: hidden; }
+</style>
+<script type="module">
+  await import('../../../dist/cdn/feedback/toast.min.js');
+
+  await customElements.whenDefined('is-toast');
+  document.documentElement.dataset.toastReady = '1';
+</script>
+</head>
+<body>
+<header>
+  <h1>is-toast</h1>
+  <p>Contenedor fijo de toasts. Placement por defecto <code>bottom-end</code>. API: <code>create(msg, opts)</code>, estáticas <code>IsToast.success/error/loading/promise</code>. <strong>Seguridad:</strong> <code>allowHtml: true</code> usa <code>insertAdjacentHTML</code> sin sanitizar (gap 18).</p>
+</header>
+
+<section>
+  <h2>Placements</h2>
+  <div class="row">
+    <is-toast placement="top-start" id="t-ts"></is-toast>
+    <is-toast placement="top-end" id="t-te"></is-toast>
+    <is-toast placement="bottom-start" id="t-bs"></is-toast>
+    <is-toast placement="bottom-end" id="t-be"></is-toast>
+  </div>
+</section>
+
+<section>
+  <h2>Lanzar varios</h2>
+  <is-toast id="api-toaster" data-default-toaster placement="bottom-end"></is-toast>
+  <div class="row">
+    <button id="btn-info" type="button">Info (brand, 3s)</button>
+    <button id="btn-success" type="button">Success</button>
+    <button id="btn-error" type="button">Error</button>
+    <button id="btn-loading" type="button">Loading persistente</button>
+    <button id="btn-promise" type="button">Promise (resolve en 600ms)</button>
+  </div>
+  <script type="module">
+    document.getElementById('btn-info').addEventListener('click', () => {
+      IsToast.host().create('Información genérica', { variant: 'brand', duration: 3000 });
+    });
+    document.getElementById('btn-success').addEventListener('click', () => {
+      IsToast.success('¡Cambios guardados!');
+    });
+    document.getElementById('btn-error').addEventListener('click', () => {
+      IsToast.error('No se pudo conectar con el servidor.');
+    });
+    document.getElementById('btn-loading').addEventListener('click', () => {
+      IsToast.loading('Procesando…');
+    });
+    document.getElementById('btn-promise').addEventListener('click', () => {
+      IsToast.promise(
+        new Promise((r) => setTimeout(() => r('OK'), 600)),
+        {
+          loading: 'Cargando datos…',
+          success: (data) => `Resultado: ${data}`,
+          error: (e) => `Falló: ${e.message}`,
+        },
+      );
+    });
+  </script>
+</section>
+
+<section>
+  <h2>Gap 18 — sanitización de <code>allowHtml</code></h2>
+  <p>El test verifica que el modo seguro (<code>allowHtml: false</code>, default) trata el mensaje como texto plano y NO ejecuta HTML.</p>
+  <div class="row">
+    <button id="btn-safe" type="button">Mensaje con HTML (modo seguro)</button>
+    <button id="btn-unsafe" type="button">Mensaje con HTML (allowHtml: true)</button>
+  </div>
+  <pre id="xss-log" style="background:#0a0e15;padding:8px;border-radius:6px;font-size:12px;min-height:32px;">(sin intentos todavía)</pre>
+  <script type="module">
+    const log = document.getElementById('xss-log');
+    function record(msg) {
+      log.textContent = msg + '\n' + log.textContent;
+    }
+    document.getElementById('btn-safe').addEventListener('click', () => {
+      IsToast.host().create('<img src=x onerror="window.__xssFired=true">Hola');
+      record('safe: el HTML debe verse como texto literal');
+    });
+    document.getElementById('btn-unsafe').addEventListener('click', () => {
+      IsToast.host().create('<img src=x onerror="window.__xssFired=true">Hola', { allowHtml: true });
+      record('unsafe: allowHtml=true inserta HTML sin sanitizar (gap 18)');
+    });
+    window.addEventListener('error', () => { window.__xssFired = true; });
+  </script>
+</section>
+</body>
+</html>

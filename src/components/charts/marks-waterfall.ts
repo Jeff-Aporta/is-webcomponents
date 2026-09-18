@@ -1,21 +1,35 @@
 import { roundedBarRect, svgEl } from '../_shared/svg-chart-engine.js';
 import { getStatusColor } from '../_shared/chart-palette.js';
+import type { ChartCtx, ChartDataset } from './chart.js';
 
 /**
  * Marca de cascada (waterfall): cada punto es un delta sobre el acumulado,
  * salvo los índices en `totals`, que son barras absolutas medidas desde cero.
  */
 
+/** Tipo de barra en la cascada. */
+export type WaterfallKind = 'up' | 'down' | 'total';
+
+/** Rango de una barra resuelto a partir de los valores brutos. */
+export type WaterfallBar = {
+  index: number;
+  start: number;
+  end: number;
+  kind: WaterfallKind;
+};
+
+/** Dataset con el flag `totals` que esta mark respeta. */
+type WaterfallDataset = ChartDataset & { totals?: readonly number[] };
+
 /**
  * Calcula el rango de cada barra a partir de los valores brutos.
- * @param {(number|null|undefined)[]} values - deltas, salvo en los índices de `totals`.
- * @param {number[]} totals - índices que son barras absolutas (desde cero).
- * @returns {{index:number, start:number, end:number, kind:'up'|'down'|'total'}[]}
+ * @param values deltas, salvo en los índices de `totals`.
+ * @param totals índices que son barras absolutas (desde cero).
  */
-export function waterfallBars(values: (number|null|undefined)[], totals: number[]) {
+export function waterfallBars(values: readonly (number | null | undefined)[], totals: readonly number[]): WaterfallBar[] {
   const totalSet = new Set(totals || []);
   let running = 0;
-  return values.map((raw, index) => {
+  return values.map((raw, index): WaterfallBar => {
     if (totalSet.has(index)) {
       const val = Number.isFinite(raw) ? Number(raw) : running;
       running = val;
@@ -29,22 +43,46 @@ export function waterfallBars(values: (number|null|undefined)[], totals: number[
   });
 }
 
-export function drawWaterfallMarks(ctx) {
-  const { group, data, band, vScale, colors, style, addHit, horizontal, fmt, grid, pt } = ctx;
-  if (!band) return;
-  const ds = data.datasets[0];
-  if (!ds) return;
+/**
+ * Adaptador: el `data` de un dataset Chart.js es `ChartDataPoint[]`
+ * (números o `{x,y}`); la cascada sólo entiende escalares.
+ */
+function toWaterfallInput(points: readonly import('./chart.js').ChartDataPoint[]): number[] {
+  return points.map((p) => {
+    if (typeof p === 'number') return p;
+    if (p && typeof p === 'object' && 'y' in p) return Number(p.y);
+    return Number.NaN;
+  });
+}
 
-  const host = ctx.svg.getRootNode().host || ctx.svg;
+export function drawWaterfallMarks(ctx: ChartCtx): void {
+  const { group, data, band, vScale, colors, style, addHit, horizontal, fmt, grid, pt } = ctx;
+  if (!band || !vScale || !pt) return;
+  const raw = data.datasets[0];
+  if (!raw) return;
+  const ds = raw as WaterfallDataset;
+
+  const root = ctx.svg.getRootNode();
+  const host: Element = (root as ShadowRoot).host ?? ctx.svg;
   const successColor = getStatusColor(host, 'success') || '#22c55e';
   const dangerColor = getStatusColor(host, 'danger') || '#ef4444';
-  const totalColor = colors[0];
+  const totalColor = colors[0] ?? '';
 
-  const bars = waterfallBars(ds.data, ds.totals || []);
+  const bars = waterfallBars(toWaterfallInput(ds.data), ds.totals || []);
   const gap = style.barGap;
   const radius = style.barRadius;
 
-  const rects = bars.map((bar, i) => {
+  type Rect = WaterfallBar & {
+    rect: { x: number; y: number; w: number; h: number };
+    edge: 'right' | 'left' | 'top' | 'bottom';
+    color: string;
+    catStart: number;
+    slotSize: number;
+    vLo: number;
+    vSpan: number;
+  };
+
+  const rects: Rect[] = bars.map((bar, i): Rect => {
     const slotStart = band.start(i);
     const slotSize = Math.max(band.bandwidth - gap, 1);
     const catStart = slotStart + (band.bandwidth - slotSize) / 2;
@@ -53,7 +91,7 @@ export function drawWaterfallMarks(ctx) {
     const vLo = Math.min(v0, v1);
     const vSpan = Math.max(Math.abs(v1 - v0), 1);
     const color = bar.kind === 'total' ? totalColor : bar.kind === 'up' ? successColor : dangerColor;
-    const edge = horizontal
+    const edge: Rect['edge'] = horizontal
       ? (bar.end >= bar.start ? 'right' : 'left')
       : (bar.end >= bar.start ? 'top' : 'bottom');
     const rect = horizontal
@@ -62,7 +100,7 @@ export function drawWaterfallMarks(ctx) {
     return { ...bar, rect, edge, color, catStart, slotSize, vLo, vSpan };
   });
 
-  rects.forEach((r, i) => {
+  rects.forEach((r: Rect, i: number) => {
     const el = svgEl('path', {
       d: roundedBarRect(r.rect.x, r.rect.y, r.rect.w, r.rect.h, radius, r.edge),
       fill: r.color,
@@ -109,11 +147,13 @@ export function drawWaterfallMarks(ctx) {
  * Rango real que ocupa la cascada en el eje de valor: el recorrido acumulado,
  * no los deltas sueltos. Sin esto el eje se escala corto y las barras se salen.
  */
-drawWaterfallMarks.domainValues = (datasets) => {
-  const ds = datasets[0];
+(drawWaterfallMarks as unknown as {
+  domainValues: (datasets: readonly ChartDataset[]) => number[];
+}).domainValues = (datasets: readonly ChartDataset[]) => {
+  const ds = datasets[0] as WaterfallDataset | undefined;
   if (!ds) return [0];
-  const bars = waterfallBars(ds.data, ds.totals || []);
-  const out = [0];
+  const bars = waterfallBars(toWaterfallInput(ds.data), ds.totals || []);
+  const out: number[] = [0];
   for (const b of bars) out.push(b.start, b.end);
   return out;
 };

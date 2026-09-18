@@ -1,0 +1,105 @@
+<!doctype html>
+<html lang="es" class="theme-dark" data-theme="dark">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>Demo de <is-date-range-picker> · is-webcomponents</title>
+<meta name="description" content="Calendario de rango con dos meses y panel de atajos (esta semana, últimos 7 días, mes actual, etc.)." />
+<style>
+  html, body { margin: 0; padding: 0; min-height: 100%; background: #0c1118; color: #e2e8f0; font-family: ui-sans-serif, system-ui, sans-serif; }
+  body { display: grid; place-items: start center; padding: 32px 20px; }
+  main { max-width: 1080px; width: 100%; display: grid; gap: 24px; }
+  header h1 { font-size: 18px; font-weight: 700; margin: 0; }
+  header p { font-size: 13px; color: #94a3b8; margin: 4px 0 0 0; }
+  .grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(420px, 1fr)); gap: 18px; }
+  .card {
+    background: #131a24; border: 1px solid rgba(255,255,255,0.1); border-radius: 10px;
+    padding: 18px; display: grid; gap: 10px;
+  }
+  .card h2 { margin: 0; font-size: 13px; color: #94a3b8; font-weight: 600; }
+  .value-readout { font: 12px ui-monospace, Menlo, Consolas, monospace; color: #94a3b8; }
+  .value-readout code { color: #e2e8f0; }
+  code { background: rgba(255,255,255,0.06); padding: 1px 5px; border-radius: 3px; font: 12px ui-monospace, Menlo, Consolas, monospace; }
+  /* Anti-FOUC */
+  is-date-range-picker:not(:defined) { visibility: hidden; }
+</style>
+<script type="module">
+  await import('../../../dist/cdn/forms/date-range-picker.min.js');
+
+  await customElements.whenDefined('is-date-range-picker');
+
+  const wire = (el, outputId) => {
+    el.addEventListener('is-change', (e) => {
+      const out = document.getElementById(outputId);
+      if (out) out.textContent = `${e.detail?.start ?? ''} / ${e.detail?.end ?? ''}`;
+    });
+  };
+
+  // 1. Básico sin valor inicial
+  wire(document.getElementById('basic'), 'basic-value');
+
+  // 2. Con valor inicial
+  const withValue = document.getElementById('with-value');
+  withValue.setAttribute('value', '2026-06-01/2026-06-30');
+  wire(withValue, 'with-value-value');
+
+  // 3. Con atajos
+  const withShortcuts = document.getElementById('with-shortcuts');
+  withShortcuts.setAttribute('shortcuts', 'this-week last-7-days current-month');
+  wire(withShortcuts, 'with-shortcuts-value');
+
+  // 4. Con 3 calendarios
+  const threeMonths = document.getElementById('three-months');
+  threeMonths.setAttribute('calendars', '3');
+  wire(threeMonths, 'three-months-value');
+
+  // 5. Con 1 calendario
+  const oneMonth = document.getElementById('one-month');
+  oneMonth.setAttribute('calendars', '1');
+  oneMonth.setAttribute('value', '2026-07-10/2026-07-20');
+  wire(oneMonth, 'one-month-value');
+
+  document.documentElement.dataset.dateRangePickerReady = '1';
+</script>
+</head>
+<body>
+<main>
+  <header>
+    <h1>&lt;is-date-range-picker&gt; — Calendario de rango con dos meses</h1>
+    <p>Compone de 1 a 3 <code>&lt;is-date-picker mode="range"&gt;</code> con un panel opcional de atajos (esta semana, últimos 7 días, mes actual, etc.). El valor es <code>inicio/fin</code>.</p>
+  </header>
+
+  <div class="grid">
+    <section class="card">
+      <h2>Básico</h2>
+      <is-date-range-picker id="basic"></is-date-range-picker>
+      <div class="value-readout">Valor actual: <code id="basic-value">(vacío)</code></div>
+    </section>
+
+    <section class="card">
+      <h2>Con valor inicial</h2>
+      <is-date-range-picker id="with-value"></is-date-range-picker>
+      <div class="value-readout">Valor actual: <code id="with-value-value">(vacío)</code></div>
+    </section>
+
+    <section class="card">
+      <h2>Con atajos</h2>
+      <is-date-range-picker id="with-shortcuts"></is-date-range-picker>
+      <div class="value-readout">Valor actual: <code id="with-shortcuts-value">(vacío)</code></div>
+    </section>
+
+    <section class="card">
+      <h2>Tres meses (calendars=3)</h2>
+      <is-date-range-picker id="three-months"></is-date-range-picker>
+      <div class="value-readout">Valor actual: <code id="three-months-value">(vacío)</code></div>
+    </section>
+
+    <section class="card">
+      <h2>Un solo mes (calendars=1)</h2>
+      <is-date-range-picker id="one-month"></is-date-range-picker>
+      <div class="value-readout">Valor actual: <code id="one-month-value">(vacío)</code></div>
+    </section>
+  </div>
+</main>
+</body>
+</html>

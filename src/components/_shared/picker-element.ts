@@ -42,12 +42,43 @@ const PANEL_ATTRS = [
   'disable-future', 'disabled-dates', 'disabled-days', 'minutes-step', 'step',
 ];
 
+export type PickerKind = 'date' | 'time' | 'datetime';
+
+export type PickerPanelDef = HTMLElement & {
+  dataset: { role?: string; which?: string; sync?: string };
+  setAttribute(name: string, value: string): void;
+  removeAttribute(name: string): void;
+  focus(opts?: { preventScroll?: boolean }): void;
+  addEventListener(type: string, listener: EventListener, options?: AddEventListenerOptions | boolean): void;
+};
+
+export type PickerField = HTMLElement & {
+  value: string;
+  setAttribute(name: string, value: string): void;
+  removeAttribute(name: string): void;
+  checkValidity?(): boolean;
+  reportValidity?(): boolean;
+  focus?(opts?: { preventScroll?: boolean }): void;
+};
+
+export type PanelsBuilder = (ctx: { host: HTMLElement; range: boolean }) => PickerPanelDef[];
+
+export type DefinePickerInputOpts = {
+  tag: string;
+  kind: PickerKind;
+  cssUrl: string;
+  fieldTag: string;
+  panels: PanelsBuilder;
+  range?: boolean;
+  styleAttrs?: Record<string, string>;
+};
+
 export function definePickerInput({
   tag, kind, cssUrl, fieldTag, panels, range = false, styleAttrs = {},
-}) {
+}: DefinePickerInputOpts): typeof HTMLElement {
   // Todos los pickers (date/time/date-time y sus rangos) comparten la
   // personalización por atributo: se declara aquí una vez, no en cada tag.
-  const STYLE_ATTRS = { 'panel-height': '--is-clock-height', ...styleAttrs };
+  const STYLE_ATTRS: Record<string, string> = { 'panel-height': '--is-clock-height', ...styleAttrs };
 
   class IsPickerInput extends withStyleAttrs(HTMLElement) {
     static styleAttrs = STYLE_ATTRS;
@@ -55,17 +86,17 @@ export function definePickerInput({
     static get observedAttributes(): string[] { return [...OBSERVED, ...Object.keys(STYLE_ATTRS)]; }
 
     #base!: HTMLElement;
-    #dialog!: HTMLElement;
+    #dialog!: HTMLElement & { open: boolean; showModal(): void; close(): void };
     #panel!: HTMLElement;
     #content!: HTMLElement;
     #toolbar!: HTMLElement;
     #actions!: HTMLElement;
-    #fields = [];
-    #triggers = [];
-    #panelEls = [];
+    #fields: PickerField[] = [];
+    #triggers: (HTMLElement & { disabled: boolean })[] = [];
+    #panelEls: PickerPanelDef[] = [];
     #mounted = false;
     #open = false;
-    #draft = null;
+    #draft: string | null = null;
     #raf = 0;
 
     constructor() {
@@ -75,13 +106,13 @@ export function definePickerInput({
       shadow.appendChild(this.#template());
 
       this.#base = shadow.querySelector<HTMLElement>('.base')!;
-      this.#dialog = shadow.querySelector<HTMLElement>('.popup')!;
+      this.#dialog = shadow.querySelector<HTMLElement>('.popup')! as HTMLElement & { open: boolean; showModal(): void; close(): void };
       this.#panel = shadow.querySelector<HTMLElement>('.panel')!;
       this.#content = shadow.querySelector<HTMLElement>('.content')!;
       this.#toolbar = shadow.querySelector<HTMLElement>('.toolbar')!;
       this.#actions = shadow.querySelector<HTMLElement>('.actions')!;
-      this.#fields = [...shadow.querySelectorAll<HTMLElement>('.field')];
-      this.#triggers = [...shadow.querySelectorAll<HTMLElement>('.trigger')];
+      this.#fields = [...shadow.querySelectorAll<HTMLElement>('.field')] as PickerField[];
+      this.#triggers = [...shadow.querySelectorAll<HTMLElement & { disabled: boolean }>('.trigger')];
 
       for (const field of this.#fields) {
         field.addEventListener('is-change', this.#onFieldChange);
@@ -125,34 +156,36 @@ export function definePickerInput({
 
     /* ── API ──────────────────────────────────────────────────────────── */
 
-    get value() { return this.getAttribute('value') ?? ''; }
+    get value(): string { return this.getAttribute('value') ?? ''; }
     set value(v: string) { v ? this.setAttribute('value', String(v)) : this.removeAttribute('value'); }
 
-    get open() { return this.#open; }
+    get open(): boolean { return this.#open; }
 
-    get color() { return this.getAttribute('color') === 'mobile' ? 'mobile' : 'desktop'; }
-    set color(v) { this.setAttribute('color', v); }
+    get color(): 'mobile' | 'desktop' { return this.getAttribute('color') === 'mobile' ? 'mobile' : 'desktop'; }
+    set color(v: 'mobile' | 'desktop') { this.setAttribute('color', v); }
+
+    get variant(): 'mobile' | 'desktop' { return this.color; }
 
     /** Barra de acciones: obligatoria en móvil, opcional en escritorio. */
-    get actionBar() { return this.variant === 'mobile' || this.hasAttribute('action-bar'); }
+    get actionBar(): boolean { return this.variant === 'mobile' || this.hasAttribute('action-bar'); }
 
-    get disabled() { return this.hasAttribute('disabled'); }
-    set disabled(v) { this.toggleAttribute('disabled', !!v); }
+    get disabled(): boolean { return this.hasAttribute('disabled'); }
+    set disabled(v: boolean) { this.toggleAttribute('disabled', !!v); }
 
-    get readonly() { return this.hasAttribute('readonly'); }
-    set readonly(v) { this.toggleAttribute('readonly', !!v); }
+    get readonly(): boolean { return this.hasAttribute('readonly'); }
+    set readonly(v: boolean) { this.toggleAttribute('readonly', !!v); }
 
-    get locale() { return resolveLocale(this.getAttribute('locale')); }
-    set locale(v) { v ? this.setAttribute('locale', v) : this.removeAttribute('locale'); }
+    get locale(): string { return resolveLocale(this.getAttribute('locale')); }
+    set locale(v: string) { v ? this.setAttribute('locale', v) : this.removeAttribute('locale'); }
 
     /** Cierra al elegir; en móvil o con barra de acciones espera a Aceptar. */
-    get closeOnSelect() {
+    get closeOnSelect(): boolean {
       const attr = this.getAttribute('close-on-select');
       if (attr != null) return attr !== 'false';
       return !this.actionBar && kind === 'date';
     }
 
-    show() {
+    show(): void {
       if (this.disabled || this.readonly || this.#open) return;
       this.#open = true;
       this.#draft = this.value;
@@ -165,9 +198,9 @@ export function definePickerInput({
       emit(this, 'is-show', {});
     }
 
-    hide({ restore = false } = {}) {
+    hide({ restore = false } = {}): void {
       if (!this.#open) return;
-      if (restore && this.#draft !== this.value) this.#write(this.#draft, 'cancel');
+      if (restore && this.#draft !== null && this.#draft !== this.value) this.#write(this.#draft, 'cancel');
       this.#open = false;
       this.#draft = null;
       for (const t of this.#triggers) t.setAttribute('aria-expanded', 'false');
@@ -176,26 +209,26 @@ export function definePickerInput({
       emit(this, 'is-hide', {});
     }
 
-    checkValidity() { return this.#fields.every((f) => f.checkValidity?.() !== false); }
-    reportValidity() { return this.#fields.every((f) => f.reportValidity?.() !== false); }
+    checkValidity(): boolean { return this.#fields.every((f) => f.checkValidity?.() !== false); }
+    reportValidity(): boolean { return this.#fields.every((f) => f.reportValidity?.() !== false); }
 
     /* ── Plantilla ────────────────────────────────────────────────────── */
 
-    #template() {
+    #template(): DocumentFragment {
       const frag = document.createDocumentFragment();
       const wrap = document.createElement('div');
       wrap.className = 'base';
       wrap.setAttribute('part', 'base');
 
-      const names = range ? ['start', 'end'] : ['single'];
+      const names: readonly ('start' | 'end' | 'single')[] = range ? ['start', 'end'] : ['single'];
       for (const which of names) {
         const cell = document.createElement('div');
         cell.className = 'cell';
-        const field = document.createElement(fieldTag);
+        const field = document.createElement(fieldTag) as HTMLElement & { variant?: string; dataset: DOMStringMap };
         field.className = 'field';
         field.setAttribute('part', `field ${which}`);
         field.dataset.which = which;
-        const trigger = document.createElement('is-button');
+        const trigger = document.createElement('is-button') as HTMLElement & { variant?: string };
         trigger.variant = 'plain';
         trigger.className = 'trigger';
         trigger.setAttribute('part', 'trigger');
@@ -225,7 +258,7 @@ export function definePickerInput({
         }
       }
 
-      const dialog = document.createElement('dialog');
+      const dialog = document.createElement('dialog') as HTMLElement & { open: boolean; showModal(): void; close(): void };
       dialog.className = 'popup';
       dialog.setAttribute('part', 'dialog');
       dialog.tabIndex = -1;
@@ -245,8 +278,8 @@ export function definePickerInput({
       actions.className = 'actions';
       actions.hidden = true;
 
-      const mkAct = (act, label, variant = 'plain', color = 'neutral') => {
-        const b = document.createElement('is-button');
+      const mkAct = (act: string, label: string, variant = 'plain', color = 'neutral'): HTMLElement => {
+        const b = document.createElement('is-button') as HTMLElement & { variant?: string; color?: string };
         b.variant = variant;
         if (color !== 'neutral') b.color = color;
         b.className = 'act';
@@ -271,15 +304,15 @@ export function definePickerInput({
 
     /* ── Interno ──────────────────────────────────────────────────────── */
 
-    #parts() {
+    #parts(): string[] {
       if (!range) return [this.value];
       const [a = '', b = ''] = this.value.split(/\s*[/,|]\s*/);
       return [a, b];
     }
 
-    #syncFields() {
+    #syncFields(): void {
       const [a, b] = this.#parts();
-      this.#fields.forEach((field, i) => {
+      this.#fields.forEach((field: PickerField, i: number) => {
         const v = range ? (i === 0 ? a : b) : a;
         if (v) field.setAttribute('value', v);
         else field.removeAttribute('value');
@@ -305,15 +338,15 @@ export function definePickerInput({
       for (const t of this.#triggers) t.disabled = this.disabled || this.readonly;
     }
 
-    #syncActions() {
+    #syncActions(): void {
       const on = this.actionBar;
       this.#actions.hidden = !on;
       this.#panel.dataset.color = this.variant;
-      this.#actions.querySelector<HTMLElement>('[data-act="now"]').textContent = kind === 'time' ? 'Ahora' : 'Hoy';
+      this.#actions.querySelector<HTMLElement>('[data-act="now"]')!.textContent = kind === 'time' ? 'Ahora' : 'Hoy';
     }
 
     /** El contenido del panel lo aporta la definición del componente. */
-    #buildPanels() {
+    #buildPanels(): void {
       if (this.#panelEls.length) return;
       this.#panelEls = panels({ host: this, range });
       for (const el of this.#panelEls) {
@@ -322,7 +355,7 @@ export function definePickerInput({
       }
     }
 
-    #syncPanels() {
+    #syncPanels(): void {
       for (const el of this.#panelEls) {
         for (const name of PANEL_ATTRS) {
           const attr = this.getAttribute(name);
@@ -345,7 +378,7 @@ export function definePickerInput({
       this.#syncToolbar();
     }
 
-    #syncToolbar() {
+    #syncToolbar(): void {
       if (this.variant !== 'mobile') {
         this.#toolbar.hidden = true;
         return;
@@ -355,13 +388,14 @@ export function definePickerInput({
     }
 
     /** Texto humano del valor actual, para la cabecera del panel móvil. */
-    #readable() {
+    #readable(): string {
       const loc = this.locale;
-      const pretty = (raw) => {
+      const pretty = (raw: string): string => {
         if (!raw) return '';
         const { date, time } = splitDateTime(raw);
         if (kind === 'time') return formatTime(date || time, loc, { seconds: this.hasAttribute('seconds') });
-        const d = formatDate(date, loc, { day: '2-digit', month: 'short', year: 'numeric' });
+        // date-utils acepta day/month/year; lo pasamos tal cual.
+        const d = (formatDate as (i: string, l: string, o?: unknown) => string)(date, loc, { day: '2-digit', month: 'short', year: 'numeric' });
         return time ? `${d} · ${formatTime(time, loc)}` : d;
       };
       if (!range) return pretty(this.value);
@@ -369,7 +403,7 @@ export function definePickerInput({
       return [pretty(a), pretty(b)].filter(Boolean).join(' – ');
     }
 
-    #write(value, source) {
+    #write(value: string, source: string): void {
       const prev = this.value;
       if (value) this.setAttribute('value', value);
       else this.removeAttribute('value');
@@ -378,7 +412,7 @@ export function definePickerInput({
       if (prev !== (value || '')) emit(this, 'is-change', { value: value || '', source });
     }
 
-    #reposition = () => {
+    #reposition = (): void => {
       if (!this.#open || this.variant === 'mobile') return;
       cancelAnimationFrame(this.#raf);
       this.#raf = requestAnimationFrame(() => {
@@ -400,17 +434,17 @@ export function definePickerInput({
 
     /* ── Eventos ──────────────────────────────────────────────────────── */
 
-    #onFieldChange = (e) => {
+    #onFieldChange = (e: Event): void => {
       e.stopPropagation();
       if (!range) {
-        this.#write(e.target.value, 'field');
+        this.#write((e.target as PickerField).value, 'field');
         return;
       }
       const [a, b] = this.#fields.map((f) => f.value);
       this.#write([a, b].filter(Boolean).join('/'), 'field');
     };
 
-    #onFieldKey = (e) => {
+    #onFieldKey = (e: KeyboardEvent): void => {
       if (e.key === 'ArrowDown' && e.altKey) {
         e.preventDefault();
         this.show();
@@ -420,17 +454,17 @@ export function definePickerInput({
       }
     };
 
-    #onTrigger = (e) => {
+    #onTrigger = (e: Event): void => {
       e.preventDefault();
       if (this.#open) this.hide();
       else this.show();
     };
 
-    #onPanelChange = (e) => {
+    #onPanelChange = (e: Event): void => {
       e.stopPropagation();
-      const el = e.target;
+      const el = e.target as PickerPanelDef;
       const role = el.dataset.role;
-      const detail = e.detail || {};
+      const detail = (e as CustomEvent<{ value?: string; start?: string; end?: string }>).detail || {};
 
       if (range) {
         const start = detail.start || '';
@@ -453,8 +487,8 @@ export function definePickerInput({
       if (this.closeOnSelect) this.hide();
     };
 
-    #onAction = (e) => {
-      const btn = e.target.closest('.act');
+    #onAction = (e: Event): void => {
+      const btn = (e.target as HTMLElement).closest<HTMLElement>('.act');
       if (!btn) return;
       const act = btn.dataset.act;
       if (act === 'clear') {
@@ -474,7 +508,7 @@ export function definePickerInput({
       }
     };
 
-    #onDialogClick = (e: PointerEvent) => {
+    #onDialogClick = (e: PointerEvent): void => {
       if (e.target !== this.#dialog) return;
       // Clic sobre la superficie del dialog (no en el panel) = clic fuera.
       const rect = this.#base.getBoundingClientRect();
@@ -484,12 +518,12 @@ export function definePickerInput({
       this.hide({ restore: this.actionBar });
     };
 
-    #onDialogCancel = (e) => {
+    #onDialogCancel = (e: Event): void => {
       e.preventDefault();
       this.hide({ restore: this.actionBar });
     };
 
-    #onDialogKey = (e) => {
+    #onDialogKey = (e: KeyboardEvent): void => {
       if (e.key !== 'Escape') return;
       e.preventDefault();
       this.hide({ restore: this.actionBar });

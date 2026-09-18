@@ -1,0 +1,62 @@
+<!doctype html>
+<html lang="es" class="theme-dark" data-theme="dark">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>Demo <is-confirm-modal> · is-webcomponents</title>
+<meta name="description" content="Demo de <is-confirm-modal>: confirmación modal con backdrop, ARIA dialog, slots y restauración de foco al cerrar." />
+<style>
+  html, body { margin: 0; padding: 0; background: #0c1118; color: #e2e8f0; font-family: ui-sans-serif, system-ui, sans-serif; }
+  body { padding: 24px; display: grid; gap: 24px; }
+  header h1 { font-size: 18px; margin: 0 0 4px; }
+  header p  { font-size: 13px; color: #94a3b8; margin: 0; }
+  section { background: #0f1620; border: 1px solid rgba(255,255,255,0.08); border-radius: 10px; padding: 18px; display: grid; gap: 12px; }
+  section h2 { font-size: 14px; margin: 0; color: #94a3b8; font-weight: 600; text-transform: uppercase; letter-spacing: 0.05em; }
+  button { background: #1a2532; color: #e2e8f0; border: 1px solid rgba(255,255,255,0.1); border-radius: 6px; padding: 8px 12px; cursor: pointer; font: inherit; }
+  button:hover { background: #25303f; }
+  is-confirm-modal:not(:defined) { visibility: hidden; }
+</style>
+<script type="module">
+  await import('../../../dist/cdn/feedback/confirm-modal.min.js');
+
+  await customElements.whenDefined('is-confirm-modal');
+  document.documentElement.dataset.confirmModalReady = '1';
+</script>
+</head>
+<body>
+<header>
+  <h1>is-confirm-modal</h1>
+  <p>Modal centrado con backdrop. role="alertdialog" + aria-modal. Click fuera / Escape → cancel. Foco se mueve al botón confirm al abrir y vuelve al disparador al cerrar.</p>
+</header>
+
+<section>
+  <h2>Apertura por atributo <code>for</code> (click en el disparador)</h2>
+  <button id="btn-open-1" type="button">Borrar registro</button>
+  <is-confirm-modal
+    for="btn-open-1"
+    heading="Eliminar registro"
+    message="¿Seguro que quieres eliminar este registro? Esta acción no se puede deshacer."
+  ></is-confirm-modal>
+</section>
+
+<section>
+  <h2>Con botones personalizados (slots confirm / cancel)</h2>
+  <button id="btn-open-2" type="button">Publicar cambios</button>
+  <is-confirm-modal for="btn-open-2" heading="Publicar cambios" message="Los cambios se publicarán para todos los usuarios.">
+    <is-button slot="cancel" variant="text" color="neutral">Atrás</is-button>
+    <is-button slot="confirm" color="success">Sí, publicar</is-button>
+  </is-confirm-modal>
+</section>
+
+<section>
+  <h2>Programático (<code>el.show()</code>)</h2>
+  <button id="btn-open-3" type="button">Aviso</button>
+  <is-confirm-modal id="modal-3" heading="Aviso" message="Cierre con Escape o click fuera."></is-confirm-modal>
+  <script type="module">
+    document.getElementById('btn-open-3').addEventListener('click', () => {
+      document.getElementById('modal-3').show();
+    });
+  </script>
+</section>
+</body>
+</html>

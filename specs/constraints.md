@@ -94,3 +94,51 @@ Prohibiciones y reglas transversales ya pagadas. Detalle por dominio: [`componen
 - Un MD por módulo JS/CSS; listar todos los tags (multi-tag = un solo doc). No crear MD por child multi-tag.
 - Los `.md` **no se copian a `dist`**: se exponen desde el fuente. De las rutas, solo `raw.githubusercontent.com` los devuelve como `text/plain` (jsDelivr/Pages los mandan como `text/markdown` y el navegador los descarga).
 - Los `<link>` del CSS de un componente NO van en los snippets: `adoptCss()` ya carga el `.min.css` hermano leyendo `import.meta.url`. En un snippet solo van `is-base.min.css` + `palettes.min.css`.
+
+## Accesibilidad (a11y)
+
+- **`prefers-reduced-motion: reduce` obligatorio** en cualquier CSS con `transition`/`animation` >100ms. Usar `@media (prefers-reduced-motion: reduce) { transition: none; animation: none; }` o equivalente. Aplica a: spinner, progress-bar, progress-ring, skeleton, toast-item, dock, scrollspy, split-panel, heatmap, inline-edit, input, mention, pin-input, color-picker, diagram-lightbox, etc. Guardián: `prefers-reduced-motion`.
+- **Foco no restaurado al cerrar popups** → teclado perdido. `palette-selector`, `tooltip`, `popconfirm`, `confirm-modal`, `modal-verificacion`, `dialog`, `drawer`, `command-palette`: guardar `document.activeElement` al abrir y `focus()` al cerrar. Guardián: `popup-focus-restore`.
+- **Listbox / menu sin roving tabindex** → Tab saca del widget sin explorar items. Para listbox/menu (palette-selector, autocomplete): `tabindex="-1"` en items, gestión de foco por Arrow keys + `aria-activedescendant`. Guardián: `roving-tabindex`.
+- **Foco en `tabindex="-1"` sin `aria-activedescendant`** → lector de pantalla no anuncia el cambio. Combinar siempre: `tabindex="-1"` + `aria-activedescendant` en el contenedor activo. Guardián: `aria-activedescendant`.
+- **`aria-modal` sin `aria-labelledby`** → modal sin título accesible. Confirmar siempre: `aria-modal="true"` ⇒ `aria-labelledby` apunta al título. Guardián: `aria-labelledby`.
+
+## Seguridad
+
+- **`innerHTML` con interpolación de datos** → XSS. Aplicar `escapeHtml()` (en `_shared/`) a TODO valor dinámico antes de asignar a `innerHTML`. Detectado en: `checkbox.preview.ts`, `input.preview.ts`, `maps.ts` (attribution + tileUrl), `treemap.ts`, `stat.ts`, `pages/ecosystem.ts`, `generate-templates.ts`, `fix-icon-viewbox.ts`. Guardián: `xss-escape`.
+- **`esc()` no escapa backticks ni comillas** → XSS via template literals en atributo. Reemplazar con `escapeHtml()` que escapa `& < > " ' \``. Guardián: `xss-backtick`.
+- **`allowHtml: true` en toast sin sanitización DOMPurify-like** → XSS. Si se permite HTML, sanitizar antes; por defecto `allowHtml: false`. Guardián: `toast-sanitize`.
+
+## Lifecycle y cleanup
+
+- **`unmount()` no-op en previews** → memory leak de listeners/timers. Cada `unmount()` debe limpiar:
+  - `removeEventListener` de cualquier listener añadido en `mount()`
+  - `clearInterval`/`clearTimeout` de cualquier timer activo
+  - `AbortController.abort()` de cualquier fetch en curso
+  - `disconnect()` de cualquier `IntersectionObserver`/`MutationObserver`/`ResizeObserver`
+  Detectado en: `image-editor.preview.ts`, `video-playlist.preview.ts`, `video.preview.ts`, `dock.preview.ts`, `main.preview.ts`, `md-editor.preview.ts`, `popover.preview.ts`, `format.preview.ts`, `toast.preview.ts`, `gauge.preview.ts`, `dropdown.preview.ts`. Guardián: `unmount-cleanup`.
+- **`customElements.whenDefined()` ausente en 14/16 previews** → race condition: el preview aplica cambios al elemento antes de que se haya upgraded. SIEMPRE `await customElements.whenDefined('is-X')` antes de cualquier manipulación. Guardián: `whenDefined-in-preview`.
+- **`document.getElementById()` sin null guard** → `Cannot read properties of null`. SIEMPRE: `const el = document.getElementById('x'); if (!el) return;`. Detectado en 8+ previews. Guardián: `getElementById-null-guard`.
+- **`setInterval` que sobrevive a `disconnectedCallback`** → timer zombie. Guardar el handle y `clearInterval` en `disconnectedCallback`. Detectado en: `relative-time.ts`, `format.ts`. Guardián: `setinterval-cleanup`.
+- **`prefs.ts` traga `QuotaExceededError` con `try/catch { /* silent */ }`** → falla silenciosa de persistencia. Loggear warning + degradar gracefully (ej. usar `sessionStorage` o memoria). Guardián: `prefs-quota-error`.
+
+## Determinismo
+
+- **`Math.random()` en IDs de gradientes SVG (`sparkline.ts`)** → IDs cambian entre renders, refs se rompen. Usar `crypto.randomUUID()` o un counter determinista. Guardián: `deterministic-ids`.
+- **Animaciones no-GPU en SVG: `transition: d` y `transition: r`** (org-chart.css, quadrant-chart.css) → animación costosa en main thread. Considerar `requestAnimationFrame` con `transform` o precomputar paths. Guardián: `gpu-animation`.
+
+## Tipos y API
+
+- **`DiagramTheme` no asignable a `TurtleTheme`** (diagramas): TurtleTheme tiene index signature `[key: string]: unknown` y DiagramTheme no. Usar `theme as unknown as TurtleTheme` en el call-site de `setData`. Guardián: `theme-cast`.
+- **`TreeNode` local vs `TreeNode` imported** (tree-layout vs tree-view) → tipos estructuralmente distintos. Re-exportar `TreeNode` desde `_shared/tree-layout.ts` y usar ese. Guardián: `tree-node-unified`.
+- **`WakeLockSentinel` declarado como `null`** (wake-lock.ts) → rechaza asignaciones. Cambiar tipo a `WakeLockSentinel | null`. Guardián: `wakelock-typing`.
+- **`Array<T>` no asignable a `readonly T[]`** (layout-specs): arrays de layout no tienen readonly. Usar `as unknown as readonly T[]` en el call-site de `assignEdgeHues`. Guardián: `readonly-array-cast`.
+- **`Event.detail` no existe** en `Event` → cast a `CustomEvent<{detail: T}>` siempre que uses `e.detail`. Detectado en 8+ previews. Guardián: `custom-event-detail`.
+- **`Property 'checked' no existe en HTMLElement`** (speed-dial, etc.) → cast a `HTMLInputElement` cuando el host tiene un input interno. Guardián: `htmlinputelement-cast`.
+- **`Node` vs `Element` vs `DocumentFragment`** (render.ts) → `getAttribute` no existe en `Node`. Narrow a `Element` o `DocumentFragment` según uso. Guardián: `node-narrow`.
+
+## Testing y auditoría
+
+- **`audit-components.ts` regex `\.js$` ignora todos los `.ts`** → falso negativo masivo en la auditoría de componentes. Cambiar a `\.[mc]?[jt]sx?$` o usar parser real. Guardián: `audit-extension`.
+- **`download-iconify.{mjs,ts}` duplicados con defaults distintos** → drift silencioso entre CI y runtime. Mantener UNA versión; la otra es shim. Guardián: `no-duplicate-scripts`.
+- **`parseDiagnostics` API inestable** (scripts TS) → TS 5.4+ lo movió a `internal`. Verificar API al actualizar TS. Guardián: `parse-diagnostics-version`.

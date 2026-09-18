@@ -1,0 +1,55 @@
+<!doctype html>
+<html lang="es" class="theme-dark" data-theme="dark">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>Demo <is-progress-bar> · is-webcomponents</title>
+<meta name="description" content="Demo de <is-progress-bar>: barra de progreso con role=progressbar, aria-valuenow, indeterminate." />
+<style>
+  html, body { margin: 0; padding: 0; background: #0c1118; color: #e2e8f0; font-family: ui-sans-serif, system-ui, sans-serif; }
+  body { padding: 24px; display: grid; gap: 24px; }
+  header h1 { font-size: 18px; margin: 0 0 4px; }
+  header p  { font-size: 13px; color: #94a3b8; margin: 0; }
+  section { background: #0f1620; border: 1px solid rgba(255,255,255,0.08); border-radius: 10px; padding: 18px; }
+  section h2 { font-size: 14px; margin: 0 0 12px; color: #94a3b8; font-weight: 600; text-transform: uppercase; letter-spacing: 0.05em; }
+  is-progress-bar:not(:defined) { visibility: hidden; }
+</style>
+<script type="module">
+  await import('../../../dist/cdn/feedback/progress-bar.min.js');
+
+  await customElements.whenDefined('is-progress-bar');
+  document.documentElement.dataset.progressBarReady = '1';
+</script>
+</head>
+<body>
+<header>
+  <h1>is-progress-bar</h1>
+  <p>Barra de progreso lineal con role=progressbar, aria-valuemin/max/now. Soporta estado indeterminate.</p>
+</header>
+
+<section>
+  <h2>Valores fijos</h2>
+  <p><code>value="0"</code></p>
+  <is-progress-bar value="0" label="Inicio"></is-progress-bar>
+
+  <p><code>value="33"</code></p>
+  <is-progress-bar value="33" label="Cargando"></is-progress-bar>
+
+  <p><code>value="66"</code></p>
+  <is-progress-bar value="66" label="Cargando"></is-progress-bar>
+
+  <p><code>value="100"</code></p>
+  <is-progress-bar value="100" label="Completo"></is-progress-bar>
+</section>
+
+<section>
+  <h2>Indeterminate</h2>
+  <is-progress-bar indeterminate label="Cargando"></is-progress-bar>
+</section>
+
+<section>
+  <h2>Personalización (color / track-height)</h2>
+  <is-progress-bar value="50" color="#7c3aed" track-height="14" label="Custom"></is-progress-bar>
+</section>
+</body>
+</html>

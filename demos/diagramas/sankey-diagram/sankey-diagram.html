@@ -1,0 +1,52 @@
+<!doctype html>
+<html lang="es" class="theme-dark" data-theme="dark">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>Demo — <is-sankey-diagram> · is-webcomponents</title>
+<meta name="description" content="Diagrama Sankey: flujos entre nodos con grosor proporcional al valor." />
+<style>
+  html, body { margin: 0; padding: 0; min-height: 100%; background: #0c1118; color: #e2e8f0; font-family: ui-sans-serif, system-ui, sans-serif; }
+  body { display: grid; grid-template-rows: auto 1fr; }
+  header { padding: 16px 20px; border-bottom: 1px solid rgba(255,255,255,0.1); background: #0f1620; }
+  header h1 { font-size: 16px; font-weight: 700; margin: 0; }
+  header p { font-size: 12px; color: #94a3b8; margin: 4px 0 0 0; }
+  main { display: grid; place-items: stretch; min-height: 0; padding: 12px; }
+  is-sankey-diagram { width: 100%; height: 100%; min-height: 480px; display: block; }
+  is-sankey-diagram:not(:defined) { visibility: hidden; }
+</style>
+<script type="module">
+  await import('../../../dist/cdn/diagrams/sankey-diagram.min.js');
+  await customElements.whenDefined('is-sankey-diagram');
+
+  const el = document.createElement('is-sankey-diagram');
+  el.payload = {
+    sankey: {
+      title: 'Flujo de energía',
+      subtitle: '4 nodos · 3 enlaces · total 100',
+      nodes: [
+        { id: 'src', label: 'Generación' },
+        { id: 'grid', label: 'Red' },
+        { id: 'home', label: 'Hogares' },
+        { id: 'loss', label: 'Pérdidas' },
+      ],
+      links: [
+        { id: 'l1', from: 'src', to: 'grid', value: 100 },
+        { id: 'l2', from: 'grid', to: 'home', value: 70 },
+        { id: 'l3', from: 'grid', to: 'loss', value: 30 },
+      ],
+    },
+  };
+  document.querySelector('main').appendChild(el);
+
+  document.documentElement.dataset.sankeyReady = '1';
+</script>
+</head>
+<body>
+  <header>
+    <h1>Demo — <code>&lt;is-sankey-diagram&gt;</code></h1>
+    <p>Diagrama Sankey: el grosor del enlace codifica el valor. Sin auto-layout: las posiciones son la semilla.</p>
+  </header>
+  <main></main>
+</body>
+</html>

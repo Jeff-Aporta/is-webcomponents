@@ -1,0 +1,56 @@
+<!doctype html>
+<html lang="es" class="theme-dark" data-theme="dark">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>Demo — <is-er-diagram> · is-webcomponents</title>
+<meta name="description" content="Diagrama Entidad-Relación (sin Mermaid) con animación trace opcional." />
+<style>
+  html, body { margin: 0; padding: 0; min-height: 100%; background: #0c1118; color: #e2e8f0; font-family: ui-sans-serif, system-ui, sans-serif; }
+  body { display: grid; grid-template-rows: auto 1fr; }
+  header { padding: 16px 20px; border-bottom: 1px solid rgba(255,255,255,0.1); background: #0f1620; }
+  header h1 { font-size: 16px; font-weight: 700; margin: 0; }
+  header p { font-size: 12px; color: #94a3b8; margin: 4px 0 0 0; }
+  main { display: grid; place-items: stretch; min-height: 0; padding: 12px; }
+  is-er-diagram { width: 100%; height: 100%; min-height: 480px; display: block; }
+  is-er-diagram:not(:defined) { visibility: hidden; }
+</style>
+<script type="module">
+  await import('../../../dist/cdn/diagrams/er-diagram.min.js');
+  await customElements.whenDefined('is-er-diagram');
+
+  const el = document.createElement('is-er-diagram');
+  el.setAttribute('animation', 'trace');
+  el.payload = {
+    entities: [
+      { id: 'user', name: 'Usuario', attributes: [
+        { name: 'id', key: 'PK', type: 'uuid' },
+        { name: 'email', type: 'string' },
+      ], pos: [80, 80] },
+      { id: 'session', name: 'Sesión', attributes: [
+        { name: 'id', key: 'PK', type: 'uuid' },
+        { name: 'expires_at', type: 'datetime' },
+      ], pos: [380, 80] },
+      { id: 'log', name: 'AuditLog', attributes: [
+        { name: 'id', key: 'PK', type: 'uuid' },
+        { name: 'event', type: 'string' },
+      ], pos: [680, 80] },
+    ],
+    relations: [
+      { id: 'r1', from: 'user', to: 'session', label: 'opens', fromCard: 'one', toCard: 'one' },
+      { id: 'r2', from: 'session', to: 'log', label: 'writes', fromCard: 'one', toCard: 'many', dashStyle: 'dashed' },
+    ],
+  };
+  document.querySelector('main').appendChild(el);
+
+  document.documentElement.dataset.erDiagramReady = '1';
+</script>
+</head>
+<body>
+  <header>
+    <h1>Demo — <code>&lt;is-er-diagram&gt;</code></h1>
+    <p>Diagrama ER: entidades con atributos PK/UK/FK, relaciones con cardinalidad y aristas dashed animadas (CSS embebido).</p>
+  </header>
+  <main></main>
+</body>
+</html>

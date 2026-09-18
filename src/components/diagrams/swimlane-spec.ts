@@ -2,6 +2,7 @@ import { richTextPlain } from '../_shared/tk-rich-text.js';
 import { diagramHeaderWidth } from '../_shared/diagram-header.js';
 import { applyEdgeActorLayout } from '../_shared/diagram-edge-actors.js';
 import { assignEdgeHues } from '../_shared/diagram-edge-style.js';
+import type { EdgeWithHue } from '../_shared/diagram-edge-style.js';
 import { resolveTkHue } from '../_shared/tk-hue.js';
 
 /**
@@ -16,9 +17,9 @@ import { resolveTkHue } from '../_shared/tk-hue.js';
  * topológico: un paso va siempre a la derecha de todos los que lo alimentan.
  */
 
-const DEFAULT_HUES = [210, 239, 160, 38, 280, 199];
+const DEFAULT_HUES: number[] = [210, 239, 160, 38, 280, 199];
 
-export const STEP_KINDS = new Set(['start', 'end', 'process', 'decision']);
+export const STEP_KINDS: Set<string> = new Set(['start', 'end', 'process', 'decision']);
 
 const LANE_LABEL_W = 132;
 const COL_W = 178;
@@ -28,54 +29,142 @@ const STEP_MIN_W = 108;
 const STEP_MAX_W = 168;
 const MARGIN = { top: 16, right: 24, bottom: 20, left: 20 };
 
-function asRecord(v) {
-  return v && typeof v === 'object' ? v : {};
+export type SwimlaneStepKind = 'start' | 'end' | 'process' | 'decision';
+
+function asRecord(v: unknown): Record<string, unknown> {
+  return v && typeof v === 'object' && !Array.isArray(v) ? (v as Record<string, unknown>) : {};
 }
 
-function readLane(raw, i: number) {
-  const r = asRecord(raw);
+export interface SwimlaneLaneSpec {
+  id: string;
+  name: string;
+  hue: number;
+  description?: string;
+}
+
+export interface SwimlaneStepSpec {
+  id: string;
+  lane: string;
+  label: string;
+  kind: SwimlaneStepKind;
+  column?: number;
+  description?: string;
+}
+
+export interface SwimlaneLinkSpec {
+  id: string;
+  from: string;
+  to: string;
+  label?: string;
+}
+
+export interface SwimlaneResolvedSpec {
+  title?: string;
+  subtitle?: string;
+  lanes: SwimlaneLaneSpec[];
+  steps: SwimlaneStepSpec[];
+  links: SwimlaneLinkSpec[];
+}
+
+export interface SwimlaneLayoutLane {
+  id: string;
+  name: string;
+  hue: number;
+  description?: string;
+  x: number;
+  y: number;
+  w: number;
+  h: number;
+  labelW: number;
+}
+
+export interface SwimlaneLayoutStep {
+  id: string;
+  label: string;
+  kind: SwimlaneStepKind;
+  lane: string;
+  description?: string;
+  hue?: number;
+  column: number;
+  x: number;
+  y: number;
+  w: number;
+  h: number;
+}
+
+export interface SwimlaneLayoutLink {
+  id: string;
+  from: string;
+  to: string;
+  label?: string;
+  forward: boolean;
+  path: string;
+  arrowTipX: number;
+  arrowTipY: number;
+  labelX: number;
+  labelY: number;
+  hue?: number;
+}
+
+export interface SwimlaneLayout {
+  width: number;
+  height: number;
+  lanes: SwimlaneLayoutLane[];
+  steps: SwimlaneLayoutStep[];
+  links: SwimlaneLayoutLink[];
+  columns: number;
+  title?: string;
+  subtitle?: string;
+  titleY: number;
+  subtitleY: number;
+}
+
+function readLane(raw: Record<string, unknown>, i: number): SwimlaneLaneSpec {
   return {
-    id: String(r.id ?? `lane${i}`),
-    name: String(r.name ?? r.label ?? r.id ?? `Carril ${i + 1}`),
-    hue: resolveTkHue(r, DEFAULT_HUES[i % DEFAULT_HUES.length]),
-    description: String(r.desc ?? r.description ?? '').trim() || undefined,
+    id: String(raw.id ?? `lane${i}`),
+    name: String(raw.name ?? raw.label ?? raw.id ?? `Carril ${i + 1}`),
+    hue: resolveTkHue(raw, DEFAULT_HUES[i % DEFAULT_HUES.length]),
+    description: String(raw.desc ?? raw.description ?? '').trim() || undefined,
   };
 }
 
-function readStep(raw, i: number) {
-  const r = asRecord(raw);
-  const kind = String(r.kind ?? r.type ?? 'process').toLowerCase();
-  const column = Number(r.column ?? r.col);
+function readStep(raw: Record<string, unknown>, i: number): SwimlaneStepSpec {
+  const kind = String(raw.kind ?? raw.type ?? 'process').toLowerCase();
+  const column = Number(raw.column ?? raw.col);
   return {
-    id: String(r.id ?? `s${i}`),
-    lane: String(r.lane ?? ''),
-    label: String(r.label ?? r.name ?? r.id ?? `Paso ${i + 1}`),
-    kind: STEP_KINDS.has(kind) ? kind : 'process',
+    id: String(raw.id ?? `s${i}`),
+    lane: String(raw.lane ?? ''),
+    label: String(raw.label ?? raw.name ?? raw.id ?? `Paso ${i + 1}`),
+    kind: STEP_KINDS.has(kind) ? (kind as SwimlaneStepKind) : 'process',
     column: Number.isFinite(column) && column >= 0 ? Math.floor(column) : undefined,
-    description: String(r.desc ?? r.description ?? '').trim() || undefined,
+    description: String(raw.desc ?? raw.description ?? '').trim() || undefined,
   };
 }
 
-function readLink(raw, i) {
-  const r = asRecord(raw);
+function readLink(raw: Record<string, unknown>, i: number): SwimlaneLinkSpec {
   return {
-    id: String(r.id ?? `l${i}`),
-    from: String(r.from ?? r.source ?? ''),
-    to: String(r.to ?? r.target ?? ''),
-    label: String(r.label ?? '').trim() || undefined,
+    id: String(raw.id ?? `l${i}`),
+    from: String(raw.from ?? raw.source ?? ''),
+    to: String(raw.to ?? r_targetAlias(raw) ?? ''),
+    label: String(raw.label ?? '').trim() || undefined,
   };
+}
+
+function r_targetAlias(raw: Record<string, unknown>): unknown {
+  return raw.target;
 }
 
 /** payload → spec normalizada, o null si no hay carriles ni pasos. */
-export function resolveSwimlaneSpec(payload) {
+export function resolveSwimlaneSpec(payload: unknown): SwimlaneResolvedSpec | null {
   const p = asRecord(payload);
   const src = asRecord(p.swimlane ?? p.swimlaneDiagram ?? p);
   const rawSteps = src.steps ?? src.activities ?? [];
   if (!Array.isArray(rawSteps) || !rawSteps.length) return null;
 
-  const steps = rawSteps.map(readStep);
-  const declaredLanes = (Array.isArray(src.lanes) ? src.lanes : []).map(readLane);
-  const byId = new Map(declaredLanes.map((l) => [l.id, l]));
+  const steps: SwimlaneStepSpec[] = rawSteps.map((raw, i: number) => readStep(asRecord(raw), i));
+  const declaredLanes: SwimlaneLaneSpec[] = (Array.isArray(src.lanes) ? src.lanes : [])
+    .map((raw: unknown, i: number) => readLane(asRecord(raw), i));
+  const byId = new Map<string, SwimlaneLaneSpec>(declaredLanes.map((l) => [l.id, l]));
   // Un paso puede nombrar un carril no declarado: se crea para no perderlo.
   let auto = declaredLanes.length;
   for (const s of steps) {
@@ -83,9 +172,12 @@ export function resolveSwimlaneSpec(payload) {
     if (!byId.has(s.lane)) byId.set(s.lane, readLane({ id: s.lane, name: s.lane }, auto++));
   }
 
-  const known = new Set(steps.map((s) => s.id));
-  const links = (Array.isArray(src.links ?? src.flows) ? (src.links ?? src.flows) : [])
-    .map(readLink)
+  const known = new Set<string>(steps.map((s) => s.id));
+  const linksSrc: unknown[] = Array.isArray(src.links) ? src.links
+    : Array.isArray(src.flows) ? src.flows
+    : [];
+  const links: SwimlaneLinkSpec[] = linksSrc
+    .map((raw: unknown, i: number) => readLink(asRecord(raw), i))
     .filter((l) => known.has(l.from) && known.has(l.to) && l.from !== l.to);
 
   return {
@@ -98,28 +190,28 @@ export function resolveSwimlaneSpec(payload) {
 }
 
 /** spec → objeto `swimlane` listo para persistir / mostrar en el editor. */
-export function swimlaneSpecToJson(spec) {
-  const out = { lanes: [], steps: [], links: [] };
+export function swimlaneSpecToJson(spec: SwimlaneResolvedSpec): Record<string, unknown> {
+  const out: { title?: string; subtitle?: string; lanes: unknown[]; steps: unknown[]; links: unknown[] } = { lanes: [], steps: [], links: [] };
   if (spec.title) out.title = spec.title;
   if (spec.subtitle) out.subtitle = spec.subtitle;
   out.lanes = spec.lanes.map((l) => {
-    const row = { id: l.id, name: l.name, hue: l.hue };
+    const row: Record<string, unknown> = { id: l.id, name: l.name, hue: l.hue };
     if (l.description) row.desc = l.description;
     return row;
   });
   out.steps = spec.steps.map((s) => {
-    const row = { id: s.id, lane: s.lane, label: s.label };
+    const row: Record<string, unknown> = { id: s.id, lane: s.lane, label: s.label };
     if (s.kind !== 'process') row.kind = s.kind;
     if (s.column != null) row.column = s.column;
     if (s.description) row.desc = s.description;
     return row;
   });
   out.links = spec.links.map((l) => {
-    const row = { from: l.from, to: l.to };
+    const row: Record<string, unknown> = { from: l.from, to: l.to };
     if (l.label) row.label = l.label;
     return row;
   });
-  return out;
+  return out as Record<string, unknown>;
 }
 
 /**
@@ -130,13 +222,13 @@ export function swimlaneSpecToJson(spec) {
  * y si se cuenta como avance infla la columna del paso al que vuelve — que fue
  * exactamente el error que este selfcheck pilló.
  */
-export function findBackEdges(steps, links) {
-  const salidas = new Map(steps.map((s) => [s.id, []]));
+export function findBackEdges(steps: SwimlaneStepSpec[], links: SwimlaneLinkSpec[]): Set<string> {
+  const salidas = new Map<string, SwimlaneLinkSpec[]>(steps.map((s) => [s.id, []]));
   for (const l of links) salidas.get(l.from)?.push(l);
-  const estado = new Map(steps.map((s) => [s.id, 0])); // 0 nuevo · 1 en pila · 2 cerrado
-  const back = new Set();
+  const estado = new Map<string, number>(steps.map((s) => [s.id, 0])); // 0 nuevo · 1 en pila · 2 cerrado
+  const back = new Set<string>();
 
-  const visitar = (id) => {
+  const visitar = (id: string): void => {
     estado.set(id, 1);
     for (const l of salidas.get(id) ?? []) {
       const st = estado.get(l.to);
@@ -153,17 +245,17 @@ export function findBackEdges(steps, links) {
  * Columna de cada paso: la declarada, o el camino más largo desde un inicio,
  * ignorando los retornos (si no, el ciclo empujaría las columnas sin fin).
  */
-function assignColumns(steps, links, back) {
-  const col = new Map(steps.map((s) => [s.id, s.column ?? 0]));
-  const fixed = new Set(steps.filter((s) => s.column != null).map((s) => s.id));
+function assignColumns(steps: SwimlaneStepSpec[], links: SwimlaneLinkSpec[], back: Set<string>): Map<string, number> {
+  const col = new Map<string, number>(steps.map((s) => [s.id, s.column ?? 0]));
+  const fixed = new Set<string>(steps.filter((s) => s.column != null).map((s) => s.id));
   const avance = links.filter((l) => !back.has(l.id));
   const limit = steps.length + 1;
   for (let pass = 0; pass < limit; pass++) {
     let moved = false;
     for (const l of avance) {
       if (fixed.has(l.to)) continue;
-      const next = col.get(l.from) + 1;
-      if (next > col.get(l.to)) {
+      const next = (col.get(l.from) ?? 0) + 1;
+      if (next > (col.get(l.to) ?? 0)) {
         col.set(l.to, next);
         moved = true;
       }
@@ -173,28 +265,27 @@ function assignColumns(steps, links, back) {
   return col;
 }
 
-function stepWidth(label) {
+function stepWidth(label: string): number {
   const plain = richTextPlain(label);
   return Math.min(STEP_MAX_W, Math.max(STEP_MIN_W, Math.ceil(plain.length * 6.9) + 26));
 }
 
 /** Codo ortogonal: sale por la derecha, gira en el punto medio y entra por la izquierda. */
-function elbowPath(a, b) {
+function elbowPath(a: { x: number; y: number }, b: { x: number; y: number }): string {
   if (Math.abs(a.y - b.y) < 1) return `M${a.x},${a.y} L${b.x},${b.y}`;
   const midX = (a.x + b.x) / 2;
   return `M${a.x},${a.y} H${midX} V${b.y} H${b.x}`;
 }
 
 /** Camino de retorno (reproceso): sale por abajo y vuelve por debajo del carril. */
-function returnPath(a, b, bottomY) {
+function returnPath(a: { x: number; y: number }, b: { x: number; y: number }, bottomY: number): string {
   return `M${a.x},${a.y} V${bottomY} H${b.x} V${b.y}`;
 }
 
 /**
  * spec → geometría lista para pintar.
- * @returns {{width:number, height:number, lanes:Array, steps:Array, links:Array, columns:number, title?:string, subtitle?:string, titleY:number, subtitleY:number}}
  */
-export function computeSwimlaneLayout(spec) {
+export function computeSwimlaneLayout(spec: SwimlaneResolvedSpec): SwimlaneLayout {
   const title = spec.title ?? '';
   const subtitle = spec.subtitle ?? '';
   const titleY = title ? 22 : 14;
@@ -204,12 +295,12 @@ export function computeSwimlaneLayout(spec) {
   const back = findBackEdges(spec.steps, spec.links);
   const colById = assignColumns(spec.steps, spec.links, back);
   const columns = Math.max(...[...colById.values()], 0) + 1;
-  const laneIndex = new Map(spec.lanes.map((l, i) => [l.id, i]));
+  const laneIndex = new Map<string, number>(spec.lanes.map((l, i) => [l.id, i]));
 
   const originX = MARGIN.left;
   const originY = MARGIN.top + headerH;
 
-  const lanes = spec.lanes.map((l, i) => ({
+  const lanes: SwimlaneLayoutLane[] = spec.lanes.map((l, i) => ({
     id: l.id,
     name: l.name,
     hue: l.hue,
@@ -223,18 +314,19 @@ export function computeSwimlaneLayout(spec) {
 
   // Varios pasos en la misma celda (mismo carril y columna) se reparten en
   // vertical para que no queden uno encima de otro.
-  const cell = new Map();
+  const cell = new Map<string, string[]>();
   for (const s of spec.steps) {
-    const key = `${s.lane}|${colById.get(s.id)}`;
-    if (!cell.has(key)) cell.set(key, []);
-    cell.get(key).push(s.id);
+    const key = `${s.lane}|${colById.get(s.id) ?? 0}`;
+    const list = cell.get(key);
+    if (list) list.push(s.id);
+    else cell.set(key, [s.id]);
   }
 
-  const steps = spec.steps.map((s) => {
-    const col = colById.get(s.id);
+  const steps: SwimlaneLayoutStep[] = spec.steps.map((s) => {
+    const col = colById.get(s.id) ?? 0;
     const laneI = laneIndex.get(s.lane) ?? 0;
     const key = `${s.lane}|${col}`;
-    const peers = cell.get(key);
+    const peers = cell.get(key) ?? [];
     const slot = peers.indexOf(s.id);
     const w = stepWidth(s.label);
     const cx = originX + LANE_LABEL_W + col * COL_W + COL_W / 2;
@@ -256,13 +348,30 @@ export function computeSwimlaneLayout(spec) {
     };
   });
 
-  const byId = new Map(steps.map((s) => [s.id, s]));
+  const byId = new Map<string, SwimlaneLayoutStep>(steps.map((s) => [s.id, s]));
   const height = originY + spec.lanes.length * LANE_H + MARGIN.bottom;
   const width = Math.max(originX + LANE_LABEL_W + columns * COL_W + MARGIN.right, diagramHeaderWidth(title, subtitle));
 
-  const links = spec.links.map((l, i) => {
+  const links: SwimlaneLayoutLink[] = spec.links.map((l, i) => {
     const from = byId.get(l.from);
     const to = byId.get(l.to);
+    if (!from || !to) {
+      // Arista colgante: filtrada en resolveSwimlaneSpec, aquí no debería
+      // aparecer, pero devolvemos un placeholder inocuo si llega.
+      return {
+        id: l.id ?? `l${i}`,
+        from: l.from,
+        to: l.to,
+        label: l.label,
+        forward: true,
+        path: '',
+        arrowTipX: 0,
+        arrowTipY: 0,
+        labelX: 0,
+        labelY: 0,
+        hue: undefined,
+      };
+    }
     // Un retorno se dibuja como reproceso aunque las columnas digan otra cosa.
     const forward = !back.has(l.id ?? `l${i}`)
       && (to.column > from.column || (to.column === from.column && to.y > from.y));
@@ -283,14 +392,14 @@ export function computeSwimlaneLayout(spec) {
       path,
       arrowTipX: b.x,
       arrowTipY: b.y,
-      labelX: forward ? (a.x + b.x) / 2 : (a.x + b.x) / 2,
+      labelX: (a.x + b.x) / 2,
       labelY: forward ? Math.min(a.y, b.y) - 8 + (Math.abs(a.y - b.y) / 2) : bottomY - 6,
       hue: from.hue,
     };
   });
 
-  assignEdgeHues(links);
-  const layout = {
+  assignEdgeHues(links as unknown as readonly EdgeWithHue[]);
+  const layout: SwimlaneLayout = {
     width,
     height,
     lanes,

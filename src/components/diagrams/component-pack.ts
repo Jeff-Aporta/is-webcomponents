@@ -88,18 +88,18 @@ function packPackageColumns(packages: Paquete[], components: Componente[], gut: 
   }
 }
 
-function inferSources(components: readonly Componente[], edges: readonly Arista[]) {
-  const out = new Map();
-  const inn = new Map();
+function inferSources(components: readonly Componente[], edges: readonly Arista[]): Componente[] {
+  const out = new Map<string, number>();
+  const inn = new Map<string, number>();
   for (const c of components) {
     out.set(c.id, 0);
     inn.set(c.id, 0);
   }
   for (const e of edges ?? []) {
-    if (e.from && out.has(e.from)) out.set(e.from, out.get(e.from) + 1);
-    if (e.to && inn.has(e.to)) inn.set(e.to, inn.get(e.to) + 1);
+    if (e.from && out.has(e.from)) out.set(e.from, (out.get(e.from) ?? 0) + 1);
+    if (e.to && inn.has(e.to)) inn.set(e.to, (inn.get(e.to) ?? 0) + 1);
   }
-  return components.filter((c) => out.get(c.id) > 0 && inn.get(c.id) === 0);
+  return components.filter((c) => (out.get(c.id) ?? 0) > 0 && (inn.get(c.id) ?? 0) === 0);
 }
 
 function boundsOf(items: readonly Caja[]) {
@@ -118,9 +118,9 @@ function boundsOf(items: readonly Caja[]) {
  * left / top / bottom / right. Evita un solo corredor saturado.
  */
 function packTriptych(packages: Paquete[], components: Componente[], edges: readonly Arista[], opts: OpcionesEmpaque): void {
-  const listed = opts.sources?.length
-    ? opts.sources.map((id) => components.find((c) => c.id === id)).filter(Boolean)
-    : inferSources(components, edges);
+  const listed: Componente[] = (opts.sources?.length
+    ? opts.sources.map((id) => components.find((c) => c.id === String(id))).filter((c): c is Componente => Boolean(c))
+    : inferSources(components, edges));
   const sourceSet = new Set(listed.map((c) => c.id));
   const rest = components.filter((c) => !sourceSet.has(c.id));
   if (packages.length && rest.some((c) => c.package)) {
@@ -130,12 +130,13 @@ function packTriptych(packages: Paquete[], components: Componente[], edges: read
   const bbox = boundsOf(rest);
   const gap = opts.sourceGap ?? 32;
   const corridor = opts.pkgCorridor ?? PKG_CORRIDOR;
-  const order = ['left', 'top', 'bottom', 'right'];
-  const bySide = { left: [], top: [], bottom: [], right: [] };
+  const order: Lado[] = ['left', 'top', 'bottom', 'right'];
+  const bySide: Record<Lado, Componente[]> = { left: [], top: [], bottom: [], right: [] };
   listed.forEach((s, i: number) => {
     // i % 4: con i % 3 la cuarta fuente volvía a 'left' y 'right' nunca se
     // usaba en automático (left se saturaba con ≥4 consumidores).
-    const side = opts.sourceSides?.[s.id] || order[i % 4];
+    const rawSide = (opts.sourceSides as Record<string, Lado> | undefined)?.[s.id] || order[i % 4]!;
+    const side: Lado = bySide[rawSide] !== undefined ? rawSide : order[i % 4]!;
     bySide[side].push(s);
   });
   let y = bbox.y;
@@ -187,18 +188,20 @@ function packPackage(pkg: Paquete, kids: Componente[], gut: number = COL_GUTTER,
   pkg.h = Math.max(48, maxBottom + PKG_PAD - pkg.y);
 }
 
-function clusterColumns(kids: readonly Componente[]) {
+interface ClusterColumn { items: Componente[]; }
+
+function clusterColumns(kids: readonly Componente[]): ClusterColumn[] {
   const sorted = kids.slice().sort((a, b) => a.x - b.x);
-  const cols = [];
+  const cols: ClusterColumn[] = [];
   for (const k of sorted) {
-    const hit = cols.find((col) => col.items.some((o) => xOverlap(o, k) > 24));
+    const hit = cols.find((col) => xOverlap(col.items[0]!, k) > 24);
     if (hit) hit.items.push(k);
     else cols.push({ items: [k] });
   }
   return cols;
 }
 
-function xOverlap(a: Caja, b: Caja): boolean {
+function xOverlap(a: Caja, b: Caja): number {
   return Math.min(a.x + a.w, b.x + b.w) - Math.max(a.x, b.x);
 }
 
@@ -294,11 +297,11 @@ function fillOrthoConvex(occ: boolean[][]): void {
   }
 }
 
-function occupyOutline(xs: readonly number[], ys: readonly number[], occ: readonly boolean[][]) {
+function occupyOutline(xs: readonly number[], ys: readonly number[], occ: readonly boolean[][]): Punto[] {
   const col = occ.length;
   const row = occ[0]?.length ?? 0;
-  const h = Array.from({ length: col }, () => Array(row + 1).fill(0));
-  const v = Array.from({ length: col + 1 }, () => Array(row).fill(0));
+  const h: number[][] = Array.from({ length: col }, () => Array(row + 1).fill(0));
+  const v: number[][] = Array.from({ length: col + 1 }, () => Array(row).fill(0));
   for (let i = 0; i < col; i++) {
     for (let j = 0; j < row; j++) {
       if (!occ[i][j]) continue;
@@ -331,18 +334,20 @@ function cellInConvex(xs: readonly number[], ys: readonly number[], occ: readonl
 function connectIslands(occ: boolean[][], blocked: readonly boolean[][]): void {
   const col = occ.length;
   const row = occ[0]?.length ?? 0;
-  const key = (i: number, j: number) => `${i},${j}`;
-  const seen = new Set();
-  const islands = [];
-  const dirs = [[1, 0], [-1, 0], [0, 1], [0, -1]];
+  const key = (i: number, j: number): string => `${i},${j}`;
+  const seen = new Set<string>();
+  const islands: Array<Array<[number, number]>> = [];
+  const dirs: Array<[number, number]> = [[1, 0], [-1, 0], [0, 1], [0, -1]];
   for (let i = 0; i < col; i++) {
     for (let j = 0; j < row; j++) {
       if (!occ[i][j] || seen.has(key(i, j))) continue;
-      const stack = [[i, j]];
-      const cells = [];
+      const stack: Array<[number, number]> = [[i, j]];
+      const cells: Array<[number, number]> = [];
       seen.add(key(i, j));
       while (stack.length) {
-        const [ci, cj] = stack.pop();
+        const popped = stack.pop();
+        if (!popped) break;
+        const [ci, cj] = popped;
         cells.push([ci, cj]);
         for (const [di, dj] of dirs) {
           const ni = ci + di;
@@ -358,15 +363,16 @@ function connectIslands(occ: boolean[][], blocked: readonly boolean[][]): void {
   }
   if (islands.length <= 1) return;
   islands.sort((a, b) => b.length - a.length);
-  const main = new Set(islands[0].map(([i, j]) => key(i, j)));
+  const main = new Set(islands[0]!.map(([i, j]) => key(i, j)));
   const passable = (i: number, j: number) => occ[i]![j] || !blocked[i]![j];
   for (let s = 1; s < islands.length; s++) {
-    const start = islands[s][0];
-    const q = [start];
-    const prev = new Map([[key(start[0], start[1]), null]]);
-    let hit = null;
+    const start: [number, number] = islands[s]![0]!;
+    const q: Array<[number, number]> = [start];
+    const prev = new Map<string, [number, number] | null>([[key(start[0], start[1]), null]]);
+    let hit: [number, number] | null = null;
     for (let qi = 0; qi < q.length && !hit; qi++) {
-      const [ci, cj] = q[qi];
+      const head = q[qi]!;
+      const [ci, cj] = head;
       for (const [di, dj] of dirs) {
         const ni = ci + di;
         const nj = cj + dj;
@@ -379,13 +385,13 @@ function connectIslands(occ: boolean[][], blocked: readonly boolean[][]): void {
       }
     }
     if (!hit) continue;
-    let cur = hit;
+    let cur: [number, number] | null | undefined = hit;
     while (cur) {
       occ[cur[0]][cur[1]] = true;
       main.add(key(cur[0], cur[1]));
       cur = prev.get(key(cur[0], cur[1]));
     }
-    for (const c of islands[s]) main.add(key(c[0], c[1]));
+    for (const c of islands[s]!) main.add(key(c[0], c[1]));
   }
 }
 
@@ -393,12 +399,13 @@ function connectIslands(occ: boolean[][], blocked: readonly boolean[][]): void {
  * Contornos de paquete: cuadrícula que envuelve a todos los hijos.
  * Celdas en conflicto van al paquete del hijo más cercano (tocan, no solapan).
  */
+interface GroupConv { xs: number[]; ys: number[]; occ: boolean[][]; }
 export function layoutPackageOutlines(packages: readonly Paquete[], components: readonly Componente[], opts: OpcionesEmpaque = {}) {
   const pad = opts.pad ?? 12;
   const tabH = opts.tabH ?? 18;
   const groups = packages.map((p) => {
     const kids = components.filter((c) => c.package === p.id);
-    const padded = kids.map((c) => ({ x: c.x - pad, y: c.y - pad, w: c.w + 2 * pad, h: c.h + 2 * pad }));
+    const padded: Caja[] = kids.map((c) => ({ x: c.x - pad, y: c.y - pad, w: c.w + 2 * pad, h: c.h + 2 * pad }));
     if (padded.length) {
       const minX = Math.min(...padded.map((r) => r.x));
       const minY = Math.min(...padded.map((r) => r.y));
@@ -407,7 +414,7 @@ export function layoutPackageOutlines(packages: readonly Paquete[], components: 
       padded.push({ x: minX, y: minY - tabH, w: tabW, h: tabH });
     }
     return { p, kids, padded, conv: occupyRects(padded, true) };
-  }).filter((g) => g.padded.length && g.conv);
+  }).filter((g): g is { p: Paquete; kids: Componente[]; padded: Caja[]; conv: GroupConv } => g.padded.length > 0 && g.conv !== null);
 
   if (!groups.length) return;
 
@@ -417,36 +424,36 @@ export function layoutPackageOutlines(packages: readonly Paquete[], components: 
   const row = ys.length - 1;
   if (col < 1 || row < 1) return;
 
-  const owner = Array.from({ length: col }, () => Array(row).fill(null));
+  const owner: Array<Array<string | null>> = Array.from({ length: col }, () => Array(row).fill(null));
   for (let i = 0; i < col; i++) {
     for (let j = 0; j < row; j++) {
       const cx = (xs[i] + xs[i + 1]) / 2;
       const cy = (ys[j] + ys[j + 1]) / 2;
       const claim = groups.filter((g) => cellInConvex(g.conv.xs, g.conv.ys, g.conv.occ, cx, cy));
       if (!claim.length) continue;
-      if (claim.length === 1) { owner[i][j] = claim[0].p.id; continue; }
-      let best = claim[0];
+      if (claim.length === 1) { owner[i]![j] = claim[0]!.p.id; continue; }
+      let best = claim[0]!;
       let bestD = Infinity;
       for (const g of claim) {
         const d = Math.min(...g.kids.map((k) => distToRect(cx, cy, k)));
         if (d < bestD) { bestD = d; best = g; }
       }
-      owner[i][j] = best.p.id;
+      owner[i]![j] = best.p.id;
     }
   }
 
   for (const g of groups) {
-    const occ = Array.from({ length: col }, () => Array(row).fill(false));
-    const blocked = Array.from({ length: col }, () => Array(row).fill(false));
+    const occ: boolean[][] = Array.from({ length: col }, () => Array(row).fill(false));
+    const blocked: boolean[][] = Array.from({ length: col }, () => Array(row).fill(false));
     for (let i = 0; i < col; i++) {
       for (let j = 0; j < row; j++) {
-        if (owner[i][j] === g.p.id) occ[i][j] = true;
-        else if (owner[i][j]) blocked[i][j] = true;
+        if (owner[i]![j] === g.p.id) occ[i]![j] = true;
+        else if (owner[i]![j]) blocked[i]![j] = true;
       }
     }
     connectIslands(occ, blocked);
     const outline = occupyOutline(xs, ys, occ);
-    g.p.outline = outline;
+    (g.p as Paquete & { outline?: Punto[] }).outline = outline;
     if (outline.length) {
       g.p.x = Math.min(...outline.map((q) => q.x));
       g.p.y = Math.min(...outline.map((q) => q.y));
@@ -456,7 +463,7 @@ export function layoutPackageOutlines(packages: readonly Paquete[], components: 
   }
 }
 
-function walkOutline(xs: readonly number[], ys: readonly number[], h: readonly boolean[][], v: readonly boolean[][]): Punto[] {
+function walkOutline(xs: readonly number[], ys: readonly number[], h: readonly number[][], v: readonly number[][]): Punto[] {
   let i0 = -1;
   let j0 = -1;
   for (let j = 0; j < h[0].length; j++) {
@@ -514,7 +521,7 @@ function walkOutline(xs: readonly number[], ys: readonly number[], h: readonly b
 }
 
 function simplifyOrtho(pts: readonly Punto[]): Punto[] {
-  if (pts.length < 2) return pts;
+  if (pts.length < 2) return pts.slice();
   const out = [pts[0]];
   for (let k = 1; k < pts.length; k++) {
     const a = out[out.length - 1];
@@ -598,17 +605,17 @@ export function rutaChoca(puntos: readonly Punto[], obstaculos: readonly Caja[])
   return false;
 }
 
-function verticalGaps(obstaculos: readonly Caja[], xMin: number, xMax: number) {
+function verticalGaps(obstaculos: readonly Caja[], xMin: number, xMax: number): Array<{ a: number; b: number }> {
   const spans = obstaculos
     .map((c) => ({ a: c.x, b: c.x + c.w }))
     .filter((s) => s.b > xMin && s.a < xMax)
     .sort((a, b) => a.a - b.a);
-  const merged = [];
+  const merged: Array<{ a: number; b: number }> = [];
   for (const s of spans) {
-    if (!merged.length || s.a > merged[merged.length - 1].b + 4) merged.push({ ...s });
-    else merged[merged.length - 1].b = Math.max(merged[merged.length - 1].b, s.b);
+    if (!merged.length || s.a > merged[merged.length - 1]!.b + 4) merged.push({ ...s });
+    else merged[merged.length - 1]!.b = Math.max(merged[merged.length - 1]!.b, s.b);
   }
-  const gaps = [];
+  const gaps: Array<{ a: number; b: number }> = [];
   let cursor = xMin;
   for (const m of merged) {
     if (m.a - cursor >= 20) gaps.push({ a: cursor, b: m.a });
@@ -618,8 +625,8 @@ function verticalGaps(obstaculos: readonly Caja[], xMin: number, xMax: number) {
   return gaps;
 }
 
-function nearestGap(gaps: readonly { x: number }[], x: number) {
-  let best = gaps[0];
+function nearestGap(gaps: readonly { a: number; b: number }[], x: number): { a: number; b: number } {
+  let best = gaps[0]!;
   let bestD = Infinity;
   for (const g of gaps) {
     const d = x < g.a ? g.a - x : x > g.b ? x - g.b : 0;
@@ -628,15 +635,15 @@ function nearestGap(gaps: readonly { x: number }[], x: number) {
   return best;
 }
 
-function laneInGap(gap, rank: number, total: number) {
+function laneInGap(gap: { a: number; b: number }, rank: number, total: number): number {
   const t = (rank + 1) / (total + 1);
   return gap.a + (gap.b - gap.a) * t;
 }
 
-const comoPath = (pts) => `M${pts[0].x},${pts[0].y} ` + pts.slice(1).map((p) => `L${p.x},${p.y}`).join(' ');
+const comoPath = (pts: readonly Punto[]): string => `M${pts[0]!.x},${pts[0]!.y} ` + pts.slice(1).map((p) => `L${p.x},${p.y}`).join(' ');
 
 /** Cuánto se sale el path del marco (margen). */
-export function boundsOverflow(pts: readonly Punto[], frame: Caja, margin = 36): boolean {
+export function boundsOverflow(pts: readonly Punto[], frame: Caja, margin = 36): number {
   if (!frame || !pts?.length) return 0;
   const x0 = frame.x - margin;
   const y0 = frame.y - margin;
@@ -652,7 +659,7 @@ export function boundsOverflow(pts: readonly Punto[], frame: Caja, margin = 36):
   return n;
 }
 
-function outward(p: Punto, side: Lado, d: number): Punto {
+function outward(p: Punto, side: Lado | undefined, d: number): Punto {
   if (!side) return { x: p.x, y: p.y };
   if (side === 'left') return { x: p.x - d, y: p.y };
   if (side === 'right') return { x: p.x + d, y: p.y };
@@ -660,14 +667,14 @@ function outward(p: Punto, side: Lado, d: number): Punto {
   return { x: p.x, y: p.y + d };
 }
 
-function alongSide(p: Punto, side: Lado, d: number): Punto {
+function alongSide(p: Punto, side: Lado | undefined, d: number): Punto {
   if (!side || !d) return { x: p.x, y: p.y };
   if (side === 'left' || side === 'right') return { x: p.x, y: p.y + d };
   return { x: p.x + d, y: p.y };
 }
 
-function dedupePts(pts) {
-  const out = [];
+function dedupePts(pts: readonly Punto[]): Punto[] {
+  const out: Punto[] = [];
   for (const p of pts) {
     const last = out[out.length - 1];
     if (last && Math.abs(last.x - p.x) < 0.5 && Math.abs(last.y - p.y) < 0.5) continue;
@@ -676,15 +683,15 @@ function dedupePts(pts) {
   return out;
 }
 
-function manhattan(pts) {
+function manhattan(pts: readonly Punto[]): number {
   let n = 0;
   for (let i = 0; i < pts.length - 1; i++) {
-    n += Math.abs(pts[i + 1].x - pts[i].x) + Math.abs(pts[i + 1].y - pts[i].y);
+    n += Math.abs(pts[i + 1]!.x - pts[i]!.x) + Math.abs(pts[i + 1]!.y - pts[i]!.y);
   }
   return n;
 }
 
-function collinearOverlap(a1, a2, b1, b2, tol = 6) {
+function collinearOverlap(a1: Punto, a2: Punto, b1: Punto, b2: Punto, tol = 6): number {
   const hA = Math.abs(a1.y - a2.y) < 0.6;
   const hB = Math.abs(b1.y - b2.y) < 0.6;
   if (hA && hB && Math.abs(a1.y - b1.y) < tol) {
@@ -706,12 +713,12 @@ function collinearOverlap(a1, a2, b1, b2, tol = 6) {
   return 0;
 }
 
-export function pathShareLen(pts, usedSegs, tol = 4) {
+export function pathShareLen(pts: readonly Punto[], usedSegs: ReadonlyArray<{ a: Punto; b: Punto }>, tol = 4): number {
   if (!usedSegs?.length || pts.length < 2) return 0;
   let n = 0;
   for (let i = 1; i < pts.length - 2; i++) {
-    const a = pts[i];
-    const b = pts[i + 1];
+    const a = pts[i]!;
+    const b = pts[i + 1]!;
     for (const u of usedSegs) {
       n += collinearOverlap(a, b, u.a, u.b, tol);
     }
@@ -719,13 +726,13 @@ export function pathShareLen(pts, usedSegs, tol = 4) {
   return n;
 }
 
-export function segsFromPath(pts) {
-  const out = [];
-  for (let i = 1; i < pts.length - 2; i++) out.push({ a: pts[i], b: pts[i + 1] });
+export function segsFromPath(pts: readonly Punto[]): Array<{ a: Punto; b: Punto }> {
+  const out: Array<{ a: Punto; b: Punto }> = [];
+  for (let i = 1; i < pts.length - 2; i++) out.push({ a: pts[i]!, b: pts[i + 1]! });
   return out;
 }
 
-function hullOf(boxes, pad) {
+function hullOf(boxes: readonly Caja[], pad: number): { x0: number; y0: number; x1: number; y1: number } {
   return {
     x0: Math.min(...boxes.map((c) => c.x)) - pad,
     y0: Math.min(...boxes.map((c) => c.y)) - pad,
@@ -734,9 +741,9 @@ function hullOf(boxes, pad) {
   };
 }
 
-function gridRoute(from, to, boxes, clearance) {
+function gridRoute(from: Punto, to: Punto, boxes: readonly Caja[], clearance: number): Punto[] | null {
   const step = 8;
-  const blocked = boxes.map((c) => inflateBox(c, clearance));
+  const blocked: Caja[] = boxes.map((c) => inflateBox(c, clearance));
   const pad = 80;
   let minX = Math.min(from.x, to.x) - pad;
   let minY = Math.min(from.y, to.y) - pad;
@@ -748,20 +755,21 @@ function gridRoute(from, to, boxes, clearance) {
     maxX = Math.max(maxX, c.x + c.w + pad);
     maxY = Math.max(maxY, c.y + c.h + pad);
   }
-  const snap = (v: number) => Math.round(v / step) * step;
-  const hit = (x, y) => blocked.some((c) => x >= c.x && x <= c.x + c.w && y >= c.y && y <= c.y + c.h);
+  const snap = (v: number): number => Math.round(v / step) * step;
+  const hit = (x: number, y: number, c: Caja): boolean => x >= c.x && x <= c.x + c.w && y >= c.y && y <= c.y + c.h;
   const sx = snap(from.x);
   const sy = snap(from.y);
   const gx = snap(to.x);
   const gy = snap(to.y);
   const startK = `${sx},${sy}`;
   const goalK = `${gx},${gy}`;
-  const q = [[sx, sy]];
-  const prev = new Map([[startK, null]]);
-  const dirs = [[step, 0], [-step, 0], [0, step], [0, -step]];
-  const near = (x: number, y: number, tx: number, ty: number) => Math.abs(x - tx) + Math.abs(y - ty) <= step * 2;
+  const q: Array<[number, number]> = [[sx, sy]];
+  const prev = new Map<string, [number, number] | null>([[startK, null]]);
+  const dirs: Array<[number, number]> = [[step, 0], [-step, 0], [0, step], [0, -step]];
+  const near = (x: number, y: number, tx: number, ty: number): boolean => Math.abs(x - tx) + Math.abs(y - ty) <= step * 2;
   for (let i = 0; i < q.length && i < 40000; i++) {
-    const [x, y] = q[i];
+    const head = q[i]!;
+    const [x, y] = head;
     if (`${x},${y}` === goalK) break;
     for (const [dx, dy] of dirs) {
       const nx = x + dx;
@@ -769,54 +777,55 @@ function gridRoute(from, to, boxes, clearance) {
       if (nx < minX || ny < minY || nx > maxX || ny > maxY) continue;
       const k = `${nx},${ny}`;
       if (prev.has(k)) continue;
-      if (hit(nx, ny) && k !== goalK && k !== startK && !near(nx, ny, gx, gy) && !near(nx, ny, sx, sy)) continue;
+      const blockedHit = blocked.some((c) => hit(nx, ny, c));
+      if (blockedHit && k !== goalK && k !== startK && !near(nx, ny, gx, gy) && !near(nx, ny, sx, sy)) continue;
       prev.set(k, [x, y]);
       q.push([nx, ny]);
     }
   }
   if (!prev.has(goalK)) return null;
-  const rev = [];
-  let cur = [gx, gy];
+  const rev: Punto[] = [];
+  let cur: [number, number] | null | undefined = [gx, gy];
   while (cur) {
     rev.push({ x: cur[0], y: cur[1] });
     cur = prev.get(`${cur[0]},${cur[1]}`);
   }
   rev.reverse();
-  const join = (a, b) => {
+  const join = (a: Punto, b: Punto): Punto[] => {
     if (Math.abs(a.x - b.x) < 0.5 || Math.abs(a.y - b.y) < 0.5) return [a, b];
     return [a, { x: a.x, y: b.y }, b];
   };
-  const first = rev[0];
-  const last = rev[rev.length - 1];
+  const first = rev[0]!;
+  const last = rev[rev.length - 1]!;
   return collapseOrtho(dedupePts([...join(from, first), ...rev.slice(1, -1), ...join(last, to).slice(1)]));
 }
 
-function overshootsTip(pts) {
+function overshootsTip(pts: readonly Punto[]): boolean {
   if (pts.length < 3) return false;
-  const a = pts[pts.length - 3];
-  const b = pts[pts.length - 2];
-  const t = pts[pts.length - 1];
-  const between = (u: number, v: number, m) => m > Math.min(u, v) + 0.5 && m < Math.max(u, v) - 0.5;
+  const a = pts[pts.length - 3]!;
+  const b = pts[pts.length - 2]!;
+  const t = pts[pts.length - 1]!;
+  const between = (u: number, v: number, m: number): boolean => m > Math.min(u, v) + 0.5 && m < Math.max(u, v) - 0.5;
   if (Math.abs(a.y - b.y) < 0.5 && Math.abs(b.y - t.y) < 0.5 && between(a.x, b.x, t.x)) return true;
   if (Math.abs(a.x - b.x) < 0.5 && Math.abs(b.x - t.x) < 0.5 && between(a.y, b.y, t.y)) return true;
   return false;
 }
 
-function overshootsStart(pts) {
+function overshootsStart(pts: readonly Punto[]): boolean {
   if (pts.length < 3) return false;
-  const t = pts[0];
-  const a = pts[1];
-  const b = pts[2];
-  const between = (u: number, v: number, m) => m > Math.min(u, v) + 0.5 && m < Math.max(u, v) - 0.5;
+  const t = pts[0]!;
+  const a = pts[1]!;
+  const b = pts[2]!;
+  const between = (u: number, v: number, m: number): boolean => m > Math.min(u, v) + 0.5 && m < Math.max(u, v) - 0.5;
   if (Math.abs(t.y - a.y) < 0.5 && Math.abs(a.y - b.y) < 0.5 && between(a.x, b.x, t.x)) return true;
   if (Math.abs(t.x - a.x) < 0.5 && Math.abs(a.x - b.x) < 0.5 && between(a.y, b.y, t.y)) return true;
   return false;
 }
 
-function lastMissesApproach(pts, toSide) {
+function lastMissesApproach(pts: readonly Punto[], toSide: Lado | undefined): boolean {
   if (!toSide || pts.length < 2) return false;
-  const a = pts[pts.length - 2];
-  const b = pts[pts.length - 1];
+  const a = pts[pts.length - 2]!;
+  const b = pts[pts.length - 1]!;
   if (toSide === 'right') return a.x < b.x - 0.5;
   if (toSide === 'left') return a.x > b.x + 0.5;
   if (toSide === 'bottom') return a.y < b.y - 0.5;
@@ -824,23 +833,23 @@ function lastMissesApproach(pts, toSide) {
   return false;
 }
 
-function collapseOrtho(pts) {
+function collapseOrtho(pts: readonly Punto[]): Punto[] {
   if (!pts?.length) return [];
   if (pts.length < 3) return pts.slice();
-  const eq = (a: number, b: number) => Math.abs(a - b) < 0.51;
-  const out = [pts[0]];
+  const eq = (a: number, b: number): boolean => Math.abs(a - b) < 0.51;
+  const out: Punto[] = [pts[0]!];
   for (let i = 1; i < pts.length - 1; i++) {
-    const a = out[out.length - 1];
-    const b = pts[i];
-    const c = pts[i + 1];
+    const a = out[out.length - 1]!;
+    const b = pts[i]!;
+    const c = pts[i + 1]!;
     const col = (eq(a.x, b.x) && eq(b.x, c.x)) || (eq(a.y, b.y) && eq(b.y, c.y));
     if (!col) out.push(b);
   }
-  out.push(pts[pts.length - 1]);
+  out.push(pts[pts.length - 1]!);
   return dedupePts(out);
 }
 
-function inCorridor(from, to, c, inflate = 12) {
+function inCorridor(from: Punto, to: Punto, c: Caja, inflate = 12): boolean {
   const x0 = Math.min(from.x, to.x) - inflate;
   const x1 = Math.max(from.x, to.x) + inflate;
   const y0 = Math.min(from.y, to.y) - inflate;
@@ -848,9 +857,9 @@ function inCorridor(from, to, c, inflate = 12) {
   return c.x < x1 && c.x + c.w > x0 && c.y < y1 && c.y + c.h > y0;
 }
 
-function endpointClamp(from, to, fromBox, toBox) {
-  const xs = [from.x, to.x];
-  const ys = [from.y, to.y];
+function endpointClamp(from: Punto, to: Punto, fromBox: Caja | undefined, toBox: Caja | undefined): { xMin: number; xMax: number; yMin: number; yMax: number } {
+  const xs: number[] = [from.x, to.x];
+  const ys: number[] = [from.y, to.y];
   if (fromBox) {
     xs.push(fromBox.x, fromBox.x + fromBox.w);
     ys.push(fromBox.y, fromBox.y + fromBox.h);
@@ -867,13 +876,24 @@ function endpointClamp(from, to, fromBox, toBox) {
   };
 }
 
-function wrapCandidates(from, to, a0, b0, aJog, bJog, boxes, pad, lane: number = 0, clamp) {
+function wrapCandidates(
+  from: Punto,
+  to: Punto,
+  a0: Punto,
+  b0: Punto,
+  aJog: Punto,
+  bJog: Punto,
+  boxes: readonly Caja[],
+  pad: number,
+  lane: number = 0,
+  clamp?: { xMin: number; xMax: number; yMin: number; yMax: number },
+): Punto[][] {
   const o = 8 + Math.min(lane, 6) * 8;
   const ax = aJog.x;
   const ay = aJog.y;
   const bx = bJog.x;
   const by = bJog.y;
-  const paths = [
+  const paths: Punto[][] = [
     [from, a0, aJog, { x: bx, y: ay }, bJog, b0, to],
     [from, a0, aJog, { x: ax, y: by }, bJog, b0, to],
   ];
@@ -910,37 +930,60 @@ function wrapCandidates(from, to, a0, b0, aJog, bJog, boxes, pad, lane: number =
  * Polilínea ortogonal: sale perpendicular, camina fuera de cajas infladas,
  * llega alineada al centro del O. Origen/destino solo tocan en el extremo.
  */
-export function routeAvoidingBoxes(from, to, obstaculos, rank: number = 0, total: number = 1, opts = {}) {
+interface RouteAvoidOpts {
+  clearance?: number;
+  fromSide?: Lado;
+  toSide?: Lado;
+  fromBox?: Caja;
+  toBox?: Caja;
+  usedSegs?: Array<{ a: Punto; b: Punto }>;
+  frame?: Caja;
+  wrapBoxes?: readonly Caja[];
+  _loose?: boolean;
+  rank?: number;
+  total?: number;
+}
+
+export function routeAvoidingBoxes(
+  from: Punto,
+  to: Punto,
+  obstaculos: readonly Caja[],
+  rank: number = 0,
+  total: number = 1,
+  opts: RouteAvoidOpts = {},
+): string | null {
   const clearance = opts.clearance ?? EDGE_CLEARANCE;
   const a0 = outward(from, opts.fromSide, clearance);
   const b0 = outward(to, opts.toSide, clearance);
   const spread = Math.max(-24, Math.min(24, (rank - (total - 1) / 2) * 8));
   const aJog = alongSide(a0, opts.fromSide, spread);
   const bJog = alongSide(b0, opts.toSide, -spread);
-  const others = obstaculos.map((c) => inflateBox(c, clearance));
-  const midObst = others.slice();
-  const farFrom = (box, pt) => {
+  const others: Caja[] = obstaculos.map((c) => inflateBox(c, clearance));
+  const midObst: Caja[] = others.slice();
+  const farFrom = (box: Caja, pt: Punto): boolean => {
     if (!box || !pt) return false;
     const inf = inflateBox(box, 10);
     return pt.x < inf.x || pt.x > inf.x + inf.w || pt.y < inf.y || pt.y > inf.y + inf.h;
   };
   if (opts.fromBox && farFrom(opts.fromBox, to)) midObst.push(inflateBox(opts.fromBox, 4));
   if (opts.toBox && farFrom(opts.toBox, from)) midObst.push(inflateBox(opts.toBox, 4));
-  const blocking = obstaculos.filter((c) => inCorridor(from, to, c, clearance + 8));
-  const wrapBoxes = opts.wrapBoxes ?? obstaculos;
+  const blocking: Caja[] = obstaculos.filter((c: Caja) => inCorridor(from, to, c, clearance + 8));
+  const wrapBoxes: readonly Caja[] = opts.wrapBoxes ?? obstaculos;
   const inner = endpointClamp(from, to, opts.fromBox, opts.toBox);
-  const clamp = undefined;
+  const clamp: { xMin: number; xMax: number; yMin: number; yMax: number } | undefined = undefined as { xMin: number; xMax: number; yMin: number; yMax: number } | undefined;
 
-  const legal = (pts) => {
+  const legal = (pts: Punto[]): boolean => {
     if (pts.length < 2 || pathHasDiagonal(pts)) return false;
-    const comps = obstaculos.slice();
+    const comps: Caja[] = obstaculos.slice();
     if (opts.fromBox) comps.push(opts.fromBox);
     if (opts.toBox) comps.push(opts.toBox);
-    if (pathIllegal(pts, comps, opts.fromBox?.id, opts.toBox?.id, clearance)) return false;
+    const fromId = (opts.fromBox as (Caja & { id?: string }) | undefined)?.id;
+    const toId = (opts.toBox as (Caja & { id?: string }) | undefined)?.id;
+    if (pathIllegal(pts, comps, fromId, toId, clearance)) return false;
     if (overshootsTip(pts) || overshootsStart(pts)) return false;
     if (lastMissesApproach(pts, opts.toSide)) return false;
-    const stem1 = [pts[0], pts[1]];
-    const stem2 = [pts[pts.length - 2], pts[pts.length - 1]];
+    const stem1 = [pts[0]!, pts[1]!];
+    const stem2 = [pts[pts.length - 2]!, pts[pts.length - 1]!];
     const mid = pts.slice(1, -1);
     if (mid.length >= 2 && rutaChoca(mid, midObst)) return false;
     if (rutaChoca(stem1, others)) return false;
@@ -948,11 +991,15 @@ export function routeAvoidingBoxes(from, to, obstaculos, rank: number = 0, total
     return true;
   };
 
-  let best = null;
+  interface ScoredPath extends Array<Punto> {
+  _share?: number;
+}
+
+let best: ScoredPath | null = null;
   let bestScore = Infinity;
   const used = opts.usedSegs ?? [];
   const frame = opts.frame;
-  const consider = (pts) => {
+  const consider = (pts: Punto[]): void => {
     const clean = collapseOrtho(dedupePts(pts));
     if (!legal(clean)) return;
     const share = pathShareLen(clean, used);
@@ -964,7 +1011,7 @@ export function routeAvoidingBoxes(from, to, obstaculos, rank: number = 0, total
     const score = manhattan(clean) + share * 200 + outside * 24 + hook * 16;
     if (score < bestScore || (score === bestScore && share < (best?._share ?? Infinity))) {
       bestScore = score;
-      best = clean;
+      best = clean as ScoredPath;
       best._share = share;
     }
   };
@@ -1022,7 +1069,7 @@ export function routeAvoidingBoxes(from, to, obstaculos, rank: number = 0, total
     }
   }
 
-  const all = obstaculos.slice();
+  const all: Caja[] = obstaculos.slice();
   if (opts.fromBox) all.push(opts.fromBox);
   if (opts.toBox) all.push(opts.toBox);
   if (all.length) {
@@ -1041,23 +1088,25 @@ export function routeAvoidingBoxes(from, to, obstaculos, rank: number = 0, total
     }
   }
   if (!best) return null;
-  delete best._share;
-  return comoPath(collapseOrtho(best));
+  const chosen: ScoredPath = best;
+  delete chosen._share;
+  return comoPath(collapseOrtho(chosen));
 }
 
 /** True si camino pisa caja ajena, diagonal, o origen/destino más de 1 toque. */
-export function pathIllegal(pts, comps, fromId, toId, clearance = EDGE_CLEARANCE) {
+export function pathIllegal(pts: Punto[], comps: Caja[], fromId?: string, toId?: string, clearance = EDGE_CLEARANCE): boolean {
   if (!pts?.length || pathHasDiagonal(pts)) return true;
-  const fromBox = comps.find((c) => c.id === fromId);
-  const toBox = comps.find((c) => c.id === toId);
+  const fromBox = comps.find((c) => (c as Caja & { id?: string }).id === fromId);
+  const toBox = comps.find((c) => (c as Caja & { id?: string }).id === toId);
   for (const c of comps) {
-    const padded = inflateBox(c, c.id === fromId || c.id === toId ? 1 : clearance);
+    const cid = (c as Caja & { id?: string }).id;
+    const padded = inflateBox(c, cid === fromId || cid === toId ? 1 : clearance);
     for (let i = 0; i < pts.length - 1; i++) {
-      const a = pts[i];
-      const b = pts[i + 1];
+      const a = pts[i]!;
+      const b = pts[i + 1]!;
       if (!segmentoCortaCaja(a.x, a.y, b.x, b.y, padded)) continue;
-      const extremoOrigen = c.id === fromId && i === 0;
-      const extremoDestino = c.id === toId && i === pts.length - 2;
+      const extremoOrigen = cid === fromId && i === 0;
+      const extremoDestino = cid === toId && i === pts.length - 2;
       if (extremoOrigen || extremoDestino) continue;
       return true;
     }

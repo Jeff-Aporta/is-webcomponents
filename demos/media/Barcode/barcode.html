@@ -1,0 +1,67 @@
+<!doctype html>
+<html lang="es" class="theme-dark" data-theme="dark">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>Demo &lt;is-barcode&gt; · is-webcomponents</title>
+<meta name="description" content="Generador de códigos de barras en SVG (Code128 y EAN-13). Renderiza barras a partir de un atributo value, con soporte para color fg/bg, altura y texto opcional." />
+<style>
+  html, body { margin: 0; padding: 0; min-height: 100%; background: #0c1118; color: #e2e8f0; font-family: ui-sans-serif, system-ui, sans-serif; }
+  body { display: grid; grid-template-rows: auto 1fr auto; }
+  header { padding: 16px 20px; border-bottom: 1px solid rgba(255,255,255,0.1); background: #0f1620; }
+  header h1 { font-size: 16px; font-weight: 700; margin: 0; }
+  header p { font-size: 12px; color: #94a3b8; margin: 4px 0 0 0; }
+  main { display: grid; grid-template-columns: 1fr 1fr; gap: 16px; padding: 20px; align-content: start; }
+  section { background: #0f1620; border: 1px solid rgba(255,255,255,0.1); border-radius: 8px; padding: 16px; min-height: 160px; }
+  section h2 { font-size: 12px; text-transform: uppercase; letter-spacing: 0.08em; margin: 0 0 12px 0; color: #94a3b8; font-weight: 600; }
+  is-barcode { display: block; max-width: 360px; height: auto; }
+  footer { padding: 12px 20px; border-top: 1px solid rgba(255,255,255,0.1); background: #0f1620; font-size: 11px; color: #94a3b8; }
+  footer code { background: rgba(255,255,255,0.06); padding: 1px 5px; border-radius: 3px; font: 11px ui-monospace, Menlo, Consolas, monospace; }
+  /* Anti-FOUC */
+  is-barcode:not(:defined) { visibility: hidden; }
+</style>
+<script type="module">
+  // Cargar solo el bundle que necesitamos desde dist/cdn/.
+  await import('../../../dist/cdn/media/barcode.min.js');
+  await customElements.whenDefined('is-barcode');
+
+  // Suscribirse a is-render para logging (útil en tests)
+  document.querySelectorAll('is-barcode').forEach((el) => {
+    el.addEventListener('is-render', (e) => {
+      console.log('[barcode] is-render', { value: el.getAttribute('value'), type: el.getAttribute('type') || 'code128' });
+      document.documentElement.dataset.barcodeRenderFired = '1';
+    });
+  });
+
+  document.documentElement.dataset.barcodeReady = '1';
+</script>
+</head>
+<body>
+<header>
+  <h1>Demo — <code>&lt;is-barcode&gt;</code></h1>
+  <p>Code128 (ASCII) y EAN-13 (12 dígitos + checksum). Renderiza en SVG inline.</p>
+</header>
+<main>
+  <section>
+    <h2>Code128 (texto libre)</h2>
+    <is-barcode value="HELLO-WORLD-2026" type="code128" height="80" show-text></is-barcode>
+  </section>
+  <section>
+    <h2>EAN-13 (con checksum auto)</h2>
+    <is-barcode value="7790070410027" type="ean13" height="100"></is-barcode>
+  </section>
+  <section>
+    <h2>Colores fg / bg</h2>
+    <is-barcode value="SKU-12345" type="code128" height="60" bg="#0f1620" fg="#22d3ee" show-text></is-barcode>
+  </section>
+  <section>
+    <h2>Sin texto (modo minimal)</h2>
+    <is-barcode value="ABC-9876" type="code128" height="40"></is-barcode>
+  </section>
+</main>
+<footer>
+  Atributos: <code>value</code> <code>type</code> (code128|ean13) <code>height</code> <code>fg</code> <code>bg</code> <code>show-text</code>.
+  Evento: <code>is-render</code> tras cada cambio.
+</footer>
+</body>
+</html>

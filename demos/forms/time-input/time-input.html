@@ -1,0 +1,133 @@
+<!doctype html>
+<html lang="es" class="theme-dark" data-theme="dark">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>Demo de <is-time-input> · is-webcomponents</title>
+<meta name="description" content="Campo de hora con panel (secciones, lista o reloj analógico) en top-layer dialog. El atributo panel elige la superficie." />
+<style>
+  html, body { margin: 0; padding: 0; min-height: 100%; background: #0c1118; color: #e2e8f0; font-family: ui-sans-serif, system-ui, sans-serif; }
+  body { display: grid; place-items: start center; padding: 32px 20px; }
+  main { max-width: 760px; width: 100%; display: grid; gap: 22px; }
+  header h1 { font-size: 18px; font-weight: 700; margin: 0; }
+  header p { font-size: 12px; color: #94a3b8; margin: 4px 0 0 0; }
+  .card {
+    background: #131a24; border: 1px solid rgba(255,255,255,0.1); border-radius: 10px;
+    padding: 18px; display: grid; gap: 10px;
+  }
+  .card h2 { margin: 0; font-size: 13px; color: #94a3b8; font-weight: 600; }
+  .value-readout { font: 12px ui-monospace, Menlo, Consolas, monospace; color: #94a3b8; }
+  .value-readout code { color: #e2e8f0; }
+  code { background: rgba(255,255,255,0.06); padding: 1px 5px; border-radius: 3px; font: 12px ui-monospace, Menlo, Consolas, monospace; }
+  /* Anti-FOUC */
+  is-time-input:not(:defined) { visibility: hidden; }
+</style>
+<script type="module">
+  // Carga solo el bundle que necesitamos desde los pre-construidos en dist/cdn/.
+  await import('../../../dist/cdn/forms/time-input.min.js');
+
+  await customElements.whenDefined('is-time-input');
+
+  // Helper para reflejar el valor en pantalla.
+  const wire = (el, outputId) => {
+    const update = (value) => {
+      const out = document.getElementById(outputId);
+      if (out) out.textContent = value || '(vacío)';
+    };
+    el.addEventListener('is-change', (e) => update(e.detail?.value));
+    el.addEventListener('is-show', () => console.log('[time-input] panel abierto'));
+    el.addEventListener('is-hide', () => console.log('[time-input] panel cerrado'));
+  };
+
+  // 1. Básico (panel=sections por defecto)
+  const basic = document.getElementById('basic');
+  wire(basic, 'basic-value');
+
+  // 2. Con valor inicial
+  const initial = document.getElementById('initial');
+  initial.setAttribute('value', '15:45');
+  wire(initial, 'initial-value');
+
+  // 3. Panel de lista
+  const list = document.getElementById('list');
+  list.setAttribute('panel', 'list');
+  wire(list, 'list-value');
+
+  // 4. Panel de reloj analógico
+  const clock = document.getElementById('clock');
+  clock.setAttribute('panel', 'clock');
+  wire(clock, 'clock-value');
+
+  // 5. AM/PM
+  const ampm = document.getElementById('ampm');
+  ampm.setAttribute('ampm', '');
+  ampm.setAttribute('locale', 'en-US');
+  wire(ampm, 'ampm-value');
+
+  // 6. Móvil con barra de acciones
+  const mobile = document.getElementById('mobile');
+  mobile.setAttribute('color', 'mobile');
+  mobile.setAttribute('action-bar', '');
+  wire(mobile, 'mobile-value');
+
+  // 7. Deshabilitado
+  const disabledField = document.getElementById('disabled-field');
+  disabledField.setAttribute('value', '08:00');
+  wire(disabledField, 'disabled-value');
+
+  document.documentElement.dataset.timeInputReady = '1';
+</script>
+</head>
+<body>
+<main>
+  <header>
+    <h1>&lt;is-time-input&gt; — Campo + panel de hora</h1>
+    <p>Click en el icono del reloj (o Alt+↓ sobre el campo) abre un panel en top-layer &lt;dialog&gt;. El atributo <code>panel</code> elige la superficie: <code>sections</code> (por defecto, columnas digitales), <code>list</code> (lista simple) o <code>clock</code> (reloj analógico).</p>
+  </header>
+
+  <section class="card">
+    <h2>Básico (panel=sections)</h2>
+    <p style="margin:0;font-size:12px;color:#94a3b8;">Click en el icono para abrir el panel de columnas digitales.</p>
+    <is-time-input id="basic" label="Hora" name="basic"></is-time-input>
+    <div class="value-readout">Valor actual: <code id="basic-value">(vacío)</code></div>
+  </section>
+
+  <section class="card">
+    <h2>Con valor inicial</h2>
+    <is-time-input id="initial" label="Cita" hint="Edita el campo o usa el panel" name="appt" value="15:45"></is-time-input>
+    <div class="value-readout">Valor actual: <code id="initial-value">(vacío)</code></div>
+  </section>
+
+  <section class="card">
+    <h2>Panel de lista simple</h2>
+    <is-time-input id="list" label="Hora con lista" hint="panel=list" name="list" panel="list"></is-time-input>
+    <div class="value-readout">Valor actual: <code id="list-value">(vacío)</code></div>
+  </section>
+
+  <section class="card">
+    <h2>Panel de reloj analógico</h2>
+    <is-time-input id="clock" label="Hora con reloj" hint="panel=clock" name="clock" panel="clock"></is-time-input>
+    <div class="value-readout">Valor actual: <code id="clock-value">(vacío)</code></div>
+  </section>
+
+  <section class="card">
+    <h2>Formato 12 horas (AM/PM)</h2>
+    <is-time-input id="ampm" label="Hora local" hint="locale en-US con ampm explícito" name="local" ampm locale="en-US"></is-time-input>
+    <div class="value-readout">Valor actual: <code id="ampm-value">(vacío)</code></div>
+  </section>
+
+  <section class="card">
+    <h2>Modo móvil (centered dialog con barra de acciones)</h2>
+    <p style="margin:0;font-size:12px;color:#94a3b8;"><code>color="mobile"</code> + <code>action-bar</code>: el panel se centra y se cierra con Aceptar/Cancelar.</p>
+    <is-time-input id="mobile" label="Hora de inicio" name="event" color="mobile" action-bar></is-time-input>
+    <div class="value-readout">Valor actual: <code id="mobile-value">(vacío)</code></div>
+  </section>
+
+  <section class="card">
+    <h2>Deshabilitado</h2>
+    <is-time-input id="disabled-field" label="No editable" name="d" disabled value="08:00"></is-time-input>
+    <div class="value-readout">Valor actual: <code id="disabled-value">(vacío)</code></div>
+  </section>
+</main>
+</body>
+</html>

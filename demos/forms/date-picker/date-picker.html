@@ -1,0 +1,119 @@
+<!doctype html>
+<html lang="es" class="theme-dark" data-theme="dark">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>Demo de <is-date-picker> · is-webcomponents</title>
+<meta name="description" content="Calendario mensual standalone con navegación por teclado (flechas, PageUp/Down, Home/End), selección y vistas mes/año." />
+<style>
+  html, body { margin: 0; padding: 0; min-height: 100%; background: #0c1118; color: #e2e8f0; font-family: ui-sans-serif, system-ui, sans-serif; }
+  body { display: grid; place-items: start center; padding: 32px 20px; }
+  main { max-width: 920px; width: 100%; display: grid; gap: 24px; }
+  header h1 { font-size: 18px; font-weight: 700; margin: 0; }
+  header p { font-size: 13px; color: #94a3b8; margin: 4px 0 0 0; }
+  .grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(260px, 1fr)); gap: 18px; }
+  .card {
+    background: #131a24; border: 1px solid rgba(255,255,255,0.1); border-radius: 10px;
+    padding: 18px; display: grid; gap: 10px;
+  }
+  .card h2 { margin: 0; font-size: 13px; color: #94a3b8; font-weight: 600; }
+  .value-readout { font: 12px ui-monospace, Menlo, Consolas, monospace; color: #94a3b8; }
+  .value-readout code { color: #e2e8f0; }
+  code { background: rgba(255,255,255,0.06); padding: 1px 5px; border-radius: 3px; font: 12px ui-monospace, Menlo, Consolas, monospace; }
+  /* Anti-FOUC */
+  is-date-picker:not(:defined) { visibility: hidden; }
+</style>
+<script type="module">
+  await import('../../../dist/cdn/forms/date-picker.min.js');
+
+  await customElements.whenDefined('is-date-picker');
+
+  const wire = (el, outputId) => {
+    el.addEventListener('is-change', (e) => {
+      const out = document.getElementById(outputId);
+      if (out) out.textContent = e.detail?.value ?? '(vacío)';
+    });
+  };
+
+  // 1. Calendario básico sin valor inicial
+  wire(document.getElementById('basic'), 'basic-value');
+
+  // 2. Con valor inicial
+  const withValue = document.getElementById('with-value');
+  withValue.setAttribute('value', '2026-06-15');
+  wire(withValue, 'with-value-value');
+
+  // 3. Con min/max
+  const ranged = document.getElementById('ranged');
+  ranged.setAttribute('min', '2025-01-01');
+  ranged.setAttribute('max', '2026-12-31');
+  wire(ranged, 'ranged-value');
+
+  // 4. Mostrando días fuera del mes
+  const outside = document.getElementById('outside');
+  outside.setAttribute('show-outside-days', '');
+  outside.setAttribute('fixed-weeks', '');
+  outside.setAttribute('value', '2026-02-15');
+  wire(outside, 'outside-value');
+
+  // 5. Con días deshabilitados (fines de semana)
+  const noWeekends = document.getElementById('no-weekends');
+  noWeekends.setAttribute('disabled-days', '0,6');
+  noWeekends.setAttribute('value', '2026-06-15');
+  wire(noWeekends, 'no-weekends-value');
+
+  // 6. Vista mes (en vez de día)
+  const monthView = document.getElementById('month-view');
+  monthView.setAttribute('view', 'month');
+  wire(monthView, 'month-view-value');
+
+  document.documentElement.dataset.datePickerReady = '1';
+</script>
+</head>
+<body>
+<main>
+  <header>
+    <h1>&lt;is-date-picker&gt; — Calendario mensual standalone</h1>
+    <p>Tres vistas: día, mes y año. Navegación por teclado: ←/→ entre días, ↑/↓ entre semanas, PageUp/PageDown entre meses (Shift+PageUp/Down entre años), Home/End inicio/fin de semana.</p>
+  </header>
+
+  <div class="grid">
+    <section class="card">
+      <h2>Básico</h2>
+      <is-date-picker id="basic"></is-date-picker>
+      <div class="value-readout">Valor actual: <code id="basic-value">(vacío)</code></div>
+    </section>
+
+    <section class="card">
+      <h2>Con valor inicial</h2>
+      <is-date-picker id="with-value"></is-date-picker>
+      <div class="value-readout">Valor actual: <code id="with-value-value">(vacío)</code></div>
+    </section>
+
+    <section class="card">
+      <h2>Con min / max</h2>
+      <is-date-picker id="ranged"></is-date-picker>
+      <div class="value-readout">Valor actual: <code id="ranged-value">(vacío)</code></div>
+    </section>
+
+    <section class="card">
+      <h2>Días fuera del mes + semanas fijas</h2>
+      <is-date-picker id="outside"></is-date-picker>
+      <div class="value-readout">Valor actual: <code id="outside-value">(vacío)</code></div>
+    </section>
+
+    <section class="card">
+      <h2>Fines de semana deshabilitados</h2>
+      <is-date-picker id="no-weekends"></is-date-picker>
+      <div class="value-readout">Valor actual: <code id="no-weekends-value">(vacío)</code></div>
+    </section>
+
+    <section class="card">
+      <h2>Vista mes</h2>
+      <is-date-picker id="month-view"></is-date-picker>
+      <div class="value-readout">Valor actual: <code id="month-view-value">(vacío)</code></div>
+    </section>
+  </div>
+</main>
+</body>
+</html>

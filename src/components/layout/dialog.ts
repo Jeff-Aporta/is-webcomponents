@@ -132,7 +132,13 @@ import { ModalBase } from '../_shared/modal-base.js';
     }
 
     /** Aplica un plain object (mismo shape que toJSON / demos JSON). */
-    fromJSON(json) {
+    fromJSON(json: Partial<{
+      open: boolean;
+      label: string;
+      withoutHeader: boolean;
+      lightDismiss: boolean;
+      backdropVariant: 'none' | 'basic';
+    }> | null | undefined): this {
       if (!json || typeof json !== 'object') return this;
       if (json.open != null) this.open = !!json.open;
       if (json.label != null) this.label = String(json.label);
@@ -142,7 +148,7 @@ import { ModalBase } from '../_shared/modal-base.js';
       return this;
     }
 
-    animateOpen() {
+    animateOpen(): Promise<void> {
       const dur = this.#readDur('--is-dialog-show-duration', 200);
       this.$modal.animate(
         [
@@ -158,7 +164,7 @@ import { ModalBase } from '../_shared/modal-base.js';
       return new Promise((resolve) => setTimeout(resolve, dur));
     }
 
-    animateClose() {
+    animateClose(): Promise<void> {
       const dur = this.#readDur('--is-dialog-hide-duration', 160);
       this.$modal.animate(
         [
@@ -174,7 +180,7 @@ import { ModalBase } from '../_shared/modal-base.js';
       return new Promise((resolve) => setTimeout(resolve, dur));
     }
 
-    #readDur(propName, fallback) {
+    #readDur(propName: string, fallback: number): number {
       const v = parseFloat(getComputedStyle(this).getPropertyValue(propName));
       return Number.isFinite(v) ? v : fallback;
     }

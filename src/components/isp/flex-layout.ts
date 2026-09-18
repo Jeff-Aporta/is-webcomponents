@@ -69,12 +69,12 @@ import { BreakpointHost } from './block-layout.js';
       this.#syncVars();
     }
 
-    onAttributeChanged(name, prev, next) {
+    onAttributeChanged(name: string, prev: string | null, next: string | null): void {
       super.onAttributeChanged(name, prev, next);
       if (name in SIZE_VARS) this.#syncVars();
     }
 
-    #syncVars() {
+    #syncVars(): void {
       for (const [attr, prop] of Object.entries(SIZE_VARS)) {
         const raw = this.getAttribute(attr);
         const value = raw == null ? '' : raw.trim();

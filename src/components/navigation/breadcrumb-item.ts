@@ -47,8 +47,8 @@ import { ElementBase } from '../../core/element-base.js';
   class IsBreadcrumbItem extends ElementBase {
     static get observedAttributes(): string[] { return OBSERVED; }
 
-    #anchor;
-    #upgradeProps = ['href', 'icon', 'target', 'rel'];
+    #anchor: HTMLAnchorElement | null = null;
+    #upgradeProps: string[] = ['href', 'icon', 'target', 'rel'];
 
     constructor() {
       super();
@@ -71,28 +71,28 @@ import { ElementBase } from '../../core/element-base.js';
 
     // ---- public properties ----
 
-    get href() {
+    get href(): string | null {
       return this.hasAttribute('href') ? this.getAttribute('href') : null;
     }
-    set href(v) {
+    set href(v: string | null | undefined) {
       if (v == null) this.removeAttribute('href');
       else this.setAttribute('href', v);
     }
 
-    get target() { return this.getAttribute('target') || ''; }
-    set target(v) {
+    get target(): string { return this.getAttribute('target') || ''; }
+    set target(v: string | null | undefined) {
       if (v == null || v === '') this.removeAttribute('target');
       else this.setAttribute('target', v);
     }
 
-    get rel() { return this.getAttribute('rel') || ''; }
-    set rel(v) {
+    get rel(): string { return this.getAttribute('rel') || ''; }
+    set rel(v: string | null | undefined) {
       if (v == null || v === '') this.removeAttribute('rel');
       else this.setAttribute('rel', v);
     }
 
-    get icon() { return this.getAttribute('icon') || ''; }
-    set icon(v) {
+    get icon(): string { return this.getAttribute('icon') || ''; }
+    set icon(v: string | null | undefined) {
       if (v == null || v === '') this.removeAttribute('icon');
       else this.setAttribute('icon', v);
     }
@@ -100,13 +100,14 @@ import { ElementBase } from '../../core/element-base.js';
     // ---- private ----
 
     #upgradeProperties() {
+      const self = this as unknown as Record<string, unknown>;
       for (const a of this.#upgradeProps) {
         if (Object.prototype.hasOwnProperty.call(this, a)) {
-          const v = this[a];
-          delete this[a];
+          const v = self[a];
+          delete self[a];
           if (v != null && v !== false) {
             if (v === true) this.setAttribute(a, '');
-            else this.setAttribute(a, v);
+            else this.setAttribute(a, String(v));
           }
         }
       }
@@ -119,6 +120,7 @@ import { ElementBase } from '../../core/element-base.js';
       if (href === null) return;
       const isCurrent = href === '';
       const label = this.shadowRoot!.querySelector<HTMLElement>('.label');
+      if (!label) return;
       const a = document.createElement('a');
       a.part = 'label';
       a.className = 'label';
@@ -152,6 +154,7 @@ import { ElementBase } from '../../core/element-base.js';
       const assigned = slot?.assignedNodes({ flatten: true });
       if (assigned && assigned.length > 0) return;
       const start = this.shadowRoot!.querySelector<HTMLElement>('.start');
+      if (!start) return;
       start.innerHTML = '';
       const icon = document.createElement('is-icon');
       icon.setAttribute('aria-hidden', 'true');

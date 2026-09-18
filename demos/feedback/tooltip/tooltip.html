@@ -1,0 +1,95 @@
+<!doctype html>
+<html lang="es" class="theme-dark" data-theme="dark">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>Demo <is-tooltip> · is-webcomponents</title>
+<meta name="description" content="Demo de <is-tooltip>: tooltip anclado a un target vía atributo for, triggers hover/focus/click/manual, arrow opcional." />
+<style>
+  html, body { margin: 0; padding: 0; background: #0c1118; color: #e2e8f0; font-family: ui-sans-serif, system-ui, sans-serif; }
+  body { padding: 24px; display: grid; gap: 24px; }
+  header h1 { font-size: 18px; margin: 0 0 4px; }
+  header p  { font-size: 13px; color: #94a3b8; margin: 0; }
+  section { background: #0f1620; border: 1px solid rgba(255,255,255,0.08); border-radius: 10px; padding: 18px; }
+  section h2 { font-size: 14px; margin: 0 0 12px; color: #94a3b8; font-weight: 600; text-transform: uppercase; letter-spacing: 0.05em; }
+  .row { display: flex; flex-wrap: wrap; gap: 12px; align-items: center; }
+  button { background: #1a2532; color: #e2e8f0; border: 1px solid rgba(255,255,255,0.1); border-radius: 6px; padding: 8px 12px; cursor: pointer; font: inherit; }
+  button:hover { background: #25303f; }
+  is-tooltip:not(:defined) { visibility: hidden; }
+</style>
+<script type="module">
+  await import('../../../dist/cdn/feedback/tooltip.min.js');
+
+  await customElements.whenDefined('is-tooltip');
+  document.documentElement.dataset.tooltipReady = '1';
+</script>
+</head>
+<body>
+<header>
+  <h1>is-tooltip</h1>
+  <p>Tooltip anclado a un target vía atributo <code>for</code>. Triggers: <code>hover focus</code> (default), <code>focus</code>, <code>click</code>, <code>manual</code>, <code>none</code>. Cierre con Escape o click fuera en modos interactivos.</p>
+</header>
+
+<section>
+  <h2>Default (hover + focus)</h2>
+  <div class="row">
+    <button id="t1" type="button">Hover / Focus aquí</button>
+    <is-tooltip for="t1">Hola, soy un tooltip</is-tooltip>
+  </div>
+</section>
+
+<section>
+  <h2>Placement + distance + sin arrow</h2>
+  <div class="row">
+    <button id="t2" type="button">Bottom-end sin arrow</button>
+    <is-tooltip for="t2" placement="bottom-end" without-arrow>Tooltip en bottom-end, sin arrow</is-tooltip>
+  </div>
+</section>
+
+<section>
+  <h2>Trigger focus (solo teclado)</h2>
+  <div class="row">
+    <button id="t3" type="button">Focus con Tab</button>
+    <is-tooltip for="t3" trigger="focus">Solo se abre con focus</is-tooltip>
+  </div>
+</section>
+
+<section>
+  <h2>Trigger click (toggle)</h2>
+  <div class="row">
+    <button id="t4" type="button">Click para abrir/cerrar</button>
+    <is-tooltip for="t4" trigger="click">Click-toggleable</is-tooltip>
+  </div>
+</section>
+
+<section>
+  <h2>Trigger manual (control programático)</h2>
+  <div class="row">
+    <button id="t5" type="button">Trigger</button>
+    <button id="t5-show" type="button">Mostrar</button>
+    <button id="t5-hide" type="button">Ocultar</button>
+    <is-tooltip id="tt5" for="t5" trigger="manual">Manual: show() / hide()</is-tooltip>
+    <script type="module">
+      document.getElementById('t5-show').addEventListener('click', () => {
+        document.getElementById('tt5').show();
+      });
+      document.getElementById('t5-hide').addEventListener('click', () => {
+        document.getElementById('tt5').hide();
+      });
+    </script>
+  </div>
+</section>
+
+<section>
+  <h2>Eventos</h2>
+  <pre id="event-log" style="background:#0a0e15;padding:8px;border-radius:6px;font-size:12px;min-height:32px;">(sin eventos)</pre>
+  <script type="module">
+    const log = document.getElementById('event-log');
+    document.addEventListener('is-show', (e) => { log.textContent = `is-show @ ${new Date().toISOString()}\n` + log.textContent; });
+    document.addEventListener('is-after-show', (e) => { log.textContent = `is-after-show\n` + log.textContent; });
+    document.addEventListener('is-hide', (e) => { log.textContent = `is-hide\n` + log.textContent; });
+    document.addEventListener('is-after-hide', (e) => { log.textContent = `is-after-hide\n` + log.textContent; });
+  </script>
+</section>
+</body>
+</html>

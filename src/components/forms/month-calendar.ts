@@ -16,7 +16,7 @@ import { ElementBase } from '../../core/element-base.js';
     <div part="base" class="base" role="radiogroup"></div>
   `;
 
-  const OBSERVED = ['value', 'year', 'min', 'max', 'locale', 'columns', 'month-width', 'disabled', 'readonly'];
+  const OBSERVED: string[] = ['value', 'year', 'min', 'max', 'locale', 'columns', 'month-width', 'disabled', 'readonly'];
 
   class IsMonthCalendar extends ElementBase {
     static get observedAttributes(): string[] { return OBSERVED; }
@@ -32,46 +32,48 @@ import { ElementBase } from '../../core/element-base.js';
       this.#base.addEventListener('keydown', this.#onKey);
     }
 
-    onConnected() {
+    onConnected(): void {
       this.#render();
     }
 
-    onAttributeChanged(name: string, oldVal: string | null, newVal: string | null) {
+    onAttributeChanged(_name: string, _oldVal: string | null, _newVal: string | null): void {
       this.#render();
     }
 
-    get value() { return this.getAttribute('value') ?? ''; }
-    set value(v) { v ? this.setAttribute('value', v) : this.removeAttribute('value'); }
+    get value(): string { return this.getAttribute('value') ?? ''; }
+    set value(v: string | null) { v ? this.setAttribute('value', v) : this.removeAttribute('value'); }
 
     /** Año mostrado: el de `value` si lo hay, si no `year`, si no el actual. */
-    get year() {
+    get year(): number {
       const fromValue = /^(\d{4})-(\d{2})/.exec(this.value);
       if (fromValue) return +fromValue[1];
       const attr = Number(this.getAttribute('year'));
       return Number.isFinite(attr) && attr > 0 ? attr : new Date().getFullYear();
     }
-    set year(v) { this.setAttribute('year', String(v)); }
+    set year(v: number | string) { this.setAttribute('year', String(v)); }
 
-    get month() {
+    get month(): number | null {
       const m = /^\d{4}-(\d{2})/.exec(this.value);
       return m ? +m[1] - 1 : null;
     }
 
-    get locale() { return this.getAttribute('locale') || document.documentElement.lang || undefined; }
-    set locale(v) { v ? this.setAttribute('locale', v) : this.removeAttribute('locale'); }
+    get locale(): string | undefined { return this.getAttribute('locale') || document.documentElement.lang || undefined; }
+    set locale(v: string | null) { v ? this.setAttribute('locale', v) : this.removeAttribute('locale'); }
 
-    get disabled() { return this.hasAttribute('disabled'); }
-    set disabled(v) { this.toggleAttribute('disabled', !!v); }
+    get disabled(): boolean { return this.hasAttribute('disabled'); }
+    set disabled(v: boolean) { this.toggleAttribute('disabled', !!v); }
 
-    get readonly() { return this.hasAttribute('readonly'); }
-    set readonly(v) { this.toggleAttribute('readonly', !!v); }
+    get readonly(): boolean { return this.hasAttribute('readonly'); }
+    set readonly(v: boolean) { this.toggleAttribute('readonly', !!v); }
 
-    focus(opts) {
-      (this.#base.querySelector<HTMLElement>('[tabindex="0"]') || this.#base.firstElementChild)?.focus(opts);
+    focus(opts?: FocusOptions): void {
+      const tabEl = this.#base.querySelector<HTMLElement>('[tabindex="0"]') as HTMLElement | null;
+      const first = this.#base.firstElementChild as HTMLElement | null;
+      (tabEl || first)?.focus(opts);
     }
 
     /** ¿Queda algún día seleccionable en ese mes? */
-    #reachable(month) {
+    #reachable(month: number): boolean {
       const year = this.year;
       const first = isoOf(year, month, 1);
       const last = isoOf(year, month, daysInMonth(year, month));
@@ -82,9 +84,9 @@ import { ElementBase } from '../../core/element-base.js';
       return true;
     }
 
-    #render() {
-      const labels = monthLabels(this.locale, {
-        width: this.getAttribute('month-width') || 'short',
+    #render(): void {
+      const labels = monthLabels(this.locale ?? '', {
+        width: (this.getAttribute('month-width') || 'short') as 'short' | 'long' | 'narrow',
         year: this.year,
       });
       const selected = this.month;
@@ -93,7 +95,7 @@ import { ElementBase } from '../../core/element-base.js';
       const now = new Date();
       const isThisYear = now.getFullYear() === this.year;
 
-      const cells = labels.map((label, m: string) => {
+      const cells = labels.map((label: string, m: number) => {
         const btn = document.createElement('button');
         btn.type = 'button';
         btn.className = 'month';
@@ -113,7 +115,7 @@ import { ElementBase } from '../../core/element-base.js';
       });
 
       // Tabindex móvil: el mes activo es la única parada del tabulador.
-      const active = cells.find((c) => c.hasAttribute('data-selected') && !c.disabled)
+      const active: HTMLButtonElement | undefined = cells.find((c) => c.hasAttribute('data-selected') && !c.disabled)
         || cells.find((c) => c.hasAttribute('data-current') && !c.disabled)
         || cells.find((c) => !c.disabled);
       for (const c of cells) c.tabIndex = c === active ? 0 : -1;
@@ -121,26 +123,26 @@ import { ElementBase } from '../../core/element-base.js';
       this.#base.replaceChildren(...cells);
     }
 
-    #select(month: number, { focus = false } = {}) {
+    #select(month: number, { focus = false }: { focus?: boolean } = {}): void {
       if (this.disabled || this.readonly) return;
-      const value = `${this.year}-${pad(month + 1)}`;
+      const value = `${this.year}-${pad(String(month + 1))}`;
       this.setAttribute('value', value);
       emit(this, 'is-change', { value, year: this.year, month });
       if (focus) this.#base.querySelector<HTMLElement>(`[data-month="${month}"]`)?.focus();
     }
 
-    #onClick = (e: PointerEvent) => {
-      const btn = e.target.closest('button.month');
+    #onClick = (e: PointerEvent): void => {
+      const btn = (e.target as Element | null)?.closest('button.month') as HTMLButtonElement | null;
       if (!btn || btn.disabled) return;
       this.#select(Number(btn.dataset.month));
     };
 
-    #onKey = (e: KeyboardEvent) => {
-      const btn = e.target.closest?.('button.month');
+    #onKey = (e: KeyboardEvent): void => {
+      const btn = (e.target as Element | null)?.closest?.('button.month') as HTMLButtonElement | null;
       if (!btn) return;
       const cols = Number(this.getAttribute('columns')) || 3;
       const from = Number(btn.dataset.month);
-      const steps = { ArrowLeft: -1, ArrowRight: 1, ArrowUp: -cols, ArrowDown: cols };
+      const steps: Record<string, number> = { ArrowLeft: -1, ArrowRight: 1, ArrowUp: -cols, ArrowDown: cols };
       if (e.key in steps) {
         e.preventDefault();
         this.#moveFocus(from, steps[e.key]);
@@ -153,11 +155,11 @@ import { ElementBase } from '../../core/element-base.js';
     };
 
     /** Salta al siguiente mes habilitado en esa dirección. */
-    #moveFocus(from, step) {
+    #moveFocus(from: number, step: number): void {
       for (let m = from + step; m >= 0 && m < 12; m += step) {
-        const el = this.#base.querySelector<HTMLElement>(`[data-month="${m}"]`);
+        const el = this.#base.querySelector<HTMLButtonElement>(`[data-month="${m}"]`);
         if (el && !el.disabled) {
-          for (const c of this.#base.children) c.tabIndex = c === el ? 0 : -1;
+          for (const c of Array.from(this.#base.children) as HTMLElement[]) c.tabIndex = c === el ? 0 : -1;
           el.focus();
           return;
         }

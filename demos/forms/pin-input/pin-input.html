@@ -1,0 +1,118 @@
+<!doctype html>
+<html lang="es" class="theme-dark" data-theme="dark">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>Input de PIN &lt;is-pin-input&gt; · is-webcomponents</title>
+<meta name="description" content="Casillas individuales para OTP/PIN con auto-avance, Backspace y paste." />
+<style>
+  html, body { margin: 0; padding: 0; min-height: 100%; background: #0c1118; color: #e2e8f0; font-family: ui-sans-serif, system-ui, sans-serif; }
+  body { display: grid; place-items: start center; padding: 32px 20px; }
+  main { max-width: 720px; width: 100%; display: grid; gap: 22px; }
+  header h1 { font-size: 18px; font-weight: 700; margin: 0 0 4px 0; }
+  header p { font-size: 12px; color: #94a3b8; margin: 0; }
+  section { background: #131a24; border: 1px solid rgba(255,255,255,0.08); border-radius: 10px; padding: 16px; display: grid; gap: 10px; }
+  section h2 { font-size: 13px; margin: 0; font-weight: 600; color: #cbd5e1; }
+  section .desc { font-size: 12px; color: #94a3b8; margin: 0; }
+  is-pin-input { width: 100%; }
+  is-pin-input + div { margin-top: 8px; font: 12px ui-monospace, Menlo, Consolas, monospace; color: #94a3b8; }
+  .row { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; }
+  code { background: rgba(255,255,255,0.06); padding: 1px 5px; border-radius: 3px; font: 12px ui-monospace, Menlo, Consolas, monospace; }
+  /* Anti-FOUC */
+  is-pin-input:not(:defined) { visibility: hidden; }
+</style>
+<script type="module">
+  await import('../../../dist/cdn/forms/pin-input.min.js');
+  await customElements.whenDefined('is-pin-input');
+
+  // (1) OTP 6 dígitos
+  const otp = document.createElement('is-pin-input');
+  otp.id = 'otp';
+  otp.length = 6;
+  otp.label = 'Código OTP';
+  otp.hint = 'Auto-avance al escribir. Backspace retrocede.';
+  otp.addEventListener('is-pin-change', (e) => {
+    document.getElementById('otp-out').textContent = `value="${e.detail.value}" (idx=${e.detail.index})`;
+  });
+  otp.addEventListener('is-pin-complete', (e) => {
+    document.getElementById('otp-status').textContent = `✓ completo: "${e.detail.value}"`;
+  });
+  document.querySelector('#sec-otp').appendChild(otp);
+
+  // (2) PIN 4 dígitos, enmascarado
+  const pin = document.createElement('is-pin-input');
+  pin.id = 'pin';
+  pin.length = 4;
+  pin.mask = true;
+  pin.label = 'PIN';
+  pin.hint = '4 dígitos enmascarados con ●';
+  document.querySelector('#sec-pin').appendChild(pin);
+
+  // (3) OTP 4 dígitos con placeholder
+  const corto = document.createElement('is-pin-input');
+  corto.id = 'corto';
+  corto.length = 4;
+  corto.placeholder = '•';
+  corto.label = 'OTP corto';
+  corto.hint = 'Casillas con placeholder "•"';
+  document.querySelector('#sec-corto').appendChild(corto);
+
+  // (4) tipo texto (letras + números)
+  const texto = document.createElement('is-pin-input');
+  texto.id = 'texto';
+  texto.length = 6;
+  texto.type = 'text';
+  texto.label = 'Código alfanumérico';
+  texto.hint = '6 caracteres A-Z + 0-9';
+  document.querySelector('#sec-texto').appendChild(texto);
+
+  // (5) deshabilitado
+  const bloqueado = document.createElement('is-pin-input');
+  bloqueado.id = 'bloqueado';
+  bloqueado.length = 6;
+  bloqueado.disabled = true;
+  bloqueado.label = 'PIN bloqueado';
+  bloqueado.hint = 'No editable';
+  bloqueado.value = '123456';
+  document.querySelector('#sec-disabled').appendChild(bloqueado);
+
+  document.documentElement.dataset.pinInputReady = '1';
+</script>
+</head>
+<body>
+<main>
+  <header>
+    <h1>&lt;is-pin-input&gt; · Casillas para OTP / PIN</h1>
+    <p>Atributos <code>length</code> (3–8), <code>type</code> (number|text), <code>mask</code>, <code>disabled</code>, <code>placeholder</code>. Emite <code>is-pin-change</code>, <code>is-pin-complete</code>.</p>
+  </header>
+
+  <section id="sec-otp">
+    <h2>OTP 6 dígitos</h2>
+    <p class="desc"><code>length="6"</code>, <code>type="number"</code> (default).</p>
+    <div id="otp-out">—</div>
+    <div id="otp-status">—</div>
+  </section>
+
+  <section id="sec-pin">
+    <h2>PIN 4 enmascarado</h2>
+    <p class="desc"><code>length="4"</code> y <code>mask</code>.</p>
+  </section>
+
+  <div class="row">
+    <section id="sec-corto">
+      <h2>OTP 4 con placeholder</h2>
+      <p class="desc"><code>placeholder="•"</code>.</p>
+    </section>
+    <section id="sec-texto">
+      <h2>Código alfanumérico</h2>
+      <p class="desc"><code>type="text"</code> permite A–Z y 0–9.</p>
+    </section>
+  </div>
+
+  <section id="sec-disabled">
+    <h2>Deshabilitado</h2>
+    <p class="desc"><code>disabled</code> bloquea edición. Value inicial 123456 visible.</p>
+  </section>
+</main>
+</body>
+</html>

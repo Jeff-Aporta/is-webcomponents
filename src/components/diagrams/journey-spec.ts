@@ -12,27 +12,55 @@ import { resolveTkHue } from '../_shared/tk-hue.js';
  * cambiar con `scale: { min, max }`.
  */
 
-const DEFAULT_HUES = [210, 239, 160, 38, 280, 199];
+const DEFAULT_HUES: number[] = [210, 239, 160, 38, 280, 199];
 
 const STEP_W = 132;
 const PLOT_H = 168;
 const PHASE_H = 30;
-const MARGIN = { top: 16, right: 24, bottom: 62, left: 54 };
+const MARGIN: { top: number; right: number; bottom: number; left: number } = { top: 16, right: 24, bottom: 62, left: 54 };
 
-function asRecord(v) {
-  return v && typeof v === 'object' ? v : {};
+function asRecord(v: unknown): Record<string, unknown> {
+  return v && typeof v === 'object' ? (v as Record<string, unknown>) : {};
 }
 
-function readPhase(raw, i: number) {
+interface JourneyPhase {
+  id: string;
+  name: string;
+  hue: number;
+}
+
+interface JourneyStep {
+  id: string;
+  phase: string;
+  label: string;
+  score?: number;
+  actor?: string;
+  description?: string;
+}
+
+interface JourneyScale {
+  min: number;
+  max: number;
+}
+
+export interface JourneySpec {
+  title?: string;
+  subtitle?: string;
+  scale: JourneyScale;
+  phases: JourneyPhase[];
+  steps: JourneyStep[];
+}
+
+function readPhase(raw: unknown, i: number): JourneyPhase {
   const r = asRecord(raw);
   return {
     id: String(r.id ?? `f${i}`),
     name: String(r.name ?? r.label ?? r.id ?? `Fase ${i + 1}`),
-    hue: resolveTkHue(r, DEFAULT_HUES[i % DEFAULT_HUES.length]),
+    hue: resolveTkHue(r, DEFAULT_HUES[i % DEFAULT_HUES.length] ?? 210),
   };
 }
 
-function readStep(raw, i: number) {
+function readStep(raw: unknown, i: number): JourneyStep {
   const r = asRecord(raw);
   const score = Number(r.score ?? r.value ?? r.satisfaction);
   return {
@@ -46,19 +74,22 @@ function readStep(raw, i: number) {
 }
 
 /** payload → spec normalizada, o null si no hay pasos. */
-export function resolveJourneySpec(payload) {
+export function resolveJourneySpec(payload: unknown): JourneySpec | null {
   const p = asRecord(payload);
   const src = asRecord(p.journey ?? p.journeyMap ?? p);
   const rawSteps = src.steps ?? src.tasks ?? [];
   if (!Array.isArray(rawSteps) || !rawSteps.length) return null;
 
-  const steps = rawSteps.map(readStep);
-  const declared = (Array.isArray(src.phases) ? src.phases : []).map(readPhase);
-  const byId = new Map(declared.map((f) => [f.id, f]));
+  const steps: JourneyStep[] = rawSteps.map(readStep);
+  const declared: JourneyPhase[] = (Array.isArray(src.phases) ? src.phases : []).map(readPhase);
+  const byId = new Map<string, JourneyPhase>(declared.map((f) => [f.id, f]));
   let auto = declared.length;
   for (const s of steps) {
     if (!s.phase) s.phase = declared[0]?.id ?? 'f0';
-    if (!byId.has(s.phase)) byId.set(s.phase, readPhase({ id: s.phase, name: s.phase }, auto++));
+    if (!byId.has(s.phase)) {
+      const autoPhase = readPhase({ id: s.phase, name: s.phase }, auto++);
+      byId.set(s.phase, autoPhase);
+    }
   }
 
   const scale = asRecord(src.scale);
@@ -76,15 +107,30 @@ export function resolveJourneySpec(payload) {
   };
 }
 
+interface JourneyJsonOut {
+  title?: string;
+  subtitle?: string;
+  scale?: JourneyScale;
+  phases: Array<{ id: string; name: string; hue: number }>;
+  steps: Array<{
+    id: string;
+    phase: string;
+    label: string;
+    score?: number;
+    actor?: string;
+    desc?: string;
+  }>;
+}
+
 /** spec → objeto `journey` listo para persistir / mostrar en el editor. */
-export function journeySpecToJson(spec) {
-  const out = { phases: [], steps: [] };
+export function journeySpecToJson(spec: JourneySpec): JourneyJsonOut {
+  const out: JourneyJsonOut = { phases: [], steps: [] };
   if (spec.title) out.title = spec.title;
   if (spec.subtitle) out.subtitle = spec.subtitle;
   if (spec.scale.min !== 1 || spec.scale.max !== 5) out.scale = { ...spec.scale };
   out.phases = spec.phases.map((f) => ({ id: f.id, name: f.name, hue: f.hue }));
   out.steps = spec.steps.map((s) => {
-    const row = { id: s.id, phase: s.phase, label: s.label };
+    const row: JourneyJsonOut['steps'][number] = { id: s.id, phase: s.phase, label: s.label };
     if (s.score != null) row.score = s.score;
     if (s.actor) row.actor = s.actor;
     if (s.description) row.desc = s.description;
@@ -93,11 +139,65 @@ export function journeySpecToJson(spec) {
   return out;
 }
 
+interface JourneyPlotRect {
+  x: number;
+  y: number;
+  w: number;
+  h: number;
+}
+
+interface JourneyLayoutStep {
+  id: string;
+  label: string;
+  phase: string;
+  actor?: string;
+  description?: string;
+  score?: number;
+  hue?: number;
+  cx: number;
+  cy: number;
+  labelY: number;
+  actorY: number;
+  hasScore: boolean;
+}
+
+interface JourneyLayoutPhase {
+  id: string;
+  name: string;
+  hue?: number;
+  x: number;
+  y: number;
+  w: number;
+  h: number;
+}
+
+interface JourneyLayoutGridLine {
+  value: number;
+  y: number;
+  x1: number;
+  x2: number;
+  labelX: number;
+}
+
+export interface JourneyLayout {
+  width: number;
+  height: number;
+  plot: JourneyPlotRect;
+  phases: JourneyLayoutPhase[];
+  steps: JourneyLayoutStep[];
+  line: string;
+  gridLines: JourneyLayoutGridLine[];
+  scale: JourneyScale;
+  title?: string;
+  subtitle?: string;
+  titleY: number;
+  subtitleY: number;
+}
+
 /**
  * spec → geometría lista para pintar.
- * @returns {{width:number, height:number, plot:object, phases:Array, steps:Array, line:string, gridLines:Array, title?:string, subtitle?:string, titleY:number, subtitleY:number}}
  */
-export function computeJourneyLayout(spec) {
+export function computeJourneyLayout(spec: JourneySpec): JourneyLayout {
   const title = spec.title ?? '';
   const subtitle = spec.subtitle ?? '';
   const titleY = title ? 22 : 14;
@@ -105,12 +205,12 @@ export function computeJourneyLayout(spec) {
   const headerH = title || subtitle ? (subtitle ? 54 : 36) : 0;
 
   // Los pasos se ordenan por fase declarada: el eje X es el recorrido.
-  const phaseOrder = new Map(spec.phases.map((f, i) => [f.id, i]));
+  const phaseOrder = new Map<string, number>(spec.phases.map((f, i) => [f.id, i]));
   const ordered = [...spec.steps].sort((a, b) => (phaseOrder.get(a.phase) ?? 0) - (phaseOrder.get(b.phase) ?? 0));
 
   const originX = MARGIN.left;
   const phasesY = MARGIN.top + headerH;
-  const plot = {
+  const plot: JourneyPlotRect = {
     x: originX,
     y: phasesY + PHASE_H + 10,
     w: ordered.length * STEP_W,
@@ -119,9 +219,9 @@ export function computeJourneyLayout(spec) {
 
   const { min, max } = spec.scale;
   const span = max - min || 1;
-  const toY = (score) => plot.y + plot.h - ((score - min) / span) * plot.h;
+  const toY = (score: number): number => plot.y + plot.h - ((score - min) / span) * plot.h;
 
-  const steps = ordered.map((s, i) => {
+  const steps: JourneyLayoutStep[] = ordered.map((s, i) => {
     const cx = plot.x + i * STEP_W + STEP_W / 2;
     const score = s.score != null ? Math.min(max, Math.max(min, s.score)) : undefined;
     return {
@@ -141,12 +241,12 @@ export function computeJourneyLayout(spec) {
   });
 
   // Bandas de fase: una por grupo contiguo de pasos de la misma fase.
-  const phases = [];
+  const phases: JourneyLayoutPhase[] = [];
   let cursor = 0;
   while (cursor < steps.length) {
-    const phaseId = steps[cursor].phase;
+    const phaseId = steps[cursor]!.phase;
     let end = cursor;
-    while (end + 1 < steps.length && steps[end + 1].phase === phaseId) end++;
+    while (end + 1 < steps.length && steps[end + 1]!.phase === phaseId) end++;
     const meta = spec.phases[phaseOrder.get(phaseId) ?? 0];
     phases.push({
       id: phaseId,
@@ -166,7 +266,7 @@ export function computeJourneyLayout(spec) {
     ? scored.map((s, i) => `${i === 0 ? 'M' : 'L'}${s.cx},${s.cy}`).join(' ')
     : '';
 
-  const gridLines = [];
+  const gridLines: JourneyLayoutGridLine[] = [];
   for (let v = min; v <= max; v++) {
     gridLines.push({ value: v, y: toY(v), x1: plot.x, x2: plot.x + plot.w, labelX: plot.x - 10 });
   }

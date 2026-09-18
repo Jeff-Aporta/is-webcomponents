@@ -10,6 +10,53 @@ import { setStringAttr } from '../_shared/reflect.js';
  * Métodos: listen(), stop(), speak(text?), cancel()
  * Eventos: is-result { transcript, isFinal }, is-speak-end, is-error { message }
  */
+
+// Tipos de la Web Speech API: no están en lib.dom.d.ts (Chromium/webkit las
+// expone bajo `webkitSpeechRecognition` y en Firefox detrás de flag). Declaramos
+// sólo el subset que el componente usa para que `rec.lang = 'es-ES'` typecheckee.
+interface SpeechRecognitionEvent extends Event {
+  resultIndex: number;
+  results: SpeechRecognitionResultList;
+}
+interface SpeechRecognitionResultList {
+  readonly length: number;
+  [index: number]: SpeechRecognitionResult;
+}
+interface SpeechRecognitionResult {
+  readonly length: number;
+  isFinal: boolean;
+  [index: number]: SpeechRecognitionAlternative;
+}
+interface SpeechRecognitionAlternative {
+  transcript: string;
+  confidence: number;
+}
+interface SpeechRecognitionErrorEvent extends Event {
+  error: string;
+  message?: string;
+}
+interface SpeechRecognitionInstance extends EventTarget {
+  lang: string;
+  continuous: boolean;
+  interimResults: boolean;
+  onresult: ((ev: SpeechRecognitionEvent) => void) | null;
+  onerror: ((ev: SpeechRecognitionErrorEvent) => void) | null;
+  onend: ((ev: Event) => void) | null;
+  start(): void;
+  stop(): void;
+  abort?(): void;
+}
+type SpeechRecognitionCtor = new () => SpeechRecognitionInstance;
+
+interface SpeechRecognitionConstructorBag {
+  SpeechRecognition?: SpeechRecognitionCtor;
+  webkitSpeechRecognition?: SpeechRecognitionCtor;
+}
+
+declare global {
+  interface Window extends SpeechRecognitionConstructorBag { }
+}
+
 (() => {
   const TEMPLATE = document.createElement('template');
   TEMPLATE.innerHTML = /* html */ `
@@ -25,8 +72,9 @@ import { setStringAttr } from '../_shared/reflect.js';
     <slot></slot>
   `;
 
-  function recCtor() {
-    return window.SpeechRecognition || window.webkitSpeechRecognition || null;
+  function recCtor(): SpeechRecognitionCtor | null {
+    const w = window as Window & SpeechRecognitionConstructorBag;
+    return w.SpeechRecognition || w.webkitSpeechRecognition || null;
   }
 
   class IsSpeech extends HTMLElement {
@@ -49,7 +97,7 @@ import { setStringAttr } from '../_shared/reflect.js';
       }
     }
 
-    #rec = null;
+    #rec: SpeechRecognitionInstance | null = null;
     #listening = false;
     #out!: HTMLElement;
     #listenBtn!: HTMLElement;
@@ -68,12 +116,12 @@ import { setStringAttr } from '../_shared/reflect.js';
 
     disconnectedCallback(): void { this.stop(); this.cancel(); }
 
-    get lang() { return this.getAttribute('lang') || document.documentElement.lang || 'es-ES'; }
-    set lang(v) { setStringAttr(this, 'lang', v); }
-    get text() { return this.getAttribute('text') ?? this.textContent ?? ''; }
-    set text(v) { setStringAttr(this, 'text', v); }
+    get lang(): string { return this.getAttribute('lang') || document.documentElement.lang || 'es-ES'; }
+    set lang(v: string) { setStringAttr(this, 'lang', v); }
+    get text(): string { return this.getAttribute('text') ?? this.textContent ?? ''; }
+    set text(v: string) { setStringAttr(this, 'text', v); }
 
-    listen() {
+    listen(): void {
       const Ctor = recCtor();
       if (!Ctor) {
         emit(this, 'is-error', { message: 'SpeechRecognition no disponible' });
@@ -84,7 +132,7 @@ import { setStringAttr } from '../_shared/reflect.js';
       rec.lang = this.lang;
       rec.continuous = true;
       rec.interimResults = true;
-      rec.onresult = (ev) => {
+      rec.onresult = (ev: SpeechRecognitionEvent) => {
         let finals = '';
         let inter = '';
         for (let i = ev.resultIndex; i < ev.results.length; i++) {
@@ -96,7 +144,7 @@ import { setStringAttr } from '../_shared/reflect.js';
         this.#out.textContent = transcript;
         emit(this, 'is-result', { transcript, isFinal: Boolean(finals) });
       };
-      rec.onerror = (ev) => {
+      rec.onerror = (ev: SpeechRecognitionErrorEvent) => {
         if (ev.error === 'no-speech' || ev.error === 'aborted') return;
         emit(this, 'is-error', { message: ev.error || 'speech' });
       };
@@ -111,14 +159,14 @@ import { setStringAttr } from '../_shared/reflect.js';
       rec.start();
     }
 
-    stop() {
+    stop(): void {
       this.#listening = false;
       try { this.#rec?.stop(); } catch { this.#rec?.abort?.(); }
       this.#rec = null;
       this.#syncListen();
     }
 
-    speak(raw) {
+    speak(raw?: string): void {
       const t = String(raw ?? this.text ?? this.#out.textContent ?? '').trim();
       if (!t || !window.speechSynthesis) {
         if (!window.speechSynthesis) emit(this, 'is-error', { message: 'speechSynthesis no disponible' });
@@ -131,11 +179,11 @@ import { setStringAttr } from '../_shared/reflect.js';
       window.speechSynthesis.speak(u);
     }
 
-    cancel() {
+    cancel(): void {
       window.speechSynthesis?.cancel();
     }
 
-    #syncListen() {
+    #syncListen(): void {
       this.#listenBtn.setAttribute('aria-pressed', this.#listening ? 'true' : 'false');
       this.toggleAttribute('listening', this.#listening);
     }

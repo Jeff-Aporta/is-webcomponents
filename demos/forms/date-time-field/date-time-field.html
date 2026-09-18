@@ -1,0 +1,129 @@
+<!doctype html>
+<html lang="es" class="theme-dark" data-theme="dark">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>Demo de <is-date-time-field> · is-webcomponents</title>
+<meta name="description" content="Campo de fecha y hora editable por secciones (año, mes, día, hora, minuto, AM/PM) como spinbutton con flechas, navegación izquierda/derecha y teclado." />
+<style>
+  html, body { margin: 0; padding: 0; min-height: 100%; background: #0c1118; color: #e2e8f0; font-family: ui-sans-serif, system-ui, sans-serif; }
+  body { display: grid; place-items: start center; padding: 32px 20px; }
+  main { max-width: 760px; width: 100%; display: grid; gap: 22px; }
+  header h1 { font-size: 18px; font-weight: 700; margin: 0; }
+  header p { font-size: 12px; color: #94a3b8; margin: 4px 0 0 0; }
+  .card {
+    background: #131a24; border: 1px solid rgba(255,255,255,0.1); border-radius: 10px;
+    padding: 18px; display: grid; gap: 10px;
+  }
+  .card h2 { margin: 0; font-size: 13px; color: #94a3b8; font-weight: 600; }
+  .value-readout { font: 12px ui-monospace, Menlo, Consolas, monospace; color: #94a3b8; }
+  .value-readout code { color: #e2e8f0; }
+  code { background: rgba(255,255,255,0.06); padding: 1px 5px; border-radius: 3px; font: 12px ui-monospace, Menlo, Consolas, monospace; }
+  /* Anti-FOUC */
+  is-date-time-field:not(:defined) { visibility: hidden; }
+</style>
+<script type="module">
+  // Carga solo el bundle que necesitamos desde los pre-construidos en dist/cdn/.
+  await import('../../../dist/cdn/forms/date-time-field.min.js');
+
+  await customElements.whenDefined('is-date-time-field');
+
+  // Helper para reflejar el valor en pantalla (útil para los tests).
+  const wire = (el, outputId) => {
+    const update = (value) => {
+      const out = document.getElementById(outputId);
+      if (out) out.textContent = value || '(vacío)';
+    };
+    el.addEventListener('is-change', (e) => update(e.detail?.value));
+    el.addEventListener('is-input', (e) => update(e.detail?.value));
+  };
+
+  // 1. Básico (24h, sin segundos)
+  const basic = document.getElementById('basic');
+  wire(basic, 'basic-value');
+
+  // 2. Con valor inicial y segundos visibles
+  const initial = document.getElementById('initial');
+  initial.setAttribute('value', '2026-07-15T14:30:00');
+  initial.setAttribute('seconds', '');
+  wire(initial, 'initial-value');
+
+  // 3. Formato 12h (AM/PM)
+  const ampm = document.getElementById('ampm');
+  ampm.setAttribute('value', '2026-03-20T09:15');
+  ampm.setAttribute('locale', 'en-US');
+  wire(ampm, 'ampm-value');
+
+  // 4. Con hint, required y rango permitido
+  const withHint = document.getElementById('with-hint');
+  wire(withHint, 'with-hint-value');
+
+  // 5. Borrable
+  const clearable = document.getElementById('clearable');
+  wire(clearable, 'clearable-value');
+
+  // 6. Deshabilitado
+  const disabledField = document.getElementById('disabled-field');
+  disabledField.setAttribute('value', '2026-01-01T08:00');
+  wire(disabledField, 'disabled-value');
+
+  // 7. Solo lectura
+  const readonlyField = document.getElementById('readonly-field');
+  readonlyField.setAttribute('value', '2026-12-31T17:45');
+  wire(readonlyField, 'readonly-value');
+
+  document.documentElement.dataset.dateTimeFieldReady = '1';
+</script>
+</head>
+<body>
+<main>
+  <header>
+    <h1>&lt;is-date-time-field&gt; — Fecha y hora por secciones</h1>
+    <p>Cada sección (año, mes, día, hora, minuto, opcionalmente segundo y AM/PM) es un spinbutton. Flechas ↑/↓ para subir/bajar, ←/→ para saltar, dígitos para escribir, Retroceso para vaciar.</p>
+  </header>
+
+  <section class="card">
+    <h2>Básico (24h, sin segundos)</h2>
+    <is-date-time-field id="basic" label="Fecha y hora" name="basic"></is-date-time-field>
+    <div class="value-readout">Valor actual: <code id="basic-value">(vacío)</code></div>
+  </section>
+
+  <section class="card">
+    <h2>Con valor inicial y segundos</h2>
+    <is-date-time-field id="initial" label="Inicio de sesión" hint="Edita el día con flechas o dígitos" name="login" seconds></is-date-time-field>
+    <div class="value-readout">Valor actual: <code id="initial-value">(vacío)</code></div>
+  </section>
+
+  <section class="card">
+    <h2>Formato 12 horas (AM/PM)</h2>
+    <is-date-time-field id="ampm" label="Hora local" hint="locale en-US con ampm explícito" name="local" ampm locale="en-US" value="2026-03-20T09:15"></is-date-time-field>
+    <div class="value-readout">Valor actual: <code id="ampm-value">(vacío)</code></div>
+  </section>
+
+  <section class="card">
+    <h2>Con texto de ayuda y validación (required + min/max)</h2>
+    <is-date-time-field id="with-hint" label="Inicio del evento" hint="Entre el 2025-01-01T00:00 y el 2026-12-31T23:59" name="event"
+                        min="2025-01-01T00:00" max="2026-12-31T23:59" required clearable></is-date-time-field>
+    <div class="value-readout">Valor actual: <code id="with-hint-value">(vacío)</code></div>
+  </section>
+
+  <section class="card">
+    <h2>Borrable (botón × para limpiar)</h2>
+    <is-date-time-field id="clearable" label="Fecha y hora opcional" clearable name="opt" value="2026-03-10T12:00"></is-date-time-field>
+    <div class="value-readout">Valor actual: <code id="clearable-value">(vacío)</code></div>
+  </section>
+
+  <section class="card">
+    <h2>Deshabilitado</h2>
+    <is-date-time-field id="disabled-field" label="No editable" name="d" disabled></is-date-time-field>
+    <div class="value-readout">Valor actual: <code id="disabled-value">(vacío)</code></div>
+  </section>
+
+  <section class="card">
+    <h2>Solo lectura</h2>
+    <is-date-time-field id="readonly-field" label="Solo lectura" name="r" readonly></is-date-time-field>
+    <div class="value-readout">Valor actual: <code id="readonly-value">(vacío)</code></div>
+  </section>
+</main>
+</body>
+</html>

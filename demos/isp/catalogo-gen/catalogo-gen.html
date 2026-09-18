@@ -1,0 +1,124 @@
+<!doctype html>
+<html lang="es" class="theme-dark" data-theme="dark">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>&lt;is-catalogo-gen&gt; · is-webcomponents</title>
+<meta name="description" content="Catálogo CRUD genérico: toolbar + ag-grid + drawer de ficha + modal verificación + confirm-delete + recodificar." />
+<style>
+  html, body { margin: 0; padding: 0; min-height: 100%; background: #0c1118; color: #e2e8f0; font-family: ui-sans-serif, system-ui, sans-serif; }
+  body { display: grid; grid-template-rows: auto 1fr; min-height: 100vh; }
+  header {
+    padding: 16px 20px; border-bottom: 1px solid rgba(255,255,255,0.1);
+    display: flex; align-items: center; gap: 14px; background: #0f1620;
+  }
+  header h1 { font-size: 16px; font-weight: 700; margin: 0; }
+  header p { font-size: 12px; color: #94a3b8; margin: 0; }
+  header .spacer { flex: 1; }
+  main { display: grid; padding: 20px; max-width: 1200px; margin: 0 auto; width: 100%; box-sizing: border-box; min-height: 0; }
+  .log { font: 12px ui-monospace, Menlo, Consolas, monospace; background: rgba(0,0,0,0.3); padding: 8px; border-radius: 4px; min-height: 60px; white-space: pre-wrap; margin-top: 12px; }
+  is-catalogo-gen { height: 70vh; display: block; border: 1px solid rgba(255,255,255,0.1); border-radius: 6px; overflow: hidden; }
+  is-catalogo-gen:not(:defined) { visibility: hidden; }
+</style>
+<script type="module">
+  // Dependencias transitivas de <is-catalogo-gen>.
+  await import('../../../dist/cdn/actions/button.min.js');
+  await import('../../../dist/cdn/forms/input.min.js');
+  await import('../../../dist/cdn/media/icon.min.js');
+  await import('../../../dist/cdn/data/ag-grid.min.js');
+  await import('../../../dist/cdn/layout/drawer.min.js');
+  await import('../../../dist/cdn/layout/dialog.min.js');
+  await import('../../../dist/cdn/isp/text.min.js');
+  await import('../../../dist/cdn/isp/heading.min.js');
+  await import('../../../dist/cdn/isp/confirm-delete.min.js');
+  await import('../../../dist/cdn/isp/modal-verificacion.min.js');
+  await import('../../../dist/cdn/isp/form.min.js');
+  await import('../../../dist/cdn/isp/controller-from-config.min.js');
+  await import('../../../dist/cdn/isp/catalogo-gen.min.js');
+  await customElements.whenDefined('is-catalogo-gen');
+
+  // ── Datos fake en memoria ────────────────────────────────────────────
+  const PRODUCTOS = [
+    { app: 'CP', descripcion: 'ContaPyme', activo: true },
+    { app: 'AW', descripcion: 'AgroWin', activo: true },
+    { app: 'NS', descripcion: 'NominaSoft', activo: false },
+    { app: 'IM', descripcion: 'InventarioMax', activo: true },
+  ];
+
+  const ctrl = {
+    entrie: 'Aplicación',
+    primaryKeys: ['app'],
+    columns: [
+      { field: 'app', header: 'App', width: 100 },
+      { field: 'descripcion', header: 'Descripción' },
+      { field: 'activo', header: 'Activo', width: 100 },
+    ],
+    async Lista({ pagina = 1, qregistros = 50, filtro = null, sort = [] } = {}) {
+      let rows = PRODUCTOS.slice();
+      if (filtro?.sql) rows = rows.filter((r) => r.app.toLowerCase().includes(filtro.sql.replace(/.*LIKE\s*'([^']+)'.*/i, '$1').toLowerCase()));
+      return { datos: rows, total: rows.length };
+    },
+    async Crear(rec) {
+      PRODUCTOS.push(rec);
+      return rec;
+    },
+    async Modificar(rec) {
+      const idx = PRODUCTOS.findIndex((r) => r.app === rec.app);
+      if (idx >= 0) PRODUCTOS[idx] = rec;
+      return rec;
+    },
+    async Eliminar(rec) {
+      const idx = PRODUCTOS.findIndex((r) => r.app === rec.app);
+      if (idx >= 0) PRODUCTOS.splice(idx, 1);
+      return rec;
+    },
+    async actVerificar(rec) {
+      return {
+        mensajes: [
+          { itdmensaje: 'info', mensaje: `Código ${rec.app} válido.` },
+          { itdmensaje: 'success', mensaje: 'Sin problemas.' },
+        ],
+      };
+    },
+  };
+
+  const cat = document.getElementById('cat');
+  cat.controller = ctrl;
+  cat.bAllowed = { Crear: true, Modificar: true, Visualizar: true, Eliminar: true, Verificar: true };
+
+  const eventLog = document.getElementById('event-log');
+  const log = (m) => { eventLog.textContent += new Date().toISOString().slice(11, 19) + ' ' + m + '\n'; };
+  for (const evt of ['is-selection-change', 'is-double-click', 'is-action', 'is-error', 'is-frm-open', 'is-frm-close']) {
+    cat.addEventListener(evt, (e) => log(`${evt}: ${JSON.stringify(e.detail || {}).slice(0, 140)}`));
+  }
+
+  // Form slot
+  cat.innerHTML = `
+    <is-form slot="frm" id="frm">
+      <h3 slot="header">Aplicación</h3>
+      <div slot="content" style="padding: 12px; display: grid; gap: 8px;">
+        <is-input name="app" label="Código" required></is-input>
+        <is-input name="descripcion" label="Descripción" required></is-input>
+        <is-switch name="activo">Activo</is-switch>
+      </div>
+    </is-form>
+  `;
+
+  document.documentElement.dataset.catalogoReady = '1';
+</script>
+</head>
+<body>
+<header>
+  <div>
+    <h1>&lt;is-catalogo-gen&gt; — catálogo CRUD genérico</h1>
+    <p>Toolbar + ag-grid + drawer de ficha + modales de verificación y borrado.</p>
+  </div>
+  <div class="spacer"></div>
+  <code>is-catalogo-gen</code>
+</header>
+<main>
+  <is-catalogo-gen id="cat" show-header></is-catalogo-gen>
+  <pre id="event-log" class="log"></pre>
+</main>
+</body>
+</html>

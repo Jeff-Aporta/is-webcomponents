@@ -1,0 +1,54 @@
+<!doctype html>
+<html lang="es" class="theme-dark" data-theme="dark">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>Demo — <is-journey-map> · is-webcomponents</title>
+<meta name="description" content="Mapa de recorrido (user journey) con puntajes de satisfacción por paso y fases." />
+<style>
+  html, body { margin: 0; padding: 0; min-height: 100%; background: #0c1118; color: #e2e8f0; font-family: ui-sans-serif, system-ui, sans-serif; }
+  body { display: grid; grid-template-rows: auto 1fr; }
+  header { padding: 16px 20px; border-bottom: 1px solid rgba(255,255,255,0.1); background: #0f1620; }
+  header h1 { font-size: 16px; font-weight: 700; margin: 0; }
+  header p { font-size: 12px; color: #94a3b8; margin: 4px 0 0 0; }
+  main { display: grid; place-items: stretch; min-height: 0; padding: 12px; }
+  is-journey-map { width: 100%; height: 100%; min-height: 480px; display: block; }
+  is-journey-map:not(:defined) { visibility: hidden; }
+</style>
+<script type="module">
+  await import('../../../dist/cdn/diagrams/journey-map.min.js');
+  await customElements.whenDefined('is-journey-map');
+
+  const el = document.createElement('is-journey-map');
+  el.payload = {
+    journey: {
+      title: 'Compra online',
+      subtitle: '5 pasos · 3 fases · escala 1..5',
+      scale: { min: 1, max: 5 },
+      phases: [
+        { id: 'awareness', name: 'Descubrir' },
+        { id: 'purchase', name: 'Comprar' },
+        { id: 'support', name: 'Soporte' },
+      ],
+      steps: [
+        { id: 's1', phase: 'awareness', label: 'Ver anuncio', actor: 'Visitante', score: 4 },
+        { id: 's2', phase: 'awareness', label: 'Buscar reviews', actor: 'Visitante', score: 3 },
+        { id: 's3', phase: 'purchase', label: 'Checkout', actor: 'Cliente', score: 2 },
+        { id: 's4', phase: 'support', label: 'Pedir ayuda', actor: 'Cliente', score: 1 },
+        { id: 's5', phase: 'support', label: 'Reembolso', actor: 'Cliente', score: 4 },
+      ],
+    },
+  };
+  document.querySelector('main').appendChild(el);
+
+  document.documentElement.dataset.journeyMapReady = '1';
+</script>
+</head>
+<body>
+  <header>
+    <h1>Demo — <code>&lt;is-journey-map&gt;</code></h1>
+    <p>Journey map: pasos con puntaje de satisfacción (1..5), agrupados por fase. La curva une los pasos medidos.</p>
+  </header>
+  <main></main>
+</body>
+</html>

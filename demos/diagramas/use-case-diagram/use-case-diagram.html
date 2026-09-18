@@ -1,0 +1,58 @@
+<!doctype html>
+<html lang="es" class="theme-dark" data-theme="dark">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>Demo — <is-use-case-diagram> · is-webcomponents</title>
+<meta name="description" content="Diagrama de casos de uso UML con actores, sistema (frontera) y enlaces include/extend." />
+<style>
+  html, body { margin: 0; padding: 0; min-height: 100%; background: #0c1118; color: #e2e8f0; font-family: ui-sans-serif, system-ui, sans-serif; }
+  body { display: grid; grid-template-rows: auto 1fr; }
+  header { padding: 16px 20px; border-bottom: 1px solid rgba(255,255,255,0.1); background: #0f1620; }
+  header h1 { font-size: 16px; font-weight: 700; margin: 0; }
+  header p { font-size: 12px; color: #94a3b8; margin: 4px 0 0 0; }
+  main { display: grid; place-items: stretch; min-height: 0; padding: 12px; }
+  is-use-case-diagram { width: 100%; height: 100%; min-height: 480px; display: block; }
+  is-use-case-diagram:not(:defined) { visibility: hidden; }
+</style>
+<script type="module">
+  await import('../../../dist/cdn/diagrams/use-case-diagram.min.js');
+  await customElements.whenDefined('is-use-case-diagram');
+
+  const el = document.createElement('is-use-case-diagram');
+  el.payload = {
+    useCase: {
+      title: 'Sistema de ventas',
+      subtitle: '2 actores · 3 casos de uso · 5 enlaces',
+      system: 'TiendaOnline',
+      actors: [
+        { id: 'cli', label: 'Cliente' },
+        { id: 'adm', label: 'Admin' },
+      ],
+      cases: [
+        { id: 'c1', label: 'Comprar' },
+        { id: 'c2', label: 'Pagar' },
+        { id: 'c3', label: 'Gestionar catálogo' },
+      ],
+      links: [
+        { id: 'l1', from: 'cli', to: 'c1' },
+        { id: 'l2', from: 'cli', to: 'c2' },
+        { id: 'l3', from: 'adm', to: 'c3' },
+        { id: 'l4', from: 'c1', to: 'c2', kind: 'include' },
+        { id: 'l5', from: 'c1', to: 'c3', kind: 'extend' },
+      ],
+    },
+  };
+  document.querySelector('main').appendChild(el);
+
+  document.documentElement.dataset.ucReady = '1';
+</script>
+</head>
+<body>
+  <header>
+    <h1>Demo — <code>&lt;is-use-case-diagram&gt;</code></h1>
+    <p>Casos de uso UML: actores (stickman) + casos (óvalo) + sistema (rectángulo) + aristas include/extend.</p>
+  </header>
+  <main></main>
+</body>
+</html>

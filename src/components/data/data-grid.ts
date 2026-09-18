@@ -3,7 +3,7 @@ import { withStyleAttrs } from '../../core/attrs.js';
 
 import { escapeHtml } from '../_shared/dom-utils.js';
 import { AGGREGATION_FNS, LOGIC, filterTest, operatorNeedsInput, toDate } from '../_shared/grid-types.js';
-import type { CellValue, ColumnDef, FilterRule, Row } from '../_shared/grid-types.js';
+import type { CellValue, ColumnDef, FilterRule, Operator, Row } from '../_shared/grid-types.js';
 
 import {
   aggregateRows,
@@ -32,11 +32,19 @@ import {
   renderMenu,
   showPopover,
 } from '../_shared/grid-ui.js';
+import type { FilterPanelModel } from '../_shared/grid-ui.js';
+import type { ResolvedColumn, FilterModel, SortModelItem } from '../_shared/grid-data.js';
+import type { GridPopoverEl } from '../_shared/grid-ui.js';
 import '../actions/button.js';
 import '../forms/input.js';
 import '../forms/select.js';
 import '../forms/option.js';
 import '../forms/checkbox.js';
+
+/* (Los tipos que dependen de `IsDataGrid` viven dentro del IIFE para evitar el
+   problema de ordenación de declaraciones: las clases NO son hoisted como
+   tipo en closures.) */
+
 /**
  * <is-data-grid> — Tabla de datos con la superficie de MUI X Data Grid.
  *
@@ -80,13 +88,13 @@ import '../forms/checkbox.js';
  */
 
 (() => {
-  const DENSITY = {
+  const DENSITY: Record<string, { row: number; header: number }> = {
     compact: { row: 36, header: 40 },
     standard: { row: 52, header: 52 },
     comfortable: { row: 67, header: 60 },
   };
 
-  const ICONS = {
+  const ICONS: Record<string, string> = {
     asc: '▲', desc: '▼', menu: '⋮', filter: '⛃', columns: '☷', density: '≡',
     export: '⭳', search: '⌕', expand: '▸', collapse: '▾', drag: '⠿',
   };
@@ -101,8 +109,8 @@ import '../forms/checkbox.js';
     density: 'Densidad',
     export: 'Exportar',
     groupColumn: 'Grupo',
-    selected: (n) => `${n} seleccionada${n === 1 ? '' : 's'}`,
-    total: (n) => `${n} fila${n === 1 ? '' : 's'}`,
+    selected: (n: number) => `${n} seleccionada${n === 1 ? '' : 's'}`,
+    total: (n: number) => `${n} fila${n === 1 ? '' : 's'}`,
     rowsPerPage: 'Filas por página',
     sortAsc: 'Ordenar ascendente',
     sortDesc: 'Ordenar descendente',
@@ -125,10 +133,10 @@ import '../forms/checkbox.js';
     compact: 'Compacta',
     standard: 'Estándar',
     comfortable: 'Cómoda',
-  };
+  } as const;
 
   /** Se aceptan también los nombres de MUI (`linear-progress`, etc.). */
-  const LOADING_VARIANTS = {
+  const LOADING_VARIANTS: Record<string, string> = {
     skeleton: 'skeleton',
     progress: 'progress',
     linear: 'progress',
@@ -199,7 +207,7 @@ import '../forms/checkbox.js';
     </div>
   `;
 
-  const OBSERVED = [
+  const OBSERVED: readonly string[] = [
     'density', 'row-height', 'header-height', 'auto-height', 'page-size',
     'page-size-options', 'pagination', 'pagination-mode', 'row-count',
     'sorting-mode', 'sorting-order', 'filter-mode', 'selection-mode',
@@ -213,18 +221,153 @@ import '../forms/checkbox.js';
     'aggregation-position', 'selectable', 'filterable',
   ];
 
+  /** Tipos internos: viven aquí para poder usar `IsDataGrid` como tipo. */
+
+  /** Acción por fila expuesta por `getActions`. */
+  type RowAction = {
+    label?: string;
+    icon?: string;
+    onClick?: (params: { id: CellValue; row: Row; api: IsDataGrid }) => void;
+    showInMenu?: boolean;
+    disabled?: boolean;
+  };
+
+  /** Foco del teclado. */
+  type FocusArea =
+    | { area?: undefined; id: CellValue; field: string }
+    | { area: 'header'; field: string };
+
+  /** Edición en curso. */
+  type EditState = {
+    id: CellValue;
+    field: string;
+    fields: string[];
+    values: Record<string, CellValue>;
+    errors: Record<string, string>;
+  };
+
+  /** Rango de celdas seleccionadas. */
+  type CellRange = {
+    start: { id: CellValue; field: string };
+    end: { id: CellValue; field: string };
+  };
+
+  /** Nodo del árbol de filas. */
+  type GridNode = {
+    kind: 'leaf' | 'group';
+    id: CellValue;
+    row?: Row;
+    children?: GridNode[];
+    rows?: Row[];
+    depth?: number;
+    key?: CellValue;
+    aggregates?: Record<string, { fn: string; value: CellValue }>;
+    baseHeight?: number;
+    height?: number;
+    pinned?: 'top' | 'bottom';
+    path?: readonly string[];
+  };
+
+  /** Salida del renderMenu (pop-item). */
+  type MenuItem = {
+    label?: string;
+    icon?: string;
+    action?: string;
+    value?: string | number;
+    checked?: boolean;
+    disabled?: boolean;
+    separator?: boolean;
+  };
+
+  /** Estado de redimensionado de columna. */
+  type ResizeState = { field: string; startX: number; startWidth: number };
+
+  /** Rango de celdas resuelto en índices. */
+  type RangeBounds = {
+    rows: [number, number];
+    cols: [number, number];
+    ids: string[];
+    fields: string[];
+  };
+
+  /** Resultado de renderCell: una celda + span opcional. */
+  type CellRender = { el: HTMLElement; spanCount: number };
+
+  /** Entrada del modelo de orden. */
+  type SortEntry = { field: string; sort: string | null } | SortModelItem;
+
+  /** Parche de undo/redo. */
+  type HistoryPatch = Array<{ id: CellValue; before: Row; after: Row }>;
+
+  /** Pivot model. */
+  type PivotModel = {
+    rows: string[];
+    columns: string[];
+    values: Array<{ field: string; fn: string }>;
+  };
+
+  /** Detalle del evento de selección. */
+  type RowSelectionDetail = {
+    rowSelectionModel: CellValue[];
+    selectedRows: Row[];
+    selectedIndices: number[];
+  };
+
+  type CellSelectionDetail = { cellSelectionModel: CellRange | null };
+
+  /** Modelo de paginación. */
+  type PaginationModel = { page: number; pageSize: number };
+
+  type PageChangeDetail = PaginationModel;
+
+  /** Localización y etiquetas del componente. */
+  type LocaleText = typeof TEXT & Record<string, string | ((n: number) => string)>;
+
+  /** Hooks públicos del grid (lo que el consumidor puede inyectar). */
+  type Hooks = {
+    getRowId?: (row: Row) => CellValue;
+    getRowHeight?: (row: Row) => number;
+    getRowClassName?: (params: { row: Row; id: CellValue; index: number }) => string;
+    getCellClassName?: (params: { value: CellValue; row: Row; id: CellValue; field: string }) => string;
+    getTreeDataPath?: (row: Row) => readonly string[];
+    getDetailPanelContent?: (params: { row: Row; id: CellValue }) => Node | string | { html?: string } | null;
+    isRowSelectable?: (params: { row: Row; id: CellValue }) => boolean;
+    isCellEditable?: (params: { row: Row; id: CellValue; field: string }) => boolean;
+    processRowUpdate?: (row: Row, before: Row) => Promise<Row | void> | Row | void;
+    rowsLoader?: (params: { start: number; api: IsDataGrid }) => Promise<Row[]> | void;
+  };
+
+  /** Hooks aplicados al elemento real: `this.#hooks`. */
+  type ResolvedHooks = {
+    getRowId?: (row: Row) => CellValue;
+    getRowHeight?: (row: Row) => number;
+    getRowClassName?: (params: { row: Row; id: CellValue; index: number }) => string;
+    getCellClassName?: (params: { value: CellValue; row: Row; id: CellValue; field: string }) => string;
+    getTreeDataPath?: (row: Row) => readonly string[];
+    getDetailPanelContent?: (params: { row: Row; id: CellValue }) => Node | string | { html?: string } | null;
+    isRowSelectable?: (params: { row: Row; id: CellValue }) => boolean;
+    isCellEditable?: (params: { row: Row; id: CellValue; field: string }) => boolean;
+    processRowUpdate?: (row: Row, before: Row) => Promise<Row | void> | Row | void;
+    rowsLoader?: (params: { start: number; api: IsDataGrid }) => Promise<Row[]> | void;
+  };
+
+  /** Argumento del `getActions` que acepta el kit (forma más explícita). */
+  type ActionParams = { row: Row; id: CellValue; colDef: ColumnDef };
+
   class IsDataGrid extends withStyleAttrs(HTMLElement) {
     /** Personalización por atributo (ver `core/attrs.ts`). */
     static styleAttrs = {
-    radius: '--is-grid-radius',
-    accent: { prop: '--is-grid-accent', onlyColorValues: true },
-    'header-bg': { prop: '--is-grid-header-bg', onlyColorValues: true },
-    'row-hover': { prop: '--is-grid-row-hover', onlyColorValues: true },
-    height: '--is-grid-height',
-    padding: '--is-grid-pad',
+      radius: '--is-grid-radius',
+      accent: { prop: '--is-grid-accent', onlyColorValues: true },
+      'header-bg': { prop: '--is-grid-header-bg', onlyColorValues: true },
+      'row-hover': { prop: '--is-grid-row-hover', onlyColorValues: true },
+      height: '--is-grid-height',
+      padding: '--is-grid-pad',
     };
 
-    static get observedAttributes(): string[] { return [...OBSERVED, 'radius', 'accent', 'header-bg', 'row-hover', 'height', 'padding']; }
+    static get observedAttributes(): string[] {
+      return [...OBSERVED, 'radius', 'accent', 'header-bg', 'row-hover', 'height', 'padding'];
+    }
 
     /* DOM */
     #base!: HTMLElement;
@@ -247,20 +390,20 @@ import '../forms/checkbox.js';
     #pager!: HTMLElement;
     #pageInfo!: HTMLElement;
     #pageSizeSelect!: HTMLElement;
-    #menu!: HTMLElement;
-    #columnsPanel!: HTMLElement;
-    #filterPanel!: HTMLElement;
+    #menu!: GridPopoverEl;
+    #columnsPanel!: GridPopoverEl;
+    #filterPanel!: GridPopoverEl;
 
     /* Estado declarado */
     #mounted = false;
     #rawColumns: ColumnDef[] = [];
     #cols: ColumnDef[] = [];
-    #activeCols: ColumnDef[] = [];
+    #activeCols: ResolvedColumn[] = [];
     #rows: Row[] = [];
     #idCache = new WeakMap<object, CellValue>();
     #pinnedRowsModel: { top: Row[]; bottom: Row[] } = { top: [], bottom: [] };
-    #sortModel: { field: string; sort: string }[] = [];
-    #filterModel: { items: FilterRule[]; logicOperator: string } = { items: [], logicOperator: LOGIC.AND };
+    #sortModel: SortEntry[] = [];
+    #filterModel: FilterModel = { items: [], logicOperator: LOGIC.AND };
     #quickValue = '';
     #visibility: Record<string, boolean> = {};
     #pinnedCols: { left: string[]; right: string[] } = { left: [], right: [] };
@@ -268,42 +411,42 @@ import '../forms/checkbox.js';
     #widthOverrides: Record<string, number> = {};
     #groupingModel: string[] = [];
     #aggregationModel: Record<string, string> = {};
-    #pivotModel = null;
-    #pivot = null;
-    #columnGroups: Record<string, CellValue>[] = [];
-    #listViewColumn = null;
+    #pivotModel: PivotModel | null = null;
+    #pivot: { rows: Row[]; columns: ColumnDef[] } | null = null;
+    #columnGroups: Array<Record<string, CellValue>> = [];
+    #listViewColumn: Partial<ColumnDef> | null = null;
     #selection = new Set<CellValue>();
-    #lastSelectedId = null;
-    #cellAnchor = null;
-    #cellRange = null;
+    #lastSelectedId: CellValue = null;
+    #cellAnchor: { id: CellValue; field: string } | null = null;
+    #cellRange: CellRange | null = null;
     #expanded = new Set<CellValue>();
     #detailOpen = new Set<CellValue>();
-    #edit = null;
-    #focus = null;
+    #edit: EditState | null = null;
+    #focus: FocusArea | null = null;
     #page = 0;
-    #undoStack: Record<string, CellValue>[] = [];
-    #redoStack: Record<string, CellValue>[] = [];
-    #nodes: Record<string, CellValue>[] = [];
+    #undoStack: HistoryPatch[] = [];
+    #redoStack: HistoryPatch[] = [];
+    #nodes: GridNode[] = [];
     #offsets = new Float64Array(1);
-    #leafRows = [];
-    #footerAgg = {};
-    #widths = {};
-    #stickyLeft = {};
-    #stickyRight = {};
+    #leafRows: Row[] = [];
+    #footerAgg: Record<string, { fn: string; value: CellValue }> = {};
+    #widths: Record<string, number> = {};
+    #stickyLeft: Record<string, number> = {};
+    #stickyRight: Record<string, number> = {};
     #totalWidth = 0;
     #available = 0;
     #renderedRange = { from: 0, to: 0 };
     #raf = 0;
     #scrollRaf = 0;
-    #resizeState = null;
-    #hooks = {};
-    #text = { ...TEXT };
-    #ro = null;
+    #resizeState: ResizeState | null = null;
+    #hooks: ResolvedHooks = {};
+    #text: LocaleText = { ...TEXT };
+    #ro: ResizeObserver | null = null;
     #reachedEnd = false;
-    #openPop = null;
-    #popAnchor = null;
-    #menuActions = null;
-    #menuActionRow = null;
+    #openPop: string | null = null;
+    #popAnchor: HTMLElement | null = null;
+    #menuActions: RowAction[] | null = null;
+    #menuActionRow: { id: CellValue; row: Row } | null = null;
 
     constructor() {
       super();
@@ -410,327 +553,349 @@ import '../forms/checkbox.js';
 
     /* ── Modelos ─────────────────────────────────────────────────────── */
 
-    get columns() { return this.#rawColumns; }
-    set columns(v) {
+    get columns(): ColumnDef[] { return this.#rawColumns; }
+    set columns(v: ColumnDef[] | null | undefined) {
       this.#rawColumns = Array.isArray(v) ? v.slice() : [];
       this.#order = null;
       this.#normalize();
       this.#refresh();
     }
 
-    get rows() { return this.#rows; }
-    set rows(v) {
+    get rows(): Row[] { return this.#rows; }
+    set rows(v: Row[] | null | undefined) {
       this.#rows = Array.isArray(v) ? v.slice() : [];
       this.#idCache = new WeakMap();
       this.#reachedEnd = false;
       this.#refresh();
     }
 
-    get pinnedRows() { return this.#pinnedRowsModel; }
-    set pinnedRows(v) {
+    get pinnedRows(): { top: Row[]; bottom: Row[] } { return this.#pinnedRowsModel; }
+    set pinnedRows(v: { top?: Row[]; bottom?: Row[] } | null | undefined) {
       this.#pinnedRowsModel = { top: v?.top || [], bottom: v?.bottom || [] };
       this.#refresh();
     }
 
-    get sortModel() { return this.#sortModel; }
-    set sortModel(v) {
-      this.#sortModel = (v || []).filter((s) => s?.field);
+    get sortModel(): SortEntry[] { return this.#sortModel; }
+    set sortModel(v: SortEntry[] | null | undefined) {
+      this.#sortModel = (v || []).filter((s: SortEntry) => s?.field);
       this.#refresh();
     }
 
-    get filterModel() { return this.#filterModel; }
-    set filterModel(v) {
+    #filterPanelModel(): FilterPanelModel {
+      const items = (this.#filterModel.items ?? []) as FilterRule[];
+      return {
+        items,
+        logicOperator: this.#filterModel.logicOperator ?? LOGIC.AND,
+      };
+    }
+    get filterModel(): FilterModel { return this.#filterModel; }
+    set filterModel(v: { items?: FilterRule[]; logicOperator?: string } | null | undefined) {
       this.#filterModel = {
-        items: (v?.items || []).map((item) => ({ ...item })),
+        items: (v?.items || []).map((item: FilterRule) => ({ ...item })),
         logicOperator: v?.logicOperator === LOGIC.OR ? LOGIC.OR : LOGIC.AND,
       };
       this.#page = 0;
       this.#refresh();
     }
 
-    get quickFilterValue() { return this.#quickValue; }
-    set quickFilterValue(v) {
+    get quickFilterValue(): string { return this.#quickValue; }
+    set quickFilterValue(v: string | null | undefined) {
       this.#quickValue = String(v ?? '');
-      if (this.#quick.value !== this.#quickValue) this.#quick.value = this.#quickValue;
+      const quick = this.#quick as unknown as { value: string };
+      if (quick.value !== this.#quickValue) quick.value = this.#quickValue;
       this.#page = 0;
       this.#refresh();
     }
 
-    get columnVisibilityModel() { return { ...this.#visibility }; }
-    set columnVisibilityModel(v) {
+    get columnVisibilityModel(): Record<string, boolean> { return { ...this.#visibility }; }
+    set columnVisibilityModel(v: Record<string, boolean> | null | undefined) {
       this.#visibility = { ...(v || {}) };
       this.#refresh();
     }
 
-    get pinnedColumns() { return { left: [...this.#pinnedCols.left], right: [...this.#pinnedCols.right] }; }
-    set pinnedColumns(v) {
+    get pinnedColumns(): { left: string[]; right: string[] } {
+      return { left: [...this.#pinnedCols.left], right: [...this.#pinnedCols.right] };
+    }
+    set pinnedColumns(v: { left?: string[]; right?: string[] } | null | undefined) {
       this.#pinnedCols = { left: [...(v?.left || [])], right: [...(v?.right || [])] };
       this.#refresh();
     }
 
-    get columnOrder() { return this.#visibleCols().map((c) => c.field); }
-    set columnOrder(fields) {
+    get columnOrder(): string[] { return this.#visibleCols().map((c: ColumnDef) => c.field ?? ''); }
+    set columnOrder(fields: string[] | null | undefined) {
       this.#order = Array.isArray(fields) ? fields.slice() : null;
       this.#refresh();
     }
 
-    get columnGroupingModel() { return this.#columnGroups; }
-    set columnGroupingModel(v) {
+    get columnGroupingModel(): Array<Record<string, CellValue>> { return this.#columnGroups; }
+    set columnGroupingModel(v: Array<Record<string, CellValue>> | null | undefined) {
       this.#columnGroups = Array.isArray(v) ? v : [];
       this.#refresh();
     }
 
-    get rowGroupingModel() { return [...this.#groupingModel]; }
-    set rowGroupingModel(v) {
+    get rowGroupingModel(): string[] { return [...this.#groupingModel]; }
+    set rowGroupingModel(v: string[] | null | undefined) {
       this.#groupingModel = (v || []).filter(Boolean);
       this.#refresh();
     }
 
-    get aggregationModel() { return { ...this.#aggregationModel }; }
-    set aggregationModel(v) {
+    get aggregationModel(): Record<string, string> { return { ...this.#aggregationModel }; }
+    set aggregationModel(v: Record<string, string> | null | undefined) {
       this.#aggregationModel = { ...(v || {}) };
       this.#refresh();
     }
 
-    get pivotModel() { return this.#pivotModel; }
-    set pivotModel(v) {
+    get pivotModel(): PivotModel | null { return this.#pivotModel; }
+    set pivotModel(v: PivotModel | null | undefined) {
       this.#pivotModel = v || null;
       this.#refresh();
     }
 
-    get listViewColumn() { return this.#listViewColumn; }
-    set listViewColumn(v) {
+    get listViewColumn(): Partial<ColumnDef> | null { return this.#listViewColumn; }
+    set listViewColumn(v: Partial<ColumnDef> | null | undefined) {
       this.#listViewColumn = v || null;
       this.#refresh();
     }
 
-    get paginationModel() { return { page: this.#page, pageSize: this.pageSize }; }
-    set paginationModel(v) {
+    get paginationModel(): PaginationModel {
+      return { page: this.#page, pageSize: this.pageSize };
+    }
+    set paginationModel(v: { page?: number; pageSize?: number } | null | undefined) {
       if (v?.pageSize && v.pageSize !== this.pageSize) this.setAttribute('page-size', String(v.pageSize));
       this.#page = Math.max(0, Number(v?.page) || 0);
       this.#refresh();
     }
 
-    get rowSelectionModel() { return [...this.#selection]; }
-    set rowSelectionModel(ids) {
+    get rowSelectionModel(): CellValue[] { return [...this.#selection]; }
+    set rowSelectionModel(ids: Iterable<CellValue> | null | undefined) {
       this.#selection = new Set(ids || []);
       this.#refresh();
       this.#emitSelection();
     }
 
-    get selectedRows() {
+    get selectedRows(): Row[] {
       const byId = this.#rowIndex();
-      return [...this.#selection].map((id) => byId.get(id)).filter(Boolean);
+      return [...this.#selection].map((id: CellValue) => byId.get(id)).filter(Boolean) as Row[];
     }
     /** Compatibilidad con la versión previa basada en índices. */
-    set selectedRows(list) {
-      const wanted = new Set(list || []);
+    set selectedRows(list: Row[] | null | undefined) {
+      const wanted = new Set<Row>(list || []);
       this.#selection = new Set();
-      this.#rows.forEach((row, i) => {
+      this.#rows.forEach((row, i: number) => {
         if (wanted.has(row)) this.#selection.add(this.#idOf(row, i));
       });
       this.#refresh();
       this.#emitSelection();
     }
 
-    get selectedIndices() {
+    get selectedIndices(): number[] {
       const ids = this.#selection;
-      return this.#rows.reduce((acc, row, i) => {
+      return this.#rows.reduce<number[]>((acc, row, i) => {
         if (ids.has(this.#idOf(row, i))) acc.push(i);
         return acc;
       }, []);
     }
-    set selectedIndices(list) {
+    set selectedIndices(list: number[] | null | undefined) {
       this.#selection = new Set((list || [])
         .map(Number)
         .filter((i: number) => i >= 0 && i < this.#rows.length)
-        .map((i) => this.#idOf(this.#rows[i], i)));
+        .map((i: number) => this.#idOf(this.#rows[i]!, i)));
       this.#refresh();
       this.#emitSelection();
     }
 
-    get cellSelectionModel() { return this.#cellRange; }
-    set cellSelectionModel(v) {
+    get cellSelectionModel(): CellRange | null { return this.#cellRange; }
+    set cellSelectionModel(v: CellRange | null | undefined) {
       this.#cellRange = v || null;
       this.#refresh();
     }
 
-    get hooks() { return this.#hooks; }
-    set hooks(v) {
-      this.#hooks = { ...(v || {}) };
+    get hooks(): Hooks { return this.#hooks; }
+    set hooks(v: Hooks | null | undefined) {
+      this.#hooks = { ...(v || {}) } as ResolvedHooks;
       this.#refresh();
     }
 
-    get localeText() { return this.#text; }
-    set localeText(v) {
+    get localeText(): LocaleText { return this.#text; }
+    set localeText(v: Partial<LocaleText> | null | undefined) {
       this.#text = { ...TEXT, ...(v || {}) };
       this.#syncChrome();
       this.#refresh();
     }
 
-    set getRowId(fn) { this.#hooks.getRowId = fn; this.#refresh(); }
-    set getRowHeight(fn) { this.#hooks.getRowHeight = fn; this.#refresh(); }
-    set getRowClassName(fn) { this.#hooks.getRowClassName = fn; this.#refresh(); }
-    set getCellClassName(fn) { this.#hooks.getCellClassName = fn; this.#refresh(); }
-    set getTreeDataPath(fn) { this.#hooks.getTreeDataPath = fn; this.#refresh(); }
-    set getDetailPanelContent(fn) { this.#hooks.getDetailPanelContent = fn; this.#refresh(); }
-    set isRowSelectable(fn) { this.#hooks.isRowSelectable = fn; }
-    set isCellEditable(fn) { this.#hooks.isCellEditable = fn; }
-    set processRowUpdate(fn) { this.#hooks.processRowUpdate = fn; }
-    set rowsLoader(fn) { this.#hooks.rowsLoader = fn; }
+    set getRowId(fn: Hooks['getRowId']) { this.#hooks.getRowId = fn; this.#refresh(); }
+    set getRowHeight(fn: Hooks['getRowHeight']) { this.#hooks.getRowHeight = fn; this.#refresh(); }
+    set getRowClassName(fn: Hooks['getRowClassName']) { this.#hooks.getRowClassName = fn; this.#refresh(); }
+    set getCellClassName(fn: Hooks['getCellClassName']) { this.#hooks.getCellClassName = fn; this.#refresh(); }
+    set getTreeDataPath(fn: Hooks['getTreeDataPath']) { this.#hooks.getTreeDataPath = fn; this.#refresh(); }
+    set getDetailPanelContent(fn: Hooks['getDetailPanelContent']) { this.#hooks.getDetailPanelContent = fn; this.#refresh(); }
+    set isRowSelectable(fn: Hooks['isRowSelectable']) { this.#hooks.isRowSelectable = fn; }
+    set isCellEditable(fn: Hooks['isCellEditable']) { this.#hooks.isCellEditable = fn; }
+    set processRowUpdate(fn: Hooks['processRowUpdate']) { this.#hooks.processRowUpdate = fn; }
+    set rowsLoader(fn: Hooks['rowsLoader']) { this.#hooks.rowsLoader = fn; }
 
     /* ── Atributos ───────────────────────────────────────────────────── */
 
-    get density() {
+    get density(): string {
       const d = this.getAttribute('density');
-      return DENSITY[d] ? d : 'standard';
+      return d != null && DENSITY[d] ? d : 'standard';
     }
-    set density(v) { this.setAttribute('density', v); }
+    set density(v: string) { this.setAttribute('density', v); }
 
-    get rowHeight() {
+    get rowHeight(): number {
       const n = Number(this.getAttribute('row-height'));
       return Number.isFinite(n) && n > 0 ? n : DENSITY[this.density].row;
     }
-    set rowHeight(v) { this.setAttribute('row-height', String(v)); }
+    set rowHeight(v: number) { this.setAttribute('row-height', String(v)); }
 
-    get headerHeight() {
+    get headerHeight(): number {
       const n = Number(this.getAttribute('header-height'));
       return Number.isFinite(n) && n > 0 ? n : DENSITY[this.density].header;
     }
 
-    get pageSize() {
+    get pageSize(): number {
       const n = Number(this.getAttribute('page-size'));
       if (Number.isFinite(n) && n > 0) return Math.floor(n);
       return this.pageSizeOptions[0] ?? 25;
     }
-    set pageSize(v) { this.setAttribute('page-size', String(Math.max(1, Number(v) || 10))); }
+    set pageSize(v: number) { this.setAttribute('page-size', String(Math.max(1, Number(v) || 10))); }
 
-    get pageSizeOptions() {
+    get pageSizeOptions(): number[] {
       const list = String(this.getAttribute('page-size-options') || '10,25,50,100')
         .split(/[\s,]+/).map(Number).filter((n: number) => n > 0);
       return list.length ? list : [10, 25, 50, 100];
     }
 
     /** `page-size` sin `pagination` también pagina: así funcionaba la v1. */
-    get pagination() { return this.hasAttribute('pagination') || this.hasAttribute('page-size'); }
-    set pagination(v) { this.toggleAttribute('pagination', !!v); }
+    get pagination(): boolean {
+      return this.hasAttribute('pagination') || this.hasAttribute('page-size');
+    }
+    set pagination(v: boolean) { this.toggleAttribute('pagination', !!v); }
 
-    get paginationMode() { return this.getAttribute('pagination-mode') === 'server' ? 'server' : 'client'; }
-    get sortingMode() { return this.getAttribute('sorting-mode') === 'server' ? 'server' : 'client'; }
-    get filterMode() { return this.getAttribute('filter-mode') === 'server' ? 'server' : 'client'; }
+    get paginationMode(): 'client' | 'server' {
+      return this.getAttribute('pagination-mode') === 'server' ? 'server' : 'client';
+    }
+    get sortingMode(): 'client' | 'server' {
+      return this.getAttribute('sorting-mode') === 'server' ? 'server' : 'client';
+    }
+    get filterMode(): 'client' | 'server' {
+      return this.getAttribute('filter-mode') === 'server' ? 'server' : 'client';
+    }
 
-    get sortingOrder() {
+    get sortingOrder(): Array<string | null> {
       const list = String(this.getAttribute('sorting-order') || 'asc,desc,null')
         .split(/[\s,]+/).filter(Boolean)
-        .map((s) => (s === 'null' || s === 'none' ? null : s));
+        .map((s: string) => (s === 'null' || s === 'none' ? null : s));
       return list.length ? list : ['asc', 'desc', null];
     }
 
-    get rowCount() {
+    get rowCount(): number | null {
       const n = Number(this.getAttribute('row-count'));
       return Number.isFinite(n) && n >= 0 && this.hasAttribute('row-count') ? n : null;
     }
-    set rowCount(v) { this.setAttribute('row-count', String(v)); }
+    set rowCount(v: number) { this.setAttribute('row-count', String(v)); }
 
-    get selectionMode() {
+    get selectionMode(): 'none' | 'single' | 'multiple' {
       const v = this.getAttribute('selection-mode');
       if (v === 'none' || v === 'single' || v === 'multiple') return v;
       return this.checkboxSelection ? 'multiple' : 'single';
     }
-    set selectionMode(v) { this.setAttribute('selection-mode', v); }
+    set selectionMode(v: 'none' | 'single' | 'multiple') { this.setAttribute('selection-mode', v); }
 
-    get checkboxSelection() {
+    get checkboxSelection(): boolean {
       return this.hasAttribute('checkbox-selection') || this.hasAttribute('selectable');
     }
-    set checkboxSelection(v) { this.toggleAttribute('checkbox-selection', !!v); }
+    set checkboxSelection(v: boolean) { this.toggleAttribute('checkbox-selection', !!v); }
 
-    get cellSelection() { return this.hasAttribute('cell-selection'); }
-    set cellSelection(v) { this.toggleAttribute('cell-selection', !!v); }
+    get cellSelection(): boolean { return this.hasAttribute('cell-selection'); }
+    set cellSelection(v: boolean) { this.toggleAttribute('cell-selection', !!v); }
 
-    get editMode() { return this.getAttribute('edit-mode') === 'row' ? 'row' : 'cell'; }
-    set editMode(v) { this.setAttribute('edit-mode', v); }
+    get editMode(): 'cell' | 'row' {
+      return this.getAttribute('edit-mode') === 'row' ? 'row' : 'cell';
+    }
+    set editMode(v: 'cell' | 'row') { this.setAttribute('edit-mode', v); }
 
-    get loading() { return this.hasAttribute('loading'); }
-    set loading(v) { this.toggleAttribute('loading', !!v); }
+    get loading(): boolean { return this.hasAttribute('loading'); }
+    set loading(v: boolean) { this.toggleAttribute('loading', !!v); }
 
-    get treeData() { return this.hasAttribute('tree-data'); }
-    set treeData(v) { this.toggleAttribute('tree-data', !!v); }
+    get treeData(): boolean { return this.hasAttribute('tree-data'); }
+    set treeData(v: boolean) { this.toggleAttribute('tree-data', !!v); }
 
-    get listView() { return this.hasAttribute('list-view'); }
-    set listView(v) { this.toggleAttribute('list-view', !!v); }
+    get listView(): boolean { return this.hasAttribute('list-view'); }
+    set listView(v: boolean) { this.toggleAttribute('list-view', !!v); }
 
-    get filterable() { return this.hasAttribute('filterable'); }
-    set filterable(v) { this.toggleAttribute('filterable', !!v); }
+    get filterable(): boolean { return this.hasAttribute('filterable'); }
+    set filterable(v: boolean) { this.toggleAttribute('filterable', !!v); }
 
     /**
      * Botones Columnas / Filtros / Densidad / Exportar de la toolbar.
      * `toolbar-tools="false"` los oculta (la búsqueda sigue gobernada por `quick-filter`).
      */
-    get toolbarTools() { return this.getAttribute('toolbar-tools') !== 'false'; }
-    set toolbarTools(v) {
+    get toolbarTools(): boolean { return this.getAttribute('toolbar-tools') !== 'false'; }
+    set toolbarTools(v: boolean) {
       if (v) this.removeAttribute('toolbar-tools');
       else this.setAttribute('toolbar-tools', 'false');
     }
 
-    get selectable() { return this.hasAttribute('selectable'); }
-    set selectable(v) { this.toggleAttribute('selectable', !!v); }
+    get selectable(): boolean { return this.hasAttribute('selectable'); }
+    set selectable(v: boolean) { this.toggleAttribute('selectable', !!v); }
 
-    get virtualize() { return this.getAttribute('virtualize') !== 'false'; }
+    get virtualize(): boolean { return this.getAttribute('virtualize') !== 'false'; }
 
-    get overscan() {
+    get overscan(): number {
       const n = Number(this.getAttribute('overscan'));
       return this.hasAttribute('overscan') && Number.isFinite(n) && n >= 0 ? n : 6;
     }
 
-    get tabNavigation() {
+    get tabNavigation(): 'content' | 'header' | 'all' | 'none' {
       const v = this.getAttribute('tab-navigation');
-      return ['content', 'header', 'all'].includes(v) ? v : 'none';
+      return ['content', 'header', 'all'].includes(v ?? '') ? (v as 'content' | 'header' | 'all') : 'none';
     }
 
-    get aggregationPosition() {
+    get aggregationPosition(): 'inline' | 'footer' {
       return this.getAttribute('aggregation-position') === 'inline' ? 'inline' : 'footer';
     }
 
-    get detailHeight() {
+    get detailHeight(): number {
       const n = Number(this.getAttribute('detail-height'));
       return Number.isFinite(n) && n > 0 ? n : 160;
     }
 
     /* ── API imperativa ──────────────────────────────────────────────── */
 
-    get api() { return this; }
+    get api(): IsDataGrid { return this; }
 
-    refresh() { this.#refresh(); }
+    refresh(): void { this.#refresh(); }
 
-    setPage(page) {
+    setPage(page: number): void {
       this.paginationModel = { page, pageSize: this.pageSize };
       this.#emitPagination();
     }
 
-    setPageSize(size) {
+    setPageSize(size: number): void {
       this.pageSize = size;
       this.#page = 0;
       this.#emitPagination();
     }
 
-    setSortModel(model) {
+    setSortModel(model: SortEntry[]): void {
       this.sortModel = model;
       emit(this, 'is-sort-change', { sortModel: this.#sortModel });
     }
 
-    sortColumn(field, dir) { this.#applySort(field, dir, false); }
+    sortColumn(field: string, dir: string | null): void { this.#applySort(field, dir, false); }
 
-    setFilterModel(model) {
+    setFilterModel(model: { items?: FilterRule[]; logicOperator?: string }): void {
       this.filterModel = model;
       emit(this, 'is-filter-change', { filterModel: this.#filterModel });
     }
 
-    setQuickFilter(value) {
+    setQuickFilter(value: string): void {
       this.quickFilterValue = value;
       emit(this, 'is-quick-filter', { value: this.#quickValue });
     }
 
-    setColumnVisibility(field, visible) {
+    setColumnVisibility(field: string, visible: boolean): void {
       this.#visibility = { ...this.#visibility, [field]: !!visible };
       this.#refresh();
       emit(this, 'is-column-hide', {
@@ -738,15 +903,15 @@ import '../forms/checkbox.js';
       });
     }
 
-    setColumnWidth(field, width: number) {
+    setColumnWidth(field: string, width: number): void {
       this.#widthOverrides = { ...this.#widthOverrides, [field]: Math.max(40, Number(width) || 0) };
       this.#refresh();
       emit(this, 'is-column-resize', { field, width: this.#widthOverrides[field] });
     }
 
-    pinColumn(field, side) {
-      const left = this.#pinnedCols.left.filter((f) => f !== field);
-      const right = this.#pinnedCols.right.filter((f) => f !== field);
+    pinColumn(field: string, side: 'left' | 'right' | null): void {
+      const left = this.#pinnedCols.left.filter((f: string) => f !== field);
+      const right = this.#pinnedCols.right.filter((f: string) => f !== field);
       if (side === 'left') left.push(field);
       if (side === 'right') right.unshift(field);
       this.#pinnedCols = { left, right };
@@ -754,18 +919,18 @@ import '../forms/checkbox.js';
       emit(this, 'is-column-pin', { field, side: side || null, pinnedColumns: this.pinnedColumns });
     }
 
-    autosizeColumns(fields) {
-      const targets = fields?.length ? fields : this.#visibleCols().map((c) => c.field);
+    autosizeColumns(fields?: string[]): void {
+      const targets = fields?.length ? fields : this.#visibleCols().map((c: ColumnDef) => c.field ?? '');
       for (const field of targets) this.#autosize(field);
     }
 
-    setDensity(value) {
+    setDensity(value: string): void {
       if (!DENSITY[value]) return;
       this.setAttribute('density', value);
       emit(this, 'is-density', { density: value });
     }
 
-    selectRow(id, selected = true, keepOthers = true) {
+    selectRow(id: CellValue, selected = true, keepOthers = true): void {
       if (!keepOthers) this.#selection.clear();
       if (selected) this.#selection.add(id);
       else this.#selection.delete(id);
@@ -775,18 +940,18 @@ import '../forms/checkbox.js';
       this.#emitSelection();
     }
 
-    selectAll(selected = true) {
+    selectAll(selected = true): void {
       if (selected) for (const row of this.#selectableRows()) this.#selection.add(this.#idOf(row));
       else this.#selection.clear();
       this.#refresh();
       this.#emitSelection();
     }
 
-    getRow(id) { return this.#rowIndex().get(id); }
+    getRow(id: CellValue): Row | undefined { return this.#rowIndex().get(id); }
 
-    updateRows(updates) {
+    updateRows(updates: Array<{ id?: CellValue } & Partial<Row>> | null | undefined): number {
       const byId = this.#rowIndex();
-      const patch = [];
+      const patch: HistoryPatch = [];
       for (const update of updates || []) {
         const id = update?.id ?? null;
         const target = byId.get(id);
@@ -801,40 +966,45 @@ import '../forms/checkbox.js';
       return patch.length;
     }
 
-    scrollToIndex(index: number) {
+    scrollToIndex(index: number): void {
       const at = Math.max(0, Math.min(index, this.#nodes.length - 1));
       this.#viewport.scrollTop = this.#offsets[at] || 0;
     }
 
-    startEdit(id, field) { this.#startEdit(id, field); }
-    stopEdit(save = true) { return this.#stopEdit(save); }
+    startEdit(id: CellValue, field: string): void { this.#startEdit(id, field); }
+    stopEdit(save = true): Promise<void> { return this.#stopEdit(save); }
 
-    toggleDetailPanel(id) { this.#toggleDetail(id); }
-    toggleGroup(id) { this.#toggleGroup(id); }
+    toggleDetailPanel(id: CellValue): void { this.#toggleDetail(id); }
+    toggleGroup(id: CellValue): void { this.#toggleGroup(id); }
 
-    expandAll() {
+    expandAll(): void {
       // Puede llamarse justo después de asignar rows, antes del primer pintado.
       if (!this.#nodes.length) this.#compute();
       for (const node of this.#allGroups()) this.#expanded.add(node.id);
       this.#refresh();
     }
 
-    collapseAll() {
+    collapseAll(): void {
       this.#expanded.clear();
       this.#refresh();
     }
 
-    setRowGroupingModel(model) {
+    setRowGroupingModel(model: string[]): void {
       this.rowGroupingModel = model;
       emit(this, 'is-group-model', { rowGroupingModel: this.rowGroupingModel });
     }
 
-    setAggregationModel(model) {
+    setAggregationModel(model: Record<string, string>): void {
       this.aggregationModel = model;
       emit(this, 'is-aggregation', { aggregationModel: this.aggregationModel });
     }
 
-    exportDataAsCsv(opts = {}) {
+    exportDataAsCsv(opts: {
+      delimiter?: string;
+      fileName?: string;
+      allColumns?: boolean;
+      utf8WithBom?: boolean;
+    } = {}): void {
       const { delimiter = ',', fileName = 'datos.csv', allColumns = false, utf8WithBom = true } = opts;
       const matrix = this.#matrix({ allColumns });
       const body = toDelimited(matrix, delimiter);
@@ -842,25 +1012,29 @@ import '../forms/checkbox.js';
       emit(this, 'is-export', { format: 'csv', rows: matrix.length - 1 });
     }
 
-    exportDataAsExcel(opts = {}) {
+    exportDataAsExcel(opts: {
+      fileName?: string;
+      allColumns?: boolean;
+      sheetName?: string;
+    } = {}): void {
       const { fileName = 'datos.xls', allColumns = false, sheetName = 'Datos' } = opts;
       const matrix = this.#matrix({ allColumns, raw: true });
       download(fileName, toSpreadsheetXml(matrix, sheetName), 'application/vnd.ms-excel');
       emit(this, 'is-export', { format: 'excel', rows: matrix.length - 1 });
     }
 
-    exportDataAsPrint(opts = {}) {
+    exportDataAsPrint(opts: { fileName?: string; allColumns?: boolean } = {}): void {
       const matrix = this.#matrix({ allColumns: opts.allColumns });
       const html = `<!doctype html><meta charset="utf-8"><title>${escapeHtml(opts.fileName || document.title)}</title>
         <style>body{font:12px system-ui;margin:16px}table{border-collapse:collapse;width:100%}
         th,td{border:1px solid #ccc;padding:4px 6px;text-align:left}th{background:#f2f2f2}</style>
-        <table><thead><tr>${matrix[0].map((h) => `<th>${escapeHtml(h)}</th>`).join('')}</tr></thead>
-        <tbody>${matrix.slice(1).map((r) => `<tr>${r.map((c) => `<td>${escapeHtml(c)}</td>`).join('')}</tr>`).join('')}</tbody></table>`;
+        <table><thead><tr>${matrix[0].map((h: string) => `<th>${escapeHtml(h)}</th>`).join('')}</tr></thead>
+        <tbody>${matrix.slice(1).map((r: string[]) => `<tr>${r.map((c: string) => `<td>${escapeHtml(c)}</td>`).join('')}</tr>`).join('')}</tbody></table>`;
       const frame = document.createElement('iframe');
       frame.style.cssText = 'position:fixed;right:0;bottom:0;width:0;height:0;border:0';
       frame.addEventListener('load', () => {
-        frame.contentWindow.focus();
-        frame.contentWindow.print();
+        frame.contentWindow?.focus();
+        frame.contentWindow?.print();
         setTimeout(() => frame.remove(), 1000);
       });
       document.body.appendChild(frame);
@@ -868,19 +1042,19 @@ import '../forms/checkbox.js';
       emit(this, 'is-export', { format: 'print', rows: matrix.length - 1 });
     }
 
-    copySelectionToClipboard() { return this.#copySelection(); }
+    copySelectionToClipboard(): string { return this.#copySelection(); }
 
-    undo() { this.#applyHistory(this.#undoStack, this.#redoStack, 'is-undo', 'before'); }
-    redo() { this.#applyHistory(this.#redoStack, this.#undoStack, 'is-redo', 'after'); }
+    undo(): void { this.#applyHistory(this.#undoStack, this.#redoStack, 'is-undo', 'before'); }
+    redo(): void { this.#applyHistory(this.#redoStack, this.#undoStack, 'is-redo', 'after'); }
 
     /* ── Núcleo ──────────────────────────────────────────────────────── */
 
-    #normalize() {
+    #normalize(): void {
       this.#cols = normalizeColumns(this.#rawColumns, { editableAll: this.hasAttribute('editable') });
     }
 
     /** Sin `id` ni `getRowId` el id es la posición original, memoizada por fila. */
-    #idOf(row, index) {
+    #idOf(row: Row, index?: number): CellValue {
       if (this.#hooks.getRowId) return this.#hooks.getRowId(row);
       if (row && row.id != null) return row.id;
       if (index != null) return `row-${index}`;
@@ -891,89 +1065,101 @@ import '../forms/checkbox.js';
       return id;
     }
 
-    #rowIndex() {
-      const map = new Map();
-      this.#rows.forEach((row, i) => map.set(this.#idOf(row, i), row));
+    #rowIndex(): Map<CellValue, Row> {
+      const map = new Map<CellValue, Row>();
+      this.#rows.forEach((row, i: number) => map.set(this.#idOf(row, i), row));
       for (const row of [...this.#pinnedRowsModel.top, ...this.#pinnedRowsModel.bottom]) {
         map.set(this.#idOf(row), row);
       }
       return map;
     }
 
-    #nodeById(id: string) {
+    #nodeById(id: CellValue): GridNode | null {
       const key = String(id);
-      return this.#nodes.find((n) => String(n.id) === key) || this.#pinnedNode(key);
+      return this.#nodes.find((n: GridNode) => String(n.id) === key) || this.#pinnedNode(key);
     }
 
-    #pinnedNode(id: string) {
-      for (const zone of ['top', 'bottom']) {
-        const row = (this.#pinnedRowsModel[zone] || []).find((r) => String(this.#idOf(r)) === String(id));
+    #pinnedNode(id: string): GridNode | null {
+      for (const zone of ['top', 'bottom'] as const) {
+        const row = (this.#pinnedRowsModel[zone] || []).find((r: Row) => String(this.#idOf(r)) === String(id));
         if (row) return { kind: 'leaf', row, id: this.#idOf(row), depth: 0, pinned: zone };
       }
       return null;
     }
 
-    #visibleCols() {
-      const source = this.#activeCols.length ? this.#activeCols : this.#cols;
-      let list = source.filter((c) => this.#visibility[c.field] !== false);
+    #visibleCols(): ResolvedColumn[] {
+      const source: ResolvedColumn[] = this.#activeCols.length ? this.#activeCols : (this.#cols as unknown as ResolvedColumn[]);
+      let list: ResolvedColumn[] = source.filter((c: ResolvedColumn) => this.#visibility[c.field ?? ''] !== false);
       if (this.#order) {
-        const pos = new Map(this.#order.map((f, i) => [f, i]));
-        list = list.slice().sort((a, b) => (pos.get(a.field) ?? 1e6) - (pos.get(b.field) ?? 1e6));
+        const pos = new Map(this.#order.map((f: string, i: number) => [f, i]));
+        list = list.slice().sort((a: ResolvedColumn, b: ResolvedColumn) =>
+          (pos.get(a.field ?? '') ?? 1e6) - (pos.get(b.field ?? '') ?? 1e6));
       }
       if (this.#groupingModel.length && !this.treeData) {
-        list = list.filter((c) => !this.#groupingModel.includes(c.field));
+        list = list.filter((c: ResolvedColumn) => !this.#groupingModel.includes(c.field ?? ''));
       }
       const { left, right } = this.#pinnedCols;
-      const rank = (c) => (left.includes(c.field) ? 0 : right.includes(c.field) ? 2 : 1);
-      return list.slice().sort((a, b) => rank(a) - rank(b));
+      const rank = (c: ResolvedColumn): number =>
+        (left.includes(c.field ?? '') ? 0 : right.includes(c.field ?? '') ? 2 : 1);
+      return list.slice().sort((a: ResolvedColumn, b: ResolvedColumn) => rank(a) - rank(b));
     }
 
-    #layoutCols() {
+    #layoutCols(): ResolvedColumn[] {
       if (this.listView && this.#listViewColumn) {
-        return normalizeColumns([{ flex: 1, minWidth: 120, sortable: false, ...this.#listViewColumn }]);
+        const merged: Partial<ColumnDef> = { flex: 1, minWidth: 120, sortable: false, ...this.#listViewColumn };
+        return normalizeColumns([merged as ColumnDef]);
       }
-      const out = [];
-      const sysCol = (field, width) => ({
-        field, system: true, headerName: '', width, align: 'center',
+      const out: ResolvedColumn[] = [];
+      const sysCol = (field: string, width: number): ResolvedColumn => ({
+        field, headerName: '', width, align: 'center',
         sortable: false, filterable: false, hideable: false, resizable: false,
         minWidth: width, maxWidth: width, flex: 0,
-      });
+        ...({ system: true } as { system: boolean }),
+      } as unknown as ResolvedColumn);
       if (this.hasAttribute('row-reorder')) out.push(sysCol('__reorder', 40));
       if (this.checkboxSelection && this.selectionMode !== 'none') out.push(sysCol('__check', 44));
       if (this.#hooks.getDetailPanelContent) out.push(sysCol('__detail', 44));
       if (this.#isGrouped()) {
         const label = this.treeData
           ? this.#text.groupColumn
-          : this.#groupingModel.map((f) => this.#cols.find((c) => c.field === f)?.headerName || f).join(' / ');
+          : this.#groupingModel.map((f: string) => this.#cols.find((c: ColumnDef) => c.field === f)?.headerName || f).join(' / ');
+        const groupCol = sysCol('__group', 240);
+        (groupCol as ColumnDef & { group?: boolean }).group = true;
         out.push({
-          ...sysCol('__group', 240),
-          headerName: label, align: 'left', resizable: true, group: true, maxWidth: Infinity,
+          ...groupCol,
+          headerName: label, align: 'left', resizable: true, maxWidth: Infinity,
         });
       }
-      return out.concat(this.#visibleCols());
+      return [...out, ...this.#visibleCols()];
     }
 
-    #isGrouped() { return this.treeData || this.#groupingModel.length > 0; }
+    #isGrouped(): boolean { return this.treeData || this.#groupingModel.length > 0; }
 
     /** Filas bajo un grupo; en tree data la propia fila del nodo no cuenta. */
-    #descendants(node) {
-      const rows = node.rows || leavesOf(node).map((leaf) => leaf.row);
-      return rows.filter((row) => row !== node.row);
+    #descendants(node: GridNode): Row[] {
+      const rows = node.rows || leavesOf(node).map((leaf: GridNode) => leaf.row).filter(Boolean) as Row[];
+      return rows.filter((row: Row) => row !== node.row);
     }
 
-    #ctx() { return { grid: this, api: this }; }
+    #ctx(): { grid: IsDataGrid; api: IsDataGrid } {
+      return { grid: this, api: this };
+    }
 
-    #refresh() {
+    #refresh(): void {
       if (!this.#mounted) return;
       cancelAnimationFrame(this.#raf);
       this.#raf = requestAnimationFrame(() => this.#compute());
     }
 
-    #compute() {
+    #compute(): void {
       if (!this.#mounted) return;
       const ctx = this.#ctx();
-      this.#pivot = this.#pivotModel ? pivotData(this.#rows, this.#pivotModel, this.#cols, ctx) : null;
-      this.#activeCols = this.#pivot ? normalizeColumns(this.#pivot.columns) : this.#cols;
+      this.#pivot = this.#pivotModel
+        ? pivotData(this.#rows, this.#pivotModel, this.#cols as readonly ResolvedColumn[], ctx) as { rows: Row[]; columns: ColumnDef[] }
+        : null;
+      this.#activeCols = this.#pivot
+        ? normalizeColumns(this.#pivot.columns)
+        : normalizeColumns(this.#cols);
       const sourceRows = this.#pivot ? this.#pivot.rows : this.#rows;
 
       let rows = sourceRows;
@@ -985,7 +1171,7 @@ import '../forms/checkbox.js';
           ctx,
         });
       }
-      if (this.sortingMode === 'client') rows = applySort(rows, this.#sortModel, this.#activeCols, ctx);
+      if (this.sortingMode === 'client') rows = applySort(rows, this.#sortModel as readonly SortModelItem[], this.#activeCols, ctx);
       this.#leafRows = rows;
 
       const totalRows = this.rowCount ?? rows.length;
@@ -999,28 +1185,28 @@ import '../forms/checkbox.js';
 
       this.#nodes = this.#isGrouped()
         ? this.#groupNodes(visibleRows, ctx)
-        : visibleRows.map((row) => ({ kind: 'leaf', row, id: this.#idOf(row), depth: 0 }));
+        : visibleRows.map((row: Row) => ({ kind: 'leaf' as const, row, id: this.#idOf(row), depth: 0 }));
 
       this.#footerAgg = aggregateRows(rows, this.#aggregationModel, this.#activeCols, ctx);
       this.#measure();
       this.#renderAll(totalRows);
     }
 
-    #groupNodes(rows, ctx) {
+    #groupNodes(rows: Row[], ctx: { grid: IsDataGrid; api: IsDataGrid }): GridNode[] {
       const cols = this.#activeCols;
       const paths = this.treeData && this.#hooks.getTreeDataPath
-        ? (row) => this.#hooks.getTreeDataPath(row) || []
-        : (row) => this.#groupingModel.map((field) => {
-          const col = cols.find((c) => c.field === field);
+        ? (row: Row) => this.#hooks.getTreeDataPath!(row) || []
+        : (row: Row) => this.#groupingModel.map((field: string) => {
+          const col = cols.find((c: ColumnDef) => c.field === field);
           return col ? formattedValue(cellValue(row, col, ctx), row, col, ctx) : '';
         });
-      const tree = buildTree(rows, { paths, getRowId: (row, i) => this.#idOf(row, i) });
-      if (this.treeData) collapseTreeLeaves(tree);
+      const tree = buildTree(rows, { paths, getRowId: (row: Row, i: number) => this.#idOf(row, i) });
+      if (this.treeData) collapseTreeLeaves(tree as unknown as GridNode[]);
       aggregateTree(tree, this.#aggregationModel, cols, ctx);
-      return flattenTree(tree, this.#expanded);
+      return flattenTree(tree, this.#expanded) as unknown as GridNode[];
     }
 
-    #allGroups(nodes = this.#nodes, out = []) {
+    #allGroups(nodes: GridNode[] = this.#nodes, out: GridNode[] = []): GridNode[] {
       for (const node of nodes) {
         if (node.kind !== 'group') continue;
         out.push(node);
@@ -1029,11 +1215,11 @@ import '../forms/checkbox.js';
       return out;
     }
 
-    #measure() {
+    #measure(): void {
       const base = this.rowHeight;
       const offsets = new Float64Array(this.#nodes.length + 1);
       for (let i = 0; i < this.#nodes.length; i++) {
-        const node = this.#nodes[i];
+        const node = this.#nodes[i]!;
         let h = base;
         if (node.row && this.#hooks.getRowHeight) {
           const custom = this.#hooks.getRowHeight(node.row);
@@ -1042,14 +1228,14 @@ import '../forms/checkbox.js';
         node.baseHeight = h;
         if (this.#detailOpen.has(node.id)) h += this.detailHeight;
         node.height = h;
-        offsets[i + 1] = offsets[i] + h;
+        offsets[i + 1] = offsets[i]! + h;
       }
       this.#offsets = offsets;
     }
 
     /* ── Render ──────────────────────────────────────────────────────── */
 
-    #syncChrome() {
+    #syncChrome(): void {
       this.#base.dataset.density = this.density;
       this.#base.style.setProperty('--is-grid-row-h', `${this.rowHeight}px`);
       this.#base.style.setProperty('--is-grid-head-h', `${this.headerHeight}px`);
@@ -1060,29 +1246,35 @@ import '../forms/checkbox.js';
       const showToolbar = this.hasAttribute('show-toolbar') || this.filterable;
       const showSearch = this.hasAttribute('quick-filter') || this.filterable;
       const showTools = this.toolbarTools;
-      this.#toolbar.querySelector<HTMLElement>('.tool-search').hidden = !showSearch;
-      for (const [tool, label] of [['columns', 'columns'], ['filters', 'filters'], ['density', 'density'], ['export', 'export']]) {
+      const search = this.#toolbar.querySelector<HTMLElement>('.tool-search');
+      if (search) search.hidden = !showSearch;
+      for (const [tool, label] of [['columns', 'columns'], ['filters', 'filters'], ['density', 'density'], ['export', 'export']] as const) {
         const btn = this.#toolbar.querySelector<HTMLElement>(`[data-tool="${tool}"]`);
-        btn.querySelector<HTMLElement>('.tool-text').textContent = this.#text[label];
-        btn.title = this.#text[label];
+        if (!btn) continue;
+        const labelText = this.#text[label];
+        const span = btn.querySelector<HTMLElement>('.tool-text');
+        if (span) span.textContent = labelText;
+        btn.title = labelText;
         const hideTool = !showTools || (tool === 'filters' && this.hasAttribute('disable-column-filter'));
         btn.hidden = hideTool;
       }
       // Si no hay búsqueda ni tools, la barra no aporta nada: ocultarla.
       this.#toolbar.hidden = !showToolbar || (!showSearch && !showTools);
-      this.#quick.placeholder = this.#text.quickFilter;
+      const quickEl = this.#quick as unknown as { placeholder: string };
+      quickEl.placeholder = this.#text.quickFilter;
       this.#footer.hidden = this.hasAttribute('hide-footer');
       this.#filterHead.hidden = !this.hasAttribute('header-filters');
       this.#pageSizeSelect.setAttribute('aria-label', this.#text.rowsPerPage);
-      this.#footer.querySelector<HTMLElement>('.page-size-label').textContent = this.#text.rowsPerPage;
+      const pageSizeLabel = this.#footer.querySelector<HTMLElement>('.page-size-label');
+      if (pageSizeLabel) pageSizeLabel.textContent = this.#text.rowsPerPage;
       this.#viewport.setAttribute('role', this.#isGrouped() ? 'treegrid' : 'grid');
     }
 
-    #renderAll(totalRows: number) {
+    #renderAll(totalRows: number): void {
       this.#available = this.#viewport.clientWidth || this.#available;
       const cols = this.#layoutCols();
       this.#widths = resolveWidths(cols, this.#available, this.#widthOverrides);
-      this.#totalWidth = cols.reduce((sum, c) => sum + this.#widths[c.field], 0);
+      this.#totalWidth = cols.reduce((sum: number, c: ColumnDef) => sum + (this.#widths[c.field ?? ''] ?? 0), 0);
       this.#stickyOffsets(cols);
       this.#viewport.setAttribute('aria-colcount', String(cols.length));
       this.#viewport.setAttribute('aria-rowcount', String(totalRows + 1));
@@ -1098,72 +1290,72 @@ import '../forms/checkbox.js';
     }
 
     /** Las filas llenan el viewport aunque las columnas no lleguen a cubrirlo. */
-    get #rowWidth() { return `max(${this.#totalWidth}px, 100%)`; }
+    get #rowWidth(): string { return `max(${this.#totalWidth}px, 100%)`; }
 
-    #stickyOffsets(cols) {
-      const left = {};
-      const right = {};
+    #stickyOffsets(cols: ColumnDef[]): void {
+      const left: Record<string, number> = {};
+      const right: Record<string, number> = {};
       let acc = 0;
       for (const col of cols) {
         if (!this.#isPinned(col, 'left')) continue;
-        left[col.field] = acc;
-        acc += this.#widths[col.field];
+        left[col.field ?? ''] = acc;
+        acc += this.#widths[col.field ?? ''] ?? 0;
       }
       acc = 0;
       for (const col of [...cols].reverse()) {
         if (!this.#isPinned(col, 'right')) continue;
-        right[col.field] = acc;
-        acc += this.#widths[col.field];
+        right[col.field ?? ''] = acc;
+        acc += this.#widths[col.field ?? ''] ?? 0;
       }
       this.#stickyLeft = left;
       this.#stickyRight = right;
     }
 
-    #isPinned(col, side) {
+    #isPinned(col: ColumnDef, side: 'left' | 'right'): boolean {
       if (col.system) return side === 'left';
       return side === 'left'
-        ? this.#pinnedCols.left.includes(col.field)
-        : this.#pinnedCols.right.includes(col.field);
+        ? this.#pinnedCols.left.includes(col.field ?? '')
+        : this.#pinnedCols.right.includes(col.field ?? '');
     }
 
-    #applyCellGeometry(el, col, width) {
-      const w = width ?? this.#widths[col.field];
+    #applyCellGeometry(el: HTMLElement, col: ColumnDef, width?: number): void {
+      const w = width ?? this.#widths[col.field ?? ''] ?? 0;
       el.style.width = `${w}px`;
       el.style.minWidth = `${w}px`;
-      if (this.#stickyLeft[col.field] != null) {
+      if (this.#stickyLeft[col.field ?? ''] != null) {
         el.dataset.pinned = 'left';
-        el.style.left = `${this.#stickyLeft[col.field]}px`;
-      } else if (this.#stickyRight[col.field] != null) {
+        el.style.left = `${this.#stickyLeft[col.field ?? '']}px`;
+      } else if (this.#stickyRight[col.field ?? ''] != null) {
         el.dataset.pinned = 'right';
-        el.style.right = `${this.#stickyRight[col.field]}px`;
+        el.style.right = `${this.#stickyRight[col.field ?? '']}px`;
       }
       if (col.align && col.align !== 'left') el.dataset.align = col.align;
     }
 
     /** Grupos de cabecera: una fila por nivel, con spans contiguos. */
     /** field → cadena de grupos, de fuera hacia dentro. */
-    #groupChains() {
-      const chains = new Map();
-      const walk = (nodes, ancestors) => {
+    #groupChains(): Map<string, Array<Record<string, CellValue>>> {
+      const chains = new Map<string, Array<Record<string, CellValue>>>();
+      const walk = (nodes: Array<Record<string, CellValue>>, ancestors: Array<Record<string, CellValue>>) => {
         for (const node of nodes) {
           if (node.field) {
-            chains.set(node.field, ancestors);
+            chains.set(String(node.field), ancestors);
             continue;
           }
-          walk(node.children || [], [...ancestors, node]);
+          walk((node.children || []) as Array<Record<string, CellValue>>, [...ancestors, node]);
         }
       };
       walk(this.#columnGroups, []);
       return chains;
     }
 
-    #renderGroupRows(cols) {
+    #renderGroupRows(cols: ColumnDef[]): void {
       const model = this.#columnGroups;
       this.#groupRows.hidden = model.length === 0;
       if (!model.length) return;
 
       const chains = this.#groupChains();
-      const depth = Math.max(0, ...[...chains.values()].map((c) => c.length));
+      const depth = Math.max(0, ...[...chains.values()].map((c: Array<Record<string, CellValue>>) => c.length));
 
       const frag = document.createDocumentFragment();
       for (let level = 0; level < depth; level++) {
@@ -1173,12 +1365,12 @@ import '../forms/checkbox.js';
         rowEl.style.width = this.#rowWidth;
         let i = 0;
         while (i < cols.length) {
-          const group = chains.get(cols[i].field)?.[level] || null;
+          const group = chains.get(cols[i]!.field ?? '')?.[level] || null;
           let span = 1;
           if (group) {
-            while (i + span < cols.length && chains.get(cols[i + span].field)?.[level] === group) span += 1;
+            while (i + span < cols.length && chains.get(cols[i + span]!.field ?? '')?.[level] === group) span += 1;
           }
-          const width = cols.slice(i, i + span).reduce((sum, c) => sum + this.#widths[c.field], 0);
+          const width = cols.slice(i, i + span).reduce((sum: number, c: ColumnDef) => sum + (this.#widths[c.field ?? ''] ?? 0), 0);
           const cell = document.createElement('div');
           cell.className = 'gcell';
           cell.style.width = `${width}px`;
@@ -1186,9 +1378,9 @@ import '../forms/checkbox.js';
           if (group) {
             cell.setAttribute('role', 'columnheader');
             cell.setAttribute('aria-colspan', String(span));
-            cell.dataset.group = group.groupId || '';
-            cell.textContent = group.headerName ?? group.groupId ?? '';
-            if (group.headerAlign) cell.dataset.align = group.headerAlign;
+            cell.dataset.group = String(group.groupId ?? '');
+            cell.textContent = String(group.headerName ?? group.groupId ?? '');
+            if (group.headerAlign) cell.dataset.align = String(group.headerAlign);
           } else {
             cell.setAttribute('role', 'none');
             cell.dataset.empty = '';
@@ -1202,16 +1394,16 @@ import '../forms/checkbox.js';
       this.#groupRows.style.width = this.#rowWidth;
     }
 
-    #renderHeader(cols) {
+    #renderHeader(cols: ColumnDef[]): void {
       this.#renderGroupRows(cols);
       const frag = document.createDocumentFragment();
-      cols.forEach((col, colIndex: number) => {
+      cols.forEach((col: ColumnDef, colIndex: number) => {
         const cell = document.createElement('div');
         cell.className = 'hcell';
         cell.setAttribute('part', 'header-cell');
         cell.setAttribute('role', 'columnheader');
         cell.setAttribute('aria-colindex', String(colIndex + 1));
-        cell.dataset.field = col.field;
+        cell.dataset.field = col.field ?? '';
         cell.tabIndex = this.#focus?.area === 'header' && this.#focus.field === col.field ? 0 : -1;
         this.#applyCellGeometry(cell, col);
         if (col.headerAlign && col.headerAlign !== 'left') cell.dataset.align = col.headerAlign;
@@ -1220,12 +1412,14 @@ import '../forms/checkbox.js';
         if (col.field === '__check') {
           const selectable = this.#selectableRows();
           const total = selectable.length;
-          const on = selectable.filter((r) => this.#selection.has(this.#idOf(r))).length;
+          const on = selectable.filter((r: Row) => this.#selection.has(this.#idOf(r))).length;
           cell.innerHTML = '<input type="checkbox" class="check check-all" aria-label="Seleccionar todo" />';
           const box = cell.querySelector<HTMLInputElement>('input');
-          box.checked = total > 0 && on === total;
-          box.indeterminate = on > 0 && on < total;
-          box.disabled = this.selectionMode !== 'multiple';
+          if (box) {
+            box.checked = total > 0 && on === total;
+            box.indeterminate = on > 0 && on < total;
+            box.disabled = this.selectionMode !== 'multiple';
+          }
         } else if (col.system) {
           cell.textContent = col.headerName || '';
           if (col.field === '__group') cell.classList.add('hcell-group');
@@ -1233,21 +1427,21 @@ import '../forms/checkbox.js';
           const label = document.createElement('span');
           label.className = 'hlabel';
           if (typeof col.renderHeader === 'function') {
-            appendContent(label, col.renderHeader({ field: col.field, colDef: col }));
+            appendContent(label, col.renderHeader({ field: col.field ?? '', colDef: col }) as Parameters<typeof appendContent>[1]);
           } else {
-            label.textContent = col.headerName;
+            label.textContent = col.headerName ?? '';
           }
           if (col.description) cell.title = col.description;
           cell.appendChild(label);
 
-          const entry = this.#sortModel.find((s) => s.field === col.field);
+          const entry = this.#sortModel.find((s: SortEntry) => s.field === col.field);
           if (entry) {
-            cell.dataset.sort = entry.sort;
+            cell.dataset.sort = String(entry.sort ?? '');
             cell.setAttribute('aria-sort', entry.sort === 'asc' ? 'ascending' : 'descending');
             const mark = document.createElement('span');
             mark.className = 'sort-mark';
             mark.setAttribute('aria-hidden', 'true');
-            mark.textContent = ICONS[entry.sort] || '';
+            mark.textContent = ICONS[String(entry.sort ?? '')] || '';
             cell.appendChild(mark);
             if (this.#sortModel.length > 1) {
               const idx = document.createElement('span');
@@ -1257,13 +1451,13 @@ import '../forms/checkbox.js';
             }
           }
           if (col.sortable !== false && !this.hasAttribute('disable-column-sort')) cell.classList.add('sortable');
-          if (this.#filterModel.items.some((f) => f.field === col.field)) cell.dataset.filtered = '';
+          if ((this.#filterModel.items ?? []).some((f: FilterRule) => f.field === col.field)) cell.dataset.filtered = '';
           if (!this.hasAttribute('disable-column-menu') && col.disableColumnMenu !== true) {
             const btn = document.createElement('button');
             btn.type = 'button';
             btn.className = 'hmenu';
             btn.dataset.action = 'column-menu';
-            btn.setAttribute('aria-label', `Menú de ${col.headerName}`);
+            btn.setAttribute('aria-label', `Menú de ${col.headerName ?? ''}`);
             btn.textContent = ICONS.menu;
             cell.appendChild(btn);
           }
@@ -1285,17 +1479,17 @@ import '../forms/checkbox.js';
     }
 
     /** Reutiliza las celdas existentes: recrearlas mataría el foco y el caret. */
-    #renderHeaderFilters(cols) {
-      const cells = [...this.#filterHead.children];
+    #renderHeaderFilters(cols: ColumnDef[]): void {
+      const cells = [...this.#filterHead.children] as HTMLElement[];
       const reuse = cells.length === cols.length
-        && cells.every((cell, i) => cell.dataset.field === cols[i].field);
+        && cells.every((cell: HTMLElement, i: number) => cell.dataset.field === cols[i]!.field);
       const frag = reuse ? null : document.createDocumentFragment();
-      cols.forEach((col, i) => {
-        const cell = reuse ? cells[i] : document.createElement('div');
+      cols.forEach((col: ColumnDef, i: number) => {
+        const cell = reuse ? cells[i]! : document.createElement('div');
         if (!reuse) {
           cell.className = 'fcell';
           cell.setAttribute('role', 'columnheader');
-          cell.dataset.field = col.field;
+          cell.dataset.field = col.field ?? '';
         }
         this.#applyCellGeometry(cell, col);
         if (col.system || col.filterable === false) cell.replaceChildren();
@@ -1306,19 +1500,19 @@ import '../forms/checkbox.js';
       this.#filterHead.style.width = this.#rowWidth;
     }
 
-    #syncFilterCell(cell, col) {
+    #syncFilterCell(cell: HTMLElement, col: ColumnDef): void {
       // En columnas muy estrechas caben los dos controles pero ninguno se usa:
       // se oculta el operador y se deja el campo de valor.
-      cell.toggleAttribute('data-tight', (this.#widths[col.field] || 0) < 110);
-      const item = this.#filterModel.items.find((f) => f.field === col.field) || {};
+      cell.toggleAttribute('data-tight', (this.#widths[col.field ?? ''] ?? 0) < 110);
+      const item = (this.#filterModel.items ?? []).find((f: FilterRule) => f.field === col.field) || {};
       const ops = col.operators || [];
-      const op = ops.find((o) => o.value === item.operator) || ops[0];
+      const op = ops.find((o: Operator) => o.value === item.operator) || ops[0];
 
-      let opSel = cell.querySelector<HTMLElement>('.fop');
+      let opSel = cell.querySelector<HTMLSelectElement>('.fop');
       if (!opSel) {
         opSel = document.createElement('select');
         opSel.className = 'fop';
-        opSel.setAttribute('aria-label', `Operador de ${col.headerName}`);
+        opSel.setAttribute('aria-label', `Operador de ${col.headerName ?? ''}`);
         for (const o of ops) {
           const option = document.createElement('option');
           option.value = o.value;
@@ -1335,31 +1529,32 @@ import '../forms/checkbox.js';
         return;
       }
       // `isAnyOf` acepta varios valores: ahí el desplegable no sirve.
-      const options = op.multiple ? null : filterOptionsFor(col);
+      const options = op?.multiple ? null : filterOptionsFor(col);
       const tag = options ? 'select' : 'input';
-      const count = op.range ? 2 : 1;
-      if (inputs.length !== count || inputs.some((el) => el.localName !== tag)) {
+      const count = op?.range ? 2 : 1;
+      if (inputs.length !== count || inputs.some((el: HTMLElement) => el.localName !== tag)) {
         for (const el of inputs) el.remove();
-        inputs = Array.from({ length: count }, (_, i) => {
-          const el = this.#filterInput(col, op, options, i);
+        inputs = Array.from({ length: count }, (_, i: number) => {
+          const el = this.#filterInput(col, op ?? null, options, i);
           cell.appendChild(el);
           return el;
         });
       }
-      const values = op.range
+      const values: CellValue[] = op?.range
         ? (Array.isArray(item.value) ? item.value : String(item.value ?? '').split(','))
         : [item.value];
-      inputs.forEach((input, i) => {
+      inputs.forEach((input: HTMLElement, i: number) => {
         const value = values[i] == null ? '' : String(values[i]).trim();
-        if (input !== this.shadowRoot!.activeElement && input.value !== value) input.value = value;
+        const inputEl = input as HTMLInputElement;
+        if (input !== this.shadowRoot!.activeElement && inputEl.value !== value) inputEl.value = value;
       });
     }
 
-    #filterInput(col, op, options, index) {
+    #filterInput(col: ColumnDef, op: Operator | null, options: ReturnType<typeof filterOptionsFor>, index: number): HTMLElement {
       if (options) {
         const select = document.createElement('select');
         select.className = 'finput';
-        select.setAttribute('aria-label', `Filtro de ${col.headerName}`);
+        select.setAttribute('aria-label', `Filtro de ${col.headerName ?? ''}`);
         const blank = document.createElement('option');
         blank.value = '';
         blank.textContent = this.#text.filterAny;
@@ -1377,30 +1572,33 @@ import '../forms/checkbox.js';
       input.type = col.type === 'number' ? 'number'
         : col.type === 'date' ? 'date'
           : col.type === 'dateTime' ? 'datetime-local' : 'text';
-      const label = op.range
-        ? `${index === 0 ? this.#text.rangeFrom : this.#text.rangeTo} (${col.headerName})`
-        : `Filtro de ${col.headerName}`;
+      const label = op?.range
+        ? `${index === 0 ? this.#text.rangeFrom : this.#text.rangeTo} (${col.headerName ?? ''})`
+        : `Filtro de ${col.headerName ?? ''}`;
       input.setAttribute('aria-label', label);
-      input.placeholder = op.range
+      input.placeholder = op?.range
         ? (index === 0 ? this.#text.rangeFrom : this.#text.rangeTo)
         : this.#text.filterBy;
       return input;
     }
 
     /** El valor de la celda: array cuando el operador pide un rango. */
-    #filterCellValue(cell) {
-      const inputs = [...cell.querySelectorAll<HTMLElement>('.finput')];
-      return inputs.length > 1 ? inputs.map((el) => el.value) : (inputs[0]?.value ?? '');
+    #filterCellValue(cell: HTMLElement): string | string[] {
+      const inputs = [...cell.querySelectorAll<HTMLInputElement>('.finput')];
+      return inputs.length > 1 ? inputs.map((el: HTMLInputElement) => el.value) : (inputs[0]?.value ?? '');
     }
 
-    #renderPinnedRows(cols) {
-      for (const [zone, el] of [['top', this.#pinnedTop], ['bottom', this.#pinnedBottom]]) {
+    #renderPinnedRows(cols: ColumnDef[]): void {
+      for (const [zone, el] of [['top', this.#pinnedTop], ['bottom', this.#pinnedBottom]] as const) {
         const rows = this.#pinnedRowsModel[zone] || [];
         el.hidden = rows.length === 0;
         if (!rows.length) continue;
         const frag = document.createDocumentFragment();
-        rows.forEach((row, i) => {
-          const node = { kind: 'leaf', row, id: this.#idOf(row), depth: 0, pinned: zone, baseHeight: this.rowHeight };
+        rows.forEach((row: Row, i: number) => {
+          const node: GridNode = {
+            kind: 'leaf', row, id: this.#idOf(row), depth: 0,
+            pinned: zone, baseHeight: this.rowHeight,
+          };
           frag.appendChild(this.#renderRow(node, cols, { flow: true, index: i }));
         });
         el.replaceChildren(frag);
@@ -1408,7 +1606,7 @@ import '../forms/checkbox.js';
       }
     }
 
-    #renderBody(cols) {
+    #renderBody(cols: ColumnDef[]): void {
       const total = this.#offsets[this.#nodes.length] || 0;
       this.#rowsEl.style.height = `${total}px`;
       this.#rowsEl.style.width = this.#rowWidth;
@@ -1424,7 +1622,8 @@ import '../forms/checkbox.js';
 
       const frag = document.createDocumentFragment();
       for (let i = from; i < to; i++) {
-        frag.appendChild(this.#renderRow(this.#nodes[i], cols, { top: this.#offsets[i], index: i }));
+        const node = this.#nodes[i]!;
+        frag.appendChild(this.#renderRow(node, cols, { top: this.#offsets[i] ?? 0, index: i }));
       }
       // replaceChildren tira el foco al aire: hay que anotarlo antes de repintar.
       const hadFocus = this.#rowsEl.contains(this.shadowRoot!.activeElement);
@@ -1433,19 +1632,19 @@ import '../forms/checkbox.js';
       this.#restoreFocus(hadFocus);
     }
 
-    #indexAt(y) {
+    #indexAt(y: number): number {
       const offsets = this.#offsets;
       let lo = 0;
       let hi = offsets.length - 1;
       while (lo < hi) {
         const mid = (lo + hi) >> 1;
-        if (offsets[mid] <= y) lo = mid + 1;
+        if (offsets[mid]! <= y) lo = mid + 1;
         else hi = mid;
       }
       return Math.max(0, lo - 1);
     }
 
-    #renderRow(node, cols, { top = 0, flow = false, index = 0 } = {}) {
+    #renderRow(node: GridNode, cols: ColumnDef[], { top = 0, flow = false, index = 0 }: { top?: number; flow?: boolean; index?: number } = {}): HTMLElement {
       const row = node.row;
       const wrap = document.createElement('div');
       wrap.className = 'row-wrap';
@@ -1484,7 +1683,7 @@ import '../forms/checkbox.js';
 
       const ctx = this.#ctx();
       let skip = 0;
-      cols.forEach((col, ci) => {
+      cols.forEach((col: ColumnDef, ci: number) => {
         if (skip > 0) {
           skip -= 1;
           return;
@@ -1502,21 +1701,22 @@ import '../forms/checkbox.js';
         detail.setAttribute('role', 'gridcell');
         detail.setAttribute('aria-colspan', String(cols.length));
         detail.style.height = `${this.detailHeight}px`;
-        appendContent(detail, this.#hooks.getDetailPanelContent({ row, id: node.id }));
+        const content = this.#hooks.getDetailPanelContent({ row: row as Row, id: node.id });
+        appendContent(detail, content);
         wrap.appendChild(detail);
       }
       return wrap;
     }
 
-    #renderCell(node, col, ctx, cols, colIndex: number) {
+    #renderCell(node: GridNode, col: ColumnDef, ctx: { grid: IsDataGrid; api: IsDataGrid }, cols: ColumnDef[], colIndex: number): CellRender {
       const row = node.row;
       const el = document.createElement('div');
       el.className = 'cell';
       el.setAttribute('part', 'cell');
       el.setAttribute('role', 'gridcell');
       el.setAttribute('aria-colindex', String(colIndex + 1));
-      el.dataset.field = col.field;
-      el.tabIndex = this.#isCellFocused(node.id, col.field) ? 0 : -1;
+      el.dataset.field = col.field ?? '';
+      el.tabIndex = this.#isCellFocused(node.id, col.field ?? '') ? 0 : -1;
 
       let spanCount = 1;
       if (!col.system && typeof col.colSpan === 'function' && row) {
@@ -1524,13 +1724,13 @@ import '../forms/checkbox.js';
         if (span > 1) {
           spanCount = Math.min(span, cols.length - colIndex);
           const width = cols.slice(colIndex, colIndex + spanCount)
-            .reduce((sum, c) => sum + this.#widths[c.field], 0);
+            .reduce((sum: number, c: ColumnDef) => sum + (this.#widths[c.field ?? ''] ?? 0), 0);
           this.#applyCellGeometry(el, col, width);
           el.dataset.colspan = String(spanCount);
         }
       }
       if (spanCount === 1) this.#applyCellGeometry(el, col);
-      if (this.#inCellRange(node.id, col.field)) el.dataset.range = '';
+      if (this.#inCellRange(node.id, col.field ?? '')) el.dataset.range = '';
 
       if (col.field === '__reorder') {
         el.innerHTML = `<span class="row-grip" aria-label="Reordenar fila" title="Reordenar fila">${ICONS.drag}</span>`;
@@ -1539,16 +1739,18 @@ import '../forms/checkbox.js';
 
       if (col.field === '__check') {
         const selectable = node.kind !== 'leaf' || !this.#hooks.isRowSelectable
-          || this.#hooks.isRowSelectable({ row, id: node.id });
+          || this.#hooks.isRowSelectable({ row: row as Row, id: node.id });
         el.innerHTML = '<input type="checkbox" class="check row-check" aria-label="Seleccionar fila" />';
         const box = el.querySelector<HTMLInputElement>('input');
-        box.checked = this.#selection.has(node.id);
-        box.disabled = !selectable;
-        if (node.kind === 'group') {
-          const leaves = leavesOf(node);
-          const on = leaves.filter((l) => this.#selection.has(l.id)).length;
-          box.checked = on > 0 && on === leaves.length;
-          box.indeterminate = on > 0 && on < leaves.length;
+        if (box) {
+          box.checked = this.#selection.has(node.id);
+          box.disabled = !selectable;
+          if (node.kind === 'group') {
+            const leaves = leavesOf(node);
+            const on = leaves.filter((l: GridNode) => this.#selection.has(l.id)).length;
+            box.checked = on > 0 && on === leaves.length;
+            box.indeterminate = on > 0 && on < leaves.length;
+          }
         }
         return { el, spanCount };
       }
@@ -1576,7 +1778,7 @@ import '../forms/checkbox.js';
           el.appendChild(btn);
           const label = document.createElement('span');
           label.className = 'group-label';
-          label.textContent = node.key;
+          label.textContent = String(node.key ?? '');
           el.appendChild(label);
           const count = document.createElement('span');
           count.className = 'group-count';
@@ -1586,7 +1788,7 @@ import '../forms/checkbox.js';
           // Hoja de tree data: sin desplegable, pero con su nombre de rama.
           const label = document.createElement('span');
           label.className = 'group-label';
-          label.textContent = node.key;
+          label.textContent = String(node.key);
           el.appendChild(label);
         }
         return { el, spanCount };
@@ -1595,7 +1797,7 @@ import '../forms/checkbox.js';
       // En una fila de grupo manda la agregación; si no hay, los datos de la
       // propia fila (tree data) y si tampoco, celda vacía.
       if (node.kind === 'group') {
-        const agg = node.aggregates?.[col.field];
+        const agg = node.aggregates?.[col.field ?? ''];
         if (agg) {
           el.dataset.aggregated = '';
           el.textContent = this.#formatAggregate(agg, col, ctx);
@@ -1604,20 +1806,22 @@ import '../forms/checkbox.js';
         if (!node.row) return { el, spanCount };
       }
 
-      const value = cellValue(row, col, ctx);
-      if (this.#isEditingCell(node.id, col.field)) {
+      const value = cellValue(row as Row, col, ctx);
+      if (this.#isEditingCell(node.id, col.field ?? '')) {
         el.dataset.editing = '';
-        el.appendChild(this.#buildEditor(col, this.#edit.values[col.field] ?? value, node));
-        if (this.#edit.errors?.[col.field]) {
+        const editValue = (this.#edit?.values[col.field ?? ''] ?? value) as CellValue;
+        const editor = this.#buildEditor(col, editValue, node);
+        el.appendChild(editor);
+        if (this.#edit?.errors?.[col.field ?? '']) {
           el.dataset.error = '';
-          el.title = this.#edit.errors[col.field];
+          el.title = this.#edit.errors[col.field ?? ''] ?? '';
         }
         return { el, spanCount };
       }
 
       if (col.type === 'actions' && typeof col.getActions === 'function') {
-        const actions = col.getActions({ row, id: node.id, colDef: col }) || [];
-        for (const action of actions.filter((a) => !a.showInMenu)) {
+        const actions = (col.getActions({ row: row as Row, id: node.id, colDef: col }) || []) as RowAction[];
+        for (const action of actions.filter((a: RowAction) => !a.showInMenu)) {
           const btn = document.createElement('button');
           btn.type = 'button';
           btn.className = 'act-btn';
@@ -1627,10 +1831,10 @@ import '../forms/checkbox.js';
           btn.disabled = !!action.disabled;
           btn.tabIndex = el.tabIndex;
           appendContent(btn, action.icon ?? action.label ?? '•');
-          btn.__action = action;
+          (btn as HTMLElement & { __action?: RowAction }).__action = action;
           el.appendChild(btn);
         }
-        const menu = actions.filter((a) => a.showInMenu);
+        const menu = actions.filter((a: RowAction) => a.showInMenu);
         if (menu.length) {
           const btn = document.createElement('button');
           btn.type = 'button';
@@ -1639,7 +1843,7 @@ import '../forms/checkbox.js';
           btn.setAttribute('aria-label', 'Más acciones');
           btn.tabIndex = el.tabIndex;
           btn.textContent = ICONS.menu;
-          btn.__actions = menu;
+          (btn as HTMLElement & { __actions?: RowAction[] }).__actions = menu;
           el.appendChild(btn);
         }
         return { el, spanCount };
@@ -1647,32 +1851,32 @@ import '../forms/checkbox.js';
 
       if (typeof col.renderCell === 'function') {
         appendContent(el, col.renderCell({
-          value, row, id: node.id, colDef: col, field: col.field, api: this,
+          value, row: row as Row, id: node.id, colDef: col, field: col.field ?? '', api: this,
           tabIndex: el.tabIndex, hasFocus: el.tabIndex === 0,
-        }));
+        }) as Parameters<typeof appendContent>[1]);
       } else {
-        const text = formattedValue(value, row, col, ctx);
+        const text = formattedValue(value, row as Row, col, ctx);
         el.textContent = text;
         if (col.showTooltip !== false && text) el.title = text;
       }
 
       if (col.cellClassName) {
         const cls = typeof col.cellClassName === 'function'
-          ? col.cellClassName({ value, row, id: node.id, colDef: col })
+          ? col.cellClassName({ value, row: row as Row, id: node.id, colDef: col })
           : col.cellClassName;
         if (cls) el.classList.add(...String(cls).split(/\s+/));
       }
       if (this.#hooks.getCellClassName) {
-        const cls = this.#hooks.getCellClassName({ value, row, id: node.id, field: col.field });
+        const cls = this.#hooks.getCellClassName({ value, row: row as Row, id: node.id, field: col.field ?? '' });
         if (cls) el.classList.add(...String(cls).split(/\s+/));
       }
       if (col.editable) el.dataset.editable = '';
       return { el, spanCount };
     }
 
-    #formatAggregate(agg, col, ctx) {
-      if (agg.value == null || Number.isNaN(agg.value)) return '';
-      const proxyRow = col?.field ? { [col.field]: agg.value } : {};
+    #formatAggregate(agg: { fn: string; value: CellValue }, col: ColumnDef, ctx: { grid: IsDataGrid; api: IsDataGrid }): string {
+      if (agg.value == null || Number.isNaN(agg.value as number)) return '';
+      const proxyRow: Row = col?.field ? { [col.field]: agg.value } : {};
       let text = formattedValue(agg.value, proxyRow, col, ctx);
       if (text == null || text === '' || text === '!') {
         text = typeof agg.value === 'number'
@@ -1683,7 +1887,7 @@ import '../forms/checkbox.js';
       return `${AGGREGATION_FNS[agg.fn]?.label || agg.fn}: ${text}`;
     }
 
-    #renderAggRow(cols) {
+    #renderAggRow(cols: ColumnDef[]): void {
       const fields = Object.keys(this.#footerAgg);
       this.#aggRow.hidden = fields.length === 0;
       if (!fields.length) return;
@@ -1693,7 +1897,7 @@ import '../forms/checkbox.js';
         const cell = document.createElement('div');
         cell.className = 'cell agg-cell';
         this.#applyCellGeometry(cell, col);
-        const agg = this.#footerAgg[col.field];
+        const agg = this.#footerAgg[col.field ?? ''];
         if (agg) cell.textContent = this.#formatAggregate(agg, col, ctx);
         frag.appendChild(cell);
       }
@@ -1701,7 +1905,7 @@ import '../forms/checkbox.js';
       this.#aggRow.style.width = this.#rowWidth;
     }
 
-    #renderFooter(totalRows: number) {
+    #renderFooter(totalRows: number): void {
       const selected = this.#selection.size;
       this.#selCount.hidden = selected === 0 || this.hasAttribute('hide-footer-selected-count');
       this.#selCount.textContent = this.#text.selected(selected);
@@ -1715,27 +1919,32 @@ import '../forms/checkbox.js';
       const to = Math.min(totalRows, (this.#page + 1) * size);
       this.#pageInfo.textContent = `${from}–${to} / ${totalRows}`;
 
-      const sizeChoices = [...new Set([...this.pageSizeOptions, size])].sort((a, b) => a - b);
-      const currentOpts = this.#pageSizeSelect.querySelectorAll<HTMLElement>('is-option, option');
-      const current = [...currentOpts].map((o) => Number(o.value)).join(',');
+      const sizeChoices = [...new Set([...this.pageSizeOptions, size])].sort((a: number, b: number) => a - b);
+      const currentOpts = this.#pageSizeSelect.querySelectorAll<HTMLOptionElement>('is-option, option');
+      const current = [...currentOpts].map((o: HTMLOptionElement) => Number(o.value)).join(',');
       if (current !== sizeChoices.join(',')) {
-        this.#pageSizeSelect.replaceChildren(...sizeChoices.map((n: string) => {
-          const opt = document.createElement('is-option');
+        this.#pageSizeSelect.replaceChildren(...sizeChoices.map((n: number) => {
+          const opt = document.createElement('is-option') as HTMLOptionElement;
           opt.value = String(n);
           opt.textContent = String(n);
           return opt;
         }));
       }
-      this.#pageSizeSelect.value = String(size);
-      this.#pager.querySelector<HTMLElement>('[data-page="first"]').disabled = this.#page === 0;
-      this.#pager.querySelector<HTMLElement>('[data-page="prev"]').disabled = this.#page === 0;
-      this.#pager.querySelector<HTMLElement>('[data-page="next"]').disabled = this.#page >= pages - 1;
-      this.#pager.querySelector<HTMLElement>('[data-page="last"]').disabled = this.#page >= pages - 1;
+      (this.#pageSizeSelect as unknown as HTMLElement & { value: string }).value = String(size);
+      const firstBtn = this.#pager.querySelector<HTMLButtonElement>('[data-page="first"]')!;
+      firstBtn.disabled = this.#page === 0;
+      const prevBtn = this.#pager.querySelector<HTMLButtonElement>('[data-page="prev"]')!;
+      prevBtn.disabled = this.#page === 0;
+      const nextBtn = this.#pager.querySelector<HTMLButtonElement>('[data-page="next"]')!;
+      nextBtn.disabled = this.#page >= pages - 1;
+      const lastBtn = this.#pager.querySelector<HTMLButtonElement>('[data-page="last"]')!;
+      lastBtn.disabled = this.#page >= pages - 1;
     }
 
-    #renderOverlay() {
+    #renderOverlay(): void {
       if (this.loading) {
-        const variant = LOADING_VARIANTS[this.getAttribute('loading-variant')] || 'spinner';
+        const attrValue = this.getAttribute('loading-variant');
+        const variant = LOADING_VARIANTS[attrValue ?? ''] || 'spinner';
         this.#overlay.hidden = false;
         this.#overlay.dataset.color = variant;
         this.#overlay.innerHTML = variant === 'skeleton'
@@ -1757,15 +1966,16 @@ import '../forms/checkbox.js';
     }
 
     /** Solo cuentan las reglas completas: las de valor vacío no filtran nada. */
-    #activeFilters() {
-      return this.#filterModel.items.filter((item) => {
-        const col = this.#activeCols.find((c) => c.field === item.field);
+    #activeFilters(): FilterRule[] {
+      return (this.#filterModel.items ?? []).filter((item: FilterRule) => {
+        const col = this.#activeCols.find((c: ColumnDef) => c.field === item.field);
         return col && filterTest(item, col);
       });
     }
 
-    #syncFilterBadge() {
+    #syncFilterBadge(): void {
       const badge = this.#toolbar.querySelector<HTMLElement>('.badge');
+      if (!badge) return;
       const active = this.#activeFilters().length;
       badge.hidden = active === 0;
       badge.textContent = String(active);
@@ -1773,21 +1983,22 @@ import '../forms/checkbox.js';
 
     /* ── Selección ───────────────────────────────────────────────────── */
 
-    #selectableRows() {
+    #selectableRows(): Row[] {
       const can = this.#hooks.isRowSelectable;
       if (!can) return this.#leafRows;
-      return this.#leafRows.filter((row) => can({ row, id: this.#idOf(row) }));
+      return this.#leafRows.filter((row: Row) => can({ row, id: this.#idOf(row) }));
     }
 
-    #emitSelection() {
-      emit(this, 'is-select', {
+    #emitSelection(): void {
+      const detail: RowSelectionDetail = {
         rowSelectionModel: this.rowSelectionModel,
         selectedRows: this.selectedRows,
         selectedIndices: this.selectedIndices,
-      });
+      };
+      emit(this, 'is-select', detail);
     }
 
-    #propagateSelection(id, selected) {
+    #propagateSelection(id: CellValue, selected: boolean): void {
       if (!this.#isGrouped()) return;
       const node = this.#nodeById(id);
       if (!node || node.kind !== 'group') return;
@@ -1797,16 +2008,16 @@ import '../forms/checkbox.js';
       }
     }
 
-    #toggleRow(id: string, { additive = false, range = false } = {}) {
+    #toggleRow(id: CellValue, { additive = false, range = false }: { additive?: boolean; range?: boolean } = {}): void {
       const mode = this.selectionMode;
       if (mode === 'none') return;
       if (range && this.#lastSelectedId != null && mode === 'multiple') {
-        const ids = this.#nodes.map((n) => n.id);
-        const a = ids.findIndex((x: string) => String(x) === String(this.#lastSelectedId));
-        const b = ids.findIndex((x: string) => String(x) === String(id));
+        const ids = this.#nodes.map((n: GridNode) => n.id);
+        const a = ids.findIndex((x: CellValue) => String(x) === String(this.#lastSelectedId));
+        const b = ids.findIndex((x: CellValue) => String(x) === String(id));
         if (a > -1 && b > -1) {
           const [start, end] = a < b ? [a, b] : [b, a];
-          for (let i = start; i <= end; i++) this.#selection.add(ids[i]);
+          for (let i = start; i <= end; i++) this.#selection.add(ids[i]!);
           this.#refresh();
           this.#emitSelection();
           return;
@@ -1831,9 +2042,9 @@ import '../forms/checkbox.js';
 
     /* ── Rango de celdas ─────────────────────────────────────────────── */
 
-    #rangeBounds() {
+    #rangeBounds(): RangeBounds | null {
       if (!this.#cellRange) return null;
-      const ids = this.#nodes.map((n) => String(n.id));
+      const ids = this.#nodes.map((n: GridNode) => String(n.id));
       const fields = this.#dataFields();
       const r1 = ids.indexOf(String(this.#cellRange.start.id));
       const r2 = ids.indexOf(String(this.#cellRange.end.id));
@@ -1848,7 +2059,7 @@ import '../forms/checkbox.js';
       };
     }
 
-    #inCellRange(id: string, field) {
+    #inCellRange(id: CellValue, field: string): boolean {
       const bounds = this.#rangeBounds();
       if (!bounds) return false;
       const r = bounds.ids.indexOf(String(id));
@@ -1857,26 +2068,27 @@ import '../forms/checkbox.js';
       return r >= bounds.rows[0] && r <= bounds.rows[1] && c >= bounds.cols[0] && c <= bounds.cols[1];
     }
 
-    #setCellRange(start, end) {
+    #setCellRange(start: { id: CellValue; field: string }, end: { id: CellValue; field: string }): void {
       this.#cellRange = { start, end };
       this.#refresh();
-      emit(this, 'is-cell-select', { cellSelectionModel: this.#cellRange });
+      const detail: CellSelectionDetail = { cellSelectionModel: this.#cellRange };
+      emit(this, 'is-cell-select', detail);
     }
 
     /* ── Orden ───────────────────────────────────────────────────────── */
 
-    #applySort(field, forcedDir, multiple) {
-      const col = this.#activeCols.find((c) => c.field === field);
+    #applySort(field: string, forcedDir: string | null | undefined, multiple: boolean): void {
+      const col = this.#activeCols.find((c: ColumnDef) => c.field === field);
       if (!col || col.sortable === false || this.hasAttribute('disable-column-sort')) return;
       const order = this.sortingOrder;
-      const current = this.#sortModel.find((s) => s.field === field);
-      let next = forcedDir;
+      const current = this.#sortModel.find((s: SortEntry) => s.field === field);
+      let next: string | null = forcedDir as string | null;
       if (next === undefined) {
         const at = current ? order.indexOf(current.sort) : -1;
         next = order[(at + 1) % order.length];
       }
       const allowMulti = multiple && !this.hasAttribute('disable-multiple-sorting');
-      let model = allowMulti ? this.#sortModel.filter((s) => s.field !== field) : [];
+      let model: SortEntry[] = allowMulti ? this.#sortModel.filter((s: SortEntry) => s.field !== field) : [];
       if (next) model = allowMulti ? [...model, { field, sort: next }] : [{ field, sort: next }];
       this.#sortModel = model;
       this.#page = 0;
@@ -1886,12 +2098,12 @@ import '../forms/checkbox.js';
 
     /* ── Filtros ─────────────────────────────────────────────────────── */
 
-    #updateFilterItem(field, patch) {
-      const items = this.#filterModel.items.slice();
-      const at = items.findIndex((i) => i.field === field);
-      const col = this.#activeCols.find((c) => c.field === field);
-      const base = { field, operator: col?.operators?.[0]?.value, value: '' };
-      if (at > -1) items[at] = { ...items[at], ...patch };
+    #updateFilterItem(field: string, patch: Partial<FilterRule>): void {
+      const items = (this.#filterModel.items ?? []).slice();
+      const at = items.findIndex((i: FilterRule) => i.field === field);
+      const col = this.#activeCols.find((c: ColumnDef) => c.field === field);
+      const base: FilterRule = { field, operator: col?.operators?.[0]?.value, value: '' };
+      if (at > -1) items[at] = { ...items[at]!, ...patch };
       else items.push({ ...base, ...patch });
       // Las reglas sin valor se conservan (el filtrado las ignora): si se
       // borrasen, el operador elegido se perdería al vaciar el campo.
@@ -1903,48 +2115,48 @@ import '../forms/checkbox.js';
 
     /* ── Edición ─────────────────────────────────────────────────────── */
 
-    #canEdit(node, col) {
+    #canEdit(node: GridNode, col: ColumnDef | undefined): boolean {
       if (!col || col.system || !col.editable) return false;
       if (node.kind === 'group' && !node.row) return false;
       if (this.#hooks.isCellEditable) {
-        return !!this.#hooks.isCellEditable({ row: node.row, id: node.id, field: col.field });
+        return !!this.#hooks.isCellEditable({ row: node.row as Row, id: node.id, field: col.field ?? '' });
       }
       return true;
     }
 
-    #isEditingCell(id: string, field) {
+    #isEditingCell(id: CellValue, field: string): boolean {
       if (!this.#edit || String(this.#edit.id) !== String(id)) return false;
       return this.#edit.fields.includes(field);
     }
 
-    #startEdit(id, field, seed) {
+    #startEdit(id: CellValue, field: string, seed?: CellValue): void {
       const node = this.#nodeById(id);
-      const col = this.#activeCols.find((c) => c.field === field);
+      const col = this.#activeCols.find((c: ColumnDef) => c.field === field);
       if (!node || !this.#canEdit(node, col)) return;
       const ctx = this.#ctx();
       if (this.editMode === 'row') {
-        const fields = this.#layoutCols().filter((c) => this.#canEdit(node, c)).map((c) => c.field);
-        const values = {};
+        const fields = this.#layoutCols().filter((c: ResolvedColumn) => this.#canEdit(node, c)).map((c: ResolvedColumn) => c.field ?? '');
+        const values: Record<string, CellValue> = {};
         for (const f of fields) {
-          const c = this.#activeCols.find((x) => x.field === f);
-          values[f] = f === field && seed !== undefined ? seed : cellValue(node.row, c, ctx);
+          const c = this.#activeCols.find((x: ResolvedColumn) => x.field === f);
+          values[f] = f === field && seed !== undefined ? seed : cellValue(node.row as Row, c as unknown as ColumnDef, ctx);
         }
         this.#edit = { id: node.id, field, fields, values, errors: {} };
       } else {
-        const value = seed !== undefined ? seed : cellValue(node.row, col, ctx);
+        const value: CellValue = seed !== undefined ? seed : cellValue(node.row as Row, col as unknown as ColumnDef, ctx);
         this.#edit = { id: node.id, field, fields: [field], values: { [field]: value }, errors: {} };
       }
       this.#focus = { id: node.id, field };
       this.#compute();
-      const input = this.#rowsEl.querySelector<HTMLElement>(
-        `[data-id="${cssEscape(node.id)}"] [data-field="${cssEscape(field)}"] .editor`,
+      const input = this.#rowsEl.querySelector<HTMLInputElement>(
+        `[data-id="${cssEscape(String(node.id))}"] [data-field="${cssEscape(field)}"] .editor`,
       );
       input?.focus();
       if (input?.select) input.select();
       emit(this, 'is-edit-start', { id: node.id, field, row: node.row });
     }
 
-    async #stopEdit(save = true) {
+    async #stopEdit(save = true): Promise<void> {
       const edit = this.#edit;
       if (!edit) return;
       this.#edit = null;
@@ -1955,19 +2167,20 @@ import '../forms/checkbox.js';
         return;
       }
 
-      const before = { ...node.row };
-      const after = { ...node.row };
+      const before: Row = { ...node.row };
+      const after: Row = { ...node.row };
       for (const field of edit.fields) {
-        const col = this.#activeCols.find((c) => c.field === field);
+        const col = this.#activeCols.find((c: ResolvedColumn) => c.field === field);
         if (!col) continue;
-        let value = edit.values[field];
-        value = typeof col.valueParser === 'function'
-          ? col.valueParser(value, node.row, col)
-          : coerceValue(value, col.type);
-        setFieldValue(after, col.field, value);
+        let value: CellValue = edit.values[field];
+        const colDef = col as unknown as ColumnDef;
+        value = typeof colDef.valueParser === 'function'
+          ? colDef.valueParser(value, node.row, colDef)
+          : coerceValue(value as string, col.type);
+        setFieldValue(after, col.field ?? '', value);
       }
 
-      let next = after;
+      let next: Row = after;
       if (this.#hooks.processRowUpdate) {
         try {
           next = (await this.#hooks.processRowUpdate(after, before)) || after;
@@ -1984,57 +2197,62 @@ import '../forms/checkbox.js';
       emit(this, 'is-row-update', { id: edit.id, row: node.row, before });
     }
 
-    #buildEditor(col, value: string, node) {
+    #buildEditor(col: ColumnDef, value: CellValue, node: GridNode): HTMLElement {
       const kind = col.editor || 'text';
-      let el;
+      let el: HTMLElement;
       if (kind === 'boolean') {
-        el = document.createElement('input');
-        el.type = 'checkbox';
-        el.checked = !!value;
+        const box = document.createElement('input');
+        box.type = 'checkbox';
+        box.checked = !!value;
+        el = box;
       } else if (kind === 'select') {
-        el = document.createElement('select');
+        const sel = document.createElement('select');
         for (const raw of col.valueOptions || []) {
-          const v = typeof raw === 'object' ? raw.value : raw;
-          const label = typeof raw === 'object' ? raw.label : raw;
+          const v = typeof raw === 'object' && raw !== null ? (raw as { value: CellValue }).value : raw;
+          const label = typeof raw === 'object' && raw !== null ? (raw as { label: CellValue }).label : raw;
           const opt = document.createElement('option');
-          opt.value = String(v);
-          opt.textContent = String(label);
-          opt.selected = String(v) === String(value ?? '');
-          el.appendChild(opt);
+          opt.value = String(v ?? '');
+          opt.textContent = String(label ?? '');
+          opt.selected = String(v ?? '') === String(value ?? '');
+          sel.appendChild(opt);
         }
+        el = sel;
       } else {
-        el = document.createElement('input');
-        el.type = kind;
-        if (kind === 'date') el.value = toInputDate(value);
-        else if (kind === 'datetime-local') el.value = toInputDateTime(value);
-        else el.value = value == null ? '' : String(value);
+        const box = document.createElement('input');
+        box.type = kind;
+        if (kind === 'date') box.value = toInputDate(value as string | number | Date);
+        else if (kind === 'datetime-local') box.value = toInputDateTime(value as string | number | Date);
+        else box.value = value == null ? '' : String(value);
+        el = box;
       }
       el.className = 'editor';
-      el.setAttribute('aria-label', col.headerName);
+      el.setAttribute('aria-label', col.headerName ?? '');
       el.addEventListener('input', () => this.#onEditorInput(col, el, node));
       el.addEventListener('change', () => this.#onEditorInput(col, el, node));
-      el.addEventListener('keydown', (e) => this.#onEditorKey(e, col));
+      el.addEventListener('keydown', (e: KeyboardEvent) => this.#onEditorKey(e, col));
       return el;
     }
 
-    async #onEditorInput(col, el, node) {
+    async #onEditorInput(col: ColumnDef, el: HTMLElement, node: GridNode): Promise<void> {
       if (!this.#edit) return;
-      const value = el.type === 'checkbox' ? el.checked : el.value;
-      this.#edit.values[col.field] = value;
+      const value: CellValue = (el as HTMLInputElement).type === 'checkbox'
+        ? (el as HTMLInputElement).checked
+        : (el as HTMLInputElement).value;
+      this.#edit.values[col.field ?? ''] = value;
       if (typeof col.preProcessEditCellProps !== 'function') return;
       const out = await col.preProcessEditCellProps({
-        props: { value }, row: node.row, id: node.id, field: col.field,
+        props: { value }, row: node.row ?? {}, id: node.id, field: col.field ?? '',
       });
-      const error = out?.error;
-      if (error) this.#edit.errors[col.field] = typeof error === 'string' ? error : 'Valor inválido';
-      else delete this.#edit.errors[col.field];
-      const cell = el.closest('.cell');
+      const error = (out as { error?: unknown } | undefined)?.error;
+      if (error) this.#edit.errors[col.field ?? ''] = typeof error === 'string' ? error : 'Valor inválido';
+      else delete this.#edit.errors[col.field ?? ''];
+      const cell = el.closest('.cell') as HTMLElement | null;
       if (!cell) return;
       cell.toggleAttribute('data-error', !!error);
-      cell.title = this.#edit.errors[col.field] || '';
+      cell.title = this.#edit.errors[col.field ?? ''] || '';
     }
 
-    #onEditorKey = (e) => {
+    #onEditorKey = (e: KeyboardEvent, _col?: ColumnDef): void => {
       if (!this.#edit) return;
       if (e.key === 'Escape') {
         e.preventDefault();
@@ -2065,17 +2283,17 @@ import '../forms/checkbox.js';
           }
           this.#focusCell(id, nextField);
           const node = this.#nodeById(id);
-          const col = this.#activeCols.find((c) => c.field === nextField);
+          const col = this.#activeCols.find((c: ColumnDef) => c.field === nextField);
           if (node && this.#canEdit(node, col)) this.#startEdit(id, nextField);
         });
       }
     };
 
-    #dataFields() { return this.#layoutCols().filter((c) => !c.system).map((c) => c.field); }
+    #dataFields(): string[] { return this.#layoutCols().filter((c: ColumnDef) => !c.system).map((c: ColumnDef) => c.field ?? ''); }
 
     /* ── Historial ───────────────────────────────────────────────────── */
 
-    #pushUndo(patch) {
+    #pushUndo(patch: HistoryPatch): void {
       if (!this.hasAttribute('undo-redo')) return;
       this.#undoStack.push(patch);
       if (this.#undoStack.length > 50) this.#undoStack.shift();
@@ -2083,7 +2301,12 @@ import '../forms/checkbox.js';
     }
 
     /** El parche viaja intacto entre pilas; `side` decide qué copia se aplica. */
-    #applyHistory(from, to, eventName, side) {
+    #applyHistory(
+      from: HistoryPatch[],
+      to: HistoryPatch[],
+      eventName: string,
+      side: 'before' | 'after',
+    ): void {
       const patch = from.pop();
       if (!patch) return;
       const byId = this.#rowIndex();
@@ -2100,7 +2323,7 @@ import '../forms/checkbox.js';
 
     /* ── Portapapeles ────────────────────────────────────────────────── */
 
-    #copySelection() {
+    #copySelection(): string {
       const matrix = this.#selectionMatrix();
       if (!matrix.length) return '';
       const text = toDelimited(matrix, '\t');
@@ -2109,46 +2332,51 @@ import '../forms/checkbox.js';
       return text;
     }
 
-    #selectionMatrix() {
+    #selectionMatrix(): string[][] {
       const ctx = this.#ctx();
-      const cols = this.#layoutCols().filter((c) => !c.system);
+      const cols = this.#layoutCols().filter((c: ColumnDef) => !c.system);
       const bounds = this.#rangeBounds();
       if (bounds) {
         const rows = this.#nodes.slice(bounds.rows[0], bounds.rows[1] + 1);
         const picked = cols.slice(bounds.cols[0], bounds.cols[1] + 1);
-        return rows.filter((n) => n.row).map((node) => picked
-          .map((col) => formattedValue(cellValue(node.row, col, ctx), node.row, col, ctx)));
+        return rows.filter((n: GridNode) => n.row).map((node: GridNode) =>
+          picked.map((col: ColumnDef) => formattedValue(cellValue(node.row as Row, col, ctx), node.row as Row, col, ctx)));
       }
-      const selected = this.#nodes.filter((n) => n.row && this.#selection.has(n.id));
-      const source = selected.length
+      const selected = this.#nodes.filter((n: GridNode) => n.row && this.#selection.has(n.id));
+      const source: GridNode[] = selected.length
         ? selected
-        : this.#focus ? this.#nodes.filter((n) => String(n.id) === String(this.#focus.id) && n.row) : [];
-      return source.map((node) => cols
-        .map((col) => formattedValue(cellValue(node.row, col, ctx), node.row, col, ctx)));
+        : (this.#focus && !this.#focus.area)
+          ? (() => {
+            const fid = (this.#focus as Exclude<FocusArea, { area: 'header' }>).id;
+            return this.#nodes.filter((n: GridNode) => String(n.id) === String(fid) && n.row);
+          })()
+          : [];
+      return source.map((node: GridNode) => cols
+        .map((col: ColumnDef) => formattedValue(cellValue(node.row as Row, col, ctx), node.row as Row, col, ctx)));
     }
 
-    async #pasteFromClipboard(text) {
-      if (!this.hasAttribute('clipboard') || !this.#focus) return;
-      const raw = text ?? (await navigator.clipboard?.readText?.().catch(() => '')) ?? '';
+    async #pasteFromClipboard(text?: string): Promise<void> {
+      if (!this.hasAttribute('clipboard') || !this.#focus || this.#focus.area === 'header') return;
+      const raw: string = text ?? (await navigator.clipboard?.readText?.().catch(() => '')) ?? '';
       if (!raw) return;
-      const matrix = raw.replace(/\r/g, '').split('\n').filter((line) => line !== '')
+      const matrix: string[][] = raw.replace(/\r/g, '').split('\n').filter((line: string) => line !== '')
         .map((line: string) => line.split('\t'));
-      const ids = this.#nodes.map((n) => String(n.id));
+      const ids = this.#nodes.map((n: GridNode) => String(n.id));
       const fields = this.#dataFields();
-      const startRow = ids.indexOf(String(this.#focus.id));
+      const startRow = ids.indexOf(String(this.#focus?.id ?? ''));
       const startCol = fields.indexOf(this.#focus.field);
       if (startRow < 0 || startCol < 0) return;
 
-      const patch = [];
-      matrix.forEach((line, r) => {
+      const patch: HistoryPatch = [];
+      matrix.forEach((line: string[], r: number) => {
         const node = this.#nodes[startRow + r];
         if (!node?.row) return;
-        const before = { ...node.row };
-        line.forEach((cellText, c) => {
+        const before: Row = { ...node.row };
+        line.forEach((cellText: string, c: number) => {
           const field = fields[startCol + c];
-          const col = this.#activeCols.find((x) => x.field === field);
+          const col = this.#activeCols.find((x: ColumnDef) => x.field === field);
           if (!col || !this.#canEdit(node, col)) return;
-          setFieldValue(node.row, field, coerceValue(cellText, col.type));
+          setFieldValue(node.row as Row, field ?? '', coerceValue(cellText, col.type));
         });
         patch.push({ id: node.id, before, after: { ...node.row } });
       });
@@ -2160,50 +2388,51 @@ import '../forms/checkbox.js';
 
     /* ── Exportación ─────────────────────────────────────────────────── */
 
-    #matrix({ allColumns = false, raw = false } = {}) {
+    #matrix({ allColumns = false, raw = false }: { allColumns?: boolean; raw?: boolean } = {}): string[][] {
       const ctx = this.#ctx();
-      const cols = (allColumns ? this.#activeCols : this.#layoutCols().filter((c) => !c.system))
-        .filter((c) => c.type !== 'actions');
-      const head = cols.map((c) => c.headerName);
-      const body = this.#leafRows.map((row) => cols.map((col) => {
-        const value = cellValue(row, col, ctx);
+      const cols = (allColumns ? this.#activeCols : this.#layoutCols().filter((c: ResolvedColumn) => !(c as unknown as { system?: boolean }).system))
+        .filter((c: ResolvedColumn) => c.type !== 'actions');
+      const head = cols.map((c: ResolvedColumn) => c.headerName ?? '');
+      const body: Array<Array<string | number>> = this.#leafRows.map((row: Row) => cols.map((col: ResolvedColumn): string | number => {
+        const value = cellValue(row, col as unknown as ColumnDef, ctx);
         if (raw && col.type === 'number') return value == null ? '' : Number(value);
-        return formattedValue(value, row, col, ctx);
+        return formattedValue(value, row, col as unknown as ColumnDef, ctx);
       }));
-      return [head, ...body];
+      return [head, ...body] as string[][];
     }
 
     /* ── Cabecera: eventos ───────────────────────────────────────────── */
 
-    #onHeadClick = (e: PointerEvent) => {
-      const cell = e.target.closest('.hcell');
+    #onHeadClick = (e: PointerEvent): void => {
+      const cell = $closest(e,'.hcell');
       if (!cell) return;
-      if (e.target.closest('.check-all')) {
+      if ($closest(e,'.check-all')) {
         const selectable = this.#selectableRows();
-        const on = selectable.filter((r) => this.#selection.has(this.#idOf(r))).length;
+        const on = selectable.filter((r: Row) => this.#selection.has(this.#idOf(r))).length;
         this.selectAll(on !== selectable.length);
         return;
       }
-      if (e.target.closest('[data-action="column-menu"]')) {
-        this.#openColumnMenu(cell.dataset.field, e.target.closest('button'));
+      if ($closest(e,'[data-action="column-menu"]')) {
+        const btn = $closest(e,'button');
+        if (btn) this.#openColumnMenu(cell.dataset.field ?? '', btn);
         return;
       }
-      if (e.target.closest('.hgrip')) return;
+      if ($closest(e,'.hgrip')) return;
       if (!cell.classList.contains('sortable')) return;
-      this.#applySort(cell.dataset.field, undefined, e.ctrlKey || e.metaKey || e.shiftKey);
+      this.#applySort(cell.dataset.field ?? '', undefined, e.ctrlKey || e.metaKey || e.shiftKey);
     };
 
-    #onHeadDblClick = (e: PointerEvent) => {
-      if (!e.target.closest('.hgrip')) return;
-      const cell = e.target.closest('.hcell');
-      if (cell) this.#autosize(cell.dataset.field);
+    #onHeadDblClick = (e: MouseEvent): void => {
+      if (!$closest(e,'.hgrip')) return;
+      const cell = $closest(e,'.hcell');
+      if (cell) this.#autosize(cell.dataset.field ?? '');
     };
 
-    #onHeadKey = (e) => {
-      const cell = e.target.closest('.hcell');
+    #onHeadKey = (e: KeyboardEvent): void => {
+      const cell = $closest(e,'.hcell');
       if (!cell) return;
-      const field = cell.dataset.field;
-      const fields = this.#layoutCols().map((c) => c.field);
+      const field = cell.dataset.field ?? '';
+      const fields = this.#layoutCols().map((c: ColumnDef) => c.field ?? '');
       const at = fields.indexOf(field);
 
       if (e.key === 'Enter' && (e.ctrlKey || e.metaKey)) {
@@ -2236,11 +2465,13 @@ import '../forms/checkbox.js';
       }
     };
 
-    #onHeadPointerDown = (e: PointerEvent) => {
-      const grip = e.target.closest('.hgrip');
+    #onHeadPointerDown = (e: PointerEvent): void => {
+      const grip = $closest(e,'.hgrip');
       if (!grip) return;
-      const field = grip.closest('.hcell').dataset.field;
-      this.#resizeState = { field, startX: e.clientX, startWidth: this.#widths[field] };
+      const fieldCell = grip.closest<HTMLElement>('.hcell');
+      if (!fieldCell) return;
+      const field = fieldCell.dataset.field ?? '';
+      this.#resizeState = { field, startX: e.clientX, startWidth: this.#widths[field] ?? 0 };
       this.#base.dataset.resizing = '';
       // En el propio grip no: al repintar la cabecera desaparece a mitad del arrastre.
       window.addEventListener('pointermove', this.#onResizeMove);
@@ -2249,7 +2480,7 @@ import '../forms/checkbox.js';
       e.preventDefault();
     };
 
-    #onResizeMove = (e) => {
+    #onResizeMove = (e: PointerEvent): void => {
       const state = this.#resizeState;
       if (!state) return;
       const width = Math.max(40, state.startWidth + (e.clientX - state.startX));
@@ -2257,7 +2488,7 @@ import '../forms/checkbox.js';
       this.#compute();
     };
 
-    #onResizeEnd = () => {
+    #onResizeEnd = (): void => {
       const state = this.#resizeState;
       this.#resizeState = null;
       this.#base.removeAttribute('data-resizing');
@@ -2267,63 +2498,66 @@ import '../forms/checkbox.js';
       if (state) emit(this, 'is-column-resize', { field: state.field, width: this.#widths[state.field] });
     };
 
-    #autosize(field) {
-      const col = this.#activeCols.find((c) => c.field === field);
+    #autosize(field: string): void {
+      const col = this.#activeCols.find((c: ColumnDef) => c.field === field);
       if (!col || col.resizable === false) return;
       const ctx = this.#ctx();
       const probe = document.createElement('span');
       probe.style.cssText = 'position:absolute;visibility:hidden;white-space:nowrap;font:inherit';
       this.#base.appendChild(probe);
-      probe.textContent = col.headerName;
+      probe.textContent = col.headerName ?? '';
       let max = probe.offsetWidth + 56;
       for (const row of this.#leafRows.slice(0, 200)) {
         probe.textContent = formattedValue(cellValue(row, col, ctx), row, col, ctx);
         max = Math.max(max, probe.offsetWidth + 24);
       }
       probe.remove();
-      this.setColumnWidth(field, Math.min(col.maxWidth, Math.max(col.minWidth, Math.ceil(max))));
+      const minWidth = col.minWidth ?? 50;
+      const maxWidth = col.maxWidth ?? Infinity;
+      this.setColumnWidth(field, Math.min(maxWidth, Math.max(minWidth, Math.ceil(max))));
     }
 
-    #onColDragStart = (e) => {
-      const cell = e.target.closest('.hcell');
-      if (!cell || cell.dataset.field.startsWith('__')) return;
+    #onColDragStart = (e: DragEvent): void => {
+      const cell = $closest(e,'.hcell');
+      if (!cell || (cell.dataset.field ?? '').startsWith('__')) return;
+      if (!e.dataTransfer) return;
       e.dataTransfer.effectAllowed = 'move';
-      e.dataTransfer.setData('text/plain', cell.dataset.field);
+      e.dataTransfer.setData('text/plain', cell.dataset.field ?? '');
       cell.dataset.dragging = '';
     };
 
-    #onColDragOver = (e) => {
-      const cell = e.target.closest('.hcell');
+    #onColDragOver = (e: DragEvent): void => {
+      const cell = $closest(e,'.hcell');
       const from = this.#headRow.querySelector<HTMLElement>('[data-dragging]')?.dataset.field;
-      if (!cell || (from && !this.#sameColumnGroup(from, cell.dataset.field))) return;
+      if (!cell || (from && !this.#sameColumnGroup(from, cell.dataset.field ?? ''))) return;
       e.preventDefault();
       cell.dataset.dropTarget = '';
     };
 
     /** Un grupo de cabecera debe quedar contiguo: no se sale de él al arrastrar. */
-    #sameColumnGroup(a, b) {
+    #sameColumnGroup(a: string, b: string): boolean {
       if (!this.#columnGroups.length) return true;
       const chains = this.#groupChains();
-      const key = (field) => (chains.get(field) || [])
-        .map((group) => group.groupId ?? group.headerName ?? '')
+      const key = (field: string): string => (chains.get(field) || [])
+        .map((group: Record<string, CellValue>) => String(group.groupId ?? group.headerName ?? ''))
         .join(' > ');
       return key(a) === key(b);
     }
 
-    #onColDragLeave = (e) => {
-      e.target.closest('.hcell')?.removeAttribute('data-drop-target');
+    #onColDragLeave = (e: DragEvent): void => {
+      $closest(e,'.hcell')?.removeAttribute('data-drop-target');
     };
 
-    #onColDrop = (e) => {
-      const target = e.target.closest('.hcell');
-      const from = e.dataTransfer.getData('text/plain');
+    #onColDrop = (e: DragEvent): void => {
+      const target = $closest(e,'.hcell');
+      const from = e.dataTransfer?.getData('text/plain');
       if (!target || !from) return;
       e.preventDefault();
-      const to = target.dataset.field;
+      const to = target.dataset.field ?? '';
       target.removeAttribute('data-drop-target');
       if (from === to || to.startsWith('__') || !this.#sameColumnGroup(from, to)) return;
-      const fields = this.#visibleCols().map((c) => c.field);
-      const order = fields.filter((f) => f !== from);
+      const fields = this.#visibleCols().map((c: ColumnDef) => c.field ?? '');
+      const order = fields.filter((f: string) => f !== from);
       const at = order.indexOf(to);
       order.splice(at < 0 ? order.length : at, 0, from);
       this.#order = order;
@@ -2331,28 +2565,30 @@ import '../forms/checkbox.js';
       emit(this, 'is-column-reorder', { field: from, targetField: to, columnOrder: order });
     };
 
-    #onColDragEnd = () => {
+    #onColDragEnd = (): void => {
       for (const cell of this.#headRow.querySelectorAll<HTMLElement>('[data-dragging],[data-drop-target]')) {
         cell.removeAttribute('data-dragging');
         cell.removeAttribute('data-drop-target');
       }
     };
 
-    #onHeaderFilterInput = (e) => {
-      const input = e.target.closest('.finput');
+    #onHeaderFilterInput = (e: Event): void => {
+      const input = $closest<HTMLInputElement>(e, '.finput');
       if (!input) return;
-      const cell = input.closest('.fcell');
-      this.#updateFilterItem(cell.dataset.field, {
-        operator: cell.querySelector<HTMLElement>('.fop')?.value,
+      const cell = input.closest<HTMLElement>('.fcell');
+      if (!cell) return;
+      this.#updateFilterItem(cell.dataset.field ?? '', {
+        operator: cell.querySelector<HTMLSelectElement>('.fop')?.value,
         value: this.#filterCellValue(cell),
       });
     };
 
-    #onHeaderFilterChange = (e) => {
-      const sel = e.target.closest('.fop');
+    #onHeaderFilterChange = (e: Event): void => {
+      const sel = $closest<HTMLSelectElement>(e, '.fop');
       if (!sel) return;
-      const cell = sel.closest('.fcell');
-      this.#updateFilterItem(cell.dataset.field, {
+      const cell = sel.closest<HTMLElement>('.fcell');
+      if (!cell) return;
+      this.#updateFilterItem(cell.dataset.field ?? '', {
         operator: sel.value,
         value: this.#filterCellValue(cell),
       });
@@ -2360,32 +2596,32 @@ import '../forms/checkbox.js';
 
     /* ── Cuerpo: eventos ─────────────────────────────────────────────── */
 
-    #onBodyClick = (e: PointerEvent) => {
-      const rowEl = e.target.closest('.row-wrap');
+    #onBodyClick = (e: PointerEvent): void => {
+      const rowEl = $closest(e,'.row-wrap');
       if (!rowEl) return;
-      const node = this.#nodeById(rowEl.dataset.id);
+      const node = this.#nodeById(rowEl.dataset.id ?? null);
       if (!node) return;
-      const cellEl = e.target.closest('.cell');
-      const field = cellEl?.dataset.field;
+      const cellEl = $closest(e,'.cell');
+      const field = cellEl?.dataset.field ?? '';
 
-      if (e.target.closest('[data-action="group"]')) {
+      if ($closest(e,'[data-action="group"]')) {
         this.#toggleGroup(node.id);
         return;
       }
-      if (e.target.closest('[data-action="detail"]')) {
+      if ($closest(e,'[data-action="detail"]')) {
         this.#toggleDetail(node.id);
         return;
       }
-      const actionBtn = e.target.closest('[data-action="row-action"]');
+      const actionBtn = $closest(e,'[data-action="row-action"]') as HTMLElement & { __action?: RowAction } | null;
       if (actionBtn?.__action) {
-        actionBtn.__action.onClick?.({ id: node.id, row: node.row, api: this });
+        actionBtn.__action.onClick?.({ id: node.id, row: node.row as Row, api: this });
         return;
       }
-      const actionMenu = e.target.closest('[data-action="row-action-menu"]');
+      const actionMenu = $closest(e,'[data-action="row-action-menu"]') as HTMLElement & { __actions?: RowAction[] } | null;
       if (actionMenu?.__actions) {
         this.#menuActions = actionMenu.__actions;
-        this.#menuActionRow = { id: node.id, row: node.row };
-        renderMenu(this.#menu, actionMenu.__actions.map((a, i) => ({
+        this.#menuActionRow = { id: node.id, row: node.row as Row };
+        renderMenu(this.#menu, actionMenu.__actions.map((a: RowAction, i: number) => ({
           label: a.label, icon: a.icon, action: 'row-action', value: i, disabled: a.disabled,
         })));
         this.#menu.removeAttribute('data-field');
@@ -2394,9 +2630,9 @@ import '../forms/checkbox.js';
         this.#popAnchor = actionMenu;
         return;
       }
-      if (e.target.closest('.row-check')) {
-        const box = e.target.closest('.row-check');
-        this.selectRow(node.id, box.checked, this.selectionMode === 'multiple');
+      const rowCheck = $closest(e,'.row-check') as HTMLInputElement | null;
+      if (rowCheck) {
+        this.selectRow(node.id, rowCheck.checked, this.selectionMode === 'multiple');
         return;
       }
       if (!cellEl) return;
@@ -2424,58 +2660,60 @@ import '../forms/checkbox.js';
       this.#toggleRow(node.id, { additive: e.ctrlKey || e.metaKey, range: e.shiftKey });
     };
 
-    #onBodyDblClick = (e: PointerEvent) => {
-      const cellEl = e.target.closest('.cell');
-      const rowEl = e.target.closest('.row-wrap');
+    #onBodyDblClick = (e: MouseEvent): void => {
+      const cellEl = $closest(e,'.cell');
+      const rowEl = $closest(e,'.row-wrap');
       if (!cellEl || !rowEl) return;
-      const node = this.#nodeById(rowEl.dataset.id);
+      const node = this.#nodeById(rowEl.dataset.id ?? null);
       if (!node) return;
       emit(this, 'is-row-double-click', { id: node.id, row: node.row });
-      emit(this, 'is-cell-double-click', { id: node.id, field: cellEl.dataset.field, row: node.row });
-      this.#startEdit(node.id, cellEl.dataset.field);
+      emit(this, 'is-cell-double-click', { id: node.id, field: cellEl.dataset.field ?? '', row: node.row });
+      this.#startEdit(node.id, cellEl.dataset.field ?? '');
     };
 
-    #onBodyPointerOver = (e: PointerEvent) => {
+    #onBodyPointerOver = (e: PointerEvent): void => {
       if (!this.cellSelection || !this.#cellAnchor || e.buttons !== 1) return;
-      const cellEl = e.target.closest('.cell');
-      const rowEl = e.target.closest('.row-wrap');
+      const cellEl = $closest(e,'.cell');
+      const rowEl = $closest(e,'.row-wrap');
       if (!cellEl || !rowEl) return;
-      const node = this.#nodeById(rowEl.dataset.id);
+      const node = this.#nodeById(rowEl.dataset.id ?? null);
       if (!node) return;
-      this.#setCellRange(this.#cellAnchor, { id: node.id, field: cellEl.dataset.field });
+      this.#setCellRange(this.#cellAnchor, { id: node.id, field: cellEl.dataset.field ?? '' });
     };
 
-    #onRowDragStart = (e) => {
-      const rowEl = e.target.closest('.row-wrap');
-      if (!rowEl) return;
+    #onRowDragStart = (e: DragEvent): void => {
+      const rowEl = $closest(e,'.row-wrap');
+      if (!rowEl || !e.dataTransfer) return;
       e.dataTransfer.effectAllowed = 'move';
-      e.dataTransfer.setData('text/plain', rowEl.dataset.id);
+      e.dataTransfer.setData('text/plain', rowEl.dataset.id ?? '');
       rowEl.dataset.dragging = '';
     };
 
-    #onRowDragOver = (e) => {
+    #onRowDragOver = (e: DragEvent): void => {
       if (!this.hasAttribute('row-reorder')) return;
       e.preventDefault();
     };
 
-    #onRowDrop = (e) => {
-      const rowEl = e.target.closest('.row-wrap');
-      const fromId = e.dataTransfer.getData('text/plain');
+    #onRowDrop = (e: DragEvent): void => {
+      const rowEl = $closest(e,'.row-wrap');
+      const fromId = e.dataTransfer?.getData('text/plain');
       if (!rowEl || !fromId) return;
       e.preventDefault();
-      const toId = rowEl.dataset.id;
+      const toId = rowEl.dataset.id ?? '';
       for (const el of this.#rowsEl.querySelectorAll<HTMLElement>('[data-dragging]')) el.removeAttribute('data-dragging');
       if (fromId === toId) return;
-      const from = this.#rows.findIndex((r, i) => String(this.#idOf(r, i)) === fromId);
-      const to = this.#rows.findIndex((r, i) => String(this.#idOf(r, i)) === toId);
+      const from = this.#rows.findIndex((r: Row, i: number) => String(this.#idOf(r, i)) === fromId);
+      const to = this.#rows.findIndex((r: Row, i: number) => String(this.#idOf(r, i)) === toId);
       if (from < 0 || to < 0) return;
-      const [moved] = this.#rows.splice(from, 1);
+      const moved = this.#rows[from];
+      if (!moved) return;
+      this.#rows.splice(from, 1);
       this.#rows.splice(to, 0, moved);
       this.#refresh();
       emit(this, 'is-row-reorder', { id: fromId, from, to });
     };
 
-    #toggleGroup(id) {
+    #toggleGroup(id: CellValue): void {
       if (id == null) return;
       if (this.#expanded.has(id)) this.#expanded.delete(id);
       else this.#expanded.add(id);
@@ -2483,7 +2721,7 @@ import '../forms/checkbox.js';
       emit(this, 'is-group-toggle', { id, expanded: this.#expanded.has(id) });
     }
 
-    #toggleDetail(id) {
+    #toggleDetail(id: CellValue): void {
       if (id == null) return;
       if (this.#detailOpen.has(id)) this.#detailOpen.delete(id);
       else this.#detailOpen.add(id);
@@ -2493,14 +2731,16 @@ import '../forms/checkbox.js';
 
     /* ── Foco y teclado ──────────────────────────────────────────────── */
 
-    #isCellFocused(id: string, field) {
-      return this.#focus?.field === field && String(this.#focus?.id) === String(id);
+    #isCellFocused(id: CellValue, field: string): boolean {
+      const focus = this.#focus;
+      if (!focus || focus.area === 'header') return false;
+      return focus.field === field && String(focus.id) === String(id);
     }
 
-    #focusCell(id: string, field) {
+    #focusCell(id: CellValue, field: string): void {
       if (id == null || !field) return;
       this.#focus = { id, field };
-      const index = this.#nodes.findIndex((n) => String(n.id) === String(id));
+      const index = this.#nodes.findIndex((n: GridNode) => String(n.id) === String(id));
       if (index > -1 && this.virtualize) {
         const { from, to } = this.#renderedRange;
         if (index < from || index >= to) {
@@ -2511,18 +2751,19 @@ import '../forms/checkbox.js';
       this.#restoreFocus(true);
     }
 
-    #focusHeader(field) {
+    #focusHeader(field: string): void {
       this.#focus = { area: 'header', field };
       for (const cell of this.#headRow.children) {
-        cell.tabIndex = cell.dataset.field === field ? 0 : -1;
+        const child = cell as HTMLElement;
+        child.tabIndex = child.dataset.field === field ? 0 : -1;
       }
       this.#headRow.querySelector<HTMLElement>(`[data-field="${cssEscape(field)}"]`)?.focus();
     }
 
-    #restoreFocus(force = false) {
+    #restoreFocus(force = false): void {
       if (!this.#focus || this.#focus.area === 'header') return;
       const cell = this.#rowsEl.querySelector<HTMLElement>(
-        `[data-id="${cssEscape(this.#focus.id)}"] .cell[data-field="${cssEscape(this.#focus.field)}"]`,
+        `[data-id="${cssEscape(String(this.#focus.id))}"] .cell[data-field="${cssEscape(this.#focus.field)}"]`,
       );
       if (!cell) return;
       cell.tabIndex = 0;
@@ -2532,21 +2773,23 @@ import '../forms/checkbox.js';
       if (!cell.contains(active)) cell.focus({ preventScroll: true });
     }
 
-    #onFocusIn = (e) => {
-      const cellEl = e.target.closest?.('.cell');
-      const rowEl = e.target.closest?.('.row-wrap');
+    #onFocusIn = (e: FocusEvent): void => {
+      const t = e.target;
+      const cellEl = t instanceof Element ? t.closest<HTMLElement>('.cell') : null;
+      const rowEl = t instanceof Element ? t.closest<HTMLElement>('.row-wrap') : null;
       if (cellEl && rowEl) {
-        const node = this.#nodeById(rowEl.dataset.id);
-        this.#focus = { id: node ? node.id : rowEl.dataset.id, field: cellEl.dataset.field };
+        const node = this.#nodeById(rowEl.dataset.id ?? null);
+        this.#focus = { id: node ? node.id : (rowEl.dataset.id ?? ''), field: cellEl.dataset.field ?? '' };
         return;
       }
-      const hcell = e.target.closest?.('.hcell');
-      if (hcell) this.#focus = { area: 'header', field: hcell.dataset.field };
+      const hcell = t instanceof Element ? t.closest<HTMLElement>('.hcell') : null;
+      if (hcell) this.#focus = { area: 'header', field: hcell.dataset.field ?? '' };
     };
 
-    #onKeyDown = (e) => {
-      if (e.target.closest('.editor, .finput, .fop')) return;
+    #onKeyDown = (e: KeyboardEvent): void => {
+      if ((e.target as HTMLElement).closest('.editor, .finput, .fop')) return;
       const focus = this.#focus;
+      if (!focus) return;
 
       if ((e.ctrlKey || e.metaKey) && e.key.toLowerCase() === 'a') {
         if (this.selectionMode !== 'multiple') return;
@@ -2575,23 +2818,26 @@ import '../forms/checkbox.js';
         this.#closePop();
         return;
       }
-      if (!focus || focus.area === 'header') return;
+      if (focus.area === 'header') return;
 
-      const fields = this.#layoutCols().map((c) => c.field);
-      const ids = this.#nodes.map((n) => String(n.id));
+      const fields = this.#layoutCols().map((c: ColumnDef) => c.field ?? '');
+      const ids = this.#nodes.map((n: GridNode) => String(n.id));
       const rowIndex = ids.indexOf(String(focus.id));
       const colIndex = fields.indexOf(focus.field);
       if (rowIndex < 0 || colIndex < 0) return;
       const node = this.#nodes[rowIndex];
-      const col = this.#activeCols.find((c) => c.field === focus.field);
+      if (!node) return;
+      const col = this.#activeCols.find((c: ColumnDef) => c.field === focus.field);
       const pageStep = Math.max(1, Math.floor(this.#viewport.clientHeight / this.rowHeight) - 1);
-      const move = (dr: number, dc: number) => {
+      const move = (dr: number, dc: number): void => {
         const r = Math.max(0, Math.min(ids.length - 1, rowIndex + dr));
         const c = Math.max(0, Math.min(fields.length - 1, colIndex + dc));
         if (r === rowIndex && c === colIndex) return;
-        this.#focusCell(this.#nodes[r].id, fields[c]);
+        const targetNode = this.#nodes[r];
+        if (!targetNode) return;
+        this.#focusCell(targetNode.id, fields[c]!);
       };
-      const extend = (dr) => {
+      const extend = (dr: number): void => {
         const next = this.#nodes[rowIndex + dr];
         this.#selection.add(node.id);
         if (next) {
@@ -2627,12 +2873,12 @@ import '../forms/checkbox.js';
         case 'Home':
           e.preventDefault();
           if (e.ctrlKey || e.metaKey) this.#focusCell(this.#nodes[0]?.id, fields[0]);
-          else this.#focusCell(focus.id, fields[0]);
+          else this.#focusCell(focus.id, fields[0]!);
           return;
         case 'End':
           e.preventDefault();
-          if (e.ctrlKey || e.metaKey) this.#focusCell(this.#nodes.at(-1)?.id, fields.at(-1));
-          else this.#focusCell(focus.id, fields.at(-1));
+          if (e.ctrlKey || e.metaKey) this.#focusCell(this.#nodes.at(-1)?.id ?? null, fields.at(-1) ?? '');
+          else this.#focusCell(focus.id, fields.at(-1) ?? '');
           return;
         case 'PageDown':
           e.preventDefault();
@@ -2666,8 +2912,8 @@ import '../forms/checkbox.js';
           e.preventDefault();
           const flat = colIndex + (e.shiftKey ? -1 : 1);
           if (flat >= 0 && flat < fields.length) move(0, e.shiftKey ? -1 : 1);
-          else if (e.shiftKey && rowIndex > 0) this.#focusCell(this.#nodes[rowIndex - 1].id, fields.at(-1));
-          else if (!e.shiftKey && rowIndex < ids.length - 1) this.#focusCell(this.#nodes[rowIndex + 1].id, fields[0]);
+          else if (e.shiftKey && rowIndex > 0) this.#focusCell(this.#nodes[rowIndex - 1]!.id, fields.at(-1)!);
+          else if (!e.shiftKey && rowIndex < ids.length - 1) this.#focusCell(this.#nodes[rowIndex + 1]!.id, fields[0]!);
           return;
         }
         default:
@@ -2676,11 +2922,11 @@ import '../forms/checkbox.js';
 
       if (e.key.length === 1 && !e.ctrlKey && !e.metaKey && !e.altKey && this.#canEdit(node, col)) {
         e.preventDefault();
-        this.#startEdit(node.id, focus.field, col.type === 'number' ? e.key : e.key);
+        this.#startEdit(node.id, focus.field, e.key);
       }
     };
 
-    #onCopyEvent = (e) => {
+    #onCopyEvent = (e: ClipboardEvent): void => {
       const matrix = this.#selectionMatrix();
       if (!matrix.length) return;
       e.clipboardData?.setData('text/plain', toDelimited(matrix, '\t'));
@@ -2688,7 +2934,7 @@ import '../forms/checkbox.js';
       emit(this, 'is-copy', { rows: matrix.length });
     };
 
-    #onPasteEvent = (e) => {
+    #onPasteEvent = (e: ClipboardEvent): void => {
       if (!this.hasAttribute('clipboard')) return;
       const text = e.clipboardData?.getData('text/plain');
       if (!text) return;
@@ -2698,7 +2944,7 @@ import '../forms/checkbox.js';
 
     /* ── Scroll y tamaño ─────────────────────────────────────────────── */
 
-    #onScroll = () => {
+    #onScroll = (): void => {
       cancelAnimationFrame(this.#scrollRaf);
       this.#scrollRaf = requestAnimationFrame(() => {
         if (this.virtualize && !this.hasAttribute('auto-height')) this.#renderBody(this.#layoutCols());
@@ -2706,7 +2952,7 @@ import '../forms/checkbox.js';
       });
     };
 
-    #checkScrollEnd() {
+    #checkScrollEnd(): void {
       const el = this.#viewport;
       const remaining = el.scrollHeight - el.scrollTop - el.clientHeight;
       if (remaining > 80) {
@@ -2721,14 +2967,14 @@ import '../forms/checkbox.js';
       if (!result?.then) return;
       this.loading = true;
       result
-        .then((more) => {
+        .then((more: Row[]) => {
           if (Array.isArray(more) && more.length) this.rows = this.#rows.concat(more);
           this.loading = false;
         })
         .catch(() => { this.loading = false; });
     }
 
-    #onResize() {
+    #onResize(): void {
       const width = this.#viewport.clientWidth;
       if (Math.abs(width - this.#available) < 1) return;
       this.#available = width;
@@ -2737,27 +2983,29 @@ import '../forms/checkbox.js';
 
     /* ── Toolbar, menús y paneles ────────────────────────────────────── */
 
-    #onQuickInput = () => {
-      this.#quickValue = this.#quick.value;
+    #onQuickInput = (): void => {
+      this.#quickValue = (this.#quick as unknown as { value: string }).value;
       this.#page = 0;
       this.#refresh();
       emit(this, 'is-quick-filter', { value: this.#quickValue });
     };
 
-    #onToolbarClick = (e: PointerEvent) => {
-      const btn = e.target.closest('[data-tool]');
+    #onToolbarClick = (e: PointerEvent): void => {
+      const btn = $closest(e,'[data-tool]');
       if (!btn) return;
       const tool = btn.dataset.tool;
+      if (!tool) return;
       const wasOpen = this.#openPop === tool;
       this.#closePop();
       if (wasOpen) return;
       if (tool === 'columns') {
         this.#showColumnsPanel(btn);
       } else if (tool === 'filters') {
-        renderFilterPanel(this.#filterPanel, { columns: this.#activeCols, model: this.#filterModel });
+        renderFilterPanel(this.#filterPanel, { columns: this.#activeCols, model: this.#filterPanelModel() });
         showPopover(this.#filterPanel, btn, 'bottom-end');
       } else if (tool === 'density') {
-        renderMenu(this.#menu, ['compact', 'standard', 'comfortable'].map((value) => ({
+        const densities: Array<'compact' | 'standard' | 'comfortable'> = ['compact', 'standard', 'comfortable'];
+        renderMenu(this.#menu, densities.map((value) => ({
           label: this.#text[value], action: 'density', value, checked: this.density === value,
         })));
         showPopover(this.#menu, btn, 'bottom-end');
@@ -2773,23 +3021,24 @@ import '../forms/checkbox.js';
       this.#popAnchor = btn;
     };
 
-    #showColumnsPanel(anchor, search = '') {
+    #showColumnsPanel(anchor: HTMLElement, search = ''): void {
       renderColumnsPanel(this.#columnsPanel, {
         columns: this.#activeCols,
-        isVisible: (f) => this.#visibility[f] !== false,
+        isVisible: (f: string) => this.#visibility[f] !== false,
         search,
       });
       showPopover(this.#columnsPanel, anchor, 'bottom-end');
     }
 
-    #openColumnMenu(field, anchor) {
-      const col = this.#activeCols.find((c) => c.field === field);
+    #openColumnMenu(field: string, anchor: HTMLElement): void {
+      const col = this.#activeCols.find((c: ColumnDef) => c.field === field);
       if (!col) return;
-      const sort = this.#sortModel.find((s) => s.field === field)?.sort;
-      const pinned = this.#pinnedCols.left.includes(field) ? 'left'
+      const sort = this.#sortModel.find((s: SortEntry) => s.field === field)?.sort;
+      const pinned: 'left' | 'right' | null = this.#pinnedCols.left.includes(field)
+        ? 'left'
         : this.#pinnedCols.right.includes(field) ? 'right' : null;
       const grouped = this.#groupingModel.includes(field);
-      const items = [];
+      const items: MenuItem[] = [];
 
       if (col.sortable !== false && !this.hasAttribute('disable-column-sort')) {
         items.push(
@@ -2817,7 +3066,7 @@ import '../forms/checkbox.js';
         );
       }
       if (col.aggregable !== false) {
-        items.push({ separator: true }, ...aggregationItems(col, this.#aggregationModel[field]));
+        items.push({ separator: true }, ...aggregationItems(col, this.#aggregationModel[field]) as MenuItem[]);
       }
       if (col.resizable !== false) {
         items.push({ separator: true }, { label: this.#text.autosize, action: 'autosize' });
@@ -2830,34 +3079,38 @@ import '../forms/checkbox.js';
       this.#popAnchor = anchor;
     }
 
-    #onMenuClick = (e: PointerEvent) => {
-      const btn = e.target.closest('.pop-item');
+    #onMenuClick = (e: PointerEvent): void => {
+      const btn = $closest<HTMLElement>(e, '.pop-item') as HTMLButtonElement | null;
       if (!btn || btn.disabled) return;
-      const { action, value } = btn.dataset;
-      const field = this.#menu.dataset.field;
+      const action = btn.dataset.action;
+      const value = btn.dataset.value;
+      const field = this.#menu.dataset.field ?? '';
 
       switch (action) {
         case 'sort-asc': this.#applySort(field, 'asc', false); break;
         case 'sort-desc': this.#applySort(field, 'desc', false); break;
         case 'sort-none': this.#applySort(field, null, false); break;
         case 'hide': this.setColumnVisibility(field, false); break;
-        case 'manage':
+        case 'manage': {
           this.#closePop();
-          this.#showColumnsPanel(this.#headRow.querySelector<HTMLElement>(`[data-field="${cssEscape(field)}"] .hmenu`) || this.#headRow);
+          const anchor = this.#headRow.querySelector<HTMLElement>(`[data-field="${cssEscape(field)}"] .hmenu`) || this.#headRow;
+          this.#showColumnsPanel(anchor);
           this.#openPop = 'columns';
           this.#popAnchor = this.#headRow.querySelector<HTMLElement>(`[data-field="${cssEscape(field)}"] .hmenu`);
           return;
+        }
         case 'filter': {
-          if (!this.#filterModel.items.some((i) => i.field === field)) {
-            const col = this.#activeCols.find((c) => c.field === field);
+          if (!(this.#filterModel.items ?? []).some((i: FilterRule) => i.field === field)) {
+            const col = this.#activeCols.find((c: ResolvedColumn) => c.field === field);
+            const currentItems = this.#filterModel.items ?? [];
             this.#filterModel = {
               ...this.#filterModel,
-              items: [...this.#filterModel.items, { field, operator: col?.operators?.[0]?.value, value: '' }],
+              items: [...currentItems, { field, operator: col?.operators?.[0]?.value, value: '' }],
             };
           }
           const anchor = this.#headRow.querySelector<HTMLElement>(`[data-field="${cssEscape(field)}"] .hmenu`);
           this.#closePop();
-          renderFilterPanel(this.#filterPanel, { columns: this.#activeCols, model: this.#filterModel });
+          renderFilterPanel(this.#filterPanel, { columns: this.#activeCols, model: this.#filterPanelModel() });
           showPopover(this.#filterPanel, anchor || this.#headRow, 'bottom-end');
           this.#openPop = 'filters';
           this.#popAnchor = anchor;
@@ -2868,7 +3121,7 @@ import '../forms/checkbox.js';
         case 'pin-right': this.pinColumn(field, 'right'); break;
         case 'unpin': this.pinColumn(field, null); break;
         case 'group-by': this.setRowGroupingModel([...this.#groupingModel, field]); break;
-        case 'ungroup': this.setRowGroupingModel(this.#groupingModel.filter((f) => f !== field)); break;
+        case 'ungroup': this.setRowGroupingModel(this.#groupingModel.filter((f: string) => f !== field)); break;
         case 'aggregate': {
           const model = { ...this.#aggregationModel };
           if (value) model[field] = value;
@@ -2877,63 +3130,73 @@ import '../forms/checkbox.js';
           break;
         }
         case 'autosize': this.#autosize(field); break;
-        case 'density': this.setDensity(value); break;
+        case 'density': this.setDensity(value ?? ''); break;
         case 'export-csv': this.exportDataAsCsv(); break;
         case 'export-excel': this.exportDataAsExcel(); break;
         case 'export-print': this.exportDataAsPrint(); break;
-        case 'row-action':
-          this.#menuActions?.[Number(value)]?.onClick?.({ ...this.#menuActionRow, api: this });
+        case 'row-action': {
+          const idx = Number(value);
+          const action = this.#menuActions?.[idx];
+          if (action && this.#menuActionRow) {
+            action.onClick?.({ ...this.#menuActionRow, api: this });
+          }
           break;
+        }
         default: break;
       }
       this.#closePop();
     };
 
-    #onColumnsPanelChange = (e) => {
-      const box = e.target.closest('input[data-field]');
+    #onColumnsPanelChange = (e: Event): void => {
+      const box = (e.target as HTMLElement).closest('input[data-field]');
       if (!box) return;
-      this.setColumnVisibility(box.dataset.field, box.checked);
+      const cb = box as HTMLInputElement;
+      this.setColumnVisibility(cb.dataset.field ?? '', cb.checked);
     };
 
-    #onColumnsPanelSearch = (e) => {
-      const input = e.target.closest('.pop-search');
+    #onColumnsPanelSearch = (e: Event): void => {
+      const input = (e.target as HTMLElement).closest('.pop-search');
       if (!input) return;
-      const { value } = input;
+      const inputEl = input as HTMLInputElement;
+      const { value } = inputEl;
+      if (!this.#popAnchor) return;
       this.#showColumnsPanel(this.#popAnchor, value);
-      const next = this.#columnsPanel.querySelector<HTMLElement>('.pop-search');
-      next.focus();
-      next.setSelectionRange(value.length, value.length);
+      const next = this.#columnsPanel.querySelector<HTMLInputElement>('.pop-search');
+      next?.focus();
+      next?.setSelectionRange(value.length, value.length);
     };
 
-    #onColumnsPanelClick = (e: PointerEvent) => {
-      const btn = e.target.closest('[data-action]');
+    #onColumnsPanelClick = (e: PointerEvent): void => {
+      const btn = $closest(e,'[data-action]');
       if (!btn) return;
-      const model = {};
+      const model: Record<string, boolean> = {};
       for (const col of this.#activeCols) {
         if (col.hideable === false) continue;
-        model[col.field] = btn.dataset.action === 'show-all';
+        model[col.field ?? ''] = btn.dataset.action === 'show-all';
       }
       this.columnVisibilityModel = model;
       emit(this, 'is-column-hide', { columnVisibilityModel: model });
-      this.#showColumnsPanel(this.#popAnchor);
+      if (this.#popAnchor) this.#showColumnsPanel(this.#popAnchor);
     };
 
-    #onFilterPanelClick = (e: PointerEvent) => {
-      const btn = e.target.closest('[data-action]');
+    #onFilterPanelClick = (e: PointerEvent): void => {
+      const btn = $closest(e,'[data-action]');
       if (!btn) return;
       const action = btn.dataset.action;
       if (action === 'add-filter') {
-        const col = this.#activeCols.find((c) => c.filterable !== false && c.type !== 'actions');
+        const col = this.#activeCols.find((c: ResolvedColumn) => c.filterable !== false && c.type !== 'actions');
         if (!col) return;
+        const currentItems = this.#filterModel.items ?? [];
         this.#filterModel = {
           ...this.#filterModel,
-          items: [...this.#filterModel.items, { field: col.field, operator: col.operators[0]?.value, value: '' }],
+          items: [...currentItems, { field: col.field ?? '', operator: col.operators?.[0]?.value, value: '' }],
         };
       } else if (action === 'remove-filter') {
-        const index = Number(btn.closest('.filter-row-form').dataset.index);
+        const rowEl = btn.closest<HTMLElement>('.filter-row-form');
+        const index = Number(rowEl?.dataset.index ?? -1);
         this.#filterModel = {
           ...this.#filterModel,
-          items: this.#filterModel.items.filter((_, i) => i !== index),
+          items: (this.#filterModel.items ?? []).filter((_, i: number) => i !== index),
         };
       } else if (action === 'clear-filters') {
         this.#filterModel = { items: [], logicOperator: this.#filterModel.logicOperator };
@@ -2943,36 +3206,38 @@ import '../forms/checkbox.js';
       this.#page = 0;
       this.#refresh();
       emit(this, 'is-filter-change', { filterModel: this.#filterModel });
-      renderFilterPanel(this.#filterPanel, { columns: this.#activeCols, model: this.#filterModel });
-      positionPopover(this.#filterPanel, this.#popAnchor, 'bottom-end');
+      renderFilterPanel(this.#filterPanel, { columns: this.#activeCols, model: this.#filterPanelModel() });
+      if (this.#popAnchor) positionPopover(this.#filterPanel, this.#popAnchor, 'bottom-end');
     };
 
-    #onFilterPanelChange = (e) => {
-      const row = e.target.closest('.filter-row-form');
+    #onFilterPanelChange = (e: Event): void => {
+      const row = $closest<HTMLElement>(e, '.filter-row-form');
       if (!row) return;
-      const index = Number(row.dataset.index);
-      const items = this.#filterModel.items.slice();
+      const index = Number(row.dataset.index ?? -1);
+      const items = (this.#filterModel.items ?? []).slice();
       const item = { ...items[index] };
       let rerender = false;
+      const target = e.target instanceof HTMLElement ? e.target : null;
 
-      if (e.target.classList.contains('filter-logic-select')) {
-        this.#filterModel = { ...this.#filterModel, logicOperator: e.target.value };
+      if (target?.classList.contains('filter-logic-select')) {
+        const op = (target as HTMLSelectElement).value;
+        this.#filterModel = { ...this.#filterModel, logicOperator: op === 'or' ? 'or' : 'and' };
         rerender = true;
-      } else if (e.target.classList.contains('filter-col')) {
-        const col = this.#activeCols.find((c) => c.field === e.target.value);
-        item.field = e.target.value;
+      } else if (target?.classList.contains('filter-col')) {
+        const col = this.#activeCols.find((c: ResolvedColumn) => c.field === (target as HTMLSelectElement).value);
+        item.field = (target as HTMLSelectElement).value;
         item.operator = col?.operators?.[0]?.value;
         item.value = '';
         items[index] = item;
         this.#filterModel = { ...this.#filterModel, items };
         rerender = true;
-      } else if (e.target.classList.contains('filter-op')) {
-        item.operator = e.target.value;
+      } else if (target?.classList.contains('filter-op')) {
+        item.operator = (target as HTMLSelectElement).value;
         items[index] = item;
         this.#filterModel = { ...this.#filterModel, items };
         rerender = true;
-      } else if (e.target.classList.contains('filter-input')) {
-        item.value = e.target.value;
+      } else if (target?.classList.contains('filter-input')) {
+        item.value = (target as HTMLInputElement).value;
         items[index] = item;
         this.#filterModel = { ...this.#filterModel, items };
       }
@@ -2981,45 +3246,52 @@ import '../forms/checkbox.js';
       this.#refresh();
       emit(this, 'is-filter-change', { filterModel: this.#filterModel });
       if (!rerender) return;
-      renderFilterPanel(this.#filterPanel, { columns: this.#activeCols, model: this.#filterModel });
-      positionPopover(this.#filterPanel, this.#popAnchor, 'bottom-end');
+      renderFilterPanel(this.#filterPanel, { columns: this.#activeCols, model: this.#filterPanelModel() });
+      if (this.#popAnchor) positionPopover(this.#filterPanel, this.#popAnchor, 'bottom-end');
     };
 
-    #onFilterPanelInput = (e) => {
-      if (!e.target.classList.contains('filter-input')) return;
-      const row = e.target.closest('.filter-row-form');
-      const index = Number(row.dataset.index);
-      const items = this.#filterModel.items.slice();
-      items[index] = { ...items[index], value: e.target.value };
+    #onFilterPanelInput = (e: Event): void => {
+      const target = e.target;
+      if (!(target instanceof HTMLElement) || !target.classList.contains('filter-input')) return;
+      const row = target.closest<HTMLElement>('.filter-row-form');
+      const index = Number(row?.dataset.index ?? -1);
+      const items = (this.#filterModel.items ?? []).slice();
+      const cur = items[index] ?? {};
+      items[index] = { ...cur, value: (target as HTMLInputElement).value };
       this.#filterModel = { ...this.#filterModel, items };
       this.#page = 0;
       this.#refresh();
       emit(this, 'is-filter-change', { filterModel: this.#filterModel });
     };
 
-    #emitPagination() {
-      emit(this, 'is-page-change', this.paginationModel);
+    #emitPagination(): void {
+      const detail: PageChangeDetail = this.paginationModel;
+      emit(this, 'is-page-change', detail);
     }
 
-    #onFooterClick = (e: PointerEvent) => {
-      const btn = e.target.closest('[data-page]');
+    #onFooterClick = (e: PointerEvent): void => {
+      const btn = $closest<HTMLElement>(e, '[data-page]') as HTMLButtonElement | null;
       if (!btn || btn.disabled) return;
       const total = this.rowCount ?? this.#leafRows.length;
       const pages = Math.max(1, Math.ceil(total / this.pageSize));
-      const map = { first: 0, prev: this.#page - 1, next: this.#page + 1, last: pages - 1 };
-      this.#page = Math.max(0, Math.min(pages - 1, map[btn.dataset.page]));
+      const map: Record<string, number> = {
+        first: 0, prev: this.#page - 1, next: this.#page + 1, last: pages - 1,
+      };
+      const target = btn.dataset.page ?? '';
+      this.#page = Math.max(0, Math.min(pages - 1, map[target] ?? 0));
       this.#refresh();
       this.#emitPagination();
     };
 
-    #onPageSizeChange = () => {
-      this.setAttribute('page-size', this.#pageSizeSelect.value);
+    #onPageSizeChange: () => void = () => {
+      const select = this.#pageSizeSelect as unknown as { value: string };
+      this.setAttribute('page-size', select.value);
       this.#page = 0;
       this.#refresh();
       this.#emitPagination();
     };
 
-    #onDocPointerDown = (e: PointerEvent) => {
+    #onDocPointerDown = (e: PointerEvent): void => {
       if (!this.#openPop) return;
       const path = e.composedPath();
       if (path.includes(this.#menu) || path.includes(this.#columnsPanel) || path.includes(this.#filterPanel)) return;
@@ -3027,7 +3299,7 @@ import '../forms/checkbox.js';
       this.#closePop();
     };
 
-    #closePop() {
+    #closePop(): void {
       hidePopover(this.#menu);
       hidePopover(this.#columnsPanel);
       hidePopover(this.#filterPanel);
@@ -3039,28 +3311,37 @@ import '../forms/checkbox.js';
 
   /* ── Utilidades ─────────────────────────────────────────────────────── */
 
-  function appendContent(host, content) {
+  function appendContent(host: HTMLElement, content: Node | string | { html?: string } | null | undefined): void {
     if (content == null) return;
     if (content instanceof Node) host.appendChild(content);
     else if (typeof content === 'object' && content.html != null) host.innerHTML = String(content.html);
     else host.textContent = String(content);
   }
 
-  function cssEscape(value: string) {
+  function cssEscape(value: string): string {
     const s = String(value);
-    return window.CSS?.escape ? CSS.escape(s) : s.replace(/["\\]/g, '\\$&');
+    return typeof CSS !== 'undefined' && CSS.escape ? CSS.escape(s) : s.replace(/["\\]/g, '\\$&');
+  }
+
+  /** `closest` tipado: el target de un evento puede ser null y no es HTMLElement. */
+  function $closest<T extends HTMLElement = HTMLElement>(e: Event, sel: string): T | null {
+    const t = e.target;
+    return t instanceof Element ? t.closest<T>(sel) : null;
   }
 
   /** Opciones cerradas para el filtro; `null` si la columna se filtra a mano. */
-  function filterOptionsFor(col) {
+  function filterOptionsFor(col: ColumnDef): Array<{ value: CellValue; label: CellValue }> | null {
     if (col.type === 'boolean') return [{ value: 'true', label: 'Sí' }, { value: 'false', label: 'No' }];
     if (col.type !== 'singleSelect' || !Array.isArray(col.valueOptions)) return null;
-    return col.valueOptions.map((raw) => (typeof raw === 'object'
-      ? { value: raw.value, label: raw.label ?? raw.value }
+    return col.valueOptions.map((raw: CellValue) => (typeof raw === 'object' && raw !== null
+      ? {
+        value: (raw as { value: CellValue }).value,
+        label: (raw as { label?: CellValue }).label ?? (raw as { value: CellValue }).value,
+      }
       : { value: raw, label: raw }));
   }
 
-  function coerceValue(value: string, type) {
+  function coerceValue(value: CellValue, type: string | undefined): CellValue {
     if (type === 'number') {
       if (value === '' || value == null) return null;
       const n = Number(value);
@@ -3074,27 +3355,28 @@ import '../forms/checkbox.js';
     return value;
   }
 
-  function setFieldValue(row, field: string, value) {
+  function setFieldValue(row: Row, field: string, value: CellValue): void {
     if (!field.includes('.')) {
       row[field] = value;
       return;
     }
     const parts = field.split('.');
-    let target = row;
+    let target: Row = row;
     for (const key of parts.slice(0, -1)) {
-      if (target[key] == null || typeof target[key] !== 'object') target[key] = {};
-      target = target[key];
+      const next = target[key];
+      if (next == null || typeof next !== 'object') target[key] = {};
+      target = target[key] as Row;
     }
-    target[parts.at(-1)] = value;
+    target[parts.at(-1) ?? ''] = value;
   }
 
-  function toInputDate(value) {
+  function toInputDate(value: string | number | Date | null | undefined): string {
     const d = toDate(value);
     if (!d) return '';
     return `${d.getFullYear()}-${String(d.getMonth() + 1).padStart(2, '0')}-${String(d.getDate()).padStart(2, '0')}`;
   }
 
-  function toInputDateTime(value) {
+  function toInputDateTime(value: string | number | Date | null | undefined): string {
     const d = toDate(value);
     if (!d) return '';
     return `${toInputDate(d)}T${String(d.getHours()).padStart(2, '0')}:${String(d.getMinutes()).padStart(2, '0')}`;
@@ -3106,17 +3388,17 @@ import '../forms/checkbox.js';
    * sin descendencia pasan a ser hojas (si no, un fichero saldría con
    * desplegable y contador).
    */
-  function collapseTreeLeaves(nodes) {
+  function collapseTreeLeaves(nodes: GridNode[]): void {
     for (const node of nodes) {
       if (node.kind !== 'group') continue;
-      const self = node.children.find((c) => c.kind === 'leaf' && c.path?.length === node.path.length);
-      if (self) {
+      const self = node.children?.find((c: GridNode) => c.kind === 'leaf' && c.path?.length === node.path?.length);
+      if (self && node.children) {
         node.row = self.row;
         node.id = self.id;
-        node.children = node.children.filter((c) => c !== self);
+        node.children = node.children.filter((c: GridNode) => c !== self);
       }
-      collapseTreeLeaves(node.children);
-      if (!node.children.length && node.row) node.kind = 'leaf';
+      if (node.children) collapseTreeLeaves(node.children);
+      if (node.children && !node.children.length && node.row) node.kind = 'leaf';
     }
   }
 

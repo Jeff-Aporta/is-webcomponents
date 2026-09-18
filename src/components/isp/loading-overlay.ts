@@ -56,7 +56,7 @@ import { ElementBase } from '../../core/element-base.js';
     #messageEl!: HTMLElement;
     #messageText!: HTMLElement;
     #messageSlot!: HTMLSlotElement;
-    #prevOverflow = null;
+    #prevOverflow: string | null = null;
 
     constructor() {
       super();
@@ -70,11 +70,12 @@ import { ElementBase } from '../../core/element-base.js';
     }
 
     onConnected() {
-      for (const p of ['open', 'message', 'scrollLock']) {
+      const props = ['open', 'message', 'scrollLock'] as const;
+      for (const p of props) {
         if (Object.prototype.hasOwnProperty.call(this, p)) {
-          const v = this[p];
-          delete this[p];
-          this[p] = v;
+          const v = (this as unknown as Record<string, unknown>)[p];
+          delete (this as unknown as Record<string, unknown>)[p];
+          (this as unknown as Record<string, unknown>)[p] = v;
         }
       }
       this.#messageSlot.addEventListener('slotchange', this.#syncMessage);
@@ -114,7 +115,7 @@ import { ElementBase } from '../../core/element-base.js';
 
     // ---- privados ---------------------------------------------------------
 
-    #emit(name) {
+    #emit(name: 'is-show' | 'is-hide'): void {
       emit(this, name, {});
     }
 
@@ -126,9 +127,9 @@ import { ElementBase } from '../../core/element-base.js';
       this.#emit(open ? 'is-show' : 'is-hide');
     }
 
-    #syncMessage = () => {
+    #syncMessage = (): void => {
       const slotted = this.#messageSlot.assignedNodes({ flatten: true })
-        .some((n) => n.nodeType === 1 || (n.nodeType === 3 && n.textContent.trim()));
+        .some((n) => n.nodeType === 1 || (n.nodeType === 3 && (n.textContent ?? '').trim()));
       const text = slotted ? '' : this.message;
       this.#messageText.textContent = text;
       this.#messageEl.hidden = !text && !slotted;

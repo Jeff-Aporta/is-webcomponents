@@ -1,0 +1,83 @@
+<!doctype html>
+<html lang="es" class="theme-dark" data-theme="dark">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>Demo &lt;is-icon&gt; · is-webcomponents</title>
+<meta name="description" content="Sistema de iconos unificado. Carga SVG inline desde el bundle propio (sin iconify-icon). Soporta currentColor, themes dark/light, iconos multicolor (banderas) y atributo src para SVG custom." />
+<style>
+  html, body { margin: 0; padding: 0; min-height: 100%; background: #0c1118; color: #e2e8f0; font-family: ui-sans-serif, system-ui, sans-serif; }
+  body { display: grid; grid-template-rows: auto 1fr auto; }
+  header { padding: 16px 20px; border-bottom: 1px solid rgba(255,255,255,0.1); background: #0f1620; }
+  header h1 { font-size: 16px; font-weight: 700; margin: 0; }
+  header p { font-size: 12px; color: #94a3b8; margin: 4px 0 0 0; }
+  main { display: grid; grid-template-columns: 1fr 1fr; gap: 16px; padding: 20px; align-content: start; }
+  section { background: #0f1620; border: 1px solid rgba(255,255,255,0.1); border-radius: 8px; padding: 16px; min-height: 160px; }
+  section h2 { font-size: 12px; text-transform: uppercase; letter-spacing: 0.08em; margin: 0 0 12px 0; color: #94a3b8; font-weight: 600; }
+  .row { display: flex; align-items: center; gap: 16px; flex-wrap: wrap; font-size: 1.6rem; color: #e2e8f0; }
+  .row.lg { font-size: 2.6rem; }
+  .swatch-light { background: #e2e8f0; color: #142033; padding: 8px 10px; border-radius: 6px; }
+  footer { padding: 12px 20px; border-top: 1px solid rgba(255,255,255,0.1); background: #0f1620; font-size: 11px; color: #94a3b8; }
+  footer code { background: rgba(255,255,255,0.06); padding: 1px 5px; border-radius: 3px; font: 11px ui-monospace, Menlo, Consolas, monospace; }
+  /* Anti-FOUC */
+  is-icon:not(:defined) { visibility: hidden; }
+</style>
+<script type="module">
+  // Cargar solo el bundle de icon desde dist/cdn/. El icono se trae por
+  // fetch desde el sistema de iconos propio (assets/icons → dist/assets/icons).
+  await import('../../../dist/cdn/media/icon.min.js');
+  await customElements.whenDefined('is-icon');
+
+  // Esperar a que se resuelvan algunos iconos (puede ser async)
+  await new Promise((r) => setTimeout(r, 300));
+
+  document.documentElement.dataset.iconReady = '1';
+</script>
+</head>
+<body>
+<header>
+  <h1>Demo — <code>&lt;is-icon&gt;</code></h1>
+  <p>Iconografía unificada (sin <code>iconify-icon</code>). Carga SVG inline; respeta <code>currentColor</code>.</p>
+</header>
+<main>
+  <section>
+    <h2>Monocromáticos (currentColor)</h2>
+    <div class="row lg">
+      <is-icon icon="mdi:home" label="Inicio"></is-icon>
+      <is-icon icon="mdi:account" label="Cuenta"></is-icon>
+      <is-icon icon="mdi:cog-outline" label="Ajustes"></is-icon>
+      <is-icon icon="mdi:star" label="Favorito"></is-icon>
+      <is-icon icon="mdi:bell-outline" label="Notificaciones"></is-icon>
+      <is-icon icon="mdi:magnify" label="Buscar"></is-icon>
+    </div>
+  </section>
+  <section>
+    <h2>Con label (accesible)</h2>
+    <div class="row lg">
+      <is-icon icon="mdi:play" label="Reproducir"></is-icon>
+      <is-icon icon="mdi:pause" label="Pausar"></is-icon>
+      <is-icon icon="mdi:skip-next" label="Siguiente"></is-icon>
+    </div>
+  </section>
+  <section>
+    <h2>Sobre fondo claro (legibilidad)</h2>
+    <div class="row lg swatch-light">
+      <is-icon icon="mdi:home"></is-icon>
+      <is-icon icon="mdi:cog-outline"></is-icon>
+      <is-icon icon="mdi:star"></is-icon>
+    </div>
+  </section>
+  <section>
+    <h2>Compat name + library</h2>
+    <div class="row lg">
+      <is-icon name="github" library="mdi" label="GitHub"></is-icon>
+      <is-icon name="robot" library="mdi"></is-icon>
+      <is-icon name="cloud" library="mdi"></is-icon>
+    </div>
+  </section>
+</main>
+<footer>
+  Atributos: <code>icon</code> ("grupo:nombre"), <code>name</code>+<code>library</code>, <code>label</code> (a11y), <code>src</code> (SVG custom).
+</footer>
+</body>
+</html>

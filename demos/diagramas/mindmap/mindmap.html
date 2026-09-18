@@ -1,0 +1,54 @@
+<!doctype html>
+<html lang="es" class="theme-dark" data-theme="dark">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>Demo — <is-mindmap> · is-webcomponents</title>
+<meta name="description" content="Mapa mental en SVG (sin Mermaid) con layout radial." />
+<style>
+  html, body { margin: 0; padding: 0; min-height: 100%; background: #0c1118; color: #e2e8f0; font-family: ui-sans-serif, system-ui, sans-serif; }
+  body { display: grid; grid-template-rows: auto 1fr; }
+  header { padding: 16px 20px; border-bottom: 1px solid rgba(255,255,255,0.1); background: #0f1620; }
+  header h1 { font-size: 16px; font-weight: 700; margin: 0; }
+  header p { font-size: 12px; color: #94a3b8; margin: 4px 0 0 0; }
+  main { display: grid; place-items: stretch; min-height: 0; padding: 12px; }
+  is-mindmap { width: 100%; height: 100%; min-height: 480px; display: block; }
+  is-mindmap:not(:defined) { visibility: hidden; }
+</style>
+<script type="module">
+  await import('../../../dist/cdn/diagrams/mindmap.min.js');
+  await customElements.whenDefined('is-mindmap');
+
+  const el = document.createElement('is-mindmap');
+  el.payload = {
+    mindmap: {
+      title: 'Plan de lanzamiento',
+      subtitle: '1 raíz · 3 ramas · 6 hojas',
+      layout: 'radial',
+      nodes: [
+        { id: 'root', label: 'Lanzamiento', kind: 'root' },
+        { id: 'mkt', label: 'Marketing', kind: 'branch', parent: 'root' },
+        { id: 'prod', label: 'Producto', kind: 'branch', parent: 'root' },
+        { id: 'ops', label: 'Operaciones', kind: 'branch', parent: 'root' },
+        { id: 'mkt-1', label: 'Blog post', kind: 'leaf', parent: 'mkt' },
+        { id: 'mkt-2', label: 'Redes', kind: 'leaf', parent: 'mkt' },
+        { id: 'prod-1', label: 'Beta cerrada', kind: 'leaf', parent: 'prod' },
+        { id: 'prod-2', label: 'Pricing', kind: 'leaf', parent: 'prod' },
+        { id: 'ops-1', label: 'Infraestructura', kind: 'leaf', parent: 'ops' },
+        { id: 'ops-2', label: 'Soporte', kind: 'leaf', parent: 'ops' },
+      ],
+    },
+  };
+  document.querySelector('main').appendChild(el);
+
+  document.documentElement.dataset.mindmapReady = '1';
+</script>
+</head>
+<body>
+  <header>
+    <h1>Demo — <code>&lt;is-mindmap&gt;</code></h1>
+    <p>Layout radial: raíz central con ramas (pill) y hojas (subrayado). Hover resalta el subárbol.</p>
+  </header>
+  <main></main>
+</body>
+</html>

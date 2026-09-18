@@ -1,0 +1,147 @@
+<!doctype html>
+<html lang="es" class="theme-dark" data-theme="dark">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>Demo de <is-dialog> · is-webcomponents</title>
+<meta name="description" content="Modal accesible con focus trap, Escape, light-dismiss, restore de foco. Variantes de backdrop none/basic. Eventos is-show/is-after-show/is-hide/is-after-hide. data-dialog='close' en descendientes." />
+<style>
+  html, body { margin: 0; padding: 0; min-height: 100%; background: #0c1118; color: #e2e8f0; font-family: ui-sans-serif, system-ui, sans-serif; }
+  body { display: grid; grid-template-rows: auto 1fr auto; min-height: 100vh; }
+  header { padding: 16px 20px; border-bottom: 1px solid rgba(255,255,255,0.1); background: #0f1620; }
+  header h1 { font-size: 16px; font-weight: 700; margin: 0; }
+  header p { font-size: 12px; color: #94a3b8; margin: 4px 0 0 0; }
+  main { padding: 20px; display: grid; gap: 14px; }
+  section { background: #0f1620; border: 1px solid rgba(255,255,255,0.1); border-radius: 8px; padding: 16px; }
+  section h2 { font-size: 11px; text-transform: uppercase; letter-spacing: 0.08em; margin: 0 0 12px 0; color: #94a3b8; }
+  is-dialog:not(:defined), is-drawer:not(:defined) { visibility: hidden; }
+  /* Live region para mensajes del test. */
+  #log { padding: 10px; font: 11px ui-monospace, Menlo, Consolas, monospace; color: #94a3b8; white-space: pre-wrap; max-height: 200px; overflow: auto; }
+  footer { padding: 12px 20px; border-top: 1px solid rgba(255,255,255,0.1); background: #0f1620; font-size: 11px; color: #94a3b8; }
+  footer code { background: rgba(255,255,255,0.06); padding: 1px 5px; border-radius: 3px; font: 11px ui-monospace, Menlo, Consolas, monospace; }
+</style>
+<script type="module">
+  await import('../../../dist/cdn/layout/dialog.min.js');
+  await customElements.whenDefined('is-dialog');
+
+  // (1) Dialog básico: arranca CERRADO (el test verifica open via .show()).
+  //     Si lo abriéramos por defecto, su backdrop cubriría la página y bloquearía
+  //     los clicks de los demás tests.
+  const d1 = document.createElement('is-dialog');
+  d1.setAttribute('label', 'Confirmación');
+  d1.id = 'd1';
+  d1.innerHTML = `
+    <p>¿Seguro que quieres continuar?</p>
+    <div slot="footer">
+      <button type="button" id="d1-cancel" data-dialog="close">Cancelar</button>
+      <button type="button" id="d1-ok" data-dialog="close">Aceptar</button>
+    </div>
+  `;
+  document.body.appendChild(d1);
+
+  // (2) Dialog con autofocus y light-dismiss.
+  const d2 = document.createElement('is-dialog');
+  d2.setAttribute('label', 'Light dismiss');
+  d2.setAttribute('light-dismiss', '');
+  d2.id = 'd2';
+  d2.innerHTML = `
+    <p>Haz click fuera del diálogo para cerrarlo.</p>
+    <input id="d2-input" placeholder="(autofocus)" autofocus />
+    <div slot="footer">
+      <button type="button" data-dialog="close">Cerrar</button>
+    </div>
+  `;
+  document.body.appendChild(d2);
+
+  // (3) Dialog sin header.
+  const d3 = document.createElement('is-dialog');
+  d3.setAttribute('without-header', '');
+  d3.setAttribute('label', 'Sin header (ignorado)');
+  d3.id = 'd3';
+  d3.innerHTML = `
+    <p>Este diálogo no debe mostrar header ni botón close. Escape sigue cerrando.</p>
+    <div slot="footer">
+      <button type="button" data-dialog="close">OK</button>
+    </div>
+  `;
+  document.body.appendChild(d3);
+
+  // (4) Dialog con backdrop-variant="basic".
+  const d4 = document.createElement('is-dialog');
+  d4.setAttribute('label', 'Backdrop basic');
+  d4.setAttribute('backdrop-variant', 'basic');
+  d4.id = 'd4';
+  d4.innerHTML = `
+    <p>Backdrop con blur.</p>
+    <div slot="footer">
+      <button type="button" data-dialog="close">OK</button>
+    </div>
+  `;
+  document.body.appendChild(d4);
+
+  // (5) Dialog con is-hide cancelable (preventDefault desde el consumidor).
+  const d5 = document.createElement('is-dialog');
+  d5.setAttribute('label', 'Cancelable');
+  d5.id = 'd5';
+  d5.innerHTML = `
+    <p>Si pulsas "Cerrar", el is-hide se cancelará y verás el shake.</p>
+    <div slot="footer">
+      <button type="button" id="d5-cancel-shake" data-dialog="close">Cerrar (shake)</button>
+      <button type="button" id="d5-force">Forzar cierre</button>
+    </div>
+  `;
+  document.body.appendChild(d5);
+  d5.addEventListener('is-hide', (e) => {
+    // Sólo cancelamos cuando el botón shake dispara.
+    if (e.detail?.source?.id === 'd5-cancel-shake') {
+      e.preventDefault();
+      appendLog('is-hide cancelado para shake.');
+    }
+  });
+
+  // Log de eventos global.
+  const log = document.getElementById('log');
+  const appendLog = (line) => { log.textContent = line + '\n' + log.textContent; };
+  [d1, d2, d3, d4, d5].forEach((d) => {
+    ['is-show', 'is-after-show', 'is-hide', 'is-after-hide'].forEach((evt) => {
+      d.addEventListener(evt, (e) => {
+        appendLog(`${evt} ← ${d.id}${e.detail?.source ? ' (source=' + (e.detail.source.id || e.detail.source.tagName) + ')' : ''}`);
+      });
+    });
+  });
+
+  // Botones de UI.
+  document.getElementById('btn-open-1').addEventListener('click', () => d1.show());
+  document.getElementById('btn-open-2').addEventListener('click', () => d2.show());
+  document.getElementById('btn-open-3').addEventListener('click', () => d3.show());
+  document.getElementById('btn-open-4').addEventListener('click', () => d4.show());
+  document.getElementById('btn-open-5').addEventListener('click', () => d5.show());
+  document.getElementById('d5-force').addEventListener('click', () => d5.hide());
+
+  document.documentElement.dataset.dialogReady = '1';
+</script>
+</head>
+<body>
+<header>
+  <h1>Demo — <code>&lt;is-dialog&gt;</code></h1>
+  <p>Modal accesible. Focus trap + Escape + light-dismiss + restore de foco. Atributos <code>label</code>, <code>without-header</code>, <code>light-dismiss</code>, <code>backdrop-variant</code>. <code>data-dialog="close"</code> cierra desde descendientes.</p>
+</header>
+<main>
+  <section>
+    <h2>Openers</h2>
+    <button id="btn-open-1" type="button">1. Básico (open attr)</button>
+    <button id="btn-open-2" type="button">2. Light dismiss + autofocus</button>
+    <button id="btn-open-3" type="button">3. Sin header</button>
+    <button id="btn-open-4" type="button">4. Backdrop basic</button>
+    <button id="btn-open-5" type="button">5. Cancelable (preventDefault)</button>
+  </section>
+  <section>
+    <h2>Eventos</h2>
+    <pre id="log"></pre>
+  </section>
+</main>
+<footer>
+  Estado: <code>customElements.whenDefined('is-dialog')</code> resuelto.
+</footer>
+</body>
+</html>

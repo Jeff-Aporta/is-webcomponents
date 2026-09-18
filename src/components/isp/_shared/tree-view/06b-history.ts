@@ -1,46 +1,89 @@
-var __defProp = Object.defineProperty;
-var __defNormalProp = (obj, key, value) => key in obj ? __defProp(obj, key, { enumerable: true, configurable: true, writable: true, value }) : obj[key] = value;
-var __publicField = (obj, key, value) => __defNormalProp(obj, typeof key !== "symbol" ? key + "" : key, value);
+/**
+ * TAHistory — undo/redo + protección del árbol.
+ *
+ * Mantiene dos stacks (`_historyPast` / `_historyFuture`) con snapshots
+ * JSON-serializados del `List2Rows`. Cada vez que el consumidor llama a
+ * `historyPush()`, captura el estado actual. `historyUndo` / `historyRedo`
+ * navegan entre snapshots.
+ *
+ * La "protección" (`_protectionMode` / `_historyViewingPast`) bloquea
+ * mutaciones cuando el árbol está en un estado pasado o cuando el usuario
+ * lo protegió manualmente.
+ *
+ * Notas de tipado
+ * ---------------
+ * - `_historyPast`, `_historyFuture`, `_historySuspended`,
+ *   `_historyViewingPast`, `_protectionMode`, `_protectionPromptOpen`,
+ *   `isProtected`, `canMutate`, etc. son campos heredados vía
+ *   `__publicField` (invisibles a TS) — los re-declaramos aquí para
+ *   tipar las operaciones.
+ */
 import { TAMutations } from "./06-mutations.js";
+import { TNode, TRecord } from "./_types.js";
+
+/** Límite máximo de snapshots en el stack de undo. */
 const HISTORY_LIMIT = 50;
+
 class TAHistory extends TAMutations {
-  constructor() {
-    super(...arguments);
-    __publicField(this, "_historyPast", []);
-    __publicField(this, "_historyFuture", []);
-    __publicField(this, "_historySuspended", 0);
-    __publicField(this, "_historyViewingPast", false);
-    __publicField(this, "_protectionMode", false);
-    __publicField(this, "_protectionPromptOpen", false);
-  }
-  get historyCanUndo() {
+  // ── Re-declaraciones de campos heredados ───────────────────────────────
+  declare _historyPast: string[];
+  declare _historyFuture: string[];
+  declare _historySuspended: number;
+  declare _historyViewingPast: boolean;
+  declare _protectionMode: boolean;
+  declare _protectionPromptOpen: boolean;
+
+  // ── Getters públicos ───────────────────────────────────────────────────
+  /** ¿Hay algo que deshacer? */
+  get historyCanUndo(): boolean {
     return this._historyPast.length > 0;
   }
-  get historyCanRedo() {
+
+  /** ¿Hay algo que rehacer? */
+  get historyCanRedo(): boolean {
     return this._historyFuture.length > 0;
   }
-  get historyIsViewingPast() {
+
+  /** ¿El árbol está visualizando un estado pasado (no el presente)? */
+  get historyIsViewingPast(): boolean {
     return this._historyViewingPast;
   }
-  get isProtected() {
+
+  /** ¿El árbol está protegido (manual o por undo/redo)? */
+  get isProtected(): boolean {
     return this._protectionMode || this._historyViewingPast;
   }
-  get isProtectionPromptOpen() {
+
+  /** ¿El modal de "desproteger" está abierto? */
+  get isProtectionPromptOpen(): boolean {
     return this._protectionPromptOpen;
   }
-  get isReadOnlyExternal() {
-    return super.isReadOnly;
+
+  /** ¿El árbol es read-only externo (override del getter de contexto)? */
+  get isReadOnlyExternal(): boolean {
+    return (this as unknown as { isReadOnly: boolean }).isReadOnly;
   }
-  get canToggleProtection() {
-    return !super.isReadOnly;
+
+  /** ¿El usuario puede alternar la protección manualmente? */
+  get canToggleProtection(): boolean {
+    return !(this as unknown as { isReadOnly: boolean }).isReadOnly;
   }
-  get isReadOnly() {
-    return super.isReadOnly || this._historyViewingPast;
+
+  /** Read-only efectivo (externo + viewing-past). */
+  override get isReadOnly(): boolean {
+    return (
+      (this as unknown as { isReadOnly: boolean }).isReadOnly ||
+      this._historyViewingPast
+    );
   }
-  get canMutate() {
+
+  /** ¿Se puede mutar? (no readOnly y no protegido) */
+  override get canMutate(): boolean {
     return !this.isReadOnly && !this._protectionMode;
   }
-  protectionToggle() {
+
+  /** Toggle de protección: si está protegido pide release, si no lo activa. */
+  protectionToggle(): void {
     if (this.isProtected) {
       this.confirmProtectionRelease();
       return;
@@ -49,32 +92,48 @@ class TAHistory extends TAMutations {
     this._protectionMode = true;
     this.notifyUI();
   }
-  setProtected(v) {
+
+  /** Setter externo del flag de protección. */
+  setProtected(v: boolean): void {
     const next = !!v;
     if (this._protectionMode === next) return;
     this._protectionMode = next;
     if (!next) this._protectionPromptOpen = false;
     this.notifyUI();
   }
-  requestProtectionRelease() {
+
+  /** Pide confirmación para desproteger (abre el modal). */
+  requestProtectionRelease(): void {
     if (!this.isProtected) return;
     this._protectionPromptOpen = true;
     this.notifyUI();
   }
-  confirmProtectionRelease() {
+
+  /** Confirma el desproteger y sale del estado "viewing past". */
+  confirmProtectionRelease(): void {
     this._protectionMode = false;
     this._historyViewingPast = false;
     this._protectionPromptOpen = false;
     this.notifyUI();
   }
-  dismissProtectionPrompt() {
+
+  /** Cierra el modal de desproteger sin desproteger. */
+  dismissProtectionPrompt(): void {
     this._protectionPromptOpen = false;
     this.notifyUI();
   }
-  historySnapshotList() {
+
+  // ── Snapshots ──────────────────────────────────────────────────────────
+  /** Serializa el `List2Rows` actual a JSON para el stack de undo. */
+  historySnapshotList(): string {
     try {
-      const list = this.List2Rows ?? [];
-      return JSON.stringify(list.map((p) => typeof p?.toJSON === "function" ? p.toJSON() : p));
+      const list: TNode[] = this.List2Rows ?? [];
+      return JSON.stringify(
+        list.map((p: TNode) => {
+          const toJsonFn = (p as unknown as { toJSON?: () => unknown }).toJSON;
+          return typeof toJsonFn === "function" ? toJsonFn.call(p) : p;
+        }),
+      );
     } catch {
       try {
         return JSON.stringify(this.List2Rows ?? []);
@@ -83,25 +142,40 @@ class TAHistory extends TAMutations {
       }
     }
   }
-  historyRestoreList(snapshot) {
+
+  /**
+   * Restaura un snapshot serializado: parsea, mapea a nodos vía `toNode`,
+   * y aplica. Notifica UI y resincroniza expandidos.
+   */
+  historyRestoreList(snapshot: string): void {
     try {
       const parsed = JSON.parse(snapshot);
-      const items = (Array.isArray(parsed) ? parsed : []).map((data) => this.toNode(data));
+      const items: TNode[] = (
+        Array.isArray(parsed) ? parsed : []
+      ).map((data: unknown) => this.toNode(data as Partial<TNode>)).filter(
+        (n: TNode | null): n is TNode => n != null,
+      );
       this.List2Rows = items;
       this.onrefresh();
       this.resyncExpandedToCurrentTree();
       this.syncAllRowAdapters();
       this.notifyUI();
-    } catch (e) {
-      const msg = e instanceof Error ? `\r
-${e.message}` : "";
-      this.onError?.("No se pudo restaurar el estado del árbol." + msg);
+    } catch (e: unknown) {
+      const msg = e instanceof Error ? `\r\n${e.message}` : "";
+      (this as unknown as { onError?: (m: string) => void }).onError?.(
+        "No se pudo restaurar el estado del árbol." + msg,
+      );
     }
   }
-  historyPush() {
+
+  /** Captura el estado actual al stack de undo (no-op si está suspendido). */
+  historyPush(): void {
     if (this._historySuspended > 0) return;
     const snap = this.historySnapshotList();
-    const top = this._historyPast.length > 0 ? this._historyPast[this._historyPast.length - 1] : null;
+    const top =
+      this._historyPast.length > 0
+        ? this._historyPast[this._historyPast.length - 1]
+        : null;
     if (top === snap) return;
     this._historyPast.push(snap);
     if (this._historyPast.length > HISTORY_LIMIT) this._historyPast.shift();
@@ -109,7 +183,9 @@ ${e.message}` : "";
     this._historyViewingPast = false;
     this.notifyUI();
   }
-  historyUndo() {
+
+  /** Deshace la última mutación. */
+  historyUndo(): void {
     if (!this.historyCanUndo) return;
     const present = this.historySnapshotList();
     const prev = this._historyPast.pop();
@@ -124,7 +200,9 @@ ${e.message}` : "";
     }
     this.notifyUI();
   }
-  historyRedo() {
+
+  /** Rehace la última mutación deshecha. */
+  historyRedo(): void {
     if (!this.historyCanRedo) return;
     const present = this.historySnapshotList();
     const next = this._historyFuture.pop();
@@ -139,7 +217,9 @@ ${e.message}` : "";
     }
     this.notifyUI();
   }
-  historyRedoAll() {
+
+  /** Rehace todas las mutaciones pendientes y sale del estado "viewing past". */
+  historyRedoAll(): void {
     if (!this.historyCanRedo) return;
     this._historySuspended++;
     try {
@@ -156,18 +236,21 @@ ${e.message}` : "";
     this._historyViewingPast = false;
     this.notifyUI();
   }
-  historyRecover() {
+
+  /** Descarta el redo stack y sale del estado "viewing past". */
+  historyRecover(): void {
     this._historyFuture = [];
     this._historyViewingPast = false;
     this.notifyUI();
   }
-  historyClear() {
+
+  /** Limpia ambos stacks. */
+  historyClear(): void {
     this._historyPast = [];
     this._historyFuture = [];
     this._historyViewingPast = false;
     this.notifyUI();
   }
 }
-export {
-  TAHistory
-};
+
+export { TAHistory };

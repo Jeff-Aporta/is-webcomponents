@@ -1,12 +1,22 @@
 import { adoptCss, defineElement, emit, emitCancelable } from '../../core/element.js';
 import { DiagramElementBase } from '../_shared/diagram-element-base.js';
 import { resolveStateSpec, computeStateLayout } from './state-spec.js';
+import type {
+  StateLayout,
+  StateLayoutNode,
+  StateLayoutTransition,
+  StateResolvedSpec,
+  StateSpec,
+} from './state-spec.js';
 import { sequenceThemeDark, sequenceThemeLight } from './sequence-spec.js';
 import { SequenceTurtle } from './sequence-turtle.js';
+import type { PathTurtle, TurtleTheme } from '../_shared/path-turtle.js';
 import { tkHueToHex } from '../_shared/tk-hue.js';
 import { edgeStrokeHex, edgeChipFill, edgeChipText } from '../_shared/diagram-edge-style.js';
+import type { DiagramTheme } from './diagram-types.js';
 import { inlineMdWeb } from '../_shared/tk-inline-md.js';
 import { wrapText, buildTspans } from '../_shared/diagram-text-wrap.js';
+import type { TSpanSpec } from '../_shared/diagram-text-wrap.js';
 import { registerDiagramKind } from './diagram-kinds.js';
 import { svgEl } from '../_shared/svg-chart-engine.js';
 import { svgArrowHead } from '../_shared/diagram-arrow.js';
@@ -27,8 +37,28 @@ import { svgArrowHead } from '../_shared/diagram-arrow.js';
  * Eventos: is-render, is-turtle-state, is-open-viewer, is-toggle-group
  */
 
+/** Estado del callback `onState` del motor de tortuga (path-turtle). */
+interface TurtleState {
+  playing: boolean;
+  idx: number;
+  total: number;
+  replay: number;
+}
+
+/** Nodo cacheado en el SVG para aplicar hover sin reconstruir el DOM. */
+interface NodeNodeEntry {
+  n: StateLayoutNode;
+  g: SVGGElement;
+}
+
+/** Transición cacheada en el SVG para aplicar hover sin reconstruir el DOM. */
+interface EdgeNodeEntry {
+  e: StateLayoutTransition;
+  g: SVGGElement;
+}
+
 /** Contorno SVG de un estado según su tipo. x/y = esquina superior izquierda. */
-function statePath(kind, x, y, w: number, h: number) {
+function statePath(kind: string, x: number, y: number, w: number, h: number): string {
   const r = 8;
   const cx = x + w / 2;
   const cy = y + h / 2;
@@ -43,12 +73,12 @@ function statePath(kind, x, y, w: number, h: number) {
 }
 
 class IsStateDiagram extends DiagramElementBase {
-  #theme = null;
-  #turtle = null;
-  #hiddenGroups = new Set();
-  #nodeNodes = new Map();
-  #edgeNodes = new Map();
-  #hoverId = null;
+  #theme: DiagramTheme | null = null;
+  #turtle: PathTurtle | null = null;
+  #hiddenGroups: Set<string> = new Set<string>();
+  #nodeNodes: Map<string, NodeNodeEntry> = new Map();
+  #edgeNodes: Map<string, EdgeNodeEntry> = new Map();
+  #hoverId: string | null = null;
 
   constructor() {
     super();
@@ -56,31 +86,31 @@ class IsStateDiagram extends DiagramElementBase {
     adoptCss(this.shadowRoot!, import.meta.url);
   }
 
-  onDiagramConnected() {
-    this.wrap.addEventListener('mousemove', this.#onMouseMove);
-    this.wrap.addEventListener('mouseleave', this.#onMouseLeave);
-    this.wrap.addEventListener('click', this.#onClick);
+  onDiagramConnected(): void {
+    this.wrap.addEventListener('mousemove', this.#onMouseMove as EventListener);
+    this.wrap.addEventListener('mouseleave', this.#onMouseLeave as EventListener);
+    this.wrap.addEventListener('click', this.#onClick as EventListener);
   }
 
-  onDiagramDisconnected() {
+  onDiagramDisconnected(): void {
     this.#turtle?.destroy();
     this.#turtle = null;
-    this.wrap.removeEventListener('mousemove', this.#onMouseMove);
-    this.wrap.removeEventListener('mouseleave', this.#onMouseLeave);
-    this.wrap.removeEventListener('click', this.#onClick);
+    this.wrap.removeEventListener('mousemove', this.#onMouseMove as EventListener);
+    this.wrap.removeEventListener('mouseleave', this.#onMouseLeave as EventListener);
+    this.wrap.removeEventListener('click', this.#onClick as EventListener);
   }
 
-  onPayloadChanged() { this.#hiddenGroups = new Set(); }
+  onPayloadChanged(): void { this.#hiddenGroups = new Set(); }
 
-  get turtle() { return this.#turtle; }
-  get hiddenGroups() { return this.#hiddenGroups; }
-  set hiddenGroups(v) {
-    this.#hiddenGroups = v instanceof Set ? v : new Set(v || []);
+  get turtle(): PathTurtle | null { return this.#turtle; }
+  get hiddenGroups(): Set<string> { return this.#hiddenGroups; }
+  set hiddenGroups(v: Set<string> | Iterable<string> | null | undefined) {
+    this.#hiddenGroups = v instanceof Set ? v : new Set(v ?? []);
     this.queueRender();
   }
 
-  renderDiagram() {
-    const spec = resolveStateSpec(this.payload ?? {});
+  renderDiagram(): void {
+    const spec: StateResolvedSpec | null = resolveStateSpec(this.payload ?? {});
     this.spec = spec;
     if (!spec) {
       this.svg.innerHTML = '';
@@ -91,9 +121,9 @@ class IsStateDiagram extends DiagramElementBase {
 
     // Ocultar un grupo quita sus estados y las transiciones que los tocan.
     const hidden = this.#hiddenGroups;
-    let visible = spec;
+    let visible: StateResolvedSpec = spec;
     if (hidden.size) {
-      const states = spec.states.filter((s) => !s.group || !hidden.has(s.group));
+      const states: StateSpec[] = spec.states.filter((s) => !s.group || !hidden.has(s.group));
       const keep = new Set(states.map((s) => s.id));
       visible = { ...spec, states, transitions: spec.transitions.filter((t) => keep.has(t.from) && keep.has(t.to)) };
     }
@@ -104,17 +134,17 @@ class IsStateDiagram extends DiagramElementBase {
     }
 
     const dark = this.isDarkTheme;
-    const theme = dark ? sequenceThemeDark() : sequenceThemeLight();
+    const theme: DiagramTheme = dark ? sequenceThemeDark() : sequenceThemeLight();
     this.#theme = theme;
     this.syncThemeAttr();
 
-    const layout = computeStateLayout(visible);
+    const layout: StateLayout = computeStateLayout(visible);
     this.layout = layout;
     this.#buildSvg(layout, theme);
     this.wrap.classList.toggle('is-viewer', this.isViewer);
   }
 
-  #buildSvg(layout, theme) {
+  #buildSvg(layout: StateLayout, theme: DiagramTheme): void {
     const { width: W, height: H } = layout;
     this.svg.setAttribute('viewBox', `0 0 ${W} ${H}`);
     this.svg.setAttribute('preserveAspectRatio', 'xMidYMid meet');
@@ -149,25 +179,26 @@ class IsStateDiagram extends DiagramElementBase {
     const turtleGroup = svgEl('g');
     this.svg.appendChild(turtleGroup);
     this.#turtle?.destroy();
-    this.#turtle = new SequenceTurtle(turtleGroup);
+    this.#turtle = new SequenceTurtle(turtleGroup as unknown as HTMLElement);
     // La tortuga recorre las transiciones en orden; reutiliza el motor de secuencia.
     this.#turtle.setData({
       messages: layout.edges.map((e, i: number) => ({
         path: e.path, step: i + 1, log: e.label || '', groupHue: e.hue,
       })),
-      theme,
+      theme: theme as unknown as TurtleTheme,
       viewW: W,
       viewH: H,
       autoLoop: this.isViewer,
-      onState: (state) => emit(this, 'is-turtle-state', state),
+      onState: (state: TurtleState) => emit(this, 'is-turtle-state', state),
     });
 
     emit(this, 'is-render', { layout, svg: this.svg });
   }
 
-  #buildLegend(layout, theme) {
+  #buildLegend(layout: StateLayout, theme: DiagramTheme): void {
     const g = svgEl('g', { class: 'st-legend' });
-    layout.groups.forEach((grp, gi: number) => {
+    const groups = layout.groups ?? [];
+    groups.forEach((grp, gi: number) => {
       const ly = (layout.subtitleY || layout.titleY || 22) + 18 + gi * 16;
       const color = tkHueToHex(grp.hue) ?? theme.accent;
       const off = this.#hiddenGroups.has(grp.id);
@@ -194,7 +225,7 @@ class IsStateDiagram extends DiagramElementBase {
     this.svg.appendChild(g);
   }
 
-  #buildEdges(layout, theme) {
+  #buildEdges(layout: StateLayout, theme: DiagramTheme): void {
     for (const e of layout.edges) {
       const color = edgeStrokeHex(e.hue, theme.accent);
       const g = svgEl('g', { class: 'st-trans' });
@@ -208,18 +239,27 @@ class IsStateDiagram extends DiagramElementBase {
       g.appendChild(path);
 
       // Punta orientada por el último tramo REAL del path.
-      g.appendChild(svgArrowHead({
+      // `svgArrowHead` está tipado en `_shared/diagram-arrow.js` con campos
+      // `any` (firma heredada); casteamos para pasar nuestro objeto tipado.
+      // `className` infiere `null | undefined`; añadimos la clase al resultado.
+      const head = (svgArrowHead as unknown as (opts: {
+        d: string; tip: { x: number; y: number }; color: string;
+        len?: number; halfWidth?: number;
+      }) => SVGElement)({
         d: e.path,
         tip: { x: e.arrowTipX, y: e.arrowTipY },
         color,
         len: 8,
         halfWidth: 4,
-        className: 'st-trans__head',
-      }));
+      });
+      head.classList.add('st-trans__head');
+      g.appendChild(head);
 
       if (e.label) {
         const pad = 4;
-        const w = e.labelW ?? (e.label.length * 5.6 + pad * 2);
+        // `labelW` no está declarado en StateLayoutTransition; el spec lo añade
+        // opcionalmente. Cast para preservar el comportamiento runtime.
+        const w = (e as { labelW?: number }).labelW ?? (e.label.length * 5.6 + pad * 2);
         g.appendChild(svgEl('rect', {
           x: e.labelX - w / 2, y: e.labelY - 8, width: w, height: 16, rx: 4,
           fill: edgeChipFill(e.hue), class: 'st-trans__chip',
@@ -233,11 +273,11 @@ class IsStateDiagram extends DiagramElementBase {
       }
 
       this.svg.appendChild(g);
-      this.#edgeNodes.set(e.id, { e, g, path });
+      this.#edgeNodes.set(e.id, { e, g: g as SVGGElement });
     }
   }
 
-  #buildNodes(layout, theme) {
+  #buildNodes(layout: StateLayout, theme: DiagramTheme): void {
     for (const n of layout.nodes) {
       const color = (n.hue != null && tkHueToHex(n.hue)) || theme.accent;
       const g = svgEl('g', { class: 'st-node' });
@@ -270,20 +310,25 @@ class IsStateDiagram extends DiagramElementBase {
         });
         const stHasMd = /[*`\[]/.test(n.label) || n.label.includes('{{');
         if (stHasMd) {
-          t.setAttribute('x', n.x + n.w / 2);
-          t.setAttribute('y', n.y + n.h / 2 + 4);
+          t.setAttribute('x', String(n.x + n.w / 2));
+          t.setAttribute('y', String(n.y + n.h / 2 + 4));
           t.setAttribute('text-anchor', 'middle');
           t.innerHTML = inlineMdWeb(n.label);
         } else {
+          // `overflow` no está declarado en StateLayoutNode; el spec lo añade
+          // opcionalmente en runtime. Cast para preservar el comportamiento.
+          const rawOverflow = (n as { overflow?: string }).overflow;
+          const overflow: 'grow' | 'ellipsis' =
+            (rawOverflow === 'grow' || rawOverflow === 'ellipsis') ? rawOverflow : 'grow';
           const stresult = wrapText({
             text: n.label,
             maxWidth: Math.max(n.w - 12, 8),
             maxHeight: n.h - 4,
             fontSize: 11,
             fontFamily: 'Tahoma,Arial,sans-serif',
-            overflow: n.overflow ?? 'grow',
+            overflow,
           });
-          const sttspans = buildTspans(
+          const sttspans: TSpanSpec[] = buildTspans(
             stresult.lines,
             n.x, n.y, n.w, n.h,
             'middle', 11, 1.2,
@@ -301,17 +346,17 @@ class IsStateDiagram extends DiagramElementBase {
       }
 
       this.svg.appendChild(g);
-      this.#nodeNodes.set(n.id, { n, g });
+      this.#nodeNodes.set(n.id, { n, g: g as SVGGElement });
     }
   }
 
   /* ── hover ── */
 
-  #onClick = (e: PointerEvent) => {
+  #onClick = (e: PointerEvent): void => {
     if (this.isViewer) {
-      const item = e.composedPath().find((x) => x?.dataset?.groupId);
+      const item = e.composedPath().find((x: EventTarget | null) => (x as HTMLElement | undefined)?.dataset?.groupId);
       if (item) {
-        emitCancelable(this, 'is-toggle-group', { id: item.dataset.groupId });
+        emitCancelable(this, 'is-toggle-group', { id: (item as HTMLElement).dataset.groupId });
       }
       return;
     }
@@ -325,10 +370,10 @@ class IsStateDiagram extends DiagramElementBase {
     if (!ev.defaultPrevented) this.openOwnViewer('state');
   };
 
-  #onMouseMove = (e: PointerEvent) => {
+  #onMouseMove = (e: PointerEvent): void => {
     if (!this.isViewer) return;
-    const g = e.composedPath().find((n) => n?.dataset?.nodeId);
-    const id = g?.dataset.nodeId ?? null;
+    const g = e.composedPath().find((n: EventTarget | null) => (n as HTMLElement | undefined)?.dataset?.nodeId);
+    const id: string | null = (g as HTMLElement | undefined)?.dataset.nodeId ?? null;
     if (id !== this.#hoverId) this.#applyHover(id);
     if (id) {
       const rect = this.wrap.getBoundingClientRect();
@@ -338,12 +383,12 @@ class IsStateDiagram extends DiagramElementBase {
     }
   };
 
-  #onMouseLeave = () => {
+  #onMouseLeave = (_e: MouseEvent): void => {
     if (!this.isViewer) return;
     this.#applyHover(null);
   };
 
-  #applyHover(id) {
+  #applyHover(id: string | null): void {
     this.#hoverId = id;
     const entry = id ? this.#nodeNodes.get(id) : null;
 

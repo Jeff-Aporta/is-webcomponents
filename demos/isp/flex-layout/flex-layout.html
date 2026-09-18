@@ -1,0 +1,88 @@
+<!doctype html>
+<html lang="es" class="theme-dark" data-theme="dark">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>&lt;is-flex-layout&gt; · is-webcomponents</title>
+<meta name="description" content="Contenedor flex declarativo: dirección, gap, justificación, alineación y crecimiento por atributos." />
+<style>
+  html, body { margin: 0; padding: 0; min-height: 100%; background: #0c1118; color: #e2e8f0; font-family: ui-sans-serif, system-ui, sans-serif; }
+  body { display: grid; grid-template-rows: auto 1fr; min-height: 100vh; }
+  header {
+    padding: 16px 20px; border-bottom: 1px solid rgba(255,255,255,0.1);
+    display: flex; align-items: center; gap: 14px; background: #0f1620;
+  }
+  header h1 { font-size: 16px; font-weight: 700; margin: 0; }
+  header p { font-size: 12px; color: #94a3b8; margin: 0; }
+  header .spacer { flex: 1; }
+  main { display: grid; gap: 24px; padding: 20px; max-width: 1100px; margin: 0 auto; width: 100%; box-sizing: border-box; }
+  section h2 { font-size: 14px; font-weight: 600; margin: 0 0 8px; color: #94a3b8; }
+  .box { background: rgba(255,255,255,0.05); border: 1px dashed rgba(255,255,255,0.15); border-radius: 4px; padding: 8px; }
+  .badge { display: inline-block; padding: 2px 8px; border-radius: 999px; background: rgba(56,189,248,0.15); color: #38bdf8; font: 11px ui-monospace, Menlo, Consolas, monospace; }
+  is-flex-layout { border: 1px solid rgba(255,255,255,0.1); border-radius: 6px; padding: 8px; background: rgba(255,255,255,0.02); }
+  is-flex-layout:not(:defined) { visibility: hidden; }
+</style>
+<script type="module">
+  await import('../../../dist/cdn/isp/flex-layout.min.js');
+  await customElements.whenDefined('is-flex-layout');
+
+  document.documentElement.dataset.flexReady = '1';
+</script>
+</head>
+<body>
+<header>
+  <div>
+    <h1>&lt;is-flex-layout&gt; — flex declarativo</h1>
+    <p>Direcciones, gap responsive (0.2 / 0.35 / 0.5rem según ancho), justificación y alineación por atributos.</p>
+  </div>
+  <div class="spacer"></div>
+  <code>is-flex-layout</code>
+</header>
+<main>
+  <section>
+    <h2>Row + gap + between + center</h2>
+    <is-flex-layout gap="0.5rem" justify="between" align="center" style="width: 100%;">
+      <div class="box">A</div>
+      <div class="box">B</div>
+      <div class="box">C</div>
+    </is-flex-layout>
+  </section>
+
+  <section>
+    <h2>Column + wrap</h2>
+    <div style="display: grid; grid-template-columns: 200px 1fr; gap: 16px;">
+      <is-flex-layout id="col" direction="column" gap="0.4rem" wrap>
+        <div class="box">ítem 1</div>
+        <div class="box">ítem 2</div>
+        <div class="box">ítem 3</div>
+        <div class="box">ítem 4</div>
+      </is-flex-layout>
+      <p style="font-size: 13px; color: #94a3b8;">La dirección se controla con <code>direction="column"</code> y <code>wrap</code> permite múltiples líneas si el contenedor se estrecha.</p>
+    </div>
+  </section>
+
+  <section>
+    <h2>Grow + max-width</h2>
+    <is-flex-layout gap="1rem" align="center" style="width: 100%;">
+      <div class="box" style="min-width: 6rem;">Logo</div>
+      <is-flex-layout id="grow" grow gap="0.5rem" max-width="40rem">
+        <div class="box">Campo 1</div>
+        <div class="box">Campo 2</div>
+        <div class="box">Campo 3</div>
+      </is-flex-layout>
+      <div class="box">Acción</div>
+    </is-flex-layout>
+  </section>
+
+  <section>
+    <h2>Responsive gap (data-sizew)</h2>
+    <p style="font-size: 12px; color: #94a3b8;">Ajusta el ancho del navegador para ver el gap cambiar entre xs / sm / md+.</p>
+    <is-flex-layout style="resize: horizontal; overflow: auto; width: 80%; min-width: 16rem;" align="center">
+      <div class="box">uno</div>
+      <div class="box">dos</div>
+      <div class="box">tres</div>
+    </is-flex-layout>
+  </section>
+</main>
+</body>
+</html>

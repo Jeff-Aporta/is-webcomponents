@@ -1,0 +1,155 @@
+<!doctype html>
+<html lang="es" class="theme-dark" data-theme="dark">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>Demo de <is-breadcrumb> · is-webcomponents</title>
+<meta name="description" content="Landmark de navegación tipo migas de pan: contenedor con aria-label, separador por slot, items con href / current / icon." />
+<style>
+  html, body { margin: 0; padding: 0; min-height: 100%; background: #0c1118; color: #e2e8f0; font-family: ui-sans-serif, system-ui, sans-serif; }
+  body { display: grid; grid-template-rows: auto 1fr auto; }
+  header {
+    padding: 16px 20px; border-bottom: 1px solid rgba(255,255,255,0.1);
+    background: #0f1620;
+  }
+  header h1 { font-size: 16px; font-weight: 700; margin: 0; }
+  header p { font-size: 12px; color: #94a3b8; margin: 4px 0 0 0; }
+  main {
+    padding: 24px 20px; display: grid; gap: 22px;
+    grid-template-columns: 1fr;
+    max-width: 980px; width: 100%;
+  }
+  section {
+    background: #0f1620; border: 1px solid rgba(255,255,255,0.1);
+    border-radius: 8px; padding: 18px;
+  }
+  section h2 {
+    font-size: 11px; text-transform: uppercase; letter-spacing: 0.08em;
+    margin: 0 0 12px 0; color: #94a3b8; font-weight: 600;
+  }
+  section .desc { font-size: 12px; color: #94a3b8; margin: 0 0 14px 0; }
+  section code { background: rgba(255,255,255,0.06); padding: 1px 5px; border-radius: 3px; font: 11px ui-monospace, Menlo, Consolas, monospace; }
+  is-breadcrumb { display: block; }
+  is-breadcrumb:not(:defined) { visibility: hidden; }
+  is-breadcrumb-item:not(:defined) { visibility: hidden; }
+  footer {
+    padding: 12px 20px; border-top: 1px solid rgba(255,255,255,0.1);
+    background: #0f1620; font-size: 11px; color: #94a3b8;
+  }
+  footer code { background: rgba(255,255,255,0.06); padding: 1px 5px; border-radius: 3px; font: 11px ui-monospace, Menlo, Consolas, monospace; }
+</style>
+<script type="module">
+  // Carga desde el bundle pre-construido. Funciona con cualquier servidor
+  // estático (incluido VS Code Live Server), no solo con dev server.
+  await import('../../../dist/cdn/navigation/breadcrumb.min.js');
+  await import('../../../dist/cdn/navigation/breadcrumb-item.min.js');
+  await customElements.whenDefined('is-breadcrumb');
+  await customElements.whenDefined('is-breadcrumb-item');
+
+  // Helper: crea un breadcrumb-item con href/icon opcionales y texto slot default.
+  function makeItem(text, { href, icon, target, rel, current } = {}) {
+    const item = document.createElement('is-breadcrumb-item');
+    if (href !== undefined) item.setAttribute('href', href);
+    if (icon) item.setAttribute('icon', icon);
+    if (target) item.setAttribute('target', target);
+    if (rel) item.setAttribute('rel', rel);
+    // current se modela con href=""; lo seteamos cuando aplique.
+    if (current) item.setAttribute('href', '');
+    item.textContent = text;
+    return item;
+  }
+
+  // (1) Básico: ruta Home / Productos / Categoría / Item
+  const basic = document.createElement('is-breadcrumb');
+  basic.setAttribute('label', 'Ruta de página');
+  basic.appendChild(makeItem('Inicio', { href: '/', icon: 'mdi:home' }));
+  basic.appendChild(makeItem('Productos', { href: '/productos' }));
+  basic.appendChild(makeItem('Electrónica', { href: '/productos/electronica' }));
+  basic.appendChild(makeItem('Smart TVs', { current: true }));
+  document.getElementById('basic').appendChild(basic);
+
+  // (2) Label custom en el nav (migas en inglés)
+  const en = document.createElement('is-breadcrumb');
+  en.setAttribute('label', 'Breadcrumb');
+  en.appendChild(makeItem('Home', { href: '/en' }));
+  en.appendChild(makeItem('Docs', { href: '/en/docs' }));
+  en.appendChild(makeItem('Navigation', { current: true }));
+  document.getElementById('en').appendChild(en);
+
+  // (3) Items sin href (SPA: el dev maneja el routing por evento click)
+  const spa = document.createElement('is-breadcrumb');
+  spa.setAttribute('label', 'Navegación SPA');
+  spa.appendChild(makeItem('Panel'));
+  spa.appendChild(makeItem('Usuarios'));
+  spa.appendChild(makeItem('Detalle'));
+  document.getElementById('spa').appendChild(spa);
+
+  // (4) Separator custom (override del chevron por defecto)
+  const sep = document.createElement('is-breadcrumb');
+  sep.setAttribute('label', 'Ruta con separador slash');
+  const sepOverride = document.createElement('span');
+  sepOverride.setAttribute('slot', 'separator');
+  sepOverride.textContent = '/';
+  sepOverride.style.cssText = 'color:#94a3b8;font-size:11px;padding:0 4px;';
+  sep.appendChild(sepOverride);
+  sep.appendChild(makeItem('Docs', { href: '/docs' }));
+  sep.appendChild(makeItem('API', { href: '/docs/api' }));
+  sep.appendChild(makeItem('Auth', { current: true }));
+  document.getElementById('separator').appendChild(sep);
+
+  // (5) target=_blank en un item (link externo)
+  const target = document.createElement('is-breadcrumb');
+  target.setAttribute('label', 'Ruta con link externo');
+  target.appendChild(makeItem('Docs', { href: '/docs' }));
+  target.appendChild(makeItem('API externa', { href: 'https://example.com/api', target: '_blank', rel: 'noopener' }));
+  target.appendChild(makeItem('Referencia', { current: true }));
+  document.getElementById('target').appendChild(target);
+
+  // Log de clicks en items (útil para tests).
+  window.addEventListener('click', (e) => {
+    const item = e.target.closest('is-breadcrumb-item');
+    if (item) {
+      console.log('[breadcrumb] click', item.getAttribute('href') ?? '(none)');
+    }
+  });
+
+  document.documentElement.dataset.breadcrumbReady = '1';
+</script>
+</head>
+<body>
+<header>
+  <h1>Demo — <code>&lt;is-breadcrumb&gt;</code> y <code>&lt;is-breadcrumb-item&gt;</code></h1>
+  <p>Landmark <code>&lt;nav&gt;</code> con <code>aria-label</code>, separador configurable y soporte para <code>href</code>, <code>target</code>, <code>aria-current="page"</code>.</p>
+</header>
+<main>
+  <section>
+    <h2>Básico</h2>
+    <p class="desc">Ruta típica con un item <em>current</em> (<code>href=""</code>) y un icono en el primer paso.</p>
+    <div id="basic"></div>
+  </section>
+  <section>
+    <h2>Label custom</h2>
+    <p class="desc">El atributo <code>label</code> sobrescribe el <code>aria-label</code> del nav (default: "Ruta").</p>
+    <div id="en"></div>
+  </section>
+  <section>
+    <h2>Items sin href</h2>
+    <p class="desc">Sin <code>href</code>, el item se renderiza como <code>&lt;span&gt;</code> (el host controla la navegación vía eventos).</p>
+    <div id="spa"></div>
+  </section>
+  <section>
+    <h2>Separator override</h2>
+    <p class="desc">Slot <code>separator</code> reemplaza el <code>chevron-right</code> por defecto.</p>
+    <div id="separator"></div>
+  </section>
+  <section>
+    <h2>Target / rel</h2>
+    <p class="desc">Item con <code>target="_blank"</code> y <code>rel="noopener"</code> para links externos.</p>
+    <div id="target"></div>
+  </section>
+</main>
+<footer>
+  Estado: <code>customElements.whenDefined('is-breadcrumb')</code> resuelto. Landmark con <code>aria-label</code>.
+</footer>
+</body>
+</html>

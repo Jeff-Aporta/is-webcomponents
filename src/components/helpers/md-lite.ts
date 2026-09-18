@@ -48,7 +48,7 @@ function isSpecialLine(line: string) {
  * apertura, se lee hasta el `</tag>` que cierra (con profundidad); si no,
  * se mantiene el fallback “hasta línea vacía”.
  */
-function consumeRawHtmlBlock(lines, start: number) {
+function consumeRawHtmlBlock(lines: string[], start: number): { html: string; next: number } {
   const first = lines[start];
 
   if (HTML_COMMENT_OPEN.test(first)) {
@@ -98,10 +98,10 @@ function consumeRawHtmlBlock(lines, start: number) {
 
 /** Formato inline: código, imagen, enlace, negrita, cursiva (en ese orden,
  *  para que el contenido de un código no se reprocese como otro formato). */
-function inline(text) {
+function inline(text: string): string {
   let s = escapeHtml(text);
-  const codeSpans = [];
-  s = s.replace(/`([^`]+)`/g, (_m, code) => {
+  const codeSpans: string[] = [];
+  s = s.replace(/`([^`]+)`/g, (_m: string, code: string) => {
     const token = `\u0000C${codeSpans.length}\u0000`;
     codeSpans.push(code);
     return token;
@@ -112,12 +112,12 @@ function inline(text) {
   s = s.replace(/__([^_]+)__/g, '<strong>$1</strong>');
   s = s.replace(/\*([^*]+)\*/g, '<em>$1</em>');
   s = s.replace(/(?<![\w])_([^_]+)_(?![\w])/g, '<em>$1</em>');
-  s = s.replace(/\u0000C(\d+)\u0000/g, (_m, i) => `<code>${codeSpans[Number(i)]}</code>`);
+  s = s.replace(/\u0000C(\d+)\u0000/g, (_m: string, i: string) => `<code>${codeSpans[Number(i)]}</code>`);
   return s;
 }
 
 /** Une líneas de un párrafo: salto simple → `<br>`; "  \n" también hard-break. */
-function joinParagraphLines(lines) {
+function joinParagraphLines(lines: string[]): string {
   let out = '';
   for (let i = 0; i < lines.length; i += 1) {
     const line = lines[i];
@@ -127,14 +127,14 @@ function joinParagraphLines(lines) {
   return out;
 }
 
-function splitTableRow(line: string) {
+function splitTableRow(line: string): string[] {
   let s = line.trim();
   if (s.startsWith('|')) s = s.slice(1);
   if (s.endsWith('|')) s = s.slice(0, -1);
   return s.split('|').map((c: string) => c.trim());
 }
 
-function parseAligns(sepLine) {
+function parseAligns(sepLine: string): string[] {
   return splitTableRow(sepLine).map((c: string) => {
     const left = c.startsWith(':');
     const right = c.endsWith(':');
@@ -145,8 +145,8 @@ function parseAligns(sepLine) {
   });
 }
 
-function renderTable(header, aligns, rows) {
-  const cell = (tag, c, idx) => {
+function renderTable(header: string[], aligns: string[], rows: string[][]): string {
+  const cell = (tag: string, c: string, idx: number): string => {
     const align = aligns[idx] ? ` style="text-align:${aligns[idx]}"` : '';
     return `<${tag}${align}>${inline(c)}</${tag}>`;
   };
@@ -155,10 +155,10 @@ function renderTable(header, aligns, rows) {
   return `<div class="md-table-wrap"><table><thead>${thead}</thead><tbody>${tbody}</tbody></table></div>`;
 }
 
-function parseList(lines, start) {
+function parseList(lines: string[], start: number): { html: string; next: number } {
   const ordered = OL_ITEM.test(lines[start]);
   const itemRe = ordered ? OL_ITEM : UL_ITEM;
-  const items = [];
+  const items: string[] = [];
   let i = start;
   while (i < lines.length) {
     const m = lines[i].match(itemRe);
@@ -175,11 +175,11 @@ function parseList(lines, start) {
  * @param {string} src
  * @returns {string}
  */
-export function mdToHtml(src: string) {
+export function mdToHtml(src: string): string {
   const text = String(src ?? '').replace(/\r\n/g, '\n');
   if (!text.trim()) return '';
   const lines = text.split('\n');
-  const out = [];
+  const out: string[] = [];
   let i = 0;
 
   while (i < lines.length) {

@@ -1,13 +1,66 @@
 import { adoptCss, defineElement, emit, emitCancelable } from '../../core/element.js';
 import { DiagramElementBase } from '../_shared/diagram-element-base.js';
 import { resolveBlockSpec, computeBlockLayout, blockShapePath } from './block-spec.js';
+import type { BlockLayout, BlockSpec } from './block-spec.js';
+// Tipos internos del spec (no exportados) que el renderer necesita; los
+// redefinimos localmente para no tocar la firma del spec.
+interface BlockSpecGroup {
+  id: string;
+  name: string;
+  hue: number;
+}
+interface BlockSpecBlock {
+  id: string;
+  label: string;
+  shape: 'rect' | 'round';
+  icon?: string;
+  hue?: number;
+  group?: string;
+  span: number;
+}
+interface BlockSpecEdge {
+  id: string;
+  from: string;
+  to: string;
+  label?: string;
+}
+interface BlockLayoutBlock {
+  id: string;
+  x: number;
+  y: number;
+  w: number;
+  h: number;
+  row: number;
+  col: number;
+  label: string;
+  shape: 'rect' | 'round';
+  icon?: string;
+  hue?: number;
+  group?: string;
+}
+interface BlockLayoutEdge {
+  id: string;
+  from: string;
+  to: string;
+  label?: string;
+  path: string;
+  arrowTipX: number;
+  arrowTipY: number;
+  arrowAngle: number;
+  labelX: number;
+  labelY: number;
+  hue?: number;
+}
 import { sequenceThemeDark, sequenceThemeLight } from './sequence-spec.js';
 import { SequenceTurtle } from './sequence-turtle.js';
+import type { PathTurtle, TurtleTheme } from '../_shared/path-turtle.js';
 import { tkHueToHex } from '../_shared/tk-hue.js';
 import { edgeStrokeHex, edgeChipFill, edgeChipText } from '../_shared/diagram-edge-style.js';
+import type { DiagramTheme } from './diagram-types.js';
 import { inlineMdWeb } from '../_shared/tk-inline-md.js';
 import { svgIconGroup } from '../_shared/tk-icon-inline.js';
 import { wrapText, buildTspans } from '../_shared/diagram-text-wrap.js';
+import type { TSpanSpec } from '../_shared/diagram-text-wrap.js';
 import { registerDiagramKind } from './diagram-kinds.js';
 import { svgEl } from '../_shared/svg-chart-engine.js';
 import { svgArrowHead } from '../_shared/diagram-arrow.js';
@@ -33,13 +86,35 @@ import { svgArrowHead } from '../_shared/diagram-arrow.js';
 
 const SVG_NS = 'http://www.w3.org/2000/svg';
 
+/** Estado del callback `onState` del motor de tortuga (path-turtle). */
+interface TurtleState {
+  playing: boolean;
+  idx: number;
+  total: number;
+  replay: number;
+}
+
+/** Bloque cacheado en el SVG para aplicar hover sin reconstruir el DOM. */
+interface BlockNodeEntry {
+  b: BlockLayoutBlock;
+  g: SVGGElement;
+  box: SVGPathElement;
+}
+
+/** Arista cacheada en el SVG para aplicar hover sin reconstruir el DOM. */
+interface EdgeNodeEntry {
+  e: BlockLayoutEdge;
+  g: SVGGElement;
+  path: SVGPathElement;
+}
+
 class IsBlockDiagram extends DiagramElementBase {
-  #theme = null;
-  #turtle = null;
-  #hiddenGroups = new Set();
-  #blockNodes = new Map();
-  #edgeNodes = new Map();
-  #hoverId = null;
+  #theme: DiagramTheme | null = null;
+  #turtle: PathTurtle | null = null;
+  #hiddenGroups: Set<string> = new Set<string>();
+  #blockNodes: Map<string, BlockNodeEntry> = new Map();
+  #edgeNodes: Map<string, EdgeNodeEntry> = new Map();
+  #hoverId: string | null = null;
 
   constructor() {
     super();
@@ -47,31 +122,31 @@ class IsBlockDiagram extends DiagramElementBase {
     adoptCss(this.shadowRoot!, import.meta.url);
   }
 
-  onDiagramConnected() {
-    this.wrap.addEventListener('mousemove', this.#onMouseMove);
-    this.wrap.addEventListener('mouseleave', this.#onMouseLeave);
-    this.wrap.addEventListener('click', this.#onClick);
+  onDiagramConnected(): void {
+    this.wrap.addEventListener('mousemove', this.#onMouseMove as EventListener);
+    this.wrap.addEventListener('mouseleave', this.#onMouseLeave as EventListener);
+    this.wrap.addEventListener('click', this.#onClick as EventListener);
   }
 
-  onDiagramDisconnected() {
+  onDiagramDisconnected(): void {
     this.#turtle?.destroy();
     this.#turtle = null;
-    this.wrap.removeEventListener('mousemove', this.#onMouseMove);
-    this.wrap.removeEventListener('mouseleave', this.#onMouseLeave);
-    this.wrap.removeEventListener('click', this.#onClick);
+    this.wrap.removeEventListener('mousemove', this.#onMouseMove as EventListener);
+    this.wrap.removeEventListener('mouseleave', this.#onMouseLeave as EventListener);
+    this.wrap.removeEventListener('click', this.#onClick as EventListener);
   }
 
-  onPayloadChanged() { this.#hiddenGroups = new Set(); }
+  onPayloadChanged(): void { this.#hiddenGroups = new Set(); }
 
-  get turtle() { return this.#turtle; }
-  get hiddenGroups() { return this.#hiddenGroups; }
-  set hiddenGroups(v) {
-    this.#hiddenGroups = v instanceof Set ? v : new Set(v || []);
+  get turtle(): PathTurtle | null { return this.#turtle; }
+  get hiddenGroups(): Set<string> { return this.#hiddenGroups; }
+  set hiddenGroups(v: Set<string> | Iterable<string> | null | undefined) {
+    this.#hiddenGroups = v instanceof Set ? v : new Set(v ?? []);
     this.queueRender();
   }
 
-  renderDiagram() {
-    const spec = resolveBlockSpec(this.payload ?? {});
+  renderDiagram(): void {
+    const spec: BlockSpec | null = resolveBlockSpec(this.payload ?? {});
     this.spec = spec;
     if (!spec) {
       this.svg.innerHTML = '';
@@ -82,9 +157,9 @@ class IsBlockDiagram extends DiagramElementBase {
 
     // Ocultar un grupo quita sus bloques y las aristas que los tocan.
     const hidden = this.#hiddenGroups;
-    let visible = spec;
+    let visible: BlockSpec = spec;
     if (hidden.size) {
-      const blocks = spec.blocks.filter((b) => !b.group || !hidden.has(b.group));
+      const blocks: BlockSpecBlock[] = spec.blocks.filter((b) => !b.group || !hidden.has(b.group));
       const keep = new Set(blocks.map((b) => b.id));
       visible = { ...spec, blocks, edges: spec.edges.filter((e) => keep.has(e.from) && keep.has(e.to)) };
     }
@@ -95,17 +170,17 @@ class IsBlockDiagram extends DiagramElementBase {
     }
 
     const dark = this.isDarkTheme;
-    const theme = dark ? sequenceThemeDark() : sequenceThemeLight();
+    const theme: DiagramTheme = dark ? sequenceThemeDark() : sequenceThemeLight();
     this.#theme = theme;
     this.syncThemeAttr();
 
-    const layout = computeBlockLayout(visible);
+    const layout: BlockLayout = computeBlockLayout(visible);
     this.layout = layout;
     this.#buildSvg(layout, theme);
     this.wrap.classList.toggle('is-viewer', this.isViewer);
   }
 
-  #buildSvg(layout, theme) {
+  #buildSvg(layout: BlockLayout, theme: DiagramTheme): void {
     const { width: W, height: H } = layout;
     this.svg.setAttribute('viewBox', `0 0 ${W} ${H}`);
     this.svg.setAttribute('preserveAspectRatio', 'xMidYMid meet');
@@ -163,24 +238,25 @@ class IsBlockDiagram extends DiagramElementBase {
     const turtleGroup = svgEl('g');
     this.svg.appendChild(turtleGroup);
     this.#turtle?.destroy();
-    this.#turtle = new SequenceTurtle(turtleGroup);
+    this.#turtle = new SequenceTurtle(turtleGroup as unknown as HTMLElement);
     this.#turtle.setData({
       messages: layout.edges.map((e, i: number) => ({
         path: e.path, step: i + 1, log: e.label || '', groupHue: undefined,
       })),
-      theme,
+      theme: theme as unknown as TurtleTheme,
       viewW: W,
       viewH: H,
       autoLoop: this.isViewer,
-      onState: (state) => emit(this, 'is-turtle-state', state),
+      onState: (state: TurtleState) => emit(this, 'is-turtle-state', state),
     });
 
     emit(this, 'is-render', { layout, svg: this.svg });
   }
 
-  #buildLegend(layout, theme) {
+  #buildLegend(layout: BlockLayout, theme: DiagramTheme): void {
     const g = svgEl('g', { class: 'block-legend' });
-    layout.groups.forEach((grp, gi: number) => {
+    const groups = layout.groups ?? [];
+    groups.forEach((grp, gi: number) => {
       const ly = (layout.subtitleY || layout.titleY || 22) + 20 + gi * 20;
       const color = tkHueToHex(grp.hue) ?? theme.accent;
       const off = this.#hiddenGroups.has(grp.id);
@@ -214,10 +290,10 @@ class IsBlockDiagram extends DiagramElementBase {
     this.svg.appendChild(g);
   }
 
-  #buildEdges(layout, theme) {
+  #buildEdges(layout: BlockLayout, theme: DiagramTheme): void {
     const dark = this.wrap.dataset.theme === 'dark';
     const haloColor = dark ? 'rgb(0 0 0 / 0.45)' : 'rgb(15 23 42 / 0.18)';
-    for (const e of layout.edges) {
+    for (const e of layout.edges as BlockLayoutEdge[]) {
       const color = edgeStrokeHex(e.hue, theme.accent);
       const g = svgEl('g', { class: 'block-edge' });
       g.dataset.edgeId = e.id;
@@ -239,19 +315,25 @@ class IsBlockDiagram extends DiagramElementBase {
       // La orientación sale del último tramo REAL del path: el ángulo del
       // layout supone el lado de entrada planificado, que no siempre es por
       // donde el A* acaba llegando.
-      const head = svgArrowHead({
+      // Cast: svgArrowHead tiene firma heredada con `any`; añadimos la clase
+      // CSS al resultado en vez de pasarla por el parámetro tipado a null.
+      const head = (svgArrowHead as unknown as (opts: {
+        d: string; tip: { x: number; y: number }; color: string;
+        len?: number; halfWidth?: number;
+      }) => SVGElement)({
         d: e.path,
         tip: { x: e.arrowTipX, y: e.arrowTipY },
         color,
         len: 9,
         halfWidth: 4.5,
-        className: 'block-edge__head',
       });
+      head.classList.add('block-edge__head');
       g.appendChild(head);
 
       if (e.label) {
         const pad = 6;
-        const w = e.labelW ?? (e.label.length * 6 + pad * 2);
+        // `labelW` no está declarado en BlockLayoutEdge; cast para leer.
+        const w = (e as { labelW?: number }).labelW ?? (e.label.length * 6 + pad * 2);
         const chipH = 18;
         const chipY = e.labelY - chipH / 2;
         // Halo del chip para que la etiqueta flote sobre la arista.
@@ -275,14 +357,14 @@ class IsBlockDiagram extends DiagramElementBase {
       }
 
       this.svg.appendChild(g);
-      this.#edgeNodes.set(e.id, { e, g, path });
+      this.#edgeNodes.set(e.id, { e, g: g as SVGGElement, path: path as SVGPathElement });
     }
   }
 
-  #buildBlocks(layout, theme) {
+  #buildBlocks(layout: BlockLayout, theme: DiagramTheme): void {
     const dark = this.wrap.dataset.theme === 'dark';
     const fillId = dark ? 'bd-block-fill' : 'bd-block-fill-light';
-    for (const b of layout.blocks) {
+    for (const b of layout.blocks as BlockLayoutBlock[]) {
       const color = (b.hue != null && tkHueToHex(b.hue)) || theme.accent;
       const g = svgEl('g', { class: 'block-node' });
       g.dataset.blockId = b.id;
@@ -318,7 +400,7 @@ class IsBlockDiagram extends DiagramElementBase {
           rx: 6, fill: color, opacity: 0.14,
         });
         g.appendChild(iconBg);
-        g.appendChild(svgIconGroup(b.icon, {
+        g.appendChild(svgIconGroup(b.icon ?? '', {
           x: b.x + 15, y: iconY, size: iconSize, hue: b.hue,
         }));
       }
@@ -342,15 +424,19 @@ class IsBlockDiagram extends DiagramElementBase {
         g.appendChild(fo);
       } else {
         // Wrap con el helper compartido: respeta `b.overflow`.
+        // `overflow` no está declarado en BlockLayoutBlock; cast para leer.
+        const rawOverflow = (b as { overflow?: string }).overflow;
+        const overflow: 'grow' | 'ellipsis' =
+          (rawOverflow === 'grow' || rawOverflow === 'ellipsis') ? rawOverflow : 'grow';
         const result = wrapText({
           text: b.label,
           maxWidth: Math.max(textRight - textLeft, 8),
           maxHeight: b.h,
           fontSize: 12,
           fontFamily: 'Inter,ui-sans-serif,system-ui,sans-serif',
-          overflow: b.overflow ?? 'grow',
+          overflow,
         });
-        const tspans = buildTspans(
+        const tspans: TSpanSpec[] = buildTspans(
           result.lines,
           b.x, b.y, b.w, b.h,
           'middle', 12, 1.25,
@@ -372,17 +458,17 @@ class IsBlockDiagram extends DiagramElementBase {
       }
 
       this.svg.appendChild(g);
-      this.#blockNodes.set(b.id, { b, g, box });
+      this.#blockNodes.set(b.id, { b, g: g as SVGGElement, box: box as SVGPathElement });
     }
   }
 
   /* ── hover ── */
 
-  #onClick = (e: PointerEvent) => {
+  #onClick = (e: PointerEvent): void => {
     if (this.isViewer) {
-      const item = e.composedPath().find((x) => x?.dataset?.groupId);
+      const item = e.composedPath().find((x: EventTarget | null) => (x as HTMLElement | undefined)?.dataset?.groupId);
       if (item) {
-        emitCancelable(this, 'is-toggle-group', { id: item.dataset.groupId });
+        emitCancelable(this, 'is-toggle-group', { id: (item as HTMLElement).dataset.groupId });
       }
       return;
     }
@@ -396,10 +482,10 @@ class IsBlockDiagram extends DiagramElementBase {
     if (!ev.defaultPrevented) this.openOwnViewer('blockDiagram');
   };
 
-  #onMouseMove = (e: PointerEvent) => {
+  #onMouseMove = (e: PointerEvent): void => {
     if (!this.isViewer) return;
-    const g = e.composedPath().find((n) => n?.dataset?.blockId);
-    const id = g?.dataset.blockId ?? null;
+    const g = e.composedPath().find((n: EventTarget | null) => (n as HTMLElement | undefined)?.dataset?.blockId);
+    const id: string | null = (g as HTMLElement | undefined)?.dataset.blockId ?? null;
     if (id !== this.#hoverId) this.#applyHover(id);
     if (id) {
       const rect = this.wrap.getBoundingClientRect();
@@ -409,12 +495,12 @@ class IsBlockDiagram extends DiagramElementBase {
     }
   };
 
-  #onMouseLeave = () => {
+  #onMouseLeave = (_e: MouseEvent): void => {
     if (!this.isViewer) return;
     this.#applyHover(null);
   };
 
-  #applyHover(id) {
+  #applyHover(id: string | null): void {
     this.#hoverId = id;
     const entry = id ? this.#blockNodes.get(id) : null;
 
@@ -422,7 +508,7 @@ class IsBlockDiagram extends DiagramElementBase {
       const active = blockId === id;
       node.g.classList.toggle('is-active', active);
       node.g.classList.toggle('is-dim', !!id && !active);
-      node.box.setAttribute('stroke-width', active ? 2.4 : 1.6);
+      node.box.setAttribute('stroke-width', String(active ? 2.4 : 1.6));
     }
     for (const [, edge] of this.#edgeNodes) {
       const touches = !!id && (edge.e.from === id || edge.e.to === id);

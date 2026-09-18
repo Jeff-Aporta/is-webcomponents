@@ -15,68 +15,109 @@ import {
 import { richTextPlain } from '../_shared/tk-rich-text.js';
 import { resolveTkHue } from '../_shared/tk-hue.js';
 import { diagramHeaderWidth } from '../_shared/diagram-header.js';
+import type { DiagramTheme } from './diagram-types.js';
 
 /** Ancho px estimado de una etiqueta, descontando tokens {{icon}} y sumando su ancho. */
 const ICON_INLINE_W = 16;
-function diagramLabelW(label) {
+function diagramLabelW(label: string): number {
   const plain = richTextPlain(label);
   const icons = countIconTokens(label);
   const est = Math.ceil(plain.length * 6.2) + 24 + icons * ICON_INLINE_W;
   return snapDiagramGrid(Math.min(360, Math.max(72, est)));
 }
 
-const DEFAULT_HUES = [239, 199, 210];
+const DEFAULT_HUES: number[] = [239, 199, 210];
 // Solo iconos presentes en `dist/assets/icons`: uno inexistente deja el avatar
 // vacío (le pasó a `simple-icons:openai`, que no viaja en el kit).
-const DEFAULT_ICONS = ['mdi:account', 'mdi:robot-outline', 'mdi:server', 'mdi:database'];
+const DEFAULT_ICONS: string[] = ['mdi:account', 'mdi:robot-outline', 'mdi:server', 'mdi:database'];
 
 /** Guía editorial: `log` ≤70 caracteres visibles (`**`, `{{iconify}}` no cuentan). Sin recorte automático. */
 export const SEQUENCE_LOG_MAX_VISIBLE = 70;
 
 /** Longitud visible del log — ignora marcado md/html/iconify. */
-export function sequenceLogVisibleLength(raw) {
-  return richTextPlain(raw).length;
+export function sequenceLogVisibleLength(raw: unknown): number {
+  return richTextPlain(raw as string | null | undefined).length;
 }
 
 /** Normaliza `log`: solo trim; el texto debe ser conciso y completo en BD. */
-export function normalizeSequenceLog(raw) {
+export function normalizeSequenceLog(raw: unknown): string | undefined {
   const text = String(raw ?? '').trim();
   return text || undefined;
 }
 
 /** Normaliza `desc`: sin límite de longitud (md/html/iconify/imágenes). */
-export function normalizeSequenceDesc(raw) {
+export function normalizeSequenceDesc(raw: unknown): string | undefined {
   const text = String(raw ?? '').trim();
   return text || undefined;
 }
 
 /** Texto del tooltip hover: `desc` tiene prioridad; `log` solo como fallback. */
-export function sequenceMessageTooltipText(m) {
+export function sequenceMessageTooltipText(m: { description?: unknown; log?: unknown }): string | undefined {
   return normalizeSequenceDesc(m.description) ?? normalizeSequenceLog(m.log);
 }
 
-function asRecord(v) {
-  return v && typeof v === 'object' ? v : {};
+function asRecord(v: unknown): Record<string, unknown> {
+  return v && typeof v === 'object' && !Array.isArray(v) ? (v as Record<string, unknown>) : {};
 }
 
-function readActor(raw, i: number) {
+export interface SequenceActorSpec {
+  id: string;
+  label: string;
+  kind?: 'participant' | 'actor';
+  icon?: string;
+  hue?: number;
+}
+
+export interface SequenceMessageSpec {
+  id: string;
+  from: string;
+  to: string;
+  label: string;
+  log?: string;
+  description?: string;
+  group?: string;
+  kind?: 'self' | 'sync' | 'async' | string;
+  step: number;
+}
+
+export interface SequenceAltSpec {
+  branches: Array<{
+    condition: string;
+    messages: SequenceMessageSpec[];
+  }>;
+}
+
+export interface SequenceResolvedSpec {
+  title?: string;
+  subtitle?: string;
+  actors: SequenceActorSpec[];
+  groups?: Array<{ id: string; name: string; hue: number }>;
+  messages?: SequenceMessageSpec[];
+  preamble?: SequenceMessageSpec[];
+  alt?: SequenceAltSpec;
+  epilogue?: SequenceMessageSpec[];
+}
+
+interface LeadingIconToken { iconId: string; hue?: number; rest: string }
+
+function readActor(raw: Record<string, unknown>, i: number): SequenceActorSpec {
   // Conserva el label COMPLETO (con el sugar) para persistencia round-trip;
   // el ícono líder se extrae al avatar en computeSequenceLayout (display).
   // `name` es alias de `label`: el resto de la categoría nombra así, y un
   // payload con `name` acababa rotulado "Actor 3" sin ningún aviso.
   const rawLabel = String(raw.label ?? raw.name ?? `Actor ${i + 1}`);
-  const leading = extractLeadingIconToken(rawLabel);
+  const leading = extractLeadingIconToken(rawLabel) as LeadingIconToken | null;
   return {
     id: String(raw.id ?? `a${i}`),
     label: rawLabel,
-    kind: raw.kind ?? 'participant',
+    kind: (raw.kind ?? 'participant') as SequenceActorSpec['kind'],
     icon: leading?.iconId ?? String(raw.icon ?? DEFAULT_ICONS[i % DEFAULT_ICONS.length]),
     hue: leading?.hue ?? (raw.hue != null ? resolveTkHue(raw) : DEFAULT_HUES[i % DEFAULT_HUES.length]),
   };
 }
 
-/** @returns {import('./diagram-types.js').DiagramTheme} */
-export function sequenceThemeLight(): import('./diagram-types.js').DiagramTheme {
+/** @returns {DiagramTheme} */
+export function sequenceThemeLight(): DiagramTheme {
   return {
     text: '#1e293b',
     muted: '#64748b',
@@ -93,8 +134,8 @@ export function sequenceThemeLight(): import('./diagram-types.js').DiagramTheme 
   };
 }
 
-/** @returns {import('./diagram-types.js').DiagramTheme} */
-export function sequenceThemeDark(): import('./diagram-types.js').DiagramTheme {
+/** @returns {DiagramTheme} */
+export function sequenceThemeDark(): DiagramTheme {
   return {
     text: '#e2e8f0',
     muted: '#94a3b8',
@@ -110,7 +151,7 @@ export function sequenceThemeDark(): import('./diagram-types.js').DiagramTheme {
   };
 }
 
-function readMessage(raw, fallbackStep) {
+function readMessage(raw: Record<string, unknown>, fallbackStep: number): SequenceMessageSpec {
   const log = normalizeSequenceLog(raw.log);
   const description = normalizeSequenceDesc(raw.desc ?? raw.description);
   const group = String(raw.group ?? '') || undefined;
@@ -127,28 +168,33 @@ function readMessage(raw, fallbackStep) {
     // Sin kind explícito, un mensaje de un actor a SÍ MISMO es un self-loop
     // (contrato del schema); el fallback 'sync' genérico dibujaba un stub
     // degenerado que cruzaba la lifeline hacia atrás.
-    kind: raw.kind ?? (from && from === to ? 'self' : 'sync'),
+    kind: (raw.kind ?? (from && from === to ? 'self' : 'sync')) as SequenceMessageSpec['kind'],
     step: Number(raw.step ?? fallbackStep),
   };
 }
 
-function readGroups(seq) {
-  const raw = seq.groups ?? [];
-  if (!raw.length) return undefined;
-  return raw.map((g, i: number) => ({
-    id: String(g.id ?? `grp-${i}`),
-    name: String(g.name ?? g.label ?? `Grupo ${i + 1}`),
-    hue: resolveTkHue(g, DEFAULT_HUES[i % DEFAULT_HUES.length]),
-  }));
+function readGroups(seq: Record<string, unknown>): Array<{ id: string; name: string; hue: number }> | undefined {
+  const raw = seq.groups;
+  const list = Array.isArray(raw) ? raw : [];
+  if (!list.length) return undefined;
+  return list.map((g, i: number) => {
+    const r = asRecord(g);
+    return {
+      id: String(r.id ?? `grp-${i}`),
+      name: String(r.name ?? r.label ?? `Grupo ${i + 1}`),
+      hue: resolveTkHue(r, DEFAULT_HUES[i % DEFAULT_HUES.length]),
+    };
+  });
 }
 
-export function sequenceSpecFromPayload(payload) {
+export function sequenceSpecFromPayload(payload: unknown): SequenceResolvedSpec | null {
   const p = asRecord(payload);
   const seq = asRecord(p.sequence ?? p);
-  const rawActors = seq.actors ?? [];
-  if (!rawActors.length) return null;
+  const rawActors = seq.actors;
+  if (!Array.isArray(rawActors) || !rawActors.length) return null;
 
-  const actors = rawActors.map(readActor);
+  const actors: SequenceActorSpec[] = rawActors.map((raw, i: number) => readActor(asRecord(raw), i));
+
   // Contador de fallback ÚNICO para todo el spec (nunca se reinicia entre
   // preamble/alt/epilogue): un `i + 1` local por bloque hacía que dos
   // mensajes sin `id`/`step` explícitos en bloques distintos cayeran en el
@@ -156,26 +202,30 @@ export function sequenceSpecFromPayload(payload) {
   // de nodos por id (`#msgNodes`) del componente terminaba reutilizando el
   // nodo cacheado de uno para el hover del otro.
   let ordinal = 0;
-  const nextMessage = (m) => readMessage(m, ++ordinal);
+  const nextMessage = (m: unknown): SequenceMessageSpec => readMessage(asRecord(m), ++ordinal);
 
-  const flatMessages = (seq.messages ?? []).map(nextMessage);
-  const preamble = flatMessages.length
+  const flatMessages: SequenceMessageSpec[] = (Array.isArray(seq.messages) ? seq.messages : []).map(nextMessage);
+  const preamble: SequenceMessageSpec[] = flatMessages.length
     ? flatMessages
-    : (seq.preamble ?? []).map(nextMessage);
+    : (Array.isArray(seq.preamble) ? seq.preamble : []).map(nextMessage);
 
-  let alt;
+  let alt: SequenceAltSpec | undefined;
   const rawAlt = asRecord(seq.alt);
-  const branches = rawAlt.branches ?? [];
+  const branches = Array.isArray(rawAlt.branches) ? rawAlt.branches : [];
   if (branches.length) {
     alt = {
-      branches: branches.map((b) => ({
-        condition: String(b.condition ?? ''),
-        messages: (b.messages ?? []).map(nextMessage),
-      })),
+      branches: branches.map((b) => {
+        const br = asRecord(b);
+        const msgs = Array.isArray(br.messages) ? br.messages : [];
+        return {
+          condition: String(br.condition ?? ''),
+          messages: msgs.map(nextMessage),
+        };
+      }),
     };
   }
 
-  const epilogue = (seq.epilogue ?? []).map(nextMessage);
+  const epilogue: SequenceMessageSpec[] = (Array.isArray(seq.epilogue) ? seq.epilogue : []).map(nextMessage);
 
   return {
     title: String(seq.title ?? p.title ?? ''),
@@ -190,7 +240,7 @@ export function sequenceSpecFromPayload(payload) {
 }
 
 /** Inline `sequence` gana sobre `preset` (editable en TK_DOC JSON). */
-export function resolveSequenceSpec(payload) {
+export function resolveSequenceSpec(payload: unknown): SequenceResolvedSpec | null {
   const inline = sequenceSpecFromPayload(payload);
   if (inline) return inline;
   const preset = String(asRecord(payload).preset ?? '');
@@ -200,8 +250,8 @@ export function resolveSequenceSpec(payload) {
 }
 
 /** Serializa un mensaje para JSON en BD (`log` + `desc`). */
-function sequenceMessageToJson(m) {
-  const row = {
+function sequenceMessageToJson(m: SequenceMessageSpec): Record<string, unknown> {
+  const row: Record<string, unknown> = {
     id: m.id,
     from: m.from,
     to: m.to,
@@ -216,15 +266,15 @@ function sequenceMessageToJson(m) {
 }
 
 /** Serializa actor para BD — icono y tono solo en `label` (sugar iconify). */
-function sequenceActorToJson(a) {
-  const row = { id: a.id, label: a.label };
+function sequenceActorToJson(a: SequenceActorSpec): Record<string, unknown> {
+  const row: Record<string, unknown> = { id: a.id, label: a.label };
   if (a.kind && a.kind !== 'participant') row.kind = a.kind;
   return row;
 }
 
 /** Spec de secuencia → objeto `sequence` listo para persistir en TK_CONTENT. */
-export function sequenceSpecToJson(spec) {
-  const seq = { actors: spec.actors.map(sequenceActorToJson) };
+export function sequenceSpecToJson(spec: SequenceResolvedSpec): Record<string, unknown> {
+  const seq: Record<string, unknown> = { actors: spec.actors.map(sequenceActorToJson) };
   if (spec.title) seq.title = spec.title;
   if (spec.subtitle) seq.subtitle = spec.subtitle;
   if (spec.groups?.length) seq.groups = spec.groups;
@@ -249,8 +299,8 @@ export function sequenceSpecToJson(spec) {
 }
 
 /** Payload TK_DOC con `sequence` materializada (presets expandidos, `log` en mensajes). */
-export function expandSequencePayloadForJson(payload) {
-  const out = { ...payload };
+export function expandSequencePayloadForJson(payload: Record<string, unknown>): Record<string, unknown> {
+  const out: Record<string, unknown> = { ...payload };
   const spec = resolveSequenceSpec(out);
   if (spec) out.sequence = sequenceSpecToJson(spec);
   return out;
@@ -260,12 +310,12 @@ export function expandSequencePayloadForJson(payload) {
  * Payload con los mensajes de los grupos en `hiddenIds` OCULTOS (re-diseña sin esas
  * aristas). Materializa la spec (sin preset). Solo afecta render / `d` / código — no BD.
  */
-export function sequencePayloadHideGroups(payload, hiddenIds) {
+export function sequencePayloadHideGroups(payload: Record<string, unknown>, hiddenIds: Set<string> | null | undefined): Record<string, unknown> {
   if (!hiddenIds || hiddenIds.size === 0) return payload;
   const spec = resolveSequenceSpec(payload);
   if (!spec) return payload;
-  const keep = (m) => !m.group || !hiddenIds.has(m.group);
-  const filtered = {
+  const keep = (m: SequenceMessageSpec): boolean => !m.group || !hiddenIds.has(m.group);
+  const filtered: SequenceResolvedSpec = {
     ...spec,
     messages: spec.messages ? spec.messages.filter(keep) : undefined,
     preamble: spec.preamble ? spec.preamble.filter(keep) : undefined,
@@ -274,13 +324,13 @@ export function sequencePayloadHideGroups(payload, hiddenIds) {
       ? { branches: spec.alt.branches.map((b) => ({ ...b, messages: b.messages.filter(keep) })) }
       : undefined,
   };
-  const out = { ...payload, sequence: sequenceSpecToJson(filtered) };
+  const out: Record<string, unknown> = { ...payload, sequence: sequenceSpecToJson(filtered) };
   delete out.preset;
   return out;
 }
 
 /** Quita `icon`/`hue` sueltos de actores — deben ir solo en el sugar del `label`. */
-export function compactSequenceActorsInPayload(payload) {
+export function compactSequenceActorsInPayload(payload: Record<string, unknown>): Record<string, unknown> {
   const seq = asRecord(payload.sequence);
   const rawActors = seq.actors;
   if (!Array.isArray(rawActors)) return payload;
@@ -288,7 +338,7 @@ export function compactSequenceActorsInPayload(payload) {
     ...payload,
     sequence: {
       ...seq,
-      actors: rawActors.map((raw, i) => {
+      actors: rawActors.map((raw, i: number) => {
         const a = asRecord(raw);
         const spec = readActor(a, i);
         return sequenceActorToJson(spec);
@@ -307,7 +357,7 @@ const LABEL_PAD = 16;
 const CHIP_H = 18;
 
 /** Ancho de la caja del actor según su etiqueta (descuenta tokens {{icon}}). */
-function actorBoxWidth(label, _kind) {
+function actorBoxWidth(label: string, _kind: string): number {
   const plain = richTextPlain(label);
   const icons = countIconTokens(label);
   // Reserva ~50px para el avatar (icono) + paddings, a la izquierda del label.
@@ -316,14 +366,24 @@ function actorBoxWidth(label, _kind) {
   return snapDiagramGrid(Math.min(240, Math.max(96, est)));
 }
 
+interface FlatMessage {
+  m: SequenceMessageSpec;
+  kind: 'self' | 'sync' | 'async' | string;
+  fromIdx: number;
+  toIdx: number;
+  labelW: number;
+  branch?: string;
+  branchFirst?: boolean;
+}
+
 /**
  * Posiciones X de las lifelines. La separación entre columnas se deriva del
  * ancho real de las etiquetas (y de los self-loops), de modo que con el JSON
  * mínimo el diagrama se auto-dimensiona sin solapes ni recortes.
  */
-function layoutActorPositions(boxW, flat) {
+function layoutActorPositions(boxW: number[], flat: FlatMessage[]): { x: number[]; rightMargin: number; selfSide: number[] } {
   const n = boxW.length;
-  const selfSide = new Array(n).fill(1);
+  const selfSide: number[] = new Array(n).fill(1);
   if (n <= 1) {
     const x0 = snapDiagramGrid(48 + (boxW[0] ?? 88) / 2);
     // Actor único: su self-loop va a la derecha (selfSide=1) y no hay huecos
@@ -339,14 +399,14 @@ function layoutActorPositions(boxW, flat) {
   }
 
   // Espacio que reclama a su derecha el self-loop de cada actor.
-  const selfExtent = new Array(n).fill(0);
+  const selfExtent: number[] = new Array(n).fill(0);
   for (const f of flat) {
     if (f.kind === 'self') selfExtent[f.fromIdx] = Math.max(selfExtent[f.fromIdx], LOOP_W + 12 + f.labelW);
   }
   // El último actor dibuja su self-loop hacia la izquierda (no hay columna a la derecha).
   selfSide[n - 1] = -1;
 
-  const gaps = new Array(n - 1);
+  const gaps: number[] = new Array(n - 1);
   for (let i = 0; i < n - 1; i++) {
     gaps[i] = Math.max(MIN_GAP, boxW[i] / 2 + boxW[i + 1] / 2 + 24);
     if (selfExtent[i] > 0) gaps[i] = Math.max(gaps[i], selfExtent[i] + 24);
@@ -356,7 +416,7 @@ function layoutActorPositions(boxW, flat) {
 
   // Relajación: ensanchar huecos para que las etiquetas multi-columna quepan.
   for (let pass = 0; pass < 2; pass++) {
-    const pos = [0];
+    const pos: number[] = [0];
     for (let i = 1; i < n; i++) pos[i] = pos[i - 1] + gaps[i - 1];
     for (const f of flat) {
       const lo = Math.min(f.fromIdx, f.toIdx);
@@ -371,7 +431,7 @@ function layoutActorPositions(boxW, flat) {
     }
   }
 
-  const pos = [0];
+  const pos: number[] = [0];
   for (let i = 1; i < n; i++) pos[i] = pos[i - 1] + gaps[i - 1];
   const leftMargin = 48 + boxW[0] / 2;
   const x = pos.map((p) => snapDiagramGrid(leftMargin + p));
@@ -379,7 +439,75 @@ function layoutActorPositions(boxW, flat) {
   return { x, rightMargin, selfSide };
 }
 
-export function computeSequenceLayout(spec) {
+export interface SequenceLayoutActor {
+  id: string;
+  x: number;
+  y: number;
+  w: number;
+  label: string;
+  icon: string;
+  hue: number;
+  kind: string;
+}
+
+export interface SequenceLayoutLifeline {
+  id: string;
+  x: number;
+  y1: number;
+  y2: number;
+}
+
+export interface SequenceLayoutMessage {
+  id: string;
+  step: number;
+  label: string;
+  log?: string;
+  description?: string;
+  kind: string;
+  y: number;
+  fromX: number;
+  toX: number;
+  path: string;
+  lineX1: number;
+  lineX2: number;
+  arrowTipX: number;
+  arrowTipY: number;
+  arrowDir: number;
+  labelX: number;
+  labelW: number;
+  labelY: number;
+  labelH: number;
+  branch?: string;
+  branchFirst?: boolean;
+  groupHue?: number;
+}
+
+export interface SequenceLayoutAltBox {
+  x: number;
+  y: number;
+  w: number;
+  h: number;
+  label: string;
+}
+
+export interface SequenceLayout {
+  width: number;
+  height: number;
+  title?: string;
+  subtitle?: string;
+  titleY: number;
+  subtitleY: number;
+  actors: SequenceLayoutActor[];
+  lifelines: SequenceLayoutLifeline[];
+  messages: SequenceLayoutMessage[];
+  altBox?: SequenceLayoutAltBox;
+  groups?: Array<{ id: string; name: string; hue: number }>;
+  legendX: number;
+  legendColX: number[];
+  legendMaxRows: number;
+}
+
+export function computeSequenceLayout(spec: SequenceResolvedSpec): SequenceLayout {
   const title = spec.title ?? '';
   const subtitle = spec.subtitle ?? '';
   const hasHeader = !!(title || subtitle);
@@ -387,19 +515,19 @@ export function computeSequenceLayout(spec) {
   const subtitleY = title ? 44 : 26;
 
   const actors = spec.actors;
-  const idx = new Map(actors.map((a, i) => [a.id, i]));
+  const idx = new Map<string, number>(actors.map((a, i) => [a.id, i]));
   // Etiqueta sin el sugar líder (el ícono va al avatar circular).
-  const actorLabels = actors.map((a) => extractLeadingIconToken(a.label)?.rest ?? a.label);
-  const boxW = actors.map((a, i) => actorBoxWidth(actorLabels[i], a.kind ?? 'participant'));
-  const groupHueMap = new Map((spec.groups ?? []).map((gp) => [gp.id, gp.hue]));
+  const actorLabels: string[] = actors.map((a) => (extractLeadingIconToken(a.label) as LeadingIconToken | null)?.rest ?? a.label);
+  const boxW: number[] = actors.map((a, i) => actorBoxWidth(actorLabels[i], a.kind ?? 'participant'));
+  const groupHueMap = new Map<string, number>((spec.groups ?? []).map((gp) => [gp.id, gp.hue]));
 
   // 1) Aplanar mensajes en orden de render (preamble/messages → alt → epilogue).
-  const flat = [];
-  const warnedActors = new Set();
-  const toFlat = (m, branch, branchFirst = false) => {
+  const flat: FlatMessage[] = [];
+  const warnedActors = new Set<string>();
+  const toFlat = (m: SequenceMessageSpec, branch: string | undefined, branchFirst: boolean = false): FlatMessage | null => {
     // from === to SIEMPRE es self (lo pinte como lo pinte el kind): un mensaje
     // de un actor a sí mismo no puede ser una línea horizontal a la lifeline.
-    const kind = m.from === m.to ? 'self' : (m.kind ?? 'sync');
+    const kind: FlatMessage['kind'] = m.from === m.to ? 'self' : (m.kind ?? 'sync');
     const fromIdx = idx.get(m.from);
     const toIdx = idx.get(m.to) ?? fromIdx;
     // Actor inexistente: hoy se degradaba en silencio a "actor 0" (o a un
@@ -412,13 +540,14 @@ export function computeSequenceLayout(spec) {
       }
       return null;
     }
-    return { m, kind, fromIdx, toIdx, labelW: diagramLabelW(m.label), branch, branchFirst };
+    return { m, kind, fromIdx, toIdx: toIdx ?? fromIdx, labelW: diagramLabelW(m.label), branch, branchFirst };
   };
-  const pushFlat = (m, b, first) => {
-    const f = toFlat(m, b, first);
+  const pushFlat = (m: SequenceMessageSpec, b?: string, first?: boolean): void => {
+    const f = toFlat(m, b, first ?? false);
     if (f) flat.push(f);
   };
-  (spec.messages ?? spec.preamble ?? []).forEach((m) => pushFlat(m));
+  const mainMessages: SequenceMessageSpec[] = spec.messages ?? spec.preamble ?? [];
+  mainMessages.forEach((m) => pushFlat(m));
   const altStart = flat.length;
   spec.alt?.branches?.forEach((b) => b.messages.forEach((m, mi) => pushFlat(m, b.condition, mi === 0)));
   const altEnd = flat.length;
@@ -434,13 +563,13 @@ export function computeSequenceLayout(spec) {
   // del lienzo.
   const LEGEND_MAX_ROWS = 3;
   const LEGEND_GAP_X = 20;
-  const legendItemWidths = legendGroups
+  const legendItemWidths: number[] = legendGroups
     ? legendGroups.map((gp) => Math.ceil(gp.name.length * 6) + 30)
     : [];
   const legendCols = legendGroups
     ? Math.max(1, Math.ceil(legendGroups.length / LEGEND_MAX_ROWS))
     : 0;
-  const legendColsWidths = Array.from({ length: legendCols }, (_, c: number) =>
+  const legendColsWidths: number[] = Array.from({ length: legendCols }, (_, c: number) =>
     legendItemWidths.slice(c * LEGEND_MAX_ROWS, (c + 1) * LEGEND_MAX_ROWS).reduce((m: number, w: number) => Math.max(m, w), 0),
   );
   const legendW = legendColsWidths.reduce((a, b) => a + b, 0)
@@ -461,23 +590,22 @@ export function computeSequenceLayout(spec) {
   // legendX devuelve el inicio de la PRIMERA columna. Las siguientes se
   // calculan en el renderer sumando legendColsWidths[i-1] + LEGEND_GAP_X.
   const legendX = legendGroups ? baseW + lastActorBoxHalf + 16 : 0;
-  const legendColX = legendColsWidths;
 
   // 3) Métricas verticales (más aire bajo el subtítulo).
   const headerCenterY = hasHeader ? 100 : 56;
   const lifelineY1 = headerCenterY + 22;
   const messagesTop = snapDiagramGrid(headerCenterY + 58);
-  const yAt = (r) => snapDiagramGrid(messagesTop + r * ROW_H);
+  const yAt = (r: number): number => snapDiagramGrid(messagesTop + r * ROW_H);
   const rowCount = flat.length;
   const lifelineY2 = snapDiagramGrid((rowCount ? yAt(rowCount - 1) : lifelineY1 + 40) + 30);
   const H = lifelineY2 + 24;
 
-  const actorLayouts = actors.map((a, i) => ({
+  const actorLayouts: SequenceLayoutActor[] = actors.map((a, i) => ({
     id: a.id,
-    x: ax[i],
+    x: ax[i] ?? 0,
     y: headerCenterY,
-    w: boxW[i],
-    label: actorLabels[i],
+    w: boxW[i] ?? 0,
+    label: actorLabels[i] ?? '',
     icon: a.icon ?? DEFAULT_ICONS[i % DEFAULT_ICONS.length],
     hue: a.hue ?? DEFAULT_HUES[i % DEFAULT_HUES.length],
     kind: a.kind ?? 'participant',
@@ -485,21 +613,21 @@ export function computeSequenceLayout(spec) {
 
   // 4) Rejilla de costos: cajas de actor bloqueadas + lifelines con costo suave.
   const g = makeCostGrid(W, H);
-  actorLayouts.forEach((a, i) => blockRect(g, a.x - boxW[i] / 2, a.y - 16, boxW[i], 34));
+  actorLayouts.forEach((a, i) => blockRect(g, a.x - boxW[i]! / 2, a.y - 16, boxW[i]!, 34));
   for (const a of actorLayouts) applyRectCost(g, a.x - 4, lifelineY1, 8, lifelineY2 - lifelineY1, 5, true);
 
   // 5) Rutear cada mensaje y colocar su etiqueta (registrada como obstáculo).
-  const messages = [];
+  const messages: SequenceLayoutMessage[] = [];
   flat.forEach((f, row) => {
     const y = yAt(row);
-    const fromX = ax[f.fromIdx];
-    const toX = ax[f.toIdx];
-    let labelX;
-    let labelY;
-    let route;
+    const fromX = ax[f.fromIdx] ?? 0;
+    const toX = ax[f.toIdx] ?? fromX;
+    let labelX: number;
+    let labelY: number;
+    let route: { path: string; arrowTipX: number; arrowTipY: number; arrowDir: number };
 
     if (f.kind === 'self') {
-      const side = selfSide[f.fromIdx];
+      const side = selfSide[f.fromIdx] ?? 1;
       route = routeSequenceSelf(fromX, y, g, side, LOOP_W, LOOP_H);
       labelX =
         side === 1
@@ -547,16 +675,16 @@ export function computeSequenceLayout(spec) {
   });
 
   // 6) Caja alt (si hay ramas).
-  let altBox;
+  let altBox: SequenceLayoutAltBox | undefined;
   if (altEnd > altStart) {
     const y1 = yAt(altStart) - 28;
     const y2 = yAt(altEnd - 1) + 26;
-    const x0 = ax[0] - boxW[0] / 2 - 8;
-    const x1 = ax[ax.length - 1] + boxW[boxW.length - 1] / 2 + 8;
+    const x0 = (ax[0] ?? 0) - (boxW[0] ?? 0) / 2 - 8;
+    const x1 = (ax[ax.length - 1] ?? 0) + (boxW[boxW.length - 1] ?? 0) / 2 + 8;
     altBox = { x: x0, y: y1, w: x1 - x0, h: y2 - y1, label: 'alt' };
   }
 
-  const lifelines = actorLayouts.map((a) => ({ id: a.id, x: a.x, y1: lifelineY1, y2: lifelineY2 }));
+  const lifelines: SequenceLayoutLifeline[] = actorLayouts.map((a) => ({ id: a.id, x: a.x, y1: lifelineY1, y2: lifelineY2 }));
 
   return {
     width: W,
@@ -571,13 +699,13 @@ export function computeSequenceLayout(spec) {
     altBox,
     groups: legendGroups,
     legendX,
-    legendColX,
+    legendColX: legendColsWidths,
     legendMaxRows: LEGEND_MAX_ROWS,
   };
 }
 
 /** Mensajes TK-1437191 — `log`: animación tortuga; `desc`: tooltip hover (extendida). */
-const TK1437191_SEQUENCE_MESSAGES = [
+const TK1437191_SEQUENCE_MESSAGES: SequenceMessageSpec[] = [
   {
     id: 'm1',
     group: 'grp-turno',
@@ -662,7 +790,7 @@ const TK1437191_SEQUENCE_MESSAGES = [
 ];
 
 /** Spec predefinida TK-1437191 — imensaje + calificación (estilo sequenceDiagram). */
-export function tk1437191SequenceSpec() {
+export function tk1437191SequenceSpec(): SequenceResolvedSpec {
   return {
     title: 'Diagrama de secuencia',
     subtitle: 'imensaje · mensajesOpenAI · calificación',
@@ -681,7 +809,7 @@ export function tk1437191SequenceSpec() {
 }
 
 /** Spec predefinida TK-1431662 — resolución de modelo por turno. */
-export function tk1431662SequenceSpec() {
+export function tk1431662SequenceSpec(): SequenceResolvedSpec {
   return {
     title: 'Resolución del modelo por turno',
     subtitle: 'Clasificación operativa → MODELO en BD → respuesta final',

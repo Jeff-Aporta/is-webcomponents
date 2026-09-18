@@ -7,18 +7,24 @@ export async function mount(ctx: import('../../previews/_kit/types.d.ts').Previe
   const root = ctx.main;
   void root;
   const editor = document.getElementById('editor1');
-      const out = document.getElementById('crop1');
-      const log = document.getElementById('log');
-      editor.addEventListener('is-crop', (e) => {
-        out.src = e.detail.dataURL;
+  const out = document.getElementById('crop1') as HTMLImageElement | null;
+  const log = document.getElementById('log');
+  if (editor) {
+    editor.addEventListener('is-crop', (e: Event) => {
+      const ev = e as CustomEvent<{ dataURL: string; crop: { x: number; y: number; width: number; height: number } }>;
+      if (out) {
+        out.src = ev.detail.dataURL;
         out.hidden = false;
-        const c = e.detail.crop;
-        log.textContent = `crop @ ${Math.round(c.x)},${Math.round(c.y)} tamaño ${Math.round(c.width)}x${Math.round(c.height)}`;
-      });
-      editor.addEventListener('is-change', (e) => {
-        const c = e.detail.crop;
-        log.textContent = `crop movido: ${Math.round(c.x)},${Math.round(c.y)} ${Math.round(c.width)}x${Math.round(c.height)}`;
-      });
+      }
+      const c = ev.detail.crop;
+      if (log) log.textContent = `crop @ ${Math.round(c.x)},${Math.round(c.y)} tamaño ${Math.round(c.width)}x${Math.round(c.height)}`;
+    });
+    editor.addEventListener('is-change', (e: Event) => {
+      const ev = e as CustomEvent<{ crop: { x: number; y: number; width: number; height: number } }>;
+      const c = ev.detail.crop;
+      if (log) log.textContent = `crop movido: ${Math.round(c.x)},${Math.round(c.y)} ${Math.round(c.width)}x${Math.round(c.height)}`;
+    });
+  }
 }
 
 export function unmount() {

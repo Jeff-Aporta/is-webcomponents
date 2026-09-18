@@ -1,0 +1,87 @@
+<!doctype html>
+<html lang="es" class="theme-dark" data-theme="dark">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>marks-radial · demo (utility)</title>
+<style>
+  html, body { margin: 0; padding: 0; min-height: 100%; background: #0c1118; color: #e2e8f0; font-family: ui-sans-serif, system-ui, sans-serif; }
+  body { display: grid; grid-template-rows: auto 1fr; }
+  header { padding: 16px 20px; border-bottom: 1px solid rgba(255,255,255,0.1); background: #0f1620; }
+  header h1 { font-size: 16px; font-weight: 700; margin: 0; }
+  header p { font-size: 12px; color: #94a3b8; margin: 4px 0 0 0; }
+  main { display: grid; grid-template-columns: 1fr 1fr; gap: 14px; padding: 20px; }
+  section { background: #0f1620; border: 1px solid rgba(255,255,255,0.1); border-radius: 8px; padding: 14px; }
+  section h2 { font-size: 11px; text-transform: uppercase; margin: 0 0 8px 0; color: #94a3b8; letter-spacing: 0.05em; }
+  is-pie-chart, is-doughnut-chart, is-polar-area-chart, is-radar-chart { display: block; width: 100%; height: 240px; }
+  pre { background: #06090e; padding: 8px; border-radius: 6px; overflow: auto; font-size: 11px; color: #94a3b8; grid-column: 1 / -1; }
+  is-pie-chart:not(:defined), is-doughnut-chart:not(:defined), is-polar-area-chart:not(:defined), is-radar-chart:not(:defined) { visibility: hidden; }
+</style>
+<script type="module">
+  // El bundle marks-radial.min.js exporta las funciones puras.
+  const lib = await import('../../../dist/cdn/charts/marks-radial.min.js');
+  document.getElementById('exports').textContent = JSON.stringify(Object.keys(lib).sort(), null, 2);
+
+  // Para invocarlas en vivo, importamos los wrappers tipados que las usan.
+  await Promise.all([
+    import('../../../dist/cdn/data-viz/pie-chart.min.js'),
+    import('../../../dist/cdn/data-viz/doughnut-chart.min.js'),
+    import('../../../dist/cdn/data-viz/polar-area-chart.min.js'),
+    import('../../../dist/cdn/data-viz/radar-chart.min.js'),
+  ]);
+  await Promise.all([
+    customElements.whenDefined('is-pie-chart'),
+    customElements.whenDefined('is-doughnut-chart'),
+    customElements.whenDefined('is-polar-area-chart'),
+    customElements.whenDefined('is-radar-chart'),
+  ]);
+
+  // Pie
+  const pie = document.createElement('is-pie-chart');
+  pie.setAttribute('label', 'drawPieMarks');
+  pie.payload = {
+    data: { labels: ['Rojo','Azul','Verde'], datasets: [{ label: 'Mix', data: [40, 35, 25] }] },
+  };
+  document.getElementById('pie-host').appendChild(pie);
+
+  // Doughnut
+  const dough = document.createElement('is-doughnut-chart');
+  dough.setAttribute('label', 'drawDoughnutMarks');
+  dough.payload = {
+    data: { labels: ['Op','Mkt','RRHH','I+D'], datasets: [{ label: '2024', data: [42, 18, 15, 25] }] },
+  };
+  document.getElementById('dough-host').appendChild(dough);
+
+  // Polar area
+  const pol = document.createElement('is-polar-area-chart');
+  pol.setAttribute('label', 'drawPolarAreaMarks');
+  pol.payload = {
+    data: { labels: ['N','NE','E','SE','S','SO','O','NO'], datasets: [{ label: 'Vientos', data: [3, 5, 8, 6, 4, 7, 9, 2] }] },
+  };
+  document.getElementById('pol-host').appendChild(pol);
+
+  // Radar
+  const rad = document.createElement('is-radar-chart');
+  rad.setAttribute('label', 'drawRadarMarks');
+  rad.payload = {
+    data: { labels: ['A','B','C','D','E'], datasets: [{ label: 'P1', data: [80, 60, 75, 90, 55] }] },
+  };
+  document.getElementById('rad-host').appendChild(rad);
+
+  document.documentElement.dataset.marksRadialReady = '1';
+</script>
+</head>
+<body>
+<header>
+  <h1>marks-radial (utility)</h1>
+  <p>Funciones puras <code>drawPieMarks</code>, <code>drawDoughnutMarks</code>, <code>drawPolarAreaMarks</code>, <code>drawRadarMarks</code>.</p>
+</header>
+<main>
+  <section><h2>Pie</h2><div id="pie-host"></div></section>
+  <section><h2>Doughnut</h2><div id="dough-host"></div></section>
+  <section><h2>Polar area</h2><div id="pol-host"></div></section>
+  <section><h2>Radar</h2><div id="rad-host"></div></section>
+  <pre id="exports"></pre>
+</main>
+</body>
+</html>

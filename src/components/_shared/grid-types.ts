@@ -56,14 +56,14 @@ export type ColumnDef = {
   /* Presentacion */
   readonly align?: string;
   readonly headerAlign?: string;
-  readonly cellClassName?: string | ((row: Row) => string);
+  readonly cellClassName?: string | ((params: { value: CellValue; row: Row; id: CellValue; colDef: ColumnDef }) => string);
   readonly headerClassName?: string;
   readonly showTooltip?: boolean;
   readonly width?: number;
   readonly minWidth?: number;
   readonly maxWidth?: number;
   readonly flex?: number;
-  readonly colSpan?: number;
+  readonly colSpan?: number | ((value: CellValue, row: Row, col: ColumnDef, ctx: unknown) => number);
 
   /* Capacidades: sin valor, manda el `type` de la columna. */
   readonly sortable?: boolean;
@@ -78,19 +78,33 @@ export type ColumnDef = {
   readonly system?: boolean;
 
   /* Valor */
-  readonly valueGetter?: (row: Row) => CellValue;
-  readonly valueFormatter?: (v: CellValue, row?: Row) => string;
-  readonly valueParser?: (v: CellValue, row?: Row) => CellValue;
+  readonly valueGetter?: (value: CellValue, row: Row, col: ColumnDef, ctx: unknown) => CellValue;
+  readonly valueFormatter?: (v: CellValue, row: Row, col: ColumnDef, ctx: unknown) => string;
+  readonly valueParser?: (v: CellValue, row: Row, col: ColumnDef) => CellValue;
   readonly valueOptions?: readonly CellValue[];
   readonly format?: (v: CellValue) => string;
   readonly comparator?: Comparator;
 
   /* Render y edicion */
   readonly editor?: string;
-  readonly renderCell?: (row: Row, col: ColumnDef) => unknown;
-  readonly renderHeader?: (col: ColumnDef) => unknown;
-  readonly getActions?: (row: Row) => readonly unknown[];
-  readonly preProcessEditCellProps?: (params: Record<string, CellValue>) => unknown;
+  readonly renderCell?: (params: {
+    value: CellValue;
+    row: Row;
+    id: CellValue;
+    colDef: ColumnDef;
+    field: string;
+    api?: unknown;
+    tabIndex?: number;
+    hasFocus?: boolean;
+  }) => unknown;
+  readonly renderHeader?: (params: { field: string; colDef: ColumnDef }) => unknown;
+  readonly getActions?: (params: { row: Row; id: CellValue; colDef: ColumnDef }) => readonly unknown[];
+  readonly preProcessEditCellProps?: (params: {
+    props: { value: CellValue };
+    row: Row;
+    id: CellValue;
+    field: string;
+  }) => unknown;
 
   /* Filtrado */
   readonly operators?: readonly Operator[];
@@ -361,7 +375,7 @@ export function prepareFilterValue(op: Operator | null | undefined, raw: CellVal
 }
 
 /** Fábrica del test de una regla: null si la regla está incompleta. */
-export type FilterRule = { readonly operator?: string; readonly value?: CellValue; };
+export type FilterRule = { readonly field?: string; readonly operator?: string; readonly value?: CellValue; };
 
 export function filterTest(item: FilterRule, col: ColumnDef | null | undefined): ((value: CellValue) => boolean) | null {
   const op = operatorsFor(col).find((o) => o.value === item.operator);

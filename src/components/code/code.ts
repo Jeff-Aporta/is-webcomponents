@@ -36,12 +36,33 @@ import {
 } from '../_shared/code-langs.js';
 import { formatCode, normalizeFormatConfig, DEFAULT_FORMAT } from '../_shared/code-format.js';
 import { applyThemeConfig, parseThemeConfig } from '../_shared/code-theme.js';
+import type { CodeThemeConfig } from '../_shared/code-theme.js';
 import { softFormat, softFormatMode } from '../_shared/code-text.js';
 import {
   code2json, json2code, parseCodeDocument, normalizeMark, rebaseMarks,
 } from '../_shared/code-model.js';
+import type { CodeDocument as CodeDocModel, CodeMark as CodeMarkModel } from '../_shared/code-model.js';
 import { tokenizeCode, lineToHtml, tokenClass, escapeHtml, tokensToText } from '../_shared/code-highlight.js';
+import type { Token as HighlightToken, HighlightLine as CodeHighlightLine } from '../_shared/code-highlight.js';
+import type { CodeFormatConfig as CodeFmtConfigShared } from '../_shared/code-format.js';
 import '../feedback/tooltip.js';
+
+// Tipos locales (los _shared sólo los declaran vía JSDoc; replicamos forma).
+type CodeMarkKind = 'highlight' | 'tooltip' | 'message';
+type CodeMarkTone = 'error' | 'warning' | 'info' | 'success' | 'neutral';
+type CodeMark = CodeMarkModel;
+type CodeDocument = CodeDocModel;
+type CodeFormatConfig = CodeFmtConfigShared;
+type CodeLangDef = {
+  id: string;
+  aliases?: string[];
+  heavy?: boolean;
+  load?: () => Promise<void>;
+  lineClass?: (line: string) => string | null;
+};
+
+// Wrapper tipado para el custom element <is-tooltip>.
+type IsTooltipEl = HTMLElement & { open: boolean };
 
 const TEMPLATE = document.createElement('template');
 TEMPLATE.innerHTML = /* html */ `
@@ -64,8 +85,11 @@ const PROP_UPGRADE = [
   'mode', 'tab-size', 'name', 'placeholder', 'min-height', 'marks',
 ];
 
+type HighlightLine = CodeHighlightLine;
+type HighlightResult = { lines: HighlightLine[]; html: string; withNumbers: boolean };
+
 /** Rango [from,to) del texto viejo reemplazado por `insertedLen` caracteres. */
-function editRange(oldText: string, newText: string) {
+function editRange(oldText: string, newText: string): [number, number, number] {
   const min = Math.min(oldText.length, newText.length);
   let from = 0;
   while (from < min && oldText[from] === newText[from]) from++;
@@ -92,51 +116,51 @@ class IsCode extends ElementBase {
     return [...OBSERVED, ...IsCode.styleAttrNames];
   }
 
-  #internals = null;
-  #textarea = null;
-  #host = null;
-  #tooltip = null;
-  #native = false;
-  #nativeRoot = null;
-  #nativeText = null;
-  #editing = false;
-  #ta = null;
-  #activeLine = -1;
-  #ready = false;
-  #marks = [];
-  #formatConfig = { ...DEFAULT_FORMAT };
-  #themeConfig = null;
-  #pendingValue = null;
-  #booting = false;
-  #markBound = false;
-  #currentTip = null;
-  #onThemeChange = () => this.#syncThemeFromPage();
-  #hideTipTimer = 0;
+  #internals: ElementInternals | null = null;
+  #textarea: HTMLTextAreaElement | null = null;
+  #host: HTMLElement | null = null;
+  #tooltip: IsTooltipEl | null = null;
+  #native: boolean = false;
+  #nativeRoot: HTMLPreElement | null = null;
+  #nativeText: string | null = null;
+  #editing: boolean = false;
+  #ta: HTMLTextAreaElement | null = null;
+  #activeLine: number = -1;
+  #ready: boolean = false;
+  #marks: CodeMark[] = [];
+  #formatConfig: CodeFormatConfig = { ...DEFAULT_FORMAT };
+  #themeConfig: CodeThemeConfig | null = null;
+  #pendingValue: string | null = null;
+  #booting: boolean = false;
+  #markBound: boolean = false;
+  #currentTip: string | null = null;
+  #onThemeChange: () => void = () => this.#syncThemeFromPage();
+  #hideTipTimer: number = 0;
 
   constructor() {
     super();
     const shadow = this.attachShadow({ mode: 'open', delegatesFocus: true });
     adoptCss(shadow, import.meta.url);
     shadow.appendChild(TEMPLATE.content.cloneNode(true));
-    this.#textarea = shadow.querySelector<HTMLElement>('.seed')!;
-    this.#host = shadow.querySelector<HTMLElement>('.editor-host')!;
-    this.#tooltip = shadow.querySelector<HTMLElement>('is-tooltip')!;
+    this.#textarea = shadow.querySelector<HTMLTextAreaElement>('.seed');
+    this.#host = shadow.querySelector<HTMLElement>('.editor-host');
+    this.#tooltip = shadow.querySelector<HTMLElement>('is-tooltip') as IsTooltipEl | null;
     this.#internals = attachFormInternals(this);
   }
 
-  onConnected() {
+  override onConnected(): void {
     upgradeProperties(this, PROP_UPGRADE);
     this.#syncThemeFromPage();
     this.#syncLayoutDom();
     if (this.#themeConfig) applyThemeConfig(this, this.#themeConfig, this.#pageTheme());
     document.addEventListener('is-theme-change', this.#onThemeChange);
-    if (!this.#booting) this.#bootstrap();
+    if (!this.#booting) void this.#bootstrap();
   }
 
-  onDisconnected() {
+  override onDisconnected(): void {
     document.removeEventListener('is-theme-change', this.#onThemeChange);
     clearTimeout(this.#hideTipTimer);
-    this.#tooltip.open = false;
+    if (this.#tooltip) this.#tooltip.open = false;
     // Conservar instancia al mover en el DOM; destruir solo si el documento
     // ya no contiene el nodo (descarte real).
     queueMicrotask(() => {
@@ -144,7 +168,7 @@ class IsCode extends ElementBase {
     });
   }
 
-  onAttributeChanged(name, _old, value) {
+  override onAttributeChanged(name: string, _old: string | null, value: string | null): void {
     if (!this.isConnected) return;
     switch (name) {
       case 'value':
@@ -179,7 +203,7 @@ class IsCode extends ElementBase {
         this.refresh();
         break;
       case 'name':
-        setFormValue(this.#internals, this.value);
+        setFormValue(this.#internals, this.value, null);
         break;
       default:
         break;
@@ -188,24 +212,24 @@ class IsCode extends ElementBase {
 
   // —— public API ——
 
-  get ready() { return this.#ready; }
+  get ready(): boolean { return this.#ready; }
   /** Legacy (escape hatch de la era CodeMirror): siempre null — motor nativo. */
-  get cm() { return null; }
+  get cm(): null { return null; }
 
-  get value() {
+  get value(): string {
     // Motor nativo: el texto vive en #nativeText; antes del bootstrap se cae a
     // la semilla (dataset legacy data-cm-source / data-src de la galería).
     return this.#nativeText ?? this.#pendingValue
       ?? this.getAttribute('value') ?? this.dataset.cmSource ?? this.dataset.src ?? '';
   }
-  set value(v) {
+  set value(v: string | null) {
     this.#setValue(v == null ? '' : String(v), true);
   }
 
-  get lang() { return this.getAttribute('lang') || 'javascript'; }
-  set lang(v) { setStringAttr(this, 'lang', v || 'javascript'); }
+  get lang(): string { return this.getAttribute('lang') || 'javascript'; }
+  set lang(v: string) { setStringAttr(this, 'lang', v || 'javascript'); }
 
-  get lineNumbers() {
+  get lineNumbers(): boolean {
     // Inline / compact (snippets de docs): sin números salvo petición explícita.
     if (this.mode === 'inline' || this.compact) {
       if (!this.hasAttribute('line-numbers')) return false;
@@ -213,75 +237,79 @@ class IsCode extends ElementBase {
     }
     return this.getAttribute('line-numbers') !== 'false';
   }
-  set lineNumbers(v) {
-    if (v === false || v === 'false') this.setAttribute('line-numbers', 'false');
+  set lineNumbers(v: boolean) {
+    if (v === false) this.setAttribute('line-numbers', 'false');
     else this.removeAttribute('line-numbers');
   }
 
-  get wrap() { return this.hasAttribute('wrap'); }
-  set wrap(v) { this.toggleAttribute('wrap', !!v); }
+  get wrap(): boolean { return this.hasAttribute('wrap'); }
+  set wrap(v: boolean) { this.toggleAttribute('wrap', !!v); }
 
-  get readonly() { return this.hasAttribute('readonly'); }
-  set readonly(v) { this.toggleAttribute('readonly', !!v); }
+  get readonly(): boolean { return this.hasAttribute('readonly'); }
+  set readonly(v: boolean) { this.toggleAttribute('readonly', !!v); }
 
-  get compact() { return this.hasAttribute('compact'); }
-  set compact(v) { this.toggleAttribute('compact', !!v); }
+  get compact(): boolean { return this.hasAttribute('compact'); }
+  set compact(v: boolean) { this.toggleAttribute('compact', !!v); }
 
   /** `block` (default) | `inline` — modo de inserción en la página. */
-  get mode() {
+  get mode(): 'block' | 'inline' {
     const m = (this.getAttribute('mode') || 'block').toLowerCase();
     return m === 'inline' ? 'inline' : 'block';
   }
-  set mode(v) {
+  set mode(v: 'block' | 'inline' | string) {
     const next = String(v || 'block').toLowerCase() === 'inline' ? 'inline' : 'block';
     if (next === 'block') this.removeAttribute('mode');
     else this.setAttribute('mode', 'inline');
   }
 
-  get disabled() { return this.hasAttribute('disabled'); }
-  set disabled(v) { this.toggleAttribute('disabled', !!v); }
+  get disabled(): boolean { return this.hasAttribute('disabled'); }
+  set disabled(v: boolean) { this.toggleAttribute('disabled', !!v); }
 
-  get autofocus() { return this.hasAttribute('autofocus'); }
-  set autofocus(v) { this.toggleAttribute('autofocus', !!v); }
+  get autofocus(): boolean { return this.hasAttribute('autofocus'); }
+  set autofocus(v: boolean) { this.toggleAttribute('autofocus', !!v); }
 
-  get tabSize() {
+  get tabSize(): number {
     const n = parseInt(this.getAttribute('tab-size') || '2', 10);
     return Number.isFinite(n) && n > 0 ? n : 2;
   }
-  set tabSize(v) { setStringAttr(this, 'tab-size', String(v)); }
+  set tabSize(v: number | string) { setStringAttr(this, 'tab-size', String(v)); }
 
-  get name() { return this.getAttribute('name') || ''; }
-  set name(v) { setStringAttr(this, 'name', v); }
+  get name(): string { return this.getAttribute('name') || ''; }
+  set name(v: string) { setStringAttr(this, 'name', v); }
 
-  get placeholder() { return this.getAttribute('placeholder') || ''; }
-  set placeholder(v) { setStringAttr(this, 'placeholder', v); }
+  get placeholder(): string { return this.getAttribute('placeholder') || ''; }
+  set placeholder(v: string) { setStringAttr(this, 'placeholder', v); }
 
-  get formatConfig() { return { ...this.#formatConfig }; }
-  set formatConfig(v) {
+  get formatConfig(): CodeFormatConfig { return { ...this.#formatConfig }; }
+  set formatConfig(v: unknown) {
     this.#formatConfig = normalizeFormatConfig(v);
     if (v != null) this.setAttribute('format', JSON.stringify(this.#formatConfig));
     else this.removeAttribute('format');
   }
 
-  get themeConfig() { return this.#themeConfig ? { ...this.#themeConfig } : null; }
-  set themeConfig(v) {
+  get themeConfig(): CodeThemeConfig | null {
+    return this.#themeConfig ? { ...this.#themeConfig } : null;
+  }
+  set themeConfig(v: unknown) {
     this.#themeConfig = parseThemeConfig(v);
     applyThemeConfig(this, this.#themeConfig, this.#pageTheme());
     if (this.#themeConfig) this.setAttribute('theme-config', JSON.stringify(this.#themeConfig));
     else this.removeAttribute('theme-config');
   }
 
-  get marks() { return this.#marks.map((m) => ({ ...m })); }
-  set marks(list) { this.setMarks(list); }
+  get marks(): CodeMark[] { return this.#marks.map((m) => ({ ...m })); }
+  set marks(list: unknown) { this.setMarks(list); }
 
-  get document() { return this.getDocument(); }
-  set document(doc) { this.setDocument(doc); }
+  get document(): CodeDocument { return this.getDocument(); }
+  set document(doc: unknown) { this.setDocument(doc); }
 
   /** Lista idiomas registrados (built-in + plugins). */
-  static listLanguages() { return listLanguages(); }
-  static registerLanguage(def) { return registerLanguage(def); }
+  static listLanguages(): Array<{ id: string; aliases: string[]; heavy: boolean }> {
+    return listLanguages() as Array<{ id: string; aliases: string[]; heavy: boolean }>;
+  }
+  static registerLanguage(def: CodeLangDef): void { return registerLanguage(def); }
 
-  code2json(opts = {}) {
+  code2json(opts: Record<string, unknown> = {}): CodeDocument {
     return code2json(this.value, {
       lang: this.lang,
       marks: this.#marks,
@@ -291,13 +319,13 @@ class IsCode extends ElementBase {
     });
   }
 
-  json2code(doc) { return json2code(doc); }
+  json2code(doc: CodeDocument | string | null | undefined): string { return json2code(doc); }
 
-  getDocument() {
+  getDocument(): CodeDocument {
     return this.code2json();
   }
 
-  setDocument(raw) {
+  setDocument(raw: unknown): void {
     const doc = parseCodeDocument(raw);
     if (!doc) return;
     if (doc.lang) this.lang = doc.lang;
@@ -312,17 +340,20 @@ class IsCode extends ElementBase {
     }
   }
 
-  setMarks(list) {
-    this.#marks = (Array.isArray(list) ? list : []).map(normalizeMark).filter(Boolean);
+  setMarks(list: unknown): void {
+    const arr: unknown[] = Array.isArray(list) ? (list as unknown[]) : [];
+    this.#marks = arr
+      .map((m: unknown) => normalizeMark(m) as CodeMark | null)
+      .filter((m): m is CodeMark => !!m);
     this.#paintMarks();
   }
 
-  clearMarks() {
+  clearMarks(): void {
     this.#marks = [];
     this.#paintMarks();
   }
 
-  format() {
+  format(): string {
     const lang = resolveLanguage(this.lang)?.id || this.lang;
     const next = formatCode(this.value, lang, this.#formatConfig);
     this.#setValue(next, true);
@@ -330,12 +361,12 @@ class IsCode extends ElementBase {
     return next;
   }
 
-  focus() {
-    if (this.#editing) this.#ta?.focus();
+  focus(): void {
+    if (this.#editing && this.#ta) this.#ta.focus();
     // readonly nativo: sin caret editable (no hay nada que enfocar).
   }
 
-  refresh() {
+  refresh(): void {
     // Sin scrollIntoView ni mediciones de CM: solo resincroniza el transform
     // del <pre> del editor (por si cambió fuente/tamaño del contenedor).
     if (this.#editing) this.#onEditScroll();
@@ -343,11 +374,11 @@ class IsCode extends ElementBase {
 
   // —— private ——
 
-  #pageTheme() {
+  #pageTheme(): 'light' | 'dark' {
     return document.documentElement.getAttribute('data-theme') === 'light' ? 'light' : 'dark';
   }
 
-  #syncThemeFromPage() {
+  #syncThemeFromPage(): void {
     if (this.#themeConfig) {
       applyThemeConfig(this, this.#themeConfig, this.#pageTheme());
       return;
@@ -355,13 +386,13 @@ class IsCode extends ElementBase {
     applyThemeConfig(this, null, this.#pageTheme());
   }
 
-  #parseJsonAttr(value) {
+  #parseJsonAttr(value: string | null): unknown {
     if (value == null || value === '') return null;
     try { return JSON.parse(value); } catch { return null; }
   }
 
   /** Texto semilla: attribute, dataset del highlighter o demo-code. */
-  #readSeedText() {
+  #readSeedText(): string {
     const docAttr = this.getAttribute('document');
     if (docAttr) {
       const doc = parseCodeDocument(docAttr);
@@ -374,7 +405,7 @@ class IsCode extends ElementBase {
     return this.textContent?.trim() || '';
   }
 
-  async #bootstrap() {
+  async #bootstrap(): Promise<void> {
     if (this.#booting || this.#native) return;
     this.#booting = true;
     try {
@@ -386,11 +417,13 @@ class IsCode extends ElementBase {
           if (doc.lang && !this.hasAttribute('lang')) this.setAttribute('lang', doc.lang);
           if (doc.format) this.#formatConfig = normalizeFormatConfig(doc.format);
           if (doc.theme) {
-            this.#themeConfig = doc.theme;
+            this.#themeConfig = doc.theme as CodeThemeConfig;
             applyThemeConfig(this, this.#themeConfig, this.#pageTheme());
           }
           this.#pendingValue = doc.value;
-          this.#marks = (doc.marks || []).map(normalizeMark).filter(Boolean);
+          this.#marks = (doc.marks || [])
+            .map((m: unknown) => normalizeMark(m) as CodeMark | null)
+            .filter((m: CodeMark | null): m is CodeMark => !!m);
         }
       } else {
         this.#pendingValue = this.#readSeedText();
@@ -431,8 +464,9 @@ class IsCode extends ElementBase {
       }
       return;
     } catch (err) {
+      const message = (err as Error)?.message ?? String(err);
       console.error('[is-code] bootstrap', err);
-      emit(this, 'is-error', { error: String(err?.message || err) });
+      emit(this, 'is-error', { error: message });
     } finally {
       this.#booting = false;
     }
@@ -440,26 +474,26 @@ class IsCode extends ElementBase {
 
   /* ── Ruta nativa (readonly) — motor code-highlight, sin CodeMirror ── */
 
-  #bootNative() {
+  #bootNative(): void {
     this.#native = true;
     this.#nativeText = this.#nativeText != null
       ? this.#nativeText
       : (this.#pendingValue ?? this.#readSeedText() ?? '');
     this.#pendingValue = null;
-    this.#textarea.value = this.#nativeText;
+    if (this.#textarea) this.#textarea.value = this.#nativeText;
     this.#renderNative();
     this.#syncReadonlyDom();
     this.#syncLayoutDom();
     this.#ready = true;
-    setFormValue(this.#internals, this.#nativeText);
+    setFormValue(this.#internals, this.#nativeText, null);
     setCustomState(this.#internals, 'blank', !this.#nativeText);
     emit(this, 'is-ready', { lang: this.lang, value: this.value });
   }
 
   /** Pinta `text` (tokenizado + marcas) dentro de un <pre> y devuelve las líneas. */
-  #paintLines(pre, text, withNumbers) {
+  #paintLines(pre: HTMLPreElement, text: string, withNumbers: boolean): HighlightResult {
     const src = String(text ?? '').replace(/\r\n/g, '\n');
-    const { lines } = tokenizeCode(src, this.lang, null);
+    const { lines } = tokenizeCode(src, this.lang, undefined) as { lines: HighlightLine[] };
     const marks = this.#markSpansFor(src);
     let html = '';
     let abs = 0;
@@ -473,7 +507,7 @@ class IsCode extends ElementBase {
   }
 
   /** Marcas normalizadas al largo real del texto (recorte + orden). */
-  #markSpansFor(text) {
+  #markSpansFor(text: string): CodeMark[] {
     const len = text.length;
     return this.#marks
       .map((m) => ({ ...m, from: Math.min(m.from, len), to: Math.min(m.to, len) }))
@@ -486,7 +520,7 @@ class IsCode extends ElementBase {
    * tramos (pueden partir un token por la mitad); si los tokens no reconstruyen
    * el texto original se pinta la línea sin marcas (nunca offsets desfasados).
    */
-  #lineHtmlWithMarks(ln, lineStart, marks) {
+  #lineHtmlWithMarks(ln: HighlightLine, lineStart: number, marks: CodeMark[]): string {
     const lineEnd = lineStart + ln.raw.length;
     const act = marks.filter((m) => m.to > lineStart && m.from < lineEnd);
     if (!act.length || tokensToText(ln.tokens) !== ln.raw) return lineToHtml(ln.tokens) || ' ';
@@ -496,7 +530,7 @@ class IsCode extends ElementBase {
       const tEnd = tStart + t.text.length;
       lineStart = tEnd; // siguiente token
       if (!t.text) continue;
-      const cuts = [tStart];
+      const cuts: number[] = [tStart];
       for (const m of act) {
         if (m.from > tStart && m.from < tEnd) cuts.push(m.from);
         if (m.to > tStart && m.to < tEnd) cuts.push(m.to);
@@ -504,8 +538,8 @@ class IsCode extends ElementBase {
       cuts.push(tEnd);
       const pts = [...new Set(cuts)].sort((a, b) => a - b);
       for (let i = 0; i < pts.length - 1; i++) {
-        const a = pts[i];
-        const b = pts[i + 1];
+        const a = pts[i] as number;
+        const b = pts[i + 1] as number;
         const piece = t.text.slice(a - tStart, b - tStart);
         const cls = tokenClass(t.type);
         const inner = cls ? `<span class="${cls}">${escapeHtml(piece)}</span>` : escapeHtml(piece);
@@ -517,7 +551,7 @@ class IsCode extends ElementBase {
   }
 
   /** Envuelve un tramo pintado con la clase/attrs de la marca. */
-  #markWrap(mark, inner) {
+  #markWrap(mark: CodeMark, inner: string): string {
     const cls = [
       'is-code-mark',
       `is-code-mark--${mark.kind}`,
@@ -532,15 +566,16 @@ class IsCode extends ElementBase {
    * Delega hover/leave de marcas (los spans se repintan: la delegación vive en
    * el host y sobrevive a los repintes). Idempotente por instancia.
    */
-  #bindMarkEvents() {
+  #bindMarkEvents(): void {
     if (this.#markBound) return;
     this.#markBound = true;
-    this.#host.addEventListener('pointerover', (e) => this.#onMarkHover(e));
-    this.#host.addEventListener('pointerout', (e) => this.#onMarkOut(e));
+    if (!this.#host) return;
+    this.#host.addEventListener('pointerover', (e: Event) => this.#onMarkHover(e as PointerEvent));
+    this.#host.addEventListener('pointerout', (e: Event) => this.#onMarkOut(e as PointerEvent));
   }
 
   /** Construye (o reconstruye) el gutter de números para `count` líneas. */
-  #buildGutter(container, lines) {
+  #buildGutter(container: HTMLElement, lines: HighlightLine[]): void {
     const withNumbers = this.lineNumbers && this.mode !== 'inline';
     const old = container.querySelector<HTMLElement>('.ic-gutter');
     old?.remove();
@@ -548,12 +583,12 @@ class IsCode extends ElementBase {
     const gutter = document.createElement('div');
     gutter.className = 'ic-gutter';
     gutter.setAttribute('aria-hidden', 'true');
-    gutter.innerHTML = lines.map((_, i) => `<span class="ic-ln">${i + 1}</span>`).join('');
+    gutter.innerHTML = lines.map((_l, i) => `<span class="ic-ln">${i + 1}</span>`).join('');
     container.prepend(gutter);
   }
 
   /** Pinta el contenido nativo (readonly): gutter (opcional) + líneas. */
-  #renderNative() {
+  #renderNative(): void {
     if (!this.#native) return;
     const text = this.#nativeText ?? '';
     const scroll = document.createElement('div');
@@ -564,12 +599,14 @@ class IsCode extends ElementBase {
     const { lines } = this.#paintLines(pre, text, true);
     scroll.append(pre);
     this.#buildGutter(scroll, lines);
-    this.#host.innerHTML = '';
-    this.#host.append(scroll);
+    if (this.#host) {
+      this.#host.innerHTML = '';
+      this.#host.append(scroll);
+    }
     this.#nativeRoot = pre;
   }
 
-  #destroyNative() {
+  #destroyNative(): void {
     this.#native = false;
     this.#editing = false;
     this.#nativeRoot = null;
@@ -579,7 +616,7 @@ class IsCode extends ElementBase {
 
   /* ── Editor editable nativo (textarea + resaltado sincronizado) ── */
 
-  #onEditInput = () => {
+  #onEditInput = (): void => {
     const v = this.#ta?.value ?? '';
     if (v === this.#nativeText) { this.#emitCursor(); return; }
     // Las marcas se re-anclan al texto editado: lo anterior a la edición se
@@ -587,7 +624,7 @@ class IsCode extends ElementBase {
     this.#marks = rebaseMarks(this.#marks, ...editRange(this.#nativeText ?? '', v));
     this.#nativeText = v;
     this.setAttribute('value', v);
-    setFormValue(this.#internals, v);
+    setFormValue(this.#internals, v, null);
     setCustomState(this.#internals, 'blank', !v);
     this.#paintEdit();
     emit(this, 'is-input', { value: v });
@@ -595,26 +632,27 @@ class IsCode extends ElementBase {
     this.#emitCursor();
   };
 
-  #onEditScroll = () => {
+  #onEditScroll = (): void => {
     const ta = this.#ta;
     const pre = this.#nativeRoot;
     if (!ta || !pre) return;
     pre.style.transform = `translate(${-ta.scrollLeft}px, ${-ta.scrollTop}px)`;
   };
 
-  #onEditSelect = () => this.#emitCursor();
+  #onEditSelect = (): void => this.#emitCursor();
 
-  #onEditKeydown = (e: KeyboardEvent) => {
+  #onEditKeydown = (e: KeyboardEvent): void => {
     if (e.key === 'Tab' && !e.ctrlKey && !e.metaKey && !e.altKey) {
       e.preventDefault();
-      const ta = this.#ta!;
+      const ta = this.#ta;
+      if (!ta) return;
       const indent = ' '.repeat(this.tabSize);
       ta.setRangeText(indent, ta.selectionStart, ta.selectionEnd, 'end');
       this.#onEditInput();
     }
   };
 
-  #emitCursor() {
+  #emitCursor(): void {
     const ta = this.#ta;
     if (!ta) return;
     const before = ta.value.slice(0, ta.selectionStart);
@@ -629,28 +667,28 @@ class IsCode extends ElementBase {
     else this.#scheduleTipClose();
   }
 
-  #paintActiveLine(line: number) {
+  #paintActiveLine(line: number): void {
     const pre = this.#nativeRoot;
     if (!pre || this.mode === 'inline') return;
     const lines = pre.querySelectorAll<HTMLElement>('.ic-line');
     if (this.#activeLine >= 0 && this.#activeLine < lines.length) {
-      lines[this.#activeLine].classList.remove('ic-line--active');
+      lines[this.#activeLine]?.classList.remove('ic-line--active');
     }
     const host = this.shadowRoot;
     host?.querySelectorAll<HTMLElement>('.ic-ln--active').forEach((n) => n.classList.remove('ic-ln--active'));
     if (line >= 0 && line < lines.length) {
-      lines[line].classList.add('ic-line--active');
+      lines[line]?.classList.add('ic-line--active');
       host?.querySelectorAll<HTMLElement>('.ic-ln')[line]?.classList.add('ic-ln--active');
     }
     this.#activeLine = line;
   }
 
   /** Re-resalta el <pre> del editor (sin tocar el textarea). */
-  #paintEdit() {
+  #paintEdit(): void {
     const pre = this.#nativeRoot;
     const ta = this.#ta;
     if (!pre || !ta) return;
-    const scroll = this.#host.querySelector<HTMLElement>('.ic-scroll') ?? pre.parentElement;
+    const scroll = this.#host?.querySelector<HTMLElement>('.ic-scroll') ?? pre.parentElement;
     const { lines } = this.#paintLines(pre, this.#nativeText ?? '', true);
     if (scroll) this.#buildGutter(scroll, lines);
     this.#paintActiveLine(-1);
@@ -658,14 +696,14 @@ class IsCode extends ElementBase {
     this.#paintActiveLine(ta.value.slice(0, ta.selectionStart).split('\n').length - 1);
   }
 
-  #bootEditable() {
+  #bootEditable(): void {
     this.#native = true;
     this.#editing = true;
     this.#nativeText = this.#nativeText != null
       ? this.#nativeText
       : (this.#pendingValue ?? this.#readSeedText() ?? '');
     this.#pendingValue = null;
-    this.#textarea.value = this.#nativeText;
+    if (this.#textarea) this.#textarea.value = this.#nativeText;
 
     const scroll = document.createElement('div');
     scroll.className = 'ic-scroll';
@@ -680,7 +718,7 @@ class IsCode extends ElementBase {
     ta.spellcheck = false;
     ta.autocapitalize = 'off';
     ta.autocomplete = 'off';
-    ta.wrap = this.wrap || this.mode === 'inline' ? 'soft' : 'off';
+    ta.wrap = (this.wrap || this.mode === 'inline') ? 'soft' : 'off';
     ta.placeholder = this.placeholder || '';
     ta.value = this.#nativeText;
     edit.append(pre, ta);
@@ -695,22 +733,24 @@ class IsCode extends ElementBase {
     ta.addEventListener('click', this.#onEditSelect);
     ta.addEventListener('keydown', this.#onEditKeydown);
 
-    this.#host.innerHTML = '';
-    this.#host.append(scroll);
+    if (this.#host) {
+      this.#host.innerHTML = '';
+      this.#host.append(scroll);
+    }
     this.#nativeRoot = pre;
     this.#ta = ta;
 
     this.#syncReadonlyDom();
     this.#syncLayoutDom();
     this.#ready = true;
-    setFormValue(this.#internals, this.#nativeText);
+    setFormValue(this.#internals, this.#nativeText, null);
     setCustomState(this.#internals, 'blank', !this.#nativeText);
     if (this.autofocus) ta.focus();
     requestAnimationFrame(() => this.#paintActiveLine(0));
     emit(this, 'is-ready', { lang: this.lang, value: this.value });
   }
 
-  #setValue(text: string, reflect) {
+  #setValue(text: string, reflect: boolean): void {
     const next = String(text);
     if (this.#native) {
       if (this.#nativeText === next) {
@@ -730,16 +770,16 @@ class IsCode extends ElementBase {
       if (this.#textarea) this.#textarea.value = next;
     }
     if (reflect) this.setAttribute('value', next);
-    setFormValue(this.#internals, next);
+    setFormValue(this.#internals, next, null);
     setCustomState(this.#internals, 'blank', !next);
   }
 
-  #applyLang() {
+  #applyLang(): void {
     if (this.#editing) this.#paintEdit();
     else if (this.#native) this.#renderNative();
   }
 
-  #applyOptions() {
+  #applyOptions(): void {
     if (this.#native) {
       const wantsReadonly = this.readonly || this.disabled;
       if (wantsReadonly !== !this.#editing) {
@@ -753,9 +793,9 @@ class IsCode extends ElementBase {
         }
         return;
       }
-      if (this.#editing) {
-        this.#ta!.wrap = this.wrap || this.mode === 'inline' ? 'soft' : 'off';
-        this.#ta!.placeholder = this.placeholder || '';
+      if (this.#editing && this.#ta) {
+        this.#ta.wrap = (this.wrap || this.mode === 'inline') ? 'soft' : 'off';
+        this.#ta.placeholder = this.placeholder || '';
         this.#paintEdit();
       } else {
         this.#renderNative();
@@ -769,14 +809,14 @@ class IsCode extends ElementBase {
     this.#syncLayoutDom();
   }
 
-  #syncLayoutDom() {
+  #syncLayoutDom(): void {
     const inline = this.mode === 'inline';
     this.toggleAttribute('data-inline', inline);
     this.setAttribute('data-mode', this.mode);
     setCustomState(this.#internals, 'inline', inline);
   }
 
-  #syncReadonlyDom() {
+  #syncReadonlyDom(): void {
     setCustomState(this.#internals, 'disabled', this.disabled);
     setCustomState(this.#internals, 'readonly', this.readonly);
     this.toggleAttribute('data-disabled', this.disabled);
@@ -791,22 +831,23 @@ class IsCode extends ElementBase {
    * con data-mark-id para el tooltip). Antes del bootstrap no hay vista: los
    * #boot* pintan ya con #marks.
    */
-  #paintMarks() {
+  #paintMarks(): void {
     if (!this.#native) return;
     this.#bindMarkEvents();
     if (this.#editing) this.#paintEdit();
     else this.#renderNative();
   }
 
-  #markFromEvent(e) {
-    const el = e.target?.closest?.('[data-mark-id]');
+  #markFromEvent(e: PointerEvent): CodeMark | null {
+    const target = e.target as Element | null;
+    const el = target?.closest?.('[data-mark-id]');
     if (!el) return null;
     const id = el.getAttribute('data-mark-id');
     return this.#marks.find((m) => m.id === id) || null;
   }
 
   /** Marca "legible" (tooltip/message o con texto) que cubre un índice. */
-  #markAt(index) {
+  #markAt(index: number): CodeMark | null {
     return this.#marks.find((m) => index >= m.from && index < m.to
       && (m.kind === 'tooltip' || m.kind === 'message' || m.message || m.body)) || null;
   }
@@ -817,8 +858,9 @@ class IsCode extends ElementBase {
    * en editable el ancla es el span de la marca dentro del <pre> (el hover no
    * existe: el textarea tapa el pre), así que el tooltip se abre por caret.
    */
-  #openMarkTip(mark, targetEl) {
+  #openMarkTip(mark: CodeMark, targetEl: HTMLElement | null): void {
     clearTimeout(this.#hideTipTimer);
+    if (!this.#tooltip) return;
     const title = mark.title || (mark.tone && mark.tone !== 'neutral' ? mark.tone : '');
     const body = mark.body || mark.message || '';
     this.#tooltip.innerHTML = '';
@@ -833,10 +875,11 @@ class IsCode extends ElementBase {
       span.textContent = body;
       this.#tooltip.append(span);
     }
-    const escId = typeof CSS !== 'undefined' && CSS.escape ? CSS.escape(mark.id) : mark.id;
+    const escId = (typeof CSS !== 'undefined' && CSS.escape) ? CSS.escape(mark.id) : mark.id;
     const anchor = targetEl
       ?? this.#nativeRoot?.querySelector<HTMLElement>(`[data-mark-id="${escId}"]`)
       ?? this.#host;
+    if (!anchor) return;
     if (!anchor.id) anchor.id = `is-code-mark-${mark.id}`;
     this.#tooltip.setAttribute('for', anchor.id);
     this.#tooltip.open = true;
@@ -847,10 +890,10 @@ class IsCode extends ElementBase {
   }
 
   /** Cierra el tooltip actual (retardo anti-parpadeo) y emite leave. */
-  #scheduleTipClose() {
+  #scheduleTipClose(): void {
     clearTimeout(this.#hideTipTimer);
     this.#hideTipTimer = window.setTimeout(() => {
-      this.#tooltip.open = false;
+      if (this.#tooltip) this.#tooltip.open = false;
       if (this.#currentTip) {
         const mark = this.#marks.find((m) => m.id === this.#currentTip);
         if (mark) emit(this, 'is-mark-activate', { mark: { ...mark }, phase: 'leave' });
@@ -859,17 +902,18 @@ class IsCode extends ElementBase {
     }, 120);
   }
 
-  #onMarkHover(e) {
+  #onMarkHover(e: PointerEvent): void {
     const mark = this.#markFromEvent(e);
     if (!mark) return;
     if (mark.kind !== 'tooltip' && mark.kind !== 'message' && !mark.message && !mark.body) {
       return;
     }
-    const target = e.target.closest?.('[data-mark-id]') || e.target;
-    this.#openMarkTip(mark, target);
+    const target = e.target as Element | null;
+    const targetEl = (target?.closest?.('[data-mark-id]') as HTMLElement) || (target as HTMLElement);
+    this.#openMarkTip(mark, targetEl);
   }
 
-  #onMarkOut(e) {
+  #onMarkOut(e: PointerEvent): void {
     if (!this.#markFromEvent(e)) return;
     this.#scheduleTipClose();
   }

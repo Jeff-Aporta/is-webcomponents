@@ -2,10 +2,23 @@
  * Behavior del preview <is-resize-observer>.
  * @param {import('../../previews/_kit/types.d.ts').PreviewMountContext} ctx
  */
-export async function mount(ctx: import('../../previews/_kit/types.d.ts').PreviewMountContext) {
+
+interface ResizeObserverEntryLike {
+  contentBoxSize?: readonly { inlineSize: number; blockSize: number }[];
+  borderBoxSize?: readonly { inlineSize: number; blockSize: number }[];
+  contentRect?: { width: number; height: number };
+}
+
+interface ResizeDetail {
+  entries?: readonly ResizeObserverEntryLike[];
+}
+
+interface BoxSize { w: number | null; h: number | null }
+
+export async function mount(ctx: import('../../previews/_kit/types.d.ts').PreviewMountContext): Promise<void> {
   const root = ctx.main;
 
-  const pushLog = (logEl, cls, text) => {
+  const pushLog = (logEl: HTMLElement | null, cls: string, text: string): void => {
     if (!logEl) return;
     logEl.querySelector<HTMLElement>('.hint')?.closest('.row')?.remove();
     const row = document.createElement('div');
@@ -21,7 +34,10 @@ export async function mount(ctx: import('../../previews/_kit/types.d.ts').Previe
     while (logEl.children.length > 8) logEl.lastElementChild?.remove();
   };
 
-  const readSize = (entry, fallbackEl) => {
+  const readSize = (
+    entry: ResizeObserverEntryLike | null | undefined,
+    fallbackEl: HTMLElement | null,
+  ): BoxSize => {
     const box = entry?.contentBoxSize?.[0] || entry?.borderBoxSize?.[0] || null;
     if (box) {
       return { w: Math.round(box.inlineSize), h: Math.round(box.blockSize) };
@@ -41,8 +57,8 @@ export async function mount(ctx: import('../../previews/_kit/types.d.ts').Previe
     return { w: null, h: null };
   };
 
-  const paintSize = (el, w, h) => {
-    if (el && w != null) el.textContent = `${w} × ${h} px`;
+  const paintSize = (el: HTMLElement | null, w: number | null, h: number | null): void => {
+    if (el && w != null && h != null) el.textContent = `${w} × ${h} px`;
   };
 
   // ── Demo principal ────────────────────────────────────────────────────────
@@ -56,11 +72,11 @@ export async function mount(ctx: import('../../previews/_kit/types.d.ts').Previe
     paintSize(roSize, w, h);
   }
 
-  ro?.addEventListener('is-resize', (e) => {
-    const entry = e.detail?.entries?.[0];
+  ro?.addEventListener('is-resize', (e: Event) => {
+    const entry = (e as CustomEvent<ResizeDetail>).detail?.entries?.[0];
     const { w, h } = readSize(entry, roBox);
     paintSize(roSize, w, h);
-    if (w != null) pushLog(roLog, 'type-res', `is-resize → ${w} × ${h} px`);
+    if (w != null && h != null) pushLog(roLog, 'type-res', `is-resize → ${w} × ${h} px`);
   });
 
   // ── Demo disabled ─────────────────────────────────────────────────────────
@@ -76,7 +92,7 @@ export async function mount(ctx: import('../../previews/_kit/types.d.ts').Previe
     paintSize(roSize2, w, h);
   }
 
-  const syncToggleUi = () => {
+  const syncToggleUi = (): void => {
     const off = ro2?.hasAttribute('disabled');
     if (roToggle) roToggle.textContent = off ? 'Activar observer' : 'Desactivar observer';
     if (ro2Status) {
@@ -98,14 +114,14 @@ export async function mount(ctx: import('../../previews/_kit/types.d.ts').Previe
     );
   });
 
-  ro2?.addEventListener('is-resize', (e) => {
-    const entry = e.detail?.entries?.[0];
+  ro2?.addEventListener('is-resize', (e: Event) => {
+    const entry = (e as CustomEvent<ResizeDetail>).detail?.entries?.[0];
     const { w, h } = readSize(entry, roBox2);
     paintSize(roSize2, w, h);
-    if (w != null) pushLog(roLog2, 'type-res', `is-resize → ${w} × ${h} px`);
+    if (w != null && h != null) pushLog(roLog2, 'type-res', `is-resize → ${w} × ${h} px`);
   });
 }
 
-export function unmount() {
+export function unmount(): void {
   /* listeners viven en el preview hasta desmontar la página */
 }

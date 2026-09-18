@@ -2,6 +2,7 @@ import { adoptCss, defineElement, emit } from '../../core/element.js';
 import { DiagramElementBase } from '../_shared/diagram-element-base.js';
 import { resolveSwimlaneSpec, computeSwimlaneLayout } from './swimlane-spec.js';
 import { sequenceThemeDark, sequenceThemeLight } from './sequence-spec.js';
+import type { DiagramTheme } from './diagram-types.js';
 import { tkHueToHex } from '../_shared/tk-hue.js';
 import { edgeStrokeHex, edgeChipFill, edgeChipText } from '../_shared/diagram-edge-style.js';
 import { inlineMdWeb } from '../_shared/tk-inline-md.js';
@@ -27,8 +28,63 @@ import { svgArrowHead } from '../_shared/diagram-arrow.js';
  * Eventos: is-render, is-open-viewer, is-toggle-lane
  */
 
+type StepKind = 'process' | 'decision' | 'start' | 'end';
+interface SwLayoutStep {
+  id: string;
+  label: string;
+  kind: StepKind;
+  lane: string;
+  description?: string;
+  hue?: number;
+  column: number;
+  x: number;
+  y: number;
+  w: number;
+  h: number;
+  overflow?: 'grow' | 'ellipsis' | 'shrink';
+}
+interface SwLayoutLink {
+  id: string;
+  from: string;
+  to: string;
+  label?: string;
+  forward: boolean;
+  path: string;
+  arrowTipX: number;
+  arrowTipY: number;
+  labelX: number;
+  labelY: number;
+  labelW?: number;
+  hue?: number;
+}
+interface SwLayoutLane {
+  id: string;
+  name: string;
+  hue: number;
+  description?: string;
+  x: number;
+  y: number;
+  w: number;
+  h: number;
+  labelW: number;
+}
+interface SwLayout {
+  width: number;
+  height: number;
+  lanes: SwLayoutLane[];
+  steps: SwLayoutStep[];
+  links: SwLayoutLink[];
+  columns: number;
+  title?: string;
+  subtitle?: string;
+  titleY: number;
+  subtitleY: number;
+}
+interface StepEntry { s: SwLayoutStep; g: SVGGElement; }
+interface LinkEntry { l: SwLayoutLink; g: SVGGElement; }
+
 /** Contorno del paso según su tipo, con la misma gramática que el flowchart. */
-function stepPath(kind, x, y, w: number, h: number) {
+function stepPath(kind: StepKind, x: number, y: number, w: number, h: number): string {
   const cx = x + w / 2;
   const cy = y + h / 2;
   if (kind === 'decision') return `M${cx},${y} L${x + w},${cy} L${cx},${y + h} L${x},${cy} Z`;
@@ -37,10 +93,10 @@ function stepPath(kind, x, y, w: number, h: number) {
 }
 
 class IsSwimlaneDiagram extends DiagramElementBase {
-  #hiddenLanes = new Set();
-  #stepNodes = new Map();
-  #linkNodes = new Map();
-  #hoverId = null;
+  #hiddenLanes = new Set<string>();
+  #stepNodes = new Map<string, StepEntry>();
+  #linkNodes = new Map<string, LinkEntry>();
+  #hoverId: string | null = null;
 
   constructor() {
     super();
@@ -60,15 +116,15 @@ class IsSwimlaneDiagram extends DiagramElementBase {
     this.wrap.removeEventListener('click', this.#onClick);
   }
 
-  onPayloadChanged() { this.#hiddenLanes = new Set(); }
+  onPayloadChanged(): void { this.#hiddenLanes = new Set(); }
 
-  get hiddenLanes() { return this.#hiddenLanes; }
-  set hiddenLanes(v) {
-    this.#hiddenLanes = v instanceof Set ? v : new Set(v || []);
+  get hiddenLanes(): Set<string> { return this.#hiddenLanes; }
+  set hiddenLanes(v: Set<string> | string[] | null | undefined) {
+    this.#hiddenLanes = v instanceof Set ? new Set(v) : new Set(v || []);
     this.queueRender();
   }
 
-  renderDiagram() {
+  renderDiagram(): void {
     const spec = resolveSwimlaneSpec(this.payload ?? {});
     this.spec = spec;
     if (!spec) {
@@ -102,13 +158,13 @@ class IsSwimlaneDiagram extends DiagramElementBase {
     const theme = this.isDarkTheme ? sequenceThemeDark() : sequenceThemeLight();
     this.syncThemeAttr();
 
-    const layout = computeSwimlaneLayout(visible);
+    const layout = computeSwimlaneLayout(visible) as unknown as SwLayout;
     this.layout = layout;
     this.#buildSvg(layout, theme);
     this.wrap.classList.toggle('is-viewer', this.isViewer);
   }
 
-  #buildSvg(layout, theme) {
+  #buildSvg(layout: SwLayout, theme: DiagramTheme): void {
     const { width: W, height: H } = layout;
     this.svg.setAttribute('viewBox', `0 0 ${W} ${H}`);
     this.svg.setAttribute('preserveAspectRatio', 'xMidYMid meet');
@@ -143,7 +199,7 @@ class IsSwimlaneDiagram extends DiagramElementBase {
     emit(this, 'is-render', { layout, svg: this.svg });
   }
 
-  #buildLanes(layout, theme) {
+  #buildLanes(layout: SwLayout, theme: DiagramTheme): void {
     layout.lanes.forEach((lane, i: number) => {
       const color = tkHueToHex(lane.hue) ?? theme.accent;
       const g = svgEl('g', { class: 'sw-lane' });
@@ -185,7 +241,7 @@ class IsSwimlaneDiagram extends DiagramElementBase {
     });
   }
 
-  #buildLinks(layout, theme) {
+  #buildLinks(layout: SwLayout, theme: DiagramTheme): void {
     for (const l of layout.links) {
       const color = edgeStrokeHex(l.hue, theme.accent);
       const g = svgEl('g', { class: `sw-link${l.forward ? '' : ' sw-link--return'}` });
@@ -197,10 +253,16 @@ class IsSwimlaneDiagram extends DiagramElementBase {
         'stroke-dasharray': l.forward ? null : '5 4',
         class: 'sw-link__path',
       }));
-      g.appendChild(svgArrowHead({
-        d: l.path, tip: { x: l.arrowTipX, y: l.arrowTipY }, color,
-        len: 8, halfWidth: 4, className: 'sw-link__head',
-      }));
+      // `svgArrowHead` está en JS plano y su `className` por defecto es `null` (no `string`),
+// así que casteamos para no tocar un helper fuera de este scope.
+g.appendChild(svgArrowHead({
+        d: l.path,
+        tip: { x: l.arrowTipX, y: l.arrowTipY },
+        color,
+        len: 8,
+        halfWidth: 4,
+        className: 'sw-link__head',
+      } as unknown as Parameters<typeof svgArrowHead>[0]));
 
       if (l.label) {
         const w = l.labelW ?? (l.label.length * 5.6 + 8);
@@ -221,7 +283,7 @@ class IsSwimlaneDiagram extends DiagramElementBase {
     }
   }
 
-  #buildSteps(layout, theme) {
+  #buildSteps(layout: SwLayout, theme: DiagramTheme): void {
     for (const s of layout.steps) {
       const color = (s.hue != null && tkHueToHex(s.hue)) || theme.accent;
       const g = svgEl('g', { class: `sw-step sw-step--${s.kind}` });
@@ -239,8 +301,8 @@ class IsSwimlaneDiagram extends DiagramElementBase {
       });
       const swHasMd = /[*`\[]/.test(s.label) || s.label.includes('{{');
       if (swHasMd) {
-        t.setAttribute('x', s.x + s.w / 2);
-        t.setAttribute('y', s.y + s.h / 2 + 4);
+        t.setAttribute('x', String(s.x + s.w / 2));
+        t.setAttribute('y', String(s.y + s.h / 2 + 4));
         t.setAttribute('text-anchor', 'middle');
         t.innerHTML = inlineMdWeb(s.label);
       } else {
@@ -250,7 +312,7 @@ class IsSwimlaneDiagram extends DiagramElementBase {
           maxHeight: s.h - 4,
           fontSize: 10.5,
           fontFamily: 'Tahoma,Arial,sans-serif',
-          overflow: s.overflow ?? 'grow',
+          overflow: (s.overflow ?? 'grow') as 'grow' | 'ellipsis',
         });
         const swtspans = buildTspans(
           swresult.lines,
@@ -275,9 +337,9 @@ class IsSwimlaneDiagram extends DiagramElementBase {
 
   /* ── interacción ── */
 
-  #onClick = (e: PointerEvent) => {
+  #onClick = (e: MouseEvent) => {
     if (this.isViewer) {
-      const lane = e.composedPath().find((x) => x?.dataset?.laneId);
+      const lane = e.composedPath().find((x): x is HTMLElement => x instanceof HTMLElement && !!x.dataset?.laneId);
       if (lane) emit(this, 'is-toggle-lane', { id: lane.dataset.laneId });
       return;
     }
@@ -291,9 +353,9 @@ class IsSwimlaneDiagram extends DiagramElementBase {
     if (!ev.defaultPrevented) this.openOwnViewer('swimlane');
   };
 
-  #onMouseMove = (e: PointerEvent) => {
+  #onMouseMove = (e: MouseEvent) => {
     if (!this.isViewer) return;
-    const g = e.composedPath().find((n) => n?.dataset?.stepId);
+    const g = e.composedPath().find((n): n is HTMLElement => n instanceof HTMLElement && !!n.dataset?.stepId);
     const id = g?.dataset.stepId ?? null;
     if (id !== this.#hoverId) this.#applyHover(id);
     if (id) {
@@ -309,7 +371,7 @@ class IsSwimlaneDiagram extends DiagramElementBase {
     this.#applyHover(null);
   };
 
-  #applyHover(id) {
+  #applyHover(id: string | null): void {
     this.#hoverId = id;
     const entry = id ? this.#stepNodes.get(id) : null;
 

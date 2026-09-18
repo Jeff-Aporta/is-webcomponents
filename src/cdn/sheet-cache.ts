@@ -10,26 +10,30 @@
 
 const GLOBAL_KEY = '__isSheetCache';
 
-/**
- * @typedef {{
- *   cacheName: string,
- *   hojas: Map<string, CSSStyleSheet>,
- *   cargas: Map<string, Promise<CSSStyleSheet | null>>,
- *   descargar: (href: string) => Promise<CSSStyleSheet | null>,
- *   calentar: (hrefs: string[]) => Promise<unknown>,
- *   calentarDesdeCache: () => Promise<unknown>,
- *   calentarDesdeManifiesto: (url: string, opts?: { base?: string, key?: string }) => Promise<unknown>,
- * }} SheetCacheApi
- */
+export interface SheetCacheOpts {
+  cacheName?: string;
+  globalKey?: string;
+  patchPrepend?: boolean;
+}
 
-/** @type {boolean} */
+export interface SheetCacheManifestOpts {
+  base?: string;
+  key?: string;
+}
+
+export interface SheetCacheApi {
+  cacheName: string;
+  hojas: Map<string, CSSStyleSheet>;
+  cargas: Map<string, Promise<CSSStyleSheet | null>>;
+  descargar: (href: string) => Promise<CSSStyleSheet | null>;
+  calentar: (hrefs: string[]) => Promise<unknown>;
+  calentarDesdeCache: () => Promise<unknown>;
+  calentarDesdeManifiesto: (url: string, opts?: SheetCacheManifestOpts) => Promise<unknown>;
+}
+
 let prependInstalled = false;
 
-/**
- * @param {{ cacheName?: string, globalKey?: string, patchPrepend?: boolean }} [opts]
- * @returns {SheetCacheApi | null}
- */
-export function createSheetCache(opts = {}) {
+export function createSheetCache(opts: SheetCacheOpts = {}): SheetCacheApi | null {
   const cacheName = String(opts.cacheName || 'is-sheets-v1');
   const globalKey = String(opts.globalKey || GLOBAL_KEY);
   const patchPrepend = opts.patchPrepend !== false;
@@ -45,29 +49,24 @@ export function createSheetCache(opts = {}) {
   }
   if (!soporta) return null;
 
-  /** @type {Map<string, CSSStyleSheet>} */
-  const hojas = new Map();
-  /** @type {Map<string, Promise<CSSStyleSheet | null>>} */
-  const cargas = new Map();
-  const cacheApi = typeof caches !== 'undefined' ? caches : null;
+  const hojas = new Map<string, CSSStyleSheet>();
+  const cargas = new Map<string, Promise<CSSStyleSheet | null>>();
+  const cacheApi: CacheStorage | null = typeof caches !== 'undefined' ? caches : null;
 
-  /** @param {ShadowRoot} shadow @param {CSSStyleSheet} hoja */
-  function adoptar(shadow: ShadowRoot, hoja: CSSStyleSheet) {
+  function adoptar(shadow: ShadowRoot, hoja: CSSStyleSheet): void {
     if (shadow.adoptedStyleSheets.indexOf(hoja) === -1) {
       shadow.adoptedStyleSheets = shadow.adoptedStyleSheets.concat(hoja);
     }
   }
 
-  /** @param {string} texto @param {string} href */
-  function construir(texto: string, href: string) {
+  function construir(texto: string, href: string): CSSStyleSheet {
     const hoja = new CSSStyleSheet();
     hoja.replaceSync(texto);
     hojas.set(href, hoja);
     return hoja;
   }
 
-  /** @param {string} href @param {string} texto */
-  function persistir(href: string, texto: string) {
+  function persistir(href: string, texto: string): void {
     if (!cacheApi) return;
     cacheApi
       .open(cacheName)
@@ -75,8 +74,7 @@ export function createSheetCache(opts = {}) {
       .catch(() => {});
   }
 
-  /** @param {string} href */
-  function leerCache(href: string) {
+  function leerCache(href: string): Promise<string | null> {
     if (!cacheApi) return Promise.resolve(null);
     return cacheApi
       .open(cacheName)
@@ -85,15 +83,15 @@ export function createSheetCache(opts = {}) {
       .catch(() => null);
   }
 
-  /** @param {string} href */
-  function descargar(href: string) {
+  function descargar(href: string): Promise<CSSStyleSheet | null> {
     const enCurso = cargas.get(href);
     if (enCurso) return enCurso;
-    if (hojas.has(href)) return Promise.resolve(hojas.get(href) ?? null);
+    const cached = hojas.get(href);
+    if (cached) return Promise.resolve(cached);
 
     const carga = leerCache(href)
-      .then((cached) => {
-        if (cached != null) return construir(cached, href);
+      .then((cachedText) => {
+        if (cachedText != null) return construir(cachedText, href);
         return fetch(href).then((r) => {
           if (!r.ok) throw new Error(`${r.status} ${href}`);
           return r.text().then((texto) => {
@@ -108,8 +106,7 @@ export function createSheetCache(opts = {}) {
     return carga;
   }
 
-  /** @param {string[]} hrefs */
-  function calentar(hrefs: string[]) {
+  function calentar(hrefs: string[]): Promise<unknown> {
     const lista = Array.isArray(hrefs) ? hrefs : [];
     const base = typeof location !== 'undefined' ? location.href : undefined;
     return Promise.all(
@@ -123,7 +120,7 @@ export function createSheetCache(opts = {}) {
     );
   }
 
-  function calentarDesdeCache() {
+  function calentarDesdeCache(): Promise<unknown> {
     if (!cacheApi) return Promise.resolve();
     return cacheApi
       .open(cacheName)
@@ -146,18 +143,20 @@ export function createSheetCache(opts = {}) {
       .catch(() => {});
   }
 
-  /**
-   * @param {string} url
-   * @param {{ base?: string, key?: string }} [manOpts]
-   */
-  async function calentarDesdeManifiesto(url: string, manOpts = {}) {
+  async function calentarDesdeManifiesto(url: string, manOpts: SheetCacheManifestOpts = {}): Promise<unknown> {
     const baseDoc = typeof location !== 'undefined' ? location.href : undefined;
     const abs = new URL(url, baseDoc).href;
     const res = await fetch(abs, { cache: 'force-cache' });
     if (!res.ok) throw new Error(`${res.status} ${abs}`);
-    const data = await res.json();
+    const data: unknown = await res.json();
     const key = manOpts.key || 'hojas';
-    const rels = Array.isArray(data?.[key]) ? data[key] : Array.isArray(data) ? data : [];
+    const relsRaw: unknown = (data as Record<string, unknown> | null)?.[key];
+    const dataArr: unknown = (data as unknown[]) || [];
+    const rels: readonly string[] = Array.isArray(relsRaw)
+      ? (relsRaw as readonly string[])
+      : Array.isArray(dataArr)
+        ? (dataArr as readonly string[])
+        : [];
     const base = manOpts.base
       ? new URL(manOpts.base, baseDoc).href
       : new URL('.', abs).href;
@@ -169,18 +168,20 @@ export function createSheetCache(opts = {}) {
     prependInstalled = true;
     const prependOriginal = ShadowRoot.prototype.prepend;
 
-    /** @param {Node} nodo */
-    function hrefDeHoja(nodo: Node) {
-      if (!nodo || nodo.nodeType !== 1 || /** @type {Element} */ (nodo).tagName !== 'LINK') return '';
-      const link = /** @type {HTMLLinkElement} */ (nodo);
+    function hrefDeHoja(nodo: Node): string {
+      if (!nodo || nodo.nodeType !== 1 || (nodo as Element).tagName !== 'LINK') return '';
+      const link = nodo as HTMLLinkElement;
       if (link.rel !== 'stylesheet' || !link.href) return '';
       return link.href;
     }
 
-    ShadowRoot.prototype.prepend = function patchedPrepend(...args) {
-      const api = typeof globalThis !== 'undefined' ? globalThis[globalKey] : null;
-      const map = api?.hojas;
-      const restantes = [];
+    (ShadowRoot.prototype as { prepend: (...args: Node[]) => void }).prepend = function patchedPrepend(
+      this: ShadowRoot,
+      ...args: Node[]
+    ): void {
+      const api = typeof globalThis !== 'undefined' ? (globalThis as Record<string, unknown>)[globalKey] : null;
+      const map = (api as SheetCacheApi | null)?.hojas;
+      const restantes: Node[] = [];
       for (const nodo of args) {
         const href = hrefDeHoja(nodo);
         if (!href) {
@@ -195,14 +196,13 @@ export function createSheetCache(opts = {}) {
           continue;
         }
         restantes.push(nodo);
-        if (api?.descargar) void api.descargar(href);
+        if ((api as SheetCacheApi | null)?.descargar) void (api as SheetCacheApi).descargar(href);
       }
       if (restantes.length) prependOriginal.apply(this, restantes);
     };
   }
 
-  /** @type {SheetCacheApi} */
-  const api = {
+  const api: SheetCacheApi = {
     cacheName,
     hojas,
     cargas,
@@ -213,9 +213,10 @@ export function createSheetCache(opts = {}) {
   };
 
   if (typeof globalThis !== 'undefined') {
-    globalThis[globalKey] = api;
+    (globalThis as Record<string, unknown>)[globalKey] = api;
     // Alias legacy PatyIA
-    if (!globalThis.__patyHojas) globalThis.__patyHojas = api;
+    if (!(globalThis as Record<string, unknown>).__patyHojas)
+      (globalThis as Record<string, unknown>).__patyHojas = api;
   }
 
   return api;
@@ -223,13 +224,13 @@ export function createSheetCache(opts = {}) {
 
 /**
  * Instala (o reusa) el caché global. Idempotente por `cacheName`.
- * @param {{ cacheName?: string, globalKey?: string }} [opts]
- * @returns {SheetCacheApi | null}
  */
-export function installSheetCache(opts = {}) {
+export function installSheetCache(opts: SheetCacheOpts = {}): SheetCacheApi | null {
   const globalKey = String(opts.globalKey || GLOBAL_KEY);
-  const existing = typeof globalThis !== 'undefined' ? globalThis[globalKey] : null;
-  if (existing?.descargar && existing?.calentar) {
+  const existing: SheetCacheApi | null = typeof globalThis !== 'undefined'
+    ? ((globalThis as Record<string, unknown>)[globalKey] as SheetCacheApi | null | undefined) ?? null
+    : null;
+  if (existing && typeof existing.descargar === 'function' && typeof existing.calentar === 'function') {
     if (opts.cacheName && existing.cacheName && existing.cacheName !== opts.cacheName) {
       return createSheetCache(opts);
     }
@@ -238,10 +239,11 @@ export function installSheetCache(opts = {}) {
   return createSheetCache(opts);
 }
 
-/** @returns {SheetCacheApi | null} */
-export function getSheetCache(globalKey = GLOBAL_KEY) {
+export function getSheetCache(globalKey: string = GLOBAL_KEY): SheetCacheApi | null {
   if (typeof globalThis === 'undefined') return null;
-  return globalThis[globalKey] || globalThis.__patyHojas || null;
+  const cache = (globalThis as Record<string, unknown>)[globalKey] as SheetCacheApi | null | undefined;
+  const legacy = (globalThis as Record<string, unknown>).__patyHojas as SheetCacheApi | null | undefined;
+  return cache || legacy || null;
 }
 
 export { GLOBAL_KEY as SHEET_CACHE_GLOBAL_KEY };

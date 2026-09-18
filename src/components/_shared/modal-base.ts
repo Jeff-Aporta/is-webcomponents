@@ -46,7 +46,7 @@ import { withStyleAttrs } from '../../core/attrs.js';
 
 import { upgradeProperties } from '../../core/element.js';
 import { emit } from '../../core/element.js';
-const BASE_OBSERVED = ['open', 'label', 'without-header', 'light-dismiss'];
+const BASE_OBSERVED: readonly string[] = ['open', 'label', 'without-header', 'light-dismiss'];
 
 /** Selector CSS para "cualquier elemento focuseable" usado en focus trap. */
 const FOCUSABLE_SELECTOR =
@@ -54,25 +54,38 @@ const FOCUSABLE_SELECTOR =
   ' select:not([disabled]), textarea:not([disabled]),' +
   ' button:not([disabled]), iframe, [tabindex]:not([tabindex="-1"])';
 
+/** Forma del constructor de subclase: expone __TEMPLATE y observedAttributes. */
+type ModalBaseCtor = typeof HTMLElement & {
+  __TEMPLATE: HTMLTemplateElement;
+  observedAttributes: readonly string[];
+};
+
 // `withStyleAttrs` da la personalización por atributo (radio, colores,
 // duraciones) a dialog/drawer y a cualquier modal que herede de aquí, sin
 // que ModalBase tenga que extender ElementBase.
 export class ModalBase extends withStyleAttrs(HTMLElement) {
-  static get observedAttributes(): string[] { return BASE_OBSERVED; }
+  static get observedAttributes(): string[] { return [...BASE_OBSERVED]; }
 
   // ── Subclass hooks ──────────────────────────────────────────────────
   /** Selector del contenedor modal dentro del shadow (p.ej. '.dialog'). */
-  get modalClass() { return '.modal'; }
+  get modalClass(): string { return '.modal'; }
   /** Atributo data-* para close declarativo en hijos (p.ej. 'data-dialog'). */
-  get closeAttr()   { return 'data-modal'; }
+  get closeAttr(): string   { return 'data-modal'; }
+
+  /** Hook opcional que la subclase puede definir (no es obligatorio). */
+  onConnected?(): void;
+  /** Hook opcional que la subclase puede definir (no es obligatorio). */
+  onDisconnected?(): void;
+  /** Hook opcional que la subclase puede definir (no es obligatorio). */
+  onAttributeChanged?(name: string, oldVal: string | null, newVal: string | null): void;
 
   // ── Refs expuestas a subclases ──────────────────────────────────────
   // Las subclases que extiendan ModalBase necesitan acceder al modal y al
   // backdrop desde sus métodos animateOpen / animateClose. Como los campos
   // privados (#modal, #backdrop) son inaccesibles fuera de esta clase,
   // exponemos getters públicos que devuelven las refs cacheadas.
-  get $modal()    { return this.#modal; }
-  get $backdrop() { return this.#backdrop; }
+  get $modal(): HTMLElement    { return this.#modal; }
+  get $backdrop(): HTMLElement { return this.#backdrop; }
 
   // ── Privados compartidos ────────────────────────────────────────────
   #mounted = false;
@@ -83,16 +96,17 @@ export class ModalBase extends withStyleAttrs(HTMLElement) {
   #header!: HTMLElement;
   #footer!: HTMLElement;
   #body!: HTMLElement;
-  #lastFocus = null;
+  #lastFocus: Element | null = null;
   #keyDownBound = false;
 
   constructor() {
     super();
     const shadow = this.attachShadow({ mode: 'open' });
-    if (!this.constructor.__TEMPLATE) {
+    const ctor = this.constructor as unknown as ModalBaseCtor;
+    if (!ctor.__TEMPLATE) {
       throw new Error(`${this.constructor.name} must define a static __TEMPLATE`);
     }
-    shadow.appendChild(this.constructor.__TEMPLATE.content.cloneNode(true));
+    shadow.appendChild(ctor.__TEMPLATE.content.cloneNode(true));
     this.#backdrop = shadow.querySelector<HTMLElement>('.backdrop')!;
     this.#modal    = shadow.querySelector<HTMLElement>(this.modalClass)!;
     this.#title    = shadow.querySelector<HTMLElement>('.title')!;
@@ -116,7 +130,7 @@ export class ModalBase extends withStyleAttrs(HTMLElement) {
   connectedCallback(): void {
     super.connectedCallback();
     this.#mounted = true;
-    upgradeProperties(this, this.constructor.observedAttributes);
+    upgradeProperties(this, (this.constructor as unknown as ModalBaseCtor).observedAttributes);
     this.#syncLabel();
     this.#syncFooterVisibility();
     this.#syncHeaderVisibility();
@@ -145,47 +159,49 @@ export class ModalBase extends withStyleAttrs(HTMLElement) {
   }
 
   // ── Public API ──────────────────────────────────────────────────────
-  get open() { return this.hasAttribute('open'); }
-  set open(v) {
+  get open(): boolean { return this.hasAttribute('open'); }
+  set open(v: boolean) {
     const desired = !!v;
     if (desired === this.open) return;
     if (desired) this.show();
     else this.hide();
   }
 
-  get label() { return this.getAttribute('label') || ''; }
-  set label(v) {
+  get label(): string { return this.getAttribute('label') || ''; }
+  set label(v: string) {
     if (v == null || v === '') this.removeAttribute('label');
     else this.setAttribute('label', v);
   }
 
-  get withoutHeader() { return this.hasAttribute('without-header'); }
-  set withoutHeader(v) { this.toggleAttribute('without-header', !!v); }
+  get withoutHeader(): boolean { return this.hasAttribute('without-header'); }
+  set withoutHeader(v: boolean) { this.toggleAttribute('without-header', !!v); }
 
-  get lightDismiss() { return this.hasAttribute('light-dismiss'); }
-  set lightDismiss(v) { this.toggleAttribute('light-dismiss', !!v); }
+  get lightDismiss(): boolean { return this.hasAttribute('light-dismiss'); }
+  set lightDismiss(v: boolean) { this.toggleAttribute('light-dismiss', !!v); }
 
-  show() { return this.#setOpen(true); }
-  hide() { return this.#setOpen(false); }
-  toggle() { return this.#setOpen(!this.open); }
+  show(): Promise<void> { return this.#setOpen(true); }
+  hide(): Promise<void> { return this.#setOpen(false); }
+  toggle(): Promise<void> { return this.#setOpen(!this.open); }
 
   // ── Privados compartidos ────────────────────────────────────────────
 
-  #onDelegatedClick = (e: PointerEvent) => {
-    const t = e.target.closest(`[${this.closeAttr}]`);
+  #onDelegatedClick = (e: PointerEvent): void => {
+    const target = e.target as Element | null;
+    if (!target) return;
+    const t = target.closest(`[${this.closeAttr}]`);
     if (!t || !this.contains(t)) return;
     const action = t.getAttribute(this.closeAttr);
     if (action === 'close') this.#requestClose(t);
   };
 
-  #onOpenAttrChanged() {
+  #onOpenAttrChanged(): void {
     if (this.open) this.#setOpen(true);
     // El atributo ya se removió (posiblemente desde fuera), así que el guard
     // de #doClose lo daría por cerrado y dejaría el modal pintado.
     else this.#doClose(true);
   }
 
-  #requestClose(source) {
+  #requestClose(source: Element | null): void {
     const evt = new CustomEvent('is-hide', {
       detail: { source: source ?? null },
       bubbles: true,
@@ -209,10 +225,10 @@ export class ModalBase extends withStyleAttrs(HTMLElement) {
     this.#doClose();
   }
 
-  #setOpen(desired) {
+  #setOpen(desired: boolean): Promise<void> {
     if (desired) {
       emit(this, 'is-show', {});
-      this.#lastFocus = document.activeElement;
+      this.#lastFocus = document.activeElement as Element | null;
       this.dataset.state = 'opening';
       this.#modal.hidden = false;
       this.#attachKeydown();
@@ -228,7 +244,7 @@ export class ModalBase extends withStyleAttrs(HTMLElement) {
     return this.#doClose();
   }
 
-  #doClose(attrAlreadyRemoved = false) {
+  #doClose(attrAlreadyRemoved: boolean = false): Promise<void> {
     if (!attrAlreadyRemoved && !this.open) return Promise.resolve();
     this.dataset.state = 'closing';
     this.removeAttribute('open');
@@ -236,8 +252,9 @@ export class ModalBase extends withStyleAttrs(HTMLElement) {
       this.#modal.hidden = false;
       delete this.dataset.state;
       this.#detachKeydown();
-      if (this.#lastFocus?.focus) {
-        try { this.#lastFocus.focus(); } catch (_e) { /* ignore */ }
+      const last = this.#lastFocus as HTMLElement | null;
+      if (last && typeof last.focus === 'function') {
+        try { last.focus(); } catch (_e: unknown) { /* ignore */ }
       }
       this.#lastFocus = null;
       emit(this, 'is-after-hide', {});
@@ -245,12 +262,12 @@ export class ModalBase extends withStyleAttrs(HTMLElement) {
   }
 
   /** Lee --show-duration / --hide-duration del host con fallback. */
-  #readDur(propName, fallback) {
+  #readDur(propName: string, fallback: number): number {
     const v = parseFloat(getComputedStyle(this).getPropertyValue(propName));
     return Number.isFinite(v) ? v : fallback;
   }
 
-  #focusInitial() {
+  #focusInitial(): void {
     const af = this.querySelector<HTMLElement>('[autofocus]');
     if (af) { af.focus(); return; }
     const focusable = this.querySelector<HTMLElement>(FOCUSABLE_SELECTOR);
@@ -258,7 +275,7 @@ export class ModalBase extends withStyleAttrs(HTMLElement) {
     this.#modal.focus();
   }
 
-  #syncLabel() {
+  #syncLabel(): void {
     const slot = this.shadowRoot!.querySelector<HTMLSlotElement>('slot[name="label"]');
     const assigned = slot?.assignedNodes({ flatten: true });
     if (assigned && assigned.length > 0) {
@@ -268,17 +285,17 @@ export class ModalBase extends withStyleAttrs(HTMLElement) {
     this.#title.textContent = this.label || '';
   }
 
-  #syncHeaderVisibility() {
+  #syncHeaderVisibility(): void {
     this.#header.hidden = this.hasAttribute('without-header');
   }
 
-  #syncFooterVisibility() {
+  #syncFooterVisibility(): void {
     const slot = this.shadowRoot!.querySelector<HTMLSlotElement>('slot[name="footer"]');
     const hasFooter = (slot?.assignedElements({ flatten: true }) ?? []).length > 0;
     this.#footer.hidden = !hasFooter;
   }
 
-  #onKeyDown = (e: KeyboardEvent) => {
+  #onKeyDown = (e: KeyboardEvent): void => {
     if (!this.open) return;
     if (e.key === 'Escape') {
       e.stopPropagation();
@@ -291,8 +308,8 @@ export class ModalBase extends withStyleAttrs(HTMLElement) {
         this.#modal.focus();
         return;
       }
-      const first = focusable[0];
-      const last = focusable[focusable.length - 1];
+      const first = focusable[0]!;
+      const last = focusable[focusable.length - 1]!;
       if (e.shiftKey && document.activeElement === first) {
         e.preventDefault();
         last.focus();
@@ -303,13 +320,13 @@ export class ModalBase extends withStyleAttrs(HTMLElement) {
     }
   };
 
-  #attachKeydown() {
+  #attachKeydown(): void {
     if (this.#keyDownBound) return;
     document.addEventListener('keydown', this.#onKeyDown, true);
     this.#keyDownBound = true;
   }
 
-  #detachKeydown() {
+  #detachKeydown(): void {
     if (!this.#keyDownBound) return;
     document.removeEventListener('keydown', this.#onKeyDown, true);
     this.#keyDownBound = false;
@@ -317,7 +334,7 @@ export class ModalBase extends withStyleAttrs(HTMLElement) {
 
   // ── Métodos que la subclase debe implementar ───────────────────────
   /** Anima la apertura. Devuelve Promise<void> que se resuelve al terminar. */
-  animateOpen() { throw new Error('animateOpen not implemented'); }
+  animateOpen(): Promise<void> { throw new Error('animateOpen not implemented'); }
   /** Anima el cierre. Devuelve Promise<void> que se resuelve al terminar. */
-  animateClose() { throw new Error('animateClose not implemented'); }
+  animateClose(): Promise<void> { throw new Error('animateClose not implemented'); }
 }

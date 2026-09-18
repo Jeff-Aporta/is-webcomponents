@@ -44,24 +44,25 @@ import { ElementBase } from '../../core/element-base.js';
 
 /** Registro de comandos de toolbar aportados por OTROS componentes.
  *  Así <is-function-editor> añade sus botones sin que este módulo lo conozca. */
-const CUSTOM_COMMANDS = new Map();
+interface RteCommandDef { icon?: string; title?: string; run: (rte: HTMLElement) => void }
+const CUSTOM_COMMANDS: Map<string, RteCommandDef> = new Map();
 
 /**
  * Registra un botón extra para la toolbar de <is-rte>.
  * @param {string} name  identificador usado en el atributo `toolbar`
  * @param {{ icon?: string, title?: string, run: (rte: HTMLElement) => void }} def
  */
-export function registerRteCommand(name: string, def) {
+export function registerRteCommand(name: string, def: RteCommandDef): void {
   if (!name || !def || typeof def.run !== 'function') return;
   CUSTOM_COMMANDS.set(name, def);
 }
 
 (() => {
-  const OBSERVED = ['value', 'placeholder', 'toolbar', 'autofocus', 'readonly', 'source-mode'];
+  const OBSERVED: string[] = ['value', 'placeholder', 'toolbar', 'autofocus', 'readonly', 'source-mode'];
 
-  const DEFAULT_TOOLBAR = ['bold', 'italic', 'underline', 'strike', '|', 'h1', 'h2', 'h3', '|', 'ul', 'ol', '|', 'link', 'blockquote', 'code', '|', 'undo', 'redo', 'clear'];
+  const DEFAULT_TOOLBAR: string[] = ['bold', 'italic', 'underline', 'strike', '|', 'h1', 'h2', 'h3', '|', 'ul', 'ol', '|', 'link', 'blockquote', 'code', '|', 'undo', 'redo', 'clear'];
 
-  const ICONS = {
+  const ICONS: Record<string, string> = {
     bold: '<b>B</b>',
     italic: '<i>I</i>',
     underline: '<u>U</u>',
@@ -98,7 +99,7 @@ export function registerRteCommand(name: string, def) {
       adoptCss(this.shadowRoot!, import.meta.url);
       this.#toolbar = this.shadowRoot!.querySelector<HTMLElement>('.toolbar')!;
       this.#content = this.shadowRoot!.querySelector<HTMLElement>('.content')!;
-      this.#source = this.shadowRoot!.querySelector<HTMLElement>('.source')!;
+      this.#source = this.shadowRoot!.querySelector<HTMLTextAreaElement>('.source')!;
       this.#placeholder = this.shadowRoot!.querySelector<HTMLElement>('.placeholder')!;
 
       this.#content.addEventListener('input', () => this.#onInput());
@@ -106,7 +107,7 @@ export function registerRteCommand(name: string, def) {
       this.#source.addEventListener('input', () => this.#onSourceInput());
     }
 
-    onConnected() {
+    onConnected(): void {
       this.#buildToolbar();
       this.#sync();
       this.#syncReadonly();
@@ -114,38 +115,38 @@ export function registerRteCommand(name: string, def) {
       if (this.hasAttribute('autofocus')) this.focus();
     }
 
-    onAttributeChanged(name: string, oldVal: string | null, newVal: string | null) {
+    onAttributeChanged(name: string, _oldVal: string | null, _newVal: string | null): void {
       if (name === 'toolbar') this.#buildToolbar();
       if (name === 'value') this.#sync();
       if (name === 'readonly') this.#syncReadonly();
       if (name === 'source-mode') this.#syncSourceMode();
     }
 
-    get value() { return this.sourceMode ? this.#source.value : this.#content.innerHTML; }
-    set value(v) { this.setAttribute('value', v || ''); }
+    get value(): string { return this.sourceMode ? this.#source.value : this.#content.innerHTML; }
+    set value(v: string | null | undefined) { this.setAttribute('value', v || ''); }
 
-    get text() { return this.#content.textContent || ''; }
+    get text(): string { return this.#content.textContent || ''; }
 
-    get sourceMode() { return this.hasAttribute('source-mode'); }
-    set sourceMode(v) { this.toggleAttribute('source-mode', !!v); }
+    get sourceMode(): boolean { return this.hasAttribute('source-mode'); }
+    set sourceMode(v: boolean) { this.toggleAttribute('source-mode', !!v); }
 
-    focus() { (this.sourceMode ? this.#source : this.#content).focus(); }
-    blur() { (this.sourceMode ? this.#source : this.#content).blur(); }
+    focus(): void { (this.sourceMode ? this.#source : this.#content).focus(); }
+    blur(): void { (this.sourceMode ? this.#source : this.#content).blur(); }
 
-    exec(cmd, value = null) {
+    exec(cmd: string, value: string | null = null): void {
       if (this.sourceMode) return;
       this.focus();
-      try { document.execCommand(cmd, false, value); } catch { /* noop */ }
+      try { document.execCommand(cmd, false, value ?? undefined); } catch { /* noop */ }
       this.#onInput();
     }
 
-    format(tag) { this.exec('formatBlock', tag); }
+    format(tag: string): void { this.exec('formatBlock', tag); }
 
     /** Inserta HTML en la posición del cursor.
      *  En modo fuente escribe el texto crudo en el caret del <textarea>;
      *  en WYSIWYG usa execCommand('insertHTML'), que es la única vía que
      *  funciona con Selection y Shadow DOM sin APIs propietarias. */
-    insertHtml(html) {
+    insertHtml(html: string): void {
       if (!html) return;
       if (this.sourceMode) {
         const ta = this.#source;
@@ -160,19 +161,19 @@ export function registerRteCommand(name: string, def) {
       this.exec('insertHTML', html);
     }
 
-    link() {
+    link(): void {
       const url = prompt('URL del enlace', 'https://');
       if (url) this.exec('createLink', url);
     }
-    clear() {
+    clear(): void {
       this.focus();
       try { document.execCommand('selectAll'); document.execCommand('removeFormat'); document.execCommand('formatBlock', false, 'p'); } catch { /* noop */ }
       this.#onInput();
     }
-    undo() { this.exec('undo'); }
-    redo() { this.exec('redo'); }
+    undo(): void { this.exec('undo'); }
+    redo(): void { this.exec('redo'); }
 
-    #buildToolbar() {
+    #buildToolbar(): void {
       const list = (this.getAttribute('toolbar') || DEFAULT_TOOLBAR.join(',')).split(',').map((s: string) => s.trim()).filter(Boolean);
       this.#toolbar.innerHTML = '';
       for (const item of list) {
@@ -198,7 +199,7 @@ export function registerRteCommand(name: string, def) {
       this.#syncToolbarState();
     }
 
-    #onToolbar(cmd) {
+    #onToolbar(cmd: string): void {
       const custom = CUSTOM_COMMANDS.get(cmd);
       if (custom) return custom.run(this);
       if (cmd === 'html') { this.sourceMode = !this.sourceMode; return; }
@@ -210,7 +211,7 @@ export function registerRteCommand(name: string, def) {
       this.exec(cmd);
     }
 
-    #sync() {
+    #sync(): void {
       const v = this.getAttribute('value') ?? '';
       // En modo fuente el <textarea> manda: no se pisa lo que el usuario escribe.
       if (this.sourceMode) {
@@ -222,14 +223,14 @@ export function registerRteCommand(name: string, def) {
       this.#syncPlaceholder();
     }
 
-    #syncReadonly() {
+    #syncReadonly(): void {
       const ro = this.hasAttribute('readonly');
       this.#content.contentEditable = ro ? 'false' : 'true';
       this.#source.readOnly = ro;
     }
 
     /** Alterna WYSIWYG ⇄ código fuente trasvasando el HTML en ambos sentidos. */
-    #syncSourceMode() {
+    #syncSourceMode(): void {
       const on = this.sourceMode;
       if (on) {
         this.#source.value = this.#content.innerHTML;
@@ -245,35 +246,35 @@ export function registerRteCommand(name: string, def) {
       if (!on) this.#emitChange(this.#content.innerHTML);
     }
 
-    #syncToolbarState() {
+    #syncToolbarState(): void {
       const btn = this.#toolbar.querySelector<HTMLElement>('.btn[data-cmd="html"]');
       if (btn) btn.classList.toggle('active', this.sourceMode);
     }
 
-    #onInput() {
+    #onInput(): void {
       const html = this.#content.innerHTML;
       this.setAttribute('value', html);
       this.#emitChange(html);
       this.#syncPlaceholder();
     }
 
-    #onSourceInput() {
+    #onSourceInput(): void {
       const html = this.#source.value;
       this.setAttribute('value', html);
       this.#emitChange(html);
     }
 
-    #emitChange(html) {
+    #emitChange(html: string): void {
       emit(this, 'is-input');
       emit(this, 'is-change', { value: html, text: this.text });
     }
 
-    #syncPlaceholder() {
+    #syncPlaceholder(): void {
       this.#placeholder.hidden = !!this.text || this.sourceMode;
     }
 
     #content!: HTMLElement;
-    #source!: HTMLElement;
+    #source!: HTMLTextAreaElement;
     #toolbar!: HTMLElement;
     #placeholder!: HTMLElement;
   }

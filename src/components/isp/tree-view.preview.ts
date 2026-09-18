@@ -1,36 +1,52 @@
 import { TreeCustomsBase } from './tree-view.js';
+import type {
+  CustomsRuntime,
+  LevelNameArgs,
+  TNode,
+} from './_shared/tree-view/_types.js';
+
+interface DemoNode extends TNode {
+  iplan?: string;
+  titulo?: string;
+}
+
+interface IsTreeViewEl extends HTMLElement {
+  customs: TreeCustomsBase | null;
+  list: unknown[];
+  addEventListener(type: string, listener: EventListener): void;
+}
 
 class DemoCustoms extends TreeCustomsBase {
   entrie = 'contenido';
   entries = 'Plan de contenidos';
-  getFlatPath = (r) => String(r?.iplan ?? r?.flatPath ?? '').trim();
-  setFlatPath = (r, fp) => { r.iplan = String(fp ?? '').trim(); };
-  levelName = ({ depth }) => (depth === 0 ? 'Módulo' : depth === 1 ? 'Lección' : '---');
-  updateNode = (node, isNew) => {
+  getFlatPath = (r: DemoNode): string => String(r?.iplan ?? r?.flatPath ?? '').trim();
+  setFlatPath = (r: DemoNode, fp: string): void => { r.iplan = String(fp ?? '').trim(); };
+  levelName = ({ depth }: LevelNameArgs): string => (depth === 0 ? 'Módulo' : depth === 1 ? 'Lección' : '---');
+  updateNode = (node: DemoNode, isNew: boolean): void => {
     const depth = Number(node.depth ?? 0);
     node.topology = depth >= 1 ? 'atom' : 'group';
     if (!isNew) return;
     if (!node.titulo) node.titulo = node.topology === 'atom' ? 'Nueva lección' : 'Nuevo módulo';
   };
-  onexpand = (node, tree) => { if (node.isEmpty) void tree.addChild?.(node); };
-  rowActions = (node, tree) => {
+  onexpand = (node: DemoNode, tree: CustomsRuntime): void => { if (node.isEmpty) void tree.addChild?.(node as never); };
+  rowActions = (node: DemoNode, tree: CustomsRuntime) => {
     const ro = !!tree.isReadOnly;
     const isFolder = !node.isAtom;
     const move = ro ? [] : [
-      { icon: 'mdi:arrow-up', title: 'Mover arriba', hotkey: 'Ctrl+ArrowUp', onClick: () => { void tree.move?.(node, 'up'); } },
-      { icon: 'mdi:arrow-down', title: 'Mover abajo', hotkey: 'Ctrl+ArrowDown', onClick: () => { void tree.move?.(node, 'down'); } },
+      { icon: 'mdi:arrow-up', title: 'Mover arriba', hotkey: 'Ctrl+ArrowUp', onClick: () => { void tree.move?.(node as never, 'up'); } },
+      { icon: 'mdi:arrow-down', title: 'Mover abajo', hotkey: 'Ctrl+ArrowDown', onClick: () => { void tree.move?.(node as never, 'down'); } },
     ];
     const add = !ro && isFolder
-      ? [{ icon: 'mdi:plus-circle-outline', title: tree.addChildLabel?.(node) ?? 'Agregar', hotkey: 'Insert', onClick: () => { void tree.addChild?.(node); } }]
+      ? [{ icon: 'mdi:plus-circle-outline', title: tree.addChildLabel?.(node) ?? 'Agregar', hotkey: 'Insert', onClick: () => { void tree.addChild?.(node as never); } }]
       : [];
     return [move, add];
   };
-  rowCascadeOptions = (node, tree) => {
+  rowCascadeOptions = (node: DemoNode, tree: CustomsRuntime) => {
     const ro = !!tree.isReadOnly;
     return [
-      { icon: 'mdi:pencil-outline', title: 'Editar', onClick: () => tree.openEdit?.(node) },
-      { icon: 'mdi:eye-outline', title: 'Ver', onClick: () => tree.openView?.(node) },
-      ...(ro ? [] : [{ icon: 'mdi:trash-can-outline', title: 'Eliminar', color: 'danger', onClick: () => tree.remove?.(node) }]),
+      { icon: 'mdi:pencil-outline', title: 'Editar', onClick: () => tree.openEdit?.(node as never) },
+      { icon: 'mdi:eye-outline', title: 'Ver', onClick: () => tree.openView?.(node as never) },
+      ...(ro ? [] : [{ icon: 'mdi:trash-can-outline', title: 'Eliminar', color: 'danger', onClick: () => tree.remove?.(node as never) }]),
     ];
   };
 }
@@ -39,9 +55,9 @@ class DemoCustoms extends TreeCustomsBase {
  * Demo <is-tree-view> con lista plana iplan + TreeCustomsBase.
  * @param {import('../../previews/_kit/types.d.ts').PreviewMountContext} ctx
  */
-export async function mount(ctx: import('../../previews/_kit/types.d.ts').PreviewMountContext) {
+export async function mount(ctx: import('../../previews/_kit/types.d.ts').PreviewMountContext): Promise<void> {
   const root = ctx.main;
-  const tv = root.querySelector<HTMLElement>('#tvDemo') || root.querySelector<HTMLElement>('is-tree-view');
+  const tv = (root.querySelector<HTMLElement>('#tvDemo') || root.querySelector<HTMLElement>('is-tree-view')) as IsTreeViewEl | null;
   if (!tv) return;
 
   tv.customs = new DemoCustoms();
@@ -55,16 +71,25 @@ export async function mount(ctx: import('../../previews/_kit/types.d.ts').Previe
   ];
 
   const log = root.querySelector<HTMLElement>('#tvLog');
-  const paint = (msg) => {
+  const paint = (msg: string): void => {
     if (!log) return;
     const code = log.querySelector<HTMLElement>('code') || log;
     code.textContent = msg;
   };
-  tv.addEventListener('is-select', (e) => paint(e.detail?.node?.titulo || e.detail?.flatPath || '—'));
-  tv.addEventListener('is-frm-open', (e) => paint(`ficha ${e.detail?.itdForm || ''} · ${e.detail?.record?.titulo || ''}`));
-  tv.addEventListener('is-error', (e) => paint(e.detail?.message || 'error'));
+  tv.addEventListener('is-select', (e: Event) => {
+    const detail = (e as CustomEvent<{ node?: DemoNode; flatPath?: string }>).detail;
+    paint(detail?.node?.titulo || detail?.flatPath || '—');
+  });
+  tv.addEventListener('is-frm-open', (e: Event) => {
+    const detail = (e as CustomEvent<{ itdForm?: string; record?: DemoNode }>).detail;
+    paint(`ficha ${detail?.itdForm || ''} · ${detail?.record?.titulo || ''}`);
+  });
+  tv.addEventListener('is-error', (e: Event) => {
+    const detail = (e as CustomEvent<{ message?: string }>).detail;
+    paint(detail?.message || 'error');
+  });
 }
 
-export function unmount() {
+export function unmount(): void {
   /* teardown no crítico */
 }

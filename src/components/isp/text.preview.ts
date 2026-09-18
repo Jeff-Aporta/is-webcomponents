@@ -2,20 +2,38 @@
  * Playground <is-text>: color / mix / lines / texto.
  * @param {import('../../previews/_kit/types.d.ts').PreviewMountContext} ctx
  */
-export async function mount(ctx: import('../../previews/_kit/types.d.ts').PreviewMountContext) {
+
+/** `<is-text>` con `color`, `mix`, `mixWith`, `lines`. */
+interface _TextLike extends HTMLElement {
+  color: string | null;
+  mix: string | null;
+  mixWith: string | null;
+  lines: number;
+}
+
+/** Input/select con `value`/`checked`/`disabled` y `textContent`. */
+interface _InputLike {
+  value: string;
+  checked: boolean;
+  disabled: boolean;
+  textContent: string | null;
+  addEventListener(type: string, listener: EventListener): void;
+}
+
+export async function mount(ctx: import('../../previews/_kit/types.d.ts').PreviewMountContext): Promise<void> {
   const root = ctx.main;
-  const el = root.querySelector<HTMLElement>('#txLive');
+  const el = root.querySelector<HTMLElement>('#txLive') as _TextLike | null;
   if (!el) return;
 
-  const colorMode = root.querySelector<HTMLElement>('#txColorMode');
-  const colorCss = root.querySelector<HTMLElement>('#txColorCss');
-  const mix = root.querySelector<HTMLElement>('#txMix');
+  const colorMode = root.querySelector<HTMLElement>('#txColorMode') as _InputLike | null;
+  const colorCss = root.querySelector<HTMLElement>('#txColorCss') as _InputLike | null;
+  const mix = root.querySelector<HTMLElement>('#txMix') as _InputLike | null;
   const mixVal = root.querySelector<HTMLElement>('#txMixVal');
-  const mixOn = root.querySelector<HTMLElement>('#txMixOn');
-  const mixWith = root.querySelector<HTMLElement>('#txMixWith');
-  const lines = root.querySelector<HTMLElement>('#txLines');
+  const mixOn = root.querySelector<HTMLElement>('#txMixOn') as _InputLike | null;
+  const mixWith = root.querySelector<HTMLElement>('#txMixWith') as _InputLike | null;
+  const lines = root.querySelector<HTMLElement>('#txLines') as _InputLike | null;
   const linesVal = root.querySelector<HTMLElement>('#txLinesVal');
-  const text = root.querySelector<HTMLElement>('#txText');
+  const text = root.querySelector<HTMLElement>('#txText') as _InputLike | null;
   const snippet = root.querySelector<HTMLElement>('#txSnippet');
 
   const sync = () => {

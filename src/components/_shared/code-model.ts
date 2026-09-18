@@ -24,85 +24,113 @@
 
 export const CODE_DOC_SCHEMA = 'is-code-doc/v1';
 
-const VALID_KINDS = new Set(['highlight', 'tooltip', 'message']);
-const VALID_TONES = new Set(['error', 'warning', 'info', 'success', 'neutral']);
+export type CodeMarkKind = 'highlight' | 'tooltip' | 'message';
+export type CodeMarkTone = 'error' | 'warning' | 'info' | 'success' | 'neutral';
 
-/**
- * @typedef {object} CodeMark
- * @property {string} [id]
- * @property {number} from
- * @property {number} to
- * @property {'highlight'|'tooltip'|'message'} kind
- * @property {'error'|'warning'|'info'|'success'|'neutral'} [tone]
- * @property {string} [message]
- * @property {string} [title]
- * @property {string} [body]
- * @property {string} [className]
- */
+/** Anotación externa sobre el texto (highlight / tooltip / message). */
+export type CodeMark = {
+  id: string;
+  from: number;
+  to: number;
+  kind: CodeMarkKind;
+  tone: CodeMarkTone;
+  message?: string;
+  title?: string;
+  body?: string;
+  className?: string;
+};
 
-/**
- * @typedef {object} CodeDocument
- * @property {string} [$schema]
- * @property {string} [lang]
- * @property {string} value
- * @property {CodeMark[]} [marks]
- * @property {object} [format]
- * @property {object} [theme]
- */
+/** Forma cruda (algunos campos faltantes) de un mark entrante. */
+type CodeMarkInput = {
+  id?: unknown;
+  from?: unknown;
+  to?: unknown;
+  kind?: unknown;
+  tone?: unknown;
+  message?: unknown;
+  title?: unknown;
+  body?: unknown;
+  className?: unknown;
+};
+
+/** Forma normalizada del documento round-trippeable. */
+export type CodeDocument = {
+  $schema: string;
+  lang: string;
+  value: string;
+  marks: CodeMark[];
+  format?: object;
+  theme?: object;
+};
+
+/** Opciones de `code2json` (texto → documento). */
+export type CodeDocOpts = {
+  lang?: string;
+  marks?: readonly unknown[];
+  format?: object;
+  theme?: object;
+};
+
+const VALID_KINDS: ReadonlySet<string> = new Set<CodeMarkKind>(['highlight', 'tooltip', 'message']);
+const VALID_TONES: ReadonlySet<string> = new Set<CodeMarkTone>(['error', 'warning', 'info', 'success', 'neutral']);
 
 let markSeq = 0;
-const nextId = () => `m${Date.now().toString(36)}_${(++markSeq).toString(36)}`;
+const nextId = (): string => `m${Date.now().toString(36)}_${(++markSeq).toString(36)}`;
 
-/** @param {unknown} mark */
-export function normalizeMark(mark: unknown) {
+function isValidKind(v: unknown): v is CodeMarkKind {
+  return typeof v === 'string' && (VALID_KINDS as Set<string>).has(v);
+}
+function isValidTone(v: unknown): v is CodeMarkTone {
+  return typeof v === 'string' && (VALID_TONES as Set<string>).has(v);
+}
+
+export function normalizeMark(mark: unknown): CodeMark | null {
   if (!mark || typeof mark !== 'object') return null;
-  const from = Number(mark.from);
-  const to = Number(mark.to);
+  const m = mark as CodeMarkInput;
+  const from = Number(m.from);
+  const to = Number(m.to);
   if (!Number.isFinite(from) || !Number.isFinite(to) || to < from) return null;
-  const kind = VALID_KINDS.has(mark.kind) ? mark.kind : 'highlight';
-  const tone = VALID_TONES.has(mark.tone) ? mark.tone : 'neutral';
+  const kind: CodeMarkKind = isValidKind(m.kind) ? m.kind : 'highlight';
+  const tone: CodeMarkTone = isValidTone(m.tone) ? m.tone : 'neutral';
   return {
-    id: mark.id ? String(mark.id) : nextId(),
+    id: m.id ? String(m.id) : nextId(),
     from: Math.max(0, Math.floor(from)),
     to: Math.max(0, Math.floor(to)),
     kind,
     tone,
-    message: mark.message != null ? String(mark.message) : undefined,
-    title: mark.title != null ? String(mark.title) : undefined,
-    body: mark.body != null ? String(mark.body) : undefined,
-    className: mark.className != null ? String(mark.className) : undefined,
+    message: m.message != null ? String(m.message) : undefined,
+    title: m.title != null ? String(m.title) : undefined,
+    body: m.body != null ? String(m.body) : undefined,
+    className: m.className != null ? String(m.className) : undefined,
   };
 }
 
 /**
  * Texto plano → documento.
- * @param {string} value
- * @param {{ lang?: string, marks?: unknown[], format?: object, theme?: object }} [opts]
- * @returns {CodeDocument}
  */
-export function code2json(value: string, opts = {}) {
+export function code2json(value: string, opts: CodeDocOpts = {}): CodeDocument {
   const marks = Array.isArray(opts.marks)
-    ? opts.marks.map(normalizeMark).filter(Boolean)
+    ? opts.marks.map(normalizeMark).filter((m): m is CodeMark => m !== null)
     : [];
-  return {
+  const doc: CodeDocument = {
     $schema: CODE_DOC_SCHEMA,
     lang: opts.lang || 'javascript',
     value: value == null ? '' : String(value),
     marks,
-    ...(opts.format ? { format: opts.format } : {}),
-    ...(opts.theme ? { theme: opts.theme } : {}),
   };
+  if (opts.format) doc.format = opts.format;
+  if (opts.theme) doc.theme = opts.theme;
+  return doc;
 }
 
 /**
  * Documento → texto plano (pierde marks; usar getDocument para round-trip).
- * @param {CodeDocument | string | null | undefined} doc
  */
-export function json2code(doc: CodeDocument | string | null | undefined) {
+export function json2code(doc: CodeDocument | string | null | undefined): string {
   if (doc == null) return '';
   if (typeof doc === 'string') {
     try {
-      return json2code(JSON.parse(doc));
+      return json2code(JSON.parse(doc) as CodeDocument);
     } catch {
       return doc;
     }
@@ -111,13 +139,19 @@ export function json2code(doc: CodeDocument | string | null | undefined) {
   return '';
 }
 
-/**
- * @param {unknown} raw
- * @returns {CodeDocument | null}
- */
-export function parseCodeDocument(raw: unknown) {
+/** Forma cruda de un doc entrante (al validar JSON.parse). */
+type CodeDocumentInput = {
+  $schema?: unknown;
+  value?: unknown;
+  lang?: unknown;
+  marks?: unknown;
+  format?: unknown;
+  theme?: unknown;
+};
+
+export function parseCodeDocument(raw: unknown): CodeDocument | null {
   if (raw == null || raw === '') return null;
-  let obj = raw;
+  let obj: unknown = raw;
   if (typeof raw === 'string') {
     try {
       obj = JSON.parse(raw);
@@ -125,14 +159,15 @@ export function parseCodeDocument(raw: unknown) {
       return code2json(raw);
     }
   }
-  if (typeof obj !== 'object') return null;
+  if (!obj || typeof obj !== 'object') return null;
+  const o = obj as CodeDocumentInput;
   // Si parece un doc
-  if ('value' in obj || '$schema' in obj || Array.isArray(obj.marks)) {
-    return code2json(obj.value ?? '', {
-      lang: obj.lang,
-      marks: obj.marks,
-      format: obj.format,
-      theme: obj.theme,
+  if ('value' in o || '$schema' in o || Array.isArray(o.marks)) {
+    return code2json(String(o.value ?? ''), {
+      lang: typeof o.lang === 'string' ? o.lang : undefined,
+      marks: Array.isArray(o.marks) ? o.marks : undefined,
+      format: typeof o.format === 'object' && o.format ? o.format : undefined,
+      theme: typeof o.theme === 'object' && o.theme ? o.theme : undefined,
     });
   }
   return null;
@@ -141,14 +176,10 @@ export function parseCodeDocument(raw: unknown) {
 /**
  * Ajusta offsets de marks tras un reemplazo de texto (simple: invalida
  * marks que intersectan el rango editado; los posteriores se desplazan).
- * @param {CodeMark[]} marks
- * @param {number} from
- * @param {number} to
- * @param {number} insertedLen
  */
-export function rebaseMarks(marks: CodeMark[], from: number, to: number, insertedLen: number) {
+export function rebaseMarks(marks: readonly CodeMark[], from: number, to: number, insertedLen: number): CodeMark[] {
   const delta = insertedLen - (to - from);
-  const next = [];
+  const next: CodeMark[] = [];
   for (const m of marks) {
     if (m.to <= from) {
       next.push(m);

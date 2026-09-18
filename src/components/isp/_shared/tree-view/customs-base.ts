@@ -2,8 +2,10 @@
  * Toolbar default del TreeView (port de TreeCustomsBase en contracts.ts).
  * El consumidor puede extender y pisar hooks.
  */
+import type { CustomsRuntime, LevelNameArgs } from "./_types.js";
 export class TreeCustomsBase {
-  topMenuActions(tree) {
+  levelName?(args: LevelNameArgs): string | undefined;
+  topMenuActions(tree: CustomsRuntime) {
     const ro = !!tree.isReadOnly;
     const addDisabled = ro || undefined;
     const nivel1 = (this.levelName?.({ depth: 0 }) ?? "").trim();

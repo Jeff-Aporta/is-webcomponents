@@ -12,20 +12,26 @@
 // aristas etiquetadas y las líneas desaparecían del render.
 import { pathPoints as parsePathPoints } from './diagram-arrow.js';
 
-function rangesOverlap(a0: number, a1: number, b0: number, b1: number, min = 12) {
+function rangesOverlap(a0: number, a1: number, b0: number, b1: number, min: number = 12): boolean {
   return Math.min(a1, b1) - Math.max(a0, b0) > min;
 }
 
-function toPath(pts) {
+/** Punto en píxeles. */
+type SpreadPoint = { x: number; y: number };
+
+/** Item que `spreadAxis` recibe: una arista y sus puntos. */
+type SpreadItem = { e: { path: string }; pts: SpreadPoint[] };
+
+function toPath(pts: SpreadPoint[]): string {
   if (!pts.length) return '';
   // Se conservan los comandos ortogonales (H/V) cuando el tramo sigue alineado
   // al eje: la geometría emitida por los specs (elbowPath/returnPath de
   // swimlane) usa H/V y hay selfchecks que lo exigen; L solo cuando el
   // desplazamiento del spread descuadró el tramo.
-  let d = `M${pts[0].x},${pts[0].y}`;
+  let d = `M${pts[0]!.x},${pts[0]!.y}`;
   for (let i = 1; i < pts.length; i++) {
-    const a = pts[i - 1];
-    const b = pts[i];
+    const a = pts[i - 1]!;
+    const b = pts[i]!;
     if (Math.abs(a.y - b.y) < 1e-6) d += ` H${b.x}`;
     else if (Math.abs(a.x - b.x) < 1e-6) d += ` V${b.y}`;
     else d += ` L${b.x},${b.y}`;
@@ -33,31 +39,34 @@ function toPath(pts) {
   return d;
 }
 
-function collectRuns(items, vertical) {
-  const runs = [];
+/** Tramo alineado detectado durante el barrido. */
+type Run = { ii: number; i: number; j: number; pos: number; a: number; b: number };
+
+function collectRuns(items: SpreadItem[], vertical: boolean): Run[] {
+  const runs: Run[] = [];
   for (let ii = 0; ii < items.length; ii++) {
-    const pts = items[ii].pts;
+    const pts = items[ii]!.pts;
     let i = 0;
     while (i < pts.length - 1) {
       const aligned = vertical
-        ? Math.abs(pts[i].x - pts[i + 1].x) < 0.6
-        : Math.abs(pts[i].y - pts[i + 1].y) < 0.6;
+        ? Math.abs(pts[i]!.x - pts[i + 1]!.x) < 0.6
+        : Math.abs(pts[i]!.y - pts[i + 1]!.y) < 0.6;
       if (!aligned) { i += 1; continue; }
       let j = i + 1;
       while (j < pts.length - 1) {
         const next = vertical
-          ? Math.abs(pts[j].x - pts[j + 1].x) < 0.6
-          : Math.abs(pts[j].y - pts[j + 1].y) < 0.6;
+          ? Math.abs(pts[j]!.x - pts[j + 1]!.x) < 0.6
+          : Math.abs(pts[j]!.y - pts[j + 1]!.y) < 0.6;
         if (!next) break;
         j += 1;
       }
-      const pos = vertical ? pts[i].x : pts[i].y;
+      const pos = vertical ? pts[i]!.x : pts[i]!.y;
       const a = vertical
-        ? Math.min(pts[i].y, pts[j].y)
-        : Math.min(pts[i].x, pts[j].x);
+        ? Math.min(pts[i]!.y, pts[j]!.y)
+        : Math.min(pts[i]!.x, pts[j]!.x);
       const b = vertical
-        ? Math.max(pts[i].y, pts[j].y)
-        : Math.max(pts[i].x, pts[j].x);
+        ? Math.max(pts[i]!.y, pts[j]!.y)
+        : Math.max(pts[i]!.x, pts[j]!.x);
       if (b - a >= 24 && j - i >= 1) {
         runs.push({ ii, i, j, pos, a, b });
       }
@@ -67,24 +76,24 @@ function collectRuns(items, vertical) {
   return runs;
 }
 
-function spreadAxis(items, vertical, gap) {
+function spreadAxis(items: SpreadItem[], vertical: boolean, gap: number): void {
   const runs = collectRuns(items, vertical);
-  const buckets = new Map();
+  const buckets = new Map<number, Run[]>();
   for (const r of runs) {
     const k = Math.round(r.pos / 5) * 5;
     if (!buckets.has(k)) buckets.set(k, []);
-    buckets.get(k).push(r);
+    buckets.get(k)!.push(r);
   }
   for (const group of buckets.values()) {
     const sorted = group.slice().sort((a, b) => a.a - b.a);
-    const clusters = [];
+    const clusters: Run[][] = [];
     for (const r of sorted) {
       const hit = clusters.find((c) => c.some((o) => rangesOverlap(o.a, o.b, r.a, r.b)));
       if (hit) hit.push(r);
       else clusters.push([r]);
     }
     for (const cluster of clusters) {
-      const byEdge = new Map();
+      const byEdge = new Map<number, Run>();
       for (const r of cluster) {
         const prev = byEdge.get(r.ii);
         if (!prev || (r.b - r.a) > (prev.b - prev.a)) byEdge.set(r.ii, r);
@@ -93,11 +102,11 @@ function spreadAxis(items, vertical, gap) {
       if (uniq.length < 2) continue;
       uniq.forEach((r, idx) => {
         const delta = (idx - (uniq.length - 1) / 2) * gap;
-        const pts = items[r.ii].pts;
+        const pts = items[r.ii]!.pts;
         for (let k = r.i; k <= r.j; k++) {
           if (k === 0 || k === pts.length - 1) continue;
-          if (vertical) pts[k].x += delta;
-          else pts[k].y += delta;
+          if (vertical) pts[k]!.x += delta;
+          else pts[k]!.y += delta;
         }
       });
     }
@@ -105,13 +114,13 @@ function spreadAxis(items, vertical, gap) {
 }
 
 /** Mutates `edges[].path`. */
-export function spreadOrthogonalPaths(edges, gap = 7) {
-  const items = (edges ?? [])
-    .filter((e) => e && e.path)
-    .map((e) => ({ e, pts: parsePathPoints(e.path).map((p) => ({ x: p.x, y: p.y })) }));
-  if (items.length < 2) return edges;
+export function spreadOrthogonalPaths<T extends { path?: string }>(edges: readonly T[], gap: number = 7): T[] {
+  const items: SpreadItem[] = (edges ?? [])
+    .filter((e): e is T & { path: string } => !!e && !!e.path)
+    .map((e) => ({ e: e as unknown as { path: string }, pts: parsePathPoints(e.path).map((p) => ({ x: p.x, y: p.y })) }));
+  if (items.length < 2) return edges.slice();
   spreadAxis(items, true, gap);
   spreadAxis(items, false, gap);
   for (const it of items) it.e.path = toPath(it.pts);
-  return edges;
+  return edges.slice();
 }

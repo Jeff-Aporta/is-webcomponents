@@ -7,41 +7,47 @@
  */
 
 /** Redondea al múltiplo de 8px más cercano (misma rejilla que el resto de los diagramas). */
-function snap8(v: number) {
+function snap8(v: number): number {
   return Math.round(v / 8) * 8;
 }
+
+/** Nodo de un grafo tipo node-link. Solo se necesitan id/w/h para `assignLayers`; el layout completo exige w/h. */
+export type GraphNode = { id: string; w?: number; h?: number };
+
+/** Arista de un grafo tipo node-link. */
+export type GraphEdge = { from: string; to: string };
 
 /**
  * Asigna una capa (nivel jerárquico) a cada nodo mediante longest-path.
  * Tolera ciclos: primero rompe back-edges con una DFS (visited / en-pila),
  * y luego capa el DAG resultante. Nunca entra en loop infinito.
- * @param {Array<{id:string}>} nodes
- * @param {Array<{from:string,to:string}>} edges
- * @returns {Map<string, number>} id -> layer
+ * @param nodes Lista de nodos con `id`.
+ * @param edges Aristas con `from` y `to`.
+ * @returns Mapa `id -> layer`.
  */
-export function assignLayers(nodes, edges) {
+export function assignLayers(nodes: readonly GraphNode[], edges: readonly GraphEdge[]): Map<string, number> {
   const ids = new Set(nodes.map((n) => n.id));
-  const adj = new Map();
+  const adj = new Map<string, string[]>();
   for (const id of ids) adj.set(id, []);
   for (const e of edges) {
     if (!ids.has(e.from) || !ids.has(e.to)) continue;
-    adj.get(e.from).push(e.to);
+    adj.get(e.from)!.push(e.to);
   }
 
   // 1) Detectar y descartar back-edges vía DFS (WHITE/GRAY/BLACK).
-  const color = new Map();
+  const color = new Map<string, number>();
   for (const id of ids) color.set(id, 0); // 0=blanco, 1=gris, 2=negro
-  const dagAdj = new Map();
+  const dagAdj = new Map<string, string[]>();
   for (const id of ids) dagAdj.set(id, []);
 
-  function dfs(u) {
+  function dfs(u: string): void {
     color.set(u, 1);
-    for (const v of adj.get(u)) {
+    for (const v of adj.get(u)!) {
       if (color.get(v) === 1) {
         // back-edge (incluye self-loop): se descarta para el cálculo de capas
         continue;
       }
-      dagAdj.get(u).push(v);
+      dagAdj.get(u)!.push(v);
       if (color.get(v) === 0) dfs(v);
     }
     color.set(u, 2);
@@ -51,12 +57,12 @@ export function assignLayers(nodes, edges) {
   }
 
   // 2) Longest-path layering sobre el DAG (sin back-edges), iterativo.
-  const layer = new Map();
+  const layer = new Map<string, number>();
   for (const id of ids) layer.set(id, 0);
-  const preds = new Map();
+  const preds = new Map<string, string[]>();
   for (const id of ids) preds.set(id, []);
   for (const [u, list] of dagAdj) {
-    for (const v of list) preds.get(v).push(u);
+    for (const v of list) preds.get(v)!.push(u);
   }
 
   // Relajación iterativa acotada: como el grafo (dagAdj) es acíclico, converge
@@ -65,10 +71,10 @@ export function assignLayers(nodes, edges) {
   for (let pass = 0; pass < maxPasses; pass++) {
     let changed = false;
     for (const id of ids) {
-      const ps = preds.get(id);
+      const ps = preds.get(id)!;
       if (ps.length === 0) continue;
       let maxPred = -1;
-      for (const p of ps) maxPred = Math.max(maxPred, layer.get(p));
+      for (const p of ps) maxPred = Math.max(maxPred, layer.get(p) ?? -1);
       const next = maxPred + 1;
       if (next !== layer.get(id)) {
         layer.set(id, next);
@@ -84,28 +90,28 @@ export function assignLayers(nodes, edges) {
 /**
  * Ordena los nodos dentro de cada capa con el heurístico de baricentro para
  * reducir cruces de aristas. Alterna barridos hacia abajo y hacia arriba.
- * @param {Map<string, number>} layersMap
- * @param {Array<{id:string}>} nodes
- * @param {Array<{from:string,to:string}>} edges
- * @param {number} sweeps
- * @returns {Map<string, number>} id -> índice de orden dentro de su capa
+ * @param layersMap Mapa de capas producido por `assignLayers`.
+ * @param nodes Lista de nodos con `id`.
+ * @param edges Aristas con `from` y `to`.
+ * @param sweeps Número de pasadas del heurístico.
+ * @returns Mapa `id -> índice de orden dentro de su capa`.
  */
-export function orderLayers(layersMap: Map<string, number>, nodes, edges, sweeps: number = 4) {
-  const byLayer = new Map();
+export function orderLayers(layersMap: Map<string, number>, nodes: readonly GraphNode[], edges: readonly GraphEdge[], sweeps: number = 4): Map<string, number> {
+  const byLayer = new Map<number, string[]>();
   for (const n of nodes) {
     const l = layersMap.get(n.id) ?? 0;
     if (!byLayer.has(l)) byLayer.set(l, []);
-    byLayer.get(l).push(n.id);
+    byLayer.get(l)!.push(n.id);
   }
   const maxLayer = byLayer.size ? Math.max(...byLayer.keys()) : 0;
 
-  const order = new Map();
+  const order = new Map<string, number>();
   for (const [, ids] of byLayer) {
     ids.forEach((id, i) => order.set(id, i));
   }
 
-  const neighborsDown = new Map(); // id -> ids en la capa siguiente (mayor)
-  const neighborsUp = new Map(); // id -> ids en la capa anterior (menor)
+  const neighborsDown = new Map<string, string[]>(); // id -> ids en la capa siguiente (mayor)
+  const neighborsUp = new Map<string, string[]>(); // id -> ids en la capa anterior (menor)
   for (const n of nodes) {
     neighborsDown.set(n.id, []);
     neighborsUp.set(n.id, []);
@@ -115,16 +121,16 @@ export function orderLayers(layersMap: Map<string, number>, nodes, edges, sweeps
     const lf = layersMap.get(e.from) ?? 0;
     const lt = layersMap.get(e.to) ?? 0;
     if (lt > lf) {
-      neighborsDown.get(e.from).push(e.to);
-      neighborsUp.get(e.to).push(e.from);
+      neighborsDown.get(e.from)!.push(e.to);
+      neighborsUp.get(e.to)!.push(e.from);
     } else if (lf > lt) {
-      neighborsDown.get(e.to).push(e.from);
-      neighborsUp.get(e.from).push(e.to);
+      neighborsDown.get(e.to)!.push(e.from);
+      neighborsUp.get(e.from)!.push(e.to);
     }
     // aristas dentro de la misma capa (o self-loops) no afectan el orden.
   }
 
-  function barycenter(id, neighborMap) {
+  function barycenter(id: string, neighborMap: Map<string, string[]>): number | null {
     const ns = neighborMap.get(id);
     if (!ns || ns.length === 0) return null;
     let sum = 0;
@@ -132,7 +138,7 @@ export function orderLayers(layersMap: Map<string, number>, nodes, edges, sweeps
     return sum / ns.length;
   }
 
-  function sortLayer(layerIdx, neighborMap) {
+  function sortLayer(layerIdx: number, neighborMap: Map<string, string[]>): void {
     const ids = byLayer.get(layerIdx);
     if (!ids) return;
     const withBc = ids.map((id, i) => ({ id, i, bc: barycenter(id, neighborMap) }));
@@ -162,13 +168,17 @@ export function orderLayers(layersMap: Map<string, number>, nodes, edges, sweeps
   return order;
 }
 
+/** Rectángulo `{ x, y, w, h }` que representa la caja de un nodo ya colocado. */
+export type NodeRect = { x: number; y: number; w: number; h: number };
+
+export type EdgeAnchorXY = { x: number; y: number };
+
 /**
  * Punto de conexión (midpoint) de un lado del nodo.
- * @param {{x:number,y:number,w:number,h:number}} node
- * @param {'top'|'bottom'|'left'|'right'} side
- * @returns {{x:number,y:number}}
+ * @param node Caja del nodo con x/y/w/h.
+ * @param side Lado del rectángulo del que se extrae el anchor.
  */
-export function edgeAnchor(node, side: 'top'|'bottom'|'left'|'right') {
+export function edgeAnchor(node: NodeRect, side: 'top' | 'bottom' | 'left' | 'right'): EdgeAnchorXY {
   // El punto medio de un lado cae a menudo fuera de la rejilla de 8px (la
   // mitad de una altura no múltiplo de 16 no es múltiplo de 8). Sin este snap,
   // el primer tramo ruteado —que sí vive en la rejilla— arranca en un punto
@@ -191,12 +201,12 @@ export function edgeAnchor(node, side: 'top'|'bottom'|'left'|'right') {
  * Elige los lados de anclaje más sensatos entre dos nodos según la dirección
  * del layout. Para aristas hacia atrás (o mismo nivel / self-loop) rutea por
  * los costados (right -> right / bottom -> bottom) en vez de atravesar el nodo.
- * @param {{layer:number}} fromNode
- * @param {{layer:number}} toNode
- * @param {'TB'|'BT'|'LR'|'RL'} direction
- * @returns {{fromSide:string, toSide:string}}
  */
-export function pickSides(fromNode, toNode, direction: 'TB'|'BT'|'LR'|'RL') {
+export function pickSides(
+  fromNode: { layer: number },
+  toNode: { layer: number },
+  direction: 'TB' | 'BT' | 'LR' | 'RL',
+): { fromSide: string; toSide: string } {
   const isBack = toNode.layer <= fromNode.layer;
 
   if (direction === 'TB') {
@@ -212,14 +222,35 @@ export function pickSides(fromNode, toNode, direction: 'TB'|'BT'|'LR'|'RL') {
   return isBack ? { fromSide: 'bottom', toSide: 'bottom' } : { fromSide: 'left', toSide: 'right' };
 }
 
+/** Nodo con tamaño, ya colocado por el layout. */
+export type PositionedNode = {
+  id: string;
+  x: number;
+  y: number;
+  w: number;
+  h: number;
+  layer: number;
+  order: number;
+};
+
+export type LayoutOpts = {
+  direction?: 'TB' | 'BT' | 'LR' | 'RL';
+  layerGap?: number;
+  nodeGap?: number;
+  align?: 'center' | 'start';
+};
+
+export type LayoutResult = {
+  nodes: PositionedNode[];
+  width: number;
+  height: number;
+  layers: Map<string, number>;
+};
+
 /**
  * Calcula el layout completo: capas, orden y coordenadas en píxeles.
- * @param {Array<{id:string,w:number,h:number}>} nodes
- * @param {Array<{from:string,to:string}>} edges
- * @param {{direction?:'TB'|'BT'|'LR'|'RL', layerGap?:number, nodeGap?:number, align?:'center'|'start'}} [opts]
- * @returns {{nodes:Array<{id:string,x:number,y:number,w:number,h:number,layer:number,order:number}>, width:number, height:number, layers:Map<string,number>}}
  */
-export function layoutNodeLink(nodes, edges, opts = {}) {
+export function layoutNodeLink(nodes: readonly GraphNode[], edges: readonly GraphEdge[], opts: LayoutOpts = {}): LayoutResult {
   const { direction = 'TB', layerGap = 64, nodeGap = 28, align = 'center' } = opts;
   const swapAxes = direction === 'LR' || direction === 'RL';
   const mirrorMain = direction === 'BT' || direction === 'RL';
@@ -227,12 +258,12 @@ export function layoutNodeLink(nodes, edges, opts = {}) {
   const layers = assignLayers(nodes, edges);
   const order = orderLayers(layers, nodes, edges);
 
-  const byId = new Map(nodes.map((n) => [n.id, n]));
-  const byLayer = new Map();
+  const byId = new Map<string, GraphNode>(nodes.map((n) => [n.id, n]));
+  const byLayer = new Map<number, string[]>();
   for (const n of nodes) {
     const l = layers.get(n.id) ?? 0;
     if (!byLayer.has(l)) byLayer.set(l, []);
-    byLayer.get(l).push(n.id);
+    byLayer.get(l)!.push(n.id);
   }
   for (const [, ids] of byLayer) {
     ids.sort((a, b) => (order.get(a) ?? 0) - (order.get(b) ?? 0));
@@ -242,34 +273,34 @@ export function layoutNodeLink(nodes, edges, opts = {}) {
 
   // Extensión en el eje cruzado (ancho para TB/BT, alto para LR/RL) y tamaño
   // principal (alto para TB/BT, ancho para LR/RL) de cada nodo, según eje.
-  function crossSize(n) {
-    return swapAxes ? n.h : n.w;
+  function crossSize(n: GraphNode): number {
+    return swapAxes ? n.h ?? 0 : n.w ?? 0;
   }
-  function mainSize(n) {
-    return swapAxes ? n.w : n.h;
+  function mainSize(n: GraphNode): number {
+    return swapAxes ? n.w ?? 0 : n.h ?? 0;
   }
 
   // Extensión cruzada total de cada capa (para centrar/alinear) y overall.
-  const layerCrossExtent = new Map();
+  const layerCrossExtent = new Map<number, number>();
   let overallCrossExtent = 0;
   for (const [l, ids] of byLayer) {
-    const nodesInLayer = ids.map((id) => byId.get(id));
+    const nodesInLayer = ids.map((id) => byId.get(id)!);
     const total =
-      nodesInLayer.reduce((acc, n: number) => acc + crossSize(n), 0) +
+      nodesInLayer.reduce((acc: number, n: GraphNode) => acc + crossSize(n), 0) +
       nodeGap * Math.max(0, nodesInLayer.length - 1);
     layerCrossExtent.set(l, total);
     overallCrossExtent = Math.max(overallCrossExtent, total);
   }
 
   // Tamaño principal (grosor) de cada capa = el nodo más "grueso" de la capa.
-  const layerMainSize = new Map();
+  const layerMainSize = new Map<number, number>();
   for (const [l, ids] of byLayer) {
-    const nodesInLayer = ids.map((id) => byId.get(id));
-    layerMainSize.set(l, Math.max(0, ...nodesInLayer.map((n) => mainSize(n))));
+    const nodesInLayer = ids.map((id) => byId.get(id)!);
+    layerMainSize.set(l, Math.max(0, ...nodesInLayer.map((n: GraphNode) => mainSize(n))));
   }
 
   // Offset principal acumulado (posición inicial de cada capa a lo largo del eje principal).
-  const layerMainOffset = new Map();
+  const layerMainOffset = new Map<number, number>();
   let mainCursor = 0;
   for (let l = 0; l <= maxLayer; l++) {
     layerMainOffset.set(l, mainCursor);
@@ -277,14 +308,14 @@ export function layoutNodeLink(nodes, edges, opts = {}) {
   }
   const totalMain = mainCursor > 0 ? mainCursor - layerGap : 0;
 
-  const positioned = [];
+  const positioned: { id: string; layer: number; order: number; crossPos: number; mainPos: number; w: number; h: number }[] = [];
   for (const [l, ids] of byLayer) {
     const crossExtent = layerCrossExtent.get(l) ?? 0;
     const startCross = align === 'start' ? 0 : (overallCrossExtent - crossExtent) / 2;
     let crossCursor = startCross;
     const mainStart = layerMainOffset.get(l) ?? 0;
     ids.forEach((id, idx) => {
-      const n = byId.get(id);
+      const n = byId.get(id)!;
       const cross = crossCursor;
       crossCursor += crossSize(n) + nodeGap;
       positioned.push({
@@ -293,15 +324,15 @@ export function layoutNodeLink(nodes, edges, opts = {}) {
         order: idx,
         crossPos: cross,
         mainPos: mainStart,
-        w: n.w,
-        h: n.h,
+        w: n.w ?? 0,
+        h: n.h ?? 0,
       });
     });
   }
 
   const outNodes = positioned.map((p) => {
-    let x;
-    let y;
+    let x: number;
+    let y: number;
     if (!swapAxes) {
       x = p.crossPos;
       y = p.mainPos;

@@ -7,7 +7,7 @@
  */
 import '../media/icon.js';
 
-const START_ICONS = {
+const START_ICONS: Record<string, string> = {
   'i-floppy': 'mdi:content-save-outline',
   'i-edit': 'mdi:pencil-outline',
   'i-trash': 'mdi:trash-can-outline',
@@ -17,45 +17,42 @@ const START_ICONS = {
   'i-search': 'mdi:magnify',
 };
 
-const END_ICONS = {
+const END_ICONS: Record<string, string> = {
   'i-arrow-r': 'mdi:arrow-right',
   'i-download': 'mdi:download',
   'i-link': 'mdi:link-variant',
 };
 
-const escapeAttr = (v: string) => String(v)
+const escapeAttr = (v: string): string => String(v)
   .replace(/&/g, '&amp;')
   .replace(/"/g, '&quot;')
   .replace(/</g, '&lt;');
 
-/**
- * @param {ParentNode} root
- */
-function wirePlayground(root: ParentNode) {
+function wirePlayground(root: ParentNode): void {
   const btn = root.querySelector<HTMLElement>('#pgBtn');
   if (!btn) return;
 
-  const colorEl = root.querySelector<HTMLElement>('#pgColor') || root.querySelector<HTMLElement>('#pgVariant');
-  const variantEl = root.querySelector<HTMLElement>('#pgColor')
-    ? root.querySelector<HTMLElement>('#pgVariant')
-    : (root.querySelector<HTMLElement>('#pgAppearance') || root.querySelector<HTMLElement>('#pgVariantAppearance'));
-  const textEl = root.querySelector<HTMLElement>('#pgText');
-  const startEl = root.querySelector<HTMLElement>('#pgStart');
-  const endEl = root.querySelector<HTMLElement>('#pgEnd');
-  const pillEl = root.querySelector<HTMLElement>('#pgPill');
-  const caretEl = root.querySelector<HTMLElement>('#pgCaret');
-  const loadingEl = root.querySelector<HTMLElement>('#pgLoading');
-  const disabledEl = root.querySelector<HTMLElement>('#pgDisabled');
-  const hrefEl = root.querySelector<HTMLElement>('#pgHref');
+  const colorEl = (root.querySelector<HTMLSelectElement>('#pgColor') || root.querySelector<HTMLSelectElement>('#pgVariant'));
+  const variantEl = root.querySelector<HTMLSelectElement>('#pgColor')
+    ? root.querySelector<HTMLSelectElement>('#pgVariant')
+    : (root.querySelector<HTMLSelectElement>('#pgAppearance') || root.querySelector<HTMLSelectElement>('#pgVariantAppearance'));
+  const textEl = root.querySelector<HTMLInputElement>('#pgText');
+  const startEl = root.querySelector<HTMLSelectElement>('#pgStart');
+  const endEl = root.querySelector<HTMLSelectElement>('#pgEnd');
+  const pillEl = root.querySelector<HTMLInputElement>('#pgPill');
+  const caretEl = root.querySelector<HTMLInputElement>('#pgCaret');
+  const loadingEl = root.querySelector<HTMLInputElement>('#pgLoading');
+  const disabledEl = root.querySelector<HTMLInputElement>('#pgDisabled');
+  const hrefEl = root.querySelector<HTMLInputElement>('#pgHref');
   const outEl = root.querySelector<HTMLElement>('#pgOut');
-  const makeIcon = (mdi, slot) => {
+  const makeIcon = (mdi: string, slot: string): HTMLElement => {
     const icon = document.createElement('is-icon');
     icon.setAttribute('slot', slot);
     icon.setAttribute('icon', mdi);
     return icon;
   };
 
-  const syncIcons = () => {
+  const syncIcons = (): void => {
     for (const el of [...btn.querySelectorAll<HTMLElement>('is-icon[slot="start"], is-icon[slot="end"]')]) {
       el.remove();
     }
@@ -69,11 +66,11 @@ function wirePlayground(root: ParentNode) {
     if (endKey && END_ICONS[endKey]) btn.append(makeIcon(END_ICONS[endKey], 'end'));
   };
 
-  const syncText = () => {
+  const syncText = (): void => {
     const text = textEl?.value ?? 'Hola mundo';
     // Conservar solo los iconos; el resto del light DOM es la etiqueta.
     for (const node of [...btn.childNodes]) {
-      if (node.nodeType === Node.ELEMENT_NODE && node.localName === 'is-icon') continue;
+      if (node.nodeType === Node.ELEMENT_NODE && (node as Element).localName === 'is-icon') continue;
       node.remove();
     }
     const label = document.createTextNode(text);
@@ -82,11 +79,11 @@ function wirePlayground(root: ParentNode) {
     else btn.prepend(label);
   };
 
-  const syncOut = () => {
+  const syncOut = (): void => {
     if (!outEl) return;
     const color = btn.getAttribute('color') || 'brand';
     const variant = btn.getAttribute('variant') || 'filled';
-    const parts = ['<is-button', ` color="${escapeAttr(color)}"`];
+    const parts: string[] = ['<is-button', ` color="${escapeAttr(color)}"`];
     if (variant && variant !== 'filled') parts.push(` variant="${escapeAttr(variant)}"`);
     if (btn.hasAttribute('pill')) parts.push(' pill');
     if (btn.hasAttribute('with-caret')) parts.push(' with-caret');
@@ -108,7 +105,7 @@ function wirePlayground(root: ParentNode) {
     parts.push('</is-button>');
     const html = parts.join('');
     if (outEl.localName === 'is-code') {
-      outEl.value = html;
+      (outEl as HTMLElement & { value: string }).value = html;
       outEl.dataset.cmSource = html;
       delete outEl.dataset.cm;
     } else {
@@ -116,7 +113,7 @@ function wirePlayground(root: ParentNode) {
     }
   };
 
-  const apply = () => {
+  const apply = (): void => {
     const color = colorEl?.value || 'brand';
     const variant = variantEl?.value || 'filled';
 
@@ -147,7 +144,7 @@ function wirePlayground(root: ParentNode) {
 
   const controls = root.querySelector<HTMLElement>('.playground .controls') || root.querySelector<HTMLElement>('#playground .controls');
   controls?.addEventListener('change', apply);
-  controls?.addEventListener('input', (e) => {
+  controls?.addEventListener('input', (e: Event) => {
     const t = e.target;
     if (t instanceof HTMLInputElement && (t.type === 'text' || t.id === 'pgText' || t.id === 'pgHref')) {
       apply();
@@ -157,13 +154,10 @@ function wirePlayground(root: ParentNode) {
   apply();
 }
 
-/**
- * @param {ParentNode} root
- */
-function wireEvents(root: ParentNode) {
+function wireEvents(root: ParentNode): void {
   const log = root.querySelector<HTMLElement>('#evtLog');
   if (!log) return;
-  const stamp = (name, detail) => {
+  const stamp = (name: string, detail: unknown): void => {
     const line = document.createElement('div');
     line.textContent = `${new Date().toLocaleTimeString()} · ${name}${detail ? ` ${JSON.stringify(detail)}` : ''}`;
     log.prepend(line);
@@ -173,20 +167,22 @@ function wireEvents(root: ParentNode) {
     const el = root.querySelector<HTMLElement>(`#${id}`);
     if (!el) continue;
     for (const ev of ['is-click', 'is-focus', 'is-blur', 'is-invalid']) {
-      el.addEventListener(ev, (e) => stamp(`${id}:${ev}`, e.detail || null));
+      el.addEventListener(ev, (e: Event) => stamp(`${id}:${ev}`, (e as CustomEvent).detail ?? null));
     }
   }
 }
 
-/**
- * @param {{ main?: ParentNode, root?: ParentNode }} ctx
- */
-export async function mount(ctx) {
+interface MountCtx {
+  main?: ParentNode;
+  root?: ParentNode;
+}
+
+export async function mount(ctx: MountCtx): Promise<void> {
   const root = ctx?.main || ctx?.root || document;
   wirePlayground(root);
   wireEvents(root);
 }
 
-export function unmount() {
+export function unmount(): void {
   /* nodos del preview se descartan con el paint */
 }

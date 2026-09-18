@@ -1,9 +1,11 @@
 /**
  * Render de la definición tipada → DOM (sin ejecutar lógica de preview).
- * @typedef {import('./types.d.ts').PreviewDefinition} PreviewDefinition
- * @typedef {import('./types.d.ts').PreviewSection} PreviewSection
- * @typedef {import('./types.d.ts').PreviewBlock} PreviewBlock
  */
+import type {
+  PreviewDefinition,
+  PreviewSection,
+  PreviewBlock,
+} from './types.d.ts';
 
 /**
  * Base de `dist/assets/` para el token `{assets}`.
@@ -26,28 +28,28 @@ const RAIZ = (() => {
 const ASSETS = `${RAIZ}dist/assets/`;
 
 /**
- * @param {string} html
- * @returns {string}
+ * @param html
+ * @returns
  */
-export function resolveAssets(html: string) {
+export function resolveAssets(html: string): string {
   return typeof html === 'string' ? html.replaceAll('{assets}', ASSETS) : html;
 }
 
 /**
- * @param {string} html
- * @returns {DocumentFragment}
+ * @param html
+ * @returns
  */
-export function fragmentFromHtml(html: string) {
+export function fragmentFromHtml(html: string): DocumentFragment {
   const tpl = document.createElement('template');
   tpl.innerHTML = resolveAssets(html).trim();
-  return tpl.content.cloneNode(true);
+  return tpl.content.cloneNode(true) as DocumentFragment;
 }
 
 /**
- * @param {PreviewBlock} block
- * @returns {HTMLElement}
+ * @param block
+ * @returns
  */
-export function renderBlock(block: PreviewBlock) {
+export function renderBlock(block: PreviewBlock): HTMLElement {
   switch (block.kind) {
     case 'lede': {
       const p = document.createElement('p');
@@ -144,11 +146,13 @@ export function renderBlock(block: PreviewBlock) {
 const CONTENEDORES = new Set(['section', 'aside']);
 
 /**
- * @param {PreviewSection} section
- * @returns {HTMLElement}
+ * @param section
+ * @returns
  */
-export function renderSection(section: PreviewSection) {
-  const tag = CONTENEDORES.has(section.as ?? '') ? section.as : 'section';
+export function renderSection(section: PreviewSection): HTMLElement {
+  const tag: 'section' | 'aside' = CONTENEDORES.has(section.as ?? '') && section.as
+    ? section.as
+    : 'section';
   const el = document.createElement(tag);
   el.className = section.className ? `section ${section.className}` : 'section';
   el.id = section.id;
@@ -178,10 +182,10 @@ export function renderSection(section: PreviewSection) {
 }
 
 /**
- * @param {PreviewDefinition} def
- * @param {{ main: HTMLElement, aside: HTMLElement }} targets
+ * @param def
+ * @param targets
  */
-export function renderDefinition(def: PreviewDefinition, targets) {
+export function renderDefinition(def: PreviewDefinition, targets: { main: HTMLElement; aside: HTMLElement }): void {
   const { main, aside } = targets;
   main.replaceChildren();
   aside.replaceChildren();
@@ -199,7 +203,7 @@ export function renderDefinition(def: PreviewDefinition, targets) {
   }
 
   const destino = def.wrapperClass ? document.createElement('div') : main;
-  if (destino !== main) destino.className = def.wrapperClass;
+  if (destino !== main) destino.className = def.wrapperClass ?? '';
 
   // El prelude va DENTRO del wrapper: es donde se declaran las custom
   // properties de la página, y fuera de ahí un `var(--propia)` queda vacío.

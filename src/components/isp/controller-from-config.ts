@@ -25,8 +25,166 @@
  *   })
  */
 
+/* ─────────────────────────── Tipos del contrato ───────────────────────── */
+
+/** Forma mínima de un registro: objeto plano indexado por nombre de campo. */
+export type IspRecord = Record<string, unknown>;
+
+/** Nombre de una acción CRUD reconocida por el controller. */
+export type IspActionKey =
+  | 'crear'
+  | 'modificar'
+  | 'visualizar'
+  | 'verificar'
+  | 'duplicar'
+  | 'recodificar'
+  | 'eliminar'
+  | 'consolidar';
+
+/** Definición de columna aplanada (campo + header). */
+export interface IspColumnDef {
+  field: string;
+  header?: string;
+}
+
+/** Configuración de una conexión HTTP al backend. */
+export interface IspServerConfig {
+  /** `true` para usar `local` en lugar de `remote`. */
+  useLocal?: boolean;
+  /** Conexión local (mock-friendly). */
+  local?: IspConnection | null;
+  /** Conexión remota. */
+  remote?: IspConnection | null;
+}
+
+/** Parámetros HTTP de un endpoint. */
+export interface IspConnection {
+  host: string;
+  port?: number | null;
+  /** `false` para forzar `http://`; por defecto `https`. */
+  https?: boolean;
+  /** Prefijo de contexto REST (p. ej. `/conta`). */
+  restcontext?: string;
+}
+
+/** Endpoints REST configurables por acción. */
+export interface IspEndpoints {
+  /** Recurso singular — usado para derivar `recursos` y `crud` por defecto. */
+  recurso?: string;
+  /** Recurso plural — usado para `listado` por defecto. */
+  recursos?: string;
+  /** Base CRUD (POST/PUT/DELETE). */
+  crud?: string;
+  /** Endpoint de listado (GET). */
+  listado?: string;
+  verificar?: string;
+  duplicar?: string;
+  recodificar?: string;
+  consolidar?: string;
+}
+
+/** Token resuelto o función que lo devuelve perezosamente. */
+export type IspToken = string | (() => string | null | undefined) | null | undefined;
+
+/** Forma del argumento de `Lista`. */
+export interface IspListaArgs {
+  pagina?: number;
+  qregistros?: number;
+  filtro?: { sql?: string };
+}
+
+/** Forma del resultado de `Lista` (mock o HTTP). */
+export interface IspListaResult {
+  datos: IspRecord[];
+  qregistros?: number;
+  totalregistros?: number;
+  pagina?: number;
+  totalpaginas?: number;
+}
+
+/** Configuración del controller — entrada de las factorías. */
+export interface IspControllerConfig {
+  /** `'catalog'` (default) o `'btnref'`. */
+  kind?: 'catalog' | 'btnref';
+  /** Etiqueta visible de la entidad. */
+  entrie?: string;
+  /** Clave primaria — única o compuesta. */
+  primaryKeys?: string[];
+  /** Columnas planas (alternativa a `Columns`). */
+  columns?: IspColumnDef[];
+  /** Columnas mostradas en BtnRef (default: primaryKeys). */
+  ColumnsBtnRef?: string[];
+  /** Selección múltiple. */
+  multiSelect?: boolean;
+  /** Etiqueta legible de la PK (para prompts). */
+  labelPk?: string;
+  /** Tamaño máximo de la PK. */
+  sizePk?: number;
+  /** Constructor de un objeto nuevo. */
+  klass?: new () => IspRecord;
+  /** Acciones habilitadas. */
+  actions?: boolean | IspActionKey[];
+  /** Datos iniciales (mock mode). */
+  mock?: IspRecord[];
+  /** Conexión HTTP. */
+  server?: IspServerConfig;
+  /** Endpoints REST. */
+  endpoints?: IspEndpoints;
+  /** Recurso singular (atajo). */
+  recurso?: string;
+  /** Bearer token o función que lo devuelve. */
+  token?: IspToken;
+}
+
+/** Definición del controller devuelto por `createIspController`. */
+export interface IspController {
+  entrie: string;
+  primaryKeys: string[];
+  columns: IspColumnDef[];
+  Columns: Record<string, string>;
+  ColumnsBtnRef: string[];
+  multiSelect: boolean;
+  labelPk?: string;
+  sizePk?: number;
+  klass: new () => IspRecord;
+  CtxBtnRef?: IspController | null;
+  Lista: (args?: IspListaArgs) => Promise<IspListaResult>;
+  actCrear?: (record: IspRecord) => Promise<IspRecord>;
+  actModificar?: (record: IspRecord) => Promise<IspRecord>;
+  actVisualizar?: (record: IspRecord) => Promise<IspRecord>;
+  actVerificar?: (record: IspRecord) => Promise<{ mensajes: Array<{ itdmensaje: unknown; mensaje: string }> }>;
+  actEliminar?: (record: IspRecord) => Promise<IspRecord>;
+  actDuplicar?: (src: IspRecord, work: IspRecord) => Promise<true>;
+  actRecodificar?: (src: IspRecord, work: IspRecord) => Promise<true>;
+  actConsolidar?: (src: IspRecord, work: IspRecord) => Promise<true>;
+  /** Acceso al store mock — sólo tests / demos. */
+  readonly _store: IspRecord[];
+}
+
+/** Forma del JSON que devuelve el backend ISP. */
+interface IspHttpEnvelope {
+  encabezado?: { resultado?: boolean; mensaje?: string };
+  respuesta?: {
+    datos?: IspRecord[];
+    pagina?: number;
+    qregistros?: number;
+    totalpaginas?: number;
+    totalregistros?: number;
+    verificacion?: { mensajes: Array<{ itdmensaje: unknown; mensaje: string }> };
+  };
+  /** Algunos endpoints exponen `datos` en la raíz sin `respuesta`. */
+  datos?: IspRecord[];
+}
+
+/** Forma del controller antes de añadir los `actXxx` y `_store` finales. */
+type MutableIspController = {
+  -readonly [K in keyof IspController]: IspController[K];
+};
+
+/* ───────────────────────────── helpers puros ──────────────────────────── */
+
 /** Pluralización ES mínima (curso→cursos, z→ces). */
-export function pluralizeEs(s) {
+export function pluralizeEs(s: string): string {
   if (!s) return s;
   const last = s.slice(-1).toLowerCase();
   return last === 'z'
@@ -36,12 +194,12 @@ export function pluralizeEs(s) {
       : `${s}es`;
 }
 
-const ALL_ACTIONS = [
+const ALL_ACTIONS: readonly IspActionKey[] = [
   'crear', 'modificar', 'visualizar', 'verificar',
   'duplicar', 'recodificar', 'eliminar', 'consolidar',
 ];
 
-const ACT_MAP = {
+const ACT_MAP: Record<IspActionKey, string> = {
   crear: 'actCrear',
   modificar: 'actModificar',
   visualizar: 'actVisualizar',
@@ -52,40 +210,56 @@ const ACT_MAP = {
   consolidar: 'actConsolidar',
 };
 
-function resolveActions(actions, kind) {
+function resolveActions(
+  actions: IspControllerConfig['actions'],
+  kind: 'catalog' | 'btnref',
+): IspActionKey[] {
   if (kind === 'btnref' || actions === false) return [];
   if (actions == null || actions === true) return [...ALL_ACTIONS];
   if (Array.isArray(actions)) {
-    return actions.map((a: string) => String(a).toLowerCase()).filter((a) => ACT_MAP[a]);
+    const out: IspActionKey[] = [];
+    for (const a of actions) {
+      const lower = String(a).toLowerCase() as IspActionKey;
+      if (ACT_MAP[lower]) out.push(lower);
+    }
+    return out;
   }
   return [...ALL_ACTIONS];
 }
 
-function pkKey(rec, primaryKeys) {
+function pkKey(rec: IspRecord | null | undefined, primaryKeys: string[]): string {
   return primaryKeys.map((k) => String(rec?.[k] ?? '')).join('\0');
 }
 
-function matchSqlFilter(datos, sql, primaryKeys) {
+function matchSqlFilter(
+  datos: IspRecord[],
+  sql: string | undefined,
+  primaryKeys: string[],
+): IspRecord[] {
   const q = String(sql || '').trim();
   if (!q) return datos;
   // Patrones simples: campo='valor' (BtnRef typing)
   const m = q.match(/([a-zA-Z_][\w]*)\s*=\s*'([^']*)'/);
   if (m) {
-    const [, field, val] = m;
+    const field = m[1]!;
+    const val = m[2]!;
     return datos.filter((r) => String(r?.[field] ?? '') === val);
   }
   const lower = q.toLowerCase();
-  return datos.filter((r) => primaryKeys.some((k) => String(r?.[k] ?? '').toLowerCase().includes(lower))
-    || Object.values(r || {}).some((v) => String(v ?? '').toLowerCase().includes(lower)));
+  return datos.filter(
+    (r) =>
+      primaryKeys.some((k) => String(r?.[k] ?? '').toLowerCase().includes(lower)) ||
+      Object.values(r || {}).some((v) => String(v ?? '').toLowerCase().includes(lower)),
+  );
 }
 
-function connectionOf(server) {
+function connectionOf(server: IspServerConfig | undefined): IspConnection | null {
   if (!server) return null;
   if (server.useLocal && server.local) return server.local;
   return server.remote || server.local || null;
 }
 
-function buildEndpoints(cfg) {
+function buildEndpoints(cfg: IspControllerConfig): Required<Pick<IspEndpoints, 'crud' | 'listado' | 'verificar' | 'duplicar' | 'recodificar' | 'consolidar'>> {
   const ep = cfg.endpoints || {};
   const recurso = ep.recurso || cfg.recurso || '';
   const recursos = ep.recursos || (recurso ? pluralizeEs(recurso) : '');
@@ -101,14 +275,20 @@ function buildEndpoints(cfg) {
   };
 }
 
-function authHeader(token) {
+function authHeader(token: IspToken): Record<string, string> {
   const t = typeof token === 'function' ? token() : token;
   if (!t) return {};
   const v = String(t);
   return { Authorization: v.startsWith('Bearer ') || v.startsWith('Basic ') ? v : `Bearer ${v}` };
 }
 
-async function httpJson(conn, method, path, body, token) {
+async function httpJson(
+  conn: IspConnection | null,
+  method: string,
+  path: string,
+  body: unknown,
+  token: IspToken,
+): Promise<IspHttpEnvelope> {
   if (!conn) throw new Error('Sin conexión de servidor en el controller');
   const proto = conn.https === false ? 'http' : 'https';
   const port = conn.port != null ? `:${conn.port}` : '';
@@ -123,20 +303,23 @@ async function httpJson(conn, method, path, body, token) {
     body: body != null ? JSON.stringify(body) : undefined,
   });
   const text = await res.text();
-  let json = {};
-  try { json = text ? JSON.parse(text) : {}; } catch { json = {}; }
+  let json: IspHttpEnvelope = {};
+  try { json = text ? (JSON.parse(text) as IspHttpEnvelope) : {}; } catch { json = {}; }
   if (!res.ok || json?.encabezado?.resultado === false) {
     throw new Error(json?.encabezado?.mensaje || `HTTP ${res.status}`);
   }
   return json;
 }
 
+/* ──────────────────────────────── factoría ────────────────────────────── */
+
 /**
- * @param {object} config
- * @returns {object} controller compatible con is-catalogo-gen / is-btn-ref
+ * Crea un controller compatible con `<is-catalogo-gen>` y `<is-btn-ref>`.
+ * @param config Configuración declarativa (mock o HTTP).
+ * @returns Controller listo para asignar a `is-catalogo-gen.controller` o `is-btn-ref.controller`.
  */
-export function createIspController(config: object = {}) {
-  const kind = config.kind === 'btnref' ? 'btnref' : 'catalog';
+export function createIspController(config: IspControllerConfig = {}): IspController {
+  const kind: 'catalog' | 'btnref' = config.kind === 'btnref' ? 'btnref' : 'catalog';
   const primaryKeys = [...(config.primaryKeys || ['id'])];
   const columns = config.columns || [];
   const actions = resolveActions(config.actions, kind);
@@ -144,9 +327,18 @@ export function createIspController(config: object = {}) {
   const conn = connectionOf(config.server);
   const useMock = Array.isArray(config.mock) || !conn;
 
-  /** @type {object[]} */
-  let store = (config.mock || []).map((r) => ({ ...r }));
+  let store: IspRecord[] = (config.mock || []).map((r) => ({ ...r }));
 
+  // Klass por defecto: devuelve un objeto con las PKs vacías.
+  class EmptyRecord {
+    [key: string]: unknown;
+    constructor() {
+      for (const k of primaryKeys) this[k] = '';
+    }
+  }
+
+  // Construimos el ctrl como un objeto mutable para poder añadir `actXxx` y
+  // `_store` (definido por propiedad) tras crearlo.
   const ctrl = {
     entrie: config.entrie || 'Registro',
     primaryKeys,
@@ -156,18 +348,16 @@ export function createIspController(config: object = {}) {
     multiSelect: !!config.multiSelect,
     labelPk: config.labelPk,
     sizePk: config.sizePk,
-    klass: typeof config.klass === 'function'
-      ? config.klass
-      : () => {
-        const o = {};
-        for (const k of primaryKeys) o[k] = '';
-        return o;
-      },
+    klass: (typeof config.klass === 'function' ? config.klass : EmptyRecord) as new () => IspRecord,
 
-    async Lista({ filtro } = {}) {
+    async Lista({ filtro }: IspListaArgs = {}) {
       if (useMock) {
         const datos = matchSqlFilter(store, filtro?.sql, primaryKeys);
-        return { datos: datos.map((r) => ({ ...r })), qregistros: datos.length, totalregistros: datos.length };
+        return {
+          datos: datos.map((r) => ({ ...r })),
+          qregistros: datos.length,
+          totalregistros: datos.length,
+        };
       }
       const json = await httpJson(conn, 'GET', endpoints.listado, null, config.token);
       const datos = json?.respuesta?.datos || json?.datos || [];
@@ -179,10 +369,10 @@ export function createIspController(config: object = {}) {
         totalregistros: json?.respuesta?.totalregistros,
       };
     },
-  };
+  } as MutableIspController;
 
   if (actions.includes('crear')) {
-    ctrl.actCrear = async (o) => {
+    ctrl.actCrear = async (o: IspRecord) => {
       if (useMock) {
         store = [...store, { ...o }];
         return o;
@@ -192,67 +382,67 @@ export function createIspController(config: object = {}) {
     };
   }
   if (actions.includes('modificar')) {
-    ctrl.actModificar = async (o) => {
+    ctrl.actModificar = async (o: IspRecord) => {
       if (useMock) {
         const key = pkKey(o, primaryKeys);
         store = store.map((r) => (pkKey(r, primaryKeys) === key ? { ...o } : r));
         return o;
       }
-      const path = `${endpoints.crud}/${primaryKeys.map((k) => encodeURIComponent(o[k])).join('/')}`;
+      const path = `${endpoints.crud}/${primaryKeys.map((k) => encodeURIComponent(String(o[k]))).join('/')}`;
       const json = await httpJson(conn, 'PUT', path, o, config.token);
       return { ...o, ...(json?.respuesta?.datos || {}) };
     };
   }
   if (actions.includes('visualizar')) {
-    ctrl.actVisualizar = async (o) => o;
+    ctrl.actVisualizar = async (o: IspRecord) => o;
   }
   if (actions.includes('verificar')) {
-    ctrl.actVerificar = async (o) => {
+    ctrl.actVerificar = async (o: IspRecord) => {
       if (useMock) {
         return { mensajes: [{ itdmensaje: 'info', mensaje: `${ctrl.entrie} OK` }] };
       }
-      const path = `${endpoints.verificar}/${primaryKeys.map((k) => encodeURIComponent(o[k])).join('/')}`;
+      const path = `${endpoints.verificar}/${primaryKeys.map((k) => encodeURIComponent(String(o[k]))).join('/')}`;
       const json = await httpJson(conn, 'GET', path, null, config.token);
       return json?.respuesta?.verificacion || { mensajes: [] };
     };
   }
   if (actions.includes('eliminar')) {
-    ctrl.actEliminar = async (o) => {
+    ctrl.actEliminar = async (o: IspRecord) => {
       if (useMock) {
         const key = pkKey(o, primaryKeys);
         store = store.filter((r) => pkKey(r, primaryKeys) !== key);
         return o;
       }
-      const path = `${endpoints.crud}/${primaryKeys.map((k) => encodeURIComponent(o[k])).join('/')}`;
+      const path = `${endpoints.crud}/${primaryKeys.map((k) => encodeURIComponent(String(o[k]))).join('/')}`;
       await httpJson(conn, 'DELETE', path, null, config.token);
       return o;
     };
   }
   if (actions.includes('duplicar')) {
-    ctrl.actDuplicar = async (src, work) => {
+    ctrl.actDuplicar = async (src: IspRecord, work: IspRecord) => {
       if (useMock) {
         store = [...store, { ...work }];
         return true;
       }
-      const path = `${endpoints.duplicar}/${primaryKeys.map((k) => encodeURIComponent(src[k])).join('/')}`;
+      const path = `${endpoints.duplicar}/${primaryKeys.map((k) => encodeURIComponent(String(src[k]))).join('/')}`;
       await httpJson(conn, 'POST', path, work, config.token);
       return true;
     };
   }
   if (actions.includes('recodificar')) {
-    ctrl.actRecodificar = async (src, work) => {
+    ctrl.actRecodificar = async (src: IspRecord, work: IspRecord) => {
       if (useMock) {
         const key = pkKey(src, primaryKeys);
         store = store.map((r) => (pkKey(r, primaryKeys) === key ? { ...work } : r));
         return true;
       }
-      const path = `${endpoints.recodificar}/${primaryKeys.map((k) => encodeURIComponent(src[k])).join('/')}`;
+      const path = `${endpoints.recodificar}/${primaryKeys.map((k) => encodeURIComponent(String(src[k]))).join('/')}`;
       await httpJson(conn, 'PUT', path, work, config.token);
       return true;
     };
   }
   if (actions.includes('consolidar')) {
-    ctrl.actConsolidar = async (src, work) => {
+    ctrl.actConsolidar = async (src: IspRecord, work: IspRecord) => {
       if (useMock) {
         const from = pkKey(src, primaryKeys);
         const to = pkKey(work, primaryKeys);
@@ -260,7 +450,7 @@ export function createIspController(config: object = {}) {
         if (!store.some((r) => pkKey(r, primaryKeys) === to)) store = [...store, { ...work }];
         return true;
       }
-      const path = `${endpoints.consolidar}/${primaryKeys.map((k) => encodeURIComponent(src[k])).join('/')}`;
+      const path = `${endpoints.consolidar}/${primaryKeys.map((k) => encodeURIComponent(String(src[k]))).join('/')}`;
       await httpJson(conn, 'PUT', path, work, config.token);
       return true;
     };
@@ -268,15 +458,15 @@ export function createIspController(config: object = {}) {
 
   /** Acceso al store mock (demos / tests). */
   Object.defineProperty(ctrl, '_store', {
-    get() { return store; },
-    set(v) { store = Array.isArray(v) ? v.map((r) => ({ ...r })) : []; },
+    get(this: MutableIspController) { return store; },
+    set(this: MutableIspController, v: IspRecord[]) { store = Array.isArray(v) ? v.map((r) => ({ ...r })) : []; },
   });
 
   return ctrl;
 }
 
 /** Catálogo CRUD: acciones por defecto = todas. */
-export function createCatalogController(config = {}) {
+export function createCatalogController(config: IspControllerConfig = {}): IspController {
   return createIspController({
     ...config,
     kind: 'catalog',
@@ -285,7 +475,7 @@ export function createCatalogController(config = {}) {
 }
 
 /** BtnRef: sin acciones de toolbar; solo Lista + columnas de etiqueta. */
-export function createBtnRefController(config = {}) {
+export function createBtnRefController(config: IspControllerConfig = {}): IspController {
   return createIspController({
     ...config,
     kind: 'btnref',

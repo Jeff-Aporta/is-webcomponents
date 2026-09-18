@@ -1,11 +1,20 @@
 import { adoptCss, defineElement, emit, emitCancelable } from '../../core/element.js';
 import { DiagramElementBase } from '../_shared/diagram-element-base.js';
 import { resolveUseCaseSpec, computeUseCaseLayout } from './use-case-spec.js';
+import type {
+  UseCaseLayout,
+  UseCaseLayoutActor,
+  UseCaseLayoutCase,
+  UseCaseLayoutLink,
+  UseCaseResolvedSpec,
+} from './use-case-spec.js';
 import { sequenceThemeDark, sequenceThemeLight } from './sequence-spec.js';
 import { tkHueToHex } from '../_shared/tk-hue.js';
 import { edgeStrokeHex, edgeChipFill, edgeChipText } from '../_shared/diagram-edge-style.js';
+import type { DiagramTheme } from './diagram-types.js';
 import { inlineMdWeb } from '../_shared/tk-inline-md.js';
 import { wrapText, buildTspans } from '../_shared/diagram-text-wrap.js';
+import type { TSpanSpec } from '../_shared/diagram-text-wrap.js';
 import { registerDiagramKind } from './diagram-kinds.js';
 import { svgEl } from '../_shared/svg-chart-engine.js';
 import { svgArrowHead } from '../_shared/diagram-arrow.js';
@@ -27,13 +36,27 @@ import { svgArrowHead } from '../_shared/diagram-arrow.js';
  * Eventos: is-render, is-open-viewer, is-toggle-group
  */
 
+/** Nodo (caso o actor) cacheado en el SVG para aplicar hover sin reconstruir. */
+interface NodeNodeEntry {
+  n: UseCaseLayoutActor | UseCaseLayoutCase;
+  g: SVGGElement;
+}
+
+/** Relación cacheada en el SVG para aplicar hover sin reconstruir. */
+interface LinkNodeEntry {
+  l: UseCaseLayoutLink;
+  g: SVGGElement;
+}
+
 /** Monigote UML: cabeza, tronco, brazos y piernas dentro de la caja del actor. */
-function stickFigure(node, color, external) {
+function stickFigure(
+  node: UseCaseLayoutActor, color: string, external: boolean,
+): SVGGElement {
   const g = svgEl('g', { class: 'uc-actor__figure' });
   const cx = node.x + node.w / 2;
   const top = node.y + 4;
   const headR = 7;
-  const dash = external ? '4 3' : null;
+  const dash: string | null = external ? '4 3' : null;
   g.appendChild(svgEl('circle', {
     cx, cy: top + headR, r: headR, fill: 'none', stroke: color, 'stroke-width': 1.4, 'stroke-dasharray': dash,
   }));
@@ -51,11 +74,13 @@ function stickFigure(node, color, external) {
   g.appendChild(svgEl('line', {
     x1: cx, y1: bodyBottom, x2: cx + 9, y2: bodyBottom + 12, stroke: color, 'stroke-width': 1.4, 'stroke-dasharray': dash,
   }));
-  return g;
+  return g as SVGGElement;
 }
 
 /** Punta hueca de generalización (triángulo UML) apuntando al padre. */
-function generalizationHead(x1: number, y1: number, x2, y2, color) {
+function generalizationHead(
+  x1: number, y1: number, x2: number, y2: number, color: string,
+): SVGPolygonElement {
   const dx = x2 - x1;
   const dy = y2 - y1;
   const len = Math.hypot(dx, dy) || 1;
@@ -73,10 +98,10 @@ function generalizationHead(x1: number, y1: number, x2, y2, color) {
 }
 
 class IsUseCaseDiagram extends DiagramElementBase {
-  #hiddenGroups = new Set();
-  #nodeNodes = new Map();
-  #linkNodes = new Map();
-  #hoverId = null;
+  #hiddenGroups: Set<string> = new Set<string>();
+  #nodeNodes: Map<string, NodeNodeEntry> = new Map();
+  #linkNodes: Map<string, LinkNodeEntry> = new Map();
+  #hoverId: string | null = null;
 
   constructor() {
     super();
@@ -84,28 +109,28 @@ class IsUseCaseDiagram extends DiagramElementBase {
     adoptCss(this.shadowRoot!, import.meta.url);
   }
 
-  onDiagramConnected() {
-    this.wrap.addEventListener('mousemove', this.#onMouseMove);
-    this.wrap.addEventListener('mouseleave', this.#onMouseLeave);
-    this.wrap.addEventListener('click', this.#onClick);
+  onDiagramConnected(): void {
+    this.wrap.addEventListener('mousemove', this.#onMouseMove as EventListener);
+    this.wrap.addEventListener('mouseleave', this.#onMouseLeave as EventListener);
+    this.wrap.addEventListener('click', this.#onClick as EventListener);
   }
 
-  onDiagramDisconnected() {
-    this.wrap.removeEventListener('mousemove', this.#onMouseMove);
-    this.wrap.removeEventListener('mouseleave', this.#onMouseLeave);
-    this.wrap.removeEventListener('click', this.#onClick);
+  onDiagramDisconnected(): void {
+    this.wrap.removeEventListener('mousemove', this.#onMouseMove as EventListener);
+    this.wrap.removeEventListener('mouseleave', this.#onMouseLeave as EventListener);
+    this.wrap.removeEventListener('click', this.#onClick as EventListener);
   }
 
-  onPayloadChanged() { this.#hiddenGroups = new Set(); }
+  onPayloadChanged(): void { this.#hiddenGroups = new Set(); }
 
-  get hiddenGroups() { return this.#hiddenGroups; }
-  set hiddenGroups(v) {
-    this.#hiddenGroups = v instanceof Set ? v : new Set(v || []);
+  get hiddenGroups(): Set<string> { return this.#hiddenGroups; }
+  set hiddenGroups(v: Set<string> | Iterable<string> | null | undefined) {
+    this.#hiddenGroups = v instanceof Set ? v : new Set(v ?? []);
     this.queueRender();
   }
 
-  renderDiagram() {
-    const spec = resolveUseCaseSpec(this.payload ?? {});
+  renderDiagram(): void {
+    const spec: UseCaseResolvedSpec | null = resolveUseCaseSpec(this.payload ?? {});
     this.spec = spec;
     if (!spec) {
       this.svg.innerHTML = '';
@@ -116,7 +141,7 @@ class IsUseCaseDiagram extends DiagramElementBase {
 
     // Ocultar un grupo quita sus casos y las relaciones que los tocan.
     const hidden = this.#hiddenGroups;
-    let visible = spec;
+    let visible: UseCaseResolvedSpec = spec;
     if (hidden.size) {
       const cases = spec.cases.filter((c) => !c.group || !hidden.has(c.group));
       const keep = new Set([...cases.map((c) => c.id), ...spec.actors.map((a) => a.id)]);
@@ -128,16 +153,16 @@ class IsUseCaseDiagram extends DiagramElementBase {
       return;
     }
 
-    const theme = this.isDarkTheme ? sequenceThemeDark() : sequenceThemeLight();
+    const theme: DiagramTheme = this.isDarkTheme ? sequenceThemeDark() : sequenceThemeLight();
     this.syncThemeAttr();
 
-    const layout = computeUseCaseLayout(visible);
+    const layout: UseCaseLayout = computeUseCaseLayout(visible);
     this.layout = layout;
     this.#buildSvg(layout, theme);
     this.wrap.classList.toggle('is-viewer', this.isViewer);
   }
 
-  #buildSvg(layout, theme) {
+  #buildSvg(layout: UseCaseLayout, theme: DiagramTheme): void {
     const { width: W, height: H } = layout;
     this.svg.setAttribute('viewBox', `0 0 ${W} ${H}`);
     this.svg.setAttribute('preserveAspectRatio', 'xMidYMid meet');
@@ -174,16 +199,16 @@ class IsUseCaseDiagram extends DiagramElementBase {
     emit(this, 'is-render', { layout, svg: this.svg });
   }
 
-  #buildSystem(layout, theme) {
+  #buildSystem(layout: UseCaseLayout, _theme: DiagramTheme): void {
     const s = layout.system;
     const g = svgEl('g', { class: 'uc-system' });
     g.appendChild(svgEl('rect', {
       x: s.x, y: s.y, width: s.w, height: s.h, rx: 8,
-      fill: theme.altFill, stroke: theme.border, 'stroke-width': 1.2, class: 'uc-system__box',
+      fill: _theme.altFill, stroke: _theme.border, 'stroke-width': 1.2, class: 'uc-system__box',
     }));
     if (s.name) {
       const t = svgEl('text', {
-        x: s.labelX, y: s.labelY, 'text-anchor': 'middle', fill: theme.muted,
+        x: s.labelX, y: s.labelY, 'text-anchor': 'middle', fill: _theme.muted,
         'font-size': '11', 'font-weight': '600', 'letter-spacing': '0.03em',
         'font-family': 'Tahoma,Arial,sans-serif', class: 'uc-system__label',
       });
@@ -193,9 +218,10 @@ class IsUseCaseDiagram extends DiagramElementBase {
     this.svg.appendChild(g);
   }
 
-  #buildLegend(layout, theme) {
+  #buildLegend(layout: UseCaseLayout, theme: DiagramTheme): void {
     const g = svgEl('g', { class: 'uc-legend' });
-    layout.groups.forEach((grp, gi: number) => {
+    const groups = layout.groups ?? [];
+    groups.forEach((grp, gi: number) => {
       const ly = (layout.subtitleY || layout.titleY || 22) + 18 + gi * 16;
       const color = tkHueToHex(grp.hue) ?? theme.accent;
       const off = this.#hiddenGroups.has(grp.id);
@@ -222,7 +248,7 @@ class IsUseCaseDiagram extends DiagramElementBase {
     this.svg.appendChild(g);
   }
 
-  #buildLinks(layout, theme) {
+  #buildLinks(layout: UseCaseLayout, theme: DiagramTheme): void {
     for (const l of layout.links) {
       const color = edgeStrokeHex(l.hue, theme.accent);
       const dashed = l.kind === 'include' || l.kind === 'extend';
@@ -236,16 +262,23 @@ class IsUseCaseDiagram extends DiagramElementBase {
 
       // Asociación: sin punta (UML). Dependencias: punta simple. Generalización: hueca.
       if (dashed) {
-        g.appendChild(svgArrowHead({
-          d: l.path, tip: { x: l.x2, y: l.y2 }, color, len: 7, halfWidth: 3.5, className: 'uc-link__head',
-        }));
+        const head = (svgArrowHead as unknown as (opts: {
+          d: string; tip: { x: number; y: number }; color: string;
+          len?: number; halfWidth?: number;
+        }) => SVGElement)({
+          d: l.path, tip: { x: l.x2, y: l.y2 }, color, len: 7, halfWidth: 3.5,
+        });
+        head.classList.add('uc-link__head');
+        g.appendChild(head);
       } else if (l.kind === 'generalization') {
         g.appendChild(generalizationHead(l.x1, l.y1, l.x2, l.y2, color));
       }
 
-      const text = l.stereotype ?? l.label;
+      const text: string | undefined = l.stereotype ?? l.label;
       if (text) {
-        const w = l.labelW ?? (text.length * 5.4 + 8);
+        // `labelW` no está declarado en UseCaseLayoutLink; el spec lo añade
+        // opcionalmente en runtime. Cast para preservar comportamiento.
+        const w = (l as { labelW?: number }).labelW ?? (text.length * 5.4 + 8);
         g.appendChild(svgEl('rect', {
           x: l.labelX - w / 2, y: l.labelY - 8, width: w, height: 15, rx: 4,
           fill: edgeChipFill(l.hue), class: 'uc-link__chip',
@@ -259,11 +292,11 @@ class IsUseCaseDiagram extends DiagramElementBase {
       }
 
       this.svg.appendChild(g);
-      this.#linkNodes.set(l.id, { l, g });
+      this.#linkNodes.set(l.id, { l, g: g as SVGGElement });
     }
   }
 
-  #buildCases(layout, theme) {
+  #buildCases(layout: UseCaseLayout, theme: DiagramTheme): void {
     for (const c of layout.cases) {
       const color = (c.hue != null && tkHueToHex(c.hue)) || theme.accent;
       const g = svgEl('g', { class: 'uc-case' });
@@ -280,20 +313,24 @@ class IsUseCaseDiagram extends DiagramElementBase {
       });
       const ucHasMd = /[*`\[]/.test(c.label) || c.label.includes('{{');
       if (ucHasMd) {
-        t.setAttribute('x', c.x + c.w / 2);
-        t.setAttribute('y', c.y + c.h / 2 + 4);
+        t.setAttribute('x', String(c.x + c.w / 2));
+        t.setAttribute('y', String(c.y + c.h / 2 + 4));
         t.setAttribute('text-anchor', 'middle');
         t.innerHTML = inlineMdWeb(c.label);
       } else {
+        // `overflow` no está declarado en UseCaseLayoutCase; cast para leer.
+        const rawOverflow = (c as { overflow?: string }).overflow;
+        const overflow: 'grow' | 'ellipsis' =
+          (rawOverflow === 'grow' || rawOverflow === 'ellipsis') ? rawOverflow : 'ellipsis';
         const ucresult = wrapText({
           text: c.label,
           maxWidth: Math.max(c.w - 16, 8),
           maxHeight: c.h - 8,
           fontSize: 11,
           fontFamily: 'Tahoma,Arial,sans-serif',
-          overflow: c.overflow ?? 'ellipsis',
+          overflow,
         });
-        const uctspans = buildTspans(
+        const uctspans: TSpanSpec[] = buildTspans(
           ucresult.lines,
           c.x, c.y, c.w, c.h,
           'middle', 11, 1.2,
@@ -310,11 +347,11 @@ class IsUseCaseDiagram extends DiagramElementBase {
       g.appendChild(t);
 
       this.svg.appendChild(g);
-      this.#nodeNodes.set(c.id, { n: c, g });
+      this.#nodeNodes.set(c.id, { n: c, g: g as SVGGElement });
     }
   }
 
-  #buildActors(layout, theme) {
+  #buildActors(layout: UseCaseLayout, theme: DiagramTheme): void {
     for (const a of layout.actors) {
       const color = (a.hue != null && tkHueToHex(a.hue)) || theme.text;
       const g = svgEl('g', { class: 'uc-actor' });
@@ -330,16 +367,16 @@ class IsUseCaseDiagram extends DiagramElementBase {
       g.appendChild(t);
 
       this.svg.appendChild(g);
-      this.#nodeNodes.set(a.id, { n: a, g });
+      this.#nodeNodes.set(a.id, { n: a, g: g as SVGGElement });
     }
   }
 
   /* ── interacción ── */
 
-  #onClick = (e: PointerEvent) => {
+  #onClick = (e: PointerEvent): void => {
     if (this.isViewer) {
-      const item = e.composedPath().find((x) => x?.dataset?.groupId);
-      if (item) emitCancelable(this, 'is-toggle-group', { id: item.dataset.groupId });
+      const item = e.composedPath().find((x: EventTarget | null) => (x as HTMLElement | undefined)?.dataset?.groupId);
+      if (item) emitCancelable(this, 'is-toggle-group', { id: (item as HTMLElement).dataset.groupId });
       return;
     }
     // El visor es opt-in: sin `open-on-click` el clic no hace nada y tampoco
@@ -352,10 +389,10 @@ class IsUseCaseDiagram extends DiagramElementBase {
     if (!ev.defaultPrevented) this.openOwnViewer('useCase');
   };
 
-  #onMouseMove = (e: PointerEvent) => {
+  #onMouseMove = (e: PointerEvent): void => {
     if (!this.isViewer) return;
-    const g = e.composedPath().find((n) => n?.dataset?.nodeId);
-    const id = g?.dataset.nodeId ?? null;
+    const g = e.composedPath().find((n: EventTarget | null) => (n as HTMLElement | undefined)?.dataset?.nodeId);
+    const id: string | null = (g as HTMLElement | undefined)?.dataset.nodeId ?? null;
     if (id !== this.#hoverId) this.#applyHover(id);
     if (id) {
       const rect = this.wrap.getBoundingClientRect();
@@ -365,12 +402,12 @@ class IsUseCaseDiagram extends DiagramElementBase {
     }
   };
 
-  #onMouseLeave = () => {
+  #onMouseLeave = (_e: MouseEvent): void => {
     if (!this.isViewer) return;
     this.#applyHover(null);
   };
 
-  #applyHover(id) {
+  #applyHover(id: string | null): void {
     this.#hoverId = id;
     const entry = id ? this.#nodeNodes.get(id) : null;
 

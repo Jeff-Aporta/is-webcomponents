@@ -1,11 +1,40 @@
 /**
  * Preview «Ecosistema JS»: get started + playground del loader + catálogo _shared.
- * @param {import('../previews/_kit/types.d.ts').PreviewMountContext} ctx
- * @param {import('../previews/_kit/types.d.ts').ISComponentPreviewLike} preview
  */
-export async function mount(ctx: import('../previews/_kit/types.d.ts').PreviewMountContext, preview: import('../previews/_kit/types.d.ts').ISComponentPreviewLike) {
+import type {
+  PreviewMountContext,
+  ISComponentPreviewLike,
+} from '../previews/_kit/types.d.ts';
+
+interface LoaderCatalog {
+  categories: Record<string, string[]>;
+  tags: Record<string, { category: string; file: string }>;
+}
+interface LoaderModule {
+  load(...ids: string[]): Promise<unknown>;
+  loadCSSBase(): Promise<unknown>;
+  loadCSSPalettesDefault(): Promise<unknown>;
+  catalog: LoaderCatalog;
+}
+
+interface SharedModuleEntry {
+  id: string;
+  file: string;
+  path: string;
+  summary: string;
+  exports?: string[];
+  bytes?: number;
+}
+interface SharedCatalogJSON {
+  modules: SharedModuleEntry[];
+}
+
+/** Snippet editable: <is-code>, <textarea> o <input>. */
+type SnippetEditor = HTMLElement & { value: string };
+
+export async function mount(ctx: PreviewMountContext, preview: ISComponentPreviewLike): Promise<void> {
   const root = ctx.main;
-  const signal = preview?.signal;
+  const signal = preview.signal;
   const opts = signal ? { signal } : undefined;
 
   const getStarted = root.querySelector<HTMLElement>('#ecoGetStarted');
@@ -25,19 +54,27 @@ export async function mount(ctx: import('../previews/_kit/types.d.ts').PreviewMo
 </script>
 
 <is-button color="brand">Hola</is-button>`;
-    getStarted.value = snip;
-    getStarted.dataset.cmSource = snip;
+    setEditorValue(getStarted, snip);
   }
 
   await mountPlayground(root, opts);
   await mountSharedCatalog(root, preview, opts);
 }
 
+/** Asigna valor a un editor de snippet (is-code / textarea / input / pre). */
+function setEditorValue(el: HTMLElement, value: string): void {
+  if ('value' in el && (el.localName === 'is-code' || el.localName === 'textarea' || el.localName === 'input')) {
+    (el as SnippetEditor).value = value;
+  } else {
+    el.textContent = value;
+  }
+  el.dataset.cmSource = value;
+}
+
 /**
- * @param {ParentNode} root
- * @param {AddEventListenerOptions | undefined} opts
+ * Playground: toggles por categoría/tag + botón "Aplicar" que invoca el loader.
  */
-async function mountPlayground(root: ParentNode, opts: AddEventListenerOptions | undefined) {
+async function mountPlayground(root: ParentNode, opts: AddEventListenerOptions | undefined): Promise<void> {
   const catsEl = root.querySelector<HTMLElement>('#ecoCats');
   const tagsEl = root.querySelector<HTMLElement>('#ecoTags');
   const snipEl = root.querySelector<HTMLElement>('#ecoSnippet');
@@ -45,11 +82,13 @@ async function mountPlayground(root: ParentNode, opts: AddEventListenerOptions |
   const applyBtn = root.querySelector<HTMLElement>('#ecoApply');
   if (!catsEl || !tagsEl) return;
 
-  /** @type {{ categories: Record<string, string[]>, tags: Record<string, { category: string, file: string }> }} */
-  let catalog = { categories: {}, tags: {} };
+  let catalog: LoaderCatalog = { categories: {}, tags: {} };
   try {
-    const { ISWebComponentsLoader } = await import('../../dist/cdn/core/loader.min.js');
-    catalog = ISWebComponentsLoader.catalog;
+    // El bundle del loader se genera con `npm run build` (dist/cdn/core/loader.min.js).
+    // En dev / lint no existe: el catch muestra el mensaje y sale.
+    // @ts-expect-error — generado en build, no presente en strict-audit.
+    const mod = (await import('../../dist/cdn/core/loader.min.js')) as { ISWebComponentsLoader: LoaderModule };
+    catalog = mod.ISWebComponentsLoader.catalog;
   } catch {
     catsEl.innerHTML = '<p class="lede">Corré <code>npm run build</code> para generar <code>loader.min.js</code>.</p>';
     return;
@@ -60,7 +99,8 @@ async function mountPlayground(root: ParentNode, opts: AddEventListenerOptions |
 
   for (const c of catNames) {
     const lab = document.createElement('label');
-    lab.innerHTML = `<input type="checkbox" data-kind="cat" value="${c}" /> <span>${c}</span> <code>${catalog.categories[c].length}</code>`;
+    const len = catalog.categories[c]?.length ?? 0;
+    lab.innerHTML = `<input type="checkbox" data-kind="cat" value="${c}" /> <span>${c}</span> <code>${len}</code>`;
     catsEl.appendChild(lab);
   }
   for (const t of quickTags) {
@@ -70,13 +110,13 @@ async function mountPlayground(root: ParentNode, opts: AddEventListenerOptions |
     tagsEl.appendChild(lab);
   }
 
-  const selected = () => {
+  const selected = (): { cats: string[]; tags: string[] } => {
     const cats = [...catsEl.querySelectorAll<HTMLInputElement>('input:checked')].map((el) => el.value);
     const tags = [...tagsEl.querySelectorAll<HTMLInputElement>('input:checked')].map((el) => el.value);
     return { cats, tags };
   };
 
-  const paintSnippet = () => {
+  const paintSnippet = (): void => {
     const { cats, tags } = selected();
     const args = [...cats, ...tags].map((x) => `'${x}'`).join(', ');
     const body = args
@@ -88,10 +128,7 @@ async function mountPlayground(root: ParentNode, opts: AddEventListenerOptions |
   await ISWebComponentsLoader.loadCSSPalettesDefault();
   ${body}
 </script>`;
-    if (snipEl) {
-      snipEl.value = snip;
-      snipEl.dataset.cmSource = snip;
-    }
+    if (snipEl) setEditorValue(snipEl, snip);
   };
 
   catsEl.addEventListener('change', paintSnippet, opts);
@@ -106,8 +143,9 @@ async function mountPlayground(root: ParentNode, opts: AddEventListenerOptions |
       return;
     }
     try {
-      const { ISWebComponentsLoader } = await import('../../dist/cdn/core/loader.min.js');
-      await ISWebComponentsLoader.load(...ids);
+      // @ts-expect-error — generado en build, no presente en strict-audit.
+      const mod = (await import('../../dist/cdn/core/loader.min.js')) as { ISWebComponentsLoader: LoaderModule };
+      await mod.ISWebComponentsLoader.load(...ids);
       if (liveEl) {
         liveEl.replaceChildren();
         if (ids.some((id) => id === 'is-button' || id === 'actions' || catalog.tags[id]?.file === 'button')) {
@@ -121,41 +159,45 @@ async function mountPlayground(root: ParentNode, opts: AddEventListenerOptions |
         liveEl.appendChild(note);
       }
     } catch (err) {
-      if (liveEl) liveEl.textContent = String(err?.message || err);
+      const msg = err instanceof Error ? err.message : String(err);
+      if (liveEl) liveEl.textContent = msg;
     }
   }, opts);
 }
 
 /**
- * @param {ParentNode} root
- * @param {import('../previews/_kit/types.d.ts').ISComponentPreviewLike} preview
- * @param {AddEventListenerOptions | undefined} opts
+ * Catálogo de módulos _shared: lista + filtro por nombre.
  */
-async function mountSharedCatalog(root: ParentNode, preview: import('../previews/_kit/types.d.ts').ISComponentPreviewLike, opts: AddEventListenerOptions | undefined) {
+async function mountSharedCatalog(
+  root: ParentNode,
+  preview: ISComponentPreviewLike,
+  opts: AddEventListenerOptions | undefined,
+): Promise<void> {
   const list = root.querySelector<HTMLElement>('#ecoList');
   const count = root.querySelector<HTMLElement>('#ecoCount');
-  const filter = root.querySelector<HTMLElement>('#ecoFilter');
+  const filter = root.querySelector<HTMLInputElement>('#ecoFilter');
   if (!list) return;
 
-  let modules = [];
+  let modules: SharedModuleEntry[] = [];
   try {
     const url = new URL('../previews/data/shared-modules.json', import.meta.url);
-    const res = await fetch(url, { cache: 'no-cache', signal: preview?.signal });
+    const res = await fetch(url, { cache: 'no-cache', signal: preview.signal });
     if (!res.ok) throw new Error(`${res.status}`);
-    const catalog = await res.json();
+    const catalog = (await res.json()) as SharedCatalogJSON;
     modules = catalog.modules || [];
   } catch (err) {
-    list.innerHTML = `<p class="lede">No se pudo cargar <code>shared-modules.json</code>. Ejecuta <code>node scripts/gen-shared-index.ts</code>. (${err?.message || err})</p>`;
+    const msg = err instanceof Error ? err.message : String(err);
+    list.innerHTML = `<p class="lede">No se pudo cargar <code>shared-modules.json</code>. Ejecuta <code>node scripts/gen-shared-index.ts</code>. (${msg})</p>`;
     return;
   }
 
-  const esc = (s) => String(s ?? '')
+  const esc = (s: unknown): string => String(s ?? '')
     .replaceAll('&', '&amp;')
     .replaceAll('<', '&lt;')
     .replaceAll('>', '&gt;')
     .replaceAll('"', '&quot;');
 
-  const paint = (q: string = '') => {
+  const paint = (q: string = ''): void => {
     const needle = q.trim().toLowerCase();
     const rows = needle
       ? modules.filter((m) => {
@@ -180,7 +222,7 @@ async function mountSharedCatalog(root: ParentNode, preview: import('../previews
         </div>
         <p class="eco-card__sum">${esc(m.summary)}</p>
         ${m.exports?.length
-          ? `<ul class="eco-exports">${m.exports.map((e: Event) => `<li><code>${esc(e)}</code></li>`).join('')}</ul>`
+          ? `<ul class="eco-exports">${m.exports.map((e: string) => `<li><code>${esc(e)}</code></li>`).join('')}</ul>`
           : ''}
         <p class="eco-meta">${Math.round((m.bytes || 0) / 1024 * 10) / 10} KB</p>
       `;
@@ -192,6 +234,6 @@ async function mountSharedCatalog(root: ParentNode, preview: import('../previews
   paint();
 }
 
-export function unmount() {
+export function unmount(): void {
   /* AbortSignal */
 }

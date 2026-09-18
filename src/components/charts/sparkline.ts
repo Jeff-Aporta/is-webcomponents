@@ -5,12 +5,15 @@ import { pathLine, pathArea, roundedBarRect } from '../_shared/svg-chart-engine.
 
 const SVG_NS = 'http://www.w3.org/2000/svg';
 
+/** Punto proyectado a coordenadas de pantalla dentro del SVG del sparkline. */
+type SparkPoint = { x: number; y: number };
+
 (() => {
   class IsSparkline extends withStyleAttrs(HTMLElement) {
     /** Personalización por atributo (ver `core/attrs.ts`). */
     static styleAttrs = {
-    'line-color': { prop: '--line-color', onlyColorValues: true },
-    'line-width': '--line-width',
+      'line-color': { prop: '--line-color', onlyColorValues: true },
+      'line-width': '--line-width',
     };
 
     static get observedAttributes(): string[] {
@@ -19,9 +22,9 @@ const SVG_NS = 'http://www.w3.org/2000/svg';
     }
 
     #svg!: HTMLElement;
-    #data = [];
+    #data: number[] = [];
     #mounted = false;
-    #ro = null;
+    #ro: ResizeObserver | null = null;
 
     constructor() {
       super();
@@ -52,19 +55,19 @@ const SVG_NS = 'http://www.w3.org/2000/svg';
       this.#render();
     }
 
-    get data() { return this.#data; }
-    set data(v) {
+    get data(): readonly number[] { return this.#data; }
+    set data(v: readonly unknown[]) {
       this.#data = Array.isArray(v) ? v.map(Number).filter(Number.isFinite) : [];
       this.#render();
     }
 
-    #parseValuesAttr() {
+    #parseValuesAttr(): void {
       const raw = this.getAttribute('data') ?? this.getAttribute('values');
       if (raw == null) return;
       this.#data = raw.split(/[\s,]+/).map(Number).filter(Number.isFinite);
     }
 
-    #render() {
+    #render(): void {
       if (!this.#mounted) return;
       const rect = this.getBoundingClientRect();
       const width = Math.max(rect.width, 1);
@@ -77,9 +80,11 @@ const SVG_NS = 'http://www.w3.org/2000/svg';
       const border = cs.getPropertyValue('--line-color').trim() || '#339af0';
       const fill = cs.getPropertyValue('--fill-color-1').trim() || 'rgba(51,154,240,.35)';
       const lineWidth = Number(cs.getPropertyValue('--line-width').trim()) || 1.5;
-      const type = this.getAttribute('type') === 'bar' ? 'bar' : 'line';
+      const type: 'bar' | 'line' = this.getAttribute('type') === 'bar' ? 'bar' : 'line';
       const appearance = this.getAttribute('variant') || 'solid';
-      const curve = this.getAttribute('curve') || 'linear';
+      const curveAttr = this.getAttribute('curve') || 'linear';
+      const curve: 'linear' | 'natural' | 'step' =
+        curveAttr === 'natural' || curveAttr === 'step' ? curveAttr : 'linear';
 
       // El sparkline usa el rango propio de la serie: forzar el 0 aplanaría
       // series como [100, 102, 101] hasta volverlas una línea recta.
@@ -93,7 +98,7 @@ const SVG_NS = 'http://www.w3.org/2000/svg';
         const base = Math.min(dataMin, 0);
         const span = (dataMax - base) || 1;
         const bw = (width - pad * 2) / this.#data.length;
-        this.#data.forEach((v: number, i) => {
+        this.#data.forEach((v: number, i: number) => {
           const h = Math.max(((v - base) / span) * inner, 1);
           const x = pad + i * bw;
           const y = height - pad - h;
@@ -108,14 +113,14 @@ const SVG_NS = 'http://www.w3.org/2000/svg';
       const span = (dataMax - dataMin) || 1;
       const min = dataMin;
 
-      const points = this.#data.map((v, i) => ({
+      const points: SparkPoint[] = this.#data.map((v: number, i: number) => ({
         x: pad + (i / Math.max(this.#data.length - 1, 1)) * (width - pad * 2),
         y: height - pad - ((v - min) / span) * inner,
       }));
 
       if (appearance !== 'line') {
         const area = document.createElementNS(SVG_NS, 'path');
-        area.setAttribute('d', pathArea(points, height - pad, { curve }));
+        area.setAttribute('d', pathArea(points, String(height - pad), { curve }));
         area.setAttribute('stroke', 'none');
         if (appearance === 'gradient') {
           // El degradado parte del color sólido: con el fill ya translúcido
@@ -143,9 +148,10 @@ const SVG_NS = 'http://www.w3.org/2000/svg';
 
       // Punto final: ancla la lectura en el valor más reciente.
       const last = points[points.length - 1];
+      if (!last) return;
       const dot = document.createElementNS(SVG_NS, 'circle');
-      dot.setAttribute('cx', last.x);
-      dot.setAttribute('cy', last.y);
+      dot.setAttribute('cx', String(last.x));
+      dot.setAttribute('cy', String(last.y));
       dot.setAttribute('r', String(Math.max(lineWidth, 1.5)));
       dot.setAttribute('fill', border);
       this.#svg.appendChild(dot);

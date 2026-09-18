@@ -50,20 +50,21 @@ import { resolveLocale } from '../_shared/resolve-locale.js';
       this.#render();
     }
 
-    get value() {
-      if (!this.hasAttribute('value') || this.getAttribute('value') === '') return null;
-      const n = parseFloat(this.getAttribute('value'));
+    get value(): number | null {
+      const raw = this.getAttribute('value');
+      if (raw == null || raw === '') return null;
+      const n = parseFloat(raw);
       return Number.isFinite(n) ? n : null;
     }
-    set value(v) {
+    set value(v: number | string | null | undefined) {
       if (v == null || v === '') this.removeAttribute('value');
       else this.setAttribute('value', String(v));
     }
 
-    #buildOptions() {
+    #buildOptions(): Intl.NumberFormatOptions {
       const type = this.getAttribute('type');
-      const style = VALID_TYPE.includes(type) ? type : 'decimal';
-      const opts = { style };
+      const style = (VALID_TYPE.includes(type as typeof VALID_TYPE[number]) ? type : 'decimal') as Intl.NumberFormatOptions['style'];
+      const opts: Intl.NumberFormatOptions = { style };
       const cur = this.getAttribute('currency');
       if (style === 'currency') opts.currency = cur || 'USD';
       const min = this.getAttribute('minimum-fraction-digits');
@@ -80,7 +81,7 @@ import { resolveLocale } from '../_shared/resolve-locale.js';
       return opts;
     }
 
-    #applyPad(text: string) {
+    #applyPad(text: string): string {
       const padLen = this.getAttribute('pad-length');
       const padN = padLen != null && padLen !== '' ? parseInt(padLen, 10) : NaN;
       if (!Number.isFinite(padN) || padN <= 0) return text;
@@ -97,7 +98,7 @@ import { resolveLocale } from '../_shared/resolve-locale.js';
         return;
       }
       const locale = resolveLocale(this.getAttribute('locale'));
-      let text;
+      let text: string;
       try {
         const fmt = new Intl.NumberFormat(locale, this.#buildOptions());
         text = fmt.format(val);

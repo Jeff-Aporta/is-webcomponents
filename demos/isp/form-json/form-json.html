@@ -1,0 +1,127 @@
+<!doctype html>
+<html lang="es" class="theme-dark" data-theme="dark">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>&lt;form-json&gt; helpers · is-webcomponents</title>
+<meta name="description" content="Helpers de lectura/escritura de valores de controles con name (getValues/setValues/listControls)." />
+<style>
+  html, body { margin: 0; padding: 0; min-height: 100%; background: #0c1118; color: #e2e8f0; font-family: ui-sans-serif, system-ui, sans-serif; }
+  body { display: grid; grid-template-rows: auto 1fr; min-height: 100vh; }
+  header {
+    padding: 16px 20px; border-bottom: 1px solid rgba(255,255,255,0.1);
+    display: flex; align-items: center; gap: 14px; background: #0f1620;
+  }
+  header h1 { font-size: 16px; font-weight: 700; margin: 0; }
+  header p { font-size: 12px; color: #94a3b8; margin: 0; }
+  header .spacer { flex: 1; }
+  main { display: grid; gap: 24px; padding: 20px; max-width: 1000px; margin: 0 auto; width: 100%; box-sizing: border-box; }
+  section h2 { font-size: 14px; font-weight: 600; margin: 0 0 8px; color: #94a3b8; }
+  .grid-2 { display: grid; grid-template-columns: 1fr 1fr; gap: 16px; }
+  .panel { background: rgba(255,255,255,0.05); border: 1px solid rgba(255,255,255,0.1); border-radius: 6px; padding: 12px; }
+  .panel h3 { font-size: 12px; margin: 0 0 8px; color: #94a3b8; }
+  form-fieldset { display: grid; gap: 8px; }
+  pre.out { font: 12px ui-monospace, Menlo, Consolas, monospace; background: rgba(0,0,0,0.4); padding: 8px; border-radius: 4px; max-height: 240px; overflow: auto; }
+  button.btn { padding: 6px 12px; background: #1e293b; color: #e2e8f0; border: 1px solid #334155; border-radius: 4px; cursor: pointer; margin-right: 6px; }
+  is-input, is-switch, is-select, is-checkbox { min-width: 12rem; }
+  is-input:not(:defined), is-switch:not(:defined), is-select:not(:defined), is-checkbox:not(:defined) { visibility: hidden; }
+</style>
+<script type="module">
+  // Dependencias: los controles que vamos a leer/escribir.
+  await import('../../../dist/cdn/forms/input.min.js');
+  await import('../../../dist/cdn/forms/select.min.js');
+  await import('../../../dist/cdn/forms/option.min.js');
+  await import('../../../dist/cdn/forms/checkbox.min.js');
+  await import('../../../dist/cdn/forms/switch.js');
+  // Cargar también el form (lo usa como contenedor del helper).
+  await import('../../../dist/cdn/isp/form-json.min.js');
+
+  // ── form-json es un módulo helper, NO un custom element ────────────
+  // Expone: getValues, setValues, listControls, getControlValue, setControlValue.
+
+  const out = document.getElementById('out');
+  const form = document.getElementById('demo-form');
+
+  const showJson = (label, obj) => {
+    out.textContent = `// ${label}\n` + JSON.stringify(obj, null, 2);
+  };
+
+  // Helper para invocar los exports del módulo.
+  async function loadHelpers() {
+    return await import('../../../dist/cdn/isp/form-json.min.js');
+  }
+
+  document.getElementById('btn-get').addEventListener('click', async () => {
+    const { getValues } = await loadHelpers();
+    showJson('getValues(form)', getValues(form));
+  });
+
+  document.getElementById('btn-set').addEventListener('click', async () => {
+    const { setValues } = await loadHelpers();
+    setValues(form, {
+      cliente: 'CL-009',
+      correo: 'demo@contapyme.co',
+      cantidad: 42,
+      activo: true,
+      tipo: 'factura',
+      envio: ['email'],
+    });
+  });
+
+  document.getElementById('btn-list').addEventListener('click', async () => {
+    const { listControls } = await loadHelpers();
+    const controls = listControls(form);
+    showJson('listControls(form)', controls.map((c) => ({ tag: c.localName, name: c.getAttribute('name') })));
+  });
+
+  document.getElementById('btn-clear').addEventListener('click', async () => {
+    const { setValues } = await loadHelpers();
+    setValues(form, {});
+  });
+
+  document.documentElement.dataset.formJsonReady = '1';
+</script>
+</head>
+<body>
+<header>
+  <div>
+    <h1>&lt;form-json&gt; — helpers de form serialization</h1>
+    <p>Expone <code>getValues / setValues / listControls / getControlValue / setControlValue</code> sobre cualquier host.</p>
+  </div>
+  <div class="spacer"></div>
+  <code>form-json</code>
+</header>
+<main>
+  <section>
+    <h2>Demo: leer/escribir controles con <code>name</code></h2>
+    <div class="grid-2">
+      <div class="panel">
+        <h3>Controles</h3>
+        <form id="demo-form" style="display: grid; gap: 8px;">
+          <is-input name="cliente" label="Cliente"></is-input>
+          <is-input name="correo" label="Correo" type="email"></is-input>
+          <is-input name="cantidad" label="Cantidad" type="number"></is-input>
+          <is-switch name="activo">Activo</is-switch>
+          <is-select name="tipo" label="Tipo">
+            <is-option value="factura">Factura</is-option>
+            <is-option value="nota">Nota</is-option>
+          </is-select>
+          <is-checkbox name="envio" value="email">Email</is-checkbox>
+          <is-checkbox name="envio" value="sms">SMS</is-checkbox>
+        </form>
+        <div style="margin-top: 12px;">
+          <button id="btn-get" type="button" class="btn">getValues()</button>
+          <button id="btn-set" type="button" class="btn">setValues({...})</button>
+          <button id="btn-list" type="button" class="btn">listControls()</button>
+          <button id="btn-clear" type="button" class="btn">Limpiar</button>
+        </div>
+      </div>
+      <div class="panel">
+        <h3>Output</h3>
+        <pre id="out" class="out">Pulsa un botón para ver el JSON.</pre>
+      </div>
+    </div>
+  </section>
+</main>
+</body>
+</html>

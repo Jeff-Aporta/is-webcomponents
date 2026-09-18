@@ -91,8 +91,8 @@ export function parseLooseDate(raw: string|number|null|undefined) {
       else this.setAttribute('locale', String(v));
     }
 
-    #buildOptions() {
-      const opts = {};
+    #buildOptions(): Intl.DateTimeFormatOptions {
+      const opts: Record<string, string | boolean> = {};
       for (const [attr, key] of Object.entries(OPT_ATTRS)) {
         const v = this.getAttribute(attr);
         if (v) opts[key] = v;
@@ -104,7 +104,7 @@ export function parseLooseDate(raw: string|number|null|undefined) {
         opts.dateStyle = 'medium';
         opts.timeStyle = 'short';
       }
-      return opts;
+      return opts as unknown as Intl.DateTimeFormatOptions;
     }
 
     #render() {
@@ -120,7 +120,8 @@ export function parseLooseDate(raw: string|number|null|undefined) {
       } catch {
         this.#el.textContent = d.toLocaleString(this.locale);
       }
-      this.#el.dateTime = d.toISOString();
+      const el = this.#el as HTMLTimeElement;
+      el.dateTime = d.toISOString();
     }
   }
 

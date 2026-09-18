@@ -2,10 +2,12 @@ import { layoutNodeLink, edgeAnchor, pickSides } from '../_shared/node-link-layo
 import { diagramHeaderWidth } from '../_shared/diagram-header.js';
 import { applyEdgeActorLayout } from '../_shared/diagram-edge-actors.js';
 import { assignEdgeHues } from '../_shared/diagram-edge-style.js';
+import type { EdgeWithHue } from '../_shared/diagram-edge-style.js';
 import { makeCostGrid, blockRect, applyRectCost, snapDiagramGrid, snapPointAwayFromSide} from '../_shared/diagram-grid.js';
 import { routeOrthogonal, pixelToGrid, gridPathToSvg, buildOrthogonalPath } from '../_shared/diagram-astar.js';
 import { richTextPlain } from '../_shared/tk-rich-text.js';
 import { resolveTkHue } from '../_shared/tk-hue.js';
+import type { BoxSide } from './diagram-types.js';
 
 /**
  * Especificación y layout de diagramas de estado (sin Mermaid).
@@ -23,15 +25,95 @@ const END_R = 10;
 const END_PAD = 5;
 
 /** Tipos de estado soportados; cualquier otro valor cae a 'normal'. */
-export const STATE_KINDS = new Set(['start', 'end', 'normal', 'choice']);
+export const STATE_KINDS: Set<string> = new Set(['start', 'end', 'normal', 'choice']);
 
-const DEFAULT_HUES = [210, 239, 160, 38, 280, 199];
+export type StateKind = 'start' | 'end' | 'normal' | 'choice';
+export type StateDirection = 'TB' | 'BT' | 'LR' | 'RL';
 
-function asRecord(v) {
-  return v && typeof v === 'object' ? v : {};
+const DEFAULT_HUES: number[] = [210, 239, 160, 38, 280, 199];
+
+// BoxSide admite `'auto'`; los anclajes efectivos del router son siempre
+// una dirección cardinal. Estrechamos para satisfacer la firma del helper.
+type AnchorSide = 'left' | 'right' | 'top' | 'bottom';
+
+function asRecord(v: unknown): Record<string, unknown> {
+  return v && typeof v === 'object' && !Array.isArray(v) ? (v as Record<string, unknown>) : {};
 }
 
-function stateSize(kind, label) {
+export interface StateSpec {
+  id: string;
+  label: string;
+  kind: StateKind;
+  group?: string;
+  hue?: number;
+  description?: string;
+}
+
+export interface StateTransitionSpec {
+  id: string;
+  from: string;
+  to: string;
+  label?: string;
+  group?: string;
+}
+
+export interface StateGroupSpec {
+  id: string;
+  name: string;
+  hue: number;
+}
+
+export interface StateResolvedSpec {
+  title?: string;
+  subtitle?: string;
+  direction: StateDirection;
+  groups?: StateGroupSpec[];
+  states: StateSpec[];
+  transitions: StateTransitionSpec[];
+}
+
+export interface StateLayoutNode {
+  id: string;
+  x: number;
+  y: number;
+  w: number;
+  h: number;
+  layer: number;
+  label: string;
+  kind: StateKind;
+  description?: string;
+  hue?: number;
+  group?: string;
+}
+
+export interface StateLayoutTransition {
+  id: string;
+  from: string;
+  to: string;
+  label?: string;
+  path: string;
+  arrowTipX: number;
+  arrowTipY: number;
+  arrowAngle: number;
+  labelX: number;
+  labelY: number;
+  hue?: number;
+}
+
+export interface StateLayout {
+  width: number;
+  height: number;
+  nodes: StateLayoutNode[];
+  edges: StateLayoutTransition[];
+  groups?: StateGroupSpec[];
+  title?: string;
+  subtitle?: string;
+  titleY: number;
+  subtitleY: number;
+  legendX: number;
+}
+
+function stateSize(kind: StateKind, label: string): { w: number; h: number } {
   if (kind === 'start') return { w: START_R * 2, h: START_R * 2 };
   if (kind === 'end') { const d = (END_R + END_PAD) * 2; return { w: d, h: d }; }
   const plain = richTextPlain(label);
@@ -43,35 +125,35 @@ function stateSize(kind, label) {
   return { w: base, h: NODE_H };
 }
 
-function readState(raw, i: number) {
-  const r = asRecord(raw);
-  const kind = STATE_KINDS.has(String(r.kind)) ? String(r.kind) : 'normal';
-  const label = String(r.label ?? r.id ?? (kind === 'start' ? '' : kind === 'end' ? '' : `Estado ${i + 1}`));
+function readState(raw: Record<string, unknown>, i: number): StateSpec {
+  const kindStr = String(raw.kind ?? '');
+  const kind = (STATE_KINDS.has(kindStr) ? kindStr : 'normal') as StateKind;
+  const label = String(raw.label ?? raw.id ?? (kind === 'start' ? '' : kind === 'end' ? '' : `Estado ${i + 1}`));
   return {
-    id: String(r.id ?? `s${i}`),
+    id: String(raw.id ?? `s${i}`),
     label,
     kind,
-    group: String(r.group ?? '') || undefined,
-    hue: r.hue != null ? resolveTkHue(r) : undefined,
-    description: String(r.desc ?? r.description ?? '').trim() || undefined,
+    group: String(raw.group ?? '') || undefined,
+    hue: raw.hue != null ? resolveTkHue(raw) : undefined,
+    description: String(raw.desc ?? raw.description ?? '').trim() || undefined,
   };
 }
 
-function readTransition(raw, i) {
-  const r = asRecord(raw);
+function readTransition(raw: Record<string, unknown>, i: number): StateTransitionSpec {
   return {
-    id: String(r.id ?? `t${i}`),
-    from: String(r.from ?? r.source ?? ''),
-    to: String(r.to ?? r.target ?? ''),
-    label: String(r.label ?? '').trim() || undefined,
-    group: String(r.group ?? '') || undefined,
+    id: String(raw.id ?? `t${i}`),
+    from: String(raw.from ?? raw.source ?? ''),
+    to: String(raw.to ?? raw.target ?? ''),
+    label: String(raw.label ?? '').trim() || undefined,
+    group: String(raw.group ?? '') || undefined,
   };
 }
 
-function readGroups(src) {
-  const raw = src.groups ?? [];
-  if (!Array.isArray(raw) || !raw.length) return undefined;
-  return raw.map((g, i: number) => {
+function readGroups(src: Record<string, unknown>): StateGroupSpec[] | undefined {
+  const raw = src.groups;
+  const list = Array.isArray(raw) ? raw : [];
+  if (!list.length) return undefined;
+  return list.map((g: unknown, i: number) => {
     const r = asRecord(g);
     return {
       id: String(r.id ?? `grp-${i}`),
@@ -82,24 +164,24 @@ function readGroups(src) {
 }
 
 /** payload → spec normalizada, o null si no hay estados. */
-export function resolveStateSpec(payload) {
+export function resolveStateSpec(payload: unknown): StateResolvedSpec | null {
   const p = asRecord(payload);
   const src = asRecord(p.stateDiagram ?? p.state ?? p);
-  const rawStates = src.states ?? [];
+  const rawStates = src.states;
   if (!Array.isArray(rawStates) || !rawStates.length) return null;
 
-  const states = rawStates.map(readState);
-  const known = new Set(states.map((s) => s.id));
+  const states: StateSpec[] = rawStates.map((raw: unknown, i: number) => readState(asRecord(raw), i));
+  const known = new Set<string>(states.map((s) => s.id));
   // Descarta transiciones colgantes: una transición a un id inexistente rompería el layout.
-  const transitions = (Array.isArray(src.transitions) ? src.transitions : [])
-    .map(readTransition)
+  const transitions: StateTransitionSpec[] = (Array.isArray(src.transitions) ? src.transitions : [])
+    .map((raw: unknown, i: number) => readTransition(asRecord(raw), i))
     .filter((t) => known.has(t.from) && known.has(t.to));
 
   const dir = String(src.direction ?? 'TB').toUpperCase();
   return {
     title: String(src.title ?? p.title ?? '') || undefined,
     subtitle: String(src.subtitle ?? p.subtitle ?? '') || undefined,
-    direction: ['TB', 'BT', 'LR', 'RL'].includes(dir) ? dir : (dir === 'TD' ? 'TB' : 'TB'),
+    direction: (['TB', 'BT', 'LR', 'RL'].includes(dir) ? dir : (dir === 'TD' ? 'TB' : 'TB')) as StateDirection,
     groups: readGroups(src),
     states,
     transitions,
@@ -107,20 +189,20 @@ export function resolveStateSpec(payload) {
 }
 
 /** spec → objeto `stateDiagram` listo para persistir / mostrar en el editor. */
-export function stateSpecToJson(spec) {
-  const out = { direction: spec.direction, states: [], transitions: [] };
+export function stateSpecToJson(spec: StateResolvedSpec): Record<string, unknown> {
+  const out: Record<string, unknown> = { direction: spec.direction, states: [], transitions: [] };
   if (spec.title) out.title = spec.title;
   if (spec.subtitle) out.subtitle = spec.subtitle;
   if (spec.groups?.length) out.groups = spec.groups;
   out.states = spec.states.map((s) => {
-    const row = { id: s.id, label: s.label };
+    const row: Record<string, unknown> = { id: s.id, label: s.label };
     if (s.kind !== 'normal') row.kind = s.kind;
     if (s.group) row.group = s.group;
     if (s.description) row.desc = s.description;
     return row;
   });
   out.transitions = spec.transitions.map((t) => {
-    const row = { from: t.from, to: t.to };
+    const row: Record<string, unknown> = { from: t.from, to: t.to };
     if (t.label) row.label = t.label;
     return row;
   });
@@ -132,7 +214,7 @@ export function stateSpecToJson(spec) {
 const MARGIN = { top: 16, right: 20, bottom: 20, left: 20 };
 
 /** Desplaza un punto hacia afuera del nodo, en la dirección de su lado. */
-function stepOut(p, side, d) {
+function stepOut(p: { x: number; y: number }, side: AnchorSide, d: number): { x: number; y: number } {
   if (side === 'top') return { x: p.x, y: p.y - d };
   if (side === 'bottom') return { x: p.x, y: p.y + d };
   if (side === 'left') return { x: p.x - d, y: p.y };
@@ -140,22 +222,23 @@ function stepOut(p, side, d) {
 }
 
 /** Punta de flecha: posición y ángulo de rotación según el lado de llegada. */
-function arrowTip(p, side) {
+function arrowTip(p: { x: number; y: number }, side: AnchorSide): { x: number; y: number; angle: number } {
   const angle = side === 'top' ? 90 : side === 'bottom' ? 270 : side === 'left' ? 0 : 180;
   return { x: p.x, y: p.y, angle };
 }
 
 /** Lados de anclaje; para self-transitions fuerza lados distintos (loop visible). */
-function sidesFor(fromNode, toNode, direction, isSelf) {
+function sidesFor(fromNode: { layer: number }, toNode: { layer: number }, direction: StateDirection, isSelf: boolean): { fromSide: AnchorSide; toSide: AnchorSide } {
   if (isSelf) return { fromSide: 'right', toSide: 'top' };
-  return pickSides(fromNode, toNode, direction);
+  // pickSides devuelve BoxSide; los narrow explícitos aquí.
+  const s = pickSides(fromNode, toNode, direction);
+  return { fromSide: s.fromSide as AnchorSide, toSide: s.toSide as AnchorSide };
 }
 
 /**
  * spec → geometría lista para pintar.
- * @returns {{width:number, height:number, nodes:Array, edges:Array, groups?:Array, title?:string, subtitle?:string, titleY:number, subtitleY:number, legendX:number}}
  */
-export function computeStateLayout(spec) {
+export function computeStateLayout(spec: StateResolvedSpec): StateLayout {
   const title = spec.title ?? '';
   const subtitle = spec.subtitle ?? '';
   const hasHeader = !!(title || subtitle);
@@ -163,7 +246,7 @@ export function computeStateLayout(spec) {
   const subtitleY = title ? 40 : 24;
   const headerH = hasHeader ? (subtitle ? 54 : 36) : 0;
 
-  const sized = spec.states.map((s) => {
+  const sized: Array<{ id: string; w: number; h: number }> = spec.states.map((s) => {
     const { w, h } = stateSize(s.kind, s.label);
     return { id: s.id, w, h };
   });
@@ -174,14 +257,16 @@ export function computeStateLayout(spec) {
     nodeGap: 32,
   });
 
-  const byId = new Map(placed.nodes.map((n) => [n.id, n]));
-  const specById = new Map(spec.states.map((s) => [s.id, s]));
-  const groupHue = new Map((spec.groups ?? []).map((g) => [g.id, g.hue]));
+  const byId = new Map<string, { id: string; x: number; y: number; w: number; h: number; layer: number }>(
+    placed.nodes.map((n) => [n.id, n]),
+  );
+  const specById = new Map<string, StateSpec>(spec.states.map((s) => [s.id, s]));
+  const groupHue = new Map<string, number>((spec.groups ?? []).map((g) => [g.id, g.hue]));
 
   const offsetX = MARGIN.left;
   const offsetY = MARGIN.top + headerH;
 
-  const nodes = placed.nodes.map((n) => {
+  const nodes: StateLayoutNode[] = placed.nodes.map((n) => {
     const s = specById.get(n.id);
     return {
       id: n.id,
@@ -190,11 +275,11 @@ export function computeStateLayout(spec) {
       w: n.w,
       h: n.h,
       layer: n.layer,
-      label: s.label,
-      kind: s.kind,
-      description: s.description,
-      hue: s.hue ?? (s.group ? groupHue.get(s.group) : undefined),
-      group: s.group,
+      label: s?.label ?? '',
+      kind: (s?.kind ?? 'normal') as StateKind,
+      description: s?.description,
+      hue: s?.hue ?? (s?.group ? groupHue.get(s.group) : undefined),
+      group: s?.group,
     };
   });
 
@@ -210,14 +295,27 @@ export function computeStateLayout(spec) {
 
   // Rejilla de costos: los estados se bloquean para que el A* los rodee.
   const grid = makeCostGrid(width, height);
-  const posById = new Map(nodes.map((n) => [n.id, n]));
+  const posById = new Map<string, StateLayoutNode>(nodes.map((n) => [n.id, n]));
   for (const n of nodes) blockRect(grid, n.x - 6, n.y - 6, n.w + 12, n.h + 12);
 
-  const routed = spec.transitions.map((t, i) => {
+  const routed: StateLayoutTransition[] = spec.transitions.map((t, i) => {
     const isSelf = t.from === t.to;
     const from = posById.get(t.from);
     const to = posById.get(t.to);
-    const sides = sidesFor(byId.get(t.from), byId.get(t.to), spec.direction, isSelf);
+    if (!from || !to) {
+      // Transición colgante: filtrada en resolveStateSpec, defensivo.
+      return {
+        id: t.id ?? `t${i}`,
+        from: t.from,
+        to: t.to,
+        label: t.label,
+        path: '',
+        arrowTipX: 0, arrowTipY: 0, arrowAngle: 0,
+        labelX: 0, labelY: 0,
+        hue: undefined,
+      };
+    }
+    const sides = sidesFor(byId.get(t.from)!, byId.get(t.to)!, spec.direction, isSelf);
     const a = edgeAnchor(from, sides.fromSide);
     const b = edgeAnchor(to, sides.toSide);
 
@@ -256,8 +354,8 @@ export function computeStateLayout(spec) {
     };
   });
 
-  assignEdgeHues(routed);
-  const layout = {
+  assignEdgeHues(routed as unknown as readonly EdgeWithHue[]);
+  const layout: StateLayout = {
     width,
     height,
     nodes,
@@ -272,3 +370,6 @@ export function computeStateLayout(spec) {
   applyEdgeActorLayout(layout, nodes.map((n) => ({ x: n.x, y: n.y, w: n.w, h: n.h })));
   return layout;
 }
+
+// Tipo importado para mantener el contrato (evita noUnusedLocals en strict).
+export type { BoxSide };

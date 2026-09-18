@@ -63,7 +63,7 @@ TEMPLATE.innerHTML = /* html */ `
  *   const TEMPLATE = document.createElement('template');
  *   TEMPLATE.innerHTML = formControlTemplate();
  */
-export function formControlTemplate() {
+export function formControlTemplate(): string {
   return /* html */ `
     <div part="form-control" class="form-control">
       <slot></slot>
@@ -78,7 +78,7 @@ export function formControlTemplate() {
 }
 
 /** Devuelve el TEMPLATE pre-construido, listo para clonar. */
-export function getFormControlTemplate() {
+export function getFormControlTemplate(): HTMLTemplateElement {
   return TEMPLATE;
 }
 
@@ -86,12 +86,16 @@ export function getFormControlTemplate() {
  * Helpers para strings consistentes. Las subclases pueden usar
  * estos para evitar repetir el getter/setter en cada componente.
  */
-export const FORM_CONTROL_PROPS = [
+export const FORM_CONTROL_PROPS: readonly string[] = [
   'label', 'hint', 'errorText',
   'disabled', 'readonly', 'required',
 ];
 
-const VALID_PLACEMENTS = ['start', 'end', 'top', 'bottom'];
+type LabelPlacement = 'start' | 'end' | 'top' | 'bottom';
+const VALID_PLACEMENTS: readonly LabelPlacement[] = ['start', 'end', 'top', 'bottom'];
+
+/** Constructor de un HTMLElement (la base del mixin). */
+type ElementCtor = new (...args: any[]) => HTMLElement;
 
 /**
  * Mixin que dota a una clase de las properties/attributes típicos de un
@@ -109,73 +113,73 @@ const VALID_PLACEMENTS = ['start', 'end', 'top', 'bottom'];
  * Requiere que el shadow DOM del componente tenga un `<div id="fc-hint">`
  * y un `<div id="fc-error">` (los provee `formControlTemplate()`).
  */
-export const MixinFormControl = (Base) => class extends Base {
+export const MixinFormControl = <T extends ElementCtor>(Base: T): T => class extends Base {
   // ── Properties ──
-  get label() { return this.getAttribute('label') ?? ''; }
-  set label(v) {
+  get label(): string { return this.getAttribute('label') ?? ''; }
+  set label(v: string | null | undefined) {
     if (v == null || v === '') this.removeAttribute('label');
     else this.setAttribute('label', v);
   }
 
-  get hint() { return this.getAttribute('hint') ?? ''; }
-  set hint(v) {
+  get hint(): string { return this.getAttribute('hint') ?? ''; }
+  set hint(v: string | null | undefined) {
     if (v == null) this.removeAttribute('hint');
     else this.setAttribute('hint', v);
   }
 
-  get errorText() { return this.getAttribute('error-text') ?? ''; }
-  set errorText(v) {
+  get errorText(): string { return this.getAttribute('error-text') ?? ''; }
+  set errorText(v: string | null | undefined) {
     if (v == null) this.removeAttribute('error-text');
     else this.setAttribute('error-text', v);
   }
 
-  get error() { return this.hasAttribute('error') || this.hasAttribute('error-text'); }
-  set error(v) {
+  get error(): boolean { return this.hasAttribute('error') || this.hasAttribute('error-text'); }
+  set error(v: boolean | null | undefined) {
     this.toggleAttribute('error', !!v);
   }
 
-  get disabled() { return this.hasAttribute('disabled'); }
-  set disabled(v) { this.toggleAttribute('disabled', !!v); }
+  get disabled(): boolean { return this.hasAttribute('disabled'); }
+  set disabled(v: boolean | null | undefined) { this.toggleAttribute('disabled', !!v); }
 
-  get readonly() { return this.hasAttribute('readonly'); }
-  set readonly(v) { this.toggleAttribute('readonly', !!v); }
+  get readonly(): boolean { return this.hasAttribute('readonly'); }
+  set readonly(v: boolean | null | undefined) { this.toggleAttribute('readonly', !!v); }
 
-  get required() { return this.hasAttribute('required'); }
-  set required(v) { this.toggleAttribute('required', !!v); }
+  get required(): boolean { return this.hasAttribute('required'); }
+  set required(v: boolean | null | undefined) { this.toggleAttribute('required', !!v); }
 
-  get labelPlacement() {
+  get labelPlacement(): LabelPlacement {
     const v = this.getAttribute('label-placement');
-    return VALID_PLACEMENTS.includes(v) ? v : 'top';
+    return (VALID_PLACEMENTS as readonly string[]).includes(v ?? '') ? (v as LabelPlacement) : 'top';
   }
-  set labelPlacement(v) {
-    if (VALID_PLACEMENTS.includes(v)) this.setAttribute('label-placement', v);
+  set labelPlacement(v: LabelPlacement) {
+    if ((VALID_PLACEMENTS as readonly string[]).includes(v)) this.setAttribute('label-placement', v);
   }
 
   /** Sincroniza la visibilidad de hint y error-text según
    *  contenido slotted o atributo. Llamar en onConnected y en
    *  attributeChangedCallback cuando 'hint' o 'error-text' cambien. */
-  syncFormControl() {
+  syncFormControl(): void {
     const hintEl = this.shadowRoot?.getElementById('fc-hint');
     const errEl = this.shadowRoot?.getElementById('fc-error');
     if (hintEl) {
       const hintSlot = hintEl.querySelector<HTMLSlotElement>('slot');
       const hasContent = this.hint.trim() ||
         (hintSlot?.assignedNodes({ flatten: true }).some(
-          (n) => n.nodeType === 1 || (n.nodeType === 3 && n.textContent.trim())
-        ));
+          (n) => n.nodeType === 1 || (n.nodeType === 3 && (n.textContent ?? '').trim())
+        ) ?? false);
       hintEl.hidden = !hasContent;
     }
     if (errEl) {
       const errSlot = errEl.querySelector<HTMLSlotElement>('slot');
       const hasContent = this.errorText.trim() || this.error ||
         (errSlot?.assignedNodes({ flatten: true }).some(
-          (n) => n.nodeType === 1 || (n.nodeType === 3 && n.textContent.trim())
-        ));
+          (n) => n.nodeType === 1 || (n.nodeType === 3 && (n.textContent ?? '').trim())
+        ) ?? false);
       errEl.hidden = !hasContent;
     }
 
     // aria-describedby
-    const ids = [];
+    const ids: string[] = [];
     if (hintEl && !hintEl.hidden) ids.push('fc-hint');
     if (errEl && !errEl.hidden) ids.push('fc-error');
     if (ids.length) this.setAttribute('aria-describedby', ids.join(' '));

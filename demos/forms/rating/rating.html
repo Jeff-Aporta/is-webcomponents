@@ -1,0 +1,113 @@
+<!doctype html>
+<html lang="es" class="theme-dark" data-theme="dark">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>Rating &lt;is-rating&gt; · is-webcomponents</title>
+<meta name="description" content="Sistema de valoración form-associated con estrellas, medios pasos, hover preview y etiquetas personalizables." />
+<style>
+  html, body { margin: 0; padding: 0; min-height: 100%; background: #0c1118; color: #e2e8f0; font-family: ui-sans-serif, system-ui, sans-serif; }
+  body { display: grid; place-items: start center; padding: 32px 20px; }
+  main { max-width: 720px; width: 100%; display: grid; gap: 22px; }
+  header h1 { font-size: 18px; font-weight: 700; margin: 0 0 4px 0; }
+  header p { font-size: 12px; color: #94a3b8; margin: 0; }
+  section { background: #131a24; border: 1px solid rgba(255,255,255,0.08); border-radius: 10px; padding: 16px; display: grid; gap: 10px; }
+  section h2 { font-size: 13px; margin: 0; font-weight: 600; color: #cbd5e1; }
+  section .desc { font-size: 12px; color: #94a3b8; margin: 0; }
+  is-rating { width: 100%; }
+  code { background: rgba(255,255,255,0.06); padding: 1px 5px; border-radius: 3px; font: 12px ui-monospace, Menlo, Consolas, monospace; }
+  /* Anti-FOUC */
+  is-rating:not(:defined) { visibility: hidden; }
+</style>
+<script type="module">
+  await import('../../../dist/cdn/forms/rating.min.js');
+  await customElements.whenDefined('is-rating');
+
+  // (1) básico 5 estrellas
+  const basico = document.createElement('is-rating');
+  basico.label = 'Valoración del producto';
+  basico.name = 'score';
+  basico.value = 3;
+  basico.setAttribute('label-format', '{v} de {max} estrellas');
+  basico.setAttribute('show-label', '');
+  document.querySelector('#sec-basico').appendChild(basico);
+
+  // (2) con medios pasos (precision=0.5)
+  const medios = document.createElement('is-rating');
+  medios.label = 'Servicio recibido';
+  medios.name = 'service';
+  medios.value = 4.5;
+  medios.setAttribute('allow-half', '');
+  medios.setAttribute('label-format', '{v}/{max}');
+  document.querySelector('#sec-half').appendChild(medios);
+
+  // (3) color de marca y clearable
+  const clearable = document.createElement('is-rating');
+  clearable.label = 'Calidad (clic para borrar)';
+  clearable.name = 'quality';
+  clearable.value = 2;
+  clearable.setAttribute('color', 'warning');
+  clearable.setAttribute('clearable', '');
+  document.querySelector('#sec-clear').appendChild(clearable);
+
+  // (4) sólo lectura con labels descriptivos
+  const readonly = document.createElement('is-rating');
+  readonly.label = 'Tu opinión';
+  readonly.name = 'opinion';
+  readonly.value = 5;
+  readonly.setAttribute('readonly', '');
+  readonly.labels = ['Muy malo', 'Malo', 'Regular', 'Bueno', 'Excelente'];
+  document.querySelector('#sec-readonly').appendChild(readonly);
+
+  // (5) requerido: se queda en blanco y dispara valueMissing
+  const requerido = document.createElement('is-rating');
+  requerido.label = 'Puntúa la experiencia *';
+  requerido.name = 'experience';
+  requerido.setAttribute('required', '');
+  requerido.setAttribute('highlight-selected-only', '');
+  document.querySelector('#sec-required').appendChild(requerido);
+
+  // Logging útil para tests: is-change y is-hover
+  [basico, medios, clearable, readonly, requerido].forEach((r) => {
+    r.addEventListener('is-change', (e) => console.log('[rating] change', e.detail));
+    r.addEventListener('is-hover', (e) => console.log('[rating] hover', e.detail));
+  });
+
+  document.documentElement.dataset.ratingReady = '1';
+</script>
+</head>
+<body>
+<main>
+  <header>
+    <h1>&lt;is-rating&gt; · Valoración form-associated</h1>
+    <p>5 estrellas por defecto · medios pasos con <code>allow-half</code> · <code>is-change</code> al confirmar, <code>is-hover</code> durante la previsualización.</p>
+  </header>
+
+  <section id="sec-basico">
+    <h2>Básico con label y formato</h2>
+    <p class="desc">Atributos <code>label</code>, <code>name</code>, <code>value</code> y <code>label-format</code>.</p>
+  </section>
+
+  <section id="sec-half">
+    <h2>Medios pasos (allow-half)</h2>
+    <p class="desc"><code>allow-half</code> activa precisión de 0.5.</p>
+  </section>
+
+  <div class="row">
+    <section id="sec-clear">
+      <h2>Color de marca + clearable</h2>
+      <p class="desc"><code>color="warning"</code> y <code>clearable</code> (clic en el mismo valor lo pone a 0).</p>
+    </section>
+    <section id="sec-readonly">
+      <h2>Solo lectura con etiquetas</h2>
+      <p class="desc">Propiedad <code>labels</code> sustituye al <code>label-format</code>.</p>
+    </section>
+  </div>
+
+  <section id="sec-required">
+    <h2>Requerido (validación de formulario)</h2>
+    <p class="desc"><code>required</code> deja el control en blanco y activa <code>:invalid</code> hasta que se puntúe.</p>
+  </section>
+</main>
+</body>
+</html>

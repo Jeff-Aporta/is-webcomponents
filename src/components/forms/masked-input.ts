@@ -31,7 +31,7 @@ import { setStringAttr } from '../_shared/reflect.js';
  * Token CSS: --is-field-width
  */
 (() => {
-  const OBSERVED = [
+  const OBSERVED: string[] = [
     'pattern', 'value', 'name', 'placeholder', 'autocomplete',
     'maxlength', 'disabled', 'readonly', 'required',
     'variant', 'invalid',
@@ -40,10 +40,10 @@ import { setStringAttr } from '../_shared/reflect.js';
   class IsMaskedInput extends HTMLElement {
     static get observedAttributes(): string[] { return OBSERVED; }
 
-    #internals;
+    #internals: ElementInternals | null;
     #mounted = false;
     #suppress = false;
-    #input!: HTMLElement;
+    #input!: HTMLInputElement;
 
     constructor() {
       super();
@@ -57,7 +57,7 @@ import { setStringAttr } from '../_shared/reflect.js';
       `;
       adoptCss(shadow, import.meta.url);
       this.#internals = attachFormInternals(this);
-      this.#input = shadow.getElementById('input')!;
+      this.#input = shadow.getElementById('input') as HTMLInputElement;
       this.#input.addEventListener('input', () => this.#onInput());
       this.#input.addEventListener('blur', () => this.#syncValidity());
       // El input interno vive en shadow: su `change` no cruza el límite, hay
@@ -90,13 +90,13 @@ import { setStringAttr } from '../_shared/reflect.js';
       }
     }
 
-    get pattern() { return this.getAttribute('pattern') || ''; }
-    set pattern(v) {
+    get pattern(): string { return this.getAttribute('pattern') || ''; }
+    set pattern(v: string) {
       setStringAttr(this, 'pattern', v);
     }
 
-    get value() { return this.#input.value; }
-    set value(v) {
+    get value(): string { return this.#input.value; }
+    set value(v: string | null | undefined) {
       const next = apply(v, this.pattern);
       if (this.#input.value === next) return;
       this.#suppress = true;
@@ -110,20 +110,20 @@ import { setStringAttr } from '../_shared/reflect.js';
     }
 
     /** Sólo caracteres limpios (sin literales). Útil para enviar al backend. */
-    get raw() {
+    get raw(): string {
       return String(this.#input.value || '').replace(/[^A-Za-z0-9]/g, '');
     }
 
     /** Devuelve el texto formateado actual. */
-    get formatted() { return this.#input.value; }
+    get formatted(): string { return this.#input.value; }
 
     /** ¿El usuario rellenó todos los slots requeridos? */
-    get complete() { return isComplete(this.#input.value, this.pattern); }
+    get complete(): boolean { return isComplete(this.#input.value, this.pattern); }
 
-    focus() { this.#input.focus(); }
-    blur() { this.#input.blur(); }
+    focus(): void { this.#input.focus(); }
+    blur(): void { this.#input.blur(); }
 
-    #onInput() {
+    #onInput(): void {
       if (this.#suppress) return;
       // aceptar lo que el usuario escribió, reformatearlo, restaurar caret razonable
       const before = this.#input.value;
@@ -138,7 +138,7 @@ import { setStringAttr } from '../_shared/reflect.js';
       setFormValue(this.#internals, next);
     }
 
-    #syncPattern() {
+    #syncPattern(): void {
       const p = this.pattern;
       this.#input.placeholder = p;
       // maxlength opcional desde el usuario, sin pisarlo si ya estaba
@@ -149,7 +149,7 @@ import { setStringAttr } from '../_shared/reflect.js';
       if (this.#mounted) this.value = this.value;
     }
 
-    #syncSlots() {
+    #syncSlots(): void {
       const startSlot = this.shadowRoot!.querySelector<HTMLSlotElement>('slot[name="start"]');
       const endSlot = this.shadowRoot!.querySelector<HTMLSlotElement>('slot[name="end"]');
       // si los slots están vacíos, ocupa todo el ancho; si no, deja hueco
@@ -157,7 +157,7 @@ import { setStringAttr } from '../_shared/reflect.js';
       this.#input.classList.toggle('with-end', !!endSlot?.assignedNodes?.().length);
     }
 
-    #syncDisabled() {
+    #syncDisabled(): void {
       const dis = this.hasAttribute('disabled');
       const ro = this.hasAttribute('readonly');
       this.#input.disabled = dis;
@@ -165,13 +165,13 @@ import { setStringAttr } from '../_shared/reflect.js';
       if (this.#input.disabled) this.#input.blur();
     }
 
-    #syncComplete() {
+    #syncComplete(): void {
       const complete = this.complete;
       setCustomState(this.#internals, 'complete', complete);
       if (complete) emit(this, 'is-complete');
     }
 
-    #syncValidity() {
+    #syncValidity(): void {
       if (this.hasAttribute('required') && !this.value) {
         this.setAttribute('invalid', '');
       } else if (this.hasAttribute('invalid') && !this.hasAttribute('required')) {

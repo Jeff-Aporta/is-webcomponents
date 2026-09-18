@@ -1,0 +1,95 @@
+<!doctype html>
+<html lang="es" class="theme-dark" data-theme="dark">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>&lt;is-grid-layout&gt; · is-webcomponents</title>
+<meta name="description" content="Rejilla CSS declarativa: cells (número o track list), gap, justificación y alineación por atributos." />
+<style>
+  html, body { margin: 0; padding: 0; min-height: 100%; background: #0c1118; color: #e2e8f0; font-family: ui-sans-serif, system-ui, sans-serif; }
+  body { display: grid; grid-template-rows: auto 1fr; min-height: 100vh; }
+  header {
+    padding: 16px 20px; border-bottom: 1px solid rgba(255,255,255,0.1);
+    display: flex; align-items: center; gap: 14px; background: #0f1620;
+  }
+  header h1 { font-size: 16px; font-weight: 700; margin: 0; }
+  header p { font-size: 12px; color: #94a3b8; margin: 0; }
+  header .spacer { flex: 1; }
+  main { display: grid; gap: 24px; padding: 20px; max-width: 1100px; margin: 0 auto; width: 100%; box-sizing: border-box; }
+  section h2 { font-size: 14px; font-weight: 600; margin: 0 0 8px; color: #94a3b8; }
+  .cell { background: rgba(255,255,255,0.05); border: 1px solid rgba(255,255,255,0.1); padding: 12px; border-radius: 4px; text-align: center; font-weight: 600; color: #e2e8f0; }
+  is-grid-layout { border: 1px solid rgba(255,255,255,0.1); border-radius: 6px; padding: 8px; background: rgba(255,255,255,0.02); }
+  is-grid-layout:not(:defined) { visibility: hidden; }
+</style>
+<script type="module">
+  await import('../../../dist/cdn/isp/grid-layout.min.js');
+  await customElements.whenDefined('is-grid-layout');
+  document.documentElement.dataset.gridReady = '1';
+</script>
+</head>
+<body>
+<header>
+  <div>
+    <h1>&lt;is-grid-layout&gt; — rejilla declarativa</h1>
+    <p>Atributo <code>cells</code> numérico → repeat(n, minmax(0,1fr)); track list CSS cruda → se usa tal cual.</p>
+  </div>
+  <div class="spacer"></div>
+  <code>is-grid-layout</code>
+</header>
+<main>
+  <section>
+    <h2>3 columnas con gap</h2>
+    <is-grid-layout cells="3" gap="0.5rem" style="width: 100%;">
+      <div class="cell">1</div>
+      <div class="cell">2</div>
+      <div class="cell">3</div>
+      <div class="cell">4</div>
+      <div class="cell">5</div>
+      <div class="cell">6</div>
+    </is-grid-layout>
+  </section>
+
+  <section>
+    <h2>Track list cruda (auto + 1fr)</h2>
+    <is-grid-layout cells="auto 1fr auto" gap="0.75rem" items="center">
+      <div class="cell" style="background: rgba(56,189,248,0.1);">Etiqueta</div>
+      <div class="cell">Valor</div>
+      <div class="cell" style="background: rgba(74,222,128,0.1);">Acción</div>
+      <div class="cell">Otro</div>
+      <div class="cell">Contenido</div>
+      <div class="cell">Más</div>
+    </is-grid-layout>
+  </section>
+
+  <section>
+    <h2>cells-fit (max-content)</h2>
+    <is-grid-layout cells="3" cells-fit gap="0.5rem">
+      <div class="cell">A</div>
+      <div class="cell">B muy largo</div>
+      <div class="cell">C</div>
+    </is-grid-layout>
+  </section>
+
+  <section>
+    <h2>direction=row (auto-flow column)</h2>
+    <is-grid-layout cells="3" direction="row" gap="0.5rem">
+      <div class="cell">fila1</div>
+      <div class="cell">fila2</div>
+      <div class="cell">fila3</div>
+      <div class="cell">fila4</div>
+    </is-grid-layout>
+  </section>
+
+  <section>
+    <h2>Responsive (data-sizew)</h2>
+    <p style="font-size: 12px; color: #94a3b8;">Cambia el ancho del navegador para ver cómo reacciona el grid.</p>
+    <is-grid-layout style="resize: horizontal; overflow: auto; width: 80%; min-width: 14rem;" cells="4" gap="0.5rem">
+      <div class="cell">α</div>
+      <div class="cell">β</div>
+      <div class="cell">γ</div>
+      <div class="cell">δ</div>
+    </is-grid-layout>
+  </section>
+</main>
+</body>
+</html>

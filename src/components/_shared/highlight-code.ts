@@ -21,8 +21,8 @@ import { inferLanguage } from './code-langs.js';
 export { dedent, unwrapHandHighlight, prettyHtml, softFormat, softFormatMode };
 
 /** data-lang / heurística → mode legacy (softFormat) + lang del editor. */
-export const resolveMode = (el, text) => {
-  const raw = (el.getAttribute?.('data-lang') || el.getAttribute?.('data-language') || el.dataset?.lang || '').toLowerCase();
+export const resolveMode = (el: HTMLElement, text: string): string => {
+  const raw = ((el.getAttribute?.('data-lang') || el.getAttribute?.('data-language') || el.dataset?.lang) ?? '').toLowerCase();
   if (['js', 'javascript'].includes(raw)) return 'javascript';
   if (['ts', 'typescript'].includes(raw)) return 'typescript';
   if (['jsx', 'tsx'].includes(raw)) return raw;
@@ -35,7 +35,7 @@ export const resolveMode = (el, text) => {
 };
 
 /** Mode legacy → lang de `<is-code>`. */
-export const modeToLang = (mode) => {
+export const modeToLang = (mode: string | null | undefined): string => {
   const m = String(mode || '').toLowerCase();
   if (m === 'htmlmixed' || m === 'htm' || m === 'xml' || m === 'svg') return 'html';
   if (m === 'js') return 'javascript';
@@ -44,33 +44,39 @@ export const modeToLang = (mode) => {
   return m || 'javascript';
 };
 
-const isMountedEditor = (el) => el instanceof HTMLElement
+const isMountedEditor = (el: Element): boolean => el instanceof HTMLElement
   && el.localName === 'is-code'
   && el.dataset.cm === '1';
 
-let editorImport = null;
-const ensureEditorDefined = () => {
+let editorImport: Promise<unknown> | null = null;
+const ensureEditorDefined = (): Promise<unknown> => {
   if (customElements.get('is-code')) return Promise.resolve();
   editorImport ??= import('../code/code.js');
   return editorImport;
 };
 
+/** Editor `<is-code>` ya montado (con atributos de configuración). */
+type CodeEditor = HTMLElement & {
+  value: string;
+  lang: string;
+  refresh?: () => void;
+};
+
 /**
  * Crea o actualiza un `<is-code readonly compact>` a partir de un
  * `<pre class="code">` o de un editor ya montado.
- * @param {HTMLElement} el
  */
-const paintOne = async (el) => {
+const paintOne = async (el: HTMLElement): Promise<void> => {
   if (!(el instanceof HTMLElement)) return;
   if (el.classList.contains('demo-code-pop__pre')
-    && !(el.localName === 'is-code' ? el.value : el.textContent).trim()
+    && !(el.localName === 'is-code' ? (el as CodeEditor).value : el.textContent ?? '').trim()
     && !el.dataset.forceCm) return;
 
   await ensureEditorDefined();
 
   const source = el.dataset.cmSource
     || el.dataset.src
-    || (isMountedEditor(el) ? el.value : el.textContent)
+    || (isMountedEditor(el) ? (el as CodeEditor).value : el.textContent)
     || '';
   if (!source.trim() && el.classList.contains('demo-code-pop__pre')) return;
 
@@ -80,24 +86,25 @@ const paintOne = async (el) => {
   const lang = modeToLang(mode);
 
   if (isMountedEditor(el) || el.localName === 'is-code') {
-    el.toggleAttribute('readonly', true);
-    el.toggleAttribute('compact', true);
-    if (!el.hasAttribute('wrap')) el.setAttribute('wrap', '');
-    if (!el.hasAttribute('line-numbers')) el.setAttribute('line-numbers', 'false');
-    el.lang = lang;
+    const ed = el as CodeEditor;
+    ed.toggleAttribute('readonly', true);
+    ed.toggleAttribute('compact', true);
+    if (!ed.hasAttribute('wrap')) ed.setAttribute('wrap', '');
+    if (!ed.hasAttribute('line-numbers')) ed.setAttribute('line-numbers', 'false');
+    ed.lang = lang;
     // Siempre asignar: el getter de is-code puede devolver el seed aunque la
     // vista aún no esté montada.
-    el.value = text;
-    el.dataset.cm = '1';
-    el.dataset.cmSource = text;
-    el.dataset.cmMode = mode;
-    el.refresh?.();
+    ed.value = text;
+    ed.dataset.cm = '1';
+    ed.dataset.cmSource = text;
+    ed.dataset.cmMode = mode;
+    ed.refresh?.();
     return;
   }
 
   if (el.localName !== 'pre' && !el.classList.contains('code')) return;
 
-  const ed = document.createElement('is-code');
+  const ed = document.createElement('is-code') as unknown as CodeEditor;
   ed.className = `${el.className} is-code-view`.replace(/\s+/g, ' ').trim();
   ed.setAttribute('readonly', '');
   ed.setAttribute('compact', '');
@@ -117,14 +124,13 @@ const paintOne = async (el) => {
 
 /**
  * Monta editores readonly sobre `pre.code` pendientes (o actualiza uno).
- * @param {ParentNode | Element} [root]
  */
-export const paint = (root = document) => {
-  let targets;
+export const paint = (root: ParentNode | Element = document): Promise<unknown[]> => {
+  let targets: HTMLElement[];
   if (root instanceof Element && (root.matches?.('pre.code') || root.localName === 'is-code')) {
-    targets = [root];
+    targets = [root as HTMLElement];
   } else {
-    const scope = root instanceof Element || root instanceof DocumentFragment || root instanceof ShadowRoot
+    const scope: ParentNode = root instanceof Element || root instanceof DocumentFragment || root instanceof ShadowRoot
       ? root
       : document;
     const list = [
@@ -137,32 +143,33 @@ export const paint = (root = document) => {
 };
 
 /** Fuerza re-montar / actualizar contenido. */
-export const repaint = (el) => {
+export const repaint = (el: HTMLElement | null | undefined): Promise<void> => {
   if (!(el instanceof Element)) return Promise.resolve();
   delete el.dataset.cm;
   if (el.localName === 'is-code') {
-    return paintOne(el);
+    return paintOne(el as HTMLElement);
   }
   delete el.dataset.cmSource;
   delete el.dataset.cmMode;
-  return paintOne(el);
+  return paintOne(el as HTMLElement);
 };
 
-let observer = null;
-let pendientes = null;
+let observer: MutationObserver | null = null;
+let pendientes: Set<HTMLElement> | null = null;
 let pintando = false;
 
-const procesarPendientes = () => {
+const procesarPendientes = (): void => {
   const lote = pendientes;
   pendientes = null;
   if (!lote?.size) return;
-  const pintar = () => {
+  const pintar = (): void => {
     pintando = true;
     try {
       for (const el of lote) {
         if (!el.isConnected) continue;
         if (el.localName === 'is-code') {
-          if (el.dataset.cmSource !== undefined && el.value !== el.dataset.cmSource) {
+          const ed = el as CodeEditor;
+          if (ed.dataset.cmSource !== undefined && ed.value !== ed.dataset.cmSource) {
             repaint(el);
           }
           continue;
@@ -178,13 +185,13 @@ const procesarPendientes = () => {
   pintar();
 };
 
-const encolar = (el) => {
+const encolar = (el: HTMLElement): void => {
   pendientes ??= new Set();
   if (!pendientes.size) queueMicrotask(procesarPendientes);
   pendientes.add(el);
 };
 
-export const watchDom = (root = document.documentElement) => {
+export const watchDom = (root: Element | Document = document.documentElement): void => {
   if (observer || typeof MutationObserver !== 'function') return;
 
   observer = new MutationObserver((muts) => {
@@ -193,10 +200,9 @@ export const watchDom = (root = document.documentElement) => {
       if (m.type !== 'childList') continue;
       for (const node of m.addedNodes) {
         if (!(node instanceof Element)) continue;
-        if (node.matches?.('pre.code') || node.localName === 'is-code') encolar(node);
-        for (const pre of node.querySelectorAll?.('pre.code, is-code.code, is-code.is-code-view') ?? []) {
-          encolar(pre);
-        }
+        if (node.matches?.('pre.code') || node.localName === 'is-code') encolar(node as HTMLElement);
+        const nested = node.querySelectorAll?.('pre.code, is-code.code, is-code.is-code-view') ?? [];
+        for (const pre of Array.from(nested)) encolar(pre as HTMLElement);
       }
     }
   });

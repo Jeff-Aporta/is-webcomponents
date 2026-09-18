@@ -1,0 +1,63 @@
+<!doctype html>
+<html lang="es" class="theme-dark" data-theme="dark">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>Demo <is-spinner> · is-webcomponents</title>
+<meta name="description" content="Demo de <is-spinner>: anillo de carga animado, role=status, customizable color/size/speed." />
+<style>
+  html, body { margin: 0; padding: 0; background: #0c1118; color: #e2e8f0; font-family: ui-sans-serif, system-ui, sans-serif; }
+  body { padding: 24px; display: grid; gap: 24px; }
+  header h1 { font-size: 18px; margin: 0 0 4px; }
+  header p  { font-size: 13px; color: #94a3b8; margin: 0; }
+  section { background: #0f1620; border: 1px solid rgba(255,255,255,0.08); border-radius: 10px; padding: 18px; }
+  section h2 { font-size: 14px; margin: 0 0 12px; color: #94a3b8; font-weight: 600; text-transform: uppercase; letter-spacing: 0.05em; }
+  .row { display: flex; flex-wrap: wrap; gap: 24px; align-items: center; }
+  is-spinner:not(:defined) { visibility: hidden; }
+</style>
+<script type="module">
+  await import('../../../dist/cdn/feedback/spinner.min.js');
+
+  await customElements.whenDefined('is-spinner');
+  document.documentElement.dataset.spinnerReady = '1';
+</script>
+</head>
+<body>
+<header>
+  <h1>is-spinner</h1>
+  <p>Anillo de carga animado. role=status + aria-live=polite + aria-label="Cargando". Personalizable: color, track-color, track-width, speed.</p>
+</header>
+
+<section>
+  <h2>Default</h2>
+  <div class="row">
+    <is-spinner></is-spinner>
+    <span>Cargando…</span>
+  </div>
+</section>
+
+<section>
+  <h2>Tamaños (vía style width/height)</h2>
+  <div class="row">
+    <is-spinner style="width:16px;height:16px;"></is-spinner>
+    <is-spinner style="width:32px;height:32px;"></is-spinner>
+    <is-spinner style="width:64px;height:64px;"></is-spinner>
+  </div>
+</section>
+
+<section>
+  <h2>Colores custom</h2>
+  <div class="row">
+    <is-spinner color="#7c3aed"></is-spinner>
+    <is-spinner color="#10b981"></is-spinner>
+    <is-spinner color="#f59e0b"></is-spinner>
+    <is-spinner color="#ef4444"></is-spinner>
+  </div>
+</section>
+
+<section>
+  <h2>Velocidad lenta</h2>
+  <is-spinner speed="3s"></is-spinner>
+</section>
+</body>
+</html>

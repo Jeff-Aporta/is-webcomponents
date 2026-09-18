@@ -5,6 +5,7 @@ import { resolveTkHue } from '../_shared/tk-hue.js';
 import { applyEdgeActorLayout } from '../_shared/diagram-edge-actors.js';
 import { assignEdgeHues } from '../_shared/diagram-edge-style.js';
 import { wrapLabel } from './component-spec.js';
+import type { DiagramSide } from '../_shared/diagram-grid.js';
 import {
   normalizeErPayload as _archifyNormalize,
   pickSidesArchify,
@@ -617,10 +618,14 @@ export function computeErLayout(spec: ErSpec): ErLayout {
     }
     // Fallback al `pickSides` histórico si el autor no fija nada:
     if (fromSide === 'auto') {
-      fromSide = pickSides(byId.get(r.from), byId.get(r.to), spec.direction).fromSide as BoxSide;
+      const fallback = byId.get(r.from);
+      const fallback2 = byId.get(r.to);
+      fromSide = fallback && fallback2 ? pickSides(fallback, fallback2, spec.direction).fromSide as BoxSide : 'right';
     }
     if (toSide === 'auto') {
-      toSide = pickSides(byId.get(r.from), byId.get(r.to), spec.direction).toSide as BoxSide;
+      const fallback = byId.get(r.from);
+      const fallback2 = byId.get(r.to);
+      toSide = fallback && fallback2 ? pickSides(fallback, fallback2, spec.direction).toSide as BoxSide : 'left';
     }
     const a = edgeAnchor(from, fromSide === 'auto' ? 'top' : fromSide);
     const b = edgeAnchor(to, toSide === 'auto' ? 'top' : toSide);
@@ -640,8 +645,8 @@ export function computeErLayout(spec: ErSpec): ErLayout {
       // auto / orthogonal — ruta histórica con A*.
       const out = stepOut(a, fromSide, 18);
       const into = stepOut(b, toSide, 18);
-      const outSnap = snapPointAwayFromSide(out, fromSide, grid.grid);
-      const intoSnap = snapPointAwayFromSide(into, toSide, grid.grid);
+      const outSnap = snapPointAwayFromSide(out, fromSide as DiagramSide, grid.grid);
+      const intoSnap = snapPointAwayFromSide(into, toSide as DiagramSide, grid.grid);
       const aGrid = pixelToGrid(outSnap.x, outSnap.y, grid.grid);
       const bGrid = pixelToGrid(intoSnap.x, intoSnap.y, grid.grid);
       // Si el autor dio `via` explícitos, los inyectamos como waypoints antes
@@ -715,7 +720,8 @@ export function computeErLayout(spec: ErSpec): ErLayout {
     if (r.style) edge.style = r.style;
     ruteadas[i] = edge;
   }
-  const relations = assignEdgeHues(ruteadas);
+  const relations: NonNullable<ErLayout['relations']> = (assignEdgeHues(ruteadas as unknown as Parameters<typeof assignEdgeHues>[0]) as unknown as NonNullable<ErLayout['relations']>)
+    .filter((e): e is NonNullable<ErLayout['relations']>[number] => e !== undefined);
 
   const layout: ErLayout = {
     width,

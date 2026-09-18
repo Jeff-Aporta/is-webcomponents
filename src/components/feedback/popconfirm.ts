@@ -66,9 +66,10 @@ import '../actions/button.js';
     static get observedAttributes(): string[] { return [...OBSERVED, 'bg', 'text-color', 'border-color', 'accent', 'danger-color']; }
 
     #pop!: HTMLElement;
-    #trigger;
-    #onTriggerClick;
-    #onDocClick;
+    #trigger: HTMLElement | null = null;
+    #onTriggerClick: ((e: PointerEvent) => void) | null = null;
+    #onDocClick!: (e: PointerEvent) => void;
+    #popup!: HTMLDivElement;
 
     /**
      * Ciclo "abierto" compartido con is-dropdown / is-context-menu
@@ -92,14 +93,14 @@ import '../actions/button.js';
     }
 
     onConnected() {
-      this.popup = document.createElement('div');
-      this.popup.style.position = 'fixed';
-      this.popup.style.top = '0';
-      this.popup.style.left = '0';
-      this.popup.style.zIndex = '99999';
-      this.popup.style.display = 'none';
-      this.appendChild(this.popup);
-      this.popup.appendChild(this.#pop);
+      this.#popup = document.createElement('div');
+      this.#popup.style.position = 'fixed';
+      this.#popup.style.top = '0';
+      this.#popup.style.left = '0';
+      this.#popup.style.zIndex = '99999';
+      this.#popup.style.display = 'none';
+      this.appendChild(this.#popup);
+      this.#popup.appendChild(this.#pop);
       this.#bindTrigger();
       this.#bindActions();
       this.#onDocClick = (e: PointerEvent) => {
@@ -134,11 +135,11 @@ import '../actions/button.js';
       }
     }
 
-    get placement() {
-      const v = this.getAttribute('placement');
+    get placement(): string {
+      const v = this.getAttribute('placement') ?? '';
       return VALID_PLACEMENT.includes(v) ? v : 'top';
     }
-    set placement(v) {
+    set placement(v: string | null | undefined) {
       if (v == null || v === '') this.removeAttribute('placement');
       else if (VALID_PLACEMENT.includes(v)) this.setAttribute('placement', v);
     }
@@ -152,12 +153,12 @@ import '../actions/button.js';
 
     hide() {
       this.removeAttribute('open');
-      this.popup.style.display = 'none';
+      this.#popup.style.display = 'none';
       emit(this, 'is-popconfirm-hide', { trigger: this.#trigger });
     }
 
     #show() {
-      this.popup.style.display = 'block';
+      this.#popup.style.display = 'block';
       requestAnimationFrame(() => this.#reposition());
     }
 
@@ -214,7 +215,7 @@ import '../actions/button.js';
       if (left + pRect.width > docW - margin) left = docW - pRect.width - margin;
       if (top < margin) top = margin;
       if (top + pRect.height > docH - margin) top = docH - pRect.height - margin;
-      this.popup.style.transform = `translate(${left}px, ${top}px)`;
+      this.#popup.style.transform = `translate(${left}px, ${top}px)`;
     };
 
     #bindTrigger() {
@@ -240,11 +241,12 @@ import '../actions/button.js';
 
     #bindActions() {
       this.#pop.addEventListener('click', (e: Event) => {
-        if (e.target.closest('[data-popconfirm-confirm]')) {
+        const target = e.target as Element | null;
+        if (target?.closest('[data-popconfirm-confirm]')) {
           emit(this, 'is-popconfirm-confirm', { trigger: this.#trigger });
           this.hide();
         }
-        if (e.target.closest('[data-popconfirm-cancel]')) {
+        if (target?.closest('[data-popconfirm-cancel]')) {
           emit(this, 'is-popconfirm-cancel', { trigger: this.#trigger });
           this.hide();
         }

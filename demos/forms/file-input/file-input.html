@@ -1,0 +1,90 @@
+<!doctype html>
+<html lang="es" class="theme-dark" data-theme="dark">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>&lt;is-file-input&gt; · is-webcomponents</title>
+<meta name="description" content="Input de archivo form-associated con dropzone, drag-and-drop y lista de archivos." />
+<style>
+  html, body { margin: 0; padding: 0; min-height: 100%; background: #0c1118; color: #e2e8f0; font-family: ui-sans-serif, system-ui, sans-serif; }
+  body { display: grid; place-items: start center; padding: 32px 20px; }
+  main { max-width: 720px; width: 100%; display: grid; gap: 22px; }
+  header h1 { font-size: 18px; font-weight: 700; margin: 0 0 4px 0; }
+  header p { font-size: 12px; color: #94a3b8; margin: 0; }
+  section { background: #131a24; border: 1px solid rgba(255,255,255,0.08); border-radius: 10px; padding: 16px; display: grid; gap: 10px; }
+  section h2 { font-size: 13px; margin: 0; font-weight: 600; color: #cbd5e1; }
+  section .desc { font-size: 12px; color: #94a3b8; margin: 0; }
+  is-file-input { width: 100%; }
+  code { background: rgba(255,255,255,0.06); padding: 1px 5px; border-radius: 3px; font: 12px ui-monospace, Menlo, Consolas, monospace; }
+  /* Anti-FOUC */
+  is-file-input:not(:defined) { visibility: hidden; }
+</style>
+<script type="module">
+  await import('../../../dist/cdn/forms/file-input.min.js');
+  await customElements.whenDefined('is-file-input');
+
+  // (1) básico: un solo archivo
+  const basico = document.createElement('is-file-input');
+  basico.label = 'Subir documento';
+  basico.name = 'doc';
+  basico.accept = '.pdf,.doc,.docx';
+  basico.hint = 'Solo PDF o Word. Tamaño máximo recomendado: 5 MB.';
+  document.querySelector('#sec-basico').appendChild(basico);
+
+  // (2) múltiples archivos
+  const varios = document.createElement('is-file-input');
+  varios.label = 'Adjuntos múltiples';
+  varios.name = 'adjuntos';
+  varios.multiple = true;
+  varios.accept = 'image/*';
+  varios.hint = 'Podés seleccionar varias imágenes.';
+  document.querySelector('#sec-multiple').appendChild(varios);
+
+  // (3) requerido (form-associated)
+  const requerido = document.createElement('is-file-input');
+  requerido.label = 'CV *';
+  requerido.name = 'cv';
+  requerido.required = true;
+  requerido.hint = 'Campo obligatorio — tu currículum en PDF.';
+  document.querySelector('#sec-required').appendChild(requerido);
+
+  // (4) deshabilitado
+  const bloqueado = document.createElement('is-file-input');
+  bloqueado.label = 'Archivo bloqueado';
+  bloqueado.value = 'archivo-bloqueado.pdf';
+  bloqueado.disabled = true;
+  bloqueado.hint = 'No editable en este contexto.';
+  document.querySelector('#sec-disabled').appendChild(bloqueado);
+
+  document.documentElement.dataset.fileInputReady = '1';
+</script>
+</head>
+<body>
+<main>
+  <header>
+    <h1>&lt;is-file-input&gt; · Input de archivo con drag-and-drop</h1>
+    <p>Dropzone accesible con <code>role=button</code>, lista de archivos y validación form-associated (<code>required</code>, <code>disabled</code>).</p>
+  </header>
+
+  <section id="sec-basico">
+    <h2>Básico (un solo archivo)</h2>
+    <p class="desc">Atributos <code>label</code>, <code>hint</code>, <code>accept</code> restringen el tipo de archivo.</p>
+  </section>
+
+  <section id="sec-multiple">
+    <h2>Múltiple (varios archivos)</h2>
+    <p class="desc">Atributo booleano <code>multiple</code> activa la selección de varios archivos.</p>
+  </section>
+
+  <section id="sec-required">
+    <h2>Requerido</h2>
+    <p class="desc"><code>required</code> + sin archivos → el componente queda <code>:invalid</code> y <code>valueMissing</code>.</p>
+  </section>
+
+  <section id="sec-disabled">
+    <h2>Deshabilitado</h2>
+    <p class="desc"><code>disabled</code> cierra el dropzone y bloquea el input nativo.</p>
+  </section>
+</main>
+</body>
+</html>

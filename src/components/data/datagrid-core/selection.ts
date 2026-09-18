@@ -70,14 +70,14 @@ export function toggleRowSelection(selection: Set<string>, rowId: string, mode: 
  * @param {RowNode[]} rows
  * @returns {Set<string>}
  */
-export function selectAll(rows: RowNode[]) {
+export function selectAll(rows: RowNode[]): Set<string> {
   return new Set(rows.map((r) => r.id));
 }
 
 /**
  * @returns {Set<string>}
  */
-export function clearSelection() {
+export function clearSelection(): Set<string> {
   return new Set();
 }
 

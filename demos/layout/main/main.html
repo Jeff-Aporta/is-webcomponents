@@ -1,0 +1,162 @@
+<!doctype html>
+<html lang="es" class="theme-dark" data-theme="dark">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>Demo de <is-main> · is-webcomponents</title>
+<meta name="description" content="Contenedor scrollable con role='main'. Persistencia opt-in de scrollTop vía remember-scroll + storage-key. Métodos scrollToTop/clearRememberedScroll/saveScroll/restoreScroll." />
+<style>
+  html, body { margin: 0; padding: 0; min-height: 100vh; background: #0c1118; color: #e2e8f0; font-family: ui-sans-serif, system-ui, sans-serif; }
+  body { display: grid; grid-template-rows: auto 1fr auto; min-height: 100vh; }
+  header { padding: 16px 20px; border-bottom: 1px solid rgba(255,255,255,0.1); background: #0f1620; }
+  header h1 { font-size: 16px; font-weight: 700; margin: 0; }
+  header p { font-size: 12px; color: #94a3b8; margin: 4px 0 0 0; }
+  main { padding: 20px; display: grid; gap: 14px; }
+  section { background: #0f1620; border: 1px solid rgba(255,255,255,0.1); border-radius: 8px; padding: 16px; }
+  section h2 { font-size: 11px; text-transform: uppercase; letter-spacing: 0.08em; margin: 0 0 12px 0; color: #94a3b8; }
+  is-main:not(:defined) { visibility: hidden; }
+  /* is-main es light DOM y necesita overflow:auto + altura para scrollear. */
+  is-main {
+    height: 220px;
+    overflow: auto;
+    border: 1px solid rgba(255,255,255,0.15);
+    border-radius: 4px;
+    background: #0a121b;
+    display: block;
+  }
+  is-main .pad { padding: 12px; }
+  .filler { height: 1200px; background: linear-gradient(to bottom, transparent, rgba(255,255,255,0.04)); }
+  .actions { display: flex; gap: 8px; flex-wrap: wrap; margin-top: 8px; }
+  pre.log { margin: 8px 0 0 0; font: 11px ui-monospace, Menlo, Consolas, monospace; color: #94a3b8; white-space: pre-wrap; max-height: 160px; overflow: auto; }
+  footer { padding: 12px 20px; border-top: 1px solid rgba(255,255,255,0.1); background: #0f1620; font-size: 11px; color: #94a3b8; }
+  footer code { background: rgba(255,255,255,0.06); padding: 1px 5px; border-radius: 3px; font: 11px ui-monospace, Menlo, Consolas, monospace; }
+</style>
+<script type="module">
+  await import('../../../dist/cdn/layout/main.min.js');
+  await customElements.whenDefined('is-main');
+
+  // (1) is-main básico: role="main" auto-puesto. Sin persistencia.
+  const m1 = document.createElement('is-main');
+  m1.id = 'm1';
+  m1.innerHTML = `
+    <div class="pad">
+      <p>Este is-main NO persiste scroll (sin <code>remember-scroll</code>).</p>
+      <div class="filler"></div>
+      <p>Fin del contenido.</p>
+    </div>
+  `;
+  document.getElementById('host-1').appendChild(m1);
+
+  // (2) is-main con persistencia: remember-scroll + storage-key.
+  const m2 = document.createElement('is-main');
+  m2.setAttribute('remember-scroll', '');
+  m2.setAttribute('storage-key', 'demo-main-2');
+  m2.id = 'm2';
+  m2.innerHTML = `
+    <div class="pad">
+      <p>Este is-main <strong>SÍ persiste scroll</strong>: remember-scroll + storage-key="demo-main-2".</p>
+      <div class="filler"></div>
+      <p>Fin. Recarga la página y deberías volver aquí.</p>
+    </div>
+  `;
+  document.getElementById('host-2').appendChild(m2);
+
+  // (3) is-main con scroll-ttl custom.
+  const m3 = document.createElement('is-main');
+  m3.setAttribute('remember-scroll', '');
+  m3.setAttribute('storage-key', 'demo-main-3');
+  m3.setAttribute('scroll-ttl', '60000'); // 60s
+  m3.id = 'm3';
+  m3.innerHTML = `
+    <div class="pad">
+      <p>Persistirá con TTL=60s (más bajo que el default de 1h).</p>
+      <div class="filler"></div>
+      <p>Fin.</p>
+    </div>
+  `;
+  document.getElementById('host-3').appendChild(m3);
+
+  // (4) Interactivo: API methods.
+  const m4 = document.createElement('is-main');
+  m4.setAttribute('remember-scroll', '');
+  m4.setAttribute('storage-key', 'demo-main-interactive');
+  m4.id = 'm4';
+  m4.innerHTML = `
+    <div class="pad">
+      <p>Usa los botones para llamar a <code>saveScroll()</code>, <code>restoreScroll()</code>, <code>scrollToTop()</code> y <code>clearRememberedScroll()</code>.</p>
+      <div class="filler"></div>
+      <p>Fin.</p>
+    </div>
+  `;
+  document.getElementById('host-4').appendChild(m4);
+
+  const log = document.getElementById('log');
+  const append = (line) => { log.textContent = line + '\n' + log.textContent; };
+
+  document.getElementById('btn-save').addEventListener('click', () => {
+    m4.saveScroll();
+    append(`saveScroll() → prefs[is-main][demo-main-interactive]=${JSON.stringify(readPrefs())}`);
+  });
+  document.getElementById('btn-restore').addEventListener('click', () => {
+    const ok = m4.restoreScroll();
+    append(`restoreScroll() → ${ok} (scrollTop=${Math.round(m4.scrollTop)})`);
+  });
+  document.getElementById('btn-top').addEventListener('click', () => {
+    m4.scrollToTop();
+    append(`scrollToTop() → scrollTop=${Math.round(m4.scrollTop)}`);
+  });
+  document.getElementById('btn-clear').addEventListener('click', () => {
+    m4.clearRememberedScroll();
+    append(`clearRememberedScroll() → prefs=${JSON.stringify(readPrefs())}`);
+  });
+  document.getElementById('btn-scroll').addEventListener('click', () => {
+    m4.scrollTop = 400;
+    append(`scrollTop manual → ${Math.round(m4.scrollTop)} (debounce 120ms antes de guardar)`);
+  });
+
+  function readPrefs() {
+    try {
+      const root = JSON.parse(localStorage.getItem('is-webcomponents') ?? '{}');
+      return root['is-main']?.['demo-main-interactive'] ?? null;
+    } catch { return null; }
+  }
+
+  document.documentElement.dataset.mainReady = '1';
+</script>
+</head>
+<body>
+<header>
+  <h1>Demo — <code>&lt;is-main&gt;</code></h1>
+  <p>Contenedor scrollable con <code>role="main"</code> automático. Persistencia opt-in: <code>remember-scroll</code> + <code>storage-key</code> + <code>scroll-ttl</code>. Métodos: <code>scrollToTop</code>, <code>saveScroll</code>, <code>restoreScroll</code>, <code>clearRememberedScroll</code>.</p>
+</header>
+<main>
+  <section>
+    <h2>Sin persistencia</h2>
+    <div class="scroll-container" id="host-1"></div>
+  </section>
+  <section>
+    <h2>Con persistencia (remember-scroll + storage-key)</h2>
+    <div class="scroll-container" id="host-2"></div>
+  </section>
+  <section>
+    <h2>scroll-ttl custom (60s)</h2>
+    <div class="scroll-container" id="host-3"></div>
+  </section>
+  <section>
+    <h2>Interactivo</h2>
+    <div class="scroll-container" id="host-4"></div>
+    <div class="actions">
+      <button id="btn-scroll" type="button">scrollTop = 400</button>
+      <button id="btn-save" type="button">saveScroll()</button>
+      <button id="btn-restore" type="button">restoreScroll()</button>
+      <button id="btn-top" type="button">scrollToTop()</button>
+      <button id="btn-clear" type="button">clearRememberedScroll()</button>
+    </div>
+    <pre id="log" class="log"></pre>
+  </section>
+</main>
+<footer>
+  Estado: <code>customElements.whenDefined('is-main')</code> resuelto. Persistencia en <code>localStorage['is-webcomponents']</code>.
+</footer>
+</body>
+</html>

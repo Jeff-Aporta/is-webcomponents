@@ -1,0 +1,45 @@
+<!doctype html>
+<html lang="es" class="theme-dark" data-theme="dark">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>&lt;is-polar-area-chart&gt; · demo</title>
+<style>
+  html, body { margin: 0; padding: 0; min-height: 100%; background: #0c1118; color: #e2e8f0; font-family: ui-sans-serif, system-ui, sans-serif; }
+  body { display: grid; grid-template-rows: auto 1fr; }
+  header { padding: 16px 20px; border-bottom: 1px solid rgba(255,255,255,0.1); background: #0f1620; }
+  header h1 { font-size: 16px; font-weight: 700; margin: 0; }
+  header p { font-size: 12px; color: #94a3b8; margin: 4px 0 0 0; }
+  main { display: grid; place-items: center; padding: 20px; min-height: 0; }
+  is-polar-area-chart { width: 480px; height: 360px; }
+  is-polar-area-chart:not(:defined) { visibility: hidden; }
+</style>
+<script type="module">
+  await import('../../../dist/cdn/data-viz/polar-area-chart.min.js');
+  await customElements.whenDefined('is-polar-area-chart');
+
+  const chart = document.createElement('is-polar-area-chart');
+  chart.setAttribute('label', 'Distribución de tareas');
+  chart.payload = {
+    type: 'polarArea',
+    data: {
+      labels: ['Diseño', 'Frontend', 'Backend', 'QA', 'DevOps', 'Docs'],
+      datasets: [{
+        label: 'Horas',
+        data: [120, 280, 340, 90, 160, 60],
+      }],
+    },
+  };
+
+  document.querySelector('main').appendChild(chart);
+  document.documentElement.dataset['polar-area-chart-ready'] = '1';
+</script>
+</head>
+<body>
+<header>
+  <h1>&lt;is-polar-area-chart&gt;</h1>
+  <p>Wrapper de <code>&lt;is-chart&gt;</code> con tipo fijo <code>polarArea</code>. Sectores con radio variable por valor.</p>
+</header>
+<main></main>
+</body>
+</html>

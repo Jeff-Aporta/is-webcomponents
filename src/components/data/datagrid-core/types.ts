@@ -191,6 +191,8 @@ export type ColumnDef = {
   headerClass?: string;
   /** Edición por prompt al hacer clic (legado). */
   editable?: boolean;
+  /** Locale BCP-47 (number/date) o formateador custom. */
+  format?: string | ((value: unknown) => string);
 };
 
 /** Estado resuelto de una columna: lo que gestiona el motor. */

@@ -41,6 +41,11 @@ import { createPopupDismiss } from '../_shared/popup-dismiss.js';
     + ' select:not([disabled]), textarea:not([disabled]),'
     + ' button:not([disabled]), iframe, [tabindex]:not([tabindex="-1"])';
 
+  type WindowState = 'normal' | 'minimized' | 'maximized';
+  interface Rect { x: number; y: number; w: number; h: number; }
+  interface DragState { x: number; y: number; rect: Rect; }
+  interface ResizeState { x: number; y: number; rect: Rect; }
+
   class IsWindow extends ElementBase {
     /** Personalización por atributo (ver `core/attrs.ts`). */
     static styleAttrs = {
@@ -50,13 +55,13 @@ import { createPopupDismiss } from '../_shared/popup-dismiss.js';
     };
 
     static get observedAttributes(): string[] { return [...OBSERVED, 'shadow', 'bar-gap', 'bar-padding']; }
-    #onWinMove;
-    #onWinUp;
-    #state = 'normal';
+    #onWinMove!: (e: PointerEvent) => void;
+    #onWinUp!: () => void;
+    #state: WindowState = 'normal';
     #z = 100;
-    #drag = null;
-    #resize = null;
-    #lastRect = null;
+    #drag: DragState | null = null;
+    #resize: ResizeState | null = null;
+    #lastRect: Rect | null = null;
 
     constructor() {
       super();
@@ -86,11 +91,11 @@ import { createPopupDismiss } from '../_shared/popup-dismiss.js';
       this.#titleSlot = this.shadowRoot!.querySelector<HTMLSlotElement>('slot[name="title"]')!;
 
       this.addEventListener('pointerdown', () => this.#raise());
-      this.#header.addEventListener('pointerdown', (e) => this.#onHeaderDown(e));
-      this.#onWinMove = (e) => this.#onPointerMove(e);
+      this.#header.addEventListener('pointerdown', (e: PointerEvent) => this.#onHeaderDown(e));
+      this.#onWinMove = (e: PointerEvent) => this.#onPointerMove(e);
       this.#onWinUp = () => this.#endAny();
-      this.#resizer.addEventListener('pointerdown', (e) => this.#onResizeDown(e));
-      this.#root.addEventListener('click', (e) => this.#onClick(e));
+      this.#resizer.addEventListener('pointerdown', (e: PointerEvent) => this.#onResizeDown(e));
+      this.#root.addEventListener('click', (e: MouseEvent) => this.#onClick(e));
     }
 
     onConnected() {
@@ -181,7 +186,7 @@ import { createPopupDismiss } from '../_shared/popup-dismiss.js';
 
     maximize() {
       if (this.#state === 'maximized') return;
-      if (this.#state !== 'maximized') this.#lastRect = this.#rect();
+      this.#lastRect = this.#rect();
       this.#state = 'maximized';
       this.#root.dataset.state = 'maximized';
       this.style.left = '0';
@@ -231,20 +236,20 @@ import { createPopupDismiss } from '../_shared/popup-dismiss.js';
       this.style.zIndex = String(max + 1);
     }
 
-    #onHeaderDown(e) {
+    #onHeaderDown(e: PointerEvent) {
       if (this.#state === 'maximized') return;
-      if (e.target.closest('.ctrl')) return;
+      if (e.target instanceof Element && e.target.closest('.ctrl')) return;
       this.#drag = { x: e.clientX, y: e.clientY, rect: this.#rect() };
       this.#header.setPointerCapture(e.pointerId);
     }
 
-    #onResizeDown(e) {
+    #onResizeDown(e: PointerEvent) {
       if (this.#state === 'maximized') return;
       this.#resize = { x: e.clientX, y: e.clientY, rect: this.#rect() };
       this.#resizer.setPointerCapture(e.pointerId);
     }
 
-    #onPointerMove(e) {
+    #onPointerMove(e: PointerEvent) {
       if (this.#drag) {
         const dx = e.clientX - this.#drag.x;
         const dy = e.clientY - this.#drag.y;
@@ -266,8 +271,9 @@ import { createPopupDismiss } from '../_shared/popup-dismiss.js';
 
     #endAny() { this.#drag = null; this.#resize = null; }
 
-    #onClick(e) {
-      const btn = e.target.closest('[data-act]');
+    #onClick(e: MouseEvent) {
+      const target = e.target as Element | null;
+      const btn = target?.closest('[data-act]') as HTMLElement | null;
       if (!btn) return;
       if (btn.dataset.act === 'min') this.#state === 'minimized' ? this.restore() : this.minimize();
       if (btn.dataset.act === 'max') this.#state === 'maximized' ? this.restore() : this.maximize();
@@ -295,9 +301,12 @@ import { createPopupDismiss } from '../_shared/popup-dismiss.js';
       this.#title.textContent = title;
       if (title) this.setAttribute('aria-label', title);
       else this.removeAttribute('aria-label');
-      this.#root.querySelector<HTMLElement>('[data-act="min"]').hidden = !this.hasAttribute('minimizable');
-      this.#root.querySelector<HTMLElement>('[data-act="max"]').hidden = !this.hasAttribute('maximizable');
-      this.#root.querySelector<HTMLElement>('[data-act="close"]').hidden = !this.hasAttribute('closable');
+      const minBtn = this.#root.querySelector<HTMLElement>('[data-act="min"]');
+      const maxBtn = this.#root.querySelector<HTMLElement>('[data-act="max"]');
+      const closeBtn = this.#root.querySelector<HTMLElement>('[data-act="close"]');
+      if (minBtn) minBtn.hidden = !this.hasAttribute('minimizable');
+      if (maxBtn) maxBtn.hidden = !this.hasAttribute('maximizable');
+      if (closeBtn) closeBtn.hidden = !this.hasAttribute('closable');
       this.#resizer.hidden = !this.hasAttribute('resizable') || this.#state === 'maximized';
     }
 

@@ -56,12 +56,12 @@ import { setStringAttr } from '../_shared/reflect.js';
       this.#syncVars();
     }
 
-    onAttributeChanged(name, prev, next) {
+    onAttributeChanged(name: string, prev: string | null, next: string | null): void {
       super.onAttributeChanged(name, prev, next);
       if (name === 'cells' || name === 'cells-fit' || name === 'gap') this.#syncVars();
     }
 
-    #syncVars() {
+    #syncVars(): void {
       const gap = (this.getAttribute('gap') ?? '').trim();
       if (gap) this.style.setProperty('--gap', gap);
       else this.style.removeProperty('--gap');
@@ -72,7 +72,7 @@ import { setStringAttr } from '../_shared/reflect.js';
     }
 
     /** Traduce `cells` + `cells-fit` a una track list, igual que ISP. */
-    #resolveCells() {
+    #resolveCells(): string {
       const raw = (this.getAttribute('cells') ?? '').trim();
       if (!raw) return '';
       if (!IS_NUMBER.test(raw)) return raw;

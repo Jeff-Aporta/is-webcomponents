@@ -68,8 +68,8 @@ import { hasSlotted } from '../_shared/dom-utils.js';
     static formAssociated = true;
     static get observedAttributes(): string[] { return [...OBSERVED, 'radius', 'border-color', 'bg', 'text-color', 'focus-color', 'danger-color']; }
 
-    #internals = null;
-    #textarea!: HTMLElement;
+    #internals: ElementInternals | null = null;
+    #textarea!: HTMLTextAreaElement;
     #labelEl!: HTMLElement;
     #supportEl!: HTMLElement;
     #hintEl!: HTMLElement;
@@ -80,7 +80,7 @@ import { hasSlotted } from '../_shared/dom-utils.js';
     #value = '';
     #hasHint = false;
     #touched = false;
-    #ro = null;
+    #ro: ResizeObserver | null = null;
     #lastWidth = -1;
 
     constructor() {
@@ -89,7 +89,7 @@ import { hasSlotted } from '../_shared/dom-utils.js';
       adoptCss(shadow, import.meta.url);
       shadow.appendChild(TEMPLATE.content.cloneNode(true));
 
-      this.#textarea = shadow.getElementById('textarea')!;
+      this.#textarea = shadow.getElementById('textarea') as HTMLTextAreaElement;
       this.#labelEl = shadow.getElementById('label')!;
       this.#supportEl = shadow.getElementById('support')!;
       this.#hintEl = shadow.getElementById('hint')!;
@@ -108,7 +108,7 @@ import { hasSlotted } from '../_shared/dom-utils.js';
       this.#hintSlot.addEventListener('slotchange', this.#syncSlots);
     }
 
-    onConnected() {
+    onConnected(): void {
       upgradeProperties(this, EXTRA_UPGRADE_ATTRS);
       this.#value = this.getAttribute('value') ?? '';
       this.#syncSlots();
@@ -127,13 +127,13 @@ import { hasSlotted } from '../_shared/dom-utils.js';
       }
     }
 
-    onDisconnected() {
+    onDisconnected(): void {
       this.#ro?.disconnect();
       this.#ro = null;
       this.#lastWidth = -1;
     }
 
-    onAttributeChanged(name: string, oldVal: string | null, newVal: string | null) {
+    onAttributeChanged(name: string, _oldVal: string | null, newVal: string | null): void {
       if (name === 'value') {
         this.#value = newVal ?? '';
         this.#syncNative();
@@ -153,8 +153,8 @@ import { hasSlotted } from '../_shared/dom-utils.js';
 
     // ---- propiedades ----------------------------------------------------
 
-    get value() { return this.#value; }
-    set value(v) {
+    get value(): string { return this.#value; }
+    set value(v: string | number | null | undefined) {
       const next = v == null ? '' : String(v);
       if (next === this.#value) return;
       this.#value = next;
@@ -162,99 +162,101 @@ import { hasSlotted } from '../_shared/dom-utils.js';
       this.#update();
     }
 
-    get defaultValue() { return this.getAttribute('value') ?? ''; }
+    get defaultValue(): string { return this.getAttribute('value') ?? ''; }
 
-    get name() { return this.getAttribute('name') ?? ''; }
-    set name(v) { setStringAttr(this, 'name', v); }
+    get name(): string { return this.getAttribute('name') ?? ''; }
+    set name(v: string) { setStringAttr(this, 'name', v); }
 
-    get disabled() { return this.hasAttribute('disabled'); }
-    set disabled(v) { this.toggleAttribute('disabled', !!v); }
+    get disabled(): boolean { return this.hasAttribute('disabled'); }
+    set disabled(v: boolean) { this.toggleAttribute('disabled', !!v); }
 
-    get required() { return this.hasAttribute('required'); }
-    set required(v) { this.toggleAttribute('required', !!v); }
+    get required(): boolean { return this.hasAttribute('required'); }
+    set required(v: boolean) { this.toggleAttribute('required', !!v); }
 
-    get readonly() { return this.hasAttribute('readonly'); }
-    set readonly(v) { this.toggleAttribute('readonly', !!v); }
+    get readonly(): boolean { return this.hasAttribute('readonly'); }
+    set readonly(v: boolean) { this.toggleAttribute('readonly', !!v); }
 
-    get rows() { return Number(this.getAttribute('rows')) || 3; }
-    set rows(v) { this.setAttribute('rows', String(v)); }
+    get rows(): number { return Number(this.getAttribute('rows')) || 3; }
+    set rows(v: number) { this.setAttribute('rows', String(v)); }
 
-    get resize() {
+    get resize(): string {
       const r = (this.getAttribute('resize') || 'vertical').toLowerCase();
       return RESIZE.includes(r) ? r : 'vertical';
     }
-    set resize(v) { this.setAttribute('resize', String(v)); }
+    set resize(v: string) { this.setAttribute('resize', String(v)); }
 
-    get autosize() { return this.hasAttribute('autosize') || this.resize === 'auto'; }
-    set autosize(v) { this.toggleAttribute('autosize', !!v); }
+    get autosize(): boolean { return this.hasAttribute('autosize') || this.resize === 'auto'; }
+    set autosize(v: boolean) { this.toggleAttribute('autosize', !!v); }
 
-    get minRows() { return Number(this.getAttribute('min-rows')) || this.rows; }
-    set minRows(v) { setOptionalAttr(this, 'min-rows', v); }
+    get minRows(): number { return Number(this.getAttribute('min-rows')) || this.rows; }
+    set minRows(v: number | null) { setOptionalAttr(this, 'min-rows', v); }
 
-    get maxRows() { return Number(this.getAttribute('max-rows')) || 0; }
-    set maxRows(v) { setOptionalAttr(this, 'max-rows', v); }
+    get maxRows(): number { return Number(this.getAttribute('max-rows')) || 0; }
+    set maxRows(v: number | null) { setOptionalAttr(this, 'max-rows', v); }
 
-    get variant() {
+    get variant(): string {
       const a = (this.getAttribute('variant') || '').toLowerCase();
       return APPEARANCES.includes(a) ? a : 'outlined';
     }
-    set variant(v) {
+    set variant(v: string | null) {
       if (v == null || v === '') this.removeAttribute('variant');
       else if (APPEARANCES.includes(String(v))) this.setAttribute('variant', String(v));
     }
 
-    get labelPlacement() {
+    get labelPlacement(): string {
       const p = (this.getAttribute('label-placement') || '').toLowerCase();
       return PLACEMENTS.includes(p) ? p : 'top';
     }
-    set labelPlacement(v) {
+    set labelPlacement(v: string | null) {
       if (v == null || v === '') this.removeAttribute('label-placement');
       else if (PLACEMENTS.includes(String(v))) this.setAttribute('label-placement', String(v));
     }
 
-    get error() { return this.hasAttribute('error'); }
-    set error(v) { this.toggleAttribute('error', !!v); }
+    get error(): boolean { return this.hasAttribute('error'); }
+    set error(v: boolean) { this.toggleAttribute('error', !!v); }
 
-    get errorText() { return this.getAttribute('error-text') ?? ''; }
-    set errorText(v) { setOptionalAttr(this, 'error-text', v); }
+    get errorText(): string { return this.getAttribute('error-text') ?? ''; }
+    set errorText(v: string | null) { setOptionalAttr(this, 'error-text', v); }
 
-    get showCount() { return this.hasAttribute('show-count'); }
-    set showCount(v) { this.toggleAttribute('show-count', !!v); }
+    get showCount(): boolean { return this.hasAttribute('show-count'); }
+    set showCount(v: boolean) { this.toggleAttribute('show-count', !!v); }
 
-    get fullWidth() { return this.hasAttribute('full-width'); }
-    set fullWidth(v) { this.toggleAttribute('full-width', !!v); }
+    get fullWidth(): boolean { return this.hasAttribute('full-width'); }
+    set fullWidth(v: boolean) { this.toggleAttribute('full-width', !!v); }
 
-    get placeholder() { return this.getAttribute('placeholder') ?? ''; }
-    set placeholder(v) { setOptionalAttr(this, 'placeholder', v); }
+    get placeholder(): string { return this.getAttribute('placeholder') ?? ''; }
+    set placeholder(v: string | null) { setOptionalAttr(this, 'placeholder', v); }
 
-    get label() { return this.getAttribute('label') ?? ''; }
-    set label(v) { setOptionalAttr(this, 'label', v); }
+    get label(): string { return this.getAttribute('label') ?? ''; }
+    set label(v: string | null) { setOptionalAttr(this, 'label', v); }
 
-    get hint() { return this.getAttribute('hint') ?? ''; }
-    set hint(v) { setOptionalAttr(this, 'hint', v); }
+    get hint(): string { return this.getAttribute('hint') ?? ''; }
+    set hint(v: string | null) { setOptionalAttr(this, 'hint', v); }
 
-    get maxlength() { return this.getAttribute('maxlength'); }
-    set maxlength(v) { setOptionalAttr(this, 'maxlength', v); }
+    get maxlength(): string | null { return this.getAttribute('maxlength'); }
+    set maxlength(v: string | number | null) { setOptionalAttr(this, 'maxlength', v); }
 
-    get textarea() { return this.#textarea; }
+    get textarea(): HTMLTextAreaElement { return this.#textarea; }
 
     // ---- API pública -----------------------------------------------------
 
-    focus(options) { this.#textarea.focus(options); }
-    blur() { this.#textarea.blur(); }
-    select() { this.#textarea.select(); }
-    setSelectionRange(...args) { this.#textarea.setSelectionRange(...args); }
+    focus(options?: FocusOptions): void { this.#textarea.focus(options); }
+    blur(): void { this.#textarea.blur(); }
+    select(): void { this.#textarea.select(); }
+    setSelectionRange(...args: Parameters<HTMLTextAreaElement['setSelectionRange']>): void {
+      this.#textarea.setSelectionRange(...(args as Parameters<HTMLTextAreaElement['setSelectionRange']>));
+    }
 
-    get validity() { return this.#internals?.validity; }
-    get validationMessage() { return this.#internals?.validationMessage ?? ''; }
-    get willValidate() { return this.#internals?.willValidate ?? false; }
-    checkValidity() { return this.#internals?.checkValidity() ?? true; }
-    reportValidity() {
+    get validity(): ValidityState | undefined { return this.#internals?.validity; }
+    get validationMessage(): string { return this.#internals?.validationMessage ?? ''; }
+    get willValidate(): boolean { return this.#internals?.willValidate ?? false; }
+    checkValidity(): boolean { return this.#internals?.checkValidity() ?? true; }
+    reportValidity(): boolean {
       this.#touched = true;
       this.#syncSupport();
       return this.#internals?.reportValidity() ?? true;
     }
-    setCustomValidity(msg) {
+    setCustomValidity(msg: string): void {
       if (msg) {
         setValidity(this.#internals, { customError: true }, msg, this.#textarea);
         this.#syncSupport();
@@ -263,25 +265,25 @@ import { hasSlotted } from '../_shared/dom-utils.js';
 
     // ---- form-associated callbacks --------------------------------------
 
-    formResetCallback() {
+    formResetCallback(): void {
       this.#value = this.defaultValue;
       this.#textarea.value = this.#value;
       this.#touched = false;
       this.#update();
     }
 
-    formDisabledCallback(disabled) {
+    formDisabledCallback(disabled: boolean): void {
       this.#syncDisabled(disabled);
       this.#update();
     }
 
-    formStateRestoreCallback(state) {
+    formStateRestoreCallback(state: string | File | FormData | null): void {
       if (typeof state === 'string') this.value = state;
     }
 
     // ---- privados --------------------------------------------------------
 
-    #syncSlots = () => {
+    #syncSlots = (): void => {
       const labelAttr = this.label.trim();
       const hintAttr = this.hint.trim();
       const hasLabelSlot = hasSlotted(this.#labelSlot);
@@ -293,7 +295,7 @@ import { hasSlotted } from '../_shared/dom-utils.js';
       this.#syncSupport();
     };
 
-    #syncNative() {
+    #syncNative(): void {
       const ta = this.#textarea;
       for (const a of ['placeholder', 'maxlength', 'name']) {
         const v = this.getAttribute(a);
@@ -305,7 +307,7 @@ import { hasSlotted } from '../_shared/dom-utils.js';
       if (ta.value !== this.#value) ta.value = this.#value;
     }
 
-    #syncDisabled(formDisabled) {
+    #syncDisabled(formDisabled?: boolean): void {
       const disabled = !!formDisabled || this.disabled;
       this.#textarea.disabled = disabled;
       this.#textarea.readOnly = this.readonly;
@@ -313,7 +315,7 @@ import { hasSlotted } from '../_shared/dom-utils.js';
       setCustomState(this.#internals, 'readonly', this.readonly);
     }
 
-    #update() {
+    #update(): void {
       const v = this.#value;
       setCustomState(this.#internals, 'blank', v === '');
       setFormValue(this.#internals, v || null);
@@ -322,7 +324,7 @@ import { hasSlotted } from '../_shared/dom-utils.js';
       this.#autofit();
     }
 
-    #updateValidity() {
+    #updateValidity(): void {
       if (!this.#internals) return;
       const v = this.#value;
       if (this.required && v === '') {
@@ -341,7 +343,7 @@ import { hasSlotted } from '../_shared/dom-utils.js';
     }
 
     /** Fila de apoyo: hint / error-text / contador, y el estado visual `invalid`. */
-    #syncSupport() {
+    #syncSupport(): void {
       const failed = this.#touched && this.#internals?.validity?.valid === false;
       const invalid = this.error || failed;
       setCustomState(this.#internals, 'invalid', invalid);
@@ -362,7 +364,7 @@ import { hasSlotted } from '../_shared/dom-utils.js';
     }
 
     /** Autosize: mide el contenido con la altura a cero y la acota entre min-rows y max-rows. */
-    #autofit() {
+    #autofit(): void {
       const ta = this.#textarea;
       if (!this.autosize) {
         if (ta.style.height) { ta.style.height = ''; ta.style.overflowY = ''; }
@@ -385,14 +387,14 @@ import { hasSlotted } from '../_shared/dom-utils.js';
       if (fit > max) ta.style.overflowY = 'auto';
     }
 
-    #onInput = () => {
+    #onInput = (): void => {
       this.#value = this.#textarea.value;
       this.#update();
       this.dispatchEvent(new Event('input', { bubbles: true, composed: true }));
       emit(this, 'is-input', { value: this.#value });
     };
 
-    #onChange = () => {
+    #onChange = (): void => {
       this.#value = this.#textarea.value;
       this.#touched = true;
       this.#update();
@@ -400,9 +402,9 @@ import { hasSlotted } from '../_shared/dom-utils.js';
       emit(this, 'is-change', { value: this.#value });
     };
 
-    #onFocus = () => { setCustomState(this.#internals, 'focused', true); };
+    #onFocus = (): void => { setCustomState(this.#internals, 'focused', true); };
 
-    #onBlur = () => {
+    #onBlur = (): void => {
       setCustomState(this.#internals, 'focused', false);
       this.#touched = true;
       this.#syncSupport();

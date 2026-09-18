@@ -19,22 +19,40 @@
 
 const STORAGE_PREFIX = 'is-diagram:';
 
+/** Override parcial por nodo (posición / label / hue). */
+export type NodeOverride = { x?: number; y?: number; label?: string; hue?: number };
+
+/** Override parcial por arista (label / hue). */
+export type EdgeOverride = { label?: string; hue?: number };
+
+/** Mapa de overrides: `id → override`. */
+export type NodeOverrideMap = Record<string, NodeOverride>;
+export type EdgeOverrideMap = Record<string, EdgeOverride>;
+
+/** Forma persistida de los overrides. */
+export type DiagramOverrides = { nodes?: NodeOverrideMap; edges?: EdgeOverrideMap };
+
+/** Anclaje en coordenadas de pantalla. */
+export type EditorAnchor = { x: number; y: number };
+
+export type DiagramPersist = 'none' | 'session' | 'local';
+
 /** Carga overrides persistidos (posición/color/label) si el modo lo permite. */
-export function loadOverrides(host: HTMLElement, key) {
+export function loadOverrides(host: HTMLElement, key: string): DiagramOverrides | null {
   if (!key) return null;
   const persist = host.getAttribute('persist') || 'none';
   if (persist === 'none') return null;
   try {
     const store = persist === 'session' ? sessionStorage : localStorage;
     const raw = store.getItem(STORAGE_PREFIX + key);
-    return raw ? JSON.parse(raw) : null;
+    return raw ? JSON.parse(raw) as DiagramOverrides : null;
   } catch (err) {
     console.warn('[diagram-edit] override load failed', err);
     return null;
   }
 }
 
-export function saveOverrides(host: HTMLElement, key, data) {
+export function saveOverrides(host: HTMLElement, key: string, data: DiagramOverrides): void {
   if (!key) return;
   const persist = host.getAttribute('persist') || 'none';
   if (persist === 'none') return;
@@ -46,7 +64,7 @@ export function saveOverrides(host: HTMLElement, key, data) {
   }
 }
 
-export function clearOverrides(host: HTMLElement, key) {
+export function clearOverrides(host: HTMLElement, key: string): void {
   if (!key) return;
   const persist = host.getAttribute('persist') || 'none';
   if (persist === 'none') return;
@@ -58,12 +76,15 @@ export function clearOverrides(host: HTMLElement, key) {
   }
 }
 
+/** Detalle del evento `is-layout-change`. */
+export type LayoutChangeDetail = { nodes?: NodeOverrideMap; edges?: EdgeOverrideMap; [key: string]: unknown };
+
 /**
  * Emite un CustomEvent burbujeante y cancelable para notificar cambios.
  * El detalle incluye `nodes` (overrideMap) y `edges` (overrideMap) para que
  * el desarrollador pueda sincronizar a su backend o mantener estado.
  */
-export function emitLayoutChange(host, detail) {
+export function emitLayoutChange(host: HTMLElement, detail: LayoutChangeDetail): void {
   host.dispatchEvent(
     new CustomEvent('is-layout-change', {
       detail,
@@ -72,6 +93,18 @@ export function emitLayoutChange(host, detail) {
     }),
   );
 }
+
+/** Nodo del layout con `id` y los campos que `applyOverrides` pisa. */
+type NodeLayoutEntry = { id: string; x?: number; y?: number; label?: string; hue?: number };
+
+/** Arista del layout con `id` y los campos que `applyOverrides` pisa. */
+type EdgeLayoutEntry = { id: string; label?: string; hue?: number };
+
+export type LayoutLike = {
+  nodes?: NodeLayoutEntry[];
+  edges?: EdgeLayoutEntry[];
+  relations?: EdgeLayoutEntry[];
+};
 
 /**
  * Aplica overrides persistidos a un layout recién calculado.
@@ -85,7 +118,7 @@ export function emitLayoutChange(host, detail) {
  * (x/y presentes) se respeta la posición y se omite el algoritmo de layout
  * automático para ese nodo (caller debe comprobar).
  */
-export function applyOverrides(layout, overrides) {
+export function applyOverrides<T extends LayoutLike>(layout: T, overrides: DiagramOverrides | null): T {
   if (!overrides) return layout;
   if (overrides.nodes) {
     for (const n of layout.nodes ?? []) {
@@ -112,9 +145,18 @@ export function applyOverrides(layout, overrides) {
  * Snapping de coordenadas al grid del diagrama (8px por defecto).
  * Importado dinámicamente para evitar dependencias circulares.
  */
-export function snap(value: number, grid: number = 8) {
+export function snap(value: number, grid: number = 8): number {
   return Math.round(value / grid) * grid;
 }
+
+/** Callback que recibe el delta desde el último move del drag. */
+export type NodeDragMove = (deltaX: number, deltaY: number, totalDx: number, totalDy: number) => void;
+
+/** Callback al soltar el drag. */
+export type NodeDragEnd = () => void;
+
+/** Destructor del drag: quita los listeners. */
+export type NodeDragDestroy = () => void;
 
 /**
  * Instala un drag de nodo sobre un elemento SVG. Devuelve un destructor.
@@ -125,14 +167,14 @@ export function snap(value: number, grid: number = 8) {
  * El drag se activa con pointerdown sobre un nodo y termina en pointerup
  * global. Usa `setPointerCapture` para no perder el puntero fuera del nodo.
  */
-export function attachNodeDrag(el: HTMLElement, onMove, onEnd) {
+export function attachNodeDrag(el: HTMLElement, onMove: NodeDragMove, onEnd?: NodeDragEnd): NodeDragDestroy {
   let startX = 0;
   let startY = 0;
   let lastX = 0;
   let lastY = 0;
   let active = false;
 
-  function down(evt) {
+  function down(evt: PointerEvent): void {
     if (evt.button !== 0) return;
     active = true;
     startX = evt.clientX;
@@ -144,7 +186,7 @@ export function attachNodeDrag(el: HTMLElement, onMove, onEnd) {
     evt.stopPropagation();
   }
 
-  function move(evt) {
+  function move(evt: PointerEvent): void {
     if (!active) return;
     const dx = evt.clientX - lastX;
     const dy = evt.clientY - lastY;
@@ -153,7 +195,7 @@ export function attachNodeDrag(el: HTMLElement, onMove, onEnd) {
     onMove(dx, dy, evt.clientX - startX, evt.clientY - startY);
   }
 
-  function up(evt) {
+  function up(evt: PointerEvent): void {
     if (!active) return;
     active = false;
     el.releasePointerCapture?.(evt.pointerId);
@@ -174,6 +216,17 @@ export function attachNodeDrag(el: HTMLElement, onMove, onEnd) {
   };
 }
 
+export type InlineEditorInitial = { label?: string; hue?: number };
+export type InlineEditorSave = (result: { label: string; hue: number | null }) => void;
+export type InlineEditorCancel = () => void;
+
+export type OpenInlineEditorOpts = {
+  anchor: EditorAnchor;
+  initial?: InlineEditorInitial;
+  onSave?: InlineEditorSave;
+  onCancel?: InlineEditorCancel;
+};
+
 /**
  * Editor inline flotante (label + color). Se ancla al viewport del diagrama.
  *
@@ -181,7 +234,7 @@ export function attachNodeDrag(el: HTMLElement, onMove, onEnd) {
  *   initial: { label?, hue? }
  *   onSave({ label, hue }) | onCancel()
  */
-export function openInlineEditor({ anchor, initial = {}, onSave, onCancel }) {
+export function openInlineEditor({ anchor, initial = {}, onSave, onCancel }: OpenInlineEditorOpts): HTMLElement {
   closeInlineEditor();
   const host = document.createElement('div');
   host.className = 'is-diagram-editor';
@@ -234,12 +287,12 @@ export function openInlineEditor({ anchor, initial = {}, onSave, onCancel }) {
   cancelBtn.textContent = '✕';
   cancelBtn.style.cssText = btnStyle();
 
-  function commit() {
+  function commit(): void {
     const hue = hexToHsl(colorInput.value);
     onSave?.({ label: labelInput.value.trim(), hue });
     closeInlineEditor();
   }
-  function abort() {
+  function abort(): void {
     onCancel?.();
     closeInlineEditor();
   }
@@ -260,18 +313,18 @@ export function openInlineEditor({ anchor, initial = {}, onSave, onCancel }) {
   setTimeout(() => {
     document.addEventListener('pointerdown', outsideClose, { capture: true, once: true });
   }, 0);
-  function outsideClose(e) {
-    if (!host.contains(e.target)) abort();
+  function outsideClose(e: Event): void {
+    if (!host.contains(e.target as Node)) abort();
   }
 
   return host;
 }
 
-export function closeInlineEditor() {
+export function closeInlineEditor(): void {
   document.querySelectorAll<HTMLElement>('.is-diagram-editor').forEach((el) => el.remove());
 }
 
-function btnStyle() {
+function btnStyle(): string {
   return `
     width: 28px;
     height: 28px;
@@ -284,22 +337,22 @@ function btnStyle() {
   `;
 }
 
-function hslToHex(h: number, s, l: number) {
-  s /= 100;
-  l /= 100;
-  const k = (n) => (n + h / 30) % 12;
-  const a = s * Math.min(l, 1 - l);
-  const f = (n: number) => l - a * Math.max(-1, Math.min(k(n) - 3, Math.min(9 - k(n), 1)));
-  const toHex = (x: number) => Math.round(255 * x).toString(16).padStart(2, '0');
+function hslToHex(h: number, s: number, l: number): string {
+  const ss = s / 100;
+  const ll = l / 100;
+  const k = (n: number) => (n + h / 30) % 12;
+  const a = ss * Math.min(ll, 1 - ll);
+  const f = (n: number): number => ll - a * Math.max(-1, Math.min(k(n) - 3, Math.min(9 - k(n), 1)));
+  const toHex = (x: number): string => Math.round(255 * x).toString(16).padStart(2, '0');
   return `#${toHex(f(0))}${toHex(f(8))}${toHex(f(4))}`;
 }
 
-function hexToHsl(hex) {
+function hexToHsl(hex: string): number | null {
   const m = /^#?([a-f\d]{2})([a-f\d]{2})([a-f\d]{2})$/i.exec(hex);
   if (!m) return null;
-  const r = parseInt(m[1], 16) / 255;
-  const g = parseInt(m[2], 16) / 255;
-  const b = parseInt(m[3], 16) / 255;
+  const r = parseInt(m[1]!, 16) / 255;
+  const g = parseInt(m[2]!, 16) / 255;
+  const b = parseInt(m[3]!, 16) / 255;
   const max = Math.max(r, g, b);
   const min = Math.min(r, g, b);
   let h = 0;

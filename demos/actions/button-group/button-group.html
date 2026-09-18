@@ -1,0 +1,86 @@
+<!doctype html>
+<html lang="es">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Demo: <is-button-group> · is-webcomponents</title>
+  <meta name="description" content="Demo de <is-button-group>: agrupa <is-button> con selección single/multiple, orientación horizontal/vertical y variants joined/segmented/separated." />
+  <style>
+    html, body {
+      margin: 0; padding: 24px; min-height: 100%;
+      background: #0c1118; color: #e2e8f0;
+      font-family: ui-sans-serif, system-ui, sans-serif;
+    }
+    body { display: grid; gap: 28px; }
+    header h1 { margin: 0 0 4px 0; font-size: 18px; }
+    header p { margin: 0; color: #94a3b8; font-size: 12px; }
+    section {
+      background: #131a24; border: 1px solid rgba(255,255,255,0.08);
+      border-radius: 10px; padding: 16px;
+    }
+    section h2 { margin: 0 0 12px 0; font-size: 13px; color: #94a3b8; text-transform: uppercase; letter-spacing: 0.06em; }
+    is-button-group { display: inline-flex; }
+    pre {
+      background: #0a0f17; padding: 10px; border-radius: 6px; font: 12px ui-monospace, Menlo, Consolas, monospace; color: #cbd5e1; overflow: auto;
+    }
+    /* Anti-FOUC */
+    is-button-group:not(:defined) { visibility: hidden; }
+    is-button:not(:defined) { visibility: hidden; }
+  </style>
+</head>
+<body>
+  <header>
+    <h1>Demo: <code>&lt;is-button-group&gt;</code></h1>
+    <p>Agrupa botones relacionados. Soporta selección (single/multiple), orientación, variants y patrón ARIA toolbar (flechas para mover foco).</p>
+  </header>
+
+  <section>
+    <h2>select="single" (default joined, horizontal)</h2>
+    <is-button-group id="g-single" label="Tamaño de fuente" select="single" value="md">
+      <is-button value="sm">Pequeño</is-button>
+      <is-button value="md">Mediano</is-button>
+      <is-button value="lg">Grande</is-button>
+    </is-button-group>
+    <pre id="out-single">value: md</pre>
+  </section>
+
+  <section>
+    <h2>select="multiple" con pill y stretch</h2>
+    <is-button-group id="g-multi" label="Etiquetas" select="multiple" pill stretch>
+      <is-button value="ux">UX</is-button>
+      <is-button value="a11y">a11y</is-button>
+      <is-button value="perf">perf</is-button>
+      <is-button value="docs">docs</is-button>
+    </is-button-group>
+    <pre id="out-multi">values: []</pre>
+  </section>
+
+  <section>
+    <h2>variant="segmented" + orientation="vertical"</h2>
+    <is-button-group id="g-seg" label="Densidad" select="single" variant="segmented" orientation="vertical">
+      <is-button value="compact">Compacta</is-button>
+      <is-button value="comfy">Cómoda</is-button>
+      <is-button value="spacious">Espaciosa</is-button>
+    </is-button-group>
+  </section>
+
+  <script type="module">
+    await import('../../../dist/cdn/actions/button-group.min.js');
+    await import('../../../dist/cdn/actions/button.min.js');
+    await customElements.whenDefined('is-button-group');
+
+    const log = (id, sel) => (e) => {
+      const out = document.getElementById(id);
+      if (out) out.textContent = JSON.stringify({ value: sel.value, values: sel.values }, null, 2);
+    };
+
+    const single = document.getElementById('g-single');
+    single.addEventListener('is-change', log('out-single', single));
+
+    const multi = document.getElementById('g-multi');
+    multi.addEventListener('is-change', log('out-multi', multi));
+
+    document.documentElement.dataset.buttonGroupReady = '1';
+  </script>
+</body>
+</html>

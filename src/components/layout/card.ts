@@ -76,6 +76,11 @@ import { TONE } from '../_shared/tone.js';
 
     static get observedAttributes(): string[] { return [...OBSERVED, 'spacing']; }
 
+    _sections: NodeListOf<HTMLElement> | null = null;
+    _slots: NodeListOf<HTMLSlotElement> | null = null;
+    _mounted = false;
+    _onSlotChange: () => void = () => undefined;
+
     constructor() {
       super();
       const shadow = this.attachShadow({ mode: 'open' });
@@ -84,7 +89,6 @@ import { TONE } from '../_shared/tone.js';
 
       this._sections = shadow.querySelectorAll<HTMLElement>('.section');
       this._slots = shadow.querySelectorAll<HTMLSlotElement>('slot');
-      this._mounted = false;
 
       // Ocultar secciones vacías: un section sin nada asignado no debe
       // pintar border/padding ni romper la rejilla del layout.
@@ -98,12 +102,12 @@ import { TONE } from '../_shared/tone.js';
       // reflejar defaults para que :host([orientation]/[appearance]) siempre matcheen
       if (!this.hasAttribute('orientation')) this.setAttribute('orientation', 'vertical');
       if (!this.hasAttribute('variant')) this.setAttribute('variant', 'outlined');
-      for (const slot of this._slots) slot.addEventListener('slotchange', this._onSlotChange);
+      for (const slot of this._slots || []) slot.addEventListener('slotchange', this._onSlotChange);
       this._syncEmpty();
     }
 
     disconnectedCallback(): void {
-      for (const slot of this._slots) slot.removeEventListener('slotchange', this._onSlotChange);
+      for (const slot of this._slots || []) slot.removeEventListener('slotchange', this._onSlotChange);
     }
 
     attributeChangedCallback(name: string, oldVal: string | null, newVal: string | null): void {
@@ -123,40 +127,40 @@ import { TONE } from '../_shared/tone.js';
 
     // ---- public properties ----
 
-    get variant() {
+    get variant(): string {
       const v = this.getAttribute('variant');
-      return VALID_VARIANT.includes(v) ? v : 'outlined';
+      return v && VALID_VARIANT.includes(v) ? v : 'outlined';
     }
-    set variant(v) {
+    set variant(v: string | null | undefined) {
       if (v == null || v === '') this.removeAttribute('variant');
       else if (VALID_VARIANT.includes(v)) this.setAttribute('variant', v);
     }
 
-    get orientation() {
+    get orientation(): string {
       const v = this.getAttribute('orientation');
-      return VALID_ORIENTATION.includes(v) ? v : 'vertical';
+      return v && VALID_ORIENTATION.includes(v) ? v : 'vertical';
     }
-    set orientation(v) {
+    set orientation(v: string | null | undefined) {
       if (v == null || v === '') this.removeAttribute('orientation');
       else if (VALID_ORIENTATION.includes(v)) this.setAttribute('orientation', v);
     }
 
     // ---- private ----
 
-    _syncEmpty() {
+    _syncEmpty(): void {
       // Cada section es empty si TODOS sus slots no tienen contenido
       // asignado (flatten=true para no contar fallback <slot>).
-      for (const section of this._sections) {
+      for (const section of this._sections || []) {
         let empty = true;
         const slots = section.querySelectorAll<HTMLElement>(':scope > slot, :scope > .row > slot');
         for (const slot of slots) {
-          if (slot.assignedElements({ flatten: true }).length > 0) { empty = false; break; }
+          if ((slot as HTMLSlotElement).assignedElements({ flatten: true }).length > 0) { empty = false; break; }
         }
         // body (default slot) cuenta también nodos de texto no vacíos
-        const onlyDefault = slots.length === 1 && slots[0].name === '';
+        const onlyDefault = slots.length === 1 && slots[0].getAttribute('name') === '';
         if (onlyDefault && empty) {
-          const text = slots[0].assignedNodes({ flatten: true })
-            .filter(n => n.nodeType === 3 && n.textContent.trim());
+          const text = (slots[0] as HTMLSlotElement).assignedNodes({ flatten: true })
+            .filter((n: Node) => n.nodeType === 3 && (n.textContent ?? '').trim());
           if (text.length) empty = false;
         }
         section.classList.toggle('is-empty', empty);

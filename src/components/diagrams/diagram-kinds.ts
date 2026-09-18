@@ -10,22 +10,27 @@
  * `color="viewer"`.
  */
 
-const REGISTRY = new Map();
+const REGISTRY = new Map<string, string>();
 
-/** @param {string} kind @param {string} tagName */
-export function registerDiagramKind(kind: string, tagName: string) {
+/** Asocia el `kind` de un diagrama (cadena, se normaliza a minúsculas) al
+ *  nombre del web component que sabe pintarlo. Si ya existía, se reemplaza. */
+export function registerDiagramKind(kind: string, tagName: string): void {
   REGISTRY.set(String(kind).toLowerCase(), tagName);
 }
 
-/** Tag registrado para un `kind`, o undefined si no hay soporte. */
-export function getDiagramTag(kind) {
+/** Devuelve el tag del web component registrado para un `kind`, o `undefined`
+ *  si no hay soporte. Acepta `string | null | undefined`. */
+export function getDiagramTag(kind: string | null | undefined): string | undefined {
   return REGISTRY.get(String(kind ?? '').toLowerCase());
 }
 
-export function listDiagramKinds() {
+/** Lista de todos los `kind` registrados (en minúsculas, orden de inserción). */
+export function listDiagramKinds(): string[] {
   return [...REGISTRY.keys()];
 }
 
 if (typeof window !== 'undefined') {
-  window.__isDiagramKinds = { registerDiagramKind, getDiagramTag, listDiagramKinds };
+  (window as unknown as { __isDiagramKinds: unknown }).__isDiagramKinds = {
+    registerDiagramKind, getDiagramTag, listDiagramKinds,
+  };
 }

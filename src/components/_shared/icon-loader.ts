@@ -33,7 +33,7 @@
  *   - dist/cdn/media/icon.min.js  → ../../assets/icons/
  *   - src/components/_shared/…    → ../../../dist/assets/icons/
  */
-const ICON_BASES = [
+const ICON_BASES: (() => string | null)[] = [
   // Bundle publicado: dist/cdn/<categoria>/*.min.js → dist/assets/icons/
   () => {
     if (!import.meta.url.includes('/dist/cdn/')) return null;
@@ -50,8 +50,8 @@ const ICON_BASES = [
   () => 'https://cdn.jsdelivr.net/gh/Jeff-Aporta/is-webcomponents@main/dist/assets/icons/',
 ];
 
-const LOCAL_INDEX_PATH = (prefix) => `${prefix}.json`;
-const LOCAL_SVG_PATH = (prefix, name) => `${prefix}/${name}.svg`;
+const LOCAL_INDEX_PATH = (prefix: string): string => `${prefix}.json`;
+const LOCAL_SVG_PATH = (prefix: string, name: string): string => `${prefix}/${name}.svg`;
 
 /**
  * Prefijos garantizados en el material publicado.
@@ -61,18 +61,18 @@ const LOCAL_SVG_PATH = (prefix, name) => `${prefix}/${name}.svg`;
  * colecciones que siempre están, para no prefetchear las que puede que el
  * consumidor no haya descargado y llenar la consola de 404.
  */
-const SRC_SHIPPED_PREFIXES = new Set(['mdi', 'tabler']);
+const SRC_SHIPPED_PREFIXES: ReadonlySet<string> = new Set(['mdi', 'tabler']);
 
 /** Cache en memoria: prefix -> Set<name> | null (null = no existe indice). */
-const indexCache = new Map();
+const indexCache = new Map<string, Set<string> | null>();
 /** Cache de base usada por coleccion: prefix -> string|null. */
-const baseCache = new Map();
+const baseCache = new Map<string, string | null>();
 /** Cache de raw SVG: `${prefix}:${name}` -> string (texto SVG). */
-const rawCache = new Map();
-const inflight = new Map();
+const rawCache = new Map<string, string>();
+const inflight = new Map<string, Promise<Set<string> | null>>();
 
-function candidateBases(prefix) {
-  const out = [];
+function candidateBases(prefix?: string): string[] {
+  const out: string[] = [];
   for (const fn of ICON_BASES) {
     try {
       const v = fn();
@@ -89,16 +89,17 @@ function candidateBases(prefix) {
   return out;
 }
 
-async function loadIndex(prefix) {
-  if (indexCache.has(prefix)) return indexCache.get(prefix);
-  if (inflight.has(prefix)) return inflight.get(prefix);
+async function loadIndex(prefix: string): Promise<Set<string> | null> {
+  if (indexCache.has(prefix)) return indexCache.get(prefix) ?? null;
+  const cached = inflight.get(prefix);
+  if (cached) return cached;
 
-  const task = (async () => {
+  const task: Promise<Set<string> | null> = (async () => {
     for (const base of candidateBases(prefix)) {
       try {
         const res = await fetch(base + LOCAL_INDEX_PATH(prefix), { cache: 'default' });
         if (!res.ok) continue;
-        const data = await res.json();
+        const data = await res.json() as { icons?: string[] };
         const icons = new Set(data.icons || []);
         indexCache.set(prefix, icons);
         baseCache.set(prefix, base);
@@ -122,21 +123,21 @@ async function loadIndex(prefix) {
 
 // Prefetch de colecciones siempre presentes en idle time.
 if (typeof requestIdleCallback === 'function') {
-  [...SRC_SHIPPED_PREFIXES].forEach((p) => {
-    requestIdleCallback(() => loadIndex(p));
-  });
+  for (const p of SRC_SHIPPED_PREFIXES) {
+    requestIdleCallback(() => { loadIndex(p); });
+  }
 }
 
-export async function hasIconLocal(prefix, name) {
+export async function hasIconLocal(prefix: string, name: string): Promise<boolean> {
   const idx = await loadIndex(prefix);
   return !!(idx && idx.has(name));
 }
 
-export function iconSourceBase(prefix) {
+export function iconSourceBase(prefix: string): string | null {
   return baseCache.get(prefix) ?? null;
 }
 
-export async function resolveIconSvg(prefix, name) {
+export async function resolveIconSvg(prefix: string, name: string): Promise<string | null> {
   const idx = await loadIndex(prefix);
   if (!idx || !idx.has(name)) return null;
   const base = baseCache.get(prefix);
@@ -144,9 +145,10 @@ export async function resolveIconSvg(prefix, name) {
   return base + LOCAL_SVG_PATH(prefix, name);
 }
 
-export async function resolveIconRaw(prefix, name, signal) {
+export async function resolveIconRaw(prefix: string, name: string, signal?: AbortSignal): Promise<string | null> {
   const key = `${prefix}:${name}`;
-  if (rawCache.has(key)) return rawCache.get(key);
+  const cached = rawCache.get(key);
+  if (cached !== undefined) return cached;
   // Resuelve primero si el icono existe y desde que base (loadIndex/baseCache),
   // igual que resolveIconSvg; el fetch del SVG respeta la senal de abort para
   // que <is-icon> pueda cancelar renders obsoletos.
@@ -160,24 +162,30 @@ export async function resolveIconRaw(prefix, name, signal) {
     rawCache.set(key, text);
     return text;
   } catch (err) {
-    if (err?.name === 'AbortError') throw err; // propagar la cancelacion
+    const name = (err as { name?: unknown } | null)?.name;
+    if (name === 'AbortError') throw err; // propagar la cancelacion
     return null;
   }
 }
 
 /** Vacia el cache en memoria de SVGs (util para tests y para liberar memoria). */
-export function clearRawCache() {
+export function clearRawCache(): void {
   rawCache.clear();
 }
 
-export async function listIconFamilies() {
+/** Entrada del listado de familias devuelto por `listIconFamilies`. */
+export type IconFamily = { prefix: string; count: number };
+
+export async function listIconFamilies(): Promise<IconFamily[]> {
   for (const base of candidateBases()) {
     try {
       const res = await fetch(base + 'index.json', { cache: 'default' });
       if (!res.ok) continue;
-      const data = await res.json();
-      if (Array.isArray(data.families)) return data.families;
-      if (Array.isArray(data)) return data;
+      const data: unknown = await res.json();
+      if (Array.isArray(data)) return data as IconFamily[];
+      if (data && typeof data === 'object' && Array.isArray((data as { families?: unknown }).families)) {
+        return (data as { families: IconFamily[] }).families;
+      }
     } catch {
       /* try next */
     }

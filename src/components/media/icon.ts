@@ -40,7 +40,7 @@ import { setStringAttr } from '../_shared/reflect.js';
     #inline!: HTMLElement;
     #mounted = false;
     #renderGen = 0;
-    #abortCtrl = null;
+    #abortCtrl: AbortController | null = null;
 
     constructor() {
       super();
@@ -111,7 +111,7 @@ import { setStringAttr } from '../_shared/reflect.js';
       this.#inline.setAttribute('hidden', '');
     }
 
-    #paint(text) {
+    #paint(text: string): void {
       this.#inline.innerHTML = text;
       this.#inline.removeAttribute('hidden');
       this.#normalizeInlineSvg();
@@ -161,7 +161,7 @@ import { setStringAttr } from '../_shared/reflect.js';
     }
 
     /** Trae un SVG por URL (para el atributo `src`). */
-    async #fetchSvg(url, signal) {
+    async #fetchSvg(url: string, signal: AbortSignal): Promise<string | null> {
       try {
         // 'default', no 'force-cache': ver la nota en icon-loader.js. El
         // cache HTTP normal ya evita el trafico; force-cache ademas impide
@@ -191,7 +191,7 @@ import { setStringAttr } from '../_shared/reflect.js';
      * silueta solida — el sintoma reportado: "CoreUI Flags se ven como bloques
      * oscuros en la rejilla, pero al abrir el icono si se ve".
      */
-    static #isMulticolor(svg) {
+    static #isMulticolor(svg: HTMLElement): boolean {
       // Degradados, patrones e imagenes incrustadas: multicolor por definicion.
       if (svg.querySelector<HTMLElement>('linearGradient, radialGradient, pattern, image, stop')) return true;
       for (const el of svg.querySelectorAll<HTMLElement>('*')) {

@@ -1,0 +1,86 @@
+<!doctype html>
+<html lang="es">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Demo: <is-check-icon-button> · is-webcomponents</title>
+  <meta name="description" content="Demo de <is-check-icon-button>: botón icon-only con estado checked, switch entre iconos, keyboard (Enter/Space)." />
+  <style>
+    html, body {
+      margin: 0; padding: 24px; min-height: 100%;
+      background: #0c1118; color: #e2e8f0;
+      font-family: ui-sans-serif, system-ui, sans-serif;
+    }
+    body { display: grid; gap: 24px; }
+    header h1 { margin: 0 0 4px 0; font-size: 18px; }
+    header p { margin: 0; color: #94a3b8; font-size: 12px; }
+    section { background: #131a24; border: 1px solid rgba(255,255,255,0.08); border-radius: 10px; padding: 16px; }
+    section h2 { margin: 0 0 12px 0; font-size: 13px; color: #94a3b8; text-transform: uppercase; letter-spacing: 0.06em; }
+    .row { display: flex; flex-wrap: wrap; gap: 16px; align-items: center; }
+    .frame {
+      background: #0a0f17; border: 1px solid rgba(255,255,255,0.1);
+      border-radius: 8px; padding: 12px; min-width: 140px;
+      display: grid; gap: 6px; justify-items: center;
+    }
+    .frame span { font-size: 11px; color: #94a3b8; font-family: ui-monospace, Menlo, Consolas, monospace; }
+    pre { background: #0a0f17; padding: 10px; border-radius: 6px; font: 12px ui-monospace, Menlo, Consolas, monospace; color: #cbd5e1; overflow: auto; }
+    /* Anti-FOUC */
+    is-check-icon-button:not(:defined) { visibility: hidden; }
+  </style>
+</head>
+<body>
+  <header>
+    <h1>Demo: <code>&lt;is-check-icon-button&gt;</code></h1>
+    <p>Botón icon-only con dos estados. Toggle via click o Enter/Space. <code>aria-pressed</code> refleja el estado para AT.</p>
+  </header>
+
+  <section>
+    <h2>Play / Pause</h2>
+    <div class="row">
+      <div class="frame">
+        <is-check-icon-button id="play" icon="mdi:play" checked-icon="mdi:pause" label="Reproducir" checked-label="Pausar"></is-check-icon-button>
+        <span>Reproducir / Pausar</span>
+      </div>
+      <div class="frame">
+        <is-check-icon-button id="mute" icon="mdi:volume-high" checked-icon="mdi:volume-off" label="Silenciar" checked-label="Activar sonido"></is-check-icon-button>
+        <span>Sonido</span>
+      </div>
+      <div class="frame">
+        <is-check-icon-button id="star" icon="mdi:star-outline" checked-icon="mdi:star" color="#fbbf24" label="Marcar favorito" checked-label="Quitar de favoritos"></is-check-icon-button>
+        <span>Favorito (color custom)</span>
+      </div>
+      <div class="frame">
+        <is-check-icon-button disabled icon="mdi:cursor-default-click-outline" label="Deshabilitado"></is-check-icon-button>
+        <span>Disabled</span>
+      </div>
+    </div>
+  </section>
+
+  <section>
+    <h2>Eventos</h2>
+    <pre id="evlog">[]</pre>
+  </section>
+
+  <script type="module">
+    await import('../../../dist/cdn/actions/check-icon-button.min.js');
+    await import('../../../dist/cdn/actions/button.min.js');
+    await customElements.whenDefined('is-check-icon-button');
+
+    const log = document.getElementById('evlog');
+    const events = [];
+    const record = (e) => {
+      const target = e.target;
+      events.push({
+        id: target.id || target.tagName.toLowerCase(),
+        checked: target.checked,
+        ariaPressed: target.getAttribute('aria-pressed'),
+      });
+      log.textContent = JSON.stringify(events, null, 2);
+    };
+    for (const id of ['play', 'mute', 'star']) {
+      document.getElementById(id).addEventListener('is-change', record);
+    }
+    document.documentElement.dataset.checkIconButtonReady = '1';
+  </script>
+</body>
+</html>

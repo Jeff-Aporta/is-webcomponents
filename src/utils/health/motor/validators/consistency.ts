@@ -97,7 +97,7 @@ export async function extraerMetaComponente(rutaModulo: string | null): Promise<
     const body = m[1];
     const inner = body.match(/return\s*\[/);
     if (!inner) return null;
-    const start = m.index + m[0].indexOf('return [', m[0].indexOf('{')) + 'return ['.length;
+    const start = (m.index ?? 0) + m[0].indexOf('return [', m[0].indexOf('{')) + 'return ['.length;
     return findBalancedArray(s, start - 1);
   };
   const literalArray = findReturnArray(src);

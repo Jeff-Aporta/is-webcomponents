@@ -1,0 +1,121 @@
+<!doctype html>
+<html lang="es" class="theme-dark" data-theme="dark">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>&lt;is-tree-view&gt; · is-webcomponents</title>
+<meta name="description" content="Árbol jerárquico editable con drag, historial undo/redo, drawer de ficha y confirm-delete." />
+<style>
+  html, body { margin: 0; padding: 0; min-height: 100%; background: #0c1118; color: #e2e8f0; font-family: ui-sans-serif, system-ui, sans-serif; }
+  body { display: grid; grid-template-rows: auto 1fr; min-height: 100vh; }
+  header {
+    padding: 16px 20px; border-bottom: 1px solid rgba(255,255,255,0.1);
+    display: flex; align-items: center; gap: 14px; background: #0f1620;
+  }
+  header h1 { font-size: 16px; font-weight: 700; margin: 0; }
+  header p { font-size: 12px; color: #94a3b8; margin: 0; }
+  header .spacer { flex: 1; }
+  main { display: grid; grid-template-columns: 1fr 320px; gap: 18px; padding: 20px; max-width: 1200px; margin: 0 auto; width: 100%; box-sizing: border-box; min-height: 0; }
+  .log { font: 12px ui-monospace, Menlo, Consolas, monospace; background: rgba(0,0,0,0.3); padding: 8px; border-radius: 4px; min-height: 80px; white-space: pre-wrap; }
+  is-tree-view { display: block; height: 70vh; border: 1px solid rgba(255,255,255,0.1); border-radius: 6px; overflow: hidden; }
+  is-tree-view:not(:defined) { visibility: hidden; }
+</style>
+<script type="module">
+  // Cargar todas las dependencias transitivas de tree-view.
+  await import('../../../dist/cdn/actions/button.min.js');
+  await import('../../../dist/cdn/actions/button-group.min.js');
+  await import('../../../dist/cdn/actions/check-icon-button.min.js');
+  await import('../../../dist/cdn/actions/dropdown.min.js');
+  await import('../../../dist/cdn/actions/dropdown-item.min.js');
+  await import('../../../dist/cdn/media/icon.min.js');
+  await import('../../../dist/cdn/layout/drawer.min.js');
+  await import('../../../dist/cdn/layout/dialog.min.js');
+  await import('../../../dist/cdn/layout/divider.min.js');
+  await import('../../../dist/cdn/isp/confirm-delete.min.js');
+  await import('../../../dist/cdn/isp/flex-options.min.js');
+  await import('../../../dist/cdn/isp/float-card.min.js');
+  await import('../../../dist/cdn/isp/tree-view.min.js');
+
+  await customElements.whenDefined('is-tree-view');
+  const { TreeCustomsBase } = await import('../../../dist/cdn/isp/tree-view.min.js');
+
+  // ── Customs para un plan de estudios ─────────────────────────────────
+  class PlanCustoms extends TreeCustomsBase {
+    entrie = 'contenido';
+    entries = 'Plan de contenidos';
+    getFlatPath = (r) => String(r.iplan ?? '').trim();
+    setFlatPath = (r, fp) => { r.iplan = fp; };
+    levelName = ({ depth }) => depth === 0 ? 'Módulo' : 'Lección';
+    updateNode = (node, isNew) => {
+      const depth = Number(node.depth ?? 0);
+      node.topology = depth >= 1 ? 'atom' : 'group';
+      if (depth < 1) node.containment = 'hermetic';
+      if (!isNew) return;
+      if (!node.titulo) node.titulo = node.isAtom ? 'Nueva lección' : 'Nuevo módulo';
+    };
+    rowActions = (node, tree) => [
+      { icon: 'mdi:arrow-up', title: 'Subir', onClick: () => tree.move?.(node, 'up') },
+      { icon: 'mdi:arrow-down', title: 'Bajar', onClick: () => tree.move?.(node, 'down') },
+    ];
+    topMenuActions = (tree) => [
+      { icon: 'mdi:plus-circle-outline', title: 'Agregar', onClick: () => tree.addRoot?.() },
+      { icon: 'mdi:plus', title: 'Hijo', onClick: () => tree.addChild?.() },
+      { icon: 'mdi:undo', title: 'Deshacer', onClick: () => tree.historyUndo?.() },
+      { icon: 'mdi:redo', title: 'Rehacer', onClick: () => tree.historyRedo?.() },
+    ];
+  }
+
+  const tv = document.getElementById('tree');
+  tv.customs = new PlanCustoms();
+  tv.bAllowed = { Crear: true, Modificar: true, Eliminar: true, Visualizar: true };
+  tv.list = [
+    { iplan: '1', titulo: 'Módulo 1: Introducción' },
+    { iplan: '1.1', titulo: 'Bienvenida' },
+    { iplan: '1.2', titulo: 'Conceptos básicos' },
+    { iplan: '2', titulo: 'Módulo 2: Avanzado' },
+    { iplan: '2.1', titulo: 'Patrones avanzados' },
+    { iplan: '2.1.1', titulo: 'Singleton' },
+    { iplan: '2.1.2', titulo: 'Factory' },
+    { iplan: '2.2', titulo: 'Arquitectura' },
+  ];
+
+  const eventLog = document.getElementById('event-log');
+  const log = (m) => { eventLog.textContent += new Date().toISOString().slice(11, 19) + ' ' + m + '\n'; };
+
+  for (const evt of ['is-select', 'is-frm-open', 'is-frm-close', 'is-error']) {
+    tv.addEventListener(evt, (e) => {
+      const detail = JSON.stringify(e.detail || {}).slice(0, 200);
+      log(`${evt}: ${detail}`);
+    });
+  }
+
+  // Botón "showDelete" programático (demo de confirm-delete anidado).
+  document.getElementById('btn-show-delete').addEventListener('click', () => {
+    const first = tv.treeController?.record;
+    if (first) tv.showDelete(first);
+  });
+
+  document.documentElement.dataset.treeViewReady = '1';
+</script>
+</head>
+<body>
+<header>
+  <div>
+    <h1>&lt;is-tree-view&gt; — árbol jerárquico editable</h1>
+    <p>Drag &amp; drop, historial undo/redo, drawer de ficha, confirm-delete por re-escritura.</p>
+  </div>
+  <div class="spacer"></div>
+  <code>is-tree-view</code>
+</header>
+<main>
+  <div style="display: grid; gap: 12px; min-height: 0;">
+    <is-tree-view id="tree" label-field="titulo" style="height: 100%;"></is-tree-view>
+    <button id="btn-show-delete" type="button" style="padding: 8px 14px; background: #1e293b; color: #e2e8f0; border: 1px solid #334155; border-radius: 4px; cursor: pointer;">Abrir confirm-delete del nodo actual</button>
+  </div>
+  <div style="display: grid; gap: 12px;">
+    <h2 style="font-size: 14px; font-weight: 600; color: #94a3b8; margin: 0;">Eventos</h2>
+    <pre id="event-log" class="log"></pre>
+  </div>
+</main>
+</body>
+</html>

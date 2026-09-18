@@ -1,0 +1,78 @@
+<!doctype html>
+<html lang="es" class="theme-dark" data-theme="dark">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>Demo — <is-diagram-lightbox> · is-webcomponents</title>
+<meta name="description" content="Visor a pantalla completa para diagramas (hereda de <is-lightbox> + barra tortuga + share)." />
+<style>
+  html, body { margin: 0; padding: 0; min-height: 100%; background: #0c1118; color: #e2e8f0; font-family: ui-sans-serif, system-ui, sans-serif; }
+  body { display: grid; grid-template-rows: auto 1fr; }
+  header { padding: 16px 20px; border-bottom: 1px solid rgba(255,255,255,0.1); background: #0f1620; }
+  header h1 { font-size: 16px; font-weight: 700; margin: 0; }
+  header p { font-size: 12px; color: #94a3b8; margin: 4px 0 0 0; }
+  main { display: grid; place-items: center; gap: 16px; padding: 24px; }
+  .controls { display: flex; gap: 12px; flex-wrap: wrap; }
+  button { background: #1e293b; color: #e2e8f0; border: 1px solid rgba(255,255,255,0.18); border-radius: 6px; padding: 8px 14px; font: inherit; cursor: pointer; }
+  button:hover { background: #334155; }
+  .preview { max-width: 560px; padding: 12px; border: 1px solid rgba(255,255,255,0.18); border-radius: 8px; background: #0f1620; }
+  .preview h3 { margin: 0 0 8px 0; font-size: 13px; color: #94a3b8; text-transform: uppercase; letter-spacing: 0.06em; }
+  is-diagram-lightbox:not(:defined) { visibility: hidden; }
+</style>
+<script type="module">
+  // Cargamos la luz base y el diagrama de secuencia para tener payload.
+  await import('../../../dist/cdn/diagrams/diagram-lightbox.min.js');
+  await import('../../../dist/cdn/diagrams/sequence-diagram.min.js');
+  await customElements.whenDefined('is-diagram-lightbox');
+
+  const samplePayload = {
+    sequence: {
+      title: 'Login de usuario',
+      actors: [
+        { id: 'u', label: 'Usuario' },
+        { id: 'a', label: 'AuthAPI' },
+        { id: 'db', label: 'DB' },
+      ],
+      messages: [
+        { from: 'u', to: 'a', label: 'login()' },
+        { from: 'a', to: 'db', label: 'buscar()' },
+        { from: 'db', to: 'a', label: 'rows' },
+        { from: 'a', to: 'u', label: 'session' },
+      ],
+    },
+  };
+
+  // Crear el lightbox UNA vez, attached al body para que esté fuera del flujo.
+  const lb = document.createElement('is-diagram-lightbox');
+  lb.setAttribute('kind', 'sequence');
+  lb.payload = samplePayload;
+  lb.open = false; // empieza cerrado
+  document.body.appendChild(lb);
+
+  // Botones para abrir/cerrar manualmente — útil para el test.
+  const open = document.getElementById('btn-open');
+  const close = document.getElementById('btn-close');
+  open.addEventListener('click', () => { lb.payload = samplePayload; lb.open = true; });
+  close.addEventListener('click', () => { lb.open = false; });
+
+  // Marcar ready cuando el lightbox ya está conectado.
+  document.documentElement.dataset.diagramLightboxReady = '1';
+</script>
+</head>
+<body>
+  <header>
+    <h1>Demo — <code>&lt;is-diagram-lightbox&gt;</code></h1>
+    <p>Visor a pantalla completa con barra tortuga (play/pause/stop), share y código JSON.</p>
+  </header>
+  <main>
+    <div class="controls">
+      <button id="btn-open" type="button">Abrir visor</button>
+      <button id="btn-close" type="button">Cerrar visor</button>
+    </div>
+    <div class="preview">
+      <h3>Estado</h3>
+      <p>El lightbox se monta en <code>document.body</code>. Pulsa "Abrir visor" para verlo en pantalla completa.</p>
+    </div>
+  </main>
+</body>
+</html>

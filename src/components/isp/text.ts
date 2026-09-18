@@ -48,7 +48,7 @@ import {
       this.#syncLines();
     }
 
-    onAttributeChanged(name) {
+    onAttributeChanged(name: string) {
       if (name === 'lines') this.#syncLines();
       else if (name === 'color' || name === 'mix' || name === 'mix-with') this.#syncColor();
     }

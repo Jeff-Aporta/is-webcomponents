@@ -125,9 +125,9 @@ import '../code/code.js';
     }
 
     #mounted = false;
-    #urls = { loader: '', llmPrompt: LLM_PROMPT, loadArg: '' };
+    #urls: { loader: string; llmPrompt: string; loadArg: string } = { loader: '', llmPrompt: LLM_PROMPT, loadArg: '' };
     #onHighlightReady = () => this.#render();
-    #deps = [];
+    #deps: { name: string; version: string; css: string; js: string; note: string }[] = [];
     #docs: { label: string; url: string; }[] = [];
     #resolvedRef = 'main';
     /** Alcance elegido (radio o ?s=); null = automático según atributos. */
@@ -303,7 +303,7 @@ import '../code/code.js';
       this.#urls.llmPrompt = buildLlmPrompt(this.#docs, {
         sha: this.#resolvedRef || 'main',
       });
-      const ed = this.shadowRoot?.querySelector<HTMLElement>('is-md-editor[data-slot="llm-prompt"]');
+      const ed = this.shadowRoot?.querySelector<HTMLElement & { value: string }>('is-md-editor[data-slot="llm-prompt"]');
       if (ed && ed.value !== this.#urls.llmPrompt) ed.value = this.#urls.llmPrompt;
     }
 
@@ -322,21 +322,23 @@ import '../code/code.js';
       }
       if (!raw?.trim()) { this.#deps = []; return; }
       try {
-        const data = JSON.parse(raw);
+        const data: unknown = JSON.parse(raw);
         this.#deps = Array.isArray(data)
-          ? data.filter((d) => d && (d.js || d.css)).map((d) => ({
-              name: String(d.name || 'dependencia'),
-              version: d.version ? String(d.version) : '',
-              css: d.css ? String(d.css) : '',
-              js: d.js ? String(d.js) : '',
-              note: d.note ? String(d.note) : '',
+          ? data.filter((d: unknown): d is Record<string, unknown> =>
+              !!d && typeof d === 'object' && (Boolean((d as Record<string, unknown>)['js']) || Boolean((d as Record<string, unknown>)['css'])))
+            .map((d: Record<string, unknown>) => ({
+              name: String(d['name'] || 'dependencia'),
+              version: d['version'] ? String(d['version']) : '',
+              css: d['css'] ? String(d['css']) : '',
+              js: d['js'] ? String(d['js']) : '',
+              note: d['note'] ? String(d['note']) : '',
             }))
           : [];
       } catch { this.#deps = []; }
     }
 
-    #buildDepSnippet(dep) {
-      const lines = [];
+    #buildDepSnippet(dep: { css: string; js: string }): string {
+      const lines: string[] = [];
       if (dep.css) lines.push(`<link rel="stylesheet" href="${dep.css}">`);
       if (dep.js) lines.push(`<script src="${dep.js}"><\/script>`);
       return lines.join('\n');
@@ -364,7 +366,7 @@ import '../code/code.js';
       if (!list || !template) return;
       for (const row of list.querySelectorAll<HTMLElement>('[data-kind="dep"]:not([hidden])')) row.remove();
       for (const dep of this.#deps) {
-        const clone = template.cloneNode(true);
+        const clone = template.cloneNode(true) as HTMLElement;
         clone.hidden = false;
         const label = clone.querySelector<HTMLElement>('[data-slot="dep-name"]');
         if (label) label.textContent = dep.version ? `${dep.name}@${dep.version}` : dep.name;
@@ -379,13 +381,14 @@ import '../code/code.js';
       }
     }
 
-    #setCode(el, text) {
+    #setCode(el: HTMLElement | null, text: string) {
       if (!el) return;
       const src = text || '';
       if (el.localName === 'is-code') {
-        if (el.value !== src) el.value = src;
-        el.dataset.cmSource = src;
-        delete el.dataset.cm;
+        const codeEl = el as HTMLElement & { value: string };
+        if (codeEl.value !== src) codeEl.value = src;
+        codeEl.dataset.cmSource = src;
+        delete codeEl.dataset.cm;
       } else {
         el.textContent = src;
       }
@@ -411,7 +414,7 @@ import '../code/code.js';
       const cfg = this.#parseConfig();
       if (cfg?.title && titleEl) titleEl.textContent = cfg.title;
       this.#syncLlmPrompt();
-      const llmPromptEd = root.querySelector<HTMLElement>('[data-slot="llm-prompt"]');
+      const llmPromptEd = root.querySelector<HTMLElement & { value: string }>('[data-slot="llm-prompt"]');
       if (llmPromptEd && llmPromptEd.tagName === 'IS-MD-EDITOR') {
         llmPromptEd.value = this.#urls.llmPrompt;
       }
@@ -423,7 +426,7 @@ import '../code/code.js';
     }
 
     #highlight() {
-      for (const ed of this.shadowRoot!.querySelectorAll<HTMLElement>('is-code.cdn__pre')) {
+      for (const ed of this.shadowRoot!.querySelectorAll<HTMLElement & { value: string }>('is-code.cdn__pre')) {
         if (!(ed.value || '').trim()) continue;
         ed.dataset.cmMode = 'htmlmixed';
         delete ed.dataset.cm;
@@ -432,7 +435,8 @@ import '../code/code.js';
     }
 
     #onClick = async (e: Event) => {
-      const btn = e.target.closest('.cdn__copy');
+      const target = e.target as Element | null;
+      const btn = target?.closest('.cdn__copy') as HTMLElement | null;
       if (!btn) return;
       e.preventDefault();
       const kind = btn.dataset.copy;

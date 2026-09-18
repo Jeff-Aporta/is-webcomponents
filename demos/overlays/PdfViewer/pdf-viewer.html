@@ -1,0 +1,119 @@
+<!doctype html>
+<html lang="es" class="theme-dark" data-theme="dark">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>Visor de PDF de <is-pdf-viewer> · is-webcomponents</title>
+<meta name="description" content="Visor de PDF basado en iframe nativo (o pdfjs opcional) con toolbar configurable: descargar, imprimir, título y slot personalizado." />
+<style>
+  html, body { margin: 0; padding: 0; height: 100%; background: #0c1118; color: #e2e8f0; font-family: ui-sans-serif, system-ui, sans-serif; }
+  body { display: grid; grid-template-rows: auto 1fr auto; }
+  header {
+    padding: 16px 20px; border-bottom: 1px solid rgba(255,255,255,0.1);
+    display: flex; align-items: center; gap: 14px; background: #0f1620;
+  }
+  header h1 { font-size: 16px; font-weight: 700; margin: 0; }
+  header p { font-size: 12px; color: #94a3b8; margin: 0; }
+  header .spacer { flex: 1; }
+  header code { background: rgba(255,255,255,0.06); padding: 2px 6px; border-radius: 4px; font: 12px ui-monospace, Menlo, Consolas, monospace; }
+  main {
+    display: grid; grid-template-columns: 1fr 1fr; gap: 16px;
+    padding: 16px; min-height: 0;
+  }
+  section {
+    background: #0f1620; border: 1px solid rgba(255,255,255,0.1);
+    border-radius: 8px; padding: 16px;
+    display: flex; flex-direction: column; min-height: 0;
+  }
+  section h2 {
+    font-size: 12px; text-transform: uppercase; letter-spacing: 0.08em;
+    margin: 0 0 12px 0; color: #94a3b8;
+  }
+  is-pdf-viewer {
+    display: block; width: 100%; height: 100%; min-height: 480px;
+  }
+  is-pdf-viewer:not(:defined) { visibility: hidden; }
+  footer { padding: 12px 20px; border-top: 1px solid rgba(255,255,255,0.1); background: #0f1620; font-size: 11px; color: #94a3b8; }
+  footer code { background: rgba(255,255,255,0.06); padding: 1px 5px; border-radius: 3px; font: 11px ui-monospace, Menlo, Consolas, monospace; }
+</style>
+<script type="module">
+  // Cargar el bundle pre-construido desde dist/cdn/. Funciona con cualquier
+  // servidor estático (incluido VS Code Live Server), no solo con dev server.
+  await import('../../../dist/cdn/overlays/pdf-viewer.min.js');
+  await customElements.whenDefined('is-pdf-viewer');
+
+  // El visor usa <iframe type="application/pdf"> por defecto; los browsers
+  // modernos renderizan PDFs nativamente. Si el binario del PDF no está
+  // disponible, el iframe caerá al fallback "no plugin" — los tests siguen
+  // verificando la estructura DOM, atributos y eventos.
+  //
+  // Para el demo usamos un PDF público de Mozilla (es ligero y served via
+  // HTTPS). Si la red estuviera caída, el demo sigue siendo informativo
+  // (el componente tiene su propia UI toolbar).
+  const SAMPLE_PDF = 'https://raw.githubusercontent.com/mozilla/pdf.js/web/compressed.tracemonkey-pldi-09.pdf';
+
+  // Demo 1: básico con src + download + print + título vía slot.
+  const basic = document.createElement('is-pdf-viewer');
+  basic.setAttribute('src', SAMPLE_PDF);
+  basic.setAttribute('download', '');
+  basic.setAttribute('print', '');
+  basic.setAttribute('height', '600px');
+  const titleSlot = document.createElement('span');
+  titleSlot.setAttribute('slot', 'title');
+  titleSlot.textContent = 'Mozilla · TraceMonkey (PDLI 2009)';
+  basic.appendChild(titleSlot);
+  document.getElementById('host-basic').appendChild(basic);
+
+  // Demo 2: con altura custom + slot toolbar extra.
+  const custom = document.createElement('is-pdf-viewer');
+  custom.setAttribute('src', SAMPLE_PDF);
+  custom.setAttribute('height', '500px');
+  const t2Title = document.createElement('span');
+  t2Title.setAttribute('slot', 'title');
+  t2Title.textContent = 'Modo lectura';
+  custom.appendChild(t2Title);
+  // Botón extra en el toolbar (slot="toolbar")
+  const tb = document.createElement('button');
+  tb.setAttribute('slot', 'toolbar');
+  tb.textContent = '↻ Recargar';
+  tb.style.cssText = 'font:inherit;font-size:.82rem;padding:.3rem .6rem;border-radius:6px;border:1px solid rgba(255,255,255,0.18);background:rgba(255,255,255,0.04);color:inherit;cursor:pointer;';
+  tb.addEventListener('click', () => { custom.src = custom.getAttribute('src'); });
+  custom.appendChild(tb);
+  document.getElementById('host-custom').appendChild(custom);
+
+  // Log de eventos is-load / is-error
+  const log = document.getElementById('log');
+  const append = (line) => { log.textContent = line + '\n' + log.textContent; };
+  for (const v of [basic, custom]) {
+    v.addEventListener('is-load', () => append(`[is-load] ${v.getAttribute('src').slice(-30)}`));
+    v.addEventListener('is-error', () => append(`[is-error] ${v.getAttribute('src').slice(-30)}`));
+  }
+
+  document.documentElement.dataset.pdfViewerReady = '1';
+</script>
+</head>
+<body>
+<header>
+  <div>
+    <h1>Visor de PDF — <code>&lt;is-pdf-viewer&gt;</code></h1>
+    <p>Toolbar con <code>download</code> / <code>print</code> opcionales · título vía <code>slot="title"</code> · <code>engine="pdfjs"</code> para integraciones avanzadas</p>
+  </div>
+  <div class="spacer"></div>
+  <code data-readout="height">height: —</code>
+</header>
+<main>
+  <section>
+    <h2>Básico + download + print</h2>
+    <div id="host-basic" style="flex:1;min-height:0"></div>
+  </section>
+  <section>
+    <h2>Toolbar personalizado (slot)</h2>
+    <div id="host-custom" style="flex:1;min-height:0"></div>
+  </section>
+</main>
+<footer>
+  Estado: <code>customElements.whenDefined('is-pdf-viewer')</code> resuelto. Atributos <code>download</code> / <code>print</code> booleanos (presencia, no valor).
+  <pre id="log" hidden></pre>
+</footer>
+</body>
+</html>

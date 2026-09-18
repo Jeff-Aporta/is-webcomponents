@@ -25,13 +25,18 @@ import { adoptCss, defineElement, emit } from '../../core/element.js';
 
   const OBSERVED = ['width', 'height', 'pen-color', 'line-width', 'background', 'hint'];
 
+  interface Point {
+    x: number;
+    y: number;
+  }
+  type Stroke = Point[];
+
   class IsSignature extends HTMLElement {
     static get observedAttributes(): string[] { return OBSERVED; }
 
     #mounted = false;
-    #strokes = []; // cada trazo: [{x, y}, ...]
-    #current = null;
-    #cancelled = false;
+    #strokes: Stroke[] = []; // cada trazo: [{x, y}, ...]
+    #current: Stroke | null = null;
 
     constructor() {
       super();
@@ -43,9 +48,9 @@ import { adoptCss, defineElement, emit } from '../../core/element.js';
         </div>
       `;
       adoptCss(this.shadowRoot!, import.meta.url);
-      this.#canvas = this.shadowRoot!.querySelector<HTMLElement>('.canvas')!;
+      this.#canvas = this.shadowRoot!.querySelector<HTMLCanvasElement>('.canvas')!;
       this.#hint = this.shadowRoot!.querySelector<HTMLElement>('.hint')!;
-      this.#ctx = this.#canvas.getContext('2d');
+      this.#ctx = this.#canvas.getContext('2d')!;
 
       this.#canvas.addEventListener('pointerdown', (e) => this.#onDown(e));
       this.#canvas.addEventListener('pointermove', (e) => this.#onMove(e));
@@ -72,28 +77,28 @@ import { adoptCss, defineElement, emit } from '../../core/element.js';
       if (name === 'hint') this.#syncHint();
     }
 
-    get width() { return Number(this.getAttribute('width')) || 320; }
-    get height() { return Number(this.getAttribute('height')) || 140; }
+    get width(): number { return Number(this.getAttribute('width')) || 320; }
+    get height(): number { return Number(this.getAttribute('height')) || 140; }
 
-    get isEmpty() { return this.#strokes.length === 0; }
+    get isEmpty(): boolean { return this.#strokes.length === 0; }
 
-    clear() {
+    clear(): void {
       this.#strokes = [];
       this.#paint();
       this.#syncHint();
       emit(this, 'is-change', { strokes: this.#strokes });
     }
 
-    toDataURL(type = 'image/png') {
+    toDataURL(type = 'image/png'): string {
       if (type === 'image/svg+xml') return 'data:' + type + ';utf8,' + encodeURIComponent(this.toSVG());
       return this.#canvas.toDataURL(type);
     }
 
-    toSVG() {
+    toSVG(): string {
       // Los puntos se guardan en px CSS; canvas.width viene escalado por dpr.
-      const w = this.width;
-      const h = this.height;
-      const strokes = this.#strokes.map((stroke) => {
+      const w: number = this.width;
+      const h: number = this.height;
+      const strokes: string = this.#strokes.map((stroke: Stroke): string => {
         if (stroke.length < 2) return '';
         let d = `M ${stroke[0].x} ${stroke[0].y}`;
         for (let i = 1; i < stroke.length - 1; i++) {
@@ -107,7 +112,7 @@ import { adoptCss, defineElement, emit } from '../../core/element.js';
       return `<svg xmlns="http://www.w3.org/2000/svg" width="${w}" height="${h}" viewBox="0 0 ${w} ${h}">${strokes}</svg>`;
     }
 
-    #resize() {
+    #resize(): void {
       const dpr = Math.min(window.devicePixelRatio || 1, 2);
       this.#canvas.width = this.width * dpr;
       this.#canvas.height = this.height * dpr;
@@ -118,7 +123,7 @@ import { adoptCss, defineElement, emit } from '../../core/element.js';
       this.style.setProperty('--_h', `${this.height}px`);
     }
 
-    #paint() {
+    #paint(): void {
       const ctx = this.#ctx;
       ctx.clearRect(0, 0, this.width, this.height);
       const bg = this.getAttribute('background');
@@ -146,7 +151,7 @@ import { adoptCss, defineElement, emit } from '../../core/element.js';
       }
     }
 
-    #onDown(e) {
+    #onDown(e: PointerEvent): void {
       e.preventDefault();
       this.#canvas.setPointerCapture(e.pointerId);
       const p = this.#localPoint(e);
@@ -154,7 +159,7 @@ import { adoptCss, defineElement, emit } from '../../core/element.js';
       this.#strokes.push(this.#current);
     }
 
-    #onMove(e) {
+    #onMove(e: PointerEvent): void {
       if (!this.#current) return;
       const p = this.#localPoint(e);
       this.#current.push(p);
@@ -176,25 +181,25 @@ import { adoptCss, defineElement, emit } from '../../core/element.js';
       this.#syncHint();
     }
 
-    #onUp(e) {
+    #onUp(_e: PointerEvent): void {
       if (!this.#current) return;
       this.#current = null;
       emit(this, 'is-stroke-end', { dataURL: this.toDataURL() });
       emit(this, 'is-change', { strokes: this.#strokes });
     }
 
-    #localPoint(e) {
+    #localPoint(e: PointerEvent): Point {
       const r = this.#canvas.getBoundingClientRect();
       return { x: e.clientX - r.left, y: e.clientY - r.top };
     }
 
-    #syncHint() {
+    #syncHint(): void {
       this.#hint.style.display = this.isEmpty ? '' : 'none';
       this.#hint.textContent = this.getAttribute('hint') || DEFAULT_HINT;
     }
 
-    #canvas!: HTMLElement;
-    #ctx;
+    #canvas!: HTMLCanvasElement;
+    #ctx: CanvasRenderingContext2D;
     #hint!: HTMLElement;
   }
 

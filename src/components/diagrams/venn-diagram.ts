@@ -1,10 +1,36 @@
 import { adoptCss, defineElement, emit } from '../../core/element.js';
 import { DiagramElementBase } from '../_shared/diagram-element-base.js';
 import { resolveVennSpec, computeVennLayout } from './venn-spec.js';
+import type { VennLayout, VennSpec } from './venn-spec.js';
+// `VennLayoutCircle` y `VennLayoutRegion` están declarados pero no exportados
+// en venn-spec.ts. Tipamos localmente para no tocar la firma del spec.
+interface VennLayoutCircle {
+  id: string;
+  label: string;
+  description?: string;
+  hue: number;
+  cx: number;
+  cy: number;
+  r: number;
+  labelX: number;
+  labelY: number;
+}
+interface VennLayoutRegion {
+  id: string;
+  sets: string[];
+  label?: string;
+  value?: number;
+  description?: string;
+  x: number;
+  y: number;
+  hues: number[];
+}
 import { sequenceThemeDark, sequenceThemeLight } from './sequence-spec.js';
 import { tkHueToHex } from '../_shared/tk-hue.js';
+import type { DiagramTheme } from './diagram-types.js';
 import { inlineMdWeb } from '../_shared/tk-inline-md.js';
 import { wrapText, buildTspans } from '../_shared/diagram-text-wrap.js';
+import type { TSpanSpec } from '../_shared/diagram-text-wrap.js';
 import { registerDiagramKind } from './diagram-kinds.js';
 import { svgEl } from '../_shared/svg-chart-engine.js';
 
@@ -25,10 +51,22 @@ import { svgEl } from '../_shared/svg-chart-engine.js';
  * Eventos: is-render, is-open-viewer
  */
 
+/** Conjunto cacheado en el SVG para aplicar hover sin reconstruir. */
+interface CircleNodeEntry {
+  c: VennLayoutCircle;
+  g: SVGGElement;
+}
+
+/** Región cacheada en el SVG para aplicar hover sin reconstruir. */
+interface RegionNodeEntry {
+  r: VennLayoutRegion;
+  g: SVGGElement;
+}
+
 class IsVennDiagram extends DiagramElementBase {
-  #circleNodes = new Map();
-  #regionNodes = new Map();
-  #hoverId = null;
+  #circleNodes: Map<string, CircleNodeEntry> = new Map();
+  #regionNodes: Map<string, RegionNodeEntry> = new Map();
+  #hoverId: string | null = null;
 
   constructor() {
     super();
@@ -36,20 +74,20 @@ class IsVennDiagram extends DiagramElementBase {
     adoptCss(this.shadowRoot!, import.meta.url);
   }
 
-  onDiagramConnected() {
-    this.wrap.addEventListener('mousemove', this.#onMouseMove);
-    this.wrap.addEventListener('mouseleave', this.#onMouseLeave);
-    this.wrap.addEventListener('click', this.#onClick);
+  onDiagramConnected(): void {
+    this.wrap.addEventListener('mousemove', this.#onMouseMove as EventListener);
+    this.wrap.addEventListener('mouseleave', this.#onMouseLeave as EventListener);
+    this.wrap.addEventListener('click', this.#onClick as EventListener);
   }
 
-  onDiagramDisconnected() {
-    this.wrap.removeEventListener('mousemove', this.#onMouseMove);
-    this.wrap.removeEventListener('mouseleave', this.#onMouseLeave);
-    this.wrap.removeEventListener('click', this.#onClick);
+  onDiagramDisconnected(): void {
+    this.wrap.removeEventListener('mousemove', this.#onMouseMove as EventListener);
+    this.wrap.removeEventListener('mouseleave', this.#onMouseLeave as EventListener);
+    this.wrap.removeEventListener('click', this.#onClick as EventListener);
   }
 
-  renderDiagram() {
-    const spec = resolveVennSpec(this.payload ?? {});
+  renderDiagram(): void {
+    const spec: VennSpec | null = resolveVennSpec(this.payload ?? {});
     this.spec = spec;
     if (!spec) {
       this.svg.innerHTML = '';
@@ -58,16 +96,16 @@ class IsVennDiagram extends DiagramElementBase {
     }
     delete this.wrap.dataset.empty;
 
-    const theme = this.isDarkTheme ? sequenceThemeDark() : sequenceThemeLight();
+    const theme: DiagramTheme = this.isDarkTheme ? sequenceThemeDark() : sequenceThemeLight();
     this.syncThemeAttr();
 
-    const layout = computeVennLayout(spec);
+    const layout: VennLayout = computeVennLayout(spec);
     this.layout = layout;
     this.#buildSvg(layout, theme);
     this.wrap.classList.toggle('is-viewer', this.isViewer);
   }
 
-  #buildSvg(layout, theme) {
+  #buildSvg(layout: VennLayout, theme: DiagramTheme): void {
     const { width: W, height: H } = layout;
     this.svg.setAttribute('viewBox', `0 0 ${W} ${H}`);
     this.svg.setAttribute('preserveAspectRatio', 'xMidYMid meet');
@@ -101,7 +139,7 @@ class IsVennDiagram extends DiagramElementBase {
     emit(this, 'is-render', { layout, svg: this.svg });
   }
 
-  #buildCircles(layout, theme) {
+  #buildCircles(layout: VennLayout, theme: DiagramTheme): void {
     for (const c of layout.circles) {
       const color = tkHueToHex(c.hue) ?? theme.accent;
       const g = svgEl('g', { class: 'vn-set' });
@@ -124,17 +162,17 @@ class IsVennDiagram extends DiagramElementBase {
       g.appendChild(t);
 
       this.svg.appendChild(g);
-      this.#circleNodes.set(c.id, { c, g });
+      this.#circleNodes.set(c.id, { c, g: g as SVGGElement });
     }
   }
 
-  #buildRegions(layout, theme) {
+  #buildRegions(layout: VennLayout, theme: DiagramTheme): void {
     for (const r of layout.regions) {
       if (!r.label && r.value == null) continue;
       const g = svgEl('g', { class: 'vn-region' });
       g.dataset.regionId = r.id;
 
-      const text = r.label ?? '';
+      const text: string = r.label ?? '';
       if (text) {
         const t = svgEl('text', {
           fill: theme.text, 'font-size': '10.5', 'font-family': 'Tahoma,Arial,sans-serif',
@@ -142,20 +180,24 @@ class IsVennDiagram extends DiagramElementBase {
         });
         const vnHasMd = /[*`\[]/.test(text) || text.includes('{{');
         if (vnHasMd) {
-          t.setAttribute('x', r.x);
-          t.setAttribute('y', r.y);
+          t.setAttribute('x', String(r.x));
+          t.setAttribute('y', String(r.y));
           t.setAttribute('text-anchor', 'middle');
           t.innerHTML = inlineMdWeb(text);
         } else {
+          // `overflow` no está declarado en VennLayoutRegion; cast para leer.
+          const rawOverflow = (r as { overflow?: string }).overflow;
+          const overflow: 'grow' | 'ellipsis' =
+            (rawOverflow === 'grow' || rawOverflow === 'ellipsis') ? rawOverflow : 'ellipsis';
           const vnresult = wrapText({
             text,
             maxWidth: 80,
             maxHeight: 50,
             fontSize: 10.5,
             fontFamily: 'Tahoma,Arial,sans-serif',
-            overflow: r.overflow ?? 'ellipsis',
+            overflow,
           });
-          const vntspans = buildTspans(
+          const vntspans: TSpanSpec[] = buildTspans(
             vnresult.lines,
             r.x - 40, r.y - 25, 80, 50,
             'middle', 10.5, 1.2,
@@ -182,13 +224,13 @@ class IsVennDiagram extends DiagramElementBase {
       }
 
       this.svg.appendChild(g);
-      this.#regionNodes.set(r.id, { r, g });
+      this.#regionNodes.set(r.id, { r, g: g as SVGGElement });
     }
   }
 
   /* ── interacción ── */
 
-  #onClick = () => {
+  #onClick = (_e: PointerEvent): void => {
     // El visor es opt-in: sin `open-on-click` el clic no hace nada y tampoco
     // se anuncia `is-open-viewer`, que prometeria una apertura que no ocurre.
     if (!this.hasAttribute('open-on-click')) return;
@@ -199,10 +241,10 @@ class IsVennDiagram extends DiagramElementBase {
     if (!ev.defaultPrevented) this.openOwnViewer('venn');
   };
 
-  #onMouseMove = (e: PointerEvent) => {
+  #onMouseMove = (e: PointerEvent): void => {
     if (!this.isViewer) return;
-    const g = e.composedPath().find((n) => n?.dataset?.setId);
-    const id = g?.dataset.setId ?? null;
+    const g = e.composedPath().find((n: EventTarget | null) => (n as HTMLElement | undefined)?.dataset?.setId);
+    const id: string | null = (g as HTMLElement | undefined)?.dataset.setId ?? null;
     if (id !== this.#hoverId) this.#applyHover(id);
     if (id) {
       const rect = this.wrap.getBoundingClientRect();
@@ -212,12 +254,12 @@ class IsVennDiagram extends DiagramElementBase {
     }
   };
 
-  #onMouseLeave = () => {
+  #onMouseLeave = (_e: MouseEvent): void => {
     if (!this.isViewer) return;
     this.#applyHover(null);
   };
 
-  #applyHover(id) {
+  #applyHover(id: string | null): void {
     this.#hoverId = id;
     const entry = id ? this.#circleNodes.get(id) : null;
 

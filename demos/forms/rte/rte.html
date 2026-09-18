@@ -1,0 +1,82 @@
+<!doctype html>
+<html lang="es" class="theme-dark" data-theme="dark">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>Editor RTE &lt;is-rte&gt; · is-webcomponents</title>
+<meta name="description" content="Editor de texto enriquecido (contentEditable) con barra de formato, modo código fuente y comandos personalizados." />
+<style>
+  html, body { margin: 0; padding: 0; min-height: 100%; background: #0c1118; color: #e2e8f0; font-family: ui-sans-serif, system-ui, sans-serif; }
+  body { display: grid; place-items: start center; padding: 32px 20px; }
+  main { max-width: 820px; width: 100%; display: grid; gap: 22px; }
+  header h1 { font-size: 18px; font-weight: 700; margin: 0 0 4px 0; }
+  header p { font-size: 12px; color: #94a3b8; margin: 0; }
+  section { background: #131a24; border: 1px solid rgba(255,255,255,0.08); border-radius: 10px; padding: 16px; display: grid; gap: 10px; }
+  section h2 { font-size: 13px; margin: 0; font-weight: 600; color: #cbd5e1; }
+  section .desc { font-size: 12px; color: #94a3b8; margin: 0; }
+  is-rte { width: 100%; min-height: 180px; }
+  code { background: rgba(255,255,255,0.06); padding: 1px 5px; border-radius: 3px; font: 12px ui-monospace, Menlo, Consolas, monospace; }
+  /* Anti-FOUC */
+  is-rte:not(:defined) { visibility: hidden; }
+</style>
+<script type="module">
+  await import('../../../dist/cdn/forms/rte.min.js');
+  await customElements.whenDefined('is-rte');
+
+  const initialHtml = '<h2>Bienvenido</h2><p>Este es un <b>editor de texto enriquecido</b>. Prueba la barra de formato.</p><ul><li>Listas</li><li>Citas</li><li>Enlaces</li></ul>';
+
+  // (1) RTE completo con toolbar por defecto
+  const completo = document.createElement('is-rte');
+  completo.setAttribute('name', 'body');
+  completo.setAttribute('placeholder', 'Empieza a escribir…');
+  completo.setAttribute('value', initialHtml);
+  document.querySelector('#sec-full').appendChild(completo);
+
+  // (2) Toolbar reducida (sólo lo esencial)
+  const reducido = document.createElement('is-rte');
+  reducido.setAttribute('name', 'note');
+  reducido.setAttribute('toolbar', 'bold,italic,underline,link,clear');
+  reducido.setAttribute('placeholder', 'Una nota rápida');
+  document.querySelector('#sec-mini').appendChild(reducido);
+
+  // (3) Solo lectura (mostrar contenido sin edición)
+  const soloLectura = document.createElement('is-rte');
+  soloLectura.setAttribute('name', 'docs');
+  soloLectura.setAttribute('readonly', '');
+  soloLectura.setAttribute('value', '<h3>Documentación</h3><p>El contenido <i>no</i> puede editarse.</p>');
+  document.querySelector('#sec-readonly').appendChild(soloLectura);
+
+  // Eventos
+  [completo, reducido, soloLectura].forEach((r) => {
+    r.addEventListener('is-input', () => console.log('[rte] input', r.value?.length ?? 0));
+    r.addEventListener('is-change', (e) => console.log('[rte] change', e.detail?.text?.slice(0, 40)));
+    r.addEventListener('is-blur', () => console.log('[rte] blur'));
+  });
+
+  document.documentElement.dataset.rteReady = '1';
+</script>
+</head>
+<body>
+<main>
+  <header>
+    <h1>&lt;is-rte&gt; · Editor de texto enriquecido</h1>
+    <p>Barra de formato con <code>bold</code>, <code>italic</code>, <code>h1..h3</code>, listas, citas, enlaces y código · <code>is-input</code>/<code>is-change</code>/<code>is-blur</code>.</p>
+  </header>
+
+  <section id="sec-full">
+    <h2>Toolbar por defecto</h2>
+    <p class="desc">Atributo <code>value</code> con HTML inicial. La toolbar incluye todos los comandos estándar.</p>
+  </section>
+
+  <section id="sec-mini">
+    <h2>Toolbar reducida</h2>
+    <p class="desc">Atributo <code>toolbar</code> limita los botones (aquí: bold, italic, underline, link, clear).</p>
+  </section>
+
+  <section id="sec-readonly">
+    <h2>Solo lectura</h2>
+    <p class="desc"><code>readonly</code> desactiva la edición; el contenido sigue visible.</p>
+  </section>
+</main>
+</body>
+</html>

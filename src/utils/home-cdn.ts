@@ -337,9 +337,12 @@ export function init(raiz: ParentNode = document): void {
   // casos (is-code, pre/textarea, no-encontrado).
 
   // Resaltado vía <is-code readonly> (paint sustituye pre.code legacy).
+  // Cast a Document: la firma de paint usa `(root = document)` por lo que TS
+  // infiere el parámetro como `Document`, pero la implementación interna
+  // acepta cualquier Element/ParentNode/ShadowRoot.
   Promise.all([
-    preJs ? paint(preJs as HTMLElement) : null,
-    preB ? paint(preB as HTMLElement) : null,
+    preJs ? paint(preJs as unknown as Document) : null,
+    preB ? paint(preB as unknown as Document) : null,
   ]).catch(console.error);
 
   // Tabs.

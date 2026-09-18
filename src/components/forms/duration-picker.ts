@@ -25,9 +25,9 @@ import { ElementBase } from '../../core/element-base.js';
  *   is-input, is-change
  */
 (() => {
-  const OBSERVED = ['value', 'min', 'max', 'step'];
+  const OBSERVED: string[] = ['value', 'min', 'max', 'step'];
 
-  const pad2 = (n: string) => String(n).padStart(2, '0');
+  const pad2 = (n: number | string): string => String(n).padStart(2, '0');
 
   class IsDurationPicker extends ElementBase {
     /** Personalización por atributo (ver `core/attrs.ts`). */
@@ -37,7 +37,7 @@ import { ElementBase } from '../../core/element-base.js';
     };
 
     static get observedAttributes(): string[] { return [...OBSERVED, 'bg', 'border-color']; }
-    #active = null;
+    #active: HTMLInputElement | null = null;
 
     constructor() {
       super();
@@ -67,50 +67,51 @@ import { ElementBase } from '../../core/element-base.js';
       `;
       adoptCss(this.shadowRoot!, import.meta.url);
       this.#root = this.shadowRoot!.querySelector<HTMLElement>('.root')!;
-      this.#h = this.shadowRoot!.getElementById('h')!;
-      this.#m = this.shadowRoot!.getElementById('m')!;
-      this.#s = this.shadowRoot!.getElementById('s')!;
-      [this.#h, this.#m, this.#s].forEach((input: HTMLElement) => {
+      this.#h = this.shadowRoot!.getElementById('h') as HTMLInputElement;
+      this.#m = this.shadowRoot!.getElementById('m') as HTMLInputElement;
+      this.#s = this.shadowRoot!.getElementById('s') as HTMLInputElement;
+      ([this.#h, this.#m, this.#s] as HTMLInputElement[]).forEach((input: HTMLInputElement) => {
         input.addEventListener('input', () => this.#onDigitInput(input));
         input.addEventListener('focus', () => { this.#active = input; input.select(); });
         input.addEventListener('blur', () => this.#commit());
-        input.addEventListener('keydown', (e) => this.#onKey(e, input));
+        input.addEventListener('keydown', (e: KeyboardEvent) => this.#onKey(e, input));
       });
-      this.#root.addEventListener('click', (e) => {
+      this.#root.addEventListener('click', (e: MouseEvent) => {
         // `is-button` es el host: el click se retarget al custom element, no
         // al <button> interno de su shadow root.
-        const btn = e.target.closest('is-button[data-target]');
+        const target = e.target as Element | null;
+        const btn = target?.closest('is-button[data-target]') as HTMLElement | null;
         if (!btn) return;
-        const target = btn.dataset.target;
+        const tgt = btn.dataset.target;
         const step = Number(this.getAttribute('step')) || 1;
         const dir = btn.classList.contains('up') ? +1 : -1;
-        if (target === 's') this.tick(step * dir);
-        if (target === 'm') this.tick(60 * step * dir);
-        if (target === 'h') this.tick(3600 * step * dir);
+        if (tgt === 's') this.tick(step * dir);
+        if (tgt === 'm') this.tick(60 * step * dir);
+        if (tgt === 'h') this.tick(3600 * step * dir);
       });
     }
 
-    onConnected() {
+    onConnected(): void {
       this.#sync();
     }
 
-    onAttributeChanged(name: string, oldVal: string | null, newVal: string | null) {
+    onAttributeChanged(_name: string, _oldVal: string | null, _newVal: string | null): void {
       this.#sync();
     }
 
-    get value() { return Number(this.getAttribute('value') || 0); }
-    set value(v) { this.setAttribute('value', String(Math.max(0, Math.round(Number(v) || 0)))); }
+    get value(): number { return Number(this.getAttribute('value') || 0); }
+    set value(v: number | string) { this.setAttribute('value', String(Math.max(0, Math.round(Number(v) || 0)))); }
 
-    get hours() { return Math.floor(this.value / 3600); }
-    get minutes() { return Math.floor((this.value % 3600) / 60); }
-    get seconds() { return this.value % 60; }
+    get hours(): number { return Math.floor(this.value / 3600); }
+    get minutes(): number { return Math.floor((this.value % 3600) / 60); }
+    get seconds(): number { return this.value % 60; }
 
-    get text() {
+    get text(): string {
       const H = this.hours, M = this.minutes, S = this.seconds;
       return H ? `${pad2(H)}:${pad2(M)}:${pad2(S)}` : `${pad2(M)}:${pad2(S)}`;
     }
 
-    tick(delta) {
+    tick(delta: number): void {
       let v = this.value + Number(delta || 0);
       const min = Number(this.getAttribute('min'));
       const max = Number(this.getAttribute('max'));
@@ -122,27 +123,27 @@ import { ElementBase } from '../../core/element-base.js';
       emit(this, 'is-change', { value: this.value, text: this.text });
     }
 
-    set(h, m, s) {
-      let v = (Number(h) || 0) * 3600 + (Number(m) || 0) * 60 + (Number(s) || 0);
+    set(h: number | string, m: number | string, s: number | string): void {
+      const v = (Number(h) || 0) * 3600 + (Number(m) || 0) * 60 + (Number(s) || 0);
       this.value = v;
       this.#sync();
     }
 
-    setSeconds(n) { this.value = n; this.#sync(); }
+    setSeconds(n: number): void { this.value = n; this.#sync(); }
 
-    #sync() {
+    #sync(): void {
       this.#h.value = pad2(this.hours);
       this.#m.value = pad2(this.minutes);
       this.#s.value = pad2(this.seconds);
     }
 
-    #onDigitInput(input) {
+    #onDigitInput(input: HTMLInputElement): void {
       // filtra no numéricos
       input.value = String(input.value).replace(/\D/g, '').slice(0, 2);
       this.#commit();
     }
 
-    #commit() {
+    #commit(): void {
       const h = Math.min(23, Number(this.#h.value) || 0);
       const m = Math.min(59, Number(this.#m.value) || 0);
       const s = Math.min(59, Number(this.#s.value) || 0);
@@ -153,8 +154,8 @@ import { ElementBase } from '../../core/element-base.js';
       emit(this, 'is-change', { value: v, text: this.text });
     }
 
-    #onKey(e, input) {
-      const target = e.target;
+    #onKey(e: KeyboardEvent, input: HTMLInputElement): void {
+      const target = e.target as HTMLInputElement;
       if (e.key === 'ArrowUp' || e.key === 'ArrowDown') {
         e.preventDefault();
         const step = Number(this.getAttribute('step')) || 1;
@@ -173,9 +174,9 @@ import { ElementBase } from '../../core/element-base.js';
       }
     }
 
-    #h!: HTMLElement;
-    #m!: HTMLElement;
-    #s!: HTMLElement;
+    #h!: HTMLInputElement;
+    #m!: HTMLInputElement;
+    #s!: HTMLInputElement;
     #root!: HTMLElement;
   }
 

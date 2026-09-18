@@ -1,0 +1,47 @@
+<!doctype html>
+<html lang="es" class="theme-dark" data-theme="dark">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>Demo — <is-org-chart> · is-webcomponents</title>
+<meta name="description" content="Organigrama jerárquico con tarjetas (avatar + nombre + cargo) y aristas con curvas Bézier." />
+<style>
+  html, body { margin: 0; padding: 0; min-height: 100%; background: #0c1118; color: #e2e8f0; font-family: ui-sans-serif, system-ui, sans-serif; }
+  body { display: grid; grid-template-rows: auto 1fr; }
+  header { padding: 16px 20px; border-bottom: 1px solid rgba(255,255,255,0.1); background: #0f1620; }
+  header h1 { font-size: 16px; font-weight: 700; margin: 0; }
+  header p { font-size: 12px; color: #94a3b8; margin: 4px 0 0 0; }
+  main { display: grid; place-items: stretch; min-height: 0; padding: 12px; }
+  is-org-chart { width: 100%; height: 100%; min-height: 480px; display: block; }
+  is-org-chart:not(:defined) { visibility: hidden; }
+</style>
+<script type="module">
+  await import('../../../dist/cdn/diagrams/org-chart.min.js');
+  await customElements.whenDefined('is-org-chart');
+
+  const el = document.createElement('is-org-chart');
+  el.setAttribute('node-width', '180');
+  el.setAttribute('node-height', '74');
+  el.payload = [
+    { id: 'ceo', title: 'CEO', name: 'Carolina Méndez', parent: null },
+    { id: 'cto', title: 'CTO', name: 'Pedro Castaño', parent: 'ceo' },
+    { id: 'cfo', title: 'CFO', name: 'María Solano', parent: 'ceo' },
+    { id: 'be', title: 'Backend Lead', name: 'Diego Ruiz', parent: 'cto' },
+    { id: 'fe', title: 'Frontend Lead', name: 'Lucía Pérez', parent: 'cto' },
+    { id: 'acc', title: 'Contable', name: 'José Vega', parent: 'cfo' },
+    { id: 'dev1', title: 'Backend Dev', name: 'Andrés Gil', parent: 'be' },
+    { id: 'dev2', title: 'Frontend Dev', name: 'Sara Loma', parent: 'fe' },
+  ];
+  document.querySelector('main').appendChild(el);
+
+  document.documentElement.dataset.orgChartReady = '1';
+</script>
+</head>
+<body>
+  <header>
+    <h1>Demo — <code>&lt;is-org-chart&gt;</code></h1>
+    <p>Organigrama top-down: tarjetas con foto/iniciales, nombre y cargo; aristas con curvas Bézier.</p>
+  </header>
+  <main></main>
+</body>
+</html>

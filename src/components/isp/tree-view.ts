@@ -14,6 +14,48 @@ import './float-card.js';
 import { TreeRowViewAdapter } from './_shared/tree-view/adapter.js';
 import { TreeCustomsBase } from './_shared/tree-view/customs-base.js';
 import { paintForest } from './_shared/tree-view/render-rows.js';
+import type { TNode, TRecord, TreeActionEntry, TreeCustoms } from './_shared/tree-view/_types.js';
+
+/** Subset del adapter que `IsTreeView` consume (no necesita el tipo completo). */
+interface _AdapterLike {
+  treeRootId: string;
+  _domRoot?: HTMLElement | null;
+  customs?: TreeCustoms | null;
+  menu?: TreeActionEntry[];
+  moreMenu?: TreeActionEntry[];
+  currentDragFlatPath: string;
+  record: TRecord | null;
+  rootNodes: TNode[];
+  decorateHotkeyTitles(actions: TreeActionEntry[]): TreeActionEntry[];
+  buildCustomsRuntime(): unknown;
+  notifySelect: () => void;
+  isPendingInsertPath?: (flatPath: string) => boolean;
+  isProtected: boolean;
+  canMutate: boolean;
+  onbranchexpand?: () => void;
+  walkAncestors(node: TNode): TNode[];
+  getRecordSecurityCode(node: TNode): string;
+  showDelete(obj: unknown): void;
+  closeEditForm?(): void;
+  clearDragOverlays(): void;
+  clearDropIndicators(): void;
+  confirmProtectionRelease(): void;
+  historyCanRedo: boolean;
+  isProtectionPromptOpen: boolean;
+  historyRedoAll(): void;
+  dismissProtectionPrompt(): void;
+  ontreeoutsidepointerdown(e: Event): void;
+  confirmDelete(value: string): Promise<boolean>;
+  onrequestopendrawer?: (mode: string) => void;
+  onrequestclosedrawer?: () => void;
+  onrequesteditshow?: (node: TNode, mode: string) => void;
+  onrequestdelete?: (node: TNode) => void;
+  onError?: (msg: string) => void;
+  addUiListener(fn: () => void): () => void;
+  runCustomsPreSubmit?(): unknown;
+  lastNodesRef: unknown;
+  onstateupdate(state: Record<string, unknown>): void;
+}
 
 export { TreeRowViewAdapter, TreeRowViewAdapter as TreeAdapter, TreeCustomsBase };
 export { objRootsToNodes, TreeNode, groupedWithSeparators } from './_shared/tree-view/tree-data.js';
@@ -65,6 +107,27 @@ TEMPLATE.innerHTML = /* html */ `
 
 const OBSERVED = ['readonly', 'draggable', 'disabled', 'label-field', 'helper-field'];
 
+/** Drawer con show/hide y label. */
+interface _DrawerLike extends HTMLElement {
+  show?: () => void;
+  hide?: () => void;
+  label?: string;
+}
+
+/** Modal de confirmación con loading. */
+interface _ModalDeleteLike extends HTMLElement {
+  show?: () => void;
+  hide?: () => void;
+  loading?: boolean;
+  entity?: string;
+}
+
+/** Diálogo de protección. */
+interface _DialogLike extends HTMLElement {
+  show?: () => void;
+  hide?: () => void;
+}
+
 class IsTreeView extends HTMLElement {
   static get observedAttributes(): string[] { return OBSERVED; }
 
@@ -72,79 +135,79 @@ class IsTreeView extends HTMLElement {
   #root!: HTMLElement;
   #toolbar!: HTMLElement;
   #body!: HTMLElement;
-  #drawer!: HTMLElement;
-  #modalDelete!: HTMLElement;
-  #protectDlg!: HTMLElement;
+  #drawer!: _DrawerLike;
+  #modalDelete!: _ModalDeleteLike;
+  #protectDlg!: _DialogLike;
   #protectRedo!: HTMLElement;
   #protectOk!: HTMLElement;
-  #offUi;
-  #adapter;
-  #list = [];
-  #customs;
-  #bAllowed;
-  #onError;
-  #renderRow;
-  #renderHelper;
-  #editMode = 'view';
-  #pendingRecord = null;
-  #lastSelectPath = '';
+  #offUi: (() => void) | null = null;
+  #adapter: _AdapterLike | null = null;
+  #list: unknown[] = [];
+  #customs: TreeCustoms | null | undefined = undefined;
+  #bAllowed: { Crear?: boolean; Modificar?: boolean; Eliminar?: boolean; Visualizar?: boolean } | undefined = undefined;
+  #onError: ((msg: string) => void) | null = null;
+  #renderRow: ((node: TNode, el: HTMLElement) => void) | undefined = undefined;
+  #renderHelper: ((node: TNode, el: HTMLElement) => void) | undefined = undefined;
+  #editMode: string = 'view';
+  #pendingRecord: TNode | null = null;
+  #lastSelectPath: string = '';
 
-  get list() { return this.#list; }
-  set list(v) {
+  get list(): unknown[] { return this.#list; }
+  set list(v: unknown[]) {
     this.#list = Array.isArray(v) ? v : [];
     if (this.#mounted) this.#pushState();
   }
-  get List2Rows() { return this.list; }
-  set List2Rows(v) { this.list = v; }
+  get List2Rows(): unknown[] { return this.list; }
+  set List2Rows(v: unknown[]) { this.list = v; }
 
-  get customs() { return this.#customs; }
-  set customs(v) {
+  get customs(): TreeCustoms | null | undefined { return this.#customs; }
+  set customs(v: TreeCustoms | null | undefined) {
     this.#customs = v;
     if (this.#adapter) this.#adapter.customs = v;
     if (this.#mounted) this.#pushState();
   }
 
-  get treeController() { return this.#adapter; }
-  set treeController(v) {
+  get treeController(): _AdapterLike | null { return this.#adapter; }
+  set treeController(v: _AdapterLike | null) {
     this.#adapter = v || this.#adapter;
     if (this.#mounted) this.#wireAdapter();
   }
 
-  get bAllowed() { return this.#bAllowed; }
-  set bAllowed(v) {
+  get bAllowed(): { Crear?: boolean; Modificar?: boolean; Eliminar?: boolean; Visualizar?: boolean } | undefined { return this.#bAllowed; }
+  set bAllowed(v: { Crear?: boolean; Modificar?: boolean; Eliminar?: boolean; Visualizar?: boolean } | undefined) {
     this.#bAllowed = v;
     if (this.#mounted) this.#pushState();
   }
 
-  get onError() { return this.#onError; }
-  set onError(v) {
+  get onError(): ((msg: string) => void) | null { return this.#onError; }
+  set onError(v: ((msg: string) => void) | null) {
     this.#onError = v;
     if (this.#adapter) this.#adapter.onError = (msg) => this.#reportError(msg);
   }
 
-  get renderRow() { return this.#renderRow; }
-  set renderRow(v) { this.#renderRow = v; if (this.#mounted) this.#paint(); }
+  get renderRow(): ((node: TNode, el: HTMLElement) => void) | undefined { return this.#renderRow; }
+  set renderRow(v: ((node: TNode, el: HTMLElement) => void) | undefined) { this.#renderRow = v; if (this.#mounted) this.#paint(); }
 
-  get renderHelper() { return this.#renderHelper; }
-  set renderHelper(v) { this.#renderHelper = v; if (this.#mounted) this.#paint(); }
+  get renderHelper(): ((node: TNode, el: HTMLElement) => void) | undefined { return this.#renderHelper; }
+  set renderHelper(v: ((node: TNode, el: HTMLElement) => void) | undefined) { this.#renderHelper = v; if (this.#mounted) this.#paint(); }
 
-  get readonly() { return this.hasAttribute('readonly'); }
-  set readonly(v) { this.toggleAttribute('readonly', !!v); }
+  get readonly(): boolean { return this.hasAttribute('readonly'); }
+  set readonly(v: boolean) { this.toggleAttribute('readonly', !!v); }
 
-  get disabled() { return this.hasAttribute('disabled'); }
-  set disabled(v) { this.toggleAttribute('disabled', !!v); }
+  get disabled(): boolean { return this.hasAttribute('disabled'); }
+  set disabled(v: boolean) { this.toggleAttribute('disabled', !!v); }
 
-  get draggable() { return this.getAttribute('draggable') !== 'false'; }
-  set draggable(v) {
+  get draggable(): boolean { return this.getAttribute('draggable') !== 'false'; }
+  set draggable(v: boolean | string) {
     if (v === false || v === 'false') this.setAttribute('draggable', 'false');
     else this.removeAttribute('draggable');
   }
 
-  get labelField() { return this.getAttribute('label-field') || 'titulo'; }
-  set labelField(v) { v ? this.setAttribute('label-field', v) : this.removeAttribute('label-field'); }
+  get labelField(): string { return this.getAttribute('label-field') || 'titulo'; }
+  set labelField(v: string) { v ? this.setAttribute('label-field', v) : this.removeAttribute('label-field'); }
 
-  get helperField() { return this.getAttribute('helper-field') || ''; }
-  set helperField(v) { v ? this.setAttribute('helper-field', v) : this.removeAttribute('helper-field'); }
+  get helperField(): string { return this.getAttribute('helper-field') || ''; }
+  set helperField(v: string) { v ? this.setAttribute('helper-field', v) : this.removeAttribute('helper-field'); }
 
   constructor() {
     super();
@@ -154,9 +217,9 @@ class IsTreeView extends HTMLElement {
     this.#root = shadow.querySelector<HTMLElement>('.isp-tree')!;
     this.#toolbar = shadow.querySelector<HTMLElement>('.isp-tree-toolbar')!;
     this.#body = shadow.querySelector<HTMLElement>('.isp-tree-body')!;
-    this.#drawer = shadow.querySelector<HTMLElement>('.drawer')!;
-    this.#modalDelete = shadow.querySelector<HTMLElement>('.modal-delete')!;
-    this.#protectDlg = shadow.querySelector<HTMLElement>('.protect-dlg')!;
+    this.#drawer = shadow.querySelector<HTMLElement>('.drawer') as _DrawerLike;
+    this.#modalDelete = shadow.querySelector<HTMLElement>('.modal-delete') as _ModalDeleteLike;
+    this.#protectDlg = shadow.querySelector<HTMLElement>('.protect-dlg') as _DialogLike;
     this.#protectRedo = shadow.querySelector<HTMLElement>('.protect-redo')!;
     this.#protectOk = shadow.querySelector<HTMLElement>('.protect-ok')!;
   }
@@ -164,17 +227,17 @@ class IsTreeView extends HTMLElement {
   connectedCallback(): void {
     this.#mounted = true;
     this.#upgrade();
-    if (!this.#adapter) this.#adapter = new TreeRowViewAdapter({});
+    if (!this.#adapter) this.#adapter = new TreeRowViewAdapter() as unknown as _AdapterLike;
     this.#wireAdapter();
     this.#drawer.addEventListener('is-after-hide', this.#onDrawerHide);
-    this.#modalDelete.addEventListener('is-confirm-delete', this.#onDeleteConfirm);
+    this.#modalDelete.addEventListener('is-confirm-delete', this.#onDeleteConfirm as unknown as EventListener);
     this.#protectOk.addEventListener('click', this.#onProtectOk);
     this.#protectRedo.addEventListener('click', this.#onProtectRedo);
     this.#protectDlg.addEventListener('is-hide', this.#onProtectDismiss);
     document.addEventListener('pointerdown', this.#onOutside, true);
     document.addEventListener('dragend', this.#onDragEnd, true);
     document.addEventListener('pointerup', this.#onDragPointerUp, true);
-    this.#root.addEventListener('dragleave', this.#onTreeDragLeave, true);
+    this.#root.addEventListener('dragleave', this.#onTreeDragLeave as EventListener, true);
     this.#pushState();
   }
 
@@ -183,53 +246,54 @@ class IsTreeView extends HTMLElement {
     this.#offUi?.();
     this.#offUi = null;
     this.#drawer.removeEventListener('is-after-hide', this.#onDrawerHide);
-    this.#modalDelete.removeEventListener('is-confirm-delete', this.#onDeleteConfirm);
+    this.#modalDelete.removeEventListener('is-confirm-delete', this.#onDeleteConfirm as unknown as EventListener);
     this.#protectOk.removeEventListener('click', this.#onProtectOk);
     this.#protectRedo.removeEventListener('click', this.#onProtectRedo);
     this.#protectDlg.removeEventListener('is-hide', this.#onProtectDismiss);
     document.removeEventListener('pointerdown', this.#onOutside, true);
     document.removeEventListener('dragend', this.#onDragEnd, true);
     document.removeEventListener('pointerup', this.#onDragPointerUp, true);
-    this.#root.removeEventListener('dragleave', this.#onTreeDragLeave, true);
+    this.#root.removeEventListener('dragleave', this.#onTreeDragLeave as EventListener, true);
   }
 
-  attributeChangedCallback() {
+  attributeChangedCallback(): void {
     if (!this.#mounted) return;
     this.#pushState();
   }
 
-  #upgrade() {
+  #upgrade(): void {
     for (const p of ['list', 'List2Rows', 'customs', 'treeController', 'bAllowed', 'onError', 'renderRow', 'renderHelper', 'readonly', 'draggable', 'disabled']) {
       if (!Object.prototype.hasOwnProperty.call(this, p)) continue;
-      const v = this[p];
-      delete this[p];
-      this[p] = v;
+      const v = (this as unknown as Record<string, unknown>)[p];
+      delete (this as unknown as Record<string, unknown>)[p];
+      (this as unknown as Record<string, unknown>)[p] = v;
     }
   }
 
-  #reportError(msg) {
+  #reportError(msg: unknown): void {
     const s = String(msg || '');
     this.#onError?.(s);
     emit(this, 'is-error', { message: s });
   }
 
-  #wireAdapter() {
+  #wireAdapter(): void {
     const a = this.#adapter;
-    a._domRoot = this.#root;
+    if (!a) return;
+    (a as unknown as { _domRoot: HTMLElement | null })._domRoot = this.#root;
     this.#root.setAttribute('data-tree-root', a.treeRootId);
-    a.customs = this.#customs;
-    a.onError = (msg) => this.#reportError(msg);
-    a.onrequestopendrawer = (mode) => {
+    (a as unknown as { customs: TreeCustoms | null | undefined }).customs = this.#customs ?? null;
+    a.onError = (msg: string) => this.#reportError(msg);
+    a.onrequestopendrawer = (mode: string) => {
       this.#editMode = mode === 'create' ? 'edit' : mode;
       this.#openDrawer();
     };
     a.onrequestclosedrawer = () => this.#closeDrawer();
-    a.onrequesteditshow = (node, mode) => {
+    a.onrequesteditshow = (node: TNode, mode: string) => {
       this.#pendingRecord = node;
       this.#editMode = mode;
       this.#openDrawer();
     };
-    a.onrequestdelete = (node) => {
+    a.onrequestdelete = (node: TNode) => {
       this.#pendingRecord = node;
       this.#modalDelete.entity = a.customs?.entrie || 'registro';
       this.#modalDelete.setAttribute('confirm-value', a.getRecordSecurityCode(node));
@@ -241,10 +305,10 @@ class IsTreeView extends HTMLElement {
       this.#syncProtect();
       this.#paint();
     });
-    a.notifySelect = () => this.#emitSelect();
+    (a as unknown as { notifySelect: () => void }).notifySelect = () => this.#emitSelect();
   }
 
-  #emitSelect() {
+  #emitSelect(): void {
     const rec = this.#adapter?.record;
     const path = rec?.flatPath ?? '';
     if (path === this.#lastSelectPath) return;
@@ -252,10 +316,10 @@ class IsTreeView extends HTMLElement {
     if (rec) emit(this, 'is-select', { node: rec, flatPath: rec.flatPath });
   }
 
-  #pushState() {
+  #pushState(): void {
     const a = this.#adapter;
     if (!a) return;
-    a.customs = this.#customs;
+    (a as unknown as { customs: TreeCustoms | null | undefined }).customs = this.#customs ?? null;
     const list = this.#customs?.list ? this.#customs.list() : this.#list;
     a.lastNodesRef = null;
     a.onstateupdate({
@@ -266,23 +330,24 @@ class IsTreeView extends HTMLElement {
       List2Rows: list,
       TreeController: a,
       customs: this.#customs,
-      onError: (msg) => this.#reportError(msg),
-      get record() { return a.record; },
-      set record(v) { a.record = v ?? null; },
+      onError: (msg: string) => this.#reportError(msg),
+      get record(): TRecord | null { return a.record; },
+      set record(v: TRecord | null) { a.record = v ?? null; },
     });
     a.onbranchexpand?.();
     this.#paint();
   }
 
-  #paint() {
+  #paint(): void {
     const a = this.#adapter;
     if (!a) return;
     const rt = a.buildCustomsRuntime();
-    const actions = a.decorateHotkeyTitles(a.customs?.topMenuActions?.(rt) ?? []);
-    const showTb = !!(a.customs?.menu || a.customs?.moreMenu) || (actions?.length ?? 0) > 0;
+    const actions = a.decorateHotkeyTitles(a.customs?.topMenuActions?.(rt as never) ?? []);
+    const customsExtra = a.customs as unknown as { menu?: TreeActionEntry[]; moreMenu?: TreeActionEntry[] };
+    const showTb = !!(customsExtra?.menu || customsExtra?.moreMenu) || (actions?.length ?? 0) > 0;
     this.#toolbar.hidden = !showTb;
     if (showTb) {
-      let fo = this.#toolbar.querySelector<HTMLElement>('is-flex-options');
+      let fo = this.#toolbar.querySelector<HTMLElement & { actions?: TreeActionEntry[] }>('is-flex-options');
       if (!fo) {
         fo = document.createElement('is-flex-options');
         this.#toolbar.append(fo);
@@ -291,7 +356,7 @@ class IsTreeView extends HTMLElement {
     }
     this.#body.setAttribute('aria-label', a.customs?.entries || `Árbol de ${a.customs?.entrie || 'registro'}s`);
     this.#body.toggleAttribute('aria-disabled', this.disabled);
-    paintForest(this.#body, a, a.rootNodes, {
+    paintForest(this.#body, a as unknown as Parameters<typeof paintForest>[1], a.rootNodes, {
       labelField: this.labelField,
       helperField: this.helperField,
       renderRow: this.#renderRow,
@@ -300,8 +365,9 @@ class IsTreeView extends HTMLElement {
     this.#emitSelect();
   }
 
-  #openDrawer() {
+  #openDrawer(): void {
     const a = this.#adapter;
+    if (!a) return;
     const rec = this.#pendingRecord || a.record;
     this.#drawer.label = this.#editMode === 'view' ? 'Visualizar' : this.#editMode === 'create' ? 'Crear' : 'Modificar';
     this.#drawer.show?.() ?? this.#drawer.setAttribute('open', '');
@@ -313,17 +379,18 @@ class IsTreeView extends HTMLElement {
     });
   }
 
-  #closeDrawer() {
+  #closeDrawer(): void {
     this.#drawer.hide?.() ?? this.#drawer.removeAttribute('open');
   }
 
-  #onDrawerHide = () => {
+  #onDrawerHide = (): void => {
     this.#adapter?.closeEditForm?.();
     emit(this, 'is-frm-close', {});
   };
 
-  #onDeleteConfirm = async (e) => {
+  #onDeleteConfirm = async (e: CustomEvent<{ value?: string }>): Promise<void> => {
     const a = this.#adapter;
+    if (!a) return;
     this.#modalDelete.loading = true;
     try {
       const ok = await a.confirmDelete(e?.detail?.value ?? '');
@@ -333,7 +400,7 @@ class IsTreeView extends HTMLElement {
     }
   };
 
-  #syncProtect() {
+  #syncProtect(): void {
     const a = this.#adapter;
     if (!a) return;
     const open = !!a.isProtectionPromptOpen;
@@ -342,31 +409,33 @@ class IsTreeView extends HTMLElement {
     this.#protectRedo.hidden = !a.historyCanRedo;
   }
 
-  #onProtectOk = () => { this.#adapter?.confirmProtectionRelease(); this.#protectDlg.hide?.(); };
-  #onProtectRedo = () => {
-    this.#adapter?.historyRedoAll();
-    this.#adapter?.confirmProtectionRelease();
+  #onProtectOk = (): void => { this.#adapter?.confirmProtectionRelease(); this.#protectDlg.hide?.(); };
+  #onProtectRedo = (): void => {
+    const a = this.#adapter;
+    if (!a) return;
+    a.historyRedoAll();
+    a.confirmProtectionRelease();
     this.#protectDlg.hide?.();
   };
-  #onProtectDismiss = () => { this.#adapter?.dismissProtectionPrompt(); };
-  #onOutside = (e) => { this.#adapter?.ontreeoutsidepointerdown(e); };
-  #onDragEnd = () => { this.#adapter?.clearDragOverlays(); };
-  #onDragPointerUp = () => {
+  #onProtectDismiss = (): void => { this.#adapter?.dismissProtectionPrompt(); };
+  #onOutside = (e: PointerEvent): void => { this.#adapter?.ontreeoutsidepointerdown(e); };
+  #onDragEnd = (): void => { this.#adapter?.clearDragOverlays(); };
+  #onDragPointerUp = (): void => {
     const a = this.#adapter;
     if (!a?.currentDragFlatPath) return;
     setTimeout(() => { if (a.currentDragFlatPath) a.clearDragOverlays(); }, 50);
   };
-  #onTreeDragLeave = (e) => {
+  #onTreeDragLeave = (e: DragEvent): void => {
     const a = this.#adapter;
     if (!a?.currentDragFlatPath) return;
-    const rel = e.relatedTarget;
+    const rel = e.relatedTarget as Node | null;
     if (rel && this.#root.contains(rel)) return;
     a.clearDropIndicators();
   };
 
-  refresh() { this.#pushState(); }
-  showDelete(obj) { this.#adapter?.showDelete(obj); }
-  runCustomsPreSubmit() { return this.#adapter?.runCustomsPreSubmit(); }
+  refresh(): void { this.#pushState(); }
+  showDelete(obj: unknown): void { this.#adapter?.showDelete(obj); }
+  runCustomsPreSubmit(): unknown { return this.#adapter?.runCustomsPreSubmit?.(); }
 }
 
 defineElement('is-tree-view', IsTreeView, 'IsTreeView');

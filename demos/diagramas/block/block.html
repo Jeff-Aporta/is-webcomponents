@@ -1,0 +1,65 @@
+<!doctype html>
+<html lang="es" class="theme-dark" data-theme="dark">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>Demo — <is-block-diagram> arquitectura monolítica</title>
+<style>
+  html, body { margin: 0; padding: 0; min-height: 100%; background: #0c1118; color: #e2e8f0; font-family: ui-sans-serif, system-ui, sans-serif; }
+  body { display: grid; grid-template-rows: auto 1fr auto; }
+  header { padding: 16px 20px; border-bottom: 1px solid rgba(255,255,255,0.1); background: #0f1620; }
+  header h1 { font-size: 16px; font-weight: 700; margin: 0; }
+  header p { font-size: 12px; color: #94a3b8; margin: 4px 0 0 0; }
+  main { padding: 20px; }
+  is-block-diagram { width: 100%; height: 520px; display: block; }
+  is-block-diagram:not(:defined) { visibility: hidden; }
+  footer { padding: 12px 20px; border-top: 1px solid rgba(255,255,255,0.1); background: #0f1620; font-size: 11px; color: #94a3b8; }
+</style>
+<script type="module">
+  await import('../../../src/components/diagrams/block-diagram.ts');
+  await customElements.whenDefined('is-block-diagram');
+
+  const el = document.createElement('is-block-diagram');
+  el.payload = {
+    title: 'Arquitectura monolítica',
+    subtitle: 'Capa de presentación → lógica → persistencia',
+    columns: 3,
+    blocks: [
+      { id: 'web', label: 'Web UI', shape: 'round', group: 'frontend' },
+      { id: 'mobile', label: 'Mobile App', shape: 'round', group: 'frontend' },
+      { id: 'api', label: 'API Gateway', group: 'backend' },
+      { id: 'auth', label: 'Auth Service', group: 'backend' },
+      { id: 'cache', label: 'Cache', span: 1, group: 'infra' },
+      { id: 'db', label: 'Postgres', shape: 'round', group: 'infra' },
+    ],
+    edges: [
+      { from: 'web', to: 'api' },
+      { from: 'mobile', to: 'api' },
+      { from: 'api', to: 'auth' },
+      { from: 'api', to: 'cache', label: 'cache' },
+      { from: 'auth', to: 'db' },
+    ],
+    groups: [
+      { id: 'frontend', name: 'Frontend' },
+      { id: 'backend', name: 'Backend' },
+      { id: 'infra', name: 'Infra' },
+    ],
+  };
+  document.getElementById('host').appendChild(el);
+
+  document.documentElement.dataset.blockReady = '1';
+</script>
+</head>
+<body>
+<header>
+  <h1>Demo funcional — <code>&lt;is-block-diagram&gt;</code></h1>
+  <p>Rejilla de 3 columnas con 6 bloques, dos formas (rect, round) y leyenda de grupos.</p>
+</header>
+<main>
+  <div id="host"></div>
+</main>
+<footer>
+  Estado: layout en rejilla explícita; aristas ruteadas con A* ortogonal.
+</footer>
+</body>
+</html>

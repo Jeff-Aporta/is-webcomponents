@@ -37,12 +37,12 @@ import { setStringAttr } from '../_shared/reflect.js';
       }
     }
 
-    #video!: HTMLElement;
+    #video!: HTMLVideoElement;
     #go!: HTMLElement;
-    #dl!: HTMLElement;
-    #stream = null;
-    #rec = null;
-    #chunks = [];
+    #dl!: HTMLAnchorElement;
+    #stream: MediaStream | null = null;
+    #rec: MediaRecorder | null = null;
+    #chunks: Blob[] = [];
     #url = '';
 
     constructor() {
@@ -50,23 +50,23 @@ import { setStringAttr } from '../_shared/reflect.js';
       const shadow = this.attachShadow({ mode: 'open' });
       adoptCss(shadow, import.meta.url);
       shadow.appendChild(TEMPLATE.content.cloneNode(true));
-      this.#video = shadow.querySelector<HTMLElement>('.preview')!;
+      this.#video = shadow.querySelector<HTMLVideoElement>('.preview')!;
       this.#go = shadow.querySelector<HTMLElement>('.go')!;
-      this.#dl = shadow.querySelector<HTMLElement>('.dl')!;
+      this.#dl = shadow.querySelector<HTMLAnchorElement>('.dl')!;
       this.#go.addEventListener('click', () => this.#rec ? this.stop() : this.start());
     }
 
     disconnectedCallback(): void { this.stop(); this.#revoke(); }
 
-    get source() {
+    get source(): 'camera' | 'mic' | 'display' {
       const v = (this.getAttribute('source') || 'camera').toLowerCase();
       return v === 'mic' || v === 'display' ? v : 'camera';
     }
-    set source(v) { setStringAttr(this, 'source', v); }
+    set source(v: 'camera' | 'mic' | 'display') { setStringAttr(this, 'source', v); }
     get disabled() { return this.hasAttribute('disabled'); }
     set disabled(v) { this.toggleAttribute('disabled', !!v); }
 
-    async start() {
+    async start(): Promise<void> {
       if (this.disabled) return;
       this.stop();
       try {
@@ -74,29 +74,31 @@ import { setStringAttr } from '../_shared/reflect.js';
         else if (this.source === 'mic') this.#stream = await navigator.mediaDevices.getUserMedia({ audio: true });
         else this.#stream = await navigator.mediaDevices.getUserMedia({ video: true, audio: true });
       } catch (err) {
-        emit(this, 'is-error', { message: err?.message || 'media' });
+        emit(this, 'is-error', { message: (err as Error)?.message || 'media' });
         return;
       }
       this.#video.srcObject = this.#stream;
       this.#video.hidden = this.source === 'mic';
-      if (this.source !== 'mic') await this.#video.play().catch(() => {});
+      if (this.source !== 'mic') await this.#video.play().catch(() => { /* autoplay bloqueado */ });
       this.#chunks = [];
       if (typeof MediaRecorder !== 'function') {
         emit(this, 'is-error', { message: 'MediaRecorder no disponible' });
         this.stop();
         return;
       }
+      const stream = this.#stream;
+      if (!stream) return;
       const mime = this.source === 'mic'
         ? (MediaRecorder.isTypeSupported('audio/webm') ? 'audio/webm' : '')
         : (MediaRecorder.isTypeSupported('video/webm;codecs=vp9') ? 'video/webm;codecs=vp9' : 'video/webm');
-      this.#rec = mime ? new MediaRecorder(this.#stream, { mimeType: mime }) : new MediaRecorder(this.#stream);
-      this.#rec.ondataavailable = (e) => { if (e.data.size) this.#chunks.push(e.data); };
+      this.#rec = mime ? new MediaRecorder(stream, { mimeType: mime }) : new MediaRecorder(stream);
+      this.#rec.ondataavailable = (e: BlobEvent) => { if (e.data.size) this.#chunks.push(e.data); };
       this.#rec.start();
       this.#go.textContent = 'Detener';
       emit(this, 'is-start', { source: this.source });
     }
 
-    stop() {
+    stop(): void {
       const rec = this.#rec;
       this.#rec = null;
       this.#go.textContent = 'Grabar';
@@ -111,13 +113,21 @@ import { setStringAttr } from '../_shared/reflect.js';
       this.#haltStream();
     }
 
-    #haltStream() {
-      this.#stream?.getTracks().forEach((t) => t.stop());
+    #attach(): void {
+      // Cambio de source fuera de una grabación: refrescar el preview en vivo.
+      // Si no hay nada conectado aún, no hacemos nada (la cámara se abrirá al start()).
+      if (!this.#stream) return;
+      this.#haltStream();
+      void this.start();
+    }
+
+    #haltStream(): void {
+      this.#stream?.getTracks().forEach((t: MediaStreamTrack) => t.stop());
       this.#stream = null;
       this.#video.srcObject = null;
     }
 
-    #finish(type) {
+    #finish(type: string): void {
       this.#revoke();
       const blob = new Blob(this.#chunks, { type: type || 'video/webm' });
       this.#url = URL.createObjectURL(blob);
@@ -127,7 +137,7 @@ import { setStringAttr } from '../_shared/reflect.js';
       emit(this, 'is-stop', { blob, url: this.#url, type: blob.type });
     }
 
-    #revoke() {
+    #revoke(): void {
       if (this.#url) URL.revokeObjectURL(this.#url);
       this.#url = '';
     }

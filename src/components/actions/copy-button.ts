@@ -102,7 +102,7 @@ import { copyText } from '../_shared/dom-utils.js';
     #btn!: HTMLElement;
     // `is-tooltip` es un custom element hermano: se declara la forma minima
     // que se consume en vez de importar su clase, que crearia un ciclo.
-    #tip!: HTMLElement;
+    #tip!: HTMLElement & { placement?: string; disabled?: boolean; show?: () => void; hide?: () => void };
     #live!: HTMLElement;
     #icons: { copy: HTMLElement; success: HTMLElement; error: HTMLElement } =
       { copy: null!, success: null!, error: null! };

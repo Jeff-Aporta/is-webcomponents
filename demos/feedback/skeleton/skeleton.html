@@ -1,0 +1,71 @@
+<!doctype html>
+<html lang="es" class="theme-dark" data-theme="dark">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>Demo <is-skeleton> · is-webcomponents</title>
+<meta name="description" content="Demo de <is-skeleton>: placeholder con efectos sheen, pulse, none." />
+<style>
+  html, body { margin: 0; padding: 0; background: #0c1118; color: #e2e8f0; font-family: ui-sans-serif, system-ui, sans-serif; }
+  body { padding: 24px; display: grid; gap: 24px; }
+  header h1 { font-size: 18px; margin: 0 0 4px; }
+  header p  { font-size: 13px; color: #94a3b8; margin: 0; }
+  section { background: #0f1620; border: 1px solid rgba(255,255,255,0.08); border-radius: 10px; padding: 18px; }
+  section h2 { font-size: 14px; margin: 0 0 12px; color: #94a3b8; font-weight: 600; text-transform: uppercase; letter-spacing: 0.05em; }
+  .row { display: flex; flex-direction: column; gap: 12px; max-width: 420px; }
+  .text-row { display: flex; gap: 8px; align-items: center; }
+  is-skeleton:not(:defined) { visibility: hidden; }
+</style>
+<script type="module">
+  await import('../../../dist/cdn/feedback/skeleton.min.js');
+
+  await customElements.whenDefined('is-skeleton');
+  document.documentElement.dataset.skeletonReady = '1';
+</script>
+</head>
+<body>
+<header>
+  <h1>is-skeleton</h1>
+  <p>Placeholder de carga. Efectos: <code>sheen</code> (default, gradiente deslizante), <code>pulse</code> (respiración), <code>none</code> (estático).</p>
+</header>
+
+<section>
+  <h2>Efectos</h2>
+  <div class="row">
+    <h3 style="margin:0;font-size:14px;">sheen (default)</h3>
+    <is-skeleton style="height:18px;width:100%;"></is-skeleton>
+    <is-skeleton style="height:18px;width:80%;"></is-skeleton>
+    <is-skeleton style="height:18px;width:60%;"></is-skeleton>
+  </div>
+</section>
+
+<section>
+  <h2>pulse</h2>
+  <div class="row">
+    <is-skeleton effect="pulse" style="height:60px;width:100%;border-radius:8px;"></is-skeleton>
+    <is-skeleton effect="pulse" style="height:60px;width:60%;border-radius:8px;"></is-skeleton>
+  </div>
+</section>
+
+<section>
+  <h2>none (estático)</h2>
+  <div class="row">
+    <is-skeleton effect="none" style="height:14px;width:100%;"></is-skeleton>
+  </div>
+</section>
+
+<section>
+  <h2>Tarjeta con varios skeletons</h2>
+  <div class="row" style="border:1px solid rgba(255,255,255,0.1);border-radius:8px;padding:16px;gap:12px;">
+    <div class="text-row">
+      <is-skeleton style="height:48px;width:48px;border-radius:50%;display:inline-block;"></is-skeleton>
+      <div style="flex:1;display:flex;flex-direction:column;gap:6px;">
+        <is-skeleton style="height:14px;width:40%;"></is-skeleton>
+        <is-skeleton style="height:14px;width:70%;"></is-skeleton>
+      </div>
+    </div>
+    <is-skeleton style="height:120px;width:100%;border-radius:6px;"></is-skeleton>
+  </div>
+</section>
+</body>
+</html>

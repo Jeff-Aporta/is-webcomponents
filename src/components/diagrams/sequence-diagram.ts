@@ -8,15 +8,26 @@ import {
   sequenceThemeDark,
   sequenceThemeLight,
 } from './sequence-spec.js';
+import type {
+  SequenceLayout,
+  SequenceLayoutAltBox,
+  SequenceLayoutMessage,
+  SequenceResolvedSpec,
+} from './sequence-spec.js';
 import { SequenceTurtle } from './sequence-turtle.js';
+import type { PathTurtle, TurtleMessage, TurtleTheme } from '../_shared/path-turtle.js';
 import { TK_DIAGRAM_RADIUS_PX } from '../_shared/diagram-grid.js';
 import { svgIconGroup, hasIconJsonSugar } from '../_shared/tk-icon-inline.js';
 import { tkHueToHex } from '../_shared/tk-hue.js';
+import type { DiagramTheme } from './diagram-types.js';
 import { contrastFontColor } from '../_shared/tk-color.js';
 import { inlineMdWeb } from '../_shared/tk-inline-md.js';
 import { wrapText, buildTspans } from '../_shared/diagram-text-wrap.js';
+import type { TSpanSpec } from '../_shared/diagram-text-wrap.js';
 import { registerDiagramKind } from './diagram-kinds.js';
 import { svgEl } from '../_shared/svg-chart-engine.js';
+import type { SequenceMessageSpec } from './sequence-spec.js';
+
 /**
  * <is-sequence-diagram> — diagrama de secuencia en SVG, sin Mermaid.
  *
@@ -43,8 +54,42 @@ import { svgEl } from '../_shared/svg-chart-engine.js';
 
 const GUIDE_X = 44;
 
+/** Estado del callback `onState` del motor de tortuga (path-turtle). */
+interface TurtleState {
+  playing: boolean;
+  idx: number;
+  total: number;
+  replay: number;
+}
+
+/** Vista cacheada por mensaje, para el hover sin reconstruir el SVG. */
+interface MsgNode {
+  m: SequenceLayoutMessage;
+  g: SVGGElement;
+  path: SVGPathElement;
+  arrow: SVGElement;
+  dot: SVGCircleElement;
+  labelNode: SVGElement | null;
+}
+
+/** Línea vertical de lifeline cacheada (para atenuar las inactivas en hover). */
+interface LifelineNode {
+  x: number;
+  line: SVGLineElement;
+}
+
+/** Caja rectangular de actor cacheada (para resaltar origen/destino en hover). */
+interface ActorNode {
+  x: number;
+  g: SVGGElement;
+  rect: SVGRectElement;
+}
+
 /** Div dentro de foreignObject con HTML inline (iconos / markdown). */
-function foreignHtml(x, y, w, h, className, html, style) {
+function foreignHtml(
+  x: number, y: number, w: number, h: number,
+  className: string, html: string, style?: Partial<CSSStyleDeclaration>,
+): SVGForeignObjectElement {
   const fo = svgEl('foreignObject', { x, y, width: w, height: h, overflow: 'visible' });
   const div = document.createElement('div');
   div.setAttribute('xmlns', 'http://www.w3.org/1999/xhtml');
@@ -56,15 +101,15 @@ function foreignHtml(x, y, w, h, className, html, style) {
 }
 
 class IsSequenceDiagram extends DiagramElementBase {
-  #theme = null;
-  #turtle = null;
-  #turtleGroup = null;
-  #hiddenGroups = new Set();
+  #theme: DiagramTheme | null = null;
+  #turtle: PathTurtle | null = null;
+  #turtleGroup: SVGGElement | null = null;
+  #hiddenGroups: Set<string> = new Set<string>();
   /** id de mensaje → nodos cacheados, para aplicar hover sin reconstruir el SVG. */
-  #msgNodes = new Map();
-  #lifelineNodes: { x: any; line: any; }[] = [];
-  #actorNodes: { x: any; g: any; rect: any; }[] = [];
-  #hoverId = null;
+  #msgNodes: Map<string, MsgNode> = new Map();
+  #lifelineNodes: LifelineNode[] = [];
+  #actorNodes: ActorNode[] = [];
+  #hoverId: string | null = null;
 
   constructor() {
     super();
@@ -72,34 +117,34 @@ class IsSequenceDiagram extends DiagramElementBase {
     adoptCss(this.shadowRoot!, import.meta.url);
   }
 
-  onDiagramConnected() {
-    this.wrap.addEventListener('mousemove', this.#onMouseMove);
-    this.wrap.addEventListener('mouseleave', this.#onMouseLeave);
-    this.wrap.addEventListener('click', this.#onClick);
+  onDiagramConnected(): void {
+    this.wrap.addEventListener('mousemove', this.#onMouseMove as EventListener);
+    this.wrap.addEventListener('mouseleave', this.#onMouseLeave as EventListener);
+    this.wrap.addEventListener('click', this.#onClick as EventListener);
   }
 
-  onDiagramDisconnected() {
+  onDiagramDisconnected(): void {
     this.#turtle?.destroy();
     this.#turtle = null;
-    this.wrap.removeEventListener('mousemove', this.#onMouseMove);
-    this.wrap.removeEventListener('mouseleave', this.#onMouseLeave);
-    this.wrap.removeEventListener('click', this.#onClick);
+    this.wrap.removeEventListener('mousemove', this.#onMouseMove as EventListener);
+    this.wrap.removeEventListener('mouseleave', this.#onMouseLeave as EventListener);
+    this.wrap.removeEventListener('click', this.#onClick as EventListener);
   }
 
-  onPayloadChanged() { this.#hiddenGroups = new Set(); }
+  onPayloadChanged(): void { this.#hiddenGroups = new Set(); }
 
-  get turtle() { return this.#turtle; }
+  get turtle(): PathTurtle | null { return this.#turtle; }
 
-  get hiddenGroups() { return this.#hiddenGroups; }
-  set hiddenGroups(v) {
-    this.#hiddenGroups = v instanceof Set ? v : new Set(v || []);
+  get hiddenGroups(): Set<string> { return this.#hiddenGroups; }
+  set hiddenGroups(v: Set<string> | Iterable<string> | null | undefined) {
+    this.#hiddenGroups = v instanceof Set ? v : new Set(v ?? []);
     this.queueRender();
   }
 
-  renderDiagram() {
+  renderDiagram(): void {
     // Los grupos ocultos se filtran del spec (re-diseña sin esas aristas).
     const hidden = this.#hiddenGroups;
-    const spec = resolveSequenceSpec(this.payload ?? {});
+    const spec: SequenceResolvedSpec | null = resolveSequenceSpec(this.payload ?? {});
     this.spec = spec;
     if (!spec) {
       this.svg.innerHTML = '';
@@ -108,8 +153,8 @@ class IsSequenceDiagram extends DiagramElementBase {
     }
     delete this.wrap.dataset.empty;
 
-    const keep = (m) => !m.group || !hidden.has(m.group);
-    const visibleSpec = hidden.size
+    const keep = (m: SequenceMessageSpec): boolean => !m.group || !hidden.has(m.group);
+    const visibleSpec: SequenceResolvedSpec = hidden.size
       ? {
           ...spec,
           messages: spec.messages ? spec.messages.filter(keep) : undefined,
@@ -122,17 +167,17 @@ class IsSequenceDiagram extends DiagramElementBase {
       : spec;
 
     const dark = this.isDarkTheme;
-    const theme = dark ? sequenceThemeDark() : sequenceThemeLight();
+    const theme: DiagramTheme = dark ? sequenceThemeDark() : sequenceThemeLight();
     this.#theme = theme;
     this.syncThemeAttr();
-    const layout = computeSequenceLayout(visibleSpec);
+    const layout: SequenceLayout = computeSequenceLayout(visibleSpec);
     this.layout = layout;
 
     this.#buildSvg(layout, theme);
     this.wrap.classList.toggle('is-viewer', this.isViewer);
   }
 
-  #buildSvg(layout, theme) {
+  #buildSvg(layout: SequenceLayout, theme: DiagramTheme): void {
     const { width: W, height: H, actors, lifelines, messages, altBox, title, subtitle, titleY, subtitleY, groups, legendX, legendColX = [], legendMaxRows = 3 } = layout;
 
     this.svg.setAttribute('viewBox', `0 0 ${W} ${H}`);
@@ -173,14 +218,14 @@ class IsSequenceDiagram extends DiagramElementBase {
     this.#turtleGroup = svgEl('g');
     this.svg.appendChild(this.#turtleGroup);
     this.#turtle?.destroy();
-    this.#turtle = new SequenceTurtle(this.#turtleGroup);
+    this.#turtle = new SequenceTurtle(this.#turtleGroup as unknown as HTMLElement);
     this.#turtle.setData({
-      messages,
-      theme,
+      messages: messages as unknown as readonly TurtleMessage[],
+      theme: theme as unknown as TurtleTheme,
       viewW: W,
       viewH: H,
       autoLoop: this.isViewer,
-      onState: (state) => {
+      onState: (state: TurtleState) => {
         emit(this, 'is-turtle-state', state);
       },
     });
@@ -188,7 +233,11 @@ class IsSequenceDiagram extends DiagramElementBase {
     emit(this, 'is-render', { layout, svg: this.svg });
   }
 
-  #buildLegend(groups, legendX, theme) {
+  #buildLegend(
+    groups: NonNullable<SequenceLayout['groups']>,
+    legendX: number,
+    theme: DiagramTheme,
+  ): void {
     const g = svgEl('g', { class: 'seq-legend' });
     // Grid de leyenda: max 3 filas por columna, tantas columnas como entren.
     // `legendColX` (del spec) lleva el ancho de cada columna para que el item
@@ -196,9 +245,10 @@ class IsSequenceDiagram extends DiagramElementBase {
     // replica aquí para el offset entre columnas — si cambia en el spec,
     // sincronizar acá.
     const LEGEND_GAP_X = 20;
-    const maxRows = this.layout?.legendMaxRows ?? 3;
-    const colWidths = this.layout?.legendColX ?? [];
-    const baseY = (this.layout?.subtitleY || this.layout?.titleY || 22) + 18;
+    const layoutMeta = this.layout as { legendMaxRows?: number; legendColX?: number[]; subtitleY?: number; titleY?: number } | null;
+    const maxRows: number = layoutMeta?.legendMaxRows ?? 3;
+    const colWidths: number[] = layoutMeta?.legendColX ?? [];
+    const baseY: number = (layoutMeta?.subtitleY || layoutMeta?.titleY || 22) + 18;
 
     groups.forEach((grp, gi: number) => {
       const col = Math.floor(gi / maxRows);
@@ -236,7 +286,7 @@ class IsSequenceDiagram extends DiagramElementBase {
     this.svg.appendChild(g);
   }
 
-  #buildActors(actors, theme) {
+  #buildActors(actors: SequenceLayout['actors'], theme: DiagramTheme): void {
     for (const a of actors) {
       const bw = a.w;
       const bx = a.x - bw / 2;
@@ -282,11 +332,11 @@ class IsSequenceDiagram extends DiagramElementBase {
       }
 
       this.svg.appendChild(g);
-      this.#actorNodes.push({ x: a.x, g, rect });
+      this.#actorNodes.push({ x: a.x, g: g as SVGGElement, rect: rect as SVGRectElement });
     }
   }
 
-  #buildLifelines(lifelines, theme) {
+  #buildLifelines(lifelines: SequenceLayout['lifelines'], theme: DiagramTheme): void {
     for (const l of lifelines) {
       const line = svgEl('line', {
         x1: l.x, y1: l.y1, x2: l.x, y2: l.y2,
@@ -294,11 +344,11 @@ class IsSequenceDiagram extends DiagramElementBase {
         class: 'seq-lifeline',
       });
       this.svg.appendChild(line);
-      this.#lifelineNodes.push({ x: l.x, line });
+      this.#lifelineNodes.push({ x: l.x, line: line as SVGLineElement });
     }
   }
 
-  #buildAltBox(altBox, theme) {
+  #buildAltBox(altBox: SequenceLayoutAltBox, theme: DiagramTheme): void {
     const g = svgEl('g', { class: 'seq-alt' });
     g.appendChild(svgEl('rect', {
       x: altBox.x, y: altBox.y, width: altBox.w, height: altBox.h, rx: TK_DIAGRAM_RADIUS_PX,
@@ -313,7 +363,11 @@ class IsSequenceDiagram extends DiagramElementBase {
     this.svg.appendChild(g);
   }
 
-  #buildMessages(messages, altBox, theme) {
+  #buildMessages(
+    messages: SequenceLayoutMessage[],
+    altBox: SequenceLayoutAltBox | undefined,
+    theme: DiagramTheme,
+  ): void {
     for (const m of messages) {
       const color = (m.groupHue != null && tkHueToHex(m.groupHue)) || theme.accent;
       const g = svgEl('g', { class: 'seq-msg' });
@@ -346,15 +400,18 @@ class IsSequenceDiagram extends DiagramElementBase {
       const tipX = m.arrowTipX;
       const tipY = m.arrowTipY ?? m.y;
       const wingLen = m.kind === 'async' ? 9 : 7;
+      // `svgArrowHead` infiere `className` como `null | undefined` por el
+      // default; añadimos la clase CSS al elemento resultante para no
+      // depender del tipado del helper compartido (que vive en `_shared`).
       const arrow = svgArrowHead({
         d: m.path,
         tip: { x: tipX, y: tipY },
         color,
         len: wingLen,
         halfWidth: 3.5,
-        className: 'seq-msg-head',
         fallbackDir: { x: m.arrowDir > 0 ? 1 : -1, y: 0 },
       });
+      arrow.classList.add('seq-msg-head');
       g.appendChild(arrow);
 
       const dotG = svgEl('g', { class: 'seq-start' });
@@ -379,11 +436,18 @@ class IsSequenceDiagram extends DiagramElementBase {
       if (labelNode) g.appendChild(labelNode);
 
       this.svg.appendChild(g);
-      this.#msgNodes.set(m.id, { m, g, path, arrow, dot, labelNode });
+      this.#msgNodes.set(m.id, {
+        m,
+        g: g as SVGGElement,
+        path: path as SVGPathElement,
+        arrow,
+        dot: dot as SVGCircleElement,
+        labelNode,
+      });
     }
   }
 
-  #buildMessageLabel(m, theme) {
+  #buildMessageLabel(m: SequenceLayoutMessage, theme: DiagramTheme): SVGElement | null {
     if (!m.label) return null;
     if (m.label.includes('{{')) {
       return foreignHtml(
@@ -403,7 +467,11 @@ class IsSequenceDiagram extends DiagramElementBase {
     // cabe — los chips de mensaje no pueden crecer verticalmente (romperían
     // la rejilla de la secuencia). El caller puede sobreescribir con
     // `m.overflow` si quiere un comportamiento distinto.
-    const overflow = (m.overflow === 'grow' || m.overflow === 'ellipsis') ? m.overflow : 'ellipsis';
+    // `SequenceLayoutMessage` no declara `overflow` (lo añade el spec si lo
+    // quiere); casteamos para leer el override opcional sin tocar la firma.
+    const rawOverflow = (m as { overflow?: string }).overflow;
+    const overflow: 'grow' | 'ellipsis' =
+      (rawOverflow === 'grow' || rawOverflow === 'ellipsis') ? rawOverflow : 'ellipsis';
     const result = wrapText({
       text: m.label,
       maxWidth: m.labelW,
@@ -412,7 +480,7 @@ class IsSequenceDiagram extends DiagramElementBase {
       fontFamily: 'Consolas,Menlo,monospace',
       overflow,
     });
-    const tspans = buildTspans(
+    const tspans: TSpanSpec[] = buildTspans(
       result.lines,
       m.labelX, m.labelY, m.labelW, m.labelH,
       'middle', 10, 1.2,
@@ -434,11 +502,11 @@ class IsSequenceDiagram extends DiagramElementBase {
 
   /* ── hover ───────────────────────────────────────────────────────── */
 
-  #onClick = (e: PointerEvent) => {
+  #onClick = (e: PointerEvent): void => {
     if (this.isViewer) {
-      const item = e.composedPath().find((n) => n?.dataset?.groupId);
+      const item = e.composedPath().find((n: EventTarget | null) => (n as HTMLElement | undefined)?.dataset?.groupId);
       if (item) {
-        emitCancelable(this, 'is-toggle-group', { id: item.dataset.groupId });
+        emitCancelable(this, 'is-toggle-group', { id: (item as HTMLElement).dataset.groupId });
       }
       return;
     }
@@ -454,24 +522,25 @@ class IsSequenceDiagram extends DiagramElementBase {
     if (!ev.defaultPrevented) this.openOwnViewer('sequence');
   };
 
-  #onMouseMove = (e: PointerEvent) => {
+  #onMouseMove = (e: PointerEvent): void => {
     if (!this.isViewer) return;
-    const g = e.composedPath().find((n) => n?.dataset?.msgId);
-    const id = g?.dataset.msgId ?? null;
+    const g = e.composedPath().find((n: EventTarget | null) => (n as HTMLElement | undefined)?.dataset?.msgId);
+    const id: string | null = (g as HTMLElement | undefined)?.dataset.msgId ?? null;
     if (id !== this.#hoverId) this.#applyHover(id);
     if (id) this.#positionTooltip(e);
   };
 
-  #onMouseLeave = () => {
+  #onMouseLeave = (_e: MouseEvent): void => {
     if (!this.isViewer) return;
     this.#applyHover(null);
   };
 
-  #applyHover(id) {
+  #applyHover(id: string | null): void {
     this.#hoverId = id;
     const entry = id ? this.#msgNodes.get(id) : null;
     const hovered = entry?.m ?? null;
     const theme = this.#theme;
+    if (!theme) return;
     const hiColor = hovered?.groupHue != null ? tkHueToHex(hovered.groupHue) || theme.accent : theme.accent;
 
     this.wrap.classList.toggle('is-hover-msg', !!id);
@@ -480,10 +549,10 @@ class IsSequenceDiagram extends DiagramElementBase {
       const active = msgId === id;
       node.g.classList.toggle('is-active', active);
       node.g.classList.toggle('is-dim', !!id && !active);
-      node.path.setAttribute('stroke-width', active ? 1.75 : 1.15);
+      node.path.setAttribute('stroke-width', String(active ? 1.75 : 1.15));
       // La cabeza es un <polygon> relleno (sync y async): no tiene trazo que
       // engrosar, el realce lo lleva la línea.
-      node.dot.setAttribute('r', active ? 9 : 8);
+      node.dot.setAttribute('r', String(active ? 9 : 8));
       if (node.labelNode?.classList?.contains('seq-label-text')) {
         node.labelNode.setAttribute('fill', active ? theme.text : theme.muted);
         node.labelNode.setAttribute('font-weight', active ? '600' : '400');
@@ -491,19 +560,19 @@ class IsSequenceDiagram extends DiagramElementBase {
     }
 
     for (const { x, line } of this.#lifelineNodes) {
-      const involved = hovered && (hovered.fromX === x || hovered.toX === x);
+      const involved = !!hovered && (hovered.fromX === x || hovered.toX === x);
       line.setAttribute('stroke', involved ? hiColor : theme.grid);
-      line.setAttribute('stroke-width', involved ? 1.6 : 1);
-      line.setAttribute('opacity', id && !involved ? 0.3 : 1);
+      line.setAttribute('stroke-width', String(involved ? 1.6 : 1));
+      line.setAttribute('opacity', String(id && !involved ? 0.3 : 1));
     }
 
     for (const { x, g, rect } of this.#actorNodes) {
-      const active = hovered && (hovered.fromX === x || hovered.toX === x);
+      const active = !!hovered && (hovered.fromX === x || hovered.toX === x);
       const dim = !!id && !active;
       g.classList.toggle('is-active', !!active);
-      g.setAttribute('opacity', dim ? 0.32 : 1);
+      g.setAttribute('opacity', String(dim ? 0.32 : 1));
       rect.setAttribute('stroke', active ? theme.accent : theme.border);
-      rect.setAttribute('stroke-width', active ? 1.4 : 1);
+      rect.setAttribute('stroke-width', String(active ? 1.4 : 1));
     }
 
     // La tortuga se congela mientras se inspecciona un mensaje.
@@ -516,7 +585,7 @@ class IsSequenceDiagram extends DiagramElementBase {
     this.#renderTooltip(hovered);
   }
 
-  #renderTooltip(m) {
+  #renderTooltip(m: SequenceLayoutMessage): void {
     const tip = this.tooltipEl;
     tip.hidden = false;
     tip.innerHTML = '';
@@ -542,7 +611,7 @@ class IsSequenceDiagram extends DiagramElementBase {
   }
 
   /** Sigue al cursor pero SIEMPRE por debajo de la fila, para no tapar el dot ni la flecha. */
-  #positionTooltip(e) {
+  #positionTooltip(e: PointerEvent): void {
     const rect = this.wrap.getBoundingClientRect();
     const x = e.clientX - rect.left;
     const y = e.clientY - rect.top;

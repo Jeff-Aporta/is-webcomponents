@@ -1,0 +1,196 @@
+<!doctype html>
+<html lang="es" class="theme-dark" data-theme="dark">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>Demo de <is-split-panel> · is-webcomponents</title>
+<meta name="description" content="Dos paneles con divisor arrastrable. position/position-in-pixels, orientation, primary, collapse, disabled, snap, storage-key. Eventos reposition. Persistencia en localStorage." />
+<style>
+  html, body { margin: 0; padding: 0; min-height: 100vh; background: #0c1118; color: #e2e8f0; font-family: ui-sans-serif, system-ui, sans-serif; }
+  body { display: grid; grid-template-rows: auto 1fr auto; min-height: 100vh; }
+  header { padding: 16px 20px; border-bottom: 1px solid rgba(255,255,255,0.1); background: #0f1620; }
+  header h1 { font-size: 16px; font-weight: 700; margin: 0; }
+  header p { font-size: 12px; color: #94a3b8; margin: 4px 0 0 0; }
+  main { padding: 20px; display: grid; gap: 14px; }
+  section { background: #0f1620; border: 1px solid rgba(255,255,255,0.1); border-radius: 8px; padding: 16px; }
+  section h2 { font-size: 11px; text-transform: uppercase; letter-spacing: 0.08em; margin: 0 0 12px 0; color: #94a3b8; }
+  is-split-panel:not(:defined) { visibility: hidden; }
+
+  /* Cada split-panel vive en una rejilla de 400-600px de alto. */
+  .sp-host {
+    height: 240px;
+    border: 1px solid rgba(255,255,255,0.12);
+    border-radius: 4px;
+    background: #0a121b;
+    overflow: hidden;
+  }
+  .sp-host > is-split-panel {
+    width: 100%;
+    height: 100%;
+    display: grid;
+  }
+  /* Paneles visibles. */
+  .panel-a, .panel-b { padding: 12px; color: #e2e8f0; }
+  .panel-a { background: linear-gradient(135deg, #1e293b, #334155); }
+  .panel-b { background: linear-gradient(135deg, #312e81, #1e3a8a); }
+
+  .actions { display: flex; gap: 8px; flex-wrap: wrap; margin-top: 8px; }
+  pre.log { margin: 8px 0 0 0; font: 11px ui-monospace, Menlo, Consolas, monospace; color: #94a3b8; white-space: pre-wrap; max-height: 160px; overflow: auto; }
+  footer { padding: 12px 20px; border-top: 1px solid rgba(255,255,255,0.1); background: #0f1620; font-size: 11px; color: #94a3b8; }
+  footer code { background: rgba(255,255,255,0.06); padding: 1px 5px; border-radius: 3px; font: 11px ui-monospace, Menlo, Consolas, monospace; }
+</style>
+<script type="module">
+  await import('../../../dist/cdn/layout/split-panel.min.js');
+  await customElements.whenDefined('is-split-panel');
+
+  // (1) Split-panel horizontal básico, posición por defecto (50%).
+  const sp1 = document.createElement('is-split-panel');
+  sp1.id = 'sp1';
+  sp1.setAttribute('orientation', 'horizontal');
+  sp1.innerHTML = `
+    <div slot="start" class="panel-a">Panel A (start)</div>
+    <div slot="end" class="panel-b">Panel B (end)</div>
+  `;
+  document.getElementById('host-1').appendChild(sp1);
+
+  // (2) Split-panel vertical.
+  const sp2 = document.createElement('is-split-panel');
+  sp2.id = 'sp2';
+  sp2.setAttribute('orientation', 'vertical');
+  sp2.innerHTML = `
+    <div slot="start" class="panel-a">Top (start)</div>
+    <div slot="end" class="panel-b">Bottom (end)</div>
+  `;
+  document.getElementById('host-2').appendChild(sp2);
+
+  // (3) Split-panel con persistencia (storage-key). NO limpiamos localStorage
+  //     en el demo: si lo hiciéramos, el componente perdería sus prefs en cada
+  //     recarga y el test de restore no podría validarlo. El test limpia las
+  //     prefs explícitamente cuando lo necesita vía clearPrefs().
+  const sp3 = document.createElement('is-split-panel');
+  sp3.id = 'sp3';
+  sp3.setAttribute('orientation', 'horizontal');
+  sp3.setAttribute('storage-key', 'demo-sp-3');
+  sp3.setAttribute('position-in-pixels', '300');
+  sp3.innerHTML = `
+    <div slot="start" class="panel-a">Panel A</div>
+    <div slot="end" class="panel-b">Panel B (storage-key=demo-sp-3)</div>
+  `;
+  document.getElementById('host-3').appendChild(sp3);
+
+  // (4) Split-panel con collapse, primary y snap.
+  const sp4 = document.createElement('is-split-panel');
+  sp4.id = 'sp4';
+  sp4.setAttribute('orientation', 'horizontal');
+  sp4.setAttribute('primary', 'end');
+  sp4.setAttribute('snap', '120px 50%');
+  sp4.setAttribute('position-in-pixels', '220');
+  sp4.innerHTML = `
+    <div slot="start" class="panel-a">Panel A (start, secondary)</div>
+    <div slot="end" class="panel-b">Panel B (end, primary)</div>
+  `;
+  document.getElementById('host-4').appendChild(sp4);
+
+  // (5) Split-panel disabled.
+  const sp5 = document.createElement('is-split-panel');
+  sp5.id = 'sp5';
+  sp5.setAttribute('orientation', 'horizontal');
+  sp5.setAttribute('disabled', '');
+  sp5.innerHTML = `
+    <div slot="start" class="panel-a">Disabled start</div>
+    <div slot="end" class="panel-b">Disabled end</div>
+  `;
+  document.getElementById('host-5').appendChild(sp5);
+
+  // (6) Listener de eventos "reposition".
+  const log = document.getElementById('log');
+  const append = (line) => { log.textContent = line + '\n' + log.textContent; };
+  document.querySelectorAll('is-split-panel').forEach((sp) => {
+    sp.addEventListener('reposition', (e) => {
+      append(`reposition ← ${sp.id} detail=${typeof e.detail === 'number' ? e.detail.toFixed(1) : '?'}`);
+    });
+  });
+
+  // (7) Acciones interactivas sobre sp1.
+  document.getElementById('btn-30').addEventListener('click', () => { sp1.position = 30; });
+  document.getElementById('btn-70').addEventListener('click', () => { sp1.position = 70; });
+  document.getElementById('btn-home').addEventListener('click', () => { sp1.position = 0; });
+  document.getElementById('btn-end').addEventListener('click', () => { sp1.position = 100; });
+  document.getElementById('btn-collapse-start').addEventListener('click', () => {
+    sp4.collapse = sp4.collapse === 'start' ? null : 'start';
+    document.getElementById('collapse-log').textContent = `collapse=${sp4.collapse ?? 'null'}`;
+  });
+  document.getElementById('btn-collapse-end').addEventListener('click', () => {
+    sp4.collapse = sp4.collapse === 'end' ? null : 'end';
+    document.getElementById('collapse-log').textContent = `collapse=${sp4.collapse ?? 'null'}`;
+  });
+  document.getElementById('btn-disabled-toggle').addEventListener('click', () => {
+    sp5.disabled = !sp5.disabled;
+    document.getElementById('disabled-log').textContent = `disabled=${sp5.disabled}`;
+  });
+  document.getElementById('btn-reset-storage').addEventListener('click', () => {
+    try {
+      const root = JSON.parse(localStorage.getItem('is-webcomponents') || '{}');
+      if (root['is-split-panel']?.['demo-sp-3']) delete root['is-split-panel']['demo-sp-3'];
+      localStorage.setItem('is-webcomponents', JSON.stringify(root));
+      append('storage-key=demo-sp-3 prefs borradas');
+    } catch {}
+  });
+
+  document.documentElement.dataset.splitPanelReady = '1';
+</script>
+</head>
+<body>
+<header>
+  <h1>Demo — <code>&lt;is-split-panel&gt;</code></h1>
+  <p>Dos paneles separados por un divisor arrastrable. <code>position</code> (%), <code>position-in-pixels</code>, <code>orientation</code>, <code>primary</code>, <code>collapse</code>, <code>disabled</code>, <code>snap</code>, <code>storage-key</code>. Eventos <code>reposition</code>.</p>
+</header>
+<main>
+  <section>
+    <h2>1. Horizontal (default)</h2>
+    <div class="sp-host" id="host-1"></div>
+    <div class="actions">
+      <button id="btn-30" type="button">position = 30%</button>
+      <button id="btn-70" type="button">position = 70%</button>
+      <button id="btn-home" type="button">position = 0 (Home)</button>
+      <button id="btn-end" type="button">position = 100 (End)</button>
+    </div>
+  </section>
+  <section>
+    <h2>2. Vertical</h2>
+    <div class="sp-host" id="host-2" style="height: 280px;"></div>
+  </section>
+  <section>
+    <h2>3. Con persistencia (storage-key)</h2>
+    <div class="sp-host" id="host-3"></div>
+    <div class="actions">
+      <button id="btn-reset-storage" type="button">Borrar prefs (demo-sp-3)</button>
+    </div>
+  </section>
+  <section>
+    <h2>4. primary="end" + snap="120px 50%"</h2>
+    <div class="sp-host" id="host-4"></div>
+    <div class="actions">
+      <button id="btn-collapse-start" type="button">toggle collapse=start</button>
+      <button id="btn-collapse-end" type="button">toggle collapse=end</button>
+    </div>
+    <pre id="collapse-log" class="log" style="max-height:32px;"></pre>
+  </section>
+  <section>
+    <h2>5. Disabled</h2>
+    <div class="sp-host" id="host-5"></div>
+    <div class="actions">
+      <button id="btn-disabled-toggle" type="button">toggle disabled</button>
+    </div>
+    <pre id="disabled-log" class="log" style="max-height:32px;"></pre>
+  </section>
+  <section>
+    <h2>Eventos reposition</h2>
+    <pre id="log" class="log"></pre>
+  </section>
+</main>
+<footer>
+  Estado: <code>customElements.whenDefined('is-split-panel')</code> resuelto.
+</footer>
+</body>
+</html>

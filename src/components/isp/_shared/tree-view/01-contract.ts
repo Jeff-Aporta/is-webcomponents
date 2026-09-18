@@ -1,7 +1,20 @@
 var __defProp = Object.defineProperty;
-var __defNormalProp = (obj, key, value) => key in obj ? __defProp(obj, key, { enumerable: true, configurable: true, writable: true, value }) : obj[key] = value;
-var __publicField = (obj, key, value) => __defNormalProp(obj, typeof key !== "symbol" ? key + "" : key, value);
+var __defNormalProp = (obj: object, key: PropertyKey, value: unknown) => key in obj ? __defProp(obj, key, { enumerable: true, configurable: true, writable: true, value }) : (obj as Record<PropertyKey, unknown>)[key] = value;
+var __publicField = (obj: object, key: PropertyKey, value: unknown) => __defNormalProp(obj, typeof key !== "symbol" ? key + "" : key, value);
 import { TTreeAdapterContext } from "./00-context.js";
+import { asRecord, type TNode } from "./_types.js";
+
+/**
+ * TTreeAdapterContract — contrato vacío sobre `_TTreeAdapterContext`.
+ *
+ * Las firmas de los métodos vacíos (`toNode`, `createNode`, ...) están
+ * declaradas con tipos concretos (no `any`) para que las subclases en
+ * `03-tree-shape.ts` / `04-tree-flow.ts` puedan sobreescribirlas sin
+ * encontrar incompatibilidades de tipo bajo strictNullChecks.
+ *
+ * Importante: este archivo NO está en lock de ningún WT. Cualquier WT puede
+ * modificarlo mientras mantenga el contrato.
+ */
 class TTreeAdapterContract extends TTreeAdapterContext {
   constructor() {
     super(...arguments);
@@ -16,25 +29,26 @@ class TTreeAdapterContract extends TTreeAdapterContext {
     __publicField(this, "_uiListeners", []);
     __publicField(this, "lastNodesRef", []);
     __publicField(this, "lastObjRefId", "");
-    __publicField(this, "flashClearTimer");
-    __publicField(this, "flashErrorClearTimer");
+    __publicField(this, "flashClearTimer", 0);
+    __publicField(this, "flashErrorClearTimer", 0);
   }
-  getReferenceFlatPath(node) {
+  getReferenceFlatPath(node: TNode): string {
     const id = String(node.flatPath ?? "").trim();
     const idx = id.lastIndexOf(".");
     return idx >= 0 ? id.slice(0, idx) : "";
   }
-  addUiListener(fn) {
+  addUiListener(fn: () => void): () => void {
     this._uiListeners.push(fn);
     return () => {
       this._uiListeners = this._uiListeners.filter((l) => l !== fn);
     };
   }
-  notifyUI() {
+  notifyUI(): void {
     this.uiTick++;
     for (const fn of this._uiListeners) fn();
+    void asRecord;
   }
-  onstateupdate(ctx) {
+  override onstateupdate(ctx: Record<string, unknown>): void {
     const prevReadonly = !!this.context.readonly;
     const prevDisabled = !!this.context.disabled;
     const prevDraggable = this.context.draggable !== false;
@@ -46,9 +60,9 @@ class TTreeAdapterContract extends TTreeAdapterContext {
       this.notifyUI();
     }
   }
-  getVisibleFlatPaths(nodes, expandedSet) {
-    const ids = [];
-    const walk = (list) => {
+  getVisibleFlatPaths(nodes: TNode[], expandedSet: Set<string>): string[] {
+    const ids: string[] = [];
+    const walk = (list: TNode[]): void => {
       for (const node of list) {
         ids.push(node.flatPath);
         if (node.childrens?.length && expandedSet.has(node.flatPath)) walk(node.childrens);
@@ -57,31 +71,52 @@ class TTreeAdapterContract extends TTreeAdapterContext {
     walk(nodes);
     return ids;
   }
-  toNode(_obj, _isCopy) {
+  /** Stub: las subclases (`TATreeShape`) sobreescriben con lógica real. */
+  toNode(_obj: Partial<TNode> | TNode | null | undefined, _isCopy?: boolean): TNode | null {
     return null;
   }
-  onrefresh() {
+  onrefresh(): void {
+    /* provided by TATreeFlow */
   }
-  applySelection(_obj) {
+  /** Stub: las subclases (`TATreeFlow`) sobreescriben con lógica real. */
+  applySelection(_obj: TNode | null | undefined): void {
+    /* provided by TAView */
   }
-  resyncExpandedToCurrentTree() {
+  /** Stub: las subclases (`TAView`) sobreescriben con lógica real. */
+  resyncExpandedToCurrentTree(): void {
+    /* provided by TAView */
   }
-  syncAllRowAdapters() {
+  /** Stub: las subclases (`TAView`) sobreescriben con lógica real. */
+  syncAllRowAdapters(): void {
+    /* provided by TARowBase */
   }
-  syncRowAdaptersByFlatPaths(_ids) {
+  /** Stub: las subclases (`TARowBase`) sobreescriben con lógica real. */
+  syncRowAdaptersByFlatPaths(_ids: readonly string[]): void {
+    /* provided by TARowBase */
   }
-  createNode(_data) {
+  /** Stub: las subclases (`TATreeShape`) sobreescriben con lógica real. */
+  createNode(data: Partial<TNode> | TNode): TNode | null {
+    void data;
     return null;
   }
-  get List2Rows() {
+  /** Stub: las subclases (`TATreeShape`) sobreescriben con lógica real. */
+  get List2Rows(): TNode[] {
     return [];
   }
-  set List2Rows(_value) {
+  /** Stub: las subclases (`TATreeShape`) sobreescriben con lógica real. */
+  set List2Rows(_value: TNode[]) {
+    /* provided by TATreeShape */
   }
-  getEditAttrsForLevel(driverAttrs, _plan) {
+  getEditAttrsForLevel(
+    driverAttrs: Record<string, unknown>,
+    _plan?: TNode,
+  ): Record<string, unknown> {
     return driverAttrs;
   }
-  canEditSelectResource(plan, draft) {
+  canEditSelectResource(
+    plan: TNode | null | undefined,
+    draft: TNode | null | undefined,
+  ): boolean {
     return !!plan?.isAtom || !!draft?.isAtom;
   }
 }

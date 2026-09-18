@@ -9,13 +9,15 @@ function clamp01(n: number): number {
   return n < 0 ? 0 : n > 1 ? 1 : n;
 }
 
-/** Cualquier color CSS soportado → {r,g,b} sRGB 0..1. Soporta #hex y hsl()/hsla(). */
-function toRgb(color) {
+type Rgb = { r: number; g: number; b: number };
+
+/** Cualquier color CSS soportado → `{r,g,b}` sRGB 0..1. Soporta #hex y hsl()/hsla(). */
+function toRgb(color: string | null | undefined): Rgb | null {
   const c = String(color || '').trim();
 
   const hex = c.replace(/^#/, '');
   if (/^[0-9a-f]{3}$/i.test(hex)) {
-    return { r: parseInt(hex[0] + hex[0], 16) / 255, g: parseInt(hex[1] + hex[1], 16) / 255, b: parseInt(hex[2] + hex[2], 16) / 255 };
+    return { r: parseInt(hex[0]! + hex[0]!, 16) / 255, g: parseInt(hex[1]! + hex[1]!, 16) / 255, b: parseInt(hex[2]! + hex[2]!, 16) / 255 };
   }
   if (/^[0-9a-f]{6}$/i.test(hex)) {
     return { r: parseInt(hex.slice(0, 2), 16) / 255, g: parseInt(hex.slice(2, 4), 16) / 255, b: parseInt(hex.slice(4, 6), 16) / 255 };
@@ -27,7 +29,7 @@ function toRgb(color) {
     const s = clamp01(Number(hsl[2]) / 100);
     const l = clamp01(Number(hsl[3]) / 100);
     const a = s * Math.min(l, 1 - l);
-    const f = (n: number) => {
+    const f = (n: number): number => {
       const k = (n + h / 30) % 12;
       return l - a * Math.max(Math.min(k - 3, 9 - k, 1), -1);
     };
@@ -36,12 +38,12 @@ function toRgb(color) {
   return null;
 }
 
-function srgbToLinear(c: number) {
+function srgbToLinear(c: number): number {
   return c <= 0.04045 ? c / 12.92 : Math.pow((c + 0.055) / 1.055, 2.4);
 }
 
 /** Lightness OKLCH (= L de OKLab) de un color, 0..1. */
-export function oklchLightness(color) {
+export function oklchLightness(color: string | null | undefined): number {
   const rgb = toRgb(color);
   if (!rgb) return 0.5;
   const r = srgbToLinear(rgb.r);
@@ -54,6 +56,6 @@ export function oklchLightness(color) {
 }
 
 /** Color de fuente con mejor contraste sobre `bg` (claro/oscuro), umbral OKLCH 0.75. */
-export function contrastFontColor(bg, light = '#ffffff', dark = '#0b1f33') {
+export function contrastFontColor(bg: string, light: string = '#ffffff', dark: string = '#0b1f33'): string {
   return oklchLightness(bg) < 0.75 ? light : dark;
 }

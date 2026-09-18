@@ -3,6 +3,7 @@ import { diagramHeaderWidth } from '../_shared/diagram-header.js';
 import { applyEdgeActorLayout } from '../_shared/diagram-edge-actors.js';
 import { assignEdgeHues } from '../_shared/diagram-edge-style.js';
 import { makeCostGrid, blockRect, applyRectCost, snapDiagramGrid, snapPointAwayFromSide} from '../_shared/diagram-grid.js';
+import type { DiagramSide } from '../_shared/diagram-grid.js';
 import { routeOrthogonal, pixelToGrid, gridPathToSvg, buildOrthogonalPath } from '../_shared/diagram-astar.js';
 import { richTextPlain } from '../_shared/tk-rich-text.js';
 import { resolveTkHue } from '../_shared/tk-hue.js';
@@ -228,13 +229,14 @@ function tipAt(p: Point2D, side: string): Point2D & { angle: number } {
 
 /** Lados de anclaje; para self-relations fuerza lados distintos (loop visible). */
 function sidesFor(
-  fromNode: { cx: number; cy: number; x: number; y: number; width: number; height: number },
-  toNode: { cx: number; cy: number; x: number; y: number; width: number; height: number },
+  fromNode: { layer: number },
+  toNode: { layer: number },
   direction: ClassSpec['direction'],
   isSelf: boolean,
-): { fromSide: string; toSide: string } {
+): { fromSide: DiagramSide; toSide: DiagramSide } {
   if (isSelf) return { fromSide: 'right', toSide: 'top' };
-  return pickSides(fromNode, toNode, direction);
+  const sides = pickSides(fromNode, toNode, direction);
+  return { fromSide: sides.fromSide as DiagramSide, toSide: sides.toSide as DiagramSide };
 }
 
 /**
@@ -347,11 +349,11 @@ export function computeClassLayout(spec: ClassSpec): ClassLayout {
       sourceAngle: sourceTip.angle,
       labelX: mid.x,
       labelY: mid.y,
-      hue: r.group ? groupHue.get(r.group) : undefined,
+      hue: r.group != null ? groupHue.get(String(r.group)) : undefined,
     };
   });
 
-  assignEdgeHues(routed);
+  assignEdgeHues(routed as unknown as Parameters<typeof assignEdgeHues>[0]);
   const layout: ClassLayout = {
     width,
     height,

@@ -57,10 +57,14 @@ import { getValues, setValues } from './form-json.js';
     static json2html = json2html;
     static html2json = html2json;
 
-    static toJSON(host) { return host?.toJSON?.() ?? null; }
-    static fromJSON(host, json, opts) { return host?.fromJSON?.(json, opts) ?? host; }
+    static toJSON(host: HTMLElement | null | undefined): unknown {
+      return (host as HTMLElement & { toJSON?: () => unknown })?.toJSON?.() ?? null;
+    }
+    static fromJSON(host: HTMLElement | null | undefined, json: unknown, opts?: { replace?: boolean }): HTMLElement | null | undefined {
+      return (host as HTMLElement & { fromJSON?: (json: unknown, opts?: { replace?: boolean }) => HTMLElement })?.fromJSON?.(json, opts) ?? host;
+    }
 
-    #form!: HTMLElement;
+    #form!: HTMLFormElement;
     #submitBtn!: HTMLElement;
     #cancelBtn!: HTMLElement;
     #inlineApplied = false;
@@ -71,7 +75,7 @@ import { getValues, setValues } from './form-json.js';
       shadow.appendChild(TEMPLATE.content.cloneNode(true));
       adoptCss(shadow, import.meta.url);
 
-      this.#form = shadow.querySelector<HTMLElement>('.form')!;
+      this.#form = shadow.querySelector<HTMLFormElement>('.form')!;
       this.#submitBtn = shadow.querySelector<HTMLElement>('.submit')!;
       this.#cancelBtn = shadow.querySelector<HTMLElement>('.cancel')!;
     }
@@ -104,53 +108,62 @@ import { getValues, setValues } from './form-json.js';
       }
     }
 
-    get mode() {
+    get mode(): string {
       const v = this.getAttribute('mode');
-      return VALID_MODE.includes(v) ? v : 'edit';
+      return v && VALID_MODE.includes(v) ? v : 'edit';
     }
-    set mode(v) {
+    set mode(v: string | null | undefined) {
       if (v == null || v === '') this.removeAttribute('mode');
       else if (VALID_MODE.includes(String(v))) this.setAttribute('mode', String(v));
     }
 
-    get submitLabel() { return this.getAttribute('submit-label') || 'Aceptar'; }
-    set submitLabel(v) {
+    get submitLabel(): string { return this.getAttribute('submit-label') || 'Aceptar'; }
+    set submitLabel(v: string | null | undefined) {
       if (v == null || v === '') this.removeAttribute('submit-label');
       else this.setAttribute('submit-label', String(v));
     }
 
-    get cancelLabel() { return this.getAttribute('cancel-label') || 'Cancelar'; }
-    set cancelLabel(v) {
+    get cancelLabel(): string { return this.getAttribute('cancel-label') || 'Cancelar'; }
+    set cancelLabel(v: string | null | undefined) {
       if (v == null || v === '') this.removeAttribute('cancel-label');
       else this.setAttribute('cancel-label', String(v));
     }
 
-    get loading() { return this.hasAttribute('loading'); }
-    set loading(v) { this.toggleAttribute('loading', !!v); }
+    get loading(): boolean { return this.hasAttribute('loading'); }
+    set loading(v: boolean) { this.toggleAttribute('loading', !!v); }
 
-    get form() { return this.#form; }
+    get form(): HTMLFormElement { return this.#form; }
 
     // ---- JSON / HTML ------------------------------------------------------
 
     /** Monta el light DOM desde JSON compacto. */
-    json2html(body, opts) {
+    json2html(body: unknown, opts?: { replace?: boolean }): this {
       applyJsonBody(this, body, opts);
       return this;
     }
 
     /** Serializa el light DOM a JSON compacto. */
-    html2json(opts) {
-      return hostToJson(this, opts);
+    html2json(opts: unknown): unknown {
+      return hostToJson(this, opts as never);
     }
 
-    getValues() { return getValues(this); }
-    setValues(values) { setValues(this, values); return this; }
+    getValues(): Record<string, unknown> { return getValues(this) as Record<string, unknown>; }
+    setValues(values: Record<string, unknown>): this {
+      setValues(this, values);
+      return this;
+    }
 
     /**
      * Snapshot persistible: chrome + body (HTML↔JSON) + values.
-     * @returns {{ mode: string, submitLabel?: string, cancelLabel?: string, loading: boolean, body: unknown, values: object }}
      */
-    toJSON() {
+    toJSON(): {
+      mode: string;
+      submitLabel: string;
+      cancelLabel: string;
+      loading: boolean;
+      body: unknown;
+      values: unknown;
+    } {
       return {
         mode: this.mode,
         submitLabel: this.submitLabel,
@@ -165,24 +178,25 @@ import { getValues, setValues } from './form-json.js';
      * @param {object} json
      * @param {{ replace?: boolean }} [opts]
      */
-    fromJSON(json, opts) {
+    fromJSON(json: unknown, opts?: { replace?: boolean }): this {
       if (!json || typeof json !== 'object') return this;
-      if (json.mode != null) this.mode = json.mode;
-      if (json.submitLabel != null) this.submitLabel = json.submitLabel;
-      if (json.cancelLabel != null) this.cancelLabel = json.cancelLabel;
-      if (json.loading != null) this.loading = !!json.loading;
+      const j = json as Record<string, unknown>;
+      if (j['mode'] != null) this.mode = String(j['mode']);
+      if (j['submitLabel'] != null) this.submitLabel = String(j['submitLabel']);
+      if (j['cancelLabel'] != null) this.cancelLabel = String(j['cancelLabel']);
+      if (j['loading'] != null) this.loading = !!j['loading'];
 
-      const body = json.body ?? json.html ?? (Array.isArray(json) ? json : null);
+      const body = j['body'] ?? j['html'] ?? (Array.isArray(json) ? json : null);
       if (body != null) applyJsonBody(this, body, opts);
 
-      if (json.values && typeof json.values === 'object') {
-        requestAnimationFrame(() => setValues(this, json.values));
+      if (j['values'] && typeof j['values'] === 'object') {
+        requestAnimationFrame(() => setValues(this, j['values'] as Record<string, unknown>));
       }
       return this;
     }
 
-    submit() { this.#form.requestSubmit(); }
-    reset() { this.#form.reset(); }
+    submit(): void { this.#form.requestSubmit(); }
+    reset(): void { this.#form.reset(); }
 
     // ---- privados ---------------------------------------------------------
 
@@ -199,12 +213,12 @@ import { getValues, setValues } from './form-json.js';
       }
     }
 
-    #detail() {
+    #detail(): { form: HTMLFormElement; values: unknown; json: unknown } {
       const values = getValues(this);
       return { form: this.#form, values, json: this.toJSON() };
     }
 
-    #emit(name) {
+    #emit(name: string): boolean {
       return emit(this, name, this.#detail(), { cancelable: true });
     }
 

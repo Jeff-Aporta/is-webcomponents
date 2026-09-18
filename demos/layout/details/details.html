@@ -1,0 +1,174 @@
+<!doctype html>
+<html lang="es" class="theme-dark" data-theme="dark">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>Demo de <is-details> · is-webcomponents</title>
+<meta name="description" content="Disclosure colapsable con summary + contenido. show()/hide()/toggle(), atributo open, name para accordion, eventos is-show/is-after-show/is-hide/is-after-hide." />
+<style>
+  html, body { margin: 0; padding: 0; min-height: 100%; background: #0c1118; color: #e2e8f0; font-family: ui-sans-serif, system-ui, sans-serif; }
+  body { display: grid; grid-template-rows: auto 1fr auto; }
+  header { padding: 16px 20px; border-bottom: 1px solid rgba(255,255,255,0.1); background: #0f1620; }
+  header h1 { font-size: 16px; font-weight: 700; margin: 0; }
+  header p { font-size: 12px; color: #94a3b8; margin: 4px 0 0 0; }
+  main { padding: 20px; display: grid; gap: 18px; }
+  section { background: #0f1620; border: 1px solid rgba(255,255,255,0.1); border-radius: 8px; padding: 16px; }
+  section h2 { font-size: 11px; text-transform: uppercase; letter-spacing: 0.08em; margin: 0 0 12px 0; color: #94a3b8; }
+  is-details { display: block; margin: 6px 0; }
+  is-details:not(:defined) { visibility: hidden; }
+  .actions { display: flex; gap: 8px; flex-wrap: wrap; margin-top: 8px; }
+  pre.log { margin: 8px 0 0 0; font: 11px ui-monospace, Menlo, Consolas, monospace; color: #94a3b8; white-space: pre-wrap; max-height: 160px; overflow: auto; }
+  footer { padding: 12px 20px; border-top: 1px solid rgba(255,255,255,0.1); background: #0f1620; font-size: 11px; color: #94a3b8; }
+  footer code { background: rgba(255,255,255,0.06); padding: 1px 5px; border-radius: 3px; font: 11px ui-monospace, Menlo, Consolas, monospace; }
+</style>
+<script type="module">
+  await import('../../../dist/cdn/layout/details.min.js');
+  await customElements.whenDefined('is-details');
+
+  // (1) Details básico: atributo summary + slot content.
+  const d1 = document.createElement('is-details');
+  d1.setAttribute('summary', '¿Qué es is-webcomponents?');
+  d1.id = 'd1';
+  d1.innerHTML = '<p>Una librería de Web Components vanilla sin dependencias, con shell de demo y galería.</p>';
+  document.getElementById('host-1').appendChild(d1);
+
+  // (2) Details con summary slot propio (texto richer).
+  const d2 = document.createElement('is-details');
+  d2.id = 'd2';
+  d2.setAttribute('open', '');
+  const summaryEl = document.createElement('span');
+  summaryEl.setAttribute('slot', 'summary');
+  summaryEl.innerHTML = '<strong>API</strong> <em>(click para colapsar)</em>';
+  d2.appendChild(summaryEl);
+  d2.innerHTML += '<ul><li>show() / hide() / toggle()</li><li>open attr + property</li><li>name (accordion)</li><li>disabled</li></ul>';
+  document.getElementById('host-2').appendChild(d2);
+
+  // (3) Accordion: 3 details con mismo `name` → abrir uno cierra los otros.
+  const labels = ['Sección A', 'Sección B', 'Sección C'];
+  for (let i = 0; i < labels.length; i++) {
+    const d = document.createElement('is-details');
+    d.setAttribute('summary', labels[i]);
+    d.setAttribute('name', 'acc1');
+    d.id = `acc${i}`;
+    d.textContent = `Contenido de ${labels[i]}.`;
+    document.getElementById('host-3').appendChild(d);
+  }
+
+  // (4) Disabled.
+  const d4 = document.createElement('is-details');
+  d4.setAttribute('summary', 'Disabled');
+  d4.setAttribute('disabled', '');
+  d4.id = 'd4';
+  d4.textContent = 'No debería abrirse ni emitir eventos.';
+  document.getElementById('host-4').appendChild(d4);
+
+  // (5) Variants.
+  const variants = ['filled', 'outlined', 'filled-outlined', 'plain'];
+  const vHost = document.getElementById('variants');
+  for (const v of variants) {
+    const d = document.createElement('is-details');
+    d.setAttribute('summary', `variant="${v}"`);
+    d.setAttribute('variant', v);
+    d.textContent = 'Cuerpo del details.';
+    vHost.appendChild(d);
+  }
+
+  // (6) icon-placement start/end.
+  const ds = document.createElement('is-details');
+  ds.setAttribute('summary', 'icon-placement="start"');
+  ds.setAttribute('icon-placement', 'start');
+  ds.id = 'ds';
+  ds.textContent = 'Chevron a la izquierda del summary.';
+  document.getElementById('host-icon-start').appendChild(ds);
+  const de = document.createElement('is-details');
+  de.setAttribute('summary', 'icon-placement="end" (default)');
+  de.setAttribute('icon-placement', 'end');
+  de.id = 'de';
+  de.textContent = 'Chevron a la derecha del summary.';
+  document.getElementById('host-icon-end').appendChild(de);
+
+  // (7) Listener global de eventos para verificar is-show / is-hide / is-after-show / is-after-hide.
+  const logEl = document.getElementById('event-log');
+  const write = (line) => { logEl.textContent = line + '\n' + logEl.textContent; };
+  document.querySelectorAll('main is-details').forEach((d) => {
+    ['is-show', 'is-after-show', 'is-hide', 'is-after-hide'].forEach((evt) => {
+      d.addEventListener(evt, (e) => {
+        const tag = d.id || d.getAttribute('summary') || '(?)';
+        write(`${evt} ← ${tag}`);
+      });
+    });
+  });
+
+  // (8) Interactivo: usar show()/hide()/toggle() + atributo open programático.
+  document.getElementById('btn-open').addEventListener('click', () => {
+    d1.open = true;
+  });
+  document.getElementById('btn-close').addEventListener('click', () => {
+    d1.open = false;
+  });
+  document.getElementById('btn-toggle').addEventListener('click', () => {
+    d1.toggle();
+  });
+  document.getElementById('btn-acc-open0').addEventListener('click', () => {
+    document.getElementById('acc0').show();
+  });
+  document.getElementById('btn-acc-open1').addEventListener('click', () => {
+    document.getElementById('acc1').show();
+  });
+
+  document.documentElement.dataset.detailsReady = '1';
+</script>
+</head>
+<body>
+<header>
+  <h1>Demo — <code>&lt;is-details&gt;</code></h1>
+  <p>Disclosure colapsable. Atributos <code>summary</code>, <code>open</code>, <code>name</code> (accordion), <code>disabled</code>, <code>variant</code>, <code>icon-placement</code>. Métodos <code>show()</code> / <code>hide()</code> / <code>toggle()</code>. Eventos <code>is-show</code> / <code>is-after-show</code> / <code>is-hide</code> / <code>is-after-hide</code>.</p>
+</header>
+<main>
+  <section>
+    <h2>Básico (summary como atributo)</h2>
+    <div id="host-1"></div>
+  </section>
+  <section>
+    <h2>Con slot summary (rich content) y open inicial</h2>
+    <div id="host-2"></div>
+  </section>
+  <section>
+    <h2>Accordion (name="acc1")</h2>
+    <div id="host-3"></div>
+    <div class="actions">
+      <button id="btn-acc-open0" type="button">show() acc0</button>
+      <button id="btn-acc-open1" type="button">show() acc1</button>
+    </div>
+  </section>
+  <section>
+    <h2>Disabled</h2>
+    <div id="host-4"></div>
+  </section>
+  <section>
+    <h2>Variants</h2>
+    <div id="variants"></div>
+  </section>
+  <section>
+    <h2>icon-placement</h2>
+    <div id="host-icon-start"></div>
+    <div id="host-icon-end"></div>
+  </section>
+  <section>
+    <h2>Interactivo (d1)</h2>
+    <div class="actions">
+      <button id="btn-open" type="button">open = true</button>
+      <button id="btn-close" type="button">open = false</button>
+      <button id="btn-toggle" type="button">toggle()</button>
+    </div>
+  </section>
+  <section>
+    <h2>Eventos</h2>
+    <pre id="event-log" class="log"></pre>
+  </section>
+</main>
+<footer>
+  Estado: <code>customElements.whenDefined('is-details')</code> resuelto.
+</footer>
+</body>
+</html>

@@ -1,0 +1,111 @@
+<!doctype html>
+<html lang="es" class="theme-dark" data-theme="dark">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>&lt;is-float-card&gt; · is-webcomponents</title>
+<meta name="description" content="Caja con un panel absoluto anclado al contenido (slot=float). Se muestra con open; opacity/visibility, no display:none." />
+<style>
+  html, body { margin: 0; padding: 0; min-height: 100%; background: #0c1118; color: #e2e8f0; font-family: ui-sans-serif, system-ui, sans-serif; }
+  body { display: grid; grid-template-rows: auto 1fr; min-height: 100vh; }
+  header {
+    padding: 16px 20px; border-bottom: 1px solid rgba(255,255,255,0.1);
+    display: flex; align-items: center; gap: 14px; background: #0f1620;
+  }
+  header h1 { font-size: 16px; font-weight: 700; margin: 0; }
+  header p { font-size: 12px; color: #94a3b8; margin: 0; }
+  header .spacer { flex: 1; }
+  main { display: grid; gap: 24px; padding: 20px; max-width: 1100px; margin: 0 auto; width: 100%; box-sizing: border-box; }
+  section h2 { font-size: 14px; font-weight: 600; margin: 0 0 8px; color: #94a3b8; }
+  .row { display: flex; gap: 32px; flex-wrap: wrap; align-items: start; }
+  .anchor { background: rgba(255,255,255,0.06); border: 1px dashed rgba(255,255,255,0.2); padding: 12px 18px; border-radius: 4px; cursor: default; }
+  is-float-card:not(:defined) { visibility: hidden; }
+  /* Forzar estilos visibles en el panel flotante */
+  is-float-card::part(panel) { background: #1e293b; border: 1px solid #334155; border-radius: 6px; padding: 8px; box-shadow: 0 4px 12px rgba(0,0,0,0.4); min-width: 10rem; }
+  is-float-card::part(wrap) { position: relative; display: inline-block; }
+</style>
+<script type="module">
+  await import('../../../dist/cdn/actions/button.min.js');
+  await import('../../../dist/cdn/actions/button-group.min.js');
+  await import('../../../dist/cdn/actions/dropdown.min.js');
+  await import('../../../dist/cdn/actions/dropdown-item.min.js');
+  await import('../../../dist/cdn/media/icon.min.js');
+  await import('../../../dist/cdn/layout/divider.min.js');
+  await import('../../../dist/cdn/isp/flex-options.min.js');
+  await import('../../../dist/cdn/isp/float-card.min.js');
+  await customElements.whenDefined('is-float-card');
+
+  // Demo 1: anclado a la derecha, vertical centro.
+  const fc1 = document.getElementById('fc1');
+  const fc1Btns = document.getElementById('fc1-btns');
+  fc1Btns.actions = [
+    { icon: 'mdi:pencil', title: 'Editar', onClick: () => console.log('Edit') },
+    { icon: 'mdi:delete', title: 'Eliminar', color: 'danger', onClick: () => console.log('Del') },
+  ];
+  fc1.addEventListener('pointerenter', () => { fc1.open = true; });
+  fc1.addEventListener('pointerleave', () => { if (!fc1.locked) fc1.open = false; });
+
+  // Demo 2: anclado encima con offset.
+  const fc2 = document.getElementById('fc2');
+  const fc2Btns = document.getElementById('fc2-btns');
+  fc2Btns.actions = [
+    { icon: 'mdi:eye-outline', title: 'Ver', onClick: () => console.log('View') },
+  ];
+  fc2.open = true; // mostrar siempre
+  fc2.horizontal = 'center';
+  fc2.vertical = 'top+50';
+
+  // Demo 3: linearTransform (translate + scale).
+  const fc3 = document.getElementById('fc3');
+  fc3.open = true;
+  fc3.horizontal = 'right';
+  fc3.vertical = 'bottom';
+  fc3.linearTransform = { tx: '0', ty: '8px', e: 1.1 };
+
+  document.documentElement.dataset.floatCardReady = '1';
+</script>
+</head>
+<body>
+<header>
+  <div>
+    <h1>&lt;is-float-card&gt; — panel anclado (hover / programmatic)</h1>
+    <p>Slot default = ancla, slot="float" = panel absoluto. Se muestra con open; los hijos no se desmontan.</p>
+  </div>
+  <div class="spacer"></div>
+  <code>is-float-card</code>
+</header>
+<main>
+  <section>
+    <h2>Hover reveal (right · center)</h2>
+    <div class="row">
+      <is-float-card id="fc1" horizontal="right" vertical="center">
+        <span class="anchor">Pasa el mouse aquí</span>
+        <is-flex-options id="fc1-btns" slot="float" compact></is-flex-options>
+      </is-float-card>
+    </div>
+  </section>
+
+  <section>
+    <h2>Always open · center · top+50</h2>
+    <div class="row">
+      <is-float-card id="fc2" horizontal="center" vertical="top+50" open>
+        <span class="anchor">Fila</span>
+        <is-flex-options id="fc2-btns" slot="float" compact></is-flex-options>
+      </is-float-card>
+    </div>
+  </section>
+
+  <section>
+    <h2>linearTransform (translate + scale)</h2>
+    <div class="row">
+      <is-float-card id="fc3" horizontal="right" vertical="bottom" open>
+        <span class="anchor">Chip</span>
+        <div slot="float" style="background: #1e293b; border: 1px solid #334155; border-radius: 6px; padding: 8px 12px;">
+          <is-icon icon="mdi:information-outline"></is-icon> Detalle
+        </div>
+      </is-float-card>
+    </div>
+  </section>
+</main>
+</body>
+</html>

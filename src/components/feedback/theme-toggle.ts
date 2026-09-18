@@ -33,7 +33,9 @@ import { findThemeContainer } from '../_shared/theme-scope.js';
     ></is-check-icon-button>
   `;
 
-  function readTheme(el: HTMLElement) {
+  type ThemeName = 'dark' | 'light';
+
+  function readTheme(el: HTMLElement): ThemeName {
     if (!el) return 'dark';
     if (el.classList.contains('theme-light')) return 'light';
     if (el.classList.contains('theme-dark')) return 'dark';
@@ -41,7 +43,7 @@ import { findThemeContainer } from '../_shared/theme-scope.js';
     return dt === 'light' ? 'light' : 'dark';
   }
 
-  function applyTheme(el: HTMLElement, theme) {
+  function applyTheme(el: HTMLElement, theme: ThemeName): void {
     if (!el) return;
     el.classList.toggle('theme-light', theme === 'light');
     el.classList.toggle('theme-dark', theme === 'dark');
@@ -49,12 +51,14 @@ import { findThemeContainer } from '../_shared/theme-scope.js';
     else el.setAttribute('data-theme', theme);
   }
 
+  interface IsCheckIconButtonEvent extends CustomEvent<{ checked: boolean }> {}
+
   class IsThemeToggle extends HTMLElement {
     static get observedAttributes(): string[] { return ['dark']; }
 
     #btn!: HTMLElement;
     #mounted = false;
-    #scopeObs = null;
+    #scopeObs: MutationObserver | null = null;
     #applying = false;
 
     constructor() {
@@ -63,7 +67,7 @@ import { findThemeContainer } from '../_shared/theme-scope.js';
       adoptCss(shadow, import.meta.url);
       shadow.appendChild(TEMPLATE.content.cloneNode(true));
       this.#btn = shadow.querySelector<HTMLElement>('#btn')!;
-      this.#btn.addEventListener('is-change', this.#onChange);
+      this.#btn.addEventListener('is-change', this.#onChange as EventListener);
     }
 
     connectedCallback(): void {
@@ -84,55 +88,53 @@ import { findThemeContainer } from '../_shared/theme-scope.js';
       this.#render();
     }
 
-    get dark() { return this.hasAttribute('dark'); }
-    set dark(v) { this.toggleAttribute('dark', !!v); }
+    get dark(): boolean { return this.hasAttribute('dark'); }
+    set dark(v: boolean) { this.toggleAttribute('dark', !!v); }
 
     /** Contenedor de tema más cercano; atraviesa Shadow DOM (closest no). */
-    get themeContainer() {
-      return findThemeContainer(this) || this.closest(SCOPE) || document.documentElement;
+    get themeContainer(): HTMLElement {
+      const found = findThemeContainer(this) || this.closest(SCOPE);
+      return (found as HTMLElement | null) || document.documentElement;
     }
 
-    #syncFromScope() {
+    #syncFromScope(): void {
       this.dark = readTheme(this.themeContainer) === 'dark';
     }
 
-    #watchScope() {
+    #watchScope(): void {
       this.#scopeObs?.disconnect();
       const container = this.themeContainer;
-      this.#scopeObs = new MutationObserver(() => {
+      const obs = new MutationObserver(() => {
         if (!this.#mounted || this.#applying) return;
         this.#syncFromScope();
         this.#render();
       });
-      this.#scopeObs.observe(container, {
+      this.#scopeObs = obs;
+      obs.observe(container, {
         attributes: true,
         attributeFilter: ['class', 'data-theme'],
       });
     }
 
-    #onChange = (e) => {
-      const next = e.detail.checked ? 'dark' : 'light';
+    #onChange = (e: Event): void => {
+      const detail = (e as IsCheckIconButtonEvent).detail;
+      const next: ThemeName = detail?.checked ? 'dark' : 'light';
       const container = this.themeContainer;
       this.#applying = true;
       applyTheme(container, next);
       this.#applying = false;
       this.#render();
-      // Un solo evento para la transicion de tema: 'is-theme-change'.
-      // Antes se emitian dos nombres ('theme-toggle' en el host, sin prefijo,
-      // y 'is-theme-change' en document). Como emit() ya sale con
-      // bubbles+composed, este llega igual a los listeners de document
-      // (highlight-code, cdn-snippet, demos) sin dispararlo dos veces.
       emit(this, 'is-theme-change', { theme: next, dark: next === 'dark', container });
     };
 
     /** Re-sincroniza el icono desde fuera (p.ej. is-context por postMessage)
      *  releyendo el tema real del container. */
-    forceSync() {
+    forceSync(): void {
       this.dark = readTheme(this.themeContainer) === 'dark';
       this.#render();
     }
 
-    #render() {
+    #render(): void {
       const want = this.dark;
       const btn = this.#btn;
       // toggleAttribute no dispara attributeChangedCallback si el atributo

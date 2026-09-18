@@ -1,0 +1,61 @@
+<!doctype html>
+<html lang="es" class="theme-dark" data-theme="dark">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>Demo — <is-quadrant-chart> · is-webcomponents</title>
+<meta name="description" content="Matriz de cuadrantes con ejes X/Y, leyenda de grupos y puntos con tooltip." />
+<style>
+  html, body { margin: 0; padding: 0; min-height: 100%; background: #0c1118; color: #e2e8f0; font-family: ui-sans-serif, system-ui, sans-serif; }
+  body { display: grid; grid-template-rows: auto 1fr; }
+  header { padding: 16px 20px; border-bottom: 1px solid rgba(255,255,255,0.1); background: #0f1620; }
+  header h1 { font-size: 16px; font-weight: 700; margin: 0; }
+  header p { font-size: 12px; color: #94a3b8; margin: 4px 0 0 0; }
+  main { display: grid; place-items: stretch; min-height: 0; padding: 12px; }
+  is-quadrant-chart { width: 100%; height: 100%; min-height: 480px; display: block; }
+  is-quadrant-chart:not(:defined) { visibility: hidden; }
+</style>
+<script type="module">
+  await import('../../../dist/cdn/diagrams/quadrant-chart.min.js');
+  await customElements.whenDefined('is-quadrant-chart');
+
+  const el = document.createElement('is-quadrant-chart');
+  el.payload = {
+    quadrant: {
+      title: 'Análisis de iniciativas',
+      subtitle: '5 puntos · 3 grupos · 4 cuadrantes',
+      xAxis: { left: 'Bajo esfuerzo', right: 'Alto esfuerzo' },
+      yAxis: { bottom: 'Bajo impacto', top: 'Alto impacto' },
+      quadrants: {
+        topRight: 'Quick wins',
+        bottomRight: 'Proyectos',
+        bottomLeft: 'Relleno',
+        topLeft: 'Thankless',
+      },
+      groups: [
+        { id: 'tech', name: 'Tech' },
+        { id: 'ops', name: 'Operaciones' },
+        { id: 'biz', name: 'Negocio' },
+      ],
+      points: [
+        { id: 'p1', label: 'Migración DB', x: 0.3, y: 0.8, group: 'tech' },
+        { id: 'p2', label: 'Onboarding', x: 0.2, y: 0.7, group: 'ops' },
+        { id: 'p3', label: 'Reporting', x: 0.8, y: 0.3, group: 'biz' },
+        { id: 'p4', label: 'Auditoría', x: 0.6, y: 0.6, group: 'ops' },
+        { id: 'p5', label: 'Nuevo pricing', x: 0.7, y: 0.9, group: 'biz' },
+      ],
+    },
+  };
+  document.querySelector('main').appendChild(el);
+
+  document.documentElement.dataset.quadrantReady = '1';
+</script>
+</head>
+<body>
+  <header>
+    <h1>Demo — <code>&lt;is-quadrant-chart&gt;</code></h1>
+    <p>Matriz 2x2 con puntos (x,y) clasificados por cuadrante y agrupados por color.</p>
+  </header>
+  <main></main>
+</body>
+</html>

@@ -38,13 +38,15 @@ import { setStringAttr } from '../_shared/reflect.js';
   `;
 
   const OBSERVED = ['image', 'initials', 'label', 'loading', 'shape'];
-  const VALID_SHAPE = ['circle', 'square', 'rounded'];
-  const VALID_LOADING = ['eager', 'lazy'];
+  const VALID_SHAPE = ['circle', 'square', 'rounded'] as const;
+  const VALID_LOADING = ['eager', 'lazy'] as const;
+  type Shape = typeof VALID_SHAPE[number];
+  type Loading = typeof VALID_LOADING[number];
 
   class IsAvatar extends ElementBase {
     static get observedAttributes(): string[] { return OBSERVED; }
 
-    #img!: HTMLElement;
+    #img!: HTMLImageElement;
     #initials!: HTMLElement;
     #icon!: HTMLElement;
     #imgFailed = false;
@@ -54,11 +56,11 @@ import { setStringAttr } from '../_shared/reflect.js';
       const shadow = this.attachShadow({ mode: 'open' });
       adoptCss(shadow, import.meta.url);
       shadow.appendChild(TEMPLATE.content.cloneNode(true));
-      this.#img = shadow.querySelector<HTMLElement>('.image')!;
+      this.#img = shadow.querySelector<HTMLImageElement>('.image')!;
       this.#initials = shadow.querySelector<HTMLElement>('.initials')!;
       this.#icon = shadow.querySelector<HTMLElement>('.icon')!;
       this.#img.addEventListener('error', this.#onImgError);
-      shadow.querySelector<HTMLSlotElement>('slot[name="icon"]').addEventListener('slotchange', () => this.#syncView());
+      shadow.querySelector<HTMLSlotElement>('slot[name="icon"]')!.addEventListener('slotchange', () => this.#syncView());
     }
 
     onConnected() {
@@ -68,7 +70,7 @@ import { setStringAttr } from '../_shared/reflect.js';
       this.#syncView();
     }
 
-    onAttributeChanged(name: string, oldVal: string | null, newVal: string | null) {
+    onAttributeChanged(name: string, _oldVal: string | null, _newVal: string | null) {
       if (name === 'image') this.#imgFailed = false;
       this.#syncView();
     }
@@ -82,20 +84,20 @@ import { setStringAttr } from '../_shared/reflect.js';
     get label() { return this.getAttribute('label') ?? ''; }
     set label(v) { setStringAttr(this, 'label', v); }
 
-    get loading() {
+    get loading(): Loading {
       const v = this.getAttribute('loading');
-      return VALID_LOADING.includes(v) ? v : 'eager';
+      return (v && VALID_LOADING.includes(v as Loading)) ? v as Loading : 'eager';
     }
-    set loading(v) {
+    set loading(v: Loading | '' | null | undefined) {
       if (v == null || v === '') this.removeAttribute('loading');
       else if (VALID_LOADING.includes(v)) this.setAttribute('loading', v);
     }
 
-    get shape() {
+    get shape(): Shape {
       const v = this.getAttribute('shape');
-      return VALID_SHAPE.includes(v) ? v : 'circle';
+      return (v && VALID_SHAPE.includes(v as Shape)) ? v as Shape : 'circle';
     }
-    set shape(v) {
+    set shape(v: Shape | '' | null | undefined) {
       if (v == null || v === '') this.removeAttribute('shape');
       else if (VALID_SHAPE.includes(v)) this.setAttribute('shape', v);
     }

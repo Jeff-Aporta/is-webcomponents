@@ -1,0 +1,64 @@
+<!doctype html>
+<html lang="es" class="theme-dark" data-theme="dark">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title><is-format-number> · is-webcomponents</title>
+<meta name="description" content="Demo del helper <is-format-number>: Intl.NumberFormat con decimal/currency/percent/unit + pad-start." />
+<style>
+  html, body { margin: 0; padding: 0; height: 100%; background: #0c1118; color: #e2e8f0; font-family: ui-sans-serif, system-ui, sans-serif; }
+  body { display: grid; grid-template-rows: auto 1fr; }
+  header {
+    padding: 16px 20px; border-bottom: 1px solid rgba(255,255,255,0.1);
+    background: #0f1620;
+  }
+  header h1 { font-size: 16px; font-weight: 700; margin: 0; }
+  header p { font-size: 12px; color: #94a3b8; margin: 6px 0 0; }
+  header code { background: rgba(255,255,255,0.06); padding: 2px 6px; border-radius: 4px; font: 12px ui-monospace, Menlo, Consolas, monospace; }
+  main { padding: 16px 20px; display: grid; gap: 8px; align-content: start; }
+  .row { display: grid; grid-template-columns: 360px 1fr; gap: 12px; align-items: baseline; }
+  .row code { color: #94a3b8; font-size: 12px; }
+  is-format-number:not(:defined) { visibility: hidden; }
+</style>
+<script type="module">
+  await import('../../../dist/cdn/helpers/format-number.min.js');
+  await customElements.whenDefined('is-format-number');
+
+  const cases = [
+    { value: '1234.5' },
+    { value: '1234567.89' },
+    { value: '1234567', 'minimum-fraction-digits': '2', 'maximum-fraction-digits': '2' },
+    { value: '0.42', type: 'percent' },
+    { value: '99.5', type: 'currency', currency: 'USD' },
+    { value: '99.5', type: 'currency', currency: 'EUR', locale: 'es-ES' },
+    { value: '99.5', type: 'currency', currency: 'COP', locale: 'es-CO' },
+    { value: '42', type: 'unit', unit: 'celsius' },
+    { value: '7', 'pad-length': '4' },
+    { value: '42', 'pad-length': '6', 'pad-start': '0' },
+    { value: '1234', locale: 'es-CO' },
+    { value: '1234', locale: 'en-US' },
+  ];
+  const main = document.querySelector('main');
+  for (const c of cases) {
+    const row = document.createElement('div');
+    row.className = 'row';
+    const label = document.createElement('code');
+    const attrs = Object.entries(c).map(([k, v]) => `${k}=${JSON.stringify(v)}`).join(' ');
+    label.textContent = `<is-format-number ${attrs}>`;
+    const el = document.createElement('is-format-number');
+    for (const [k, v] of Object.entries(c)) el.setAttribute(k, String(v));
+    row.append(label, el);
+    main.appendChild(row);
+  }
+
+  document.documentElement.dataset.formatNumberReady = '1';
+</script>
+</head>
+<body>
+<header>
+  <h1><is-format-number> — Intl.NumberFormat + presets</h1>
+  <p>Atributos: <code>value</code> <code>type</code> <code>currency</code> <code>locale</code> <code>minimum-fraction-digits</code> <code>maximum-fraction-digits</code> <code>pad-start</code> <code>pad-length</code></p>
+</header>
+<main></main>
+</body>
+</html>
