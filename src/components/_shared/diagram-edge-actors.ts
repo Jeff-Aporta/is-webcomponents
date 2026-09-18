@@ -16,22 +16,46 @@ export const EDGE_ACTOR_H = 16;
 // specs (component-spec) y utilidades. Ahora delega en diagram-arrow (H/V-aware).
 export { pathPoints as parsePathPoints } from './diagram-arrow.js';
 
-export function edgeActorWidth(text: number) {
+/** Punto en píxeles (x, y). */
+export type XYPoint = { x: number; y: number };
+
+/** Rectángulo `{ x, y, w, h }` usado tanto para actores como para obstáculos. */
+export type RectLike = { x: number; y: number; w: number; h: number };
+
+/** Arista con etiqueta tal y como la modelan los diagramas del kit. */
+export type LabeledEdge = {
+  label?: string;
+  path: string;
+  fromX?: number;
+  fromY?: number;
+  toX?: number;
+  toY?: number;
+  labelX?: number;
+  labelY?: number;
+  labelW?: number;
+  labelH?: number;
+  /** Campo interno: dónde quedó la chip mientras `separateActors` corre. */
+  _actor?: RectLike;
+};
+
+export function edgeActorWidth(text: string | number | null | undefined): number {
   return Math.max(28, String(text ?? '').length * 5.6 + 10);
 }
 
 /** Punto al `t` (0–1) de la longitud del polyline. */
-export function pointAtFraction(pts, t: number = 0.5) {
+export function pointAtFraction(pts: readonly XYPoint[] | null | undefined, t: number = 0.5): XYPoint {
   if (!pts?.length) return { x: 0, y: 0 };
-  if (pts.length === 1) return { x: pts[0].x, y: pts[0].y };
+  if (pts.length === 1) return { x: pts[0]!.x, y: pts[0]!.y };
   let total = 0;
-  const segs = [];
+  const segs: { a: XYPoint; b: XYPoint; len: number }[] = [];
   for (let i = 0; i < pts.length - 1; i++) {
-    const len = Math.hypot(pts[i + 1].x - pts[i].x, pts[i + 1].y - pts[i].y);
-    segs.push({ a: pts[i], b: pts[i + 1], len });
+    const a = pts[i]!;
+    const b = pts[i + 1]!;
+    const len = Math.hypot(b.x - a.x, b.y - a.y);
+    segs.push({ a, b, len });
     total += len;
   }
-  if (total < 1) return { x: pts[0].x, y: pts[0].y };
+  if (total < 1) return { x: pts[0]!.x, y: pts[0]!.y };
   let walk = total * Math.min(1, Math.max(0, t));
   for (const s of segs) {
     if (walk <= s.len) {
@@ -40,16 +64,16 @@ export function pointAtFraction(pts, t: number = 0.5) {
     }
     walk -= s.len;
   }
-  const last = pts[pts.length - 1];
+  const last = pts[pts.length - 1]!;
   return { x: last.x, y: last.y };
 }
 
-function densify(pts: string, step: number = 14) {
+function densify(pts: readonly XYPoint[], step: number = 14): XYPoint[] {
   if (pts.length < 2) return pts.slice();
-  const out = [];
+  const out: XYPoint[] = [];
   for (let i = 0; i < pts.length - 1; i++) {
-    const a = pts[i];
-    const b = pts[i + 1];
+    const a = pts[i]!;
+    const b = pts[i + 1]!;
     const dx = b.x - a.x;
     const dy = b.y - a.y;
     const len = Math.hypot(dx, dy) || 1;
@@ -58,11 +82,11 @@ function densify(pts: string, step: number = 14) {
       out.push({ x: a.x + (dx * k) / n, y: a.y + (dy * k) / n });
     }
   }
-  out.push(pts[pts.length - 1]);
+  out.push({ x: pts[pts.length - 1]!.x, y: pts[pts.length - 1]!.y });
   return out;
 }
 
-function overlap(a, b, padX = 4, padY = 6) {
+function overlap(a: RectLike, b: RectLike, padX = 4, padY = 6): boolean {
   return a.x - padX < b.x + b.w
     && a.x + a.w + padX > b.x
     && a.y - padY < b.y + b.h
@@ -70,30 +94,30 @@ function overlap(a, b, padX = 4, padY = 6) {
 }
 
 /** Empuja en Y hasta que ningún par de actores se pise. */
-function separateActors(placed, obstacles, canvas) {
+function separateActors(placed: RectLike[], obstacles: readonly RectLike[], canvas: RectLike): void {
   for (let n = 0; n < 80; n++) {
     let moved = false;
     for (let i = 0; i < placed.length; i++) {
       for (let j = 0; j < placed.length; j++) {
         if (i === j) continue;
-        if (!overlap(placed[i], placed[j])) continue;
-        placed[j].y += EDGE_ACTOR_H + 6;
+        if (!overlap(placed[i]!, placed[j]!)) continue;
+        placed[j]!.y += EDGE_ACTOR_H + 6;
         moved = true;
       }
       for (const o of obstacles) {
-        if (!overlap(placed[i], o, 8, 8)) continue;
-        placed[i].y += EDGE_ACTOR_H + 4;
+        if (!overlap(placed[i]!, o, 8, 8)) continue;
+        placed[i]!.y += EDGE_ACTOR_H + 4;
         moved = true;
       }
-      placed[i].x = Math.max(4, placed[i].x);
-      placed[i].y = Math.max(4, placed[i].y);
+      placed[i]!.x = Math.max(4, placed[i]!.x);
+      placed[i]!.y = Math.max(4, placed[i]!.y);
     }
     if (!moved) break;
   }
   void canvas;
 }
 
-function spiral(maxR = 16) {
+function spiral(maxR = 16): { dx: number; dy: number }[] {
   const out = [{ dx: 0, dy: 0 }];
   for (let r = 1; r <= maxR; r++) {
     for (let dx = -r; dx <= r; dx++) {
@@ -111,6 +135,19 @@ function spiral(maxR = 16) {
 const SPIRAL = spiral(16);
 const SPIRAL_GLUE = spiral(2);
 
+export type PlaceEdgeActorsOpts = {
+  edges?: readonly LabeledEdge[];
+  obstacles?: readonly RectLike[];
+  canvas?: { width: number; height: number };
+  glue?: boolean;
+};
+
+export type PlaceEdgeActorsResult = {
+  width: number;
+  height: number;
+  actors: RectLike[];
+};
+
 /**
  * Coloca chips de `edges[].label` como actores.
  * Mutates edges: labelX, labelY, labelW, labelH.
@@ -121,17 +158,18 @@ export function placeEdgeActors({
   obstacles = [],
   canvas = { width: 800, height: 600 },
   glue = false,
-} = {}) {
-  const placed = [];
+}: PlaceEdgeActorsOpts = {}): PlaceEdgeActorsResult {
+  const placed: RectLike[] = [];
   const labeled = edges
-    .filter((e) => e && e.label)
+    .filter((e): e is LabeledEdge => e != null && !!e.label)
+    .slice()
     .sort((a, b) => String(b.label).length - String(a.label).length);
 
   for (const e of labeled) {
     const w = edgeActorWidth(e.label);
     const h = EDGE_ACTOR_H;
     const raw = parsePathPoints(e.path);
-    const ends = [
+    const ends: XYPoint[] = [
       { x: Number(e.fromX) || 0, y: Number(e.fromY) || 0 },
       { x: Number(e.toX) || 0, y: Number(e.toY) || 0 },
     ];
@@ -143,11 +181,11 @@ export function placeEdgeActors({
     const sample = ranked.length ? ranked.map((x) => x.p) : [mid];
     const offsets = glue ? SPIRAL_GLUE : SPIRAL;
 
-    let best = null;
+    let best: RectLike | null = null;
     search:
     for (const p of sample) {
       for (const s of offsets) {
-        const rect = {
+        const rect: RectLike = {
           x: p.x + s.dx - w / 2,
           y: p.y + s.dy - h / 2,
           w,
@@ -172,7 +210,7 @@ export function placeEdgeActors({
         w,
         h,
       };
-      while (placed.some((o) => overlap(best, o)) || obstacles.some((o) => overlap(best, o))) {
+      while (placed.some((o) => overlap(best!, o)) || obstacles.some((o) => overlap(best!, o))) {
         best.y += h + 6;
       }
     }
@@ -182,13 +220,13 @@ export function placeEdgeActors({
     e.labelH = h;
   }
 
-  if (!glue) separateActors(placed, obstacles, canvas);
+  if (!glue) separateActors(placed, obstacles, { x: 0, y: 0, w: canvas.width, h: canvas.height });
   for (const e of labeled) {
     const r = e._actor;
     delete e._actor;
     if (!r) continue;
-    e.labelX = r.x + e.labelW / 2;
-    e.labelY = r.y + e.labelH / 2;
+    e.labelX = r.x + (e.labelW ?? 0) / 2;
+    e.labelY = r.y + (e.labelH ?? 0) / 2;
   }
 
   let width = canvas.width;
@@ -200,7 +238,15 @@ export function placeEdgeActors({
   return { width, height, actors: placed };
 }
 
-function edgeListOf(layout) {
+export type EdgeActorLayout = {
+  edges?: LabeledEdge[];
+  relations?: LabeledEdge[];
+  links?: LabeledEdge[];
+  width: number;
+  height: number;
+};
+
+function edgeListOf(layout: EdgeActorLayout | null | undefined): LabeledEdge[] | null {
   if (layout?.edges?.length) return layout.edges;
   if (layout?.relations?.length) return layout.relations;
   if (layout?.links?.length) return layout.links;
@@ -208,7 +254,7 @@ function edgeListOf(layout) {
 }
 
 /** Aplica actores al layout y agranda el lienzo si hace falta. */
-export function applyEdgeActorLayout(layout, obstacles, opts = {}) {
+export function applyEdgeActorLayout<T extends EdgeActorLayout>(layout: T, obstacles?: readonly RectLike[], opts: { spread?: boolean; glue?: boolean } = {}): T {
   const edges = edgeListOf(layout);
   if (!edges) return layout;
   if (opts.spread !== false) spreadOrthogonalPaths(edges);
