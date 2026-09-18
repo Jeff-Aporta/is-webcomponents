@@ -74,9 +74,12 @@ const MSG_COLOR_MAP = {
 };
 
 /** @param {unknown} itd @returns {string} color semántico de `<is-text>` */
-export function getMsgColor(itd: unknown) {
-  const key = String(itd).toLowerCase();
-  return MSG_COLOR_MAP[key] ?? MSG_COLOR_MAP[String(itd)] ?? 'neutral';
+export function getMsgColor(itd: unknown): string {
+  const raw = String(itd);
+  const key = raw.toLowerCase();
+  return (MSG_COLOR_MAP as Record<string, string>)[key]
+    ?? (MSG_COLOR_MAP as Record<string, string>)[raw]
+    ?? 'neutral';
 }
 
 /** `lowerCase` de ispgen: null/undefined/'' → '', el resto en minúsculas. */
@@ -128,7 +131,7 @@ export function lowerCase(value: string) {
 
     static get observedAttributes(): string[] { return [...OBSERVED, 'accent']; }
 
-    #dlg!: HTMLElement;
+    #dlg!: HTMLElement & { show(): void; hide(): void };
     #headingText!: HTMLElement;
     #titleIcon!: HTMLElement;
     #results!: HTMLElement;
@@ -136,16 +139,17 @@ export function lowerCase(value: string) {
     #qInfos!: HTMLElement;
     #qWarning!: HTMLElement;
     #qErrores!: HTMLElement;
-    /** @type {Array<{itdmensaje: unknown, mensaje: string}>} */
-    #mensajes = [];
+    #mensajes: { itdmensaje: unknown; mensaje?: string }[] = [];
     #wasOpen = false;
 
-    /** @type {object|null} controlador con `entrie` y `actVerificar`. */
-    controller = null;
-    /** @type {object|null} registro a verificar. */
-    record = null;
-    /** @type {(msg: string) => void} */
-    onError = (msg) => console.error(msg);
+    /** Controlador con `entrie` y `actVerificar`. */
+    controller: {
+      entrie?: string;
+      actVerificar?: (record: unknown) => Promise<{ mensajes?: { itdmensaje: unknown; mensaje?: string }[] }>;
+    } | null = null;
+    /** Registro a verificar. */
+    record: unknown = null;
+    onError: (msg: string) => void = (msg) => console.error(msg);
 
     constructor() {
       super();
@@ -153,7 +157,7 @@ export function lowerCase(value: string) {
       shadow.appendChild(TEMPLATE.content.cloneNode(true));
       adoptCss(shadow, import.meta.url);
 
-      this.#dlg = shadow.querySelector<HTMLElement>('.dlg')!;
+      this.#dlg = shadow.querySelector<HTMLElement>('.dlg') as HTMLElement & { show(): void; hide(): void };
       this.#headingText = shadow.querySelector<HTMLElement>('.heading-text')!;
       this.#titleIcon = shadow.querySelector<HTMLElement>('.title-icon')!;
       this.#results = shadow.querySelector<HTMLElement>('.results')!;
@@ -177,7 +181,7 @@ export function lowerCase(value: string) {
       this.#dlg.removeEventListener('is-after-hide', this.#onDialogAfterHide);
     }
 
-    onAttributeChanged(name, _oldVal, _newVal) {
+    onAttributeChanged(name: string, _oldVal: string | null, _newVal: string | null): void {
       if (name === 'open') {
         if (this.open) this.#showUI(); else this.#hideUI();
       } else if (name === 'loading') {
@@ -213,20 +217,20 @@ export function lowerCase(value: string) {
     }
 
     /** Mensajes actuales (solo lectura para el consumidor). */
-    get mensajes() { return this.#mensajes.slice(); }
+    get mensajes(): { itdmensaje: unknown; mensaje?: string }[] { return this.#mensajes.slice(); }
 
     /** Contadores derivados, igual que `TMensajesVerificacion` de ispgen. */
-    get qerrores() { return this.#mensajes.filter((m) => m.itdmensaje === 'error').length; }
-    get qwarning() { return this.#mensajes.filter((m) => m.itdmensaje === 'warning').length; }
-    get qinfos() { return this.#mensajes.filter((m) => m.itdmensaje === 'info').length; }
+    get qerrores(): number { return this.#mensajes.filter((m) => m.itdmensaje === 'error').length; }
+    get qwarning(): number { return this.#mensajes.filter((m) => m.itdmensaje === 'warning').length; }
+    get qinfos(): number { return this.#mensajes.filter((m) => m.itdmensaje === 'info').length; }
 
     // ---- API pública ------------------------------------------------------
 
-    show() { this.open = true; }
-    hide() { this.open = false; }
+    show(): void { this.open = true; }
+    hide(): void { this.open = false; }
 
     /** Ejecuta `controller.actVerificar` y repinta. Devuelve los mensajes. */
-    async verify() {
+    async verify(): Promise<{ itdmensaje: unknown; mensaje?: string }[]> {
       this.loading = true;
       try {
         // El original siembra "Verificando..." antes de esperar la promesa.
@@ -257,8 +261,8 @@ export function lowerCase(value: string) {
 
     // ---- privados ---------------------------------------------------------
 
-    #syncTexts() {
-      const entrie = this.entity || this.controller?.entrie;
+    #syncTexts(): void {
+      const entrie: string = this.entity || (this.controller?.entrie ?? '');
       // Fidelidad con el original: `lowerCase(entrie) ?? "registros"`. Como
       // `lowerCase` devuelve "" (no null) el fallback nunca entra en juego.
       this.#headingText.textContent = `Verificación de ${lowerCase(entrie)}`;
@@ -267,16 +271,16 @@ export function lowerCase(value: string) {
     }
 
     /** `light-dismiss` es opt-in y se delega tal cual al <is-dialog>. */
-    #syncLightDismiss() {
+    #syncLightDismiss(): void {
       this.#dlg.toggleAttribute('light-dismiss', this.lightDismiss);
     }
 
-    #syncGate() {
+    #syncGate(): void {
       this.#closeBtn.toggleAttribute('loading', this.loading);
       this.#dlg.setAttribute('aria-busy', String(this.loading));
     }
 
-    #renderMensajes() {
+    #renderMensajes(): void {
       this.#results.textContent = '';
       const list = this.#mensajes.length
         ? this.#mensajes
@@ -305,11 +309,11 @@ export function lowerCase(value: string) {
      * (Escape, backdrop, botón Cerrar): `hide()` programático no pasa por aquí.
      * Es justo la semántica que tenía `is-cancel`.
      */
-    #onDialogHide = () => { emit(this, 'is-cancel', {}); };
+    #onDialogHide = (): void => { emit(this, 'is-cancel', {}); };
 
-    #onDialogAfterHide = () => { this.removeAttribute('open'); };
+    #onDialogAfterHide = (): void => { this.removeAttribute('open'); };
 
-    #showUI() {
+    #showUI(): void {
       if (this.#wasOpen) return;
       this.#wasOpen = true;
       this.#syncTexts();
@@ -317,7 +321,7 @@ export function lowerCase(value: string) {
       void this.verify();
     }
 
-    #hideUI() {
+    #hideUI(): void {
       if (!this.#wasOpen) return;
       this.#wasOpen = false;
       this.#dlg.hide();
