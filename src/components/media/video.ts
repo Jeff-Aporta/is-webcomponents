@@ -37,6 +37,12 @@ import { setStringAttr } from '../_shared/reflect.js';
  *            ::part(fullscreen-button) ::part(pip-button) ::part(settings-button)
  */
 
+// Tipo del botón `is-check-icon-button` para acceder a `checked`/`icon`.
+interface IsCheckIconButton extends HTMLElement {
+  checked: boolean;
+  icon: string;
+}
+
 (() => {
   const TEMPLATE = document.createElement('template');
   TEMPLATE.innerHTML = /* html */ `
@@ -128,12 +134,12 @@ import { setStringAttr } from '../_shared/reflect.js';
   const RATES = [0.25, 0.5, 0.75, 1, 1.25, 1.5, 1.75, 2];
   const IDLE_MS = 2600;
 
-  function fmtTime(sec: number) {
+  function fmtTime(sec: number): string {
     if (!Number.isFinite(sec) || sec < 0) return '0:00';
     const s = Math.floor(sec % 60);
     const m = Math.floor(sec / 60) % 60;
     const h = Math.floor(sec / 3600);
-    const pad = (n: string) => String(n).padStart(2, '0');
+    const pad = (n: number) => String(n).padStart(2, '0');
     return h > 0 ? `${h}:${pad(m)}:${pad(s)}` : `${m}:${pad(s)}`;
   }
 
@@ -145,28 +151,27 @@ import { setStringAttr } from '../_shared/reflect.js';
 
     static get observedAttributes(): string[] { return [...OBSERVED, 'accent']; }
 
-    #video!: HTMLElement;
+    #video!: HTMLVideoElement;
     #controls!: HTMLElement;
-    #playBtn!: HTMLElement;
-    #muteBtn!: HTMLElement;
-    #volume!: HTMLElement;
-    #seek!: HTMLElement;
+    #playBtn!: IsCheckIconButton;
+    #muteBtn!: IsCheckIconButton;
+    #volume!: HTMLInputElement;
+    #seek!: HTMLInputElement;
     #time!: HTMLElement;
     #slot!: HTMLSlotElement;
     #wrap!: HTMLElement;
-    #bigPlay!: HTMLElement;
     #progress!: HTMLElement;
     #tip!: HTMLElement;
     #cur!: HTMLElement;
     #dur!: HTMLElement;
-    #fsBtn!: HTMLElement;
-    #pipBtn!: HTMLElement;
+    #fsBtn!: IsCheckIconButton;
+    #pipBtn!: IsCheckIconButton;
     #speedBtn!: HTMLElement;
     #menu!: HTMLElement;
     #mounted = false;
     #seeking = false;
     #lastVolume = 1;
-    #idleTimer = 0;
+    #idleTimer: ReturnType<typeof setTimeout> | null = null;
 
     constructor() {
       super();
@@ -174,29 +179,29 @@ import { setStringAttr } from '../_shared/reflect.js';
       adoptCss(shadow, import.meta.url);
       shadow.appendChild(TEMPLATE.content.cloneNode(true));
 
-      this.#video = shadow.querySelector<HTMLElement>('.video')!;
+      this.#video = shadow.querySelector<HTMLVideoElement>('.video')!;
       this.#controls = shadow.querySelector<HTMLElement>('.controls')!;
-      this.#playBtn = shadow.querySelector<HTMLElement>('.play')!;
-      this.#muteBtn = shadow.querySelector<HTMLElement>('.mute')!;
-      this.#volume = shadow.querySelector<HTMLElement>('.volume')!;
-      this.#seek = shadow.querySelector<HTMLElement>('.seek')!;
+      this.#playBtn = shadow.querySelector<HTMLElement>('.play') as IsCheckIconButton;
+      this.#muteBtn = shadow.querySelector<HTMLElement>('.mute') as IsCheckIconButton;
+      this.#volume = shadow.querySelector<HTMLInputElement>('.volume')!;
+      this.#seek = shadow.querySelector<HTMLInputElement>('.seek')!;
       this.#time = shadow.querySelector<HTMLElement>('.time')!;
       this.#slot = shadow.querySelector<HTMLSlotElement>('slot')!;
       this.#wrap = shadow.querySelector<HTMLElement>('.wrap')!;
-      this.#bigPlay = shadow.querySelector<HTMLElement>('.big-play')!;
       this.#progress = shadow.querySelector<HTMLElement>('.progress')!;
       this.#tip = shadow.querySelector<HTMLElement>('.tip')!;
       this.#cur = shadow.querySelector<HTMLElement>('.cur')!;
       this.#dur = shadow.querySelector<HTMLElement>('.dur')!;
-      this.#fsBtn = shadow.querySelector<HTMLElement>('.fs')!;
-      this.#pipBtn = shadow.querySelector<HTMLElement>('.pip')!;
+      this.#fsBtn = shadow.querySelector<HTMLElement>('.fs') as IsCheckIconButton;
+      this.#pipBtn = shadow.querySelector<HTMLElement>('.pip') as IsCheckIconButton;
       this.#speedBtn = shadow.querySelector<HTMLElement>('.speed')!;
       this.#menu = shadow.querySelector<HTMLElement>('.menu')!;
 
       this.#buildSpeedMenu();
 
-      this.#playBtn.addEventListener('is-change', (e) => {
-        if (e.detail.checked) {
+      this.#playBtn.addEventListener('is-change', (e: Event) => {
+        const ev = e as CustomEvent<{ checked: boolean }>;
+        if (ev.detail.checked) {
           const p = this.play();
           if (p && typeof p.catch === 'function') {
             p.catch(() => { this.#playBtn.checked = false; });
@@ -205,8 +210,9 @@ import { setStringAttr } from '../_shared/reflect.js';
           this.pause();
         }
       });
-      this.#muteBtn.addEventListener('is-change', (e) => {
-        if (e.detail.checked) {
+      this.#muteBtn.addEventListener('is-change', (e: Event) => {
+        const ev = e as CustomEvent<{ checked: boolean }>;
+        if (ev.detail.checked) {
           if (this.#video.volume > 0) this.#lastVolume = this.#video.volume;
           this.muted = true;
         } else {
@@ -238,10 +244,11 @@ import { setStringAttr } from '../_shared/reflect.js';
       });
 
       // Tooltip de tiempo sobre la barra, como YouTube.
-      this.#progress.addEventListener('pointermove', (e) => {
+      this.#progress.addEventListener('pointermove', (e: Event) => {
+        const ev = e as PointerEvent;
         const r = this.#progress.getBoundingClientRect();
         if (!r.width) return;
-        const ratio = Math.min(1, Math.max(0, (e.clientX - r.left) / r.width));
+        const ratio = Math.min(1, Math.max(0, (ev.clientX - r.left) / r.width));
         this.#tip.textContent = fmtTime(ratio * (this.#video.duration || 0));
         this.#tip.style.left = `${ratio * 100}%`;
       });
@@ -281,6 +288,12 @@ import { setStringAttr } from '../_shared/reflect.js';
       this.#slot.addEventListener('slotchange', () => this.#distributeSlot());
     }
 
+    // Guardamos big-play en una property aparte para no añadir otro #field: lo
+    // recuperamos en cada uso (es un único punto del template).
+    get #bigPlay(): HTMLElement {
+      return this.shadowRoot!.querySelector<HTMLElement>('.big-play')!;
+    }
+
     connectedCallback(): void {
       super.connectedCallback();
       this.#mounted = true;
@@ -300,7 +313,8 @@ import { setStringAttr } from '../_shared/reflect.js';
 
     disconnectedCallback(): void {
       this.#mounted = false;
-      clearTimeout(this.#idleTimer);
+      if (this.#idleTimer !== null) clearTimeout(this.#idleTimer);
+      this.#idleTimer = null;
       document.removeEventListener('fullscreenchange', this.#syncFsUi);
     }
 
@@ -312,50 +326,50 @@ import { setStringAttr } from '../_shared/reflect.js';
       if (name === 'muted') this.#syncVolumeUi();
     }
 
-    get src() { return this.getAttribute('src') ?? ''; }
-    set src(v) { setStringAttr(this, 'src', v); }
+    get src(): string { return this.getAttribute('src') ?? ''; }
+    set src(v: string) { setStringAttr(this, 'src', v); }
 
-    get poster() { return this.getAttribute('poster') ?? ''; }
-    set poster(v) { setStringAttr(this, 'poster', v); }
+    get poster(): string { return this.getAttribute('poster') ?? ''; }
+    set poster(v: string) { setStringAttr(this, 'poster', v); }
 
-    get withoutControls() { return this.hasAttribute('without-controls'); }
-    set withoutControls(v) { this.toggleAttribute('without-controls', !!v); }
+    get withoutControls(): boolean { return this.hasAttribute('without-controls'); }
+    set withoutControls(v: boolean) { this.toggleAttribute('without-controls', !!v); }
 
     /** Conveniencia: `controls` es el inverso de `without-controls`. */
-    get controls() { return !this.withoutControls; }
-    set controls(v) { this.withoutControls = !v; }
+    get controls(): boolean { return !this.withoutControls; }
+    set controls(v: boolean) { this.withoutControls = !v; }
 
-    get muted() { return this.hasAttribute('muted'); }
-    set muted(v) { this.toggleAttribute('muted', !!v); }
+    get muted(): boolean { return this.hasAttribute('muted'); }
+    set muted(v: boolean) { this.toggleAttribute('muted', !!v); }
 
-    get loop() { return this.hasAttribute('loop'); }
-    set loop(v) { this.toggleAttribute('loop', !!v); }
+    get loop(): boolean { return this.hasAttribute('loop'); }
+    set loop(v: boolean) { this.toggleAttribute('loop', !!v); }
 
-    get autoplay() { return this.hasAttribute('autoplay'); }
-    set autoplay(v) { this.toggleAttribute('autoplay', !!v); }
+    get autoplay(): boolean { return this.hasAttribute('autoplay'); }
+    set autoplay(v: boolean) { this.toggleAttribute('autoplay', !!v); }
 
-    get playsInline() { return this.hasAttribute('playsinline'); }
-    set playsInline(v) { this.toggleAttribute('playsinline', !!v); }
+    get playsInline(): boolean { return this.hasAttribute('playsinline'); }
+    set playsInline(v: boolean) { this.toggleAttribute('playsinline', !!v); }
 
     /** Expose underlying media element */
-    get media() { return this.#video; }
+    get media(): HTMLVideoElement { return this.#video; }
 
-    play() { return this.#video.play(); }
-    pause() { this.#video.pause(); }
+    play(): Promise<void> { return this.#video.play(); }
+    pause(): void { this.#video.pause(); }
 
     /** Pantalla completa sobre el host (mantiene el chrome propio dentro). */
-    toggleFullscreen() {
-      if (document.fullscreenElement === this) document.exitFullscreen?.();
-      else this.requestFullscreen?.().catch(() => { /* gesto denegado */ });
+    toggleFullscreen(): void {
+      if (document.fullscreenElement === this) void document.exitFullscreen?.();
+      else void this.requestFullscreen?.().catch(() => { /* gesto denegado */ });
     }
 
-    togglePictureInPicture() {
+    togglePictureInPicture(): void {
       if (!document.pictureInPictureEnabled) return;
-      if (document.pictureInPictureElement === this.#video) document.exitPictureInPicture?.();
-      else this.#video.requestPictureInPicture?.().catch(() => { /* no disponible */ });
+      if (document.pictureInPictureElement === this.#video) void document.exitPictureInPicture?.();
+      else void this.#video.requestPictureInPicture?.().catch(() => { /* no disponible */ });
     }
 
-    #togglePlay() {
+    #togglePlay(): void {
       if (this.#video.paused) {
         const p = this.play();
         if (p && typeof p.catch === 'function') p.catch(() => { /* autoplay bloqueado */ });
@@ -364,24 +378,25 @@ import { setStringAttr } from '../_shared/reflect.js';
       }
     }
 
-    #seekBy(delta: number) {
+    #seekBy(delta: number): void {
       const d = this.#video.duration;
       if (!Number.isFinite(d)) return;
       this.#video.currentTime = Math.min(d, Math.max(0, this.#video.currentTime + delta));
       this.#wake();
     }
 
-    #volumeBy(delta: number) {
+    #volumeBy(delta: number): void {
       const v = Math.min(1, Math.max(0, this.#video.volume + delta));
       this.#video.volume = v;
       if (v > 0) this.muted = false;
       this.#wake();
     }
 
-    #onKeydown = (e) => {
+    #onKeydown = (e: KeyboardEvent): void => {
       if (!this.controls || e.altKey || e.ctrlKey || e.metaKey) return;
       // Los sliders ya manejan sus propias flechas: no las duplicamos.
-      const onSlider = e.target === this.#seek || e.target === this.#volume;
+      const target = e.target as Element | null;
+      const onSlider = target === this.#seek || target === this.#volume;
       const key = e.key;
 
       if (key === ' ' || key === 'k') { this.#togglePlay(); }
@@ -402,20 +417,20 @@ import { setStringAttr } from '../_shared/reflect.js';
     };
 
     /** Devuelve el chrome y reinicia la cuenta atrás de ocultado. */
-    #wake = () => {
+    #wake = (): void => {
       this.removeAttribute('data-idle');
-      clearTimeout(this.#idleTimer);
+      if (this.#idleTimer !== null) clearTimeout(this.#idleTimer);
       if (this.#video.paused || !this.controls) return;
       this.#idleTimer = setTimeout(() => this.#goIdle(), IDLE_MS);
     };
 
-    #goIdle() {
+    #goIdle(): void {
       if (this.#video.paused || !this.controls) return;
       if (!this.#menu.hidden) return;   // menú abierto: no esconder
       this.setAttribute('data-idle', '');
     }
 
-    #buildSpeedMenu() {
+    #buildSpeedMenu(): void {
       for (const rate of RATES) {
         const li = document.createElement('li');
         li.setAttribute('role', 'presentation');
@@ -432,21 +447,22 @@ import { setStringAttr } from '../_shared/reflect.js';
         this.#menu.appendChild(li);
       }
       // Clic fuera cierra: un solo listener en el wrap, sin doc listeners.
-      this.#wrap.addEventListener('pointerdown', (e) => {
+      this.#wrap.addEventListener('pointerdown', (e: Event) => {
+        const ev = e as PointerEvent;
         if (this.#menu.hidden) return;
-        const path = e.composedPath();
+        const path = ev.composedPath();
         if (!path.includes(this.#menu) && !path.includes(this.#speedBtn)) this.#toggleMenu(false);
       });
     }
 
-    #toggleMenu(force) {
+    #toggleMenu(force?: boolean): void {
       const open = force ?? this.#menu.hidden;
       this.#menu.hidden = !open;
       this.#speedBtn.setAttribute('aria-expanded', String(open));
       if (open) this.#wake();
     }
 
-    #syncMenuUi() {
+    #syncMenuUi(): void {
       const rate = this.#video.playbackRate;
       for (const btn of this.#menu.querySelectorAll<HTMLButtonElement>('button[data-rate]')) {
         btn.setAttribute('aria-checked', String(Number(btn.dataset.rate) === rate));
@@ -457,15 +473,15 @@ import { setStringAttr } from '../_shared/reflect.js';
     }
 
     // is-check-icon-button ya intercambia icono y aria-label según `checked`.
-    #syncPipUi = () => {
+    #syncPipUi = (): void => {
       this.#pipBtn.checked = document.pictureInPictureElement === this.#video;
     };
 
-    #syncFsUi = () => {
+    #syncFsUi = (): void => {
       this.#fsBtn.checked = document.fullscreenElement === this;
     };
 
-    #onBuffer = () => {
+    #onBuffer = (): void => {
       const d = this.#video.duration;
       const buf = this.#video.buffered;
       if (!Number.isFinite(d) || d <= 0 || !buf.length) return;
@@ -473,7 +489,7 @@ import { setStringAttr } from '../_shared/reflect.js';
       this.style.setProperty('--buffered', `${Math.min(100, (end / d) * 100)}%`);
     };
 
-    #syncAttrs() {
+    #syncAttrs(): void {
       const src = this.src.trim();
       if (src) {
         if (this.#video.getAttribute('src') !== src) this.#video.src = src;
@@ -492,17 +508,17 @@ import { setStringAttr } from '../_shared/reflect.js';
       this.#video.controls = false;
     }
 
-    #hasSlottedSources() {
+    #hasSlottedSources(): boolean {
       return this.#slot.assignedElements({ flatten: true }).some(
         (el) => el.tagName === 'SOURCE' || el.tagName === 'TRACK'
       );
     }
 
-    #distributeSlot() {
+    #distributeSlot(): void {
       this.#video.querySelectorAll<HTMLElement>('[data-is-injected]').forEach((el) => el.remove());
       for (const el of this.#slot.assignedElements({ flatten: true })) {
         if (el.tagName === 'SOURCE' || el.tagName === 'TRACK') {
-          const clone = el.cloneNode(true);
+          const clone = el.cloneNode(true) as HTMLElement;
           clone.setAttribute('data-is-injected', '');
           this.#video.appendChild(clone);
         }
@@ -510,7 +526,7 @@ import { setStringAttr } from '../_shared/reflect.js';
       if (!this.src.trim() && this.#hasSlottedSources()) this.#video.load();
     }
 
-    #syncControlsVisibility() {
+    #syncControlsVisibility(): void {
       const on = this.controls;
       this.#controls.hidden = !on;
       // data-no-controls apaga scrim y overlay (el playlist usa este modo).
@@ -518,13 +534,13 @@ import { setStringAttr } from '../_shared/reflect.js';
       if (!on) this.removeAttribute('data-idle');
     }
 
-    #syncPlayUi() {
+    #syncPlayUi(): void {
       const playing = !this.#video.paused;
       this.#playBtn.checked = playing;
       this.toggleAttribute('data-playing', playing);
     }
 
-    #syncVolumeUi = () => {
+    #syncVolumeUi = (): void => {
       const muted = this.#video.muted || this.#video.volume === 0;
       this.#muteBtn.checked = muted;
       this.toggleAttribute('muted', this.#video.muted);
@@ -540,12 +556,12 @@ import { setStringAttr } from '../_shared/reflect.js';
       }
     };
 
-    #applySeek() {
+    #applySeek(): void {
       if (!this.#video.duration) return;
       this.#video.currentTime = (Number(this.#seek.value) / 1000) * this.#video.duration;
     }
 
-    #onPlay = () => {
+    #onPlay = (): void => {
       this.#playBtn.checked = true;
       this.setAttribute('data-playing', '');
       this.#wake();
@@ -553,24 +569,24 @@ import { setStringAttr } from '../_shared/reflect.js';
       emit(this, 'is-play');
     };
 
-    #onPause = () => {
+    #onPause = (): void => {
       this.#playBtn.checked = false;
       this.removeAttribute('data-playing');
       // En pausa el chrome se queda: nunca se oculta sobre un fotograma fijo.
       this.removeAttribute('data-idle');
-      clearTimeout(this.#idleTimer);
+      if (this.#idleTimer !== null) clearTimeout(this.#idleTimer);
       this.dispatchEvent(new Event('pause', { bubbles: true, composed: true }));
       emit(this, 'is-pause');
     };
 
-    #onEnded = () => {
+    #onEnded = (): void => {
       this.removeAttribute('data-playing');
       this.removeAttribute('data-idle');
       this.dispatchEvent(new Event('ended', { bubbles: true, composed: true }));
       emit(this, 'is-ended');
     };
 
-    #onTime = () => {
+    #onTime = (): void => {
       const d = this.#video.duration || 0;
       const t = this.#video.currentTime || 0;
       this.#cur.textContent = fmtTime(t);
