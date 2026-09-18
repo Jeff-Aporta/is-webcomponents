@@ -1,27 +1,62 @@
 /**
  * Behavior preview: <is-code>
- * @param {import('../../previews/_kit/types.d.ts').ISComponentPreviewLike} preview
  */
-export function mount(preview: import('../../previews/_kit/types.d.ts').ISComponentPreviewLike) {
+import type { PreviewMountContext } from '../../previews/_kit/types.d.ts';
+
+interface CodeMark {
+  id?: string;
+  from: number;
+  to: number;
+  kind: 'tooltip' | 'highlight';
+  title?: string;
+  body?: string;
+  tone?: string;
+  message?: string;
+}
+
+interface CodeDoc {
+  text: string;
+  marks?: CodeMark[];
+}
+
+interface IsCodeEl extends HTMLElement {
+  lang: string;
+  mode: 'inline' | 'block';
+  value: string;
+  lineNumbers: boolean | string;
+  ready: boolean;
+  themeConfig?: Record<string, string> | null;
+  setMarks(marks: CodeMark[]): void;
+  code2json(opts: { marks: CodeMark[] }): CodeDoc;
+  setDocument(doc: CodeDoc): void;
+  format(): void;
+  refresh(): void;
+}
+
+interface IsFormatEl extends HTMLElement {
+  format(): void;
+}
+
+const SAMPLES: Record<string, string> = {
+  javascript: `function greet(name) {\n  return \`Hola, \${name}\`;\n}\n\nconsole.log(greet('IS'));`,
+  typescript: `type User = { id: number; name: string };\n\nexport function label(u: User): string {\n  return \`#\${u.id} \${u.name}\`;\n}`,
+  html: `<main class="page">\n  <h1>ContaPyme</h1>\n  <p>Web components</p>\n</main>`,
+  css: `.card {\n  display: grid;\n  gap: 0.75rem;\n  padding: 1rem;\n  border-radius: 12px;\n}`,
+  python: `def greet(name: str) -> str:\n    return f"Hola, {name}"\n\nprint(greet("IS"))`,
+  json: `{\n  "ok": true,\n  "items": [1, 2, 3]\n}`,
+  plaintext: `nota sin resaltado`,
+};
+
+export function mount(preview: PreviewMountContext): void {
   const root = preview.main || preview.root;
   if (!root) return;
 
-  const samples = {
-    javascript: `function greet(name) {\n  return \`Hola, \${name}\`;\n}\n\nconsole.log(greet('IS'));`,
-    typescript: `type User = { id: number; name: string };\n\nexport function label(u: User): string {\n  return \`#\${u.id} \${u.name}\`;\n}`,
-    html: `<main class="page">\n  <h1>ContaPyme</h1>\n  <p>Web components</p>\n</main>`,
-    css: `.card {\n  display: grid;\n  gap: 0.75rem;\n  padding: 1rem;\n  border-radius: 12px;\n}`,
-    python: `def greet(name: str) -> str:\n    return f"Hola, {name}"\n\nprint(greet("IS"))`,
-    json: `{\n  "ok": true,\n  "items": [1, 2, 3]\n}`,
-    plaintext: `nota sin resaltado`,
-  };
-
   const langEd = root.querySelector<HTMLElement>('#demo-lang');
   if (langEd) {
-    langEd.value = samples.typescript;
-    const setLang = (lang) => {
+    (langEd as HTMLTextAreaElement).value = SAMPLES.typescript;
+    const setLang = (lang: string): void => {
       langEd.lang = lang;
-      langEd.value = samples[lang] || samples.javascript;
+      (langEd as HTMLTextAreaElement).value = SAMPLES[lang] || SAMPLES.javascript;
     };
     root.querySelector<HTMLElement>('#lang-js')?.addEventListener('click', () => setLang('javascript'));
     root.querySelector<HTMLElement>('#lang-ts')?.addEventListener('click', () => setLang('typescript'));
@@ -31,17 +66,17 @@ export function mount(preview: import('../../previews/_kit/types.d.ts').ISCompon
   }
 
   root.querySelector<HTMLElement>('#btn-format')?.addEventListener('click', () => {
-    root.querySelector<HTMLElement>('#demo-format')?.format();
+    (root.querySelector<IsFormatEl>('#demo-format'))?.format();
   });
 
   // El --stat del demo llega adrede desalineado (barras partidas, columnas
   // irregulares) para que se vea qué hace `format()` sobre un diff: no toca el
   // contenido, solo devuelve la rejilla.
   root.querySelector<HTMLElement>('#diff-format')?.addEventListener('click', () => {
-    root.querySelector<HTMLElement>('#demo-diff-stat')?.format();
+    (root.querySelector<IsFormatEl>('#demo-diff-stat'))?.format();
   });
 
-  const themeEd = root.querySelector<HTMLElement>('#demo-theme');
+  const themeEd = root.querySelector<IsCodeEl>('#demo-theme');
   root.querySelector<HTMLElement>('#theme-ocean')?.addEventListener('click', () => {
     if (!themeEd) return;
     themeEd.themeConfig = {
@@ -65,8 +100,8 @@ export function mount(preview: import('../../previews/_kit/types.d.ts').ISCompon
     themeEd.themeConfig = null;
   });
 
-  const marksEd = root.querySelector<HTMLElement>('#demo-marks');
-  const applyMarksDemo = () => {
+  const marksEd = root.querySelector<IsCodeEl>('#demo-marks');
+  const applyMarksDemo = (): void => {
     if (!marksEd) return;
     const value = `function add(a, b) {\n  return a + b;\n}\n\nadd(1, 2);`;
     marksEd.value = value;
@@ -105,9 +140,9 @@ export function mount(preview: import('../../previews/_kit/types.d.ts').ISCompon
     else marksEd.addEventListener('is-ready', applyMarksDemo, { once: true });
   }
 
-  const jsonEd = root.querySelector<HTMLElement>('#demo-json');
+  const jsonEd = root.querySelector<IsCodeEl>('#demo-json');
   const out = root.querySelector<HTMLElement>('#json-out');
-  let lastDoc = null;
+  let lastDoc: CodeDoc | null = null;
   root.querySelector<HTMLElement>('#btn-to-json')?.addEventListener('click', () => {
     if (!jsonEd || !out) return;
     lastDoc = jsonEd.code2json({
@@ -128,33 +163,29 @@ export function mount(preview: import('../../previews/_kit/types.d.ts').ISCompon
     jsonEd.setDocument(lastDoc);
   });
 
-  mountPlayground(root, samples);
+  mountPlayground(root, SAMPLES);
 }
 
-/**
- * @param {ParentNode} root
- * @param {Record<string, string>} samples
- */
-function mountPlayground(root: ParentNode, samples: Record<string, string>) {
-  const ed = root.querySelector<HTMLElement>('#pgCode');
+function mountPlayground(root: ParentNode, samples: Record<string, string>): void {
+  const ed = root.querySelector<IsCodeEl>('#pgCode');
   if (!ed) return;
 
   const stage = root.querySelector<HTMLElement>('#pgStage');
   const prose = root.querySelector<HTMLElement>('#pgProse');
   const inlineHost = root.querySelector<HTMLElement>('#pgInlineHost');
-  const modeSel = root.querySelector<HTMLElement>('#pgMode');
-  const langSel = root.querySelector<HTMLElement>('#pgLang');
-  const valueTa = root.querySelector<HTMLElement>('#pgValue');
+  const modeSel = root.querySelector<HTMLSelectElement>('#pgMode');
+  const langSel = root.querySelector<HTMLSelectElement>('#pgLang');
+  const valueTa = root.querySelector<HTMLTextAreaElement>('#pgValue');
   const meta = root.querySelector<HTMLElement>('#pgMeta');
   const flags = {
-    readonly: root.querySelector<HTMLElement>('#pgReadonly'),
-    wrap: root.querySelector<HTMLElement>('#pgWrap'),
-    lines: root.querySelector<HTMLElement>('#pgLines'),
-    compact: root.querySelector<HTMLElement>('#pgCompact'),
-    disabled: root.querySelector<HTMLElement>('#pgDisabled'),
+    readonly: root.querySelector<HTMLInputElement>('#pgReadonly'),
+    wrap: root.querySelector<HTMLInputElement>('#pgWrap'),
+    lines: root.querySelector<HTMLInputElement>('#pgLines'),
+    compact: root.querySelector<HTMLInputElement>('#pgCompact'),
+    disabled: root.querySelector<HTMLInputElement>('#pgDisabled'),
   };
 
-  const syncMeta = () => {
+  const syncMeta = (): void => {
     if (!meta) return;
     const rect = ed.getBoundingClientRect();
     meta.textContent = [
@@ -166,7 +197,7 @@ function mountPlayground(root: ParentNode, samples: Record<string, string>) {
     ].join(' · ');
   };
 
-  const placeEditor = () => {
+  const placeEditor = (): void => {
     const inline = modeSel?.value === 'inline';
     stage?.classList.toggle('is-inline', inline);
     if (prose) prose.hidden = !inline;
@@ -177,7 +208,7 @@ function mountPlayground(root: ParentNode, samples: Record<string, string>) {
     }
   };
 
-  const apply = () => {
+  const apply = (): void => {
     const mode = modeSel?.value === 'inline' ? 'inline' : 'block';
     ed.mode = mode;
     placeEditor();
@@ -202,7 +233,7 @@ function mountPlayground(root: ParentNode, samples: Record<string, string>) {
       ed.setAttribute('line-numbers', 'false');
     }
 
-    ed.refresh?.();
+    ed.refresh();
     requestAnimationFrame(syncMeta);
   };
 
@@ -265,16 +296,16 @@ function mountPlayground(root: ParentNode, samples: Record<string, string>) {
   });
 
   root.querySelector<HTMLElement>('#pgFormat')?.addEventListener('click', () => {
-    ed.format?.();
+    ed.format();
     if (valueTa) valueTa.value = ed.value;
     syncMeta();
   });
-  root.querySelector<HTMLElement>('#pgFocus')?.addEventListener('click', () => ed.focus?.());
+  root.querySelector<HTMLElement>('#pgFocus')?.addEventListener('click', () => ed.focus());
 
   apply();
   window.addEventListener('resize', syncMeta, { passive: true });
 }
 
-export function unmount() {
+export function unmount(): void {
   /* listeners viven en nodos que se descartan con el preview */
 }
