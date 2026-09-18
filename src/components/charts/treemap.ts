@@ -1,7 +1,9 @@
 import { adoptCss, defineElement, emit } from '../../core/element.js';
 import { svgEl } from '../_shared/svg-chart-engine.js';
 import { resolveTreemapSpec, computeTreemapLayout } from './treemap-spec.js';
+import type { TreemapSpec, TreemapLayout } from './treemap-spec.js';
 import { sequenceThemeDark, sequenceThemeLight } from '../diagrams/sequence-spec.js';
+import type { DiagramTheme } from '../diagrams/diagram-types.js';
 import { tkHueToCss } from '../_shared/tk-hue.js';
 import { inlineMdWeb } from '../_shared/tk-inline-md.js';
 import { registerDiagramKind } from '../diagrams/diagram-kinds.js';
@@ -34,16 +36,16 @@ class IsTreemap extends HTMLElement {
   static get observedAttributes(): string[] { return ['color', 'open-on-click']; }
 
   #wrap!: HTMLElement; #svg!: HTMLElement; #tooltipEl!: HTMLElement;
-  #payload = null;
-  #spec = null;
-  #layout = null;
+  #payload: unknown = null;
+  #spec: TreemapSpec | null = null;
+  #layout: TreemapLayout | null = null;
   #mounted = false;
-  #mo = null; #themeObs = null;
-  #renderQueued = false;
-  #nodeNodes = new Map();
-  #hoverId = null;
-  #ownLightbox = null;
-  #ro = null;
+  #mo: MutationObserver | null = null; #themeObs: MutationObserver | null = null;
+  #renderQueued: Promise<void> | false = false;
+  #nodeNodes = new Map<string, { n: import('./treemap-spec.js').TreemapLayoutNode; g: SVGElement }>();
+  #hoverId: string | null = null;
+  #ownLightbox: HTMLElement | null = null;
+  #ro: ResizeObserver | null = null;
   #lastWidth = 0;
 
   constructor() {
@@ -65,24 +67,27 @@ class IsTreemap extends HTMLElement {
   connectedCallback(): void {
     this.#mounted = true;
     this.#readJsonSlot();
-    this.#mo = new MutationObserver(() => this.#readJsonSlot());
-    this.#mo.observe(this, { childList: true, characterData: true, subtree: true });
-    this.#themeObs = new MutationObserver(() => this.#queueRender());
-    this.#themeObs.observe(document.documentElement, {
+    const mo = new MutationObserver(() => this.#readJsonSlot());
+    this.#mo = mo;
+    mo.observe(this, { childList: true, characterData: true, subtree: true });
+    const themeObs = new MutationObserver(() => this.#queueRender());
+    this.#themeObs = themeObs;
+    themeObs.observe(document.documentElement, {
       attributes: true, attributeFilter: ['class', 'data-theme', 'data-palette'],
     });
-    this.#wrap.addEventListener('mousemove', this.#onMouseMove);
-    this.#wrap.addEventListener('mouseleave', this.#onMouseLeave);
-    this.#wrap.addEventListener('click', this.#onClick);
+    this.#wrap.addEventListener('mousemove', this.#onMouseMove as EventListener);
+    this.#wrap.addEventListener('mouseleave', this.#onMouseLeave as EventListener);
+    this.#wrap.addEventListener('click', this.#onClick as EventListener);
     if (typeof ResizeObserver !== 'undefined') {
-      this.#ro = new ResizeObserver(() => {
+      const ro = new ResizeObserver(() => {
         const w = this.#wrap.clientWidth;
         if (w && Math.abs(w - this.#lastWidth) > 4) {
           this.#lastWidth = w;
           this.#queueRender();
         }
       });
-      this.#ro.observe(this.#wrap);
+      this.#ro = ro;
+      ro.observe(this.#wrap);
     }
     this.#queueRender();
   }
@@ -92,9 +97,9 @@ class IsTreemap extends HTMLElement {
     this.#mo?.disconnect();
     this.#themeObs?.disconnect();
     this.#ro?.disconnect();
-    this.#wrap.removeEventListener('mousemove', this.#onMouseMove);
-    this.#wrap.removeEventListener('mouseleave', this.#onMouseLeave);
-    this.#wrap.removeEventListener('click', this.#onClick);
+    this.#wrap.removeEventListener('mousemove', this.#onMouseMove as EventListener);
+    this.#wrap.removeEventListener('mouseleave', this.#onMouseLeave as EventListener);
+    this.#wrap.removeEventListener('click', this.#onClick as EventListener);
   }
 
   attributeChangedCallback(name: string, oldVal: string | null, newVal: string | null): void {
@@ -102,33 +107,34 @@ class IsTreemap extends HTMLElement {
     this.#queueRender();
   }
 
-  get isViewer() { return this.getAttribute('color') === 'viewer'; }
-  get payload() { return this.#payload; }
-  set payload(v) { this.#payload = v; this.#queueRender(); }
-  get spec() { return this.#spec; }
-  get layout() { return this.#layout; }
+  get isViewer(): boolean { return this.getAttribute('color') === 'viewer'; }
+  get payload(): unknown { return this.#payload; }
+  set payload(v: unknown) { this.#payload = v; this.#queueRender(); }
+  get spec(): TreemapSpec | null { return this.#spec; }
+  get layout(): TreemapLayout | null { return this.#layout; }
 
-  async updateComplete() { await this.#queueRender(); }
+  async updateComplete(): Promise<void> { await this.#queueRender(); }
 
-  #readJsonSlot() {
-    const script = [...this.children].find((c) => c.tagName === 'SCRIPT' && /json/i.test(c.type || ''));
+  #readJsonSlot(): void {
+    const script = [...this.children].find((c: Element) => c.tagName === 'SCRIPT' && /json/i.test((c as HTMLScriptElement).type || ''));
     if (!script) return;
     try {
-      this.#payload = JSON.parse(script.textContent.trim());
+      this.#payload = JSON.parse(script.textContent ? script.textContent.trim() : '');
       this.#queueRender();
     } catch { /* JSON inválido: conserva el último válido */ }
   }
 
-  #queueRender() {
+  #queueRender(): Promise<void> | false {
     if (this.#renderQueued) return this.#renderQueued;
-    this.#renderQueued = (async () => {
+    const task = (async () => {
       await Promise.resolve();
       try { this.#render(); } finally { this.#renderQueued = false; }
     })();
-    return this.#renderQueued;
+    this.#renderQueued = task;
+    return task;
   }
 
-  #render() {
+  #render(): void {
     if (!this.#mounted) return;
     const spec = resolveTreemapSpec(this.#payload ?? {});
     this.#spec = spec;
@@ -140,7 +146,7 @@ class IsTreemap extends HTMLElement {
     delete this.#wrap.dataset.empty;
 
     const dark = !document.documentElement.classList.contains('theme-light');
-    const theme = dark ? sequenceThemeDark() : sequenceThemeLight();
+    const theme: DiagramTheme & { surface?: string; headerTint?: string } = dark ? sequenceThemeDark() : sequenceThemeLight();
     this.#wrap.dataset.theme = dark ? 'dark' : 'light';
     // El tema del secuencia no trae un color de superficie real (`panel` es
     // 'transparent'); lo leemos del sistema para usarlo como gap entre
@@ -160,8 +166,9 @@ class IsTreemap extends HTMLElement {
     this.#wrap.classList.toggle('is-viewer', this.isViewer);
   }
 
-  #buildSvg(layout, theme) {
-    const { width: W, height: H } = layout;
+  #buildSvg(layout: TreemapLayout, theme: DiagramTheme & { surface?: string; headerTint?: string }): void {
+    const W = layout.width;
+    const H = layout.height;
     this.#svg.setAttribute('viewBox', `0 0 ${W} ${H}`);
     this.#svg.setAttribute('preserveAspectRatio', 'xMidYMid meet');
     this.#svg.setAttribute('aria-label', layout.title || 'Treemap');
@@ -192,7 +199,7 @@ class IsTreemap extends HTMLElement {
     emit(this, 'is-render', { layout, svg: this.#svg });
   }
 
-  #buildNodes(layout, theme) {
+  #buildNodes(layout: TreemapLayout, theme: DiagramTheme & { surface?: string; headerTint?: string }): void {
     // Orden pre-order: el rect del padre se pinta primero y los hijos lo tapan,
     // dejando visible solo la franja superior como rótulo del contenedor.
     for (const n of layout.nodes) {
@@ -239,7 +246,7 @@ class IsTreemap extends HTMLElement {
 
   /* ── interacción ── */
 
-  #onClick = () => {
+  #onClick = (): void => {
     // El visor es opt-in: sin `open-on-click` el clic no hace nada y tampoco
     // se anuncia `is-open-viewer`, que prometeria una apertura que no ocurre.
     if (!this.hasAttribute('open-on-click')) return;
@@ -250,24 +257,28 @@ class IsTreemap extends HTMLElement {
     if (!ev.defaultPrevented) this.#openOwnViewer();
   };
 
-  async #openOwnViewer() {
+  async #openOwnViewer(): Promise<void> {
     await import('../diagrams/diagram-lightbox.js');
     let lb = this.#ownLightbox;
     if (!lb || !lb.isConnected) {
-      lb = document.createElement('is-diagram-lightbox');
-      lb.setAttribute('kind', 'treemap');
-      lb.addEventListener('is-after-hide', () => lb.remove());
-      document.body.appendChild(lb);
-      this.#ownLightbox = lb;
+      const newLb = document.createElement('is-diagram-lightbox');
+      newLb.setAttribute('kind', 'treemap');
+      newLb.addEventListener('is-after-hide', () => newLb.remove());
+      document.body.appendChild(newLb);
+      lb = newLb;
+      this.#ownLightbox = newLb;
     }
-    lb.payload = this.#payload;
-    lb.open = true;
+    (lb as unknown as { payload: unknown }).payload = this.#payload;
+    (lb as unknown as { open: boolean }).open = true;
   }
 
-  #onMouseMove = (e: PointerEvent) => {
+  #onMouseMove = (e: PointerEvent): void => {
     if (!this.isViewer) return;
-    const g = e.composedPath().find((n) => n?.dataset?.nodeId);
-    const id = g?.dataset.nodeId ?? null;
+    const g = e.composedPath().find((n: EventTarget | null) => {
+      const el = n as HTMLElement | undefined;
+      return !!(el && el.dataset && 'nodeId' in el.dataset);
+    }) as HTMLElement | undefined;
+    const id = g?.dataset?.['nodeId'] ?? null;
     if (id !== this.#hoverId) this.#applyHover(id);
     if (id) {
       const rect = this.#wrap.getBoundingClientRect();
@@ -277,12 +288,12 @@ class IsTreemap extends HTMLElement {
     }
   };
 
-  #onMouseLeave = () => {
+  #onMouseLeave = (): void => {
     if (!this.isViewer) return;
     this.#applyHover(null);
   };
 
-  #applyHover(id) {
+  #applyHover(id: string | null): void {
     this.#hoverId = id;
     const entry = id ? this.#nodeNodes.get(id) : null;
 
