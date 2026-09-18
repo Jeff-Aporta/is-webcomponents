@@ -19,7 +19,7 @@
 | # | Tanda | Rama WT | Hojas | Estado |
 |---|---|---|---|---|
 | 1 | T0 preflight | — | — | ✅ cerrada |
-| 2 | T1 infra (diagram-edit shell, contract) | `wt/tanda01-infra` | 1 | 🟡 PLANNED |
+| 2 | T1 infra (diagram-edit shell, contract) | `wt/tanda01-infra` | 1 | 🟢 **PARCIAL** (4/5 archivos) |
 | 3 | T2 panel lateral + toolbar unificada | `wt/tanda02-ui` | 2 | pendiente |
 | 4 | T3 UML editores (er + class + state) | `wt/tanda03-uml` | 1 | pendiente |
 | 5 | T4 jerárquicos (mindmap + org + journey) | `wt/tanda04-hier` | 1 | pendiente |
@@ -28,6 +28,28 @@
 | 8 | T7 demos + tests + sweep final | `wt/tanda07-final` | 1 | pendiente |
 
 (8 WT sub-tandas + WT-ROOT = 9 total, profundidad 4 ✓)
+
+## Progreso de T1 (commits en `wt-root-editors-2026`)
+
+| Commit | SHA | Files | LOC | Descripción |
+|---|---|---|---|---|
+| Init | `5b2ad41524` | 2 | +189 | WIP-ROOT + file-locks |
+| T0 status | `528ec064e5` | 1 | +1 | T1 marcado PLANNED |
+| T1-base | `294075c438` | 1 | +217 | `src/components/diagrams/_editor-base.ts` — base abstracta IsEditorBase<Spec> |
+| T1-shell | `dffdd29694` | 3 | +519 | `_editor-toolbar.ts` + `_editor-panel.ts` + `_editor-nesting.ts` |
+
+**Total T1**: 4 archivos NUEVOS, +925 LOC compartidos entre los 16 editores.
+
+**Pendiente T1** (para próximo turn):
+- Refactor `src/components/diagrams/er-editor.ts` para extender `IsEditorBase<ErSpec>` (1 commit, alto riesgo — 1194 LOC)
+- Verificar que los 31 tests existentes de `<is-er-editor>` siguen pasando tras el refactor
+
+**Resto del workstream** (T2-T7):
+- Implementar 15 editores restantes (class, state, mindmap, org-chart, journey, sankey, venn, gantt, quadrant, use-case, component, flowchart, sequence, swimlane, timeline)
+- 16 demos HTML en `demos/diagramas/<kind>/<kind>-editor.html`
+- 16 sets de tests (`.test.mjs` + `.stagehand.test.mjs`)
+- 16 tests unitarios en `src/utils/health/exhaustive/diagrams/`
+- Total: 11 rondas estimadas (handoff original "~10 rounds")
 
 ## Reglas del capitán
 
