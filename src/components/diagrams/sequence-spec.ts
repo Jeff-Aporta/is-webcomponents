@@ -36,7 +36,7 @@ export const SEQUENCE_LOG_MAX_VISIBLE = 70;
 
 /** Longitud visible del log — ignora marcado md/html/iconify. */
 export function sequenceLogVisibleLength(raw: unknown): number {
-  return richTextPlain(raw).length;
+  return richTextPlain(raw as string | null | undefined).length;
 }
 
 /** Normaliza `log`: solo trim; el texto debe ser conciso y completo en BD. */
