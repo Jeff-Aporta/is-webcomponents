@@ -3,27 +3,57 @@
  * Sin dependencias — usa getBoundingClientRect + flip/shift.
  */
 
-export const PLACEMENTS = [
+export type Placement =
+  | 'top' | 'top-start' | 'top-end'
+  | 'bottom' | 'bottom-start' | 'bottom-end'
+  | 'left' | 'left-start' | 'left-end'
+  | 'right' | 'right-start' | 'right-end';
+
+export const PLACEMENTS: Placement[] = [
   'top', 'top-start', 'top-end',
   'bottom', 'bottom-start', 'bottom-end',
   'left', 'left-start', 'left-end',
   'right', 'right-start', 'right-end',
 ];
 
-const OPPOSITE = {
+const OPPOSITE: Record<'top' | 'bottom' | 'left' | 'right', 'top' | 'bottom' | 'left' | 'right'> = {
   top: 'bottom', bottom: 'top', left: 'right', right: 'left',
 };
 
-function sideOf(p: string) {
-  return p.split('-')[0];
+/** Elemento (real o virtual) del que se puede medir un rectángulo. */
+export type AnchorLike = Element | { getBoundingClientRect(): DOMRect };
+
+/** Rectángulo medido, normalizado a campos numéricos. */
+export type Rect = {
+  top: number;
+  left: number;
+  right: number;
+  bottom: number;
+  width: number;
+  height: number;
+  x: number;
+  y: number;
+};
+
+/** Tamaño popup (w x h). */
+export type Size = { width: number; height: number };
+
+/** Coordenadas resultantes de `computeCoords`. */
+export type Coords = { top: number; left: number; placement: string };
+
+/** Borde efectivo (rect de viewport / contenedor scroll) en píxeles. */
+export type Boundary = Rect;
+
+function sideOf(p: string): string {
+  return p.split('-')[0]!;
 }
 
-function alignOf(p: string) {
+function alignOf(p: string): string {
   const parts = p.split('-');
   return parts[1] || 'center';
 }
 
-function getRect(el) {
+function getRect(el: AnchorLike | null | undefined): Rect | null {
   if (!el) return null;
   if (typeof el.getBoundingClientRect === 'function') {
     const r = el.getBoundingClientRect();
@@ -36,10 +66,10 @@ function getRect(el) {
 }
 
 /** Ancestros en el flat tree (cruza shadow hosts). */
-function* flatAncestors(el) {
-  let node = el;
+function* flatAncestors(el: Node): Generator<Element, void, unknown> {
+  let node: Node | null = el;
   while (node) {
-    let parent = node.parentElement;
+    let parent: Element | null = node.parentElement;
     if (!parent) {
       const root = node.getRootNode?.();
       if (root instanceof ShadowRoot && root.host) {
@@ -55,7 +85,7 @@ function* flatAncestors(el) {
 }
 
 /** Dialog modal o popover abierto: se pinta en el top layer. */
-function isTopLayer(node: HTMLElement) {
+function isTopLayer(node: Element): boolean {
   try {
     return node.matches(':modal, :popover-open');
   } catch {
@@ -67,7 +97,7 @@ function isTopLayer(node: HTMLElement) {
  * Contenedor que atrapa `position: fixed` (transform / filter / etc.).
  * Si hay uno, top/left CSS deben restarse de su getBoundingClientRect.
  */
-function fixedContainingBlockRect(el) {
+function fixedContainingBlockRect(el: HTMLElement): Rect | null {
   // El propio popup puede ser el elemento del top layer (un popover), no solo
   // vivir dentro de uno (un dialog modal).
   if (isTopLayer(el)) return null;
@@ -93,7 +123,7 @@ function fixedContainingBlockRect(el) {
 }
 
 /** Mide el popup sin flicker (no oculta si ya está visible). */
-function measurePopupSize(popupEl: HTMLElement) {
+function measurePopupSize(popupEl: HTMLElement): Size {
   if (!popupEl.hasAttribute('hidden')) {
     return { width: popupEl.offsetWidth, height: popupEl.offsetHeight };
   }
@@ -106,7 +136,7 @@ function measurePopupSize(popupEl: HTMLElement) {
   popupEl.style.position = 'fixed';
   popupEl.style.top = '0';
   popupEl.style.left = '0';
-  const size = { width: popupEl.offsetWidth, height: popupEl.offsetHeight };
+  const size: Size = { width: popupEl.offsetWidth, height: popupEl.offsetHeight };
   popupEl.setAttribute('hidden', '');
   popupEl.style.visibility = prevVis;
   popupEl.style.position = prevPos;
@@ -115,7 +145,7 @@ function measurePopupSize(popupEl: HTMLElement) {
   return size;
 }
 
-function viewportBoundary(padding: number = 0) {
+function viewportBoundary(padding: number = 0): Boundary {
   return {
     top: padding,
     left: padding,
@@ -123,10 +153,12 @@ function viewportBoundary(padding: number = 0) {
     bottom: window.innerHeight - padding,
     width: window.innerWidth - padding * 2,
     height: window.innerHeight - padding * 2,
+    x: padding,
+    y: padding,
   };
 }
 
-function scrollParentBoundary(el, padding: number = 0) {
+function scrollParentBoundary(el: HTMLElement, padding: number = 0): Boundary {
   for (const node of flatAncestors(el)) {
     if (!(node instanceof Element) || node === document.body) continue;
     const s = getComputedStyle(node);
@@ -143,13 +175,15 @@ function scrollParentBoundary(el, padding: number = 0) {
         bottom: r.bottom - padding,
         width: r.width - padding * 2,
         height: r.height - padding * 2,
+        x: r.left + padding,
+        y: r.top + padding,
       };
     }
   }
   return viewportBoundary(padding);
 }
 
-function computeCoords(anchor, popup, placement, distance, skidding: number) {
+function computeCoords(anchor: Rect, popup: Size, placement: string, distance: number, skidding: number): Coords {
   const side = sideOf(placement);
   const align = alignOf(placement);
   let top = 0;
@@ -180,7 +214,7 @@ function computeCoords(anchor, popup, placement, distance, skidding: number) {
   return { top, left, placement };
 }
 
-function overflowAmount(coords, size, boundary) {
+function overflowAmount(coords: Coords, size: Size, boundary: Boundary): number {
   const right = coords.left + size.width;
   const bottom = coords.top + size.height;
   return Math.max(0, boundary.left - coords.left)
@@ -189,7 +223,7 @@ function overflowAmount(coords, size, boundary) {
     + Math.max(0, bottom - boundary.bottom);
 }
 
-function applyShift(coords, size, boundary, enabled) {
+function applyShift(coords: Coords, size: Size, boundary: Boundary, enabled: boolean): Coords {
   if (!enabled) return coords;
   let { top, left } = coords;
   if (left < boundary.left) left = boundary.left;
@@ -199,7 +233,7 @@ function applyShift(coords, size, boundary, enabled) {
   return { ...coords, top, left };
 }
 
-function availableSize(coords, size, boundary, autoSize) {
+function availableSize(coords: Coords, size: Size, boundary: Boundary, autoSize: '' | 'horizontal' | 'vertical' | 'both'): { width: number | null; height: number | null } {
   if (!autoSize) return { width: null, height: null };
   let width = size.width;
   let height = size.height;
@@ -212,18 +246,29 @@ function availableSize(coords, size, boundary, autoSize) {
   return { width, height };
 }
 
-function arrowOffset(placement, anchor, popupCoords, popupSize, arrowSize: number, arrowPadding: number, arrowPlacement) {
+/** Estilo CSS resuelto para la flecha. */
+export type ArrowOffset = { top: string; left: string; right: string; bottom: string };
+
+function arrowOffset(
+  placement: string,
+  anchor: Rect,
+  popupCoords: Coords,
+  popupSize: Size,
+  arrowSize: number,
+  arrowPadding: number,
+  arrowPlacement: string,
+): ArrowOffset {
   const side = sideOf(placement);
   const align = arrowPlacement === 'anchor' ? 'anchor' : arrowPlacement;
   // Cuadrado de lado `arrowSize * 2` (rotado 45° en CSS = rombo). La punta
   // visible es la mitad que asoma fuera del popup: el offset del lado estático
   // debe ser `-arrowSize` (no 0), si no el rombo queda entero detrás del body.
   const side2 = arrowSize * 2;
-  const result = { top: '', left: '', right: '', bottom: '' };
+  const result: ArrowOffset = { top: '', left: '', right: '', bottom: '' };
   const out = `${-arrowSize}px`;
 
   if (side === 'top' || side === 'bottom') {
-    let x;
+    let x: number;
     if (align === 'start') x = arrowPadding;
     else if (align === 'end') x = popupSize.width - side2 - arrowPadding;
     else if (align === 'center') x = (popupSize.width - side2) / 2;
@@ -237,7 +282,7 @@ function arrowOffset(placement, anchor, popupCoords, popupSize, arrowSize: numbe
     if (side === 'top') result.bottom = out;
     else result.top = out;
   } else {
-    let y;
+    let y: number;
     if (align === 'start') y = arrowPadding;
     else if (align === 'end') y = popupSize.height - side2 - arrowPadding;
     else if (align === 'center') y = (popupSize.height - side2) / 2;
@@ -253,10 +298,46 @@ function arrowOffset(placement, anchor, popupCoords, popupSize, arrowSize: numbe
   return result;
 }
 
+export type ComputePositionOpts = {
+  anchor: AnchorLike;
+  popupEl: HTMLElement;
+  placement?: string;
+  distance?: number;
+  skidding?: number;
+  flip?: boolean;
+  flipFallbackPlacements?: string;
+  flipFallbackStrategy?: 'best-fit' | 'initial';
+  flipPadding?: number;
+  shift?: boolean;
+  shiftPadding?: number;
+  autoSize?: '' | 'horizontal' | 'vertical' | 'both';
+  autoSizePadding?: number;
+  boundary?: 'viewport' | 'scroll';
+  strategy?: 'absolute' | 'fixed';
+  arrow?: boolean;
+  arrowSize?: number;
+  arrowPadding?: number;
+  arrowPlacement?: string;
+};
+
+export type ComputePositionResult = {
+  top: number;
+  left: number;
+  viewportTop: number;
+  viewportLeft: number;
+  placement: string;
+  strategy: string;
+  availableWidth: number | null;
+  availableHeight: number | null;
+  arrow: ArrowOffset | null;
+  anchor: Rect;
+  popupSize: Size;
+};
+
 /**
- * @param {object} opts
+ * Posiciona un popup anclado a un elemento, con flip/shift/arrow opcionales.
  */
-export function computePosition(opts: object) {
+export function computePosition(opts: ComputePositionOpts): ComputePositionResult | null {
   const {
     anchor: anchorRef,
     popupEl,
@@ -294,23 +375,23 @@ export function computePosition(opts: object) {
   // entre el cuerpo del popup y el ancla siga siendo la pedida por el usuario.
   const effectiveDistance = arrow ? distance + arrowSize : distance;
 
-  const candidates = [preferred];
+  const candidates: string[] = [preferred];
   if (flip) {
     const fallbacks = String(flipFallbackPlacements || '')
       .trim()
       .split(/\s+/)
-      .filter((p) => PLACEMENTS.includes(p) && p !== preferred);
+      .filter((p): p is Placement => PLACEMENTS.includes(p as Placement) && p !== preferred);
     if (fallbacks.length) candidates.push(...fallbacks);
     else {
-      const opp = `${OPPOSITE[sideOf(preferred)]}${preferred.includes('-') ? `-${alignOf(preferred)}` : ''}`;
-      if (PLACEMENTS.includes(opp)) candidates.push(opp);
+      const opp = `${OPPOSITE[sideOf(preferred) as 'top' | 'bottom' | 'left' | 'right']}${preferred.includes('-') ? `-${alignOf(preferred)}` : ''}`;
+      if (PLACEMENTS.includes(opp as Placement)) candidates.push(opp);
       for (const p of PLACEMENTS) {
         if (!candidates.includes(p)) candidates.push(p);
       }
     }
   }
 
-  let best = null;
+  let best: Coords | null = null;
   let bestOverflow = Infinity;
   for (const p of candidates) {
     const coords = computeCoords(anchor, size, p, effectiveDistance, skidding);
@@ -346,7 +427,7 @@ export function computePosition(opts: object) {
       left = best.left - cb.left;
     }
   } else {
-    const offsetParent = popupEl.offsetParent || document.documentElement;
+    const offsetParent: Element = popupEl.offsetParent || document.documentElement;
     const parentRect = offsetParent.getBoundingClientRect();
     const parentStyle = getComputedStyle(offsetParent);
     const bl = parseFloat(parentStyle.borderLeftWidth) || 0;
@@ -379,6 +460,6 @@ export function computePosition(opts: object) {
   };
 }
 
-export function isVirtualElement(v) {
-  return v && typeof v.getBoundingClientRect === 'function' && !(v instanceof Element);
+export function isVirtualElement(v: unknown): boolean {
+  return !!v && typeof (v as { getBoundingClientRect?: unknown }).getBoundingClientRect === 'function' && !(v instanceof Element);
 }
