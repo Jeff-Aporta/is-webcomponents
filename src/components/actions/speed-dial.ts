@@ -159,7 +159,7 @@ import { createPopupDismiss } from '../_shared/popup-dismiss.js';
 
     open() {
       if (!this.#trigger || !this.shadowRoot!) return;
-      this.#trigger.checked = true;
+      (this.#trigger as HTMLInputElement).checked = true;
       this.#trigger.setAttribute('aria-expanded', 'true');
       const root = this.shadowRoot!.querySelector<HTMLElement>('.root')!;
       if (root) root.hidden = false;
@@ -175,7 +175,7 @@ import { createPopupDismiss } from '../_shared/popup-dismiss.js';
 
     close() {
       if (!this.#trigger || !this.shadowRoot!) return;
-      this.#trigger.checked = false;
+      (this.#trigger as HTMLInputElement).checked = false;
       this.#trigger.setAttribute('aria-expanded', 'false');
       const root = this.shadowRoot!.querySelector<HTMLElement>('.root')!;
       if (root) root.hidden = true;
