@@ -22,9 +22,11 @@ import { parseLooseDate } from './format-date.js';
   TEMPLATE.innerHTML = /* html */ `<time part="time" class="time"></time>`;
 
   const OBSERVED = ['date', 'format', 'numeric', 'locale', 'sync'];
-  const VALID_FORMAT = ['long', 'short', 'narrow'];
-  const VALID_NUMERIC = ['always', 'auto'];
-  const UNITS = [
+  const VALID_FORMAT = ['long', 'short', 'narrow'] as const;
+  type FormatStyle = (typeof VALID_FORMAT)[number];
+  const VALID_NUMERIC = ['always', 'auto'] as const;
+  type NumericStyle = (typeof VALID_NUMERIC)[number];
+  const UNITS: ReadonlyArray<readonly [Intl.RelativeTimeFormatUnit, number]> = [
     ['year', 31536000],
     ['month', 2592000],
     ['week', 604800],
@@ -37,15 +39,15 @@ import { parseLooseDate } from './format-date.js';
   class IsRelativeTime extends ElementBase {
     static get observedAttributes(): string[] { return OBSERVED; }
 
-    #el!: HTMLElement;
-    #timer = null;
+    #el!: HTMLTimeElement;
+    #timer: ReturnType<typeof setInterval> | null = null;
 
     constructor() {
       super();
       const shadow = this.attachShadow({ mode: 'open' });
       adoptCss(shadow, import.meta.url);
       shadow.appendChild(TEMPLATE.content.cloneNode(true));
-      this.#el = shadow.querySelector<HTMLElement>('.time')!;
+      this.#el = shadow.querySelector<HTMLTimeElement>('.time')!;
     }
 
     onConnected() {
@@ -57,7 +59,7 @@ import { parseLooseDate } from './format-date.js';
       this.#clearSync();
     }
 
-    onAttributeChanged(name) {
+    onAttributeChanged(name: string) {
       this.#render();
       if (name === 'sync') this.#setupSync();
     }
@@ -65,36 +67,35 @@ import { parseLooseDate } from './format-date.js';
     get date() { return this.getAttribute('date') ?? ''; }
     set date(v) { setStringAttr(this, 'date', v); }
 
-    get format() {
+    get format(): FormatStyle {
       const v = this.getAttribute('format');
-      return VALID_FORMAT.includes(v) ? v : 'long';
+      return (VALID_FORMAT as readonly string[]).includes(v ?? '') ? (v as FormatStyle) : 'long';
     }
-    set format(v) { setStringAttr(this, 'format', v); }
+    set format(v: string) { setStringAttr(this, 'format', v); }
 
-    get numeric() {
+    get numeric(): NumericStyle {
       const v = this.getAttribute('numeric');
-      return VALID_NUMERIC.includes(v) ? v : 'auto';
+      return (VALID_NUMERIC as readonly string[]).includes(v ?? '') ? (v as NumericStyle) : 'auto';
     }
-    set numeric(v) { setStringAttr(this, 'numeric', v); }
+    set numeric(v: string) { setStringAttr(this, 'numeric', v); }
 
     get locale() {
       return resolveLocale(this.getAttribute('locale'));
     }
-    set locale(v) { setStringAttr(this, 'locale', v); }
+    set locale(v: string) { setStringAttr(this, 'locale', v); }
 
     get sync() { return this.hasAttribute('sync'); }
-    set sync(v) { this.toggleAttribute('sync', !!v); }
+    set sync(v: boolean) { this.toggleAttribute('sync', !!v); }
 
-    #formatRelative(d) {
+    #formatRelative(d: Date): string {
       const now = Date.now();
       const diffSec = Math.round((d.getTime() - now) / 1000);
       const abs = Math.abs(diffSec);
       const locale = this.locale;
+      const numeric: NumericStyle = this.numeric;
+      const style: FormatStyle = this.format;
       try {
-        const rtf = new Intl.RelativeTimeFormat(locale, {
-          numeric: this.numeric,
-          style: this.format,
-        });
+        const rtf = new Intl.RelativeTimeFormat(locale, { numeric, style });
         for (const [unit, secs] of UNITS) {
           if (abs >= secs || unit === 'second') {
             return rtf.format(Math.round(diffSec / secs), unit);
@@ -104,10 +105,7 @@ import { parseLooseDate } from './format-date.js';
         // Locale raro o motor sin RelativeTimeFormat completo → reintento es/en.
         try {
           const fallback = locale.toLowerCase().startsWith('en') ? 'en' : 'es';
-          const rtf = new Intl.RelativeTimeFormat(fallback, {
-            numeric: this.numeric,
-            style: this.format,
-          });
+          const rtf = new Intl.RelativeTimeFormat(fallback, { numeric, style });
           for (const [unit, secs] of UNITS) {
             if (abs >= secs || unit === 'second') {
               return rtf.format(Math.round(diffSec / secs), unit);
