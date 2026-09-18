@@ -45,8 +45,8 @@ import '../media/icon.js';
 
   class IsMegaMenu extends HTMLElement {
     static get observedAttributes(): string[] { return OBSERVED; }
-    #openTimer = 0;
-    #closeTimer = 0;
+    #openTimer: ReturnType<typeof setTimeout> | null = null;
+    #closeTimer: ReturnType<typeof setTimeout> | null = null;
 
     constructor() {
       super();
@@ -66,7 +66,7 @@ import '../media/icon.js';
       `;
       adoptCss(this.shadowRoot!, import.meta.url);
       this.#trigger = this.shadowRoot!.querySelector<HTMLElement>('.trigger')!;
-      this.#panel = this.shadowRoot!.querySelector<HTMLElement>('.panel')!;
+      this.#panel = this.shadowRoot!.querySelector<HTMLDialogElement>('.panel')!;
       this.#labelEl = this.shadowRoot!.querySelector<HTMLElement>('.trigger-label')!;
       this.#iconEl = this.shadowRoot!.querySelector<HTMLElement>('.trigger-icon')!;
 
@@ -76,9 +76,11 @@ import '../media/icon.js';
       this.#panel.addEventListener('mouseenter', () => this.#scheduleOpen());
       this.#panel.addEventListener('mouseleave', () => this.hasAttribute('hover') && this.#scheduleClose());
       this.#panel.addEventListener('click', (e: Event) => {
+        if (!(e.target instanceof Element)) return;
         const a = e.target.closest('a[href]');
         if (a) {
-          emit(this, 'is-select', { href: a.getAttribute('href'), text: a.textContent.trim() });
+          const href = a.getAttribute('href');
+          if (href) emit(this, 'is-select', { href, text: (a.textContent || '').trim() });
           this.close();
         }
       });
@@ -142,16 +144,16 @@ import '../media/icon.js';
     };
 
     #scheduleOpen() {
-      clearTimeout(this.#closeTimer);
+      if (this.#closeTimer !== null) clearTimeout(this.#closeTimer);
       this.#openTimer = setTimeout(() => this.open(), 90);
     }
     #scheduleClose() {
-      clearTimeout(this.#openTimer);
+      if (this.#openTimer !== null) clearTimeout(this.#openTimer);
       this.#closeTimer = setTimeout(() => this.close(), 220);
     }
 
     #trigger!: HTMLElement;
-    #panel!: HTMLElement;
+    #panel!: HTMLDialogElement;
     #labelEl!: HTMLElement;
     #iconEl!: HTMLElement;
   }
