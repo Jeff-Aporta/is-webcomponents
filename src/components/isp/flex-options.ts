@@ -7,9 +7,10 @@ import '../actions/dropdown.js';
 import '../actions/dropdown-item.js';
 import '../layout/divider.js';
 import '../media/icon.js';
-import { paintFlexOptions } from './_shared/tree-view/flex-options.js';
+import { paintFlexOptions, type FlexActionEntry } from './_shared/tree-view/flex-options.js';
 
 export { paintFlexOptions };
+export type { FlexActionEntry };
 
 /**
  * <is-flex-options> — port de FlexOptions.svelte (ClientesIS).
@@ -32,8 +33,8 @@ class IsFlexOptions extends ElementBase {
   static get observedAttributes(): string[] { return ['compact', 'more-disabled']; }
 
   #root!: HTMLElement;
-  #actions = [];
-  #more = [];
+  #actions: FlexActionEntry[] = [];
+  #more: FlexActionEntry[] = [];
 
   constructor() {
     super();
@@ -53,13 +54,19 @@ class IsFlexOptions extends ElementBase {
   get moreDisabled() { return this.hasAttribute('more-disabled'); }
   set moreDisabled(v) { this.setBooleanAttr('more-disabled', v); }
 
-  get actions() { return this.#actions; }
-  set actions(v) { this.setConfig({ actions: v }); }
+  get actions(): FlexActionEntry[] { return this.#actions; }
+  set actions(v: FlexActionEntry[]) { this.setConfig({ actions: v }); }
 
-  get more() { return this.#more; }
-  set more(v) { this.setConfig({ more: v }); }
+  get more(): FlexActionEntry[] { return this.#more; }
+  set more(v: FlexActionEntry[]) { this.setConfig({ more: v }); }
 
-  setConfig({ actions, more, moreDisabled, compact } = {}) {
+  setConfig(config: {
+    actions?: FlexActionEntry[];
+    more?: FlexActionEntry[];
+    moreDisabled?: boolean;
+    compact?: boolean;
+  } = {}): void {
+    const { actions, more, moreDisabled, compact } = config;
     this.#batch = true;
     if (actions !== undefined) this.#actions = Array.isArray(actions) ? actions : [];
     if (more !== undefined) this.#more = Array.isArray(more) ? more : [];

@@ -97,7 +97,12 @@ import { ElementBase } from '../../core/element-base.js';
     get readonly(): boolean { return this.hasAttribute('readonly'); }
     set readonly(v: boolean) { this.toggleAttribute('readonly', !!v); }
 
-    get time(): TimeParts | null { return parseTime(Number(this.value) || NaN) as TimeParts | null; }
+    get time(): TimeParts | null {
+      const raw = this.value;
+      if (!raw) return null;
+      const n = Number(raw);
+      return parseTime(Number.isFinite(n) ? String(n) : raw) as TimeParts | null;
+    }
 
     scrollToSelection(): void {
       for (const col of this.#base.querySelectorAll<HTMLElement>('.col, .list')) {
@@ -111,7 +116,9 @@ import { ElementBase } from '../../core/element-base.js';
       const withSeconds = this.seconds;
       const v = toTime(time, withSeconds);
       const norm = (raw: string | null): string | null => {
-        const t = parseTime(raw == null ? NaN : Number(raw)) as TimeParts | null;
+        if (raw == null) return null;
+        const n = Number(raw);
+        const t = parseTime(Number.isFinite(n) ? String(n) : raw) as TimeParts | null;
         return t ? toTime(t, withSeconds) : null;
       };
       const lo = norm(this.getAttribute('min-time'));
@@ -173,7 +180,7 @@ import { ElementBase } from '../../core/element-base.js';
         const selected = key === currentKey;
         if (selected) anyTabbable = true;
         list.appendChild(this.#option(
-          formatTime(time, this.locale, { hour12: this.ampm } as { hour12?: boolean; seconds?: boolean }) as string,
+          formatTime(time, this.locale ?? '', { hour12: this.ampm } as { hour12?: boolean; seconds?: boolean }) as string,
           { section: 'time', raw: key, selected, disabled } as OptionInput & { section: string },
         ));
       }
@@ -226,7 +233,7 @@ import { ElementBase } from '../../core/element-base.js';
       }
 
       if (ampm) {
-        cols.push(this.#column('meridiem', 'AM / PM', ['AM', 'PM'].map((mer: string): OptionInput => ({
+        cols.push(this.#column('meridiem', 'AM / PM', (['AM', 'PM'] as const).map((mer: 'AM' | 'PM'): OptionInput => ({
           label: mer,
           raw: mer,
           selected: !!t && to12Hour(t.h).meridiem === mer,

@@ -115,7 +115,7 @@ import { ElementBase } from '../../core/element-base.js';
 
     // ---- privados ---------------------------------------------------------
 
-    #emit(name) {
+    #emit(name: 'is-show' | 'is-hide'): void {
       emit(this, name, {});
     }
 
@@ -127,9 +127,9 @@ import { ElementBase } from '../../core/element-base.js';
       this.#emit(open ? 'is-show' : 'is-hide');
     }
 
-    #syncMessage = () => {
+    #syncMessage = (): void => {
       const slotted = this.#messageSlot.assignedNodes({ flatten: true })
-        .some((n) => n.nodeType === 1 || (n.nodeType === 3 && n.textContent.trim()));
+        .some((n) => n.nodeType === 1 || (n.nodeType === 3 && (n.textContent ?? '').trim()));
       const text = slotted ? '' : this.message;
       this.#messageText.textContent = text;
       this.#messageEl.hidden = !text && !slotted;

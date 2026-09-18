@@ -28,6 +28,8 @@ interface FlexActionSpec {
 
 type FlexActionEntry = FlexActionSpec | FlexActionSpec[] | null | undefined | false;
 
+export type { FlexActionSpec, FlexActionEntry };
+
 interface CompactOpts {
   compact?: boolean;
 }
