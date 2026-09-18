@@ -56,11 +56,12 @@ import { setStringAttr } from '../_shared/reflect.js';
       this.#render();
     }
 
-    get value() {
-      const n = parseFloat(this.getAttribute('value'));
+    get value(): number {
+      const raw = this.getAttribute('value');
+      const n = raw == null || raw === '' ? NaN : parseFloat(raw);
       return Number.isFinite(n) ? Math.min(100, Math.max(0, n)) : 0;
     }
-    set value(v) {
+    set value(v: number | string | null | undefined) {
       if (v == null || v === '') this.removeAttribute('value');
       else this.setAttribute('value', String(v));
     }
