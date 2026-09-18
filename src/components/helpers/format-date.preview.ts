@@ -1,14 +1,12 @@
 /**
  * Behavior de is-format-date: locales dinámicos + reloj en vivo (1 s).
- * @param {import('../../previews/_kit/types.d.ts').PreviewMountContext} ctx
  */
+import type { PreviewMountContext } from '../../previews/_kit/types.d.ts';
 
-/** @type {ReturnType<typeof setInterval> | null} */
-let liveTimer = null;
-/** @type {HTMLElement | null} */
-let mainRoot = null;
+let liveTimer: ReturnType<typeof setInterval> | null = null;
+let mainRoot: HTMLElement | null = null;
 
-function tickNow() {
+function tickNow(): void {
   if (!mainRoot) return;
   const now = new Date().toISOString();
   for (const el of mainRoot.querySelectorAll<HTMLElement>('is-format-date')) {
@@ -16,11 +14,11 @@ function tickNow() {
   }
 }
 
-export async function mount(ctx) {
+export async function mount(ctx: PreviewMountContext): Promise<void> {
   mainRoot = ctx.main;
   await customElements.whenDefined('is-format-date');
 
-  const CANDIDATES = [
+  const CANDIDATES: readonly string[] = [
     'es', 'es-CO', 'es-MX', 'es-AR',
     'en', 'en-US', 'en-GB',
     'pt-BR', 'pt-PT',
@@ -32,8 +30,8 @@ export async function mount(ctx) {
   ];
 
   const uiLang = document.documentElement.lang || 'es';
-  const supported = Intl.DateTimeFormat.supportedLocalesOf(CANDIDATES, { localeMatcher: 'lookup' });
-  const names = typeof Intl.DisplayNames === 'function'
+  const supported = Intl.DateTimeFormat.supportedLocalesOf([...CANDIDATES], { localeMatcher: 'lookup' });
+  const names: Intl.DisplayNames | null = typeof Intl.DisplayNames === 'function'
     ? new Intl.DisplayNames([uiLang], { type: 'language' })
     : null;
 
@@ -50,7 +48,7 @@ export async function mount(ctx) {
     for (const tag of supported) {
       const card = document.createElement('div');
       card.className = 'demo-locale-card';
-      const label = names?.of(tag) || tag;
+      const label: string = names?.of(tag) || tag;
       card.innerHTML = `
         <div class="demo-locale-card__meta">
           <span class="demo-locale-card__name"></span>
@@ -59,9 +57,12 @@ export async function mount(ctx) {
         <is-format-date weekday="long" year="numeric" month="long" day="numeric"
           hour="numeric" minute="numeric" second="numeric"></is-format-date>
       `;
-      card.querySelector<HTMLElement>('.demo-locale-card__name').textContent = label;
-      card.querySelector<HTMLElement>('.demo-locale-card__code').textContent = tag;
-      card.querySelector<HTMLElement>('is-format-date').setAttribute('locale', tag);
+      const nameEl = card.querySelector<HTMLElement>('.demo-locale-card__name');
+      const codeEl = card.querySelector<HTMLElement>('.demo-locale-card__code');
+      const fmtEl = card.querySelector<HTMLElement>('is-format-date');
+      if (nameEl) nameEl.textContent = label;
+      if (codeEl) codeEl.textContent = tag;
+      fmtEl?.setAttribute('locale', tag);
       grid.appendChild(card);
 
       if (hints) {
@@ -72,9 +73,9 @@ export async function mount(ctx) {
     }
   }
 
-  const probe = mainRoot.querySelector<HTMLElement>('#localeProbe');
+  const probe = mainRoot.querySelector<HTMLInputElement>('#localeProbe');
   const probeOut = mainRoot.querySelector<HTMLElement>('#localeProbeOut');
-  const renderProbe = () => {
+  const renderProbe = (): void => {
     if (!probe || !probeOut) return;
     const tag = probe.value.trim();
     if (!tag) { probeOut.textContent = ''; return; }
@@ -106,7 +107,7 @@ export async function mount(ctx) {
   liveTimer = setInterval(tickNow, 1000);
 }
 
-export function unmount() {
+export function unmount(): void {
   if (liveTimer != null) {
     clearInterval(liveTimer);
     liveTimer = null;
