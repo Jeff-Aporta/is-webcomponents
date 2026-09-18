@@ -65,16 +65,48 @@ import { createPopupDismiss } from '../_shared/popup-dismiss.js';
  *   el.addEventListener('is-palette-change', e => e.detail)
  */
 
+/** Entrada normalizada de paleta, lista para render. */
+interface Palette {
+  value: string;
+  label: string;
+  accent: string;
+  css: string;
+  /** Para el trigger estilo logo (dos mitades de texto). */
+  lead: string;
+  accentLabel: string;
+  leadColor: string;
+  accentColor: string;
+  bg: string;
+  fg: string;
+}
+
+/** Entrada cruda que puede llegar en el atributo `palettes`. */
+interface PaletteCruda {
+  value?: unknown;
+  label?: unknown;
+  accent?: unknown;
+  css?: unknown;
+  lead?: unknown;
+  accentLabel?: unknown;
+  leadColor?: unknown;
+  accentColor?: unknown;
+  bg?: unknown;
+  fg?: unknown;
+}
+
+/** Tokens disponibles para sustitución dentro de `{...}`. */
+type TemplateTokens = Record<keyof Palette, string>;
+
 (() => {
   // 3 paletas por defecto. Primera = default del kit (ContaPyme). El
   // `lead`/`accent` permiten que el trigger represente la marca en dos
   // colores. Como ESTOS CSS ya están enlazados en el <head>, no hace
   // falta inyectar <link> extra: solo se respeta data-palette="X" en <html>.
-  const DEFAULT_PALETTES = [
-    { value: 'contapyme', label: 'ContaPyme', accent: 'dodgerblue', lead: 'conta', accentLabel: 'pyme', leadColor: '#111', accentColor: 'dodgerblue', bg: '#fff', fg: '#111' },
+  const DEFAULT_PALETTES: Palette[] = [
+    { value: 'contapyme', label: 'ContaPyme', accent: 'dodgerblue', css: '', lead: 'conta', accentLabel: 'pyme', leadColor: '#111', accentColor: 'dodgerblue', bg: '#fff', fg: '#111' },
     // El logo InSoft lleva la S en MAYUSCULA y en el color de marca: in + Soft.
-    { value: 'insoft',    label: 'InSoft',    accent: '#e03131', lead: 'in',  accentLabel: 'Soft',  leadColor: '#111', accentColor: '#e03131', bg: '#fff', fg: '#111' },
-    { value: 'agrowin',   label: 'AgroWin',   accent: 'yellowgreen', lead: 'agro', accentLabel: 'win',  leadColor: '#111', accentColor: 'yellowgreen', bg: '#fff', fg: '#111' },
+    { value: 'insoft',    label: 'InSoft',    accent: '#e03131',    css: '', lead: 'in',    accentLabel: 'Soft', leadColor: '#111', accentColor: '#e03131',    bg: '#fff', fg: '#111' },
+    { value: 'agrowin',   label: 'AgroWin',   accent: 'yellowgreen',css: '', lead: 'agro',  accentLabel: 'win',  leadColor: '#111', accentColor: 'yellowgreen',bg: '#fff', fg: '#111' },
   ];
 
   const TEMPLATE = document.createElement('template');
@@ -103,10 +135,10 @@ import { createPopupDismiss } from '../_shared/popup-dismiss.js';
     #menu!: HTMLElement;
     #slotTrigger!: HTMLSlotElement;
     #slotOption!: HTMLSlotElement;
-    #palettes = [];
+    #palettes: Palette[] = [];
     #value = '';
     /** CSS cargado dinámicamente por paleta, para no recargar dos veces. */
-    #loadedCSS = new Set();
+    #loadedCSS = new Set<string>();
 
     /** Ciclo "menú abierto" compartido con is-dropdown / is-context-menu. */
     #dismiss = createPopupDismiss(this, {
@@ -138,7 +170,7 @@ import { createPopupDismiss } from '../_shared/popup-dismiss.js';
       this.addEventListener('click', this.#onSlotClick);
     }
 
-    onDisconnected() {
+    onDisconnected(): void {
       this.#dismiss.detach();
       this.#menu?.removeEventListener('click', this.#onClick);
       this.#trigger?.removeEventListener('click', this.#onClick);
@@ -146,7 +178,7 @@ import { createPopupDismiss } from '../_shared/popup-dismiss.js';
       this.#slotOption?.removeEventListener('slotchange', this.#onOptionSlotChange);
     }
 
-    onConnected() {
+    onConnected(): void {
       this.#parsePalettes();
       this.#loadInitial();
       this.#render();
@@ -154,7 +186,7 @@ import { createPopupDismiss } from '../_shared/popup-dismiss.js';
       this.#syncTriggerVisibility();
     }
 
-    onAttributeChanged(name: string, oldVal: string | null, newVal: string | null) {
+    onAttributeChanged(name: string, oldVal: string | null, newVal: string | null): void {
       if (name === 'palettes') {
         this.#parsePalettes();
         this.#render();
@@ -167,37 +199,37 @@ import { createPopupDismiss } from '../_shared/popup-dismiss.js';
 
     // ---- API pública ----
 
-    get palettes() { return this.#palettes.slice(); }
-    set palettes(list) {
+    get palettes(): Palette[] { return this.#palettes.slice(); }
+    set palettes(list: Palette[] | null | undefined) {
       this.setAttribute('palettes', JSON.stringify(list || []));
     }
 
-    get value() { return this.getAttribute('value') || ''; }
-    set value(v) {
+    get value(): string { return this.getAttribute('value') || ''; }
+    set value(v: string) {
       if (v) this.setAttribute('value', v);
       else this.removeAttribute('value');
     }
 
     /** Lanza el dropdown programáticamente. */
-    open() { this.#setOpen(true); }
-    close() { this.#setOpen(false); }
-    toggle() { this.#setOpen(this.#menu.hidden); }
+    open(): void { this.#setOpen(true); }
+    close(): void { this.#setOpen(false); }
+    toggle(): void { this.#setOpen(this.#menu.hidden); }
 
     // ---- privados ----
 
-    #parsePalettes() {
+    #parsePalettes(): void {
       const raw = this.getAttribute('palettes');
-      let list = DEFAULT_PALETTES;
+      let list: PaletteCruda[] = DEFAULT_PALETTES;
       if (raw) {
         try {
-          const parsed = JSON.parse(raw);
-          if (Array.isArray(parsed) && parsed.length) list = parsed;
+          const parsed: unknown = JSON.parse(raw);
+          if (Array.isArray(parsed) && parsed.length) list = parsed as PaletteCruda[];
         } catch (err) {
           console.warn('[is-palette-selector] palettes no es JSON válido:', err);
         }
       }
       // Normaliza cada entrada.
-      this.#palettes = list.map((p) => ({
+      this.#palettes = list.map((p): Palette => ({
         value: String(p.value || '').trim(),
         label: String(p.label || p.value || '').trim(),
         accent: String(p.accent || '#888'),
@@ -212,7 +244,7 @@ import { createPopupDismiss } from '../_shared/popup-dismiss.js';
       })).filter((p) => p.value);
     }
 
-    #loadInitial() {
+    #loadInitial(): void {
       const root = document.documentElement;
       const fromDom = root.dataset.palette;
       const key = this.getAttribute('storage-key') || 'is-palette';
@@ -230,12 +262,12 @@ import { createPopupDismiss } from '../_shared/popup-dismiss.js';
     }
 
     /** Devuelve la paleta activa o la primera. */
-    #current() {
+    #current(): Palette | undefined {
       return this.#palettes.find((p) => p.value === this.#value) || this.#palettes[0];
     }
 
     /** ¿El slot trigger tiene contenido provisto por el consumidor? */
-    #hasCustomTrigger() {
+    #hasCustomTrigger(): boolean {
       const nodes = this.#slotTrigger?.assignedNodes({ flatten: true }) || [];
       return nodes.some((n) => {
         if (n.nodeType === 1) return true;
@@ -244,7 +276,7 @@ import { createPopupDismiss } from '../_shared/popup-dismiss.js';
       });
     }
 
-    #syncTriggerVisibility() {
+    #syncTriggerVisibility(): void {
       const hasCustom = this.#hasCustomTrigger();
       this.#trigger.hidden = hasCustom;
       if (hasCustom) {
@@ -255,17 +287,17 @@ import { createPopupDismiss } from '../_shared/popup-dismiss.js';
     }
 
     /** Handler del slot "trigger" — sólo afecta el trigger button. */
-    #onTriggerSlotChange = () => {
+    #onTriggerSlotChange = (): void => {
       this.#syncTriggerVisibility();
       this.#paintTrigger();
     };
 
     /** Handler del slot "option" — re-render menu items. */
-    #onOptionSlotChange = () => {
+    #onOptionSlotChange = (): void => {
       this.#render();
     };
 
-    #paintTrigger() {
+    #paintTrigger(): void {
       const current = this.#current();
       if (!current) return;
 
@@ -277,19 +309,19 @@ import { createPopupDismiss } from '../_shared/popup-dismiss.js';
       const lead = this.#trigger.querySelector<HTMLElement>('.trigger__lead');
       const label = this.#trigger.querySelector<HTMLElement>('.trigger__label');
       if (current.lead && current.accentLabel) {
-        lead.textContent = current.lead;
-        lead.style.color = current.leadColor || 'currentColor';
-        label.textContent = current.accentLabel;
-        label.style.color = current.accentColor || 'currentColor';
+        if (lead) lead.textContent = current.lead;
+        if (lead) lead.style.color = current.leadColor || 'currentColor';
+        if (label) label.textContent = current.accentLabel;
+        if (label) label.style.color = current.accentColor || 'currentColor';
       } else {
-        lead.textContent = '';
-        label.textContent = current.label;
+        if (lead) lead.textContent = '';
+        if (label) label.textContent = current.label;
       }
       this.#trigger.style.background = current.bg || '';
       this.#trigger.style.color = current.fg || '';
     }
 
-    #render() {
+    #render(): void {
       const current = this.#current();
       if (!current) return;
 
@@ -306,9 +338,10 @@ import { createPopupDismiss } from '../_shared/popup-dismiss.js';
     }
 
     /** Devuelve el <template> del slot si el consumidor proveyó uno. */
-    #getOptionTemplate() {
+    #getOptionTemplate(): HTMLTemplateElement | null {
       const nodes = this.#slotOption?.assignedNodes({ flatten: true }) || [];
-      return nodes.find((n) => n.nodeName === 'TEMPLATE') || null;
+      const found = nodes.find((n) => n.nodeName === 'TEMPLATE');
+      return (found as HTMLTemplateElement | undefined) ?? null;
     }
 
     /**
@@ -316,11 +349,11 @@ import { createPopupDismiss } from '../_shared/popup-dismiss.js';
      * data-palette / aria-selected / role="option". Si el árbol tiene
      * [data-role="..."], el helper los rellena con campos específicos.
      */
-    #buildOptionFromTemplate(template, p, current) {
-      const frag = template.content.cloneNode(true);
+    #buildOptionFromTemplate(template: HTMLTemplateElement, p: Palette, current: Palette): HTMLElement {
+      const frag = template.content.cloneNode(true) as DocumentFragment;
       // El elemento root del item. El consumidor puede marcarlo con
       // cualquier tag (li, button, div). Le añadimos los attrs ARIA.
-      let root = frag.firstElementChild;
+      let root = frag.firstElementChild as HTMLElement | null;
       if (!root) {
         // Fallback: el consumidor puso texto o múltiples nodos.
         // Envolvemos en un <li>.
@@ -334,7 +367,7 @@ import { createPopupDismiss } from '../_shared/popup-dismiss.js';
       root.setAttribute('aria-selected', p.value === current.value ? 'true' : 'false');
 
       // Reemplazar {tokens} en atributos y textos.
-      this.#bindTemplate(root, p, current.value);
+      this.#bindTemplate(root, p);
 
       // data-role="*" -> setters específicos.
       const swatch = root.querySelector<HTMLElement>('[data-role="swatch"]');
@@ -365,11 +398,12 @@ import { createPopupDismiss } from '../_shared/popup-dismiss.js';
      * Escape {{ }}. Tokens disponibles: value, label, accent,
      * lead, accentLabel, leadColor, accentColor, bg, fg.
      */
-    #bindTemplate(root, p, currentValue) {
-      const tokens = {
+    #bindTemplate(root: Node, p: Palette): void {
+      const tokens: TemplateTokens = {
         value: p.value,
         label: p.label,
         accent: p.accent,
+        css: p.css,
         lead: p.lead,
         accentLabel: p.accentLabel,
         leadColor: p.leadColor,
@@ -377,30 +411,35 @@ import { createPopupDismiss } from '../_shared/popup-dismiss.js';
         bg: p.bg,
         fg: p.fg,
       };
-      const walk = (node) => {
+      const replace = (raw: string): string => raw
+        .replace(/\{\{([^}]+)\}\}/g, '{$1}')
+        .replace(/\{([a-zA-Z]+)\}/g, (_: string, k: string): string => (k in tokens ? tokens[k as keyof Palette] : ''));
+      const walk = (node: Node): void => {
         if (node.nodeType === 1) {
-          for (const attr of [...node.attributes]) {
+          const el = node as Element;
+          for (const attr of [...el.attributes]) {
             const v = attr.value;
             if (v.includes('{')) {
-              const next = v.replace(/\{\{([^}]+)\}\}/g, '{$1}').replace(/\{([a-zA-Z]+)\}/g, (_, k) => (k in tokens ? tokens[k] : ''));
+              const next = replace(v);
               if (next !== v) attr.value = next;
             }
           }
         } else if (node.nodeType === 3) {
-          const v = node.nodeValue;
+          const t = node as Text;
+          const v = t.nodeValue ?? '';
           if (v.includes('{')) {
-            const next = v.replace(/\{\{([^}]+)\}\}/g, '{$1}').replace(/\{([a-zA-Z]+)\}/g, (_, k) => (k in tokens ? tokens[k] : ''));
-            if (next !== v) node.nodeValue = next;
+            const next = replace(v);
+            if (next !== v) t.nodeValue = next;
           }
         }
-        for (const child of node.childNodes) walk(child);
+        for (const child of [...node.childNodes]) walk(child);
       };
       walk(root);
     }
 
-    /** Item default cuando el slot est\u00e1 vac\u00edo (swatch + lead/accent + check,
+    /** Item default cuando el slot está vacío (swatch + lead/accent + check,
      *  a juego con el trigger "logo style" por defecto). */
-    #buildDefaultOption(p, current) {
+    #buildDefaultOption(p: Palette, current: Palette): HTMLElement {
       const li = document.createElement('li');
       li.setAttribute('role', 'option');
       li.setAttribute('part', 'option');
@@ -439,7 +478,7 @@ import { createPopupDismiss } from '../_shared/popup-dismiss.js';
       return li;
     }
 
-    #apply(value) {
+    #apply(value: string | null): void {
       if (!value) return;
       const palette = this.#palettes.find((p) => p.value === value);
       if (!palette) return;
@@ -457,7 +496,7 @@ import { createPopupDismiss } from '../_shared/popup-dismiss.js';
       }
       // Persistir.
       const key = this.getAttribute('storage-key') || 'is-palette';
-      try { localStorage.setItem(key, value); } catch (_) { /* ignore */ }
+      try { localStorage.setItem(key, value); } catch (_err) { /* ignore */ }
       // Emitir evento.
       emit(this, 'is-palette-change', { value, palette });
       // Actualizar aria-selected del menu.
@@ -471,7 +510,7 @@ import { createPopupDismiss } from '../_shared/popup-dismiss.js';
       this.#paintTrigger();
     }
 
-    #setOpen(open) {
+    #setOpen(open: boolean): void {
       this.#menu.hidden = !open;
       this.#trigger.setAttribute('aria-expanded', open ? 'true' : 'false');
       if (open) this.#dismiss.attach();
@@ -479,14 +518,17 @@ import { createPopupDismiss } from '../_shared/popup-dismiss.js';
     }
 
     /** Click dentro del shadow tree: trigger o menu. */
-    #onClick = (e: PointerEvent) => {
-      const opt = e.target.closest('[role="option"]');
+    #onClick = (e: PointerEvent): void => {
+      const target = e.target;
+      if (!(target instanceof Element)) return;
+      const opt = target.closest('[role="option"]');
       if (opt && this.#menu.contains(opt)) {
-        this.#apply(opt.dataset.palette);
+        const paletteValue = opt instanceof HTMLElement ? opt.dataset.palette ?? null : null;
+        this.#apply(paletteValue);
         this.#setOpen(false);
         return;
       }
-      if (e.target.closest('.trigger')) {
+      if (target.closest('.trigger')) {
         this.#setOpen(this.#menu.hidden);
       }
     };
@@ -494,10 +536,12 @@ import { createPopupDismiss } from '../_shared/popup-dismiss.js';
     /** Click en el contenido del slot (light DOM). Cualquier click alli
      *  abre/cierra el menú. Si el consumidor quiere comportamiento especial
      *  (links, etc.) puede llamar `e.stopPropagation()` en su handler. */
-    #onSlotClick = (e: PointerEvent) => {
+    #onSlotClick = (e: PointerEvent): void => {
       // ¿El target está dentro del slot trigger (light DOM)?
+      const target = e.target;
+      if (!(target instanceof Node)) return;
       const trigger = this.querySelector<HTMLElement>('[slot="trigger"]');
-      if (trigger && trigger.contains(e.target)) {
+      if (trigger && trigger.contains(target)) {
         this.#setOpen(this.#menu.hidden);
       }
     };
