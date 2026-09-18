@@ -15,7 +15,7 @@ import type {
   SequenceResolvedSpec,
 } from './sequence-spec.js';
 import { SequenceTurtle } from './sequence-turtle.js';
-import type { PathTurtle } from '../_shared/path-turtle.js';
+import type { PathTurtle, TurtleMessage, TurtleTheme } from '../_shared/path-turtle.js';
 import { TK_DIAGRAM_RADIUS_PX } from '../_shared/diagram-grid.js';
 import { svgIconGroup, hasIconJsonSugar } from '../_shared/tk-icon-inline.js';
 import { tkHueToHex } from '../_shared/tk-hue.js';
@@ -220,8 +220,8 @@ class IsSequenceDiagram extends DiagramElementBase {
     this.#turtle?.destroy();
     this.#turtle = new SequenceTurtle(this.#turtleGroup as unknown as HTMLElement);
     this.#turtle.setData({
-      messages,
-      theme,
+      messages: messages as unknown as readonly TurtleMessage[],
+      theme: theme as unknown as TurtleTheme,
       viewW: W,
       viewH: H,
       autoLoop: this.isViewer,
