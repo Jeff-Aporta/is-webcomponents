@@ -7,20 +7,58 @@
  *   - "Aplicar a toda la página" es SOLO de sesión: no se guarda; F5 limpia
  *     los --is-* inline del <html> y deja el switch en off.
  *   - "Restaurar defaults" borra el LS y vuelve a DEFAULTS.
- *
- * @param {import('../previews/_kit/types.d.ts').PreviewMountContext} ctx
- * @param {import('../previews/_kit/types.d.ts').ISComponentPreviewLike} preview
  */
-export async function mount(ctx: import('../previews/_kit/types.d.ts').PreviewMountContext, preview: import('../previews/_kit/types.d.ts').ISComponentPreviewLike) {
+import type {
+  PreviewMountContext,
+  ISComponentPreviewLike,
+} from '../previews/_kit/types.d.ts';
+
+/** Tripleta RGB lineal (0..1). */
+type Rgb = [number, number, number];
+/** Tripleta OKLab (L, a, b). */
+type Oklab = [number, number, number];
+
+interface Seed {
+  brand: string;
+  darkBg: string;
+  darkText: string;
+  lightBg: string;
+  lightText: string;
+}
+interface OklchTriplet { l: number; c: number; h: number }
+interface ShiftOpts { l?: number; lm?: number; dl?: number; c?: number; cm?: number }
+interface PersistedData { name: string; seeds: Seed }
+
+type TokenMap = Record<string, string>;
+
+interface BuildTokensResult {
+  brand: Record<'paler' | 'pale' | 'base' | 'strong' | 'stronger' | 'strongest', string>;
+  marca: TokenMap;
+  dark: TokenMap;
+  light: TokenMap;
+}
+
+interface RampStep { key: keyof BuildTokensResult['brand']; label: string; token: string }
+
+/** Editor de color (is-color-picker o <input type="color">). */
+type ColorPicker = HTMLElement & { value: string };
+
+/** Editor de texto / nombre. */
+type TextEditor = HTMLElement & { value: string };
+
+/** Toggle / checkbox (Aplicar a toda la página). */
+type CheckboxEl = HTMLElement & { checked: boolean };
+
+export async function mount(ctx: PreviewMountContext, preview: ISComponentPreviewLike): Promise<void> {
   const root = ctx.main;
-  const signal = preview?.signal;
+  const signal = preview.signal;
   const opts = signal ? { signal } : undefined;
 
   const LS_KEY = 'is-wc-theming-seeds';
 
-  const clamp01 = (n: number) => Math.min(1, Math.max(0, n));
+  const clamp01 = (n: number): number => Math.min(1, Math.max(0, n));
 
-  function hexToRgb(hex) {
+  function hexToRgb(hex: string): Rgb {
     let h = String(hex || '').trim().replace('#', '');
     if (h.length === 3) h = h.split('').map((c) => c + c).join('');
     if (!/^[0-9a-f]{6}$/i.test(h)) h = '808080';
@@ -30,13 +68,13 @@ export async function mount(ctx: import('../previews/_kit/types.d.ts').PreviewMo
       parseInt(h.slice(4, 6), 16) / 255,
     ];
   }
-  const toHex2 = (n: number) => Math.round(clamp01(n) * 255).toString(16).padStart(2, '0');
-  const rgbToHex = ([r, g, b]) => `#${toHex2(r)}${toHex2(g)}${toHex2(b)}`;
+  const toHex2 = (n: number): string => Math.round(clamp01(n) * 255).toString(16).padStart(2, '0');
+  const rgbToHex = ([r, g, b]: Rgb): string => `#${toHex2(r)}${toHex2(g)}${toHex2(b)}`;
 
-  const lin = (c: number) => (c <= 0.04045 ? c / 12.92 : Math.pow((c + 0.055) / 1.055, 2.4));
-  const unlin = (c: number) => (c <= 0.0031308 ? c * 12.92 : 1.055 * Math.pow(c, 1 / 2.4) - 0.055);
+  const lin = (c: number): number => (c <= 0.04045 ? c / 12.92 : Math.pow((c + 0.055) / 1.055, 2.4));
+  const unlin = (c: number): number => (c <= 0.0031308 ? c * 12.92 : 1.055 * Math.pow(c, 1 / 2.4) - 0.055);
 
-  function rgbToOklab([r0, g0, b0]) {
+  function rgbToOklab([r0, g0, b0]: Rgb): Oklab {
     const r = lin(r0); const g = lin(g0); const b = lin(b0);
     const l = Math.cbrt(0.4122214708 * r + 0.5363325363 * g + 0.0514459929 * b);
     const m = Math.cbrt(0.2119034982 * r + 0.6806995451 * g + 0.1073969566 * b);
@@ -48,7 +86,7 @@ export async function mount(ctx: import('../previews/_kit/types.d.ts').PreviewMo
     ];
   }
 
-  function oklabToRgb([L, a, bb]) {
+  function oklabToRgb([L, a, bb]: Oklab): Rgb {
     const l_ = L + 0.3963377774 * a + 0.2158037573 * bb;
     const m_ = L - 0.1055613458 * a - 0.0638541728 * bb;
     const s_ = L - 0.0894841775 * a - 1.2914855480 * bb;
@@ -57,15 +95,15 @@ export async function mount(ctx: import('../previews/_kit/types.d.ts').PreviewMo
       unlin(+4.0767416621 * l - 3.3077115913 * m + 0.2309699292 * s),
       unlin(-1.2684380046 * l + 2.6097574011 * m - 0.3413193965 * s),
       unlin(-0.0041960863 * l - 0.7034186147 * m + 1.7076147010 * s),
-    ].map(clamp01);
+    ].map(clamp01) as Rgb;
   }
 
-  function toOklch(hex) {
+  function toOklch(hex: string): OklchTriplet {
     const [L, a, b] = rgbToOklab(hexToRgb(hex));
     return { l: L, c: Math.hypot(a, b), h: (Math.atan2(b, a) * 180) / Math.PI };
   }
 
-  function fromOklch({ l, c, h }) {
+  function fromOklch({ l, c, h }: OklchTriplet): string {
     const rad = (h * Math.PI) / 180;
     let cc = Math.max(0, c);
     for (let i = 0; i < 24; i += 1) {
@@ -76,7 +114,7 @@ export async function mount(ctx: import('../previews/_kit/types.d.ts').PreviewMo
     return rgbToHex(oklabToRgb([clamp01(l), cc * Math.cos(rad), cc * Math.sin(rad)]));
   }
 
-  const shift = (hex, { l, lm, dl, c, cm }) => {
+  const shift = (hex: string, { l, lm, dl, c, cm }: ShiftOpts): string => {
     const o = toOklch(hex);
     return fromOklch({
       l: clamp01(l ?? (o.l * (lm ?? 1) + (dl ?? 0))),
@@ -85,7 +123,7 @@ export async function mount(ctx: import('../previews/_kit/types.d.ts').PreviewMo
     });
   };
 
-  const surface = (baseHex, dl, brandHue, tint: number) => {
+  const surface = (baseHex: string, dl: number, brandHue: number, tint: number): string => {
     const o = toOklch(baseHex);
     return fromOklch({
       l: clamp01(o.l + dl),
@@ -94,19 +132,20 @@ export async function mount(ctx: import('../previews/_kit/types.d.ts').PreviewMo
     });
   };
 
-  const mix = (aHex, bHex, t) => {
+  const mix = (aHex: string, bHex: string, t: number): string => {
     const A = rgbToOklab(hexToRgb(aHex));
     const B = rgbToOklab(hexToRgb(bHex));
-    return rgbToHex(oklabToRgb(A.map((v, i) => v + (B[i] - v) * t)));
+    const mixed: Rgb = A.map((v, i) => v + ((B[i] ?? 0) - v) * t) as Rgb;
+    return rgbToHex(oklabToRgb(mixed));
   };
 
-  const alpha = (hex, pct) => {
+  const alpha = (hex: string, pct: number): string => {
     const [r, g, b] = hexToRgb(hex).map((v: number) => Math.round(v * 255));
     return `rgb(${r} ${g} ${b} / ${pct}%)`;
   };
 
   /** Rampa semántica (sin sufijos numéricos tipo -50 / -500). */
-  const RAMP_STEPS = [
+  const RAMP_STEPS: RampStep[] = [
     { key: 'paler', label: 'brand-paler', token: '--is-color-brand-paler' },
     { key: 'pale', label: 'brand-pale', token: '--is-color-brand-pale' },
     { key: 'base', label: 'brand', token: '--is-color-brand' },
@@ -115,7 +154,7 @@ export async function mount(ctx: import('../previews/_kit/types.d.ts').PreviewMo
     { key: 'strongest', label: 'brand-strongest', token: '--is-color-brand-strongest' },
   ];
 
-  function buildTokens(seed) {
+  function buildTokens(seed: Seed): BuildTokensResult {
     const b = toOklch(seed.brand);
     const brand = {
       paler: shift(seed.brand, { l: 0.97, cm: 0.18 }),
@@ -126,7 +165,7 @@ export async function mount(ctx: import('../previews/_kit/types.d.ts').PreviewMo
       strongest: shift(seed.brand, { lm: 0.60, cm: 0.80 }),
     };
 
-    const marca = {
+    const marca: TokenMap = {
       '--is-color-brand-paler': brand.paler,
       '--is-color-brand-pale': brand.pale,
       '--is-color-brand': brand.base,
@@ -143,7 +182,7 @@ export async function mount(ctx: import('../previews/_kit/types.d.ts').PreviewMo
 
     const tint = Math.min(b.c * 0.22, 0.016);
 
-    const dark = {
+    const dark: TokenMap = {
       '--is-bg': rgbToHex(hexToRgb(seed.darkBg)),
       '--is-bg-soft': surface(seed.darkBg, 0.035, b.h, tint),
       '--is-bg-elev': surface(seed.darkBg, 0.065, b.h, tint),
@@ -170,7 +209,7 @@ export async function mount(ctx: import('../previews/_kit/types.d.ts').PreviewMo
       '--is-shadow': '0 1px 0 rgb(255 255 255 / 3%), 0 8px 24px rgb(0 0 0 / 25%)',
     };
 
-    const light = {
+    const light: TokenMap = {
       '--is-bg': rgbToHex(hexToRgb(seed.lightBg)),
       '--is-bg-soft': surface(seed.lightBg, -0.022, b.h, tint),
       '--is-bg-elev': surface(seed.lightBg, 0.008, b.h, tint),
@@ -200,12 +239,12 @@ export async function mount(ctx: import('../previews/_kit/types.d.ts').PreviewMo
     return { brand, marca, dark, light };
   }
 
-  const block = (sel, obj) => {
+  const block = (sel: string, obj: TokenMap): string => {
     const body = Object.entries(obj).map(([k, v]) => `  ${k}: ${v};`).join('\n');
     return `${sel} {\n${body}\n}`;
   };
 
-  function buildCss(name, t) {
+  function buildCss(name: string, t: BuildTokensResult): string {
     const safe = name || 'mi-marca';
     return `/* ${safe}.css — paleta generada con el taller de Personalización
  * de IS Web Components.
@@ -227,7 +266,7 @@ ${block(`.theme-light[data-palette="${safe}"]`, t.light)}
 `;
   }
 
-  const DEFAULTS = {
+  const DEFAULTS: Seed = {
     brand: '#7048e8',
     darkBg: '#0b0d10',
     darkText: '#e6e8eb',
@@ -236,31 +275,39 @@ ${block(`.theme-light[data-palette="${safe}"]`, t.light)}
   };
   const DEFAULT_NAME = 'mi-marca';
 
-  const pickers = [...root.querySelectorAll<HTMLElement>('.tw-seed')];
-  const nameInput = root.querySelector<HTMLElement>('#palName');
+  const pickers = [...root.querySelectorAll<ColorPicker>('.tw-seed')];
+  const nameInput = root.querySelector<TextEditor>('#palName');
   const panels = [...root.querySelectorAll<HTMLElement>('.tw-panel')];
   const out = root.querySelector<HTMLElement>('#cssOut');
   const rampEl = root.querySelector<HTMLElement>('#ramp');
   const tagName = root.querySelector<HTMLElement>('#tagName');
   const fileName = root.querySelector<HTMLElement>('#fileName');
-  const applyRoot = root.querySelector<HTMLElement>('#applyRoot');
-  const labels = {
+  const applyRoot = root.querySelector<CheckboxEl>('#applyRoot');
+  const labels: { dark: HTMLElement | null; light: HTMLElement | null } = {
     dark: root.querySelector<HTMLElement>('#darkBgLabel'),
     light: root.querySelector<HTMLElement>('#lightBgLabel'),
   };
 
-  const tpl = root.querySelector<HTMLElement>('#tplPanel');
-  for (const p of panels) {
-    p.querySelector<HTMLElement>('[data-panel-body]')?.append(tpl.content.cloneNode(true));
+  const tpl = root.querySelector<HTMLTemplateElement>('#tplPanel');
+  if (tpl) {
+    for (const p of panels) {
+      p.querySelector<HTMLElement>('[data-panel-body]')?.append(tpl.content.cloneNode(true));
+    }
   }
 
-  const readSeeds = () => {
-    const s = { ...DEFAULTS };
-    for (const p of pickers) s[p.dataset.seed] = p.value || DEFAULTS[p.dataset.seed];
+  const readSeeds = (): Seed => {
+    const s: Seed = { ...DEFAULTS };
+    for (const p of pickers) {
+      const key = p.dataset.seed;
+      if (!key) continue;
+      const fallback = DEFAULTS[key as keyof Seed];
+      const v = p.value || fallback;
+      (s as unknown as Record<string, string>)[key] = v;
+    }
     return s;
   };
 
-  const persistSeeds = () => {
+  const persistSeeds = (): void => {
     try {
       localStorage.setItem(LS_KEY, JSON.stringify({
         name: (nameInput?.value || DEFAULT_NAME).trim() || DEFAULT_NAME,
@@ -269,36 +316,38 @@ ${block(`.theme-light[data-palette="${safe}"]`, t.light)}
     } catch { /* quota / private */ }
   };
 
-  const loadPersisted = () => {
+  const loadPersisted = (): PersistedData | null => {
     try {
       const raw = localStorage.getItem(LS_KEY);
       if (!raw) return null;
-      return JSON.parse(raw);
+      return JSON.parse(raw) as PersistedData;
     } catch {
       return null;
     }
   };
 
-  const applyPersistedToInputs = (data) => {
+  const applyPersistedToInputs = (data: PersistedData | null): void => {
     if (!data) return;
     if (nameInput && data.name) nameInput.value = data.name;
-    const seeds = data.seeds || {};
+    const seeds = data.seeds ?? {};
     for (const p of pickers) {
-      const v = seeds[p.dataset.seed];
+      const key = p.dataset.seed;
+      if (!key) continue;
+      const v = (seeds as unknown as Record<string, string | undefined>)[key];
       if (v) p.value = v;
     }
   };
 
   let lastCss = '';
 
-  function clearRootInline() {
+  function clearRootInline(): void {
     const html = document.documentElement;
-    for (const k of [...html.style].filter((k: string) => k.startsWith('--is-'))) {
+    for (const k of [...html.style].filter((kk: string) => kk.startsWith('--is-'))) {
       html.style.removeProperty(k);
     }
   }
 
-  function apply() {
+  function apply(): string {
     const seed = readSeeds();
     const t = buildTokens(seed);
     const name = (nameInput?.value || DEFAULT_NAME).trim().toLowerCase()
@@ -316,8 +365,8 @@ ${block(`.theme-light[data-palette="${safe}"]`, t.light)}
       for (const [k, v] of Object.entries({ ...t.marca, ...set })) html.style.setProperty(k, v);
     }
 
-    if (labels.dark) labels.dark.textContent = t.dark['--is-bg'];
-    if (labels.light) labels.light.textContent = t.light['--is-bg'];
+    if (labels.dark) labels.dark.textContent = t.dark['--is-bg'] ?? '';
+    if (labels.light) labels.light.textContent = t.light['--is-bg'] ?? '';
     if (tagName) tagName.textContent = name;
     if (fileName) fileName.textContent = `${name}.css`;
 
@@ -364,7 +413,11 @@ ${block(`.theme-light[data-palette="${safe}"]`, t.light)}
 
   root.querySelector<HTMLElement>('#btnReset')?.addEventListener('click', () => {
     try { localStorage.removeItem(LS_KEY); } catch { /* */ }
-    for (const p of pickers) p.value = DEFAULTS[p.dataset.seed];
+    for (const p of pickers) {
+      const key = p.dataset.seed;
+      if (!key) continue;
+      p.value = DEFAULTS[key as keyof Seed];
+    }
     if (nameInput) nameInput.value = DEFAULT_NAME;
     if (applyRoot) applyRoot.checked = false;
     clearRootInline();
@@ -386,6 +439,6 @@ ${block(`.theme-light[data-palette="${safe}"]`, t.light)}
   apply();
 }
 
-export function unmount() {
+export function unmount(): void {
   /* AbortSignal limpia listeners; no tocamos el <html> (sesión del usuario). */
 }
