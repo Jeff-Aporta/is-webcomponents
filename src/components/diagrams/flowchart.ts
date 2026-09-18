@@ -31,6 +31,7 @@ import {
   snap as snapToGrid,
   openInlineEditor,
 } from '../_shared/diagram-edit.js';
+import type { DiagramOverrides } from '../_shared/diagram-edit.js';
 /**
  * <is-flowchart> — diagrama de flujo en SVG, sin Mermaid.
  *
@@ -497,7 +498,7 @@ class IsFlowchart extends DiagramElementBase {
           this.#overrides!.nodes![cur.id] ??= {};
           this.#overrides!.nodes![cur.id].x = cur.x;
           this.#overrides!.nodes![cur.id].y = cur.y;
-          saveOverrides(this, this.getAttribute('storage-key') ?? '', this.#overrides);
+          saveOverrides(this, this.getAttribute('storage-key') ?? '', (this.#overrides ?? {}) as DiagramOverrides);
           emitLayoutChange(this, { nodeId: cur.id, x: cur.x, y: cur.y, overrides: this.#overrides });
           this.queueRender();
         },
