@@ -1,4 +1,5 @@
 import './flex-options.js';
+import type { PreviewMountContext } from '../../previews/_kit/types.d.ts';
 
 interface FloatCardLike extends HTMLElement {
   open: boolean;
@@ -10,7 +11,8 @@ interface FlexOptionsLike extends HTMLElement {
   actions: unknown[];
 }
 
-export function mount(root: HTMLElement): void {
+export function mount(ctx: PreviewMountContext): void {
+  const root = ctx.main;
   const fc = root.querySelector<FloatCardLike>('#fcDemo');
   const opts = root.querySelector<FlexOptionsLike>('#fcOpts');
   if (!fc || !opts) return;
@@ -28,6 +30,6 @@ export function mount(root: HTMLElement): void {
   };
 }
 
-export function unmount(root: HTMLElement): void {
-  root.querySelector<FloatCardLike>('#fcDemo')?._fcOff?.();
+export function unmount(ctx: PreviewMountContext): void {
+  ctx.main.querySelector<FloatCardLike>('#fcDemo')?._fcOff?.();
 }

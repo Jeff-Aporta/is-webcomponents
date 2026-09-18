@@ -221,6 +221,41 @@ for (const cat of await readdir(componentsRoot, { withFileTypes: true })) {
 }
 ok += jsonCount;
 
+// ── CSS siblings para los preview bundles: los bundles en dist/previews/<cat>/
+// resuelven `import './host-base.css'` y `import './scrollbars.css'` contra
+// su propia carpeta. Sin esos CSS en dist/previews/<cat>/ el browser hace 2×
+// 404 por preview que los importe (tree-view, modal-verificacion, etc.).
+// Lo más simple: copiar los 2 CSS compartidos a cada carpeta de preview.
+// Además: cada bundle adopta CSS via `siblingCssHref(import.meta.url)` que
+// resuelve `<bundle>.preview.min.css` — si no existe, 404 adicional. Stubs
+// vacíos satisfacen al browser (los bundles ya tienen su CSS via
+// __IS_COMPONENT_CSS__ si el build lo inline, o vía el component import).
+const sharedCss = ['host-base.css', 'scrollbars.css'];
+for (const cat of await readdir(previewsOut, { withFileTypes: true })) {
+  if (!cat.isDirectory()) continue;
+  for (const css of sharedCss) {
+    const src = join('src/components/_shared', css);
+    const dst = join(previewsOut, cat.name, css);
+    try {
+      await copyFile(src, dst);
+    } catch { /* ignore — puede no existir */ }
+  }
+}
+
+// Stub .preview.min.css junto a cada preview bundle: evita el 404 que lanza
+// `siblingCssHref(import.meta.url)` cuando un preview no trae CSS inline.
+for (const cat of await readdir(previewsOut, { withFileTypes: true })) {
+  if (!cat.isDirectory()) continue;
+  const catDir = join(previewsOut, cat.name);
+  for (const f of await readdir(catDir)) {
+    if (!f.endsWith('.preview.min.js')) continue;
+    const stub = join(catDir, f.replace(/\.js$/, '.css'));
+    try {
+      await writeFile(stub, '/* stub: CSS del preview bundle inline en .min.js */\n');
+    } catch { /* ignore */ }
+  }
+}
+
 // ── Skills: src/skills/** ya está copiado por build.mjs → dist/cdn/skills/.
 // Aquí evitamos duplicar; el build principal es quien lo hace. Solo
 // verificamos.

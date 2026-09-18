@@ -60,18 +60,21 @@ type HotkeyClickHandler = (() => void) | null;
 type HotkeyList = (TreeActionEntry | undefined | null | false)[];
 
 class TARowBase extends TARoles {
-  // ── Nuevos campos de instancia ────────────────────────────────────────
-  declare _adapterConfig: AdapterConfig;
-  declare _lastFocusedFlatPath: string;
-  declare currentDragFlatPath: string;
-  declare _autoExpandedSeen: Set<string>;
+  // ── Inicialización de campos heredados (declare en TS = undefined en
+  // runtime). Sin estos defaults, getOrCreateRowAdapter() rompe con
+  // "Cannot read properties of undefined (reading 'get')" la primera vez
+  // que el tree-view demo asigna tv.list y dispara paintRow.
+  _bridgeCallStats: Map<string, BridgeCallStat> = new Map();
+  _adapterConfig: AdapterConfig = {};
+  _lastFocusedFlatPath: string = '';
+  currentDragFlatPath: string = '';
+  _autoExpandedSeen: Set<string> = new Set();
   declare consumeronrowfocus:
     | ((n: TNode | null | undefined) => void)
     | undefined;
   declare consumeronrowreorder:
     | ((s: string, t: string, p: DropPosition) => void)
     | undefined;
-  declare _bridgeCallStats: Map<string, BridgeCallStat>;
 
   // ── Re-declaraciones de campos heredados (vienen de __publicField en
   //    los padres; invisibles a TS, los declaramos aquí para tipar). ──────
