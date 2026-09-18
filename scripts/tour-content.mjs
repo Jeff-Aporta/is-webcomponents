@@ -48,11 +48,14 @@ const BASE = (() => {
 const B64 = (s) => Buffer.from(s, 'utf8').toString('base64').replaceAll('+', '-').replaceAll('/', '_').replaceAll('=', '');
 const urlFor = (tag) => `${BASE}/?s=${B64(JSON.stringify({ component: tag }))}`;
 
-const PAGES = ['home', 'theming', 'ecosystem'];
+const PAGES = ['home', 'theming', 'ecosystem', 'is-icon-explorer'];
 const PAGE_MARKERS = {
   home: [/IS Web Components|Componentes|kit/i, /cat(?:egorías|egory)|sección|hero/i],
   theming: [/theming|palette|theme|tema|paleta|color/i],
   ecosystem: [/ecosistema|ecosystem|componentes|categor/i],
+  // is-icon-explorer: meta-página, no es un custom element. Sin customElements
+  // registrado, se valida por marcadores de contenido en su lugar.
+  'is-icon-explorer': [/explorador|iconos?|familia/i],
 };
 
 function allTags() {

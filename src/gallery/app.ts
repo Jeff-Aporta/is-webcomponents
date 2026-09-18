@@ -350,7 +350,15 @@ async function ensurePreviewDeps(tag: string, preview: PreviewLike): Promise<voi
   });
   if (tags.length) await L.load(...tags);
   if (tag.startsWith('is-') && !customElements.get(tag)) {
-    await customElements.whenDefined(tag);
+    // Solo esperar cuando el loader realmente va a definir el tag. Hay
+    // previews que NO son custom elements (p.ej. is-icon-explorer, que es
+    // un meta-preview declarativo) — esos nunca se definirán, y
+    // `customElements.whenDefined` colgaría para siempre, dejando el host
+    // con `preview=null` y `<is-main>` vacío.
+    const aliases = L.catalog?.aliases;
+    const known = Boolean(L.catalog?.tags?.[tag])
+      || Boolean(L.catalog?.categories?.[aliases?.[tag] ?? tag]);
+    if (known) await customElements.whenDefined(tag);
   }
 }
 

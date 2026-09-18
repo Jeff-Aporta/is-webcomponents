@@ -1,6 +1,6 @@
 {
   "$schema": "is-preview/v1",
-  "tag": "icon-explorer",
+  "tag": "is-icon-explorer",
   "category": "media",
   "title": "Explorador de iconos",
   "description": "Explorador offline de familias e iconos del CDN.",

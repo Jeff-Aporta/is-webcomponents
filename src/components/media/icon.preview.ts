@@ -10,7 +10,7 @@ export async function mount(ctx: import('../../previews/_kit/types.d.ts').Previe
   const params = new URLSearchParams(location.search);
   const s = params.get('s') || '';
   const shell = new URL('../_shell.html', import.meta.url);
-  shell.searchParams.set('tag', 'icon-explorer');
+  shell.searchParams.set('tag', 'is-icon-explorer');
   if (s) shell.searchParams.set('s', s);
   frame.src = shell.pathname + shell.search;
 

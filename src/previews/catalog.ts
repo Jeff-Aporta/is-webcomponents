@@ -665,7 +665,7 @@ export default {
     "json": "../../dist/previews/layout/split-panel.json",
     "category": "layout"
   },
-  "icon-explorer": {
+  "is-icon-explorer": {
     "json": "../../dist/previews/media/icon-explorer.json",
     "behavior": "../../dist/previews/media/icon-explorer.preview.min.js",
     "category": "media"
