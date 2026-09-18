@@ -24,18 +24,30 @@ import { adoptCss, defineElement, emit } from '../../core/element.js';
  *   is-change     detail: { crop }
  *   is-crop       detail: { dataURL, crop }
  */
+
+interface CropRect { x: number; y: number; width: number; height: number; }
+type DragHandle = 'move' | 'nw' | 'ne' | 'sw' | 'se';
+interface DragState {
+  handle: DragHandle;
+  startX: number;
+  startY: number;
+  origRect: CropRect;
+  origScreenRect: CropRect;
+  aspect: number | null;
+}
+
 (() => {
   const OBSERVED = ['src', 'zoom', 'rotation', 'aspect'];
 
   class IsImageEditor extends HTMLElement {
     static get observedAttributes(): string[] { return OBSERVED; }
     #mounted = false;
-    #img = null;
-    #cropRect = { x: 0, y: 0, width: 0, height: 0 };
-    #drag = null;
-    #ro;
-    #onWinMove;
-    #onWinUp;
+    #img: HTMLImageElement | null = null;
+    #cropRect: CropRect = { x: 0, y: 0, width: 0, height: 0 };
+    #drag: DragState | null = null;
+    #ro: ResizeObserver | null = null;
+    #onWinMove: ((e: PointerEvent) => void) | null = null;
+    #onWinUp: (() => void) | null = null;
 
     constructor() {
       super();
@@ -58,7 +70,7 @@ import { adoptCss, defineElement, emit } from '../../core/element.js';
         </div>
       `;
       adoptCss(this.shadowRoot!, import.meta.url);
-      this.#canvas = this.shadowRoot!.querySelector<HTMLElement>('.canvas')!;
+      this.#canvas = this.shadowRoot!.querySelector<HTMLCanvasElement>('.canvas')!;
       this.#viewport = this.shadowRoot!.querySelector<HTMLElement>('.viewport')!;
       this.#selection = this.shadowRoot!.querySelector<HTMLElement>('.selection')!;
       this.#status = this.shadowRoot!.querySelector<HTMLElement>('.status')!;
@@ -67,10 +79,11 @@ import { adoptCss, defineElement, emit } from '../../core/element.js';
       this.#onWinMove = (e) => this.#onMove(e);
       this.#onWinUp = () => this.#endDrag();
 
-      this.addEventListener('click', (e) => {
-        const btn = e.target.closest('[data-action]');
+      this.addEventListener('click', (e: Event) => {
+        const ev = e as MouseEvent;
+        const btn = (ev.target as Element | null)?.closest('[data-action]');
         if (!btn) return;
-        const action = btn.dataset.action;
+        const action = btn.getAttribute('data-action');
         if (action === 'zoom-in')   this.applyZoom(0.1);
         if (action === 'zoom-out')  this.applyZoom(-0.1);
         if (action === 'rotate')    this.applyRotation(90);
@@ -84,53 +97,55 @@ import { adoptCss, defineElement, emit } from '../../core/element.js';
       this.#mounted = true;
       this.#ro = new ResizeObserver(() => this.#draw());
       this.#ro.observe(this.#viewport);
-      if (this.hasAttribute('src')) this.#load(this.getAttribute('src'));
-      window.addEventListener('pointermove', this.#onWinMove);
-      window.addEventListener('pointerup', this.#onWinUp);
+      if (this.hasAttribute('src')) this.#load(this.getAttribute('src') ?? '');
+      window.addEventListener('pointermove', this.#onWinMove!);
+      window.addEventListener('pointerup', this.#onWinUp!);
     }
 
     disconnectedCallback(): void {
       this.#mounted = false;
       this.#ro?.disconnect();
-      window.removeEventListener('pointermove', this.#onWinMove);
-      window.removeEventListener('pointerup', this.#onWinUp);
+      this.#ro = null;
+      window.removeEventListener('pointermove', this.#onWinMove!);
+      window.removeEventListener('pointerup', this.#onWinUp!);
     }
 
     attributeChangedCallback(name: string, oldVal: string | null, newVal: string | null): void {
       if (!this.#mounted || oldVal === newVal) return;
-      if (name === 'src') this.#load(newVal);
+      if (name === 'src') this.#load(newVal ?? '');
       if (name === 'zoom' || name === 'rotation') this.#draw();
     }
 
-    get zoom() { return Number(this.getAttribute('zoom')) || 1; }
-    set zoom(v) {
+    get zoom(): number { return Number(this.getAttribute('zoom')) || 1; }
+    set zoom(v: number | string) {
       const n = Math.max(0.1, Math.min(8, Number(v) || 1));
       this.setAttribute('zoom', String(n));
     }
-    get rotation() { return Number(this.getAttribute('rotation')) || 0; }
-    set rotation(v) {
+    get rotation(): number { return Number(this.getAttribute('rotation')) || 0; }
+    set rotation(v: number | string) {
       const n = ((Number(v) || 0) % 360 + 360) % 360;
       this.setAttribute('rotation', String(n));
     }
 
-    applyZoom(delta) { this.zoom = this.zoom + delta; }
-    applyRotation(deg) { this.rotation = this.rotation + deg; }
+    applyZoom(delta: number): void { this.zoom = this.zoom + delta; }
+    applyRotation(deg: number): void { this.rotation = this.rotation + deg; }
 
     /** Devuelve el recorte como dataURL (image/png). */
-    cropped() {
+    cropped(): string | null {
       if (!this.#img || !this.#cropRect.width) return null;
       const r = this.#cropRect;
       const cv = document.createElement('canvas');
       cv.width = Math.round(r.width);
       cv.height = Math.round(r.height);
       const ctx = cv.getContext('2d');
+      if (!ctx) return null;
       ctx.drawImage(this.#img, Math.round(r.x), Math.round(r.y), Math.round(r.width), Math.round(r.height), 0, 0, cv.width, cv.height);
       const url = cv.toDataURL('image/png');
       emit(this, 'is-crop', { dataURL: url, crop: { ...r } });
       return url;
     }
 
-    #load(src) {
+    #load(src: string): void {
       const img = new Image();
       img.crossOrigin = 'anonymous';
       img.onload = () => {
@@ -148,7 +163,7 @@ import { adoptCss, defineElement, emit } from '../../core/element.js';
       img.src = src;
     }
 
-    #draw() {
+    #draw(): void {
       const img = this.#img;
       if (!img) return;
       const cw = Math.max(this.#viewport.clientWidth, 1);
@@ -159,6 +174,7 @@ import { adoptCss, defineElement, emit } from '../../core/element.js';
       this.#canvas.style.width = `${cw}px`;
       this.#canvas.style.height = `${ch}px`;
       const ctx = this.#canvas.getContext('2d');
+      if (!ctx) return;
       ctx.setTransform(dpr, 0, 0, dpr, 0, 0);
       ctx.clearRect(0, 0, cw, ch);
       ctx.fillStyle = 'transparent';
@@ -189,7 +205,7 @@ import { adoptCss, defineElement, emit } from '../../core/element.js';
       this.#status.textContent = `${img.naturalWidth}×${img.naturalHeight}px · zoom ${(z * 100).toFixed(0)}% · ${this.rotation}°`;
     }
 
-    #screenRect() {
+    #screenRect(): CropRect | null {
       const img = this.#img;
       if (!img) return null;
       const cw = this.#viewport.clientWidth;
@@ -225,7 +241,7 @@ import { adoptCss, defineElement, emit } from '../../core/element.js';
       };
     }
 
-    #drawSelectionMask(ctx, W, H, r) {
+    #drawSelectionMask(ctx: CanvasRenderingContext2D, W: number, H: number, r: CropRect): void {
       ctx.save();
       ctx.fillStyle = 'rgba(15, 23, 42, 0.55)';
       ctx.beginPath();
@@ -239,13 +255,14 @@ import { adoptCss, defineElement, emit } from '../../core/element.js';
     }
 
     // Eventos de drag (mover crop)
-    #onDown(e) {
-      const handle = e.target.closest('[data-handle]');
+    #onDown(e: PointerEvent): void {
+      const target = e.target as Element | null;
+      const handle = target?.closest('[data-handle]');
       const on = this.#screenRect();
       if (!on) return;
       const aspect = this.getAttribute('aspect');
       this.#drag = {
-        handle: handle ? handle.dataset.handle : 'move',
+        handle: (handle ? handle.getAttribute('data-handle') : 'move') as DragHandle,
         startX: e.clientX, startY: e.clientY,
         origRect: { ...this.#cropRect },
         origScreenRect: on,
@@ -254,7 +271,7 @@ import { adoptCss, defineElement, emit } from '../../core/element.js';
       this.#canvas.setPointerCapture(e.pointerId);
     }
 
-    #onMove(e) {
+    #onMove(e: PointerEvent): void {
       if (!this.#drag || !this.#img) return;
       const dx = e.clientX - this.#drag.startX;
       const dy = e.clientY - this.#drag.startY;
@@ -309,17 +326,17 @@ import { adoptCss, defineElement, emit } from '../../core/element.js';
       emit(this, 'is-change', { crop: { ...this.#cropRect } });
     }
 
-    #endDrag() {
+    #endDrag(): void {
       this.#drag = null;
     }
 
-    #canvas!: HTMLElement;
+    #canvas!: HTMLCanvasElement;
     #viewport!: HTMLElement;
     #selection!: HTMLElement;
     #status!: HTMLElement;
   }
 
-  function evalAspect(s: string) {
+  function evalAspect(s: string): number | null {
     if (!s) return null;
     const [a, b] = s.split('/').map(Number);
     if (!b) return a > 0 ? a : null;
