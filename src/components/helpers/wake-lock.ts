@@ -13,8 +13,8 @@ import { adoptCss, defineElement, emit } from '../../core/element.js';
   class IsWakeLock extends HTMLElement {
     static get observedAttributes(): string[] { return ['active']; }
 
-    #lock = null;
-    #onVis;
+    #lock: WakeLockSentinel | null = null;
+    #onVis: () => void;
 
     constructor() {
       super();
@@ -46,8 +46,9 @@ import { adoptCss, defineElement, emit } from '../../core/element.js';
     async #acquire() {
       if (!('wakeLock' in navigator) || this.#lock) return;
       try {
-        this.#lock = await navigator.wakeLock.request('screen');
-        this.#lock.addEventListener('release', () => {
+        const sentinel: WakeLockSentinel = await navigator.wakeLock.request('screen');
+        this.#lock = sentinel;
+        sentinel.addEventListener('release', () => {
           this.#lock = null;
           emit(this, 'is-change', { held: false });
         });
@@ -58,7 +59,9 @@ import { adoptCss, defineElement, emit } from '../../core/element.js';
     }
 
     async #release() {
-      try { await this.#lock?.release(); } catch { /* noop */ }
+      const lock = this.#lock;
+      if (!lock) return;
+      try { await lock.release(); } catch { /* noop */ }
       this.#lock = null;
     }
   }
