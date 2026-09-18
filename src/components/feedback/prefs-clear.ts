@@ -43,7 +43,7 @@ import { clearAllComponentPrefs, peekComponentPrefsRoot } from '../_shared/prefs
       adoptCss(shadow, import.meta.url);
       shadow.appendChild(TEMPLATE.content.cloneNode(true));
       this.#btn = shadow.querySelector<HTMLElement>('is-button')!;
-      this.#btn.addEventListener('is-click', this.#onClick);
+      this.#btn.addEventListener('is-click', this.#onClick as EventListener);
     }
 
     connectedCallback(): void {
@@ -84,9 +84,10 @@ import { clearAllComponentPrefs, peekComponentPrefsRoot } from '../_shared/prefs
     #syncAttrs() {
       if (!this.#btn) return;
       for (const a of ['variant', 'color', 'shape', 'disabled', 'title', 'aria-label']) {
-        if (this.hasAttribute(a)) this.#btn.setAttribute(a, this.getAttribute(a));
+        const v = this.getAttribute(a);
+        if (v != null) this.#btn.setAttribute(a, v);
         else if (a === 'disabled' || a === 'title') this.#btn.removeAttribute(a);
-        else if (a === 'aria-label' && !this.hasAttribute(a)) {
+        else if (a === 'aria-label') {
           this.#btn.setAttribute('aria-label', 'Limpiar memoria UI');
         }
       }
