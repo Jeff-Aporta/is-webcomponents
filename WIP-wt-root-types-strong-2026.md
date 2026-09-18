@@ -101,6 +101,8 @@ Las hojas de T2-T3 entregan:
 
 [2026-09-20T00:30:00Z] — WT-0062-bis listo. Errores: scope 100→0. SHAs: a1d19771d9 (feat:gallery-app 100→0). Gates: PASS.
 
+[2026-09-18T13:50:00Z] — WT-0091 listo. Errores: scope ~165→0 (theming 75, palette-selector 56, ecosystem 15, home 4, stagehand 3, run-all 5, home-cdn 2, catalog 2, consistency 1 + types.d.ts + popup-dismiss.ts signature). SHAs: 59dd5fc55d (run-all 5→0), 38a76f00ba (home-cdn 2→0), cb808c5c4b (consistency 1→0), 37e7170864 (catalog 2→0), 3e9ed227ed (stagehand 3→0), 32a609a3a9 (preview-kit-types signal?+), e4350fa9ef (popup-dismiss PopupDismissOpciones), 0148d4249c (home 4→0), 7aef74e54c (ecosystem 15→0), 493e7abbbd (theming 75→0), 6b5d3704e8 (palette-selector 56→0). Gates: PASS.
+
 [2026-09-20T03:30:00Z] — WT-0081 listo. Errores: navigation/ 82→0 (tab-group 19→0, tree 21→0, stepper 12→0, carousel 8→0, mega-menu 7→0, breadcrumb-item 6→0, scroller 4→0, mega-menu.preview 4→0, breadcrumb 1→0). SHAs: 88ea7b1241 (feat:tab-group 19→0, junto signature.preview), 7bc4b3c2c7 (feat:tree 21→0), 35bd4e87fa (feat:stepper 12→0), dc6ac8869e (feat:carousel 8→0), 0b1ebed4fe (feat:mega-menu 7→0), 886214e8db (feat:breadcrumb-item 6→0), 48c9de4359 (feat:scroller 4→0), 6a0d64502f (feat:mega-menu.preview 4→0), 44db4f42c0 (feat:breadcrumb 1→0). Gates: PASS.
 
 ## Gate status (Tanda 3 — WT-0032-bis cierre)
