@@ -3,6 +3,14 @@ import { withStyleAttrs } from '../../core/attrs.js';
 
 import { niceTicks, scaleLinear, svgEl } from '../_shared/svg-chart-engine.js';
 
+/** Config leída del slot JSON. */
+type HeatmapCfg = {
+  xLabels?: unknown[];
+  yLabels?: unknown[];
+  data?: unknown[];
+  points?: Array<{ x: unknown; y: unknown; v: number }>;
+};
+
 /**
  * <is-heatmap> — Mapa de calor: matriz de celdas coloreadas por valor numérico.
  *
@@ -26,7 +34,7 @@ import { niceTicks, scaleLinear, svgEl } from '../_shared/svg-chart-engine.js';
 (() => {
   const OBSERVED = ['x-label', 'y-label', 'color', 'cell-radius', 'show-values', 'legend-position'];
 
-  const COLORS = {
+  const COLORS: Record<string, string[]> = {
     brand:    ['#0f172a', ...intensitySteps('#5b9bff')],
     neutral:  ['#0f172a', ...intensitySteps('#94a3b8')],
     success:  ['#0f172a', ...intensitySteps('#22c55e')],
@@ -35,7 +43,7 @@ import { niceTicks, scaleLinear, svgEl } from '../_shared/svg-chart-engine.js';
     'red-blue': [...intensitySteps('#3b82f6').reverse(), ...intensitySteps('#ef4444')],
   };
 
-  function intensitySteps(hex) {
+  function intensitySteps(hex: string): string[] {
     // 5 pasos de opacidad (0.15, 0.3, 0.5, 0.7, 0.9)
     return [0.18, 0.36, 0.55, 0.75, 0.95].map((a: number) => `color-mix(in srgb, ${hex} ${Math.round(a * 100)}%, var(--is-bg-elev))`);
   }
@@ -49,12 +57,12 @@ import { niceTicks, scaleLinear, svgEl } from '../_shared/svg-chart-engine.js';
 
     static get observedAttributes(): string[] { return [...OBSERVED, 'text-color', 'grid-color']; }
 
-    #ro;
-    #mo;
+    #ro: ResizeObserver | null = null;
+    #mo: MutationObserver | null = null;
     #svg!: HTMLElement;
     #legendEl!: HTMLElement;
     #mounted = false;
-    #config = null;
+    #config: HeatmapCfg | null = null;
 
     constructor() {
       super();
@@ -76,10 +84,12 @@ import { niceTicks, scaleLinear, svgEl } from '../_shared/svg-chart-engine.js';
       super.connectedCallback();
       this.#mounted = true;
       this.#readJsonSlot();
-      this.#mo = new MutationObserver(() => this.#readJsonSlot());
-      this.#mo.observe(this, { childList: true, characterData: true, subtree: true });
-      this.#ro = new ResizeObserver(() => this.#render());
-      this.#ro.observe(this);
+      const mo = new MutationObserver(() => this.#readJsonSlot());
+      this.#mo = mo;
+      mo.observe(this, { childList: true, characterData: true, subtree: true });
+      const ro = new ResizeObserver(() => this.#render());
+      this.#ro = ro;
+      ro.observe(this);
       this.#render();
     }
 
@@ -95,35 +105,37 @@ import { niceTicks, scaleLinear, svgEl } from '../_shared/svg-chart-engine.js';
       this.#render();
     }
 
-    get config() { return this.#config; }
-    set config(v) { this.#config = v || null; this.#render(); }
+    get config(): HeatmapCfg | null { return this.#config; }
+    set config(v: HeatmapCfg | null) { this.#config = v || null; this.#render(); }
 
-    #readJsonSlot() {
-      const script = [...this.children].find((c) => c.tagName === 'SCRIPT' && /json/i.test(c.type || ''));
+    #readJsonSlot(): void {
+      const script = [...this.children].find((c: Element) => c.tagName === 'SCRIPT' && /json/i.test((c as HTMLScriptElement).type || ''));
       if (!script) return;
       try {
-        this.#config = JSON.parse(script.textContent);
+        this.#config = JSON.parse(script.textContent || '');
         this.#render();
       } catch { /* noop */ }
     }
 
-    #render() {
+    #render(): void {
       if (!this.#mounted) return;
-      const cfg = this.#config || {};
-      const xLabels = cfg.xLabels || [];
-      const yLabels = cfg.yLabels || [];
+      const cfg: HeatmapCfg = this.#config || {};
+      const xLabels: string[] = Array.isArray(cfg.xLabels) ? cfg.xLabels.map((x: unknown) => String(x)) : [];
+      const yLabels: string[] = Array.isArray(cfg.yLabels) ? cfg.yLabels.map((y: unknown) => String(y)) : [];
       // aceptar {xLabels, yLabels, points: [{x, y, v}]} o matrix
-      let matrix;
-      if (Array.isArray(cfg.data)) matrix = cfg.data;
-      else if (Array.isArray(cfg.points)) {
+      let matrix: (number | null)[][] | null = null;
+      if (Array.isArray(cfg.data)) {
+        matrix = cfg.data as (number | null)[][];
+      } else if (Array.isArray(cfg.points)) {
+        const points = cfg.points;
         matrix = yLabels.map((_, y) => xLabels.map((_, x) => {
-          const p = cfg.points.find((pt) => pt.x === xLabels[x] && pt.y === yLabels[y]);
+          const p = points.find((pt) => String(pt.x) === xLabels[x] && String(pt.y) === yLabels[y]);
           return p ? p.v : null;
         }));
       }
       matrix = matrix || [];
       const showLegend = !['none'].includes(this.getAttribute('legend-position') || 'end');
-      this.shadowRoot!.querySelector<HTMLElement>('.root').dataset.legend = this.getAttribute('legend-position') || 'end';
+      this.shadowRoot!.querySelector<HTMLElement>('.root')!.dataset['legend'] = this.getAttribute('legend-position') || 'end';
 
       const W = Math.max(this.#svg.getBoundingClientRect().width, 1);
       const H = Math.max(this.#svg.getBoundingClientRect().height, 1);
@@ -135,12 +147,12 @@ import { niceTicks, scaleLinear, svgEl } from '../_shared/svg-chart-engine.js';
       const grid = cs.getPropertyValue('--grid-color').trim() || 'rgba(128,128,128,.18)';
 
       // calcular dominio
-      const flat = matrix.flat().filter((v) => Number.isFinite(v));
+      const flat = matrix.flat().filter((v): v is number => v != null && Number.isFinite(v));
       if (!flat.length) return;
       const min = Math.min(...flat);
       const max = Math.max(...flat);
       const ticks = niceTicks(min, max, 5);
-      const domain = [ticks[0], ticks[ticks.length - 1]];
+      const domain: [number, number] = [ticks[0] ?? min, ticks[ticks.length - 1] ?? max];
 
       const legendW = showLegend ? 70 : 0;
       const labelPadX = (xLabels[0]?.length || 4) * 6 + 12;
@@ -176,14 +188,14 @@ import { niceTicks, scaleLinear, svgEl } from '../_shared/svg-chart-engine.js';
         this.#svg.appendChild(t);
       }
       // labels X (rotadas)
-      xLabels.forEach((lb: string, i) => {
+      xLabels.forEach((lb: string, i: number) => {
         const t = svgEl('text', { x: plot.x + cellW * i + cellW / 2, y: plot.y - 6, 'text-anchor': 'middle', class: 'tick-label' });
         t.textContent = String(lb);
         t.style.fill = text;
         this.#svg.appendChild(t);
       });
       // labels Y
-      yLabels.forEach((lb: string, i) => {
+      yLabels.forEach((lb: string, i: number) => {
         const t = svgEl('text', { x: plot.x - 4, y: plot.y + cellH * i + cellH / 2 + 4, 'text-anchor': 'end', class: 'tick-label' });
         t.textContent = String(lb);
         t.style.fill = text;
@@ -192,11 +204,11 @@ import { niceTicks, scaleLinear, svgEl } from '../_shared/svg-chart-engine.js';
 
       // cells
       const paletteName = this.getAttribute('color') || 'brand';
-      const palette = COLORS[paletteName] || COLORS.brand;
+      const palette = COLORS[paletteName] || COLORS['brand']!;
 
       matrix.forEach((row, y) => {
         row.forEach((v, x) => {
-          if (!Number.isFinite(v)) return;
+          if (v == null || !Number.isFinite(v)) return;
           const x0 = plot.x + x * cellW;
           const y0 = plot.y + y * cellH;
           const cell = svgEl('rect', {
@@ -228,7 +240,7 @@ import { niceTicks, scaleLinear, svgEl } from '../_shared/svg-chart-engine.js';
       emit(this, 'is-render', { svg: this.#svg });
     }
 
-    #renderLegend(domain, palette, x, y, w: number, h: number) {
+    #renderLegend(domain: [number, number], palette: string[], x: number, y: number, w: number, h: number): void {
       if (w <= 12) { this.#legendEl.hidden = true; this.#legendEl.innerHTML = ''; return; }
       this.#legendEl.hidden = false;
       this.#legendEl.innerHTML = '';
@@ -246,29 +258,31 @@ import { niceTicks, scaleLinear, svgEl } from '../_shared/svg-chart-engine.js';
         wrap.appendChild(lbl);
       }
       this.#legendEl.appendChild(wrap);
+      void x; void y; void h;
     }
 
-    #onHover(e) {
-      const cell = e.target.closest('.cell');
+    #onHover(e: Event): void {
+      const target = e.target as Element | null;
+      const cell = target?.closest('.cell') as HTMLElement | null;
       if (!cell) return this.#clearHover();
       cell.classList.add('is-hover');
-      const detail = { x: cell.dataset.x, y: cell.dataset.y, value: Number(cell.dataset.v) };
+      const detail = { x: cell.dataset['x'], y: cell.dataset['y'], value: Number(cell.dataset['v']) };
       emit(this, 'is-cell-hover', detail);
     }
 
-    #clearHover() {
+    #clearHover(): void {
       this.#svg.querySelectorAll<HTMLElement>('.cell.is-hover').forEach((c) => c.classList.remove('is-hover'));
     }
   }
 
-  function colorFor(v, [lo, hi], palette) {
-    if (hi === lo) return palette[Math.floor(palette.length / 2)];
+  function colorFor(v: number, [lo, hi]: [number, number], palette: string[]): string {
+    if (hi === lo) return palette[Math.floor(palette.length / 2)] ?? '#000';
     const t = (v - lo) / (hi - lo);
     const idx = Math.min(palette.length - 1, Math.floor(t * palette.length));
-    return palette[idx];
+    return palette[idx] ?? '#000';
   }
 
-  function formatVal(v) {
+  function formatVal(v: number): string {
     if (Math.abs(v) >= 10000) return new Intl.NumberFormat('es-CO', { notation: 'compact', maximumFractionDigits: 1 }).format(v);
     if (Number.isInteger(v)) return String(v);
     return Number(v.toFixed(2)).toString();
