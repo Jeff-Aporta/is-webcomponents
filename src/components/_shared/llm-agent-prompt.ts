@@ -4,8 +4,11 @@
  * (se copia a `dist/cdn/skills/` en el build).
  */
 
+/** Doc individual de skill/prompt referenciada por el prompt canónico. */
+export type SkillDoc = { label: string; url: string };
+
 /** Docs fijas del kit (preferir GitHub; raw solo lectura text/plain). */
-export const SKILL_DOCS = [
+export const SKILL_DOCS: readonly SkillDoc[] = [
   {
     label: 'Skill · instalación CDN',
     url: 'https://github.com/Jeff-Aporta/is-webcomponents/blob/main/src/skills/is-cdn-install/SKILL.md',
@@ -29,7 +32,7 @@ export const SKILL_DOCS = [
 ];
 
 /** Fallback corto si no se puede fetch de PROMPT.md. */
-export const LLM_PROMPT_FALLBACK = [
+export const LLM_PROMPT_FALLBACK: string = [
   '# IS Web Components (Instrucciones para LLM)',
   '',
   'Utiliza **IS Web Components** exclusivamente mediante **CDN** (o `/is-webcomponents:local`).',
@@ -39,14 +42,15 @@ export const LLM_PROMPT_FALLBACK = [
   'Iconos: `<is-icon icon="mdi:…">`. Tema: `data-theme` / `data-palette`.',
 ].join('\n');
 
-let cachedPromptMd = null;
-let loadPromise = null;
+let cachedPromptMd: string | null = null;
+let loadPromise: Promise<string> | null = null;
+
+export type PromptMdOpts = { importMetaUrl?: string };
 
 /**
  * Resuelve URLs candidatas de PROMPT.md (src gallery + dist CDN).
- * @param {string} [importMetaUrl]
  */
-export function promptMdCandidates(importMetaUrl: string = import.meta.url) {
+export function promptMdCandidates(importMetaUrl: string = import.meta.url): string[] {
   const list = [
     // src/components/_shared → src/skills/...
     new URL('../../skills/is-webcomponents/PROMPT.md', importMetaUrl).href,
@@ -55,19 +59,21 @@ export function promptMdCandidates(importMetaUrl: string = import.meta.url) {
     // dist/cdn/all.min.js → dist/cdn/skills/...
     new URL('./skills/is-webcomponents/PROMPT.md', importMetaUrl).href,
   ];
-  if (typeof globalThis.location?.origin === 'string') {
-    const origin = globalThis.location.origin;
+  const loc = globalThis as { location?: { origin?: string } };
+  const origin = loc.location?.origin;
+  if (typeof origin === 'string') {
     list.push(`${origin}/src/skills/is-webcomponents/PROMPT.md`);
     list.push(`${origin}/dist/cdn/skills/is-webcomponents/PROMPT.md`);
   }
   return list;
 }
 
+export type LoadAgentPromptOpts = { importMetaUrl?: string; force?: boolean };
+
 /**
  * Carga y cachea el PROMPT.md canónico.
- * @param {{ importMetaUrl?: string, force?: boolean }} [opts]
  */
-export async function loadAgentPromptMd(opts = {}) {
+export async function loadAgentPromptMd(opts: LoadAgentPromptOpts = {}): Promise<string> {
   if (cachedPromptMd && !opts.force) return cachedPromptMd;
   if (loadPromise && !opts.force) return loadPromise;
 
@@ -95,12 +101,12 @@ export async function loadAgentPromptMd(opts = {}) {
   }
 }
 
+export type BuildLlmPromptOpts = { sha?: string; base?: string };
+
 /**
  * Ensambla el prompt copiable: PROMPT.md + SHA + docs del módulo.
- * @param {{ label: string, url: string }[]} docs
- * @param {{ sha?: string, base?: string }} [opts]
  */
-export function buildLlmPrompt(docs, opts = {}) {
+export function buildLlmPrompt(docs: readonly SkillDoc[], opts: BuildLlmPromptOpts = {}): string {
   const sha = opts.sha || 'main';
   let base = opts.base || cachedPromptMd || LLM_PROMPT_FALLBACK;
   base = base.replaceAll('{{SHA}}', sha);
