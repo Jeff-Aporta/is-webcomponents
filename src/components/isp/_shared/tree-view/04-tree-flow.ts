@@ -423,8 +423,8 @@ class TATreeFlow extends TATreeShape {
     const { result: rootsTree, pending } = this.withDeferredMaterialize(() =>
       this.buildTree(this.List2Rows),
     );
-    const nextNodes = objRootsToNodes(rootsTree, initFn);
-    this._treeNodes = [...nextNodes];
+    const nextNodes = objRootsToNodes(rootsTree as any, initFn as any);
+    this._treeNodes = [...(nextNodes as any)];
     this.flushPendingMaterialize(pending);
     this.notifyUI();
   }
