@@ -22,13 +22,19 @@ import { ElementBase } from '../../core/element-base.js';
 (() => {
   const OBSERVED = ['rows', 'cols', 'measure', 'agg', 'format', 'decimals'];
 
-  const AGG_FNS = {
-    sum: (vs) => vs.reduce((a, b) => a + b, 0),
-    avg: (vs) => vs.length ? vs.reduce((a, b) => a + b, 0) / vs.length : 0,
-    count: (vs) => vs.length,
-    min: (vs: number) => Math.min(...vs),
-    max: (vs: number) => Math.max(...vs),
+  type AggInput = readonly number[] | number;
+  const AGG_FNS: Record<string, (vs: AggInput) => number> = {
+    sum: (vs) => (vs as readonly number[]).reduce((a, b) => a + b, 0),
+    avg: (vs) => {
+      const arr = vs as readonly number[];
+      return arr.length ? arr.reduce((a, b) => a + b, 0) / arr.length : 0;
+    },
+    count: (vs) => (vs as readonly number[]).length,
+    min: (vs) => Math.min(...(vs as readonly number[])),
+    max: (vs) => Math.max(...(vs as readonly number[])),
   };
+
+  type Row = Record<string, unknown>;
 
   class IsPivotTable extends ElementBase {
     static get observedAttributes(): string[] { return OBSERVED; }
@@ -54,24 +60,28 @@ import { ElementBase } from '../../core/element-base.js';
     }
 
     #readData() {
-      const script = [...this.children].find((c) => c.tagName === 'SCRIPT' && /json/i.test(c.type || ''));
+      const script = [...this.children].find(
+        (c): c is HTMLScriptElement => c.tagName === 'SCRIPT' && /json/i.test((c as HTMLScriptElement).type || ''),
+      );
       if (!script) { this.#data = []; return; }
-      try { this.#data = JSON.parse(script.textContent); }
+      try { this.#data = JSON.parse(script.textContent || '[]') as Row[]; }
       catch { this.#data = []; }
     }
 
     #render() {
-      const data = this.#data || [];
+      const data: Row[] = this.#data || [];
       const rowsField = this.getAttribute('rows');
       const colsField = this.getAttribute('cols');
       const measure = this.getAttribute('measure');
-      const agg = AGG_FNS[this.getAttribute('agg') || 'sum'] || AGG_FNS.sum;
+      const aggFnName = this.getAttribute('agg') || 'sum';
+      const agg: (vs: AggInput) => number = AGG_FNS[aggFnName] || AGG_FNS.sum;
       const fmt = new Intl.NumberFormat(this.getAttribute('format') || 'es-CO', {
         minimumFractionDigits: Number(this.getAttribute('decimals')) || 0,
         maximumFractionDigits: Number(this.getAttribute('decimals')) || 2,
       });
 
       const table = this.shadowRoot!.querySelector<HTMLElement>('.pivot');
+      if (!table) return;
       table.innerHTML = '';
       if (!rowsField || !colsField) {
         table.innerHTML = `<tfoot><tr><td class="empty">Faltan <code>rows</code> o <code>cols</code></td></tr></tfoot>`;
@@ -83,37 +93,46 @@ import { ElementBase } from '../../core/element-base.js';
       }
 
       // agrupar
-      const rowVals = [...new Set(data.map((d) => d[rowsField]))];
-      const colVals = [...new Set(data.map((d) => d[colsField]))];
-      const buckets = new Map();
+      const rowVals: unknown[] = [...new Set(data.map((d) => d[rowsField]))];
+      const colVals: unknown[] = [...new Set(data.map((d) => d[colsField]))];
+      const buckets = new Map<string, number[]>();
       for (const r of data) {
-        const k = `${r[rowsField]}__${r[colsField]}`;
+        const k = `${String(r[rowsField])}__${String(r[colsField])}`;
         if (!buckets.has(k)) buckets.set(k, []);
-        if (measure == null) buckets.get(k).push(1);
-        else buckets.get(k).push(Number(r[measure]) || 0);
+        const arr = buckets.get(k);
+        if (!arr) continue;
+        if (measure == null) arr.push(1);
+        else arr.push(Number(r[measure]) || 0);
       }
-      const totals = { rows: new Map(), cols: new Map(), grand: [] };
-      for (const r of rowVals) totals.rows.set(r, []);
-      for (const c of colVals) totals.cols.set(c, []);
+      const totals = { rows: new Map<string, number[]>(), cols: new Map<string, number[]>(), grand: [] as number[] };
+      for (const r of rowVals) totals.rows.set(String(r), []);
+      for (const c of colVals) totals.cols.set(String(c), []);
       for (const r of rowVals) {
         for (const c of colVals) {
-          const k = `${r}__${c}`;
-          const v = (buckets.get(k) || []).length ? agg(buckets.get(k)) : null;
+          const k = `${String(r)}__${String(c)}`;
+          const cellArr = buckets.get(k) ?? [];
+          const v = cellArr.length ? agg(cellArr) : null;
           this.#cellMap = this.#cellMap || new Map();
           this.#cellMap.set(k, v);
           if (v != null && Number.isFinite(v)) {
-            totals.rows.get(r).push(v);
-            totals.cols.get(c).push(v);
+            totals.rows.get(String(r))?.push(v);
+            totals.cols.get(String(c))?.push(v);
             totals.grand.push(v);
           }
         }
       }
       // totales agregados
-      const rowTotals = {};
-      for (const r of rowVals) rowTotals[r] = totals.rows.get(r).length ? agg(totals.rows.get(r)) : null;
-      const colTotals = {};
-      for (const c of colVals) colTotals[c] = totals.cols.get(c).length ? agg(totals.cols.get(c)) : null;
-      const grand = totals.grand.length ? agg(totals.grand) : null;
+      const rowTotals: Record<string, number | null> = {};
+      for (const r of rowVals) {
+        const arr = totals.rows.get(String(r)) ?? [];
+        rowTotals[String(r)] = arr.length ? agg(arr) : null;
+      }
+      const colTotals: Record<string, number | null> = {};
+      for (const c of colVals) {
+        const arr = totals.cols.get(String(c)) ?? [];
+        colTotals[String(c)] = arr.length ? agg(arr) : null;
+      }
+      const grand: number | null = totals.grand.length ? agg(totals.grand) : null;
 
       // construir tabla
       const thead = document.createElement('thead');
@@ -129,10 +148,11 @@ import { ElementBase } from '../../core/element-base.js';
         const tr = document.createElement('tr');
         tr.appendChild(td(String(r), 'row-head'));
         for (const c of colVals) {
-          const v = this.#cellMap.get(`${r}__${c}`);
-          tr.appendChild(this.#cellEl(r, c, v, fmt));
+          const v = this.#cellMap?.get(`${String(r)}__${String(c)}`) ?? null;
+          tr.appendChild(this.#cellEl(String(r), String(c), v, fmt));
         }
-        tr.appendChild(td(rowTotals[r] != null ? fmt.format(rowTotals[r]) : '—', 'total'));
+        const rt = rowTotals[String(r)];
+        tr.appendChild(td(rt != null ? fmt.format(rt) : '—', 'total'));
         tbody.appendChild(tr);
       }
       table.appendChild(tbody);
@@ -140,16 +160,19 @@ import { ElementBase } from '../../core/element-base.js';
       const tfoot = document.createElement('tfoot');
       const trf = document.createElement('tr');
       trf.appendChild(td('Total', 'row-head'));
-      for (const c of colVals) trf.appendChild(td(colTotals[c] != null ? fmt.format(colTotals[c]) : '—', 'total'));
+      for (const c of colVals) {
+        const ct = colTotals[String(c)];
+        trf.appendChild(td(ct != null ? fmt.format(ct) : '—', 'total'));
+      }
       trf.appendChild(td(grand != null ? fmt.format(grand) : '—', 'total'));
       tfoot.appendChild(trf);
       table.appendChild(tfoot);
     }
 
-    #cellMap = new Map();
-    #data = [];
+    #cellMap: Map<string, number | null> | null = new Map();
+    #data: Row[] = [];
 
-    #cellEl(row, col, value: string, fmt) {
+    #cellEl(row: string, col: string, value: number | null, fmt: Intl.NumberFormat): HTMLElement {
       const td = document.createElement('td');
       td.className = 'cell';
       td.dataset.row = row;
@@ -163,13 +186,13 @@ import { ElementBase } from '../../core/element-base.js';
     }
   }
 
-  function th(text, cls = '') {
+  function th(text: string, cls: string = ''): HTMLElement {
     const t = document.createElement('th');
     t.textContent = text;
     if (cls) t.className = cls;
     return t;
   }
-  function td(text, cls = '') {
+  function td(text: string, cls: string = ''): HTMLElement {
     const t = document.createElement('td');
     t.textContent = text;
     if (cls) t.className = cls;
