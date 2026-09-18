@@ -7,10 +7,12 @@ export async function mount(ctx: import('../../previews/_kit/types.d.ts').Previe
   const root = ctx.main;
   void root;
   const v = document.getElementById('v1');
-      const log = document.getElementById('log');
-      for (const ev of ['is-play', 'is-pause', 'is-ended']) {
-        v.addEventListener(ev, () => { log.textContent = `eventos: ${ev}`; });
-      }
+  const log = document.getElementById('log');
+  if (v && log) {
+    for (const ev of ['is-play', 'is-pause', 'is-ended']) {
+      v.addEventListener(ev, () => { log.textContent = `eventos: ${ev}`; });
+    }
+  }
 }
 
 export function unmount() {
