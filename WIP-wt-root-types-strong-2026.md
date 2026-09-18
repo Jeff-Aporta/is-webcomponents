@@ -105,6 +105,8 @@ Las hojas de T2-T3 entregan:
 
 [2026-09-20T03:30:00Z] — WT-0081 listo. Errores: navigation/ 82→0 (tab-group 19→0, tree 21→0, stepper 12→0, carousel 8→0, mega-menu 7→0, breadcrumb-item 6→0, scroller 4→0, mega-menu.preview 4→0, breadcrumb 1→0). SHAs: 88ea7b1241 (feat:tab-group 19→0, junto signature.preview), 7bc4b3c2c7 (feat:tree 21→0), 35bd4e87fa (feat:stepper 12→0), dc6ac8869e (feat:carousel 8→0), 0b1ebed4fe (feat:mega-menu 7→0), 886214e8db (feat:breadcrumb-item 6→0), 48c9de4359 (feat:scroller 4→0), 6a0d64502f (feat:mega-menu.preview 4→0), 44db4f42c0 (feat:breadcrumb 1→0). Gates: PASS.
 
+[2026-09-20T05:30:00Z] — WT-0082 listo. Errores: media/ scope 287→0 (15 archivos). SHAs: 340ecc42ab (feat:avatar 7→0), bc1439abe0 (feat:barcode 3→0), 7ccc538377 (feat:barcode-scanner 15→0), e3eb77fca6 (feat:icon.preview 1→0), 7c967af358 (feat:icon 9→0), 766a7804da (feat:image-editor.preview 8→0), d521dd64b3 (feat:image-editor 55→0), 1a00f4ad3e (feat:media-recorder 26→0), 094cdcd530 (feat:qrcode 4→0), 983274b776 (feat:speech 9→0), c39e4c3733 (feat:theme-img 10→0), fcd967d50a (feat:video.preview 2→0), e82894cd11 (feat:video 78→0), aea6bd4de7 (feat:video-playlist.preview 7→0), 3ffeda8484 (feat:video-playlist 66→0). Gates: PASS.
+
 ## Gate status (Tanda 3 — WT-0032-bis cierre)
 
 - npm run typecheck: ✓ verde
