@@ -33,10 +33,17 @@ import { ElementBase } from '../../core/element-base.js';
 
   const OBSERVED = ['multiple'];
 
-  class IsAccordionGroup extends ElementBase {
+  interface DetailsLike extends HTMLElement {
+  open: boolean;
+  show(): void;
+  hide(): void;
+}
+
+class IsAccordionGroup extends ElementBase {
     static get observedAttributes(): string[] { return OBSERVED; }
 
     #slot!: HTMLSlotElement;
+
     constructor() {
       super();
       const shadow = this.attachShadow({ mode: 'open' });
@@ -46,11 +53,6 @@ import { ElementBase } from '../../core/element-base.js';
     }
 
     onConnected() {
-      if (Object.prototype.hasOwnProperty.call(this, 'multiple')) {
-        const v = this.multiple;
-        delete this.multiple;
-        this.multiple = v;
-      }
       // `is-show` es composed, así que llega al host desde el shadow del hijo.
       this.addEventListener('is-show', this.#onItemShow);
       this.addEventListener('is-hide', this.#onItemHide);
@@ -70,42 +72,44 @@ import { ElementBase } from '../../core/element-base.js';
 
     // ---- propiedades ------------------------------------------------------
 
-    get multiple() { return this.hasAttribute('multiple'); }
-    set multiple(v) { this.toggleAttribute('multiple', !!v); }
+    get multiple(): boolean { return this.hasAttribute('multiple'); }
+    set multiple(v: boolean) { this.toggleAttribute('multiple', !!v); }
 
     /** Los <is-details> proyectados, en orden de documento. */
-    get items() {
+    get items(): DetailsLike[] {
       return this.#slot.assignedElements({ flatten: true })
-        .filter((el) => el.localName === 'is-details');
+        .filter((el): el is DetailsLike => el.localName === 'is-details');
     }
 
     /** Los <is-details> actualmente abiertos. */
-    get openItems() { return this.items.filter((el) => el.open); }
+    get openItems(): DetailsLike[] { return this.items.filter((el) => el.open); }
 
     // ---- API pública ------------------------------------------------------
 
     /** Abre todos (solo tiene sentido con `multiple`). */
-    showAll() {
+    showAll(): void {
       if (!this.multiple) return;
       for (const el of this.items) el.show();
     }
 
     /** Cierra todos los paneles. */
-    hideAll() { for (const el of this.items) el.hide(); }
+    hideAll(): void { for (const el of this.items) el.hide(); }
 
     // ---- privados ---------------------------------------------------------
 
-    #emitChange(opened, closed) {
+    #emitChange(opened: DetailsLike | null, closed: DetailsLike | null): void {
       emit(this, 'is-accordion-change', { open: this.openItems, opened: opened ?? null, closed: closed ?? null });
     }
 
     /** Solo nos interesan los <is-details> que son hijos DIRECTOS del grupo. */
-    #ownItem(target) {
+    #ownItem(target: EventTarget | null): DetailsLike | null {
+      if (!target) return null;
       const items = this.items;
-      return items.includes(target) ? target : null;
+      const found = items.find((el) => el === target);
+      return found ?? null;
     }
 
-    #onItemShow = (e: Event) => {
+    #onItemShow = (e: Event): void => {
       const item = this.#ownItem(e.target);
       if (!item) return;
       if (!this.multiple) {
@@ -116,16 +120,16 @@ import { ElementBase } from '../../core/element-base.js';
       this.#emitChange(item, null);
     };
 
-    #onItemHide = (e: Event) => {
+    #onItemHide = (e: Event): void => {
       const item = this.#ownItem(e.target);
       if (!item) return;
       this.#emitChange(null, item);
     };
 
-    #onSlotChange = () => { this.#enforceSingle(); };
+    #onSlotChange = (): void => { this.#enforceSingle(); };
 
     /** En modo single solo sobrevive el primer abierto del markup. */
-    #enforceSingle() {
+    #enforceSingle(): void {
       if (this.multiple) return;
       let seen = false;
       for (const el of this.items) {
