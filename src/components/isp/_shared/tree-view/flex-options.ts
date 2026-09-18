@@ -3,28 +3,66 @@
  * Misma forma que ISP FlexOptions: grupos, separator, icon+title, toggle checked.
  */
 
-function mkIcon(name) {
+/** Elemento del host con campos custom de cacheo (signature + bound). */
+interface FlexHost extends HTMLElement {
+  _trvwrFlexSig?: string;
+  _trvwrOnClick?: () => void;
+  _trvwrBound?: boolean;
+}
+
+/** Spec mínima que necesitamos de cada acción para construir el botón. */
+interface FlexActionSpec {
+  icon?: string;
+  iconTrue?: string;
+  iconFalse?: string;
+  label?: string;
+  title?: string;
+  hotkey?: string;
+  color?: string;
+  colorFalse?: string;
+  checked?: boolean;
+  disabled?: boolean;
+  separator?: boolean;
+  onClick?: () => void;
+}
+
+type FlexActionEntry = FlexActionSpec | FlexActionSpec[] | null | undefined | false;
+
+interface CompactOpts {
+  compact?: boolean;
+}
+
+interface MoreOpts {
+  more?: FlexActionEntry[];
+  moreDisabled?: boolean;
+  compact?: boolean;
+}
+
+function mkIcon(name: string): HTMLElement {
   const ic = document.createElement("is-icon");
   ic.setAttribute("icon", name);
   ic.setAttribute("slot", "start");
   return ic;
 }
 
-function bindAction(el, spec) {
-  el._trvwrOnClick = () => {
+function bindAction(el: HTMLElement, spec: FlexActionSpec | null | undefined): void {
+  (el as FlexHost)._trvwrOnClick = () => {
     if (!spec || spec.disabled) return;
     spec.onClick?.();
   };
-  if (el._trvwrBound) return;
-  el._trvwrBound = true;
+  const host = el as FlexHost;
+  if (host._trvwrBound) return;
+  host._trvwrBound = true;
   el.addEventListener("click", (e: Event) => {
-    if (el.hasAttribute("disabled") || el.disabled) return;
+    const btn = el as unknown as { disabled?: boolean };
+    if (el.hasAttribute("disabled") || !!btn.disabled) return;
     e.stopPropagation();
-    el._trvwrOnClick?.();
+    host._trvwrOnClick?.();
   });
 }
 
-function mkBtn(spec, { compact = false } = {}) {
+function mkBtn(spec: FlexActionSpec | null | undefined, opts: CompactOpts = {}): HTMLElement {
+  const compact = opts.compact ?? false;
   if (spec && typeof spec === "object" && "checked" in spec && (spec.iconTrue || spec.iconFalse)) {
     const btn = document.createElement("is-check-icon-button");
     btn.setAttribute("icon", spec.iconFalse || spec.icon || "mdi:circle-outline");
@@ -40,32 +78,32 @@ function mkBtn(spec, { compact = false } = {}) {
   }
   const btn = document.createElement("is-button");
   btn.setAttribute("variant", "plain");
-  btn.setAttribute("color", spec.color || "neutral");
-  if (spec.disabled) btn.setAttribute("disabled", "");
-  btn.setAttribute("title", spec.title || spec.label || "");
-  if (spec.icon) btn.appendChild(mkIcon(spec.icon));
-  if (!compact && spec.label) btn.appendChild(document.createTextNode(spec.label));
+  btn.setAttribute("color", spec?.color || "neutral");
+  if (spec?.disabled) btn.setAttribute("disabled", "");
+  btn.setAttribute("title", spec?.title || spec?.label || "");
+  if (spec?.icon) btn.appendChild(mkIcon(spec.icon));
+  if (!compact && spec?.label) btn.appendChild(document.createTextNode(spec.label));
   bindAction(btn, spec);
   return btn;
 }
 
-function flattenEntry(entry, out) {
+function flattenEntry(entry: FlexActionEntry, out: FlexActionSpec[]): void {
   if (!entry) return;
   if (Array.isArray(entry)) {
     if (out.length) out.push({ separator: true });
-    for (const it of entry) if (it) out.push(it);
+    for (const it of entry) if (it) out.push(it as FlexActionSpec);
     return;
   }
   out.push(entry);
 }
 
-function flattenActionable(list) {
-  const flat = [];
+function flattenActionable(list: FlexActionEntry[] | null | undefined): FlexActionSpec[] {
+  const flat: FlexActionSpec[] = [];
   for (const entry of list || []) flattenEntry(entry, flat);
   return flat.filter((it) => it && !it.separator);
 }
 
-function applyHandlers(host, actions, more) {
+function applyHandlers(host: HTMLElement, actions: FlexActionEntry[], more: FlexActionEntry[]): void {
   const btns = [...host.querySelectorAll<HTMLElement>(":scope > is-button-group > is-button, :scope > is-button-group > is-check-icon-button")];
   flattenActionable(actions).forEach((spec, i) => { if (btns[i]) bindAction(btns[i], spec); });
   const dd = host.querySelector<HTMLElement>(":scope > is-dropdown");
@@ -74,9 +112,14 @@ function applyHandlers(host, actions, more) {
   flattenActionable(more).forEach((spec, i) => { if (items[i]) bindAction(items[i], spec); });
 }
 
-function actionsSig(actions, more, moreDisabled, compact) {
-  const parts = [];
-  const walk = (entry) => {
+function actionsSig(
+  actions: FlexActionEntry[] | null | undefined,
+  more: FlexActionEntry[] | null | undefined,
+  moreDisabled: boolean | undefined,
+  compact: boolean,
+): string {
+  const parts: string[] = [];
+  const walk = (entry: FlexActionEntry): void => {
     if (!entry) return;
     if (Array.isArray(entry)) { entry.forEach(walk); return; }
     if (entry.separator) { parts.push("|"); return; }
@@ -89,19 +132,24 @@ function actionsSig(actions, more, moreDisabled, compact) {
   return parts.join("\0");
 }
 
-export function paintFlexOptions(host, actions, { more, moreDisabled, compact = false } = {}) {
+export function paintFlexOptions(
+  host: HTMLElement,
+  actions: FlexActionEntry[] | null | undefined,
+  { more, moreDisabled, compact = false }: MoreOpts = {},
+): void {
   const sig = actionsSig(actions, more, moreDisabled, compact);
-  if (host._trvwrFlexSig === sig && host.childElementCount) {
-    applyHandlers(host, actions, more);
+  const flexHost = host as FlexHost;
+  if (flexHost._trvwrFlexSig === sig && host.childElementCount) {
+    applyHandlers(host, actions || [], more || []);
     return;
   }
-  host._trvwrFlexSig = sig;
+  flexHost._trvwrFlexSig = sig;
   host.replaceChildren();
-  const flat = [];
+  const flat: FlexActionSpec[] = [];
   for (const entry of actions || []) flattenEntry(entry, flat);
 
   let group = document.createElement("is-button-group");
-  const flushGroup = () => {
+  const flushGroup = (): void => {
     if (group.childElementCount) host.appendChild(group);
     group = document.createElement("is-button-group");
   };
@@ -114,7 +162,7 @@ export function paintFlexOptions(host, actions, { more, moreDisabled, compact = 
   }
   flushGroup();
 
-  const moreFlat = [];
+  const moreFlat: FlexActionSpec[] = [];
   for (const entry of more || []) flattenEntry(entry, moreFlat);
   const actionable = moreFlat.filter((it) => it && !it.separator);
   if (!actionable.length) return;
