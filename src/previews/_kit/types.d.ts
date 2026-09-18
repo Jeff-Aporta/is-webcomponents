@@ -155,6 +155,9 @@ export interface PreviewBehaviorModule {
  */
 export interface ISComponentPreviewLike {
   readonly definition: PreviewDefinition;
+  /** Signal para listeners (se aborta en unmount). Lo expone ISComponentPreview
+   *  concreto; las behaviors lo reciben como `preview.signal`. */
+  readonly signal?: AbortSignal;
   mount(ctx: PreviewMountContext): void | Promise<void>;
   unmount?(ctx: PreviewMountContext): void;
 }
