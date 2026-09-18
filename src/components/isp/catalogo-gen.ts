@@ -544,7 +544,7 @@ const OBSERVED = [
         return;
       }
       try {
-        const cols = columnsFromController(ctrl);
+        const cols = columnsFromController(ctrl as any);
         if (cols.length) this.#grid.api?.setColumns?.(cols);
         const lista = await ctrl.Lista({
           pagina: 1,
