@@ -13,10 +13,11 @@
 | 7 | `c763849`+ | WT-0071 + WT-0072 + WT-0073 | 1,216 → 3,222 (4,438 → 3,222) | 36 archivos forms (24 .ts + 12 .preview.ts). WT-0073 cerró los 15+ pendientes. Ver `checkpoint-tanda07.md`. |
 | 8 | `2d435f8f` | WT-0081 + WT-0082 | 609 → ~2,613 (3,222 → ~2,613) | 24 archivos (8 nav + 15 media). Ver `checkpoint-tanda08.md`. |
 | 9 | `afb415890a` | WT-0091 + WT-0092 | 1,439 → ~1,783 (3,222 → ~1,783) | 50+ archivos (pages + utils + 41 _shared/ + palette-selector). Ver `checkpoint-tanda09.md`. |
+| 10 | TBD | WT-0101 a WT-0105 + WT-0106 a/b/c | 1,783 → **0** | ✅ cerrada — STRICT_NOW=0, typecheck verde, 21/21 tests. Ver `checkpoint-tanda10.md`. |
 
 ## Tandas en proceso
 
-(Ninguna — T9 cerrada, T10 pendiente de dispatch)
+(Ninguna — T10 cerrada)
 
 ## Tandas pendientes
 
@@ -29,7 +30,7 @@
 | 7 | forms | `wt-root-types-strong-2026` | cerrada | ~450 | cerrada (36 archivos) |
 | 8 | nav + media | `wt-root-types-strong-2026` | WT-0081, WT-0082 | ~700 | **+ stagehand tests para componentes UX** |
 | 9 | pages + utils + shared | `wt-root-types-strong-2026` | WT-0091, WT-0092 | ~600 | ninguno |
-| 10 | Sweep final + merge prep | `wt-root-types-strong-2026` | WT-0101, WT-0102 | ~300 | validación global + merge prep |
+| 10 | Sweep final + merge prep | `wt-root-types-strong-2026` | WT-0101 a WT-0105, WT-0106 a/b/c | 1783 → 0 | ✅ CERRADA — gate humano pendiente para merge a main |
 
 ## Tareas nuevas en cola
 
@@ -70,11 +71,16 @@
 - Errores strict audit después de T7: **3,222** (−1,216)
 - Errores strict audit después de T8: **~2,613** (−609)
 - Errores strict audit después de T9: **~1,783** (−1,439 acumulado)
-- Próximo hito: < 100 después de T10
+- Errores strict audit después de T10: **0** ✅ (−1,783 acumulado, meta <100 cumplida con creces)
+- Próximo hito: gate humano para merge `wt-root → main`
 
-## Próxima tanda activa: T3
+## Próxima tanda activa: ninguna (T10 cerrada, gate humano pendiente)
 
-WT-0031 (A-L diagrams) + WT-0032 (M-Z diagrams + lightbox).
+**Mandatos pendientes (post-merge):**
+- M17 — Lab completo de testing (259 componentes × demo + 2 tests)
+- M18 — specs/constraints.md + lessons.md + guardianes
+- M19 — `test:all` verde
+- M20 — Workstream editors (preguntar al humano antes de arrancar)
 
 Estrategia T3:
 - **REUTILIZAR worktrees de T2** — WT-0021 y WT-0022 ya existen como directorios; crear WT-0031 y WT-0032 desde WT-ROOT.

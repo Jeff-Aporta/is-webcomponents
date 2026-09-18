@@ -119,3 +119,54 @@ Las hojas de T2-T3 entregan:
 [2026-09-20T08:30:00Z] — WT-0092 listo. Errores: scope src/components/_shared/*.ts → 0. 41 archivos tipados explícitamente. SHAs: 290b41dbef feat(grid-data 105→0 parcial), 117b751257 feat(grid-data 66→0 resto), 1db979ceef feat(diagram-astar 69→0), 38c561f49e feat(picker-element 63→0), ddf74dfd35 feat(tk-icon-inline 49→0), 621279ea9e feat(diagram-edge-actors 49→0), 3fb630435a feat(position 46→0), d87ae94485 feat(date-utils 45→0), 32e90900e8 feat(scroll-memory 41→0), 39acecdfc8 feat(code-highlight 40→0), 7887a20f69 feat(tree-layout 38→0), 250120840d feat(lane-layout 37→0), 904c4785e4 feat(diagram-grid 35→0), 74eac2f1b2 feat(grid-ui 42→0), 9ce69c6c2a feat(prefs 12→0), 738453101a feat(llm-agent-prompt 11→0), 0802cc3561 feat(web-share 10→0), e7a993179e feat(diagram-arrow 9→0), 06a5ff368b feat(diagram-edge-style 7→0), 3c650a79db feat(tk-hue 6→0), b8fe3b684d feat(tk-rich-text 5→0), f393abc840 feat(code-diff 5→0), d77e9b4135 feat(tk-inline-md 5→0), 325826a883 feat(form-control-mixin 5→0), c2dedd00e2 feat(web-otp 3→0), e6eb390e7b feat(tk-color 3→0), dc34e9b9ca feat(code-langs 2→0), 870088a991 feat(chart-palette 13→0), abbf547eed feat(diagram-edge-spread 13→0), 32b2d125ee feat(icon-loader 15→0), cb88242832 feat(path-turtle 20→0), 7c11bde6ae feat(highlight-code 20→0), 549636a9a1 feat(json-html 21→0), 23276ce21c feat(code-format 19→0), be7e561627 feat(diagram-edit 23→0), 13276484f9 feat(date-field-element 27→0), 9786677b1d feat(isp-record-utils 28→0), 7e12176e4e feat(code-model 31→0), ff8ae217c3 feat(prompt-md 33→0), b580fc244a feat(modal-base 17→0). Gates: PASS.
 
 [2026-09-20T12:30:00Z] — WT-0105 listo. STRICT_NOW: 200 → 78 (<100 meta, aporte post-commit bajó a 78 por paralelo). Errores: 122 → 0 scope (200 → 78 global). SHAs: 9e37727968 (type-batch-3 flex-options/digital-clock/drawer 18→0), cf2efab438 (type-batch-4 registry/heading/flowchart 14→0), 9383746e68 (type-batch-6 stat/render/time-clock/gauge 16→0), 1d8260499b (type-batch3 digital-clock/drawer/main/demo/divider/context-menu/speed-dial/float-card.preview 30→0 — paralelo hermanas), c7219923ec (type-batch-7 tooltip/catalogo-gen/mutation-observer previews + extras 12→0), 01e2549ebe (type-batch4 hermanas paralelo 25→0). Gates: pendiente typecheck.
+
+[2026-09-21T14:00:00Z] — **WT-0106 a/b/c listo. STRICT_NOW: 62 → 0 ✅ (META CUMPLIDA — 0 absoluto).** Errores: 62 → 0 (37 archivos tipados). Gates: typecheck verde, npm test 21/21 PASS.
+
+**WT-0106-a** (tree-view + ISP core, 9 archivos, 14 errs):
+- 31b3da01af feat(adapter) 3→0
+- 1af2a8e2ee feat(00-as-row) 1→0
+- 5f69d435dc feat(03-tree-shape) 2→0
+- 701a9df54b feat(04-tree-flow) 2→0
+- d5ef11c83e feat(06-mutations) 1→0
+- 8d26870cc7 feat(customs-base) 2→0
+- 567d1fce6c feat(text) 1→0
+- 4779dc5163 feat(catalogo-gen) 1→0
+- bb8994924b feat(index) 1→0
+
+**WT-0106-b** (diagrams + diagrams-spec, 14 archivos, 19 errs):
+- 51c86ef7f2 feat(block-diagram) 2→0
+- 6744b1851d feat(block-spec) 1→0
+- fa37d7dc9b feat(class-diagram) 1→0
+- f70ee276a8 feat(er-diagram) 1→0
+- 2a6af1fa11 feat(flowchart) 1→0
+- 39cf9491c6 feat(gantt) 1→0
+- dbe80e53e2 feat(mindmap-spec) 3→0
+- fef71b39b1 feat(mindmap) 1→0
+- 619f02bb00 feat(sequence-diagram) 2→0
+- a88339d574 feat(sequence-spec) 1→0
+- f033509dc5 feat(state-diagram) 1→0
+- 6238996f04 feat(state-spec) 2→0
+- 36a7422442 feat(swimlane-spec) 1→0
+- c31e0c2534 feat(use-case-spec) 1→0
+
+**WT-0106-c** (actions + forms + feedback + helpers + data + charts + previews/_kit, 14 archivos, 29 errs):
+- 739c7b7973 feat(actions) 1→0 (button-group.preview.controller)
+- 92340ceea3 feat(actions) 1→0 (button-group)
+- 73348b2741 feat(actions) 2→0 (dropdown.preview)
+- 84b6eb76bb feat(actions) 2→0 (speed-dial)
+- 68a7c6c4ad feat(charts) 2→0 (sparkline)
+- c597ad5739 feat(data) 3→0 (gauge.preview)
+- 519bc27cab feat(feedback) 3→0 (tooltip)
+- 3e9e147853 feat(forms) 3→0 (date-picker)
+- 8a21ac8354 feat(forms) 2→0 (month-calendar)
+- 75ff5f6407 feat(helpers) 1→0 (mutation-observer.preview)
+- c20bea246f feat(helpers) 3→0 (wake-lock)
+- 679b8ac440 feat(previews) 3→0 (render.ts)
+- c011dec25b feat(previews) 2→0 (JsonPreview)
+- a15982e9fd feat(previews) 1→0 (demo-snippet-styles)
+
+**T10 cerrada**: STRICT_NOW=0 ✅, 382 commits ahead de main, typecheck verde, tests 21/21 PASS, worktrees [main, wt-root]. Mandato M1 cumplido más allá de meta (<100 → 0).
+
+**Pendiente gate humano** (PASO 10): merge `wt-root → main` con `--no-ff`.
+
+**Mandatos restantes** (post-merge): M17 (lab completo 259 comps), M18 (specs/guardianes), M19 (test:all), M20 (workstream editors).
