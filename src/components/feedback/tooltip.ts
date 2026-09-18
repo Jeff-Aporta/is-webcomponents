@@ -55,11 +55,20 @@ import '../helpers/floating.js';
 
     static get observedAttributes(): string[] { return [...OBSERVED, 'max-width', 'arrow-size', 'arrow-color']; }
 
-    #popup!: HTMLElement;
-    #target = null;
+    #popup!: HTMLElement & {
+      placement: string;
+      distance: number;
+      skidding: number;
+      arrow: boolean;
+      hoverBridge: boolean;
+      anchor: HTMLElement | null;
+      active: boolean;
+      reposition(): void;
+    };
+    #target: HTMLElement | null = null;
     #mounted = false;
-    #showTimer = 0;
-    #hideTimer = 0;
+    #showTimer: ReturnType<typeof setTimeout> | null = null;
+    #hideTimer: ReturnType<typeof setTimeout> | null = null;
     #hovering = false;
 
     constructor() {
@@ -67,7 +76,7 @@ import '../helpers/floating.js';
       const shadow = this.attachShadow({ mode: 'open' });
       adoptCss(shadow, import.meta.url);
       shadow.appendChild(TEMPLATE.content.cloneNode(true));
-      this.#popup = shadow.querySelector<HTMLElement>('is-floating')!;
+      this.#popup = shadow.querySelector<HTMLElement>('is-floating')! as IsTooltip['#popup'];
     }
 
     connectedCallback(): void {
@@ -81,14 +90,14 @@ import '../helpers/floating.js';
     disconnectedCallback(): void {
       this.#mounted = false;
       this.#unbindTarget();
-      clearTimeout(this.#showTimer);
-      clearTimeout(this.#hideTimer);
+      if (this.#showTimer !== null) clearTimeout(this.#showTimer);
+      if (this.#hideTimer !== null) clearTimeout(this.#hideTimer);
       document.removeEventListener('pointerdown', this.#onDocPointer, true);
       document.removeEventListener('keydown', this.#onDocKey, true);
     }
 
-    attributeChangedCallback(name: string): void {
-      super.attributeChangedCallback(name);
+    attributeChangedCallback(name: string, oldValue: string | null, newValue: string | null): void {
+      super.attributeChangedCallback(name, oldValue, newValue);
       if (!this.#mounted) return;
       if (name === 'for') this.#bindTarget();
       else if (name === 'open') {
@@ -130,7 +139,7 @@ import '../helpers/floating.js';
     show() { this.open = true; }
     hide() { this.open = false; }
 
-    #hasTrigger(name) {
+    #hasTrigger(name: string) {
       return this.trigger.split(/\s+/).includes(name);
     }
 
@@ -146,7 +155,7 @@ import '../helpers/floating.js';
     #bindTarget() {
       this.#unbindTarget();
       if (!this.for) return;
-      const root = this.getRootNode();
+      const root = this.getRootNode() as Document | ShadowRoot;
       const el = root.getElementById?.(this.for) || document.getElementById(this.for);
       if (!el) {
         console.warn(`[is-tooltip] No se encontró #${this.for}`);
@@ -187,57 +196,57 @@ import '../helpers/floating.js';
       this.#target = null;
     }
 
-    #onEnter = () => {
+    #onEnter = (): void => {
       if (this.disabled || this.#hasTrigger('manual')) return;
       this.#hovering = true;
-      clearTimeout(this.#hideTimer);
-      clearTimeout(this.#showTimer);
+      clearTimeout(this.#hideTimer ?? undefined);
+      clearTimeout(this.#showTimer ?? undefined);
       if (this.open) return;
       this.#showTimer = setTimeout(() => { this.open = true; }, this.showDelay);
     };
 
-    #onLeave = () => {
+    #onLeave = (): void => {
       if (this.disabled || this.#hasTrigger('manual')) return;
       this.#hovering = false;
-      clearTimeout(this.#showTimer);
-      clearTimeout(this.#hideTimer);
+      clearTimeout(this.#showTimer ?? undefined);
+      clearTimeout(this.#hideTimer ?? undefined);
       this.#hideTimer = setTimeout(() => {
         if (!this.#hovering) this.open = false;
       }, this.hideDelay);
     };
 
-    #onBridge = (e) => {
+    #onBridge = (e: CustomEvent<{ hovering: boolean }>): void => {
       if (this.disabled || this.#hasTrigger('manual')) return;
       if (e.detail?.hovering) {
         this.#hovering = true;
-        clearTimeout(this.#hideTimer);
+        clearTimeout(this.#hideTimer ?? undefined);
       } else {
         this.#hovering = false;
-        clearTimeout(this.#hideTimer);
+        clearTimeout(this.#hideTimer ?? undefined);
         this.#hideTimer = setTimeout(() => {
           if (!this.#hovering) this.open = false;
         }, this.hideDelay);
       }
     };
 
-    #onFocus = () => {
+    #onFocus = (): void => {
       if (this.disabled || this.#hasTrigger('manual')) return;
-      clearTimeout(this.#hideTimer);
+      clearTimeout(this.#hideTimer ?? undefined);
       this.open = true;
     };
 
-    #onBlur = () => {
+    #onBlur = (): void => {
       if (this.disabled || this.#hasTrigger('manual')) return;
       if (!this.#hovering) this.open = false;
     };
 
-    #onClick = (e: PointerEvent) => {
+    #onClick = (e: PointerEvent): void => {
       if (this.disabled || this.#hasTrigger('manual')) return;
       e.stopPropagation();
       this.open = !this.open;
     };
 
-    #onDocPointer = (e: PointerEvent) => {
+    #onDocPointer = (e: PointerEvent): void => {
       if (!this.open) return;
       const path = e.composedPath();
       if (path.includes(this)) return;
@@ -245,7 +254,7 @@ import '../helpers/floating.js';
       this.hide();
     };
 
-    #onDocKey = (e) => {
+    #onDocKey = (e: KeyboardEvent): void => {
       if (!this.open) return;
       if (e.key === 'Escape') this.hide();
     };
