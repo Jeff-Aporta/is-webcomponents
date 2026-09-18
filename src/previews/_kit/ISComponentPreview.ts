@@ -4,73 +4,58 @@
  * La definición (secciones/bloques) es datos. El comportamiento se escribe en
  * `mount` / `unmount` como métodos reales (addEventListener, whenDefined, …).
  * Nunca `eval` ni strings de lógica.
- *
- * @typedef {import('./types.d.ts').PreviewDefinition} PreviewDefinition
- * @typedef {import('./types.d.ts').PreviewMountContext} PreviewMountContext
- * @typedef {import('./types.d.ts').ISComponentPreviewLike} ISComponentPreviewLike
  */
 
-/** @implements {ISComponentPreviewLike} */
-export class ISComponentPreview {
-  /** @param {PreviewDefinition} definition */
-  constructor(definition) {
+import type {
+  PreviewDefinition,
+  PreviewMountContext,
+  ISComponentPreviewLike,
+} from './types.d.ts';
+
+/** Implementación concreta de ISComponentPreviewLike. */
+export class ISComponentPreview implements ISComponentPreviewLike {
+  readonly definition: PreviewDefinition;
+  #ac: AbortController | null = null;
+
+  constructor(definition: PreviewDefinition) {
     if (!definition?.tag) throw new Error('ISComponentPreview: falta definition.tag');
     if (!Array.isArray(definition.sections)) {
       throw new Error(`ISComponentPreview(${definition.tag}): sections[] obligatorio`);
     }
-    /** @type {PreviewDefinition} */
     this.definition = Object.freeze({
       ...definition,
       sections: definition.sections.map((s) => Object.freeze({ ...s, blocks: [...s.blocks] })),
-    });
-    /** @type {AbortController | null} */
-    this.#ac = null;
+    }) as PreviewDefinition;
   }
-
-  /** @type {AbortController | null} */
-  #ac;
 
   /**
    * Signal para listeners: this.on(el, 'is-change', handler)
    * Se aborta automáticamente en unmount.
-   * @returns {AbortSignal}
    */
-  get signal() {
+  get signal(): AbortSignal {
     if (!this.#ac) this.#ac = new AbortController();
     return this.#ac.signal;
   }
 
-  /**
-   * @param {EventTarget} target
-   * @param {string} type
-   * @param {EventListenerOrEventListenerObject} listener
-   * @param {AddEventListenerOptions} [options]
-   */
-  on(target: HTMLElement, type, listener, options = {}) {
+  on(
+    target: HTMLElement,
+    type: string,
+    listener: EventListenerOrEventListenerObject,
+    options: AddEventListenerOptions = {},
+  ): void {
     if (!target || typeof target.addEventListener !== 'function') return;
     target.addEventListener(type, listener, { ...options, signal: this.signal });
   }
 
-  /**
-   * @param {string} tag
-   * @returns {Promise<CustomElementConstructor>}
-   */
-  whenDefined(tag) {
+  whenDefined(tag: string): Promise<CustomElementConstructor> {
     return customElements.whenDefined(tag);
   }
 
-  /**
-   * @param {PreviewMountContext} _ctx
-   * @returns {void | Promise<void>}
-   */
-  mount(_ctx) {
+  mount(_ctx: PreviewMountContext): void | Promise<void> {
     /* override */
   }
 
-  /**
-   * @param {PreviewMountContext} _ctx
-   */
-  unmount(_ctx) {
+  unmount(_ctx: PreviewMountContext): void {
     this.#ac?.abort();
     this.#ac = null;
   }
