@@ -31,6 +31,8 @@
 | 8 | nav + media | `wt-root-types-strong-2026` | WT-0081, WT-0082 | ~700 | **+ stagehand tests para componentes UX** |
 | 9 | pages + utils + shared | `wt-root-types-strong-2026` | WT-0091, WT-0092 | ~600 | ninguno |
 | 10 | Sweep final + merge prep | `wt-root-types-strong-2026` | WT-0101 a WT-0105, WT-0106 a/b/c | 1783 → 0 | ✅ CERRADA — gate humano pendiente para merge a main |
+| 5 | F0 deep-test proposals | (main) | g39, g43, g44 retry | 9/12 → 12/12 | ✅ cerrada — 12 proposals, ~3,800 test specs |
+| 6 | F0.4 gate-proposals | (main) | — | 4102 → top-30 priorizadas | ✅ cerrada — `tests-to-implement-F0.4.md` (286 nuevos, 3816 duplicados) |
 
 ## Tareas nuevas en cola
 

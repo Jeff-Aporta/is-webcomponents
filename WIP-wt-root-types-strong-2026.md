@@ -170,3 +170,11 @@ Las hojas de T2-T3 entregan:
 **Pendiente gate humano** (PASO 10): merge `wt-root → main` con `--no-ff`.
 
 **Mandatos restantes** (post-merge): M17 (lab completo 259 comps), M18 (specs/guardianes), M19 (test:all), M20 (workstream editors).
+
+[2026-09-21T23:45:00Z] — **PASO 5 cerrado: F0 proposals 12/12 entregadas (~3,800 propuestas totales).**
+- g9 (102 KB), g17 (133 KB), g26 (135 KB), g40 (93 KB), g41 (177 KB), g42 (122 KB), g54 (121 KB), g56 (97 KB), g64 (101 KB) — pre-existentes en main
+- **g39 (113 KB / 3097 líneas / 52 testables / ~530 propuestas) — retry exitoso**
+- **g43 (66 KB / 1530 líneas / 25 testables / ~250 propuestas) — retry-2 exitoso**
+- **g44 (79 KB / 1482 líneas / 25 testables / ~250 propuestas) — retry exitoso**
+
+Próximo: PASO 6 — F0.4 gate-proposals.mjs para consolidar en `tests-to-implement.md`.
