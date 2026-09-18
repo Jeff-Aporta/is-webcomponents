@@ -14,10 +14,10 @@ import { ElementBase } from '../../core/element-base.js';
     <div part="base" class="base" role="radiogroup"></div>
   `;
 
-  const OBSERVED = ['value', 'min', 'max', 'columns', 'disabled', 'readonly'];
+  const OBSERVED: string[] = ['value', 'min', 'max', 'columns', 'disabled', 'readonly'];
 
   /** Acepta `2026` o `2026-07-31`. */
-  function yearOf(raw, fallback) {
+  function yearOf(raw: string | null | undefined, fallback: number | null): number | null {
     const n = Number(String(raw ?? '').slice(0, 4));
     return Number.isFinite(n) && n > 0 ? n : fallback;
   }
@@ -36,47 +36,49 @@ import { ElementBase } from '../../core/element-base.js';
       this.#base.addEventListener('keydown', this.#onKey);
     }
 
-    onConnected() {
+    onConnected(): void {
       this.#render();
       this.scrollToSelection();
     }
 
-    onAttributeChanged(name: string, oldVal: string | null, newVal: string | null) {
+    onAttributeChanged(name: string, _oldVal: string | null, _newVal: string | null): void {
       this.#render();
       if (name === 'value') this.scrollToSelection();
     }
 
-    get value() { return this.getAttribute('value') ?? ''; }
-    set value(v) { v ? this.setAttribute('value', String(v)) : this.removeAttribute('value'); }
+    get value(): string { return this.getAttribute('value') ?? ''; }
+    set value(v: string | number | null | undefined) { v ? this.setAttribute('value', String(v)) : this.removeAttribute('value'); }
 
-    get year() { return yearOf(this.value, null); }
+    get year(): number | null { return yearOf(this.value, null); }
 
-    get min() { return yearOf(this.getAttribute('min'), new Date().getFullYear() - 100); }
-    get max() { return yearOf(this.getAttribute('max'), new Date().getFullYear() + 100); }
+    get min(): number { return yearOf(this.getAttribute('min'), new Date().getFullYear() - 100) ?? (new Date().getFullYear() - 100); }
+    get max(): number { return yearOf(this.getAttribute('max'), new Date().getFullYear() + 100) ?? (new Date().getFullYear() + 100); }
 
-    get disabled() { return this.hasAttribute('disabled'); }
-    set disabled(v) { this.toggleAttribute('disabled', !!v); }
+    get disabled(): boolean { return this.hasAttribute('disabled'); }
+    set disabled(v: boolean) { this.toggleAttribute('disabled', !!v); }
 
-    get readonly() { return this.hasAttribute('readonly'); }
-    set readonly(v) { this.toggleAttribute('readonly', !!v); }
+    get readonly(): boolean { return this.hasAttribute('readonly'); }
+    set readonly(v: boolean) { this.toggleAttribute('readonly', !!v); }
 
-    focus(opts) {
-      (this.#base.querySelector<HTMLElement>('[tabindex="0"]') || this.#base.firstElementChild)?.focus(opts);
+    focus(opts?: FocusOptions): void {
+      const tabEl = this.#base.querySelector<HTMLElement>('[tabindex="0"]') as HTMLElement | null;
+      const first = this.#base.firstElementChild as HTMLElement | null;
+      (tabEl || first)?.focus(opts);
     }
 
     /** Deja el año activo centrado: la lista puede abarcar dos siglos. */
-    scrollToSelection() {
+    scrollToSelection(): void {
       const el = this.#base.querySelector<HTMLElement>('[data-selected], [data-current]');
       if (el) el.scrollIntoView({ block: 'center' });
     }
 
-    #render() {
+    #render(): void {
       const selected = this.year;
       const current = new Date().getFullYear();
       const cols = Number(this.getAttribute('columns')) || 3;
       this.#base.style.setProperty('--is-year-columns', String(cols));
 
-      const cells = [];
+      const cells: HTMLButtonElement[] = [];
       for (let y = this.min; y <= this.max; y++) {
         const btn = document.createElement('button');
         btn.type = 'button';
@@ -93,7 +95,7 @@ import { ElementBase } from '../../core/element-base.js';
         cells.push(btn);
       }
 
-      const active = cells.find((c) => c.hasAttribute('data-selected'))
+      const active: HTMLButtonElement | undefined = cells.find((c) => c.hasAttribute('data-selected'))
         || cells.find((c) => c.hasAttribute('data-current'))
         || cells[0];
       for (const c of cells) c.tabIndex = c === active ? 0 : -1;
@@ -101,23 +103,23 @@ import { ElementBase } from '../../core/element-base.js';
       this.#base.replaceChildren(...cells);
     }
 
-    #select(year: string) {
+    #select(year: number): void {
       if (this.disabled || this.readonly) return;
       this.setAttribute('value', String(year));
       emit(this, 'is-change', { value: String(year), year });
     }
 
-    #onClick = (e: PointerEvent) => {
-      const btn = e.target.closest('button.year');
+    #onClick = (e: PointerEvent): void => {
+      const btn = (e.target as Element | null)?.closest('button.year') as HTMLButtonElement | null;
       if (!btn || btn.disabled) return;
       this.#select(Number(btn.dataset.year));
     };
 
-    #onKey = (e: KeyboardEvent) => {
-      const btn = e.target.closest?.('button.year');
+    #onKey = (e: KeyboardEvent): void => {
+      const btn = (e.target as Element | null)?.closest?.('button.year') as HTMLButtonElement | null;
       if (!btn) return;
       const cols = Number(this.getAttribute('columns')) || 3;
-      const steps = { ArrowLeft: -1, ArrowRight: 1, ArrowUp: -cols, ArrowDown: cols };
+      const steps: Record<string, number> = { ArrowLeft: -1, ArrowRight: 1, ArrowUp: -cols, ArrowDown: cols };
       if (e.key in steps) {
         e.preventDefault();
         this.#moveFocus(Number(btn.dataset.year) + steps[e.key]);
@@ -129,10 +131,10 @@ import { ElementBase } from '../../core/element-base.js';
       }
     };
 
-    #moveFocus(year) {
-      const el = this.#base.querySelector<HTMLElement>(`[data-year="${year}"]`);
+    #moveFocus(year: number): void {
+      const el = this.#base.querySelector<HTMLButtonElement>(`[data-year="${year}"]`);
       if (!el || el.disabled) return;
-      for (const c of this.#base.children) c.tabIndex = c === el ? 0 : -1;
+      for (const c of Array.from(this.#base.children) as HTMLElement[]) c.tabIndex = c === el ? 0 : -1;
       el.focus();
     }
   }
