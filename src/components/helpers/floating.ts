@@ -1,7 +1,13 @@
 import { adoptCss, defineElement, emit } from '../../core/element.js';
 import { withStyleAttrs } from '../../core/attrs.js';
 
-import { computePosition, PLACEMENTS, isVirtualElement } from '../_shared/position.js';
+import {
+  computePosition,
+  PLACEMENTS,
+  isVirtualElement,
+  type AnchorLike,
+  type ComputePositionResult,
+} from '../_shared/position.js';
 
 /**
  * <is-floating> — building block interno de posicionamiento anclado.
@@ -24,7 +30,7 @@ import { computePosition, PLACEMENTS, isVirtualElement } from '../_shared/positi
 
 (() => {
   /** Lee `--is-floating-arrow-size` en px. `parseFloat('0.375rem')` devolvía 0.375 y rompía la flecha. */
-  const arrowSizePx = (el) => {
+  const arrowSizePx = (el: Element): number => {
     const raw = getComputedStyle(el).getPropertyValue('--is-floating-arrow-size').trim();
     if (!raw) return 8;
     const n = parseFloat(raw);
@@ -72,10 +78,10 @@ import { computePosition, PLACEMENTS, isVirtualElement } from '../_shared/positi
     #arrow!: HTMLElement;
     #bridge!: HTMLElement;
     #anchorSlot!: HTMLElement;
-    #anchorEl = null;
-    #anchorRef = null;
+    #anchorEl: Element | null = null;
+    #anchorRef: AnchorLike | null = null;
     #mounted = false;
-    #ro = null;
+    #ro: ResizeObserver | null = null;
     #raf = 0;
     #measuring = false;
     #bridgeBound = false;
@@ -105,9 +111,9 @@ import { computePosition, PLACEMENTS, isVirtualElement } from '../_shared/positi
       this.#teardown();
     }
 
-    attributeChangedCallback(name: string): void {
+    attributeChangedCallback(name: string, oldValue: string | null, newValue: string | null): void {
 
-      super.attributeChangedCallback(name);
+      super.attributeChangedCallback(name, oldValue, newValue);
       if (!this.#mounted) return;
       if (name === 'active') this.#syncActive();
       else if (name === 'anchor') this.#resolveAnchor();
@@ -117,11 +123,11 @@ import { computePosition, PLACEMENTS, isVirtualElement } from '../_shared/positi
     get active() { return this.hasAttribute('active'); }
     set active(v) { this.toggleAttribute('active', !!v); }
 
-    get placement() {
+    get placement(): string {
       const v = this.getAttribute('placement') || 'top';
-      return PLACEMENTS.includes(v) ? v : 'top';
+      return PLACEMENTS.includes(v as never) ? v : 'top';
     }
-    set placement(v) { this.setAttribute('placement', v); }
+    set placement(v: string) { this.setAttribute('placement', v); }
 
     get distance() { return Number(this.getAttribute('distance')) || 0; }
     set distance(v) { this.setAttribute('distance', String(v)); }
@@ -150,11 +156,11 @@ import { computePosition, PLACEMENTS, isVirtualElement } from '../_shared/positi
     get arrowPadding() { return Number(this.getAttribute('arrow-padding')) || 10; }
     set arrowPadding(v) { this.setAttribute('arrow-padding', String(v)); }
 
-    get autoSize() {
+    get autoSize(): '' | 'horizontal' | 'vertical' | 'both' {
       const v = this.getAttribute('auto-size');
-      return ['horizontal', 'vertical', 'both'].includes(v) ? v : '';
+      return ['horizontal', 'vertical', 'both'].includes(v ?? '') ? (v as 'horizontal' | 'vertical' | 'both') : '';
     }
-    set autoSize(v) {
+    set autoSize(v: '' | 'horizontal' | 'vertical' | 'both') {
       if (!v) this.removeAttribute('auto-size');
       else this.setAttribute('auto-size', v);
     }
@@ -168,7 +174,7 @@ import { computePosition, PLACEMENTS, isVirtualElement } from '../_shared/positi
     set hoverBridge(v) { this.toggleAttribute('hover-bridge', !!v); }
 
     get flipFallbackPlacements() { return this.getAttribute('flip-fallback-placements') || ''; }
-    set flipFallbackPlacements(v) { this.setAttribute('flip-fallback-placements', v || ''); }
+    set flipFallbackPlacements(v: string) { this.setAttribute('flip-fallback-placements', v || ''); }
 
     get flipFallbackStrategy() {
       return this.getAttribute('flip-fallback-strategy') === 'initial' ? 'initial' : 'best-fit';
@@ -186,26 +192,31 @@ import { computePosition, PLACEMENTS, isVirtualElement } from '../_shared/positi
     get autoSizePadding() { return Number(this.getAttribute('auto-size-padding')) || 0; }
     set autoSizePadding(v) { this.setAttribute('auto-size-padding', String(v)); }
 
-    get anchor() {
+    get anchor(): AnchorLike | Element | null {
       if (this.#anchorRef) return this.#anchorRef;
       return this.#anchorEl;
     }
-    set anchor(v) {
-      this.#anchorRef = v ?? null;
-      if (typeof v === 'string') this.setAttribute('anchor', v);
-      else if (v instanceof Element || isVirtualElement(v)) this.removeAttribute('anchor');
+    set anchor(v: AnchorLike | Element | string | null | undefined) {
+      if (v == null) this.#anchorRef = null;
+      else if (typeof v === 'string') {
+        this.#anchorRef = null;
+        this.setAttribute('anchor', v);
+      } else {
+        this.#anchorRef = v;
+        if (v instanceof Element || isVirtualElement(v)) this.removeAttribute('anchor');
+      }
       this.#resolveAnchor();
       if (this.active) this.reposition();
     }
 
-    reposition() {
+    reposition(): void {
       if (!this.active || !this.#mounted || this.#measuring) return;
       const anchor = this.#getAnchorTarget();
       if (!anchor) return;
 
       const arrowSize = arrowSizePx(this);
       this.#measuring = true;
-      let result;
+      let result: ComputePositionResult | null;
       try {
         result = computePosition({
           anchor,
@@ -288,7 +299,7 @@ import { computePosition, PLACEMENTS, isVirtualElement } from '../_shared/positi
       return this.#anchorEl;
     }
 
-    #resolveAnchor() {
+    #resolveAnchor(): void {
       if (this.#anchorRef && (this.#anchorRef instanceof Element || isVirtualElement(this.#anchorRef))) {
         this.#anchorEl = this.#anchorRef instanceof Element ? this.#anchorRef : null;
         if (this.active) this.#setupListeners();
@@ -297,17 +308,17 @@ import { computePosition, PLACEMENTS, isVirtualElement } from '../_shared/positi
 
       const attr = this.getAttribute('anchor');
       if (attr) {
-        const el = (this.getRootNode()?.getElementById?.(attr))
-          || document.getElementById(attr);
+        const root = this.getRootNode() as Document | ShadowRoot | null;
+        const el = root?.getElementById?.(attr) || document.getElementById(attr);
         this.#anchorEl = el;
       } else {
-        const assigned = this.#anchorSlot.assignedElements({ flatten: true });
+        const assigned = (this.#anchorSlot as HTMLSlotElement).assignedElements({ flatten: true });
         this.#anchorEl = assigned[0] || null;
       }
       if (this.active) this.#setupListeners();
     }
 
-    #syncActive() {
+    #syncActive(): void {
       if (this.active) {
         this.#popup.hidden = false;
         this.#setupListeners();
@@ -321,10 +332,10 @@ import { computePosition, PLACEMENTS, isVirtualElement } from '../_shared/positi
       }
     }
 
-    #setupListeners() {
+    #setupListeners(): void {
       this.#teardown(false);
-      const onScroll = () => this.#schedule();
-      const onResize = () => this.#schedule();
+      const onScroll = (): void => this.#schedule();
+      const onResize = (): void => this.#schedule();
       window.addEventListener('scroll', onScroll, true);
       window.addEventListener('resize', onResize);
       this.#onScroll = onScroll;
@@ -340,10 +351,10 @@ import { computePosition, PLACEMENTS, isVirtualElement } from '../_shared/positi
       }
     }
 
-    #onScroll = null;
-    #onResize = null;
+    #onScroll: (() => void) | null = null;
+    #onResize: (() => void) | null = null;
 
-    #teardown(hide = true) {
+    #teardown(hide = true): void {
       if (this.#onScroll) window.removeEventListener('scroll', this.#onScroll, true);
       if (this.#onResize) window.removeEventListener('resize', this.#onResize);
       this.#onScroll = null;
@@ -373,7 +384,7 @@ import { computePosition, PLACEMENTS, isVirtualElement } from '../_shared/positi
       });
     }
 
-    #updateBridge(result) {
+    #updateBridge(result: ComputePositionResult): void {
       if (!this.hoverBridge || !result.anchor) {
         this.#bridge.hidden = true;
         return;
