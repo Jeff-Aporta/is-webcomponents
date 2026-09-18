@@ -89,13 +89,13 @@ import { ElementBase } from '../../core/element-base.js';
       if (name === 'expanded') this.#syncExpansion();
     }
 
-    get selection() {
+    get selection(): 'none' | 'single' | 'leaf' | 'multiple' {
       const v = this.getAttribute('selection');
-      return VALID_SELECTION.includes(v) ? v : 'single';
+      return (v && (VALID_SELECTION as readonly string[]).includes(v)) ? (v as 'none' | 'single' | 'leaf' | 'multiple') : 'single';
     }
-    set selection(v) {
-      if (v == null || v === '') this.removeAttribute('selection');
-      else if (VALID_SELECTION.includes(v)) this.setAttribute('selection', v);
+    set selection(v: 'none' | 'single' | 'leaf' | 'multiple' | null | undefined) {
+      if (v == null) this.removeAttribute('selection');
+      else if ((VALID_SELECTION as readonly string[]).includes(v)) this.setAttribute('selection', v);
     }
 
     // ---- private ----
@@ -118,12 +118,12 @@ import { ElementBase } from '../../core/element-base.js';
       });
     }
 
-    #allItems() {
+    #allItems(): HTMLElement[] {
       // BFS de todos los is-tree-item descendientes.
-      const all = [];
-      const walk = (root) => {
-        const items = [...root.children].filter((c) => c.tagName && c.tagName.toLowerCase() === 'is-tree-item');
-        items.forEach((it) => { all.push(it); walk(it); });
+      const all: HTMLElement[] = [];
+      const walk = (root: Element) => {
+        const items = [...root.children].filter((c: Element) => c.tagName && c.tagName.toLowerCase() === 'is-tree-item') as HTMLElement[];
+        items.forEach((it: HTMLElement) => { all.push(it); walk(it); });
       };
       walk(this);
       return all;
@@ -134,10 +134,11 @@ import { ElementBase } from '../../core/element-base.js';
     }
 
     #onClick = (e: PointerEvent) => {
+      if (!(e.target instanceof Element)) return;
       const toggle = e.target.closest('[data-tree-toggle]');
       if (toggle) {
         const item = toggle.closest('is-tree-item');
-        if (item) {
+        if (item instanceof HTMLElement) {
           item.toggleAttribute('expanded');
           emit(this, 'is-tree-toggle', { item, expanded: item.hasAttribute('expanded') });
         }
@@ -145,12 +146,14 @@ import { ElementBase } from '../../core/element-base.js';
         return;
       }
       const item = e.target.closest('is-tree-item');
-      if (!item || item.hasAttribute('disabled')) return;
+      if (!(item instanceof HTMLElement) || item.hasAttribute('disabled')) return;
       this.#select(item);
     };
 
-    #onKeyDown = (e) => {
+    #onKeyDown = (e: KeyboardEvent) => {
+      if (!(e.target instanceof Element)) return;
       const item = e.target.closest('is-tree-item');
+      if (!(item instanceof HTMLElement)) return;
       if (!item) return;
       const visible = this.#visibleItems();
       const idx = visible.indexOf(item);
@@ -174,7 +177,7 @@ import { ElementBase } from '../../core/element-base.js';
             emit(this, 'is-tree-toggle', { item, expanded: false });
           } else {
             const parent = item.parentElement && item.parentElement.closest('is-tree-item');
-            if (parent) next = visible.indexOf(parent);
+            if (parent instanceof HTMLElement) next = visible.indexOf(parent);
           }
           e.preventDefault();
           break;
@@ -189,10 +192,10 @@ import { ElementBase } from '../../core/element-base.js';
       if (next !== -1 && visible[next]) visible[next].focus();
     };
 
-    #visibleItems() {
-      const out = [];
-      const walk = (root) => {
-        const items = [...root.children].filter((c) => c.tagName && c.tagName.toLowerCase() === 'is-tree-item');
+    #visibleItems(): HTMLElement[] {
+      const out: HTMLElement[] = [];
+      const walk = (root: Element) => {
+        const items = [...root.children].filter((c: Element) => c.tagName && c.tagName.toLowerCase() === 'is-tree-item') as HTMLElement[];
         items.forEach((it: HTMLElement) => {
           out.push(it);
           if (it.hasAttribute('expanded')) walk(it);
@@ -263,8 +266,9 @@ import { ElementBase } from '../../core/element-base.js';
       // ESCUCHAR eventos del is-checkbox interno para sincronizar.
       const cb = this.shadowRoot!.querySelector<HTMLElement>('is-checkbox');
       if (cb) {
-        cb.addEventListener('input', (e) => {
-          if (e.detail.checked) this.setAttribute('selected', '');
+        cb.addEventListener('input', (e: Event) => {
+          const detail = (e as CustomEvent<{ checked: boolean }>).detail;
+          if (detail && detail.checked) this.setAttribute('selected', '');
           else this.removeAttribute('selected');
         });
       }
@@ -281,20 +285,22 @@ import { ElementBase } from '../../core/element-base.js';
       const toggle = this.shadowRoot!.querySelector<HTMLElement>('.expand-toggle');
       const childrenPane = this.shadowRoot!.querySelector<HTMLElement>('.children');
       if (!hasKids) {
-        toggle.hidden = true;
-        toggle.setAttribute('aria-hidden', 'true');
+        if (toggle) {
+          toggle.hidden = true;
+          toggle.setAttribute('aria-hidden', 'true');
+        }
       } else {
-        toggle.hidden = false;
+        if (toggle) toggle.hidden = false;
         if (this.hasAttribute('expanded')) {
-          toggle.setAttribute('aria-expanded', 'true');
-          childrenPane.hidden = false;
+          if (toggle) toggle.setAttribute('aria-expanded', 'true');
+          if (childrenPane) childrenPane.hidden = false;
         } else {
-          toggle.setAttribute('aria-expanded', 'false');
-          childrenPane.hidden = true;
+          if (toggle) toggle.setAttribute('aria-expanded', 'false');
+          if (childrenPane) childrenPane.hidden = true;
         }
       }
       const cb = this.shadowRoot!.querySelector<HTMLElement>('is-checkbox');
-      if (cb) cb.checked = this.hasAttribute('selected');
+      if (cb) (cb as unknown as { checked: boolean }).checked = this.hasAttribute('selected');
     }
 
     focus() {
