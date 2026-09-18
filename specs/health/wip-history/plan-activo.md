@@ -10,10 +10,13 @@
 | 4 | `a2d223afa` | WT-0041 + WT-0042 + WT-0042-bis | 1,238 → 6,146 (7,384 → 6,146) | data-grid family completo. WT-0041 hizo data-grid + preview + smoke. WT-0042-bis hizo icon-explorer.preview. Capitán commiteó grid-shared + ag-grid (sub-agents no commiteaban). Ver `checkpoint-tanda04.md`. |
 | 5 | `68492c97e` | WT-0051 + WT-0052 | 1,011 → 5,135 (6,146 → 5,135) | tree-view + helpers completo. _types.ts nuevo. Ver `checkpoint-tanda05.md`. |
 | 6 | `9241ea4ce` | WT-0061-quad + WT-0062 + WT-0062-bis | 697 → 4,438 (5,135 → 4,438) | 7 archivos: code, split-panel, chart, gallery/app, catalogo-gen, controller-from-config, date-field-core. Ver `checkpoint-tanda06.md`. |
+| 7 | `c763849`+ | WT-0071 + WT-0072 + WT-0073 | 1,216 → 3,222 (4,438 → 3,222) | 36 archivos forms (24 .ts + 12 .preview.ts). WT-0073 cerró los 15+ pendientes. Ver `checkpoint-tanda07.md`. |
 
 ## Tandas en proceso
 
-(Ninguna — T6 cerrada, T7 pendiente de dispatch)
+| Tanda | Hoja | Rama | Estado |
+|---|---|---|---|
+| 8 (nav + media) | WT-0081, WT-0082 | `wt-root-types-strong-2026` | sub-agentes background |
 
 ## Tandas pendientes
 
@@ -23,7 +26,7 @@
 | 4 | data-grid family | `wt-root-types-strong-2026` | cerrada | ~1,250 | cerrada |
 | 5 | tree-view + helpers | `wt-root-types-strong-2026` | cerrada | ~987 | cerrada |
 | 6 | layout + catalog + code | `wt-root-types-strong-2026` | cerrada | ~800 | cerrada (WT-0061-quad + WT-0062 + WT-0062-bis) |
-| 7 | forms | `wt-root-types-strong-2026` | WT-0071, WT-0072 | ~450 | **+ tests para forms críticos** — dispatch pendiente |
+| 7 | forms | `wt-root-types-strong-2026` | cerrada | ~450 | cerrada (36 archivos) |
 | 8 | nav + media | `wt-root-types-strong-2026` | WT-0081, WT-0082 | ~700 | **+ stagehand tests para componentes UX** |
 | 9 | pages + utils + shared | `wt-root-types-strong-2026` | WT-0091, WT-0092 | ~600 | ninguno |
 | 10 | Sweep final + merge prep | `wt-root-types-strong-2026` | WT-0101, WT-0102 | ~300 | validación global + merge prep |
@@ -64,7 +67,8 @@
 - Errores strict audit después de T4: **6,146** (−1,238 acumulado en T4)
 - Errores strict audit después de T5: **5,135** (−1,011)
 - Errores strict audit después de T6: **4,438** (−697)
-- Próximo hito: < 4,000 después de T7
+- Errores strict audit después de T7: **3,222** (−1,216)
+- Próximo hito: < 2,500 después de T8
 
 ## Próxima tanda activa: T3
 
