@@ -21,13 +21,26 @@ import { adoptCss, defineElement, emit } from '../../core/element.js';
  *   qr.svg       mismo nodo SVG
  *   qr.dataURL() dataURL del PNG
  */
+
+// Tipo del módulo qrcode-generator cargado por CDN. La función default exporta
+// un factory (typeNumber, errorCorrectionLevel) → instancia con addData/make/isDark.
+interface QRInstance {
+  addData(data: string): void;
+  make(): void;
+  getModuleCount(): number;
+  isDark(row: number, col: number): boolean;
+}
+type QRLib = (typeNumber: number, errorCorrectionLevel: string) => QRInstance;
+
 (() => {
   const OBSERVED = ['value', 'level', 'cell', 'margin', 'fg', 'bg'];
 
   class IsQrCode extends HTMLElement {
     static get observedAttributes(): string[] { return OBSERVED; }
     #mounted = false;
-    #lib = null;
+    #lib: QRLib | null = null;
+    #canvas!: HTMLElement;
+    #status!: HTMLElement;
 
     constructor() {
       super();
@@ -49,13 +62,13 @@ import { adoptCss, defineElement, emit } from '../../core/element.js';
       this.#render();
     }
 
-    async attributeChangedCallback() {
+    async attributeChangedCallback(): Promise<void> {
       if (this.#mounted && this.#lib) await this.#ensureLib().then(() => this.#render());
     }
 
     get svg() { return this.#canvas.querySelector<HTMLElement>('svg'); }
 
-    dataURL(type = 'image/png') {
+    dataURL(type: string = 'image/png'): Promise<string> | null {
       const svg = this.svg;
       if (!svg) return null;
       return new Promise((resolve) => {
@@ -65,18 +78,24 @@ import { adoptCss, defineElement, emit } from '../../core/element.js';
           const cv = document.createElement('canvas');
           cv.width = img.width;
           cv.height = img.height;
-          cv.getContext('2d').drawImage(img, 0, 0);
+          const ctx = cv.getContext('2d');
+          if (!ctx) return;
+          ctx.drawImage(img, 0, 0);
           resolve(cv.toDataURL(type));
         };
         img.src = 'data:image/svg+xml;utf8,' + encodeURIComponent(xml);
       });
     }
 
-    async #ensureLib() {
+    async #ensureLib(): Promise<QRLib> {
       if (this.#lib) return this.#lib;
       this.#status.textContent = 'Cargando generador QR…';
       try {
-        const mod = await import('https://esm.sh/qrcode-generator@1.4.4');
+        // El módulo vive sólo en esm.sh (sin typings en lib.dom.d.ts). El cast a
+        // continuación le da forma sin tocar TS ni requerir declaraciones
+        // externas para una URL.
+        const url: string = 'https://esm.sh/qrcode-generator@1.4.4';
+        const mod = await import(/* @vite-ignore */ url) as { default?: QRLib } & QRLib;
         this.#lib = mod.default || mod;
         this.#status.textContent = '';
       } catch (err) {
@@ -86,8 +105,9 @@ import { adoptCss, defineElement, emit } from '../../core/element.js';
       return this.#lib;
     }
 
-    #render() {
-      if (!this.#lib) return;
+    #render(): void {
+      const lib = this.#lib;
+      if (!lib) return;
       const value = this.getAttribute('value');
       if (!value) { this.#canvas.innerHTML = ''; return; }
       const level = this.getAttribute('level') || 'L';
@@ -96,13 +116,13 @@ import { adoptCss, defineElement, emit } from '../../core/element.js';
       const fg = this.getAttribute('fg') || 'currentColor';
       const bg = this.getAttribute('bg') || 'transparent';
 
-      let qr;
+      let qr: QRInstance;
       try {
-        qr = this.#lib(0, level); // type-number 0 = auto
+        qr = lib(0, level); // type-number 0 = auto
         qr.addData(value);
         qr.make();
       } catch (err) {
-        this.#status.textContent = String(err.message || err);
+        this.#status.textContent = String((err as Error)?.message || err);
         return;
       }
 
@@ -139,9 +159,6 @@ import { adoptCss, defineElement, emit } from '../../core/element.js';
       this.#canvas.appendChild(svg);
       emit(this, 'is-render', { svg });
     }
-
-    #canvas!: HTMLElement;
-    #status!: HTMLElement;
   }
 
   defineElement('is-qrcode', IsQrCode);
