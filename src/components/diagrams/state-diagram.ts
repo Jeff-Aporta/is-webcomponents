@@ -10,7 +10,7 @@ import type {
 } from './state-spec.js';
 import { sequenceThemeDark, sequenceThemeLight } from './sequence-spec.js';
 import { SequenceTurtle } from './sequence-turtle.js';
-import type { PathTurtle } from '../_shared/path-turtle.js';
+import type { PathTurtle, TurtleTheme } from '../_shared/path-turtle.js';
 import { tkHueToHex } from '../_shared/tk-hue.js';
 import { edgeStrokeHex, edgeChipFill, edgeChipText } from '../_shared/diagram-edge-style.js';
 import type { DiagramTheme } from './diagram-types.js';
@@ -185,7 +185,7 @@ class IsStateDiagram extends DiagramElementBase {
       messages: layout.edges.map((e, i: number) => ({
         path: e.path, step: i + 1, log: e.label || '', groupHue: e.hue,
       })),
-      theme,
+      theme: theme as unknown as TurtleTheme,
       viewW: W,
       viewH: H,
       autoLoop: this.isViewer,
