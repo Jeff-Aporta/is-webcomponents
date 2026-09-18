@@ -60,7 +60,8 @@ export async function mount(ctx: import('../../previews/_kit/types.d.ts').Previe
           });
         }
       } else if (r.type === 'attributes') {
-        const v = r.target.getAttribute?.(r.attributeName ?? '') ?? '';
+        const target = r.target as Element;
+        const v = target.getAttribute(r.attributeName ?? '') ?? '';
         parts.push({
           cls: 'type-attr',
           text: `attributes: ${r.attributeName}="${v.slice(0, 24)}${v.length > 24 ? '…' : ''}"`,
