@@ -110,7 +110,7 @@ class IsFlowchart extends DiagramElementBase {
   }
 
   onDiagramConnected(): void {
-    this.#overrides = loadOverrides(this, this.getAttribute('storage-key')) || { nodes: {}, edges: {} };
+    this.#overrides = loadOverrides(this, this.getAttribute('storage-key') ?? '') || { nodes: {}, edges: {} };
     this.wrap.addEventListener('mousemove', this.#onMouseMove as EventListener);
     this.wrap.addEventListener('mouseleave', this.#onMouseLeave as EventListener);
     this.wrap.addEventListener('click', this.#onClick as EventListener);
@@ -237,7 +237,7 @@ class IsFlowchart extends DiagramElementBase {
       messages: layout.edges.map((e, i: number) => ({
         path: e.path, step: i + 1, log: e.label || '', groupHue: e.hue,
       })),
-      theme,
+      theme: theme as unknown as { accent: string; [key: string]: unknown },
       viewW: W,
       viewH: H,
       autoLoop: this.isViewer,
@@ -368,7 +368,7 @@ class IsFlowchart extends DiagramElementBase {
       const textRight = n.x + n.w - 10;
 
       if (hasIcon) {
-        g.appendChild(svgIconGroup(n.icon, {
+        g.appendChild(svgIconGroup(n.icon ?? '', {
           x: n.x + 8, y: n.y + n.h / 2 - 8, size: 16, hue: n.hue,
         }));
       }
@@ -497,7 +497,7 @@ class IsFlowchart extends DiagramElementBase {
           this.#overrides!.nodes![cur.id] ??= {};
           this.#overrides!.nodes![cur.id].x = cur.x;
           this.#overrides!.nodes![cur.id].y = cur.y;
-          saveOverrides(this, this.getAttribute('storage-key'), this.#overrides);
+          saveOverrides(this, this.getAttribute('storage-key') ?? '', this.#overrides);
           emitLayoutChange(this, { nodeId: cur.id, x: cur.x, y: cur.y, overrides: this.#overrides });
           this.queueRender();
         },
@@ -525,7 +525,7 @@ class IsFlowchart extends DiagramElementBase {
         if (!this.#overrides.nodes[node.id]) this.#overrides.nodes[node.id] = {};
         if (label) this.#overrides.nodes[node.id].label = label;
         if (Number.isFinite(hue)) this.#overrides.nodes[node.id].hue = hue;
-        saveOverrides(this, this.getAttribute('storage-key'), this.#overrides);
+        saveOverrides(this, this.getAttribute('storage-key') ?? '', this.#overrides);
         emitLayoutChange(this, { nodeId: node.id, overrides: this.#overrides });
         this.queueRender();
       },

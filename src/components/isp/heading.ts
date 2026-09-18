@@ -38,7 +38,7 @@ import {
       return ['level', 'color', 'mix', 'mix-with', 'size'];
     }
 
-    #heading = null;
+    #heading: HTMLElement | null = null;
 
     constructor() {
       super();
@@ -101,7 +101,7 @@ import {
 
     get level() {
       const v = this.getAttribute('level');
-      return LEVELS.includes(v) ? v : '1';
+      return LEVELS.includes(v ?? '') ? (v as string) : '1';
     }
     set level(v) {
       const s = String(v);
@@ -134,7 +134,7 @@ import {
     }
 
     get computedMix() {
-      return normalizeMix(this.mix) || DEFAULT_MIX[this.level] || '15%';
+      return normalizeMix(this.mix) || DEFAULT_MIX[this.level as '1' | '2' | '3' | '4' | '5' | '6'] || '15%';
     }
 
     /** @returns {'none'|'semantic'|'current'|'css'} */

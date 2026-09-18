@@ -10,6 +10,18 @@
 import catalog from './catalog.js';
 import { JsonPreview } from './_kit/JsonPreview.js';
 import { loadDefinitionJson } from './_kit/load-json.js';
+import type {
+  ISComponentPreviewLike,
+  PreviewBehaviorModule,
+  PreviewDefinition,
+} from './_kit/types.d.ts';
+
+/** Mirror of an entry in catalog.ts (auto-generated). */
+interface CatalogEntry {
+  json: string;
+  behavior?: string;
+  category: string;
+}
 
 function previewsBase(): URL {
   // Consumo: gallery-app.min.js en dist/ → ../src/previews/
@@ -21,41 +33,24 @@ function previewsBase(): URL {
   return new URL('./', here); // registry vive en src/previews/
 }
 
-/** @type {Map<string, import('./_kit/types.d.ts').PreviewDefinition>} */
-const definitionCache = new Map();
+const definitionCache = new Map<string, PreviewDefinition>();
 
-/** @type {Map<string, import('./_kit/types.d.ts').PreviewBehaviorModule>} */
-const behaviorCache = new Map();
+const behaviorCache = new Map<string, PreviewBehaviorModule>();
 
-/**
- * @param {string} tag
- * @returns {boolean}
- */
-export function hasControlledPreview(tag: string) {
+export function hasControlledPreview(tag: string): boolean {
   return Object.prototype.hasOwnProperty.call(catalog, tag);
 }
 
-/**
- * @returns {string[]}
- */
-export function controlledPreviewTags() {
+export function controlledPreviewTags(): string[] {
   return Object.keys(catalog);
 }
 
-/**
- * @param {string} tag
- * @returns {boolean}
- */
-export function hasCachedPreview(tag: string) {
+export function hasCachedPreview(tag: string): boolean {
   return definitionCache.has(tag);
 }
 
-/**
- * @param {string} tag
- * @returns {Promise<import('./_kit/types.d.ts').ISComponentPreviewLike | null>}
- */
-export async function loadPreview(tag: string) {
-  const entry = catalog[tag];
+export async function loadPreview(tag: string): Promise<ISComponentPreviewLike | null> {
+  const entry = (catalog as Record<string, CatalogEntry | undefined>)[tag];
   if (!entry) return null;
 
   let definition = definitionCache.get(tag);
@@ -65,19 +60,19 @@ export async function loadPreview(tag: string) {
     definitionCache.set(tag, definition);
   }
 
-  /** @type {import('./_kit/types.d.ts').PreviewBehaviorModule | null} */
-  let behavior = null;
+  let behavior: PreviewBehaviorModule | null = null;
   if (entry.behavior || definition.hasBehavior) {
     const behPath = entry.behavior || `../components/${tag}.js`  // legacy fallback;
     const behKey = behPath;
     if (behaviorCache.has(behKey)) {
-      behavior = behaviorCache.get(behKey);
+      behavior = behaviorCache.get(behKey) ?? null;
     } else {
       try {
         behavior = await import(new URL(behPath, previewsBase()).href);
         behaviorCache.set(behKey, behavior);
-      } catch (err) {
-        console.warn(`[registry] behavior missing for ${tag}:`, err.message);
+      } catch (err: unknown) {
+        const msg = err instanceof Error ? err.message : String(err);
+        console.warn(`[registry] behavior missing for ${tag}:`, msg);
       }
     }
   }
@@ -86,13 +81,13 @@ export async function loadPreview(tag: string) {
 }
 
 /** Vacía la caché de definiciones (tests / HMR manual). */
-export function clearPreviewCache() {
+export function clearPreviewCache(): void {
   definitionCache.clear();
   behaviorCache.clear();
 }
 
-export function previewCatalogEntry(tag) {
-  return catalog[tag] || null;
+export function previewCatalogEntry(tag: string): CatalogEntry | null {
+  return (catalog as Record<string, CatalogEntry | undefined>)[tag] ?? null;
 }
 
 export { catalog };
