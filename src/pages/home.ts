@@ -14,6 +14,7 @@
  * @typedef {import('../previews/_kit/types.d.ts').PreviewMountContext} PreviewMountContext
  * @typedef {import('../previews/_kit/types.d.ts').ISComponentPreviewLike} ISComponentPreviewLike
  */
+import type { PreviewMountContext, ISComponentPreviewLike } from '../previews/_kit/types.d.ts';
 import { init as pintarConsumoCdn } from '../utils/home-cdn.js';
 
 /** Tags con demo propia: definen en qué cards aparece el botón de «abrir». */
@@ -111,7 +112,7 @@ function progresoDeLectura(raiz: HTMLElement, signal: AbortSignal) {
   const sincronizar = () => {
     raf = 0;
     const max = raiz.scrollHeight - raiz.clientHeight;
-    barra.value = max > 0 ? Math.round((raiz.scrollTop / max) * 100) : 0;
+    (barra as HTMLProgressElement).value = max > 0 ? Math.round((raiz.scrollTop / max) * 100) : 0;
   };
   raiz.addEventListener(
     'scroll',
@@ -186,7 +187,8 @@ function contadores(raiz: HTMLElement, signal: AbortSignal) {
     (entradas) => {
       for (const e of entradas) {
         if (!e.isIntersecting) continue;
-        contar(e.target);
+        // e.target es Element; el callback genérico no preserva HTMLElement.
+        if (e.target instanceof HTMLElement) contar(e.target);
         io.unobserve(e.target);
       }
     },
@@ -245,12 +247,13 @@ function botonesDeDemo(raiz: HTMLElement) {
 }
 
 /**
- * @param {PreviewMountContext} ctx
- * @param {ISComponentPreviewLike & { signal: AbortSignal }} preview
+ * @param ctx Mount context del preview.
+ * @param preview Preview concreto (ISComponentPreview). Se accede a `signal`
+ *              que es AbortSignal compartido para listeners/observers.
  */
-export async function mount(ctx: PreviewMountContext, preview) {
+export async function mount(ctx: PreviewMountContext, preview: ISComponentPreviewLike) {
   const raiz = ctx.main;
-  const { signal } = preview;
+  const signal = preview.signal ?? new AbortController().signal;
   const menosMovimiento = matchMedia('(prefers-reduced-motion: reduce)').matches;
 
   pintarConsumoCdn(raiz);
