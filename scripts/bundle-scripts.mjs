@@ -5,9 +5,13 @@
 // que NO se sirven en GitHub Pages. Tras esto, los pages y previews
 // del registry cargan rutas dist/... que sí están publicadas.
 import { build } from 'esbuild';
-import { mkdir, copyFile, readdir, writeFile, rm } from 'node:fs/promises';
+import { mkdir, copyFile, readdir, writeFile, rm, cp } from 'node:fs/promises';
+import { readdirSync } from 'node:fs';
 import { join, dirname } from 'node:path';
 import { readFileSync } from 'node:fs';
+
+let ok = 0;
+let failed = 0;
 
 const scripts = [
   'highlight-pre',
@@ -27,10 +31,66 @@ const pages = [
 await mkdir('dist/scripts', { recursive: true });
 await mkdir('dist/pages', { recursive: true });
 
-let ok = 0;
-let failed = 0;
+// ── CSS sibling files: los bundles JS usan `import './foo.css'` para resolver
+// `host-base.css` y `scrollbars.css`. Si no existen en dist/scripts/,
+// el browser hace 404 en runtime. Copiamos desde src/components/_shared/.
+// Antes: invisible el 404 (solo HEAD checks no los capturaban). Stagehand
+// lo descubrió.
+for (const css of ['host-base.css', 'scrollbars.css']) {
+  const src = join('src/components/_shared', css);
+  const dst = join('dist/scripts', css);
+  try {
+    await copyFile(src, dst);
+    ok++;
+  } catch {
+    // ignore — el archivo puede no existir
+  }
+}
 
-// Gallery scripts: ../scripts/*.js → ../dist/scripts/*.min.js
+// ── Skills siblings: el bundled cdn-panel.min.js (lives at dist/scripts/)
+// tiene un fallback de 5 paths para resolver PROMPT.md:
+//   1) ../../skills/... (relativo desde src/components/_shared) — irreal
+//   2) ../skills/...       — irreal
+//   3) ./skills/...        — apunta a dist/scripts/skills/ (id)
+//   4) ${origin}/src/skills/... — GitHub NO sirve src
+//   5) ${origin}/dist/cdn/skills/... — SÍ funciona
+// Para que SOLO las que funcionan existan (reduce 404s en stagehand),
+// copiamos src/skills/is-webcomponents a:
+//   - dist/scripts/skills/  (satisface #3)
+//   - dist/skills/          (satisface #2: ../skills desde dist/scripts)
+// Y dejamos src/skills (#1) y dist/cdn/skills (#5) que ya existen.
+//   El #4 (origen/src/) NO se copia porque GH Pages no sirve src/.
+try {
+  await mkdir(join('dist', 'skills'), { recursive: true });
+  await mkdir(join('dist', 'scripts', 'skills'), { recursive: true });
+  const srcSkillsDir = join('src', 'skills');
+  const skillsDirs = readdirSync(srcSkillsDir, { withFileTypes: true }).filter(e => e.isDirectory());
+  for (const skillDir of skillsDirs) {
+    const skillName = skillDir.name;
+    // dist/skills/<name>/...
+    await cp(join(srcSkillsDir, skillName), join('dist', 'skills', skillName), { recursive: true, force: true });
+    // dist/scripts/skills/<name>/...
+    await cp(join(srcSkillsDir, skillName), join('dist', 'scripts', 'skills', skillName), { recursive: true, force: true });
+    ok += 2;
+  }
+  console.log(`  ✓ skills siblings copiados a dist/skills/ y dist/scripts/skills/`);
+} catch (err) {
+  console.warn(`  ⚠ no se pudieron copiar skills siblings: ${err}`);
+}
+
+// Gallery scripts: ../scripts/*.js → ../dist/scripts/*.min.js (placeholder — loop abajo).
+let ok_unused_placeholder = 0;
+
+// ── Stub CSS files alongside bundles: cada `.min.js` adopta CSS via
+// `siblingCssHref(importMetaUrl)` que resuelve `<bundle>.min.css`. Como
+// los gallery scripts no tienen CSS propio (manipulan DOM y solo heredan
+// el CSS global de la página), creamos stubs vacíos para que el browser
+// reciba 200 en vez de 404 cuando los busque. Sin CSS propio — evita
+// 404 silencioso que stagehand captura.
+for (const name of scripts) {
+  const stub = join('dist/scripts', `${name}.min.css`);
+  try { await writeFile(stub, '/* stub: no CSS propio, globales ya inyectados */\n'); } catch { /* ignore */ }
+}
 for (const name of scripts) {
   try {
     await build({
