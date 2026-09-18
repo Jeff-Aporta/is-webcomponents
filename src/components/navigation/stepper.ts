@@ -79,11 +79,11 @@ import { ElementBase } from '../../core/element-base.js';
       this.#sync();
     }
 
-    get active() {
+    get active(): number {
       const v = parseInt(this.getAttribute('active') || '0', 10);
       return Number.isFinite(v) ? v : 0;
     }
-    set active(v) {
+    set active(v: number | null | undefined) {
       if (v == null) this.removeAttribute('active');
       else this.setAttribute('active', String(v));
     }
@@ -101,7 +101,7 @@ import { ElementBase } from '../../core/element-base.js';
       const a = this.active;
       if (a > 0) this.#goTo(a - 1);
     }
-    goTo(idx) { this.#goTo(idx); }
+    goTo(idx: number) { this.#goTo(idx); }
 
     #steps() {
       return [...this.querySelectorAll<HTMLElement>(':scope > is-stepper-step')];
@@ -112,6 +112,7 @@ import { ElementBase } from '../../core/element-base.js';
       const orientation = this.getAttribute('orientation') || 'horizontal';
       const variant = this.getAttribute('color') || 'default';
       const base = this.shadowRoot!.querySelector<HTMLElement>('.stepper');
+      if (!base) return;
       base.dataset.orientation = orientation;
       base.dataset.color = variant;
       const active = this.active;
@@ -125,7 +126,7 @@ import { ElementBase } from '../../core/element-base.js';
       });
     }
 
-    #goTo(idx) {
+    #goTo(idx: number) {
       const steps = this.#steps();
       if (idx < 0 || idx >= steps.length) return;
       const from = this.active;
@@ -177,24 +178,26 @@ import { ElementBase } from '../../core/element-base.js';
       const label = this.getAttribute('label');
       if (label) {
         const labelEl = this.shadowRoot!.querySelector<HTMLElement>('.label');
-        if (!labelEl.querySelector<HTMLSlotElement>('slot[name="label"]')) return;
+        if (!labelEl || !labelEl.querySelector<HTMLSlotElement>('slot[name="label"]')) return;
         // Si no hay slotted content, mostrar el attribute.
         const slot = labelEl.querySelector<HTMLSlotElement>('slot[name="label"]');
         if (slot && !slot.assignedNodes().length) {
-          labelEl.querySelector<HTMLSlotElement>('slot[name="label"]').replaceWith(document.createTextNode(label));
+          labelEl.querySelector<HTMLSlotElement>('slot[name="label"]')!.replaceWith(document.createTextNode(label));
         }
       }
       const desc = this.getAttribute('description');
       if (desc) {
         const descEl = this.shadowRoot!.querySelector<HTMLElement>('.description');
+        if (!descEl) return;
         const slot = descEl.querySelector<HTMLSlotElement>('slot[name="description"]');
         if (slot && !slot.assignedNodes().length) {
-          descEl.querySelector<HTMLSlotElement>('slot[name="description"]').replaceWith(document.createTextNode(desc));
+          descEl.querySelector<HTMLSlotElement>('slot[name="description"]')!.replaceWith(document.createTextNode(desc));
         }
       }
       const icon = this.getAttribute('icon');
       if (icon) {
         const dot = this.shadowRoot!.querySelector<HTMLElement>('.dot');
+        if (!dot) return;
         const slot = dot.querySelector<HTMLSlotElement>('slot[name="icon"]');
         if (slot && !slot.assignedNodes().length) {
           const ic = document.createElement('is-icon');
