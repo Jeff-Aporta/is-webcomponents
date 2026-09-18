@@ -1,0 +1,1 @@
+async function o(t){t.main;let e=document.getElementById("lb"),n=document.getElementById("openViewer");e&&n&&n.addEventListener("click",()=>{e.payload={preset:"tk1437191"},e.open=!0})}function i(){}export{o as mount,i as unmount};

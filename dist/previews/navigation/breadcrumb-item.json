@@ -1,0 +1,48 @@
+{
+  "$schema": "is-preview/v1",
+  "tag": "is-breadcrumb-item",
+  "category": "navigation",
+  "title": "<is-breadcrumb-item>",
+  "titleHtml": true,
+  "description": "Documentación y demos de is-breadcrumb-item de InSoft.",
+  "storageKey": "docs-is-breadcrumb-item",
+  "sections": [
+    {
+      "id": "intro",
+      "title": "<is-breadcrumb-item>",
+      "lede": "Cada eslabón de un <code class=\"code\">&lt;is-breadcrumb&gt;</code>. Puede ser enlace (<code class=\"code\">href</code>) o texto plano cuando es la página actual.",
+      "blocks": [
+        {
+          "kind": "demo",
+          "html": "<is-breadcrumb>\r\n            <is-breadcrumb-item href=\"#\"><is-icon slot=\"start\" icon=\"mdi:home\"></is-icon>Inicio</is-breadcrumb-item>\r\n            <is-breadcrumb-item href=\"#\">Contabilidad</is-breadcrumb-item>\r\n            <is-breadcrumb-item href=\"#\">Comprobantes</is-breadcrumb-item>\r\n            <is-breadcrumb-item>Detalle</is-breadcrumb-item>\r\n          </is-breadcrumb>",
+          "controls": [
+              {
+                "control": "text",
+                "prop": "attr:href",
+                "label": "href"
+              }
+          ],
+          "equivNote": "Con href pinta enlace; vacío = current; sin href = span.",
+          "equivHtml": "<!-- ver diagrama de ramas -->",
+          "equivFlow": "<is-flowchart open-on-click animation=\"flow\">\n  <script type=\"application/json\">\n  {\n    \"flowchart\": {\n      \"title\": \"is-breadcrumb-item: host\",\n      \"direction\": \"TB\",\n      \"nodes\": [\n        {\n          \"id\": \"q\",\n          \"label\": \"tiene href?\",\n          \"shape\": \"diamond\"\n        },\n        {\n          \"id\": \"a\",\n          \"label\": \"elemento a (enlace)\",\n          \"shape\": \"stadium\"\n        },\n        {\n          \"id\": \"b\",\n          \"label\": \"href vacío?\",\n          \"shape\": \"diamond\"\n        },\n        {\n          \"id\": \"c\",\n          \"label\": \"página actual (span)\",\n          \"shape\": \"round\"\n        },\n        {\n          \"id\": \"d\",\n          \"label\": \"span SPA\",\n          \"shape\": \"stadium\"\n        }\n      ],\n      \"edges\": [\n        {\n          \"from\": \"q\",\n          \"to\": \"b\",\n          \"label\": \"si\"\n        },\n        {\n          \"from\": \"q\",\n          \"to\": \"d\",\n          \"label\": \"no\"\n        },\n        {\n          \"from\": \"b\",\n          \"to\": \"c\",\n          \"label\": \"\\\"\\\"\"\n        },\n        {\n          \"from\": \"b\",\n          \"to\": \"a\",\n          \"label\": \"url\"\n        }\n      ]\n    }\n  }\n  </script>\n</is-flowchart>"
+        },
+        {
+          "kind": "code",
+          "code": "<is-breadcrumb>\n  <is-breadcrumb-item href=\"#\"><is-icon slot=\"start\" icon=\"mdi:home\"></is-icon>Inicio</is-breadcrumb-item>\n  <is-breadcrumb-item href=\"#\">Contabilidad</is-breadcrumb-item>\n  <is-breadcrumb-item href=\"#\">Comprobantes</is-breadcrumb-item>\n  <is-breadcrumb-item>Detalle</is-breadcrumb-item>\n</is-breadcrumb>",
+          "lang": "html"
+        }
+      ]
+    },
+    {
+      "id": "reference",
+      "title": "Referencia",
+      "lede": "&lt;is-breadcrumb-item&gt; — un paso individual dentro de un &lt;is-breadcrumb&gt;. Si tiene `href` (incluido `href=\"\"`), el item se renderiza como &lt;a href&gt;. Con `href=\"\"` se marca como current page (aria-current=\"page\", CSS [current]). Si no tiene href, se renderiza como &lt;span&gt; (SPAs: el desarrollador maneja eventos). Atributos href    string  — opcional: el item se vuelve enlace. \"\" = current page. target  string  — opcional. rel     string  — opcional. icon    string  — opcional: Iconify id para icono al inicio si no se usa slot start. Slots (default)  texto del item. start      icono propio al inicio (gana sobre icon). end        icono propio al final. separator  override del separador (chevron-right por default). CSS Parts: ::part(label) ::part(separator) ::part(start) ::part(end)",
+      "blocks": [
+        {
+          "kind": "html",
+          "html": "<p class=\"lede\">\r\n          API declarada en el módulo fuente\r\n          <code class=\"code\">components/navigation/breadcrumb-item.js</code>.\r\n        </p>"
+        }
+      ]
+    }
+  ]
+}

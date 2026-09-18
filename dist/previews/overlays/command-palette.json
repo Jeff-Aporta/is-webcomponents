@@ -1,0 +1,38 @@
+{
+  "$schema": "is-preview/v1",
+  "tag": "is-command-palette",
+  "category": "overlays",
+  "title": "<is-command-palette>",
+  "titleHtml": true,
+  "styles": ".hero-cmd {\r\n      position: relative;\r\n      min-height: 22rem;\r\n      border: 1px dashed var(--is-border);\r\n      border-radius: var(--is-radius);\r\n      display: grid; place-items: center;\r\n      text-align: center;\r\n      padding: 1rem;\r\n    }\r\n    .hero-cmd h3 { margin: 0; font-size: 1.4rem; }\r\n    .hero-cmd kbd {\r\n      font-family: ui-monospace, SFMono-Regular, Menlo, Consolas, monospace;\r\n      font-size: .85rem;\r\n      padding: .15rem .5rem;\r\n      border-radius: 6px;\r\n      border: 1px solid var(--is-border);\r\n      background: var(--is-bg-elev);\r\n    }\r\n    .trigger-btn {\r\n      margin-top: .85rem;\r\n      font: inherit;\r\n      padding: .55rem 1rem;\r\n      border-radius: 999px;\r\n      border: 1px solid var(--is-border);\r\n      background: var(--is-bg-elev);\r\n      color: inherit;\r\n      cursor: pointer;\r\n    }\r\n    .trigger-btn:hover { border-color: var(--is-accent); color: var(--is-accent); }",
+  "storageKey": "docs-is-command-palette",
+  "hasBehavior": true,
+  "sections": [
+    {
+      "id": "intro",
+      "title": "<is-command-palette>",
+      "lede": "Paleta modal al estilo <kbd>⌘K</kbd> / <kbd>Ctrl</kbd>+<kbd>K</kbd>. Búsqueda difusa sobre una lista de comandos configurada vía JSON.",
+      "blocks": []
+    },
+    {
+      "id": "demo",
+      "title": "Pruébalo",
+      "blocks": [
+        {
+          "kind": "demo",
+          "html": "<div class=\"hero-cmd\">\n            <div>\n              <h3>Busca un comando</h3>\n              <p style=\"color:var(--is-text-soft)\">Pulsa <kbd>⌘K</kbd> / <kbd>Ctrl+K</kbd>, o:</p>\n              <button class=\"trigger-btn\" id=\"openBtn\">Abrir paleta</button>\n            </div>\n          </div>\n          <is-command-palette id=\"cmd\" placeholder=\"Buscar comando…\">\n            <script type=\"application/json\">\n              [\n                { \"id\": \"new\",          \"title\": \"Nuevo documento\", \"group\": \"Archivo\",    \"icon\": \"mdi:file-plus-outline\",    \"hint\": \"Crear archivo en blanco\", \"keywords\": [\"crear\", \"blank\"], \"keys\": [\"Ctrl\", \"N\"] },\n                { \"id\": \"open\",         \"title\": \"Abrir…\",          \"group\": \"Archivo\",    \"icon\": \"mdi:folder-open-outline\", \"hint\": \"Abrir archivo existente\", \"keys\": [\"Ctrl\", \"O\"] },\n                { \"id\": \"save\",         \"title\": \"Guardar\",         \"group\": \"Archivo\",    \"icon\": \"mdi:content-save-outline\", \"hint\": \"Guardar el archivo actual\", \"keys\": [\"Ctrl\", \"S\"] },\n                { \"id\": \"export-pdf\",   \"title\": \"Exportar PDF\",    \"group\": \"Archivo\",    \"icon\": \"mdi:file-pdf-box\",        \"hint\": \"PDF listo para enviar\" },\n                { \"id\": \"duplicate\",    \"title\": \"Duplicar\",        \"group\": \"Edición\",    \"icon\": \"mdi:content-duplicate\",   \"hint\": \"Clonar y abrir nueva pestaña\", \"keys\": [\"Ctrl\", \"D\"] },\n                { \"id\": \"rename\",       \"title\": \"Renombrar\",       \"group\": \"Edición\",    \"icon\": \"mdi:rename-box\",         \"hint\": \"Cambiar el nombre del archivo\", \"keys\": [\"F2\"] },\n                { \"id\": \"find\",         \"title\": \"Buscar en archivo\", \"group\": \"Edición\",  \"icon\": \"mdi:magnify\",            \"hint\": \"Abre el editor de búsqueda\", \"keys\": [\"Ctrl\", \"F\"] },\n                { \"id\": \"palette\",      \"title\": \"Cambiar paleta\",  \"group\": \"Apariencia\", \"icon\": \"mdi:palette-swatch-outline\", \"hint\": \"Cambiar tema de marca\" },\n                { \"id\": \"toggle-theme\", \"title\": \"Tema claro/oscuro\", \"group\": \"Apariencia\", \"icon\": \"mdi:theme-light-dark\", \"hint\": \"Alternar modo claro y oscuro\", \"keys\": [\"Ctrl\", \"Shift\", \"L\"] },\n                { \"id\": \"logout\",       \"title\": \"Cerrar sesión\",   \"group\": \"Sesión\",     \"icon\": \"mdi:logout\",             \"hint\": \"Salir de la cuenta actual\" }\n              ]\n            </script>\n          </is-command-palette>"
+        }
+      ]
+    },
+    {
+      "id": "api",
+      "title": "API",
+      "blocks": [
+        {
+          "kind": "code",
+          "code": "const cm = document.querySelector('is-command-palette');\ncm.open();\ncm.close();\ncm.toggle();\n\ncm.addEventListener('is-select', e => console.log(e.detail.command.title));\ncm.addEventListener('is-open',   () => ...);\ncm.addEventListener('is-close',  () => ...);\n\n// Atributos\n// hotkey        \"mod+k\" (default), \"ctrl+k\", \"cmd+k\", \"mod+/\", \"\" (desactivado)\n// placeholder   texto del input\n// max-results   tope de resultados (default 12)\n// empty-text    texto cuando no hay resultados\n\n// Comandos vía <script type=\"application/json\">:\n// { id, title, group, icon, hint, keys?/shortcut?, keywords?, disabled? }\n// keys: string | string[]  → chips <kbd> a la derecha de cada fila\n// Footer: atajos ↑↓/↵/Esc van embebidos; slot=\"footer\" suma contenido extra"
+        }
+      ]
+    }
+  ]
+}

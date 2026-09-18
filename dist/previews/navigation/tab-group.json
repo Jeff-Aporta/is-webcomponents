@@ -1,0 +1,232 @@
+{
+  "$schema": "is-preview/v1",
+  "tag": "is-tab-group",
+  "category": "navigation",
+  "title": "<is-tab-group>",
+  "titleHtml": true,
+  "description": "Documentación y demos de is-tab-group / is-tab / is-tab-panel de InSoft.",
+  "storageKey": "docs-is-tab-group",
+  "sections": [
+    {
+      "id": "intro",
+      "title": "<is-tab-group>",
+      "lede": "Tabs accesibles con navegación por teclado (←/→), activación automática o\r\n          manual, indicator animado, placements (top/bottom/start/end), scroll horizontal\r\n          automático y soporte para tabs cerrables.",
+      "blocks": [
+        {
+          "kind": "demo",
+          "html": "<is-tab-group active=\"general\">\r\n            <is-tab slot=\"nav\" panel=\"general\">General</is-tab>\r\n            <is-tab slot=\"nav\" panel=\"custom\">Custom</is-tab>\r\n            <is-tab slot=\"nav\" panel=\"advanced\">Avanzado</is-tab>\r\n            <is-tab slot=\"nav\" panel=\"disabled\" disabled>Deshabilitado</is-tab>\r\n\r\n            <is-tab-panel name=\"general\">Panel General: configuración por defecto del sistema.</is-tab-panel>\r\n            <is-tab-panel name=\"custom\">Panel Custom: ajustes personalizables.</is-tab-panel>\r\n            <is-tab-panel name=\"advanced\">Panel Avanzado: opciones experimentales.</is-tab-panel>\r\n            <is-tab-panel name=\"disabled\">No accesible.</is-tab-panel>\r\n          </is-tab-group>",
+          "controls": [
+            {
+              "control": "select",
+              "prop": "attr:active",
+              "label": "active",
+              "options": [
+                "general",
+                "a1",
+                "b1",
+                "c1",
+                "d1",
+                "home",
+                "x1",
+                "t1"
+              ]
+            },
+            {
+              "control": "select",
+              "prop": "attr:placement",
+              "label": "placement",
+              "options": [
+                "bottom",
+                "start",
+                "end"
+              ]
+            }
+          ],
+          "equivNote": "activation define teclado; closable añade cierre de pestaña.",
+          "equivHtml": "<!-- ver diagrama de ramas -->",
+          "equivFlow": "<is-flowchart open-on-click animation=\"flow\">\n  <script type=\"application/json\">\n  {\n    \"flowchart\": {\n      \"title\": \"is-tab-group: activation\",\n      \"direction\": \"TB\",\n      \"nodes\": [\n        {\n          \"id\": \"q\",\n          \"label\": \"activation=?\",\n          \"shape\": \"diamond\"\n        },\n        {\n          \"id\": \"a\",\n          \"label\": \"auto → flechas cambian\",\n          \"shape\": \"stadium\"\n        },\n        {\n          \"id\": \"b\",\n          \"label\": \"manual → Space/Enter\",\n          \"shape\": \"stadium\"\n        },\n        {\n          \"id\": \"c\",\n          \"label\": \"closable?\",\n          \"shape\": \"diamond\"\n        },\n        {\n          \"id\": \"d\",\n          \"label\": \"emite close\",\n          \"shape\": \"round\"\n        }\n      ],\n      \"edges\": [\n        {\n          \"from\": \"q\",\n          \"to\": \"a\",\n          \"label\": \"auto\"\n        },\n        {\n          \"from\": \"q\",\n          \"to\": \"b\",\n          \"label\": \"manual\"\n        },\n        {\n          \"from\": \"a\",\n          \"to\": \"c\"\n        },\n        {\n          \"from\": \"b\",\n          \"to\": \"c\"\n        },\n        {\n          \"from\": \"c\",\n          \"to\": \"d\",\n          \"label\": \"si\"\n        }\n      ]\n    }\n  }\n  </script>\n</is-flowchart>"
+        },
+        {
+          "kind": "code",
+          "code": "<is-tab-group active=\"general\">\n  <is-tab slot=\"nav\" panel=\"general\">General</is-tab>\n  <is-tab-panel name=\"general\">Contenido del panel.</is-tab-panel>\n  …\n</is-tab-group>"
+        }
+      ]
+    },
+    {
+      "id": "placements",
+      "title": "Placements",
+      "lede": "Posiciona los tabs en cualquiera de los cuatro lados.",
+      "blocks": [
+        {
+          "kind": "html",
+          "html": "<div class=\"demo-stack\">\r\n          <div>\r\n            <h4>top (default)</h4>\r\n            <is-tab-group active=\"a1\" style=\"min-height:140px\">\r\n              <is-tab slot=\"nav\" panel=\"a1\">Uno</is-tab>\r\n              <is-tab slot=\"nav\" panel=\"a2\">Dos</is-tab>\r\n              <is-tab slot=\"nav\" panel=\"a3\">Tres</is-tab>\r\n              <is-tab-panel name=\"a1\">Uno.</is-tab-panel>\r\n              <is-tab-panel name=\"a2\">Dos.</is-tab-panel>\r\n              <is-tab-panel name=\"a3\">Tres.</is-tab-panel>\r\n            </is-tab-group>\r\n          </div>\r\n\r\n          <div>\r\n            <h4>bottom</h4>\r\n            <is-tab-group active=\"b1\" placement=\"bottom\" style=\"min-height:140px\">\r\n              <is-tab slot=\"nav\" panel=\"b1\">Uno</is-tab>\r\n              <is-tab slot=\"nav\" panel=\"b2\">Dos</is-tab>\r\n              <is-tab slot=\"nav\" panel=\"b3\">Tres</is-tab>\r\n              <is-tab-panel name=\"b1\">Uno.</is-tab-panel>\r\n              <is-tab-panel name=\"b2\">Dos.</is-tab-panel>\r\n              <is-tab-panel name=\"b3\">Tres.</is-tab-panel>\r\n            </is-tab-group>\r\n          </div>\r\n\r\n          <div>\r\n            <h4>start</h4>\r\n            <is-tab-group active=\"c1\" placement=\"start\" style=\"min-height:140px\">\r\n              <is-tab slot=\"nav\" panel=\"c1\">Uno</is-tab>\r\n              <is-tab slot=\"nav\" panel=\"c2\">Dos</is-tab>\r\n              <is-tab slot=\"nav\" panel=\"c3\">Tres</is-tab>\r\n              <is-tab-panel name=\"c1\">Uno.</is-tab-panel>\r\n              <is-tab-panel name=\"c2\">Dos.</is-tab-panel>\r\n              <is-tab-panel name=\"c3\">Tres.</is-tab-panel>\r\n            </is-tab-group>\r\n          </div>\r\n\r\n          <div>\r\n            <h4>end</h4>\r\n            <is-tab-group active=\"d1\" placement=\"end\" style=\"min-height:140px\">\r\n              <is-tab slot=\"nav\" panel=\"d1\">Uno</is-tab>\r\n              <is-tab slot=\"nav\" panel=\"d2\">Dos</is-tab>\r\n              <is-tab slot=\"nav\" panel=\"d3\">Tres</is-tab>\r\n              <is-tab-panel name=\"d1\">Uno.</is-tab-panel>\r\n              <is-tab-panel name=\"d2\">Dos.</is-tab-panel>\r\n              <is-tab-panel name=\"d3\">Tres.</is-tab-panel>\r\n            </is-tab-group>\r\n          </div>\r\n        </div>"
+        }
+      ]
+    },
+    {
+      "id": "icons",
+      "title": "Tabs con icono",
+      "lede": "Usa los slots <code class=\"code\">start</code> y <code class=\"code\">end</code> para iconos.",
+      "blocks": [
+        {
+          "kind": "demo",
+          "html": "<is-tab-group active=\"home\">\r\n            <is-tab slot=\"nav\" panel=\"home\">\r\n              <is-icon slot=\"start\" icon=\"mdi:home\" aria-hidden=\"true\"></is-icon>\r\n              Inicio\r\n            </is-tab>\r\n            <is-tab slot=\"nav\" panel=\"users\">\r\n              <is-icon slot=\"start\" icon=\"mdi:account-group\" aria-hidden=\"true\"></is-icon>\r\n              Usuarios\r\n            </is-tab>\r\n            <is-tab slot=\"nav\" panel=\"settings\">\r\n              <is-icon slot=\"start\" icon=\"mdi:cog\" aria-hidden=\"true\"></is-icon>\r\n              Configuración\r\n            </is-tab>\r\n            <is-tab-panel name=\"home\">Bienvenido.</is-tab-panel>\r\n            <is-tab-panel name=\"users\">Listado de usuarios.</is-tab-panel>\r\n            <is-tab-panel name=\"settings\">Preferencias de la app.</is-tab-panel>\r\n          </is-tab-group>"
+        }
+      ]
+    },
+    {
+      "id": "activation",
+      "title": "Activación manual vs automática",
+      "lede": "Con <code class=\"code\">activation=\"manual\"</code>, las flechas cambian foco sin mostrar\r\n          el panel hasta pulsar Space/Enter.",
+      "blocks": [
+        {
+          "kind": "demo",
+          "html": "<is-tab-group active=\"x1\" activation=\"manual\">\r\n            <is-tab slot=\"nav\" panel=\"x1\">Uno</is-tab>\r\n            <is-tab slot=\"nav\" panel=\"x2\">Dos</is-tab>\r\n            <is-tab slot=\"nav\" panel=\"x3\">Tres</is-tab>\r\n            <is-tab-panel name=\"x1\">Panel Uno.</is-tab-panel>\r\n            <is-tab-panel name=\"x2\">Panel Dos.</is-tab-panel>\r\n            <is-tab-panel name=\"x3\">Panel Tres.</is-tab-panel>\r\n          </is-tab-group>"
+        },
+        {
+          "kind": "code",
+          "code": "<is-tab-group activation=\"manual\">…</is-tab-group>"
+        }
+      ]
+    },
+    {
+      "id": "closable",
+      "title": "Tabs cerrables",
+      "lede": "Con el atributo <code class=\"code\">closable</code>, el tab muestra una X. El evento <code class=\"code\">is-tab-close</code> burbujea.",
+      "blocks": [
+        {
+          "kind": "demo",
+          "html": "<is-tab-group id=\"closable\" active=\"t1\">\r\n            <is-tab slot=\"nav\" panel=\"t1\">General</is-tab>\r\n            <is-tab slot=\"nav\" panel=\"t2\" closable>Cerrable</is-tab>\r\n            <is-tab slot=\"nav\" panel=\"t3\">Avanzado</is-tab>\r\n            <is-tab-panel name=\"t1\">General.</is-tab-panel>\r\n            <is-tab-panel name=\"t2\">Cerrable.</is-tab-panel>\r\n            <is-tab-panel name=\"t3\">Avanzado.</is-tab-panel>\r\n          </is-tab-group>\r\n          <is-button id=\"restoreTab\" disabled>Restaurar tab</is-button>"
+        },
+        {
+          "kind": "code",
+          "code": "group.addEventListener('is-tab-close', (e) => {\n  const t = e.detail.tab;\n  t.remove();\n  const panel = group.querySelector(\\`is-tab-panel[name=\"\\${e.detail.name}\"]\\`);\n  if (panel) panel.remove();\n});"
+        }
+      ]
+    },
+    {
+      "id": "reference",
+      "title": "Referencia",
+      "blocks": [
+        {
+          "kind": "html",
+          "html": "<h3><code class=\"code\">&lt;is-tab-group&gt;</code></h3>"
+        },
+        {
+          "kind": "table",
+          "columns": [
+            "Atributo",
+            "Tipo",
+            "Default",
+            "Descripción"
+          ],
+          "rows": [
+            [
+              "<code>active</code>",
+              "string",
+              "\"\"",
+              "Nombre del panel activo."
+            ],
+            [
+              "<code>placement</code>",
+              "top | bottom | start | end",
+              "top",
+              "Posición de los tabs."
+            ],
+            [
+              "<code>activation</code>",
+              "auto | manual",
+              "auto",
+              "Activación por teclado."
+            ],
+            [
+              "<code>without-scroll-controls</code>",
+              "boolean",
+              "false",
+              "Sin botones de scroll horizontal."
+            ]
+          ]
+        },
+        {
+          "kind": "html",
+          "html": "<h3><code class=\"code\">&lt;is-tab&gt;</code></h3>"
+        },
+        {
+          "kind": "table",
+          "columns": [
+            "Atributo",
+            "Tipo",
+            "Default",
+            "Descripción"
+          ],
+          "rows": [
+            [
+              "<code>panel</code>",
+              "string",
+              "—",
+              "Nombre del panel al que apunta."
+            ],
+            [
+              "<code>disabled</code>",
+              "boolean",
+              "false",
+              "Bloquea la activación."
+            ],
+            [
+              "<code>closable</code>",
+              "boolean",
+              "false",
+              "Muestra el botón de cerrar."
+            ]
+          ]
+        },
+        {
+          "kind": "html",
+          "html": "<h3><code class=\"code\">&lt;is-tab-panel&gt;</code></h3>"
+        },
+        {
+          "kind": "table",
+          "columns": [
+            "Atributo",
+            "Tipo",
+            "Default",
+            "Descripción"
+          ],
+          "rows": [
+            [
+              "<code>name</code>",
+              "string",
+              "—",
+              "Identificador único del panel."
+            ]
+          ]
+        },
+        {
+          "kind": "html",
+          "html": "<h3>Eventos</h3>"
+        },
+        {
+          "kind": "table",
+          "columns": [
+            "Evento",
+            "Descripción"
+          ],
+          "rows": [
+            [
+              "<code>is-tab-show</code>",
+              "Un panel pasa a activo. <code>detail: { name, panel, tab }</code>."
+            ],
+            [
+              "<code>is-tab-hide</code>",
+              "Un panel pasa a oculto."
+            ],
+            [
+              "<code>is-tab-close</code>",
+              "Click en X. <code>detail: { tab, name }</code>."
+            ]
+          ]
+        }
+      ]
+    }
+  ]
+}

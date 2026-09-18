@@ -1,0 +1,276 @@
+{
+  "$schema": "is-preview/v1",
+  "tag": "is-callout",
+  "category": "layout",
+  "title": "<is-callout>",
+  "titleHtml": true,
+  "description": "Documentación y demos del componente is-callout de InSoft.",
+  "storageKey": "docs-is-callout",
+  "sections": [
+    {
+      "id": "intro",
+      "title": "<is-callout>",
+      "lede": "Mensaje en línea con borde y fondo suaves. Pensado para tips, info, warnings y\r\n          errores que el usuario no debe pasar por alto. Cinco variantes y cinco apariencias,\r\n          con icono automático según la variante (sobrescribible vía <code class=\"code\">icon</code>\r\n          o slot <code class=\"code\">icon</code>).",
+      "blocks": [
+        {
+          "kind": "demo",
+          "html": "<span class=\"demo-label\">caso mínimo</span>\r\n          <is-callout>Esto es un callout estándar. Puedes personalizar su contenido e icono.</is-callout>",
+          "controls": [
+              {
+                "control": "select",
+                "prop": "attr:color",
+                "label": "color",
+                "options": [
+                  "brand",
+                  "neutral",
+                  "success",
+                  "warning",
+                  "danger"
+                ]
+              },
+              {
+                "control": "select",
+                "prop": "attr:variant",
+                "label": "variant",
+                "options": [
+                  "accent",
+                  "filled-outlined",
+                  "filled",
+                  "outlined",
+                  "plain"
+                ]
+              }
+          ],
+          "equivNote": "color sugiere icono; slot o icon vacío lo anulan.",
+          "equivHtml": "<!-- ver diagrama de ramas -->",
+          "equivFlow": "<is-flowchart open-on-click animation=\"flow\">\n  <script type=\"application/json\">\n  {\n    \"flowchart\": {\n      \"title\": \"is-callout: icono\",\n      \"direction\": \"TB\",\n      \"nodes\": [\n        {\n          \"id\": \"q\",\n          \"label\": \"slot icon?\",\n          \"shape\": \"diamond\"\n        },\n        {\n          \"id\": \"a\",\n          \"label\": \"override slot\",\n          \"shape\": \"stadium\"\n        },\n        {\n          \"id\": \"b\",\n          \"label\": \"icon=\\\"\\\"?\",\n          \"shape\": \"diamond\"\n        },\n        {\n          \"id\": \"c\",\n          \"label\": \"sin icono\",\n          \"shape\": \"stadium\"\n        },\n        {\n          \"id\": \"d\",\n          \"label\": \"default por color\",\n          \"shape\": \"stadium\"\n        }\n      ],\n      \"edges\": [\n        {\n          \"from\": \"q\",\n          \"to\": \"a\",\n          \"label\": \"si\"\n        },\n        {\n          \"from\": \"q\",\n          \"to\": \"b\",\n          \"label\": \"no\"\n        },\n        {\n          \"from\": \"b\",\n          \"to\": \"c\",\n          \"label\": \"si\"\n        },\n        {\n          \"from\": \"b\",\n          \"to\": \"d\",\n          \"label\": \"no\"\n        }\n      ]\n    }\n  }\n  </script>\n</is-flowchart>"
+        },
+        {
+          "kind": "code",
+          "code": "<is-callout>Esto es un callout estándar.</is-callout>"
+        }
+      ]
+    },
+    {
+      "id": "variants",
+      "title": "Variantes",
+      "lede": "El atributo <code class=\"code\">color</code> elige el tono del callout. Cada color trae un icono por defecto.",
+      "blocks": [
+        {
+          "kind": "demo",
+          "html": "<div class=\"demo-stack\">\n  <is-callout color=\"brand\">Hay un nuevo tema disponible. Prueba desde Configuración cuando quieras.</is-callout>\n  <is-callout color=\"neutral\">Los horarios se muestran en tu zona horaria local.</is-callout>\n  <is-callout color=\"success\">Tus cambios se han guardado. Puedes cerrar esta pestaña con seguridad.</is-callout>\n  <is-callout color=\"warning\">Tu sesión está a punto de expirar. Guarda tu trabajo.</is-callout>\n  <is-callout color=\"danger\">Esta acción no se puede deshacer. Eliminará el proyecto para todos.</is-callout>\n</div>"
+        },
+        {
+          "kind": "code",
+          "code": "<is-callout color=\"success\">…</is-callout>\n<is-callout color=\"danger\">…</is-callout>"
+        }
+      ]
+    },
+    {
+      "id": "appearances",
+      "title": "Apariencias",
+      "lede": "El atributo <code class=\"code\">variant</code> controla el tratamiento visual. Default: <code class=\"code\">filled-outlined</code>.",
+      "blocks": [
+        {
+          "kind": "demo",
+          "html": "<div class=\"demo-stack\">\n  <is-callout color=\"brand\" variant=\"accent\">Esta variante <strong>accent</strong> capta la atención de inmediato.</is-callout>\n  <is-callout color=\"brand\" variant=\"filled-outlined\">Fondo + borde, el más habitual.</is-callout>\n  <is-callout color=\"brand\" variant=\"filled\">Solo fondo, sin borde.</is-callout>\n  <is-callout color=\"brand\" variant=\"outlined\">Solo borde, fondo transparente.</is-callout>\n  <is-callout color=\"brand\" variant=\"plain\">Sin fondo ni borde, solo texto e icono.</is-callout>\n</div>"
+        },
+        {
+          "kind": "code",
+          "code": "<is-callout variant=\"accent\">…</is-callout>"
+        }
+      ]
+    },
+    {
+      "id": "sizes",
+      "title": "Tamaños",
+      "lede": "El tamaño hereda del contexto. Ajusta <code class=\"code\">font-size</code> en el host para escala.",
+      "blocks": [
+        {
+          "kind": "demo",
+          "html": "<div class=\"demo-stack\">\n  <is-callout style=\"font-size:0.8em\">0.8em · callout mínimo.</is-callout>\n  <is-callout style=\"font-size:0.9em\">0.9em · un poco más de énfasis.</is-callout>\n  <is-callout>1em · hereda el tamaño del contexto.</is-callout>\n  <is-callout style=\"font-size:1.15em\">1.15em · más énfasis.</is-callout>\n  <is-callout style=\"font-size:1.3em\">1.3em · énfasis máximo.</is-callout>\n</div>"
+        },
+        {
+          "kind": "code",
+          "code": "<is-callout style=\"font-size:1.15em\">…</is-callout>"
+        }
+      ]
+    },
+    {
+      "id": "icon",
+      "title": "Icono personalizado",
+      "lede": "Sobreescribe el icono automático con el slot <code class=\"code\">icon</code>.",
+      "blocks": [
+        {
+          "kind": "demo",
+          "html": "<div class=\"demo-stack\">\n  <is-callout color=\"warning\">\n    <is-icon slot=\"icon\" icon=\"mdi:timer-sand\" aria-hidden=\"true\"></is-icon>\n    Tiempo limitado: queda 1 día para enviar la solicitud.\n  </is-callout>\n  <is-callout color=\"success\">\n    <is-icon slot=\"icon\" icon=\"mdi:rocket-launch\" aria-hidden=\"true\"></is-icon>\n    Lanzamiento completado. Métricas disponibles.\n  </is-callout>\n  <is-callout color=\"danger\">\n    <is-icon slot=\"icon\" icon=\"mdi:shield-alert\" aria-hidden=\"true\"></is-icon>\n    Bloqueo de seguridad: demasiados intentos.\n  </is-callout>\n  <is-callout color=\"brand\">\n    <is-icon slot=\"icon\" icon=\"mdi:bullhorn\" aria-hidden=\"true\"></is-icon>\n    Anuncio global: nueva versión disponible.\n  </is-callout>\n</div>"
+        },
+        {
+          "kind": "code",
+          "code": "<is-callout color=\"warning\">\n  <is-icon slot=\"icon\" icon=\"mdi:timer-sand\"></is-icon>\n  Tiempo limitado…\n</is-callout>"
+        }
+      ]
+    },
+    {
+      "id": "no-icon",
+      "title": "Sin icono",
+      "lede": "Pasa <code class=\"code\">icon=\"\"</code> para ocultar el icono por defecto y dejar\r\n          solo el mensaje.",
+      "blocks": [
+        {
+          "kind": "demo",
+          "html": "<is-callout color=\"neutral\" icon=\"\">Todas las horas se muestran en tu zona horaria local.</is-callout>"
+        },
+        {
+          "kind": "code",
+          "code": "<is-callout icon=\"\">Texto plano.</is-callout>"
+        }
+      ]
+    },
+    {
+      "id": "actions",
+      "title": "Con acciones",
+      "lede": "Puedes anidar botones u otros controles dentro del callout.",
+      "blocks": [
+        {
+          "kind": "demo",
+          "html": "<div class=\"demo-stack\">\n  <is-callout color=\"brand\">\n    <strong>Una nueva versión está disponible</strong>\n    <p>Incluye el módulo de reportes y soporte para multi-empresa.</p>\n    <is-button variant=\"outlined\" color=\"brand\">Más tarde</is-button>\n    <is-button variant=\"filled\" color=\"brand\">Actualizar ahora</is-button>\n  </is-callout>\n</div>"
+        }
+      ]
+    },
+    {
+      "id": "parts",
+      "title": "CSS Parts",
+      "lede": "Solo dos partes expuestas: <code class=\"code\">icon</code> y <code class=\"code\">message</code>.\r\n          El contenedor raíz es la <code class=\"code\">::part(base)</code>.",
+      "blocks": [
+        {
+          "kind": "demo",
+          "html": "<is-callout color=\"success\" style=\"--callout-bg: #d3f9d8; --callout-border: #2f9e44;\">\r\n            CSS parts en uso: el fondo y el borde se redefinen vía custom properties.\r\n          </is-callout>"
+        }
+      ]
+    },
+    {
+      "id": "reference",
+      "title": "Referencia completa",
+      "blocks": [
+        {
+          "kind": "html",
+          "html": "<h3>Atributos / propiedades</h3>"
+        },
+        {
+          "kind": "table",
+          "columns": [
+            "Atributo",
+            "Tipo",
+            "Default",
+            "Descripción"
+          ],
+          "rows": [
+            [
+              "<code>variant</code>",
+              "brand · neutral · success · warning · danger",
+              "neutral",
+              "Tono. Reflected."
+            ],
+            [
+              "<code>appearance</code>",
+              "accent · filled · outlined · filled-outlined · plain",
+              "filled-outlined",
+              "Tratamiento visual. Reflected."
+            ],
+            [
+              "<code>icon</code>",
+              "string",
+              "(según variant)",
+              "Iconify id para el icono por defecto. Vacío = sin icono."
+            ]
+          ]
+        },
+        {
+          "kind": "html",
+          "html": "<h3>Slots</h3>"
+        },
+        {
+          "kind": "table",
+          "columns": [
+            "Slot",
+            "Descripción"
+          ],
+          "rows": [
+            [
+              "<code>(default)</code>",
+              "Mensaje principal."
+            ],
+            [
+              "<code>icon</code>",
+              "Icono propio (is-icon o img)."
+            ]
+          ]
+        },
+        {
+          "kind": "html",
+          "html": "<h3>CSS Parts</h3>"
+        },
+        {
+          "kind": "table",
+          "columns": [
+            "Part",
+            "Descripción"
+          ],
+          "rows": [
+            [
+              "<code>::part(base)</code>",
+              "Contenedor raíz."
+            ],
+            [
+              "<code>::part(icon)</code>",
+              "Wrapper del icono."
+            ],
+            [
+              "<code>::part(message)</code>",
+              "Wrapper del mensaje."
+            ]
+          ]
+        },
+        {
+          "kind": "html",
+          "html": "<h3>CSS custom properties</h3>"
+        },
+        {
+          "kind": "table",
+          "columns": [
+            "Variable",
+            "Default",
+            "Descripción"
+          ],
+          "rows": [
+            [
+              "<code>--spacing</code>",
+              "<code>var(--is-space-l, 1rem)</code>",
+              "Padding/gap interno."
+            ],
+            [
+              "<code>--callout-bg</code>",
+              "var de variant",
+              "Fondo computado."
+            ],
+            [
+              "<code>--callout-border</code>",
+              "var de variant",
+              "Color del borde."
+            ],
+            [
+              "<code>--callout-text</code>",
+              "var de variant",
+              "Color del texto."
+            ],
+            [
+              "<code>--callout-accent</code>",
+              "var de variant",
+              "Color del icono."
+            ]
+          ]
+        }
+      ]
+    }
+  ]
+}

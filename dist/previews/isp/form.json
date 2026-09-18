@@ -1,0 +1,90 @@
+{
+  "$schema": "is-preview/v1",
+  "tag": "is-form",
+  "category": "isp",
+  "title": "<is-form>",
+  "titleHtml": true,
+  "description": "Ficha ISP — cuerpo en JSON compacto (json2html / html2json).",
+  "storageKey": "docs-is-form",
+  "hasBehavior": true,
+  "styles": ".f-json-row {\n      display: flex;\n      flex-wrap: wrap;\n      gap: 0.5rem;\n      margin: 0.5rem 0 0.75rem;\n    }\n    .f-json-out {\n      margin: 0.5rem 0 0;\n      padding: 0.65rem 0.75rem;\n      border-radius: var(--is-radius, 0.5em);\n      border: 1px solid var(--is-border);\n      background: var(--is-bg-elev);\n      font-family: ui-monospace, SFMono-Regular, Menlo, Consolas, monospace;\n      font-size: 0.75rem;\n      line-height: 1.4;\n      white-space: pre-wrap;\n      word-break: break-word;\n      max-height: 16rem;\n      overflow: auto;\n    }\n    .f-frame {\n      height: 24rem;\n      border: 1px solid var(--is-border);\n      border-radius: 0.5rem;\n    }",
+  "sections": [
+    {
+      "id": "intro",
+      "title": "<is-form>",
+      "lede": "Ficha con Aceptar / Cancelar. El cuerpo se define en JSON compacto\n          (<code class=\"code\">[tag, attrs?, …hijos]</code>) vía\n          <code class=\"code\">json2html</code> / <code class=\"code\">html2json</code>.",
+      "blocks": [
+        {
+          "kind": "callout",
+          "html": "Lenguaje de definición = JSON. En BD se guarda el HTML como JSON;\n          en runtime: <code class=\"code\">form.fromJSON({ body, values })</code>."
+        },
+        {
+          "kind": "demo",
+          "html": "<div class=\"f-frame\">\n            <is-form id=\"fDemo\"></is-form>\n          </div>\n          <div class=\"f-json-row\">\n            <is-button id=\"fBtnToJson\" variant=\"outlined\" color=\"neutral\">html2json / toJSON</is-button>\n            <is-button id=\"fBtnSet\" variant=\"outlined\" color=\"neutral\">setValues(demo)</is-button>\n          </div>\n          <pre class=\"f-json-out\" id=\"fJsonOut\"></pre>\n          <p id=\"fLog\">Última acción: <code class=\"code\">—</code></p>",
+          "controls": [
+            {
+              "control": "text",
+              "prop": "attr:submit-label",
+              "label": "submit-label"
+            }
+          ]
+        },
+        {
+          "kind": "code",
+          "code": "form.fromJSON({\n  mode: 'edit',\n  body: [\n    ['h3', { slot: 'header' }, 'Curso'],\n    ['div', { slot: 'content', style: 'display:flex;flex-direction:column;gap:0.75rem;padding:0.5rem' },\n      ['is-input', { name: 'icurso', label: 'Código', required: true, 'full-width': true }],\n      ['is-input', { name: 'ncurso', label: 'Nombre', 'full-width': true }],\n      ['is-switch', { name: 'activo' }, 'Activo'],\n    ],\n  ],\n  values: { icurso: 'C001', ncurso: 'Nómina', activo: true },\n});\n\nform.html2json(); // solo el light DOM\nform.toJSON();    // chrome + body + values",
+          "lang": "js"
+        }
+      ]
+    },
+    {
+      "id": "roundtrip",
+      "title": "Round-trip JSON",
+      "lede": "Pulsa <code class=\"code\">html2json</code>, edita mentalmente el JSON de BD, y vuelve a montar.",
+      "blocks": [
+        {
+          "kind": "demo",
+          "html": "<div class=\"f-frame\" style=\"height:20rem\">\n            <is-form id=\"fRound\" submit-label=\"Guardar\"></is-form>\n          </div>\n          <div class=\"f-json-row\">\n            <is-button id=\"fBtnRemount\" color=\"brand\">fromJSON(body)</is-button>\n          </div>\n          <pre class=\"f-json-out\" id=\"fBodyOut\"></pre>"
+        }
+      ]
+    },
+    {
+      "id": "reference",
+      "title": "Referencia",
+      "blocks": [
+        {
+          "kind": "table",
+          "columns": [
+            "API",
+            "Notas"
+          ],
+          "rows": [
+            [
+              "<code>json2html(body)</code>",
+              "monta light DOM desde JSON compacto"
+            ],
+            [
+              "<code>html2json()</code>",
+              "serializa light DOM"
+            ],
+            [
+              "<code>toJSON()</code>",
+              "<code>{ mode, body, values, … }</code>"
+            ],
+            [
+              "<code>fromJSON(json)</code>",
+              "chrome + body + values"
+            ],
+            [
+              "<code>getValues</code> / <code>setValues</code>",
+              "mapa de controles con <code>name</code>"
+            ],
+            [
+              "<code>IsForm.json2html</code> / <code>html2json</code>",
+              "estáticos (mismo codec global)"
+            ]
+          ]
+        }
+      ]
+    }
+  ]
+}

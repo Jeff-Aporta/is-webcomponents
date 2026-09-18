@@ -1,0 +1,73 @@
+{
+  "$schema": "is-preview/v1",
+  "tag": "is-rte",
+  "category": "forms",
+  "title": "<is-rte>",
+  "titleHtml": true,
+  "styles": ".rte-pair { display: grid; grid-template-columns: 1fr 1fr; gap: 1rem; }\r\n    @media (max-width: 800px) { .rte-pair { grid-template-columns: 1fr; } }\r\n    pre.output {\r\n      font-family: ui-monospace, monospace; font-size: .78rem;\r\n      background: var(--is-bg-elev); border: 1px solid var(--is-border);\r\n      border-radius: var(--is-radius); padding: .65rem .85rem;\r\n      max-height: 12rem; overflow: auto;\r\n      white-space: pre-wrap;\r\n    }",
+  "storageKey": "docs-is-rte",
+  "hasBehavior": true,
+  "sections": [
+    {
+      "id": "intro",
+      "title": "<is-rte>",
+      "lede": "Editor de texto enriquecido mínimo sobre <code>contentEditable</code>. Toolbar configurable; salida en HTML.",
+      "blocks": []
+    },
+    {
+      "id": "basico",
+      "title": "Básico",
+      "blocks": [
+        {
+          "kind": "demo",
+          "html": "<is-rte id=\"rte\" placeholder=\"Empezá a escribir…\"\r\n                  value=\"<h2>Hola</h2><p><b>Bienvenido</b> al editor de ejemplo. Prueba <i>negrita</i>, <u>subrayado</u>, listas y enlaces.</p>\">\r\n          </is-rte>\r\n          <pre class=\"code output\" id=\"outHTML\" data-lang=\"html\"></pre>",
+          "controls": [
+            {
+              "control": "select",
+              "prop": "attr:placeholder",
+              "label": "placeholder",
+              "options": [
+                "Empezá a escribir…",
+                "Solo lo esencial…"
+              ]
+            },
+            {
+              "control": "boolean",
+              "prop": "attr:value",
+              "label": "value"
+            },
+            {
+              "control": "boolean",
+              "prop": "attr:h2",
+              "label": "h2"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "toolbar",
+      "title": "Toolbar a medida",
+      "blocks": [
+        {
+          "kind": "html",
+          "html": "<p>Pasá una lista separada por comas con <code class=\"code\">|</code> como separador.</p>"
+        },
+        {
+          "kind": "demo",
+          "html": "<is-rte placeholder=\"Solo lo esencial…\"\r\n                  toolbar=\"bold, italic, link,|, undo, redo\">\r\n          </is-rte>"
+        }
+      ]
+    },
+    {
+      "id": "api",
+      "title": "API",
+      "blocks": [
+        {
+          "kind": "code",
+          "code": "const r = document.querySelector('is-rte');\nr.value;        // HTML actual\nr.text;         // texto plano\nr.focus();\nr.exec('bold'); // bold, italic, underline, strike\nr.format('h2'); // h1..h6, p, blockquote, pre\nr.link();       // prompt → crea <a>\nr.clear();      // sin formato, sin listas\nr.undo(); r.redo();\n\nr.addEventListener('is-input',  e => /* cada keystroke */);\nr.addEventListener('is-change', e => console.log(e.detail.value));\nr.addEventListener('is-blur',   () => /* perdió foco */);\n\n// Atributos\n// value, placeholder, autofocus, readonly\n// toolbar   lista separada por comas"
+        }
+      ]
+    }
+  ]
+}

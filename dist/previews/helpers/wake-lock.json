@@ -1,0 +1,31 @@
+{
+  "$schema": "is-preview/v1",
+  "tag": "is-wake-lock",
+  "category": "helpers",
+  "title": "<is-wake-lock>",
+  "titleHtml": true,
+  "description": "Mantiene la pantalla encendida con Screen Wake Lock mientras `active` está puesto.",
+  "storageKey": "docs-is-wake-lock",
+  "sections": [
+    {
+      "id": "intro",
+      "title": "<is-wake-lock>",
+      "lede": "Mantiene la pantalla encendida con Screen Wake Lock mientras `active` está puesto.",
+      "blocks": [
+        {
+          "kind": "demo",
+          "html": "<is-wake-lock><p>Pon el atributo <code>active</code> para pedir el lock.</p></is-wake-lock>"
+        },
+        {
+          "kind": "code",
+          "lang": "html",
+          "code": "<is-wake-lock><p>Pon el atributo <code>active</code> para pedir el lock.</p></is-wake-lock>"
+        },
+        {
+          "kind": "callout",
+          "html": "<strong>HTTPS o localhost.</strong> Estas APIs piden contexto seguro y, a menudo, un gesto del usuario."
+        }
+      ]
+    }
+  ]
+}

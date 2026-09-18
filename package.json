@@ -24,7 +24,12 @@
     "test:all": "npm run typecheck && npm run test && npm run audit",
     "test:all:e2e": "npm run typecheck && npm run test && npm run audit && npm run test:e2e",
     "test:all:demos": "npm run typecheck && npm run test && npm run audit && npm run test:demos",
-    "test:all:full": "npm run typecheck && npm run test && npm run audit && npm run test:e2e && npm run test:demos"
+    "test:all:full": "npm run typecheck && npm run test && npm run audit && npm run test:e2e && npm run test:demos",
+    "bundle": "node scripts/bundle-scripts.mjs",
+    "tour:local": "node scripts/tour-deploy.mjs --local",
+    "tour:remote": "node scripts/tour-deploy.mjs --remote",
+    "prepush": "node scripts/tour-deploy.mjs --local",
+    "postpush": "node scripts/tour-deploy.mjs --remote"
   },
   "devDependencies": {
     "@browserbasehq/stagehand": "^4.0.2",

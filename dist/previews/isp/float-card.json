@@ -1,0 +1,29 @@
+{
+  "$schema": "is-preview/v1",
+  "tag": "is-float-card",
+  "category": "isp",
+  "title": "<is-float-card>",
+  "titleHtml": true,
+  "description": "Panel flotante anclado (port FloatingComponent). Hover muestra tools ya montadas.",
+  "storageKey": "docs-is-float-card",
+  "hasBehavior": true,
+  "styles": ".fc-demo {\n      position: relative;\n      padding: 1.25rem 1rem;\n      border: 1px dashed var(--is-border);\n      border-radius: var(--is-radius, 0.5em);\n      background: var(--is-bg-elev);\n      min-height: 4.5rem;\n    }",
+  "sections": [
+    {
+      "id": "intro",
+      "title": "<is-float-card>",
+      "lede": "Port de <code class=\"code\">FloatingComponent</code>. El slot <code class=\"code\">float</code> no se desmonta: <code class=\"code\">open</code> solo cambia opacidad. Pasá el mouse por la fila.",
+      "blocks": [
+        {
+          "kind": "demo",
+          "html": "<div class=\"fc-demo\">\n            <is-float-card id=\"fcDemo\" horizontal=\"right\" vertical=\"center\">\n              <span>Lección — hover aquí</span>\n              <is-flex-options id=\"fcOpts\" slot=\"float\" compact></is-flex-options>\n            </is-float-card>\n          </div>"
+        },
+        {
+          "kind": "code",
+          "code": "<is-float-card open horizontal=\"right\" vertical=\"center\">\n  <span>Fila</span>\n  <is-button slot=\"float\" variant=\"plain\">Acción</is-button>\n</is-float-card>",
+          "lang": "html"
+        }
+      ]
+    }
+  ]
+}

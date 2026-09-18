@@ -4,542 +4,542 @@
  */
 export default {
   "is-code": {
-    "json": "../components/code/code.json",
-    "behavior": "../components/code/code.preview.js",
+    "json": "../../dist/previews/code/code.json",
+    "behavior": "../../dist/previews/code/code.preview.min.js",
     "category": "code"
   },
   "is-button-group": {
-    "json": "../components/actions/button-group.json",
-    "behavior": "../components/actions/button-group.preview.js",
+    "json": "../../dist/previews/actions/button-group.json",
+    "behavior": "../../dist/previews/actions/button-group.preview.min.js",
     "category": "actions"
   },
   "is-button": {
-    "json": "../components/actions/button.json",
-    "behavior": "../components/actions/button.preview.js",
+    "json": "../../dist/previews/actions/button.json",
+    "behavior": "../../dist/previews/actions/button.preview.min.js",
     "category": "actions"
   },
   "is-check-icon-button": {
-    "json": "../components/actions/check-icon-button.json",
+    "json": "../../dist/previews/actions/check-icon-button.json",
     "category": "actions"
   },
   "is-context-menu": {
-    "json": "../components/actions/context-menu.json",
-    "behavior": "../components/actions/context-menu.preview.js",
+    "json": "../../dist/previews/actions/context-menu.json",
+    "behavior": "../../dist/previews/actions/context-menu.preview.min.js",
     "category": "actions"
   },
   "is-copy-button": {
-    "json": "../components/actions/copy-button.json",
+    "json": "../../dist/previews/actions/copy-button.json",
     "category": "actions"
   },
   "is-share-button": {
-    "json": "../components/actions/share-button.json",
+    "json": "../../dist/previews/actions/share-button.json",
     "category": "actions"
   },
   "is-dropdown-item": {
-    "json": "../components/actions/dropdown-item.json",
+    "json": "../../dist/previews/actions/dropdown-item.json",
     "category": "actions"
   },
   "is-dropdown": {
-    "json": "../components/actions/dropdown.json",
-    "behavior": "../components/actions/dropdown.preview.js",
+    "json": "../../dist/previews/actions/dropdown.json",
+    "behavior": "../../dist/previews/actions/dropdown.preview.min.js",
     "category": "actions"
   },
   "is-fab": {
-    "json": "../components/actions/fab.json",
+    "json": "../../dist/previews/actions/fab.json",
     "category": "actions"
   },
   "is-speed-dial-action": {
-    "json": "../components/actions/speed-dial-action.json",
+    "json": "../../dist/previews/actions/speed-dial-action.json",
     "category": "actions"
   },
   "is-speed-dial": {
-    "json": "../components/actions/speed-dial.json",
-    "behavior": "../components/actions/speed-dial.preview.js",
+    "json": "../../dist/previews/actions/speed-dial.json",
+    "behavior": "../../dist/previews/actions/speed-dial.preview.min.js",
     "category": "actions"
   },
   "is-ag-grid": {
-    "json": "../components/data/ag-grid.json",
-    "behavior": "../components/data/ag-grid.preview.js",
+    "json": "../../dist/previews/data/ag-grid.json",
+    "behavior": "../../dist/previews/data/ag-grid.preview.min.js",
     "category": "data"
   },
   "is-data-grid": {
-    "json": "../components/data/data-grid.json",
-    "behavior": "../components/data/data-grid.preview.js",
+    "json": "../../dist/previews/data/data-grid.json",
+    "behavior": "../../dist/previews/data/data-grid.preview.min.js",
     "category": "data"
   },
   "is-kanban-card": {
-    "json": "../components/data/kanban-card.json",
+    "json": "../../dist/previews/data/kanban-card.json",
     "category": "data"
   },
   "is-kanban-column": {
-    "json": "../components/data/kanban-column.json",
+    "json": "../../dist/previews/data/kanban-column.json",
     "category": "data"
   },
   "is-kanban": {
-    "json": "../components/data/kanban.json",
+    "json": "../../dist/previews/data/kanban.json",
     "category": "data"
   },
   "is-pivot-table": {
-    "json": "../components/data/pivot-table.json",
-    "behavior": "../components/data/pivot-table.preview.js",
+    "json": "../../dist/previews/data/pivot-table.json",
+    "behavior": "../../dist/previews/data/pivot-table.preview.min.js",
     "category": "data"
   },
   "is-spreadsheet": {
-    "json": "../components/data/spreadsheet.json",
+    "json": "../../dist/previews/data/spreadsheet.json",
     "category": "data"
   },
   "is-stat": {
-    "json": "../components/data/stat.json",
+    "json": "../../dist/previews/data/stat.json",
     "category": "data"
   },
   "is-transfer-item": {
-    "json": "../components/data/transfer-item.json",
+    "json": "../../dist/previews/data/transfer-item.json",
     "category": "data"
   },
   "is-transfer": {
-    "json": "../components/data/transfer.json",
+    "json": "../../dist/previews/data/transfer.json",
     "category": "data"
   },
   "is-bar-chart": {
-    "json": "../components/charts/bar-chart.json",
+    "json": "../../dist/previews/charts/bar-chart.json",
     "category": "data-viz"
   },
   "is-bubble-chart": {
-    "json": "../components/charts/bubble-chart.json",
+    "json": "../../dist/previews/charts/bubble-chart.json",
     "category": "data-viz"
   },
   "is-chart": {
-    "json": "../components/charts/chart.json",
-    "behavior": "../components/charts/chart.preview.js",
+    "json": "../../dist/previews/charts/chart.json",
+    "behavior": "../../dist/previews/charts/chart.preview.min.js",
     "category": "data-viz"
   },
   "is-doughnut-chart": {
-    "json": "../components/charts/doughnut-chart.json",
+    "json": "../../dist/previews/charts/doughnut-chart.json",
     "category": "data-viz"
   },
   "is-funnel-chart": {
-    "json": "../components/charts/funnel-chart.json",
+    "json": "../../dist/previews/charts/funnel-chart.json",
     "category": "data-viz"
   },
   "is-gauge": {
-    "json": "../components/data/gauge.json",
-    "behavior": "../components/data/gauge.preview.js",
+    "json": "../../dist/previews/data/gauge.json",
+    "behavior": "../../dist/previews/data/gauge.preview.min.js",
     "category": "data-viz"
   },
   "is-heatmap": {
-    "json": "../components/data-viz/heatmap.json",
-    "behavior": "../components/data-viz/heatmap.preview.js",
+    "json": "../../dist/previews/data-viz/heatmap.json",
+    "behavior": "../../dist/previews/data-viz/heatmap.preview.min.js",
     "category": "data-viz"
   },
   "is-line-chart": {
-    "json": "../components/charts/line-chart.json",
+    "json": "../../dist/previews/charts/line-chart.json",
     "category": "data-viz"
   },
   "is-map-marker": {
-    "json": "../components/data-viz/map-marker.json",
+    "json": "../../dist/previews/data-viz/map-marker.json",
     "category": "data-viz"
   },
   "is-maps": {
-    "json": "../components/data-viz/maps.json",
+    "json": "../../dist/previews/data-viz/maps.json",
     "category": "data-viz"
   },
   "is-pie-chart": {
-    "json": "../components/charts/pie-chart.json",
+    "json": "../../dist/previews/charts/pie-chart.json",
     "category": "data-viz"
   },
   "is-polar-area-chart": {
-    "json": "../components/charts/polar-area-chart.json",
+    "json": "../../dist/previews/charts/polar-area-chart.json",
     "category": "data-viz"
   },
   "is-radar-chart": {
-    "json": "../components/charts/radar-chart.json",
-    "behavior": "../components/charts/radar-chart.preview.js",
+    "json": "../../dist/previews/charts/radar-chart.json",
+    "behavior": "../../dist/previews/charts/radar-chart.preview.min.js",
     "category": "data-viz"
   },
   "is-scatter-chart": {
-    "json": "../components/charts/scatter-chart.json",
-    "behavior": "../components/charts/scatter-chart.preview.js",
+    "json": "../../dist/previews/charts/scatter-chart.json",
+    "behavior": "../../dist/previews/charts/scatter-chart.preview.min.js",
     "category": "data-viz"
   },
   "is-sparkline": {
-    "json": "../components/charts/sparkline.json",
+    "json": "../../dist/previews/charts/sparkline.json",
     "category": "data-viz"
   },
   "is-treemap": {
-    "json": "../components/charts/treemap.json",
+    "json": "../../dist/previews/charts/treemap.json",
     "category": "data-viz"
   },
   "is-waterfall-chart": {
-    "json": "../components/charts/waterfall-chart.json",
+    "json": "../../dist/previews/charts/waterfall-chart.json",
     "category": "data-viz"
   },
   "is-block-diagram": {
-    "json": "../components/diagrams/block-diagram.json",
+    "json": "../../dist/previews/diagrams/block-diagram.json",
     "category": "diagrams"
   },
   "is-class-diagram": {
-    "json": "../components/diagrams/class-diagram.json",
+    "json": "../../dist/previews/diagrams/class-diagram.json",
     "category": "diagrams"
   },
   "is-diagram-lightbox": {
-    "json": "../components/diagrams/diagram-lightbox.json",
-    "behavior": "../components/diagrams/diagram-lightbox.preview.js",
+    "json": "../../dist/previews/diagrams/diagram-lightbox.json",
+    "behavior": "../../dist/previews/diagrams/diagram-lightbox.preview.min.js",
     "category": "diagrams"
   },
   "is-component-diagram": {
-    "json": "../components/diagrams/component-diagram.json",
+    "json": "../../dist/previews/diagrams/component-diagram.json",
     "category": "diagrams"
   },
   "is-er-diagram": {
-    "json": "../components/diagrams/er-diagram.json",
+    "json": "../../dist/previews/diagrams/er-diagram.json",
     "category": "diagrams"
   },
   "is-flowchart": {
-    "json": "../components/diagrams/flowchart.json",
+    "json": "../../dist/previews/diagrams/flowchart.json",
     "category": "diagrams"
   },
   "is-gantt": {
-    "json": "../components/diagrams/gantt.json",
+    "json": "../../dist/previews/diagrams/gantt.json",
     "category": "diagrams"
   },
   "is-mindmap": {
-    "json": "../components/diagrams/mindmap.json",
+    "json": "../../dist/previews/diagrams/mindmap.json",
     "category": "diagrams"
   },
   "is-org-chart": {
-    "json": "../components/diagrams/org-chart.json",
-    "behavior": "../components/diagrams/org-chart.preview.js",
+    "json": "../../dist/previews/diagrams/org-chart.json",
+    "behavior": "../../dist/previews/diagrams/org-chart.preview.min.js",
     "category": "diagrams"
   },
   "is-journey-map": {
-    "json": "../components/diagrams/journey-map.json",
+    "json": "../../dist/previews/diagrams/journey-map.json",
     "category": "diagrams"
   },
   "is-quadrant-chart": {
-    "json": "../components/diagrams/quadrant-chart.json",
+    "json": "../../dist/previews/diagrams/quadrant-chart.json",
     "category": "diagrams"
   },
   "is-sankey-diagram": {
-    "json": "../components/diagrams/sankey-diagram.json",
+    "json": "../../dist/previews/diagrams/sankey-diagram.json",
     "category": "diagrams"
   },
   "is-swimlane-diagram": {
-    "json": "../components/diagrams/swimlane-diagram.json",
+    "json": "../../dist/previews/diagrams/swimlane-diagram.json",
     "category": "diagrams"
   },
   "is-use-case-diagram": {
-    "json": "../components/diagrams/use-case-diagram.json",
+    "json": "../../dist/previews/diagrams/use-case-diagram.json",
     "category": "diagrams"
   },
   "is-venn-diagram": {
-    "json": "../components/diagrams/venn-diagram.json",
+    "json": "../../dist/previews/diagrams/venn-diagram.json",
     "category": "diagrams"
   },
   "is-sequence-diagram": {
-    "json": "../components/diagrams/sequence-diagram.json",
-    "behavior": "../components/diagrams/sequence-diagram.preview.js",
+    "json": "../../dist/previews/diagrams/sequence-diagram.json",
+    "behavior": "../../dist/previews/diagrams/sequence-diagram.preview.min.js",
     "category": "diagrams"
   },
   "is-state-diagram": {
-    "json": "../components/diagrams/state-diagram.json",
+    "json": "../../dist/previews/diagrams/state-diagram.json",
     "category": "diagrams"
   },
   "is-timeline": {
-    "json": "../components/diagrams/timeline.json",
+    "json": "../../dist/previews/diagrams/timeline.json",
     "category": "diagrams"
   },
   "is-badge": {
-    "json": "../components/feedback/badge.json",
+    "json": "../../dist/previews/feedback/badge.json",
     "category": "feedback"
   },
   "is-cdn-snippet": {
-    "json": "../components/feedback/cdn-snippet.json",
+    "json": "../../dist/previews/feedback/cdn-snippet.json",
     "category": "feedback"
   },
   "is-confirm-modal": {
-    "json": "../components/feedback/confirm-modal.json",
+    "json": "../../dist/previews/feedback/confirm-modal.json",
     "category": "feedback"
   },
   "is-palette-selector": {
-    "json": "../components/feedback/palette-selector.json",
+    "json": "../../dist/previews/feedback/palette-selector.json",
     "category": "feedback"
   },
   "is-popconfirm": {
-    "json": "../components/feedback/popconfirm.json",
+    "json": "../../dist/previews/feedback/popconfirm.json",
     "category": "feedback"
   },
   "is-progress-bar": {
-    "json": "../components/feedback/progress-bar.json",
-    "behavior": "../components/feedback/progress-bar.preview.js",
+    "json": "../../dist/previews/feedback/progress-bar.json",
+    "behavior": "../../dist/previews/feedback/progress-bar.preview.min.js",
     "category": "feedback"
   },
   "is-progress-ring": {
-    "json": "../components/feedback/progress-ring.json",
+    "json": "../../dist/previews/feedback/progress-ring.json",
     "category": "feedback"
   },
   "is-skeleton": {
-    "json": "../components/feedback/skeleton.json",
+    "json": "../../dist/previews/feedback/skeleton.json",
     "category": "feedback"
   },
   "is-spinner": {
-    "json": "../components/feedback/spinner.json",
+    "json": "../../dist/previews/feedback/spinner.json",
     "category": "feedback"
   },
   "is-tag": {
-    "json": "../components/feedback/tag.json",
+    "json": "../../dist/previews/feedback/tag.json",
     "category": "feedback"
   },
   "is-theme-toggle": {
-    "json": "../components/feedback/theme-toggle.json",
+    "json": "../../dist/previews/feedback/theme-toggle.json",
     "category": "feedback"
   },
   "is-prefs-clear": {
-    "json": "../components/feedback/prefs-clear.json",
+    "json": "../../dist/previews/feedback/prefs-clear.json",
     "category": "feedback"
   },
   "is-toast-item": {
-    "json": "../components/feedback/toast-item.json",
+    "json": "../../dist/previews/feedback/toast-item.json",
     "category": "feedback"
   },
   "is-toast": {
-    "json": "../components/feedback/toast.json",
-    "behavior": "../components/feedback/toast.preview.js",
+    "json": "../../dist/previews/feedback/toast.json",
+    "behavior": "../../dist/previews/feedback/toast.preview.min.js",
     "category": "feedback"
   },
   "is-tooltip": {
-    "json": "../components/feedback/tooltip.json",
-    "behavior": "../components/feedback/tooltip.preview.js",
+    "json": "../../dist/previews/feedback/tooltip.json",
+    "behavior": "../../dist/previews/feedback/tooltip.preview.min.js",
     "category": "feedback"
   },
   "is-checkbox": {
-    "json": "../components/forms/checkbox.json",
-    "behavior": "../components/forms/checkbox.preview.js",
+    "json": "../../dist/previews/forms/checkbox.json",
+    "behavior": "../../dist/previews/forms/checkbox.preview.min.js",
     "category": "forms"
   },
   "is-color-picker": {
-    "json": "../components/forms/color-picker.json",
-    "behavior": "../components/forms/color-picker.preview.js",
+    "json": "../../dist/previews/forms/color-picker.json",
+    "behavior": "../../dist/previews/forms/color-picker.preview.min.js",
     "category": "forms"
   },
   "is-combobox": {
-    "json": "../components/forms/combobox.json",
+    "json": "../../dist/previews/forms/combobox.json",
     "category": "forms"
   },
   "is-date-field": {
-    "json": "../components/forms/date-field.json",
+    "json": "../../dist/previews/forms/date-field.json",
     "category": "forms"
   },
   "is-date-input": {
-    "json": "../components/forms/date-input.json",
+    "json": "../../dist/previews/forms/date-input.json",
     "category": "forms"
   },
   "is-date-picker": {
-    "json": "../components/forms/date-picker.json",
+    "json": "../../dist/previews/forms/date-picker.json",
     "category": "forms"
   },
   "is-date-range-input": {
-    "json": "../components/forms/date-range-input.json",
+    "json": "../../dist/previews/forms/date-range-input.json",
     "category": "forms"
   },
   "is-date-range-picker": {
-    "json": "../components/forms/date-range-picker.json",
+    "json": "../../dist/previews/forms/date-range-picker.json",
     "category": "forms"
   },
   "is-date-time-field": {
-    "json": "../components/forms/date-time-field.json",
+    "json": "../../dist/previews/forms/date-time-field.json",
     "category": "forms"
   },
   "is-date-time-input": {
-    "json": "../components/forms/date-time-input.json",
+    "json": "../../dist/previews/forms/date-time-input.json",
     "category": "forms"
   },
   "is-digital-clock": {
-    "json": "../components/forms/digital-clock.json",
+    "json": "../../dist/previews/forms/digital-clock.json",
     "category": "forms"
   },
   "is-doc-editor": {
-    "json": "../components/forms/doc-editor.json",
-    "behavior": "../components/forms/doc-editor.preview.js",
+    "json": "../../dist/previews/forms/doc-editor.json",
+    "behavior": "../../dist/previews/forms/doc-editor.preview.min.js",
     "category": "forms"
   },
   "is-dropzone": {
-    "json": "../components/forms/dropzone.json",
-    "behavior": "../components/forms/dropzone.preview.js",
+    "json": "../../dist/previews/forms/dropzone.json",
+    "behavior": "../../dist/previews/forms/dropzone.preview.min.js",
     "category": "forms"
   },
   "is-duration-picker": {
-    "json": "../components/forms/duration-picker.json",
-    "behavior": "../components/forms/duration-picker.preview.js",
+    "json": "../../dist/previews/forms/duration-picker.json",
+    "behavior": "../../dist/previews/forms/duration-picker.preview.min.js",
     "category": "forms"
   },
   "is-file-input": {
-    "json": "../components/forms/file-input.json",
-    "behavior": "../components/forms/file-input.preview.js",
+    "json": "../../dist/previews/forms/file-input.json",
+    "behavior": "../../dist/previews/forms/file-input.preview.min.js",
     "category": "forms"
   },
   "is-full-calendar": {
-    "json": "../components/forms/full-calendar.json",
-    "behavior": "../components/forms/full-calendar.preview.js",
+    "json": "../../dist/previews/forms/full-calendar.json",
+    "behavior": "../../dist/previews/forms/full-calendar.preview.min.js",
     "category": "forms"
   },
   "is-inline-edit": {
-    "json": "../components/forms/inline-edit.json",
+    "json": "../../dist/previews/forms/inline-edit.json",
     "category": "forms"
   },
   "is-input": {
-    "json": "../components/forms/input.json",
-    "behavior": "../components/forms/input.preview.js",
+    "json": "../../dist/previews/forms/input.json",
+    "behavior": "../../dist/previews/forms/input.preview.min.js",
     "category": "forms"
   },
   "is-masked-input": {
-    "json": "../components/forms/masked-input.json",
+    "json": "../../dist/previews/forms/masked-input.json",
     "category": "forms"
   },
   "is-mention": {
-    "json": "../components/forms/mention.json",
-    "behavior": "../components/forms/mention.preview.js",
+    "json": "../../dist/previews/forms/mention.json",
+    "behavior": "../../dist/previews/forms/mention.preview.min.js",
     "category": "forms"
   },
   "is-month-calendar": {
-    "json": "../components/forms/month-calendar.json",
+    "json": "../../dist/previews/forms/month-calendar.json",
     "category": "forms"
   },
   "is-option": {
-    "json": "../components/forms/option.json",
+    "json": "../../dist/previews/forms/option.json",
     "category": "forms"
   },
   "is-pin-input": {
-    "json": "../components/forms/pin-input.json",
+    "json": "../../dist/previews/forms/pin-input.json",
     "category": "forms"
   },
   "is-radio-group": {
-    "json": "../components/forms/radio-group.json",
+    "json": "../../dist/previews/forms/radio-group.json",
     "category": "forms"
   },
   "is-radio": {
-    "json": "../components/forms/radio.json",
+    "json": "../../dist/previews/forms/radio.json",
     "category": "forms"
   },
   "is-rating": {
-    "json": "../components/forms/rating.json",
-    "behavior": "../components/forms/rating.preview.js",
+    "json": "../../dist/previews/forms/rating.json",
+    "behavior": "../../dist/previews/forms/rating.preview.min.js",
     "category": "forms"
   },
   "is-rte": {
-    "json": "../components/forms/rte.json",
-    "behavior": "../components/forms/rte.preview.js",
+    "json": "../../dist/previews/forms/rte.json",
+    "behavior": "../../dist/previews/forms/rte.preview.min.js",
     "category": "forms"
   },
   "is-select": {
-    "json": "../components/forms/select.json",
-    "behavior": "../components/forms/select.preview.js",
+    "json": "../../dist/previews/forms/select.json",
+    "behavior": "../../dist/previews/forms/select.preview.min.js",
     "category": "forms"
   },
   "is-signature": {
-    "json": "../components/forms/signature.json",
-    "behavior": "../components/forms/signature.preview.js",
+    "json": "../../dist/previews/forms/signature.json",
+    "behavior": "../../dist/previews/forms/signature.preview.min.js",
     "category": "forms"
   },
   "is-slider": {
-    "json": "../components/forms/slider.json",
-    "behavior": "../components/forms/slider.preview.js",
+    "json": "../../dist/previews/forms/slider.json",
+    "behavior": "../../dist/previews/forms/slider.preview.min.js",
     "category": "forms"
   },
   "is-switch": {
-    "json": "../components/forms/switch.json",
-    "behavior": "../components/forms/switch.preview.js",
+    "json": "../../dist/previews/forms/switch.json",
+    "behavior": "../../dist/previews/forms/switch.preview.min.js",
     "category": "forms"
   },
   "is-textarea": {
-    "json": "../components/forms/textarea.json",
-    "behavior": "../components/forms/textarea.preview.js",
+    "json": "../../dist/previews/forms/textarea.json",
+    "behavior": "../../dist/previews/forms/textarea.preview.min.js",
     "category": "forms"
   },
   "is-time-clock": {
-    "json": "../components/forms/time-clock.json",
+    "json": "../../dist/previews/forms/time-clock.json",
     "category": "forms"
   },
   "is-time-field": {
-    "json": "../components/forms/time-field.json",
+    "json": "../../dist/previews/forms/time-field.json",
     "category": "forms"
   },
   "is-time-input": {
-    "json": "../components/forms/time-input.json",
+    "json": "../../dist/previews/forms/time-input.json",
     "category": "forms"
   },
   "is-year-calendar": {
-    "json": "../components/forms/year-calendar.json",
+    "json": "../../dist/previews/forms/year-calendar.json",
     "category": "forms"
   },
   "is-format-bytes": {
-    "json": "../components/helpers/format-bytes.json",
+    "json": "../../dist/previews/helpers/format-bytes.json",
     "category": "helpers"
   },
   "is-format-date": {
-    "json": "../components/helpers/format-date.json",
-    "behavior": "../components/helpers/format-date.preview.js",
+    "json": "../../dist/previews/helpers/format-date.json",
+    "behavior": "../../dist/previews/helpers/format-date.preview.min.js",
     "category": "helpers"
   },
   "is-format-number": {
-    "json": "../components/helpers/format-number.json",
+    "json": "../../dist/previews/helpers/format-number.json",
     "category": "helpers"
   },
   "is-format": {
-    "json": "../components/helpers/format.json",
+    "json": "../../dist/previews/helpers/format.json",
     "category": "helpers"
   },
   "is-intersection-observer": {
-    "json": "../components/helpers/intersection-observer.json",
+    "json": "../../dist/previews/helpers/intersection-observer.json",
     "category": "helpers"
   },
   "is-lightbox": {
-    "json": "../components/diagrams/lightbox.json",
-    "behavior": "../components/diagrams/lightbox.preview.js",
+    "json": "../../dist/previews/diagrams/lightbox.json",
+    "behavior": "../../dist/previews/diagrams/lightbox.preview.min.js",
     "category": "helpers"
   },
   "is-md-editor": {
-    "json": "../components/helpers/md-editor.json",
+    "json": "../../dist/previews/helpers/md-editor.json",
     "category": "helpers"
   },
   "is-md-render": {
-    "json": "../components/helpers/md-render.json",
+    "json": "../../dist/previews/helpers/md-render.json",
     "category": "helpers"
   },
   "is-mutation-observer": {
-    "json": "../components/helpers/mutation-observer.json",
-    "behavior": "../components/helpers/mutation-observer.preview.js",
+    "json": "../../dist/previews/helpers/mutation-observer.json",
+    "behavior": "../../dist/previews/helpers/mutation-observer.preview.min.js",
     "category": "helpers"
   },
   "is-observer": {
-    "json": "../components/helpers/observer.json",
-    "behavior": "../components/helpers/observer.preview.js",
+    "json": "../../dist/previews/helpers/observer.json",
+    "behavior": "../../dist/previews/helpers/observer.preview.min.js",
     "category": "helpers"
   },
   "is-wake-lock": {
-    "json": "../components/helpers/wake-lock.json",
+    "json": "../../dist/previews/helpers/wake-lock.json",
     "category": "helpers"
   },
   "is-offscreen-canvas": {
-    "json": "../components/helpers/offscreen-canvas.json",
+    "json": "../../dist/previews/helpers/offscreen-canvas.json",
     "category": "helpers"
   },
   "is-popover": {
-    "json": "../components/helpers/popover.json",
+    "json": "../../dist/previews/helpers/popover.json",
     "category": "helpers"
   },
   "is-relative-time": {
-    "json": "../components/helpers/relative-time.json",
-    "behavior": "../components/helpers/relative-time.preview.js",
+    "json": "../../dist/previews/helpers/relative-time.json",
+    "behavior": "../../dist/previews/helpers/relative-time.preview.min.js",
     "category": "helpers"
   },
   "is-resize-observer": {
-    "json": "../components/helpers/resize-observer.json",
-    "behavior": "../components/helpers/resize-observer.preview.js",
+    "json": "../../dist/previews/helpers/resize-observer.json",
+    "behavior": "../../dist/previews/helpers/resize-observer.preview.min.js",
     "category": "helpers"
   },
   "is-ui": {
-    "json": "../components/helpers/ui.json",
-    "behavior": "../components/helpers/ui.preview.js",
+    "json": "../../dist/previews/helpers/ui.json",
+    "behavior": "../../dist/previews/helpers/ui.preview.min.js",
     "category": "helpers"
   },
   "home": {
@@ -548,240 +548,240 @@ export default {
     "category": ""
   },
   "is-accordion-group": {
-    "json": "../components/isp/accordion-group.json",
+    "json": "../../dist/previews/isp/accordion-group.json",
     "category": "isp"
   },
   "is-block-layout": {
-    "json": "../components/isp/block-layout.json",
-    "behavior": "../components/isp/block-layout.preview.js",
+    "json": "../../dist/previews/isp/block-layout.json",
+    "behavior": "../../dist/previews/isp/block-layout.preview.min.js",
     "category": "isp"
   },
   "is-btn-ref": {
-    "json": "../components/isp/btn-ref.json",
-    "behavior": "../components/isp/btn-ref.preview.js",
+    "json": "../../dist/previews/isp/btn-ref.json",
+    "behavior": "../../dist/previews/isp/btn-ref.preview.min.js",
     "category": "isp"
   },
   "is-catalogo-gen": {
-    "json": "../components/isp/catalogo-gen.json",
-    "behavior": "../components/isp/catalogo-gen.preview.js",
+    "json": "../../dist/previews/isp/catalogo-gen.json",
+    "behavior": "../../dist/previews/isp/catalogo-gen.preview.min.js",
     "category": "isp"
   },
   "is-confirm-delete": {
-    "json": "../components/isp/confirm-delete.json",
+    "json": "../../dist/previews/isp/confirm-delete.json",
     "category": "isp"
   },
   "is-flex-layout": {
-    "json": "../components/isp/flex-layout.json",
-    "behavior": "../components/isp/flex-layout.preview.js",
+    "json": "../../dist/previews/isp/flex-layout.json",
+    "behavior": "../../dist/previews/isp/flex-layout.preview.min.js",
     "category": "isp"
   },
   "is-flex-options": {
-    "json": "../components/isp/flex-options.json",
-    "behavior": "../components/isp/flex-options.preview.js",
+    "json": "../../dist/previews/isp/flex-options.json",
+    "behavior": "../../dist/previews/isp/flex-options.preview.min.js",
     "category": "isp"
   },
   "is-float-card": {
-    "json": "../components/isp/float-card.json",
-    "behavior": "../components/isp/float-card.preview.js",
+    "json": "../../dist/previews/isp/float-card.json",
+    "behavior": "../../dist/previews/isp/float-card.preview.min.js",
     "category": "isp"
   },
   "is-form": {
-    "json": "../components/isp/form.json",
-    "behavior": "../components/isp/form.preview.js",
+    "json": "../../dist/previews/isp/form.json",
+    "behavior": "../../dist/previews/isp/form.preview.min.js",
     "category": "isp"
   },
   "is-grid-layout": {
-    "json": "../components/isp/grid-layout.json",
+    "json": "../../dist/previews/isp/grid-layout.json",
     "category": "isp"
   },
   "is-heading": {
-    "json": "../components/isp/heading.json",
-    "behavior": "../components/isp/heading.preview.js",
+    "json": "../../dist/previews/isp/heading.json",
+    "behavior": "../../dist/previews/isp/heading.preview.min.js",
     "category": "isp"
   },
   "is-loading-overlay": {
-    "json": "../components/isp/loading-overlay.json",
-    "behavior": "../components/isp/loading-overlay.preview.js",
+    "json": "../../dist/previews/isp/loading-overlay.json",
+    "behavior": "../../dist/previews/isp/loading-overlay.preview.min.js",
     "category": "isp"
   },
   "is-modal-verificacion": {
-    "json": "../components/isp/modal-verificacion.json",
-    "behavior": "../components/isp/modal-verificacion.preview.js",
+    "json": "../../dist/previews/isp/modal-verificacion.json",
+    "behavior": "../../dist/previews/isp/modal-verificacion.preview.min.js",
     "category": "isp"
   },
   "is-text": {
-    "json": "../components/isp/text.json",
-    "behavior": "../components/isp/text.preview.js",
+    "json": "../../dist/previews/isp/text.json",
+    "behavior": "../../dist/previews/isp/text.preview.min.js",
     "category": "isp"
   },
   "is-tree-view": {
-    "json": "../components/isp/tree-view.json",
-    "behavior": "../components/isp/tree-view.preview.js",
+    "json": "../../dist/previews/isp/tree-view.json",
+    "behavior": "../../dist/previews/isp/tree-view.preview.min.js",
     "category": "isp"
   },
   "is-callout": {
-    "json": "../components/layout/callout.json",
+    "json": "../../dist/previews/layout/callout.json",
     "category": "layout"
   },
   "is-card": {
-    "json": "../components/layout/card.json",
+    "json": "../../dist/previews/layout/card.json",
     "category": "layout"
   },
   "is-details": {
-    "json": "../components/layout/details.json",
+    "json": "../../dist/previews/layout/details.json",
     "category": "layout"
   },
   "is-dialog": {
-    "json": "../components/layout/dialog.json",
+    "json": "../../dist/previews/layout/dialog.json",
     "category": "layout"
   },
   "is-divider": {
-    "json": "../components/layout/divider.json",
+    "json": "../../dist/previews/layout/divider.json",
     "category": "layout"
   },
   "is-dock-item": {
-    "json": "../components/layout/dock-item.json",
+    "json": "../../dist/previews/layout/dock-item.json",
     "category": "layout"
   },
   "is-dock": {
-    "json": "../components/layout/dock.json",
-    "behavior": "../components/layout/dock.preview.js",
+    "json": "../../dist/previews/layout/dock.json",
+    "behavior": "../../dist/previews/layout/dock.preview.min.js",
     "category": "layout"
   },
   "is-drawer": {
-    "json": "../components/layout/drawer.json",
+    "json": "../../dist/previews/layout/drawer.json",
     "category": "layout"
   },
   "is-main": {
-    "json": "../components/layout/main.json",
-    "behavior": "../components/layout/main.preview.js",
+    "json": "../../dist/previews/layout/main.json",
+    "behavior": "../../dist/previews/layout/main.preview.min.js",
     "category": "layout"
   },
   "is-scrollspy": {
-    "json": "../components/layout/scrollspy.json",
+    "json": "../../dist/previews/layout/scrollspy.json",
     "category": "layout"
   },
   "is-split-panel": {
-    "json": "../components/layout/split-panel.json",
+    "json": "../../dist/previews/layout/split-panel.json",
     "category": "layout"
   },
   "icon-explorer": {
-    "json": "../components/media/icon-explorer.json",
-    "behavior": "../components/media/icon-explorer.preview.js",
+    "json": "../../dist/previews/media/icon-explorer.json",
+    "behavior": "../../dist/previews/media/icon-explorer.preview.min.js",
     "category": "media"
   },
   "is-avatar": {
-    "json": "../components/media/avatar.json",
+    "json": "../../dist/previews/media/avatar.json",
     "category": "media"
   },
   "is-theme-img": {
-    "json": "../components/media/theme-img.json",
+    "json": "../../dist/previews/media/theme-img.json",
     "category": "media"
   },
   "is-barcode": {
-    "json": "../components/media/barcode.json",
+    "json": "../../dist/previews/media/barcode.json",
     "category": "media"
   },
   "is-barcode-scanner": {
-    "json": "../components/media/barcode-scanner.json",
+    "json": "../../dist/previews/media/barcode-scanner.json",
     "category": "media"
   },
   "is-icon": {
-    "json": "../components/media/icon.json",
-    "behavior": "../components/media/icon.preview.js",
+    "json": "../../dist/previews/media/icon.json",
+    "behavior": "../../dist/previews/media/icon.preview.min.js",
     "category": "media"
   },
   "is-image-editor": {
-    "json": "../components/media/image-editor.json",
-    "behavior": "../components/media/image-editor.preview.js",
+    "json": "../../dist/previews/media/image-editor.json",
+    "behavior": "../../dist/previews/media/image-editor.preview.min.js",
     "category": "media"
   },
   "is-qrcode": {
-    "json": "../components/media/qrcode.json",
+    "json": "../../dist/previews/media/qrcode.json",
     "category": "media"
   },
   "is-video-playlist": {
-    "json": "../components/media/video-playlist.json",
-    "behavior": "../components/media/video-playlist.preview.js",
+    "json": "../../dist/previews/media/video-playlist.json",
+    "behavior": "../../dist/previews/media/video-playlist.preview.min.js",
     "category": "media"
   },
   "is-video": {
-    "json": "../components/media/video.json",
-    "behavior": "../components/media/video.preview.js",
+    "json": "../../dist/previews/media/video.json",
+    "behavior": "../../dist/previews/media/video.preview.min.js",
     "category": "media"
   },
   "is-speech": {
-    "json": "../components/media/speech.json",
+    "json": "../../dist/previews/media/speech.json",
     "category": "media"
   },
   "is-media-recorder": {
-    "json": "../components/media/media-recorder.json",
+    "json": "../../dist/previews/media/media-recorder.json",
     "category": "media"
   },
   "is-breadcrumb-item": {
-    "json": "../components/navigation/breadcrumb-item.json",
+    "json": "../../dist/previews/navigation/breadcrumb-item.json",
     "category": "navigation"
   },
   "is-breadcrumb": {
-    "json": "../components/navigation/breadcrumb.json",
+    "json": "../../dist/previews/navigation/breadcrumb.json",
     "category": "navigation"
   },
   "is-carousel-item": {
-    "json": "../components/navigation/carousel-item.json",
+    "json": "../../dist/previews/navigation/carousel-item.json",
     "category": "navigation"
   },
   "is-carousel": {
-    "json": "../components/navigation/carousel.json",
+    "json": "../../dist/previews/navigation/carousel.json",
     "category": "navigation"
   },
   "is-mega-menu": {
-    "json": "../components/navigation/mega-menu.json",
-    "behavior": "../components/navigation/mega-menu.preview.js",
+    "json": "../../dist/previews/navigation/mega-menu.json",
+    "behavior": "../../dist/previews/navigation/mega-menu.preview.min.js",
     "category": "navigation"
   },
   "is-scroller": {
-    "json": "../components/navigation/scroller.json",
+    "json": "../../dist/previews/navigation/scroller.json",
     "category": "navigation"
   },
   "is-stepper-step": {
-    "json": "../components/navigation/stepper-step.json",
+    "json": "../../dist/previews/navigation/stepper-step.json",
     "category": "navigation"
   },
   "is-stepper": {
-    "json": "../components/navigation/stepper.json",
+    "json": "../../dist/previews/navigation/stepper.json",
     "category": "navigation"
   },
   "is-tab-group": {
-    "json": "../components/navigation/tab-group.json",
+    "json": "../../dist/previews/navigation/tab-group.json",
     "category": "navigation"
   },
   "is-tab-panel": {
-    "json": "../components/navigation/tab-panel.json",
+    "json": "../../dist/previews/navigation/tab-panel.json",
     "category": "navigation"
   },
   "is-tab": {
-    "json": "../components/navigation/tab.json",
+    "json": "../../dist/previews/navigation/tab.json",
     "category": "navigation"
   },
   "is-tree-item": {
-    "json": "../components/navigation/tree-item.json",
+    "json": "../../dist/previews/navigation/tree-item.json",
     "category": "navigation"
   },
   "is-tree": {
-    "json": "../components/navigation/tree.json",
+    "json": "../../dist/previews/navigation/tree.json",
     "category": "navigation"
   },
   "is-command-palette": {
-    "json": "../components/overlays/command-palette.json",
-    "behavior": "../components/overlays/command-palette.preview.js",
+    "json": "../../dist/previews/overlays/command-palette.json",
+    "behavior": "../../dist/previews/overlays/command-palette.preview.min.js",
     "category": "overlays"
   },
   "is-pdf-viewer": {
-    "json": "../components/overlays/pdf-viewer.json",
+    "json": "../../dist/previews/overlays/pdf-viewer.json",
     "category": "overlays"
   },
   "is-window": {
-    "json": "../components/overlays/window.json",
+    "json": "../../dist/previews/overlays/window.json",
     "category": "overlays"
   },
   "phase7": {

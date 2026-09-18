@@ -1,0 +1,61 @@
+{
+  "$schema": "is-preview/v1",
+  "tag": "is-pdf-viewer",
+  "category": "overlays",
+  "title": "<is-pdf-viewer>",
+  "titleHtml": true,
+  "storageKey": "docs-is-pdf-viewer",
+  "sections": [
+    {
+      "id": "intro",
+      "title": "<is-pdf-viewer>",
+      "lede": "Visor de PDF. Por defecto delega en el visor nativo del navegador (<code class=\"code\">&lt;iframe type=\"application/pdf\"&gt;</code>) — sin dependencias, sin peso adicional.",
+      "blocks": []
+    },
+    {
+      "id": "demo",
+      "title": "Demo",
+      "blocks": [
+        {
+          "kind": "demo",
+          "html": "<is-pdf-viewer\r\n            src=\"{assets}documento-ejemplo.pdf\"\r\n            download\r\n            print\r\n            height=\"70vh\">\r\n            <span slot=\"title\">Documento de ejemplo</span>\r\n            <a slot=\"toolbar\" href=\"{assets}documento-ejemplo.pdf\" target=\"_blank\" rel=\"noopener\" style=\"font-size:.8rem; color:var(--is-text-soft);\">abrir en pestaña ↗</a>\r\n          </is-pdf-viewer>",
+          "controls": [
+              {
+                "control": "text",
+                "prop": "attr:src",
+                "label": "src"
+              },
+              {
+                "control": "boolean",
+                "prop": "attr:download",
+                "label": "download"
+              },
+              {
+                "control": "boolean",
+                "prop": "attr:print",
+                "label": "print"
+              },
+              {
+                "control": "text",
+                "prop": "attr:height",
+                "label": "height"
+              }
+          ],
+          "equivNote": "engine elige motor; flags de toolbar son independientes.",
+          "equivHtml": "<!-- ver diagrama de ramas -->",
+          "equivFlow": "<is-flowchart open-on-click animation=\"flow\">\n  <script type=\"application/json\">\n  {\n    \"flowchart\": {\n      \"title\": \"is-pdf-viewer: engine\",\n      \"direction\": \"TB\",\n      \"nodes\": [\n        {\n          \"id\": \"q\",\n          \"label\": \"engine=?\",\n          \"shape\": \"diamond\"\n        },\n        {\n          \"id\": \"a\",\n          \"label\": \"native → iframe\",\n          \"shape\": \"stadium\"\n        },\n        {\n          \"id\": \"b\",\n          \"label\": \"pdfjs → page/zoom\",\n          \"shape\": \"stadium\"\n        },\n        {\n          \"id\": \"c\",\n          \"label\": \"download / print\",\n          \"shape\": \"round\"\n        }\n      ],\n      \"edges\": [\n        {\n          \"from\": \"q\",\n          \"to\": \"a\",\n          \"label\": \"native\"\n        },\n        {\n          \"from\": \"q\",\n          \"to\": \"b\",\n          \"label\": \"pdfjs\"\n        },\n        {\n          \"from\": \"a\",\n          \"to\": \"c\"\n        },\n        {\n          \"from\": \"b\",\n          \"to\": \"c\"\n        }\n      ]\n    }\n  }\n  </script>\n</is-flowchart>"
+        }
+      ]
+    },
+    {
+      "id": "api",
+      "title": "API",
+      "blocks": [
+        {
+          "kind": "code",
+          "code": "const v = document.querySelector('is-pdf-viewer');\nv.src = '/files/manual.pdf';\nv.currentPage;  // número de página actual (iframe + #page=N)\n\n// Eventos\nv.addEventListener('is-load',  () => /* listo */);\nv.addEventListener('is-error', () => /* error de carga */);\n\n// Slots\n//   title       texto de la izquierda\n//   toolbar     contenido extra a la derecha\n\n// Atributos\n// src           URL del PDF (requerido)\n// engine        native (default) | pdfjs\n// height        alto del iframe\n// download      boolean — botón Descargar\n// print         boolean — botón Imprimir\n// page, zoom    sólo con engine=pdfjs (cuando integres pdfjs en tu build)"
+        }
+      ]
+    }
+  ]
+}

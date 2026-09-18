@@ -1,0 +1,266 @@
+{
+  "$schema": "is-preview/v1",
+  "tag": "is-cdn-snippet",
+  "category": "feedback",
+  "title": "<is-cdn-snippet>",
+  "titleHtml": true,
+  "storageKey": "docs-is-cdn-snippet",
+  "sections": [
+    {
+      "id": "intro",
+      "title": "<is-cdn-snippet>",
+      "lede": "Panel copy-paste vía <code>loader.min.js</code>: un\r\n          <code>&lt;script type=\"module\" src&gt;</code> + un script que hace\r\n          <code>loadCSS*</code> y <code>load(tag\\|categoría\\|all)</code>. Radio para elegir el alcance.",
+      "blocks": [
+        {
+          "kind": "demo",
+          "html": "<is-cdn-snippet tag=\"is-button\" category=\"actions\"></is-cdn-snippet>",
+          "controls": [
+            {
+              "control": "select",
+              "prop": "attr:tag",
+              "label": "tag",
+              "options": [
+                "is-button",
+                "is-popconfirm",
+                "is-chart",
+                "is-textarea"
+              ]
+            },
+            {
+              "control": "select",
+              "prop": "attr:category",
+              "label": "category",
+              "options": [
+                "actions",
+                "feedback",
+                "data",
+                "forms"
+              ]
+            },
+            {
+              "control": "boolean",
+              "prop": "attr:dependencies",
+              "label": "dependencies"
+            },
+            {
+              "control": "boolean",
+              "prop": "attr:Chart",
+              "label": "Chart"
+            },
+            {
+              "control": "boolean",
+              "prop": "attr:js",
+              "label": "js"
+            },
+            {
+              "control": "boolean",
+              "prop": "attr:version",
+              "label": "version"
+            },
+            {
+              "control": "boolean",
+              "prop": "attr:https:",
+              "label": "https:"
+            },
+            {
+              "control": "boolean",
+              "prop": "attr:cdn",
+              "label": "cdn"
+            },
+            {
+              "control": "boolean",
+              "prop": "attr:jsdelivr",
+              "label": "jsdelivr"
+            },
+            {
+              "control": "boolean",
+              "prop": "attr:net",
+              "label": "net"
+            },
+            {
+              "control": "boolean",
+              "prop": "attr:npm",
+              "label": "npm"
+            },
+            {
+              "control": "boolean",
+              "prop": "attr:chart",
+              "label": "chart"
+            },
+            {
+              "control": "boolean",
+              "prop": "attr:dist",
+              "label": "dist"
+            },
+            {
+              "control": "boolean",
+              "prop": "attr:umd",
+              "label": "umd"
+            },
+            {
+              "control": "boolean",
+              "prop": "attr:min",
+              "label": "min"
+            },
+            {
+              "control": "boolean",
+              "prop": "attr:note",
+              "label": "note"
+            },
+            {
+              "control": "boolean",
+              "prop": "attr:Necesario",
+              "label": "Necesario"
+            },
+            {
+              "control": "boolean",
+              "prop": "attr:si",
+              "label": "si"
+            },
+            {
+              "control": "boolean",
+              "prop": "attr:usas",
+              "label": "usas"
+            },
+            {
+              "control": "boolean",
+              "prop": "attr:lt",
+              "label": "lt"
+            },
+            {
+              "control": "boolean",
+              "prop": "attr:is-chart",
+              "label": "is-chart"
+            },
+            {
+              "control": "boolean",
+              "prop": "attr:gt",
+              "label": "gt"
+            },
+            {
+              "control": "boolean",
+              "prop": "attr:con",
+              "label": "con"
+            },
+            {
+              "control": "boolean",
+              "prop": "attr:type",
+              "label": "type"
+            },
+            {
+              "control": "boolean",
+              "prop": "attr:quot",
+              "label": "quot"
+            },
+            {
+              "control": "boolean",
+              "prop": "attr:bar",
+              "label": "bar"
+            },
+            {
+              "control": "boolean",
+              "prop": "attr:o",
+              "label": "o"
+            },
+            {
+              "control": "boolean",
+              "prop": "attr:line",
+              "label": "line"
+            }
+          ]
+        },
+        {
+          "kind": "code",
+          "code": "<is-cdn-snippet\n  tag=\"is-button\"\n  category=\"actions\"\n></is-cdn-snippet>",
+          "lang": "html"
+        }
+      ]
+    },
+    {
+      "id": "dependencies",
+      "title": "Dependencias externas",
+      "lede": "Si tu componente necesita otra librería para funcionar (p. ej. dayjs para\r\n          fechas), declara sus enlaces con el slot <code class=\"code\">deps</code>:\r\n          un <code class=\"code\">&lt;script type=\"application/json\"&gt;</code> con un array de\r\n          objetos <code class=\"code\">{name, version?, css?, js?, note?}</code>. El componente\r\n          pinta una fila por cada dep con borde y label distintos, para que se note\r\n          que son REQUISITOS, no opciones del componente.",
+      "blocks": [
+        {
+          "kind": "demo",
+          "html": "<is-cdn-snippet\r\n            tag=\"is-popconfirm\"\r\n            category=\"feedback\"\r\n            title=\"Popconfirm — Consumo por CDN\"\r\n          >\r\n            <script type=\"application/json\" slot=\"deps\">\r\n              [\r\n                {\r\n                  \"name\": \"dayjs\",\r\n                  \"version\": \"1.11.13\",\r\n                  \"js\":  \"https://cdn.jsdelivr.net/npm/dayjs@1.11.13/dayjs.min.js\",\r\n                  \"note\": \"Formatea fechas y horas en la UI del componente (API estilo Moment, ~2 kB). Sin CSS propio.\"\r\n                }\r\n              ]\r\n            </script>\r\n          </is-cdn-snippet>"
+        },
+        {
+          "kind": "code",
+          "code": "<is-cdn-snippet tag=\"is-popconfirm\" category=\"feedback\">\n  <script type=\"application/json\" slot=\"deps\">\n    [\n      {\n        \"name\": \"dayjs\",\n        \"version\": \"1.11.13\",\n        \"js\":  \"https://cdn.jsdelivr.net/npm/dayjs@1.11.13/dayjs.min.js\",\n        \"note\": \"Formatea fechas y horas (sin CSS).\"\n      }\n    ]\n  </script>\n</is-cdn-snippet>",
+          "lang": "html"
+        }
+      ]
+    },
+    {
+      "id": "deps-attribute",
+      "title": "Dependencias vía atributo",
+      "lede": "Si te queda más cómodo, también puedes pasar las deps como atributo\r\n          <code class=\"code\">dependencies</code> con JSON. El slot y el atributo se\r\n          MERGEAN: si pasas ambos, el atributo gana.",
+      "blocks": [
+        {
+          "kind": "demo",
+          "html": "<is-cdn-snippet\r\n            tag=\"is-chart\"\r\n            category=\"data\"\r\n            dependencies='[\r\n              {\"name\":\"Chart.js\",\"version\":\"4.4.0\",\"js\":\"https://cdn.jsdelivr.net/npm/chart.js@4.4.0/dist/chart.umd.min.js\",\"note\":\"Necesario si usas &lt;is-chart&gt; con type=&quot;bar&quot; o &quot;line&quot;.\"}\r\n            ]'\r\n          ></is-cdn-snippet>"
+        },
+        {
+          "kind": "code",
+          "code": "<is-cdn-snippet\n  tag=\"is-chart\"\n  category=\"data\"\n  dependencies='[\n    { \"name\": \"Chart.js\", \"version\": \"4.4.0\",\n      \"js\": \"https://cdn.jsdelivr.net/npm/chart.js@4.4.0/dist/chart.umd.min.js\" }\n  ]'\n></is-cdn-snippet>",
+          "lang": "html"
+        }
+      ]
+    },
+    {
+      "id": "multiple",
+      "title": "Múltiples dependencias",
+      "lede": "Puedes declarar N deps en el mismo array. El componente las pinta\r\n          todas, en el orden dado, con su propio bloque copiable.",
+      "blocks": [
+        {
+          "kind": "demo",
+          "html": "<is-cdn-snippet tag=\"is-textarea\" category=\"forms\" title=\"Textarea + dayjs + plugin\">\r\n            <script type=\"application/json\" slot=\"deps\">\r\n              [\r\n                {\r\n                  \"name\": \"dayjs\",\r\n                  \"version\": \"1.11.13\",\r\n                  \"js\":  \"https://cdn.jsdelivr.net/npm/dayjs@1.11.13/dayjs.min.js\",\r\n                  \"note\": \"Formatea fechas y horas en el campo.\"\r\n                },\r\n                {\r\n                  \"name\": \"dayjs · plugin relativeTime\",\r\n                  \"version\": \"1.11.13\",\r\n                  \"js\":  \"https://cdn.jsdelivr.net/npm/dayjs@1.11.13/plugin/relativeTime.js\",\r\n                  \"note\": \"Opcional. Muestra horas relativas (p. ej. \\\"hace 2 días\\\").\"\r\n                }\r\n              ]\r\n            </script>\r\n          </is-cdn-snippet>"
+        }
+      ]
+    },
+    {
+      "id": "reference",
+      "title": "Referencia",
+      "blocks": [
+        {
+          "kind": "table",
+          "columns": [
+            "API",
+            "Detalle"
+          ],
+          "rows": [
+            [
+              "<code>tag</code>",
+              "string — p. ej. <code>\"is-button\"</code> (obligatorio para single + category)"
+            ],
+            [
+              "<code>category</code>",
+              "string — p. ej. <code>\"actions\"</code> (categoría del manifest)"
+            ],
+            [
+              "<code>base</code>",
+              "string — override del CDN base (default <code>cdn.jsdelivr.net/.../dist/cdn</code>)"
+            ],
+            [
+              "<code>title</code>",
+              "string — título del panel (default \"Consumo por CDN\")"
+            ],
+            [
+              "<code>dependencies</code>",
+              "JSON string — array de deps externas (alternativa al slot)"
+            ],
+            [
+              "<code>slot=\"deps\"</code>",
+              "<code>&lt;script type=\"application/json\"&gt;</code> con array de deps"
+            ],
+            [
+              "Dep shape",
+              "<code>{name, version?, css?, js?, note?}</code> &mdash; css y js son opcionales independientes"
+            ]
+          ]
+        }
+      ]
+    }
+  ]
+}
