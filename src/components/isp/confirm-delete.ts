@@ -5,6 +5,13 @@ import '../media/icon.js';
 import '../layout/dialog.js';
 import { ElementBase } from '../../core/element-base.js';
 
+/** Custom input-like element con label, value, y errores. */
+interface InputLike extends HTMLElement {
+  label: string;
+  value: string;
+  maxlength: string | null;
+}
+
 /**
  * <is-confirm-delete> — Confirmación destructiva de tipo "escribe para confirmar".
  *
@@ -91,16 +98,17 @@ import { ElementBase } from '../../core/element-base.js';
 
     static get observedAttributes(): string[] { return [...OBSERVED, 'accent']; }
 
-    #dlg!: HTMLElement;
+    #dlg!: HTMLElement & { show(): void; hide(): void };
     #headingText!: HTMLElement;
     #messageText!: HTMLElement;
     #messageSlot!: HTMLSlotElement;
-    #currentField!: HTMLElement;
-    #confirmField!: HTMLElement;
+    #currentField!: InputLike;
+    #confirmField!: InputLike;
     #helpEl!: HTMLElement;
     #deleteBtn!: HTMLElement;
     #cancelBtn!: HTMLElement;
-    #trigger = null;
+    #trigger: HTMLElement | null = null;
+    #onTriggerClick: (() => void) | null = null;
 
     constructor() {
       super();
@@ -108,12 +116,12 @@ import { ElementBase } from '../../core/element-base.js';
       shadow.appendChild(TEMPLATE.content.cloneNode(true));
       adoptCss(shadow, import.meta.url);
 
-      this.#dlg = shadow.querySelector<HTMLElement>('.dlg')!;
+      this.#dlg = shadow.querySelector<HTMLElement>('.dlg') as HTMLElement & { show(): void; hide(): void };
       this.#headingText = shadow.querySelector<HTMLElement>('.heading-text')!;
       this.#messageText = shadow.querySelector<HTMLElement>('.message-text')!;
       this.#messageSlot = shadow.querySelector<HTMLSlotElement>('slot[name="message"]')!;
-      this.#currentField = shadow.querySelector<HTMLElement>('.current')!;
-      this.#confirmField = shadow.querySelector<HTMLElement>('.confirm')!;
+      this.#currentField = shadow.querySelector<HTMLElement>('.current') as InputLike;
+      this.#confirmField = shadow.querySelector<HTMLElement>('.confirm') as InputLike;
       this.#helpEl = shadow.querySelector<HTMLElement>('.help')!;
       this.#deleteBtn = shadow.querySelector<HTMLElement>('.delete')!;
       this.#cancelBtn = shadow.querySelector<HTMLElement>('.cancel')!;
@@ -225,9 +233,9 @@ import { ElementBase } from '../../core/element-base.js';
       this.#cancelBtn.textContent = this.getAttribute('cancel-label') || 'Cancelar';
     }
 
-    #syncMessage = () => {
+    #syncMessage = (): void => {
       const slotted = this.#messageSlot.assignedNodes({ flatten: true })
-        .some((n) => n.nodeType === 1 || (n.nodeType === 3 && n.textContent.trim()));
+        .some((n) => n.nodeType === 1 || (n.nodeType === 3 && (n.textContent ?? '').trim()));
       this.#messageText.textContent = slotted
         ? ''
         : (this.getAttribute('message') || '¿Confirma que desea eliminar este registro?');
@@ -246,9 +254,9 @@ import { ElementBase } from '../../core/element-base.js';
       this.#cancelBtn.toggleAttribute('disabled', this.loading);
     }
 
-    #onConfirmInput = () => { this.#syncGate(); };
+    #onConfirmInput = (): void => { this.#syncGate(); };
 
-    #onDelete = () => {
+    #onDelete = (): void => {
       // Doble comprobación: el botón podría habilitarse desde fuera.
       if (!this.confirmed || this.loading) return;
       emit(this, 'is-confirm-delete', { value: this.#confirmField.value });
@@ -259,40 +267,42 @@ import { ElementBase } from '../../core/element-base.js';
      * (Escape, backdrop, botón Cancelar): `hide()` programático no pasa por
      * aquí. Es justo la semántica que tenía `is-cancel-delete`.
      */
-    #onDialogHide = (e: Event) => {
+    #onDialogHide = (e: Event): void => {
       if (this.loading) { e.preventDefault(); return; }
       emit(this, 'is-cancel-delete', {});
     };
 
-    #onDialogAfterHide = () => { this.removeAttribute('open'); };
+    #onDialogAfterHide = (): void => { this.removeAttribute('open'); };
 
-    #showUI() {
+    #showUI(): void {
       this.reset();
       this.#syncTexts();
       this.#dlg.show();
     }
 
-    #hideUI() {
+    #hideUI(): void {
       this.#dlg.hide();
     }
 
-    #bindTrigger() {
+    #bindTrigger(): void {
       const id = this.getAttribute('for');
       if (!id) return;
-      const root = this.getRootNode();
+      const root = this.getRootNode() as Document | ShadowRoot;
       const trigger = root.getElementById?.(id) || document.getElementById(id);
       if (!trigger) return;
       this.#trigger = trigger;
+      this.#onTriggerClick = (): void => { this.show(); };
       trigger.addEventListener('click', this.#onTriggerClick);
       trigger.setAttribute('aria-haspopup', 'dialog');
     }
 
-    #unbindTrigger() {
-      this.#trigger?.removeEventListener('click', this.#onTriggerClick);
+    #unbindTrigger(): void {
+      if (this.#trigger && this.#onTriggerClick) {
+        this.#trigger.removeEventListener('click', this.#onTriggerClick);
+      }
       this.#trigger = null;
+      this.#onTriggerClick = null;
     }
-
-    #onTriggerClick = () => { this.show(); };
   }
 
   defineElement('is-confirm-delete', IsConfirmDelete, 'IsConfirmDelete');
