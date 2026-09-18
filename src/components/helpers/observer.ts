@@ -60,12 +60,14 @@ const OBSERVED = [
   'attr', 'child-list', 'character-data',
 ];
 
+export type ObserverType = 'intersection' | 'mutation' | 'resize';
+
 class ObserverElement extends HTMLElement {
   static get observedAttributes(): string[] { return OBSERVED; }
 
-  #observer = null;
+  #observer: IntersectionObserver | MutationObserver | ResizeObserver | null = null;
   #mounted = false;
-  #slot = null;
+  #slot!: HTMLSlotElement;
 
   constructor() {
     super();
@@ -92,32 +94,32 @@ class ObserverElement extends HTMLElement {
   }
 
   // ---- type ----
-  get type() {
+  get type(): ObserverType {
     const v = this.getAttribute('type');
-    return ['intersection', 'mutation', 'resize'].includes(v) ? v : 'intersection';
+    return ['intersection', 'mutation', 'resize'].includes(v as string) ? (v as ObserverType) : 'intersection';
   }
-  set type(v) {
-    if (v == null || v === '') this.removeAttribute('type');
+  set type(v: ObserverType | null | undefined) {
+    if (v == null) this.removeAttribute('type');
     else this.setAttribute('type', v);
   }
 
-  get disabled() { return this.hasAttribute('disabled'); }
-  set disabled(v) { this.toggleAttribute('disabled', !!v); }
+  get disabled(): boolean { return this.hasAttribute('disabled'); }
+  set disabled(v: boolean) { this.toggleAttribute('disabled', !!v); }
 
   // ---- privados ----
-  #onSlotChange = () => {
+  #onSlotChange = (): void => {
     // El observer de mutación vigila el host, no los hijos: reconectarlo en
     // cada slotchange sólo perdería registros pendientes.
     if (this.#mounted && this.type !== 'mutation') this.#setup();
   };
 
-  #teardown() {
+  #teardown(): void {
     this.#observer?.disconnect();
     this.#observer = null;
   }
 
   /** Root del IO: closest (ancestro) → getRootNode (shadow) → document. */
-  #resolveIntersectionRoot() {
+  #resolveIntersectionRoot(): Element | null {
     const rootSel = (this.getAttribute('root') || '').trim();
     if (!rootSel) return null;
     try {
@@ -134,7 +136,7 @@ class ObserverElement extends HTMLElement {
     return document.querySelector<HTMLElement>(rootSel);
   }
 
-  #setupIntersection() {
+  #setupIntersection(): void {
     const root = this.#resolveIntersectionRoot();
     const margin = this.getAttribute('root-margin') || '0px';
     const threshRaw = this.getAttribute('threshold');
@@ -142,29 +144,30 @@ class ObserverElement extends HTMLElement {
     const once = this.hasAttribute('once');
     const cls = this.getAttribute('intersect-class') || '';
 
-    this.#observer = new IntersectionObserver((entries) => {
+    const io = new IntersectionObserver((entries) => {
       for (const entry of entries) {
         if (cls && entry.target instanceof Element) {
           entry.target.classList.toggle(cls, entry.isIntersecting);
         }
         emit(this, 'is-intersect', { entry });
         if (once && entry.isIntersecting) {
-          this.#observer?.unobserve(entry.target);
+          io.unobserve(entry.target);
         }
       }
     }, { root, rootMargin: margin, threshold });
 
-    for (const child of this.children) this.#observer.observe(child);
+    this.#observer = io;
+    for (const child of this.children) io.observe(child);
   }
 
-  #setupMutation() {
+  #setupMutation(): void {
     const attrRaw = this.getAttribute('attr');
     const attrFilter = attrRaw && attrRaw.trim() ? attrRaw.trim() : null;
     const childList = this.hasAttribute('child-list')
       || (!this.hasAttribute('character-data') && !this.hasAttribute('attr'));
     const charData = this.hasAttribute('character-data');
 
-    const opts = {
+    const opts: MutationObserverInit = {
       childList,
       characterData: charData,
       subtree: true,
@@ -172,22 +175,24 @@ class ObserverElement extends HTMLElement {
       attributeFilter: attrFilter ? attrFilter.split(/\s+/).filter(Boolean) : undefined,
     };
 
-    this.#observer = new MutationObserver((records) => {
+    const mo = new MutationObserver((records) => {
       emit(this, 'is-mutate', { records });
     });
 
-    this.#observer.observe(this, opts);
+    mo.observe(this, opts);
+    this.#observer = mo;
   }
 
-  #setupResize() {
+  #setupResize(): void {
     if (typeof ResizeObserver === 'undefined') return;
-    this.#observer = new ResizeObserver((entries) => {
+    const ro = new ResizeObserver((entries) => {
       emit(this, 'is-resize', { entries });
     });
-    for (const child of this.children) this.#observer.observe(child);
+    for (const child of this.children) ro.observe(child);
+    this.#observer = ro;
   }
 
-  #setup() {
+  #setup(): void {
     this.#teardown();
     if (this.disabled) return;
     switch (this.type) {
@@ -205,7 +210,7 @@ defineElement('is-observer', ObserverElement, 'IsObserver');
  * Colore con `type` prefijado al construir. Usada por los wrappers
  * históricos (intersection-observer, mutation-observer, resize-observer).
  */
-export function createObserverElement(defaultType) {
+export function createObserverElement(defaultType: ObserverType) {
   class PrefixedObserver extends ObserverElement {
     constructor() {
       super();
