@@ -1,17 +1,20 @@
 /**
  * Behavior adapter: reusa mount() de la clase legacy is-button-group.preview.js
- * @param {import('../../previews/_kit/types.d.ts').PreviewMountContext} ctx
- * @param {import('../../previews/_kit/types.d.ts').ISComponentPreviewLike} preview
  */
+import type { PreviewMountContext, ISComponentPreviewLike } from '../../previews/_kit/types.d.ts';
 import PreviewClass from './button-group.preview.controller.js';
 
-export async function mount(ctx, preview) {
+interface PreviewWithLegacy extends ISComponentPreviewLike {
+  __legacy?: { mount?: (ctx: PreviewMountContext) => void | Promise<void>; unmount?: (ctx: PreviewMountContext) => void };
+}
+
+export async function mount(ctx: PreviewMountContext, preview: ISComponentPreviewLike): Promise<void> {
   const inst = new PreviewClass();
   // La definition ya viene del JSON; solo reutilizar mount de la clase.
   await inst.mount(ctx);
-  preview.__legacy = inst;
+  (preview as PreviewWithLegacy).__legacy = inst;
 }
 
-export function unmount(ctx, preview) {
-  preview.__legacy?.unmount?.(ctx);
+export function unmount(ctx: PreviewMountContext, preview: ISComponentPreviewLike): void {
+  (preview as PreviewWithLegacy).__legacy?.unmount?.(ctx);
 }

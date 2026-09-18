@@ -452,10 +452,15 @@ export function computeFlowchartLayout(spec: FlowResolvedSpec, overrides: FlowLa
   // Zonas de exclusión: ni nodos (ya nudgeados) ni aristas pueden cruzarlas.
   blockExclusionZones(grid, zones, offsetX, offsetY);
 
-  const routed: FlowLayoutEdge[] = spec.edges.map((e, i) => {
+  const routed: Array<FlowLayoutEdge | null> = spec.edges.map((e, i) => {
     const from = posById.get(e.from);
     const to = posById.get(e.to);
-    const sides = pickSides(byId.get(e.from), byId.get(e.to), spec.direction);
+    const fromMeta = byId.get(e.from);
+    const toMeta = byId.get(e.to);
+    if (!from || !to || !fromMeta || !toMeta) {
+      return null;
+    }
+    const sides = pickSides(fromMeta, toMeta, spec.direction);
     // `pickSides` devuelve `sides` con `fromSide`/`toSide` como `string` (no
     // tipado en el helper); los narrow explícitos aquí para mantener el
     // contrato BoxSide en el resto del pipeline.
@@ -513,12 +518,14 @@ export function computeFlowchartLayout(spec: FlowResolvedSpec, overrides: FlowLa
     };
   });
 
-  assignEdgeHues(routed);
+  const routedEdges: FlowLayoutEdge[] = routed.filter((e): e is FlowLayoutEdge => e !== null);
+
+  assignEdgeHues(routedEdges as unknown as Parameters<typeof assignEdgeHues>[0]);
   const layout: FlowLayout = {
     width,
     height,
     nodes,
-    edges: routed,
+    edges: routedEdges,
     groups: legendGroups,
     // Rects en coords del lienzo final (con el mismo offset que los nodos),
     // listos para dibujarse como zona sutil sin recalcular nada en el componente.

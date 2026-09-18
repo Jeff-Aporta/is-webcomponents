@@ -53,23 +53,27 @@ export async function loadPreview(tag: string): Promise<ISComponentPreviewLike |
   const entry = (catalog as Record<string, CatalogEntry | undefined>)[tag];
   if (!entry) return null;
 
-  let definition = definitionCache.get(tag);
+  let definition: PreviewDefinition | undefined = definitionCache.get(tag);
   if (!definition) {
     const jsonUrl = new URL(entry.json, previewsBase());
-    definition = await loadDefinitionJson(jsonUrl);
-    definitionCache.set(tag, definition);
+    const loaded = await loadDefinitionJson(jsonUrl) as PreviewDefinition;
+    definition = loaded;
+    definitionCache.set(tag, loaded);
   }
+  if (!definition) return null;
 
   let behavior: PreviewBehaviorModule | null = null;
   if (entry.behavior || definition.hasBehavior) {
     const behPath = entry.behavior || `../components/${tag}.js`  // legacy fallback;
     const behKey = behPath;
-    if (behaviorCache.has(behKey)) {
-      behavior = behaviorCache.get(behKey) ?? null;
+    const cached = behaviorCache.get(behKey);
+    if (cached) {
+      behavior = cached;
     } else {
       try {
-        behavior = await import(new URL(behPath, previewsBase()).href);
-        behaviorCache.set(behKey, behavior);
+        const mod = await import(new URL(behPath, previewsBase()).href) as PreviewBehaviorModule;
+        behavior = mod;
+        behaviorCache.set(behKey, mod);
       } catch (err: unknown) {
         const msg = err instanceof Error ? err.message : String(err);
         console.warn(`[registry] behavior missing for ${tag}:`, msg);
@@ -77,7 +81,7 @@ export async function loadPreview(tag: string): Promise<ISComponentPreviewLike |
     }
   }
 
-  return new JsonPreview(definition, behavior);
+  return new JsonPreview(definition as unknown as ConstructorParameters<typeof JsonPreview>[0], behavior);
 }
 
 /** Vacía la caché de definiciones (tests / HMR manual). */
