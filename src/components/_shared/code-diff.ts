@@ -33,7 +33,12 @@ export const DIFF_LINE_CLASS = Object.freeze({
 });
 
 /** Todas las clases de línea, para poder limpiarlas sin saber cuál había. */
-export const DIFF_LINE_CLASSES = Object.freeze(Object.values(DIFF_LINE_CLASS));
+export const DIFF_LINE_CLASSES: readonly string[] = Object.freeze(Object.values(DIFF_LINE_CLASS));
+
+/** Categoría que `classifyDiffLine` puede devolver. */
+export type DiffLineKind =
+  | 'commit' | 'header' | 'file' | 'hunk' | 'add' | 'del'
+  | 'stat' | 'total' | 'context' | 'comment' | 'note';
 
 /**
  * Clasifica una línea suelta de diff / resumen de commit.
@@ -42,11 +47,8 @@ export const DIFF_LINE_CLASSES = Object.freeze(Object.values(DIFF_LINE_CLASS));
  * b/file` empiezan por `-` y `+`, así que si se prueba la regla de
  * añadido/borrado primero, las cabeceras de archivo se pintan como si fueran
  * contenido cambiado. Van antes, siempre.
- *
- * @param {string} line
- * @returns {'commit'|'header'|'file'|'hunk'|'add'|'del'|'stat'|'total'|'context'}
  */
-export function classifyDiffLine(line: string) {
+export function classifyDiffLine(line: string | null | undefined): DiffLineKind {
   const s = String(line ?? '');
   if (/^commit\s+[0-9a-f]{7,40}\b/i.test(s)) return 'commit';
   if (/^(Author|Date|Merge|AuthorDate|CommitDate|Committer)\s*:/i.test(s)) return 'header';
@@ -76,9 +78,8 @@ export function classifyDiffLine(line: string) {
 
 /** Clase de fondo para una línea, o `null` si la línea no lleva banda.
  * La usa `<is-code>` vía `CodeLangDef.lineClass`.
- * @param {string} line
  */
-export function diffLineClass(line: string) {
+export function diffLineClass(line: string | null | undefined): string | null {
   const kind = classifyDiffLine(line);
   if (kind === 'add') return DIFF_LINE_CLASS.add;
   if (kind === 'del') return DIFF_LINE_CLASS.del;
@@ -88,24 +89,28 @@ export function diffLineClass(line: string) {
   return null;
 }
 
+/** Piezas de una línea de `--stat`. */
+export type StatLineParts = { path: string; count: string; bar: string; note: string };
+
 /**
  * Descompone una línea de `--stat` en sus cuatro piezas.
  * Devuelve `null` si la línea no es un `--stat`.
- * @param {string} line
  */
-export function parseStatLine(line: string) {
+export function parseStatLine(line: string | null | undefined): StatLineParts | null {
   const s = String(line ?? '');
   const m = s.match(/^\s*(.*?)\s*\|\s*(\d+)\s*([+\-\s]*?)\s*(\([^)]*\))?\s*$/);
   if (!m) return null;
   return {
     path: m[1] || '',
-    count: m[2],
+    count: m[2] || '',
     // Los espacios dentro de la barra (`++ --`) son basura de copiado: la barra
     // es una sola tirada de signos, y separada deja de leerse como proporción.
     bar: (m[3] || '').replace(/\s+/g, ''),
     note: m[4] || '',
   };
 }
+
+export type FormatDiffCfg = { eol?: 'lf' | 'crlf' };
 
 /**
  * Alinea en columnas el bloque `--stat` de un resumen de commit.
@@ -118,18 +123,15 @@ export function parseStatLine(line: string) {
  * que dos tablas separadas por prosa no se contaminen entre sí).
  *
  * Las líneas que no son `--stat` se devuelven intactas.
- *
- * @param {string} text
- * @param {{ eol?: string }} [cfg]
  */
-export function formatDiff(text: string, cfg = {}) {
+export function formatDiff(text: string | null | undefined, cfg: FormatDiffCfg = {}): string {
   const eol = cfg.eol === 'crlf' ? '\r\n' : '\n';
   const lines = String(text ?? '').split(/\r?\n/);
-  /** @type {Array<{ i: number, parts: ReturnType<typeof parseStatLine> }>} */
-  let bloque = [];
+  type Block = { i: number; parts: StatLineParts };
+  let bloque: Block[] = [];
   const out = lines.slice();
 
-  const volcar = () => {
+  const volcar = (): void => {
     if (!bloque.length) return;
     const anchoRuta = Math.max(...bloque.map((b) => b.parts.path.length));
     const anchoNum = Math.max(...bloque.map((b) => b.parts.count.length));
