@@ -10,6 +10,40 @@ import './catalogo-gen.js';
 import {
   asStr, getProp, isPresent,
 } from '../_shared/isp-record-utils.js';
+
+/** Catálogo genérico (subset mínimo que necesitamos del controller). */
+interface _CatalogLike {
+  primaryKeys?: string[];
+  ColumnsBtnRef?: string[] | (() => string[]);
+  multiSelect?: boolean;
+  Lista?: (opts: { pagina?: number; qregistros?: number; filtro?: { sql?: string } }) => Promise<{ datos?: unknown[] | { [Symbol.iterator](): Iterator<unknown> } } | null | undefined>;
+  refreshGrid?: () => Promise<void> | void;
+}
+
+/** Columna y datos arbitrarios que devuelve el controller. */
+type _RecordLike = Record<string, unknown>;
+
+/** Input field con attrs custom (label/name/value/etc.). */
+interface _FieldLike extends HTMLElement {
+  value?: unknown;
+  label?: unknown;
+  name?: unknown;
+  required?: unknown;
+  readonly?: unknown;
+}
+
+/** Diálogo con show/hide. */
+interface _DialogLike extends HTMLElement {
+  show?: () => void;
+  hide?: () => void;
+}
+
+/** Catálogo embebido con toggleAttribute y refresh. */
+interface _CatalogEl extends HTMLElement {
+  controller?: _CatalogLike;
+  refreshGrid?: () => Promise<void> | void;
+  selectionData?: _RecordLike[];
+}
 /**
  * <is-btn-ref> — port de `src/lib/form/BtnRef.svelte` (ISP).
  *
@@ -66,28 +100,26 @@ const FILTER_SVG = `<svg fill="currentColor" width="20" height="20" viewBox="0 0
     static formAssociated = true;
     static get observedAttributes(): string[] { return OBSERVED; }
 
+    /** Indexer usado por `#upgradeProps()` para re-leer propiedades pre-upgrade. */
+    [key: string]: unknown;
+
     #mounted = false;
-    #field!: HTMLElement;
+    #field!: _FieldLike;
     #valueLabel!: HTMLElement;
     #openBtn!: HTMLElement;
-    #dlg!: HTMLElement;
-    #cat!: HTMLElement;
+    #dlg!: _DialogLike;
+    #cat!: _CatalogEl;
     #cancelBtn!: HTMLElement;
     #pickBtn!: HTMLElement;
-    #internals;
+    #internals: ElementInternals | null = null;
     #typingTimer = 0;
-    #prevValue = Symbol('init');
+    #prevValue: string | symbol = Symbol('init');
 
-    /** @type {object|null} */
-    controller = null;
-    /** @type {(record: object) => void} */
-    onSelectedRecord = () => {};
-    /** @type {() => void} */
-    onChange = () => {};
-    /** @type {() => void} */
-    onTypingEnd = () => {};
-    /** @type {() => void} */
-    handleInput = () => {};
+    controller: _CatalogLike | null = null;
+    onSelectedRecord: (record: _RecordLike) => void = () => {};
+    onChange: () => void = () => {};
+    onTypingEnd: () => void = () => {};
+    handleInput: () => void = () => {};
 
     constructor() {
       super();
@@ -96,11 +128,11 @@ const FILTER_SVG = `<svg fill="currentColor" width="20" height="20" viewBox="0 0
       shadow.appendChild(TEMPLATE.content.cloneNode(true));
       adoptCss(shadow, import.meta.url);
 
-      this.#field = shadow.querySelector<HTMLElement>('.field')!;
+      this.#field = shadow.querySelector<HTMLElement>('.field') as _FieldLike;
       this.#valueLabel = shadow.querySelector<HTMLElement>('.value-label')!;
       this.#openBtn = shadow.querySelector<HTMLElement>('.open')!;
-      this.#dlg = shadow.querySelector<HTMLElement>('.dlg')!;
-      this.#cat = shadow.querySelector<HTMLElement>('.cat')!;
+      this.#dlg = shadow.querySelector<HTMLElement>('.dlg') as _DialogLike;
+      this.#cat = shadow.querySelector<HTMLElement>('.cat') as _CatalogEl;
       this.#cancelBtn = shadow.querySelector<HTMLElement>('.cancel')!;
       this.#pickBtn = shadow.querySelector<HTMLElement>('.pick')!;
     }
@@ -115,7 +147,7 @@ const FILTER_SVG = `<svg fill="currentColor" width="20" height="20" viewBox="0 0
       this.#openBtn.addEventListener('click', this.#onOpen);
       this.#cancelBtn.addEventListener('click', () => this.close());
       this.#pickBtn.addEventListener('click', this.#onPick);
-      this.#cat.addEventListener('is-double-click', this.#onCatDbl);
+      this.#cat.addEventListener('is-double-click', this.#onCatDbl as EventListener);
       this.#valueLabel.addEventListener('click', () => this.focus());
       if (this.controller) this.#cat.controller = this.controller;
       void this.#resolveLabel();
@@ -130,7 +162,7 @@ const FILTER_SVG = `<svg fill="currentColor" width="20" height="20" viewBox="0 0
       this.#field.removeEventListener('is-typing-end', this.#onTypingEndEvt);
       this.#openBtn.removeEventListener('click', this.#onOpen);
       this.#pickBtn.removeEventListener('click', this.#onPick);
-      this.#cat.removeEventListener('is-double-click', this.#onCatDbl);
+      this.#cat.removeEventListener('is-double-click', this.#onCatDbl as EventListener);
     }
 
     attributeChangedCallback(name: string): void {
@@ -189,7 +221,7 @@ const FILTER_SVG = `<svg fill="currentColor" width="20" height="20" viewBox="0 0
       setTimeout(() => this.#field?.focus?.(), 50);
     }
 
-    open() {
+    open(): void {
       if (this.readonly) return;
       const multi = this.multi || !!this.controller?.multiSelect;
       this.#cat.toggleAttribute('multi-select', multi);
@@ -198,11 +230,11 @@ const FILTER_SVG = `<svg fill="currentColor" width="20" height="20" viewBox="0 0
       this.#dlg.show?.();
     }
 
-    close() {
+    close(): void {
       this.#dlg.hide?.();
     }
 
-    #syncFieldAttrs() {
+    #syncFieldAttrs(): void {
       this.#field.label = this.label;
       this.#field.value = this.value;
       if (this.name) this.#field.name = this.name;
@@ -210,13 +242,13 @@ const FILTER_SVG = `<svg fill="currentColor" width="20" height="20" viewBox="0 0
       this.#field.readonly = this.readonly;
       this.#field.setAttribute('maxlength', String(this.maxlength));
       this.#field.style.setProperty('padding-right', '2rem');
-      this.#openBtn.disabled = this.readonly;
+      (this.#openBtn as unknown as { disabled?: boolean }).disabled = this.readonly;
       this.#openBtn.classList.toggle('focus-required', false);
       this.#openBtn.classList.toggle('focus-optional', false);
       setFormValue(this.#internals, this.value);
     }
 
-    #syncValidity() {
+    #syncValidity(): void {
       if (this.required && !isPresent(this.value)) {
         setValidity(this.#internals, { valueMissing: true }, 'Campo obligatorio', this.#field);
       } else {
@@ -224,12 +256,12 @@ const FILTER_SVG = `<svg fill="currentColor" width="20" height="20" viewBox="0 0
       }
     }
 
-    #pk() {
+    #pk(): string {
       const keys = this.controller?.primaryKeys;
       return keys?.length ? asStr(keys.at(-1)) : 'id';
     }
 
-    #columnsBtnRef() {
+    #columnsBtnRef(): string[] {
       const c = this.controller?.ColumnsBtnRef;
       if (Array.isArray(c)) return c;
       if (typeof c === 'function') return c.call(this.controller) || [];
@@ -244,7 +276,7 @@ const FILTER_SVG = `<svg fill="currentColor" width="20" height="20" viewBox="0 0
       return [];
     }
 
-    #setValueLabel(text, missing) {
+    #setValueLabel(text: string, missing: boolean): void {
       if (missing) {
         this.#valueLabel.innerHTML = `<span class="missing">${asStr(text)}</span>`;
       } else {
@@ -252,7 +284,7 @@ const FILTER_SVG = `<svg fill="currentColor" width="20" height="20" viewBox="0 0
       }
     }
 
-    async #resolveLabel() {
+    async #resolveLabel(): Promise<void> {
       const value = this.value;
       if (!isPresent(value)) {
         this.#setValueLabel('', false);
@@ -276,8 +308,8 @@ const FILTER_SVG = `<svg fill="currentColor" width="20" height="20" viewBox="0 0
           filtro: { sql: ` ${pk}='${value}' ` },
         });
         const datos = lista?.datos || [];
-        const arr = Array.isArray(datos) ? datos : [...datos];
-        const record = arr.find((r) => asStr(getProp(r, pk)) === asStr(value)) || arr[0];
+        const arr: _RecordLike[] = Array.isArray(datos) ? datos as _RecordLike[] : [...datos as Iterable<_RecordLike>];
+        const record: _RecordLike | undefined = arr.find((r) => asStr(getProp(r, pk)) === asStr(value)) || arr[0];
         if (!record) {
           this.#setValueLabel(value, true);
           return;
@@ -292,7 +324,7 @@ const FILTER_SVG = `<svg fill="currentColor" width="20" height="20" viewBox="0 0
       }
     }
 
-    #labelOf(record) {
+    #labelOf(record: _RecordLike): string {
       let label = '';
       for (const key of this.#columnsBtnRef()) {
         label += ` ${asStr(getProp(record, key))}`;
@@ -300,7 +332,7 @@ const FILTER_SVG = `<svg fill="currentColor" width="20" height="20" viewBox="0 0
       return label.trim();
     }
 
-    #applyRecord(record) {
+    #applyRecord(record: _RecordLike | undefined | null): void {
       if (!record) return;
       const pk = this.#pk();
       const value = asStr(getProp(record, pk));
@@ -316,16 +348,16 @@ const FILTER_SVG = `<svg fill="currentColor" width="20" height="20" viewBox="0 0
     }
 
     /** Multi-select: value = PKs unidos por coma; label = etiquetas unidas. */
-    #applyRecords(records) {
+    #applyRecords(records: _RecordLike[]): void {
       if (!records?.length) return;
       const pk = this.#pk();
-      const values = records.map((r) => asStr(getProp(r, pk))).filter(Boolean);
+      const values = records.map((r: _RecordLike) => asStr(getProp(r, pk))).filter(Boolean);
       const value = values.join(',');
-      const label = records.map((r) => this.#labelOf(r) || asStr(getProp(r, pk))).filter(Boolean).join(', ');
+      const label = records.map((r: _RecordLike) => this.#labelOf(r) || asStr(getProp(r, pk))).filter(Boolean).join(', ');
       this.value = value;
       this.#setValueLabel(label || value, !label);
       const record = records.at(-1);
-      this.onSelectedRecord(record);
+      this.onSelectedRecord(record as _RecordLike);
       this.onChange();
       emit(this, 'is-selected-record', { record, records, value, label });
       emit(this, 'is-change', { value });
@@ -333,10 +365,10 @@ const FILTER_SVG = `<svg fill="currentColor" width="20" height="20" viewBox="0 0
       this.close();
     }
 
-    #onOpen = () => this.open();
+    #onOpen = (): void => this.open();
 
-    #onPick = () => {
-      const rows = this.#cat.selectionData || [];
+    #onPick = (): void => {
+      const rows: _RecordLike[] = this.#cat.selectionData || [];
       if (!rows.length) return;
       if (this.multi || this.controller?.multiSelect) {
         this.#applyRecords(rows);
@@ -345,11 +377,11 @@ const FILTER_SVG = `<svg fill="currentColor" width="20" height="20" viewBox="0 0
       this.#applyRecord(rows[0]);
     };
 
-    #onCatDbl = (e) => {
+    #onCatDbl = (e: CustomEvent<{ record?: _RecordLike }>): void => {
       this.#applyRecord(e.detail?.record);
     };
 
-    #onInput = () => {
+    #onInput = (): void => {
       let v = asStr(this.#field.value);
       if (v.length > this.maxlength) {
         v = v.slice(0, this.maxlength);
@@ -361,12 +393,12 @@ const FILTER_SVG = `<svg fill="currentColor" width="20" height="20" viewBox="0 0
       this.#syncValidity();
     };
 
-    #onFieldChange = () => {
+    #onFieldChange = (): void => {
       this.onChange();
       emit(this, 'is-change', { value: this.value });
     };
 
-    #onTypingEndEvt = () => {
+    #onTypingEndEvt = (): void => {
       void this.#resolveLabel();
       this.onTypingEnd();
       emit(this, 'is-typing-end', { value: this.value });
