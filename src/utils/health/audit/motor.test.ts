@@ -195,6 +195,46 @@ test('consistency: detecta control que apunta a atributo no observado', async ()
   assert.ok(meta.atributosObservados.has('variant'));
 });
 
+// GUARDIAN TEST: previene regresión del regex observedAttributes con TS type
+// annotation. Caso real que disparó el bug: masked-input.ts usa
+// `const OBSERVED: string[] = [...]` (con tipo TS) — el regex original con
+// `[:=]\s*\[` no soportaba la sintaxis `NAME: TYPE = [...]`, por lo que
+// extraía 0 atributos y reportaba 9 falsos warnings en masked-input/inline-edit/mention.
+test('guard: consistency extrae observedAttributes con type annotation TS', async () => {
+  const rutaMasked = join(RAIZ, 'src', 'components', 'forms', 'masked-input.ts');
+  const meta = await extraerMetaComponente(rutaMasked);
+  assert.ok(meta, 'meta de is-masked-input debe existir');
+  // Sanity: estos 5 atributos DEBEN observarse (definidos con TS type annotation)
+  for (const attr of ['pattern', 'value', 'placeholder', 'autocomplete', 'required']) {
+    assert.ok(
+      meta.atributosObservados.has(attr),
+      `is-masked-input debería declarar '${attr}' como observado (TS type annotation regression)`,
+    );
+  }
+});
+
+test('guard: consistency extrae observedAttributes de inline-edit (TS type)', async () => {
+  const ruta = join(RAIZ, 'src', 'components', 'forms', 'inline-edit.ts');
+  const meta = await extraerMetaComponente(ruta);
+  assert.ok(meta, 'meta de is-inline-edit debe existir');
+  for (const attr of ['placeholder', 'mode', 'rows']) {
+    assert.ok(
+      meta.atributosObservados.has(attr),
+      `is-inline-edit debería declarar '${attr}' como observado`,
+    );
+  }
+});
+
+test('guard: consistency extrae observedAttributes de mention (TS type)', async () => {
+  const ruta = join(RAIZ, 'src', 'components', 'forms', 'mention.ts');
+  const meta = await extraerMetaComponente(ruta);
+  assert.ok(meta, 'meta de is-mention debe existir');
+  assert.ok(
+    meta.atributosObservados.has('trigger'),
+    `is-mention debería declarar 'trigger' como observado`,
+  );
+});
+
 test('consistency: ejecutarValidacionConsistencia contra def de is-button', async () => {
   const rutaBtn = join(RAIZ, 'src', 'components', 'actions', 'button.ts');
   const meta = await extraerMetaComponente(rutaBtn);

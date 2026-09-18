@@ -136,7 +136,7 @@ export async function extraerMetaComponente(rutaModulo: string | null): Promise<
     const constName = obsConstMatch[1];
     // Como el nombre de la const puede repetirse (BOARD_OBSERVED = []), iteramos
     // todas las declaraciones con ese nombre.
-    const aliasMatches = src.matchAll(new RegExp(`(?:const|let|var)\\s+${constName}\\s*[:=]\\s*\\[([\\s\\S]*?)\\]`, 'g'));
+    const aliasMatches = src.matchAll(new RegExp(`(?:const|let|var)\\s+${constName}(?:\\s*:\\s*[A-Za-z_$<>\\[\\]|, ]+)?\\s*=\\s*\\[([\\s\\S]*?)\\]`, 'g'));
     for (const cMatch of aliasMatches) {
       for (const m of cMatch[1].matchAll(/['"`]([a-zA-Z0-9-]+)['"`]/g)) atributosObservados.add(m[1]);
     }
@@ -145,7 +145,7 @@ export async function extraerMetaComponente(rutaModulo: string | null): Promise<
   // componentes definen la lista en una constante y luego la usan en el
   // getter (común en isp/*).
   if (atributosObservados.size === 0) {
-    for (const m of src.matchAll(/(?:const|let|var)\s+(OBSERVED|OBSERVED_ATTRS|ATTRS)\s*[:=]\s*\[([^\]]*)\]/g)) {
+    for (const m of src.matchAll(/(?:const|let|var)\s+(OBSERVED|OBSERVED_ATTRS|ATTRS)(?:\s*:\s*[A-Za-z_$<>\[|\], ]+)?\s*=\s*\[([^\]]*)\]/g)) {
       for (const s of m[2].matchAll(/['"`]([a-zA-Z0-9-]+)['"`]/g)) atributosObservados.add(s[1]);
     }
   }
