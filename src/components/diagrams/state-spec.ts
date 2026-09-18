@@ -2,6 +2,7 @@ import { layoutNodeLink, edgeAnchor, pickSides } from '../_shared/node-link-layo
 import { diagramHeaderWidth } from '../_shared/diagram-header.js';
 import { applyEdgeActorLayout } from '../_shared/diagram-edge-actors.js';
 import { assignEdgeHues } from '../_shared/diagram-edge-style.js';
+import type { EdgeWithHue } from '../_shared/diagram-edge-style.js';
 import { makeCostGrid, blockRect, applyRectCost, snapDiagramGrid, snapPointAwayFromSide} from '../_shared/diagram-grid.js';
 import { routeOrthogonal, pixelToGrid, gridPathToSvg, buildOrthogonalPath } from '../_shared/diagram-astar.js';
 import { richTextPlain } from '../_shared/tk-rich-text.js';
@@ -227,7 +228,7 @@ function arrowTip(p: { x: number; y: number }, side: AnchorSide): { x: number; y
 }
 
 /** Lados de anclaje; para self-transitions fuerza lados distintos (loop visible). */
-function sidesFor(fromNode: { x: number; y: number; w: number; h: number }, toNode: { x: number; y: number; w: number; h: number }, direction: StateDirection, isSelf: boolean): { fromSide: AnchorSide; toSide: AnchorSide } {
+function sidesFor(fromNode: { layer: number }, toNode: { layer: number }, direction: StateDirection, isSelf: boolean): { fromSide: AnchorSide; toSide: AnchorSide } {
   if (isSelf) return { fromSide: 'right', toSide: 'top' };
   // pickSides devuelve BoxSide; los narrow explícitos aquí.
   const s = pickSides(fromNode, toNode, direction);
@@ -353,7 +354,7 @@ export function computeStateLayout(spec: StateResolvedSpec): StateLayout {
     };
   });
 
-  assignEdgeHues(routed);
+  assignEdgeHues(routed as unknown as readonly EdgeWithHue[]);
   const layout: StateLayout = {
     width,
     height,
