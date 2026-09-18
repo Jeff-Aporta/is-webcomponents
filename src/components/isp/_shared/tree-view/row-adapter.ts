@@ -1,49 +1,118 @@
 import { TRADrag } from "./row-adapter-drag.js";
+import type { TNode, TreeActionEntry } from "./_types.js";
+
+/** Detalle con un evento custom del row-adapter (summary/pointer). */
+interface _SummaryEvent extends Event {
+  currentTarget: HTMLElement;
+}
+
+/** Subset extendido del adapter que `TreeRowAdapter` consume (más allá de TreeAdapterLike). */
+interface _RowAdapter extends TRAAccessible {
+  onrowclick(node: TNode): void;
+  onrowdblclick(node: TNode): void;
+  syncRowSelectionChrome(): void;
+  syncHoverFloats(): void;
+  buildCustomsRuntime(): unknown;
+  customs?: {
+    hotkeys?: Record<string, (node: TNode, runtime: unknown, e: KeyboardEvent) => void>;
+    topMenuActions?: (rt: unknown) => TreeActionEntry[];
+  } | null;
+  findHotkeyHandler(
+    sources: ReadonlyArray<TreeActionEntry[] | undefined>,
+    combo: string,
+  ): (() => void) | null;
+  hoveredNode: { flatPath: string } | null;
+  normalizeFlatPath(id: string | null | undefined): string;
+  blurTreeSummariesExcept(summary: HTMLElement): void;
+  onrowfocus(node: TNode): void;
+}
+
+/** `TRADrag` no expone `treeAdapter` con todos los métodos que usamos aquí. */
+interface TRAAccessible {
+  treeAdapter: TRAAccessible & _RowAdapter;
+  mergedDisabled: boolean;
+  hasChildren: boolean;
+  isNodeOpen: boolean;
+  rowNode: TNode | null;
+  flatPath: string;
+  effectiveRowConfig?: {
+    events?: {
+      onclick?: () => void;
+      onopen?: () => void;
+      onclose?: () => void;
+      onfocus?: () => void;
+      onblur?: () => void;
+    };
+    actions?: TreeActionEntry[];
+    cascadeOptions?: TreeActionEntry[];
+  };
+  onrowtoggle(open: boolean): void;
+  requestRowUiSync(): void;
+  getVisibleSummaries(treeItem: Element): HTMLElement[];
+  focusSummary(summary: HTMLElement): void;
+}
+
 class TreeRowAdapter extends TRADrag {
-  onsummaryclick(e) {
+  /** Timer para limpiar el hover tras pointerleave. */
+  declare _hoverLeaveTid: ReturnType<typeof setTimeout> | undefined;
+
+  /** Helper para tratar `this.treeAdapter` con todos los métodos que usamos. */
+  get ta(): _RowAdapter {
+    return (this as unknown as { treeAdapter: _RowAdapter }).treeAdapter;
+  }
+
+  get selfProps(): TRAAccessible {
+    return this as unknown as TRAAccessible;
+  }
+
+  onsummaryclick(e: _SummaryEvent): void {
     let paint = false;
+    const sp = this.selfProps;
+    const ta = this.ta;
     try {
-      const summaryEl = e.currentTarget;
-      if (this.mergedDisabled) {
+      const summaryEl: HTMLElement = e.currentTarget;
+      if (sp.mergedDisabled) {
         e.preventDefault();
         return;
       }
-      this.treeAdapter.blurTreeSummariesExcept(summaryEl);
-      const target = e.target;
+      ta.blurTreeSummariesExcept(summaryEl);
+      const target = e.target as Element | null;
       if (target?.closest(".trvwr-drag-handle")) {
         e.preventDefault();
         e.stopPropagation();
         return;
       }
       const clickedSymbol = target?.closest(".trvwr-itm-symb");
-      if (this.hasChildren) {
+      if (sp.hasChildren) {
         e.preventDefault();
         if (clickedSymbol) {
-          this.onrowtoggle(!this.isNodeOpen);
+          sp.onrowtoggle(!sp.isNodeOpen);
           paint = true;
         }
       }
       if (clickedSymbol) {
-        this.rowNode && this.treeAdapter.onrowfocus(this.rowNode);
+        sp.rowNode && ta.onrowfocus(sp.rowNode);
         summaryEl.focus({ preventScroll: true });
         return;
       }
-      this.rowNode && this.treeAdapter.onrowfocus(this.rowNode);
-      this.rowNode && this.treeAdapter.onrowclick(this.rowNode);
-      this.effectiveRowConfig?.events?.onclick?.();
+      sp.rowNode && ta.onrowfocus(sp.rowNode);
+      sp.rowNode && ta.onrowclick(sp.rowNode);
+      sp.effectiveRowConfig?.events?.onclick?.();
       summaryEl.focus({ preventScroll: true });
     } finally {
-      if (paint) this.requestRowUiSync();
-      else this.treeAdapter.syncRowSelectionChrome();
+      if (paint) sp.requestRowUiSync();
+      else ta.syncRowSelectionChrome();
     }
   }
-  onsummarydblclick(e) {
+  onsummarydblclick(e: _SummaryEvent): void {
+    const sp = this.selfProps;
+    const ta = this.ta;
     try {
-      if (this.mergedDisabled) {
+      if (sp.mergedDisabled) {
         e.preventDefault();
         return;
       }
-      const target = e.target;
+      const target = e.target as Element | null;
       if (target?.closest(".trvwr-itm-symb")) {
         e.preventDefault();
         e.stopPropagation();
@@ -51,38 +120,42 @@ class TreeRowAdapter extends TRADrag {
       }
       e.preventDefault();
       e.stopPropagation();
-      this.rowNode && this.treeAdapter.onrowdblclick(this.rowNode);
+      sp.rowNode && ta.onrowdblclick(sp.rowNode);
     } finally {
-      this.requestRowUiSync();
+      sp.requestRowUiSync();
     }
   }
-  ondetailstoggle(e) {
+  ondetailstoggle(e: _SummaryEvent): void {
+    const sp = this.selfProps;
     try {
-      const el = e.currentTarget;
+      const el: HTMLElement & { _trvwrSyncOpen?: boolean } = e.currentTarget;
       if (el._trvwrSyncOpen) return;
-      if (this.mergedDisabled) {
+      if (sp.mergedDisabled) {
         el._trvwrSyncOpen = true;
-        el.open = this.isNodeOpen;
+        (el as unknown as { open: boolean }).open = sp.isNodeOpen;
         el._trvwrSyncOpen = false;
         return;
       }
-      if (el.open !== this.isNodeOpen) {
-        this.onrowtoggle(el.open);
-        if (el.open) this.effectiveRowConfig?.events?.onopen?.();
-        else this.effectiveRowConfig?.events?.onclose?.();
+      const open = (el as unknown as { open: boolean }).open;
+      if (open !== sp.isNodeOpen) {
+        sp.onrowtoggle(open);
+        if (open) sp.effectiveRowConfig?.events?.onopen?.();
+        else sp.effectiveRowConfig?.events?.onclose?.();
       }
     } finally {
-      this.requestRowUiSync();
+      sp.requestRowUiSync();
     }
   }
-  onkeydown(e) {
+  onkeydown(e: _SummaryEvent & KeyboardEvent): void {
     let paint = false;
+    const sp = this.selfProps;
+    const ta = this.ta;
     try {
       if (document.activeElement !== e.currentTarget) return;
-      const treeItem = e.currentTarget.closest?.("details.trvwr-itm");
+      const treeItem = (e.currentTarget as HTMLElement).closest?.("details.trvwr-itm");
       if (!treeItem) return;
-      const visibleSummaries = this.getVisibleSummaries(treeItem);
-      const currentSummary = e.currentTarget;
+      const visibleSummaries = sp.getVisibleSummaries(treeItem);
+      const currentSummary: HTMLElement = e.currentTarget;
       const currentIdx = visibleSummaries.indexOf(currentSummary);
       const hasMods = e.ctrlKey || e.shiftKey || e.altKey || e.metaKey;
       let handledByDefault = false;
@@ -92,55 +165,54 @@ class TreeRowAdapter extends TRADrag {
             e.preventDefault();
             handledByDefault = true;
             if (currentIdx >= 0 && currentIdx < visibleSummaries.length - 1) {
-              this.focusSummary(visibleSummaries[currentIdx + 1]);
+              sp.focusSummary(visibleSummaries[currentIdx + 1]!);
             }
             break;
           case "ArrowUp":
             e.preventDefault();
             handledByDefault = true;
-            if (currentIdx > 0) this.focusSummary(visibleSummaries[currentIdx - 1]);
+            if (currentIdx > 0) sp.focusSummary(visibleSummaries[currentIdx - 1]!);
             break;
           case "ArrowRight":
             e.preventDefault();
             handledByDefault = true;
-            if (this.hasChildren && !this.isNodeOpen) {
-              this.onrowtoggle(true);
+            if (sp.hasChildren && !sp.isNodeOpen) {
+              sp.onrowtoggle(true);
               paint = true;
             }
             break;
           case "ArrowLeft":
             e.preventDefault();
             handledByDefault = true;
-            if (this.hasChildren && this.isNodeOpen) {
-              this.onrowtoggle(false);
+            if (sp.hasChildren && sp.isNodeOpen) {
+              sp.onrowtoggle(false);
               paint = true;
             }
             break;
           case "Home":
             e.preventDefault();
             handledByDefault = true;
-            visibleSummaries.length && this.focusSummary(visibleSummaries[0]);
+            if (visibleSummaries.length) sp.focusSummary(visibleSummaries[0]!);
             break;
           case "End":
             e.preventDefault();
             handledByDefault = true;
-            visibleSummaries.length && this.focusSummary(visibleSummaries[visibleSummaries.length - 1]);
+            if (visibleSummaries.length) sp.focusSummary(visibleSummaries[visibleSummaries.length - 1]!);
             break;
         }
       }
       if (handledByDefault) return;
-      const ta = this.treeAdapter;
-      const parts = [];
+      const parts: string[] = [];
       if (e.ctrlKey) parts.push("Ctrl");
       if (e.shiftKey) parts.push("Shift");
       if (e.altKey) parts.push("Alt");
       parts.push(e.code);
       const combo = parts.join("+");
-      const cfg = this.effectiveRowConfig;
+      const cfg = sp.effectiveRowConfig;
       const rt = ta.buildCustomsRuntime();
       const toolbarActions = ta.customs?.topMenuActions?.(rt);
       const buttonHandler = ta.findHotkeyHandler([cfg?.actions, cfg?.cascadeOptions, toolbarActions], combo);
-      if (buttonHandler && this.rowNode) {
+      if (buttonHandler && sp.rowNode) {
         e.preventDefault();
         e.stopPropagation();
         buttonHandler();
@@ -149,47 +221,52 @@ class TreeRowAdapter extends TRADrag {
       const hotkeys = ta.customs?.hotkeys;
       if (!hotkeys) return;
       const handler = hotkeys[combo];
-      if (!handler || !this.rowNode) return;
+      if (!handler || !sp.rowNode) return;
       e.preventDefault();
       e.stopPropagation();
       const runtime = ta.buildCustomsRuntime();
-      handler(this.rowNode, runtime, e);
+      handler(sp.rowNode, runtime, e);
     } finally {
-      if (paint) this.requestRowUiSync();
-      else this.treeAdapter.syncRowSelectionChrome();
+      if (paint) sp.requestRowUiSync();
+      else ta.syncRowSelectionChrome();
     }
   }
-  onsummaryfocus(e) {
-    const summaryEl = e.currentTarget;
-    this.treeAdapter.blurTreeSummariesExcept(summaryEl);
-    this.rowNode && this.treeAdapter.onrowfocus(this.rowNode);
-    this.effectiveRowConfig?.events?.onfocus?.();
+  onsummaryfocus(e: _SummaryEvent): void {
+    const sp = this.selfProps;
+    const ta = this.ta;
+    const summaryEl: HTMLElement = e.currentTarget;
+    ta.blurTreeSummariesExcept(summaryEl);
+    sp.rowNode && ta.onrowfocus(sp.rowNode);
+    sp.effectiveRowConfig?.events?.onfocus?.();
   }
-  onsummaryblur() {
-    this.effectiveRowConfig?.events?.onblur?.();
+  onsummaryblur(): void {
+    const sp = this.selfProps;
+    sp.effectiveRowConfig?.events?.onblur?.();
   }
-  onsummarypointerenter(e) {
+  onsummarypointerenter(e: _SummaryEvent): void {
+    const sp = this.selfProps;
+    const ta = this.ta;
     clearTimeout(this._hoverLeaveTid);
-    const rel = e?.relatedTarget;
-    if (rel && e.currentTarget.contains(rel)) return;
-    const ta = this.treeAdapter;
-    if (!this.rowNode) return;
+    const rel = (e as unknown as { relatedTarget: Element | null }).relatedTarget;
+    if (rel && (e.currentTarget as HTMLElement).contains(rel)) return;
+    if (!sp.rowNode) return;
     const prevFlatPath = ta.hoveredNode ? ta.normalizeFlatPath(ta.hoveredNode.flatPath) : "";
-    if (prevFlatPath === this.flatPath) return;
-    ta.hoveredNode = this.rowNode;
+    if (prevFlatPath === sp.flatPath) return;
+    ta.hoveredNode = sp.rowNode;
     ta.syncHoverFloats();
   }
-  onsummarypointerleave(e) {
-    const rel = e?.relatedTarget;
-    if (rel && e.currentTarget.contains(rel)) return;
-    const ta = this.treeAdapter;
+  onsummarypointerleave(e: _SummaryEvent): void {
+    const sp = this.selfProps;
+    const ta = this.ta;
+    const rel = (e as unknown as { relatedTarget: Element | null }).relatedTarget;
+    if (rel && (e.currentTarget as HTMLElement).contains(rel)) return;
     const other = rel?.closest?.("summary.trvwr-itm-sum");
     if (other && other !== e.currentTarget) return;
-    const sum = e.currentTarget;
-    const prev = this.flatPath;
+    const sum: HTMLElement = e.currentTarget;
+    const prev = sp.flatPath;
     clearTimeout(this._hoverLeaveTid);
     this._hoverLeaveTid = setTimeout(() => {
-      const fc = sum.querySelector?.("is-float-card");
+      const fc = sum.querySelector?.("is-float-card") as (HTMLElement & { locked?: boolean }) | null;
       if (fc?.locked) return;
       const cur = ta.hoveredNode ? ta.normalizeFlatPath(ta.hoveredNode.flatPath) : "";
       if (cur !== prev) return;
