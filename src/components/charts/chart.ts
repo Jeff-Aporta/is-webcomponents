@@ -929,4 +929,4 @@ if (typeof window !== 'undefined') {
   window.__isDefineTypedChart = defineTypedChart;
 }
 
-export { IsChart, defineTypedChart, formatValue };
+export { IsChart, defineTypedChart, formatValue, type ChartCtx, type ChartConfig, type ChartDataset, type ChartDataPoint, type ResolvedOptions, type HitRecord };
