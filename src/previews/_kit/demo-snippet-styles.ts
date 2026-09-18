@@ -279,7 +279,7 @@ textarea.demo-native-field {
 
 /** @param {string} html */
 export function extractClassTokens(html: string) {
-  const set = new Set();
+  const set = new Set<string>();
   const re = /class\s*=\s*["']([^"']+)["']/gi;
   let m;
   while ((m = re.exec(html))) {
