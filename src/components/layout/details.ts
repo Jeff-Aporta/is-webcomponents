@@ -80,7 +80,7 @@ import { TONE } from '../_shared/tone.js';
 
     static get observedAttributes(): string[] { return [...OBSERVED, 'spacing', 'show-duration', 'hide-duration']; }
 
-    #button!: HTMLElement;
+    #button!: HTMLButtonElement;
     #content!: HTMLElement;
     #root!: HTMLElement;
     #defaultIcon!: HTMLElement;
@@ -90,7 +90,7 @@ import { TONE } from '../_shared/tone.js';
       adoptCss(shadow, import.meta.url);
       shadow.appendChild(TEMPLATE.content.cloneNode(true));
       this.#root = shadow.querySelector<HTMLElement>('.root')!;
-      this.#button = shadow.querySelector<HTMLElement>('.summary-btn')!;
+      this.#button = shadow.querySelector<HTMLButtonElement>('.summary-btn')!;
       this.#content = shadow.querySelector<HTMLElement>('.content')!;
       this.#defaultIcon = shadow.querySelector<HTMLElement>('.default-icon')!;
 
@@ -145,8 +145,8 @@ import { TONE } from '../_shared/tone.js';
 
     // ---- public properties ----
 
-    get open() { return this.hasAttribute('open'); }
-    set open(v) {
+    get open(): boolean { return this.hasAttribute('open'); }
+    set open(v: boolean) {
       const desired = !!v;
       if (desired === this.open) return;
       if (desired) this.show();
@@ -168,20 +168,20 @@ import { TONE } from '../_shared/tone.js';
     get disabled() { return this.hasAttribute('disabled'); }
     set disabled(v) { this.toggleAttribute('disabled', !!v); }
 
-    get variant() {
+    get variant(): string {
       const v = this.getAttribute('variant');
-      return VALID_VARIANT.includes(v) ? v : 'outlined';
+      return v && VALID_VARIANT.includes(v) ? v : 'outlined';
     }
-    set variant(v) {
+    set variant(v: string | null | undefined) {
       if (v == null || v === '') this.removeAttribute('variant');
       else if (VALID_VARIANT.includes(v)) this.setAttribute('variant', v);
     }
 
-    get iconPlacement() {
+    get iconPlacement(): string {
       const v = this.getAttribute('icon-placement');
-      return VALID_ICON_PLACEMENT.includes(v) ? v : 'end';
+      return v && VALID_ICON_PLACEMENT.includes(v) ? v : 'end';
     }
-    set iconPlacement(v) {
+    set iconPlacement(v: string | null | undefined) {
       if (v == null || v === '') this.removeAttribute('icon-placement');
       else if (VALID_ICON_PLACEMENT.includes(v)) this.setAttribute('icon-placement', v);
     }
@@ -215,12 +215,13 @@ import { TONE } from '../_shared/tone.js';
       // automático.
     }
 
-    #syncSummaryText() {
+    #syncSummaryText(): void {
       const slot = this.shadowRoot!.querySelector<HTMLSlotElement>('slot[name="summary"]');
       const assigned = slot?.assignedNodes({ flatten: true });
       if (assigned && assigned.length > 0) return; // el usuario puso su slot
       const text = this.summary;
       const span = this.#button.querySelector<HTMLElement>('.summary-text');
+      if (!span) return;
       // Fallback sin destruir el <slot>: textContent borraría el slot y rompe
       // reasignaciones posteriores.
       let fallback = span.querySelector<HTMLElement>('[data-summary-fallback]');
@@ -236,15 +237,16 @@ import { TONE } from '../_shared/tone.js';
       fallback.textContent = text;
     }
 
-    #syncIcon() {
+    #syncIcon(): void {
       // El icono de expandido/plegado es el mismo (chevron). En el CSS rotamos
       // 180° según [open]. Aquí solo refrescamos el atributo aria del wrapper.
       const isOpen = this.open;
       const iconWrap = this.#button.querySelector<HTMLElement>('.summary-icon');
+      if (!iconWrap) return;
       iconWrap.dataset.state = isOpen ? 'open' : 'closed';
     }
 
-    #setOpen(desired, fromUser) {
+    #setOpen(desired: boolean, fromUser: boolean): Promise<void> {
       if (desired === this.open) return Promise.resolve();
       if (this.disabled) return Promise.resolve();
 
@@ -271,17 +273,18 @@ import { TONE } from '../_shared/tone.js';
       });
     }
 
-    #closeOthers() {
+    #closeOthers(): void {
       const name = this.name;
       if (!name) return;
       const group = document.querySelectorAll<HTMLElement>(`is-details[name="${CSS.escape(name)}"]`);
       group.forEach((el) => {
         if (el === this) return;
-        if (el.open) el.hide();
+        const me = el as HTMLElement & { open: boolean; hide(): void };
+        if (me.open) me.hide();
       });
     }
 
-    #animateContent(open) {
+    #animateContent(open: boolean): Promise<void> {
       if (open) {
         this.#content.hidden = false;
         return this.#animateOpen();
