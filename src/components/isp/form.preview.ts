@@ -2,17 +2,28 @@
  * Demo <is-form> con cuerpo JSON compacto (json2html / html2json).
  * @param {import('../../previews/_kit/types.d.ts').PreviewMountContext} ctx
  */
-export async function mount(ctx: import('../../previews/_kit/types.d.ts').PreviewMountContext) {
+
+interface IsFormEl extends HTMLElement {
+  fromJSON(json: unknown): unknown;
+  toJSON(): unknown;
+  setValues(values: Record<string, unknown>): void;
+  getValues(): Record<string, unknown>;
+  html2json(): unknown;
+}
+
+interface SubmitDetail { json?: unknown }
+
+export async function mount(ctx: import('../../previews/_kit/types.d.ts').PreviewMountContext): Promise<void> {
   const root = ctx.main;
   const out = root.querySelector<HTMLElement>('#fJsonOut');
   const bodyOut = root.querySelector<HTMLElement>('#fBodyOut');
   const log = root.querySelector<HTMLElement>('#fLog');
 
-  const paint = (el, data) => {
+  const paint = (el: HTMLElement | null, data: unknown): void => {
     if (!el) return;
     el.textContent = JSON.stringify(data, null, 2);
   };
-  const paintLog = (msg) => {
+  const paintLog = (msg: string): void => {
     if (!log) return;
     const code = log.querySelector<HTMLElement>('code') || log;
     code.textContent = msg;
@@ -39,12 +50,13 @@ export async function mount(ctx: import('../../previews/_kit/types.d.ts').Previe
     values: { icurso: 'C001', ncurso: 'Nómina electrónica', activo: true },
   };
 
-  const demo = root.querySelector<HTMLElement>('#fDemo');
+  const demo = root.querySelector<HTMLElement>('#fDemo') as IsFormEl | null;
   if (demo) {
     demo.fromJSON(schema);
     paint(out, demo.toJSON());
-    demo.addEventListener('is-submit', (e) => {
-      paint(out, e.detail?.json ?? demo.toJSON());
+    demo.addEventListener('is-submit', (e: Event) => {
+      const detail = (e as CustomEvent<SubmitDetail>).detail;
+      paint(out, detail?.json ?? demo.toJSON());
       paintLog('is-submit');
     });
     demo.addEventListener('is-cancel', () => paintLog('is-cancel'));
@@ -67,10 +79,10 @@ export async function mount(ctx: import('../../previews/_kit/types.d.ts').Previe
     paintLog('setValues(demo)');
   });
 
-  const round = root.querySelector<HTMLElement>('#fRound');
+  const round = root.querySelector<HTMLElement>('#fRound') as IsFormEl | null;
   paint(bodyOut, schema.body);
 
-  const remount = () => {
+  const remount = (): void => {
     if (!round) return;
     round.fromJSON({
       submitLabel: 'Guardar',
@@ -85,6 +97,6 @@ export async function mount(ctx: import('../../previews/_kit/types.d.ts').Previe
   remount();
 }
 
-export function unmount() {
+export function unmount(): void {
   /* no-op */
 }
