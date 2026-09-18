@@ -42,7 +42,7 @@ export function resolveAssets(html: string): string {
 export function fragmentFromHtml(html: string): DocumentFragment {
   const tpl = document.createElement('template');
   tpl.innerHTML = resolveAssets(html).trim();
-  return tpl.content.cloneNode(true);
+  return tpl.content.cloneNode(true) as DocumentFragment;
 }
 
 /**
@@ -150,7 +150,9 @@ const CONTENEDORES = new Set(['section', 'aside']);
  * @returns
  */
 export function renderSection(section: PreviewSection): HTMLElement {
-  const tag = CONTENEDORES.has(section.as ?? '') ? section.as : 'section';
+  const tag: 'section' | 'aside' = CONTENEDORES.has(section.as ?? '') && section.as
+    ? section.as
+    : 'section';
   const el = document.createElement(tag);
   el.className = section.className ? `section ${section.className}` : 'section';
   el.id = section.id;
@@ -201,7 +203,7 @@ export function renderDefinition(def: PreviewDefinition, targets: { main: HTMLEl
   }
 
   const destino = def.wrapperClass ? document.createElement('div') : main;
-  if (destino !== main) destino.className = def.wrapperClass;
+  if (destino !== main) destino.className = def.wrapperClass ?? '';
 
   // El prelude va DENTRO del wrapper: es donde se declaran las custom
   // properties de la página, y fuera de ahí un `var(--propia)` queda vacío.
