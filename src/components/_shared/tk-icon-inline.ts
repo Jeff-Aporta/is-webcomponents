@@ -35,7 +35,7 @@ function sugarPrefixOf(token: string) {
   return SUGAR_PREFIXES.find((p) => lower.startsWith(p)) || null;
 }
 
-export function iconAssetPath(iconId) {
+export function iconAssetPath(iconId: string | null | undefined): string {
   const id = String(iconId ?? '').trim();
   if (id.includes(':')) return id.replace(':', '/');
   if (id.includes('/')) return id;
@@ -43,24 +43,26 @@ export function iconAssetPath(iconId) {
 }
 
 /** Resuelve token interno simple {{…}} a id Iconify canónico (mdi:foo). */
-export function resolveIconId(raw) {
+export function resolveIconId(raw: string | null | undefined): string | null {
   const token = String(raw ?? '').trim();
   if (!token) return null;
-  const alias = ALIASES[token.toLowerCase()];
+  const alias = ALIASES[token.toLowerCase() as keyof typeof ALIASES];
   if (alias) return alias;
   if (ICON_ID_RE.test(token)) return token;
   return null;
 }
 
-function parseSugarObject(objRaw: string) {
+function parseSugarObject(objRaw: string): { icon?: string; hue?: number } | null {
   const s = objRaw.trim();
   if (!s.startsWith('{') || !s.endsWith('}')) return null;
   try {
-    const parsed = JSON.parse(s);
+    const parsed: unknown = JSON.parse(s);
     if (parsed && typeof parsed === 'object') {
+      const p = parsed as { icon?: unknown; hue?: unknown };
+      const hueNum = typeof p.hue === 'number' ? p.hue : Number(p.hue);
       return {
-        icon: parsed.icon != null ? String(parsed.icon) : undefined,
-        hue: normalizeTkHue(parsed.hue) ?? undefined,
+        icon: p.icon != null ? String(p.icon) : undefined,
+        hue: Number.isFinite(hueNum) ? normalizeTkHue(hueNum) ?? undefined : undefined,
       };
     }
   } catch {
@@ -69,13 +71,16 @@ function parseSugarObject(objRaw: string) {
   const iconM = /\bicon\s*:\s*(?:"([^"]*)"|'([^']*)')/i.exec(s);
   const hueM = /\bhue\s*:\s*(\d+(?:\.\d+)?)/i.exec(s);
   const icon = iconM?.[1] ?? iconM?.[2];
-  const hue = normalizeTkHue(hueM?.[1]);
+  const hueNum = hueM?.[1] != null ? Number(hueM[1]) : NaN;
+  const hue = Number.isFinite(hueNum) ? normalizeTkHue(hueNum) ?? undefined : undefined;
   if (!icon) return null;
-  return { icon, hue: hue ?? undefined };
+  return { icon, hue };
 }
 
+export type ResolvedIconToken = { iconId: string; hue?: number };
+
 /** Resuelve contenido interno de {{…}} (simple o sugar con objeto). */
-export function resolveIconToken(raw) {
+export function resolveIconToken(raw: string | null | undefined): ResolvedIconToken | null {
   const token = String(raw ?? '').trim();
   if (!token) return null;
 
@@ -98,7 +103,7 @@ export function hasIconJsonSugar(raw: string) {
   return text.includes('{{icon:') || text.includes('{{iconify:');
 }
 
-function scanIconTemplateTokens(text: string, onToken) {
+function scanIconTemplateTokens(text: string, onToken: (start: number, end: number, inner: string) => void): void {
   let i = 0;
   while (i < text.length) {
     const open = text.indexOf('{{', i);
@@ -157,13 +162,24 @@ function scanIconTemplateTokens(text: string, onToken) {
 /** Icono de reemplazo cuando el pedido no existe en los assets del kit. */
 const ICONO_FALLBACK = 'mdi:shape-outline';
 
-export function svgIconGroup(iconId, opts = {}) {
+export type SvgIconGroupOpts = {
+  x?: number;
+  y?: number;
+  size?: number;
+  hue?: number;
+  fallback?: string;
+};
+
+export function svgIconGroup(iconId: string, opts: SvgIconGroupOpts = {}): SVGGElement {
   const { x = 0, y = 0, size = 16, hue, fallback = ICONO_FALLBACK } = opts;
   const NS = 'http://www.w3.org/2000/svg';
   const g = document.createElementNS(NS, 'g');
   g.setAttribute('class', 'tk-svg-icon');
   g.setAttribute('aria-hidden', 'true');
-  if (hue != null) g.setAttribute('fill', tkHueToHex(hue));
+  if (hue != null) {
+    const fill = tkHueToHex(hue as number);
+    if (fill) g.setAttribute('fill', fill);
+  }
 
   const path = iconAssetPath(iconId);
   const sep = path.indexOf('/');
@@ -173,14 +189,14 @@ export function svgIconGroup(iconId, opts = {}) {
 
   // Un icono que no existe dejaba el avatar VACÍO — un hueco que se lee como
   // error, no como ausencia. Se cae al genérico antes de rendirse.
-  const conFallback = async () => {
-    const raw = await resolveIconRaw(prefix, name);
+  const conFallback = async (): Promise<string | null> => {
+    const raw = await resolveIconRaw(prefix, name, undefined);
     if (raw) return raw;
     if (!fallback || fallback === iconId) return null;
     const alt = iconAssetPath(fallback);
     const corte = alt.indexOf('/');
     if (corte <= 0) return null;
-    return resolveIconRaw(alt.slice(0, corte), alt.slice(corte + 1));
+    return resolveIconRaw(alt.slice(0, corte), alt.slice(corte + 1), undefined);
   };
 
   conFallback().then((raw) => {
@@ -205,8 +221,16 @@ export function svgIconGroup(iconId, opts = {}) {
   return g;
 }
 
+export type IconInlineOpts = {
+  size?: string | number;
+  className?: string;
+  hue?: number;
+};
+
+export type IconHtmlRender = string;
+
 /** HTML web — `<is-icon>`, la unica API de iconos del kit. */
-export function iconInlineHtmlWeb(iconId: string, opts = {}) {
+export function iconInlineHtmlWeb(iconId: string, opts: IconInlineOpts = {}): IconHtmlRender {
   const size = opts.size ?? '1.1em';
   const cls = opts.className ?? 'tk-inline-icon';
   const css = opts.hue != null ? tkHueToCss(opts.hue) : undefined;
@@ -215,18 +239,22 @@ export function iconInlineHtmlWeb(iconId: string, opts = {}) {
 }
 
 /** HTML email-safe — img contra el CDN publico del repo (no api.iconify). */
-export function iconInlineHtmlEmail(iconId, opts = {}) {
+export function iconInlineHtmlEmail(iconId: string, opts: IconInlineOpts = {}): IconHtmlRender {
   const px = typeof opts.size === 'number' ? opts.size : 16;
   const path = iconAssetPath(iconId);
   const url = `https://cdn.jsdelivr.net/gh/Jeff-Aporta/is-webcomponents@main/dist/assets/icons/${path}.svg`;
   return `<img src="${url}" width="${px}" height="${px}" alt="" class="tk-inline-icon-img" style="display:inline-block;vertical-align:-0.2em;border:0;"/>`;
 }
 
-function replaceIconTokens(raw: string, transformPlain, renderIcon) {
+function replaceIconTokens(
+  raw: string,
+  transformPlain: (text: string) => string,
+  renderIcon: (iconId: string, hue: number | undefined) => string,
+): string {
   if (!raw.includes('{{')) return transformPlain(raw);
   let out = '';
   let last = 0;
-  scanIconTemplateTokens(raw, (start, end, inner) => {
+  scanIconTemplateTokens(raw, (start: number, end: number, inner: string) => {
     if (start > last) out += transformPlain(raw.slice(last, start));
     const tok = resolveIconToken(inner);
     out += tok ? renderIcon(tok.iconId, tok.hue) : transformPlain(raw.slice(start, end));
@@ -236,25 +264,25 @@ function replaceIconTokens(raw: string, transformPlain, renderIcon) {
   return out;
 }
 
-export function replaceIconTokensWeb(raw, transformPlain, opts) {
+export function replaceIconTokensWeb(raw: string, transformPlain: (t: string) => string, opts: IconInlineOpts): string {
   return replaceIconTokens(raw, transformPlain, (id, hue) =>
     iconInlineHtmlWeb(id, { ...opts, hue: hue ?? opts?.hue }),
   );
 }
 
-export function replaceIconTokensEmail(raw, transformPlain, opts) {
+export function replaceIconTokensEmail(raw: string, transformPlain: (t: string) => string, opts: IconInlineOpts): string {
   return replaceIconTokens(raw, transformPlain, (id, hue) =>
     iconInlineHtmlEmail(id, { ...opts, hue: hue ?? opts?.hue }),
   );
 }
 
 /** Texto plano — quita markup de iconos para tooltips/búsqueda. */
-export function stripIconTokensPlain(raw) {
+export function stripIconTokensPlain(raw: string | null | undefined): string {
   const text = String(raw ?? '');
   if (!text.includes('{{')) return text;
   let out = '';
   let last = 0;
-  scanIconTemplateTokens(text, (start, end, inner) => {
+  scanIconTemplateTokens(text, (start: number, end: number, inner: string) => {
     if (start > last) out += text.slice(last, start);
     out += resolveIconToken(inner) ? ' ' : text.slice(start, end);
     last = end;
@@ -264,13 +292,15 @@ export function stripIconTokensPlain(raw) {
 }
 
 /** Primer token de icono al inicio del texto (p. ej. label de actor). */
-export function extractLeadingIconToken(raw) {
+export type LeadingIcon = { iconId: string; hue: number | undefined; rest: string };
+
+export function extractLeadingIconToken(raw: string | null | undefined): LeadingIcon | null {
   const text = String(raw ?? '');
   if (!text.includes('{{')) return null;
   const offset = (text.match(/^\s*/)?.[0].length) ?? 0;
-  let result = null;
+  let result: LeadingIcon | null = null;
   let done = false;
-  scanIconTemplateTokens(text, (start, end, inner) => {
+  scanIconTemplateTokens(text, (start: number, end: number, inner: string) => {
     if (done) return;
     done = true;
     if (start !== offset) return;
@@ -280,11 +310,11 @@ export function extractLeadingIconToken(raw) {
   return result;
 }
 
-export function countIconTokens(raw) {
+export function countIconTokens(raw: string | null | undefined): number {
   const text = String(raw ?? '');
   if (!text.includes('{{')) return 0;
   let n = 0;
-  scanIconTemplateTokens(text, (_s, _e, inner) => {
+  scanIconTemplateTokens(text, (_s: number, _e: number, inner: string) => {
     if (resolveIconToken(inner)) n++;
   });
   return n;
