@@ -43,7 +43,7 @@ import { ElementBase } from '../../core/element-base.js';
  */
 (() => {
   // Card en vuelo durante un drag (una sola por documento).
-  let dragCard = null;
+  let dragCard: HTMLElement | null = null;
   const BOARD_TEMPLATE = document.createElement('template');
   BOARD_TEMPLATE.innerHTML = /* html */ `
     <div class="board" part="base">
@@ -90,7 +90,7 @@ import { ElementBase } from '../../core/element-base.js';
 
   class IsKanban extends HTMLElement {
     static get observedAttributes(): string[] { return BOARD_OBSERVED; }
-    #mo = null;
+    #mo: MutationObserver | null = null;
     connectedCallback(): void {
       if (!this.hasAttribute('role')) this.setAttribute('role', 'list');
       this.#syncOrientation();
@@ -143,17 +143,18 @@ import { ElementBase } from '../../core/element-base.js';
     /** Zona de drop: la lane acepta cards arrastradas desde cualquier columna. */
     #bindDrop() {
       const lane = this.shadowRoot!.querySelector<HTMLElement>('.lane');
-      lane.addEventListener('dragover', (e) => {
+      if (!lane) return;
+      lane.addEventListener('dragover', (e: DragEvent) => {
         if (!dragCard) return;
         e.preventDefault();
-        e.dataTransfer.dropEffect = 'move';
-        this.#root.classList.add('drop-target');
+        if (e.dataTransfer) e.dataTransfer.dropEffect = 'move';
+        this.#root?.classList.add('drop-target');
       });
-      lane.addEventListener('dragleave', () => this.#root.classList.remove('drop-target'));
-      lane.addEventListener('drop', (e) => {
+      lane.addEventListener('dragleave', () => this.#root?.classList.remove('drop-target'));
+      lane.addEventListener('drop', (e: DragEvent) => {
         if (!dragCard) return;
         e.preventDefault();
-        this.#root.classList.remove('drop-target');
+        this.#root?.classList.remove('drop-target');
         const from = dragCard.parentElement;
         // Insertar antes de la card bajo el cursor; si no hay, al final.
         const cards = [...this.querySelectorAll<HTMLElement>(':scope > is-kanban-card')].filter((c) => c !== dragCard);
@@ -165,7 +166,9 @@ import { ElementBase } from '../../core/element-base.js';
         if (after) this.insertBefore(dragCard, after);
         else this.appendChild(dragCard);
         this.#sync();
-        if (from && from !== this && typeof from.refreshBadge === 'function') from.refreshBadge();
+        if (from && from !== this && typeof (from as HTMLElement & { refreshBadge?: () => void }).refreshBadge === 'function') {
+          (from as HTMLElement & { refreshBadge: () => void }).refreshBadge();
+        }
         emit(dragCard, 'is-kanban-move', { card: dragCard, from, to: this });
       });
     }
@@ -184,7 +187,7 @@ import { ElementBase } from '../../core/element-base.js';
       } else {
         this.#badge.hidden = true;
       }
-      if (accent) {
+      if (accent && this.#root) {
         this.#root.style.setProperty('--accent', accent);
       }
       // Update badge count
@@ -220,10 +223,12 @@ import { ElementBase } from '../../core/element-base.js';
       this.#sync();
       // Transferible entre stacks vía HTML5 drag & drop.
       this.setAttribute('draggable', 'true');
-      this.addEventListener('dragstart', (e) => {
+      this.addEventListener('dragstart', (e: DragEvent) => {
         dragCard = this;
-        e.dataTransfer.effectAllowed = 'move';
-        e.dataTransfer.setData('text/plain', this.getAttribute('heading') || 'card');
+        if (e.dataTransfer) {
+          e.dataTransfer.effectAllowed = 'move';
+          e.dataTransfer.setData('text/plain', this.getAttribute('heading') || 'card');
+        }
         this.classList.add('is-dragging');
       });
       this.addEventListener('dragend', () => {
@@ -263,7 +268,7 @@ import { ElementBase } from '../../core/element-base.js';
       }
       this.#root.classList.toggle('no-shadow', this.hasAttribute('without-shadow'));
       const footerSlot = this.shadowRoot!.querySelector<HTMLSlotElement>('slot[name="footer"]');
-      this.#footer.hidden = !footerSlot.assignedNodes().length;
+      this.#footer.hidden = !footerSlot || footerSlot.assignedNodes().length === 0;
     }
   }
   defineElement('is-kanban-card', IsKanbanCard);
