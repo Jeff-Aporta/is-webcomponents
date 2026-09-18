@@ -91,11 +91,11 @@ export function parseLooseDate(raw: string|number|null|undefined) {
       else this.setAttribute('locale', String(v));
     }
 
-    #buildOptions() {
-      const opts = {};
+    #buildOptions(): Intl.DateTimeFormatOptions {
+      const opts: Intl.DateTimeFormatOptions = {};
       for (const [attr, key] of Object.entries(OPT_ATTRS)) {
         const v = this.getAttribute(attr);
-        if (v) opts[key] = v;
+        if (v) opts[key as keyof Intl.DateTimeFormatOptions] = v as never;
       }
       const hf = this.getAttribute('hour-format');
       if (hf === '12') opts.hour12 = true;
@@ -120,7 +120,8 @@ export function parseLooseDate(raw: string|number|null|undefined) {
       } catch {
         this.#el.textContent = d.toLocaleString(this.locale);
       }
-      this.#el.dateTime = d.toISOString();
+      const el = this.#el as HTMLTimeElement;
+      el.dateTime = d.toISOString();
     }
   }
 
