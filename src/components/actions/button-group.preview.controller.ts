@@ -36,7 +36,9 @@ const STYLES = /* css */ `
 export class ButtonGroupPreview extends ISComponentPreview {
   constructor() {
     super({
+      $schema: 'is-preview/v1',
       tag: 'is-button-group',
+      category: 'actions',
       title: '<is-button-group>',
       titleHtml: true,
       description: 'Documentación y demos del componente is-button-group de InSoft.',
