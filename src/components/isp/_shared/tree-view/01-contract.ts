@@ -1,6 +1,6 @@
 var __defProp = Object.defineProperty;
-var __defNormalProp = (obj, key, value) => key in obj ? __defProp(obj, key, { enumerable: true, configurable: true, writable: true, value }) : obj[key] = value;
-var __publicField = (obj, key, value) => __defNormalProp(obj, typeof key !== "symbol" ? key + "" : key, value);
+var __defNormalProp = (obj: object, key: PropertyKey, value: unknown) => key in obj ? __defProp(obj, key, { enumerable: true, configurable: true, writable: true, value }) : (obj as Record<PropertyKey, unknown>)[key] = value;
+var __publicField = (obj: object, key: PropertyKey, value: unknown) => __defNormalProp(obj, typeof key !== "symbol" ? key + "" : key, value);
 import { TTreeAdapterContext } from "./00-context.js";
 import { asRecord, type TNode } from "./_types.js";
 
@@ -29,8 +29,8 @@ class TTreeAdapterContract extends TTreeAdapterContext {
     __publicField(this, "_uiListeners", []);
     __publicField(this, "lastNodesRef", []);
     __publicField(this, "lastObjRefId", "");
-    __publicField(this, "flashClearTimer");
-    __publicField(this, "flashErrorClearTimer");
+    __publicField(this, "flashClearTimer", 0);
+    __publicField(this, "flashErrorClearTimer", 0);
   }
   getReferenceFlatPath(node: TNode): string {
     const id = String(node.flatPath ?? "").trim();

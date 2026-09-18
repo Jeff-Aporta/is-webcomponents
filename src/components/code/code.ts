@@ -41,40 +41,18 @@ import { softFormat, softFormatMode } from '../_shared/code-text.js';
 import {
   code2json, json2code, parseCodeDocument, normalizeMark, rebaseMarks,
 } from '../_shared/code-model.js';
+import type { CodeDocument as CodeDocModel, CodeMark as CodeMarkModel } from '../_shared/code-model.js';
 import { tokenizeCode, lineToHtml, tokenClass, escapeHtml, tokensToText } from '../_shared/code-highlight.js';
+import type { Token as HighlightToken, HighlightLine as CodeHighlightLine } from '../_shared/code-highlight.js';
+import type { CodeFormatConfig as CodeFmtConfigShared } from '../_shared/code-format.js';
 import '../feedback/tooltip.js';
 
 // Tipos locales (los _shared sólo los declaran vía JSDoc; replicamos forma).
 type CodeMarkKind = 'highlight' | 'tooltip' | 'message';
 type CodeMarkTone = 'error' | 'warning' | 'info' | 'success' | 'neutral';
-type CodeMark = {
-  id: string;
-  from: number;
-  to: number;
-  kind: CodeMarkKind;
-  tone: CodeMarkTone;
-  message?: string;
-  title?: string;
-  body?: string;
-  className?: string;
-};
-type CodeDocument = {
-  $schema?: string;
-  lang?: string;
-  value: string;
-  marks?: CodeMark[];
-  format?: Record<string, unknown>;
-  theme?: CodeThemeConfig;
-};
-type CodeFormatConfig = {
-  tabWidth: number;
-  useTabs: boolean;
-  printWidth: number;
-  semi: boolean;
-  singleQuote: boolean;
-  trailingComma: boolean;
-  endOfLine: 'lf' | 'crlf' | 'cr';
-};
+type CodeMark = CodeMarkModel;
+type CodeDocument = CodeDocModel;
+type CodeFormatConfig = CodeFmtConfigShared;
 type CodeLangDef = {
   id: string;
   aliases?: string[];
@@ -107,7 +85,7 @@ const PROP_UPGRADE = [
   'mode', 'tab-size', 'name', 'placeholder', 'min-height', 'marks',
 ];
 
-type HighlightLine = { tokens: Array<{ type: string; text: string }>; lineClass: string | null; raw: string };
+type HighlightLine = CodeHighlightLine;
 type HighlightResult = { lines: HighlightLine[]; html: string; withNumbers: boolean };
 
 /** Rango [from,to) del texto viejo reemplazado por `insertedLen` caracteres. */
@@ -439,7 +417,7 @@ class IsCode extends ElementBase {
           if (doc.lang && !this.hasAttribute('lang')) this.setAttribute('lang', doc.lang);
           if (doc.format) this.#formatConfig = normalizeFormatConfig(doc.format);
           if (doc.theme) {
-            this.#themeConfig = doc.theme;
+            this.#themeConfig = doc.theme as CodeThemeConfig;
             applyThemeConfig(this, this.#themeConfig, this.#pageTheme());
           }
           this.#pendingValue = doc.value;
@@ -515,7 +493,7 @@ class IsCode extends ElementBase {
   /** Pinta `text` (tokenizado + marcas) dentro de un <pre> y devuelve las líneas. */
   #paintLines(pre: HTMLPreElement, text: string, withNumbers: boolean): HighlightResult {
     const src = String(text ?? '').replace(/\r\n/g, '\n');
-    const { lines } = tokenizeCode(src, this.lang, null) as { lines: HighlightLine[] };
+    const { lines } = tokenizeCode(src, this.lang, undefined) as { lines: HighlightLine[] };
     const marks = this.#markSpansFor(src);
     let html = '';
     let abs = 0;
