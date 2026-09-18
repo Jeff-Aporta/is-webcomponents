@@ -65,8 +65,8 @@ import '../actions/button.js';
     #progressBar!: HTMLElement;
     #closeBtn!: HTMLElement;
     #mounted = false;
-    #timer = null;
-    #raf = null;
+    #timer: ReturnType<typeof setTimeout> | null = null;
+    #raf: number | null = null;
     #startedAt = 0;
     #remaining = 0;
     #paused = false;
@@ -126,11 +126,11 @@ import '../actions/button.js';
       else this.setAttribute('color', normalizeIntent(v, 'neutral'));
     }
 
-    get duration() {
-      const n = parseFloat(this.getAttribute('duration'));
+    get duration(): number {
+      const n = parseFloat(this.getAttribute('duration') ?? '');
       return Number.isFinite(n) ? Math.max(0, n) : DEFAULT_DURATION;
     }
-    set duration(v) {
+    set duration(v: number | string | null | undefined) {
       if (v == null || v === '') this.removeAttribute('duration');
       else this.setAttribute('duration', String(v));
     }
@@ -214,10 +214,10 @@ import '../actions/button.js';
       this.#progressBar.style.width = computed;
     };
 
-    #onResume = (e) => {
+    #onResume = (e: Event) => {
       if (!this.#paused || this.duration <= 0) return;
       // Still focused inside → keep paused
-      if (e?.type === 'focusout' && this.#base.contains(e.relatedTarget)) return;
+      if (e?.type === 'focusout' && e instanceof FocusEvent && this.#base.contains(e.relatedTarget as Node | null)) return;
       this.#paused = false;
       if (this.#remaining <= 0) {
         this.hide();
