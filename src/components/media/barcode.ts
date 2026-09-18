@@ -52,7 +52,7 @@ import { svgEl } from '../_shared/svg-chart-engine.js';
     '114131','311141','411131','211412','211214','221112','222311','212222','212222','212222', // padding
   ];
 
-  function code128B(value) {
+  function code128B(value: string | null | undefined): string {
     const text = String(value || '');
     const codes = [104]; // Code B start
     for (const ch of text) {
@@ -61,12 +61,12 @@ import { svgEl } from '../_shared/svg-chart-engine.js';
       codes.push(code - 32);
     }
     // checksum
-    let sum = codes[0];
-    for (let i = 1; i < codes.length; i++) sum += codes[i] * i;
+    let sum = codes[0] ?? 0;
+    for (let i = 1; i < codes.length; i++) sum += (codes[i] ?? 0) * i;
     codes.push(sum % 103);
     // concatenar bits
     let bits = '';
-    for (const c of codes) bits += CODE128_PATTERNS[c];
+    for (const c of codes) bits += CODE128_PATTERNS[c] ?? '';
     bits += '11'; // stop
     return bits;
   }
@@ -79,7 +79,7 @@ import { svgEl } from '../_shared/svg-chart-engine.js';
   // Patrón de paridad (primeros 6 dígitos). 0=L, 1=G
   const EAN_PARITY = ['LLLLLL','LLGLGG','LLGGLG','LLGGGL','LGLLGG','LGGLLG','LGGGLL','LGLGLG','LGLGGL','LGGLGL'];
 
-  function ean13Check(value) {
+  function ean13Check(value: string | null | undefined): string | null {
     const digits = String(value || '').replace(/\D/g, '').slice(0, 12);
     if (digits.length !== 12) return null;
     let sum = 0;
@@ -88,7 +88,7 @@ import { svgEl } from '../_shared/svg-chart-engine.js';
     return digits + String(check);
   }
 
-  function ean13Bits(full) {
+  function ean13Bits(full: string): string {
     const first = full[0];
     const left = full.slice(1, 7);
     const right = full.slice(7);
