@@ -336,7 +336,7 @@ class TATreeShape extends TAModel {
     if (needle.length === 0) return null;
     for (const branch of list) {
       if (this.normalizeFlatPath(branch.flatPath) === needle) return branch;
-      const childs = branch.childrens;
+      const childs = branch.childrens as TNode[] | undefined;
       if (childs?.length) {
         const found = this.findNodeByFlatPath(needle, childs);
         if (found) return found;
