@@ -75,8 +75,8 @@ import { TONE } from '../_shared/tone.js';
 
     static get observedAttributes(): string[] { return [...OBSERVED, 'bg', 'border-color', 'text-color', 'accent', 'spacing']; }
 
-    #defaultIcon!: HTMLElement;
-    #customIconObserver;
+    #defaultIcon!: HTMLElement & { icon?: string };
+    #customIconObserver: MutationObserver | null = null;
     #lastIconName = '';
 
     constructor() {
@@ -122,8 +122,8 @@ import { TONE } from '../_shared/tone.js';
 
     // ---- properties ----
 
-    get color() {
-      const v = this.getAttribute('color');
+    get color(): string {
+      const v = this.getAttribute('color') ?? '';
       return VALID_COLOR.includes(v) ? v : 'neutral';
     }
     set color(v) {
@@ -131,8 +131,8 @@ import { TONE } from '../_shared/tone.js';
       else if (VALID_COLOR.includes(v)) this.setAttribute('color', v);
     }
 
-    get variant() {
-      const v = this.getAttribute('variant');
+    get variant(): string {
+      const v = this.getAttribute('variant') ?? '';
       return VALID_VARIANT.includes(v) ? v : 'filled-outlined';
     }
     set variant(v) {
@@ -160,7 +160,7 @@ import { TONE } from '../_shared/tone.js';
       this.removeAttribute('data-no-icon');
       const explicit = this.getAttribute('icon');
       const variant = this.variant;
-      const targetName = explicit || ICON_BY_VARIANT[variant] || ICON_BY_VARIANT.neutral;
+      const targetName: string = explicit || ICON_BY_VARIANT[variant as keyof typeof ICON_BY_VARIANT] || ICON_BY_VARIANT.neutral;
       if (targetName === this.#lastIconName) return;
       this.#lastIconName = targetName;
       // Resolver tras el próximo microtask para asegurar que is-icon está definido.
