@@ -9,17 +9,17 @@
 import { prettyHtml, softFormat, dedent } from './code-text.js';
 import { formatDiff } from './code-diff.js';
 
-/** @typedef {object} CodeFormatConfig
- * @property {number} [tabWidth=2]
- * @property {boolean} [useTabs=false]
- * @property {number} [printWidth=100]
- * @property {boolean} [semi=true]
- * @property {boolean} [singleQuote=false]
- * @property {boolean} [trailingComma=false]
- * @property {'lf'|'crlf'|'cr'} [endOfLine='lf']
- */
+export type CodeFormatConfig = {
+  tabWidth?: number;
+  useTabs?: boolean;
+  printWidth?: number;
+  semi?: boolean;
+  singleQuote?: boolean;
+  trailingComma?: boolean;
+  endOfLine?: 'lf' | 'crlf' | 'cr';
+};
 
-export const DEFAULT_FORMAT = Object.freeze({
+export const DEFAULT_FORMAT: CodeFormatConfig = Object.freeze({
   tabWidth: 2,
   useTabs: false,
   printWidth: 100,
@@ -29,35 +29,44 @@ export const DEFAULT_FORMAT = Object.freeze({
   endOfLine: 'lf',
 });
 
-/** @param {unknown} raw */
-export function normalizeFormatConfig(raw: unknown) {
-  const src = raw && typeof raw === 'object' ? raw : {};
-  const tabWidth = Number(src.tabWidth);
-  const printWidth = Number(src.printWidth);
-  const eol = src.endOfLine;
+export type NormalizedFormatConfig = {
+  tabWidth: number;
+  useTabs: boolean;
+  printWidth: number;
+  semi: boolean;
+  singleQuote: boolean;
+  trailingComma: boolean;
+  endOfLine: 'lf' | 'crlf' | 'cr';
+};
+
+export function normalizeFormatConfig(raw: unknown): NormalizedFormatConfig {
+  const src = (raw && typeof raw === 'object') ? raw as Record<string, unknown> : {};
+  const tabWidth = Number(src['tabWidth']);
+  const printWidth = Number(src['printWidth']);
+  const eol = src['endOfLine'];
   return {
     tabWidth: Number.isFinite(tabWidth) && tabWidth > 0 ? Math.min(8, Math.floor(tabWidth)) : 2,
-    useTabs: !!src.useTabs,
+    useTabs: !!src['useTabs'],
     printWidth: Number.isFinite(printWidth) && printWidth >= 40 ? Math.floor(printWidth) : 100,
-    semi: src.semi !== false,
-    singleQuote: !!src.singleQuote,
-    trailingComma: !!src.trailingComma,
+    semi: src['semi'] !== false,
+    singleQuote: !!src['singleQuote'],
+    trailingComma: !!src['trailingComma'],
     endOfLine: eol === 'crlf' || eol === 'cr' ? eol : 'lf',
   };
 }
 
-const indentUnit = (cfg) => (cfg.useTabs ? '\t' : ' '.repeat(cfg.tabWidth));
+const indentUnit = (cfg: NormalizedFormatConfig): string => (cfg.useTabs ? '\t' : ' '.repeat(cfg.tabWidth));
 
-const joinEol = (lines, cfg) => {
+const joinEol = (lines: readonly string[], cfg: NormalizedFormatConfig): string => {
   const eol = cfg.endOfLine === 'crlf' ? '\r\n' : cfg.endOfLine === 'cr' ? '\r' : '\n';
   return lines.join(eol);
 };
 
 /** Re-indenta un texto ya con saltos de línea según braces/tags simples. */
-function reindentByBraces(text: string, cfg) {
+function reindentByBraces(text: string, cfg: NormalizedFormatConfig): string {
   const unit = indentUnit(cfg);
   let depth = 0;
-  const out = [];
+  const out: string[] = [];
   for (const raw of String(text).replace(/\r\n/g, '\n').split('\n')) {
     const line = raw.trim();
     if (!line) {
@@ -69,14 +78,11 @@ function reindentByBraces(text: string, cfg) {
     const opens = (line.match(/[{\[(]/g) || []).length;
     const closes = (line.match(/[}\])]/g) || []).length;
     depth = Math.max(0, depth + opens - closes);
-    if (/^[}\]\)]/.test(line) && opens > closes) {
-      /* ya ajustado arriba */
-    }
   }
   return joinEol(out, cfg);
 }
 
-function formatJavascript(text: string, cfg) {
+function formatJavascript(text: string, cfg: NormalizedFormatConfig): string {
   let t = softFormat(dedent(text), 'javascript');
   // Soft-format deja indent de 2 espacios; reaplicar tabWidth / tabs.
   t = reindentByBraces(t, cfg);
@@ -107,16 +113,16 @@ function formatJavascript(text: string, cfg) {
   return t;
 }
 
-function formatHtml(text, cfg) {
+function formatHtml(text: string, cfg: NormalizedFormatConfig): string {
   let t = prettyHtml(dedent(text));
   const unit = indentUnit(cfg);
   // prettyHtml usa 2 espacios; remapear
-  t = t.replace(/^( +)/gm, (_, sp) => unit.repeat(Math.floor(sp.length / 2)));
+  t = t.replace(/^( +)/gm, (_m: string, sp: string) => unit.repeat(Math.floor(sp.length / 2)));
   return joinEol(t.split(/\r?\n/), cfg);
 }
 
-function formatCss(text, cfg) {
-  let t = dedent(text)
+function formatCss(text: string, cfg: NormalizedFormatConfig): string {
+  const t = dedent(text)
     .replace(/\s*\{\s*/g, ' {\n')
     .replace(/\s*\}\s*/g, '\n}\n')
     .replace(/;\s*/g, ';\n')
@@ -124,20 +130,21 @@ function formatCss(text, cfg) {
   return reindentByBraces(t, cfg);
 }
 
-function formatPython(text, cfg) {
+function formatPython(text: string, cfg: NormalizedFormatConfig): string {
   // Python: respetar bloques por `:` / dedent heurístico mínimo + tabWidth.
   const unit = indentUnit(cfg);
   const lines = dedent(text).replace(/\r\n/g, '\n').split('\n');
   // Normalizar indent existente a niveles de 2/4 detectados
-  const indents = lines
+  const nonZero = lines
     .filter((l: string) => l.trim())
-    .map((l) => (l.match(/^ */) || [''])[0].length);
-  const step = indents.length
-    ? Math.max(1, Math.min(...indents.filter((n: number) => n > 0).length ? indents.filter((n: number) => n > 0) : [2]))
+    .map((l) => (l.match(/^ */) ?? [''])[0]!.length)
+    .filter((n: number) => n > 0);
+  const step = nonZero.length
+    ? Math.max(1, Math.min(...nonZero))
     : 2;
   const out = lines.map((line: string) => {
     if (!line.trim()) return '';
-    const lead = (line.match(/^ */) || [''])[0].length;
+    const lead = (line.match(/^ */) ?? [''])[0]!.length;
     const level = Math.round(lead / step);
     return unit.repeat(level) + line.trim();
   });
@@ -145,17 +152,15 @@ function formatPython(text, cfg) {
 }
 
 /**
- * @param {string} text
- * @param {string} langId
- * @param {CodeFormatConfig | object} [config]
+ * Formatea el código según el lenguaje detectado y la configuración.
  */
-export function formatCode(text: string, langId: string, config: CodeFormatConfig | object) {
+export function formatCode(text: string, langId: string, config: CodeFormatConfig | object = {}): string {
   const cfg = normalizeFormatConfig(config);
   const id = String(langId || 'javascript').toLowerCase();
-  let out;
+  let out: string;
   // Un diff no se re-indenta ni se re-comilla: sus columnas son datos. Lo único
   // que se "formatea" es la rejilla del --stat.
-  if (id === 'diff' || id === 'commit') out = formatDiff(text, { eol: cfg.endOfLine });
+  if (id === 'diff' || id === 'commit') out = formatDiff(text, { eol: cfg.endOfLine as 'lf' | 'crlf' });
   else if (id === 'html' || id === 'htm' || id === 'htmlmixed') out = formatHtml(text, cfg);
   else if (id === 'css' || id === 'scss' || id === 'less') out = formatCss(text, cfg);
   else if (id === 'python' || id === 'py') out = formatPython(text, cfg);
