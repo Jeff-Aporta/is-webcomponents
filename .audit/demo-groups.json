@@ -1,0 +1,5118 @@
+{
+  "profile": "iswc",
+  "source": "custom-by-demo-category",
+  "totalDemos": 67,
+  "totalTestables": 507,
+  "groups": [
+    {
+      "id": "demo-g01",
+      "label": "actions (5 demos: button, button-group, context-menu, dropdown, speed-dial)",
+      "category": "actions",
+      "demos": [
+        "button",
+        "button-group",
+        "context-menu",
+        "dropdown",
+        "speed-dial"
+      ],
+      "testables": [
+        {
+          "file": "demos/actions/button-group/button-group.html",
+          "language": "html",
+          "name": "button-group",
+          "categories": [
+            "event"
+          ],
+          "loc": 87
+        },
+        {
+          "file": "demos/actions/button/button.html",
+          "language": "html",
+          "name": "button",
+          "categories": [
+            "event"
+          ],
+          "loc": 103
+        },
+        {
+          "file": "demos/actions/check-icon-button/check-icon-button.html",
+          "language": "html",
+          "name": "check-icon-button",
+          "categories": [
+            "event"
+          ],
+          "loc": 87
+        },
+        {
+          "file": "demos/actions/context-menu/context-menu.html",
+          "language": "html",
+          "name": "context-menu",
+          "categories": [
+            "event"
+          ],
+          "loc": 73
+        },
+        {
+          "file": "demos/actions/copy-button/copy-button.html",
+          "language": "html",
+          "name": "copy-button",
+          "categories": [
+            "event"
+          ],
+          "loc": 81
+        },
+        {
+          "file": "demos/actions/dropdown-item/dropdown-item.html",
+          "language": "html",
+          "name": "dropdown-item",
+          "categories": [
+            "webcomponent",
+            "event"
+          ],
+          "loc": 102
+        },
+        {
+          "file": "demos/actions/dropdown/dropdown.html",
+          "language": "html",
+          "name": "dropdown",
+          "categories": [
+            "webcomponent",
+            "event"
+          ],
+          "loc": 81
+        },
+        {
+          "file": "demos/actions/fab/fab.html",
+          "language": "html",
+          "name": "fab",
+          "categories": [
+            "event"
+          ],
+          "loc": 77
+        },
+        {
+          "file": "demos/actions/share-button/share-button.html",
+          "language": "html",
+          "name": "share-button",
+          "categories": [
+            "event"
+          ],
+          "loc": 71
+        },
+        {
+          "file": "demos/actions/speed-dial/speed-dial.html",
+          "language": "html",
+          "name": "speed-dial",
+          "categories": [
+            "event"
+          ],
+          "loc": 80
+        },
+        {
+          "file": "src/components/actions/button-group.css",
+          "language": "css",
+          "name": "button-group",
+          "categories": [
+            "animation",
+            "css-part"
+          ],
+          "loc": 239
+        },
+        {
+          "file": "src/components/actions/button-group.preview.controller.ts",
+          "language": "ts",
+          "name": "button-group.preview.controller",
+          "categories": [
+            "webcomponent",
+            "event"
+          ],
+          "loc": 518
+        },
+        {
+          "file": "src/components/actions/button-group.ts",
+          "language": "ts",
+          "name": "is-button-group",
+          "categories": [
+            "webcomponent",
+            "event",
+            "css-part"
+          ],
+          "loc": 300
+        },
+        {
+          "file": "src/components/actions/button.css",
+          "language": "css",
+          "name": "button",
+          "categories": [
+            "auth",
+            "animation",
+            "css-part"
+          ],
+          "loc": 357
+        },
+        {
+          "file": "src/components/actions/button.preview.ts",
+          "language": "ts",
+          "name": "button.preview",
+          "categories": [
+            "webcomponent",
+            "event"
+          ],
+          "loc": 189
+        },
+        {
+          "file": "src/components/actions/button.ts",
+          "language": "ts",
+          "name": "is-button",
+          "categories": [
+            "webcomponent",
+            "event",
+            "css-part"
+          ],
+          "loc": 492
+        },
+        {
+          "file": "src/components/actions/check-icon-button.css",
+          "language": "css",
+          "name": "check-icon-button",
+          "categories": [
+            "animation",
+            "css-part"
+          ],
+          "loc": 112
+        },
+        {
+          "file": "src/components/actions/check-icon-button.ts",
+          "language": "ts",
+          "name": "is-check-icon-button",
+          "categories": [
+            "webcomponent",
+            "event",
+            "css-part"
+          ],
+          "loc": 161
+        },
+        {
+          "file": "src/components/actions/context-menu.css",
+          "language": "css",
+          "name": "context-menu",
+          "categories": [
+            "css-part"
+          ],
+          "loc": 73
+        },
+        {
+          "file": "src/components/actions/context-menu.preview.ts",
+          "language": "ts",
+          "name": "context-menu.preview",
+          "categories": [
+            "event"
+          ],
+          "loc": 31
+        },
+        {
+          "file": "src/components/actions/context-menu.ts",
+          "language": "ts",
+          "name": "is-context-menu",
+          "categories": [
+            "webcomponent",
+            "event"
+          ],
+          "loc": 220
+        },
+        {
+          "file": "src/components/actions/copy-button.css",
+          "language": "css",
+          "name": "copy-button",
+          "categories": [
+            "animation",
+            "css-part"
+          ],
+          "loc": 104
+        },
+        {
+          "file": "src/components/actions/copy-button.ts",
+          "language": "ts",
+          "name": "is-copy-button",
+          "categories": [
+            "webcomponent",
+            "worker",
+            "event"
+          ],
+          "loc": 377
+        },
+        {
+          "file": "src/components/actions/dropdown-item.ts",
+          "language": "ts",
+          "name": "is-dropdown-item",
+          "categories": [
+            "webcomponent",
+            "event"
+          ],
+          "loc": 260
+        },
+        {
+          "file": "src/components/actions/dropdown.css",
+          "language": "css",
+          "name": "dropdown",
+          "categories": [
+            "css-part"
+          ],
+          "loc": 83
+        },
+        {
+          "file": "src/components/actions/dropdown.preview.ts",
+          "language": "ts",
+          "name": "dropdown.preview",
+          "categories": [
+            "event"
+          ],
+          "loc": 21
+        },
+        {
+          "file": "src/components/actions/dropdown.ts",
+          "language": "ts",
+          "name": "is-dropdown",
+          "categories": [
+            "webcomponent",
+            "event",
+            "css-part"
+          ],
+          "loc": 289
+        },
+        {
+          "file": "src/components/actions/fab.css",
+          "language": "css",
+          "name": "fab",
+          "categories": [
+            "animation",
+            "css-part"
+          ],
+          "loc": 119
+        },
+        {
+          "file": "src/components/actions/fab.ts",
+          "language": "ts",
+          "name": "is-fab",
+          "categories": [
+            "webcomponent",
+            "event",
+            "css-part"
+          ],
+          "loc": 162
+        },
+        {
+          "file": "src/components/actions/share-button.ts",
+          "language": "ts",
+          "name": "is-share-button",
+          "categories": [
+            "webcomponent",
+            "event"
+          ],
+          "loc": 69
+        },
+        {
+          "file": "src/components/actions/speed-dial.css",
+          "language": "css",
+          "name": "speed-dial",
+          "categories": [
+            "animation",
+            "css-part"
+          ],
+          "loc": 215
+        },
+        {
+          "file": "src/components/actions/speed-dial.preview.ts",
+          "language": "ts",
+          "name": "speed-dial.preview",
+          "categories": [
+            "event"
+          ],
+          "loc": 82
+        },
+        {
+          "file": "src/components/actions/speed-dial.ts",
+          "language": "ts",
+          "name": "is-speed-dial",
+          "categories": [
+            "webcomponent",
+            "event"
+          ],
+          "loc": 626
+        }
+      ]
+    },
+    {
+      "id": "demo-g02",
+      "label": "charts (3 demos: chart, radar-chart, scatter-chart)",
+      "category": "charts",
+      "demos": [
+        "chart",
+        "radar-chart",
+        "scatter-chart"
+      ],
+      "testables": [
+        {
+          "file": "demos/charts/_global/lib/harness.mjs",
+          "language": "js",
+          "name": "harness",
+          "categories": [
+            "worker"
+          ],
+          "loc": 95
+        },
+        {
+          "file": "demos/charts/_testing/run.mjs",
+          "language": "js",
+          "name": "run",
+          "categories": [
+            "worker",
+            "cli",
+            "http-client"
+          ],
+          "loc": 120
+        },
+        {
+          "file": "demos/charts/index.html",
+          "language": "html",
+          "name": "index",
+          "categories": [
+            "animation"
+          ],
+          "loc": 152
+        },
+        {
+          "file": "src/components/charts/chart.css",
+          "language": "css",
+          "name": "chart",
+          "categories": [
+            "animation"
+          ],
+          "loc": 325
+        },
+        {
+          "file": "src/components/charts/chart.ts",
+          "language": "ts",
+          "name": "is-chart",
+          "categories": [
+            "webcomponent",
+            "sql-query",
+            "event"
+          ],
+          "loc": 933
+        },
+        {
+          "file": "src/components/charts/marks-waterfall.ts",
+          "language": "ts",
+          "name": "marks-waterfall",
+          "categories": [
+            "webcomponent"
+          ],
+          "loc": 160
+        },
+        {
+          "file": "src/components/charts/sparkline.ts",
+          "language": "ts",
+          "name": "is-sparkline",
+          "categories": [
+            "webcomponent"
+          ],
+          "loc": 163
+        },
+        {
+          "file": "src/components/charts/treemap.css",
+          "language": "css",
+          "name": "treemap",
+          "categories": [
+            "animation"
+          ],
+          "loc": 128
+        },
+        {
+          "file": "src/components/charts/treemap.ts",
+          "language": "ts",
+          "name": "is-treemap",
+          "categories": [
+            "webcomponent",
+            "event"
+          ],
+          "loc": 329
+        }
+      ]
+    },
+    {
+      "id": "demo-g03",
+      "label": "code (1 demos: code)",
+      "category": "code",
+      "demos": [
+        "code"
+      ],
+      "testables": [
+        {
+          "file": "demos/code/code/code.html",
+          "language": "html",
+          "name": "code",
+          "categories": [
+            "event"
+          ],
+          "loc": 221
+        },
+        {
+          "file": "src/components/code/code.preview.ts",
+          "language": "ts",
+          "name": "code.preview",
+          "categories": [
+            "event"
+          ],
+          "loc": 312
+        },
+        {
+          "file": "src/components/code/code.ts",
+          "language": "ts",
+          "name": "is-code",
+          "categories": [
+            "webcomponent",
+            "auth",
+            "worker",
+            "event"
+          ],
+          "loc": 936
+        }
+      ]
+    },
+    {
+      "id": "demo-g04",
+      "label": "data (4 demos: ag-grid, data-grid, gauge, pivot-table)",
+      "category": "data",
+      "demos": [
+        "ag-grid",
+        "data-grid",
+        "gauge",
+        "pivot-table"
+      ],
+      "testables": [
+        {
+          "file": "demos/data/_testing/lib/harness.mjs",
+          "language": "js",
+          "name": "harness",
+          "categories": [
+            "worker"
+          ],
+          "loc": 89
+        },
+        {
+          "file": "demos/data/ag-grid/ag-grid.html",
+          "language": "html",
+          "name": "ag-grid",
+          "categories": [
+            "event"
+          ],
+          "loc": 157
+        },
+        {
+          "file": "demos/data/data-grid/data-grid.html",
+          "language": "html",
+          "name": "data-grid",
+          "categories": [
+            "event"
+          ],
+          "loc": 147
+        },
+        {
+          "file": "demos/data/kanban/kanban.html",
+          "language": "html",
+          "name": "kanban",
+          "categories": [
+            "event",
+            "tour"
+          ],
+          "loc": 143
+        },
+        {
+          "file": "demos/data/pivot-table/pivot-table.html",
+          "language": "html",
+          "name": "pivot-table",
+          "categories": [
+            "event"
+          ],
+          "loc": 139
+        },
+        {
+          "file": "demos/data/spreadsheet/spreadsheet.html",
+          "language": "html",
+          "name": "spreadsheet",
+          "categories": [
+            "event"
+          ],
+          "loc": 128
+        },
+        {
+          "file": "demos/data/transfer/transfer.html",
+          "language": "html",
+          "name": "transfer",
+          "categories": [
+            "event"
+          ],
+          "loc": 162
+        },
+        {
+          "file": "src/components/data/ag-grid.preview.ts",
+          "language": "ts",
+          "name": "ag-grid.preview",
+          "categories": [
+            "event"
+          ],
+          "loc": 82
+        },
+        {
+          "file": "src/components/data/ag-grid.ts",
+          "language": "ts",
+          "name": "is-ag-grid",
+          "categories": [
+            "webcomponent",
+            "auth",
+            "migration",
+            "storage",
+            "event",
+            "http-client"
+          ],
+          "loc": 2137
+        },
+        {
+          "file": "src/components/data/data-grid.css",
+          "language": "css",
+          "name": "data-grid",
+          "categories": [
+            "animation"
+          ],
+          "loc": 697
+        },
+        {
+          "file": "src/components/data/data-grid.preview.ts",
+          "language": "ts",
+          "name": "data-grid.preview",
+          "categories": [
+            "event"
+          ],
+          "loc": 462
+        },
+        {
+          "file": "src/components/data/data-grid.ts",
+          "language": "ts",
+          "name": "is-data-grid",
+          "categories": [
+            "webcomponent",
+            "sql-query",
+            "worker",
+            "event",
+            "browser-api"
+          ],
+          "loc": 3406
+        },
+        {
+          "file": "src/components/data/datagrid-core/grid-model.ts",
+          "language": "ts",
+          "name": "grid-model",
+          "categories": [
+            "sql-query"
+          ],
+          "loc": 294
+        },
+        {
+          "file": "src/components/data/datagrid-core/selection.ts",
+          "language": "ts",
+          "name": "selection",
+          "categories": [
+            "sql-query"
+          ],
+          "loc": 99
+        },
+        {
+          "file": "src/components/data/datagrid-core/server-datasource.ts",
+          "language": "ts",
+          "name": "server-datasource",
+          "categories": [
+            "service",
+            "worker",
+            "event",
+            "http-client"
+          ],
+          "loc": 454
+        },
+        {
+          "file": "src/components/data/gauge.css",
+          "language": "css",
+          "name": "gauge",
+          "categories": [
+            "animation"
+          ],
+          "loc": 78
+        },
+        {
+          "file": "src/components/data/gauge.preview.ts",
+          "language": "ts",
+          "name": "gauge.preview",
+          "categories": [
+            "event"
+          ],
+          "loc": 21
+        },
+        {
+          "file": "src/components/data/gauge.ts",
+          "language": "ts",
+          "name": "is-gauge",
+          "categories": [
+            "webcomponent"
+          ],
+          "loc": 146
+        },
+        {
+          "file": "src/components/data/kanban.css",
+          "language": "css",
+          "name": "kanban",
+          "categories": [
+            "animation",
+            "css-part"
+          ],
+          "loc": 189
+        },
+        {
+          "file": "src/components/data/kanban.ts",
+          "language": "ts",
+          "name": "is-kanban",
+          "categories": [
+            "webcomponent",
+            "event"
+          ],
+          "loc": 276
+        },
+        {
+          "file": "src/components/data/pivot-table.preview.ts",
+          "language": "ts",
+          "name": "pivot-table.preview",
+          "categories": [
+            "event"
+          ],
+          "loc": 29
+        },
+        {
+          "file": "src/components/data/pivot-table.ts",
+          "language": "ts",
+          "name": "is-pivot-table",
+          "categories": [
+            "webcomponent",
+            "event"
+          ],
+          "loc": 204
+        },
+        {
+          "file": "src/components/data/spreadsheet.ts",
+          "language": "ts",
+          "name": "is-spreadsheet",
+          "categories": [
+            "webcomponent",
+            "sql-query",
+            "event"
+          ],
+          "loc": 411
+        },
+        {
+          "file": "src/components/data/stat.css",
+          "language": "css",
+          "name": "stat",
+          "categories": [
+            "animation"
+          ],
+          "loc": 94
+        },
+        {
+          "file": "src/components/data/stat.ts",
+          "language": "ts",
+          "name": "is-stat",
+          "categories": [
+            "webcomponent",
+            "css-part"
+          ],
+          "loc": 115
+        },
+        {
+          "file": "src/components/data/transfer.css",
+          "language": "css",
+          "name": "transfer",
+          "categories": [
+            "animation"
+          ],
+          "loc": 130
+        },
+        {
+          "file": "src/components/data/transfer.ts",
+          "language": "ts",
+          "name": "is-transfer",
+          "categories": [
+            "webcomponent",
+            "event"
+          ],
+          "loc": 243
+        }
+      ]
+    },
+    {
+      "id": "demo-g05",
+      "label": "data-viz (1 demos: heatmap)",
+      "category": "data-viz",
+      "demos": [
+        "heatmap"
+      ],
+      "testables": [
+        {
+          "file": "demos/data-viz/Heatmap/_testing/lib/harness.mjs",
+          "language": "js",
+          "name": "harness",
+          "categories": [
+            "worker"
+          ],
+          "loc": 90
+        },
+        {
+          "file": "demos/data-viz/Heatmap/heatmap.html",
+          "language": "html",
+          "name": "heatmap",
+          "categories": [
+            "event"
+          ],
+          "loc": 130
+        },
+        {
+          "file": "demos/data-viz/Maps/_testing/lib/harness.mjs",
+          "language": "js",
+          "name": "harness",
+          "categories": [
+            "worker"
+          ],
+          "loc": 90
+        },
+        {
+          "file": "demos/data-viz/Maps/maps.html",
+          "language": "html",
+          "name": "maps",
+          "categories": [
+            "event"
+          ],
+          "loc": 128
+        },
+        {
+          "file": "src/components/data-viz/heatmap.css",
+          "language": "css",
+          "name": "heatmap",
+          "categories": [
+            "animation"
+          ],
+          "loc": 44
+        },
+        {
+          "file": "src/components/data-viz/heatmap.preview.ts",
+          "language": "ts",
+          "name": "heatmap.preview",
+          "categories": [
+            "event"
+          ],
+          "loc": 22
+        },
+        {
+          "file": "src/components/data-viz/heatmap.ts",
+          "language": "ts",
+          "name": "is-heatmap",
+          "categories": [
+            "webcomponent",
+            "event"
+          ],
+          "loc": 293
+        },
+        {
+          "file": "src/components/data-viz/maps.ts",
+          "language": "ts",
+          "name": "is-maps",
+          "categories": [
+            "webcomponent",
+            "event",
+            "paty-iss"
+          ],
+          "loc": 281
+        }
+      ]
+    },
+    {
+      "id": "demo-g06",
+      "label": "diagrams (4 demos: diagram-lightbox, lightbox, org-chart, sequence-diagram)",
+      "category": "diagrams",
+      "demos": [
+        "diagram-lightbox",
+        "lightbox",
+        "org-chart",
+        "sequence-diagram"
+      ],
+      "testables": [
+        {
+          "file": "src/components/diagrams/_editor-base.ts",
+          "language": "ts",
+          "name": "is-editorbase",
+          "categories": [
+            "webcomponent",
+            "migration",
+            "event",
+            "animation"
+          ],
+          "loc": 218
+        },
+        {
+          "file": "src/components/diagrams/_editor-nesting.ts",
+          "language": "ts",
+          "name": "_editor-nesting",
+          "categories": [
+            "migration",
+            "worker",
+            "event",
+            "animation"
+          ],
+          "loc": 275
+        },
+        {
+          "file": "src/components/diagrams/_editor-panel.ts",
+          "language": "ts",
+          "name": "_editor-panel",
+          "categories": [
+            "event",
+            "browser-api"
+          ],
+          "loc": 270
+        },
+        {
+          "file": "src/components/diagrams/_editor-toolbar.ts",
+          "language": "ts",
+          "name": "_editor-toolbar",
+          "categories": [
+            "event"
+          ],
+          "loc": 209
+        },
+        {
+          "file": "src/components/diagrams/block-diagram.css",
+          "language": "css",
+          "name": "block-diagram",
+          "categories": [
+            "animation"
+          ],
+          "loc": 175
+        },
+        {
+          "file": "src/components/diagrams/block-diagram.ts",
+          "language": "ts",
+          "name": "is-block-diagram",
+          "categories": [
+            "webcomponent",
+            "event"
+          ],
+          "loc": 540
+        },
+        {
+          "file": "src/components/diagrams/class-diagram.css",
+          "language": "css",
+          "name": "class-diagram",
+          "categories": [
+            "animation"
+          ],
+          "loc": 101
+        },
+        {
+          "file": "src/components/diagrams/class-diagram.ts",
+          "language": "ts",
+          "name": "is-class-diagram",
+          "categories": [
+            "webcomponent",
+            "event"
+          ],
+          "loc": 473
+        },
+        {
+          "file": "src/components/diagrams/component-diagram.css",
+          "language": "css",
+          "name": "component-diagram",
+          "categories": [
+            "animation"
+          ],
+          "loc": 81
+        },
+        {
+          "file": "src/components/diagrams/component-diagram.ts",
+          "language": "ts",
+          "name": "is-component-diagram",
+          "categories": [
+            "webcomponent",
+            "event"
+          ],
+          "loc": 408
+        },
+        {
+          "file": "src/components/diagrams/diagram-lightbox.css",
+          "language": "css",
+          "name": "diagram-lightbox",
+          "categories": [
+            "animation"
+          ],
+          "loc": 132
+        },
+        {
+          "file": "src/components/diagrams/diagram-lightbox.preview.ts",
+          "language": "ts",
+          "name": "diagram-lightbox.preview",
+          "categories": [
+            "event"
+          ],
+          "loc": 31
+        },
+        {
+          "file": "src/components/diagrams/diagram-lightbox.ts",
+          "language": "ts",
+          "name": "is-diagram-lightbox",
+          "categories": [
+            "webcomponent",
+            "sql-query",
+            "worker",
+            "event"
+          ],
+          "loc": 414
+        },
+        {
+          "file": "src/components/diagrams/er-archify.ts",
+          "language": "ts",
+          "name": "er-archify",
+          "categories": [
+            "animation"
+          ],
+          "loc": 481
+        },
+        {
+          "file": "src/components/diagrams/er-diagram.css",
+          "language": "css",
+          "name": "er-diagram",
+          "categories": [
+            "animation"
+          ],
+          "loc": 100
+        },
+        {
+          "file": "src/components/diagrams/er-diagram.ts",
+          "language": "ts",
+          "name": "is-er-diagram",
+          "categories": [
+            "webcomponent",
+            "event",
+            "animation"
+          ],
+          "loc": 501
+        },
+        {
+          "file": "src/components/diagrams/er-editor.ts",
+          "language": "ts",
+          "name": "is-er-editor",
+          "categories": [
+            "webcomponent",
+            "sql-query",
+            "worker",
+            "event",
+            "browser-api",
+            "animation"
+          ],
+          "loc": 1194
+        },
+        {
+          "file": "src/components/diagrams/er-spec.ts",
+          "language": "ts",
+          "name": "er-spec",
+          "categories": [
+            "event"
+          ],
+          "loc": 763
+        },
+        {
+          "file": "src/components/diagrams/flowchart.css",
+          "language": "css",
+          "name": "flowchart",
+          "categories": [
+            "animation"
+          ],
+          "loc": 139
+        },
+        {
+          "file": "src/components/diagrams/flowchart.ts",
+          "language": "ts",
+          "name": "is-flowchart",
+          "categories": [
+            "webcomponent",
+            "auth",
+            "event"
+          ],
+          "loc": 599
+        },
+        {
+          "file": "src/components/diagrams/gantt.css",
+          "language": "css",
+          "name": "gantt",
+          "categories": [
+            "animation"
+          ],
+          "loc": 99
+        },
+        {
+          "file": "src/components/diagrams/gantt.ts",
+          "language": "ts",
+          "name": "is-gantt",
+          "categories": [
+            "webcomponent",
+            "event"
+          ],
+          "loc": 461
+        },
+        {
+          "file": "src/components/diagrams/journey-map.css",
+          "language": "css",
+          "name": "journey-map",
+          "categories": [
+            "animation"
+          ],
+          "loc": 99
+        },
+        {
+          "file": "src/components/diagrams/journey-map.ts",
+          "language": "ts",
+          "name": "is-journey-map",
+          "categories": [
+            "webcomponent",
+            "event"
+          ],
+          "loc": 358
+        },
+        {
+          "file": "src/components/diagrams/lightbox.css",
+          "language": "css",
+          "name": "lightbox",
+          "categories": [
+            "animation",
+            "css-part"
+          ],
+          "loc": 210
+        },
+        {
+          "file": "src/components/diagrams/lightbox.preview.ts",
+          "language": "ts",
+          "name": "lightbox.preview",
+          "categories": [
+            "event"
+          ],
+          "loc": 81
+        },
+        {
+          "file": "src/components/diagrams/lightbox.ts",
+          "language": "ts",
+          "name": "is-lightbox",
+          "categories": [
+            "webcomponent",
+            "worker",
+            "event"
+          ],
+          "loc": 397
+        },
+        {
+          "file": "src/components/diagrams/mindmap.css",
+          "language": "css",
+          "name": "mindmap",
+          "categories": [
+            "animation"
+          ],
+          "loc": 102
+        },
+        {
+          "file": "src/components/diagrams/mindmap.ts",
+          "language": "ts",
+          "name": "is-mindmap",
+          "categories": [
+            "webcomponent",
+            "event"
+          ],
+          "loc": 328
+        },
+        {
+          "file": "src/components/diagrams/org-chart.css",
+          "language": "css",
+          "name": "org-chart",
+          "categories": [
+            "animation"
+          ],
+          "loc": 126
+        },
+        {
+          "file": "src/components/diagrams/org-chart.preview.ts",
+          "language": "ts",
+          "name": "org-chart.preview",
+          "categories": [
+            "event"
+          ],
+          "loc": 32
+        },
+        {
+          "file": "src/components/diagrams/org-chart.ts",
+          "language": "ts",
+          "name": "is-org-chart",
+          "categories": [
+            "webcomponent",
+            "sql-query",
+            "migration",
+            "worker",
+            "event",
+            "animation"
+          ],
+          "loc": 484
+        },
+        {
+          "file": "src/components/diagrams/quadrant-chart.css",
+          "language": "css",
+          "name": "quadrant-chart",
+          "categories": [
+            "animation"
+          ],
+          "loc": 99
+        },
+        {
+          "file": "src/components/diagrams/quadrant-chart.ts",
+          "language": "ts",
+          "name": "is-quadrant-chart",
+          "categories": [
+            "webcomponent",
+            "event"
+          ],
+          "loc": 351
+        },
+        {
+          "file": "src/components/diagrams/sankey-diagram.css",
+          "language": "css",
+          "name": "sankey-diagram",
+          "categories": [
+            "animation"
+          ],
+          "loc": 101
+        },
+        {
+          "file": "src/components/diagrams/sankey-diagram.ts",
+          "language": "ts",
+          "name": "is-sankey-diagram",
+          "categories": [
+            "webcomponent",
+            "event"
+          ],
+          "loc": 370
+        },
+        {
+          "file": "src/components/diagrams/sequence-diagram.css",
+          "language": "css",
+          "name": "sequence-diagram",
+          "categories": [
+            "animation"
+          ],
+          "loc": 125
+        },
+        {
+          "file": "src/components/diagrams/sequence-diagram.preview.ts",
+          "language": "ts",
+          "name": "sequence-diagram.preview",
+          "categories": [
+            "event"
+          ],
+          "loc": 20
+        },
+        {
+          "file": "src/components/diagrams/sequence-diagram.ts",
+          "language": "ts",
+          "name": "is-sequence-diagram",
+          "categories": [
+            "webcomponent",
+            "event"
+          ],
+          "loc": 629
+        },
+        {
+          "file": "src/components/diagrams/state-diagram.css",
+          "language": "css",
+          "name": "state-diagram",
+          "categories": [
+            "animation"
+          ],
+          "loc": 97
+        },
+        {
+          "file": "src/components/diagrams/state-diagram.ts",
+          "language": "ts",
+          "name": "is-state-diagram",
+          "categories": [
+            "webcomponent",
+            "event"
+          ],
+          "loc": 436
+        },
+        {
+          "file": "src/components/diagrams/swimlane-diagram.css",
+          "language": "css",
+          "name": "swimlane-diagram",
+          "categories": [
+            "animation"
+          ],
+          "loc": 101
+        },
+        {
+          "file": "src/components/diagrams/swimlane-diagram.ts",
+          "language": "ts",
+          "name": "is-swimlane-diagram",
+          "categories": [
+            "webcomponent",
+            "event"
+          ],
+          "loc": 414
+        },
+        {
+          "file": "src/components/diagrams/timeline.css",
+          "language": "css",
+          "name": "timeline",
+          "categories": [
+            "animation"
+          ],
+          "loc": 99
+        },
+        {
+          "file": "src/components/diagrams/timeline.ts",
+          "language": "ts",
+          "name": "is-timeline",
+          "categories": [
+            "webcomponent",
+            "event"
+          ],
+          "loc": 372
+        },
+        {
+          "file": "src/components/diagrams/use-case-diagram.css",
+          "language": "css",
+          "name": "use-case-diagram",
+          "categories": [
+            "animation"
+          ],
+          "loc": 101
+        },
+        {
+          "file": "src/components/diagrams/use-case-diagram.ts",
+          "language": "ts",
+          "name": "is-use-case-diagram",
+          "categories": [
+            "webcomponent",
+            "event"
+          ],
+          "loc": 450
+        },
+        {
+          "file": "src/components/diagrams/venn-diagram.css",
+          "language": "css",
+          "name": "venn-diagram",
+          "categories": [
+            "animation"
+          ],
+          "loc": 97
+        },
+        {
+          "file": "src/components/diagrams/venn-diagram.ts",
+          "language": "ts",
+          "name": "is-venn-diagram",
+          "categories": [
+            "webcomponent",
+            "event"
+          ],
+          "loc": 302
+        }
+      ]
+    },
+    {
+      "id": "demo-g07",
+      "label": "feedback (3 demos: progress-bar, toast, tooltip)",
+      "category": "feedback",
+      "demos": [
+        "progress-bar",
+        "toast",
+        "tooltip"
+      ],
+      "testables": [
+        {
+          "file": "demos/feedback/badge/_testing/lib/harness.mjs",
+          "language": "js",
+          "name": "harness",
+          "categories": [
+            "worker"
+          ],
+          "loc": 90
+        },
+        {
+          "file": "demos/feedback/badge/badge.html",
+          "language": "html",
+          "name": "badge",
+          "categories": [
+            "webcomponent"
+          ],
+          "loc": 85
+        },
+        {
+          "file": "demos/feedback/cdn-snippet/_testing/lib/harness.mjs",
+          "language": "js",
+          "name": "harness",
+          "categories": [
+            "worker"
+          ],
+          "loc": 90
+        },
+        {
+          "file": "demos/feedback/cdn-snippet/cdn-snippet.html",
+          "language": "html",
+          "name": "cdn-snippet",
+          "categories": [
+            "webcomponent"
+          ],
+          "loc": 43
+        },
+        {
+          "file": "demos/feedback/confirm-modal/_testing/lib/harness.mjs",
+          "language": "js",
+          "name": "harness",
+          "categories": [
+            "worker"
+          ],
+          "loc": 90
+        },
+        {
+          "file": "demos/feedback/confirm-modal/confirm-modal.html",
+          "language": "html",
+          "name": "confirm-modal",
+          "categories": [
+            "webcomponent",
+            "event"
+          ],
+          "loc": 63
+        },
+        {
+          "file": "demos/feedback/palette-selector/_testing/lib/harness.mjs",
+          "language": "js",
+          "name": "harness",
+          "categories": [
+            "worker"
+          ],
+          "loc": 90
+        },
+        {
+          "file": "demos/feedback/palette-selector/palette-selector.html",
+          "language": "html",
+          "name": "palette-selector",
+          "categories": [
+            "storage"
+          ],
+          "loc": 49
+        },
+        {
+          "file": "demos/feedback/popconfirm/_testing/lib/harness.mjs",
+          "language": "js",
+          "name": "harness",
+          "categories": [
+            "worker"
+          ],
+          "loc": 90
+        },
+        {
+          "file": "demos/feedback/popconfirm/popconfirm.html",
+          "language": "html",
+          "name": "popconfirm",
+          "categories": [
+            "webcomponent",
+            "event"
+          ],
+          "loc": 61
+        },
+        {
+          "file": "demos/feedback/prefs-clear/_testing/lib/harness.mjs",
+          "language": "js",
+          "name": "harness",
+          "categories": [
+            "worker"
+          ],
+          "loc": 90
+        },
+        {
+          "file": "demos/feedback/prefs-clear/prefs-clear.html",
+          "language": "html",
+          "name": "prefs-clear",
+          "categories": [
+            "storage",
+            "event"
+          ],
+          "loc": 66
+        },
+        {
+          "file": "demos/feedback/progress-bar/_testing/lib/harness.mjs",
+          "language": "js",
+          "name": "harness",
+          "categories": [
+            "worker"
+          ],
+          "loc": 90
+        },
+        {
+          "file": "demos/feedback/progress-ring/_testing/lib/harness.mjs",
+          "language": "js",
+          "name": "harness",
+          "categories": [
+            "worker"
+          ],
+          "loc": 90
+        },
+        {
+          "file": "demos/feedback/skeleton/_testing/lib/harness.mjs",
+          "language": "js",
+          "name": "harness",
+          "categories": [
+            "worker"
+          ],
+          "loc": 90
+        },
+        {
+          "file": "demos/feedback/spinner/_testing/lib/harness.mjs",
+          "language": "js",
+          "name": "harness",
+          "categories": [
+            "worker"
+          ],
+          "loc": 90
+        },
+        {
+          "file": "demos/feedback/tag/_testing/lib/harness.mjs",
+          "language": "js",
+          "name": "harness",
+          "categories": [
+            "worker"
+          ],
+          "loc": 90
+        },
+        {
+          "file": "demos/feedback/tag/tag.html",
+          "language": "html",
+          "name": "tag",
+          "categories": [
+            "webcomponent",
+            "event"
+          ],
+          "loc": 85
+        },
+        {
+          "file": "demos/feedback/theme-toggle/_testing/lib/harness.mjs",
+          "language": "js",
+          "name": "harness",
+          "categories": [
+            "worker"
+          ],
+          "loc": 90
+        },
+        {
+          "file": "demos/feedback/theme-toggle/theme-toggle.html",
+          "language": "html",
+          "name": "theme-toggle",
+          "categories": [
+            "event"
+          ],
+          "loc": 56
+        },
+        {
+          "file": "demos/feedback/toast-item/_testing/lib/harness.mjs",
+          "language": "js",
+          "name": "harness",
+          "categories": [
+            "worker"
+          ],
+          "loc": 90
+        },
+        {
+          "file": "demos/feedback/toast-item/toast-item.html",
+          "language": "html",
+          "name": "toast-item",
+          "categories": [
+            "event"
+          ],
+          "loc": 102
+        },
+        {
+          "file": "demos/feedback/toast/_testing/lib/harness.mjs",
+          "language": "js",
+          "name": "harness",
+          "categories": [
+            "worker"
+          ],
+          "loc": 90
+        },
+        {
+          "file": "demos/feedback/toast/toast.html",
+          "language": "html",
+          "name": "toast",
+          "categories": [
+            "worker",
+            "event"
+          ],
+          "loc": 106
+        },
+        {
+          "file": "demos/feedback/tooltip/_testing/lib/harness.mjs",
+          "language": "js",
+          "name": "harness",
+          "categories": [
+            "worker"
+          ],
+          "loc": 90
+        },
+        {
+          "file": "demos/feedback/tooltip/tooltip.html",
+          "language": "html",
+          "name": "tooltip",
+          "categories": [
+            "event"
+          ],
+          "loc": 96
+        },
+        {
+          "file": "src/components/feedback/badge.css",
+          "language": "css",
+          "name": "badge",
+          "categories": [
+            "animation"
+          ],
+          "loc": 134
+        },
+        {
+          "file": "src/components/feedback/badge.ts",
+          "language": "ts",
+          "name": "is-badge",
+          "categories": [
+            "webcomponent"
+          ],
+          "loc": 75
+        },
+        {
+          "file": "src/components/feedback/cdn-snippet.css",
+          "language": "css",
+          "name": "cdn-snippet",
+          "categories": [
+            "animation"
+          ],
+          "loc": 302
+        },
+        {
+          "file": "src/components/feedback/cdn-snippet.ts",
+          "language": "ts",
+          "name": "is-cdn-snippet",
+          "categories": [
+            "webcomponent",
+            "worker",
+            "event"
+          ],
+          "loc": 461
+        },
+        {
+          "file": "src/components/feedback/confirm-modal.css",
+          "language": "css",
+          "name": "confirm-modal",
+          "categories": [
+            "animation"
+          ],
+          "loc": 72
+        },
+        {
+          "file": "src/components/feedback/confirm-modal.ts",
+          "language": "ts",
+          "name": "is-confirm-modal",
+          "categories": [
+            "webcomponent",
+            "event"
+          ],
+          "loc": 205
+        },
+        {
+          "file": "src/components/feedback/palette-selector.css",
+          "language": "css",
+          "name": "palette-selector",
+          "categories": [
+            "webcomponent",
+            "animation",
+            "css-part"
+          ],
+          "loc": 189
+        },
+        {
+          "file": "src/components/feedback/palette-selector.ts",
+          "language": "ts",
+          "name": "is-palette-selector",
+          "categories": [
+            "webcomponent",
+            "auth",
+            "storage",
+            "event"
+          ],
+          "loc": 553
+        },
+        {
+          "file": "src/components/feedback/popconfirm.css",
+          "language": "css",
+          "name": "popconfirm",
+          "categories": [
+            "animation"
+          ],
+          "loc": 69
+        },
+        {
+          "file": "src/components/feedback/popconfirm.ts",
+          "language": "ts",
+          "name": "is-popconfirm",
+          "categories": [
+            "webcomponent",
+            "event"
+          ],
+          "loc": 269
+        },
+        {
+          "file": "src/components/feedback/prefs-clear.ts",
+          "language": "ts",
+          "name": "is-prefs-clear",
+          "categories": [
+            "webcomponent",
+            "storage",
+            "event"
+          ],
+          "loc": 128
+        },
+        {
+          "file": "src/components/feedback/progress-bar.css",
+          "language": "css",
+          "name": "progress-bar",
+          "categories": [
+            "animation"
+          ],
+          "loc": 43
+        },
+        {
+          "file": "src/components/feedback/progress-bar.preview.ts",
+          "language": "ts",
+          "name": "progress-bar.preview",
+          "categories": [
+            "event"
+          ],
+          "loc": 56
+        },
+        {
+          "file": "src/components/feedback/progress-bar.ts",
+          "language": "ts",
+          "name": "is-progress-bar",
+          "categories": [
+            "webcomponent",
+            "css-part"
+          ],
+          "loc": 102
+        },
+        {
+          "file": "src/components/feedback/progress-ring.css",
+          "language": "css",
+          "name": "progress-ring",
+          "categories": [
+            "animation"
+          ],
+          "loc": 80
+        },
+        {
+          "file": "src/components/feedback/progress-ring.ts",
+          "language": "ts",
+          "name": "is-progress-ring",
+          "categories": [
+            "webcomponent",
+            "css-part"
+          ],
+          "loc": 104
+        },
+        {
+          "file": "src/components/feedback/skeleton.css",
+          "language": "css",
+          "name": "skeleton",
+          "categories": [
+            "animation"
+          ],
+          "loc": 74
+        },
+        {
+          "file": "src/components/feedback/skeleton.ts",
+          "language": "ts",
+          "name": "is-skeleton",
+          "categories": [
+            "webcomponent",
+            "css-part"
+          ],
+          "loc": 59
+        },
+        {
+          "file": "src/components/feedback/spinner.css",
+          "language": "css",
+          "name": "spinner",
+          "categories": [
+            "animation"
+          ],
+          "loc": 30
+        },
+        {
+          "file": "src/components/feedback/spinner.ts",
+          "language": "ts",
+          "name": "is-spinner",
+          "categories": [
+            "webcomponent",
+            "animation",
+            "css-part"
+          ],
+          "loc": 49
+        },
+        {
+          "file": "src/components/feedback/tag.ts",
+          "language": "ts",
+          "name": "is-tag",
+          "categories": [
+            "webcomponent",
+            "event"
+          ],
+          "loc": 95
+        },
+        {
+          "file": "src/components/feedback/theme-toggle.ts",
+          "language": "ts",
+          "name": "is-theme-toggle",
+          "categories": [
+            "webcomponent",
+            "event"
+          ],
+          "loc": 155
+        },
+        {
+          "file": "src/components/feedback/toast-item.css",
+          "language": "css",
+          "name": "toast-item",
+          "categories": [
+            "webcomponent",
+            "animation",
+            "css-part"
+          ],
+          "loc": 139
+        },
+        {
+          "file": "src/components/feedback/toast-item.ts",
+          "language": "ts",
+          "name": "is-toast-item",
+          "categories": [
+            "webcomponent",
+            "migration",
+            "worker",
+            "event",
+            "css-part"
+          ],
+          "loc": 240
+        },
+        {
+          "file": "src/components/feedback/toast.css",
+          "language": "css",
+          "name": "toast",
+          "categories": [
+            "css-part"
+          ],
+          "loc": 58
+        },
+        {
+          "file": "src/components/feedback/toast.preview.ts",
+          "language": "ts",
+          "name": "toast.preview",
+          "categories": [
+            "worker",
+            "event"
+          ],
+          "loc": 88
+        },
+        {
+          "file": "src/components/feedback/toast.ts",
+          "language": "ts",
+          "name": "is-toast",
+          "categories": [
+            "webcomponent",
+            "event",
+            "css-part"
+          ],
+          "loc": 290
+        },
+        {
+          "file": "src/components/feedback/tooltip.css",
+          "language": "css",
+          "name": "tooltip",
+          "categories": [
+            "css-part"
+          ],
+          "loc": 69
+        },
+        {
+          "file": "src/components/feedback/tooltip.preview.ts",
+          "language": "ts",
+          "name": "tooltip.preview",
+          "categories": [
+            "event"
+          ],
+          "loc": 16
+        },
+        {
+          "file": "src/components/feedback/tooltip.ts",
+          "language": "ts",
+          "name": "is-tooltip",
+          "categories": [
+            "webcomponent",
+            "migration",
+            "worker",
+            "event",
+            "css-part"
+          ],
+          "loc": 308
+        }
+      ]
+    },
+    {
+      "id": "demo-g08",
+      "label": "forms (16 demos: checkbox, color-picker, doc-editor, dropzone, duration-picker, file-input, full-calendar, input, mention, rating, rte, select, signature, slider, switch, textarea)",
+      "category": "forms",
+      "demos": [
+        "checkbox",
+        "color-picker",
+        "doc-editor",
+        "dropzone",
+        "duration-picker",
+        "file-input",
+        "full-calendar",
+        "input",
+        "mention",
+        "rating",
+        "rte",
+        "select",
+        "signature",
+        "slider",
+        "switch",
+        "textarea"
+      ],
+      "testables": [
+        {
+          "file": "demos/forms/_testing/lib/harness.mjs",
+          "language": "js",
+          "name": "harness",
+          "categories": [
+            "worker"
+          ],
+          "loc": 93
+        },
+        {
+          "file": "demos/forms/checkbox/_testing/lib/harness.mjs",
+          "language": "js",
+          "name": "harness",
+          "categories": [
+            "worker"
+          ],
+          "loc": 94
+        },
+        {
+          "file": "demos/forms/checkbox/checkbox.html",
+          "language": "html",
+          "name": "checkbox",
+          "categories": [
+            "event"
+          ],
+          "loc": 120
+        },
+        {
+          "file": "demos/forms/color-picker/_testing/lib/harness.mjs",
+          "language": "js",
+          "name": "harness",
+          "categories": [
+            "worker"
+          ],
+          "loc": 93
+        },
+        {
+          "file": "demos/forms/combobox/_testing/lib/harness.mjs",
+          "language": "js",
+          "name": "harness",
+          "categories": [
+            "worker"
+          ],
+          "loc": 93
+        },
+        {
+          "file": "demos/forms/date-field/_testing/lib/harness.mjs",
+          "language": "js",
+          "name": "harness",
+          "categories": [
+            "worker"
+          ],
+          "loc": 94
+        },
+        {
+          "file": "demos/forms/date-field/date-field.html",
+          "language": "html",
+          "name": "date-field",
+          "categories": [
+            "event"
+          ],
+          "loc": 119
+        },
+        {
+          "file": "demos/forms/date-input/_testing/lib/harness.mjs",
+          "language": "js",
+          "name": "harness",
+          "categories": [
+            "worker"
+          ],
+          "loc": 94
+        },
+        {
+          "file": "demos/forms/date-input/date-input.html",
+          "language": "html",
+          "name": "date-input",
+          "categories": [
+            "event"
+          ],
+          "loc": 125
+        },
+        {
+          "file": "demos/forms/date-picker/_testing/lib/harness.mjs",
+          "language": "js",
+          "name": "harness",
+          "categories": [
+            "worker"
+          ],
+          "loc": 94
+        },
+        {
+          "file": "demos/forms/date-picker/date-picker.html",
+          "language": "html",
+          "name": "date-picker",
+          "categories": [
+            "event"
+          ],
+          "loc": 119
+        },
+        {
+          "file": "demos/forms/date-range-input/_testing/lib/harness.mjs",
+          "language": "js",
+          "name": "harness",
+          "categories": [
+            "worker"
+          ],
+          "loc": 94
+        },
+        {
+          "file": "demos/forms/date-range-input/date-range-input.html",
+          "language": "html",
+          "name": "date-range-input",
+          "categories": [
+            "event"
+          ],
+          "loc": 112
+        },
+        {
+          "file": "demos/forms/date-range-picker/_testing/lib/harness.mjs",
+          "language": "js",
+          "name": "harness",
+          "categories": [
+            "worker"
+          ],
+          "loc": 94
+        },
+        {
+          "file": "demos/forms/date-range-picker/date-range-picker.html",
+          "language": "html",
+          "name": "date-range-picker",
+          "categories": [
+            "event"
+          ],
+          "loc": 105
+        },
+        {
+          "file": "demos/forms/date-time-field/_testing/lib/harness.mjs",
+          "language": "js",
+          "name": "harness",
+          "categories": [
+            "worker"
+          ],
+          "loc": 94
+        },
+        {
+          "file": "demos/forms/date-time-field/date-time-field.html",
+          "language": "html",
+          "name": "date-time-field",
+          "categories": [
+            "event"
+          ],
+          "loc": 130
+        },
+        {
+          "file": "demos/forms/date-time-input/_testing/lib/harness.mjs",
+          "language": "js",
+          "name": "harness",
+          "categories": [
+            "worker"
+          ],
+          "loc": 94
+        },
+        {
+          "file": "demos/forms/date-time-input/date-time-input.html",
+          "language": "html",
+          "name": "date-time-input",
+          "categories": [
+            "event"
+          ],
+          "loc": 112
+        },
+        {
+          "file": "demos/forms/digital-clock/_testing/lib/harness.mjs",
+          "language": "js",
+          "name": "harness",
+          "categories": [
+            "worker"
+          ],
+          "loc": 94
+        },
+        {
+          "file": "demos/forms/doc-editor/_testing/lib/harness.mjs",
+          "language": "js",
+          "name": "harness",
+          "categories": [
+            "worker"
+          ],
+          "loc": 94
+        },
+        {
+          "file": "demos/forms/doc-editor/doc-editor.html",
+          "language": "html",
+          "name": "doc-editor",
+          "categories": [
+            "event"
+          ],
+          "loc": 95
+        },
+        {
+          "file": "demos/forms/dropzone/_testing/lib/harness.mjs",
+          "language": "js",
+          "name": "harness",
+          "categories": [
+            "worker"
+          ],
+          "loc": 94
+        },
+        {
+          "file": "demos/forms/dropzone/dropzone.html",
+          "language": "html",
+          "name": "dropzone",
+          "categories": [
+            "event"
+          ],
+          "loc": 109
+        },
+        {
+          "file": "demos/forms/duration-picker/_testing/lib/harness.mjs",
+          "language": "js",
+          "name": "harness",
+          "categories": [
+            "worker"
+          ],
+          "loc": 94
+        },
+        {
+          "file": "demos/forms/duration-picker/duration-picker.html",
+          "language": "html",
+          "name": "duration-picker",
+          "categories": [
+            "event"
+          ],
+          "loc": 98
+        },
+        {
+          "file": "demos/forms/file-input/_testing/lib/harness.mjs",
+          "language": "js",
+          "name": "harness",
+          "categories": [
+            "worker"
+          ],
+          "loc": 94
+        },
+        {
+          "file": "demos/forms/full-calendar/_testing/lib/harness.mjs",
+          "language": "js",
+          "name": "harness",
+          "categories": [
+            "worker"
+          ],
+          "loc": 94
+        },
+        {
+          "file": "demos/forms/full-calendar/full-calendar.html",
+          "language": "html",
+          "name": "full-calendar",
+          "categories": [
+            "event"
+          ],
+          "loc": 113
+        },
+        {
+          "file": "demos/forms/index.html",
+          "language": "html",
+          "name": "index",
+          "categories": [
+            "animation"
+          ],
+          "loc": 81
+        },
+        {
+          "file": "demos/forms/inline-edit/_testing/lib/harness.mjs",
+          "language": "js",
+          "name": "harness",
+          "categories": [
+            "worker"
+          ],
+          "loc": 94
+        },
+        {
+          "file": "demos/forms/inline-edit/inline-edit.html",
+          "language": "html",
+          "name": "inline-edit",
+          "categories": [
+            "event"
+          ],
+          "loc": 108
+        },
+        {
+          "file": "demos/forms/input/_testing/lib/harness.mjs",
+          "language": "js",
+          "name": "harness",
+          "categories": [
+            "worker"
+          ],
+          "loc": 94
+        },
+        {
+          "file": "demos/forms/input/input.html",
+          "language": "html",
+          "name": "input",
+          "categories": [
+            "event"
+          ],
+          "loc": 104
+        },
+        {
+          "file": "demos/forms/masked-input/_testing/lib/harness.mjs",
+          "language": "js",
+          "name": "harness",
+          "categories": [
+            "worker"
+          ],
+          "loc": 94
+        },
+        {
+          "file": "demos/forms/masked-input/masked-input.html",
+          "language": "html",
+          "name": "masked-input",
+          "categories": [
+            "event"
+          ],
+          "loc": 119
+        },
+        {
+          "file": "demos/forms/mention/_testing/lib/harness.mjs",
+          "language": "js",
+          "name": "harness",
+          "categories": [
+            "worker"
+          ],
+          "loc": 93
+        },
+        {
+          "file": "demos/forms/month-calendar/_testing/lib/harness.mjs",
+          "language": "js",
+          "name": "harness",
+          "categories": [
+            "worker"
+          ],
+          "loc": 94
+        },
+        {
+          "file": "demos/forms/month-calendar/month-calendar.html",
+          "language": "html",
+          "name": "month-calendar",
+          "categories": [
+            "event"
+          ],
+          "loc": 100
+        },
+        {
+          "file": "demos/forms/option/_testing/lib/harness.mjs",
+          "language": "js",
+          "name": "harness",
+          "categories": [
+            "worker"
+          ],
+          "loc": 94
+        },
+        {
+          "file": "demos/forms/option/option.html",
+          "language": "html",
+          "name": "option",
+          "categories": [
+            "webcomponent",
+            "event"
+          ],
+          "loc": 125
+        },
+        {
+          "file": "demos/forms/pin-input/_testing/lib/harness.mjs",
+          "language": "js",
+          "name": "harness",
+          "categories": [
+            "worker"
+          ],
+          "loc": 94
+        },
+        {
+          "file": "demos/forms/pin-input/pin-input.html",
+          "language": "html",
+          "name": "pin-input",
+          "categories": [
+            "event"
+          ],
+          "loc": 119
+        },
+        {
+          "file": "demos/forms/radio-group/_testing/lib/harness.mjs",
+          "language": "js",
+          "name": "harness",
+          "categories": [
+            "worker"
+          ],
+          "loc": 94
+        },
+        {
+          "file": "demos/forms/radio-group/radio-group.html",
+          "language": "html",
+          "name": "radio-group",
+          "categories": [
+            "event"
+          ],
+          "loc": 114
+        },
+        {
+          "file": "demos/forms/radio/_testing/lib/harness.mjs",
+          "language": "js",
+          "name": "harness",
+          "categories": [
+            "worker"
+          ],
+          "loc": 94
+        },
+        {
+          "file": "demos/forms/radio/radio.html",
+          "language": "html",
+          "name": "radio",
+          "categories": [
+            "webcomponent",
+            "worker",
+            "event"
+          ],
+          "loc": 99
+        },
+        {
+          "file": "demos/forms/rating/_testing/lib/harness.mjs",
+          "language": "js",
+          "name": "harness",
+          "categories": [
+            "worker"
+          ],
+          "loc": 94
+        },
+        {
+          "file": "demos/forms/rating/rating.html",
+          "language": "html",
+          "name": "rating",
+          "categories": [
+            "event"
+          ],
+          "loc": 114
+        },
+        {
+          "file": "demos/forms/rte/_testing/lib/harness.mjs",
+          "language": "js",
+          "name": "harness",
+          "categories": [
+            "worker"
+          ],
+          "loc": 94
+        },
+        {
+          "file": "demos/forms/rte/rte.html",
+          "language": "html",
+          "name": "rte",
+          "categories": [
+            "event"
+          ],
+          "loc": 83
+        },
+        {
+          "file": "demos/forms/select/_testing/lib/harness.mjs",
+          "language": "js",
+          "name": "harness",
+          "categories": [
+            "worker"
+          ],
+          "loc": 93
+        },
+        {
+          "file": "demos/forms/signature/_testing/lib/harness.mjs",
+          "language": "js",
+          "name": "harness",
+          "categories": [
+            "worker"
+          ],
+          "loc": 94
+        },
+        {
+          "file": "demos/forms/signature/signature.html",
+          "language": "html",
+          "name": "signature",
+          "categories": [
+            "event"
+          ],
+          "loc": 128
+        },
+        {
+          "file": "demos/forms/slider/_testing/lib/harness.mjs",
+          "language": "js",
+          "name": "harness",
+          "categories": [
+            "worker"
+          ],
+          "loc": 93
+        },
+        {
+          "file": "demos/forms/switch/_testing/lib/harness.mjs",
+          "language": "js",
+          "name": "harness",
+          "categories": [
+            "worker"
+          ],
+          "loc": 94
+        },
+        {
+          "file": "demos/forms/switch/switch.html",
+          "language": "html",
+          "name": "switch",
+          "categories": [
+            "event"
+          ],
+          "loc": 107
+        },
+        {
+          "file": "demos/forms/textarea/_testing/lib/harness.mjs",
+          "language": "js",
+          "name": "harness",
+          "categories": [
+            "worker"
+          ],
+          "loc": 94
+        },
+        {
+          "file": "demos/forms/textarea/textarea.html",
+          "language": "html",
+          "name": "textarea",
+          "categories": [
+            "event"
+          ],
+          "loc": 98
+        },
+        {
+          "file": "demos/forms/time-clock/_testing/lib/harness.mjs",
+          "language": "js",
+          "name": "harness",
+          "categories": [
+            "worker"
+          ],
+          "loc": 94
+        },
+        {
+          "file": "demos/forms/time-clock/time-clock.html",
+          "language": "html",
+          "name": "time-clock",
+          "categories": [
+            "event"
+          ],
+          "loc": 140
+        },
+        {
+          "file": "demos/forms/time-field/_testing/lib/harness.mjs",
+          "language": "js",
+          "name": "harness",
+          "categories": [
+            "worker"
+          ],
+          "loc": 94
+        },
+        {
+          "file": "demos/forms/time-field/time-field.html",
+          "language": "html",
+          "name": "time-field",
+          "categories": [
+            "event"
+          ],
+          "loc": 128
+        },
+        {
+          "file": "demos/forms/time-input/_testing/lib/harness.mjs",
+          "language": "js",
+          "name": "harness",
+          "categories": [
+            "worker"
+          ],
+          "loc": 94
+        },
+        {
+          "file": "demos/forms/time-input/time-input.html",
+          "language": "html",
+          "name": "time-input",
+          "categories": [
+            "event"
+          ],
+          "loc": 134
+        },
+        {
+          "file": "demos/forms/year-calendar/_testing/lib/harness.mjs",
+          "language": "js",
+          "name": "harness",
+          "categories": [
+            "worker"
+          ],
+          "loc": 94
+        },
+        {
+          "file": "demos/forms/year-calendar/year-calendar.html",
+          "language": "html",
+          "name": "year-calendar",
+          "categories": [
+            "event"
+          ],
+          "loc": 103
+        },
+        {
+          "file": "src/components/forms/checkbox.css",
+          "language": "css",
+          "name": "checkbox",
+          "categories": [
+            "animation"
+          ],
+          "loc": 154
+        },
+        {
+          "file": "src/components/forms/checkbox.preview.ts",
+          "language": "ts",
+          "name": "checkbox.preview",
+          "categories": [
+            "event"
+          ],
+          "loc": 49
+        },
+        {
+          "file": "src/components/forms/checkbox.ts",
+          "language": "ts",
+          "name": "is-checkbox",
+          "categories": [
+            "webcomponent",
+            "event"
+          ],
+          "loc": 280
+        },
+        {
+          "file": "src/components/forms/color-picker.css",
+          "language": "css",
+          "name": "color-picker",
+          "categories": [
+            "animation",
+            "css-part"
+          ],
+          "loc": 208
+        },
+        {
+          "file": "src/components/forms/color-picker.preview.ts",
+          "language": "ts",
+          "name": "color-picker.preview",
+          "categories": [
+            "event"
+          ],
+          "loc": 35
+        },
+        {
+          "file": "src/components/forms/color-picker.ts",
+          "language": "ts",
+          "name": "is-color-picker",
+          "categories": [
+            "webcomponent",
+            "event"
+          ],
+          "loc": 463
+        },
+        {
+          "file": "src/components/forms/combobox.ts",
+          "language": "ts",
+          "name": "is-combobox",
+          "categories": [
+            "webcomponent",
+            "sql-query",
+            "event"
+          ],
+          "loc": 490
+        },
+        {
+          "file": "src/components/forms/date-input.css",
+          "language": "css",
+          "name": "date-input",
+          "categories": [
+            "css-part"
+          ],
+          "loc": 164
+        },
+        {
+          "file": "src/components/forms/date-picker.ts",
+          "language": "ts",
+          "name": "is-date-picker",
+          "categories": [
+            "webcomponent",
+            "event"
+          ],
+          "loc": 813
+        },
+        {
+          "file": "src/components/forms/date-range-picker.ts",
+          "language": "ts",
+          "name": "is-date-range-picker",
+          "categories": [
+            "webcomponent",
+            "event"
+          ],
+          "loc": 351
+        },
+        {
+          "file": "src/components/forms/digital-clock.ts",
+          "language": "ts",
+          "name": "is-digital-clock",
+          "categories": [
+            "webcomponent",
+            "event"
+          ],
+          "loc": 305
+        },
+        {
+          "file": "src/components/forms/doc-editor.css",
+          "language": "css",
+          "name": "doc-editor",
+          "categories": [
+            "animation"
+          ],
+          "loc": 95
+        },
+        {
+          "file": "src/components/forms/doc-editor.preview.ts",
+          "language": "ts",
+          "name": "doc-editor.preview",
+          "categories": [
+            "event"
+          ],
+          "loc": 27
+        },
+        {
+          "file": "src/components/forms/doc-editor.ts",
+          "language": "ts",
+          "name": "is-doc-editor",
+          "categories": [
+            "webcomponent",
+            "event"
+          ],
+          "loc": 264
+        },
+        {
+          "file": "src/components/forms/dropzone.css",
+          "language": "css",
+          "name": "dropzone",
+          "categories": [
+            "animation"
+          ],
+          "loc": 109
+        },
+        {
+          "file": "src/components/forms/dropzone.preview.ts",
+          "language": "ts",
+          "name": "dropzone.preview",
+          "categories": [
+            "event"
+          ],
+          "loc": 40
+        },
+        {
+          "file": "src/components/forms/dropzone.ts",
+          "language": "ts",
+          "name": "is-dropzone",
+          "categories": [
+            "webcomponent",
+            "worker",
+            "event"
+          ],
+          "loc": 240
+        },
+        {
+          "file": "src/components/forms/duration-picker.preview.ts",
+          "language": "ts",
+          "name": "duration-picker.preview",
+          "categories": [
+            "event"
+          ],
+          "loc": 22
+        },
+        {
+          "file": "src/components/forms/duration-picker.ts",
+          "language": "ts",
+          "name": "is-duration-picker",
+          "categories": [
+            "webcomponent",
+            "sql-query",
+            "event"
+          ],
+          "loc": 185
+        },
+        {
+          "file": "src/components/forms/file-input.css",
+          "language": "css",
+          "name": "file-input",
+          "categories": [
+            "animation",
+            "css-part"
+          ],
+          "loc": 144
+        },
+        {
+          "file": "src/components/forms/file-input.preview.ts",
+          "language": "ts",
+          "name": "file-input.preview",
+          "categories": [
+            "event"
+          ],
+          "loc": 23
+        },
+        {
+          "file": "src/components/forms/file-input.ts",
+          "language": "ts",
+          "name": "is-file-input",
+          "categories": [
+            "webcomponent",
+            "sql-query",
+            "event",
+            "css-part"
+          ],
+          "loc": 346
+        },
+        {
+          "file": "src/components/forms/full-calendar.preview.ts",
+          "language": "ts",
+          "name": "full-calendar.preview",
+          "categories": [
+            "event"
+          ],
+          "loc": 22
+        },
+        {
+          "file": "src/components/forms/full-calendar.ts",
+          "language": "ts",
+          "name": "is-full-calendar",
+          "categories": [
+            "webcomponent",
+            "event"
+          ],
+          "loc": 277
+        },
+        {
+          "file": "src/components/forms/inline-edit.css",
+          "language": "css",
+          "name": "inline-edit",
+          "categories": [
+            "animation"
+          ],
+          "loc": 73
+        },
+        {
+          "file": "src/components/forms/inline-edit.ts",
+          "language": "ts",
+          "name": "is-inline-edit",
+          "categories": [
+            "webcomponent",
+            "worker",
+            "event"
+          ],
+          "loc": 248
+        },
+        {
+          "file": "src/components/forms/input.css",
+          "language": "css",
+          "name": "input",
+          "categories": [
+            "animation"
+          ],
+          "loc": 272
+        },
+        {
+          "file": "src/components/forms/input.preview.ts",
+          "language": "ts",
+          "name": "input.preview",
+          "categories": [
+            "event"
+          ],
+          "loc": 41
+        },
+        {
+          "file": "src/components/forms/input.ts",
+          "language": "ts",
+          "name": "is-input",
+          "categories": [
+            "webcomponent",
+            "worker",
+            "event"
+          ],
+          "loc": 582
+        },
+        {
+          "file": "src/components/forms/masked-input.css",
+          "language": "css",
+          "name": "masked-input",
+          "categories": [
+            "animation"
+          ],
+          "loc": 67
+        },
+        {
+          "file": "src/components/forms/masked-input.ts",
+          "language": "ts",
+          "name": "is-masked-input",
+          "categories": [
+            "webcomponent",
+            "auth",
+            "event"
+          ],
+          "loc": 185
+        },
+        {
+          "file": "src/components/forms/masks-tokens.ts",
+          "language": "ts",
+          "name": "masks-tokens",
+          "categories": [
+            "auth"
+          ],
+          "loc": 73
+        },
+        {
+          "file": "src/components/forms/mention.css",
+          "language": "css",
+          "name": "mention",
+          "categories": [
+            "animation"
+          ],
+          "loc": 63
+        },
+        {
+          "file": "src/components/forms/mention.preview.ts",
+          "language": "ts",
+          "name": "mention.preview",
+          "categories": [
+            "event"
+          ],
+          "loc": 27
+        },
+        {
+          "file": "src/components/forms/mention.ts",
+          "language": "ts",
+          "name": "is-mention",
+          "categories": [
+            "webcomponent",
+            "migration",
+            "event"
+          ],
+          "loc": 214
+        },
+        {
+          "file": "src/components/forms/month-calendar.ts",
+          "language": "ts",
+          "name": "is-month-calendar",
+          "categories": [
+            "webcomponent",
+            "event"
+          ],
+          "loc": 172
+        },
+        {
+          "file": "src/components/forms/option.css",
+          "language": "css",
+          "name": "option",
+          "categories": [
+            "webcomponent"
+          ],
+          "loc": 72
+        },
+        {
+          "file": "src/components/forms/option.ts",
+          "language": "ts",
+          "name": "is-option",
+          "categories": [
+            "webcomponent",
+            "migration"
+          ],
+          "loc": 89
+        },
+        {
+          "file": "src/components/forms/pin-input.css",
+          "language": "css",
+          "name": "pin-input",
+          "categories": [
+            "animation"
+          ],
+          "loc": 75
+        },
+        {
+          "file": "src/components/forms/pin-input.ts",
+          "language": "ts",
+          "name": "is-pin-input",
+          "categories": [
+            "webcomponent",
+            "event"
+          ],
+          "loc": 280
+        },
+        {
+          "file": "src/components/forms/radio-group.ts",
+          "language": "ts",
+          "name": "is-radio-group",
+          "categories": [
+            "webcomponent",
+            "event"
+          ],
+          "loc": 342
+        },
+        {
+          "file": "src/components/forms/radio.css",
+          "language": "css",
+          "name": "radio",
+          "categories": [
+            "animation"
+          ],
+          "loc": 138
+        },
+        {
+          "file": "src/components/forms/radio.ts",
+          "language": "ts",
+          "name": "is-radio",
+          "categories": [
+            "webcomponent",
+            "migration",
+            "event"
+          ],
+          "loc": 177
+        },
+        {
+          "file": "src/components/forms/rating.css",
+          "language": "css",
+          "name": "rating",
+          "categories": [
+            "animation"
+          ],
+          "loc": 112
+        },
+        {
+          "file": "src/components/forms/rating.preview.ts",
+          "language": "ts",
+          "name": "rating.preview",
+          "categories": [
+            "event"
+          ],
+          "loc": 67
+        },
+        {
+          "file": "src/components/forms/rating.ts",
+          "language": "ts",
+          "name": "is-rating",
+          "categories": [
+            "webcomponent",
+            "event"
+          ],
+          "loc": 456
+        },
+        {
+          "file": "src/components/forms/rte.css",
+          "language": "css",
+          "name": "rte",
+          "categories": [
+            "auth"
+          ],
+          "loc": 129
+        },
+        {
+          "file": "src/components/forms/rte.preview.ts",
+          "language": "ts",
+          "name": "rte.preview",
+          "categories": [
+            "event"
+          ],
+          "loc": 21
+        },
+        {
+          "file": "src/components/forms/rte.ts",
+          "language": "ts",
+          "name": "is-rte",
+          "categories": [
+            "webcomponent",
+            "auth",
+            "event"
+          ],
+          "loc": 284
+        },
+        {
+          "file": "src/components/forms/select.css",
+          "language": "css",
+          "name": "select",
+          "categories": [
+            "animation"
+          ],
+          "loc": 304
+        },
+        {
+          "file": "src/components/forms/select.preview.ts",
+          "language": "ts",
+          "name": "select.preview",
+          "categories": [
+            "event"
+          ],
+          "loc": 41
+        },
+        {
+          "file": "src/components/forms/select.ts",
+          "language": "ts",
+          "name": "is-select",
+          "categories": [
+            "webcomponent",
+            "worker",
+            "event"
+          ],
+          "loc": 882
+        },
+        {
+          "file": "src/components/forms/signature.preview.ts",
+          "language": "ts",
+          "name": "signature.preview",
+          "categories": [
+            "event"
+          ],
+          "loc": 32
+        },
+        {
+          "file": "src/components/forms/signature.ts",
+          "language": "ts",
+          "name": "is-signature",
+          "categories": [
+            "webcomponent",
+            "event"
+          ],
+          "loc": 208
+        },
+        {
+          "file": "src/components/forms/slider.css",
+          "language": "css",
+          "name": "slider",
+          "categories": [
+            "animation"
+          ],
+          "loc": 281
+        },
+        {
+          "file": "src/components/forms/slider.preview.ts",
+          "language": "ts",
+          "name": "slider.preview",
+          "categories": [
+            "event"
+          ],
+          "loc": 65
+        },
+        {
+          "file": "src/components/forms/slider.ts",
+          "language": "ts",
+          "name": "is-slider",
+          "categories": [
+            "webcomponent",
+            "event"
+          ],
+          "loc": 786
+        },
+        {
+          "file": "src/components/forms/switch.css",
+          "language": "css",
+          "name": "switch",
+          "categories": [
+            "animation"
+          ],
+          "loc": 210
+        },
+        {
+          "file": "src/components/forms/switch.preview.ts",
+          "language": "ts",
+          "name": "switch.preview",
+          "categories": [
+            "event"
+          ],
+          "loc": 40
+        },
+        {
+          "file": "src/components/forms/switch.ts",
+          "language": "ts",
+          "name": "is-switch",
+          "categories": [
+            "webcomponent",
+            "event"
+          ],
+          "loc": 285
+        },
+        {
+          "file": "src/components/forms/textarea.preview.ts",
+          "language": "ts",
+          "name": "textarea.preview",
+          "categories": [
+            "event"
+          ],
+          "loc": 36
+        },
+        {
+          "file": "src/components/forms/textarea.ts",
+          "language": "ts",
+          "name": "is-textarea",
+          "categories": [
+            "webcomponent",
+            "sql-query",
+            "event"
+          ],
+          "loc": 416
+        },
+        {
+          "file": "src/components/forms/time-clock.ts",
+          "language": "ts",
+          "name": "is-time-clock",
+          "categories": [
+            "webcomponent",
+            "event"
+          ],
+          "loc": 413
+        },
+        {
+          "file": "src/components/forms/year-calendar.ts",
+          "language": "ts",
+          "name": "is-year-calendar",
+          "categories": [
+            "webcomponent",
+            "event"
+          ],
+          "loc": 144
+        },
+        {
+          "file": "src/utils/health/exhaustive/forms/_helpers.ts",
+          "language": "ts",
+          "name": "<is-x>",
+          "categories": [
+            "webcomponent",
+            "event"
+          ],
+          "loc": 223
+        }
+      ]
+    },
+    {
+      "id": "demo-g09",
+      "label": "helpers (6 demos: format-date, mutation-observer, observer, relative-time, resize-observer, ui)",
+      "category": "helpers",
+      "demos": [
+        "format-date",
+        "mutation-observer",
+        "observer",
+        "relative-time",
+        "resize-observer",
+        "ui"
+      ],
+      "testables": [
+        {
+          "file": "demos/helpers/_testing/lib/harness.mjs",
+          "language": "js",
+          "name": "harness",
+          "categories": [
+            "worker"
+          ],
+          "loc": 93
+        },
+        {
+          "file": "demos/helpers/md-render/md-render.html",
+          "language": "html",
+          "name": "md-render",
+          "categories": [
+            "event"
+          ],
+          "loc": 106
+        },
+        {
+          "file": "src/components/helpers/floating.css",
+          "language": "css",
+          "name": "floating",
+          "categories": [
+            "animation",
+            "css-part"
+          ],
+          "loc": 101
+        },
+        {
+          "file": "src/components/helpers/floating.ts",
+          "language": "ts",
+          "name": "is-floating",
+          "categories": [
+            "webcomponent",
+            "migration",
+            "event",
+            "css-part"
+          ],
+          "loc": 453
+        },
+        {
+          "file": "src/components/helpers/format-bytes.ts",
+          "language": "ts",
+          "name": "is-format-bytes",
+          "categories": [
+            "webcomponent"
+          ],
+          "loc": 132
+        },
+        {
+          "file": "src/components/helpers/format-date.preview.ts",
+          "language": "ts",
+          "name": "format-date.preview",
+          "categories": [
+            "worker",
+            "event"
+          ],
+          "loc": 117
+        },
+        {
+          "file": "src/components/helpers/format-date.ts",
+          "language": "ts",
+          "name": "is-format-date",
+          "categories": [
+            "webcomponent"
+          ],
+          "loc": 130
+        },
+        {
+          "file": "src/components/helpers/format-number.ts",
+          "language": "ts",
+          "name": "is-format-number",
+          "categories": [
+            "webcomponent"
+          ],
+          "loc": 114
+        },
+        {
+          "file": "src/components/helpers/format.ts",
+          "language": "ts",
+          "name": "is-format",
+          "categories": [
+            "webcomponent",
+            "worker"
+          ],
+          "loc": 605
+        },
+        {
+          "file": "src/components/helpers/intersection-observer.ts",
+          "language": "ts",
+          "name": "is-intersection-observer",
+          "categories": [
+            "webcomponent"
+          ],
+          "loc": 26
+        },
+        {
+          "file": "src/components/helpers/md-editor-api.ts",
+          "language": "ts",
+          "name": "md-editor-api",
+          "categories": [
+            "auth",
+            "http-client"
+          ],
+          "loc": 187
+        },
+        {
+          "file": "src/components/helpers/md-editor.css",
+          "language": "css",
+          "name": "md-editor",
+          "categories": [
+            "animation",
+            "css-part"
+          ],
+          "loc": 328
+        },
+        {
+          "file": "src/components/helpers/md-editor.ts",
+          "language": "ts",
+          "name": "is-md-editor",
+          "categories": [
+            "webcomponent",
+            "auth",
+            "sql-query",
+            "event"
+          ],
+          "loc": 957
+        },
+        {
+          "file": "src/components/helpers/md-lite.ts",
+          "language": "ts",
+          "name": "md-lite",
+          "categories": [
+            "auth",
+            "migration"
+          ],
+          "loc": 257
+        },
+        {
+          "file": "src/components/helpers/md-render.ts",
+          "language": "ts",
+          "name": "is-md-render",
+          "categories": [
+            "webcomponent",
+            "event"
+          ],
+          "loc": 216
+        },
+        {
+          "file": "src/components/helpers/mutation-observer.preview.ts",
+          "language": "ts",
+          "name": "mutation-observer.preview",
+          "categories": [
+            "worker",
+            "event"
+          ],
+          "loc": 135
+        },
+        {
+          "file": "src/components/helpers/mutation-observer.ts",
+          "language": "ts",
+          "name": "is-mutation-observer",
+          "categories": [
+            "webcomponent"
+          ],
+          "loc": 24
+        },
+        {
+          "file": "src/components/helpers/observer.preview.ts",
+          "language": "ts",
+          "name": "observer.preview",
+          "categories": [
+            "event"
+          ],
+          "loc": 139
+        },
+        {
+          "file": "src/components/helpers/observer.ts",
+          "language": "ts",
+          "name": "is-observer",
+          "categories": [
+            "webcomponent",
+            "migration",
+            "event"
+          ],
+          "loc": 222
+        },
+        {
+          "file": "src/components/helpers/offscreen-canvas.ts",
+          "language": "ts",
+          "name": "is-offscreen-canvas",
+          "categories": [
+            "webcomponent",
+            "worker",
+            "event"
+          ],
+          "loc": 70
+        },
+        {
+          "file": "src/components/helpers/popover.ts",
+          "language": "ts",
+          "name": "is-popover",
+          "categories": [
+            "webcomponent",
+            "migration",
+            "event",
+            "css-part"
+          ],
+          "loc": 345
+        },
+        {
+          "file": "src/components/helpers/relative-time.preview.ts",
+          "language": "ts",
+          "name": "relative-time.preview",
+          "categories": [
+            "event",
+            "i18n"
+          ],
+          "loc": 121
+        },
+        {
+          "file": "src/components/helpers/relative-time.ts",
+          "language": "ts",
+          "name": "is-relative-time",
+          "categories": [
+            "webcomponent",
+            "worker"
+          ],
+          "loc": 145
+        },
+        {
+          "file": "src/components/helpers/resize-observer.preview.ts",
+          "language": "ts",
+          "name": "resize-observer.preview",
+          "categories": [
+            "event"
+          ],
+          "loc": 127
+        },
+        {
+          "file": "src/components/helpers/resize-observer.ts",
+          "language": "ts",
+          "name": "is-resize-observer",
+          "categories": [
+            "webcomponent"
+          ],
+          "loc": 21
+        },
+        {
+          "file": "src/components/helpers/response-cache.ts",
+          "language": "ts",
+          "name": "response-cache",
+          "categories": [
+            "sql-query",
+            "worker",
+            "storage"
+          ],
+          "loc": 258
+        },
+        {
+          "file": "src/components/helpers/ui.preview.ts",
+          "language": "ts",
+          "name": "ui.preview",
+          "categories": [
+            "webcomponent"
+          ],
+          "loc": 112
+        },
+        {
+          "file": "src/components/helpers/ui.ts",
+          "language": "ts",
+          "name": "ui",
+          "categories": [
+            "webcomponent",
+            "event"
+          ],
+          "loc": 243
+        },
+        {
+          "file": "src/components/helpers/wake-lock.ts",
+          "language": "ts",
+          "name": "is-wake-lock",
+          "categories": [
+            "webcomponent",
+            "event",
+            "http-client"
+          ],
+          "loc": 71
+        }
+      ]
+    },
+    {
+      "id": "demo-g10",
+      "label": "isp (12 demos: block-layout, btn-ref, catalogo-gen, flex-layout, flex-options, float-card, form, heading, loading-overlay, modal-verificacion, text, tree-view)",
+      "category": "isp",
+      "demos": [
+        "block-layout",
+        "btn-ref",
+        "catalogo-gen",
+        "flex-layout",
+        "flex-options",
+        "float-card",
+        "form",
+        "heading",
+        "loading-overlay",
+        "modal-verificacion",
+        "text",
+        "tree-view"
+      ],
+      "testables": [
+        {
+          "file": "demos/isp/_testing/lib/harness.mjs",
+          "language": "js",
+          "name": "harness",
+          "categories": [
+            "worker"
+          ],
+          "loc": 91
+        },
+        {
+          "file": "demos/isp/_testing/run.mjs",
+          "language": "js",
+          "name": "run",
+          "categories": [
+            "worker",
+            "cli",
+            "http-client"
+          ],
+          "loc": 120
+        },
+        {
+          "file": "demos/isp/accordion-group/accordion-group.html",
+          "language": "html",
+          "name": "accordion-group",
+          "categories": [
+            "event"
+          ],
+          "loc": 102
+        },
+        {
+          "file": "demos/isp/block-layout/block-layout.html",
+          "language": "html",
+          "name": "block-layout",
+          "categories": [
+            "event",
+            "animation"
+          ],
+          "loc": 122
+        },
+        {
+          "file": "demos/isp/btn-ref/btn-ref.html",
+          "language": "html",
+          "name": "btn-ref",
+          "categories": [
+            "event"
+          ],
+          "loc": 107
+        },
+        {
+          "file": "demos/isp/catalogo-gen/catalogo-gen.html",
+          "language": "html",
+          "name": "catalogo-gen",
+          "categories": [
+            "webcomponent",
+            "event"
+          ],
+          "loc": 125
+        },
+        {
+          "file": "demos/isp/confirm-delete/confirm-delete.html",
+          "language": "html",
+          "name": "confirm-delete",
+          "categories": [
+            "worker",
+            "event"
+          ],
+          "loc": 75
+        },
+        {
+          "file": "demos/isp/flex-options/flex-options.html",
+          "language": "html",
+          "name": "flex-options",
+          "categories": [
+            "worker",
+            "css-part"
+          ],
+          "loc": 133
+        },
+        {
+          "file": "demos/isp/float-card/float-card.html",
+          "language": "html",
+          "name": "float-card",
+          "categories": [
+            "webcomponent",
+            "event",
+            "css-part"
+          ],
+          "loc": 112
+        },
+        {
+          "file": "demos/isp/form-json/form-json.html",
+          "language": "html",
+          "name": "form-json",
+          "categories": [
+            "event"
+          ],
+          "loc": 128
+        },
+        {
+          "file": "demos/isp/form/form.html",
+          "language": "html",
+          "name": "form",
+          "categories": [
+            "webcomponent",
+            "event"
+          ],
+          "loc": 154
+        },
+        {
+          "file": "demos/isp/index.html",
+          "language": "html",
+          "name": "index",
+          "categories": [
+            "animation"
+          ],
+          "loc": 50
+        },
+        {
+          "file": "demos/isp/loading-overlay/loading-overlay.html",
+          "language": "html",
+          "name": "loading-overlay",
+          "categories": [
+            "worker",
+            "event"
+          ],
+          "loc": 77
+        },
+        {
+          "file": "demos/isp/modal-verificacion/modal-verificacion.html",
+          "language": "html",
+          "name": "modal-verificacion",
+          "categories": [
+            "worker",
+            "event"
+          ],
+          "loc": 97
+        },
+        {
+          "file": "demos/isp/tree-view/tree-view.html",
+          "language": "html",
+          "name": "tree-view",
+          "categories": [
+            "event"
+          ],
+          "loc": 122
+        },
+        {
+          "file": "src/components/isp/_shared/tree-view/_types.ts",
+          "language": "ts",
+          "name": "_types",
+          "categories": [
+            "worker"
+          ],
+          "loc": 404
+        },
+        {
+          "file": "src/components/isp/_shared/tree-view/00-as-row.ts",
+          "language": "ts",
+          "name": "00-as-row",
+          "categories": [
+            "webcomponent",
+            "sql-query",
+            "migration"
+          ],
+          "loc": 839
+        },
+        {
+          "file": "src/components/isp/_shared/tree-view/04-tree-flow.ts",
+          "language": "ts",
+          "name": "04-tree-flow",
+          "categories": [
+            "worker"
+          ],
+          "loc": 550
+        },
+        {
+          "file": "src/components/isp/_shared/tree-view/05-view.ts",
+          "language": "ts",
+          "name": "05-view",
+          "categories": [
+            "worker"
+          ],
+          "loc": 291
+        },
+        {
+          "file": "src/components/isp/_shared/tree-view/flex-options.ts",
+          "language": "ts",
+          "name": "flex-options",
+          "categories": [
+            "migration",
+            "event"
+          ],
+          "loc": 201
+        },
+        {
+          "file": "src/components/isp/_shared/tree-view/render-rows.ts",
+          "language": "ts",
+          "name": "render-rows",
+          "categories": [
+            "migration",
+            "event"
+          ],
+          "loc": 452
+        },
+        {
+          "file": "src/components/isp/_shared/tree-view/row-adapter-drag.ts",
+          "language": "ts",
+          "name": "row-adapter-drag",
+          "categories": [
+            "worker"
+          ],
+          "loc": 193
+        },
+        {
+          "file": "src/components/isp/_shared/tree-view/row-adapter.ts",
+          "language": "ts",
+          "name": "row-adapter",
+          "categories": [
+            "migration",
+            "worker"
+          ],
+          "loc": 281
+        },
+        {
+          "file": "src/components/isp/accordion-group.css",
+          "language": "css",
+          "name": "accordion-group",
+          "categories": [
+            "css-part"
+          ],
+          "loc": 23
+        },
+        {
+          "file": "src/components/isp/accordion-group.ts",
+          "language": "ts",
+          "name": "is-accordion-group",
+          "categories": [
+            "webcomponent",
+            "event",
+            "css-part"
+          ],
+          "loc": 145
+        },
+        {
+          "file": "src/components/isp/block-layout.preview.ts",
+          "language": "ts",
+          "name": "block-layout.preview",
+          "categories": [
+            "event"
+          ],
+          "loc": 64
+        },
+        {
+          "file": "src/components/isp/block-layout.ts",
+          "language": "ts",
+          "name": "is-block-layout",
+          "categories": [
+            "webcomponent",
+            "database",
+            "event"
+          ],
+          "loc": 251
+        },
+        {
+          "file": "src/components/isp/btn-ref.preview.ts",
+          "language": "ts",
+          "name": "btn-ref.preview",
+          "categories": [
+            "event"
+          ],
+          "loc": 70
+        },
+        {
+          "file": "src/components/isp/btn-ref.ts",
+          "language": "ts",
+          "name": "is-btn-ref",
+          "categories": [
+            "webcomponent",
+            "worker",
+            "event",
+            "css-part"
+          ],
+          "loc": 410
+        },
+        {
+          "file": "src/components/isp/catalogo-gen.preview.ts",
+          "language": "ts",
+          "name": "catalogo-gen.preview",
+          "categories": [
+            "auth",
+            "storage",
+            "event"
+          ],
+          "loc": 60
+        },
+        {
+          "file": "src/components/isp/catalogo-gen.ts",
+          "language": "ts",
+          "name": "is-catalogo-gen",
+          "categories": [
+            "webcomponent",
+            "event"
+          ],
+          "loc": 796
+        },
+        {
+          "file": "src/components/isp/confirm-delete.ts",
+          "language": "ts",
+          "name": "is-confirm-delete",
+          "categories": [
+            "webcomponent",
+            "event",
+            "css-part"
+          ],
+          "loc": 310
+        },
+        {
+          "file": "src/components/isp/controller-from-config.ts",
+          "language": "ts",
+          "name": "controller-from-config",
+          "categories": [
+            "auth",
+            "http-client"
+          ],
+          "loc": 495
+        },
+        {
+          "file": "src/components/isp/flex-layout.preview.ts",
+          "language": "ts",
+          "name": "flex-layout.preview",
+          "categories": [
+            "event"
+          ],
+          "loc": 72
+        },
+        {
+          "file": "src/components/isp/flex-layout.ts",
+          "language": "ts",
+          "name": "is-flex-layout",
+          "categories": [
+            "webcomponent"
+          ],
+          "loc": 107
+        },
+        {
+          "file": "src/components/isp/flex-options.ts",
+          "language": "ts",
+          "name": "is-flex-options",
+          "categories": [
+            "webcomponent"
+          ],
+          "loc": 90
+        },
+        {
+          "file": "src/components/isp/float-card.css",
+          "language": "css",
+          "name": "float-card",
+          "categories": [
+            "webcomponent",
+            "css-part"
+          ],
+          "loc": 51
+        },
+        {
+          "file": "src/components/isp/float-card.preview.ts",
+          "language": "ts",
+          "name": "float-card.preview",
+          "categories": [
+            "event"
+          ],
+          "loc": 36
+        },
+        {
+          "file": "src/components/isp/float-card.ts",
+          "language": "ts",
+          "name": "is-float-card",
+          "categories": [
+            "webcomponent",
+            "event"
+          ],
+          "loc": 146
+        },
+        {
+          "file": "src/components/isp/form.css",
+          "language": "css",
+          "name": "form",
+          "categories": [
+            "animation"
+          ],
+          "loc": 68
+        },
+        {
+          "file": "src/components/isp/form.preview.ts",
+          "language": "ts",
+          "name": "form.preview",
+          "categories": [
+            "event"
+          ],
+          "loc": 103
+        },
+        {
+          "file": "src/components/isp/form.ts",
+          "language": "ts",
+          "name": "is-form",
+          "categories": [
+            "webcomponent",
+            "event"
+          ],
+          "loc": 250
+        },
+        {
+          "file": "src/components/isp/grid-layout.ts",
+          "language": "ts",
+          "name": "is-grid-layout",
+          "categories": [
+            "webcomponent"
+          ],
+          "loc": 100
+        },
+        {
+          "file": "src/components/isp/heading.preview.ts",
+          "language": "ts",
+          "name": "heading.preview",
+          "categories": [
+            "event"
+          ],
+          "loc": 110
+        },
+        {
+          "file": "src/components/isp/heading.ts",
+          "language": "ts",
+          "name": "is-heading",
+          "categories": [
+            "webcomponent"
+          ],
+          "loc": 148
+        },
+        {
+          "file": "src/components/isp/loading-overlay.css",
+          "language": "css",
+          "name": "loading-overlay",
+          "categories": [
+            "animation"
+          ],
+          "loc": 57
+        },
+        {
+          "file": "src/components/isp/loading-overlay.preview.ts",
+          "language": "ts",
+          "name": "loading-overlay.preview",
+          "categories": [
+            "worker",
+            "event"
+          ],
+          "loc": 37
+        },
+        {
+          "file": "src/components/isp/loading-overlay.ts",
+          "language": "ts",
+          "name": "is-loading-overlay",
+          "categories": [
+            "webcomponent",
+            "event",
+            "css-part"
+          ],
+          "loc": 153
+        },
+        {
+          "file": "src/components/isp/modal-verificacion.preview.ts",
+          "language": "ts",
+          "name": "modal-verificacion.preview",
+          "categories": [
+            "worker",
+            "event"
+          ],
+          "loc": 52
+        },
+        {
+          "file": "src/components/isp/modal-verificacion.ts",
+          "language": "ts",
+          "name": "is-modal-verificacion",
+          "categories": [
+            "webcomponent",
+            "event",
+            "css-part"
+          ],
+          "loc": 336
+        },
+        {
+          "file": "src/components/isp/text.preview.ts",
+          "language": "ts",
+          "name": "text.preview",
+          "categories": [
+            "event"
+          ],
+          "loc": 90
+        },
+        {
+          "file": "src/components/isp/text.ts",
+          "language": "ts",
+          "name": "is-text",
+          "categories": [
+            "webcomponent"
+          ],
+          "loc": 109
+        },
+        {
+          "file": "src/components/isp/tree-view.css",
+          "language": "css",
+          "name": "tree-view",
+          "categories": [
+            "animation"
+          ],
+          "loc": 266
+        },
+        {
+          "file": "src/components/isp/tree-view.preview.ts",
+          "language": "ts",
+          "name": "tree-view.preview",
+          "categories": [
+            "event"
+          ],
+          "loc": 95
+        },
+        {
+          "file": "src/components/isp/tree-view.ts",
+          "language": "ts",
+          "name": "is-tree-view",
+          "categories": [
+            "webcomponent",
+            "migration",
+            "worker",
+            "event"
+          ],
+          "loc": 442
+        }
+      ]
+    },
+    {
+      "id": "demo-g11",
+      "label": "layout (2 demos: dock, main)",
+      "category": "layout",
+      "demos": [
+        "dock",
+        "main"
+      ],
+      "testables": [
+        {
+          "file": "demos/layout/callout/_testing/lib/harness.mjs",
+          "language": "js",
+          "name": "harness",
+          "categories": [
+            "worker"
+          ],
+          "loc": 90
+        },
+        {
+          "file": "demos/layout/callout/callout.html",
+          "language": "html",
+          "name": "callout",
+          "categories": [
+            "event"
+          ],
+          "loc": 150
+        },
+        {
+          "file": "demos/layout/card/_testing/lib/harness.mjs",
+          "language": "js",
+          "name": "harness",
+          "categories": [
+            "worker"
+          ],
+          "loc": 90
+        },
+        {
+          "file": "demos/layout/card/card.html",
+          "language": "html",
+          "name": "card",
+          "categories": [
+            "event"
+          ],
+          "loc": 167
+        },
+        {
+          "file": "demos/layout/demo/_testing/lib/harness.mjs",
+          "language": "js",
+          "name": "harness",
+          "categories": [
+            "worker"
+          ],
+          "loc": 90
+        },
+        {
+          "file": "demos/layout/demo/demo.html",
+          "language": "html",
+          "name": "demo",
+          "categories": [
+            "event"
+          ],
+          "loc": 122
+        },
+        {
+          "file": "demos/layout/details/_testing/lib/harness.mjs",
+          "language": "js",
+          "name": "harness",
+          "categories": [
+            "worker"
+          ],
+          "loc": 90
+        },
+        {
+          "file": "demos/layout/details/details.html",
+          "language": "html",
+          "name": "details",
+          "categories": [
+            "event"
+          ],
+          "loc": 175
+        },
+        {
+          "file": "demos/layout/dialog/_testing/lib/harness.mjs",
+          "language": "js",
+          "name": "harness",
+          "categories": [
+            "worker"
+          ],
+          "loc": 90
+        },
+        {
+          "file": "demos/layout/dialog/dialog.html",
+          "language": "html",
+          "name": "dialog",
+          "categories": [
+            "webcomponent",
+            "event"
+          ],
+          "loc": 148
+        },
+        {
+          "file": "demos/layout/divider/_testing/lib/harness.mjs",
+          "language": "js",
+          "name": "harness",
+          "categories": [
+            "worker"
+          ],
+          "loc": 90
+        },
+        {
+          "file": "demos/layout/divider/divider.html",
+          "language": "html",
+          "name": "divider",
+          "categories": [
+            "event"
+          ],
+          "loc": 151
+        },
+        {
+          "file": "demos/layout/dock/_testing/lib/harness.mjs",
+          "language": "js",
+          "name": "harness",
+          "categories": [
+            "worker"
+          ],
+          "loc": 90
+        },
+        {
+          "file": "demos/layout/dock/dock.html",
+          "language": "html",
+          "name": "dock",
+          "categories": [
+            "event"
+          ],
+          "loc": 125
+        },
+        {
+          "file": "demos/layout/drawer/_testing/lib/harness.mjs",
+          "language": "js",
+          "name": "harness",
+          "categories": [
+            "worker"
+          ],
+          "loc": 90
+        },
+        {
+          "file": "demos/layout/drawer/drawer.html",
+          "language": "html",
+          "name": "drawer",
+          "categories": [
+            "webcomponent",
+            "event"
+          ],
+          "loc": 136
+        },
+        {
+          "file": "demos/layout/main/_testing/lib/harness.mjs",
+          "language": "js",
+          "name": "harness",
+          "categories": [
+            "worker"
+          ],
+          "loc": 90
+        },
+        {
+          "file": "demos/layout/main/main.html",
+          "language": "html",
+          "name": "main",
+          "categories": [
+            "storage",
+            "event"
+          ],
+          "loc": 163
+        },
+        {
+          "file": "demos/layout/scrollspy/_testing/lib/harness.mjs",
+          "language": "js",
+          "name": "harness",
+          "categories": [
+            "worker"
+          ],
+          "loc": 90
+        },
+        {
+          "file": "demos/layout/scrollspy/scrollspy.html",
+          "language": "html",
+          "name": "scrollspy",
+          "categories": [
+            "event"
+          ],
+          "loc": 220
+        },
+        {
+          "file": "demos/layout/split-panel/_testing/lib/harness.mjs",
+          "language": "js",
+          "name": "harness",
+          "categories": [
+            "worker"
+          ],
+          "loc": 90
+        },
+        {
+          "file": "demos/layout/split-panel/split-panel.html",
+          "language": "html",
+          "name": "split-panel",
+          "categories": [
+            "webcomponent",
+            "storage",
+            "event"
+          ],
+          "loc": 197
+        },
+        {
+          "file": "src/components/layout/callout.css",
+          "language": "css",
+          "name": "callout",
+          "categories": [
+            "css-part"
+          ],
+          "loc": 149
+        },
+        {
+          "file": "src/components/layout/callout.ts",
+          "language": "ts",
+          "name": "is-callout",
+          "categories": [
+            "webcomponent",
+            "css-part"
+          ],
+          "loc": 178
+        },
+        {
+          "file": "src/components/layout/card.css",
+          "language": "css",
+          "name": "card",
+          "categories": [
+            "webcomponent",
+            "css-part"
+          ],
+          "loc": 105
+        },
+        {
+          "file": "src/components/layout/card.ts",
+          "language": "ts",
+          "name": "is-card",
+          "categories": [
+            "webcomponent",
+            "event",
+            "css-part"
+          ],
+          "loc": 172
+        },
+        {
+          "file": "src/components/layout/demo.ts",
+          "language": "ts",
+          "name": "is-demo",
+          "categories": [
+            "webcomponent",
+            "event"
+          ],
+          "loc": 67
+        },
+        {
+          "file": "src/components/layout/details.css",
+          "language": "css",
+          "name": "details",
+          "categories": [
+            "webcomponent",
+            "animation",
+            "css-part"
+          ],
+          "loc": 140
+        },
+        {
+          "file": "src/components/layout/details.ts",
+          "language": "ts",
+          "name": "is-details",
+          "categories": [
+            "webcomponent",
+            "event",
+            "css-part"
+          ],
+          "loc": 351
+        },
+        {
+          "file": "src/components/layout/dialog.ts",
+          "language": "ts",
+          "name": "is-dialog",
+          "categories": [
+            "webcomponent",
+            "worker"
+          ],
+          "loc": 191
+        },
+        {
+          "file": "src/components/layout/divider.ts",
+          "language": "ts",
+          "name": "is-divider",
+          "categories": [
+            "webcomponent"
+          ],
+          "loc": 106
+        },
+        {
+          "file": "src/components/layout/dock.css",
+          "language": "css",
+          "name": "dock",
+          "categories": [
+            "animation"
+          ],
+          "loc": 80
+        },
+        {
+          "file": "src/components/layout/dock.preview.ts",
+          "language": "ts",
+          "name": "dock.preview",
+          "categories": [
+            "event"
+          ],
+          "loc": 25
+        },
+        {
+          "file": "src/components/layout/dock.ts",
+          "language": "ts",
+          "name": "is-dock",
+          "categories": [
+            "webcomponent",
+            "event"
+          ],
+          "loc": 165
+        },
+        {
+          "file": "src/components/layout/drawer.ts",
+          "language": "ts",
+          "name": "is-drawer",
+          "categories": [
+            "webcomponent",
+            "worker"
+          ],
+          "loc": 169
+        },
+        {
+          "file": "src/components/layout/main.preview.ts",
+          "language": "ts",
+          "name": "main.preview",
+          "categories": [
+            "event"
+          ],
+          "loc": 31
+        },
+        {
+          "file": "src/components/layout/main.ts",
+          "language": "ts",
+          "name": "is-main",
+          "categories": [
+            "webcomponent",
+            "database",
+            "storage"
+          ],
+          "loc": 61
+        },
+        {
+          "file": "src/components/layout/preview-component.ts",
+          "language": "ts",
+          "name": "is-preview-component",
+          "categories": [
+            "webcomponent",
+            "migration",
+            "event"
+          ],
+          "loc": 288
+        },
+        {
+          "file": "src/components/layout/preview-controls.ts",
+          "language": "ts",
+          "name": "is-preview-controls",
+          "categories": [
+            "webcomponent",
+            "event"
+          ],
+          "loc": 288
+        },
+        {
+          "file": "src/components/layout/scrollspy.css",
+          "language": "css",
+          "name": "scrollspy",
+          "categories": [
+            "animation",
+            "css-part"
+          ],
+          "loc": 36
+        },
+        {
+          "file": "src/components/layout/scrollspy.ts",
+          "language": "ts",
+          "name": "is-scrollspy",
+          "categories": [
+            "webcomponent",
+            "sql-query",
+            "migration",
+            "event"
+          ],
+          "loc": 337
+        },
+        {
+          "file": "src/components/layout/split-panel.css",
+          "language": "css",
+          "name": "split-panel",
+          "categories": [
+            "animation",
+            "css-part"
+          ],
+          "loc": 115
+        },
+        {
+          "file": "src/components/layout/split-panel.ts",
+          "language": "ts",
+          "name": "is-split-panel",
+          "categories": [
+            "webcomponent",
+            "storage",
+            "event"
+          ],
+          "loc": 504
+        }
+      ]
+    },
+    {
+      "id": "demo-g12",
+      "label": "media (5 demos: icon, icon-explorer, image-editor, video, video-playlist)",
+      "category": "media",
+      "demos": [
+        "icon",
+        "icon-explorer",
+        "image-editor",
+        "video",
+        "video-playlist"
+      ],
+      "testables": [
+        {
+          "file": "demos/media/_testing/lib/harness.mjs",
+          "language": "js",
+          "name": "harness",
+          "categories": [
+            "worker"
+          ],
+          "loc": 90
+        },
+        {
+          "file": "demos/media/_testing/run.mjs",
+          "language": "js",
+          "name": "run",
+          "categories": [
+            "worker",
+            "cli",
+            "http-client"
+          ],
+          "loc": 135
+        },
+        {
+          "file": "demos/media/Avatar/avatar.html",
+          "language": "html",
+          "name": "avatar",
+          "categories": [
+            "webcomponent",
+            "event"
+          ],
+          "loc": 82
+        },
+        {
+          "file": "demos/media/Barcode/barcode.html",
+          "language": "html",
+          "name": "barcode",
+          "categories": [
+            "event"
+          ],
+          "loc": 68
+        },
+        {
+          "file": "demos/media/BarcodeScanner/barcode-scanner.html",
+          "language": "html",
+          "name": "barcode-scanner",
+          "categories": [
+            "event"
+          ],
+          "loc": 70
+        },
+        {
+          "file": "demos/media/Icon/icon.html",
+          "language": "html",
+          "name": "icon",
+          "categories": [
+            "worker"
+          ],
+          "loc": 84
+        },
+        {
+          "file": "demos/media/ImageEditor/image-editor.html",
+          "language": "html",
+          "name": "image-editor",
+          "categories": [
+            "webcomponent",
+            "event"
+          ],
+          "loc": 80
+        },
+        {
+          "file": "src/components/media/avatar.css",
+          "language": "css",
+          "name": "avatar",
+          "categories": [
+            "css-part"
+          ],
+          "loc": 61
+        },
+        {
+          "file": "src/components/media/avatar.ts",
+          "language": "ts",
+          "name": "is-avatar",
+          "categories": [
+            "webcomponent",
+            "event",
+            "css-part"
+          ],
+          "loc": 149
+        },
+        {
+          "file": "src/components/media/barcode-scanner.ts",
+          "language": "ts",
+          "name": "is-barcode-scanner",
+          "categories": [
+            "webcomponent",
+            "worker",
+            "event",
+            "browser-api"
+          ],
+          "loc": 145
+        },
+        {
+          "file": "src/components/media/barcode.ts",
+          "language": "ts",
+          "name": "is-barcode",
+          "categories": [
+            "webcomponent",
+            "event"
+          ],
+          "loc": 200
+        },
+        {
+          "file": "src/components/media/icon-explorer.preview.ts",
+          "language": "ts",
+          "name": "icon-explorer.preview",
+          "categories": [
+            "webcomponent",
+            "auth",
+            "migration",
+            "worker",
+            "event",
+            "http-client"
+          ],
+          "loc": 888
+        },
+        {
+          "file": "src/components/media/icon.preview.ts",
+          "language": "ts",
+          "name": "icon.preview",
+          "categories": [
+            "tour"
+          ],
+          "loc": 28
+        },
+        {
+          "file": "src/components/media/icon.ts",
+          "language": "ts",
+          "name": "is-icon",
+          "categories": [
+            "webcomponent",
+            "http-client"
+          ],
+          "loc": 246
+        },
+        {
+          "file": "src/components/media/image-editor.css",
+          "language": "css",
+          "name": "image-editor",
+          "categories": [
+            "css-part"
+          ],
+          "loc": 72
+        },
+        {
+          "file": "src/components/media/image-editor.preview.ts",
+          "language": "ts",
+          "name": "image-editor.preview",
+          "categories": [
+            "event"
+          ],
+          "loc": 33
+        },
+        {
+          "file": "src/components/media/image-editor.ts",
+          "language": "ts",
+          "name": "is-image-editor",
+          "categories": [
+            "webcomponent",
+            "event"
+          ],
+          "loc": 348
+        },
+        {
+          "file": "src/components/media/media-recorder.ts",
+          "language": "ts",
+          "name": "is-media-recorder",
+          "categories": [
+            "webcomponent",
+            "event",
+            "browser-api"
+          ],
+          "loc": 148
+        },
+        {
+          "file": "src/components/media/qrcode.ts",
+          "language": "ts",
+          "name": "is-qrcode",
+          "categories": [
+            "webcomponent",
+            "event"
+          ],
+          "loc": 166
+        },
+        {
+          "file": "src/components/media/speech.ts",
+          "language": "ts",
+          "name": "is-speech",
+          "categories": [
+            "webcomponent",
+            "event"
+          ],
+          "loc": 194
+        },
+        {
+          "file": "src/components/media/theme-img.ts",
+          "language": "ts",
+          "name": "is-theme-img",
+          "categories": [
+            "webcomponent",
+            "css-part"
+          ],
+          "loc": 145
+        },
+        {
+          "file": "src/components/media/video-playlist.css",
+          "language": "css",
+          "name": "video-playlist",
+          "categories": [
+            "css-part"
+          ],
+          "loc": 326
+        },
+        {
+          "file": "src/components/media/video-playlist.preview.ts",
+          "language": "ts",
+          "name": "video-playlist.preview",
+          "categories": [
+            "event"
+          ],
+          "loc": 43
+        },
+        {
+          "file": "src/components/media/video-playlist.ts",
+          "language": "ts",
+          "name": "is-video-playlist",
+          "categories": [
+            "webcomponent",
+            "event"
+          ],
+          "loc": 812
+        },
+        {
+          "file": "src/components/media/video.css",
+          "language": "css",
+          "name": "video",
+          "categories": [
+            "animation",
+            "css-part"
+          ],
+          "loc": 439
+        },
+        {
+          "file": "src/components/media/video.preview.ts",
+          "language": "ts",
+          "name": "video.preview",
+          "categories": [
+            "event"
+          ],
+          "loc": 21
+        },
+        {
+          "file": "src/components/media/video.ts",
+          "language": "ts",
+          "name": "is-video",
+          "categories": [
+            "webcomponent",
+            "database",
+            "worker",
+            "event",
+            "browser-api",
+            "css-part"
+          ],
+          "loc": 605
+        }
+      ]
+    },
+    {
+      "id": "demo-g13",
+      "label": "navigation (1 demos: mega-menu)",
+      "category": "navigation",
+      "demos": [
+        "mega-menu"
+      ],
+      "testables": [
+        {
+          "file": "demos/navigation/breadcrumb-item/breadcrumb-item.html",
+          "language": "html",
+          "name": "breadcrumb-item",
+          "categories": [
+            "event"
+          ],
+          "loc": 158
+        },
+        {
+          "file": "demos/navigation/breadcrumb/_testing/lib/harness.mjs",
+          "language": "js",
+          "name": "harness",
+          "categories": [
+            "worker"
+          ],
+          "loc": 90
+        },
+        {
+          "file": "demos/navigation/breadcrumb/breadcrumb.html",
+          "language": "html",
+          "name": "breadcrumb",
+          "categories": [
+            "event"
+          ],
+          "loc": 156
+        },
+        {
+          "file": "src/components/navigation/breadcrumb-item.css",
+          "language": "css",
+          "name": "breadcrumb-item",
+          "categories": [
+            "animation"
+          ],
+          "loc": 57
+        },
+        {
+          "file": "src/components/navigation/breadcrumb-item.ts",
+          "language": "ts",
+          "name": "is-breadcrumb-item",
+          "categories": [
+            "webcomponent",
+            "css-part"
+          ],
+          "loc": 169
+        },
+        {
+          "file": "src/components/navigation/breadcrumb.css",
+          "language": "css",
+          "name": "breadcrumb",
+          "categories": [
+            "css-part"
+          ],
+          "loc": 24
+        },
+        {
+          "file": "src/components/navigation/breadcrumb.ts",
+          "language": "ts",
+          "name": "is-breadcrumb",
+          "categories": [
+            "webcomponent",
+            "css-part"
+          ],
+          "loc": 62
+        },
+        {
+          "file": "src/components/navigation/carousel.css",
+          "language": "css",
+          "name": "carousel",
+          "categories": [
+            "animation",
+            "css-part"
+          ],
+          "loc": 132
+        },
+        {
+          "file": "src/components/navigation/carousel.ts",
+          "language": "ts",
+          "name": "is-carousel",
+          "categories": [
+            "webcomponent",
+            "worker",
+            "event",
+            "css-part"
+          ],
+          "loc": 378
+        },
+        {
+          "file": "src/components/navigation/mega-menu.css",
+          "language": "css",
+          "name": "mega-menu",
+          "categories": [
+            "webcomponent",
+            "css-part"
+          ],
+          "loc": 108
+        },
+        {
+          "file": "src/components/navigation/mega-menu.preview.ts",
+          "language": "ts",
+          "name": "mega-menu.preview",
+          "categories": [
+            "event"
+          ],
+          "loc": 22
+        },
+        {
+          "file": "src/components/navigation/mega-menu.ts",
+          "language": "ts",
+          "name": "is-mega-menu",
+          "categories": [
+            "webcomponent",
+            "worker",
+            "event"
+          ],
+          "loc": 163
+        },
+        {
+          "file": "src/components/navigation/scroller.css",
+          "language": "css",
+          "name": "scroller",
+          "categories": [
+            "animation",
+            "css-part"
+          ],
+          "loc": 78
+        },
+        {
+          "file": "src/components/navigation/scroller.ts",
+          "language": "ts",
+          "name": "is-scroller",
+          "categories": [
+            "webcomponent",
+            "event",
+            "css-part"
+          ],
+          "loc": 174
+        },
+        {
+          "file": "src/components/navigation/stepper.css",
+          "language": "css",
+          "name": "stepper",
+          "categories": [
+            "animation",
+            "css-part"
+          ],
+          "loc": 186
+        },
+        {
+          "file": "src/components/navigation/stepper.ts",
+          "language": "ts",
+          "name": "is-stepper",
+          "categories": [
+            "webcomponent",
+            "event",
+            "css-part"
+          ],
+          "loc": 214
+        },
+        {
+          "file": "src/components/navigation/tab-group.css",
+          "language": "css",
+          "name": "tab-group",
+          "categories": [
+            "animation"
+          ],
+          "loc": 168
+        },
+        {
+          "file": "src/components/navigation/tab-group.ts",
+          "language": "ts",
+          "name": "is-tab-group",
+          "categories": [
+            "webcomponent",
+            "event",
+            "css-part"
+          ],
+          "loc": 459
+        },
+        {
+          "file": "src/components/navigation/tree.css",
+          "language": "css",
+          "name": "tree",
+          "categories": [
+            "animation",
+            "css-part"
+          ],
+          "loc": 129
+        },
+        {
+          "file": "src/components/navigation/tree.ts",
+          "language": "ts",
+          "name": "is-tree",
+          "categories": [
+            "webcomponent",
+            "event",
+            "css-part"
+          ],
+          "loc": 314
+        }
+      ]
+    },
+    {
+      "id": "demo-g14",
+      "label": "overlays (1 demos: command-palette)",
+      "category": "overlays",
+      "demos": [
+        "command-palette"
+      ],
+      "testables": [
+        {
+          "file": "demos/overlays/CommandPalette/_testing/lib/harness.mjs",
+          "language": "js",
+          "name": "harness",
+          "categories": [
+            "worker"
+          ],
+          "loc": 89
+        },
+        {
+          "file": "demos/overlays/CommandPalette/command-palette.html",
+          "language": "html",
+          "name": "command-palette",
+          "categories": [
+            "event"
+          ],
+          "loc": 114
+        },
+        {
+          "file": "demos/overlays/PdfViewer/_testing/lib/harness.mjs",
+          "language": "js",
+          "name": "harness",
+          "categories": [
+            "worker"
+          ],
+          "loc": 89
+        },
+        {
+          "file": "demos/overlays/PdfViewer/pdf-viewer.html",
+          "language": "html",
+          "name": "pdf-viewer",
+          "categories": [
+            "webcomponent",
+            "event"
+          ],
+          "loc": 119
+        },
+        {
+          "file": "demos/overlays/Window/_testing/lib/harness.mjs",
+          "language": "js",
+          "name": "harness",
+          "categories": [
+            "worker"
+          ],
+          "loc": 90
+        },
+        {
+          "file": "demos/overlays/Window/window.html",
+          "language": "html",
+          "name": "window",
+          "categories": [
+            "event"
+          ],
+          "loc": 129
+        },
+        {
+          "file": "src/components/overlays/command-palette.css",
+          "language": "css",
+          "name": "command-palette",
+          "categories": [
+            "css-part"
+          ],
+          "loc": 170
+        },
+        {
+          "file": "src/components/overlays/command-palette.preview.ts",
+          "language": "ts",
+          "name": "command-palette.preview",
+          "categories": [
+            "event"
+          ],
+          "loc": 46
+        },
+        {
+          "file": "src/components/overlays/command-palette.ts",
+          "language": "ts",
+          "name": "is-command-palette",
+          "categories": [
+            "webcomponent",
+            "event"
+          ],
+          "loc": 299
+        },
+        {
+          "file": "src/components/overlays/pdf-viewer.ts",
+          "language": "ts",
+          "name": "is-pdf-viewer",
+          "categories": [
+            "webcomponent",
+            "event"
+          ],
+          "loc": 125
+        },
+        {
+          "file": "src/components/overlays/window.css",
+          "language": "css",
+          "name": "window",
+          "categories": [
+            "css-part"
+          ],
+          "loc": 111
+        },
+        {
+          "file": "src/components/overlays/window.ts",
+          "language": "ts",
+          "name": "is-window",
+          "categories": [
+            "webcomponent",
+            "event"
+          ],
+          "loc": 323
+        }
+      ]
+    },
+    {
+      "id": "demo-g15",
+      "label": "pages + gallery (3 pages + gallery SPA: ecosystem, home, theming)",
+      "category": "pages-gallery",
+      "demos": [
+        "ecosystem",
+        "home",
+        "theming"
+      ],
+      "extras": [
+        "gallery-app.min.js (SPA, navbar, theme switcher, view toggles)"
+      ],
+      "testables": [
+        {
+          "file": "src/gallery/app.ts",
+          "language": "ts",
+          "name": "app",
+          "categories": [
+            "webcomponent",
+            "worker",
+            "storage",
+            "event"
+          ],
+          "loc": 625
+        },
+        {
+          "file": "src/pages/ecosystem.ts",
+          "language": "ts",
+          "name": "ecosystem",
+          "categories": [
+            "event",
+            "http-client"
+          ],
+          "loc": 240
+        },
+        {
+          "file": "src/pages/home.ts",
+          "language": "ts",
+          "name": "home",
+          "categories": [
+            "event",
+            "animation"
+          ],
+          "loc": 276
+        },
+        {
+          "file": "src/pages/theming.ts",
+          "language": "ts",
+          "name": "theming",
+          "categories": [
+            "auth",
+            "worker",
+            "storage",
+            "event"
+          ],
+          "loc": 445
+        }
+      ]
+    }
+  ]
+}
