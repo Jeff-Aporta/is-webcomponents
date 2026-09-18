@@ -23,17 +23,23 @@ TEMPLATE.innerHTML = /* html */ `
   </div>
 `;
 
-function parseAxis(value) {
+function parseAxis(value: unknown): { side: string; offset: number } {
   const raw = String(value ?? '');
   const [side, off] = raw.split('+');
   const offset = off ? Number(off) : NaN;
   return { side: side || '', offset: Number.isFinite(offset) ? offset : 0 };
 }
 
-function cssLen(v: string) {
+function cssLen(v: string | number | null | undefined): string {
   if (v === undefined || v === null || v === '') return '0';
   if (typeof v === 'number') return Number.isFinite(v) ? `${v}px` : '0';
   return String(v);
+}
+
+interface LinearTransform {
+  tx?: string | number;
+  ty?: string | number;
+  e?: number;
 }
 
 class IsFloatCard extends ElementBase {
@@ -42,7 +48,7 @@ class IsFloatCard extends ElementBase {
 
   #panel!: HTMLElement;
   #keep = 0;
-  #lt = null;
+  #lt: LinearTransform | null = null;
 
   constructor() {
     super();
@@ -62,48 +68,48 @@ class IsFloatCard extends ElementBase {
     this.removeEventListener('is-hide', this.#onChildHide);
   }
 
-  onAttributeChanged(name) {
+  onAttributeChanged(name: string): void {
     if (name === 'horizontal' || name === 'vertical') this.#place();
   }
 
-  get open() { return this.hasAttribute('open'); }
-  set open(v) { this.setBooleanAttr('open', v); }
+  get open(): boolean { return this.hasAttribute('open'); }
+  set open(v: boolean) { this.setBooleanAttr('open', v); }
 
-  get locked() { return this.hasAttribute('locked'); }
+  get locked(): boolean { return this.hasAttribute('locked'); }
 
-  get horizontal() { return this.getAttribute('horizontal') || 'right'; }
-  set horizontal(v) { v ? this.setAttribute('horizontal', v) : this.removeAttribute('horizontal'); }
+  get horizontal(): string { return this.getAttribute('horizontal') || 'right'; }
+  set horizontal(v: string | null | undefined) { v ? this.setAttribute('horizontal', v) : this.removeAttribute('horizontal'); }
 
-  get vertical() { return this.getAttribute('vertical') || 'center'; }
-  set vertical(v) { v ? this.setAttribute('vertical', v) : this.removeAttribute('vertical'); }
+  get vertical(): string { return this.getAttribute('vertical') || 'center'; }
+  set vertical(v: string | null | undefined) { v ? this.setAttribute('vertical', v) : this.removeAttribute('vertical'); }
 
-  get linearTransform() { return this.#lt; }
-  set linearTransform(v) {
+  get linearTransform(): LinearTransform | null { return this.#lt; }
+  set linearTransform(v: LinearTransform | null | undefined) {
     const next = v && typeof v === 'object' ? v : null;
     if (JSON.stringify(this.#lt) === JSON.stringify(next)) return;
     this.#lt = next;
     this.#place();
   }
 
-  lock() {
+  lock(): void {
     this.#keep += 1;
     this.setBooleanAttr('locked', this.#keep > 0);
   }
-  unlock() {
+  unlock(): void {
     this.#keep = Math.max(0, this.#keep - 1);
     this.setBooleanAttr('locked', this.#keep > 0);
   }
 
-  #onChildShow = (e: Event) => {
+  #onChildShow = (e: Event): void => {
     if (e.target === this) return;
     this.lock();
   };
-  #onChildHide = (e: Event) => {
+  #onChildHide = (e: Event): void => {
     if (e.target === this) return;
     this.unlock();
   };
 
-  #place() {
+  #place(): void {
     if (!this.#panel) return;
     const h = parseAxis(this.horizontal);
     const v = parseAxis(this.vertical);
@@ -123,7 +129,7 @@ class IsFloatCard extends ElementBase {
     else if (v.side === 'top') top = '0';
     else if (v.side === 'bottom') bottom = '-15px';
     else if (v.side === 'center') { top = '50%'; ty = '-50%'; }
-    const extra = [];
+    const extra: string[] = [];
     const lt = this.#lt;
     if (lt) {
       const ltx = cssLen(lt.tx);
