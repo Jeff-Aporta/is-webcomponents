@@ -13,6 +13,48 @@ import { svgEl } from './svg-chart-engine.js';
  * y el mismo bucle conducido por requestAnimationFrame.
  */
 
+/** Mensaje de un flujo de secuencia (un dot por tramo). */
+export type TurtleMessage = {
+  step: string | number;
+  path: string;
+  color?: string;
+  groupHue?: number;
+  log?: string;
+  [key: string]: unknown;
+};
+
+/** Tema (al menos el `accent` del kit). */
+export type TurtleTheme = { accent: string; [key: string]: unknown };
+
+/** Estado interno del bucle de animación. */
+export type TurtlePhase = 'idle' | 'playing' | 'between' | 'waiting' | 'paused' | 'done';
+
+export type TurtleState = {
+  idx: number;
+  elapsed: number;
+  autoElapsed: number;
+  phase: TurtlePhase;
+  lastTs: number;
+  gapStart: number;
+  lastPct: number;
+};
+
+/** Estado reportado por `onState`. */
+export type TurtleReport = { playing: boolean; idx: number; total: number; replay: number };
+
+/** Opciones de `setData`. */
+export type TurtleDataOpts = {
+  messages?: readonly TurtleMessage[];
+  theme: TurtleTheme;
+  viewW?: number;
+  viewH?: number;
+  autoLoop?: boolean;
+  onState?: (s: TurtleReport) => void;
+};
+
+/** Resultado de medir un mensaje. */
+type TurtleMeasure = { m: TurtleMessage; len: number; dur: number };
+
 const SVG_NS = 'http://www.w3.org/2000/svg';
 
 const TRAIL = 14;
@@ -31,38 +73,39 @@ function clamp(v: number, lo: number, hi: number) {
 /* svgEl → _shared/svg-chart-engine.js */
 
 export class PathTurtle {
-  #group;
-  #measurePath;
-  #headLayer;
-  #messages = [];
-  #theme;
+  #group!: SVGGElement;
+  #measurePath!: SVGPathElement;
+  #headLayer!: SVGGElement;
+  #messages: TurtleMessage[] = [];
+  #theme!: TurtleTheme;
   #viewW = 0;
   #viewH = 0;
   #paused = false;
   #autoLoop = false;
-  #onState = null;
+  #onState: ((s: TurtleReport) => void) | null = null;
   #raf = 0;
-  #st = { idx: 0, elapsed: 0, autoElapsed: 0, phase: 'idle', lastTs: 0, gapStart: 0, lastPct: -1 };
+  #st: TurtleState = { idx: 0, elapsed: 0, autoElapsed: 0, phase: 'idle', lastTs: 0, gapStart: 0, lastPct: -1 };
 
-  /** @param {SVGGElement} group grupo donde se dibuja la tortuga (dentro del SVG). */
+  /** @param group grupo donde se dibuja la tortuga (dentro del SVG). */
   constructor(group: HTMLElement) {
-    this.#group = group;
+    this.#group = group as unknown as SVGGElement;
     this.#group.setAttribute('class', 'seq-turtle');
     this.#group.setAttribute('pointer-events', 'none');
     this.#group.setAttribute('aria-hidden', 'true');
     // Path oculto: sólo se usa para medir longitudes con getPointAtLength.
-    this.#measurePath = svgEl('path', { fill: 'none', stroke: 'none' });
-    this.#headLayer = svgEl('g', { class: 'seq-turtle-head' });
+    this.#measurePath = svgEl('path', { fill: 'none', stroke: 'none' }) as SVGPathElement;
+    this.#headLayer = svgEl('g', { class: 'seq-turtle-head' }) as SVGGElement;
     this.#group.appendChild(this.#measurePath);
     this.#group.appendChild(this.#headLayer);
   }
 
-  get total() { return this.#messages.length; }
+  get total(): number { return this.#messages.length; }
 
   /** Reinicia con nuevos mensajes/geometría. Equivale al efecto de montaje del React. */
-  setData({ messages, theme, viewW, viewH, autoLoop, onState }) {
+  setData(opts: TurtleDataOpts): void {
+    const { messages, theme, viewW, viewH, autoLoop, onState } = opts;
     this.#stopRaf();
-    this.#messages = messages ?? [];
+    this.#messages = [...(messages ?? [])];
     this.#theme = theme;
     this.#viewW = viewW ?? 0;
     this.#viewH = viewH ?? 0;
@@ -80,7 +123,7 @@ export class PathTurtle {
   }
 
   /** Hover sobre un mensaje congela la animación sin perder el progreso. */
-  setPaused(paused) {
+  setPaused(paused: boolean): void {
     this.#paused = !!paused;
     const phase = this.#st.phase;
     const active = phase === 'playing' || phase === 'between' || phase === 'waiting';
@@ -91,14 +134,14 @@ export class PathTurtle {
     }
   }
 
-  destroy() {
+  destroy(): void {
     this.#stopRaf();
     this.#clearHead();
   }
 
   /* ── API imperativa (la usa la barra de controles del lightbox) ── */
 
-  play() {
+  play(): void {
     const s = this.#st;
     // Reanuda desde el tramo actual (incl. tras usar << / >> o waiting); reinicia solo si terminó.
     if (s.phase === 'done' || s.idx >= this.total) {
@@ -112,13 +155,13 @@ export class PathTurtle {
     this.#ensureLoop();
   }
 
-  pause() {
+  pause(): void {
     this.#st.phase = 'paused';
     this.#stopRaf();
     this.#report();
   }
 
-  stop() {
+  stop(): void {
     const s = this.#st;
     s.idx = 0;
     s.elapsed = 0;
@@ -132,7 +175,7 @@ export class PathTurtle {
   }
 
   // << / >>: saltan de tramo y quedan EN PAUSA en ese tramo (play reanuda desde ahí).
-  next() {
+  next(): void {
     const s = this.#st;
     s.idx = Math.min(this.total - 1, s.idx + 1);
     s.elapsed = 0;
@@ -143,7 +186,7 @@ export class PathTurtle {
     this.#report();
   }
 
-  prev() {
+  prev(): void {
     const s = this.#st;
     s.idx = Math.max(0, s.idx - 1);
     s.elapsed = 0;
@@ -157,7 +200,7 @@ export class PathTurtle {
   /* ── interno ── */
 
   /** `replay` = fracción restante del contador de auto-anim (1 lleno → 0 vacío → arranca). */
-  #report() {
+  #report(): void {
     const s = this.#st;
     const active = s.phase === 'playing' || s.phase === 'between';
     const replay = this.#autoLoop ? clamp(1 - s.autoElapsed / AUTO_GAP, 0, 1) : 0;
@@ -165,7 +208,7 @@ export class PathTurtle {
     this.#onState?.({ playing: active, idx: s.idx, total: this.total, replay });
   }
 
-  #measure(idx) {
+  #measure(idx: number): TurtleMeasure | null {
     const m = this.#messages[idx];
     if (!m || !m.path) return null;
     this.#measurePath.setAttribute('d', m.path);
@@ -173,23 +216,23 @@ export class PathTurtle {
     return { m, len, dur: Math.max(MIN_DUR, len * SPEED) };
   }
 
-  #stopRaf() {
+  #stopRaf(): void {
     if (this.#raf) cancelAnimationFrame(this.#raf);
     this.#raf = 0;
   }
 
-  #ensureLoop() {
+  #ensureLoop(): void {
     if (!this.#raf && !this.#paused) {
       this.#st.lastTs = 0;
       this.#raf = requestAnimationFrame(this.#loop);
     }
   }
 
-  #clearHead() {
+  #clearHead(): void {
     while (this.#headLayer.firstChild) this.#headLayer.removeChild(this.#headLayer.firstChild);
   }
 
-  #renderAt(idx, t: number) {
+  #renderAt(idx: number, t: number): void {
     const info = this.#measure(idx);
     if (!info) {
       this.#clearHead();
@@ -198,7 +241,7 @@ export class PathTurtle {
     const el = this.#measurePath;
     const pt = el.getPointAtLength(info.len * t);
     const color = info.m.color
-      || (info.m.groupHue != null && tkHueToHex(info.m.groupHue))
+      || (info.m.groupHue != null && tkHueToHex(info.m.groupHue)!)
       || this.#theme.accent;
 
     this.#clearHead();
@@ -243,14 +286,14 @@ export class PathTurtle {
   }
 
   /** Bucle único conducido por la fase. */
-  #loop = (ts) => {
+  #loop = (ts: number): void => {
     const s = this.#st;
     if (this.#paused) {
       this.#raf = 0; // hover: congela (setPaused reanuda)
       return;
     }
 
-    const finishRun = () => {
+    const finishRun = (): void => {
       this.#clearHead();
       if (this.#autoLoop) {
         s.phase = 'waiting';
