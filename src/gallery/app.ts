@@ -350,15 +350,25 @@ async function ensurePreviewDeps(tag: string, preview: PreviewLike): Promise<voi
   });
   if (tags.length) await L.load(...tags);
   if (tag.startsWith('is-') && !customElements.get(tag)) {
-    // Solo esperar cuando el loader realmente va a definir el tag. Hay
-    // previews que NO son custom elements (p.ej. is-icon-explorer, que es
-    // un meta-preview declarativo) — esos nunca se definirán, y
-    // `customElements.whenDefined` colgaría para siempre, dejando el host
-    // con `preview=null` y `<is-main>` vacío.
+    // Solo esperar cuando el loader conoce el tag Y lo va a definir.
+    // Hay dos clases de "tag conocido pero no definido":
+    //   1. Meta-previews como `is-icon-explorer` (no están en el catálogo
+    //      del loader → fix anterior).
+    //   2. Module-only entries del manifest (p.ej. `is-ui`) — el loader
+    //      SÍ los conoce y los carga, pero el módulo no llama
+    //      `customElements.define()` porque son utilidades, no componentes.
+    //      En ese caso `whenDefined` cuelga para siempre.
+    // Solución: race con timeout corto. Si en 1s no se define, asumimos
+    // que es module-only y seguimos.
     const aliases = L.catalog?.aliases;
     const known = Boolean(L.catalog?.tags?.[tag])
       || Boolean(L.catalog?.categories?.[aliases?.[tag] ?? tag]);
-    if (known) await customElements.whenDefined(tag);
+    if (known) {
+      await Promise.race([
+        customElements.whenDefined(tag),
+        new Promise<undefined>((r) => setTimeout(() => r(undefined), 1000)),
+      ]);
+    }
   }
 }
 
