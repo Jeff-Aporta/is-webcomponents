@@ -422,7 +422,7 @@ import { ElementBase } from '../../core/element-base.js';
 
     #fillMonths(): void {
       const year = this.#view.getFullYear();
-      const labels = monthLabels(this.locale, { width: 'long', year });
+      const labels = monthLabels(this.locale ?? '', { width: 'long', year });
       this.#setJumpItems(this.#monthDd, labels.map((label, m) => this.#jumpItem(
         m, label, m === this.#view.getMonth(), !this.#monthReachable(year, m),
       )));
@@ -447,7 +447,7 @@ import { ElementBase } from '../../core/element-base.js';
       const year = this.#view.getFullYear();
       const month = this.#view.getMonth();
 
-      this.#monthText.textContent = monthLabels(this.locale, { width: 'long', year })[month];
+      this.#monthText.textContent = monthLabels(this.locale ?? '', { width: 'long', year })[month];
       this.#yearText.textContent = String(year);
 
       const views = this.views;
@@ -500,8 +500,8 @@ import { ElementBase } from '../../core/element-base.js';
     }
 
     #renderWeekdays(fdow: number): void {
-      const labels = weekdayLabels(this.locale, {
-        width: this.getAttribute('weekday-width') || 'short',
+      const labels = weekdayLabels(this.locale ?? '', {
+        width: (this.getAttribute('weekday-width') || 'short') as 'short' | 'long' | 'narrow',
         firstDay: fdow,
       });
       const cells: HTMLElement[] = [];
