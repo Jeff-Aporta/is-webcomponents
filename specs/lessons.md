@@ -113,6 +113,12 @@ Lecciones pagadas, agrupadas por tema. Cada fila: síntoma → regla/fix → gua
 | Leyenda medida sobre el centro del último actor → solapa | `baseW + boxW[n-1]/2 + 16`; grid máx 3 filas | `sequence-legend-grid` |
 | `ifaceById` poblado antes de geometría → aristas a `(0,0)` | Rellenar el mapa auxiliar DESPUÉS del map de geometría | `component-diagram-ifaces` |
 | Headless/PNG ilegible con geometry checks verdes | La cabecera cuenta para el ancho; etiquetas fuera de la figura entran al lienzo; `is-org-chart` (foreignObject) no vale para imagen exportada | `render-legibilidad` |
+| `DiagramTheme` no asignable a `TurtleTheme` (index signature) | `theme as unknown as TurtleTheme` en el call-site de `setData` | `theme-cast` |
+| `Array<LayoutEdge>` no asignable a `readonly EdgeWithHue[]` | `as unknown as readonly EdgeWithHue[]` en `assignEdgeHues` | `readonly-array-cast` |
+| `MindmapNode[]` vs `readonly RawNode[]` (id y parent con tipos diferentes) | `spec.nodes as unknown as readonly RawNode[]` antes de `buildTree` | `raw-node-cast` |
+| `FlowLayoutOverrides \| null` pasado a `DiagramOverrides` | `(this.#overrides ?? {}) as DiagramOverrides` en el call-site | `diagram-overrides-null` |
+| `TreeNode` local (tree-view) ≠ `TreeNode` imported (tree-layout) | Importar `TreeNode as ImportedTreeNode` desde `_shared/tree-layout.ts` y usar cast | `tree-node-unified` |
+| `sidesFor(from, to)` recibía `{x,y,w,h}` pero `pickSides` pide `{layer}` | Cambiar firma de `sidesFor` a `{layer}` (StateLayoutNode.layer ya existe) | `sides-for-layer` |
 
 ## Entorno (PowerShell, git, jsDelivr)
 
@@ -131,3 +137,67 @@ Lecciones pagadas, agrupadas por tema. Cada fila: síntoma → regla/fix → gua
 ## Contenido no consolidado
 
 Detalles de **inventario por tag** (tablas de componentes de cada categoría), listas de **dependencias compartidas** (`_shared/`, `../media/icon.js`, etc.) y textos repetidos de "Qué hacer"/"Que no hacer" genéricos no se transcriben aquí: viven en `manifest.ts`, en los `<categoría>/*.md` (que **no se borran**) y en [`componentes.md`](componentes.md) S-K6–S-K19. Tampoco se duplican los diagramas de "marca tipográfica / vídeo de otro repo" ni las notas operativas de un solo uso (ver reporte de consolidación).
+
+## Accesibilidad (a11y)
+
+| Lección | Regla | Guardián |
+|---|---|---|
+| `prefers-reduced-motion: reduce` ausente en CSS con transición >100ms (15+ CSS: spinner, progress-bar, skeleton, toast-item, dock, scrollspy, split-panel, heatmap, inline-edit, input, mention, pin-input, color-picker, etc.) → animación causa mareo/vértigo en usuarios sensibles | `@media (prefers-reduced-motion: reduce) { transition: none; animation: none }` o equivalente | `prefers-reduced-motion` |
+| Foco no restaurado al cerrar popup (palette-selector, tooltip, popconfirm, confirm-modal, modal-verificacion, dialog, drawer, command-palette) → teclado perdido al volver a la página | Guardar `document.activeElement` al abrir y `.focus()` al cerrar | `popup-focus-restore` |
+| Listbox/menu (palette-selector, autocomplete) con `tabIndex=-1` sin `aria-activedescendant` → lector de pantalla no anuncia cambio de selección | Combinar: `tabindex="-1"` en items + gestión de foco por Arrow keys + `aria-activedescendant` en contenedor | `roving-tabindex`, `aria-activedescendant` |
+| Modal con `aria-modal="true"` pero sin `aria-labelledby` → modal sin título accesible | Apuntar `aria-labelledby` al título del modal | `aria-labelledby` |
+
+## Seguridad (XSS)
+
+| Lección | Regla | Guardián |
+|---|---|---|
+| `innerHTML` con interpolación de datos (`${userInput}`) sin escape → XSS | Aplicar `escapeHtml()` (en `_shared/`) a TODO valor dinámico antes de `innerHTML` | `xss-escape` |
+| `esc()` escapa `& < > "` pero no backticks ni `'`. Rompe `innerHTML` con template literals que contienen estos caracteres en atributos | Usar `escapeHtml()` que escapa `& < > " ' \`` | `xss-backtick` |
+| `allowHtml: true` en toast sin sanitización DOMPurify-like → XSS | Por defecto `allowHtml: false`; si se permite, sanitizar antes | `toast-sanitize` |
+
+## Lifecycle y cleanup
+
+| Lección | Regla | Guardián |
+|---|---|---|
+| `unmount()` no-op en 11+ previews (image-editor, video-playlist, video, dock, main, md-editor, popover, format, toast, gauge, dropdown) → memory leak de listeners/timers al re-montar | `unmount()` debe limpiar: `removeEventListener`, `clearInterval`/`clearTimeout`, `AbortController.abort()`, `disconnect()` de observers | `unmount-cleanup` |
+| `customElements.whenDefined()` ausente en 14/16 previews → race condition: el preview aplica cambios antes de que se haya upgraded el custom element | SIEMPRE `await customElements.whenDefined('is-X')` antes de cualquier manipulación | `whenDefined-in-preview` |
+| `document.getElementById('x').style` sin null guard en 8+ previews → `Cannot read properties of null` | `const el = ...; if (!el) return;` | `getElementById-null-guard` |
+| `setInterval` en `connectedCallback` no se limpia en `disconnectedCallback` (relative-time, format) → timer zombie | Guardar handle y `clearInterval` en `disconnectedCallback` | `setinterval-cleanup` |
+| `prefs.ts` traga `QuotaExceededError` con `try/catch { /* silent */ }` → falla silenciosa de persistencia | Loggear warning + degradar (ej. `sessionStorage` o memoria) | `prefs-quota-error` |
+
+## Determinismo
+
+| Lección | Regla | Guardián |
+|---|---|---|
+| `Math.random()` para IDs de gradientes SVG (`sparkline.ts`) → IDs cambian entre renders, refs se rompen | Usar `crypto.randomUUID()` o counter determinista | `deterministic-ids` |
+| `transition: d` y `transition: r` en SVG (org-chart.css, quadrant-chart.css) → animación costosa en main thread | Considerar `requestAnimationFrame` con `transform` o precomputar paths | `gpu-animation` |
+| `document.execCommand` deprecated (md-editor.ts, md-render.ts) → falla en navegadores modernos | Usar API moderna (`clipboard.writeText`, `Selection` API) | `no-exec-command` |
+
+## Tipos y API
+
+| Lección | Regla | Guardián |
+|---|---|---|
+| `WakeLockSentinel` declarado como `null` en wake-lock.ts → rechaza asignaciones | Cambiar tipo a `WakeLockSentinel \| null` | `wakelock-typing` |
+| `Event.detail` no existe en `Event` (8+ previews) | Cast a `CustomEvent<{detail: T}>` siempre que uses `e.detail` | `custom-event-detail` |
+| `Property 'checked' no existe en HTMLElement` (speed-dial, etc.) | Cast a `HTMLInputElement` cuando el host tiene un input interno | `htmlinputelement-cast` |
+| `Node` vs `Element` vs `DocumentFragment` (render.ts) → `getAttribute` no existe en `Node` | Narrow a `Element` o `DocumentFragment` según uso | `node-narrow` |
+| `Set<unknown>` no asignable a `Set<string>` (demo-snippet-styles.ts) | `new Set(Array.from(set, String))` con type narrowing | `set-string-narrow` |
+
+## Bug latente (no arreglado aún)
+
+| Archivo | Línea | Síntoma | Fix |
+|---|---|---|---|
+| `src/components/isp/_shared/tree-view/selection.ts` | 26 | JSDoc dice `keyof typeof SelectionMode`, cuerpo compara contra `SelectionMode.NONE` (string `'none'`) | Alinear JSDoc con cuerpo: comparar contra `SelectionMode` completo o cambiar el tipo de `mode` a `SelectionMode` (no `keyof typeof`) |
+
+## Trampas operativas de types-strong-2026
+
+| Trampa | Mitigación |
+|---|---|
+| ~35% de sub-agentes terminan sin commitear | Prompts ultra-focalizados: "NO EXPLORES. TIPA Y COMMITEA." Lista explícita de archivos. Si falla → retry con scope restante |
+| Sub-agente no commitea | Capitán commitea manualmente con mensaje específico del archivo |
+| Colisión de scope entre sub-agentes | `file-locks.md` con tabla explícita "Archivo → WT que lo lockea" |
+| Archivos stray `.audit*`/`.tmp*` colándose con `git add -A` | Revisar `git status` antes de cada add; `git rm --cached` + `Remove-Item` |
+| `git worktree add` tarda ~15 min (320,773 archivos) | NO crear worktrees; sub-agentes en WT-ROOT con file partitioning |
+| `write` falla en dirs nuevos | Usar `Set-Content` de PowerShell |
+| Sub-agents F0.3 proposal writers terminan sin escribir el archivo (35%) | Re-dispatch con prompt estricto "WRITE ONLY" + template inline + verificación `Test-Path` |
+| `tsc --noEmit` reporta errores en líneas de multiline messages que rompen el split por `(` | Usar `Select-String -Pattern '^src/.+\(\d+,\d+\): error TS'` con regex anclada |

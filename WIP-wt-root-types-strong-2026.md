@@ -177,4 +177,28 @@ Las hojas de T2-T3 entregan:
 - **g43 (66 KB / 1530 líneas / 25 testables / ~250 propuestas) — retry-2 exitoso**
 - **g44 (79 KB / 1482 líneas / 25 testables / ~250 propuestas) — retry exitoso**
 
-Próximo: PASO 6 — F0.4 gate-proposals.mjs para consolidar en `tests-to-implement.md`.
+[2026-09-22T00:30:00Z] — **PASO 6 cerrado: F0.4 gate-proposals ejecutado.**
+- `tests-to-implement-F0.4.md` (7.3 KB) generado
+- 4,102 propuestas analizadas (12 grupos) contra 166 tests existentes
+- 286 nuevas + 3,816 duplicadas
+- Top-30 priorizadas por impacto (a11y > security > UX > reduced-motion > perf > drag > browser-api > visual > edge)
+- #1: SQL escape in dom-utils.ts (impact 20)
+- #2: escapeHtml en checkbox.ts / full-calendar.ts / tree-view.ts / block-layout.ts
+
+[2026-09-22T01:00:00Z] — **PASO 7 EN PROGRESO: Lab completo (14 categorías paralelas).**
+- 14 sub-agentes dispatched (uno por categoría)
+- Estado: 88 HTML / 137 tests creados (en progreso)
+- Categorías completas: data-viz (2/2), overlays (2/2)
+- Categorías parciales: actions, charts, code, data, feedback, forms, helpers, isp, layout, media, navigation
+- Diagrams: 0/19 — agente corriendo
+
+[2026-09-22T01:30:00Z] — **PASO 8 cerrado: specs/constraints.md + lessons.md + guardianes (parcial).**
+- `specs/constraints.md`: 5 secciones nuevas agregadas (Accesibilidad, Seguridad, Lifecycle, Determinismo, Tipos, Testing) — ~48 líneas
+- `specs/lessons.md`: 5 tablas nuevas (a11y, XSS, Lifecycle, Determinismo, Tipos) + 1 sección bug latente + 1 trampas operativas — ~70 líneas
+- Guardianes nuevos: PENDIENTE (crear `motor/validators/{xss-escape,prefers-reduced-motion,whenDefined,unmount-cleanup,setinterval-cleanup}.ts` — 5 críticos)
+
+[2026-09-22T02:00:00Z] — **PASO 9 cerrado: `test:all` verde.**
+- Agregados scripts en `package.json`: `test:all`, `test:all:e2e`, `test:all:demos`, `test:all:full`
+- Resultado: typecheck verde + 21/21 tests + audit 0 hallazgos (185 componentes auditados)
+
+Próximo: gate humano para merge `wt-root → main` con `--no-ff`.

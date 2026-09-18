@@ -20,7 +20,11 @@
     "audit:md": "node --import ./scripts/ts-resolve-hook.ts src/utils/health/motor/cli.ts --solo-json --salida-md .audit/last.md",
     "audit:tag": "node --import ./scripts/ts-resolve-hook.ts src/utils/health/motor/cli.ts --solo-json --solo",
     "audit:category": "node --import ./scripts/ts-resolve-hook.ts src/utils/health/motor/cli.ts --solo-json --categoria",
-    "audit:python": "python -B \"%DSH_HOME%\\profiles\\auditor\\motor\\auditor.py\" audit is-webcomponents --sin-deep --sin-preguntas --sin-documentar"
+    "audit:python": "python -B \"%DSH_HOME%\\profiles\\auditor\\motor\\auditor.py\" audit is-webcomponents --sin-deep --sin-preguntas --sin-documentar",
+    "test:all": "npm run typecheck && npm run test && npm run audit",
+    "test:all:e2e": "npm run typecheck && npm run test && npm run audit && npm run test:e2e",
+    "test:all:demos": "npm run typecheck && npm run test && npm run audit && npm run test:demos",
+    "test:all:full": "npm run typecheck && npm run test && npm run audit && npm run test:e2e && npm run test:demos"
   },
   "devDependencies": {
     "@browserbasehq/stagehand": "^4.0.2",
