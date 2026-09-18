@@ -543,8 +543,8 @@ export default {
     "category": "helpers"
   },
   "home": {
-    "json": "../pages/home.json",
-    "behavior": "../pages/home.js",
+    "json": "../../dist/pages/home.json",
+    "behavior": "../../dist/pages/home.min.js",
     "category": ""
   },
   "is-accordion-group": {
@@ -789,13 +789,13 @@ export default {
     "category": ""
   },
   "theming": {
-    "json": "../pages/theming.json",
-    "behavior": "../pages/theming.js",
+    "json": "../../dist/pages/theming.json",
+    "behavior": "../../dist/pages/theming.min.js",
     "category": ""
   },
   "ecosystem": {
-    "json": "../pages/ecosystem.json",
-    "behavior": "../pages/ecosystem.js",
+    "json": "../../dist/pages/ecosystem.json",
+    "behavior": "../../dist/pages/ecosystem.min.js",
     "category": ""
   }
 };

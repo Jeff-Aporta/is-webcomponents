@@ -1,12 +1,11 @@
-// bundle-scripts.mjs — bundlea los gallery scripts (../scripts/*.js) como
-// ESM a ../dist/scripts/*.min.js. Necesario porque los scripts originales
-// hacen `import '../src/...` (TypeScript source paths) que NO se sirven en
-// GitHub Pages. Tras esto, el `index.html` y el `gallery-app.min.js`
-// cargan rutas exclusivamente `dist/...`, que sí están publicadas.
-//
-// Lista de bundles: misma lista que `loadPageModules()` en index.html.
+// bundle-scripts.mjs — bundlea los gallery scripts (../scripts/*.js) Y las
+// pages (../src/pages/*.ts) como ESM a ../dist/scripts/*.min.js y
+// ../dist/pages/*.min.js. Necesario porque los originales hacen
+// `import '../src/...` (TypeScript source paths) que NO se sirven en
+// GitHub Pages. Tras esto, los pages del registry cargan rutas dist/...,
+// que sí están publicadas.
 import { build } from 'esbuild';
-import { mkdir } from 'node:fs/promises';
+import { mkdir, copyFile } from 'node:fs/promises';
 
 const scripts = [
   'highlight-pre',
@@ -17,10 +16,19 @@ const scripts = [
   'demo-file-meta',
 ];
 
+const pages = [
+  'home',
+  'theming',
+  'ecosystem',
+];
+
 await mkdir('dist/scripts', { recursive: true });
+await mkdir('dist/pages', { recursive: true });
 
 let ok = 0;
 let failed = 0;
+
+// Gallery scripts: ../scripts/*.js → ../dist/scripts/*.min.js
 for (const name of scripts) {
   try {
     await build({
@@ -33,11 +41,7 @@ for (const name of scripts) {
       legalComments: 'none',
       sourcemap: false,
       treeShaking: true,
-      // `../src/...` resuelve a archivos .ts/.js directos. esbuild los
-      // procesa. Se importan con la extensión real para evitar ambigüedad.
       resolveExtensions: ['.ts', '.js', '.tsx', '.mjs'],
-      // Mantener imports de CSS/text como texto (no se usan en estos scripts
-      // pero por si acaso los conserva).
       loader: { '.ts': 'ts', '.js': 'js' },
     });
     console.log(`  ✓ dist/scripts/${name}.min.js`);
@@ -48,4 +52,38 @@ for (const name of scripts) {
   }
 }
 
-console.log(`\nOK ${ok}/${scripts.length} scripts bundleados${failed ? ` (${failed} fallaron)` : ''}.`);
+// Page behaviors: ../src/pages/*.ts → ../dist/pages/*.min.js
+// + JSON definitions: ../src/pages/*.json → ../dist/pages/*.json (copia).
+for (const name of pages) {
+  try {
+    await build({
+      entryPoints: [`src/pages/${name}.ts`],
+      outfile: `dist/pages/${name}.min.js`,
+      bundle: true,
+      minify: true,
+      format: 'esm',
+      target: 'es2020',
+      legalComments: 'none',
+      sourcemap: false,
+      treeShaking: true,
+      resolveExtensions: ['.ts', '.js', '.tsx', '.mjs'],
+      loader: { '.ts': 'ts', '.js': 'js' },
+    });
+    console.log(`  ✓ dist/pages/${name}.min.js`);
+    ok++;
+  } catch (err) {
+    console.error(`  ✗ dist/pages/${name}.min.js — ${err}`);
+    failed++;
+  }
+  // Copiar el JSON al dist para que el registry pueda fetcharlo.
+  try {
+    await copyFile(`src/pages/${name}.json`, `dist/pages/${name}.json`);
+    console.log(`  ✓ dist/pages/${name}.json`);
+    ok++;
+  } catch (err) {
+    console.error(`  ✗ dist/pages/${name}.json — ${err}`);
+    failed++;
+  }
+}
+
+console.log(`\nOK ${ok}/${scripts.length + pages.length * 2} bundleados/copiados${failed ? ` (${failed} fallaron)` : ''}.`);
