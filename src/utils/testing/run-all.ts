@@ -26,10 +26,10 @@ import { dirname, join, relative } from 'node:path';
 const here = dirname(fileURLToPath(import.meta.url));
 const root = join(here, '..', '..', '..');
 const ALL = process.env.PORT != null;
-const NEEDS_SERVER = new Set([join('meta', 'cdn-icons.test.ts')]);
-const only = (rel) => (ALL ? true : !NEEDS_SERVER.has(rel));
+const NEEDS_SERVER = new Set<string>([join('meta', 'cdn-icons.test.ts')]);
+const only = (rel: string): boolean => (ALL ? true : !NEEDS_SERVER.has(rel));
 
-async function collect(dir, acc = []) {
+async function collect(dir: string, acc: string[] = []): Promise<string[]> {
   for (const entry of await readdir(dir, { withFileTypes: true })) {
     const full = join(dir, entry.name);
     if (entry.isDirectory()) await collect(full, acc);
@@ -45,7 +45,7 @@ const hook = pathToFileURL(join(root, 'scripts', 'ts-resolve-hook.ts')).href;
 
 let pass = 0;
 let fail = 0;
-const failed = [];
+const failed: string[] = [];
 
 for (const f of files) {
   const start = Date.now();
