@@ -3,6 +3,21 @@ import { withStyleAttrs } from '../../core/attrs.js';
 
 import { svgEl } from '../_shared/svg-chart-engine.js';
 
+/** Viewport geográfico (lon/lat) usado por <is-maps>. */
+type Viewport = { minLon: number; minLat: number; maxLon: number; maxLat: number };
+
+/** Estado de arrastre del usuario (pan). */
+type DragState = { x: number; y: number; start: Viewport };
+
+/** Config leída del slot JSON cuando `engine="tile"`. */
+type TileCfg = {
+  tileUrl?: string;
+  bbox?: string;
+  zoom?: number;
+  center?: string;
+  attribution?: string;
+};
+
 /**
  * <is-maps> — Visualizador geográfico.
  *
@@ -41,8 +56,8 @@ import { svgEl } from '../_shared/svg-chart-engine.js';
 
     static get observedAttributes(): string[] { return [...OBSERVED, 'grid-color', 'meridian-color']; }
     #mounted = false;
-    #vp = { minLon: -180, minLat: -85, maxLon: 180, maxLat: 85 };
-    #onWinPointerUp;
+    #vp: Viewport = { minLon: -180, minLat: -85, maxLon: 180, maxLat: 85 };
+    #onWinPointerUp!: () => void;
 
     constructor() {
       super();
@@ -56,10 +71,10 @@ import { svgEl } from '../_shared/svg-chart-engine.js';
       adoptCss(this.shadowRoot!, import.meta.url);
       this.#canvas = this.shadowRoot!.querySelector<HTMLElement>('.canvas')!;
       this.#zoomInfo = this.shadowRoot!.querySelector<HTMLElement>('.zoom-info')!;
-      this.#canvas.addEventListener('wheel', (e) => this.#onWheel(e), { passive: false });
-      this.#canvas.addEventListener('pointerdown', (e) => this.#onDown(e));
-      this.#canvas.addEventListener('pointermove', (e) => this.#onMove(e));
-      this.#canvas.addEventListener('pointerup', (e) => this.#onUp(e));
+      this.#canvas.addEventListener('wheel', (e: WheelEvent) => this.#onWheel(e), { passive: false });
+      this.#canvas.addEventListener('pointerdown', (e: PointerEvent) => this.#onDown(e));
+      this.#canvas.addEventListener('pointermove', (e: PointerEvent) => this.#onMove(e));
+      this.#canvas.addEventListener('pointerup', () => this.#onUp());
       this.#onWinPointerUp = () => this.#endDrag();
     }
 
@@ -84,7 +99,7 @@ import { svgEl } from '../_shared/svg-chart-engine.js';
       this.#render();
     }
 
-    #readViewbox() {
+    #readViewbox(): void {
       const v = this.getAttribute('viewbox');
       if (!v) return;
       const parts = v.split(',').map(Number);
@@ -93,9 +108,9 @@ import { svgEl } from '../_shared/svg-chart-engine.js';
       this.#vp = { minLon: Math.min(a, c), maxLon: Math.max(a, c), minLat: Math.min(b, d), maxLat: Math.max(b, d) };
     }
 
-    #engine() { return this.getAttribute('engine') || 'svg'; }
+    #engine(): string { return this.getAttribute('engine') || 'svg'; }
 
-    #render() {
+    #render(): void {
       this.#canvas.innerHTML = '';
       const engine = this.#engine();
       if (engine === 'tile') {
@@ -105,16 +120,16 @@ import { svgEl } from '../_shared/svg-chart-engine.js';
       this.#renderSvg();
     }
 
-    #renderTile() {
-      const script = [...this.children].find((c) => c.tagName === 'SCRIPT' && /json/i.test(c.type || ''));
-      let cfg = {};
-      try { cfg = script ? JSON.parse(script.textContent) : {}; } catch {}
+    #renderTile(): void {
+      const script = [...this.children].find((c: Element) => c.tagName === 'SCRIPT' && /json/i.test((c as HTMLScriptElement).type || ''));
+      let cfg: TileCfg = {};
+      try { cfg = script ? JSON.parse(script.textContent || '') as TileCfg : {}; } catch {}
       const url = cfg.tileUrl || 'https://www.openstreetmap.org/export/embed.html';
       const iframe = document.createElement('iframe');
       iframe.className = 'tile-iframe';
       iframe.loading = 'lazy';
       iframe.title = 'Mapa';
-      const params = [];
+      const params: string[] = [];
       if (cfg.bbox) params.push(`bbox=${cfg.bbox}`);
       if (typeof cfg.zoom === 'number') params.push(`zoom=${cfg.zoom}`);
       if (cfg.center) params.push(`center=${cfg.center}`);
@@ -129,7 +144,7 @@ import { svgEl } from '../_shared/svg-chart-engine.js';
       }
     }
 
-    #renderSvg() {
+    #renderSvg(): void {
       const W = Math.max(this.#canvas.clientWidth, 320);
       const H = Math.max(this.#canvas.clientHeight, 240);
       const svg = svgEl('svg', { class: 'map', width: W, height: H, viewBox: `0 0 ${W} ${H}` });
@@ -148,30 +163,34 @@ import { svgEl } from '../_shared/svg-chart-engine.js';
       for (let lat = Math.floor(this.#vp.minLat / g) * g; lat <= this.#vp.maxLat; lat += g) {
         const y = this.#project(lat, this.#vp.minLon, W, H).y;
         svg.appendChild(svgEl('line', { x1: 0, x2: W, y1: y, y2: y, class: 'meridian' }));
-        svg.appendChild(svgEl('text', { x: 4, y: y - 2, class: 'tick' })).textContent = `${lat}°`;
+        const tickLabel = svgEl('text', { x: 4, y: y - 2, class: 'tick' });
+        tickLabel.textContent = `${lat}°`;
+        svg.appendChild(tickLabel);
       }
       for (let lon = Math.floor(this.#vp.minLon / g) * g; lon <= this.#vp.maxLon; lon += g) {
         const x = this.#project(this.#vp.minLat, lon, W, H).x;
         svg.appendChild(svgEl('line', { x1: x, x2: x, y1: 0, y2: H, class: 'meridian' }));
-        svg.appendChild(svgEl('text', { x: x + 4, y: 12, class: 'tick' })).textContent = `${lon}°`;
+        const tickLabel = svgEl('text', { x: x + 4, y: 12, class: 'tick' });
+        tickLabel.textContent = `${lon}°`;
+        svg.appendChild(tickLabel);
       }
       // markers
       this.#syncMarkers();
       this.#emit();
     }
 
-    #project(lat, lon, W, H) {
+    #project(lat: number, lon: number, W: number, H: number): { x: number; y: number } {
       const x = ((lon - this.#vp.minLon) / (this.#vp.maxLon - this.#vp.minLon)) * W;
       // invertir lat (Y crece hacia abajo)
       const y = (1 - (lat - this.#vp.minLat) / (this.#vp.maxLat - this.#vp.minLat)) * H;
       return { x, y };
     }
 
-    #syncMarkers() {
+    #syncMarkers(): void {
       const svg = this.shadowRoot!.querySelector<HTMLElement>('svg.map');
       if (!svg) return;
-      const W = +svg.getAttribute('width');
-      const H = +svg.getAttribute('height');
+      const W = +(svg.getAttribute('width') || '0');
+      const H = +(svg.getAttribute('height') || '0');
       const markers = [...this.querySelectorAll<HTMLElement>(':scope > is-map-marker')];
       for (const m of markers) {
         const lat = Number(m.getAttribute('lat'));
@@ -190,7 +209,7 @@ import { svgEl } from '../_shared/svg-chart-engine.js';
       }
     }
 
-    #onWheel(e) {
+    #onWheel(e: WheelEvent): void {
       if (this.#engine() !== 'svg' || !this.hasAttribute('interactive')) return;
       e.preventDefault();
       const z = Math.exp(-e.deltaY * 0.001);
@@ -217,32 +236,33 @@ import { svgEl } from '../_shared/svg-chart-engine.js';
       this.#render();
     }
 
-    #onDown(e) {
+    #onDown(e: PointerEvent): void {
       if (this.#engine() !== 'svg' || !this.hasAttribute('interactive')) return;
       this.#drag = { x: e.clientX, y: e.clientY, start: { ...this.#vp } };
       this.#canvas.style.cursor = 'grabbing';
     }
-    #onMove(e) {
-      if (!this.#drag) return;
+    #onMove(e: PointerEvent): void {
+      const drag = this.#drag;
+      if (!drag) return;
       const W = this.#canvas.clientWidth;
       const H = this.#canvas.clientHeight;
-      const dx = e.clientX - this.#drag.x;
-      const dy = e.clientY - this.#drag.y;
-      const w = this.#drag.start.maxLon - this.#drag.start.minLon;
-      const h = this.#drag.start.maxLat - this.#drag.start.minLat;
+      const dx = e.clientX - drag.x;
+      const dy = e.clientY - drag.y;
+      const w = drag.start.maxLon - drag.start.minLon;
+      const h = drag.start.maxLat - drag.start.minLat;
       this.#vp = {
-        minLon: this.#drag.start.minLon - (dx / W) * w,
-        maxLon: this.#drag.start.maxLon - (dx / W) * w,
-        minLat: this.#drag.start.minLat + (dy / H) * h,
-        maxLat: this.#drag.start.maxLat + (dy / H) * h,
+        minLon: drag.start.minLon - (dx / W) * w,
+        maxLon: drag.start.maxLon - (dx / W) * w,
+        minLat: drag.start.minLat + (dy / H) * h,
+        maxLat: drag.start.maxLat + (dy / H) * h,
       };
       this.#render();
     }
-    #onUp() { this.#endDrag(); }
-    #endDrag() { this.#drag = null; this.#canvas.style.cursor = ''; }
-    #drag = null;
+    #onUp(): void { this.#endDrag(); }
+    #endDrag(): void { this.#drag = null; this.#canvas.style.cursor = ''; }
+    #drag: DragState | null = null;
 
-    #emit() {
+    #emit(): void {
       emit(this, 'is-viewport', { ...this.#vp });
     }
 
