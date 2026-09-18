@@ -127,8 +127,10 @@ import { ElementBase } from '../../core/element-base.js';
     }
 
     #bindControls() {
-      this.shadowRoot!.querySelector<HTMLElement>('[data-action="to-target"]').addEventListener('click', () => this.#move(true));
-      this.shadowRoot!.querySelector<HTMLElement>('[data-action="to-source"]').addEventListener('click', () => this.#move(false));
+      const btnTarget = this.shadowRoot!.querySelector<HTMLElement>('[data-action="to-target"]');
+      if (btnTarget) btnTarget.addEventListener('click', () => this.#move(true));
+      const btnSource = this.shadowRoot!.querySelector<HTMLElement>('[data-action="to-source"]');
+      if (btnSource) btnSource.addEventListener('click', () => this.#move(false));
     }
 
     #bindSearch() {
@@ -141,21 +143,21 @@ import { ElementBase } from '../../core/element-base.js';
       const titleTarget = this.getAttribute('target-title') || 'Asignados';
       this.#titleSource.textContent = titleSource;
       this.#titleTarget.textContent = titleTarget;
-      this.#panelSource.querySelector<HTMLElement>('.search').hidden = !this.hasAttribute('searchable');
-      this.#panelTarget.querySelector<HTMLElement>('.search').hidden = !this.hasAttribute('searchable');
-      this.shadowRoot!.querySelector<HTMLElement>('.controls').hidden = this.hasAttribute('without-buttons');
-      this.#panelSource.querySelector<HTMLElement>('.pane-head').hidden = this.hasAttribute('without-headings');
-      this.#panelTarget.querySelector<HTMLElement>('.pane-head').hidden = this.hasAttribute('without-headings');
+      this.#panelSource.querySelector<HTMLElement>('.search')?.toggleAttribute('hidden', !this.hasAttribute('searchable'));
+      this.#panelTarget.querySelector<HTMLElement>('.search')?.toggleAttribute('hidden', !this.hasAttribute('searchable'));
+      this.shadowRoot!.querySelector<HTMLElement>('.controls')?.toggleAttribute('hidden', this.hasAttribute('without-buttons'));
+      this.#panelSource.querySelector<HTMLElement>('.pane-head')?.toggleAttribute('hidden', this.hasAttribute('without-headings'));
+      this.#panelTarget.querySelector<HTMLElement>('.pane-head')?.toggleAttribute('hidden', this.hasAttribute('without-headings'));
     }
 
-    #items() {
+    #items(): HTMLElement[] {
       return [...this.querySelectorAll<HTMLElement>(':scope > is-transfer-item')];
     }
 
-    #visibleItems(inTarget) {
+    #visibleItems(inTarget: boolean): HTMLElement[] {
       const term = (inTarget ? this.#searchTarget : this.#searchSource).value.toLowerCase();
       return this.#items().filter((it: HTMLElement) => it.hasAttribute('selected') === inTarget)
-        .filter((it) => !term || it.textContent.toLowerCase().includes(term));
+        .filter((it) => !term || (it.textContent ?? '').toLowerCase().includes(term));
     }
 
     #render() {
@@ -166,13 +168,15 @@ import { ElementBase } from '../../core/element-base.js';
       this.#listTarget.innerHTML = '';
       source.forEach((it) => this.#listSource.appendChild(this.#renderItem(it)));
       target.forEach((it) => this.#listTarget.appendChild(this.#renderItem(it)));
-      this.#countSource.textContent = source.length;
-      this.#countTarget.textContent = target.length;
+      this.#countSource.textContent = String(source.length);
+      this.#countTarget.textContent = String(target.length);
       // Bloquear botón hacia target si alcanzó max
       const max = parseInt(this.getAttribute('max-target') || '0', 10);
-      const btn = this.shadowRoot!.querySelector<HTMLElement>('[data-action="to-target"]');
-      if (max > 0 && target.length >= max) btn.disabled = true;
-      else btn.disabled = false;
+      const btn = this.shadowRoot!.querySelector<HTMLButtonElement>('[data-action="to-target"]');
+      if (btn) {
+        if (max > 0 && target.length >= max) btn.disabled = true;
+        else btn.disabled = false;
+      }
     }
 
     #renderItem(it: HTMLElement) {
@@ -193,7 +197,7 @@ import { ElementBase } from '../../core/element-base.js';
       return div;
     }
 
-    #move(toTarget) {
+    #move(toTarget: boolean): void {
       const max = parseInt(this.getAttribute('max-target') || '0', 10);
       const items = this.#items();
       items.forEach((it: HTMLElement) => {
@@ -209,8 +213,13 @@ import { ElementBase } from '../../core/element-base.js';
       emit(this, 'is-transfer-change', { source: this.values.length, target: this.values.length, values: this.values });
     }
 
-    #emitChange(item) {
-      emit(this, 'is-transfer-change', { item, source: this.#items().filter((it: HTMLElement) => !it.hasAttribute('selected')).length, target: this.values.length, values: this.values });
+    #emitChange(item: HTMLElement): void {
+      emit(this, 'is-transfer-change', {
+        item,
+        source: this.#items().filter((it: HTMLElement) => !it.hasAttribute('selected')).length,
+        target: this.values.length,
+        values: this.values,
+      });
     }
   }
 
