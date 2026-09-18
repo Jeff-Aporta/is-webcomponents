@@ -74,7 +74,7 @@ import { ElementBase } from '../../core/element-base.js';
 
     /** ¿Queda algún día seleccionable en ese mes? */
     #reachable(month: number): boolean {
-      const year = String(this.year);
+      const year = this.year;
       const first = isoOf(year, month, 1);
       const last = isoOf(year, month, daysInMonth(year, month));
       const min = this.getAttribute('min');
@@ -85,8 +85,8 @@ import { ElementBase } from '../../core/element-base.js';
     }
 
     #render(): void {
-      const labels = monthLabels(this.locale, {
-        width: this.getAttribute('month-width') || 'short',
+      const labels = monthLabels(this.locale ?? '', {
+        width: (this.getAttribute('month-width') || 'short') as 'short' | 'long' | 'narrow',
         year: this.year,
       });
       const selected = this.month;
