@@ -88,13 +88,17 @@
     }
 
     // Chrome de docs + categorías útiles + resto del kit: no bloquean paint.
+    // API por ALIASES (retrocompat ante renames/rutas): pasamos nombres
+    // estables y el loader los resuelve internamente a los bundles desplegables.
+    // Si el path cambia en una versión futura, basta actualizar el alias-table
+    // del loader; los consumidores siguen funcionando.
     L.loadPageModules([
-      'scripts/highlight-pre.js',
-      'scripts/demo-code.js',
-      'scripts/docs-chrome.js',
-      'scripts/cdn-panel.js',
-      'scripts/view-sources.js',
-      'scripts/demo-file-meta.js',
+      'highlight-pre',
+      'demo-code',
+      'docs-chrome',
+      'cdn-panel',
+      'view-sources',
+      'demo-file-meta',
     ]).catch((err) => console.warn('[gallery] page modules', err));
   </script>
 </head>

@@ -67,6 +67,16 @@ interface LoaderState {
   host: string | null;
   /** Query de cache-bust en cada asset (`?v=2`). */
   query: Record<string, string>;
+  /**
+   * Aliases para `loadPageModules` / `loadPageStyles`. Permiten que el consumidor
+   * pase un nombre estable (`'highlight-pre'`, `'demo-code'`) y el loader lo
+   * resuelva internamente al bundle desplegable (`'dist/scripts/highlight-pre.min.js'`).
+   *
+   * Esto hace retrocompatible el API ante renames de archivo o cambios de
+   * carpeta. Los nombres de los aliases son el contrato público; las URLs
+   * internas son detalle de implementación.
+   */
+  pageModules: Map<string, string>;
 }
 
 const state: LoaderState = {
@@ -75,6 +85,20 @@ const state: LoaderState = {
   preferSelf: true,
   host: null,
   query: {},
+  // Aliases estables para `loadPageModules`. Si cambia una URL, el consumidor
+  // no se entera: solo hay que actualizar este mapa en una versión mayor del
+  // loader y/o añadir migración en runtime.
+  pageModules: new Map<string, string>([
+    ['highlight-pre',   'dist/scripts/highlight-pre.min.js'],
+    ['demo-code',       'dist/scripts/demo-code.min.js'],
+    ['docs-chrome',     'dist/scripts/docs-chrome.min.js'],
+    ['cdn-panel',       'dist/scripts/cdn-panel.min.js'],
+    ['view-sources',    'dist/scripts/view-sources.min.js'],
+    ['demo-file-meta',  'dist/scripts/demo-file-meta.min.js'],
+    // Aliases legacy (pre-rename). Mantener para retrocompatibilidad: si un
+    // consumidor llama `L.loadPageModules(['scripts/demo-code.js'])` lo
+    // tratamos como path literal.
+  ]),
 };
 
 /** Registro de lo ya cargado en esta página (anti-redundancia). */
@@ -85,6 +109,47 @@ const appComponents = new Map<string, AppComponentEntry>();
 
 const cssDone = new Set<string>();
 const jsDone = new Map<string, Promise<void>>();
+
+/**
+ * Resuelve un input de `loadPageModules` / `loadPageStyles` a una URL
+ * relativa al host de la página.
+ *
+ * Comportamiento:
+ *  - Si el input es una URL absoluta (empieza por `http://`, `https://`,
+ *    `//`, `/`, `data:`) o contiene `/` o tiene extensión `.js`/`.mjs`/
+ *    `.css`/`.ts`/`.tsx`, se trata como **path literal**.
+ *  - Si el input es un nombre simple (`'demo-code'`, `'highlight-pre'`)
+ *    sin `/` y sin extensión, se busca en el alias table.
+ *
+ * Esto garantiza retrocompatibilidad: el código viejo que pasaba paths
+ * literales (`'scripts/demo-code.js'`) sigue funcionando; el código nuevo
+ * que pasa aliases (`'demo-code'`) obtiene URLs estables ante renames.
+ */
+function resolvePageModuleHref(input: string): string {
+  if (typeof input !== 'string' || input === '') {
+    throw new TypeError('resolvePageModuleHref: input must be non-empty string');
+  }
+  const trimmed = input.trim();
+  // URL absoluta (cross-origin) o esquema → tratar literal.
+  if (
+    /^[a-z][a-z0-9+.-]*:/i.test(trimmed) // http:, https:, data:, blob:, etc.
+    || trimmed.startsWith('//')
+    || trimmed.startsWith('/')
+  ) {
+    return trimmed;
+  }
+  // Path con separador o extensión reconocible → tratar literal (retrocompat).
+  if (trimmed.includes('/') || /\.(?:js|mjs|cjs|ts|tsx|css)(?:\?.*)?$/i.test(trimmed)) {
+    return trimmed;
+  }
+  // Nombre simple → alias table.
+  const found = state.pageModules.get(trimmed);
+  if (!found) {
+    // Fail loud: el consumidor pasó un alias desconocido.
+    throw new Error(`loadPageModules: alias desconocido "${trimmed}" — registra con L.registerPageModule(alias, href) o usa un alias válido (${[...state.pageModules.keys()].join(', ')})`);
+  }
+  return found;
+}
 
 const slash = (u: string): string => (u.endsWith('/') ? u : `${u}/`);
 
@@ -499,7 +564,7 @@ export const ISWebComponentsLoader = {
 
   async loadPageStyles(hrefs: string[]) {
     const jobs = (hrefs || []).map((h) => {
-      const abs = new URL(h, typeof location !== 'undefined' ? location.href : SELF_BASE).href;
+      const abs = new URL(resolvePageModuleHref(h), typeof location !== 'undefined' ? location.href : SELF_BASE).href;
       return injectStylesheet(abs);
     });
     await Promise.all(jobs);
@@ -507,10 +572,34 @@ export const ISWebComponentsLoader = {
 
   async loadPageModules(hrefs: string[]) {
     const jobs = (hrefs || []).map((h) => {
-      const abs = new URL(h, typeof location !== 'undefined' ? location.href : SELF_BASE).href;
+      const abs = new URL(resolvePageModuleHref(h), typeof location !== 'undefined' ? location.href : SELF_BASE).href;
       return importOnce(abs);
     });
     await Promise.all(jobs);
+  },
+
+  /**
+   * Registra o reemplaza un alias para `loadPageModules` / `loadPageStyles`.
+   * Útil para apps de terceros que montan sus propios gallery scripts.
+   *
+   * Retrocompat: si el `alias` ya existe, se sobreescribe.
+   *
+   * @param alias Nombre estable (sin `/`, sin extensión `.js`).
+   * @param href Ruta relativa al host (`'dist/scripts/foo.min.js'` o absoluta).
+   */
+  registerPageModule(alias: string, href: string) {
+    if (typeof alias !== 'string' || alias === '') throw new TypeError('registerPageModule: alias required');
+    if (typeof href !== 'string' || href === '') throw new TypeError('registerPageModule: href required');
+    state.pageModules.set(alias, href);
+    return this;
+  },
+
+  /**
+   * Devuelve el alias-table actual (copia superficial — modificar `Map` no
+   * afecta al estado, pero sí los objetos individuales por referencia).
+   */
+  getPageModules(): Record<string, string> {
+    return Object.fromEntries(state.pageModules);
   },
 
   /**
