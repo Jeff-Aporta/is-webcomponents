@@ -3,6 +3,9 @@ package-lock.json
 .DS_Store
 Thumbs.db
 *.log
+*.txt
+*.md
+!README.md
 .env
 .env.*
 src/utils/health/e2e/.artifacts/
