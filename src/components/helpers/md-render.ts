@@ -22,7 +22,7 @@ import {
 
   const OBSERVED = ['value', 'can-edit', 'readonly', 'placeholder'];
 
-  function getCaretOffset(root, targetNode, targetOffset) {
+  function getCaretOffset(root: Node, targetNode: Node, targetOffset: number): number {
     const walker = document.createTreeWalker(root, NodeFilter.SHOW_TEXT);
     let offset = 0;
     let node = walker.nextNode();
@@ -34,7 +34,7 @@ import {
     return offset;
   }
 
-  function setCaretOffset(root, offset: number) {
+  function setCaretOffset(root: Node, offset: number): void {
     const walker = document.createTreeWalker(root, NodeFilter.SHOW_TEXT);
     let remain = Math.max(0, offset ?? 0);
     let node = walker.nextNode();
@@ -60,15 +60,16 @@ import {
     sel?.addRange(range);
   }
 
-  function saveCaret(root) {
+  function saveCaret(root: Node | null): number | null {
+    if (!root) return null;
     const sel = window.getSelection();
-    if (!sel?.rangeCount || !root) return null;
+    if (!sel?.rangeCount) return null;
     const range = sel.getRangeAt(0);
     if (!root.contains(range.startContainer)) return null;
     return getCaretOffset(root, range.startContainer, range.startOffset);
   }
 
-  function restoreCaret(root, offset) {
+  function restoreCaret(root: Node | null, offset: number | null): void {
     if (offset == null || !root) return;
     requestAnimationFrame(() => setCaretOffset(root, offset));
   }
@@ -90,7 +91,7 @@ import {
 
       this.#body.addEventListener('input', () => this.#onInput());
       this.#body.addEventListener('blur', () => this.#onBlur());
-      this.#body.addEventListener('keydown', (e) => this.#onKeyDown(e));
+      this.#body.addEventListener('keydown', (e: KeyboardEvent) => this.#onKeyDown(e));
     }
 
     onConnected() {
@@ -98,12 +99,12 @@ import {
       this.#render();
     }
 
-    onAttributeChanged(name) {
+    onAttributeChanged(name: string): void {
       if (name === 'value' && this.#dirty) return;
       this.#render();
     }
 
-    #hydrateValueFromChild() {
+    #hydrateValueFromChild(): void {
       if (this.hasAttribute('value')) return;
       const area = this.querySelector<HTMLTextAreaElement>(':scope > textarea[data-md-source]');
       if (area) {
@@ -111,7 +112,7 @@ import {
         if (body) this.value = body;
         return;
       }
-      const script = [...this.children].find((c: HTMLElement) => {
+      const script: Element | undefined = [...this.children].find((c: Element) => {
         if (c.tagName !== 'SCRIPT') return false;
         const t = (c.getAttribute('type') || '').toLowerCase();
         return t === 'text/markdown' || t === 'text/plain' || t === 'text/md';
@@ -187,7 +188,7 @@ import {
       emit(this, 'is-change', { value: next });
     }
 
-    #onKeyDown(e) {
+    #onKeyDown(e: KeyboardEvent): void {
       if (!this.canEdit) return;
       const mod = e.ctrlKey || e.metaKey;
       if (!mod) return;
