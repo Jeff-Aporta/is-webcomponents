@@ -7,10 +7,12 @@ export async function mount(ctx: import('../../previews/_kit/types.d.ts').Previe
   const root = ctx.main;
   void root;
   const g = document.getElementById('gInteractive');
-      const s = document.getElementById('gSlider');
-      s.addEventListener('is-input', (e) => {
-        g.setAttribute('value', e.detail.value);
-      });
+  const s = document.getElementById('gSlider');
+  if (!g || !s) return;
+  s.addEventListener('is-input', (e: Event) => {
+    const detail = (e as CustomEvent<{ value: string }>).detail;
+    g.setAttribute('value', detail.value);
+  });
 }
 
 export function unmount() {
