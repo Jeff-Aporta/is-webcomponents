@@ -63,17 +63,20 @@ for (const css of ['host-base.css', 'scrollbars.css']) {
 try {
   await mkdir(join('dist', 'skills'), { recursive: true });
   await mkdir(join('dist', 'scripts', 'skills'), { recursive: true });
+  await mkdir(join('skills'), { recursive: true });
   const srcSkillsDir = join('src', 'skills');
   const skillsDirs = readdirSync(srcSkillsDir, { withFileTypes: true }).filter(e => e.isDirectory());
   for (const skillDir of skillsDirs) {
     const skillName = skillDir.name;
-    // dist/skills/<name>/...
+    // dist/skills/<name>/... (resuelve ../skills/... desde dist/scripts/)
     await cp(join(srcSkillsDir, skillName), join('dist', 'skills', skillName), { recursive: true, force: true });
-    // dist/scripts/skills/<name>/...
+    // dist/scripts/skills/<name>/... (resuelve ./skills/... desde dist/scripts/)
     await cp(join(srcSkillsDir, skillName), join('dist', 'scripts', 'skills', skillName), { recursive: true, force: true });
-    ok += 2;
+    // skills/<name>/... (root-level, resuelve ${origin}/skills/...)
+    await cp(join(srcSkillsDir, skillName), join('skills', skillName), { recursive: true, force: true });
+    ok += 3;
   }
-  console.log(`  ✓ skills siblings copiados a dist/skills/ y dist/scripts/skills/`);
+  console.log(`  ✓ skills siblings copiados a dist/skills/, dist/scripts/skills/, skills/`);
 } catch (err) {
   console.warn(`  ⚠ no se pudieron copiar skills siblings: ${err}`);
 }
