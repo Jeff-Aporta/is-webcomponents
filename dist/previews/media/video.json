@@ -14,7 +14,7 @@
       "blocks": [
         {
           "kind": "demo",
-          "html": "<is-video\r\n            id=\"v1\"\r\n            controls\r\n            playsinline\r\n            src=\"https://interactive-examples.mdn.mozilla.net/media/cc0-videos/flower.mp4\"\r\n            style=\"max-width:36rem\"\r\n          ></is-video>",
+          "html": "<is-video\r\n            id=\"v1\"\r\n            controls\r\n            playsinline\r\n            src=\"{assets}playlist/01-big-buck-bunny.mp4\"\r\n            style=\"max-width:36rem\"\r\n          ></is-video>",
           "controls": [
             {
               "control": "text",
@@ -50,7 +50,7 @@
       "blocks": [
         {
           "kind": "demo",
-          "html": "<is-video\r\n            muted\r\n            loop\r\n            playsinline\r\n            controls=\"false\"\r\n            src=\"https://interactive-examples.mdn.mozilla.net/media/cc0-videos/flower.mp4\"\r\n            style=\"max-width:20rem\"\r\n          ></is-video>"
+          "html": "<is-video\r\n            muted\r\n            loop\r\n            playsinline\r\n            controls=\"false\"\r\n            src=\"{assets}playlist/01-big-buck-bunny.mp4\"\r\n            style=\"max-width:20rem\"\r\n          ></is-video>"
         },
         {
           "kind": "code",

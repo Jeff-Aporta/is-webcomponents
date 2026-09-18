@@ -93,7 +93,7 @@
         },
         {
           "kind": "demo",
-          "html": "<button type=\"button\" id=\"open-vid\" class=\"demo-btn\">Ver video en pantalla completa</button>\r\n          <is-lightbox id=\"lb-vid\">\r\n            <video src=\"https://commondatastorage.googleapis.com/gtv-videos-bucket/sample/BigBuckBunny.mp4\"\r\n              controls playsinline style=\"max-width:90vw;max-height:80vh\"></video>\r\n          </is-lightbox>"
+          "html": "<button type=\"button\" id=\"open-vid\" class=\"demo-btn\">Ver video en pantalla completa</button>\r\n          <is-lightbox id=\"lb-vid\">\r\n            <video src=\"{assets}playlist/01-big-buck-bunny.mp4\"\r\n              controls playsinline style=\"max-width:90vw;max-height:80vh\"></video>\r\n          </is-lightbox>"
         }
       ]
     },
