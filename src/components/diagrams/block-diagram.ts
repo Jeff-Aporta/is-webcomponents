@@ -53,7 +53,7 @@ interface BlockLayoutEdge {
 }
 import { sequenceThemeDark, sequenceThemeLight } from './sequence-spec.js';
 import { SequenceTurtle } from './sequence-turtle.js';
-import type { PathTurtle } from '../_shared/path-turtle.js';
+import type { PathTurtle, TurtleTheme } from '../_shared/path-turtle.js';
 import { tkHueToHex } from '../_shared/tk-hue.js';
 import { edgeStrokeHex, edgeChipFill, edgeChipText } from '../_shared/diagram-edge-style.js';
 import type { DiagramTheme } from './diagram-types.js';
@@ -243,7 +243,7 @@ class IsBlockDiagram extends DiagramElementBase {
       messages: layout.edges.map((e, i: number) => ({
         path: e.path, step: i + 1, log: e.label || '', groupHue: undefined,
       })),
-      theme,
+      theme: theme as unknown as TurtleTheme,
       viewW: W,
       viewH: H,
       autoLoop: this.isViewer,
@@ -400,7 +400,7 @@ class IsBlockDiagram extends DiagramElementBase {
           rx: 6, fill: color, opacity: 0.14,
         });
         g.appendChild(iconBg);
-        g.appendChild(svgIconGroup(b.icon, {
+        g.appendChild(svgIconGroup(b.icon ?? '', {
           x: b.x + 15, y: iconY, size: iconSize, hue: b.hue,
         }));
       }
