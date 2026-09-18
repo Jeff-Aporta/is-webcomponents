@@ -8,6 +8,34 @@ import {
   applyForbiddenRegions,
 } from './diagram-grid.js';
 
+/** Punto en la rejilla: par (col, row) enteras. */
+export type GridPoint = { col: number; row: number };
+
+/** Rejilla de costos usada por el A*. Su forma concreta la define `makeCostGrid`. */
+export type CostGrid = {
+  cols: number;
+  rows: number;
+  grid: number;
+  cost: Float64Array;
+  forbidden?: Map<string, ForbiddenRegion>;
+};
+
+/** Región prohibida que se puede registrar para el ruteo A*. */
+export type ForbiddenRegion = {
+  id: string;
+  kind: 'rect' | 'poly';
+  x?: number;
+  y?: number;
+  w?: number;
+  h?: number;
+  points?: ReadonlyArray<readonly [number, number]>;
+  color?: string;
+  label?: string;
+};
+
+/** Punto en píxeles (ya fuera de la rejilla). */
+export type PixelPoint = { x: number; y: number };
+
 const DIRS = [
   { col: 0, row: -1 },
   { col: 0, row: 1 },
@@ -15,42 +43,43 @@ const DIRS = [
   { col: 1, row: 0 },
 ];
 
-function manhattan(a, b) {
+function manhattan(a: GridPoint, b: GridPoint): number {
   return Math.abs(a.col - b.col) + Math.abs(a.row - b.row);
 }
 
 /** Min-heap binario sobre estados {f}. */
 class MinHeap {
-  a = [];
-  get size() {
+  a: { k: number; f: number }[] = [];
+  get size(): number {
     return this.a.length;
   }
-  push(k, f) {
+  push(k: number, f: number): void {
     const a = this.a;
     a.push({ k, f });
     let i = a.length - 1;
     while (i > 0) {
       const p = (i - 1) >> 1;
-      if (a[p].f <= a[i].f) break;
-      [a[p], a[i]] = [a[i], a[p]];
+      if (a[p]!.f <= a[i]!.f) break;
+      [a[p], a[i]] = [a[i], a[p]!];
       i = p;
     }
   }
-  pop() {
+  pop(): number | undefined {
     const a = this.a;
     const top = a[0];
+    if (!top) return undefined;
     const last = a.pop();
-    if (a.length) {
+    if (a.length && last) {
       a[0] = last;
       let i = 0;
       for (;;) {
         const l = 2 * i + 1;
         const r = l + 1;
         let s = i;
-        if (l < a.length && a[l].f < a[s].f) s = l;
-        if (r < a.length && a[r].f < a[s].f) s = r;
+        if (l < a.length && a[l]!.f < a[s]!.f) s = l;
+        if (r < a.length && a[r]!.f < a[s]!.f) s = r;
         if (s === i) break;
-        [a[s], a[i]] = [a[i], a[s]];
+        [a[s], a[i]] = [a[i], a[s]!];
         i = s;
       }
     }
@@ -62,19 +91,19 @@ class MinHeap {
  * A* ortogonal ponderado, consciente de dirección (penaliza giros).
  * Estado = celda + dirección de llegada, para cobrar el giro correctamente.
  */
-function astarSegment(start, end, g, turnCost) {
+function astarSegment(start: GridPoint, end: GridPoint, g: CostGrid, turnCost: number): GridPoint[] {
   if (start.col === end.col && start.row === end.row) return [start];
   const { cols, rows } = g;
   // key = (row*cols + col) * 5 + (dir+1); dir -1 = sin dirección (inicio).
-  const stateKey = (col: number, row, dir: number) => ((row * cols + col) * 5) + (dir + 1);
-  const gScore = new Map();
-  const cameFrom = new Map();
+  const stateKey = (col: number, row: number, dir: number) => ((row * cols + col) * 5) + (dir + 1);
+  const gScore = new Map<number, number>();
+  const cameFrom = new Map<number, { key: number; col: number; row: number }>();
   const open = new MinHeap();
 
   const sk = stateKey(start.col, start.row, -1);
   gScore.set(sk, 0);
   open.push(sk, manhattan(start, end));
-  const decode = (k: number) => {
+  const decode = (k: number): { col: number; row: number; dir: number } => {
     const dir = (k % 5) - 1;
     const cell = (k - (dir + 1)) / 5;
     return { col: cell % cols, row: Math.floor(cell / cols), dir };
@@ -88,6 +117,7 @@ function astarSegment(start, end, g, turnCost) {
   let bestDist = manhattan(start, end);
   while (open.size) {
     const ck = open.pop();
+    if (ck === undefined) break;
     const cur = decode(ck);
     if (cur.col === end.col && cur.row === end.row) {
       goalKey = ck;
@@ -97,8 +127,8 @@ function astarSegment(start, end, g, turnCost) {
     if (d0 < bestDist) { bestDist = d0; bestKey = ck; }
     const cg = gScore.get(ck) ?? Infinity;
     for (let d = 0; d < 4; d++) {
-      const nc = cur.col + DIRS[d].col;
-      const nr = cur.row + DIRS[d].row;
+      const nc = cur.col + DIRS[d]!.col;
+      const nr = cur.row + DIRS[d]!.row;
       const enter = cellCost(g, nc, nr);
       if (enter === COST_BLOCKED) continue;
       const turn = cur.dir !== -1 && cur.dir !== d ? turnCost : 0;
@@ -116,20 +146,20 @@ function astarSegment(start, end, g, turnCost) {
   // podría cruzar en diagonal justo el obstáculo que se quería rodear.
   const finalKey = goalKey === -1 ? bestKey : goalKey;
 
-  const path = [];
+  const path: GridPoint[] = [];
   let k = finalKey;
   let node = decode(k);
   path.push({ col: node.col, row: node.row });
   while (cameFrom.has(k)) {
-    const prev = cameFrom.get(k);
+    const prev = cameFrom.get(k)!;
     path.unshift({ col: prev.col, row: prev.row });
     k = prev.key;
     node = decode(k);
   }
-  if (goalKey === -1 && (path[path.length - 1].col !== end.col || path[path.length - 1].row !== end.row)) {
+  if (goalKey === -1 && (path[path.length - 1]!.col !== end.col || path[path.length - 1]!.row !== end.row)) {
     // Tramo final recto pero SIEMPRE ortogonal (nunca diagonal): primero se
     // alinea un eje, luego el otro — dos segmentos rectos, no un salto libre.
-    const last = path[path.length - 1];
+    const last = path[path.length - 1]!;
     if (last.col !== end.col) path.push({ col: end.col, row: last.row });
     path.push({ col: end.col, row: end.row });
   }
@@ -137,23 +167,23 @@ function astarSegment(start, end, g, turnCost) {
 }
 
 /** Quita puntos intermedios en línea recta (deja solo los vértices). */
-function collapseColinear(points) {
+function collapseColinear(points: GridPoint[]): GridPoint[] {
   if (points.length <= 2) return points;
-  const out = [points[0]];
+  const out = [points[0]!];
   for (let i = 1; i < points.length - 1; i++) {
-    const a = out[out.length - 1];
-    const b = points[i];
-    const c = points[i + 1];
+    const a = out[out.length - 1]!;
+    const b = points[i]!;
+    const c = points[i + 1]!;
     const colinear = (a.col === b.col && b.col === c.col) || (a.row === b.row && b.row === c.row);
     if (!colinear) out.push(b);
   }
-  out.push(points[points.length - 1]);
+  out.push(points[points.length - 1]!);
   return out;
 }
 
 
 /** ¿El tramo recto entre dos celdas (mismo eje) está libre de obstáculos? */
-function segmentClear(g, a, b) {
+function segmentClear(g: CostGrid, a: GridPoint, b: GridPoint): boolean {
   if (a.col !== b.col && a.row !== b.row) return false;
   const stepCol = Math.sign(b.col - a.col);
   const stepRow = Math.sign(b.row - a.row);
@@ -173,14 +203,15 @@ function segmentClear(g, a, b) {
  * El A* lo produce porque el coste de giro es local y no ve que dos vueltas
  * seguidas se pueden fundir en una.
  */
-function collapseJogs(points, g) {
+function collapseJogs(points: GridPoint[], g: CostGrid): GridPoint[] {
   if (points.length < 4) return points;
   let out = points;
   let changed = true;
   while (changed) {
     changed = false;
     for (let i = 0; i + 3 < out.length; i += 1) {
-      const [a, , , d] = [out[i], out[i + 1], out[i + 2], out[i + 3]];
+      const a = out[i]!;
+      const d = out[i + 3]!;
       for (const corner of [{ col: a.col, row: d.row }, { col: d.col, row: a.row }]) {
         if (!segmentClear(g, a, corner) || !segmentClear(g, corner, d)) continue;
         out = collapseColinear([...out.slice(0, i + 1), corner, ...out.slice(i + 3)]);
@@ -200,7 +231,7 @@ function collapseJogs(points, g) {
  * no pueda alcanzarla y caiga en su fallback de línea recta — una diagonal
  * que atraviesa el propio obstáculo que se quería evitar.
  */
-function nearestOpenCell(g, cell, maxRadius = 8) {
+function nearestOpenCell(g: CostGrid, cell: GridPoint, maxRadius = 8): GridPoint {
   if (cellCost(g, cell.col, cell.row) !== COST_BLOCKED) return cell;
   for (let r = 1; r <= maxRadius; r++) {
     for (let dc = -r; dc <= r; dc++) {
@@ -214,10 +245,16 @@ function nearestOpenCell(g, cell, maxRadius = 8) {
   return cell; // rodeado por completo: se deja igual, astarSegment hará el fallback
 }
 
+export type RouteOpts = {
+  turnCost?: number;
+  waypoints?: readonly GridPoint[];
+  forbiddenRegions?: readonly ForbiddenRegion[] | ForbiddenRegion[];
+};
+
 /** Ruta ortogonal A* con obstáculos y waypoints forzados. */
-export function routeOrthogonal(start, end, g, opts = {}) {
+export function routeOrthogonal(start: GridPoint, end: GridPoint, g: CostGrid, opts: RouteOpts = {}): GridPoint[] {
   const turnCost = opts.turnCost ?? 2;
-  const waypoints = (opts.waypoints ?? []).filter((w) => w && Number.isFinite(w.col) && Number.isFinite(w.row));
+  const waypoints = (opts.waypoints ?? []).filter((w): w is GridPoint => w != null && Number.isFinite(w.col) && Number.isFinite(w.row));
   if (opts.forbiddenRegions) {
     if (Array.isArray(opts.forbiddenRegions)) {
       for (const r of opts.forbiddenRegions) {
@@ -231,11 +268,11 @@ export function routeOrthogonal(start, end, g, opts = {}) {
   const safeStart = nearestOpenCell(g, start);
   const safeEnd = nearestOpenCell(g, end);
   const safeWaypoints = waypoints.map((w) => nearestOpenCell(g, w));
-  const stops = [safeStart, ...safeWaypoints, safeEnd];
-  const full = [stops[0]];
+  const stops: GridPoint[] = [safeStart, ...safeWaypoints, safeEnd];
+  const full: GridPoint[] = [stops[0]!];
   for (let i = 0; i < stops.length - 1; i++) {
-    const seg = astarSegment(stops[i], stops[i + 1], g, turnCost);
-    for (let j = 1; j < seg.length; j++) full.push(seg[j]);
+    const seg = astarSegment(stops[i]!, stops[i + 1]!, g, turnCost);
+    for (let j = 1; j < seg.length; j++) full.push(seg[j]!);
   }
   const out = collapseJogs(collapseColinear(full), g);
   if (opts.forbiddenRegions && Array.isArray(opts.forbiddenRegions)) {
@@ -250,13 +287,13 @@ export function routeOrthogonal(start, end, g, opts = {}) {
  * Estética: cuenta cuántos giros de 90° tiene la polyline.
  * Útil como heurística para preferir rutas "menos serpenteantes".
  */
-export function countTurns(points) {
+export function countTurns(points: readonly GridPoint[] | null | undefined): number {
   if (!points || points.length < 3) return 0;
   let turns = 0;
   let prevDx = 0, prevDy = 0;
   for (let i = 1; i < points.length; i++) {
-    const dx = points[i].col - points[i - 1].col;
-    const dy = points[i].row - points[i - 1].row;
+    const dx = points[i]!.col - points[i - 1]!.col;
+    const dy = points[i]!.row - points[i - 1]!.row;
     if (i > 1 && (dx !== prevDx || dy !== prevDy)) turns++;
     prevDx = dx;
     prevDy = dy;
@@ -265,11 +302,11 @@ export function countTurns(points) {
 }
 
 /** Longitud Manhattan total de la polyline (suma de |dx|+|dy|). */
-export function manhattanLength(points) {
+export function manhattanLength(points: readonly GridPoint[] | null | undefined): number {
   if (!points || points.length < 2) return 0;
   let total = 0;
   for (let i = 1; i < points.length; i++) {
-    total += Math.abs(points[i].col - points[i - 1].col) + Math.abs(points[i].row - points[i - 1].row);
+    total += Math.abs(points[i]!.col - points[i - 1]!.col) + Math.abs(points[i]!.row - points[i - 1]!.row);
   }
   return total;
 }
@@ -280,10 +317,10 @@ export function manhattanLength(points) {
  * y por debajo del eje. Si es vertical, análogo. Sirve para sugerir rutas
  * que evitan obstáculos grandes atravesando por arriba o por abajo.
  */
-export function suggestWaypoints(start, end, g, count: number = 4) {
+export function suggestWaypoints(start: GridPoint, end: GridPoint, g: CostGrid, count: number = 4): GridPoint[] {
   const dx = end.col - start.col;
   const dy = end.row - start.row;
-  const out = [];
+  const out: GridPoint[] = [];
   if (Math.abs(dx) >= Math.abs(dy)) {
     const midCol = Math.round((start.col + end.col) / 2);
     const halfRows = Math.max(2, Math.floor(g.rows / (count + 2)));
@@ -309,34 +346,39 @@ export function suggestWaypoints(start, end, g, count: number = 4) {
  * de menor "costo estético" = turnos + longitud (con peso). Útil cuando el
  * ruteo directo cae en diagonal zigzagueante y queremos forzar un corredor.
  */
-export function routeWithAesthetics(start, end, g, opts = {}) {
+export type AestheticsOpts = RouteOpts & {
+  suggestCount?: number;
+  turnWeight?: number;
+};
+
+export function routeWithAesthetics(start: GridPoint, end: GridPoint, g: CostGrid, opts: AestheticsOpts = {}): GridPoint[] {
   const suggest = opts.suggestCount ?? 4;
   const turnWeight = opts.turnWeight ?? 4;
-  const candidates = [start, ...suggestWaypoints(start, end, g, suggest), end];
-  let best = null;
+  const candidates: GridPoint[] = [start, ...suggestWaypoints(start, end, g, suggest), end];
+  let best: { path: GridPoint[]; cost: number } | null = null;
   for (let i = 0; i < candidates.length - 1; i++) {
     const wp = candidates.slice(i + 1, -1);
     const path = routeOrthogonal(start, end, g, { ...opts, waypoints: wp });
     const cost = countTurns(path) * turnWeight + manhattanLength(path);
-    if (!best || cost < best.cost) best = { path, cost, waypoints: wp };
+    if (!best || cost < best.cost) best = { path, cost };
   }
   return best?.path ?? routeOrthogonal(start, end, g, opts);
 }
 
-export function gridToPixel(p, grid = TK_DIAGRAM_GRID) {
+export function gridToPixel(p: GridPoint, grid: number = TK_DIAGRAM_GRID): PixelPoint {
   return { x: p.col * grid, y: p.row * grid };
 }
 
-export function pixelToGrid(x: number, y: number, grid: number = TK_DIAGRAM_GRID) {
+export function pixelToGrid(x: number, y: number, grid: number = TK_DIAGRAM_GRID): GridPoint {
   return { col: Math.round(x / grid), row: Math.round(y / grid) };
 }
 
-export function gridPathToSvg(points, grid = TK_DIAGRAM_GRID) {
+export function gridPathToSvg(points: readonly GridPoint[], grid: number = TK_DIAGRAM_GRID): string {
   if (!points.length) return '';
-  const first = gridToPixel(points[0], grid);
+  const first = gridToPixel(points[0]!, grid);
   let d = `M ${first.x} ${first.y}`;
   for (let i = 1; i < points.length; i++) {
-    const p = gridToPixel(points[i], grid);
+    const p = gridToPixel(points[i]!, grid);
     d += ` L ${p.x} ${p.y}`;
   }
   return d;
@@ -349,7 +391,7 @@ export function gridPathToSvg(points, grid = TK_DIAGRAM_GRID) {
  * 'auto' = el eje de mayor delta primero para menos “escalón” visual).
  * @returns {string[]} comandos `L x,y` (sin M).
  */
-function orthoConnect(from, to, prefer = 'auto') {
+function orthoConnect(from: PixelPoint, to: PixelPoint, prefer: 'auto' | 'h' | 'v' = 'auto'): string[] {
   const ax = from.x;
   const ay = from.y;
   const bx = to.x;
@@ -366,7 +408,7 @@ function orthoConnect(from, to, prefer = 'auto') {
  * Si el empalme queda a menos de media celda del ancla en un eje, lo pega
  * al ancla: evita el micro-giro de 1 celda (class/flowchart “casi recto”).
  */
-function snapSeamToAnchor(anchor, seam, grid: number) {
+function snapSeamToAnchor(anchor: PixelPoint, seam: PixelPoint, grid: number): PixelPoint {
   const tol = Math.max(1, grid / 2);
   return {
     x: Math.abs(seam.x - anchor.x) <= tol ? anchor.x : seam.x,
@@ -386,31 +428,31 @@ function snapSeamToAnchor(anchor, seam, grid: number) {
  *   <polyline A*>      → ortogonal entre aGrid y bGrid
  *   (ortho) intoPx→b   → entra ortogonal al destino
  */
-export function buildOrthogonalPath(a, b, aGrid, bGrid, points, grid = TK_DIAGRAM_GRID) {
+export function buildOrthogonalPath(a: PixelPoint, b: PixelPoint, aGrid: GridPoint, bGrid: GridPoint, points: readonly GridPoint[], grid: number = TK_DIAGRAM_GRID): string {
   // outPx/intoPx se derivan de `points` (el arranque/fin REAL de la polyline),
   // no de aGrid/bGrid: si el ancla pedida caía en una celda bloqueada,
   // `routeOrthogonal` la desplaza a la celda libre más cercana (ver
   // `nearestOpenCell`) y ese es el punto con el que de verdad hay que
   // empalmar — usar aGrid/bGrid aquí dejaría una costura en diagonal.
-  let outPx = points.length ? gridToPixel(points[0], grid) : { x: aGrid.col * grid, y: aGrid.row * grid };
-  let intoPx = points.length ? gridToPixel(points[points.length - 1], grid) : { x: bGrid.col * grid, y: bGrid.row * grid };
+  let outPx: PixelPoint = points.length ? gridToPixel(points[0]!, grid) : { x: aGrid.col * grid, y: aGrid.row * grid };
+  let intoPx: PixelPoint = points.length ? gridToPixel(points[points.length - 1]!, grid) : { x: bGrid.col * grid, y: bGrid.row * grid };
   outPx = snapSeamToAnchor(a, outPx, grid);
   intoPx = snapSeamToAnchor(b, intoPx, grid);
 
   // Preferencia de empalme: al salir, seguir primero el eje donde ya hubo
   // movimiento desde el ancla (stub); al entrar, alinear primero al destino.
-  const exitPrefer = (Math.abs(outPx.x - a.x) >= Math.abs(outPx.y - a.y)) ? 'h' : 'v';
-  const enterPrefer = (Math.abs(b.x - intoPx.x) >= Math.abs(b.y - intoPx.y)) ? 'h' : 'v';
+  const exitPrefer: 'h' | 'v' = (Math.abs(outPx.x - a.x) >= Math.abs(outPx.y - a.y)) ? 'h' : 'v';
+  const enterPrefer: 'h' | 'v' = (Math.abs(b.x - intoPx.x) >= Math.abs(b.y - intoPx.y)) ? 'h' : 'v';
 
-  const segs = [`M${a.x},${a.y}`, ...orthoConnect(a, outPx, exitPrefer)];
+  const segs: string[] = [`M${a.x},${a.y}`, ...orthoConnect(a, outPx, exitPrefer)];
   // Polyline A*: saltar el primer punto (ya empalmado) para no duplicar.
   if (points.length > 1) {
     for (let i = 1; i < points.length; i += 1) {
-      const p = gridToPixel(points[i], grid);
+      const p = gridToPixel(points[i]!, grid);
       // Último punto de A* se reemplaza por intoPx snappeado
       if (i === points.length - 1) {
         segs.push(...orthoConnect(
-          i === 1 ? outPx : gridToPixel(points[i - 1], grid),
+          i === 1 ? outPx : gridToPixel(points[i - 1]!, grid),
           intoPx,
           'auto',
         ));
@@ -426,35 +468,43 @@ export function buildOrthogonalPath(a, b, aGrid, bGrid, points, grid = TK_DIAGRA
 }
 
 /** Colapsa vértices colineales en un path SVG M/L ortogonal. */
-function collapseSvgOrtho(d) {
+function collapseSvgOrtho(d: string): string {
   const tokens = d.match(/[ML]-?\d+(?:\.\d+)?,-?\d+(?:\.\d+)?/g);
   if (!tokens || tokens.length < 2) return d;
   const pts = tokens.map((t) => {
     const [x, y] = t.slice(1).split(',').map(Number);
-    return { cmd: t[0], x, y };
+    return { cmd: t[0] as 'M' | 'L', x: x as number, y: y as number };
   });
-  const out = [pts[0]];
+  const out = [pts[0]!];
   for (let i = 1; i < pts.length - 1; i += 1) {
-    const a = out[out.length - 1];
-    const b = pts[i];
-    const c = pts[i + 1];
+    const a = out[out.length - 1]!;
+    const b = pts[i]!;
+    const c = pts[i + 1]!;
     const colinear = (a.x === b.x && b.x === c.x) || (a.y === b.y && b.y === c.y);
     if (!colinear) out.push(b);
   }
-  out.push(pts[pts.length - 1]);
+  out.push(pts[pts.length - 1]!);
   return out.map((p, i) => `${i === 0 ? 'M' : 'L'}${p.x},${p.y}`).join(' ');
 }
 
+export type SequenceRoute = {
+  path: string;
+  arrowTipX: number;
+  arrowTipY: number;
+  arrowDir: number;
+  points: GridPoint[];
+};
+
 /** Mensaje horizontal entre dos lifelines (A* sobre la rejilla de costos). */
-export function routeSequenceHorizontal(fromX, toX, y, g) {
+export function routeSequenceHorizontal(fromX: number, toX: number, y: number, g: CostGrid): SequenceRoute {
   const ySn = snapDiagramGrid(y);
   const dir = toX >= fromX ? 1 : -1;
   // Anclas reales: el dot de origen (fromX) y la lifeline de destino (toX)
   // exacta — `buildOrthogonalPath` empalma el tramo A* con estos píxeles
   // reales, así la punta SIEMPRE toca la lifeline en vez de quedarse corta
   // por el redondeo a rejilla.
-  const a = { x: fromX + dir * 8, y: ySn };
-  const b = { x: toX, y: ySn };
+  const a: PixelPoint = { x: fromX + dir * 8, y: ySn };
+  const b: PixelPoint = { x: toX, y: ySn };
   const start = pixelToGrid(snapDiagramGrid(a.x), ySn, g.grid);
   const end = pixelToGrid(snapDiagramGrid(b.x - dir * 12), ySn, g.grid);
   const points = routeOrthogonal(start, end, g);
@@ -476,7 +526,7 @@ export function routeSequenceHorizontal(fromX, toX, y, g) {
  * waypoints colapsaba el tercer segmento a 1 celda (8px) — el resultado era
  * una línea vertical con flecha, no la herradura que distingue un self-loop.
  */
-export function routeSequenceSelf(lifelineX, y, g, side = 1, loopW: number = 40, loopH: number = 24) {
+export function routeSequenceSelf(lifelineX: number, y: number, g: CostGrid, side: number = 1, loopW: number = 40, loopH: number = 24): SequenceRoute {
   const gx = snapDiagramGrid(lifelineX);
   const gy = snapDiagramGrid(y);
   const wCells = Math.max(2, Math.round(loopW / g.grid));
@@ -484,10 +534,10 @@ export function routeSequenceSelf(lifelineX, y, g, side = 1, loopW: number = 40,
   // Cuatro esquinas en píxeles. Mantenemos el cuadrilátero entero: el tercer
   // segmento recorre TODA la anchura del bucle, no 1 celda como en la versión
   // previa. El cuarto cierra la herradura entrando por arriba a la lifeline.
-  const start = { x: gx, y: gy };
-  const corner1 = { x: gx + side * wCells * g.grid, y: gy };
-  const corner2 = { x: gx + side * wCells * g.grid, y: gy - hCells * g.grid };
-  const corner3 = { x: gx, y: gy - hCells * g.grid };
+  const start: PixelPoint = { x: gx, y: gy };
+  const corner1: PixelPoint = { x: gx + side * wCells * g.grid, y: gy };
+  const corner2: PixelPoint = { x: gx + side * wCells * g.grid, y: gy - hCells * g.grid };
+  const corner3: PixelPoint = { x: gx, y: gy - hCells * g.grid };
   const path = [
     `M${start.x},${start.y}`,
     `L${corner1.x},${corner1.y}`,
@@ -500,6 +550,6 @@ export function routeSequenceSelf(lifelineX, y, g, side = 1, loopW: number = 40,
     arrowTipX: gx,
     arrowTipY: gy,
     arrowDir: 1,
-    points: [start, corner1, corner2, corner3],
+    points: [start, corner1, corner2, corner3] as unknown as GridPoint[],
   };
 }
