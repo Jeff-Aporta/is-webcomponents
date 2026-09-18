@@ -140,8 +140,9 @@ interface PickOpts { advance?: boolean }
     set readonly(v: boolean) { this.toggleAttribute('readonly', !!v); }
 
     get time(): ParsedTime {
-      const parsed = parseTime(this.value as unknown as number) as ParsedTime | null;
-      return parsed || { h: 0, m: 0, s: 0 };
+      const raw = this.value;
+      const parsed = raw ? parseTime(raw) : null;
+      return (parsed as ParsedTime | null) || { h: 0, m: 0, s: 0 };
     }
 
     /* ── Interno ──────────────────────────────────────────────────────── */
@@ -156,7 +157,7 @@ interface PickOpts { advance?: boolean }
       const withSeconds = this.seconds;
       const v = toTime(time, withSeconds);
       const norm = (raw: string): string | null => {
-        const t = parseTime(raw as unknown as number) as ParsedTime | null;
+        const t = parseTime(raw) as ParsedTime | null;
         return t ? toTime(t, withSeconds) : null;
       };
       const lo = norm(min);
@@ -195,7 +196,7 @@ interface PickOpts { advance?: boolean }
     #render(): void {
       const view = this.view;
       const t = this.time;
-      const has = !!parseTime(this.value as unknown as number);
+      const has = !!parseTime(this.value);
       this.#base.dataset['view'] = view;
 
       // Cabecera: la unidad de la vista actual queda resaltada.
@@ -295,7 +296,7 @@ interface PickOpts { advance?: boolean }
         ...(this.seconds ? { second: '2-digit' as const } : {}),
       };
       this.#clock.setAttribute('aria-valuetext', has
-        ? formatTime(this.time, locale, { seconds: this.seconds, hour12: this.ampm } as { seconds: boolean; hour12: boolean })
+        ? formatTime(this.time, locale ?? '', { seconds: this.seconds, hour12: this.ampm } as { seconds: boolean; hour12: boolean })
         : 'sin hora');
       // supress unused
       void fmtOpts;

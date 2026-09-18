@@ -65,7 +65,7 @@ import { ElementBase } from '../../core/element-base.js';
       this.#sync();
     }
 
-    #sync() {
+    #sync(): void {
       const label = this.getAttribute('label');
       const value = this.getAttribute('value');
       const helper = this.getAttribute('helper');
@@ -75,9 +75,9 @@ import { ElementBase } from '../../core/element-base.js';
       const direction = this.#detectTrendDirection(trend);
       this.#root.dataset.trend = direction;
       // Auto-fill slots si están vacíos
-      const setSlot = (slotName, attrVal) => {
+      const setSlot = (slotName: string, attrVal: string | null): void => {
         if (!attrVal) return;
-        const slot = this.shadowRoot!.querySelector<HTMLElement>(`slot[name="${slotName}"]`);
+        const slot = this.shadowRoot!.querySelector<HTMLSlotElement>(`slot[name="${slotName}"]`);
         if (slot && slot.assignedNodes().length === 0) {
           slot.replaceWith(Object.assign(document.createElement('span'), { textContent: attrVal }));
         }
@@ -99,7 +99,7 @@ import { ElementBase } from '../../core/element-base.js';
       }
     }
 
-    #detectTrendDirection(trend: string) {
+    #detectTrendDirection(trend: string | null): 'up' | 'down' | 'flat' {
       const explicit = this.getAttribute('trend-direction');
       if (explicit === 'up' || explicit === 'down' || explicit === 'flat') return explicit;
       if (!trend) return 'flat';

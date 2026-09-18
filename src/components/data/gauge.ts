@@ -72,10 +72,10 @@ import { ElementBase } from '../../core/element-base.js';
       this.#render();
     }
 
-    #render() {
-      const value = this.#num(this.getAttribute('value') || 0);
-      const min = this.#num(this.getAttribute('min') || 0);
-      const max = this.#num(this.getAttribute('max') || 100);
+    #render(): void {
+      const value = this.#num(this.getAttribute('value') ?? '0');
+      const min = this.#num(this.getAttribute('min') ?? '0');
+      const max = this.#num(this.getAttribute('max') ?? '100');
       const label = this.getAttribute('label') || '';
       const unit = this.getAttribute('unit') || '';
       const variant = this.getAttribute('color') || 'brand';
@@ -116,7 +116,7 @@ import { ElementBase } from '../../core/element-base.js';
 
       // Value y label
       if (showValue) {
-        const formatted = format ? this.#formatNumber(value, format) : this.#formatNumber(value, '0');
+        const formatted = format ? this.#formatNumber(String(value), format) : this.#formatNumber(String(value), '0');
         this.#valueEl.textContent = `${formatted}${unit}`;
       } else {
         this.#valueEl.textContent = '';
@@ -124,19 +124,19 @@ import { ElementBase } from '../../core/element-base.js';
       this.#labelEl.textContent = label;
     }
 
-    #formatNumber(value: string, format: string) {
+    #formatNumber(value: string, format: string): string {
       try {
         return new Intl.NumberFormat(undefined, {
           minimumFractionDigits: format.split('.')[1]?.length || 0,
           maximumFractionDigits: format.split('.')[1]?.length || 0,
-        }).format(value);
+        }).format(Number(value));
       } catch {
         return String(value);
       }
     }
 
-    #num(v) {
-      const n = parseFloat(v);
+    #num(v: string | number): number {
+      const n = typeof v === 'number' ? v : parseFloat(v);
       return Number.isFinite(n) ? n : 0;
     }
   }
