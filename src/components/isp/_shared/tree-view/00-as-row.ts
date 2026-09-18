@@ -258,7 +258,7 @@ class TARowBase extends TARoles {
 
   /** ¿Este nodo debe auto-expandirse al materializarse? */
   shouldAutoExpand(node: TNode | null | undefined): boolean {
-    return this.isGrouper(node);
+    return !!node && this.isGrouper(node);
   }
 
   /** Aplica auto-expansión a nodos nuevos que califiquen como grouper. */
