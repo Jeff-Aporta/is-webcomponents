@@ -34,6 +34,22 @@ import {
   const OBSERVED = ['src-dark', 'src-light', 'alt', 'shape', 'fit', 'theme', 'loading'];
   const VALID_SHAPE = new Set(['circle', 'rounded', 'square']);
   const VALID_FIT = new Set(['contain', 'cover']);
+  type Shape = 'circle' | 'rounded' | 'square';
+  type Fit = 'contain' | 'cover';
+  type Theme = 'dark' | 'light';
+
+  function asShape(s: string | null): Shape | null {
+    return s !== null && VALID_SHAPE.has(s) ? s as Shape : null;
+  }
+  function asFit(s: string | null): Fit {
+    return s !== null && VALID_FIT.has(s) ? s as Fit : 'contain';
+  }
+  function asTheme(v: string | null): Theme | null {
+    return v === 'light' || v === 'dark' ? v : null;
+  }
+  function asThemeInput(v: unknown): Theme | null {
+    return v === 'light' || v === 'dark' ? v : null;
+  }
 
   class IsThemeImg extends ElementBase {
     static styleAttrs = {
@@ -44,15 +60,15 @@ import {
       return [...OBSERVED];
     }
 
-    #img!: HTMLElement;
-    #unwatch = null;
+    #img!: HTMLImageElement;
+    #unwatch: (() => void) | null = null;
 
     constructor() {
       super();
       const shadow = this.attachShadow({ mode: 'open' });
       adoptCss(shadow, import.meta.url);
       shadow.appendChild(TEMPLATE.content.cloneNode(true));
-      this.#img = shadow.querySelector<HTMLElement>('.img')!;
+      this.#img = shadow.querySelector<HTMLImageElement>('.img')!;
     }
 
     onConnected() {
@@ -61,7 +77,8 @@ import {
     }
 
     onDisconnected() {
-      this.#unwatch?.();
+      const unwatch = this.#unwatch;
+      if (unwatch) unwatch();
       this.#unwatch = null;
     }
 
@@ -69,63 +86,36 @@ import {
       this.#sync();
     }
 
-    get srcDark() {
-      return this.getAttribute('src-dark') ?? '';
-    }
-    set srcDark(v) {
-      setStringAttr(this, 'src-dark', v);
-    }
+    get srcDark(): string { return this.getAttribute('src-dark') ?? ''; }
+    set srcDark(v: string) { setStringAttr(this, 'src-dark', v); }
 
-    get srcLight() {
-      return this.getAttribute('src-light') ?? '';
-    }
-    set srcLight(v) {
-      setStringAttr(this, 'src-light', v);
-    }
+    get srcLight(): string { return this.getAttribute('src-light') ?? ''; }
+    set srcLight(v: string) { setStringAttr(this, 'src-light', v); }
 
-    get alt() {
-      return this.getAttribute('alt') ?? '';
-    }
-    set alt(v) {
-      setStringAttr(this, 'alt', v ?? '');
-    }
+    get alt(): string { return this.getAttribute('alt') ?? ''; }
+    set alt(v: string | null | undefined) { setStringAttr(this, 'alt', v ?? ''); }
 
-    get shape() {
-      const s = this.getAttribute('shape');
-      return VALID_SHAPE.has(s) ? s : null;
-    }
-    set shape(v) {
-      setStringAttr(this, 'shape', VALID_SHAPE.has(v) ? v : null);
-    }
+    get shape(): Shape | null { return asShape(this.getAttribute('shape')); }
+    set shape(v: Shape | string | null | undefined) { setStringAttr(this, 'shape', asShape(typeof v === 'string' ? v : null)); }
 
-    get fit() {
-      const f = this.getAttribute('fit');
-      return VALID_FIT.has(f) ? f : 'contain';
-    }
-    set fit(v) {
-      setStringAttr(this, 'fit', VALID_FIT.has(v) ? v : null);
-    }
+    get fit(): Fit { return asFit(this.getAttribute('fit')); }
+    set fit(v: Fit | string | null | undefined) { setStringAttr(this, 'fit', asFit(typeof v === 'string' ? v : null)); }
 
     /** Tema forzado; vacío = seguir contenedor. */
-    get theme() {
-      const t = this.getAttribute('theme');
-      return t === 'light' || t === 'dark' ? t : null;
-    }
-    set theme(v) {
-      setStringAttr(this, 'theme', v === 'light' || v === 'dark' ? v : null);
-    }
+    get theme(): Theme | null { return asTheme(this.getAttribute('theme')); }
+    set theme(v: Theme | string | null | undefined) { setStringAttr(this, 'theme', asThemeInput(v)); }
 
-    get themeContainer() {
-      return findThemeContainer(this);
-    }
+    get themeContainer(): Element { return findThemeContainer(this); }
 
     /** Tema efectivo (forzado o del contenedor). */
-    get activeTheme() {
-      return this.theme || readTheme(this.themeContainer);
+    get activeTheme(): 'dark' | 'light' {
+      const forced = this.theme;
+      return forced ?? (readTheme(this.themeContainer) as 'dark' | 'light');
     }
 
     #watch() {
-      this.#unwatch?.();
+      const prev = this.#unwatch;
+      if (prev) prev();
       const container = this.themeContainer;
       this.#unwatch = watchThemeContainer(container, () => this.#sync());
     }
