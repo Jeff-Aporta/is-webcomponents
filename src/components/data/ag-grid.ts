@@ -88,6 +88,7 @@ import {
   getComponentPrefs, removeComponentPrefs, replaceComponentPrefs,
 } from '../_shared/prefs.js';
 import { escapeHtml } from '../_shared/dom-utils.js';
+import type { PrefsEntry } from '../_shared/prefs.js';
 import { adoptCss, defineElement, emit } from '../../core/element.js';
 import '../media/icon.js';
 import '../forms/checkbox.js';
@@ -127,6 +128,7 @@ import type {
   GridApi,
   ColumnFilter,
   SelectionModeName,
+  TextFilterOp,
 } from './datagrid-core/types.js';
 
 const TEMPLATE = document.createElement('template');
@@ -299,7 +301,7 @@ interface CellEditDetail {
 /** Detalle del evento `is-cell-click`. */
 interface CellClickDetail {
   row: RowData;
-  column: ColumnState;
+  column: ColumnState | null;
   value: unknown;
 }
 
@@ -675,7 +677,7 @@ export class IsAgGrid extends ElementBase {
     if (this.#rememberState) {
       const key = this.#storageKey || this.#defaultStorageKey();
       const saved = getComponentPrefs('is-ag-grid', key);
-      if (saved && this.#api) this.#api.loadState(saved);
+      if (saved && this.#api) this.#api.loadState(JSON.stringify(saved));
     }
     this.#render();
     this.#renderBody();
@@ -761,7 +763,7 @@ export class IsAgGrid extends ElementBase {
     const raw = this.#api.serializeState();
     const state = IsAgGrid.#parseState(raw);
     if (!state) return;
-    replaceComponentPrefs('is-ag-grid', key, state);
+    replaceComponentPrefs('is-ag-grid', key, state as PrefsEntry);
     emit(this, 'is-state-saved', { key, state } satisfies StateSavedDetail);
   }
 
@@ -1118,7 +1120,14 @@ export class IsAgGrid extends ElementBase {
   }
 
   #renderCellContent(col: ColumnState, row: RowData): string {
-    const value = getCellValue(col, { data: row, id: row?.['id'] as string | undefined, index: row?.['index'] as number | undefined ?? 0 });
+    const idVal = row['id'];
+    const indexVal = row['index'];
+    const node: RowNode = {
+      data: row,
+      id: typeof idVal === 'string' ? idVal : '',
+      index: typeof indexVal === 'number' ? indexVal : 0,
+    };
+    const value = getCellValue(col, node);
     // El tipo declarado es `ColumnTypeName | 'currency' | 'dateTime'` pero el
     // consumidor puede pasar tipos adicionales (link/enum/badge/tags/actions).
     const t = col.type as string;
@@ -1573,7 +1582,7 @@ export class IsAgGrid extends ElementBase {
 
   /* ── Event handlers ───────────────────────────────────────────────────── */
 
-  #onViewportClick = (e: Event): void => {
+  #onViewportClick = (e: MouseEvent): void => {
     if (!this.#api) return;
     const target = asElement(e.target);
     if (!target) return;
@@ -1676,7 +1685,7 @@ export class IsAgGrid extends ElementBase {
             this.#api.setRows([...this.#rawRows]); // notifica al store
           }
         }
-        emit(this, 'is-cell-click', { row: node.data, column: col, value } satisfies CellClickDetail);
+        emit(this, 'is-cell-click', { row: node.data, column: col ?? null, value } satisfies CellClickDetail);
       }
     }
     // Reference allRows to satisfy unused-var lint without altering behavior.
@@ -1805,7 +1814,7 @@ export class IsAgGrid extends ElementBase {
         if (valueMaybe === undefined || valueMaybe === null || valueMaybe === '') {
           self.#api.setFilter(colId, null);
         } else {
-          self.#api.setFilter(colId, { type: 'text', op: normOp, value: String(valueMaybe) });
+          self.#api.setFilter(colId, { type: 'text', op: normOp as TextFilterOp, value: String(valueMaybe) });
         }
       },
       /** Nueva: (colId, filter | null). */
@@ -1923,7 +1932,8 @@ function formatDate(value: unknown, col: ColumnState): string {
   if (value == null || value === '') return '';
   const d = value instanceof Date ? value : new Date(String(value));
   if (Number.isNaN(d.getTime())) return String(value);
-  const locale = col.def.format || 'es-CO';
+  const fmt = col.def.format;
+  const locale = typeof fmt === 'string' ? fmt : 'es-CO';
   const style = (col.def as ColumnDef & { dateFormat?: Intl.DateTimeFormatOptions['dateStyle'] }).dateFormat || 'medium';
   try {
     return new Intl.DateTimeFormat(locale, { dateStyle: style }).format(d);
@@ -1937,7 +1947,8 @@ function formatNumber(value: unknown, col: ColumnState): string {
   const n = Number(value);
   if (!Number.isFinite(n)) return '';
   const decimals = (col.def as ColumnDef & { decimals?: number }).decimals ?? 2;
-  const locale = col.def.format || 'es-CO';
+  const fmt = col.def.format;
+  const locale = typeof fmt === 'string' ? fmt : 'es-CO';
   try {
     return new Intl.NumberFormat(locale, {
       minimumFractionDigits: decimals,
@@ -1952,7 +1963,8 @@ function formatCurrency(value: unknown, col: ColumnState): string {
   if (value == null || value === '') return '';
   const n = Number(value);
   if (!Number.isFinite(n)) return '';
-  const locale = col.def.format || 'es-CO';
+  const fmt = col.def.format;
+  const locale = typeof fmt === 'string' ? fmt : 'es-CO';
   const defExt = col.def as ColumnDef & { currency?: string; decimals?: number };
   const currency = defExt.currency || 'COP';
   const decimals = defExt.decimals ?? 0;
