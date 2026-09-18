@@ -44,14 +44,15 @@ import { ElementBase } from '../../core/element-base.js';
       if (name === 'label') this.#syncLabel();
     }
 
-    get label() { return this.getAttribute('label') || 'Ruta'; }
-    set label(v) {
+    get label(): string { return this.getAttribute('label') || 'Ruta'; }
+    set label(v: string | null | undefined) {
       if (v == null || v === '') this.removeAttribute('label');
       else this.setAttribute('label', v);
     }
 
     #syncLabel() {
       const nav = this.shadowRoot!.querySelector<HTMLElement>('nav');
+      if (!nav) return;
       nav.setAttribute('aria-label', this.label);
     }
   }
