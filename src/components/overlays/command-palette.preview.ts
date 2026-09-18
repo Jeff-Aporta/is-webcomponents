@@ -1,28 +1,41 @@
 /**
  * Behavior de is-command-palette: abre la paleta desde el botón del demo y
  * registra el comando elegido.
- * @param {import('../../previews/_kit/types.d.ts').PreviewMountContext} ctx
  */
-let paleta = null;
-let boton = null;
-let abrir = null;
-let alElegir = null;
+import type { PreviewMountContext } from '../../previews/_kit/types.d.ts';
 
-export async function mount(ctx) {
-  paleta = ctx.main.querySelector<HTMLElement>('is-command-palette');
+interface PaletteEl extends HTMLElement {
+  open(): void;
+  close(): void;
+}
+
+interface SelectDetail {
+  command: { id: string };
+}
+
+let paleta: PaletteEl | null = null;
+let boton: HTMLElement | null = null;
+let abrir: (() => void) | null = null;
+let alElegir: ((e: Event) => void) | null = null;
+
+export async function mount(ctx: PreviewMountContext): Promise<void> {
+  paleta = ctx.main.querySelector<PaletteEl>('is-command-palette');
   boton = ctx.main.querySelector<HTMLElement>('#openBtn');
   if (!paleta) return;
 
-  alElegir = (e) => console.log('ejecutar:', e.detail.command.id);
+  alElegir = (e: Event): void => {
+    const detail = (e as CustomEvent<SelectDetail>).detail;
+    console.log('ejecutar:', detail.command.id);
+  };
   paleta.addEventListener('is-select', alElegir);
 
   if (boton) {
-    abrir = () => paleta.open();
+    abrir = (): void => { paleta!.open(); };
     boton.addEventListener('click', abrir);
   }
 }
 
-export function unmount() {
+export function unmount(): void {
   if (paleta && alElegir) paleta.removeEventListener('is-select', alElegir);
   if (boton && abrir) boton.removeEventListener('click', abrir);
   paleta = null;
