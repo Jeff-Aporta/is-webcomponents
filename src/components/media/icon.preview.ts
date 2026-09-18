@@ -3,7 +3,7 @@
  * @param {import('../../previews/_kit/types.d.ts').PreviewMountContext} ctx
  */
 export async function mount(ctx: import('../../previews/_kit/types.d.ts').PreviewMountContext) {
-  const frame = ctx.main.querySelector<HTMLElement>('#xpFrame');
+  const frame = ctx.main.querySelector<HTMLIFrameElement>('#xpFrame');
   const openBtn = ctx.main.querySelector<HTMLElement>('#xpOpen');
   if (!frame) return;
 
