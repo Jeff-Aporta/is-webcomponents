@@ -4,8 +4,17 @@ package-lock.json
 Thumbs.db
 *.log
 *.txt
-*.md
+
+# Markdown: ignorar solo root y specs/ (WIPs, docs de equipo).
+# IMPORTANTE: dist/ NO se ignora porque `dist/**/skills/**/*.md` se
+# bundlea desde `src/skills/` y se sirve al público. Si ignoráramos
+# `*.md` global, los PROMPT.md nunca llegarían al usuario final.
+/*.md
+/specs/**/*.md
+*.tmp
+!.gitkeep
 !README.md
+!CHANGELOG.md
 .env
 .env.*
 src/utils/health/e2e/.artifacts/
