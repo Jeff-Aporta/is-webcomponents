@@ -1,15 +1,20 @@
 /**
  * Playground <is-loading-overlay>: show/hide desde los botones del demo.
- * @param {import('../../previews/_kit/types.d.ts').PreviewMountContext} ctx
- * @param {import('../../previews/_kit/types.d.ts').ISComponentPreviewLike} preview
  */
-export async function mount(ctx: import('../../previews/_kit/types.d.ts').PreviewMountContext, preview: import('../../previews/_kit/types.d.ts').ISComponentPreviewLike) {
+import type { PreviewMountContext, ISComponentPreviewLike } from '../../previews/_kit/types.d.ts';
+
+interface LoadingOverlayLike extends HTMLElement {
+  show(): void;
+  hide(): void;
+}
+
+export async function mount(ctx: PreviewMountContext, preview: ISComponentPreviewLike): Promise<void> {
   const root = ctx.main;
   const signal = preview?.signal;
 
-  const wire = (btnId, overlayId, ms = 2000) => {
+  const wire = (btnId: string, overlayId: string, ms: number = 2000): void => {
     const btn = root.querySelector<HTMLElement>(`#${btnId}`);
-    const ov = root.querySelector<HTMLElement>(`#${overlayId}`);
+    const ov = root.querySelector<LoadingOverlayLike>(`#${overlayId}`);
     if (!btn || !ov) return;
 
     const opts = signal ? { signal } : undefined;
@@ -26,6 +31,6 @@ export async function mount(ctx: import('../../previews/_kit/types.d.ts').Previe
   wire('loBtn2', 'loDemo2', 2000);
 }
 
-export function unmount() {
+export function unmount(): void {
   /* AbortSignal del preview limpia listeners */
 }

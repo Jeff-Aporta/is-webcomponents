@@ -1,9 +1,18 @@
 import { prettyHtml, repaint } from '../_shared/highlight-code.js';
 
+interface CodeLike extends HTMLElement {
+  value: string;
+  lang: string;
+}
+
+interface DescribePart {
+  cls: string;
+  text: string;
+}
+
 /**
  * Behavior migrado desde HTML inline de is-mutation-observer.
  * Se ejecuta en mount() tras pintar la definition JSON.
- * @param {import('../../previews/_kit/types.d.ts').PreviewMountContext} ctx
  */
 export async function mount(ctx: import('../../previews/_kit/types.d.ts').PreviewMountContext) {
   const root = ctx.main;
@@ -17,14 +26,15 @@ export async function mount(ctx: import('../../previews/_kit/types.d.ts').Previe
 
   let childN = 0;
 
-  const paintHtml = () => {
+  const paintHtml = (): void => {
     // `#moHtml` puede haber pasado de <pre> a <is-code> tras el primer paint.
-    const el = root.querySelector<HTMLElement>('#moHtml') || htmlPre;
+    const el = (root.querySelector<HTMLElement>('#moHtml') || htmlPre);
     const src = prettyHtml(target.outerHTML);
     if (el.localName === 'is-code') {
-      el.value = src;
-      el.setAttribute('data-lang', 'html');
-      el.lang = 'html';
+      const codeEl = el as CodeLike;
+      codeEl.value = src;
+      codeEl.setAttribute('data-lang', 'html');
+      codeEl.lang = 'html';
     } else {
       el.textContent = src;
       el.setAttribute('data-lang', 'html');
@@ -33,8 +43,8 @@ export async function mount(ctx: import('../../previews/_kit/types.d.ts').Previe
     if (stamp) stamp.textContent = new Date().toLocaleTimeString();
   };
 
-  const describe = (records) => {
-    const parts = [];
+  const describe = (records: MutationRecord[]): DescribePart[] => {
+    const parts: DescribePart[] = [];
     for (const r of records) {
       if (r.type === 'childList') {
         if (r.addedNodes.length) {
@@ -50,7 +60,7 @@ export async function mount(ctx: import('../../previews/_kit/types.d.ts').Previe
           });
         }
       } else if (r.type === 'attributes') {
-        const v = r.target.getAttribute?.(r.attributeName) ?? '';
+        const v = r.target.getAttribute?.(r.attributeName ?? '') ?? '';
         parts.push({
           cls: 'type-attr',
           text: `attributes: ${r.attributeName}="${v.slice(0, 24)}${v.length > 24 ? '…' : ''}"`,
@@ -90,11 +100,12 @@ export async function mount(ctx: import('../../previews/_kit/types.d.ts').Previe
     }
   });
 
-  mo.addEventListener('is-mutate', (e) => {
+  mo.addEventListener('is-mutate', (e: Event) => {
     paintHtml();
     log?.querySelector<HTMLElement>('.hint')?.closest('.row')?.remove();
     const t = new Date().toLocaleTimeString();
-    for (const part of describe(e.detail.records)) {
+    const detail = (e as CustomEvent<{ records: MutationRecord[] }>).detail;
+    for (const part of describe(detail.records)) {
       const row = document.createElement('div');
       row.className = 'row';
       const time = document.createElement('span');
@@ -106,17 +117,17 @@ export async function mount(ctx: import('../../previews/_kit/types.d.ts').Previe
       row.append(time, msg);
       log?.prepend(row);
     }
-    while (log && log.children.length > 10) log.lastElementChild.remove();
+    while (log && log.children.length > 10) log.lastElementChild?.remove();
   });
 
   // Primer pintado: CM puede llegar tarde → reintentar hasta colorear.
-  const bootPaint = () => {
+  const bootPaint = (): void => {
     paintHtml();
     if (!htmlPre.dataset.cm) setTimeout(bootPaint, 120);
   };
   setTimeout(bootPaint, 50);
 }
 
-export function unmount() {
+export function unmount(): void {
   /* no-op: listeners del HTML legado no tenían teardown */
 }

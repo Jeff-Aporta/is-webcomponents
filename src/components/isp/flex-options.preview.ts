@@ -1,5 +1,12 @@
-export function mount(root) {
-  const demo = root.querySelector<HTMLElement>('#foDemo');
+import type { FlexActionEntry } from './_shared/tree-view/flex-options.js';
+
+interface FlexOptionsLike extends HTMLElement {
+  actions: FlexActionEntry[];
+  more: FlexActionEntry[];
+}
+
+export function mount(root: HTMLElement): void {
+  const demo = root.querySelector<FlexOptionsLike>('#foDemo');
   if (demo) {
     demo.actions = [
       { icon: 'mdi:plus', title: 'Agregar', label: 'Agregar', onClick: () => {} },
@@ -7,7 +14,7 @@ export function mount(root) {
     ];
     demo.more = [{ icon: 'mdi:delete-outline', title: 'Eliminar', color: 'danger', onClick: () => {} }];
   }
-  const compact = root.querySelector<HTMLElement>('#foCompact');
+  const compact = root.querySelector<FlexOptionsLike>('#foCompact');
   if (compact) {
     compact.actions = [
       { icon: 'mdi:arrow-up-down', title: 'Mover', onClick: () => {} },
@@ -16,4 +23,4 @@ export function mount(root) {
   }
 }
 
-export function unmount() {}
+export function unmount(): void {}

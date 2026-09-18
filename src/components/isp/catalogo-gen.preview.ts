@@ -1,12 +1,15 @@
 import { createCatalogController } from './controller-from-config.js';
 
+interface CatalogEl extends HTMLElement {
+  controller: unknown;
+}
+
 /**
  * Demo <is-catalogo-gen> con controller JSON (acciones CRUD completas).
- * @param {import('../../previews/_kit/types.d.ts').PreviewMountContext} ctx
  */
 export async function mount(ctx: import('../../previews/_kit/types.d.ts').PreviewMountContext) {
   const root = ctx.main;
-  const cat = root.querySelector<HTMLElement>('#catDemo') || root.querySelector<HTMLElement>('is-catalogo-gen');
+  const cat = (root.querySelector<CatalogEl>('#catDemo') || root.querySelector<CatalogEl>('is-catalogo-gen'));
   if (!cat) return;
 
   cat.controller = createCatalogController({
@@ -36,17 +39,21 @@ export async function mount(ctx: import('../../previews/_kit/types.d.ts').Previe
   });
 
   const log = root.querySelector<HTMLElement>('#catLog');
-  const paint = (msg) => {
+  const paint = (msg: string): void => {
     if (!log) return;
     const code = log.querySelector<HTMLElement>('code') || log;
     code.textContent = msg;
   };
-  cat.addEventListener('is-action', (e) => paint(e.detail?.action || '—'));
-  cat.addEventListener('is-selection-change', (e) => {
-    paint(`selección ×${e.detail?.records?.length ?? 0}`);
+  cat.addEventListener('is-action', (e: Event) => {
+    const detail = (e as CustomEvent<{ action?: string }>).detail;
+    paint(detail?.action || '—');
+  });
+  cat.addEventListener('is-selection-change', (e: Event) => {
+    const detail = (e as CustomEvent<{ records?: unknown[] }>).detail;
+    paint(`selección ×${detail?.records?.length ?? 0}`);
   });
 }
 
-export function unmount() {
+export function unmount(): void {
   /* teardown no crítico */
 }
