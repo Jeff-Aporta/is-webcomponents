@@ -18,8 +18,9 @@ import { resolveLocale } from '../_shared/resolve-locale.js';
  */
 
 /** Unidades y multiplicadores compartidos por is-format-bytes e is-format. */
-export const BYTE_UNITS = ['byte', 'kilobyte', 'megabyte', 'gigabyte', 'terabyte', 'petabyte'];
-export const BYTE_MULT = {
+export const BYTE_UNITS = ['byte', 'kilobyte', 'megabyte', 'gigabyte', 'terabyte', 'petabyte'] as const;
+export type ByteUnit = (typeof BYTE_UNITS)[number];
+export const BYTE_MULT: Record<ByteUnit, number> = {
   byte: 1,
   kilobyte: 1024,
   megabyte: 1048576,
@@ -29,17 +30,24 @@ export const BYTE_MULT = {
 };
 
 /** Convierte `value` expresado en `unit` a bytes. */
-export function toBytes(value, unit) {
-  return value * BYTE_MULT[BYTE_UNITS.includes(unit) ? unit : 'byte'];
+export function toBytes(value: number, unit: string): number {
+  return value * BYTE_MULT[BYTE_UNITS.includes(unit as ByteUnit) ? (unit as ByteUnit) : 'byte'];
+}
+
+/** Opciones de `formatBytes`. */
+export interface FormatBytesOptions {
+  /** Locale BCP 47 (p.ej. 'es-CO'). Si se omite, usa el del navegador. */
+  locale?: string;
+  /** 'short' → 'KB', 'MB', …; 'long' → 'kilobytes', 'megabytes', … */
+  display?: 'short' | 'long';
+  /** Evita 0.2 MB: sube a la unidad donde el número sea ≥ 1. */
+  autofit?: boolean;
 }
 
 /**
  * Escala bytes a unidad legible y la formatea con Intl.
- * @param {number} bytes
- * @param {{ locale?: string, display?: 'short'|'long', autofit?: boolean }} [opts]
- * @returns {string}
  */
-export function formatBytes(bytes: number, { locale, display = 'short', autofit = false } = {}) {
+export function formatBytes(bytes: number, { locale, display = 'short', autofit = false }: FormatBytesOptions = {}) {
   let i = 0;
   let n = Math.abs(bytes);
   while (i < BYTE_UNITS.length - 1 && n / 1024 >= 1) {
@@ -94,14 +102,15 @@ export function formatBytes(bytes: number, { locale, display = 'short', autofit 
       this.#render();
     }
 
-    get value() {
-      if (!this.hasAttribute('value') || this.getAttribute('value') === '') return null;
-      const n = parseFloat(this.getAttribute('value'));
+    get value(): number | null {
+      const raw = this.getAttribute('value');
+      if (raw == null || raw === '') return null;
+      const n = parseFloat(raw);
       return Number.isFinite(n) ? n : null;
     }
 
-    get autofit() { return this.hasAttribute('autofit'); }
-    set autofit(v) { this.toggleAttribute('autofit', !!v); }
+    get autofit(): boolean { return this.hasAttribute('autofit'); }
+    set autofit(v: boolean) { this.toggleAttribute('autofit', !!v); }
 
     #render() {
       if (this.value == null) {
@@ -109,9 +118,10 @@ export function formatBytes(bytes: number, { locale, display = 'short', autofit 
         return;
       }
       const bytes = toBytes(this.value, this.getAttribute('unit') || 'byte');
+      const unitDisplay: 'short' | 'long' = this.getAttribute('display') === 'long' ? 'long' : 'short';
       this.#el.textContent = formatBytes(bytes, {
         locale: resolveLocale(this.getAttribute('locale')),
-        display: this.getAttribute('display') === 'long' ? 'long' : 'short',
+        display: unitDisplay,
         autofit: this.autofit,
       });
     }
