@@ -88,7 +88,11 @@ const paintOne = async (el: HTMLElement): Promise<void> => {
   if (isMountedEditor(el) || el.localName === 'is-code') {
     const ed = el as CodeEditor;
     ed.toggleAttribute('readonly', true);
-    ed.toggleAttribute('compact', true);
+    // Opt-out: `data-no-compact` permite al consumidor mantener el scroll vertical
+    // cuando el contenedor tiene max-height. Por defecto `compact` desactiva el
+    // scroll vertical en .ic-scroll (es para snippets inline de docs).
+    const noCompact = el.hasAttribute('data-no-compact');
+    ed.toggleAttribute('compact', !noCompact);
     if (!ed.hasAttribute('wrap')) ed.setAttribute('wrap', '');
     if (!ed.hasAttribute('line-numbers')) ed.setAttribute('line-numbers', 'false');
     ed.lang = lang;
@@ -107,7 +111,10 @@ const paintOne = async (el: HTMLElement): Promise<void> => {
   const ed = document.createElement('is-code') as unknown as CodeEditor;
   ed.className = `${el.className} is-code-view`.replace(/\s+/g, ' ').trim();
   ed.setAttribute('readonly', '');
-  ed.setAttribute('compact', '');
+  // Opt-out: `data-no-compact` permite al consumidor mantener el scroll vertical
+  // cuando el contenedor tiene max-height. Por defecto `compact` desactiva el
+  // scroll vertical en .ic-scroll (es para snippets inline de docs).
+  if (!el.hasAttribute('data-no-compact')) ed.setAttribute('compact', '');
   ed.setAttribute('wrap', '');
   ed.setAttribute('line-numbers', 'false');
   ed.setAttribute('lang', lang);

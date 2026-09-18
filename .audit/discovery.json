@@ -1,5 +1,5 @@
 {
-  "generatedAt": "2026-09-18T10:55:35.915Z",
+  "generatedAt": "2026-09-18T21:48:42.018Z",
   "project": ".",
   "profile": "iswc",
   "philosophy": "TODO lo testeable debe quedar testeado. Regla dura de deep-test y admin-is.",
@@ -1878,7 +1878,7 @@
         "event",
         "i18n"
       ],
-      "loc": 155
+      "loc": 159
     },
     {
       "file": "scripts/audit-components.ts",
@@ -2121,6 +2121,38 @@
       "loc": 77
     },
     {
+      "file": "scripts/tour-content.mjs",
+      "language": "js",
+      "name": "tour-content",
+      "categories": [
+        "cli",
+        "event",
+        "tour"
+      ],
+      "loc": 343
+    },
+    {
+      "file": "scripts/tour-deploy.mjs",
+      "language": "js",
+      "name": "tour-deploy",
+      "categories": [
+        "cli",
+        "http-client",
+        "tour"
+      ],
+      "loc": 157
+    },
+    {
+      "file": "scripts/tour-stagehand.mjs",
+      "language": "js",
+      "name": "tour-stagehand",
+      "categories": [
+        "cli",
+        "tour"
+      ],
+      "loc": 134
+    },
+    {
       "file": "scripts/ts-campos-dom.ts",
       "language": "ts",
       "name": "ts-campos-dom",
@@ -2242,7 +2274,7 @@
       "categories": [
         "sql-query"
       ],
-      "loc": 602
+      "loc": 697
     },
     {
       "file": "src/cdn/sheet-cache.ts",
@@ -3101,6 +3133,49 @@
         "event"
       ],
       "loc": 243
+    },
+    {
+      "file": "src/components/diagrams/_editor-base.ts",
+      "language": "ts",
+      "name": "is-editorbase",
+      "categories": [
+        "webcomponent",
+        "migration",
+        "event",
+        "animation"
+      ],
+      "loc": 218
+    },
+    {
+      "file": "src/components/diagrams/_editor-nesting.ts",
+      "language": "ts",
+      "name": "_editor-nesting",
+      "categories": [
+        "migration",
+        "worker",
+        "event",
+        "animation"
+      ],
+      "loc": 275
+    },
+    {
+      "file": "src/components/diagrams/_editor-panel.ts",
+      "language": "ts",
+      "name": "_editor-panel",
+      "categories": [
+        "event",
+        "browser-api"
+      ],
+      "loc": 270
+    },
+    {
+      "file": "src/components/diagrams/_editor-toolbar.ts",
+      "language": "ts",
+      "name": "_editor-toolbar",
+      "categories": [
+        "event"
+      ],
+      "loc": 209
     },
     {
       "file": "src/components/diagrams/block-diagram.css",
@@ -4751,7 +4826,7 @@
         "sql-query",
         "migration"
       ],
-      "loc": 836
+      "loc": 839
     },
     {
       "file": "src/components/isp/_shared/tree-view/04-tree-flow.ts",
@@ -4957,7 +5032,7 @@
       "categories": [
         "event"
       ],
-      "loc": 34
+      "loc": 36
     },
     {
       "file": "src/components/isp/float-card.ts",
@@ -5393,6 +5468,15 @@
       "loc": 888
     },
     {
+      "file": "src/components/media/icon.preview.ts",
+      "language": "ts",
+      "name": "icon.preview",
+      "categories": [
+        "tour"
+      ],
+      "loc": 28
+    },
+    {
       "file": "src/components/media/icon.ts",
       "language": "ts",
       "name": "is-icon",
@@ -5804,11 +5888,12 @@
       "language": "ts",
       "name": "app",
       "categories": [
+        "webcomponent",
         "worker",
         "storage",
         "event"
       ],
-      "loc": 607
+      "loc": 625
     },
     {
       "file": "src/pages/ecosystem.ts",
@@ -6021,7 +6106,7 @@
       "categories": [
         "worker"
       ],
-      "loc": 489,
+      "loc": 498,
       "e2e": true
     },
     {
@@ -6096,35 +6181,35 @@
     }
   ],
   "summary": {
-    "total": 632,
+    "total": 640,
     "byCategory": {
-      "event": 309,
-      "webcomponent": 214,
-      "animation": 89,
-      "worker": 158,
-      "cli": 30,
-      "http-client": 24,
-      "tour": 5,
+      "event": 314,
+      "webcomponent": 216,
+      "animation": 91,
+      "worker": 159,
+      "cli": 33,
+      "http-client": 25,
+      "tour": 9,
       "auth": 29,
       "storage": 19,
       "css-part": 77,
       "i18n": 3,
-      "migration": 25,
+      "migration": 27,
       "sql-query": 28,
-      "browser-api": 9,
+      "browser-api": 10,
       "database": 8,
       "service": 1,
       "paty-iss": 1
     },
     "byLanguage": {
       "html": 110,
-      "js": 117,
-      "ts": 309,
+      "js": 120,
+      "ts": 314,
       "css": 96
     },
     "e2eFiles": 5,
-    "testsFilesFound": 493,
-    "ignoredFilesFound": 5,
+    "testsFilesFound": 496,
+    "ignoredFilesFound": 4,
     "profile": "iswc"
   }
 }
