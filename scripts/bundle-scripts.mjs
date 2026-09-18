@@ -256,6 +256,12 @@ for (const cat of await readdir(previewsOut, { withFileTypes: true })) {
   }
 }
 
+// NOTA: _shell.html NO se copia a dist/previews/. El iframe embebido desde
+// icon.preview.ts apunta a /src/previews/_shell.html (servido por serve.mjs
+// desde el repo root). Copiarlo a dist/ haría que sus paths internos
+// (`../styles/...`, `./registry.js`, `../../src/cdn/...`) se resuelvan
+// contra dist/ en vez de src/ → 404 en styles/presentation.css y registry.js.
+
 // ── Skills: src/skills/** ya está copiado por build.mjs → dist/cdn/skills/.
 // Aquí evitamos duplicar; el build principal es quien lo hace. Solo
 // verificamos.
