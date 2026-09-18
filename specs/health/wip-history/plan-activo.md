@@ -11,12 +11,13 @@
 | 5 | `68492c97e` | WT-0051 + WT-0052 | 1,011 → 5,135 (6,146 → 5,135) | tree-view + helpers completo. _types.ts nuevo. Ver `checkpoint-tanda05.md`. |
 | 6 | `9241ea4ce` | WT-0061-quad + WT-0062 + WT-0062-bis | 697 → 4,438 (5,135 → 4,438) | 7 archivos: code, split-panel, chart, gallery/app, catalogo-gen, controller-from-config, date-field-core. Ver `checkpoint-tanda06.md`. |
 | 7 | `c763849`+ | WT-0071 + WT-0072 + WT-0073 | 1,216 → 3,222 (4,438 → 3,222) | 36 archivos forms (24 .ts + 12 .preview.ts). WT-0073 cerró los 15+ pendientes. Ver `checkpoint-tanda07.md`. |
+| 8 | `2d435f8f` | WT-0081 + WT-0082 | 609 → ~2,613 (3,222 → ~2,613) | 24 archivos (8 nav + 15 media). Ver `checkpoint-tanda08.md`. |
 
 ## Tandas en proceso
 
 | Tanda | Hoja | Rama | Estado |
 |---|---|---|---|
-| 8 (nav + media) | WT-0081, WT-0082 | `wt-root-types-strong-2026` | sub-agentes background |
+| 9 (pages + utils + shared) | WT-0092 | `wt-root-types-strong-2026` | sub-agente `4c1d86d2` background |
 
 ## Tandas pendientes
 
@@ -68,7 +69,8 @@
 - Errores strict audit después de T5: **5,135** (−1,011)
 - Errores strict audit después de T6: **4,438** (−697)
 - Errores strict audit después de T7: **3,222** (−1,216)
-- Próximo hito: < 2,500 después de T8
+- Errores strict audit después de T8: **~2,613** (−609)
+- Próximo hito: < 2,000 después de T9
 
 ## Próxima tanda activa: T3
 
