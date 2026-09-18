@@ -1,20 +1,20 @@
 {
   "schema": "iswc-audit/v1",
-  "corridaId": "1788987782454-j1efad",
-  "inicio": "2026-09-09T21:03:02.197Z",
-  "fin": "2026-09-09T21:03:02.453Z",
-  "duracionMs": 255,
+  "corridaId": "1789690163068-1sx8q5",
+  "inicio": "2026-09-18T00:09:22.543Z",
+  "fin": "2026-09-18T00:09:23.067Z",
+  "duracionMs": 520,
   "conteo": {
     "fatal": 0,
-    "error": 80,
-    "warn": 90,
-    "info": 0
+    "error": 0,
+    "warn": 0,
+    "info": 6
   },
   "total": 185,
   "estado": {
-    "ok": 124,
-    "warning": 24,
-    "fail": 37
+    "ok": 185,
+    "warning": 0,
+    "fail": 0
   },
   "componentes": [
     {
@@ -336,24 +336,16 @@
       "tag": "is-button",
       "titulo": "Button",
       "categoria": "actions",
-      "estado": "warning",
+      "estado": "ok",
       "rutaJson": "src/components/actions/button.json",
       "rutaModulo": "src/components/actions/button.ts",
       "conteo": {
         "fatal": 0,
         "error": 0,
-        "warn": 1,
+        "warn": 0,
         "info": 0
       },
-      "hallazgos": [
-        {
-          "categoria": "json-contenido",
-          "severidad": "warn",
-          "tag": "is-button",
-          "ruta": "src/components/actions/button.json",
-          "mensaje": "Bloque html contiene <style>; usar el campo `styles` raíz o un behavior en su lugar."
-        }
-      ],
+      "hallazgos": [],
       "metricas": {
         "secciones": 20,
         "bloques": 70,
@@ -428,25 +420,16 @@
       "tag": "is-check-icon-button",
       "titulo": "Check Icon Button",
       "categoria": "actions",
-      "estado": "warning",
+      "estado": "ok",
       "rutaJson": "src/components/actions/check-icon-button.json",
       "rutaModulo": "src/components/actions/check-icon-button.ts",
       "conteo": {
         "fatal": 0,
         "error": 0,
-        "warn": 1,
+        "warn": 0,
         "info": 0
       },
-      "hallazgos": [
-        {
-          "categoria": "consistencia",
-          "severidad": "warn",
-          "tag": "is-check-icon-button",
-          "ruta": "C:\\ContaPyme\\Personal\\apps\\is-webcomponents\\src\\components\\actions\\check-icon-button.ts",
-          "mensaje": "Control \"variant\" (prop=\"attr:variant\") en src/components/actions/check-icon-button.json#sections[0].blocks[0].controls[3] apunta a un atributo que el módulo no declara como observado.",
-          "sugerencia": "Agregá 'variant' al array devuelto por static get observedAttributes()."
-        }
-      ],
+      "hallazgos": [],
       "metricas": {
         "secciones": 7,
         "bloques": 12,
@@ -584,32 +567,16 @@
       "tag": "is-speech",
       "titulo": "Speech",
       "categoria": "media",
-      "estado": "fail",
+      "estado": "ok",
       "rutaJson": "src/components/media/speech.json",
       "rutaModulo": "src/components/media/speech.ts",
       "conteo": {
         "fatal": 0,
-        "error": 1,
-        "warn": 1,
+        "error": 0,
+        "warn": 0,
         "info": 0
       },
-      "hallazgos": [
-        {
-          "categoria": "consistencia",
-          "severidad": "warn",
-          "tag": "is-speech",
-          "ruta": "C:\\ContaPyme\\Personal\\apps\\is-webcomponents\\src\\components\\media\\speech.ts",
-          "mensaje": "Control \"lang\" (prop=\"attr:lang\") en src/components/media/speech.json#sections[0].blocks[0].controls[0] apunta a un atributo que el módulo no declara como observado.",
-          "sugerencia": "Agregá 'lang' al array devuelto por static get observedAttributes()."
-        },
-        {
-          "categoria": "runtime",
-          "severidad": "error",
-          "tag": "is-speech",
-          "ruta": "C:\\ContaPyme\\Personal\\apps\\is-webcomponents\\src\\components\\media\\speech.ts",
-          "mensaje": "observedAttributes declarado pero sin attributeChangedCallback: los cambios de atributo nunca se procesan. El playground del demo no será reactivo."
-        }
-      ],
+      "hallazgos": [],
       "metricas": {
         "secciones": 1,
         "bloques": 3,
@@ -621,32 +588,16 @@
       "tag": "is-media-recorder",
       "titulo": "Media Recorder",
       "categoria": "media",
-      "estado": "fail",
+      "estado": "ok",
       "rutaJson": "src/components/media/media-recorder.json",
       "rutaModulo": "src/components/media/media-recorder.ts",
       "conteo": {
         "fatal": 0,
-        "error": 1,
-        "warn": 1,
+        "error": 0,
+        "warn": 0,
         "info": 0
       },
-      "hallazgos": [
-        {
-          "categoria": "consistencia",
-          "severidad": "warn",
-          "tag": "is-media-recorder",
-          "ruta": "C:\\ContaPyme\\Personal\\apps\\is-webcomponents\\src\\components\\media\\media-recorder.ts",
-          "mensaje": "Control \"source\" (prop=\"attr:source\") en src/components/media/media-recorder.json#sections[0].blocks[0].controls[0] apunta a un atributo que el módulo no declara como observado.",
-          "sugerencia": "Agregá 'source' al array devuelto por static get observedAttributes()."
-        },
-        {
-          "categoria": "runtime",
-          "severidad": "error",
-          "tag": "is-media-recorder",
-          "ruta": "C:\\ContaPyme\\Personal\\apps\\is-webcomponents\\src\\components\\media\\media-recorder.ts",
-          "mensaje": "observedAttributes declarado pero sin attributeChangedCallback: los cambios de atributo nunca se procesan. El playground del demo no será reactivo."
-        }
-      ],
+      "hallazgos": [],
       "metricas": {
         "secciones": 1,
         "bloques": 3,
@@ -805,25 +756,16 @@
       "tag": "is-theme-toggle",
       "titulo": "Theme Toggle",
       "categoria": "feedback",
-      "estado": "warning",
+      "estado": "ok",
       "rutaJson": "src/components/feedback/theme-toggle.json",
       "rutaModulo": "src/components/feedback/theme-toggle.ts",
       "conteo": {
         "fatal": 0,
         "error": 0,
-        "warn": 1,
+        "warn": 0,
         "info": 0
       },
-      "hallazgos": [
-        {
-          "categoria": "consistencia",
-          "severidad": "warn",
-          "tag": "is-theme-toggle",
-          "ruta": "C:\\ContaPyme\\Personal\\apps\\is-webcomponents\\src\\components\\feedback\\theme-toggle.ts",
-          "mensaje": "Control \"dark\" (prop=\"attr:dark\") en src/components/feedback/theme-toggle.json#sections[0].blocks[0].controls[0] apunta a un atributo que el módulo no declara como observado.",
-          "sugerencia": "Agregá 'dark' al array devuelto por static get observedAttributes()."
-        }
-      ],
+      "hallazgos": [],
       "metricas": {
         "secciones": 3,
         "bloques": 4,
@@ -835,25 +777,16 @@
       "tag": "is-prefs-clear",
       "titulo": "Prefs Clear",
       "categoria": "feedback",
-      "estado": "warning",
+      "estado": "ok",
       "rutaJson": "src/components/feedback/prefs-clear.json",
       "rutaModulo": "src/components/feedback/prefs-clear.ts",
       "conteo": {
         "fatal": 0,
         "error": 0,
-        "warn": 1,
+        "warn": 0,
         "info": 0
       },
-      "hallazgos": [
-        {
-          "categoria": "consistencia",
-          "severidad": "warn",
-          "tag": "is-prefs-clear",
-          "ruta": "C:\\ContaPyme\\Personal\\apps\\is-webcomponents\\src\\components\\feedback\\prefs-clear.ts",
-          "mensaje": "Control \"reload\" (prop=\"attr:reload\") en src/components/feedback/prefs-clear.json#sections[0].blocks[0].controls[0] apunta a un atributo que el módulo no declara como observado.",
-          "sugerencia": "Agregá 'reload' al array devuelto por static get observedAttributes()."
-        }
-      ],
+      "hallazgos": [],
       "metricas": {
         "secciones": 1,
         "bloques": 1,
@@ -949,27 +882,16 @@
       "tag": "is-split-panel",
       "titulo": "Panel dividido",
       "categoria": "layout",
-      "estado": "warning",
+      "estado": "ok",
       "rutaJson": "src/components/layout/split-panel.json",
       "rutaModulo": "src/components/layout/split-panel.ts",
       "conteo": {
         "fatal": 0,
         "error": 0,
-        "warn": 1,
+        "warn": 0,
         "info": 0
       },
-      "hallazgos": [
-        {
-          "categoria": "json-contenido",
-          "severidad": "warn",
-          "tag": "is-split-panel",
-          "ruta": "src/components/layout/split-panel.json",
-          "mensaje": "Bloque code parece tener un placeholder sin expandir (TODO/FIXME/...).",
-          "detalle": {
-            "code": "<is-split-panel disabled>\n  ...\n</is-split-panel>"
-          }
-        }
-      ],
+      "hallazgos": [],
       "metricas": {
         "secciones": 9,
         "bloques": 28,
@@ -1149,19 +1071,19 @@
       "tag": "is-demo",
       "titulo": "Demo",
       "categoria": "layout",
-      "estado": "warning",
+      "estado": "ok",
       "rutaJson": "",
       "rutaModulo": "src/components/layout/demo.ts",
       "conteo": {
         "fatal": 0,
         "error": 0,
-        "warn": 1,
-        "info": 0
+        "warn": 0,
+        "info": 1
       },
       "hallazgos": [
         {
           "categoria": "json-schema",
-          "severidad": "warn",
+          "severidad": "info",
           "tag": "is-demo",
           "mensaje": "No se encontró JSON de preview para <is-demo>.",
           "sugerencia": "Creá un archivo de definición siguiendo el esquema is-preview/v1."
@@ -1193,57 +1115,16 @@
       "tag": "is-ui",
       "titulo": "IsUi",
       "categoria": "helpers",
-      "estado": "fail",
+      "estado": "ok",
       "rutaJson": "src/components/helpers/ui.json",
       "rutaModulo": "src/components/helpers/ui.ts",
       "conteo": {
         "fatal": 0,
-        "error": 1,
-        "warn": 3,
+        "error": 0,
+        "warn": 0,
         "info": 0
       },
-      "hallazgos": [
-        {
-          "categoria": "json-contenido",
-          "severidad": "warn",
-          "tag": "is-ui",
-          "ruta": "src/components/helpers/ui.json",
-          "mensaje": "Bloque demo en sections[0].blocks[0] no contiene ningún <is-*>.",
-          "detalle": {
-            "html": "<span class=\"demo-label\">// Disponible tras all.min.js</span>\r\n          <div cl…"
-          },
-          "sugerencia": "Si el demo no usa ningún is-*, convertilo a bloque `html` (no necesita chrome de demo)."
-        },
-        {
-          "categoria": "json-contenido",
-          "severidad": "warn",
-          "tag": "is-ui",
-          "ruta": "src/components/helpers/ui.json",
-          "mensaje": "Bloque demo en sections[1].blocks[0] no contiene ningún <is-*>.",
-          "detalle": {
-            "html": "<div class=\"ui-stage\" id=\"htmlStage\"></div>"
-          },
-          "sugerencia": "Si el demo no usa ningún is-*, convertilo a bloque `html` (no necesita chrome de demo)."
-        },
-        {
-          "categoria": "json-contenido",
-          "severidad": "warn",
-          "tag": "is-ui",
-          "ruta": "src/components/helpers/ui.json",
-          "mensaje": "Bloque demo en sections[2].blocks[0] no contiene ningún <is-*>.",
-          "detalle": {
-            "html": "<span class=\"demo-label\">// demo-card registrado en esta página</span>\r\n        …"
-          },
-          "sugerencia": "Si el demo no usa ningún is-*, convertilo a bloque `html` (no necesita chrome de demo)."
-        },
-        {
-          "categoria": "consistencia",
-          "severidad": "error",
-          "tag": "is-ui",
-          "ruta": "C:\\ContaPyme\\Personal\\apps\\is-webcomponents\\src\\components\\helpers\\ui.ts",
-          "mensaje": "Módulo del componente no llama customElements.define('is-ui', …). El JSON declara demos de <is-ui> pero el tag nunca se registra."
-        }
-      ],
+      "hallazgos": [],
       "metricas": {
         "secciones": 5,
         "bloques": 7,
@@ -1423,57 +1304,16 @@
       "tag": "is-tree",
       "titulo": "Tree",
       "categoria": "navigation",
-      "estado": "fail",
+      "estado": "ok",
       "rutaJson": "src/components/navigation/tree.json",
       "rutaModulo": "src/components/navigation/tree.ts",
       "conteo": {
         "fatal": 0,
-        "error": 5,
+        "error": 0,
         "warn": 0,
         "info": 0
       },
-      "hallazgos": [
-        {
-          "categoria": "json-complejidad",
-          "severidad": "error",
-          "tag": "is-tree",
-          "ruta": "src/components/navigation/tree.json",
-          "mensaje": "Demo de <is-tree> no declara <script type=\"application/json\"> con payload.",
-          "sugerencia": "Pasale la data por JSON al host: <is-tree><script type=\"application/json\">{…}</script></is-tree>."
-        },
-        {
-          "categoria": "json-complejidad",
-          "severidad": "error",
-          "tag": "is-tree",
-          "ruta": "src/components/navigation/tree.json",
-          "mensaje": "Demo de <is-tree> no declara <script type=\"application/json\"> con payload.",
-          "sugerencia": "Pasale la data por JSON al host: <is-tree><script type=\"application/json\">{…}</script></is-tree>."
-        },
-        {
-          "categoria": "json-complejidad",
-          "severidad": "error",
-          "tag": "is-tree",
-          "ruta": "src/components/navigation/tree.json",
-          "mensaje": "Demo de <is-tree> no declara <script type=\"application/json\"> con payload.",
-          "sugerencia": "Pasale la data por JSON al host: <is-tree><script type=\"application/json\">{…}</script></is-tree>."
-        },
-        {
-          "categoria": "json-complejidad",
-          "severidad": "error",
-          "tag": "is-tree",
-          "ruta": "src/components/navigation/tree.json",
-          "mensaje": "Demo de <is-tree> no declara <script type=\"application/json\"> con payload.",
-          "sugerencia": "Pasale la data por JSON al host: <is-tree><script type=\"application/json\">{…}</script></is-tree>."
-        },
-        {
-          "categoria": "json-complejidad",
-          "severidad": "error",
-          "tag": "is-tree",
-          "ruta": "src/components/navigation/tree.json",
-          "mensaje": "Demo de <is-tree> no declara <script type=\"application/json\"> con payload.",
-          "sugerencia": "Pasale la data por JSON al host: <is-tree><script type=\"application/json\">{…}</script></is-tree>."
-        }
-      ],
+      "hallazgos": [],
       "metricas": {
         "secciones": 6,
         "bloques": 12,
@@ -1485,25 +1325,16 @@
       "tag": "is-tree-item",
       "titulo": "Tree Item",
       "categoria": "navigation",
-      "estado": "fail",
+      "estado": "ok",
       "rutaJson": "src/components/navigation/tree-item.json",
       "rutaModulo": "src/components/navigation/tree.ts",
       "conteo": {
         "fatal": 0,
-        "error": 1,
+        "error": 0,
         "warn": 0,
         "info": 0
       },
-      "hallazgos": [
-        {
-          "categoria": "json-complejidad",
-          "severidad": "error",
-          "tag": "is-tree-item",
-          "ruta": "src/components/navigation/tree-item.json",
-          "mensaje": "Demo de <is-tree> no declara <script type=\"application/json\"> con payload.",
-          "sugerencia": "Pasale la data por JSON al host: <is-tree><script type=\"application/json\">{…}</script></is-tree>."
-        }
-      ],
+      "hallazgos": [],
       "metricas": {
         "secciones": 2,
         "bloques": 3,
@@ -1851,73 +1682,16 @@
       "tag": "is-date-picker",
       "titulo": "Date Picker",
       "categoria": "forms",
-      "estado": "fail",
+      "estado": "ok",
       "rutaJson": "src/components/forms/date-picker.json",
       "rutaModulo": "src/components/forms/date-picker.ts",
       "conteo": {
         "fatal": 0,
-        "error": 7,
+        "error": 0,
         "warn": 0,
         "info": 0
       },
-      "hallazgos": [
-        {
-          "categoria": "json-complejidad",
-          "severidad": "error",
-          "tag": "is-date-picker",
-          "ruta": "src/components/forms/date-picker.json",
-          "mensaje": "Demo de <is-date-picker> no declara <script type=\"application/json\"> con payload.",
-          "sugerencia": "Pasale la data por JSON al host: <is-date-picker><script type=\"application/json\">{…}</script></is-date-picker>."
-        },
-        {
-          "categoria": "json-complejidad",
-          "severidad": "error",
-          "tag": "is-date-picker",
-          "ruta": "src/components/forms/date-picker.json",
-          "mensaje": "Demo de <is-date-picker> no declara <script type=\"application/json\"> con payload.",
-          "sugerencia": "Pasale la data por JSON al host: <is-date-picker><script type=\"application/json\">{…}</script></is-date-picker>."
-        },
-        {
-          "categoria": "json-complejidad",
-          "severidad": "error",
-          "tag": "is-date-picker",
-          "ruta": "src/components/forms/date-picker.json",
-          "mensaje": "Demo de <is-date-picker> no declara <script type=\"application/json\"> con payload.",
-          "sugerencia": "Pasale la data por JSON al host: <is-date-picker><script type=\"application/json\">{…}</script></is-date-picker>."
-        },
-        {
-          "categoria": "json-complejidad",
-          "severidad": "error",
-          "tag": "is-date-picker",
-          "ruta": "src/components/forms/date-picker.json",
-          "mensaje": "Demo de <is-date-picker> no declara <script type=\"application/json\"> con payload.",
-          "sugerencia": "Pasale la data por JSON al host: <is-date-picker><script type=\"application/json\">{…}</script></is-date-picker>."
-        },
-        {
-          "categoria": "json-complejidad",
-          "severidad": "error",
-          "tag": "is-date-picker",
-          "ruta": "src/components/forms/date-picker.json",
-          "mensaje": "Demo de <is-date-picker> no declara <script type=\"application/json\"> con payload.",
-          "sugerencia": "Pasale la data por JSON al host: <is-date-picker><script type=\"application/json\">{…}</script></is-date-picker>."
-        },
-        {
-          "categoria": "json-complejidad",
-          "severidad": "error",
-          "tag": "is-date-picker",
-          "ruta": "src/components/forms/date-picker.json",
-          "mensaje": "Demo de <is-month-calendar> no declara <script type=\"application/json\"> con payload.",
-          "sugerencia": "Pasale la data por JSON al host: <is-month-calendar><script type=\"application/json\">{…}</script></is-month-calendar>."
-        },
-        {
-          "categoria": "json-complejidad",
-          "severidad": "error",
-          "tag": "is-date-picker",
-          "ruta": "src/components/forms/date-picker.json",
-          "mensaje": "Demo de <is-year-calendar> no declara <script type=\"application/json\"> con payload.",
-          "sugerencia": "Pasale la data por JSON al host: <is-year-calendar><script type=\"application/json\">{…}</script></is-year-calendar>."
-        }
-      ],
+      "hallazgos": [],
       "metricas": {
         "secciones": 7,
         "bloques": 9,
@@ -1929,25 +1703,16 @@
       "tag": "is-month-calendar",
       "titulo": "Month Calendar",
       "categoria": "forms",
-      "estado": "fail",
+      "estado": "ok",
       "rutaJson": "src/components/forms/month-calendar.json",
       "rutaModulo": "src/components/forms/month-calendar.ts",
       "conteo": {
         "fatal": 0,
-        "error": 1,
+        "error": 0,
         "warn": 0,
         "info": 0
       },
-      "hallazgos": [
-        {
-          "categoria": "json-complejidad",
-          "severidad": "error",
-          "tag": "is-month-calendar",
-          "ruta": "src/components/forms/month-calendar.json",
-          "mensaje": "Demo de <is-month-calendar> no declara <script type=\"application/json\"> con payload.",
-          "sugerencia": "Pasale la data por JSON al host: <is-month-calendar><script type=\"application/json\">{…}</script></is-month-calendar>."
-        }
-      ],
+      "hallazgos": [],
       "metricas": {
         "secciones": 2,
         "bloques": 3,
@@ -1959,25 +1724,16 @@
       "tag": "is-year-calendar",
       "titulo": "Year Calendar",
       "categoria": "forms",
-      "estado": "fail",
+      "estado": "ok",
       "rutaJson": "src/components/forms/year-calendar.json",
       "rutaModulo": "src/components/forms/year-calendar.ts",
       "conteo": {
         "fatal": 0,
-        "error": 1,
+        "error": 0,
         "warn": 0,
         "info": 0
       },
-      "hallazgos": [
-        {
-          "categoria": "json-complejidad",
-          "severidad": "error",
-          "tag": "is-year-calendar",
-          "ruta": "src/components/forms/year-calendar.json",
-          "mensaje": "Demo de <is-year-calendar> no declara <script type=\"application/json\"> con payload.",
-          "sugerencia": "Pasale la data por JSON al host: <is-year-calendar><script type=\"application/json\">{…}</script></is-year-calendar>."
-        }
-      ],
+      "hallazgos": [],
       "metricas": {
         "secciones": 2,
         "bloques": 3,
@@ -2052,80 +1808,16 @@
       "tag": "is-date-field",
       "titulo": "Date Field",
       "categoria": "forms",
-      "estado": "fail",
+      "estado": "ok",
       "rutaJson": "src/components/forms/date-field.json",
       "rutaModulo": "src/components/forms/date-field.ts",
       "conteo": {
         "fatal": 0,
-        "error": 1,
-        "warn": 7,
+        "error": 0,
+        "warn": 0,
         "info": 0
       },
-      "hallazgos": [
-        {
-          "categoria": "consistencia",
-          "severidad": "error",
-          "tag": "is-date-field",
-          "ruta": "C:\\ContaPyme\\Personal\\apps\\is-webcomponents\\src\\components\\forms\\date-field.ts",
-          "mensaje": "Módulo del componente no llama customElements.define('is-date-field', …). El JSON declara demos de <is-date-field> pero el tag nunca se registra."
-        },
-        {
-          "categoria": "consistencia",
-          "severidad": "warn",
-          "tag": "is-date-field",
-          "ruta": "C:\\ContaPyme\\Personal\\apps\\is-webcomponents\\src\\components\\forms\\date-field.ts",
-          "mensaje": "Control \"label\" (prop=\"attr:label\") en src/components/forms/date-field.json#sections[0].blocks[0].controls[0] apunta a un atributo que el módulo no declara como observado.",
-          "sugerencia": "Agregá 'label' al array devuelto por static get observedAttributes()."
-        },
-        {
-          "categoria": "consistencia",
-          "severidad": "warn",
-          "tag": "is-date-field",
-          "ruta": "C:\\ContaPyme\\Personal\\apps\\is-webcomponents\\src\\components\\forms\\date-field.ts",
-          "mensaje": "Control \"value\" (prop=\"attr:value\") en src/components/forms/date-field.json#sections[0].blocks[0].controls[1] apunta a un atributo que el módulo no declara como observado.",
-          "sugerencia": "Agregá 'value' al array devuelto por static get observedAttributes()."
-        },
-        {
-          "categoria": "consistencia",
-          "severidad": "warn",
-          "tag": "is-date-field",
-          "ruta": "C:\\ContaPyme\\Personal\\apps\\is-webcomponents\\src\\components\\forms\\date-field.ts",
-          "mensaje": "Control \"locale\" (prop=\"attr:locale\") en src/components/forms/date-field.json#sections[0].blocks[0].controls[2] apunta a un atributo que el módulo no declara como observado.",
-          "sugerencia": "Agregá 'locale' al array devuelto por static get observedAttributes()."
-        },
-        {
-          "categoria": "consistencia",
-          "severidad": "warn",
-          "tag": "is-date-field",
-          "ruta": "C:\\ContaPyme\\Personal\\apps\\is-webcomponents\\src\\components\\forms\\date-field.ts",
-          "mensaje": "Control \"clearable\" (prop=\"attr:clearable\") en src/components/forms/date-field.json#sections[0].blocks[0].controls[3] apunta a un atributo que el módulo no declara como observado.",
-          "sugerencia": "Agregá 'clearable' al array devuelto por static get observedAttributes()."
-        },
-        {
-          "categoria": "consistencia",
-          "severidad": "warn",
-          "tag": "is-date-field",
-          "ruta": "C:\\ContaPyme\\Personal\\apps\\is-webcomponents\\src\\components\\forms\\date-field.ts",
-          "mensaje": "Control \"required\" (prop=\"attr:required\") en src/components/forms/date-field.json#sections[0].blocks[0].controls[4] apunta a un atributo que el módulo no declara como observado.",
-          "sugerencia": "Agregá 'required' al array devuelto por static get observedAttributes()."
-        },
-        {
-          "categoria": "consistencia",
-          "severidad": "warn",
-          "tag": "is-date-field",
-          "ruta": "C:\\ContaPyme\\Personal\\apps\\is-webcomponents\\src\\components\\forms\\date-field.ts",
-          "mensaje": "Control \"min\" (prop=\"attr:min\") en src/components/forms/date-field.json#sections[0].blocks[0].controls[5] apunta a un atributo que el módulo no declara como observado.",
-          "sugerencia": "Agregá 'min' al array devuelto por static get observedAttributes()."
-        },
-        {
-          "categoria": "consistencia",
-          "severidad": "warn",
-          "tag": "is-date-field",
-          "ruta": "C:\\ContaPyme\\Personal\\apps\\is-webcomponents\\src\\components\\forms\\date-field.ts",
-          "mensaje": "Control \"readonly\" (prop=\"attr:readonly\") en src/components/forms/date-field.json#sections[0].blocks[0].controls[6] apunta a un atributo que el módulo no declara como observado.",
-          "sugerencia": "Agregá 'readonly' al array devuelto por static get observedAttributes()."
-        }
-      ],
+      "hallazgos": [],
       "metricas": {
         "secciones": 5,
         "bloques": 6,
@@ -2137,32 +1829,16 @@
       "tag": "is-time-field",
       "titulo": "Time Field",
       "categoria": "forms",
-      "estado": "fail",
+      "estado": "ok",
       "rutaJson": "src/components/forms/time-field.json",
       "rutaModulo": "src/components/forms/time-field.ts",
       "conteo": {
         "fatal": 0,
-        "error": 1,
-        "warn": 1,
+        "error": 0,
+        "warn": 0,
         "info": 0
       },
-      "hallazgos": [
-        {
-          "categoria": "consistencia",
-          "severidad": "error",
-          "tag": "is-time-field",
-          "ruta": "C:\\ContaPyme\\Personal\\apps\\is-webcomponents\\src\\components\\forms\\time-field.ts",
-          "mensaje": "Módulo del componente no llama customElements.define('is-time-field', …). El JSON declara demos de <is-time-field> pero el tag nunca se registra."
-        },
-        {
-          "categoria": "consistencia",
-          "severidad": "warn",
-          "tag": "is-time-field",
-          "ruta": "C:\\ContaPyme\\Personal\\apps\\is-webcomponents\\src\\components\\forms\\time-field.ts",
-          "mensaje": "Control \"value\" (prop=\"attr:value\") en src/components/forms/time-field.json#sections[0].blocks[0].controls[0] apunta a un atributo que el módulo no declara como observado.",
-          "sugerencia": "Agregá 'value' al array devuelto por static get observedAttributes()."
-        }
-      ],
+      "hallazgos": [],
       "metricas": {
         "secciones": 2,
         "bloques": 3,
@@ -2174,32 +1850,16 @@
       "tag": "is-date-time-field",
       "titulo": "Date Time Field",
       "categoria": "forms",
-      "estado": "fail",
+      "estado": "ok",
       "rutaJson": "src/components/forms/date-time-field.json",
       "rutaModulo": "src/components/forms/date-time-field.ts",
       "conteo": {
         "fatal": 0,
-        "error": 1,
-        "warn": 1,
+        "error": 0,
+        "warn": 0,
         "info": 0
       },
-      "hallazgos": [
-        {
-          "categoria": "consistencia",
-          "severidad": "error",
-          "tag": "is-date-time-field",
-          "ruta": "C:\\ContaPyme\\Personal\\apps\\is-webcomponents\\src\\components\\forms\\date-time-field.ts",
-          "mensaje": "Módulo del componente no llama customElements.define('is-date-time-field', …). El JSON declara demos de <is-date-time-field> pero el tag nunca se registra."
-        },
-        {
-          "categoria": "consistencia",
-          "severidad": "warn",
-          "tag": "is-date-time-field",
-          "ruta": "C:\\ContaPyme\\Personal\\apps\\is-webcomponents\\src\\components\\forms\\date-time-field.ts",
-          "mensaje": "Control \"value\" (prop=\"attr:value\") en src/components/forms/date-time-field.json#sections[0].blocks[0].controls[0] apunta a un atributo que el módulo no declara como observado.",
-          "sugerencia": "Agregá 'value' al array devuelto por static get observedAttributes()."
-        }
-      ],
+      "hallazgos": [],
       "metricas": {
         "secciones": 2,
         "bloques": 3,
@@ -2211,64 +1871,16 @@
       "tag": "is-date-input",
       "titulo": "Date Input",
       "categoria": "forms",
-      "estado": "fail",
+      "estado": "ok",
       "rutaJson": "src/components/forms/date-input.json",
       "rutaModulo": "src/components/forms/date-input.ts",
       "conteo": {
         "fatal": 0,
-        "error": 1,
-        "warn": 5,
+        "error": 0,
+        "warn": 0,
         "info": 0
       },
-      "hallazgos": [
-        {
-          "categoria": "consistencia",
-          "severidad": "error",
-          "tag": "is-date-input",
-          "ruta": "C:\\ContaPyme\\Personal\\apps\\is-webcomponents\\src\\components\\forms\\date-input.ts",
-          "mensaje": "Módulo del componente no llama customElements.define('is-date-input', …). El JSON declara demos de <is-date-input> pero el tag nunca se registra."
-        },
-        {
-          "categoria": "consistencia",
-          "severidad": "warn",
-          "tag": "is-date-input",
-          "ruta": "C:\\ContaPyme\\Personal\\apps\\is-webcomponents\\src\\components\\forms\\date-input.ts",
-          "mensaje": "Control \"label\" (prop=\"attr:label\") en src/components/forms/date-input.json#sections[0].blocks[0].controls[0] apunta a un atributo que el módulo no declara como observado.",
-          "sugerencia": "Agregá 'label' al array devuelto por static get observedAttributes()."
-        },
-        {
-          "categoria": "consistencia",
-          "severidad": "warn",
-          "tag": "is-date-input",
-          "ruta": "C:\\ContaPyme\\Personal\\apps\\is-webcomponents\\src\\components\\forms\\date-input.ts",
-          "mensaje": "Control \"value\" (prop=\"attr:value\") en src/components/forms/date-input.json#sections[0].blocks[0].controls[1] apunta a un atributo que el módulo no declara como observado.",
-          "sugerencia": "Agregá 'value' al array devuelto por static get observedAttributes()."
-        },
-        {
-          "categoria": "consistencia",
-          "severidad": "warn",
-          "tag": "is-date-input",
-          "ruta": "C:\\ContaPyme\\Personal\\apps\\is-webcomponents\\src\\components\\forms\\date-input.ts",
-          "mensaje": "Control \"locale\" (prop=\"attr:locale\") en src/components/forms/date-input.json#sections[0].blocks[0].controls[2] apunta a un atributo que el módulo no declara como observado.",
-          "sugerencia": "Agregá 'locale' al array devuelto por static get observedAttributes()."
-        },
-        {
-          "categoria": "consistencia",
-          "severidad": "warn",
-          "tag": "is-date-input",
-          "ruta": "C:\\ContaPyme\\Personal\\apps\\is-webcomponents\\src\\components\\forms\\date-input.ts",
-          "mensaje": "Control \"clearable\" (prop=\"attr:clearable\") en src/components/forms/date-input.json#sections[0].blocks[0].controls[3] apunta a un atributo que el módulo no declara como observado.",
-          "sugerencia": "Agregá 'clearable' al array devuelto por static get observedAttributes()."
-        },
-        {
-          "categoria": "consistencia",
-          "severidad": "warn",
-          "tag": "is-date-input",
-          "ruta": "C:\\ContaPyme\\Personal\\apps\\is-webcomponents\\src\\components\\forms\\date-input.ts",
-          "mensaje": "Control \"action-bar\" (prop=\"attr:action-bar\") en src/components/forms/date-input.json#sections[0].blocks[0].controls[4] apunta a un atributo que el módulo no declara como observado.",
-          "sugerencia": "Agregá 'action-bar' al array devuelto por static get observedAttributes()."
-        }
-      ],
+      "hallazgos": [],
       "metricas": {
         "secciones": 6,
         "bloques": 7,
@@ -2280,40 +1892,16 @@
       "tag": "is-time-input",
       "titulo": "Time Input",
       "categoria": "forms",
-      "estado": "fail",
+      "estado": "ok",
       "rutaJson": "src/components/forms/time-input.json",
       "rutaModulo": "src/components/forms/time-input.ts",
       "conteo": {
         "fatal": 0,
-        "error": 1,
-        "warn": 2,
+        "error": 0,
+        "warn": 0,
         "info": 0
       },
-      "hallazgos": [
-        {
-          "categoria": "consistencia",
-          "severidad": "error",
-          "tag": "is-time-input",
-          "ruta": "C:\\ContaPyme\\Personal\\apps\\is-webcomponents\\src\\components\\forms\\time-input.ts",
-          "mensaje": "Módulo del componente no llama customElements.define('is-time-input', …). El JSON declara demos de <is-time-input> pero el tag nunca se registra."
-        },
-        {
-          "categoria": "consistencia",
-          "severidad": "warn",
-          "tag": "is-time-input",
-          "ruta": "C:\\ContaPyme\\Personal\\apps\\is-webcomponents\\src\\components\\forms\\time-input.ts",
-          "mensaje": "Control \"label\" (prop=\"attr:label\") en src/components/forms/time-input.json#sections[0].blocks[0].controls[0] apunta a un atributo que el módulo no declara como observado.",
-          "sugerencia": "Agregá 'label' al array devuelto por static get observedAttributes()."
-        },
-        {
-          "categoria": "consistencia",
-          "severidad": "warn",
-          "tag": "is-time-input",
-          "ruta": "C:\\ContaPyme\\Personal\\apps\\is-webcomponents\\src\\components\\forms\\time-input.ts",
-          "mensaje": "Control \"value\" (prop=\"attr:value\") en src/components/forms/time-input.json#sections[0].blocks[0].controls[1] apunta a un atributo que el módulo no declara como observado.",
-          "sugerencia": "Agregá 'value' al array devuelto por static get observedAttributes()."
-        }
-      ],
+      "hallazgos": [],
       "metricas": {
         "secciones": 2,
         "bloques": 3,
@@ -2325,40 +1913,16 @@
       "tag": "is-date-time-input",
       "titulo": "Date Time Input",
       "categoria": "forms",
-      "estado": "fail",
+      "estado": "ok",
       "rutaJson": "src/components/forms/date-time-input.json",
       "rutaModulo": "src/components/forms/date-time-input.ts",
       "conteo": {
         "fatal": 0,
-        "error": 1,
-        "warn": 2,
+        "error": 0,
+        "warn": 0,
         "info": 0
       },
-      "hallazgos": [
-        {
-          "categoria": "consistencia",
-          "severidad": "error",
-          "tag": "is-date-time-input",
-          "ruta": "C:\\ContaPyme\\Personal\\apps\\is-webcomponents\\src\\components\\forms\\date-time-input.ts",
-          "mensaje": "Módulo del componente no llama customElements.define('is-date-time-input', …). El JSON declara demos de <is-date-time-input> pero el tag nunca se registra."
-        },
-        {
-          "categoria": "consistencia",
-          "severidad": "warn",
-          "tag": "is-date-time-input",
-          "ruta": "C:\\ContaPyme\\Personal\\apps\\is-webcomponents\\src\\components\\forms\\date-time-input.ts",
-          "mensaje": "Control \"label\" (prop=\"attr:label\") en src/components/forms/date-time-input.json#sections[0].blocks[0].controls[0] apunta a un atributo que el módulo no declara como observado.",
-          "sugerencia": "Agregá 'label' al array devuelto por static get observedAttributes()."
-        },
-        {
-          "categoria": "consistencia",
-          "severidad": "warn",
-          "tag": "is-date-time-input",
-          "ruta": "C:\\ContaPyme\\Personal\\apps\\is-webcomponents\\src\\components\\forms\\date-time-input.ts",
-          "mensaje": "Control \"value\" (prop=\"attr:value\") en src/components/forms/date-time-input.json#sections[0].blocks[0].controls[1] apunta a un atributo que el módulo no declara como observado.",
-          "sugerencia": "Agregá 'value' al array devuelto por static get observedAttributes()."
-        }
-      ],
+      "hallazgos": [],
       "metricas": {
         "secciones": 2,
         "bloques": 3,
@@ -2370,48 +1934,16 @@
       "tag": "is-date-range-input",
       "titulo": "Date Range Input",
       "categoria": "forms",
-      "estado": "fail",
+      "estado": "ok",
       "rutaJson": "src/components/forms/date-range-input.json",
       "rutaModulo": "src/components/forms/date-range-input.ts",
       "conteo": {
         "fatal": 0,
-        "error": 1,
-        "warn": 3,
+        "error": 0,
+        "warn": 0,
         "info": 0
       },
-      "hallazgos": [
-        {
-          "categoria": "consistencia",
-          "severidad": "error",
-          "tag": "is-date-range-input",
-          "ruta": "C:\\ContaPyme\\Personal\\apps\\is-webcomponents\\src\\components\\forms\\date-range-input.ts",
-          "mensaje": "Módulo del componente no llama customElements.define('is-date-range-input', …). El JSON declara demos de <is-date-range-input> pero el tag nunca se registra."
-        },
-        {
-          "categoria": "consistencia",
-          "severidad": "warn",
-          "tag": "is-date-range-input",
-          "ruta": "C:\\ContaPyme\\Personal\\apps\\is-webcomponents\\src\\components\\forms\\date-range-input.ts",
-          "mensaje": "Control \"label\" (prop=\"attr:label\") en src/components/forms/date-range-input.json#sections[0].blocks[0].controls[0] apunta a un atributo que el módulo no declara como observado.",
-          "sugerencia": "Agregá 'label' al array devuelto por static get observedAttributes()."
-        },
-        {
-          "categoria": "consistencia",
-          "severidad": "warn",
-          "tag": "is-date-range-input",
-          "ruta": "C:\\ContaPyme\\Personal\\apps\\is-webcomponents\\src\\components\\forms\\date-range-input.ts",
-          "mensaje": "Control \"start\" (prop=\"attr:start\") en src/components/forms/date-range-input.json#sections[0].blocks[0].controls[1] apunta a un atributo que el módulo no declara como observado.",
-          "sugerencia": "Agregá 'start' al array devuelto por static get observedAttributes()."
-        },
-        {
-          "categoria": "consistencia",
-          "severidad": "warn",
-          "tag": "is-date-range-input",
-          "ruta": "C:\\ContaPyme\\Personal\\apps\\is-webcomponents\\src\\components\\forms\\date-range-input.ts",
-          "mensaje": "Control \"end\" (prop=\"attr:end\") en src/components/forms/date-range-input.json#sections[0].blocks[0].controls[2] apunta a un atributo que el módulo no declara como observado.",
-          "sugerencia": "Agregá 'end' al array devuelto por static get observedAttributes()."
-        }
-      ],
+      "hallazgos": [],
       "metricas": {
         "secciones": 2,
         "bloques": 3,
@@ -2423,126 +1955,16 @@
       "tag": "is-data-grid",
       "titulo": "Data Grid",
       "categoria": "data",
-      "estado": "fail",
+      "estado": "ok",
       "rutaJson": "src/components/data/data-grid.json",
       "rutaModulo": "src/components/data/data-grid.ts",
       "conteo": {
         "fatal": 0,
-        "error": 14,
+        "error": 0,
         "warn": 0,
         "info": 0
       },
-      "hallazgos": [
-        {
-          "categoria": "json-schema",
-          "severidad": "error",
-          "tag": "is-data-grid",
-          "mensaje": "sections[0].blocks[2].code: bloque code sin texto."
-        },
-        {
-          "categoria": "json-complejidad",
-          "severidad": "error",
-          "tag": "is-data-grid",
-          "ruta": "src/components/data/data-grid.json",
-          "mensaje": "Demo de <is-data-grid> no declara <script type=\"application/json\"> con payload.",
-          "sugerencia": "Pasale la data por JSON al host: <is-data-grid><script type=\"application/json\">{…}</script></is-data-grid>."
-        },
-        {
-          "categoria": "json-contenido",
-          "severidad": "error",
-          "tag": "is-data-grid",
-          "ruta": "src/components/data/data-grid.json",
-          "mensaje": "Bloque code en sections[0].blocks[2] está vacío."
-        },
-        {
-          "categoria": "json-complejidad",
-          "severidad": "error",
-          "tag": "is-data-grid",
-          "ruta": "src/components/data/data-grid.json",
-          "mensaje": "Demo de <is-data-grid> no declara <script type=\"application/json\"> con payload.",
-          "sugerencia": "Pasale la data por JSON al host: <is-data-grid><script type=\"application/json\">{…}</script></is-data-grid>."
-        },
-        {
-          "categoria": "json-complejidad",
-          "severidad": "error",
-          "tag": "is-data-grid",
-          "ruta": "src/components/data/data-grid.json",
-          "mensaje": "Demo de <is-data-grid> no declara <script type=\"application/json\"> con payload.",
-          "sugerencia": "Pasale la data por JSON al host: <is-data-grid><script type=\"application/json\">{…}</script></is-data-grid>."
-        },
-        {
-          "categoria": "json-complejidad",
-          "severidad": "error",
-          "tag": "is-data-grid",
-          "ruta": "src/components/data/data-grid.json",
-          "mensaje": "Demo de <is-data-grid> no declara <script type=\"application/json\"> con payload.",
-          "sugerencia": "Pasale la data por JSON al host: <is-data-grid><script type=\"application/json\">{…}</script></is-data-grid>."
-        },
-        {
-          "categoria": "json-complejidad",
-          "severidad": "error",
-          "tag": "is-data-grid",
-          "ruta": "src/components/data/data-grid.json",
-          "mensaje": "Demo de <is-data-grid> no declara <script type=\"application/json\"> con payload.",
-          "sugerencia": "Pasale la data por JSON al host: <is-data-grid><script type=\"application/json\">{…}</script></is-data-grid>."
-        },
-        {
-          "categoria": "json-complejidad",
-          "severidad": "error",
-          "tag": "is-data-grid",
-          "ruta": "src/components/data/data-grid.json",
-          "mensaje": "Demo de <is-data-grid> no declara <script type=\"application/json\"> con payload.",
-          "sugerencia": "Pasale la data por JSON al host: <is-data-grid><script type=\"application/json\">{…}</script></is-data-grid>."
-        },
-        {
-          "categoria": "json-complejidad",
-          "severidad": "error",
-          "tag": "is-data-grid",
-          "ruta": "src/components/data/data-grid.json",
-          "mensaje": "Demo de <is-data-grid> no declara <script type=\"application/json\"> con payload.",
-          "sugerencia": "Pasale la data por JSON al host: <is-data-grid><script type=\"application/json\">{…}</script></is-data-grid>."
-        },
-        {
-          "categoria": "json-complejidad",
-          "severidad": "error",
-          "tag": "is-data-grid",
-          "ruta": "src/components/data/data-grid.json",
-          "mensaje": "Demo de <is-data-grid> no declara <script type=\"application/json\"> con payload.",
-          "sugerencia": "Pasale la data por JSON al host: <is-data-grid><script type=\"application/json\">{…}</script></is-data-grid>."
-        },
-        {
-          "categoria": "json-complejidad",
-          "severidad": "error",
-          "tag": "is-data-grid",
-          "ruta": "src/components/data/data-grid.json",
-          "mensaje": "Demo de <is-data-grid> no declara <script type=\"application/json\"> con payload.",
-          "sugerencia": "Pasale la data por JSON al host: <is-data-grid><script type=\"application/json\">{…}</script></is-data-grid>."
-        },
-        {
-          "categoria": "json-complejidad",
-          "severidad": "error",
-          "tag": "is-data-grid",
-          "ruta": "src/components/data/data-grid.json",
-          "mensaje": "Demo de <is-data-grid> no declara <script type=\"application/json\"> con payload.",
-          "sugerencia": "Pasale la data por JSON al host: <is-data-grid><script type=\"application/json\">{…}</script></is-data-grid>."
-        },
-        {
-          "categoria": "json-complejidad",
-          "severidad": "error",
-          "tag": "is-data-grid",
-          "ruta": "src/components/data/data-grid.json",
-          "mensaje": "Demo de <is-data-grid> no declara <script type=\"application/json\"> con payload.",
-          "sugerencia": "Pasale la data por JSON al host: <is-data-grid><script type=\"application/json\">{…}</script></is-data-grid>."
-        },
-        {
-          "categoria": "json-complejidad",
-          "severidad": "error",
-          "tag": "is-data-grid",
-          "ruta": "src/components/data/data-grid.json",
-          "mensaje": "Demo de <is-data-grid> no declara <script type=\"application/json\"> con payload.",
-          "sugerencia": "Pasale la data por JSON al host: <is-data-grid><script type=\"application/json\">{…}</script></is-data-grid>."
-        }
-      ],
+      "hallazgos": [],
       "metricas": {
         "secciones": 14,
         "bloques": 33,
@@ -2554,25 +1976,16 @@
       "tag": "is-chart",
       "titulo": "Chart",
       "categoria": "data-viz",
-      "estado": "fail",
+      "estado": "ok",
       "rutaJson": "src/components/charts/chart.json",
       "rutaModulo": "src/components/charts/chart.ts",
       "conteo": {
         "fatal": 0,
-        "error": 1,
+        "error": 0,
         "warn": 0,
         "info": 0
       },
-      "hallazgos": [
-        {
-          "categoria": "json-complejidad",
-          "severidad": "error",
-          "tag": "is-chart",
-          "ruta": "src/components/charts/chart.json",
-          "mensaje": "Demo de <is-chart> no declara <script type=\"application/json\"> con payload.",
-          "sugerencia": "Pasale la data por JSON al host: <is-chart><script type=\"application/json\">{…}</script></is-chart>."
-        }
-      ],
+      "hallazgos": [],
       "metricas": {
         "secciones": 7,
         "bloques": 19,
@@ -2584,48 +1997,16 @@
       "tag": "is-bar-chart",
       "titulo": "Bar Chart",
       "categoria": "data-viz",
-      "estado": "fail",
+      "estado": "ok",
       "rutaJson": "src/components/charts/bar-chart.json",
       "rutaModulo": "src/components/charts/bar-chart.ts",
       "conteo": {
         "fatal": 0,
-        "error": 1,
-        "warn": 3,
+        "error": 0,
+        "warn": 0,
         "info": 0
       },
-      "hallazgos": [
-        {
-          "categoria": "consistencia",
-          "severidad": "error",
-          "tag": "is-bar-chart",
-          "ruta": "C:\\ContaPyme\\Personal\\apps\\is-webcomponents\\src\\components\\charts\\bar-chart.ts",
-          "mensaje": "Módulo del componente no llama customElements.define('is-bar-chart', …). El JSON declara demos de <is-bar-chart> pero el tag nunca se registra."
-        },
-        {
-          "categoria": "consistencia",
-          "severidad": "warn",
-          "tag": "is-bar-chart",
-          "ruta": "C:\\ContaPyme\\Personal\\apps\\is-webcomponents\\src\\components\\charts\\bar-chart.ts",
-          "mensaje": "Módulo no usa guard idempotente (customElements.get(tag)). Llamar el módulo dos veces rompe.",
-          "sugerencia": "Envolvé customElements.define en `if (!customElements.get(tag)) customElements.define(...)`."
-        },
-        {
-          "categoria": "consistencia",
-          "severidad": "warn",
-          "tag": "is-bar-chart",
-          "ruta": "C:\\ContaPyme\\Personal\\apps\\is-webcomponents\\src\\components\\charts\\bar-chart.ts",
-          "mensaje": "Control \"open-on-click\" (prop=\"attr:open-on-click\") en src/components/charts/bar-chart.json#sections[0].blocks[0].controls[0] apunta a un atributo que el módulo no declara como observado.",
-          "sugerencia": "Agregá 'open-on-click' al array devuelto por static get observedAttributes()."
-        },
-        {
-          "categoria": "consistencia",
-          "severidad": "warn",
-          "tag": "is-bar-chart",
-          "ruta": "C:\\ContaPyme\\Personal\\apps\\is-webcomponents\\src\\components\\charts\\bar-chart.ts",
-          "mensaje": "Control \"stacked\" (prop=\"attr:stacked\") en src/components/charts/bar-chart.json#sections[0].blocks[0].controls[1] apunta a un atributo que el módulo no declara como observado.",
-          "sugerencia": "Agregá 'stacked' al array devuelto por static get observedAttributes()."
-        }
-      ],
+      "hallazgos": [],
       "metricas": {
         "secciones": 1,
         "bloques": 1,
@@ -2637,40 +2018,16 @@
       "tag": "is-line-chart",
       "titulo": "Line Chart",
       "categoria": "data-viz",
-      "estado": "fail",
+      "estado": "ok",
       "rutaJson": "src/components/charts/line-chart.json",
       "rutaModulo": "src/components/charts/line-chart.ts",
       "conteo": {
         "fatal": 0,
-        "error": 1,
-        "warn": 2,
+        "error": 0,
+        "warn": 0,
         "info": 0
       },
-      "hallazgos": [
-        {
-          "categoria": "consistencia",
-          "severidad": "error",
-          "tag": "is-line-chart",
-          "ruta": "C:\\ContaPyme\\Personal\\apps\\is-webcomponents\\src\\components\\charts\\line-chart.ts",
-          "mensaje": "Módulo del componente no llama customElements.define('is-line-chart', …). El JSON declara demos de <is-line-chart> pero el tag nunca se registra."
-        },
-        {
-          "categoria": "consistencia",
-          "severidad": "warn",
-          "tag": "is-line-chart",
-          "ruta": "C:\\ContaPyme\\Personal\\apps\\is-webcomponents\\src\\components\\charts\\line-chart.ts",
-          "mensaje": "Módulo no usa guard idempotente (customElements.get(tag)). Llamar el módulo dos veces rompe.",
-          "sugerencia": "Envolvé customElements.define en `if (!customElements.get(tag)) customElements.define(...)`."
-        },
-        {
-          "categoria": "consistencia",
-          "severidad": "warn",
-          "tag": "is-line-chart",
-          "ruta": "C:\\ContaPyme\\Personal\\apps\\is-webcomponents\\src\\components\\charts\\line-chart.ts",
-          "mensaje": "Control \"open-on-click\" (prop=\"attr:open-on-click\") en src/components/charts/line-chart.json#sections[0].blocks[0].controls[0] apunta a un atributo que el módulo no declara como observado.",
-          "sugerencia": "Agregá 'open-on-click' al array devuelto por static get observedAttributes()."
-        }
-      ],
+      "hallazgos": [],
       "metricas": {
         "secciones": 1,
         "bloques": 1,
@@ -2682,40 +2039,16 @@
       "tag": "is-pie-chart",
       "titulo": "Pie Chart",
       "categoria": "data-viz",
-      "estado": "fail",
+      "estado": "ok",
       "rutaJson": "src/components/charts/pie-chart.json",
       "rutaModulo": "src/components/charts/pie-chart.ts",
       "conteo": {
         "fatal": 0,
-        "error": 1,
-        "warn": 2,
+        "error": 0,
+        "warn": 0,
         "info": 0
       },
-      "hallazgos": [
-        {
-          "categoria": "consistencia",
-          "severidad": "error",
-          "tag": "is-pie-chart",
-          "ruta": "C:\\ContaPyme\\Personal\\apps\\is-webcomponents\\src\\components\\charts\\pie-chart.ts",
-          "mensaje": "Módulo del componente no llama customElements.define('is-pie-chart', …). El JSON declara demos de <is-pie-chart> pero el tag nunca se registra."
-        },
-        {
-          "categoria": "consistencia",
-          "severidad": "warn",
-          "tag": "is-pie-chart",
-          "ruta": "C:\\ContaPyme\\Personal\\apps\\is-webcomponents\\src\\components\\charts\\pie-chart.ts",
-          "mensaje": "Módulo no usa guard idempotente (customElements.get(tag)). Llamar el módulo dos veces rompe.",
-          "sugerencia": "Envolvé customElements.define en `if (!customElements.get(tag)) customElements.define(...)`."
-        },
-        {
-          "categoria": "consistencia",
-          "severidad": "warn",
-          "tag": "is-pie-chart",
-          "ruta": "C:\\ContaPyme\\Personal\\apps\\is-webcomponents\\src\\components\\charts\\pie-chart.ts",
-          "mensaje": "Control \"open-on-click\" (prop=\"attr:open-on-click\") en src/components/charts/pie-chart.json#sections[0].blocks[0].controls[0] apunta a un atributo que el módulo no declara como observado.",
-          "sugerencia": "Agregá 'open-on-click' al array devuelto por static get observedAttributes()."
-        }
-      ],
+      "hallazgos": [],
       "metricas": {
         "secciones": 1,
         "bloques": 1,
@@ -2727,40 +2060,16 @@
       "tag": "is-doughnut-chart",
       "titulo": "Doughnut Chart",
       "categoria": "data-viz",
-      "estado": "fail",
+      "estado": "ok",
       "rutaJson": "src/components/charts/doughnut-chart.json",
       "rutaModulo": "src/components/charts/doughnut-chart.ts",
       "conteo": {
         "fatal": 0,
-        "error": 1,
-        "warn": 2,
+        "error": 0,
+        "warn": 0,
         "info": 0
       },
-      "hallazgos": [
-        {
-          "categoria": "consistencia",
-          "severidad": "error",
-          "tag": "is-doughnut-chart",
-          "ruta": "C:\\ContaPyme\\Personal\\apps\\is-webcomponents\\src\\components\\charts\\doughnut-chart.ts",
-          "mensaje": "Módulo del componente no llama customElements.define('is-doughnut-chart', …). El JSON declara demos de <is-doughnut-chart> pero el tag nunca se registra."
-        },
-        {
-          "categoria": "consistencia",
-          "severidad": "warn",
-          "tag": "is-doughnut-chart",
-          "ruta": "C:\\ContaPyme\\Personal\\apps\\is-webcomponents\\src\\components\\charts\\doughnut-chart.ts",
-          "mensaje": "Módulo no usa guard idempotente (customElements.get(tag)). Llamar el módulo dos veces rompe.",
-          "sugerencia": "Envolvé customElements.define en `if (!customElements.get(tag)) customElements.define(...)`."
-        },
-        {
-          "categoria": "consistencia",
-          "severidad": "warn",
-          "tag": "is-doughnut-chart",
-          "ruta": "C:\\ContaPyme\\Personal\\apps\\is-webcomponents\\src\\components\\charts\\doughnut-chart.ts",
-          "mensaje": "Control \"open-on-click\" (prop=\"attr:open-on-click\") en src/components/charts/doughnut-chart.json#sections[0].blocks[0].controls[0] apunta a un atributo que el módulo no declara como observado.",
-          "sugerencia": "Agregá 'open-on-click' al array devuelto por static get observedAttributes()."
-        }
-      ],
+      "hallazgos": [],
       "metricas": {
         "secciones": 1,
         "bloques": 1,
@@ -2772,72 +2081,16 @@
       "tag": "is-radar-chart",
       "titulo": "Radar Chart",
       "categoria": "data-viz",
-      "estado": "fail",
+      "estado": "ok",
       "rutaJson": "src/components/charts/radar-chart.json",
       "rutaModulo": "src/components/charts/radar-chart.ts",
       "conteo": {
         "fatal": 0,
-        "error": 3,
-        "warn": 4,
+        "error": 0,
+        "warn": 0,
         "info": 0
       },
-      "hallazgos": [
-        {
-          "categoria": "json-complejidad",
-          "severidad": "error",
-          "tag": "is-radar-chart",
-          "ruta": "src/components/charts/radar-chart.json",
-          "mensaje": "Demo de <is-radar-chart> no declara <script type=\"application/json\"> con payload.",
-          "sugerencia": "Pasale la data por JSON al host: <is-radar-chart><script type=\"application/json\">{…}</script></is-radar-chart>."
-        },
-        {
-          "categoria": "json-complejidad",
-          "severidad": "error",
-          "tag": "is-radar-chart",
-          "ruta": "src/components/charts/radar-chart.json",
-          "mensaje": "Demo de <is-radar-chart> no declara <script type=\"application/json\"> con payload.",
-          "sugerencia": "Pasale la data por JSON al host: <is-radar-chart><script type=\"application/json\">{…}</script></is-radar-chart>."
-        },
-        {
-          "categoria": "consistencia",
-          "severidad": "error",
-          "tag": "is-radar-chart",
-          "ruta": "C:\\ContaPyme\\Personal\\apps\\is-webcomponents\\src\\components\\charts\\radar-chart.ts",
-          "mensaje": "Módulo del componente no llama customElements.define('is-radar-chart', …). El JSON declara demos de <is-radar-chart> pero el tag nunca se registra."
-        },
-        {
-          "categoria": "consistencia",
-          "severidad": "warn",
-          "tag": "is-radar-chart",
-          "ruta": "C:\\ContaPyme\\Personal\\apps\\is-webcomponents\\src\\components\\charts\\radar-chart.ts",
-          "mensaje": "Módulo no usa guard idempotente (customElements.get(tag)). Llamar el módulo dos veces rompe.",
-          "sugerencia": "Envolvé customElements.define en `if (!customElements.get(tag)) customElements.define(...)`."
-        },
-        {
-          "categoria": "consistencia",
-          "severidad": "warn",
-          "tag": "is-radar-chart",
-          "ruta": "C:\\ContaPyme\\Personal\\apps\\is-webcomponents\\src\\components\\charts\\radar-chart.ts",
-          "mensaje": "Control \"open-on-click\" (prop=\"attr:open-on-click\") en src/components/charts/radar-chart.json#sections[0].blocks[1].controls[0] apunta a un atributo que el módulo no declara como observado.",
-          "sugerencia": "Agregá 'open-on-click' al array devuelto por static get observedAttributes()."
-        },
-        {
-          "categoria": "consistencia",
-          "severidad": "warn",
-          "tag": "is-radar-chart",
-          "ruta": "C:\\ContaPyme\\Personal\\apps\\is-webcomponents\\src\\components\\charts\\radar-chart.ts",
-          "mensaje": "Control \"label\" (prop=\"attr:label\") en src/components/charts/radar-chart.json#sections[0].blocks[1].controls[1] apunta a un atributo que el módulo no declara como observado.",
-          "sugerencia": "Agregá 'label' al array devuelto por static get observedAttributes()."
-        },
-        {
-          "categoria": "consistencia",
-          "severidad": "warn",
-          "tag": "is-radar-chart",
-          "ruta": "C:\\ContaPyme\\Personal\\apps\\is-webcomponents\\src\\components\\charts\\radar-chart.ts",
-          "mensaje": "Control \"legend-position\" (prop=\"attr:legend-position\") en src/components/charts/radar-chart.json#sections[0].blocks[1].controls[2] apunta a un atributo que el módulo no declara como observado.",
-          "sugerencia": "Agregá 'legend-position' al array devuelto por static get observedAttributes()."
-        }
-      ],
+      "hallazgos": [],
       "metricas": {
         "secciones": 6,
         "bloques": 11,
@@ -2849,72 +2102,16 @@
       "tag": "is-polar-area-chart",
       "titulo": "Polar Area Chart",
       "categoria": "data-viz",
-      "estado": "fail",
+      "estado": "ok",
       "rutaJson": "src/components/charts/polar-area-chart.json",
       "rutaModulo": "src/components/charts/polar-area-chart.ts",
       "conteo": {
         "fatal": 0,
-        "error": 1,
-        "warn": 6,
+        "error": 0,
+        "warn": 0,
         "info": 0
       },
-      "hallazgos": [
-        {
-          "categoria": "consistencia",
-          "severidad": "error",
-          "tag": "is-polar-area-chart",
-          "ruta": "C:\\ContaPyme\\Personal\\apps\\is-webcomponents\\src\\components\\charts\\polar-area-chart.ts",
-          "mensaje": "Módulo del componente no llama customElements.define('is-polar-area-chart', …). El JSON declara demos de <is-polar-area-chart> pero el tag nunca se registra."
-        },
-        {
-          "categoria": "consistencia",
-          "severidad": "warn",
-          "tag": "is-polar-area-chart",
-          "ruta": "C:\\ContaPyme\\Personal\\apps\\is-webcomponents\\src\\components\\charts\\polar-area-chart.ts",
-          "mensaje": "Módulo no usa guard idempotente (customElements.get(tag)). Llamar el módulo dos veces rompe.",
-          "sugerencia": "Envolvé customElements.define en `if (!customElements.get(tag)) customElements.define(...)`."
-        },
-        {
-          "categoria": "consistencia",
-          "severidad": "warn",
-          "tag": "is-polar-area-chart",
-          "ruta": "C:\\ContaPyme\\Personal\\apps\\is-webcomponents\\src\\components\\charts\\polar-area-chart.ts",
-          "mensaje": "Control \"open-on-click\" (prop=\"attr:open-on-click\") en src/components/charts/polar-area-chart.json#sections[0].blocks[0].controls[0] apunta a un atributo que el módulo no declara como observado.",
-          "sugerencia": "Agregá 'open-on-click' al array devuelto por static get observedAttributes()."
-        },
-        {
-          "categoria": "consistencia",
-          "severidad": "warn",
-          "tag": "is-polar-area-chart",
-          "ruta": "C:\\ContaPyme\\Personal\\apps\\is-webcomponents\\src\\components\\charts\\polar-area-chart.ts",
-          "mensaje": "Control \"label\" (prop=\"attr:label\") en src/components/charts/polar-area-chart.json#sections[0].blocks[0].controls[1] apunta a un atributo que el módulo no declara como observado.",
-          "sugerencia": "Agregá 'label' al array devuelto por static get observedAttributes()."
-        },
-        {
-          "categoria": "consistencia",
-          "severidad": "warn",
-          "tag": "is-polar-area-chart",
-          "ruta": "C:\\ContaPyme\\Personal\\apps\\is-webcomponents\\src\\components\\charts\\polar-area-chart.ts",
-          "mensaje": "Control \"legend-position\" (prop=\"attr:legend-position\") en src/components/charts/polar-area-chart.json#sections[0].blocks[0].controls[2] apunta a un atributo que el módulo no declara como observado.",
-          "sugerencia": "Agregá 'legend-position' al array devuelto por static get observedAttributes()."
-        },
-        {
-          "categoria": "consistencia",
-          "severidad": "warn",
-          "tag": "is-polar-area-chart",
-          "ruta": "C:\\ContaPyme\\Personal\\apps\\is-webcomponents\\src\\components\\charts\\polar-area-chart.ts",
-          "mensaje": "Control \"without-legend\" (prop=\"attr:without-legend\") en src/components/charts/polar-area-chart.json#sections[0].blocks[0].controls[3] apunta a un atributo que el módulo no declara como observado.",
-          "sugerencia": "Agregá 'without-legend' al array devuelto por static get observedAttributes()."
-        },
-        {
-          "categoria": "consistencia",
-          "severidad": "warn",
-          "tag": "is-polar-area-chart",
-          "ruta": "C:\\ContaPyme\\Personal\\apps\\is-webcomponents\\src\\components\\charts\\polar-area-chart.ts",
-          "mensaje": "Control \"without-animation\" (prop=\"attr:without-animation\") en src/components/charts/polar-area-chart.json#sections[0].blocks[0].controls[4] apunta a un atributo que el módulo no declara como observado.",
-          "sugerencia": "Agregá 'without-animation' al array devuelto por static get observedAttributes()."
-        }
-      ],
+      "hallazgos": [],
       "metricas": {
         "secciones": 5,
         "bloques": 13,
@@ -2926,88 +2123,16 @@
       "tag": "is-scatter-chart",
       "titulo": "Scatter Chart",
       "categoria": "data-viz",
-      "estado": "fail",
+      "estado": "ok",
       "rutaJson": "src/components/charts/scatter-chart.json",
       "rutaModulo": "src/components/charts/scatter-chart.ts",
       "conteo": {
         "fatal": 0,
-        "error": 3,
-        "warn": 6,
+        "error": 0,
+        "warn": 0,
         "info": 0
       },
-      "hallazgos": [
-        {
-          "categoria": "json-complejidad",
-          "severidad": "error",
-          "tag": "is-scatter-chart",
-          "ruta": "src/components/charts/scatter-chart.json",
-          "mensaje": "Demo de <is-scatter-chart> no declara <script type=\"application/json\"> con payload.",
-          "sugerencia": "Pasale la data por JSON al host: <is-scatter-chart><script type=\"application/json\">{…}</script></is-scatter-chart>."
-        },
-        {
-          "categoria": "json-complejidad",
-          "severidad": "error",
-          "tag": "is-scatter-chart",
-          "ruta": "src/components/charts/scatter-chart.json",
-          "mensaje": "Demo de <is-scatter-chart> no declara <script type=\"application/json\"> con payload.",
-          "sugerencia": "Pasale la data por JSON al host: <is-scatter-chart><script type=\"application/json\">{…}</script></is-scatter-chart>."
-        },
-        {
-          "categoria": "consistencia",
-          "severidad": "error",
-          "tag": "is-scatter-chart",
-          "ruta": "C:\\ContaPyme\\Personal\\apps\\is-webcomponents\\src\\components\\charts\\scatter-chart.ts",
-          "mensaje": "Módulo del componente no llama customElements.define('is-scatter-chart', …). El JSON declara demos de <is-scatter-chart> pero el tag nunca se registra."
-        },
-        {
-          "categoria": "consistencia",
-          "severidad": "warn",
-          "tag": "is-scatter-chart",
-          "ruta": "C:\\ContaPyme\\Personal\\apps\\is-webcomponents\\src\\components\\charts\\scatter-chart.ts",
-          "mensaje": "Módulo no usa guard idempotente (customElements.get(tag)). Llamar el módulo dos veces rompe.",
-          "sugerencia": "Envolvé customElements.define en `if (!customElements.get(tag)) customElements.define(...)`."
-        },
-        {
-          "categoria": "consistencia",
-          "severidad": "warn",
-          "tag": "is-scatter-chart",
-          "ruta": "C:\\ContaPyme\\Personal\\apps\\is-webcomponents\\src\\components\\charts\\scatter-chart.ts",
-          "mensaje": "Control \"open-on-click\" (prop=\"attr:open-on-click\") en src/components/charts/scatter-chart.json#sections[0].blocks[1].controls[0] apunta a un atributo que el módulo no declara como observado.",
-          "sugerencia": "Agregá 'open-on-click' al array devuelto por static get observedAttributes()."
-        },
-        {
-          "categoria": "consistencia",
-          "severidad": "warn",
-          "tag": "is-scatter-chart",
-          "ruta": "C:\\ContaPyme\\Personal\\apps\\is-webcomponents\\src\\components\\charts\\scatter-chart.ts",
-          "mensaje": "Control \"label\" (prop=\"attr:label\") en src/components/charts/scatter-chart.json#sections[0].blocks[1].controls[1] apunta a un atributo que el módulo no declara como observado.",
-          "sugerencia": "Agregá 'label' al array devuelto por static get observedAttributes()."
-        },
-        {
-          "categoria": "consistencia",
-          "severidad": "warn",
-          "tag": "is-scatter-chart",
-          "ruta": "C:\\ContaPyme\\Personal\\apps\\is-webcomponents\\src\\components\\charts\\scatter-chart.ts",
-          "mensaje": "Control \"x-label\" (prop=\"attr:x-label\") en src/components/charts/scatter-chart.json#sections[0].blocks[1].controls[2] apunta a un atributo que el módulo no declara como observado.",
-          "sugerencia": "Agregá 'x-label' al array devuelto por static get observedAttributes()."
-        },
-        {
-          "categoria": "consistencia",
-          "severidad": "warn",
-          "tag": "is-scatter-chart",
-          "ruta": "C:\\ContaPyme\\Personal\\apps\\is-webcomponents\\src\\components\\charts\\scatter-chart.ts",
-          "mensaje": "Control \"y-label\" (prop=\"attr:y-label\") en src/components/charts/scatter-chart.json#sections[0].blocks[1].controls[3] apunta a un atributo que el módulo no declara como observado.",
-          "sugerencia": "Agregá 'y-label' al array devuelto por static get observedAttributes()."
-        },
-        {
-          "categoria": "consistencia",
-          "severidad": "warn",
-          "tag": "is-scatter-chart",
-          "ruta": "C:\\ContaPyme\\Personal\\apps\\is-webcomponents\\src\\components\\charts\\scatter-chart.ts",
-          "mensaje": "Control \"grid\" (prop=\"attr:grid\") en src/components/charts/scatter-chart.json#sections[0].blocks[1].controls[4] apunta a un atributo que el módulo no declara como observado.",
-          "sugerencia": "Agregá 'grid' al array devuelto por static get observedAttributes()."
-        }
-      ],
+      "hallazgos": [],
       "metricas": {
         "secciones": 6,
         "bloques": 12,
@@ -3019,40 +2144,16 @@
       "tag": "is-bubble-chart",
       "titulo": "Bubble Chart",
       "categoria": "data-viz",
-      "estado": "fail",
+      "estado": "ok",
       "rutaJson": "src/components/charts/bubble-chart.json",
       "rutaModulo": "src/components/charts/bubble-chart.ts",
       "conteo": {
         "fatal": 0,
-        "error": 1,
-        "warn": 2,
+        "error": 0,
+        "warn": 0,
         "info": 0
       },
-      "hallazgos": [
-        {
-          "categoria": "consistencia",
-          "severidad": "error",
-          "tag": "is-bubble-chart",
-          "ruta": "C:\\ContaPyme\\Personal\\apps\\is-webcomponents\\src\\components\\charts\\bubble-chart.ts",
-          "mensaje": "Módulo del componente no llama customElements.define('is-bubble-chart', …). El JSON declara demos de <is-bubble-chart> pero el tag nunca se registra."
-        },
-        {
-          "categoria": "consistencia",
-          "severidad": "warn",
-          "tag": "is-bubble-chart",
-          "ruta": "C:\\ContaPyme\\Personal\\apps\\is-webcomponents\\src\\components\\charts\\bubble-chart.ts",
-          "mensaje": "Módulo no usa guard idempotente (customElements.get(tag)). Llamar el módulo dos veces rompe.",
-          "sugerencia": "Envolvé customElements.define en `if (!customElements.get(tag)) customElements.define(...)`."
-        },
-        {
-          "categoria": "consistencia",
-          "severidad": "warn",
-          "tag": "is-bubble-chart",
-          "ruta": "C:\\ContaPyme\\Personal\\apps\\is-webcomponents\\src\\components\\charts\\bubble-chart.ts",
-          "mensaje": "Control \"open-on-click\" (prop=\"attr:open-on-click\") en src/components/charts/bubble-chart.json#sections[0].blocks[0].controls[0] apunta a un atributo que el módulo no declara como observado.",
-          "sugerencia": "Agregá 'open-on-click' al array devuelto por static get observedAttributes()."
-        }
-      ],
+      "hallazgos": [],
       "metricas": {
         "secciones": 1,
         "bloques": 1,
@@ -3064,65 +2165,16 @@
       "tag": "is-sparkline",
       "titulo": "Sparkline",
       "categoria": "data-viz",
-      "estado": "fail",
+      "estado": "ok",
       "rutaJson": "src/components/charts/sparkline.json",
       "rutaModulo": "src/components/charts/sparkline.ts",
       "conteo": {
         "fatal": 0,
-        "error": 6,
+        "error": 0,
         "warn": 0,
         "info": 0
       },
-      "hallazgos": [
-        {
-          "categoria": "json-complejidad",
-          "severidad": "error",
-          "tag": "is-sparkline",
-          "ruta": "src/components/charts/sparkline.json",
-          "mensaje": "Demo de <is-sparkline> no declara <script type=\"application/json\"> con payload.",
-          "sugerencia": "Pasale la data por JSON al host: <is-sparkline><script type=\"application/json\">{…}</script></is-sparkline>."
-        },
-        {
-          "categoria": "json-complejidad",
-          "severidad": "error",
-          "tag": "is-sparkline",
-          "ruta": "src/components/charts/sparkline.json",
-          "mensaje": "Demo de <is-sparkline> no declara <script type=\"application/json\"> con payload.",
-          "sugerencia": "Pasale la data por JSON al host: <is-sparkline><script type=\"application/json\">{…}</script></is-sparkline>."
-        },
-        {
-          "categoria": "json-complejidad",
-          "severidad": "error",
-          "tag": "is-sparkline",
-          "ruta": "src/components/charts/sparkline.json",
-          "mensaje": "Demo de <is-sparkline> no declara <script type=\"application/json\"> con payload.",
-          "sugerencia": "Pasale la data por JSON al host: <is-sparkline><script type=\"application/json\">{…}</script></is-sparkline>."
-        },
-        {
-          "categoria": "json-complejidad",
-          "severidad": "error",
-          "tag": "is-sparkline",
-          "ruta": "src/components/charts/sparkline.json",
-          "mensaje": "Demo de <is-sparkline> no declara <script type=\"application/json\"> con payload.",
-          "sugerencia": "Pasale la data por JSON al host: <is-sparkline><script type=\"application/json\">{…}</script></is-sparkline>."
-        },
-        {
-          "categoria": "json-complejidad",
-          "severidad": "error",
-          "tag": "is-sparkline",
-          "ruta": "src/components/charts/sparkline.json",
-          "mensaje": "Demo de <is-sparkline> no declara <script type=\"application/json\"> con payload.",
-          "sugerencia": "Pasale la data por JSON al host: <is-sparkline><script type=\"application/json\">{…}</script></is-sparkline>."
-        },
-        {
-          "categoria": "json-complejidad",
-          "severidad": "error",
-          "tag": "is-sparkline",
-          "ruta": "src/components/charts/sparkline.json",
-          "mensaje": "Demo de <is-sparkline> no declara <script type=\"application/json\"> con payload.",
-          "sugerencia": "Pasale la data por JSON al host: <is-sparkline><script type=\"application/json\">{…}</script></is-sparkline>."
-        }
-      ],
+      "hallazgos": [],
       "metricas": {
         "secciones": 7,
         "bloques": 12,
@@ -3176,32 +2228,20 @@
       "tag": "is-lightbox",
       "titulo": "Lightbox",
       "categoria": "helpers",
-      "estado": "warning",
+      "estado": "ok",
       "rutaJson": "src/components/diagrams/lightbox.json",
       "rutaModulo": "src/components/diagrams/lightbox.ts",
       "conteo": {
         "fatal": 0,
         "error": 0,
-        "warn": 1,
+        "warn": 0,
         "info": 0
       },
-      "hallazgos": [
-        {
-          "categoria": "json-contenido",
-          "severidad": "warn",
-          "tag": "is-lightbox",
-          "ruta": "src/components/diagrams/lightbox.json",
-          "mensaje": "Bloque demo en sections[2].blocks[1] no contiene ningún <is-*>.",
-          "detalle": {
-            "html": "<figure>\r\n            <div class=\"lb-target\" data-tone=\"brand\" data-lb-target=\"s…"
-          },
-          "sugerencia": "Si el demo no usa ningún is-*, convertilo a bloque `html` (no necesita chrome de demo)."
-        }
-      ],
+      "hallazgos": [],
       "metricas": {
         "secciones": 6,
         "bloques": 16,
-        "demos": 5,
+        "demos": 4,
         "controles": 0
       }
     },
@@ -3230,32 +2270,20 @@
       "tag": "is-relative-time",
       "titulo": "Tiempo relativo",
       "categoria": "helpers",
-      "estado": "warning",
+      "estado": "ok",
       "rutaJson": "src/components/helpers/relative-time.json",
       "rutaModulo": "src/components/helpers/relative-time.ts",
       "conteo": {
         "fatal": 0,
         "error": 0,
-        "warn": 1,
+        "warn": 0,
         "info": 0
       },
-      "hallazgos": [
-        {
-          "categoria": "json-contenido",
-          "severidad": "warn",
-          "tag": "is-relative-time",
-          "ruta": "src/components/helpers/relative-time.json",
-          "mensaje": "Bloque demo en sections[2].blocks[0] no contiene ningún <is-*>.",
-          "detalle": {
-            "html": "<p class=\"demo-caption\" id=\"localeCaption\">Cargando locales…</p>\n          <div …"
-          },
-          "sugerencia": "Si el demo no usa ningún is-*, convertilo a bloque `html` (no necesita chrome de demo)."
-        }
-      ],
+      "hallazgos": [],
       "metricas": {
         "secciones": 5,
         "bloques": 8,
-        "demos": 4,
+        "demos": 3,
         "controles": 4
       }
     },
@@ -3326,33 +2354,16 @@
       "tag": "is-offscreen-canvas",
       "titulo": "Offscreen Canvas",
       "categoria": "helpers",
-      "estado": "warning",
+      "estado": "ok",
       "rutaJson": "src/components/helpers/offscreen-canvas.json",
       "rutaModulo": "src/components/helpers/offscreen-canvas.ts",
       "conteo": {
         "fatal": 0,
         "error": 0,
-        "warn": 2,
+        "warn": 0,
         "info": 0
       },
-      "hallazgos": [
-        {
-          "categoria": "consistencia",
-          "severidad": "warn",
-          "tag": "is-offscreen-canvas",
-          "ruta": "C:\\ContaPyme\\Personal\\apps\\is-webcomponents\\src\\components\\helpers\\offscreen-canvas.ts",
-          "mensaje": "Control \"width\" (prop=\"attr:width\") en src/components/helpers/offscreen-canvas.json#sections[0].blocks[0].controls[0] apunta a un atributo que el módulo no declara como observado.",
-          "sugerencia": "Agregá 'width' al array devuelto por static get observedAttributes()."
-        },
-        {
-          "categoria": "consistencia",
-          "severidad": "warn",
-          "tag": "is-offscreen-canvas",
-          "ruta": "C:\\ContaPyme\\Personal\\apps\\is-webcomponents\\src\\components\\helpers\\offscreen-canvas.ts",
-          "mensaje": "Control \"height\" (prop=\"attr:height\") en src/components/helpers/offscreen-canvas.json#sections[0].blocks[0].controls[1] apunta a un atributo que el módulo no declara como observado.",
-          "sugerencia": "Agregá 'height' al array devuelto por static get observedAttributes()."
-        }
-      ],
+      "hallazgos": [],
       "metricas": {
         "secciones": 1,
         "bloques": 3,
@@ -3364,32 +2375,20 @@
       "tag": "is-format-date",
       "titulo": "Formato de fecha",
       "categoria": "helpers",
-      "estado": "warning",
+      "estado": "ok",
       "rutaJson": "src/components/helpers/format-date.json",
       "rutaModulo": "src/components/helpers/format-date.ts",
       "conteo": {
         "fatal": 0,
         "error": 0,
-        "warn": 1,
+        "warn": 0,
         "info": 0
       },
-      "hallazgos": [
-        {
-          "categoria": "json-contenido",
-          "severidad": "warn",
-          "tag": "is-format-date",
-          "ruta": "src/components/helpers/format-date.json",
-          "mensaje": "Bloque demo en sections[2].blocks[0] no contiene ningún <is-*>.",
-          "detalle": {
-            "html": "<p class=\"demo-caption\" id=\"localeCaption\">Cargando locales…</p>\n          <div …"
-          },
-          "sugerencia": "Si el demo no usa ningún is-*, convertilo a bloque `html` (no necesita chrome de demo)."
-        }
-      ],
+      "hallazgos": [],
       "metricas": {
         "secciones": 7,
         "bloques": 9,
-        "demos": 6,
+        "demos": 5,
         "controles": 11
       }
     },
@@ -3439,49 +2438,16 @@
       "tag": "is-intersection-observer",
       "titulo": "Observador de intersección",
       "categoria": "helpers",
-      "estado": "warning",
+      "estado": "ok",
       "rutaJson": "src/components/helpers/intersection-observer.json",
       "rutaModulo": "src/components/helpers/intersection-observer.ts",
       "conteo": {
         "fatal": 0,
         "error": 0,
-        "warn": 4,
+        "warn": 0,
         "info": 0
       },
-      "hallazgos": [
-        {
-          "categoria": "consistencia",
-          "severidad": "warn",
-          "tag": "is-intersection-observer",
-          "ruta": "C:\\ContaPyme\\Personal\\apps\\is-webcomponents\\src\\components\\helpers\\intersection-observer.ts",
-          "mensaje": "Control \"root\" (prop=\"attr:root\") en src/components/helpers/intersection-observer.json#sections[1].blocks[0].controls[0] apunta a un atributo que el módulo no declara como observado.",
-          "sugerencia": "Agregá 'root' al array devuelto por static get observedAttributes()."
-        },
-        {
-          "categoria": "consistencia",
-          "severidad": "warn",
-          "tag": "is-intersection-observer",
-          "ruta": "C:\\ContaPyme\\Personal\\apps\\is-webcomponents\\src\\components\\helpers\\intersection-observer.ts",
-          "mensaje": "Control \"intersect-class\" (prop=\"attr:intersect-class\") en src/components/helpers/intersection-observer.json#sections[1].blocks[0].controls[1] apunta a un atributo que el módulo no declara como observado.",
-          "sugerencia": "Agregá 'intersect-class' al array devuelto por static get observedAttributes()."
-        },
-        {
-          "categoria": "consistencia",
-          "severidad": "warn",
-          "tag": "is-intersection-observer",
-          "ruta": "C:\\ContaPyme\\Personal\\apps\\is-webcomponents\\src\\components\\helpers\\intersection-observer.ts",
-          "mensaje": "Control \"threshold\" (prop=\"attr:threshold\") en src/components/helpers/intersection-observer.json#sections[1].blocks[0].controls[2] apunta a un atributo que el módulo no declara como observado.",
-          "sugerencia": "Agregá 'threshold' al array devuelto por static get observedAttributes()."
-        },
-        {
-          "categoria": "consistencia",
-          "severidad": "warn",
-          "tag": "is-intersection-observer",
-          "ruta": "C:\\ContaPyme\\Personal\\apps\\is-webcomponents\\src\\components\\helpers\\intersection-observer.ts",
-          "mensaje": "Control \"once\" (prop=\"attr:once\") en src/components/helpers/intersection-observer.json#sections[1].blocks[0].controls[3] apunta a un atributo que el módulo no declara como observado.",
-          "sugerencia": "Agregá 'once' al array devuelto por static get observedAttributes()."
-        }
-      ],
+      "hallazgos": [],
       "metricas": {
         "secciones": 4,
         "bloques": 6,
@@ -3493,33 +2459,16 @@
       "tag": "is-mutation-observer",
       "titulo": "Observador de mutación",
       "categoria": "helpers",
-      "estado": "warning",
+      "estado": "ok",
       "rutaJson": "src/components/helpers/mutation-observer.json",
       "rutaModulo": "src/components/helpers/mutation-observer.ts",
       "conteo": {
         "fatal": 0,
         "error": 0,
-        "warn": 2,
+        "warn": 0,
         "info": 0
       },
-      "hallazgos": [
-        {
-          "categoria": "consistencia",
-          "severidad": "warn",
-          "tag": "is-mutation-observer",
-          "ruta": "C:\\ContaPyme\\Personal\\apps\\is-webcomponents\\src\\components\\helpers\\mutation-observer.ts",
-          "mensaje": "Control \"child-list\" (prop=\"attr:child-list\") en src/components/helpers/mutation-observer.json#sections[1].blocks[0].controls[0] apunta a un atributo que el módulo no declara como observado.",
-          "sugerencia": "Agregá 'child-list' al array devuelto por static get observedAttributes()."
-        },
-        {
-          "categoria": "consistencia",
-          "severidad": "warn",
-          "tag": "is-mutation-observer",
-          "ruta": "C:\\ContaPyme\\Personal\\apps\\is-webcomponents\\src\\components\\helpers\\mutation-observer.ts",
-          "mensaje": "Control \"attr\" (prop=\"attr:attr\") en src/components/helpers/mutation-observer.json#sections[1].blocks[0].controls[1] apunta a un atributo que el módulo no declara como observado.",
-          "sugerencia": "Agregá 'attr' al array devuelto por static get observedAttributes()."
-        }
-      ],
+      "hallazgos": [],
       "metricas": {
         "secciones": 3,
         "bloques": 4,
@@ -3552,31 +2501,16 @@
       "tag": "is-md-render",
       "titulo": "Render Markdown",
       "categoria": "helpers",
-      "estado": "warning",
+      "estado": "ok",
       "rutaJson": "src/components/helpers/md-render.json",
       "rutaModulo": "src/components/helpers/md-render.ts",
       "conteo": {
         "fatal": 0,
         "error": 0,
-        "warn": 2,
+        "warn": 0,
         "info": 0
       },
-      "hallazgos": [
-        {
-          "categoria": "json-contenido",
-          "severidad": "warn",
-          "tag": "is-md-render",
-          "ruta": "src/components/helpers/md-render.json",
-          "mensaje": "Bloque demo contiene un <script> ejecutable. La lógica debería vivir en un behavior (módulo .preview.js)."
-        },
-        {
-          "categoria": "json-contenido",
-          "severidad": "warn",
-          "tag": "is-md-render",
-          "ruta": "src/components/helpers/md-render.json",
-          "mensaje": "Bloque demo contiene un <script> ejecutable. La lógica debería vivir en un behavior (módulo .preview.js)."
-        }
-      ],
+      "hallazgos": [],
       "metricas": {
         "secciones": 3,
         "bloques": 3,
@@ -3588,38 +2522,16 @@
       "tag": "is-md-editor",
       "titulo": "Editor Markdown",
       "categoria": "helpers",
-      "estado": "warning",
+      "estado": "ok",
       "rutaJson": "src/components/helpers/md-editor.json",
       "rutaModulo": "src/components/helpers/md-editor.ts",
       "conteo": {
         "fatal": 0,
         "error": 0,
-        "warn": 3,
+        "warn": 0,
         "info": 0
       },
-      "hallazgos": [
-        {
-          "categoria": "json-contenido",
-          "severidad": "warn",
-          "tag": "is-md-editor",
-          "ruta": "src/components/helpers/md-editor.json",
-          "mensaje": "Bloque demo contiene un <script> ejecutable. La lógica debería vivir en un behavior (módulo .preview.js)."
-        },
-        {
-          "categoria": "json-contenido",
-          "severidad": "warn",
-          "tag": "is-md-editor",
-          "ruta": "src/components/helpers/md-editor.json",
-          "mensaje": "Bloque demo contiene un <script> ejecutable. La lógica debería vivir en un behavior (módulo .preview.js)."
-        },
-        {
-          "categoria": "json-contenido",
-          "severidad": "warn",
-          "tag": "is-md-editor",
-          "ruta": "src/components/helpers/md-editor.json",
-          "mensaje": "Bloque demo contiene un <script> ejecutable. La lógica debería vivir en un behavior (módulo .preview.js)."
-        }
-      ],
+      "hallazgos": [],
       "metricas": {
         "secciones": 6,
         "bloques": 6,
@@ -3631,40 +2543,16 @@
       "tag": "is-waterfall-chart",
       "titulo": "Waterfall Chart",
       "categoria": "data-viz",
-      "estado": "fail",
+      "estado": "ok",
       "rutaJson": "src/components/charts/waterfall-chart.json",
       "rutaModulo": "src/components/charts/waterfall-chart.ts",
       "conteo": {
         "fatal": 0,
-        "error": 1,
-        "warn": 2,
+        "error": 0,
+        "warn": 0,
         "info": 0
       },
-      "hallazgos": [
-        {
-          "categoria": "consistencia",
-          "severidad": "error",
-          "tag": "is-waterfall-chart",
-          "ruta": "C:\\ContaPyme\\Personal\\apps\\is-webcomponents\\src\\components\\charts\\waterfall-chart.ts",
-          "mensaje": "Módulo del componente no llama customElements.define('is-waterfall-chart', …). El JSON declara demos de <is-waterfall-chart> pero el tag nunca se registra."
-        },
-        {
-          "categoria": "consistencia",
-          "severidad": "warn",
-          "tag": "is-waterfall-chart",
-          "ruta": "C:\\ContaPyme\\Personal\\apps\\is-webcomponents\\src\\components\\charts\\waterfall-chart.ts",
-          "mensaje": "Módulo no usa guard idempotente (customElements.get(tag)). Llamar el módulo dos veces rompe.",
-          "sugerencia": "Envolvé customElements.define en `if (!customElements.get(tag)) customElements.define(...)`."
-        },
-        {
-          "categoria": "consistencia",
-          "severidad": "warn",
-          "tag": "is-waterfall-chart",
-          "ruta": "C:\\ContaPyme\\Personal\\apps\\is-webcomponents\\src\\components\\charts\\waterfall-chart.ts",
-          "mensaje": "Control \"open-on-click\" (prop=\"attr:open-on-click\") en src/components/charts/waterfall-chart.json#sections[0].blocks[0].controls[0] apunta a un atributo que el módulo no declara como observado.",
-          "sugerencia": "Agregá 'open-on-click' al array devuelto por static get observedAttributes()."
-        }
-      ],
+      "hallazgos": [],
       "metricas": {
         "secciones": 1,
         "bloques": 1,
@@ -3676,40 +2564,16 @@
       "tag": "is-funnel-chart",
       "titulo": "Funnel Chart",
       "categoria": "data-viz",
-      "estado": "fail",
+      "estado": "ok",
       "rutaJson": "src/components/charts/funnel-chart.json",
       "rutaModulo": "src/components/charts/funnel-chart.ts",
       "conteo": {
         "fatal": 0,
-        "error": 1,
-        "warn": 2,
+        "error": 0,
+        "warn": 0,
         "info": 0
       },
-      "hallazgos": [
-        {
-          "categoria": "consistencia",
-          "severidad": "error",
-          "tag": "is-funnel-chart",
-          "ruta": "C:\\ContaPyme\\Personal\\apps\\is-webcomponents\\src\\components\\charts\\funnel-chart.ts",
-          "mensaje": "Módulo del componente no llama customElements.define('is-funnel-chart', …). El JSON declara demos de <is-funnel-chart> pero el tag nunca se registra."
-        },
-        {
-          "categoria": "consistencia",
-          "severidad": "warn",
-          "tag": "is-funnel-chart",
-          "ruta": "C:\\ContaPyme\\Personal\\apps\\is-webcomponents\\src\\components\\charts\\funnel-chart.ts",
-          "mensaje": "Módulo no usa guard idempotente (customElements.get(tag)). Llamar el módulo dos veces rompe.",
-          "sugerencia": "Envolvé customElements.define en `if (!customElements.get(tag)) customElements.define(...)`."
-        },
-        {
-          "categoria": "consistencia",
-          "severidad": "warn",
-          "tag": "is-funnel-chart",
-          "ruta": "C:\\ContaPyme\\Personal\\apps\\is-webcomponents\\src\\components\\charts\\funnel-chart.ts",
-          "mensaje": "Control \"open-on-click\" (prop=\"attr:open-on-click\") en src/components/charts/funnel-chart.json#sections[0].blocks[0].controls[0] apunta a un atributo que el módulo no declara como observado.",
-          "sugerencia": "Agregá 'open-on-click' al array devuelto por static get observedAttributes()."
-        }
-      ],
+      "hallazgos": [],
       "metricas": {
         "secciones": 1,
         "bloques": 1,
@@ -3826,25 +2690,16 @@
       "tag": "is-treemap",
       "titulo": "Treemap",
       "categoria": "data-viz",
-      "estado": "warning",
+      "estado": "ok",
       "rutaJson": "src/components/charts/treemap.json",
       "rutaModulo": "src/components/charts/treemap.ts",
       "conteo": {
         "fatal": 0,
         "error": 0,
-        "warn": 1,
+        "warn": 0,
         "info": 0
       },
-      "hallazgos": [
-        {
-          "categoria": "consistencia",
-          "severidad": "warn",
-          "tag": "is-treemap",
-          "ruta": "C:\\ContaPyme\\Personal\\apps\\is-webcomponents\\src\\components\\charts\\treemap.ts",
-          "mensaje": "Control \"open-on-click\" (prop=\"attr:open-on-click\") en src/components/charts/treemap.json#sections[0].blocks[1].controls[0] apunta a un atributo que el módulo no declara como observado.",
-          "sugerencia": "Agregá 'open-on-click' al array devuelto por static get observedAttributes()."
-        }
-      ],
+      "hallazgos": [],
       "metricas": {
         "secciones": 2,
         "bloques": 8,
@@ -4003,49 +2858,16 @@
       "tag": "is-stat",
       "titulo": "Stat KPI",
       "categoria": "data",
-      "estado": "fail",
+      "estado": "ok",
       "rutaJson": "src/components/data/stat.json",
       "rutaModulo": "src/components/data/stat.ts",
       "conteo": {
         "fatal": 0,
-        "error": 4,
+        "error": 0,
         "warn": 0,
         "info": 0
       },
-      "hallazgos": [
-        {
-          "categoria": "json-complejidad",
-          "severidad": "error",
-          "tag": "is-stat",
-          "ruta": "src/components/data/stat.json",
-          "mensaje": "Demo de <is-stat> no declara <script type=\"application/json\"> con payload.",
-          "sugerencia": "Pasale la data por JSON al host: <is-stat><script type=\"application/json\">{…}</script></is-stat>."
-        },
-        {
-          "categoria": "json-complejidad",
-          "severidad": "error",
-          "tag": "is-stat",
-          "ruta": "src/components/data/stat.json",
-          "mensaje": "Demo de <is-stat> no declara <script type=\"application/json\"> con payload.",
-          "sugerencia": "Pasale la data por JSON al host: <is-stat><script type=\"application/json\">{…}</script></is-stat>."
-        },
-        {
-          "categoria": "json-complejidad",
-          "severidad": "error",
-          "tag": "is-stat",
-          "ruta": "src/components/data/stat.json",
-          "mensaje": "Demo de <is-stat> no declara <script type=\"application/json\"> con payload.",
-          "sugerencia": "Pasale la data por JSON al host: <is-stat><script type=\"application/json\">{…}</script></is-stat>."
-        },
-        {
-          "categoria": "json-complejidad",
-          "severidad": "error",
-          "tag": "is-stat",
-          "ruta": "src/components/data/stat.json",
-          "mensaje": "Demo de <is-stat> no declara <script type=\"application/json\"> con payload.",
-          "sugerencia": "Pasale la data por JSON al host: <is-stat><script type=\"application/json\">{…}</script></is-stat>."
-        }
-      ],
+      "hallazgos": [],
       "metricas": {
         "secciones": 5,
         "bloques": 7,
@@ -4057,49 +2879,16 @@
       "tag": "is-transfer",
       "titulo": "Transfer",
       "categoria": "data",
-      "estado": "fail",
+      "estado": "ok",
       "rutaJson": "src/components/data/transfer.json",
       "rutaModulo": "src/components/data/transfer.ts",
       "conteo": {
         "fatal": 0,
-        "error": 4,
+        "error": 0,
         "warn": 0,
         "info": 0
       },
-      "hallazgos": [
-        {
-          "categoria": "json-complejidad",
-          "severidad": "error",
-          "tag": "is-transfer",
-          "ruta": "src/components/data/transfer.json",
-          "mensaje": "Demo de <is-transfer> no declara <script type=\"application/json\"> con payload.",
-          "sugerencia": "Pasale la data por JSON al host: <is-transfer><script type=\"application/json\">{…}</script></is-transfer>."
-        },
-        {
-          "categoria": "json-complejidad",
-          "severidad": "error",
-          "tag": "is-transfer",
-          "ruta": "src/components/data/transfer.json",
-          "mensaje": "Demo de <is-transfer> no declara <script type=\"application/json\"> con payload.",
-          "sugerencia": "Pasale la data por JSON al host: <is-transfer><script type=\"application/json\">{…}</script></is-transfer>."
-        },
-        {
-          "categoria": "json-complejidad",
-          "severidad": "error",
-          "tag": "is-transfer",
-          "ruta": "src/components/data/transfer.json",
-          "mensaje": "Demo de <is-transfer> no declara <script type=\"application/json\"> con payload.",
-          "sugerencia": "Pasale la data por JSON al host: <is-transfer><script type=\"application/json\">{…}</script></is-transfer>."
-        },
-        {
-          "categoria": "json-complejidad",
-          "severidad": "error",
-          "tag": "is-transfer",
-          "ruta": "src/components/data/transfer.json",
-          "mensaje": "Demo de <is-transfer> no declara <script type=\"application/json\"> con payload.",
-          "sugerencia": "Pasale la data por JSON al host: <is-transfer><script type=\"application/json\">{…}</script></is-transfer>."
-        }
-      ],
+      "hallazgos": [],
       "metricas": {
         "secciones": 5,
         "bloques": 11,
@@ -4111,25 +2900,16 @@
       "tag": "is-transfer-item",
       "titulo": "Transfer Item",
       "categoria": "data",
-      "estado": "fail",
+      "estado": "ok",
       "rutaJson": "src/components/data/transfer-item.json",
       "rutaModulo": "src/components/data/transfer.ts",
       "conteo": {
         "fatal": 0,
-        "error": 1,
+        "error": 0,
         "warn": 0,
         "info": 0
       },
-      "hallazgos": [
-        {
-          "categoria": "json-complejidad",
-          "severidad": "error",
-          "tag": "is-transfer-item",
-          "ruta": "src/components/data/transfer-item.json",
-          "mensaje": "Demo de <is-transfer> no declara <script type=\"application/json\"> con payload.",
-          "sugerencia": "Pasale la data por JSON al host: <is-transfer><script type=\"application/json\">{…}</script></is-transfer>."
-        }
-      ],
+      "hallazgos": [],
       "metricas": {
         "secciones": 2,
         "bloques": 3,
@@ -4141,57 +2921,16 @@
       "tag": "is-gauge",
       "titulo": "Gauge",
       "categoria": "data-viz",
-      "estado": "fail",
+      "estado": "ok",
       "rutaJson": "src/components/data/gauge.json",
       "rutaModulo": "src/components/data/gauge.ts",
       "conteo": {
         "fatal": 0,
-        "error": 5,
+        "error": 0,
         "warn": 0,
         "info": 0
       },
-      "hallazgos": [
-        {
-          "categoria": "json-complejidad",
-          "severidad": "error",
-          "tag": "is-gauge",
-          "ruta": "src/components/data/gauge.json",
-          "mensaje": "Demo de <is-gauge> no declara <script type=\"application/json\"> con payload.",
-          "sugerencia": "Pasale la data por JSON al host: <is-gauge><script type=\"application/json\">{…}</script></is-gauge>."
-        },
-        {
-          "categoria": "json-complejidad",
-          "severidad": "error",
-          "tag": "is-gauge",
-          "ruta": "src/components/data/gauge.json",
-          "mensaje": "Demo de <is-gauge> no declara <script type=\"application/json\"> con payload.",
-          "sugerencia": "Pasale la data por JSON al host: <is-gauge><script type=\"application/json\">{…}</script></is-gauge>."
-        },
-        {
-          "categoria": "json-complejidad",
-          "severidad": "error",
-          "tag": "is-gauge",
-          "ruta": "src/components/data/gauge.json",
-          "mensaje": "Demo de <is-gauge> no declara <script type=\"application/json\"> con payload.",
-          "sugerencia": "Pasale la data por JSON al host: <is-gauge><script type=\"application/json\">{…}</script></is-gauge>."
-        },
-        {
-          "categoria": "json-complejidad",
-          "severidad": "error",
-          "tag": "is-gauge",
-          "ruta": "src/components/data/gauge.json",
-          "mensaje": "Demo de <is-gauge> no declara <script type=\"application/json\"> con payload.",
-          "sugerencia": "Pasale la data por JSON al host: <is-gauge><script type=\"application/json\">{…}</script></is-gauge>."
-        },
-        {
-          "categoria": "json-complejidad",
-          "severidad": "error",
-          "tag": "is-gauge",
-          "ruta": "src/components/data/gauge.json",
-          "mensaje": "Demo de <is-gauge> no declara <script type=\"application/json\"> con payload.",
-          "sugerencia": "Pasale la data por JSON al host: <is-gauge><script type=\"application/json\">{…}</script></is-gauge>."
-        }
-      ],
+      "hallazgos": [],
       "metricas": {
         "secciones": 6,
         "bloques": 8,
@@ -4203,33 +2942,16 @@
       "tag": "is-kanban",
       "titulo": "Kanban",
       "categoria": "data",
-      "estado": "fail",
+      "estado": "ok",
       "rutaJson": "src/components/data/kanban.json",
       "rutaModulo": "src/components/data/kanban.ts",
       "conteo": {
         "fatal": 0,
-        "error": 2,
+        "error": 0,
         "warn": 0,
         "info": 0
       },
-      "hallazgos": [
-        {
-          "categoria": "json-complejidad",
-          "severidad": "error",
-          "tag": "is-kanban",
-          "ruta": "src/components/data/kanban.json",
-          "mensaje": "Demo de <is-kanban> no declara <script type=\"application/json\"> con payload.",
-          "sugerencia": "Pasale la data por JSON al host: <is-kanban><script type=\"application/json\">{…}</script></is-kanban>."
-        },
-        {
-          "categoria": "json-complejidad",
-          "severidad": "error",
-          "tag": "is-kanban",
-          "ruta": "src/components/data/kanban.json",
-          "mensaje": "Demo de <is-kanban> no declara <script type=\"application/json\"> con payload.",
-          "sugerencia": "Pasale la data por JSON al host: <is-kanban><script type=\"application/json\">{…}</script></is-kanban>."
-        }
-      ],
+      "hallazgos": [],
       "metricas": {
         "secciones": 3,
         "bloques": 9,
@@ -4241,25 +2963,16 @@
       "tag": "is-kanban-column",
       "titulo": "Kanban Column",
       "categoria": "data",
-      "estado": "fail",
+      "estado": "ok",
       "rutaJson": "src/components/data/kanban-column.json",
       "rutaModulo": "src/components/data/kanban.ts",
       "conteo": {
         "fatal": 0,
-        "error": 1,
+        "error": 0,
         "warn": 0,
         "info": 0
       },
-      "hallazgos": [
-        {
-          "categoria": "json-complejidad",
-          "severidad": "error",
-          "tag": "is-kanban-column",
-          "ruta": "src/components/data/kanban-column.json",
-          "mensaje": "Demo de <is-kanban> no declara <script type=\"application/json\"> con payload.",
-          "sugerencia": "Pasale la data por JSON al host: <is-kanban><script type=\"application/json\">{…}</script></is-kanban>."
-        }
-      ],
+      "hallazgos": [],
       "metricas": {
         "secciones": 2,
         "bloques": 3,
@@ -4271,25 +2984,16 @@
       "tag": "is-kanban-card",
       "titulo": "Kanban Card",
       "categoria": "data",
-      "estado": "fail",
+      "estado": "ok",
       "rutaJson": "src/components/data/kanban-card.json",
       "rutaModulo": "src/components/data/kanban.ts",
       "conteo": {
         "fatal": 0,
-        "error": 1,
+        "error": 0,
         "warn": 0,
         "info": 0
       },
-      "hallazgos": [
-        {
-          "categoria": "json-complejidad",
-          "severidad": "error",
-          "tag": "is-kanban-card",
-          "ruta": "src/components/data/kanban-card.json",
-          "mensaje": "Demo de <is-kanban> no declara <script type=\"application/json\"> con payload.",
-          "sugerencia": "Pasale la data por JSON al host: <is-kanban><script type=\"application/json\">{…}</script></is-kanban>."
-        }
-      ],
+      "hallazgos": [],
       "metricas": {
         "secciones": 2,
         "bloques": 3,
@@ -4385,32 +3089,16 @@
       "tag": "is-barcode-scanner",
       "titulo": "Barcode Scanner",
       "categoria": "media",
-      "estado": "fail",
+      "estado": "ok",
       "rutaJson": "src/components/media/barcode-scanner.json",
       "rutaModulo": "src/components/media/barcode-scanner.ts",
       "conteo": {
         "fatal": 0,
-        "error": 1,
-        "warn": 1,
+        "error": 0,
+        "warn": 0,
         "info": 0
       },
-      "hallazgos": [
-        {
-          "categoria": "consistencia",
-          "severidad": "warn",
-          "tag": "is-barcode-scanner",
-          "ruta": "C:\\ContaPyme\\Personal\\apps\\is-webcomponents\\src\\components\\media\\barcode-scanner.ts",
-          "mensaje": "Control \"formats\" (prop=\"attr:formats\") en src/components/media/barcode-scanner.json#sections[0].blocks[0].controls[0] apunta a un atributo que el módulo no declara como observado.",
-          "sugerencia": "Agregá 'formats' al array devuelto por static get observedAttributes()."
-        },
-        {
-          "categoria": "runtime",
-          "severidad": "error",
-          "tag": "is-barcode-scanner",
-          "ruta": "C:\\ContaPyme\\Personal\\apps\\is-webcomponents\\src\\components\\media\\barcode-scanner.ts",
-          "mensaje": "observedAttributes declarado pero sin attributeChangedCallback: los cambios de atributo nunca se procesan. El playground del demo no será reactivo."
-        }
-      ],
+      "hallazgos": [],
       "metricas": {
         "secciones": 1,
         "bloques": 3,
@@ -4653,32 +3341,20 @@
       "tag": "is-signature",
       "titulo": "Signature",
       "categoria": "forms",
-      "estado": "warning",
+      "estado": "ok",
       "rutaJson": "src/components/forms/signature.json",
       "rutaModulo": "src/components/forms/signature.ts",
       "conteo": {
         "fatal": 0,
         "error": 0,
-        "warn": 1,
+        "warn": 0,
         "info": 0
       },
-      "hallazgos": [
-        {
-          "categoria": "json-contenido",
-          "severidad": "warn",
-          "tag": "is-signature",
-          "ruta": "src/components/forms/signature.json",
-          "mensaje": "Bloque demo en sections[2].blocks[0] no contiene ningún <is-*>.",
-          "detalle": {
-            "html": "<div class=\"sig-output\" id=\"output\">\r\n            <small style=\"color:var(--is-t…"
-          },
-          "sugerencia": "Si el demo no usa ningún is-*, convertilo a bloque `html` (no necesita chrome de demo)."
-        }
-      ],
+      "hallazgos": [],
       "metricas": {
         "secciones": 4,
         "bloques": 3,
-        "demos": 2,
+        "demos": 1,
         "controles": 0
       }
     },
@@ -4770,25 +3446,16 @@
       "tag": "is-spreadsheet",
       "titulo": "Spreadsheet",
       "categoria": "data",
-      "estado": "fail",
+      "estado": "ok",
       "rutaJson": "src/components/data/spreadsheet.json",
       "rutaModulo": "src/components/data/spreadsheet.ts",
       "conteo": {
         "fatal": 0,
-        "error": 1,
+        "error": 0,
         "warn": 0,
         "info": 0
       },
-      "hallazgos": [
-        {
-          "categoria": "json-complejidad",
-          "severidad": "error",
-          "tag": "is-spreadsheet",
-          "ruta": "src/components/data/spreadsheet.json",
-          "mensaje": "Demo de <is-spreadsheet> no declara <script type=\"application/json\"> con payload.",
-          "sugerencia": "Pasale la data por JSON al host: <is-spreadsheet><script type=\"application/json\">{…}</script></is-spreadsheet>."
-        }
-      ],
+      "hallazgos": [],
       "metricas": {
         "secciones": 3,
         "bloques": 3,
@@ -4884,25 +3551,16 @@
       "tag": "is-org-chart",
       "titulo": "Org Chart",
       "categoria": "diagrams",
-      "estado": "warning",
+      "estado": "ok",
       "rutaJson": "src/components/diagrams/org-chart.json",
       "rutaModulo": "src/components/diagrams/org-chart.ts",
       "conteo": {
         "fatal": 0,
         "error": 0,
-        "warn": 1,
+        "warn": 0,
         "info": 0
       },
-      "hallazgos": [
-        {
-          "categoria": "consistencia",
-          "severidad": "warn",
-          "tag": "is-org-chart",
-          "ruta": "C:\\ContaPyme\\Personal\\apps\\is-webcomponents\\src\\components\\diagrams\\org-chart.ts",
-          "mensaje": "Control \"open-on-click\" (prop=\"attr:open-on-click\") en src/components/diagrams/org-chart.json#sections[1].blocks[0].controls[0] apunta a un atributo que el módulo no declara como observado.",
-          "sugerencia": "Agregá 'open-on-click' al array devuelto por static get observedAttributes()."
-        }
-      ],
+      "hallazgos": [],
       "metricas": {
         "secciones": 5,
         "bloques": 4,
@@ -5103,19 +3761,19 @@
       "tag": "is-preview-component",
       "titulo": "Preview Component",
       "categoria": "preview",
-      "estado": "warning",
+      "estado": "ok",
       "rutaJson": "",
       "rutaModulo": "src/components/layout/preview-component.ts",
       "conteo": {
         "fatal": 0,
         "error": 0,
-        "warn": 1,
-        "info": 0
+        "warn": 0,
+        "info": 1
       },
       "hallazgos": [
         {
           "categoria": "json-schema",
-          "severidad": "warn",
+          "severidad": "info",
           "tag": "is-preview-component",
           "mensaje": "No se encontró JSON de preview para <is-preview-component>.",
           "sugerencia": "Creá un archivo de definición siguiendo el esquema is-preview/v1."
@@ -5126,19 +3784,19 @@
       "tag": "is-preview-controls",
       "titulo": "Preview Controls",
       "categoria": "preview",
-      "estado": "warning",
+      "estado": "ok",
       "rutaJson": "",
       "rutaModulo": "src/components/layout/preview-controls.ts",
       "conteo": {
         "fatal": 0,
         "error": 0,
-        "warn": 1,
-        "info": 0
+        "warn": 0,
+        "info": 1
       },
       "hallazgos": [
         {
           "categoria": "json-schema",
-          "severidad": "warn",
+          "severidad": "info",
           "tag": "is-preview-controls",
           "mensaje": "No se encontró JSON de preview para <is-preview-controls>.",
           "sugerencia": "Creá un archivo de definición siguiendo el esquema is-preview/v1."
@@ -5149,111 +3807,127 @@
       "tag": "home",
       "titulo": "home",
       "categoria": "",
-      "estado": "warning",
-      "rutaJson": "",
+      "estado": "ok",
+      "rutaJson": "C:/ContaPyme/Personal/apps/is-webcomponents/src/pages/home.json",
+      "rutaModulo": "C:/ContaPyme/Personal/apps/is-webcomponents/src/pages/home.js",
       "conteo": {
         "fatal": 0,
         "error": 0,
-        "warn": 1,
+        "warn": 0,
         "info": 0
       },
-      "hallazgos": [
-        {
-          "categoria": "json-schema",
-          "severidad": "warn",
-          "tag": "home",
-          "mensaje": "No se encontró JSON de preview para <home>.",
-          "sugerencia": "Creá un archivo de definición siguiendo el esquema is-preview/v1."
-        }
-      ]
+      "hallazgos": [],
+      "metricas": {
+        "secciones": 3,
+        "bloques": 3,
+        "demos": 0,
+        "controles": 0
+      }
     },
     {
       "tag": "icon-explorer",
       "titulo": "icon-explorer",
-      "categoria": "",
-      "estado": "warning",
-      "rutaJson": "",
+      "categoria": "media",
+      "estado": "ok",
+      "rutaJson": "C:/ContaPyme/Personal/apps/is-webcomponents/src/components/media/icon-explorer.json",
+      "rutaModulo": "C:/ContaPyme/Personal/apps/is-webcomponents/src/components/media/icon-explorer.preview.js",
       "conteo": {
         "fatal": 0,
         "error": 0,
-        "warn": 1,
+        "warn": 0,
         "info": 0
       },
-      "hallazgos": [
-        {
-          "categoria": "json-schema",
-          "severidad": "warn",
-          "tag": "icon-explorer",
-          "mensaje": "No se encontró JSON de preview para <icon-explorer>.",
-          "sugerencia": "Creá un archivo de definición siguiendo el esquema is-preview/v1."
-        }
-      ]
+      "hallazgos": [],
+      "metricas": {
+        "secciones": 1,
+        "bloques": 1,
+        "demos": 0,
+        "controles": 0
+      }
     },
     {
       "tag": "phase7",
       "titulo": "phase7",
       "categoria": "",
-      "estado": "warning",
-      "rutaJson": "",
+      "estado": "ok",
+      "rutaJson": "C:/ContaPyme/Personal/apps/is-webcomponents/src/pages/phase7.json",
       "conteo": {
         "fatal": 0,
         "error": 0,
-        "warn": 1,
-        "info": 0
+        "warn": 0,
+        "info": 3
       },
       "hallazgos": [
         {
-          "categoria": "json-schema",
-          "severidad": "warn",
+          "categoria": "json-contenido",
+          "severidad": "info",
           "tag": "phase7",
-          "mensaje": "No se encontró JSON de preview para <phase7>.",
-          "sugerencia": "Creá un archivo de definición siguiendo el esquema is-preview/v1."
+          "ruta": "C:/ContaPyme/Personal/apps/is-webcomponents/src/pages/phase7.json",
+          "mensaje": "Demo con 9 tags distintos: is-button, is-icon, is-dialog, is-input, is-select, is-option, is-textarea, is-switch…. Considerá partirlo en varios bloques."
+        },
+        {
+          "categoria": "json-contenido",
+          "severidad": "info",
+          "tag": "phase7",
+          "ruta": "C:/ContaPyme/Personal/apps/is-webcomponents/src/pages/phase7.json",
+          "mensaje": "Demo con 11 tags distintos: is-card, is-badge, is-dropdown, is-button, is-icon, is-dropdown-item, is-tag, is-tab-group…. Considerá partirlo en varios bloques."
+        },
+        {
+          "categoria": "json-contenido",
+          "severidad": "info",
+          "tag": "phase7",
+          "ruta": "C:/ContaPyme/Personal/apps/is-webcomponents/src/pages/phase7.json",
+          "mensaje": "Demo con 11 tags distintos: is-button, is-icon, is-split-panel, is-tree, is-tree-item, is-drawer, is-tab-group, is-tab…. Considerá partirlo en varios bloques."
         }
-      ]
+      ],
+      "metricas": {
+        "secciones": 6,
+        "bloques": 6,
+        "demos": 5,
+        "controles": 0
+      }
     },
     {
       "tag": "theming",
       "titulo": "theming",
       "categoria": "",
-      "estado": "warning",
-      "rutaJson": "",
+      "estado": "ok",
+      "rutaJson": "C:/ContaPyme/Personal/apps/is-webcomponents/src/pages/theming.json",
+      "rutaModulo": "C:/ContaPyme/Personal/apps/is-webcomponents/src/pages/theming.js",
       "conteo": {
         "fatal": 0,
         "error": 0,
-        "warn": 1,
+        "warn": 0,
         "info": 0
       },
-      "hallazgos": [
-        {
-          "categoria": "json-schema",
-          "severidad": "warn",
-          "tag": "theming",
-          "mensaje": "No se encontró JSON de preview para <theming>.",
-          "sugerencia": "Creá un archivo de definición siguiendo el esquema is-preview/v1."
-        }
-      ]
+      "hallazgos": [],
+      "metricas": {
+        "secciones": 6,
+        "bloques": 15,
+        "demos": 1,
+        "controles": 0
+      }
     },
     {
       "tag": "ecosystem",
       "titulo": "ecosystem",
       "categoria": "",
-      "estado": "warning",
-      "rutaJson": "",
+      "estado": "ok",
+      "rutaJson": "C:/ContaPyme/Personal/apps/is-webcomponents/src/pages/ecosystem.json",
+      "rutaModulo": "C:/ContaPyme/Personal/apps/is-webcomponents/src/pages/ecosystem.js",
       "conteo": {
         "fatal": 0,
         "error": 0,
-        "warn": 1,
+        "warn": 0,
         "info": 0
       },
-      "hallazgos": [
-        {
-          "categoria": "json-schema",
-          "severidad": "warn",
-          "tag": "ecosystem",
-          "mensaje": "No se encontró JSON de preview para <ecosystem>.",
-          "sugerencia": "Creá un archivo de definición siguiendo el esquema is-preview/v1."
-        }
-      ]
+      "hallazgos": [],
+      "metricas": {
+        "secciones": 3,
+        "bloques": 4,
+        "demos": 2,
+        "controles": 0
+      }
     }
   ],
   "erroresMotor": []

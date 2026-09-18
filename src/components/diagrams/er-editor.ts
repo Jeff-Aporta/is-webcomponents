@@ -123,6 +123,61 @@ const EDITOR_CSS = `
   font-size: 12px;
   margin-bottom: 4px;
 }
+
+/* Editor de atributos (CRUD de rows) */
+.panel fieldset[data-attrs] .attr-row {
+  display: grid;
+  grid-template-columns: 1fr 1fr 70px 22px;
+  gap: 4px;
+  align-items: center;
+  margin-bottom: 4px;
+  font-size: 12px;
+}
+.panel fieldset[data-attrs] .attr-row input,
+.panel fieldset[data-attrs] .attr-row select {
+  width: 100%;
+  background: transparent;
+  color: var(--is-text, #e2e8f0);
+  border: 1px solid var(--is-border, rgba(255,255,255,0.18));
+  border-radius: 3px;
+  padding: 3px 5px;
+  font: 11px ui-monospace, Menlo, Consolas, monospace;
+  box-sizing: border-box;
+  min-width: 0;
+}
+.panel fieldset[data-attrs] .attr-row input:focus,
+.panel fieldset[data-attrs] .attr-row select:focus {
+  outline: 1px solid var(--is-accent, #2563eb);
+  outline-offset: 0;
+  border-color: var(--is-accent, #2563eb);
+}
+.panel fieldset[data-attrs] .attr-row .key-pk {
+  border-color: var(--is-accent, #2563eb);
+  background: rgba(37, 99, 235, 0.12);
+}
+.panel fieldset[data-attrs] .attr-row .key-fk {
+  border-color: #f59e0b;
+  background: rgba(245, 158, 11, 0.12);
+}
+.panel fieldset[data-attrs] .attr-row .attr-del {
+  appearance: none;
+  border: 1px solid var(--is-border, rgba(255,255,255,0.18));
+  background: transparent;
+  color: var(--is-danger, #f87171);
+  border-radius: 3px;
+  cursor: pointer;
+  font: 12px ui-monospace, Menlo, Consolas, monospace;
+  padding: 0;
+  line-height: 1;
+}
+.panel fieldset[data-attrs] .attr-row .attr-del:hover {
+  background: rgba(248, 113, 113, 0.16);
+  border-color: var(--is-danger, #f87171);
+}
+.panel fieldset[data-attrs] button[data-action="add-attr"] {
+  width: 100%;
+  margin-top: 6px;
+}
 .panel input[type="text"],
 .panel input[type="number"],
 .panel select {
@@ -217,6 +272,11 @@ const EDITOR_TEMPLATE = `
         <button data-action="redo">↷ Rehacer</button>
       </div>
     </fieldset>
+    <fieldset data-attrs hidden>
+      <legend>Atributos</legend>
+      <div data-attr-list></div>
+      <button data-action="add-attr">+ Atributo</button>
+    </fieldset>
     <fieldset data-styles>
       <legend>Estilo</legend>
       <label>fill <input type="color" data-style="fill"></label>
@@ -278,12 +338,15 @@ class IsErEditor extends HTMLElement {
 
   #diagram: HTMLElement & { payload: unknown; svg: SVGElement } | null = null;
   #state: ErEditorState | null = null;
-  #past: Array<{ op: string; payload: unknown; inverse: () => void }> = [];
-  #future: Array<{ op: string; payload: unknown; inverse: () => void }> = [];
+  // Cada entrada de history lleva un `sig` opcional para coalescer cambios
+  // rápidos en name/type de un atributo en una sola entrada de undo.
+  #past: Array<{ op: string; sig?: string; payload: unknown; inverse: () => void; redo?: () => void }> = [];
+  #future: Array<{ op: string; sig?: string; payload: unknown; inverse: () => void; redo?: () => void }> = [];
   #selection: Set<string> = new Set();
   #mode: 'edit' | 'connect' = 'edit';
   #pendingConnection: { fromId: string } | null = null;
   #undoHotkey: ((e: KeyboardEvent) => void) | null = null;
+  #attrEditDebounce: number | null = null;
 
   constructor() {
     super();
@@ -305,6 +368,8 @@ class IsErEditor extends HTMLElement {
   }
   disconnectedCallback() {
     this.#uninstallHotkeys();
+    if (this.#attrEditDebounce !== null) clearTimeout(this.#attrEditDebounce);
+    this.#attrEditDebounce = null;
   }
   attributeChangedCallback(name: string): void {
     if (name === 'animation' && this.#diagram) {
@@ -355,7 +420,11 @@ class IsErEditor extends HTMLElement {
   #redo(): void {
     const entry = this.#future.pop();
     if (!entry) return;
-    entry.inverse();
+    // Si la entry tiene un `redo` explícito (p.ej. attribute edits que cambian
+    // el mismo campo varias veces), lo usamos. Si no, fallback a `inverse()`
+    // que es lo correcto para entries simétricas (add/delete/replace).
+    const apply = entry.redo ?? entry.inverse;
+    apply.call(entry);
     this.#past.push(entry);
     this.#render();
     this.#emitStateChange();
@@ -392,9 +461,11 @@ class IsErEditor extends HTMLElement {
 
   #updatePanel(): void {
     const info = this.shadowRoot!.querySelector('[data-selection-info]');
+    const attrsFieldset = this.shadowRoot!.querySelector('[data-attrs]') as HTMLElement | null;
     if (!info) return;
     if (!this.#selection.size || !this.#state) {
       info.textContent = 'Vacía — click sobre una entidad o arista para seleccionarla.';
+      attrsFieldset?.setAttribute('hidden', '');
       return;
     }
     const entitySel = [...this.#selection].filter((id) => this.#state!.entities.find((e) => e.id === id));
@@ -403,6 +474,74 @@ class IsErEditor extends HTMLElement {
       entitySel.length ? `${entitySel.length} entidad(es)` : null,
       relSel.length ? `${relSel.length} relación(es)` : null,
     ].filter(Boolean).join(' · ');
+
+    // Editor de atributos: solo visible cuando hay EXACTAMENTE 1 entidad
+    // seleccionada (no multi-select, no relaciones). Si no, ocultar.
+    if (attrsFieldset) {
+      if (entitySel.length === 1 && relSel.length === 0) {
+        attrsFieldset.removeAttribute('hidden');
+        this.#renderAttributeRows(entitySel[0]!);
+      } else {
+        attrsFieldset.setAttribute('hidden', '');
+      }
+    }
+  }
+
+  /** Renderiza las filas de atributos para la entidad seleccionada. */
+  #renderAttributeRows(entityId: string): void {
+    const list = this.shadowRoot!.querySelector('[data-attr-list]') as HTMLElement | null;
+    if (!list || !this.#state) return;
+    const entity = this.#state.entities.find((e) => e.id === entityId);
+    if (!entity) {
+      list.innerHTML = '';
+      return;
+    }
+    list.innerHTML = '';
+    for (let i = 0; i < entity.attributes.length; i++) {
+      const a = entity.attributes[i]!;
+      const row = document.createElement('div');
+      row.className = 'attr-row';
+      row.dataset.attrIndex = String(i);
+
+      const nameInput = document.createElement('input');
+      nameInput.type = 'text';
+      nameInput.value = a.name ?? '';
+      nameInput.placeholder = 'nombre';
+      nameInput.dataset.attrField = 'name';
+      nameInput.dataset.attrIndex = String(i);
+
+      const typeInput = document.createElement('input');
+      typeInput.type = 'text';
+      typeInput.value = a.type ?? '';
+      typeInput.placeholder = 'tipo';
+      typeInput.dataset.attrField = 'type';
+      typeInput.dataset.attrIndex = String(i);
+
+      const keySelect = document.createElement('select');
+      keySelect.dataset.attrField = 'key';
+      keySelect.dataset.attrIndex = String(i);
+      for (const opt of ['', 'PK', 'FK']) {
+        const o = document.createElement('option');
+        o.value = opt;
+        o.textContent = opt || '—';
+        if ((a.key ?? '') === opt) o.selected = true;
+        keySelect.appendChild(o);
+      }
+      keySelect.className = a.key === 'PK' ? 'key-pk' : a.key === 'FK' ? 'key-fk' : '';
+
+      const delBtn = document.createElement('button');
+      delBtn.className = 'attr-del';
+      delBtn.title = 'Eliminar atributo';
+      delBtn.textContent = '×';
+      delBtn.dataset.attrAction = 'delete';
+      delBtn.dataset.attrIndex = String(i);
+
+      row.appendChild(nameInput);
+      row.appendChild(typeInput);
+      row.appendChild(keySelect);
+      row.appendChild(delBtn);
+      list.appendChild(row);
+    }
   }
 
   #syncJsonReadout(): void {
@@ -427,26 +566,49 @@ class IsErEditor extends HTMLElement {
     this.shadowRoot!.addEventListener('click', (e: Event) => {
       const path = e.composedPath();
       const btn = path.find((x) => (x as HTMLElement | undefined)?.dataset?.action);
-      if (btn) { this.#handleAction((btn as HTMLElement).dataset.action!); return; }
+      if (btn) { this.#handleAction((btn as HTMLElement).dataset.action!, e); return; }
+      const attrDel = path.find((x) => (x as HTMLElement | undefined)?.dataset?.attrAction === 'delete') as HTMLElement | undefined;
+      if (attrDel) {
+        const idx = Number(attrDel.dataset.attrIndex);
+        this.#deleteAttribute(idx);
+        return;
+      }
       const modeBtn = path.find((x) => (x as HTMLElement | undefined)?.dataset?.mode);
       if (modeBtn) this.#setMode((modeBtn as HTMLElement).dataset.mode!);
     });
     this.shadowRoot!.addEventListener('input', (e: Event) => {
       const t = e.target as HTMLInputElement | null;
-      if (!t?.dataset?.style) return;
-      this.#applyStyleToSelection(t.dataset.style, t.value, t.type);
+      if (!t) return;
+      if (t.dataset.style) {
+        this.#applyStyleToSelection(t.dataset.style, t.value, t.type);
+        return;
+      }
+      // Atributo (name/type) — debounce 200ms para coalescer tecleo rápido
+      // en una sola entrada de history (un undo por fila de escritura).
+      if (t.dataset.attrField && (t.dataset.attrField === 'name' || t.dataset.attrField === 'type')) {
+        this.#updateAttributeDebounced(Number(t.dataset.attrIndex), t.dataset.attrField as 'name' | 'type', t.value);
+        return;
+      }
     });
     this.shadowRoot!.addEventListener('change', (e: Event) => {
       const t = e.target as HTMLInputElement | null;
-      if (!t?.dataset?.style) return;
-      this.#applyStyleToSelection(t.dataset.style, t.value, t.type);
+      if (!t) return;
+      if (t.dataset.style) {
+        this.#applyStyleToSelection(t.dataset.style, t.value, t.type);
+        return;
+      }
+      if (t.dataset.attrField === 'key') {
+        this.#updateAttributeImmediate(Number(t.dataset.attrIndex), 'key', t.value as 'PK' | 'FK' | '');
+        return;
+      }
     });
   }
 
-  #handleAction(action: string): void {
+  #handleAction(action: string, ev?: Event): void {
     switch (action) {
       case 'add-entity': this.#addEntity(); break;
       case 'add-relation': this.#addRelation(); break;
+      case 'add-attr': this.#addAttribute(); break;
       case 'delete': this.#deleteSelection(); break;
       case 'duplicate': this.#duplicateSelection(); break;
       case 'undo': this.#undo(); break;
@@ -456,6 +618,8 @@ class IsErEditor extends HTMLElement {
       case 'copy-svg': this.#copyToClipboard(this.exportSvg(), 'image/svg+xml'); break;
       case 'download-svg': this.#downloadFile(this.exportSvg(), 'image/svg+xml', 'er-diagram.svg'); break;
     }
+    // Los atributos se manejan via dataset.attrAction (delete), no via action.
+    void ev;
   }
 
   #setMode(mode: string): void {
@@ -702,6 +866,140 @@ class IsErEditor extends HTMLElement {
     this.#selection = new Set([r.id]);
     this.#render();
     this.#emitStateChange();
+  }
+
+  /* ───── Atributos (CRUD de rows) ───── */
+
+  /** Entidad única actualmente seleccionada (la única compatible con el editor de attrs). */
+  #selectedEntityId(): string | null {
+    if (!this.#state || this.#selection.size !== 1) return null;
+    const id = [...this.#selection][0]!;
+    return this.#state.entities.some((e) => e.id === id) ? id : null;
+  }
+
+  #addAttribute(): void {
+    if (!this.#state) return;
+    const eid = this.#selectedEntityId();
+    if (!eid) return;
+    const e = this.#state.entities.find((x) => x.id === eid)!;
+    const idx = e.attributes.length;
+    const beforeAttrs = e.attributes.map((a) => ({ ...a }));
+    e.attributes.push({ name: `atributo${idx + 1}`, type: 'string', key: undefined });
+    this.#commit('add_attr', { eid, idx, before: beforeAttrs }, () => {
+      if (!this.#state) return;
+      const en = this.#state.entities.find((x) => x.id === eid);
+      if (!en) return;
+      en.attributes = beforeAttrs.map((a) => ({ ...a }));
+    });
+    this.#render();
+    this.#emitStateChange();
+  }
+
+  #deleteAttribute(idx: number): void {
+    if (!this.#state) return;
+    const eid = this.#selectedEntityId();
+    if (!eid) return;
+    const e = this.#state.entities.find((x) => x.id === eid);
+    if (!e || idx < 0 || idx >= e.attributes.length) return;
+    const beforeAttrs = e.attributes.map((a) => ({ ...a }));
+    const removed = e.attributes.splice(idx, 1)[0]!;
+    this.#commit('delete_attr', { eid, idx, removed: { ...removed } }, () => {
+      if (!this.#state) return;
+      const en = this.#state.entities.find((x) => x.id === eid);
+      if (!en) return;
+      en.attributes.splice(idx, 0, { ...removed });
+    });
+    this.#render();
+    this.#emitStateChange();
+  }
+
+  /** Update inmediato (sin debounce): usado para cambios discretos como `key`. */
+  #updateAttributeImmediate(idx: number, field: 'key', value: 'PK' | 'FK' | ''): void {
+    if (!this.#state) return;
+    const eid = this.#selectedEntityId();
+    if (!eid) return;
+    const e = this.#state.entities.find((x) => x.id === eid);
+    if (!e || idx < 0 || idx >= e.attributes.length) return;
+    const before = { ...e.attributes[idx]! };
+    const next = { ...before, key: value === '' ? undefined : value };
+    e.attributes[idx] = next;
+    this.#commit('update_attr', { eid, idx, before, field, value }, () => {
+      if (!this.#state) return;
+      const en = this.#state.entities.find((x) => x.id === eid);
+      if (!en || idx < 0 || idx >= en.attributes.length) return;
+      en.attributes[idx] = { ...before };
+    });
+    // Re-render del panel para que el estilo PK/FK se aplique (border color).
+    this.#updatePanel();
+    this.#emitStateChange();
+  }
+
+  /** Update con debounce: coalesce tecleo en name/type en una sola entrada de history. */
+  #updateAttributeDebounced(idx: number, field: 'name' | 'type', value: string): void {
+    if (!this.#state) return;
+    const eid = this.#selectedEntityId();
+    if (!eid) return;
+    const e = this.#state.entities.find((x) => x.id === eid);
+    if (!e || idx < 0 || idx >= e.attributes.length) return;
+    // Aplicar inmediatamente para que el state refleje lo que ve el usuario.
+    const before = { ...e.attributes[idx]! };
+    e.attributes[idx] = { ...before, [field]: value };
+    this.#commitAttributeEdit(eid, idx, field, value, before, { ...e.attributes[idx]! });
+    // Sin re-render del diagrama: los textos del atributo los regenera el render
+    // siguiente (#render() ya se llama tras los debounce). Para feedback inmediato
+    // al usuario re-pintamos el atributo seleccionado en el SVG via updateComplete.
+    this.#scheduleDebouncedRender();
+  }
+
+  /** Limpia timers anteriores y agenda uno nuevo. */
+  #scheduleDebouncedRender(): void {
+    if (this.#attrEditDebounce !== null) clearTimeout(this.#attrEditDebounce);
+    this.#attrEditDebounce = window.setTimeout(() => {
+      this.#render();
+      this.#emitStateChange();
+    }, 220);
+  }
+
+  /** Commit coalesced: si ya hay un commit pendiente para el mismo (eid,idx,field),
+   *  acumula el cambio actualizando el `value` del entry sin tocar el inverse;
+   *  si no, crea uno nuevo. */
+  #commitAttributeEdit(
+    eid: string,
+    idx: number,
+    field: 'name' | 'type',
+    value: string,
+    before: ErSpecAttribute,
+    after: ErSpecAttribute,
+  ): void {
+    // Buscar el último commit pendiente para esta misma celda.
+    const last = this.#past[this.#past.length - 1];
+    const sig = `attr:${eid}:${idx}:${field}`;
+    if (last && last.op === 'update_attr' && last.sig === sig) {
+      // Actualizar el value del entry SIN perder el `before` original (eso es
+      // lo que undo usa). Para redo, queremos que al pulsar redo después del
+      // undo se aplique el ÚLTIMO valor escrito (no el primero).
+      (last as { payload: { value: string } }).payload.value = value;
+      return;
+    }
+    this.#past.push({
+      op: 'update_attr',
+      sig,
+      payload: { eid, idx, field, value },
+      inverse: () => {
+        if (!this.#state) return;
+        const en = this.#state.entities.find((x) => x.id === eid);
+        if (!en || idx < 0 || idx >= en.attributes.length) return;
+        en.attributes[idx] = { ...before };
+      },
+      redo: () => {
+        if (!this.#state) return;
+        const en = this.#state.entities.find((x) => x.id === eid);
+        if (!en || idx < 0 || idx >= en.attributes.length) return;
+        en.attributes[idx] = { ...after };
+      },
+    } as { op: string; sig?: string; payload: unknown; inverse: () => void; redo?: () => void });
+    if (this.#past.length > HISTORY_LIMIT) this.#past.shift();
+    this.#future = [];
   }
   #deleteSelection(): void {
     if (!this.#selection.size || !this.#state) return;

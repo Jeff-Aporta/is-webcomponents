@@ -1,0 +1,4344 @@
+{
+  "generatedAt": "2026-09-17T23:39:41.544Z",
+  "fromInput": "C:\\ContaPyme\\Personal\\apps\\is-webcomponents\\.audit\\discovery-deep-audit.json",
+  "totalTestables": 432,
+  "groups": [
+    {
+      "id": "g41",
+      "label": "webcomponent/components/forms+components+navigation+isp+utils+components+previews",
+      "size": 56,
+      "testables": [
+        {
+          "file": "src/components/forms/checkbox.ts",
+          "language": "ts",
+          "name": "is-checkbox",
+          "categories": [
+            "webcomponent",
+            "event"
+          ],
+          "loc": 280
+        },
+        {
+          "file": "src/components/forms/color-picker.ts",
+          "language": "ts",
+          "name": "is-color-picker",
+          "categories": [
+            "webcomponent",
+            "event"
+          ],
+          "loc": 454
+        },
+        {
+          "file": "src/components/forms/combobox.ts",
+          "language": "ts",
+          "name": "is-combobox",
+          "categories": [
+            "webcomponent",
+            "sql-query",
+            "event"
+          ],
+          "loc": 489
+        },
+        {
+          "file": "src/components/forms/date-picker.ts",
+          "language": "ts",
+          "name": "is-date-picker",
+          "categories": [
+            "webcomponent",
+            "event"
+          ],
+          "loc": 794
+        },
+        {
+          "file": "src/components/forms/date-range-picker.ts",
+          "language": "ts",
+          "name": "is-date-range-picker",
+          "categories": [
+            "webcomponent",
+            "event"
+          ],
+          "loc": 342
+        },
+        {
+          "file": "src/components/forms/digital-clock.ts",
+          "language": "ts",
+          "name": "is-digital-clock",
+          "categories": [
+            "webcomponent",
+            "event"
+          ],
+          "loc": 294
+        },
+        {
+          "file": "src/components/forms/doc-editor.ts",
+          "language": "ts",
+          "name": "is-doc-editor",
+          "categories": [
+            "webcomponent",
+            "event"
+          ],
+          "loc": 251
+        },
+        {
+          "file": "src/components/forms/dropzone.ts",
+          "language": "ts",
+          "name": "is-dropzone",
+          "categories": [
+            "webcomponent",
+            "worker",
+            "event"
+          ],
+          "loc": 226
+        },
+        {
+          "file": "src/components/forms/duration-picker.ts",
+          "language": "ts",
+          "name": "is-duration-picker",
+          "categories": [
+            "webcomponent",
+            "sql-query",
+            "event"
+          ],
+          "loc": 184
+        },
+        {
+          "file": "src/components/forms/file-input.ts",
+          "language": "ts",
+          "name": "is-file-input",
+          "categories": [
+            "webcomponent",
+            "sql-query",
+            "event",
+            "css-part"
+          ],
+          "loc": 340
+        },
+        {
+          "file": "src/components/forms/full-calendar.ts",
+          "language": "ts",
+          "name": "is-full-calendar",
+          "categories": [
+            "webcomponent",
+            "event"
+          ],
+          "loc": 256
+        },
+        {
+          "file": "src/components/forms/inline-edit.ts",
+          "language": "ts",
+          "name": "is-inline-edit",
+          "categories": [
+            "webcomponent",
+            "worker",
+            "event"
+          ],
+          "loc": 246
+        },
+        {
+          "file": "src/components/forms/input.ts",
+          "language": "ts",
+          "name": "is-input",
+          "categories": [
+            "webcomponent",
+            "worker",
+            "event"
+          ],
+          "loc": 578
+        },
+        {
+          "file": "src/components/forms/masked-input.ts",
+          "language": "ts",
+          "name": "is-masked-input",
+          "categories": [
+            "webcomponent",
+            "auth",
+            "event"
+          ],
+          "loc": 185
+        },
+        {
+          "file": "src/components/forms/mention.ts",
+          "language": "ts",
+          "name": "is-mention",
+          "categories": [
+            "webcomponent",
+            "migration",
+            "event"
+          ],
+          "loc": 201
+        },
+        {
+          "file": "src/components/forms/month-calendar.ts",
+          "language": "ts",
+          "name": "is-month-calendar",
+          "categories": [
+            "webcomponent",
+            "event"
+          ],
+          "loc": 170
+        },
+        {
+          "file": "src/components/forms/option.css",
+          "language": "css",
+          "name": "option",
+          "categories": [
+            "webcomponent"
+          ],
+          "loc": 72
+        },
+        {
+          "file": "src/components/forms/option.ts",
+          "language": "ts",
+          "name": "is-option",
+          "categories": [
+            "webcomponent",
+            "migration"
+          ],
+          "loc": 89
+        },
+        {
+          "file": "src/components/forms/pin-input.ts",
+          "language": "ts",
+          "name": "is-pin-input",
+          "categories": [
+            "webcomponent",
+            "event"
+          ],
+          "loc": 279
+        },
+        {
+          "file": "src/components/forms/radio-group.ts",
+          "language": "ts",
+          "name": "is-radio-group",
+          "categories": [
+            "webcomponent",
+            "event"
+          ],
+          "loc": 332
+        },
+        {
+          "file": "src/components/forms/radio.ts",
+          "language": "ts",
+          "name": "is-radio",
+          "categories": [
+            "webcomponent",
+            "migration",
+            "event"
+          ],
+          "loc": 177
+        },
+        {
+          "file": "src/components/forms/rating.ts",
+          "language": "ts",
+          "name": "is-rating",
+          "categories": [
+            "webcomponent",
+            "event"
+          ],
+          "loc": 454
+        },
+        {
+          "file": "src/components/forms/rte.ts",
+          "language": "ts",
+          "name": "is-rte",
+          "categories": [
+            "webcomponent",
+            "auth",
+            "event"
+          ],
+          "loc": 283
+        },
+        {
+          "file": "src/components/forms/select.ts",
+          "language": "ts",
+          "name": "is-select",
+          "categories": [
+            "webcomponent",
+            "worker",
+            "event"
+          ],
+          "loc": 863
+        },
+        {
+          "file": "src/components/forms/signature.ts",
+          "language": "ts",
+          "name": "is-signature",
+          "categories": [
+            "webcomponent",
+            "event"
+          ],
+          "loc": 203
+        },
+        {
+          "file": "src/components/forms/slider.ts",
+          "language": "ts",
+          "name": "is-slider",
+          "categories": [
+            "webcomponent",
+            "event"
+          ],
+          "loc": 781
+        },
+        {
+          "file": "src/components/forms/switch.ts",
+          "language": "ts",
+          "name": "is-switch",
+          "categories": [
+            "webcomponent",
+            "event"
+          ],
+          "loc": 285
+        },
+        {
+          "file": "src/components/forms/textarea.ts",
+          "language": "ts",
+          "name": "is-textarea",
+          "categories": [
+            "webcomponent",
+            "sql-query",
+            "event"
+          ],
+          "loc": 414
+        },
+        {
+          "file": "src/components/forms/time-clock.ts",
+          "language": "ts",
+          "name": "is-time-clock",
+          "categories": [
+            "webcomponent",
+            "event"
+          ],
+          "loc": 387
+        },
+        {
+          "file": "src/components/forms/year-calendar.ts",
+          "language": "ts",
+          "name": "is-year-calendar",
+          "categories": [
+            "webcomponent",
+            "event"
+          ],
+          "loc": 142
+        },
+        {
+          "file": "src/components/_shared/grid-data.ts",
+          "language": "ts",
+          "name": "grid-data",
+          "categories": [
+            "worker"
+          ],
+          "loc": 372
+        },
+        {
+          "file": "src/components/_shared/scroll-memory.ts",
+          "language": "ts",
+          "name": "scroll-memory",
+          "categories": [
+            "worker",
+            "storage",
+            "event"
+          ],
+          "loc": 252
+        },
+        {
+          "file": "src/components/feedback/toast.preview.ts",
+          "language": "ts",
+          "name": "toast.preview",
+          "categories": [
+            "worker",
+            "event"
+          ],
+          "loc": 76
+        },
+        {
+          "file": "src/components/helpers/format-date.preview.ts",
+          "language": "ts",
+          "name": "format-date.preview",
+          "categories": [
+            "worker",
+            "event"
+          ],
+          "loc": 116
+        },
+        {
+          "file": "src/components/helpers/mutation-observer.preview.ts",
+          "language": "ts",
+          "name": "mutation-observer.preview",
+          "categories": [
+            "worker",
+            "event"
+          ],
+          "loc": 123
+        },
+        {
+          "file": "src/components/isp/_shared/tree-view/04-tree-flow.ts",
+          "language": "ts",
+          "name": "04-tree-flow",
+          "categories": [
+            "worker"
+          ],
+          "loc": 338
+        },
+        {
+          "file": "src/components/isp/_shared/tree-view/05-view.ts",
+          "language": "ts",
+          "name": "05-view",
+          "categories": [
+            "worker"
+          ],
+          "loc": 161
+        },
+        {
+          "file": "src/components/isp/_shared/tree-view/row-adapter-drag.ts",
+          "language": "ts",
+          "name": "row-adapter-drag",
+          "categories": [
+            "worker"
+          ],
+          "loc": 148
+        },
+        {
+          "file": "src/components/isp/loading-overlay.preview.ts",
+          "language": "ts",
+          "name": "loading-overlay.preview",
+          "categories": [
+            "worker",
+            "event"
+          ],
+          "loc": 32
+        },
+        {
+          "file": "src/components/isp/modal-verificacion.preview.ts",
+          "language": "ts",
+          "name": "modal-verificacion.preview",
+          "categories": [
+            "worker",
+            "event"
+          ],
+          "loc": 36
+        },
+        {
+          "file": "src/components/navigation/breadcrumb-item.ts",
+          "language": "ts",
+          "name": "is-breadcrumb-item",
+          "categories": [
+            "webcomponent",
+            "css-part"
+          ],
+          "loc": 166
+        },
+        {
+          "file": "src/components/navigation/breadcrumb.ts",
+          "language": "ts",
+          "name": "is-breadcrumb",
+          "categories": [
+            "webcomponent",
+            "css-part"
+          ],
+          "loc": 61
+        },
+        {
+          "file": "src/components/navigation/carousel.ts",
+          "language": "ts",
+          "name": "is-carousel",
+          "categories": [
+            "webcomponent",
+            "worker",
+            "event",
+            "css-part"
+          ],
+          "loc": 372
+        },
+        {
+          "file": "src/components/navigation/mega-menu.css",
+          "language": "css",
+          "name": "mega-menu",
+          "categories": [
+            "webcomponent",
+            "css-part"
+          ],
+          "loc": 108
+        },
+        {
+          "file": "src/components/navigation/mega-menu.ts",
+          "language": "ts",
+          "name": "is-mega-menu",
+          "categories": [
+            "webcomponent",
+            "worker",
+            "event"
+          ],
+          "loc": 161
+        },
+        {
+          "file": "src/components/navigation/scroller.ts",
+          "language": "ts",
+          "name": "is-scroller",
+          "categories": [
+            "webcomponent",
+            "event",
+            "css-part"
+          ],
+          "loc": 157
+        },
+        {
+          "file": "src/components/navigation/stepper.ts",
+          "language": "ts",
+          "name": "is-stepper",
+          "categories": [
+            "webcomponent",
+            "event",
+            "css-part"
+          ],
+          "loc": 211
+        },
+        {
+          "file": "src/components/navigation/tab-group.ts",
+          "language": "ts",
+          "name": "is-tab-group",
+          "categories": [
+            "webcomponent",
+            "event",
+            "css-part"
+          ],
+          "loc": 452
+        },
+        {
+          "file": "src/components/navigation/tree.ts",
+          "language": "ts",
+          "name": "is-tree",
+          "categories": [
+            "webcomponent",
+            "event",
+            "css-part"
+          ],
+          "loc": 308
+        },
+        {
+          "file": "src/components/isp/form.css",
+          "language": "css",
+          "name": "form",
+          "categories": [
+            "animation"
+          ],
+          "loc": 68
+        },
+        {
+          "file": "src/components/isp/loading-overlay.css",
+          "language": "css",
+          "name": "loading-overlay",
+          "categories": [
+            "animation"
+          ],
+          "loc": 57
+        },
+        {
+          "file": "src/components/isp/tree-view.css",
+          "language": "css",
+          "name": "tree-view",
+          "categories": [
+            "animation"
+          ],
+          "loc": 266
+        },
+        {
+          "file": "src/utils/health/motor/cli.ts",
+          "language": "ts",
+          "name": "cli",
+          "categories": [
+            "migration",
+            "cli"
+          ],
+          "loc": 211
+        },
+        {
+          "file": "src/utils/health/motor/reporter.ts",
+          "language": "ts",
+          "name": "reporter",
+          "categories": [
+            "migration"
+          ],
+          "loc": 277
+        },
+        {
+          "file": "src/components/_shared/llm-agent-prompt.ts",
+          "language": "ts",
+          "name": "llm-agent-prompt",
+          "categories": [
+            "http-client"
+          ],
+          "loc": 115
+        },
+        {
+          "file": "src/previews/_kit/load-json.ts",
+          "language": "ts",
+          "name": "load-json",
+          "categories": [
+            "http-client"
+          ],
+          "loc": 24
+        }
+      ]
+    },
+    {
+      "id": "g39",
+      "label": "webcomponent/components/diagrams+_shared+navigation+data+scripts+helpers+styles+scripts+scripts+utils",
+      "size": 52,
+      "testables": [
+        {
+          "file": "src/components/diagrams/block-diagram.ts",
+          "language": "ts",
+          "name": "is-block-diagram",
+          "categories": [
+            "webcomponent",
+            "event"
+          ],
+          "loc": 455
+        },
+        {
+          "file": "src/components/diagrams/class-diagram.ts",
+          "language": "ts",
+          "name": "is-class-diagram",
+          "categories": [
+            "webcomponent",
+            "event"
+          ],
+          "loc": 472
+        },
+        {
+          "file": "src/components/diagrams/component-diagram.ts",
+          "language": "ts",
+          "name": "is-component-diagram",
+          "categories": [
+            "webcomponent",
+            "event"
+          ],
+          "loc": 376
+        },
+        {
+          "file": "src/components/diagrams/diagram-lightbox.ts",
+          "language": "ts",
+          "name": "is-diagram-lightbox",
+          "categories": [
+            "webcomponent",
+            "sql-query",
+            "worker",
+            "event"
+          ],
+          "loc": 337
+        },
+        {
+          "file": "src/components/diagrams/er-diagram.ts",
+          "language": "ts",
+          "name": "is-er-diagram",
+          "categories": [
+            "webcomponent",
+            "event",
+            "animation"
+          ],
+          "loc": 500
+        },
+        {
+          "file": "src/components/diagrams/er-editor.ts",
+          "language": "ts",
+          "name": "is-er-editor",
+          "categories": [
+            "webcomponent",
+            "sql-query",
+            "worker",
+            "event",
+            "browser-api",
+            "animation"
+          ],
+          "loc": 1194
+        },
+        {
+          "file": "src/components/diagrams/flowchart.ts",
+          "language": "ts",
+          "name": "is-flowchart",
+          "categories": [
+            "webcomponent",
+            "auth",
+            "event"
+          ],
+          "loc": 527
+        },
+        {
+          "file": "src/components/diagrams/gantt.ts",
+          "language": "ts",
+          "name": "is-gantt",
+          "categories": [
+            "webcomponent",
+            "event"
+          ],
+          "loc": 390
+        },
+        {
+          "file": "src/components/diagrams/journey-map.ts",
+          "language": "ts",
+          "name": "is-journey-map",
+          "categories": [
+            "webcomponent",
+            "event"
+          ],
+          "loc": 310
+        },
+        {
+          "file": "src/components/diagrams/lightbox.ts",
+          "language": "ts",
+          "name": "is-lightbox",
+          "categories": [
+            "webcomponent",
+            "worker",
+            "event"
+          ],
+          "loc": 371
+        },
+        {
+          "file": "src/components/diagrams/mindmap.ts",
+          "language": "ts",
+          "name": "is-mindmap",
+          "categories": [
+            "webcomponent",
+            "event"
+          ],
+          "loc": 287
+        },
+        {
+          "file": "src/components/diagrams/org-chart.ts",
+          "language": "ts",
+          "name": "is-org-chart",
+          "categories": [
+            "webcomponent",
+            "sql-query",
+            "migration",
+            "worker",
+            "event",
+            "animation"
+          ],
+          "loc": 416
+        },
+        {
+          "file": "src/components/diagrams/quadrant-chart.ts",
+          "language": "ts",
+          "name": "is-quadrant-chart",
+          "categories": [
+            "webcomponent",
+            "event"
+          ],
+          "loc": 304
+        },
+        {
+          "file": "src/components/diagrams/sankey-diagram.ts",
+          "language": "ts",
+          "name": "is-sankey-diagram",
+          "categories": [
+            "webcomponent",
+            "event"
+          ],
+          "loc": 324
+        },
+        {
+          "file": "src/components/diagrams/sequence-diagram.ts",
+          "language": "ts",
+          "name": "is-sequence-diagram",
+          "categories": [
+            "webcomponent",
+            "event"
+          ],
+          "loc": 561
+        },
+        {
+          "file": "src/components/diagrams/state-diagram.ts",
+          "language": "ts",
+          "name": "is-state-diagram",
+          "categories": [
+            "webcomponent",
+            "event"
+          ],
+          "loc": 392
+        },
+        {
+          "file": "src/components/diagrams/swimlane-diagram.ts",
+          "language": "ts",
+          "name": "is-swimlane-diagram",
+          "categories": [
+            "webcomponent",
+            "event"
+          ],
+          "loc": 352
+        },
+        {
+          "file": "src/components/diagrams/timeline.ts",
+          "language": "ts",
+          "name": "is-timeline",
+          "categories": [
+            "webcomponent",
+            "event"
+          ],
+          "loc": 334
+        },
+        {
+          "file": "src/components/diagrams/use-case-diagram.ts",
+          "language": "ts",
+          "name": "is-use-case-diagram",
+          "categories": [
+            "webcomponent",
+            "event"
+          ],
+          "loc": 414
+        },
+        {
+          "file": "src/components/diagrams/venn-diagram.ts",
+          "language": "ts",
+          "name": "is-venn-diagram",
+          "categories": [
+            "webcomponent",
+            "event"
+          ],
+          "loc": 261
+        },
+        {
+          "file": "src/components/_shared/date-field-element.ts",
+          "language": "ts",
+          "name": "is-datefieldbase",
+          "categories": [
+            "webcomponent",
+            "sql-query",
+            "event"
+          ],
+          "loc": 311
+        },
+        {
+          "file": "src/components/_shared/diagram-element-base.ts",
+          "language": "ts",
+          "name": "is-flowchart",
+          "categories": [
+            "webcomponent",
+            "event"
+          ],
+          "loc": 213
+        },
+        {
+          "file": "src/components/_shared/dom-utils.ts",
+          "language": "ts",
+          "name": "dom-utils",
+          "categories": [
+            "webcomponent",
+            "sql-query",
+            "browser-api"
+          ],
+          "loc": 96
+        },
+        {
+          "file": "src/components/_shared/form-control-mixin.ts",
+          "language": "ts",
+          "name": "is-input",
+          "categories": [
+            "webcomponent"
+          ],
+          "loc": 194
+        },
+        {
+          "file": "src/components/_shared/highlight-code.ts",
+          "language": "ts",
+          "name": "highlight-code",
+          "categories": [
+            "webcomponent"
+          ],
+          "loc": 206
+        },
+        {
+          "file": "src/components/_shared/modal-base.ts",
+          "language": "ts",
+          "name": "is-dialog",
+          "categories": [
+            "webcomponent",
+            "migration",
+            "event"
+          ],
+          "loc": 324
+        },
+        {
+          "file": "src/components/_shared/picker-element.ts",
+          "language": "ts",
+          "name": "is-pickerinput",
+          "categories": [
+            "webcomponent",
+            "event"
+          ],
+          "loc": 502
+        },
+        {
+          "file": "src/components/_shared/position.ts",
+          "language": "ts",
+          "name": "position",
+          "categories": [
+            "webcomponent"
+          ],
+          "loc": 385
+        },
+        {
+          "file": "src/components/_shared/theme-scope.ts",
+          "language": "ts",
+          "name": "theme-scope",
+          "categories": [
+            "webcomponent",
+            "event"
+          ],
+          "loc": 59
+        },
+        {
+          "file": "src/components/navigation/breadcrumb-item.css",
+          "language": "css",
+          "name": "breadcrumb-item",
+          "categories": [
+            "animation"
+          ],
+          "loc": 57
+        },
+        {
+          "file": "src/components/navigation/carousel.css",
+          "language": "css",
+          "name": "carousel",
+          "categories": [
+            "animation",
+            "css-part"
+          ],
+          "loc": 132
+        },
+        {
+          "file": "src/components/navigation/scroller.css",
+          "language": "css",
+          "name": "scroller",
+          "categories": [
+            "animation",
+            "css-part"
+          ],
+          "loc": 78
+        },
+        {
+          "file": "src/components/navigation/stepper.css",
+          "language": "css",
+          "name": "stepper",
+          "categories": [
+            "animation",
+            "css-part"
+          ],
+          "loc": 186
+        },
+        {
+          "file": "src/components/navigation/tab-group.css",
+          "language": "css",
+          "name": "tab-group",
+          "categories": [
+            "animation"
+          ],
+          "loc": 168
+        },
+        {
+          "file": "src/components/navigation/tree.css",
+          "language": "css",
+          "name": "tree",
+          "categories": [
+            "animation",
+            "css-part"
+          ],
+          "loc": 129
+        },
+        {
+          "file": "src/components/data/data-grid.css",
+          "language": "css",
+          "name": "data-grid",
+          "categories": [
+            "animation"
+          ],
+          "loc": 697
+        },
+        {
+          "file": "src/components/data/gauge.css",
+          "language": "css",
+          "name": "gauge",
+          "categories": [
+            "animation"
+          ],
+          "loc": 78
+        },
+        {
+          "file": "src/components/data/kanban.css",
+          "language": "css",
+          "name": "kanban",
+          "categories": [
+            "animation",
+            "css-part"
+          ],
+          "loc": 189
+        },
+        {
+          "file": "src/components/data/stat.css",
+          "language": "css",
+          "name": "stat",
+          "categories": [
+            "animation"
+          ],
+          "loc": 94
+        },
+        {
+          "file": "src/components/data/transfer.css",
+          "language": "css",
+          "name": "transfer",
+          "categories": [
+            "animation"
+          ],
+          "loc": 130
+        },
+        {
+          "file": "scripts/audit-is-code.ts",
+          "language": "ts",
+          "name": "audit-is-code",
+          "categories": [
+            "event"
+          ],
+          "loc": 176
+        },
+        {
+          "file": "scripts/cdn-panel.js",
+          "language": "js",
+          "name": "cdn-panel",
+          "categories": [
+            "event"
+          ],
+          "loc": 99
+        },
+        {
+          "file": "scripts/docs-chrome.js",
+          "language": "js",
+          "name": "docs-chrome",
+          "categories": [
+            "event"
+          ],
+          "loc": 62
+        },
+        {
+          "file": "scripts/highlight-pre.js",
+          "language": "js",
+          "name": "highlight-pre",
+          "categories": [
+            "event"
+          ],
+          "loc": 54
+        },
+        {
+          "file": "src/components/helpers/observer.preview.ts",
+          "language": "ts",
+          "name": "observer.preview",
+          "categories": [
+            "event"
+          ],
+          "loc": 136
+        },
+        {
+          "file": "src/components/helpers/relative-time.preview.ts",
+          "language": "ts",
+          "name": "relative-time.preview",
+          "categories": [
+            "event",
+            "i18n"
+          ],
+          "loc": 121
+        },
+        {
+          "file": "src/components/helpers/resize-observer.preview.ts",
+          "language": "ts",
+          "name": "resize-observer.preview",
+          "categories": [
+            "event"
+          ],
+          "loc": 112
+        },
+        {
+          "file": "src/styles/presentation.css",
+          "language": "css",
+          "name": "presentation",
+          "categories": [
+            "animation",
+            "css-part"
+          ],
+          "loc": 1594
+        },
+        {
+          "file": "src/styles/shell.css",
+          "language": "css",
+          "name": "shell",
+          "categories": [
+            "animation"
+          ],
+          "loc": 411
+        },
+        {
+          "file": "scripts/inject-equiv-flows.ts",
+          "language": "ts",
+          "name": "inject-equiv-flows",
+          "categories": [
+            "auth"
+          ],
+          "loc": 501
+        },
+        {
+          "file": "scripts/preview-boot.js",
+          "language": "js",
+          "name": "preview-boot",
+          "categories": [
+            "storage"
+          ],
+          "loc": 52
+        },
+        {
+          "file": "src/utils/testing/e2e/lib/server.ts",
+          "language": "ts",
+          "name": "server",
+          "categories": [
+            "database"
+          ],
+          "loc": 107,
+          "e2e": true
+        }
+      ]
+    },
+    {
+      "id": "g54",
+      "label": "animation/components/diagrams+actions+media+charts+data-viz+demos+components+previews+utils",
+      "size": 53,
+      "testables": [
+        {
+          "file": "src/components/diagrams/block-diagram.css",
+          "language": "css",
+          "name": "block-diagram",
+          "categories": [
+            "animation"
+          ],
+          "loc": 175
+        },
+        {
+          "file": "src/components/diagrams/class-diagram.css",
+          "language": "css",
+          "name": "class-diagram",
+          "categories": [
+            "animation"
+          ],
+          "loc": 101
+        },
+        {
+          "file": "src/components/diagrams/component-diagram.css",
+          "language": "css",
+          "name": "component-diagram",
+          "categories": [
+            "animation"
+          ],
+          "loc": 81
+        },
+        {
+          "file": "src/components/diagrams/diagram-lightbox.css",
+          "language": "css",
+          "name": "diagram-lightbox",
+          "categories": [
+            "animation"
+          ],
+          "loc": 132
+        },
+        {
+          "file": "src/components/diagrams/er-archify.ts",
+          "language": "ts",
+          "name": "er-archify",
+          "categories": [
+            "animation"
+          ],
+          "loc": 481
+        },
+        {
+          "file": "src/components/diagrams/er-diagram.css",
+          "language": "css",
+          "name": "er-diagram",
+          "categories": [
+            "animation"
+          ],
+          "loc": 100
+        },
+        {
+          "file": "src/components/diagrams/flowchart.css",
+          "language": "css",
+          "name": "flowchart",
+          "categories": [
+            "animation"
+          ],
+          "loc": 139
+        },
+        {
+          "file": "src/components/diagrams/gantt.css",
+          "language": "css",
+          "name": "gantt",
+          "categories": [
+            "animation"
+          ],
+          "loc": 99
+        },
+        {
+          "file": "src/components/diagrams/journey-map.css",
+          "language": "css",
+          "name": "journey-map",
+          "categories": [
+            "animation"
+          ],
+          "loc": 99
+        },
+        {
+          "file": "src/components/diagrams/lightbox.css",
+          "language": "css",
+          "name": "lightbox",
+          "categories": [
+            "animation",
+            "css-part"
+          ],
+          "loc": 210
+        },
+        {
+          "file": "src/components/diagrams/mindmap.css",
+          "language": "css",
+          "name": "mindmap",
+          "categories": [
+            "animation"
+          ],
+          "loc": 102
+        },
+        {
+          "file": "src/components/diagrams/org-chart.css",
+          "language": "css",
+          "name": "org-chart",
+          "categories": [
+            "animation"
+          ],
+          "loc": 126
+        },
+        {
+          "file": "src/components/diagrams/quadrant-chart.css",
+          "language": "css",
+          "name": "quadrant-chart",
+          "categories": [
+            "animation"
+          ],
+          "loc": 99
+        },
+        {
+          "file": "src/components/diagrams/sankey-diagram.css",
+          "language": "css",
+          "name": "sankey-diagram",
+          "categories": [
+            "animation"
+          ],
+          "loc": 101
+        },
+        {
+          "file": "src/components/diagrams/sequence-diagram.css",
+          "language": "css",
+          "name": "sequence-diagram",
+          "categories": [
+            "animation"
+          ],
+          "loc": 125
+        },
+        {
+          "file": "src/components/diagrams/state-diagram.css",
+          "language": "css",
+          "name": "state-diagram",
+          "categories": [
+            "animation"
+          ],
+          "loc": 97
+        },
+        {
+          "file": "src/components/diagrams/swimlane-diagram.css",
+          "language": "css",
+          "name": "swimlane-diagram",
+          "categories": [
+            "animation"
+          ],
+          "loc": 101
+        },
+        {
+          "file": "src/components/diagrams/timeline.css",
+          "language": "css",
+          "name": "timeline",
+          "categories": [
+            "animation"
+          ],
+          "loc": 99
+        },
+        {
+          "file": "src/components/diagrams/use-case-diagram.css",
+          "language": "css",
+          "name": "use-case-diagram",
+          "categories": [
+            "animation"
+          ],
+          "loc": 101
+        },
+        {
+          "file": "src/components/diagrams/venn-diagram.css",
+          "language": "css",
+          "name": "venn-diagram",
+          "categories": [
+            "animation"
+          ],
+          "loc": 97
+        },
+        {
+          "file": "src/components/actions/button-group.preview.controller.ts",
+          "language": "ts",
+          "name": "button-group.preview.controller",
+          "categories": [
+            "webcomponent",
+            "event"
+          ],
+          "loc": 494
+        },
+        {
+          "file": "src/components/actions/button-group.ts",
+          "language": "ts",
+          "name": "is-button-group",
+          "categories": [
+            "webcomponent",
+            "event",
+            "css-part"
+          ],
+          "loc": 300
+        },
+        {
+          "file": "src/components/actions/button.preview.ts",
+          "language": "ts",
+          "name": "button.preview",
+          "categories": [
+            "webcomponent",
+            "event"
+          ],
+          "loc": 193
+        },
+        {
+          "file": "src/components/actions/button.ts",
+          "language": "ts",
+          "name": "is-button",
+          "categories": [
+            "webcomponent",
+            "event",
+            "css-part"
+          ],
+          "loc": 492
+        },
+        {
+          "file": "src/components/actions/check-icon-button.ts",
+          "language": "ts",
+          "name": "is-check-icon-button",
+          "categories": [
+            "webcomponent",
+            "event",
+            "css-part"
+          ],
+          "loc": 161
+        },
+        {
+          "file": "src/components/actions/context-menu.ts",
+          "language": "ts",
+          "name": "is-context-menu",
+          "categories": [
+            "webcomponent",
+            "event"
+          ],
+          "loc": 220
+        },
+        {
+          "file": "src/components/actions/copy-button.ts",
+          "language": "ts",
+          "name": "is-copy-button",
+          "categories": [
+            "webcomponent",
+            "worker",
+            "event"
+          ],
+          "loc": 377
+        },
+        {
+          "file": "src/components/actions/dropdown-item.ts",
+          "language": "ts",
+          "name": "is-dropdown-item",
+          "categories": [
+            "webcomponent",
+            "event"
+          ],
+          "loc": 260
+        },
+        {
+          "file": "src/components/actions/dropdown.ts",
+          "language": "ts",
+          "name": "is-dropdown",
+          "categories": [
+            "webcomponent",
+            "event",
+            "css-part"
+          ],
+          "loc": 289
+        },
+        {
+          "file": "src/components/actions/fab.ts",
+          "language": "ts",
+          "name": "is-fab",
+          "categories": [
+            "webcomponent",
+            "event",
+            "css-part"
+          ],
+          "loc": 162
+        },
+        {
+          "file": "src/components/actions/share-button.ts",
+          "language": "ts",
+          "name": "is-share-button",
+          "categories": [
+            "webcomponent",
+            "event"
+          ],
+          "loc": 69
+        },
+        {
+          "file": "src/components/actions/speed-dial.ts",
+          "language": "ts",
+          "name": "is-speed-dial",
+          "categories": [
+            "webcomponent",
+            "event"
+          ],
+          "loc": 626
+        },
+        {
+          "file": "src/components/media/avatar.ts",
+          "language": "ts",
+          "name": "is-avatar",
+          "categories": [
+            "webcomponent",
+            "event",
+            "css-part"
+          ],
+          "loc": 147
+        },
+        {
+          "file": "src/components/media/barcode-scanner.ts",
+          "language": "ts",
+          "name": "is-barcode-scanner",
+          "categories": [
+            "webcomponent",
+            "worker",
+            "event",
+            "browser-api"
+          ],
+          "loc": 116
+        },
+        {
+          "file": "src/components/media/barcode.ts",
+          "language": "ts",
+          "name": "is-barcode",
+          "categories": [
+            "webcomponent",
+            "event"
+          ],
+          "loc": 200
+        },
+        {
+          "file": "src/components/media/icon-explorer.preview.ts",
+          "language": "ts",
+          "name": "icon-explorer.preview",
+          "categories": [
+            "webcomponent",
+            "auth",
+            "migration",
+            "worker",
+            "event",
+            "http-client"
+          ],
+          "loc": 615
+        },
+        {
+          "file": "src/components/media/icon.ts",
+          "language": "ts",
+          "name": "is-icon",
+          "categories": [
+            "webcomponent",
+            "http-client"
+          ],
+          "loc": 246
+        },
+        {
+          "file": "src/components/media/image-editor.ts",
+          "language": "ts",
+          "name": "is-image-editor",
+          "categories": [
+            "webcomponent",
+            "event"
+          ],
+          "loc": 331
+        },
+        {
+          "file": "src/components/media/media-recorder.ts",
+          "language": "ts",
+          "name": "is-media-recorder",
+          "categories": [
+            "webcomponent",
+            "event",
+            "browser-api"
+          ],
+          "loc": 138
+        },
+        {
+          "file": "src/components/media/qrcode.ts",
+          "language": "ts",
+          "name": "is-qrcode",
+          "categories": [
+            "webcomponent",
+            "event"
+          ],
+          "loc": 149
+        },
+        {
+          "file": "src/components/media/speech.ts",
+          "language": "ts",
+          "name": "is-speech",
+          "categories": [
+            "webcomponent",
+            "event"
+          ],
+          "loc": 146
+        },
+        {
+          "file": "src/components/media/theme-img.ts",
+          "language": "ts",
+          "name": "is-theme-img",
+          "categories": [
+            "webcomponent",
+            "css-part"
+          ],
+          "loc": 155
+        },
+        {
+          "file": "src/components/media/video-playlist.ts",
+          "language": "ts",
+          "name": "is-video-playlist",
+          "categories": [
+            "webcomponent",
+            "event"
+          ],
+          "loc": 780
+        },
+        {
+          "file": "src/components/media/video.ts",
+          "language": "ts",
+          "name": "is-video",
+          "categories": [
+            "webcomponent",
+            "database",
+            "worker",
+            "event",
+            "browser-api",
+            "css-part"
+          ],
+          "loc": 589
+        },
+        {
+          "file": "src/components/charts/chart.ts",
+          "language": "ts",
+          "name": "is-chart",
+          "categories": [
+            "webcomponent",
+            "sql-query",
+            "event"
+          ],
+          "loc": 793
+        },
+        {
+          "file": "src/components/charts/sparkline.ts",
+          "language": "ts",
+          "name": "is-sparkline",
+          "categories": [
+            "webcomponent"
+          ],
+          "loc": 157
+        },
+        {
+          "file": "src/components/charts/treemap.ts",
+          "language": "ts",
+          "name": "is-treemap",
+          "categories": [
+            "webcomponent",
+            "event"
+          ],
+          "loc": 318
+        },
+        {
+          "file": "src/components/data-viz/heatmap.ts",
+          "language": "ts",
+          "name": "is-heatmap",
+          "categories": [
+            "webcomponent",
+            "event"
+          ],
+          "loc": 279
+        },
+        {
+          "file": "src/components/data-viz/maps.ts",
+          "language": "ts",
+          "name": "is-maps",
+          "categories": [
+            "webcomponent",
+            "event",
+            "paty-iss"
+          ],
+          "loc": 261
+        },
+        {
+          "file": "demos/diagramas/ER/er-editor.html",
+          "language": "html",
+          "name": "er-editor",
+          "categories": [
+            "event"
+          ],
+          "loc": 85
+        },
+        {
+          "file": "src/components/data/datagrid-core/server-datasource.ts",
+          "language": "ts",
+          "name": "server-datasource",
+          "categories": [
+            "service",
+            "worker",
+            "event",
+            "http-client"
+          ],
+          "loc": 454
+        },
+        {
+          "file": "src/previews/_kit/ISComponentPreview.ts",
+          "language": "ts",
+          "name": "ISComponentPreview",
+          "categories": [
+            "event"
+          ],
+          "loc": 80
+        },
+        {
+          "file": "src/utils/home-cdn.ts",
+          "language": "ts",
+          "name": "home-cdn",
+          "categories": [
+            "sql-query",
+            "worker",
+            "event",
+            "browser-api"
+          ],
+          "loc": 412
+        }
+      ]
+    },
+    {
+      "id": "g40",
+      "label": "webcomponent/components/feedback+utils+scripts+actions+layout+utils",
+      "size": 33,
+      "testables": [
+        {
+          "file": "src/components/feedback/badge.ts",
+          "language": "ts",
+          "name": "is-badge",
+          "categories": [
+            "webcomponent"
+          ],
+          "loc": 75
+        },
+        {
+          "file": "src/components/feedback/cdn-snippet.ts",
+          "language": "ts",
+          "name": "is-cdn-snippet",
+          "categories": [
+            "webcomponent",
+            "worker",
+            "event"
+          ],
+          "loc": 457
+        },
+        {
+          "file": "src/components/feedback/confirm-modal.ts",
+          "language": "ts",
+          "name": "is-confirm-modal",
+          "categories": [
+            "webcomponent",
+            "event"
+          ],
+          "loc": 202
+        },
+        {
+          "file": "src/components/feedback/palette-selector.css",
+          "language": "css",
+          "name": "palette-selector",
+          "categories": [
+            "webcomponent",
+            "animation",
+            "css-part"
+          ],
+          "loc": 189
+        },
+        {
+          "file": "src/components/feedback/palette-selector.ts",
+          "language": "ts",
+          "name": "is-palette-selector",
+          "categories": [
+            "webcomponent",
+            "auth",
+            "storage",
+            "event"
+          ],
+          "loc": 509
+        },
+        {
+          "file": "src/components/feedback/popconfirm.ts",
+          "language": "ts",
+          "name": "is-popconfirm",
+          "categories": [
+            "webcomponent",
+            "event"
+          ],
+          "loc": 267
+        },
+        {
+          "file": "src/components/feedback/prefs-clear.ts",
+          "language": "ts",
+          "name": "is-prefs-clear",
+          "categories": [
+            "webcomponent",
+            "storage",
+            "event"
+          ],
+          "loc": 127
+        },
+        {
+          "file": "src/components/feedback/progress-bar.ts",
+          "language": "ts",
+          "name": "is-progress-bar",
+          "categories": [
+            "webcomponent",
+            "css-part"
+          ],
+          "loc": 101
+        },
+        {
+          "file": "src/components/feedback/progress-ring.ts",
+          "language": "ts",
+          "name": "is-progress-ring",
+          "categories": [
+            "webcomponent",
+            "css-part"
+          ],
+          "loc": 103
+        },
+        {
+          "file": "src/components/feedback/skeleton.ts",
+          "language": "ts",
+          "name": "is-skeleton",
+          "categories": [
+            "webcomponent",
+            "css-part"
+          ],
+          "loc": 59
+        },
+        {
+          "file": "src/components/feedback/spinner.ts",
+          "language": "ts",
+          "name": "is-spinner",
+          "categories": [
+            "webcomponent",
+            "animation",
+            "css-part"
+          ],
+          "loc": 49
+        },
+        {
+          "file": "src/components/feedback/tag.ts",
+          "language": "ts",
+          "name": "is-tag",
+          "categories": [
+            "webcomponent",
+            "event"
+          ],
+          "loc": 95
+        },
+        {
+          "file": "src/components/feedback/theme-toggle.ts",
+          "language": "ts",
+          "name": "is-theme-toggle",
+          "categories": [
+            "webcomponent",
+            "event"
+          ],
+          "loc": 153
+        },
+        {
+          "file": "src/components/feedback/toast-item.css",
+          "language": "css",
+          "name": "toast-item",
+          "categories": [
+            "webcomponent",
+            "animation",
+            "css-part"
+          ],
+          "loc": 139
+        },
+        {
+          "file": "src/components/feedback/toast-item.ts",
+          "language": "ts",
+          "name": "is-toast-item",
+          "categories": [
+            "webcomponent",
+            "migration",
+            "worker",
+            "event",
+            "css-part"
+          ],
+          "loc": 240
+        },
+        {
+          "file": "src/components/feedback/toast.ts",
+          "language": "ts",
+          "name": "is-toast",
+          "categories": [
+            "webcomponent",
+            "event",
+            "css-part"
+          ],
+          "loc": 250
+        },
+        {
+          "file": "src/components/feedback/tooltip.ts",
+          "language": "ts",
+          "name": "is-tooltip",
+          "categories": [
+            "webcomponent",
+            "migration",
+            "worker",
+            "event",
+            "css-part"
+          ],
+          "loc": 295
+        },
+        {
+          "file": "src/utils/health/engine/stagehand.ts",
+          "language": "ts",
+          "name": "stagehand",
+          "categories": [
+            "http-client"
+          ],
+          "loc": 335
+        },
+        {
+          "file": "src/utils/health/motor/auditor.ts",
+          "language": "ts",
+          "name": "auditor",
+          "categories": [
+            "http-client"
+          ],
+          "loc": 325
+        },
+        {
+          "file": "src/utils/source-paths.ts",
+          "language": "ts",
+          "name": "source-paths",
+          "categories": [
+            "http-client"
+          ],
+          "loc": 142
+        },
+        {
+          "file": "src/utils/testing/e2e/lib/vendor-e2e-config.ts",
+          "language": "ts",
+          "name": "vendor-e2e-config",
+          "categories": [
+            "http-client"
+          ],
+          "loc": 58,
+          "e2e": true
+        },
+        {
+          "file": "scripts/serve-demos.mjs",
+          "language": "js",
+          "name": "serve-demos",
+          "categories": [
+            "database",
+            "cli"
+          ],
+          "loc": 73
+        },
+        {
+          "file": "scripts/serve.mjs",
+          "language": "js",
+          "name": "serve",
+          "categories": [
+            "database",
+            "cli"
+          ],
+          "loc": 101
+        },
+        {
+          "file": "scripts/verify-server.cjs",
+          "language": "js",
+          "name": "verify-server",
+          "categories": [
+            "database"
+          ],
+          "loc": 28
+        },
+        {
+          "file": "src/components/actions/context-menu.preview.ts",
+          "language": "ts",
+          "name": "context-menu.preview",
+          "categories": [
+            "event"
+          ],
+          "loc": 24
+        },
+        {
+          "file": "src/components/actions/dropdown.preview.ts",
+          "language": "ts",
+          "name": "dropdown.preview",
+          "categories": [
+            "event"
+          ],
+          "loc": 17
+        },
+        {
+          "file": "src/components/actions/speed-dial.preview.ts",
+          "language": "ts",
+          "name": "speed-dial.preview",
+          "categories": [
+            "event"
+          ],
+          "loc": 67
+        },
+        {
+          "file": "src/components/layout/dock.css",
+          "language": "css",
+          "name": "dock",
+          "categories": [
+            "animation"
+          ],
+          "loc": 80
+        },
+        {
+          "file": "src/components/layout/scrollspy.css",
+          "language": "css",
+          "name": "scrollspy",
+          "categories": [
+            "animation",
+            "css-part"
+          ],
+          "loc": 36
+        },
+        {
+          "file": "src/components/layout/split-panel.css",
+          "language": "css",
+          "name": "split-panel",
+          "categories": [
+            "animation",
+            "css-part"
+          ],
+          "loc": 115
+        },
+        {
+          "file": "src/utils/testing/e2e/lib/harness.ts",
+          "language": "ts",
+          "name": "harness",
+          "categories": [
+            "worker"
+          ],
+          "loc": 489,
+          "e2e": true
+        },
+        {
+          "file": "src/utils/testing/meta/smoke-runtime.html",
+          "language": "html",
+          "name": "smoke-runtime",
+          "categories": [
+            "worker",
+            "event"
+          ],
+          "loc": 69
+        },
+        {
+          "file": "src/utils/testing/meta/visual-copy-button.html",
+          "language": "html",
+          "name": "visual-copy-button",
+          "categories": [
+            "worker"
+          ],
+          "loc": 117
+        }
+      ]
+    },
+    {
+      "id": "g42",
+      "label": "webcomponent/components/helpers+components+overlays+scripts+scripts+data-viz+overlays+data-viz+components",
+      "size": 30,
+      "testables": [
+        {
+          "file": "src/components/helpers/floating.ts",
+          "language": "ts",
+          "name": "is-floating",
+          "categories": [
+            "webcomponent",
+            "migration",
+            "event",
+            "css-part"
+          ],
+          "loc": 442
+        },
+        {
+          "file": "src/components/helpers/format-bytes.ts",
+          "language": "ts",
+          "name": "is-format-bytes",
+          "categories": [
+            "webcomponent"
+          ],
+          "loc": 122
+        },
+        {
+          "file": "src/components/helpers/format-date.ts",
+          "language": "ts",
+          "name": "is-format-date",
+          "categories": [
+            "webcomponent"
+          ],
+          "loc": 129
+        },
+        {
+          "file": "src/components/helpers/format-number.ts",
+          "language": "ts",
+          "name": "is-format-number",
+          "categories": [
+            "webcomponent"
+          ],
+          "loc": 113
+        },
+        {
+          "file": "src/components/helpers/format.ts",
+          "language": "ts",
+          "name": "is-format",
+          "categories": [
+            "webcomponent",
+            "worker"
+          ],
+          "loc": 542
+        },
+        {
+          "file": "src/components/helpers/intersection-observer.ts",
+          "language": "ts",
+          "name": "is-intersection-observer",
+          "categories": [
+            "webcomponent"
+          ],
+          "loc": 26
+        },
+        {
+          "file": "src/components/helpers/md-editor.ts",
+          "language": "ts",
+          "name": "is-md-editor",
+          "categories": [
+            "webcomponent",
+            "sql-query",
+            "event"
+          ],
+          "loc": 854
+        },
+        {
+          "file": "src/components/helpers/md-render.ts",
+          "language": "ts",
+          "name": "is-md-render",
+          "categories": [
+            "webcomponent",
+            "event"
+          ],
+          "loc": 215
+        },
+        {
+          "file": "src/components/helpers/mutation-observer.ts",
+          "language": "ts",
+          "name": "is-mutation-observer",
+          "categories": [
+            "webcomponent"
+          ],
+          "loc": 24
+        },
+        {
+          "file": "src/components/helpers/observer.ts",
+          "language": "ts",
+          "name": "is-observer",
+          "categories": [
+            "webcomponent",
+            "migration",
+            "event"
+          ],
+          "loc": 217
+        },
+        {
+          "file": "src/components/helpers/offscreen-canvas.ts",
+          "language": "ts",
+          "name": "is-offscreen-canvas",
+          "categories": [
+            "webcomponent",
+            "worker",
+            "event"
+          ],
+          "loc": 68
+        },
+        {
+          "file": "src/components/helpers/popover.ts",
+          "language": "ts",
+          "name": "is-popover",
+          "categories": [
+            "webcomponent",
+            "migration",
+            "event",
+            "css-part"
+          ],
+          "loc": 307
+        },
+        {
+          "file": "src/components/helpers/relative-time.ts",
+          "language": "ts",
+          "name": "is-relative-time",
+          "categories": [
+            "webcomponent",
+            "worker"
+          ],
+          "loc": 147
+        },
+        {
+          "file": "src/components/helpers/resize-observer.ts",
+          "language": "ts",
+          "name": "is-resize-observer",
+          "categories": [
+            "webcomponent"
+          ],
+          "loc": 21
+        },
+        {
+          "file": "src/components/helpers/ui.preview.ts",
+          "language": "ts",
+          "name": "ui.preview",
+          "categories": [
+            "webcomponent"
+          ],
+          "loc": 83
+        },
+        {
+          "file": "src/components/helpers/ui.ts",
+          "language": "ts",
+          "name": "ui",
+          "categories": [
+            "webcomponent",
+            "event"
+          ],
+          "loc": 228
+        },
+        {
+          "file": "src/components/helpers/wake-lock.ts",
+          "language": "ts",
+          "name": "is-wake-lock",
+          "categories": [
+            "webcomponent",
+            "event",
+            "http-client"
+          ],
+          "loc": 68
+        },
+        {
+          "file": "src/components/_shared/popup-dismiss.ts",
+          "language": "ts",
+          "name": "popup-dismiss",
+          "categories": [
+            "migration",
+            "event"
+          ],
+          "loc": 136
+        },
+        {
+          "file": "src/components/isp/_shared/tree-view/flex-options.ts",
+          "language": "ts",
+          "name": "flex-options",
+          "categories": [
+            "migration",
+            "event"
+          ],
+          "loc": 152
+        },
+        {
+          "file": "src/components/isp/_shared/tree-view/render-rows.ts",
+          "language": "ts",
+          "name": "render-rows",
+          "categories": [
+            "migration",
+            "event"
+          ],
+          "loc": 299
+        },
+        {
+          "file": "src/components/isp/_shared/tree-view/row-adapter.ts",
+          "language": "ts",
+          "name": "row-adapter",
+          "categories": [
+            "migration",
+            "worker"
+          ],
+          "loc": 204
+        },
+        {
+          "file": "src/components/overlays/command-palette.ts",
+          "language": "ts",
+          "name": "is-command-palette",
+          "categories": [
+            "webcomponent",
+            "event"
+          ],
+          "loc": 272
+        },
+        {
+          "file": "src/components/overlays/pdf-viewer.ts",
+          "language": "ts",
+          "name": "is-pdf-viewer",
+          "categories": [
+            "webcomponent",
+            "event"
+          ],
+          "loc": 125
+        },
+        {
+          "file": "src/components/overlays/window.ts",
+          "language": "ts",
+          "name": "is-window",
+          "categories": [
+            "webcomponent",
+            "event"
+          ],
+          "loc": 314
+        },
+        {
+          "file": "scripts/audit-components.ts",
+          "language": "ts",
+          "name": "audit-components",
+          "categories": [
+            "worker",
+            "event"
+          ],
+          "loc": 86
+        },
+        {
+          "file": "scripts/verify-fetch.cjs",
+          "language": "js",
+          "name": "verify-fetch",
+          "categories": [
+            "http-client"
+          ],
+          "loc": 29
+        },
+        {
+          "file": "src/components/data-viz/heatmap.preview.ts",
+          "language": "ts",
+          "name": "heatmap.preview",
+          "categories": [
+            "event"
+          ],
+          "loc": 19
+        },
+        {
+          "file": "src/components/overlays/command-palette.preview.ts",
+          "language": "ts",
+          "name": "command-palette.preview",
+          "categories": [
+            "event"
+          ],
+          "loc": 33
+        },
+        {
+          "file": "src/components/data-viz/heatmap.css",
+          "language": "css",
+          "name": "heatmap",
+          "categories": [
+            "animation"
+          ],
+          "loc": 44
+        },
+        {
+          "file": "src/components/_shared/web-share.ts",
+          "language": "ts",
+          "name": "web-share",
+          "categories": [
+            "browser-api"
+          ],
+          "loc": 31
+        }
+      ]
+    },
+    {
+      "id": "g43",
+      "label": "webcomponent/components/isp+demos+layout+index.html+scripts+code+utils",
+      "size": 25,
+      "testables": [
+        {
+          "file": "src/components/isp/_shared/tree-view/00-as-row.ts",
+          "language": "ts",
+          "name": "00-as-row",
+          "categories": [
+            "webcomponent",
+            "sql-query",
+            "migration"
+          ],
+          "loc": 512
+        },
+        {
+          "file": "src/components/isp/accordion-group.ts",
+          "language": "ts",
+          "name": "is-accordion-group",
+          "categories": [
+            "webcomponent",
+            "event",
+            "css-part"
+          ],
+          "loc": 141
+        },
+        {
+          "file": "src/components/isp/block-layout.ts",
+          "language": "ts",
+          "name": "is-block-layout",
+          "categories": [
+            "webcomponent",
+            "database",
+            "event"
+          ],
+          "loc": 241
+        },
+        {
+          "file": "src/components/isp/btn-ref.ts",
+          "language": "ts",
+          "name": "is-btn-ref",
+          "categories": [
+            "webcomponent",
+            "worker",
+            "event",
+            "css-part"
+          ],
+          "loc": 378
+        },
+        {
+          "file": "src/components/isp/catalogo-gen.ts",
+          "language": "ts",
+          "name": "is-catalogo-gen",
+          "categories": [
+            "webcomponent",
+            "event"
+          ],
+          "loc": 645
+        },
+        {
+          "file": "src/components/isp/confirm-delete.ts",
+          "language": "ts",
+          "name": "is-confirm-delete",
+          "categories": [
+            "webcomponent",
+            "event",
+            "css-part"
+          ],
+          "loc": 300
+        },
+        {
+          "file": "src/components/isp/flex-layout.ts",
+          "language": "ts",
+          "name": "is-flex-layout",
+          "categories": [
+            "webcomponent"
+          ],
+          "loc": 107
+        },
+        {
+          "file": "src/components/isp/flex-options.ts",
+          "language": "ts",
+          "name": "is-flex-options",
+          "categories": [
+            "webcomponent"
+          ],
+          "loc": 83
+        },
+        {
+          "file": "src/components/isp/float-card.css",
+          "language": "css",
+          "name": "float-card",
+          "categories": [
+            "webcomponent",
+            "css-part"
+          ],
+          "loc": 51
+        },
+        {
+          "file": "src/components/isp/float-card.ts",
+          "language": "ts",
+          "name": "is-float-card",
+          "categories": [
+            "webcomponent",
+            "event"
+          ],
+          "loc": 140
+        },
+        {
+          "file": "src/components/isp/form.ts",
+          "language": "ts",
+          "name": "is-form",
+          "categories": [
+            "webcomponent",
+            "event"
+          ],
+          "loc": 236
+        },
+        {
+          "file": "src/components/isp/grid-layout.ts",
+          "language": "ts",
+          "name": "is-grid-layout",
+          "categories": [
+            "webcomponent"
+          ],
+          "loc": 100
+        },
+        {
+          "file": "src/components/isp/heading.ts",
+          "language": "ts",
+          "name": "is-heading",
+          "categories": [
+            "webcomponent"
+          ],
+          "loc": 148
+        },
+        {
+          "file": "src/components/isp/loading-overlay.ts",
+          "language": "ts",
+          "name": "is-loading-overlay",
+          "categories": [
+            "webcomponent",
+            "event",
+            "css-part"
+          ],
+          "loc": 152
+        },
+        {
+          "file": "src/components/isp/modal-verificacion.ts",
+          "language": "ts",
+          "name": "is-modal-verificacion",
+          "categories": [
+            "webcomponent",
+            "event",
+            "css-part"
+          ],
+          "loc": 332
+        },
+        {
+          "file": "src/components/isp/text.ts",
+          "language": "ts",
+          "name": "is-text",
+          "categories": [
+            "webcomponent"
+          ],
+          "loc": 109
+        },
+        {
+          "file": "src/components/isp/tree-view.ts",
+          "language": "ts",
+          "name": "is-tree-view",
+          "categories": [
+            "webcomponent",
+            "migration",
+            "worker",
+            "event"
+          ],
+          "loc": 373
+        },
+        {
+          "file": "demos/diagramas/ER/_testing/lib/harness.mjs",
+          "language": "js",
+          "name": "harness",
+          "categories": [
+            "worker"
+          ],
+          "loc": 89
+        },
+        {
+          "file": "demos/diagramas/ER/_testing/run.mjs",
+          "language": "js",
+          "name": "run",
+          "categories": [
+            "worker",
+            "cli",
+            "http-client"
+          ],
+          "loc": 125
+        },
+        {
+          "file": "src/components/layout/dock.preview.ts",
+          "language": "ts",
+          "name": "dock.preview",
+          "categories": [
+            "event"
+          ],
+          "loc": 22
+        },
+        {
+          "file": "src/components/layout/main.preview.ts",
+          "language": "ts",
+          "name": "main.preview",
+          "categories": [
+            "event"
+          ],
+          "loc": 22
+        },
+        {
+          "file": "index.html",
+          "language": "html",
+          "name": "index",
+          "categories": [
+            "webcomponent",
+            "event",
+            "i18n"
+          ],
+          "loc": 155
+        },
+        {
+          "file": "scripts/migrate-scrollspy.ts",
+          "language": "ts",
+          "name": "migrate-scrollspy",
+          "categories": [
+            "migration"
+          ],
+          "loc": 100
+        },
+        {
+          "file": "src/components/code/code.ts",
+          "language": "ts",
+          "name": "is-code",
+          "categories": [
+            "webcomponent",
+            "auth",
+            "worker",
+            "event"
+          ],
+          "loc": 892
+        },
+        {
+          "file": "src/utils/testing/e2e/lib/minimax.ts",
+          "language": "ts",
+          "name": "minimax",
+          "categories": [
+            "auth",
+            "worker",
+            "http-client"
+          ],
+          "loc": 195,
+          "e2e": true
+        }
+      ]
+    },
+    {
+      "id": "g9",
+      "label": "cli/scripts+pages+demos+demos",
+      "size": 20,
+      "testables": [
+        {
+          "file": "scripts/diag-failures.mjs",
+          "language": "js",
+          "name": "diag-failures",
+          "categories": [
+            "cli"
+          ],
+          "loc": 25
+        },
+        {
+          "file": "scripts/download-iconify.mjs",
+          "language": "js",
+          "name": "download-iconify",
+          "categories": [
+            "cli"
+          ],
+          "loc": 395
+        },
+        {
+          "file": "scripts/download-iconify.ts",
+          "language": "ts",
+          "name": "download-iconify",
+          "categories": [
+            "cli"
+          ],
+          "loc": 396
+        },
+        {
+          "file": "scripts/download-icons.ts",
+          "language": "ts",
+          "name": "download-icons",
+          "categories": [
+            "cli"
+          ],
+          "loc": 234
+        },
+        {
+          "file": "scripts/fix-icon-viewbox.ts",
+          "language": "ts",
+          "name": "fix-icon-viewbox",
+          "categories": [
+            "cli"
+          ],
+          "loc": 167
+        },
+        {
+          "file": "scripts/fix-private-fields.ts",
+          "language": "ts",
+          "name": "fix-private-fields",
+          "categories": [
+            "cli"
+          ],
+          "loc": 87
+        },
+        {
+          "file": "scripts/generate-templates.ts",
+          "language": "ts",
+          "name": "generate-templates",
+          "categories": [
+            "cli",
+            "event"
+          ],
+          "loc": 61
+        },
+        {
+          "file": "scripts/migrate-previews-to-json.ts",
+          "language": "ts",
+          "name": "migrate-previews-to-json",
+          "categories": [
+            "cli",
+            "event"
+          ],
+          "loc": 428
+        },
+        {
+          "file": "scripts/migrate-tests.mjs",
+          "language": "js",
+          "name": "migrate-tests",
+          "categories": [
+            "cli"
+          ],
+          "loc": 113
+        },
+        {
+          "file": "scripts/rewrite-test-imports.mjs",
+          "language": "js",
+          "name": "rewrite-test-imports",
+          "categories": [
+            "cli"
+          ],
+          "loc": 71
+        },
+        {
+          "file": "scripts/ts-campos-dom.ts",
+          "language": "ts",
+          "name": "ts-campos-dom",
+          "categories": [
+            "cli"
+          ],
+          "loc": 197
+        },
+        {
+          "file": "scripts/ts-inferir-params.ts",
+          "language": "ts",
+          "name": "ts-inferir-params",
+          "categories": [
+            "cli",
+            "event"
+          ],
+          "loc": 167
+        },
+        {
+          "file": "scripts/ts-jsdoc-a-tipos.ts",
+          "language": "ts",
+          "name": "ts-jsdoc-a-tipos",
+          "categories": [
+            "cli"
+          ],
+          "loc": 101
+        },
+        {
+          "file": "scripts/ts-revertir-inferencia.ts",
+          "language": "ts",
+          "name": "ts-revertir-inferencia",
+          "categories": [
+            "cli"
+          ],
+          "loc": 131
+        },
+        {
+          "file": "scripts/ts-tipo-por-selector.ts",
+          "language": "ts",
+          "name": "ts-tipo-por-selector",
+          "categories": [
+            "cli"
+          ],
+          "loc": 142
+        },
+        {
+          "file": "scripts/update-spec-paths.mjs",
+          "language": "js",
+          "name": "update-spec-paths",
+          "categories": [
+            "cli"
+          ],
+          "loc": 78
+        },
+        {
+          "file": "src/pages/ecosystem.ts",
+          "language": "ts",
+          "name": "ecosystem",
+          "categories": [
+            "event",
+            "http-client"
+          ],
+          "loc": 198
+        },
+        {
+          "file": "src/pages/home.ts",
+          "language": "ts",
+          "name": "home",
+          "categories": [
+            "event",
+            "animation"
+          ],
+          "loc": 273
+        },
+        {
+          "file": "demos/diagramas/ER/er-static.html",
+          "language": "html",
+          "name": "er-static",
+          "categories": [
+            "auth",
+            "animation"
+          ],
+          "loc": 99
+        },
+        {
+          "file": "demos/diagramas/ER/index.html",
+          "language": "html",
+          "name": "index",
+          "categories": [
+            "animation"
+          ],
+          "loc": 63
+        }
+      ]
+    },
+    {
+      "id": "g26",
+      "label": "event/components/forms+feedback+data+utils+_shared+components",
+      "size": 34,
+      "testables": [
+        {
+          "file": "src/components/forms/checkbox.preview.ts",
+          "language": "ts",
+          "name": "checkbox.preview",
+          "categories": [
+            "event"
+          ],
+          "loc": 42
+        },
+        {
+          "file": "src/components/forms/color-picker.preview.ts",
+          "language": "ts",
+          "name": "color-picker.preview",
+          "categories": [
+            "event"
+          ],
+          "loc": 30
+        },
+        {
+          "file": "src/components/forms/doc-editor.preview.ts",
+          "language": "ts",
+          "name": "doc-editor.preview",
+          "categories": [
+            "event"
+          ],
+          "loc": 24
+        },
+        {
+          "file": "src/components/forms/dropzone.preview.ts",
+          "language": "ts",
+          "name": "dropzone.preview",
+          "categories": [
+            "event"
+          ],
+          "loc": 23
+        },
+        {
+          "file": "src/components/forms/duration-picker.preview.ts",
+          "language": "ts",
+          "name": "duration-picker.preview",
+          "categories": [
+            "event"
+          ],
+          "loc": 18
+        },
+        {
+          "file": "src/components/forms/file-input.preview.ts",
+          "language": "ts",
+          "name": "file-input.preview",
+          "categories": [
+            "event"
+          ],
+          "loc": 19
+        },
+        {
+          "file": "src/components/forms/full-calendar.preview.ts",
+          "language": "ts",
+          "name": "full-calendar.preview",
+          "categories": [
+            "event"
+          ],
+          "loc": 16
+        },
+        {
+          "file": "src/components/forms/input.preview.ts",
+          "language": "ts",
+          "name": "input.preview",
+          "categories": [
+            "event"
+          ],
+          "loc": 36
+        },
+        {
+          "file": "src/components/forms/mention.preview.ts",
+          "language": "ts",
+          "name": "mention.preview",
+          "categories": [
+            "event"
+          ],
+          "loc": 20
+        },
+        {
+          "file": "src/components/forms/rating.preview.ts",
+          "language": "ts",
+          "name": "rating.preview",
+          "categories": [
+            "event"
+          ],
+          "loc": 54
+        },
+        {
+          "file": "src/components/forms/rte.preview.ts",
+          "language": "ts",
+          "name": "rte.preview",
+          "categories": [
+            "event"
+          ],
+          "loc": 19
+        },
+        {
+          "file": "src/components/forms/select.preview.ts",
+          "language": "ts",
+          "name": "select.preview",
+          "categories": [
+            "event"
+          ],
+          "loc": 32
+        },
+        {
+          "file": "src/components/forms/signature.preview.ts",
+          "language": "ts",
+          "name": "signature.preview",
+          "categories": [
+            "event"
+          ],
+          "loc": 31
+        },
+        {
+          "file": "src/components/forms/slider.preview.ts",
+          "language": "ts",
+          "name": "slider.preview",
+          "categories": [
+            "event"
+          ],
+          "loc": 52
+        },
+        {
+          "file": "src/components/forms/switch.preview.ts",
+          "language": "ts",
+          "name": "switch.preview",
+          "categories": [
+            "event"
+          ],
+          "loc": 35
+        },
+        {
+          "file": "src/components/forms/textarea.preview.ts",
+          "language": "ts",
+          "name": "textarea.preview",
+          "categories": [
+            "event"
+          ],
+          "loc": 31
+        },
+        {
+          "file": "src/components/feedback/badge.css",
+          "language": "css",
+          "name": "badge",
+          "categories": [
+            "animation"
+          ],
+          "loc": 134
+        },
+        {
+          "file": "src/components/feedback/cdn-snippet.css",
+          "language": "css",
+          "name": "cdn-snippet",
+          "categories": [
+            "animation"
+          ],
+          "loc": 302
+        },
+        {
+          "file": "src/components/feedback/confirm-modal.css",
+          "language": "css",
+          "name": "confirm-modal",
+          "categories": [
+            "animation"
+          ],
+          "loc": 72
+        },
+        {
+          "file": "src/components/feedback/popconfirm.css",
+          "language": "css",
+          "name": "popconfirm",
+          "categories": [
+            "animation"
+          ],
+          "loc": 69
+        },
+        {
+          "file": "src/components/feedback/progress-bar.css",
+          "language": "css",
+          "name": "progress-bar",
+          "categories": [
+            "animation"
+          ],
+          "loc": 43
+        },
+        {
+          "file": "src/components/feedback/progress-ring.css",
+          "language": "css",
+          "name": "progress-ring",
+          "categories": [
+            "animation"
+          ],
+          "loc": 80
+        },
+        {
+          "file": "src/components/feedback/skeleton.css",
+          "language": "css",
+          "name": "skeleton",
+          "categories": [
+            "animation"
+          ],
+          "loc": 74
+        },
+        {
+          "file": "src/components/feedback/spinner.css",
+          "language": "css",
+          "name": "spinner",
+          "categories": [
+            "animation"
+          ],
+          "loc": 30
+        },
+        {
+          "file": "src/components/data/ag-grid.preview.ts",
+          "language": "ts",
+          "name": "ag-grid.preview",
+          "categories": [
+            "event"
+          ],
+          "loc": 57
+        },
+        {
+          "file": "src/components/data/data-grid.preview.ts",
+          "language": "ts",
+          "name": "data-grid.preview",
+          "categories": [
+            "event"
+          ],
+          "loc": 329
+        },
+        {
+          "file": "src/components/data/gauge.preview.ts",
+          "language": "ts",
+          "name": "gauge.preview",
+          "categories": [
+            "event"
+          ],
+          "loc": 19
+        },
+        {
+          "file": "src/components/data/pivot-table.preview.ts",
+          "language": "ts",
+          "name": "pivot-table.preview",
+          "categories": [
+            "event"
+          ],
+          "loc": 18
+        },
+        {
+          "file": "src/utils/health/exhaustive/_helpers.ts",
+          "language": "ts",
+          "name": "_helpers",
+          "categories": [
+            "webcomponent",
+            "event"
+          ],
+          "loc": 409
+        },
+        {
+          "file": "src/utils/health/exhaustive/forms/_helpers.ts",
+          "language": "ts",
+          "name": "<is-x>",
+          "categories": [
+            "webcomponent",
+            "event"
+          ],
+          "loc": 223
+        },
+        {
+          "file": "src/utils/health/motor/validators/consistency.ts",
+          "language": "ts",
+          "name": "${tag}",
+          "categories": [
+            "webcomponent"
+          ],
+          "loc": 451
+        },
+        {
+          "file": "src/utils/health/motor/validators/runtime.ts",
+          "language": "ts",
+          "name": "runtime",
+          "categories": [
+            "webcomponent",
+            "worker",
+            "event"
+          ],
+          "loc": 202
+        },
+        {
+          "file": "src/components/_shared/diagram-kit.css",
+          "language": "css",
+          "name": "diagram-kit",
+          "categories": [
+            "animation"
+          ],
+          "loc": 202
+        },
+        {
+          "file": "src/components/_shared/prefs.ts",
+          "language": "ts",
+          "name": "prefs",
+          "categories": [
+            "storage"
+          ],
+          "loc": 128
+        }
+      ]
+    },
+    {
+      "id": "g44",
+      "label": "webcomponent/components/layout+media+helpers+cdn+_shared+components+pages+utils",
+      "size": 25,
+      "testables": [
+        {
+          "file": "src/components/layout/callout.ts",
+          "language": "ts",
+          "name": "is-callout",
+          "categories": [
+            "webcomponent",
+            "css-part"
+          ],
+          "loc": 178
+        },
+        {
+          "file": "src/components/layout/card.css",
+          "language": "css",
+          "name": "card",
+          "categories": [
+            "webcomponent",
+            "css-part"
+          ],
+          "loc": 105
+        },
+        {
+          "file": "src/components/layout/card.ts",
+          "language": "ts",
+          "name": "is-card",
+          "categories": [
+            "webcomponent",
+            "event",
+            "css-part"
+          ],
+          "loc": 168
+        },
+        {
+          "file": "src/components/layout/demo.ts",
+          "language": "ts",
+          "name": "is-demo",
+          "categories": [
+            "webcomponent",
+            "event"
+          ],
+          "loc": 66
+        },
+        {
+          "file": "src/components/layout/details.css",
+          "language": "css",
+          "name": "details",
+          "categories": [
+            "webcomponent",
+            "animation",
+            "css-part"
+          ],
+          "loc": 140
+        },
+        {
+          "file": "src/components/layout/details.ts",
+          "language": "ts",
+          "name": "is-details",
+          "categories": [
+            "webcomponent",
+            "event",
+            "css-part"
+          ],
+          "loc": 348
+        },
+        {
+          "file": "src/components/layout/dialog.ts",
+          "language": "ts",
+          "name": "is-dialog",
+          "categories": [
+            "webcomponent",
+            "worker"
+          ],
+          "loc": 185
+        },
+        {
+          "file": "src/components/layout/divider.ts",
+          "language": "ts",
+          "name": "is-divider",
+          "categories": [
+            "webcomponent"
+          ],
+          "loc": 106
+        },
+        {
+          "file": "src/components/layout/dock.ts",
+          "language": "ts",
+          "name": "is-dock",
+          "categories": [
+            "webcomponent",
+            "event"
+          ],
+          "loc": 170
+        },
+        {
+          "file": "src/components/layout/drawer.ts",
+          "language": "ts",
+          "name": "is-drawer",
+          "categories": [
+            "webcomponent",
+            "worker"
+          ],
+          "loc": 169
+        },
+        {
+          "file": "src/components/layout/main.ts",
+          "language": "ts",
+          "name": "is-main",
+          "categories": [
+            "webcomponent",
+            "database",
+            "storage"
+          ],
+          "loc": 60
+        },
+        {
+          "file": "src/components/layout/preview-component.ts",
+          "language": "ts",
+          "name": "is-preview-component",
+          "categories": [
+            "webcomponent",
+            "migration",
+            "event"
+          ],
+          "loc": 286
+        },
+        {
+          "file": "src/components/layout/preview-controls.ts",
+          "language": "ts",
+          "name": "is-preview-controls",
+          "categories": [
+            "webcomponent",
+            "event"
+          ],
+          "loc": 288
+        },
+        {
+          "file": "src/components/layout/scrollspy.ts",
+          "language": "ts",
+          "name": "is-scrollspy",
+          "categories": [
+            "webcomponent",
+            "sql-query",
+            "migration",
+            "event"
+          ],
+          "loc": 329
+        },
+        {
+          "file": "src/components/layout/split-panel.ts",
+          "language": "ts",
+          "name": "is-split-panel",
+          "categories": [
+            "webcomponent",
+            "storage",
+            "event"
+          ],
+          "loc": 494
+        },
+        {
+          "file": "src/components/media/image-editor.preview.ts",
+          "language": "ts",
+          "name": "image-editor.preview",
+          "categories": [
+            "event"
+          ],
+          "loc": 27
+        },
+        {
+          "file": "src/components/media/video-playlist.preview.ts",
+          "language": "ts",
+          "name": "video-playlist.preview",
+          "categories": [
+            "event"
+          ],
+          "loc": 36
+        },
+        {
+          "file": "src/components/media/video.preview.ts",
+          "language": "ts",
+          "name": "video.preview",
+          "categories": [
+            "event"
+          ],
+          "loc": 19
+        },
+        {
+          "file": "src/components/helpers/floating.css",
+          "language": "css",
+          "name": "floating",
+          "categories": [
+            "animation",
+            "css-part"
+          ],
+          "loc": 101
+        },
+        {
+          "file": "src/components/helpers/md-editor.css",
+          "language": "css",
+          "name": "md-editor",
+          "categories": [
+            "animation",
+            "css-part"
+          ],
+          "loc": 328
+        },
+        {
+          "file": "src/cdn/sheet-cache.ts",
+          "language": "ts",
+          "name": "sheet-cache",
+          "categories": [
+            "webcomponent",
+            "http-client"
+          ],
+          "loc": 248
+        },
+        {
+          "file": "src/components/_shared/date-field-core.ts",
+          "language": "ts",
+          "name": "date-field-core",
+          "categories": [
+            "event"
+          ],
+          "loc": 400
+        },
+        {
+          "file": "src/components/_shared/resolve-locale.ts",
+          "language": "ts",
+          "name": "resolve-locale",
+          "categories": [
+            "i18n"
+          ],
+          "loc": 49
+        },
+        {
+          "file": "src/pages/theming.ts",
+          "language": "ts",
+          "name": "theming",
+          "categories": [
+            "auth",
+            "worker",
+            "storage",
+            "event"
+          ],
+          "loc": 392
+        },
+        {
+          "file": "src/utils/testing/meta/visual-check-icon-button.html",
+          "language": "html",
+          "name": "visual-check-icon-button",
+          "categories": [
+            "css-part"
+          ],
+          "loc": 151
+        }
+      ]
+    },
+    {
+      "id": "g56",
+      "label": "animation/components/forms+cdn+components+code+gallery",
+      "size": 20,
+      "testables": [
+        {
+          "file": "src/components/forms/checkbox.css",
+          "language": "css",
+          "name": "checkbox",
+          "categories": [
+            "animation"
+          ],
+          "loc": 154
+        },
+        {
+          "file": "src/components/forms/color-picker.css",
+          "language": "css",
+          "name": "color-picker",
+          "categories": [
+            "animation",
+            "css-part"
+          ],
+          "loc": 208
+        },
+        {
+          "file": "src/components/forms/doc-editor.css",
+          "language": "css",
+          "name": "doc-editor",
+          "categories": [
+            "animation"
+          ],
+          "loc": 95
+        },
+        {
+          "file": "src/components/forms/dropzone.css",
+          "language": "css",
+          "name": "dropzone",
+          "categories": [
+            "animation"
+          ],
+          "loc": 109
+        },
+        {
+          "file": "src/components/forms/file-input.css",
+          "language": "css",
+          "name": "file-input",
+          "categories": [
+            "animation",
+            "css-part"
+          ],
+          "loc": 144
+        },
+        {
+          "file": "src/components/forms/inline-edit.css",
+          "language": "css",
+          "name": "inline-edit",
+          "categories": [
+            "animation"
+          ],
+          "loc": 73
+        },
+        {
+          "file": "src/components/forms/input.css",
+          "language": "css",
+          "name": "input",
+          "categories": [
+            "animation"
+          ],
+          "loc": 272
+        },
+        {
+          "file": "src/components/forms/masked-input.css",
+          "language": "css",
+          "name": "masked-input",
+          "categories": [
+            "animation"
+          ],
+          "loc": 67
+        },
+        {
+          "file": "src/components/forms/mention.css",
+          "language": "css",
+          "name": "mention",
+          "categories": [
+            "animation"
+          ],
+          "loc": 63
+        },
+        {
+          "file": "src/components/forms/pin-input.css",
+          "language": "css",
+          "name": "pin-input",
+          "categories": [
+            "animation"
+          ],
+          "loc": 75
+        },
+        {
+          "file": "src/components/forms/radio.css",
+          "language": "css",
+          "name": "radio",
+          "categories": [
+            "animation"
+          ],
+          "loc": 138
+        },
+        {
+          "file": "src/components/forms/rating.css",
+          "language": "css",
+          "name": "rating",
+          "categories": [
+            "animation"
+          ],
+          "loc": 112
+        },
+        {
+          "file": "src/components/forms/select.css",
+          "language": "css",
+          "name": "select",
+          "categories": [
+            "animation"
+          ],
+          "loc": 304
+        },
+        {
+          "file": "src/components/forms/slider.css",
+          "language": "css",
+          "name": "slider",
+          "categories": [
+            "animation"
+          ],
+          "loc": 281
+        },
+        {
+          "file": "src/components/forms/switch.css",
+          "language": "css",
+          "name": "switch",
+          "categories": [
+            "animation"
+          ],
+          "loc": 210
+        },
+        {
+          "file": "src/cdn/ensure-element.ts",
+          "language": "ts",
+          "name": "ensure-element",
+          "categories": [
+            "sql-query",
+            "worker"
+          ],
+          "loc": 81
+        },
+        {
+          "file": "src/cdn/loader.ts",
+          "language": "ts",
+          "name": "loader",
+          "categories": [
+            "sql-query"
+          ],
+          "loc": 628
+        },
+        {
+          "file": "src/components/_shared/code-langs.ts",
+          "language": "ts",
+          "name": "code-langs",
+          "categories": [
+            "cli"
+          ],
+          "loc": 163
+        },
+        {
+          "file": "src/components/code/code.preview.ts",
+          "language": "ts",
+          "name": "code.preview",
+          "categories": [
+            "event"
+          ],
+          "loc": 281
+        },
+        {
+          "file": "src/gallery/app.ts",
+          "language": "ts",
+          "name": "app",
+          "categories": [
+            "worker",
+            "storage",
+            "event"
+          ],
+          "loc": 483
+        }
+      ]
+    },
+    {
+      "id": "g64",
+      "label": "css-part/components+isp+data+core+utils+feedback+media",
+      "size": 40,
+      "testables": [
+        {
+          "file": "src/components/_shared/modal-chrome.css",
+          "language": "css",
+          "name": "modal-chrome",
+          "categories": [
+            "css-part"
+          ],
+          "loc": 51
+        },
+        {
+          "file": "src/components/actions/context-menu.css",
+          "language": "css",
+          "name": "context-menu",
+          "categories": [
+            "css-part"
+          ],
+          "loc": 73
+        },
+        {
+          "file": "src/components/actions/dropdown.css",
+          "language": "css",
+          "name": "dropdown",
+          "categories": [
+            "css-part"
+          ],
+          "loc": 83
+        },
+        {
+          "file": "src/components/feedback/toast.css",
+          "language": "css",
+          "name": "toast",
+          "categories": [
+            "css-part"
+          ],
+          "loc": 58
+        },
+        {
+          "file": "src/components/feedback/tooltip.css",
+          "language": "css",
+          "name": "tooltip",
+          "categories": [
+            "css-part"
+          ],
+          "loc": 69
+        },
+        {
+          "file": "src/components/forms/date-input.css",
+          "language": "css",
+          "name": "date-input",
+          "categories": [
+            "css-part"
+          ],
+          "loc": 164
+        },
+        {
+          "file": "src/components/isp/accordion-group.css",
+          "language": "css",
+          "name": "accordion-group",
+          "categories": [
+            "css-part"
+          ],
+          "loc": 23
+        },
+        {
+          "file": "src/components/layout/callout.css",
+          "language": "css",
+          "name": "callout",
+          "categories": [
+            "css-part"
+          ],
+          "loc": 149
+        },
+        {
+          "file": "src/components/media/avatar.css",
+          "language": "css",
+          "name": "avatar",
+          "categories": [
+            "css-part"
+          ],
+          "loc": 61
+        },
+        {
+          "file": "src/components/media/image-editor.css",
+          "language": "css",
+          "name": "image-editor",
+          "categories": [
+            "css-part"
+          ],
+          "loc": 72
+        },
+        {
+          "file": "src/components/media/video-playlist.css",
+          "language": "css",
+          "name": "video-playlist",
+          "categories": [
+            "css-part"
+          ],
+          "loc": 326
+        },
+        {
+          "file": "src/components/navigation/breadcrumb.css",
+          "language": "css",
+          "name": "breadcrumb",
+          "categories": [
+            "css-part"
+          ],
+          "loc": 24
+        },
+        {
+          "file": "src/components/overlays/command-palette.css",
+          "language": "css",
+          "name": "command-palette",
+          "categories": [
+            "css-part"
+          ],
+          "loc": 170
+        },
+        {
+          "file": "src/components/overlays/window.css",
+          "language": "css",
+          "name": "window",
+          "categories": [
+            "css-part"
+          ],
+          "loc": 111
+        },
+        {
+          "file": "src/components/isp/block-layout.preview.ts",
+          "language": "ts",
+          "name": "block-layout.preview",
+          "categories": [
+            "event"
+          ],
+          "loc": 54
+        },
+        {
+          "file": "src/components/isp/btn-ref.preview.ts",
+          "language": "ts",
+          "name": "btn-ref.preview",
+          "categories": [
+            "event"
+          ],
+          "loc": 55
+        },
+        {
+          "file": "src/components/isp/flex-layout.preview.ts",
+          "language": "ts",
+          "name": "flex-layout.preview",
+          "categories": [
+            "event"
+          ],
+          "loc": 67
+        },
+        {
+          "file": "src/components/isp/float-card.preview.ts",
+          "language": "ts",
+          "name": "float-card.preview",
+          "categories": [
+            "event"
+          ],
+          "loc": 24
+        },
+        {
+          "file": "src/components/isp/form.preview.ts",
+          "language": "ts",
+          "name": "form.preview",
+          "categories": [
+            "event"
+          ],
+          "loc": 91
+        },
+        {
+          "file": "src/components/isp/heading.preview.ts",
+          "language": "ts",
+          "name": "heading.preview",
+          "categories": [
+            "event"
+          ],
+          "loc": 92
+        },
+        {
+          "file": "src/components/isp/text.preview.ts",
+          "language": "ts",
+          "name": "text.preview",
+          "categories": [
+            "event"
+          ],
+          "loc": 72
+        },
+        {
+          "file": "src/components/isp/tree-view.preview.ts",
+          "language": "ts",
+          "name": "tree-view.preview",
+          "categories": [
+            "event"
+          ],
+          "loc": 71
+        },
+        {
+          "file": "src/components/data/ag-grid.ts",
+          "language": "ts",
+          "name": "is-ag-grid",
+          "categories": [
+            "webcomponent",
+            "auth",
+            "migration",
+            "storage",
+            "event",
+            "http-client"
+          ],
+          "loc": 1918
+        },
+        {
+          "file": "src/components/data/data-grid.ts",
+          "language": "ts",
+          "name": "is-data-grid",
+          "categories": [
+            "webcomponent",
+            "sql-query",
+            "worker",
+            "event",
+            "browser-api"
+          ],
+          "loc": 3125
+        },
+        {
+          "file": "src/components/data/gauge.ts",
+          "language": "ts",
+          "name": "is-gauge",
+          "categories": [
+            "webcomponent"
+          ],
+          "loc": 146
+        },
+        {
+          "file": "src/components/data/kanban.ts",
+          "language": "ts",
+          "name": "is-kanban",
+          "categories": [
+            "webcomponent",
+            "event"
+          ],
+          "loc": 271
+        },
+        {
+          "file": "src/components/data/pivot-table.ts",
+          "language": "ts",
+          "name": "is-pivot-table",
+          "categories": [
+            "webcomponent",
+            "event"
+          ],
+          "loc": 181
+        },
+        {
+          "file": "src/components/data/spreadsheet.ts",
+          "language": "ts",
+          "name": "is-spreadsheet",
+          "categories": [
+            "webcomponent",
+            "sql-query",
+            "event"
+          ],
+          "loc": 324
+        },
+        {
+          "file": "src/components/data/stat.ts",
+          "language": "ts",
+          "name": "is-stat",
+          "categories": [
+            "webcomponent",
+            "css-part"
+          ],
+          "loc": 115
+        },
+        {
+          "file": "src/components/data/transfer.ts",
+          "language": "ts",
+          "name": "is-transfer",
+          "categories": [
+            "webcomponent",
+            "event"
+          ],
+          "loc": 234
+        },
+        {
+          "file": "src/core/attrs.ts",
+          "language": "ts",
+          "name": "is-foo",
+          "categories": [
+            "webcomponent"
+          ],
+          "loc": 324
+        },
+        {
+          "file": "src/core/base-sheets.ts",
+          "language": "ts",
+          "name": "base-sheets",
+          "categories": [
+            "webcomponent"
+          ],
+          "loc": 64
+        },
+        {
+          "file": "src/core/element-base.ts",
+          "language": "ts",
+          "name": "is-foo",
+          "categories": [
+            "webcomponent"
+          ],
+          "loc": 134
+        },
+        {
+          "file": "src/core/element.ts",
+          "language": "ts",
+          "name": "element",
+          "categories": [
+            "webcomponent",
+            "event"
+          ],
+          "loc": 234
+        },
+        {
+          "file": "src/utils/health/exhaustive/merge-children.mjs",
+          "language": "js",
+          "name": "merge-children",
+          "categories": [
+            "cli"
+          ],
+          "loc": 74
+        },
+        {
+          "file": "src/utils/health/exhaustive/run-all-tests.mjs",
+          "language": "js",
+          "name": "run-all-tests",
+          "categories": [
+            "cli"
+          ],
+          "loc": 74
+        },
+        {
+          "file": "src/utils/testing/e2e/run.ts",
+          "language": "ts",
+          "name": "run",
+          "categories": [
+            "cli"
+          ],
+          "loc": 111,
+          "e2e": true
+        },
+        {
+          "file": "src/components/feedback/progress-bar.preview.ts",
+          "language": "ts",
+          "name": "progress-bar.preview",
+          "categories": [
+            "event"
+          ],
+          "loc": 44
+        },
+        {
+          "file": "src/components/feedback/tooltip.preview.ts",
+          "language": "ts",
+          "name": "tooltip.preview",
+          "categories": [
+            "event"
+          ],
+          "loc": 16
+        },
+        {
+          "file": "src/components/media/video.css",
+          "language": "css",
+          "name": "video",
+          "categories": [
+            "animation",
+            "css-part"
+          ],
+          "loc": 439
+        }
+      ]
+    },
+    {
+      "id": "g17",
+      "label": "auth/components+scripts+components+diagrams+actions+charts+navigation+previews+utils",
+      "size": 44,
+      "testables": [
+        {
+          "file": "src/components/_shared/cdn-ref.ts",
+          "language": "ts",
+          "name": "cdn-ref",
+          "categories": [
+            "auth",
+            "storage",
+            "http-client"
+          ],
+          "loc": 84
+        },
+        {
+          "file": "src/components/_shared/code-highlight.ts",
+          "language": "ts",
+          "name": "code-highlight",
+          "categories": [
+            "auth"
+          ],
+          "loc": 497
+        },
+        {
+          "file": "src/components/_shared/diagram-arrow.ts",
+          "language": "ts",
+          "name": "diagram-arrow",
+          "categories": [
+            "auth"
+          ],
+          "loc": 123
+        },
+        {
+          "file": "src/components/_shared/diagram-edit.ts",
+          "language": "ts",
+          "name": "diagram-edit",
+          "categories": [
+            "auth",
+            "sql-query",
+            "migration",
+            "worker",
+            "storage",
+            "event"
+          ],
+          "loc": 320
+        },
+        {
+          "file": "src/components/_shared/prompt-md.ts",
+          "language": "ts",
+          "name": "prompt-md",
+          "categories": [
+            "auth"
+          ],
+          "loc": 292
+        },
+        {
+          "file": "src/components/_shared/tk-icon-inline.ts",
+          "language": "ts",
+          "name": "tk-icon-inline",
+          "categories": [
+            "auth"
+          ],
+          "loc": 292
+        },
+        {
+          "file": "src/components/actions/button.css",
+          "language": "css",
+          "name": "button",
+          "categories": [
+            "auth",
+            "animation",
+            "css-part"
+          ],
+          "loc": 357
+        },
+        {
+          "file": "src/components/forms/masks-tokens.ts",
+          "language": "ts",
+          "name": "masks-tokens",
+          "categories": [
+            "auth"
+          ],
+          "loc": 68
+        },
+        {
+          "file": "src/components/forms/rte.css",
+          "language": "css",
+          "name": "rte",
+          "categories": [
+            "auth"
+          ],
+          "loc": 129
+        },
+        {
+          "file": "src/components/helpers/md-editor-api.ts",
+          "language": "ts",
+          "name": "md-editor-api",
+          "categories": [
+            "auth",
+            "http-client"
+          ],
+          "loc": 148
+        },
+        {
+          "file": "src/components/helpers/md-lite.ts",
+          "language": "ts",
+          "name": "md-lite",
+          "categories": [
+            "auth",
+            "migration"
+          ],
+          "loc": 257
+        },
+        {
+          "file": "src/components/isp/catalogo-gen.preview.ts",
+          "language": "ts",
+          "name": "catalogo-gen.preview",
+          "categories": [
+            "auth",
+            "storage",
+            "event"
+          ],
+          "loc": 53
+        },
+        {
+          "file": "src/components/isp/controller-from-config.ts",
+          "language": "ts",
+          "name": "controller-from-config",
+          "categories": [
+            "auth",
+            "http-client"
+          ],
+          "loc": 306
+        },
+        {
+          "file": "scripts/demo-code.js",
+          "language": "js",
+          "name": "demo-code",
+          "categories": [
+            "webcomponent",
+            "event"
+          ],
+          "loc": 381
+        },
+        {
+          "file": "scripts/demo-file-meta.js",
+          "language": "js",
+          "name": "demo-file-meta",
+          "categories": [
+            "webcomponent",
+            "event"
+          ],
+          "loc": 205
+        },
+        {
+          "file": "scripts/gen-child-previews.ts",
+          "language": "ts",
+          "name": "gen-child-previews",
+          "categories": [
+            "webcomponent",
+            "worker",
+            "cli"
+          ],
+          "loc": 429
+        },
+        {
+          "file": "scripts/preview-chrome.js",
+          "language": "js",
+          "name": "preview-chrome",
+          "categories": [
+            "webcomponent",
+            "sql-query",
+            "worker",
+            "storage",
+            "event",
+            "browser-api"
+          ],
+          "loc": 198
+        },
+        {
+          "file": "scripts/smoke-dropdown-open.mjs",
+          "language": "js",
+          "name": "smoke-dropdown-open",
+          "categories": [
+            "webcomponent",
+            "database"
+          ],
+          "loc": 77
+        },
+        {
+          "file": "scripts/ts-codemod.ts",
+          "language": "ts",
+          "name": "ts-codemod",
+          "categories": [
+            "webcomponent",
+            "cli"
+          ],
+          "loc": 130
+        },
+        {
+          "file": "scripts/ux-audit.ts",
+          "language": "ts",
+          "name": "ux-audit",
+          "categories": [
+            "webcomponent",
+            "worker",
+            "cli",
+            "http-client"
+          ],
+          "loc": 301
+        },
+        {
+          "file": "scripts/view-sources.js",
+          "language": "js",
+          "name": "view-sources",
+          "categories": [
+            "webcomponent",
+            "event"
+          ],
+          "loc": 326
+        },
+        {
+          "file": "src/components/_shared/diagram-astar.ts",
+          "language": "ts",
+          "name": "diagram-astar",
+          "categories": [
+            "sql-query"
+          ],
+          "loc": 506
+        },
+        {
+          "file": "src/components/_shared/diagram-grid.ts",
+          "language": "ts",
+          "name": "diagram-grid",
+          "categories": [
+            "sql-query"
+          ],
+          "loc": 265
+        },
+        {
+          "file": "src/components/_shared/form-associated.ts",
+          "language": "ts",
+          "name": "form-associated",
+          "categories": [
+            "sql-query"
+          ],
+          "loc": 52
+        },
+        {
+          "file": "src/components/_shared/icon-loader.ts",
+          "language": "ts",
+          "name": "icon-loader",
+          "categories": [
+            "sql-query",
+            "http-client"
+          ],
+          "loc": 187
+        },
+        {
+          "file": "src/components/_shared/url-nav.ts",
+          "language": "ts",
+          "name": "url-nav",
+          "categories": [
+            "sql-query"
+          ],
+          "loc": 132
+        },
+        {
+          "file": "src/components/data/datagrid-core/grid-model.ts",
+          "language": "ts",
+          "name": "grid-model",
+          "categories": [
+            "sql-query"
+          ],
+          "loc": 294
+        },
+        {
+          "file": "src/components/data/datagrid-core/selection.ts",
+          "language": "ts",
+          "name": "selection",
+          "categories": [
+            "sql-query"
+          ],
+          "loc": 99
+        },
+        {
+          "file": "src/components/helpers/response-cache.ts",
+          "language": "ts",
+          "name": "response-cache",
+          "categories": [
+            "sql-query",
+            "service",
+            "worker",
+            "storage"
+          ],
+          "loc": 210
+        },
+        {
+          "file": "src/components/diagrams/diagram-lightbox.preview.ts",
+          "language": "ts",
+          "name": "diagram-lightbox.preview",
+          "categories": [
+            "event"
+          ],
+          "loc": 27
+        },
+        {
+          "file": "src/components/diagrams/er-spec.ts",
+          "language": "ts",
+          "name": "er-spec",
+          "categories": [
+            "event"
+          ],
+          "loc": 757
+        },
+        {
+          "file": "src/components/diagrams/lightbox.preview.ts",
+          "language": "ts",
+          "name": "lightbox.preview",
+          "categories": [
+            "event"
+          ],
+          "loc": 68
+        },
+        {
+          "file": "src/components/diagrams/org-chart.preview.ts",
+          "language": "ts",
+          "name": "org-chart.preview",
+          "categories": [
+            "event"
+          ],
+          "loc": 26
+        },
+        {
+          "file": "src/components/diagrams/sequence-diagram.preview.ts",
+          "language": "ts",
+          "name": "sequence-diagram.preview",
+          "categories": [
+            "event"
+          ],
+          "loc": 19
+        },
+        {
+          "file": "src/components/actions/button-group.css",
+          "language": "css",
+          "name": "button-group",
+          "categories": [
+            "animation",
+            "css-part"
+          ],
+          "loc": 239
+        },
+        {
+          "file": "src/components/actions/check-icon-button.css",
+          "language": "css",
+          "name": "check-icon-button",
+          "categories": [
+            "animation",
+            "css-part"
+          ],
+          "loc": 112
+        },
+        {
+          "file": "src/components/actions/copy-button.css",
+          "language": "css",
+          "name": "copy-button",
+          "categories": [
+            "animation",
+            "css-part"
+          ],
+          "loc": 104
+        },
+        {
+          "file": "src/components/actions/fab.css",
+          "language": "css",
+          "name": "fab",
+          "categories": [
+            "animation",
+            "css-part"
+          ],
+          "loc": 119
+        },
+        {
+          "file": "src/components/actions/speed-dial.css",
+          "language": "css",
+          "name": "speed-dial",
+          "categories": [
+            "animation",
+            "css-part"
+          ],
+          "loc": 215
+        },
+        {
+          "file": "src/components/charts/chart.css",
+          "language": "css",
+          "name": "chart",
+          "categories": [
+            "animation"
+          ],
+          "loc": 325
+        },
+        {
+          "file": "src/components/charts/treemap.css",
+          "language": "css",
+          "name": "treemap",
+          "categories": [
+            "animation"
+          ],
+          "loc": 128
+        },
+        {
+          "file": "src/components/navigation/mega-menu.preview.ts",
+          "language": "ts",
+          "name": "mega-menu.preview",
+          "categories": [
+            "event"
+          ],
+          "loc": 18
+        },
+        {
+          "file": "src/previews/_kit/render.ts",
+          "language": "ts",
+          "name": "render",
+          "categories": [
+            "auth"
+          ],
+          "loc": 229
+        },
+        {
+          "file": "src/utils/system/controles.ts",
+          "language": "ts",
+          "name": "controles",
+          "categories": [
+            "event"
+          ],
+          "loc": 200
+        }
+      ]
+    }
+  ]
+}

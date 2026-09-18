@@ -1,5 +1,5 @@
 {
-  "generatedAt": "2026-09-16T16:53:52.595Z",
+  "generatedAt": "2026-09-17T18:03:57.570Z",
   "count": 61,
   "modules": [
     {
@@ -274,7 +274,7 @@
       "id": "diagram-element-base",
       "path": "src/components/_shared/diagram-element-base.ts",
       "summary": "diagram-element-base — (block-diagram, class-diagram, er-diagram, flowchart, gantt, mindmap,",
-      "bytes": 8788,
+      "bytes": 9395,
       "exports": [
         "DiagramElementBase extends ElementBase \r\n  static get observedAttributes"
       ]
@@ -714,7 +714,7 @@
       "id": "svg-chart-engine",
       "path": "src/components/_shared/svg-chart-engine.ts",
       "summary": "Módulo compartido `svg-chart-engine.ts`.",
-      "bytes": 5743,
+      "bytes": 6701,
       "exports": [
         "svgEl",
         "scaleLinear",

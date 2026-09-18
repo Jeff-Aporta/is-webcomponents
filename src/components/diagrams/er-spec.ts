@@ -545,13 +545,23 @@ export function computeErLayout(spec: ErSpec): ErLayout {
     ? Math.max(...legendGroups.map((g) => Math.ceil(g.name.length * 6) + 24)) + 8
     : 0;
 
-  const contentW = (mejorPack?.width ?? 0) + offsetX + MARGIN.right;
-  const width = legendGroups
-    ? Math.max(contentW + LEGEND_GUTTER + legendW, 160)
-    : Math.max(contentW, 160);
-  const height = (mejorPack?.height ?? 0) + offsetY + MARGIN.bottom;
+  // El viewBox abraza a las cajas (incluso a las lockeadas que el empaquetado
+  // ignoró). Bug histórico: lockedMax{X,Y} se calculaban pero no se usaban,
+  // lo que recortaba entidades que el usuario posicionó fuera del rectángulo
+  // de packing (cubierto por er-stagehand.test.mjs).
+  const baseW = (mejorPack?.width ?? 0) + offsetX + MARGIN.right;
+  const minRight = Math.max(baseW, lockedMaxX + MARGIN.right);
+  const contentW = legendGroups
+    ? Math.max(minRight + LEGEND_GUTTER + legendW, 160)
+    : Math.max(minRight, 160);
+  const width = contentW;
   const legendX = legendGroups ? contentW + LEGEND_GUTTER : 0;
   const legendY = MARGIN.top + (subtitle ? 34 : title ? 22 : 0);
+  const baseHeight = (mejorPack?.height ?? 0) + offsetY + MARGIN.bottom;
+  const minBottom = Math.max(baseHeight, lockedMaxY + MARGIN.bottom);
+  const height = legendGroups
+    ? Math.max(minBottom, legendY + legendGroups.length * 16 + 24)
+    : minBottom;
   const titleMaxW = Math.max(80, width - MARGIN.left - MARGIN.right - (legendGroups ? legendW + LEGEND_GUTTER : 0));
   const titleLines = title ? wrapLabel(title, titleMaxW, 13, 3) : [];
   const subtitleLines = subtitle ? wrapLabel(subtitle, titleMaxW, 11, 2) : [];
