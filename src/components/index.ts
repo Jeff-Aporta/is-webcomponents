@@ -168,7 +168,7 @@ const CATALOG = {
   'is-window':            'overlays/window',
 };
 
-async function load(tag, devPath: string) {
+async function load(tag: string, devPath: string) {
   if (customElements.get(tag)) return;
   // 1) CDN minificado: dist/cdn/<categoria>/<name>.min.js (folderizado)
   const [folder] = devPath.split('/');
