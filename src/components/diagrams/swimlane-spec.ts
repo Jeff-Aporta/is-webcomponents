@@ -2,6 +2,7 @@ import { richTextPlain } from '../_shared/tk-rich-text.js';
 import { diagramHeaderWidth } from '../_shared/diagram-header.js';
 import { applyEdgeActorLayout } from '../_shared/diagram-edge-actors.js';
 import { assignEdgeHues } from '../_shared/diagram-edge-style.js';
+import type { EdgeWithHue } from '../_shared/diagram-edge-style.js';
 import { resolveTkHue } from '../_shared/tk-hue.js';
 
 /**
@@ -397,7 +398,7 @@ export function computeSwimlaneLayout(spec: SwimlaneResolvedSpec): SwimlaneLayou
     };
   });
 
-  assignEdgeHues(links);
+  assignEdgeHues(links as unknown as readonly EdgeWithHue[]);
   const layout: SwimlaneLayout = {
     width,
     height,
