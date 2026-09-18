@@ -1,23 +1,30 @@
 /**
  * Behavior migrado desde HTML inline de is-context-menu.
  * Se ejecuta en mount() tras pintar la definition JSON.
- * @param {import('../../previews/_kit/types.d.ts').PreviewMountContext} ctx
  */
-export async function mount(ctx: import('../../previews/_kit/types.d.ts').PreviewMountContext) {
+import type { PreviewMountContext } from '../../previews/_kit/types.d.ts';
+
+interface CustomEventWithDetail<T = unknown> extends Event {
+  detail?: T;
+}
+
+export async function mount(ctx: PreviewMountContext): Promise<void> {
   const root = ctx.main;
   void root;
   const log = document.getElementById('log');
-      function append(line) {
-        log.textContent = line + '\n' + log.textContent;
-        log.scrollTop = 0;
-      }
-      document.querySelectorAll<HTMLElement>('is-context-menu').forEach((m: HTMLElement) => {
-        m.addEventListener('is-select', (e) => {
-          append(`[${new Date().toLocaleTimeString()}] ${e.detail.value}`);
-        });
-      });
+  if (!log) return;
+  const append = (line: string): void => {
+    log.textContent = line + '\n' + (log.textContent ?? '');
+    log.scrollTop = 0;
+  };
+  document.querySelectorAll<HTMLElement>('is-context-menu').forEach((m: HTMLElement) => {
+    m.addEventListener('is-select', (e: Event) => {
+      const detail = (e as CustomEventWithDetail<{ value?: string }>).detail;
+      append(`[${new Date().toLocaleTimeString()}] ${detail?.value ?? ''}`);
+    });
+  });
 }
 
-export function unmount() {
+export function unmount(): void {
   /* no-op: listeners del HTML legado no tenían teardown */
 }

@@ -65,38 +65,38 @@ import { withStyleAttrs } from '../../core/attrs.js';
       }
     }
 
-    get orientation() {
-      const v = this.getAttribute('orientation');
+    get orientation(): string {
+      const v = this.getAttribute('orientation') ?? '';
       return VALID_ORIENTATION.includes(v) ? v : 'horizontal';
     }
-    set orientation(v) {
+    set orientation(v: string | null) {
       if (v == null || v === '') this.removeAttribute('orientation');
       else if (VALID_ORIENTATION.includes(v)) this.setAttribute('orientation', v);
     }
 
-    get opacity() {
-      const n = parseFloat(this.getAttribute('opacity'));
+    get opacity(): number {
+      const n = parseFloat(this.getAttribute('opacity') ?? '');
       return Number.isFinite(n) ? Math.min(100, Math.max(0, n)) : 20;
     }
-    set opacity(v) {
+    set opacity(v: number | string | null) {
       if (v == null || v === '') this.removeAttribute('opacity');
       else this.setAttribute('opacity', String(v));
     }
 
-    get color() {
-      const v = this.getAttribute('color');
+    get color(): string {
+      const v = this.getAttribute('color') ?? '';
       return VALID_COLOR.includes(v) ? v : 'text';
     }
-    set color(v) {
+    set color(v: string | null) {
       if (v == null || v === '') this.removeAttribute('color');
       else if (VALID_COLOR.includes(v)) this.setAttribute('color', v);
     }
 
-    #syncA11y() {
+    #syncA11y(): void {
       this.setAttribute('aria-orientation', this.orientation);
     }
 
-    #syncOpacity() {
+    #syncOpacity(): void {
       this.style.setProperty('--opacity', String(this.opacity / 100));
     }
   }

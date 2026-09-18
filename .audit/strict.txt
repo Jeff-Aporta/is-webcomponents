@@ -1,4 +1,6 @@
-﻿src/components/actions/button-group.preview.ts(8,29): error TS7006: Parameter 'ctx' implicitly has an 'any' type.
+﻿src/components/actions/button-group.preview.controller.ts(38,11): error TS2345: Argument of type '{ tag: string; title: string; titleHtml: true; description: string; storageKey: string; styles: string; sections: ({ id: string; title: string; titleHtml: true; lede: string; blocks: ({ kind: "demo"; html: string; } | { ...; } | { ...; })[]; } | { ...; } | { ...; } | { ...; })[]; }' is not assignable to parameter of type 'PreviewDefinition'.
+  Type '{ tag: string; title: string; titleHtml: true; description: string; storageKey: string; styles: string; sections: ({ id: string; title: string; titleHtml: true; lede: string; blocks: ({ kind: "demo"; html: string; } | { ...; } | { ...; })[]; } | { ...; } | { ...; } | { ...; })[]; }' is missing the following properties from type 'PreviewDefinition': $schema, category
+src/components/actions/button-group.preview.ts(8,29): error TS7006: Parameter 'ctx' implicitly has an 'any' type.
 src/components/actions/button-group.preview.ts(8,34): error TS7006: Parameter 'preview' implicitly has an 'any' type.
 src/components/actions/button-group.preview.ts(15,25): error TS7006: Parameter 'ctx' implicitly has an 'any' type.
 src/components/actions/button-group.preview.ts(15,30): error TS7006: Parameter 'preview' implicitly has an 'any' type.
@@ -39,33 +41,6 @@ src/components/charts/scatter-chart.preview.ts(21,7): error TS2531: Object is po
 src/components/charts/scatter-chart.preview.ts(21,60): error TS2339: Property 'config' does not exist on type 'HTMLElement'.
 src/components/charts/sparkline.ts(153,30): error TS2345: Argument of type 'number' is not assignable to parameter of type 'string'.
 src/components/charts/sparkline.ts(154,30): error TS2345: Argument of type 'number' is not assignable to parameter of type 'string'.
-src/components/code/code.ts(153,3): error TS2322: Type '{ tabWidth?: number; useTabs?: boolean; printWidth?: number; semi?: boolean; singleQuote?: boolean; trailingComma?: boolean; endOfLine?: "lf" | "crlf" | "cr"; }' is not assignable to type 'CodeFormatConfig'.
-  Types of property 'tabWidth' are incompatible.
-    Type 'number | undefined' is not assignable to type 'number'.
-      Type 'undefined' is not assignable to type 'number'.
-src/components/code/code.ts(335,5): error TS2322: Type 'import("C:/ContaPyme/Personal/apps/WT/is-webcomponents-wt-root-types-strong-2026/src/components/_shared/code-model").CodeDocument' is not assignable to type 'CodeDocument'.
-  Types of property 'format' are incompatible.
-    Type 'object | undefined' is not assignable to type 'Record<string, unknown> | undefined'.
-      Type 'object' is not assignable to type 'Record<string, unknown>'.
-        Index signature for type 'string' is missing in type '{}'.
-src/components/code/code.ts(344,87): error TS2345: Argument of type 'string | CodeDocument | null | undefined' is not assignable to parameter of type 'string | import("C:/ContaPyme/Personal/apps/WT/is-webcomponents-wt-root-types-strong-2026/src/components/_shared/code-model").CodeDocument | null | undefined'.
-  Type 'CodeDocument' is not assignable to type 'string | CodeDocument | null | undefined'.
-    Type 'CodeDocument' is not assignable to type 'import("C:/ContaPyme/Personal/apps/WT/is-webcomponents-wt-root-types-strong-2026/src/components/_shared/code-model").CodeDocument'.
-      Types of property '$schema' are incompatible.
-        Type 'string | undefined' is not assignable to type 'string'.
-          Type 'undefined' is not assignable to type 'string'.
-src/components/code/code.ts(442,13): error TS2322: Type 'object' is not assignable to type 'CodeThemeConfig'.
-  Index signature for type 'string' is missing in type '{}'.
-src/components/code/code.ts(518,52): error TS2345: Argument of type 'null' is not assignable to parameter of type 'HighlightState | undefined'.
-src/components/code/code.ts(548,37): error TS2345: Argument of type '{ type: string; text: string; }[]' is not assignable to parameter of type 'readonly Token[]'.
-  Type '{ type: string; text: string; }' is not assignable to type 'Token'.
-    Types of property 'type' are incompatible.
-      Type 'string' is not assignable to type 'TokenType'.
-src/components/code/code.ts(548,78): error TS2345: Argument of type '{ type: string; text: string; }[]' is not assignable to parameter of type 'readonly Token[]'.
-  Type '{ type: string; text: string; }' is not assignable to type 'Token'.
-    Types of property 'type' are incompatible.
-      Type 'string' is not assignable to type 'TokenType'.
-src/components/code/code.ts(566,32): error TS2345: Argument of type 'string' is not assignable to parameter of type 'TokenType | null | undefined'.
 src/components/data/gauge.preview.ts(11,7): error TS18047: 's' is possibly 'null'.
 src/components/data/gauge.preview.ts(12,9): error TS18047: 'g' is possibly 'null'.
 src/components/data/gauge.preview.ts(12,35): error TS2339: Property 'detail' does not exist on type 'Event'.
@@ -91,33 +66,8 @@ src/components/diagrams/block-spec.ts(337,18): error TS2345: Argument of type 'B
     Index signature for type 'string' is missing in type 'BlockLayoutEdge'.
 src/components/diagrams/class-diagram.ts(152,7): error TS2322: Type 'DiagramTheme' is not assignable to type 'TurtleTheme'.
   Index signature for type 'string' is missing in type 'DiagramTheme'.
-src/components/diagrams/class-spec.ts(237,20): error TS2345: Argument of type '{ cx: number; cy: number; x: number; y: number; width: number; height: number; }' is not assignable to parameter of type '{ layer: number; }'.
-  Property 'layer' is missing in type '{ cx: number; cy: number; x: number; y: number; width: number; height: number; }' but required in type '{ layer: number; }'.
-src/components/diagrams/class-spec.ts(308,28): error TS2345: Argument of type 'PositionedNode' is not assignable to parameter of type '{ cx: number; cy: number; x: number; y: number; width: number; height: number; }'.
-  Type 'PositionedNode' is missing the following properties from type '{ cx: number; cy: number; x: number; y: number; width: number; height: number; }': cx, cy, width, height
-src/components/diagrams/class-spec.ts(309,32): error TS2345: Argument of type 'string' is not assignable to parameter of type '"top" | "left" | "right" | "bottom"'.
-src/components/diagrams/class-spec.ts(310,30): error TS2345: Argument of type 'string' is not assignable to parameter of type '"top" | "left" | "right" | "bottom"'.
-src/components/diagrams/class-spec.ts(317,48): error TS2345: Argument of type 'string' is not assignable to parameter of type 'DiagramSide'.
-src/components/diagrams/class-spec.ts(318,50): error TS2345: Argument of type 'string' is not assignable to parameter of type 'DiagramSide'.
-src/components/diagrams/class-spec.ts(350,35): error TS2345: Argument of type 'number' is not assignable to parameter of type 'string'.
-src/components/diagrams/class-spec.ts(354,18): error TS2345: Argument of type 'ClassLayoutEdge[]' is not assignable to parameter of type 'readonly EdgeWithHue[]'.
-  Type 'ClassLayoutEdge' is not assignable to type 'EdgeWithHue'.
-    Index signature for type 'string' is missing in type 'ClassLayoutEdge'.
 src/components/diagrams/er-diagram.ts(190,7): error TS2322: Type 'DiagramTheme' is not assignable to type 'TurtleTheme'.
   Index signature for type 'string' is missing in type 'DiagramTheme'.
-src/components/diagrams/er-spec.ts(610,28): error TS2345: Argument of type '{ readonly layer: number; readonly id: string; readonly x: number; readonly y: number; readonly w: number; readonly h: number; readonly name: string; readonly attributes: ErSpecAttribute[]; readonly group?: string | undefined; readonly hue?: number | undefined; readonly style?: NodeStyleOverride | undefined; readonl...' is not assignable to parameter of type '{ layer: number; }'.
-  Type 'undefined' is not assignable to type '{ layer: number; }'.
-src/components/diagrams/er-spec.ts(613,26): error TS2345: Argument of type '{ readonly layer: number; readonly id: string; readonly x: number; readonly y: number; readonly w: number; readonly h: number; readonly name: string; readonly attributes: ErSpecAttribute[]; readonly group?: string | undefined; readonly hue?: number | undefined; readonly style?: NodeStyleOverride | undefined; readonl...' is not assignable to parameter of type '{ layer: number; }'.
-  Type 'undefined' is not assignable to type '{ layer: number; }'.
-src/components/diagrams/er-spec.ts(633,50): error TS2345: Argument of type 'BoxSide' is not assignable to parameter of type 'DiagramSide'.
-  Type '"auto"' is not assignable to type 'DiagramSide'.
-src/components/diagrams/er-spec.ts(634,52): error TS2345: Argument of type 'BoxSide' is not assignable to parameter of type 'DiagramSide'.
-  Type '"auto"' is not assignable to type 'DiagramSide'.
-src/components/diagrams/er-spec.ts(708,36): error TS2345: Argument of type '(ErLayoutEdge | undefined)[]' is not assignable to parameter of type 'readonly EdgeWithHue[]'.
-  Type 'ErLayoutEdge | undefined' is not assignable to type 'EdgeWithHue'.
-    Type 'undefined' is not assignable to type 'EdgeWithHue'.
-src/components/diagrams/er-spec.ts(714,5): error TS2322: Type 'EdgeWithHue[]' is not assignable to type 'ErLayoutEdge[]'.
-  Type 'EdgeWithHue' is missing the following properties from type 'ErLayoutEdge': id, from, to, identifying, and 5 more.
 src/components/diagrams/flowchart-spec.ts(458,29): error TS2345: Argument of type '{ id: string; x: number; y: number; w: number; h: number; layer: number; } | undefined' is not assignable to parameter of type '{ layer: number; }'.
   Type 'undefined' is not assignable to type '{ layer: number; }'.
 src/components/diagrams/flowchart-spec.ts(464,26): error TS2345: Argument of type 'FlowLayoutNode | undefined' is not assignable to parameter of type 'NodeRect'.
@@ -167,18 +117,6 @@ src/components/diagrams/swimlane-spec.ts(400,18): error TS2345: Argument of type
 src/components/diagrams/use-case-spec.ts(409,18): error TS2345: Argument of type 'UseCaseLayoutLink[]' is not assignable to parameter of type 'readonly EdgeWithHue[]'.
   Type 'UseCaseLayoutLink' is not assignable to type 'EdgeWithHue'.
     Index signature for type 'string' is missing in type 'UseCaseLayoutLink'.
-src/components/feedback/theme-toggle.ts(44,40): error TS7006: Parameter 'theme' implicitly has an 'any' type.
-src/components/feedback/theme-toggle.ts(78,23): error TS2339: Property 'disconnect' does not exist on type 'never'.
-src/components/feedback/theme-toggle.ts(96,29): error TS2345: Argument of type 'Element' is not assignable to parameter of type 'HTMLElement'.
-  Type 'Element' is missing the following properties from type 'HTMLElement': accessKey, accessKeyLabel, autocapitalize, autocorrect, and 129 more.
-src/components/feedback/theme-toggle.ts(100,23): error TS2339: Property 'disconnect' does not exist on type 'never'.
-src/components/feedback/theme-toggle.ts(102,7): error TS2322: Type 'MutationObserver' is not assignable to type 'null'.
-src/components/feedback/theme-toggle.ts(107,7): error TS2531: Object is possibly 'null'.
-src/components/feedback/theme-toggle.ts(113,18): error TS7006: Parameter 'e' implicitly has an 'any' type.
-src/components/feedback/theme-toggle.ts(117,18): error TS2345: Argument of type 'Element' is not assignable to parameter of type 'HTMLElement'.
-  Type 'Element' is missing the following properties from type 'HTMLElement': accessKey, accessKeyLabel, autocapitalize, autocorrect, and 129 more.
-src/components/feedback/theme-toggle.ts(131,29): error TS2345: Argument of type 'Element' is not assignable to parameter of type 'HTMLElement'.
-  Type 'Element' is missing the following properties from type 'HTMLElement': accessKey, accessKeyLabel, autocapitalize, autocorrect, and 129 more.
 src/components/feedback/tooltip.preview.ts(10,82): error TS18047: 'tip' is possibly 'null'.
 src/components/feedback/tooltip.preview.ts(10,86): error TS2339: Property 'open' does not exist on type 'HTMLElement'.
 src/components/feedback/tooltip.preview.ts(10,94): error TS18047: 'tip' is possibly 'null'.
@@ -206,13 +144,6 @@ src/components/forms/date-picker.ts(450,49): error TS2345: Argument of type 'str
   Type 'undefined' is not assignable to type 'string'.
 src/components/forms/date-picker.ts(503,36): error TS2345: Argument of type 'string | undefined' is not assignable to parameter of type 'string'.
   Type 'undefined' is not assignable to type 'string'.
-src/components/forms/digital-clock.ts(100,53): error TS2345: Argument of type 'number' is not assignable to parameter of type 'string'.
-src/components/forms/digital-clock.ts(114,29): error TS2345: Argument of type 'number' is not assignable to parameter of type 'string'.
-src/components/forms/digital-clock.ts(176,28): error TS2345: Argument of type 'string | undefined' is not assignable to parameter of type 'string'.
-  Type 'undefined' is not assignable to type 'string'.
-src/components/forms/digital-clock.ts(234,99): error TS2345: Argument of type 'string' is not assignable to parameter of type '"AM" | "PM"'.
-src/components/forms/digital-clock.ts(261,34): error TS2345: Argument of type 'number' is not assignable to parameter of type 'string'.
-src/components/forms/digital-clock.ts(269,80): error TS2345: Argument of type 'string' is not assignable to parameter of type '"AM" | "PM"'.
 src/components/forms/month-calendar.ts(79,51): error TS2345: Argument of type 'string' is not assignable to parameter of type 'number'.
 src/components/forms/month-calendar.ts(88,34): error TS2345: Argument of type 'string | undefined' is not assignable to parameter of type 'string'.
   Type 'undefined' is not assignable to type 'string'.
@@ -225,29 +156,12 @@ src/components/helpers/mutation-observer.preview.ts(25,10): error TS2339: Proper
 src/components/helpers/mutation-observer.preview.ts(36,21): error TS7006: Parameter 'records' implicitly has an 'any' type.
 src/components/helpers/mutation-observer.preview.ts(97,35): error TS2339: Property 'detail' does not exist on type 'Event'.
 src/components/helpers/mutation-observer.preview.ts(109,45): error TS18047: 'log.lastElementChild' is possibly 'null'.
-src/components/helpers/offscreen-canvas.ts(32,50): error TS2339: Property 'terminate' does not exist on type 'never'.
-src/components/helpers/offscreen-canvas.ts(35,16): error TS2339: Property 'width' does not exist on type 'HTMLElement'.
-src/components/helpers/offscreen-canvas.ts(36,16): error TS2339: Property 'height' does not exist on type 'HTMLElement'.
-src/components/helpers/offscreen-canvas.ts(48,16): error TS2339: Property 'width' does not exist on type 'HTMLElement'.
-src/components/helpers/offscreen-canvas.ts(49,16): error TS2339: Property 'height' does not exist on type 'HTMLElement'.
-src/components/helpers/offscreen-canvas.ts(52,38): error TS2339: Property 'transferControlToOffscreen' does not exist on type 'HTMLElement'.
-src/components/helpers/offscreen-canvas.ts(54,30): error TS2339: Property 'transferControlToOffscreen' does not exist on type 'HTMLElement'.
-src/components/helpers/offscreen-canvas.ts(56,11): error TS2322: Type 'Worker' is not assignable to type 'null'.
-src/components/helpers/offscreen-canvas.ts(57,11): error TS2531: Object is possibly 'null'.
 src/components/helpers/wake-lock.ts(49,9): error TS2322: Type 'WakeLockSentinel' is not assignable to type 'null'.
 src/components/helpers/wake-lock.ts(50,9): error TS2531: Object is possibly 'null'.
 src/components/helpers/wake-lock.ts(61,31): error TS2339: Property 'release' does not exist on type 'never'.
 src/components/index.ts(171,21): error TS7006: Parameter 'tag' implicitly has an 'any' type.
 src/components/isp/_shared/tree-view/00-as-row.ts(261,27): error TS2345: Argument of type 'TNode | null | undefined' is not assignable to parameter of type 'TNode'.
   Type 'undefined' is not assignable to type 'TNode'.
-src/components/isp/_shared/tree-view/01-contract.ts(2,24): error TS7006: Parameter 'obj' implicitly has an 'any' type.
-src/components/isp/_shared/tree-view/01-contract.ts(2,29): error TS7006: Parameter 'key' implicitly has an 'any' type.
-src/components/isp/_shared/tree-view/01-contract.ts(2,34): error TS7006: Parameter 'value' implicitly has an 'any' type.
-src/components/isp/_shared/tree-view/01-contract.ts(3,22): error TS7006: Parameter 'obj' implicitly has an 'any' type.
-src/components/isp/_shared/tree-view/01-contract.ts(3,27): error TS7006: Parameter 'key' implicitly has an 'any' type.
-src/components/isp/_shared/tree-view/01-contract.ts(3,32): error TS7006: Parameter 'value' implicitly has an 'any' type.
-src/components/isp/_shared/tree-view/01-contract.ts(32,5): error TS2554: Expected 3 arguments, but got 2.
-src/components/isp/_shared/tree-view/01-contract.ts(33,5): error TS2554: Expected 3 arguments, but got 2.
 src/components/isp/_shared/tree-view/03-tree-shape.ts(340,19): error TS2339: Property 'length' does not exist on type '{}'.
 src/components/isp/_shared/tree-view/03-tree-shape.ts(341,55): error TS2345: Argument of type '{}' is not assignable to parameter of type 'TNode[]'.
   Type '{}' is missing the following properties from type 'TNode[]': length, pop, push, concat, and 29 more.
@@ -269,12 +183,6 @@ src/components/isp/_shared/tree-view/adapter.ts(42,29): error TS7006: Parameter 
 src/components/isp/_shared/tree-view/adapter.ts(71,33): error TS7006: Parameter 'ctx' implicitly has an 'any' type.
 src/components/isp/_shared/tree-view/customs-base.ts(6,18): error TS7006: Parameter 'tree' implicitly has an 'any' type.
 src/components/isp/_shared/tree-view/customs-base.ts(9,26): error TS2339: Property 'levelName' does not exist on type 'TreeCustomsBase'.
-src/components/isp/_shared/tree-view/helpers.ts(9,10): error TS2339: Property 'f' does not exist on type 'TObject'.
-src/components/isp/_shared/tree-view/helpers.ts(18,14): error TS2339: Property 'f' does not exist on type 'TObject'.
-src/components/isp/_shared/tree-view/helpers.ts(21,16): error TS7006: Parameter 'j' implicitly has an 'any' type.
-src/components/isp/_shared/tree-view/helpers.ts(27,29): error TS7006: Parameter 's' implicitly has an 'any' type.
-src/components/isp/_shared/tree-view/helpers.ts(52,17): error TS7053: Element implicitly has an 'any' type because expression of type 'string' can't be used to index type '{ border: string; bg: string; color: string; text: string; primary: string; brand: string; success: string; danger: string; warning: string; info: string; error: string; neutral: string; }'.
-  No index signature with a parameter of type 'string' was found on type '{ border: string; bg: string; color: string; text: string; primary: string; brand: string; success: string; danger: string; warning: string; info: string; error: string; neutral: string; }'.
 src/components/isp/catalogo-gen.preview.ts(12,7): error TS2339: Property 'controller' does not exist on type 'HTMLElement'.
 src/components/isp/catalogo-gen.preview.ts(39,18): error TS7006: Parameter 'msg' implicitly has an 'any' type.
 src/components/isp/catalogo-gen.preview.ts(44,52): error TS2339: Property 'detail' does not exist on type 'Event'.
@@ -289,14 +197,6 @@ src/components/isp/flex-layout.ts(72,36): error TS7006: Parameter 'next' implici
 src/components/isp/flex-options.preview.ts(1,23): error TS7006: Parameter 'root' implicitly has an 'any' type.
 src/components/isp/flex-options.preview.ts(2,16): error TS2347: Untyped function calls may not accept type arguments.
 src/components/isp/flex-options.preview.ts(10,19): error TS2347: Untyped function calls may not accept type arguments.
-src/components/isp/flex-options.ts(62,15): error TS2339: Property 'actions' does not exist on type '{}'.
-src/components/isp/flex-options.ts(62,24): error TS2339: Property 'more' does not exist on type '{}'.
-src/components/isp/flex-options.ts(62,30): error TS2339: Property 'moreDisabled' does not exist on type '{}'.
-src/components/isp/flex-options.ts(62,44): error TS2339: Property 'compact' does not exist on type '{}'.
-src/components/isp/flex-options.ts(64,32): error TS2322: Type 'any[]' is not assignable to type 'never[]'.
-  Type 'any' is not assignable to type 'never'.
-src/components/isp/flex-options.ts(65,29): error TS2322: Type 'any[]' is not assignable to type 'never[]'.
-  Type 'any' is not assignable to type 'never'.
 src/components/isp/float-card.preview.ts(3,23): error TS7006: Parameter 'root' implicitly has an 'any' type.
 src/components/isp/float-card.preview.ts(4,14): error TS2347: Untyped function calls may not accept type arguments.
 src/components/isp/float-card.preview.ts(5,16): error TS2347: Untyped function calls may not accept type arguments.
@@ -315,28 +215,11 @@ src/components/isp/loading-overlay.preview.ts(10,17): error TS7006: Parameter 'b
 src/components/isp/loading-overlay.preview.ts(10,24): error TS7006: Parameter 'overlayId' implicitly has an 'any' type.
 src/components/isp/loading-overlay.preview.ts(17,10): error TS2339: Property 'show' does not exist on type 'HTMLElement'.
 src/components/isp/loading-overlay.preview.ts(20,12): error TS2339: Property 'hide' does not exist on type 'HTMLElement'.
-src/components/isp/loading-overlay.ts(75,21): error TS7053: Element implicitly has an 'any' type because expression of type 'string' can't be used to index type 'IsLoadingOverlay'.
-  No index signature with a parameter of type 'string' was found on type 'IsLoadingOverlay'.
-src/components/isp/loading-overlay.ts(76,18): error TS7053: Element implicitly has an 'any' type because expression of type 'string' can't be used to index type 'IsLoadingOverlay'.
-  No index signature with a parameter of type 'string' was found on type 'IsLoadingOverlay'.
-src/components/isp/loading-overlay.ts(77,11): error TS7053: Element implicitly has an 'any' type because expression of type 'string' can't be used to index type 'IsLoadingOverlay'.
-  No index signature with a parameter of type 'string' was found on type 'IsLoadingOverlay'.
-src/components/isp/loading-overlay.ts(117,11): error TS7006: Parameter 'name' implicitly has an 'any' type.
-src/components/isp/loading-overlay.ts(131,63): error TS18047: 'n.textContent' is possibly 'null'.
-src/components/isp/loading-overlay.ts(139,7): error TS2322: Type 'string' is not assignable to type 'null'.
 src/components/isp/modal-verificacion.preview.ts(15,9): error TS2339: Property 'controller' does not exist on type 'HTMLElement'.
 src/components/isp/modal-verificacion.preview.ts(17,24): error TS7006: Parameter 'record' implicitly has an 'any' type.
 src/components/isp/modal-verificacion.preview.ts(28,9): error TS2339: Property 'record' does not exist on type 'HTMLElement'.
 src/components/isp/modal-verificacion.preview.ts(30,45): error TS2339: Property 'show' does not exist on type 'HTMLElement'.
 src/components/isp/text.ts(51,24): error TS7006: Parameter 'name' implicitly has an 'any' type.
-src/components/layout/callout.ts(79,5): error TS7008: Member '#customIconObserver' implicitly has an 'any' type.
-src/components/layout/callout.ts(127,35): error TS2345: Argument of type 'string | null' is not assignable to parameter of type 'string'.
-  Type 'null' is not assignable to type 'string'.
-src/components/layout/callout.ts(136,37): error TS2345: Argument of type 'string | null' is not assignable to parameter of type 'string'.
-  Type 'null' is not assignable to type 'string'.
-src/components/layout/callout.ts(163,54): error TS2538: Type 'null' cannot be used as an index type.
-src/components/layout/callout.ts(169,38): error TS2339: Property 'icon' does not exist on type 'HTMLElement'.
-src/components/layout/callout.ts(170,29): error TS2339: Property 'icon' does not exist on type 'HTMLElement'.
 src/components/layout/demo.ts(51,26): error TS2339: Property 'remove' does not exist on type 'never'.
 src/components/layout/demo.ts(56,9): error TS2322: Type 'HTMLParagraphElement' is not assignable to type 'null'.
 src/components/layout/demo.ts(57,9): error TS2531: Object is possibly 'null'.
@@ -367,28 +250,6 @@ src/components/layout/dock.preview.ts(11,9): error TS18047: 'log' is possibly 'n
 src/components/layout/dock.preview.ts(11,41): error TS18047: 'log' is possibly 'null'.
 src/components/layout/dock.preview.ts(12,9): error TS18047: 'log' is possibly 'null'.
 src/components/layout/dock.preview.ts(15,68): error TS2339: Property 'detail' does not exist on type 'Event'.
-src/components/layout/dock.ts(50,66): error TS7006: Parameter 'e' implicitly has an 'any' type.
-src/components/layout/dock.ts(83,46): error TS2339: Property 'style' does not exist on type 'Element'.
-src/components/layout/dock.ts(86,26): error TS7006: Parameter 'e' implicitly has an 'any' type.
-src/components/layout/dock.ts(109,16): error TS2339: Property 'style' does not exist on type 'Element'.
-src/components/layout/dock.ts(144,17): error TS18047: 'link' is possibly 'null'.
-src/components/layout/dock.ts(145,12): error TS18047: 'link' is possibly 'null'.
-src/components/layout/dock.ts(146,7): error TS18047: 'link' is possibly 'null'.
-src/components/layout/dock.ts(148,18): error TS18047: 'link' is possibly 'null'.
-src/components/layout/dock.ts(153,18): error TS18047: 'link' is possibly 'null'.
-src/components/layout/drawer.ts(121,39): error TS2345: Argument of type 'string | null' is not assignable to parameter of type 'string'.
-  Type 'null' is not assignable to type 'string'.
-src/components/layout/drawer.ts(130,5): error TS2416: Property 'animateOpen' in type 'IsDrawer' is not assignable to the same property in base type 'ModalBase'.
-  Type '() => Promise<unknown>' is not assignable to type '() => Promise<void>'.
-    Type 'Promise<unknown>' is not assignable to type 'Promise<void>'.
-      Type 'unknown' is not assignable to type 'void'.
-src/components/layout/drawer.ts(143,5): error TS2416: Property 'animateClose' in type 'IsDrawer' is not assignable to the same property in base type 'ModalBase'.
-  Type '() => Promise<unknown>' is not assignable to type '() => Promise<void>'.
-    Type 'Promise<unknown>' is not assignable to type 'Promise<void>'.
-      Type 'unknown' is not assignable to type 'void'.
-src/components/layout/drawer.ts(157,48): error TS2538: Type 'null' cannot be used as an index type.
-src/components/layout/drawer.ts(161,14): error TS7006: Parameter 'propName' implicitly has an 'any' type.
-src/components/layout/drawer.ts(161,24): error TS7006: Parameter 'fallback' implicitly has an 'any' type.
 src/components/layout/main.ts(37,7): error TS2322: Type 'ScrollMemory' is not assignable to type 'null'.
 src/components/layout/main.ts(38,33): error TS2345: Argument of type 'null' is not assignable to parameter of type 'ScrollMemory'.
 src/components/layout/main.ts(44,7): error TS2531: Object is possibly 'null'.
@@ -400,15 +261,10 @@ src/components/overlays/pdf-viewer.ts(113,22): error TS2339: Property 'contentWi
 src/components/overlays/pdf-viewer.ts(114,22): error TS2339: Property 'contentWindow' does not exist on type 'HTMLElement'.
 src/previews/_kit/demo-snippet-styles.ts(328,29): error TS2345: Argument of type 'Set<unknown>' is not assignable to parameter of type 'Set<string>'.
   Type 'unknown' is not assignable to type 'string'.
-src/previews/_kit/ISComponentPreview.ts(16,15): error TS7006: Parameter 'definition' implicitly has an 'any' type.
-src/previews/_kit/ISComponentPreview.ts(22,10): error TS2339: Property 'definition' does not exist on type 'ISComponentPreview'.
-src/previews/_kit/ISComponentPreview.ts(24,42): error TS7006: Parameter 's' implicitly has an 'any' type.
-src/previews/_kit/ISComponentPreview.ts(31,3): error TS7008: Member '#ac' implicitly has an 'any' type.
-src/previews/_kit/ISComponentPreview.ts(49,27): error TS7006: Parameter 'type' implicitly has an 'any' type.
-src/previews/_kit/ISComponentPreview.ts(49,33): error TS7006: Parameter 'listener' implicitly has an 'any' type.
-src/previews/_kit/ISComponentPreview.ts(58,15): error TS7006: Parameter 'tag' implicitly has an 'any' type.
-src/previews/_kit/ISComponentPreview.ts(66,9): error TS7006: Parameter '_ctx' implicitly has an 'any' type.
-src/previews/_kit/ISComponentPreview.ts(73,11): error TS7006: Parameter '_ctx' implicitly has an 'any' type.
+src/previews/_kit/JsonPreview.ts(33,11): error TS2345: Argument of type 'DefinicionPreview' is not assignable to parameter of type 'PreviewDefinition'.
+  Property 'title' is missing in type 'DefinicionPreview' but required in type 'PreviewDefinition'.
+src/previews/_kit/JsonPreview.ts(53,21): error TS2345: Argument of type 'CtxMontaje' is not assignable to parameter of type 'PreviewMountContext'.
+  Property 'definition' is missing in type 'CtxMontaje' but required in type 'PreviewMountContext'.
 src/previews/_kit/render.ts(50,36): error TS2304: Cannot find name 'PreviewBlock'.
 src/previews/_kit/render.ts(150,40): error TS2304: Cannot find name 'PreviewSection'.
 src/previews/_kit/render.ts(184,39): error TS2304: Cannot find name 'PreviewDefinition'.
