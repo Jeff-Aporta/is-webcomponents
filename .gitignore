@@ -46,3 +46,7 @@ docs/superpowers/
 EXEC-PLAN-*.md
 HANDOFF-*.md
 
+# Worktrees scratch (admin-is-dsh strategy): carpeta local, nunca versionar.
+WT/
+/.workspaces/
+
