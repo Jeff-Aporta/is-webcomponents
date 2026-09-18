@@ -1,35 +1,60 @@
-const NODE_DECORATED = /* @__PURE__ */ new WeakSet();
-const NODE_DIM_DESCRIPTORS = {
+type _NodeAny = Record<string, unknown> & { flatPath: string; childrens?: _NodeAny[]; topology?: unknown; containment?: unknown; mobility?: unknown; pathInit?: unknown; f?: _NodeAny };
+type _TreeRoot = _NodeAny & { childrens: _NodeAny[]; flatPath?: string };
+
+/** Constructor genérico que `TreeNode(Base)` acepta. */
+type _TreeBaseCtor = new (...args: unknown[]) => Record<string, unknown>;
+
+/** Spec mínimo de los `groups` que pinta `groupedWithSeparators`. */
+type _GroupEntry = { separator?: boolean; [key: string]: unknown };
+
+/** Self shape de los getters de NODE_DIM_DESCRIPTORS. */
+interface _DecoratedSelf {
+  topology?: string;
+  containment?: string;
+  mobility?: string;
+  childrens?: unknown[];
+}
+
+const NODE_DECORATED = /* @__PURE__ */ new WeakSet<object>();
+const NODE_DIM_DESCRIPTORS: Record<string, PropertyDescriptor> = {
   isAtom: { get() {
-    return this.topology === "atom";
-  }, configurable: true },
+      const self = this as unknown as _DecoratedSelf;
+      return self.topology === "atom";
+    }, configurable: true },
   isGroupActor: { get() {
-    return (this.topology ?? "group") === "group";
-  }, configurable: true },
+      const self = this as unknown as _DecoratedSelf;
+      return (self.topology ?? "group") === "group";
+    }, configurable: true },
   isPrison: { get() {
-    return this.topology !== "atom" && this.containment === "prison";
-  }, configurable: true },
+      const self = this as unknown as _DecoratedSelf;
+      return self.topology !== "atom" && self.containment === "prison";
+    }, configurable: true },
   isHermetic: { get() {
-    return this.topology !== "atom" && this.containment === "hermetic";
-  }, configurable: true },
+      const self = this as unknown as _DecoratedSelf;
+      return self.topology !== "atom" && self.containment === "hermetic";
+    }, configurable: true },
   isCell: { get() {
-    return this.topology !== "atom" && (this.containment ?? "cell") === "cell";
-  }, configurable: true },
+      const self = this as unknown as _DecoratedSelf;
+      return self.topology !== "atom" && (self.containment ?? "cell") === "cell";
+    }, configurable: true },
   isUnanchored: { get() {
-    return (this.mobility ?? "unanchored") === "unanchored";
-  }, configurable: true },
+      const self = this as unknown as _DecoratedSelf;
+      return (self.mobility ?? "unanchored") === "unanchored";
+    }, configurable: true },
   isFreezer: { get() {
-    return this.mobility === "freezer";
-  }, configurable: true },
+      const self = this as unknown as _DecoratedSelf;
+      return self.mobility === "freezer";
+    }, configurable: true },
   isEmpty: {
     get() {
-      if (this.topology === "atom") return true;
-      return !this.childrens || this.childrens.length === 0;
+      const self = this as unknown as _DecoratedSelf;
+      if (self.topology === "atom") return true;
+      return !self.childrens || self.childrens.length === 0;
     },
     configurable: true
   }
 };
-function decorateAsNode(rec, init) {
+function decorateAsNode(rec: _NodeAny, init: { flatPath: string; pathInit: string; childrens: _NodeAny[] }): _NodeAny {
   const r = rec;
   r.flatPath = init.flatPath;
   // pathInit congelado: no pisar si el registro ya lo tenía (reordenar no cambia identidad DOM)
@@ -41,127 +66,130 @@ function decorateAsNode(rec, init) {
   }
   return r;
 }
-function objRootsToNodes(roots, pathInitFn) {
+function objRootsToNodes(roots: _TreeRoot[], pathInitFn?: (node: _NodeAny) => unknown): _NodeAny[] {
   return roots.map((r) => {
     const rawFlatPath = String(r.flatPath || "").replace(/^(_UP_|_M_)/, "").trim() || String(r.flatPath || "");
     const injected = pathInitFn ? String(pathInitFn(r) ?? "").trim() : "";
     const rawPathInit = String(r.pathInit ?? "").trim() || injected || rawFlatPath;
+    const childrenArr: _NodeAny[] = r.childrens;
     return decorateAsNode(r, {
       flatPath: rawFlatPath,
       pathInit: rawPathInit,
-      childrens: r.childrens.length ? objRootsToNodes(r.childrens, pathInitFn) : []
+      childrens: childrenArr.length ? objRootsToNodes(childrenArr as _TreeRoot[], pathInitFn) : []
     });
   });
 }
-function groupedWithSeparators(groups) {
-  const result = [];
+function groupedWithSeparators(groups: ReadonlyArray<_GroupEntry | _GroupEntry[] | false | null | undefined>): _GroupEntry[] {
+  const result: _GroupEntry[] = [];
   for (const group of groups) {
     if (!group) continue;
-    const items = (Array.isArray(group) ? group : [group]).filter(Boolean);
+    const items = (Array.isArray(group) ? group : [group]).filter(Boolean) as _GroupEntry[];
     if (items.length === 0) continue;
     if (result.length > 0) result.push({ separator: true });
     result.push(...items);
   }
   return result;
 }
-function TreeNode(Base) {
+function TreeNode(Base: _TreeBaseCtor) {
   class C extends Base {
-    get depth() {
+    /** Bag de flags (mapeo 1:1 al objeto plano de BD). */
+    declare f: _NodeAny;
+    get depth(): unknown {
       return this.f.depth;
     }
-    set depth(v) {
+    set depth(v: unknown) {
       this.f.depth = v;
     }
-    get isSelected() {
+    get isSelected(): unknown {
       return this.f.isSelected;
     }
-    set isSelected(v) {
+    set isSelected(v: unknown) {
       this.f.isSelected = v;
     }
-    get hasChildren() {
+    get hasChildren(): unknown {
       return this.f.hasChildren;
     }
-    set hasChildren(v) {
+    set hasChildren(v: unknown) {
       this.f.hasChildren = v;
     }
-    get isCollapsed() {
+    get isCollapsed(): unknown {
       return this.f.isCollapsed;
     }
-    set isCollapsed(v) {
+    set isCollapsed(v: unknown) {
       this.f.isCollapsed = v;
     }
-    get flatPath() {
+    get flatPath(): string {
       return String(this.f.flatPath ?? "").trim();
     }
-    set flatPath(v) {
-      var _a;
-      this.f.flatPath = String(v ?? "").trim();
-      (_a = this.f).pathInit ?? (_a.pathInit = this.f.flatPath);
+    set flatPath(v: string | null | undefined) {
+      const flat = String(v ?? "").trim();
+      this.f.flatPath = flat;
+      if (this.f.pathInit == null || this.f.pathInit === "") this.f.pathInit = flat;
     }
-    get pathInit() {
+    get pathInit(): string {
       return String(this.f.pathInit ?? "").trim();
     }
-    set pathInit(v) {
-      var _a;
-      (_a = this.f).pathInit ?? (_a.pathInit = String(v ?? "").trim() || this.f.flatPath);
+    set pathInit(v: string | null | undefined) {
+      const next = String(v ?? "").trim() || String(this.f.flatPath ?? "");
+      if (this.f.pathInit == null || this.f.pathInit === "") this.f.pathInit = next;
     }
-    get topology() {
+    get topology(): unknown {
       return this.f.topology;
     }
-    set topology(v) {
+    set topology(v: unknown) {
       this.f.topology = v;
     }
-    get containment() {
+    get containment(): unknown {
       return this.f.containment;
     }
-    set containment(v) {
+    set containment(v: unknown) {
       this.f.containment = v;
     }
-    get mobility() {
+    get mobility(): unknown {
       return this.f.mobility;
     }
-    set mobility(v) {
+    set mobility(v: unknown) {
       this.f.mobility = v;
     }
-    get freeze() {
+    get freeze(): unknown {
       return this.f.freeze;
     }
-    set freeze(v) {
+    set freeze(v: unknown) {
       this.f.freeze = v;
     }
-    get isAtom() {
+    get isAtom(): boolean {
       return this.topology === "atom";
     }
-    get isGroupActor() {
+    get isGroupActor(): boolean {
       return (this.topology ?? "group") === "group";
     }
-    get isPrison() {
+    get isPrison(): boolean {
       return !this.isAtom && this.containment === "prison";
     }
-    get isHermetic() {
+    get isHermetic(): boolean {
       return !this.isAtom && this.containment === "hermetic";
     }
-    get isCell() {
+    get isCell(): boolean {
       return !this.isAtom && (this.containment ?? "cell") === "cell";
     }
-    get isUnanchored() {
+    get isUnanchored(): boolean {
       return (this.mobility ?? "unanchored") === "unanchored";
     }
-    get isFreezer() {
+    get isFreezer(): boolean {
       return this.mobility === "freezer";
     }
-    get isEmpty() {
+    get isEmpty(): boolean {
       if (this.isAtom) return true;
       const children = this.f.childrens;
       return !children || children.length === 0;
     }
-    get childrens() {
+    get childrens(): unknown {
       return this.f.childrens;
     }
-    set childrens(v) {
-      this.f.childrens = v ?? [];
+    set childrens(v: unknown) {
+      this.f.childrens = (Array.isArray(v) ? v : []) as _NodeAny[];
     }
-    recomputeHasChildren(siblings, getPath) {
+    recomputeHasChildren(siblings: unknown[] | null | undefined, getPath: (item: unknown) => unknown): void {
       const myId = this.flatPath;
       const myPrefix = myId + ".";
       const list = siblings ?? [];
