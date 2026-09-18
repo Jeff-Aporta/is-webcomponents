@@ -23,6 +23,29 @@ import { setStringAttr } from '../_shared/reflect.js';
 
 const SVG_NS = 'http://www.w3.org/2000/svg';
 
+/**
+ * Forma del factory `defineTypedChart` (se exporta más abajo). Los wrappers
+ * <is-bar-chart>, <is-pie-chart>, etc. lo invocan vía `window.__isDefineTypedChart`
+ * como guarda de carga para registrar su tipo fijo y su `drawMarks`.
+ */
+export type TypedChartFactory = ((
+  tag: string,
+  fixedType: string,
+  drawMarks: (ctx: ChartCtx) => void,
+  styleModuleUrl?: string,
+) => typeof IsChart);
+
+declare global {
+  interface Window {
+    /**
+     * Factory expuesto por <is-chart> para que los wrappers tipados
+     * (bar, pie, line, …) se autoregistren. Opcional: si <is-chart>
+     * aún no cargó, el wrapper sale sin hacer nada.
+     */
+    __isDefineTypedChart?: TypedChartFactory;
+  }
+}
+
 const OBSERVED = [
   'type', 'label', 'legend-position', 'index-axis', 'min', 'max', 'grid',
   'stacked', 'without-animation', 'without-legend', 'without-tooltip',
@@ -533,7 +556,12 @@ class IsChart extends withStyleAttrs(HTMLElement) {
    * recorrer (line/area/radar); en barras o rebanadas no hay ruta y se omite.
    */
   #mountTurtle(group: SVGGElement, width: number, height: number, text: string): void {
-    const lines = [...group.querySelectorAll<HTMLElement>('.mark-line, .mark-radar')];
+    const lines = [...group.querySelectorAll<HTMLElement>('.mark-line, .mark-radar')]
+      .map((el): { el: HTMLElement; d: string } | null => {
+        const d = el.getAttribute('d');
+        return d === null ? null : { el, d };
+      })
+      .filter((entry): entry is { el: HTMLElement; d: string } => entry !== null);
     this.#turtle?.destroy();
     this.#turtle = null;
     this.#turtleGroup?.remove();
@@ -548,11 +576,11 @@ class IsChart extends withStyleAttrs(HTMLElement) {
     if (!this.#turtleGroup) return;
     this.#turtle = new PathTurtle(this.#turtleGroup as unknown as HTMLElement);
     this.#turtle.setData({
-      messages: lines.map((path: HTMLElement, i: number) => ({
-        path: path.getAttribute('d'),
+      messages: lines.map(({ el, d }: { el: HTMLElement; d: string }, i: number) => ({
+        path: d,
         step: i + 1,
-        log: path.dataset.seriesLabel || '',
-        color: path.getAttribute('stroke'),
+        log: el.dataset['seriesLabel'] || '',
+        color: el.getAttribute('stroke') ?? undefined,
       })),
       theme: { accent: text },
       viewW: width,
@@ -881,7 +909,7 @@ function defineTypedChart(
   tag: string,
   fixedType: string,
   drawMarks: (ctx: ChartCtx) => void,
-  styleModuleUrl: string,
+  styleModuleUrl?: string,
 ): typeof IsChart {
   if (typeof drawMarks === 'function') MARK_REGISTRY[fixedType] = drawMarks;
   class Typed extends IsChart {
@@ -898,7 +926,7 @@ for (const kind of ['chart', 'bar', 'line', 'pie', 'doughnut', 'radar', 'polarAr
 }
 
 if (typeof window !== 'undefined') {
-  (window as unknown as Record<string, unknown>)['__isDefineTypedChart'] = defineTypedChart;
+  window.__isDefineTypedChart = defineTypedChart;
 }
 
 export { IsChart, defineTypedChart, formatValue };
