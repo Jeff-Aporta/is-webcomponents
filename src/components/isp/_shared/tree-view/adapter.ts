@@ -2,7 +2,7 @@ import { resolveColor } from "./helpers.js";
 import { TARowBase } from "./00-as-row.js";
 const FLEX_BTN_STYLE = "flex: 1 1 0; width: 100%;";
 class TreeRowViewAdapter extends TARowBase {
-  buildEditDrawerStructure(ctx) {
+  buildEditDrawerStructure(ctx: any) {
     const itd = ctx.readonly ? "view" : ctx.itdForm;
     const viewBlocked = itd === "view" && !(ctx.bAllowed?.Visualizar ?? true);
     const blockedMsg = { type: "FlexLayout", direction: "column", items: "center", justify: "center", style: "padding: 2rem; flex: 1;", children: [{ type: "Text", color: "neutral", slot: { default: "No tiene permisos para visualizar este registro." } }] };
@@ -39,7 +39,7 @@ class TreeRowViewAdapter extends TARowBase {
       }]
     }];
   }
-  buildDeleteModalStructure(ctx) {
+  buildDeleteModalStructure(ctx: any) {
     return [{
       type: "Modal",
       bshow: ctx.bshow,
@@ -68,7 +68,7 @@ class TreeRowViewAdapter extends TARowBase {
       }]
     }];
   }
-  buildProtectionModalStructure(ctx) {
+  buildProtectionModalStructure(ctx: any) {
     const canRedo = this.historyCanRedo;
     return [{
       type: "Modal",
