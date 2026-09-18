@@ -19,7 +19,7 @@
 | # | Tanda | Rama WT | Hojas | Estado |
 |---|---|---|---|---|
 | 1 | T0 preflight | — | — | ✅ cerrada |
-| 2 | T1 infra (diagram-edit shell, contract) | `wt/tanda01-infra` | 1 | pendiente |
+| 2 | T1 infra (diagram-edit shell, contract) | `wt/tanda01-infra` | 1 | 🟡 PLANNED |
 | 3 | T2 panel lateral + toolbar unificada | `wt/tanda02-ui` | 2 | pendiente |
 | 4 | T3 UML editores (er + class + state) | `wt/tanda03-uml` | 1 | pendiente |
 | 5 | T4 jerárquicos (mindmap + org + journey) | `wt/tanda04-hier` | 1 | pendiente |
