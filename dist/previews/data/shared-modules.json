@@ -1,5 +1,5 @@
 {
-  "generatedAt": "2026-09-18T21:24:31.147Z",
+  "generatedAt": "2026-09-18T22:27:36.140Z",
   "count": 61,
   "modules": [
     {
@@ -436,7 +436,7 @@
       "id": "highlight-code",
       "path": "src/components/_shared/highlight-code.ts",
       "summary": "highlight-code — `<pre class=\"code\">` de la documentación (antes se coloreaban con",
-      "bytes": 7956,
+      "bytes": 8536,
       "exports": [
         "dedent",
         "unwrapHandHighlight",
