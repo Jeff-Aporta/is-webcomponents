@@ -32,6 +32,9 @@ import {
   renderMenu,
   showPopover,
 } from '../_shared/grid-ui.js';
+import type { FilterPanelModel } from '../_shared/grid-ui.js';
+import type { ResolvedColumn, FilterModel, SortModelItem } from '../_shared/grid-data.js';
+import type { GridPopoverEl } from '../_shared/grid-ui.js';
 import '../actions/button.js';
 import '../forms/input.js';
 import '../forms/select.js';
@@ -291,7 +294,7 @@ import '../forms/checkbox.js';
   type CellRender = { el: HTMLElement; spanCount: number };
 
   /** Entrada del modelo de orden. */
-  type SortEntry = { field: string; sort: string | null };
+  type SortEntry = { field: string; sort: string | null } | SortModelItem;
 
   /** Parche de undo/redo. */
   type HistoryPatch = Array<{ id: CellValue; before: Row; after: Row }>;
@@ -387,20 +390,20 @@ import '../forms/checkbox.js';
     #pager!: HTMLElement;
     #pageInfo!: HTMLElement;
     #pageSizeSelect!: HTMLElement;
-    #menu!: HTMLElement;
-    #columnsPanel!: HTMLElement;
-    #filterPanel!: HTMLElement;
+    #menu!: GridPopoverEl;
+    #columnsPanel!: GridPopoverEl;
+    #filterPanel!: GridPopoverEl;
 
     /* Estado declarado */
     #mounted = false;
     #rawColumns: ColumnDef[] = [];
     #cols: ColumnDef[] = [];
-    #activeCols: ColumnDef[] = [];
+    #activeCols: ResolvedColumn[] = [];
     #rows: Row[] = [];
     #idCache = new WeakMap<object, CellValue>();
     #pinnedRowsModel: { top: Row[]; bottom: Row[] } = { top: [], bottom: [] };
     #sortModel: SortEntry[] = [];
-    #filterModel: { items: FilterRule[]; logicOperator: string } = { items: [], logicOperator: LOGIC.AND };
+    #filterModel: FilterModel = { items: [], logicOperator: LOGIC.AND };
     #quickValue = '';
     #visibility: Record<string, boolean> = {};
     #pinnedCols: { left: string[]; right: string[] } = { left: [], right: [] };
@@ -578,7 +581,14 @@ import '../forms/checkbox.js';
       this.#refresh();
     }
 
-    get filterModel(): { items: FilterRule[]; logicOperator: string } { return this.#filterModel; }
+    #filterPanelModel(): FilterPanelModel {
+      const items = (this.#filterModel.items ?? []) as FilterRule[];
+      return {
+        items,
+        logicOperator: this.#filterModel.logicOperator ?? LOGIC.AND,
+      };
+    }
+    get filterModel(): FilterModel { return this.#filterModel; }
     set filterModel(v: { items?: FilterRule[]; logicOperator?: string } | null | undefined) {
       this.#filterModel = {
         items: (v?.items || []).map((item: FilterRule) => ({ ...item })),
@@ -1077,34 +1087,35 @@ import '../forms/checkbox.js';
       return null;
     }
 
-    #visibleCols(): ColumnDef[] {
-      const source = this.#activeCols.length ? this.#activeCols : this.#cols;
-      let list = source.filter((c: ColumnDef) => this.#visibility[c.field ?? ''] !== false);
+    #visibleCols(): ResolvedColumn[] {
+      const source: ResolvedColumn[] = this.#activeCols.length ? this.#activeCols : (this.#cols as unknown as ResolvedColumn[]);
+      let list: ResolvedColumn[] = source.filter((c: ResolvedColumn) => this.#visibility[c.field ?? ''] !== false);
       if (this.#order) {
         const pos = new Map(this.#order.map((f: string, i: number) => [f, i]));
-        list = list.slice().sort((a: ColumnDef, b: ColumnDef) =>
+        list = list.slice().sort((a: ResolvedColumn, b: ResolvedColumn) =>
           (pos.get(a.field ?? '') ?? 1e6) - (pos.get(b.field ?? '') ?? 1e6));
       }
       if (this.#groupingModel.length && !this.treeData) {
-        list = list.filter((c: ColumnDef) => !this.#groupingModel.includes(c.field ?? ''));
+        list = list.filter((c: ResolvedColumn) => !this.#groupingModel.includes(c.field ?? ''));
       }
       const { left, right } = this.#pinnedCols;
-      const rank = (c: ColumnDef): number =>
+      const rank = (c: ResolvedColumn): number =>
         (left.includes(c.field ?? '') ? 0 : right.includes(c.field ?? '') ? 2 : 1);
-      return list.slice().sort((a: ColumnDef, b: ColumnDef) => rank(a) - rank(b));
+      return list.slice().sort((a: ResolvedColumn, b: ResolvedColumn) => rank(a) - rank(b));
     }
 
-    #layoutCols(): ColumnDef[] {
+    #layoutCols(): ResolvedColumn[] {
       if (this.listView && this.#listViewColumn) {
         const merged: Partial<ColumnDef> = { flex: 1, minWidth: 120, sortable: false, ...this.#listViewColumn };
         return normalizeColumns([merged as ColumnDef]);
       }
-      const out: ColumnDef[] = [];
-      const sysCol = (field: string, width: number): ColumnDef => ({
-        field, system: true, headerName: '', width, align: 'center',
+      const out: ResolvedColumn[] = [];
+      const sysCol = (field: string, width: number): ResolvedColumn => ({
+        field, headerName: '', width, align: 'center',
         sortable: false, filterable: false, hideable: false, resizable: false,
         minWidth: width, maxWidth: width, flex: 0,
-      });
+        ...({ system: true } as { system: boolean }),
+      } as unknown as ResolvedColumn);
       if (this.hasAttribute('row-reorder')) out.push(sysCol('__reorder', 40));
       if (this.checkboxSelection && this.selectionMode !== 'none') out.push(sysCol('__check', 44));
       if (this.#hooks.getDetailPanelContent) out.push(sysCol('__detail', 44));
@@ -1119,7 +1130,7 @@ import '../forms/checkbox.js';
           headerName: label, align: 'left', resizable: true, maxWidth: Infinity,
         });
       }
-      return out.concat(this.#visibleCols());
+      return [...out, ...this.#visibleCols()];
     }
 
     #isGrouped(): boolean { return this.treeData || this.#groupingModel.length > 0; }
@@ -1144,9 +1155,11 @@ import '../forms/checkbox.js';
       if (!this.#mounted) return;
       const ctx = this.#ctx();
       this.#pivot = this.#pivotModel
-        ? pivotData(this.#rows, this.#pivotModel, this.#cols, ctx) as { rows: Row[]; columns: ColumnDef[] }
+        ? pivotData(this.#rows, this.#pivotModel, this.#cols as readonly ResolvedColumn[], ctx) as { rows: Row[]; columns: ColumnDef[] }
         : null;
-      this.#activeCols = this.#pivot ? normalizeColumns(this.#pivot.columns) : this.#cols;
+      this.#activeCols = this.#pivot
+        ? normalizeColumns(this.#pivot.columns)
+        : normalizeColumns(this.#cols);
       const sourceRows = this.#pivot ? this.#pivot.rows : this.#rows;
 
       let rows = sourceRows;
@@ -1158,7 +1171,7 @@ import '../forms/checkbox.js';
           ctx,
         });
       }
-      if (this.sortingMode === 'client') rows = applySort(rows, this.#sortModel, this.#activeCols, ctx);
+      if (this.sortingMode === 'client') rows = applySort(rows, this.#sortModel as readonly SortModelItem[], this.#activeCols, ctx);
       this.#leafRows = rows;
 
       const totalRows = this.rowCount ?? rows.length;
@@ -1188,9 +1201,9 @@ import '../forms/checkbox.js';
           return col ? formattedValue(cellValue(row, col, ctx), row, col, ctx) : '';
         });
       const tree = buildTree(rows, { paths, getRowId: (row: Row, i: number) => this.#idOf(row, i) });
-      if (this.treeData) collapseTreeLeaves(tree);
+      if (this.treeData) collapseTreeLeaves(tree as unknown as GridNode[]);
       aggregateTree(tree, this.#aggregationModel, cols, ctx);
-      return flattenTree(tree, this.#expanded);
+      return flattenTree(tree, this.#expanded) as unknown as GridNode[];
     }
 
     #allGroups(nodes: GridNode[] = this.#nodes, out: GridNode[] = []): GridNode[] {
@@ -1438,7 +1451,7 @@ import '../forms/checkbox.js';
             }
           }
           if (col.sortable !== false && !this.hasAttribute('disable-column-sort')) cell.classList.add('sortable');
-          if (this.#filterModel.items.some((f: FilterRule) => f.field === col.field)) cell.dataset.filtered = '';
+          if ((this.#filterModel.items ?? []).some((f: FilterRule) => f.field === col.field)) cell.dataset.filtered = '';
           if (!this.hasAttribute('disable-column-menu') && col.disableColumnMenu !== true) {
             const btn = document.createElement('button');
             btn.type = 'button';
@@ -1491,7 +1504,7 @@ import '../forms/checkbox.js';
       // En columnas muy estrechas caben los dos controles pero ninguno se usa:
       // se oculta el operador y se deja el campo de valor.
       cell.toggleAttribute('data-tight', (this.#widths[col.field ?? ''] ?? 0) < 110);
-      const item = this.#filterModel.items.find((f: FilterRule) => f.field === col.field) || {};
+      const item = (this.#filterModel.items ?? []).find((f: FilterRule) => f.field === col.field) || {};
       const ops = col.operators || [];
       const op = ops.find((o: Operator) => o.value === item.operator) || ops[0];
 
@@ -1842,7 +1855,7 @@ import '../forms/checkbox.js';
           tabIndex: el.tabIndex, hasFocus: el.tabIndex === 0,
         }) as Parameters<typeof appendContent>[1]);
       } else {
-        const text = formattedValue(value, row, col, ctx);
+        const text = formattedValue(value, row as Row, col, ctx);
         el.textContent = text;
         if (col.showTooltip !== false && text) el.title = text;
       }
@@ -1954,7 +1967,7 @@ import '../forms/checkbox.js';
 
     /** Solo cuentan las reglas completas: las de valor vacío no filtran nada. */
     #activeFilters(): FilterRule[] {
-      return this.#filterModel.items.filter((item: FilterRule) => {
+      return (this.#filterModel.items ?? []).filter((item: FilterRule) => {
         const col = this.#activeCols.find((c: ColumnDef) => c.field === item.field);
         return col && filterTest(item, col);
       });
@@ -2086,7 +2099,7 @@ import '../forms/checkbox.js';
     /* ── Filtros ─────────────────────────────────────────────────────── */
 
     #updateFilterItem(field: string, patch: Partial<FilterRule>): void {
-      const items = this.#filterModel.items.slice();
+      const items = (this.#filterModel.items ?? []).slice();
       const at = items.findIndex((i: FilterRule) => i.field === field);
       const col = this.#activeCols.find((c: ColumnDef) => c.field === field);
       const base: FilterRule = { field, operator: col?.operators?.[0]?.value, value: '' };
@@ -2122,15 +2135,15 @@ import '../forms/checkbox.js';
       if (!node || !this.#canEdit(node, col)) return;
       const ctx = this.#ctx();
       if (this.editMode === 'row') {
-        const fields = this.#layoutCols().filter((c: ColumnDef) => this.#canEdit(node, c)).map((c: ColumnDef) => c.field ?? '');
+        const fields = this.#layoutCols().filter((c: ResolvedColumn) => this.#canEdit(node, c)).map((c: ResolvedColumn) => c.field ?? '');
         const values: Record<string, CellValue> = {};
         for (const f of fields) {
-          const c = this.#activeCols.find((x: ColumnDef) => x.field === f);
-          values[f] = f === field && seed !== undefined ? seed : cellValue(node.row as Row, c, ctx);
+          const c = this.#activeCols.find((x: ResolvedColumn) => x.field === f);
+          values[f] = f === field && seed !== undefined ? seed : cellValue(node.row as Row, c as unknown as ColumnDef, ctx);
         }
         this.#edit = { id: node.id, field, fields, values, errors: {} };
       } else {
-        const value: CellValue = seed !== undefined ? seed : cellValue(node.row as Row, col, ctx);
+        const value: CellValue = seed !== undefined ? seed : cellValue(node.row as Row, col as unknown as ColumnDef, ctx);
         this.#edit = { id: node.id, field, fields: [field], values: { [field]: value }, errors: {} };
       }
       this.#focus = { id: node.id, field };
@@ -2157,11 +2170,12 @@ import '../forms/checkbox.js';
       const before: Row = { ...node.row };
       const after: Row = { ...node.row };
       for (const field of edit.fields) {
-        const col = this.#activeCols.find((c: ColumnDef) => c.field === field);
+        const col = this.#activeCols.find((c: ResolvedColumn) => c.field === field);
         if (!col) continue;
         let value: CellValue = edit.values[field];
-        value = typeof col.valueParser === 'function'
-          ? col.valueParser(value, node.row, col)
+        const colDef = col as unknown as ColumnDef;
+        value = typeof colDef.valueParser === 'function'
+          ? colDef.valueParser(value, node.row, colDef)
           : coerceValue(value as string, col.type);
         setFieldValue(after, col.field ?? '', value);
       }
@@ -2376,15 +2390,15 @@ import '../forms/checkbox.js';
 
     #matrix({ allColumns = false, raw = false }: { allColumns?: boolean; raw?: boolean } = {}): string[][] {
       const ctx = this.#ctx();
-      const cols = (allColumns ? this.#activeCols : this.#layoutCols().filter((c: ColumnDef) => !c.system))
-        .filter((c: ColumnDef) => c.type !== 'actions');
-      const head = cols.map((c: ColumnDef) => c.headerName ?? '');
-      const body = this.#leafRows.map((row: Row) => cols.map((col: ColumnDef) => {
-        const value = cellValue(row, col, ctx);
+      const cols = (allColumns ? this.#activeCols : this.#layoutCols().filter((c: ResolvedColumn) => !(c as unknown as { system?: boolean }).system))
+        .filter((c: ResolvedColumn) => c.type !== 'actions');
+      const head = cols.map((c: ResolvedColumn) => c.headerName ?? '');
+      const body: Array<Array<string | number>> = this.#leafRows.map((row: Row) => cols.map((col: ResolvedColumn): string | number => {
+        const value = cellValue(row, col as unknown as ColumnDef, ctx);
         if (raw && col.type === 'number') return value == null ? '' : Number(value);
-        return formattedValue(value, row, col, ctx);
+        return formattedValue(value, row, col as unknown as ColumnDef, ctx);
       }));
-      return [head, ...body];
+      return [head, ...body] as string[][];
     }
 
     /* ── Cabecera: eventos ───────────────────────────────────────────── */
@@ -2987,7 +3001,7 @@ import '../forms/checkbox.js';
       if (tool === 'columns') {
         this.#showColumnsPanel(btn);
       } else if (tool === 'filters') {
-        renderFilterPanel(this.#filterPanel, { columns: this.#activeCols, model: this.#filterModel });
+        renderFilterPanel(this.#filterPanel, { columns: this.#activeCols, model: this.#filterPanelModel() });
         showPopover(this.#filterPanel, btn, 'bottom-end');
       } else if (tool === 'density') {
         const densities: Array<'compact' | 'standard' | 'comfortable'> = ['compact', 'standard', 'comfortable'];
@@ -3086,16 +3100,17 @@ import '../forms/checkbox.js';
           return;
         }
         case 'filter': {
-          if (!this.#filterModel.items.some((i: FilterRule) => i.field === field)) {
-            const col = this.#activeCols.find((c: ColumnDef) => c.field === field);
+          if (!(this.#filterModel.items ?? []).some((i: FilterRule) => i.field === field)) {
+            const col = this.#activeCols.find((c: ResolvedColumn) => c.field === field);
+            const currentItems = this.#filterModel.items ?? [];
             this.#filterModel = {
               ...this.#filterModel,
-              items: [...this.#filterModel.items, { field, operator: col?.operators?.[0]?.value, value: '' }],
+              items: [...currentItems, { field, operator: col?.operators?.[0]?.value, value: '' }],
             };
           }
           const anchor = this.#headRow.querySelector<HTMLElement>(`[data-field="${cssEscape(field)}"] .hmenu`);
           this.#closePop();
-          renderFilterPanel(this.#filterPanel, { columns: this.#activeCols, model: this.#filterModel });
+          renderFilterPanel(this.#filterPanel, { columns: this.#activeCols, model: this.#filterPanelModel() });
           showPopover(this.#filterPanel, anchor || this.#headRow, 'bottom-end');
           this.#openPop = 'filters';
           this.#popAnchor = anchor;
@@ -3169,18 +3184,19 @@ import '../forms/checkbox.js';
       if (!btn) return;
       const action = btn.dataset.action;
       if (action === 'add-filter') {
-        const col = this.#activeCols.find((c: ColumnDef) => c.filterable !== false && c.type !== 'actions');
+        const col = this.#activeCols.find((c: ResolvedColumn) => c.filterable !== false && c.type !== 'actions');
         if (!col) return;
+        const currentItems = this.#filterModel.items ?? [];
         this.#filterModel = {
           ...this.#filterModel,
-          items: [...this.#filterModel.items, { field: col.field ?? '', operator: col.operators?.[0]?.value, value: '' }],
+          items: [...currentItems, { field: col.field ?? '', operator: col.operators?.[0]?.value, value: '' }],
         };
       } else if (action === 'remove-filter') {
         const rowEl = btn.closest<HTMLElement>('.filter-row-form');
         const index = Number(rowEl?.dataset.index ?? -1);
         this.#filterModel = {
           ...this.#filterModel,
-          items: this.#filterModel.items.filter((_, i: number) => i !== index),
+          items: (this.#filterModel.items ?? []).filter((_, i: number) => i !== index),
         };
       } else if (action === 'clear-filters') {
         this.#filterModel = { items: [], logicOperator: this.#filterModel.logicOperator };
@@ -3190,7 +3206,7 @@ import '../forms/checkbox.js';
       this.#page = 0;
       this.#refresh();
       emit(this, 'is-filter-change', { filterModel: this.#filterModel });
-      renderFilterPanel(this.#filterPanel, { columns: this.#activeCols, model: this.#filterModel });
+      renderFilterPanel(this.#filterPanel, { columns: this.#activeCols, model: this.#filterPanelModel() });
       if (this.#popAnchor) positionPopover(this.#filterPanel, this.#popAnchor, 'bottom-end');
     };
 
@@ -3198,16 +3214,17 @@ import '../forms/checkbox.js';
       const row = $closest<HTMLElement>(e, '.filter-row-form');
       if (!row) return;
       const index = Number(row.dataset.index ?? -1);
-      const items = this.#filterModel.items.slice();
+      const items = (this.#filterModel.items ?? []).slice();
       const item = { ...items[index] };
       let rerender = false;
       const target = e.target instanceof HTMLElement ? e.target : null;
 
       if (target?.classList.contains('filter-logic-select')) {
-        this.#filterModel = { ...this.#filterModel, logicOperator: (target as HTMLSelectElement).value };
+        const op = (target as HTMLSelectElement).value;
+        this.#filterModel = { ...this.#filterModel, logicOperator: op === 'or' ? 'or' : 'and' };
         rerender = true;
       } else if (target?.classList.contains('filter-col')) {
-        const col = this.#activeCols.find((c: ColumnDef) => c.field === (target as HTMLSelectElement).value);
+        const col = this.#activeCols.find((c: ResolvedColumn) => c.field === (target as HTMLSelectElement).value);
         item.field = (target as HTMLSelectElement).value;
         item.operator = col?.operators?.[0]?.value;
         item.value = '';
@@ -3229,7 +3246,7 @@ import '../forms/checkbox.js';
       this.#refresh();
       emit(this, 'is-filter-change', { filterModel: this.#filterModel });
       if (!rerender) return;
-      renderFilterPanel(this.#filterPanel, { columns: this.#activeCols, model: this.#filterModel });
+      renderFilterPanel(this.#filterPanel, { columns: this.#activeCols, model: this.#filterPanelModel() });
       if (this.#popAnchor) positionPopover(this.#filterPanel, this.#popAnchor, 'bottom-end');
     };
 
@@ -3238,8 +3255,9 @@ import '../forms/checkbox.js';
       if (!(target instanceof HTMLElement) || !target.classList.contains('filter-input')) return;
       const row = target.closest<HTMLElement>('.filter-row-form');
       const index = Number(row?.dataset.index ?? -1);
-      const items = this.#filterModel.items.slice();
-      items[index] = { ...items[index]!, value: (target as HTMLInputElement).value };
+      const items = (this.#filterModel.items ?? []).slice();
+      const cur = items[index] ?? {};
+      items[index] = { ...cur, value: (target as HTMLInputElement).value };
       this.#filterModel = { ...this.#filterModel, items };
       this.#page = 0;
       this.#refresh();

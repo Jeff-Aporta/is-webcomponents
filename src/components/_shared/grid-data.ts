@@ -19,7 +19,7 @@ import type { CellValue, ColumnDef, ColumnType, Comparator, Operator, Row } from
 
 /** Columna con los defaults aplicados: misma forma que `ColumnDef` pero mutable,
  * porque `normalizeColumns` la construye con spreads + assigns. */
-type ResolvedColumn = {
+export type ResolvedColumn = {
   field: string;
   headerName: string;
   align: string;
