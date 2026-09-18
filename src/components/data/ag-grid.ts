@@ -1936,7 +1936,7 @@ function formatDate(value: unknown, col: ColumnState): string {
   const locale = typeof fmt === 'string' ? fmt : 'es-CO';
   const style = (col.def as ColumnDef & { dateFormat?: Intl.DateTimeFormatOptions['dateStyle'] }).dateFormat || 'medium';
   try {
-    return new Intl.DateTimeFormat(locale, { dateStyle: style }).format(d);
+    return new Intl.DateTimeFormat(locale as string, { dateStyle: style }).format(d);
   } catch {
     return d.toISOString().slice(0, 10);
   }
@@ -1950,7 +1950,7 @@ function formatNumber(value: unknown, col: ColumnState): string {
   const fmt = col.def.format;
   const locale = typeof fmt === 'string' ? fmt : 'es-CO';
   try {
-    return new Intl.NumberFormat(locale, {
+    return new Intl.NumberFormat(locale as string, {
       minimumFractionDigits: decimals,
       maximumFractionDigits: decimals,
     }).format(n);
@@ -1969,7 +1969,7 @@ function formatCurrency(value: unknown, col: ColumnState): string {
   const currency = defExt.currency || 'COP';
   const decimals = defExt.decimals ?? 0;
   try {
-    return new Intl.NumberFormat(locale, {
+    return new Intl.NumberFormat(locale as string, {
       style: 'currency',
       currency,
       maximumFractionDigits: decimals,
