@@ -35,6 +35,28 @@ import { withStyleAttrs } from '../../core/attrs.js';
 import '../actions/button.js';
 import './video.js';
 import './icon.js';
+
+// Tipo mínimo del <is-video> hijo. Sólo accedemos a `media`, `play`, `pause`
+// y atributos — no hace falta arrastrar todo el componente.
+interface IsVideoLike extends HTMLElement {
+  media: HTMLVideoElement;
+  play(): Promise<void>;
+  pause(): void;
+}
+type IsVideo = IsVideoLike;
+type VideoList = readonly IsVideo[];
+
+// Handler de MediaQueryList cuando cambia el viewport (acordeón auto).
+interface MediaObsBag {
+  mq: MediaQueryList;
+  handler: () => void;
+}
+
+// Activación de un índice: opcional play + previousIndex para emitir.
+interface ActivateOptions { play?: boolean; previousIndex?: number; }
+// Estado de applyActive: permite emitir o no el cambio.
+interface ApplyActiveOptions { emit?: boolean; previousIndex?: number; }
+
 (() => {
   const TEMPLATE = document.createElement('template');
   TEMPLATE.innerHTML = /* html */ `
@@ -98,11 +120,13 @@ import './icon.js';
   // reproductor y no resultaba usable. Si alguien lo manda, lo ignoramos.
   const PLACEMENTS = new Set(['left', 'right', 'bottom']);
   const ACCORDIONS = new Set(['auto', 'open', 'closed']);
-  const posterCache = new WeakMap();
+  type Placement = 'left' | 'right' | 'bottom';
+  type Accordion = 'auto' | 'open' | 'closed';
+  const posterCache = new WeakMap<IsVideo, string>();
 
   /** Botón por defecto de la barra de herramientas (light DOM, proyectado). */
-  function makeTool(cls, slot, label, html, onClick) {
-    const btn = document.createElement('is-button');
+  function makeTool(cls: string, slot: string, label: string, html: string, onClick: () => void): HTMLElement {
+    const btn = document.createElement('is-button') as HTMLElement;
     btn.className = `vp-default ${cls}`;
     btn.setAttribute('slot', slot);
     btn.setAttribute('variant', 'text');
@@ -114,30 +138,31 @@ import './icon.js';
     return btn;
   }
 
-  function fmtTime(sec: number) {
+  function fmtTime(sec: number): string {
     if (!Number.isFinite(sec) || sec < 0) return '';
     const s = Math.floor(sec % 60);
     const m = Math.floor(sec / 60) % 60;
     const h = Math.floor(sec / 3600);
-    const pad = (n: string) => String(n).padStart(2, '0');
+    const pad = (n: number) => String(n).padStart(2, '0');
     return h > 0 ? `${h}:${pad(m)}:${pad(s)}` : `${m}:${pad(s)}`;
   }
 
-  function videoTitle(v, i: number) {
+  function videoTitle(v: IsVideo, i: number): string {
     const t = (v.getAttribute('title') || v.title || '').trim();
     return t || `Video ${i + 1}`;
   }
 
-  function videoChannel(v) {
+  function videoChannel(v: IsVideo): string {
     return (v.getAttribute('channel') || v.getAttribute('data-channel') || '').trim();
   }
 
-  function videoPosterAttr(v) {
+  function videoPosterAttr(v: IsVideo): string {
     return (v.getAttribute('poster') || '').trim();
   }
 
-  function capturePoster(v) {
-    if (posterCache.has(v)) return posterCache.get(v);
+  function capturePoster(v: IsVideo): string {
+    const cached = posterCache.get(v);
+    if (cached !== undefined) return cached;
     const media = v.media;
     if (!media || media.readyState < 2 || !media.videoWidth) return '';
     try {
@@ -146,7 +171,9 @@ import './icon.js';
       const h = Math.round((w / media.videoWidth) * media.videoHeight);
       c.width = w;
       c.height = h;
-      c.getContext('2d').drawImage(media, 0, 0, w, h);
+      const ctx = c.getContext('2d');
+      if (!ctx) return '';
+      ctx.drawImage(media, 0, 0, w, h);
       const url = c.toDataURL('image/jpeg', 0.72);
       posterCache.set(v, url);
       return url;
@@ -155,11 +182,11 @@ import './icon.js';
     }
   }
 
-  function videoPoster(v) {
+  function videoPoster(v: IsVideo): string {
     return videoPosterAttr(v) || capturePoster(v);
   }
 
-  function videoDuration(v) {
+  function videoDuration(v: IsVideo): string {
     const media = v.media;
     if (media && Number.isFinite(media.duration) && media.duration > 0) {
       return fmtTime(media.duration);
@@ -188,19 +215,19 @@ import './icon.js';
     #countEl!: HTMLElement;
     #toggleBtn!: HTMLElement;
     #playBtn!: HTMLElement;
-    #seekEl!: HTMLElement;
+    #seekEl!: HTMLInputElement;
     #timeEl!: HTMLElement;
     #muteBtn!: HTMLElement;
-    #volumeEl!: HTMLElement;
+    #volumeEl!: HTMLInputElement;
     #playIcon!: HTMLElement;
     #muteIcon!: HTMLElement;
     #accordionOpen = true;
     #index = 0;
     #mounted = false;
-    #boundEnded = null;
-    #metaHandlers = new WeakMap();
-    #attrObs = null;
-    #mediaObs = null;
+    #boundEnded: ((e: Event) => void) | null = null;
+    #metaHandlers = new WeakMap<IsVideo, () => void>();
+    #attrObs: MutationObserver | null = null;
+    #mediaObs: MediaObsBag | null = null;
     #seeking = false;
 
     constructor() {
@@ -217,10 +244,10 @@ import './icon.js';
       this.#countEl = shadow.querySelector<HTMLElement>('.playlist-count')!;
       this.#toggleBtn = shadow.querySelector<HTMLElement>('.playlist-toggle')!;
       this.#playBtn = shadow.querySelector<HTMLElement>('.vp-play')!;
-      this.#seekEl = shadow.querySelector<HTMLElement>('.vp-seek')!;
+      this.#seekEl = shadow.querySelector<HTMLInputElement>('.vp-seek')!;
       this.#timeEl = shadow.querySelector<HTMLElement>('.vp-time')!;
       this.#muteBtn = shadow.querySelector<HTMLElement>('.vp-mute')!;
-      this.#volumeEl = shadow.querySelector<HTMLElement>('.vp-volume')!;
+      this.#volumeEl = shadow.querySelector<HTMLInputElement>('.vp-volume')!;
       this.#playIcon = this.#playBtn.querySelector<HTMLElement>('is-icon')!;
       this.#muteIcon = this.#muteBtn.querySelector<HTMLElement>('is-icon')!;
 
@@ -252,8 +279,10 @@ import './icon.js';
 
     disconnectedCallback(): void {
       this.#unbindVideos();
-      this.#attrObs?.disconnect();
-      this.#attrObs = null;
+      if (this.#attrObs) {
+        this.#attrObs.disconnect();
+        this.#attrObs = null;
+      }
       if (this.#mediaObs) {
         this.#mediaObs.mq.removeEventListener('change', this.#mediaObs.handler);
         this.#mediaObs = null;
@@ -261,8 +290,8 @@ import './icon.js';
       this.#mounted = false;
     }
 
-    attributeChangedCallback(name: string): void {
-      super.attributeChangedCallback(name);
+    attributeChangedCallback(name: string, oldVal: string | null, newVal: string | null): void {
+      super.attributeChangedCallback(name, oldVal, newVal);
       if (!this.#mounted) return;
       if (name === 'placement') this.#syncPlacement();
       if (name === 'autoplay-next') this.#syncAutoplayUi();
@@ -270,75 +299,75 @@ import './icon.js';
       if (name === 'channel') this.#syncChannel();
     }
 
-    get autoplayNext() { return this.hasAttribute('autoplay-next'); }
-    set autoplayNext(v) { this.toggleAttribute('autoplay-next', !!v); }
+    get autoplayNext(): boolean { return this.hasAttribute('autoplay-next'); }
+    set autoplayNext(v: boolean) { this.toggleAttribute('autoplay-next', !!v); }
 
-    get placement() {
+    get placement(): Placement {
       const v = (this.getAttribute('placement') || 'bottom').toLowerCase();
-      return PLACEMENTS.has(v) ? v : 'bottom';
+      return PLACEMENTS.has(v) ? (v as Placement) : 'bottom';
     }
-    set placement(v) {
+    set placement(v: Placement | string | null | undefined) {
       const next = String(v || 'bottom').toLowerCase();
       this.setAttribute('placement', PLACEMENTS.has(next) ? next : 'bottom');
     }
 
-    get channel() { return this.getAttribute('channel') || ''; }
-    set channel(v) {
+    get channel(): string { return this.getAttribute('channel') || ''; }
+    set channel(v: string | null | undefined) {
       if (v == null || v === '') this.removeAttribute('channel');
       else this.setAttribute('channel', String(v));
     }
 
-    get accordion() {
+    get accordion(): Accordion {
       const v = (this.getAttribute('accordion') || 'auto').toLowerCase();
-      return ACCORDIONS.has(v) ? v : 'auto';
+      return ACCORDIONS.has(v) ? (v as Accordion) : 'auto';
     }
-    set accordion(v) {
+    set accordion(v: Accordion | string | null | undefined) {
       const next = String(v || 'auto').toLowerCase();
       this.setAttribute('accordion', ACCORDIONS.has(next) ? next : 'auto');
     }
 
-    get index() { return this.#index; }
+    get index(): number { return this.#index; }
 
-    get videos() {
+    get videos(): IsVideo[] {
       return this.#slot.assignedElements({ flatten: true }).filter(
-        (el) => el.localName === 'is-video'
+        (el): el is IsVideo => el.localName === 'is-video'
       );
     }
 
-    get #active() {
+    get #active(): IsVideo | undefined {
       const list = this.videos;
       return list[this.#index];
     }
 
-    goTo(index) { return this.#activate(index, { play: true }); }
-    play(index) { return this.goTo(index); }
+    goTo(index: number): Promise<void> | undefined { return this.#activate(index, { play: true }); }
+    play(index: number): Promise<void> | undefined { return this.goTo(index); }
 
-    next() {
+    next(): Promise<void> | undefined {
       const list = this.videos;
       if (!list.length || this.#index >= list.length - 1) return;
       return this.goTo(this.#index + 1);
     }
 
-    previous() {
+    previous(): Promise<void> | undefined {
       const list = this.videos;
       if (!list.length || this.#index <= 0) return;
       return this.goTo(this.#index - 1);
     }
 
-    #syncPlacement() {
+    #syncPlacement(): void {
       this.#root.dataset.placement = this.placement;
       if (this.getAttribute('placement') !== this.placement) {
         this.setAttribute('placement', this.placement);
       }
     }
 
-    #syncChannel() {
+    #syncChannel(): void {
       const text = this.channel;
       this.#channelEl.textContent = text;
       this.#channelEl.hidden = !text;
     }
 
-    #syncAccordion() {
+    #syncAccordion(): void {
       const mode = this.accordion;
       if (mode === 'open') {
         this.#setAccordion(true);
@@ -358,7 +387,7 @@ import './icon.js';
       }
     }
 
-    #setAccordion(open: string) {
+    #setAccordion(open: boolean): void {
       this.#accordionOpen = open;
       this.#root.dataset.accordion = open ? 'open' : 'closed';
       this.#toggleBtn.setAttribute('aria-expanded', String(open));
@@ -366,12 +395,12 @@ import './icon.js';
       if (icon) icon.setAttribute('icon', open ? 'mdi:chevron-up' : 'mdi:chevron-down');
     }
 
-    #toggleAccordion() {
+    #toggleAccordion(): void {
       if (this.accordion === 'auto') this.setAttribute('accordion', this.#accordionOpen ? 'closed' : 'open');
       else this.#setAccordion(!this.#accordionOpen);
     }
 
-    #syncAutoplayUi() {
+    #syncAutoplayUi(): void {
       // La UI de autoplay vive en tools-right; si el usuario provee un botón
       // custom, sincronizamos su `aria-pressed`. Si no, el playlist inyecta
       // su propio botón (#buildDefaultTools).
@@ -383,7 +412,7 @@ import './icon.js';
     /** Construye las herramientas por defecto (first / prev / next / autoplay)
      *  si el usuario no las ha inyectado. Se activan salvo que el atributo
      *  `no-default-tools` esté presente. */
-    #buildDefaultTools() {
+    #buildDefaultTools(): void {
       // Si el usuario desactivó los defaults, no hacemos nada.
       if (this.hasAttribute('no-default-tools')) return;
       // Solo añadimos los defaults que falten.
@@ -409,25 +438,26 @@ import './icon.js';
     }
 
     /** Lista de nodos proyectados en slot="tools-right" (light DOM). */
-    #toolRightChildren() {
+    #toolRightChildren(): Element[] {
       const slot = this.shadowRoot!.querySelector<HTMLSlotElement>('slot[name="tools-right"]');
       return slot ? slot.assignedElements({ flatten: true }) : [];
     }
 
     /** Lista de nodos proyectados en slot="tools-left" (light DOM). */
-    #toolLeftChildren() {
+    #toolLeftChildren(): Element[] {
       const slot = this.shadowRoot!.querySelector<HTMLSlotElement>('slot[name="tools-left"]');
       return slot ? slot.assignedElements({ flatten: true }) : [];
     }
 
-    #onListClick = (e: PointerEvent) => {
-      const item = e.target.closest('[data-index]');
+    #onListClick = (e: PointerEvent): void => {
+      const target = e.target as Element | null;
+      const item = target?.closest('[data-index]');
       if (!item || !this.#listEl.contains(item)) return;
-      const i = Number(item.dataset.index);
+      const i = Number(item.getAttribute('data-index'));
       if (Number.isFinite(i)) this.goTo(i);
     };
 
-    #onListKeydown = (e: KeyboardEvent) => {
+    #onListKeydown = (e: KeyboardEvent): void => {
       const items = [...this.#listEl.querySelectorAll<HTMLElement>('[data-index]')];
       if (!items.length) return;
       const current = items.findIndex((el: HTMLElement) => el.classList.contains('active'));
@@ -448,7 +478,7 @@ import './icon.js';
       this.goTo(next);
     };
 
-    #refresh() {
+    #refresh(): void {
       this.#unbindVideos();
       const list = this.videos;
       if (this.#index >= list.length) this.#index = Math.max(0, list.length - 1);
@@ -462,8 +492,8 @@ import './icon.js';
       this.#syncActiveMediaState();
     }
 
-    #bindVideos(list) {
-      this.#boundEnded = (e: Event) => {
+    #bindVideos(list: VideoList): void {
+      this.#boundEnded = (e: Event): void => {
         if (!this.autoplayNext) return;
         const listNow = this.videos;
         const active = listNow[this.#index];
@@ -472,8 +502,9 @@ import './icon.js';
         this.next();
       };
       for (const v of list) {
+        const active = v;
         v.addEventListener('is-ended', this.#boundEnded);
-        const onMeta = () => {
+        const onMeta = (): void => {
           try {
             const media = v.media;
             if (media && !videoPosterAttr(v) && media.readyState >= 2) {
@@ -495,16 +526,16 @@ import './icon.js';
           this.#updateHeader(this.videos);
           this.#syncActiveMediaState();
         };
-        this.#metaHandlers.set(v, onMeta);
+        this.#metaHandlers.set(active, onMeta);
         v.media?.addEventListener('loadedmetadata', onMeta);
         v.media?.addEventListener('loadeddata', onMeta);
         if (v.media?.readyState >= 1) onMeta();
         // Reenviamos eventos nativos del <video> al playlist para que el
         // player-toolbar refleje el estado.
-        const onPlay = () => this.#syncPlayUi();
-        const onPause = () => this.#syncPlayUi();
-        const onTime = () => this.#syncTimeUi();
-        const onVol = () => this.#syncVolumeUi();
+        const onPlay = (): void => this.#syncPlayUi();
+        const onPause = (): void => this.#syncPlayUi();
+        const onTime = (): void => this.#syncTimeUi();
+        const onVol = (): void => this.#syncVolumeUi();
         v.media?.addEventListener('play', onPlay);
         v.media?.addEventListener('pause', onPause);
         v.media?.addEventListener('timeupdate', onTime);
@@ -516,7 +547,7 @@ import './icon.js';
       this.#syncActiveMediaState();
     }
 
-    #unbindVideos() {
+    #unbindVideos(): void {
       if (this.#boundEnded) {
         for (const v of this.videos) {
           v.removeEventListener('is-ended', this.#boundEnded);
@@ -531,8 +562,8 @@ import './icon.js';
       this.#metaHandlers = new WeakMap();
     }
 
-    #watchAttrs(list) {
-      this.#attrObs?.disconnect();
+    #watchAttrs(list: VideoList): void {
+      if (this.#attrObs) this.#attrObs.disconnect();
       this.#attrObs = new MutationObserver(() => {
         if (this.#mounted) {
           this.#rebuildList(this.videos);
@@ -547,7 +578,7 @@ import './icon.js';
       }
     }
 
-    #activate(index: number, { play = false } = {}) {
+    #activate(index: number, { play = false }: ActivateOptions = {}): Promise<void> | undefined {
       const list = this.videos;
       if (!list.length) return;
       const previousIndex = this.#index;
@@ -563,7 +594,7 @@ import './icon.js';
       return list[this.#index]?.play?.();
     }
 
-    #applyActive(list, { emit = false, previousIndex = this.#index } = {}) {
+    #applyActive(list: VideoList, { emit: emitEvent = false, previousIndex = this.#index }: ApplyActiveOptions = {}): void {
       list.forEach((v, i) => {
         const on = i === this.#index;
         v.toggleAttribute('data-active', on);
@@ -580,7 +611,7 @@ import './icon.js';
         v.setAttribute('without-controls', '');
         if (!on) v.pause?.();
       });
-      if (emit) {
+      if (emitEvent) {
         const video = list[this.#index];
         emit(this, 'is-video-change', { previousIndex, currentIndex: this.#index, video });
         emit(this, 'is-change', { index: this.#index });
@@ -588,7 +619,7 @@ import './icon.js';
     }
 
     /** Sincroniza los controles del player-toolbar con el media del is-video activo. */
-    #syncActiveMediaState() {
+    #syncActiveMediaState(): void {
       const active = this.#active;
       const media = active?.media;
       if (!media) {
@@ -603,13 +634,13 @@ import './icon.js';
       this.#syncTimeUi();
     }
 
-    #syncPlayUi = () => {
+    #syncPlayUi = (): void => {
       const media = this.#active?.media;
       if (!media || !this.#playIcon) return;
       this.#playIcon.setAttribute('icon', media.paused ? 'mdi:play' : 'mdi:pause');
     };
 
-    #syncVolumeUi = () => {
+    #syncVolumeUi = (): void => {
       const media = this.#active?.media;
       if (!media || !this.#muteIcon || !this.#volumeEl) return;
       const muted = media.muted || media.volume === 0;
@@ -620,7 +651,7 @@ import './icon.js';
       this.#volumeEl.value = String(Math.round((muted ? 0 : media.volume) * 100));
     };
 
-    #syncTimeUi = () => {
+    #syncTimeUi = (): void => {
       const media = this.#active?.media;
       if (!media) return;
       const d = media.duration || 0;
@@ -631,33 +662,33 @@ import './icon.js';
       }
     };
 
-    #previewSeek() {
+    #previewSeek(): void {
       const media = this.#active?.media;
       if (!media?.duration) return;
       const t = (Number(this.#seekEl.value) / 1000) * media.duration;
       this.#timeEl.textContent = `${fmtTime(t)} / ${fmtTime(media.duration)}`;
     }
 
-    #applySeek() {
+    #applySeek(): void {
       const media = this.#active?.media;
       if (!media?.duration) return;
       media.currentTime = (Number(this.#seekEl.value) / 1000) * media.duration;
     }
 
-    #togglePlay() {
+    #togglePlay(): void {
       const media = this.#active?.media;
       if (!media) return;
-      if (media.paused) this.#active.play?.();
-      else this.#active.pause?.();
+      if (media.paused) this.#active?.play?.();
+      else this.#active?.pause?.();
     }
 
-    #toggleMute() {
+    #toggleMute(): void {
       const media = this.#active?.media;
       if (!media) return;
       media.muted = !media.muted;
     }
 
-    #setVolume(pct) {
+    #setVolume(pct: string): void {
       const media = this.#active?.media;
       if (!media) return;
       const v = Number(pct) / 100;
@@ -665,13 +696,13 @@ import './icon.js';
       media.muted = v === 0;
     }
 
-    #updateCount(list) {
+    #updateCount(list: VideoList): void {
       const total = list.length || 0;
       const cur = total ? this.#index + 1 : 0;
       this.#countEl.textContent = total ? `${cur} / ${total}` : '';
     }
 
-    #updateHeader(list) {
+    #updateHeader(list: VideoList): void {
       const v = list[this.#index];
       this.#titleEl.textContent = v ? videoTitle(v, this.#index) : '';
       const channel = (this.channel || (v ? videoChannel(v) : '') || '').trim();
@@ -679,7 +710,7 @@ import './icon.js';
       this.#channelEl.hidden = !channel;
     }
 
-    #rebuildList(list) {
+    #rebuildList(list: VideoList): void {
       const frag = document.createDocumentFragment();
       list.forEach((v, i) => {
         const title = videoTitle(v, i);
@@ -764,7 +795,7 @@ import './icon.js';
       this.#listEl.replaceChildren(frag);
     }
 
-    #makePlaceholder() {
+    #makePlaceholder(): HTMLElement {
       const ph = document.createElement('div');
       ph.className = 'playlist-thumbnail playlist-thumbnail-placeholder';
       ph.setAttribute('part', 'playlist-thumbnail');
