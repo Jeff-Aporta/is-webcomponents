@@ -15,13 +15,13 @@ export const GALLERY_CHROME_TAGS = [
   'is-tab-group',
 ];
 
-export function collectIsTags(...chunks) {
-  const set = new Set();
+export function collectIsTags(...chunks: unknown[]) {
+  const set = new Set<string>();
   for (const chunk of chunks) {
     if (chunk == null) continue;
     const text = typeof chunk === 'string' ? chunk : JSON.stringify(chunk);
     for (const m of text.matchAll(/<(is-[a-z0-9-]+)/gi)) {
-      set.add(m[1].toLowerCase());
+      set.add(m[1]!.toLowerCase());
     }
   }
   return [...set].sort();
