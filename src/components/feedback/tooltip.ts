@@ -45,6 +45,18 @@ import '../helpers/floating.js';
     'show-delay', 'hide-delay', 'disabled', 'without-arrow',
   ];
 
+  /** Tipo del subcomponente `<is-floating>` que envuelve el tooltip. */
+  type PopupRef = HTMLElement & {
+    placement: string;
+    distance: number;
+    skidding: number;
+    arrow: boolean;
+    hoverBridge: boolean;
+    anchor: HTMLElement | null;
+    active: boolean;
+    reposition(): void;
+  };
+
   class IsTooltip extends withStyleAttrs(HTMLElement) {
     /** Personalización por atributo (ver `core/attrs.ts`). */
     static styleAttrs = {
@@ -55,16 +67,7 @@ import '../helpers/floating.js';
 
     static get observedAttributes(): string[] { return [...OBSERVED, 'max-width', 'arrow-size', 'arrow-color']; }
 
-    #popup!: HTMLElement & {
-      placement: string;
-      distance: number;
-      skidding: number;
-      arrow: boolean;
-      hoverBridge: boolean;
-      anchor: HTMLElement | null;
-      active: boolean;
-      reposition(): void;
-    };
+    #popup!: PopupRef;
     #target: HTMLElement | null = null;
     #mounted = false;
     #showTimer: ReturnType<typeof setTimeout> | null = null;
@@ -76,7 +79,7 @@ import '../helpers/floating.js';
       const shadow = this.attachShadow({ mode: 'open' });
       adoptCss(shadow, import.meta.url);
       shadow.appendChild(TEMPLATE.content.cloneNode(true));
-      this.#popup = shadow.querySelector<HTMLElement>('is-floating')! as IsTooltip['#popup'];
+      this.#popup = shadow.querySelector<PopupRef>('is-floating')!;
     }
 
     connectedCallback(): void {
@@ -168,7 +171,8 @@ import '../helpers/floating.js';
       if (this.#hasTrigger('hover')) {
         el.addEventListener('pointerenter', this.#onEnter);
         el.addEventListener('pointerleave', this.#onLeave);
-        this.#popup.addEventListener('is-hover-bridge', this.#onBridge);
+        (this.#popup as HTMLElement).addEventListener('is-hover-bridge', (e) =>
+          this.#onBridge(e as CustomEvent<{ hovering: boolean }>));
       }
       if (this.#hasTrigger('focus')) {
         el.addEventListener('focus', this.#onFocus, true);
@@ -185,7 +189,7 @@ import '../helpers/floating.js';
     }
 
     #unbindTarget() {
-      this.#popup.removeEventListener('is-hover-bridge', this.#onBridge);
+      (this.#popup as HTMLElement).removeEventListener('is-hover-bridge', this.#onBridge as EventListener);
       const el = this.#target;
       if (!el) return;
       el.removeEventListener('pointerenter', this.#onEnter);
