@@ -42,6 +42,20 @@ import { ElementBase } from '../../core/element-base.js';
 (() => {
   const OBSERVED = ['hotkey', 'placeholder', 'max-results', 'empty-text'];
 
+  interface Command {
+    id: string;
+    title?: string;
+    group?: string;
+    icon?: string;
+    hint?: string;
+    keys?: string | string[];
+    shortcut?: string | string[];
+    hotkey?: string | string[];
+    keywords?: string[];
+    disabled?: boolean;
+    run?: () => void;
+  }
+
   class IsCommandPalette extends ElementBase {
     /** Personalización por atributo (ver `core/attrs.ts`). */
     static styleAttrs = {
@@ -51,8 +65,8 @@ import { ElementBase } from '../../core/element-base.js';
     };
 
     static get observedAttributes(): string[] { return [...OBSERVED, 'radius', 'shadow', 'bar-gap']; }
-    #commands = [];
-    #results = [];
+    #commands: Command[] = [];
+    #results: Command[] = [];
     #active = 0;
     #query = '';
 
@@ -78,10 +92,10 @@ import { ElementBase } from '../../core/element-base.js';
         </dialog>
       `;
       adoptCss(this.shadowRoot!, import.meta.url);
-      this.#dialog = this.shadowRoot!.querySelector<HTMLElement>('.dialog')!;
-      this.#input = this.shadowRoot!.getElementById('input')!;
-      this.#resultsEl = this.shadowRoot!.getElementById('results')!;
-      this.#empty = this.shadowRoot!.getElementById('empty')!;
+      this.#dialog = this.shadowRoot!.querySelector<HTMLDialogElement>('.dialog')!;
+      this.#input = this.shadowRoot!.getElementById('input') as HTMLInputElement;
+      this.#resultsEl = this.shadowRoot!.getElementById('results') as HTMLElement;
+      this.#empty = this.shadowRoot!.getElementById('empty') as HTMLElement;
 
       this.#input.addEventListener('input', () => {
         this.#query = this.#input.value;
@@ -93,7 +107,8 @@ import { ElementBase } from '../../core/element-base.js';
       this.#dialog.addEventListener('cancel', () => this.close());
       this.#dialog.addEventListener('click', (e) => {
         if (e.target === this.#dialog) this.close();
-        const item = e.target.closest('[role="option"]');
+        const target = e.target as Element | null;
+        const item = target?.closest('[role="option"]') as HTMLElement | null;
         if (item) this.#selectByIndex(Number(item.dataset.idx));
       });
     }
@@ -115,8 +130,8 @@ import { ElementBase } from '../../core/element-base.js';
       if (name === 'empty-text') this.#empty.textContent = newVal || '';
     }
 
-    get commands() { return this.#commands; }
-    get results() { return this.#results; }
+    get commands(): Command[] { return this.#commands; }
+    get results(): Command[] { return this.#results; }
 
     open() {
       if (this.hasAttribute('disabled')) return;
@@ -142,9 +157,11 @@ import { ElementBase } from '../../core/element-base.js';
     toggle() { this.#dialog.open ? this.close() : this.open(); }
 
     #readCommands() {
-      const script = [...this.children].find((c) => c.tagName === 'SCRIPT' && /json/i.test(c.type || ''));
+      const script = [...this.children].find(
+        (c): c is HTMLScriptElement => c.tagName === 'SCRIPT' && /json/i.test((c as HTMLScriptElement).type || ''),
+      );
       if (!script) { this.#commands = []; return; }
-      try { this.#commands = JSON.parse(script.textContent); }
+      try { this.#commands = JSON.parse(script.textContent || '[]') as Command[]; }
       catch { this.#commands = []; }
     }
 
@@ -152,7 +169,7 @@ import { ElementBase } from '../../core/element-base.js';
       document.removeEventListener('keydown', this.#hotkeyHandler);
       const combo = this.getAttribute('hotkey') ?? 'mod+k';
       if (!combo) return;
-      this.#hotkeyHandler = (e) => {
+      this.#hotkeyHandler = (e: KeyboardEvent): void => {
         if (!this.#matchesCombo(e, combo)) return;
         e.preventDefault();
         this.toggle();
@@ -160,8 +177,8 @@ import { ElementBase } from '../../core/element-base.js';
       document.addEventListener('keydown', this.#hotkeyHandler);
     }
 
-    #matchesCombo(e, combo: string) {
-      const parts = combo.toLowerCase().split('+').map((s: string) => s.trim()).filter(Boolean);
+    #matchesCombo(e: KeyboardEvent, combo: string): boolean {
+      const parts = combo.toLowerCase().split('+').map((s) => s.trim()).filter(Boolean);
       const needMod = parts.includes('mod') || parts.includes('cmd') || parts.includes('ctrl');
       const wantKey = parts.filter((p) => !['mod', 'cmd', 'ctrl'].includes(p)).pop();
       if (!wantKey) return false;
@@ -171,21 +188,30 @@ import { ElementBase } from '../../core/element-base.js';
 
     /** Escape NO se maneja aquí: lo cierra el propio <dialog> y llega por
      *  el evento `cancel`. */
-    #onKey(e) {
+    #onKey(e: KeyboardEvent): void {
       if (this.#results.length === 0) return;
-      if (e.key === 'ArrowDown') { e.preventDefault(); this.#active = (this.#active + 1) % this.#results.length; this.#renderResults(); }
-      else if (e.key === 'ArrowUp') { e.preventDefault(); this.#active = (this.#active - 1 + this.#results.length) % this.#results.length; this.#renderResults(); }
-      else if (e.key === 'Enter') { e.preventDefault(); this.#selectByIndex(this.#active); }
+      if (e.key === 'ArrowDown') {
+        e.preventDefault();
+        this.#active = (this.#active + 1) % this.#results.length;
+        this.#renderResults();
+      } else if (e.key === 'ArrowUp') {
+        e.preventDefault();
+        this.#active = (this.#active - 1 + this.#results.length) % this.#results.length;
+        this.#renderResults();
+      } else if (e.key === 'Enter') {
+        e.preventDefault();
+        this.#selectByIndex(this.#active);
+      }
     }
 
-    #score(item, query: string) {
+    #score(item: Command, query: string): number {
       const q = query.toLowerCase();
       if (!q) return 0;
       const t = String(item.title || '').toLowerCase();
       let s = 0;
       if (t.includes(q)) s += 5;
       if (t.startsWith(q)) s += 2;
-      const kws = (item.keywords || []).map((k: string) => String(k).toLowerCase());
+      const kws = (item.keywords || []).map((k) => String(k).toLowerCase());
       if (kws.some((k) => k.includes(q))) s += 2;
       if (String(item.group || '').toLowerCase().includes(q)) s += 1;
       return s;
@@ -203,7 +229,7 @@ import { ElementBase } from '../../core/element-base.js';
           .sort((a, b) => b.s - a.s)
           .slice(0, Number(this.getAttribute('max-results')) || 12)
           .map((x) => x.c);
-        if (!this.#results.length) this.#results = items.slice(0, 4).filter((c) => /^[a-z]/i.test(c.title?.[0] || '') && c.id);
+        if (!this.#results.length) this.#results = items.slice(0, 4).filter((c) => /^[a-z]/i.test((c.title?.[0] || '')) && c.id);
       }
       this.#active = 0;
       this.#empty.hidden = this.#results.length !== 0;
@@ -213,11 +239,11 @@ import { ElementBase } from '../../core/element-base.js';
 
     #renderResults() {
       this.#resultsEl.innerHTML = '';
-      const groups = new Map();
+      const groups = new Map<string, Array<{ c: Command; i: number }>>();
       this.#results.forEach((c, i) => {
         const g = c.group || '—';
         if (!groups.has(g)) groups.set(g, []);
-        groups.get(g).push({ c, i });
+        groups.get(g)!.push({ c, i });
       });
       let idx = 0;
       for (const [groupName, items] of groups) {
@@ -227,11 +253,12 @@ import { ElementBase } from '../../core/element-base.js';
         this.#resultsEl.appendChild(gh);
         for (const { c, i } of items) {
           const opt = document.createElement('li');
-          opt.role = 'option';
+          opt.setAttribute('role', 'option');
           opt.dataset.idx = String(i);
           opt.className = 'opt' + (idx === this.#active ? ' is-active' : '');
           const keysHtml = this.#keysHtml(c);
-          opt.innerHTML = `<span class="ico">${c.icon ? `<is-icon icon="${c.icon}"></is-icon>` : ''}</span><span class="label"><span class="t">${escapeHtml(c.title || c.id)}</span>${c.hint ? `<span class="hint">${escapeHtml(c.hint)}</span>` : ''}</span>${keysHtml ? `<span class="keys" part="keys">${keysHtml}</span>` : '<span class="keys" aria-hidden="true"></span>'}`;
+          const iconHtml = c.icon ? `<is-icon icon="${escapeHtml(c.icon)}"></is-icon>` : '';
+          opt.innerHTML = `<span class="ico">${iconHtml}</span><span class="label"><span class="t">${escapeHtml(c.title || c.id)}</span>${c.hint ? `<span class="hint">${escapeHtml(c.hint)}</span>` : ''}</span>${keysHtml ? `<span class="keys" part="keys">${keysHtml}</span>` : '<span class="keys" aria-hidden="true"></span>'}`;
           this.#resultsEl.appendChild(opt);
           idx++;
         }
@@ -242,17 +269,17 @@ import { ElementBase } from '../../core/element-base.js';
     }
 
     /** Normaliza `keys` / `shortcut` → chips `<kbd>` a la derecha. */
-    #keysHtml(c) {
+    #keysHtml(c: Command): string {
       const raw = c.keys ?? c.shortcut ?? c.hotkey;
       if (raw == null || raw === '') return '';
       const parts = Array.isArray(raw)
-        ? raw.map((k: string) => String(k).trim()).filter(Boolean)
-        : String(raw).split(/[+ ]+/).map((k: string) => k.trim()).filter(Boolean);
+        ? raw.map((k) => String(k).trim()).filter(Boolean)
+        : String(raw).split(/[+ ]+/).map((k) => k.trim()).filter(Boolean);
       if (!parts.length) return '';
       return parts.map((k) => `<kbd>${escapeHtml(k)}</kbd>`).join('');
     }
 
-    #selectByIndex(idx) {
+    #selectByIndex(idx: number) {
       const c = this.#results[idx];
       if (!c) return;
       emit(this, 'is-select', { command: c, id: c.id });
@@ -260,11 +287,11 @@ import { ElementBase } from '../../core/element-base.js';
       this.close();
     }
 
-    #dialog!: HTMLElement;
-    #input!: HTMLElement;
+    #dialog!: HTMLDialogElement;
+    #input!: HTMLInputElement;
     #resultsEl!: HTMLElement;
     #empty!: HTMLElement;
-    #hotkeyHandler;
+    #hotkeyHandler!: (e: KeyboardEvent) => void;
   }
 
   defineElement('is-command-palette', IsCommandPalette);
