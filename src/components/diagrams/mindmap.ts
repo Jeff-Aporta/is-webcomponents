@@ -190,7 +190,7 @@ class IsMindmap extends DiagramElementBase {
       const textRight = n.x + n.w - (n.kind === 'leaf' ? 2 : 10);
 
       if (hasIcon) {
-        g.appendChild(svgIconGroup(n.icon, {
+        g.appendChild(svgIconGroup(n.icon ?? '', {
           x: n.x + (n.kind === 'leaf' ? 0 : 8), y: n.y + n.h / 2 - 8, size: 16, hue: n.hue,
         }));
       }
