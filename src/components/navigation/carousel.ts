@@ -85,12 +85,12 @@ import { ElementBase } from '../../core/element-base.js';
     #indicators!: HTMLElement;
     #btnPrev!: HTMLElement;
     #btnNext!: HTMLElement;
-    #autoplayTimer = null;
+    #autoplayTimer: ReturnType<typeof setInterval> | null = null;
     #touchStartX = 0;
     #touchStartY = 0;
     #touchDX = 0;
     #touchDY = 0;
-    #visibilityHandler;
+    #visibilityHandler: (() => void) | null = null;
 
     constructor() {
       super();
@@ -155,7 +155,7 @@ import { ElementBase } from '../../core/element-base.js';
     }
 
     onDisconnected() {
-      document.removeEventListener('visibilitychange', this.#visibilityHandler);
+      if (this.#visibilityHandler) document.removeEventListener('visibilitychange', this.#visibilityHandler);
       this.#pause('lifecycle');
     }
 
@@ -166,40 +166,40 @@ import { ElementBase } from '../../core/element-base.js';
     }
 
     // ---- public properties ----
-    get active() {
+    get active(): number {
       const v = parseInt(this.getAttribute('active') || '0', 10);
       return Number.isFinite(v) ? v : 0;
     }
-    set active(v) {
+    set active(v: number | null | undefined) {
       if (v == null) this.removeAttribute('active');
       else this.setAttribute('active', String(v));
     }
 
-    get autoplay() {
+    get autoplay(): number {
       const v = parseInt(this.getAttribute('autoplay') || '0', 10);
       return Number.isFinite(v) ? v : 0;
     }
-    set autoplay(v) {
+    set autoplay(v: number | null | undefined) {
       if (v == null || v === 0) this.removeAttribute('autoplay');
       else this.setAttribute('autoplay', String(v));
     }
 
-    get loop() { return this.hasAttribute('loop'); }
-    set loop(v) {
+    get loop(): boolean { return this.hasAttribute('loop'); }
+    set loop(v: boolean) {
       if (v) this.setAttribute('loop', '');
       else this.removeAttribute('loop');
     }
 
-    get vertical() { return this.hasAttribute('vertical'); }
-    set vertical(v) {
+    get vertical(): boolean { return this.hasAttribute('vertical'); }
+    set vertical(v: boolean) {
       if (v) this.setAttribute('vertical', '');
       else this.removeAttribute('vertical');
     }
 
-    get slidesPerPage() {
+    get slidesPerPage(): number {
       return Math.max(1, parseInt(this.getAttribute('slides-per-page') || '1', 10) || 1);
     }
-    set slidesPerPage(v) {
+    set slidesPerPage(v: number) {
       this.setAttribute('slides-per-page', String(Math.max(1, v)));
     }
 
@@ -239,9 +239,11 @@ import { ElementBase } from '../../core/element-base.js';
       const per = this.slidesPerPage;
       const vertical = this.vertical;
       const base = this.shadowRoot!.querySelector<HTMLElement>('.carousel');
+      if (!base) return;
       base.dataset.orientation = vertical ? 'vertical' : 'horizontal';
       if (this.hasAttribute('aspect-ratio')) {
-        base.style.setProperty('--aspect-ratio', this.getAttribute('aspect-ratio'));
+        const ar = this.getAttribute('aspect-ratio');
+        if (ar) base.style.setProperty('--aspect-ratio', ar);
       } else {
         base.style.removeProperty('--aspect-ratio');
       }
@@ -251,7 +253,7 @@ import { ElementBase } from '../../core/element-base.js';
       // Track direction
       this.#track.dataset.orientation = vertical ? 'vertical' : 'horizontal';
       // Layout items
-      items.forEach((item: HTMLElement, i) => {
+      items.forEach((item: HTMLElement, i: number) => {
         item.style.flex = `0 0 ${100 / per}%`;
       });
       // Build indicators
@@ -313,7 +315,7 @@ import { ElementBase } from '../../core/element-base.js';
 
     #updateIndicators() {
       const btns = this.#indicators.querySelectorAll<HTMLButtonElement>('button');
-      btns.forEach((b: HTMLElement, i) => {
+      btns.forEach((b: HTMLElement, i: number) => {
         if (i === this.active) b.setAttribute('aria-selected', 'true');
         else b.removeAttribute('aria-selected');
       });
@@ -328,7 +330,7 @@ import { ElementBase } from '../../core/element-base.js';
       }
     }
 
-    #pause(reason) {
+    #pause(reason: 'user' | 'auto' | 'visibility' | 'lifecycle') {
       if (this.#autoplayTimer) {
         clearInterval(this.#autoplayTimer);
         this.#autoplayTimer = null;
@@ -359,11 +361,15 @@ import { ElementBase } from '../../core/element-base.js';
 
     connectedCallback(): void {
       this.setAttribute('role', 'tabpanel');
-      if (this.hasAttribute('label')) this.setAttribute('aria-label', this.getAttribute('label'));
+      const label = this.getAttribute('label');
+      if (label) this.setAttribute('aria-label', label);
     }
 
     attributeChangedCallback(name: string): void {
-      if (name === 'label' && this.hasAttribute('label')) this.setAttribute('aria-label', this.getAttribute('label'));
+      if (name === 'label') {
+        const label = this.getAttribute('label');
+        if (label) this.setAttribute('aria-label', label);
+      }
     }
   }
 
