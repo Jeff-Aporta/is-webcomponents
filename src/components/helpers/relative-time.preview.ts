@@ -1,19 +1,15 @@
 /**
  * Behavior de is-relative-time: fechas relativas al now + grid de locales.
- * @param {import('../../previews/_kit/types.d.ts').PreviewMountContext} ctx
  */
+import type { PreviewMountContext } from '../../previews/_kit/types.d.ts';
 
-function applyOffsets(root) {
+function applyOffsets(root: HTMLElement): void {
   const now = Date.now();
   for (const el of root.querySelectorAll<HTMLElement>('[data-rt-offset]')) {
     const sec = Number(el.getAttribute('data-rt-offset'));
     if (!Number.isFinite(sec)) continue;
     const iso = new Date(now + sec * 1000).toISOString();
-    if (el.tagName === 'IS-FORMAT') {
-      el.setAttribute('date', iso);
-    } else {
-      el.setAttribute('date', iso);
-    }
+    el.setAttribute('date', iso);
   }
   const live = root.querySelector<HTMLElement>('#live');
   if (live && !live.hasAttribute('date')) {
@@ -21,13 +17,13 @@ function applyOffsets(root) {
   }
 }
 
-export async function mount(ctx) {
+export async function mount(ctx: PreviewMountContext): Promise<void> {
   const root = ctx.main;
   await customElements.whenDefined('is-relative-time');
 
   applyOffsets(root);
 
-  const CANDIDATES = [
+  const CANDIDATES: readonly string[] = [
     'es', 'es-CO', 'es-MX', 'es-AR',
     'en', 'en-US', 'en-GB',
     'pt-BR', 'fr', 'de', 'it',
@@ -35,9 +31,9 @@ export async function mount(ctx) {
   ];
 
   const uiLang = document.documentElement.lang || navigator.language || 'es';
-  let supported = [];
+  let supported: string[] = [];
   try {
-    supported = Intl.RelativeTimeFormat.supportedLocalesOf(CANDIDATES, { localeMatcher: 'lookup' });
+    supported = [...Intl.RelativeTimeFormat.supportedLocalesOf([...CANDIDATES], { localeMatcher: 'lookup' })];
   } catch {
     supported = ['es', 'en'];
   }
@@ -46,7 +42,7 @@ export async function mount(ctx) {
     if (!supported.includes(must)) supported.unshift(must);
   }
 
-  const names = typeof Intl.DisplayNames === 'function'
+  const names: Intl.DisplayNames | null = typeof Intl.DisplayNames === 'function'
     ? new Intl.DisplayNames([uiLang], { type: 'language' })
     : null;
 
@@ -64,7 +60,7 @@ export async function mount(ctx) {
     for (const tag of supported) {
       const card = document.createElement('div');
       card.className = 'demo-locale-card';
-      const label = names?.of(tag) || tag;
+      const label: string = names?.of(tag) || tag;
       card.innerHTML = `
         <div class="demo-locale-card__meta">
           <span class="demo-locale-card__name"></span>
@@ -72,11 +68,15 @@ export async function mount(ctx) {
         </div>
         <is-relative-time format="long"></is-relative-time>
       `;
-      card.querySelector<HTMLElement>('.demo-locale-card__name').textContent = label;
-      card.querySelector<HTMLElement>('.demo-locale-card__code').textContent = tag;
+      const nameEl = card.querySelector<HTMLElement>('.demo-locale-card__name');
+      const codeEl = card.querySelector<HTMLElement>('.demo-locale-card__code');
       const rt = card.querySelector<HTMLElement>('is-relative-time');
-      rt.setAttribute('locale', tag);
-      rt.setAttribute('date', sampleIso);
+      if (nameEl) nameEl.textContent = label;
+      if (codeEl) codeEl.textContent = tag;
+      if (rt) {
+        rt.setAttribute('locale', tag);
+        rt.setAttribute('date', sampleIso);
+      }
       grid.appendChild(card);
 
       if (hints) {
@@ -87,9 +87,9 @@ export async function mount(ctx) {
     }
   }
 
-  const probe = root.querySelector<HTMLElement>('#localeProbe');
+  const probe = root.querySelector<HTMLInputElement>('#localeProbe');
   const probeOut = root.querySelector<HTMLElement>('#localeProbeOut');
-  const renderProbe = () => {
+  const renderProbe = (): void => {
     if (!probe || !probeOut) return;
     const tag = probe.value.trim();
     if (!tag) { probeOut.textContent = ''; return; }
@@ -115,6 +115,6 @@ export async function mount(ctx) {
   renderProbe();
 }
 
-export function unmount() {
+export function unmount(): void {
   /* no-op */
 }
