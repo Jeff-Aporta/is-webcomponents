@@ -402,6 +402,53 @@ test('UX/UI proposals: validaciones distribuidas sobre los demos del catálogo (
         const cat = await assertsPorCategoria(page, categoria, tag);
         r.estados.tested = cat.ok;
 
+        // Categoria 5 (especifica): diagramas SVG — texto de nodos centrado.
+        // Bug P0 reportado en GH Pages (imagen swimlane): el texto en los nodos
+        // estaba descentrado 22-33px del centro del box. El fix fue agregar
+        // textAnchor="middle" en los tspans via buildTspans(). Esta verificacion
+        // previene la regresion en todos los diagramas SVG que renderizan
+        // labels con tspans.
+        if (categoria === 'diagrams' || tag === 'is-swimlane-diagram') {
+          const centered = await page.evaluate((selector) => {
+            const host = document.getElementById('previewHost');
+            const main = host?.querySelector('is-main.main');
+            const comp = main?.querySelector(selector);
+            const svg = comp?.shadowRoot?.querySelector('svg') || main?.querySelector('svg');
+            if (!svg) return { ok: true, maxOffset: 0, reason: 'no svg' };
+            // Estrategia: para cada <text> con al menos un tspan, comparar
+            // el centro del texto con el centro del box ancestro (rect/path).
+            const texts = Array.from(svg.querySelectorAll('text'));
+            let maxOffset = 0;
+            let checked = 0;
+            for (const t of texts) {
+              if (t.querySelectorAll('tspan').length === 0) continue;
+              const textRect = t.getBoundingClientRect();
+              if (textRect.width === 0 || textRect.width > 600) continue;
+              const textCenterX = textRect.x + textRect.width / 2;
+              let parent = t.parentElement;
+              let boxCenterX = null;
+              while (parent && parent !== svg && boxCenterX == null) {
+                const box = parent.querySelector('rect, path');
+                if (box) {
+                  const r = box.getBoundingClientRect();
+                  if (r.width > 20 && r.height > 10 && r.width < 1000) {
+                    boxCenterX = r.x + r.width / 2;
+                  }
+                }
+                parent = parent.parentElement;
+              }
+              if (boxCenterX == null) continue;
+              const offset = Math.abs(textCenterX - boxCenterX);
+              if (offset > maxOffset) maxOffset = offset;
+              checked++;
+            }
+            return { ok: checked === 0 || maxOffset <= 1.5, maxOffset, checked };
+          }, `is-${tag.replace(/^is-/, '')}`);
+          // Solo marcamos fail si realmente pudimos medir (checked > 0).
+          if (centered.checked > 0 && !centered.ok) r.estados.tested = false;
+          (r as any).textCenterOffset = centered.maxOffset;
+        }
+
         // Metricas de render.
         const m = await page.evaluate(() => {
           const host = document.getElementById('previewHost');

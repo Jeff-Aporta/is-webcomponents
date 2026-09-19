@@ -62,6 +62,12 @@ export interface TSpanSpec {
   x: number;
   y: number;
   dy?: number;
+  /** Si está presente, el caller debe aplicarlo como atributo
+   *  `text-anchor` al `<tspan>` correspondiente. Útil cuando el `<text>`
+   *  padre no setea text-anchor (default `start` en SVG) y los tspans
+   *  llevan su propio `x`: embebido se renderiza correctamente
+   *  centrado en x. Ver bug fix de swimlane-diagram y otros 9 diagramas. */
+  textAnchor?: 'start' | 'middle' | 'end';
 }
 
 // -----------------------------------------------------------------------------
@@ -286,8 +292,58 @@ function anchorX(
   return boxX + boxW / 2;
 }
 
+/** Construye un `<text>` SVG con tspans ya listos. La primera línea lleva
+ *  `y` absoluto; las siguientes llevan `dy` incremental.
+ *
+ *  Devuelve el `<text>` element pre-armado con `text-anchor` correcto para
+ *  que cada tspan (que ya lleva su `x` calculado por `anchorX`) se centre
+ *  correctamente. Sin esto, el default SVG es `start` y el texto se
+ *  renderiza arrancando en x y extendiéndose a la derecha → descentrado
+ *  visible (ver swimlane-diagram: 22-33px offset por nodo).
+ *
+ *  Uso:
+ *    const text = buildTextWithTspans({ lines, box, anchor: 'middle', ... });
+ *    g.appendChild(text);
+ */
+export function buildTextWithTspans(opts: {
+  lines: WrappedLine[];
+  boxX: number;
+  boxY: number;
+  boxW: number;
+  _boxH: number;
+  textAnchor: 'start' | 'middle' | 'end';
+  fontSize: number;
+  lineHeight: number;
+  baseAttrs: Record<string, string | number | null>;
+}): { text: SVGTextElement; tspans: TSpanSpec[] } {
+  const { lines, boxX, boxY, textAnchor, fontSize, lineHeight, baseAttrs } = opts;
+  const x = anchorX(textAnchor, boxX, opts.boxW);
+  const firstY = boxY + DEFAULT_PADDING_Y + fontSize * BASELINE_RATIO;
+  const dy = fontSize * lineHeight;
+  const tspans: TSpanSpec[] = lines.map((line, i) => {
+    if (i === 0) return { text: line.text, x, y: firstY };
+    return { text: line.text, x, y: firstY, dy };
+  });
+  // Construye el <text> con text-anchor correcto (el bug que esto evita).
+  const text = document.createElementNS('http://www.w3.org/2000/svg', 'text');
+  for (const [k, v] of Object.entries(baseAttrs)) {
+    if (v == null) continue;
+    text.setAttribute(k, String(v));
+  }
+  text.setAttribute('text-anchor', textAnchor);
+  return { text, tspans };
+}
+
 /** Construye specs de `<tspan>` listas para un `<text>` SVG. La primera
- *  línea lleva `y` absoluto; las siguientes llevan `dy` incremental. */
+ *  línea lleva `y` absoluto; las siguientes llevan `dy` incremental.
+ *
+ *  Si `textAnchor === 'middle'` (o `'end'`), incluye `textAnchor` en cada
+ *  spec para que el caller lo aplique al `<tspan>` correspondiente. Esto
+ *  resuelve el bug de descentrado: el default SVG del `<text>` es `start`,
+ *  y los tspans (que llevan su propio `x`) heredan ese anchor — el texto
+ *  se renderiza arrancando en x y extendiéndose a la derecha, descentrado.
+ *  Aplicando `text-anchor` en cada tspan, el texto se centra en su x.
+ */
 export function buildTspans(
   lines: WrappedLine[],
   boxX: number,
@@ -301,8 +357,12 @@ export function buildTspans(
   const x = anchorX(textAnchor, boxX, boxW);
   const firstY = boxY + DEFAULT_PADDING_Y + fontSize * BASELINE_RATIO;
   const dy = fontSize * lineHeight;
+  // Solo embebemos textAnchor en el spec si NO es 'start' (el default SVG
+  // ya es start; embebido o no, el resultado es el mismo). Esto minimiza
+  // cambios para callers que no necesitan el fix.
+  const embedAnchor = textAnchor !== 'start';
   return lines.map((line, i) => {
-    if (i === 0) return { text: line.text, x, y: firstY };
-    return { text: line.text, x, y: firstY, dy };
+    const base = (i === 0) ? { text: line.text, x, y: firstY } : { text: line.text, x, y: firstY, dy };
+    return embedAnchor ? { ...base, textAnchor } : base;
   });
 }

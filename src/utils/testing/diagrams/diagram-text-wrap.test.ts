@@ -150,6 +150,29 @@ describe('buildTspans', () => {
     const tspans = buildTspans(lines, 0, 0, 100, 50, 'middle', 11, 1.2);
     assert.equal(tspans.length, 3);
   });
+
+  test('REGRESION: anchor=middle embebe textAnchor="middle" en cada tspan (fix swimlane descentrado)', () => {
+    // Bug: el <text> padre se creaba sin text-anchor (default SVG = "start")
+    // y los tspans (con su x en el centro del box) renderizaban el texto
+    // arrancando en x y extendiéndose a la derecha -> descentrado visible
+    // (22-33px de offset en swimlane-diagram). El fix embebe textAnchor en
+    // cada spec para que el caller lo aplique al <tspan>.
+    const lines = [
+      { text: 'Solicita ajuste', truncated: false },
+      { text: 'multilínea', truncated: false },
+    ];
+    const middle = buildTspans(lines, 200, 100, 120, 60, 'middle', 10.5, 1.2);
+    for (const t of middle) {
+      assert.equal(t.textAnchor, 'middle', `tspan "${t.text}" debe traer textAnchor="middle"`);
+      assert.equal(t.x, 260, `x debe ser boxX + boxW/2 = 260`);
+    }
+
+    const start = buildTspans([{ text: 'x', truncated: false }], 0, 0, 100, 50, 'start', 11, 1.2);
+    assert.equal(start[0].textAnchor, undefined, 'anchor=start no embebe textAnchor (default SVG ya es start)');
+
+    const end = buildTspans([{ text: 'x', truncated: false }], 0, 0, 100, 50, 'end', 11, 1.2);
+    assert.equal(end[0].textAnchor, 'end', 'anchor=end embebe textAnchor="end"');
+  });
 });
 
 describe('defaultMeasureTextWidth', () => {

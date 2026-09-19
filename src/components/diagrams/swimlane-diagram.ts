@@ -295,11 +295,11 @@ g.appendChild(svgArrowHead({
         fill: theme.chipFill, stroke: color, 'stroke-width': 1.3, 'stroke-linejoin': 'round',
         class: 'sw-step__box',
       }));
+      const swHasMd = /[*`\[]/.test(s.label) || s.label.includes('{{');
       const t = svgEl('text', {
         fill: theme.text, 'font-size': '10.5', 'font-weight': '600',
         'font-family': 'Tahoma,Arial,sans-serif',
       });
-      const swHasMd = /[*`\[]/.test(s.label) || s.label.includes('{{');
       if (swHasMd) {
         t.setAttribute('x', String(s.x + s.w / 2));
         t.setAttribute('y', String(s.y + s.h / 2 + 4));
@@ -323,6 +323,7 @@ g.appendChild(svgArrowHead({
           const ts = svgEl('tspan', {
             x: span.x, y: span.y,
             ...(span.dy != null ? { dy: span.dy } : {}),
+            ...(span.textAnchor != null ? { 'text-anchor': span.textAnchor } : {}),
           });
           ts.textContent = span.text;
           t.appendChild(ts);

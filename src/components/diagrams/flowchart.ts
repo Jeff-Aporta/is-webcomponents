@@ -412,11 +412,16 @@ class IsFlowchart extends DiagramElementBase {
         const t = svgEl('text', {
           fill: theme.text, 'font-size': '11', 'font-weight': '600',
           'font-family': 'Tahoma,Arial,sans-serif',
+          // text-anchor: el default SVG es `start`. Los tspans (con su x en el
+          // centro del box) renderizan arrancando en x y extendiéndose a la
+          // derecha → descentrado visible. Forzamos `middle`.
+          'text-anchor': 'middle',
         });
         for (const span of tspans) {
           const ts = svgEl('tspan', {
             x: span.x, y: span.y,
             ...(span.dy != null ? { dy: span.dy } : {}),
+            ...(span.textAnchor != null ? { 'text-anchor': span.textAnchor } : {}),
           });
           ts.textContent = span.text;
           t.appendChild(ts);
