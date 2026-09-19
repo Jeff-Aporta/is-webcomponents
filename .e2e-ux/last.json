@@ -1,0 +1,2511 @@
+{
+  "base": "http://127.0.0.1:49372/index.html",
+  "total": 67,
+  "ok": 67,
+  "fail": 0,
+  "resultados": [
+    {
+      "tag": "ecosystem",
+      "categoria": "pages",
+      "ok": true,
+      "interaccion": {
+        "botones": 3,
+        "responded": 1,
+        "ok": true
+      },
+      "teclado": {
+        "tabOk": true,
+        "firstFocus": "is-code#ecoGetStarted"
+      },
+      "aria": {
+        "hasRole": true,
+        "roles": [
+          "button-implicit"
+        ]
+      },
+      "estados": {
+        "tested": true
+      },
+      "metricas": {
+        "texto": 19478,
+        "sections": 3,
+        "interactivos": 3
+      },
+      "errores": 0,
+      "warnings": 0,
+      "badHttp": 0,
+      "pageErrors": 0,
+      "rejections": 0,
+      "badHttpUrls": [],
+      "erroresText": []
+    },
+    {
+      "tag": "home",
+      "categoria": "pages",
+      "ok": true,
+      "interaccion": {
+        "botones": 6,
+        "responded": 1,
+        "ok": true
+      },
+      "teclado": {
+        "tabOk": true,
+        "firstFocus": "is-button#"
+      },
+      "aria": {
+        "hasRole": true,
+        "roles": [
+          "button-implicit"
+        ]
+      },
+      "estados": {
+        "tested": true
+      },
+      "metricas": {
+        "texto": 13338,
+        "sections": 20,
+        "interactivos": 6
+      },
+      "errores": 0,
+      "warnings": 0,
+      "badHttp": 0,
+      "pageErrors": 0,
+      "rejections": 0,
+      "badHttpUrls": [
+        "404 http://127.0.0.1:49372/dist/src/components/actions/button.ts",
+        "404 http://127.0.0.1:49372/dist/src/components/actions/button.css",
+        "404 http://127.0.0.1:49372/dist/src/components/actions/button.md"
+      ],
+      "erroresText": [
+        "Failed to load resource: the server responded with a status of 404 (Not Found)",
+        "Failed to load resource: the server responded with a status of 404 (Not Found)",
+        "Failed to load resource: the server responded with a status of 404 (Not Found)"
+      ]
+    },
+    {
+      "tag": "is-ag-grid",
+      "categoria": "data",
+      "ok": true,
+      "interaccion": {
+        "botones": 14,
+        "responded": 1,
+        "ok": true
+      },
+      "teclado": {
+        "tabOk": true,
+        "firstFocus": "is-button#"
+      },
+      "aria": {
+        "hasRole": true,
+        "roles": [
+          "button-implicit"
+        ]
+      },
+      "estados": {
+        "tested": true
+      },
+      "metricas": {
+        "texto": 10233,
+        "sections": 7,
+        "interactivos": 14
+      },
+      "errores": 0,
+      "warnings": 0,
+      "badHttp": 0,
+      "pageErrors": 0,
+      "rejections": 0,
+      "badHttpUrls": [
+        "404 http://127.0.0.1:49372/dist/src/components/data/ag-grid.ts",
+        "404 http://127.0.0.1:49372/dist/src/components/data/ag-grid.css",
+        "404 http://127.0.0.1:49372/dist/src/components/data/ag-grid.md"
+      ],
+      "erroresText": [
+        "Failed to load resource: the server responded with a status of 404 (Not Found)",
+        "Failed to load resource: the server responded with a status of 404 (Not Found)",
+        "Failed to load resource: the server responded with a status of 404 (Not Found)"
+      ]
+    },
+    {
+      "tag": "is-block-layout",
+      "categoria": "isp",
+      "ok": true,
+      "interaccion": {
+        "botones": 6,
+        "responded": 2,
+        "ok": true
+      },
+      "teclado": {
+        "tabOk": true,
+        "firstFocus": "is-button#"
+      },
+      "aria": {
+        "hasRole": true,
+        "roles": [
+          "button-implicit"
+        ]
+      },
+      "estados": {
+        "tested": true
+      },
+      "metricas": {
+        "texto": 1951,
+        "sections": 4,
+        "interactivos": 6
+      },
+      "errores": 0,
+      "warnings": 0,
+      "badHttp": 0,
+      "pageErrors": 0,
+      "rejections": 0,
+      "badHttpUrls": [
+        "404 http://127.0.0.1:49372/dist/src/components/isp/block-layout.ts",
+        "404 http://127.0.0.1:49372/dist/src/components/isp/block-layout.css",
+        "404 http://127.0.0.1:49372/dist/src/components/isp/block-layout.md"
+      ],
+      "erroresText": [
+        "Failed to load resource: the server responded with a status of 404 (Not Found)",
+        "Failed to load resource: the server responded with a status of 404 (Not Found)",
+        "Failed to load resource: the server responded with a status of 404 (Not Found)"
+      ]
+    },
+    {
+      "tag": "is-btn-ref",
+      "categoria": "isp",
+      "ok": true,
+      "interaccion": {
+        "botones": 7,
+        "responded": 0,
+        "ok": false
+      },
+      "teclado": {
+        "tabOk": true,
+        "firstFocus": "is-button#"
+      },
+      "aria": {
+        "hasRole": true,
+        "roles": [
+          "button-implicit"
+        ]
+      },
+      "estados": {
+        "tested": true
+      },
+      "metricas": {
+        "texto": 586,
+        "sections": 2,
+        "interactivos": 7
+      },
+      "errores": 0,
+      "warnings": 0,
+      "badHttp": 0,
+      "pageErrors": 0,
+      "rejections": 0,
+      "badHttpUrls": [
+        "404 http://127.0.0.1:49372/dist/src/components/isp/btn-ref.ts",
+        "404 http://127.0.0.1:49372/dist/src/components/isp/btn-ref.css",
+        "404 http://127.0.0.1:49372/dist/src/components/isp/btn-ref.md"
+      ],
+      "erroresText": [
+        "Failed to load resource: the server responded with a status of 404 (Not Found)",
+        "Failed to load resource: the server responded with a status of 404 (Not Found)",
+        "Failed to load resource: the server responded with a status of 404 (Not Found)"
+      ]
+    },
+    {
+      "tag": "is-button",
+      "categoria": "actions",
+      "ok": true,
+      "interaccion": {
+        "botones": 23,
+        "responded": 0,
+        "ok": false
+      },
+      "teclado": {
+        "tabOk": true,
+        "firstFocus": "is-button#"
+      },
+      "aria": {
+        "hasRole": true,
+        "roles": [
+          "button-implicit"
+        ]
+      },
+      "estados": {
+        "tested": true
+      },
+      "metricas": {
+        "texto": 13338,
+        "sections": 20,
+        "interactivos": 23
+      },
+      "errores": 0,
+      "warnings": 0,
+      "badHttp": 0,
+      "pageErrors": 0,
+      "rejections": 0,
+      "badHttpUrls": [
+        "404 http://127.0.0.1:49372/dist/src/components/actions/button.ts",
+        "404 http://127.0.0.1:49372/dist/src/components/actions/button.css",
+        "404 http://127.0.0.1:49372/dist/src/components/actions/button.md"
+      ],
+      "erroresText": [
+        "Failed to load resource: the server responded with a status of 404 (Not Found)",
+        "Failed to load resource: the server responded with a status of 404 (Not Found)",
+        "Failed to load resource: the server responded with a status of 404 (Not Found)"
+      ]
+    },
+    {
+      "tag": "is-button-group",
+      "categoria": "actions",
+      "ok": true,
+      "interaccion": {
+        "botones": 10,
+        "responded": 4,
+        "ok": true
+      },
+      "teclado": {
+        "tabOk": true,
+        "firstFocus": "is-button#"
+      },
+      "aria": {
+        "hasRole": true,
+        "roles": [
+          "button-implicit"
+        ]
+      },
+      "estados": {
+        "tested": true
+      },
+      "metricas": {
+        "texto": 7642,
+        "sections": 11,
+        "interactivos": 10
+      },
+      "errores": 0,
+      "warnings": 0,
+      "badHttp": 0,
+      "pageErrors": 0,
+      "rejections": 0,
+      "badHttpUrls": [
+        "404 http://127.0.0.1:49372/dist/src/components/actions/button-group.ts",
+        "404 http://127.0.0.1:49372/dist/src/components/actions/button-group.css",
+        "404 http://127.0.0.1:49372/dist/src/components/actions/button-group.md"
+      ],
+      "erroresText": [
+        "Failed to load resource: the server responded with a status of 404 (Not Found)",
+        "Failed to load resource: the server responded with a status of 404 (Not Found)",
+        "Failed to load resource: the server responded with a status of 404 (Not Found)"
+      ]
+    },
+    {
+      "tag": "is-catalogo-gen",
+      "categoria": "isp",
+      "ok": true,
+      "interaccion": {
+        "botones": 7,
+        "responded": 0,
+        "ok": false
+      },
+      "teclado": {
+        "tabOk": true,
+        "firstFocus": "is-button#"
+      },
+      "aria": {
+        "hasRole": true,
+        "roles": [
+          "button-implicit"
+        ]
+      },
+      "estados": {
+        "tested": true
+      },
+      "metricas": {
+        "texto": 982,
+        "sections": 2,
+        "interactivos": 7
+      },
+      "errores": 0,
+      "warnings": 0,
+      "badHttp": 0,
+      "pageErrors": 0,
+      "rejections": 0,
+      "badHttpUrls": [
+        "404 http://127.0.0.1:49372/dist/src/components/isp/catalogo-gen.ts",
+        "404 http://127.0.0.1:49372/dist/src/components/isp/catalogo-gen.css",
+        "404 http://127.0.0.1:49372/dist/src/components/isp/catalogo-gen.md"
+      ],
+      "erroresText": [
+        "Failed to load resource: the server responded with a status of 404 (Not Found)",
+        "Failed to load resource: the server responded with a status of 404 (Not Found)",
+        "Failed to load resource: the server responded with a status of 404 (Not Found)"
+      ]
+    },
+    {
+      "tag": "is-chart",
+      "categoria": "data-viz",
+      "ok": true,
+      "interaccion": {
+        "botones": 3,
+        "responded": 0,
+        "ok": false
+      },
+      "teclado": {
+        "tabOk": false,
+        "firstFocus": "is-diagram-lightbox#"
+      },
+      "aria": {
+        "hasRole": true,
+        "roles": [
+          "button-implicit"
+        ]
+      },
+      "estados": {
+        "tested": true
+      },
+      "metricas": {
+        "texto": 9507,
+        "sections": 7,
+        "interactivos": 3
+      },
+      "errores": 0,
+      "warnings": 0,
+      "badHttp": 0,
+      "pageErrors": 0,
+      "rejections": 0,
+      "badHttpUrls": [],
+      "erroresText": []
+    },
+    {
+      "tag": "is-checkbox",
+      "categoria": "forms",
+      "ok": true,
+      "interaccion": {
+        "botones": 8,
+        "responded": 1,
+        "ok": true
+      },
+      "teclado": {
+        "tabOk": true,
+        "firstFocus": "a#"
+      },
+      "aria": {
+        "hasRole": true,
+        "roles": [
+          "button-implicit"
+        ]
+      },
+      "estados": {
+        "tested": true
+      },
+      "metricas": {
+        "texto": 5263,
+        "sections": 11,
+        "interactivos": 8
+      },
+      "errores": 0,
+      "warnings": 0,
+      "badHttp": 0,
+      "pageErrors": 0,
+      "rejections": 0,
+      "badHttpUrls": [],
+      "erroresText": []
+    },
+    {
+      "tag": "is-code",
+      "categoria": "code",
+      "ok": true,
+      "interaccion": {
+        "botones": 16,
+        "responded": 7,
+        "ok": true
+      },
+      "teclado": {
+        "tabOk": true,
+        "firstFocus": "is-code#demo-basic"
+      },
+      "aria": {
+        "hasRole": true,
+        "roles": [
+          "button-implicit"
+        ]
+      },
+      "estados": {
+        "tested": true
+      },
+      "metricas": {
+        "texto": 4136,
+        "sections": 11,
+        "interactivos": 16
+      },
+      "errores": 0,
+      "warnings": 0,
+      "badHttp": 0,
+      "pageErrors": 0,
+      "rejections": 0,
+      "badHttpUrls": [],
+      "erroresText": []
+    },
+    {
+      "tag": "is-color-picker",
+      "categoria": "forms",
+      "ok": true,
+      "interaccion": {
+        "botones": 9,
+        "responded": 1,
+        "ok": true
+      },
+      "teclado": {
+        "tabOk": true,
+        "firstFocus": "is-button#ctaExplore"
+      },
+      "aria": {
+        "hasRole": true,
+        "roles": [
+          "switch",
+          "tab"
+        ]
+      },
+      "estados": {
+        "tested": true
+      },
+      "metricas": {
+        "texto": 19443,
+        "sections": 2,
+        "interactivos": 9
+      },
+      "errores": 0,
+      "warnings": 0,
+      "badHttp": 0,
+      "pageErrors": 0,
+      "rejections": 0,
+      "badHttpUrls": [
+        "404 http://127.0.0.1:49372/dist/src/components/forms/color-picker.ts",
+        "404 http://127.0.0.1:49372/dist/src/components/forms/color-picker.css",
+        "404 http://127.0.0.1:49372/dist/src/components/forms/color-picker.md"
+      ],
+      "erroresText": [
+        "Failed to load resource: the server responded with a status of 404 (Not Found)",
+        "Failed to load resource: the server responded with a status of 404 (Not Found)",
+        "Failed to load resource: the server responded with a status of 404 (Not Found)"
+      ]
+    },
+    {
+      "tag": "is-command-palette",
+      "categoria": "overlays",
+      "ok": true,
+      "interaccion": {
+        "botones": 4,
+        "responded": 0,
+        "ok": false
+      },
+      "teclado": {
+        "tabOk": true,
+        "firstFocus": "is-command-palette#cmd"
+      },
+      "aria": {
+        "hasRole": true,
+        "roles": [
+          "button-implicit"
+        ]
+      },
+      "estados": {
+        "tested": true
+      },
+      "metricas": {
+        "texto": 2257,
+        "sections": 3,
+        "interactivos": 4
+      },
+      "errores": 0,
+      "warnings": 0,
+      "badHttp": 0,
+      "pageErrors": 0,
+      "rejections": 0,
+      "badHttpUrls": [],
+      "erroresText": []
+    },
+    {
+      "tag": "is-context-menu",
+      "categoria": "actions",
+      "ok": true,
+      "interaccion": {
+        "botones": 3,
+        "responded": 1,
+        "ok": true
+      },
+      "teclado": {
+        "tabOk": true,
+        "firstFocus": "button#"
+      },
+      "aria": {
+        "hasRole": true,
+        "roles": [
+          "button-implicit"
+        ]
+      },
+      "estados": {
+        "tested": true
+      },
+      "metricas": {
+        "texto": 1288,
+        "sections": 6,
+        "interactivos": 3
+      },
+      "errores": 0,
+      "warnings": 0,
+      "badHttp": 0,
+      "pageErrors": 0,
+      "rejections": 0,
+      "badHttpUrls": [],
+      "erroresText": []
+    },
+    {
+      "tag": "is-data-grid",
+      "categoria": "data",
+      "ok": true,
+      "interaccion": {
+        "botones": 7,
+        "responded": 0,
+        "ok": false
+      },
+      "teclado": {
+        "tabOk": true,
+        "firstFocus": "is-button#"
+      },
+      "aria": {
+        "hasRole": true,
+        "roles": [
+          "button-implicit"
+        ]
+      },
+      "estados": {
+        "tested": true
+      },
+      "metricas": {
+        "texto": 9277,
+        "sections": 14,
+        "interactivos": 7
+      },
+      "errores": 0,
+      "warnings": 0,
+      "badHttp": 0,
+      "pageErrors": 0,
+      "rejections": 0,
+      "badHttpUrls": [
+        "404 http://127.0.0.1:49372/dist/src/components/data/data-grid.ts",
+        "404 http://127.0.0.1:49372/dist/src/components/data/data-grid.css",
+        "404 http://127.0.0.1:49372/dist/src/components/data/data-grid.md"
+      ],
+      "erroresText": [
+        "Failed to load resource: the server responded with a status of 404 (Not Found)",
+        "Failed to load resource: the server responded with a status of 404 (Not Found)",
+        "Failed to load resource: the server responded with a status of 404 (Not Found)"
+      ]
+    },
+    {
+      "tag": "is-diagram-lightbox",
+      "categoria": "diagrams",
+      "ok": true,
+      "interaccion": {
+        "botones": 7,
+        "responded": 0,
+        "ok": false
+      },
+      "teclado": {
+        "tabOk": true,
+        "firstFocus": "is-diagram-lightbox#lb"
+      },
+      "aria": {
+        "hasRole": true,
+        "roles": [
+          "button-implicit"
+        ]
+      },
+      "estados": {
+        "tested": true
+      },
+      "metricas": {
+        "texto": 1224,
+        "sections": 2,
+        "interactivos": 7
+      },
+      "errores": 0,
+      "warnings": 0,
+      "badHttp": 0,
+      "pageErrors": 0,
+      "rejections": 0,
+      "textCenterOffset": 0,
+      "badHttpUrls": [],
+      "erroresText": []
+    },
+    {
+      "tag": "is-doc-editor",
+      "categoria": "forms",
+      "ok": true,
+      "interaccion": {
+        "botones": 6,
+        "responded": 0,
+        "ok": false
+      },
+      "teclado": {
+        "tabOk": true,
+        "firstFocus": "is-button#"
+      },
+      "aria": {
+        "hasRole": true,
+        "roles": [
+          "button-implicit"
+        ]
+      },
+      "estados": {
+        "tested": true
+      },
+      "metricas": {
+        "texto": 1326,
+        "sections": 4,
+        "interactivos": 6
+      },
+      "errores": 0,
+      "warnings": 0,
+      "badHttp": 0,
+      "pageErrors": 0,
+      "rejections": 0,
+      "badHttpUrls": [
+        "404 http://127.0.0.1:49372/dist/src/components/forms/doc-editor.ts",
+        "404 http://127.0.0.1:49372/dist/src/components/forms/doc-editor.css",
+        "404 http://127.0.0.1:49372/dist/src/components/forms/doc-editor.md"
+      ],
+      "erroresText": [
+        "Failed to load resource: the server responded with a status of 404 (Not Found)",
+        "Failed to load resource: the server responded with a status of 404 (Not Found)",
+        "Failed to load resource: the server responded with a status of 404 (Not Found)"
+      ]
+    },
+    {
+      "tag": "is-dock",
+      "categoria": "layout",
+      "ok": true,
+      "interaccion": {
+        "botones": 3,
+        "responded": 0,
+        "ok": false
+      },
+      "teclado": {
+        "tabOk": true,
+        "firstFocus": "is-dock-item#"
+      },
+      "aria": {
+        "hasRole": true,
+        "roles": [
+          "button-implicit"
+        ]
+      },
+      "estados": {
+        "tested": true
+      },
+      "metricas": {
+        "texto": 516,
+        "sections": 5,
+        "interactivos": 3
+      },
+      "errores": 0,
+      "warnings": 0,
+      "badHttp": 0,
+      "pageErrors": 0,
+      "rejections": 0,
+      "badHttpUrls": [],
+      "erroresText": []
+    },
+    {
+      "tag": "is-dropdown",
+      "categoria": "actions",
+      "ok": true,
+      "interaccion": {
+        "botones": 5,
+        "responded": 0,
+        "ok": false
+      },
+      "teclado": {
+        "tabOk": true,
+        "firstFocus": "is-dropdown-item#"
+      },
+      "aria": {
+        "hasRole": true,
+        "roles": [
+          "button-implicit"
+        ]
+      },
+      "estados": {
+        "tested": true
+      },
+      "metricas": {
+        "texto": 1292,
+        "sections": 4,
+        "interactivos": 5
+      },
+      "errores": 0,
+      "warnings": 0,
+      "badHttp": 0,
+      "pageErrors": 0,
+      "rejections": 0,
+      "badHttpUrls": [],
+      "erroresText": []
+    },
+    {
+      "tag": "is-dropzone",
+      "categoria": "forms",
+      "ok": true,
+      "interaccion": {
+        "botones": 5,
+        "responded": 0,
+        "ok": false
+      },
+      "teclado": {
+        "tabOk": true,
+        "firstFocus": "is-dropzone#dz"
+      },
+      "aria": {
+        "hasRole": true,
+        "roles": [
+          "button-implicit"
+        ]
+      },
+      "estados": {
+        "tested": true
+      },
+      "metricas": {
+        "texto": 368,
+        "sections": 4,
+        "interactivos": 5
+      },
+      "errores": 0,
+      "warnings": 0,
+      "badHttp": 0,
+      "pageErrors": 0,
+      "rejections": 0,
+      "badHttpUrls": [],
+      "erroresText": []
+    },
+    {
+      "tag": "is-duration-picker",
+      "categoria": "forms",
+      "ok": true,
+      "interaccion": {
+        "botones": 4,
+        "responded": 0,
+        "ok": false
+      },
+      "teclado": {
+        "tabOk": true,
+        "firstFocus": "is-duration-picker#dur"
+      },
+      "aria": {
+        "hasRole": true,
+        "roles": [
+          "button-implicit"
+        ]
+      },
+      "estados": {
+        "tested": true
+      },
+      "metricas": {
+        "texto": 379,
+        "sections": 4,
+        "interactivos": 4
+      },
+      "errores": 0,
+      "warnings": 0,
+      "badHttp": 0,
+      "pageErrors": 0,
+      "rejections": 0,
+      "badHttpUrls": [],
+      "erroresText": []
+    },
+    {
+      "tag": "is-file-input",
+      "categoria": "forms",
+      "ok": true,
+      "interaccion": {
+        "botones": 4,
+        "responded": 0,
+        "ok": false
+      },
+      "teclado": {
+        "tabOk": true,
+        "firstFocus": "is-file-input#fi"
+      },
+      "aria": {
+        "hasRole": true,
+        "roles": [
+          "button-implicit"
+        ]
+      },
+      "estados": {
+        "tested": true
+      },
+      "metricas": {
+        "texto": 437,
+        "sections": 3,
+        "interactivos": 4
+      },
+      "errores": 0,
+      "warnings": 0,
+      "badHttp": 0,
+      "pageErrors": 0,
+      "rejections": 0,
+      "badHttpUrls": [],
+      "erroresText": []
+    },
+    {
+      "tag": "is-flex-layout",
+      "categoria": "isp",
+      "ok": true,
+      "interaccion": {
+        "botones": 6,
+        "responded": 3,
+        "ok": true
+      },
+      "teclado": {
+        "tabOk": true,
+        "firstFocus": "select#fxDirection"
+      },
+      "aria": {
+        "hasRole": true,
+        "roles": [
+          "switch"
+        ]
+      },
+      "estados": {
+        "tested": true
+      },
+      "metricas": {
+        "texto": 3104,
+        "sections": 3,
+        "interactivos": 6
+      },
+      "errores": 0,
+      "warnings": 0,
+      "badHttp": 0,
+      "pageErrors": 0,
+      "rejections": 0,
+      "badHttpUrls": [],
+      "erroresText": []
+    },
+    {
+      "tag": "is-flex-options",
+      "categoria": "isp",
+      "ok": true,
+      "interaccion": {
+        "botones": 5,
+        "responded": 0,
+        "ok": false
+      },
+      "teclado": {
+        "tabOk": true,
+        "firstFocus": "is-flex-options#foDemo"
+      },
+      "aria": {
+        "hasRole": true,
+        "roles": [
+          "button-implicit"
+        ]
+      },
+      "estados": {
+        "tested": true
+      },
+      "metricas": {
+        "texto": 243,
+        "sections": 2,
+        "interactivos": 5
+      },
+      "errores": 0,
+      "warnings": 0,
+      "badHttp": 0,
+      "pageErrors": 0,
+      "rejections": 0,
+      "badHttpUrls": [],
+      "erroresText": []
+    },
+    {
+      "tag": "is-float-card",
+      "categoria": "isp",
+      "ok": true,
+      "interaccion": {
+        "botones": 3,
+        "responded": 0,
+        "ok": false
+      },
+      "teclado": {
+        "tabOk": false,
+        "firstFocus": "button#brand"
+      },
+      "aria": {
+        "hasRole": true,
+        "roles": [
+          "button-implicit"
+        ]
+      },
+      "estados": {
+        "tested": true
+      },
+      "metricas": {
+        "texto": 252,
+        "sections": 1,
+        "interactivos": 3
+      },
+      "errores": 0,
+      "warnings": 0,
+      "badHttp": 0,
+      "pageErrors": 0,
+      "rejections": 0,
+      "badHttpUrls": [],
+      "erroresText": []
+    },
+    {
+      "tag": "is-form",
+      "categoria": "isp",
+      "ok": true,
+      "interaccion": {
+        "botones": 10,
+        "responded": 1,
+        "ok": true
+      },
+      "teclado": {
+        "tabOk": true,
+        "firstFocus": "is-button#"
+      },
+      "aria": {
+        "hasRole": true,
+        "roles": [
+          "switch"
+        ]
+      },
+      "estados": {
+        "tested": true
+      },
+      "metricas": {
+        "texto": 1930,
+        "sections": 3,
+        "interactivos": 10
+      },
+      "errores": 0,
+      "warnings": 0,
+      "badHttp": 0,
+      "pageErrors": 0,
+      "rejections": 0,
+      "badHttpUrls": [
+        "404 http://127.0.0.1:49372/dist/src/components/isp/form.ts",
+        "404 http://127.0.0.1:49372/dist/src/components/isp/form.css",
+        "404 http://127.0.0.1:49372/dist/src/components/isp/form.md"
+      ],
+      "erroresText": [
+        "Failed to load resource: the server responded with a status of 404 (Not Found)",
+        "Failed to load resource: the server responded with a status of 404 (Not Found)",
+        "Failed to load resource: the server responded with a status of 404 (Not Found)"
+      ]
+    },
+    {
+      "tag": "is-format-date",
+      "categoria": "helpers",
+      "ok": true,
+      "interaccion": {
+        "botones": 3,
+        "responded": 0,
+        "ok": false
+      },
+      "teclado": {
+        "tabOk": true,
+        "firstFocus": "button#"
+      },
+      "aria": {
+        "hasRole": true,
+        "roles": [
+          "button-implicit"
+        ]
+      },
+      "estados": {
+        "tested": true
+      },
+      "metricas": {
+        "texto": 4675,
+        "sections": 7,
+        "interactivos": 3
+      },
+      "errores": 0,
+      "warnings": 0,
+      "badHttp": 0,
+      "pageErrors": 0,
+      "rejections": 0,
+      "badHttpUrls": [],
+      "erroresText": []
+    },
+    {
+      "tag": "is-full-calendar",
+      "categoria": "forms",
+      "ok": true,
+      "interaccion": {
+        "botones": 6,
+        "responded": 0,
+        "ok": false
+      },
+      "teclado": {
+        "tabOk": true,
+        "firstFocus": "is-button#"
+      },
+      "aria": {
+        "hasRole": true,
+        "roles": [
+          "button-implicit"
+        ]
+      },
+      "estados": {
+        "tested": true
+      },
+      "metricas": {
+        "texto": 1788,
+        "sections": 4,
+        "interactivos": 6
+      },
+      "errores": 0,
+      "warnings": 0,
+      "badHttp": 0,
+      "pageErrors": 0,
+      "rejections": 0,
+      "badHttpUrls": [
+        "404 http://127.0.0.1:49372/dist/src/components/forms/full-calendar.ts",
+        "404 http://127.0.0.1:49372/dist/src/components/forms/full-calendar.css",
+        "404 http://127.0.0.1:49372/dist/src/components/forms/full-calendar.md"
+      ],
+      "erroresText": [
+        "Failed to load resource: the server responded with a status of 404 (Not Found)",
+        "Failed to load resource: the server responded with a status of 404 (Not Found)",
+        "Failed to load resource: the server responded with a status of 404 (Not Found)"
+      ]
+    },
+    {
+      "tag": "is-gauge",
+      "categoria": "data-viz",
+      "ok": true,
+      "interaccion": {
+        "botones": 4,
+        "responded": 0,
+        "ok": false
+      },
+      "teclado": {
+        "tabOk": true,
+        "firstFocus": "button#"
+      },
+      "aria": {
+        "hasRole": true,
+        "roles": [
+          "button-implicit"
+        ]
+      },
+      "estados": {
+        "tested": true
+      },
+      "metricas": {
+        "texto": 1257,
+        "sections": 6,
+        "interactivos": 4
+      },
+      "errores": 0,
+      "warnings": 0,
+      "badHttp": 0,
+      "pageErrors": 0,
+      "rejections": 0,
+      "badHttpUrls": [],
+      "erroresText": []
+    },
+    {
+      "tag": "is-heading",
+      "categoria": "isp",
+      "ok": true,
+      "interaccion": {
+        "botones": 3,
+        "responded": 0,
+        "ok": false
+      },
+      "teclado": {
+        "tabOk": false,
+        "firstFocus": "input#hdLevel"
+      },
+      "aria": {
+        "hasRole": true,
+        "roles": [
+          "button-implicit"
+        ]
+      },
+      "estados": {
+        "tested": true
+      },
+      "metricas": {
+        "texto": 4011,
+        "sections": 6,
+        "interactivos": 3
+      },
+      "errores": 0,
+      "warnings": 0,
+      "badHttp": 0,
+      "pageErrors": 0,
+      "rejections": 0,
+      "badHttpUrls": [],
+      "erroresText": []
+    },
+    {
+      "tag": "is-heatmap",
+      "categoria": "data-viz",
+      "ok": true,
+      "interaccion": {
+        "botones": 3,
+        "responded": 0,
+        "ok": false
+      },
+      "teclado": {
+        "tabOk": true,
+        "firstFocus": "button#"
+      },
+      "aria": {
+        "hasRole": true,
+        "roles": [
+          "button-implicit"
+        ]
+      },
+      "estados": {
+        "tested": true
+      },
+      "metricas": {
+        "texto": 1611,
+        "sections": 5,
+        "interactivos": 3
+      },
+      "errores": 0,
+      "warnings": 0,
+      "badHttp": 0,
+      "pageErrors": 0,
+      "rejections": 0,
+      "badHttpUrls": [],
+      "erroresText": []
+    },
+    {
+      "tag": "is-icon",
+      "categoria": "media",
+      "ok": true,
+      "interaccion": {
+        "botones": 4,
+        "responded": 0,
+        "ok": false
+      },
+      "teclado": {
+        "tabOk": true,
+        "firstFocus": "button#"
+      },
+      "aria": {
+        "hasRole": true,
+        "roles": [
+          "button-implicit"
+        ]
+      },
+      "estados": {
+        "tested": true
+      },
+      "metricas": {
+        "texto": 944,
+        "sections": 4,
+        "interactivos": 4
+      },
+      "errores": 0,
+      "warnings": 0,
+      "badHttp": 0,
+      "pageErrors": 0,
+      "rejections": 0,
+      "badHttpUrls": [],
+      "erroresText": []
+    },
+    {
+      "tag": "is-icon-explorer",
+      "categoria": "media",
+      "ok": true,
+      "interaccion": {
+        "botones": 30,
+        "responded": 5,
+        "ok": true
+      },
+      "teclado": {
+        "tabOk": true,
+        "firstFocus": "is-button#ctaExplore"
+      },
+      "aria": {
+        "hasRole": true,
+        "roles": [
+          "switch",
+          "tab"
+        ]
+      },
+      "estados": {
+        "tested": true
+      },
+      "metricas": {
+        "texto": 19443,
+        "sections": 2,
+        "interactivos": 30
+      },
+      "errores": 0,
+      "warnings": 0,
+      "badHttp": 0,
+      "pageErrors": 0,
+      "rejections": 0,
+      "badHttpUrls": [],
+      "erroresText": []
+    },
+    {
+      "tag": "is-image-editor",
+      "categoria": "media",
+      "ok": true,
+      "interaccion": {
+        "botones": 4,
+        "responded": 0,
+        "ok": false
+      },
+      "teclado": {
+        "tabOk": true,
+        "firstFocus": "is-button#"
+      },
+      "aria": {
+        "hasRole": true,
+        "roles": [
+          "button-implicit"
+        ]
+      },
+      "estados": {
+        "tested": true
+      },
+      "metricas": {
+        "texto": 452,
+        "sections": 3,
+        "interactivos": 4
+      },
+      "errores": 0,
+      "warnings": 0,
+      "badHttp": 0,
+      "pageErrors": 0,
+      "rejections": 0,
+      "badHttpUrls": [
+        "404 http://127.0.0.1:49372/dist/src/components/media/image-editor.ts",
+        "404 http://127.0.0.1:49372/dist/src/components/media/image-editor.css",
+        "404 http://127.0.0.1:49372/dist/src/components/media/image-editor.md"
+      ],
+      "erroresText": [
+        "Failed to load resource: the server responded with a status of 404 (Not Found)",
+        "Failed to load resource: the server responded with a status of 404 (Not Found)",
+        "Failed to load resource: the server responded with a status of 404 (Not Found)"
+      ]
+    },
+    {
+      "tag": "is-input",
+      "categoria": "forms",
+      "ok": true,
+      "interaccion": {
+        "botones": 12,
+        "responded": 0,
+        "ok": false
+      },
+      "teclado": {
+        "tabOk": true,
+        "firstFocus": "a#"
+      },
+      "aria": {
+        "hasRole": true,
+        "roles": [
+          "button-implicit"
+        ]
+      },
+      "estados": {
+        "tested": true
+      },
+      "metricas": {
+        "texto": 5806,
+        "sections": 11,
+        "interactivos": 12
+      },
+      "errores": 0,
+      "warnings": 0,
+      "badHttp": 0,
+      "pageErrors": 0,
+      "rejections": 0,
+      "badHttpUrls": [],
+      "erroresText": []
+    },
+    {
+      "tag": "is-lightbox",
+      "categoria": "helpers",
+      "ok": true,
+      "interaccion": {
+        "botones": 13,
+        "responded": 1,
+        "ok": true
+      },
+      "teclado": {
+        "tabOk": true,
+        "firstFocus": "is-lightbox#lb-vid"
+      },
+      "aria": {
+        "hasRole": true,
+        "roles": [
+          "button-implicit"
+        ]
+      },
+      "estados": {
+        "tested": true
+      },
+      "metricas": {
+        "texto": 3739,
+        "sections": 6,
+        "interactivos": 13
+      },
+      "errores": 0,
+      "warnings": 0,
+      "badHttp": 0,
+      "pageErrors": 0,
+      "rejections": 0,
+      "badHttpUrls": [],
+      "erroresText": []
+    },
+    {
+      "tag": "is-loading-overlay",
+      "categoria": "isp",
+      "ok": true,
+      "interaccion": {
+        "botones": 6,
+        "responded": 0,
+        "ok": false
+      },
+      "teclado": {
+        "tabOk": true,
+        "firstFocus": "is-button#"
+      },
+      "aria": {
+        "hasRole": true,
+        "roles": [
+          "button-implicit"
+        ]
+      },
+      "estados": {
+        "tested": true
+      },
+      "metricas": {
+        "texto": 652,
+        "sections": 3,
+        "interactivos": 6
+      },
+      "errores": 0,
+      "warnings": 0,
+      "badHttp": 0,
+      "pageErrors": 0,
+      "rejections": 0,
+      "badHttpUrls": [
+        "404 http://127.0.0.1:49372/dist/src/components/isp/loading-overlay.ts",
+        "404 http://127.0.0.1:49372/dist/src/components/isp/loading-overlay.css",
+        "404 http://127.0.0.1:49372/dist/src/components/isp/loading-overlay.md"
+      ],
+      "erroresText": [
+        "Failed to load resource: the server responded with a status of 404 (Not Found)",
+        "Failed to load resource: the server responded with a status of 404 (Not Found)",
+        "Failed to load resource: the server responded with a status of 404 (Not Found)"
+      ]
+    },
+    {
+      "tag": "is-main",
+      "categoria": "layout",
+      "ok": true,
+      "interaccion": {
+        "botones": 6,
+        "responded": 1,
+        "ok": true
+      },
+      "teclado": {
+        "tabOk": true,
+        "firstFocus": "is-code#"
+      },
+      "aria": {
+        "hasRole": true,
+        "roles": [
+          "button-implicit"
+        ]
+      },
+      "estados": {
+        "tested": true
+      },
+      "metricas": {
+        "texto": 1028,
+        "sections": 3,
+        "interactivos": 6
+      },
+      "errores": 0,
+      "warnings": 0,
+      "badHttp": 0,
+      "pageErrors": 0,
+      "rejections": 0,
+      "badHttpUrls": [],
+      "erroresText": []
+    },
+    {
+      "tag": "is-mega-menu",
+      "categoria": "navigation",
+      "ok": true,
+      "interaccion": {
+        "botones": 5,
+        "responded": 1,
+        "ok": true
+      },
+      "teclado": {
+        "tabOk": true,
+        "firstFocus": "is-mega-menu#"
+      },
+      "aria": {
+        "hasRole": true,
+        "roles": [
+          "button-implicit"
+        ]
+      },
+      "estados": {
+        "tested": true
+      },
+      "metricas": {
+        "texto": 1171,
+        "sections": 4,
+        "interactivos": 5
+      },
+      "errores": 0,
+      "warnings": 0,
+      "badHttp": 0,
+      "pageErrors": 0,
+      "rejections": 0,
+      "badHttpUrls": [],
+      "erroresText": []
+    },
+    {
+      "tag": "is-mention",
+      "categoria": "forms",
+      "ok": true,
+      "interaccion": {
+        "botones": 3,
+        "responded": 0,
+        "ok": false
+      },
+      "teclado": {
+        "tabOk": true,
+        "firstFocus": "is-mention#cmt"
+      },
+      "aria": {
+        "hasRole": true,
+        "roles": [
+          "button-implicit"
+        ]
+      },
+      "estados": {
+        "tested": true
+      },
+      "metricas": {
+        "texto": 882,
+        "sections": 5,
+        "interactivos": 3
+      },
+      "errores": 0,
+      "warnings": 0,
+      "badHttp": 0,
+      "pageErrors": 0,
+      "rejections": 0,
+      "badHttpUrls": [],
+      "erroresText": []
+    },
+    {
+      "tag": "is-modal-verificacion",
+      "categoria": "isp",
+      "ok": true,
+      "interaccion": {
+        "botones": 6,
+        "responded": 0,
+        "ok": false
+      },
+      "teclado": {
+        "tabOk": true,
+        "firstFocus": "is-button#mvBtn"
+      },
+      "aria": {
+        "hasRole": true,
+        "roles": [
+          "button-implicit"
+        ]
+      },
+      "estados": {
+        "tested": true
+      },
+      "metricas": {
+        "texto": 439,
+        "sections": 2,
+        "interactivos": 6
+      },
+      "errores": 0,
+      "warnings": 0,
+      "badHttp": 0,
+      "pageErrors": 0,
+      "rejections": 0,
+      "badHttpUrls": [],
+      "erroresText": []
+    },
+    {
+      "tag": "is-mutation-observer",
+      "categoria": "helpers",
+      "ok": true,
+      "interaccion": {
+        "botones": 5,
+        "responded": 3,
+        "ok": true
+      },
+      "teclado": {
+        "tabOk": true,
+        "firstFocus": "is-button#moAdd"
+      },
+      "aria": {
+        "hasRole": true,
+        "roles": [
+          "button-implicit"
+        ]
+      },
+      "estados": {
+        "tested": true
+      },
+      "metricas": {
+        "texto": 2212,
+        "sections": 3,
+        "interactivos": 5
+      },
+      "errores": 0,
+      "warnings": 0,
+      "badHttp": 0,
+      "pageErrors": 0,
+      "rejections": 0,
+      "badHttpUrls": [],
+      "erroresText": []
+    },
+    {
+      "tag": "is-observer",
+      "categoria": "helpers",
+      "ok": true,
+      "interaccion": {
+        "botones": 6,
+        "responded": 3,
+        "ok": true
+      },
+      "teclado": {
+        "tabOk": true,
+        "firstFocus": "div#obsScroller"
+      },
+      "aria": {
+        "hasRole": true,
+        "roles": [
+          "button-implicit"
+        ]
+      },
+      "estados": {
+        "tested": true
+      },
+      "metricas": {
+        "texto": 3334,
+        "sections": 5,
+        "interactivos": 6
+      },
+      "errores": 0,
+      "warnings": 0,
+      "badHttp": 0,
+      "pageErrors": 0,
+      "rejections": 0,
+      "badHttpUrls": [],
+      "erroresText": []
+    },
+    {
+      "tag": "is-org-chart",
+      "categoria": "diagrams",
+      "ok": true,
+      "interaccion": {
+        "botones": 3,
+        "responded": 1,
+        "ok": true
+      },
+      "teclado": {
+        "tabOk": false,
+        "firstFocus": "is-diagram-lightbox#"
+      },
+      "aria": {
+        "hasRole": true,
+        "roles": [
+          "button-implicit"
+        ]
+      },
+      "estados": {
+        "tested": true
+      },
+      "metricas": {
+        "texto": 5431,
+        "sections": 5,
+        "interactivos": 3
+      },
+      "errores": 0,
+      "warnings": 0,
+      "badHttp": 0,
+      "pageErrors": 0,
+      "rejections": 0,
+      "textCenterOffset": 0,
+      "badHttpUrls": [],
+      "erroresText": []
+    },
+    {
+      "tag": "is-pivot-table",
+      "categoria": "data",
+      "ok": true,
+      "interaccion": {
+        "botones": 6,
+        "responded": 0,
+        "ok": false
+      },
+      "teclado": {
+        "tabOk": true,
+        "firstFocus": "is-button#"
+      },
+      "aria": {
+        "hasRole": true,
+        "roles": [
+          "button-implicit"
+        ]
+      },
+      "estados": {
+        "tested": true
+      },
+      "metricas": {
+        "texto": 2931,
+        "sections": 6,
+        "interactivos": 6
+      },
+      "errores": 0,
+      "warnings": 0,
+      "badHttp": 0,
+      "pageErrors": 0,
+      "rejections": 0,
+      "badHttpUrls": [
+        "404 http://127.0.0.1:49372/dist/src/components/data/pivot-table.ts",
+        "404 http://127.0.0.1:49372/dist/src/components/data/pivot-table.css",
+        "404 http://127.0.0.1:49372/dist/src/components/data/pivot-table.md"
+      ],
+      "erroresText": [
+        "Failed to load resource: the server responded with a status of 404 (Not Found)",
+        "Failed to load resource: the server responded with a status of 404 (Not Found)",
+        "Failed to load resource: the server responded with a status of 404 (Not Found)"
+      ]
+    },
+    {
+      "tag": "is-progress-bar",
+      "categoria": "feedback",
+      "ok": true,
+      "interaccion": {
+        "botones": 6,
+        "responded": 0,
+        "ok": false
+      },
+      "teclado": {
+        "tabOk": true,
+        "firstFocus": "button#"
+      },
+      "aria": {
+        "hasRole": true,
+        "roles": [
+          "button-implicit"
+        ]
+      },
+      "estados": {
+        "tested": true
+      },
+      "metricas": {
+        "texto": 983,
+        "sections": 4,
+        "interactivos": 6
+      },
+      "errores": 0,
+      "warnings": 0,
+      "badHttp": 0,
+      "pageErrors": 0,
+      "rejections": 0,
+      "badHttpUrls": [],
+      "erroresText": []
+    },
+    {
+      "tag": "is-radar-chart",
+      "categoria": "data-viz",
+      "ok": true,
+      "interaccion": {
+        "botones": 6,
+        "responded": 0,
+        "ok": false
+      },
+      "teclado": {
+        "tabOk": false,
+        "firstFocus": "is-diagram-lightbox#"
+      },
+      "aria": {
+        "hasRole": true,
+        "roles": [
+          "button-implicit"
+        ]
+      },
+      "estados": {
+        "tested": true
+      },
+      "metricas": {
+        "texto": 2830,
+        "sections": 6,
+        "interactivos": 6
+      },
+      "errores": 0,
+      "warnings": 0,
+      "badHttp": 0,
+      "pageErrors": 0,
+      "rejections": 0,
+      "badHttpUrls": [
+        "404 http://127.0.0.1:49372/dist/src/components/charts/radar-chart.ts",
+        "404 http://127.0.0.1:49372/dist/src/components/charts/radar-chart.css",
+        "404 http://127.0.0.1:49372/dist/src/components/charts/radar-chart.md"
+      ],
+      "erroresText": [
+        "Failed to load resource: the server responded with a status of 404 (Not Found)",
+        "Failed to load resource: the server responded with a status of 404 (Not Found)",
+        "Failed to load resource: the server responded with a status of 404 (Not Found)"
+      ]
+    },
+    {
+      "tag": "is-rating",
+      "categoria": "forms",
+      "ok": true,
+      "interaccion": {
+        "botones": 5,
+        "responded": 0,
+        "ok": false
+      },
+      "teclado": {
+        "tabOk": true,
+        "firstFocus": "a#"
+      },
+      "aria": {
+        "hasRole": true,
+        "roles": [
+          "button-implicit"
+        ]
+      },
+      "estados": {
+        "tested": true
+      },
+      "metricas": {
+        "texto": 4637,
+        "sections": 12,
+        "interactivos": 5
+      },
+      "errores": 0,
+      "warnings": 0,
+      "badHttp": 0,
+      "pageErrors": 0,
+      "rejections": 0,
+      "badHttpUrls": [],
+      "erroresText": []
+    },
+    {
+      "tag": "is-relative-time",
+      "categoria": "helpers",
+      "ok": true,
+      "interaccion": {
+        "botones": 3,
+        "responded": 0,
+        "ok": false
+      },
+      "teclado": {
+        "tabOk": true,
+        "firstFocus": "button#"
+      },
+      "aria": {
+        "hasRole": true,
+        "roles": [
+          "button-implicit"
+        ]
+      },
+      "estados": {
+        "tested": true
+      },
+      "metricas": {
+        "texto": 2736,
+        "sections": 5,
+        "interactivos": 3
+      },
+      "errores": 0,
+      "warnings": 0,
+      "badHttp": 0,
+      "pageErrors": 0,
+      "rejections": 0,
+      "badHttpUrls": [],
+      "erroresText": []
+    },
+    {
+      "tag": "is-resize-observer",
+      "categoria": "helpers",
+      "ok": true,
+      "interaccion": {
+        "botones": 4,
+        "responded": 1,
+        "ok": true
+      },
+      "teclado": {
+        "tabOk": true,
+        "firstFocus": "button#"
+      },
+      "aria": {
+        "hasRole": true,
+        "roles": [
+          "button-implicit"
+        ]
+      },
+      "estados": {
+        "tested": true
+      },
+      "metricas": {
+        "texto": 1319,
+        "sections": 4,
+        "interactivos": 4
+      },
+      "errores": 0,
+      "warnings": 0,
+      "badHttp": 0,
+      "pageErrors": 0,
+      "rejections": 0,
+      "badHttpUrls": [],
+      "erroresText": []
+    },
+    {
+      "tag": "is-rte",
+      "categoria": "forms",
+      "ok": true,
+      "interaccion": {
+        "botones": 3,
+        "responded": 0,
+        "ok": false
+      },
+      "teclado": {
+        "tabOk": true,
+        "firstFocus": "is-rte#rte"
+      },
+      "aria": {
+        "hasRole": true,
+        "roles": [
+          "button-implicit"
+        ]
+      },
+      "estados": {
+        "tested": true
+      },
+      "metricas": {
+        "texto": 356,
+        "sections": 4,
+        "interactivos": 3
+      },
+      "errores": 0,
+      "warnings": 0,
+      "badHttp": 0,
+      "pageErrors": 0,
+      "rejections": 0,
+      "badHttpUrls": [],
+      "erroresText": []
+    },
+    {
+      "tag": "is-scatter-chart",
+      "categoria": "data-viz",
+      "ok": true,
+      "interaccion": {
+        "botones": 3,
+        "responded": 0,
+        "ok": false
+      },
+      "teclado": {
+        "tabOk": false,
+        "firstFocus": "is-diagram-lightbox#"
+      },
+      "aria": {
+        "hasRole": true,
+        "roles": [
+          "button-implicit"
+        ]
+      },
+      "estados": {
+        "tested": true
+      },
+      "metricas": {
+        "texto": 2442,
+        "sections": 6,
+        "interactivos": 3
+      },
+      "errores": 0,
+      "warnings": 0,
+      "badHttp": 0,
+      "pageErrors": 0,
+      "rejections": 0,
+      "badHttpUrls": [],
+      "erroresText": []
+    },
+    {
+      "tag": "is-select",
+      "categoria": "forms",
+      "ok": true,
+      "interaccion": {
+        "botones": 9,
+        "responded": 0,
+        "ok": false
+      },
+      "teclado": {
+        "tabOk": true,
+        "firstFocus": "a#"
+      },
+      "aria": {
+        "hasRole": true,
+        "roles": [
+          "button-implicit"
+        ]
+      },
+      "estados": {
+        "tested": true
+      },
+      "metricas": {
+        "texto": 8371,
+        "sections": 13,
+        "interactivos": 9
+      },
+      "errores": 0,
+      "warnings": 0,
+      "badHttp": 0,
+      "pageErrors": 0,
+      "rejections": 0,
+      "badHttpUrls": [],
+      "erroresText": []
+    },
+    {
+      "tag": "is-sequence-diagram",
+      "categoria": "diagrams",
+      "ok": true,
+      "interaccion": {
+        "botones": 3,
+        "responded": 0,
+        "ok": false
+      },
+      "teclado": {
+        "tabOk": true,
+        "firstFocus": "is-diagram-lightbox#lb"
+      },
+      "aria": {
+        "hasRole": true,
+        "roles": [
+          "button-implicit"
+        ]
+      },
+      "estados": {
+        "tested": true
+      },
+      "metricas": {
+        "texto": 7887,
+        "sections": 5,
+        "interactivos": 3
+      },
+      "errores": 0,
+      "warnings": 0,
+      "badHttp": 0,
+      "pageErrors": 0,
+      "rejections": 0,
+      "textCenterOffset": 0,
+      "badHttpUrls": [],
+      "erroresText": []
+    },
+    {
+      "tag": "is-signature",
+      "categoria": "forms",
+      "ok": true,
+      "interaccion": {
+        "botones": 6,
+        "responded": 2,
+        "ok": true
+      },
+      "teclado": {
+        "tabOk": true,
+        "firstFocus": "button#bClear"
+      },
+      "aria": {
+        "hasRole": true,
+        "roles": [
+          "button-implicit"
+        ]
+      },
+      "estados": {
+        "tested": true
+      },
+      "metricas": {
+        "texto": 351,
+        "sections": 4,
+        "interactivos": 6
+      },
+      "errores": 0,
+      "warnings": 0,
+      "badHttp": 0,
+      "pageErrors": 0,
+      "rejections": 0,
+      "badHttpUrls": [],
+      "erroresText": []
+    },
+    {
+      "tag": "is-slider",
+      "categoria": "forms",
+      "ok": true,
+      "interaccion": {
+        "botones": 8,
+        "responded": 0,
+        "ok": false
+      },
+      "teclado": {
+        "tabOk": true,
+        "firstFocus": "a#"
+      },
+      "aria": {
+        "hasRole": true,
+        "roles": [
+          "button-implicit"
+        ]
+      },
+      "estados": {
+        "tested": true
+      },
+      "metricas": {
+        "texto": 3882,
+        "sections": 13,
+        "interactivos": 8
+      },
+      "errores": 0,
+      "warnings": 0,
+      "badHttp": 0,
+      "pageErrors": 0,
+      "rejections": 0,
+      "badHttpUrls": [],
+      "erroresText": []
+    },
+    {
+      "tag": "is-speed-dial",
+      "categoria": "actions",
+      "ok": true,
+      "interaccion": {
+        "botones": 7,
+        "responded": 0,
+        "ok": false
+      },
+      "teclado": {
+        "tabOk": true,
+        "firstFocus": "is-button#"
+      },
+      "aria": {
+        "hasRole": true,
+        "roles": [
+          "button-implicit"
+        ]
+      },
+      "estados": {
+        "tested": true
+      },
+      "metricas": {
+        "texto": 2457,
+        "sections": 6,
+        "interactivos": 7
+      },
+      "errores": 0,
+      "warnings": 0,
+      "badHttp": 0,
+      "pageErrors": 0,
+      "rejections": 0,
+      "badHttpUrls": [
+        "404 http://127.0.0.1:49372/dist/src/components/actions/speed-dial.ts",
+        "404 http://127.0.0.1:49372/dist/src/components/actions/speed-dial.css",
+        "404 http://127.0.0.1:49372/dist/src/components/actions/speed-dial.md"
+      ],
+      "erroresText": [
+        "Failed to load resource: the server responded with a status of 404 (Not Found)",
+        "Failed to load resource: the server responded with a status of 404 (Not Found)",
+        "Failed to load resource: the server responded with a status of 404 (Not Found)"
+      ]
+    },
+    {
+      "tag": "is-switch",
+      "categoria": "forms",
+      "ok": true,
+      "interaccion": {
+        "botones": 7,
+        "responded": 1,
+        "ok": true
+      },
+      "teclado": {
+        "tabOk": true,
+        "firstFocus": "a#"
+      },
+      "aria": {
+        "hasRole": true,
+        "roles": [
+          "switch"
+        ]
+      },
+      "estados": {
+        "tested": true
+      },
+      "metricas": {
+        "texto": 4897,
+        "sections": 11,
+        "interactivos": 7
+      },
+      "errores": 0,
+      "warnings": 0,
+      "badHttp": 0,
+      "pageErrors": 0,
+      "rejections": 0,
+      "badHttpUrls": [],
+      "erroresText": []
+    },
+    {
+      "tag": "is-text",
+      "categoria": "isp",
+      "ok": true,
+      "interaccion": {
+        "botones": 2,
+        "responded": 0,
+        "ok": false
+      },
+      "teclado": {
+        "tabOk": true,
+        "firstFocus": "select#txColorMode"
+      },
+      "aria": {
+        "hasRole": true,
+        "roles": [
+          "button-implicit"
+        ]
+      },
+      "estados": {
+        "tested": true
+      },
+      "metricas": {
+        "texto": 2749,
+        "sections": 4,
+        "interactivos": 2
+      },
+      "errores": 0,
+      "warnings": 0,
+      "badHttp": 0,
+      "pageErrors": 0,
+      "rejections": 0,
+      "badHttpUrls": [],
+      "erroresText": []
+    },
+    {
+      "tag": "is-textarea",
+      "categoria": "forms",
+      "ok": true,
+      "interaccion": {
+        "botones": 8,
+        "responded": 0,
+        "ok": false
+      },
+      "teclado": {
+        "tabOk": true,
+        "firstFocus": "a#"
+      },
+      "aria": {
+        "hasRole": true,
+        "roles": [
+          "button-implicit"
+        ]
+      },
+      "estados": {
+        "tested": true
+      },
+      "metricas": {
+        "texto": 4728,
+        "sections": 11,
+        "interactivos": 8
+      },
+      "errores": 0,
+      "warnings": 0,
+      "badHttp": 0,
+      "pageErrors": 0,
+      "rejections": 0,
+      "badHttpUrls": [],
+      "erroresText": []
+    },
+    {
+      "tag": "is-toast",
+      "categoria": "feedback",
+      "ok": true,
+      "interaccion": {
+        "botones": 12,
+        "responded": 0,
+        "ok": false
+      },
+      "teclado": {
+        "tabOk": true,
+        "firstFocus": "is-button#btn-brand"
+      },
+      "aria": {
+        "hasRole": true,
+        "roles": [
+          "button-implicit"
+        ]
+      },
+      "estados": {
+        "tested": true
+      },
+      "metricas": {
+        "texto": 1281,
+        "sections": 4,
+        "interactivos": 12
+      },
+      "errores": 0,
+      "warnings": 0,
+      "badHttp": 0,
+      "pageErrors": 0,
+      "rejections": 0,
+      "badHttpUrls": [],
+      "erroresText": []
+    },
+    {
+      "tag": "is-tooltip",
+      "categoria": "feedback",
+      "ok": true,
+      "interaccion": {
+        "botones": 12,
+        "responded": 0,
+        "ok": false
+      },
+      "teclado": {
+        "tabOk": true,
+        "firstFocus": "is-button#tip-target"
+      },
+      "aria": {
+        "hasRole": true,
+        "roles": [
+          "button-implicit"
+        ]
+      },
+      "estados": {
+        "tested": true
+      },
+      "metricas": {
+        "texto": 1595,
+        "sections": 5,
+        "interactivos": 12
+      },
+      "errores": 0,
+      "warnings": 0,
+      "badHttp": 0,
+      "pageErrors": 0,
+      "rejections": 0,
+      "badHttpUrls": [],
+      "erroresText": []
+    },
+    {
+      "tag": "is-tree-view",
+      "categoria": "isp",
+      "ok": true,
+      "interaccion": {
+        "botones": 6,
+        "responded": 0,
+        "ok": false
+      },
+      "teclado": {
+        "tabOk": true,
+        "firstFocus": "is-button#"
+      },
+      "aria": {
+        "hasRole": true,
+        "roles": [
+          "button-implicit"
+        ]
+      },
+      "estados": {
+        "tested": true
+      },
+      "metricas": {
+        "texto": 1105,
+        "sections": 1,
+        "interactivos": 6
+      },
+      "errores": 0,
+      "warnings": 0,
+      "badHttp": 0,
+      "pageErrors": 0,
+      "rejections": 0,
+      "badHttpUrls": [
+        "404 http://127.0.0.1:49372/dist/src/components/isp/tree-view.ts",
+        "404 http://127.0.0.1:49372/dist/src/components/isp/tree-view.css",
+        "404 http://127.0.0.1:49372/dist/src/components/isp/tree-view.md"
+      ],
+      "erroresText": [
+        "Failed to load resource: the server responded with a status of 404 (Not Found)",
+        "Failed to load resource: the server responded with a status of 404 (Not Found)",
+        "Failed to load resource: the server responded with a status of 404 (Not Found)"
+      ]
+    },
+    {
+      "tag": "is-ui",
+      "categoria": "helpers",
+      "ok": true,
+      "interaccion": {
+        "botones": 6,
+        "responded": 0,
+        "ok": false
+      },
+      "teclado": {
+        "tabOk": true,
+        "firstFocus": "is-button#"
+      },
+      "aria": {
+        "hasRole": true,
+        "roles": [
+          "button-implicit"
+        ]
+      },
+      "estados": {
+        "tested": true
+      },
+      "metricas": {
+        "texto": 1393,
+        "sections": 5,
+        "interactivos": 6
+      },
+      "errores": 0,
+      "warnings": 0,
+      "badHttp": 0,
+      "pageErrors": 0,
+      "rejections": 0,
+      "badHttpUrls": [
+        "404 http://127.0.0.1:49372/dist/src/components/helpers/ui.ts",
+        "404 http://127.0.0.1:49372/dist/src/components/helpers/ui.css",
+        "404 http://127.0.0.1:49372/dist/src/components/helpers/ui.md",
+        "404 https://raw.githubusercontent.com/Jeff-Aporta/is-webcomponents/main/src/components/helpers/ui.css"
+      ],
+      "erroresText": [
+        "Failed to load resource: the server responded with a status of 404 (Not Found)",
+        "Failed to load resource: the server responded with a status of 404 (Not Found)",
+        "Failed to load resource: the server responded with a status of 404 (Not Found)"
+      ]
+    },
+    {
+      "tag": "is-video",
+      "categoria": "media",
+      "ok": true,
+      "interaccion": {
+        "botones": 7,
+        "responded": 0,
+        "ok": false
+      },
+      "teclado": {
+        "tabOk": true,
+        "firstFocus": "is-video#v1"
+      },
+      "aria": {
+        "hasRole": true,
+        "roles": [
+          "button-implicit"
+        ]
+      },
+      "estados": {
+        "tested": true
+      },
+      "metricas": {
+        "texto": 1338,
+        "sections": 4,
+        "interactivos": 7
+      },
+      "errores": 0,
+      "warnings": 0,
+      "badHttp": 0,
+      "pageErrors": 0,
+      "rejections": 0,
+      "badHttpUrls": [],
+      "erroresText": []
+    },
+    {
+      "tag": "is-video-playlist",
+      "categoria": "media",
+      "ok": true,
+      "interaccion": {
+        "botones": 9,
+        "responded": 1,
+        "ok": true
+      },
+      "teclado": {
+        "tabOk": true,
+        "firstFocus": "is-video#"
+      },
+      "aria": {
+        "hasRole": true,
+        "roles": [
+          "button-implicit"
+        ]
+      },
+      "estados": {
+        "tested": true
+      },
+      "metricas": {
+        "texto": 3144,
+        "sections": 7,
+        "interactivos": 9
+      },
+      "errores": 0,
+      "warnings": 0,
+      "badHttp": 0,
+      "pageErrors": 0,
+      "rejections": 0,
+      "badHttpUrls": [],
+      "erroresText": []
+    },
+    {
+      "tag": "theming",
+      "categoria": "pages",
+      "ok": true,
+      "interaccion": {
+        "botones": 12,
+        "responded": 1,
+        "ok": true
+      },
+      "teclado": {
+        "tabOk": true,
+        "firstFocus": "is-code#"
+      },
+      "aria": {
+        "hasRole": true,
+        "roles": [
+          "switch"
+        ]
+      },
+      "estados": {
+        "tested": true
+      },
+      "metricas": {
+        "texto": 5075,
+        "sections": 6,
+        "interactivos": 12
+      },
+      "errores": 0,
+      "warnings": 0,
+      "badHttp": 0,
+      "pageErrors": 0,
+      "rejections": 0,
+      "badHttpUrls": [],
+      "erroresText": []
+    }
+  ]
+}

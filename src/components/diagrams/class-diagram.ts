@@ -336,6 +336,7 @@ class IsClassDiagram extends DiagramElementBase {
               const ts = svgEl('tspan', {
                 x: span.x, y: span.y,
                 ...(span.dy != null ? { dy: span.dy } : {}),
+            ...(span.textAnchor != null ? { 'text-anchor': span.textAnchor } : {}),
               });
               ts.textContent = span.text;
               nameT.appendChild(ts);
@@ -364,6 +365,7 @@ class IsClassDiagram extends DiagramElementBase {
               const ts = svgEl('tspan', {
                 x: span.x, y: span.y,
                 ...(span.dy != null ? { dy: span.dy } : {}),
+            ...(span.textAnchor != null ? { 'text-anchor': span.textAnchor } : {}),
               });
               ts.textContent = span.text;
               nameT.appendChild(ts);
