@@ -352,7 +352,8 @@ class IsErDiagram extends DiagramElementBase {
         fill: headerFill, class: 'er-entity__header',
       }));
       const nameT = svgEl('text', {
-        x: e.x + e.w / 2, y: e.y + ER_HEADER_H / 2 + 4, 'text-anchor': 'middle',
+        x: e.x + e.w / 2, y: e.y + ER_HEADER_H / 2, 'text-anchor': 'middle',
+        'dominant-baseline': 'middle',
         fill: theme.text, 'font-size': '11', 'font-weight': '700',
         'font-family': 'Tahoma,Arial,sans-serif',
       });

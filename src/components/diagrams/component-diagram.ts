@@ -225,16 +225,20 @@ class IsComponentDiagram extends DiagramElementBase {
       });
       g.appendChild(path);
       if (!ballSocket) {
-        // `svgArrowHead` se tipa con `className?: string | null = null`; la firma
-        // heredada lo trata como `null | undefined` cuando el caller pasa string.
-        // Casteamos la firma para mantener la API tipada y añadimos la clase al
-        // resultado (mismo patrón que `block-diagram.ts`).
+        // Recorta la punta de flecha para que el cuerpo del arrowhead NO
+        // entre dentro del nodo destino. El path ya termina en el borde
+        // (e.toX/Y), pero la flecha mide `len=7` + halfWidth=3.5 → sin
+        // este offset el cuerpo queda dentro del rect.
+        const dir = pathEndDirection(e.path);
+        const back = 8; // px hacia atras del borde
+        const tipX = e.toX - dir.x * back;
+        const tipY = e.toY - dir.y * back;
         const head = (svgArrowHead as unknown as (opts: {
           d: string; tip: { x: number; y: number }; color: string;
           len?: number; halfWidth?: number;
         }) => SVGElement)({
           d: e.path,
-          tip: { x: e.toX, y: e.toY },
+          tip: { x: tipX, y: tipY },
           color,
         });
         head.classList.add('cd-edge__arrow');

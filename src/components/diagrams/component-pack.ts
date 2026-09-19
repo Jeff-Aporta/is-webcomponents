@@ -16,8 +16,9 @@ export const PKG_TAB = 22;
 export const ROW_GAP = 64;
 /** Distancia mínima entre cajas si el consumidor no pone `min-gap`. */
 export const DEFAULT_MIN_GAP = ROW_GAP;
-/** Holgura arista vs perímetro. */
-export const EDGE_CLEARANCE = 14;
+/** Holgura arista vs perímetro. 18 px = las conexiones no se pegan a los
+ *  nodos y los arrowheads quedan visibles fuera del rect destino. */
+export const EDGE_CLEARANCE = 18;
 /** Aire extra alrededor del título de paquete: 14 px no basta, se lee mal. */
 export const TITLE_CLEARANCE = 22;
 

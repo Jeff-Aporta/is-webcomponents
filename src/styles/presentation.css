@@ -334,6 +334,26 @@ body::-webkit-scrollbar-corner {
   border-radius: calc(var(--is-radius) + 2px);
 }
 
+/* Enlace "Abrir editor en nueva pestana": aparece solo en demos de
+   diagramas SVG (render.ts detecta el tag y lo agrega). Compacto,
+   alineado a la derecha, discreto, no compite con el demo. */
+.demo-block__editor-link {
+  align-self: flex-end;
+  margin: 6px 4px 0 0;
+  font-size: 12px;
+  font-weight: 600;
+  color: var(--is-fg-muted, #9aa3b2);
+  text-decoration: none;
+  border-bottom: 1px dashed currentColor;
+  padding-bottom: 1px;
+}
+.demo-block__editor-link:hover,
+.demo-block__editor-link:focus-visible {
+  color: var(--is-fg, #e7eef8);
+  border-bottom-style: solid;
+  outline: none;
+}
+
 /* .demo-equiv: retirado de demos (equivHtml queda en JSON solo como dato opcional). */
 
 .demo {

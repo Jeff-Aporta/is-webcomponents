@@ -308,24 +308,29 @@ class IsClassDiagram extends DiagramElementBase {
         if (section.type === 'header') {
           const midY = n.y + section.h / 2;
           if (n.stereotype) {
+            // Stereotype: linea pequena arriba (centrada en y=11).
             const st = svgEl('text', {
-              x: n.x + n.w / 2, y: n.y + 13, 'text-anchor': 'middle', fill: theme.muted,
+              x: n.x + n.w / 2, y: n.y + 11, 'text-anchor': 'middle',
+              'dominant-baseline': 'middle', fill: theme.muted,
               'font-size': '9.5', 'font-family': 'Tahoma,Arial,sans-serif',
             });
             st.textContent = n.stereotype;
             g.appendChild(st);
-            // Wrap del nombre de clase si es largo.
+            // Nombre: ocupa el resto del header (debajo del stereotype).
+            // El espacio va desde y = 18 hasta y = section.h - 4 (centrado en su mitad).
+            const nameTop = n.y + 18;
+            const nameHeight = section.h - 18 - 4;
             const result = wrapText({
               text: n.name,
               maxWidth: n.w - 12,
-              maxHeight: section.h - 8,
+              maxHeight: nameHeight,
               fontSize: 11.5,
               fontFamily: 'Tahoma,Arial,sans-serif',
               overflow: 'grow',
             });
             const tspans = buildTspans(
               result.lines,
-              n.x + 6, n.y, n.w - 12, section.h,
+              n.x + 6, nameTop, n.w - 12, nameHeight,
               'middle', 11.5, 1.2,
             );
             const nameT = svgEl('text', {

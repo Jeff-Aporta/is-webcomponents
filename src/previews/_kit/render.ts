@@ -35,6 +35,12 @@ export function resolveAssets(html: string): string {
   return typeof html === 'string' ? html.replaceAll('{assets}', ASSETS) : html;
 }
 
+/** Base64-url encode (sin padding) — mismo formato que `?s=` en gallery/app.ts. */
+function b64urlEncode(s: string): string {
+  const b64 = btoa(unescape(encodeURIComponent(s)));
+  return b64.replace(/\+/g, '-').replace(/\//g, '_').replace(/=+$/, '');
+}
+
 /**
  * @param html
  * @returns
@@ -67,6 +73,24 @@ export function renderBlock(block: PreviewBlock): HTMLElement {
       if (block.noCode) demo.dataset.noCode = '';
       demo.append(fragmentFromHtml(block.html));
       wrap.append(demo);
+
+      // Si el demo es un diagrama SVG (class/flowchart/state/etc),
+      // agregar un enlace "Abrir en editor (new tab)" para que el usuario
+      // pueda abrir el demo en su propia pestana desde la galeria/home.
+      // Esto usa `window.open` con `noopener` para abrir el shell del demo
+      // (mismo demo, contexto limpio, sin chrome de galeria).
+      const m = /<is-([a-z0-9-]+)-(diagram|chart)|<is-(flowchart|gantt|mindmap|venn-diagram|sankey-diagram|state-diagram|sequence-diagram|swimlane-diagram|use-case-diagram|class-diagram|er-diagram|block-diagram|component-diagram|org-chart|radar-chart|scatter-chart|sparkline|treemap|waterfall-chart|polar-area-chart|funnel-chart|pie-chart|doughnut-chart|line-chart|bar-chart|quadrant-chart|journey-map|timeline)\b/.exec(block.html);
+      if (m) {
+        const tag = `is-${m[1] ? `${m[1]}-${m[2]}` : m[3]}`;
+        const editorLink = document.createElement('a');
+        editorLink.className = 'demo-block__editor-link';
+        editorLink.href = `?s=${b64urlEncode(JSON.stringify({ component: tag }))}`;
+        editorLink.target = '_blank';
+        editorLink.rel = 'noopener';
+        editorLink.textContent = 'Abrir editor en nueva pestaña ↗';
+        editorLink.setAttribute('aria-label', `Abrir demo de ${tag} en nueva pestaña`);
+        wrap.append(editorLink);
+      }
       return wrap;
     }
     case 'callout': {
