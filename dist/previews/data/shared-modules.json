@@ -1,5 +1,5 @@
 {
-  "generatedAt": "2026-09-19T00:08:05.273Z",
+  "generatedAt": "2026-09-19T01:04:38.797Z",
   "count": 61,
   "modules": [
     {
@@ -315,7 +315,7 @@
       "id": "diagram-text-wrap",
       "path": "src/components/_shared/diagram-text-wrap.ts",
       "summary": "diagram-text-wrap — Tres funciones públicas:",
-      "bytes": 14311,
+      "bytes": 15856,
       "exports": [
         "defaultMeasureTextWidth",
         "wrapText",
