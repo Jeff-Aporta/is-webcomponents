@@ -243,6 +243,7 @@ class IsMindmap extends DiagramElementBase {
             x: span.x, y: span.y,
             ...(span.dy != null ? { dy: span.dy } : {}),
             ...(span.textAnchor != null ? { 'text-anchor': span.textAnchor } : {}),
+            ...(span.dominantBaseline != null ? { 'dominant-baseline': span.dominantBaseline } : {}),
           });
           ts.textContent = span.text;
           t.appendChild(ts);

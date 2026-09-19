@@ -302,7 +302,11 @@ g.appendChild(svgArrowHead({
       });
       if (swHasMd) {
         t.setAttribute('x', String(s.x + s.w / 2));
-        t.setAttribute('y', String(s.y + s.h / 2 + 4));
+        t.setAttribute('y', String(s.y + s.h / 2));
+        // dominant-baseline='middle' centra verticalmente el texto en y
+        // (sin esto, SVG pone y en la baseline y el texto queda ~3-5px arriba
+        // del centro). text-anchor='middle' ya estaba.
+        t.setAttribute('dominant-baseline', 'middle');
         t.setAttribute('text-anchor', 'middle');
         t.innerHTML = inlineMdWeb(s.label);
       } else {
@@ -324,6 +328,7 @@ g.appendChild(svgArrowHead({
             x: span.x, y: span.y,
             ...(span.dy != null ? { dy: span.dy } : {}),
             ...(span.textAnchor != null ? { 'text-anchor': span.textAnchor } : {}),
+            ...(span.dominantBaseline != null ? { 'dominant-baseline': span.dominantBaseline } : {}),
           });
           ts.textContent = span.text;
           t.appendChild(ts);

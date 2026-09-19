@@ -68,6 +68,12 @@ export interface TSpanSpec {
    *  llevan su propio `x`: embebido se renderiza correctamente
    *  centrado en x. Ver bug fix de swimlane-diagram y otros 9 diagramas. */
   textAnchor?: 'start' | 'middle' | 'end';
+  /** Si está presente, el caller debe aplicarlo como atributo
+   *  `dominant-baseline` al `<tspan>` correspondiente. SVG por defecto
+   *  usa `alphabetic` (y = baseline del texto), por lo que para centrar
+   *  verticalmente hay que usar `middle` o `central` y poner y al
+   *  centro del box. Ver bug fix vertical centering diagramas 2026-09. */
+  dominantBaseline?: 'auto' | 'middle' | 'central' | 'hanging' | 'alphabetic' | 'ideographic';
 }
 
 // -----------------------------------------------------------------------------
@@ -337,32 +343,51 @@ export function buildTextWithTspans(opts: {
 /** Construye specs de `<tspan>` listas para un `<text>` SVG. La primera
  *  línea lleva `y` absoluto; las siguientes llevan `dy` incremental.
  *
- *  Si `textAnchor === 'middle'` (o `'end'`), incluye `textAnchor` en cada
- *  spec para que el caller lo aplique al `<tspan>` correspondiente. Esto
- *  resuelve el bug de descentrado: el default SVG del `<text>` es `start`,
- *  y los tspans (que llevan su propio `x`) heredan ese anchor — el texto
- *  se renderiza arrancando en x y extendiéndose a la derecha, descentrado.
- *  Aplicando `text-anchor` en cada tspan, el texto se centra en su x.
+ *  Centrado horizontal: si `textAnchor === 'middle'` (o `'end'`), incluye
+ *  `textAnchor` en cada spec para que el caller lo aplique al `<tspan>`
+ *  correspondiente. El default SVG del `<text>` es `start`, y los tspans
+ *  (que llevan su propio `x`) heredan ese anchor — el texto se renderiza
+ *  arrancando en x y extendiéndose a la derecha, descentrado. Aplicando
+ *  `text-anchor` en cada tspan, el texto se centra en su x.
+ *
+ *  Centrado vertical: por defecto, SVG pone `y` en la BASELINE del texto
+ *  (no en el centro), por lo que poner `y = boxY + boxH/2` deja el texto
+ *  visualmente desplazado hacia arriba por ~`fontSize * 0.35`. El fix es
+ *  embeber `dominantBaseline: 'middle'` en cada spec y poner `y` al
+ *  centro vertical del box (`boxY + boxH/2`). Las líneas siguientes se
+ *  posicionan con `dy` relativo al centro (lineHeight * fontSize).
  */
 export function buildTspans(
   lines: WrappedLine[],
   boxX: number,
   boxY: number,
   boxW: number,
-  _boxH: number,
+  boxH: number,
   textAnchor: 'start' | 'middle' | 'end',
   fontSize: number,
   lineHeight: number,
 ): TSpanSpec[] {
   const x = anchorX(textAnchor, boxX, boxW);
-  const firstY = boxY + DEFAULT_PADDING_Y + fontSize * BASELINE_RATIO;
+  // Centro vertical: con dominant-baseline='middle', y es el centro del
+  // texto (no la baseline). Para multilinea, la primera linea arranca en
+  // `centerY - (n-1)/2 * lineHeight * fontSize` para que el conjunto
+  // quede centrado alrededor de centerY.
+  const centerY = boxY + boxH / 2;
   const dy = fontSize * lineHeight;
+  // Offset inicial: posiciona la primera linea para que el bloque de N
+  // lineas quede centrado verticalmente en centerY.
+  // Para 1 linea: firstY = centerY.
+  // Para 3 lineas: firstY = centerY - dy (la segunda cae sobre centerY, la tercera +dy).
+  const firstY = centerY - ((lines.length - 1) / 2) * dy;
   // Solo embebemos textAnchor en el spec si NO es 'start' (el default SVG
   // ya es start; embebido o no, el resultado es el mismo). Esto minimiza
   // cambios para callers que no necesitan el fix.
   const embedAnchor = textAnchor !== 'start';
+  // Embebemos dominantBaseline='middle' siempre para centrado vertical.
   return lines.map((line, i) => {
     const base = (i === 0) ? { text: line.text, x, y: firstY } : { text: line.text, x, y: firstY, dy };
-    return embedAnchor ? { ...base, textAnchor } : base;
+    return embedAnchor
+      ? { ...base, textAnchor, dominantBaseline: 'middle' }
+      : { ...base, dominantBaseline: 'middle' };
   });
 }
