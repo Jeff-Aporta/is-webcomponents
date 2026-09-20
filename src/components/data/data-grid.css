@@ -191,7 +191,7 @@
   &[data-filtered] .hlabel { text-decoration: underline dotted; }
 }
 
-.hlabel { overflow: hidden; text-overflow: ellipsis; }
+.hlabel { overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
 
 .sort-mark { font-size: 0.7em; opacity: 0.8; }
 

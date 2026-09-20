@@ -16,6 +16,13 @@
   min-height: var(--min-height, auto);
   max-width: var(--max-width, 100%);
   max-height: var(--max-height, none);
+  /* Por defecto recorta el contenido que sobresale. Con `justify-content:
+     center` los items extremos pueden salirse del contenedor padre cuando
+     el ancho del padre es menor que la suma de items. Sin este clip, se ve
+     un item parcialmente visible al borde (clip antiestetico). El padre ya
+     tiene `overflow: auto`, pero el overflow es interno del flex, no del
+     stage. Para opt-out: atributo `overflow="visible"`. */
+  overflow: hidden;
 }
 
 :host([hidden]) { display: none; }

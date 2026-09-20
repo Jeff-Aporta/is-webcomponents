@@ -381,9 +381,12 @@
   min-height: 0;
   height: 100%;
   flex: 0 0 auto;
-  overflow: hidden;
-  text-overflow: ellipsis;
-  white-space: nowrap;
+  /* Antes: overflow:hidden + text-overflow:ellipsis + white-space:nowrap.
+     Esto recortaba los .mim-dg-tag y .mim-dg-pill que se desbordaban
+     (varios tags por celda no caben). Ahora permitimos wrap de los hijos
+     inline-flex; el text-overflow de hijos sin flex lo aplica la regla
+     de override abajo (linea 393). */
+  overflow: visible;
   background: inherit;
   color: var(--is-text);
   font-size: inherit;

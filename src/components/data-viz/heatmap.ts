@@ -159,7 +159,10 @@ type HeatmapCfg = {
       const labelPadY = 18;
       const titleH = 22;
       const xTitleH = this.hasAttribute('x-label') ? 18 : 0;
-      const yTitleW = this.hasAttribute('y-label') ? 14 : 0;
+      // 18px de ancho reservado para el título Y rotado. Antes era 14, que
+      // era muy poco y provocaba que el texto rotado se solapara con los
+      // labels de fila. Ahora damos 4px mas para separar visualmente.
+      const yTitleW = this.hasAttribute('y-label') ? 18 : 0;
 
       const plot = {
         x: labelPadX + yTitleW,
@@ -182,7 +185,17 @@ type HeatmapCfg = {
         this.#svg.appendChild(t);
       }
       if (this.hasAttribute('y-label')) {
-        const t = svgEl('text', { x: 10, y: plot.y + plot.height / 2, 'text-anchor': 'middle', class: 'axis-title', transform: `rotate(-90 10 ${plot.y + plot.height / 2})` });
+        // El título Y rotado se coloca en x=4 (borde izquierdo del SVG) y
+        // centrado vertical en el plot. Antes x=10 quedaba muy pegado a los
+        // row labels (en plot.x - 4) y como ambos se centraban en el mismo
+        // vertical (plot.y + plot.height/2), el texto rotado cruzaba la
+        // etiqueta de la fila central (e.g. "Día" sobre "Jue" con 7 filas).
+        const yCx = 6;
+        const yCy = plot.y + plot.height / 2;
+        const t = svgEl('text', {
+          x: yCx, y: yCy, 'text-anchor': 'middle', class: 'axis-title',
+          transform: `rotate(-90 ${yCx} ${yCy})`,
+        });
         t.textContent = this.getAttribute('y-label');
         t.style.fill = text;
         this.#svg.appendChild(t);
