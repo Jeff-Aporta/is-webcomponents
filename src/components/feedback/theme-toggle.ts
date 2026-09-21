@@ -147,6 +147,15 @@ import { findThemeContainer } from '../_shared/theme-scope.js';
         if (!btn.hasAttribute('checked')) btn.setAttribute('checked', '');
         btn.removeAttribute('checked');
       }
+      // g07 (Cat 28): exponer el estado como switch accesible. role=switch
+      // es el patrón APG para un toggle de dos estados; aria-checked refleja
+      // el valor actual y aria-label cambia según el destino del próximo
+      // click (mismo texto que el <is-check-icon-button> interno).
+      this.setAttribute('role', 'switch');
+      this.setAttribute('aria-checked', want ? 'true' : 'false');
+      this.setAttribute('aria-label', want
+        ? (this.getAttribute('checked-label') || 'Cambiar a tema claro')
+        : (this.getAttribute('label') || 'Cambiar a tema oscuro'));
     }
   }
 

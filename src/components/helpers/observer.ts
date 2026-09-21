@@ -50,10 +50,14 @@ import { adoptCss, defineElement, emit } from '../../core/element.js';
  */
 
 const TEMPLATE = document.createElement('template');
-TEMPLATE.innerHTML = '<slot></slot>';
+TEMPLATE.innerHTML = `
+  <div class="base" part="base">
+    <slot></slot>
+  </div>
+`;
 
 const OBSERVED = [
-  'type', 'disabled',
+  'type', 'disabled', 'label', 'labelledby',
   // intersection
   'intersect-class', 'once', 'root', 'root-margin', 'threshold',
   // mutation
@@ -80,16 +84,25 @@ class ObserverElement extends HTMLElement {
   connectedCallback(): void {
     this.#mounted = true;
     this.#slot.addEventListener('slotchange', this.#onSlotChange);
+    this.#syncAria();
     this.#setup();
   }
 
   disconnectedCallback(): void {
     this.#slot.removeEventListener('slotchange', this.#onSlotChange);
     this.#teardown();
+    // Anular referencia al observer: aunque `disconnect()` ya corta el
+    // callback, liberar el campo permite al GC reclamar el observer aunque
+    // el nodo siga vivo (caso típico: reasignación de un slot vacío).
+    this.#observer = null;
   }
 
   attributeChangedCallback(name: string, oldVal: string | null, newVal: string | null): void {
     if (!this.#mounted || oldVal === newVal) return;
+    if (name === 'label' || name === 'labelledby') {
+      this.#syncAria();
+      return;
+    }
     this.#setup();
   }
 
@@ -105,6 +118,53 @@ class ObserverElement extends HTMLElement {
 
   get disabled(): boolean { return this.hasAttribute('disabled'); }
   set disabled(v: boolean) { this.toggleAttribute('disabled', !!v); }
+
+  /**
+   * Etiqueta del landmark (proposals g09 — `role=region` + `aria-label`).
+   * Solo se aplica `role="region"` cuando hay `label` o `labelledby`
+   * (norma ARIA: un `region` sin nombre accesible no aporta landmark y
+   * solo contamina el mapa de nodos).
+   */
+  get label(): string {
+    return this.getAttribute('label') ?? '';
+  }
+  set label(v: string) {
+    if (v == null || v === '') this.removeAttribute('label');
+    else this.setAttribute('label', String(v));
+  }
+
+  get labelledby(): string {
+    return this.getAttribute('labelledby') ?? '';
+  }
+  set labelledby(v: string) {
+    if (v == null || v === '') this.removeAttribute('labelledby');
+    else this.setAttribute('labelledby', String(v));
+  }
+
+  #syncAria(): void {
+    const label = this.label.trim();
+    const labelledby = this.labelledby.trim();
+    // Predicado ARIA: region requiere nombre accesible.
+    if (label || labelledby) {
+      this.setAttribute('role', 'region');
+      if (label) {
+        this.setAttribute('aria-label', label);
+      } else {
+        // labelledby: preferimos el id para que screen readers resuelvan
+        // el texto dinámicamente si cambia.
+        this.removeAttribute('aria-label');
+      }
+      if (labelledby) {
+        this.setAttribute('aria-labelledby', labelledby);
+      } else {
+        this.removeAttribute('aria-labelledby');
+      }
+    } else {
+      this.removeAttribute('role');
+      this.removeAttribute('aria-label');
+      this.removeAttribute('aria-labelledby');
+    }
+  }
 
   // ---- privados ----
   #onSlotChange = (): void => {

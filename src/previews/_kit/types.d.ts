@@ -86,6 +86,14 @@ export interface PreviewSection {
   className?: string;
   ariaLabel?: string;
   ariaLabelledby?: string;
+  /**
+   * `role` ARIA opcional para la sección. Útil para que secciones con nombre
+   * accesible se conviertan en landmark `region` (o cualquier otro rol válido).
+   * Si se omite, el navegador deriva el rol implícito del tag (`<section>` /
+   * `<aside>`) y solo lo expone como landmark cuando hay `aria-label` o
+   * `aria-labelledby` definido.
+   */
+  role?: string;
   lede?: string;
   blocks: PreviewBlock[];
 }

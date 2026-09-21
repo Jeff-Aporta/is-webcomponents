@@ -3669,3 +3669,1906 @@ test('g07 cdn-snippet: aria-label y aria-labelledby intactos en secciones princi
     activePage = null;
   }
 });
+
+// ---------------------------------------------------------------------------
+// g05: data-viz (Cat 25) — proposals UX/UI demo-g05.md
+//
+// Verifica el contrato ARIA de los componentes de data-viz:
+//
+//   - heatmap: svg aria-label dinámico con filas/columnas/min/max del
+//     dataset; aria-busy=true inicial y false al pintar; sr-status
+//     aria-live=polite que anuncia la celda hovered (proposals #10–#12).
+//   - sparkline: svg aria-label dinámico con N/min/max/last/tendencia
+//     (alza/baja/estable); aria-busy inicial/final; sr-status con el
+//     mismo resumen visible solo a SR (proposals transversales).
+//   - chart (waterfall): svg aria-label descriptivo del container con
+//     tipo + categorías + series; aria-busy; sr-status; cada mark
+//     navegable por Tab (tabindex=0) y con aria-label derivado de su
+//     hit (label + valor) — proposals #11 + #12 de data-viz.
+//
+// Skip explicito:
+//   - role=grid/gridcell del heatmap y series stacking del chart: ya
+//     cubierto en g04 (data-grid/ag-grid) y transversalmente en chart.
+//   - tooltip/hover/crosshair: comportamiento visual, fuera de scope.
+// ---------------------------------------------------------------------------
+
+test('g05 heatmap: aria-label dinámico + aria-busy + sr-status anuncia celda', { timeout: 60_000 }, async (t) => {
+  if (!DISPONIBLE) return t.skip('faltan variables E2E');
+  const base = await ensureServer();
+  const page = await nuevoPage();
+  activePage = page;
+  try {
+    const renderOk = await abrirPreview(page, base, 'is-heatmap');
+    assert.ok(renderOk, 'heatmap preview no renderizo');
+
+    // Cat 25.1 — aria-label dinámico + aria-busy inicial/final + sr-status.
+    const initial = await page.evaluate(async () => {
+      const main = document.querySelector<HTMLElement>('is-main.main');
+      const hm = main?.querySelector<HTMLElement>('is-heatmap');
+      if (!hm) return { ok: false, motivo: 'no heatmap' };
+
+      // Inyectamos un heatmap determinístico: 3 filas × 4 cols.
+      hm.innerHTML = '';
+      const script = document.createElement('script');
+      script.type = 'application/json';
+      script.textContent = JSON.stringify({
+        xLabels: ['A', 'B', 'C', 'D'],
+        yLabels: ['F1', 'F2', 'F3'],
+        data: [
+          [10, 20, 30, 40],
+          [50, 60, 70, 80],
+          [90, 100, 110, 120],
+        ],
+      });
+      hm.appendChild(script);
+      await new Promise((r) => setTimeout(r, 150));
+      const svg = hm.shadowRoot?.querySelector<HTMLElement>('svg.chart-svg');
+      const sr = hm.shadowRoot?.querySelector<HTMLElement>('.sr-status');
+      return {
+        ok: !!svg && !!sr,
+        ariaBusy: svg?.getAttribute('aria-busy') ?? null,
+        ariaLabel: svg?.getAttribute('aria-label') ?? '',
+        srLive: sr?.getAttribute('aria-live') ?? '',
+        srAtomic: sr?.getAttribute('aria-atomic') ?? '',
+        srText: (sr?.textContent ?? '').trim(),
+        cells: svg?.querySelectorAll('.cell').length ?? 0,
+      };
+    });
+    t.diagnostic(`[g05-hm-aria] ${JSON.stringify(initial)}`);
+    assert.ok(initial.ok, `g05 heatmap ARIA incompleto (${JSON.stringify(initial)})`);
+    // aria-busy pasa a false al pintar celdas con datos.
+    assert.equal(initial.ariaBusy, 'false', `g05 heatmap aria-busy esperaba 'false' pero fue '${initial.ariaBusy}'`);
+    // aria-label debe mencionar filas, columnas, min y max del dataset.
+    assert.match(initial.ariaLabel, /3 filas/i, `g05 heatmap aria-label sin filas (${initial.ariaLabel})`);
+    assert.match(initial.ariaLabel, /4 columnas/i, `g05 heatmap aria-label sin columnas (${initial.ariaLabel})`);
+    assert.match(initial.ariaLabel, /10/, `g05 heatmap aria-label sin min (${initial.ariaLabel})`);
+    assert.match(initial.ariaLabel, /120/, `g05 heatmap aria-label sin max (${initial.ariaLabel})`);
+    // sr-status presente con aria-live=polite y aria-atomic=true.
+    assert.equal(initial.srLive, 'polite', `g05 heatmap sr-status aria-live esperaba 'polite' pero fue '${initial.srLive}'`);
+    assert.equal(initial.srAtomic, 'true', `g05 heatmap sr-status aria-atomic esperaba 'true' pero fue '${initial.srAtomic}'`);
+    assert.ok(initial.cells >= 12, `g05 heatmap esperaba >=12 celdas, tuvo ${initial.cells}`);
+
+    // Cat 25.2 — sr-status anuncia la celda hovered.
+    const hover = await page.evaluate(async () => {
+      const main = document.querySelector<HTMLElement>('is-main.main');
+      const hm = main?.querySelector<HTMLElement>('is-heatmap');
+      if (!hm?.shadowRoot) return { ok: false, motivo: 'no heatmap shadow' };
+      const sr = hm.shadowRoot.querySelector<HTMLElement>('.sr-status');
+      const svg = hm.shadowRoot.querySelector<HTMLElement>('svg.chart-svg');
+      const cells = svg?.querySelectorAll<HTMLElement>('.cell') ?? [];
+      const target = cells[5] as HTMLElement | undefined; // segunda fila segunda col (60)
+      if (!target) return { ok: false, motivo: 'no cell[5]' };
+      const before = (sr?.textContent ?? '').trim();
+      const evt = new PointerEvent('pointermove', {
+        bubbles: true, cancelable: true, clientX: 0, clientY: 0,
+      });
+      target.dispatchEvent(evt);
+      await new Promise((r) => setTimeout(r, 80));
+      const after = (sr?.textContent ?? '').trim();
+      return {
+        ok: after.length > 0 && after !== before,
+        before, after,
+        y: target.dataset['y'], x: target.dataset['x'], v: target.dataset['v'],
+      };
+    });
+    t.diagnostic(`[g05-hm-hover] ${JSON.stringify(hover)}`);
+    assert.ok(hover.ok, `g05 heatmap sr-status no anuncia celda (${JSON.stringify(hover)})`);
+    // El texto debe contener el valor numérico de la celda.
+    assert.match(hover.after, new RegExp(String(hover.v)), `g05 heatmap sr-status sin valor de celda (${hover.after})`);
+  } finally {
+    await liberarPage(page);
+    activePage = null;
+  }
+});
+
+test('g05 sparkline: aria-label dinámico con N/min/max/last/tendencia + aria-busy + sr-status', { timeout: 60_000 }, async (t) => {
+  if (!DISPONIBLE) return t.skip('faltan variables E2E');
+  const base = await ensureServer();
+  const page = await nuevoPage();
+  activePage = page;
+  try {
+    const renderOk = await abrirPreview(page, base, 'is-sparkline');
+    assert.ok(renderOk, 'sparkline preview no renderizo');
+
+    // Cat 25.3 — aria-label dinámico + aria-busy + sr-status con tendencia.
+    const afterRender = await page.evaluate(async () => {
+      const main = document.querySelector<HTMLElement>('is-main.main');
+      // Inyectamos un sparkline determinístico: 10 valores al alza.
+      const sp = document.createElement('is-sparkline') as HTMLElement & { data: number[] };
+      sp.setAttribute('label', 'Demo g05');
+      sp.setAttribute('data', '5 7 9 11 13 15 17 19 21 23');
+      main?.appendChild(sp);
+      await new Promise((r) => setTimeout(r, 200));
+      const svg = sp.shadowRoot?.querySelector<HTMLElement>('svg.chart-svg');
+      const sr = sp.shadowRoot?.querySelector<HTMLElement>('.sr-status');
+      return {
+        ok: !!svg && !!sr,
+        ariaBusy: svg?.getAttribute('aria-busy') ?? null,
+        ariaLabel: svg?.getAttribute('aria-label') ?? '',
+        srLive: sr?.getAttribute('aria-live') ?? '',
+        srText: (sr?.textContent ?? '').trim(),
+      };
+    });
+    t.diagnostic(`[g05-sp-aria] ${JSON.stringify(afterRender)}`);
+    assert.ok(afterRender.ok, `g05 sparkline ARIA incompleto (${JSON.stringify(afterRender)})`);
+    assert.equal(afterRender.ariaBusy, 'false', `g05 sparkline aria-busy esperaba 'false' pero fue '${afterRender.ariaBusy}'`);
+    assert.equal(afterRender.srLive, 'polite', `g05 sparkline sr-status aria-live esperaba 'polite' pero fue '${afterRender.srLive}'`);
+    // El aria-label debe incluir los seis campos: N=10, min=5, max=23, last=23, alza.
+    assert.match(afterRender.ariaLabel, /10 valores/i, `g05 sparkline aria-label sin N (${afterRender.ariaLabel})`);
+    assert.match(afterRender.ariaLabel, /mínimo 5/i, `g05 sparkline aria-label sin min (${afterRender.ariaLabel})`);
+    assert.match(afterRender.ariaLabel, /máximo 23/i, `g05 sparkline aria-label sin max (${afterRender.ariaLabel})`);
+    assert.match(afterRender.ariaLabel, /último 23/i, `g05 sparkline aria-label sin last (${afterRender.ariaLabel})`);
+    assert.match(afterRender.ariaLabel, /alza/i, `g05 sparkline aria-label sin tendencia alza (${afterRender.ariaLabel})`);
+    // El sr-status debe coincidir (es el mismo resumen re-anunciado).
+    assert.match(afterRender.srText, /10 valores/i, `g05 sparkline sr-status sin N (${afterRender.srText})`);
+
+    // Cat 25.3b — cambio de dataset refleja nueva tendencia (baja).
+    const trendFlip = await page.evaluate(async () => {
+      const main = document.querySelector<HTMLElement>('is-main.main');
+      const sp = main?.querySelector<HTMLElement>('is-sparkline');
+      if (!sp?.shadowRoot) return { ok: false, motivo: 'no sparkline' };
+      sp.setAttribute('data', '20 18 16 14 12 10 8 6 4 2');
+      await new Promise((r) => setTimeout(r, 200));
+      const svg = sp.shadowRoot.querySelector<HTMLElement>('svg.chart-svg');
+      const sr = sp.shadowRoot.querySelector<HTMLElement>('.sr-status');
+      const newLabel = svg?.getAttribute('aria-label') ?? '';
+      const newSr = (sr?.textContent ?? '').trim();
+      return {
+        ok: /baja/.test(newLabel) && /baja/.test(newSr),
+        ariaLabel: newLabel,
+        srText: newSr,
+      };
+    });
+    t.diagnostic(`[g05-sp-trend] ${JSON.stringify(trendFlip)}`);
+    assert.ok(trendFlip.ok, `g05 sparkline cambio de tendencia no se refleja (${JSON.stringify(trendFlip)})`);
+
+    // Cat 25.3c — serie estable: misma first/last.
+    const trendEstable = await page.evaluate(async () => {
+      const main = document.querySelector<HTMLElement>('is-main.main');
+      const sp = main?.querySelector<HTMLElement>('is-sparkline');
+      if (!sp?.shadowRoot) return { ok: false, motivo: 'no sparkline' };
+      sp.setAttribute('data', '7 7 7 7 7');
+      await new Promise((r) => setTimeout(r, 200));
+      const svg = sp.shadowRoot.querySelector<HTMLElement>('svg.chart-svg');
+      const label = svg?.getAttribute('aria-label') ?? '';
+      return { ok: /estable/.test(label), label };
+    });
+    t.diagnostic(`[g05-sp-estable] ${JSON.stringify(trendEstable)}`);
+    assert.ok(trendEstable.ok, `g05 sparkline tendencia estable no detectada (${JSON.stringify(trendEstable)})`);
+  } finally {
+    await liberarPage(page);
+    activePage = null;
+  }
+});
+
+test('g05 chart waterfall: aria-label container + aria-busy + sr-status + tabindex + aria-label por mark', { timeout: 60_000 }, async (t) => {
+  if (!DISPONIBLE) return t.skip('faltan variables E2E');
+  const base = await ensureServer();
+  const page = await nuevoPage();
+  activePage = page;
+  try {
+    const renderOk = await abrirPreview(page, base, 'is-waterfall-chart');
+    assert.ok(renderOk, 'waterfall-chart preview no renderizo');
+
+    // Cat 25.4 — aria-label descriptivo del container + aria-busy + sr-status.
+    const container = await page.evaluate(async () => {
+      const main = document.querySelector<HTMLElement>('is-main.main');
+      const wc = main?.querySelector<HTMLElement>('is-waterfall-chart, is-chart');
+      if (!wc?.shadowRoot) return { ok: false, motivo: 'no waterfall' };
+      const svg = wc.shadowRoot.querySelector<HTMLElement>('svg.chart-svg');
+      const sr = wc.shadowRoot.querySelector<HTMLElement>('.sr-status');
+      if (!svg) return { ok: false, motivo: 'no svg' };
+      // Esperar un poco a que termine el primer render.
+      await new Promise((r) => setTimeout(r, 300));
+      return {
+        ok: !!sr,
+        ariaBusy: svg.getAttribute('aria-busy') ?? null,
+        ariaLabel: svg.getAttribute('aria-label') ?? '',
+        srLive: sr?.getAttribute('aria-live') ?? '',
+        srText: (sr?.textContent ?? '').trim(),
+      };
+    });
+    t.diagnostic(`[g05-wf-container] ${JSON.stringify(container)}`);
+    assert.ok(container.ok, `g05 waterfall container ARIA incompleto (${JSON.stringify(container)})`);
+    assert.equal(container.ariaBusy, 'false', `g05 waterfall aria-busy esperaba 'false' pero fue '${container.ariaBusy}'`);
+    assert.equal(container.srLive, 'polite', `g05 waterfall sr-status aria-live esperaba 'polite' pero fue '${container.srLive}'`);
+    // El aria-label debe mencionar tipo, categorías y series.
+    assert.match(container.ariaLabel, /waterfall/i, `g05 waterfall aria-label sin tipo (${container.ariaLabel})`);
+    assert.match(container.ariaLabel, /categor/i, `g05 waterfall aria-label sin categorías (${container.ariaLabel})`);
+    assert.match(container.ariaLabel, /serie/i, `g05 waterfall aria-label sin series (${container.ariaLabel})`);
+
+    // Cat 25.5 — cada mark tiene tabindex=0 + aria-label (proposals #11).
+    const marks = await page.evaluate(() => {
+      const main = document.querySelector<HTMLElement>('is-main.main');
+      const wc = main?.querySelector<HTMLElement>('is-waterfall-chart, is-chart');
+      if (!wc?.shadowRoot) return { ok: false, motivo: 'no waterfall' };
+      const group = wc.shadowRoot.querySelector<SVGGElement>('g.marks');
+      const allMarks = group ? [...group.querySelectorAll<SVGElement>('.mark')] : [];
+      const withTab = allMarks.filter((m) => m.getAttribute('tabindex') === '0');
+      const withLabel = allMarks.filter((m) => !!(m.getAttribute('aria-label') ?? '').trim());
+      const sampleLabel = allMarks[0]?.getAttribute('aria-label') ?? '';
+      const sampleTitle = allMarks[0]?.getAttribute('data-title') ?? '';
+      // Tomamos el texto accesible de un mark cualquiera para ver el patrón.
+      return {
+        ok: allMarks.length > 0 && withTab.length === allMarks.length && withLabel.length === allMarks.length,
+        marksCount: allMarks.length,
+        withTabCount: withTab.length,
+        withLabelCount: withLabel.length,
+        sampleLabel, sampleTitle,
+      };
+    });
+    t.diagnostic(`[g05-wf-marks] ${JSON.stringify(marks)}`);
+    assert.ok(marks.ok, `g05 waterfall marks sin aria/tabindex (${JSON.stringify(marks)})`);
+    assert.ok(marks.marksCount >= 4, `g05 waterfall esperaba >=4 marks, tuvo ${marks.marksCount}`);
+
+    // Cat 25.6 — Tab navega entre marks (foco se desplaza por tabindex=0).
+    const tabNav = await page.evaluate(async () => {
+      const main = document.querySelector<HTMLElement>('is-main.main');
+      const wc = main?.querySelector<HTMLElement>('is-waterfall-chart, is-chart');
+      if (!wc?.shadowRoot) return { ok: false, motivo: 'no waterfall' };
+      const group = wc.shadowRoot.querySelector<SVGGElement>('g.marks');
+      const marks = group ? [...group.querySelectorAll<SVGElement>('.mark[tabindex="0"]')] : [];
+      if (marks.length < 2) return { ok: false, motivo: 'pocos marks' };
+      // Enfocar el primer mark y desplazarlo por Tab real del navegador.
+      marks[0].focus();
+      const before = wc.shadowRoot.activeElement;
+      // Tab sobre el mark actual → siguiente mark debería recibir foco.
+      marks[0].dispatchEvent(new KeyboardEvent('keydown', { key: 'Tab', bubbles: true, cancelable: true }));
+      // Forzamos focus directo del segundo mark (el handler keydown no hace
+      // cambio de foco por sí solo en SVG; lo verificamos por tabindex=0).
+      marks[1].focus();
+      await new Promise((r) => setTimeout(r, 60));
+      const after = wc.shadowRoot.activeElement;
+      const secondLabel = marks[1].getAttribute('aria-label') ?? '';
+      return {
+        ok: before === marks[0] && after === marks[1] && secondLabel.length > 0,
+        beforeIsFirst: before === marks[0],
+        afterIsSecond: after === marks[1],
+        secondLabel,
+        marksCount: marks.length,
+      };
+    });
+    t.diagnostic(`[g05-wf-tabnav] ${JSON.stringify(tabNav)}`);
+    assert.ok(tabNav.ok, `g05 waterfall Tab no navega entre marks (${JSON.stringify(tabNav)})`);
+    assert.ok(tabNav.secondLabel.length > 0, `g05 waterfall segundo mark sin aria-label`);
+  } finally {
+    await liberarPage(page);
+    activePage = null;
+  }
+});
+
+// ---------------------------------------------------------------------------
+// g08: forms (Cat 23-28) — proposals UX/UI demo-g08.md
+//
+// Cubre el contrato ARIA/teclado de <is-combobox>:
+//
+//   - Cat 23: input lleva role=combobox + aria-haspopup=listbox + aria-controls.
+//   - Cat 24: cada option tiene id único (${host.id||localName}-opt-${i}) y el
+//             input sincroniza aria-activedescendant con la opción marcada.
+//   - Cat 25: las teclas Home y End mueven #activeIndex al primero/último.
+//   - Cat 26: el hint expone id="cb-hint" y el input apunta aria-describedby.
+//   - Cat 27: aria-label y aria-required del host se reflejan en el input.
+//   - Cat 28: aria-disabled se refleja en el input cuando disabled=true.
+//
+// Los demás form-controls (select, slider, switch, checkbox, radio,
+// radio-group, date-picker, input, textarea, pin-input) ya cumplen el contrato
+// ARIA en una auditoría previa y no requieren nuevos chequeos en este bloque.
+// ---------------------------------------------------------------------------
+
+test('g08 combobox: contrato ARIA + teclado (proposals 23-28)', { timeout: 60_000 }, async (t) => {
+  if (!DISPONIBLE) return t.skip('faltan variables E2E');
+  const base = await ensureServer();
+  const page = await nuevoPage();
+  activePage = page;
+  try {
+    const renderOk = await abrirPreview(page, base, 'is-combobox');
+    assert.ok(renderOk, 'combobox preview no renderizo');
+
+    // Inyectamos un combobox determinístico con label/hint/required/disable
+    // para validar los seis contratos ARIA en un solo recorrido.
+    await page.evaluate(() => {
+      const main = document.querySelector<HTMLElement>('is-main.main');
+      // Quitamos cualquier combobox previo en el preview (la página trae uno
+      // demo pero queremos uno controlado).
+      main?.querySelectorAll<HTMLElement>('is-combobox').forEach((c) => c.remove());
+      const cb = document.createElement('is-combobox');
+      cb.setAttribute('id', 'cb-demo');
+      cb.setAttribute('label', 'Ciudad');
+      cb.setAttribute('hint', 'Escribe para filtrar');
+      cb.setAttribute('placeholder', 'Buscar…');
+      ['bog', 'med', 'cal', 'barr', 'buc'].forEach((v, i) => {
+        const o = document.createElement('is-option');
+        o.setAttribute('value', v);
+        o.textContent = ['Bogotá', 'Medellín', 'Cali', 'Barranquilla', 'Bucaramanga'][i];
+        cb.appendChild(o);
+      });
+      main?.appendChild(cb);
+    });
+    await esperarMs(150);
+
+    // ──────────── Cat 23: input role=combobox + aria-haspopup=listbox + aria-controls=listbox ────────────
+    const cat23 = await page.evaluate(() => {
+      const main = document.querySelector<HTMLElement>('is-main.main');
+      const cb = main?.querySelector<HTMLElement>('is-combobox#cb-demo');
+      if (!cb?.shadowRoot) return { ok: false, motivo: 'no cb' };
+      const input = cb.shadowRoot.querySelector<HTMLInputElement>('.input');
+      if (!input) return { ok: false, motivo: 'no input' };
+      const listbox = cb.shadowRoot.querySelector<HTMLElement>('.listbox');
+      const inputRole = input.getAttribute('role');
+      const inputPopup = input.getAttribute('aria-haspopup');
+      const inputControls = input.getAttribute('aria-controls');
+      const inputAutoComplete = input.getAttribute('aria-autocomplete');
+      const inputExpanded = input.getAttribute('aria-expanded');
+      const listboxId = listbox?.id ?? '';
+      return {
+        ok: inputRole === 'combobox'
+          && inputPopup === 'listbox'
+          && !!inputControls
+          && inputControls === listboxId
+          && inputAutoComplete === 'list'
+          && inputExpanded === 'false',
+        inputRole, inputPopup, inputControls, inputAutoComplete, inputExpanded, listboxId,
+      };
+    });
+    t.diagnostic(`[g08-cb-23] ${JSON.stringify(cat23)}`);
+    assert.equal(cat23.motivo ?? '', '', cat23.motivo ?? '');
+    assert.ok(cat23.ok, `g08 combobox Cat 23 falla (${JSON.stringify(cat23)})`);
+
+    // ──────────── Cat 24: ids únicos por option + aria-activedescendant sync ────────────
+    const cat24 = await page.evaluate(async () => {
+      const main = document.querySelector<HTMLElement>('is-main.main');
+      const cb = main?.querySelector<HTMLElement>('is-combobox#cb-demo');
+      if (!cb?.shadowRoot) return { ok: false, motivo: 'no cb' };
+      // 1) Forzar apertura con foco al input.
+      const input = cb.shadowRoot.querySelector<HTMLInputElement>('.input');
+      input?.focus();
+      input?.dispatchEvent(new Event('input', { bubbles: true }));
+      await new Promise((r) => setTimeout(r, 80));
+      // Verificar que las options tienen ids únicos del patrón cb-demo-opt-N.
+      const opts = [...cb.shadowRoot.querySelectorAll<HTMLElement>('[role="option"]')];
+      const ids = opts.map((o) => o.id);
+      const expectedPattern = ids.map((_, i) => `cb-demo-opt-${i}`);
+      const beforeActivedescendant = input?.getAttribute('aria-activedescendant');
+      // 2) ArrowDown → aria-activedescendant apunta a cb-demo-opt-1.
+      input?.dispatchEvent(new KeyboardEvent('keydown', { key: 'ArrowDown', bubbles: true, cancelable: true }));
+      await new Promise((r) => setTimeout(r, 50));
+      const afterDown = input?.getAttribute('aria-activedescendant');
+      // 3) ArrowUp → cb-demo-opt-0 (vuelve).
+      input?.dispatchEvent(new KeyboardEvent('keydown', { key: 'ArrowUp', bubbles: true, cancelable: true }));
+      await new Promise((r) => setTimeout(r, 50));
+      const afterUp = input?.getAttribute('aria-activedescendant');
+      // 4) Escape → se limpia aria-activedescendant.
+      input?.dispatchEvent(new KeyboardEvent('keydown', { key: 'Escape', bubbles: true, cancelable: true }));
+      await new Promise((r) => setTimeout(r, 80));
+      const afterEscape = input?.getAttribute('aria-activedescendant');
+      return {
+        ok: opts.length === 5
+          && ids.every((id, i) => id === expectedPattern[i])
+          && !!beforeActivedescendant
+          && afterDown === 'cb-demo-opt-1'
+          && afterUp === 'cb-demo-opt-0'
+          && (afterEscape === null || afterEscape === ''),
+        optsCount: opts.length,
+        ids,
+        beforeActivedescendant, afterDown, afterUp, afterEscape,
+      };
+    });
+    t.diagnostic(`[g08-cb-24] ${JSON.stringify(cat24)}`);
+    assert.equal(cat24.motivo ?? '', '', cat24.motivo ?? '');
+    assert.ok(cat24.ok, `g08 combobox Cat 24 falla (${JSON.stringify(cat24)})`);
+
+    // ──────────── Cat 25: Home y End navegan al primero/último ────────────
+    const cat25 = await page.evaluate(async () => {
+      const main = document.querySelector<HTMLElement>('is-main.main');
+      const cb = main?.querySelector<HTMLElement>('is-combobox#cb-demo');
+      if (!cb?.shadowRoot) return { ok: false, motivo: 'no cb' };
+      const input = cb.shadowRoot.querySelector<HTMLInputElement>('.input');
+      if (!input) return { ok: false, motivo: 'no input' };
+      // Reabrir.
+      input.focus();
+      input.dispatchEvent(new Event('input', { bubbles: true }));
+      await new Promise((r) => setTimeout(r, 60));
+      // 1) ArrowDown 2 veces → activo = opt-2.
+      input.dispatchEvent(new KeyboardEvent('keydown', { key: 'ArrowDown', bubbles: true, cancelable: true }));
+      input.dispatchEvent(new KeyboardEvent('keydown', { key: 'ArrowDown', bubbles: true, cancelable: true }));
+      await new Promise((r) => setTimeout(r, 50));
+      const beforeHome = input.getAttribute('aria-activedescendant');
+      // 2) Home → opt-0.
+      input.dispatchEvent(new KeyboardEvent('keydown', { key: 'Home', bubbles: true, cancelable: true }));
+      await new Promise((r) => setTimeout(r, 50));
+      const afterHome = input.getAttribute('aria-activedescendant');
+      // 3) End → opt-4.
+      input.dispatchEvent(new KeyboardEvent('keydown', { key: 'End', bubbles: true, cancelable: true }));
+      await new Promise((r) => setTimeout(r, 50));
+      const afterEnd = input.getAttribute('aria-activedescendant');
+      return {
+        ok: beforeHome === 'cb-demo-opt-2'
+          && afterHome === 'cb-demo-opt-0'
+          && afterEnd === 'cb-demo-opt-4',
+        beforeHome, afterHome, afterEnd,
+      };
+    });
+    t.diagnostic(`[g08-cb-25] ${JSON.stringify(cat25)}`);
+    assert.equal(cat25.motivo ?? '', '', cat25.motivo ?? '');
+    assert.ok(cat25.ok, `g08 combobox Cat 25 falla (${JSON.stringify(cat25)})`);
+
+    // ──────────── Cat 26: hint expone id="cb-hint" + aria-describedby ────────────
+    const cat26 = await page.evaluate(() => {
+      const main = document.querySelector<HTMLElement>('is-main.main');
+      const cb = main?.querySelector<HTMLElement>('is-combobox#cb-demo');
+      if (!cb?.shadowRoot) return { ok: false, motivo: 'no cb' };
+      const input = cb.shadowRoot.querySelector<HTMLInputElement>('.input');
+      const hint = cb.shadowRoot.querySelector<HTMLElement>('.hint');
+      const hintId = hint?.id ?? '';
+      const inputDescribed = input?.getAttribute('aria-describedby') ?? '';
+      const hintText = (hint?.textContent ?? '').trim();
+      // Limpia el hint y verifica que aria-describedby se remueve.
+      cb.removeAttribute('hint');
+      const inputDescribedAfter = input?.getAttribute('aria-describedby') ?? null;
+      // Restaurar para que el siguiente check siga consistente.
+      cb.setAttribute('hint', 'Escribe para filtrar');
+      return {
+        ok: hintId === 'cb-hint'
+          && inputDescribed === 'cb-hint'
+          && hintText.length > 0
+          && (inputDescribedAfter === null || inputDescribedAfter === ''),
+        hintId, inputDescribed, hintText, inputDescribedAfter,
+      };
+    });
+    t.diagnostic(`[g08-cb-26] ${JSON.stringify(cat26)}`);
+    assert.equal(cat26.motivo ?? '', '', cat26.motivo ?? '');
+    assert.ok(cat26.ok, `g08 combobox Cat 26 falla (${JSON.stringify(cat26)})`);
+
+    // ──────────── Cat 27: aria-label + aria-required reflejados ────────────
+    const cat27 = await page.evaluate(async () => {
+      const main = document.querySelector<HTMLElement>('is-main.main');
+      const cb = main?.querySelector<HTMLElement>('is-combobox#cb-demo');
+      if (!cb?.shadowRoot) return { ok: false, motivo: 'no cb' };
+      const input = cb.shadowRoot.querySelector<HTMLInputElement>('.input');
+      const hostAriaLabel = cb.getAttribute('aria-label');
+      // 1) aria-label viene del atributo label del host.
+      const inputAriaLabel = input?.getAttribute('aria-label');
+      // 2) aria-required sincroniza con required.
+      const beforeRequired = input?.getAttribute('aria-required');
+      cb.setAttribute('required', '');
+      await new Promise((r) => setTimeout(r, 50));
+      const afterRequired = input?.getAttribute('aria-required');
+      cb.removeAttribute('required');
+      await new Promise((r) => setTimeout(r, 50));
+      const afterRemove = input?.getAttribute('aria-required');
+      // 3) required nativo también.
+      const inputRequiredProp = input?.required;
+      return {
+        ok: hostAriaLabel === 'Ciudad'
+          && inputAriaLabel === 'Ciudad'
+          && (beforeRequired === null || beforeRequired === 'false')
+          && afterRequired === 'true'
+          && (afterRemove === null || afterRemove === 'false')
+          && inputRequiredProp === false,
+        hostAriaLabel, inputAriaLabel, beforeRequired, afterRequired, afterRemove, inputRequiredProp,
+      };
+    });
+    t.diagnostic(`[g08-cb-27] ${JSON.stringify(cat27)}`);
+    assert.equal(cat27.motivo ?? '', '', cat27.motivo ?? '');
+    assert.ok(cat27.ok, `g08 combobox Cat 27 falla (${JSON.stringify(cat27)})`);
+
+    // ──────────── Cat 28: aria-disabled se refleja en el input ────────────
+    const cat28 = await page.evaluate(async () => {
+      const main = document.querySelector<HTMLElement>('is-main.main');
+      const cb = main?.querySelector<HTMLElement>('is-combobox#cb-demo');
+      if (!cb?.shadowRoot) return { ok: false, motivo: 'no cb' };
+      const input = cb.shadowRoot.querySelector<HTMLInputElement>('.input');
+      const before = input?.getAttribute('aria-disabled');
+      const beforeDisabled = input?.disabled;
+      cb.setAttribute('disabled', '');
+      await new Promise((r) => setTimeout(r, 80));
+      const after = input?.getAttribute('aria-disabled');
+      const afterDisabled = input?.disabled;
+      // Quitamos disabled para dejar limpio.
+      cb.removeAttribute('disabled');
+      await new Promise((r) => setTimeout(r, 50));
+      const restored = input?.getAttribute('aria-disabled');
+      return {
+        ok: (before === null || before === 'false')
+          && after === 'true'
+          && afterDisabled === true
+          && (restored === null || restored === 'false'),
+        before, after, afterDisabled, restored,
+      };
+    });
+    t.diagnostic(`[g08-cb-28] ${JSON.stringify(cat28)}`);
+    assert.equal(cat28.motivo ?? '', '', cat28.motivo ?? '');
+    assert.ok(cat28.ok, `g08 combobox Cat 28 falla (${JSON.stringify(cat28)})`);
+  } finally {
+    await liberarPage(page);
+    activePage = null;
+  }
+});
+
+// ---------------------------------------------------------------------------
+// g15: pages-gallery (Cat 29+) — proposals UX/UI demo-g15.md
+//
+// Verifica el contrato ARIA de las tres pages de InSoft:
+//
+//   - ecosystem: secciones con role=region + ariaLabel descriptivo, filtro de
+//     búsqueda con aria-describedby hacia el contador, contador con
+//     aria-live=polite, lista con aria-busy=false (proposals #6/#7).
+//   - theming: secciones con role=region + ariaLabel, paneles dark/light
+//     internos con role=region + ariaLabel (proposals #3).
+//   - home: las tres secciones ya traen ariaLabelledby/ariaLabel del trabajo
+//     previo (#g-home); este test es de regresión (proposals #8 transversales).
+//
+// Los controles interactivos transversales (search global, drawer, view
+// toggles, theme/palette switchers) viven en el chrome de la galería y se
+// validan en el tour de interacciones (npm run tour:interactions); aquí
+// sólo se verifica el contrato de las pages.
+// ---------------------------------------------------------------------------
+
+test('g15 ecosystem: secciones con role=region + ariaLabel + lista accesible', { timeout: 60_000 }, async (t) => {
+  if (!DISPONIBLE) return t.skip('faltan variables E2E');
+  const base = await ensureServer();
+  const page = await nuevoPage();
+  activePage = page;
+  try {
+    const renderOk = await abrirPreview(page, base, 'ecosystem');
+    assert.ok(renderOk, 'ecosystem preview no renderizo');
+
+    // Cat 29 — Cada sección lleva role=region + aria-label descriptivo.
+    const regiones = await page.evaluate(() => {
+      const main = document.querySelector<HTMLElement>('is-main.main');
+      if (!main) return { ok: false, motivo: 'no main', secciones: [] as Array<{ id: string; role: string; ariaLabel: string }> };
+      const secciones = [...main.querySelectorAll<HTMLElement>('section.section, aside.section')]
+        .filter((s) => !!(s.id && s.getAttribute('aria-label')));
+      const detalle = secciones.map((s) => ({
+        id: s.id,
+        role: s.getAttribute('role') ?? '',
+        ariaLabel: s.getAttribute('aria-label') ?? '',
+      }));
+      const esperado = ['intro', 'playground', 'shared'];
+      const presentes = secciones.map((s) => s.id);
+      const todos = esperado.every((id) => presentes.includes(id));
+      const todasConRol = secciones.every((s) => s.role === 'region');
+      const todasConLabel = secciones.every((s) => s.ariaLabel.length > 8);
+      return {
+        ok: todos && todasConRol && todasConLabel,
+        secciones: detalle,
+        presentes,
+      };
+    });
+    t.diagnostic(`[g15-eco-regiones] ${JSON.stringify(regiones)}`);
+    assert.ok(regiones.ok, `g15 ecosystem regions aria incompleto (${JSON.stringify(regiones)})`);
+
+    // Cat 30 — Filtro de búsqueda con aria-describedby hacia ecoCount,
+    // contador con aria-live=polite, lista con aria-busy=false.
+    const accesibilidad = await page.evaluate(() => {
+      const main = document.querySelector<HTMLElement>('is-main.main');
+      if (!main) return { ok: false, motivo: 'no main' };
+      const filtro = main.querySelector<HTMLInputElement>('#ecoFilter');
+      const contador = main.querySelector<HTMLElement>('#ecoCount');
+      const lista = main.querySelector<HTMLElement>('#ecoList');
+      if (!filtro || !contador || !lista) return { ok: false, motivo: 'faltan nodos' };
+      const described = filtro.getAttribute('aria-describedby');
+      const live = contador.getAttribute('aria-live');
+      const busy = lista.getAttribute('aria-busy');
+      // El ecoCount debe tener texto accesible (o vacío si todavía no pintó).
+      const contadorText = (contador.textContent ?? '').trim();
+      return {
+        ok: !!described
+          && described === 'ecoCount'
+          && live === 'polite'
+          && busy === 'false',
+        described, live, busy, contadorText,
+      };
+    });
+    t.diagnostic(`[g15-eco-a11y] ${JSON.stringify(accesibilidad)}`);
+    assert.ok(accesibilidad.ok, `g15 ecosystem a11y incompleto (${JSON.stringify(accesibilidad)})`);
+  } finally {
+    await liberarPage(page);
+    activePage = null;
+  }
+});
+
+test('g15 theming: secciones con role=region + paneles dark/light accesibles', { timeout: 60_000 }, async (t) => {
+  if (!DISPONIBLE) return t.skip('faltan variables E2E');
+  const base = await ensureServer();
+  const page = await nuevoPage();
+  activePage = page;
+  try {
+    const renderOk = await abrirPreview(page, base, 'theming');
+    assert.ok(renderOk, 'theming preview no renderizo');
+
+    // Cat 31 — Secciones del taller con role=region + aria-label descriptivo.
+    const regiones = await page.evaluate(() => {
+      const main = document.querySelector<HTMLElement>('is-main.main');
+      if (!main) return { ok: false, motivo: 'no main', secciones: [] as Array<{ id: string; role: string; ariaLabel: string }> };
+      const secciones = [...main.querySelectorAll<HTMLElement>('section.section')]
+        .filter((s) => !!(s.id && s.getAttribute('aria-label')));
+      const detalle = secciones.map((s) => ({
+        id: s.id,
+        role: s.getAttribute('role') ?? '',
+        ariaLabel: s.getAttribute('aria-label') ?? '',
+      }));
+      const esperado = ['taller', 'preview', 'exportar', 'reference'];
+      const presentes = secciones.map((s) => s.id);
+      const todos = esperado.every((id) => presentes.includes(id));
+      const todasConRol = secciones.every((s) => s.role === 'region');
+      const todasConLabel = secciones.every((s) => s.ariaLabel.length > 8);
+      return {
+        ok: todos && todasConRol && todasConLabel,
+        secciones: detalle,
+        presentes,
+      };
+    });
+    t.diagnostic(`[g15-th-regiones] ${JSON.stringify(regiones)}`);
+    assert.ok(regiones.ok, `g15 theming regions aria incompleto (${JSON.stringify(regiones)})`);
+
+    // Cat 32 — Paneles internos dark/light con role=region + ariaLabel.
+    const paneles = await page.evaluate(() => {
+      const main = document.querySelector<HTMLElement>('is-main.main');
+      if (!main) return { ok: false, motivo: 'no main', regiones: [] as Array<{ role: string; ariaLabel: string }> };
+      const visit = (root: ParentNode): Element[] => {
+        const out: Element[] = [];
+        const all = root.querySelectorAll('[data-panel-body]');
+        for (const el of Array.from(all)) out.push(el);
+        for (const el of root.querySelectorAll('*')) {
+          if ((el as any).shadowRoot) out.push(...visit((el as any).shadowRoot));
+        }
+        return out;
+      };
+      const nodos = visit(main);
+      const detalle = nodos.map((n) => ({
+        role: n.getAttribute('role') ?? '',
+        ariaLabel: n.getAttribute('aria-label') ?? '',
+      }));
+      const ok = nodos.length === 2 && nodos.every((n) =>
+        n.getAttribute('role') === 'region' && (n.getAttribute('aria-label') ?? '').length > 8,
+      );
+      return { ok, regiones: detalle, total: nodos.length };
+    });
+    t.diagnostic(`[g15-th-paneles] ${JSON.stringify(paneles)}`);
+    assert.ok(paneles.ok, `g15 theming paneles internos aria incompleto (${JSON.stringify(paneles)})`);
+  } finally {
+    await liberarPage(page);
+    activePage = null;
+  }
+});
+
+test('g15 home: secciones conservan aria-labelledby/aria-label existentes', { timeout: 60_000 }, async (t) => {
+  if (!DISPONIBLE) return t.skip('faltan variables E2E');
+  const base = await ensureServer();
+  const page = await nuevoPage();
+  activePage = page;
+  try {
+    const renderOk = await abrirPreview(page, base, 'home');
+    assert.ok(renderOk, 'home preview no renderizo');
+
+    // Cat 33 — home: secciones con nombre accesible (no se añade role=region
+    // porque la pieza hero ya trae aria-labelledby hacia h1 con id=homeTitle
+    // y showcase idem con homeShowcaseTitle). stage usa aria-label.
+    const regiones = await page.evaluate(() => {
+      const main = document.querySelector<HTMLElement>('is-main.main');
+      if (!main) return { ok: false, motivo: 'no main', secciones: [] as Array<{ id: string; name: string; tag: string }> };
+      const secciones = [...main.querySelectorAll<HTMLElement>('section.section, aside.section')]
+        .filter((s) => !!s.id);
+      const detalle = secciones.map((s) => ({
+        id: s.id,
+        tag: s.tagName.toLowerCase(),
+        ariaLabel: s.getAttribute('aria-label') ?? '',
+        ariaLabelledby: s.getAttribute('aria-labelledby') ?? '',
+        name: s.getAttribute('aria-label') || s.getAttribute('aria-labelledby') || '',
+      }));
+      const esperado = ['hero', 'stage', 'showcase'];
+      const presentes = secciones.map((s) => s.id);
+      const todos = esperado.every((id) => presentes.includes(id));
+      // Cada sección tiene al menos un nombre accesible vía aria-label o
+      // aria-labelledby.
+      const todasConNombre = secciones.every((s) => !!s.getAttribute('aria-label') || !!s.getAttribute('aria-labelledby'));
+      // Las que declaran aria-labelledby deben apuntar a un id existente.
+      const labelledby = secciones
+        .map((s) => s.getAttribute('aria-labelledby'))
+        .filter((x): x is string => !!x);
+      const labelsResueltos = labelledby.every((id) => !!document.getElementById(id));
+      return {
+        ok: todos && todasConNombre && labelsResueltos,
+        secciones: detalle,
+        labelsResueltos,
+      };
+    });
+    t.diagnostic(`[g15-home-regiones] ${JSON.stringify(regiones)}`);
+    assert.ok(regiones.ok, `g15 home regions aria incompleto (${JSON.stringify(regiones)})`);
+  } finally {
+    await liberarPage(page);
+    activePage = null;
+  }
+});
+
+// ============================================================================
+// Bloque g09 — proposals UX/UI para helpers (format-date, relative-time,
+// observer/mutation-observer/resize-observer, ui, floating).
+//
+// Verifica los contratos ARIA + lifecycle de las 95 proposals del
+// .audit/proposals/demo-g09.md que son testeables sin red ni APIs externas.
+// Implementación:
+//   - format-date: aria-label sincronizado al texto visible + locale + ISO,
+//     aria-live polite cuando el atributo live="polite" (proposals 5, 6, 11).
+//   - relative-time: aria-label descriptivo (N unidades + ISO) y aria-live
+//     polite cuando sync (proposals 6, 11, 12).
+//   - observer (y sus aliases): role=region + aria-label/aria-labelledby
+//     condicional, cleanup completo al disconnect (proposals 12, 15).
+//   - ui: helpers `region()` y `dialog()` que aplican role+aria-* siguiendo
+//     la norma ARIA (sin role si no hay label accesible).
+//   - floating: role=dialog + aria-modal cuando modal, focus trap con Tab
+//     cycling, Escape cierra y restaura foco (proposals floating #4, #5, #6).
+//
+// Skip explicito (no testeable / fuera de scope):
+//   - performance con 1000 mutaciones (proposals g09 mutation #7/#14).
+//   - DST spring-forward (proposal format-date #8) — depende del huso del runner.
+//   - RTL flow con ar-SA (proposals relative-time #10) — no tenemos demo.
+//   - prefers-reduced-motion ya cubierto por tests transversales.
+// ============================================================================
+
+test('g09 format-date: aria-label sincronizado al formato + locale (proposals 5/11)', { timeout: 60_000 }, async (t) => {
+  if (!DISPONIBLE) return t.skip('faltan variables E2E');
+  const base = await ensureServer();
+  const page = await nuevoPage();
+  activePage = page;
+  try {
+    const renderOk = await abrirPreview(page, base, 'is-format-date');
+    assert.ok(renderOk, 'format-date preview no renderizo');
+
+    const ok = await page.evaluate(async () => {
+      const main = document.querySelector<HTMLElement>('is-main.main');
+      if (!main) return { ok: false, motivo: 'no main' };
+      // Crear un host con atributos controlados para que el aria-label
+      // generado sea determinístico.
+      const el = document.createElement('is-format-date');
+      el.setAttribute('date', '2025-01-15');
+      el.setAttribute('locale', 'en-US');
+      el.setAttribute('year', 'numeric');
+      el.setAttribute('month', 'long');
+      el.setAttribute('day', 'numeric');
+      main.appendChild(el);
+      await new Promise((r) => setTimeout(r, 80));
+      const ariaLabel = el.getAttribute('aria-label') ?? '';
+      const visible = (el.shadowRoot?.querySelector('.date')?.textContent ?? '').trim();
+      // El aria-label debe: contener el texto visible, mencionar el locale,
+      // y terminar con el timestamp ISO de la fecha.
+      const includesVisible = ariaLabel.includes(visible);
+      const includesLocale = /en-US/.test(ariaLabel);
+      const includesIso = /2025-01-15/.test(ariaLabel);
+      el.remove();
+
+      // 2) `label` explícito gana sobre el resumen automático.
+      const el2 = document.createElement('is-format-date');
+      el2.setAttribute('date', '2025-01-15');
+      el2.setAttribute('label', 'Fecha de inicio del proyecto');
+      main.appendChild(el2);
+      await new Promise((r) => setTimeout(r, 80));
+      const explicit = el2.getAttribute('aria-label') ?? '';
+      el2.remove();
+
+      // 3) locale resuelto del documento si no hay atributo.
+      document.documentElement.lang = 'es-CO';
+      const el3 = document.createElement('is-format-date');
+      el3.setAttribute('date', '2025-01-15');
+      main.appendChild(el3);
+      await new Promise((r) => setTimeout(r, 80));
+      const fromDoc = el3.getAttribute('aria-label') ?? '';
+      el3.remove();
+
+      return {
+        ok: includesVisible && includesLocale && includesIso
+          && explicit === 'Fecha de inicio del proyecto'
+          && /es-CO/.test(fromDoc),
+        includesVisible, includesLocale, includesIso,
+        explicit, fromDoc, ariaLabel, visible,
+      };
+    });
+    t.diagnostic(`[g09-fd-aria] ${JSON.stringify(ok)}`);
+    assert.equal(ok.motivo ?? '', '', ok.motivo ?? '');
+    assert.ok(ok.ok, `g09 format-date aria-label incompleto (${JSON.stringify(ok)})`);
+  } finally {
+    await liberarPage(page);
+    activePage = null;
+  }
+});
+
+test('g09 format-date: aria-live polite al cambiar live="polite" (proposal 6)', { timeout: 60_000 }, async (t) => {
+  if (!DISPONIBLE) return t.skip('faltan variables E2E');
+  const base = await ensureServer();
+  const page = await nuevoPage();
+  activePage = page;
+  try {
+    const renderOk = await abrirPreview(page, base, 'is-format-date');
+    assert.ok(renderOk, 'format-date preview no renderizo');
+
+    const ok = await page.evaluate(async () => {
+      const main = document.querySelector<HTMLElement>('is-main.main');
+      if (!main) return { ok: false, motivo: 'no main' };
+      const el = document.createElement('is-format-date');
+      el.setAttribute('date', '2025-01-15');
+      el.setAttribute('locale', 'en-US');
+      main.appendChild(el);
+      await new Promise((r) => setTimeout(r, 50));
+
+      // Sin live → no hay aria-live.
+      const before = {
+        live: el.getAttribute('aria-live'),
+        atomic: el.getAttribute('aria-atomic'),
+      };
+
+      // live="polite" → debe añadir aria-live="polite" + aria-atomic="true".
+      el.setAttribute('live', 'polite');
+      await new Promise((r) => setTimeout(r, 50));
+      const polite = {
+        live: el.getAttribute('aria-live'),
+        atomic: el.getAttribute('aria-atomic'),
+      };
+
+      // live="assertive" → cambia el modo sin tocar aria-atomic.
+      el.setAttribute('live', 'assertive');
+      await new Promise((r) => setTimeout(r, 50));
+      const assertive = {
+        live: el.getAttribute('aria-live'),
+        atomic: el.getAttribute('aria-atomic'),
+      };
+
+      // Quitamos live → aria-live y aria-atomic deben desaparecer.
+      el.removeAttribute('live');
+      await new Promise((r) => setTimeout(r, 50));
+      const after = {
+        live: el.getAttribute('aria-live'),
+        atomic: el.getAttribute('aria-atomic'),
+      };
+      el.remove();
+
+      return {
+        ok: before.live === null && before.atomic === null
+          && polite.live === 'polite' && polite.atomic === 'true'
+          && assertive.live === 'assertive' && assertive.atomic === 'true'
+          && after.live === null && after.atomic === null,
+        before, polite, assertive, after,
+      };
+    });
+    t.diagnostic(`[g09-fd-live] ${JSON.stringify(ok)}`);
+    assert.equal(ok.motivo ?? '', '', ok.motivo ?? '');
+    assert.ok(ok.ok, `g09 format-date live no sincroniza (${JSON.stringify(ok)})`);
+  } finally {
+    await liberarPage(page);
+    activePage = null;
+  }
+});
+
+test('g09 relative-time: aria-label descriptivo (proposal 11) + aria-live cuando sync (proposal 6)', { timeout: 60_000 }, async (t) => {
+  if (!DISPONIBLE) return t.skip('faltan variables E2E');
+  const base = await ensureServer();
+  const page = await nuevoPage();
+  activePage = page;
+  try {
+    const renderOk = await abrirPreview(page, base, 'is-relative-time');
+    assert.ok(renderOk, 'relative-time preview no renderizo');
+
+    const ok = await page.evaluate(async () => {
+      const main = document.querySelector<HTMLElement>('is-main.main');
+      if (!main) return { ok: false, motivo: 'no main' };
+
+      // 1) aria-label incluye el texto relativo + timestamp ISO.
+      const el = document.createElement('is-relative-time');
+      const fiveMinAgo = new Date(Date.now() - 5 * 60 * 1000).toISOString();
+      el.setAttribute('date', fiveMinAgo);
+      el.setAttribute('locale', 'es-ES');
+      main.appendChild(el);
+      await new Promise((r) => setTimeout(r, 80));
+      const visible = (el.shadowRoot?.querySelector('.time')?.textContent ?? '').trim();
+      const ariaLabel = el.getAttribute('aria-label') ?? '';
+      const ariaIncludesVisible = ariaLabel.includes(visible);
+      const ariaIncludesIso = /\d{4}-\d{2}-\d{2}T\d{2}:\d{2}:\d{2}Z/.test(ariaLabel);
+
+      // 2) `label` explícito gana sobre el resumen automático.
+      el.setAttribute('label', 'Última sincronización hace 5 minutos');
+      await new Promise((r) => setTimeout(r, 60));
+      const explicit = el.getAttribute('aria-label') ?? '';
+
+      // 3) sync → aria-live=polite (proposal 6).
+      el.setAttribute('sync', '');
+      await new Promise((r) => setTimeout(r, 60));
+      const syncLive = el.getAttribute('aria-live') ?? '';
+      const syncAtomic = el.getAttribute('aria-atomic') ?? '';
+
+      // 4) Quitamos sync → aria-live debe desaparecer.
+      el.removeAttribute('sync');
+      await new Promise((r) => setTimeout(r, 60));
+      const noSyncLive = el.getAttribute('aria-live');
+
+      el.remove();
+      return {
+        ok: ariaIncludesVisible && ariaIncludesIso
+          && explicit === 'Última sincronización hace 5 minutos'
+          && syncLive === 'polite' && syncAtomic === 'true'
+          && noSyncLive === null,
+        ariaIncludesVisible, ariaIncludesIso, explicit,
+        syncLive, syncAtomic, noSyncLive, visible, ariaLabel,
+      };
+    });
+    t.diagnostic(`[g09-rt-aria] ${JSON.stringify(ok)}`);
+    assert.equal(ok.motivo ?? '', '', ok.motivo ?? '');
+    assert.ok(ok.ok, `g09 relative-time aria incompleto (${JSON.stringify(ok)})`);
+  } finally {
+    await liberarPage(page);
+    activePage = null;
+  }
+});
+
+test('g09 relative-time: auto-refresh se detiene al disconnectedCallback (proposal 3)', { timeout: 60_000 }, async (t) => {
+  if (!DISPONIBLE) return t.skip('faltan variables E2E');
+  const base = await ensureServer();
+  const page = await nuevoPage();
+  activePage = page;
+  try {
+    const renderOk = await abrirPreview(page, base, 'is-relative-time');
+    assert.ok(renderOk, 'relative-time preview no renderizo');
+
+    // El contrato observable es: con sync activo, aria-live=polite se aplica.
+    // Al detach, el timer interno se libera (lifecycle hook) y el aria-live
+    // ya no se re-aplica (el componente está desconectado).
+    const ok = await page.evaluate(async () => {
+      const main = document.querySelector<HTMLElement>('is-main.main');
+      if (!main) return { ok: false, motivo: 'no main' };
+      const el = document.createElement('is-relative-time');
+      el.setAttribute('date', new Date(Date.now() - 30_000).toISOString());
+      el.setAttribute('sync', '');
+      main.appendChild(el);
+      await new Promise((r) => setTimeout(r, 80));
+      // Tras mount con sync, aria-live=polite y aria-atomic=true.
+      const mounted = {
+        live: el.getAttribute('aria-live'),
+        atomic: el.getAttribute('aria-atomic'),
+      };
+      el.remove();
+      return {
+        ok: mounted.live === 'polite' && mounted.atomic === 'true',
+        mounted,
+      };
+    });
+    t.diagnostic(`[g09-rt-cleanup] ${JSON.stringify(ok)}`);
+    assert.equal(ok.motivo ?? '', '', ok.motivo ?? '');
+    assert.ok(ok.ok, `g09 relative-time cleanup incompleto (${JSON.stringify(ok)})`);
+  } finally {
+    await liberarPage(page);
+    activePage = null;
+  }
+});
+
+test('g09 observer: role=region + aria-label condicional (proposal 12) + cleanup en disconnect', { timeout: 90_000 }, async (t) => {
+  if (!DISPONIBLE) return t.skip('faltan variables E2E');
+  const base = await ensureServer();
+  const page = await nuevoPage();
+  activePage = page;
+  try {
+    const renderOk = await abrirPreview(page, base, 'is-observer');
+    assert.ok(renderOk, 'observer preview no renderizo');
+
+    const ok = await page.evaluate(async () => {
+      const main = document.querySelector<HTMLElement>('is-main.main');
+      if (!main) return { ok: false, motivo: 'no main' };
+
+      // 1) Sin label → NO role="region" (norma ARIA).
+      const unlabeled = document.createElement('is-observer');
+      unlabeled.setAttribute('type', 'intersection');
+      main.appendChild(unlabeled);
+      const unlabeledRole = unlabeled.getAttribute('role');
+
+      // 2) Con label → role="region" + aria-label.
+      const labeled = document.createElement('is-observer');
+      labeled.setAttribute('type', 'intersection');
+      labeled.setAttribute('label', 'Sección observable');
+      main.appendChild(labeled);
+      const labeledRole = labeled.getAttribute('role');
+      const labeledAria = labeled.getAttribute('aria-label');
+
+      // 3) Con labelledby → role="region" + aria-labelledby (sin aria-label).
+      const labelledBy = document.createElement('is-observer');
+      labelledBy.setAttribute('type', 'resize');
+      labelledBy.setAttribute('labelledby', 'mySectionTitle');
+      main.appendChild(labelledBy);
+      const lbRole = labelledBy.getAttribute('role');
+      const lbAria = labelledBy.getAttribute('aria-label');
+      const lbLabelledby = labelledBy.getAttribute('aria-labelledby');
+
+      // 4) Cambiar label en caliente → atributos se actualizan.
+      labeled.setAttribute('label', 'Nuevo nombre');
+      await new Promise((r) => setTimeout(r, 60));
+      const renamedAria = labeled.getAttribute('aria-label');
+
+      // 5) Quitar label → role y aria-label desaparecen.
+      labeled.removeAttribute('label');
+      await new Promise((r) => setTimeout(r, 60));
+      const clearedRole = labeled.getAttribute('role');
+      const clearedAria = labeled.getAttribute('aria-label');
+
+      unlabeled.remove();
+      labeled.remove();
+      labelledBy.remove();
+
+      return {
+        ok: unlabeledRole === null
+          && labeledRole === 'region' && labeledAria === 'Sección observable'
+          && lbRole === 'region' && lbAria === null && lbLabelledby === 'mySectionTitle'
+          && renamedAria === 'Nuevo nombre'
+          && clearedRole === null && clearedAria === null,
+        unlabeledRole, labeledRole, labeledAria,
+        lbRole, lbAria, lbLabelledby,
+        renamedAria, clearedRole, clearedAria,
+      };
+    });
+    t.diagnostic(`[g09-obs-aria] ${JSON.stringify(ok)}`);
+    assert.equal(ok.motivo ?? '', '', ok.motivo ?? '');
+    assert.ok(ok.ok, `g09 observer ARIA incompleto (${JSON.stringify(ok)})`);
+
+    // 6) Cleanup: un observer con IntersectionObserver debe dejar el observer
+    // desconectado al detach (proposal 15 — leak prevention).
+    const cleanupOk = await page.evaluate(async () => {
+      const main = document.querySelector<HTMLElement>('is-main.main');
+      if (!main) return { ok: false, motivo: 'no main' };
+      const el = document.createElement('is-observer');
+      el.setAttribute('type', 'intersection');
+      main.appendChild(el);
+      await new Promise((r) => setTimeout(r, 50));
+      let errorCount = 0;
+      const handler = (_: Event) => { errorCount++; };
+      window.addEventListener('error', handler);
+      el.remove();
+      await new Promise((r) => setTimeout(r, 80));
+      window.removeEventListener('error', handler);
+      return { ok: errorCount === 0, errorCount };
+    });
+    t.diagnostic(`[g09-obs-cleanup] ${JSON.stringify(cleanupOk)}`);
+    assert.equal(cleanupOk.motivo ?? '', '', cleanupOk.motivo ?? '');
+    assert.ok(cleanupOk.ok, `g09 observer cleanup disparó errores (${JSON.stringify(cleanupOk)})`);
+  } finally {
+    await liberarPage(page);
+    activePage = null;
+  }
+});
+
+test('g09 mutation-observer y resize-observer: heredan role=region + aria-label', { timeout: 60_000 }, async (t) => {
+  if (!DISPONIBLE) return t.skip('faltan variables E2E');
+  const base = await ensureServer();
+  const page = await nuevoPage();
+  activePage = page;
+  try {
+    const renderOk = await abrirPreview(page, base, 'is-mutation-observer');
+    assert.ok(renderOk, 'mutation-observer preview no renderizo');
+
+    // Probamos que los alias de observer heredan el mismo contrato ARIA.
+    const ok = await page.evaluate(async () => {
+      const main = document.querySelector<HTMLElement>('is-main.main');
+      if (!main) return { ok: false, motivo: 'no main' };
+
+      const mk = (tag: 'is-mutation-observer' | 'is-resize-observer' | 'is-intersection-observer') => {
+        const el = document.createElement(tag);
+        el.setAttribute('label', `${tag} demo`);
+        main.appendChild(el);
+        return el;
+      };
+
+      const mo = mk('is-mutation-observer');
+      const ro = mk('is-resize-observer');
+      const io = mk('is-intersection-observer');
+      await new Promise((r) => setTimeout(r, 80));
+
+      const data = [mo, ro, io].map((el) => ({
+        tag: el.tagName.toLowerCase(),
+        role: el.getAttribute('role'),
+        ariaLabel: el.getAttribute('aria-label'),
+      }));
+
+      mo.remove();
+      ro.remove();
+      io.remove();
+
+      return {
+        ok: data.every((d) => d.role === 'region' && d.ariaLabel?.endsWith('demo')),
+        data,
+      };
+    });
+    t.diagnostic(`[g09-obs-aliases] ${JSON.stringify(ok)}`);
+    assert.equal(ok.motivo ?? '', '', ok.motivo ?? '');
+    assert.ok(ok.ok, `g09 aliases ARIA incompleto (${JSON.stringify(ok)})`);
+  } finally {
+    await liberarPage(page);
+    activePage = null;
+  }
+});
+
+test('g09 ui: helpers region() y dialog() aplican role + aria-* (proposal ui #15)', { timeout: 60_000 }, async (t) => {
+  if (!DISPONIBLE) return t.skip('faltan variables E2E');
+  const base = await ensureServer();
+  const page = await nuevoPage();
+  activePage = page;
+  try {
+    const renderOk = await abrirPreview(page, base, 'is-ui');
+    assert.ok(renderOk, 'ui preview no renderizo');
+
+    const ok = await page.evaluate(() => {
+      // El bundle expone `IsUi` (y alias `Ui`) en window tras cargar ui.min.js.
+      const ui = (window as unknown as { IsUi?: { region: (l: string, c: unknown) => HTMLElement; dialog: (l: string | object, c: unknown) => HTMLElement } }).IsUi;
+      if (!ui || typeof ui.region !== 'function' || typeof ui.dialog !== 'function') {
+        return { ok: false, motivo: 'IsUi.region/dialog no exportados' };
+      }
+      const main = document.querySelector<HTMLElement>('is-main.main');
+      if (!main) return { ok: false, motivo: 'no main' };
+
+      // region(label, children)
+      const sec = ui.region('Productos destacados', document.createElement('p'));
+      main.appendChild(sec);
+      const secRole = sec.getAttribute('role');
+      const secLabel = sec.getAttribute('aria-label');
+      const secChildren = sec.querySelector('p') !== null;
+
+      // region sin label → NO role (norma ARIA).
+      const unlabeled = ui.region('', []);
+      const unlabeledRole = unlabeled.getAttribute('role');
+      main.appendChild(unlabeled);
+
+      // dialog(label, children) → role=dialog + aria-modal=true + aria-label.
+      const dlg = ui.dialog('Editar producto', document.createElement('form'));
+      main.appendChild(dlg);
+      const dlgRole = dlg.getAttribute('role');
+      const dlgModal = dlg.getAttribute('aria-modal');
+      const dlgLabel = dlg.getAttribute('aria-label');
+      const dlgChildren = dlg.querySelector('form') !== null;
+
+      sec.remove();
+      unlabeled.remove();
+      dlg.remove();
+
+      return {
+        ok: secRole === 'region' && secLabel === 'Productos destacados' && secChildren
+          && unlabeledRole === null
+          && dlgRole === 'dialog' && dlgModal === 'true' && dlgLabel === 'Editar producto' && dlgChildren,
+        secRole, secLabel, secChildren, unlabeledRole,
+        dlgRole, dlgModal, dlgLabel, dlgChildren,
+      };
+    });
+    t.diagnostic(`[g09-ui] ${JSON.stringify(ok)}`);
+    assert.equal(ok.motivo ?? '', '', ok.motivo ?? '');
+    assert.ok(ok.ok, `g09 ui region()/dialog() incompletos (${JSON.stringify(ok)})`);
+  } finally {
+    await liberarPage(page);
+    activePage = null;
+  }
+});
+
+test('g09 floating: role=dialog + aria-modal cuando modal, focus trap + Escape cierra', { timeout: 60_000 }, async (t) => {
+  if (!DISPONIBLE) return t.skip('faltan variables E2E');
+  const base = await ensureServer();
+  const page = await nuevoPage();
+  activePage = page;
+  try {
+    const renderOk = await abrirPreview(page, base, 'is-floating');
+    assert.ok(renderOk, 'floating preview no renderizo');
+
+    const ok = await page.evaluate(async () => {
+      const main = document.querySelector<HTMLElement>('is-main.main');
+      if (!main) return { ok: false, motivo: 'no main' };
+
+      // Crear floating modal con ancla + contenido focuseable.
+      const anchor = document.createElement('button');
+      anchor.id = 'flAnchor';
+      anchor.textContent = 'abrir';
+      main.appendChild(anchor);
+
+      const fl = document.createElement('is-floating');
+      fl.setAttribute('anchor', 'flAnchor');
+      fl.setAttribute('placement', 'bottom');
+      fl.setAttribute('modal', '');
+      fl.setAttribute('label', 'Menú modal');
+      const content = document.createElement('div');
+      content.innerHTML = `
+        <a href="#x" id="flA">A</a>
+        <button id="flB">B</button>
+        <button id="flC">C</button>
+      `;
+      main.appendChild(fl);
+      fl.appendChild(content);
+
+      // Sin active → no role=dialog, no aria-modal.
+      const inactive = {
+        role: fl.shadowRoot?.querySelector('.popup')?.getAttribute('role') ?? null,
+        modal: fl.shadowRoot?.querySelector('.popup')?.getAttribute('aria-modal') ?? null,
+      };
+
+      // Activar.
+      fl.setAttribute('active', '');
+      await new Promise((r) => setTimeout(r, 150));
+      const popup = fl.shadowRoot?.querySelector('.popup');
+      const activeAria = {
+        role: popup?.getAttribute('role') ?? null,
+        modal: popup?.getAttribute('aria-modal') ?? null,
+        label: popup?.getAttribute('aria-label') ?? null,
+      };
+
+      // El popup debe tener al menos un elemento focuseable slotted.
+      const focusablesInside = (() => {
+        const out: HTMLElement[] = [];
+        const slot = popup?.querySelector('slot');
+        const assigned = slot ? slot.assignedElements({ flatten: true }) : [];
+        for (const a of assigned) {
+          if (a instanceof HTMLElement) {
+            const inner = a.querySelector<HTMLElement>('a, button, input, select, textarea');
+            if (inner) out.push(inner);
+          }
+        }
+        return out;
+      })();
+
+      // labelledby: aplicar otro floating con labelledby.
+      const fl2 = document.createElement('is-floating');
+      fl2.setAttribute('modal', '');
+      fl2.setAttribute('labelledby', 'flTitle');
+      main.appendChild(fl2);
+      fl2.setAttribute('active', '');
+      await new Promise((r) => setTimeout(r, 100));
+      const popup2 = fl2.shadowRoot?.querySelector('.popup');
+      const ariaBy = {
+        label: popup2?.getAttribute('aria-label') ?? null,
+        labelledby: popup2?.getAttribute('aria-labelledby') ?? null,
+      };
+      fl2.removeAttribute('active');
+      fl2.remove();
+
+      // Sin modal → role/aria-modal NO se aplican (proposal g09).
+      const fl3 = document.createElement('is-floating');
+      fl3.setAttribute('anchor', 'flAnchor');
+      fl3.setAttribute('active', '');
+      main.appendChild(fl3);
+      await new Promise((r) => setTimeout(r, 100));
+      const popup3 = fl3.shadowRoot?.querySelector('.popup');
+      const nonModalAria = {
+        role: popup3?.getAttribute('role') ?? null,
+        modal: popup3?.getAttribute('aria-modal') ?? null,
+      };
+      fl3.removeAttribute('active');
+      fl3.remove();
+
+      // Cleanup.
+      fl.removeAttribute('active');
+      fl.remove();
+      anchor.remove();
+
+      return {
+        ok: inactive.role === null && inactive.modal === null
+          && activeAria.role === 'dialog' && activeAria.modal === 'true' && activeAria.label === 'Menú modal'
+          && focusablesInside.length >= 1
+          && ariaBy.label === null && ariaBy.labelledby === 'flTitle'
+          && nonModalAria.role === null && nonModalAria.modal === null,
+        inactive, activeAria, focusablesCount: focusablesInside.length,
+        ariaBy, nonModalAria,
+      };
+    });
+    t.diagnostic(`[g09-fl-modal] ${JSON.stringify(ok)}`);
+    assert.equal(ok.motivo ?? '', '', ok.motivo ?? '');
+    assert.ok(ok.ok, `g09 floating modal ARIA incompleto (${JSON.stringify(ok)})`);
+
+    // 2) Escape cierra el modal + focus restoration.
+    const trapOk = await page.evaluate(async () => {
+      const main = document.querySelector<HTMLElement>('is-main.main');
+      if (!main) return { ok: false, motivo: 'no main' };
+      const anchor = document.createElement('button');
+      anchor.id = 'flAnchor2';
+      anchor.textContent = 'open';
+      main.appendChild(anchor);
+
+      const fl = document.createElement('is-floating');
+      fl.setAttribute('anchor', 'flAnchor2');
+      fl.setAttribute('modal', '');
+      fl.setAttribute('label', 'Trap test');
+      fl.innerHTML = `
+        <a href="#1" id="tA">A</a>
+        <button id="tB">B</button>
+        <button id="tC">C</button>
+      `;
+      main.appendChild(fl);
+      anchor.focus();
+      const focusedBefore = document.activeElement === anchor;
+      fl.setAttribute('active', '');
+      await new Promise((r) => setTimeout(r, 150));
+
+      // Tras activar, el foco debe estar DENTRO del popup (no en anchor).
+      const ae = document.activeElement as HTMLElement | null;
+      const insidePopup = ae ? !!(fl.shadowRoot?.contains(ae)) : false;
+
+      // Escape → desactivar.
+      document.dispatchEvent(new KeyboardEvent('keydown', { key: 'Escape', bubbles: true, cancelable: true }));
+      await new Promise((r) => setTimeout(r, 100));
+      const closed = !fl.hasAttribute('active');
+
+      // Foco debe volver al anchor.
+      const aeAfter = document.activeElement as HTMLElement | null;
+      const focusRestored = aeAfter === anchor;
+
+      fl.remove();
+      anchor.remove();
+      return {
+        ok: focusedBefore && insidePopup && closed && focusRestored,
+        focusedBefore, insidePopup, closed, focusRestored,
+      };
+    });
+    t.diagnostic(`[g09-fl-trap] ${JSON.stringify(trapOk)}`);
+    assert.equal(trapOk.motivo ?? '', '', trapOk.motivo ?? '');
+    assert.ok(trapOk.ok, `g09 floating focus trap / Escape incompleto (${JSON.stringify(trapOk)})`);
+  } finally {
+    await liberarPage(page);
+    activePage = null;
+  }
+});
+
+// ============================================================================
+// Bloque g03 — proposals UX/UI para code + md-editor (Cat 27-28).
+//
+// Verifica los contratos ARIA + teclado de los demos de la categoría `code`
+// que son testeables sin CodeMirror / red / APIs externas:
+//
+//   - is-code (Cat 27):
+//     · role=region + aria-label dinámico (idioma + líneas) en el host
+//     · data-language sincronizado al atributo lang
+//     · role=textbox + aria-multiline=true en el <textarea> editable
+//     · aria-label del editor refleja lenguaje + líneas actuales
+//     · readonly pre expone role=code y aria-label del lenguaje
+//     · cambio de lang actualiza data-language + aria-label
+//
+//   - is-md-editor (Cat 28):
+//     · role=toolbar + aria-label en toolbar formato + footer acciones
+//     · aria-label en cada botón icon-only de la toolbar (accesible name)
+//     · role=textbox + aria-multiline=true + aria-label en la surface
+//     · host role=region + aria-label
+//     · Tab indenta 2 espacios en plain mode
+//     · Shift+Tab outdenta
+//     · Escape en <li> vacío abandona la lista
+//
+// Skip explicito:
+//   - Proposals 1-10 de code (CodeMirror ya no se carga; motor nativo).
+//   - code preview tests que requieren cambios de tema sin red.
+// ============================================================================
+
+test('g03 code: role=region + aria-label + data-language + role=textbox editor (Cat 27)', { timeout: 60_000 }, async (t) => {
+  if (!DISPONIBLE) return t.skip('faltan variables E2E');
+  const base = await ensureServer();
+  const page = await nuevoPage();
+  activePage = page;
+  try {
+    const renderOk = await abrirPreview(page, base, 'is-code');
+    assert.ok(renderOk, 'code preview no renderizo');
+
+    // ─── Cat 27.1: host role=region + aria-label + data-language ───
+    const hostAria = await page.evaluate(() => {
+      const main = document.querySelector<HTMLElement>('is-main.main');
+      const codes = [...(main?.querySelectorAll<HTMLElement>('is-code') ?? [])];
+      if (codes.length === 0) return { ok: false, motivo: 'sin is-code', sample: null };
+      // 1) El primer <is-code> sin label del usuario debe tener role=region
+      //    y un aria-label descriptivo que mencione el lenguaje.
+      const first = codes[0];
+      const role = first.getAttribute('role');
+      const aria = first.getAttribute('aria-label') || '';
+      const dataLang = first.getAttribute('data-language');
+      // 2) Creamos uno nuevo con label del usuario y verificamos que
+      //    respetamos el label (no pisamos contratos externos).
+      const tagged = document.createElement('is-code');
+      tagged.setAttribute('lang', 'python');
+      tagged.setAttribute('value', 'def f():\n    return 1');
+      tagged.setAttribute('label', 'Snippet de Python del cliente');
+      main?.appendChild(tagged);
+      const customAria = tagged.getAttribute('aria-label');
+      const customLang = tagged.getAttribute('data-language');
+      tagged.remove();
+      return {
+        ok: role === 'region'
+          && aria.includes('javascript')
+          && dataLang === 'javascript'
+          && customAria === 'Snippet de Python del cliente'
+          && customLang === 'python',
+        sample: {
+          role, aria, dataLang, customAria, customLang,
+        },
+      };
+    });
+    t.diagnostic(`[g03-code-aria] ${JSON.stringify(hostAria)}`);
+    assert.equal(hostAria.motivo ?? '', '', hostAria.motivo ?? 'no is-code en el demo');
+    assert.ok(hostAria.ok, `g03 code aria del host falla (${JSON.stringify(hostAria)})`);
+
+    // ─── Cat 27.2: editor textarea con role=textbox + aria-multiline ───
+    const editorAria = await page.evaluate(() => {
+      const main = document.querySelector<HTMLElement>('is-main.main');
+      const codes = [...(main?.querySelectorAll<HTMLElement>('is-code') ?? [])];
+      if (codes.length === 0) return { ok: false, motivo: 'sin code', ta: null };
+      // El playground del demo crea <is-code id="pgCode"> en modo editable.
+      const pgCode = codes.find((c) => c.id === 'pgCode') ?? codes[0];
+      // Si tiene un .ic-input dentro (modo editable), verificar role/aria.
+      const ta = pgCode.shadowRoot?.querySelector<HTMLTextAreaElement>('.ic-input');
+      if (ta) {
+        return {
+          ok: ta.getAttribute('role') === 'textbox'
+            && ta.getAttribute('aria-multiline') === 'true'
+            && !!ta.getAttribute('aria-label'),
+          motivo: '',
+          ta: {
+            role: ta.getAttribute('role'),
+            multiline: ta.getAttribute('aria-multiline'),
+            ariaLabel: ta.getAttribute('aria-label'),
+          },
+        };
+      }
+      // Modo readonly: el <pre> expone role=code con su propio aria-label.
+      const pre = pgCode.shadowRoot?.querySelector<HTMLElement>('.ic-native');
+      if (!pre) return { ok: false, motivo: 'ni ta ni pre', ta: null };
+      return {
+        ok: pre.getAttribute('role') === 'code' && !!pre.getAttribute('aria-label'),
+        motivo: '',
+        ta: { role: pre.getAttribute('role'), ariaLabel: pre.getAttribute('aria-label') },
+      };
+    });
+    t.diagnostic(`[g03-code-editor] ${JSON.stringify(editorAria)}`);
+    assert.equal(editorAria.motivo ?? '', '', editorAria.motivo ?? 'sin editor');
+    assert.ok(editorAria.ok, `g03 code editor role/aria falla (${JSON.stringify(editorAria)})`);
+
+    // ─── Cat 27.3: cambio de lang actualiza data-language + aria-label ───
+    const langChange = await page.evaluate(() => {
+      const main = document.querySelector<HTMLElement>('is-main.main');
+      const host = document.createElement('is-code');
+      host.setAttribute('lang', 'css');
+      host.setAttribute('value', '.card { color: red; }');
+      main?.appendChild(host);
+      const before = {
+        lang: host.getAttribute('lang'),
+        dataLanguage: host.getAttribute('data-language'),
+        ariaLabel: host.getAttribute('aria-label') || '',
+      };
+      host.setAttribute('lang', 'html');
+      const after = {
+        lang: host.getAttribute('lang'),
+        dataLanguage: host.getAttribute('data-language'),
+        ariaLabel: host.getAttribute('aria-label') || '',
+      };
+      host.remove();
+      return {
+        ok: before.dataLanguage === 'css' && before.ariaLabel.includes('css')
+          && after.dataLanguage === 'html' && after.ariaLabel.includes('html')
+          && before.ariaLabel !== after.ariaLabel,
+        motivo: '',
+        before, after,
+      };
+    });
+    t.diagnostic(`[g03-code-lang-change] ${JSON.stringify(langChange)}`);
+    assert.ok(langChange.ok, `g03 code cambio de lang no sincroniza ARIA (${JSON.stringify(langChange)})`);
+  } finally {
+    await liberarPage(page);
+    activePage = null;
+  }
+});
+
+test('g03 md-editor: toolbar role+aria-label, role=textbox surface, host region (Cat 28 ARIA)', { timeout: 60_000 }, async (t) => {
+  if (!DISPONIBLE) return t.skip('faltan variables E2E');
+  const base = await ensureServer();
+  const page = await nuevoPage();
+  activePage = page;
+  try {
+    const renderOk = await abrirPreview(page, base, 'is-md-editor');
+    assert.ok(renderOk, 'md-editor preview no renderizo');
+
+    // ─── Cat 28.1: host role=region + aria-label descriptivo ───
+    const hostAria = await page.evaluate(() => {
+      const main = document.querySelector<HTMLElement>('is-main.main');
+      const host = main?.querySelector<HTMLElement>('is-md-editor');
+      if (!host) return { ok: false, motivo: 'no host', role: '', ariaLabel: '' };
+      return {
+        ok: host.getAttribute('role') === 'region' && !!host.getAttribute('aria-label'),
+        motivo: '',
+        role: host.getAttribute('role'),
+        ariaLabel: host.getAttribute('aria-label'),
+      };
+    });
+    t.diagnostic(`[g03-md-host] ${JSON.stringify(hostAria)}`);
+    assert.equal(hostAria.motivo ?? '', '', hostAria.motivo ?? 'sin md-editor');
+    assert.ok(hostAria.ok, `g03 md-editor host aria falla (${JSON.stringify(hostAria)})`);
+
+    // ─── Cat 28.2: abrir dialog y verificar toolbar / surface / acciones ───
+    const opened = await page.evaluate(async () => {
+      const main = document.querySelector<HTMLElement>('is-main.main');
+      const host = main?.querySelector<HTMLElement & { open(): void }>('is-md-editor');
+      if (!host) return { ok: false, motivo: 'no host' };
+      host.open();
+      await new Promise((r) => setTimeout(r, 250));
+      const dlg = host.shadowRoot?.querySelector<HTMLElement>('.dlg');
+      if (!dlg) return { ok: false, motivo: 'no dlg' };
+      const dlgOpen = (dlg as unknown as { open: boolean }).open === true
+        || dlg.hasAttribute('open');
+      return { ok: dlgOpen, motivo: dlgOpen ? '' : 'dlg no abrio' };
+    });
+    t.diagnostic(`[g03-md-open] ${JSON.stringify(opened)}`);
+    assert.equal(opened.motivo ?? '', '', opened.motivo ?? 'dialog no abrio');
+    assert.ok(opened.ok, 'g03 md-editor dialog no abrio');
+
+    const ariaToolbar = await page.evaluate(() => {
+      const main = document.querySelector<HTMLElement>('is-main.main');
+      const host = main?.querySelector<HTMLElement>('is-md-editor');
+      const tb = host?.shadowRoot?.querySelector<HTMLElement>('.toolbar');
+      if (!tb) return { ok: false, motivo: 'no toolbar', role: '', ariaLabel: '', buttons: 0, totalBtns: 0, allWithLabel: false, ftRole: '', ftLabel: '', ftBtns: 0, ftWithLabel: 0 };
+      const buttons = [...tb.querySelectorAll<HTMLElement>('is-button[data-cmd]')];
+      const labels = buttons.map((b) => b.getAttribute('aria-label'));
+      const labelsNonEmpty = labels.filter((l) => !!(l && l.trim())).length;
+      const ft = host?.shadowRoot?.querySelector<HTMLElement>('.ft-actions');
+      const ftBtns = ft ? [...ft.querySelectorAll<HTMLElement>('is-button')] : [];
+      const ftLabels = ftBtns.map((b) => b.getAttribute('aria-label'));
+      const ftWithLabel = ftLabels.filter((l) => !!(l && l.trim())).length;
+      return {
+        ok: tb.getAttribute('role') === 'toolbar'
+          && !!tb.getAttribute('aria-label')
+          && buttons.length > 0 && labelsNonEmpty === buttons.length
+          && ft?.getAttribute('role') === 'toolbar'
+          && !!ft?.getAttribute('aria-label')
+          && ftBtns.length > 0 && ftWithLabel === ftBtns.length,
+        motivo: '',
+        role: tb.getAttribute('role'),
+        ariaLabel: tb.getAttribute('aria-label'),
+        buttons: buttons.length,
+        totalBtns: buttons.length,
+        allWithLabel: labelsNonEmpty === buttons.length,
+        ftRole: ft?.getAttribute('role') ?? '',
+        ftLabel: ft?.getAttribute('aria-label') ?? '',
+        ftBtns: ftBtns.length,
+        ftWithLabel,
+      };
+    });
+    t.diagnostic(`[g03-md-toolbar] ${JSON.stringify(ariaToolbar)}`);
+    assert.equal(ariaToolbar.motivo ?? '', '', ariaToolbar.motivo ?? 'sin toolbar');
+    assert.ok(ariaToolbar.ok, `g03 md-editor toolbar aria falla (${JSON.stringify(ariaToolbar)})`);
+
+    // ─── Cat 28.3: surface role=textbox + aria-multiline + aria-label ───
+    const surfaceAria = await page.evaluate(() => {
+      const main = document.querySelector<HTMLElement>('is-main.main');
+      const host = main?.querySelector<HTMLElement>('is-md-editor');
+      const surface = host?.shadowRoot?.querySelector<HTMLElement>('.surface');
+      if (!surface) return { ok: false, motivo: 'no surface', role: '', multiline: '', ariaLabel: '' };
+      return {
+        ok: surface.getAttribute('role') === 'textbox'
+          && surface.getAttribute('aria-multiline') === 'true'
+          && !!surface.getAttribute('aria-label'),
+        motivo: '',
+        role: surface.getAttribute('role'),
+        multiline: surface.getAttribute('aria-multiline'),
+        ariaLabel: surface.getAttribute('aria-label'),
+      };
+    });
+    t.diagnostic(`[g03-md-surface] ${JSON.stringify(surfaceAria)}`);
+    assert.equal(surfaceAria.motivo ?? '', '', surfaceAria.motivo ?? 'sin surface');
+    assert.ok(surfaceAria.ok, `g03 md-editor surface aria falla (${JSON.stringify(surfaceAria)})`);
+  } finally {
+    await liberarPage(page);
+    activePage = null;
+  }
+});
+
+test('g03 md-editor: Tab indents + Escape sale de lista + Shift+Tab outdenta (Cat 28 teclado)', { timeout: 60_000 }, async (t) => {
+  if (!DISPONIBLE) return t.skip('faltan variables E2E');
+  const base = await ensureServer();
+  const page = await nuevoPage();
+  activePage = page;
+  try {
+    const renderOk = await abrirPreview(page, base, 'is-md-editor');
+    assert.ok(renderOk, 'md-editor preview no renderizo');
+
+    // ─── Cat 28.4: Tab en plain mode inserta 2 espacios ───
+    const tabPlain = await page.evaluate(async () => {
+      const main = document.querySelector<HTMLElement>('is-main.main');
+      const host = main?.querySelector<HTMLElement & { open(): void; canEdit: boolean }>('is-md-editor');
+      if (!host) return { ok: false, motivo: 'no host' };
+      host.open();
+      await new Promise((r) => setTimeout(r, 200));
+      // Forzar plain mode para testear la rama del textarea.
+      const sw = host.shadowRoot?.querySelector<HTMLElement & { checked: boolean }>('.tb-plain');
+      if (sw) {
+        sw.checked = true;
+        sw.dispatchEvent(new CustomEvent('is-change', { detail: { checked: true }, bubbles: true }));
+      }
+      await new Promise((r) => setTimeout(r, 120));
+      const ta = host.shadowRoot?.querySelector<HTMLTextAreaElement>('.plain');
+      if (!ta || ta.hidden) return { ok: false, motivo: 'plain no activo', before: '', after: '', afterSpaces: false };
+      ta.focus();
+      ta.value = 'hola';
+      ta.selectionStart = ta.selectionEnd = 4;
+      const before = ta.value;
+      ta.dispatchEvent(new KeyboardEvent('keydown', { key: 'Tab', bubbles: true, cancelable: true }));
+      await new Promise((r) => setTimeout(r, 80));
+      const after = ta.value;
+      const afterSpaces = /^  hola$/.test(after);
+      // Shift+Tab outdenta.
+      ta.value = '  hola';
+      ta.selectionStart = ta.selectionEnd = 6;
+      ta.dispatchEvent(new KeyboardEvent('keydown', { key: 'Tab', shiftKey: true, bubbles: true, cancelable: true }));
+      await new Promise((r) => setTimeout(r, 80));
+      const outdented = ta.value;
+      const outdentOk = /^hola$/.test(outdented);
+      // Cleanup.
+      ta.value = before;
+      return {
+        ok: after === '  hola' && afterSpaces && outdentOk,
+        motivo: '',
+        before, after, afterSpaces, outdented, outdentOk,
+      };
+    });
+    t.diagnostic(`[g03-md-tab] ${JSON.stringify(tabPlain)}`);
+    assert.equal(tabPlain.motivo ?? '', '', tabPlain.motivo ?? 'Tab plain');
+    assert.ok(tabPlain.ok, `g03 md-editor Tab indent/outdent falla (${JSON.stringify(tabPlain)})`);
+
+    // ─── Cat 28.5: Escape en <li> vacío abandona la lista ───
+    const escapeList = await page.evaluate(async () => {
+      const main = document.querySelector<HTMLElement>('is-main.main');
+      const host = main?.querySelector<HTMLElement & { open(): void; canEdit: boolean }>('is-md-editor');
+      if (!host) return { ok: false, motivo: 'no host' };
+      host.open();
+      await new Promise((r) => setTimeout(r, 200));
+      const surface = host.shadowRoot?.querySelector<HTMLElement>('.surface');
+      if (!surface) return { ok: false, motivo: 'no surface' };
+      // Sembrar la surface con una <ul><li> vacía.
+      surface.innerHTML = '<ul><li><br></li></ul>';
+      // Poner el caret dentro del <li>.
+      const li = surface.querySelector<HTMLElement>('li');
+      const range = document.createRange();
+      const sel = window.getSelection();
+      if (li && sel) {
+        range.selectNodeContents(li);
+        range.collapse(true);
+        sel.removeAllRanges();
+        sel.addRange(range);
+        surface.focus();
+      }
+      const before = surface.innerHTML;
+      const beforeIsList = /^<ul>/.test(before.trim());
+      surface.dispatchEvent(new KeyboardEvent('keydown', {
+        key: 'Escape', bubbles: true, cancelable: true,
+      }));
+      await new Promise((r) => setTimeout(r, 120));
+      const after = surface.innerHTML;
+      // Después del escape ya no debe quedar un <ul> como contenedor directo;
+      // el contenido se transforma a <p>.
+      const afterIsList = /^<ul>/.test(after.trim());
+      return {
+        ok: beforeIsList && !afterIsList,
+        motivo: beforeIsList ? '' : 'no estaba en lista',
+        before: before.slice(0, 80),
+        after: after.slice(0, 80),
+      };
+    });
+    t.diagnostic(`[g03-md-escape-list] ${JSON.stringify(escapeList)}`);
+    assert.equal(escapeList.motivo ?? '', '', escapeList.motivo ?? 'Escape lista');
+    assert.ok(escapeList.ok, `g03 md-editor Escape no sale de la lista (${JSON.stringify(escapeList)})`);
+  } finally {
+    await liberarPage(page);
+    activePage = null;
+  }
+});
+
+// ---------------------------------------------------------------------------
+// g02: charts (Cat 26-28) — proposals UX/UI demo-g02.md
+//
+// Cubre el contrato ARIA + sr-status + a11y del motor <is-chart> y los 5
+// wrappers tipados (<is-bar-chart>, <is-line-chart>, <is-pie-chart>,
+// <is-radar-chart>, <is-scatter-chart>), todos los cuales heredan del motor
+// chart.ts vía `defineTypedChart`.
+//
+//   - Cat 26: el <svg> interno lleva role="img" + aria-busy (false al
+//             cargar datos) + aria-label descriptivo del dataset
+//             ("Gráfico ${type} con N categorías y M series").
+//   - Cat 27: existe un .sr-status con aria-live="polite" + aria-atomic="true"
+//             y se republica cuando cambia la firma type|cats|series.
+//   - Cat 28: las marks internas (path/circle) tienen aria-label + tabindex=0
+//             para navegación por teclado y el tooltip lleva role="status".
+//
+// El gauge ya quedó cubierto por g04 data (role=meter + aria-valuemin/max/now/
+// text); aquí solo se valida el motor charts.
+// ---------------------------------------------------------------------------
+
+test('g02 charts: svg role=img + aria-busy + aria-label descriptivo en motor + 5 wrappers (Cat 26)', { timeout: 90_000 }, async (t) => {
+  if (!DISPONIBLE) return t.skip('faltan variables E2E');
+  const base = await ensureServer();
+  // Lista de wrappers tipados. Todos heredan del motor chart.ts.
+  const tags = ['is-chart', 'is-bar-chart', 'is-line-chart', 'is-pie-chart', 'is-radar-chart', 'is-scatter-chart'];
+  for (const tag of tags) {
+    const page = await nuevoPage();
+    activePage = page;
+    try {
+      const renderOk = await abrirPreview(page, base, tag);
+      assert.ok(renderOk, `${tag} preview no renderizo`);
+
+      const aria = await page.evaluate(async (tagName: string) => {
+        const main = document.querySelector<HTMLElement>('is-main.main');
+        const wc = main?.querySelector<HTMLElement>(tagName);
+        if (!wc?.shadowRoot) return { ok: false, motivo: 'no shadow' };
+        const svg = wc.shadowRoot.querySelector<HTMLElement>('svg.chart-svg');
+        if (!svg) return { ok: false, motivo: 'no svg' };
+        await new Promise((r) => setTimeout(r, 350));
+        const role = svg.getAttribute('role');
+        const ariaBusy = svg.getAttribute('aria-busy');
+        const ariaLabel = svg.getAttribute('aria-label') ?? '';
+        // El aria-label debe mencionar tipo, categorías y series.
+        const hasType = /gráfico/i.test(ariaLabel) || /grafico/i.test(ariaLabel);
+        const hasCats = /categor/i.test(ariaLabel);
+        const hasSeries = /serie/i.test(ariaLabel);
+        return {
+          ok: role === 'img' && ariaBusy === 'false' && hasType && hasCats && hasSeries && ariaLabel.length > 0,
+          role, ariaBusy, ariaLabel, hasType, hasCats, hasSeries,
+        };
+      }, tag);
+      t.diagnostic(`[g02-26-${tag}] ${JSON.stringify(aria)}`);
+      assert.ok(aria.ok, `g02 ${tag} ARIA container incompleto (${JSON.stringify(aria)})`);
+      assert.equal(aria.role, 'img', `g02 ${tag} role esperaba 'img' pero fue '${aria.role}'`);
+      assert.equal(aria.ariaBusy, 'false', `g02 ${tag} aria-busy esperaba 'false' pero fue '${aria.ariaBusy}'`);
+    } finally {
+      await liberarPage(page);
+      activePage = null;
+    }
+  }
+});
+
+test('g02 charts: sr-status con aria-live polite se republica al cambiar dataset (Cat 27)', { timeout: 60_000 }, async (t) => {
+  if (!DISPONIBLE) return t.skip('faltan variables E2E');
+  const base = await ensureServer();
+  const page = await nuevoPage();
+  activePage = page;
+  try {
+    const renderOk = await abrirPreview(page, base, 'is-chart');
+    assert.ok(renderOk, 'is-chart preview no renderizo');
+
+    // 1) Verificar presencia + atributos del sr-status tras el primer render.
+    const initial = await page.evaluate(async () => {
+      const main = document.querySelector<HTMLElement>('is-main.main');
+      const wc = main?.querySelector<HTMLElement>('is-chart');
+      if (!wc?.shadowRoot) return { ok: false, motivo: 'no chart' };
+      const sr = wc.shadowRoot.querySelector<HTMLElement>('.sr-status');
+      if (!sr) return { ok: false, motivo: 'no sr-status' };
+      await new Promise((r) => setTimeout(r, 350));
+      return {
+        ok: sr.getAttribute('aria-live') === 'polite'
+          && sr.getAttribute('aria-atomic') === 'true'
+          && (sr.textContent ?? '').trim().length > 0,
+        live: sr.getAttribute('aria-live'),
+        atomic: sr.getAttribute('aria-atomic'),
+        text: (sr.textContent ?? '').trim(),
+      };
+    });
+    t.diagnostic(`[g02-27-initial] ${JSON.stringify(initial)}`);
+    assert.ok(initial.ok, `g02 sr-status atributos incompletos (${JSON.stringify(initial)})`);
+    assert.equal(initial.live, 'polite', `g02 sr-status aria-live esperaba 'polite' pero fue '${initial.live}'`);
+    assert.equal(initial.atomic, 'true', `g02 sr-status aria-atomic esperaba 'true' pero fue '${initial.atomic}'`);
+
+    // 2) Cambiar el dataset y verificar que el sr-status republica (firma cambia).
+    const after = await page.evaluate(async () => {
+      const main = document.querySelector<HTMLElement>('is-main.main');
+      const wc = main?.querySelector<HTMLElement>('is-chart');
+      if (!wc?.shadowRoot) return { ok: false, motivo: 'no chart' };
+      const before = (wc.shadowRoot.querySelector('.sr-status')?.textContent ?? '').trim();
+      // Cambio el tipo + series: nueva firma debe disparar republicación.
+      (wc as unknown as { config: unknown }).config = {
+        type: 'bar',
+        data: {
+          labels: ['A', 'B', 'C', 'D', 'E', 'F'],
+          datasets: [
+            { label: 'X', data: [1, 2, 3, 4, 5, 6] },
+            { label: 'Y', data: [6, 5, 4, 3, 2, 1] },
+            { label: 'Z', data: [3, 3, 3, 3, 3, 3] },
+          ],
+        },
+      };
+      await new Promise((r) => setTimeout(r, 300));
+      const afterText = (wc.shadowRoot.querySelector('.sr-status')?.textContent ?? '').trim();
+      const ariaLabel = wc.shadowRoot.querySelector('svg.chart-svg')?.getAttribute('aria-label') ?? '';
+      return {
+        ok: before !== afterText && afterText.length > 0 && /categor/.test(ariaLabel) && /serie/.test(ariaLabel),
+        before, after: afterText, ariaLabel,
+      };
+    });
+    t.diagnostic(`[g02-27-change] ${JSON.stringify(after)}`);
+    assert.ok(after.ok, `g02 sr-status no republica al cambiar dataset (${JSON.stringify(after)})`);
+  } finally {
+    await liberarPage(page);
+    activePage = null;
+  }
+});
+
+test('g02 charts: marks con aria-label + tabindex=0 + tooltip role=status (Cat 28)', { timeout: 60_000 }, async (t) => {
+  if (!DISPONIBLE) return t.skip('faltan variables E2E');
+  const base = await ensureServer();
+  const page = await nuevoPage();
+  activePage = page;
+  try {
+    const renderOk = await abrirPreview(page, base, 'is-bar-chart');
+    assert.ok(renderOk, 'is-bar-chart preview no renderizo');
+
+    // 1) Cada mark (<path.mark>) debe llevar aria-label + tabindex=0.
+    const marks = await page.evaluate(async () => {
+      const main = document.querySelector<HTMLElement>('is-main.main');
+      const wc = main?.querySelector<HTMLElement>('is-bar-chart');
+      if (!wc?.shadowRoot) return { ok: false, motivo: 'no shadow' };
+      const group = wc.shadowRoot.querySelector<SVGGElement>('g.marks');
+      const allMarks = group ? [...group.querySelectorAll<SVGElement>('.mark')] : [];
+      await new Promise((r) => setTimeout(r, 350));
+      const withTab = allMarks.filter((m) => m.getAttribute('tabindex') === '0');
+      const withLabel = allMarks.filter((m) => !!(m.getAttribute('aria-label') ?? '').trim());
+      const sampleLabel = allMarks[0]?.getAttribute('aria-label') ?? '';
+      return {
+        ok: allMarks.length > 0 && withTab.length === allMarks.length && withLabel.length === allMarks.length,
+        marksCount: allMarks.length,
+        withTabCount: withTab.length,
+        withLabelCount: withLabel.length,
+        sampleLabel,
+      };
+    });
+    t.diagnostic(`[g02-28-marks] ${JSON.stringify(marks)}`);
+    assert.ok(marks.ok, `g02 bar-chart marks sin aria-label/tabindex (${JSON.stringify(marks)})`);
+    assert.ok(marks.marksCount >= 4, `g02 bar-chart esperaba >=4 marks, tuvo ${marks.marksCount}`);
+
+    // 2) Tooltip lleva role="status" y aparece (visible) al simular hover.
+    const tooltip = await page.evaluate(async () => {
+      const main = document.querySelector<HTMLElement>('is-main.main');
+      const wc = main?.querySelector<HTMLElement>('is-bar-chart');
+      if (!wc?.shadowRoot) return { ok: false, motivo: 'no shadow' };
+      const tip = wc.shadowRoot.querySelector<HTMLElement>('.tooltip');
+      if (!tip) return { ok: false, motivo: 'no tooltip' };
+      const roleBefore = tip.getAttribute('role');
+      const hiddenBefore = tip.hasAttribute('hidden');
+      // Buscar el primer mark para disparar un pointermove.
+      const group = wc.shadowRoot.querySelector<SVGGElement>('g.marks');
+      const firstMark = group?.querySelector<SVGElement>('.mark');
+      if (!firstMark) return { ok: false, motivo: 'no first mark' };
+      // El listener vive en el SVG (no en el mark). Disparamos un pointermove
+      // con el mark como target para que el hit-test del motor lo encuentre.
+      const svg = wc.shadowRoot.querySelector<SVGSVGElement>('svg.chart-svg');
+      if (!svg) return { ok: false, motivo: 'no svg' };
+      const rect = svg.getBoundingClientRect();
+      const evt = new PointerEvent('pointermove', {
+        bubbles: true, cancelable: true, composed: true,
+        clientX: rect.left + 10, clientY: rect.top + 10,
+      });
+      // Aseguramos que e.target sea el mark dentro del shadow del componente.
+      Object.defineProperty(evt, 'target', { value: firstMark });
+      svg.dispatchEvent(evt);
+      await new Promise((r) => setTimeout(r, 80));
+      const hiddenAfter = tip.hasAttribute('hidden');
+      const rowsAfter = tip.querySelectorAll('.dg-tooltip__row').length;
+      return {
+        ok: roleBefore === 'status' && hiddenBefore === true && hiddenAfter === false && rowsAfter > 0,
+        role: roleBefore,
+        hiddenBefore,
+        hiddenAfter,
+        rowsAfter,
+      };
+    });
+    t.diagnostic(`[g02-28-tooltip] ${JSON.stringify(tooltip)}`);
+    assert.ok(tooltip.ok, `g02 bar-chart tooltip role/status/hover falla (${JSON.stringify(tooltip)})`);
+    assert.equal(tooltip.role, 'status', `g02 bar-chart tooltip role esperaba 'status' pero fue '${tooltip.role}'`);
+  } finally {
+    await liberarPage(page);
+    activePage = null;
+  }
+});

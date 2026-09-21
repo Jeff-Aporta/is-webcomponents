@@ -208,6 +208,8 @@ class IsChart extends withStyleAttrs(HTMLElement) {
   #svg!: HTMLElement;
   #legendEl!: HTMLElement;
   #tooltipEl!: HTMLElement;
+  #srStatusEl!: HTMLElement;
+  #srSignature: string = '';
   #config: ChartConfig | null = null;
   #mounted: boolean = false;
   #ro: ResizeObserver | null = null;
@@ -232,9 +234,10 @@ class IsChart extends withStyleAttrs(HTMLElement) {
     const shadow = this.attachShadow({ mode: 'open' });
     shadow.innerHTML = /* html */ `
       <div part="base" class="wrap">
-        <svg part="canvas" class="chart-svg" role="img"></svg>
+        <svg part="canvas" class="chart-svg" role="img" aria-busy="true"></svg>
         <div part="legend" class="legend" hidden></div>
         <div part="tooltip" class="tooltip dg-tooltip" hidden role="status"></div>
+        <div part="sr-status" class="sr-status" aria-live="polite" aria-atomic="true"></div>
         <div class="slot-hidden"><slot></slot></div>
       </div>
     `;
@@ -243,6 +246,7 @@ class IsChart extends withStyleAttrs(HTMLElement) {
     this.#svg = shadow.querySelector<HTMLElement>('.chart-svg') as HTMLElement;
     this.#legendEl = shadow.querySelector<HTMLElement>('.legend') as HTMLElement;
     this.#tooltipEl = shadow.querySelector<HTMLElement>('.tooltip') as HTMLElement;
+    this.#srStatusEl = shadow.querySelector<HTMLElement>('.sr-status') as HTMLElement;
     this.#svg.addEventListener('pointermove', (e: Event) => this.#onPointerMove(e as PointerEvent));
     this.#svg.addEventListener('pointerleave', () => this.#clearHover());
   }
@@ -400,6 +404,25 @@ class IsChart extends withStyleAttrs(HTMLElement) {
     const isRadial = RADIAL_TYPES.has(type);
     const isSlice = SLICE_TYPES.has(type);
 
+    // aria-label descriptivo del contenedor + aria-busy desactivado cuando
+    // los datos están listos. El inicial "true" lo pone el constructor.
+    this.#svg.setAttribute('aria-busy', allDatasets.length === 0 ? 'true' : 'false');
+    if (allDatasets.length === 0) {
+      this.#svg.setAttribute('aria-label', `Gráfico ${type} sin datos`);
+    } else {
+      const cats = labels.length;
+      const series = allDatasets.length;
+      const ariaLabel = `Gráfico ${type} con ${cats} ${cats === 1 ? 'categoría' : 'categorías'} y ${series} ${series === 1 ? 'serie' : 'series'}`;
+      this.#svg.setAttribute('aria-label', ariaLabel);
+      // sr-status: solo republicar cuando la firma cambia para evitar spam
+      // durante resize. SR polite anuncia cambios reales de texto.
+      const signature = `${type}|${series}|${cats}|${ariaLabel}`;
+      if (signature !== this.#srSignature) {
+        this.#srSignature = signature;
+        this.#srStatusEl.textContent = ariaLabel;
+      }
+    }
+
     // Leyenda: en pie/doughnut/polarArea enumera las etiquetas; en el resto, los datasets.
     const legendEntries: LegendEntry[] = isSlice
       ? labels.map((lb: string, i: number) => ({ label: String(lb), index: i, hidden: this.#hiddenSlices.has(i) }))
@@ -521,7 +544,20 @@ class IsChart extends withStyleAttrs(HTMLElement) {
       colors, fills, text, grid, surface, style,
       opts,
       fmt: formatValue,
-      addHit: (hit: HitRecord) => { this.#hits.push(hit); },
+      addHit: (hit: HitRecord) => {
+      // Marca navegable por teclado: tabindex=0 + aria-label derivado del
+      // hit permiten Tab entre categorías y lectura por SR de cada mark.
+      if (hit.el && hit.el instanceof Element) {
+        const parts: string[] = [];
+        if (hit.title) parts.push(String(hit.title));
+        if (hit.label) parts.push(String(hit.label));
+        if (hit.value != null) parts.push(`valor ${hit.display ?? String(hit.value)}`);
+        const aria = parts.join(': ');
+        if (aria) hit.el.setAttribute('aria-label', aria);
+        hit.el.setAttribute('tabindex', '0');
+      }
+      this.#hits.push(hit);
+    },
       scaleLinear, scaleBand, niceTicks,
     };
 

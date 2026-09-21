@@ -182,6 +182,7 @@ export function renderSection(section: PreviewSection): HTMLElement {
   el.id = section.id;
   if (section.ariaLabel) el.setAttribute('aria-label', section.ariaLabel);
   if (section.ariaLabelledby) el.setAttribute('aria-labelledby', section.ariaLabelledby);
+  if (section.role) el.setAttribute('role', section.role);
 
   // `hideTitle` es para las secciones cuyo markup ya trae su encabezado: pintar
   // el <h2> del chrome encima duplicaría el título de la página.

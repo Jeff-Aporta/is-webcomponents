@@ -8,6 +8,28 @@ const SVG_NS = 'http://www.w3.org/2000/svg';
 /** Punto proyectado a coordenadas de pantalla dentro del SVG del sparkline. */
 type SparkPoint = { x: number; y: number };
 
+/**
+ * Resume la serie para un lector de pantalla: N puntos, mínimo, máximo,
+ * último valor y tendencia global (alza / baja / estable).
+ */
+function buildAriaLabel(data: readonly number[], fallbackLabel: string): string {
+  const n = data.length;
+  const min = Math.min(...data);
+  const max = Math.max(...data);
+  const first = data[0] ?? 0;
+  const last = data[n - 1] ?? 0;
+  const trend: 'alza' | 'baja' | 'estable' =
+    last > first ? 'alza' : last < first ? 'baja' : 'estable';
+  const labelPart = fallbackLabel ? `, "${fallbackLabel}"` : '';
+  return `Sparkline${labelPart}: ${n} valores, mínimo ${fmtNum(min)}, máximo ${fmtNum(max)}, último ${fmtNum(last)}, tendencia en ${trend}.`;
+}
+
+function fmtNum(v: number): string {
+  if (!Number.isFinite(v)) return String(v);
+  if (Number.isInteger(v)) return String(v);
+  return Number(v.toFixed(2)).toString();
+}
+
 (() => {
   class IsSparkline extends withStyleAttrs(HTMLElement) {
     /** Personalización por atributo (ver `core/attrs.ts`). */
@@ -22,16 +44,23 @@ type SparkPoint = { x: number; y: number };
     }
 
     #svg!: HTMLElement;
+    #srStatusEl!: HTMLElement;
     #data: number[] = [];
     #mounted = false;
     #ro: ResizeObserver | null = null;
+    #lastSignature: string = '';
 
     constructor() {
       super();
       const shadow = this.attachShadow({ mode: 'open' });
-      shadow.innerHTML = /* html */ `<div part="sparkline" class="wrap"><svg part="canvas" class="chart-svg"></svg></div>`;
+      shadow.innerHTML = /* html */ `
+        <div part="sparkline" class="wrap">
+          <svg part="canvas" class="chart-svg" aria-busy="true"></svg>
+          <div part="sr-status" class="sr-status" aria-live="polite" aria-atomic="true"></div>
+        </div>`;
       adoptCss(shadow, import.meta.url);
       this.#svg = shadow.querySelector<HTMLElement>('svg')!;
+      this.#srStatusEl = shadow.querySelector<HTMLElement>('.sr-status')!;
     }
 
     connectedCallback(): void {
@@ -74,7 +103,24 @@ type SparkPoint = { x: number; y: number };
       const height = Math.max(rect.height, 1);
       this.#svg.setAttribute('viewBox', `0 0 ${width} ${height}`);
       while (this.#svg.firstChild) this.#svg.removeChild(this.#svg.firstChild);
-      if (!this.#data.length) return;
+      if (!this.#data.length) {
+        // Sin datos: aria-busy=true y label neutro para que el SR sepa que
+        // no hay contenido todavía (típico al cargar streaming de métricas).
+        this.#svg.setAttribute('aria-busy', 'true');
+        this.#svg.setAttribute('aria-label', 'Sparkline sin datos');
+        return;
+      }
+      // aria-busy=false + aria-label dinámico con N/min/max/last/tendencia.
+      this.#svg.setAttribute('aria-busy', 'false');
+      const ariaLabel = buildAriaLabel(this.#data, this.getAttribute('label') || '');
+      this.#svg.setAttribute('aria-label', ariaLabel);
+      // sr-status: solo republicar cuando la firma cambia (evita spam en
+      // resize). El SR polite solo anuncia cambios reales de texto.
+      const signature = `${this.getAttribute('label') || ''}|${this.#data.join(',')}`;
+      if (signature !== this.#lastSignature) {
+        this.#lastSignature = signature;
+        this.#srStatusEl.textContent = ariaLabel;
+      }
 
       const cs = getComputedStyle(this);
       const border = cs.getPropertyValue('--line-color').trim() || '#339af0';

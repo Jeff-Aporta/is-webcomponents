@@ -17,7 +17,7 @@ import { withStyleAttrs } from '../../core/attrs.js';
 (() => {
   const TEMPLATE = document.createElement('template');
   TEMPLATE.innerHTML = /* html */ `
-    <span part="indicator" class="indicator" aria-hidden="true"></span>
+    <span part="indicator" class="indicator"></span>
   `;
 
   const OBSERVED = ['effect'];
@@ -42,7 +42,19 @@ import { withStyleAttrs } from '../../core/attrs.js';
     connectedCallback(): void {
       super.connectedCallback();
       if (!this.hasAttribute('effect')) this.setAttribute('effect', 'sheen');
-      this.setAttribute('aria-hidden', 'true');
+      // g07 (Cat 31): exponer el estado de carga a los lectores de pantalla.
+      // role=status + aria-busy=true + aria-live=polite avisa al SR de que
+      // hay contenido pendiente. aria-label describe la acción esperada
+      // para que el usuario sepa qué se está cargando.
+      this.setAttribute('role', 'status');
+      this.setAttribute('aria-busy', 'true');
+      this.setAttribute('aria-live', 'polite');
+      if (!this.hasAttribute('aria-label')) {
+        this.setAttribute('aria-label', 'Cargando contenido');
+      }
+      // Compatibilidad: el indicador interno sigue siendo decorativo.
+      const indicator = this.shadowRoot?.querySelector('[part="indicator"]');
+      indicator?.setAttribute('aria-hidden', 'true');
     }
 
     attributeChangedCallback(name: string, oldVal: string | null, newVal: string | null): void {

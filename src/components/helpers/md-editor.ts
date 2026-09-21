@@ -129,16 +129,18 @@ interface EditorHistory {
         html += '<span class="tb-sep" aria-hidden="true"></span>';
         continue;
       }
-      html += `<is-button class="tb-btn" part="toolbar-button" data-cmd="${t.cmd}" variant="text" color="neutral" title="${t.title}"><is-icon icon="${t.icon}"></is-icon></is-button>`;
+      // aria-label obligatorio en cada botón (icon-only); title se mantiene
+      // como fallback visual al hover.
+      html += `<is-button class="tb-btn" part="toolbar-button" data-cmd="${t.cmd}" variant="text" color="neutral" aria-label="${t.title}" title="${t.title}"><is-icon icon="${t.icon}" aria-hidden="true"></is-icon></is-button>`;
     }
     html += '<span class="tb-flex"></span>';
-    html += '<is-switch class="tb-plain" part="plain-switch">Texto plano</is-switch>';
+    html += '<is-switch class="tb-plain" part="plain-switch" aria-label="Alternar modo texto plano">Texto plano</is-switch>';
     return html;
   }
 
   const TEMPLATE = document.createElement('template');
   TEMPLATE.innerHTML = /* html */ `
-    <div class="preview" part="preview" tabindex="0" role="button">
+    <div class="preview" part="preview" tabindex="0" role="button" aria-label="Vista previa del documento">
       <div class="preview-body prompt-md-preview" part="preview-body"></div>
       <p class="preview-empty" part="preview-empty" hidden></p>
       <is-copy-button class="copy" part="copy" tooltip="full" copy-label="Copiar" success-label="Copiado"></is-copy-button>
@@ -148,21 +150,21 @@ interface EditorHistory {
         <span class="dlg-label" part="dialog-label"></span>
         <span class="dlg-filename" part="dialog-filename"></span>
       </div>
-      <div class="toolbar" part="toolbar" role="toolbar">${buildToolbarHtml()}</div>
+      <div class="toolbar" part="toolbar" role="toolbar" aria-label="Formato del documento" aria-controls="surface">${buildToolbarHtml()}</div>
       <div class="vars" part="vars" hidden>
         <span class="vars-label" part="vars-label">Variables:</span>
         <span class="vars-list" part="vars-list"></span>
       </div>
-      <div class="surface prompt-md-preview" part="surface" spellcheck="false" role="textbox" aria-multiline="true" tabindex="0" autofocus></div>
-      <textarea class="plain" part="plain" spellcheck="false" hidden placeholder="Markdown y {{variables}} en texto plano…"></textarea>
+      <div class="surface prompt-md-preview" part="surface" spellcheck="false" role="textbox" aria-multiline="true" aria-label="Editor de markdown" id="surface" tabindex="0" autofocus></div>
+      <textarea class="plain" part="plain" spellcheck="false" aria-label="Editor en texto plano" hidden placeholder="Markdown y {{variables}} en texto plano…"></textarea>
       <div slot="footer" class="footer" part="footer">
         <div class="ft-meta" part="footer-meta" aria-live="polite"></div>
-        <div class="ft-actions">
-          <is-button class="ft-btn" part="footer-download" data-action="download" variant="outlined" color="neutral">
-            <is-icon slot="start" icon="mdi:download"></is-icon>Descargar
+        <div class="ft-actions" role="toolbar" aria-label="Acciones del documento">
+          <is-button class="ft-btn" part="footer-download" data-action="download" variant="outlined" color="neutral" aria-label="Descargar documento">
+            <is-icon slot="start" icon="mdi:download" aria-hidden="true"></is-icon>Descargar
           </is-button>
-          <is-button class="ft-btn" part="footer-discard" data-action="discard" variant="text" color="neutral">Descartar</is-button>
-          <is-button class="ft-btn" part="footer-save" data-action="save" variant="filled" color="brand">Guardar</is-button>
+          <is-button class="ft-btn" part="footer-discard" data-action="discard" variant="text" color="neutral" aria-label="Descartar cambios">Descartar</is-button>
+          <is-button class="ft-btn" part="footer-save" data-action="save" variant="filled" color="brand" aria-label="Guardar documento">Guardar</is-button>
         </div>
       </div>
     </is-dialog>
@@ -392,8 +394,26 @@ interface EditorHistory {
       this.#renderPreview();
       this.#syncDialogLabel();
       this.#applyFullscreenScope();
+      this.#syncHostAria();
       if (this.hasAttribute('open')) this.#syncOpenAttr();
       if (this.#actions?.load || this.src || this.#api?.endpoints?.get) void this.load();
+    }
+
+    /**
+     * role=region + aria-label descriptivo del host (proposal g03 transversales).
+     * Si el usuario fija `label` o `aria-label`, respetamos ese nombre accesible
+     * (no pisamos contratos externos) pero siempre asignamos role=region para
+     * que lectores de pantalla localicen el landmark.
+     */
+    #syncHostAria(): void {
+      if (!this.hasAttribute('role')) this.setAttribute('role', 'region');
+      if (this.getAttribute('aria-label') == null) {
+        const userLabel = this.getAttribute('label');
+        const name = (userLabel && userLabel.trim())
+          ? userLabel.trim()
+          : (this.label || this.filename || 'Editor de markdown');
+        this.setAttribute('aria-label', name);
+      }
     }
 
     override onDisconnected(): void {
@@ -872,13 +892,70 @@ interface EditorHistory {
 
     #onEditorKeyDown(e: KeyboardEvent): void {
       if (!this.canEdit) return;
+      // Atajos con modificador (siempre antes que Tab/Escape, que son sin mod).
       const mod = e.ctrlKey || e.metaKey;
-      if (!mod) return;
-      const key = e.key.toLowerCase();
-      if (key === 'z' && !e.shiftKey) { e.preventDefault(); this.#undo(); }
-      else if (key === 'y' || (key === 'z' && e.shiftKey)) { e.preventDefault(); this.#redo(); }
-      else if (key === 'b') { e.preventDefault(); this.#runCommand('bold'); }
-      else if (key === 'i') { e.preventDefault(); this.#runCommand('italic'); }
+      if (mod) {
+        const key = e.key.toLowerCase();
+        if (key === 'z' && !e.shiftKey) { e.preventDefault(); this.#undo(); return; }
+        if (key === 'y' || (key === 'z' && e.shiftKey)) { e.preventDefault(); this.#redo(); return; }
+        if (key === 'b') { e.preventDefault(); this.#runCommand('bold'); return; }
+        if (key === 'i') { e.preventDefault(); this.#runCommand('italic'); return; }
+        return;
+      }
+      // Tab indenta / outdenta (proposal: keyboard nav). En superficie WYSIWYG
+      // usamos execCommand; en plain textarea insertamos espacios a mano.
+      if (e.key === 'Tab') {
+        if (this.#plain) {
+          e.preventDefault();
+          const ta = this.#plainTextarea as unknown as HTMLTextAreaElement | null;
+          if (!ta) return;
+          const start = ta.selectionStart ?? 0;
+          const end = ta.selectionEnd ?? 0;
+          const indent = '  ';
+          if (e.shiftKey) {
+            // Outdent: recorta 2 espacios al inicio de cada línea del rango.
+            const before = ta.value.slice(0, start);
+            const sel = ta.value.slice(start, end);
+            const after = ta.value.slice(end);
+            const lineStart = before.lastIndexOf('\n') + 1;
+            const block = before.slice(lineStart) + sel;
+            const outdented = block.replace(/^( {1,2})/gm, '');
+            const delta = block.length - outdented.length;
+            const next = before.slice(0, lineStart) + outdented + after;
+            ta.value = next;
+            ta.selectionStart = Math.max(lineStart, start - 2);
+            ta.selectionEnd = Math.max(0, end - delta);
+          } else {
+            ta.value = ta.value.slice(0, start) + indent + ta.value.slice(end);
+            ta.selectionStart = ta.selectionEnd = start + indent.length;
+          }
+          this.#onPlainInput();
+        } else {
+          e.preventDefault();
+          if (e.shiftKey) document.execCommand('outdent');
+          else document.execCommand('indent');
+        }
+        return;
+      }
+      // Escape en una lista vacía: sale del bloque (proposal g03 #8: "Escape
+      // sale de listas"). Si la línea actual es un <li> vacío, lo convierte en
+      // un <p> y abandona la lista.
+      if (e.key === 'Escape' && !this.#plain) {
+        const sel = window.getSelection();
+        if (!sel?.rangeCount) return;
+        const node = sel.anchorNode;
+        if (!node) return;
+        const li = (node.nodeType === Node.ELEMENT_NODE ? node as HTMLElement : node.parentElement)?.closest('li');
+        if (li && (li.textContent ?? '').trim() === '') {
+          e.preventDefault();
+          document.execCommand('formatBlock', false, 'p');
+          // Asegurar que el <p> no quede con marcadores de lista residuales.
+          const parent = li.parentElement;
+          if (parent && (parent.tagName === 'UL' || parent.tagName === 'OL') && parent.children.length === 1) {
+            document.execCommand('formatBlock', false, 'p');
+          }
+        }
+      }
     }
 
     #runCommand(cmd: string | null): void {

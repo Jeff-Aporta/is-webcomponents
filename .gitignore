@@ -18,6 +18,7 @@ Thumbs.db
 .env
 .env.*
 src/utils/health/e2e/.artifacts/
+src/utils/testing/e2e/.artifacts/
 .gitsecret/
 .vscode/
 .idea/

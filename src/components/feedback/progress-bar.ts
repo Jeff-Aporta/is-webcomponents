@@ -81,13 +81,18 @@ import { setStringAttr } from '../_shared/reflect.js';
       this.#track.setAttribute('aria-valuemax', '100');
 
       if (indet) {
+        // g07 (Cat 26): en indeterminate no hay progreso real → el role sigue
+        // siendo progressbar pero aria-busy=true avisa al SR de que ignore el
+        // valuenow ausente y anuncie que el proceso sigue en curso.
         this.#track.removeAttribute('aria-valuenow');
         this.#track.setAttribute('aria-valuetext', label || 'Loading');
+        this.#track.setAttribute('aria-busy', 'true');
         this.#indicator.style.width = '';
         this.#indicator.classList.add('is-indeterminate');
       } else {
         this.#track.setAttribute('aria-valuenow', String(val));
         this.#track.setAttribute('aria-valuetext', label || `${val}%`);
+        this.#track.setAttribute('aria-busy', 'false');
         this.#indicator.style.width = `${val}%`;
         this.#indicator.classList.remove('is-indeterminate');
       }

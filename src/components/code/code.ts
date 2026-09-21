@@ -73,6 +73,11 @@ TEMPLATE.innerHTML = /* html */ `
   </div>
 `;
 
+// Etiqueta accesible por defecto para el host. Se completa con el lenguaje
+// detectado al pintar (#syncAriaOnHost). El usuario puede pisarla con
+// `aria-label` propio o `label` y la respetamos (override manual).
+const DEFAULT_HOST_LABEL = 'Editor de código';
+
 const OBSERVED = [
   'lang', 'value', 'document', 'format', 'theme-config',
   'line-numbers', 'wrap', 'readonly', 'disabled', 'autofocus', 'compact',
@@ -152,6 +157,7 @@ class IsCode extends ElementBase {
     upgradeProperties(this, PROP_UPGRADE);
     this.#syncThemeFromPage();
     this.#syncLayoutDom();
+    this.#syncAriaOnHost();
     if (this.#themeConfig) applyThemeConfig(this, this.#themeConfig, this.#pageTheme());
     document.addEventListener('is-theme-change', this.#onThemeChange);
     if (!this.#booting) void this.#bootstrap();
@@ -591,14 +597,17 @@ class IsCode extends ElementBase {
   #renderNative(): void {
     if (!this.#native) return;
     const text = this.#nativeText ?? '';
+    const lang = this.lang || 'text';
+    const lines = (text ?? '').split('\n').length;
     const scroll = document.createElement('div');
     scroll.className = 'ic-scroll';
     const pre = document.createElement('pre');
     pre.className = 'ic-native';
-    pre.setAttribute('aria-label', 'Código');
-    const { lines } = this.#paintLines(pre, text, true);
+    pre.setAttribute('aria-label', `Código en ${lang}, ${lines} ${lines === 1 ? 'línea' : 'líneas'}`);
+    pre.setAttribute('role', 'code');
+    const { lines: painted } = this.#paintLines(pre, text, true);
     scroll.append(pre);
-    this.#buildGutter(scroll, lines);
+    this.#buildGutter(scroll, painted);
     if (this.#host) {
       this.#host.innerHTML = '';
       this.#host.append(scroll);
@@ -694,6 +703,23 @@ class IsCode extends ElementBase {
     this.#paintActiveLine(-1);
     this.#onEditScroll();
     this.#paintActiveLine(ta.value.slice(0, ta.selectionStart).split('\n').length - 1);
+    // Sincronizar aria-label del textarea (lenguaje + líneas).
+    this.#syncEditorAriaLabel();
+  }
+
+  /**
+   * aria-label dinámico del `<textarea>` interno: refleja lenguaje + líneas
+   * actuales para que lectores de pantalla anuncien cambios al tipear.
+   */
+  #syncEditorAriaLabel(): void {
+    const ta = this.#ta;
+    if (!ta) return;
+    const lang = this.lang || 'text';
+    const lines = (this.#nativeText ?? '').split('\n').length;
+    ta.setAttribute(
+      'aria-label',
+      `Editor de código en ${lang}, ${lines} ${lines === 1 ? 'línea' : 'líneas'}`,
+    );
   }
 
   #bootEditable(): void {
@@ -709,9 +735,10 @@ class IsCode extends ElementBase {
     scroll.className = 'ic-scroll';
     const edit = document.createElement('div');
     edit.className = 'ic-edit';
+    const lang = this.lang || 'text';
     const pre = document.createElement('pre');
     pre.className = 'ic-native';
-    pre.setAttribute('aria-label', 'Código');
+    pre.setAttribute('aria-label', `Código en ${lang}`);
     pre.setAttribute('aria-hidden', 'true');
     const ta = document.createElement('textarea');
     ta.className = 'ic-input';
@@ -721,6 +748,12 @@ class IsCode extends ElementBase {
     ta.wrap = (this.wrap || this.mode === 'inline') ? 'soft' : 'off';
     ta.placeholder = this.placeholder || '';
     ta.value = this.#nativeText;
+    // ARIA editor: role=textbox + aria-multiline para lectores de pantalla.
+    // aria-label dinámico: "Editor de código en <lang>, N líneas".
+    ta.setAttribute('role', 'textbox');
+    ta.setAttribute('aria-multiline', 'true');
+    const initialLines = (this.#nativeText ?? '').split('\n').length;
+    ta.setAttribute('aria-label', `Editor de código en ${lang}, ${initialLines} ${initialLines === 1 ? 'línea' : 'líneas'}`);
     edit.append(pre, ta);
     scroll.append(edit);
 
@@ -772,9 +805,12 @@ class IsCode extends ElementBase {
     if (reflect) this.setAttribute('value', next);
     setFormValue(this.#internals, next, null);
     setCustomState(this.#internals, 'blank', !next);
+    this.#syncAriaOnHost();
   }
 
   #applyLang(): void {
+    this.#syncAriaOnHost();
+    this.#syncEditorAriaLabel();
     if (this.#editing) this.#paintEdit();
     else if (this.#native) this.#renderNative();
   }
@@ -824,6 +860,48 @@ class IsCode extends ElementBase {
     this.setAttribute('aria-readonly', this.readonly ? 'true' : 'false');
     if (this.disabled) this.setAttribute('aria-disabled', 'true');
     else this.removeAttribute('aria-disabled');
+  }
+
+  /**
+   * Atributos ARIA del host: role=region (siempre que tenga label accesible,
+   * norma ARIA) + aria-label descriptivo del lenguaje y líneas + data-language
+   * para selectores CSS y tooling. Solo se aplica el role si el usuario NO
+   * ya puso un role propio (no pisamos contratos externos).
+   *
+   * Si el consumidor define `label` (atributo) o `aria-label`, ganamos ese
+   * nombre accesible pero mantenemos data-language sincronizado. Usamos un
+   * flag interno para distinguir "label auto" vs "label usuario" sin tener que
+   * parsear el string.
+   */
+  #ariaAutoLabel: boolean = false;
+  #syncAriaOnHost(): void {
+    const lang = this.lang || 'text';
+    this.setAttribute('data-language', lang);
+    const userLabel = this.getAttribute('label');
+    const ariaAttr = this.getAttribute('aria-label');
+    // Si el usuario fijó aria-label por su cuenta, dejamos de auto-generar.
+    if (ariaAttr != null) {
+      this.#ariaAutoLabel = false;
+    } else if (userLabel && userLabel.trim()) {
+      // El usuario dio un `label` (no aria-label): respetamos ese texto pero
+      // seguimos marcándolo como "no auto" para no pisarlo en updates futuros.
+      this.setAttribute('aria-label', userLabel.trim());
+      this.#ariaAutoLabel = false;
+    } else if (!this.#ariaAutoLabel) {
+      // Primer pase sin label del usuario: arrancamos a autogenerar.
+      this.#ariaAutoLabel = true;
+    }
+    if (this.#ariaAutoLabel) {
+      const lines = (this.#nativeText ?? '').split('\n').length;
+      const tail = this.readonly ? ' (sólo lectura)' : '';
+      const base = `${DEFAULT_HOST_LABEL} en ${lang}, ${lines} ${lines === 1 ? 'línea' : 'líneas'}${tail}`;
+      this.setAttribute('aria-label', base);
+    }
+    // role=region solo si el usuario no fija uno propio (un <is-window> u
+    // otro consumidor podría querer region vs group vs application).
+    if (!this.hasAttribute('role')) {
+      this.setAttribute('role', 'region');
+    }
   }
 
   /**

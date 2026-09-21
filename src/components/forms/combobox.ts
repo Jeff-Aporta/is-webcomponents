@@ -24,7 +24,7 @@ import { setStringAttr } from '../_shared/reflect.js';
       <div part="base" class="base">
         <input part="input" class="input" type="text" role="combobox"
           autocomplete="off" aria-autocomplete="list" aria-expanded="false"
-          aria-controls="listbox" />
+          aria-haspopup="listbox" aria-controls="listbox" />
         <is-button
           type="button"
           part="clear"
@@ -49,7 +49,7 @@ import { setStringAttr } from '../_shared/reflect.js';
           <is-icon icon="mdi:chevron-down" aria-hidden="true"></is-icon>
         </is-button>
       </div>
-      <div part="hint" class="hint" hidden></div>
+      <div part="hint" class="hint" id="cb-hint" hidden></div>
     </div>
     <dialog part="dialog" class="popup" tabindex="-1">
       <div part="listbox" class="listbox" id="listbox" role="listbox"></div>
@@ -206,6 +206,18 @@ import { setStringAttr } from '../_shared/reflect.js';
       this.#hintEl.textContent = hint || '';
       this.#input.placeholder = this.getAttribute('placeholder') || '';
       this.#input.required = this.required;
+      // aria-label: priorizar el atributo `label` del host para que los
+      // lectores de pantalla anuncien algo cuando el icono visual es lo único.
+      if (label) this.setAttribute('aria-label', label);
+      else this.removeAttribute('aria-label');
+      // aria-describedby: apunta al slot del hint cuando hay contenido.
+      if (hint) this.#input.setAttribute('aria-describedby', 'cb-hint');
+      else this.#input.removeAttribute('aria-describedby');
+      // aria-required + aria-disabled reflejados en el input.
+      if (this.required) this.#input.setAttribute('aria-required', 'true');
+      else this.#input.removeAttribute('aria-required');
+      if (this.disabled) this.#input.setAttribute('aria-disabled', 'true');
+      else this.#input.removeAttribute('aria-disabled');
       this.#syncClear();
     }
 
@@ -257,6 +269,7 @@ import { setStringAttr } from '../_shared/reflect.js';
         if (!this.#wasOpen) emit(this, 'is-show', {});
       } else {
         this.#activeIndex = -1;
+        this.#syncActiveDescendant();
         if (this.#dialog.open) this.#dialog.close();
         if (this.#wasOpen) emit(this, 'is-hide', {});
       }
@@ -301,12 +314,14 @@ import { setStringAttr } from '../_shared/reflect.js';
 
     #renderList(): void {
       const items = this.#filtered();
+      const baseId = this.id || this.localName;
       this.#listbox.replaceChildren();
       items.forEach((opt, i) => {
         const btn = document.createElement('div');
         btn.className = 'option';
         btn.setAttribute('part', 'option');
         btn.setAttribute('role', 'option');
+        btn.setAttribute('id', `${baseId}-opt-${i}`);
         btn.setAttribute('data-value', opt.value);
         btn.setAttribute('aria-selected', String(opt.value === this.value));
         if (i === this.#activeIndex) btn.setAttribute('data-active', '');
@@ -314,6 +329,19 @@ import { setStringAttr } from '../_shared/reflect.js';
         this.#listbox.appendChild(btn);
       });
       if (this.#activeIndex >= items.length) this.#activeIndex = items.length - 1;
+      this.#syncActiveDescendant();
+    }
+
+    /** Sincroniza aria-activedescendant del input con la option activa. */
+    #syncActiveDescendant(): void {
+      const items = this.#filtered();
+      const idx = this.#activeIndex;
+      if (idx < 0 || idx >= items.length) {
+        this.#input.removeAttribute('aria-activedescendant');
+        return;
+      }
+      const baseId = this.id || this.localName;
+      this.#input.setAttribute('aria-activedescendant', `${baseId}-opt-${idx}`);
     }
 
     #selectIndex(i: number): void {
@@ -405,6 +433,22 @@ import { setStringAttr } from '../_shared/reflect.js';
           e.preventDefault();
           if (!this.open) { this.open = true; return; }
           this.#activeIndex = Math.max(this.#activeIndex - 1, 0);
+          this.#renderList();
+          this.#scrollActive();
+          break;
+        case 'Home':
+          e.preventDefault();
+          if (!this.open) { this.open = true; return; }
+          if (items.length === 0) return;
+          this.#activeIndex = 0;
+          this.#renderList();
+          this.#scrollActive();
+          break;
+        case 'End':
+          e.preventDefault();
+          if (!this.open) { this.open = true; return; }
+          if (items.length === 0) return;
+          this.#activeIndex = items.length - 1;
           this.#renderList();
           this.#scrollActive();
           break;

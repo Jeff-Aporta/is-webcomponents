@@ -75,6 +75,80 @@ interface HandlerEntry {
 }
 
 /**
+ * Crea un `<section role="region">` con `aria-label` (proposal g09 ui.ts).
+ *
+ * Solo añade `role="region"` cuando hay label o labelledby: la norma ARIA
+ * dice que un region sin nombre accesible no debe promocionarse a landmark
+ * (ensucia el mapa de nodos sin aportar navegación). Los consumidores que
+ * quieren un wrapper sin landmark deben usar `el('section', { class: 'x' })`
+ * directamente.
+ *
+ * @param label    Texto accesible o id del elemento que lo provee.
+ * @param opts.useLabel    Si `true`, `label` se aplica como `aria-label`.
+ *                        Si `false`, se aplica como `aria-labelledby`.
+ * @param children Nodos hijos.
+ *
+ * @example
+ *   // region con aria-label propio
+ *   const sec = region('Productos', el('h2', { text: 'Productos' }));
+ *   // region que apunta a un <h2> existente en el documento
+ *   const sec = region('productos-title', { labelledby: true }, ul);
+ */
+export function region(
+  label: string,
+  optsOrChildren: (ElChild | ElChild[]) | { labelledby?: boolean },
+  maybeChildren?: ElChild | ElChild[],
+): HTMLElement {
+  const isOpts = (v: unknown): v is { labelledby?: boolean } =>
+    !!v && typeof v === 'object' && !Array.isArray(v) && !(v instanceof Node) && !('nodeType' in (v as object));
+
+  const opts = isOpts(optsOrChildren) ? optsOrChildren : {};
+  const children = isOpts(optsOrChildren) ? maybeChildren : optsOrChildren;
+
+  const sec = document.createElement('section');
+  const text = String(label ?? '').trim();
+  if (text) {
+    if (opts.labelledby) sec.setAttribute('aria-labelledby', text);
+    else sec.setAttribute('aria-label', text);
+    sec.setAttribute('role', 'region');
+  }
+  const lista = Array.isArray(children) ? children : children == null ? [] : [children];
+  for (const c of lista) {
+    if (c == null || c === false || c === true) continue;
+    if (typeof c === 'string') sec.append(document.createTextNode(c));
+    else if (c instanceof Node) sec.append(c);
+  }
+  return sec;
+}
+
+/**
+ * Crea un `<div role="dialog" aria-modal="true">` (proposal g09 ui.ts).
+ * Complementa `region` para secciones interactivas tipo modal. El consumidor
+ * sigue siendo responsable del focus trap y de cerrar al Escape (ver
+ * `IsFloating` que ya lo trae integrado).
+ */
+export function dialog(
+  labelOrOpts: string | { label?: string; labelledby?: string; modal?: boolean },
+  children: ElChild | ElChild[] = [],
+): HTMLElement {
+  const opts = typeof labelOrOpts === 'string'
+    ? { label: labelOrOpts }
+    : (labelOrOpts ?? {});
+  const dlg = document.createElement('div');
+  dlg.setAttribute('role', 'dialog');
+  if (opts.modal !== false) dlg.setAttribute('aria-modal', 'true');
+  if (opts.label) dlg.setAttribute('aria-label', opts.label);
+  if (opts.labelledby) dlg.setAttribute('aria-labelledby', opts.labelledby);
+  const lista = Array.isArray(children) ? children : children == null ? [] : [children];
+  for (const c of lista) {
+    if (c == null || c === false || c === true) continue;
+    if (typeof c === 'string') dlg.append(document.createTextNode(c));
+    else if (c instanceof Node) dlg.append(c);
+  }
+  return dlg;
+}
+
+/**
  * Plantilla etiquetada → DocumentFragment.
  * Función tras `on…=` / `onis-…=` → addEventListener.
  * `raw(str)` → HTML sin escapar. Node → se inserta. null/false → nada.
@@ -232,6 +306,7 @@ export const crearComponente = <P extends Record<string, unknown>>(
 
 export const IsUi = {
   css, adoptCss, el, html, raw, esc, rec, fecha, jsonScript, define, crearComponente,
+  region, dialog,
 };
 
 if (typeof globalThis !== 'undefined') {

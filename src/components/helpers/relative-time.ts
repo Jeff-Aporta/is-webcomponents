@@ -21,7 +21,7 @@ import { parseLooseDate } from './format-date.js';
   const TEMPLATE = document.createElement('template');
   TEMPLATE.innerHTML = /* html */ `<time part="time" class="time"></time>`;
 
-  const OBSERVED = ['date', 'format', 'numeric', 'locale', 'sync'];
+  const OBSERVED = ['date', 'format', 'numeric', 'locale', 'sync', 'label'];
   const VALID_FORMAT = ['long', 'short', 'narrow'] as const;
   type FormatStyle = (typeof VALID_FORMAT)[number];
   const VALID_NUMERIC = ['always', 'auto'] as const;
@@ -41,6 +41,7 @@ import { parseLooseDate } from './format-date.js';
 
     #el!: HTMLTimeElement;
     #timer: ReturnType<typeof setInterval> | null = null;
+    #lastTickRendered = '';
 
     constructor() {
       super();
@@ -87,6 +88,21 @@ import { parseLooseDate } from './format-date.js';
     get sync() { return this.hasAttribute('sync'); }
     set sync(v: boolean) { this.toggleAttribute('sync', !!v); }
 
+    /**
+     * Etiqueta explícita (proposal g09 #11 — `aria-label` semánticamente
+     * rico). Si está, se usa como `aria-label` del host; si no, se construye
+     * un resumen con la versión relativa + el instante ISO para que el lector
+     * de pantalla pueda situar el momento con precisión sin necesidad de
+     * mirar el reloj del sistema.
+     */
+    get label(): string {
+      return this.getAttribute('label') ?? '';
+    }
+    set label(v: string) {
+      if (v == null || v === '') this.removeAttribute('label');
+      else this.setAttribute('label', String(v));
+    }
+
     #formatRelative(d: Date): string {
       const now = Date.now();
       const diffSec = Math.round((d.getTime() - now) / 1000);
@@ -118,11 +134,40 @@ import { parseLooseDate } from './format-date.js';
       return '';
     }
 
+    /**
+     * Construye la versión para `aria-label` (proposal g09 #11). Combina el
+     * texto relativo visible con el timestamp ISO exacto entre paréntesis,
+     * para que el lector de pantalla comunique "hace 5 minutos (14:23:07Z)"
+     * aunque el texto visible siga siendo "hace 5 minutos". Si hay `label`
+     * explícito, ese gana.
+     */
+    #describeForAria(visible: string, d: Date | null): string {
+      const explicit = this.label.trim();
+      if (explicit) return explicit;
+      if (!d) return visible;
+      const iso = d.toISOString().replace(/\.\d{3}Z$/, 'Z');
+      return `${visible} (${iso})`;
+    }
+
     #render() {
       const d = parseLooseDate(this.date);
-      this.#el.textContent = d ? this.#formatRelative(d) : '';
+      const visible = d ? this.#formatRelative(d) : '';
+      this.#el.textContent = visible;
       if (d) this.#el.dateTime = d.toISOString();
       else this.#el.removeAttribute('datetime');
+
+      this.setAttribute('aria-label', this.#describeForAria(visible, d));
+
+      // Proposal g09 #6 — `aria-live="polite"` cuando autoUpdate (sync).
+      // Solo cambiamos el aria-live si estamos conectados: durante el render
+      // inicial (atributo parser) ya quedó en su valor final.
+      if (this.sync && this.mounted) {
+        this.setAttribute('aria-live', 'polite');
+        this.setAttribute('aria-atomic', 'true');
+      } else if (!this.sync) {
+        this.removeAttribute('aria-live');
+        this.removeAttribute('aria-atomic');
+      }
     }
 
     #clearSync() {
@@ -135,6 +180,9 @@ import { parseLooseDate } from './format-date.js';
     #setupSync() {
       this.#clearSync();
       if (this.sync) {
+        // 30s es razonable; el texto "hace N segundos" no necesita refresco
+        // sub-segundo. Si el consumidor quiere más fino, puede sobrescribir
+        // el interval manualmente y volver a llamar setupSync.
         this.#timer = setInterval(() => this.#render(), 30000);
       }
     }

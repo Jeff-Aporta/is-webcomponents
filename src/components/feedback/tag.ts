@@ -51,6 +51,7 @@ import { TONE } from '../_shared/tone.js';
     static get observedAttributes(): string[] { return OBSERVED; }
 
     #remove!: HTMLElement;
+    #mo: MutationObserver | null = null;
     constructor() {
       super();
       const shadow = this.attachShadow({ mode: 'open' });
@@ -64,6 +65,15 @@ import { TONE } from '../_shared/tone.js';
       if (!this.hasAttribute('color')) this.setAttribute('color', 'brand');
       if (!this.hasAttribute('variant')) this.setAttribute('variant', 'filled-outlined');
       this.#syncRemove();
+      // g07 (Cat 30): observar el slot para reflejar cambios en la
+      // etiqueta accesible automática (p.ej. icon-only tag).
+      this.#watchA11y();
+      this.#syncAria();
+    }
+
+    onDisconnected() {
+      this.#mo?.disconnect();
+      this.#mo = null;
     }
 
     onAttributeChanged(name: string, oldVal: string | null, newVal: string | null) {
@@ -74,6 +84,7 @@ import { TONE } from '../_shared/tone.js';
         this.setAttribute('variant', 'filled-outlined');
       }
       if (name === 'with-remove' || name === 'remove-label') this.#syncRemove();
+      if (name === 'color') this.#syncAria();
     }
 
     get withRemove() { return this.hasAttribute('with-remove'); }
@@ -82,6 +93,26 @@ import { TONE } from '../_shared/tone.js';
     #syncRemove() {
       this.#remove.hidden = !this.withRemove;
       this.#remove.setAttribute('aria-label', this.getAttribute('remove-label') || 'Quitar');
+    }
+
+    /** g07 (Cat 30): etiqueta accesible automática cuando el slot principal
+     *  está vacío. Mismo criterio que badge.ts: "Etiqueta {color}". */
+    #syncAria() {
+      if (this.hasAttribute('aria-label')) return;
+      const text = this.textContent?.trim() ?? '';
+      if (text) return;
+      // Si hay un slot distinto a start/end, el consumidor está pintando
+      // contenido propio en el slot por defecto → no inventar label.
+      const hasOtherSlot = this.querySelector('[slot]:not([slot="start"]):not([slot="end"])');
+      if (hasOtherSlot) return;
+      const color = this.getAttribute('color') || 'brand';
+      this.setAttribute('aria-label', `Etiqueta ${color}`);
+    }
+
+    #watchA11y() {
+      this.#mo?.disconnect();
+      this.#mo = new MutationObserver(() => this.#syncAria());
+      this.#mo.observe(this, { childList: true, subtree: true, characterData: true });
     }
 
     #onRemove = (e: Event) => {

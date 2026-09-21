@@ -8,8 +8,9 @@ import { setStringAttr } from '../_shared/reflect.js';
  * Anillo de progreso SVG.
  *
  * Atributos
- *   value   number 0–100
- *   label   string — aria-label / texto central
+ *   value           number 0–100
+ *   label           string — aria-label / texto central
+ *   indeterminate   boolean — g07 (Cat 27): oculta valuenow y entra en busy.
  *
  * CSS Parts: ::part(progress-ring) ::part(track) ::part(indicator) ::part(label)
  */
@@ -26,7 +27,7 @@ import { setStringAttr } from '../_shared/reflect.js';
     </div>
   `;
 
-  const OBSERVED = ['value', 'label'];
+  const OBSERVED = ['value', 'label', 'indeterminate'];
   const CIRC = 2 * Math.PI * 15.9155;
 
   class IsProgressRing extends ElementBase {
@@ -74,23 +75,45 @@ import { setStringAttr } from '../_shared/reflect.js';
     get label() { return this.getAttribute('label') ?? ''; }
     set label(v) { setStringAttr(this, 'label', v); }
 
+    /** g07 (Cat 27): nuevo atributo `indeterminate` para modo sin progreso real. */
+    get indeterminate() { return this.hasAttribute('indeterminate'); }
+    set indeterminate(v) { this.toggleAttribute('indeterminate', !!v); }
+
     #render() {
+      const indet = this.indeterminate;
       const val = this.value;
       const label = this.label.trim();
-      const offset = CIRC * (1 - val / 100);
-
-      this.#indicator.style.strokeDasharray = `${CIRC}`;
-      this.#indicator.style.strokeDashoffset = `${offset}`;
 
       this.#wrap.setAttribute('aria-valuemin', '0');
       this.#wrap.setAttribute('aria-valuemax', '100');
-      this.#wrap.setAttribute('aria-valuenow', String(val));
-      this.#wrap.setAttribute('aria-valuetext', label || `${val}%`);
+
+      if (indet) {
+        // g07 (Cat 27): sin valuenow + busy=true. Mantenemos el ring como
+        // progressbar para que el SR lo identifique como tal, pero dejamos
+        // el label interno vacío para no duplicar el porcentaje.
+        this.#wrap.removeAttribute('aria-valuenow');
+        this.#wrap.setAttribute('aria-busy', 'true');
+        this.#wrap.setAttribute('aria-valuetext', label || '');
+        this.#indicator.classList.add('is-indeterminate');
+      } else {
+        const offset = CIRC * (1 - val / 100);
+        this.#indicator.style.strokeDasharray = `${CIRC}`;
+        this.#indicator.style.strokeDashoffset = `${offset}`;
+        this.#wrap.setAttribute('aria-valuenow', String(val));
+        this.#wrap.setAttribute('aria-busy', 'false');
+        this.#wrap.setAttribute('aria-valuetext', label || `${val}%`);
+        this.#indicator.classList.remove('is-indeterminate');
+      }
 
       if (label) {
         this.#wrap.setAttribute('aria-label', label);
         this.#labelEl.textContent = label;
         this.#labelEl.hidden = false;
+      } else if (indet) {
+        // g07 (Cat 27): sin label ni valor, el texto central queda vacío.
+        this.#wrap.removeAttribute('aria-label');
+        this.#labelEl.textContent = '';
+        this.#labelEl.hidden = true;
       } else {
         this.#wrap.removeAttribute('aria-label');
         this.#labelEl.textContent = `${Math.round(val)}%`;

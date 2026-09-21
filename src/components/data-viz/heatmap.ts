@@ -61,6 +61,7 @@ type HeatmapCfg = {
     #mo: MutationObserver | null = null;
     #svg!: HTMLElement;
     #legendEl!: HTMLElement;
+    #srStatusEl!: HTMLElement;
     #mounted = false;
     #config: HeatmapCfg | null = null;
 
@@ -69,13 +70,15 @@ type HeatmapCfg = {
       this.attachShadow({ mode: 'open' });
       this.shadowRoot!.innerHTML = /* html */ `
         <div part="root" class="root" data-legend="end">
-          <svg part="canvas" class="chart-svg" role="img" aria-label="Mapa de calor"></svg>
+          <svg part="canvas" class="chart-svg" role="img" aria-busy="true"></svg>
           <div part="legend" class="legend" hidden></div>
+          <div part="sr-status" class="sr-status" aria-live="polite" aria-atomic="true"></div>
         </div>
       `;
       adoptCss(this.shadowRoot!, import.meta.url);
       this.#svg = this.shadowRoot!.querySelector<HTMLElement>('.chart-svg')!;
       this.#legendEl = this.shadowRoot!.querySelector<HTMLElement>('.legend')!;
+      this.#srStatusEl = this.shadowRoot!.querySelector<HTMLElement>('.sr-status')!;
       this.#svg.addEventListener('pointermove', (e: Event) => this.#onHover(e));
       this.#svg.addEventListener('pointerleave', () => this.#clearHover());
     }
@@ -148,11 +151,25 @@ type HeatmapCfg = {
 
       // calcular dominio
       const flat = matrix.flat().filter((v): v is number => v != null && Number.isFinite(v));
-      if (!flat.length) return;
+      if (!flat.length) {
+        // Sin datos: mantenemos aria-busy y dejamos un aria-label neutro.
+        this.#svg.setAttribute('aria-busy', 'true');
+        this.#svg.setAttribute('aria-label', 'Mapa de calor sin datos');
+        return;
+      }
       const min = Math.min(...flat);
       const max = Math.max(...flat);
       const ticks = niceTicks(min, max, 5);
       const domain: [number, number] = [ticks[0] ?? min, ticks[ticks.length - 1] ?? max];
+
+      // aria-label dinámico con resumen del dataset (filas, columnas, min, max).
+      const rows = yLabels.length || matrix.length;
+      const cols = xLabels.length || (matrix[0]?.length ?? 0);
+      this.#svg.setAttribute('aria-busy', 'false');
+      this.#svg.setAttribute(
+        'aria-label',
+        `Mapa de calor de ${rows} filas y ${cols} columnas, rango de ${formatVal(min)} a ${formatVal(max)}`,
+      );
 
       const legendW = showLegend ? 70 : 0;
       const labelPadX = (xLabels[0]?.length || 4) * 6 + 12;
@@ -280,11 +297,15 @@ type HeatmapCfg = {
       if (!cell) return this.#clearHover();
       cell.classList.add('is-hover');
       const detail = { x: cell.dataset['x'], y: cell.dataset['y'], value: Number(cell.dataset['v']) };
+      // Anuncio polite al sr-status: replica el detail del evento is-cell-hover.
+      this.#srStatusEl.textContent = `${detail.y} · ${detail.x} = ${formatVal(Number(detail.value))}`;
       emit(this, 'is-cell-hover', detail);
     }
 
     #clearHover(): void {
       this.#svg.querySelectorAll<HTMLElement>('.cell.is-hover').forEach((c) => c.classList.remove('is-hover'));
+      // No limpiamos srStatusEl.textContent: los lectores de pantalla polite
+      // necesitan mantener el último mensaje hasta que llegue uno nuevo.
     }
   }
 

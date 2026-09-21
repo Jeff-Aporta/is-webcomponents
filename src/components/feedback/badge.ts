@@ -41,6 +41,8 @@ import { TONE } from '../_shared/tone.js';
 
     static get observedAttributes(): string[] { return [...OBSERVED, 'pulse-color']; }
 
+    #mo: MutationObserver | null = null;
+
     constructor() {
       super();
       const shadow = this.attachShadow({ mode: 'open' });
@@ -53,6 +55,15 @@ import { TONE } from '../_shared/tone.js';
       if (!this.hasAttribute('color')) this.setAttribute('color', 'brand');
       if (!this.hasAttribute('variant')) this.setAttribute('variant', 'accent');
       if (!this.hasAttribute('attention')) this.setAttribute('attention', 'none');
+      // g07 (Cat 29): observar el slot por si la app lo rellena tras mount.
+      this.#watchA11y();
+      // Una primera pasada sincronizada.
+      this.#syncAria();
+    }
+
+    disconnectedCallback(): void {
+      this.#mo?.disconnect();
+      this.#mo = null;
     }
 
     attributeChangedCallback(name: string, oldVal: string | null, newVal: string | null): void {
@@ -67,6 +78,27 @@ import { TONE } from '../_shared/tone.js';
       if (name === 'attention' && newVal && !VALID_ATTENTION.includes(newVal)) {
         this.setAttribute('attention', 'none');
       }
+      if (name === 'color') this.#syncAria();
+    }
+
+    /** g07 (Cat 29): etiqueta accesible automática cuando el slot principal
+     *  está vacío (ej: badge con sólo icono). Solo se aplica si el consumer
+     *  no fijó su propio aria-label. */
+    #syncAria() {
+      if (this.hasAttribute('aria-label')) return;
+      const slotDefault = this.querySelector('[slot]:not([slot="start"]):not([slot="end"])');
+      const text = this.textContent?.trim() ?? '';
+      if (text) return; // hay texto visible, no necesita label
+      if (!slotDefault) {
+        const color = this.getAttribute('color') || 'brand';
+        this.setAttribute('aria-label', `Insignia ${color}`);
+      }
+    }
+
+    #watchA11y() {
+      this.#mo?.disconnect();
+      this.#mo = new MutationObserver(() => this.#syncAria());
+      this.#mo.observe(this, { childList: true, subtree: true, characterData: true });
     }
   }
 

@@ -30,7 +30,7 @@ import '../actions/button.js';
 (() => {
   const TEMPLATE = document.createElement('template');
   TEMPLATE.innerHTML = /* html */ `
-    <div part="base" class="base" role="status" aria-live="polite">
+    <div part="base" class="base" data-toast-base role="status" aria-live="polite" aria-atomic="true">
       <span part="icon" class="icon">
         <slot name="icon"><slot name="start"></slot></slot>
       </span>
@@ -87,12 +87,17 @@ import '../actions/button.js';
       this.#base.addEventListener('mouseleave', this.#onResume);
       this.#base.addEventListener('focusin', this.#onPause);
       this.#base.addEventListener('focusout', this.#onResume);
+      // g07: Escape cierra el toast focused (no atrapa foco, pero su botón
+      // close puede tener foco tras tabular). El listener vive en el shadow
+      // para no contaminar el resto de la página.
+      this.#base.addEventListener('keydown', this.#onKeydown);
     }
 
     connectedCallback(): void {
       this.#mounted = true;
       if (!this.hasAttribute('color')) this.setAttribute('color', 'brand');
       if (!this.hasAttribute('duration')) this.setAttribute('duration', String(DEFAULT_DURATION));
+      this.#syncAria();
       if (this.hasAttribute('open')) this.show();
       else this.hidden = true;
     }
@@ -107,6 +112,9 @@ import '../actions/button.js';
       if (name === 'color' && newVal && !VALID_COLOR.includes(newVal)) {
         this.setAttribute('color', normalizeIntent(newVal, 'neutral'));
         return;
+      }
+      if (name === 'color') {
+        this.#syncAria();
       }
       if (name === 'open') {
         if (this.hasAttribute('open')) {
@@ -233,6 +241,32 @@ import '../actions/button.js';
       if (this.#timer != null) { clearTimeout(this.#timer); this.#timer = null; }
       if (this.#raf != null) { cancelAnimationFrame(this.#raf); this.#raf = null; }
     }
+
+    /**
+     * g07 (Cat 22): sincroniza `role` y `aria-live` del contenedor interno
+     * según el color del toast. Por defecto es status+polite, pero `danger`
+     * cambia a alert+assertive para que los lectores de pantalla lo
+     * anuncien inmediatamente.
+     */
+    #syncAria() {
+      const isDanger = this.color === 'danger';
+      const role = isDanger ? 'alert' : 'status';
+      const live = isDanger ? 'assertive' : 'polite';
+      this.#base.setAttribute('role', role);
+      this.#base.setAttribute('aria-live', live);
+      this.#base.setAttribute('aria-atomic', 'true');
+    }
+
+    /** g07 (Cat 22): Escape cierra el toast que tiene foco. No es modal, así
+     *  que el foco puede pasar por detrás; el atajo sirve para cerrar el
+     *  ítem cuyo botón close quedó activo. */
+    #onKeydown = (e: KeyboardEvent) => {
+      if (e.key !== 'Escape' || e.defaultPrevented) return;
+      if (!this.hasAttribute('open')) return;
+      e.stopPropagation();
+      e.preventDefault();
+      this.hide();
+    };
   }
 
   defineElement('is-toast-item', IsToastItem, 'IsToastItem');

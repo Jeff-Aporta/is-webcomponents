@@ -70,6 +70,9 @@ import '../actions/button.js';
     #onTriggerClick: ((e: PointerEvent) => void) | null = null;
     #onDocClick!: (e: PointerEvent) => void;
     #popup!: HTMLDivElement;
+    /** g07 (Cat 24): elemento que tenía foco antes de abrir el popconfirm
+     *  para restaurarlo al cerrar (UX estándar de popovers). */
+    #restoreFocus: HTMLElement | null = null;
 
     /**
      * Ciclo "abierto" compartido con is-dropdown / is-context-menu
@@ -99,6 +102,9 @@ import '../actions/button.js';
       this.#popup.style.left = '0';
       this.#popup.style.zIndex = '99999';
       this.#popup.style.display = 'none';
+      // g07 (Cat 24): aria-hidden sincronizado al estado. Mientras está
+      // cerrado, el contenedor flotante debe ser ignorado por SR.
+      this.#popup.setAttribute('aria-hidden', 'true');
       this.appendChild(this.#popup);
       this.#popup.appendChild(this.#pop);
       this.#bindTrigger();
@@ -146,20 +152,80 @@ import '../actions/button.js';
 
     show() {
       const trigger = this.#trigger;
+      // g07 (Cat 24): guarda el foco del disparador antes de moverlo al
+      // popconfirm, para devolverlo al cerrar.
+      const active = document.activeElement;
+      if (active instanceof HTMLElement) this.#restoreFocus = active;
       this.setAttribute('open', '');
       this.#show();
       emit(this, 'is-popconfirm-show', { trigger });
     }
 
     hide() {
+      // g07 (Cat 24): devuelve el foco al elemento que lo tenía antes de
+      // abrir, o al trigger como fallback. Se hace antes de quitar
+      // aria-hidden y display para que el cambio de foco sea estable.
+      const restore = this.#restoreFocus;
+      this.#restoreFocus = null;
       this.removeAttribute('open');
       this.#popup.style.display = 'none';
+      this.#popup.setAttribute('aria-hidden', 'true');
+      if (restore && document.contains(restore)) {
+        try { restore.focus({ preventScroll: true }); } catch { restore.focus(); }
+      } else if (this.#trigger && document.contains(this.#trigger)) {
+        try { this.#trigger.focus({ preventScroll: true }); } catch { this.#trigger.focus(); }
+      }
       emit(this, 'is-popconfirm-hide', { trigger: this.#trigger });
     }
 
     #show() {
       this.#popup.style.display = 'block';
-      requestAnimationFrame(() => this.#reposition());
+      this.#popup.setAttribute('aria-hidden', 'false');
+      // g07 (Cat 24): al abrir, foco al primer focusable del popup. Se hace
+      // tras el layout (rAF) para que el popup esté pintado y los is-button
+      // hayan completado su upgrade.
+      requestAnimationFrame(() => {
+        this.#reposition();
+        this.#focusFirst();
+      });
+    }
+
+    /** g07 (Cat 24): foco al primer elemento focuseable del popup flotante.
+     *  Recorre el shadow del popconfirm y devuelve el primer descendiente
+     *  que sea focusable y no esté disabled. Si no encuentra ninguno, deja
+     *  el foco donde estaba (no es modal). */
+    #focusFirst() {
+      const root = this.#pop;
+      if (!root) return;
+      const sel = 'button, [href], input, select, textarea, is-button, is-input, [tabindex]:not([tabindex="-1"])';
+      const visit = (scope: ParentNode): HTMLElement | null => {
+        const direct = scope.querySelectorAll<HTMLElement>(sel);
+        for (const el of Array.from(direct)) {
+          if (el.hasAttribute('disabled') || el.getAttribute('aria-disabled') === 'true') continue;
+          return el;
+        }
+        for (const el of scope.querySelectorAll<HTMLElement>('*')) {
+          if (el.tabIndex >= 0 && !el.hasAttribute('disabled') && el.getAttribute('aria-disabled') !== 'true') {
+            return el;
+          }
+          if ((el as HTMLElement & { shadowRoot?: ShadowRoot | null }).shadowRoot) {
+            const found = visit((el as HTMLElement & { shadowRoot: ShadowRoot }).shadowRoot);
+            if (found) return found;
+          }
+        }
+        return null;
+      };
+      const target = visit(root);
+      if (!target) return;
+      // Para is-button / is-input, el foco debe ir al <button>/<input> interno.
+      const inner = (target as HTMLElement & { shadowRoot?: ShadowRoot | null }).shadowRoot
+        ?.querySelector<HTMLElement>('button, input, textarea, [tabindex]:not([tabindex="-1"])');
+      try {
+        if (inner) inner.focus({ preventScroll: true });
+        else target.focus({ preventScroll: true });
+      } catch {
+        try { (inner ?? target).focus(); } catch { /* no-op */ }
+      }
     }
 
     #reposition = () => {

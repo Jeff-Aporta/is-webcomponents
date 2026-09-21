@@ -62,6 +62,7 @@ import {
     'auto-size', 'boundary', 'hover-bridge',
     'flip-fallback-placements', 'flip-fallback-strategy',
     'flip-padding', 'shift-padding', 'auto-size-padding', 'anchor',
+    'modal', 'label', 'labelledby',
   ];
 
   class IsFloating extends withStyleAttrs(HTMLElement) {
@@ -85,6 +86,7 @@ import {
     #raf = 0;
     #measuring = false;
     #bridgeBound = false;
+    #lastActive: HTMLElement | null = null;
 
     constructor() {
       super();
@@ -104,11 +106,19 @@ import {
       this.#mounted = true;
       this.#resolveAnchor();
       this.#syncActive();
+      // Listeners de teclado globales: solo cuando es modal — propuesta g09.
+      // Capturamos fase para que Escape cierre ANTES de que el evento llegue
+      // al árbol del popup (que podría tener otros handlers).
+      if (this.modal) {
+        document.addEventListener('keydown', this.#onModalKeydown, true);
+      }
     }
 
     disconnectedCallback(): void {
       this.#mounted = false;
       this.#teardown();
+      document.removeEventListener('keydown', this.#onModalKeydown, true);
+      this.#releaseTrap();
     }
 
     attributeChangedCallback(name: string, oldValue: string | null, newValue: string | null): void {
@@ -117,6 +127,10 @@ import {
       if (!this.#mounted) return;
       if (name === 'active') this.#syncActive();
       else if (name === 'anchor') this.#resolveAnchor();
+      else if (name === 'modal' || name === 'label' || name === 'labelledby') {
+        // Atributos ARIA: no requieren reposition, solo reaplicar sync.
+        this.#syncModalAria();
+      }
       else if (this.active) this.reposition();
     }
 
@@ -172,6 +186,32 @@ import {
 
     get hoverBridge() { return this.hasAttribute('hover-bridge'); }
     set hoverBridge(v) { this.toggleAttribute('hover-bridge', !!v); }
+
+    /**
+     * Modo modal (proposal g09 floating — `role=dialog` cuando modal).
+     * Activa: `role="dialog"`, `aria-modal="true"`, focus trap con Tab cycling,
+     * cierre con Escape, y restaura foco al disparador al desactivar.
+     */
+    get modal(): boolean { return this.hasAttribute('modal'); }
+    set modal(v: boolean) { this.toggleAttribute('modal', !!v); }
+
+    /** Etiqueta accesible del dialog (proposal g09 floating). */
+    get label(): string {
+      return this.getAttribute('label') ?? '';
+    }
+    set label(v: string) {
+      if (v == null || v === '') this.removeAttribute('label');
+      else this.setAttribute('label', String(v));
+    }
+
+    /** Referencia a un `<label>` externo (proposal g09 floating). */
+    get labelledby(): string {
+      return this.getAttribute('labelledby') ?? '';
+    }
+    set labelledby(v: string) {
+      if (v == null || v === '') this.removeAttribute('labelledby');
+      else this.setAttribute('labelledby', String(v));
+    }
 
     get flipFallbackPlacements() { return this.getAttribute('flip-fallback-placements') || ''; }
     set flipFallbackPlacements(v: string) { this.setAttribute('flip-fallback-placements', v || ''); }
@@ -322,6 +362,16 @@ import {
       if (this.active) {
         this.#popup.hidden = false;
         this.#setupListeners();
+        // Recordar el foco activo antes de tomar el control del foco. Se
+        // restaura en la rama `else` (modal) — proposal g09 floating.
+        if (this.modal) {
+          const ae = document.activeElement;
+          if (ae instanceof HTMLElement && ae !== document.body) {
+            this.#lastActive = ae;
+          }
+          this.#syncModalAria();
+          this.#installTrap();
+        }
         requestAnimationFrame(() => {
           requestAnimationFrame(() => this.reposition());
         });
@@ -329,7 +379,140 @@ import {
         this.#popup.hidden = true;
         this.#bridge.hidden = true;
         this.#teardown();
+        this.#releaseTrap();
       }
+    }
+
+    /**
+     * Sincroniza los atributos ARIA del dialog cuando el componente está
+     * activo en modo modal. Aplica `role="dialog"`, `aria-modal="true"`,
+     * `aria-label`/`aria-labelledby`. Sin modal activo no se aplica nada
+     * (proposal g09: solo `dialog` cuando modal).
+     */
+    #syncModalAria(): void {
+      if (!this.modal || !this.active) {
+        this.#popup.removeAttribute('role');
+        this.#popup.removeAttribute('aria-modal');
+        this.#popup.removeAttribute('aria-label');
+        this.#popup.removeAttribute('aria-labelledby');
+        return;
+      }
+      this.#popup.setAttribute('role', 'dialog');
+      this.#popup.setAttribute('aria-modal', 'true');
+      const label = this.label.trim();
+      const labelledby = this.labelledby.trim();
+      if (label) {
+        this.#popup.setAttribute('aria-label', label);
+        this.#popup.removeAttribute('aria-labelledby');
+      } else if (labelledby) {
+        this.#popup.setAttribute('aria-labelledby', labelledby);
+        this.#popup.removeAttribute('aria-label');
+      } else {
+        this.#popup.removeAttribute('aria-label');
+        this.#popup.removeAttribute('aria-labelledby');
+      }
+    }
+
+    /**
+     * Captura global de teclas en modo modal (proposal g09 floating).
+     * - Tab: cicla dentro del popup.
+     * - Escape: cierra el floating (emitiendo is-close-cancel y desactivando).
+     */
+    #onModalKeydown = (ev: KeyboardEvent): void => {
+      if (!this.modal || !this.active) return;
+      if (ev.key === 'Escape') {
+        ev.stopPropagation();
+        ev.preventDefault();
+        this.active = false;
+        return;
+      }
+      if (ev.key === 'Tab') {
+        this.#cycleFocus(ev);
+      }
+    };
+
+    /**
+     * Cicla el foco entre los elementos focuseables del popup. Implementa el
+     * focus trap estándar: Tab en el último → primero, Shift+Tab en el
+     * primero → último.
+     */
+    #cycleFocus(ev: KeyboardEvent): void {
+      const focusables = this.#focuseables();
+      if (focusables.length === 0) {
+        // Sin focuseables internos: dejamos el foco en el popup mismo.
+        ev.preventDefault();
+        this.#popup.focus();
+        return;
+      }
+      const first = focusables[0];
+      const last = focusables[focusables.length - 1];
+      const ae = this.#popup.contains(document.activeElement)
+        ? (document.activeElement as HTMLElement | null)
+        : null;
+      if (ev.shiftKey) {
+        if (ae === first || ae == null) {
+          ev.preventDefault();
+          last.focus();
+        }
+      } else {
+        if (ae === last) {
+          ev.preventDefault();
+          first.focus();
+        }
+      }
+    }
+
+    /** Elementos focuseables dentro del popup (excluyendo `hidden` y `[disabled]`). */
+    #focuseables(): HTMLElement[] {
+      const sel = [
+        'a[href]', 'area[href]', 'button:not([disabled])',
+        'input:not([disabled]):not([type="hidden"])',
+        'select:not([disabled])', 'textarea:not([disabled])',
+        'iframe', 'object', 'embed',
+        '[tabindex]:not([tabindex="-1"])',
+        '[contenteditable="true"]',
+      ].join(',');
+      const out: HTMLElement[] = [];
+      const visit = (root: ParentNode): void => {
+        for (const el of Array.from(root.querySelectorAll<HTMLElement>(sel))) {
+          const r = el.getBoundingClientRect();
+          if (r.width === 0 && r.height === 0) continue;
+          if (el.hasAttribute('disabled')) continue;
+          if (el.getAttribute('aria-hidden') === 'true') continue;
+          out.push(el);
+        }
+        for (const el of Array.from(root.querySelectorAll<HTMLElement>('*'))) {
+          if ((el as unknown as { shadowRoot?: ShadowRoot | null }).shadowRoot) {
+            visit((el as unknown as { shadowRoot: ShadowRoot }).shadowRoot);
+          }
+        }
+      };
+      visit(this.#popup);
+      // Quitar duplicados preservando orden (mismo nodo via shadow + visit).
+      const seen = new Set<HTMLElement>();
+      return out.filter((e) => (seen.has(e) ? false : (seen.add(e), true)));
+    }
+
+    #installTrap(): void {
+      if (!this.modal) return;
+      // Tras pintar el popup, mover foco al primer focuseable (o al popup).
+      requestAnimationFrame(() => {
+        const focusables = this.#focuseables();
+        const target = focusables[0] ?? this.#popup;
+        if (target && typeof target.focus === 'function') {
+          target.focus();
+        }
+      });
+    }
+
+    #releaseTrap(): void {
+      // Restaurar foco al elemento que lo tenía antes de abrir (proposal g09).
+      if (this.#lastActive && document.contains(this.#lastActive)) {
+        try { this.#lastActive.focus(); } catch { /* nodo detachado */ }
+      }
+      this.#lastActive = null;
+      // Quitar ARIA del popup al salir del modo modal/activo.
+      this.#syncModalAria();
     }
 
     #setupListeners(): void {

@@ -44,7 +44,7 @@ export function parseLooseDate(raw: string|number|null|undefined) {
   const OBSERVED = [
     'date', 'weekday', 'era', 'year', 'month', 'day',
     'hour', 'minute', 'second', 'time-zone', 'time-zone-name',
-    'hour-format', 'locale'
+    'hour-format', 'locale', 'label', 'live'
   ];
 
   const OPT_ATTRS = {
@@ -73,10 +73,12 @@ export function parseLooseDate(raw: string|number|null|undefined) {
     }
 
     onConnected() {
+      this.#syncLive();
       this.#render();
     }
 
     onAttributeChanged(name: string, oldVal: string | null, newVal: string | null) {
+      if (name === 'live') this.#syncLive();
       this.#render();
     }
 
@@ -89,6 +91,46 @@ export function parseLooseDate(raw: string|number|null|undefined) {
     set locale(v) {
       if (v == null || v === '') this.removeAttribute('locale');
       else this.setAttribute('locale', String(v));
+    }
+
+    /**
+     * Etiqueta explícita (proposals g09 #5/#6 — a11y). Si está, se usa como
+     * `aria-label` del host; si no, se construye un resumen automático
+     * combinando el formato legible + locale. Se actualiza en cada `#render()`
+     * para mantenerlo sincronizado con el texto visible.
+     */
+    get label(): string {
+      return this.getAttribute('label') ?? '';
+    }
+    set label(v: string) {
+      if (v == null || v === '') this.removeAttribute('label');
+      else this.setAttribute('label', String(v));
+    }
+
+    /**
+     * Modo live (proposal g09 #6). Con `live="polite"` el host lleva
+     * `aria-live="polite"` y `aria-atomic="true"` para que los lectores de
+     * pantalla anuncien los cambios de fecha sin interrumpir al usuario.
+     * Valores: '' | 'off' | 'polite' | 'assertive'.
+     */
+    get live(): '' | 'off' | 'polite' | 'assertive' {
+      const v = (this.getAttribute('live') || '').toLowerCase();
+      return ['off', 'polite', 'assertive'].includes(v) ? (v as 'off' | 'polite' | 'assertive') : '';
+    }
+    set live(v: '' | 'off' | 'polite' | 'assertive') {
+      if (!v) this.removeAttribute('live');
+      else this.setAttribute('live', v);
+    }
+
+    #syncLive(): void {
+      const v = this.live;
+      if (v) {
+        this.setAttribute('aria-live', v);
+        this.setAttribute('aria-atomic', 'true');
+      } else {
+        this.removeAttribute('aria-live');
+        this.removeAttribute('aria-atomic');
+      }
     }
 
     #buildOptions(): Intl.DateTimeFormatOptions {
@@ -107,21 +149,43 @@ export function parseLooseDate(raw: string|number|null|undefined) {
       return opts as unknown as Intl.DateTimeFormatOptions;
     }
 
+    /**
+     * Construye una descripción natural de la fecha formateada para
+     * `aria-label` cuando el consumidor no provee `label` explícito.
+     * Combina el texto visible + el locale + el instante ISO entre paréntesis
+     * para que el lector de pantalla comunique la fecha con precisión sin
+     * depender solo del texto visible (que puede ser corto, p. ej. "15/1/25").
+     */
+    #describeForAria(visible: string, d: Date | null): string {
+      const explicit = this.label.trim();
+      if (explicit) return explicit;
+      if (!d) return visible;
+      const loc = this.locale;
+      // ISO 8601 sin ms (más compacto) → más natural para TTS.
+      const iso = d.toISOString().replace(/\.\d{3}Z$/, 'Z');
+      return `${visible} (${loc}, ${iso})`;
+    }
+
     #render() {
       const d = parseLooseDate(this.date);
       if (!d) {
         this.#el.textContent = '';
         this.#el.removeAttribute('datetime');
+        // Limpiamos aria-label para que no describa un instante obsoleto.
+        this.removeAttribute('aria-label');
         return;
       }
+      let visible: string;
       try {
         const fmt = new Intl.DateTimeFormat(this.locale, this.#buildOptions());
-        this.#el.textContent = fmt.format(d);
+        visible = fmt.format(d);
       } catch {
-        this.#el.textContent = d.toLocaleString(this.locale);
+        visible = d.toLocaleString(this.locale);
       }
+      this.#el.textContent = visible;
       const el = this.#el as HTMLTimeElement;
       el.dateTime = d.toISOString();
+      this.setAttribute('aria-label', this.#describeForAria(visible, d));
     }
   }
 
