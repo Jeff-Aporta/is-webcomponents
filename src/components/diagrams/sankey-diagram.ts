@@ -242,8 +242,9 @@ class IsSankeyDiagram extends DiagramElementBase {
         // Markdown inline: foreignObject para preservar el formato.
         const xPos = right ? n.x + n.w + 8 : n.x - 8;
         t.setAttribute('x', String(xPos));
-        t.setAttribute('y', String(n.y + n.h / 2 + 3.5));
+        t.setAttribute('y', String(n.y + n.h / 2));
         t.setAttribute('text-anchor', right ? 'start' : 'end');
+        t.setAttribute('dominant-baseline', 'middle');
         t.innerHTML = inlineMdWeb(n.label);
       } else {
         // Wrap con el helper. El ancho disponible es el alto del nodo
@@ -280,6 +281,7 @@ class IsSankeyDiagram extends DiagramElementBase {
         x: right ? n.x + n.w + 8 : n.x - 8,
         y: n.y + n.h / 2 + 15,
         'text-anchor': right ? 'start' : 'end',
+        'dominant-baseline': 'middle',
         fill: theme.muted, 'font-size': '10',
         'font-family': 'Consolas,Menlo,monospace',
       });

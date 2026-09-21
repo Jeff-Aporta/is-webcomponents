@@ -171,6 +171,14 @@ class IsDiagramLightbox extends IsLightbox {
 
   show(): void {
     super.show();
+    // El <dialog> del lightbox base ya aporta role=dialog y aria-modal=nativos
+    // cuando se abre con showModal(). Añadimos aria-label por accesibilidad
+    // (g06 #13) para describir el tipo de diagrama que se está viendo.
+    const dlg = (this as unknown as { shadowRoot?: ShadowRoot }).shadowRoot
+      ?.querySelector<HTMLDialogElement>('.lb');
+    if (dlg && !dlg.getAttribute('aria-label')) {
+      dlg.setAttribute('aria-label', `Visor de diagrama: ${this.kind}`);
+    }
     this.#mountDiagram();
   }
 

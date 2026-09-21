@@ -154,7 +154,7 @@ class IsVennDiagram extends DiagramElementBase {
       }));
 
       const t = svgEl('text', {
-        x: c.labelX, y: c.labelY, 'text-anchor': 'middle', fill: theme.text,
+        x: c.labelX, y: c.labelY, 'text-anchor': 'middle', 'dominant-baseline': 'middle', fill: theme.text,
         'font-size': '11', 'font-weight': '600', 'font-family': 'Tahoma,Arial,sans-serif',
         class: 'vn-set__label',
       });
@@ -176,6 +176,7 @@ class IsVennDiagram extends DiagramElementBase {
       if (text) {
         const t = svgEl('text', {
           fill: theme.text, 'font-size': '10.5', 'font-family': 'Tahoma,Arial,sans-serif',
+          'dominant-baseline': 'middle',
           class: 'vn-region__label',
         });
         const vnHasMd = /[*`\[]/.test(text) || text.includes('{{');
@@ -183,6 +184,7 @@ class IsVennDiagram extends DiagramElementBase {
           t.setAttribute('x', String(r.x));
           t.setAttribute('y', String(r.y));
           t.setAttribute('text-anchor', 'middle');
+          t.setAttribute('dominant-baseline', 'middle');
           t.innerHTML = inlineMdWeb(text);
         } else {
           // `overflow` no está declarado en VennLayoutRegion; cast para leer.
@@ -217,7 +219,7 @@ class IsVennDiagram extends DiagramElementBase {
       }
       if (r.value != null) {
         const v = svgEl('text', {
-          x: r.x, y: r.y + (text ? 14 : 0), 'text-anchor': 'middle', fill: theme.muted,
+          x: r.x, y: r.y + (text ? 14 : 0), 'text-anchor': 'middle', 'dominant-baseline': 'middle', fill: theme.muted,
           'font-size': '10', 'font-family': 'Consolas,Menlo,monospace',
           class: 'vn-region__value',
         });

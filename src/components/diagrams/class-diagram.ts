@@ -383,7 +383,7 @@ class IsClassDiagram extends DiagramElementBase {
         }
         section.rows.forEach((row, ri: number) => {
           const t = svgEl('text', {
-            x: n.x + 8, y: n.y + section.y + 6 + ri * 16 + 10.5, fill: theme.text,
+            x: n.x + 8, y: n.y + section.y + ri * 16 + 8, 'dominant-baseline': 'middle', fill: theme.text,
             'font-size': '10.5', 'font-family': 'Consolas,Menlo,monospace',
           });
           t.innerHTML = inlineMdWeb(row);

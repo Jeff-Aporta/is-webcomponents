@@ -213,6 +213,35 @@ export function createEditorPanel(opts: EditorPanelOptions = {}): HTMLElement {
     setNodeProps: (id: string | null) => void;
   };
 
+  /** Helper: mueve el foco entre options con roving tabindex (proposal g06
+   *  #5 + g10 flex-options). Sin esto, los usuarios de teclado deben tabular
+   *  por cada item, lo que rompe la navegación fluida sobre listas largas. */
+  const moveFocus = (delta: number, jumpTo: 'first' | 'last' | null): void => {
+    const items = [...list.querySelectorAll<HTMLLIElement>('li[role="option"]')];
+    if (items.length === 0) return;
+    const current = items.findIndex((li) => li.tabIndex === 0);
+    let nextIdx: number;
+    if (jumpTo === 'first') nextIdx = 0;
+    else if (jumpTo === 'last') nextIdx = items.length - 1;
+    else nextIdx = current < 0 ? 0 : (current + delta + items.length) % items.length;
+    items.forEach((li, i) => {
+      const sel = i === nextIdx;
+      li.tabIndex = sel ? 0 : -1;
+      if (sel) li.setAttribute('aria-selected', 'true');
+    });
+    items[nextIdx].focus();
+    emit(root, EDITOR_SELECT_NODE_EVENT, { nodeId: items[nextIdx].dataset.nodeId });
+  };
+
+  // Teclado: ArrowUp/Down/Home/End navegan el listbox con roving tabindex.
+  list.addEventListener('keydown', (ev: KeyboardEvent) => {
+    const k = ev.key;
+    if (k === 'ArrowDown') { moveFocus(1, null); ev.preventDefault(); }
+    else if (k === 'ArrowUp') { moveFocus(-1, null); ev.preventDefault(); }
+    else if (k === 'Home') { moveFocus(0, 'first'); ev.preventDefault(); }
+    else if (k === 'End') { moveFocus(0, 'last'); ev.preventDefault(); }
+  });
+
   api.setNodes = (nodes) => {
     list.innerHTML = '';
     if (nodes.length === 0) {
@@ -227,6 +256,7 @@ export function createEditorPanel(opts: EditorPanelOptions = {}): HTMLElement {
       const li = document.createElement('li');
       li.setAttribute('role', 'option');
       li.setAttribute('data-node-id', n.id);
+      li.id = `editor-opt-${n.id}`;
       li.tabIndex = -1;
       li.textContent = n.label ?? n.id;
       li.addEventListener('click', () => {
@@ -243,6 +273,8 @@ export function createEditorPanel(opts: EditorPanelOptions = {}): HTMLElement {
       li.setAttribute('aria-selected', sel ? 'true' : 'false');
       li.tabIndex = sel ? 0 : -1;
     });
+    if (id) list.setAttribute('aria-activedescendant', `editor-opt-${id}`);
+    else list.removeAttribute('aria-activedescendant');
     api.setNodeProps(id);
   };
 

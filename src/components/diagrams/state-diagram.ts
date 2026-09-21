@@ -311,8 +311,9 @@ class IsStateDiagram extends DiagramElementBase {
         const stHasMd = /[*`\[]/.test(n.label) || n.label.includes('{{');
         if (stHasMd) {
           t.setAttribute('x', String(n.x + n.w / 2));
-          t.setAttribute('y', String(n.y + n.h / 2 + 4));
+          t.setAttribute('y', String(n.y + n.h / 2));
           t.setAttribute('text-anchor', 'middle');
+          t.setAttribute('dominant-baseline', 'middle');
           t.innerHTML = inlineMdWeb(n.label);
         } else {
           // `overflow` no está declarado en StateLayoutNode; el spec lo añade

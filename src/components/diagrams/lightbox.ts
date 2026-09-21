@@ -110,6 +110,10 @@ class IsLightbox extends withStyleAttrs(HTMLElement) {
   #drag: DragState | null = null;
   #dragged = false;
   #view: ViewTransform = { scale: 1, x: 0, y: 0 };
+  /** Foco que tenía el elemento antes de abrir el lightbox: se restaura al
+   *  cerrar (g06 #13). El <dialog> top-layer ya da role=dialog + aria-modal
+   *  nativos; lo que añadimos es la pieza de focus restoration + cycling. */
+  #prevFocus: Element | null = null;
 
   constructor() {
     super();
@@ -168,6 +172,8 @@ class IsLightbox extends withStyleAttrs(HTMLElement) {
     this.#dialog.addEventListener('close', this.#onDialogClose as EventListener);
     this.#dialog.addEventListener('cancel', this.#onDialogCancel as EventListener);
     this.#dialog.addEventListener('click', this.#onDialogClick as EventListener);
+    // Focus trap: cycling Tab/Shift+Tab dentro del dialog (g06 #13).
+    this.#dialog.addEventListener('keydown', this.#onDialogKeydown as EventListener);
     this.#stage.addEventListener('wheel', this.#onWheel as EventListener, { passive: false });
     this.#stage.addEventListener('pointerdown', this.#onPointerDown as EventListener);
     this.#stage.addEventListener('click', this.#onStageClick as EventListener, true);
@@ -243,11 +249,33 @@ class IsLightbox extends withStyleAttrs(HTMLElement) {
   #syncOpen(): void {
     if (this.open) {
       if (!this.#dialog.open) {
+        // Antes de abrir, recuerda el foco activo para restaurarlo al cerrar.
+        this.#prevFocus = document.activeElement;
         this.#dialog.showModal();
+        // ARIA: el <dialog> top-layer ya expone role=dialog + aria-modal=true
+        // cuando se abre con showModal(); añadimos aria-label si el consumidor
+        // no lo puso (g06 #13).
+        if (!this.#dialog.getAttribute('aria-label')) {
+          this.#dialog.setAttribute('aria-label', 'Visor a pantalla completa');
+        }
+        // Mueve el foco al primer control lógico del toolbar (close por
+        // defecto) para que el usuario de teclado tenga un ancla clara.
+        const first = this.#defaultToolbar.querySelector<HTMLElement>('[data-act="close"]');
+        (first ?? this.#dialog).focus();
         emit(this, 'is-after-show');
       }
     } else if (this.#dialog.open) {
       this.#dialog.close();
+    }
+  }
+
+  #restoreFocus(): void {
+    // Restaura el foco al elemento que lo tenía antes de abrir. Solo si aún
+    // es focuseable (puede haber sido desmontado); si no, lo deja en el body.
+    const prev = this.#prevFocus as HTMLElement | null;
+    this.#prevFocus = null;
+    if (prev && typeof prev.focus === 'function' && prev.isConnected) {
+      try { prev.focus(); } catch { /* no-op */ }
     }
   }
 
@@ -275,6 +303,7 @@ class IsLightbox extends withStyleAttrs(HTMLElement) {
 
   #onDialogClose = () => {
     if (this.open) this.removeAttribute('open');
+    this.#restoreFocus();
     emit(this, 'is-after-hide');
   };
 
@@ -389,6 +418,34 @@ class IsLightbox extends withStyleAttrs(HTMLElement) {
     e.stopPropagation();
     e.preventDefault();
   };
+
+  /** Focus trap básico: si Tab/Shift+Tab sale del dialog, lo cicla al
+   *  otro extremo (g06 #13). El `<dialog>` top-layer ya aísla el foco del
+   *  resto del documento, pero el cycling interno no lo da por defecto. */
+  #onDialogKeydown = (e: KeyboardEvent): void => {
+    if (e.key !== 'Tab') return;
+    const ae = this.shadowRoot?.activeElement;
+    if (!ae || !this.#dialog.contains(ae)) return;
+    const focusables = this.#collectFocusables();
+    if (focusables.length === 0) return;
+    const first = focusables[0];
+    const last = focusables[focusables.length - 1];
+    const activeIdx = focusables.indexOf(ae as HTMLElement);
+    if (e.shiftKey && activeIdx <= 0) {
+      e.preventDefault();
+      last.focus();
+    } else if (!e.shiftKey && activeIdx === focusables.length - 1) {
+      e.preventDefault();
+      first.focus();
+    }
+  };
+
+  #collectFocusables(): HTMLElement[] {
+    const sel = 'button:not([disabled]):not([hidden]), [tabindex]:not([tabindex="-1"]), textarea:not([disabled]), input:not([disabled])';
+    const inDialog = Array.from(this.#dialog.querySelectorAll<HTMLElement>(sel))
+      .filter((el) => el.tagName === 'BUTTON' || el.offsetParent !== null);
+    return inDialog;
+  }
 }
 
 defineElement('is-lightbox', IsLightbox, 'IsLightbox');

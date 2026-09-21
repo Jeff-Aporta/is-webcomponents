@@ -196,7 +196,7 @@ class IsQuadrantChart extends DiagramElementBase {
 
     for (const quad of layout.quadrants) {
       const t = svgEl('text', {
-        x: quad.cx, y: quad.cy, 'text-anchor': 'middle', fill: theme.muted,
+        x: quad.cx, y: quad.cy, 'text-anchor': 'middle', 'dominant-baseline': 'middle', fill: theme.muted,
         'font-size': '10', 'font-weight': '600', 'letter-spacing': '0.04em',
         'font-family': 'Tahoma,Arial,sans-serif', class: 'qd-quadrant',
       });
@@ -207,7 +207,7 @@ class IsQuadrantChart extends DiagramElementBase {
     const axisText = (spec: QdAxisLabel | undefined, anchor: 'start' | 'end' | 'middle', rotate: boolean): void => {
       if (!spec) return;
       const t = svgEl('text', {
-        x: spec.x, y: spec.y, 'text-anchor': anchor, fill: theme.muted,
+        x: spec.x, y: spec.y, 'text-anchor': anchor, 'dominant-baseline': 'middle', fill: theme.muted,
         'font-size': '10', 'font-family': 'Tahoma,Arial,sans-serif',
         transform: rotate ? `rotate(-90 ${spec.x} ${spec.y})` : null,
         class: 'qd-axis-label',
@@ -266,7 +266,7 @@ class IsQuadrantChart extends DiagramElementBase {
         class: 'qd-point__dot',
       }));
       const t = svgEl('text', {
-        x: pt.cx + pt.r + 5, y: pt.cy + 3.5 + pt.labelDy, fill: theme.text,
+        x: pt.cx + pt.r + 5, y: pt.cy + pt.labelDy, 'dominant-baseline': 'middle', fill: theme.text,
         'font-size': '10', 'font-weight': '600', 'font-family': 'Tahoma,Arial,sans-serif',
         class: 'qd-point__label',
       });

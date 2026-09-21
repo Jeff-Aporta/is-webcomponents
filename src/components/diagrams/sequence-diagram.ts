@@ -324,7 +324,7 @@ class IsSequenceDiagram extends DiagramElementBase {
         ));
       } else {
         const t = svgEl('text', {
-          x: labelCx, y: a.y + 4, 'text-anchor': 'middle', fill: theme.text,
+          x: labelCx, y: a.y, 'text-anchor': 'middle', 'dominant-baseline': 'middle', fill: theme.text,
           'font-size': '11', 'font-weight': '600', 'font-family': 'Tahoma,Arial,sans-serif',
         });
         t.textContent = a.label;
@@ -355,7 +355,7 @@ class IsSequenceDiagram extends DiagramElementBase {
       fill: theme.altFill, stroke: theme.altBorder, 'stroke-width': '1.2', 'stroke-dasharray': '5 4',
     }));
     const t = svgEl('text', {
-      x: altBox.x + 10, y: altBox.y + 14, fill: theme.muted,
+      x: altBox.x + 10, y: altBox.y + 14, 'dominant-baseline': 'middle', fill: theme.muted,
       'font-size': '10', 'font-weight': '600', 'font-family': 'Tahoma,Arial,sans-serif',
     });
     t.textContent = altBox.label;
@@ -376,7 +376,7 @@ class IsSequenceDiagram extends DiagramElementBase {
 
       if (m.branchFirst && m.branch) {
         const t = svgEl('text', {
-          x: altBox ? altBox.x + 36 : GUIDE_X + 8, y: m.y - 10, fill: theme.muted,
+          x: altBox ? altBox.x + 36 : GUIDE_X + 8, y: m.y - 10, 'dominant-baseline': 'middle', fill: theme.muted,
           'font-size': '9', 'font-family': 'Tahoma,Arial,sans-serif',
         });
         t.textContent = `[${m.branch}]`;
@@ -418,7 +418,7 @@ class IsSequenceDiagram extends DiagramElementBase {
       const dot = svgEl('circle', { cx: m.fromX, cy: m.y, r: 8, fill: color });
       dotG.appendChild(dot);
       const stepText = svgEl('text', {
-        x: m.fromX, y: m.y + 3.2, 'text-anchor': 'middle', fill: contrastFontColor(color),
+        x: m.fromX, y: m.y, 'text-anchor': 'middle', 'dominant-baseline': 'middle', fill: contrastFontColor(color),
         'font-size': '9', 'font-weight': '700', 'font-family': 'Tahoma,Arial,sans-serif',
       });
       stepText.textContent = String(m.step);

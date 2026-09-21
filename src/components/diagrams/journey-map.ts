@@ -176,7 +176,7 @@ class IsJourneyMap extends DiagramElementBase {
         stroke: theme.grid, 'stroke-width': 1, 'stroke-dasharray': '3 4', class: 'jn-grid__line',
       }));
       const t = svgEl('text', {
-        x: line.labelX, y: line.y + 3.5, 'text-anchor': 'end', fill: theme.muted,
+        x: line.labelX, y: line.y, 'text-anchor': 'end', 'dominant-baseline': 'middle', fill: theme.muted,
         'font-size': '9.5', 'font-family': 'Consolas,Menlo,monospace',
       });
       t.textContent = String(line.value);
@@ -198,7 +198,7 @@ class IsJourneyMap extends DiagramElementBase {
         class: 'jn-phase__band',
       }));
       const t = svgEl('text', {
-        x: f.x + f.w / 2, y: f.y + f.h / 2 + 4, 'text-anchor': 'middle', fill: theme.text,
+        x: f.x + f.w / 2, y: f.y + f.h / 2, 'text-anchor': 'middle', 'dominant-baseline': 'middle', fill: theme.text,
         'font-size': '10.5', 'font-weight': '600', 'letter-spacing': '0.03em',
         'font-family': 'Tahoma,Arial,sans-serif',
       });
@@ -261,7 +261,7 @@ class IsJourneyMap extends DiagramElementBase {
       }
 
       const t = svgEl('text', {
-        x: s.cx, y: s.labelY, 'text-anchor': 'middle', fill: theme.text,
+        x: s.cx, y: s.labelY, 'text-anchor': 'middle', 'dominant-baseline': 'middle', fill: theme.text,
         'font-size': '10.5', 'font-weight': '600', 'font-family': 'Tahoma,Arial,sans-serif',
         class: 'jn-step__label',
       });
@@ -270,7 +270,7 @@ class IsJourneyMap extends DiagramElementBase {
 
       if (s.actor) {
         const a = svgEl('text', {
-          x: s.cx, y: s.actorY, 'text-anchor': 'middle', fill: theme.muted,
+          x: s.cx, y: s.actorY, 'text-anchor': 'middle', 'dominant-baseline': 'middle', fill: theme.muted,
           'font-size': '9.5', 'font-family': 'Tahoma,Arial,sans-serif',
         });
         a.textContent = s.actor;
