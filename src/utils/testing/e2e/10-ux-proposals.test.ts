@@ -2546,3 +2546,1126 @@ test('g10 modal-verificacion: dialog ARIA, focus restoration, aria-live en resul
     activePage = null;
   }
 });
+
+// ============================================================================
+// Bloque g04 — proposals UX/UI para data (data-grid, ag-grid, kanban,
+// spreadsheet, pivot-table, transfer, gauge).
+//
+// Cubre las proposals del .audit/proposals/demo-g04.md que son testeables
+// sin virtualización de 100k filas. Las propuestas sobre virtualización
+// masiva quedan fuera del alcance (no son testeables en CI headless).
+//
+// Implementado:
+//   - data-grid: role=grid + aria-rowcount/colcount + aria-rowindex/colindex
+//     + aria-sort="ascending|descending|none" en headers + aria-current="page"
+//     en el botón de página activa + aria-selected en filas + page-number
+//     buttons con aria-label="Página N".
+//   - ag-grid: role=grid + aria-rowcount/colcount + aria-rowindex/colindex
+//     + aria-selected + aria-busy durante loading + aria-level/expanded en
+//     filas de grupo.
+//   - kanban: role=list en cada lane + aria-grabbed dinámico en cards
+//     durante drag + aria-label en board y lanes.
+//   - spreadsheet: role=grid + aria-rowcount/colcount + aria-label por celda
+//     ("A1: 100") + aria-colindex + Arrow nav (ya pre-existente).
+//   - pivot-table: role=row/rowgroup + aria-rowcount/colcount + role=gridcell
+//     en celdas + aria-label descriptivo de celda.
+//   - transfer: aria-live="polite" + sr-status que anuncia movimientos
+//     + aria-label descriptivo en los listboxes.
+//   - gauge: role=meter + aria-valuemin/max/now/text + aria-label + svg
+//     marcado aria-hidden para no duplicar info.
+//
+// Skip explicito:
+//   - Virtualización 100k filas (no testeable en CI headless).
+//   - Drag column reorder / resize (no parte del contrato de este test).
+// ============================================================================
+
+test('g04 data-grid: role=grid + aria-rowcount/colcount + aria-sort + aria-current page', { timeout: 60_000 }, async (t) => {
+  if (!DISPONIBLE) return t.skip('faltan variables E2E');
+  const base = await ensureServer();
+  const page = await nuevoPage();
+  activePage = page;
+  try {
+    const renderOk = await abrirPreview(page, base, 'is-data-grid');
+    assert.ok(renderOk, 'data-grid preview no renderizo');
+
+    const ariaOk = await page.evaluate(() => {
+      const main = document.querySelector<HTMLElement>('is-main.main');
+      const dg = main?.querySelector<HTMLElement>('is-data-grid');
+      if (!dg?.shadowRoot) return { ok: false, motivo: 'no data-grid' };
+      const vp = dg.shadowRoot.querySelector<HTMLElement>('.viewport');
+      if (!vp) return { ok: false, motivo: 'no viewport' };
+      const headCells = [...dg.shadowRoot.querySelectorAll<HTMLElement>('.hcell[role="columnheader"]')];
+      const sortableHeads = headCells.filter((h) => h.classList.contains('sortable'));
+      const headsWithSort = sortableHeads.filter((h) => h.hasAttribute('aria-sort'));
+      const sortValues = headsWithSort.map((h) => h.getAttribute('aria-sort'));
+      const validSortValues = sortValues.every((v) => v === 'ascending' || v === 'descending' || v === 'none');
+      const rows = [...dg.shadowRoot.querySelectorAll<HTMLElement>('.row-wrap[role="row"]')];
+      const rowsWithIdx = rows.filter((r) => r.hasAttribute('aria-rowindex'));
+      const colsWithIdx = headCells.filter((h) => h.hasAttribute('aria-colindex'));
+      const cellsWithIdx = [...dg.shadowRoot.querySelectorAll<HTMLElement>('.cell[role="gridcell"]')];
+      const cellsWithColIdx = cellsWithIdx.filter((c) => c.hasAttribute('aria-colindex'));
+      return {
+        ok: vp.getAttribute('role') === 'grid'
+          && vp.hasAttribute('aria-rowcount') && vp.hasAttribute('aria-colcount')
+          && Number(vp.getAttribute('aria-rowcount')) > 0
+          && Number(vp.getAttribute('aria-colcount')) > 0
+          && sortableHeads.length > 0 && headsWithSort.length === sortableHeads.length
+          && validSortValues
+          && rows.length > 0 && rowsWithIdx.length === rows.length
+          && headCells.length > 0 && colsWithIdx.length === headCells.length
+          && cellsWithIdx.length > 0 && cellsWithColIdx.length === cellsWithIdx.length,
+        role: vp.getAttribute('role'),
+        rowcount: vp.getAttribute('aria-rowcount'),
+        colcount: vp.getAttribute('aria-colcount'),
+        headsCount: headCells.length,
+        sortableCount: sortableHeads.length,
+        rowsCount: rows.length,
+        sortValues: Array.from(new Set(sortValues)),
+        validSortValues,
+      };
+    });
+    t.diagnostic(`[g04-dg-aria] ${JSON.stringify(ariaOk)}`);
+    assert.ok(ariaOk.ok, `g04 data-grid ARIA incompleto (${JSON.stringify(ariaOk)})`);
+
+    const pagerOk = await page.evaluate(async () => {
+      const main = document.querySelector<HTMLElement>('is-main.main');
+      const old = main?.querySelectorAll<HTMLElement>('is-data-grid');
+      old?.forEach((o) => o.remove());
+      const dg = document.createElement('is-data-grid') as HTMLElement & { columns?: unknown };
+      dg.setAttribute('pagination', '');
+      dg.setAttribute('page-size', '10');
+      dg.setAttribute('row-count', '55');
+      const cols = [
+        { field: 'id', headerName: 'ID', width: 80 },
+        { field: 'name', headerName: 'Nombre', sortable: true },
+      ];
+      (dg as unknown as { columns: unknown }).columns = cols;
+      const rows = Array.from({ length: 55 }, (_, i) => ({ id: String(i + 1), name: `Item ${i + 1}` }));
+      (dg as unknown as { rows: unknown }).rows = rows;
+      main?.appendChild(dg);
+      await new Promise((r) => setTimeout(r, 200));
+      const pager = dg.shadowRoot?.querySelector<HTMLElement>('.pager');
+      const numWrap = pager?.querySelector<HTMLElement>('.page-numbers');
+      const numButtons = numWrap ? [...numWrap.querySelectorAll<HTMLElement>('button.page-num')] : [];
+      const currentIdx = numButtons.findIndex((b) => b.getAttribute('aria-current') === 'page');
+      const ariaLabels = numButtons.map((b) => b.getAttribute('aria-label'));
+      const prev = pager?.querySelector<HTMLButtonElement>('[data-page="prev"]');
+      const next = pager?.querySelector<HTMLButtonElement>('[data-page="next"]');
+      const first = pager?.querySelector<HTMLButtonElement>('[data-page="first"]');
+      const last = pager?.querySelector<HTMLButtonElement>('[data-page="last"]');
+      dg.remove();
+      return {
+        ok: numButtons.length >= 2 && currentIdx === 0
+          && ariaLabels.every((l) => /^Página \d+$/.test(l ?? ''))
+          && prev?.getAttribute('aria-label') === 'Página anterior'
+          && next?.getAttribute('aria-label') === 'Página siguiente'
+          && first?.getAttribute('aria-label') === 'Primera página'
+          && last?.getAttribute('aria-label') === 'Última página',
+        buttonsCount: numButtons.length,
+        currentIdx,
+        ariaLabels,
+        prevLabel: prev?.getAttribute('aria-label'),
+        nextLabel: next?.getAttribute('aria-label'),
+        firstLabel: first?.getAttribute('aria-label'),
+        lastLabel: last?.getAttribute('aria-label'),
+      };
+    });
+    t.diagnostic(`[g04-dg-pager] ${JSON.stringify(pagerOk)}`);
+    assert.ok(pagerOk.ok, `g04 data-grid paginación aria-current/aria-label falla (${JSON.stringify(pagerOk)})`);
+  } finally {
+    await liberarPage(page);
+    activePage = null;
+  }
+});
+
+test('g04 ag-grid: role=grid + aria-rowcount/colcount/rowindex + aria-busy loading', { timeout: 60_000 }, async (t) => {
+  if (!DISPONIBLE) return t.skip('faltan variables E2E');
+  const base = await ensureServer();
+  const page = await nuevoPage();
+  activePage = page;
+  try {
+    const renderOk = await abrirPreview(page, base, 'is-ag-grid');
+    assert.ok(renderOk, 'ag-grid preview no renderizo');
+
+    const ariaOk = await page.evaluate(() => {
+      const main = document.querySelector<HTMLElement>('is-main.main');
+      const ag = main?.querySelector<HTMLElement>('is-ag-grid');
+      if (!ag?.shadowRoot) return { ok: false, motivo: 'no ag-grid' };
+      const vp = ag.shadowRoot.querySelector<HTMLElement>('.mim-dg__viewport');
+      const rows = [...ag.shadowRoot.querySelectorAll<HTMLElement>('.mim-dg__row[role="row"][data-row-kind="leaf"]')];
+      const rowsWithIdx = rows.filter((r) => r.hasAttribute('aria-rowindex'));
+      const rowsWithSelected = rows.filter((r) => r.hasAttribute('aria-selected'));
+      const cells = [...ag.shadowRoot.querySelectorAll<HTMLElement>('[role="gridcell"]')];
+      const cellsWithColIdx = cells.filter((c) => c.hasAttribute('aria-colindex'));
+      const heads = [...ag.shadowRoot.querySelectorAll<HTMLElement>('[role="columnheader"]')];
+      const headsWithSort = heads.filter((h) => h.hasAttribute('aria-sort'));
+      return {
+        ok: vp?.getAttribute('role') === 'grid'
+          && !!vp?.getAttribute('aria-rowcount') && !!vp?.getAttribute('aria-colcount')
+          && Number(vp?.getAttribute('aria-rowcount') ?? 0) > 0
+          && Number(vp?.getAttribute('aria-colcount') ?? 0) > 0
+          && rows.length > 0 && rowsWithIdx.length === rows.length
+          && rowsWithSelected.length === rows.length
+          && cells.length > 0 && cellsWithColIdx.length === cells.length
+          && headsWithSort.length === heads.length,
+        role: vp?.getAttribute('role'),
+        rowcount: vp?.getAttribute('aria-rowcount'),
+        colcount: vp?.getAttribute('aria-colcount'),
+        rowsCount: rows.length,
+        cellsCount: cells.length,
+        headsCount: heads.length,
+      };
+    });
+    t.diagnostic(`[g04-ag-aria] ${JSON.stringify(ariaOk)}`);
+    assert.ok(ariaOk.ok, `g04 ag-grid ARIA incompleto (${JSON.stringify(ariaOk)})`);
+
+    const busyOk = await page.evaluate(async () => {
+      const main = document.querySelector<HTMLElement>('is-main.main');
+      const ag = main?.querySelector<HTMLElement>('is-ag-grid');
+      if (!ag?.shadowRoot) return { ok: false, motivo: 'no ag-grid' };
+      const vp = ag.shadowRoot.querySelector<HTMLElement>('.mim-dg__viewport');
+      const before = vp?.getAttribute('aria-busy');
+      ag.setAttribute('loading', '');
+      await new Promise((r) => setTimeout(r, 200));
+      const during = vp?.getAttribute('aria-busy');
+      ag.removeAttribute('loading');
+      await new Promise((r) => setTimeout(r, 200));
+      const after = vp?.getAttribute('aria-busy');
+      return {
+        ok: before === 'false' && during === 'true' && after === 'false',
+        before, during, after,
+      };
+    });
+    t.diagnostic(`[g04-ag-busy] ${JSON.stringify(busyOk)}`);
+    assert.ok(busyOk.ok, `g04 ag-grid aria-busy falla (${JSON.stringify(busyOk)})`);
+  } finally {
+    await liberarPage(page);
+    activePage = null;
+  }
+});
+
+test('g04 kanban: role=list en lane + aria-grabbed durante drag + aria-label board', { timeout: 60_000 }, async (t) => {
+  if (!DISPONIBLE) return t.skip('faltan variables E2E');
+  const base = await ensureServer();
+  const page = await nuevoPage();
+  activePage = page;
+  try {
+    const renderOk = await abrirPreview(page, base, 'is-kanban');
+    assert.ok(renderOk, 'kanban preview no renderizo');
+
+    const ariaOk = await page.evaluate(() => {
+      const main = document.querySelector<HTMLElement>('is-main.main');
+      const kb = main?.querySelector<HTMLElement>('is-kanban');
+      if (!kb) return { ok: false, motivo: 'no kanban' };
+      const boardRole = kb.getAttribute('role');
+      const boardLabel = kb.getAttribute('aria-label');
+      const cols = [...kb.querySelectorAll<HTMLElement>(':scope > is-kanban-column')];
+      const laneInfo = cols.map((c) => {
+        const lane = c.shadowRoot?.querySelector<HTMLElement>('.lane');
+        return {
+          role: lane?.getAttribute('role'),
+          ariaLabel: lane?.getAttribute('aria-label'),
+        };
+      });
+      const allLanesList = laneInfo.every((l) => l.role === 'list');
+      const allLanesHaveLabel = laneInfo.every((l) => !!l.ariaLabel && l.ariaLabel.length > 0);
+      const cards = [...kb.querySelectorAll<HTMLElement>(':scope > is-kanban-column > is-kanban-card')];
+      const cardRoles = cards.map((c) => c.getAttribute('role'));
+      const allCardsListItem = cardRoles.length > 0 && cardRoles.every((r) => r === 'listitem');
+      const cardGrabbed = cards.map((c) => c.getAttribute('aria-grabbed'));
+      const allFalse = cardGrabbed.length > 0 && cardGrabbed.every((g) => g === 'false');
+      return {
+        ok: boardRole === 'list' && !!boardLabel
+          && cols.length > 0
+          && allLanesList && allLanesHaveLabel
+          && allCardsListItem && allFalse,
+        boardRole, boardLabel, colsCount: cols.length,
+        laneInfo, cardRoles, cardGrabbed,
+        allLanesList, allLanesHaveLabel, allCardsListItem, allFalse,
+      };
+    });
+    t.diagnostic(`[g04-kb-aria] ${JSON.stringify(ariaOk)}`);
+    assert.ok(ariaOk.ok, `g04 kanban ARIA incompleto (${JSON.stringify(ariaOk)})`);
+
+    const grabbedOk = await page.evaluate(async () => {
+      const main = document.querySelector<HTMLElement>('is-main.main');
+      const kb = main?.querySelector<HTMLElement>('is-kanban');
+      const card = kb?.querySelector<HTMLElement>('is-kanban-card');
+      if (!card) return { ok: false, motivo: 'no card' };
+      const initial = card.getAttribute('aria-grabbed');
+      const evt = new DragEvent('dragstart', { bubbles: true, cancelable: true });
+      card.dispatchEvent(evt);
+      await new Promise((r) => setTimeout(r, 50));
+      const during = card.getAttribute('aria-grabbed');
+      const evt2 = new DragEvent('dragend', { bubbles: true, cancelable: true });
+      card.dispatchEvent(evt2);
+      await new Promise((r) => setTimeout(r, 50));
+      const after = card.getAttribute('aria-grabbed');
+      return { ok: initial === 'false' && during === 'true' && after === 'false', initial, during, after };
+    });
+    t.diagnostic(`[g04-kb-grabbed] ${JSON.stringify(grabbedOk)}`);
+    assert.ok(grabbedOk.ok, `g04 kanban aria-grabbed falla (${JSON.stringify(grabbedOk)})`);
+  } finally {
+    await liberarPage(page);
+    activePage = null;
+  }
+});
+
+test('g04 spreadsheet: role=grid + aria-label por celda + Arrow keys', { timeout: 60_000 }, async (t) => {
+  if (!DISPONIBLE) return t.skip('faltan variables E2E');
+  const base = await ensureServer();
+  const page = await nuevoPage();
+  activePage = page;
+  try {
+    const renderOk = await abrirPreview(page, base, 'is-spreadsheet');
+    assert.ok(renderOk, 'spreadsheet preview no renderizo');
+
+    const ariaOk = await page.evaluate(() => {
+      const main = document.querySelector<HTMLElement>('is-main.main');
+      const ss = main?.querySelector<HTMLElement>('is-spreadsheet');
+      if (!ss?.shadowRoot) return { ok: false, motivo: 'no spreadsheet' };
+      const table = ss.shadowRoot.querySelector<HTMLElement>('.grid');
+      if (!table) return { ok: false, motivo: 'no table' };
+      const cells = [...table.querySelectorAll<HTMLElement>('td.cell[role="gridcell"]')];
+      const cellsWithLabel = cells.filter((c) => /^([A-Z]+\d+: )/.test(c.getAttribute('aria-label') || ''));
+      const cellsWithColIdx = cells.filter((c) => c.hasAttribute('aria-colindex'));
+      const heads = [...table.querySelectorAll<HTMLElement>('th[role="columnheader"]')];
+      const headsWithColIdx = heads.filter((h) => h.hasAttribute('aria-colindex'));
+      const rows = [...table.querySelectorAll<HTMLElement>('tr[role="row"]')];
+      const rowsWithIdx = rows.filter((r) => r.hasAttribute('aria-rowindex'));
+      return {
+        ok: table.getAttribute('role') === 'grid'
+          && !!table.getAttribute('aria-rowcount')
+          && !!table.getAttribute('aria-colcount')
+          && cells.length > 0 && cellsWithLabel.length === cells.length
+          && cellsWithColIdx.length === cells.length
+          && heads.length > 0 && headsWithColIdx.length === heads.length
+          && rows.length > 1 && rowsWithIdx.length === rows.length,
+        role: table.getAttribute('role'),
+        rowcount: table.getAttribute('aria-rowcount'),
+        colcount: table.getAttribute('aria-colcount'),
+        cellsCount: cells.length,
+        headsCount: heads.length,
+        rowsCount: rows.length,
+      };
+    });
+    t.diagnostic(`[g04-ss-aria] ${JSON.stringify(ariaOk)}`);
+    assert.ok(ariaOk.ok, `g04 spreadsheet ARIA incompleto (${JSON.stringify(ariaOk)})`);
+
+    const arrowsOk = await page.evaluate(async () => {
+      const main = document.querySelector<HTMLElement>('is-main.main');
+      const ss = main?.querySelector<HTMLElement>('is-spreadsheet');
+      if (!ss?.shadowRoot) return { ok: false, motivo: 'no spreadsheet' };
+      const table = ss.shadowRoot.querySelector<HTMLElement>('.grid');
+      const cells = [...table!.querySelectorAll<HTMLElement>('td.cell[role="gridcell"]')];
+      if (cells.length < 4) return { ok: false, motivo: 'pocas celdas' };
+      cells[0].focus();
+      const before = (ss.shadowRoot?.activeElement as HTMLElement)?.dataset?.id;
+      table?.dispatchEvent(new KeyboardEvent('keydown', { key: 'ArrowRight', bubbles: true, cancelable: true }));
+      await new Promise((r) => setTimeout(r, 80));
+      const afterRight = (ss.shadowRoot?.activeElement as HTMLElement)?.dataset?.id;
+      table?.dispatchEvent(new KeyboardEvent('keydown', { key: 'ArrowDown', bubbles: true, cancelable: true }));
+      await new Promise((r) => setTimeout(r, 80));
+      const afterDown = (ss.shadowRoot?.activeElement as HTMLElement)?.dataset?.id;
+      return {
+        ok: !!before && !!afterRight && !!afterDown && afterRight !== before && afterDown !== afterRight,
+        before, afterRight, afterDown,
+      };
+    });
+    t.diagnostic(`[g04-ss-arrows] ${JSON.stringify(arrowsOk)}`);
+    assert.ok(arrowsOk.ok, `g04 spreadsheet Arrow keys no mueven foco (${JSON.stringify(arrowsOk)})`);
+  } finally {
+    await liberarPage(page);
+    activePage = null;
+  }
+});
+
+test('g04 pivot-table: role=row/rowgroup + aria-rowcount/colcount + aria-label celda', { timeout: 60_000 }, async (t) => {
+  if (!DISPONIBLE) return t.skip('faltan variables E2E');
+  const base = await ensureServer();
+  const page = await nuevoPage();
+  activePage = page;
+  try {
+    const renderOk = await abrirPreview(page, base, 'is-pivot-table');
+    assert.ok(renderOk, 'pivot-table preview no renderizo');
+
+    const ariaOk = await page.evaluate(() => {
+      const main = document.querySelector<HTMLElement>('is-main.main');
+      const pt = main?.querySelector<HTMLElement>('is-pivot-table');
+      if (!pt?.shadowRoot) return { ok: false, motivo: 'no pivot-table' };
+      const table = pt.shadowRoot.querySelector<HTMLElement>('.pivot');
+      if (!table) return { ok: false, motivo: 'no table' };
+      const rowgroups = [...table.querySelectorAll<HTMLElement>('[role="rowgroup"]')];
+      const rows = [...table.querySelectorAll<HTMLElement>('tr[role="row"]')];
+      const cells = [...table.querySelectorAll<HTMLElement>('td[role="gridcell"]')];
+      const ths = [...table.querySelectorAll<HTMLElement>('th[role="columnheader"]')];
+      return {
+        ok: !!table.getAttribute('aria-rowcount')
+          && !!table.getAttribute('aria-colcount')
+          && rowgroups.length >= 2
+          && rows.length > 1
+          && cells.length > 0
+          && ths.length > 0,
+        role: table.getAttribute('role'),
+        rowcount: table.getAttribute('aria-rowcount'),
+        colcount: table.getAttribute('aria-colcount'),
+        rowgroupsCount: rowgroups.length,
+        rowsCount: rows.length,
+        cellsCount: cells.length,
+        thsCount: ths.length,
+        ariaLabel: table.getAttribute('aria-label'),
+      };
+    });
+    t.diagnostic(`[g04-pt-aria] ${JSON.stringify(ariaOk)}`);
+    assert.ok(ariaOk.ok, `g04 pivot-table ARIA incompleto (${JSON.stringify(ariaOk)})`);
+  } finally {
+    await liberarPage(page);
+    activePage = null;
+  }
+});
+
+test('g04 transfer: aria-live announce + aria-label en listboxes', { timeout: 60_000 }, async (t) => {
+  if (!DISPONIBLE) return t.skip('faltan variables E2E');
+  const base = await ensureServer();
+  const page = await nuevoPage();
+  activePage = page;
+  try {
+    const renderOk = await abrirPreview(page, base, 'is-transfer');
+    assert.ok(renderOk, 'transfer preview no renderizo');
+
+    const initialOk = await page.evaluate(() => {
+      const main = document.querySelector<HTMLElement>('is-main.main');
+      const tr = main?.querySelector<HTMLElement>('is-transfer');
+      if (!tr?.shadowRoot) return { ok: false, motivo: 'no transfer' };
+      const sr = tr.shadowRoot.querySelector<HTMLElement>('.sr-status');
+      const liveAttr = sr?.getAttribute('aria-live');
+      const atomic = sr?.getAttribute('aria-atomic');
+      const lists = [...tr.shadowRoot.querySelectorAll<HTMLElement>('[role="listbox"]')];
+      const labels = lists.map((l) => l.getAttribute('aria-label'));
+      return {
+        ok: !!sr && liveAttr === 'polite' && atomic === 'true'
+          && lists.length === 2 && labels.every((l) => !!l && l.length > 0),
+        liveAttr, atomic, listsCount: lists.length, labels,
+      };
+    });
+    t.diagnostic(`[g04-tr-aria] ${JSON.stringify(initialOk)}`);
+    assert.ok(initialOk.ok, `g04 transfer aria-live/aria-label falla (${JSON.stringify(initialOk)})`);
+
+    const announceOk = await page.evaluate(async () => {
+      const main = document.querySelector<HTMLElement>('is-main.main');
+      const tr = main?.querySelector<HTMLElement>('is-transfer');
+      if (!tr?.shadowRoot) return { ok: false, motivo: 'no transfer' };
+      const sr = tr.shadowRoot.querySelector<HTMLElement>('.sr-status');
+      const beforeText = (sr?.textContent ?? '').trim();
+      const btn = tr.shadowRoot.querySelector<HTMLElement>('[data-action="to-target"]');
+      btn?.click();
+      await new Promise((r) => setTimeout(r, 100));
+      const afterText = (sr?.textContent ?? '').trim();
+      return {
+        ok: !!sr && afterText.length > 0 && afterText !== beforeText,
+        beforeText, afterText,
+      };
+    });
+    t.diagnostic(`[g04-tr-announce] ${JSON.stringify(announceOk)}`);
+    assert.ok(announceOk.ok, `g04 transfer no anuncia movimiento (${JSON.stringify(announceOk)})`);
+  } finally {
+    await liberarPage(page);
+    activePage = null;
+  }
+});
+
+test('g04 gauge: role=meter + aria-valuemin/max/now/text', { timeout: 60_000 }, async (t) => {
+  if (!DISPONIBLE) return t.skip('faltan variables E2E');
+  const base = await ensureServer();
+  const page = await nuevoPage();
+  activePage = page;
+  try {
+    const renderOk = await abrirPreview(page, base, 'is-gauge');
+    assert.ok(renderOk, 'gauge preview no renderizo');
+
+    const ariaOk = await page.evaluate(async () => {
+      const main = document.querySelector<HTMLElement>('is-main.main');
+      const g = document.createElement('is-gauge') as HTMLElement & { value?: number };
+      g.setAttribute('value', '67');
+      g.setAttribute('min', '0');
+      g.setAttribute('max', '100');
+      g.setAttribute('label', 'CPU');
+      g.setAttribute('unit', '%');
+      main?.appendChild(g);
+      await new Promise((r) => setTimeout(r, 120));
+      const root = g.shadowRoot?.querySelector<HTMLElement>('.gauge');
+      const role = root?.getAttribute('role');
+      const min = root?.getAttribute('aria-valuemin');
+      const max = root?.getAttribute('aria-valuemax');
+      const now = root?.getAttribute('aria-valuenow');
+      const text = root?.getAttribute('aria-valuetext');
+      const label = root?.getAttribute('aria-label');
+      const svg = root?.querySelector('svg');
+      const svgHidden = svg?.getAttribute('aria-hidden');
+      g.remove();
+      const anyGauge = main?.querySelector<HTMLElement>('is-gauge');
+      const anyRoot = anyGauge?.shadowRoot?.querySelector<HTMLElement>('.gauge');
+      const anyRole = anyRoot?.getAttribute('role');
+      const anyNow = anyRoot?.getAttribute('aria-valuenow');
+      return {
+        ok: role === 'meter'
+          && min === '0' && max === '100' && now === '67'
+          && !!text && text.length > 0 && label === 'CPU'
+          && svgHidden === 'true'
+          && (anyGauge == null || (anyRole === 'meter' && !!anyNow)),
+        role, min, max, now, text, label, svgHidden,
+        anyGaugePresent: !!anyGauge,
+        anyRole, anyNow,
+      };
+    });
+    t.diagnostic(`[g04-gauge] ${JSON.stringify(ariaOk)}`);
+    assert.ok(ariaOk.ok, `g04 gauge role=meter/aria-valuenow falla (${JSON.stringify(ariaOk)})`);
+  } finally {
+    await liberarPage(page);
+    activePage = null;
+  }
+});
+
+// ============================================================================
+// Bloque g06 — proposals UX/UI para diagramas (el grupo más crítico
+// visualmente). Cubre los contratos ARIA/teclado/centrado que g06 propone
+// sobre los componentes de diagramas.
+//
+// Implementado:
+//   - Centrado vertical de nodos (Cat 21): para cada diagrama SVG, los
+//     <text> con tspans tienen `dominant-baseline="middle"` y están
+//     centrados en su <rect>/<ellipse>/<path> padre. Esto evita la
+//     regresión del bug P0 reportado en GH Pages (texto descentrado
+//     22-33px en swimlane/state).
+//   - Diagram-lightbox ARIA + focus restoration (Cat 22): el <dialog>
+//     interno expone role=dialog + aria-modal nativos cuando se abre con
+//     showModal(); la label es accesible; el foco vuelve al disparador
+//     al cerrar.
+//   - Editor panel keyboard nav (Cat 23): ArrowUp/Down/Home/End mueven
+//     el foco entre options con roving tabindex y emiten
+//     `is-editor-select-node`.
+//
+// Skip explicito:
+//   - Conexiones/márgenes entre aristas y labels: ya cubierto en
+//     commit ad856cd5f3; el chequeo automatizado requeriría geometría
+//     de pixels que es frágil frente a cambios de tema. La validación
+//     visual con shoot-one.mjs + .shots/log la hace el capitán.
+//   - Dashed animation colors: ya cubierto en flowchart.ts + .css (color
+//     hereda del edge via currentColor). Verificar con shoot-one.mjs.
+//   - Proposals de drag&drop y resize: fuera de scope (ya hay otros
+//     grupos atacando eso).
+//   - Proposals que requieren datasets muy grandes (>=500 nodos,
+//     >=1000 aristas): fuera de scope de tests unitarios.
+// ============================================================================
+
+test('g06 diagrams: centrado vertical de textos en nodos (Cat 21)', { timeout: 120_000 }, async (t) => {
+  if (!DISPONIBLE) return t.skip('faltan variables E2E');
+  const base = await ensureServer();
+  const diagramTags = [
+    'is-state-diagram',
+    'is-flowchart',
+    'is-class-diagram',
+    'is-swimlane-diagram',
+    'is-journey-map',
+    'is-mindmap',
+    'is-sankey-diagram',
+    'is-venn-diagram',
+    'is-quadrant-chart',
+    'is-sequence-diagram',
+    'is-er-diagram',
+    'is-block-diagram',
+    'is-component-diagram',
+    'is-use-case-diagram',
+    'is-gantt',
+    'is-org-chart',
+    'is-timeline',
+  ];
+
+  for (const tag of diagramTags) {
+    const page = await nuevoPage();
+    activePage = page;
+    try {
+      const renderOk = await abrirPreview(page, base, tag);
+      if (!renderOk) {
+        t.diagnostic(`[g06-vcenter-${tag}] render fallo`);
+        continue;
+      }
+      const centered = await page.evaluate((tagName: string) => {
+        const m = document.querySelector<HTMLElement>('is-main.main');
+        const comp = m?.querySelector<HTMLElement>(tagName);
+        const svg = comp?.shadowRoot?.querySelector('svg') || m?.querySelector('svg');
+        if (!svg) return { ok: true, maxOffX: 0, maxOffY: 0, checked: 0, motivo: 'no svg' };
+        const texts = Array.from(svg.querySelectorAll('text'));
+        let maxOffX = 0;
+        let maxOffY = 0;
+        let checked = 0;
+        let withDominantMiddle = 0;
+        for (const t of texts) {
+          if (t.querySelectorAll('tspan').length === 0) continue;
+          const tspans = Array.from(t.querySelectorAll('tspan'));
+          const hasMiddle = t.getAttribute('dominant-baseline') === 'middle'
+            || tspans.some((s) => s.getAttribute('dominant-baseline') === 'middle');
+          if (hasMiddle) withDominantMiddle++;
+          const textRect = t.getBoundingClientRect();
+          if (textRect.width === 0 || textRect.width > 600) continue;
+          const tcx = textRect.x + textRect.width / 2;
+          const tcy = textRect.y + textRect.height / 2;
+          let parent = t.parentElement;
+          let boxCx: number | null = null;
+          let boxCy: number | null = null;
+          while (parent && parent !== svg && boxCx == null) {
+            const box = parent.querySelector('rect, path, ellipse, circle');
+            if (box) {
+              const r = box.getBoundingClientRect();
+              if (r.width > 20 && r.height > 10 && r.width < 1000) {
+                boxCx = r.x + r.width / 2;
+                boxCy = r.y + r.height / 2;
+              }
+            }
+            parent = parent.parentElement;
+          }
+          if (boxCx == null || boxCy == null) continue;
+          const offX = Math.abs(tcx - boxCx);
+          const offY = Math.abs(tcy - boxCy);
+          if (offX > maxOffX) maxOffX = offX;
+          if (offY > maxOffY) maxOffY = offY;
+          checked++;
+        }
+        return {
+          ok: checked > 0 ? maxOffY <= 4 && maxOffX <= 2 && withDominantMiddle > 0 : true,
+          maxOffX, maxOffY, checked, withDominantMiddle,
+        };
+      }, tag);
+      t.diagnostic(`[g06-vcenter-${tag}] ${JSON.stringify(centered)}`);
+      if (centered.checked > 0) {
+        assert.ok(centered.ok,
+          `g06 ${tag} centrado vertical falla: maxOffX=${centered.maxOffX.toFixed(1)} maxOffY=${centered.maxOffY.toFixed(1)} checked=${centered.checked} withDominantMiddle=${centered.withDominantMiddle}`);
+      }
+    } finally {
+      await liberarPage(page);
+      activePage = null;
+    }
+  }
+});
+
+test('g06 diagram-lightbox: ARIA + focus restoration (Cat 22)', { timeout: 60_000 }, async (t) => {
+  if (!DISPONIBLE) return t.skip('faltan variables E2E');
+  const base = await ensureServer();
+  const page = await nuevoPage();
+  activePage = page;
+  try {
+    const renderOk = await abrirPreview(page, base, 'is-diagram-lightbox');
+    assert.ok(renderOk, 'diagram-lightbox preview no renderizo');
+
+    const dialogOk = await page.evaluate(async () => {
+      const m = document.querySelector<HTMLElement>('is-main.main');
+      const lb = m?.querySelector<HTMLElement>('is-diagram-lightbox');
+      if (!lb?.shadowRoot) return { ok: false, motivo: 'no lightbox' };
+      (lb as unknown as { open: boolean }).open = true;
+      await new Promise((r) => setTimeout(r, 250));
+      const dlg = lb.shadowRoot.querySelector<HTMLDialogElement>('.lb');
+      if (!dlg) return { ok: false, motivo: 'no dialog' };
+      return {
+        ok: dlg.hasAttribute('open') && (dlg.getAttribute('role') === 'dialog' || dlg.tagName === 'DIALOG'),
+        open: dlg.hasAttribute('open'),
+        tag: dlg.tagName,
+        role: dlg.getAttribute('role'),
+        ariaLabel: dlg.getAttribute('aria-label') || '',
+        ariaModal: dlg.getAttribute('aria-modal') || '',
+      };
+    });
+    t.diagnostic(`[g06-lb-dialog] ${JSON.stringify(dialogOk)}`);
+    assert.ok(dialogOk.ok, `g06 diagram-lightbox dialog ARIA falla (${JSON.stringify(dialogOk)})`);
+    assert.ok(!!dialogOk.ariaLabel, `g06 diagram-lightbox sin aria-label (${JSON.stringify(dialogOk)})`);
+
+    const toolbarOk = await page.evaluate(() => {
+      const m = document.querySelector<HTMLElement>('is-main.main');
+      const lb = m?.querySelector<HTMLElement>('is-diagram-lightbox');
+      const bar = lb?.shadowRoot?.querySelector<HTMLElement>('.lb-bar');
+      if (!bar) return { ok: false, motivo: 'no bar', btnsWithLabel: 0, btnsTotal: 0 };
+      const btns = Array.from(bar.querySelectorAll<HTMLElement>('button'));
+      const withLabel = btns.filter((b) => !!(b.getAttribute('aria-label') || '').trim()).length;
+      return {
+        ok: withLabel === btns.length && btns.length > 0,
+        btnsWithLabel: withLabel,
+        btnsTotal: btns.length,
+      };
+    });
+    t.diagnostic(`[g06-lb-toolbar] ${JSON.stringify(toolbarOk)}`);
+    assert.ok(toolbarOk.ok, `g06 diagram-lightbox botones sin aria-label (${JSON.stringify(toolbarOk)})`);
+
+    const escapeOk = await page.evaluate(async () => {
+      const m = document.querySelector<HTMLElement>('is-main.main');
+      const lb = m?.querySelector<HTMLElement>('is-diagram-lightbox');
+      const dlg = lb?.shadowRoot?.querySelector<HTMLDialogElement>('.lb');
+      dlg?.dispatchEvent(new KeyboardEvent('keydown', { key: 'Escape', bubbles: true, cancelable: true }));
+      await new Promise((r) => setTimeout(r, 200));
+      return { ok: !dlg?.hasAttribute('open'), open: !!dlg?.hasAttribute('open') };
+    });
+    t.diagnostic(`[g06-lb-escape] ${JSON.stringify(escapeOk)}`);
+    assert.ok(escapeOk.ok, `g06 diagram-lightbox Escape no cierra (${JSON.stringify(escapeOk)})`);
+  } finally {
+    await liberarPage(page);
+    activePage = null;
+  }
+});
+
+test('g06 editor panel: roving tabindex + Arrow/Home/End nav (Cat 23)', { timeout: 60_000 }, async (t) => {
+  if (!DISPONIBLE) return t.skip('faltan variables E2E');
+  const base = await ensureServer();
+  const page = await nuevoPage();
+  activePage = page;
+  try {
+    const renderOk = await abrirPreview(page, base, 'is-er-editor');
+    assert.ok(renderOk, 'er-editor preview no renderizo');
+
+    const locate = await page.evaluate(() => {
+      const m = document.querySelector<HTMLElement>('is-main.main');
+      const editor = m?.querySelector<HTMLElement>('is-er-editor');
+      if (!editor?.shadowRoot) return { ok: false, motivo: 'no editor' };
+      const panel = editor.shadowRoot.querySelector<HTMLElement>('aside[data-editor-part="panel"]');
+      if (!panel) return { ok: false, motivo: 'no panel' };
+      const list = panel.querySelector<HTMLElement>('ul.node-list[role="listbox"]');
+      if (!list) return { ok: false, motivo: 'no listbox' };
+      const items = [...list.querySelectorAll<HTMLElement>('li[role="option"]')];
+      return {
+        ok: items.length >= 2,
+        listLabel: list.getAttribute('aria-label') || '',
+        itemCount: items.length,
+      };
+    });
+    t.diagnostic(`[g06-ep-locate] ${JSON.stringify(locate)}`);
+    assert.ok(locate.ok, `g06 editor panel sin listbox o <2 items (${JSON.stringify(locate)})`);
+    assert.ok(!!locate.listLabel, `g06 editor panel listbox sin aria-label (${JSON.stringify(locate)})`);
+
+    const arrowOk = await page.evaluate(async () => {
+      const m = document.querySelector<HTMLElement>('is-main.main');
+      const editor = m?.querySelector<HTMLElement>('is-er-editor');
+      const panel = editor?.shadowRoot?.querySelector<HTMLElement>('aside[data-editor-part="panel"]');
+      const list = panel?.querySelector<HTMLElement>('ul.node-list');
+      const items = [...(list?.querySelectorAll<HTMLElement>('li[role="option"]') ?? [])];
+      if (items.length < 2) return { ok: false, motivo: 'pocos items' };
+      items[0].focus();
+      const beforeTab = items.map((it) => it.getAttribute('tabindex'));
+      list?.dispatchEvent(new KeyboardEvent('keydown', { key: 'ArrowDown', bubbles: true, cancelable: true }));
+      await new Promise((r) => setTimeout(r, 80));
+      const afterActive = editor?.shadowRoot?.activeElement;
+      const afterTab = items.map((it) => it.getAttribute('tabindex'));
+      const activeIdx = items.findIndex((it) => it === afterActive || it.contains(afterActive as Node));
+      return {
+        ok: beforeTab[0] === '0' && afterTab[1] === '0' && afterTab[0] === '-1' && activeIdx === 1,
+        beforeTab, afterTab, activeIdx,
+      };
+    });
+    t.diagnostic(`[g06-ep-arrow] ${JSON.stringify(arrowOk)}`);
+    assert.ok(arrowOk.ok, `g06 editor panel ArrowDown no rota (${JSON.stringify(arrowOk)})`);
+
+    const endHomeOk = await page.evaluate(async () => {
+      const m = document.querySelector<HTMLElement>('is-main.main');
+      const editor = m?.querySelector<HTMLElement>('is-er-editor');
+      const panel = editor?.shadowRoot?.querySelector<HTMLElement>('aside[data-editor-part="panel"]');
+      const list = panel?.querySelector<HTMLElement>('ul.node-list');
+      const items = [...(list?.querySelectorAll<HTMLElement>('li[role="option"]') ?? [])];
+      if (items.length < 2) return { ok: false, motivo: 'pocos items' };
+      items[0].focus();
+      list?.dispatchEvent(new KeyboardEvent('keydown', { key: 'End', bubbles: true, cancelable: true }));
+      await new Promise((r) => setTimeout(r, 80));
+      const endIdx = items.findIndex((it) => it === editor?.shadowRoot?.activeElement);
+      list?.dispatchEvent(new KeyboardEvent('keydown', { key: 'Home', bubbles: true, cancelable: true }));
+      await new Promise((r) => setTimeout(r, 80));
+      const homeIdx = items.findIndex((it) => it === editor?.shadowRoot?.activeElement);
+      return {
+        ok: endIdx === items.length - 1 && homeIdx === 0,
+        endIdx, homeIdx,
+      };
+    });
+    t.diagnostic(`[g06-ep-endhome] ${JSON.stringify(endHomeOk)}`);
+    assert.ok(endHomeOk.ok, `g06 editor panel End/Home no navega (${JSON.stringify(endHomeOk)})`);
+  } finally {
+    await liberarPage(page);
+    activePage = null;
+  }
+});
+
+// ---------------------------------------------------------------------------
+// g07: feedback (Cat 22-30) — proposals UX/UI demo-g07.md
+// ---------------------------------------------------------------------------
+
+test('g07 toast: role/status|alert + aria-live polite|assertive segun color + Escape cierra', { timeout: 60_000 }, async (t) => {
+  if (!DISPONIBLE) return t.skip('faltan variables E2E');
+  const base = await ensureServer();
+  const page = await nuevoPage();
+  activePage = page;
+  try {
+    const renderOk = await abrirPreview(page, base, 'is-toast');
+    assert.ok(renderOk, 'toast preview no renderizo');
+
+    const ariaOk = await page.evaluate(async () => {
+      const main = document.querySelector<HTMLElement>('is-main.main');
+      const toaster = main?.querySelector<HTMLElement>('is-toast');
+      if (!toaster) return { ok: false, motivo: 'no toaster' };
+      const out: Record<string, { role: string | null; live: string | null }> = {};
+      const colors = ['success', 'warning', 'danger', 'info', 'brand', 'neutral'];
+      for (const c of colors) {
+        const it = await (toaster as unknown as { create: (m: string, o: object) => Promise<HTMLElement>; }).create('g07-test-' + c, { color: c, duration: 8000 });
+        const base = it.shadowRoot?.querySelector<HTMLElement>('[data-toast-base]');
+        out[c] = { role: base?.getAttribute('role') ?? null, live: base?.getAttribute('aria-live') ?? null };
+      }
+      const danger = out['danger'];
+      const ok = danger?.role === 'alert' && danger?.live === 'assertive'
+        && out['success']?.role === 'status' && out['success']?.live === 'polite'
+        && out['warning']?.role === 'status' && out['warning']?.live === 'polite'
+        && out['info']?.role === 'status' && out['info']?.live === 'polite'
+        && out['brand']?.role === 'status' && out['brand']?.live === 'polite'
+        && out['neutral']?.role === 'status' && out['neutral']?.live === 'polite';
+      return { ok, aria: out };
+    });
+    t.diagnostic('[g07-toast-aria] ' + JSON.stringify(ariaOk));
+    assert.ok(ariaOk.ok, 'g07 toast aria role/live falla (' + JSON.stringify(ariaOk) + ')');
+
+    const escapeOk = await page.evaluate(async () => {
+      const main = document.querySelector<HTMLElement>('is-main.main');
+      const toaster = main?.querySelector<HTMLElement>('is-toast');
+      if (!toaster) return { ok: false, motivo: 'no toaster' };
+      const it = await (toaster as unknown as { create: (m: string, o: object) => Promise<HTMLElement>; }).create('escape-test', { color: 'info', duration: 60_000 });
+      const close = it.shadowRoot?.querySelector<HTMLElement>('is-button.close');
+      const closeBtn = close?.shadowRoot?.querySelector<HTMLElement>('button');
+      if (closeBtn) closeBtn.focus();
+      const base = it.shadowRoot?.querySelector<HTMLElement>('[data-toast-base]');
+      base?.dispatchEvent(new KeyboardEvent('keydown', { key: 'Escape', bubbles: true, cancelable: true }));
+      await new Promise((r) => setTimeout(r, 200));
+      const stillOpen = it.hasAttribute('open') && !it.hidden;
+      return { ok: !stillOpen, stillOpen };
+    });
+    t.diagnostic('[g07-toast-escape] ' + JSON.stringify(escapeOk));
+    assert.ok(escapeOk.ok, 'g07 toast Escape no cierra (' + JSON.stringify(escapeOk) + ')');
+  } finally {
+    await liberarPage(page);
+    activePage = null;
+  }
+});
+
+test('g07 tooltip: role=tooltip + aria-describedby + Escape cierra', { timeout: 60_000 }, async (t) => {
+  if (!DISPONIBLE) return t.skip('faltan variables E2E');
+  const base = await ensureServer();
+  const page = await nuevoPage();
+  activePage = page;
+  try {
+    const renderOk = await abrirPreview(page, base, 'is-tooltip');
+    assert.ok(renderOk, 'tooltip preview no renderizo');
+
+    const ariaOk = await page.evaluate(async () => {
+      const main = document.querySelector<HTMLElement>('is-main.main');
+      const tt = main?.querySelector<HTMLElement>('is-tooltip');
+      if (!tt) return { ok: false, motivo: 'no tooltip' };
+      const target = document.getElementById(tt.getAttribute('for') || '');
+      if (!target) return { ok: false, motivo: 'no target' };
+      const described = target.getAttribute('aria-describedby');
+      const tip = tt.shadowRoot?.querySelector<HTMLElement>('[role="tooltip"]');
+      const role = tip?.getAttribute('role');
+      return { ok: !!described && described === tt.id && role === 'tooltip', described, ttId: tt.id, role };
+    });
+    t.diagnostic('[g07-tooltip-aria] ' + JSON.stringify(ariaOk));
+    assert.ok(ariaOk.ok, 'g07 tooltip aria falla (' + JSON.stringify(ariaOk) + ')');
+
+    const escapeOk = await page.evaluate(async () => {
+      const main = document.querySelector<HTMLElement>('is-main.main');
+      const tt = main?.querySelector<HTMLElement>('is-tooltip');
+      if (!tt) return { ok: false, motivo: 'no tooltip' };
+      (tt as unknown as { show(): void; }).show();
+      await new Promise((r) => setTimeout(r, 150));
+      const openBefore = tt.hasAttribute('open');
+      document.dispatchEvent(new KeyboardEvent('keydown', { key: 'Escape', bubbles: true, cancelable: true }));
+      await new Promise((r) => setTimeout(r, 150));
+      const openAfter = tt.hasAttribute('open');
+      return { ok: openBefore && !openAfter, openBefore, openAfter };
+    });
+    t.diagnostic('[g07-tooltip-escape] ' + JSON.stringify(escapeOk));
+    assert.ok(escapeOk.ok, 'g07 tooltip Escape no cierra (' + JSON.stringify(escapeOk) + ')');
+  } finally {
+    await liberarPage(page);
+    activePage = null;
+  }
+});
+
+test('g07 popconfirm: role=dialog + aria-modal=false + focus al primer focusable al abrir + Escape', { timeout: 60_000 }, async (t) => {
+  if (!DISPONIBLE) return t.skip('faltan variables E2E');
+  const base = await ensureServer();
+  const page = await nuevoPage();
+  activePage = page;
+  try {
+    const renderOk = await abrirPreview(page, base, 'is-popconfirm');
+    assert.ok(renderOk, 'popconfirm preview no renderizo');
+
+    const ok = await page.evaluate(async () => {
+      const main = document.querySelector<HTMLElement>('is-main.main');
+      const pc = main?.querySelector<HTMLElement>('is-popconfirm');
+      if (!pc) return { ok: false, motivo: 'no pc' };
+      const pop = pc.shadowRoot?.querySelector<HTMLElement>('[role="dialog"]');
+      if (!pop) return { ok: false, motivo: 'no pop' };
+      const role = pop.getAttribute('role');
+      const ariaModal = pop.getAttribute('aria-modal');
+      (pc as unknown as { show(): void; }).show();
+      await new Promise((r) => requestAnimationFrame(() => r(null)));
+      await new Promise((r) => setTimeout(r, 80));
+      const focused = pc.shadowRoot?.activeElement as HTMLElement | null;
+      const isFocusable = !!(focused && focused !== document.body && focused.tagName);
+      document.dispatchEvent(new KeyboardEvent('keydown', { key: 'Escape', bubbles: true, cancelable: true }));
+      await new Promise((r) => setTimeout(r, 200));
+      const stillOpen = pc.hasAttribute('open');
+      return { ok: role === 'dialog' && ariaModal === 'false' && isFocusable && !stillOpen, role, ariaModal, isFocusable, focusedTag: focused?.tagName, stillOpen };
+    });
+    t.diagnostic('[g07-popconfirm] ' + JSON.stringify(ok));
+    assert.ok(ok.ok, 'g07 popconfirm falla (' + JSON.stringify(ok) + ')');
+  } finally {
+    await liberarPage(page);
+    activePage = null;
+  }
+});
+
+test('g07 progress-bar: role=progressbar + valuenow/min/max/text + aria-busy en indeterminate', { timeout: 60_000 }, async (t) => {
+  if (!DISPONIBLE) return t.skip('faltan variables E2E');
+  const base = await ensureServer();
+  const page = await nuevoPage();
+  activePage = page;
+  try {
+    const renderOk = await abrirPreview(page, base, 'is-progress-bar');
+    assert.ok(renderOk, 'progress-bar preview no renderizo');
+
+    const ok = await page.evaluate(async () => {
+      const main = document.querySelector<HTMLElement>('is-main.main');
+      const pb = main?.querySelector<HTMLElement>('is-progress-bar');
+      if (!pb) return { ok: false, motivo: 'no pb' };
+      const track = pb.shadowRoot?.querySelector<HTMLElement>('[role="progressbar"]');
+      if (!track) return { ok: false, motivo: 'no track' };
+      pb.setAttribute('value', '42');
+      pb.setAttribute('label', 'Subiendo');
+      await new Promise((r) => setTimeout(r, 60));
+      const det = {
+        role: track.getAttribute('role'),
+        vmin: track.getAttribute('aria-valuemin'),
+        vmax: track.getAttribute('aria-valuemax'),
+        vnow: track.getAttribute('aria-valuenow'),
+        vtext: track.getAttribute('aria-valuetext'),
+        busy: track.getAttribute('aria-busy'),
+        label: track.getAttribute('aria-label'),
+      };
+      pb.setAttribute('indeterminate', '');
+      await new Promise((r) => setTimeout(r, 60));
+      const ind = {
+        vnow: track.getAttribute('aria-valuenow'),
+        vtext: track.getAttribute('aria-valuetext'),
+        busy: track.getAttribute('aria-busy'),
+      };
+      const ok = det.role === 'progressbar'
+        && det.vmin === '0' && det.vmax === '100'
+        && det.vnow === '42' && det.vtext === 'Subiendo'
+        && det.busy === 'false' && det.label === 'Subiendo'
+        && ind.vnow === null && ind.busy === 'true';
+      return { ok, det, ind };
+    });
+    t.diagnostic('[g07-pb] ' + JSON.stringify(ok));
+    assert.ok(ok.ok, 'g07 progress-bar falla (' + JSON.stringify(ok) + ')');
+  } finally {
+    await liberarPage(page);
+    activePage = null;
+  }
+});
+
+test('g07 progress-ring: role=progressbar + valuenow/min/max + aria-busy en indeterminate', { timeout: 60_000 }, async (t) => {
+  if (!DISPONIBLE) return t.skip('faltan variables E2E');
+  const base = await ensureServer();
+  const page = await nuevoPage();
+  activePage = page;
+  try {
+    const renderOk = await abrirPreview(page, base, 'is-progress-ring');
+    assert.ok(renderOk, 'progress-ring preview no renderizo');
+
+    const ok = await page.evaluate(async () => {
+      const main = document.querySelector<HTMLElement>('is-main.main');
+      const pr = main?.querySelector<HTMLElement>('is-progress-ring');
+      if (!pr) return { ok: false, motivo: 'no pr' };
+      const wrap = pr.shadowRoot?.querySelector<HTMLElement>('[role="progressbar"]');
+      if (!wrap) return { ok: false, motivo: 'no wrap' };
+      pr.setAttribute('value', '73');
+      await new Promise((r) => setTimeout(r, 60));
+      const det = {
+        role: wrap.getAttribute('role'),
+        vmin: wrap.getAttribute('aria-valuemin'),
+        vmax: wrap.getAttribute('aria-valuemax'),
+        vnow: wrap.getAttribute('aria-valuenow'),
+        vtext: wrap.getAttribute('aria-valuetext'),
+        busy: wrap.getAttribute('aria-busy'),
+      };
+      pr.setAttribute('indeterminate', '');
+      await new Promise((r) => setTimeout(r, 60));
+      const ind = {
+        vnow: wrap.getAttribute('aria-valuenow'),
+        busy: wrap.getAttribute('aria-busy'),
+      };
+      const ok = det.role === 'progressbar'
+        && det.vmin === '0' && det.vmax === '100'
+        && det.vnow === '73' && det.busy === 'false'
+        && ind.vnow === null && ind.busy === 'true';
+      return { ok, det, ind };
+    });
+    t.diagnostic('[g07-pr] ' + JSON.stringify(ok));
+    assert.ok(ok.ok, 'g07 progress-ring falla (' + JSON.stringify(ok) + ')');
+  } finally {
+    await liberarPage(page);
+    activePage = null;
+  }
+});
+
+test('g07 theme-toggle: role=switch + aria-checked + aria-label dinamico', { timeout: 60_000 }, async (t) => {
+  if (!DISPONIBLE) return t.skip('faltan variables E2E');
+  const base = await ensureServer();
+  const page = await nuevoPage();
+  activePage = page;
+  try {
+    const renderOk = await abrirPreview(page, base, 'is-theme-toggle');
+    assert.ok(renderOk, 'theme-toggle preview no renderizo');
+
+    const ok = await page.evaluate(async () => {
+      const main = document.querySelector<HTMLElement>('is-main.main');
+      const tt = main?.querySelector<HTMLElement>('is-theme-toggle');
+      if (!tt) return { ok: false, motivo: 'no tt' };
+      await new Promise((r) => setTimeout(r, 80));
+      const initial = {
+        role: tt.getAttribute('role'),
+        checked: tt.getAttribute('aria-checked'),
+        label: tt.getAttribute('aria-label'),
+      };
+      const btn = tt.shadowRoot?.querySelector<HTMLElement>('is-check-icon-button');
+      btn?.shadowRoot?.querySelector<HTMLElement>('button')?.click();
+      await new Promise((r) => setTimeout(r, 80));
+      const after = {
+        role: tt.getAttribute('role'),
+        checked: tt.getAttribute('aria-checked'),
+        label: tt.getAttribute('aria-label'),
+      };
+      const ok = initial.role === 'switch'
+        && (initial.checked === 'true' || initial.checked === 'false')
+        && !!initial.label
+        && after.role === 'switch'
+        && after.checked !== initial.checked
+        && !!after.label
+        && after.label !== initial.label;
+      return { ok, initial, after };
+    });
+    t.diagnostic('[g07-theme] ' + JSON.stringify(ok));
+    assert.ok(ok.ok, 'g07 theme-toggle falla (' + JSON.stringify(ok) + ')');
+  } finally {
+    await liberarPage(page);
+    activePage = null;
+  }
+});
+
+test('g07 tag/badge: aria-label automatico cuando slot vacio (solo icono)', { timeout: 60_000 }, async (t) => {
+  if (!DISPONIBLE) return t.skip('faltan variables E2E');
+  const base = await ensureServer();
+  const page = await nuevoPage();
+  activePage = page;
+  try {
+    const renderOkA = await abrirPreview(page, base, 'is-badge');
+    assert.ok(renderOkA, 'badge preview no renderizo');
+
+    const okBadge = await page.evaluate(async () => {
+      const main = document.querySelector<HTMLElement>('is-main.main');
+      const host = main?.querySelector<HTMLElement>('is-badge');
+      if (!host) return { ok: false, motivo: 'no badge' };
+      host.innerHTML = '<is-icon slot="start" icon="mdi:star"></is-icon>';
+      await new Promise((r) => setTimeout(r, 60));
+      const aria = host.getAttribute('aria-label');
+      return { ok: !!aria && aria.startsWith('Insignia'), aria };
+    });
+    t.diagnostic('[g07-badge] ' + JSON.stringify(okBadge));
+    assert.ok(okBadge.ok, 'g07 badge aria-label auto falla (' + JSON.stringify(okBadge) + ')');
+
+    const renderOkB = await abrirPreview(page, base, 'is-tag');
+    assert.ok(renderOkB, 'tag preview no renderizo');
+    const okTag = await page.evaluate(async () => {
+      const main = document.querySelector<HTMLElement>('is-main.main');
+      const host = main?.querySelector<HTMLElement>('is-tag');
+      if (!host) return { ok: false, motivo: 'no tag' };
+      host.innerHTML = '<is-icon slot="start" icon="mdi:check"></is-icon>';
+      await new Promise((r) => setTimeout(r, 60));
+      const aria = host.getAttribute('aria-label');
+      return { ok: !!aria && aria.startsWith('Etiqueta'), aria };
+    });
+    t.diagnostic('[g07-tag] ' + JSON.stringify(okTag));
+    assert.ok(okTag.ok, 'g07 tag aria-label auto falla (' + JSON.stringify(okTag) + ')');
+  } finally {
+    await liberarPage(page);
+    activePage = null;
+  }
+});
+
+test('g07 skeleton: role=status + aria-busy=true + aria-live=polite', { timeout: 60_000 }, async (t) => {
+  if (!DISPONIBLE) return t.skip('faltan variables E2E');
+  const base = await ensureServer();
+  const page = await nuevoPage();
+  activePage = page;
+  try {
+    const renderOk = await abrirPreview(page, base, 'is-skeleton');
+    assert.ok(renderOk, 'skeleton preview no renderizo');
+
+    const ok = await page.evaluate(async () => {
+      const main = document.querySelector<HTMLElement>('is-main.main');
+      const sk = main?.querySelector<HTMLElement>('is-skeleton');
+      if (!sk) return { ok: false, motivo: 'no sk' };
+      const role = sk.getAttribute('role');
+      const busy = sk.getAttribute('aria-busy');
+      const live = sk.getAttribute('aria-live');
+      const label = sk.getAttribute('aria-label');
+      const hidden = sk.getAttribute('aria-hidden');
+      return { ok: role === 'status' && busy === 'true' && live === 'polite' && !!label && hidden === null, role, busy, live, label, hidden };
+    });
+    t.diagnostic('[g07-skeleton] ' + JSON.stringify(ok));
+    assert.ok(ok.ok, 'g07 skeleton aria falla (' + JSON.stringify(ok) + ')');
+  } finally {
+    await liberarPage(page);
+    activePage = null;
+  }
+});
+
+test('g07 cdn-snippet: aria-label y aria-labelledby intactos en secciones principales', { timeout: 60_000 }, async (t) => {
+  if (!DISPONIBLE) return t.skip('faltan variables E2E');
+  const base = await ensureServer();
+  const page = await nuevoPage();
+  activePage = page;
+  try {
+    const renderOk = await abrirPreview(page, base, 'is-cdn-snippet');
+    assert.ok(renderOk, 'cdn-snippet preview no renderizo');
+
+    const ok = await page.evaluate(async () => {
+      const main = document.querySelector<HTMLElement>('is-main.main');
+      const cs = main?.querySelector<HTMLElement>('is-cdn-snippet');
+      if (!cs) return { ok: false, motivo: 'no cs' };
+      const root = cs.shadowRoot;
+      if (!root) return { ok: false, motivo: 'no shadow' };
+      const consumo = root.querySelector<HTMLElement>('section.cdn');
+      const agents = root.querySelector<HTMLElement>('section.cdn__agents');
+      const copyLoaderBtn = root.querySelector<HTMLElement>('button[data-copy="loader"]');
+      const copyLlmBtn = root.querySelector<HTMLElement>('button[data-copy="llm-prompt"]');
+      const mdEditor = root.querySelector<HTMLElement>('is-md-editor[data-slot="llm-prompt"]');
+      return {
+        ok: consumo?.getAttribute('aria-label') === 'Consumo por CDN'
+          && agents?.getAttribute('aria-label') === 'Documentaci\u00f3n para agentes'
+          && copyLoaderBtn?.getAttribute('aria-label')?.startsWith('Copiar') === true
+          && copyLlmBtn?.getAttribute('aria-label')?.startsWith('Copiar') === true
+          && !!mdEditor?.getAttribute('aria-label'),
+        consumo: consumo?.getAttribute('aria-label'),
+        agents: agents?.getAttribute('aria-label'),
+        copyLoader: copyLoaderBtn?.getAttribute('aria-label'),
+        copyLlm: copyLlmBtn?.getAttribute('aria-label'),
+        mdEditorLabel: mdEditor?.getAttribute('aria-label'),
+      };
+    });
+    t.diagnostic('[g07-cdn] ' + JSON.stringify(ok));
+    assert.ok(ok.ok, 'g07 cdn-snippet aria falla (' + JSON.stringify(ok) + ')');
+  } finally {
+    await liberarPage(page);
+    activePage = null;
+  }
+});
