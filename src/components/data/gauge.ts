@@ -26,8 +26,8 @@ import { ElementBase } from '../../core/element-base.js';
 (() => {
   const TEMPLATE = document.createElement('template');
   TEMPLATE.innerHTML = /* html */ `
-    <div class="gauge" part="base">
-      <svg viewBox="0 0 100 100" part="svg" preserveAspectRatio="xMidYMid meet">
+    <div class="gauge" part="base" role="meter" aria-valuemin="0" aria-valuemax="100" aria-valuenow="0">
+      <svg viewBox="0 0 100 100" part="svg" preserveAspectRatio="xMidYMid meet" aria-hidden="true">
         <circle class="track" part="track" cx="50" cy="50" r="44" />
         <circle class="fill" part="fill" cx="50" cy="50" r="44" />
       </svg>
@@ -52,11 +52,13 @@ import { ElementBase } from '../../core/element-base.js';
     #track!: HTMLElement;
     #valueEl!: HTMLElement;
     #labelEl!: HTMLElement;
+    #root!: HTMLElement;
     constructor() {
       super();
       const shadow = this.attachShadow({ mode: 'open' });
       adoptCss(shadow, import.meta.url);
       shadow.appendChild(TEMPLATE.content.cloneNode(true));
+      this.#root = shadow.querySelector<HTMLElement>('.gauge')!;
       this.#svg = shadow.querySelector<HTMLElement>('svg')!;
       this.#circle = shadow.querySelector<HTMLElement>('.fill')!;
       this.#track = shadow.querySelector<HTMLElement>('.track')!;
@@ -122,6 +124,15 @@ import { ElementBase } from '../../core/element-base.js';
         this.#valueEl.textContent = '';
       }
       this.#labelEl.textContent = label;
+      // aria-valuemin / aria-valuemax / aria-valuenow / aria-valuetext + label.
+      const clamped = Math.max(min, Math.min(max, value));
+      this.#root.setAttribute('aria-valuemin', String(min));
+      this.#root.setAttribute('aria-valuemax', String(max));
+      this.#root.setAttribute('aria-valuenow', String(clamped));
+      const formattedNow = format ? this.#formatNumber(String(clamped), format) : String(clamped);
+      const valuetext = `${formattedNow}${unit}${label ? `, ${label}` : ''}`;
+      this.#root.setAttribute('aria-valuetext', valuetext);
+      if (label) this.#root.setAttribute('aria-label', label);
     }
 
     #formatNumber(value: string, format: string): string {

@@ -136,23 +136,29 @@ import { ElementBase } from '../../core/element-base.js';
 
     #render(): void {
       const colsCount = this.#colsCount();
+      // aria-rowcount + aria-colcount + aria-label en la tabla para
+      // lectores de pantalla.
+      this.#table.setAttribute('aria-rowcount', String(this.#data.length + 1));
+      this.#table.setAttribute('aria-colcount', String(colsCount));
+      this.#table.setAttribute('aria-label', `Hoja de cálculo ${this.#data.length} filas por ${colsCount} columnas`);
       // cabecera
-      const head = ['<thead><tr><th class="corner"></th>'];
-      for (let x = 0; x < colsCount; x++) head.push(`<th>${COLS[x]}</th>`);
+      const head = ['<thead><tr role="row"><th class="corner" role="columnheader"></th>'];
+      for (let x = 0; x < colsCount; x++) head.push(`<th role="columnheader" aria-colindex="${x + 1}" aria-label="Columna ${COLS[x]}">${COLS[x]}</th>`);
       head.push('</tr></thead>');
       // cuerpo
       const rows: string[] = [];
       for (let y = 0; y < this.#data.length; y++) {
-        rows.push(`<tr><th class="row-head">${y + 1}</th>`);
+        rows.push(`<tr role="row" aria-rowindex="${y + 2}"><th class="row-head" role="rowheader" scope="row" aria-label="Fila ${y + 1}">${y + 1}</th>`);
         const row = this.#data[y];
         for (let x = 0; x < row.length; x++) {
           const id = `${COLS[x]}${y + 1}`;
           const v = row[x];
-          rows.push(`<td class="cell" data-r="${y}" data-c="${x}" data-id="${id}" tabindex="0">${escapeHtml(v.computed)}</td>`);
+          const label = `${id}: ${v.computed === '' || v.computed == null ? 'vacía' : String(v.computed)}`;
+          rows.push(`<td class="cell" role="gridcell" data-r="${y}" data-c="${x}" data-id="${id}" aria-colindex="${x + 1}" aria-label="${escapeHtml(label)}" tabindex="0">${escapeHtml(v.computed)}</td>`);
         }
         rows.push('</tr>');
       }
-      this.#table.innerHTML = `<colgroup>${'<col style="width:3rem">' + '<col>'.repeat(colsCount)}</colgroup>${head.join('')}<tbody>${rows.join('')}</tbody>`;
+      this.#table.innerHTML = `<colgroup>${'<col style="width:3rem">' + '<col>'.repeat(colsCount)}</colgroup>${head.join('')}<tbody role="rowgroup">${rows.join('')}</tbody>`;
     }
 
     #onClick = (e: MouseEvent): void => {

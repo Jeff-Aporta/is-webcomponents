@@ -200,6 +200,7 @@ import '../forms/checkbox.js';
           <span class="page-info"></span>
           <is-button variant="plain" pill class="page-btn" data-page="first" aria-label="Primera página">«</is-button>
           <is-button variant="plain" pill class="page-btn" data-page="prev" aria-label="Página anterior">‹</is-button>
+          <span class="page-numbers" role="list" aria-label="Páginas"></span>
           <is-button variant="plain" pill class="page-btn" data-page="next" aria-label="Página siguiente">›</is-button>
           <is-button variant="plain" pill class="page-btn" data-page="last" aria-label="Última página">»</is-button>
         </div>
@@ -1449,6 +1450,10 @@ import '../forms/checkbox.js';
               idx.textContent = String(this.#sortModel.indexOf(entry) + 1);
               cell.appendChild(idx);
             }
+          } else if (col.sortable !== false && !this.hasAttribute('disable-column-sort')) {
+            // Header sortable pero sin orden activo: estado ARIA "none" para
+            // que los lectores anuncien la posibilidad de ordenar.
+            cell.setAttribute('aria-sort', 'none');
           }
           if (col.sortable !== false && !this.hasAttribute('disable-column-sort')) cell.classList.add('sortable');
           if ((this.#filterModel.items ?? []).some((f: FilterRule) => f.field === col.field)) cell.dataset.filtered = '';
@@ -1939,6 +1944,31 @@ import '../forms/checkbox.js';
       nextBtn.disabled = this.#page >= pages - 1;
       const lastBtn = this.#pager.querySelector<HTMLButtonElement>('[data-page="last"]')!;
       lastBtn.disabled = this.#page >= pages - 1;
+      // Pintar los botones numéricos de página con aria-current en el activo.
+      const numWrap = this.#pager.querySelector<HTMLElement>('.page-numbers');
+      if (numWrap) {
+        const buttons: HTMLElement[] = [];
+        for (let p = 0; p < pages; p++) {
+          const b = document.createElement('button');
+          b.type = 'button';
+          b.className = 'page-num';
+          b.dataset.page = String(p);
+          b.setAttribute('aria-label', `Página ${p + 1}`);
+          b.textContent = String(p + 1);
+          if (p === this.#page) {
+            b.setAttribute('aria-current', 'page');
+            b.classList.add('is-current');
+          }
+          b.addEventListener('click', () => {
+            if (p === this.#page) return;
+            this.#page = p;
+            this.#refresh();
+            this.#emitPagination();
+          });
+          buttons.push(b);
+        }
+        numWrap.replaceChildren(...buttons);
+      }
     }
 
     #renderOverlay(): void {

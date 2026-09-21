@@ -1065,7 +1065,7 @@ export class IsAgGrid extends ElementBase {
           if (v == null) return '';
           return `<span class="mim-dg__group-agg"><b>${escapeHtml(c.headerName)}:</b> ${escapeHtml(formatValueSafe(c, v))}</span>`;
         }).join('');
-        html.push(`<div class="mim-dg__row mim-dg__group-row" role="row" data-row-id="${escapeHtml(dr.id)}" data-row-kind="group" data-row-index="${absIdx}" style="height:${rowH}px">
+        html.push(`<div class="mim-dg__row mim-dg__group-row" role="row" data-row-id="${escapeHtml(dr.id)}" data-row-kind="group" data-row-index="${absIdx}" aria-rowindex="${absIdx + 2}" aria-level="${dr.level + 1}" aria-expanded="${dr.expanded}" style="height:${rowH}px">
           <div class="mim-dg__group-cell" style="padding-left:${8 + dr.level * 18}px">
             <is-icon icon="${dr.expanded ? 'mdi:chevron-down' : 'mdi:chevron-right'}" class="mim-dg__group-chevron"></is-icon>
             <span class="mim-dg__group-label">${escapeHtml(dr.label)}</span>
@@ -1107,16 +1107,21 @@ export class IsAgGrid extends ElementBase {
           const cellStyle = (col as ColumnStateWithSticky).cellStyle;
           const style = cellStyle ? cellStyleToString(cellStyle) : '';
           const cls = col.align === 'right' ? 'mim-dg__cell--right' : col.align === 'center' ? 'mim-dg__cell--center' : '';
-          cells.push(`<div class="mim-dg__cell ${cls}" role="gridcell" data-col-id="${col.colId}" data-row-id="${escapeHtml(node.id)}" style="width:${col.width}px;${stickStyle}${style}">${inner}</div>`);
+          const ariaColindex = (check ? 1 : 0) + withFlex.indexOf(colRaw) + 1;
+          cells.push(`<div class="mim-dg__cell ${cls}" role="gridcell" data-col-id="${col.colId}" data-row-id="${escapeHtml(node.id)}" aria-colindex="${ariaColindex}" style="width:${col.width}px;${stickStyle}${style}">${inner}</div>`);
         }
         const rowCls = `${selected ? 'is-selected' : ''}${focused ? ' is-focused' : ''}${node.index % 2 ? ' is-odd' : ''}`;
-        html.push(`<div class="mim-dg__row ${rowCls}" role="row" data-row-id="${escapeHtml(node.id)}" data-row-kind="leaf" data-row-index="${absIdx}" style="height:${rowH}px" aria-selected="${selected}">${cells.join('')}</div>`);
+        html.push(`<div class="mim-dg__row ${rowCls}" role="row" data-row-id="${escapeHtml(node.id)}" data-row-kind="leaf" data-row-index="${absIdx}" aria-rowindex="${absIdx + 2}" style="height:${rowH}px" aria-selected="${selected}">${cells.join('')}</div>`);
       }
     }
     html.push('</div>');
     this.#body.style.height = `${win.totalHeight}px`;
     this.#body.style.width = `${totalWidth}px`;
     this.#body.innerHTML = html.join('');
+    // aria-rowcount + aria-colcount + aria-busy en el viewport.
+    this.#viewport.setAttribute('aria-rowcount', String(dataRows.length + 1));
+    this.#viewport.setAttribute('aria-colcount', String(withFlex.length));
+    this.#viewport.setAttribute('aria-busy', this.hasAttribute('loading') ? 'true' : 'false');
   }
 
   #renderCellContent(col: ColumnState, row: RowData): string {

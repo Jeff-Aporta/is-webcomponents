@@ -136,7 +136,9 @@ import { ElementBase } from '../../core/element-base.js';
 
       // construir tabla
       const thead = document.createElement('thead');
+      thead.setAttribute('role', 'rowgroup');
       const trh = document.createElement('tr');
+      trh.setAttribute('role', 'row');
       trh.appendChild(th(rowsField, 'corner'));
       for (const c of colVals) trh.appendChild(th(String(c)));
       trh.appendChild(th('Total', 'total'));
@@ -144,8 +146,10 @@ import { ElementBase } from '../../core/element-base.js';
       table.appendChild(thead);
 
       const tbody = document.createElement('tbody');
+      tbody.setAttribute('role', 'rowgroup');
       for (const r of rowVals) {
         const tr = document.createElement('tr');
+        tr.setAttribute('role', 'row');
         tr.appendChild(td(String(r), 'row-head'));
         for (const c of colVals) {
           const v = this.#cellMap?.get(`${String(r)}__${String(c)}`) ?? null;
@@ -158,7 +162,9 @@ import { ElementBase } from '../../core/element-base.js';
       table.appendChild(tbody);
 
       const tfoot = document.createElement('tfoot');
+      tfoot.setAttribute('role', 'rowgroup');
       const trf = document.createElement('tr');
+      trf.setAttribute('role', 'row');
       trf.appendChild(td('Total', 'row-head'));
       for (const c of colVals) {
         const ct = colTotals[String(c)];
@@ -167,6 +173,12 @@ import { ElementBase } from '../../core/element-base.js';
       trf.appendChild(td(grand != null ? fmt.format(grand) : '—', 'total'));
       tfoot.appendChild(trf);
       table.appendChild(tfoot);
+
+      // aria-rowcount + aria-colcount para lectores de pantalla.
+      const totalRows = rowVals.length + 2; // thead + body + tfoot
+      table.setAttribute('aria-rowcount', String(totalRows));
+      table.setAttribute('aria-colcount', String(colVals.length + 2));
+      table.setAttribute('aria-label', `Tabla pivote de ${rowVals.length} filas por ${colVals.length} columnas, agregación ${aggFnName} de ${measure ?? 'filas'}`);
     }
 
     #cellMap: Map<string, number | null> | null = new Map();
@@ -175,10 +187,12 @@ import { ElementBase } from '../../core/element-base.js';
     #cellEl(row: string, col: string, value: number | null, fmt: Intl.NumberFormat): HTMLElement {
       const td = document.createElement('td');
       td.className = 'cell';
+      td.setAttribute('role', 'gridcell');
       td.dataset.row = row;
       td.dataset.col = col;
       td.dataset.value = value == null ? '' : String(value);
       td.textContent = value == null ? '—' : fmt.format(value);
+      if (value != null) td.setAttribute('aria-label', `${row}, ${col}: ${fmt.format(value)}`);
       td.addEventListener('click', () => {
         emit(this, 'is-cell-click', { row, col, value });
       });
@@ -188,6 +202,7 @@ import { ElementBase } from '../../core/element-base.js';
 
   function th(text: string, cls: string = ''): HTMLElement {
     const t = document.createElement('th');
+    t.setAttribute('role', 'columnheader');
     t.textContent = text;
     if (cls) t.className = cls;
     return t;

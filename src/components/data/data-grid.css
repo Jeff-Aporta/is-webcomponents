@@ -537,6 +537,37 @@
   &:focus-visible { outline: 2px solid var(--is-focus, var(--is-grid-accent)); outline-offset: 1px; }
 }
 
+.page-numbers {
+  display: inline-flex;
+  gap: 0.25em;
+  list-style: none;
+  padding: 0;
+  margin: 0;
+}
+
+.page-num {
+  min-width: 2em;
+  height: 2em;
+  padding: 0 0.5em;
+  border: 1px solid var(--is-grid-border);
+  border-radius: var(--is-radius-sm, 0.375em);
+  background: var(--is-control-bg, transparent);
+  color: inherit;
+  font: inherit;
+  font-size: 0.9em;
+  cursor: pointer;
+
+  &.is-current,
+  &[aria-current="page"] {
+    background: var(--is-grid-accent);
+    color: var(--is-color-on-accent, #fff);
+    border-color: var(--is-grid-accent);
+  }
+
+  &:hover:not(.is-current):not([aria-current="page"]) { background: var(--is-grid-row-hover); }
+  &:focus-visible { outline: 2px solid var(--is-focus, var(--is-grid-accent)); outline-offset: 1px; }
+}
+
 /* ── Popovers (menú de columna, paneles) ──────────────────────────────── */
 
 .pop {

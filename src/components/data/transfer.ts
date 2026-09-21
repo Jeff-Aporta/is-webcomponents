@@ -42,7 +42,7 @@ import { ElementBase } from '../../core/element-base.js';
         <div class="search" part="search">
           <input type="text" placeholder="Buscar…" aria-label="Buscar" />
         </div>
-        <div class="list" part="list" role="listbox" aria-multiselectable="true"></div>
+        <div class="list" part="list" role="listbox" aria-multiselectable="true" tabindex="0"></div>
       </div>
       <div class="controls" part="controls">
         <button type="button" class="ctrl" data-action="to-target" aria-label="Mover a destino">
@@ -60,8 +60,9 @@ import { ElementBase } from '../../core/element-base.js';
         <div class="search" part="search">
           <input type="text" placeholder="Buscar…" aria-label="Buscar" />
         </div>
-        <div class="list" part="list" role="listbox" aria-multiselectable="true"></div>
+        <div class="list" part="list" role="listbox" aria-multiselectable="true" tabindex="0"></div>
       </div>
+      <div class="sr-status" part="sr-status" aria-live="polite" aria-atomic="true"></div>
     </div>
   `;
 
@@ -91,6 +92,7 @@ import { ElementBase } from '../../core/element-base.js';
     #countTarget!: HTMLElement;
     #titleSource!: HTMLElement;
     #titleTarget!: HTMLElement;
+    #srStatus!: HTMLElement;
 
     constructor() {
       super();
@@ -107,6 +109,7 @@ import { ElementBase } from '../../core/element-base.js';
       this.#countTarget = this.#panelTarget.querySelector<HTMLElement>('.count')!;
       this.#titleSource = this.#panelSource.querySelector<HTMLElement>('.title')!;
       this.#titleTarget = this.#panelTarget.querySelector<HTMLElement>('.title')!;
+      this.#srStatus = shadow.querySelector<HTMLElement>('.sr-status')!;
     }
 
     onConnected() {
@@ -143,11 +146,22 @@ import { ElementBase } from '../../core/element-base.js';
       const titleTarget = this.getAttribute('target-title') || 'Asignados';
       this.#titleSource.textContent = titleSource;
       this.#titleTarget.textContent = titleTarget;
+      // aria-label de los listboxes (las etiquetas accesibles).
+      this.#listSource.setAttribute('aria-label', `${titleSource}: lista de elementos disponibles`);
+      this.#listTarget.setAttribute('aria-label', `${titleTarget}: lista de elementos asignados`);
       this.#panelSource.querySelector<HTMLElement>('.search')?.toggleAttribute('hidden', !this.hasAttribute('searchable'));
       this.#panelTarget.querySelector<HTMLElement>('.search')?.toggleAttribute('hidden', !this.hasAttribute('searchable'));
       this.shadowRoot!.querySelector<HTMLElement>('.controls')?.toggleAttribute('hidden', this.hasAttribute('without-buttons'));
       this.#panelSource.querySelector<HTMLElement>('.pane-head')?.toggleAttribute('hidden', this.hasAttribute('without-headings'));
       this.#panelTarget.querySelector<HTMLElement>('.pane-head')?.toggleAttribute('hidden', this.hasAttribute('without-headings'));
+    }
+
+    /** Anuncia un mensaje al lector de pantalla (región aria-live). */
+    #announce(msg: string): void {
+      if (!this.#srStatus) return;
+      this.#srStatus.textContent = '';
+      // Forzar re-announce en sucesivas llamadas idénticas.
+      setTimeout(() => { if (this.#srStatus) this.#srStatus.textContent = msg; }, 30);
     }
 
     #items(): HTMLElement[] {
@@ -200,20 +214,31 @@ import { ElementBase } from '../../core/element-base.js';
     #move(toTarget: boolean): void {
       const max = parseInt(this.getAttribute('max-target') || '0', 10);
       const items = this.#items();
+      const movedLabels: string[] = [];
       items.forEach((it: HTMLElement) => {
         if (it.hasAttribute('disabled')) return;
         if (toTarget) {
           if (max > 0 && items.filter((x: HTMLElement) => x.hasAttribute('selected')).length >= max) return;
+          if (!it.hasAttribute('selected')) movedLabels.push((it.textContent || it.getAttribute('value') || '').trim());
           it.setAttribute('selected', '');
         } else {
+          if (it.hasAttribute('selected')) movedLabels.push((it.textContent || it.getAttribute('value') || '').trim());
           it.removeAttribute('selected');
         }
       });
       this.#render();
+      // Anuncio al lector de pantalla.
+      if (movedLabels.length > 0) {
+        const dest = toTarget ? 'destino' : 'origen';
+        this.#announce(`Movidos ${movedLabels.length} elemento${movedLabels.length === 1 ? '' : 's'} a ${dest}: ${movedLabels.slice(0, 3).join(', ')}${movedLabels.length > 3 ? '…' : ''}`);
+      }
       emit(this, 'is-transfer-change', { source: this.values.length, target: this.values.length, values: this.values });
     }
 
     #emitChange(item: HTMLElement): void {
+      const label = (item.textContent || item.getAttribute('value') || '').trim();
+      const wasSelected = !item.hasAttribute('selected');
+      this.#announce(`${label} ${wasSelected ? 'movido a origen' : 'movido a destino'}`);
       emit(this, 'is-transfer-change', {
         item,
         source: this.#items().filter((it: HTMLElement) => !it.hasAttribute('selected')).length,

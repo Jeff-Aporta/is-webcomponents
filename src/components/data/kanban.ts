@@ -59,7 +59,7 @@ import { ElementBase } from '../../core/element-base.js';
         <span class="badge" part="badge"></span>
         <span class="actions" part="actions"><slot name="header-actions"></slot></span>
       </header>
-      <div class="lane" part="lane">
+      <div class="lane" part="lane" role="list" aria-label="">
         <slot></slot>
       </div>
       <footer class="col-foot" part="col-foot">
@@ -93,6 +93,7 @@ import { ElementBase } from '../../core/element-base.js';
     #mo: MutationObserver | null = null;
     connectedCallback(): void {
       if (!this.hasAttribute('role')) this.setAttribute('role', 'list');
+      if (!this.hasAttribute('aria-label')) this.setAttribute('aria-label', 'Tablero kanban');
       this.#syncOrientation();
       this.#mo = new MutationObserver(() => this.#syncOrientation());
       this.#mo.observe(this, { childList: true });
@@ -134,6 +135,11 @@ import { ElementBase } from '../../core/element-base.js';
       this.setAttribute('role', 'listitem');
       this.#sync();
       this.#bindDrop();
+    }
+
+    /** Etiqueta accesible de la lane (lista de cards de esta columna). */
+    get #lane(): HTMLElement | null {
+      return this.shadowRoot!.querySelector<HTMLElement>('.lane');
     }
 
     onAttributeChanged(name: string, oldVal: string | null, newVal: string | null) {
@@ -193,6 +199,12 @@ import { ElementBase } from '../../core/element-base.js';
       // Update badge count
       const cards = this.querySelectorAll<HTMLElement>(':scope > is-kanban-card');
       this.#badge.textContent = badge || String(cards.length);
+      // aria-label accesible de la lane (lista de cards).
+      const lane = this.#lane;
+      if (lane) {
+        const count = cards.length;
+        lane.setAttribute('aria-label', `Tarjetas en ${title || 'columna'} (${count})`);
+      }
     }
   }
   defineElement('is-kanban-column', IsKanbanColumn);
@@ -219,7 +231,8 @@ import { ElementBase } from '../../core/element-base.js';
     }
 
     onConnected() {
-      this.setAttribute('role', 'article');
+      this.setAttribute('role', 'listitem');
+      this.setAttribute('aria-grabbed', 'false');
       this.#sync();
       // Transferible entre stacks vía HTML5 drag & drop.
       this.setAttribute('draggable', 'true');
@@ -229,10 +242,12 @@ import { ElementBase } from '../../core/element-base.js';
           e.dataTransfer.effectAllowed = 'move';
           e.dataTransfer.setData('text/plain', this.getAttribute('heading') || 'card');
         }
+        this.setAttribute('aria-grabbed', 'true');
         this.classList.add('is-dragging');
       });
       this.addEventListener('dragend', () => {
         dragCard = null;
+        this.setAttribute('aria-grabbed', 'false');
         this.classList.remove('is-dragging');
       });
       this.#root.addEventListener('click', (e) => {
