@@ -11,8 +11,13 @@
     {
       "id": "intro",
       "title": "<is-context-menu>",
-      "lede": "Menú anclado al <strong>clic derecho</strong> sobre un elemento. Compatible con cualquier árbol DOM: target por selector.",
-      "blocks": []
+      "lede": "Menú anclado al <strong>clic derecho</strong> sobre un elemento. Compatible con cualquier árbol DOM: target por selector. Tres áreas del lienzo más abajo muestran contextos típicos (archivo, fila de lista, lienzo con scroll-lock).",
+      "blocks": [
+        {
+          "kind": "demo",
+          "html": "<div style=\"display:grid;grid-template-columns:1fr 1fr 1fr;gap:.85rem;min-height:11rem\">\n            <div class=\"canvas\" id=\"cm-intro-1\" data-label=\"Archivo\">\n              <span>📄 reporte-mensual.xlsx</span>\n              <small style=\"opacity:.6;font-size:.75em\">Clic derecho aquí</small>\n            </div>\n            <ul style=\"list-style:none;padding:0;margin:0;border:2px dashed var(--is-border);border-radius:var(--is-radius);background:repeating-linear-gradient(45deg,color-mix(in srgb,var(--is-bg-elev) 60%,transparent) 0 8px,transparent 8px 16px);min-height:11rem\" id=\"cm-intro-2\">\n              <li class=\"row\" data-id=\"r1\" style=\"padding:.6rem .75rem;border-bottom:1px solid var(--is-border)\">Reporte mensual</li>\n              <li class=\"row\" data-id=\"r2\" style=\"padding:.6rem .75rem;border-bottom:1px solid var(--is-border)\">Inventario</li>\n              <li class=\"row\" data-id=\"r3\" style=\"padding:.6rem .75rem\">Cartera vencida</li>\n            </ul>\n            <div class=\"canvas\" id=\"cm-intro-3\" data-label=\"Scroll-lock\">\n              <span>🔒 Acción importante</span>\n              <small style=\"opacity:.6;font-size:.75em\">Bloquea scroll al abrir</small>\n            </div>\n          </div>\n          <is-context-menu for=\"#cm-intro-1\">\n            <button class=\"item\" data-value=\"open\">Abrir</button>\n            <button class=\"item\" data-value=\"download\">Descargar</button>\n            <hr />\n            <button class=\"item\" data-value=\"rename\">Renombrar…</button>\n            <button class=\"item\" data-value=\"delete\">Eliminar</button>\n          </is-context-menu>\n          <is-context-menu for=\".row\">\n            <button class=\"item\" data-value=\"view\">Ver detalle</button>\n            <button class=\"item\" data-value=\"archive\">Archivar</button>\n            <hr />\n            <button class=\"item\" data-value=\"delete\">Eliminar</button>\n          </is-context-menu>\n          <is-context-menu for=\"#cm-intro-3\" scroll-lock>\n            <button class=\"item\" data-value=\"confirm\">Confirmar acción</button>\n            <button class=\"item\" data-value=\"cancel\">Cancelar</button>\n          </is-context-menu>"
+        }
+      ]
     },
     {
       "id": "basico",
