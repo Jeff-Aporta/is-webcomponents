@@ -99,7 +99,9 @@ export function lowerCase(value: string) {
         <span class="heading-text"></span>
       </span>
       <is-heading level="3" color="neutral" class="results-title">Resultados</is-heading>
-      <div part="results" class="results" tabindex="0"></div>
+      <div part="results" class="results" tabindex="0"
+           aria-live="polite" aria-relevant="additions text" aria-atomic="false"></div>
+      <p class="sr-status" aria-live="polite" aria-atomic="true"></p>
       <footer part="stats" class="stats">
         <div class="stat">
           <is-icon icon="mdi:information-outline" aria-hidden="true"></is-icon>
@@ -135,6 +137,7 @@ export function lowerCase(value: string) {
     #headingText!: HTMLElement;
     #titleIcon!: HTMLElement;
     #results!: HTMLElement;
+    #srStatus!: HTMLElement;
     #closeBtn!: HTMLElement;
     #qInfos!: HTMLElement;
     #qWarning!: HTMLElement;
@@ -161,6 +164,7 @@ export function lowerCase(value: string) {
       this.#headingText = shadow.querySelector<HTMLElement>('.heading-text')!;
       this.#titleIcon = shadow.querySelector<HTMLElement>('.title-icon')!;
       this.#results = shadow.querySelector<HTMLElement>('.results')!;
+      this.#srStatus = shadow.querySelector<HTMLElement>('.sr-status')!;
       this.#closeBtn = shadow.querySelector<HTMLElement>('.close')!;
       this.#qInfos = shadow.querySelector<HTMLElement>('.q-infos')!;
       this.#qWarning = shadow.querySelector<HTMLElement>('.q-warning')!;
@@ -302,6 +306,26 @@ export function lowerCase(value: string) {
       this.#qInfos.textContent = String(this.qinfos);
       this.#qWarning.textContent = String(this.qwarning);
       this.#qErrores.textContent = String(this.qerrores);
+
+      // Region aria-live separada: anuncia el RESUMEN a screen readers
+      // (cuántos infos/warnings/errores), evitando que se lea cada mensaje
+      // completo cuando la lista es larga (proposal g10 modal-verificacion
+      // #4: ARIA live para mensajes, pero de forma resumida).
+      const qi = this.qinfos;
+      const qw = this.qwarning;
+      const qe = this.qerrores;
+      const total = qi + qw + qe;
+      if (this.#srStatus) {
+        if (total === 0) {
+          this.#srStatus.textContent = 'Verificación completada sin observaciones.';
+        } else {
+          const parts: string[] = [];
+          if (qi) parts.push(`${qi} ${qi === 1 ? 'información' : 'informaciones'}`);
+          if (qw) parts.push(`${qw} ${qw === 1 ? 'advertencia' : 'advertencias'}`);
+          if (qe) parts.push(`${qe} ${qe === 1 ? 'error' : 'errores'}`);
+          this.#srStatus.textContent = `Verificación completada: ${parts.join(', ')}.`;
+        }
+      }
     }
 
     /**

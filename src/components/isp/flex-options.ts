@@ -177,16 +177,24 @@ class IsFlexOptions extends ElementBase {
    * los botones; Home/End saltan al primero/último. Si el foco está en el
    * trigger del "more" dropdown, ArrowLeft/Right sigue moviéndose dentro del
    * toolbar (incluyendo el trigger).
+   *
+   * Importante: `composedPath()` se recorre completo para encontrar el botón
+   * focuseable — cuando el `<is-button>` interno tiene `delegatesFocus: true`
+   * el foco real está en su `<button>` interno, y el path del evento puede
+   * empezar por ese botón (no por el host `<is-button>`).
    */
   #onKeydown = (e: KeyboardEvent): void => {
-    const target = e.composedPath()[0] as HTMLElement | undefined;
-    if (!target) return;
-    // Solo reaccionar cuando el foco está en uno de los botones pintados.
+    let next: number | null = null;
     const focusables = this.#focusables();
     if (focusables.length === 0) return;
-    const idx = focusables.indexOf(target as HTMLElement);
+    const path = e.composedPath();
+    let idx = -1;
+    for (const node of path) {
+      const el = node as HTMLElement;
+      const found = focusables.indexOf(el);
+      if (found !== -1) { idx = found; break; }
+    }
     if (idx === -1) return;
-    let next = idx;
     switch (e.key) {
       case 'ArrowRight': next = (idx + 1) % focusables.length; break;
       case 'ArrowLeft': next = (idx - 1 + focusables.length) % focusables.length; break;
@@ -199,7 +207,7 @@ class IsFlexOptions extends ElementBase {
       if (i === next) b.setAttribute('tabindex', '0');
       else b.setAttribute('tabindex', '-1');
     });
-    focusables[next].focus();
+    focusables[next as number].focus();
   };
 }
 

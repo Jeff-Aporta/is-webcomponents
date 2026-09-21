@@ -73,3 +73,19 @@
 
 /* Mientras corre la verificación el diálogo no acepta interacción nueva. */
 :host .dlg[aria-busy="true"] { cursor: progress; }
+
+/* Region sr-only para anunciar el resumen de la verificación a los lectores
+   de pantalla. Es complementaria al aria-live del contenedor .results:
+   esa anuncia los mensajes completos a medida que se añaden, esta el
+   RESUMEN agregado al terminar (más conciso y útil en listas largas). */
+.sr-status {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  padding: 0;
+  margin: -1px;
+  overflow: hidden;
+  clip: rect(0, 0, 0, 0);
+  white-space: nowrap;
+  border: 0;
+}

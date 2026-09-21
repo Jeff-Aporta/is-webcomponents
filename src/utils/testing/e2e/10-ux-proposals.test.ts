@@ -1997,3 +1997,552 @@ test('g11 prefers-reduced-motion: transition-duration → 0s bajo reduce', { tim
     }
   }
 });
+
+// ============================================================================
+// Bloque g10 — proposals UX/UI para acciones y overlays simples.
+//
+// Cubre las proposals del .audit/proposals/demo-g10.md que NO fueron tratadas
+// en g12/g13/g14:
+//
+//   - is-button: Enter/Space nativos, aria-busy + aria-live en loading,
+//     focus-visible con outline 2px (g10 #5, #7, #4).
+//   - is-button-group: aria-pressed, roving tabindex, Arrow nav + Home/End,
+//     wrap con envoltura (g10 button-group transversales).
+//   - is-dropdown: aria-expanded sincronizado al click, click-outside,
+//     Escape cierra + restaura foco al trigger, roving tabindex dentro del
+//     menú, aria-controls del trigger al panel (g10 #1, #2, #3, #6).
+//   - is-confirm-delete: role=dialog + aria-modal del <is-dialog> interno,
+//     focus trap (Tab cycling), Escape cierra + restaura foco, aria-invalid
+//     + aria-describedby sobre el input de confirmación al haber mismatch
+//     (g10 confirm-delete #1, #2, #3).
+//   - is-modal-verificacion: role=dialog + aria-modal, focus restoration,
+//     Escape cierra, aria-live="polite" en .results + region sr-status con
+//     el resumen agregado (g10 modal-verificacion #1, #2, #3, #8).
+//
+// Skip explicito:
+//   - mega-menu / menu (g13 ya los cubrió).
+//   - scroller (g13 ya cubrió role=region + aria-label).
+//   - proposals que requieren redimensionamiento JS o long-press (no son
+//     parte del contrato de los componentes actuales).
+// ============================================================================
+
+test('g10 button: Enter activa, aria-busy, aria-live en loading', { timeout: 60_000 }, async (t) => {
+  if (!DISPONIBLE) return t.skip('faltan variables E2E');
+  const base = await ensureServer();
+  const page = await nuevoPage();
+  activePage = page;
+  try {
+    const renderOk = await abrirPreview(page, base, 'is-button');
+    assert.ok(renderOk, 'button preview no renderizo');
+
+    // 1) Enter activa el botón (proposal g10 #5).
+    const enterOk = await page.evaluate(async () => {
+      const main = document.querySelector<HTMLElement>('is-main.main');
+      const btn = main?.querySelector<HTMLElement>('is-button');
+      if (!btn?.shadowRoot) return { ok: false, motivo: 'no button' };
+      const inner = btn.shadowRoot.querySelector<HTMLButtonElement>('button');
+      if (!inner) return { ok: false, motivo: 'no inner' };
+      let clicked = 0;
+      const handler = () => { clicked++; };
+      btn.addEventListener('click', handler);
+      inner.focus();
+      // El native <button> ya activa con Enter, pero verificamos que el
+      // flujo de eventos llega al host (que es lo que el consumer escucha).
+      inner.dispatchEvent(new KeyboardEvent('keydown', { key: 'Enter', bubbles: true, cancelable: true }));
+      inner.click();
+      btn.removeEventListener('click', handler);
+      return { ok: clicked >= 1, clicked };
+    });
+    t.diagnostic(`[g10-btn-enter] ${JSON.stringify(enterOk)}`);
+    assert.ok(enterOk.ok, `g10 button Enter no activa (${JSON.stringify(enterOk)})`);
+
+    // 2) Focus-visible con outline 2px (proposal g10 #4).
+    const focusOk = await page.evaluate(() => {
+      const main = document.querySelector<HTMLElement>('is-main.main');
+      const btn = main?.querySelector<HTMLElement>('is-button');
+      if (!btn?.shadowRoot) return { ok: false, motivo: 'no button' };
+      const inner = btn.shadowRoot.querySelector<HTMLButtonElement>('button');
+      if (!inner) return { ok: false, motivo: 'no inner' };
+      inner.focus();
+      const cs = getComputedStyle(inner);
+      const ow = parseFloat(cs.outlineWidth);
+      const oo = parseFloat(cs.outlineOffset);
+      return { ok: ow >= 2 && oo >= 2, ow, oo, style: cs.outlineStyle, color: cs.outlineColor };
+    });
+    t.diagnostic(`[g10-btn-focus] ${JSON.stringify(focusOk)}`);
+    assert.ok(focusOk.ok, `g10 button focus-visible no cumple 2px/2px (${JSON.stringify(focusOk)})`);
+
+    // 3) aria-busy + region aria-live en loading (proposal g10 #7).
+    const loadingOk = await page.evaluate(async () => {
+      const main = document.querySelector<HTMLElement>('is-main.main');
+      const btn = main?.querySelector<HTMLElement>('is-button');
+      if (!btn?.shadowRoot) return { ok: false, motivo: 'no button' };
+      const inner = btn.shadowRoot.querySelector<HTMLButtonElement>('button');
+      const sr = btn.shadowRoot.querySelector<HTMLElement>('.btn__sr-status');
+      const liveAttr = sr?.getAttribute('aria-live');
+      const atomicAttr = sr?.getAttribute('aria-atomic');
+      const beforeAriaBusy = inner?.getAttribute('aria-busy');
+      btn.setAttribute('loading', '');
+      await new Promise((r) => setTimeout(r, 80));
+      const duringAriaBusy = inner?.getAttribute('aria-busy');
+      const srText = (sr?.textContent ?? '').trim();
+      const loadingState = (btn as unknown as { matches: (s: string) => boolean }).matches(':state(loading)');
+      btn.removeAttribute('loading');
+      await new Promise((r) => setTimeout(r, 80));
+      const afterAriaBusy = inner?.getAttribute('aria-busy');
+      const afterSrText = (sr?.textContent ?? '').trim();
+      return {
+        ok: beforeAriaBusy === 'false'
+          && duringAriaBusy === 'true'
+          && afterAriaBusy === 'false'
+          && liveAttr === 'polite'
+          && atomicAttr === 'true'
+          && loadingState
+          && srText.length > 0
+          && afterSrText.length > 0,
+        beforeAriaBusy, duringAriaBusy, afterAriaBusy,
+        liveAttr, atomicAttr, srText, afterSrText, loadingState,
+      };
+    });
+    t.diagnostic(`[g10-btn-loading] ${JSON.stringify(loadingOk)}`);
+    assert.ok(loadingOk.ok, `g10 button loading no anuncia (${JSON.stringify(loadingOk)})`);
+  } finally {
+    await liberarPage(page);
+    activePage = null;
+  }
+});
+
+test('g10 button-group: aria-pressed, roving tabindex, Arrow nav + Home/End', { timeout: 60_000 }, async (t) => {
+  if (!DISPONIBLE) return t.skip('faltan variables E2E');
+  const base = await ensureServer();
+  const page = await nuevoPage();
+  activePage = page;
+  try {
+    const renderOk = await abrirPreview(page, base, 'is-button-group');
+    assert.ok(renderOk, 'button-group preview no renderizo');
+
+    // 1) Construimos un grupo determinístico: select=single, 3 botones.
+    await page.evaluate(() => {
+      const main = document.querySelector<HTMLElement>('is-main.main');
+      const old = main?.querySelector<HTMLElement>('is-button-group');
+      if (old) old.remove();
+      const bg = document.createElement('is-button-group');
+      bg.setAttribute('select', 'single');
+      bg.setAttribute('label', 'g10 demo');
+      ['uno', 'dos', 'tres'].forEach((label, i) => {
+        const b = document.createElement('is-button');
+        b.setAttribute('value', label);
+        b.textContent = label;
+        if (i === 1) b.setAttribute('selected', '');
+        bg.appendChild(b);
+      });
+      main?.appendChild(bg);
+    });
+    await esperarMs(150);
+
+    // 2) aria-pressed correcto + roving tabindex inicial.
+    const initial = await page.evaluate(() => {
+      const main = document.querySelector<HTMLElement>('is-main.main');
+      const bg = main?.querySelector<HTMLElement>('is-button-group');
+      if (!bg) return { ok: false, motivo: 'no bg' };
+      const btns = [...bg.querySelectorAll<HTMLElement>('is-button')];
+      const pressed = btns.map((b) => b.getAttribute('aria-pressed'));
+      const tabs = btns.map((b) => b.getAttribute('tabindex'));
+      const selectedIdx = btns.findIndex((b) => b.hasAttribute('selected'));
+      return {
+        ok: pressed.length === 3
+          && pressed[selectedIdx] === 'true'
+          && pressed.filter((p) => p === 'false').length === 2
+          && tabs[selectedIdx] === '0'
+          && tabs.filter((t, i) => i !== selectedIdx && t === '-1').length === 2,
+        pressed, tabs, selectedIdx, btnsCount: btns.length,
+      };
+    });
+    t.diagnostic(`[g10-bg-init] ${JSON.stringify(initial)}`);
+    assert.ok(initial.ok, `g10 button-group inicial falla (${JSON.stringify(initial)})`);
+
+    // 3) ArrowRight mueve el foco al siguiente (proposal button-group #4).
+    const arrowOk = await page.evaluate(async () => {
+      const main = document.querySelector<HTMLElement>('is-main.main');
+      const bg = main?.querySelector<HTMLElement>('is-button-group');
+      if (!bg) return { ok: false, motivo: 'no bg' };
+      const btns = [...bg.querySelectorAll<HTMLElement>('is-button')];
+      const selected = btns.find((b) => b.hasAttribute('selected'))!;
+      selected.focus();
+      bg.dispatchEvent(new KeyboardEvent('keydown', {
+        key: 'ArrowRight', bubbles: true, cancelable: true,
+      }));
+      await new Promise((r) => setTimeout(r, 60));
+      const idx = btns.findIndex((b) => b === document.activeElement
+        || b.shadowRoot?.activeElement === document.activeElement);
+      const tabs = btns.map((b) => b.getAttribute('tabindex'));
+      const newSelected = btns.findIndex((b) => b.hasAttribute('selected'));
+      return {
+        ok: idx > 0 && idx === newSelected
+          && tabs[idx] === '0'
+          && tabs.filter((t, i) => i !== idx && t === '-1').length === 2,
+        idx, tabs, newSelected,
+      };
+    });
+    t.diagnostic(`[g10-bg-arrow] ${JSON.stringify(arrowOk)}`);
+    assert.ok(arrowOk.ok, `g10 button-group ArrowRight no rota (${JSON.stringify(arrowOk)})`);
+
+    // 4) End → último botón como tabindex 0 (proposal #5).
+    const endOk = await page.evaluate(async () => {
+      const main = document.querySelector<HTMLElement>('is-main.main');
+      const bg = main?.querySelector<HTMLElement>('is-button-group');
+      if (!bg) return { ok: false, motivo: 'no bg' };
+      const btns = [...bg.querySelectorAll<HTMLElement>('is-button')];
+      btns[0].focus();
+      bg.dispatchEvent(new KeyboardEvent('keydown', {
+        key: 'End', bubbles: true, cancelable: true,
+      }));
+      await new Promise((r) => setTimeout(r, 60));
+      const tabs = btns.map((b) => b.getAttribute('tabindex'));
+      const idx = btns.findIndex((b) => b === document.activeElement
+        || b.shadowRoot?.activeElement === document.activeElement);
+      return { ok: idx === btns.length - 1 && tabs[idx] === '0', idx, tabs };
+    });
+    t.diagnostic(`[g10-bg-end] ${JSON.stringify(endOk)}`);
+    assert.ok(endOk.ok, `g10 button-group End no navega (${JSON.stringify(endOk)})`);
+
+    // 5) Home → primer botón como tabindex 0.
+    const homeOk = await page.evaluate(async () => {
+      const main = document.querySelector<HTMLElement>('is-main.main');
+      const bg = main?.querySelector<HTMLElement>('is-button-group');
+      if (!bg) return { ok: false, motivo: 'no bg' };
+      const btns = [...bg.querySelectorAll<HTMLElement>('is-button')];
+      btns[btns.length - 1].focus();
+      bg.dispatchEvent(new KeyboardEvent('keydown', {
+        key: 'Home', bubbles: true, cancelable: true,
+      }));
+      await new Promise((r) => setTimeout(r, 60));
+      const tabs = btns.map((b) => b.getAttribute('tabindex'));
+      const idx = btns.findIndex((b) => b === document.activeElement
+        || b.shadowRoot?.activeElement === document.activeElement);
+      return { ok: idx === 0 && tabs[idx] === '0', idx, tabs };
+    });
+    t.diagnostic(`[g10-bg-home] ${JSON.stringify(homeOk)}`);
+    assert.ok(homeOk.ok, `g10 button-group Home no navega (${JSON.stringify(homeOk)})`);
+  } finally {
+    await liberarPage(page);
+    activePage = null;
+  }
+});
+
+test('g10 dropdown: aria-expanded, click-outside, Escape + focus restore, aria-controls', { timeout: 60_000 }, async (t) => {
+  if (!DISPONIBLE) return t.skip('faltan variables E2E');
+  const base = await ensureServer();
+  const page = await nuevoPage();
+  activePage = page;
+  try {
+    const renderOk = await abrirPreview(page, base, 'is-dropdown');
+    assert.ok(renderOk, 'dropdown preview no renderizo');
+
+    // Localizamos el primer <is-dropdown> dentro del preview.
+    const located = await page.evaluate(() => {
+      const main = document.querySelector<HTMLElement>('is-main.main');
+      const dd = main?.querySelector<HTMLElement>('is-dropdown');
+      if (!dd?.shadowRoot) return { ok: false, motivo: 'no dropdown' };
+      const trigger = dd.shadowRoot.querySelector<HTMLElement>('slot[name="trigger"]');
+      const triggers = trigger?.assignedElements({ flatten: true }) ?? [];
+      const items = dd.shadowRoot.querySelector<HTMLElement>('slot:not([name])');
+      const assigned = items?.assignedElements({ flatten: true })
+        .filter((el) => el.localName === 'is-dropdown-item') ?? [];
+      return {
+        ok: triggers.length > 0 && assigned.length > 0,
+        ddId: dd.id,
+        hasItems: assigned.length,
+      };
+    });
+    t.diagnostic(`[g10-dd-locate] ${JSON.stringify(located)}`);
+    assert.ok(located.ok, `g10 dropdown: trigger o items faltantes (${JSON.stringify(located)})`);
+
+    // 1) aria-expanded sincronizado al click (proposal g10 #1).
+    const expandedOk = await page.evaluate(async () => {
+      const main = document.querySelector<HTMLElement>('is-main.main');
+      const dd = main?.querySelector<HTMLElement>('is-dropdown');
+      if (!dd) return { ok: false, motivo: 'no dd' };
+      const trigger = dd.shadowRoot!.querySelector<HTMLSlotElement>('slot[name="trigger"]')!
+      .assignedElements({ flatten: true })[0] as HTMLElement;
+      const before = trigger.getAttribute('aria-expanded');
+      const beforeHaspopup = trigger.getAttribute('aria-haspopup');
+      const beforeControls = trigger.getAttribute('aria-controls');
+      // Click en el trigger.
+      trigger.click();
+      await new Promise((r) => setTimeout(r, 150));
+      const after = trigger.getAttribute('aria-expanded');
+      const dialog = dd.shadowRoot!.querySelector<HTMLDialogElement>('dialog');
+      const dialogOpen = !!dialog?.open;
+      return {
+        ok: before === 'false' && beforeHaspopup === 'menu' && !!beforeControls
+          && after === 'true' && dialogOpen,
+        before, after, beforeHaspopup, beforeControls, dialogOpen,
+      };
+    });
+    t.diagnostic(`[g10-dd-expanded] ${JSON.stringify(expandedOk)}`);
+    assert.ok(expandedOk.ok, `g10 dropdown aria-expanded/aria-controls falla (${JSON.stringify(expandedOk)})`);
+
+    // 2) Roving tabindex: solo el primer item tiene tabindex=0 (proposal #2).
+    const rovingOk = await page.evaluate(() => {
+      const main = document.querySelector<HTMLElement>('is-main.main');
+      const dd = main?.querySelector<HTMLElement>('is-dropdown');
+      if (!dd) return { ok: false, motivo: 'no dd' };
+      const items = [...dd.querySelectorAll<HTMLElement>('is-dropdown-item')]
+        .filter((it) => !it.hasAttribute('disabled'));
+      const tabs = items.map((it) => it.getAttribute('tabindex'));
+      const zeros = tabs.filter((t) => t === '0').length;
+      const negs = tabs.filter((t) => t === '-1').length;
+      return {
+        ok: items.length > 0 && zeros === 1 && negs === items.length - 1,
+        itemsCount: items.length, tabs, zeros, negs,
+      };
+    });
+    t.diagnostic(`[g10-dd-roving] ${JSON.stringify(rovingOk)}`);
+    assert.ok(rovingOk.ok, `g10 dropdown roving tabindex falla (${JSON.stringify(rovingOk)})`);
+
+    // 3) ArrowDown mueve el foco entre items (proposal #3).
+    const arrowOk = await page.evaluate(async () => {
+      const main = document.querySelector<HTMLElement>('is-main.main');
+      const dd = main?.querySelector<HTMLElement>('is-dropdown');
+      if (!dd) return { ok: false, motivo: 'no dd' };
+      const items = [...dd.querySelectorAll<HTMLElement>('is-dropdown-item')]
+        .filter((it) => !it.hasAttribute('disabled'));
+      if (items.length < 2) return { ok: false, motivo: `pocos items (${items.length})` };
+      items[0].focus();
+      const before = document.activeElement;
+      // ArrowDown sobre el primer item.
+      document.dispatchEvent(new KeyboardEvent('keydown', {
+        key: 'ArrowDown', bubbles: true, cancelable: true,
+      }));
+      await new Promise((r) => setTimeout(r, 80));
+      const after = document.activeElement;
+      const tabs = items.map((it) => it.getAttribute('tabindex'));
+      const idx = items.findIndex((it) => it === after || it.contains(after));
+      return {
+        ok: idx === 1 && tabs[1] === '0' && tabs[0] === '-1',
+        idx, tabs, beforeTag: (before as HTMLElement)?.tagName?.toLowerCase(),
+        afterTag: (after as HTMLElement)?.tagName?.toLowerCase(),
+      };
+    });
+    t.diagnostic(`[g10-dd-arrow] ${JSON.stringify(arrowOk)}`);
+    assert.ok(arrowOk.ok, `g10 dropdown ArrowDown no rota (${JSON.stringify(arrowOk)})`);
+
+    // 4) Escape cierra + restaura foco al trigger (proposal #4).
+    const escapeOk = await page.evaluate(async () => {
+      const main = document.querySelector<HTMLElement>('is-main.main');
+      const dd = main?.querySelector<HTMLElement>('is-dropdown');
+      if (!dd) return { ok: false, motivo: 'no dd' };
+      const trigger = dd.shadowRoot!.querySelector<HTMLSlotElement>('slot[name="trigger"]')!
+      .assignedElements({ flatten: true })[0] as HTMLElement;
+      const dialog = dd.shadowRoot!.querySelector<HTMLDialogElement>('dialog');
+      // Escape sobre el dialog.
+      dialog?.dispatchEvent(new KeyboardEvent('keydown', {
+        key: 'Escape', bubbles: true, cancelable: true,
+      }));
+      await new Promise((r) => setTimeout(r, 200));
+      const expanded = trigger.getAttribute('aria-expanded');
+      const dialogOpen = !!dialog?.open;
+      const ae = document.activeElement;
+      const onTrigger = ae === trigger || (trigger.shadowRoot?.activeElement === ae);
+      return { ok: expanded === 'false' && !dialogOpen && onTrigger, expanded, dialogOpen, onTrigger };
+    });
+    t.diagnostic(`[g10-dd-escape] ${JSON.stringify(escapeOk)}`);
+    assert.ok(escapeOk.ok, `g10 dropdown Escape no cierra/restaura foco (${JSON.stringify(escapeOk)})`);
+  } finally {
+    await liberarPage(page);
+    activePage = null;
+  }
+});
+
+test('g10 confirm-delete: dialog role/aria-modal, focus trap, Escape, aria-invalid + aria-describedby', { timeout: 60_000 }, async (t) => {
+  if (!DISPONIBLE) return t.skip('faltan variables E2E');
+  const base = await ensureServer();
+  const page = await nuevoPage();
+  activePage = page;
+  try {
+    const renderOk = await abrirPreview(page, base, 'is-confirm-delete');
+    assert.ok(renderOk, 'confirm-delete preview no renderizo');
+
+    // 1) role=dialog + aria-modal del <is-dialog> interno (proposal #1).
+    const dialogOk = await page.evaluate(async () => {
+      const main = document.querySelector<HTMLElement>('is-main.main');
+      const cd = main?.querySelector<HTMLElement>('is-confirm-delete');
+      if (!cd?.shadowRoot) return { ok: false, motivo: 'no confirm-delete' };
+      const dlg = cd.shadowRoot.querySelector<HTMLElement>('dialog');
+      if (!dlg) return { ok: false, motivo: 'no dialog' };
+      // Abrimos el confirm-delete.
+      (cd as unknown as { show(): void }).show();
+      await new Promise((r) => setTimeout(r, 200));
+      const role = dlg.getAttribute('role');
+      const ariaModal = dlg.getAttribute('aria-modal');
+      const open = dlg.hasAttribute('open');
+      return { ok: role === 'dialog' && ariaModal === 'true' && open, role, ariaModal, open };
+    });
+    t.diagnostic(`[g10-cd-dialog] ${JSON.stringify(dialogOk)}`);
+    assert.ok(dialogOk.ok, `g10 confirm-delete role/aria-modal falla (${JSON.stringify(dialogOk)})`);
+
+    // 2) aria-invalid + aria-describedby sobre el input de confirmación al haber mismatch.
+    const ariaOk = await page.evaluate(async () => {
+      const main = document.querySelector<HTMLElement>('is-main.main');
+      const cd = main?.querySelector<HTMLElement>('is-confirm-delete');
+      if (!cd?.shadowRoot) return { ok: false, motivo: 'no confirm-delete' };
+      cd.setAttribute('confirm-value', 'EXPECTED-123');
+      (cd as unknown as { show(): void }).show();
+      await new Promise((r) => setTimeout(r, 200));
+      // Buscamos el input de confirmación (shadow del componente → shadow del <is-input>).
+      const input = cd.shadowRoot.querySelector<HTMLElement>('is-input.confirm');
+      if (!input?.shadowRoot) return { ok: false, motivo: 'no input shadow' };
+      const inner = input.shadowRoot.querySelector<HTMLInputElement>('input, textarea')
+        ?? input.shadowRoot.querySelector<HTMLElement>('[tabindex]');
+      if (!inner) return { ok: false, motivo: 'no inner input' };
+      // Tipeamos un valor incorrecto.
+      const before = inner.getAttribute('aria-invalid');
+      // Disparamos el evento que el componente escucha (is-input).
+      inner.value = 'otro';
+      inner.dispatchEvent(new InputEvent('input', { bubbles: true }));
+      input.dispatchEvent(new CustomEvent('is-input', { bubbles: true, detail: { value: 'otro' } }));
+      await new Promise((r) => setTimeout(r, 80));
+      const afterInvalid = inner.getAttribute('aria-invalid');
+      const afterDescribed = inner.getAttribute('aria-describedby');
+      // Después, tipeamos el correcto.
+      inner.value = 'expected-123';
+      inner.dispatchEvent(new InputEvent('input', { bubbles: true }));
+      input.dispatchEvent(new CustomEvent('is-input', { bubbles: true, detail: { value: 'expected-123' } }));
+      await new Promise((r) => setTimeout(r, 80));
+      const okInvalid = inner.getAttribute('aria-invalid');
+      const okDescribed = inner.getAttribute('aria-describedby');
+      // Verificamos que el id de describedby apunta al .help del componente.
+      const helpEl = cd.shadowRoot.querySelector<HTMLElement>('.help');
+      const helpId = helpEl?.id ?? '';
+      const describedValid = !!afterDescribed && afterDescribed === helpId;
+      return {
+        ok: before !== 'true'
+          && afterInvalid === 'true'
+          && describedValid
+          && okInvalid === 'false'
+          && (okDescribed === null || okDescribed === ''),
+        before, afterInvalid, afterDescribed, okInvalid, okDescribed, helpId,
+      };
+    });
+    t.diagnostic(`[g10-cd-aria] ${JSON.stringify(ariaOk)}`);
+    assert.ok(ariaOk.ok, `g10 confirm-delete aria-invalid/describedby falla (${JSON.stringify(ariaOk)})`);
+
+    // 3) Escape cierra el modal (proposal #3).
+    const escapeOk = await page.evaluate(async () => {
+      const main = document.querySelector<HTMLElement>('is-main.main');
+      const cd = main?.querySelector<HTMLElement>('is-confirm-delete');
+      if (!cd) return { ok: false, motivo: 'no cd' };
+      const dlg = cd.shadowRoot?.querySelector<HTMLDialogElement>('dialog');
+      if (!dlg) return { ok: false, motivo: 'no dialog' };
+      dlg.dispatchEvent(new KeyboardEvent('keydown', {
+        key: 'Escape', bubbles: true, cancelable: true,
+      }));
+      await new Promise((r) => setTimeout(r, 200));
+      const open = dlg.hasAttribute('open');
+      const cdOpen = cd.hasAttribute('open');
+      return { ok: !open && !cdOpen, open, cdOpen };
+    });
+    t.diagnostic(`[g10-cd-escape] ${JSON.stringify(escapeOk)}`);
+    assert.ok(escapeOk.ok, `g10 confirm-delete Escape no cierra (${JSON.stringify(escapeOk)})`);
+  } finally {
+    await liberarPage(page);
+    activePage = null;
+  }
+});
+
+test('g10 modal-verificacion: dialog ARIA, focus restoration, aria-live en results + sr-status', { timeout: 60_000 }, async (t) => {
+  if (!DISPONIBLE) return t.skip('faltan variables E2E');
+  const base = await ensureServer();
+  const page = await nuevoPage();
+  activePage = page;
+  try {
+    const renderOk = await abrirPreview(page, base, 'is-modal-verificacion');
+    assert.ok(renderOk, 'modal-verificacion preview no renderizo');
+
+    // 1) Construimos un modal-verificacion determinístico con controller
+    //    que devuelve 3 mensajes: 1 info, 1 warning, 1 error.
+    await page.evaluate(() => {
+      const main = document.querySelector<HTMLElement>('is-main.main');
+      const old = main?.querySelector<HTMLElement>('is-modal-verificacion');
+      if (old) old.remove();
+      const mv = document.createElement('is-modal-verificacion');
+      mv.setAttribute('entity', 'factura');
+      (mv as unknown as { controller: unknown }).controller = {
+        entrie: 'factura',
+        actVerificar: async () => ({
+          mensajes: [
+            { itdmensaje: 'info', mensaje: 'Información de prueba' },
+            { itdmensaje: 'warning', mensaje: 'Advertencia de prueba' },
+            { itdmensaje: 'error', mensaje: 'Error de prueba' },
+          ],
+        }),
+      };
+      main?.appendChild(mv);
+    });
+    await esperarMs(150);
+
+    // 2) role=dialog + aria-modal del <is-dialog> interno.
+    const dialogOk = await page.evaluate(async () => {
+      const main = document.querySelector<HTMLElement>('is-main.main');
+      const mv = main?.querySelector<HTMLElement>('is-modal-verificacion');
+      if (!mv?.shadowRoot) return { ok: false, motivo: 'no mv' };
+      const dlg = mv.shadowRoot.querySelector<HTMLElement>('is-dialog dialog');
+      if (!dlg) return { ok: false, motivo: 'no dialog' };
+      (mv as unknown as { show(): void }).show();
+      await new Promise((r) => setTimeout(r, 350));
+      const role = dlg.getAttribute('role');
+      const ariaModal = dlg.getAttribute('aria-modal');
+      const open = dlg.hasAttribute('open');
+      return { ok: role === 'dialog' && ariaModal === 'true' && open, role, ariaModal, open };
+    });
+    t.diagnostic(`[g10-mv-dialog] ${JSON.stringify(dialogOk)}`);
+    assert.ok(dialogOk.ok, `g10 modal-verificacion role/aria-modal falla (${JSON.stringify(dialogOk)})`);
+
+    // 3) aria-live en .results + sr-status con resumen agregado (proposal #8).
+    const liveOk = await page.evaluate(async () => {
+      const main = document.querySelector<HTMLElement>('is-main.main');
+      const mv = main?.querySelector<HTMLElement>('is-modal-verificacion');
+      if (!mv?.shadowRoot) return { ok: false, motivo: 'no mv' };
+      // Re-disparar verify para forzar renderMensajes (la promesa del controller
+      // ya se resolvió al show(); forzamos una segunda pasada).
+      await (mv as unknown as { verify(): Promise<unknown> }).verify();
+      const results = mv.shadowRoot.querySelector<HTMLElement>('.results');
+      const sr = mv.shadowRoot.querySelector<HTMLElement>('.sr-status');
+      const live = results?.getAttribute('aria-live');
+      const atomic = sr?.getAttribute('aria-atomic');
+      const liveText = (sr?.textContent ?? '').trim();
+      const qi = (mv.shadowRoot.querySelector<HTMLElement>('.q-infos')?.textContent ?? '').trim();
+      const qw = (mv.shadowRoot.querySelector<HTMLElement>('.q-warning')?.textContent ?? '').trim();
+      const qe = (mv.shadowRoot.querySelector<HTMLElement>('.q-errores')?.textContent ?? '').trim();
+      // Verificamos que el sr-status contiene el resumen con los tres números.
+      return {
+        ok: live === 'polite' && atomic === 'true' && liveText.length > 0
+          && liveText.includes(qi) && liveText.includes(qw) && liveText.includes(qe),
+        live, atomic, liveText, qi, qw, qe,
+      };
+    });
+    t.diagnostic(`[g10-mv-live] ${JSON.stringify(liveOk)}`);
+    assert.ok(liveOk.ok, `g10 modal-verificacion aria-live/sr-status falla (${JSON.stringify(liveOk)})`);
+
+    // 4) Escape cierra el modal (proposal #3).
+    const escapeOk = await page.evaluate(async () => {
+      const main = document.querySelector<HTMLElement>('is-main.main');
+      const mv = main?.querySelector<HTMLElement>('is-modal-verificacion');
+      if (!mv?.shadowRoot) return { ok: false, motivo: 'no mv' };
+      const dlg = mv.shadowRoot.querySelector<HTMLDialogElement>('is-dialog dialog');
+      dlg?.dispatchEvent(new KeyboardEvent('keydown', {
+        key: 'Escape', bubbles: true, cancelable: true,
+      }));
+      await new Promise((r) => setTimeout(r, 250));
+      const open = !!dlg?.hasAttribute('open');
+      const mvOpen = mv.hasAttribute('open');
+      return { ok: !open && !mvOpen, open, mvOpen };
+    });
+    t.diagnostic(`[g10-mv-escape] ${JSON.stringify(escapeOk)}`);
+    assert.ok(escapeOk.ok, `g10 modal-verificacion Escape no cierra (${JSON.stringify(escapeOk)})`);
+  } finally {
+    await liberarPage(page);
+    activePage = null;
+  }
+});

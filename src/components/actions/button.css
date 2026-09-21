@@ -351,6 +351,20 @@
 :host([with-caret]) .btn__caret { display: inline-flex; align-items: center; }
 :host(:state(link)) .btn { text-decoration: none; }
 
+/* Region aria-live para anunciar cambios de estado (loading → ready).
+   Patrón "sr-only": visualmente oculto pero accesible para AT. */
+.btn__sr-status {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  padding: 0;
+  margin: -1px;
+  overflow: hidden;
+  clip: rect(0, 0, 0, 0);
+  white-space: nowrap;
+  border: 0;
+}
+
 @keyframes is-button-spin {
   to { transform: rotate(360deg); }
 }

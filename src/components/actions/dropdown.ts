@@ -79,7 +79,11 @@ type DropdownItemEl = HTMLElement & { disabled?: boolean; type?: string; closeSu
       this.#defaultSlot = shadow.querySelector<HTMLSlotElement>('slot:not([name])')!;
 
       this.#triggerSlot.addEventListener('slotchange', () => this.#bindTrigger());
-      this.#defaultSlot.addEventListener('slotchange', () => this.#syncCheckboxPad());
+      this.#defaultSlot.addEventListener('slotchange', () => {
+        this.#syncCheckboxPad();
+        // Cuando cambian los items, reaplicar el roving tabindex.
+        this.#syncRovingTabindex();
+      });
       this.addEventListener('is-dropdown-item-select', this.#onItemSelect as EventListener);
 
       this.#dialog.addEventListener('click', this.#onDialogClick);
@@ -135,7 +139,31 @@ type DropdownItemEl = HTMLElement & { disabled?: boolean; type?: string; closeSu
       this.#triggerEl.addEventListener('click', this.#onTriggerClick);
       this.#triggerEl.setAttribute('aria-haspopup', 'menu');
       this.#triggerEl.setAttribute('aria-expanded', String(this.open));
+      // aria-controls: el trigger debe apuntar al panel por su id estable.
+      // Sin id propio, generamos uno determinístico basado en la posición del
+      // componente o caemos al uid de los elementos asignados.
+      if (!this.id) this.id = `is-dropdown-${this.#uid()}`;
+      this.#dialog.id = `${this.id}-menu`;
+      this.#menu.id = `${this.id}-menu`;
+      this.#triggerEl.setAttribute('aria-controls', `${this.id}-menu`);
     }
+
+    /**
+     * Genera un id único estable para este componente. Usa la API nativa
+     * `crypto.randomUUID()` cuando está disponible; cae a `Math.random` en
+     * navegadores viejos. El id se cachea en `this.#_uid`.
+     */
+    #uid(): string {
+      if (this.#_uid) return this.#_uid;
+      try {
+        this.#_uid = (crypto as { randomUUID?: () => string }).randomUUID?.() ??
+          Math.random().toString(36).slice(2, 10);
+      } catch {
+        this.#_uid = Math.random().toString(36).slice(2, 10);
+      }
+      return this.#_uid;
+    }
+    #_uid: string | null = null;
 
     #unbindTrigger() {
       if (!this.#triggerEl) return;
@@ -215,7 +243,39 @@ type DropdownItemEl = HTMLElement & { disabled?: boolean; type?: string; closeSu
       if (!list.length) return;
       const i = list.findIndex((el) => el === document.activeElement || el.contains(document.activeElement));
       const next = list[(Math.max(0, i) + delta + list.length) % list.length];
+      // Actualizar roving tabindex: el item que recibe focus pasa a
+      // tabindex=0; los demás a -1. Solo afecta a la navegación con Tab,
+      // no a la navegación con flechas.
+      list.forEach((el) => el.setAttribute('tabindex', el === next ? '0' : '-1'));
       next?.focus?.();
+    }
+
+    /**
+     * Aplica el patrón "roving tabindex" sobre los items focuseables del
+     * menú: solo el primero (o el que esté activo) tiene tabindex=0; los
+     * demás reciben tabindex=-1. Cuando el menú se cierra, restauramos
+     * tabindex=0 en todos para que los items sean tabstops fuera del menú.
+     *
+     * Esto convierte la lista de items en UN SOLO tabstop cuando el
+     * dropdown está abierto (las flechas navegan entre ellos), evitando
+     * que la página tenga 8+ paradas de Tab solo para abrir un menú
+     * (proposal g10 dropdown #2).
+     */
+    #syncRovingTabindex(): void {
+      const items = this.items;
+      if (!items.length) return;
+      // Mantener tabindex del item que tiene focus si existe; si no, el primero.
+      const i = items.findIndex((el) => el === document.activeElement || el.contains(document.activeElement));
+      const active = items[i >= 0 ? i : 0]!;
+      items.forEach((el) => {
+        if (el === active) el.setAttribute('tabindex', '0');
+        else el.setAttribute('tabindex', '-1');
+      });
+    }
+
+    /** Devuelve los items a su tabindex por defecto (todos focuseables). */
+    #resetRovingTabindex(): void {
+      this.items.forEach((el) => el.setAttribute('tabindex', '0'));
     }
 
     #reposition() {
@@ -263,6 +323,9 @@ type DropdownItemEl = HTMLElement & { disabled?: boolean; type?: string; closeSu
 
       this.#triggerEl?.setAttribute('aria-expanded', 'true');
       this.#dismiss.attach();
+      // Roving tabindex: solo el primer item es tabstop mientras el menú
+      // está abierto; los demás se navegan con flechas.
+      this.#syncRovingTabindex();
       requestAnimationFrame(() => this.items[0]?.focus?.());
       emit(this, 'is-after-show');
     }
@@ -278,6 +341,7 @@ type DropdownItemEl = HTMLElement & { disabled?: boolean; type?: string; closeSu
 
       this.#triggerEl?.setAttribute('aria-expanded', 'false');
       this.querySelectorAll<DropdownItemEl>('is-dropdown-item').forEach((el) => el.closeSubmenu?.());
+      this.#resetRovingTabindex();
       this.#dismiss.detach();
       if (this.#dialog.open) this.#dialog.close();
       emit(this, 'is-after-hide');

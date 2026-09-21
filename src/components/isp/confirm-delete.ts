@@ -109,6 +109,7 @@ interface InputLike extends HTMLElement {
     #cancelBtn!: HTMLElement;
     #trigger: HTMLElement | null = null;
     #onTriggerClick: (() => void) | null = null;
+    #uid: string = '';
 
     constructor() {
       super();
@@ -227,6 +228,12 @@ interface InputLike extends HTMLElement {
       const max = this.getAttribute('maxlength');
       if (max) this.#confirmField.maxlength = max;
       else this.#confirmField.maxlength = null;
+      // El texto de ayuda es la fuente del aria-describedby (referenciado
+      // desde #syncGate cuando hay mismatch). Le damos un id estable para
+      // que aria-describedby apunte correctamente.
+      if (!this.#helpEl.id) {
+        this.#helpEl.id = `confirm-delete-help-${this.#uidSuffix()}`;
+      }
       this.#helpEl.textContent = `Escriba el ${pk} indicado para confirmar.`;
 
       this.#deleteBtn.textContent = this.getAttribute('delete-label') || 'Eliminar';
@@ -252,6 +259,36 @@ interface InputLike extends HTMLElement {
       this.#deleteBtn.toggleAttribute('disabled', !enabled);
       this.#deleteBtn.toggleAttribute('loading', this.loading);
       this.#cancelBtn.toggleAttribute('disabled', this.loading);
+
+      // aria-invalid + aria-describedby en el input de confirmación.
+      // Mientras está vacío, el botón está deshabilitado y no hay error:
+      // un aria-invalid temprano daría falsos positivos a los lectores
+      // de pantalla ("campo no válido") antes de que el usuario escribiera.
+      // Cuando hay texto pero NO coincide, marcamos el error y referenciamos
+      // el texto de ayuda con aria-describedby (proposal g10 confirm-delete
+      // #2: aria-describedby apunta al mensaje de error/ayuda).
+      const target = this.confirmValue.trim();
+      const typed = String(this.#confirmField.value ?? '').trim();
+      const hasMismatch = typed.length > 0 && target.length > 0 && !this.confirmed;
+      this.#confirmField.setAttribute('aria-invalid', String(hasMismatch));
+      if (hasMismatch) {
+        this.#helpEl.id = this.#helpEl.id || `confirm-delete-help-${this.#uidSuffix()}`;
+        this.#confirmField.setAttribute('aria-describedby', this.#helpEl.id);
+      } else {
+        this.#confirmField.removeAttribute('aria-describedby');
+      }
+    }
+
+    /** Sufijo estable para los ids internos. Cacheado por instancia. */
+    #uidSuffix(): string {
+      if (this.#uid) return this.#uid;
+      try {
+        this.#uid = (crypto as { randomUUID?: () => string }).randomUUID?.()?.replace(/-/g, '').slice(0, 8)
+          ?? Math.random().toString(36).slice(2, 10);
+      } catch {
+        this.#uid = Math.random().toString(36).slice(2, 10);
+      }
+      return this.#uid;
     }
 
     #onConfirmInput = (): void => { this.#syncGate(); };

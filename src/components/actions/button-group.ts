@@ -232,6 +232,39 @@ import { withStyleAttrs } from '../../core/attrs.js';
         el.toggleAttribute('selected', on);
         el.setAttribute('aria-pressed', String(on));
       });
+      // Sincronizar el tabindex roving: una vez seleccionado (en `single`/
+      // `multiple`) el tabindex activo va al botón seleccionado; si no hay
+      // selección o estamos en `none`, al primer elemento focuseable.
+      this.#syncRovingTabindex();
+    }
+
+    /**
+     * Implementa el patrón ARIA "roving tabindex": solo uno de los botones
+     * del grupo tiene tabindex=0 (el que participa en la navegación con Tab);
+     * los demás tienen tabindex=-1. Las flechas / Home / End del `#onKeyDown`
+     * mueven el foco y reescriben aquí el tabindex.
+     *
+     * Esto convierte el grupo en UN SOLO tabstop (en vez de N), que es lo
+     * que recomienda WAI-ARIA Authoring Practices para toolbars y listas
+     * (proposal g10 button-group #3).
+     */
+    #syncRovingTabindex() {
+      const items = this.#items().filter((el) => !this.#isDisabled(el));
+      if (items.length === 0) return;
+      // Prioridad: el botón seleccionado (single/multiple); si no hay, el
+      // primero focuseable; si el actual tiene focus, lo mantenemos.
+      let active: HTMLElement | undefined;
+      if (this.select !== 'none') {
+        active = items.find((el) => this.#selected.includes(this.#valueOf(el, this.#items().indexOf(el))));
+      }
+      if (!active) {
+        const current = items.findIndex((el) => el === document.activeElement || el.contains(document.activeElement));
+        active = items[current >= 0 ? current : 0]!;
+      }
+      items.forEach((el) => {
+        if (el === active) el.setAttribute('tabindex', '0');
+        else el.setAttribute('tabindex', '-1');
+      });
     }
 
     #applySelection(next: Seleccion, shouldEmit: boolean): void {

@@ -104,6 +104,7 @@ import { setCustomState } from '../_shared/form-associated.js';
         <is-icon icon="mdi:loading"></is-icon>
       </span>
     </button>
+    <span class="btn__sr-status" part="sr-status" aria-live="polite" aria-atomic="true"></span>
   `;
 
   // --- 2. Custom element ----------------------------------------------
@@ -455,6 +456,11 @@ import { setCustomState } from '../_shared/form-associated.js';
       setCustomState(this.#internals, "loading", loading);
       this.toggleAttribute("data-state-loading", loading);
       this.#btn.setAttribute("aria-busy", String(loading));
+      // Anunciar el cambio de estado a screen readers via la region aria-live.
+      // g10 proposal: cuando el botón entra en loading, debe anunciarse
+      // "Cargando"; al terminar, anunciar "Listo" o vacío.
+      const sr = this.shadowRoot?.querySelector<HTMLElement>(".btn__sr-status");
+      if (sr) sr.textContent = loading ? 'Cargando' : 'Listo';
       if (loading) {
         this.#syncDisabled(true);
       } else {
