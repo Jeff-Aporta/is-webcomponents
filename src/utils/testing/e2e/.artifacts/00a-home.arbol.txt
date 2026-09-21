@@ -1,1087 +1,1464 @@
 [1-2] RootWebArea: Home | ContaPyme
-  [1-16] scrollable, html
-    [1-51] body
-      [1-52] banner
-        [1-84] button: ContaPyme — elegir paleta
-          [1-86] StaticText: conta
-          [1-88] StaticText: pyme
-        [1-8] button: Abrir preview en pantalla completa
-        [1-149] button: Cambiar a tema claro
-      [1-180] is-split-panel
-        [1-184] scrollable, nav: Componentes
-          [1-191] button: Inicio — home
-            [1-194] StaticText: Inicio
-          [1-195] button: Personalización — theming
-            [1-197] StaticText: Personalización
-          [1-198] button: Ecosistema JS — utilidades compartidas
-            [1-200] StaticText: Ecosistema JS
-          [1-201] group: ACCIONES
-            [1-205] button: Button is-button
-              [1-207] StaticText: Button
-              [1-209] StaticText: <is-button>
-            [1-210] button: Button Group is-button-group
-              [1-212] StaticText: Button Group
-              [1-214] StaticText: <is-button-group>
-            [1-5] button: Check Icon Button is-check-icon-button
-              [1-216] StaticText: Check Icon Button
-              [1-218] StaticText: <is-check-icon-button>
-            [1-219] button: Context Menu is-context-menu
-              [1-221] StaticText: Context Menu
-              [1-223] StaticText: <is-context-menu>
-            [1-224] button: Copy Button is-copy-button
-              [1-226] StaticText: Copy Button
-              [1-228] StaticText: <is-copy-button>
-            [1-229] button: Dropdown is-dropdown
-              [1-231] StaticText: Dropdown
-              [1-233] StaticText: <is-dropdown>
-            [1-234] button: Dropdown Item is-dropdown-item
-              [1-236] StaticText: Dropdown Item
-              [1-238] StaticText: <is-dropdown-item>
-            [1-239] button: Floating Action Button is-fab
-              [1-241] StaticText: Floating Action Button
-              [1-243] StaticText: <is-fab>
-            [1-6] button: Share Button is-share-button
-              [1-245] StaticText: Share Button
-              [1-247] StaticText: <is-share-button>
-            [1-248] button: Speed Dial is-speed-dial
-              [1-250] StaticText: Speed Dial
-              [1-252] StaticText: <is-speed-dial>
-            [1-253] button: Speed Dial Action is-speed-dial-action
-              [1-255] StaticText: Speed Dial Action
-              [1-257] StaticText: <is-speed-dial-action>
-          [1-258] group: MEDIA
-            [1-262] button: Avatar is-avatar
-              [1-264] StaticText: Avatar
-              [1-266] StaticText: <is-avatar>
-            [1-267] button: Barcode is-barcode
-              [1-269] StaticText: Barcode
-              [1-271] StaticText: <is-barcode>
-            [1-272] button: Barcode Scanner is-barcode-scanner
-              [1-274] StaticText: Barcode Scanner
-              [1-276] StaticText: <is-barcode-scanner>
-            [1-277] button: Icon is-icon
-              [1-279] StaticText: Icon
-              [1-281] StaticText: <is-icon>
-            [1-282] button: Image Editor is-image-editor
-              [1-284] StaticText: Image Editor
-              [1-286] StaticText: <is-image-editor>
-            [1-287] button: Media Recorder is-media-recorder
-              [1-289] StaticText: Media Recorder
-              [1-291] StaticText: <is-media-recorder>
-            [1-292] button: QR Code is-qrcode
-              [1-294] StaticText: QR Code
-              [1-296] StaticText: <is-qrcode>
-            [1-297] button: Speech is-speech
-              [1-299] StaticText: Speech
-              [1-301] StaticText: <is-speech>
-            [1-302] button: Theme Img is-theme-img
-              [1-304] StaticText: Theme Img
-              [1-306] StaticText: <is-theme-img>
-            [1-307] button: Video is-video
-              [1-309] StaticText: Video
-              [1-311] StaticText: <is-video>
-            [1-312] button: Video Playlist is-video-playlist
-              [1-314] StaticText: Video Playlist
-              [1-316] StaticText: <is-video-playlist>
-          [1-317] group: FEEDBACK
-            [1-321] button: Badge is-badge
-              [1-323] StaticText: Badge
-              [1-325] StaticText: <is-badge>
-            [1-326] button: CDN Snippet is-cdn-snippet
-              [1-328] StaticText: CDN Snippet
-              [1-330] StaticText: <is-cdn-snippet>
-            [1-331] button: Confirm Modal is-confirm-modal
-              [1-333] StaticText: Confirm Modal
-              [1-335] StaticText: <is-confirm-modal>
-            [1-336] button: Palette Selector is-palette-selector
-              [1-338] StaticText: Palette Selector
-              [1-340] StaticText: <is-palette-selector>
-            [1-341] button: Popconfirm is-popconfirm
-              [1-343] StaticText: Popconfirm
-              [1-345] StaticText: <is-popconfirm>
-            [1-346] button: Prefs Clear is-prefs-clear
-              [1-348] StaticText: Prefs Clear
-              [1-350] StaticText: <is-prefs-clear>
-            [1-351] button: Progress Bar is-progress-bar
-              [1-353] StaticText: Progress Bar
-              [1-355] StaticText: <is-progress-bar>
-            [1-356] button: Progress Ring is-progress-ring
-              [1-358] StaticText: Progress Ring
-              [1-360] StaticText: <is-progress-ring>
-            [1-361] button: Skeleton is-skeleton
-              [1-363] StaticText: Skeleton
-              [1-365] StaticText: <is-skeleton>
-            [1-366] button: Spinner is-spinner
-              [1-368] StaticText: Spinner
-              [1-370] StaticText: <is-spinner>
-            [1-371] button: Tag is-tag
-              [1-373] StaticText: Tag
-              [1-375] StaticText: <is-tag>
-            [1-376] button: Theme Toggle is-theme-toggle
-              [1-378] StaticText: Theme Toggle
-              [1-380] StaticText: <is-theme-toggle>
-            [1-381] button: Toast is-toast
-              [1-383] StaticText: Toast
-              [1-385] StaticText: <is-toast>
-            [1-386] button: Toast Item is-toast-item
-              [1-388] StaticText: Toast Item
-              [1-390] StaticText: <is-toast-item>
-            [1-391] button: Tooltip is-tooltip
-              [1-393] StaticText: Tooltip
-              [1-395] StaticText: <is-tooltip>
-          [1-396] group: LAYOUT
-            [1-400] button: Callout is-callout
-              [1-402] StaticText: Callout
-              [1-404] StaticText: <is-callout>
-            [1-405] button: Card is-card
-              [1-407] StaticText: Card
-              [1-409] StaticText: <is-card>
-            [1-410] button: Details is-details
-              [1-412] StaticText: Details
-              [1-414] StaticText: <is-details>
-            [1-415] button: Dialog is-dialog
-              [1-417] StaticText: Dialog
-              [1-419] StaticText: <is-dialog>
-            [1-420] button: Divider is-divider
-              [1-422] StaticText: Divider
-              [1-424] StaticText: <is-divider>
-            [1-425] button: Dock is-dock
-              [1-427] StaticText: Dock
-              [1-429] StaticText: <is-dock>
-            [1-430] button: Dock Item is-dock-item
-              [1-432] StaticText: Dock Item
-              [1-434] StaticText: <is-dock-item>
-            [1-435] button: Drawer is-drawer
-              [1-437] StaticText: Drawer
-              [1-439] StaticText: <is-drawer>
-            [1-440] button: Main is-main
-              [1-442] StaticText: Main
-              [1-444] StaticText: <is-main>
-            [1-445] button: Panel dividido is-split-panel
-              [1-447] StaticText: Panel dividido
-              [1-449] StaticText: <is-split-panel>
-            [1-450] button: Scrollspy is-scrollspy
-              [1-452] StaticText: Scrollspy
-              [1-454] StaticText: <is-scrollspy>
-          [1-455] group: NAVEGACIÓN
-            [1-459] button: Breadcrumb is-breadcrumb
-              [1-461] StaticText: Breadcrumb
-              [1-463] StaticText: <is-breadcrumb>
-            [1-464] button: Breadcrumb Item is-breadcrumb-item
-              [1-466] StaticText: Breadcrumb Item
-              [1-468] StaticText: <is-breadcrumb-item>
-            [1-469] button: Carousel is-carousel
-              [1-471] StaticText: Carousel
-              [1-473] StaticText: <is-carousel>
-            [1-474] button: Carousel Item is-carousel-item
-              [1-476] StaticText: Carousel Item
-              [1-478] StaticText: <is-carousel-item>
-            [1-479] button: Mega Menu is-mega-menu
-              [1-481] StaticText: Mega Menu
-              [1-483] StaticText: <is-mega-menu>
-            [1-484] button: Scroller is-scroller
-              [1-486] StaticText: Scroller
-              [1-488] StaticText: <is-scroller>
-            [1-489] button: Stepper is-stepper
-              [1-491] StaticText: Stepper
-              [1-493] StaticText: <is-stepper>
-            [1-494] button: Stepper Step is-stepper-step
-              [1-496] StaticText: Stepper Step
-              [1-498] StaticText: <is-stepper-step>
-            [1-499] button: Tab is-tab
-              [1-501] StaticText: Tab
-              [1-503] StaticText: <is-tab>
-            [1-504] button: Tab Group is-tab-group
-              [1-506] StaticText: Tab Group
-              [1-508] StaticText: <is-tab-group>
-            [1-509] button: Tab Panel is-tab-panel
-              [1-511] StaticText: Tab Panel
-              [1-513] StaticText: <is-tab-panel>
-            [1-514] button: Tree is-tree
-              [1-516] StaticText: Tree
-              [1-518] StaticText: <is-tree>
-            [1-519] button: Tree Item is-tree-item
-              [1-521] StaticText: Tree Item
-              [1-523] StaticText: <is-tree-item>
-          [1-524] group: FORMULARIOS
-            [1-528] button: Checkbox is-checkbox
-              [1-530] StaticText: Checkbox
-              [1-532] StaticText: <is-checkbox>
-            [1-533] button: Color Picker is-color-picker
-              [1-535] StaticText: Color Picker
-              [1-537] StaticText: <is-color-picker>
-            [1-538] button: Combobox is-combobox
-              [1-540] StaticText: Combobox
-              [1-542] StaticText: <is-combobox>
-            [1-543] button: Date Field is-date-field
-              [1-545] StaticText: Date Field
-              [1-547] StaticText: <is-date-field>
-            [1-548] button: Date Input is-date-input
-              [1-550] StaticText: Date Input
-              [1-552] StaticText: <is-date-input>
-            [1-553] button: Date Picker is-date-picker
-              [1-555] StaticText: Date Picker
-              [1-557] StaticText: <is-date-picker>
-            [1-558] button: Date Range Input is-date-range-input
-              [1-560] StaticText: Date Range Input
-              [1-562] StaticText: <is-date-range-input>
-            [1-563] button: Date Range Picker is-date-range-picker
-              [1-565] StaticText: Date Range Picker
-              [1-567] StaticText: <is-date-range-picker>
-            [1-568] button: Date Time Field is-date-time-field
-              [1-570] StaticText: Date Time Field
-              [1-572] StaticText: <is-date-time-field>
-            [1-573] button: Date Time Input is-date-time-input
-              [1-575] StaticText: Date Time Input
-              [1-577] StaticText: <is-date-time-input>
-            [1-578] button: Digital Clock is-digital-clock
-              [1-580] StaticText: Digital Clock
-              [1-582] StaticText: <is-digital-clock>
-            [1-583] button: Document Editor is-doc-editor
-              [1-585] StaticText: Document Editor
-              [1-587] StaticText: <is-doc-editor>
-            [1-588] button: Dropzone is-dropzone
-              [1-590] StaticText: Dropzone
-              [1-592] StaticText: <is-dropzone>
-            [1-593] button: Duration Picker is-duration-picker
-              [1-595] StaticText: Duration Picker
-              [1-597] StaticText: <is-duration-picker>
-            [1-598] button: File Input is-file-input
-              [1-600] StaticText: File Input
-              [1-602] StaticText: <is-file-input>
-            [1-603] button: Full Calendar is-full-calendar
-              [1-605] StaticText: Full Calendar
-              [1-607] StaticText: <is-full-calendar>
-            [1-608] button: Inline Edit is-inline-edit
-              [1-610] StaticText: Inline Edit
-              [1-612] StaticText: <is-inline-edit>
-            [1-613] button: Input is-input
-              [1-615] StaticText: Input
-              [1-617] StaticText: <is-input>
-            [1-618] button: Masked Input is-masked-input
-              [1-620] StaticText: Masked Input
-              [1-622] StaticText: <is-masked-input>
-            [1-623] button: Mention is-mention
-              [1-625] StaticText: Mention
-              [1-627] StaticText: <is-mention>
-            [1-628] button: Month Calendar is-month-calendar
-              [1-630] StaticText: Month Calendar
-              [1-632] StaticText: <is-month-calendar>
-            [1-633] button: Option is-option
-              [1-635] StaticText: Option
-              [1-637] StaticText: <is-option>
-            [1-638] button: Pin Input is-pin-input
-              [1-640] StaticText: Pin Input
-              [1-642] StaticText: <is-pin-input>
-            [1-643] button: Radio is-radio
-              [1-645] StaticText: Radio
-              [1-647] StaticText: <is-radio>
-            [1-648] button: Radio Group is-radio-group
-              [1-650] StaticText: Radio Group
-              [1-652] StaticText: <is-radio-group>
-            [1-653] button: Rating is-rating
-              [1-655] StaticText: Rating
-              [1-657] StaticText: <is-rating>
-            [1-658] button: Rich Text Editor is-rte
-              [1-660] StaticText: Rich Text Editor
-              [1-662] StaticText: <is-rte>
-            [1-663] button: Select is-select
-              [1-665] StaticText: Select
-              [1-667] StaticText: <is-select>
-            [1-668] button: Signature is-signature
-              [1-670] StaticText: Signature
-              [1-672] StaticText: <is-signature>
-            [1-673] button: Slider is-slider
-              [1-675] StaticText: Slider
-              [1-677] StaticText: <is-slider>
-            [1-678] button: Switch is-switch
-              [1-680] StaticText: Switch
-              [1-682] StaticText: <is-switch>
-            [1-683] button: Textarea is-textarea
-              [1-685] StaticText: Textarea
-              [1-687] StaticText: <is-textarea>
-            [1-688] button: Time Clock is-time-clock
-              [1-690] StaticText: Time Clock
-              [1-692] StaticText: <is-time-clock>
-            [1-693] button: Time Field is-time-field
-              [1-695] StaticText: Time Field
-              [1-697] StaticText: <is-time-field>
-            [1-698] button: Time Input is-time-input
-              [1-700] StaticText: Time Input
-              [1-702] StaticText: <is-time-input>
-            [1-703] button: Year Calendar is-year-calendar
-              [1-705] StaticText: Year Calendar
-              [1-707] StaticText: <is-year-calendar>
-          [1-708] group: CÓDIGO
-            [1-712] button: Code is-code
-              [1-714] StaticText: Code
-              [1-716] StaticText: <is-code>
-          [1-717] group: DATOS
-            [1-721] button: AG Grid is-ag-grid
-              [1-723] StaticText: AG Grid
-              [1-725] StaticText: <is-ag-grid>
-            [1-726] button: Data Grid is-data-grid
-              [1-728] StaticText: Data Grid
-              [1-730] StaticText: <is-data-grid>
-            [1-731] button: Kanban is-kanban
-              [1-733] StaticText: Kanban
-              [1-735] StaticText: <is-kanban>
-            [1-736] button: Kanban Card is-kanban-card
-              [1-738] StaticText: Kanban Card
-              [1-740] StaticText: <is-kanban-card>
-            [1-741] button: Kanban Column is-kanban-column
-              [1-743] StaticText: Kanban Column
-              [1-745] StaticText: <is-kanban-column>
-            [1-746] button: Pivot Table is-pivot-table
-              [1-748] StaticText: Pivot Table
-              [1-750] StaticText: <is-pivot-table>
-            [1-751] button: Spreadsheet is-spreadsheet
-              [1-753] StaticText: Spreadsheet
-              [1-755] StaticText: <is-spreadsheet>
-            [1-756] button: Stat KPI is-stat
-              [1-758] StaticText: Stat KPI
-              [1-760] StaticText: <is-stat>
-            [1-761] button: Transfer is-transfer
-              [1-763] StaticText: Transfer
-              [1-765] StaticText: <is-transfer>
-            [1-766] button: Transfer Item is-transfer-item
-              [1-768] StaticText: Transfer Item
-              [1-770] StaticText: <is-transfer-item>
-          [1-771] group: GRÁFICOS
-            [1-775] button: Bar Chart is-bar-chart
-              [1-777] StaticText: Bar Chart
-              [1-779] StaticText: <is-bar-chart>
-            [1-780] button: Bubble Chart is-bubble-chart
-              [1-782] StaticText: Bubble Chart
-              [1-784] StaticText: <is-bubble-chart>
-            [1-785] button: Chart is-chart
-              [1-787] StaticText: Chart
-              [1-789] StaticText: <is-chart>
-            [1-790] button: Doughnut Chart is-doughnut-chart
-              [1-792] StaticText: Doughnut Chart
-              [1-794] StaticText: <is-doughnut-chart>
-            [1-795] button: Funnel Chart is-funnel-chart
-              [1-797] StaticText: Funnel Chart
-              [1-799] StaticText: <is-funnel-chart>
-            [1-800] button: Gauge is-gauge
-              [1-802] StaticText: Gauge
-              [1-804] StaticText: <is-gauge>
-            [1-805] button: Heatmap is-heatmap
-              [1-807] StaticText: Heatmap
-              [1-809] StaticText: <is-heatmap>
-            [1-810] button: Line Chart is-line-chart
-              [1-812] StaticText: Line Chart
-              [1-814] StaticText: <is-line-chart>
-            [1-815] button: Map Marker is-map-marker
-              [1-817] StaticText: Map Marker
-              [1-819] StaticText: <is-map-marker>
-            [1-820] button: Maps is-maps
-              [1-822] StaticText: Maps
-              [1-824] StaticText: <is-maps>
-            [1-825] button: Pie Chart is-pie-chart
-              [1-827] StaticText: Pie Chart
-              [1-829] StaticText: <is-pie-chart>
-            [1-830] button: Polar Area Chart is-polar-area-chart
-              [1-832] StaticText: Polar Area Chart
-              [1-834] StaticText: <is-polar-area-chart>
-            [1-835] button: Radar Chart is-radar-chart
-              [1-837] StaticText: Radar Chart
-              [1-839] StaticText: <is-radar-chart>
-            [1-840] button: Scatter Chart is-scatter-chart
-              [1-842] StaticText: Scatter Chart
-              [1-844] StaticText: <is-scatter-chart>
-            [1-845] button: Sparkline is-sparkline
-              [1-847] StaticText: Sparkline
-              [1-849] StaticText: <is-sparkline>
-            [1-850] button: Treemap is-treemap
-              [1-852] StaticText: Treemap
-              [1-854] StaticText: <is-treemap>
-            [1-855] button: Waterfall Chart is-waterfall-chart
-              [1-857] StaticText: Waterfall Chart
-              [1-859] StaticText: <is-waterfall-chart>
-          [1-860] group: DIAGRAMAS
-            [1-864] button: Diagrama de bloques is-block-diagram
-              [1-866] StaticText: Diagrama de bloques
-              [1-868] StaticText: <is-block-diagram>
-            [1-869] button: Diagrama de carriles is-swimlane-diagram
-              [1-871] StaticText: Diagrama de carriles
-              [1-873] StaticText: <is-swimlane-diagram>
-            [1-874] button: Diagrama de casos de uso is-use-case-diagram
-              [1-876] StaticText: Diagrama de casos de uso
-              [1-878] StaticText: <is-use-case-diagram>
-            [1-879] button: Diagrama de clases is-class-diagram
-              [1-881] StaticText: Diagrama de clases
-              [1-883] StaticText: <is-class-diagram>
-            [1-884] button: Diagrama de componentes is-component-diagram
-              [1-886] StaticText: Diagrama de componentes
-              [1-888] StaticText: <is-component-diagram>
-            [1-889] button: Diagrama de estados is-state-diagram
-              [1-891] StaticText: Diagrama de estados
-              [1-893] StaticText: <is-state-diagram>
-            [1-894] button: Diagrama de flujo is-flowchart
-              [1-896] StaticText: Diagrama de flujo
-              [1-898] StaticText: <is-flowchart>
-            [1-899] button: Diagrama de Gantt is-gantt
-              [1-901] StaticText: Diagrama de Gantt
-              [1-903] StaticText: <is-gantt>
-            [1-904] button: Diagrama de Sankey is-sankey-diagram
-              [1-906] StaticText: Diagrama de Sankey
-              [1-908] StaticText: <is-sankey-diagram>
-            [1-909] button: Diagrama de secuencia is-sequence-diagram
-              [1-911] StaticText: Diagrama de secuencia
-              [1-913] StaticText: <is-sequence-diagram>
-            [1-914] button: Diagrama de Venn is-venn-diagram
-              [1-916] StaticText: Diagrama de Venn
-              [1-918] StaticText: <is-venn-diagram>
-            [1-919] button: Diagrama entidad-relación is-er-diagram
-              [1-921] StaticText: Diagrama entidad-relación
-              [1-923] StaticText: <is-er-diagram>
-            [1-924] button: Línea de tiempo is-timeline
-              [1-926] StaticText: Línea de tiempo
-              [1-928] StaticText: <is-timeline>
-            [1-929] button: Mapa de recorrido is-journey-map
-              [1-931] StaticText: Mapa de recorrido
-              [1-933] StaticText: <is-journey-map>
-            [1-934] button: Mapa mental is-mindmap
-              [1-936] StaticText: Mapa mental
-              [1-938] StaticText: <is-mindmap>
-            [1-939] button: Matriz de cuadrantes is-quadrant-chart
-              [1-941] StaticText: Matriz de cuadrantes
-              [1-943] StaticText: <is-quadrant-chart>
-            [1-944] button: Org Chart is-org-chart
-              [1-946] StaticText: Org Chart
-              [1-948] StaticText: <is-org-chart>
-            [1-949] button: Visor de diagramas is-diagram-lightbox
-              [1-951] StaticText: Visor de diagramas
-              [1-953] StaticText: <is-diagram-lightbox>
-          [1-954] group: OVERLAYS
-            [1-958] button: Command Palette is-command-palette
-              [1-960] StaticText: Command Palette
-              [1-962] StaticText: <is-command-palette>
-            [1-963] button: PDF Viewer is-pdf-viewer
-              [1-965] StaticText: PDF Viewer
-              [1-967] StaticText: <is-pdf-viewer>
-            [1-968] button: Window is-window
-              [1-970] StaticText: Window
-              [1-972] StaticText: <is-window>
-          [1-973] group: UTILERÍAS
-            [1-977] button: Editor Markdown is-md-editor
-              [1-979] StaticText: Editor Markdown
-              [1-981] StaticText: <is-md-editor>
-            [1-982] button: Formato is-format
-              [1-984] StaticText: Formato
-              [1-986] StaticText: <is-format>
-            [1-987] button: Formato de bytes is-format-bytes
-              [1-989] StaticText: Formato de bytes
-              [1-991] StaticText: <is-format-bytes>
-            [1-992] button: Formato de fecha is-format-date
-              [1-994] StaticText: Formato de fecha
-              [1-996] StaticText: <is-format-date>
-            [1-997] button: Formato de número is-format-number
-              [1-999] StaticText: Formato de número
-              [1-1001] StaticText: <is-format-number>
-            [1-1002] button: IsUi is-ui
-              [1-1004] StaticText: IsUi
-              [1-1006] StaticText: <is-ui>
-            [1-1007] button: Lightbox is-lightbox
-              [1-1009] StaticText: Lightbox
-              [1-1011] StaticText: <is-lightbox>
-            [1-1012] button: Observador de intersección is-intersection-observer
-              [1-1014] StaticText: Observador de intersección
-              [1-1016] StaticText: <is-intersection-observer>
-            [1-1017] button: Observador de mutación is-mutation-observer
-              [1-1019] StaticText: Observador de mutación
-              [1-1021] StaticText: <is-mutation-observer>
-            [1-1022] button: Observer is-observer
-              [1-1024] StaticText: Observer
-              [1-1026] StaticText: <is-observer>
-            [1-1027] button: Offscreen Canvas is-offscreen-canvas
-              [1-1029] StaticText: Offscreen Canvas
-              [1-1031] StaticText: <is-offscreen-canvas>
-            [1-1032] button: Popover is-popover
-              [1-1034] StaticText: Popover
-              [1-1036] StaticText: <is-popover>
-            [1-1037] button: Render Markdown is-md-render
-              [1-1039] StaticText: Render Markdown
-              [1-1041] StaticText: <is-md-render>
-            [1-1042] button: Resize Observer is-resize-observer
-              [1-1044] StaticText: Resize Observer
-              [1-1046] StaticText: <is-resize-observer>
-            [1-1047] button: Tiempo relativo is-relative-time
-              [1-1049] StaticText: Tiempo relativo
-              [1-1051] StaticText: <is-relative-time>
-            [1-1052] button: Wake Lock is-wake-lock
-              [1-1054] StaticText: Wake Lock
-              [1-1056] StaticText: <is-wake-lock>
-          [1-1057] group: ISP-SVELTECOMPONENTS
-            [1-1061] button: Accordion Group is-accordion-group
-              [1-1064] StaticText: Accordion Group
-              [1-1066] StaticText: <is-accordion-group>
-            [1-1067] button: Block Layout is-block-layout
-              [1-1070] StaticText: Block Layout
-              [1-1072] StaticText: <is-block-layout>
-            [1-1073] button: Btn Ref is-btn-ref
-              [1-1076] StaticText: Btn Ref
-              [1-1078] StaticText: <is-btn-ref>
-            [1-1079] button: Catálogo Gen is-catalogo-gen
-              [1-1082] StaticText: Catálogo Gen
-              [1-1084] StaticText: <is-catalogo-gen>
-            [1-1085] button: Confirm Delete is-confirm-delete
-              [1-1088] StaticText: Confirm Delete
-              [1-1090] StaticText: <is-confirm-delete>
-            [1-1091] button: Flex Layout is-flex-layout
-              [1-1094] StaticText: Flex Layout
-              [1-1096] StaticText: <is-flex-layout>
-            [1-1097] button: Flex Options is-flex-options
-              [1-1100] StaticText: Flex Options
-              [1-1102] StaticText: <is-flex-options>
-            [1-1103] button: Float Card is-float-card
-              [1-1106] StaticText: Float Card
-              [1-1108] StaticText: <is-float-card>
-            [1-1109] button: Form is-form
-              [1-1112] StaticText: Form
-              [1-1114] StaticText: <is-form>
-            [1-1115] button: Grid Layout is-grid-layout
-              [1-1118] StaticText: Grid Layout
-              [1-1120] StaticText: <is-grid-layout>
-            [1-1121] button: Heading is-heading
-              [1-1124] StaticText: Heading
-              [1-1126] StaticText: <is-heading>
-            [1-1127] button: Loading Overlay is-loading-overlay
-              [1-1130] StaticText: Loading Overlay
-              [1-1132] StaticText: <is-loading-overlay>
-            [1-1133] button: Modal Verificación is-modal-verificacion
-              [1-1136] StaticText: Modal Verificación
-              [1-1138] StaticText: <is-modal-verificacion>
-            [1-1139] button: Text is-text
-              [1-1142] StaticText: Text
-              [1-1144] StaticText: <is-text>
-            [1-1145] button: Tree View is-tree-view
-              [1-1148] StaticText: Tree View
-              [1-1150] StaticText: <is-tree-view>
-        [1-185] separator: Redimensionar panel
-        [1-1158] scrollable, is-main
-          [1-1165] div
-            [1-1168] progressbar
-            [1-1172] region: Construye más rápido con UI nativa y tokens de marca
-              [1-1175] div
-                [1-1176] paragraph
-                  [1-1178] StaticText: IS WEB COMPONENTS
-                [1-13] heading: Construye más rápido con UI nativa y tokens de marca
-                  [1-1180] StaticText: Construye más rápido
-                  [1-1181] StaticText: con UI nativa y tokens de marca
-                [1-1182] paragraph
-                  [1-1183] StaticText: Galería de Web Components vanilla (
-                  [1-1184] code
-                    [1-1185] StaticText: is-*
-                  [1-1186] StaticText: ) para InSoft, ContaPyme y AgroWin. Shadow DOM, tokens
-                  [1-1187] code
-                    [1-1188] StaticText: --is-*
-                  [1-10] StaticText: y charts animados listos para producción.
-                [1-14] div
-                  [1-1191] button: Explorar componentes
-                  [1-1221] button: Ver is-button
-                  [1-1245] button: Ver charts
-                [1-1267] div
-                  [1-1275] StaticText: Vanilla
-                  [1-1314] StaticText: CDN / ES modules
-                  [1-1353] StaticText: 3 paletas
-                  [1-1392] StaticText: 80+ componentes
-                [1-1424] div: Consumo por CDN
-                  [1-1425] div
-                    [1-1431] StaticText: index.html
-                    [1-1432] tablist: Pestañas de consumo
-                      [1-1433] tab: POR COMPONENTE
-                      [1-1435] tab: BUNDLE ÚNICO
-                  [1-1437] div
-                    [1-1438] div
-                      [1-1440] StaticText: Carga el tema base y los componentes que necesites
-                      [1-1441] div
-                        [1-1442] button: Copiar snippet JS y CSS
-                          [1-1449] StaticText: Copiar
-                        [1-1450] button: Descargar index.html de prueba
-                          [1-1457] StaticText: Descargar HTML
-                    [1-1458] div
-                      [1-1459] is-code
-                        [1-4112] StaticText: 
-                        [1-4113] StaticText: 
-                        [1-4114] StaticText: 
-                      [1-1488] button: Copiar
-                  [1-1659] div: Resultado renderizado en vivo
-                    [1-1662] StaticText: RESULTADO · EN VIVO
-                    [1-1663] div
-                      [1-1666] button: Explorar
-                      [1-1695] StaticText: +12%
-                      [1-1704] slider
-                      [1-1781] switch: Demo switch [checked]
-                      [1-1800] image
-            [1-1804] complementary: Vista previa de componentes
-              [1-1806] div
-                [1-1809] div
-                  [1-1811] div
-                    [1-1814] paragraph
-                      [1-1815] StaticText: INGRESOS · ÚLTIMOS 30 DÍAS
-                    [1-1816] div
-                      [1-1817] div
-                        [1-1819] StaticText: $ 248.5k
-                        [1-1821] StaticText: ▲ 12.4% vs mes anterior
-                      [1-1829] StaticText: +12%
-                    [1-1836] image
-                  [1-1841] div
-                    [1-1844] paragraph
-                      [1-1845] StaticText: POR CATEGORÍA
-                    [1-1846] paragraph
-                      [1-1847] StaticText: Ingresos del mes
-                    [1-1851] image
-                      [1-1855] StaticText: 0
-                      [1-1858] StaticText: 10
-                      [1-1861] StaticText: 20
-                      [1-1864] StaticText: 30
-                      [1-1867] StaticText: 40
-                      [1-1870] StaticText: 50
-                      [1-1873] StaticText: 60
-                      [1-1876] StaticText: 70
-                      [1-1879] StaticText: 80
-                      [1-1882] StaticText: 90
-                      [1-1884] StaticText: Servi…
-                      [1-1888] StaticText: Produ…
-                      [1-1892] StaticText: Suscr…
-                      [1-1896] StaticText: Sopor…
-                      [1-1900] StaticText: Otros
-                  [1-1916] div
-                    [1-1919] paragraph
-                      [1-1920] StaticText: MIX DE CARTERA
-                    [1-1921] paragraph
-                      [1-1922] StaticText: Activos vs Pasivos
-                    [1-1926] image
-                      [1-1931] StaticText: 35%
-                      [1-1934] StaticText: 28%
-                      [1-1937] StaticText: 18%
-                      [1-1940] StaticText: 9%
-                      [1-1943] StaticText: 10%
-                      [1-1945] StaticText: 100
-                      [1-1947] StaticText: Total
-                [1-1956] div
-                  [1-1958] div
-                    [1-1961] paragraph
-                      [1-1962] StaticText: MRR · 6 MESES
-                    [1-1963] paragraph
-                      [1-1964] StaticText: Tendencia de crecimiento
-                    [1-1968] image
-                      [1-1972] StaticText: 0
-                      [1-1975] StaticText: 10
-                      [1-1978] StaticText: 20
-                      [1-1981] StaticText: 30
-                      [1-1984] StaticText: 40
-                      [1-1987] StaticText: 50
-                      [1-1990] StaticText: 60
-                      [1-1993] StaticText: 70
-                      [1-1996] StaticText: 80
-                      [1-1998] StaticText: Jun
-                      [1-2000] StaticText: Jul
-                      [1-2002] StaticText: Ago
-                      [1-2004] StaticText: Sep
-                      [1-2006] StaticText: Oct
-                      [1-2008] StaticText: Nov
-                  [1-2030] div
-                    [1-2033] paragraph
-                      [1-2034] StaticText: ADQUISICIÓN
-                    [1-2035] paragraph
-                      [1-2036] StaticText: Canales del mes
-                    [1-2040] image
-                  [1-2061] div
-                    [1-2064] paragraph
-                      [1-2065] StaticText: Listo para producción
-                    [1-2066] list
-                      [1-2067] listitem
-                        [1-2074] span
-                          [1-2075] strong
-                            [1-2076] StaticText: Actions
-                          [1-2077] StaticText: — button, dropdown, copy-button
-                      [1-2078] listitem
-                        [1-2085] span
-                          [1-2086] strong
-                            [1-2087] StaticText: Feedback
-                          [1-2088] StaticText: — toast, tooltip, progress
-                      [1-2089] listitem
-                        [1-2096] span
-                          [1-2097] strong
-                            [1-2098] StaticText: Charts
-                          [1-2099] StaticText: — bar, line, donut, polar, radar
-                      [1-2100] listitem
-                        [1-2107] span
-                          [1-2108] strong
-                            [1-2109] StaticText: Data
-                          [1-2110] StaticText: — grid virtualizado, formatos i18n
-            [1-2111] region: Componentes en acción
-              [1-2113] div
-                [1-2114] div
-                  [1-2115] div
-                    [1-2116] heading: Componentes en acción
-                      [1-2117] StaticText: Componentes
-                      [1-2118] emphasis
-                        [1-2119] StaticText: en acción
-                    [1-2120] paragraph
-                      [1-2121] StaticText: Una vuelta por todo el catálogo: charts, diagramas, formatos y controles, con las 12 series de gráficos completas. Mismas APIs, mismos tokens, mismo shadow DOM.
-                  [1-2122] div
-                    [1-2130] StaticText: 12 tipos de chart
-                    [1-2169] StaticText: Sin dependencias
-                    [1-2208] StaticText: SVG puro
-                    [1-2247] StaticText: Tokens --is-*
-                [1-2485] div
-                  [1-2486] article
-                    [1-2489] heading: MIX DE CARTERA
-                    [1-2495] image
-                    [1-2508] div
-                      [1-2510] StaticText: Distribución
-                      [1-2512] StaticText: 62% / 23% / 15%
-                  [1-2513] article
-                    [1-2516] heading: VENTAS POR SEDE
-                    [1-2522] image
-                      [1-2526] StaticText: 0
-                      [1-2529] StaticText: 200
-                      [1-2532] StaticText: 400
-                      [1-2535] StaticText: 600
-                      [1-2538] StaticText: 800
-                      [1-2541] StaticText: 1.000
-                      [1-2544] StaticText: 1.200
-                      [1-2547] StaticText: 1.400
-                      [1-2549] StaticText: Bogotá
-                      [1-2551] StaticText: Medellín
-                      [1-2553] StaticText: Cali
-                      [1-2555] StaticText: Barranquilla
-                      [1-2557] StaticText: Bucaramanga
-                      [1-2559] StaticText: Pereira
-                    [1-2575] div
-                      [1-2577] StaticText: Top
-                      [1-2579] StaticText: Bogotá · 1.240
-                  [1-2580] article
-                    [1-2583] heading: TENDENCIA
-                    [1-2589] image
-                      [1-2593] StaticText: 0
-                      [1-2596] StaticText: 10
-                      [1-2599] StaticText: 20
-                      [1-2602] StaticText: 30
-                      [1-2605] StaticText: 40
-                      [1-2608] StaticText: 50
-                      [1-2611] StaticText: 60
-                      [1-2614] StaticText: 70
-                      [1-2616] StaticText: Ene
-                      [1-2618] StaticText: Feb
-                      [1-2620] StaticText: Mar
-                      [1-2622] StaticText: Abr
-                      [1-2624] StaticText: May
-                      [1-2626] StaticText: Jun
-                    [1-2647] div
-                      [1-2649] StaticText: Δ YoY
-                      [1-2651] StaticText: +38%
-                  [1-2652] article
-                    [1-2655] heading: COMPOSICIÓN
-                    [1-2661] image
-                      [1-2666] StaticText: 44%
-                      [1-2669] StaticText: 28%
-                      [1-2672] StaticText: 18%
-                      [1-2675] StaticText: 10%
-                    [1-2683] div
-                      [1-2685] StaticText: Modalidad
-                      [1-2687] StaticText: Contado · 44%
-                  [1-2688] article
-                    [1-2691] heading: RADAR
-                    [1-2697] image
-                      [1-2706] StaticText: Velocidad
-                      [1-2709] StaticText: Calidad
-                      [1-2712] StaticText: Soporte
-                      [1-2715] StaticText: Precio
-                      [1-2718] StaticText: UX
-                    [1-2741] div
-                      [1-2743] StaticText: KPI
-                      [1-2745] StaticText: UX · 95
-                  [1-2746] article
-                    [1-2749] heading: SLA SEMANAL
-                    [1-2755] image
-                    [1-2776] div
-                      [1-2778] StaticText: Promedio
-                      [1-2780] StaticText: 92%
-                  [1-2781] article
-                    [1-2784] heading: TRÁFICO VS VENTAS
-                    [1-2790] image
-                      [1-2794] StaticText: 0
-                      [1-2797] StaticText: 10
-                      [1-2800] StaticText: 20
-                      [1-2803] StaticText: 30
-                      [1-2806] StaticText: 40
-                      [1-2809] StaticText: 50
-                      [1-2812] StaticText: 60
-                      [1-2815] StaticText: 70
-                      [1-2818] StaticText: 100
-                      [1-2821] StaticText: 200
-                      [1-2824] StaticText: 300
-                      [1-2827] StaticText: 400
-                      [1-2830] StaticText: 500
-                      [1-2833] StaticText: 600
-                      [1-2836] StaticText: 700
-                      [1-2839] StaticText: 800
-                    [1-2855] div
-                      [1-2857] StaticText: r
-                      [1-2859] StaticText: 0.94
-                  [1-2860] article
-                    [1-2863] heading: HORA PICO
-                    [1-2869] image
-                      [1-2873] StaticText: 0
-                      [1-2876] StaticText: 10
-                      [1-2879] StaticText: 20
-                      [1-2882] StaticText: 30
-                      [1-2885] StaticText: 40
-                      [1-2888] StaticText: 50
-                      [1-2891] StaticText: 60
-                      [1-2894] StaticText: 8
-                      [1-2897] StaticText: 10
-                      [1-2900] StaticText: 12
-                      [1-2903] StaticText: 14
-                      [1-2906] StaticText: 16
-                      [1-2909] StaticText: 18
-                      [1-2912] StaticText: 20
-                    [1-2929] div
-                      [1-2931] StaticText: Pico
-                      [1-2933] StaticText: 14h
-                  [1-2934] article
-                    [1-2937] heading: FLUJO DE OPERACIÓN
-                    [1-2943] image: Diagrama de flujo
-                      [1-2958] StaticText: OK
-                      [1-2963] StaticText: Lead
-                      [1-2968] StaticText: Califica
-                      [1-2973] StaticText: Propuesta
-                      [1-2978] StaticText: Negociación
-                      [1-2983] StaticText: Cierre
-                    [1-2992] div
-                      [1-2994] StaticText: Embudo
-                      [1-2996] StaticText: 5 etapas
-                  [1-2997] article
-                    [1-3000] heading: DISTRIBUCIÓN GEOGRÁFICA
-                    [1-3006] image
-                      [1-3015] StaticText: Norte
-                      [1-3018] StaticText: Sur
-                      [1-3021] StaticText: Oriente
-                      [1-3024] StaticText: Occidente
-                      [1-3027] StaticText: Centro
-                    [1-3044] div
-                      [1-3046] StaticText: Top
-                      [1-3048] StaticText: Centro · 90
-                  [1-3049] article
-                    [1-3052] heading: CRONOGRAMA
-                    [1-3058] image: Línea de tiempo
-                      [1-3071] div
-                        [1-3073] StaticText: 2025-08-04
-                        [1-3075] StaticText: Kick-off
-                      [1-3081] div
-                        [1-3083] StaticText: 2025-08-18
-                        [1-3085] StaticText: Diseño
-                      [1-3091] div
-                        [1-3093] StaticText: 2025-09-08
-                        [1-3095] StaticText: Desarrollo
-                      [1-3101] div
-                        [1-3103] StaticText: 2025-09-22
-                        [1-3105] StaticText: QA
-                      [1-3111] div
-                        [1-3113] StaticText: 2025-10-06
-                        [1-3115] StaticText: Go live
-                    [1-3121] div
-                      [1-3123] StaticText: Trimestre
-                      [1-3125] StaticText: Q3 → Q4
-                [1-3213] heading: Charts lab barras, líneas, pie, doughnut, polar, radar, scatter y bubble
-                  [1-3216] StaticText: Charts lab
-                  [1-3218] StaticText: barras, líneas, pie, doughnut, polar, radar, scatter y bubble
-                [1-3219] div
-                  [1-3220] article
-                    [1-3222] heading: BAR · UNA SERIE
-                    [1-3228] image
-                      [1-3232] StaticText: 0
-                      [1-3235] StaticText: 1 M
-                      [1-3238] StaticText: 2 M
-                      [1-3241] StaticText: 3 M
-                      [1-3244] StaticText: 4 M
-                      [1-3247] StaticText: 5 M
-                      [1-3250] StaticText: 6 M
-                      [1-3253] StaticText: 7 M
-                      [1-3256] StaticText: 8 M
-                      [1-3258] StaticText: Ene
-                      [1-3260] StaticText: Feb
-                      [1-3262] StaticText: Mar
-                      [1-3264] StaticText: Abr
-                      [1-3266] StaticText: May
-                      [1-3268] StaticText: Jun
-                  [1-3284] article
-                    [1-3286] heading: BAR · 3 SERIES AGRUPADAS
-                    [1-3292] image
-                      [1-3296] StaticText: 0
-                      [1-3299] StaticText: 10
-                      [1-3302] StaticText: 20
-                      [1-3305] StaticText: 30
-                      [1-3308] StaticText: 40
-                      [1-3311] StaticText: 50
-                      [1-3314] StaticText: 60
-                      [1-3316] StaticText: Q1
-                      [1-3318] StaticText: Q2
-                      [1-3320] StaticText: Q3
-                      [1-3322] StaticText: Q4
-                  [1-3344] article
-                    [1-3346] heading: BAR · APILADA
-                    [1-3352] image
-                      [1-3356] StaticText: 0
-                      [1-3359] StaticText: 10
-                      [1-3362] StaticText: 20
-                      [1-3365] StaticText: 30
-                      [1-3368] StaticText: 40
-                      [1-3371] StaticText: 50
-                      [1-3373] StaticText: Ene
-                      [1-3375] StaticText: Feb
-                      [1-3377] StaticText: Mar
-                      [1-3379] StaticText: Abr
-                  [1-3401] article
-                    [1-3403] heading: BAR · HORIZONTAL
-                    [1-3409] image
-                      [1-3413] StaticText: 0
-                      [1-3416] StaticText: 200
-                      [1-3419] StaticText: 400
-                      [1-3422] StaticText: 600
-                      [1-3425] StaticText: 800
-                      [1-3428] StaticText: 1.000
-                      [1-3431] StaticText: 1.200
-                      [1-3434] StaticText: 1.400
-                      [1-3436] StaticText: Bogotá
-                      [1-3438] StaticText: Medellín
-                      [1-3440] StaticText: Cali
-                      [1-3442] StaticText: Barranquilla
-                      [1-3444] StaticText: Bucaramanga
-                  [1-3459] article
-                    [1-3461] heading: LINE · 2 SERIES, CURVA
-                    [1-3467] image
-                      [1-3471] StaticText: 0
-                      [1-3474] StaticText: 10
-                      [1-3477] StaticText: 20
-                      [1-3480] StaticText: 30
-                      [1-3483] StaticText: 40
-                      [1-3486] StaticText: 50
-                      [1-3489] StaticText: 60
-                      [1-3492] StaticText: 70
-                      [1-3494] StaticText: Ene
-                      [1-3496] StaticText: Feb
-                      [1-3498] StaticText: Mar
-                      [1-3500] StaticText: Abr
-                      [1-3502] StaticText: May
-                      [1-3504] StaticText: Jun
-                  [1-3531] article
-                    [1-3533] heading: LINE · ÁREA RELLENA
-                    [1-3539] image
-                      [1-3543] StaticText: 0
-                      [1-3546] StaticText: 50
-                      [1-3549] StaticText: 100
-                      [1-3552] StaticText: 150
-                      [1-3555] StaticText: 200
-                      [1-3558] StaticText: 250
-                      [1-3561] StaticText: 300
-                      [1-3563] StaticText: L
-                      [1-3565] StaticText: M
-                      [1-3567] StaticText: X
-                      [1-3569] StaticText: J
-                      [1-3571] StaticText: V
-                      [1-3573] StaticText: S
-                      [1-3575] StaticText: D
-                  [1-3597] article
-                    [1-3599] heading: PIE
-                    [1-3605] image
-                      [1-3610] StaticText: 45%
-                      [1-3613] StaticText: 25%
-                      [1-3616] StaticText: 18%
-                      [1-3619] StaticText: 12%
-                  [1-3627] article
-                    [1-3629] heading: DOUGHNUT
-                    [1-3635] image
-                      [1-3640] StaticText: 27%
-                      [1-3643] StaticText: 17%
-                      [1-3646] StaticText: 12%
-                      [1-3649] StaticText: 44%
-                      [1-3651] StaticText: 12,1 k
-                      [1-3653] StaticText: Activos
-                  [1-3661] article
-                    [1-3663] heading: POLAR AREA
-                    [1-3669] image
-                  [1-3688] article
-                    [1-3690] heading: RADAR · 2 SERIES
-                    [1-3696] image
-                      [1-3705] StaticText: Liquidez
-                      [1-3708] StaticText: Rentabilidad
-                      [1-3711] StaticText: Endeudamiento
-                      [1-3714] StaticText: Eficiencia
-                      [1-3717] StaticText: Crecimiento
-                  [1-3740] article
-                    [1-3742] heading: SCATTER
-                    [1-3748] image
-                      [1-3752] StaticText: 0
-                      [1-3755] StaticText: 100
-                      [1-3758] StaticText: 200
-                      [1-3761] StaticText: 300
-                      [1-3764] StaticText: 400
-                      [1-3767] StaticText: 500
-                      [1-3770] StaticText: 600
-                      [1-3773] StaticText: 700
-                      [1-3776] StaticText: 800
-                      [1-3779] StaticText: 900
-                      [1-3782] StaticText: 0
-                      [1-3785] StaticText: 10
-                      [1-3788] StaticText: 20
-                      [1-3791] StaticText: 30
-                      [1-3794] StaticText: 40
-                      [1-3797] StaticText: 50
-                      [1-3800] StaticText: 60
-                      [1-3803] StaticText: 70
-                      [1-3806] StaticText: 80
-                      [1-3809] StaticText: 90
-                      [1-3812] StaticText: 100
-                      [1-3815] StaticText: Antigüedad (días)
-                      [1-3817] StaticText: Saldo
+  [1-15] scrollable, html
+    [1-50] body
+      [1-51] banner
+        [1-85] button: ContaPyme — elegir paleta
+          [1-87] StaticText: conta
+          [1-89] StaticText: pyme
+        [1-6] is-button: Abrir preview en pantalla completa
+          [1-7] button: Abrir preview en pantalla completa
+          [1-145] StaticText: Listo
+        [1-150] switch: Cambiar a tema claro [checked]
+          [1-152] button: Cambiar a tema claro
+      [1-185] is-split-panel
+        [1-189] scrollable, nav: Componentes
+          [1-196] button: Inicio — home
+            [1-199] StaticText: Inicio
+          [1-200] button: Personalización — theming
+            [1-202] StaticText: Personalización
+          [1-203] button: Ecosistema JS — utilidades compartidas
+            [1-205] StaticText: Ecosistema JS
+          [1-206] group: ACCIONES
+            [1-210] button: Button is-button
+              [1-212] StaticText: Button
+              [1-214] StaticText: <is-button>
+            [1-215] button: Button Group is-button-group
+              [1-217] StaticText: Button Group
+              [1-219] StaticText: <is-button-group>
+            [1-220] button: Check Icon Button is-check-icon-button
+              [1-222] StaticText: Check Icon Button
+              [1-224] StaticText: <is-check-icon-button>
+            [1-225] button: Context Menu is-context-menu
+              [1-227] StaticText: Context Menu
+              [1-229] StaticText: <is-context-menu>
+            [1-230] button: Copy Button is-copy-button
+              [1-232] StaticText: Copy Button
+              [1-234] StaticText: <is-copy-button>
+            [1-235] button: Dropdown is-dropdown
+              [1-237] StaticText: Dropdown
+              [1-239] StaticText: <is-dropdown>
+            [1-240] button: Dropdown Item is-dropdown-item
+              [1-242] StaticText: Dropdown Item
+              [1-244] StaticText: <is-dropdown-item>
+            [1-245] button: Floating Action Button is-fab
+              [1-247] StaticText: Floating Action Button
+              [1-249] StaticText: <is-fab>
+            [1-250] button: Share Button is-share-button
+              [1-252] StaticText: Share Button
+              [1-254] StaticText: <is-share-button>
+            [1-255] button: Speed Dial is-speed-dial
+              [1-257] StaticText: Speed Dial
+              [1-259] StaticText: <is-speed-dial>
+            [1-260] button: Speed Dial Action is-speed-dial-action
+              [1-262] StaticText: Speed Dial Action
+              [1-264] StaticText: <is-speed-dial-action>
+          [1-265] group: MEDIA
+            [1-269] button: Avatar is-avatar
+              [1-271] StaticText: Avatar
+              [1-273] StaticText: <is-avatar>
+            [1-274] button: Barcode is-barcode
+              [1-276] StaticText: Barcode
+              [1-278] StaticText: <is-barcode>
+            [1-279] button: Barcode Scanner is-barcode-scanner
+              [1-281] StaticText: Barcode Scanner
+              [1-283] StaticText: <is-barcode-scanner>
+            [1-284] button: Explorador de iconos is-icon-explorer
+              [1-286] StaticText: Explorador de iconos
+              [1-288] StaticText: <is-icon-explorer>
+            [1-289] button: Icon is-icon
+              [1-291] StaticText: Icon
+              [1-293] StaticText: <is-icon>
+            [1-294] button: Image Editor is-image-editor
+              [1-296] StaticText: Image Editor
+              [1-298] StaticText: <is-image-editor>
+            [1-299] button: Media Recorder is-media-recorder
+              [1-301] StaticText: Media Recorder
+              [1-303] StaticText: <is-media-recorder>
+            [1-304] button: QR Code is-qrcode
+              [1-306] StaticText: QR Code
+              [1-308] StaticText: <is-qrcode>
+            [1-309] button: Speech is-speech
+              [1-311] StaticText: Speech
+              [1-313] StaticText: <is-speech>
+            [1-314] button: Theme Img is-theme-img
+              [1-316] StaticText: Theme Img
+              [1-318] StaticText: <is-theme-img>
+            [1-319] button: Video is-video
+              [1-321] StaticText: Video
+              [1-323] StaticText: <is-video>
+            [1-324] button: Video Playlist is-video-playlist
+              [1-326] StaticText: Video Playlist
+              [1-328] StaticText: <is-video-playlist>
+          [1-329] group: FEEDBACK
+            [1-333] button: Badge is-badge
+              [1-335] StaticText: Badge
+              [1-337] StaticText: <is-badge>
+            [1-338] button: CDN Snippet is-cdn-snippet
+              [1-340] StaticText: CDN Snippet
+              [1-342] StaticText: <is-cdn-snippet>
+            [1-343] button: Confirm Modal is-confirm-modal
+              [1-345] StaticText: Confirm Modal
+              [1-347] StaticText: <is-confirm-modal>
+            [1-348] button: Palette Selector is-palette-selector
+              [1-350] StaticText: Palette Selector
+              [1-352] StaticText: <is-palette-selector>
+            [1-353] button: Popconfirm is-popconfirm
+              [1-355] StaticText: Popconfirm
+              [1-357] StaticText: <is-popconfirm>
+            [1-358] button: Prefs Clear is-prefs-clear
+              [1-360] StaticText: Prefs Clear
+              [1-362] StaticText: <is-prefs-clear>
+            [1-363] button: Progress Bar is-progress-bar
+              [1-365] StaticText: Progress Bar
+              [1-367] StaticText: <is-progress-bar>
+            [1-368] button: Progress Ring is-progress-ring
+              [1-370] StaticText: Progress Ring
+              [1-372] StaticText: <is-progress-ring>
+            [1-373] button: Skeleton is-skeleton
+              [1-375] StaticText: Skeleton
+              [1-377] StaticText: <is-skeleton>
+            [1-378] button: Spinner is-spinner
+              [1-380] StaticText: Spinner
+              [1-382] StaticText: <is-spinner>
+            [1-383] button: Tag is-tag
+              [1-385] StaticText: Tag
+              [1-387] StaticText: <is-tag>
+            [1-388] button: Theme Toggle is-theme-toggle
+              [1-390] StaticText: Theme Toggle
+              [1-392] StaticText: <is-theme-toggle>
+            [1-393] button: Toast is-toast
+              [1-395] StaticText: Toast
+              [1-397] StaticText: <is-toast>
+            [1-398] button: Toast Item is-toast-item
+              [1-400] StaticText: Toast Item
+              [1-402] StaticText: <is-toast-item>
+            [1-403] button: Tooltip is-tooltip
+              [1-405] StaticText: Tooltip
+              [1-407] StaticText: <is-tooltip>
+          [1-408] group: LAYOUT
+            [1-412] button: Callout is-callout
+              [1-414] StaticText: Callout
+              [1-416] StaticText: <is-callout>
+            [1-417] button: Card is-card
+              [1-419] StaticText: Card
+              [1-421] StaticText: <is-card>
+            [1-422] button: Details is-details
+              [1-424] StaticText: Details
+              [1-426] StaticText: <is-details>
+            [1-427] button: Dialog is-dialog
+              [1-429] StaticText: Dialog
+              [1-431] StaticText: <is-dialog>
+            [1-432] button: Divider is-divider
+              [1-434] StaticText: Divider
+              [1-436] StaticText: <is-divider>
+            [1-437] button: Dock is-dock
+              [1-439] StaticText: Dock
+              [1-441] StaticText: <is-dock>
+            [1-442] button: Dock Item is-dock-item
+              [1-444] StaticText: Dock Item
+              [1-446] StaticText: <is-dock-item>
+            [1-447] button: Drawer is-drawer
+              [1-449] StaticText: Drawer
+              [1-451] StaticText: <is-drawer>
+            [1-452] button: Main is-main
+              [1-454] StaticText: Main
+              [1-456] StaticText: <is-main>
+            [1-457] button: Panel dividido is-split-panel
+              [1-459] StaticText: Panel dividido
+              [1-461] StaticText: <is-split-panel>
+            [1-462] button: Scrollspy is-scrollspy
+              [1-464] StaticText: Scrollspy
+              [1-466] StaticText: <is-scrollspy>
+          [1-467] group: NAVEGACIÓN
+            [1-471] button: Breadcrumb is-breadcrumb
+              [1-473] StaticText: Breadcrumb
+              [1-475] StaticText: <is-breadcrumb>
+            [1-476] button: Breadcrumb Item is-breadcrumb-item
+              [1-478] StaticText: Breadcrumb Item
+              [1-480] StaticText: <is-breadcrumb-item>
+            [1-481] button: Carousel is-carousel
+              [1-483] StaticText: Carousel
+              [1-485] StaticText: <is-carousel>
+            [1-486] button: Carousel Item is-carousel-item
+              [1-488] StaticText: Carousel Item
+              [1-490] StaticText: <is-carousel-item>
+            [1-491] button: Mega Menu is-mega-menu
+              [1-493] StaticText: Mega Menu
+              [1-495] StaticText: <is-mega-menu>
+            [1-496] button: Scroller is-scroller
+              [1-498] StaticText: Scroller
+              [1-500] StaticText: <is-scroller>
+            [1-501] button: Stepper is-stepper
+              [1-503] StaticText: Stepper
+              [1-505] StaticText: <is-stepper>
+            [1-506] button: Stepper Step is-stepper-step
+              [1-508] StaticText: Stepper Step
+              [1-510] StaticText: <is-stepper-step>
+            [1-511] button: Tab is-tab
+              [1-513] StaticText: Tab
+              [1-515] StaticText: <is-tab>
+            [1-516] button: Tab Group is-tab-group
+              [1-518] StaticText: Tab Group
+              [1-520] StaticText: <is-tab-group>
+            [1-521] button: Tab Panel is-tab-panel
+              [1-523] StaticText: Tab Panel
+              [1-525] StaticText: <is-tab-panel>
+            [1-526] button: Tree is-tree
+              [1-528] StaticText: Tree
+              [1-530] StaticText: <is-tree>
+            [1-531] button: Tree Item is-tree-item
+              [1-533] StaticText: Tree Item
+              [1-535] StaticText: <is-tree-item>
+          [1-536] group: FORMULARIOS
+            [1-540] button: Checkbox is-checkbox
+              [1-542] StaticText: Checkbox
+              [1-544] StaticText: <is-checkbox>
+            [1-545] button: Color Picker is-color-picker
+              [1-547] StaticText: Color Picker
+              [1-549] StaticText: <is-color-picker>
+            [1-550] button: Combobox is-combobox
+              [1-552] StaticText: Combobox
+              [1-554] StaticText: <is-combobox>
+            [1-555] button: Date Field is-date-field
+              [1-557] StaticText: Date Field
+              [1-559] StaticText: <is-date-field>
+            [1-560] button: Date Input is-date-input
+              [1-562] StaticText: Date Input
+              [1-564] StaticText: <is-date-input>
+            [1-565] button: Date Picker is-date-picker
+              [1-567] StaticText: Date Picker
+              [1-569] StaticText: <is-date-picker>
+            [1-570] button: Date Range Input is-date-range-input
+              [1-572] StaticText: Date Range Input
+              [1-574] StaticText: <is-date-range-input>
+            [1-575] button: Date Range Picker is-date-range-picker
+              [1-577] StaticText: Date Range Picker
+              [1-579] StaticText: <is-date-range-picker>
+            [1-580] button: Date Time Field is-date-time-field
+              [1-582] StaticText: Date Time Field
+              [1-584] StaticText: <is-date-time-field>
+            [1-585] button: Date Time Input is-date-time-input
+              [1-587] StaticText: Date Time Input
+              [1-589] StaticText: <is-date-time-input>
+            [1-590] button: Digital Clock is-digital-clock
+              [1-592] StaticText: Digital Clock
+              [1-594] StaticText: <is-digital-clock>
+            [1-595] button: Document Editor is-doc-editor
+              [1-597] StaticText: Document Editor
+              [1-599] StaticText: <is-doc-editor>
+            [1-600] button: Dropzone is-dropzone
+              [1-602] StaticText: Dropzone
+              [1-604] StaticText: <is-dropzone>
+            [1-605] button: Duration Picker is-duration-picker
+              [1-607] StaticText: Duration Picker
+              [1-609] StaticText: <is-duration-picker>
+            [1-610] button: File Input is-file-input
+              [1-612] StaticText: File Input
+              [1-614] StaticText: <is-file-input>
+            [1-615] button: Full Calendar is-full-calendar
+              [1-617] StaticText: Full Calendar
+              [1-619] StaticText: <is-full-calendar>
+            [1-620] button: Inline Edit is-inline-edit
+              [1-622] StaticText: Inline Edit
+              [1-624] StaticText: <is-inline-edit>
+            [1-625] button: Input is-input
+              [1-627] StaticText: Input
+              [1-629] StaticText: <is-input>
+            [1-630] button: Masked Input is-masked-input
+              [1-632] StaticText: Masked Input
+              [1-634] StaticText: <is-masked-input>
+            [1-635] button: Mention is-mention
+              [1-637] StaticText: Mention
+              [1-639] StaticText: <is-mention>
+            [1-640] button: Month Calendar is-month-calendar
+              [1-642] StaticText: Month Calendar
+              [1-644] StaticText: <is-month-calendar>
+            [1-645] button: Option is-option
+              [1-647] StaticText: Option
+              [1-649] StaticText: <is-option>
+            [1-650] button: Pin Input is-pin-input
+              [1-652] StaticText: Pin Input
+              [1-654] StaticText: <is-pin-input>
+            [1-655] button: Radio is-radio
+              [1-657] StaticText: Radio
+              [1-659] StaticText: <is-radio>
+            [1-660] button: Radio Group is-radio-group
+              [1-662] StaticText: Radio Group
+              [1-664] StaticText: <is-radio-group>
+            [1-665] button: Rating is-rating
+              [1-667] StaticText: Rating
+              [1-669] StaticText: <is-rating>
+            [1-670] button: Rich Text Editor is-rte
+              [1-672] StaticText: Rich Text Editor
+              [1-674] StaticText: <is-rte>
+            [1-675] button: Select is-select
+              [1-677] StaticText: Select
+              [1-679] StaticText: <is-select>
+            [1-680] button: Signature is-signature
+              [1-682] StaticText: Signature
+              [1-684] StaticText: <is-signature>
+            [1-685] button: Slider is-slider
+              [1-687] StaticText: Slider
+              [1-689] StaticText: <is-slider>
+            [1-690] button: Switch is-switch
+              [1-692] StaticText: Switch
+              [1-694] StaticText: <is-switch>
+            [1-695] button: Textarea is-textarea
+              [1-697] StaticText: Textarea
+              [1-699] StaticText: <is-textarea>
+            [1-700] button: Time Clock is-time-clock
+              [1-702] StaticText: Time Clock
+              [1-704] StaticText: <is-time-clock>
+            [1-705] button: Time Field is-time-field
+              [1-707] StaticText: Time Field
+              [1-709] StaticText: <is-time-field>
+            [1-710] button: Time Input is-time-input
+              [1-712] StaticText: Time Input
+              [1-714] StaticText: <is-time-input>
+            [1-715] button: Year Calendar is-year-calendar
+              [1-717] StaticText: Year Calendar
+              [1-719] StaticText: <is-year-calendar>
+          [1-720] group: CÓDIGO
+            [1-724] button: Code is-code
+              [1-726] StaticText: Code
+              [1-728] StaticText: <is-code>
+          [1-729] group: DATOS
+            [1-733] button: AG Grid is-ag-grid
+              [1-735] StaticText: AG Grid
+              [1-737] StaticText: <is-ag-grid>
+            [1-738] button: Data Grid is-data-grid
+              [1-740] StaticText: Data Grid
+              [1-742] StaticText: <is-data-grid>
+            [1-743] button: Kanban is-kanban
+              [1-745] StaticText: Kanban
+              [1-747] StaticText: <is-kanban>
+            [1-748] button: Kanban Card is-kanban-card
+              [1-750] StaticText: Kanban Card
+              [1-752] StaticText: <is-kanban-card>
+            [1-753] button: Kanban Column is-kanban-column
+              [1-755] StaticText: Kanban Column
+              [1-757] StaticText: <is-kanban-column>
+            [1-758] button: Pivot Table is-pivot-table
+              [1-760] StaticText: Pivot Table
+              [1-762] StaticText: <is-pivot-table>
+            [1-763] button: Spreadsheet is-spreadsheet
+              [1-765] StaticText: Spreadsheet
+              [1-767] StaticText: <is-spreadsheet>
+            [1-768] button: Stat KPI is-stat
+              [1-770] StaticText: Stat KPI
+              [1-772] StaticText: <is-stat>
+            [1-773] button: Transfer is-transfer
+              [1-775] StaticText: Transfer
+              [1-777] StaticText: <is-transfer>
+            [1-778] button: Transfer Item is-transfer-item
+              [1-780] StaticText: Transfer Item
+              [1-782] StaticText: <is-transfer-item>
+          [1-783] group: GRÁFICOS
+            [1-787] button: Bar Chart is-bar-chart
+              [1-789] StaticText: Bar Chart
+              [1-791] StaticText: <is-bar-chart>
+            [1-792] button: Bubble Chart is-bubble-chart
+              [1-794] StaticText: Bubble Chart
+              [1-796] StaticText: <is-bubble-chart>
+            [1-797] button: Chart is-chart
+              [1-799] StaticText: Chart
+              [1-801] StaticText: <is-chart>
+            [1-802] button: Doughnut Chart is-doughnut-chart
+              [1-804] StaticText: Doughnut Chart
+              [1-806] StaticText: <is-doughnut-chart>
+            [1-807] button: Funnel Chart is-funnel-chart
+              [1-809] StaticText: Funnel Chart
+              [1-811] StaticText: <is-funnel-chart>
+            [1-812] button: Gauge is-gauge
+              [1-814] StaticText: Gauge
+              [1-816] StaticText: <is-gauge>
+            [1-817] button: Heatmap is-heatmap
+              [1-819] StaticText: Heatmap
+              [1-821] StaticText: <is-heatmap>
+            [1-822] button: Line Chart is-line-chart
+              [1-824] StaticText: Line Chart
+              [1-826] StaticText: <is-line-chart>
+            [1-827] button: Map Marker is-map-marker
+              [1-829] StaticText: Map Marker
+              [1-831] StaticText: <is-map-marker>
+            [1-832] button: Maps is-maps
+              [1-834] StaticText: Maps
+              [1-836] StaticText: <is-maps>
+            [1-837] button: Pie Chart is-pie-chart
+              [1-839] StaticText: Pie Chart
+              [1-841] StaticText: <is-pie-chart>
+            [1-842] button: Polar Area Chart is-polar-area-chart
+              [1-844] StaticText: Polar Area Chart
+              [1-846] StaticText: <is-polar-area-chart>
+            [1-847] button: Radar Chart is-radar-chart
+              [1-849] StaticText: Radar Chart
+              [1-851] StaticText: <is-radar-chart>
+            [1-852] button: Scatter Chart is-scatter-chart
+              [1-854] StaticText: Scatter Chart
+              [1-856] StaticText: <is-scatter-chart>
+            [1-857] button: Sparkline is-sparkline
+              [1-859] StaticText: Sparkline
+              [1-861] StaticText: <is-sparkline>
+            [1-862] button: Treemap is-treemap
+              [1-864] StaticText: Treemap
+              [1-866] StaticText: <is-treemap>
+            [1-867] button: Waterfall Chart is-waterfall-chart
+              [1-869] StaticText: Waterfall Chart
+              [1-871] StaticText: <is-waterfall-chart>
+          [1-872] group: DIAGRAMAS
+            [1-876] button: Diagrama de bloques is-block-diagram
+              [1-878] StaticText: Diagrama de bloques
+              [1-880] StaticText: <is-block-diagram>
+            [1-881] button: Diagrama de carriles is-swimlane-diagram
+              [1-883] StaticText: Diagrama de carriles
+              [1-885] StaticText: <is-swimlane-diagram>
+            [1-886] button: Diagrama de casos de uso is-use-case-diagram
+              [1-888] StaticText: Diagrama de casos de uso
+              [1-890] StaticText: <is-use-case-diagram>
+            [1-891] button: Diagrama de clases is-class-diagram
+              [1-893] StaticText: Diagrama de clases
+              [1-895] StaticText: <is-class-diagram>
+            [1-896] button: Diagrama de componentes is-component-diagram
+              [1-898] StaticText: Diagrama de componentes
+              [1-900] StaticText: <is-component-diagram>
+            [1-901] button: Diagrama de estados is-state-diagram
+              [1-903] StaticText: Diagrama de estados
+              [1-905] StaticText: <is-state-diagram>
+            [1-906] button: Diagrama de flujo is-flowchart
+              [1-908] StaticText: Diagrama de flujo
+              [1-910] StaticText: <is-flowchart>
+            [1-911] button: Diagrama de Gantt is-gantt
+              [1-913] StaticText: Diagrama de Gantt
+              [1-915] StaticText: <is-gantt>
+            [1-916] button: Diagrama de Sankey is-sankey-diagram
+              [1-918] StaticText: Diagrama de Sankey
+              [1-920] StaticText: <is-sankey-diagram>
+            [1-921] button: Diagrama de secuencia is-sequence-diagram
+              [1-923] StaticText: Diagrama de secuencia
+              [1-925] StaticText: <is-sequence-diagram>
+            [1-926] button: Diagrama de Venn is-venn-diagram
+              [1-928] StaticText: Diagrama de Venn
+              [1-930] StaticText: <is-venn-diagram>
+            [1-931] button: Diagrama entidad-relación is-er-diagram
+              [1-933] StaticText: Diagrama entidad-relación
+              [1-935] StaticText: <is-er-diagram>
+            [1-936] button: Línea de tiempo is-timeline
+              [1-938] StaticText: Línea de tiempo
+              [1-940] StaticText: <is-timeline>
+            [1-941] button: Mapa de recorrido is-journey-map
+              [1-943] StaticText: Mapa de recorrido
+              [1-945] StaticText: <is-journey-map>
+            [1-946] button: Mapa mental is-mindmap
+              [1-948] StaticText: Mapa mental
+              [1-950] StaticText: <is-mindmap>
+            [1-951] button: Matriz de cuadrantes is-quadrant-chart
+              [1-953] StaticText: Matriz de cuadrantes
+              [1-955] StaticText: <is-quadrant-chart>
+            [1-956] button: Org Chart is-org-chart
+              [1-958] StaticText: Org Chart
+              [1-960] StaticText: <is-org-chart>
+            [1-961] button: Visor de diagramas is-diagram-lightbox
+              [1-963] StaticText: Visor de diagramas
+              [1-965] StaticText: <is-diagram-lightbox>
+          [1-966] group: OVERLAYS
+            [1-970] button: Command Palette is-command-palette
+              [1-972] StaticText: Command Palette
+              [1-974] StaticText: <is-command-palette>
+            [1-975] button: PDF Viewer is-pdf-viewer
+              [1-977] StaticText: PDF Viewer
+              [1-979] StaticText: <is-pdf-viewer>
+            [1-980] button: Window is-window
+              [1-982] StaticText: Window
+              [1-984] StaticText: <is-window>
+          [1-985] group: UTILERÍAS
+            [1-989] button: Editor Markdown is-md-editor
+              [1-991] StaticText: Editor Markdown
+              [1-993] StaticText: <is-md-editor>
+            [1-994] button: Formato is-format
+              [1-996] StaticText: Formato
+              [1-998] StaticText: <is-format>
+            [1-999] button: Formato de bytes is-format-bytes
+              [1-1001] StaticText: Formato de bytes
+              [1-1003] StaticText: <is-format-bytes>
+            [1-1004] button: Formato de fecha is-format-date
+              [1-1006] StaticText: Formato de fecha
+              [1-1008] StaticText: <is-format-date>
+            [1-1009] button: Formato de número is-format-number
+              [1-1011] StaticText: Formato de número
+              [1-1013] StaticText: <is-format-number>
+            [1-1014] button: IsUi is-ui
+              [1-1016] StaticText: IsUi
+              [1-1018] StaticText: <is-ui>
+            [1-1019] button: Lightbox is-lightbox
+              [1-1021] StaticText: Lightbox
+              [1-1023] StaticText: <is-lightbox>
+            [1-1024] button: Observador de intersección is-intersection-observer
+              [1-1026] StaticText: Observador de intersección
+              [1-1028] StaticText: <is-intersection-observer>
+            [1-1029] button: Observador de mutación is-mutation-observer
+              [1-1031] StaticText: Observador de mutación
+              [1-1033] StaticText: <is-mutation-observer>
+            [1-1034] button: Observer is-observer
+              [1-1036] StaticText: Observer
+              [1-1038] StaticText: <is-observer>
+            [1-1039] button: Offscreen Canvas is-offscreen-canvas
+              [1-1041] StaticText: Offscreen Canvas
+              [1-1043] StaticText: <is-offscreen-canvas>
+            [1-1044] button: Popover is-popover
+              [1-1046] StaticText: Popover
+              [1-1048] StaticText: <is-popover>
+            [1-1049] button: Render Markdown is-md-render
+              [1-1051] StaticText: Render Markdown
+              [1-1053] StaticText: <is-md-render>
+            [1-1054] button: Resize Observer is-resize-observer
+              [1-1056] StaticText: Resize Observer
+              [1-1058] StaticText: <is-resize-observer>
+            [1-1059] button: Tiempo relativo is-relative-time
+              [1-1061] StaticText: Tiempo relativo
+              [1-1063] StaticText: <is-relative-time>
+            [1-1064] button: Wake Lock is-wake-lock
+              [1-1066] StaticText: Wake Lock
+              [1-1068] StaticText: <is-wake-lock>
+          [1-1069] group: ISP-SVELTECOMPONENTS
+            [1-1073] button: Accordion Group is-accordion-group
+              [1-1076] StaticText: Accordion Group
+              [1-1078] StaticText: <is-accordion-group>
+            [1-1079] button: Block Layout is-block-layout
+              [1-1082] StaticText: Block Layout
+              [1-1084] StaticText: <is-block-layout>
+            [1-1085] button: Btn Ref is-btn-ref
+              [1-1088] StaticText: Btn Ref
+              [1-1090] StaticText: <is-btn-ref>
+            [1-1091] button: Catálogo Gen is-catalogo-gen
+              [1-1094] StaticText: Catálogo Gen
+              [1-1096] StaticText: <is-catalogo-gen>
+            [1-1097] button: Confirm Delete is-confirm-delete
+              [1-1100] StaticText: Confirm Delete
+              [1-1102] StaticText: <is-confirm-delete>
+            [1-1103] button: Flex Layout is-flex-layout
+              [1-1106] StaticText: Flex Layout
+              [1-1108] StaticText: <is-flex-layout>
+            [1-1109] button: Flex Options is-flex-options
+              [1-1112] StaticText: Flex Options
+              [1-1114] StaticText: <is-flex-options>
+            [1-1115] button: Float Card is-float-card
+              [1-1118] StaticText: Float Card
+              [1-1120] StaticText: <is-float-card>
+            [1-1121] button: Form is-form
+              [1-1124] StaticText: Form
+              [1-1126] StaticText: <is-form>
+            [1-1127] button: Grid Layout is-grid-layout
+              [1-1130] StaticText: Grid Layout
+              [1-1132] StaticText: <is-grid-layout>
+            [1-1133] button: Heading is-heading
+              [1-1136] StaticText: Heading
+              [1-1138] StaticText: <is-heading>
+            [1-1139] button: Loading Overlay is-loading-overlay
+              [1-1142] StaticText: Loading Overlay
+              [1-1144] StaticText: <is-loading-overlay>
+            [1-1145] button: Modal Verificación is-modal-verificacion
+              [1-1148] StaticText: Modal Verificación
+              [1-1150] StaticText: <is-modal-verificacion>
+            [1-1151] button: Text is-text
+              [1-1154] StaticText: Text
+              [1-1156] StaticText: <is-text>
+            [1-1157] button: Tree View is-tree-view
+              [1-1160] StaticText: Tree View
+              [1-1162] StaticText: <is-tree-view>
+        [1-190] separator: Redimensionar panel
+        [1-5] scrollable, is-main
+          [1-1176] div
+            [1-1179] progressbar
+            [1-1183] region: Construye más rápido con UI nativa y tokens de marca
+              [1-1186] div
+                [1-1187] paragraph
+                  [1-1189] StaticText: IS WEB COMPONENTS
+                [1-11] heading: Construye más rápido con UI nativa y tokens de marca
+                  [1-1191] StaticText: Construye más rápido
+                  [1-1192] StaticText: con UI nativa y tokens de marca
+                [1-1193] paragraph
+                  [1-1194] StaticText: Galería de Web Components vanilla (
+                  [1-1195] code
+                    [1-1196] StaticText: is-*
+                  [1-1197] StaticText: ) para InSoft, ContaPyme y AgroWin. Shadow DOM, tokens
+                  [1-1198] code
+                    [1-1199] StaticText: --is-*
+                  [1-13] StaticText: y charts animados listos para producción.
+                [1-12] div
+                  [1-1200] is-button
+                    [1-1202] button: Explorar componentes
+                    [1-1226] StaticText: Listo
+                  [1-1232] is-button
+                    [1-1234] button: Ver is-button
+                    [1-1257] StaticText: Listo
+                  [1-1258] is-button
+                    [1-1260] button: Ver charts
+                    [1-1283] StaticText: Listo
+                [1-1284] div
+                  [1-1292] StaticText: Vanilla
+                  [1-1333] StaticText: CDN / ES modules
+                  [1-1374] StaticText: 3 paletas
+                  [1-1415] StaticText: 80+ componentes
+                [1-1449] div: Consumo por CDN
+                  [1-1450] div
+                    [1-1456] StaticText: index.html
+                    [1-1457] tablist: Pestañas de consumo
+                      [1-1458] tab: POR COMPONENTE
+                      [1-1460] tab: BUNDLE ÚNICO
+                  [1-1462] div
+                    [1-1463] div
+                      [1-1465] StaticText: Carga el tema base y los componentes que necesites
+                      [1-1466] div
+                        [1-1467] button: Copiar snippet JS y CSS
+                          [1-1474] StaticText: Copiar
+                        [1-1475] button: Descargar index.html de prueba
+                          [1-1482] StaticText: Descargar HTML
+                    [1-1483] is-code
+                      [1-4855] StaticText: 
+                      [1-1490] scrollable, div
+                        [1-1491] pre: Código
+                          [1-1494] StaticText: <!-- Carga solo los componentes que necesites -->
+                          [1-1495] div
+                            [1-1497] StaticText: <script
+                            [1-4856] StaticText: 
+                            [1-1499] StaticText: type
+                            [1-1501] StaticText: =
+                            [1-1503] StaticText: "module"
+                            [1-4857] StaticText: 
+                            [1-1505] StaticText: src
+                            [1-1507] StaticText: =
+                            [1-1509] StaticText: "https://cdn.jsdelivr.net/gh/Jeff-Aporta/is-webcomponents@main/dist/cdn/actions/button.min.js"
+                            [1-1511] StaticText: >
+                            [1-1513] StaticText: </script>
+                          [1-1514] div
+                            [1-1516] StaticText: <script
+                            [1-4858] StaticText: 
+                            [1-1518] StaticText: type
+                            [1-1520] StaticText: =
+                            [1-1522] StaticText: "module"
+                            [1-4859] StaticText: 
+                            [1-1524] StaticText: src
+                            [1-1526] StaticText: =
+                            [1-1528] StaticText: "https://cdn.jsdelivr.net/gh/Jeff-Aporta/is-webcomponents@main/dist/cdn/feedback/badge.min.js"
+                            [1-1530] StaticText: >
+                            [1-1532] StaticText: </script>
+                          [1-1533] div
+                            [1-1535] StaticText: <script
+                            [1-4860] StaticText: 
+                            [1-1537] StaticText: type
+                            [1-1539] StaticText: =
+                            [1-1541] StaticText: "module"
+                            [1-4861] StaticText: 
+                            [1-1543] StaticText: src
+                            [1-1545] StaticText: =
+                            [1-1547] StaticText: "https://cdn.jsdelivr.net/gh/Jeff-Aporta/is-webcomponents@main/dist/cdn/forms/rating.min.js"
+                            [1-1549] StaticText: >
+                            [1-1551] StaticText: </script>
+                          [1-1552] div
+                            [1-1554] StaticText: <script
+                            [1-4862] StaticText: 
+                            [1-1556] StaticText: type
+                            [1-1558] StaticText: =
+                            [1-1560] StaticText: "module"
+                            [1-4863] StaticText: 
+                            [1-1562] StaticText: src
+                            [1-1564] StaticText: =
+                            [1-1566] StaticText: "https://cdn.jsdelivr.net/gh/Jeff-Aporta/is-webcomponents@main/dist/cdn/forms/switch.min.js"
+                            [1-1568] StaticText: >
+                            [1-1570] StaticText: </script>
+                          [1-1571] div
+                            [1-1573] StaticText: <script
+                            [1-4864] StaticText: 
+                            [1-1575] StaticText: type
+                            [1-1577] StaticText: =
+                            [1-1579] StaticText: "module"
+                            [1-4865] StaticText: 
+                            [1-1581] StaticText: src
+                            [1-1583] StaticText: =
+                            [1-1585] StaticText: "https://cdn.jsdelivr.net/gh/Jeff-Aporta/is-webcomponents@main/dist/cdn/data-viz/sparkline.min.js"
+                            [1-1587] StaticText: >
+                            [1-1589] StaticText: </script>
+                          [1-1592] StaticText: <!-- ...y úsalos como HTML nativo -->
+                          [1-1593] div
+                            [1-1595] StaticText: <is-button
+                            [1-4866] StaticText: 
+                            [1-1597] StaticText: color
+                            [1-1599] StaticText: =
+                            [1-1601] StaticText: "brand"
+                            [1-1603] StaticText: >
+                            [1-1604] StaticText: Explorar
+                            [1-1606] StaticText: </is-button
+                            [1-1608] StaticText: >
+                          [1-1609] div
+                            [1-1611] StaticText: <is-badge
+                            [1-4867] StaticText: 
+                            [1-1613] StaticText: color
+                            [1-1615] StaticText: =
+                            [1-1617] StaticText: "success"
+                            [1-1619] StaticText: >
+                            [1-1620] StaticText: +12%
+                            [1-1622] StaticText: </is-badge
+                            [1-1624] StaticText: >
+                          [1-1625] div
+                            [1-1627] StaticText: <is-rating
+                            [1-4868] StaticText: 
+                            [1-1629] StaticText: value
+                            [1-1631] StaticText: =
+                            [1-1633] StaticText: "4"
+                            [1-4869] StaticText: 
+                            [1-1635] StaticText: readonly
+                            [1-1637] StaticText: >
+                            [1-1639] StaticText: </is-rating
+                            [1-1641] StaticText: >
+                          [1-1642] div
+                            [1-1644] StaticText: <is-switch
+                            [1-4870] StaticText: 
+                            [1-1646] StaticText: checked
+                            [1-1648] StaticText: >
+                            [1-1650] StaticText: </is-switch
+                            [1-1652] StaticText: >
+                          [1-1653] div
+                            [1-1655] StaticText: <is-sparkline
+                            [1-4871] StaticText: 
+                            [1-1657] StaticText: values
+                            [1-1659] StaticText: =
+                            [1-1661] StaticText: "4,6,5,8,7,11,13"
+                            [1-1663] StaticText: >
+                            [1-1665] StaticText: </is-sparkline
+                            [1-1667] StaticText: >
+                      [1-4872] StaticText: 
+                  [1-1845] div: Resultado renderizado en vivo
+                    [1-1848] StaticText: RESULTADO · EN VIVO
+                    [1-1849] div
+                      [1-1850] is-button
+                        [1-1852] button: Explorar
+                        [1-1875] StaticText: Listo
+                      [1-1883] StaticText: +12%
+                      [1-1892] slider
+                      [1-1969] switch: Demo switch [checked]
+                      [1-1987] div
+                        [1-1988] image: Sparkline: 7 valores, mínimo 4, máximo 13, último 13, tendencia en alza.
+                        [1-1993] StaticText: Sparkline: 7 valores, mínimo 4, máximo 13, último 13, tendencia en alza.
+            [1-1994] complementary: Vista previa de componentes
+              [1-1996] div
+                [1-1999] div
+                  [1-2001] div
+                    [1-2004] paragraph
+                      [1-2005] StaticText: INGRESOS · ÚLTIMOS 30 DÍAS
+                    [1-2006] div
+                      [1-2007] div
+                        [1-2009] StaticText: $ 248,5k
+                        [1-2011] StaticText: ▲ 12.4% vs mes anterior
+                      [1-2019] StaticText: +12%
+                    [1-2025] div
+                      [1-2026] image: Sparkline, "Ingresos diarios": 20 valores, mínimo 12, máximo 52, último 52, tendencia en alza.
+                      [1-2031] StaticText: Sparkline, "Ingresos diarios": 20 valores, mínimo 12, máximo 52, último 52, tendencia en alza.
+                    [1-2032] button: Abrir demo de is-sparkline
+                  [1-2040] div
+                    [1-2043] paragraph
+                      [1-2044] StaticText: POR CATEGORÍA
+                    [1-2045] paragraph
+                      [1-2046] StaticText: Ingresos del mes
+                    [1-2049] div
+                      [1-2050] image: Gráfico bar con 5 categorías y 1 serie
+                        [1-2054] StaticText: 0
+                        [1-2057] StaticText: 10
+                        [1-2060] StaticText: 20
+                        [1-2063] StaticText: 30
+                        [1-2066] StaticText: 40
+                        [1-2069] StaticText: 50
+                        [1-2072] StaticText: 60
+                        [1-2075] StaticText: 70
+                        [1-2078] StaticText: 80
+                        [1-2081] StaticText: 90
+                        [1-2083] StaticText: Servi…
+                        [1-2087] StaticText: Produ…
+                        [1-2091] StaticText: Suscr…
+                        [1-2095] StaticText: Sopor…
+                        [1-2099] StaticText: Otros
+                        [1-2102] graphics-symbol: Servicios: Ingresos: valor 82
+                        [1-2103] graphics-symbol: Productos: Ingresos: valor 64
+                        [1-2104] graphics-symbol: Suscripciones: Ingresos: valor 48
+                        [1-2105] graphics-symbol: Soporte: Ingresos: valor 31
+                        [1-2106] graphics-symbol: Otros: Ingresos: valor 14
+                      [1-2111] StaticText: Gráfico bar con 5 categorías y 1 serie
+                    [1-2116] button: Abrir demo de is-bar-chart
+                  [1-2124] div
+                    [1-2127] paragraph
+                      [1-2128] StaticText: MIX DE CARTERA
+                    [1-2129] paragraph
+                      [1-2130] StaticText: Activos vs Pasivos
+                    [1-2133] div
+                      [1-2134] image: Gráfico doughnut con 5 categorías y 1 serie
+                        [1-2137] graphics-symbol: Activo corriente: valor 35 · 35.0%
+                        [1-2139] StaticText: 35%
+                        [1-2140] graphics-symbol: Activo no corriente: valor 28 · 28.0%
+                        [1-2142] StaticText: 28%
+                        [1-2143] graphics-symbol: Pasivo corriente: valor 18 · 18.0%
+                        [1-2145] StaticText: 18%
+                        [1-2146] graphics-symbol: Pasivo no corriente: valor 9 · 9.0%
+                        [1-2148] StaticText: 9%
+                        [1-2149] graphics-symbol: Patrimonio: valor 10 · 10.0%
+                        [1-2151] StaticText: 10%
+                      [1-2156] StaticText: Gráfico doughnut con 5 categorías y 1 serie
+                    [1-2161] button: Abrir demo de is-doughnut-chart
+                [1-2169] div
+                  [1-2171] div
+                    [1-2174] paragraph
+                      [1-2175] StaticText: MRR · 6 MESES
+                    [1-2176] paragraph
+                      [1-2177] StaticText: Tendencia de crecimiento
+                    [1-2180] div
+                      [1-2181] image: Gráfico line con 6 categorías y 1 serie
+                        [1-2185] StaticText: 0
+                        [1-2188] StaticText: 10
+                        [1-2191] StaticText: 20
+                        [1-2194] StaticText: 30
+                        [1-2197] StaticText: 40
+                        [1-2200] StaticText: 50
+                        [1-2203] StaticText: 60
+                        [1-2206] StaticText: 70
+                        [1-2209] StaticText: 80
+                        [1-2211] StaticText: Jun
+                        [1-2213] StaticText: Jul
+                        [1-2215] StaticText: Ago
+                        [1-2217] StaticText: Sep
+                        [1-2219] StaticText: Oct
+                        [1-2221] StaticText: Nov
+                        [1-2226] graphics-symbol: Jun: MRR: valor 42
+                        [1-2227] graphics-symbol: Jul: MRR: valor 48
+                        [1-2228] graphics-symbol: Ago: MRR: valor 53
+                        [1-2229] graphics-symbol: Sep: MRR: valor 61
+                        [1-2230] graphics-symbol: Oct: MRR: valor 68
+                        [1-2231] graphics-symbol: Nov: MRR: valor 74
+                      [1-2239] StaticText: Gráfico line con 6 categorías y 1 serie
+                    [1-2244] button: Abrir demo de is-line-chart
+                  [1-2252] div
+                    [1-2255] paragraph
+                      [1-2256] StaticText: ADQUISICIÓN
+                    [1-2257] paragraph
+                      [1-2258] StaticText: Canales del mes
+                    [1-2261] div
+                      [1-2262] image: Gráfico polarArea con 6 categorías y 1 serie
+                        [1-2269] graphics-symbol: Orgánico: valor 34
+                        [1-2270] graphics-symbol: Directo: valor 28
+                        [1-2271] graphics-symbol: Social: valor 22
+                        [1-2272] graphics-symbol: Email: valor 18
+                        [1-2273] graphics-symbol: Referral: valor 12
+                        [1-2274] graphics-symbol: Paid: valor 9
+                      [1-2279] StaticText: Gráfico polarArea con 6 categorías y 1 serie
+                    [1-2284] button: Abrir demo de is-polar-area-chart
+                  [1-2292] div
+                    [1-2295] paragraph
+                      [1-2296] StaticText: Listo para producción
+                    [1-2297] list
+                      [1-2298] listitem
+                        [1-2305] span
+                          [1-2306] strong
+                            [1-2307] StaticText: Actions
+                          [1-2308] StaticText: — button, dropdown, copy-button
+                      [1-2309] listitem
+                        [1-2316] span
+                          [1-2317] strong
+                            [1-2318] StaticText: Feedback
+                          [1-2319] StaticText: — toast, tooltip, progress
+                      [1-2320] listitem
+                        [1-2327] span
+                          [1-2328] strong
+                            [1-2329] StaticText: Charts
+                          [1-2330] StaticText: — bar, line, donut, polar, radar
+                      [1-2331] listitem
+                        [1-2338] span
+                          [1-2339] strong
+                            [1-2340] StaticText: Data
+                          [1-2341] StaticText: — grid virtualizado, formatos i18n
+            [1-2342] region: Componentes en acción
+              [1-2344] div
+                [1-2345] div
+                  [1-2346] div
+                    [1-2347] heading: Componentes en acción
+                      [1-2348] StaticText: Componentes
+                      [1-2349] emphasis
+                        [1-2350] StaticText: en acción
+                    [1-2351] paragraph
+                      [1-2352] StaticText: Una vuelta por todo el catálogo: charts, diagramas, formatos y controles, con las 12 series de gráficos completas. Mismas APIs, mismos tokens, mismo shadow DOM.
+                  [1-2353] div
+                    [1-2361] StaticText: 12 tipos de chart
+                    [1-2402] StaticText: Sin dependencias
+                    [1-2443] StaticText: SVG puro
+                    [1-2484] StaticText: Tokens --is-*
+                [1-2924] div
+                  [1-2925] article
+                    [1-2928] heading: MIX DE CARTERA
+                    [1-2933] div
+                      [1-2934] image: Gráfico doughnut con 3 categorías y 1 serie
+                        [1-2937] graphics-symbol: Activos: valor 62 · 62.0%
+                        [1-2938] graphics-symbol: Pasivos: valor 23 · 23.0%
+                        [1-2939] graphics-symbol: Patrimonio: valor 15 · 15.0%
+                      [1-2944] StaticText: Gráfico doughnut con 3 categorías y 1 serie
+                    [1-2949] div
+                      [1-2951] StaticText: Distribución
+                      [1-2953] StaticText: 62% / 23% / 15%
+                    [1-2954] button: Abrir demo de is-doughnut-chart
+                  [1-2961] article
+                    [1-2964] heading: VENTAS POR SEDE
+                    [1-2969] div
+                      [1-2970] image: Gráfico bar con 6 categorías y 1 serie
+                        [1-2974] StaticText: 0
+                        [1-2977] StaticText: 200
+                        [1-2980] StaticText: 400
+                        [1-2983] StaticText: 600
+                        [1-2986] StaticText: 800
+                        [1-2989] StaticText: 1.000
+                        [1-2992] StaticText: 1.200
+                        [1-2995] StaticText: 1.400
+                        [1-2997] StaticText: Bogotá
+                        [1-2999] StaticText: Medellín
+                        [1-3001] StaticText: Cali
+                        [1-3003] StaticText: Barranquilla
+                        [1-3005] StaticText: Bucaramanga
+                        [1-3007] StaticText: Pereira
+                        [1-3010] graphics-symbol: Bogotá: Clientes: valor 1.240
+                        [1-3011] graphics-symbol: Medellín: Clientes: valor 890
+                        [1-3012] graphics-symbol: Cali: Clientes: valor 610
+                        [1-3013] graphics-symbol: Barranquilla: Clientes: valor 430
+                        [1-3014] graphics-symbol: Bucaramanga: Clientes: valor 280
+                        [1-3015] graphics-symbol: Pereira: Clientes: valor 195
+                      [1-3020] StaticText: Gráfico bar con 6 categorías y 1 serie
+                    [1-3025] div
+                      [1-3027] StaticText: Top
+                      [1-3029] StaticText: Bogotá · 1.240
+                    [1-3030] button: Abrir demo de is-bar-chart
+                  [1-3037] article
+                    [1-3040] heading: TENDENCIA
+                    [1-3045] div
+                      [1-3046] image: Gráfico line con 6 categorías y 1 serie
+                        [1-3050] StaticText: 0
+                        [1-3053] StaticText: 10
+                        [1-3056] StaticText: 20
+                        [1-3059] StaticText: 30
+                        [1-3062] StaticText: 40
+                        [1-3065] StaticText: 50
+                        [1-3068] StaticText: 60
+                        [1-3071] StaticText: 70
+                        [1-3073] StaticText: Ene
+                        [1-3075] StaticText: Feb
+                        [1-3077] StaticText: Mar
+                        [1-3079] StaticText: Abr
+                        [1-3081] StaticText: May
+                        [1-3083] StaticText: Jun
+                        [1-3088] graphics-symbol: Ene: 2025: valor 30
+                        [1-3089] graphics-symbol: Feb: 2025: valor 42
+                        [1-3090] graphics-symbol: Mar: 2025: valor 38
+                        [1-3091] graphics-symbol: Abr: 2025: valor 55
+                        [1-3092] graphics-symbol: May: 2025: valor 48
+                        [1-3093] graphics-symbol: Jun: 2025: valor 62
+                      [1-3101] StaticText: Gráfico line con 6 categorías y 1 serie
+                    [1-3106] div
+                      [1-3108] StaticText: Δ YoY
+                      [1-3110] StaticText: +38%
+                    [1-3111] button: Abrir demo de is-line-chart
+                  [1-3118] article
+                    [1-3121] heading: COMPOSICIÓN
+                    [1-3126] div
+                      [1-3127] image: Gráfico pie con 4 categorías y 1 serie
+                        [1-3130] graphics-symbol: Contado: valor 44 · 44.0%
+                        [1-3132] StaticText: 44%
+                        [1-3133] graphics-symbol: Crédito 30: valor 28 · 28.0%
+                        [1-3135] StaticText: 28%
+                        [1-3136] graphics-symbol: Crédito 60: valor 18 · 18.0%
+                        [1-3138] StaticText: 18%
+                        [1-3139] graphics-symbol: Anticipos: valor 10 · 10.0%
+                        [1-3141] StaticText: 10%
+                      [1-3146] StaticText: Gráfico pie con 4 categorías y 1 serie
+                    [1-3151] div
+                      [1-3153] StaticText: Modalidad
+                      [1-3155] StaticText: Contado · 44%
+                    [1-3156] button: Abrir demo de is-pie-chart
+                  [1-3163] article
+                    [1-3166] heading: RADAR
+                    [1-3171] div
+                      [1-3172] image: Gráfico radar con 5 categorías y 2 series
+                        [1-3181] StaticText: Velocidad
+                        [1-3184] StaticText: Calidad
+                        [1-3187] StaticText: Soporte
+                        [1-3190] StaticText: Precio
+                        [1-3193] StaticText: UX
+                        [1-3195] graphics-symbol: Velocidad: Q3: valor 85
+                        [1-3196] graphics-symbol: Calidad: Q3: valor 92
+                        [1-3197] graphics-symbol: Soporte: Q3: valor 70
+                        [1-3198] graphics-symbol: Precio: Q3: valor 88
+                        [1-3199] graphics-symbol: UX: Q3: valor 95
+                        [1-3201] graphics-symbol: Velocidad: Q2: valor 72
+                        [1-3202] graphics-symbol: Calidad: Q2: valor 78
+                        [1-3203] graphics-symbol: Soporte: Q2: valor 90
+                        [1-3204] graphics-symbol: Precio: Q2: valor 65
+                        [1-3205] graphics-symbol: UX: Q2: valor 80
+                      [1-3213] StaticText: Gráfico radar con 5 categorías y 2 series
+                    [1-3218] div
+                      [1-3220] StaticText: KPI
+                      [1-3222] StaticText: UX · 95
+                    [1-3223] button: Abrir demo de is-radar-chart
+                  [1-3230] article
+                    [1-3233] heading: SLA SEMANAL
+                    [1-3238] div
+                      [1-3239] image: Gráfico polarArea con 7 categorías y 1 serie
+                        [1-3246] graphics-symbol: L: valor 98
+                        [1-3247] graphics-symbol: M: valor 95
+                        [1-3248] graphics-symbol: X: valor 92
+                        [1-3249] graphics-symbol: J: valor 99
+                        [1-3250] graphics-symbol: V: valor 96
+                        [1-3251] graphics-symbol: S: valor 88
+                        [1-3252] graphics-symbol: D: valor 75
+                      [1-3257] StaticText: Gráfico polarArea con 7 categorías y 1 serie
+                    [1-3262] div
+                      [1-3264] StaticText: Promedio
+                      [1-3266] StaticText: 92%
+                    [1-3267] button: Abrir demo de is-polar-area-chart
+                  [1-3274] article
+                    [1-3277] heading: TRÁFICO VS VENTAS
+                    [1-3282] div
+                      [1-3283] image: Gráfico scatter con 0 categorías y 1 serie
+                        [1-3287] StaticText: 0
+                        [1-3290] StaticText: 10
+                        [1-3293] StaticText: 20
+                        [1-3296] StaticText: 30
+                        [1-3299] StaticText: 40
+                        [1-3302] StaticText: 50
+                        [1-3305] StaticText: 60
+                        [1-3308] StaticText: 70
+                        [1-3311] StaticText: 100
+                        [1-3314] StaticText: 200
+                        [1-3317] StaticText: 300
+                        [1-3320] StaticText: 400
+                        [1-3323] StaticText: 500
+                        [1-3326] StaticText: 600
+                        [1-3329] StaticText: 700
+                        [1-3332] StaticText: 800
+                        [1-3335] graphics-symbol: Web: valor 120 · 14
+                        [1-3336] graphics-symbol: Web: valor 240 · 22
+                        [1-3337] graphics-symbol: Web: valor 360 · 31
+                        [1-3338] graphics-symbol: Web: valor 480 · 38
+                        [1-3339] graphics-symbol: Web: valor 600 · 52
+                        [1-3340] graphics-symbol: Web: valor 720 · 65
+                      [1-3345] StaticText: Gráfico scatter con 0 categorías y 1 serie
+                    [1-3350] div
+                      [1-3352] StaticText: r
+                      [1-3354] StaticText: 0.94
+                    [1-3355] button: Abrir demo de is-scatter-chart
+                  [1-3362] article
+                    [1-3365] heading: HORA PICO
+                    [1-3370] div
+                      [1-3371] image: Gráfico bubble con 0 categorías y 1 serie
+                        [1-3375] StaticText: 0
+                        [1-3378] StaticText: 10
+                        [1-3381] StaticText: 20
+                        [1-3384] StaticText: 30
+                        [1-3387] StaticText: 40
+                        [1-3390] StaticText: 50
+                        [1-3393] StaticText: 60
+                        [1-3396] StaticText: 8
+                        [1-3399] StaticText: 10
+                        [1-3402] StaticText: 12
+                        [1-3405] StaticText: 14
+                        [1-3408] StaticText: 16
+                        [1-3411] StaticText: 18
+                        [1-3414] StaticText: 20
+                        [1-3417] graphics-symbol: Visitas: valor 8 · 12 · r 4
+                        [1-3418] graphics-symbol: Visitas: valor 10 · 22 · r 9
+                        [1-3419] graphics-symbol: Visitas: valor 12 · 38 · r 14
+                        [1-3420] graphics-symbol: Visitas: valor 14 · 52 · r 22
+                        [1-3421] graphics-symbol: Visitas: valor 16 · 48 · r 18
+                        [1-3422] graphics-symbol: Visitas: valor 18 · 32 · r 12
+                        [1-3423] graphics-symbol: Visitas: valor 20 · 18 · r 6
+                      [1-3428] StaticText: Gráfico bubble con 0 categorías y 1 serie
+                    [1-3433] div
+                      [1-3435] StaticText: Pico
+                      [1-3437] StaticText: 14h
+                    [1-3438] button: Abrir demo de is-bubble-chart
+                  [1-3445] article
+                    [1-3448] heading: FLUJO DE OPERACIÓN
+                    [1-3454] image: Diagrama de flujo
+                      [1-3469] StaticText: OK
+                      [1-3474] StaticText: Lead
+                      [1-3479] StaticText: Califica
+                      [1-3484] StaticText: Propuesta
+                      [1-3489] StaticText: Negociación
+                      [1-3494] StaticText: Cierre
+                    [1-3503] div
+                      [1-3505] StaticText: Embudo
+                      [1-3507] StaticText: 5 etapas
+                    [1-3508] button: Abrir demo de is-flowchart
+                  [1-3515] article
+                    [1-3518] heading: DISTRIBUCIÓN GEOGRÁFICA
+                    [1-3523] div
+                      [1-3524] image: Gráfico radar con 5 categorías y 1 serie
+                        [1-3533] StaticText: Norte
+                        [1-3536] StaticText: Sur
+                        [1-3539] StaticText: Oriente
+                        [1-3542] StaticText: Occidente
+                        [1-3545] StaticText: Centro
+                        [1-3547] graphics-symbol: Norte: Cobertura: valor 78
+                        [1-3548] graphics-symbol: Sur: Cobertura: valor 65
+                        [1-3549] graphics-symbol: Oriente: Cobertura: valor 82
+                        [1-3550] graphics-symbol: Occidente: Cobertura: valor 71
+                        [1-3551] graphics-symbol: Centro: Cobertura: valor 90
+                      [1-3559] StaticText: Gráfico radar con 5 categorías y 1 serie
+                    [1-3564] div
+                      [1-3566] StaticText: Top
+                      [1-3568] StaticText: Centro · 90
+                    [1-3569] button: Abrir demo de is-radar-chart
+                  [1-3576] article
+                    [1-3579] heading: CRONOGRAMA
+                    [1-3585] image: Línea de tiempo
+                      [1-3598] div
+                        [1-3600] StaticText: 2025-08-04
+                        [1-3602] StaticText: Kick-off
+                      [1-3608] div
+                        [1-3610] StaticText: 2025-08-18
+                        [1-3612] StaticText: Diseño
+                      [1-3618] div
+                        [1-3620] StaticText: 2025-09-08
+                        [1-3622] StaticText: Desarrollo
+                      [1-3628] div
+                        [1-3630] StaticText: 2025-09-22
+                        [1-3632] StaticText: QA
+                      [1-3638] div
+                        [1-3640] StaticText: 2025-10-06
+                        [1-3642] StaticText: Go live
+                    [1-3648] div
+                      [1-3650] StaticText: Trimestre
+                      [1-3652] StaticText: Q3 → Q4
+                    [1-3653] button: Abrir demo de is-timeline
+                [1-3827] heading: Charts lab barras, líneas, pie, doughnut, polar, radar, scatter y bubble
+                  [1-3830] StaticText: Charts lab
+                  [1-3832] StaticText: barras, líneas, pie, doughnut, polar, radar, scatter y bubble
+                [1-3833] div
                   [1-3834] article
-                    [1-3836] heading: BUBBLE
-                    [1-3842] image
-                      [1-3846] StaticText: 0
-                      [1-3849] StaticText: 10
-                      [1-3852] StaticText: 20
-                      [1-3855] StaticText: 30
-                      [1-3858] StaticText: 40
-                      [1-3861] StaticText: 50
-                      [1-3864] StaticText: 60
-                      [1-3867] StaticText: 70
-                      [1-3870] StaticText: 80
-                      [1-3873] StaticText: 90
-                      [1-3876] StaticText: 10
-                      [1-3879] StaticText: 15
-                      [1-3882] StaticText: 20
-                      [1-3885] StaticText: 25
-                      [1-3888] StaticText: 30
-                      [1-3891] StaticText: 35
-                      [1-3894] StaticText: 40
-                      [1-3897] StaticText: 45
-                      [1-3900] StaticText: 50
-                      [1-3903] StaticText: 55
-                      [1-3906] StaticText: 60
-                      [1-3909] StaticText: Margen %
-                      [1-3911] StaticText: Volumen
-                  [1-3925] article
-                    [1-3927] heading: SPARKLINES INLINE
-                    [1-3929] div
-                      [1-3930] div
-                        [1-3932] StaticText: Ventas
-                        [1-3936] image
-                        [1-3941] StaticText: +18%
-                      [1-3942] div
-                        [1-3944] StaticText: Cartera vencida
-                        [1-3948] image
-                        [1-3953] StaticText: −22%
-                      [1-3954] div
-                        [1-3956] StaticText: Rotación
-                        [1-3960] image
-                        [1-3969] StaticText: =
-                      [1-3970] div
-                        [1-3972] StaticText: Margen (gradiente)
-                        [1-3976] image
-                        [1-3985] StaticText: +31%
+                    [1-3836] heading: BAR · UNA SERIE
+                    [1-3841] div
+                      [1-3842] image: Gráfico bar con 6 categorías y 1 serie
+                        [1-3846] StaticText: 0
+                        [1-3849] StaticText: 1 M
+                        [1-3852] StaticText: 2 M
+                        [1-3855] StaticText: 3 M
+                        [1-3858] StaticText: 4 M
+                        [1-3861] StaticText: 5 M
+                        [1-3864] StaticText: 6 M
+                        [1-3867] StaticText: 7 M
+                        [1-3870] StaticText: 8 M
+                        [1-3872] StaticText: Ene
+                        [1-3874] StaticText: Feb
+                        [1-3876] StaticText: Mar
+                        [1-3878] StaticText: Abr
+                        [1-3880] StaticText: May
+                        [1-3882] StaticText: Jun
+                        [1-3885] graphics-symbol: Ene: Ventas: valor 4,2 M
+                        [1-3886] graphics-symbol: Feb: Ventas: valor 5,1 M
+                        [1-3887] graphics-symbol: Mar: Ventas: valor 3,8 M
+                        [1-3888] graphics-symbol: Abr: Ventas: valor 6,4 M
+                        [1-3889] graphics-symbol: May: Ventas: valor 5,9 M
+                        [1-3890] graphics-symbol: Jun: Ventas: valor 7,2 M
+                      [1-3895] StaticText: Gráfico bar con 6 categorías y 1 serie
+                    [1-3900] button: Abrir demo de is-bar-chart
+                  [1-3907] article
+                    [1-3909] heading: BAR · 3 SERIES AGRUPADAS
+                    [1-3914] div
+                      [1-3915] image: Gráfico bar con 4 categorías y 3 series
+                        [1-3919] StaticText: 0
+                        [1-3922] StaticText: 10
+                        [1-3925] StaticText: 20
+                        [1-3928] StaticText: 30
+                        [1-3931] StaticText: 40
+                        [1-3934] StaticText: 50
+                        [1-3937] StaticText: 60
+                        [1-3939] StaticText: Q1
+                        [1-3941] StaticText: Q2
+                        [1-3943] StaticText: Q3
+                        [1-3945] StaticText: Q4
+                        [1-3948] graphics-symbol: Q1: Ingresos: valor 32
+                        [1-3949] graphics-symbol: Q1: Costos: valor 22
+                        [1-3950] graphics-symbol: Q1: Utilidad: valor 10
+                        [1-3951] graphics-symbol: Q2: Ingresos: valor 45
+                        [1-3952] graphics-symbol: Q2: Costos: valor 28
+                        [1-3953] graphics-symbol: Q2: Utilidad: valor 17
+                        [1-3954] graphics-symbol: Q3: Ingresos: valor 38
+                        [1-3955] graphics-symbol: Q3: Costos: valor 25
+                        [1-3956] graphics-symbol: Q3: Utilidad: valor 13
+                        [1-3957] graphics-symbol: Q4: Ingresos: valor 52
+                        [1-3958] graphics-symbol: Q4: Costos: valor 31
+                        [1-3959] graphics-symbol: Q4: Utilidad: valor 21
+                      [1-3964] StaticText: Gráfico bar con 4 categorías y 3 series
+                    [1-3969] button: Abrir demo de is-bar-chart
+                  [1-3976] article
+                    [1-3978] heading: BAR · APILADA
+                    [1-3983] div
+                      [1-3984] image: Gráfico bar con 4 categorías y 3 series
+                        [1-3988] StaticText: 0
+                        [1-3991] StaticText: 10
+                        [1-3994] StaticText: 20
+                        [1-3997] StaticText: 30
+                        [1-4000] StaticText: 40
+                        [1-4003] StaticText: 50
+                        [1-4005] StaticText: Ene
+                        [1-4007] StaticText: Feb
+                        [1-4009] StaticText: Mar
+                        [1-4011] StaticText: Abr
+                        [1-4014] graphics-symbol: Ene: Contado: valor 18
+                        [1-4015] graphics-symbol: Ene: Crédito: valor 12
+                        [1-4016] graphics-symbol: Ene: Anticipos: valor 5
+                        [1-4017] graphics-symbol: Feb: Contado: valor 22
+                        [1-4018] graphics-symbol: Feb: Crédito: valor 15
+                        [1-4019] graphics-symbol: Feb: Anticipos: valor 7
+                        [1-4020] graphics-symbol: Mar: Contado: valor 20
+                        [1-4021] graphics-symbol: Mar: Crédito: valor 18
+                        [1-4022] graphics-symbol: Mar: Anticipos: valor 6
+                        [1-4023] graphics-symbol: Abr: Contado: valor 27
+                        [1-4024] graphics-symbol: Abr: Crédito: valor 14
+                        [1-4025] graphics-symbol: Abr: Anticipos: valor 9
+                      [1-4030] StaticText: Gráfico bar con 4 categorías y 3 series
+                    [1-4035] button: Abrir demo de is-bar-chart
+                  [1-4042] article
+                    [1-4044] heading: BAR · HORIZONTAL
+                    [1-4049] div
+                      [1-4050] image: Gráfico bar con 5 categorías y 1 serie
+                        [1-4054] StaticText: 0
+                        [1-4057] StaticText: 200
+                        [1-4060] StaticText: 400
+                        [1-4063] StaticText: 600
+                        [1-4066] StaticText: 800
+                        [1-4069] StaticText: 1.000
+                        [1-4072] StaticText: 1.200
+                        [1-4075] StaticText: 1.400
+                        [1-4077] StaticText: Bogotá
+                        [1-4079] StaticText: Medellín
+                        [1-4081] StaticText: Cali
+                        [1-4083] StaticText: Barranquilla
+                        [1-4085] StaticText: Bucaramanga
+                        [1-4088] graphics-symbol: Bogotá: Clientes: valor 1.240
+                        [1-4089] graphics-symbol: Medellín: Clientes: valor 890
+                        [1-4090] graphics-symbol: Cali: Clientes: valor 610
+                        [1-4091] graphics-symbol: Barranquilla: Clientes: valor 430
+                        [1-4092] graphics-symbol: Bucaramanga: Clientes: valor 280
+                      [1-4097] StaticText: Gráfico bar con 5 categorías y 1 serie
+                    [1-4102] button: Abrir demo de is-bar-chart
+                  [1-4109] article
+                    [1-4111] heading: LINE · 2 SERIES, CURVA
+                    [1-4116] div
+                      [1-4117] image: Gráfico line con 6 categorías y 2 series
+                        [1-4121] StaticText: 0
+                        [1-4124] StaticText: 10
+                        [1-4127] StaticText: 20
+                        [1-4130] StaticText: 30
+                        [1-4133] StaticText: 40
+                        [1-4136] StaticText: 50
+                        [1-4139] StaticText: 60
+                        [1-4142] StaticText: 70
+                        [1-4144] StaticText: Ene
+                        [1-4146] StaticText: Feb
+                        [1-4148] StaticText: Mar
+                        [1-4150] StaticText: Abr
+                        [1-4152] StaticText: May
+                        [1-4154] StaticText: Jun
+                        [1-4158] graphics-symbol: Ene: 2025: valor 30
+                        [1-4159] graphics-symbol: Feb: 2025: valor 42
+                        [1-4160] graphics-symbol: Mar: 2025: valor 38
+                        [1-4161] graphics-symbol: Abr: 2025: valor 55
+                        [1-4162] graphics-symbol: May: 2025: valor 48
+                        [1-4163] graphics-symbol: Jun: 2025: valor 62
+                        [1-4165] graphics-symbol: Ene: 2024: valor 25
+                        [1-4166] graphics-symbol: Feb: 2024: valor 30
+                        [1-4167] graphics-symbol: Mar: 2024: valor 34
+                        [1-4168] graphics-symbol: Abr: 2024: valor 40
+                        [1-4169] graphics-symbol: May: 2024: valor 39
+                        [1-4170] graphics-symbol: Jun: 2024: valor 45
+                      [1-4178] StaticText: Gráfico line con 6 categorías y 2 series
+                    [1-4183] button: Abrir demo de is-line-chart
+                  [1-4190] article
+                    [1-4192] heading: LINE · ÁREA RELLENA
+                    [1-4197] div
+                      [1-4198] image: Gráfico line con 7 categorías y 1 serie
+                        [1-4202] StaticText: 0
+                        [1-4205] StaticText: 50
+                        [1-4208] StaticText: 100
+                        [1-4211] StaticText: 150
+                        [1-4214] StaticText: 200
+                        [1-4217] StaticText: 250
+                        [1-4220] StaticText: 300
+                        [1-4222] StaticText: L
+                        [1-4224] StaticText: M
+                        [1-4226] StaticText: X
+                        [1-4228] StaticText: J
+                        [1-4230] StaticText: V
+                        [1-4232] StaticText: S
+                        [1-4234] StaticText: D
+                        [1-4239] graphics-symbol: L: Visitas: valor 120
+                        [1-4240] graphics-symbol: M: Visitas: valor 190
+                        [1-4241] graphics-symbol: X: Visitas: valor 170
+                        [1-4242] graphics-symbol: J: Visitas: valor 240
+                        [1-4243] graphics-symbol: V: Visitas: valor 280
+                        [1-4244] graphics-symbol: S: Visitas: valor 210
+                        [1-4245] graphics-symbol: D: Visitas: valor 150
+                      [1-4253] StaticText: Gráfico line con 7 categorías y 1 serie
+                    [1-4258] button: Abrir demo de is-line-chart
+                  [1-4265] article
+                    [1-4267] heading: PIE
+                    [1-4272] div
+                      [1-4273] image: Gráfico pie con 4 categorías y 1 serie
+                        [1-4276] graphics-symbol: Contado: Cartera: valor 45 · 45.0%
+                        [1-4278] StaticText: 45%
+                        [1-4279] graphics-symbol: Crédito 30: Cartera: valor 25 · 25.0%
+                        [1-4281] StaticText: 25%
+                        [1-4282] graphics-symbol: Crédito 60: Cartera: valor 18 · 18.0%
+                        [1-4284] StaticText: 18%
+                        [1-4285] graphics-symbol: Crédito 90: Cartera: valor 12 · 12.0%
+                        [1-4287] StaticText: 12%
+                      [1-4292] StaticText: Gráfico pie con 4 categorías y 1 serie
+                    [1-4297] button: Abrir demo de is-pie-chart
+                  [1-4304] article
+                    [1-4306] heading: DOUGHNUT
+                    [1-4311] div
+                      [1-4312] image: Gráfico doughnut con 4 categorías y 1 serie
+                        [1-4315] graphics-symbol: Inventario: Activos: valor 3.200 · 26.6%
+                        [1-4317] StaticText: 27%
+                        [1-4318] graphics-symbol: Cartera: Activos: valor 2.100 · 17.4%
+                        [1-4320] StaticText: 17%
+                        [1-4321] graphics-symbol: Bancos: Activos: valor 1.450 · 12.0%
+                        [1-4323] StaticText: 12%
+                        [1-4324] graphics-symbol: Activo fijo: Activos: valor 5.300 · 44.0%
+                        [1-4326] StaticText: 44%
+                        [1-4328] StaticText: 12,1 k
+                        [1-4330] StaticText: Activos
+                      [1-4335] StaticText: Gráfico doughnut con 4 categorías y 1 serie
+                    [1-4340] button: Abrir demo de is-doughnut-chart
+                  [1-4347] article
+                    [1-4349] heading: POLAR AREA
+                    [1-4354] div
+                      [1-4355] image: Gráfico polarArea con 5 categorías y 1 serie
+                        [1-4362] graphics-symbol: Norte: Cobertura: valor 11
+                        [1-4363] graphics-symbol: Sur: Cobertura: valor 16
+                        [1-4364] graphics-symbol: Este: Cobertura: valor 7
+                        [1-4365] graphics-symbol: Oeste: Cobertura: valor 14
+                        [1-4366] graphics-symbol: Centro: Cobertura: valor 9
+                      [1-4371] StaticText: Gráfico polarArea con 5 categorías y 1 serie
+                    [1-4376] button: Abrir demo de is-polar-area-chart
+                  [1-4383] article
+                    [1-4385] heading: RADAR · 2 SERIES
+                    [1-4390] div
+                      [1-4391] image: Gráfico radar con 5 categorías y 2 series
+                        [1-4400] StaticText: Liquidez
+                        [1-4403] StaticText: Rentabilidad
+                        [1-4406] StaticText: Endeudamiento
+                        [1-4409] StaticText: Eficiencia
+                        [1-4412] StaticText: Crecimiento
+                        [1-4414] graphics-symbol: Liquidez: Empresa: valor 65
+                        [1-4415] graphics-symbol: Rentabilidad: Empresa: valor 78
+                        [1-4416] graphics-symbol: Endeudamiento: Empresa: valor 45
+                        [1-4417] graphics-symbol: Eficiencia: Empresa: valor 82
+                        [1-4418] graphics-symbol: Crecimiento: Empresa: valor 70
+                        [1-4420] graphics-symbol: Liquidez: Sector: valor 55
+                        [1-4421] graphics-symbol: Rentabilidad: Sector: valor 62
+                        [1-4422] graphics-symbol: Endeudamiento: Sector: valor 60
+                        [1-4423] graphics-symbol: Eficiencia: Sector: valor 58
+                        [1-4424] graphics-symbol: Crecimiento: Sector: valor 52
+                      [1-4432] StaticText: Gráfico radar con 5 categorías y 2 series
+                    [1-4437] button: Abrir demo de is-radar-chart
+                  [1-4444] article
+                    [1-4446] heading: SCATTER
+                    [1-4451] div
+                      [1-4452] image: Gráfico scatter con 0 categorías y 1 serie
+                        [1-4456] StaticText: 0
+                        [1-4459] StaticText: 100
+                        [1-4462] StaticText: 200
+                        [1-4465] StaticText: 300
+                        [1-4468] StaticText: 400
+                        [1-4471] StaticText: 500
+                        [1-4474] StaticText: 600
+                        [1-4477] StaticText: 700
+                        [1-4480] StaticText: 800
+                        [1-4483] StaticText: 900
+                        [1-4486] StaticText: 0
+                        [1-4489] StaticText: 10
+                        [1-4492] StaticText: 20
+                        [1-4495] StaticText: 30
+                        [1-4498] StaticText: 40
+                        [1-4501] StaticText: 50
+                        [1-4504] StaticText: 60
+                        [1-4507] StaticText: 70
+                        [1-4510] StaticText: 80
+                        [1-4513] StaticText: 90
+                        [1-4516] StaticText: 100
+                        [1-4519] StaticText: Antigüedad (días)
+                        [1-4521] StaticText: Saldo
+                        [1-4523] graphics-symbol: Facturas: valor 5 · 120
+                        [1-4524] graphics-symbol: Facturas: valor 18 · 340
+                        [1-4525] graphics-symbol: Facturas: valor 32 · 210
+                        [1-4526] graphics-symbol: Facturas: valor 45 · 560
+                        [1-4527] graphics-symbol: Facturas: valor 60 · 430
+                        [1-4528] graphics-symbol: Facturas: valor 75 · 720
+                        [1-4529] graphics-symbol: Facturas: valor 88 · 510
+                        [1-4530] graphics-symbol: Facturas: valor 95 · 880
+                      [1-4535] StaticText: Gráfico scatter con 0 categorías y 1 serie
+                    [1-4540] button: Abrir demo de is-scatter-chart
+                  [1-4547] article
+                    [1-4549] heading: BUBBLE
+                    [1-4554] div
+                      [1-4555] image: Gráfico bubble con 0 categorías y 1 serie
+                        [1-4559] StaticText: 0
+                        [1-4562] StaticText: 10
+                        [1-4565] StaticText: 20
+                        [1-4568] StaticText: 30
+                        [1-4571] StaticText: 40
+                        [1-4574] StaticText: 50
+                        [1-4577] StaticText: 60
+                        [1-4580] StaticText: 70
+                        [1-4583] StaticText: 80
+                        [1-4586] StaticText: 90
+                        [1-4589] StaticText: 10
+                        [1-4592] StaticText: 15
+                        [1-4595] StaticText: 20
+                        [1-4598] StaticText: 25
+                        [1-4601] StaticText: 30
+                        [1-4604] StaticText: 35
+                        [1-4607] StaticText: 40
+                        [1-4610] StaticText: 45
+                        [1-4613] StaticText: 50
+                        [1-4616] StaticText: 55
+                        [1-4619] StaticText: 60
+                        [1-4622] StaticText: Margen %
+                        [1-4624] StaticText: Volumen
+                        [1-4626] graphics-symbol: Productos: valor 12 · 40 · r 10
+                        [1-4627] graphics-symbol: Productos: valor 24 · 75 · r 18
+                        [1-4628] graphics-symbol: Productos: valor 33 · 55 · r 8
+                        [1-4629] graphics-symbol: Productos: valor 45 · 90 · r 24
+                        [1-4630] graphics-symbol: Productos: valor 58 · 62 · r 14
+                      [1-4635] StaticText: Gráfico bubble con 0 categorías y 1 serie
+                    [1-4640] button: Abrir demo de is-bubble-chart
+                  [1-4647] article
+                    [1-4649] heading: SPARKLINES INLINE
+                    [1-4651] div
+                      [1-4652] div
+                        [1-4654] StaticText: Ventas
+                        [1-4657] div
+                          [1-4658] image: Sparkline: 7 valores, mínimo 4, máximo 13, último 13, tendencia en alza.
+                          [1-4663] StaticText: Sparkline: 7 valores, mínimo 4, máximo 13, último 13, tendencia en alza.
+                        [1-4665] StaticText: +18%
+                      [1-4666] div
+                        [1-4668] StaticText: Cartera vencida
+                        [1-4671] div
+                          [1-4672] image: Sparkline: 7 valores, mínimo 5, máximo 13, último 5, tendencia en baja.
+                          [1-4677] StaticText: Sparkline: 7 valores, mínimo 5, máximo 13, último 5, tendencia en baja.
+                        [1-4679] StaticText: −22%
+                      [1-4680] div
+                        [1-4682] StaticText: Rotación
+                        [1-4685] div
+                          [1-4686] image: Sparkline: 7 valores, mínimo 5, máximo 8, último 7, tendencia en alza.
+                          [1-4695] StaticText: Sparkline: 7 valores, mínimo 5, máximo 8, último 7, tendencia en alza.
+                        [1-4697] StaticText: =
+                      [1-4698] div
+                        [1-4700] StaticText: Margen (gradiente)
+                        [1-4703] div
+                          [1-4704] image: Sparkline: 7 valores, mínimo 3, máximo 12, último 12, tendencia en alza.
+                          [1-4713] StaticText: Sparkline: 7 valores, mínimo 3, máximo 12, último 12, tendencia en alza.
+                        [1-4715] StaticText: +31%
+                    [1-4716] button: Abrir demo de is-sparkline

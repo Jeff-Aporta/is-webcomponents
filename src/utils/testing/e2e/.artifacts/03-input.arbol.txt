@@ -1,1721 +1,1741 @@
-[1-45689] RootWebArea: Input | ContaPyme
-  [1-46063] scrollable, html
-    [1-46090] body
-      [1-46091] banner
-        [1-46095] button: ContaPyme — elegir paleta
-          [1-45687] StaticText: conta
-          [1-45688] StaticText: pyme
-        [1-46727] button: Abrir preview en pantalla completa
-        [1-46873] button: Cambiar a tema claro
-      [1-46115] is-split-panel
-        [1-46061] scrollable, nav: Componentes
-          [1-46116] button: Inicio — home
-            [1-45704] StaticText: Inicio
-          [1-46118] button: Personalización — theming
-            [1-45705] StaticText: Personalización
-          [1-46120] button: Ecosistema JS — utilidades compartidas
-            [1-45706] StaticText: Ecosistema JS
-          [1-46122] group: ACCIONES
-            [1-46124] button: Button is-button
-              [1-45707] StaticText: Button
-              [1-45708] StaticText: <is-button>
-            [1-46127] button: Button Group is-button-group
-              [1-45709] StaticText: Button Group
-              [1-45710] StaticText: <is-button-group>
-            [1-46130] button: Check Icon Button is-check-icon-button
-              [1-45711] StaticText: Check Icon Button
-              [1-45712] StaticText: <is-check-icon-button>
-            [1-46133] button: Context Menu is-context-menu
-              [1-45713] StaticText: Context Menu
-              [1-45714] StaticText: <is-context-menu>
-            [1-46136] button: Copy Button is-copy-button
-              [1-45715] StaticText: Copy Button
-              [1-45716] StaticText: <is-copy-button>
-            [1-46139] button: Dropdown is-dropdown
-              [1-45717] StaticText: Dropdown
-              [1-45718] StaticText: <is-dropdown>
-            [1-46142] button: Dropdown Item is-dropdown-item
-              [1-45719] StaticText: Dropdown Item
-              [1-45720] StaticText: <is-dropdown-item>
-            [1-46145] button: Floating Action Button is-fab
-              [1-45721] StaticText: Floating Action Button
-              [1-45722] StaticText: <is-fab>
-            [1-46148] button: Share Button is-share-button
-              [1-45723] StaticText: Share Button
-              [1-45724] StaticText: <is-share-button>
-            [1-46151] button: Speed Dial is-speed-dial
-              [1-45725] StaticText: Speed Dial
-              [1-45726] StaticText: <is-speed-dial>
-            [1-46154] button: Speed Dial Action is-speed-dial-action
-              [1-45727] StaticText: Speed Dial Action
-              [1-45728] StaticText: <is-speed-dial-action>
-          [1-46157] group: MEDIA
-            [1-46159] button: Avatar is-avatar
-              [1-45729] StaticText: Avatar
-              [1-45730] StaticText: <is-avatar>
-            [1-46162] button: Barcode is-barcode
-              [1-45731] StaticText: Barcode
-              [1-45732] StaticText: <is-barcode>
-            [1-46165] button: Barcode Scanner is-barcode-scanner
-              [1-45733] StaticText: Barcode Scanner
-              [1-45734] StaticText: <is-barcode-scanner>
-            [1-46168] button: Icon is-icon
-              [1-45735] StaticText: Icon
-              [1-45736] StaticText: <is-icon>
-            [1-46171] button: Image Editor is-image-editor
-              [1-45737] StaticText: Image Editor
-              [1-45738] StaticText: <is-image-editor>
-            [1-46174] button: Media Recorder is-media-recorder
-              [1-45739] StaticText: Media Recorder
-              [1-45740] StaticText: <is-media-recorder>
-            [1-46177] button: QR Code is-qrcode
-              [1-45741] StaticText: QR Code
-              [1-45742] StaticText: <is-qrcode>
-            [1-46180] button: Speech is-speech
-              [1-45743] StaticText: Speech
-              [1-45744] StaticText: <is-speech>
-            [1-46183] button: Theme Img is-theme-img
-              [1-45745] StaticText: Theme Img
-              [1-45746] StaticText: <is-theme-img>
-            [1-46186] button: Video is-video
-              [1-45747] StaticText: Video
-              [1-45748] StaticText: <is-video>
-            [1-46189] button: Video Playlist is-video-playlist
-              [1-45749] StaticText: Video Playlist
-              [1-45750] StaticText: <is-video-playlist>
-          [1-46192] group: FEEDBACK
-            [1-46194] button: Badge is-badge
-              [1-45751] StaticText: Badge
-              [1-45752] StaticText: <is-badge>
-            [1-46197] button: CDN Snippet is-cdn-snippet
-              [1-45753] StaticText: CDN Snippet
-              [1-45754] StaticText: <is-cdn-snippet>
-            [1-46200] button: Confirm Modal is-confirm-modal
-              [1-45755] StaticText: Confirm Modal
-              [1-45756] StaticText: <is-confirm-modal>
-            [1-46203] button: Palette Selector is-palette-selector
-              [1-45757] StaticText: Palette Selector
-              [1-45758] StaticText: <is-palette-selector>
-            [1-46206] button: Popconfirm is-popconfirm
-              [1-45759] StaticText: Popconfirm
-              [1-45760] StaticText: <is-popconfirm>
-            [1-46209] button: Prefs Clear is-prefs-clear
-              [1-45761] StaticText: Prefs Clear
-              [1-45762] StaticText: <is-prefs-clear>
-            [1-46212] button: Progress Bar is-progress-bar
-              [1-45763] StaticText: Progress Bar
-              [1-45764] StaticText: <is-progress-bar>
-            [1-46215] button: Progress Ring is-progress-ring
-              [1-45765] StaticText: Progress Ring
-              [1-45766] StaticText: <is-progress-ring>
-            [1-46218] button: Skeleton is-skeleton
-              [1-45767] StaticText: Skeleton
-              [1-45768] StaticText: <is-skeleton>
-            [1-46221] button: Spinner is-spinner
-              [1-45769] StaticText: Spinner
-              [1-45770] StaticText: <is-spinner>
-            [1-46224] button: Tag is-tag
-              [1-45771] StaticText: Tag
-              [1-45772] StaticText: <is-tag>
-            [1-46227] button: Theme Toggle is-theme-toggle
-              [1-45773] StaticText: Theme Toggle
-              [1-45774] StaticText: <is-theme-toggle>
-            [1-46230] button: Toast is-toast
-              [1-45775] StaticText: Toast
-              [1-45776] StaticText: <is-toast>
-            [1-46233] button: Toast Item is-toast-item
-              [1-45777] StaticText: Toast Item
-              [1-45778] StaticText: <is-toast-item>
-            [1-46236] button: Tooltip is-tooltip
-              [1-45779] StaticText: Tooltip
-              [1-45780] StaticText: <is-tooltip>
-          [1-46239] group: LAYOUT
-            [1-46241] button: Callout is-callout
-              [1-45781] StaticText: Callout
-              [1-45782] StaticText: <is-callout>
-            [1-46244] button: Card is-card
-              [1-45783] StaticText: Card
-              [1-45784] StaticText: <is-card>
-            [1-46247] button: Details is-details
-              [1-45785] StaticText: Details
-              [1-45786] StaticText: <is-details>
-            [1-46250] button: Dialog is-dialog
-              [1-45787] StaticText: Dialog
-              [1-45788] StaticText: <is-dialog>
-            [1-46253] button: Divider is-divider
-              [1-45789] StaticText: Divider
-              [1-45790] StaticText: <is-divider>
-            [1-46256] button: Dock is-dock
-              [1-45791] StaticText: Dock
-              [1-45792] StaticText: <is-dock>
-            [1-46259] button: Dock Item is-dock-item
-              [1-45793] StaticText: Dock Item
-              [1-45794] StaticText: <is-dock-item>
-            [1-46262] button: Drawer is-drawer
-              [1-45795] StaticText: Drawer
-              [1-45796] StaticText: <is-drawer>
-            [1-46265] button: Main is-main
-              [1-45797] StaticText: Main
-              [1-45798] StaticText: <is-main>
-            [1-46268] button: Panel dividido is-split-panel
-              [1-45799] StaticText: Panel dividido
-              [1-45800] StaticText: <is-split-panel>
-            [1-46271] button: Scrollspy is-scrollspy
-              [1-45801] StaticText: Scrollspy
-              [1-45802] StaticText: <is-scrollspy>
-          [1-46274] group: NAVEGACIÓN
-            [1-46276] button: Breadcrumb is-breadcrumb
-              [1-45803] StaticText: Breadcrumb
-              [1-45804] StaticText: <is-breadcrumb>
-            [1-46279] button: Breadcrumb Item is-breadcrumb-item
-              [1-45805] StaticText: Breadcrumb Item
-              [1-45806] StaticText: <is-breadcrumb-item>
-            [1-46282] button: Carousel is-carousel
-              [1-45807] StaticText: Carousel
-              [1-45808] StaticText: <is-carousel>
-            [1-46285] button: Carousel Item is-carousel-item
-              [1-45809] StaticText: Carousel Item
-              [1-45810] StaticText: <is-carousel-item>
-            [1-46288] button: Mega Menu is-mega-menu
-              [1-45811] StaticText: Mega Menu
-              [1-45812] StaticText: <is-mega-menu>
-            [1-46291] button: Scroller is-scroller
-              [1-45813] StaticText: Scroller
-              [1-45814] StaticText: <is-scroller>
-            [1-46294] button: Stepper is-stepper
-              [1-45815] StaticText: Stepper
-              [1-45816] StaticText: <is-stepper>
-            [1-46297] button: Stepper Step is-stepper-step
-              [1-45817] StaticText: Stepper Step
-              [1-45818] StaticText: <is-stepper-step>
-            [1-46300] button: Tab is-tab
-              [1-45819] StaticText: Tab
-              [1-45820] StaticText: <is-tab>
-            [1-46303] button: Tab Group is-tab-group
-              [1-45821] StaticText: Tab Group
-              [1-45822] StaticText: <is-tab-group>
-            [1-46306] button: Tab Panel is-tab-panel
-              [1-45823] StaticText: Tab Panel
-              [1-45824] StaticText: <is-tab-panel>
-            [1-46309] button: Tree is-tree
-              [1-45825] StaticText: Tree
-              [1-45826] StaticText: <is-tree>
-            [1-46312] button: Tree Item is-tree-item
-              [1-45827] StaticText: Tree Item
-              [1-45828] StaticText: <is-tree-item>
-          [1-46315] group: FORMULARIOS
-            [1-46317] button: Checkbox is-checkbox
-              [1-45829] StaticText: Checkbox
-              [1-45830] StaticText: <is-checkbox>
-            [1-46320] button: Color Picker is-color-picker
-              [1-45831] StaticText: Color Picker
-              [1-45832] StaticText: <is-color-picker>
-            [1-46323] button: Combobox is-combobox
-              [1-45833] StaticText: Combobox
-              [1-45834] StaticText: <is-combobox>
-            [1-46326] button: Date Field is-date-field
-              [1-45835] StaticText: Date Field
-              [1-45836] StaticText: <is-date-field>
-            [1-46329] button: Date Input is-date-input
-              [1-45837] StaticText: Date Input
-              [1-45838] StaticText: <is-date-input>
-            [1-46332] button: Date Picker is-date-picker
-              [1-45839] StaticText: Date Picker
-              [1-45840] StaticText: <is-date-picker>
-            [1-46335] button: Date Range Input is-date-range-input
-              [1-45841] StaticText: Date Range Input
-              [1-45842] StaticText: <is-date-range-input>
-            [1-46338] button: Date Range Picker is-date-range-picker
-              [1-45843] StaticText: Date Range Picker
-              [1-45844] StaticText: <is-date-range-picker>
-            [1-46341] button: Date Time Field is-date-time-field
-              [1-45845] StaticText: Date Time Field
-              [1-45846] StaticText: <is-date-time-field>
-            [1-46344] button: Date Time Input is-date-time-input
-              [1-45847] StaticText: Date Time Input
-              [1-45848] StaticText: <is-date-time-input>
-            [1-46347] button: Digital Clock is-digital-clock
-              [1-45849] StaticText: Digital Clock
-              [1-45850] StaticText: <is-digital-clock>
-            [1-46350] button: Document Editor is-doc-editor
-              [1-45851] StaticText: Document Editor
-              [1-45852] StaticText: <is-doc-editor>
-            [1-46353] button: Dropzone is-dropzone
-              [1-45853] StaticText: Dropzone
-              [1-45854] StaticText: <is-dropzone>
-            [1-46356] button: Duration Picker is-duration-picker
-              [1-45855] StaticText: Duration Picker
-              [1-45856] StaticText: <is-duration-picker>
-            [1-46359] button: File Input is-file-input
-              [1-45857] StaticText: File Input
-              [1-45858] StaticText: <is-file-input>
-            [1-46362] button: Full Calendar is-full-calendar
-              [1-45859] StaticText: Full Calendar
-              [1-45860] StaticText: <is-full-calendar>
-            [1-46365] button: Inline Edit is-inline-edit
-              [1-45861] StaticText: Inline Edit
-              [1-45862] StaticText: <is-inline-edit>
-            [1-46368] button: Input is-input
-              [1-45863] StaticText: Input
-              [1-45864] StaticText: <is-input>
-            [1-46371] button: Masked Input is-masked-input
-              [1-45865] StaticText: Masked Input
-              [1-45866] StaticText: <is-masked-input>
-            [1-46374] button: Mention is-mention
-              [1-45867] StaticText: Mention
-              [1-45868] StaticText: <is-mention>
-            [1-46377] button: Month Calendar is-month-calendar
-              [1-45869] StaticText: Month Calendar
-              [1-45870] StaticText: <is-month-calendar>
-            [1-46380] button: Option is-option
-              [1-45871] StaticText: Option
-              [1-45872] StaticText: <is-option>
-            [1-46383] button: Pin Input is-pin-input
-              [1-45873] StaticText: Pin Input
-              [1-45874] StaticText: <is-pin-input>
-            [1-46386] button: Radio is-radio
-              [1-45875] StaticText: Radio
-              [1-45876] StaticText: <is-radio>
-            [1-46389] button: Radio Group is-radio-group
-              [1-45877] StaticText: Radio Group
-              [1-45878] StaticText: <is-radio-group>
-            [1-46392] button: Rating is-rating
-              [1-45879] StaticText: Rating
-              [1-45880] StaticText: <is-rating>
-            [1-46395] button: Rich Text Editor is-rte
-              [1-45881] StaticText: Rich Text Editor
-              [1-45882] StaticText: <is-rte>
-            [1-46398] button: Select is-select
-              [1-45883] StaticText: Select
-              [1-45884] StaticText: <is-select>
-            [1-46401] button: Signature is-signature
-              [1-45885] StaticText: Signature
-              [1-45886] StaticText: <is-signature>
-            [1-46404] button: Slider is-slider
-              [1-45887] StaticText: Slider
-              [1-45888] StaticText: <is-slider>
-            [1-46407] button: Switch is-switch
-              [1-45889] StaticText: Switch
-              [1-45890] StaticText: <is-switch>
-            [1-46410] button: Textarea is-textarea
-              [1-45891] StaticText: Textarea
-              [1-45892] StaticText: <is-textarea>
-            [1-46413] button: Time Clock is-time-clock
-              [1-45893] StaticText: Time Clock
-              [1-45894] StaticText: <is-time-clock>
-            [1-46416] button: Time Field is-time-field
-              [1-45895] StaticText: Time Field
-              [1-45896] StaticText: <is-time-field>
-            [1-46419] button: Time Input is-time-input
-              [1-45897] StaticText: Time Input
-              [1-45898] StaticText: <is-time-input>
-            [1-46422] button: Year Calendar is-year-calendar
-              [1-45899] StaticText: Year Calendar
-              [1-45900] StaticText: <is-year-calendar>
-          [1-46425] group: CÓDIGO
-            [1-46427] button: Code is-code
-              [1-45901] StaticText: Code
-              [1-45902] StaticText: <is-code>
-          [1-46430] group: DATOS
-            [1-46432] button: AG Grid is-ag-grid
-              [1-45903] StaticText: AG Grid
-              [1-45904] StaticText: <is-ag-grid>
-            [1-46435] button: Data Grid is-data-grid
-              [1-45905] StaticText: Data Grid
-              [1-45906] StaticText: <is-data-grid>
-            [1-46438] button: Kanban is-kanban
-              [1-45907] StaticText: Kanban
-              [1-45908] StaticText: <is-kanban>
-            [1-46441] button: Kanban Card is-kanban-card
-              [1-45909] StaticText: Kanban Card
-              [1-45910] StaticText: <is-kanban-card>
-            [1-46444] button: Kanban Column is-kanban-column
-              [1-45911] StaticText: Kanban Column
-              [1-45912] StaticText: <is-kanban-column>
-            [1-46447] button: Pivot Table is-pivot-table
-              [1-45913] StaticText: Pivot Table
-              [1-45914] StaticText: <is-pivot-table>
-            [1-46450] button: Spreadsheet is-spreadsheet
-              [1-45915] StaticText: Spreadsheet
-              [1-45916] StaticText: <is-spreadsheet>
-            [1-46453] button: Stat KPI is-stat
-              [1-45917] StaticText: Stat KPI
-              [1-45918] StaticText: <is-stat>
-            [1-46456] button: Transfer is-transfer
-              [1-45919] StaticText: Transfer
-              [1-45920] StaticText: <is-transfer>
-            [1-46459] button: Transfer Item is-transfer-item
-              [1-45921] StaticText: Transfer Item
-              [1-45922] StaticText: <is-transfer-item>
-          [1-46462] group: GRÁFICOS
-            [1-46464] button: Bar Chart is-bar-chart
-              [1-45923] StaticText: Bar Chart
-              [1-45924] StaticText: <is-bar-chart>
-            [1-46467] button: Bubble Chart is-bubble-chart
-              [1-45925] StaticText: Bubble Chart
-              [1-45926] StaticText: <is-bubble-chart>
-            [1-46470] button: Chart is-chart
-              [1-45927] StaticText: Chart
-              [1-45928] StaticText: <is-chart>
-            [1-46473] button: Doughnut Chart is-doughnut-chart
-              [1-45929] StaticText: Doughnut Chart
-              [1-45930] StaticText: <is-doughnut-chart>
-            [1-46476] button: Funnel Chart is-funnel-chart
-              [1-45931] StaticText: Funnel Chart
-              [1-45932] StaticText: <is-funnel-chart>
-            [1-46479] button: Gauge is-gauge
-              [1-45933] StaticText: Gauge
-              [1-45934] StaticText: <is-gauge>
-            [1-46482] button: Heatmap is-heatmap
-              [1-45935] StaticText: Heatmap
-              [1-45936] StaticText: <is-heatmap>
-            [1-46485] button: Line Chart is-line-chart
-              [1-45937] StaticText: Line Chart
-              [1-45938] StaticText: <is-line-chart>
-            [1-46488] button: Map Marker is-map-marker
-              [1-45939] StaticText: Map Marker
-              [1-45940] StaticText: <is-map-marker>
-            [1-46491] button: Maps is-maps
-              [1-45941] StaticText: Maps
-              [1-45942] StaticText: <is-maps>
-            [1-46494] button: Pie Chart is-pie-chart
-              [1-45943] StaticText: Pie Chart
-              [1-45944] StaticText: <is-pie-chart>
-            [1-46497] button: Polar Area Chart is-polar-area-chart
-              [1-45945] StaticText: Polar Area Chart
-              [1-45946] StaticText: <is-polar-area-chart>
-            [1-46500] button: Radar Chart is-radar-chart
-              [1-45947] StaticText: Radar Chart
-              [1-45948] StaticText: <is-radar-chart>
-            [1-46503] button: Scatter Chart is-scatter-chart
-              [1-45949] StaticText: Scatter Chart
-              [1-45950] StaticText: <is-scatter-chart>
-            [1-46506] button: Sparkline is-sparkline
-              [1-45951] StaticText: Sparkline
-              [1-45952] StaticText: <is-sparkline>
-            [1-46509] button: Treemap is-treemap
-              [1-45953] StaticText: Treemap
-              [1-45954] StaticText: <is-treemap>
-            [1-46512] button: Waterfall Chart is-waterfall-chart
-              [1-45955] StaticText: Waterfall Chart
-              [1-45956] StaticText: <is-waterfall-chart>
-          [1-46515] group: DIAGRAMAS
-            [1-46517] button: Diagrama de bloques is-block-diagram
-              [1-45957] StaticText: Diagrama de bloques
-              [1-45958] StaticText: <is-block-diagram>
-            [1-46520] button: Diagrama de carriles is-swimlane-diagram
-              [1-45959] StaticText: Diagrama de carriles
-              [1-45960] StaticText: <is-swimlane-diagram>
-            [1-46523] button: Diagrama de casos de uso is-use-case-diagram
-              [1-45961] StaticText: Diagrama de casos de uso
-              [1-45962] StaticText: <is-use-case-diagram>
-            [1-46526] button: Diagrama de clases is-class-diagram
-              [1-45963] StaticText: Diagrama de clases
-              [1-45964] StaticText: <is-class-diagram>
-            [1-46529] button: Diagrama de componentes is-component-diagram
-              [1-45965] StaticText: Diagrama de componentes
-              [1-45966] StaticText: <is-component-diagram>
-            [1-46532] button: Diagrama de estados is-state-diagram
-              [1-45967] StaticText: Diagrama de estados
-              [1-45968] StaticText: <is-state-diagram>
-            [1-46535] button: Diagrama de flujo is-flowchart
-              [1-45969] StaticText: Diagrama de flujo
-              [1-45970] StaticText: <is-flowchart>
-            [1-46538] button: Diagrama de Gantt is-gantt
-              [1-45971] StaticText: Diagrama de Gantt
-              [1-45972] StaticText: <is-gantt>
-            [1-46541] button: Diagrama de Sankey is-sankey-diagram
-              [1-45973] StaticText: Diagrama de Sankey
-              [1-45974] StaticText: <is-sankey-diagram>
-            [1-46544] button: Diagrama de secuencia is-sequence-diagram
-              [1-45975] StaticText: Diagrama de secuencia
-              [1-45976] StaticText: <is-sequence-diagram>
-            [1-46547] button: Diagrama de Venn is-venn-diagram
-              [1-45977] StaticText: Diagrama de Venn
-              [1-45978] StaticText: <is-venn-diagram>
-            [1-46550] button: Diagrama entidad-relación is-er-diagram
-              [1-45979] StaticText: Diagrama entidad-relación
-              [1-45980] StaticText: <is-er-diagram>
-            [1-46553] button: Línea de tiempo is-timeline
-              [1-45981] StaticText: Línea de tiempo
-              [1-45982] StaticText: <is-timeline>
-            [1-46556] button: Mapa de recorrido is-journey-map
-              [1-45983] StaticText: Mapa de recorrido
-              [1-45984] StaticText: <is-journey-map>
-            [1-46559] button: Mapa mental is-mindmap
-              [1-45985] StaticText: Mapa mental
-              [1-45986] StaticText: <is-mindmap>
-            [1-46562] button: Matriz de cuadrantes is-quadrant-chart
-              [1-45987] StaticText: Matriz de cuadrantes
-              [1-45988] StaticText: <is-quadrant-chart>
-            [1-46565] button: Org Chart is-org-chart
-              [1-45989] StaticText: Org Chart
-              [1-45990] StaticText: <is-org-chart>
-            [1-46568] button: Visor de diagramas is-diagram-lightbox
-              [1-45991] StaticText: Visor de diagramas
-              [1-45992] StaticText: <is-diagram-lightbox>
-          [1-46571] group: OVERLAYS
-            [1-46573] button: Command Palette is-command-palette
-              [1-45993] StaticText: Command Palette
-              [1-45994] StaticText: <is-command-palette>
-            [1-46576] button: PDF Viewer is-pdf-viewer
-              [1-45995] StaticText: PDF Viewer
-              [1-45996] StaticText: <is-pdf-viewer>
-            [1-46579] button: Window is-window
-              [1-45997] StaticText: Window
-              [1-45998] StaticText: <is-window>
-          [1-46582] group: UTILERÍAS
-            [1-46584] button: Editor Markdown is-md-editor
-              [1-45999] StaticText: Editor Markdown
-              [1-46000] StaticText: <is-md-editor>
-            [1-46587] button: Formato is-format
-              [1-46001] StaticText: Formato
-              [1-46002] StaticText: <is-format>
-            [1-46590] button: Formato de bytes is-format-bytes
-              [1-46003] StaticText: Formato de bytes
-              [1-46004] StaticText: <is-format-bytes>
-            [1-46593] button: Formato de fecha is-format-date
-              [1-46005] StaticText: Formato de fecha
-              [1-46006] StaticText: <is-format-date>
-            [1-46596] button: Formato de número is-format-number
-              [1-46007] StaticText: Formato de número
-              [1-46008] StaticText: <is-format-number>
-            [1-46599] button: IsUi is-ui
-              [1-46009] StaticText: IsUi
-              [1-46010] StaticText: <is-ui>
-            [1-46602] button: Lightbox is-lightbox
-              [1-46011] StaticText: Lightbox
-              [1-46012] StaticText: <is-lightbox>
-            [1-46605] button: Observador de intersección is-intersection-observer
-              [1-46013] StaticText: Observador de intersección
-              [1-46014] StaticText: <is-intersection-observer>
-            [1-46608] button: Observador de mutación is-mutation-observer
-              [1-46015] StaticText: Observador de mutación
-              [1-46016] StaticText: <is-mutation-observer>
-            [1-46611] button: Observer is-observer
-              [1-46017] StaticText: Observer
-              [1-46018] StaticText: <is-observer>
-            [1-46614] button: Offscreen Canvas is-offscreen-canvas
-              [1-46019] StaticText: Offscreen Canvas
-              [1-46020] StaticText: <is-offscreen-canvas>
-            [1-46617] button: Popover is-popover
-              [1-46021] StaticText: Popover
-              [1-46022] StaticText: <is-popover>
-            [1-46620] button: Render Markdown is-md-render
-              [1-46023] StaticText: Render Markdown
-              [1-46024] StaticText: <is-md-render>
-            [1-46623] button: Resize Observer is-resize-observer
-              [1-46025] StaticText: Resize Observer
-              [1-46026] StaticText: <is-resize-observer>
-            [1-46626] button: Tiempo relativo is-relative-time
-              [1-46027] StaticText: Tiempo relativo
-              [1-46028] StaticText: <is-relative-time>
-            [1-46629] button: Wake Lock is-wake-lock
-              [1-46029] StaticText: Wake Lock
-              [1-46030] StaticText: <is-wake-lock>
-          [1-46632] group: ISP-SVELTECOMPONENTS
-            [1-46634] button: Accordion Group is-accordion-group
-              [1-46031] StaticText: Accordion Group
-              [1-46032] StaticText: <is-accordion-group>
-            [1-46638] button: Block Layout is-block-layout
-              [1-46033] StaticText: Block Layout
-              [1-46034] StaticText: <is-block-layout>
-            [1-46642] button: Btn Ref is-btn-ref
-              [1-46035] StaticText: Btn Ref
-              [1-46036] StaticText: <is-btn-ref>
-            [1-46646] button: Catálogo Gen is-catalogo-gen
-              [1-46037] StaticText: Catálogo Gen
-              [1-46038] StaticText: <is-catalogo-gen>
-            [1-46650] button: Confirm Delete is-confirm-delete
-              [1-46039] StaticText: Confirm Delete
-              [1-46040] StaticText: <is-confirm-delete>
-            [1-46654] button: Flex Layout is-flex-layout
-              [1-46041] StaticText: Flex Layout
-              [1-46042] StaticText: <is-flex-layout>
-            [1-46658] button: Flex Options is-flex-options
-              [1-46043] StaticText: Flex Options
-              [1-46044] StaticText: <is-flex-options>
-            [1-46662] button: Float Card is-float-card
-              [1-46045] StaticText: Float Card
-              [1-46046] StaticText: <is-float-card>
-            [1-46666] button: Form is-form
-              [1-46047] StaticText: Form
-              [1-46048] StaticText: <is-form>
-            [1-46670] button: Grid Layout is-grid-layout
-              [1-46049] StaticText: Grid Layout
-              [1-46050] StaticText: <is-grid-layout>
-            [1-46674] button: Heading is-heading
-              [1-46051] StaticText: Heading
-              [1-46052] StaticText: <is-heading>
-            [1-46678] button: Loading Overlay is-loading-overlay
-              [1-46053] StaticText: Loading Overlay
-              [1-46054] StaticText: <is-loading-overlay>
-            [1-46682] button: Modal Verificación is-modal-verificacion
-              [1-46055] StaticText: Modal Verificación
-              [1-46056] StaticText: <is-modal-verificacion>
-            [1-46686] button: Text is-text
-              [1-46057] StaticText: Text
-              [1-46058] StaticText: <is-text>
-            [1-46690] button: Tree View is-tree-view
-              [1-46059] StaticText: Tree View
-              [1-46060] StaticText: <is-tree-view>
-        [1-46846] separator: Redimensionar panel
-        [1-46774] is-split-panel
-          [1-46775] scrollable, is-main
-            [1-46948] section
-              [1-46936] heading: <is-input>
-              [1-46941] paragraph
-                [1-50088] StaticText: Campo de texto form-associated con paridad funcional con el
-                [1-46937] link: TextField de MUI
-                [1-50090] StaticText: : tres
-                [1-46938] emphasis
-                  [1-50091] StaticText: appearances
-                [1-50092] StaticText: , estado de error ligado a la validación nativa, adornos, contador de caracteres y ancho controlable. Participa en
-                [1-46939] code
-                  [1-50093] StaticText: <form>
-                [1-50094] StaticText: vía
-                [1-46940] code
-                  [1-50095] StaticText: ElementInternals
-                [1-50096] StaticText: .
-              [1-46944] div
-                [1-46943] is-demo
-                  [1-46949] div
-                    [1-46950] LabelText
-                      [1-50097] StaticText: Nombre
-                    [1-46956] textbox: Nombre
-                    [1-50099] StaticText: Como aparece en la factura
-                  [1-50973] button: Ver código del ejemplo
-                  [1-51660] button: Ver fuentes JS / CSS / MD
-                [1-50032] group
-                  [1-50037] DisclosureTriangle: CONTROLES
-              [1-46945] paragraph
-                [1-50100] StaticText: value:
-                [1-46946] code
-                  [1-50101] StaticText: ""
-            [1-47027] section
-              [1-47006] heading: Appearance
-              [1-47013] paragraph
-                [1-47007] code
-                  [1-50103] StaticText: appearance
-                [1-50104] StaticText: equivale a las
-                [1-47008] emphasis
-                  [1-50105] StaticText: variants
-                [1-50106] StaticText: de MUI:
-                [1-47009] code
-                  [1-50107] StaticText: outlined
-                [1-50108] StaticText: (default) ·
-                [1-47010] code
-                  [1-50109] StaticText: filled
-                [1-50110] StaticText: ·
-                [1-47011] code
-                  [1-50111] StaticText: underlined
-                [1-50112] StaticText: (el
-                [1-47012] code
-                  [1-50113] StaticText: standard
-                [1-50114] StaticText: de MUI).
-              [1-47018] is-demo
-                [1-47014] div
-                  [1-47028] div
-                    [1-47029] LabelText
-                      [1-50115] StaticText: outlined (default)
-                    [1-47035] textbox: outlined (default)
-                  [1-47085] div
-                    [1-47086] LabelText
-                      [1-50117] StaticText: filled
-                    [1-47092] textbox: filled
-                  [1-47142] div
-                    [1-47143] LabelText
-                      [1-50119] StaticText: underlined
-                    [1-47149] textbox: underlined
-                [1-51034] button: Ver código del ejemplo
-                [1-51664] button: Ver fuentes JS / CSS / MD
-              [1-51722] div
-                [1-47231] pre: Código
-                  [1-47201] div
-                    [1-50121] StaticText: <is-input
-                    [1-50122] StaticText: 
-                    [1-50123] StaticText: label
-                    [1-50124] StaticText: =
-                    [1-50125] StaticText: "outlined (default)"
-                    [1-50126] StaticText: >
-                    [1-50127] StaticText: </is-input
-                    [1-50128] StaticText: >
-                  [1-47209] div
-                    [1-50129] StaticText: <is-input
-                    [1-50130] StaticText: 
-                    [1-50131] StaticText: variant
-                    [1-50132] StaticText: =
-                    [1-50133] StaticText: "filled"
-                    [1-50134] StaticText: 
-                    [1-50135] StaticText: label
-                    [1-50136] StaticText: =
-                    [1-50137] StaticText: "filled"
-                    [1-50138] StaticText: >
-                    [1-50139] StaticText: </is-input
-                    [1-50140] StaticText: >
-                  [1-47220] div
-                    [1-50141] StaticText: <is-input
-                    [1-50142] StaticText: 
-                    [1-50143] StaticText: variant
-                    [1-50144] StaticText: =
-                    [1-50145] StaticText: "underlined"
-                    [1-50146] StaticText: 
-                    [1-50147] StaticText: label
-                    [1-50148] StaticText: =
-                    [1-50149] StaticText: "underlined"
-                    [1-50150] StaticText: >
-                    [1-50151] StaticText: </is-input
-                    [1-50152] StaticText: >
-                [1-51739] button: Copiar
-            [1-47271] section
-              [1-47243] heading: Tipos
-              [1-47253] paragraph
-                [1-47244] code
-                  [1-50157] StaticText: type
-                [1-50158] StaticText: pasa al input nativo interno junto con
-                [1-47245] code
-                  [1-50159] StaticText: min
-                [1-50160] StaticText: ,
-                [1-47246] code
-                  [1-50161] StaticText: max
-                [1-50162] StaticText: ,
-                [1-47247] code
-                  [1-50163] StaticText: step
-                [1-50164] StaticText: ,
-                [1-47248] code
-                  [1-50165] StaticText: maxlength
-                [1-50166] StaticText: y
-                [1-47249] code
-                  [1-50167] StaticText: autocomplete
-                [1-50168] StaticText: . En
-                [1-47250] code
-                  [1-50169] StaticText: type="search"
-                [1-50170] StaticText: se oculta la
-                [1-47251] emphasis
-                  [1-50171] StaticText: x
-                [1-50172] StaticText: nativa del navegador: la limpieza la hace
-                [1-47252] code
-                  [1-50173] StaticText: clearable
-                [1-50174] StaticText: .
-              [1-47262] is-demo
-                [1-47254] div
-                  [1-47272] div
-                    [1-47273] LabelText
-                      [1-50175] StaticText: Email
-                    [1-47279] textbox: Email
-                    [1-50177] StaticText: Obligatorio
-                  [1-47330] div
-                    [1-47331] LabelText
-                      [1-50178] StaticText: Contraseña
-                    [1-47333] div
-                      [1-47337] textbox: Contraseña
-                      [1-47341] button: Mostrar contraseña
-                  [1-47388] div
-                    [1-47389] LabelText
-                      [1-50180] StaticText: Cantidad
-                    [1-47395] spinbutton: Cantidad
-                      [1-50181] StaticText: 10
-                  [1-47448] div
-                    [1-47449] LabelText
-                      [1-50182] StaticText: Buscar
-                    [1-47455] searchbox: Buscar
-                  [1-47509] div
-                    [1-47510] LabelText
-                      [1-50184] StaticText: Teléfono
-                    [1-47516] textbox: Teléfono
-                  [1-47567] div
-                    [1-47568] LabelText
-                      [1-50186] StaticText: Sitio web
-                    [1-47574] textbox: Sitio web
-                  [1-47625] div
-                    [1-47626] LabelText
-                      [1-50188] StaticText: Fecha
-                    [1-47632] Date: Fecha
-                      [1-47681] div
-                        [1-47684] div
-                          [1-47685] spinbutton: Día Día
-                            [1-50189] StaticText: dd
-                          [1-50190] StaticText: /
-                          [1-47687] spinbutton: Mes Mes
-                            [1-50191] StaticText: mm
-                          [1-50192] StaticText: /
-                          [1-47689] spinbutton: Año Año
-                            [1-50193] StaticText: aaaa
-                        [1-47683] button: Mostrar selector de fecha
-                [1-51095] button: Ver código del ejemplo
-                [1-51668] button: Ver fuentes JS / CSS / MD
-              [1-51795] div
-                [1-47736] pre: Código
-                  [1-47692] div
-                    [1-50194] StaticText: <is-input
-                    [1-50195] StaticText: 
-                    [1-50196] StaticText: type
-                    [1-50197] StaticText: =
-                    [1-50198] StaticText: "password"
-                    [1-50199] StaticText: 
-                    [1-50200] StaticText: label
-                    [1-50201] StaticText: =
-                    [1-50202] StaticText: "Contraseña"
-                    [1-50203] StaticText: 
-                    [1-50204] StaticText: password-toggle
-                    [1-50205] StaticText: >
-                    [1-50206] StaticText: </is-input
-                    [1-50207] StaticText: >
-                  [1-47704] div
-                    [1-50208] StaticText: <is-input
-                    [1-50209] StaticText: 
-                    [1-50210] StaticText: type
-                    [1-50211] StaticText: =
-                    [1-50212] StaticText: "number"
-                    [1-50213] StaticText: 
-                    [1-50214] StaticText: label
-                    [1-50215] StaticText: =
-                    [1-50216] StaticText: "Cantidad"
-                    [1-50217] StaticText: 
-                    [1-50218] StaticText: min
-                    [1-50219] StaticText: =
-                    [1-50220] StaticText: "0"
-                    [1-50221] StaticText: 
-                    [1-50222] StaticText: max
-                    [1-50223] StaticText: =
-                    [1-50224] StaticText: "100"
-                    [1-50225] StaticText: 
-                    [1-50226] StaticText: step
-                    [1-50227] StaticText: =
-                    [1-50228] StaticText: "5"
-                    [1-50229] StaticText: >
-                    [1-50230] StaticText: </is-input
-                    [1-50231] StaticText: >
-                  [1-47724] div
-                    [1-50232] StaticText: <is-input
-                    [1-50233] StaticText: 
-                    [1-50234] StaticText: type
-                    [1-50235] StaticText: =
-                    [1-50236] StaticText: "search"
-                    [1-50237] StaticText: 
-                    [1-50238] StaticText: label
-                    [1-50239] StaticText: =
-                    [1-50240] StaticText: "Buscar"
-                    [1-50241] StaticText: 
-                    [1-50242] StaticText: clearable
-                    [1-50243] StaticText: >
-                    [1-50244] StaticText: </is-input
-                    [1-50245] StaticText: >
-                [1-51812] button: Copiar
-            [1-47780] section
-              [1-47748] heading: Adornos
-              [1-47756] paragraph
-                [1-50250] StaticText: Para texto corto (
-                [1-47749] code
-                  [1-50251] StaticText: $
-                [1-50252] StaticText: ,
-                [1-47750] code
-                  [1-50253] StaticText: kg
-                [1-50254] StaticText: ,
-                [1-47751] code
-                  [1-50255] StaticText: %
-                [1-50256] StaticText: ) basta con
-                [1-47752] code
-                  [1-50257] StaticText: prefix
-                [1-50258] StaticText: y
-                [1-47753] code
-                  [1-50259] StaticText: suffix
-                [1-50260] StaticText: : se pintan atenuados y no reciben eventos. Para iconos o botones, los slots
-                [1-47754] code
-                  [1-50261] StaticText: start
-                [1-50262] StaticText: y
-                [1-47755] code
-                  [1-50263] StaticText: end
-                [1-50264] StaticText: . Se pueden combinar.
-              [1-47765] is-demo
-                [1-47757] div
-                  [1-47781] div
-                    [1-47782] LabelText
-                      [1-50265] StaticText: Importe
-                    [1-47784] div
-                      [1-50266] StaticText: $
-                      [1-47788] spinbutton: Importe
-                        [1-50267] StaticText: 1200
-                      [1-50268] StaticText: COP
-                  [1-47841] div
-                    [1-47842] LabelText
-                      [1-50269] StaticText: Peso
-                    [1-47844] div
-                      [1-47848] spinbutton: Peso
-                        [1-50270] StaticText: 72
-                      [1-50271] StaticText: kg
-                  [1-47901] div
-                    [1-47902] LabelText
-                      [1-50272] StaticText: Con iconos
-                    [1-47908] textbox: Con iconos
-                  [1-47962] div
-                    [1-47963] LabelText
-                      [1-50274] StaticText: Slot + prefix
-                    [1-47965] div
-                      [1-50275] StaticText: https://
-                      [1-47969] textbox: Slot + prefix
-                [1-51156] button: Ver código del ejemplo
-                [1-51672] button: Ver fuentes JS / CSS / MD
-              [1-51868] div
-                [1-48073] pre: Código
-                  [1-48025] div
-                    [1-50277] StaticText: <is-input
-                    [1-50278] StaticText: 
-                    [1-50279] StaticText: label
-                    [1-50280] StaticText: =
-                    [1-50281] StaticText: "Importe"
-                    [1-50282] StaticText: 
-                    [1-50283] StaticText: type
-                    [1-50284] StaticText: =
-                    [1-50285] StaticText: "number"
-                    [1-50286] StaticText: 
-                    [1-50287] StaticText: prefix
-                    [1-50288] StaticText: =
-                    [1-50289] StaticText: "$"
-                    [1-50290] StaticText: 
-                    [1-50291] StaticText: suffix
-                    [1-50292] StaticText: =
-                    [1-50293] StaticText: "COP"
-                    [1-50294] StaticText: >
-                    [1-50295] StaticText: </is-input
-                    [1-50296] StaticText: >
-                  [1-48042] div
-                    [1-50297] StaticText: <is-input
-                    [1-50298] StaticText: 
-                    [1-50299] StaticText: label
-                    [1-50300] StaticText: =
-                    [1-50301] StaticText: "Con iconos"
-                    [1-50302] StaticText: >
-                  [1-48048] div
-                    [1-50303] StaticText: 
-                    [1-50304] StaticText: <is-icon
-                    [1-50305] StaticText: 
-                    [1-50306] StaticText: slot
-                    [1-50307] StaticText: =
-                    [1-50308] StaticText: "start"
-                    [1-50309] StaticText: 
-                    [1-50310] StaticText: icon
-                    [1-50311] StaticText: =
-                    [1-50312] StaticText: "mdi:magnify"
-                    [1-50313] StaticText: >
-                    [1-50314] StaticText: </is-icon
-                    [1-50315] StaticText: >
-                  [1-48059] div
-                    [1-50316] StaticText: 
-                    [1-50317] StaticText: <is-icon
-                    [1-50318] StaticText: 
-                    [1-50319] StaticText: slot
-                    [1-50320] StaticText: =
-                    [1-50321] StaticText: "end"
-                    [1-50322] StaticText: 
-                    [1-50323] StaticText: icon
-                    [1-50324] StaticText: =
-                    [1-50325] StaticText: "mdi:filter-variant"
-                    [1-50326] StaticText: >
-                    [1-50327] StaticText: </is-icon
-                    [1-50328] StaticText: >
-                  [1-48070] div
-                    [1-50329] StaticText: </is-input
-                    [1-50330] StaticText: >
-                [1-51885] button: Copiar
-              [1-47774] paragraph
-                [1-50336] StaticText: En JS las propiedades se llaman
-                [1-47775] code
-                  [1-50337] StaticText: prefixText
-                [1-50338] StaticText: y
-                [1-47776] code
-                  [1-50339] StaticText: suffixText
-                [1-50340] StaticText: :
-                [1-47777] code
-                  [1-50341] StaticText: prefix
-                [1-50342] StaticText: ya existe en
-                [1-47778] code
-                  [1-50343] StaticText: Element
-                [1-50344] StaticText: (prefijo de espacio de nombres XML) y no conviene pisarla.
-            [1-48112] section
-              [1-48085] heading: Error y validación
-              [1-48094] paragraph
-                [1-48086] code
-                  [1-50346] StaticText: error
-                [1-50347] StaticText: fuerza el estado visual de peligro y
-                [1-48087] code
-                  [1-50348] StaticText: error-text
-                [1-50349] StaticText: sustituye al
-                [1-48088] code
-                  [1-50350] StaticText: hint
-                [1-50351] StaticText: . Sin forzarlo, el campo entra solo en error cuando la validación nativa falla
-                [1-48089] emphasis
-                  [1-50352] StaticText: después
-                [1-50353] StaticText: de la primera interacción (blur,
-                [1-48090] code
-                  [1-50354] StaticText: change
-                [1-50355] StaticText: o
-                [1-48091] code
-                  [1-50356] StaticText: reportValidity()
-                [1-50357] StaticText: ); si no diste
-                [1-48092] code
-                  [1-50358] StaticText: error-text
-                [1-50359] StaticText: , se muestra el mensaje de validación del navegador. El estado se expone como
-                [1-48093] code
-                  [1-50360] StaticText: :state(invalid)
-                [1-50361] StaticText: .
-              [1-48103] is-demo
-                [1-48095] div
-                  [1-48113] div
-                    [1-48114] LabelText
-                      [1-50362] StaticText: Error forzado
-                    [1-48120] textbox: Error forzado
-                      [1-50363] StaticText: valor@malo
-                    [1-50364] StaticText: Ese correo no existe en el sistema
-                  [1-48170] div
-                    [1-48171] LabelText
-                      [1-50365] StaticText: Error sin error-text
-                    [1-48177] textbox: Error sin error-text
-                      [1-50366] StaticText: 12
-                    [1-50367] StaticText: El hint se pinta en rojo
-                  [1-48226] div
-                    [1-48227] LabelText
-                      [1-50368] StaticText: Correo (sale del campo para validar)
-                    [1-48233] textbox: Correo (sale del campo para validar)
-                    [1-50369] StaticText: Se valida al perder el foco
-                  [1-48283] div
-                    [1-48284] LabelText
-                      [1-50370] StaticText: Obligatorio
-                    [1-48290] textbox: Obligatorio
-                    [1-50371] StaticText: Pulsa «Validar»
-                [1-48100] div
-                  [1-48101] button: Validar
-                  [1-48102] button: Alternar error
-                [1-51217] button: Ver código del ejemplo
-                [1-51676] button: Ver fuentes JS / CSS / MD
-              [1-51941] div
-                [1-48354] pre: Código
-                  [1-48342] div
-                    [1-50374] StaticText: <is-input
-                    [1-50375] StaticText: 
-                    [1-50376] StaticText: error
-                    [1-50377] StaticText: 
-                    [1-50378] StaticText: error-text
-                    [1-50379] StaticText: =
-                    [1-50380] StaticText: "Ese correo no existe en el sistema"
-                    [1-50381] StaticText: >
-                    [1-50382] StaticText: </is-input
-                    [1-50383] StaticText: >
-                  [1-50384] StaticText: // error derivado de la validación nativa
-                  [1-50385] StaticText: input.reportValidity();          // marca el campo como tocado y pinta el error
-                  [1-50386] StaticText: input.error = true;              // o fuérzalo desde fuera
-                [1-51958] button: Copiar
-            [1-48385] section
-              [1-48366] heading: Contador de caracteres
-              [1-48371] paragraph
-                [1-48367] code
-                  [1-50392] StaticText: show-count
-                [1-50393] StaticText: añade el contador a la derecha de la fila del hint. Con
-                [1-48368] code
-                  [1-50394] StaticText: maxlength
-                [1-50395] StaticText: muestra
-                [1-48369] code
-                  [1-50396] StaticText: n/max
-                [1-50397] StaticText: ; sin él, solo
-                [1-48370] code
-                  [1-50398] StaticText: n
-                [1-50399] StaticText: .
-              [1-48376] is-demo
-                [1-48372] div
-                  [1-48386] div
-                    [1-48387] LabelText
-                      [1-50400] StaticText: Titular
-                    [1-48393] textbox: Titular
-                      [1-50401] StaticText: Facturación electrónica
-                    [1-48401] div
-                      [1-50402] StaticText: Máximo 40 caracteres
-                      [1-50403] StaticText: 23/40
-                  [1-48443] div
-                    [1-48444] LabelText
-                      [1-50404] StaticText: Sin límite
-                    [1-48450] textbox: Sin límite
-                    [1-50406] StaticText: 0
-                  [1-48501] div
-                    [1-48502] LabelText
-                      [1-50407] StaticText: Solo contador
-                    [1-48508] textbox: Solo contador
-                    [1-50408] StaticText: 0/10
-                [1-51278] button: Ver código del ejemplo
-                [1-51680] button: Ver fuentes JS / CSS / MD
-              [1-52014] div
-                [1-48558] div
-                  [1-50409] StaticText: <is-input
-                  [1-50410] StaticText: 
-                  [1-50411] StaticText: label
-                  [1-50412] StaticText: =
-                  [1-50413] StaticText: "Titular"
-                  [1-50414] StaticText: 
-                  [1-50415] StaticText: maxlength
-                  [1-50416] StaticText: =
-                  [1-50417] StaticText: "40"
-                  [1-50418] StaticText: 
-                  [1-50419] StaticText: show-count
-                  [1-50420] StaticText: 
-                  [1-50421] StaticText: hint
-                  [1-50422] StaticText: =
-                  [1-50423] StaticText: "Máximo 40 caracteres"
-                  [1-50424] StaticText: >
-                  [1-50425] StaticText: </is-input
-                  [1-50426] StaticText: >
-                [1-52031] button: Copiar
-            [1-48603] section
-              [1-48585] heading: Ancho
-              [1-48589] paragraph
-                [1-50429] StaticText: El ancho se controla con el token
-                [1-48586] code
-                  [1-50430] StaticText: --is-field-width
-                [1-50431] StaticText: (heredable: puedes ponerlo en el contenedor y afecta a todos los campos de dentro).
-                [1-48587] code
-                  [1-50432] StaticText: full-width
-                [1-50433] StaticText: lo ignora y ocupa el 100% disponible, como el
-                [1-48588] code
-                  [1-50434] StaticText: fullWidth
-                [1-50435] StaticText: de MUI.
-              [1-48594] is-demo
-                [1-48590] div
-                  [1-48604] div
-                    [1-48605] LabelText
-                      [1-50436] StaticText: --is-field-width: 14rem
-                    [1-48611] textbox: --is-field-width: 14rem
-                  [1-48661] div
-                    [1-48662] LabelText
-                      [1-50438] StaticText: Mismo contenedor, full-width
-                    [1-48668] textbox: Mismo contenedor, full-width
-                  [1-48718] div
-                    [1-48719] LabelText
-                      [1-50440] StaticText: Override local
-                    [1-48725] spinbutton: Override local
-                      [1-50441] StaticText: 42
-                [1-51339] button: Ver código del ejemplo
-                [1-51684] button: Ver fuentes JS / CSS / MD
-              [1-52087] div
-                [1-48807] pre: Código
-                  [1-48781] div
-                    [1-50442] StaticText: <div
-                    [1-50443] StaticText: 
-                    [1-50444] StaticText: style
-                    [1-50445] StaticText: =
-                    [1-50446] StaticText: "--is-field-width: 14rem"
-                    [1-50447] StaticText: >
-                  [1-48787] div
-                    [1-50448] StaticText: 
-                    [1-50449] StaticText: <is-input
-                    [1-50450] StaticText: 
-                    [1-50451] StaticText: label
-                    [1-50452] StaticText: =
-                    [1-50453] StaticText: "Estrecho"
-                    [1-50454] StaticText: >
-                    [1-50455] StaticText: </is-input
-                    [1-50456] StaticText: >
-                  [1-48795] div
-                    [1-50457] StaticText: 
-                    [1-50458] StaticText: <is-input
-                    [1-50459] StaticText: 
-                    [1-50460] StaticText: label
-                    [1-50461] StaticText: =
-                    [1-50462] StaticText: "Ancho completo"
-                    [1-50463] StaticText: 
-                    [1-50464] StaticText: full-width
-                    [1-50465] StaticText: >
-                    [1-50466] StaticText: </is-input
-                    [1-50467] StaticText: >
-                  [1-48804] div
-                    [1-50468] StaticText: </div
-                    [1-50469] StaticText: >
-                [1-52104] button: Copiar
-            [1-48836] section
-              [1-48819] heading: Label a la izquierda
-              [1-48822] paragraph
-                [1-48820] code
-                  [1-50475] StaticText: label-placement="start"
-                [1-50476] StaticText: pasa el layout a rejilla de dos columnas para formularios horizontales.
-                [1-48821] code
-                  [1-50477] StaticText: --is-field-label-width
-                [1-50478] StaticText: fija la columna del label para que varios campos queden alineados.
-              [1-48827] is-demo
-                [1-48823] div
-                  [1-48837] div
-                    [1-48838] LabelText
-                      [1-50479] StaticText: Nombre
-                    [1-48844] textbox: Nombre
-                  [1-48894] div
-                    [1-48895] LabelText
-                      [1-50481] StaticText: Correo
-                    [1-48901] textbox: Correo
-                    [1-50482] StaticText: Se usa para la factura
-                  [1-48952] div
-                    [1-48953] LabelText
-                      [1-50484] StaticText: NIT
-                    [1-48955] div
-                      [1-50486] StaticText: CO
-                      [1-48959] textbox: NIT
-                    [1-50485] StaticText: 0/12
-                [1-51400] button: Ver código del ejemplo
-                [1-51688] button: Ver fuentes JS / CSS / MD
-              [1-52160] div
-                [1-49045] pre: Código
-                  [1-49012] div
-                    [1-50487] StaticText: <div
-                    [1-50488] StaticText: 
-                    [1-50489] StaticText: style
-                    [1-50490] StaticText: =
-                    [1-50491] StaticText: "--is-field-label-width: 7rem"
-                    [1-50492] StaticText: >
-                  [1-49018] div
-                    [1-50493] StaticText: 
-                    [1-50494] StaticText: <is-input
-                    [1-50495] StaticText: 
-                    [1-50496] StaticText: label-placement
-                    [1-50497] StaticText: =
-                    [1-50498] StaticText: "start"
-                    [1-50499] StaticText: 
-                    [1-50500] StaticText: label
-                    [1-50501] StaticText: =
-                    [1-50502] StaticText: "Nombre"
-                    [1-50503] StaticText: 
-                    [1-50504] StaticText: full-width
-                    [1-50505] StaticText: >
-                    [1-50506] StaticText: </is-input
-                    [1-50507] StaticText: >
-                  [1-49030] div
-                    [1-50508] StaticText: 
-                    [1-50509] StaticText: <is-input
-                    [1-50510] StaticText: 
-                    [1-50511] StaticText: label-placement
-                    [1-50512] StaticText: =
-                    [1-50513] StaticText: "start"
-                    [1-50514] StaticText: 
-                    [1-50515] StaticText: label
-                    [1-50516] StaticText: =
-                    [1-50517] StaticText: "Correo"
-                    [1-50518] StaticText: 
-                    [1-50519] StaticText: full-width
-                    [1-50520] StaticText: >
-                    [1-50521] StaticText: </is-input
-                    [1-50522] StaticText: >
-                  [1-49042] div
-                    [1-50523] StaticText: </div
-                    [1-50524] StaticText: >
-                [1-52177] button: Copiar
-            [1-49068] section
-              [1-49057] heading: Estados
-              [1-49060] paragraph
-                [1-49058] code
-                  [1-50530] StaticText: readonly
-                [1-50531] StaticText: vacía el fondo y pasa el borde a discontinuo;
-                [1-49059] code
-                  [1-50532] StaticText: disabled
-                [1-50533] StaticText: además atenúa y bloquea la interacción.
-              [1-49066] is-demo
-                [1-49061] div
-                  [1-49069] div
-                    [1-49070] LabelText
-                      [1-50534] StaticText: Solo lectura
-                    [1-49076] textbox: Solo lectura
-                      [1-50535] StaticText: No editable
-                  [1-49125] div
-                    [1-49126] LabelText
-                      [1-50536] StaticText: Deshabilitado
-                    [1-49132] textbox: Deshabilitado
-                      [1-50537] StaticText: Sin acceso
-                  [1-49181] div
-                    [1-49182] LabelText
-                      [1-50538] StaticText: filled · readonly
-                    [1-49188] textbox: filled · readonly
-                      [1-50539] StaticText: No editable
-                  [1-49237] div
-                    [1-49238] LabelText
-                      [1-50540] StaticText: underlined · disabled
-                    [1-49244] textbox: underlined · disabled
-                      [1-50541] StaticText: Sin acceso
-                [1-51461] button: Ver código del ejemplo
-                [1-51692] button: Ver fuentes JS / CSS / MD
-            [1-49310] section
-              [1-49293] heading: Dentro de un <form>
-              [1-49298] paragraph
-                [1-50543] StaticText: El valor entra en
-                [1-49294] code
-                  [1-50544] StaticText: FormData
-                [1-50545] StaticText: con la clave de
-                [1-49295] code
-                  [1-50546] StaticText: name
-                [1-50547] StaticText: .
-                [1-49296] code
-                  [1-50548] StaticText: reset
-                [1-50549] StaticText: restaura el atributo
-                [1-49297] code
-                  [1-50550] StaticText: value
-                [1-50551] StaticText: y limpia el estado de error.
-              [1-49306] is-demo
-                [1-49299] form
-                  [1-49311] div
-                    [1-49312] LabelText
-                      [1-50552] StaticText: Usuario
-                    [1-49318] textbox: Usuario
-                    [1-50553] StaticText: 0/20
-                  [1-49368] div
-                    [1-49369] LabelText
-                      [1-50554] StaticText: Correo
-                    [1-49375] textbox: Correo
-                  [1-49425] div
-                    [1-49426] LabelText
-                      [1-50555] StaticText: Cargo
-                    [1-49432] textbox: Cargo
-                      [1-50556] StaticText: Contador
-                  [1-49303] div
-                    [1-49304] button: Enviar
-                    [1-49305] button: Reset
-                [1-51522] button: Ver código del ejemplo
-                [1-51696] button: Ver fuentes JS / CSS / MD
-              [1-49308] paragraph
-                [1-50559] StaticText: FormData: —
-            [1-49722] section
-              [1-49481] heading: Referencia
-              [1-49482] heading: Atributos
-              [1-49562] table
-                [1-49560] rowgroup
-                  [1-49486] row
-                    [1-49484] columnheader: ATRIBUTO
-                    [1-49485] columnheader: DETALLE
-                [1-49561] tbody
-                  [1-49491] row
-                    [1-49488] cell: type
-                      [1-49487] code
-                        [1-50562] StaticText: type
-                    [1-49490] cell: text (default) · email · password · number · search · tel · url · date
-                      [1-49489] code
-                        [1-50563] StaticText: text
-                      [1-50564] StaticText: (default) · email · password · number · search · tel · url · date
-                  [1-49498] row
-                    [1-49493] cell: appearance
-                      [1-49492] code
-                        [1-50565] StaticText: appearance
-                    [1-49497] cell: outlined (default) · filled · underlined
-                      [1-49494] code
-                        [1-50566] StaticText: outlined
-                      [1-50567] StaticText: (default) ·
-                      [1-49495] code
-                        [1-50568] StaticText: filled
-                      [1-50569] StaticText: ·
-                      [1-49496] code
-                        [1-50570] StaticText: underlined
-                  [1-49504] row
-                    [1-49500] cell: label-placement
-                      [1-49499] code
-                        [1-50571] StaticText: label-placement
-                    [1-49503] cell: top (default) · start
-                      [1-49501] code
-                        [1-50572] StaticText: top
-                      [1-50573] StaticText: (default) ·
-                      [1-49502] code
-                        [1-50574] StaticText: start
-                  [1-49511] row
-                    [1-49509] cell: name value placeholder autocomplete
-                      [1-49505] code
-                        [1-50575] StaticText: name
-                      [1-50576] StaticText: 
-                      [1-49506] code
-                        [1-50577] StaticText: value
-                      [1-50578] StaticText: 
-                      [1-49507] code
-                        [1-50579] StaticText: placeholder
-                      [1-50785] StaticText: 
-                      [1-49508] code
-                        [1-50580] StaticText: autocomplete
-                    [1-49510] cell: string
-                  [1-49516] row
-                    [1-49514] cell: label hint
-                      [1-49512] code
-                        [1-50582] StaticText: label
-                      [1-50583] StaticText: 
-                      [1-49513] code
-                        [1-50584] StaticText: hint
-                    [1-49515] cell: texto o slots homónimos
-                  [1-49521] row
-                    [1-49518] cell: error-text
-                      [1-49517] code
-                        [1-50586] StaticText: error-text
-                    [1-49520] cell: mensaje que sustituye al hint cuando hay error
-                      [1-50587] StaticText: mensaje que sustituye al
-                      [1-49519] code
-                        [1-50588] StaticText: hint
-                      [1-50589] StaticText: cuando hay error
-                  [1-49526] row
-                    [1-49524] cell: prefix suffix
-                      [1-49522] code
-                        [1-50590] StaticText: prefix
-                      [1-50591] StaticText: 
-                      [1-49523] code
-                        [1-50592] StaticText: suffix
-                    [1-49525] cell: adorno de texto corto, atenuado y no interactivo
-                  [1-49533] row
-                    [1-49531] cell: min max step maxlength
-                      [1-49527] code
-                        [1-50594] StaticText: min
-                      [1-50595] StaticText: 
-                      [1-49528] code
-                        [1-50596] StaticText: max
-                      [1-50597] StaticText: 
-                      [1-49529] code
-                        [1-50598] StaticText: step
-                      [1-50599] StaticText: 
-                      [1-49530] code
-                        [1-50600] StaticText: maxlength
-                    [1-49532] cell: pasan al input nativo interno
-                  [1-49539] row
-                    [1-49537] cell: disabled required readonly
-                      [1-49534] code
-                        [1-50602] StaticText: disabled
-                      [1-50603] StaticText: 
-                      [1-49535] code
-                        [1-50604] StaticText: required
-                      [1-50605] StaticText: 
-                      [1-49536] code
-                        [1-50606] StaticText: readonly
-                    [1-49538] cell: boolean
-                  [1-49544] row
-                    [1-49542] cell: clearable password-toggle
-                      [1-49540] code
-                        [1-50608] StaticText: clearable
-                      [1-50609] StaticText: 
-                      [1-49541] code
-                        [1-50610] StaticText: password-toggle
-                    [1-49543] cell: boolean · botón de limpiar y ojo de contraseña
-                  [1-49548] row
-                    [1-49546] cell: error
-                      [1-49545] code
-                        [1-50612] StaticText: error
-                    [1-49547] cell: boolean · fuerza el estado visual de peligro
-                  [1-49554] row
-                    [1-49550] cell: show-count
-                      [1-49549] code
-                        [1-50614] StaticText: show-count
-                    [1-49553] cell: boolean · contador n/maxlength (o n)
-                      [1-50615] StaticText: boolean · contador
-                      [1-49551] code
-                        [1-50616] StaticText: n/maxlength
-                      [1-50617] StaticText: (o
-                      [1-49552] code
-                        [1-50618] StaticText: n
-                      [1-50619] StaticText: )
-                  [1-49559] row
-                    [1-49556] cell: full-width
-                      [1-49555] code
-                        [1-50620] StaticText: full-width
-                    [1-49558] cell: boolean · 100% del ancho disponible, ignora --is-field-width
-                      [1-50621] StaticText: boolean · 100% del ancho disponible, ignora
-                      [1-49557] code
-                        [1-50622] StaticText: --is-field-width
-              [1-49564] heading: Propiedades y métodos
-              [1-49632] table
-                [1-49630] rowgroup
-                  [1-49568] row
-                    [1-49566] columnheader: API
-                    [1-49567] columnheader: DETALLE
-                [1-49631] tbody
-                  [1-49574] row
-                    [1-49571] cell: value defaultValue
-                      [1-49569] code
-                        [1-50624] StaticText: value
-                      [1-50625] StaticText: 
-                      [1-49570] code
-                        [1-50626] StaticText: defaultValue
-                    [1-49573] cell: valor actual · valor del atributo value (el del reset)
-                      [1-50627] StaticText: valor actual · valor del atributo
-                      [1-49572] code
-                        [1-50628] StaticText: value
-                      [1-50629] StaticText: (el del reset)
-                  [1-49580] row
-                    [1-49578] cell: type appearance labelPlacement
-                      [1-49575] code
-                        [1-50630] StaticText: type
-                      [1-50631] StaticText: 
-                      [1-49576] code
-                        [1-50632] StaticText: appearance
-                      [1-50633] StaticText: 
-                      [1-49577] code
-                        [1-50634] StaticText: labelPlacement
-                    [1-49579] cell: sanitizan valores no válidos al default
-                  [1-49588] row
-                    [1-49583] cell: prefixText suffixText
-                      [1-49581] code
-                        [1-50636] StaticText: prefixText
-                      [1-50637] StaticText: 
-                      [1-49582] code
-                        [1-50638] StaticText: suffixText
-                    [1-49587] cell: reflejan prefix / suffix (Element.prefix ya existe)
-                      [1-50639] StaticText: reflejan
-                      [1-49584] code
-                        [1-50640] StaticText: prefix
-                      [1-50641] StaticText: /
-                      [1-49585] code
-                        [1-50642] StaticText: suffix
-                      [1-50643] StaticText: (
-                      [1-49586] code
-                        [1-50644] StaticText: Element.prefix
-                      [1-50645] StaticText: ya existe)
-                  [1-49595] row
-                    [1-49593] cell: error errorText showCount fullWidth
-                      [1-49589] code
-                        [1-50646] StaticText: error
-                      [1-50647] StaticText: 
-                      [1-49590] code
-                        [1-50648] StaticText: errorText
-                      [1-50649] StaticText: 
-                      [1-49591] code
-                        [1-50650] StaticText: showCount
-                      [1-50651] StaticText: 
-                      [1-49592] code
-                        [1-50652] StaticText: fullWidth
-                    [1-49594] cell: reflejan sus atributos
-                  [1-49603] row
-                    [1-49601] cell: clearable passwordToggle disabled required readonly
-                      [1-49596] code
-                        [1-50654] StaticText: clearable
-                      [1-50655] StaticText: 
-                      [1-49597] code
-                        [1-50656] StaticText: passwordToggle
-                      [1-50657] StaticText: 
-                      [1-49598] code
-                        [1-50658] StaticText: disabled
-                      [1-50786] StaticText: 
-                      [1-49599] code
-                        [1-50659] StaticText: required
-                      [1-50660] StaticText: 
-                      [1-49600] code
-                        [1-50661] StaticText: readonly
-                    [1-49602] cell: boolean
-                  [1-49608] row
-                    [1-49605] cell: input
-                      [1-49604] code
-                        [1-50663] StaticText: input
-                    [1-49607] cell: el <input> nativo interno, para casos avanzados
-                      [1-50664] StaticText: el
-                      [1-49606] code
-                        [1-50665] StaticText: <input>
-                      [1-50666] StaticText: nativo interno, para casos avanzados
-                  [1-49615] row
-                    [1-49612] cell: validity validationMessage willValidate
-                      [1-49609] code
-                        [1-50667] StaticText: validity
-                      [1-50668] StaticText: 
-                      [1-49610] code
-                        [1-50669] StaticText: validationMessage
-                      [1-50670] StaticText: 
-                      [1-49611] code
-                        [1-50671] StaticText: willValidate
-                    [1-49614] cell: espejo de ElementInternals
-                      [1-50672] StaticText: espejo de
-                      [1-49613] code
-                        [1-50673] StaticText: ElementInternals
-                  [1-49622] row
-                    [1-49620] cell: focus() blur() select() setSelectionRange()
-                      [1-49616] code
-                        [1-50674] StaticText: focus()
-                      [1-50675] StaticText: 
-                      [1-49617] code
-                        [1-50676] StaticText: blur()
-                      [1-50677] StaticText: 
-                      [1-49618] code
-                        [1-50678] StaticText: select()
-                      [1-50787] StaticText: 
-                      [1-49619] code
-                        [1-50679] StaticText: setSelectionRange()
-                    [1-49621] cell: delegan en el input interno
-                  [1-49629] row
-                    [1-49626] cell: checkValidity() reportValidity() setCustomValidity()
-                      [1-49623] code
-                        [1-50681] StaticText: checkValidity()
-                      [1-50682] StaticText: 
-                      [1-49624] code
-                        [1-50683] StaticText: reportValidity()
-                      [1-50788] StaticText: 
-                      [1-49625] code
-                        [1-50684] StaticText: setCustomValidity()
-                    [1-49628] cell: reportValidity() además marca el campo como tocado
-                      [1-49627] code
-                        [1-50685] StaticText: reportValidity()
-                      [1-50686] StaticText: además marca el campo como tocado
-              [1-49634] heading: Slots, parts y estados
-              [1-49683] scrollable, div
-                [1-49682] table
-                  [1-49680] rowgroup
-                    [1-49638] row
-                      [1-49636] columnheader: API
-                      [1-49637] columnheader: DETALLE
-                  [1-49681] tbody
-                    [1-49645] row
-                      [1-49639] cell: slots
-                      [1-49644] cell: label hint start end
-                        [1-49640] code
-                          [1-50689] StaticText: label
-                        [1-50690] StaticText: 
-                        [1-49641] code
-                          [1-50691] StaticText: hint
-                        [1-50692] StaticText: 
-                        [1-49642] code
-                          [1-50693] StaticText: start
-                        [1-50694] StaticText: 
-                        [1-49643] code
-                          [1-50695] StaticText: end
-                    [1-49662] row
-                      [1-49646] cell: parts
-                      [1-49661] cell: form-control label base start prefix input clear toggle suffix end support hint error-text count
-                        [1-49647] code
-                          [1-50697] StaticText: form-control
-                        [1-50698] StaticText: 
-                        [1-49648] code
-                          [1-50699] StaticText: label
-                        [1-50700] StaticText: 
-                        [1-49649] code
-                          [1-50701] StaticText: base
-                        [1-50702] StaticText: 
-                        [1-49650] code
-                          [1-50703] StaticText: start
-                        [1-50704] StaticText: 
-                        [1-49651] code
-                          [1-50705] StaticText: prefix
-                        [1-50706] StaticText: 
-                        [1-49652] code
-                          [1-50707] StaticText: input
-                        [1-50708] StaticText: 
-                        [1-49653] code
-                          [1-50709] StaticText: clear
-                        [1-50710] StaticText: 
-                        [1-49654] code
-                          [1-50711] StaticText: toggle
-                        [1-50712] StaticText: 
-                        [1-49655] code
-                          [1-50713] StaticText: suffix
-                        [1-50714] StaticText: 
-                        [1-49656] code
-                          [1-50715] StaticText: end
-                        [1-50716] StaticText: 
-                        [1-49657] code
-                          [1-50717] StaticText: support
-                        [1-50718] StaticText: 
-                        [1-49658] code
-                          [1-50719] StaticText: hint
-                        [1-50720] StaticText: 
-                        [1-49659] code
-                          [1-50721] StaticText: error-text
-                        [1-50722] StaticText: 
-                        [1-49660] code
-                          [1-50723] StaticText: count
-                    [1-49671] row
-                      [1-49663] cell: states
-                      [1-49670] cell: blank disabled readonly focused invalid password-visible
-                        [1-49664] code
-                          [1-50725] StaticText: blank
-                        [1-50726] StaticText: 
-                        [1-49665] code
-                          [1-50727] StaticText: disabled
-                        [1-50728] StaticText: 
-                        [1-49666] code
-                          [1-50729] StaticText: readonly
-                        [1-50730] StaticText: 
-                        [1-49667] code
-                          [1-50731] StaticText: focused
-                        [1-50732] StaticText: 
-                        [1-49668] code
-                          [1-50733] StaticText: invalid
-                        [1-50734] StaticText: 
-                        [1-49669] code
-                          [1-50735] StaticText: password-visible
-                    [1-49679] row
-                      [1-49672] cell: events
-                      [1-49678] cell: is-input is-change (detail.value) + nativos input / change
-                        [1-49673] code
-                          [1-50737] StaticText: is-input
-                        [1-50738] StaticText: 
-                        [1-49674] code
-                          [1-50739] StaticText: is-change
-                        [1-50740] StaticText: (
-                        [1-49675] code
-                          [1-50741] StaticText: detail.value
-                        [1-50742] StaticText: ) + nativos
-                        [1-49676] code
-                          [1-50743] StaticText: input
-                        [1-50744] StaticText: /
-                        [1-49677] code
-                          [1-50745] StaticText: change
-              [1-49684] heading: Tokens
-              [1-49720] table
-                [1-49718] rowgroup
-                  [1-49688] row
-                    [1-49686] columnheader: TOKEN
-                    [1-49687] columnheader: DETALLE
-                [1-49719] tbody
-                  [1-49693] row
-                    [1-49690] cell: --is-field-width
-                      [1-49689] code
-                        [1-50747] StaticText: --is-field-width
-                    [1-49692] cell: ancho del control (default auto); heredable desde el contenedor
-                      [1-50748] StaticText: ancho del control (default
-                      [1-49691] code
-                        [1-50749] StaticText: auto
-                      [1-50750] StaticText: ); heredable desde el contenedor
-                  [1-49698] row
-                    [1-49695] cell: --is-field-label-width
-                      [1-49694] code
-                        [1-50751] StaticText: --is-field-label-width
-                    [1-49697] cell: columna del label con label-placement="start"
-                      [1-50752] StaticText: columna del label con
-                      [1-49696] code
-                        [1-50753] StaticText: label-placement="start"
-                  [1-49705] row
-                    [1-49702] cell: --is-input-bg --is-input-border --is-input-text
-                      [1-49699] code
-                        [1-50754] StaticText: --is-input-bg
-                      [1-50755] StaticText: 
-                      [1-49700] code
-                        [1-50756] StaticText: --is-input-border
-                      [1-50757] StaticText: 
-                      [1-49701] code
-                        [1-50758] StaticText: --is-input-text
-                    [1-49704] cell: caen en --is-control-*
-                      [1-50759] StaticText: caen en
-                      [1-49703] code
-                        [1-50760] StaticText: --is-control-*
-                  [1-49712] row
-                    [1-49708] cell: --is-input-border-radius --is-input-focus
-                      [1-49706] code
-                        [1-50761] StaticText: --is-input-border-radius
-                      [1-50762] StaticText: 
-                      [1-49707] code
-                        [1-50763] StaticText: --is-input-focus
-                    [1-49711] cell: caen en --is-radius-sm / --is-focus
-                      [1-50764] StaticText: caen en
-                      [1-49709] code
-                        [1-50765] StaticText: --is-radius-sm
-                      [1-50766] StaticText: /
-                      [1-49710] code
-                        [1-50767] StaticText: --is-focus
-                  [1-49717] row
-                    [1-49715] cell: --is-input-danger --is-input-danger-text
-                      [1-49713] code
-                        [1-50768] StaticText: --is-input-danger
-                      [1-50769] StaticText: 
-                      [1-49714] code
-                        [1-50770] StaticText: --is-input-danger-text
-                    [1-49716] cell: borde y texto del estado de error
-          [1-46868] separator: Redimensionar panel
-          [1-46776] complementary
-            [1-49723] heading: IS-INPUT
-            [1-49724] slot
-              [1-49725] link: intro
-              [1-49726] link: Appearance
-              [1-49727] link: Tipos
-              [1-49728] link: Adornos
-              [1-49729] link: Error y validación
-              [1-49730] link: Contador de caracteres
-              [1-49731] link: Ancho
-              [1-49732] link: Label a la izquierda
-              [1-49733] link: Estados
-              [1-49734] link: Dentro de un
-              [1-49735] link: Referencia
+[1-51170] RootWebArea: Input | ContaPyme
+  [1-51546] scrollable, html
+    [1-51573] body
+      [1-51574] banner
+        [1-51578] button: ContaPyme — elegir paleta
+          [1-51168] StaticText: conta
+          [1-51169] StaticText: pyme
+        [1-51595] is-button: Abrir preview en pantalla completa
+          [1-52214] button: Abrir preview en pantalla completa
+          [1-52298] StaticText: Listo
+        [1-51597] switch: Cambiar a tema claro [checked]
+          [1-52369] button: Cambiar a tema claro
+      [1-51598] is-split-panel
+        [1-51544] scrollable, nav: Componentes
+          [1-51599] button: Inicio — home
+            [1-51185] StaticText: Inicio
+          [1-51601] button: Personalización — theming
+            [1-51186] StaticText: Personalización
+          [1-51603] button: Ecosistema JS — utilidades compartidas
+            [1-51187] StaticText: Ecosistema JS
+          [1-51605] group: ACCIONES
+            [1-51607] button: Button is-button
+              [1-51188] StaticText: Button
+              [1-51189] StaticText: <is-button>
+            [1-51610] button: Button Group is-button-group
+              [1-51190] StaticText: Button Group
+              [1-51191] StaticText: <is-button-group>
+            [1-51613] button: Check Icon Button is-check-icon-button
+              [1-51192] StaticText: Check Icon Button
+              [1-51193] StaticText: <is-check-icon-button>
+            [1-51616] button: Context Menu is-context-menu
+              [1-51194] StaticText: Context Menu
+              [1-51195] StaticText: <is-context-menu>
+            [1-51619] button: Copy Button is-copy-button
+              [1-51196] StaticText: Copy Button
+              [1-51197] StaticText: <is-copy-button>
+            [1-51622] button: Dropdown is-dropdown
+              [1-51198] StaticText: Dropdown
+              [1-51199] StaticText: <is-dropdown>
+            [1-51625] button: Dropdown Item is-dropdown-item
+              [1-51200] StaticText: Dropdown Item
+              [1-51201] StaticText: <is-dropdown-item>
+            [1-51628] button: Floating Action Button is-fab
+              [1-51202] StaticText: Floating Action Button
+              [1-51203] StaticText: <is-fab>
+            [1-51631] button: Share Button is-share-button
+              [1-51204] StaticText: Share Button
+              [1-51205] StaticText: <is-share-button>
+            [1-51634] button: Speed Dial is-speed-dial
+              [1-51206] StaticText: Speed Dial
+              [1-51207] StaticText: <is-speed-dial>
+            [1-51637] button: Speed Dial Action is-speed-dial-action
+              [1-51208] StaticText: Speed Dial Action
+              [1-51209] StaticText: <is-speed-dial-action>
+          [1-51640] group: MEDIA
+            [1-51642] button: Avatar is-avatar
+              [1-51210] StaticText: Avatar
+              [1-51211] StaticText: <is-avatar>
+            [1-51645] button: Barcode is-barcode
+              [1-51212] StaticText: Barcode
+              [1-51213] StaticText: <is-barcode>
+            [1-51648] button: Barcode Scanner is-barcode-scanner
+              [1-51214] StaticText: Barcode Scanner
+              [1-51215] StaticText: <is-barcode-scanner>
+            [1-51651] button: Explorador de iconos is-icon-explorer
+              [1-51216] StaticText: Explorador de iconos
+              [1-51217] StaticText: <is-icon-explorer>
+            [1-51654] button: Icon is-icon
+              [1-51218] StaticText: Icon
+              [1-51219] StaticText: <is-icon>
+            [1-51657] button: Image Editor is-image-editor
+              [1-51220] StaticText: Image Editor
+              [1-51221] StaticText: <is-image-editor>
+            [1-51660] button: Media Recorder is-media-recorder
+              [1-51222] StaticText: Media Recorder
+              [1-51223] StaticText: <is-media-recorder>
+            [1-51663] button: QR Code is-qrcode
+              [1-51224] StaticText: QR Code
+              [1-51225] StaticText: <is-qrcode>
+            [1-51666] button: Speech is-speech
+              [1-51226] StaticText: Speech
+              [1-51227] StaticText: <is-speech>
+            [1-51669] button: Theme Img is-theme-img
+              [1-51228] StaticText: Theme Img
+              [1-51229] StaticText: <is-theme-img>
+            [1-51672] button: Video is-video
+              [1-51230] StaticText: Video
+              [1-51231] StaticText: <is-video>
+            [1-51675] button: Video Playlist is-video-playlist
+              [1-51232] StaticText: Video Playlist
+              [1-51233] StaticText: <is-video-playlist>
+          [1-51678] group: FEEDBACK
+            [1-51680] button: Badge is-badge
+              [1-51234] StaticText: Badge
+              [1-51235] StaticText: <is-badge>
+            [1-51683] button: CDN Snippet is-cdn-snippet
+              [1-51236] StaticText: CDN Snippet
+              [1-51237] StaticText: <is-cdn-snippet>
+            [1-51686] button: Confirm Modal is-confirm-modal
+              [1-51238] StaticText: Confirm Modal
+              [1-51239] StaticText: <is-confirm-modal>
+            [1-51689] button: Palette Selector is-palette-selector
+              [1-51240] StaticText: Palette Selector
+              [1-51241] StaticText: <is-palette-selector>
+            [1-51692] button: Popconfirm is-popconfirm
+              [1-51242] StaticText: Popconfirm
+              [1-51243] StaticText: <is-popconfirm>
+            [1-51695] button: Prefs Clear is-prefs-clear
+              [1-51244] StaticText: Prefs Clear
+              [1-51245] StaticText: <is-prefs-clear>
+            [1-51698] button: Progress Bar is-progress-bar
+              [1-51246] StaticText: Progress Bar
+              [1-51247] StaticText: <is-progress-bar>
+            [1-51701] button: Progress Ring is-progress-ring
+              [1-51248] StaticText: Progress Ring
+              [1-51249] StaticText: <is-progress-ring>
+            [1-51704] button: Skeleton is-skeleton
+              [1-51250] StaticText: Skeleton
+              [1-51251] StaticText: <is-skeleton>
+            [1-51707] button: Spinner is-spinner
+              [1-51252] StaticText: Spinner
+              [1-51253] StaticText: <is-spinner>
+            [1-51710] button: Tag is-tag
+              [1-51254] StaticText: Tag
+              [1-51255] StaticText: <is-tag>
+            [1-51713] button: Theme Toggle is-theme-toggle
+              [1-51256] StaticText: Theme Toggle
+              [1-51257] StaticText: <is-theme-toggle>
+            [1-51716] button: Toast is-toast
+              [1-51258] StaticText: Toast
+              [1-51259] StaticText: <is-toast>
+            [1-51719] button: Toast Item is-toast-item
+              [1-51260] StaticText: Toast Item
+              [1-51261] StaticText: <is-toast-item>
+            [1-51722] button: Tooltip is-tooltip
+              [1-51262] StaticText: Tooltip
+              [1-51263] StaticText: <is-tooltip>
+          [1-51725] group: LAYOUT
+            [1-51727] button: Callout is-callout
+              [1-51264] StaticText: Callout
+              [1-51265] StaticText: <is-callout>
+            [1-51730] button: Card is-card
+              [1-51266] StaticText: Card
+              [1-51267] StaticText: <is-card>
+            [1-51733] button: Details is-details
+              [1-51268] StaticText: Details
+              [1-51269] StaticText: <is-details>
+            [1-51736] button: Dialog is-dialog
+              [1-51270] StaticText: Dialog
+              [1-51271] StaticText: <is-dialog>
+            [1-51739] button: Divider is-divider
+              [1-51272] StaticText: Divider
+              [1-51273] StaticText: <is-divider>
+            [1-51742] button: Dock is-dock
+              [1-51274] StaticText: Dock
+              [1-51275] StaticText: <is-dock>
+            [1-51745] button: Dock Item is-dock-item
+              [1-51276] StaticText: Dock Item
+              [1-51277] StaticText: <is-dock-item>
+            [1-51748] button: Drawer is-drawer
+              [1-51278] StaticText: Drawer
+              [1-51279] StaticText: <is-drawer>
+            [1-51751] button: Main is-main
+              [1-51280] StaticText: Main
+              [1-51281] StaticText: <is-main>
+            [1-51754] button: Panel dividido is-split-panel
+              [1-51282] StaticText: Panel dividido
+              [1-51283] StaticText: <is-split-panel>
+            [1-51757] button: Scrollspy is-scrollspy
+              [1-51284] StaticText: Scrollspy
+              [1-51285] StaticText: <is-scrollspy>
+          [1-51760] group: NAVEGACIÓN
+            [1-51762] button: Breadcrumb is-breadcrumb
+              [1-51286] StaticText: Breadcrumb
+              [1-51287] StaticText: <is-breadcrumb>
+            [1-51765] button: Breadcrumb Item is-breadcrumb-item
+              [1-51288] StaticText: Breadcrumb Item
+              [1-51289] StaticText: <is-breadcrumb-item>
+            [1-51768] button: Carousel is-carousel
+              [1-51290] StaticText: Carousel
+              [1-51291] StaticText: <is-carousel>
+            [1-51771] button: Carousel Item is-carousel-item
+              [1-51292] StaticText: Carousel Item
+              [1-51293] StaticText: <is-carousel-item>
+            [1-51774] button: Mega Menu is-mega-menu
+              [1-51294] StaticText: Mega Menu
+              [1-51295] StaticText: <is-mega-menu>
+            [1-51777] button: Scroller is-scroller
+              [1-51296] StaticText: Scroller
+              [1-51297] StaticText: <is-scroller>
+            [1-51780] button: Stepper is-stepper
+              [1-51298] StaticText: Stepper
+              [1-51299] StaticText: <is-stepper>
+            [1-51783] button: Stepper Step is-stepper-step
+              [1-51300] StaticText: Stepper Step
+              [1-51301] StaticText: <is-stepper-step>
+            [1-51786] button: Tab is-tab
+              [1-51302] StaticText: Tab
+              [1-51303] StaticText: <is-tab>
+            [1-51789] button: Tab Group is-tab-group
+              [1-51304] StaticText: Tab Group
+              [1-51305] StaticText: <is-tab-group>
+            [1-51792] button: Tab Panel is-tab-panel
+              [1-51306] StaticText: Tab Panel
+              [1-51307] StaticText: <is-tab-panel>
+            [1-51795] button: Tree is-tree
+              [1-51308] StaticText: Tree
+              [1-51309] StaticText: <is-tree>
+            [1-51798] button: Tree Item is-tree-item
+              [1-51310] StaticText: Tree Item
+              [1-51311] StaticText: <is-tree-item>
+          [1-51801] group: FORMULARIOS
+            [1-51803] button: Checkbox is-checkbox
+              [1-51312] StaticText: Checkbox
+              [1-51313] StaticText: <is-checkbox>
+            [1-51806] button: Color Picker is-color-picker
+              [1-51314] StaticText: Color Picker
+              [1-51315] StaticText: <is-color-picker>
+            [1-51809] button: Combobox is-combobox
+              [1-51316] StaticText: Combobox
+              [1-51317] StaticText: <is-combobox>
+            [1-51812] button: Date Field is-date-field
+              [1-51318] StaticText: Date Field
+              [1-51319] StaticText: <is-date-field>
+            [1-51815] button: Date Input is-date-input
+              [1-51320] StaticText: Date Input
+              [1-51321] StaticText: <is-date-input>
+            [1-51818] button: Date Picker is-date-picker
+              [1-51322] StaticText: Date Picker
+              [1-51323] StaticText: <is-date-picker>
+            [1-51821] button: Date Range Input is-date-range-input
+              [1-51324] StaticText: Date Range Input
+              [1-51325] StaticText: <is-date-range-input>
+            [1-51824] button: Date Range Picker is-date-range-picker
+              [1-51326] StaticText: Date Range Picker
+              [1-51327] StaticText: <is-date-range-picker>
+            [1-51827] button: Date Time Field is-date-time-field
+              [1-51328] StaticText: Date Time Field
+              [1-51329] StaticText: <is-date-time-field>
+            [1-51830] button: Date Time Input is-date-time-input
+              [1-51330] StaticText: Date Time Input
+              [1-51331] StaticText: <is-date-time-input>
+            [1-51833] button: Digital Clock is-digital-clock
+              [1-51332] StaticText: Digital Clock
+              [1-51333] StaticText: <is-digital-clock>
+            [1-51836] button: Document Editor is-doc-editor
+              [1-51334] StaticText: Document Editor
+              [1-51335] StaticText: <is-doc-editor>
+            [1-51839] button: Dropzone is-dropzone
+              [1-51336] StaticText: Dropzone
+              [1-51337] StaticText: <is-dropzone>
+            [1-51842] button: Duration Picker is-duration-picker
+              [1-51338] StaticText: Duration Picker
+              [1-51339] StaticText: <is-duration-picker>
+            [1-51845] button: File Input is-file-input
+              [1-51340] StaticText: File Input
+              [1-51341] StaticText: <is-file-input>
+            [1-51848] button: Full Calendar is-full-calendar
+              [1-51342] StaticText: Full Calendar
+              [1-51343] StaticText: <is-full-calendar>
+            [1-51851] button: Inline Edit is-inline-edit
+              [1-51344] StaticText: Inline Edit
+              [1-51345] StaticText: <is-inline-edit>
+            [1-51854] button: Input is-input
+              [1-51346] StaticText: Input
+              [1-51347] StaticText: <is-input>
+            [1-51857] button: Masked Input is-masked-input
+              [1-51348] StaticText: Masked Input
+              [1-51349] StaticText: <is-masked-input>
+            [1-51860] button: Mention is-mention
+              [1-51350] StaticText: Mention
+              [1-51351] StaticText: <is-mention>
+            [1-51863] button: Month Calendar is-month-calendar
+              [1-51352] StaticText: Month Calendar
+              [1-51353] StaticText: <is-month-calendar>
+            [1-51866] button: Option is-option
+              [1-51354] StaticText: Option
+              [1-51355] StaticText: <is-option>
+            [1-51869] button: Pin Input is-pin-input
+              [1-51356] StaticText: Pin Input
+              [1-51357] StaticText: <is-pin-input>
+            [1-51872] button: Radio is-radio
+              [1-51358] StaticText: Radio
+              [1-51359] StaticText: <is-radio>
+            [1-51875] button: Radio Group is-radio-group
+              [1-51360] StaticText: Radio Group
+              [1-51361] StaticText: <is-radio-group>
+            [1-51878] button: Rating is-rating
+              [1-51362] StaticText: Rating
+              [1-51363] StaticText: <is-rating>
+            [1-51881] button: Rich Text Editor is-rte
+              [1-51364] StaticText: Rich Text Editor
+              [1-51365] StaticText: <is-rte>
+            [1-51884] button: Select is-select
+              [1-51366] StaticText: Select
+              [1-51367] StaticText: <is-select>
+            [1-51887] button: Signature is-signature
+              [1-51368] StaticText: Signature
+              [1-51369] StaticText: <is-signature>
+            [1-51890] button: Slider is-slider
+              [1-51370] StaticText: Slider
+              [1-51371] StaticText: <is-slider>
+            [1-51893] button: Switch is-switch
+              [1-51372] StaticText: Switch
+              [1-51373] StaticText: <is-switch>
+            [1-51896] button: Textarea is-textarea
+              [1-51374] StaticText: Textarea
+              [1-51375] StaticText: <is-textarea>
+            [1-51899] button: Time Clock is-time-clock
+              [1-51376] StaticText: Time Clock
+              [1-51377] StaticText: <is-time-clock>
+            [1-51902] button: Time Field is-time-field
+              [1-51378] StaticText: Time Field
+              [1-51379] StaticText: <is-time-field>
+            [1-51905] button: Time Input is-time-input
+              [1-51380] StaticText: Time Input
+              [1-51381] StaticText: <is-time-input>
+            [1-51908] button: Year Calendar is-year-calendar
+              [1-51382] StaticText: Year Calendar
+              [1-51383] StaticText: <is-year-calendar>
+          [1-51911] group: CÓDIGO
+            [1-51913] button: Code is-code
+              [1-51384] StaticText: Code
+              [1-51385] StaticText: <is-code>
+          [1-51916] group: DATOS
+            [1-51918] button: AG Grid is-ag-grid
+              [1-51386] StaticText: AG Grid
+              [1-51387] StaticText: <is-ag-grid>
+            [1-51921] button: Data Grid is-data-grid
+              [1-51388] StaticText: Data Grid
+              [1-51389] StaticText: <is-data-grid>
+            [1-51924] button: Kanban is-kanban
+              [1-51390] StaticText: Kanban
+              [1-51391] StaticText: <is-kanban>
+            [1-51927] button: Kanban Card is-kanban-card
+              [1-51392] StaticText: Kanban Card
+              [1-51393] StaticText: <is-kanban-card>
+            [1-51930] button: Kanban Column is-kanban-column
+              [1-51394] StaticText: Kanban Column
+              [1-51395] StaticText: <is-kanban-column>
+            [1-51933] button: Pivot Table is-pivot-table
+              [1-51396] StaticText: Pivot Table
+              [1-51397] StaticText: <is-pivot-table>
+            [1-51936] button: Spreadsheet is-spreadsheet
+              [1-51398] StaticText: Spreadsheet
+              [1-51399] StaticText: <is-spreadsheet>
+            [1-51939] button: Stat KPI is-stat
+              [1-51400] StaticText: Stat KPI
+              [1-51401] StaticText: <is-stat>
+            [1-51942] button: Transfer is-transfer
+              [1-51402] StaticText: Transfer
+              [1-51403] StaticText: <is-transfer>
+            [1-51945] button: Transfer Item is-transfer-item
+              [1-51404] StaticText: Transfer Item
+              [1-51405] StaticText: <is-transfer-item>
+          [1-51948] group: GRÁFICOS
+            [1-51950] button: Bar Chart is-bar-chart
+              [1-51406] StaticText: Bar Chart
+              [1-51407] StaticText: <is-bar-chart>
+            [1-51953] button: Bubble Chart is-bubble-chart
+              [1-51408] StaticText: Bubble Chart
+              [1-51409] StaticText: <is-bubble-chart>
+            [1-51956] button: Chart is-chart
+              [1-51410] StaticText: Chart
+              [1-51411] StaticText: <is-chart>
+            [1-51959] button: Doughnut Chart is-doughnut-chart
+              [1-51412] StaticText: Doughnut Chart
+              [1-51413] StaticText: <is-doughnut-chart>
+            [1-51962] button: Funnel Chart is-funnel-chart
+              [1-51414] StaticText: Funnel Chart
+              [1-51415] StaticText: <is-funnel-chart>
+            [1-51965] button: Gauge is-gauge
+              [1-51416] StaticText: Gauge
+              [1-51417] StaticText: <is-gauge>
+            [1-51968] button: Heatmap is-heatmap
+              [1-51418] StaticText: Heatmap
+              [1-51419] StaticText: <is-heatmap>
+            [1-51971] button: Line Chart is-line-chart
+              [1-51420] StaticText: Line Chart
+              [1-51421] StaticText: <is-line-chart>
+            [1-51974] button: Map Marker is-map-marker
+              [1-51422] StaticText: Map Marker
+              [1-51423] StaticText: <is-map-marker>
+            [1-51977] button: Maps is-maps
+              [1-51424] StaticText: Maps
+              [1-51425] StaticText: <is-maps>
+            [1-51980] button: Pie Chart is-pie-chart
+              [1-51426] StaticText: Pie Chart
+              [1-51427] StaticText: <is-pie-chart>
+            [1-51983] button: Polar Area Chart is-polar-area-chart
+              [1-51428] StaticText: Polar Area Chart
+              [1-51429] StaticText: <is-polar-area-chart>
+            [1-51986] button: Radar Chart is-radar-chart
+              [1-51430] StaticText: Radar Chart
+              [1-51431] StaticText: <is-radar-chart>
+            [1-51989] button: Scatter Chart is-scatter-chart
+              [1-51432] StaticText: Scatter Chart
+              [1-51433] StaticText: <is-scatter-chart>
+            [1-51992] button: Sparkline is-sparkline
+              [1-51434] StaticText: Sparkline
+              [1-51435] StaticText: <is-sparkline>
+            [1-51995] button: Treemap is-treemap
+              [1-51436] StaticText: Treemap
+              [1-51437] StaticText: <is-treemap>
+            [1-51998] button: Waterfall Chart is-waterfall-chart
+              [1-51438] StaticText: Waterfall Chart
+              [1-51439] StaticText: <is-waterfall-chart>
+          [1-52001] group: DIAGRAMAS
+            [1-52003] button: Diagrama de bloques is-block-diagram
+              [1-51440] StaticText: Diagrama de bloques
+              [1-51441] StaticText: <is-block-diagram>
+            [1-52006] button: Diagrama de carriles is-swimlane-diagram
+              [1-51442] StaticText: Diagrama de carriles
+              [1-51443] StaticText: <is-swimlane-diagram>
+            [1-52009] button: Diagrama de casos de uso is-use-case-diagram
+              [1-51444] StaticText: Diagrama de casos de uso
+              [1-51445] StaticText: <is-use-case-diagram>
+            [1-52012] button: Diagrama de clases is-class-diagram
+              [1-51446] StaticText: Diagrama de clases
+              [1-51447] StaticText: <is-class-diagram>
+            [1-52015] button: Diagrama de componentes is-component-diagram
+              [1-51448] StaticText: Diagrama de componentes
+              [1-51449] StaticText: <is-component-diagram>
+            [1-52018] button: Diagrama de estados is-state-diagram
+              [1-51450] StaticText: Diagrama de estados
+              [1-51451] StaticText: <is-state-diagram>
+            [1-52021] button: Diagrama de flujo is-flowchart
+              [1-51452] StaticText: Diagrama de flujo
+              [1-51453] StaticText: <is-flowchart>
+            [1-52024] button: Diagrama de Gantt is-gantt
+              [1-51454] StaticText: Diagrama de Gantt
+              [1-51455] StaticText: <is-gantt>
+            [1-52027] button: Diagrama de Sankey is-sankey-diagram
+              [1-51456] StaticText: Diagrama de Sankey
+              [1-51457] StaticText: <is-sankey-diagram>
+            [1-52030] button: Diagrama de secuencia is-sequence-diagram
+              [1-51458] StaticText: Diagrama de secuencia
+              [1-51459] StaticText: <is-sequence-diagram>
+            [1-52033] button: Diagrama de Venn is-venn-diagram
+              [1-51460] StaticText: Diagrama de Venn
+              [1-51461] StaticText: <is-venn-diagram>
+            [1-52036] button: Diagrama entidad-relación is-er-diagram
+              [1-51462] StaticText: Diagrama entidad-relación
+              [1-51463] StaticText: <is-er-diagram>
+            [1-52039] button: Línea de tiempo is-timeline
+              [1-51464] StaticText: Línea de tiempo
+              [1-51465] StaticText: <is-timeline>
+            [1-52042] button: Mapa de recorrido is-journey-map
+              [1-51466] StaticText: Mapa de recorrido
+              [1-51467] StaticText: <is-journey-map>
+            [1-52045] button: Mapa mental is-mindmap
+              [1-51468] StaticText: Mapa mental
+              [1-51469] StaticText: <is-mindmap>
+            [1-52048] button: Matriz de cuadrantes is-quadrant-chart
+              [1-51470] StaticText: Matriz de cuadrantes
+              [1-51471] StaticText: <is-quadrant-chart>
+            [1-52051] button: Org Chart is-org-chart
+              [1-51472] StaticText: Org Chart
+              [1-51473] StaticText: <is-org-chart>
+            [1-52054] button: Visor de diagramas is-diagram-lightbox
+              [1-51474] StaticText: Visor de diagramas
+              [1-51475] StaticText: <is-diagram-lightbox>
+          [1-52057] group: OVERLAYS
+            [1-52059] button: Command Palette is-command-palette
+              [1-51476] StaticText: Command Palette
+              [1-51477] StaticText: <is-command-palette>
+            [1-52062] button: PDF Viewer is-pdf-viewer
+              [1-51478] StaticText: PDF Viewer
+              [1-51479] StaticText: <is-pdf-viewer>
+            [1-52065] button: Window is-window
+              [1-51480] StaticText: Window
+              [1-51481] StaticText: <is-window>
+          [1-52068] group: UTILERÍAS
+            [1-52070] button: Editor Markdown is-md-editor
+              [1-51482] StaticText: Editor Markdown
+              [1-51483] StaticText: <is-md-editor>
+            [1-52073] button: Formato is-format
+              [1-51484] StaticText: Formato
+              [1-51485] StaticText: <is-format>
+            [1-52076] button: Formato de bytes is-format-bytes
+              [1-51486] StaticText: Formato de bytes
+              [1-51487] StaticText: <is-format-bytes>
+            [1-52079] button: Formato de fecha is-format-date
+              [1-51488] StaticText: Formato de fecha
+              [1-51489] StaticText: <is-format-date>
+            [1-52082] button: Formato de número is-format-number
+              [1-51490] StaticText: Formato de número
+              [1-51491] StaticText: <is-format-number>
+            [1-52085] button: IsUi is-ui
+              [1-51492] StaticText: IsUi
+              [1-51493] StaticText: <is-ui>
+            [1-52088] button: Lightbox is-lightbox
+              [1-51494] StaticText: Lightbox
+              [1-51495] StaticText: <is-lightbox>
+            [1-52091] button: Observador de intersección is-intersection-observer
+              [1-51496] StaticText: Observador de intersección
+              [1-51497] StaticText: <is-intersection-observer>
+            [1-52094] button: Observador de mutación is-mutation-observer
+              [1-51498] StaticText: Observador de mutación
+              [1-51499] StaticText: <is-mutation-observer>
+            [1-52097] button: Observer is-observer
+              [1-51500] StaticText: Observer
+              [1-51501] StaticText: <is-observer>
+            [1-52100] button: Offscreen Canvas is-offscreen-canvas
+              [1-51502] StaticText: Offscreen Canvas
+              [1-51503] StaticText: <is-offscreen-canvas>
+            [1-52103] button: Popover is-popover
+              [1-51504] StaticText: Popover
+              [1-51505] StaticText: <is-popover>
+            [1-52106] button: Render Markdown is-md-render
+              [1-51506] StaticText: Render Markdown
+              [1-51507] StaticText: <is-md-render>
+            [1-52109] button: Resize Observer is-resize-observer
+              [1-51508] StaticText: Resize Observer
+              [1-51509] StaticText: <is-resize-observer>
+            [1-52112] button: Tiempo relativo is-relative-time
+              [1-51510] StaticText: Tiempo relativo
+              [1-51511] StaticText: <is-relative-time>
+            [1-52115] button: Wake Lock is-wake-lock
+              [1-51512] StaticText: Wake Lock
+              [1-51513] StaticText: <is-wake-lock>
+          [1-52118] group: ISP-SVELTECOMPONENTS
+            [1-52120] button: Accordion Group is-accordion-group
+              [1-51514] StaticText: Accordion Group
+              [1-51515] StaticText: <is-accordion-group>
+            [1-52124] button: Block Layout is-block-layout
+              [1-51516] StaticText: Block Layout
+              [1-51517] StaticText: <is-block-layout>
+            [1-52128] button: Btn Ref is-btn-ref
+              [1-51518] StaticText: Btn Ref
+              [1-51519] StaticText: <is-btn-ref>
+            [1-52132] button: Catálogo Gen is-catalogo-gen
+              [1-51520] StaticText: Catálogo Gen
+              [1-51521] StaticText: <is-catalogo-gen>
+            [1-52136] button: Confirm Delete is-confirm-delete
+              [1-51522] StaticText: Confirm Delete
+              [1-51523] StaticText: <is-confirm-delete>
+            [1-52140] button: Flex Layout is-flex-layout
+              [1-51524] StaticText: Flex Layout
+              [1-51525] StaticText: <is-flex-layout>
+            [1-52144] button: Flex Options is-flex-options
+              [1-51526] StaticText: Flex Options
+              [1-51527] StaticText: <is-flex-options>
+            [1-52148] button: Float Card is-float-card
+              [1-51528] StaticText: Float Card
+              [1-51529] StaticText: <is-float-card>
+            [1-52152] button: Form is-form
+              [1-51530] StaticText: Form
+              [1-51531] StaticText: <is-form>
+            [1-52156] button: Grid Layout is-grid-layout
+              [1-51532] StaticText: Grid Layout
+              [1-51533] StaticText: <is-grid-layout>
+            [1-52160] button: Heading is-heading
+              [1-51534] StaticText: Heading
+              [1-51535] StaticText: <is-heading>
+            [1-52164] button: Loading Overlay is-loading-overlay
+              [1-51536] StaticText: Loading Overlay
+              [1-51537] StaticText: <is-loading-overlay>
+            [1-52168] button: Modal Verificación is-modal-verificacion
+              [1-51538] StaticText: Modal Verificación
+              [1-51539] StaticText: <is-modal-verificacion>
+            [1-52172] button: Text is-text
+              [1-51540] StaticText: Text
+              [1-51541] StaticText: <is-text>
+            [1-52176] button: Tree View is-tree-view
+              [1-51542] StaticText: Tree View
+              [1-51543] StaticText: <is-tree-view>
+        [1-52279] separator: Redimensionar panel
+        [1-52301] is-split-panel
+          [1-52302] scrollable, is-main
+            [1-52446] section
+              [1-52434] heading: <is-input>
+              [1-52439] paragraph
+                [1-57259] StaticText: Campo de texto form-associated con paridad funcional con el
+                [1-52435] link: TextField de MUI
+                [1-57261] StaticText: : tres
+                [1-52436] emphasis
+                  [1-57262] StaticText: appearances
+                [1-57263] StaticText: , estado de error ligado a la validación nativa, adornos, contador de caracteres y ancho controlable. Participa en
+                [1-52437] code
+                  [1-57264] StaticText: <form>
+                [1-57265] StaticText: vía
+                [1-52438] code
+                  [1-57266] StaticText: ElementInternals
+                [1-57267] StaticText: .
+              [1-52442] div
+                [1-52441] is-demo
+                  [1-52516] div
+                    [1-52517] LabelText
+                      [1-57268] StaticText: Nombre
+                    [1-52523] textbox: Nombre
+                    [1-57270] StaticText: Como aparece en la factura
+                  [1-52476] button: Ver código del ejemplo
+                  [1-52515] button: Ver fuentes JS / CSS / MD
+                [1-56370] group
+                  [1-56375] DisclosureTriangle: CONTROLES
+              [1-52443] paragraph
+                [1-57271] StaticText: value:
+                [1-52444] code
+                  [1-57272] StaticText: ""
+            [1-52596] section
+              [1-52575] heading: Appearance
+              [1-52582] paragraph
+                [1-52576] code
+                  [1-57274] StaticText: appearance
+                [1-57275] StaticText: equivale a las
+                [1-52577] emphasis
+                  [1-57276] StaticText: variants
+                [1-57277] StaticText: de MUI:
+                [1-52578] code
+                  [1-57278] StaticText: outlined
+                [1-57279] StaticText: (default) ·
+                [1-52579] code
+                  [1-57280] StaticText: filled
+                [1-57281] StaticText: ·
+                [1-52580] code
+                  [1-57282] StaticText: underlined
+                [1-57283] StaticText: (el
+                [1-52581] code
+                  [1-57284] StaticText: standard
+                [1-57285] StaticText: de MUI).
+              [1-52587] is-demo
+                [1-52583] div
+                  [1-52666] div
+                    [1-52667] LabelText
+                      [1-57286] StaticText: outlined (default)
+                    [1-52673] textbox: outlined (default)
+                  [1-52725] div
+                    [1-52726] LabelText
+                      [1-57288] StaticText: filled
+                    [1-52732] textbox: filled
+                  [1-52784] div
+                    [1-52785] LabelText
+                      [1-57290] StaticText: underlined
+                    [1-52791] textbox: underlined
+                [1-52626] button: Ver código del ejemplo
+                [1-52665] button: Ver fuentes JS / CSS / MD
+              [1-56472] div
+                [1-52875] pre: Código
+                  [1-52845] div
+                    [1-56420] StaticText: <is-input
+                    [1-56421] StaticText: 
+                    [1-56422] StaticText: label
+                    [1-56423] StaticText: =
+                    [1-56424] StaticText: "outlined (default)"
+                    [1-56425] StaticText: >
+                    [1-56426] StaticText: </is-input
+                    [1-56427] StaticText: >
+                  [1-52853] div
+                    [1-56428] StaticText: <is-input
+                    [1-56429] StaticText: 
+                    [1-56430] StaticText: variant
+                    [1-56431] StaticText: =
+                    [1-56432] StaticText: "filled"
+                    [1-56433] StaticText: 
+                    [1-56434] StaticText: label
+                    [1-56435] StaticText: =
+                    [1-56436] StaticText: "filled"
+                    [1-56437] StaticText: >
+                    [1-56438] StaticText: </is-input
+                    [1-56439] StaticText: >
+                  [1-52864] div
+                    [1-56440] StaticText: <is-input
+                    [1-56441] StaticText: 
+                    [1-56442] StaticText: variant
+                    [1-56443] StaticText: =
+                    [1-56444] StaticText: "underlined"
+                    [1-56445] StaticText: 
+                    [1-56446] StaticText: label
+                    [1-56447] StaticText: =
+                    [1-56448] StaticText: "underlined"
+                    [1-56449] StaticText: >
+                    [1-56450] StaticText: </is-input
+                    [1-56451] StaticText: >
+                [1-56475] is-button: Copiar
+                  [1-56489] button: Copiar
+                  [1-57292] StaticText: Listo
+            [1-52915] section
+              [1-52887] heading: Tipos
+              [1-52897] paragraph
+                [1-52888] code
+                  [1-57294] StaticText: type
+                [1-57295] StaticText: pasa al input nativo interno junto con
+                [1-52889] code
+                  [1-57296] StaticText: min
+                [1-57297] StaticText: ,
+                [1-52890] code
+                  [1-57298] StaticText: max
+                [1-57299] StaticText: ,
+                [1-52891] code
+                  [1-57300] StaticText: step
+                [1-57301] StaticText: ,
+                [1-52892] code
+                  [1-57302] StaticText: maxlength
+                [1-57303] StaticText: y
+                [1-52893] code
+                  [1-57304] StaticText: autocomplete
+                [1-57305] StaticText: . En
+                [1-52894] code
+                  [1-57306] StaticText: type="search"
+                [1-57307] StaticText: se oculta la
+                [1-52895] emphasis
+                  [1-57308] StaticText: x
+                [1-57309] StaticText: nativa del navegador: la limpieza la hace
+                [1-52896] code
+                  [1-57310] StaticText: clearable
+                [1-57311] StaticText: .
+              [1-52906] is-demo
+                [1-52898] div
+                  [1-52985] div
+                    [1-52986] LabelText
+                      [1-57312] StaticText: Email
+                    [1-52992] textbox: Email
+                    [1-57314] StaticText: Obligatorio
+                  [1-53045] div
+                    [1-53046] LabelText
+                      [1-57315] StaticText: Contraseña
+                    [1-53048] div
+                      [1-53052] textbox: Contraseña
+                      [1-53056] button: Mostrar contraseña
+                  [1-53105] div
+                    [1-53106] LabelText
+                      [1-57317] StaticText: Cantidad
+                    [1-53112] spinbutton: Cantidad
+                      [1-57318] StaticText: 10
+                  [1-53167] div
+                    [1-53168] LabelText
+                      [1-57319] StaticText: Buscar
+                    [1-53174] searchbox: Buscar
+                  [1-53230] div
+                    [1-53231] LabelText
+                      [1-57321] StaticText: Teléfono
+                    [1-53237] textbox: Teléfono
+                  [1-53290] div
+                    [1-53291] LabelText
+                      [1-57323] StaticText: Sitio web
+                    [1-53297] textbox: Sitio web
+                  [1-53350] div
+                    [1-53351] LabelText
+                      [1-57325] StaticText: Fecha
+                    [1-53357] Date: Fecha
+                      [1-53408] div
+                        [1-53411] div
+                          [1-53412] spinbutton: Día Día
+                            [1-57326] StaticText: dd
+                          [1-57327] StaticText: /
+                          [1-53414] spinbutton: Mes Mes
+                            [1-57328] StaticText: mm
+                          [1-57329] StaticText: /
+                          [1-53416] spinbutton: Año Año
+                            [1-57330] StaticText: aaaa
+                        [1-53410] button: Mostrar selector de fecha Mostrar selector de fecha
+                [1-52945] button: Ver código del ejemplo
+                [1-52984] button: Ver fuentes JS / CSS / MD
+              [1-56601] div
+                [1-53463] pre: Código
+                  [1-53419] div
+                    [1-56529] StaticText: <is-input
+                    [1-56530] StaticText: 
+                    [1-56531] StaticText: type
+                    [1-56532] StaticText: =
+                    [1-56533] StaticText: "password"
+                    [1-56534] StaticText: 
+                    [1-56535] StaticText: label
+                    [1-56536] StaticText: =
+                    [1-56537] StaticText: "Contraseña"
+                    [1-56538] StaticText: 
+                    [1-56539] StaticText: password-toggle
+                    [1-56540] StaticText: >
+                    [1-56541] StaticText: </is-input
+                    [1-56542] StaticText: >
+                  [1-53431] div
+                    [1-56543] StaticText: <is-input
+                    [1-56544] StaticText: 
+                    [1-56545] StaticText: type
+                    [1-56546] StaticText: =
+                    [1-56547] StaticText: "number"
+                    [1-56548] StaticText: 
+                    [1-56549] StaticText: label
+                    [1-56550] StaticText: =
+                    [1-56551] StaticText: "Cantidad"
+                    [1-56552] StaticText: 
+                    [1-56553] StaticText: min
+                    [1-56554] StaticText: =
+                    [1-56555] StaticText: "0"
+                    [1-56556] StaticText: 
+                    [1-56557] StaticText: max
+                    [1-56558] StaticText: =
+                    [1-56559] StaticText: "100"
+                    [1-56560] StaticText: 
+                    [1-56561] StaticText: step
+                    [1-56562] StaticText: =
+                    [1-56563] StaticText: "5"
+                    [1-56564] StaticText: >
+                    [1-56565] StaticText: </is-input
+                    [1-56566] StaticText: >
+                  [1-53451] div
+                    [1-56567] StaticText: <is-input
+                    [1-56568] StaticText: 
+                    [1-56569] StaticText: type
+                    [1-56570] StaticText: =
+                    [1-56571] StaticText: "search"
+                    [1-56572] StaticText: 
+                    [1-56573] StaticText: label
+                    [1-56574] StaticText: =
+                    [1-56575] StaticText: "Buscar"
+                    [1-56576] StaticText: 
+                    [1-56577] StaticText: clearable
+                    [1-56578] StaticText: >
+                    [1-56579] StaticText: </is-input
+                    [1-56580] StaticText: >
+                [1-56604] is-button: Copiar
+                  [1-56618] button: Copiar
+                  [1-57332] StaticText: Listo
+            [1-53507] section
+              [1-53475] heading: Adornos
+              [1-53483] paragraph
+                [1-57334] StaticText: Para texto corto (
+                [1-53476] code
+                  [1-57335] StaticText: $
+                [1-57336] StaticText: ,
+                [1-53477] code
+                  [1-57337] StaticText: kg
+                [1-57338] StaticText: ,
+                [1-53478] code
+                  [1-57339] StaticText: %
+                [1-57340] StaticText: ) basta con
+                [1-53479] code
+                  [1-57341] StaticText: prefix
+                [1-57342] StaticText: y
+                [1-53480] code
+                  [1-57343] StaticText: suffix
+                [1-57344] StaticText: : se pintan atenuados y no reciben eventos. Para iconos o botones, los slots
+                [1-53481] code
+                  [1-57345] StaticText: start
+                [1-57346] StaticText: y
+                [1-53482] code
+                  [1-57347] StaticText: end
+                [1-57348] StaticText: . Se pueden combinar.
+              [1-53492] is-demo
+                [1-53484] div
+                  [1-53577] div
+                    [1-53578] LabelText
+                      [1-57349] StaticText: Importe
+                    [1-53580] div
+                      [1-57350] StaticText: $
+                      [1-53584] spinbutton: Importe
+                        [1-57351] StaticText: 1200
+                      [1-57352] StaticText: COP
+                  [1-53639] div
+                    [1-53640] LabelText
+                      [1-57353] StaticText: Peso
+                    [1-53642] div
+                      [1-53646] spinbutton: Peso
+                        [1-57354] StaticText: 72
+                      [1-57355] StaticText: kg
+                  [1-53701] div
+                    [1-53702] LabelText
+                      [1-57356] StaticText: Con iconos
+                    [1-53708] textbox: Con iconos
+                  [1-53764] div
+                    [1-53765] LabelText
+                      [1-57358] StaticText: Slot + prefix
+                    [1-53767] div
+                      [1-57359] StaticText: https://
+                      [1-53771] textbox: Slot + prefix
+                [1-53537] button: Ver código del ejemplo
+                [1-53576] button: Ver fuentes JS / CSS / MD
+              [1-56734] div
+                [1-53877] pre: Código
+                  [1-53829] div
+                    [1-56660] StaticText: <is-input
+                    [1-56661] StaticText: 
+                    [1-56662] StaticText: label
+                    [1-56663] StaticText: =
+                    [1-56664] StaticText: "Importe"
+                    [1-56665] StaticText: 
+                    [1-56666] StaticText: type
+                    [1-56667] StaticText: =
+                    [1-56668] StaticText: "number"
+                    [1-56669] StaticText: 
+                    [1-56670] StaticText: prefix
+                    [1-56671] StaticText: =
+                    [1-56672] StaticText: "$"
+                    [1-56673] StaticText: 
+                    [1-56674] StaticText: suffix
+                    [1-56675] StaticText: =
+                    [1-56676] StaticText: "COP"
+                    [1-56677] StaticText: >
+                    [1-56678] StaticText: </is-input
+                    [1-56679] StaticText: >
+                  [1-53846] div
+                    [1-56680] StaticText: <is-input
+                    [1-56681] StaticText: 
+                    [1-56682] StaticText: label
+                    [1-56683] StaticText: =
+                    [1-56684] StaticText: "Con iconos"
+                    [1-56685] StaticText: >
+                  [1-53852] div
+                    [1-56686] StaticText: 
+                    [1-56687] StaticText: <is-icon
+                    [1-56688] StaticText: 
+                    [1-56689] StaticText: slot
+                    [1-56690] StaticText: =
+                    [1-56691] StaticText: "start"
+                    [1-56692] StaticText: 
+                    [1-56693] StaticText: icon
+                    [1-56694] StaticText: =
+                    [1-56695] StaticText: "mdi:magnify"
+                    [1-56696] StaticText: >
+                    [1-56697] StaticText: </is-icon
+                    [1-56698] StaticText: >
+                  [1-53863] div
+                    [1-56699] StaticText: 
+                    [1-56700] StaticText: <is-icon
+                    [1-56701] StaticText: 
+                    [1-56702] StaticText: slot
+                    [1-56703] StaticText: =
+                    [1-56704] StaticText: "end"
+                    [1-56705] StaticText: 
+                    [1-56706] StaticText: icon
+                    [1-56707] StaticText: =
+                    [1-56708] StaticText: "mdi:filter-variant"
+                    [1-56709] StaticText: >
+                    [1-56710] StaticText: </is-icon
+                    [1-56711] StaticText: >
+                  [1-53874] div
+                    [1-56712] StaticText: </is-input
+                    [1-56713] StaticText: >
+                [1-56737] is-button: Copiar
+                  [1-56751] button: Copiar
+                  [1-57361] StaticText: Listo
+              [1-53501] paragraph
+                [1-57362] StaticText: En JS las propiedades se llaman
+                [1-53502] code
+                  [1-57363] StaticText: prefixText
+                [1-57364] StaticText: y
+                [1-53503] code
+                  [1-57365] StaticText: suffixText
+                [1-57366] StaticText: :
+                [1-53504] code
+                  [1-57367] StaticText: prefix
+                [1-57368] StaticText: ya existe en
+                [1-53505] code
+                  [1-57369] StaticText: Element
+                [1-57370] StaticText: (prefijo de espacio de nombres XML) y no conviene pisarla.
+            [1-53916] section
+              [1-53889] heading: Error y validación
+              [1-53898] paragraph
+                [1-53890] code
+                  [1-57372] StaticText: error
+                [1-57373] StaticText: fuerza el estado visual de peligro y
+                [1-53891] code
+                  [1-57374] StaticText: error-text
+                [1-57375] StaticText: sustituye al
+                [1-53892] code
+                  [1-57376] StaticText: hint
+                [1-57377] StaticText: . Sin forzarlo, el campo entra solo en error cuando la validación nativa falla
+                [1-53893] emphasis
+                  [1-57378] StaticText: después
+                [1-57379] StaticText: de la primera interacción (blur,
+                [1-53894] code
+                  [1-57380] StaticText: change
+                [1-57381] StaticText: o
+                [1-53895] code
+                  [1-57382] StaticText: reportValidity()
+                [1-57383] StaticText: ); si no diste
+                [1-53896] code
+                  [1-57384] StaticText: error-text
+                [1-57385] StaticText: , se muestra el mensaje de validación del navegador. El estado se expone como
+                [1-53897] code
+                  [1-57386] StaticText: :state(invalid)
+                [1-57387] StaticText: .
+              [1-53907] is-demo
+                [1-53899] div
+                  [1-53986] div
+                    [1-53987] LabelText
+                      [1-57388] StaticText: Error forzado
+                    [1-53993] textbox: Error forzado
+                      [1-57389] StaticText: valor@malo
+                    [1-57390] StaticText: Ese correo no existe en el sistema
+                  [1-54045] div
+                    [1-54046] LabelText
+                      [1-57391] StaticText: Error sin error-text
+                    [1-54052] textbox: Error sin error-text
+                      [1-57392] StaticText: 12
+                    [1-57393] StaticText: El hint se pinta en rojo
+                  [1-54103] div
+                    [1-54104] LabelText
+                      [1-57394] StaticText: Correo (sale del campo para validar)
+                    [1-54110] textbox: Correo (sale del campo para validar)
+                    [1-57395] StaticText: Se valida al perder el foco
+                  [1-54162] div
+                    [1-54163] LabelText
+                      [1-57396] StaticText: Obligatorio
+                    [1-54169] textbox: Obligatorio
+                    [1-57397] StaticText: Pulsa «Validar»
+                [1-53904] div
+                  [1-53905] button: Validar
+                  [1-53906] button: Alternar error
+                [1-53946] button: Ver código del ejemplo
+                [1-53985] button: Ver fuentes JS / CSS / MD
+              [1-56825] div
+                [1-54235] pre: Código
+                  [1-54223] div
+                    [1-56792] StaticText: <is-input
+                    [1-56793] StaticText: 
+                    [1-56794] StaticText: error
+                    [1-56795] StaticText: 
+                    [1-56796] StaticText: error-text
+                    [1-56797] StaticText: =
+                    [1-56798] StaticText: "Ese correo no existe en el sistema"
+                    [1-56799] StaticText: >
+                    [1-56800] StaticText: </is-input
+                    [1-56801] StaticText: >
+                  [1-56802] StaticText: // error derivado de la validación nativa
+                  [1-56803] StaticText: input.reportValidity();          // marca el campo como tocado y pinta el error
+                  [1-56804] StaticText: input.error = true;              // o fuérzalo desde fuera
+                [1-56828] is-button: Copiar
+                  [1-56842] button: Copiar
+                  [1-57400] StaticText: Listo
+            [1-54266] section
+              [1-54247] heading: Contador de caracteres
+              [1-54252] paragraph
+                [1-54248] code
+                  [1-57402] StaticText: show-count
+                [1-57403] StaticText: añade el contador a la derecha de la fila del hint. Con
+                [1-54249] code
+                  [1-57404] StaticText: maxlength
+                [1-57405] StaticText: muestra
+                [1-54250] code
+                  [1-57406] StaticText: n/max
+                [1-57407] StaticText: ; sin él, solo
+                [1-54251] code
+                  [1-57408] StaticText: n
+                [1-57409] StaticText: .
+              [1-54257] is-demo
+                [1-54253] div
+                  [1-54336] div
+                    [1-54337] LabelText
+                      [1-57410] StaticText: Titular
+                    [1-54343] textbox: Titular
+                      [1-57411] StaticText: Facturación electrónica
+                    [1-54351] div
+                      [1-57412] StaticText: Máximo 40 caracteres
+                      [1-57413] StaticText: 23/40
+                  [1-54395] div
+                    [1-54396] LabelText
+                      [1-57414] StaticText: Sin límite
+                    [1-54402] textbox: Sin límite
+                    [1-57416] StaticText: 0
+                  [1-54455] div
+                    [1-54456] LabelText
+                      [1-57417] StaticText: Solo contador
+                    [1-54462] textbox: Solo contador
+                    [1-57418] StaticText: 0/10
+                [1-54296] button: Ver código del ejemplo
+                [1-54335] button: Ver fuentes JS / CSS / MD
+              [1-56918] div
+                [1-54514] div
+                  [1-56880] StaticText: <is-input
+                  [1-56881] StaticText: 
+                  [1-56882] StaticText: label
+                  [1-56883] StaticText: =
+                  [1-56884] StaticText: "Titular"
+                  [1-56885] StaticText: 
+                  [1-56886] StaticText: maxlength
+                  [1-56887] StaticText: =
+                  [1-56888] StaticText: "40"
+                  [1-56889] StaticText: 
+                  [1-56890] StaticText: show-count
+                  [1-56891] StaticText: 
+                  [1-56892] StaticText: hint
+                  [1-56893] StaticText: =
+                  [1-56894] StaticText: "Máximo 40 caracteres"
+                  [1-56895] StaticText: >
+                  [1-56896] StaticText: </is-input
+                  [1-56897] StaticText: >
+                [1-56921] is-button: Copiar
+                  [1-56935] button: Copiar
+                  [1-57419] StaticText: Listo
+            [1-54559] section
+              [1-54541] heading: Ancho
+              [1-54545] paragraph
+                [1-57421] StaticText: El ancho se controla con el token
+                [1-54542] code
+                  [1-57422] StaticText: --is-field-width
+                [1-57423] StaticText: (heredable: puedes ponerlo en el contenedor y afecta a todos los campos de dentro).
+                [1-54543] code
+                  [1-57424] StaticText: full-width
+                [1-57425] StaticText: lo ignora y ocupa el 100% disponible, como el
+                [1-54544] code
+                  [1-57426] StaticText: fullWidth
+                [1-57427] StaticText: de MUI.
+              [1-54550] is-demo
+                [1-54546] div
+                  [1-54629] div
+                    [1-54630] LabelText
+                      [1-57428] StaticText: --is-field-width: 14rem
+                    [1-54636] textbox: --is-field-width: 14rem
+                  [1-54688] div
+                    [1-54689] LabelText
+                      [1-57430] StaticText: Mismo contenedor, full-width
+                    [1-54695] textbox: Mismo contenedor, full-width
+                  [1-54747] div
+                    [1-54748] LabelText
+                      [1-57432] StaticText: Override local
+                    [1-54754] spinbutton: Override local
+                      [1-57433] StaticText: 42
+                [1-54589] button: Ver código del ejemplo
+                [1-54628] button: Ver fuentes JS / CSS / MD
+              [1-57024] div
+                [1-54838] pre: Código
+                  [1-54812] div
+                    [1-56976] StaticText: <div
+                    [1-56977] StaticText: 
+                    [1-56978] StaticText: style
+                    [1-56979] StaticText: =
+                    [1-56980] StaticText: "--is-field-width: 14rem"
+                    [1-56981] StaticText: >
+                  [1-54818] div
+                    [1-56982] StaticText: 
+                    [1-56983] StaticText: <is-input
+                    [1-56984] StaticText: 
+                    [1-56985] StaticText: label
+                    [1-56986] StaticText: =
+                    [1-56987] StaticText: "Estrecho"
+                    [1-56988] StaticText: >
+                    [1-56989] StaticText: </is-input
+                    [1-56990] StaticText: >
+                  [1-54826] div
+                    [1-56991] StaticText: 
+                    [1-56992] StaticText: <is-input
+                    [1-56993] StaticText: 
+                    [1-56994] StaticText: label
+                    [1-56995] StaticText: =
+                    [1-56996] StaticText: "Ancho completo"
+                    [1-56997] StaticText: 
+                    [1-56998] StaticText: full-width
+                    [1-56999] StaticText: >
+                    [1-57000] StaticText: </is-input
+                    [1-57001] StaticText: >
+                  [1-54835] div
+                    [1-57002] StaticText: </div
+                    [1-57003] StaticText: >
+                [1-57027] is-button: Copiar
+                  [1-57041] button: Copiar
+                  [1-57434] StaticText: Listo
+            [1-54867] section
+              [1-54850] heading: Label a la izquierda
+              [1-54853] paragraph
+                [1-54851] code
+                  [1-57436] StaticText: label-placement="start"
+                [1-57437] StaticText: pasa el layout a rejilla de dos columnas para formularios horizontales.
+                [1-54852] code
+                  [1-57438] StaticText: --is-field-label-width
+                [1-57439] StaticText: fija la columna del label para que varios campos queden alineados.
+              [1-54858] is-demo
+                [1-54854] div
+                  [1-54937] div
+                    [1-54938] LabelText
+                      [1-57440] StaticText: Nombre
+                    [1-54944] textbox: Nombre
+                  [1-54996] div
+                    [1-54997] LabelText
+                      [1-57442] StaticText: Correo
+                    [1-55003] textbox: Correo
+                    [1-57443] StaticText: Se usa para la factura
+                  [1-55056] div
+                    [1-55057] LabelText
+                      [1-57445] StaticText: NIT
+                    [1-55059] div
+                      [1-57447] StaticText: CO
+                      [1-55063] textbox: NIT
+                    [1-57446] StaticText: 0/12
+                [1-54897] button: Ver código del ejemplo
+                [1-54936] button: Ver fuentes JS / CSS / MD
+              [1-57140] div
+                [1-55151] pre: Código
+                  [1-55118] div
+                    [1-57082] StaticText: <div
+                    [1-57083] StaticText: 
+                    [1-57084] StaticText: style
+                    [1-57085] StaticText: =
+                    [1-57086] StaticText: "--is-field-label-width: 7rem"
+                    [1-57087] StaticText: >
+                  [1-55124] div
+                    [1-57088] StaticText: 
+                    [1-57089] StaticText: <is-input
+                    [1-57090] StaticText: 
+                    [1-57091] StaticText: label-placement
+                    [1-57092] StaticText: =
+                    [1-57093] StaticText: "start"
+                    [1-57094] StaticText: 
+                    [1-57095] StaticText: label
+                    [1-57096] StaticText: =
+                    [1-57097] StaticText: "Nombre"
+                    [1-57098] StaticText: 
+                    [1-57099] StaticText: full-width
+                    [1-57100] StaticText: >
+                    [1-57101] StaticText: </is-input
+                    [1-57102] StaticText: >
+                  [1-55136] div
+                    [1-57103] StaticText: 
+                    [1-57104] StaticText: <is-input
+                    [1-57105] StaticText: 
+                    [1-57106] StaticText: label-placement
+                    [1-57107] StaticText: =
+                    [1-57108] StaticText: "start"
+                    [1-57109] StaticText: 
+                    [1-57110] StaticText: label
+                    [1-57111] StaticText: =
+                    [1-57112] StaticText: "Correo"
+                    [1-57113] StaticText: 
+                    [1-57114] StaticText: full-width
+                    [1-57115] StaticText: >
+                    [1-57116] StaticText: </is-input
+                    [1-57117] StaticText: >
+                  [1-55148] div
+                    [1-57118] StaticText: </div
+                    [1-57119] StaticText: >
+                [1-57143] is-button: Copiar
+                  [1-57157] button: Copiar
+                  [1-57448] StaticText: Listo
+            [1-55174] section
+              [1-55163] heading: Estados
+              [1-55166] paragraph
+                [1-55164] code
+                  [1-57450] StaticText: readonly
+                [1-57451] StaticText: vacía el fondo y pasa el borde a discontinuo;
+                [1-55165] code
+                  [1-57452] StaticText: disabled
+                [1-57453] StaticText: además atenúa y bloquea la interacción.
+              [1-55172] is-demo
+                [1-55167] div
+                  [1-55244] div
+                    [1-55245] LabelText
+                      [1-57454] StaticText: Solo lectura
+                    [1-55251] textbox: Solo lectura
+                      [1-57455] StaticText: No editable
+                  [1-55302] div
+                    [1-55303] LabelText
+                      [1-57456] StaticText: Deshabilitado
+                    [1-55309] textbox: Deshabilitado
+                      [1-57457] StaticText: Sin acceso
+                  [1-55360] div
+                    [1-55361] LabelText
+                      [1-57458] StaticText: filled · readonly
+                    [1-55367] textbox: filled · readonly
+                      [1-57459] StaticText: No editable
+                  [1-55418] div
+                    [1-55419] LabelText
+                      [1-57460] StaticText: underlined · disabled
+                    [1-55425] textbox: underlined · disabled
+                      [1-57461] StaticText: Sin acceso
+                [1-55204] button: Ver código del ejemplo
+                [1-55243] button: Ver fuentes JS / CSS / MD
+            [1-55493] section
+              [1-55476] heading: Dentro de un <form>
+              [1-55481] paragraph
+                [1-57463] StaticText: El valor entra en
+                [1-55477] code
+                  [1-57464] StaticText: FormData
+                [1-57465] StaticText: con la clave de
+                [1-55478] code
+                  [1-57466] StaticText: name
+                [1-57467] StaticText: .
+                [1-55479] code
+                  [1-57468] StaticText: reset
+                [1-57469] StaticText: restaura el atributo
+                [1-55480] code
+                  [1-57470] StaticText: value
+                [1-57471] StaticText: y limpia el estado de error.
+              [1-55489] is-demo
+                [1-55482] form
+                  [1-55563] div
+                    [1-55564] LabelText
+                      [1-57472] StaticText: Usuario
+                    [1-55570] textbox: Usuario
+                    [1-57473] StaticText: 0/20
+                  [1-55622] div
+                    [1-55623] LabelText
+                      [1-57474] StaticText: Correo
+                    [1-55629] textbox: Correo
+                  [1-55681] div
+                    [1-55682] LabelText
+                      [1-57475] StaticText: Cargo
+                    [1-55688] textbox: Cargo
+                      [1-57476] StaticText: Contador
+                  [1-55486] div
+                    [1-55487] button: Enviar
+                    [1-55488] button: Reset
+                [1-55523] button: Ver código del ejemplo
+                [1-55562] button: Ver fuentes JS / CSS / MD
+              [1-55491] paragraph
+                [1-57479] StaticText: FormData: —
+            [1-55980] section
+              [1-55739] heading: Referencia
+              [1-55740] heading: Atributos
+              [1-55820] table
+                [1-55818] rowgroup
+                  [1-55744] row
+                    [1-55742] columnheader: ATRIBUTO
+                    [1-55743] columnheader: DETALLE
+                [1-55819] tbody
+                  [1-55749] row
+                    [1-55746] cell: type
+                      [1-55745] code
+                        [1-57482] StaticText: type
+                    [1-55748] cell: text (default) · email · password · number · search · tel · url · date
+                      [1-55747] code
+                        [1-57483] StaticText: text
+                      [1-57484] StaticText: (default) · email · password · number · search · tel · url · date
+                  [1-55756] row
+                    [1-55751] cell: appearance
+                      [1-55750] code
+                        [1-57485] StaticText: appearance
+                    [1-55755] cell: outlined (default) · filled · underlined
+                      [1-55752] code
+                        [1-57486] StaticText: outlined
+                      [1-57487] StaticText: (default) ·
+                      [1-55753] code
+                        [1-57488] StaticText: filled
+                      [1-57489] StaticText: ·
+                      [1-55754] code
+                        [1-57490] StaticText: underlined
+                  [1-55762] row
+                    [1-55758] cell: label-placement
+                      [1-55757] code
+                        [1-57491] StaticText: label-placement
+                    [1-55761] cell: top (default) · start
+                      [1-55759] code
+                        [1-57492] StaticText: top
+                      [1-57493] StaticText: (default) ·
+                      [1-55760] code
+                        [1-57494] StaticText: start
+                  [1-55769] row
+                    [1-55767] cell: name value placeholder autocomplete
+                      [1-55763] code
+                        [1-57495] StaticText: name
+                      [1-57496] StaticText: 
+                      [1-55764] code
+                        [1-57497] StaticText: value
+                      [1-57498] StaticText: 
+                      [1-55765] code
+                        [1-57499] StaticText: placeholder
+                      [1-57811] StaticText: 
+                      [1-55766] code
+                        [1-57500] StaticText: autocomplete
+                    [1-55768] cell: string
+                  [1-55774] row
+                    [1-55772] cell: label hint
+                      [1-55770] code
+                        [1-57502] StaticText: label
+                      [1-57503] StaticText: 
+                      [1-55771] code
+                        [1-57504] StaticText: hint
+                    [1-55773] cell: texto o slots homónimos
+                  [1-55779] row
+                    [1-55776] cell: error-text
+                      [1-55775] code
+                        [1-57506] StaticText: error-text
+                    [1-55778] cell: mensaje que sustituye al hint cuando hay error
+                      [1-57507] StaticText: mensaje que sustituye al
+                      [1-55777] code
+                        [1-57508] StaticText: hint
+                      [1-57509] StaticText: cuando hay error
+                  [1-55784] row
+                    [1-55782] cell: prefix suffix
+                      [1-55780] code
+                        [1-57510] StaticText: prefix
+                      [1-57511] StaticText: 
+                      [1-55781] code
+                        [1-57512] StaticText: suffix
+                    [1-55783] cell: adorno de texto corto, atenuado y no interactivo
+                  [1-55791] row
+                    [1-55789] cell: min max step maxlength
+                      [1-55785] code
+                        [1-57514] StaticText: min
+                      [1-57515] StaticText: 
+                      [1-55786] code
+                        [1-57516] StaticText: max
+                      [1-57517] StaticText: 
+                      [1-55787] code
+                        [1-57518] StaticText: step
+                      [1-57519] StaticText: 
+                      [1-55788] code
+                        [1-57520] StaticText: maxlength
+                    [1-55790] cell: pasan al input nativo interno
+                  [1-55797] row
+                    [1-55795] cell: disabled required readonly
+                      [1-55792] code
+                        [1-57522] StaticText: disabled
+                      [1-57523] StaticText: 
+                      [1-55793] code
+                        [1-57524] StaticText: required
+                      [1-57525] StaticText: 
+                      [1-55794] code
+                        [1-57526] StaticText: readonly
+                    [1-55796] cell: boolean
+                  [1-55802] row
+                    [1-55800] cell: clearable password-toggle
+                      [1-55798] code
+                        [1-57528] StaticText: clearable
+                      [1-57529] StaticText: 
+                      [1-55799] code
+                        [1-57530] StaticText: password-toggle
+                    [1-55801] cell: boolean · botón de limpiar y ojo de contraseña
+                  [1-55806] row
+                    [1-55804] cell: error
+                      [1-55803] code
+                        [1-57532] StaticText: error
+                    [1-55805] cell: boolean · fuerza el estado visual de peligro
+                  [1-55812] row
+                    [1-55808] cell: show-count
+                      [1-55807] code
+                        [1-57534] StaticText: show-count
+                    [1-55811] cell: boolean · contador n/maxlength (o n)
+                      [1-57535] StaticText: boolean · contador
+                      [1-55809] code
+                        [1-57536] StaticText: n/maxlength
+                      [1-57537] StaticText: (o
+                      [1-55810] code
+                        [1-57538] StaticText: n
+                      [1-57539] StaticText: )
+                  [1-55817] row
+                    [1-55814] cell: full-width
+                      [1-55813] code
+                        [1-57540] StaticText: full-width
+                    [1-55816] cell: boolean · 100% del ancho disponible, ignora --is-field-width
+                      [1-57541] StaticText: boolean · 100% del ancho disponible, ignora
+                      [1-55815] code
+                        [1-57542] StaticText: --is-field-width
+              [1-55822] heading: Propiedades y métodos
+              [1-55890] table
+                [1-55888] rowgroup
+                  [1-55826] row
+                    [1-55824] columnheader: API
+                    [1-55825] columnheader: DETALLE
+                [1-55889] tbody
+                  [1-55832] row
+                    [1-55829] cell: value defaultValue
+                      [1-55827] code
+                        [1-57544] StaticText: value
+                      [1-57545] StaticText: 
+                      [1-55828] code
+                        [1-57546] StaticText: defaultValue
+                    [1-55831] cell: valor actual · valor del atributo value (el del reset)
+                      [1-57547] StaticText: valor actual · valor del atributo
+                      [1-55830] code
+                        [1-57548] StaticText: value
+                      [1-57549] StaticText: (el del reset)
+                  [1-55838] row
+                    [1-55836] cell: type appearance labelPlacement
+                      [1-55833] code
+                        [1-57550] StaticText: type
+                      [1-57551] StaticText: 
+                      [1-55834] code
+                        [1-57552] StaticText: appearance
+                      [1-57553] StaticText: 
+                      [1-55835] code
+                        [1-57554] StaticText: labelPlacement
+                    [1-55837] cell: sanitizan valores no válidos al default
+                  [1-55846] row
+                    [1-55841] cell: prefixText suffixText
+                      [1-55839] code
+                        [1-57556] StaticText: prefixText
+                      [1-57557] StaticText: 
+                      [1-55840] code
+                        [1-57558] StaticText: suffixText
+                    [1-55845] cell: reflejan prefix / suffix (Element.prefix ya existe)
+                      [1-57559] StaticText: reflejan
+                      [1-55842] code
+                        [1-57560] StaticText: prefix
+                      [1-57561] StaticText: /
+                      [1-55843] code
+                        [1-57562] StaticText: suffix
+                      [1-57563] StaticText: (
+                      [1-55844] code
+                        [1-57564] StaticText: Element.prefix
+                      [1-57565] StaticText: ya existe)
+                  [1-55853] row
+                    [1-55851] cell: error errorText showCount fullWidth
+                      [1-55847] code
+                        [1-57566] StaticText: error
+                      [1-57567] StaticText: 
+                      [1-55848] code
+                        [1-57568] StaticText: errorText
+                      [1-57569] StaticText: 
+                      [1-55849] code
+                        [1-57570] StaticText: showCount
+                      [1-57571] StaticText: 
+                      [1-55850] code
+                        [1-57572] StaticText: fullWidth
+                    [1-55852] cell: reflejan sus atributos
+                  [1-55861] row
+                    [1-55859] cell: clearable passwordToggle disabled required readonly
+                      [1-55854] code
+                        [1-57574] StaticText: clearable
+                      [1-57575] StaticText: 
+                      [1-55855] code
+                        [1-57576] StaticText: passwordToggle
+                      [1-57577] StaticText: 
+                      [1-55856] code
+                        [1-57578] StaticText: disabled
+                      [1-57812] StaticText: 
+                      [1-55857] code
+                        [1-57579] StaticText: required
+                      [1-57580] StaticText: 
+                      [1-55858] code
+                        [1-57581] StaticText: readonly
+                    [1-55860] cell: boolean
+                  [1-55866] row
+                    [1-55863] cell: input
+                      [1-55862] code
+                        [1-57583] StaticText: input
+                    [1-55865] cell: el <input> nativo interno, para casos avanzados
+                      [1-57584] StaticText: el
+                      [1-55864] code
+                        [1-57585] StaticText: <input>
+                      [1-57586] StaticText: nativo interno, para casos avanzados
+                  [1-55873] row
+                    [1-55870] cell: validity validationMessage willValidate
+                      [1-55867] code
+                        [1-57587] StaticText: validity
+                      [1-57588] StaticText: 
+                      [1-55868] code
+                        [1-57589] StaticText: validationMessage
+                      [1-57590] StaticText: 
+                      [1-55869] code
+                        [1-57591] StaticText: willValidate
+                    [1-55872] cell: espejo de ElementInternals
+                      [1-57592] StaticText: espejo de
+                      [1-55871] code
+                        [1-57593] StaticText: ElementInternals
+                  [1-55880] row
+                    [1-55878] cell: focus() blur() select() setSelectionRange()
+                      [1-55874] code
+                        [1-57594] StaticText: focus()
+                      [1-57595] StaticText: 
+                      [1-55875] code
+                        [1-57596] StaticText: blur()
+                      [1-57597] StaticText: 
+                      [1-55876] code
+                        [1-57598] StaticText: select()
+                      [1-57813] StaticText: 
+                      [1-55877] code
+                        [1-57599] StaticText: setSelectionRange()
+                    [1-55879] cell: delegan en el input interno
+                  [1-55887] row
+                    [1-55884] cell: checkValidity() reportValidity() setCustomValidity()
+                      [1-55881] code
+                        [1-57601] StaticText: checkValidity()
+                      [1-57602] StaticText: 
+                      [1-55882] code
+                        [1-57603] StaticText: reportValidity()
+                      [1-57814] StaticText: 
+                      [1-55883] code
+                        [1-57604] StaticText: setCustomValidity()
+                    [1-55886] cell: reportValidity() además marca el campo como tocado
+                      [1-55885] code
+                        [1-57605] StaticText: reportValidity()
+                      [1-57606] StaticText: además marca el campo como tocado
+              [1-55892] heading: Slots, parts y estados
+              [1-55941] scrollable, div
+                [1-55940] table
+                  [1-55938] rowgroup
+                    [1-55896] row
+                      [1-55894] columnheader: API
+                      [1-55895] columnheader: DETALLE
+                  [1-55939] tbody
+                    [1-55903] row
+                      [1-55897] cell: slots
+                      [1-55902] cell: label hint start end
+                        [1-55898] code
+                          [1-57609] StaticText: label
+                        [1-57610] StaticText: 
+                        [1-55899] code
+                          [1-57611] StaticText: hint
+                        [1-57612] StaticText: 
+                        [1-55900] code
+                          [1-57613] StaticText: start
+                        [1-57614] StaticText: 
+                        [1-55901] code
+                          [1-57615] StaticText: end
+                    [1-55920] row
+                      [1-55904] cell: parts
+                      [1-55919] cell: form-control label base start prefix input clear toggle suffix end support hint error-text count
+                        [1-55905] code
+                          [1-57617] StaticText: form-control
+                        [1-57618] StaticText: 
+                        [1-55906] code
+                          [1-57619] StaticText: label
+                        [1-57620] StaticText: 
+                        [1-55907] code
+                          [1-57621] StaticText: base
+                        [1-57622] StaticText: 
+                        [1-55908] code
+                          [1-57623] StaticText: start
+                        [1-57624] StaticText: 
+                        [1-55909] code
+                          [1-57625] StaticText: prefix
+                        [1-57626] StaticText: 
+                        [1-55910] code
+                          [1-57627] StaticText: input
+                        [1-57628] StaticText: 
+                        [1-55911] code
+                          [1-57629] StaticText: clear
+                        [1-57630] StaticText: 
+                        [1-55912] code
+                          [1-57631] StaticText: toggle
+                        [1-57632] StaticText: 
+                        [1-55913] code
+                          [1-57633] StaticText: suffix
+                        [1-57634] StaticText: 
+                        [1-55914] code
+                          [1-57635] StaticText: end
+                        [1-57636] StaticText: 
+                        [1-55915] code
+                          [1-57637] StaticText: support
+                        [1-57638] StaticText: 
+                        [1-55916] code
+                          [1-57639] StaticText: hint
+                        [1-57640] StaticText: 
+                        [1-55917] code
+                          [1-57641] StaticText: error-text
+                        [1-57642] StaticText: 
+                        [1-55918] code
+                          [1-57643] StaticText: count
+                    [1-55929] row
+                      [1-55921] cell: states
+                      [1-55928] cell: blank disabled readonly focused invalid password-visible
+                        [1-55922] code
+                          [1-57645] StaticText: blank
+                        [1-57646] StaticText: 
+                        [1-55923] code
+                          [1-57647] StaticText: disabled
+                        [1-57648] StaticText: 
+                        [1-55924] code
+                          [1-57649] StaticText: readonly
+                        [1-57650] StaticText: 
+                        [1-55925] code
+                          [1-57651] StaticText: focused
+                        [1-57652] StaticText: 
+                        [1-55926] code
+                          [1-57653] StaticText: invalid
+                        [1-57654] StaticText: 
+                        [1-55927] code
+                          [1-57655] StaticText: password-visible
+                    [1-55937] row
+                      [1-55930] cell: events
+                      [1-55936] cell: is-input is-change (detail.value) + nativos input / change
+                        [1-55931] code
+                          [1-57657] StaticText: is-input
+                        [1-57658] StaticText: 
+                        [1-55932] code
+                          [1-57659] StaticText: is-change
+                        [1-57660] StaticText: (
+                        [1-55933] code
+                          [1-57661] StaticText: detail.value
+                        [1-57662] StaticText: ) + nativos
+                        [1-55934] code
+                          [1-57663] StaticText: input
+                        [1-57664] StaticText: /
+                        [1-55935] code
+                          [1-57665] StaticText: change
+              [1-55942] heading: Tokens
+              [1-55978] table
+                [1-55976] rowgroup
+                  [1-55946] row
+                    [1-55944] columnheader: TOKEN
+                    [1-55945] columnheader: DETALLE
+                [1-55977] tbody
+                  [1-55951] row
+                    [1-55948] cell: --is-field-width
+                      [1-55947] code
+                        [1-57667] StaticText: --is-field-width
+                    [1-55950] cell: ancho del control (default auto); heredable desde el contenedor
+                      [1-57668] StaticText: ancho del control (default
+                      [1-55949] code
+                        [1-57669] StaticText: auto
+                      [1-57670] StaticText: ); heredable desde el contenedor
+                  [1-55956] row
+                    [1-55953] cell: --is-field-label-width
+                      [1-55952] code
+                        [1-57671] StaticText: --is-field-label-width
+                    [1-55955] cell: columna del label con label-placement="start"
+                      [1-57672] StaticText: columna del label con
+                      [1-55954] code
+                        [1-57673] StaticText: label-placement="start"
+                  [1-55963] row
+                    [1-55960] cell: --is-input-bg --is-input-border --is-input-text
+                      [1-55957] code
+                        [1-57674] StaticText: --is-input-bg
+                      [1-57675] StaticText: 
+                      [1-55958] code
+                        [1-57676] StaticText: --is-input-border
+                      [1-57677] StaticText: 
+                      [1-55959] code
+                        [1-57678] StaticText: --is-input-text
+                    [1-55962] cell: caen en --is-control-*
+                      [1-57679] StaticText: caen en
+                      [1-55961] code
+                        [1-57680] StaticText: --is-control-*
+                  [1-55970] row
+                    [1-55966] cell: --is-input-border-radius --is-input-focus
+                      [1-55964] code
+                        [1-57681] StaticText: --is-input-border-radius
+                      [1-57682] StaticText: 
+                      [1-55965] code
+                        [1-57683] StaticText: --is-input-focus
+                    [1-55969] cell: caen en --is-radius-sm / --is-focus
+                      [1-57684] StaticText: caen en
+                      [1-55967] code
+                        [1-57685] StaticText: --is-radius-sm
+                      [1-57686] StaticText: /
+                      [1-55968] code
+                        [1-57687] StaticText: --is-focus
+                  [1-55975] row
+                    [1-55973] cell: --is-input-danger --is-input-danger-text
+                      [1-55971] code
+                        [1-57688] StaticText: --is-input-danger
+                      [1-57689] StaticText: 
+                      [1-55972] code
+                        [1-57690] StaticText: --is-input-danger-text
+                    [1-55974] cell: borde y texto del estado de error
+          [1-52309] separator: Redimensionar panel
+          [1-52303] complementary
+            [1-55981] heading: IS-INPUT
+            [1-55982] slot
+              [1-55983] link: intro
+              [1-55984] link: Appearance
+              [1-55985] link: Tipos
+              [1-55986] link: Adornos
+              [1-55987] link: Error y validación
+              [1-55988] link: Contador de caracteres
+              [1-55989] link: Ancho
+              [1-55990] link: Label a la izquierda
+              [1-55991] link: Estados
+              [1-55992] link: Dentro de un
+              [1-55993] link: Referencia

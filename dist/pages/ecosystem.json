@@ -10,6 +10,8 @@
     {
       "id": "intro",
       "title": "Get started",
+      "role": "region",
+      "ariaLabel": "Get started del loader JS",
       "lede": "Un solo entry liviano (<code>loader.min.js</code>) carga CSS de documento y solo los módulos que pedís. Evitá <code>all.min.js</code> (~1.8&nbsp;MB resuelto) salvo demos locales.",
       "blocks": [
         {
@@ -25,6 +27,8 @@
     {
       "id": "playground",
       "title": "Playground del loader",
+      "role": "region",
+      "ariaLabel": "Playground interactivo del loader de IS Web Components",
       "lede": "Elegí categorías o tags y copiá el snippet. El live demo aplica <code>load()</code> sobre esta misma página.",
       "blocks": [
         {
@@ -36,11 +40,13 @@
     {
       "id": "shared",
       "title": "Módulos _shared",
+      "role": "region",
+      "ariaLabel": "Catálogo de módulos compartidos en src/components/_shared",
       "lede": "Utilidades compartidas en <code>src/components/_shared/</code>: no son Web Components, pero sostienen el kit (eventos, CSS adoption, CDN, fechas, grids, diagramas…). Listado completo.",
       "blocks": [
         {
           "kind": "html",
-          "html": "<div class=\"eco-toolbar\">\n            <label class=\"eco-field\">Buscar\n              <input id=\"ecoFilter\" type=\"search\" placeholder=\"nombre, path, export…\" autocomplete=\"off\" />\n            </label>\n          </div>\n          <p class=\"eco-count\" id=\"ecoCount\"></p>\n          <div class=\"eco-list\" id=\"ecoList\"></div>"
+          "html": "<div class=\"eco-toolbar\">\n            <label class=\"eco-field\">Buscar\n              <input id=\"ecoFilter\" type=\"search\" placeholder=\"nombre, path, export…\" autocomplete=\"off\" aria-describedby=\"ecoCount\" />\n            </label>\n          </div>\n          <p class=\"eco-count\" id=\"ecoCount\" aria-live=\"polite\"></p>\n          <div class=\"eco-list\" id=\"ecoList\" aria-busy=\"false\"></div>"
         }
       ]
     }

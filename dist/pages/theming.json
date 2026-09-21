@@ -104,6 +104,8 @@
     {
       "id": "taller",
       "title": "Tu paleta",
+      "role": "region",
+      "ariaLabel": "Editor de paleta: cinco semillas para personalizar marca y temas",
       "lede": "Cinco semillas. Todo lo demás se deriva en OKLCH conservando el tono\r\n          de tu marca.",
       "blocks": [
         {
@@ -116,6 +118,8 @@
     {
       "id": "preview",
       "title": "Vista previa · oscuro y claro a la vez",
+      "role": "region",
+      "ariaLabel": "Vista previa con paneles de tema oscuro y claro a la vez",
       "lede": "Los mismos componentes, dos veces. El panel izquierdo lleva\r\n          <code>class=\"theme-dark\"</code> y el derecho\r\n          <code>class=\"theme-light\"</code>; encima de cada uno se escriben los\r\n          tokens generados como propiedades personalizadas del propio elemento.\r\n          Los <code>is-*</code> los leen por herencia dentro de su shadow root,\r\n          así que no hace falta tocar <code>&lt;html&gt;</code>.",
       "blocks": [
         {
@@ -124,11 +128,11 @@
         },
         {
           "kind": "html",
-          "html": "<p class=\"tw-panel__head\"><span>Tema oscuro</span><span id=\"darkBgLabel\"></span></p>\r\n            <div class=\"tw-panel__body\" data-panel-body></div>"
+          "html": "<p class=\"tw-panel__head\"><span>Tema oscuro</span><span id=\"darkBgLabel\"></span></p>\r\n            <div class=\"tw-panel__body\" data-panel-body role=\"region\" aria-label=\"Panel de previsualización en tema oscuro\"></div>"
         },
         {
           "kind": "html",
-          "html": "<p class=\"tw-panel__head\"><span>Tema claro</span><span id=\"lightBgLabel\"></span></p>\r\n            <div class=\"tw-panel__body\" data-panel-body></div>"
+          "html": "<p class=\"tw-panel__head\"><span>Tema claro</span><span id=\"lightBgLabel\"></span></p>\r\n            <div class=\"tw-panel__body\" data-panel-body role=\"region\" aria-label=\"Panel de previsualización en tema claro\"></div>"
         },
         {
           "kind": "html",
@@ -139,6 +143,8 @@
     {
       "id": "exportar",
       "title": "Llévatelo",
+      "role": "region",
+      "ariaLabel": "Exportar paleta generada: copiar o descargar CSS",
       "lede": "Archivo autocontenido: pégalo después de <code>is-base.css</code> (en\r\n          lugar de <code>palettes.css</code> o junto a él) y activa tu paleta con\r\n          <code>data-palette</code>.",
       "blocks": [
         {
@@ -150,6 +156,8 @@
     {
       "id": "reference",
       "title": "Referencia de la derivación",
+      "role": "region",
+      "ariaLabel": "Referencia de cómo se deriva cada token CSS desde la paleta",
       "blocks": [
         {
           "kind": "table",

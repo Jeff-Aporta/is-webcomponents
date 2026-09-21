@@ -1,1247 +1,1261 @@
-[1-14547] RootWebArea: Diagrama entidad-relación | ContaPyme
-  [1-14921] scrollable, html
-    [1-14948] body
-      [1-14949] banner
-        [1-14953] button: ContaPyme — elegir paleta
-          [1-14545] StaticText: conta
-          [1-14546] StaticText: pyme
-        [1-15620] button: Abrir preview en pantalla completa
-        [1-15731] button: Cambiar a tema claro
-      [1-14973] is-split-panel
-        [1-14919] scrollable, nav: Componentes
-          [1-14974] button: Inicio — home
-            [1-14562] StaticText: Inicio
-          [1-14976] button: Personalización — theming
-            [1-14563] StaticText: Personalización
-          [1-14978] button: Ecosistema JS — utilidades compartidas
-            [1-14564] StaticText: Ecosistema JS
-          [1-14980] group: ACCIONES
-            [1-14982] button: Button is-button
-              [1-14565] StaticText: Button
-              [1-14566] StaticText: <is-button>
-            [1-14985] button: Button Group is-button-group
-              [1-14567] StaticText: Button Group
-              [1-14568] StaticText: <is-button-group>
-            [1-14988] button: Check Icon Button is-check-icon-button
-              [1-14569] StaticText: Check Icon Button
-              [1-14570] StaticText: <is-check-icon-button>
-            [1-14991] button: Context Menu is-context-menu
-              [1-14571] StaticText: Context Menu
-              [1-14572] StaticText: <is-context-menu>
-            [1-14994] button: Copy Button is-copy-button
-              [1-14573] StaticText: Copy Button
-              [1-14574] StaticText: <is-copy-button>
-            [1-14997] button: Dropdown is-dropdown
-              [1-14575] StaticText: Dropdown
-              [1-14576] StaticText: <is-dropdown>
-            [1-15000] button: Dropdown Item is-dropdown-item
-              [1-14577] StaticText: Dropdown Item
-              [1-14578] StaticText: <is-dropdown-item>
-            [1-15003] button: Floating Action Button is-fab
-              [1-14579] StaticText: Floating Action Button
-              [1-14580] StaticText: <is-fab>
-            [1-15006] button: Share Button is-share-button
-              [1-14581] StaticText: Share Button
-              [1-14582] StaticText: <is-share-button>
-            [1-15009] button: Speed Dial is-speed-dial
-              [1-14583] StaticText: Speed Dial
-              [1-14584] StaticText: <is-speed-dial>
-            [1-15012] button: Speed Dial Action is-speed-dial-action
-              [1-14585] StaticText: Speed Dial Action
-              [1-14586] StaticText: <is-speed-dial-action>
-          [1-15015] group: MEDIA
-            [1-15017] button: Avatar is-avatar
-              [1-14587] StaticText: Avatar
-              [1-14588] StaticText: <is-avatar>
-            [1-15020] button: Barcode is-barcode
-              [1-14589] StaticText: Barcode
-              [1-14590] StaticText: <is-barcode>
-            [1-15023] button: Barcode Scanner is-barcode-scanner
-              [1-14591] StaticText: Barcode Scanner
-              [1-14592] StaticText: <is-barcode-scanner>
-            [1-15026] button: Icon is-icon
-              [1-14593] StaticText: Icon
-              [1-14594] StaticText: <is-icon>
-            [1-15029] button: Image Editor is-image-editor
-              [1-14595] StaticText: Image Editor
-              [1-14596] StaticText: <is-image-editor>
-            [1-15032] button: Media Recorder is-media-recorder
-              [1-14597] StaticText: Media Recorder
-              [1-14598] StaticText: <is-media-recorder>
-            [1-15035] button: QR Code is-qrcode
-              [1-14599] StaticText: QR Code
-              [1-14600] StaticText: <is-qrcode>
-            [1-15038] button: Speech is-speech
-              [1-14601] StaticText: Speech
-              [1-14602] StaticText: <is-speech>
-            [1-15041] button: Theme Img is-theme-img
-              [1-14603] StaticText: Theme Img
-              [1-14604] StaticText: <is-theme-img>
-            [1-15044] button: Video is-video
-              [1-14605] StaticText: Video
-              [1-14606] StaticText: <is-video>
-            [1-15047] button: Video Playlist is-video-playlist
-              [1-14607] StaticText: Video Playlist
-              [1-14608] StaticText: <is-video-playlist>
-          [1-15050] group: FEEDBACK
-            [1-15052] button: Badge is-badge
-              [1-14609] StaticText: Badge
-              [1-14610] StaticText: <is-badge>
-            [1-15055] button: CDN Snippet is-cdn-snippet
-              [1-14611] StaticText: CDN Snippet
-              [1-14612] StaticText: <is-cdn-snippet>
-            [1-15058] button: Confirm Modal is-confirm-modal
-              [1-14613] StaticText: Confirm Modal
-              [1-14614] StaticText: <is-confirm-modal>
-            [1-15061] button: Palette Selector is-palette-selector
-              [1-14615] StaticText: Palette Selector
-              [1-14616] StaticText: <is-palette-selector>
-            [1-15064] button: Popconfirm is-popconfirm
-              [1-14617] StaticText: Popconfirm
-              [1-14618] StaticText: <is-popconfirm>
-            [1-15067] button: Prefs Clear is-prefs-clear
-              [1-14619] StaticText: Prefs Clear
-              [1-14620] StaticText: <is-prefs-clear>
-            [1-15070] button: Progress Bar is-progress-bar
-              [1-14621] StaticText: Progress Bar
-              [1-14622] StaticText: <is-progress-bar>
-            [1-15073] button: Progress Ring is-progress-ring
-              [1-14623] StaticText: Progress Ring
-              [1-14624] StaticText: <is-progress-ring>
-            [1-15076] button: Skeleton is-skeleton
-              [1-14625] StaticText: Skeleton
-              [1-14626] StaticText: <is-skeleton>
-            [1-15079] button: Spinner is-spinner
-              [1-14627] StaticText: Spinner
-              [1-14628] StaticText: <is-spinner>
-            [1-15082] button: Tag is-tag
-              [1-14629] StaticText: Tag
-              [1-14630] StaticText: <is-tag>
-            [1-15085] button: Theme Toggle is-theme-toggle
-              [1-14631] StaticText: Theme Toggle
-              [1-14632] StaticText: <is-theme-toggle>
-            [1-15088] button: Toast is-toast
-              [1-14633] StaticText: Toast
-              [1-14634] StaticText: <is-toast>
-            [1-15091] button: Toast Item is-toast-item
-              [1-14635] StaticText: Toast Item
-              [1-14636] StaticText: <is-toast-item>
-            [1-15094] button: Tooltip is-tooltip
-              [1-14637] StaticText: Tooltip
-              [1-14638] StaticText: <is-tooltip>
-          [1-15097] group: LAYOUT
-            [1-15099] button: Callout is-callout
-              [1-14639] StaticText: Callout
-              [1-14640] StaticText: <is-callout>
-            [1-15102] button: Card is-card
-              [1-14641] StaticText: Card
-              [1-14642] StaticText: <is-card>
-            [1-15105] button: Details is-details
-              [1-14643] StaticText: Details
-              [1-14644] StaticText: <is-details>
-            [1-15108] button: Dialog is-dialog
-              [1-14645] StaticText: Dialog
-              [1-14646] StaticText: <is-dialog>
-            [1-15111] button: Divider is-divider
-              [1-14647] StaticText: Divider
-              [1-14648] StaticText: <is-divider>
-            [1-15114] button: Dock is-dock
-              [1-14649] StaticText: Dock
-              [1-14650] StaticText: <is-dock>
-            [1-15117] button: Dock Item is-dock-item
-              [1-14651] StaticText: Dock Item
-              [1-14652] StaticText: <is-dock-item>
-            [1-15120] button: Drawer is-drawer
-              [1-14653] StaticText: Drawer
-              [1-14654] StaticText: <is-drawer>
-            [1-15123] button: Main is-main
-              [1-14655] StaticText: Main
-              [1-14656] StaticText: <is-main>
-            [1-15126] button: Panel dividido is-split-panel
-              [1-14657] StaticText: Panel dividido
-              [1-14658] StaticText: <is-split-panel>
-            [1-15129] button: Scrollspy is-scrollspy
-              [1-14659] StaticText: Scrollspy
-              [1-14660] StaticText: <is-scrollspy>
-          [1-15132] group: NAVEGACIÓN
-            [1-15134] button: Breadcrumb is-breadcrumb
-              [1-14661] StaticText: Breadcrumb
-              [1-14662] StaticText: <is-breadcrumb>
-            [1-15137] button: Breadcrumb Item is-breadcrumb-item
-              [1-14663] StaticText: Breadcrumb Item
-              [1-14664] StaticText: <is-breadcrumb-item>
-            [1-15140] button: Carousel is-carousel
-              [1-14665] StaticText: Carousel
-              [1-14666] StaticText: <is-carousel>
-            [1-15143] button: Carousel Item is-carousel-item
-              [1-14667] StaticText: Carousel Item
-              [1-14668] StaticText: <is-carousel-item>
-            [1-15146] button: Mega Menu is-mega-menu
-              [1-14669] StaticText: Mega Menu
-              [1-14670] StaticText: <is-mega-menu>
-            [1-15149] button: Scroller is-scroller
-              [1-14671] StaticText: Scroller
-              [1-14672] StaticText: <is-scroller>
-            [1-15152] button: Stepper is-stepper
-              [1-14673] StaticText: Stepper
-              [1-14674] StaticText: <is-stepper>
-            [1-15155] button: Stepper Step is-stepper-step
-              [1-14675] StaticText: Stepper Step
-              [1-14676] StaticText: <is-stepper-step>
-            [1-15158] button: Tab is-tab
-              [1-14677] StaticText: Tab
-              [1-14678] StaticText: <is-tab>
-            [1-15161] button: Tab Group is-tab-group
-              [1-14679] StaticText: Tab Group
-              [1-14680] StaticText: <is-tab-group>
-            [1-15164] button: Tab Panel is-tab-panel
-              [1-14681] StaticText: Tab Panel
-              [1-14682] StaticText: <is-tab-panel>
-            [1-15167] button: Tree is-tree
-              [1-14683] StaticText: Tree
-              [1-14684] StaticText: <is-tree>
-            [1-15170] button: Tree Item is-tree-item
-              [1-14685] StaticText: Tree Item
-              [1-14686] StaticText: <is-tree-item>
-          [1-15173] group: FORMULARIOS
-            [1-15175] button: Checkbox is-checkbox
-              [1-14687] StaticText: Checkbox
-              [1-14688] StaticText: <is-checkbox>
-            [1-15178] button: Color Picker is-color-picker
-              [1-14689] StaticText: Color Picker
-              [1-14690] StaticText: <is-color-picker>
-            [1-15181] button: Combobox is-combobox
-              [1-14691] StaticText: Combobox
-              [1-14692] StaticText: <is-combobox>
-            [1-15184] button: Date Field is-date-field
-              [1-14693] StaticText: Date Field
-              [1-14694] StaticText: <is-date-field>
-            [1-15187] button: Date Input is-date-input
-              [1-14695] StaticText: Date Input
-              [1-14696] StaticText: <is-date-input>
-            [1-15190] button: Date Picker is-date-picker
-              [1-14697] StaticText: Date Picker
-              [1-14698] StaticText: <is-date-picker>
-            [1-15193] button: Date Range Input is-date-range-input
-              [1-14699] StaticText: Date Range Input
-              [1-14700] StaticText: <is-date-range-input>
-            [1-15196] button: Date Range Picker is-date-range-picker
-              [1-14701] StaticText: Date Range Picker
-              [1-14702] StaticText: <is-date-range-picker>
-            [1-15199] button: Date Time Field is-date-time-field
-              [1-14703] StaticText: Date Time Field
-              [1-14704] StaticText: <is-date-time-field>
-            [1-15202] button: Date Time Input is-date-time-input
-              [1-14705] StaticText: Date Time Input
-              [1-14706] StaticText: <is-date-time-input>
-            [1-15205] button: Digital Clock is-digital-clock
-              [1-14707] StaticText: Digital Clock
-              [1-14708] StaticText: <is-digital-clock>
-            [1-15208] button: Document Editor is-doc-editor
-              [1-14709] StaticText: Document Editor
-              [1-14710] StaticText: <is-doc-editor>
-            [1-15211] button: Dropzone is-dropzone
-              [1-14711] StaticText: Dropzone
-              [1-14712] StaticText: <is-dropzone>
-            [1-15214] button: Duration Picker is-duration-picker
-              [1-14713] StaticText: Duration Picker
-              [1-14714] StaticText: <is-duration-picker>
-            [1-15217] button: File Input is-file-input
-              [1-14715] StaticText: File Input
-              [1-14716] StaticText: <is-file-input>
-            [1-15220] button: Full Calendar is-full-calendar
-              [1-14717] StaticText: Full Calendar
-              [1-14718] StaticText: <is-full-calendar>
-            [1-15223] button: Inline Edit is-inline-edit
-              [1-14719] StaticText: Inline Edit
-              [1-14720] StaticText: <is-inline-edit>
-            [1-15226] button: Input is-input
-              [1-14721] StaticText: Input
-              [1-14722] StaticText: <is-input>
-            [1-15229] button: Masked Input is-masked-input
-              [1-14723] StaticText: Masked Input
-              [1-14724] StaticText: <is-masked-input>
-            [1-15232] button: Mention is-mention
-              [1-14725] StaticText: Mention
-              [1-14726] StaticText: <is-mention>
-            [1-15235] button: Month Calendar is-month-calendar
-              [1-14727] StaticText: Month Calendar
-              [1-14728] StaticText: <is-month-calendar>
-            [1-15238] button: Option is-option
-              [1-14729] StaticText: Option
-              [1-14730] StaticText: <is-option>
-            [1-15241] button: Pin Input is-pin-input
-              [1-14731] StaticText: Pin Input
-              [1-14732] StaticText: <is-pin-input>
-            [1-15244] button: Radio is-radio
-              [1-14733] StaticText: Radio
-              [1-14734] StaticText: <is-radio>
-            [1-15247] button: Radio Group is-radio-group
-              [1-14735] StaticText: Radio Group
-              [1-14736] StaticText: <is-radio-group>
-            [1-15250] button: Rating is-rating
-              [1-14737] StaticText: Rating
-              [1-14738] StaticText: <is-rating>
-            [1-15253] button: Rich Text Editor is-rte
-              [1-14739] StaticText: Rich Text Editor
-              [1-14740] StaticText: <is-rte>
-            [1-15256] button: Select is-select
-              [1-14741] StaticText: Select
-              [1-14742] StaticText: <is-select>
-            [1-15259] button: Signature is-signature
-              [1-14743] StaticText: Signature
-              [1-14744] StaticText: <is-signature>
-            [1-15262] button: Slider is-slider
-              [1-14745] StaticText: Slider
-              [1-14746] StaticText: <is-slider>
-            [1-15265] button: Switch is-switch
-              [1-14747] StaticText: Switch
-              [1-14748] StaticText: <is-switch>
-            [1-15268] button: Textarea is-textarea
-              [1-14749] StaticText: Textarea
-              [1-14750] StaticText: <is-textarea>
-            [1-15271] button: Time Clock is-time-clock
-              [1-14751] StaticText: Time Clock
-              [1-14752] StaticText: <is-time-clock>
-            [1-15274] button: Time Field is-time-field
-              [1-14753] StaticText: Time Field
-              [1-14754] StaticText: <is-time-field>
-            [1-15277] button: Time Input is-time-input
-              [1-14755] StaticText: Time Input
-              [1-14756] StaticText: <is-time-input>
-            [1-15280] button: Year Calendar is-year-calendar
-              [1-14757] StaticText: Year Calendar
-              [1-14758] StaticText: <is-year-calendar>
-          [1-15283] group: CÓDIGO
-            [1-15285] button: Code is-code
-              [1-14759] StaticText: Code
-              [1-14760] StaticText: <is-code>
-          [1-15288] group: DATOS
-            [1-15290] button: AG Grid is-ag-grid
-              [1-14761] StaticText: AG Grid
-              [1-14762] StaticText: <is-ag-grid>
-            [1-15293] button: Data Grid is-data-grid
-              [1-14763] StaticText: Data Grid
-              [1-14764] StaticText: <is-data-grid>
-            [1-15296] button: Kanban is-kanban
-              [1-14765] StaticText: Kanban
-              [1-14766] StaticText: <is-kanban>
-            [1-15299] button: Kanban Card is-kanban-card
-              [1-14767] StaticText: Kanban Card
-              [1-14768] StaticText: <is-kanban-card>
-            [1-15302] button: Kanban Column is-kanban-column
-              [1-14769] StaticText: Kanban Column
-              [1-14770] StaticText: <is-kanban-column>
-            [1-15305] button: Pivot Table is-pivot-table
-              [1-14771] StaticText: Pivot Table
-              [1-14772] StaticText: <is-pivot-table>
-            [1-15308] button: Spreadsheet is-spreadsheet
-              [1-14773] StaticText: Spreadsheet
-              [1-14774] StaticText: <is-spreadsheet>
-            [1-15311] button: Stat KPI is-stat
-              [1-14775] StaticText: Stat KPI
-              [1-14776] StaticText: <is-stat>
-            [1-15314] button: Transfer is-transfer
-              [1-14777] StaticText: Transfer
-              [1-14778] StaticText: <is-transfer>
-            [1-15317] button: Transfer Item is-transfer-item
-              [1-14779] StaticText: Transfer Item
-              [1-14780] StaticText: <is-transfer-item>
-          [1-15320] group: GRÁFICOS
-            [1-15322] button: Bar Chart is-bar-chart
-              [1-14781] StaticText: Bar Chart
-              [1-14782] StaticText: <is-bar-chart>
-            [1-15325] button: Bubble Chart is-bubble-chart
-              [1-14783] StaticText: Bubble Chart
-              [1-14784] StaticText: <is-bubble-chart>
-            [1-15328] button: Chart is-chart
-              [1-14785] StaticText: Chart
-              [1-14786] StaticText: <is-chart>
-            [1-15331] button: Doughnut Chart is-doughnut-chart
-              [1-14787] StaticText: Doughnut Chart
-              [1-14788] StaticText: <is-doughnut-chart>
-            [1-15334] button: Funnel Chart is-funnel-chart
-              [1-14789] StaticText: Funnel Chart
-              [1-14790] StaticText: <is-funnel-chart>
-            [1-15337] button: Gauge is-gauge
-              [1-14791] StaticText: Gauge
-              [1-14792] StaticText: <is-gauge>
-            [1-15340] button: Heatmap is-heatmap
-              [1-14793] StaticText: Heatmap
-              [1-14794] StaticText: <is-heatmap>
-            [1-15343] button: Line Chart is-line-chart
-              [1-14795] StaticText: Line Chart
-              [1-14796] StaticText: <is-line-chart>
-            [1-15346] button: Map Marker is-map-marker
-              [1-14797] StaticText: Map Marker
-              [1-14798] StaticText: <is-map-marker>
-            [1-15349] button: Maps is-maps
-              [1-14799] StaticText: Maps
-              [1-14800] StaticText: <is-maps>
-            [1-15352] button: Pie Chart is-pie-chart
-              [1-14801] StaticText: Pie Chart
-              [1-14802] StaticText: <is-pie-chart>
-            [1-15355] button: Polar Area Chart is-polar-area-chart
-              [1-14803] StaticText: Polar Area Chart
-              [1-14804] StaticText: <is-polar-area-chart>
-            [1-15358] button: Radar Chart is-radar-chart
-              [1-14805] StaticText: Radar Chart
-              [1-14806] StaticText: <is-radar-chart>
-            [1-15361] button: Scatter Chart is-scatter-chart
-              [1-14807] StaticText: Scatter Chart
-              [1-14808] StaticText: <is-scatter-chart>
-            [1-15364] button: Sparkline is-sparkline
-              [1-14809] StaticText: Sparkline
-              [1-14810] StaticText: <is-sparkline>
-            [1-15367] button: Treemap is-treemap
-              [1-14811] StaticText: Treemap
-              [1-14812] StaticText: <is-treemap>
-            [1-15370] button: Waterfall Chart is-waterfall-chart
-              [1-14813] StaticText: Waterfall Chart
-              [1-14814] StaticText: <is-waterfall-chart>
-          [1-15373] group: DIAGRAMAS
-            [1-15375] button: Diagrama de bloques is-block-diagram
-              [1-14815] StaticText: Diagrama de bloques
-              [1-14816] StaticText: <is-block-diagram>
-            [1-15378] button: Diagrama de carriles is-swimlane-diagram
-              [1-14817] StaticText: Diagrama de carriles
-              [1-14818] StaticText: <is-swimlane-diagram>
-            [1-15381] button: Diagrama de casos de uso is-use-case-diagram
-              [1-14819] StaticText: Diagrama de casos de uso
-              [1-14820] StaticText: <is-use-case-diagram>
-            [1-15384] button: Diagrama de clases is-class-diagram
-              [1-14821] StaticText: Diagrama de clases
-              [1-14822] StaticText: <is-class-diagram>
-            [1-15387] button: Diagrama de componentes is-component-diagram
-              [1-14823] StaticText: Diagrama de componentes
-              [1-14824] StaticText: <is-component-diagram>
-            [1-15390] button: Diagrama de estados is-state-diagram
-              [1-14825] StaticText: Diagrama de estados
-              [1-14826] StaticText: <is-state-diagram>
-            [1-15393] button: Diagrama de flujo is-flowchart
-              [1-14827] StaticText: Diagrama de flujo
-              [1-14828] StaticText: <is-flowchart>
-            [1-15396] button: Diagrama de Gantt is-gantt
-              [1-14829] StaticText: Diagrama de Gantt
-              [1-14830] StaticText: <is-gantt>
-            [1-15399] button: Diagrama de Sankey is-sankey-diagram
-              [1-14831] StaticText: Diagrama de Sankey
-              [1-14832] StaticText: <is-sankey-diagram>
-            [1-15402] button: Diagrama de secuencia is-sequence-diagram
-              [1-14833] StaticText: Diagrama de secuencia
-              [1-14834] StaticText: <is-sequence-diagram>
-            [1-15405] button: Diagrama de Venn is-venn-diagram
-              [1-14835] StaticText: Diagrama de Venn
-              [1-14836] StaticText: <is-venn-diagram>
-            [1-15408] button: Diagrama entidad-relación is-er-diagram
-              [1-14837] StaticText: Diagrama entidad-relación
-              [1-14838] StaticText: <is-er-diagram>
-            [1-15411] button: Línea de tiempo is-timeline
-              [1-14839] StaticText: Línea de tiempo
-              [1-14840] StaticText: <is-timeline>
-            [1-15414] button: Mapa de recorrido is-journey-map
-              [1-14841] StaticText: Mapa de recorrido
-              [1-14842] StaticText: <is-journey-map>
-            [1-15417] button: Mapa mental is-mindmap
-              [1-14843] StaticText: Mapa mental
-              [1-14844] StaticText: <is-mindmap>
-            [1-15420] button: Matriz de cuadrantes is-quadrant-chart
-              [1-14845] StaticText: Matriz de cuadrantes
-              [1-14846] StaticText: <is-quadrant-chart>
-            [1-15423] button: Org Chart is-org-chart
-              [1-14847] StaticText: Org Chart
-              [1-14848] StaticText: <is-org-chart>
-            [1-15426] button: Visor de diagramas is-diagram-lightbox
-              [1-14849] StaticText: Visor de diagramas
-              [1-14850] StaticText: <is-diagram-lightbox>
-          [1-15429] group: OVERLAYS
-            [1-15431] button: Command Palette is-command-palette
-              [1-14851] StaticText: Command Palette
-              [1-14852] StaticText: <is-command-palette>
-            [1-15434] button: PDF Viewer is-pdf-viewer
-              [1-14853] StaticText: PDF Viewer
-              [1-14854] StaticText: <is-pdf-viewer>
-            [1-15437] button: Window is-window
-              [1-14855] StaticText: Window
-              [1-14856] StaticText: <is-window>
-          [1-15440] group: UTILERÍAS
-            [1-15442] button: Editor Markdown is-md-editor
-              [1-14857] StaticText: Editor Markdown
-              [1-14858] StaticText: <is-md-editor>
-            [1-15445] button: Formato is-format
-              [1-14859] StaticText: Formato
-              [1-14860] StaticText: <is-format>
-            [1-15448] button: Formato de bytes is-format-bytes
-              [1-14861] StaticText: Formato de bytes
-              [1-14862] StaticText: <is-format-bytes>
-            [1-15451] button: Formato de fecha is-format-date
-              [1-14863] StaticText: Formato de fecha
-              [1-14864] StaticText: <is-format-date>
-            [1-15454] button: Formato de número is-format-number
-              [1-14865] StaticText: Formato de número
-              [1-14866] StaticText: <is-format-number>
-            [1-15457] button: IsUi is-ui
-              [1-14867] StaticText: IsUi
-              [1-14868] StaticText: <is-ui>
-            [1-15460] button: Lightbox is-lightbox
-              [1-14869] StaticText: Lightbox
-              [1-14870] StaticText: <is-lightbox>
-            [1-15463] button: Observador de intersección is-intersection-observer
-              [1-14871] StaticText: Observador de intersección
-              [1-14872] StaticText: <is-intersection-observer>
-            [1-15466] button: Observador de mutación is-mutation-observer
-              [1-14873] StaticText: Observador de mutación
-              [1-14874] StaticText: <is-mutation-observer>
-            [1-15469] button: Observer is-observer
-              [1-14875] StaticText: Observer
-              [1-14876] StaticText: <is-observer>
-            [1-15472] button: Offscreen Canvas is-offscreen-canvas
-              [1-14877] StaticText: Offscreen Canvas
-              [1-14878] StaticText: <is-offscreen-canvas>
-            [1-15475] button: Popover is-popover
-              [1-14879] StaticText: Popover
-              [1-14880] StaticText: <is-popover>
-            [1-15478] button: Render Markdown is-md-render
-              [1-14881] StaticText: Render Markdown
-              [1-14882] StaticText: <is-md-render>
-            [1-15481] button: Resize Observer is-resize-observer
-              [1-14883] StaticText: Resize Observer
-              [1-14884] StaticText: <is-resize-observer>
-            [1-15484] button: Tiempo relativo is-relative-time
-              [1-14885] StaticText: Tiempo relativo
-              [1-14886] StaticText: <is-relative-time>
-            [1-15487] button: Wake Lock is-wake-lock
-              [1-14887] StaticText: Wake Lock
-              [1-14888] StaticText: <is-wake-lock>
-          [1-15490] group: ISP-SVELTECOMPONENTS
-            [1-15492] button: Accordion Group is-accordion-group
-              [1-14889] StaticText: Accordion Group
-              [1-14890] StaticText: <is-accordion-group>
-            [1-15496] button: Block Layout is-block-layout
-              [1-14891] StaticText: Block Layout
-              [1-14892] StaticText: <is-block-layout>
-            [1-15500] button: Btn Ref is-btn-ref
-              [1-14893] StaticText: Btn Ref
-              [1-14894] StaticText: <is-btn-ref>
-            [1-15504] button: Catálogo Gen is-catalogo-gen
-              [1-14895] StaticText: Catálogo Gen
-              [1-14896] StaticText: <is-catalogo-gen>
-            [1-15508] button: Confirm Delete is-confirm-delete
-              [1-14897] StaticText: Confirm Delete
-              [1-14898] StaticText: <is-confirm-delete>
-            [1-15512] button: Flex Layout is-flex-layout
-              [1-14899] StaticText: Flex Layout
-              [1-14900] StaticText: <is-flex-layout>
-            [1-15516] button: Flex Options is-flex-options
-              [1-14901] StaticText: Flex Options
-              [1-14902] StaticText: <is-flex-options>
-            [1-15520] button: Float Card is-float-card
-              [1-14903] StaticText: Float Card
-              [1-14904] StaticText: <is-float-card>
-            [1-15524] button: Form is-form
-              [1-14905] StaticText: Form
-              [1-14906] StaticText: <is-form>
-            [1-15528] button: Grid Layout is-grid-layout
-              [1-14907] StaticText: Grid Layout
-              [1-14908] StaticText: <is-grid-layout>
-            [1-15532] button: Heading is-heading
-              [1-14909] StaticText: Heading
-              [1-14910] StaticText: <is-heading>
-            [1-15536] button: Loading Overlay is-loading-overlay
-              [1-14911] StaticText: Loading Overlay
-              [1-14912] StaticText: <is-loading-overlay>
-            [1-15540] button: Modal Verificación is-modal-verificacion
-              [1-14913] StaticText: Modal Verificación
-              [1-14914] StaticText: <is-modal-verificacion>
-            [1-15544] button: Text is-text
-              [1-14915] StaticText: Text
-              [1-14916] StaticText: <is-text>
-            [1-15548] button: Tree View is-tree-view
-              [1-14917] StaticText: Tree View
-              [1-14918] StaticText: <is-tree-view>
-        [1-15576] separator: Redimensionar panel
-        [1-15667] is-split-panel
-          [1-15668] scrollable, is-main
-            [1-15802] section
-              [1-15793] heading: <is-er-diagram>
-              [1-15794] paragraph
-                [1-16004] StaticText: Diagrama entidad-relación en SVG, sin Mermaid. Declaras entidades con sus atributos y las relaciones entre ellas; el componente ubica las cajas, rutea las líneas con A* y dibuja la notación de pata de gallo en cada extremo.
-              [1-15795] paragraph
-                [1-16005] StaticText: Comparte motor con
-                [1-15796] code
-                  [1-16006] StaticText: <is-flowchart>
-                [1-16007] StaticText: : mismo esquema JSON de grupos/leyenda, mismo visor a pantalla completa y la misma animación tortuga.
-              [1-15801] div
-                [1-15800] is-demo
-                  [1-15804] image: Facturación electrónica
-                    [1-15995] StaticText: Facturación electrónica
-                    [1-15996] StaticText: Facturación
-                    [1-15997] StaticText: Terceros
-                    [1-15998] StaticText: Facturación
-                    [1-15999] StaticText: Terceros
-                    [1-16000] StaticText: pertenece a
-                    [1-16001] StaticText: contiene
-                    [1-16002] StaticText: referencia
-                    [1-16099] StaticText: FACTURA
-                    [1-16100] StaticText: PK
-                    [1-16101] StaticText: id
-                    [1-16102] StaticText: int
-                    [1-16103] StaticText: FK
-                    [1-16104] StaticText: cliente_id
-                    [1-16105] StaticText: int
-                    [1-16106] StaticText: fecha
-                    [1-16107] StaticText: date
-                    [1-16108] StaticText: total
-                    [1-16109] StaticText: decimal
-                    [1-16127] StaticText: ITEM_FACTURA
-                    [1-16128] StaticText: PK
-                    [1-16129] StaticText: id
-                    [1-16130] StaticText: int
-                    [1-16131] StaticText: FK
-                    [1-16132] StaticText: factura_id
-                    [1-16133] StaticText: int
-                    [1-16134] StaticText: FK
-                    [1-16135] StaticText: producto_id
-                    [1-16136] StaticText: int
-                    [1-16137] StaticText: cantidad
-                    [1-16138] StaticText: decimal
-                    [1-16150] StaticText: CLIENTE
-                    [1-16151] StaticText: PK
-                    [1-16152] StaticText: id
-                    [1-16153] StaticText: int
-                    [1-16154] StaticText: nombre
-                    [1-16155] StaticText: varchar
-                    [1-16181] StaticText: PRODUCTO
-                    [1-16182] StaticText: PK
-                    [1-16183] StaticText: id
-                    [1-16184] StaticText: int
-                    [1-16185] StaticText: nombre
-                    [1-16186] StaticText: varchar
-                    [1-16187] StaticText: precio
-                    [1-16188] StaticText: decimal
-                  [1-17942] button: Ver código del ejemplo
-                  [1-18065] button: Ver fuentes JS / CSS / MD
-                [1-16213] group
-                  [1-16218] DisclosureTriangle: CONTROLES
-            [1-15820] section
-              [1-15808] heading: Cardinalidad
-              [1-15809] paragraph
-                [1-16009] StaticText: Cada extremo de una relación admite
-                [1-15810] code
-                  [1-16010] StaticText: one
-                [1-16011] StaticText: ,
-                [1-15811] code
-                  [1-16012] StaticText: many
-                [1-16013] StaticText: ,
-                [1-15812] code
-                  [1-16014] StaticText: zeroOrOne
-                [1-16015] StaticText: y
-                [1-15813] code
-                  [1-16016] StaticText: zeroOrMany
-                [1-16017] StaticText: , dibujados como pata de gallo / marca de uno / círculo de opcionalidad, igual que la notación crow's foot clásica.
-                [1-15814] code
-                  [1-16018] StaticText: identifying: false
-                [1-16019] StaticText: dibuja la línea punteada.
-              [1-15818] is-demo
-                [1-15822] image: Diagrama entidad-relación
-                  [1-16180] StaticText: 1 a N
-                  [1-16198] StaticText: A
-                  [1-16199] StaticText: PK
-                  [1-16200] StaticText: id
-                  [1-16201] StaticText: int
-                  [1-17075] StaticText: B
-                  [1-17076] StaticText: PK
-                  [1-17077] StaticText: id
-                  [1-17078] StaticText: int
-                [1-18003] button: Ver código del ejemplo
-                [1-18069] button: Ver fuentes JS / CSS / MD
-            [1-15932] section
-              [1-15826] heading: Referencia
-              [1-15827] heading: Atributos
-              [1-15847] table
-                [1-15845] rowgroup
-                  [1-15832] row
-                    [1-15829] columnheader: NOMBRE
-                    [1-15830] columnheader: VALORES
-                    [1-15831] columnheader: DESCRIPCIÓN
-                [1-15846] tbody
-                  [1-15839] row
-                    [1-15834] cell: variant
-                      [1-15833] code
-                        [1-16022] StaticText: variant
-                    [1-15837] cell: inline · viewer
-                      [1-15835] code
-                        [1-16023] StaticText: inline
-                      [1-16024] StaticText: ·
-                      [1-15836] code
-                        [1-16025] StaticText: viewer
-                    [1-15838] cell: inline abre el visor al hacer clic; viewer activa hover, tooltips, leyenda clickeable y auto-animación.
-                  [1-15844] row
-                    [1-15841] cell: open-on-click
-                      [1-15840] code
-                        [1-16027] StaticText: open-on-click
-                    [1-15842] cell: booleano
-                    [1-15843] cell: Habilita abrir el visor a pantalla completa al hacer clic. Por defecto el componente no tiene visor.
-              [1-15849] heading: Esquema del JSON
-              [1-15897] table
-                [1-15895] rowgroup
-                  [1-15853] row
-                    [1-15851] columnheader: CAMPO
-                    [1-15852] columnheader: DESCRIPCIÓN
-                [1-15896] tbody
-                  [1-15861] row
-                    [1-15855] cell: direction
-                      [1-15854] code
-                        [1-16031] StaticText: direction
-                    [1-15860] cell: TB · BT · LR (default) · RL.
-                      [1-15856] code
-                        [1-16032] StaticText: TB
-                      [1-16033] StaticText: ·
-                      [1-15857] code
-                        [1-16034] StaticText: BT
-                      [1-16035] StaticText: ·
-                      [1-15858] code
-                        [1-16036] StaticText: LR
-                      [1-16037] StaticText: (default) ·
-                      [1-15859] code
-                        [1-16038] StaticText: RL
-                      [1-16039] StaticText: .
-                  [1-15865] row
-                    [1-15863] cell: entities[].id
-                      [1-15862] code
-                        [1-16040] StaticText: entities[].id
-                    [1-15864] cell: Identificador que referencian las relaciones.
-                  [1-15871] row
-                    [1-15867] cell: entities[].attributes[].key
-                      [1-15866] code
-                        [1-16042] StaticText: entities[].attributes[].key
-                    [1-15870] cell: PK · FK; se pinta como badge junto al nombre.
-                      [1-15868] code
-                        [1-16043] StaticText: PK
-                      [1-16044] StaticText: ·
-                      [1-15869] code
-                        [1-16045] StaticText: FK
-                      [1-16046] StaticText: ; se pinta como badge junto al nombre.
-                  [1-15875] row
-                    [1-15873] cell: entities[].group
-                      [1-15872] code
-                        [1-16047] StaticText: entities[].group
-                    [1-15874] cell: Id del grupo; tiñe el encabezado de la caja.
-                  [1-15884] row
-                    [1-15878] cell: relations[].fromCard · toCard
-                      [1-15876] code
-                        [1-16049] StaticText: relations[].fromCard
-                      [1-16050] StaticText: ·
-                      [1-15877] code
-                        [1-16051] StaticText: toCard
-                    [1-15883] cell: one · many · zeroOrOne · zeroOrMany.
-                      [1-15879] code
-                        [1-16052] StaticText: one
-                      [1-16053] StaticText: ·
-                      [1-15880] code
-                        [1-16054] StaticText: many
-                      [1-16055] StaticText: ·
-                      [1-15881] code
-                        [1-16056] StaticText: zeroOrOne
-                      [1-16057] StaticText: ·
-                      [1-15882] code
-                        [1-16058] StaticText: zeroOrMany
-                      [1-16059] StaticText: .
-                  [1-15890] row
-                    [1-15886] cell: relations[].identifying
-                      [1-15885] code
-                        [1-16060] StaticText: relations[].identifying
-                    [1-15889] cell: true (default, línea sólida) · false (línea punteada).
-                      [1-15887] code
-                        [1-16061] StaticText: true
-                      [1-16062] StaticText: (default, línea sólida) ·
-                      [1-15888] code
-                        [1-16063] StaticText: false
-                      [1-16064] StaticText: (línea punteada).
-                  [1-15894] row
-                    [1-15892] cell: groups[].hue
-                      [1-15891] code
-                        [1-16065] StaticText: groups[].hue
-                    [1-15893] cell: Tono HSL 0–360.
-              [1-15899] heading: Propiedades y eventos
-              [1-15930] table
-                [1-15928] rowgroup
-                  [1-15903] row
-                    [1-15901] columnheader: NOMBRE
-                    [1-15902] columnheader: DESCRIPCIÓN
-                [1-15929] tbody
-                  [1-15907] row
-                    [1-15905] cell: payload
-                      [1-15904] code
-                        [1-16068] StaticText: payload
-                    [1-15906] cell: Configuración JSON; alternativa al script hijo.
-                  [1-15911] row
-                    [1-15909] cell: layout
-                      [1-15908] code
-                        [1-16070] StaticText: layout
-                    [1-15910] cell: Geometría calculada (solo lectura).
-                  [1-15915] row
-                    [1-15913] cell: turtle
-                      [1-15912] code
-                        [1-16072] StaticText: turtle
-                    [1-15914] cell: API de la animación: play / pause / stop / next / prev.
-                  [1-15919] row
-                    [1-15917] cell: hiddenGroups
-                      [1-15916] code
-                        [1-16074] StaticText: hiddenGroups
-                    [1-15918] cell: Set de grupos ocultos; al cambiar, el diagrama se re-diseña sin esas entidades.
-                  [1-15923] row
-                    [1-15921] cell: is-render
-                      [1-15920] code
-                        [1-16076] StaticText: is-render
-                    [1-15922] cell: Evento: el SVG terminó de construirse.
-                  [1-15927] row
-                    [1-15925] cell: is-turtle-state
-                      [1-15924] code
-                        [1-16078] StaticText: is-turtle-state
-                    [1-15926] cell: Evento: estado de la animación.
-            [1-16230] region: Consumo por CDN
-              [1-16231] sectionheader
-                [1-16232] heading: CDN · DIAGRAMA ENTIDAD-RELACIÓN
-                [1-16233] paragraph
-                  [1-17080] StaticText: Estrategia única:
-                  [1-16234] code
-                    [1-17081] StaticText: loader.min.js
-                  [1-17082] StaticText: . Pegá los dos
-                  [1-16235] code
-                    [1-17083] StaticText: <script>
-                  [1-17084] StaticText: en el
-                  [1-16236] code
-                    [1-17085] StaticText: <head>
-                  [1-17086] StaticText: (o al final del
-                  [1-16237] code
-                    [1-17087] StaticText: <body>
-                  [1-17088] StaticText: ). El primero carga el loader; el segundo pide CSS + el componente de
-                  [1-16238] code
-                    [1-17089] StaticText: tag
-                  [1-17090] StaticText: .
-              [1-16239] div
-                [1-16240] div
-                  [1-17091] StaticText: Copy-paste · loader
-                  [1-16242] button: Copiar snippet del loader
-                    [1-17092] StaticText: Copiar
-                [1-16976] scrollable, div
-                  [1-16909] pre: Código
-                    [1-16849] div
-                      [1-17093] StaticText: <script
-                      [1-17094] StaticText: 
-                      [1-17095] StaticText: type
-                      [1-17096] StaticText: =
-                      [1-17097] StaticText: "module"
-                      [1-17098] StaticText: 
-                      [1-17099] StaticText: src
-                      [1-17100] StaticText: =
-                      [1-17101] StaticText: "https://cdn.jsdelivr.net/gh/Jeff-Aporta/is-webcomponents@dda8eb20d56b02f5e92a52d72c9e0ce196015acd/dist/cdn/core/loader.min.js"
-                      [1-17102] StaticText: >
-                      [1-17103] StaticText: </script>
-                    [1-16859] div
-                      [1-17104] StaticText: <script
-                      [1-17105] StaticText: 
-                      [1-17106] StaticText: type
-                      [1-17107] StaticText: =
-                      [1-17108] StaticText: "module"
-                      [1-17109] StaticText: >
-                    [1-16865] div
-                      [1-17110] StaticText: 
-                      [1-17111] StaticText: const
-                      [1-17112] StaticText: 
-                      [1-17113] StaticText: L
-                      [1-17114] StaticText: 
-                      [1-17115] StaticText: =
-                      [1-17116] StaticText: 
-                      [1-17117] StaticText: globalThis
-                      [1-17118] StaticText: .
-                      [1-17119] StaticText: ISWebComponentsLoader
-                      [1-17120] StaticText: ;
-                    [1-16873] div
-                      [1-17121] StaticText: 
-                      [1-17122] StaticText: await
-                      [1-17123] StaticText: 
-                      [1-17124] StaticText: L
-                      [1-17125] StaticText: .
-                      [1-17126] StaticText: loadCSSBase
-                      [1-17127] StaticText: ();
-                    [1-16879] div
-                      [1-17128] StaticText: 
-                      [1-17129] StaticText: await
-                      [1-17130] StaticText: 
-                      [1-17131] StaticText: L
-                      [1-17132] StaticText: .
-                      [1-17133] StaticText: loadCSSPalettesDefault
-                      [1-17134] StaticText: ();
-                    [1-16885] div
-                      [1-17135] StaticText: 
-                      [1-17136] StaticText: await
-                      [1-17137] StaticText: 
-                      [1-17138] StaticText: L
-                      [1-17139] StaticText: .
-                      [1-17140] StaticText: load
-                      [1-17141] StaticText: (
-                      [1-17142] StaticText: "
-                      [1-17143] StaticText: i
-                      [1-17144] StaticText: s
-                      [1-17145] StaticText: -
-                      [1-17146] StaticText: e
-                      [1-17147] StaticText: r
-                      [1-17148] StaticText: -
-                      [1-17149] StaticText: d
-                      [1-17150] StaticText: i
-                      [1-17151] StaticText: a
-                      [1-17152] StaticText: g
-                      [1-17153] StaticText: r
-                      [1-17154] StaticText: a
-                      [1-17155] StaticText: m
-                      [1-17156] StaticText: "
-                      [1-17157] StaticText: );
-                    [1-17158] StaticText: </script>
-              [1-16245] group: ALCANCE DE LA CARGA
-                [1-16246] Legend
-                  [1-17073] StaticText: ALCANCE DE LA CARGA
-                [1-16247] LabelText
-                  [1-16248] radio: Cargar solo este componente (is-er-diagram) [checked]
-                  [1-16249] span
-                    [1-17166] StaticText: Cargar solo este componente (
-                    [1-16250] code
-                      [1-17167] StaticText: is-er-diagram
-                    [1-17168] StaticText: )
-                [1-16251] LabelText
-                  [1-16252] radio: Cargar la categoría completa (diagrams)
-                  [1-16253] span
-                    [1-17169] StaticText: Cargar la categoría completa (
-                    [1-16254] code
-                      [1-17170] StaticText: diagrams
-                    [1-17171] StaticText: )
-                [1-16255] LabelText
-                  [1-16256] radio: Cargar todo el kit (all)
-                  [1-16257] span
-                    [1-17172] StaticText: Cargar todo el kit (
-                    [1-16258] code
-                      [1-17173] StaticText: all
-                    [1-17174] StaticText: )
-              [1-16259] list
-              [1-16268] region: Documentación para agentes
-                [1-16269] sectionheader
-                  [1-16270] heading: PARA AGENTES / LLM
-                  [1-16271] paragraph
-                    [1-17175] StaticText: Prompt canónico (CDN-only + tools). Vista previa con scroll; clic para abrir y copiar. Solo lectura aquí.
-                [1-16272] div
-                  [1-16273] div
-                    [1-17176] StaticText: Prompt · agents
-                    [1-16275] button: Copiar prompt para agentes
-                      [1-17177] StaticText: Copiar
-                  [1-16389] scrollable, div: IS Web Components (Instrucciones para LLM) Utiliza IS Web Components exclusivamente mediante CDN (o copia local v�a /is-webcomponents:local). Nunca utilices: npm npx Bun pnpm Yarn Vite Webpack Rollup gestores de paquetes instalaciones locales del kit v�a registry copias parciales de componentes El objetivo es consumir la librer�a exactamente como se publica en dist/cdn/. Reglas generales Reutiliza siempre componentes existentes con prefijo is-*. No implementes componentes que ya existan. No reinventes componentes, atributos, propiedades, m�todos, eventos, slots, variables CSS ni Custom Properties. Toda API utilizada debe existir en la documentaci�n oficial. Antes de escribir c�digo, verifica si la librer�a ya ofrece un componente adecuado. Si existen varios componentes similares, utiliza el m�s espec�fico. Si un componente depende de otros componentes, reutiliza la composici�n existente; no la reimplementes. Utiliza siempre el sistema de iconos propio mediante <is-icon icon="prefix:name">. No utilices Iconify, FontAwesome, Material Icons ni otras librer�as externas de iconos, salvo que el usuario lo solicite expl�citamente. Configura el tema mediante data-theme. Configura la paleta mediante data-palette. La configuraci�n declarativa debe realizarse mediante atributos data-* cuando el componente lo soporte. No mezcles mirrors CDN dentro de una misma p�gina. Mant�n la accesibilidad y el comportamiento documentado por cada componente. Herramientas (slash) Cuando el usuario pida una de estas intenciones, sigue la skill de la herramienta:
-                    [1-16390] div
-                      [1-17258] heading: IS Web Components (Instrucciones para LLM)
-                      [1-17259] paragraph
-                        [1-17649] StaticText: Utiliza
-                        [1-17260] strong
-                          [1-17650] StaticText: IS Web Components
-                        [1-17651] StaticText: exclusivamente mediante
-                        [1-17261] strong
-                          [1-17652] StaticText: CDN
-                        [1-17653] StaticText: (o copia local v�a
-                        [1-17262] code
-                          [1-17654] StaticText: /is-webcomponents:local
-                        [1-17655] StaticText: ).
-                      [1-17263] paragraph
-                        [1-17264] strong
-                          [1-17656] StaticText: Nunca
-                        [1-17657] StaticText: utilices:
-                      [1-17265] list
-                        [1-17266] listitem
-                          [1-17534] ListMarker: •
-                          [1-17658] StaticText: npm
-                        [1-17267] listitem
-                          [1-17535] ListMarker: •
-                          [1-17659] StaticText: npx
-                        [1-17268] listitem
-                          [1-17536] ListMarker: •
-                          [1-17660] StaticText: Bun
-                        [1-17269] listitem
-                          [1-17537] ListMarker: •
-                          [1-17661] StaticText: pnpm
-                        [1-17270] listitem
-                          [1-17538] ListMarker: •
-                          [1-17662] StaticText: Yarn
-                        [1-17271] listitem
-                          [1-17539] ListMarker: •
-                          [1-17663] StaticText: Vite
-                        [1-17272] listitem
-                          [1-17540] ListMarker: •
-                          [1-17664] StaticText: Webpack
-                        [1-17273] listitem
-                          [1-17541] ListMarker: •
-                          [1-17665] StaticText: Rollup
-                        [1-17274] listitem
-                          [1-17542] ListMarker: •
-                          [1-17666] StaticText: gestores de paquetes
-                        [1-17275] listitem
-                          [1-17543] ListMarker: •
-                          [1-17667] StaticText: instalaciones locales del kit v�a registry
-                        [1-17276] listitem
-                          [1-17544] ListMarker: •
-                          [1-17668] StaticText: copias parciales de componentes
-                      [1-17277] paragraph
-                        [1-17669] StaticText: El objetivo es consumir la librer�a exactamente como se publica en
-                        [1-17278] LineBreak: 
-                        [1-17279] code
-                          [1-17670] StaticText: dist/cdn/
-                        [1-17671] StaticText: .
-                      [1-17280] separator
-                      [1-17281] heading: Reglas generales
-                      [1-17282] list
-                        [1-17283] listitem
-                          [1-17545] ListMarker: •
-                          [1-17673] StaticText: Reutiliza siempre componentes existentes con prefijo
-                          [1-17284] code
-                            [1-17674] StaticText: is-*
-                          [1-17675] StaticText: .
-                        [1-17285] listitem
-                          [1-17546] ListMarker: •
-                          [1-17676] StaticText: No implementes componentes que ya existan.
-                        [1-17286] listitem
-                          [1-17547] ListMarker: •
-                          [1-17677] StaticText: No reinventes componentes, atributos, propiedades, m�todos, eventos, slots, variables CSS ni Custom Properties.
-                        [1-17287] listitem
-                          [1-17548] ListMarker: •
-                          [1-17678] StaticText: Toda API utilizada debe existir en la documentaci�n oficial.
-                        [1-17288] listitem
-                          [1-17549] ListMarker: •
-                          [1-17679] StaticText: Antes de escribir c�digo, verifica si la librer�a ya ofrece un componente adecuado.
-                        [1-17289] listitem
-                          [1-17550] ListMarker: •
-                          [1-17680] StaticText: Si existen varios componentes similares, utiliza el m�s espec�fico.
-                        [1-17290] listitem
-                          [1-17551] ListMarker: •
-                          [1-17681] StaticText: Si un componente depende de otros componentes, reutiliza la composici�n existente; no la reimplementes.
-                        [1-17291] listitem
-                          [1-17552] ListMarker: •
-                          [1-17682] StaticText: Utiliza siempre el sistema de iconos propio mediante
-                          [1-17292] code
-                            [1-17683] StaticText: <is-icon icon="prefix:name">
-                          [1-17684] StaticText: .
-                        [1-17293] listitem
-                          [1-17553] ListMarker: •
-                          [1-17685] StaticText: No utilices Iconify, FontAwesome, Material Icons ni otras librer�as externas de iconos, salvo que el usuario lo solicite expl�citamente.
-                        [1-17294] listitem
-                          [1-17554] ListMarker: •
-                          [1-17686] StaticText: Configura el tema mediante
-                          [1-17295] code
-                            [1-17687] StaticText: data-theme
-                          [1-17688] StaticText: .
-                        [1-17296] listitem
-                          [1-17555] ListMarker: •
-                          [1-17689] StaticText: Configura la paleta mediante
-                          [1-17297] code
-                            [1-17690] StaticText: data-palette
-                          [1-17691] StaticText: .
-                        [1-17298] listitem
-                          [1-17556] ListMarker: •
-                          [1-17692] StaticText: La configuraci�n declarativa debe realizarse mediante atributos
-                          [1-17299] code
-                            [1-17693] StaticText: data-*
-                          [1-17694] StaticText: cuando el componente lo soporte.
-                        [1-17300] listitem
-                          [1-17557] ListMarker: •
-                          [1-17695] StaticText: No mezcles mirrors CDN dentro de una misma p�gina.
-                        [1-17301] listitem
-                          [1-17558] ListMarker: •
-                          [1-17696] StaticText: Mant�n la accesibilidad y el comportamiento documentado por cada componente.
-                      [1-17302] separator
-                      [1-17303] heading: Herramientas (slash)
-                      [1-17304] paragraph
-                        [1-17698] StaticText: Cuando el usuario pida una de estas intenciones, sigue la skill de la herramienta:
-                      [1-17306] table
-                        [1-17307] rowgroup
-                          [1-17308] row
-                            [1-17309] columnheader: Comando
-                            [1-17310] columnheader: Skill
-                            [1-17311] columnheader: Uso
-                        [1-17312] tbody
-                          [1-17313] row
-                            [1-17314] cell: /is-webcomponents:build
-                              [1-17315] code
-                                [1-17702] StaticText: /is-webcomponents:build
-                            [1-17316] cell: tools/build.md
-                              [1-17317] link: tools/build.md
-                            [1-17318] cell: Fundar o extender apps con is-*
-                              [1-17704] StaticText: Fundar o extender apps con
-                              [1-17319] code
-                                [1-17705] StaticText: is-*
-                          [1-17320] row
-                            [1-17321] cell: /is-webcomponents:migrate
-                              [1-17322] code
-                                [1-17706] StaticText: /is-webcomponents:migrate
-                            [1-17323] cell: tools/migrate.md
-                              [1-17324] link: tools/migrate.md
-                            [1-17325] cell: Migrar un front (React/MUI/Svelte/�) a vanilla + is-*
-                              [1-17708] StaticText: Migrar un front (React/MUI/Svelte/�) a vanilla +
-                              [1-17326] code
-                                [1-17709] StaticText: is-*
-                          [1-17327] row
-                            [1-17328] cell: /is-webcomponents:local
-                              [1-17329] code
-                                [1-17710] StaticText: /is-webcomponents:local
-                            [1-17330] cell: tools/local.md
-                              [1-17331] link: tools/local.md
-                            [1-17332] cell: Vendorizar JS/CSS locales (preferido) y actualizar SHA
-                      [1-17333] paragraph
-                        [1-17713] StaticText: Instalaci�n de skills (preferir repo GitHub):
-                      [1-17335] code
-                        [1-17714] StaticText: npx skills add Jeff-Aporta/is-webcomponents -s is-webcomponents
+[1-17426] RootWebArea: Diagrama entidad-relación | ContaPyme
+  [1-17802] scrollable, html
+    [1-17829] body
+      [1-17830] banner
+        [1-17834] button: ContaPyme — elegir paleta
+          [1-17424] StaticText: conta
+          [1-17425] StaticText: pyme
+        [1-17851] is-button: Abrir preview en pantalla completa
+          [1-18505] button: Abrir preview en pantalla completa
+          [1-18567] StaticText: Listo
+        [1-17853] switch: Cambiar a tema claro [checked]
+          [1-18625] button: Cambiar a tema claro
+      [1-17854] is-split-panel
+        [1-17800] scrollable, nav: Componentes
+          [1-17855] button: Inicio — home
+            [1-17441] StaticText: Inicio
+          [1-17857] button: Personalización — theming
+            [1-17442] StaticText: Personalización
+          [1-17859] button: Ecosistema JS — utilidades compartidas
+            [1-17443] StaticText: Ecosistema JS
+          [1-17861] group: ACCIONES
+            [1-17863] button: Button is-button
+              [1-17444] StaticText: Button
+              [1-17445] StaticText: <is-button>
+            [1-17866] button: Button Group is-button-group
+              [1-17446] StaticText: Button Group
+              [1-17447] StaticText: <is-button-group>
+            [1-17869] button: Check Icon Button is-check-icon-button
+              [1-17448] StaticText: Check Icon Button
+              [1-17449] StaticText: <is-check-icon-button>
+            [1-17872] button: Context Menu is-context-menu
+              [1-17450] StaticText: Context Menu
+              [1-17451] StaticText: <is-context-menu>
+            [1-17875] button: Copy Button is-copy-button
+              [1-17452] StaticText: Copy Button
+              [1-17453] StaticText: <is-copy-button>
+            [1-17878] button: Dropdown is-dropdown
+              [1-17454] StaticText: Dropdown
+              [1-17455] StaticText: <is-dropdown>
+            [1-17881] button: Dropdown Item is-dropdown-item
+              [1-17456] StaticText: Dropdown Item
+              [1-17457] StaticText: <is-dropdown-item>
+            [1-17884] button: Floating Action Button is-fab
+              [1-17458] StaticText: Floating Action Button
+              [1-17459] StaticText: <is-fab>
+            [1-17887] button: Share Button is-share-button
+              [1-17460] StaticText: Share Button
+              [1-17461] StaticText: <is-share-button>
+            [1-17890] button: Speed Dial is-speed-dial
+              [1-17462] StaticText: Speed Dial
+              [1-17463] StaticText: <is-speed-dial>
+            [1-17893] button: Speed Dial Action is-speed-dial-action
+              [1-17464] StaticText: Speed Dial Action
+              [1-17465] StaticText: <is-speed-dial-action>
+          [1-17896] group: MEDIA
+            [1-17898] button: Avatar is-avatar
+              [1-17466] StaticText: Avatar
+              [1-17467] StaticText: <is-avatar>
+            [1-17901] button: Barcode is-barcode
+              [1-17468] StaticText: Barcode
+              [1-17469] StaticText: <is-barcode>
+            [1-17904] button: Barcode Scanner is-barcode-scanner
+              [1-17470] StaticText: Barcode Scanner
+              [1-17471] StaticText: <is-barcode-scanner>
+            [1-17907] button: Explorador de iconos is-icon-explorer
+              [1-17472] StaticText: Explorador de iconos
+              [1-17473] StaticText: <is-icon-explorer>
+            [1-17910] button: Icon is-icon
+              [1-17474] StaticText: Icon
+              [1-17475] StaticText: <is-icon>
+            [1-17913] button: Image Editor is-image-editor
+              [1-17476] StaticText: Image Editor
+              [1-17477] StaticText: <is-image-editor>
+            [1-17916] button: Media Recorder is-media-recorder
+              [1-17478] StaticText: Media Recorder
+              [1-17479] StaticText: <is-media-recorder>
+            [1-17919] button: QR Code is-qrcode
+              [1-17480] StaticText: QR Code
+              [1-17481] StaticText: <is-qrcode>
+            [1-17922] button: Speech is-speech
+              [1-17482] StaticText: Speech
+              [1-17483] StaticText: <is-speech>
+            [1-17925] button: Theme Img is-theme-img
+              [1-17484] StaticText: Theme Img
+              [1-17485] StaticText: <is-theme-img>
+            [1-17928] button: Video is-video
+              [1-17486] StaticText: Video
+              [1-17487] StaticText: <is-video>
+            [1-17931] button: Video Playlist is-video-playlist
+              [1-17488] StaticText: Video Playlist
+              [1-17489] StaticText: <is-video-playlist>
+          [1-17934] group: FEEDBACK
+            [1-17936] button: Badge is-badge
+              [1-17490] StaticText: Badge
+              [1-17491] StaticText: <is-badge>
+            [1-17939] button: CDN Snippet is-cdn-snippet
+              [1-17492] StaticText: CDN Snippet
+              [1-17493] StaticText: <is-cdn-snippet>
+            [1-17942] button: Confirm Modal is-confirm-modal
+              [1-17494] StaticText: Confirm Modal
+              [1-17495] StaticText: <is-confirm-modal>
+            [1-17945] button: Palette Selector is-palette-selector
+              [1-17496] StaticText: Palette Selector
+              [1-17497] StaticText: <is-palette-selector>
+            [1-17948] button: Popconfirm is-popconfirm
+              [1-17498] StaticText: Popconfirm
+              [1-17499] StaticText: <is-popconfirm>
+            [1-17951] button: Prefs Clear is-prefs-clear
+              [1-17500] StaticText: Prefs Clear
+              [1-17501] StaticText: <is-prefs-clear>
+            [1-17954] button: Progress Bar is-progress-bar
+              [1-17502] StaticText: Progress Bar
+              [1-17503] StaticText: <is-progress-bar>
+            [1-17957] button: Progress Ring is-progress-ring
+              [1-17504] StaticText: Progress Ring
+              [1-17505] StaticText: <is-progress-ring>
+            [1-17960] button: Skeleton is-skeleton
+              [1-17506] StaticText: Skeleton
+              [1-17507] StaticText: <is-skeleton>
+            [1-17963] button: Spinner is-spinner
+              [1-17508] StaticText: Spinner
+              [1-17509] StaticText: <is-spinner>
+            [1-17966] button: Tag is-tag
+              [1-17510] StaticText: Tag
+              [1-17511] StaticText: <is-tag>
+            [1-17969] button: Theme Toggle is-theme-toggle
+              [1-17512] StaticText: Theme Toggle
+              [1-17513] StaticText: <is-theme-toggle>
+            [1-17972] button: Toast is-toast
+              [1-17514] StaticText: Toast
+              [1-17515] StaticText: <is-toast>
+            [1-17975] button: Toast Item is-toast-item
+              [1-17516] StaticText: Toast Item
+              [1-17517] StaticText: <is-toast-item>
+            [1-17978] button: Tooltip is-tooltip
+              [1-17518] StaticText: Tooltip
+              [1-17519] StaticText: <is-tooltip>
+          [1-17981] group: LAYOUT
+            [1-17983] button: Callout is-callout
+              [1-17520] StaticText: Callout
+              [1-17521] StaticText: <is-callout>
+            [1-17986] button: Card is-card
+              [1-17522] StaticText: Card
+              [1-17523] StaticText: <is-card>
+            [1-17989] button: Details is-details
+              [1-17524] StaticText: Details
+              [1-17525] StaticText: <is-details>
+            [1-17992] button: Dialog is-dialog
+              [1-17526] StaticText: Dialog
+              [1-17527] StaticText: <is-dialog>
+            [1-17995] button: Divider is-divider
+              [1-17528] StaticText: Divider
+              [1-17529] StaticText: <is-divider>
+            [1-17998] button: Dock is-dock
+              [1-17530] StaticText: Dock
+              [1-17531] StaticText: <is-dock>
+            [1-18001] button: Dock Item is-dock-item
+              [1-17532] StaticText: Dock Item
+              [1-17533] StaticText: <is-dock-item>
+            [1-18004] button: Drawer is-drawer
+              [1-17534] StaticText: Drawer
+              [1-17535] StaticText: <is-drawer>
+            [1-18007] button: Main is-main
+              [1-17536] StaticText: Main
+              [1-17537] StaticText: <is-main>
+            [1-18010] button: Panel dividido is-split-panel
+              [1-17538] StaticText: Panel dividido
+              [1-17539] StaticText: <is-split-panel>
+            [1-18013] button: Scrollspy is-scrollspy
+              [1-17540] StaticText: Scrollspy
+              [1-17541] StaticText: <is-scrollspy>
+          [1-18016] group: NAVEGACIÓN
+            [1-18018] button: Breadcrumb is-breadcrumb
+              [1-17542] StaticText: Breadcrumb
+              [1-17543] StaticText: <is-breadcrumb>
+            [1-18021] button: Breadcrumb Item is-breadcrumb-item
+              [1-17544] StaticText: Breadcrumb Item
+              [1-17545] StaticText: <is-breadcrumb-item>
+            [1-18024] button: Carousel is-carousel
+              [1-17546] StaticText: Carousel
+              [1-17547] StaticText: <is-carousel>
+            [1-18027] button: Carousel Item is-carousel-item
+              [1-17548] StaticText: Carousel Item
+              [1-17549] StaticText: <is-carousel-item>
+            [1-18030] button: Mega Menu is-mega-menu
+              [1-17550] StaticText: Mega Menu
+              [1-17551] StaticText: <is-mega-menu>
+            [1-18033] button: Scroller is-scroller
+              [1-17552] StaticText: Scroller
+              [1-17553] StaticText: <is-scroller>
+            [1-18036] button: Stepper is-stepper
+              [1-17554] StaticText: Stepper
+              [1-17555] StaticText: <is-stepper>
+            [1-18039] button: Stepper Step is-stepper-step
+              [1-17556] StaticText: Stepper Step
+              [1-17557] StaticText: <is-stepper-step>
+            [1-18042] button: Tab is-tab
+              [1-17558] StaticText: Tab
+              [1-17559] StaticText: <is-tab>
+            [1-18045] button: Tab Group is-tab-group
+              [1-17560] StaticText: Tab Group
+              [1-17561] StaticText: <is-tab-group>
+            [1-18048] button: Tab Panel is-tab-panel
+              [1-17562] StaticText: Tab Panel
+              [1-17563] StaticText: <is-tab-panel>
+            [1-18051] button: Tree is-tree
+              [1-17564] StaticText: Tree
+              [1-17565] StaticText: <is-tree>
+            [1-18054] button: Tree Item is-tree-item
+              [1-17566] StaticText: Tree Item
+              [1-17567] StaticText: <is-tree-item>
+          [1-18057] group: FORMULARIOS
+            [1-18059] button: Checkbox is-checkbox
+              [1-17568] StaticText: Checkbox
+              [1-17569] StaticText: <is-checkbox>
+            [1-18062] button: Color Picker is-color-picker
+              [1-17570] StaticText: Color Picker
+              [1-17571] StaticText: <is-color-picker>
+            [1-18065] button: Combobox is-combobox
+              [1-17572] StaticText: Combobox
+              [1-17573] StaticText: <is-combobox>
+            [1-18068] button: Date Field is-date-field
+              [1-17574] StaticText: Date Field
+              [1-17575] StaticText: <is-date-field>
+            [1-18071] button: Date Input is-date-input
+              [1-17576] StaticText: Date Input
+              [1-17577] StaticText: <is-date-input>
+            [1-18074] button: Date Picker is-date-picker
+              [1-17578] StaticText: Date Picker
+              [1-17579] StaticText: <is-date-picker>
+            [1-18077] button: Date Range Input is-date-range-input
+              [1-17580] StaticText: Date Range Input
+              [1-17581] StaticText: <is-date-range-input>
+            [1-18080] button: Date Range Picker is-date-range-picker
+              [1-17582] StaticText: Date Range Picker
+              [1-17583] StaticText: <is-date-range-picker>
+            [1-18083] button: Date Time Field is-date-time-field
+              [1-17584] StaticText: Date Time Field
+              [1-17585] StaticText: <is-date-time-field>
+            [1-18086] button: Date Time Input is-date-time-input
+              [1-17586] StaticText: Date Time Input
+              [1-17587] StaticText: <is-date-time-input>
+            [1-18089] button: Digital Clock is-digital-clock
+              [1-17588] StaticText: Digital Clock
+              [1-17589] StaticText: <is-digital-clock>
+            [1-18092] button: Document Editor is-doc-editor
+              [1-17590] StaticText: Document Editor
+              [1-17591] StaticText: <is-doc-editor>
+            [1-18095] button: Dropzone is-dropzone
+              [1-17592] StaticText: Dropzone
+              [1-17593] StaticText: <is-dropzone>
+            [1-18098] button: Duration Picker is-duration-picker
+              [1-17594] StaticText: Duration Picker
+              [1-17595] StaticText: <is-duration-picker>
+            [1-18101] button: File Input is-file-input
+              [1-17596] StaticText: File Input
+              [1-17597] StaticText: <is-file-input>
+            [1-18104] button: Full Calendar is-full-calendar
+              [1-17598] StaticText: Full Calendar
+              [1-17599] StaticText: <is-full-calendar>
+            [1-18107] button: Inline Edit is-inline-edit
+              [1-17600] StaticText: Inline Edit
+              [1-17601] StaticText: <is-inline-edit>
+            [1-18110] button: Input is-input
+              [1-17602] StaticText: Input
+              [1-17603] StaticText: <is-input>
+            [1-18113] button: Masked Input is-masked-input
+              [1-17604] StaticText: Masked Input
+              [1-17605] StaticText: <is-masked-input>
+            [1-18116] button: Mention is-mention
+              [1-17606] StaticText: Mention
+              [1-17607] StaticText: <is-mention>
+            [1-18119] button: Month Calendar is-month-calendar
+              [1-17608] StaticText: Month Calendar
+              [1-17609] StaticText: <is-month-calendar>
+            [1-18122] button: Option is-option
+              [1-17610] StaticText: Option
+              [1-17611] StaticText: <is-option>
+            [1-18125] button: Pin Input is-pin-input
+              [1-17612] StaticText: Pin Input
+              [1-17613] StaticText: <is-pin-input>
+            [1-18128] button: Radio is-radio
+              [1-17614] StaticText: Radio
+              [1-17615] StaticText: <is-radio>
+            [1-18131] button: Radio Group is-radio-group
+              [1-17616] StaticText: Radio Group
+              [1-17617] StaticText: <is-radio-group>
+            [1-18134] button: Rating is-rating
+              [1-17618] StaticText: Rating
+              [1-17619] StaticText: <is-rating>
+            [1-18137] button: Rich Text Editor is-rte
+              [1-17620] StaticText: Rich Text Editor
+              [1-17621] StaticText: <is-rte>
+            [1-18140] button: Select is-select
+              [1-17622] StaticText: Select
+              [1-17623] StaticText: <is-select>
+            [1-18143] button: Signature is-signature
+              [1-17624] StaticText: Signature
+              [1-17625] StaticText: <is-signature>
+            [1-18146] button: Slider is-slider
+              [1-17626] StaticText: Slider
+              [1-17627] StaticText: <is-slider>
+            [1-18149] button: Switch is-switch
+              [1-17628] StaticText: Switch
+              [1-17629] StaticText: <is-switch>
+            [1-18152] button: Textarea is-textarea
+              [1-17630] StaticText: Textarea
+              [1-17631] StaticText: <is-textarea>
+            [1-18155] button: Time Clock is-time-clock
+              [1-17632] StaticText: Time Clock
+              [1-17633] StaticText: <is-time-clock>
+            [1-18158] button: Time Field is-time-field
+              [1-17634] StaticText: Time Field
+              [1-17635] StaticText: <is-time-field>
+            [1-18161] button: Time Input is-time-input
+              [1-17636] StaticText: Time Input
+              [1-17637] StaticText: <is-time-input>
+            [1-18164] button: Year Calendar is-year-calendar
+              [1-17638] StaticText: Year Calendar
+              [1-17639] StaticText: <is-year-calendar>
+          [1-18167] group: CÓDIGO
+            [1-18169] button: Code is-code
+              [1-17640] StaticText: Code
+              [1-17641] StaticText: <is-code>
+          [1-18172] group: DATOS
+            [1-18174] button: AG Grid is-ag-grid
+              [1-17642] StaticText: AG Grid
+              [1-17643] StaticText: <is-ag-grid>
+            [1-18177] button: Data Grid is-data-grid
+              [1-17644] StaticText: Data Grid
+              [1-17645] StaticText: <is-data-grid>
+            [1-18180] button: Kanban is-kanban
+              [1-17646] StaticText: Kanban
+              [1-17647] StaticText: <is-kanban>
+            [1-18183] button: Kanban Card is-kanban-card
+              [1-17648] StaticText: Kanban Card
+              [1-17649] StaticText: <is-kanban-card>
+            [1-18186] button: Kanban Column is-kanban-column
+              [1-17650] StaticText: Kanban Column
+              [1-17651] StaticText: <is-kanban-column>
+            [1-18189] button: Pivot Table is-pivot-table
+              [1-17652] StaticText: Pivot Table
+              [1-17653] StaticText: <is-pivot-table>
+            [1-18192] button: Spreadsheet is-spreadsheet
+              [1-17654] StaticText: Spreadsheet
+              [1-17655] StaticText: <is-spreadsheet>
+            [1-18195] button: Stat KPI is-stat
+              [1-17656] StaticText: Stat KPI
+              [1-17657] StaticText: <is-stat>
+            [1-18198] button: Transfer is-transfer
+              [1-17658] StaticText: Transfer
+              [1-17659] StaticText: <is-transfer>
+            [1-18201] button: Transfer Item is-transfer-item
+              [1-17660] StaticText: Transfer Item
+              [1-17661] StaticText: <is-transfer-item>
+          [1-18204] group: GRÁFICOS
+            [1-18206] button: Bar Chart is-bar-chart
+              [1-17662] StaticText: Bar Chart
+              [1-17663] StaticText: <is-bar-chart>
+            [1-18209] button: Bubble Chart is-bubble-chart
+              [1-17664] StaticText: Bubble Chart
+              [1-17665] StaticText: <is-bubble-chart>
+            [1-18212] button: Chart is-chart
+              [1-17666] StaticText: Chart
+              [1-17667] StaticText: <is-chart>
+            [1-18215] button: Doughnut Chart is-doughnut-chart
+              [1-17668] StaticText: Doughnut Chart
+              [1-17669] StaticText: <is-doughnut-chart>
+            [1-18218] button: Funnel Chart is-funnel-chart
+              [1-17670] StaticText: Funnel Chart
+              [1-17671] StaticText: <is-funnel-chart>
+            [1-18221] button: Gauge is-gauge
+              [1-17672] StaticText: Gauge
+              [1-17673] StaticText: <is-gauge>
+            [1-18224] button: Heatmap is-heatmap
+              [1-17674] StaticText: Heatmap
+              [1-17675] StaticText: <is-heatmap>
+            [1-18227] button: Line Chart is-line-chart
+              [1-17676] StaticText: Line Chart
+              [1-17677] StaticText: <is-line-chart>
+            [1-18230] button: Map Marker is-map-marker
+              [1-17678] StaticText: Map Marker
+              [1-17679] StaticText: <is-map-marker>
+            [1-18233] button: Maps is-maps
+              [1-17680] StaticText: Maps
+              [1-17681] StaticText: <is-maps>
+            [1-18236] button: Pie Chart is-pie-chart
+              [1-17682] StaticText: Pie Chart
+              [1-17683] StaticText: <is-pie-chart>
+            [1-18239] button: Polar Area Chart is-polar-area-chart
+              [1-17684] StaticText: Polar Area Chart
+              [1-17685] StaticText: <is-polar-area-chart>
+            [1-18242] button: Radar Chart is-radar-chart
+              [1-17686] StaticText: Radar Chart
+              [1-17687] StaticText: <is-radar-chart>
+            [1-18245] button: Scatter Chart is-scatter-chart
+              [1-17688] StaticText: Scatter Chart
+              [1-17689] StaticText: <is-scatter-chart>
+            [1-18248] button: Sparkline is-sparkline
+              [1-17690] StaticText: Sparkline
+              [1-17691] StaticText: <is-sparkline>
+            [1-18251] button: Treemap is-treemap
+              [1-17692] StaticText: Treemap
+              [1-17693] StaticText: <is-treemap>
+            [1-18254] button: Waterfall Chart is-waterfall-chart
+              [1-17694] StaticText: Waterfall Chart
+              [1-17695] StaticText: <is-waterfall-chart>
+          [1-18257] group: DIAGRAMAS
+            [1-18259] button: Diagrama de bloques is-block-diagram
+              [1-17696] StaticText: Diagrama de bloques
+              [1-17697] StaticText: <is-block-diagram>
+            [1-18262] button: Diagrama de carriles is-swimlane-diagram
+              [1-17698] StaticText: Diagrama de carriles
+              [1-17699] StaticText: <is-swimlane-diagram>
+            [1-18265] button: Diagrama de casos de uso is-use-case-diagram
+              [1-17700] StaticText: Diagrama de casos de uso
+              [1-17701] StaticText: <is-use-case-diagram>
+            [1-18268] button: Diagrama de clases is-class-diagram
+              [1-17702] StaticText: Diagrama de clases
+              [1-17703] StaticText: <is-class-diagram>
+            [1-18271] button: Diagrama de componentes is-component-diagram
+              [1-17704] StaticText: Diagrama de componentes
+              [1-17705] StaticText: <is-component-diagram>
+            [1-18274] button: Diagrama de estados is-state-diagram
+              [1-17706] StaticText: Diagrama de estados
+              [1-17707] StaticText: <is-state-diagram>
+            [1-18277] button: Diagrama de flujo is-flowchart
+              [1-17708] StaticText: Diagrama de flujo
+              [1-17709] StaticText: <is-flowchart>
+            [1-18280] button: Diagrama de Gantt is-gantt
+              [1-17710] StaticText: Diagrama de Gantt
+              [1-17711] StaticText: <is-gantt>
+            [1-18283] button: Diagrama de Sankey is-sankey-diagram
+              [1-17712] StaticText: Diagrama de Sankey
+              [1-17713] StaticText: <is-sankey-diagram>
+            [1-18286] button: Diagrama de secuencia is-sequence-diagram
+              [1-17714] StaticText: Diagrama de secuencia
+              [1-17715] StaticText: <is-sequence-diagram>
+            [1-18289] button: Diagrama de Venn is-venn-diagram
+              [1-17716] StaticText: Diagrama de Venn
+              [1-17717] StaticText: <is-venn-diagram>
+            [1-18292] button: Diagrama entidad-relación is-er-diagram
+              [1-17718] StaticText: Diagrama entidad-relación
+              [1-17719] StaticText: <is-er-diagram>
+            [1-18295] button: Línea de tiempo is-timeline
+              [1-17720] StaticText: Línea de tiempo
+              [1-17721] StaticText: <is-timeline>
+            [1-18298] button: Mapa de recorrido is-journey-map
+              [1-17722] StaticText: Mapa de recorrido
+              [1-17723] StaticText: <is-journey-map>
+            [1-18301] button: Mapa mental is-mindmap
+              [1-17724] StaticText: Mapa mental
+              [1-17725] StaticText: <is-mindmap>
+            [1-18304] button: Matriz de cuadrantes is-quadrant-chart
+              [1-17726] StaticText: Matriz de cuadrantes
+              [1-17727] StaticText: <is-quadrant-chart>
+            [1-18307] button: Org Chart is-org-chart
+              [1-17728] StaticText: Org Chart
+              [1-17729] StaticText: <is-org-chart>
+            [1-18310] button: Visor de diagramas is-diagram-lightbox
+              [1-17730] StaticText: Visor de diagramas
+              [1-17731] StaticText: <is-diagram-lightbox>
+          [1-18313] group: OVERLAYS
+            [1-18315] button: Command Palette is-command-palette
+              [1-17732] StaticText: Command Palette
+              [1-17733] StaticText: <is-command-palette>
+            [1-18318] button: PDF Viewer is-pdf-viewer
+              [1-17734] StaticText: PDF Viewer
+              [1-17735] StaticText: <is-pdf-viewer>
+            [1-18321] button: Window is-window
+              [1-17736] StaticText: Window
+              [1-17737] StaticText: <is-window>
+          [1-18324] group: UTILERÍAS
+            [1-18326] button: Editor Markdown is-md-editor
+              [1-17738] StaticText: Editor Markdown
+              [1-17739] StaticText: <is-md-editor>
+            [1-18329] button: Formato is-format
+              [1-17740] StaticText: Formato
+              [1-17741] StaticText: <is-format>
+            [1-18332] button: Formato de bytes is-format-bytes
+              [1-17742] StaticText: Formato de bytes
+              [1-17743] StaticText: <is-format-bytes>
+            [1-18335] button: Formato de fecha is-format-date
+              [1-17744] StaticText: Formato de fecha
+              [1-17745] StaticText: <is-format-date>
+            [1-18338] button: Formato de número is-format-number
+              [1-17746] StaticText: Formato de número
+              [1-17747] StaticText: <is-format-number>
+            [1-18341] button: IsUi is-ui
+              [1-17748] StaticText: IsUi
+              [1-17749] StaticText: <is-ui>
+            [1-18344] button: Lightbox is-lightbox
+              [1-17750] StaticText: Lightbox
+              [1-17751] StaticText: <is-lightbox>
+            [1-18347] button: Observador de intersección is-intersection-observer
+              [1-17752] StaticText: Observador de intersección
+              [1-17753] StaticText: <is-intersection-observer>
+            [1-18350] button: Observador de mutación is-mutation-observer
+              [1-17754] StaticText: Observador de mutación
+              [1-17755] StaticText: <is-mutation-observer>
+            [1-18353] button: Observer is-observer
+              [1-17756] StaticText: Observer
+              [1-17757] StaticText: <is-observer>
+            [1-18356] button: Offscreen Canvas is-offscreen-canvas
+              [1-17758] StaticText: Offscreen Canvas
+              [1-17759] StaticText: <is-offscreen-canvas>
+            [1-18359] button: Popover is-popover
+              [1-17760] StaticText: Popover
+              [1-17761] StaticText: <is-popover>
+            [1-18362] button: Render Markdown is-md-render
+              [1-17762] StaticText: Render Markdown
+              [1-17763] StaticText: <is-md-render>
+            [1-18365] button: Resize Observer is-resize-observer
+              [1-17764] StaticText: Resize Observer
+              [1-17765] StaticText: <is-resize-observer>
+            [1-18368] button: Tiempo relativo is-relative-time
+              [1-17766] StaticText: Tiempo relativo
+              [1-17767] StaticText: <is-relative-time>
+            [1-18371] button: Wake Lock is-wake-lock
+              [1-17768] StaticText: Wake Lock
+              [1-17769] StaticText: <is-wake-lock>
+          [1-18374] group: ISP-SVELTECOMPONENTS
+            [1-18376] button: Accordion Group is-accordion-group
+              [1-17770] StaticText: Accordion Group
+              [1-17771] StaticText: <is-accordion-group>
+            [1-18380] button: Block Layout is-block-layout
+              [1-17772] StaticText: Block Layout
+              [1-17773] StaticText: <is-block-layout>
+            [1-18384] button: Btn Ref is-btn-ref
+              [1-17774] StaticText: Btn Ref
+              [1-17775] StaticText: <is-btn-ref>
+            [1-18388] button: Catálogo Gen is-catalogo-gen
+              [1-17776] StaticText: Catálogo Gen
+              [1-17777] StaticText: <is-catalogo-gen>
+            [1-18392] button: Confirm Delete is-confirm-delete
+              [1-17778] StaticText: Confirm Delete
+              [1-17779] StaticText: <is-confirm-delete>
+            [1-18396] button: Flex Layout is-flex-layout
+              [1-17780] StaticText: Flex Layout
+              [1-17781] StaticText: <is-flex-layout>
+            [1-18400] button: Flex Options is-flex-options
+              [1-17782] StaticText: Flex Options
+              [1-17783] StaticText: <is-flex-options>
+            [1-18404] button: Float Card is-float-card
+              [1-17784] StaticText: Float Card
+              [1-17785] StaticText: <is-float-card>
+            [1-18408] button: Form is-form
+              [1-17786] StaticText: Form
+              [1-17787] StaticText: <is-form>
+            [1-18412] button: Grid Layout is-grid-layout
+              [1-17788] StaticText: Grid Layout
+              [1-17789] StaticText: <is-grid-layout>
+            [1-18416] button: Heading is-heading
+              [1-17790] StaticText: Heading
+              [1-17791] StaticText: <is-heading>
+            [1-18420] button: Loading Overlay is-loading-overlay
+              [1-17792] StaticText: Loading Overlay
+              [1-17793] StaticText: <is-loading-overlay>
+            [1-18424] button: Modal Verificación is-modal-verificacion
+              [1-17794] StaticText: Modal Verificación
+              [1-17795] StaticText: <is-modal-verificacion>
+            [1-18428] button: Text is-text
+              [1-17796] StaticText: Text
+              [1-17797] StaticText: <is-text>
+            [1-18432] button: Tree View is-tree-view
+              [1-17798] StaticText: Tree View
+              [1-17799] StaticText: <is-tree-view>
+        [1-18460] separator: Redimensionar panel
+        [1-18554] is-split-panel
+          [1-18555] scrollable, is-main
+            [1-20136] div
+              [1-19955] group: Ver fuentes del módulo
+                [1-19922] is-button: Ver fuente JS
+                  [1-19907] button: JS
+                  [1-20155] StaticText: Listo
+                [1-19938] is-button: Ver fuente CSS
+                  [1-19923] button: CSS
+                  [1-20156] StaticText: Listo
+                [1-19954] is-button: Ver fuente MD
+                  [1-19939] button: MD
+                  [1-20157] StaticText: Listo
+              [1-19968] div: Pesos CDN minificados
+                [1-19957] code
+                  [1-20153] StaticText: diagrams/er-diagram.min.js
+                [1-19961] code
+                  [1-20154] StaticText: diagrams/er-diagram.min.css
+                [1-20149] StaticText: CDN
+            [1-18699] section
+              [1-18689] heading: <is-er-diagram>
+              [1-18690] paragraph
+                [1-19042] StaticText: Diagrama entidad-relación en SVG, sin Mermaid. Declaras entidades con sus atributos y las relaciones entre ellas; el componente ubica las cajas, rutea las líneas con A* y dibuja la notación de pata de gallo en cada extremo.
+              [1-18691] paragraph
+                [1-19043] StaticText: Comparte motor con
+                [1-18692] code
+                  [1-19044] StaticText: <is-flowchart>
+                [1-19045] StaticText: : mismo esquema JSON de grupos/leyenda, mismo visor a pantalla completa y la misma animación tortuga.
+              [1-18698] div
+                [1-18696] is-demo
+                  [1-18767] image: Facturación electrónica
+                    [1-19033] StaticText: Facturación electrónica
+                    [1-19034] StaticText: Facturación
+                    [1-19035] StaticText: Terceros
+                    [1-19036] StaticText: Facturación
+                    [1-19037] StaticText: Terceros
+                    [1-19038] StaticText: pertenece a
+                    [1-19039] StaticText: contiene
+                    [1-19040] StaticText: referencia
+                    [1-19139] StaticText: FACTURA
+                    [1-19140] StaticText: PK
+                    [1-19141] StaticText: id
+                    [1-19142] StaticText: int
+                    [1-19143] StaticText: FK
+                    [1-19144] StaticText: cliente_id
+                    [1-19145] StaticText: int
+                    [1-19146] StaticText: fecha
+                    [1-19147] StaticText: date
+                    [1-19148] StaticText: total
+                    [1-19149] StaticText: decimal
+                    [1-19167] StaticText: ITEM_FACTURA
+                    [1-19168] StaticText: PK
+                    [1-19169] StaticText: id
+                    [1-19170] StaticText: int
+                    [1-19171] StaticText: FK
+                    [1-19172] StaticText: factura_id
+                    [1-19173] StaticText: int
+                    [1-19174] StaticText: FK
+                    [1-19175] StaticText: producto_id
+                    [1-19176] StaticText: int
+                    [1-19177] StaticText: cantidad
+                    [1-19178] StaticText: decimal
+                    [1-19190] StaticText: CLIENTE
+                    [1-19191] StaticText: PK
+                    [1-19192] StaticText: id
+                    [1-19193] StaticText: int
+                    [1-19194] StaticText: nombre
+                    [1-19195] StaticText: varchar
+                    [1-19229] StaticText: PRODUCTO
+                    [1-19230] StaticText: PK
+                    [1-19231] StaticText: id
+                    [1-19232] StaticText: int
+                    [1-19233] StaticText: nombre
+                    [1-19234] StaticText: varchar
+                    [1-19235] StaticText: precio
+                    [1-19236] StaticText: decimal
+                  [1-18726] button: Ver código del ejemplo
+                  [1-18765] button: Ver fuentes JS / CSS / MD
+                [1-19261] group
+                  [1-19266] DisclosureTriangle: CONTROLES
+                [1-18697] link: Abrir demo de is-er-diagram en nueva pestaña
+                  [1-19046] StaticText: Abrir editor en nueva pestaña ↗
+            [1-18784] section
+              [1-18771] heading: Cardinalidad
+              [1-18772] paragraph
+                [1-19048] StaticText: Cada extremo de una relación admite
+                [1-18773] code
+                  [1-19049] StaticText: one
+                [1-19050] StaticText: ,
+                [1-18774] code
+                  [1-19051] StaticText: many
+                [1-19052] StaticText: ,
+                [1-18775] code
+                  [1-19053] StaticText: zeroOrOne
+                [1-19054] StaticText: y
+                [1-18776] code
+                  [1-19055] StaticText: zeroOrMany
+                [1-19056] StaticText: , dibujados como pata de gallo / marca de uno / círculo de opcionalidad, igual que la notación crow's foot clásica.
+                [1-18777] code
+                  [1-19057] StaticText: identifying: false
+                [1-19058] StaticText: dibuja la línea punteada.
+              [1-18783] div
+                [1-18781] is-demo
+                  [1-18852] image: Diagrama entidad-relación
+                    [1-19228] StaticText: 1 a N
+                    [1-19246] StaticText: A
+                    [1-19247] StaticText: PK
+                    [1-19248] StaticText: id
+                    [1-19249] StaticText: int
+                    [1-19981] StaticText: B
+                    [1-19982] StaticText: PK
+                    [1-19983] StaticText: id
+                    [1-19984] StaticText: int
+                  [1-18811] button: Ver código del ejemplo
+                  [1-18850] button: Ver fuentes JS / CSS / MD
+                [1-18782] link: Abrir demo de is-er-diagram en nueva pestaña
+                  [1-19059] StaticText: Abrir editor en nueva pestaña ↗
+            [1-18962] section
+              [1-18856] heading: Referencia
+              [1-18857] heading: Atributos
+              [1-18877] table
+                [1-18875] rowgroup
+                  [1-18862] row
+                    [1-18859] columnheader: NOMBRE
+                    [1-18860] columnheader: VALORES
+                    [1-18861] columnheader: DESCRIPCIÓN
+                [1-18876] tbody
+                  [1-18869] row
+                    [1-18864] cell: variant
+                      [1-18863] code
+                        [1-19062] StaticText: variant
+                    [1-18867] cell: inline · viewer
+                      [1-18865] code
+                        [1-19063] StaticText: inline
+                      [1-19064] StaticText: ·
+                      [1-18866] code
+                        [1-19065] StaticText: viewer
+                    [1-18868] cell: inline abre el visor al hacer clic; viewer activa hover, tooltips, leyenda clickeable y auto-animación.
+                  [1-18874] row
+                    [1-18871] cell: open-on-click
+                      [1-18870] code
+                        [1-19067] StaticText: open-on-click
+                    [1-18872] cell: booleano
+                    [1-18873] cell: Habilita abrir el visor a pantalla completa al hacer clic. Por defecto el componente no tiene visor.
+              [1-18879] heading: Esquema del JSON
+              [1-18927] table
+                [1-18925] rowgroup
+                  [1-18883] row
+                    [1-18881] columnheader: CAMPO
+                    [1-18882] columnheader: DESCRIPCIÓN
+                [1-18926] tbody
+                  [1-18891] row
+                    [1-18885] cell: direction
+                      [1-18884] code
+                        [1-19071] StaticText: direction
+                    [1-18890] cell: TB · BT · LR (default) · RL.
+                      [1-18886] code
+                        [1-19072] StaticText: TB
+                      [1-19073] StaticText: ·
+                      [1-18887] code
+                        [1-19074] StaticText: BT
+                      [1-19075] StaticText: ·
+                      [1-18888] code
+                        [1-19076] StaticText: LR
+                      [1-19077] StaticText: (default) ·
+                      [1-18889] code
+                        [1-19078] StaticText: RL
+                      [1-19079] StaticText: .
+                  [1-18895] row
+                    [1-18893] cell: entities[].id
+                      [1-18892] code
+                        [1-19080] StaticText: entities[].id
+                    [1-18894] cell: Identificador que referencian las relaciones.
+                  [1-18901] row
+                    [1-18897] cell: entities[].attributes[].key
+                      [1-18896] code
+                        [1-19082] StaticText: entities[].attributes[].key
+                    [1-18900] cell: PK · FK; se pinta como badge junto al nombre.
+                      [1-18898] code
+                        [1-19083] StaticText: PK
+                      [1-19084] StaticText: ·
+                      [1-18899] code
+                        [1-19085] StaticText: FK
+                      [1-19086] StaticText: ; se pinta como badge junto al nombre.
+                  [1-18905] row
+                    [1-18903] cell: entities[].group
+                      [1-18902] code
+                        [1-19087] StaticText: entities[].group
+                    [1-18904] cell: Id del grupo; tiñe el encabezado de la caja.
+                  [1-18914] row
+                    [1-18908] cell: relations[].fromCard · toCard
+                      [1-18906] code
+                        [1-19089] StaticText: relations[].fromCard
+                      [1-19090] StaticText: ·
+                      [1-18907] code
+                        [1-19091] StaticText: toCard
+                    [1-18913] cell: one · many · zeroOrOne · zeroOrMany.
+                      [1-18909] code
+                        [1-19092] StaticText: one
+                      [1-19093] StaticText: ·
+                      [1-18910] code
+                        [1-19094] StaticText: many
+                      [1-19095] StaticText: ·
+                      [1-18911] code
+                        [1-19096] StaticText: zeroOrOne
+                      [1-19097] StaticText: ·
+                      [1-18912] code
+                        [1-19098] StaticText: zeroOrMany
+                      [1-19099] StaticText: .
+                  [1-18920] row
+                    [1-18916] cell: relations[].identifying
+                      [1-18915] code
+                        [1-19100] StaticText: relations[].identifying
+                    [1-18919] cell: true (default, línea sólida) · false (línea punteada).
+                      [1-18917] code
+                        [1-19101] StaticText: true
+                      [1-19102] StaticText: (default, línea sólida) ·
+                      [1-18918] code
+                        [1-19103] StaticText: false
+                      [1-19104] StaticText: (línea punteada).
+                  [1-18924] row
+                    [1-18922] cell: groups[].hue
+                      [1-18921] code
+                        [1-19105] StaticText: groups[].hue
+                    [1-18923] cell: Tono HSL 0–360.
+              [1-18929] heading: Propiedades y eventos
+              [1-18960] table
+                [1-18958] rowgroup
+                  [1-18933] row
+                    [1-18931] columnheader: NOMBRE
+                    [1-18932] columnheader: DESCRIPCIÓN
+                [1-18959] tbody
+                  [1-18937] row
+                    [1-18935] cell: payload
+                      [1-18934] code
+                        [1-19108] StaticText: payload
+                    [1-18936] cell: Configuración JSON; alternativa al script hijo.
+                  [1-18941] row
+                    [1-18939] cell: layout
+                      [1-18938] code
+                        [1-19110] StaticText: layout
+                    [1-18940] cell: Geometría calculada (solo lectura).
+                  [1-18945] row
+                    [1-18943] cell: turtle
+                      [1-18942] code
+                        [1-19112] StaticText: turtle
+                    [1-18944] cell: API de la animación: play / pause / stop / next / prev.
+                  [1-18949] row
+                    [1-18947] cell: hiddenGroups
+                      [1-18946] code
+                        [1-19114] StaticText: hiddenGroups
+                    [1-18948] cell: Set de grupos ocultos; al cambiar, el diagrama se re-diseña sin esas entidades.
+                  [1-18953] row
+                    [1-18951] cell: is-render
+                      [1-18950] code
+                        [1-19116] StaticText: is-render
+                    [1-18952] cell: Evento: el SVG terminó de construirse.
+                  [1-18957] row
+                    [1-18955] cell: is-turtle-state
+                      [1-18954] code
+                        [1-19118] StaticText: is-turtle-state
+                    [1-18956] cell: Evento: estado de la animación.
+            [1-19278] region: Consumo por CDN
+              [1-19279] sectionheader
+                [1-19280] heading: CDN · DIAGRAMA ENTIDAD-RELACIÓN
+                [1-19281] paragraph
+                  [1-19986] StaticText: Estrategia única:
+                  [1-19282] code
+                    [1-19987] StaticText: loader.min.js
+                  [1-19988] StaticText: . Pegá los dos
+                  [1-19283] code
+                    [1-19989] StaticText: <script>
+                  [1-19990] StaticText: en el
+                  [1-19284] code
+                    [1-19991] StaticText: <head>
+                  [1-19992] StaticText: (o al final del
+                  [1-19285] code
+                    [1-19993] StaticText: <body>
+                  [1-19994] StaticText: ). El primero carga el loader; el segundo pide CSS + el componente de
+                  [1-19286] code
+                    [1-19995] StaticText: tag
+                  [1-19996] StaticText: .
+              [1-19287] div
+                [1-19288] div
+                  [1-19997] StaticText: Copy-paste · loader
+                  [1-19290] button: Copiar snippet del loader
+                    [1-19998] StaticText: Copiar
+                [1-20219] scrollable, div
+                  [1-20218] pre: Código
+                    [1-20158] div
+                      [1-20317] StaticText: <script
+                      [1-20318] StaticText: 
+                      [1-20319] StaticText: type
+                      [1-20320] StaticText: =
+                      [1-20321] StaticText: "module"
+                      [1-20322] StaticText: 
+                      [1-20323] StaticText: src
+                      [1-20324] StaticText: =
+                      [1-20325] StaticText: "https://cdn.jsdelivr.net/gh/Jeff-Aporta/is-webcomponents@062bc9085b78b6703c5537dfa3eaae78b36dda7b/dist/cdn/core/loader.min.js"
+                      [1-20326] StaticText: >
+                      [1-20327] StaticText: </script>
+                    [1-20168] div
+                      [1-20328] StaticText: <script
+                      [1-20329] StaticText: 
+                      [1-20330] StaticText: type
+                      [1-20331] StaticText: =
+                      [1-20332] StaticText: "module"
+                      [1-20333] StaticText: >
+                    [1-20174] div
+                      [1-20334] StaticText: 
+                      [1-20335] StaticText: const
+                      [1-20336] StaticText: 
+                      [1-20337] StaticText: L
+                      [1-20338] StaticText: 
+                      [1-20339] StaticText: =
+                      [1-20340] StaticText: 
+                      [1-20341] StaticText: globalThis
+                      [1-20342] StaticText: .
+                      [1-20343] StaticText: ISWebComponentsLoader
+                      [1-20344] StaticText: ;
+                    [1-20182] div
+                      [1-20345] StaticText: 
+                      [1-20346] StaticText: await
+                      [1-20347] StaticText: 
+                      [1-20348] StaticText: L
+                      [1-20349] StaticText: .
+                      [1-20350] StaticText: loadCSSBase
+                      [1-20351] StaticText: ();
+                    [1-20188] div
+                      [1-20352] StaticText: 
+                      [1-20353] StaticText: await
+                      [1-20354] StaticText: 
+                      [1-20355] StaticText: L
+                      [1-20356] StaticText: .
+                      [1-20357] StaticText: loadCSSPalettesDefault
+                      [1-20358] StaticText: ();
+                    [1-20194] div
+                      [1-20359] StaticText: 
+                      [1-20360] StaticText: await
+                      [1-20361] StaticText: 
+                      [1-20362] StaticText: L
+                      [1-20363] StaticText: .
+                      [1-20364] StaticText: load
+                      [1-20365] StaticText: (
+                      [1-20366] StaticText: "
+                      [1-20367] StaticText: i
+                      [1-20368] StaticText: s
+                      [1-20369] StaticText: -
+                      [1-20370] StaticText: e
+                      [1-20371] StaticText: r
+                      [1-20372] StaticText: -
+                      [1-20373] StaticText: d
+                      [1-20374] StaticText: i
+                      [1-20375] StaticText: a
+                      [1-20376] StaticText: g
+                      [1-20377] StaticText: r
+                      [1-20378] StaticText: a
+                      [1-20379] StaticText: m
+                      [1-20380] StaticText: "
+                      [1-20381] StaticText: );
+                    [1-20382] StaticText: </script>
+              [1-19293] group: ALCANCE DE LA CARGA
+                [1-19294] Legend
+                  [1-19979] StaticText: ALCANCE DE LA CARGA
+                [1-19295] LabelText
+                  [1-19296] radio: Cargar solo este componente (is-er-diagram) [checked]
+                  [1-19297] span
+                    [1-20072] StaticText: Cargar solo este componente (
+                    [1-19298] code
+                      [1-20383] StaticText: is-er-diagram
+                    [1-20074] StaticText: )
+              [1-19299] list
+              [1-19308] region: Documentación para agentes
+                [1-19309] sectionheader
+                  [1-19310] heading: PARA AGENTES / LLM
+                  [1-19311] paragraph
+                    [1-20075] StaticText: Prompt canónico (CDN-only + tools). Vista previa con scroll; clic para abrir y copiar. Solo lectura aquí.
+                [1-19312] div
+                  [1-19313] div
+                    [1-20076] StaticText: Prompt · agents
+                    [1-19315] button: Copiar prompt para agentes
+                      [1-20077] StaticText: Copiar
+                  [1-19429] scrollable, div: IS Web Components (Instrucciones para LLM) Utiliza IS Web Components exclusivamente mediante CDN (o copia local v�a /is-webcomponents:local). Nunca utilices: npm npx Bun pnpm Yarn Vite Webpack Rollup gestores de paquetes instalaciones locales del kit v�a registry copias parciales de componentes El objetivo es consumir la librer�a exactamente como se publica en dist/cdn/. Reglas generales Reutiliza siempre componentes existentes con prefijo is-*. No implementes componentes que ya existan. No reinventes componentes, atributos, propiedades, m�todos, eventos, slots, variables CSS ni Custom Properties. Toda API utilizada debe existir en la documentaci�n oficial. Antes de escribir c�digo, verifica si la librer�a ya ofrece un componente adecuado. Si existen varios componentes similares, utiliza el m�s espec�fico. Si un componente depende de otros componentes, reutiliza la composici�n existente; no la reimplementes. Utiliza siempre el sistema de iconos propio mediante <is-icon icon="prefix:name">. No utilices Iconify, FontAwesome, Material Icons ni otras librer�as externas de iconos, salvo que el usuario lo solicite expl�citamente. Configura el tema mediante data-theme. Configura la paleta mediante data-palette. La configuraci�n declarativa debe realizarse mediante atributos data-* cuando el componente lo soporte. No mezcles mirrors CDN dentro de una misma p�gina. Mant�n la accesibilidad y el comportamiento documentado por cada componente. Herramientas (slash) Cuando el usuario pida una de estas intenciones, sigue la skill de la herramienta:
+                    [1-19430] div
+                      [1-20401] heading: IS Web Components (Instrucciones para LLM)
+                      [1-20402] paragraph
+                        [1-20840] StaticText: Utiliza
+                        [1-20403] strong
+                          [1-20841] StaticText: IS Web Components
+                        [1-20842] StaticText: exclusivamente mediante
+                        [1-20404] strong
+                          [1-20843] StaticText: CDN
+                        [1-20844] StaticText: (o copia local v�a
+                        [1-20405] code
+                          [1-20845] StaticText: /is-webcomponents:local
+                        [1-20846] StaticText: ).
+                      [1-20406] paragraph
+                        [1-20407] strong
+                          [1-20847] StaticText: Nunca
+                        [1-20848] StaticText: utilices:
+                      [1-20408] list
+                        [1-20409] listitem
+                          [1-20725] ListMarker: •
+                          [1-20849] StaticText: npm
+                        [1-20410] listitem
+                          [1-20726] ListMarker: •
+                          [1-20850] StaticText: npx
+                        [1-20411] listitem
+                          [1-20727] ListMarker: •
+                          [1-20851] StaticText: Bun
+                        [1-20412] listitem
+                          [1-20728] ListMarker: •
+                          [1-20852] StaticText: pnpm
+                        [1-20413] listitem
+                          [1-20729] ListMarker: •
+                          [1-20853] StaticText: Yarn
+                        [1-20414] listitem
+                          [1-20730] ListMarker: •
+                          [1-20854] StaticText: Vite
+                        [1-20415] listitem
+                          [1-20731] ListMarker: •
+                          [1-20855] StaticText: Webpack
+                        [1-20416] listitem
+                          [1-20732] ListMarker: •
+                          [1-20856] StaticText: Rollup
+                        [1-20417] listitem
+                          [1-20733] ListMarker: •
+                          [1-20857] StaticText: gestores de paquetes
+                        [1-20418] listitem
+                          [1-20734] ListMarker: •
+                          [1-20858] StaticText: instalaciones locales del kit v�a registry
+                        [1-20419] listitem
+                          [1-20735] ListMarker: •
+                          [1-20859] StaticText: copias parciales de componentes
+                      [1-20420] paragraph
+                        [1-20860] StaticText: El objetivo es consumir la librer�a exactamente como se publica en
+                        [1-20421] LineBreak: 
+                        [1-20422] code
+                          [1-20861] StaticText: dist/cdn/
+                        [1-20862] StaticText: .
+                      [1-20423] separator
+                      [1-20424] heading: Reglas generales
+                      [1-20425] list
+                        [1-20426] listitem
+                          [1-20736] ListMarker: •
+                          [1-20864] StaticText: Reutiliza siempre componentes existentes con prefijo
+                          [1-20427] code
+                            [1-20865] StaticText: is-*
+                          [1-20866] StaticText: .
+                        [1-20428] listitem
+                          [1-20737] ListMarker: •
+                          [1-20867] StaticText: No implementes componentes que ya existan.
+                        [1-20429] listitem
+                          [1-20738] ListMarker: •
+                          [1-20868] StaticText: No reinventes componentes, atributos, propiedades, m�todos, eventos, slots, variables CSS ni Custom Properties.
+                        [1-20430] listitem
+                          [1-20739] ListMarker: •
+                          [1-20869] StaticText: Toda API utilizada debe existir en la documentaci�n oficial.
+                        [1-20431] listitem
+                          [1-20740] ListMarker: •
+                          [1-20870] StaticText: Antes de escribir c�digo, verifica si la librer�a ya ofrece un componente adecuado.
+                        [1-20432] listitem
+                          [1-20741] ListMarker: •
+                          [1-20871] StaticText: Si existen varios componentes similares, utiliza el m�s espec�fico.
+                        [1-20433] listitem
+                          [1-20742] ListMarker: •
+                          [1-20872] StaticText: Si un componente depende de otros componentes, reutiliza la composici�n existente; no la reimplementes.
+                        [1-20434] listitem
+                          [1-20743] ListMarker: •
+                          [1-20873] StaticText: Utiliza siempre el sistema de iconos propio mediante
+                          [1-20435] code
+                            [1-20874] StaticText: <is-icon icon="prefix:name">
+                          [1-20875] StaticText: .
+                        [1-20436] listitem
+                          [1-20744] ListMarker: •
+                          [1-20876] StaticText: No utilices Iconify, FontAwesome, Material Icons ni otras librer�as externas de iconos, salvo que el usuario lo solicite expl�citamente.
+                        [1-20437] listitem
+                          [1-20745] ListMarker: •
+                          [1-20877] StaticText: Configura el tema mediante
+                          [1-20438] code
+                            [1-20878] StaticText: data-theme
+                          [1-20879] StaticText: .
+                        [1-20439] listitem
+                          [1-20746] ListMarker: •
+                          [1-20880] StaticText: Configura la paleta mediante
+                          [1-20440] code
+                            [1-20881] StaticText: data-palette
+                          [1-20882] StaticText: .
+                        [1-20441] listitem
+                          [1-20747] ListMarker: •
+                          [1-20883] StaticText: La configuraci�n declarativa debe realizarse mediante atributos
+                          [1-20442] code
+                            [1-20884] StaticText: data-*
+                          [1-20885] StaticText: cuando el componente lo soporte.
+                        [1-20443] listitem
+                          [1-20748] ListMarker: •
+                          [1-20886] StaticText: No mezcles mirrors CDN dentro de una misma p�gina.
+                        [1-20444] listitem
+                          [1-20749] ListMarker: •
+                          [1-20887] StaticText: Mant�n la accesibilidad y el comportamiento documentado por cada componente.
+                      [1-20445] separator
+                      [1-20446] heading: Herramientas (slash)
+                      [1-20447] paragraph
+                        [1-20889] StaticText: Cuando el usuario pida una de estas intenciones, sigue la skill de la herramienta:
+                      [1-20449] table
+                        [1-20450] rowgroup
+                          [1-20451] row
+                            [1-20452] columnheader: Comando
+                            [1-20453] columnheader: Skill
+                            [1-20454] columnheader: Uso
+                        [1-20455] tbody
+                          [1-20456] row
+                            [1-20457] cell: /is-webcomponents:build
+                              [1-20458] code
+                                [1-20893] StaticText: /is-webcomponents:build
+                            [1-20459] cell: tools/build.md
+                              [1-20460] link: tools/build.md
+                            [1-20461] cell: Fundar o extender apps con is-*
+                              [1-20895] StaticText: Fundar o extender apps con
+                              [1-20462] code
+                                [1-20896] StaticText: is-*
+                          [1-20463] row
+                            [1-20464] cell: /is-webcomponents:migrate
+                              [1-20465] code
+                                [1-20897] StaticText: /is-webcomponents:migrate
+                            [1-20466] cell: tools/migrate.md
+                              [1-20467] link: tools/migrate.md
+                            [1-20468] cell: Migrar un front (React/MUI/Svelte/�) a vanilla + is-*
+                              [1-20899] StaticText: Migrar un front (React/MUI/Svelte/�) a vanilla +
+                              [1-20469] code
+                                [1-20900] StaticText: is-*
+                          [1-20470] row
+                            [1-20471] cell: /is-webcomponents:local
+                              [1-20472] code
+                                [1-20901] StaticText: /is-webcomponents:local
+                            [1-20473] cell: tools/local.md
+                              [1-20474] link: tools/local.md
+                            [1-20475] cell: Vendorizar JS/CSS locales (preferido) y actualizar SHA
+                      [1-20476] paragraph
+                        [1-20904] StaticText: Instalaci�n de skills (preferir repo GitHub):
+                      [1-20478] code
+                        [1-20905] StaticText: npx skills add Jeff-Aporta/is-webcomponents -s is-webcomponents
 npx skills add Jeff-Aporta/is-webcomponents -s is-cdn-install
-                      [1-17336] separator
-                      [1-17337] heading: Flujo obligatorio antes de generar c�digo
-                      [1-17338] paragraph
-                        [1-17716] StaticText: Antes de utilizar cualquier componente debes seguir este flujo:
-                      [1-17339] list
-                        [1-17340] listitem
-                          [1-17559] ListMarker: 1.
-                          [1-17717] StaticText: Leer la documentaci�n de instalaci�n.
-                        [1-17341] listitem
-                          [1-17560] ListMarker: 2.
-                          [1-17718] StaticText: Leer la gu�a general de IS Web Components.
-                        [1-17342] listitem
-                          [1-17561] ListMarker: 3.
-                          [1-17719] StaticText: Consultar el �ndice global (
-                          [1-17343] code
-                            [1-17720] StaticText: LLM.md
-                          [1-17721] StaticText: ).
-                        [1-17344] listitem
-                          [1-17562] ListMarker: 4.
-                          [1-17722] StaticText: Identificar la categor�a adecuada.
-                        [1-17345] listitem
-                          [1-17563] ListMarker: 5.
-                          [1-17723] StaticText: Abrir el
-                          [1-17346] code
-                            [1-17724] StaticText: LLM.md
-                          [1-17725] StaticText: de esa categor�a.
-                        [1-17347] listitem
-                          [1-17564] ListMarker: 6.
-                          [1-17726] StaticText: Abrir la documentaci�n del m�dulo correspondiente.
-                        [1-17348] listitem
-                          [1-17565] ListMarker: 7.
-                          [1-17727] StaticText: Confirmar la API del componente.
-                        [1-17349] listitem
-                          [1-17566] ListMarker: 8.
-                          [1-17728] StaticText: Solo entonces generar el c�digo.
-                      [1-17350] paragraph
-                        [1-17729] StaticText: Nunca deduzcas la API �nicamente por el nombre del componente.
-                      [1-17351] paragraph
-                        [1-17730] StaticText: Si una propiedad, atributo, evento, m�todo o slot no aparece documentado, asume que no existe.
-                      [1-17352] separator
-                      [1-17353] heading: Selecci�n de componentes
-                      [1-17354] paragraph
-                        [1-17732] StaticText: Antes de implementar cualquier soluci�n:
-                      [1-17355] list
-                        [1-17356] listitem
-                          [1-17567] ListMarker: 1.
-                          [1-17733] StaticText: Busca un componente existente.
-                        [1-17357] listitem
-                          [1-17568] ListMarker: 2.
-                          [1-17734] StaticText: Busca un helper reutilizable.
-                        [1-17358] listitem
-                          [1-17569] ListMarker: 3.
-                          [1-17735] StaticText: Busca una utilidad compartida.
-                        [1-17359] listitem
-                          [1-17570] ListMarker: 4.
-                          [1-17736] StaticText: Busca un componente similar.
-                        [1-17360] listitem
-                          [1-17571] ListMarker: 5.
-                          [1-17737] StaticText: Solo si la documentaci�n confirma que no existe una soluci�n adecuada, implementa una nueva.
-                      [1-17361] paragraph
-                        [1-17738] StaticText: La librer�a contiene m�s de un centenar de componentes organizados por categor�as.
-                      [1-17362] paragraph
-                        [1-17739] StaticText: Nunca asumas que un componente pertenece a una categor�a �nicamente por su nombre; consulta siempre el �ndice oficial.
-                      [1-17363] separator
-                      [1-17364] heading: Reutilizaci�n
-                      [1-17365] paragraph
-                        [1-17741] StaticText: Antes de escribir cualquier implementaci�n verifica si ya existe:
-                      [1-17366] list
-                        [1-17367] listitem
-                          [1-17572] ListMarker: •
-                          [1-17742] StaticText: un componente
-                        [1-17368] listitem
-                          [1-17573] ListMarker: •
-                          [1-17743] StaticText: un helper
-                        [1-17369] listitem
-                          [1-17574] ListMarker: •
-                          [1-17744] StaticText: un m�dulo compartido
-                        [1-17370] listitem
-                          [1-17575] ListMarker: •
-                          [1-17745] StaticText: una utilidad
-                        [1-17371] listitem
-                          [1-17576] ListMarker: •
-                          [1-17746] StaticText: un motor de gr�ficos
-                        [1-17372] listitem
-                          [1-17577] ListMarker: •
-                          [1-17747] StaticText: un helper para formularios
-                        [1-17373] listitem
-                          [1-17578] ListMarker: •
-                          [1-17748] StaticText: un helper para overlays
-                        [1-17374] listitem
-                          [1-17579] ListMarker: •
-                          [1-17749] StaticText: un helper de iconos
-                        [1-17375] listitem
-                          [1-17580] ListMarker: •
-                          [1-17750] StaticText: un helper de fechas
-                        [1-17376] listitem
-                          [1-17581] ListMarker: •
-                          [1-17751] StaticText: un helper de posicionamiento
-                        [1-17377] listitem
-                          [1-17582] ListMarker: •
-                          [1-17752] StaticText: un helper de observadores
-                      [1-17378] paragraph
-                        [1-17753] StaticText: Nunca dupliques funcionalidades existentes.
-                      [1-17379] separator
-                      [1-17380] heading: CDN recomendado
-                      [1-17381] paragraph
-                        [1-17755] StaticText: Utiliza siempre
-                        [1-17382] strong
-                          [1-17756] StaticText: jsDelivr
-                        [1-17757] StaticText: con un SHA fijo (pinned commit) para garantizar versiones inmutables.
-                      [1-17383] paragraph
-                        [1-17758] StaticText: Sustituye
-                        [1-17384] code
-                          [1-17759] StaticText: dda8eb20d56b02f5e92a52d72c9e0ce196015acd
-                        [1-17760] StaticText: por el tip de
-                        [1-17385] code
-                          [1-17761] StaticText: main
-                        [1-17762] StaticText: (referencia:
-                        [1-17386] code
-                          [1-17763] StaticText: ca31ad04be5bba79c8ef4652b7540058169ca891
-                        [1-17764] StaticText: ).
-                      [1-17387] scrollable, pre
-                        [1-17388] code
-                          [1-17765] StaticText: <script type="module" src="https://cdn.jsdelivr.net/gh/Jeff-Aporta/is-webcomponents@dda8eb20d56b02f5e92a52d72c9e0ce196015acd/dist/cdn/core/loader.min.js"></script>
+                      [1-20479] separator
+                      [1-20480] heading: Flujo obligatorio antes de generar c�digo
+                      [1-20481] paragraph
+                        [1-20907] StaticText: Antes de utilizar cualquier componente debes seguir este flujo:
+                      [1-20482] list
+                        [1-20483] listitem
+                          [1-20750] ListMarker: 1.
+                          [1-20908] StaticText: Leer la documentaci�n de instalaci�n.
+                        [1-20484] listitem
+                          [1-20751] ListMarker: 2.
+                          [1-20909] StaticText: Leer la gu�a general de IS Web Components.
+                        [1-20485] listitem
+                          [1-20752] ListMarker: 3.
+                          [1-20910] StaticText: Consultar el �ndice global (
+                          [1-20486] code
+                            [1-20911] StaticText: LLM.md
+                          [1-20912] StaticText: ).
+                        [1-20487] listitem
+                          [1-20753] ListMarker: 4.
+                          [1-20913] StaticText: Identificar la categor�a adecuada.
+                        [1-20488] listitem
+                          [1-20754] ListMarker: 5.
+                          [1-20914] StaticText: Abrir el
+                          [1-20489] code
+                            [1-20915] StaticText: LLM.md
+                          [1-20916] StaticText: de esa categor�a.
+                        [1-20490] listitem
+                          [1-20755] ListMarker: 6.
+                          [1-20917] StaticText: Abrir la documentaci�n del m�dulo correspondiente.
+                        [1-20491] listitem
+                          [1-20756] ListMarker: 7.
+                          [1-20918] StaticText: Confirmar la API del componente.
+                        [1-20492] listitem
+                          [1-20757] ListMarker: 8.
+                          [1-20919] StaticText: Solo entonces generar el c�digo.
+                      [1-20493] paragraph
+                        [1-20920] StaticText: Nunca deduzcas la API �nicamente por el nombre del componente.
+                      [1-20494] paragraph
+                        [1-20921] StaticText: Si una propiedad, atributo, evento, m�todo o slot no aparece documentado, asume que no existe.
+                      [1-20495] separator
+                      [1-20496] heading: Selecci�n de componentes
+                      [1-20497] paragraph
+                        [1-20923] StaticText: Antes de implementar cualquier soluci�n:
+                      [1-20498] list
+                        [1-20499] listitem
+                          [1-20758] ListMarker: 1.
+                          [1-20924] StaticText: Busca un componente existente.
+                        [1-20500] listitem
+                          [1-20759] ListMarker: 2.
+                          [1-20925] StaticText: Busca un helper reutilizable.
+                        [1-20501] listitem
+                          [1-20760] ListMarker: 3.
+                          [1-20926] StaticText: Busca una utilidad compartida.
+                        [1-20502] listitem
+                          [1-20761] ListMarker: 4.
+                          [1-20927] StaticText: Busca un componente similar.
+                        [1-20503] listitem
+                          [1-20762] ListMarker: 5.
+                          [1-20928] StaticText: Solo si la documentaci�n confirma que no existe una soluci�n adecuada, implementa una nueva.
+                      [1-20504] paragraph
+                        [1-20929] StaticText: La librer�a contiene m�s de un centenar de componentes organizados por categor�as.
+                      [1-20505] paragraph
+                        [1-20930] StaticText: Nunca asumas que un componente pertenece a una categor�a �nicamente por su nombre; consulta siempre el �ndice oficial.
+                      [1-20506] separator
+                      [1-20507] heading: Reutilizaci�n
+                      [1-20508] paragraph
+                        [1-20932] StaticText: Antes de escribir cualquier implementaci�n verifica si ya existe:
+                      [1-20509] list
+                        [1-20510] listitem
+                          [1-20763] ListMarker: •
+                          [1-20933] StaticText: un componente
+                        [1-20511] listitem
+                          [1-20764] ListMarker: •
+                          [1-20934] StaticText: un helper
+                        [1-20512] listitem
+                          [1-20765] ListMarker: •
+                          [1-20935] StaticText: un m�dulo compartido
+                        [1-20513] listitem
+                          [1-20766] ListMarker: •
+                          [1-20936] StaticText: una utilidad
+                        [1-20514] listitem
+                          [1-20767] ListMarker: •
+                          [1-20937] StaticText: un motor de gr�ficos
+                        [1-20515] listitem
+                          [1-20768] ListMarker: •
+                          [1-20938] StaticText: un helper para formularios
+                        [1-20516] listitem
+                          [1-20769] ListMarker: •
+                          [1-20939] StaticText: un helper para overlays
+                        [1-20517] listitem
+                          [1-20770] ListMarker: •
+                          [1-20940] StaticText: un helper de iconos
+                        [1-20518] listitem
+                          [1-20771] ListMarker: •
+                          [1-20941] StaticText: un helper de fechas
+                        [1-20519] listitem
+                          [1-20772] ListMarker: •
+                          [1-20942] StaticText: un helper de posicionamiento
+                        [1-20520] listitem
+                          [1-20773] ListMarker: •
+                          [1-20943] StaticText: un helper de observadores
+                      [1-20521] paragraph
+                        [1-20944] StaticText: Nunca dupliques funcionalidades existentes.
+                      [1-20522] separator
+                      [1-20523] heading: CDN recomendado
+                      [1-20524] paragraph
+                        [1-20946] StaticText: Utiliza siempre
+                        [1-20525] strong
+                          [1-20947] StaticText: jsDelivr
+                        [1-20948] StaticText: con un SHA fijo (pinned commit) para garantizar versiones inmutables.
+                      [1-20526] paragraph
+                        [1-20949] StaticText: Sustituye
+                        [1-20527] code
+                          [1-20950] StaticText: 062bc9085b78b6703c5537dfa3eaae78b36dda7b
+                        [1-20951] StaticText: por el tip de
+                        [1-20528] code
+                          [1-20952] StaticText: main
+                        [1-20953] StaticText: (referencia:
+                        [1-20529] code
+                          [1-20954] StaticText: ca31ad04be5bba79c8ef4652b7540058169ca891
+                        [1-20955] StaticText: ).
+                      [1-20530] scrollable, pre
+                        [1-20531] code
+                          [1-20956] StaticText: <script type="module" src="https://cdn.jsdelivr.net/gh/Jeff-Aporta/is-webcomponents@062bc9085b78b6703c5537dfa3eaae78b36dda7b/dist/cdn/core/loader.min.js"></script>
 <script type="module">
   const L = globalThis.ISWebComponentsLoader;
   await L.loadCSSBase();
   await L.loadCSSPalettesDefault();
   await L.load("is-button");
 </script>
-                      [1-17389] paragraph
-                        [1-17766] StaticText: Utiliza un �nico origen CDN durante toda la aplicaci�n.
-                      [1-17390] paragraph
-                        [1-17767] StaticText: Si la app usa copia local, ver
-                        [1-17391] code
-                          [1-17768] StaticText: /is-webcomponents:local
-                        [1-17769] StaticText: (local primero en el fallback).
-                      [1-17392] separator
-                      [1-17393] heading: Boot con fallback (opcional)
-                      [1-17394] paragraph
-                        [1-17771] StaticText: Si deseas tolerancia a fallos del CDN puedes utilizar un cargador similar al siguiente.
-                      [1-17395] scrollable, pre
-                        [1-17396] code
-                          [1-17772] StaticText: <script type="module">
+                      [1-20532] paragraph
+                        [1-20957] StaticText: Utiliza un �nico origen CDN durante toda la aplicaci�n.
+                      [1-20533] paragraph
+                        [1-20958] StaticText: Si la app usa copia local, ver
+                        [1-20534] code
+                          [1-20959] StaticText: /is-webcomponents:local
+                        [1-20960] StaticText: (local primero en el fallback).
+                      [1-20535] separator
+                      [1-20536] heading: Boot con fallback (opcional)
+                      [1-20537] paragraph
+                        [1-20962] StaticText: Si deseas tolerancia a fallos del CDN puedes utilizar un cargador similar al siguiente.
+                      [1-20538] scrollable, pre
+                        [1-20539] code
+                          [1-20963] StaticText: <script type="module">
 const MIRRORS=[
-"https://cdn.jsdelivr.net/gh/Jeff-Aporta/is-webcomponents@dda8eb20d56b02f5e92a52d72c9e0ce196015acd/dist/cdn",
-"https://cdn.statically.io/gh/Jeff-Aporta/is-webcomponents/dda8eb20d56b02f5e92a52d72c9e0ce196015acd/dist/cdn",
+"https://cdn.jsdelivr.net/gh/Jeff-Aporta/is-webcomponents@062bc9085b78b6703c5537dfa3eaae78b36dda7b/dist/cdn",
+"https://cdn.statically.io/gh/Jeff-Aporta/is-webcomponents/062bc9085b78b6703c5537dfa3eaae78b36dda7b/dist/cdn",
 "https://jeff-aporta.github.io/is-webcomponents/dist/cdn"
 ];
 
@@ -1265,338 +1279,340 @@ for(const base of MIRRORS){
  }catch{}
 }
 </script>
-                      [1-17397] paragraph
-                        [1-17773] StaticText: Los snippets CDN �nicamente deben usar
-                        [1-17398] code
-                          [1-17774] StaticText: loader.min.js
-                        [1-17775] StaticText: +
-                        [1-17399] code
-                          [1-17776] StaticText: L.load(tags�)
-                        [1-17777] StaticText: .
-                        [1-17400] LineBreak: 
-                        [1-17778] StaticText: No hay
-                        [1-17401] code
-                          [1-17779] StaticText: all.min.js
-                        [1-17780] StaticText: ni
-                        [1-17402] code
-                          [1-17781] StaticText: category.*.min.js
-                        [1-17782] StaticText: publicados.
-                      [1-17403] paragraph
-                        [1-17783] StaticText: No cargues manualmente los CSS individuales de cada componente; estos se resuelven autom�ticamente mediante
-                        [1-17404] code
-                          [1-17784] StaticText: import.meta.url
-                        [1-17785] StaticText: .
-                      [1-17405] separator
-                      [1-17406] heading: Repositorio oficial
-                      [1-17407] paragraph
-                        [1-17787] StaticText: https://github.com/Jeff-Aporta/is-webcomponents
-                      [1-17408] paragraph
-                        [1-17788] StaticText: El repositorio contiene:
-                      [1-17409] list
-                        [1-17410] listitem
-                          [1-17583] ListMarker: •
-                          [1-17789] StaticText: c�digo fuente
-                        [1-17411] listitem
-                          [1-17584] ListMarker: •
-                          [1-17790] StaticText: documentaci�n
-                        [1-17412] listitem
-                          [1-17585] ListMarker: •
-                          [1-17791] StaticText: inventario de componentes
-                        [1-17413] listitem
-                          [1-17586] ListMarker: •
-                          [1-17792] StaticText: manifiesto
-                        [1-17414] listitem
-                          [1-17587] ListMarker: •
-                          [1-17793] StaticText: previews
-                        [1-17415] listitem
-                          [1-17588] ListMarker: •
-                          [1-17794] StaticText: helpers compartidos
-                        [1-17416] listitem
-                          [1-17589] ListMarker: •
-                          [1-17795] StaticText: convenciones
-                        [1-17417] listitem
-                          [1-17590] ListMarker: •
-                          [1-17796] StaticText: pruebas
-                        [1-17418] listitem
-                          [1-17591] ListMarker: •
-                          [1-17797] StaticText: skills (
-                          [1-17419] code
-                            [1-17798] StaticText: src/skills/
-                          [1-17799] StaticText: )
-                      [1-17420] paragraph
-                        [1-17800] StaticText: Cuando exista una discrepancia entre una respuesta del LLM y el repositorio, prevalece siempre el repositorio.
-                      [1-17421] separator
-                      [1-17422] heading: Documentaci�n (leer en este orden)
-                      [1-17423] paragraph
-                        [1-17802] StaticText: Preferir enlaces
-                        [1-17424] strong
-                          [1-17803] StaticText: GitHub
-                        [1-17804] StaticText: (mejor instalaci�n de skills). Raw como secundario (
-                        [1-17425] code
-                          [1-17805] StaticText: text/plain
-                        [1-17806] StaticText: ).
-                      [1-17426] heading: 1. Instalaci�n CDN
-                      [1-17427] paragraph
-                        [1-17808] StaticText: https://github.com/Jeff-Aporta/is-webcomponents/blob/main/src/skills/is-cdn-install/SKILL.md
-                      [1-17428] heading: 2. Gu�a general
-                      [1-17429] paragraph
-                        [1-17810] StaticText: https://github.com/Jeff-Aporta/is-webcomponents/blob/main/src/skills/is-webcomponents/SKILL.md
-                      [1-17430] heading: 3. Prompt completo (este archivo)
-                      [1-17431] paragraph
-                        [1-17812] StaticText: https://github.com/Jeff-Aporta/is-webcomponents/blob/main/src/skills/is-webcomponents/PROMPT.md
-                      [1-17432] heading: 4. Gu�a CDN publicada (jsDelivr)
-                      [1-17433] paragraph
-                        [1-17814] StaticText: https://cdn.jsdelivr.net/gh/Jeff-Aporta/is-webcomponents@main/dist/cdn/skills/is-cdn-install/SKILL.md
-                      [1-17434] heading: 5. �ndice global
-                      [1-17435] paragraph
-                        [1-17816] StaticText: https://raw.githubusercontent.com/Jeff-Aporta/is-webcomponents/main/specs/componentes.md
-                      [1-17436] heading: 6. LLM.md de la categor�a correspondiente
-                      [1-17437] paragraph
-                        [1-17818] StaticText: Consultar el �ndice global para localizar la categor�a correcta.
-                      [1-17438] heading: 7. Documentaci�n espec�fica del componente
-                      [1-17439] paragraph
-                        [1-17820] StaticText: Leer siempre el archivo
-                        [1-17440] code
-                          [1-17821] StaticText: .md
-                        [1-17822] StaticText: del componente antes de utilizarlo.
-                      [1-17441] heading: 8. Herramientas
-                      [1-17442] list
-                        [1-17443] listitem
-                          [1-17592] ListMarker: •
-                          [1-17824] StaticText: https://github.com/Jeff-Aporta/is-webcomponents/tree/main/src/skills/is-webcomponents/tools
-                      [1-17444] separator
-                      [1-17445] heading: Qu� hacer
-                      [1-17446] list
-                        [1-17447] listitem
-                          [1-17593] ListMarker: •
-                          [1-17826] StaticText: Buscar un componente existente antes de escribir c�digo.
-                        [1-17448] listitem
-                          [1-17594] ListMarker: •
-                          [1-17827] StaticText: Buscar helpers reutilizables.
-                        [1-17449] listitem
-                          [1-17595] ListMarker: •
-                          [1-17828] StaticText: Buscar utilidades compartidas.
-                        [1-17450] listitem
-                          [1-17596] ListMarker: •
-                          [1-17829] StaticText: Mantener compatibilidad con Shadow DOM.
-                        [1-17451] listitem
-                          [1-17597] ListMarker: •
-                          [1-17830] StaticText: Mantener accesibilidad.
-                        [1-17452] listitem
-                          [1-17598] ListMarker: •
-                          [1-17831] StaticText: Mantener compatibilidad con formularios.
-                        [1-17453] listitem
-                          [1-17599] ListMarker: •
-                          [1-17832] StaticText: Reutilizar componentes existentes.
-                        [1-17454] listitem
-                          [1-17600] ListMarker: •
-                          [1-17833] StaticText: Reutilizar motores internos.
-                        [1-17455] listitem
-                          [1-17601] ListMarker: •
-                          [1-17834] StaticText: Reutilizar helpers internos.
-                        [1-17456] listitem
-                          [1-17602] ListMarker: •
-                          [1-17835] StaticText: Mantener la estructura p�blica de cada componente.
-                        [1-17457] listitem
-                          [1-17603] ListMarker: •
-                          [1-17836] StaticText: Utilizar
-                          [1-17458] code
-                            [1-17837] StaticText: connectedCallback()
-                          [1-17838] StaticText: y
-                          [1-17459] code
-                            [1-17839] StaticText: disconnectedCallback()
-                          [1-17840] StaticText: correctamente para listeners y observers.
-                        [1-17460] listitem
-                          [1-17604] ListMarker: •
-                          [1-17841] StaticText: Mantener separados los conceptos
-                          [1-17461] code
-                            [1-17842] StaticText: color
-                          [1-17843] StaticText: y
-                          [1-17462] code
-                            [1-17844] StaticText: variant
-                          [1-17845] StaticText: .
-                        [1-17463] listitem
-                          [1-17605] ListMarker: •
-                          [1-17846] StaticText: Escalar componentes mediante
-                          [1-17464] code
-                            [1-17847] StaticText: font-size
-                          [1-17848] StaticText: ; no implementar un atributo
-                          [1-17465] code
-                            [1-17849] StaticText: size
-                          [1-17850] StaticText: .
-                        [1-17466] listitem
-                          [1-17606] ListMarker: •
-                          [1-17851] StaticText: Utilizar �nicamente
-                          [1-17467] code
-                            [1-17852] StaticText: <is-icon>
-                          [1-17853] StaticText: para iconograf�a.
-                        [1-17468] listitem
-                          [1-17607] ListMarker: •
-                          [1-17854] StaticText: Corregir la causa ra�z de un problema en lugar de crear soluciones duplicadas.
-                        [1-17469] listitem
-                          [1-17608] ListMarker: •
-                          [1-17855] StaticText: Si modificas un componente compartido, revisa primero sus consumidores.
-                      [1-17470] separator
-                      [1-17471] heading: Qu� no hacer
-                      [1-17472] paragraph
-                        [1-17857] StaticText: Nunca:
-                      [1-17473] list
-                        [1-17474] listitem
-                          [1-17609] ListMarker: •
-                          [1-17858] StaticText: inventar componentes;
-                        [1-17475] listitem
-                          [1-17610] ListMarker: •
-                          [1-17859] StaticText: inventar atributos;
-                        [1-17476] listitem
-                          [1-17611] ListMarker: •
-                          [1-17860] StaticText: inventar propiedades;
-                        [1-17477] listitem
-                          [1-17612] ListMarker: •
-                          [1-17861] StaticText: inventar eventos;
-                        [1-17478] listitem
-                          [1-17613] ListMarker: •
-                          [1-17862] StaticText: inventar m�todos;
-                        [1-17479] listitem
-                          [1-17614] ListMarker: •
-                          [1-17863] StaticText: inventar slots;
-                        [1-17480] listitem
-                          [1-17615] ListMarker: •
-                          [1-17864] StaticText: inventar variables CSS;
-                        [1-17481] listitem
-                          [1-17616] ListMarker: •
-                          [1-17865] StaticText: inventar Custom Properties;
-                        [1-17482] listitem
-                          [1-17617] ListMarker: •
-                          [1-17866] StaticText: duplicar componentes existentes;
-                        [1-17483] listitem
-                          [1-17618] ListMarker: •
-                          [1-17867] StaticText: duplicar helpers;
-                        [1-17484] listitem
-                          [1-17619] ListMarker: •
-                          [1-17868] StaticText: duplicar l�gica ya implementada;
-                        [1-17485] listitem
-                          [1-17620] ListMarker: •
-                          [1-17869] StaticText: duplicar iconos;
-                        [1-17486] listitem
-                          [1-17621] ListMarker: •
-                          [1-17870] StaticText: utilizar Iconify;
-                        [1-17487] listitem
-                          [1-17622] ListMarker: •
-                          [1-17871] StaticText: utilizar
-                          [1-17488] code
-                            [1-17872] StaticText: <iconify-icon>
-                          [1-17873] StaticText: ;
-                        [1-17489] listitem
-                          [1-17623] ListMarker: •
-                          [1-17874] StaticText: utilizar APIs externas de iconos;
-                        [1-17490] listitem
-                          [1-17624] ListMarker: •
-                          [1-17875] StaticText: asumir la ubicaci�n de un componente;
-                        [1-17491] listitem
-                          [1-17625] ListMarker: •
-                          [1-17876] StaticText: asumir rutas CDN;
-                        [1-17492] listitem
-                          [1-17626] ListMarker: •
-                          [1-17877] StaticText: crear variantes no documentadas;
-                        [1-17493] listitem
-                          [1-17627] ListMarker: •
-                          [1-17878] StaticText: modificar el comportamiento documentado;
-                        [1-17494] listitem
-                          [1-17628] ListMarker: •
-                          [1-17879] StaticText: romper compatibilidad con Shadow DOM;
-                        [1-17495] listitem
-                          [1-17629] ListMarker: •
-                          [1-17880] StaticText: romper compatibilidad con formularios;
-                        [1-17496] listitem
-                          [1-17630] ListMarker: •
-                          [1-17881] StaticText: utilizar atributos
-                          [1-17497] code
-                            [1-17882] StaticText: size
-                          [1-17883] StaticText: ;
-                        [1-17498] listitem
-                          [1-17631] ListMarker: •
-                          [1-17884] StaticText: mezclar conceptos de
-                          [1-17499] code
-                            [1-17885] StaticText: color
-                          [1-17886] StaticText: y
-                          [1-17500] code
-                            [1-17887] StaticText: variant
-                          [1-17888] StaticText: .
-                      [1-17501] separator
-                      [1-17502] heading: Principios de generaci�n
-                      [1-17503] paragraph
-                        [1-17890] StaticText: Cuando el usuario solicite una interfaz:
-                      [1-17504] list
-                        [1-17505] listitem
-                          [1-17632] ListMarker: 1.
-                          [1-17891] StaticText: Identifica los componentes necesarios.
-                        [1-17506] listitem
-                          [1-17633] ListMarker: 2.
-                          [1-17892] StaticText: Consulta su documentaci�n.
-                        [1-17507] listitem
-                          [1-17634] ListMarker: 3.
-                          [1-17893] StaticText: Reutiliza �nicamente APIs documentadas.
-                        [1-17508] listitem
-                          [1-17635] ListMarker: 4.
-                          [1-17894] StaticText: Genera c�digo utilizando componentes
-                          [1-17509] code
-                            [1-17895] StaticText: is-*
-                          [1-17896] StaticText: .
-                        [1-17510] listitem
-                          [1-17636] ListMarker: 5.
-                          [1-17897] StaticText: No sustituyas componentes existentes por HTML nativo salvo que el usuario lo solicite.
-                        [1-17511] listitem
-                          [1-17637] ListMarker: 6.
-                          [1-17898] StaticText: Si la documentaci�n ofrece una soluci�n, �sala.
-                        [1-17512] listitem
-                          [1-17638] ListMarker: 7.
-                          [1-17899] StaticText: Si la documentaci�n no documenta una API, no la inventes.
-                        [1-17513] listitem
-                          [1-17639] ListMarker: 8.
-                          [1-17900] StaticText: Si existe una duda, indica expl�citamente que la documentaci�n no proporciona esa informaci�n en lugar de asumirla.
-                      [1-17514] separator
-                      [1-17515] heading: Regla de oro
-                      [1-17516] paragraph
-                        [1-17902] StaticText: La documentaci�n oficial es la �nica fuente de verdad.
-                      [1-17517] paragraph
-                        [1-17903] StaticText: Si la documentaci�n contradice una inferencia, prevalece la documentaci�n.
-                      [1-17518] paragraph
-                        [1-17904] StaticText: Si una API no aparece documentada, no debe utilizarse.
-                      [1-17519] paragraph
-                        [1-17905] StaticText: Si existe un componente que resuelve el problema, debe reutilizarse.
-                      [1-17520] paragraph
-                        [1-17906] StaticText: Nunca generes una implementaci�n alternativa sin haber confirmado previamente que la librer�a no ofrece una soluci�n equivalente.
-                      [1-17521] heading: Referencias de este componente
-                      [1-17522] list
-                        [1-17523] listitem
-                          [1-17640] ListMarker: •
-                          [1-17908] StaticText: Skill · instalación CDN: https://github.com/Jeff-Aporta/is-webcomponents/blob/main/src/skills/is-cdn-install/SKILL.md
-                        [1-17524] listitem
-                          [1-17641] ListMarker: •
-                          [1-17909] StaticText: Skill · kit (reuso is-*): https://github.com/Jeff-Aporta/is-webcomponents/blob/main/src/skills/is-webcomponents/SKILL.md
-                        [1-17525] listitem
-                          [1-17642] ListMarker: •
-                          [1-17910] StaticText: Prompt · instrucciones LLM: https://github.com/Jeff-Aporta/is-webcomponents/blob/main/src/skills/is-webcomponents/PROMPT.md
-                        [1-17526] listitem
-                          [1-17643] ListMarker: •
-                          [1-17911] StaticText: Tools · build / migrate / local: https://github.com/Jeff-Aporta/is-webcomponents/tree/main/src/skills/is-webcomponents/tools
-                        [1-17527] listitem
-                          [1-17644] ListMarker: •
-                          [1-17912] StaticText: Skill CDN · is-cdn-install (jsDelivr): https://cdn.jsdelivr.net/gh/Jeff-Aporta/is-webcomponents@main/dist/cdn/skills/is-cdn-install/SKILL.md
-                        [1-17528] listitem
-                          [1-17645] ListMarker: •
-                          [1-17913] StaticText: Módulo: https://raw.githubusercontent.com/Jeff-Aporta/is-webcomponents/main/src/components/diagrams/er-diagram.md
-                        [1-17529] listitem
-                          [1-17646] ListMarker: •
-                          [1-17914] StaticText: Índice global: https://raw.githubusercontent.com/Jeff-Aporta/is-webcomponents/main/src/specs/componentes.md
-                        [1-17530] listitem
-                          [1-17647] ListMarker: •
-                          [1-17915] StaticText: Skill · instalación CDN: https://raw.githubusercontent.com/Jeff-Aporta/is-webcomponents/main/src/skills/is-cdn-install/SKILL.md
-                    [1-16460] button: Copiar
-          [1-15675] separator: Redimensionar panel
-          [1-15669] complementary
-            [1-15933] heading: IS-ER-DIAGRAM
-            [1-15934] slot
-              [1-15935] link: intro
-              [1-15936] link: Cardinalidad
-              [1-15937] link: Referencia
+                      [1-20540] paragraph
+                        [1-20964] StaticText: Los snippets CDN �nicamente deben usar
+                        [1-20541] code
+                          [1-20965] StaticText: loader.min.js
+                        [1-20966] StaticText: +
+                        [1-20542] code
+                          [1-20967] StaticText: L.load(tags�)
+                        [1-20968] StaticText: .
+                        [1-20543] LineBreak: 
+                        [1-20969] StaticText: No hay
+                        [1-20544] code
+                          [1-20970] StaticText: all.min.js
+                        [1-20971] StaticText: ni
+                        [1-20545] code
+                          [1-20972] StaticText: category.*.min.js
+                        [1-20973] StaticText: publicados.
+                      [1-20546] paragraph
+                        [1-20974] StaticText: No cargues manualmente los CSS individuales de cada componente; estos se resuelven autom�ticamente mediante
+                        [1-20547] code
+                          [1-20975] StaticText: import.meta.url
+                        [1-20976] StaticText: .
+                      [1-20548] separator
+                      [1-20549] heading: Repositorio oficial
+                      [1-20550] paragraph
+                        [1-20978] StaticText: https://github.com/Jeff-Aporta/is-webcomponents
+                      [1-20551] paragraph
+                        [1-20979] StaticText: El repositorio contiene:
+                      [1-20552] list
+                        [1-20553] listitem
+                          [1-20774] ListMarker: •
+                          [1-20980] StaticText: c�digo fuente
+                        [1-20554] listitem
+                          [1-20775] ListMarker: •
+                          [1-20981] StaticText: documentaci�n
+                        [1-20555] listitem
+                          [1-20776] ListMarker: •
+                          [1-20982] StaticText: inventario de componentes
+                        [1-20556] listitem
+                          [1-20777] ListMarker: •
+                          [1-20983] StaticText: manifiesto
+                        [1-20557] listitem
+                          [1-20778] ListMarker: •
+                          [1-20984] StaticText: previews
+                        [1-20558] listitem
+                          [1-20779] ListMarker: •
+                          [1-20985] StaticText: helpers compartidos
+                        [1-20559] listitem
+                          [1-20780] ListMarker: •
+                          [1-20986] StaticText: convenciones
+                        [1-20560] listitem
+                          [1-20781] ListMarker: •
+                          [1-20987] StaticText: pruebas
+                        [1-20561] listitem
+                          [1-20782] ListMarker: •
+                          [1-20988] StaticText: skills (
+                          [1-20562] code
+                            [1-20989] StaticText: src/skills/
+                          [1-20990] StaticText: )
+                      [1-20563] paragraph
+                        [1-20991] StaticText: Cuando exista una discrepancia entre una respuesta del LLM y el repositorio, prevalece siempre el repositorio.
+                      [1-20564] separator
+                      [1-20565] heading: Documentaci�n (leer en este orden)
+                      [1-20566] paragraph
+                        [1-20993] StaticText: Preferir enlaces
+                        [1-20567] strong
+                          [1-20994] StaticText: GitHub
+                        [1-20995] StaticText: (mejor instalaci�n de skills). Raw como secundario (
+                        [1-20568] code
+                          [1-20996] StaticText: text/plain
+                        [1-20997] StaticText: ).
+                      [1-20569] heading: 1. Instalaci�n CDN
+                      [1-20570] paragraph
+                        [1-20999] StaticText: https://github.com/Jeff-Aporta/is-webcomponents/blob/main/src/skills/is-cdn-install/SKILL.md
+                      [1-20571] heading: 2. Gu�a general
+                      [1-20572] paragraph
+                        [1-21001] StaticText: https://github.com/Jeff-Aporta/is-webcomponents/blob/main/src/skills/is-webcomponents/SKILL.md
+                      [1-20573] heading: 3. Prompt completo (este archivo)
+                      [1-20574] paragraph
+                        [1-21003] StaticText: https://github.com/Jeff-Aporta/is-webcomponents/blob/main/src/skills/is-webcomponents/PROMPT.md
+                      [1-20575] heading: 4. Gu�a CDN publicada (jsDelivr)
+                      [1-20576] paragraph
+                        [1-21005] StaticText: https://cdn.jsdelivr.net/gh/Jeff-Aporta/is-webcomponents@main/dist/cdn/skills/is-cdn-install/SKILL.md
+                      [1-20577] heading: 5. �ndice global
+                      [1-20578] paragraph
+                        [1-21007] StaticText: https://raw.githubusercontent.com/Jeff-Aporta/is-webcomponents/main/specs/componentes.md
+                      [1-20579] heading: 6. LLM.md de la categor�a correspondiente
+                      [1-20580] paragraph
+                        [1-21009] StaticText: Consultar el �ndice global para localizar la categor�a correcta.
+                      [1-20581] heading: 7. Documentaci�n espec�fica del componente
+                      [1-20582] paragraph
+                        [1-21011] StaticText: Leer siempre el archivo
+                        [1-20583] code
+                          [1-21012] StaticText: .md
+                        [1-21013] StaticText: del componente antes de utilizarlo.
+                      [1-20584] heading: 8. Herramientas
+                      [1-20585] list
+                        [1-20586] listitem
+                          [1-20783] ListMarker: •
+                          [1-21015] StaticText: https://github.com/Jeff-Aporta/is-webcomponents/tree/main/src/skills/is-webcomponents/tools
+                      [1-20587] separator
+                      [1-20588] heading: Qu� hacer
+                      [1-20589] list
+                        [1-20590] listitem
+                          [1-20784] ListMarker: •
+                          [1-21017] StaticText: Buscar un componente existente antes de escribir c�digo.
+                        [1-20591] listitem
+                          [1-20785] ListMarker: •
+                          [1-21018] StaticText: Buscar helpers reutilizables.
+                        [1-20592] listitem
+                          [1-20786] ListMarker: •
+                          [1-21019] StaticText: Buscar utilidades compartidas.
+                        [1-20593] listitem
+                          [1-20787] ListMarker: •
+                          [1-21020] StaticText: Mantener compatibilidad con Shadow DOM.
+                        [1-20594] listitem
+                          [1-20788] ListMarker: •
+                          [1-21021] StaticText: Mantener accesibilidad.
+                        [1-20595] listitem
+                          [1-20789] ListMarker: •
+                          [1-21022] StaticText: Mantener compatibilidad con formularios.
+                        [1-20596] listitem
+                          [1-20790] ListMarker: •
+                          [1-21023] StaticText: Reutilizar componentes existentes.
+                        [1-20597] listitem
+                          [1-20791] ListMarker: •
+                          [1-21024] StaticText: Reutilizar motores internos.
+                        [1-20598] listitem
+                          [1-20792] ListMarker: •
+                          [1-21025] StaticText: Reutilizar helpers internos.
+                        [1-20599] listitem
+                          [1-20793] ListMarker: •
+                          [1-21026] StaticText: Mantener la estructura p�blica de cada componente.
+                        [1-20600] listitem
+                          [1-20794] ListMarker: •
+                          [1-21027] StaticText: Utilizar
+                          [1-20601] code
+                            [1-21028] StaticText: connectedCallback()
+                          [1-21029] StaticText: y
+                          [1-20602] code
+                            [1-21030] StaticText: disconnectedCallback()
+                          [1-21031] StaticText: correctamente para listeners y observers.
+                        [1-20603] listitem
+                          [1-20795] ListMarker: •
+                          [1-21032] StaticText: Mantener separados los conceptos
+                          [1-20604] code
+                            [1-21033] StaticText: color
+                          [1-21034] StaticText: y
+                          [1-20605] code
+                            [1-21035] StaticText: variant
+                          [1-21036] StaticText: .
+                        [1-20606] listitem
+                          [1-20796] ListMarker: •
+                          [1-21037] StaticText: Escalar componentes mediante
+                          [1-20607] code
+                            [1-21038] StaticText: font-size
+                          [1-21039] StaticText: ; no implementar un atributo
+                          [1-20608] code
+                            [1-21040] StaticText: size
+                          [1-21041] StaticText: .
+                        [1-20609] listitem
+                          [1-20797] ListMarker: •
+                          [1-21042] StaticText: Utilizar �nicamente
+                          [1-20610] code
+                            [1-21043] StaticText: <is-icon>
+                          [1-21044] StaticText: para iconograf�a.
+                        [1-20611] listitem
+                          [1-20798] ListMarker: •
+                          [1-21045] StaticText: Corregir la causa ra�z de un problema en lugar de crear soluciones duplicadas.
+                        [1-20612] listitem
+                          [1-20799] ListMarker: •
+                          [1-21046] StaticText: Si modificas un componente compartido, revisa primero sus consumidores.
+                      [1-20613] separator
+                      [1-20614] heading: Qu� no hacer
+                      [1-20615] paragraph
+                        [1-21048] StaticText: Nunca:
+                      [1-20616] list
+                        [1-20617] listitem
+                          [1-20800] ListMarker: •
+                          [1-21049] StaticText: inventar componentes;
+                        [1-20618] listitem
+                          [1-20801] ListMarker: •
+                          [1-21050] StaticText: inventar atributos;
+                        [1-20619] listitem
+                          [1-20802] ListMarker: •
+                          [1-21051] StaticText: inventar propiedades;
+                        [1-20620] listitem
+                          [1-20803] ListMarker: •
+                          [1-21052] StaticText: inventar eventos;
+                        [1-20621] listitem
+                          [1-20804] ListMarker: •
+                          [1-21053] StaticText: inventar m�todos;
+                        [1-20622] listitem
+                          [1-20805] ListMarker: •
+                          [1-21054] StaticText: inventar slots;
+                        [1-20623] listitem
+                          [1-20806] ListMarker: •
+                          [1-21055] StaticText: inventar variables CSS;
+                        [1-20624] listitem
+                          [1-20807] ListMarker: •
+                          [1-21056] StaticText: inventar Custom Properties;
+                        [1-20625] listitem
+                          [1-20808] ListMarker: •
+                          [1-21057] StaticText: duplicar componentes existentes;
+                        [1-20626] listitem
+                          [1-20809] ListMarker: •
+                          [1-21058] StaticText: duplicar helpers;
+                        [1-20627] listitem
+                          [1-20810] ListMarker: •
+                          [1-21059] StaticText: duplicar l�gica ya implementada;
+                        [1-20628] listitem
+                          [1-20811] ListMarker: •
+                          [1-21060] StaticText: duplicar iconos;
+                        [1-20629] listitem
+                          [1-20812] ListMarker: •
+                          [1-21061] StaticText: utilizar Iconify;
+                        [1-20630] listitem
+                          [1-20813] ListMarker: •
+                          [1-21062] StaticText: utilizar
+                          [1-20631] code
+                            [1-21063] StaticText: <iconify-icon>
+                          [1-21064] StaticText: ;
+                        [1-20632] listitem
+                          [1-20814] ListMarker: •
+                          [1-21065] StaticText: utilizar APIs externas de iconos;
+                        [1-20633] listitem
+                          [1-20815] ListMarker: •
+                          [1-21066] StaticText: asumir la ubicaci�n de un componente;
+                        [1-20634] listitem
+                          [1-20816] ListMarker: •
+                          [1-21067] StaticText: asumir rutas CDN;
+                        [1-20635] listitem
+                          [1-20817] ListMarker: •
+                          [1-21068] StaticText: crear variantes no documentadas;
+                        [1-20636] listitem
+                          [1-20818] ListMarker: •
+                          [1-21069] StaticText: modificar el comportamiento documentado;
+                        [1-20637] listitem
+                          [1-20819] ListMarker: •
+                          [1-21070] StaticText: romper compatibilidad con Shadow DOM;
+                        [1-20638] listitem
+                          [1-20820] ListMarker: •
+                          [1-21071] StaticText: romper compatibilidad con formularios;
+                        [1-20639] listitem
+                          [1-20821] ListMarker: •
+                          [1-21072] StaticText: utilizar atributos
+                          [1-20640] code
+                            [1-21073] StaticText: size
+                          [1-21074] StaticText: ;
+                        [1-20641] listitem
+                          [1-20822] ListMarker: •
+                          [1-21075] StaticText: mezclar conceptos de
+                          [1-20642] code
+                            [1-21076] StaticText: color
+                          [1-21077] StaticText: y
+                          [1-20643] code
+                            [1-21078] StaticText: variant
+                          [1-21079] StaticText: .
+                      [1-20644] separator
+                      [1-20645] heading: Principios de generaci�n
+                      [1-20646] paragraph
+                        [1-21081] StaticText: Cuando el usuario solicite una interfaz:
+                      [1-20647] list
+                        [1-20648] listitem
+                          [1-20823] ListMarker: 1.
+                          [1-21082] StaticText: Identifica los componentes necesarios.
+                        [1-20649] listitem
+                          [1-20824] ListMarker: 2.
+                          [1-21083] StaticText: Consulta su documentaci�n.
+                        [1-20650] listitem
+                          [1-20825] ListMarker: 3.
+                          [1-21084] StaticText: Reutiliza �nicamente APIs documentadas.
+                        [1-20651] listitem
+                          [1-20826] ListMarker: 4.
+                          [1-21085] StaticText: Genera c�digo utilizando componentes
+                          [1-20652] code
+                            [1-21086] StaticText: is-*
+                          [1-21087] StaticText: .
+                        [1-20653] listitem
+                          [1-20827] ListMarker: 5.
+                          [1-21088] StaticText: No sustituyas componentes existentes por HTML nativo salvo que el usuario lo solicite.
+                        [1-20654] listitem
+                          [1-20828] ListMarker: 6.
+                          [1-21089] StaticText: Si la documentaci�n ofrece una soluci�n, �sala.
+                        [1-20655] listitem
+                          [1-20829] ListMarker: 7.
+                          [1-21090] StaticText: Si la documentaci�n no documenta una API, no la inventes.
+                        [1-20656] listitem
+                          [1-20830] ListMarker: 8.
+                          [1-21091] StaticText: Si existe una duda, indica expl�citamente que la documentaci�n no proporciona esa informaci�n en lugar de asumirla.
+                      [1-20657] separator
+                      [1-20658] heading: Regla de oro
+                      [1-20659] paragraph
+                        [1-21093] StaticText: La documentaci�n oficial es la �nica fuente de verdad.
+                      [1-20660] paragraph
+                        [1-21094] StaticText: Si la documentaci�n contradice una inferencia, prevalece la documentaci�n.
+                      [1-20661] paragraph
+                        [1-21095] StaticText: Si una API no aparece documentada, no debe utilizarse.
+                      [1-20662] paragraph
+                        [1-21096] StaticText: Si existe un componente que resuelve el problema, debe reutilizarse.
+                      [1-20663] paragraph
+                        [1-21097] StaticText: Nunca generes una implementaci�n alternativa sin haber confirmado previamente que la librer�a no ofrece una soluci�n equivalente.
+                      [1-20664] heading: Referencias de este componente
+                      [1-20665] list
+                        [1-20666] listitem
+                          [1-20831] ListMarker: •
+                          [1-21099] StaticText: Skill · instalación CDN: https://github.com/Jeff-Aporta/is-webcomponents/blob/main/src/skills/is-cdn-install/SKILL.md
+                        [1-20667] listitem
+                          [1-20832] ListMarker: •
+                          [1-21100] StaticText: Skill · kit (reuso is-*): https://github.com/Jeff-Aporta/is-webcomponents/blob/main/src/skills/is-webcomponents/SKILL.md
+                        [1-20668] listitem
+                          [1-20833] ListMarker: •
+                          [1-21101] StaticText: Prompt · instrucciones LLM: https://github.com/Jeff-Aporta/is-webcomponents/blob/main/src/skills/is-webcomponents/PROMPT.md
+                        [1-20669] listitem
+                          [1-20834] ListMarker: •
+                          [1-21102] StaticText: Tools · build / migrate / local: https://github.com/Jeff-Aporta/is-webcomponents/tree/main/src/skills/is-webcomponents/tools
+                        [1-20670] listitem
+                          [1-20835] ListMarker: •
+                          [1-21103] StaticText: Skill CDN · is-cdn-install (jsDelivr): https://cdn.jsdelivr.net/gh/Jeff-Aporta/is-webcomponents@main/dist/cdn/skills/is-cdn-install/SKILL.md
+                        [1-20671] listitem
+                          [1-20836] ListMarker: •
+                          [1-21104] StaticText: Módulo: https://raw.githubusercontent.com/Jeff-Aporta/is-webcomponents/main/src/components/diagrams/er-diagram.md
+                        [1-20672] listitem
+                          [1-20837] ListMarker: •
+                          [1-21105] StaticText: Índice global: https://raw.githubusercontent.com/Jeff-Aporta/is-webcomponents/main/src/specs/componentes.md
+                        [1-20673] listitem
+                          [1-20838] ListMarker: •
+                          [1-21106] StaticText: Skill · instalación CDN: https://raw.githubusercontent.com/Jeff-Aporta/is-webcomponents/main/src/skills/is-cdn-install/SKILL.md
+                    [1-19488] is-button: Copiar
+                      [1-19500] button: Copiar
+                      [1-20113] StaticText: Listo
+          [1-18562] separator: Redimensionar panel
+          [1-18556] complementary
+            [1-18963] heading: IS-ER-DIAGRAM
+            [1-18964] slot
+              [1-18965] link: intro
+              [1-18966] link: Cardinalidad
+              [1-18967] link: Referencia
