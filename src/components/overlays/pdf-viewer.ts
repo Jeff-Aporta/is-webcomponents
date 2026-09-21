@@ -40,19 +40,22 @@ import { setOptionalAttr } from '../_shared/reflect.js';
       super();
       this.attachShadow({ mode: 'open' });
       this.shadowRoot!.innerHTML = /* html */ `
-        <div part="root" class="root is-popover-panel">
-          <div part="toolbar" class="toolbar is-surface-bar">
-            <span class="title"><slot name="title">Documento PDF</slot></span>
+        <div part="root" class="root is-popover-panel" role="region" aria-label="Visor de PDF">
+          <div part="toolbar" class="toolbar is-surface-bar" role="toolbar" aria-label="Controles del visor">
+            <span class="title" id="pdf-title"><slot name="title">Documento PDF</slot></span>
             <span class="spacer"></span>
-            <button part="download" class="btn" id="dl" hidden>
+            <button part="download" class="btn" id="dl" hidden
+              aria-label="Descargar PDF">
               <span aria-hidden="true">⤓</span> Descargar
             </button>
-            <button part="print" class="btn" id="print" hidden>
+            <button part="print" class="btn" id="print" hidden
+              aria-label="Imprimir PDF">
               <span aria-hidden="true">⎙</span> Imprimir
             </button>
             <slot name="toolbar"></slot>
           </div>
-          <iframe part="frame" class="frame" id="frame" title="Visor PDF"></iframe>
+          <iframe part="frame" class="frame" id="frame"
+            title="Visor PDF" role="document"></iframe>
         </div>
       `;
       adoptCss(this.shadowRoot!, import.meta.url);
@@ -67,6 +70,9 @@ import { setOptionalAttr } from '../_shared/reflect.js';
       this.#sync();
       this.#iframe.addEventListener('load', () => emit(this, 'is-load'));
       this.#iframe.addEventListener('error', () => emit(this, 'is-error'));
+      // Vincular el iframe con la cabecera (#pdf-title) para que el lector
+      // de pantalla tenga un nombre accesible sincronizado con el titulo.
+      this.#iframe.setAttribute('aria-labelledby', 'pdf-title');
     }
 
     onAttributeChanged(name: string, oldVal: string | null, newVal: string | null) {

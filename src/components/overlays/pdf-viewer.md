@@ -118,6 +118,23 @@ Tags del módulo: `<is-pdf-viewer>`.
 
 ## Accesibilidad
 
+El host lleva `role="region"` con `aria-label="Visor de PDF"` para que
+lectores de pantalla lo identifiquen como una zona de contenido. La barra
+de herramientas interna lleva `role="toolbar"` con `aria-label="Controles
+del visor"`, y los botones Descargar / Imprimir llevan `aria-label`
+explícito (icon-only).
+
+El `<iframe>` interno recibe `title="Visor PDF"`, `role="document"` y
+`aria-labelledby="pdf-title"` (referencia al slot `title`), de modo que su
+nombre accesible queda sincronizado con el encabezado del componente.
+
+| Atributo / Rol | Dónde | Notas |
+| --- | --- | --- |
+| `role="region"` + `aria-label` | `<div class="root">` | Marca el visor como una región navegable. |
+| `role="toolbar"` + `aria-label` | `<div class="toolbar">` | Agrupa los botones Descargar / Imprimir / slot. |
+| `aria-label` en botones internos | `#dl`, `#print` | Botones icon-only con label explícito. |
+| `title` + `role="document"` + `aria-labelledby` | `<iframe>` | Nombre accesible del documento PDF, sincronizado con el slot `title`. |
+
 Preservar semántica, foco, teclado, labels y ARIA. Listeners globales solo en
 `connectedCallback` / `disconnectedCallback`.
 

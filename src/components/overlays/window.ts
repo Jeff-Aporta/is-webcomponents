@@ -62,6 +62,8 @@ import { createPopupDismiss } from '../_shared/popup-dismiss.js';
     #drag: DragState | null = null;
     #resize: ResizeState | null = null;
     #lastRect: Rect | null = null;
+    /** Elemento que tenia el foco antes de abrir la ventana; se restaura al close. */
+    #previouslyFocused: HTMLElement | null = null;
 
     constructor() {
       super();
@@ -101,6 +103,13 @@ import { createPopupDismiss } from '../_shared/popup-dismiss.js';
     onConnected() {
       emit(this, 'is-show');
       if (!this.hasAttribute('role')) this.setAttribute('role', 'dialog');
+      // aria-modal="true" indica a lectores de pantalla que el contenido
+      // fuera del dialog esta inerte (mantiene focus trap / sin Tab).
+      // Se puede apagar con aria-modal="false" en el HTML para casos donde
+      // la ventana convive con otros controles del usuario.
+      if (!this.hasAttribute('aria-modal')) this.setAttribute('aria-modal', 'true');
+      // Capturar el elemento con foco antes de abrir para restaurarlo al close.
+      this.#previouslyFocused = (document.activeElement as HTMLElement | null) ?? null;
       window.addEventListener('pointermove', this.#onWinMove);
       window.addEventListener('pointerup', this.#onWinUp);
       this.#dismiss.attach();
@@ -122,6 +131,13 @@ import { createPopupDismiss } from '../_shared/popup-dismiss.js';
       const def = this.getAttribute('default') || 'normal';
       if (def === 'maximized') this.maximize();
       if (def === 'minimized') this.minimize();
+      // Mover foco al body de la ventana (focuseable via tabindex=0) para que
+      // aria-modal="true" tenga sentido y el foco no se quede en el documento.
+      // Se difiere al siguiente tick para evitar robar el foco durante el
+      // connect (ej. cuando el usuario acaba de pulsar el trigger).
+      queueMicrotask(() => {
+        if (this.isConnected && this.#body) this.#body.focus({ preventScroll: true });
+      });
       emit(this, 'is-after-show');
     }
 
@@ -129,6 +145,12 @@ import { createPopupDismiss } from '../_shared/popup-dismiss.js';
       window.removeEventListener('pointermove', this.#onWinMove);
       window.removeEventListener('pointerup', this.#onWinUp);
       this.#dismiss.detach();
+      // Restaurar foco al elemento que lo tenia antes de abrir la ventana.
+      // Si ya no esta en el DOM, el browser cae al body, que es aceptable.
+      if (this.#previouslyFocused && this.#previouslyFocused.isConnected) {
+        try { this.#previouslyFocused.focus({ preventScroll: true }); } catch { /* noop */ }
+      }
+      this.#previouslyFocused = null;
     }
 
     onAttributeChanged() {
@@ -137,11 +159,16 @@ import { createPopupDismiss } from '../_shared/popup-dismiss.js';
 
     /** Escape cierra; Tab se queda dentro mientras el foco esté en la ventana.
      *  El foco NO se atrapa si el usuario está fuera: is-window no es modal,
-     *  conviven varias en pantalla y secuestrar el Tab global las rompería. */
+     *  conviven varias en pantalla y secuestrar el Tab global las rompería.
+     *  Si aria-modal="true" esta activo, si se aplica el focus trap tambien
+     *  con el foco en el light DOM del componente (slotted children). */
     #dismiss = createPopupDismiss(this, {
       onKeydown: (e) => {
-        if (!this.contains(document.activeElement)
-          && !this.shadowRoot!.contains(this.shadowRoot!.activeElement)) return;
+        const insideShadow = !!this.shadowRoot!.contains(this.shadowRoot!.activeElement);
+        const insideLight = this.contains(document.activeElement);
+        const isModal = this.getAttribute('aria-modal') !== 'false';
+        const inside = insideShadow || insideLight || (isModal && this.#isTopMostWindow());
+        if (!inside) return;
         if (e.key === 'Escape') {
           if (!this.hasAttribute('closable')) return;
           e.stopPropagation();
@@ -166,6 +193,20 @@ import { createPopupDismiss } from '../_shared/popup-dismiss.js';
         }
       },
     });
+
+    /** ¿Esta ventana es la de mayor zIndex entre las is-window visibles? Para
+     *  aria-modal=true: si el usuario clico otra ventana, esta deja de ser
+     *  la "top" y deberia dejar de atrapar el foco. */
+    #isTopMostWindow(): boolean {
+      const all = [...document.querySelectorAll<HTMLElement>('is-window')]
+        .filter((w) => w !== this && !w.hasAttribute('hidden'));
+      const myZ = Number(this.style.zIndex) || 100;
+      for (const w of all) {
+        const z = Number(w.style.zIndex) || 100;
+        if (z > myZ) return false;
+      }
+      return true;
+    }
 
     minimize() {
       if (this.#state === 'minimized') return;

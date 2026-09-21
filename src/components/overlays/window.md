@@ -58,6 +58,7 @@ import './window.js';
 | `default` | string | `maximized` | `minimized` | `normal`. |
 | `resizable` | boolean | Drag esquina inferior derecha. |
 | `dock` | string | `bottom-right` | `bottom` | `top` | `none`. |
+| `aria-modal` | string | Por defecto `"true"`. Pasar `"false"` para que conviva con la página como una ventana no modal. |
 
 #### Propiedades públicas
 
@@ -135,10 +136,32 @@ Tags del módulo: `<is-window>`.
 
 ## Accesibilidad
 
-El host lleva `role="dialog"` y `aria-label` sincronizado con `title`.
-Escape cierra la ventana cuando tiene `closable`, y Tab se queda dentro de
-ella mientras el foco esté dentro: `is-window` NO es modal —conviven varias
-en pantalla— así que el foco no se secuestra cuando el usuario está fuera.
+El host lleva `role="dialog"` (por defecto; configurable) y `aria-label`
+sincronizado con `title`. El atributo `aria-modal="true"` se aplica por
+defecto — indica al lector de pantalla que el contenido fuera del dialog
+está inerte mientras está abierto.
+
+| Atributo / Rol | Notas |
+| --- | --- |
+| `role="dialog"` | Aplicado en `onConnected`. |
+| `aria-label="<title>"` | Sincronizado con el atributo `title`. |
+| `aria-modal="true"` | Por defecto. Pasar `"false"` explícito para deshabilitar el focus trap. |
+| Tabla `data-state="normal | maximized | minimized"` | Refleja el estado actual para estilos. |
+
+**Comportamiento de foco** (cuando `aria-modal="true"`):
+
+- `Escape` cierra la ventana si lleva el atributo `closable`.
+- `Tab` / `Shift+Tab` quedan contenidos dentro de la ventana cuando el foco
+  ya está dentro de ella. Si el foco está fuera y la ventana es la de
+  mayor `zIndex`, también se captura el `Tab`.
+- Al abrir, el foco se mueve al `body` interno (tabindex=0) en el
+  siguiente tick, para que el lector identifique correctamente el modal.
+- Al desconectar (porque se llamó a `close()`), el foco se restaura al
+  elemento que lo tenía antes de abrir la ventana.
+
+Si se quiere el comportamiento "no modal" de antes —convivir con otras
+ventanas/elementos focuseables sin atrapar el Tab— basta con declarar
+`aria-modal="false"` en el HTML.
 
 Preservar semántica, foco, teclado, labels y ARIA. Listeners globales solo en
 `connectedCallback` / `disconnectedCallback`.
