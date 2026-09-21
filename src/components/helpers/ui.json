@@ -2,16 +2,16 @@
   "$schema": "is-preview/v1",
   "tag": "is-ui",
   "category": "helpers",
-  "title": "IsUi <span class=\"lede\" style=\"display:inline;font-weight:400\">(módulo · no es un tag)</span>",
+  "title": "IsUi <span class=\"ui-chip-title\">(módulo · no es un tag)</span>",
   "titleHtml": true,
   "description": "Utilidad IsUi: html, adoptCss y define para apps consumidoras del kit.",
-  "styles": ".ui-stage {\r\n      display: grid;\r\n      gap: 0.75rem;\r\n      padding: 1rem;\r\n      border: 1px dashed var(--is-border);\r\n      border-radius: var(--is-radius-md, 8px);\r\n      background: color-mix(in srgb, var(--is-control-bg) 80%, transparent);\r\n    }\r\n    .ui-stage__meta {\r\n      font-size: 0.85em;\r\n      color: var(--is-text-muted, var(--is-text));\r\n      opacity: 0.85;\r\n    }\r\n    demo-card {\r\n      display: block;\r\n      padding: 0.85rem 1rem;\r\n      border-radius: 8px;\r\n      border: 1px solid var(--is-border);\r\n      background: var(--is-bg);\r\n      color: var(--is-text);\r\n    }\r\n    demo-card[data-tone=\"brand\"] {\r\n      border-color: color-mix(in srgb, var(--is-accent) 55%, var(--is-border));\r\n    }",
+  "styles": ".ui-stage {\r\n      display: grid;\r\n      gap: 0.75rem;\r\n      padding: 1rem;\r\n      border: 1px dashed var(--is-border);\r\n      border-radius: var(--is-radius-md, 8px);\r\n      background: color-mix(in srgb, var(--is-control-bg) 80%, transparent);\r\n    }\r\n    .ui-stage__meta {\r\n      font-size: 0.85em;\r\n      color: var(--is-text-muted, var(--is-text));\r\n      opacity: 0.85;\r\n    }\r\n    demo-card {\r\n      display: block;\r\n      padding: 0.85rem 1rem;\r\n      border-radius: 8px;\r\n      border: 1px solid var(--is-border);\r\n      background: var(--is-bg);\r\n      color: var(--is-text);\r\n    }\r\n    demo-card[data-tone=\"brand\"] {\r\n      border-color: color-mix(in srgb, var(--is-accent) 55%, var(--is-border));\r\n    }\r\n    .ui-chip-title {\r\n      display: inline-block;\r\n      margin-left: 0.5rem;\r\n      padding: 0.15rem 0.6rem;\r\n      border-radius: 999px;\r\n      font-size: 0.55em;\r\n      font-weight: 600;\r\n      letter-spacing: 0.02em;\r\n      color: var(--is-text);\r\n      background: color-mix(in srgb, var(--is-accent) 22%, transparent);\r\n      border: 1px solid color-mix(in srgb, var(--is-accent) 45%, transparent);\r\n      vertical-align: middle;",
   "storageKey": "docs-is-ui",
   "hasBehavior": true,
   "sections": [
     {
       "id": "intro",
-      "title": "IsUi <span class=\"lede\" style=\"display:inline;font-weight:400\">(módulo · no es un tag)</span>",
+      "title": "IsUi <span class=\"ui-chip-title\">(módulo · no es un tag)</span>",
       "titleHtml": true,
       "lede": "Utilidad de render para apps consumidoras. Tras cargar el CDN queda en\r\n          <code class=\"code\">globalThis.IsUi</code> (alias <code class=\"code\">Ui</code>).\r\n          No reinventes botones ni tablas: monta <code class=\"code\">is-*</code> con\r\n          <code class=\"code\">html</code> + CSS hermano vía <code class=\"code\">adoptCss</code>.",
       "blocks": [

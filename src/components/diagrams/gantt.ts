@@ -259,27 +259,32 @@ class IsGantt extends DiagramElementBase {
         }
       }
 
-      const label = svgEl('text', {
-        x: 16, y: r.y + r.h / 2 + 4, fill: theme.text,
-        'font-size': '11', 'font-family': 'Tahoma,Arial,sans-serif',
-      });
-      // Wrap del label de la fila si es largo (no debe desbordar la barra).
-      // `overflow` no está declarado en GanttRow; cast para leer.
+      // Label del row: se coloca en la GUTTER (columna izquierda, gutterX/gutterW),
+      // NO dentro de la barra. Esto evita que el texto se solape o quede
+      // tapado por la barra. Antes el label se metia dentro de la barra
+      // (buildTspans con boxX=r.x, boxW=r.w) → texto cortado o tapado
+      // cuando la barra era angosta.
       const rawOverflow = (r as { overflow?: string }).overflow;
       const overflow: 'grow' | 'ellipsis' =
         (rawOverflow === 'grow' || rawOverflow === 'ellipsis') ? rawOverflow : 'ellipsis';
       const lresult = wrapText({
         text: r.label,
-        maxWidth: Math.max((r.w ?? 0) - 8, 16),
+        maxWidth: Math.max(layout.gutterW - 12, 24),
         maxHeight: r.h - 4,
         fontSize: 11,
         fontFamily: 'Tahoma,Arial,sans-serif',
         overflow,
       });
+      // El text padre solo da contexto para el fill/font; las tspans definen
+      // la posicion real (gutterX + padding, centrado vertical en la fila).
+      const label = svgEl('text', {
+        fill: theme.text,
+        'font-size': '11', 'font-family': 'Tahoma,Arial,sans-serif',
+      });
       const ltspans: TSpanSpec[] = buildTspans(
         lresult.lines,
-        r.x, r.y, r.w ?? 0, r.h,
-        'start', 11, 1.2,
+        layout.gutterX - 8, r.y, layout.gutterW - 4, r.h,
+        'end', 11, 1.2,
       );
       for (const span of ltspans) {
         const ts = svgEl('tspan', {

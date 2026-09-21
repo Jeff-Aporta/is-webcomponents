@@ -87,11 +87,17 @@
   stroke-width: 2.2;
 }
 
-/* animation="flow": trazo dashed brand detrás de la arista continua.
-   Los dash se desplazan para sugerir sentido del flujo. */
+/* animation="flow": trazo dashed detrás de la arista continua.
+   El color del dash hereda del `currentColor` del `<g class="flow-edge">`,
+   que el TS setea con el mismo `edgeStrokeHex(hue, theme.accent)` de la
+   arista principal. Antes el dash usaba `var(--is-color-brand)` fijo,
+   lo que no coincidian con el color de la arista cuando `hue` != brand. */
+.flow-edge {
+  color: currentColor; /* default; TS lo sobrescribe con edgeStrokeHex(...) */
+}
 .flow-edge__flow {
-  stroke: var(--is-color-brand, #e03131);
-  stroke-opacity: 0.4;
+  stroke: currentColor;
+  stroke-opacity: 0.55;
   stroke-dasharray: 7 11;
   stroke-dashoffset: 0;
   pointer-events: none;
@@ -99,7 +105,7 @@
 
 @supports (stroke: color-mix(in oklab, red 40%, transparent)) {
   .flow-edge__flow {
-    stroke: color-mix(in oklab, var(--is-color-brand, #e03131) 42%, transparent);
+    stroke: color-mix(in oklab, currentColor 55%, transparent);
     stroke-opacity: 1;
   }
 }

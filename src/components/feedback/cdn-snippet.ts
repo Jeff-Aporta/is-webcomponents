@@ -37,8 +37,10 @@ import '../code/code.js';
 (() => {
   const LLM_PROMPT = buildLlmPrompt(SKILL_DOCS, { sha: 'main', base: LLM_PROMPT_FALLBACK });
 
-  /** Opciones del radio de alcance: componente | categoría | kit completo. */
-  const SCOPES = ['tag', 'category', 'all'];
+  /** Alcance único: SOLO componente (`tag`). Cargar la categoría completa
+   *  o el kit completo están erradicados: cada componente debe cargarse
+   *  atómicamente, uno a uno. Ver ticket "erradicar category/all del CDN". */
+  const SCOPES = ['tag'] as const;
 
   const TEMPLATE = document.createElement('template');
   TEMPLATE.innerHTML = /* html */ `
@@ -68,9 +70,7 @@ import '../code/code.js';
 
       <fieldset class="cdn__scope" data-slot="scope" hidden>
         <legend class="cdn__scope-legend">Alcance de la carga</legend>
-        <label class="cdn__radio"><input type="radio" name="cdn-scope" value="tag"><span>Cargar solo este componente (<code data-slot="scope-tag"></code>)</span></label>
-        <label class="cdn__radio"><input type="radio" name="cdn-scope" value="category"><span>Cargar la categoría completa (<code data-slot="scope-cat"></code>)</span></label>
-        <label class="cdn__radio"><input type="radio" name="cdn-scope" value="all"><span>Cargar todo el kit (<code>all</code>)</span></label>
+        <label class="cdn__radio"><input type="radio" name="cdn-scope" value="tag" checked><span>Cargar solo este componente (<code data-slot="scope-tag"></code>)</span></label>
       </fieldset>
 
       <ol class="cdn__list" data-slot="deps-list">
@@ -187,66 +187,42 @@ import '../code/code.js';
       return (this.getAttribute('url-key') || '').trim();
     }
 
-    /** ¿El host trae tag y/o category? Sin ambos el radio no tiene sentido. */
+    /** ¿El host trae tag? Sin tag el radio no tiene sentido (la carga es
+     *  siempre atómica, un componente a la vez). */
     #hasScopeTargets() {
-      return !!(this.getAttribute('tag') || '').trim()
-        || !!(this.getAttribute('category') || '').trim();
+      return !!(this.getAttribute('tag') || '').trim();
     }
 
-    /** Alcance automático (cuando no se eligió radio ni ?s=). */
-    #defaultScope() {
-      if ((this.getAttribute('tag') || '').trim()) return 'tag';
-      if ((this.getAttribute('category') || '').trim()) return 'category';
-      return 'all';
+    /** Alcance único: `tag`. */
+    #defaultScope(): 'tag' {
+      return 'tag';
     }
 
     #loadArg() {
       const tag = (this.getAttribute('tag') || '').trim();
-      const category = (this.getAttribute('category') || '').trim();
-      const scope = this.#scope || this.#defaultScope();
-      if (scope === 'tag') return tag || category || '';
-      if (scope === 'category') return category || '';
-      if (scope === 'all') {
-        // Sin tag, sin category y sin url-key el elemento nunca mostró radios:
-        // conservar el comportamiento histórico (sin línea load) en lugar de
-        // lanzar L.load('all') por sorpresa.
-        if (!tag && !category && !this.#urlKey) return '';
-        return 'all';
-      }
-      return tag || category || '';
+      return tag;
     }
 
-    /** Sincroniza el fieldset: oculto sin tag/category; radio activo marcado y
-     *  las opciones cuyo atributo falte deshabilitadas. */
+    /** Sincroniza el fieldset: oculto sin tag. */
     #syncScopeUi() {
       const fieldset = this.shadowRoot?.querySelector<HTMLFieldSetElement>('[data-slot="scope"]');
       if (!fieldset) return;
       const tag = (this.getAttribute('tag') || '').trim();
-      const category = (this.getAttribute('category') || '').trim();
-      // Sin tag ni category el alcance no tiene sentido: ocultar el fieldset.
       fieldset.hidden = !this.#hasScopeTargets();
-      const scope = this.#scope || this.#defaultScope();
       const tagCode = fieldset.querySelector<HTMLElement>('[data-slot="scope-tag"]');
       if (tagCode) tagCode.textContent = tag || '(sin tag)';
-      const catCode = fieldset.querySelector<HTMLElement>('[data-slot="scope-cat"]');
-      if (catCode) catCode.textContent = category || '(sin categoría)';
-      for (const label of fieldset.querySelectorAll<HTMLLabelElement>('label.cdn__radio')) {
-        const input = label.querySelector<HTMLInputElement>('input[name="cdn-scope"]');
-        if (!input) continue;
-        const available = input.value === 'all'
-          || (input.value === 'tag' && !!tag)
-          || (input.value === 'category' && !!category);
-        input.disabled = !available;
-        label.classList.toggle('is-disabled', !available);
-        input.checked = input.value === scope;
-      }
+      // Solo hay una opcion ("tag"); siempre marcada.
+      const input = fieldset.querySelector<HTMLInputElement>('input[name="cdn-scope"]');
+      if (input) input.checked = true;
     }
 
     #onScopeChange = (e: Event) => {
+      // El radio es informativo (siempre "tag"); no hay otra opcion. Mantenemos
+      // el listener para no romper integraciones que lo invoquen.
       const input = e.target as HTMLInputElement;
       if (!input || !input.matches?.('input[name="cdn-scope"]')) return;
       const value = input.value;
-      if (!SCOPES.includes(value) || input.disabled) return;
+      if (!SCOPES.includes(value as 'tag')) return;
       this.#scope = value;
       if (this.#urlKey) this.#persistScopeToUrl(value);
       this.#render();
@@ -258,11 +234,9 @@ import '../code/code.js';
       const key = this.#urlKey;
       if (!key) return;
       const fromUrl = readUrlNav(key);
-      if (!fromUrl || !SCOPES.includes(fromUrl)) return;
+      if (!fromUrl || !SCOPES.includes(fromUrl as 'tag')) return;
       const tag = (this.getAttribute('tag') || '').trim();
-      const category = (this.getAttribute('category') || '').trim();
       if (fromUrl === 'tag' && !tag) return;
-      if (fromUrl === 'category' && !category) return;
       this.#scope = fromUrl;
     }
 

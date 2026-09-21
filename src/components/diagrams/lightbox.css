@@ -6,9 +6,11 @@
   --is-lightbox-bg: var(--is-bg, #0d1117);
   --is-lightbox-text: var(--is-text, #e6e8eb);
   --is-lightbox-border: var(--is-border, #1d2229);
-  /* variant=backdrop (default): 20% oscuridad + blur 2px */
-  --is-lightbox-backdrop: rgb(0 0 0 / 20%);
-  --is-lightbox-backdrop-blur: 2px;
+  /* variant=backdrop (default): backdrop completamente SOLIDO (sin
+     transparencia). El usuario prefiere un oscurecido opaco al abrir el
+     lightbox para evitar el efecto "vidrio esmerilado" que distrae. */
+  --is-lightbox-backdrop: rgb(0 0 0 / 70%);
+  --is-lightbox-backdrop-blur: 0px;
 }
 
 /* Cerrado: no participa del layout. Abierto: contents para que el dialog
@@ -24,9 +26,9 @@
   display: none !important;
 }
 
-/* solid: lienzo opaco a pantalla completa (comportamiento histórico) */
+/* solid: backdrop completamente opaco a pantalla completa. */
 :host([variant="solid"]) {
-  --is-lightbox-backdrop: rgb(0 0 0 / 60%);
+  --is-lightbox-backdrop: rgb(0 0 0 / 85%);
   --is-lightbox-backdrop-blur: 0px;
 }
 

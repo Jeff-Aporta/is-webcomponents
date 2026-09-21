@@ -297,7 +297,11 @@ class IsFlowchart extends DiagramElementBase {
           'stroke-linejoin': 'round',
           'stroke-linecap': 'round',
           class: 'flow-edge__flow',
+          stroke: color,
         }));
+        // El `g` setea `color` para que el `.flow-edge__flow` herede via
+        // `currentColor` (CSS) → mismo color que la arista principal.
+        g.setAttribute('color', color);
       }
 
       const path = svgEl('path', {

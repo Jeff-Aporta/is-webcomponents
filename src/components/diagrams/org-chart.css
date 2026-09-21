@@ -34,6 +34,12 @@
   width: 100%;
   height: 100%;
   min-height: 12rem;
+  /* Centra el organigrama en el container si sobra altura (la mayoria de
+     organigramas son anchos, no altos). Con flex+center evitamos el
+     organigrama pegado arriba o abajo del espacio disponible. */
+  display: flex;
+  align-items: center;
+  justify-content: center;
 }
 
 /* El visor es opt-in: sin `open-on-click` un clic en el fondo no hace nada,

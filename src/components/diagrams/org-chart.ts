@@ -182,7 +182,7 @@ import { svgEl } from '../_shared/svg-chart-engine.js';
       const nodeH = Number(this.getAttribute('node-height')) || 78;
       const gap = Number(this.getAttribute('gap')) || 28;
 
-      this.#svg.setAttribute('preserveAspectRatio', 'xMidYMid meet');
+      this.#svg.setAttribute('preserveAspectRatio', 'xMidYMin meet');
       this.#svg.style.cssText = 'width:100%;height:100%;max-width:none;display:block';
       this.#svg.removeAttribute('width');
       this.#svg.removeAttribute('height');

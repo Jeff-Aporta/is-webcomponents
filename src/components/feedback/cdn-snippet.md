@@ -19,7 +19,7 @@ Muestra un bloque copy-paste de dos tags:
 1. `<script type="module" src="…/loader.min.js">` — carga el loader.
 2. `<script type="module">` — `loadCSSBase` + `loadCSSPalettesDefault` + `load(…)`.
 
-Radio de alcance: **sí** cuando el host trae `tag` y/o `category` — elegís entre cargar solo el componente, la categoría completa o todo el kit. Con `url-key` la elección persiste dentro de `?s=` (sobrevive al F5); sin `url-key` el panel arranca en `tag` (o `category` si no hay tag) y el cambio del radio solo afecta al snippet en vivo.
+Radio de alcance: **solo `tag`** (cargar este componente atómicamente). Las opciones "cargar la categoría completa" y "cargar todo el kit" están **erradicadas** — cada componente debe cargarse individualmente. Con `url-key` la elección persiste dentro de `?s=` (sobrevive al F5); sin `url-key` el panel siempre arranca en `tag` y el snippet muestra solo la línea `load('is-foo')`.
 
 Sin tab de mirrors. Sin filas sueltas de `all.min.js` / categoría / tag. Docs para agentes vía `<is-md-editor>`. Dependencias externas opcionales (slot `deps` / atributo `dependencies`).
 
