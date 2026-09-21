@@ -45,6 +45,26 @@
   &.ne { top: -6px;    right: -6px; cursor: nesw-resize; }
   &.sw { bottom: -6px; left: -6px;  cursor: nesw-resize; }
   &.se { bottom: -6px; right: -6px; cursor: nwse-resize; }
+
+  /* F0.3 g12 [a11y/focus]: outline solo con teclado */
+  &:focus-visible { outline: 2px solid var(--is-text, #111); outline-offset: 2px; }
+}
+
+/* F0.3 g12 [a11y/focus]: viewport focuseable con outline visible */
+.viewport:focus-visible {
+  outline: 2px solid var(--is-accent);
+  outline-offset: -2px;
+}
+.viewport:focus { outline: none; }
+
+/* F0.3 g12 [media/loading]: overlay mientras aria-busy=true */
+:host([data-loading]) .viewport {
+  opacity: 0.5;
+  cursor: progress;
+}
+:host([data-error]) .viewport {
+  outline: 1px dashed var(--is-color-danger, #e03131);
+  outline-offset: -1px;
 }
 
 .toolbar {

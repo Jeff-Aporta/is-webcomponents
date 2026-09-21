@@ -436,3 +436,51 @@ is-button.iconbtn {
   .bar,
   .thumb { transition: none; }
 }
+
+/* ── F0.3 g12 [a11y/focus] ─────────────────────────────────────────────
+   Anillo de foco visible SOLO cuando el host tiene el foco por teclado.
+   El resto del chrome ya lo gestiona :focus-visible por botón. */
+:host(:focus-visible) {
+  outline: 2px solid #fff;
+  outline-offset: 3px;
+}
+
+/* ── F0.3 g12 [media/loading]: spinner accesible ──────────────────── */
+:host([data-loading]) .wrap::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  margin: auto;
+  width: 2em;
+  height: 2em;
+  border-radius: 50%;
+  border: 0.18em solid rgb(255 255 255 / 20%);
+  border-top-color: var(--is-video-accent);
+  animation: is-video-spin 0.8s linear infinite;
+  pointer-events: none;
+  z-index: 3;
+}
+@keyframes is-video-spin { to { transform: rotate(360deg); } }
+@media (prefers-reduced-motion: reduce) {
+  :host([data-loading]) .wrap::before { animation: none; }
+}
+
+/* ── F0.3 g12 [media/error-state]: overlay de error ─────────────── */
+:host([data-error]) .big-play { display: none; }
+:host([data-error])::after {
+  content: "No se pudo cargar el vídeo (" attr(data-error) ")";
+  position: absolute;
+  inset: 0;
+  display: grid;
+  place-items: center;
+  text-align: center;
+  padding: 1em;
+  background: rgb(0 0 0 / 60%);
+  color: #fff;
+  font-size: 0.9em;
+  pointer-events: none;
+  z-index: 2;
+}
+
+/* ── F0.3 g12 [keyboard/help]: estado focus del host ─────────── */
+:host(:focus) { outline: none; }

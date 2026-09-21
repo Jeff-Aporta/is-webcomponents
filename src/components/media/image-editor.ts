@@ -54,19 +54,19 @@ interface DragState {
       this.attachShadow({ mode: 'open' });
       this.shadowRoot!.innerHTML = /* html */ `
         <div part="root" class="root">
-          <div part="viewport" class="viewport">
-            <canvas part="canvas" class="canvas" aria-label="Lienzo del editor"></canvas>
-            <div part="selection" class="selection" hidden>
-              <span class="handle nw" data-handle="nw"></span>
-              <span class="handle ne" data-handle="ne"></span>
-              <span class="handle sw" data-handle="sw"></span>
-              <span class="handle se" data-handle="se"></span>
+          <div part="viewport" class="viewport" tabindex="0" aria-label="Lienzo del editor. Use flechas para mover el recorte.">
+            <canvas part="canvas" class="canvas" aria-hidden="true"></canvas>
+            <div part="selection" class="selection" hidden role="group" aria-label="Selección de recorte">
+              <span class="handle nw" data-handle="nw" tabindex="0" role="button" aria-label="Esquina superior izquierda"></span>
+              <span class="handle ne" data-handle="ne" tabindex="0" role="button" aria-label="Esquina superior derecha"></span>
+              <span class="handle sw" data-handle="sw" tabindex="0" role="button" aria-label="Esquina inferior izquierda"></span>
+              <span class="handle se" data-handle="se" tabindex="0" role="button" aria-label="Esquina inferior derecha"></span>
             </div>
           </div>
-          <div part="toolbar" class="toolbar">
+          <div part="toolbar" class="toolbar" role="toolbar" aria-label="Herramientas del editor">
             <slot name="toolbar"></slot>
           </div>
-          <output part="status" class="status"></output>
+          <output part="status" class="status" aria-live="polite"></output>
         </div>
       `;
       adoptCss(this.shadowRoot!, import.meta.url);
@@ -91,10 +91,24 @@ interface DragState {
         if (action === 'reset')     { this.zoom = 1; this.rotation = 0; }
         if (action === 'crop')      this.cropped();
       });
+
+      // F0.3 g12 [a11y/canvas] + [keyboard/crop]: navegación por teclado
+      // sobre el viewport/handles — flechas mueven el crop, Shift+flechas
+      // mueven 10 px, Enter confirma crop. Sin esto, el editor era 100%
+      // ratón, excluyendo usuarios de teclado/lector.
+      this.addEventListener('keydown', this.#onKeydown);
     }
 
     connectedCallback(): void {
       this.#mounted = true;
+      // F0.3 g12 [a11y/canvas]: role="application" para que el lector no
+      // intercepte las teclas (modo app), y aria-label para landmark.
+      if (!this.hasAttribute('role')) this.setAttribute('role', 'application');
+      if (!this.hasAttribute('aria-label')) this.setAttribute('aria-label', 'Editor de imagen');
+      if (!this.hasAttribute('tabindex')) this.setAttribute('tabindex', '0');
+      if (!this.hasAttribute('aria-keyshortcuts')) {
+        this.setAttribute('aria-keyshortcuts', 'ArrowLeft ArrowRight ArrowUp ArrowDown Shift+ArrowLeft Shift+ArrowRight Shift+ArrowUp Shift+ArrowDown Enter');
+      }
       this.#ro = new ResizeObserver(() => this.#draw());
       this.#ro.observe(this.#viewport);
       if (this.hasAttribute('src')) this.#load(this.getAttribute('src') ?? '');
@@ -108,7 +122,50 @@ interface DragState {
       this.#ro = null;
       window.removeEventListener('pointermove', this.#onWinMove!);
       window.removeEventListener('pointerup', this.#onWinUp!);
+      this.removeEventListener('keydown', this.#onKeydown);
     }
+
+    /**
+     * F0.3 g12 [keyboard/crop]: mueve el crop con flechas. 1 px por
+     * pulsación, 10 px con Shift. Evita salir de la imagen y respeta
+     * `aspect` cuando hay uno bloqueado.
+     */
+    #onKeydown = (e: KeyboardEvent): void => {
+      if (e.altKey || e.ctrlKey || e.metaKey) return;
+      const img = this.#img;
+      if (!img || !this.#cropRect.width) return;
+      const step = e.shiftKey ? 10 : 1;
+      let { x, y, width, height } = this.#cropRect;
+      let handled = false;
+      const ar = this.getAttribute('aspect');
+      const aspect = ar ? evalAspect(ar) : null;
+      switch (e.key) {
+        case 'ArrowLeft':  x -= step; handled = true; break;
+        case 'ArrowRight': x += step; handled = true; break;
+        case 'ArrowUp':    y -= step; handled = true; break;
+        case 'ArrowDown':  y += step; handled = true; break;
+        case 'Enter':
+          // Enter sobre el viewport/handles confirma el crop actual.
+          this.cropped();
+          handled = true;
+          break;
+      }
+      if (!handled) return;
+      e.preventDefault();
+      x = Math.max(0, Math.min(x, img.width - 8));
+      y = Math.max(0, Math.min(y, img.height - 8));
+      width = Math.min(width, img.width - x);
+      height = Math.min(height, img.height - y);
+      this.#cropRect = { x, y, width, height };
+      if (aspect) {
+        const desired = width / aspect;
+        if (Math.abs(height - desired) > 0.5) {
+          this.#cropRect.height = Math.max(8, desired);
+        }
+      }
+      this.#draw();
+      emit(this, 'is-change', { crop: { ...this.#cropRect } });
+    };
 
     attributeChangedCallback(name: string, oldVal: string | null, newVal: string | null): void {
       if (!this.#mounted || oldVal === newVal) return;
@@ -146,9 +203,16 @@ interface DragState {
     }
 
     #load(src: string): void {
+      // F0.3 g12 [media/loading]: aria-busy durante la carga; el `load`
+      // lo limpia y un error lo marca como data-error.
+      this.setAttribute('aria-busy', 'true');
+      this.setAttribute('data-loading', '');
+      this.removeAttribute('data-error');
       const img = new Image();
       img.crossOrigin = 'anonymous';
       img.onload = () => {
+        this.removeAttribute('aria-busy');
+        this.removeAttribute('data-loading');
         this.#img = img;
         // crop inicial centrado cubriendo 80%
         const cxp = img.width / 2;
@@ -159,7 +223,13 @@ interface DragState {
         emit(this, 'is-load', { image: img });
         this.#draw();
       };
-      img.onerror = () => { this.#status.textContent = 'No se pudo cargar la imagen'; };
+      img.onerror = () => {
+        this.removeAttribute('aria-busy');
+        this.removeAttribute('data-loading');
+        this.setAttribute('data-error', '');
+        this.#status.textContent = 'No se pudo cargar la imagen';
+        emit(this, 'is-error', { src });
+      };
       img.src = src;
     }
 
@@ -202,7 +272,12 @@ interface DragState {
         this.#selection.style.width = `${on.width}px`;
         this.#selection.style.height = `${on.height}px`;
       }
-      this.#status.textContent = `${img.naturalWidth}×${img.naturalHeight}px · zoom ${(z * 100).toFixed(0)}% · ${this.rotation}°`;
+      // F0.3 g12 [a11y/canvas]: aria-valuetext anuncia dimensiones actuales
+      // (incluyendo recorte) para que un lector diga "120x80 px, zoom 100%".
+      const cr = this.#cropRect;
+      const vtext = `imagen ${img.naturalWidth}×${img.naturalHeight} px, recorte ${Math.round(cr.width)}×${Math.round(cr.height)} px, zoom ${(z * 100).toFixed(0)}%, rotación ${this.rotation}°`;
+      this.setAttribute('aria-valuetext', vtext);
+      this.#status.textContent = vtext;
     }
 
     #screenRect(): CropRect | null {

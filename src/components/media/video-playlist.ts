@@ -269,13 +269,69 @@ interface ApplyActiveOptions { emit?: boolean; previousIndex?: number; }
     connectedCallback(): void {
       super.connectedCallback();
       this.#mounted = true;
+      // F0.3 g12 [a11y/region]: landmark + label y atajos para el reader.
+      if (!this.hasAttribute('role')) this.setAttribute('role', 'region');
+      if (!this.hasAttribute('aria-label')) this.setAttribute('aria-label', 'Reproductor con lista');
+      if (!this.hasAttribute('aria-keyshortcuts')) {
+        this.setAttribute('aria-keyshortcuts', 'K J L M F N P ArrowLeft ArrowRight ArrowUp ArrowDown Space Enter');
+      }
       this.#syncPlacement();
       this.#syncAccordion();
       this.#buildDefaultTools();
       this.#syncAutoplayUi();
       this.#syncChannel();
       this.#refresh();
+      // Atajos globales estilo YouTube: j/k/l/m/f/n/p. Solo cuando el foco
+      // NO está en un input/textarea/contenteditable (regla YouTube).
+      this.addEventListener('keydown', this.#onGlobalKeydown);
     }
+
+    /**
+     * F0.3 g12 [keyboard/media]: convenciones YouTube para el player.
+     * k play/pausa · j/l ±10s · m mute · f fullscreen · n/p next/previous.
+     * Si el foco está en un campo de texto del playlist, no interceptamos.
+     */
+    #onGlobalKeydown = (e: KeyboardEvent): void => {
+      if (e.altKey || e.ctrlKey || e.metaKey) return;
+      const target = e.target as HTMLElement | null;
+      if (target) {
+        const tag = target.tagName;
+        if (tag === 'INPUT' || tag === 'TEXTAREA' || tag === 'SELECT' || (target as any).isContentEditable) return;
+        // Si el foco está en un slider del player, ya lo gestiona el slider.
+        if (target.classList?.contains('vp-seek') || target.classList?.contains('vp-volume')) return;
+      }
+      const k = e.key.toLowerCase();
+      const active = this.#active;
+      switch (k) {
+        case 'k': case ' ':
+          if (k === ' ') { e.preventDefault(); this.#togglePlay(); }
+          else { e.preventDefault(); this.#togglePlay(); }
+          return;
+        case 'j':
+          if (active) { e.preventDefault(); active.media.currentTime = Math.max(0, active.media.currentTime - 10); }
+          return;
+        case 'l':
+          if (active) { e.preventDefault(); active.media.currentTime = Math.min(active.media.duration || 0, active.media.currentTime + 10); }
+          return;
+        case 'm':
+          if (active) { e.preventDefault(); active.media.muted = !active.media.muted; this.#syncVolumeUi(); }
+          return;
+        case 'f': {
+          e.preventDefault();
+          const host = active;
+          if (!host) return;
+          if (document.fullscreenElement === host) void document.exitFullscreen?.();
+          else void host.requestFullscreen?.().catch(() => { /* gesto denegado */ });
+          return;
+        }
+        case 'n':
+          if (this.#index < this.videos.length - 1) { e.preventDefault(); void this.next(); }
+          return;
+        case 'p':
+          if (this.#index > 0) { e.preventDefault(); void this.previous(); }
+          return;
+      }
+    };
 
     disconnectedCallback(): void {
       this.#unbindVideos();
@@ -287,6 +343,7 @@ interface ApplyActiveOptions { emit?: boolean; previousIndex?: number; }
         this.#mediaObs.mq.removeEventListener('change', this.#mediaObs.handler);
         this.#mediaObs = null;
       }
+      this.removeEventListener('keydown', this.#onGlobalKeydown);
       this.#mounted = false;
     }
 
@@ -432,9 +489,20 @@ interface ApplyActiveOptions { emit?: boolean; previousIndex?: number; }
           <is-icon icon="mdi:playlist-play" aria-hidden="true"></is-icon>
           <span class="vp-autoplay__label">Autoplay</span>
         `, () => { this.autoplayNext = !this.autoplayNext; });
+        // F0.3 g12 [a11y/toggle]: aria-label dinámico para que el reader
+        // diga "Autoplay activado" / "Autoplay desactivado" tras toggle.
         autoplay.setAttribute('aria-pressed', String(this.autoplayNext));
+        this.#syncAutoplayLabel(autoplay);
+        autoplay.addEventListener('click', () => {
+          // Después del toggle, sincronizamos el label.
+          queueMicrotask(() => this.#syncAutoplayLabel(autoplay));
+        });
         this.appendChild(autoplay);
       }
+    }
+
+    #syncAutoplayLabel(btn: HTMLElement): void {
+      btn.setAttribute('aria-label', this.autoplayNext ? 'Autoplay activado' : 'Autoplay desactivado');
     }
 
     /** Lista de nodos proyectados en slot="tools-right" (light DOM). */
@@ -504,6 +572,11 @@ interface ApplyActiveOptions { emit?: boolean; previousIndex?: number; }
       for (const v of list) {
         const active = v;
         v.addEventListener('is-ended', this.#boundEnded);
+        // F0.3 g12 [media/loading]: propaga el busy/error del <is-video>
+        // hijo al host para que aria-busy a nivel playlist sea coherente.
+        v.addEventListener('is-error', this.#onChildError as EventListener);
+        v.addEventListener('is-play', this.#onChildMediaEvent);
+        v.addEventListener('is-pause', this.#onChildMediaEvent);
         const onMeta = (): void => {
           try {
             const media = v.media;
@@ -551,6 +624,9 @@ interface ApplyActiveOptions { emit?: boolean; previousIndex?: number; }
       if (this.#boundEnded) {
         for (const v of this.videos) {
           v.removeEventListener('is-ended', this.#boundEnded);
+          v.removeEventListener('is-error', this.#onChildError as EventListener);
+          v.removeEventListener('is-play', this.#onChildMediaEvent);
+          v.removeEventListener('is-pause', this.#onChildMediaEvent);
           const onMeta = this.#metaHandlers.get(v);
           if (onMeta) {
             v.media?.removeEventListener('loadedmetadata', onMeta);
@@ -561,6 +637,28 @@ interface ApplyActiveOptions { emit?: boolean; previousIndex?: number; }
       }
       this.#metaHandlers = new WeakMap();
     }
+
+    /**
+     * F0.3 g12 [media/error-state]: si el <is-video> hijo falla, marcamos
+     * `aria-invalid` en su item de playlist y emitimos `is-error` arriba.
+     */
+    #onChildError = (e: CustomEvent<{ code: number; message: string }>): void => {
+      const video = e.target as IsVideo | null;
+      if (!video) return;
+      const i = this.videos.indexOf(video);
+      if (i >= 0) {
+        const item = this.#listEl.querySelector<HTMLElement>(`[data-index="${i}"]`);
+        item?.setAttribute('aria-invalid', 'true');
+      }
+      emit(this, 'is-error', { ...(e.detail ?? {}), index: i });
+    };
+
+    #onChildMediaEvent = (): void => {
+      // Cuando el clip cambia de estado, sincronizamos la UI. No hace falta
+      // lógica extra aquí: #syncActiveMediaState() ya se llama desde los
+      // handlers locales play/pause. Este handler existe para que
+      // unbindVideos pueda remover el listener sin warnings.
+    };
 
     #watchAttrs(list: VideoList): void {
       if (this.#attrObs) this.#attrObs.disconnect();
@@ -725,6 +823,13 @@ interface ApplyActiveOptions { emit?: boolean; previousIndex?: number; }
         item.setAttribute('role', 'option');
         item.setAttribute('tabindex', active ? '0' : '-1');
         item.setAttribute('aria-selected', String(active));
+        // F0.3 g12 [a11y/current]: aria-current="true" duplica el estado
+        // activo en términos de landmark de navegación (algunos lectores
+        // prefieren aria-current sobre aria-selected para "el actual").
+        if (active) item.setAttribute('aria-current', 'true');
+        else item.removeAttribute('aria-current');
+        item.setAttribute('aria-setsize', String(list.length));
+        item.setAttribute('aria-posinset', String(i + 1));
         item.setAttribute('aria-label', active ? `${title}, currently playing` : title);
 
         // Columna de índice: número, y ▶ en el que suena (patrón YouTube).

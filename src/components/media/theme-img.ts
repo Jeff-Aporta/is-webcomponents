@@ -1,4 +1,4 @@
-import { adoptCss, defineElement } from '../../core/element.js';
+import { adoptCss, defineElement, emit } from '../../core/element.js';
 import { ElementBase } from '../../core/element-base.js';
 import { setStringAttr } from '../_shared/reflect.js';
 import {
@@ -21,6 +21,13 @@ import {
  *   shape                 circle | rounded | square (opcional)
  *   fit                   contain | cover (default contain → CSS var)
  *   theme                 dark | light — forzado; si falta, lee el contenedor
+ *   loading               lazy | eager
+ *
+ * Estados accesibles (F0.3 g12 [media/loading]):
+ *   aria-busy="true" mientras se carga el src activo
+ *   data-loading     mientras se carga
+ *   data-error       si la imagen falla (404 / CORS / formato)
+ *   emite `is-error { src }` en fallo
  *
  * CSS Parts: ::part(image)
  */
@@ -69,7 +76,28 @@ import {
       adoptCss(shadow, import.meta.url);
       shadow.appendChild(TEMPLATE.content.cloneNode(true));
       this.#img = shadow.querySelector<HTMLImageElement>('.img')!;
+      // F0.3 g12 [media/loading]: aria-busy durante la carga + is-error al
+      // fallar la imagen. Antes el fallo era silencioso y la UI se quedaba
+      // con un hueco vacío.
+      this.#img.addEventListener('load', () => {
+        this.removeAttribute('aria-busy');
+        this.removeAttribute('data-loading');
+      });
+      this.#img.addEventListener('error', this.#onError);
     }
+
+    /**
+     * F0.3 g12 [media/error-state]: emite `is-error` cuando la imagen no
+     * carga (404, CORS, formato no soportado). También añade
+     * `data-error` para que el consumidor pueda pintar un fallback CSS
+     * si lo desea.
+     */
+    #onError = (): void => {
+      this.removeAttribute('aria-busy');
+      this.removeAttribute('data-loading');
+      this.setAttribute('data-error', '');
+      emit(this, 'is-error', { src: this.#img?.src ?? '' });
+    };
 
     onConnected() {
       this.#watch();
@@ -130,6 +158,14 @@ import {
       const dark = this.srcDark;
       const light = this.srcLight;
       const src = theme === 'light' ? light || dark : dark || light;
+      // F0.3 g12 [media/loading]: marcamos busy antes de cambiar src; los
+      // listeners `load`/`error` limpian el atributo. Si src no cambia,
+      // evitamos parpadeo del spinner.
+      if (src && this.#img.src !== new URL(src, location.href).href) {
+        this.setAttribute('aria-busy', 'true');
+        this.setAttribute('data-loading', '');
+        this.removeAttribute('data-error');
+      }
       // Forzar src: getAttribute vs .src (absoluto) puede no coincidir.
       if (src) this.#img.src = src;
 

@@ -23,8 +23,14 @@ import { setStringAttr } from '../_shared/reflect.js';
  *
  * Métodos: play(), pause(), toggleFullscreen(), togglePictureInPicture()
  *
- * Eventos (bubbles, composed): is-play, is-pause, is-ended
+ * Eventos (bubbles, composed): is-play, is-pause, is-ended, is-error { code, message }
  * También reenvía play/pause/ended nativos (bubbles, composed)
+ *
+ * Estados accesibles:
+ *   role="region" + aria-label="Reproductor de vídeo" + aria-keyshortcuts
+ *   aria-busy="true" mientras buffered < HAVE_FUTURE_DATA (loading spinner)
+ *   data-loading   cuando el browser está esperando datos
+ *   data-error     cuando `video.error` está presente (MediaError code 1-4)
  *
  * Teclado (con foco en el reproductor)
  *   espacio / k  play-pausa      m  silenciar        f  pantalla completa
@@ -241,6 +247,9 @@ interface IsCheckIconButton extends HTMLElement {
         this.#cur.textContent = fmtTime(ratio * this.#video.duration);
         this.#dur.textContent = fmtTime(this.#video.duration);
         this.style.setProperty('--played', `${ratio * 100}%`);
+        // F0.3 g12 [a11y/seek]: aria-valuetext con tiempo absoluto para que
+        // el lector diga "1 minuto 23 segundos" en vez del 0–1000 crudo.
+        this.#seek.setAttribute('aria-valuetext', `${fmtTime(ratio * this.#video.duration)} de ${fmtTime(this.#video.duration)}`);
       });
 
       // Tooltip de tiempo sobre la barra, como YouTube.
@@ -283,6 +292,14 @@ interface IsCheckIconButton extends HTMLElement {
       this.#video.addEventListener('ratechange', () => this.#syncMenuUi());
       this.#video.addEventListener('enterpictureinpicture', this.#syncPipUi);
       this.#video.addEventListener('leavepictureinpicture', this.#syncPipUi);
+      // F0.3 g12 [media/error-state]: surfacing `MediaError` as ARIA-busy +
+      // evento is-error. Antes el fallo era silencioso y el chrome seguía
+      // mostrando play sobre un vídeo que nunca iba a cargar.
+      this.#video.addEventListener('error', this.#onMediaError);
+      // [media/loading]: aria-busy mientras no hay metadatos suficientes.
+      this.#video.addEventListener('waiting', this.#onWaiting);
+      this.#video.addEventListener('canplay', this.#onCanPlay);
+      this.#video.addEventListener('stalled', this.#onWaiting);
       document.addEventListener('fullscreenchange', this.#syncFsUi);
 
       this.#slot.addEventListener('slotchange', () => this.#distributeSlot());
@@ -299,6 +316,16 @@ interface IsCheckIconButton extends HTMLElement {
       this.#mounted = true;
       // Foco propio para los atajos de teclado (como el player de YouTube).
       if (!this.hasAttribute('tabindex')) this.setAttribute('tabindex', '0');
+      // F0.3 g12 [a11y/region]: landmark + label para que el reader anuncie
+      // "Reproductor de vídeo" al entrar con lector de pantalla.
+      if (!this.hasAttribute('role')) this.setAttribute('role', 'region');
+      if (!this.hasAttribute('aria-label')) this.setAttribute('aria-label', 'Reproductor de vídeo');
+      // F0.3 g12 [keyboard/help]: lista de atajos para la API de
+      // accesibilidad. Algunos lectores (NVDA + Firefox) la anuncian al pedir
+      // la lista de teclas.
+      if (!this.hasAttribute('aria-keyshortcuts')) {
+        this.setAttribute('aria-keyshortcuts', 'Space K ArrowLeft ArrowRight ArrowUp ArrowDown J L M F 0-9');
+      }
       this.#syncAttrs();
       this.#syncControlsVisibility();
       this.#syncPlayUi();
@@ -586,6 +613,46 @@ interface IsCheckIconButton extends HTMLElement {
       emit(this, 'is-ended');
     };
 
+    /**
+     * F0.3 g12 [media/error-state]: un <video> con src inválido o códec no
+     * soportado dispara `error`. Lo exponemos como `is-error` con código y
+     * marcamos `data-error` para que el CSS muestre un overlay accesible
+     * (en lugar del play silencioso sobre un vídeo muerto). `aria-busy=false`
+     * para no engañar al lector.
+     */
+    #onMediaError = (): void => {
+      const err = this.#video.error;
+      const code = err?.code ?? 0;
+      const messages: Record<number, string> = {
+        1: 'MEDIA_ERR_ABORTED',
+        2: 'MEDIA_ERR_NETWORK',
+        3: 'MEDIA_ERR_DECODE',
+        4: 'MEDIA_ERR_SRC_NOT_SUPPORTED',
+      };
+      const msg = messages[code] ?? 'MEDIA_ERR_UNKNOWN';
+      this.setAttribute('data-error', msg);
+      this.setAttribute('aria-busy', 'false');
+      this.removeAttribute('aria-busy');
+      emit(this, 'is-error', { code, message: msg });
+    };
+
+    /**
+     * F0.3 g12 [media/loading]: mientras `readyState < 3` (HAVE_FUTURE_DATA)
+     * el navegador aún no puede asegurar reproducción sin stalls. Marcamos
+     * `aria-busy=true` y un `data-loading` para que la chrome pueda pintar un
+     * spinner accesible si lo desea. `canplay` lo limpia.
+     */
+    #onWaiting = (): void => {
+      if (this.#video.readyState >= 3) return;
+      this.setAttribute('aria-busy', 'true');
+      this.setAttribute('data-loading', '');
+    };
+
+    #onCanPlay = (): void => {
+      this.removeAttribute('aria-busy');
+      this.removeAttribute('data-loading');
+    };
+
     #onTime = (): void => {
       const d = this.#video.duration || 0;
       const t = this.#video.currentTime || 0;
@@ -595,6 +662,10 @@ interface IsCheckIconButton extends HTMLElement {
       this.style.setProperty('--played', `${ratio * 100}%`);
       if (!this.#seeking && d > 0) {
         this.#seek.value = String(Math.round(ratio * 1000));
+      }
+      // F0.3 g12 [a11y/seek]: aria-valuetext sincronizado con tiempo.
+      if (d > 0) {
+        this.#seek.setAttribute('aria-valuetext', `${fmtTime(t)} de ${fmtTime(d)}`);
       }
       this.#onBuffer();
     };

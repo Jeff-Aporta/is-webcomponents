@@ -9,3 +9,10 @@
 
 .bar { display: flex; gap: 0.15em; }
 .out { margin: 0; min-height: 1.2em; color: var(--is-text-soft, inherit); }
+
+/* F0.3 g12 [a11y/focus]: foco visible solo con teclado */
+:host(:focus-visible) { outline: 2px solid var(--is-accent, #339af0); outline-offset: 3px; }
+:host(:focus) { outline: none; }
+
+/* F0.3 g12 [a11y/support]: botones deshabilitados cuando la API no existe */
+.bar is-button[aria-disabled="true"] { opacity: 0.5; cursor: not-allowed; pointer-events: none; }

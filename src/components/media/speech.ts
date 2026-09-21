@@ -9,6 +9,14 @@ import { setStringAttr } from '../_shared/reflect.js';
  * Atributos: lang, text
  * Métodos: listen(), stop(), speak(text?), cancel()
  * Eventos: is-result { transcript, isFinal }, is-speak-end, is-error { message }
+ *
+ * Estados accesibles (F0.3 g12):
+ *   role="region" aria-label aria-keyshortcuts
+ *   aria-busy durante escucha activa y durante lectura
+ *   aria-disabled si SpeechRecognition / speechSynthesis no existen
+ *   aria-pressed en el botón de escucha
+ *   aria-live="polite" en el <p.transcript>
+ *   Space / Enter sobre el host alternan escucha (Shift+Space = speak)
  */
 
 // Tipos de la Web Speech API: no están en lib.dom.d.ts (Chromium/webkit las
@@ -61,10 +69,10 @@ declare global {
   const TEMPLATE = document.createElement('template');
   TEMPLATE.innerHTML = /* html */ `
     <div class="bar" part="bar">
-      <is-button class="listen" variant="plain" type="button" aria-pressed="false">
+      <is-button class="listen" variant="plain" type="button" aria-pressed="false" aria-label="Iniciar escucha" disabled>
         <is-icon icon="mdi:microphone-outline"></is-icon>
       </is-button>
-      <is-button class="speak" variant="plain" type="button">
+      <is-button class="speak" variant="plain" type="button" aria-label="Leer texto en voz alta" disabled>
         <is-icon icon="mdi:volume-high"></is-icon>
       </is-button>
     </div>
@@ -102,6 +110,7 @@ declare global {
     #out!: HTMLElement;
     #listenBtn!: HTMLElement;
     #speakBtn!: HTMLElement;
+    #mounted = false;
     constructor() {
       super();
       const shadow = this.attachShadow({ mode: 'open' });
@@ -112,9 +121,56 @@ declare global {
       this.#speakBtn = shadow.querySelector<HTMLElement>('.speak')!;
       this.#listenBtn.addEventListener('click', () => this.#listening ? this.stop() : this.listen());
       this.#speakBtn.addEventListener('click', () => this.speak());
+      // F0.3 g12 [keyboard/media]: Space / Enter sobre el host alternan
+      // escucha (botón 1) o disparan speak (botón 2 según data-active).
+      this.addEventListener('keydown', this.#onKeydown);
     }
 
-    disconnectedCallback(): void { this.stop(); this.cancel(); }
+    connectedCallback(): void {
+      this.#mounted = true;
+      // F0.3 g12 [a11y/region]: landmark + label.
+      if (!this.hasAttribute('role')) this.setAttribute('role', 'region');
+      if (!this.hasAttribute('aria-label')) this.setAttribute('aria-label', 'Dictado y lectura por voz');
+      if (!this.hasAttribute('tabindex')) this.setAttribute('tabindex', '0');
+      if (!this.hasAttribute('aria-keyshortcuts')) {
+        this.setAttribute('aria-keyshortcuts', 'Space Enter');
+      }
+      this.#syncSupport();
+    }
+
+    disconnectedCallback(): void {
+      this.removeEventListener('keydown', this.#onKeydown);
+      this.stop();
+      this.cancel();
+    }
+
+    /**
+     * F0.3 g12 [a11y/support]: si la Web Speech API no está disponible,
+     * marcamos los botones como `aria-disabled` y emitimos is-error al
+     * pulsar. Antes el click era silencioso.
+     */
+    #syncSupport(): void {
+      const hasRec = !!recCtor();
+      const hasSpeak = !!window.speechSynthesis;
+      // is-button no tiene disabled nativo, así que usamos aria-disabled.
+      this.#listenBtn.setAttribute('aria-disabled', String(!hasRec));
+      this.#speakBtn.setAttribute('aria-disabled', String(!hasSpeak));
+      this.#listenBtn.setAttribute('title', hasRec ? 'Dictado (micrófono)' : 'Dictado no soportado en este navegador');
+      this.#speakBtn.setAttribute('title', hasSpeak ? 'Lectura por voz' : 'Lectura por voz no soportada en este navegador');
+      // Etiqueta dinámica según estado de escucha.
+      this.#listenBtn.setAttribute('aria-label', this.#listening ? 'Detener escucha' : 'Iniciar escucha');
+    }
+
+    #onKeydown = (e: KeyboardEvent): void => {
+      if (e.altKey || e.ctrlKey || e.metaKey) return;
+      if (e.target && (e.target as HTMLElement).closest('input,textarea,[contenteditable]')) return;
+      if (e.key !== ' ' && e.key !== 'Enter') return;
+      // Por defecto Space/Enter arrancan/paran la escucha.
+      e.preventDefault();
+      if (e.shiftKey) this.speak();
+      else if (this.#listening) this.stop();
+      else this.listen();
+    };
 
     get lang(): string { return this.getAttribute('lang') || document.documentElement.lang || 'es-ES'; }
     set lang(v: string) { setStringAttr(this, 'lang', v); }
@@ -128,6 +184,8 @@ declare global {
         return;
       }
       this.stop();
+      // F0.3 g12 [media/loading]: aria-busy mientras se inicializa.
+      this.setAttribute('aria-busy', 'true');
       const rec = new Ctor();
       rec.lang = this.lang;
       rec.continuous = true;
@@ -155,6 +213,7 @@ declare global {
       };
       this.#rec = rec;
       this.#listening = true;
+      this.removeAttribute('aria-busy');
       this.#syncListen();
       rec.start();
     }
@@ -163,6 +222,7 @@ declare global {
       this.#listening = false;
       try { this.#rec?.stop(); } catch { this.#rec?.abort?.(); }
       this.#rec = null;
+      this.removeAttribute('aria-busy');
       this.#syncListen();
     }
 
@@ -173,18 +233,28 @@ declare global {
         return;
       }
       window.speechSynthesis.cancel();
+      // F0.3 g12 [media/loading]: aria-busy mientras suena.
+      this.setAttribute('aria-busy', 'true');
       const u = new SpeechSynthesisUtterance(t);
       u.lang = this.lang;
-      u.onend = () => emit(this, 'is-speak-end');
+      u.onend = () => {
+        this.removeAttribute('aria-busy');
+        emit(this, 'is-speak-end');
+      };
+      u.onerror = () => {
+        this.removeAttribute('aria-busy');
+      };
       window.speechSynthesis.speak(u);
     }
 
     cancel(): void {
+      this.removeAttribute('aria-busy');
       window.speechSynthesis?.cancel();
     }
 
     #syncListen(): void {
       this.#listenBtn.setAttribute('aria-pressed', this.#listening ? 'true' : 'false');
+      this.#listenBtn.setAttribute('aria-label', this.#listening ? 'Detener escucha' : 'Iniciar escucha');
       this.toggleAttribute('listening', this.#listening);
     }
   }

@@ -36,3 +36,28 @@
 :host([shape='square']) .img {
   border-radius: 0;
 }
+
+/* F0.3 g12 [media/loading]: skeleton accesible mientras aria-busy=true. */
+:host([data-loading]) .img {
+  opacity: 0.4;
+  background:
+    linear-gradient(90deg,
+      color-mix(in srgb, var(--is-text) 8%, transparent),
+      color-mix(in srgb, var(--is-text) 14%, transparent),
+      color-mix(in srgb, var(--is-text) 8%, transparent));
+  background-size: 200% 100%;
+  animation: is-theme-img-shimmer 1.2s linear infinite;
+}
+@keyframes is-theme-img-shimmer {
+  from { background-position: 0% 0; }
+  to { background-position: -200% 0; }
+}
+@media (prefers-reduced-motion: reduce) {
+  :host([data-loading]) .img { animation: none; }
+}
+
+/* F0.3 g12 [media/error-state]: pista visual mínima cuando la imagen falla. */
+:host([data-error]) .img {
+  outline: 1px dashed var(--is-color-danger, #e03131);
+  outline-offset: -1px;
+}
