@@ -16,3 +16,14 @@
 :host([compact]) .toolbar {
   flex-wrap: nowrap;
 }
+
+/* g11 — UX/UI proposals: accesibilidad y esquema de color. */
+@media (prefers-reduced-motion: reduce) {
+  :host, :host *, .toolbar, .toolbar * { transition-duration: 0s !important; animation-duration: 0s !important; }
+}
+@media (prefers-color-scheme: light) {
+  :host(:focus-visible), .toolbar > *:focus-visible { outline-color: var(--is-brand, #2563eb); }
+}
+@media (prefers-color-scheme: dark) {
+  :host(:focus-visible), .toolbar > *:focus-visible { outline-color: var(--is-brand, #60a5fa); }
+}

@@ -2,6 +2,13 @@ import { adoptCss, defineElement } from '../../core/element.js';
 import { BreakpointHost } from './block-layout.js';
 
 /**
+ * g11 — UX/UI proposals (aria/region/aria-orientation/prefers-*):
+ *   - role="region" cuando hay `label` o `labelledby`.
+ *   - aria-orientation refleja `direction` (row→horizontal, column→vertical).
+ *   - `label` y `labelledby` se reflejan a aria-label / aria-labelledby.
+ */
+
+/**
  * <is-flex-layout> — port de ISP `layout/FlexLayout.svelte`.
  *
  * ISP construía un `style=""` gigante en el div interno. Aquí las dimensiones
@@ -49,6 +56,7 @@ import { BreakpointHost } from './block-layout.js';
   const OBSERVED = [
     ...Object.keys(SIZE_VARS),
     'direction', 'wrap', 'justify', 'align', 'items', 'grow', 'inline', 'cscroll',
+    'label', 'labelledby',
     ...BreakpointHost.scrollMemoryAttrs,
   ];
 
@@ -67,11 +75,27 @@ import { BreakpointHost } from './block-layout.js';
     onConnected() {
       super.onConnected();
       this.#syncVars();
+      this.#syncAria();
     }
 
     onAttributeChanged(name: string, prev: string | null, next: string | null): void {
       super.onAttributeChanged(name, prev, next);
       if (name in SIZE_VARS) this.#syncVars();
+      if (name === 'label' || name === 'labelledby' || name === 'direction') this.#syncAria();
+    }
+
+    #syncAria(): void {
+      const label = (this.getAttribute('label') ?? '').trim();
+      const labelledby = (this.getAttribute('labelledby') ?? '').trim();
+      if (label || labelledby) this.setAttribute('role', 'region');
+      else this.removeAttribute('role');
+      if (label) this.setAttribute('aria-label', label);
+      else this.removeAttribute('aria-label');
+      if (labelledby) this.setAttribute('aria-labelledby', labelledby);
+      else this.removeAttribute('aria-labelledby');
+      const dir = (this.getAttribute('direction') || 'row').toLowerCase();
+      const orient = dir === 'row' ? 'horizontal' : 'vertical';
+      this.setAttribute('aria-orientation', orient);
     }
 
     #syncVars(): void {
@@ -100,6 +124,14 @@ import { BreakpointHost } from './block-layout.js';
 
     get cscroll() { return this.hasAttribute('cscroll'); }
     set cscroll(v) { this.setBooleanAttr('cscroll', v); }
+
+    /** g11 — Etiqueta accesible del landmark; se refleja a `aria-label`. */
+    get label() { return this.getAttribute('label') ?? ''; }
+    set label(v) { v == null || v === '' ? this.removeAttribute('label') : this.setAttribute('label', String(v)); }
+
+    /** g11 — ID del elemento que etiqueta al landmark; se refleja a `aria-labelledby`. */
+    get labelledby() { return this.getAttribute('labelledby') ?? ''; }
+    set labelledby(v) { v == null || v === '' ? this.removeAttribute('labelledby') : this.setAttribute('labelledby', String(v)); }
   }
 
   defineElement('is-flex-layout', IsFlexLayout, 'IsFlexLayout');

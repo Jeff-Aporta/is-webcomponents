@@ -53,3 +53,17 @@
 :host([items="stretch"]) { align-items: stretch; }
 :host([items="baseline"]) { align-items: baseline; }
 :host([items="normal"]) { align-items: normal; }
+
+/* g11 — prefers-reduced-motion: anula cualquier transición heredada. */
+@media (prefers-reduced-motion: reduce) {
+  :host, :host * { transition-duration: 0s !important; animation-duration: 0s !important; }
+}
+
+/* g11 — prefers-color-scheme light: ajusta tokens internos al esquema claro
+   (los tokens principales vienen del kit, esto es solo el outline de foco). */
+@media (prefers-color-scheme: light) {
+  :host(:focus-visible) { outline-color: var(--is-brand, #2563eb); }
+}
+@media (prefers-color-scheme: dark) {
+  :host(:focus-visible) { outline-color: var(--is-brand, #60a5fa); }
+}

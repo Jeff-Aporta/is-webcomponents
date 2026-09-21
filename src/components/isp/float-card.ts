@@ -2,6 +2,13 @@ import { ElementBase } from '../../core/element-base.js';
 import { adoptCss, defineElement } from '../../core/element.js';
 
 /**
+ * g11 — UX/UI proposals:
+ *   - role="region" + aria-label/labelledby (landmark cuando hay etiqueta).
+ *   - Escape cierra el panel si está visible y devuelve foco al ancla.
+ *   - prefers-reduced-motion: anula la transición de show/hide del panel.
+ */
+
+/**
  * <is-float-card> — port de FloatingComponent.svelte (ClientesIS).
  *
  * Ancla contenido (slot default) y un panel absoluto (slot="float").
@@ -44,11 +51,15 @@ interface LinearTransform {
 
 class IsFloatCard extends ElementBase {
   static TEMPLATE = TEMPLATE;
-  static get observedAttributes(): string[] { return ['open', 'horizontal', 'vertical', 'locked']; }
+  static get observedAttributes(): string[] {
+    return ['open', 'horizontal', 'vertical', 'locked', 'label', 'labelledby'];
+  }
 
   #panel!: HTMLElement;
   #keep = 0;
   #lt: LinearTransform | null = null;
+  /** Último ancla que abrió el panel: para devolver foco al cerrar con Escape. */
+  #lastAnchor: HTMLElement | null = null;
 
   constructor() {
     super();
@@ -60,16 +71,20 @@ class IsFloatCard extends ElementBase {
   onConnected() {
     this.addEventListener('is-show', this.#onChildShow);
     this.addEventListener('is-hide', this.#onChildHide);
+    this.addEventListener('keydown', this.#onKeydown);
     this.#place();
+    this.#syncAria();
   }
 
   onDisconnected() {
     this.removeEventListener('is-show', this.#onChildShow);
     this.removeEventListener('is-hide', this.#onChildHide);
+    this.removeEventListener('keydown', this.#onKeydown);
   }
 
   onAttributeChanged(name: string): void {
     if (name === 'horizontal' || name === 'vertical') this.#place();
+    if (name === 'label' || name === 'labelledby') this.#syncAria();
   }
 
   get open(): boolean { return this.hasAttribute('open'); }
@@ -91,6 +106,31 @@ class IsFloatCard extends ElementBase {
     this.#place();
   }
 
+  /** g11 — Etiqueta accesible del landmark; se refleja a `aria-label`. */
+  get label(): string { return this.getAttribute('label') ?? ''; }
+  set label(v: unknown) {
+    if (v == null || v === '') this.removeAttribute('label');
+    else this.setAttribute('label', String(v));
+  }
+
+  /** g11 — ID del elemento que etiqueta al landmark; se refleja a `aria-labelledby`. */
+  get labelledby(): string { return this.getAttribute('labelledby') ?? ''; }
+  set labelledby(v: unknown) {
+    if (v == null || v === '') this.removeAttribute('labelledby');
+    else this.setAttribute('labelledby', String(v));
+  }
+
+  #syncAria(): void {
+    const label = (this.getAttribute('label') ?? '').trim();
+    const labelledby = (this.getAttribute('labelledby') ?? '').trim();
+    if (label || labelledby) this.setAttribute('role', 'region');
+    else this.removeAttribute('role');
+    if (label) this.setAttribute('aria-label', label);
+    else this.removeAttribute('aria-label');
+    if (labelledby) this.setAttribute('aria-labelledby', labelledby);
+    else this.removeAttribute('aria-labelledby');
+  }
+
   lock(): void {
     this.#keep += 1;
     this.setBooleanAttr('locked', this.#keep > 0);
@@ -107,6 +147,40 @@ class IsFloatCard extends ElementBase {
   #onChildHide = (e: Event): void => {
     if (e.target === this) return;
     this.unlock();
+  };
+
+  /**
+   * g11 — Escape cierra el panel cuando está visible y devuelve el foco al
+   * ancla que lo abrió. Si hay un lock activo (dropdown interno abierto), no
+   * cierra (prioridad al sub-widget); el sub-widget maneja su propio Escape.
+   */
+  #onKeydown = (e: KeyboardEvent): void => {
+    if (e.key !== 'Escape') return;
+    if (!this.open) return;
+    if (this.#keep > 0) return;
+    // Recordar el ancla actual como "dueño" antes de cerrar.
+    const path = e.composedPath();
+    let anchor: HTMLElement | null = null;
+    for (const node of path) {
+      const el = node as HTMLElement;
+      if (el === this) continue;
+      if (el.nodeType !== 1) continue;
+      // Primer hermano (no slot="float") es el ancla visible.
+      if (el.parentElement === this) {
+        if (el.getAttribute && el.getAttribute('slot') !== 'float') {
+          anchor = el as HTMLElement;
+          break;
+        }
+      }
+    }
+    if (!anchor) anchor = this;
+    this.#lastAnchor = anchor;
+    this.open = false;
+    // Devolver foco al ancla en el siguiente tick (después de que el panel
+    // se oculte visualmente).
+    queueMicrotask(() => {
+      try { this.#lastAnchor?.focus?.(); } catch { /* el ancla puede no ser focuseable */ }
+    });
   };
 
   #place(): void {

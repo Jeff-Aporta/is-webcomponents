@@ -22,3 +22,14 @@
 /* ISP: `cscroll` (o un style con overflow auto/scroll) añadía `custom-scrollbar`.
    Aquí el scrollbar ya viene temizado por _shared/scrollbars.css. */
 :host([cscroll]) { overflow: auto; }
+
+/* g11 — UX/UI proposals: preferencias de accesibilidad y esquema de color. */
+@media (prefers-reduced-motion: reduce) {
+  :host, :host * { transition-duration: 0s !important; animation-duration: 0s !important; }
+}
+@media (prefers-color-scheme: light) {
+  :host(:focus-visible) { outline-color: var(--is-brand, #2563eb); }
+}
+@media (prefers-color-scheme: dark) {
+  :host(:focus-visible) { outline-color: var(--is-brand, #60a5fa); }
+}

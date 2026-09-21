@@ -178,7 +178,7 @@ export class BreakpointHost extends ElementBase {
   class IsBlockLayout extends BreakpointHost {
     static TEMPLATE = TEMPLATE;
     static get observedAttributes(): string[] {
-      return ['inline', 'cscroll', ...SCROLL_MEMORY_ATTRS];
+      return ['inline', 'cscroll', 'label', 'labelledby', ...SCROLL_MEMORY_ATTRS];
     }
 
     static json2html = json2html;
@@ -195,6 +195,24 @@ export class BreakpointHost extends ElementBase {
     onConnected(): void {
       super.onConnected();
       this.#applyInlineJson();
+      this.#syncAria();
+    }
+
+    onAttributeChanged(name: string, prev: string | null, next: string | null): void {
+      super.onAttributeChanged(name, prev, next);
+      if (name === 'label' || name === 'labelledby') this.#syncAria();
+    }
+
+    #syncAria(): void {
+      // g11 — role="region" sólo si hay etiqueta accesible (norma ARIA).
+      const label = (this.getAttribute('label') ?? '').trim();
+      const labelledby = (this.getAttribute('labelledby') ?? '').trim();
+      if (label || labelledby) this.setAttribute('role', 'region');
+      else this.removeAttribute('role');
+      if (label) this.setAttribute('aria-label', label);
+      else this.removeAttribute('aria-label');
+      if (labelledby) this.setAttribute('aria-labelledby', labelledby);
+      else this.removeAttribute('aria-labelledby');
     }
 
     get inline(): boolean { return this.hasAttribute('inline'); }
@@ -202,6 +220,20 @@ export class BreakpointHost extends ElementBase {
 
     get cscroll(): boolean { return this.hasAttribute('cscroll'); }
     set cscroll(v: unknown) { this.setBooleanAttr('cscroll', v); }
+
+    /** g11 — Etiqueta accesible del landmark; se refleja a `aria-label`. */
+    get label(): string { return this.getAttribute('label') ?? ''; }
+    set label(v: unknown) {
+      if (v == null || v === '') this.removeAttribute('label');
+      else this.setAttribute('label', String(v));
+    }
+
+    /** g11 — ID del elemento que etiqueta al landmark; se refleja a `aria-labelledby`. */
+    get labelledby(): string { return this.getAttribute('labelledby') ?? ''; }
+    set labelledby(v: unknown) {
+      if (v == null || v === '') this.removeAttribute('labelledby');
+      else this.setAttribute('labelledby', String(v));
+    }
 
     /** Monta el light DOM desde JSON compacto. */
     json2html(body: unknown, opts?: Parameters<typeof applyJsonBody>[2]): this {

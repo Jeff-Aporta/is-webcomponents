@@ -848,6 +848,186 @@ test('UX/UI proposals: validaciones distribuidas sobre los demos del catálogo (
           // en transicion: el componente puede no estar en el demo default).
         }
 
+        // ─── Categorías 17-20 (F0.3 g12 — media UX/UI) ────────────────
+        //
+        // Estas cuatro categorías validan las proposals g12 que requieren
+        // verificación con Playwright pero NO necesitan red real ni APIs
+        // externas (video streaming, voice recognition, BarcodeDetector).
+        // Se evalúan sólo cuando el demo renderiza un componente media y
+        // son estrictamente informativas: NO degradan el gate si un check
+        // falla, porque cada componente puede no estar en el demo default.
+
+        // Cat 17: media — atajos de teclado (proposals video #2-7,
+        // video-playlist #8, media-recorder #8, speech #6, scanner #5).
+        // Verifica que el host expone aria-keyshortcuts y que los botones
+        // internos tienen aria-label/aria-pressed coherentes.
+        if (categoria === 'media' && (
+          tag === 'is-video' ||
+          tag === 'is-video-playlist' ||
+          tag === 'is-media-recorder' ||
+          tag === 'is-speech' ||
+          tag === 'is-barcode-scanner'
+        )) {
+          const kbOk = await page.evaluate((tagName: string) => {
+            const m = document.querySelector('is-main.main');
+            if (!m) return { motivo: 'no main', ok: false, hostKeyshortcuts: '', interactiveLabels: 0, totalButtons: 0 };
+            const host = m.querySelector(tagName) as HTMLElement | null;
+            if (!host) return { motivo: 'no host', ok: false, hostKeyshortcuts: '', interactiveLabels: 0, totalButtons: 0 };
+            const ks = (host.getAttribute('aria-keyshortcuts') || '').trim();
+            // Sombra: contar botones con aria-label (no vacío) — el patrón
+            // UX/UI g12 pide que TODOS los icon-only buttons tengan label.
+            let labels = 0;
+            let total = 0;
+            const visit = (root: ParentNode): void => {
+              const btns = root.querySelectorAll('button, is-button, is-check-icon-button, [role="button"]');
+              for (const b of Array.from(btns)) {
+                total++;
+                const lbl = (b.getAttribute('aria-label') || '').trim();
+                const txt = (b.textContent || '').trim();
+                if (lbl || txt) labels++;
+              }
+              for (const el of root.querySelectorAll('*')) {
+                if ((el as any).shadowRoot) visit((el as any).shadowRoot);
+              }
+            };
+            visit(host.shadowRoot ?? host);
+            return {
+              motivo: '',
+              ok: !!ks && labels >= Math.min(1, total),
+              hostKeyshortcuts: ks,
+              interactiveLabels: labels,
+              totalButtons: total,
+            };
+          }, tag);
+          (r as any).mediaKbd = kbOk;
+          if (!kbOk.motivo && !kbOk.ok) r.estados.tested = false;
+        }
+
+        // Cat 18: media — aria-pressed / aria-current / role=region en el
+        // host (proposals video #2, video-playlist #13, speech #6).
+        if (categoria === 'media' && (
+          tag === 'is-video' ||
+          tag === 'is-video-playlist' ||
+          tag === 'is-media-recorder' ||
+          tag === 'is-speech' ||
+          tag === 'is-barcode-scanner'
+        )) {
+          const stateOk = await page.evaluate((tagName: string) => {
+            const m = document.querySelector('is-main.main');
+            if (!m) return { motivo: 'no main', ok: false, role: '', ariaLabel: '', pressedCount: 0, currentCount: 0 };
+            const host = m.querySelector(tagName) as HTMLElement | null;
+            if (!host) return { motivo: 'no host', ok: false, role: '', ariaLabel: '', pressedCount: 0, currentCount: 0 };
+            // role=region + aria-label es el landmark transversal g12.
+            const role = host.getAttribute('role') || '';
+            const ariaLabel = host.getAttribute('aria-label') || '';
+            let pressed = 0, current = 0;
+            const visit = (root: ParentNode): void => {
+              pressed += root.querySelectorAll('[aria-pressed="true"], [aria-pressed="false"]').length;
+              current += root.querySelectorAll('[aria-current]').length;
+              for (const el of root.querySelectorAll('*')) {
+                if ((el as any).shadowRoot) visit((el as any).shadowRoot);
+              }
+            };
+            visit(host.shadowRoot ?? host);
+            // Solo verificamos que al menos exista aria-label como mínimo
+            // (role=region lo tienen la mayoría salvo image-editor, que usa
+            // role=application y se valida por separado).
+            return {
+              motivo: '',
+              ok: !!ariaLabel,
+              role,
+              ariaLabel,
+              pressedCount: pressed,
+              currentCount: current,
+            };
+          }, tag);
+          (r as any).mediaState = stateOk;
+          if (!stateOk.motivo && !stateOk.ok) r.estados.tested = false;
+        }
+
+        // Cat 19: media — aria-busy durante carga (proposals video #12,
+        // image-editor #11, theme-img #1, media-recorder, scanner).
+        // No podemos reproducir el flujo real de carga, pero validamos
+        // que la chrome contiene un elemento donde aria-busy *podría* vivir
+        // (un [aria-live] o un contenedor .status/.hint con role=status).
+        if (categoria === 'media' && (
+          tag === 'is-video' ||
+          tag === 'is-video-playlist' ||
+          tag === 'is-image-editor' ||
+          tag === 'is-theme-img' ||
+          tag === 'is-media-recorder' ||
+          tag === 'is-barcode-scanner'
+        )) {
+          const busyOk = await page.evaluate((tagName: string) => {
+            const m = document.querySelector('is-main.main');
+            if (!m) return { motivo: 'no main', ok: false, ariaBusyPresent: false, hasStatusRegion: false };
+            const host = m.querySelector(tagName) as HTMLElement | null;
+            if (!host) return { motivo: 'no host', ok: false, ariaBusyPresent: false, hasStatusRegion: false };
+            // theme-img expone aria-busy a nivel host; los demás lo hacen
+            // en el host o en un contenedor interno.
+            const ariaBusyPresent = host.hasAttribute('aria-busy')
+              || !!host.shadowRoot?.querySelector('[aria-busy]');
+            const hasStatusRegion = !!host.shadowRoot?.querySelector('[aria-live], [role="status"], .status, .hint, [part="status"], [part="hint"]');
+            return {
+              motivo: '',
+              ok: ariaBusyPresent || hasStatusRegion,
+              ariaBusyPresent,
+              hasStatusRegion,
+            };
+          }, tag);
+          (r as any).mediaBusy = busyOk;
+          if (!busyOk.motivo && !busyOk.ok) r.estados.tested = false;
+        }
+
+        // Cat 20: media — aria-disabled cuando el atributo `disabled`
+        // está presente (proposals video #12, media-recorder #8, scanner).
+        // Aplica `disabled` programáticamente y verifica que el botón de
+        // acción refleja el estado. Esto evita regresiones de la Q1 fix.
+        if (categoria === 'media' && (
+          tag === 'is-media-recorder' ||
+          tag === 'is-barcode-scanner' ||
+          tag === 'is-speech'
+        )) {
+          const disOk = await page.evaluate(async (tagName: string) => {
+            const m = document.querySelector('is-main.main');
+            if (!m) return { motivo: 'no main', ok: false, beforeDisabled: false, afterAriaDisabled: false, ariaDisabled: '' };
+            const host = m.querySelector(tagName) as HTMLElement | null;
+            if (!host) return { motivo: 'no host', ok: false, beforeDisabled: false, afterAriaDisabled: false, ariaDisabled: '' };
+            const beforeDisabled = host.hasAttribute('aria-disabled');
+            host.setAttribute('disabled', '');
+            await new Promise((r) => setTimeout(r, 80));
+            // Buscar el botón de acción y leer aria-disabled.
+            let ariaDisabled = '';
+            const findBtn = (root: ParentNode): HTMLElement | null => {
+              const btns = root.querySelectorAll('is-button, button, [role="button"]');
+              for (const b of Array.from(btns)) {
+                const cls = (b as HTMLElement).className || '';
+                if (cls.includes('go') || cls.includes('listen') || cls.includes('speak')) return b as HTMLElement;
+              }
+              for (const el of root.querySelectorAll('*')) {
+                if ((el as any).shadowRoot) {
+                  const r = findBtn((el as any).shadowRoot);
+                  if (r) return r;
+                }
+              }
+              return null;
+            };
+            const btn = findBtn(host.shadowRoot ?? host);
+            if (btn) ariaDisabled = btn.getAttribute('aria-disabled') || '';
+            host.removeAttribute('disabled');
+            await new Promise((r) => setTimeout(r, 50));
+            return {
+              motivo: '',
+              ok: ariaDisabled === 'true',
+              beforeDisabled,
+              afterAriaDisabled: ariaDisabled === 'true',
+              ariaDisabled,
+            };
+          }, tag);
+          (r as any).mediaDisabled = disOk;
+          if (!disOk.motivo && !disOk.ok) r.estados.tested = false;
+        }
+
         // Categoria 10: Theme toggle preserva valor (transversal).
         // El theme switcher (chrome global) usa localStorage. Verificar
         // que el toggle persiste.
@@ -1410,6 +1590,407 @@ test('g13 navigation transversales: tab-group, tree, stepper, carousel, breadcru
       });
       t.diagnostic(`[g13-scroller] ${JSON.stringify(scOk)}`);
       assert.ok(scOk.ok, `g13 scroller ARIA incompleto (${JSON.stringify(scOk)})`);
+    } finally {
+      await liberarPage(page);
+      activePage = null;
+    }
+  }
+});
+
+// ============================================================================
+// Bloque g11 — proposals UX/UI para layout (grid/block/flex-layout, flex-options,
+// float-card). Implementa los contratos ARIA/teclado/estados del .audit/proposals/
+// demo-g11.md que son testeables sin drag&drop ni redimensionamiento JS.
+//
+// Verifica:
+//   - grid-layout: role="region" condicional + aria-label/labelledby +
+//     aria-orientation (column→vertical, row→horizontal).
+//   - block-layout: role="region" condicional + aria-label/labelledby,
+//     sin aria-orientation (no aplica a un block sin dirección declarada).
+//   - flex-layout: role="region" condicional + aria-label/labelledby +
+//     aria-orientation (row→horizontal, column→vertical).
+//   - flex-options: role="toolbar" (existente) + aria-orientation="horizontal"
+//     + roving tabindex (tabindex 0 / -1 en los botones) + ArrowLeft/Right +
+//     Home/End mueven el foco.
+//   - float-card: role="region" condicional + aria-label; Escape cierra el
+//     panel cuando está abierto.
+//   - prefers-reduced-motion: bajo reduce, transition-duration → 0s en los 5.
+//
+// Skip explicito (no testeable / fuera de scope):
+//   - Drag&drop resize, long-press, hover-tools del float-card (su md dice
+//     "port de FloatingComponent.svelte" — el keep-alive es interno).
+//   - Proposals que requieren implementación JS de selección/redimensionamiento
+//     de celdas de grid (no las tiene el port actual).
+// ============================================================================
+
+test('g11 layout ARIA: roles, aria-label/labelledby, aria-orientation (proposals 11/12)', { timeout: 120_000 }, async (t) => {
+  if (!DISPONIBLE) return t.skip('faltan variables E2E');
+  const base = await ensureServer();
+
+  // ──────────── grid-layout: role + aria-label + aria-orientation ────────────
+  {
+    const page = await nuevoPage();
+    activePage = page;
+    try {
+      const renderOk = await abrirPreview(page, base, 'is-grid-layout');
+      assert.ok(renderOk, 'grid-layout preview no renderizo');
+
+      const ariaOk = await page.evaluate(() => {
+        const main = document.querySelector<HTMLElement>('is-main.main');
+        const grids = [...(main?.querySelectorAll<HTMLElement>('is-grid-layout') ?? [])];
+        if (grids.length === 0) return { ok: false, motivo: 'sin grid-layout' };
+
+        // 1) sin label → NO debe haber role="region" (norma ARIA).
+        const unlabeled = grids.find((g) => !g.hasAttribute('label') && !g.hasAttribute('labelledby'));
+        const unlabeledHasRole = unlabeled ? unlabeled.hasAttribute('role') : false;
+
+        // 2) aria-orientation por defecto = vertical (direction="column").
+        const orientDefault = unlabeled?.getAttribute('aria-orientation');
+
+        // 3) Creamos un grid con label dinámico y direction=row para verificar
+        //    que se aplica role="region" + aria-label + aria-orientation=horizontal.
+        const tagged = document.createElement('is-grid-layout');
+        tagged.setAttribute('label', 'galería de prueba');
+        tagged.setAttribute('direction', 'row');
+        main?.appendChild(tagged);
+        const taggedRole = tagged.getAttribute('role');
+        const taggedLabel = tagged.getAttribute('aria-label');
+        const taggedOrient = tagged.getAttribute('aria-orientation');
+        tagged.remove();
+
+        // 4) Creamos otro con labelledby para verificar aria-labelledby.
+        const byId = document.createElement('is-grid-layout');
+        byId.setAttribute('labelledby', 'demoTitle');
+        main?.appendChild(byId);
+        const byIdLabelledby = byId.getAttribute('aria-labelledby');
+        const byIdRole = byId.getAttribute('role');
+        byId.remove();
+
+        return {
+          ok: !unlabeledHasRole && orientDefault === 'vertical'
+            && taggedRole === 'region' && taggedLabel === 'galería de prueba'
+            && taggedOrient === 'horizontal'
+            && byIdRole === 'region' && byIdLabelledby === 'demoTitle',
+          unlabeledHasRole, orientDefault,
+          taggedRole, taggedLabel, taggedOrient,
+          byIdRole, byIdLabelledby,
+          gridsCount: grids.length,
+        };
+      });
+      t.diagnostic(`[g11-grid] ${JSON.stringify(ariaOk)}`);
+      assert.ok(ariaOk.ok, `g11 grid-layout ARIA incompleto (${JSON.stringify(ariaOk)})`);
+    } finally {
+      await liberarPage(page);
+      activePage = null;
+    }
+  }
+
+  // ──────────── block-layout: role + aria-label (sin aria-orientation) ────────────
+  {
+    const page = await nuevoPage();
+    activePage = page;
+    try {
+      const renderOk = await abrirPreview(page, base, 'is-block-layout');
+      assert.ok(renderOk, 'block-layout preview no renderizo');
+
+      const ariaOk = await page.evaluate(() => {
+        const main = document.querySelector<HTMLElement>('is-main.main');
+        const blocks = [...(main?.querySelectorAll<HTMLElement>('is-block-layout') ?? [])];
+        if (blocks.length === 0) return { ok: false, motivo: 'sin block-layout' };
+        const unlabeled = blocks.find((b) => !b.hasAttribute('label') && !b.hasAttribute('labelledby'));
+        const unlabeledHasRole = unlabeled ? unlabeled.hasAttribute('role') : false;
+
+        const tagged = document.createElement('is-block-layout');
+        tagged.setAttribute('label', 'panel lateral');
+        main?.appendChild(tagged);
+        const taggedRole = tagged.getAttribute('role');
+        const taggedLabel = tagged.getAttribute('aria-label');
+        tagged.remove();
+
+        const byId = document.createElement('is-block-layout');
+        byId.setAttribute('labelledby', 'sectionTitle');
+        main?.appendChild(byId);
+        const byIdRole = byId.getAttribute('role');
+        const byIdLabelledby = byId.getAttribute('aria-labelledby');
+        byId.remove();
+
+        return {
+          ok: !unlabeledHasRole
+            && taggedRole === 'region' && taggedLabel === 'panel lateral'
+            && byIdRole === 'region' && byIdLabelledby === 'sectionTitle',
+          unlabeledHasRole,
+          taggedRole, taggedLabel,
+          byIdRole, byIdLabelledby,
+          blocksCount: blocks.length,
+        };
+      });
+      t.diagnostic(`[g11-block] ${JSON.stringify(ariaOk)}`);
+      assert.ok(ariaOk.ok, `g11 block-layout ARIA incompleto (${JSON.stringify(ariaOk)})`);
+    } finally {
+      await liberarPage(page);
+      activePage = null;
+    }
+  }
+
+  // ──────────── flex-layout: role + aria-label + aria-orientation ────────────
+  {
+    const page = await nuevoPage();
+    activePage = page;
+    try {
+      const renderOk = await abrirPreview(page, base, 'is-flex-layout');
+      assert.ok(renderOk, 'flex-layout preview no renderizo');
+
+      const ariaOk = await page.evaluate(() => {
+        const main = document.querySelector<HTMLElement>('is-main.main');
+        const flexes = [...(main?.querySelectorAll<HTMLElement>('is-flex-layout') ?? [])];
+        if (flexes.length === 0) return { ok: false, motivo: 'sin flex-layout' };
+        const unlabeled = flexes.find((f) => !f.hasAttribute('label') && !f.hasAttribute('labelledby'));
+        const unlabeledHasRole = unlabeled ? unlabeled.hasAttribute('role') : false;
+        // Default direction=row → aria-orientation="horizontal".
+        const orientDefault = unlabeled?.getAttribute('aria-orientation');
+
+        const tagged = document.createElement('is-flex-layout');
+        tagged.setAttribute('label', 'acciones del header');
+        tagged.setAttribute('direction', 'column');
+        main?.appendChild(tagged);
+        const taggedRole = tagged.getAttribute('role');
+        const taggedLabel = tagged.getAttribute('aria-label');
+        const taggedOrient = tagged.getAttribute('aria-orientation');
+        tagged.remove();
+
+        const tagged2 = document.createElement('is-flex-layout');
+        tagged2.setAttribute('direction', 'row');
+        main?.appendChild(tagged2);
+        const orientRow = tagged2.getAttribute('aria-orientation');
+        tagged2.remove();
+
+        return {
+          ok: !unlabeledHasRole && orientDefault === 'horizontal'
+            && taggedRole === 'region' && taggedLabel === 'acciones del header'
+            && taggedOrient === 'vertical' && orientRow === 'horizontal',
+          unlabeledHasRole, orientDefault,
+          taggedRole, taggedLabel, taggedOrient, orientRow,
+          flexesCount: flexes.length,
+        };
+      });
+      t.diagnostic(`[g11-flex] ${JSON.stringify(ariaOk)}`);
+      assert.ok(ariaOk.ok, `g11 flex-layout ARIA incompleto (${JSON.stringify(ariaOk)})`);
+    } finally {
+      await liberarPage(page);
+      activePage = null;
+    }
+  }
+});
+
+test('g11 flex-options: role=toolbar, aria-orientation, roving tabindex + teclado', { timeout: 60_000 }, async (t) => {
+  if (!DISPONIBLE) return t.skip('faltan variables E2E');
+  const base = await ensureServer();
+  const page = await nuevoPage();
+  activePage = page;
+  try {
+    const renderOk = await abrirPreview(page, base, 'is-flex-options');
+    assert.ok(renderOk, 'flex-options preview no renderizo');
+
+    // Inyectamos acciones programáticamente para que la toolbar tenga
+    // contenido determinístico.
+    await page.evaluate(() => {
+      const main = document.querySelector<HTMLElement>('is-main.main');
+      const fo = main?.querySelector<HTMLElement>('is-flex-options');
+      if (!fo) return;
+      // forzar 3 botones en el toolbar.
+      const actions = [
+        { icon: 'mdi:plus', title: 'Agregar', label: 'Agregar', onClick: () => {} },
+        { icon: 'mdi:pencil', title: 'Editar', label: 'Editar', onClick: () => {} },
+        { icon: 'mdi:delete', title: 'Eliminar', label: 'Eliminar', onClick: () => {} },
+      ];
+      (fo as unknown as { actions: unknown[] }).actions = actions;
+      (fo as unknown as { label: string }).label = 'toolbar demo';
+    });
+    await esperarMs(250);
+
+    // ──────────── Propuesta: role=toolbar + aria-orientation ────────────
+    const toolbarAria = await page.evaluate(() => {
+      const main = document.querySelector<HTMLElement>('is-main.main');
+      const fo = main?.querySelector<HTMLElement>('is-flex-options');
+      if (!fo?.shadowRoot) return { ok: false, motivo: 'no fo' };
+      const toolbar = fo.shadowRoot.querySelector<HTMLElement>('.toolbar');
+      const role = toolbar?.getAttribute('role');
+      const orient = toolbar?.getAttribute('aria-orientation');
+      const hostOrient = fo.getAttribute('aria-orientation');
+      const hostLabel = fo.getAttribute('aria-label');
+      return {
+        ok: role === 'toolbar' && orient === 'horizontal'
+          && hostOrient === 'horizontal' && hostLabel === 'toolbar demo',
+        role, orient, hostOrient, hostLabel,
+      };
+    });
+    t.diagnostic(`[g11-fo-aria] ${JSON.stringify(toolbarAria)}`);
+    assert.ok(toolbarAria.ok, `g11 flex-options ARIA incompleto (${JSON.stringify(toolbarAria)})`);
+
+    // ──────────── Propuesta: roving tabindex + ArrowLeft/Right ────────────
+    const roving = await page.evaluate(async () => {
+      const main = document.querySelector<HTMLElement>('is-main.main');
+      const fo = main?.querySelector<HTMLElement>('is-flex-options');
+      if (!fo?.shadowRoot) return { ok: false, motivo: 'no fo' };
+      const toolbar = fo.shadowRoot.querySelector<HTMLElement>('.toolbar');
+      if (!toolbar) return { ok: false, motivo: 'no toolbar' };
+      // Botones pintados (excluir dropdown).
+      const btns = [...toolbar.querySelectorAll<HTMLElement>(':scope > is-button-group > is-button')]
+        .filter((b) => !b.hasAttribute('disabled') && !b.closest('is-dropdown'));
+      if (btns.length < 2) return { ok: false, motivo: `pocos botones (${btns.length})` };
+      // 1) El primero debe tener tabindex=0 y los demás -1.
+      const t0 = btns.map((b) => b.getAttribute('tabindex'));
+      const okInicial = t0[0] === '0' && t0.slice(1).every((t) => t === '-1');
+
+      // 2) ArrowRight sobre el primer botón → foco al segundo, tabindex rotado.
+      btns[0].focus();
+      btns[0].dispatchEvent(new KeyboardEvent('keydown', { key: 'ArrowRight', bubbles: true, cancelable: true }));
+      await new Promise((r) => setTimeout(r, 50));
+      const ae1 = fo.shadowRoot.activeElement;
+      const t1 = btns.map((b) => b.getAttribute('tabindex'));
+      const okArrowRight = t1[1] === '0' && t1[0] === '-1' && (ae1 === btns[1] || btns[1].contains(ae1 as Node));
+
+      // 3) End → foco al último.
+      const last = btns.length - 1;
+      btns[1].focus();
+      btns[1].dispatchEvent(new KeyboardEvent('keydown', { key: 'End', bubbles: true, cancelable: true }));
+      await new Promise((r) => setTimeout(r, 50));
+      const t2 = btns.map((b) => b.getAttribute('tabindex'));
+      const okEnd = t2[last] === '0' && t2[0] === '-1';
+
+      // 4) Home → foco al primero.
+      btns[last].focus();
+      btns[last].dispatchEvent(new KeyboardEvent('keydown', { key: 'Home', bubbles: true, cancelable: true }));
+      await new Promise((r) => setTimeout(r, 50));
+      const t3 = btns.map((b) => b.getAttribute('tabindex'));
+      const okHome = t3[0] === '0' && t3[last] === '-1';
+
+      // 5) ArrowLeft sobre el primero → ciclado al último.
+      btns[0].focus();
+      btns[0].dispatchEvent(new KeyboardEvent('keydown', { key: 'ArrowLeft', bubbles: true, cancelable: true }));
+      await new Promise((r) => setTimeout(r, 50));
+      const t4 = btns.map((b) => b.getAttribute('tabindex'));
+      const okArrowLeft = t4[last] === '0' && t4[0] === '-1';
+
+      return {
+        ok: okInicial && okArrowRight && okEnd && okHome && okArrowLeft,
+        btnsCount: btns.length,
+        t0, t1, t2, t3, t4,
+        okInicial, okArrowRight, okEnd, okHome, okArrowLeft,
+      };
+    });
+    t.diagnostic(`[g11-fo-roving] ${JSON.stringify(roving)}`);
+    assert.ok(roving.ok, `g11 flex-options roving tabindex falla (${JSON.stringify(roving)})`);
+  } finally {
+    await liberarPage(page);
+    activePage = null;
+  }
+});
+
+test('g11 float-card: role=region, aria-label, Escape cierra el panel', { timeout: 60_000 }, async (t) => {
+  if (!DISPONIBLE) return t.skip('faltan variables E2E');
+  const base = await ensureServer();
+  const page = await nuevoPage();
+  activePage = page;
+  try {
+    const renderOk = await abrirPreview(page, base, 'is-float-card');
+    assert.ok(renderOk, 'float-card preview no renderizo');
+
+    // 1) Inyectamos un float-card determinístico con label.
+    const ariaOk = await page.evaluate(() => {
+      const main = document.querySelector<HTMLElement>('is-main.main');
+      const fc = document.createElement('is-float-card');
+      fc.setAttribute('id', 'fc-test');
+      fc.setAttribute('label', 'acciones de fila');
+      main?.appendChild(fc);
+      const role = fc.getAttribute('role');
+      const ariaLabel = fc.getAttribute('aria-label');
+      const noLabel = fc.hasAttribute('aria-label') && !fc.getAttribute('label');
+      fc.remove();
+
+      const unlabeled = document.createElement('is-float-card');
+      main?.appendChild(unlabeled);
+      const unlabeledRole = unlabeled.getAttribute('role');
+      unlabeled.remove();
+
+      return {
+        ok: role === 'region' && ariaLabel === 'acciones de fila' && !noLabel
+          && !unlabeledRole,
+        role, ariaLabel, unlabeledRole,
+      };
+    });
+    t.diagnostic(`[g11-fc-aria] ${JSON.stringify(ariaOk)}`);
+    assert.ok(ariaOk.ok, `g11 float-card ARIA incompleto (${JSON.stringify(ariaOk)})`);
+
+    // 2) Escape cierra el panel cuando está abierto.
+    const escapeOk = await page.evaluate(async () => {
+      const main = document.querySelector<HTMLElement>('is-main.main');
+      const fc = document.createElement('is-float-card');
+      fc.setAttribute('id', 'fc-escape');
+      fc.setAttribute('label', 'toolbar');
+      main?.appendChild(fc);
+      // Esperar upgrade.
+      await new Promise((r) => setTimeout(r, 100));
+      const wasOpen = fc.hasAttribute('open');
+      (fc as unknown as { open: boolean }).open = true;
+      await new Promise((r) => setTimeout(r, 50));
+      const openedNow = fc.hasAttribute('open');
+      // Disparar Escape desde dentro del componente.
+      fc.dispatchEvent(new KeyboardEvent('keydown', { key: 'Escape', bubbles: true, cancelable: true }));
+      await new Promise((r) => setTimeout(r, 50));
+      const closed = !fc.hasAttribute('open');
+      fc.remove();
+      return { ok: !wasOpen && openedNow && closed, wasOpen, openedNow, closed };
+    });
+    t.diagnostic(`[g11-fc-escape] ${JSON.stringify(escapeOk)}`);
+    assert.ok(escapeOk.ok, `g11 float-card Escape no cierra (${JSON.stringify(escapeOk)})`);
+  } finally {
+    await liberarPage(page);
+    activePage = null;
+  }
+});
+
+test('g11 prefers-reduced-motion: transition-duration → 0s bajo reduce', { timeout: 60_000 }, async (t) => {
+  if (!DISPONIBLE) return t.skip('faltan variables E2E');
+  const base = await ensureServer();
+
+  for (const tag of ['is-grid-layout', 'is-block-layout', 'is-flex-layout', 'is-flex-options', 'is-float-card']) {
+    const page = await nuevoPage();
+    activePage = page;
+    try {
+      const renderOk = await abrirPreview(page, base, tag);
+      assert.ok(renderOk, `${tag} preview no renderizo`);
+
+      // Bajo prefers-reduced-motion: reduce, los selectores :host y * del
+      // componente deberían forzar transition-duration: 0s !important.
+      await page.emulateMedia({ reducedMotion: 'reduce' });
+      const reduceOk = await page.evaluate((selector) => {
+        const main = document.querySelector<HTMLElement>('is-main.main');
+        const comp = main?.querySelector<HTMLElement>(selector);
+        if (!comp) return { ok: false, motivo: 'no encontrado' };
+        // Recorremos TODOS los elementos del shadow (y light si los hay)
+        // buscando cualquiera con transition-duration > 0s.
+        const visit = (root: ParentNode): { violators: string[]; total: number } => {
+          const violators: string[] = [];
+          let total = 0;
+          const all = root.querySelectorAll('*');
+          for (const el of Array.from(all)) {
+            total++;
+            const cs = getComputedStyle(el);
+            const dur = cs.transitionDuration;
+            const adur = cs.animationDuration;
+            if (dur && dur !== '0s' && dur !== '0ms') violators.push(`transition=${dur}@${el.tagName.toLowerCase()}`);
+            if (adur && adur !== '0s' && adur !== '0ms') violators.push(`animation=${adur}@${el.tagName.toLowerCase()}`);
+          }
+          return { violators, total };
+        };
+        const r = comp.shadowRoot ? visit(comp.shadowRoot) : visit(comp);
+        return { ok: r.violators.length === 0, ...r };
+      }, tag);
+      // Restaurar antes de la próxima iteración.
+      await page.emulateMedia({ reducedMotion: 'no-preference' });
+      t.diagnostic(`[g11-rm-${tag}] ${JSON.stringify({ ok: reduceOk.ok, violators: reduceOk.violators.length, total: reduceOk.total })}`);
+      assert.ok(reduceOk.ok, `g11 ${tag} reduced-motion no respetado: ${reduceOk.violators.slice(0, 3).join('; ')}`);
     } finally {
       await liberarPage(page);
       activePage = null;

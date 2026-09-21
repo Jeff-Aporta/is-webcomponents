@@ -3,6 +3,14 @@ import { BreakpointHost } from './block-layout.js';
 import { setStringAttr } from '../_shared/reflect.js';
 
 /**
+ * g11 — UX/UI proposals (aria/region/aria-orientation/prefers-*):
+ *   - role="region" cuando hay `label` o `labelledby` (los landmarks sin
+ *     etiqueta accesible NO se exponen, por norma ARIA).
+ *   - aria-orientation refleja `direction` (column→vertical, row→horizontal).
+ *   - `label` y `labelledby` se reflejan a aria-label / aria-labelledby.
+ */
+
+/**
  * <is-grid-layout> — port de ISP `layout/GridLayout.svelte`.
  *
  * `cells` acepta lo mismo que en ISP:
@@ -34,6 +42,7 @@ import { setStringAttr } from '../_shared/reflect.js';
 
   const OBSERVED = [
     'cells', 'cells-fit', 'direction', 'gap', 'justify', 'items', 'inline', 'cscroll',
+    'label', 'labelledby',
     ...BreakpointHost.scrollMemoryAttrs,
   ];
 
@@ -54,11 +63,28 @@ import { setStringAttr } from '../_shared/reflect.js';
     onConnected() {
       super.onConnected();
       this.#syncVars();
+      this.#syncAria();
     }
 
     onAttributeChanged(name: string, prev: string | null, next: string | null): void {
       super.onAttributeChanged(name, prev, next);
       if (name === 'cells' || name === 'cells-fit' || name === 'gap') this.#syncVars();
+      if (name === 'label' || name === 'labelledby' || name === 'direction') this.#syncAria();
+    }
+
+    #syncAria(): void {
+      const label = (this.getAttribute('label') ?? '').trim();
+      const labelledby = (this.getAttribute('labelledby') ?? '').trim();
+      // role="region" sólo si hay label/aria-labelledby (norma ARIA).
+      if (label || labelledby) this.setAttribute('role', 'region');
+      else this.removeAttribute('role');
+      if (label) this.setAttribute('aria-label', label);
+      else this.removeAttribute('aria-label');
+      if (labelledby) this.setAttribute('aria-labelledby', labelledby);
+      else this.removeAttribute('aria-labelledby');
+      const dir = (this.getAttribute('direction') || 'column').toLowerCase();
+      const orient = dir === 'row' ? 'horizontal' : 'vertical';
+      this.setAttribute('aria-orientation', orient);
     }
 
     #syncVars(): void {
@@ -93,6 +119,14 @@ import { setStringAttr } from '../_shared/reflect.js';
 
     get cscroll() { return this.hasAttribute('cscroll'); }
     set cscroll(v) { this.setBooleanAttr('cscroll', v); }
+
+    /** Etiqueta accesible del landmark; se refleja a `aria-label`. */
+    get label() { return this.getAttribute('label') ?? ''; }
+    set label(v) { setStringAttr(this, 'label', v); }
+
+    /** ID del elemento que etiqueta al landmark; se refleja a `aria-labelledby`. */
+    get labelledby() { return this.getAttribute('labelledby') ?? ''; }
+    set labelledby(v) { setStringAttr(this, 'labelledby', v); }
   }
 
   defineElement('is-grid-layout', IsGridLayout, 'IsGridLayout');
