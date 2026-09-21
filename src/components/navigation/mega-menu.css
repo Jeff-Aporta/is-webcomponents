@@ -104,4 +104,22 @@ is-button.trigger {
     font-size: .85rem;
     display: flex; flex-direction: column; gap: .55rem;
   }
+
+  & ::slotted([aria-disabled="true"]),
+  & ::slotted([disabled]) {
+    opacity: 0.5;
+    cursor: not-allowed;
+    pointer-events: none;
+  }
+}
+
+/* Foco visible en items slotted — `::slotted()` no llega a los descendientes
+   de las columnas (sólo un nivel). El outline por defecto del navegador sobre
+   <a>/<button> cubre el caso; aquí solo aseguramos que no quede anulado por
+   resets globales. */
+:host { --is-mega-menu-focus: var(--is-accent, dodgerblue); }
+
+/* Reduced-motion: cierra y abre sin animación. */
+@media (prefers-reduced-motion: reduce) {
+  .panel { transition: none !important; animation: none !important; }
 }

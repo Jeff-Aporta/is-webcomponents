@@ -48,8 +48,8 @@ import { ElementBase } from '../../core/element-base.js';
 (() => {
   const TG_TEMPLATE = document.createElement('template');
   TG_TEMPLATE.innerHTML = /* html */ `
-    <div class="carousel" part="base">
-      <div class="viewport" part="viewport" tabindex="0">
+    <div class="carousel" part="base" role="region" aria-roledescription="carrusel" aria-label="Carrusel">
+      <div class="viewport" part="viewport" tabindex="0" aria-live="polite">
         <div class="track" part="track"><slot></slot></div>
       </div>
       <div class="indicators" part="indicators" role="tablist" aria-label="Indicadores"></div>
@@ -256,8 +256,18 @@ import { ElementBase } from '../../core/element-base.js';
       items.forEach((item: HTMLElement, i: number) => {
         item.style.flex = `0 0 ${100 / per}%`;
       });
+      // Identificadores estables para cross-ARIA entre indicadores y slides.
+      let hostNs = (this.id || '').trim();
+      if (!hostNs) {
+        hostNs = `is-carousel-${Math.random().toString(36).slice(2, 10)}`;
+        this.id = hostNs;
+      }
+      items.forEach((item: HTMLElement, i: number) => {
+        if (!item.id) item.id = `${hostNs}-slide-${i}`;
+      });
       // Build indicators
       this.#indicators.innerHTML = '';
+      this.#indicators.setAttribute('aria-orientation', vertical ? 'vertical' : 'horizontal');
       const total = this.#totalSlides();
       for (let i = 0; i < total; i++) {
         const btn = document.createElement('button');
@@ -265,6 +275,7 @@ import { ElementBase } from '../../core/element-base.js';
         btn.setAttribute('role', 'tab');
         btn.setAttribute('aria-label', `Slide ${i + 1}`);
         btn.dataset.index = String(i);
+        btn.setAttribute('aria-controls', `${hostNs}-slide-${i}`);
         if (i === this.active) btn.setAttribute('aria-selected', 'true');
         btn.addEventListener('click', () => this.#goTo(i));
         this.#indicators.appendChild(btn);

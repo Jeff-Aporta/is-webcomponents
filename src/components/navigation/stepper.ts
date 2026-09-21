@@ -123,6 +123,15 @@ import { ElementBase } from '../../core/element-base.js';
         if (s.hasAttribute('error')) s.dataset.state = 'error';
         const num = s.shadowRoot?.querySelector<HTMLElement>('.num');
         if (num) num.textContent = String(i + 1);
+        // aria-current="step" en el paso activo (propuesta g13 stepper).
+        if (i === active) {
+          s.setAttribute('aria-current', 'step');
+        } else {
+          s.removeAttribute('aria-current');
+        }
+        // Cada paso conoce su índice y el total para anunciado más rico.
+        if (!s.hasAttribute('aria-posinset')) s.setAttribute('aria-posinset', String(i + 1));
+        if (!s.hasAttribute('aria-setsize')) s.setAttribute('aria-setsize', String(steps.length));
       });
     }
 

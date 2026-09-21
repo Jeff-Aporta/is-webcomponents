@@ -21,12 +21,14 @@ import { ElementBase } from '../../core/element-base.js';
   const TEMPLATE = document.createElement('template');
   TEMPLATE.innerHTML = /* html */ `
     <nav class="bc" part="breadcrumb" aria-label="Ruta">
-      <slot></slot>
+      <ol role="list" class="bc-list"><slot></slot></ol>
     </nav>
   `;
 
   class IsBreadcrumb extends ElementBase {
     static get observedAttributes(): string[] { return ['label']; }
+
+    #itemObserver: MutationObserver | null = null;
 
 
     constructor() {
@@ -38,6 +40,15 @@ import { ElementBase } from '../../core/element-base.js';
 
     onConnected() {
       this.#syncLabel();
+      this.#syncItemRoles();
+      // Re-sincronizar roles si los items se añaden dinámicamente.
+      this.#itemObserver = new MutationObserver(() => this.#syncItemRoles());
+      this.#itemObserver.observe(this, { childList: true, subtree: true });
+    }
+
+    onDisconnected() {
+      this.#itemObserver?.disconnect();
+      this.#itemObserver = null;
     }
 
     onAttributeChanged(name: string, oldVal: string | null, newVal: string | null) {
@@ -54,6 +65,18 @@ import { ElementBase } from '../../core/element-base.js';
       const nav = this.shadowRoot!.querySelector<HTMLElement>('nav');
       if (!nav) return;
       nav.setAttribute('aria-label', this.label);
+    }
+
+    #syncItemRoles() {
+      // Cada <is-breadcrumb-item> en el slot default lleva role="listitem"
+      // para una semántica de lista coherente (propuesta g13 breadcrumb).
+      const slot = this.shadowRoot!.querySelector<HTMLSlotElement>('slot');
+      if (!slot) return;
+      const items = slot.assignedElements({ flatten: true });
+      items.forEach((it) => {
+        if (!(it instanceof HTMLElement)) return;
+        if (!it.hasAttribute('role')) it.setAttribute('role', 'listitem');
+      });
     }
   }
 

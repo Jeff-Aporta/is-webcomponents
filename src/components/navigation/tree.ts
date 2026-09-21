@@ -46,7 +46,7 @@ import { ElementBase } from '../../core/element-base.js';
 (() => {
   const TREE_TEMPLATE = document.createElement('template');
   TREE_TEMPLATE.innerHTML = /* html */ `
-    <div class="tree" part="base" role="tree">
+    <div class="tree" part="base" role="tree" aria-label="Árbol">
       <div class="items" part="items"><slot></slot></div>
     </div>
   `;
@@ -67,6 +67,7 @@ import { ElementBase } from '../../core/element-base.js';
 
     static get observedAttributes(): string[] { return [...TREE_OBSERVED, ...IsTree.styleAttrNames]; }
 
+    #syncObserver: MutationObserver | null = null;
 
     constructor() {
       super();
@@ -80,13 +81,25 @@ import { ElementBase } from '../../core/element-base.js';
     onConnected() {
       if (!this.hasAttribute('selection')) this.setAttribute('selection', 'single');
       this.#syncRoots();
+      // Re-sincronizar atributos ARIA cuando el subtree cambie (hijos añadidos
+      // por JS o templates que se hidratan tras el connect).
+      this.#syncObserver = new MutationObserver(() => this.#syncRoots());
+      this.#syncObserver.observe(this, { childList: true, subtree: true });
+    }
+
+    onDisconnected() {
+      this.#syncObserver?.disconnect();
+      this.#syncObserver = null;
     }
 
     onAttributeChanged(name: string, oldVal: string | null, newVal: string | null) {
       if (name === 'selection') {
         if (newVal && !VALID_SELECTION.includes(newVal)) this.setAttribute('selection', 'single');
       }
-      if (name === 'expanded') this.#syncExpansion();
+      if (name === 'expanded') {
+        this.#syncExpansion();
+        this.#syncRoots();
+      }
     }
 
     get selection(): 'none' | 'single' | 'leaf' | 'multiple' {
@@ -106,7 +119,38 @@ import { ElementBase } from '../../core/element-base.js';
         it.setAttribute('role', 'treeitem');
         if (it.parentElement === this) it.setAttribute('data-root', '');
       });
+      // Atributos de posición para lectores de pantalla (aria-setsize/posinset/level)
+      // — se calculan sobre TODOS los items para que cada nodo conozca sus
+      // hermanos a cualquier nivel.
+      const all = this.#allItems();
+      all.forEach((it, idx) => {
+        const siblings = [...((it.parentElement as HTMLElement | null)?.children ?? [])]
+          .filter((c: Element) => c.tagName?.toLowerCase() === 'is-tree-item');
+        it.setAttribute('aria-setsize', String(siblings.length));
+        it.setAttribute('aria-posinset', String(siblings.indexOf(it) + 1));
+        it.setAttribute('aria-level', String(this.#depthOf(it)));
+        // selected: aria-selected=true cuando selected (los checkbox ya lo hacen visible).
+        if (it.hasAttribute('selected')) it.setAttribute('aria-selected', 'true');
+        else it.removeAttribute('aria-selected');
+        // expanded: aria-expanded refleja el atributo expanded (para nodos con hijos).
+        const hasKids = it.hasAttribute('has-children') || it.querySelectorAll(':scope > is-tree-item').length > 0;
+        if (hasKids) {
+          it.setAttribute('aria-expanded', it.hasAttribute('expanded') ? 'true' : 'false');
+        } else {
+          it.removeAttribute('aria-expanded');
+        }
+      });
       if (this.hasAttribute('expanded')) this.#syncExpansion();
+    }
+
+    #depthOf(item: HTMLElement): number {
+      let depth = 1;
+      let p: HTMLElement | null = item.parentElement;
+      while (p && p !== this) {
+        if (p.tagName?.toLowerCase() === 'is-tree-item') depth++;
+        p = p.parentElement;
+      }
+      return depth;
     }
 
     #syncExpansion() {

@@ -249,6 +249,12 @@ import { readUrlNav, writeUrlNav } from '../_shared/url-nav.js';
       const tabs = this.#allTabs();
       const panels = this.#allPanels();
       const activeName = this.active;
+      // Identificadores estables para cross-ARIA entre tab ↔ panel.
+      let hostNs = (this.id || '').trim();
+      if (!hostNs) {
+        hostNs = `is-tab-group-${Math.random().toString(36).slice(2, 10)}`;
+        this.id = hostNs;
+      }
       for (const t of tabs) {
         const on = t.getAttribute('panel') === activeName;
         // El shadow del <is-tab> no puede leer el placement del grupo
@@ -257,10 +263,21 @@ import { readUrlNav, writeUrlNav } from '../_shared/url-nav.js';
         t.toggleAttribute('active', on);
         if (on) t.setAttribute('aria-selected', 'true');
         else t.removeAttribute('aria-selected');
+        // aria-controls: cada tab apunta a su panel.
+        const panelName = t.getAttribute('panel');
+        if (panelName) {
+          if (!t.id) t.id = `${hostNs}-tab-${panelName}`;
+          t.setAttribute('aria-controls', `${hostNs}-panel-${panelName}`);
+        }
       }
       let any = false;
       for (const p of panels) {
         const on = p.getAttribute('name') === activeName;
+        const name = p.getAttribute('name') || '';
+        if (!p.id) p.id = `${hostNs}-panel-${name}`;
+        // aria-labelledby: cada panel apunta a su tab.
+        const tabId = `${hostNs}-tab-${name}`;
+        if (name) p.setAttribute('aria-labelledby', tabId);
         if (on) {
           p.removeAttribute('hidden');
           any = true;
@@ -268,6 +285,11 @@ import { readUrlNav, writeUrlNav } from '../_shared/url-nav.js';
           p.setAttribute('hidden', '');
         }
       }
+      // El contenedor de tabs debe tener role=tablist.
+      this.#tabsWrap.setAttribute('role', 'tablist');
+      // Orientación para lectores de pantalla (default horizontal).
+      const orient = (this.placement === 'start' || this.placement === 'end') ? 'vertical' : 'horizontal';
+      this.#tabsWrap.setAttribute('aria-orientation', orient);
       // Si no hay panel activo aún pero hay paneles, activar el primero.
       if (!any && panels.length > 0 && !activeName) {
         const first = panels[0].getAttribute('name');

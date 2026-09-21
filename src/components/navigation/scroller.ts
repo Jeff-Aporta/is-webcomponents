@@ -35,7 +35,7 @@ import { ElementBase } from '../../core/element-base.js';
           <is-icon icon="mdi:chevron-left" aria-hidden="true"></is-icon>
         </slot>
       </button>
-      <div class="viewport" part="viewport">
+      <div class="viewport" part="viewport" role="region" aria-label="Área desplazable" tabindex="0">
         <slot></slot>
       </div>
       <button type="button" class="scroll-btn scroll-end" part="scroll-button" tabindex="-1" aria-label="Siguiente">
@@ -46,7 +46,7 @@ import { ElementBase } from '../../core/element-base.js';
     </div>
   `;
 
-  const OBSERVED = ['orientation', 'without-scroll-buttons'];
+  const OBSERVED = ['orientation', 'without-scroll-buttons', 'label'];
 
   class IsScroller extends ElementBase {
     /** Personalización por atributo (ver `core/attrs.ts`). */
@@ -81,6 +81,7 @@ import { ElementBase } from '../../core/element-base.js';
 
     onConnected() {
       if (!this.hasAttribute('orientation')) this.setAttribute('orientation', 'horizontal');
+      this.#syncLabel();
       this.#ro = new ResizeObserver(this.#syncOverflow);
       this.#ro.observe(this.#viewport);
       const onScroll = this.#onScroll;
@@ -96,6 +97,12 @@ import { ElementBase } from '../../core/element-base.js';
     onAttributeChanged(name: string, oldVal: string | null, newVal: string | null) {
       if (name === 'orientation') this.#syncOrientation();
       if (name === 'without-scroll-buttons') this.#syncOverflow();
+      if (name === 'label') this.#syncLabel();
+    }
+
+    #syncLabel() {
+      const label = (this.getAttribute('label') || '').trim() || 'Área desplazable';
+      if (this.#viewport) this.#viewport.setAttribute('aria-label', label);
     }
 
     get orientation(): 'horizontal' | 'vertical' | 'both' {
