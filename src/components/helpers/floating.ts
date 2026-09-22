@@ -446,16 +446,20 @@ import {
       }
       const first = focusables[0];
       const last = focusables[focusables.length - 1];
-      const ae = this.#popup.contains(document.activeElement)
-        ? (document.activeElement as HTMLElement | null)
-        : null;
+      const ae = document.activeElement as HTMLElement | null;
+      // Considerar focuseable si está en el host (slotted) o en el shadow.
+      const slot = this.#popup.querySelector<HTMLSlotElement>('slot');
+      const assigned = slot ? slot.assignedElements({ flatten: true }) : [];
+      const inHost = !!ae && Array.from(this.children).indexOf(ae) !== -1;
+      const inSlot = !!ae && assigned.some((a) => a.contains(ae) || a === ae);
+      const inPopup = !!ae && (this.#popup.contains(ae) || inHost || inSlot);
       if (ev.shiftKey) {
-        if (ae === first || ae == null) {
+        if (!inPopup || ae === first) {
           ev.preventDefault();
           last.focus();
         }
       } else {
-        if (ae === last) {
+        if (!inPopup || ae === last) {
           ev.preventDefault();
           first.focus();
         }
@@ -473,13 +477,16 @@ import {
         '[contenteditable="true"]',
       ].join(',');
       const out: HTMLElement[] = [];
+      const accept = (el: HTMLElement): void => {
+        // No filtramos por tamaño: el popup puede tener 0×0 antes del primer
+        // reposition, pero los focuseables deben seguir siendo ciclables.
+        if (el.hasAttribute('disabled')) return;
+        if (el.getAttribute('aria-hidden') === 'true') return;
+        if (out.indexOf(el) === -1) out.push(el);
+      };
       const visit = (root: ParentNode): void => {
         for (const el of Array.from(root.querySelectorAll<HTMLElement>(sel))) {
-          const r = el.getBoundingClientRect();
-          if (r.width === 0 && r.height === 0) continue;
-          if (el.hasAttribute('disabled')) continue;
-          if (el.getAttribute('aria-hidden') === 'true') continue;
-          out.push(el);
+          accept(el);
         }
         for (const el of Array.from(root.querySelectorAll<HTMLElement>('*'))) {
           if ((el as unknown as { shadowRoot?: ShadowRoot | null }).shadowRoot) {
@@ -487,10 +494,26 @@ import {
           }
         }
       };
+      // 1) Focuseables dentro del shadow del popup (incluye descendientes
+      //    nativos en shadow si los hay).
       visit(this.#popup);
-      // Quitar duplicados preservando orden (mismo nodo via shadow + visit).
-      const seen = new Set<HTMLElement>();
-      return out.filter((e) => (seen.has(e) ? false : (seen.add(e), true)));
+      // 2) Focuseables en los elementos asignados al slot por defecto del
+      //    popup (los consumidores suelen pasar el contenido via light DOM).
+      const slot = this.#popup.querySelector<HTMLSlotElement>('slot');
+      if (slot) {
+        const assigned = slot.assignedElements({ flatten: true });
+        for (const a of assigned) {
+          if (a instanceof HTMLElement) {
+            for (const el of Array.from(a.querySelectorAll<HTMLElement>(sel))) {
+              accept(el);
+            }
+            if ((a as unknown as { shadowRoot?: ShadowRoot | null }).shadowRoot) {
+              visit((a as unknown as { shadowRoot: ShadowRoot }).shadowRoot);
+            }
+          }
+        }
+      }
+      return out;
     }
 
     #installTrap(): void {
@@ -499,8 +522,13 @@ import {
       requestAnimationFrame(() => {
         const focusables = this.#focuseables();
         const target = focusables[0] ?? this.#popup;
+        // Asegurar que el target es focuseable: si es el popup y no tiene
+        // tabindex, le aplicamos uno para que focus() no sea no-op.
+        if (target === this.#popup && !target.hasAttribute('tabindex')) {
+          target.setAttribute('tabindex', '-1');
+        }
         if (target && typeof target.focus === 'function') {
-          target.focus();
+          try { target.focus(); } catch { /* nodo detachado */ }
         }
       });
     }

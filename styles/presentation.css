@@ -1,0 +1,1116 @@
+/* =========================================================
+   presentation.css — docs / playground de componentes IS.
+   Dirección: panel técnico editorial. Tipografía propia,
+   acento de marca como señal, demos con profundidad.
+   ========================================================= */
+
+@import url("https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;500;600&family=Manrope:wght@400;500;600;700;800&display=swap");
+
+* { box-sizing: border-box; }
+
+html, body {
+  margin: 0;
+  padding: 0;
+  height: 100%;
+  background: var(--is-bg);
+  color: var(--is-text);
+  font-family: "Manrope", var(--is-sans);
+  font-size: 15px;
+  line-height: 1.55;
+  letter-spacing: -0.011em;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+  scroll-behavior: smooth;
+  overflow: hidden;
+}
+
+a { color: var(--is-accent); text-decoration: none; }
+a:hover { text-decoration: underline; text-underline-offset: 0.18em; }
+
+/* --- Layout --------------------------------------------------------- */
+
+.page {
+  width: 100%;
+  height: 100%;
+  min-height: 0;
+  --min: 160px;
+  --max: 280px;
+  --divider-width: 5px;
+}
+
+.sidebar {
+  align-self: stretch;
+  height: 100%;
+  min-height: 0;
+  margin: 0;
+  padding: 22px 12px 28px;
+  background:
+    linear-gradient(180deg, color-mix(in srgb, var(--is-accent) 6%, transparent) 0%, transparent 120px),
+    var(--is-bg-soft);
+  border-left: 1px solid color-mix(in srgb, var(--is-border) 60%, transparent);
+  overflow-y: auto;
+  scrollbar-width: thin;
+  scrollbar-color: var(--is-scrollbar-thumb) transparent;
+}
+
+/* El preview-chrome está clavado dentro de is-main.main con sticky.
+   No flota sobre el viewport, así que el sidebar no necesita hueco arriba. */
+html:not([data-embed="1"]) .sidebar h1 { top: 0.5rem; }
+
+/* Título pegado arriba: el índice puede ser largo y se pierde la referencia. */
+.sidebar h1 {
+  position: sticky;
+  top: -22px;
+  z-index: 1;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  font-size: 0.7rem;
+  font-weight: 700;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  margin: 0 0 14px;
+  padding: 6px 10px 10px;
+  color: var(--is-text-dim);
+  background: linear-gradient(180deg,
+    var(--is-bg-soft) 60%,
+    color-mix(in srgb, var(--is-bg-soft) 0%, transparent));
+}
+
+.sidebar h1::after {
+  content: "";
+  flex: 1;
+  height: 1px;
+  background: linear-gradient(90deg, var(--is-border), transparent);
+}
+
+/* El TOC de las previews vive en <is-scrollspy>, no en <nav>: los <a> son
+   light DOM, así que la regla global de enlaces (color: var(--is-accent))
+   los pintaba todos de rojo y el ::slotted del componente no gana el
+   cascade. Ambos selectores comparten estilo. */
+.sidebar nav,
+.sidebar is-scrollspy { display: flex; flex-direction: column; gap: 2px; }
+.sidebar nav a,
+.sidebar is-scrollspy a {
+  position: relative;
+  display: block;
+  padding: 7px 12px 7px 14px;
+  font-size: 0.8125rem;
+  font-weight: 500;
+  line-height: 1.35;
+  color: var(--is-text-soft);
+  border-radius: 6px;
+  transition: background 140ms ease, color 140ms ease, padding-left 140ms ease;
+}
+.sidebar nav a:hover,
+.sidebar is-scrollspy a:hover {
+  background: color-mix(in srgb, var(--is-bg-elev) 85%, transparent);
+  color: var(--is-text);
+  padding-left: 17px;
+  text-decoration: none;
+}
+.sidebar nav a.active,
+.sidebar nav a.is-scrollspy-active,
+.sidebar is-scrollspy a.is-scrollspy-active {
+  background: var(--is-accent-bg);
+  color: var(--is-brand-text);
+  font-weight: 650;
+}
+/* Barra de acento como pseudo: convive con el border-radius. */
+.sidebar nav a.active::before,
+.sidebar nav a.is-scrollspy-active::before,
+.sidebar is-scrollspy a.is-scrollspy-active::before {
+  content: "";
+  position: absolute;
+  left: 0;
+  top: 5px;
+  bottom: 5px;
+  width: 3px;
+  border-radius: 999px;
+  background: var(--is-accent);
+}
+
+.main,
+is-main.main {
+  display: block;
+  box-sizing: border-box;
+  position: relative;
+  height: 100%;
+  min-height: 0;
+  padding: 36px clamp(24px, 4vw, 48px) 88px;
+  max-width: none;
+  margin: 0;
+  width: 100%;
+  overflow-y: auto;
+  overflow-x: hidden;
+  background:
+    radial-gradient(900px 420px at 12% -8%, color-mix(in srgb, var(--is-accent) 11%, transparent), transparent 60%),
+    radial-gradient(700px 360px at 92% 8%, color-mix(in srgb, var(--is-bg-elev) 70%, transparent), transparent 55%),
+    var(--is-bg);
+  scrollbar-width: thin;
+  scrollbar-color: var(--is-scrollbar-thumb) var(--is-scrollbar-track);
+}
+
+/* --- Scrollbar consistente en superficies de los demos ---------------
+ * El is-base.css ya pone `* { scrollbar-color: ... }`; aquí consolidamos
+ * el estilo WebKit (track invisible, thumb con padding-clip, hover con
+ * acento) para que cualquier `.section`, `.main`, `.sidebar`, `<is-main>`
+ * o `.demo` con overflow muestre el mismo thumb que el sidebar. */
+.main::-webkit-scrollbar,
+is-main.main::-webkit-scrollbar,
+.sidebar::-webkit-scrollbar,
+.section::-webkit-scrollbar,
+.demo::-webkit-scrollbar,
+html::-webkit-scrollbar,
+body::-webkit-scrollbar {
+  width: var(--is-scrollbar-size);
+  height: var(--is-scrollbar-size);
+}
+.main::-webkit-scrollbar-track,
+is-main.main::-webkit-scrollbar-track,
+.sidebar::-webkit-scrollbar-track,
+.section::-webkit-scrollbar-track,
+.demo::-webkit-scrollbar-track,
+html::-webkit-scrollbar-track,
+body::-webkit-scrollbar-track {
+  background: var(--is-scrollbar-track);
+  border-radius: var(--is-scrollbar-radius);
+}
+.main::-webkit-scrollbar-thumb,
+is-main.main::-webkit-scrollbar-thumb,
+.sidebar::-webkit-scrollbar-thumb,
+.section::-webkit-scrollbar-thumb,
+.demo::-webkit-scrollbar-thumb,
+html::-webkit-scrollbar-thumb,
+body::-webkit-scrollbar-thumb {
+  background: var(--is-scrollbar-thumb);
+  border-radius: var(--is-scrollbar-radius);
+  border: 2px solid transparent;
+  background-clip: padding-box;
+}
+.main:hover::-webkit-scrollbar-thumb,
+is-main.main:hover::-webkit-scrollbar-thumb,
+.sidebar:hover::-webkit-scrollbar-thumb,
+.section:hover::-webkit-scrollbar-thumb,
+.demo:hover::-webkit-scrollbar-thumb,
+html:hover::-webkit-scrollbar-thumb,
+body:hover::-webkit-scrollbar-thumb {
+  background: var(--is-scrollbar-thumb-hover);
+  border: 2px solid transparent;
+  background-clip: padding-box;
+}
+.main::-webkit-scrollbar-corner,
+is-main.main::-webkit-scrollbar-corner,
+.sidebar::-webkit-scrollbar-corner,
+.section::-webkit-scrollbar-corner,
+.demo::-webkit-scrollbar-corner,
+html::-webkit-scrollbar-corner,
+body::-webkit-scrollbar-corner {
+  background: transparent;
+}
+
+/* --- Theme toggle --------------------------------------------------- */
+
+.theme-toggle {
+  position: fixed;
+  top: 16px;
+  right: 16px;
+  z-index: 10;
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  padding: 6px 10px;
+  background: var(--is-bg-elev);
+  border: 1px solid var(--is-border);
+  border-radius: 999px;
+  font-size: 0.8rem;
+  color: var(--is-text-soft);
+  cursor: pointer;
+  font-family: inherit;
+  box-shadow: var(--is-shadow);
+}
+.theme-toggle:hover { color: var(--is-text); }
+.theme-toggle svg { width: 14px; height: 14px; }
+
+/* --- Sections ------------------------------------------------------- */
+
+.section {
+  padding: 40px 0 12px;
+  border-top: 1px solid color-mix(in srgb, var(--is-border) 70%, transparent);
+  animation: section-in 420ms cubic-bezier(0.22, 1, 0.36, 1) both;
+}
+.section:first-of-type {
+  border-top: 0;
+  padding-top: 8px;
+}
+.section:nth-of-type(2) { animation-delay: 40ms; }
+.section:nth-of-type(3) { animation-delay: 80ms; }
+.section:nth-of-type(4) { animation-delay: 120ms; }
+
+@keyframes section-in {
+  from { opacity: 0; transform: translateY(10px); }
+  to { opacity: 1; transform: none; }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .section { animation: none; }
+}
+
+.section h2 {
+  font-size: clamp(1.55rem, 2.2vw, 1.95rem);
+  font-weight: 800;
+  margin: 0 0 10px;
+  letter-spacing: -0.045em;
+  line-height: 1.15;
+  color: var(--is-text);
+}
+.section:first-of-type h2 {
+  font-size: clamp(2rem, 3.4vw, 2.65rem);
+  letter-spacing: -0.055em;
+}
+.section:first-of-type h2::after {
+  content: "";
+  display: block;
+  width: 2.5rem;
+  height: 3px;
+  margin-top: 14px;
+  border-radius: 999px;
+  background: linear-gradient(90deg, var(--is-accent), color-mix(in srgb, var(--is-accent) 20%, transparent));
+}
+
+.section .lede {
+  color: var(--is-text-soft);
+  margin: 0 0 28px;
+  max-width: 62ch;
+  font-size: 1.02rem;
+  line-height: 1.65;
+  font-weight: 450;
+}
+
+.section h3 {
+  font-size: 1.05rem;
+  font-weight: 700;
+  margin: 32px 0 10px;
+  letter-spacing: -0.02em;
+  color: var(--is-text);
+}
+.section h4 {
+  font-size: 0.72rem;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.1em;
+  color: var(--is-text-dim);
+  margin: 26px 0 12px;
+}
+
+.section p {
+  margin: 0 0 12px;
+  color: var(--is-text-soft);
+  max-width: 68ch;
+}
+
+/* --- Demo cards ----------------------------------------------------- */
+
+.demo {
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  background:
+    linear-gradient(180deg, color-mix(in srgb, var(--is-bg-elev) 92%, #fff) 0%, var(--is-bg-elev) 100%);
+  border: 1px solid var(--is-border);
+  border-radius: calc(var(--is-radius) + 2px);
+  padding: 22px 24px;
+  margin: 12px 0 28px;
+  box-shadow:
+    inset 0 1px 0 rgb(255 255 255 / 4%),
+    var(--is-shadow);
+  overflow: hidden;
+}
+/* is-copy-button lleva un is-tooltip dentro de su shadow: :has() no lo ve. */
+.demo:has(is-tooltip, is-popover, is-dropdown, is-popup, is-copy-button, is-lightbox, is-diagram-lightbox) {
+  overflow: visible;
+}
+.demo::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  background-image:
+    linear-gradient(to right, color-mix(in srgb, var(--is-border-soft) 80%, transparent) 1px, transparent 1px),
+    linear-gradient(to bottom, color-mix(in srgb, var(--is-border-soft) 80%, transparent) 1px, transparent 1px);
+  background-size: 20px 20px;
+  mask-image: radial-gradient(ellipse 80% 70% at 50% 40%, #000 20%, transparent 75%);
+  pointer-events: none;
+  opacity: 0.55;
+}
+.demo > * { position: relative; z-index: 1; }
+/* Overlays: su z-index interno no cruza el stacking del host; subir el host
+   para que no lo tapen siblings posteriores (#log, captions, etc.). */
+.demo > :is(is-dropdown, is-popup, is-tooltip, is-popover, is-combobox, is-date-picker, is-date-input, is-lightbox, is-diagram-lightbox) {
+  z-index: 5;
+}
+
+/* Charts / playlist: llenan la altura del demo (fit height) */
+.demo:has(is-chart, is-bar-chart, is-line-chart, is-pie-chart, is-doughnut-chart,
+  is-radar-chart, is-polar-area-chart, is-scatter-chart, is-bubble-chart) {
+  min-height: 16rem;
+}
+.demo > :is(is-chart, is-bar-chart, is-line-chart, is-pie-chart, is-doughnut-chart,
+  is-radar-chart, is-polar-area-chart, is-scatter-chart, is-bubble-chart) {
+  flex: 1 1 auto;
+  align-self: stretch;
+  width: 100%;
+  min-height: 0;
+  height: auto;
+}
+
+.demo:has(is-video-playlist) {
+  min-height: 22rem;
+}
+.demo > is-video-playlist {
+  flex: 1 1 auto;
+  align-self: stretch;
+  width: 100%;
+  min-height: 0;
+  height: auto;
+}
+
+.demo:has(is-sequence-diagram) {
+  min-height: 18rem;
+}
+.demo > is-sequence-diagram {
+  flex: 1 1 auto;
+  align-self: stretch;
+  width: 100%;
+  min-height: 0;
+  height: auto;
+}
+
+.demo--with-code { padding-right: 3rem; }
+
+.demo-code-btn {
+  position: absolute;
+  top: 0.65rem;
+  right: 0.65rem;
+  z-index: 3;
+  display: inline-grid;
+  place-items: center;
+  width: 2.25em;
+  aspect-ratio: 1;
+  margin: 0;
+  padding: 0;
+  border: 0;
+  border-radius: 999px;
+  background: transparent;
+  color: var(--is-text-dim);
+  cursor: pointer;
+  font: inherit;
+  line-height: 0;
+  transition: background-color 120ms ease, color 120ms ease;
+}
+.demo-code-btn:hover {
+  background: var(--is-control-bg-hover);
+  color: var(--is-text);
+}
+.demo-code-btn:focus-visible {
+  outline: 2px solid var(--is-focus);
+  outline-offset: 2px;
+}
+.demo-code-btn is-icon {
+  width: 1.15em;
+  height: 1.15em;
+}
+
+/* El panel vive dentro de <is-dropdown>: el anclaje y el reposicionado los
+   hace el componente (dialog en top layer), así que aquí sólo va la caja.
+   Antes era un popover con top/left calculados a mano que se despegaba. */
+.demo-code-dd {
+  position: absolute;
+  top: 0.65rem;
+  right: 0.65rem;
+  z-index: 3;
+}
+
+.demo-code-dd .demo-code-btn { position: static; top: auto; right: auto; }
+
+.demo-code-pop {
+  box-sizing: border-box;
+  display: flex;
+  flex-direction: column;
+  width: min(32rem, calc(100vw - 3rem));
+  max-height: min(70vh, 26rem);
+  margin: 0;
+  padding: 0;
+  overflow: hidden;
+  color: var(--is-text);
+}
+
+.demo-code-pop__bar {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 0.75rem;
+  padding: 0.5rem 0.75rem;
+  border-bottom: 1px solid var(--is-border-soft);
+  background: var(--is-bg-soft);
+}
+.demo-code-pop__title {
+  font-size: 0.75rem;
+  font-weight: 600;
+  letter-spacing: 0.04em;
+  text-transform: uppercase;
+  color: var(--is-text-dim);
+}
+.demo-code-pop__copy { font-size: 0.9rem; }
+.demo-code-pop__pre {
+  margin: 0 !important;
+  border: 0 !important;
+  border-radius: 0 !important;
+  border-left: 0 !important;
+  box-shadow: none !important;
+  flex: 0 1 auto;
+  min-height: 4rem;
+  max-height: min(60vh, 22rem);
+  overflow: auto;
+}
+
+.demo-label {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.35em;
+  margin: 0 0 0.35em;
+  padding: 0.2em 0.55em;
+  border-radius: 999px;
+  border: 1px solid color-mix(in srgb, var(--is-border) 80%, transparent);
+  background: color-mix(in srgb, var(--is-bg-soft) 70%, transparent);
+  font-family: "JetBrains Mono", var(--is-mono);
+  font-size: 0.68rem;
+  font-weight: 600;
+  letter-spacing: 0.02em;
+  color: var(--is-text-soft);
+  text-transform: none;
+  vertical-align: middle;
+}
+.demo-label::before { content: none; }
+
+/* Como flex item de .demo (columna) el chip se estiraría a todo el ancho */
+.demo > .demo-label { align-self: flex-start; }
+
+.demo-caption {
+  display: block;
+  margin: 0 0 0.75em;
+  font-size: 0.8rem;
+  color: var(--is-text-dim);
+}
+
+.demo-locale-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(16rem, 1fr));
+  gap: 0.65rem;
+}
+.demo-locale-card {
+  display: flex;
+  flex-direction: column;
+  gap: 0.35em;
+  padding: 0.7em 0.85em;
+  border: 1px solid var(--is-border-soft);
+  border-radius: var(--is-radius-sm);
+  background: color-mix(in srgb, var(--is-bg) 55%, transparent);
+  min-width: 0;
+}
+.demo-locale-card__meta {
+  display: flex;
+  align-items: baseline;
+  justify-content: space-between;
+  gap: 0.5em;
+}
+.demo-locale-card__name {
+  font-size: 0.78rem;
+  font-weight: 650;
+  color: var(--is-text);
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+.demo-locale-card__code {
+  flex-shrink: 0;
+  font-family: "JetBrains Mono", var(--is-mono);
+  font-size: 0.68rem;
+  color: var(--is-text-dim);
+}
+.demo-locale-card is-format-date {
+  font-size: 0.92rem;
+  color: var(--is-text-soft);
+}
+
+/* Grid de filas (etiqueta + valor) para demos de format-bytes/format-number/format-date.
+   La primera columna es la firma del ejemplo y la segunda el valor renderizado; en
+   columnas anchas se ven 2×N pero sin partir una fila a la mitad. */
+.format-grid {
+  display: grid;
+  grid-template-columns: minmax(8.5rem, max-content) 1fr;
+  gap: 0.4rem 1.25rem;
+  margin: 0;
+  font-size: 0.92rem;
+}
+
+.format-grid__row {
+  display: contents;
+}
+
+.format-grid__tag {
+  align-self: center;
+  justify-self: start;
+  font-family: var(--is-mono, ui-monospace, Consolas, monospace);
+  font-size: 0.78rem;
+  letter-spacing: 0.01em;
+  color: var(--is-text-soft);
+  background: color-mix(in srgb, var(--is-bg-soft) 70%, transparent);
+  padding: 0.18em 0.55em;
+  border-radius: 999px;
+  border: 1px solid color-mix(in srgb, var(--is-border) 60%, transparent);
+  white-space: nowrap;
+}
+
+.format-grid__value {
+  align-self: center;
+  justify-self: start;
+  font-weight: 600;
+  font-size: 1rem;
+  color: var(--is-text);
+  /* Permitir que un valor largo no rompa el grid. */
+  min-width: 0;
+}
+
+@media (max-width: 38rem) {
+  .format-grid { grid-template-columns: 1fr; gap: 0.25rem 0; }
+  .format-grid__row { display: flex; flex-wrap: wrap; gap: 0.35rem 0.75rem; align-items: baseline; }
+  .format-grid__value { flex: 1 1 auto; }
+}
+
+/* Variante en cards: cada fila vive en una tarjeta con borde sutil y aire.
+   La rejilla interna deja la firma (`.format-grid__tag`) arriba a la izquierda
+   y el valor destacado abajo a la derecha. Pensada para entradas, presets y
+   listas de ejemplos cortos (3–6 filas). */
+.format-grid--cards {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(15rem, 1fr));
+  gap: 0.75rem;
+}
+
+.format-grid--cards .format-grid__row {
+  display: grid;
+  grid-template-rows: auto 1fr;
+  align-content: space-between;
+  gap: 0.4rem 0.6rem;
+  padding: 0.85rem 1rem;
+  border: 1px solid var(--is-border);
+  border-radius: var(--is-radius, 0.5em);
+  background: color-mix(in srgb, var(--is-bg-elev, #1c2128) 70%, transparent);
+  min-height: 4.5rem;
+}
+
+.format-grid--cards .format-grid__tag {
+  align-self: start;
+  justify-self: start;
+}
+
+.format-grid--cards .format-grid__value {
+  align-self: end;
+  justify-self: end;
+  text-align: right;
+  font-size: 1.1rem;
+  line-height: 1.25;
+}
+
+.demo-row {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 12px;
+  align-items: center;
+}
+.demo-stack > * + * { margin-top: 12px; }
+.demo-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(140px, 1fr));
+  gap: 12px;
+  align-items: center;
+}
+
+/* centered cell para matrices variants x appearance */
+.matrix {
+  display: grid;
+  grid-template-columns: max-content repeat(3, 1fr);
+  gap: 10px 14px;
+  align-items: center;
+}
+.matrix > .cell-label {
+  font-size: 0.72rem;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 0.06em;
+  color: var(--is-text-dim);
+  text-align: center;
+}
+.matrix > .row-label {
+  font-size: 0.82rem;
+  color: var(--is-text-soft);
+  font-weight: 600;
+  grid-column: 1;
+}
+.matrix > .demo-cell {
+  display: flex;
+  align-items: center;
+  justify-content: flex-start;
+  min-height: 2.75em;
+  padding: 8px 10px;
+  background: color-mix(in srgb, var(--is-bg) 55%, transparent);
+  border: 1px solid var(--is-border-soft);
+  border-radius: var(--is-radius-sm);
+}
+
+/* --- Code blocks ---------------------------------------------------- */
+
+pre.code, code.code {
+  font-family: "JetBrains Mono", var(--is-mono);
+  font-size: 0.8rem;
+  background: var(--is-code-bg);
+  color: var(--is-code-text);
+  border-radius: var(--is-radius-sm);
+  border: 1px solid var(--is-border-soft);
+}
+pre.code {
+  padding: 14px 16px;
+  overflow-x: auto;
+  overflow-y: auto;
+  margin: 10px 0 20px;
+  line-height: 1.55;
+  tab-size: 2;
+  white-space: pre;
+  border-left: 3px solid color-mix(in srgb, var(--is-accent) 55%, var(--is-border));
+  box-shadow: inset 0 1px 0 rgb(255 255 255 / 3%);
+  /* Los bloques de código pueden ser muy largos; capeamos la altura y los
+     hacemos scrolleables para no empujar el layout del sidebar. */
+  max-height: 80vh;
+}
+/* CodeMirror runMode tokens — specificity > theme CDN (carga async) */
+pre.code.cm-s-material-darker {
+  background: var(--is-code-bg) !important;
+  color: var(--is-code-text);
+}
+pre.code.cm-s-material-darker span {
+  font-family: inherit;
+  font-size: inherit;
+}
+pre.code.cm-s-material-darker .cm-tag { color: #74c0fc !important; }
+pre.code.cm-s-material-darker .cm-attribute { color: #ffe066 !important; }
+pre.code.cm-s-material-darker .cm-string { color: #b2f2bb !important; }
+pre.code.cm-s-material-darker .cm-comment { color: #868e96 !important; font-style: italic; }
+pre.code.cm-s-material-darker .cm-keyword { color: #e599f7 !important; }
+pre.code.cm-s-material-darker .cm-def,
+pre.code.cm-s-material-darker .cm-variable { color: #ffc078 !important; }
+pre.code.cm-s-material-darker .cm-number { color: #ffc078 !important; }
+pre.code.cm-s-material-darker .cm-bracket { color: #868e96 !important; }
+pre.code.cm-s-material-darker .cm-atom { color: #ff8787 !important; }
+code.code { padding: 0.15em 0.4em; font-size: 0.86em; }
+/* inline code dentro de callout: mismos tokens que pre.code */
+.callout code.code .tag { color: #74c0fc; }
+.callout code.code .attr { color: #ffe066; }
+.callout code.code .val  { color: #b2f2bb; }
+.callout code.code .str  { color: #ffc078; }
+
+.tag { color: #74c0fc; }
+.attr { color: #ffe066; }
+.val  { color: #b2f2bb; }
+.str  { color: #ffc078; }
+.kw   { color: #e599f7; }
+.com  { color: #868e96; font-style: italic; }
+
+/* --- Tables (referencia) ------------------------------------------- */
+
+table.ref {
+  width: 100%;
+  border-collapse: separate;
+  border-spacing: 0;
+  font-size: 0.85rem;
+  margin: 10px 0 22px;
+  overflow: hidden;
+  border: 1px solid var(--is-border-soft);
+  border-radius: var(--is-radius);
+  background: color-mix(in srgb, var(--is-bg-elev) 50%, transparent);
+}
+table.ref th, table.ref td {
+  text-align: left;
+  padding: 10px 12px;
+  border-bottom: 1px solid var(--is-border-soft);
+  vertical-align: top;
+}
+table.ref tr:last-child td { border-bottom: 0; }
+table.ref th {
+  font-weight: 700;
+  color: var(--is-text-soft);
+  font-size: 0.72rem;
+  text-transform: uppercase;
+  letter-spacing: 0.06em;
+  background: color-mix(in srgb, var(--is-bg-soft) 80%, transparent);
+}
+table.ref td code {
+  font-family: "JetBrains Mono", var(--is-mono);
+  font-size: 0.76rem;
+  background: var(--is-code-bg);
+  padding: 1px 6px;
+  border-radius: 4px;
+  color: var(--is-text);
+  border: 1px solid var(--is-border-soft);
+}
+table.ref td:first-child { width: 36%; }
+
+/* --- Anatomy diagram ----------------------------------------------- */
+
+.anatomy {
+  position: relative;
+  background:
+    radial-gradient(circle at 50% 30%, color-mix(in srgb, var(--is-accent) 8%, transparent), transparent 55%),
+    linear-gradient(180deg, transparent 0%, var(--is-bg-soft) 100%);
+  border: 1px solid var(--is-border);
+  border-radius: var(--is-radius);
+  padding: 40px 20px 32px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin: 12px 0 24px;
+}
+.anatomy is-button { transform: scale(1.4); transform-origin: center; }
+.anatomy-calls {
+  position: absolute;
+  font-size: 0.7rem;
+  color: var(--is-text-dim);
+  font-family: "JetBrains Mono", var(--is-mono);
+}
+.anatomy-calls .call {
+  position: absolute;
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  white-space: nowrap;
+}
+.anatomy-calls .line {
+  display: inline-block;
+  height: 1px;
+  background: var(--is-text-dim);
+  flex: 1;
+  min-width: 24px;
+}
+.anatomy-calls .lbl { color: var(--is-accent); }
+
+/* --- Playground ---------------------------------------------------- */
+
+.playground {
+  display: grid;
+  grid-template-columns: 1fr 320px;
+  gap: 20px;
+  align-items: start;
+}
+.playground .stage {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  min-height: 220px;
+  padding: 32px;
+  background:
+    linear-gradient(to right, color-mix(in srgb, var(--is-border-soft) 70%, transparent) 1px, transparent 1px),
+    linear-gradient(to bottom, color-mix(in srgb, var(--is-border-soft) 70%, transparent) 1px, transparent 1px),
+    var(--is-bg-soft);
+  background-size: 24px 24px, 24px 24px, auto;
+  border: 1px solid var(--is-border);
+  border-radius: var(--is-radius);
+  box-shadow: inset 0 1px 0 rgb(255 255 255 / 3%);
+}
+.playground .stage is-button { font-size: 1.1rem; }
+
+.controls {
+  background: var(--is-bg-elev);
+  border: 1px solid var(--is-border);
+  border-radius: var(--is-radius);
+  padding: 18px;
+  font-size: 0.85rem;
+  box-shadow: var(--is-shadow);
+}
+.controls h4 { margin-top: 0; letter-spacing: -0.02em; }
+.controls .ctl-row {
+  display: grid;
+  grid-template-columns: 110px 1fr;
+  gap: 10px;
+  align-items: center;
+  margin: 8px 0;
+}
+.controls label { color: var(--is-text-soft); font-size: 0.8rem; font-weight: 500; }
+.controls select,
+.controls input[type="text"] {
+  width: 100%;
+  padding: 6px 9px;
+  background: var(--is-bg);
+  color: var(--is-text);
+  border: 1px solid var(--is-border);
+  border-radius: 6px;
+  font: inherit;
+  font-size: 0.85rem;
+}
+.controls .checks {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+}
+.controls .chip {
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
+  padding: 4px 9px;
+  background: var(--is-bg);
+  border: 1px solid var(--is-border);
+  border-radius: 999px;
+  cursor: pointer;
+  font-size: 0.78rem;
+  user-select: none;
+  transition: background 120ms ease, border-color 120ms ease, color 120ms ease;
+}
+.controls .chip input { margin: 0; }
+.controls .chip:has(input:checked) {
+  background: var(--is-accent-bg);
+  border-color: var(--is-accent);
+  color: var(--is-accent);
+}
+
+/* --- Event log ----------------------------------------------------- */
+
+.log {
+  background: var(--is-code-bg);
+  color: var(--is-code-text);
+  font-family: "JetBrains Mono", var(--is-mono);
+  font-size: 0.78rem;
+  border-radius: var(--is-radius-sm);
+  padding: 10px 12px;
+  max-height: 160px;
+  overflow-y: auto;
+  border: 1px solid var(--is-border-soft);
+  margin-top: 8px;
+  min-height: 2.5em;
+}
+.log:empty {
+  display: none;
+}
+.log .row { padding: 2px 0; }
+.log .t { color: var(--is-text-dim); }
+.log .e { color: #74c0fc; }
+.log .hint { color: var(--is-text-dim); font-style: italic; }
+
+/* --- Callout -------------------------------------------------------- */
+
+.callout {
+  background: color-mix(in srgb, var(--is-accent) 7%, var(--is-bg-soft));
+  border: 1px solid color-mix(in srgb, var(--is-accent) 28%, var(--is-border-soft));
+  border-left: 3px solid var(--is-accent);
+  padding: 12px 16px;
+  margin: 14px 0 20px;
+  border-radius: 0 var(--is-radius-sm) var(--is-radius-sm) 0;
+  font-size: 0.9rem;
+  color: var(--is-text-soft);
+  line-height: 1.5;
+}
+.callout strong { color: var(--is-text); font-weight: 700; }
+
+/* --- Footer --------------------------------------------------------- */
+
+.foot {
+  margin-top: 72px;
+  padding-top: 28px;
+  border-top: 1px solid var(--is-border-soft);
+  font-size: 0.78rem;
+  color: var(--is-text-dim);
+  display: flex;
+  justify-content: space-between;
+  flex-wrap: wrap;
+  gap: 12px;
+  font-family: "JetBrains Mono", var(--is-mono);
+  letter-spacing: 0.02em;
+}
+
+/* --- Card preview helpers (is-card) -------------------------------- */
+
+.card-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+  gap: 16px;
+  margin: 14px 0 28px;
+}
+.card-grid > is-card { align-self: stretch; }
+.card-meta {
+  font-size: 0.85rem;
+  color: var(--is-text-soft);
+  margin: 6px 0 0;
+  line-height: 1.45;
+}
+.card-row-actions { display: flex; gap: 8px; flex-wrap: wrap; }
+.card-stage-h {
+  height: auto;
+  min-height: 0;
+  border: 1px solid var(--is-border);
+  border-radius: var(--is-radius);
+  padding: 20px;
+  margin: 12px 0 28px;
+  background:
+    linear-gradient(to right, color-mix(in srgb, var(--is-border-soft) 65%, transparent) 1px, transparent 1px),
+    linear-gradient(to bottom, color-mix(in srgb, var(--is-border-soft) 65%, transparent) 1px, transparent 1px),
+    var(--is-bg-soft);
+  background-size: 20px 20px, 20px 20px, auto;
+  box-shadow: inset 0 1px 0 rgb(255 255 255 / 3%);
+  display: flex;
+  align-items: flex-start;
+}
+.card-demo-img {
+  display: block;
+  width: 100%;
+  height: 132px;
+  object-fit: cover;
+  background:
+    linear-gradient(135deg,
+      color-mix(in srgb, var(--is-color-brand-500) 85%, #fff),
+      var(--is-color-brand-700));
+}
+
+/* --- Preview chrome (theme + palette; hidden when ?embed=1) ---------- */
+
+.preview-chrome {
+  position: sticky;
+  z-index: 20;
+  top: 0.65rem;
+  margin-left: auto;
+  margin-right: 0.65rem;
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  width: max-content;
+  max-width: calc(100% - 2rem);
+  padding: 0.35rem 0.45rem 0.35rem 0.65rem;
+  border-radius: 999px;
+  background: color-mix(in srgb, var(--is-bg-elev) 92%, transparent);
+  border: 1px solid var(--is-border);
+  box-shadow: var(--is-shadow);
+  backdrop-filter: blur(10px);
+  -webkit-backdrop-filter: blur(10px);
+  pointer-events: auto;
+}
+
+/* El main reserva un poco de aire arriba para que el chrome fixed no tape el
+   primer heading al cargar. El valor coincide con la altura aprox. del chrome
+   + su offset. */
+is-main.main {
+  scroll-padding-top: 4rem;
+}
+
+.preview-chrome[hidden] {
+  display: none !important;
+}
+
+html[data-embed="1"] .preview-chrome {
+  display: none !important;
+}
+
+.preview-chrome__palette {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.35rem;
+  margin: 0;
+  font-size: 0.75rem;
+  font-weight: 600;
+  color: var(--is-text-soft);
+}
+
+.preview-chrome__label {
+  display: none;
+}
+
+.preview-chrome__palette select {
+  appearance: none;
+  margin: 0;
+  padding: 0.3rem 1.6rem 0.3rem 0.55rem;
+  border: 1px solid var(--is-border);
+  border-radius: 999px;
+  background:
+    var(--is-bg-soft)
+    url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='12' viewBox='0 0 16 16'%3E%3Cpath fill='%237a8390' d='M4.5 6L8 9.5 11.5 6z'/%3E%3C/svg%3E")
+    no-repeat right 0.45rem center;
+  color: var(--is-text);
+  font: inherit;
+  font-size: 0.75rem;
+  font-weight: 600;
+  cursor: pointer;
+}
+
+.preview-chrome__palette select:focus-visible {
+  outline: 2px solid var(--is-focus, var(--is-accent));
+  outline-offset: 2px;
+}
+
+.preview-chrome is-theme-toggle {
+  font-size: 1.15rem;
+}
+
+.preview-chrome__save {
+  font-size: 1.15rem; /* a la par del is-theme-toggle vecino */
+  flex-shrink: 0;
+}
+
+/* --- Responsive ----------------------------------------------------- */
+
+@media (max-width: 900px) {
+  .sidebar {
+    border-left: 1px solid var(--is-border-soft);
+    border-top: 0;
+  }
+  .main { padding: 24px 20px 60px; }
+  .playground { grid-template-columns: 1fr; }
+  .anatomy is-button { transform: scale(1.1); }
+}
+
+/* --- is-icon defaults ----------------------------------------------- */
+is-icon {
+  display: inline-flex;
+  width: 1.1em;
+  height: 1.1em;
+  vertical-align: -0.15em;
+  flex-shrink: 0;
+}
+is-button is-icon {
+  color: currentColor;
+}
+
+/* --- Snippets con botón de copiar (docs-chrome.js) ------------------- */
+
+/* Todo `pre.code` queda envuelto aquí para colgar el botón en la esquina. */
+.code-block {
+  position: relative;
+  display: block;
+  margin: 12px 0 18px;
+}
+
+.code-block > pre.code { margin: 0; }
+
+.code-block__copy {
+  position: absolute;
+  top: 0.45em;
+  right: 0.45em;
+  z-index: 2;
+  font-size: 0.85em;
+  opacity: 0;
+  transition: opacity 140ms ease;
+}
+
+/* Se revela al acercarse; con foco por teclado siempre visible. */
+.code-block:hover .code-block__copy,
+.code-block:focus-within .code-block__copy { opacity: 1; }
+
+@media (hover: none) {
+  .code-block__copy { opacity: 1; }
+}
+
+.callout--cdn .code-block { margin: 8px 0 14px; }
