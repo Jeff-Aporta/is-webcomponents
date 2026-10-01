@@ -760,3 +760,23 @@ export function entityBoxPath(x: number, y: number, w: number, h: number, radius
 
 export const ER_HEADER_H = HEADER_H;
 export const ER_ROW_H = ROW_H;
+
+/**
+ * Iconos que representan los marcadores PK/FK en el cuerpo de cada entidad.
+ * Antes se emitían como `<text>PK</text>` / `<text>FK</text>` (texto monoespaciado
+ * bold); ahora son iconos del sistema de iconos del kit (Material Design Icons
+ * via Iconify). La elección favorece metáforas de "llave" porque el lector
+ * asocia PK=primary key y FK=foreign key con llaves/foráneas.
+ *
+ * Si en el futuro el autor del JSON quiere sobreescribir el icono por atributo
+ * (p.ej. "audit column marker"), basta con añadir `a.key: 'AUDIT'` en
+ * `ErSpecAttribute.key` y mapear aquí. Mantener el conjunto cerrado: PK/FK
+ * son las dos variantes que el motor entiende hoy.
+ */
+export const ER_KEY_ICON_IDS: Record<string, string> = {
+  PK: 'mdi:key-variant',
+  FK: 'mdi:key-link',
+};
+
+/** Tamaño (px) del icono PK/FK en el cuerpo de la entidad. */
+export const ER_KEY_ICON_SIZE = 12;

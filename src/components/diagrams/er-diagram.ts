@@ -1,12 +1,13 @@
 import { adoptCss, defineElement, emit, emitCancelable } from '../../core/element.js';
 import { DiagramElementBase } from '../_shared/diagram-element-base.js';
-import { resolveErSpec, computeErLayout, entityBoxPath, ER_HEADER_H, ER_ROW_H } from './er-spec.js';
+import { resolveErSpec, computeErLayout, entityBoxPath, ER_HEADER_H, ER_ROW_H, ER_KEY_ICON_IDS } from './er-spec.js';
 import { sequenceThemeDark, sequenceThemeLight } from './sequence-spec.js';
 import { SequenceTurtle } from './sequence-turtle.js';
 import { tkHueToHex } from '../_shared/tk-hue.js';
 import { edgeStrokeHex, edgeChipFill, edgeChipText } from '../_shared/diagram-edge-style.js';
 import { inlineMdWeb } from '../_shared/tk-inline-md.js';
 import { wrapText, buildTspans } from '../_shared/diagram-text-wrap.js';
+import { svgIconGroup } from '../_shared/tk-icon-inline.js';
 import { registerDiagramKind } from './diagram-kinds.js';
 import { svgEl } from '../_shared/svg-chart-engine.js';
 import type { DiagramGroup, DiagramTheme, ErLayout, ErLayoutEdge, ErLayoutEdgeMark, ErLayoutEntity } from './diagram-types.js';
@@ -387,13 +388,19 @@ class IsErDiagram extends DiagramElementBase {
         const ry = e.y + ER_HEADER_H + i * ER_ROW_H + ER_ROW_H / 2 + 4;
         let leftX = e.x + 10;
         if (a.key) {
-          const badge = svgEl('text', {
-            x: leftX, y: ry, fill: color, 'font-size': '9', 'font-weight': '700',
-            'font-family': 'Consolas,Menlo,monospace',
-          });
-          badge.textContent = a.key;
-          g.appendChild(badge);
-          leftX += 20;
+          // Icono pequeño en vez de texto PK/FK: usa el sistema de iconos del
+          // kit (svgIconGroup inyecta el SVG inline cuando resuelve). Tinte =
+          // color de la entidad para que case con el acento del borde.
+          const iconId = ER_KEY_ICON_IDS[a.key] ?? ER_KEY_ICON_IDS.PK;
+          const iconSize = 12;
+          // El icono se alinea verticalmente al centro de la fila (ry) y se
+          // descuenta la mitad del tamaño del icono para que su borde superior
+          // no se pegue al row de arriba.
+          const iconY = ry - iconSize - 1;
+          g.appendChild(svgIconGroup(iconId, {
+            x: leftX, y: iconY, size: iconSize, hue: e.hue,
+          }));
+          leftX += iconSize + 8;
         }
         const nameEl = svgEl('text', {
           x: leftX, y: ry, fill: theme.text, 'font-size': '10.5',
