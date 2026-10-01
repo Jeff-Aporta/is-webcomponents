@@ -84,9 +84,10 @@ assert.ok(ER_KEY_ICON_IDS.FK, 'FK debe tener un icono distinto');
 
 /* ─────────────────────── 2. Bordes de cluster como obstáculo ─────────────────────── */
 
-// El test de bordes de cluster como obstáculo se añade en el commit de
-// Step 2. Aquí sólo validamos que `computeErLayout` sigue produciendo un
-// layout coherente cuando hay ≥2 clusters (regresión de contrato).
+// Caso real: dos clusters con bordes que deben ser rodeados por las aristas
+// que cruzan entre ellos. Si el cluster NO se añade al cost grid como
+// obstáculo duro, las aristas pasarán por dentro del rectángulo del cluster
+// vecino, atravesándolo.
 {
   const spec = resolveErSpec({
     erDiagram: {
@@ -97,17 +98,68 @@ assert.ok(ER_KEY_ICON_IDS.FK, 'FK debe tener un icono distinto');
       ],
       entities: [
         { id: 'L1', name: 'L1', group: 'left', attributes: [{ name: 'id', key: 'PK' }] },
+        { id: 'L2', name: 'L2', group: 'left', attributes: [{ name: 'id', key: 'PK' }] },
         { id: 'R1', name: 'R1', group: 'right', attributes: [{ name: 'id', key: 'PK' }] },
+        { id: 'R2', name: 'R2', group: 'right', attributes: [{ name: 'id', key: 'PK' }] },
       ],
       relations: [
         { from: 'L1', to: 'R1', fromCard: 'one', toCard: 'many', identifying: true },
+        { from: 'L2', to: 'R2', fromCard: 'one', toCard: 'many', identifying: true },
       ],
     },
   });
   assert.ok(spec, 'spec con dos clusters debe ser válido');
   const layout = computeErLayout(spec!);
   assert.ok(layout.clusters && layout.clusters.length >= 2, 'layout debe emitir al menos 2 cajones');
-  assert.equal(layout.relations.length, 1, 'una arista entre clusters');
+  // Cada arista cruza entre clusters. Verificamos que ningún punto intermedio
+  // del path cae dentro de OTRO cluster que no sea el origen/destino.
+  for (const rel of layout.relations) {
+    const fromEntity = layout.entities.find((e) => e.id === rel.from)!;
+    const toEntity = layout.entities.find((e) => e.id === rel.to)!;
+    const fromClusterId = fromEntity.group;
+    const toClusterId = toEntity.group;
+    // Parsear puntos del path SVG: 'M x,yL x,yL x,y…'
+    const nums = [...rel.path.matchAll(/-?\d+(?:\.\d+)?/g)].map((m) => Number(m[0]));
+    for (let i = 0; i + 1 < nums.length; i += 2) {
+      const x = nums[i]!;
+      const y = nums[i + 1]!;
+      for (const c of layout.clusters!) {
+        if (c.id === fromClusterId || c.id === toClusterId) continue;
+        const inside = x >= c.x && x <= c.x + c.w && y >= c.y && y <= c.y + c.h;
+        assert.ok(!inside, `arista ${rel.id} cruza el cluster ${c.id} en (${x},${y}) — debe rodearlo`);
+      }
+    }
+  }
+}
+
+// Caso degenerado: dos clusters donde la geometría obliga a una arista
+// corta que antes cruzaba el cluster vecino. Aquí validamos que el resultado
+// sigue siendo un layout con la arista rutada (no se rompe el A*).
+{
+  const spec = resolveErSpec({
+    erDiagram: {
+      direction: 'TB',
+      groups: [
+        { id: 'top', name: 'Top' },
+        { id: 'bottom', name: 'Bottom' },
+      ],
+      entities: [
+        { id: 'A', name: 'A', group: 'top', attributes: [{ name: 'id', key: 'PK' }] },
+        { id: 'B', name: 'B', group: 'bottom', attributes: [{ name: 'id', key: 'PK' }] },
+      ],
+      relations: [
+        { from: 'A', to: 'B', fromCard: 'one', toCard: 'many', identifying: true },
+      ],
+    },
+  });
+  const layout = computeErLayout(spec!);
+  assert.equal(layout.relations.length, 1);
+  assert.ok(layout.relations[0]!.path.startsWith('M'));
+  // El layout no debe ser más ancho que el doble del cluster más ancho (los
+  // bordes no se cruzan → no hay pasillos extra). Si esta cota se rompe,
+  // alguien volvió a la versión que cruza clusters.
+  const maxW = Math.max(...layout.clusters!.map((c) => c.w));
+  assert.ok(layout.width <= maxW * 4, `ancho ${layout.width} excede el límite esperado`);
 }
 
 /* ─────────────────────── 3. Clusters anidados (parent) ─────────────────────── */

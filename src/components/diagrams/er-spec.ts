@@ -1,6 +1,7 @@
 import { layoutNodeLink, edgeAnchor, pickSides } from '../_shared/node-link-layout.js';
 import { makeCostGrid, blockRect, applyRectCost, snapDiagramGrid, snapPointAwayFromSide} from '../_shared/diagram-grid.js';
 import { routeOrthogonal, pixelToGrid, gridPathToSvg, buildOrthogonalPath } from '../_shared/diagram-astar.js';
+import type { ForbiddenRegion } from '../_shared/diagram-astar.js';
 import { resolveTkHue } from '../_shared/tk-hue.js';
 import { applyEdgeActorLayout } from '../_shared/diagram-edge-actors.js';
 import { assignEdgeHues } from '../_shared/diagram-edge-style.js';
@@ -52,6 +53,13 @@ const DEFAULT_RATIO = 1.4;
 /** Aire dentro del cajón de un grupo y alto de su cabecera. */
 const CLUSTER_PAD = 20;
 const CLUSTER_HEADER = 26;
+/**
+ * Padding extra alrededor del rectángulo de un cajón cuando se convierte en
+ * forbidden-region para el ruteo A*. 8 px deja un pasillo limpio entre la
+ * línea dashed del cluster y la arista que lo bordea (también múltiplo del
+ * grid 8, así no se snapea a celdas adyacentes).
+ */
+const CLUSTER_BORDER_PAD = 8;
 /** Separación entre cajones y entre entidades sueltas de un mismo cajón. */
 const CLUSTER_GAP = 56;
 const NODE_GAP = 84;
@@ -576,7 +584,11 @@ export function computeErLayout(spec: ErSpec): ErLayout {
   for (const c of cajones) applyRectCost(grid, c.x, c.y, c.w, CLUSTER_HEADER + 4, 12, true);
   // Peaje suave dentro de cada cajón: una arista que va de un cajón a otro
   // prefiere rodear por fuera antes que atravesar el territorio ajeno. Suave a
-  // propósito — las aristas internas del propio cajón deben seguir pudiendo pasar.
+  // propósito — las aristas internas del propio cajón deben seguir pudiendo
+  // pasar. Los obstáculos DUROS para que las aristas rodeen otros cajones se
+  // aplican por-arista vía `forbiddenRegions` en routeOrthogonal (ver más
+  // abajo): así, una arista interna del propio cajón sigue pasando libremente
+  // y una externa ve los demás cajones como muros.
   for (const c of cajones) applyRectCost(grid, c.x, c.y, c.w, c.h, 2, true);
 
   // Rutear primero lo corto deja los pasillos libres para lo largo, que es lo
@@ -652,6 +664,26 @@ export function computeErLayout(spec: ErSpec): ErLayout {
       // Si el autor dio `via` explícitos, los inyectamos como waypoints antes
       // del A*. El primer waypoint reemplaza a aGrid, los intermedios se
       // insertan en la ruta, el último reemplaza a bGrid.
+      // Para cada arista identificamos su cluster origen y destino: el resto
+      // de cajones se pasan como `forbiddenRegions` al router para que las
+      // aristas RODEEN los cajones ajenos en vez de cruzarlos. Sin este
+      // filtrado, una arista interna del propio cajón quedaría bloqueada por
+      // el rectángulo de su propio cluster (la celda del ancla cae dentro).
+      const fromClusterId = from.group ? from.group : null;
+      const toClusterId = to.group ? to.group : null;
+      const otherClusters: ForbiddenRegion[] = [];
+      for (const c of cajones) {
+        if (!c.id) continue;
+        if (c.id === fromClusterId || c.id === toClusterId) continue;
+        otherClusters.push({
+          id: `fr-cluster-${c.id}-${i}`,
+          kind: 'rect',
+          x: c.x - CLUSTER_BORDER_PAD,
+          y: c.y - CLUSTER_BORDER_PAD,
+          w: c.w + CLUSTER_BORDER_PAD * 2,
+          h: c.h + CLUSTER_BORDER_PAD * 2,
+        });
+      }
       let points: Array<{ col: number; row: number }>;
       if (Array.isArray(r.via) && r.via.length) {
         const midArr = r.via.map(([vx, vy]) => pixelToGrid(vx, vy, grid.grid));
@@ -663,13 +695,17 @@ export function computeErLayout(spec: ErSpec): ErLayout {
         points = [];
         let prev = rawRoute[0]!;
         for (let k = 1; k < rawRoute.length; k++) {
-          const seg = routeOrthogonal(prev, rawRoute[k]!, grid);
+          const seg = routeOrthogonal(prev, rawRoute[k]!, grid, {
+            forbiddenRegions: otherClusters,
+          });
           if (k === 1) points.push(...seg);
           else points.push(...seg.slice(1));
           prev = rawRoute[k]!;
         }
       } else {
-        points = routeOrthogonal(aGrid, bGrid, grid);
+        points = routeOrthogonal(aGrid, bGrid, grid, {
+          forbiddenRegions: otherClusters,
+        });
       }
       path = buildOrthogonalPath(a, b, aGrid, bGrid, points, grid.grid);
       const midPt = points.length
