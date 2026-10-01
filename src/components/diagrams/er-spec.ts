@@ -177,13 +177,57 @@ function readRelation(raw: unknown, i: number): ErSpecRelation {
 function readGroups(src: Record<string, unknown>): DiagramGroup[] | undefined {
   const raw = src.groups;
   if (!Array.isArray(raw) || !raw.length) return undefined;
-  return raw.map((g, i: number) => {
+  const out: DiagramGroup[] = raw.map((g, i: number) => {
     const r = asRecord(g);
-    return {
+    const group: DiagramGroup = {
       id: String(r.id ?? `grp-${i}`),
       name: String(r.name ?? r.label ?? `Grupo ${i + 1}`),
       hue: resolveTkHue(r, DEFAULT_HUES[i % DEFAULT_HUES.length]),
     };
+    if (typeof r.parent === 'string' && r.parent.length > 0) group.parent = r.parent;
+    return group;
+  });
+  return normalizeGroupParents(out);
+}
+
+/**
+ * Ciclos y referencias inválidas en `parent` se limpian en pasada. Política:
+ *   - parent apunta a un id inexistente → se descarta (sin parent);
+ *   - ciclo A.parent=B, B.parent=A → ambos quedan sin parent. Es más barato
+ *     que romper el ciclo en un eslabón arbitrario y deja el layout estable.
+ * El algoritmo es O(n²) sobre el número de grupos — son pocos.
+ */
+function normalizeGroupParents(groups: DiagramGroup[]): DiagramGroup[] {
+  if (!groups.length) return groups;
+  const byId = new Map(groups.map((g) => [g.id, g] as const));
+  // Recolectar todos los nodos que forman parte de un ciclo (drop parent).
+  const cycleMembers = new Set<string>();
+  for (const g of groups) {
+    if (!g.parent) continue;
+    const seen = new Set<string>();
+    let cursor: string | undefined = g.id;
+    while (cursor && !seen.has(cursor)) {
+      seen.add(cursor);
+      cursor = byId.get(cursor)?.parent;
+    }
+    if (cursor && seen.has(cursor)) {
+      // cursor está en el recorrido → todos los vistos son parte del ciclo.
+      for (const v of seen) cycleMembers.add(v);
+    }
+  }
+  // Recolectar todos los nodos cuyo parent apunta a un id inexistente.
+  const orphanParents = new Set<string>();
+  for (const g of groups) {
+    if (g.parent && !byId.has(g.parent)) orphanParents.add(g.id);
+  }
+  // Aplicar limpieza.
+  return groups.map((g) => {
+    if (cycleMembers.has(g.id) || orphanParents.has(g.id)) {
+      const fixed: DiagramGroup = { id: g.id, name: g.name };
+      if (g.hue != null) fixed.hue = g.hue;
+      return fixed;
+    }
+    return g;
   });
 }
 
@@ -305,22 +349,52 @@ interface ClusterRaw {
   hue: number | undefined;
   ids: string[];
   boxed: boolean;
+  /** Id del cluster padre (si está anidado). */
+  parentId?: string;
+  /** Profundidad de anidamiento (0 = root). */
+  depth: number;
 }
 
 /**
  * Reparte las entidades en clústeres: uno por grupo declarado, más uno suelto
- * (sin cajón) con las que no declaran `group`.
+ * (sin cajón) con las que no declaran `group`. Cada cluster lleva su
+ * `parentId` y `depth` para que el layout pueda dibujarlos anidados.
  */
 function buildClusters(spec: ErSpec): ClusterRaw[] {
   const porGrupo = new Map<string, ClusterRaw>();
-  for (const g of spec.groups ?? []) porGrupo.set(g.id, { id: g.id, name: g.name, hue: g.hue, ids: [], boxed: true });
+  // Profundidad por id: se propaga desde los roots (depth=0) hasta los
+  // hijos siguiendo `parent`. Un hijo nunca puede tener depth > la del
+  // padre + 1; en caso contrario, se considera huérfano (el padre podría
+  // no existir — ya se limpió en `normalizeGroupParents`, pero nos
+  // curamos en salud).
+  const depthById = new Map<string, number>();
+  const byId = new Map<string, DiagramGroup>();
+  for (const g of spec.groups ?? []) byId.set(g.id, g);
+  function depthOf(id: string): number {
+    const cached = depthById.get(id);
+    if (cached !== undefined) return cached;
+    const g = byId.get(id);
+    if (!g?.parent) { depthById.set(id, 0); return 0; }
+    const parentDepth = byId.has(g.parent) ? depthOf(g.parent) : -1;
+    const d = parentDepth >= 0 ? parentDepth + 1 : 0;
+    depthById.set(id, d);
+    return d;
+  }
+  for (const g of spec.groups ?? []) {
+    const depth = depthOf(g.id);
+    porGrupo.set(g.id, {
+      id: g.id, name: g.name, hue: g.hue, ids: [], boxed: true,
+      parentId: depth > 0 ? g.parent : undefined,
+      depth,
+    });
+  }
   const sueltas: string[] = [];
   for (const e of spec.entities) {
     if (e.group && porGrupo.has(e.group)) porGrupo.get(e.group)!.ids.push(e.id);
     else sueltas.push(e.id);
   }
   const out: ClusterRaw[] = [...porGrupo.values()].filter((c) => c.ids.length);
-  if (sueltas.length) out.push({ id: null, name: '', hue: undefined, ids: sueltas, boxed: false });
+  if (sueltas.length) out.push({ id: null, name: '', hue: undefined, ids: sueltas, boxed: false, depth: 0 });
   return out;
 }
 
@@ -406,6 +480,16 @@ export function computeErLayout(spec: ErSpec): ErLayout {
   const clusterDe = new Map<string, number>();
   clusters.forEach((c, i) => { for (const id of c.ids) clusterDe.set(id, i); });
 
+  // Mapa parentId -> indices de clusters hijos (vive en este módulo, no en
+  // types, porque es transitorio del layout).
+  const childrenByParent = new Map<string | null, number[]>();
+  for (let i = 0; i < clusters.length; i++) {
+    const c = clusters[i]!;
+    const key = c.parentId ?? null;
+    if (!childrenByParent.has(key)) childrenByParent.set(key, []);
+    childrenByParent.get(key)!.push(i);
+  }
+
   // Cada clúster se resuelve como un diagrama independiente: las relaciones que
   // cruzan de un cajón a otro no participan del capado, así que no arrastran
   // entidades fuera de su grupo ni deforman el orden interno.
@@ -461,6 +545,41 @@ export function computeErLayout(spec: ErSpec): ErLayout {
     };
   });
 
+  // Post-proceso: si un cluster es padre de otros, su bbox debe ser al menos
+  // tan ancho/alto como la suma de los hijos (más un margen interno). Esto se
+  // calcula AQUÍ — antes del pack — para que el shelf-packer del root tenga
+  // en cuenta el espacio reservado por los hijos. Sin esto, un outer
+  // pequeñito se quedaría sin hueco para los hijos y el layout no podría
+  // meterlos dentro.
+  //
+  // IMPORTANTE: procesamos en orden de PROFUNDIDAD DESCENDENTE — los hijos
+  // más profundos primero. Si iteramos por índice, los padres se evalúan con
+  // el bbox ORIGINAL de los hijos (entity-only), no con el bbox final que ya
+  // incluye a sus propios hijos. En un anidamiento A>B>C, A terminaría de
+  // tamaño insuficiente para contener a B+C.
+  const depthByIdx = new Map<number, number>();
+  for (let i = 0; i < clusters.length; i++) depthByIdx.set(i, clusters[i]!.depth);
+  const orderByDepthDesc = [...Array(cajas.length).keys()]
+    .filter((i) => clusters[i]!.id != null)
+    .sort((a, b) => (depthByIdx.get(b) ?? 0) - (depthByIdx.get(a) ?? 0));
+  for (const i of orderByDepthDesc) {
+    const c = clusters[i]!;
+    if (c.id == null) continue;
+    // Calcula el bbox combinado de los hijos del cluster i.
+    const childIndices = childrenByParent.get(c.id) ?? [];
+    if (!childIndices.length) continue;
+    // Calcula pack local de los hijos para reservar ancho/alto suficiente.
+    const childSizes = childIndices.map((j) => ({ key: j, w: cajas[j]!.w, h: cajas[j]!.h }));
+    if (!childSizes.length) continue;
+    const childPack = packShelves(childSizes, ratioGuia, CLUSTER_GAP);
+    // Reservamos ancho para los hijos + padding lateral a cada lado. El alto
+    // del padre debe acomodar cabecera + cluster hijo + padding abajo.
+    const childReserveW = childPack.width + CLUSTER_PAD * 2;
+    const childReserveH = CLUSTER_PAD + CLUSTER_HEADER + childPack.height + CLUSTER_PAD;
+    cajas[i]!.w = snapDiagramGrid(Math.max(cajas[i]!.w, childReserveW));
+    cajas[i]!.h = snapDiagramGrid(Math.max(cajas[i]!.h, childReserveH));
+  }
+
   // Orden de los cajones: se prueba cada permutación (son pocos) y gana la que
   // deja más cerca los extremos de las relaciones que cruzan entre cajones.
   const cruzadas = spec.relations.filter((r) => clusterDe.get(r.from) !== clusterDe.get(r.to));
@@ -505,7 +624,7 @@ export function computeErLayout(spec: ErSpec): ErLayout {
     const cy = offsetY + p.y;
     const c = clusters[caja.key];
     if (!c) continue;
-    if (c.boxed) cajones.push({ id: c.id, name: c.name, hue: c.hue, x: cx, y: cy, w: caja.w, h: caja.h });
+    if (c.boxed) cajones.push({ id: c.id, name: c.name, hue: c.hue, parentId: c.parentId, x: cx, y: cy, w: caja.w, h: caja.h, depth: c.depth });
     for (const n of caja.nodes) {
       const s = specById.get(n.id);
       if (!s) continue;
@@ -535,6 +654,83 @@ export function computeErLayout(spec: ErSpec): ErLayout {
       if (s.style) entity.style = s.style;
       if (lk) entity.locked = true;
       entities.push(entity);
+    }
+  }
+
+  // Posicionar clusters anidados: cada cluster con parentId se mete DENTRO
+  // del bbox de su padre (con padding). Esto se hace tras el pack porque
+  // las posiciones absolutas del padre ya están fijadas.
+  if (cajones.length) {
+    // Mapa rápido id -> cajón en layout (omite el null suelto).
+    const byClusterId = new Map<string, NonNullable<ErLayout['clusters']>[number]>();
+    for (const cj of cajones) {
+      if (cj.id != null) byClusterId.set(cj.id, cj);
+    }
+    // Mapa id cluster -> offset (dx, dy) que el cluster hijo debe aplicar a
+    // las coordenadas de sus entidades para que sigan al bbox reubicado.
+    const childTranslate = new Map<string, { dx: number; dy: number }>();
+    // Posiciones originales (antes del anidamiento) — guardadas por si
+    // necesitamos re-traducir.
+    const oldPos = new Map<string, { x: number; y: number }>();
+    for (const cj of cajones) {
+      if (cj.id != null) oldPos.set(cj.id, { x: cj.x, y: cj.y });
+    }
+    // Orden topológico por profundidad ascendente: padres primero.
+    const ordered = [...cajones].sort((a, b) => (a.depth ?? 0) - (b.depth ?? 0));
+    for (const cj of ordered) {
+      if (!cj.parentId) continue;
+      const parent = byClusterId.get(cj.parentId);
+      if (!parent) continue;
+      // Pack interno de los hijos de este parent para obtener posiciones
+      // locales (relativas al padre).
+      const childIndices = childrenByParent.get(parent.id) ?? [];
+      if (!childIndices.length) continue;
+      const childPack = packShelves(
+        childIndices.map((j) => ({ key: j, w: cajas[j]!.w, h: cajas[j]!.h })),
+        ratioGuia, CLUSTER_GAP,
+      );
+      const childIndex = clusters.findIndex((c) => c.id === cj.id);
+      if (childIndex < 0) continue;
+      const localPos = childPack.pos.get(childIndex);
+      if (!localPos) continue;
+      // Padding entre el borde del padre y el cluster hijo. Reservamos la
+      // cabecera (header) del padre en el TOP — el resto del espacio está
+      // disponible para los hijos.
+      const nestPad = CLUSTER_PAD;
+      const headerReserve = (parent.depth ?? 0) === 0 ? (CLUSTER_PAD + CLUSTER_HEADER) : nestPad;
+      const innerX = parent.x + nestPad;
+      const innerY = parent.y + headerReserve;
+      const innerW = Math.max(parent.w - nestPad * 2, 0);
+      const innerH = Math.max(parent.h - headerReserve - nestPad, 0);
+      const desiredX = innerX + localPos.x;
+      const desiredY = innerY + localPos.y;
+      // Clamp al interior del padre: si el hijo no cabe, lo pegamos al borde
+      // y listo (caso degenerado de un JSON muy estrecho — preferible a un
+      // NaN o a salirse del lienzo).
+      const x = innerW >= cj.w
+        ? Math.max(innerX, Math.min(desiredX, innerX + innerW - cj.w))
+        : innerX;
+      const y = innerH >= cj.h
+        ? Math.max(innerY, Math.min(desiredY, innerY + innerH - cj.h))
+        : innerY;
+      const old = oldPos.get(cj.id!) ?? { x: 0, y: 0 };
+      const newX = snapDiagramGrid(x);
+      const newY = snapDiagramGrid(y);
+      cj.x = newX;
+      cj.y = newY;
+      // Las entidades del cluster hijo se habían colocado respecto a `old`;
+      // las desplazamos por (newX-old.x, newY-old.y).
+      childTranslate.set(cj.id!, { dx: newX - old.x, dy: newY - old.y });
+    }
+    // Re-traducir entidades de clusters hijos.
+    if (childTranslate.size) {
+      for (const ent of entities) {
+        if (!ent.group) continue;
+        const t = childTranslate.get(ent.group);
+        if (!t) continue;
+        ent.x = snapDiagramGrid(ent.x + t.dx);
+        ent.y = snapDiagramGrid(ent.y + t.dy);
+      }
     }
   }
   // Si una entidad lockeada se sale del viewBox que el empaquetado calculó,

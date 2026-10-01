@@ -164,9 +164,7 @@ assert.ok(ER_KEY_ICON_IDS.FK, 'FK debe tener un icono distinto');
 
 /* ─────────────────────── 3. Clusters anidados (parent) ─────────────────────── */
 
-// Los chequeos de clusters anidados se cubren en una segunda tanda tras el
-// commit de Step 3 (nested clusters). Aquí dejamos un placeholder que sólo
-// verifica que el type acepta el campo (regresión de contrato).
+// 3a. Sin `parent`, nada cambia: grupos siguen siendo siblings.
 {
   const spec = resolveErSpec({
     erDiagram: {
@@ -174,12 +172,167 @@ assert.ok(ER_KEY_ICON_IDS.FK, 'FK debe tener un icono distinto');
         { id: 'a', name: 'A' },
         { id: 'b', name: 'B' },
       ],
-      entities: [{ id: 'x', name: 'X', group: 'a', attributes: [{ name: 'id', key: 'PK' }] }],
+      entities: [
+        { id: 'x', name: 'X', group: 'a', attributes: [{ name: 'id', key: 'PK' }] },
+      ],
       relations: [],
     },
   });
-  assert.ok(spec, 'spec con grupos debe parsear');
   assert.equal(spec!.groups?.length, 2, 'dos grupos sin parent = dos siblings');
+  for (const g of spec!.groups!) assert.equal(g.parent, undefined, 'sin `parent` en JSON, queda undefined');
+}
+
+// 3b. Con `parent`, el spec normalizado lo conserva y el layout coloca el bbox
+// interior estrictamente dentro del bbox exterior.
+{
+  const spec = resolveErSpec({
+    erDiagram: {
+      groups: [
+        { id: 'outer', name: 'Outer' },
+        { id: 'inner', name: 'Inner', parent: 'outer' },
+      ],
+      entities: [
+        { id: 'A', name: 'A', group: 'outer', attributes: [{ name: 'id', key: 'PK' }] },
+        { id: 'B', name: 'B', group: 'inner', attributes: [{ name: 'id', key: 'PK' }] },
+      ],
+      relations: [],
+    },
+  });
+  assert.ok(spec, 'spec con parent debe parsear');
+  assert.equal(spec!.groups!.find((g) => g.id === 'inner')!.parent, 'outer');
+  const layout = computeErLayout(spec!);
+  const innerCluster = layout.clusters!.find((c) => c.id === 'inner')!;
+  const outerCluster = layout.clusters!.find((c) => c.id === 'outer')!;
+  assert.ok(innerCluster, 'cluster interior debe existir');
+  assert.ok(outerCluster, 'cluster exterior debe existir');
+  // Contención estricta con margen: el interior queda dentro del exterior
+  // dejando padding a ambos lados.
+  assert.ok(
+    innerCluster.x > outerCluster.x,
+    `inner.x (${innerCluster.x}) debe ser > outer.x (${outerCluster.x})`,
+  );
+  assert.ok(
+    innerCluster.y > outerCluster.y,
+    `inner.y (${innerCluster.y}) debe ser > outer.y (${outerCluster.y})`,
+  );
+  assert.ok(
+    innerCluster.x + innerCluster.w < outerCluster.x + outerCluster.w,
+    `inner debe terminar antes que outer horizontalmente`,
+  );
+  assert.ok(
+    innerCluster.y + innerCluster.h < outerCluster.y + outerCluster.h,
+    `inner debe terminar antes que outer verticalmente`,
+  );
+  // Las entidades del cluster hijo también quedan dentro del bbox del padre.
+  const innerEntity = layout.entities.find((e) => e.id === 'B')!;
+  assert.ok(innerEntity, 'entidad B existe');
+  assert.ok(
+    innerEntity.x >= outerCluster.x && innerEntity.x + innerEntity.w <= outerCluster.x + outerCluster.w,
+    `B.x (${innerEntity.x}..${innerEntity.x + innerEntity.w}) debe estar dentro de outer (${outerCluster.x}..${outerCluster.x + outerCluster.w})`,
+  );
+  assert.ok(
+    innerEntity.y >= outerCluster.y && innerEntity.y + innerEntity.h <= outerCluster.y + outerCluster.h,
+    `B.y debe estar dentro de outer verticalmente`,
+  );
+  // El layout debe registrar la profundidad de anidamiento.
+  assert.ok((innerCluster.depth ?? 0) >= 1, 'inner.depth >= 1');
+  assert.ok((outerCluster.depth ?? 0) === 0, 'outer.depth = 0');
+}
+
+// 3c. Detección de ciclos: A.parent = B y B.parent = A debe romper el ciclo
+// durante la normalización. La forma exacta del manejo (drop o normalización
+// a undefined) la define el spec; lo importante es que el layout NO se cuelga
+// ni produce recursión infinita.
+{
+  const spec = resolveErSpec({
+    erDiagram: {
+      groups: [
+        { id: 'a', name: 'A', parent: 'b' },
+        { id: 'b', name: 'B', parent: 'a' },
+      ],
+      entities: [
+        { id: 'x', name: 'X', group: 'a', attributes: [{ name: 'id', key: 'PK' }] },
+      ],
+      relations: [],
+    },
+  });
+  // La spec debe romper el ciclo soltando el parent de los participantes.
+  for (const g of spec!.groups!) {
+    assert.equal(g.parent, undefined, `parent del cluster ${g.id} debe quedar undefined tras romper el ciclo`);
+  }
+  const layout = computeErLayout(spec!);
+  assert.ok(layout, 'layout con ciclos en parent no debe colgarse');
+  assert.ok(layout.entities.length === 1, 'X sigue presente');
+  // Ningún cluster debe estar anidado dentro de sí mismo (containment vacío).
+  for (const c of layout.clusters ?? []) {
+    assert.ok(c.w >= 0 && c.h >= 0, `cluster ${c.id} debe tener dimensiones no-negativas`);
+    assert.equal(c.parentId, undefined, `cluster ${c.id} debe quedar sin parent tras romper ciclo`);
+  }
+}
+
+// 3d. Padre inexistente: el spec lo marca como inválido y el cluster queda
+// suelto (sin parent) para que el layout no se rompa buscando un bbox padre
+// que no existe.
+{
+  const spec = resolveErSpec({
+    erDiagram: {
+      groups: [
+        { id: 'g', name: 'G', parent: 'fantasma' },
+      ],
+      entities: [
+        { id: 'x', name: 'X', group: 'g', attributes: [{ name: 'id', key: 'PK' }] },
+      ],
+      relations: [],
+    },
+  });
+  assert.ok(spec, 'spec con parent inexistente no debe fallar al parsear');
+  const inner = spec!.groups!.find((g) => g.id === 'g')!;
+  assert.equal(inner.parent, undefined, 'parent inexistente debe quedar undefined');
+  const layout = computeErLayout(spec!);
+  assert.ok(layout, 'layout con parent inexistente debe renderizar');
+  const g = layout.clusters!.find((c) => c.id === 'g');
+  assert.ok(g, 'cluster g debe existir igual');
+  assert.ok(g!.x >= 0 && g!.y >= 0, 'cluster huérfano debe tener coordenadas válidas');
+}
+
+// 3e. Anidamiento de 3 niveles: A → B → C. La jerarquía se respeta y los
+// bboxes quedan anidados correctamente.
+{
+  const spec = resolveErSpec({
+    erDiagram: {
+      groups: [
+        { id: 'a', name: 'A' },
+        { id: 'b', name: 'B', parent: 'a' },
+        { id: 'c', name: 'C', parent: 'b' },
+      ],
+      entities: [
+        { id: 'ea', name: 'EA', group: 'a', attributes: [{ name: 'id', key: 'PK' }] },
+        { id: 'eb', name: 'EB', group: 'b', attributes: [{ name: 'id', key: 'PK' }] },
+        { id: 'ec', name: 'EC', group: 'c', attributes: [{ name: 'id', key: 'PK' }] },
+      ],
+      relations: [],
+    },
+  });
+  assert.ok(spec, 'spec de 3 niveles debe parsear');
+  const layout = computeErLayout(spec!);
+  const a = layout.clusters!.find((c) => c.id === 'a')!;
+  const b = layout.clusters!.find((c) => c.id === 'b')!;
+  const c = layout.clusters!.find((c) => c.id === 'c')!;
+  // C dentro de B dentro de A.
+  for (const inner of [b, c]) {
+    assert.ok(
+      inner.x > a.x && inner.x + inner.w < a.x + a.w,
+      `${inner.id}.x no está estrictamente dentro de a`,
+    );
+    assert.ok(
+      inner.y > a.y && inner.y + inner.h < a.y + a.h,
+      `${inner.id}.y no está estrictamente dentro de a`,
+    );
+  }
+  assert.ok(c.y > b.y, 'c.y debe ser > b.y');
+  assert.equal((c.depth ?? 0), 2, 'c.depth = 2');
+  assert.equal((b.depth ?? 0), 1, 'b.depth = 1');
+  assert.equal((a.depth ?? 0), 0, 'a.depth = 0');
 }
 
 console.log('er-features self-check: PASS');

@@ -46,6 +46,15 @@ export interface DiagramGroup {
   id: string;
   name: string;
   hue?: number;
+  /**
+   * Id del grupo padre: si está presente, este cluster se dibuja
+   * VISUALMENTE anidado dentro del rectángulo del padre (bbox estrictamente
+   * contenido, fondo con el `hue` del padre, borde más fino). Cadena plana
+   * por nivel — para anidar A dentro de B dentro de C basta con que C.parent
+   * esté ausente, B.parent = 'C' y A.parent = 'B'. El motor detecta ciclos y
+   * los rompe soltando el `parent` del eslabón más reciente.
+   */
+  parent?: string;
 }
 
 // ──────────────────────────────── Geometry ────────────────────────────────
@@ -320,6 +329,14 @@ export interface ErLayout {
     id: string | null;
     name: string;
     hue?: number;
+    /** Id del cluster padre si este está visualmente anidado. */
+    parentId?: string;
+    /**
+     * Profundidad de anidamiento (0 = root). Útil para que el renderer
+     * atenúe el borde y/o el fondo en clusters anidados: los hijos llevan
+     * el `hue` del padre como fondo y un borde más fino.
+     */
+    depth?: number;
     x: number;
     y: number;
     w: number;

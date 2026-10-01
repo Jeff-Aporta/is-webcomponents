@@ -199,17 +199,44 @@ class IsErDiagram extends DiagramElementBase {
     emit(this, 'is-render', { layout, svg: this.svg });
   }
 
-  /** Cajón por grupo: marco tenue + cabecera con el nombre del agrupador. */
+  /** Cajón por grupo: marco tenue + cabecera con el nombre del agrupador.
+   * Los clusters anidados (depth > 0) llevan un fondo heredado del hue del
+   * padre (más opaco para que destaque la jerarquía) y un borde más fino sin
+   * dashing — la línea dashed solo aparece en los cajones de raíz. */
   #buildClusters(layout: ErLayout, theme: DiagramTheme) {
+    // Resolver el hue del padre para clusters con parentId: el renderer pinta
+    // los hijos con el color del padre para que la jerarquía visual sea
+    // inmediata sin agregar un campo nuevo al layout.
+    const parentHue = new Map<string, number | undefined>();
     for (const c of layout.clusters ?? []) {
-      const color = (c.hue != null && tkHueToHex(c.hue)) || theme.accent;
-      const g = svgEl('g', { class: 'er-cluster' });
+      if (c.parentId && c.hue == null) {
+        const parent = layout.clusters!.find((p) => p.id === c.parentId);
+        parentHue.set(c.id!, parent?.hue);
+      }
+    }
+    for (const c of layout.clusters ?? []) {
+      const color = (c.hue != null && tkHueToHex(c.hue))
+        || (parentHue.get(c.id ?? -1) != null && tkHueToHex(parentHue.get(c.id ?? -1)!))
+        || theme.accent;
+      const depth = c.depth ?? 0;
+      const isNested = depth > 0;
+      const g = svgEl('g', { class: isNested ? 'er-cluster er-cluster--nested' : 'er-cluster' });
       if (c.id) g.dataset.clusterId = c.id;
+      if (c.parentId) g.dataset.clusterParent = c.parentId;
 
+      // Fondo: en raíz es muy tenue (0.06), en anidados usa el hue del padre
+      // con algo más de opacidad para que la jerarquía se lea de un vistazo.
+      const bgHue = c.hue ?? parentHue.get(c.id ?? -1);
+      const bg = bgHue != null
+        ? `hsla(${bgHue},60%,50%,${isNested ? 0.10 : 0.06})`
+        : 'none';
+      // Borde: raíz dashing tenue, anidado continuo y más fino.
       g.appendChild(svgEl('rect', {
         x: c.x, y: c.y, width: c.w, height: c.h, rx: 12,
-        fill: c.hue != null ? `hsla(${c.hue},60%,50%,0.06)` : 'none',
-        stroke: color, 'stroke-width': 1.1, 'stroke-dasharray': '2 5',
+        fill: bg,
+        stroke: color,
+        'stroke-width': isNested ? 0.8 : 1.1,
+        'stroke-dasharray': isNested ? null : '2 5',
         class: 'er-cluster__box',
       }));
 
