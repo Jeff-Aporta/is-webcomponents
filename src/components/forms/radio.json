@@ -9,7 +9,7 @@
   "sections": [
     {
       "id": "intro",
-      "title": "<is-radio> + <is-radio-group>",
+      "title": "Uso",
       "lede": "Paridad funcional con el\r\n          <a href=\"https://mui.com/material-ui/react-radio-button/\" target=\"_blank\" rel=\"noreferrer\">Radio Group de MUI</a>:\r\n          color por <code class=\"code\">variant</code>, posición de etiqueta, estado de error, solo lectura y\r\n          navegación por teclado según el patrón ARIA <em>radiogroup</em>.\r\n          El grupo es el elemento <em>form-associated</em>: publica el valor, valida y gobierna el teclado.\r\n          Los <code class=\"code\">is-radio</code> son las opciones y solo avisan al grupo cuando se eligen.",
       "blocks": [
         {
@@ -271,7 +271,7 @@
     {
       "id": "reference",
       "title": "Referencia",
-      "lede": "Los tokens <code class=\"code\">--is-radio-*</code> se heredan: ponlos en el grupo (o en cualquier\r\n          ancestro) para tematizar todas sus opciones de golpe. Un <code class=\"code\">is-radio</code> suelto\r\n          (sin grupo) se marca solo, útil para maquetas; el valor de formulario siempre lo publica el grupo, así\r\n          nunca hay dos radios marcados con el mismo <code class=\"code\">name</code>.",
+      "lede": "Los tokens <code class=\"code\">--iswc-radio-*</code> se heredan: ponlos en el grupo (o en cualquier\r\n          ancestro) para tematizar todas sus opciones de golpe. Un <code class=\"code\">is-radio</code> suelto\r\n          (sin grupo) se marca solo, útil para maquetas; el valor de formulario siempre lo publica el grupo, así\r\n          nunca hay dos radios marcados con el mismo <code class=\"code\">name</code>.",
       "blocks": [
         {
           "kind": "table",
@@ -399,7 +399,7 @@
             ],
             [
               "tokens",
-              "<code>--is-radio-size</code> <code>--is-radio-bg</code> <code>--is-radio-bg-hover</code> <code>--is-radio-border</code> <code>--is-radio-accent</code> <code>--is-radio-dot</code> <code>--is-radio-focus</code> <code>--is-radio-halo-size</code>"
+              "<code>--iswc-radio-size</code> <code>--iswc-radio-bg</code> <code>--iswc-radio-bg-hover</code> <code>--iswc-radio-border</code> <code>--iswc-radio-accent</code> <code>--iswc-radio-dot</code> <code>--iswc-radio-focus</code> <code>--iswc-radio-halo-size</code>"
             ]
           ]
         }

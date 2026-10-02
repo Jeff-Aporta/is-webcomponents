@@ -1,15 +1,15 @@
 :host {
-  --is-progress-ring-track-width: 2.75;
-  --is-progress-ring-width: 2.75;
-  --is-progress-ring-track-color: color-mix(in srgb, var(--is-control-border, #59636e) 55%, transparent);
-  --is-progress-ring-color: var(--is-accent, var(--is-color-brand, #339af0));
+  --iswc-progress-ring-track-width: 2.75;
+  --iswc-progress-ring-width: 2.75;
+  --iswc-progress-ring-track-color: color-mix(in srgb, var(--iswc-control-border, #59636e) 55%, transparent);
+  --iswc-progress-ring-color: var(--iswc-accent, var(--iswc-color-brand, #339af0));
   display: inline-flex;
   vertical-align: middle;
   font-size: inherit;
   width: 1em;
   height: 1em;
-  font-family: var(--is-font-family, system-ui, sans-serif);
-  color: var(--is-text, #e6e8eb);
+  font-family: var(--iswc-font-family, system-ui, sans-serif);
+  color: var(--iswc-text, #e6e8eb);
 }
 
 .ring-wrap {
@@ -35,13 +35,13 @@
 }
 
 .track {
-  stroke: var(--is-progress-ring-track-color);
-  stroke-width: var(--is-progress-ring-track-width);
+  stroke: var(--iswc-progress-ring-track-color);
+  stroke-width: var(--iswc-progress-ring-track-width);
 }
 
 .indicator {
-  stroke: var(--is-progress-ring-color);
-  stroke-width: var(--is-progress-ring-width);
+  stroke: var(--iswc-progress-ring-color);
+  stroke-width: var(--iswc-progress-ring-width);
   transition: stroke-dashoffset 280ms cubic-bezier(0.22, 1, 0.36, 1);
 }
 
@@ -65,7 +65,7 @@
   font-variant-numeric: tabular-nums;
   letter-spacing: -0.03em;
   line-height: 1.05;
-  color: var(--is-text, inherit);
+  color: var(--iswc-text, inherit);
 
   &[hidden] {
     display: none !important;

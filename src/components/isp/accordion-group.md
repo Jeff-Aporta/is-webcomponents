@@ -94,7 +94,7 @@ No expone custom states.
 
 | Token | Uso |
 | --- | --- |
-| `--is-accordion-gap` | Separación vertical entre paneles. |
+| `--iswc-accordion-gap` | Separación vertical entre paneles. |
 
 
 ### Integración con formularios

@@ -9,7 +9,7 @@
   "sections": [
     {
       "id": "intro",
-      "title": "<is-card>",
+      "title": "Uso",
       "lede": "Contenedor flexible con slots para <code class=\"code\">media</code>, <code class=\"code\">header</code>,\r\n          <code class=\"code\">body</code>, <code class=\"code\">footer</code> y <code class=\"code\">actions</code>.\r\n          Cinco apariencias y dos orientaciones. JavaScript nativo, Shadow DOM, sin frameworks.",
       "blocks": [
         {
@@ -73,7 +73,7 @@
       "blocks": [
         {
           "kind": "html",
-          "html": "<div class=\"card-stage-h\">\r\n          <is-card orientation=\"horizontal\" style=\"max-width: 560px; width: 100%;\">\r\n            <div slot=\"media\">\r\n              <is-icon icon=\"mdi:bell-ring-outline\" style=\"font-size: 2.4rem; color: var(--is-accent);\"></is-icon>\r\n            </div>\r\n            <div>\r\n              <strong>Nueva mención</strong>\r\n              <p class=\"card-meta\">Te han mencionado en <code>#general</code> hace 3 min.</p>\r\n            </div>\r\n            <div slot=\"actions\" class=\"card-row-actions\">\r\n              <is-button color=\"neutral\" variant=\"outlined\">Ignorar</is-button>\r\n              <is-button color=\"brand\">Ver</is-button>\r\n            </div>\r\n          </is-card>\r\n        </div>"
+          "html": "<div class=\"card-stage-h\">\r\n          <is-card orientation=\"horizontal\" style=\"max-width: 560px; width: 100%;\">\r\n            <div slot=\"media\">\r\n              <is-icon icon=\"mdi:bell-ring-outline\" style=\"font-size: 2.4rem; color: var(--iswc-accent);\"></is-icon>\r\n            </div>\r\n            <div>\r\n              <strong>Nueva mención</strong>\r\n              <p class=\"card-meta\">Te han mencionado en <code>#general</code> hace 3 min.</p>\r\n            </div>\r\n            <div slot=\"actions\" class=\"card-row-actions\">\r\n              <is-button color=\"neutral\" variant=\"outlined\">Ignorar</is-button>\r\n              <is-button color=\"brand\">Ver</is-button>\r\n            </div>\r\n          </is-card>\r\n        </div>"
         },
         {
           "kind": "code",
@@ -254,7 +254,7 @@
           "rows": [
             [
               "<code>--spacing</code>",
-              "<code>var(--is-space-l, 1rem)</code>",
+              "<code>var(--iswc-space-l, 1rem)</code>",
               "Padding y gap entre secciones."
             ]
           ]

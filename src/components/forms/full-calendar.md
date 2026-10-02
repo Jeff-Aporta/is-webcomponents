@@ -109,15 +109,15 @@ No expone custom states.
 
 | Token | Uso |
 | --- | --- |
-| `--is-bg-elev` | Fondo del calendario. |
-| `--is-border` | Bordes de la rejilla. |
-| `--is-border-soft` | Líneas internas. |
-| `--is-radius` | Radio de bordes. |
-| `--is-text` | Color del texto. |
-| `--is-text-soft` | Días fuera del mes. |
-| `--is-text-dim` | Etiquetas de hora. |
-| `--is-accent` | Día de hoy y vista activa. |
-| `--is-on-accent` | Contenido sobre el acento. |
+| `--iswc-bg-elev` | Fondo del calendario. |
+| `--iswc-border` | Bordes de la rejilla. |
+| `--iswc-border-soft` | Líneas internas. |
+| `--iswc-radius` | Radio de bordes. |
+| `--iswc-text` | Color del texto. |
+| `--iswc-text-soft` | Días fuera del mes. |
+| `--iswc-text-dim` | Etiquetas de hora. |
+| `--iswc-accent` | Día de hoy y vista activa. |
+| `--iswc-on-accent` | Contenido sobre el acento. |
 
 El `color` de cada evento se aplica por variables locales del propio evento.
 

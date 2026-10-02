@@ -9,7 +9,7 @@
   "sections": [
     {
       "id": "intro",
-      "title": "<is-dropdown-item>",
+      "title": "Uso",
       "lede": "Item de un <code class=\"code\">&lt;is-dropdown&gt;</code>. Aporta el estado (activo, deshabilitado), el slot de icono y el valor que viaja en el evento de selección.",
       "blocks": [
         {

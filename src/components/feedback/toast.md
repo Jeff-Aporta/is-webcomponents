@@ -91,7 +91,7 @@ No expone.
 
 | Token | Uso |
 | --- | --- |
-| `--is-font-family` | Token leído o definido por componente. |
+| `--iswc-font-family` | Token leído o definido por componente. |
 
 ### Integración con formularios
 

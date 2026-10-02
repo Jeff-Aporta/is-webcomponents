@@ -77,7 +77,7 @@ export class TRADrag extends TRABase {
       const label = (labelEl?.textContent?.trim() || this.flatPath);
       const ghost = document.createElement("div");
       ghost.textContent = label;
-      ghost.style.cssText = "position:absolute;top:-1000px;left:-1000px;padding:0.3rem 0.7rem;border-radius:0.35rem;font:600 13px/1.2 system-ui,sans-serif;background:var(--is-accent,#1976d2);color:#fff;box-shadow:0 4px 12px #0004;white-space:nowrap;pointer-events:none;z-index:99999;";
+      ghost.style.cssText = "position:absolute;top:-1000px;left:-1000px;padding:0.3rem 0.7rem;border-radius:0.35rem;font:600 13px/1.2 system-ui,sans-serif;background:var(--iswc-accent,#1976d2);color:#fff;box-shadow:0 4px 12px #0004;white-space:nowrap;pointer-events:none;z-index:99999;";
       document.body.appendChild(ghost);
       if (dt) dt.setDragImage(ghost, 16, 14);
       setTimeout(() => ghost.remove(), 50);

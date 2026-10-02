@@ -90,12 +90,12 @@ No expone.
 
 | Token | Uso |
 | --- | --- |
-| `--is-text-soft` | Token leído o definido por componente. |
-| `--is-bg-elev` | Token leído o definido por componente. |
-| `--is-text` | Token leído o definido por componente. |
-| `--is-accent-bg` | Token leído o definido por componente. |
-| `--is-brand-text` | Token leído o definido por componente. |
-| `--is-accent` | Token leído o definido por componente. |
+| `--iswc-text-soft` | Token leído o definido por componente. |
+| `--iswc-bg-elev` | Token leído o definido por componente. |
+| `--iswc-text` | Token leído o definido por componente. |
+| `--iswc-accent-bg` | Token leído o definido por componente. |
+| `--iswc-brand-text` | Token leído o definido por componente. |
+| `--iswc-accent` | Token leído o definido por componente. |
 
 ### Integración con formularios
 

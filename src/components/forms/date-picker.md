@@ -142,26 +142,26 @@ No expone.
 
 | Token | Uso |
 | --- | --- |
-| `--is-dp-cols` | Token leído o definido por componente. |
-| `--is-datepicker-border` | Token leído o definido por componente. |
-| `--is-border` | Token leído o definido por componente. |
-| `--is-datepicker-bg` | Token leído o definido por componente. |
-| `--is-bg-elev` | Token leído o definido por componente. |
-| `--is-datepicker-radius` | Token leído o definido por componente. |
-| `--is-radius` | Token leído o definido por componente. |
-| `--is-sans` | Token leído o definido por componente. |
-| `--is-text` | Token leído o definido por componente. |
-| `--is-shadow` | Token leído o definido por componente. |
-| `--is-radius-sm` | Token leído o definido por componente. |
-| `--is-control-bg-hover` | Token leído o definido por componente. |
-| `--is-focus` | Token leído o definido por componente. |
-| `--is-accent` | Token leído o definido por componente. |
-| `--is-text-dim` | Token leído o definido por componente. |
-| `--is-color-brand-500` | Token leído o definido por componente. |
-| `--is-accent-bg` | Token leído o definido por componente. |
-| `--is-color-brand-600` | Token leído o definido por componente. |
-| `--is-on-brand` | Token leído o definido por componente. |
-| `--is-year-height` | Token leído o definido por componente. |
+| `--iswc-dp-cols` | Token leído o definido por componente. |
+| `--iswc-datepicker-border` | Token leído o definido por componente. |
+| `--iswc-border` | Token leído o definido por componente. |
+| `--iswc-datepicker-bg` | Token leído o definido por componente. |
+| `--iswc-bg-elev` | Token leído o definido por componente. |
+| `--iswc-datepicker-radius` | Token leído o definido por componente. |
+| `--iswc-radius` | Token leído o definido por componente. |
+| `--iswc-sans` | Token leído o definido por componente. |
+| `--iswc-text` | Token leído o definido por componente. |
+| `--iswc-shadow` | Token leído o definido por componente. |
+| `--iswc-radius-sm` | Token leído o definido por componente. |
+| `--iswc-control-bg-hover` | Token leído o definido por componente. |
+| `--iswc-focus` | Token leído o definido por componente. |
+| `--iswc-accent` | Token leído o definido por componente. |
+| `--iswc-text-dim` | Token leído o definido por componente. |
+| `--iswc-color-brand-500` | Token leído o definido por componente. |
+| `--iswc-accent-bg` | Token leído o definido por componente. |
+| `--iswc-color-brand-600` | Token leído o definido por componente. |
+| `--iswc-on-brand` | Token leído o definido por componente. |
+| `--iswc-year-height` | Token leído o definido por componente. |
 
 ### Integración con formularios
 

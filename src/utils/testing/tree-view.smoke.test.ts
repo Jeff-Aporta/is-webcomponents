@@ -272,7 +272,7 @@ function iconParts(
   }
   const mergedStyle = [
     typeof iconStyle === 'string' ? iconStyle : '',
-    color ? `color: var(--is-accent)` : '',
+    color ? `color: var(--iswc-accent)` : '',
     'font-size: 1.1rem',
   ]
     .filter(Boolean)

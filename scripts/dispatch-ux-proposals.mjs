@@ -1,4 +1,4 @@
-#!/usr/bin/env node
+#!/usr/bin/env -S deno run -A --no-check
 // scripts/dispatch-ux-proposals.mjs
 //
 // F0.3 variante: dispatch de propuestas UX/UI exhaustivas por demo.
@@ -11,7 +11,7 @@
 // Output: .audit/prompts/g<N>.md (input prompts) + sub-agentes que escriben
 //         .audit/proposals/g<N>.md (output).
 //
-// Uso: node scripts/dispatch-ux-proposals.mjs [--wave N] [--limit N]
+// Uso: deno run -A --no-check scripts/dispatch-ux-proposals.mjs [--wave N] [--limit N]
 
 import { readFileSync, writeFileSync, mkdirSync, readdirSync } from 'node:fs';
 import { join } from 'node:path';
@@ -35,7 +35,7 @@ const writePrompts = () => {
     const prompt = `# F0.3 propuesta UX/UI exhaustiva — ${g.label}
 
 ## Perfil del proyecto
-**is-webcomponents** — librería de Web Components vanilla TypeScript con Shadow DOM, tokens \`--is-*\`, y un kit de 67 demos servidos desde GitHub Pages. Stack: Playwright 1.62.1 + Chromium headless para tests browser.
+**is-webcomponents** — librería de Web Components vanilla TypeScript con Shadow DOM, tokens \`--iswc-*\`, y un kit de 67 demos servidos desde GitHub Pages. Stack: Playwright 1.62.1 + Chromium headless para tests browser.
 
 ## Testables del grupo (categoría: ${g.category})
 

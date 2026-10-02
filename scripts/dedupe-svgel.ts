@@ -1,6 +1,6 @@
 /**
  * Reemplaza function svgEl locales por import desde svg-chart-engine.js
- * Uso: node scripts/dedupe-svgel.ts
+ * Uso: deno run -A --no-check scripts/dedupe-svgel.ts
  */
 import { readFileSync, writeFileSync } from 'node:fs';
 import { join, dirname, relative } from 'node:path';

@@ -18,8 +18,8 @@
   header code { background: rgba(255,255,255,0.06); padding: 2px 6px; border-radius: 4px; font: 12px ui-monospace, Menlo, Consolas, monospace; }
   main { display: grid; place-items: stretch; min-height: 0; padding: 12px; }
   main .hero {
-    background: #0f1620; border: 1px dashed var(--is-border, rgba(255,255,255,0.1));
-    border-radius: var(--is-radius, 8px);
+    background: #0f1620; border: 1px dashed var(--iswc-border, rgba(255,255,255,0.1));
+    border-radius: var(--iswc-radius, 8px);
     display: grid; place-items: center; text-align: center; padding: 1rem;
   }
   main .hero h3 { margin: 0; font-size: 1.4rem; }
@@ -35,7 +35,7 @@
     border: 1px solid rgba(255,255,255,0.18);
     background: rgba(255,255,255,0.04); color: inherit; cursor: pointer;
   }
-  .trigger-btn:hover { border-color: var(--is-accent, #38bdf8); color: var(--is-accent, #38bdf8); }
+  .trigger-btn:hover { border-color: var(--iswc-accent, #38bdf8); color: var(--iswc-accent, #38bdf8); }
   /* Anti-FOUC */
   is-command-palette:not(:defined) { visibility: hidden; }
 </style>
@@ -43,7 +43,7 @@
   // Cargar solo los tags que necesitamos, desde los bundles pre-construidos en
   // dist/cdn/. Esto hace funcionar los demos con cualquier servidor estático
   // (incluido VS Code Live Server), no solo con el dev server que transpila TS.
-  await import('../../../dist/cdn/overlays/command-palette.min.js?h=msd57j');
+  await import('../../../dist/cdn/overlays/command-palette.min.js?h=046yvn');
   await customElements.whenDefined('is-command-palette');
 
   // Comandos declarados como JSON hijo (script[ type="application/json" ]).
@@ -104,7 +104,7 @@
   <section class="hero">
     <div>
       <h3>Busca un comando</h3>
-      <p style="color:var(--is-text-soft)">Pulsa <kbd>⌘K</kbd> / <kbd>Ctrl</kbd>+<kbd>K</kbd>, o:</p>
+      <p style="color:var(--iswc-text-soft)">Pulsa <kbd>⌘K</kbd> / <kbd>Ctrl</kbd>+<kbd>K</kbd>, o:</p>
       <button class="trigger-btn" id="openBtn">Abrir paleta</button>
       <pre id="log" hidden></pre>
     </div>

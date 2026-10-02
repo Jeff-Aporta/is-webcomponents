@@ -8,7 +8,7 @@
 //   - No queda NINGÚN cargador de CodeMirror ni CDN de CM en el highlighter.
 //   - paint() delega el color en `<is-code>` (createElement('is-code')).
 //   - `<is-code>` (code.ts) lee data-theme del documento y reacciona a
-//     'is-theme-change' (custom properties --is-code-*, sin clases cm-s-*).
+//     'is-theme-change' (custom properties --iswc-code-*, sin clases cm-s-*).
 //   - <is-theme-toggle> emite el evento 'is-theme-change' en document con
 //     bubbles+composed (el contrato que escucha <is-code>).
 //

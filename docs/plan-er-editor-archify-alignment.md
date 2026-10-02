@@ -296,7 +296,7 @@ JSON que el componente consume. Esta es la clave del determinismo:
   - `er-editor.html`: editor completo embebido.
   - `er-static.html`: solo lectura (vista "story" en html).
   - `index.html`: índice de demos.
-- Añadir al `package.json` el script `pnpm run dev:demos` que sirve el
+- Añadir al `package.json` el script `deno task dev:demos` que sirve el
   directorio vía el servidor estático existente.
 
 ### Fase F — Serialización determinista  ✅
@@ -376,7 +376,7 @@ Suite Stagehand: SKIP por defecto (requiere `STAGEHAND=1` + API key). Cuando
 está disponible, evalúa visual rubric (no overlap, aristas legibles, encaje,
 texto, animación) por demo.
 
-Runner: `pnpm test:demos`. Levanta `serve-demos.mjs` en `127.0.0.1:8491`,
+Runner: `deno task test:demos`. Levanta `serve-demos.mjs` en `127.0.0.1:8491`,
 corre todas las suites y baja el servidor. `--only=editor|static` filtra.
 
 ## 9. Arquitectura final (lite / full con core compartido)

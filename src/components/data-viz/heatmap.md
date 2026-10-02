@@ -128,11 +128,11 @@ No expone. El resaltado de celda usa la clase interna `.is-hover`, no
 
 | Token | Uso |
 | --- | --- |
-| `--is-text` | Color de texto del host y base de `--chart-text`, `--grid-color` y el borde de la leyenda. |
-| `--is-text-soft` | Color de las cifras de la leyenda. |
-| `--chart-text` | Definido en `:host` como alias de `--is-text`; el JS lo lee para pintar títulos y etiquetas de eje. |
+| `--iswc-text` | Color de texto del host y base de `--chart-text`, `--grid-color` y el borde de la leyenda. |
+| `--iswc-text-soft` | Color de las cifras de la leyenda. |
+| `--chart-text` | Definido en `:host` como alias de `--iswc-text`; el JS lo lee para pintar títulos y etiquetas de eje. |
 | `--grid-color` | Definido en `:host`; el JS lo lee, pero en la versión actual no se usa para dibujar nada. |
-| `--is-bg-elev` | Base del `color-mix` de la paleta y color del número dentro de celdas oscuras. |
+| `--iswc-bg-elev` | Base del `color-mix` de la paleta y color del número dentro de celdas oscuras. |
 
 ### Integración con formularios
 

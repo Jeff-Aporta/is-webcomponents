@@ -130,18 +130,18 @@ No expone.
 | `--sd-pack-top` | Token leído o definido por componente. |
 | `--sd-pack-w` | Token leído o definido por componente. |
 | `--sd-pack-h` | Token leído o definido por componente. |
-| `--is-accent` | Token leído o definido por componente. |
-| `--is-on-accent` | Token leído o definido por componente. |
-| `--is-bg-elev` | Token leído o definido por componente. |
-| `--is-border` | Token leído o definido por componente. |
-| `--is-text` | Token leído o definido por componente. |
-| `--is-radius-fab` | Token leído o definido por componente. |
-| `--is-focus` | Token leído o definido por componente. |
-| `--is-focus-fallback` | Token leído o definido por componente. |
-| `--is-focus-offset` | Token leído o definido por componente. |
-| `--is-success` | Token leído o definido por componente. |
-| `--is-warning` | Token leído o definido por componente. |
-| `--is-danger` | Token leído o definido por componente. |
+| `--iswc-accent` | Token leído o definido por componente. |
+| `--iswc-on-accent` | Token leído o definido por componente. |
+| `--iswc-bg-elev` | Token leído o definido por componente. |
+| `--iswc-border` | Token leído o definido por componente. |
+| `--iswc-text` | Token leído o definido por componente. |
+| `--iswc-radius-fab` | Token leído o definido por componente. |
+| `--iswc-focus` | Token leído o definido por componente. |
+| `--iswc-focus-fallback` | Token leído o definido por componente. |
+| `--iswc-focus-offset` | Token leído o definido por componente. |
+| `--iswc-success` | Token leído o definido por componente. |
+| `--iswc-warning` | Token leído o definido por componente. |
+| `--iswc-danger` | Token leído o definido por componente. |
 
 ### Integración con formularios
 

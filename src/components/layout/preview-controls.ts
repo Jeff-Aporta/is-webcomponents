@@ -12,7 +12,7 @@ const CSS = `
 :host {
   display: block;
   margin: 0.65rem 0 1.1rem;
-  font-family: var(--is-sans, system-ui, sans-serif);
+  font-family: var(--iswc-sans, system-ui, sans-serif);
   font-size: 0.82rem;
   line-height: 1.45;
   color: inherit;
@@ -64,7 +64,7 @@ const CSS = `
   color: inherit;
 }
 .fila input[type="color"] { height: 1.6rem; padding: 0.1rem; }
-.fila textarea { min-height: 4.2rem; resize: vertical; font-family: var(--is-mono, ui-monospace, monospace); font-size: 0.74rem; }
+.fila textarea { min-height: 4.2rem; resize: vertical; font-family: var(--iswc-mono, ui-monospace, monospace); font-size: 0.74rem; }
 .boolean { display: flex; align-items: center; gap: 0.5rem; }
 .boolean input { accent-color: currentColor; }
 `;

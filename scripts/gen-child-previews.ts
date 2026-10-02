@@ -9,7 +9,7 @@
 // La documentacion de atributos NO se inventa: se extrae del bloque de
 // comentario de cabecera del modulo fuente.
 //
-// Uso:  node scripts/gen-child-previews.ts [--force]
+// Uso:  deno run -A --no-check scripts/gen-child-previews.ts [--force]
 
 import { readFile, writeFile, access } from 'node:fs/promises';
 import { join, dirname } from 'node:path';
@@ -95,7 +95,7 @@ const CHILDREN = {
   <is-carousel-item><div class="slide">Diapositiva 3</div></is-carousel-item>
 </is-carousel>`,
     styles: `.slide { display:grid; place-items:center; height:180px; border-radius:.6rem;
-      background: color-mix(in srgb, var(--is-accent) 14%, var(--is-bg-elev)); font-weight:600; }`,
+      background: color-mix(in srgb, var(--iswc-accent) 14%, var(--iswc-bg-elev)); font-weight:600; }`,
   },
   'is-tree-item': {
     modules: ['navigation/tree.js'],
@@ -224,7 +224,7 @@ const CHILDREN = {
   </is-speed-dial>
 </div>`,
     styles: `.sd-stage { position:relative; transform:translateZ(0); height:320px;
-      border:1px dashed var(--is-border); border-radius:.6rem; }`,
+      border:1px dashed var(--iswc-border); border-radius:.6rem; }`,
   },
   'is-dock-item': {
     modules: ['layout/dock.js'],
@@ -237,7 +237,7 @@ const CHILDREN = {
   </is-dock>
 </div>`,
     styles: `.dock-stage { position:relative; transform:translateZ(0); height:200px;
-      border:1px dashed var(--is-border); border-radius:.6rem; }`,
+      border:1px dashed var(--iswc-border); border-radius:.6rem; }`,
   },
   'is-map-marker': {
     modules: ['data-viz/maps.js'],

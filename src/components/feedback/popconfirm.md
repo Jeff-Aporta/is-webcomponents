@@ -105,12 +105,12 @@ No expone.
 
 | Token | Uso |
 | --- | --- |
-| `--is-bg-elev` | Fondo del panel (vía `--bg`). |
-| `--is-text` | Color de texto (vía `--fg`). |
-| `--is-border` | Borde del panel (vía `--border`). |
-| `--is-brand` | Color de marca (vía `--brand`). |
-| `--is-brand-fg` | Texto sobre el color de marca (vía `--brand-fg`). |
-| `--is-danger` | Tono destructivo (vía `--danger`). |
+| `--iswc-bg-elev` | Fondo del panel (vía `--bg`). |
+| `--iswc-text` | Color de texto (vía `--fg`). |
+| `--iswc-border` | Borde del panel (vía `--border`). |
+| `--iswc-brand` | Color de marca (vía `--brand`). |
+| `--iswc-brand-fg` | Texto sobre el color de marca (vía `--brand-fg`). |
+| `--iswc-danger` | Tono destructivo (vía `--danger`). |
 
 Los botones por defecto de los slots `confirm` / `cancel` son `<is-button>`:
 su color y apariencia se controlan desde el propio botón, no desde aquí.

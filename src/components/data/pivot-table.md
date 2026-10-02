@@ -124,13 +124,13 @@ que hereda de [`_sticky.css`](./_sticky.css)).
 
 | Token | Uso |
 | --- | --- |
-| `--is-text` | Color de texto del host. |
-| `--is-bg-elev` | Fondo del contenedor, de la cabecera pegada y base del `color-mix` de la esquina y las cabeceras de fila. |
-| `--is-border` | Borde del contenedor y línea superior del `tfoot` (2px). |
-| `--is-border-soft` | Líneas internas entre celdas. |
-| `--is-radius` | Radio de las esquinas del contenedor. |
-| `--is-accent` | Base del `color-mix` para el hover de celda (14%) y el fondo de los totales (8%). |
-| `--is-text-soft` | Color del mensaje de estado vacío. |
+| `--iswc-text` | Color de texto del host. |
+| `--iswc-bg-elev` | Fondo del contenedor, de la cabecera pegada y base del `color-mix` de la esquina y las cabeceras de fila. |
+| `--iswc-border` | Borde del contenedor y línea superior del `tfoot` (2px). |
+| `--iswc-border-soft` | Líneas internas entre celdas. |
+| `--iswc-radius` | Radio de las esquinas del contenedor. |
+| `--iswc-accent` | Base del `color-mix` para el hover de celda (14%) y el fondo de los totales (8%). |
+| `--iswc-text-soft` | Color del mensaje de estado vacío. |
 
 ### Integración con formularios
 
@@ -286,7 +286,7 @@ Tags del módulo: `<is-pivot-table>`.
 - El único evento emitido es `is-cell-click`. No generes código que escuche
   `is-change` ni `is-select` sobre este componente.
 - Para estilizar usa `::part(root)` y `::part(table)` o redefine los tokens
-  `--is-*` del tema; no crees variantes de tamaño, escala con `font-size`
+  `--iswc-*` del tema; no crees variantes de tamaño, escala con `font-size`
   contextual y unidades `em`.
 - Reusa los helpers de `../_shared/` antes de escribir lógica paralela.
 - Si el requisito incluye editar celdas, el componente correcto es

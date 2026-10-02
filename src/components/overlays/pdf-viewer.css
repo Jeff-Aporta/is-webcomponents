@@ -4,10 +4,10 @@
 /* is-pdf-viewer */
 :host {
   /* Embebido en la página, no flota: sin sombra propia. */
-  --is-popover-shadow: none;
+  --iswc-popover-shadow: none;
   display: block;
   font: inherit;
-  color: var(--is-text);
+  color: var(--iswc-text);
 }
 
 /* Borde, radio y fondo vienen de `.is-popover-panel`. */
@@ -19,7 +19,7 @@
 
 /* La fila flex, el padding y el separador vienen de `.is-surface-bar`. */
 .toolbar {
-  --is-surface-bar-gap: .45rem;
+  --iswc-surface-bar-gap: .45rem;
 }
 
 .title {
@@ -37,16 +37,16 @@
   align-items: center;
   gap: .35rem;
   padding: .3rem .6rem;
-  border-radius: var(--is-radius, 6px);
-  border: 1px solid var(--is-border);
-  background: var(--is-bg-soft);
+  border-radius: var(--iswc-radius, 6px);
+  border: 1px solid var(--iswc-border);
+  background: var(--iswc-bg-soft);
   color: inherit;
   cursor: pointer;
   font-size: .82rem;
 
   &:hover {
-    background: color-mix(in srgb, var(--is-accent) 14%, var(--is-bg-soft));
-    border-color: var(--is-accent);
+    background: color-mix(in srgb, var(--iswc-accent) 14%, var(--iswc-bg-soft));
+    border-color: var(--iswc-accent);
   }
 }
 

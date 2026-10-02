@@ -153,35 +153,35 @@ Propiedades públicas aparecen en tabla anterior; APIs heredadas se verifican en
 
 | Token | Uso |
 | --- | --- |
-| `--is-select-border-radius` | Token leído o definido por componente. |
-| `--is-radius-sm` | Token leído o definido por componente. |
-| `--is-select-border` | Token leído o definido por componente. |
-| `--is-control-border` | Token leído o definido por componente. |
-| `--is-select-bg` | Token leído o definido por componente. |
-| `--is-control-bg` | Token leído o definido por componente. |
-| `--is-select-text` | Token leído o definido por componente. |
-| `--is-control-text` | Token leído o definido por componente. |
-| `--is-select-focus` | Token leído o definido por componente. |
-| `--is-focus` | Token leído o definido por componente. |
-| `--is-accent` | Token leído o definido por componente. |
-| `--is-select-danger` | Token leído o definido por componente. |
-| `--is-color-danger-500` | Token leído o definido por componente. |
-| `--is-select-danger-text` | Token leído o definido por componente. |
-| `--is-danger-text` | Token leído o definido por componente. |
-| `--is-color-danger-600` | Token leído o definido por componente. |
-| `--is-sans` | Token leído o definido por componente. |
-| `--is-text` | Token leído o definido por componente. |
-| `--is-text-soft` | Token leído o definido por componente. |
-| `--is-text-dim` | Token leído o definido por componente. |
-| `--is-control-bg-hover` | Token leído o definido por componente. |
-| `--is-bg-elev` | Token leído o definido por componente. |
-| `--is-border` | Token leído o definido por componente. |
-| `--is-radius` | Token leído o definido por componente. |
-| `--is-shadow` | Token leído o definido por componente. |
-| `--is-border-soft` | Token leído o definido por componente. |
-| `--is-accent-bg` | Token leído o definido por componente. |
-| `--is-brand-text` | Token leído o definido por componente. |
-| `--is-on-brand` | Token leído o definido por componente. |
+| `--iswc-select-border-radius` | Token leído o definido por componente. |
+| `--iswc-radius-sm` | Token leído o definido por componente. |
+| `--iswc-select-border` | Token leído o definido por componente. |
+| `--iswc-control-border` | Token leído o definido por componente. |
+| `--iswc-select-bg` | Token leído o definido por componente. |
+| `--iswc-control-bg` | Token leído o definido por componente. |
+| `--iswc-select-text` | Token leído o definido por componente. |
+| `--iswc-control-text` | Token leído o definido por componente. |
+| `--iswc-select-focus` | Token leído o definido por componente. |
+| `--iswc-focus` | Token leído o definido por componente. |
+| `--iswc-accent` | Token leído o definido por componente. |
+| `--iswc-select-danger` | Token leído o definido por componente. |
+| `--iswc-color-danger-500` | Token leído o definido por componente. |
+| `--iswc-select-danger-text` | Token leído o definido por componente. |
+| `--iswc-danger-text` | Token leído o definido por componente. |
+| `--iswc-color-danger-600` | Token leído o definido por componente. |
+| `--iswc-sans` | Token leído o definido por componente. |
+| `--iswc-text` | Token leído o definido por componente. |
+| `--iswc-text-soft` | Token leído o definido por componente. |
+| `--iswc-text-dim` | Token leído o definido por componente. |
+| `--iswc-control-bg-hover` | Token leído o definido por componente. |
+| `--iswc-bg-elev` | Token leído o definido por componente. |
+| `--iswc-border` | Token leído o definido por componente. |
+| `--iswc-radius` | Token leído o definido por componente. |
+| `--iswc-shadow` | Token leído o definido por componente. |
+| `--iswc-border-soft` | Token leído o definido por componente. |
+| `--iswc-accent-bg` | Token leído o definido por componente. |
+| `--iswc-brand-text` | Token leído o definido por componente. |
+| `--iswc-on-brand` | Token leído o definido por componente. |
 
 ### Integración con formularios
 

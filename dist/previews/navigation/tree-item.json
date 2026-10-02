@@ -9,7 +9,7 @@
   "sections": [
     {
       "id": "intro",
-      "title": "<is-tree-item>",
+      "title": "Uso",
       "lede": "Nodo de un <code class=\"code\">&lt;is-tree&gt;</code>. Anidando items se construye la jerarquía; <code class=\"code\">expanded</code> controla el pliegue.",
       "blocks": [
         {

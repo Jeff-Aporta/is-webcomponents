@@ -2,16 +2,16 @@
 :host {
   display: inline-block;
   font: inherit;
-  color: var(--is-text);
+  color: var(--iswc-text);
 }
 .root {
   display: flex;
   flex-direction: column;
   align-items: stretch;
   padding: .35rem .5rem;
-  border: 1px solid var(--is-border);
-  border-radius: var(--is-radius);
-  background: var(--is-bg-elev);
+  border: 1px solid var(--iswc-border);
+  border-radius: var(--iswc-radius);
+  background: var(--iswc-bg-elev);
   max-width: 100%;
 }
 .svg {
@@ -25,5 +25,5 @@
   font-size: .85rem;
   letter-spacing: .12em;
   margin-top: .25rem;
-  color: var(--is-text);
+  color: var(--iswc-text);
 }

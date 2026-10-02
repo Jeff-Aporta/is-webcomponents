@@ -12,7 +12,9 @@ preview: ./theme-toggle.json
 
 ## Propósito
 
-Alterna el tema del contenedor más cercano
+Alterna el tema del contenedor.
+`scope="root"` escribe en `<html>`.
+`scope="closest"` (default) usa el contenedor más cercano
 ([container-theme] / .container-theme
 / .theme-dark|.theme-light / [data-theme];
 si no hay, <html>).
@@ -98,7 +100,7 @@ No expone.
 
 | Token | Uso |
 | --- | --- |
-| `--is-control-text` | Token leído o definido por componente. |
+| `--iswc-control-text` | Token leído o definido por componente. |
 
 ### Integración con formularios
 

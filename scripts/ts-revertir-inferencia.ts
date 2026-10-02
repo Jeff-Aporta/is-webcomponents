@@ -18,8 +18,8 @@
  * un tipo primitivo, y solo si la anotación es uno de los tipos que el paso de
  * inferencia sabe poner.
  *
- *   npx tsc -p tsconfig.json > errores.txt
- *   node scripts/ts-revertir-inferencia.ts errores.txt
+ *   deno task typecheck > errores.txt
+ *   deno run -A --no-check scripts/ts-revertir-inferencia.ts errores.txt
  */
 import { readFileSync, writeFileSync } from 'node:fs';
 import ts from 'typescript';
@@ -32,7 +32,7 @@ const RE_ERROR = /^(.+?)\((\d+),(\d+)\): error TS(?:2339|2571|18046):/;
 
 const entrada = process.argv[2];
 if (!entrada) {
-  console.error('uso: node scripts/ts-revertir-inferencia.ts <fichero-con-la-salida-de-tsc>');
+  console.error('uso: deno run -A --no-check scripts/ts-revertir-inferencia.ts <fichero-con-la-salida-de-tsc>');
   process.exit(2);
 }
 

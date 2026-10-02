@@ -8,7 +8,7 @@
   "sections": [
     {
       "id": "intro",
-      "title": "<is-floating> (interno)",
+      "title": "Uso interno",
       "lede": "Building block interno. En producto usa is-popover o is-tooltip.",
       "blocks": [
         {

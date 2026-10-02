@@ -8,7 +8,7 @@
   "sections": [
     {
       "id": "intro",
-      "title": "<is-funnel-chart>",
+      "title": "Uso",
       "lede": "Embudo para seguir la conversión entre etapas de un proceso.",
       "blocks": [
         {

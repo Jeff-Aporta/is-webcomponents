@@ -60,7 +60,7 @@ interface IsRadioElement extends HTMLElement {
   class IsRadioGroup extends ElementBase {
     /** Personalización por atributo (ver `core/attrs.ts`). */
     static styleAttrs = {
-    accent: { prop: '--is-radio-accent', onlyColorValues: true },
+    accent: { prop: '--iswc-radio-accent', onlyColorValues: true },
     };
 
     static formAssociated = true;

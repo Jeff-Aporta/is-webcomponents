@@ -9,18 +9,18 @@
   box-sizing: border-box;
 
   /* Tipografía: todo en em, escala con el font-size del contexto. */
-  font-family: var(--is-sans, ui-sans-serif, system-ui, sans-serif);
+  font-family: var(--iswc-sans, ui-sans-serif, system-ui, sans-serif);
   --chart-tick-size: 0.6875em;
   --chart-legend-size: 0.75em;
   --chart-title-size: 0.875em;
   --chart-tooltip-size: 0.75em;
 
   /* Superficie y tinta */
-  --chart-text: var(--is-text, #e6e8eb);
-  --chart-muted: var(--is-text-dim, #7a8390);
-  --chart-surface: var(--is-bg-elev, #1c2128);
-  --is-chart-grid-color: color-mix(in srgb, var(--is-border, #2a3038) 85%, transparent);
-  --chart-axis-color: color-mix(in srgb, var(--is-border, #2a3038) 100%, transparent);
+  --chart-text: var(--iswc-text, #e6e8eb);
+  --chart-muted: var(--iswc-text-dim, #7a8390);
+  --chart-surface: var(--iswc-bg-elev, #1c2128);
+  --iswc-chart-grid-color: color-mix(in srgb, var(--iswc-border, #2a3038) 85%, transparent);
+  --chart-axis-color: color-mix(in srgb, var(--iswc-border, #2a3038) 100%, transparent);
 
   /* Geometría de marks — unitless (px), legibles desde JS */
   --chart-bar-radius: 4;
@@ -82,7 +82,7 @@
 /* ---- Ejes y grid: recesivos ---- */
 
 .grid-line {
-  stroke: var(--is-chart-grid-color);
+  stroke: var(--iswc-chart-grid-color);
   stroke-width: 1;
   shape-rendering: crispEdges;
 }
@@ -214,7 +214,7 @@
   gap: 0.4em;
   background: none;
   border: none;
-  border-radius: var(--is-radius-sm, 0.375em);
+  border-radius: var(--iswc-radius-sm, 0.375em);
   color: var(--chart-text);
   cursor: pointer;
   padding: 0.15em 0.3em;
@@ -225,7 +225,7 @@
 .legend-item:hover { background: color-mix(in srgb, var(--chart-text) 8%, transparent); }
 
 .legend-item:focus-visible {
-  outline: 2px solid var(--is-focus, #4aabff);
+  outline: 2px solid var(--iswc-focus, #4aabff);
   outline-offset: 1px;
 }
 
@@ -285,7 +285,7 @@
   pointer-events: none;
   max-width: 16em;
   padding: 0.45em 0.6em;
-  border: 1px solid var(--is-border, #2a3038);
+  border: 1px solid var(--iswc-border, #2a3038);
   border-radius: 0.4em;
   background: color-mix(in srgb, var(--chart-surface) 96%, transparent);
   color: var(--chart-text);

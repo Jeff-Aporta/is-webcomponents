@@ -4,13 +4,13 @@
   "category": "helpers",
   "title": "<is-resize-observer>",
   "titleHtml": true,
-  "styles": ".ro-box {\n      resize: both;\n      overflow: auto;\n      box-sizing: border-box;\n      min-width: 140px;\n      min-height: 90px;\n      max-width: 100%;\n      width: 220px;\n      height: 120px;\n      padding: 1rem;\n      border: 1px dashed var(--is-border);\n      border-radius: var(--is-radius, 0.5em);\n      background:\n        repeating-linear-gradient(45deg,\n          color-mix(in srgb, var(--is-border) 35%, transparent) 0 8px,\n          transparent 8px 16px),\n        var(--is-bg-elev);\n      color: var(--is-text);\n      font-size: 0.9rem;\n      line-height: 1.4;\n    }\n    .ro-meta {\n      display: flex;\n      flex-wrap: wrap;\n      align-items: center;\n      gap: 0.75rem 1.25rem;\n      margin-top: 0.75rem;\n      font-size: 0.9rem;\n      color: var(--is-text-soft);\n    }\n    .ro-size {\n      font-variant-numeric: tabular-nums;\n      font-weight: 600;\n      color: var(--is-text);\n    }\n    .ro-status {\n      font-size: 0.75rem;\n      font-weight: 600;\n      letter-spacing: 0.04em;\n      text-transform: uppercase;\n      padding: 0.2em 0.55em;\n      border-radius: 999px;\n      background: var(--is-brand-soft, color-mix(in srgb, var(--is-color-brand) 18%, transparent));\n      color: var(--is-brand-text, var(--is-color-brand));\n    }\n    .ro-status.is-off {\n      background: var(--is-control-bg);\n      color: var(--is-text-dim);\n    }\n    .ro-actions {\n      display: flex;\n      flex-wrap: wrap;\n      gap: 0.5rem;\n      align-items: center;\n      margin-bottom: 0.75rem;\n    }\n    .log .type-res { color: #74c0fc; }\n    .log .type-off { color: #ffa8a8; }",
+  "styles": ".ro-box {\n      resize: both;\n      overflow: auto;\n      box-sizing: border-box;\n      min-width: 140px;\n      min-height: 90px;\n      max-width: 100%;\n      width: 220px;\n      height: 120px;\n      padding: 1rem;\n      border: 1px dashed var(--iswc-border);\n      border-radius: var(--iswc-radius, 0.5em);\n      background:\n        repeating-linear-gradient(45deg,\n          color-mix(in srgb, var(--iswc-border) 35%, transparent) 0 8px,\n          transparent 8px 16px),\n        var(--iswc-bg-elev);\n      color: var(--iswc-text);\n      font-size: 0.9rem;\n      line-height: 1.4;\n    }\n    .ro-meta {\n      display: flex;\n      flex-wrap: wrap;\n      align-items: center;\n      gap: 0.75rem 1.25rem;\n      margin-top: 0.75rem;\n      font-size: 0.9rem;\n      color: var(--iswc-text-soft);\n    }\n    .ro-size {\n      font-variant-numeric: tabular-nums;\n      font-weight: 600;\n      color: var(--iswc-text);\n    }\n    .ro-status {\n      font-size: 0.75rem;\n      font-weight: 600;\n      letter-spacing: 0.04em;\n      text-transform: uppercase;\n      padding: 0.2em 0.55em;\n      border-radius: 999px;\n      background: var(--iswc-brand-soft, color-mix(in srgb, var(--iswc-color-brand) 18%, transparent));\n      color: var(--iswc-brand-text, var(--iswc-color-brand));\n    }\n    .ro-status.is-off {\n      background: var(--iswc-control-bg);\n      color: var(--iswc-text-dim);\n    }\n    .ro-actions {\n      display: flex;\n      flex-wrap: wrap;\n      gap: 0.5rem;\n      align-items: center;\n      margin-bottom: 0.75rem;\n    }\n    .log .type-res { color: #74c0fc; }\n    .log .type-off { color: #ffa8a8; }",
   "storageKey": "docs-is-resize-observer",
   "hasBehavior": true,
   "sections": [
     {
       "id": "intro",
-      "title": "<is-resize-observer>",
+      "title": "Uso",
       "lede": "Observa hijos directos y emite <code class=\"code\">is-resize</code> con las\n          <code class=\"code\">ResizeObserverEntry</code>. Alias de\n          <code class=\"code\">&lt;is-observer type=\"resize\"&gt;</code>.",
       "blocks": [
         {
@@ -30,7 +30,7 @@
     },
     {
       "id": "disabled",
-      "title": "<code>disabled</code>",
+      "title": "Desactivado",
       "titleHtml": true,
       "lede": "Con <code class=\"code\">disabled</code> el observer se desconecta: redimensionar\n          ya no emite eventos. El botón alterna el atributo y su propia etiqueta.",
       "blocks": [

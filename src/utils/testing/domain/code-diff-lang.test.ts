@@ -105,7 +105,7 @@ const src = await readFile(join(root, 'src/components/_shared/code-diff.ts'), 'u
 for (const cls of DIFF_LINE_CLASSES) {
   ok(css.includes(`.${cls}`), `falta regla CSS para la banda \`.${cls}\``);
 }
-for (const varName of ['--is-code-diff-added', '--is-code-diff-removed', '--is-code-diff-added-band', '--is-code-diff-removed-band']) {
+for (const varName of ['--iswc-code-diff-added', '--iswc-code-diff-removed', '--iswc-code-diff-added-band', '--iswc-code-diff-removed-band']) {
   ok(theme.includes(varName), `falta el token de tema ${varName} en code-theme.ts`);
   ok(css.includes(varName), `el CSS no usa el token de tema ${varName}`);
 }

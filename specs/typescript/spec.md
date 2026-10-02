@@ -12,9 +12,9 @@ Guardianes: [`src/utils/health/meta/src-layout.test.ts`](../../src/utils/health/
 
 Hasta el 31-ago-2026 el kit era ESM vanilla con JSDoc. La migración pasó los
 388 ficheros de `src/` a `.ts`, más los 120 `.mjs` de `tests/` y `scripts/`.
-No hay paso de compilación para desarrollar ni para probar: Node 22 borra los
-tipos al cargar y esbuild los borra al construir. TypeScript aquí es una
-herramienta de revisión, no de build.
+No hay paso de compilación para desarrollar ni para probar: Deno carga el
+TypeScript directo (`--no-check` en las tareas; el typecheck estricto es
+`deno task typecheck`) y esbuild borra los tipos al construir.
 
 ## S-TS1 Extensión en disco
 
@@ -38,7 +38,7 @@ edita. La traducción `.js` → `.ts` ocurre en **tres sitios y solo tres**:
 
 | Entorno | Quién traduce |
 |---|---|
-| Node (tests, selfchecks, scripts) | `scripts/ts-resolve-hook.ts` |
+| Deno (tests, selfchecks, scripts) | `unstable: ["sloppy-imports"]` en `deno.json` |
 | Navegador en desarrollo | `scripts/serve.mjs` (transpila al vuelo) |
 | Build | esbuild |
 
@@ -130,11 +130,11 @@ salidas de esbuild, así que no se pone uno donde basta una función.
 
 En `scripts/`. Todas son idempotentes y todas vuelven a parsear lo que
 escribirían antes de escribirlo: si la reescritura rompiese la sintaxis, el
-fichero se deja intacto y se avisa. Se invocan con el hook de resolución,
+fichero se deja intacto y se avisa. Se invocan con Deno,
 porque entre ellas se importan con `.js` según S-TS2:
 
 ```bash
-node --import ./scripts/ts-resolve-hook.ts scripts/<script>.ts src/components
+deno run -A --no-check scripts/<script>.ts src/components
 ```
 
 | Script | Qué hace |
@@ -155,8 +155,8 @@ Aun así se equivoca, y por eso existe su pareja. El orden es **inferir, mirar
 qué dice `tsc`, revertir lo desmentido**:
 
 ```bash
-npx tsc -p tsconfig.json > /tmp/err.txt
-node --import ./scripts/ts-resolve-hook.ts scripts/ts-revertir-inferencia.ts /tmp/err.txt
+deno task typecheck > /tmp/err.txt
+deno run -A --no-check scripts/ts-revertir-inferencia.ts /tmp/err.txt
 ```
 
 Los dos comparten `scripts/ts-descartes.json`, donde la reversión apunta qué

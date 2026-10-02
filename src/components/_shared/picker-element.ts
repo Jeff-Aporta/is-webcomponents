@@ -78,7 +78,7 @@ export function definePickerInput({
 }: DefinePickerInputOpts): typeof HTMLElement {
   // Todos los pickers (date/time/date-time y sus rangos) comparten la
   // personalización por atributo: se declara aquí una vez, no en cada tag.
-  const STYLE_ATTRS: Record<string, string> = { 'panel-height': '--is-clock-height', ...styleAttrs };
+  const STYLE_ATTRS: Record<string, string> = { 'panel-height': '--iswc-clock-height', ...styleAttrs };
 
   class IsPickerInput extends withStyleAttrs(HTMLElement) {
     static styleAttrs = STYLE_ATTRS;

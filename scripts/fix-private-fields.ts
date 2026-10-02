@@ -8,7 +8,7 @@
  * `#foo;` o `#foo = ...`, añade una declaración al inicio del cuerpo
  * de la clase.
  *
- * Uso:  node scripts/fix-private-fields.ts [--dry]
+ * Uso:  deno run -A --no-check scripts/fix-private-fields.ts [--dry]
  */
 import fs from 'node:fs';
 import path from 'node:path';

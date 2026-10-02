@@ -31,7 +31,7 @@ import { withStyleAttrs } from '../../core/attrs.js';
   class IsDock extends withStyleAttrs(HTMLElement) {
     /** Personalización por atributo (ver `core/attrs.ts`). */
     static styleAttrs = {
-    'scale-unit': '--is-dock-scale-unit',
+    'scale-unit': '--iswc-dock-scale-unit',
     };
 
     static get observedAttributes(): string[] { return [...OBSERVED, 'scale-unit']; }

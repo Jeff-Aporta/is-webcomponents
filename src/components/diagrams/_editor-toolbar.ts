@@ -9,8 +9,8 @@
  *
  * Eventos: click delegate → `EDITOR_ACTION_EVENTS` (constante exportada).
  *
- * Temas: hereda de las CSS vars `--is-bg-elev`, `--is-border`, `--is-accent`,
- * `--is-text`, `--is-ui`. Las pone el `is-base.min.css` global.
+ * Temas: hereda de las CSS vars `--iswc-bg-elev`, `--iswc-border`, `--iswc-accent`,
+ * `--iswc-text`, `--iswc-ui`. Las pone el `is-base.min.css` global.
  *
  * Accesibilidad:
  *   - `role="toolbar"` en `<div>` raíz.
@@ -72,34 +72,34 @@ const TB_CSS = `
   display: flex;
   gap: 4px;
   z-index: 5;
-  background: var(--is-bg-elev, #131a24);
-  border: 1px solid var(--is-border, rgba(255,255,255,0.12));
+  background: var(--iswc-bg-elev, #131a24);
+  border: 1px solid var(--iswc-border, rgba(255,255,255,0.12));
   border-radius: 8px;
   padding: 6px;
   box-shadow: 0 6px 16px rgba(0,0,0,0.35);
-  font-family: var(--is-ui, ui-sans-serif, system-ui, sans-serif);
+  font-family: var(--iswc-ui, ui-sans-serif, system-ui, sans-serif);
 }
 button {
   appearance: none;
-  border: 1px solid var(--is-border, rgba(255,255,255,0.18));
+  border: 1px solid var(--iswc-border, rgba(255,255,255,0.18));
   background: transparent;
-  color: var(--is-text, #e2e8f0);
+  color: var(--iswc-text, #e2e8f0);
   padding: 6px 10px;
   border-radius: 6px;
   cursor: pointer;
-  font: 12px var(--is-ui, ui-sans-serif, system-ui, sans-serif);
+  font: 12px var(--iswc-ui, ui-sans-serif, system-ui, sans-serif);
   line-height: 1;
 }
 button:hover { background: rgba(255,255,255,0.06); }
-button:focus-visible { outline: 2px solid var(--is-accent, #2563eb); outline-offset: 1px; }
+button:focus-visible { outline: 2px solid var(--iswc-accent, #2563eb); outline-offset: 1px; }
 button:disabled { opacity: 0.4; cursor: not-allowed; }
 button[aria-pressed="true"] {
-  background: var(--is-accent, #2563eb);
+  background: var(--iswc-accent, #2563eb);
   border-color: transparent;
 }
 .sep {
   width: 1px;
-  background: var(--is-border, rgba(255,255,255,0.12));
+  background: var(--iswc-border, rgba(255,255,255,0.12));
   align-self: stretch;
   margin: 0 2px;
 }

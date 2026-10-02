@@ -9,7 +9,7 @@
   "sections": [
     {
       "id": "intro",
-      "title": "<is-confirm-modal>",
+      "title": "Uso",
       "lede": "Confirmación en modal centrado con backdrop. Para decisiones que\r\n          merecen foco total. Si prefieres confirmar en línea sin tapar la\r\n          pantalla, usa <code class=\"code\">&lt;is-popconfirm&gt;</code>.",
       "blocks": [
         {
@@ -35,7 +35,7 @@
     },
     {
       "id": "custom",
-      "title": "Slot message",
+      "title": "Mensaje propio",
       "lede": "El contenido del slot <code class=\"code\">message</code> reemplaza el atributo.",
       "blocks": [
         {

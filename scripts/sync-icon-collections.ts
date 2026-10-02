@@ -9,7 +9,7 @@
  * Se consulta una sola vez y queda offline: el explorador no debe pegarle a la
  * API de Iconify en runtime.
  *
- *   node scripts/sync-icon-collections.ts
+ *   deno run -A --no-check scripts/sync-icon-collections.ts
  */
 import { readFile, writeFile } from 'node:fs/promises';
 import { join, dirname } from 'node:path';

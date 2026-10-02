@@ -9,7 +9,7 @@
  * Eso cambia la naturaleza de la carpeta: **deja de ser un artefacto
  * regenerable por copia y pasa a ser fuente**. Si alguien la borra —un `rm -rf
  * dist/`, un build que limpie de más— no hay de dónde recuperarla salvo un
- * `npm run icons:download` de horas contra un servicio externo.
+ * `deno task icons:download` de horas contra un servicio externo.
  *
  * El build ya aborta por debajo de `MIN_ICONOS`, pero eso solo protege a quien
  * construye. Este test protege también a quien solo corre la suite, y falla

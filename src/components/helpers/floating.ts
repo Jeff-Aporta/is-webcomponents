@@ -29,9 +29,9 @@ import {
  */
 
 (() => {
-  /** Lee `--is-floating-arrow-size` en px. `parseFloat('0.375rem')` devolvía 0.375 y rompía la flecha. */
+  /** Lee `--iswc-floating-arrow-size` en px. `parseFloat('0.375rem')` devolvía 0.375 y rompía la flecha. */
   const arrowSizePx = (el: Element): number => {
-    const raw = getComputedStyle(el).getPropertyValue('--is-floating-arrow-size').trim();
+    const raw = getComputedStyle(el).getPropertyValue('--iswc-floating-arrow-size').trim();
     if (!raw) return 8;
     const n = parseFloat(raw);
     if (!Number.isFinite(n) || n <= 0) return 8;
@@ -68,9 +68,9 @@ import {
   class IsFloating extends withStyleAttrs(HTMLElement) {
     /** Personalización por atributo (ver `core/attrs.ts`). */
     static styleAttrs = {
-    'arrow-size': '--is-floating-arrow-size',
-    'show-duration': '--is-floating-show-duration',
-    'hide-duration': '--is-floating-hide-duration',
+    'arrow-size': '--iswc-floating-arrow-size',
+    'show-duration': '--iswc-floating-show-duration',
+    'hide-duration': '--iswc-floating-hide-duration',
     };
 
     static get observedAttributes(): string[] { return [...OBSERVED, 'arrow-size', 'show-duration', 'hide-duration']; }

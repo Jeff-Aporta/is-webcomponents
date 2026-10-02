@@ -76,7 +76,7 @@ tests.push({
       const s = document.querySelector('is-spinner[color="#7c3aed"]');
       const ind = s.shadowRoot.querySelector('.spinner');
       return {
-        varColor: s.style.getPropertyValue('--is-spinner-color'),
+        varColor: s.style.getPropertyValue('--iswc-spinner-color'),
         computedColor: getComputedStyle(ind).borderTopColor,
       };
     });
@@ -97,12 +97,12 @@ tests.push({
       const slow = document.querySelector('is-spinner[speed="3s"]');
       const def = document.querySelector('is-spinner:not([speed])');
       return {
-        slowVar: slow.style.getPropertyValue('--is-spinner-speed'),
+        slowVar: slow.style.getPropertyValue('--iswc-spinner-speed'),
         slowDur: getComputedStyle(slow.shadowRoot.querySelector('.spinner')).animationDuration,
         defDur: getComputedStyle(def.shadowRoot.querySelector('.spinner')).animationDuration,
       };
     });
-    assert.equal(data.slowVar, '3s', `speed="3s" debe reflejarse en --is-spinner-speed (vimos "${data.slowVar}")`);
+    assert.equal(data.slowVar, '3s', `speed="3s" debe reflejarse en --iswc-spinner-speed (vimos "${data.slowVar}")`);
     assert.match(data.slowDur, /3s/, `slow spinner debe tener animationDuration ≈ 3s (vimos "${data.slowDur}")`);
     assert.notEqual(data.slowDur, data.defDur, `slow debe ser más lento que default (slow=${data.slowDur}, def=${data.defDur})`);
   },

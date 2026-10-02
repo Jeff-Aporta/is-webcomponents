@@ -1,4 +1,4 @@
-#!/usr/bin/env node
+#!/usr/bin/env -S deno run -A --no-check
 /**
  * Consolida los WTs hijos de la tanda 1 al WT-ROOT.
  *
@@ -8,7 +8,7 @@
  *   - wt/audit-charts-data-exhaustivo  → src/utils/health/exhaustive/{charts,data,diagrams}/*.test.ts
  *   - wt/audit-rest-exhaustivo         → src/utils/health/exhaustive/{helpers,isp,layout,media,navigation,preview,surfaces,feedback,typography,ai}/*.test.ts
  *
- * Uso: node scripts/consolidate-audit-tanda1.mjs
+ * Uso: deno run -A --no-check scripts/consolidate-audit-tanda1.mjs
  */
 
 import { execSync } from 'node:child_process';

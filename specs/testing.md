@@ -1,10 +1,10 @@
 # Spec — Testing y gate
 
-Guardianes en `src/utils/health/**/*.test.ts` y runner local (motor `node:test`).
+Guardianes en `src/utils/health/**/*.test.ts`. El runner es `deno test` (los ficheros siguen en `node:test`, que Deno ejecuta).
 
 ## Contexto
 
-Todo el kit es TypeScript (ver [typescript/spec.md](typescript/spec.md)), pero no hay Vitest ni build de tests: guardianes en Node que leen el árbol y fallan con exit ≠ 0. Node 22 borra los tipos al cargar, así que `.test.ts` se ejecuta directo via `node --test`.
+Todo el kit es TypeScript (ver [typescript/spec.md](typescript/spec.md)), pero no hay Vitest ni build de tests: guardianes que leen el árbol y fallan con exit ≠ 0. Deno los ejecuta directo con `deno test -A --no-check`. El typecheck aparte es `deno task typecheck`.
 
 ## S-T1 Ubicación
 
@@ -16,17 +16,17 @@ Todo el kit es TypeScript (ver [typescript/spec.md](typescript/spec.md)), pero n
 
 ```bash
 # Sin servidor (default)
-npm test                  # ejecuta meta/diagrams/domain/audit
+deno task test                  # ejecuta meta/diagrams/domain/audit
 
 # Con servidor (e2e)
-npm run test:e2e          # necesita serve-demos.mjs corriendo
+deno task test:e2e          # necesita serve-demos.mjs corriendo
 
 # Gate completo (lo que el workflow corre)
-npm run test:all          # typecheck + test + audit
-npm run test:all:e2e      # test:all + test:e2e
+deno task test:all          # typecheck + test + audit
+deno task test:all:e2e      # test:all + test:e2e
 ```
 
-`ts-resolve-hook.ts` resuelve imports `.js` → `.ts` sin build pipeline.
+`sloppy-imports` en `deno.json` resuelve imports `.js` → `.ts` sin build pipeline.
 
 ## S-T3 Escribir un guardián
 
@@ -48,7 +48,7 @@ La estructura de `specs/` se valida con `src/utils/health/meta/specs-sdd.test.ts
 ## S-T5 Antes de declarar listo
 
 1. Guardián nuevo en verde.
-2. `npm test` verde (mínimo sin servidor).
+2. `deno task test` verde (mínimo sin servidor).
 3. Si tocó la carta (constraints/lessons): `src/utils/health/meta/llm-contract.test.ts` *(migrar el test a los specs consolidados)*.
 4. Si tocó `specs/`: `src/utils/health/meta/specs-sdd.test.ts`.
 
@@ -56,8 +56,8 @@ La estructura de `specs/` se valida con `src/utils/health/meta/specs-sdd.test.ts
 
 | Pieza | Contrato |
 |---|---|
-| Runner | `node --import ./scripts/ts-resolve-hook.ts --test src/utils/health/**/*.test.ts` |
-| Gate completo | `npm run test:all` (typecheck + test + audit) |
+| Runner | `deno test -A --no-check src/utils/health/**/*.test.ts` |
+| Gate completo | `deno task test:all` (typecheck + test + audit) |
 | Meta SDD | `src/utils/health/meta/specs-sdd.test.ts` |
 | Carta | `src/utils/health/meta/llm-contract.test.ts` |
 | Auditor motor | `src/utils/health/audit/motor.test.ts` |
@@ -66,8 +66,8 @@ La estructura de `specs/` se valida con `src/utils/health/meta/specs-sdd.test.ts
 
 | Caso | Resultado | Verificación |
 |---|---|---|
-| Suite sin servidor | todos exit 0 | `npm test` |
-| Gate completo | 🛑 0   🔴 0   🟡 0 | `npm run test:all` |
+| Suite sin servidor | todos exit 0 | `deno task test` |
+| Gate completo | 🛑 0   🔴 0   🟡 0 | `deno task test:all` |
 | Estructura specs | mapa + links + citas tests | `src/utils/health/meta/specs-sdd.test.ts` |
 | LLM contractual | secciones + guardianes en disco | `src/utils/health/meta/llm-contract.test.ts` |
 

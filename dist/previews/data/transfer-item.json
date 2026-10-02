@@ -9,7 +9,7 @@
   "sections": [
     {
       "id": "intro",
-      "title": "<is-transfer-item>",
+      "title": "Uso",
       "lede": "Elemento movible entre las dos listas de un <code class=\"code\">&lt;is-transfer&gt;</code>.",
       "blocks": [
         {

@@ -9,7 +9,7 @@
   "sections": [
     {
       "id": "intro",
-      "title": "<is-tab>",
+      "title": "Uso",
       "lede": "Pestaña de un <code class=\"code\">&lt;is-tab-group&gt;</code>. El atributo <code class=\"code\">panel</code> la enlaza con su <code class=\"code\">&lt;is-tab-panel&gt;</code>.",
       "blocks": [
         {

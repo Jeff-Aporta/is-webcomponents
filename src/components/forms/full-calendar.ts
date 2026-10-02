@@ -182,7 +182,7 @@ type View = 'month' | 'week' | 'day';
         const events = this.#events.filter((e: CalEvent) => e.date === iso).slice(0, 3);
         html += `<button class="day ${inMonth ? '' : 'out'} ${isToday ? 'today' : ''}" data-iso="${iso}">
           <span class="num">${d.getDate()}</span>
-          <ul class="events">${events.map((e: CalEvent) => `<li class="ev" data-evid="${e.id}" style="--c:${e.color || 'var(--is-accent)'}">${escapeHtml(e.title)}</li>`).join('')}</ul>
+          <ul class="events">${events.map((e: CalEvent) => `<li class="ev" data-evid="${e.id}" style="--c:${e.color || 'var(--iswc-accent)'}">${escapeHtml(e.title)}</li>`).join('')}</ul>
         </button>`;
       }
       html += `</div>`;
@@ -231,7 +231,7 @@ type View = 'month' | 'week' | 'day';
           const topPct = ((hh - startHour) + mm / 60) / (endHour - startHour);
           const endMin = e.end ? (() => { const [eh, em] = (e.end ?? '').split(':').map(Number); return (eh - startHour) + em / 60; })() : (hh - startHour) + 1;
           const heightPct = Math.max(((endMin) / (endHour - startHour)) - topPct, 1 / (endHour - startHour));
-          html += `<div class="ev-block" data-evid="${e.id}" data-iso="${iso}" style="top:${(topPct * 100).toFixed(2)}%; height:${(heightPct * 100).toFixed(2)}%; --c:${e.color || 'var(--is-accent)'}">
+          html += `<div class="ev-block" data-evid="${e.id}" data-iso="${iso}" style="top:${(topPct * 100).toFixed(2)}%; height:${(heightPct * 100).toFixed(2)}%; --c:${e.color || 'var(--iswc-accent)'}">
             <strong>${escapeHtml(e.title)}</strong>
             <small>${e.start}${e.end ? `–${e.end}` : ''}</small>
           </div>`;

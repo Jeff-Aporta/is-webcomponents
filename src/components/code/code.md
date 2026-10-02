@@ -74,8 +74,8 @@ import './code.js';
 | `tab-size` | number | `2` | Tamaño de tab visual. |
 | `name` | string | — | Nombre form-associated. |
 | `placeholder` | string | — | Placeholder del editor nativo. |
-| `min-height` | CSS length | `12rem` | → `--is-code-min-height`. |
-| `radius` | CSS | — | Style-attr → `--is-code-radius`. |
+| `min-height` | CSS length | `12rem` | → `--iswc-code-min-height`. |
+| `radius` | CSS | — | Style-attr → `--iswc-code-radius`. |
 
 #### Propiedades públicas
 
@@ -140,16 +140,16 @@ No proyecta light DOM (el texto inicial se lee una vez como semilla si no hay
 
 ### CSS custom properties
 
-Tokens de superficie: `--is-code-radius`, `--is-code-border`,
-`--is-code-min-height`, `--is-code-font`, `--is-code-font-size`.
+Tokens de superficie: `--iswc-code-radius`, `--iswc-code-border`,
+`--iswc-code-min-height`, `--iswc-code-font`, `--iswc-code-font-size`.
 
-Tokens de tema (ver `theme-config`): `--is-code-bg`, `--is-code-fg`,
-`--is-code-keyword`, `--is-code-string`, `--is-code-mark-error`, …
+Tokens de tema (ver `theme-config`): `--iswc-code-bg`, `--iswc-code-fg`,
+`--iswc-code-keyword`, `--iswc-code-string`, `--iswc-code-mark-error`, …
 
-Tokens de diff: `--is-code-diff-added` / `--is-code-diff-added-band`,
-`--is-code-diff-removed` / `--is-code-diff-removed-band`,
-`--is-code-diff-hunk`, `--is-code-diff-file`, `--is-code-diff-commit`,
-`--is-code-diff-path`, `--is-code-diff-note`. Cada color va en pareja con su
+Tokens de diff: `--iswc-code-diff-added` / `--iswc-code-diff-added-band`,
+`--iswc-code-diff-removed` / `--iswc-code-diff-removed-band`,
+`--iswc-code-diff-hunk`, `--iswc-code-diff-file`, `--iswc-code-diff-commit`,
+`--iswc-code-diff-path`, `--iswc-code-diff-note`. Cada color va en pareja con su
 banda porque el texto contrasta contra la banda, no contra el fondo.
 
 ### Integración con formularios

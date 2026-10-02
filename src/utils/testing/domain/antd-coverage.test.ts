@@ -113,7 +113,7 @@ const ROADMAP_CORE = {
   Image: 'imagen con preview; is-lightbox es el visor full-screen (zoom/pan/share), no el <img> en línea',
   List: 'deprecado en Ant Design 6.x — su caso se cubre con is-data-grid / ag-grid',
   Result: 'página de estado (éxito/error) con icono y acciones',
-  ConfigProvider: 'tema/paleta: el kit lo resuelve con data-theme/data-palette + tokens --is-* (no con un provider JS)',
+  ConfigProvider: 'tema/paleta: el kit lo resuelve con data-theme/data-palette + tokens --iswc-* (no con un provider JS)',
 };
 
 test('Ant Design coverage: existen los core en nuestro manifest', () => {

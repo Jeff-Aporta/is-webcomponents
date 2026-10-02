@@ -12,7 +12,7 @@
  *     <is-scrollspy target="is-main">...</is-scrollspy>.
  *  3. Borra el primer bloque Active-section-in-sidebar del <script> embebido.
  *
- * Uso:  node scripts/migrate-scrollspy.ts
+ * Uso:  deno run -A --no-check scripts/migrate-scrollspy.ts
  */
 import { readdir, readFile, writeFile } from 'node:fs/promises';
 import { join, dirname } from 'node:path';

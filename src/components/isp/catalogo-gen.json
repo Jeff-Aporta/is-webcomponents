@@ -10,7 +10,7 @@
   "sections": [
     {
       "id": "intro",
-      "title": "<is-catalogo-gen>",
+      "title": "Uso",
       "lede": "Catálogo CRUD (port ISP <code class=\"code\">CatalogoGen</code>). El <code class=\"code\">controller</code>\n          se genera con <code class=\"code\">createCatalogController(json)</code>: listado, columnas y\n          acciones (crear / modificar / visualizar / verificar / duplicar / recodificar / eliminar / consolidar).",
       "blocks": [
         {

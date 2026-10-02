@@ -1,62 +1,63 @@
 /**
  * is-code.css — superficie del editor + motor nativo (tokens .tok-*).
- * Los colores salen de --is-code-* (code-theme.js / theme-config JSON).
+ * Los colores salen de --iswc-code-* (code-theme.js / theme-config JSON).
  */
 
 :host {
-  --is-code-radius: var(--is-radius, 8px);
-  --is-code-border: var(--is-border, #2a3038);
-  --is-code-min-height: 12rem;
-  --is-code-font: var(--is-mono, ui-monospace, SFMono-Regular, Menlo, Consolas, monospace);
-  --is-code-font-size: 0.875rem;
-  --is-code-line-height: 1.55;
+  --iswc-code-radius: var(--iswc-radius, 8px);
+  --iswc-code-border: var(--iswc-border, #2a3038);
+  --iswc-code-min-height: 12rem;
+  --iswc-code-font: var(--iswc-mono, ui-monospace, SFMono-Regular, Menlo, Consolas, monospace);
+  --iswc-code-font-size: 0.875rem;
+  --iswc-code-line-height: 1.55;
 
   /* Defaults (dark); applyThemeConfig los sobrescribe. Material Darker + contraste HTML. */
-  --is-code-bg: #1e1e1e;
-  --is-code-fg: #eeffff;
-  --is-code-caret: #ffcc00;
-  --is-code-selection: rgba(128, 203, 196, 0.28);
-  --is-code-selection-match: rgba(128, 203, 196, 0.18);
-  --is-code-gutter-bg: #1e1e1e;
-  --is-code-gutter-fg: #546e7a;
-  --is-code-gutter-border: transparent;
-  --is-code-active-line: rgba(0, 0, 0, 0.22);
-  --is-code-active-gutter: rgba(0, 0, 0, 0.22);
-  --is-code-matching-bracket: #ffeb3b;
-  --is-code-comment: #697098;
-  --is-code-keyword: #c792ea;
-  --is-code-string: #c3e88d;
-  --is-code-number: #f78c6c;
-  --is-code-operator: #89ddff;
-  --is-code-punctuation: #89ddff;
-  --is-code-function: #82aaff;
-  --is-code-variable: #eeffff;
-  --is-code-property: #80cbc4;
-  --is-code-tag: #f07178;
-  --is-code-attribute: #ffcb6b;
-  --is-code-atom: #f78c6c;
-  --is-code-definition: #82aaff;
-  --is-code-meta: #ffcb6b;
-  --is-code-qualifier: #decb6b;
-  --is-code-builtin: #ffcb6b;
-  --is-code-type: #decb6b;
-  --is-code-mark-error: rgba(255, 82, 82, 0.28);
-  --is-code-mark-warning: rgba(255, 193, 7, 0.28);
-  --is-code-mark-info: rgba(33, 150, 243, 0.28);
-  --is-code-mark-success: rgba(76, 175, 80, 0.28);
-  --is-code-mark-neutral: rgba(158, 158, 158, 0.22);
+  --iswc-code-bg: #1e1e1e;
+  --iswc-code-fg: #eeffff;
+  --iswc-code-caret: #ffcc00;
+  --iswc-code-selection: rgba(128, 203, 196, 0.28);
+  --iswc-code-selection-match: rgba(128, 203, 196, 0.18);
+  --iswc-code-gutter-bg: #1e1e1e;
+  --iswc-code-gutter-fg: #546e7a;
+  --iswc-code-gutter-border: transparent;
+  --iswc-code-active-line: rgba(0, 0, 0, 0.22);
+  --iswc-code-active-gutter: rgba(0, 0, 0, 0.22);
+  --iswc-code-matching-bracket: #ffeb3b;
+  --iswc-code-comment: #697098;
+  --iswc-code-keyword: #c792ea;
+  --iswc-code-string: #c3e88d;
+  --iswc-code-number: #f78c6c;
+  --iswc-code-operator: #89ddff;
+  --iswc-code-punctuation: #89ddff;
+  --iswc-code-function: #82aaff;
+  --iswc-code-variable: #eeffff;
+  --iswc-code-property: #80cbc4;
+  --iswc-code-tag: #f07178;
+  --iswc-code-tag-punct: #ffc1c6;
+  --iswc-code-attribute: #ffcb6b;
+  --iswc-code-atom: #f78c6c;
+  --iswc-code-definition: #82aaff;
+  --iswc-code-meta: #ffcb6b;
+  --iswc-code-qualifier: #decb6b;
+  --iswc-code-builtin: #ffcb6b;
+  --iswc-code-type: #decb6b;
+  --iswc-code-mark-error: rgba(255, 82, 82, 0.28);
+  --iswc-code-mark-warning: rgba(255, 193, 7, 0.28);
+  --iswc-code-mark-info: rgba(33, 150, 243, 0.28);
+  --iswc-code-mark-success: rgba(76, 175, 80, 0.28);
+  --iswc-code-mark-neutral: rgba(158, 158, 158, 0.22);
 
   display: block;
   position: relative;
-  min-height: var(--is-code-min-height);
-  border: 1px solid var(--is-code-border);
-  border-radius: var(--is-code-radius);
-  background: var(--is-code-bg);
-  color: var(--is-code-fg);
+  min-height: var(--iswc-code-min-height);
+  border: 1px solid var(--iswc-code-border);
+  border-radius: var(--iswc-code-radius);
+  background: var(--iswc-code-bg);
+  color: var(--iswc-code-fg);
   overflow: hidden;
-  font-family: var(--is-code-font);
-  font-size: var(--is-code-font-size);
-  line-height: var(--is-code-line-height);
+  font-family: var(--iswc-code-font);
+  font-size: var(--iswc-code-font-size);
+  line-height: var(--iswc-code-line-height);
 }
 
 :host([data-disabled]),
@@ -71,10 +72,10 @@
 }
 
 :host([compact]) {
-  --is-code-min-height: 0;
-  --is-code-font-size: 0.8125rem;
-  --is-code-line-height: 1.6;
-  border-radius: var(--is-radius, 8px);
+  --iswc-code-min-height: 0;
+  --iswc-code-font-size: 0.8125rem;
+  --iswc-code-line-height: 1.6;
+  border-radius: var(--iswc-radius, 8px);
 }
 
 :host([compact]) .editor-host {
@@ -84,17 +85,17 @@
 /* —— mode=inline: fluye en el texto como un chip de código —— */
 :host([mode="inline"]),
 :host([data-inline]) {
-  --is-code-min-height: 0;
-  --is-code-font-size: 0.92em;
-  --is-code-line-height: 1.35;
-  --is-code-radius: 0.35em;
+  --iswc-code-min-height: 0;
+  --iswc-code-font-size: 0.92em;
+  --iswc-code-line-height: 1.35;
+  --iswc-code-radius: 0.35em;
 
   display: inline-flex;
   vertical-align: baseline;
   max-width: 100%;
   min-height: 0;
   margin: 0 0.15em;
-  border-radius: var(--is-code-radius);
+  border-radius: var(--iswc-code-radius);
   box-decoration-break: clone;
   -webkit-box-decoration-break: clone;
 }
@@ -121,13 +122,13 @@
 }
 
 :host(:focus-within) {
-  outline: 2px solid var(--is-focus, var(--is-accent, #4dabf7));
+  outline: 2px solid var(--iswc-focus, var(--iswc-accent, #4dabf7));
   outline-offset: 1px;
 }
 
 :host([readonly]:focus-within),
 :host([compact]:focus-within) {
-  outline-color: color-mix(in srgb, var(--is-focus, var(--is-accent)) 55%, transparent);
+  outline-color: color-mix(in srgb, var(--iswc-focus, var(--iswc-accent)) 55%, transparent);
 }
 
 .root {
@@ -150,7 +151,7 @@
 
 .editor-host {
   flex: 1 1 auto;
-  min-height: var(--is-code-min-height);
+  min-height: var(--iswc-code-min-height);
   display: flex;
   flex-direction: column;
 }
@@ -162,47 +163,47 @@
 
 .is-code-mark--highlight.is-code-mark--error,
 .is-code-mark--message.is-code-mark--error {
-  background: var(--is-code-mark-error);
+  background: var(--iswc-code-mark-error);
   border-bottom: 2px wavy #ff5252;
 }
 
 .is-code-mark--highlight.is-code-mark--warning,
 .is-code-mark--message.is-code-mark--warning {
-  background: var(--is-code-mark-warning);
+  background: var(--iswc-code-mark-warning);
   border-bottom: 2px wavy #ffc107;
 }
 
 .is-code-mark--highlight.is-code-mark--info,
 .is-code-mark--message.is-code-mark--info {
-  background: var(--is-code-mark-info);
+  background: var(--iswc-code-mark-info);
   border-bottom: 2px solid #2196f3;
 }
 
 .is-code-mark--highlight.is-code-mark--success {
-  background: var(--is-code-mark-success);
+  background: var(--iswc-code-mark-success);
 }
 
 .is-code-mark--highlight.is-code-mark--neutral {
-  background: var(--is-code-mark-neutral);
+  background: var(--iswc-code-mark-neutral);
 }
 
 .is-code-mark--tooltip {
-  border-bottom: 1px dotted color-mix(in srgb, var(--is-code-fg) 55%, transparent);
+  border-bottom: 1px dotted color-mix(in srgb, var(--iswc-code-fg) 55%, transparent);
   cursor: help;
 }
 
 .doc-tip {
-  --is-tooltip-max-width: 22rem;
-  font-family: var(--is-sans, system-ui, sans-serif);
+  --iswc-tooltip-max-width: 22rem;
+  font-family: var(--iswc-sans, system-ui, sans-serif);
   font-size: 0.8rem;
 }
 
 /* ── Vista NATIVA (motor nativo code-highlight) ──
-   Los tokens .tok-* consumen las MISMAS custom properties --is-code-* de la
+   Los tokens .tok-* consumen las MISMAS custom properties --iswc-code-* de la
    paleta (code-theme.js / theme-config). */
 .editor-host .ic-scroll {
   flex: 1 1 auto;
-  min-height: var(--is-code-min-height, 12rem);
+  min-height: var(--iswc-code-min-height, 12rem);
   display: flex;
   align-items: stretch;
   overflow: auto;
@@ -239,9 +240,9 @@
   z-index: 1;
   padding: 0.7rem 0;
   text-align: right;
-  color: var(--is-code-gutter-fg);
-  background: var(--is-code-gutter-bg);
-  border-right: 1px solid var(--is-code-gutter-border);
+  color: var(--iswc-code-gutter-fg);
+  background: var(--iswc-code-gutter-bg);
+  border-right: 1px solid var(--iswc-code-gutter-border);
   user-select: none;
   -webkit-user-select: none;
 }
@@ -257,27 +258,28 @@
   min-width: 100%;
 }
 
-/* Tokens nativos → mismas variables de paleta --is-code-* */
-.tok-comment   { color: var(--is-code-comment); font-style: italic; }
-.tok-keyword   { color: var(--is-code-keyword); font-weight: 500; }
-.tok-string    { color: var(--is-code-string); }
-.tok-number    { color: var(--is-code-number); }
-.tok-operator  { color: var(--is-code-operator); }
-.tok-punctuation { color: var(--is-code-punctuation); }
-.tok-tag       { color: var(--is-code-tag); font-weight: 600; }
-.tok-attribute { color: var(--is-code-attribute); }
-.tok-property  { color: var(--is-code-property); }
-.tok-function  { color: var(--is-code-function); }
-.tok-variable  { color: var(--is-code-variable); }
-.tok-atom      { color: var(--is-code-atom); }
-.tok-builtin   { color: var(--is-code-builtin); }
-.tok-type      { color: var(--is-code-type); }
-.tok-meta      { color: var(--is-code-meta); }
+/* Tokens nativos → mismas variables de paleta --iswc-code-* */
+.tok-comment   { color: var(--iswc-code-comment); font-style: italic; }
+.tok-keyword   { color: var(--iswc-code-keyword); font-weight: 500; }
+.tok-string    { color: var(--iswc-code-string); }
+.tok-number    { color: var(--iswc-code-number); }
+.tok-operator  { color: var(--iswc-code-operator); }
+.tok-punctuation { color: var(--iswc-code-punctuation); }
+.tok-tag       { color: var(--iswc-code-tag); font-weight: 600; }
+.tok-tagPunct  { color: var(--iswc-code-tag-punct, var(--iswc-code-tag)); }
+.tok-attribute { color: var(--iswc-code-attribute); }
+.tok-property  { color: var(--iswc-code-property); }
+.tok-function  { color: var(--iswc-code-function); }
+.tok-variable  { color: var(--iswc-code-variable); }
+.tok-atom      { color: var(--iswc-code-atom); }
+.tok-builtin   { color: var(--iswc-code-builtin); }
+.tok-type      { color: var(--iswc-code-type); }
+.tok-meta      { color: var(--iswc-code-meta); }
 
 /* Bandas de diff en la vista nativa (la clase va en el div de línea). */
-.editor-host .ic-line.is-diff-line-add { background: var(--is-code-diff-added-band); }
-.editor-host .ic-line.is-diff-line-del { background: var(--is-code-diff-removed-band); }
-.editor-host .ic-line.is-diff-line-hunk { background: var(--is-code-diff-hunk-band); }
+.editor-host .ic-line.is-diff-line-add { background: var(--iswc-code-diff-added-band); }
+.editor-host .ic-line.is-diff-line-del { background: var(--iswc-code-diff-removed-band); }
+.editor-host .ic-line.is-diff-line-hunk { background: var(--iswc-code-diff-hunk-band); }
 .editor-host .ic-line.is-diff-line-file,
 .editor-host .ic-line.is-diff-line-commit { background: transparent; }
 
@@ -290,7 +292,7 @@
   flex: 1 1 auto;
   align-self: stretch;
   min-width: 0;
-  min-height: calc(var(--is-code-line-height) * 1em + 1.4rem);
+  min-height: calc(var(--iswc-code-line-height) * 1em + 1.4rem);
   overflow: hidden;
 }
 
@@ -321,7 +323,7 @@
   color: inherit;
   line-height: inherit;
   background: transparent;
-  caret-color: var(--is-code-caret);
+  caret-color: var(--iswc-code-caret);
   border: 0;
   outline: 0;
   resize: none;
@@ -332,9 +334,9 @@
 
 /* El texto del textarea es transparente (lo pinta el <pre> de debajo). */
 .editor-host .ic-input { color: transparent; }
-.editor-host .ic-input::selection { background: var(--is-code-selection); }
+.editor-host .ic-input::selection { background: var(--iswc-code-selection); }
 .editor-host .ic-input::placeholder {
-  color: color-mix(in srgb, var(--is-code-fg) 48%, transparent);
+  color: color-mix(in srgb, var(--iswc-code-fg) 48%, transparent);
   opacity: 1;
 }
 
@@ -348,5 +350,5 @@
 }
 
 /* Línea activa (cursor) en el editor nativo. */
-.editor-host .ic-line--active { background: var(--is-code-active-line); }
-.editor-host .ic-ln--active { background: var(--is-code-active-gutter); }
+.editor-host .ic-line--active { background: var(--iswc-code-active-line); }
+.editor-host .ic-ln--active { background: var(--iswc-code-active-gutter); }

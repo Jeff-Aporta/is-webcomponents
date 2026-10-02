@@ -4,13 +4,13 @@
   "category": "data-viz",
   "title": "<is-heatmap>",
   "titleHtml": true,
-  "styles": ".heat-wrap { height: 22rem; }\r\n    pre.log {\r\n      font-family: ui-monospace, monospace; font-size: .8rem;\r\n      background: var(--is-bg-elev); border: 1px solid var(--is-border);\r\n      border-radius: var(--is-radius); padding: .55rem .75rem;\r\n      max-height: 8rem; overflow: auto;\r\n    }",
+  "styles": ".heat-wrap { height: 22rem; }\r\n    pre.log {\r\n      font-family: ui-monospace, monospace; font-size: .8rem;\r\n      background: var(--iswc-bg-elev); border: 1px solid var(--iswc-border);\r\n      border-radius: var(--iswc-radius); padding: .55rem .75rem;\r\n      max-height: 8rem; overflow: auto;\r\n    }",
   "storageKey": "docs-is-heatmap",
   "hasBehavior": true,
   "sections": [
     {
       "id": "intro",
-      "title": "<is-heatmap>",
+      "title": "Uso",
       "lede": "Matriz coloreada por valor. Útil para visualizar correlaciones, frecuencias a lo largo de día × semana, o calor por hora × servidor.",
       "blocks": []
     },

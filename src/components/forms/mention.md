@@ -105,17 +105,17 @@ No expone custom states.
 
 | Token | Uso |
 | --- | --- |
-| `--is-control-bg` | Fondo del campo. |
-| `--is-control-border` | Borde del campo. |
-| `--is-control-radius` | Radio del campo. |
-| `--is-bg-soft` | Fondo de reserva. |
-| `--is-bg-elev` | Fondo del popup. |
-| `--is-border` | Borde del popup. |
-| `--is-radius` | Radio del popup. |
-| `--is-shadow` | Sombra del popup. |
-| `--is-accent` | Realce de la opción activa. |
-| `--is-focus` | Anillo de foco. |
-| `--is-text-soft` | Carácter trigger en la opción. |
+| `--iswc-control-bg` | Fondo del campo. |
+| `--iswc-control-border` | Borde del campo. |
+| `--iswc-control-radius` | Radio del campo. |
+| `--iswc-bg-soft` | Fondo de reserva. |
+| `--iswc-bg-elev` | Fondo del popup. |
+| `--iswc-border` | Borde del popup. |
+| `--iswc-radius` | Radio del popup. |
+| `--iswc-shadow` | Sombra del popup. |
+| `--iswc-accent` | Realce de la opción activa. |
+| `--iswc-focus` | Anillo de foco. |
+| `--iswc-text-soft` | Carácter trigger en la opción. |
 
 ### Integración con formularios
 

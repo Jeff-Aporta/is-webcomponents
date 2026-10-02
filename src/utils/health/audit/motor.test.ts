@@ -11,7 +11,7 @@
  *   - el reportero emite JSON válido y Markdown legible
  *   - el orquestador (auditarComponente) agrega hallazgos
  *
- * Se ejecutan con `node --test` (mismo runner que el resto de la suite).
+ * Se ejecutan con `deno test -A --no-check` (mismo runner que el resto de la suite).
  */
 
 import { test } from 'node:test';

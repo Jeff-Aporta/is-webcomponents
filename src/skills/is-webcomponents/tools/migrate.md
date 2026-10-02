@@ -49,7 +49,7 @@ mapean a qué tag `is-*`, cómo quedó el bootstrap, qué se eliminó del
 - [ ] Cero imports de React/MUI/Svelte/Vue/Angular/Chart.js/Iconify en el código migrado.
 - [ ] Cada componente de framework tiene un tag `is-*` equivalente documentado (o un wrapper de dominio justificado).
 - [ ] `package.json` de la app consumidora sin dependencias de framework/bundler no usadas.
-- [ ] Bootstrap por CDN (o local) funcionando, sin `npm run dev`/`vite`/`webpack` para servir el kit.
+- [ ] Bootstrap por CDN (o local) funcionando, sin `deno task dev`/`vite`/`webpack` para servir el kit.
 - [ ] Wrappers de dominio (`tk-*`/`app-*`) solo traducen datos, no pintan UI genérica.
 - [ ] Comparado contra el patrón `is-swagger` → `is-swagger2` para detectar casos no cubiertos.
 

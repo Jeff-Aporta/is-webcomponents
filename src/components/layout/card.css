@@ -1,13 +1,13 @@
 :host {
-  --is-card-spacing: var(--is-space-l, 1rem);
+  --iswc-card-spacing: var(--iswc-space-l, 1rem);
   display: block;
   position: relative;
   overflow: hidden;
   background: var(--card-bg, transparent);
   border: var(--card-border, 0 solid transparent);
-  border-radius: var(--is-radius, 0.625em);
-  color: var(--is-text, inherit);
-  font-family: var(--is-sans, inherit);
+  border-radius: var(--iswc-radius, 0.625em);
+  color: var(--iswc-text, inherit);
+  font-family: var(--iswc-sans, inherit);
   box-sizing: border-box;
 
   .layout {
@@ -23,7 +23,7 @@
     display: flex;
     align-items: center;
     justify-content: space-between;
-    gap: var(--is-card-spacing);
+    gap: var(--iswc-card-spacing);
     & > ::slotted([slot="header"]),
     & > ::slotted([slot="footer"]) { flex: 1 1 auto; min-width: 0; }
     & > ::slotted([slot="header-actions"]),
@@ -51,17 +51,17 @@
    `:host[attr]`, que nunca matchea un shadow host. Usar :host([attr]). */
 :host([variant="outlined"]), :host(:not([variant])) {
     background: transparent;
-    border: 1px solid var(--is-border);
+    border: 1px solid var(--iswc-border);
   }
 
 :host([variant="filled"]) {
-    background: var(--is-bg-elev);
+    background: var(--iswc-bg-elev);
     border: 0;
   }
 
 :host([variant="filled-outlined"]) {
-    background: var(--is-bg-elev);
-    border: 1px solid var(--is-border);
+    background: var(--iswc-bg-elev);
+    border: 1px solid var(--iswc-border);
   }
 
 :host([variant="plain"]) {
@@ -70,9 +70,9 @@
   }
 
 :host([variant="accent"]) {
-    background: var(--is-accent-bg, rgb(30 144 255 / 12%));
+    background: var(--iswc-accent-bg, rgb(30 144 255 / 12%));
     border: 0;
-    box-shadow: inset 3px 0 0 var(--is-accent, #e03131);
+    box-shadow: inset 3px 0 0 var(--iswc-accent, #e03131);
   }
 
 :host(:not([orientation="horizontal"])) {
@@ -82,20 +82,20 @@
       padding: 0;
       & ::slotted(*) { display: block; width: 100%; }
     }
-    .section-header { padding: var(--is-card-spacing) var(--is-card-spacing) 0; }
-    .section-body { padding: var(--is-card-spacing); }
-    .section-footer { padding: 0 var(--is-card-spacing) var(--is-card-spacing); }
-    .section-header:not(.is-empty) ~ .section-body { padding-top: calc(var(--is-card-spacing) * 0.65); }
-    .section-media:not(.is-empty) ~ .section-header:not(.is-empty) { padding-top: calc(var(--is-card-spacing) * 0.85); }
-    .section-media:not(.is-empty) ~ .section-body { padding-top: calc(var(--is-card-spacing) * 0.85); }
-    .section-body:has(~ .section-footer:not(.is-empty)) { padding-bottom: calc(var(--is-card-spacing) * 0.65); }
+    .section-header { padding: var(--iswc-card-spacing) var(--iswc-card-spacing) 0; }
+    .section-body { padding: var(--iswc-card-spacing); }
+    .section-footer { padding: 0 var(--iswc-card-spacing) var(--iswc-card-spacing); }
+    .section-header:not(.is-empty) ~ .section-body { padding-top: calc(var(--iswc-card-spacing) * 0.65); }
+    .section-media:not(.is-empty) ~ .section-header:not(.is-empty) { padding-top: calc(var(--iswc-card-spacing) * 0.85); }
+    .section-media:not(.is-empty) ~ .section-body { padding-top: calc(var(--iswc-card-spacing) * 0.85); }
+    .section-body:has(~ .section-footer:not(.is-empty)) { padding-bottom: calc(var(--iswc-card-spacing) * 0.65); }
   }
 
 :host([orientation="horizontal"]) {
     .layout {
       flex-direction: row;
-      padding: var(--is-card-spacing);
-      gap: var(--is-card-spacing);
+      padding: var(--iswc-card-spacing);
+      gap: var(--iswc-card-spacing);
       align-items: center;
     }
     .section-body { flex: 1 1 auto; min-width: 0; }

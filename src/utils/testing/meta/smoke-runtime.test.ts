@@ -14,7 +14,7 @@
 // Si no hay Chrome o no hay servidor, el test se salta (no falla): la
 // batería tiene que seguir corriendo en una máquina pelada.
 //
-// Uso:  node scripts/serve.mjs &  node tests/smoke-runtime.test.ts
+// Uso:  deno run -A --no-check scripts/serve.mjs &  node tests/smoke-runtime.test.ts
 
 import { execFileSync, spawn } from 'node:child_process';
 import { existsSync } from 'node:fs';
@@ -81,7 +81,7 @@ if (!bloque || bloque[1].trim() === 'PENDIENTE') {
   // esto es infraestructura — no debe romper la batería principal.
   console.log(`SKIP smoke-runtime — la página quedó PENDIENTE (Chrome=${chrome}, server=${PORT})`);
   console.log('  Causas típicas: red inestable / componente colgado / virtual-time-budget corto.');
-  console.log('  Diagnóstico manual: node scripts/serve.mjs 8391 & node tests/smoke-runtime.test.ts');
+  console.log('  Diagnóstico manual: deno run -A --no-check scripts/serve.mjs 8391 & node tests/smoke-runtime.test.ts');
   process.exit(0);
 }
 

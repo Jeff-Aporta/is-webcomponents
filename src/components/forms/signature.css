@@ -9,13 +9,13 @@
   position: relative;
   width: var(--_w);
   height: var(--_h);
-  border: 1px dashed var(--is-border);
-  border-radius: var(--is-radius);
+  border: 1px dashed var(--iswc-border);
+  border-radius: var(--iswc-radius);
   background:
     repeating-linear-gradient(0deg,
-      color-mix(in srgb, var(--is-text) 5%, transparent) 0 1px,
+      color-mix(in srgb, var(--iswc-text) 5%, transparent) 0 1px,
       transparent 1px 24px),
-    color-mix(in srgb, var(--is-bg-elev) 80%, transparent);
+    color-mix(in srgb, var(--iswc-bg-elev) 80%, transparent);
   touch-action: none;
   overflow: hidden;
 }
@@ -28,7 +28,7 @@
   inset: 0;
   display: grid;
   place-items: center;
-  color: var(--is-text-dim);
+  color: var(--iswc-text-dim);
   font-size: .85rem;
   letter-spacing: .12em;
   pointer-events: none;

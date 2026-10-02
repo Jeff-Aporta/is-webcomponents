@@ -77,7 +77,7 @@ Cada leaf corre F0 (DISCOVER → GROUP → PROPOSE → GATE → IMPLEMENT → IT
 
 | Gate | Cuándo |
 |---|---|
-| Pre-WT | npm run typecheck, npm run test:demos, strict audit ≤baseline |
+| Pre-WT | deno task typecheck, deno task test:demos, strict audit ≤baseline |
 | Pre-merge | F0 cerrado en el leaf, tests ≥baseline, round-trip preservado |
 | Pre-merge-to-main | single gate humano |
 
@@ -95,8 +95,8 @@ Cada leaf corre F0 (DISCOVER → GROUP → PROPOSE → GATE → IMPLEMENT → IT
 ```powershell
 cd C:\ContaPyme\Personal\apps\is-webcomponents
 git status --short  # debe estar limpio
-npm run typecheck    # debe pasar
-npm run test:demos   # 42/42 PASS
+deno task typecheck    # debe pasar
+deno task test:demos   # 42/42 PASS
 git worktree add C:\ContaPyme\Personal\apps\WT\is-wc-wt-root-editors-2026 -b wt-root-editors-2026 main
 ```
 

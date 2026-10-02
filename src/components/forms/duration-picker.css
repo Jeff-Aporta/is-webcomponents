@@ -2,18 +2,18 @@
 :host {
   display: inline-block;
   font: inherit;
-  color: var(--is-text);
-  --is-duration-picker-bg: var(--is-control-bg, var(--is-bg-soft));
-  --is-duration-picker-border: var(--is-control-border, var(--is-border));
+  color: var(--iswc-text);
+  --iswc-duration-picker-bg: var(--iswc-control-bg, var(--iswc-bg-soft));
+  --iswc-duration-picker-border: var(--iswc-control-border, var(--iswc-border));
 }
 
 .root {
   display: inline-flex;
   align-items: center;
   gap: .15rem;
-  background: var(--is-duration-picker-bg);
-  border: 1px solid var(--is-duration-picker-border);
-  border-radius: var(--is-radius, 8px);
+  background: var(--iswc-duration-picker-bg);
+  border: 1px solid var(--iswc-duration-picker-border);
+  border-radius: var(--iswc-radius, 8px);
   padding: .25rem .45rem;
 }
 
@@ -38,14 +38,14 @@
   border-radius: 4px;
 
   &:focus {
-    background: color-mix(in srgb, var(--is-accent) 14%, transparent);
+    background: color-mix(in srgb, var(--iswc-accent) 14%, transparent);
   }
 }
 
 .col button {
   border: 0;
   background: transparent;
-  color: var(--is-text-soft);
+  color: var(--iswc-text-soft);
   cursor: pointer;
   font: inherit;
   line-height: 1;
@@ -55,14 +55,14 @@
   border-radius: 4px;
 
   &:hover {
-    background: color-mix(in srgb, var(--is-accent) 18%, transparent);
-    color: var(--is-accent);
+    background: color-mix(in srgb, var(--iswc-accent) 18%, transparent);
+    color: var(--iswc-accent);
   }
 }
 
 .sep {
   font-weight: 600;
-  color: var(--is-text-soft);
+  color: var(--iswc-text-soft);
   align-self: center;
   font-size: 1.05rem;
 }

@@ -8,7 +8,7 @@
   "sections": [
     {
       "id": "intro",
-      "title": "<is-mindmap>",
+      "title": "Uso",
       "lede": "Mapa mental en SVG, sin Mermaid. Declaras ideas con un `parent`\r\n          opcional y el componente arma el árbol, reparte las ramas y las une\r\n          con curvas suaves coloreadas por rama.",
       "blocks": [
         {

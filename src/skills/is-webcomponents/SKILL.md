@@ -106,7 +106,7 @@ Excepción: apps que declaran seguimiento continuo (por ejemplo `jagudeloe/front
 
 - CSS de documento: `loadCSSBase` + `loadCSSPalettesDefault`. El CSS de cada `is-*` lo carga el propio tag.
 - Cargar solo los tags de la vista. `load('actions')` expande a cada `.min.js` de la categoría (no hay bundle). `load('all')` pide todos los tags, no un archivo único.
-- Tema: `data-theme` / `data-palette` en `<html>`. Tokens: `--is-text`, `--is-bg`, `--is-border`, `--is-accent`, etc.
+- Tema: `data-theme` / `data-palette` en `<html>`. Tokens: `--iswc-text`, `--iswc-bg`, `--iswc-border`, `--iswc-accent`, etc.
 - Si la app prefiere no depender de red: usar [`/is-webcomponents:local`](tools/local.md) (vendoriza JS y CSS, arranque local con fallback a CDN).
 
 ## Arquitectura de apps (patrón jagudeloe / r2admin)
@@ -182,7 +182,7 @@ Antes de cambiar el repo del kit, leer [`specs/lessons.md`](https://github.com/J
 - [ ] Cada control visual mapea a un `is-*` existente (o hay una justificación explícita de que no existe).
 - [ ] Guía del módulo leída; props y eventos según ese MD.
 - [ ] Iconos vía `is-icon`.
-- [ ] Tema y paleta con tokens `--is-*`.
+- [ ] Tema y paleta con tokens `--iswc-*`.
 - [ ] Los wrappers de dominio solo traducen datos al kit.
 - [ ] CDN: SHA fijado (`{{SHA}}` resuelto), o `@main` si el proyecto sigue la punta, o copia local vía `/is-webcomponents:local`.
 - [ ] CSS de dominio en archivo hermano + `adoptCss` (no un `const CSS` gigante en el JS).

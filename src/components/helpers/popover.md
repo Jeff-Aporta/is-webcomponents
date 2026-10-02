@@ -124,12 +124,12 @@ No expone.
 | `--hide-duration` | Token leído o definido por componente. |
 | `--auto-size-available-width` | Token leído o definido por componente. |
 | `--auto-size-available-height` | Token leído o definido por componente. |
-| `--is-radius` | Token leído o definido por componente. |
-| `--is-bg-elev` | Token leído o definido por componente. |
-| `--is-text` | Token leído o definido por componente. |
-| `--is-border` | Token leído o definido por componente. |
-| `--is-shadow` | Token leído o definido por componente. |
-| `--is-font-family` | Token leído o definido por componente. |
+| `--iswc-radius` | Token leído o definido por componente. |
+| `--iswc-bg-elev` | Token leído o definido por componente. |
+| `--iswc-text` | Token leído o definido por componente. |
+| `--iswc-border` | Token leído o definido por componente. |
+| `--iswc-shadow` | Token leído o definido por componente. |
+| `--iswc-font-family` | Token leído o definido por componente. |
 
 ### Integración con formularios
 

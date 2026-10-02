@@ -133,34 +133,34 @@ Propiedades públicas aparecen en tabla anterior; APIs heredadas se verifican en
 
 | Token | Uso |
 | --- | --- |
-| `--is-checkbox-size` | Token leído o definido por componente. |
-| `--is-checkbox-radius` | Token leído o definido por componente. |
-| `--is-radius-sm` | Token leído o definido por componente. |
-| `--is-checkbox-bg` | Token leído o definido por componente. |
-| `--is-control-bg` | Token leído o definido por componente. |
-| `--is-checkbox-bg-hover` | Token leído o definido por componente. |
-| `--is-control-bg-hover` | Token leído o definido por componente. |
-| `--is-checkbox-border` | Token leído o definido por componente. |
-| `--is-control-border` | Token leído o definido por componente. |
-| `--is-checkbox-accent` | Token leído o definido por componente. |
-| `--is-accent` | Token leído o definido por componente. |
-| `--is-color-brand-500` | Token leído o definido por componente. |
-| `--is-checkbox-on-accent` | Token leído o definido por componente. |
-| `--is-on-brand` | Token leído o definido por componente. |
-| `--is-checkbox-focus` | Token leído o definido por componente. |
-| `--is-focus` | Token leído o definido por componente. |
-| `--is-checkbox-fill` | Token leído o definido por componente. |
-| `--is-checkbox-mark` | Token leído o definido por componente. |
-| `--is-checkbox-halo` | Token leído o definido por componente. |
-| `--is-sans` | Token leído o definido por componente. |
-| `--is-text` | Token leído o definido por componente. |
-| `--is-control-text` | Token leído o definido por componente. |
-| `--is-text-dim` | Token leído o definido por componente. |
-| `--is-color-success-500` | Token leído o definido por componente. |
-| `--is-color-warning-500` | Token leído o definido por componente. |
-| `--is-color-danger-500` | Token leído o definido por componente. |
-| `--is-danger-text` | Token leído o definido por componente. |
-| `--is-color-danger-600` | Token leído o definido por componente. |
+| `--iswc-checkbox-size` | Token leído o definido por componente. |
+| `--iswc-checkbox-radius` | Token leído o definido por componente. |
+| `--iswc-radius-sm` | Token leído o definido por componente. |
+| `--iswc-checkbox-bg` | Token leído o definido por componente. |
+| `--iswc-control-bg` | Token leído o definido por componente. |
+| `--iswc-checkbox-bg-hover` | Token leído o definido por componente. |
+| `--iswc-control-bg-hover` | Token leído o definido por componente. |
+| `--iswc-checkbox-border` | Token leído o definido por componente. |
+| `--iswc-control-border` | Token leído o definido por componente. |
+| `--iswc-checkbox-accent` | Token leído o definido por componente. |
+| `--iswc-accent` | Token leído o definido por componente. |
+| `--iswc-color-brand-500` | Token leído o definido por componente. |
+| `--iswc-checkbox-on-accent` | Token leído o definido por componente. |
+| `--iswc-on-brand` | Token leído o definido por componente. |
+| `--iswc-checkbox-focus` | Token leído o definido por componente. |
+| `--iswc-focus` | Token leído o definido por componente. |
+| `--iswc-checkbox-fill` | Token leído o definido por componente. |
+| `--iswc-checkbox-mark` | Token leído o definido por componente. |
+| `--iswc-checkbox-halo` | Token leído o definido por componente. |
+| `--iswc-sans` | Token leído o definido por componente. |
+| `--iswc-text` | Token leído o definido por componente. |
+| `--iswc-control-text` | Token leído o definido por componente. |
+| `--iswc-text-dim` | Token leído o definido por componente. |
+| `--iswc-color-success-500` | Token leído o definido por componente. |
+| `--iswc-color-warning-500` | Token leído o definido por componente. |
+| `--iswc-color-danger-500` | Token leído o definido por componente. |
+| `--iswc-danger-text` | Token leído o definido por componente. |
+| `--iswc-color-danger-600` | Token leído o definido por componente. |
 
 ### Integración con formularios
 

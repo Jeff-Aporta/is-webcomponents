@@ -4,13 +4,13 @@
   "category": "forms",
   "title": "<is-doc-editor>",
   "titleHtml": true,
-  "styles": "pre.output {\r\n      font-family: ui-monospace, monospace; font-size: .78rem;\r\n      background: var(--is-bg-elev); border: 1px solid var(--is-border);\r\n      border-radius: var(--is-radius); padding: .65rem .85rem;\r\n      max-height: 14rem; overflow: auto;\r\n      white-space: pre-wrap;\r\n    }\r\n    .kbd-hint {\r\n      font-size: .78rem; color: var(--is-text-soft);\r\n    }\r\n    .kbd-hint kbd {\r\n      font-family: ui-monospace, monospace; font-size: .72rem;\r\n      padding: 1px 5px;\r\n      border-radius: 4px;\r\n      border: 1px solid var(--is-border);\r\n      background: var(--is-bg-elev);\r\n    }",
+  "styles": "pre.output {\r\n      font-family: ui-monospace, monospace; font-size: .78rem;\r\n      background: var(--iswc-bg-elev); border: 1px solid var(--iswc-border);\r\n      border-radius: var(--iswc-radius); padding: .65rem .85rem;\r\n      max-height: 14rem; overflow: auto;\r\n      white-space: pre-wrap;\r\n    }\r\n    .kbd-hint {\r\n      font-size: .78rem; color: var(--iswc-text-soft);\r\n    }\r\n    .kbd-hint kbd {\r\n      font-family: ui-monospace, monospace; font-size: .72rem;\r\n      padding: 1px 5px;\r\n      border-radius: 4px;\r\n      border: 1px solid var(--iswc-border);\r\n      background: var(--iswc-bg-elev);\r\n    }",
   "storageKey": "docs-is-doc-editor",
   "hasBehavior": true,
   "sections": [
     {
       "id": "intro",
-      "title": "<is-doc-editor>",
+      "title": "Uso",
       "lede": "Editor por bloques tipo Notion. Escribe <kbd class=\"ic\">/</kbd> al inicio de una línea para cambiar el tipo. <kbd class=\"ic\">Enter</kbd> crea otro bloque, <kbd class=\"ic\">Backspace</kbd> sobre texto vacío elimina.",
       "blocks": []
     },

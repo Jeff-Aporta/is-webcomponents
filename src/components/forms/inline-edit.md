@@ -116,15 +116,15 @@ nuevo y `detail.previous` el vigente al entrar en edición.
 
 | Token | Uso |
 | --- | --- |
-| `--is-inline-edit-min-h` | Altura mínima del editor en `mode="textarea"`. |
-| `--is-inline-edit-radius` | Radio de bordes. |
-| `--is-accent` | Realce en edición. |
-| `--is-border` | Borde del editor. |
-| `--is-text` | Color del texto. |
-| `--is-text-soft` | Color del placeholder. |
-| `--is-success` | Realce del estado `saved`. |
-| `--is-danger` | Realce de validación. |
-| `--is-focus` | Anillo de foco. |
+| `--iswc-inline-edit-min-h` | Altura mínima del editor en `mode="textarea"`. |
+| `--iswc-inline-edit-radius` | Radio de bordes. |
+| `--iswc-accent` | Realce en edición. |
+| `--iswc-border` | Borde del editor. |
+| `--iswc-text` | Color del texto. |
+| `--iswc-text-soft` | Color del placeholder. |
+| `--iswc-success` | Realce del estado `saved`. |
+| `--iswc-danger` | Realce de validación. |
+| `--iswc-focus` | Anillo de foco. |
 
 ### Integración con formularios
 

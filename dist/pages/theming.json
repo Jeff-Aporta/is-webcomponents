@@ -4,7 +4,7 @@
   "category": "",
   "title": "Personalización",
   "titleHtml": false,
-  "styles": "/* ═══════════════════════════════════════════════════════════════\r\n       Personalización — taller de temas.\r\n       Solo layout de la página: ni un color literal, todo sale de los\r\n       tokens --is-* para que la propia página respete la marca activa.\r\n       ═══════════════════════════════════════════════════════════════ */\r\n\r\n    .tw-seeds {\r\n      display: grid;\r\n      grid-template-columns: repeat(auto-fit, minmax(13rem, 1fr));\r\n      gap: 1rem;\r\n      align-items: start;\r\n\r\n      & .tw-seed-name { grid-column: 1 / -1; max-width: 22rem; }\r\n    }\r\n\r\n    .tw-actions {\r\n      display: flex;\r\n      flex-wrap: wrap;\r\n      align-items: center;\r\n      gap: 0.75rem;\r\n      margin-top: 0.9rem;\r\n    }\r\n\r\n    /* ── Doble panel: dark y light a la vez ───────────────────────── */\r\n    .tw-panels {\r\n      display: grid;\r\n      grid-template-columns: repeat(auto-fit, minmax(21rem, 1fr));\r\n      gap: 1.15rem;\r\n\r\n      @media (max-width: 720px) {\r\n        grid-template-columns: minmax(0, 1fr);\r\n      }\r\n    }\r\n\r\n    /* El panel ES el ámbito del tema: lleva .theme-dark/.theme-light y\r\n       encima los tokens generados como propiedades inline. Todo lo que\r\n       cuelga dentro —incluidos los shadow roots de los is-*— los hereda. */\r\n    .tw-panel {\r\n      display: block;\r\n      padding: 1.1rem;\r\n      border-radius: var(--is-radius);\r\n      border: 1px solid var(--is-border);\r\n      background: var(--is-bg);\r\n      color: var(--is-text);\r\n      box-shadow: var(--is-shadow);\r\n      min-width: 0;\r\n\r\n      & .tw-panel__head {\r\n        display: flex;\r\n        align-items: center;\r\n        justify-content: space-between;\r\n        gap: 0.6rem;\r\n        margin: 0 0 0.9rem;\r\n        padding-bottom: 0.55rem;\r\n        border-bottom: 1px solid var(--is-border-soft);\r\n        font-size: 0.72rem;\r\n        font-weight: 700;\r\n        letter-spacing: 0.08em;\r\n        text-transform: uppercase;\r\n        color: var(--is-text-soft);\r\n      }\r\n\r\n      & .tw-panel__body {\r\n        display: flex;\r\n        flex-direction: column;\r\n        gap: 0.95rem;\r\n      }\r\n\r\n      & .tw-row {\r\n        display: flex;\r\n        flex-wrap: wrap;\r\n        align-items: center;\r\n        gap: 0.55rem;\r\n      }\r\n\r\n      & .tw-grid2 {\r\n        display: grid;\r\n        grid-template-columns: repeat(auto-fit, minmax(9rem, 1fr));\r\n        gap: 0.7rem;\r\n      }\r\n\r\n      & .tw-note {\r\n        margin: 0;\r\n        font-size: 0.8rem;\r\n        line-height: 1.5;\r\n        color: var(--is-text-soft);\r\n      }\r\n    }\r\n\r\n    /* Muestras de la rampa generada */\r\n    .tw-ramp {\r\n      display: grid;\r\n      grid-template-columns: repeat(auto-fit, minmax(4.5rem, 1fr));\r\n      gap: 0.4rem;\r\n      margin-top: 0.9rem;\r\n\r\n      & .tw-chip {\r\n        display: grid;\r\n        gap: 0.15rem;\r\n        padding: 0.5rem 0.4rem;\r\n        border-radius: var(--is-radius-sm);\r\n        border: 1px solid var(--is-border);\r\n        font-family: var(--is-mono);\r\n        font-size: 0.62rem;\r\n        text-align: center;\r\n\r\n        & b { font-size: 0.6rem; letter-spacing: 0.04em; opacity: 0.85; }\r\n        & span { font-size: 0.62rem; }\r\n      }\r\n    }\r\n\r\n    /* ── Bloque de exportación: barra + salida, una sola pieza ────── */\r\n    .tw-export {\r\n      margin-top: 1rem;\r\n      border: 1px solid var(--is-border);\r\n      border-radius: var(--is-radius);\r\n      background: var(--is-bg-elev);\r\n      box-shadow: var(--is-shadow);\r\n      overflow: hidden;\r\n    }\r\n\r\n    .tw-export__bar {\r\n      display: flex;\r\n      flex-wrap: wrap;\r\n      align-items: center;\r\n      gap: 0.6rem;\r\n      padding: 0.6rem 0.7rem;\r\n      border-bottom: 1px solid var(--is-border-soft);\r\n      background: color-mix(in srgb, var(--is-bg-elev) 60%, transparent);\r\n\r\n      & .tw-export__file {\r\n        display: inline-flex;\r\n        align-items: center;\r\n        gap: 0.35rem;\r\n        font-family: var(--is-mono);\r\n        font-size: 0.78rem;\r\n        color: var(--is-text);\r\n      }\r\n\r\n      & .tw-export__meta {\r\n        display: inline-flex;\r\n        align-items: center;\r\n        gap: 0.35rem;\r\n        font-family: var(--is-mono);\r\n        font-size: 0.7rem;\r\n        color: var(--is-text-soft);\r\n      }\r\n\r\n      /* Empuja copiar/descargar al extremo: la barra se lee de izquierda\r\n         (qué archivo es) a derecha (qué hago con él). */\r\n      & .tw-export__spacer { flex: 1 1 auto; min-width: 0.5rem; }\r\n    }\r\n\r\n    /* La salida ES un `pre.code`: la colorea `<is-code>` (motor nativo) como cualquier otro\r\n       snippet, y el observer del highlighter la repinta en cada `is-input`\r\n       del picker. Aquí solo queda encajarla en la tarjeta. */\r\n    .tw-output {\r\n      margin: 0;\r\n      max-height: 26rem;\r\n      overflow: auto;\r\n      overscroll-behavior: contain;\r\n      border: 0;\r\n      border-radius: 0;\r\n      box-shadow: none;\r\n      font-size: 0.76rem;\r\n    }\n    .tw-persist-hint {\n      margin: 0.5rem 0 0;\n      font-size: 0.75rem;\n      color: var(--is-text-dim);\n    }\n",
+  "styles": "/* ═══════════════════════════════════════════════════════════════\r\n       Personalización — taller de temas.\r\n       Solo layout de la página: ni un color literal, todo sale de los\r\n       tokens --iswc-* para que la propia página respete la marca activa.\r\n       ═══════════════════════════════════════════════════════════════ */\r\n\r\n    .tw-seeds {\r\n      display: grid;\r\n      grid-template-columns: repeat(auto-fit, minmax(13rem, 1fr));\r\n      gap: 1rem;\r\n      align-items: start;\r\n\r\n      & .tw-seed-name { grid-column: 1 / -1; max-width: 22rem; }\r\n    }\r\n\r\n    .tw-actions {\r\n      display: flex;\r\n      flex-wrap: wrap;\r\n      align-items: center;\r\n      gap: 0.75rem;\r\n      margin-top: 0.9rem;\r\n    }\r\n\r\n    /* ── Doble panel: dark y light a la vez ───────────────────────── */\r\n    .tw-panels {\r\n      display: grid;\r\n      grid-template-columns: repeat(auto-fit, minmax(21rem, 1fr));\r\n      gap: 1.15rem;\r\n\r\n      @media (max-width: 720px) {\r\n        grid-template-columns: minmax(0, 1fr);\r\n      }\r\n    }\r\n\r\n    /* El panel ES el ámbito del tema: lleva .theme-dark/.theme-light y\r\n       encima los tokens generados como propiedades inline. Todo lo que\r\n       cuelga dentro —incluidos los shadow roots de los is-*— los hereda. */\r\n    .tw-panel {\r\n      display: block;\r\n      padding: 1.1rem;\r\n      border-radius: var(--iswc-radius);\r\n      border: 1px solid var(--iswc-border);\r\n      background: var(--iswc-bg);\r\n      color: var(--iswc-text);\r\n      box-shadow: var(--iswc-shadow);\r\n      min-width: 0;\r\n\r\n      & .tw-panel__head {\r\n        display: flex;\r\n        align-items: center;\r\n        justify-content: space-between;\r\n        gap: 0.6rem;\r\n        margin: 0 0 0.9rem;\r\n        padding-bottom: 0.55rem;\r\n        border-bottom: 1px solid var(--iswc-border-soft);\r\n        font-size: 0.72rem;\r\n        font-weight: 700;\r\n        letter-spacing: 0.08em;\r\n        text-transform: uppercase;\r\n        color: var(--iswc-text-soft);\r\n      }\r\n\r\n      & .tw-panel__body {\r\n        display: flex;\r\n        flex-direction: column;\r\n        gap: 0.95rem;\r\n      }\r\n\r\n      & .tw-row {\r\n        display: flex;\r\n        flex-wrap: wrap;\r\n        align-items: center;\r\n        gap: 0.55rem;\r\n      }\r\n\r\n      & .tw-grid2 {\r\n        display: grid;\r\n        grid-template-columns: repeat(auto-fit, minmax(9rem, 1fr));\r\n        gap: 0.7rem;\r\n      }\r\n\r\n      & .tw-note {\r\n        margin: 0;\r\n        font-size: 0.8rem;\r\n        line-height: 1.5;\r\n        color: var(--iswc-text-soft);\r\n      }\r\n    }\r\n\r\n    /* Muestras de la rampa generada */\r\n    .tw-ramp {\r\n      display: grid;\r\n      grid-template-columns: repeat(auto-fit, minmax(4.5rem, 1fr));\r\n      gap: 0.4rem;\r\n      margin-top: 0.9rem;\r\n\r\n      & .tw-chip {\r\n        display: grid;\r\n        gap: 0.15rem;\r\n        padding: 0.5rem 0.4rem;\r\n        border-radius: var(--iswc-radius-sm);\r\n        border: 1px solid var(--iswc-border);\r\n        font-family: var(--iswc-mono);\r\n        font-size: 0.62rem;\r\n        text-align: center;\r\n\r\n        & b { font-size: 0.6rem; letter-spacing: 0.04em; opacity: 0.85; }\r\n        & span { font-size: 0.62rem; }\r\n      }\r\n    }\r\n\r\n    /* ── Bloque de exportación: barra + salida, una sola pieza ────── */\r\n    .tw-export {\r\n      margin-top: 1rem;\r\n      border: 1px solid var(--iswc-border);\r\n      border-radius: var(--iswc-radius);\r\n      background: var(--iswc-bg-elev);\r\n      box-shadow: var(--iswc-shadow);\r\n      overflow: hidden;\r\n    }\r\n\r\n    .tw-export__bar {\r\n      display: flex;\r\n      flex-wrap: wrap;\r\n      align-items: center;\r\n      gap: 0.6rem;\r\n      padding: 0.6rem 0.7rem;\r\n      border-bottom: 1px solid var(--iswc-border-soft);\r\n      background: color-mix(in srgb, var(--iswc-bg-elev) 60%, transparent);\r\n\r\n      & .tw-export__file {\r\n        display: inline-flex;\r\n        align-items: center;\r\n        gap: 0.35rem;\r\n        font-family: var(--iswc-mono);\r\n        font-size: 0.78rem;\r\n        color: var(--iswc-text);\r\n      }\r\n\r\n      & .tw-export__meta {\r\n        display: inline-flex;\r\n        align-items: center;\r\n        gap: 0.35rem;\r\n        font-family: var(--iswc-mono);\r\n        font-size: 0.7rem;\r\n        color: var(--iswc-text-soft);\r\n      }\r\n\r\n      /* Empuja copiar/descargar al extremo: la barra se lee de izquierda\r\n         (qué archivo es) a derecha (qué hago con él). */\r\n      & .tw-export__spacer { flex: 1 1 auto; min-width: 0.5rem; }\r\n    }\r\n\r\n    /* La salida ES un `pre.code`: la colorea `<is-code>` (motor nativo) como cualquier otro\r\n       snippet, y el observer del highlighter la repinta en cada `is-input`\r\n       del picker. Aquí solo queda encajarla en la tarjeta. */\r\n    .tw-output {\r\n      margin: 0;\r\n      max-height: 26rem;\r\n      overflow: auto;\r\n      overscroll-behavior: contain;\r\n      border: 0;\r\n      border-radius: 0;\r\n      box-shadow: none;\r\n      font-size: 0.76rem;\r\n    }\n    .tw-persist-hint {\n      margin: 0.5rem 0 0;\n      font-size: 0.75rem;\n      color: var(--iswc-text-dim);\n    }\n\n    .tw-export-tabs { display: block; }\n\n    .tw-tuto {\n      display: flex;\n      flex-direction: column;\n      gap: 0.75rem;\n      margin-top: 0.85rem;\n      max-width: 52rem;\n      font-size: 0.92rem;\n      line-height: 1.55;\n      color: var(--iswc-text);\n\n      & p { margin: 0; }\n\n      & ol {\n        margin: 0;\n        padding-left: 1.15rem;\n        display: flex;\n        flex-direction: column;\n        gap: 0.55rem;\n      }\n\n      & code {\n        font-family: var(--iswc-mono);\n        font-size: 0.84em;\n      }\n\n      & .tw-note {\n        margin: 0;\n        color: var(--iswc-text-soft);\n        font-size: 0.8rem;\n      }\n    }\n",
   "storageKey": "docs-theming",
   "hasBehavior": true,
   "sections": [
@@ -26,11 +26,11 @@
       "blocks": [
         {
           "kind": "html",
-          "html": "<ol class=\"lede\">\r\n          <li>\r\n            <code>is-base.css</code> — define los <strong>dos temas</strong>\r\n            (superficies, texto, controles, estados de campo, scrollbars) sin\r\n            ningún color de marca. Con solo este archivo ya tienes dark/light\r\n            gris neutro.\r\n          </li>\r\n          <li>\r\n            <code>palettes.css</code> — opcional. Aporta la\r\n            <strong>marca</strong> (<code>--is-color-brand-*</code>,\r\n            <code>--is-accent</code>, <code>--is-brand-*</code>,\r\n            <code>--is-focus</code>) y <strong>re-tinta las superficies</strong>\r\n            por pareja tema+paleta.\r\n          </li>\r\n          <li>\r\n            Tu paleta — exactamente la misma forma que <code>palettes.css</code>.\r\n            Es lo que genera esta página.\r\n          </li>\r\n        </ol>\r\n\r\n        <p class=\"lede\">\r\n          La selección combina <strong>dos cosas</strong>: la clase de tema y el\r\n          atributo de paleta. Las variables de marca cuelgan solo del atributo\r\n          (valen para los dos temas); las superficies cuelgan de la\r\n          <strong>pareja</strong>:\r\n        </p>"
+          "html": "<ol class=\"lede\">\r\n          <li>\r\n            <code>is-base.css</code> — define los <strong>dos temas</strong>\r\n            (superficies, texto, controles, estados de campo, scrollbars) sin\r\n            ningún color de marca. Con solo este archivo ya tienes dark/light\r\n            gris neutro.\r\n          </li>\r\n          <li>\r\n            <code>palettes.css</code> — opcional. Aporta la\r\n            <strong>marca</strong> (<code>--iswc-color-brand-*</code>,\r\n            <code>--iswc-accent</code>, <code>--iswc-brand-*</code>,\r\n            <code>--iswc-focus</code>) y <strong>re-tinta las superficies</strong>\r\n            por pareja tema+paleta.\r\n          </li>\r\n          <li>\r\n            Tu paleta — exactamente la misma forma que <code>palettes.css</code>.\r\n            Es lo que genera esta página.\r\n          </li>\r\n        </ol>\r\n\r\n        <p class=\"lede\">\r\n          La selección combina <strong>dos cosas</strong>: la clase de tema y el\r\n          atributo de paleta. Las variables de marca cuelgan solo del atributo\r\n          (valen para los dos temas); las superficies cuelgan de la\r\n          <strong>pareja</strong>:\r\n        </p>"
         },
         {
           "kind": "code",
-          "code": "/* marca: sirve a dark y light por igual */\n[data-palette=\"contapyme\"] {\n  --is-color-brand: dodgerblue;\n  --is-accent: dodgerblue;\n  --is-accent-bg: rgb(30 144 255 / 12%);\n  --is-brand-soft: rgb(30 144 255 / 18%);\n  --is-focus: dodgerblue;\n}\n\n/* superficies: dependen de la PAREJA (tema, paleta) */\n.theme-dark[data-palette=\"contapyme\"]  { --is-bg: #0a0e14; --is-border: #273040; }\n.theme-light[data-palette=\"contapyme\"] { --is-bg: #fff;    --is-border: #ccc; }"
+          "code": "/* cada paleta solo declara h, s, b. La rampa la calcula la capa comun. */\n[data-palette=\"contapyme\"] {\n  --iswc-brand-h: 210;\n  --iswc-brand-s: 100%;\n  --iswc-brand-b: 56%;\n}\n\n[data-palette] {\n  --iswc-color-brand: hsl(calc(var(--iswc-brand-h) * 1deg) var(--iswc-brand-s) var(--iswc-brand-b));\n  --iswc-accent: var(--iswc-color-brand);\n  --iswc-accent-bg: rgb(from var(--iswc-accent) r g b / 12%);\n  --iswc-brand-soft: rgb(from var(--iswc-accent) r g b / 18%);\n  --iswc-hue-rotate: calc((var(--iswc-brand-h) - var(--iswc-logo-h)) * 1deg);\n}\n\n/* superficies: dependen de la PAREJA (tema, paleta) */\n.theme-dark[data-palette=\"contapyme\"]  { --iswc-bg: #0a0e14; --iswc-border: #273040; }\n.theme-light[data-palette=\"contapyme\"] { --iswc-bg: #fff;    --iswc-border: #ccc; }"
         },
         {
           "kind": "html",
@@ -54,42 +54,42 @@
           "rows": [
             [
               "Marca",
-              "<code>--is-color-brand</code> <code>--is-color-brand-paler</code> <code>--is-color-brand-pale</code> <code>--is-color-brand-strong</code> <code>--is-color-brand-stronger</code> <code>--is-color-brand-strongest</code> <code>--is-accent</code> <code>--is-accent-bg</code> <code>--is-on-brand</code>",
+              "<code>--iswc-color-brand</code> <code>--iswc-color-brand-paler</code> <code>--iswc-color-brand-pale</code> <code>--iswc-color-brand-strong</code> <code>--iswc-color-brand-stronger</code> <code>--iswc-color-brand-strongest</code> <code>--iswc-accent</code> <code>--iswc-accent-bg</code> <code>--iswc-on-brand</code>",
               "<code>[data-palette=\"…\"]</code>"
             ],
             [
               "Marca por tema",
-              "<code>--is-brand-soft</code> <code>--is-brand-soft-active</code> <code>--is-brand-text</code> <code>--is-focus</code>",
+              "<code>--iswc-brand-soft</code> <code>--iswc-brand-soft-active</code> <code>--iswc-brand-text</code> <code>--iswc-focus</code>",
               "pareja tema+paleta"
             ],
             [
               "Superficies",
-              "<code>--is-bg</code> <code>--is-bg-soft</code> <code>--is-bg-elev</code> <code>--is-code-bg</code>",
+              "<code>--iswc-bg</code> <code>--iswc-bg-soft</code> <code>--iswc-bg-elev</code> <code>--iswc-code-bg</code>",
               "pareja tema+paleta"
             ],
             [
               "Bordes y texto",
-              "<code>--is-border</code> <code>--is-border-soft</code> <code>--is-text</code> <code>--is-text-soft</code> <code>--is-text-dim</code>",
+              "<code>--iswc-border</code> <code>--iswc-border-soft</code> <code>--iswc-text</code> <code>--iswc-text-soft</code> <code>--iswc-text-dim</code>",
               "pareja tema+paleta"
             ],
             [
               "Controles",
-              "<code>--is-control-bg</code> <code>--is-control-bg-hover</code> <code>--is-control-bg-active</code> <code>--is-control-border</code> <code>--is-control-text</code>",
+              "<code>--iswc-control-bg</code> <code>--iswc-control-bg-hover</code> <code>--iswc-control-bg-active</code> <code>--iswc-control-border</code> <code>--iswc-control-text</code>",
               "pareja tema+paleta"
             ],
             [
               "Campos",
-              "<code>--is-b-required</code> <code>--is-b-optional</code> <code>--is-b-readonly</code> <code>--is-bg-readonly</code>",
+              "<code>--iswc-b-required</code> <code>--iswc-b-optional</code> <code>--iswc-b-readonly</code> <code>--iswc-bg-readonly</code>",
               "pareja tema+paleta"
             ],
             [
               "Geometría",
-              "<code>--is-radius</code> <code>--is-radius-sm</code> <code>--is-shadow</code>",
+              "<code>--iswc-radius</code> <code>--iswc-radius-sm</code> <code>--iswc-shadow</code>",
               "cualquiera de los dos"
             ],
             [
               "Scrollbars",
-              "<code>--is-scrollbar-thumb</code> <code>--is-scrollbar-thumb-hover</code> <code>--is-scrollbar-track</code>",
+              "<code>--iswc-scrollbar-thumb</code> <code>--iswc-scrollbar-thumb-hover</code> <code>--iswc-scrollbar-track</code>",
               "opcional"
             ]
           ],
@@ -97,7 +97,7 @@
         },
         {
           "kind": "html",
-          "html": "<p class=\"lede\">\r\n          Los semánticos (<code>--is-color-success-*</code>,\r\n          <code>--is-color-warning-*</code>, <code>--is-color-danger-*</code>) se\r\n          dejan como están salvo que tu marca los necesite: son señales de\r\n          estado, no decoración.\r\n        </p>"
+          "html": "<p class=\"lede\">\r\n          Los semánticos (<code>--iswc-color-success-*</code>,\r\n          <code>--iswc-color-warning-*</code>, <code>--iswc-color-danger-*</code>) se\r\n          dejan como están salvo que tu marca los necesite: son señales de\r\n          estado, no decoración.\r\n        </p>"
         }
       ]
     },
@@ -110,7 +110,7 @@
       "blocks": [
         {
           "kind": "demo",
-          "html": "<div class=\"tw-seeds\">\r\n            <is-input class=\"tw-seed-name\" id=\"palName\" label=\"Nombre de la paleta\" hint=\"Se usa como data-palette=&quot;…&quot;\" value=\"mi-marca\"></is-input>\r\n            <is-color-picker class=\"tw-seed\" data-seed=\"brand\"     label=\"Marca / acento\" hint=\"--is-accent y la rampa\" value=\"#7048e8\" swatches=\"#e03131,#1a6eb0,#9acd32,#7048e8,#0ca678,#f76707\"></is-color-picker>\r\n            <is-color-picker class=\"tw-seed\" data-seed=\"darkBg\"    label=\"Fondo oscuro\"   hint=\"--is-bg en dark\"        value=\"#0b0d10\"></is-color-picker>\r\n            <is-color-picker class=\"tw-seed\" data-seed=\"darkText\"  label=\"Texto oscuro\"   hint=\"--is-text en dark\"      value=\"#e6e8eb\"></is-color-picker>\r\n            <is-color-picker class=\"tw-seed\" data-seed=\"lightBg\"   label=\"Fondo claro\"    hint=\"--is-bg en light\"       value=\"#ffffff\"></is-color-picker>\r\n            <is-color-picker class=\"tw-seed\" data-seed=\"lightText\" label=\"Texto claro\"    hint=\"--is-text en light\"     value=\"#1f2328\"></is-color-picker>\r\n          </div>\r\n\r\n          <div class=\"tw-actions\">\r\n            <is-switch id=\"applyRoot\" hint=\"Solo esta sesión: F5 lo quita. No se guarda en localStorage.\">Aplicar a toda la página</is-switch>\r\n            <is-button id=\"btnReset\" variant=\"outlined\">Restaurar defaults</is-button>\r\n          </div>\n          <p class=\"tw-persist-hint\">Los colores de los inputs se guardan en <code>localStorage</code>. «Restaurar defaults» los borra. «Aplicar a toda la página» es temporal (F5).</p>\r\n\r\n          <div class=\"tw-ramp\" id=\"ramp\"></div>",
+          "html": "<div class=\"tw-seeds\">\r\n            <is-input class=\"tw-seed-name\" id=\"palName\" label=\"Nombre de la paleta\" hint=\"Se usa como data-palette=&quot;…&quot;\" value=\"mi-marca\"></is-input>\r\n            <is-color-picker class=\"tw-seed\" data-seed=\"brand\"     label=\"Marca / acento\" hint=\"--iswc-accent y la rampa\" value=\"#7048e8\" swatches=\"#e03131,#1a6eb0,#9acd32,#7048e8,#0ca678,#f76707\"></is-color-picker>\r\n            <is-color-picker class=\"tw-seed\" data-seed=\"darkBg\"    label=\"Fondo oscuro\"   hint=\"--iswc-bg en dark\"        value=\"#0b0d10\"></is-color-picker>\r\n            <is-color-picker class=\"tw-seed\" data-seed=\"darkText\"  label=\"Texto oscuro\"   hint=\"--iswc-text en dark\"      value=\"#e6e8eb\"></is-color-picker>\r\n            <is-color-picker class=\"tw-seed\" data-seed=\"lightBg\"   label=\"Fondo claro\"    hint=\"--iswc-bg en light\"       value=\"#ffffff\"></is-color-picker>\r\n            <is-color-picker class=\"tw-seed\" data-seed=\"lightText\" label=\"Texto claro\"    hint=\"--iswc-text en light\"     value=\"#1f2328\"></is-color-picker>\r\n          </div>\r\n\r\n          <div class=\"tw-actions\">\r\n            <is-switch id=\"applyRoot\" hint=\"Solo esta sesión: F5 lo quita. No se guarda en localStorage.\">Aplicar a toda la página</is-switch>\r\n            <is-button id=\"btnReset\" variant=\"outlined\">Restaurar defaults</is-button>\r\n          </div>\n          <p class=\"tw-persist-hint\">Los colores de los inputs se guardan en <code>localStorage</code>. «Restaurar defaults» los borra. «Aplicar a toda la página» es temporal (F5).</p>\r\n\r\n          <div class=\"tw-ramp\" id=\"ramp\"></div>",
           "heading": "Semillas"
         }
       ]
@@ -144,12 +144,12 @@
       "id": "exportar",
       "title": "Llévatelo",
       "role": "region",
-      "ariaLabel": "Exportar paleta generada: copiar o descargar CSS",
-      "lede": "Archivo autocontenido: pégalo después de <code>is-base.css</code> (en\r\n          lugar de <code>palettes.css</code> o junto a él) y activa tu paleta con\r\n          <code>data-palette</code>.",
+      "ariaLabel": "Exportar paleta: copiar CSS, obtener JSON o ver cómo convertir el JSON en CSS",
+      "lede": "Tres piezas de la misma paleta: el CSS para pegar, el JSON que alimenta <code>&lt;is-palette-selector&gt;</code>, y cómo se pasa del JSON al CSS.",
       "blocks": [
         {
           "kind": "html",
-          "html": "<div class=\"tw-export\">\r\n          <div class=\"tw-export__bar\">\r\n            <span class=\"tw-export__file\">\r\n              <is-icon icon=\"mdi:language-css3\"></is-icon>\r\n              <span id=\"fileName\">mi-marca.css</span>\r\n            </span>\r\n            <span class=\"tw-export__meta\">data-palette=<is-tag pill id=\"tagName\">mi-marca</is-tag></span>\r\n            <span class=\"tw-export__spacer\"></span>\r\n            <is-copy-button id=\"copyCss\" from=\"cssOut\" copy-label=\"Copiar\" success-label=\"¡Copiado!\" tooltip=\"Copiar la paleta generada\"></is-copy-button>\r\n            <is-button id=\"btnDownload\" variant=\"filled\">\r\n              <is-icon slot=\"start\" icon=\"mdi:download\"></is-icon>\r\n              Descargar .css\r\n            </is-button>\r\n          </div>\r\n          <pre class=\"code tw-output\" id=\"cssOut\" data-lang=\"css\" data-no-compact=\"\">/* … */</pre>\r\n        </div>"
+          "html": "<is-tab-group class=\"tw-export-tabs\" active=\"css\">\n          <is-tab slot=\"nav\" panel=\"css\">CSS</is-tab>\n          <is-tab slot=\"nav\" panel=\"json\">JSON</is-tab>\n          <is-tab slot=\"nav\" panel=\"tuto\">Cómo usarlo</is-tab>\n          <is-tab-panel name=\"css\">\n            <div class=\"tw-export\">\n              <div class=\"tw-export__bar\">\n                <span class=\"tw-export__file\">\n                  <is-icon icon=\"mdi:language-css3\"></is-icon>\n                  <span id=\"fileName\">mi-marca.css</span>\n                </span>\n                <span class=\"tw-export__meta\">data-palette=<is-tag pill id=\"tagName\">mi-marca</is-tag></span>\n                <span class=\"tw-export__spacer\"></span>\n                <is-copy-button id=\"copyCss\" from=\"cssOut.value\" copy-label=\"Copiar CSS\" success-label=\"¡Copiado!\" tooltip=\"Copiar solo el CSS\"></is-copy-button>\n                <is-button id=\"btnDownload\" variant=\"filled\">\n                  <is-icon slot=\"start\" icon=\"mdi:download\"></is-icon>\n                  Descargar .css\n                </is-button>\n              </div>\n              <pre class=\"code tw-output\" id=\"cssOut\" data-lang=\"css\" data-no-compact=\"\">/* … */</pre>\n            </div>\n          </is-tab-panel>\n          <is-tab-panel name=\"json\">\n            <div class=\"tw-export\">\n              <div class=\"tw-export__bar\">\n                <span class=\"tw-export__file\">\n                  <is-icon icon=\"mdi:code-json\"></is-icon>\n                  <span id=\"fileNameJson\">mi-marca.json</span>\n                </span>\n                <span class=\"tw-export__meta\">atributo palettes de is-palette-selector</span>\n                <span class=\"tw-export__spacer\"></span>\n                <is-copy-button id=\"copyJson\" from=\"jsonOut.value\" copy-label=\"Copiar JSON\" success-label=\"¡Copiado!\" tooltip=\"Copiar el JSON del selector\"></is-copy-button>\n                <is-button id=\"btnDownloadJson\" variant=\"filled\">\n                  <is-icon slot=\"start\" icon=\"mdi:download\"></is-icon>\n                  Descargar .json\n                </is-button>\n              </div>\n              <pre class=\"code tw-output\" id=\"jsonOut\" data-lang=\"json\" data-no-compact=\"\">[]</pre>\n            </div>\n          </is-tab-panel>\n          <is-tab-panel name=\"tuto\">\n            <div class=\"tw-tuto\">\n              <p>El JSON es el catálogo. El CSS sale de <code>h</code>, <code>s</code> y <code>b</code>. Ese mismo array construye <code>&lt;is-palette-selector&gt;</code>.</p>\n              <ol>\n                <li><strong>Semilla.</strong> Por cada objeto, un bloque <code>[data-palette=\"value\"]</code> con <code>--iswc-brand-h</code>, <code>--iswc-brand-s</code> y <code>--iswc-brand-b</code>. Esos tres salen de <code>h</code>, <code>s</code> y <code>b</code>. No escribas el hex de la marca.</li>\n                <li><strong>Rampa, una sola vez.</strong> <code>palettes.css</code> ya la declara en <code>:root, [data-palette]</code>: calcula <code>--iswc-color-brand</code>, strong / pale y los alpha con <code>hsl(from …)</code> y <code>rgb(from var(--iswc-accent) …)</code>. Si no cargas esa hoja, pégala una vez. El tab CSS la trae resuelta dentro del bloque, más las superficies de tema oscuro y claro. El selector no las consume.</li>\n                <li><strong>Actívala.</strong> Pon <code>data-palette=\"value\"</code> en <code>&lt;html&gt;</code> o en el subárbol que quieras teñir.</li>\n                <li><strong>Selector.</strong> Pega el array en el atributo <code>palettes</code>. <code>label</code>, <code>lead</code> y <code>accentLabel</code> arman el menú y el wordmark; <code>h</code>, <code>s</code> y <code>b</code> pintan la muestra. Al elegir, el componente escribe <code>data-palette</code>. Si el objeto trae <code>css</code> (una URL), carga esa hoja al seleccionar.</li>\n                <li><strong>Logo.</strong> <code>filter: hue-rotate(var(--iswc-hue-rotate))</code>. <code>--iswc-logo-h</code> es el tono en el que está pintado el SVG (210 en los logos del kit).</li>\n              </ol>\n              <p class=\"tw-note\">Semilla de la paleta que estás editando:</p>\n              <pre class=\"code tw-output\" id=\"tutoSeed\" data-lang=\"css\" data-no-compact=\"\">/* … */</pre>\n              <p class=\"tw-note\">El mismo JSON, listo para el componente:</p>\n              <pre class=\"code tw-output\" id=\"tutoSelector\" data-lang=\"html\" data-no-compact=\"\">&lt;is-palette-selector&gt;</pre>\n            </div>\n          </is-tab-panel>\n        </is-tab-group>"
         }
       ]
     },
@@ -167,35 +167,35 @@
           ],
           "rows": [
             [
-              "<code>--is-color-brand</code>",
+              "<code>--iswc-color-brand</code>",
               "la semilla tal cual"
             ],
             [
-              "<code>--is-color-brand-paler</code> / <code>--is-color-brand-pale</code>",
+              "<code>--iswc-color-brand-paler</code> / <code>--iswc-color-brand-pale</code>",
               "OKLCH con L 0.97 / 0.92 y croma al 18 % / 40 % (pasteles para <em>soft</em> en claro)"
             ],
             [
-              "<code>--is-color-brand-strong</code> / <code>--is-color-brand-stronger</code> / <code>--is-color-brand-strongest</code>",
+              "<code>--iswc-color-brand-strong</code> / <code>--iswc-color-brand-stronger</code> / <code>--iswc-color-brand-strongest</code>",
               "strong / stronger / strongest: L × 0.88 / 0.75 / 0.60, croma × 1 / 0.92 / 0.80"
             ],
             [
-              "<code>--is-accent-bg</code>",
+              "<code>--iswc-accent-bg</code>",
               "semilla al 12 % de alfa"
             ],
             [
-              "<code>--is-brand-soft</code> / <code>-active</code>",
+              "<code>--iswc-brand-soft</code> / <code>-active</code>",
               "dark: 18 % / 28 % de alfa · light: brand-paler / brand-pale"
             ],
             [
-              "<code>--is-brand-text</code>",
+              "<code>--iswc-brand-text</code>",
               "dark: semilla subida a L ≥ 0.78 · light: brand-stronger"
             ],
             [
-              "<code>--is-focus</code>",
+              "<code>--iswc-focus</code>",
               "dark: L + 0.10 · light: la semilla"
             ],
             [
-              "<code>--is-on-brand</code>",
+              "<code>--iswc-on-brand</code>",
               "<code>#fff</code> o <code>#111</code> según la L de la marca"
             ],
             [
@@ -203,7 +203,7 @@
               "escalones de L sobre el fondo elegido, con un croma mínimo en el tono de la marca (mismo truco que <code>oklch(from … calc(c * 0.25) h)</code> de ContaPyme)"
             ],
             [
-              "<code>--is-text-soft</code> / <code>-dim</code>",
+              "<code>--iswc-text-soft</code> / <code>-dim</code>",
               "texto mezclado hacia el fondo un 28 % / 45 %"
             ]
           ],

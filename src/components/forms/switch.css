@@ -1,18 +1,18 @@
 :host {
-  --is-switch-height: 1.15em;
-  --is-switch-width: 2.1em;
-  --is-switch-bg: var(--is-control-bg, #f1f3f5);
-  --is-switch-bg-hover: var(--is-control-bg-hover, #e9ecef);
-  --is-switch-border: var(--is-control-border, #adb5bd);
+  --iswc-switch-height: 1.15em;
+  --iswc-switch-width: 2.1em;
+  --iswc-switch-bg: var(--iswc-control-bg, #f1f3f5);
+  --iswc-switch-bg-hover: var(--iswc-control-bg-hover, #e9ecef);
+  --iswc-switch-border: var(--iswc-control-border, #adb5bd);
   /* Sin `color`: el encendido sigue el color del contexto, como is-icon. */
-  --is-switch-accent: currentColor;
-  --is-switch-thumb: var(--is-bg, #fff);
-  --is-switch-focus: var(--is-focus, var(--is-accent, #339af0));
-  --is-switch-icon: var(--is-control-text, #212529);
-  --is-switch-icon-checked: var(--is-switch-accent);
-  --is-switch-halo: 0.4em;
+  --iswc-switch-accent: currentColor;
+  --iswc-switch-thumb: var(--iswc-bg, #fff);
+  --iswc-switch-focus: var(--iswc-focus, var(--iswc-accent, #339af0));
+  --iswc-switch-icon: var(--iswc-control-text, #212529);
+  --iswc-switch-icon-checked: var(--iswc-switch-accent);
+  --iswc-switch-halo: 0.4em;
   display: inline-flex;
-  font-family: var(--is-sans, inherit);
+  font-family: var(--iswc-sans, inherit);
   font-size: 1em;
   color: inherit;
   box-sizing: border-box;
@@ -39,11 +39,11 @@
     flex: 0 0 auto;
     position: relative;
     display: inline-block;
-    width: var(--is-switch-width);
-    height: var(--is-switch-height);
+    width: var(--iswc-switch-width);
+    height: var(--iswc-switch-height);
     box-sizing: border-box;
-    background: var(--is-switch-bg);
-    border: 1px solid var(--is-switch-border);
+    background: var(--iswc-switch-bg);
+    border: 1px solid var(--iswc-switch-border);
     border-radius: 999px;
     transition: background-color 140ms ease, border-color 140ms ease;
   }
@@ -56,11 +56,11 @@
     display: flex;
     align-items: center;
     justify-content: center;
-    width: calc(var(--is-switch-height) - 0.35em);
-    height: calc(var(--is-switch-height) - 0.35em);
+    width: calc(var(--iswc-switch-height) - 0.35em);
+    height: calc(var(--iswc-switch-height) - 0.35em);
     border-radius: 50%;
-    background: var(--is-switch-border);
-    color: var(--is-switch-icon);
+    background: var(--iswc-switch-border);
+    color: var(--iswc-switch-icon);
     transform: translate(0, -50%);
     transition: transform 140ms ease, background-color 140ms ease, box-shadow 120ms ease;
   }
@@ -87,25 +87,25 @@
   .track-label.on {
     justify-content: flex-start;
     padding-inline-start: 0.9em;
-    color: var(--is-on-brand, #fff);
+    color: var(--iswc-on-brand, #fff);
   }
 
   .track-label.off {
     justify-content: flex-end;
     padding-inline-end: 0.9em;
-    color: var(--is-text-dim, #7a8390);
+    color: var(--iswc-text-dim, #7a8390);
     opacity: 1;
   }
 
   .label {
     min-width: 0;
-    color: var(--is-control-text, var(--is-text, inherit));
+    color: var(--iswc-control-text, var(--iswc-text, inherit));
   }
 
   .hint {
     font-size: 0.8em;
     line-height: 1.35;
-    color: var(--is-text-dim, #7a8390);
+    color: var(--iswc-text-dim, #7a8390);
     cursor: default;
     width: fit-content;
   }
@@ -117,52 +117,52 @@
 }
 
 :host([color="brand"]) {
-  --is-switch-accent: var(--is-accent, var(--is-color-brand, #339af0));
-  --is-switch-thumb: var(--is-on-brand, #fff);
+  --iswc-switch-accent: var(--iswc-accent, var(--iswc-color-brand, #339af0));
+  --iswc-switch-thumb: var(--iswc-on-brand, #fff);
 }
 :host([color="neutral"]) {
-  --is-switch-accent: var(--is-control-border, #59636e);
-  --is-switch-thumb: var(--is-on-brand, #fff);
+  --iswc-switch-accent: var(--iswc-control-border, #59636e);
+  --iswc-switch-thumb: var(--iswc-on-brand, #fff);
 }
 :host([color="success"]) {
-  --is-switch-accent: var(--is-color-success, #40c057);
-  --is-switch-thumb: var(--is-on-brand, #fff);
+  --iswc-switch-accent: var(--iswc-color-success, #40c057);
+  --iswc-switch-thumb: var(--iswc-on-brand, #fff);
 }
 :host([color="warning"]) {
-  --is-switch-accent: var(--is-color-warning, #f59f00);
-  --is-switch-thumb: var(--is-on-brand, #fff);
+  --iswc-switch-accent: var(--iswc-color-warning, #f59f00);
+  --iswc-switch-thumb: var(--iswc-on-brand, #fff);
 }
 :host([color="danger"]) {
-  --is-switch-accent: var(--is-color-danger, #fa5252);
-  --is-switch-thumb: var(--is-on-brand, #fff);
+  --iswc-switch-accent: var(--iswc-color-danger, #fa5252);
+  --iswc-switch-thumb: var(--iswc-on-brand, #fff);
 }
 
 :host([error]) {
-  --is-switch-accent: var(--is-color-danger, #fa5252);
-  --is-switch-border: var(--is-color-danger, #fa5252);
-  --is-switch-focus: var(--is-color-danger, #fa5252);
+  --iswc-switch-accent: var(--iswc-color-danger, #fa5252);
+  --iswc-switch-border: var(--iswc-color-danger, #fa5252);
+  --iswc-switch-focus: var(--iswc-color-danger, #fa5252);
 }
 
 :host([error]) .hint {
-  color: var(--is-danger-text, var(--is-color-danger-strong, #e03131));
+  color: var(--iswc-danger-text, var(--iswc-color-danger-strong, #e03131));
 }
 
 /* Iconos y rótulos necesitan más carril del que da el tamaño por defecto. */
 :host([icon]),
 :host([checked-icon]) {
-  --is-switch-height: 1.5em;
-  --is-switch-width: 2.75em;
+  --iswc-switch-height: 1.5em;
+  --iswc-switch-width: 2.75em;
 }
 
 :host([on-label]),
 :host([off-label]) {
-  --is-switch-height: 1.5em;
-  --is-switch-width: 3.6em;
+  --iswc-switch-height: 1.5em;
+  --iswc-switch-width: 3.6em;
 }
 
 :host([readonly]) {
   cursor: default;
-  --is-switch-bg-hover: var(--is-switch-bg);
+  --iswc-switch-bg-hover: var(--iswc-switch-bg);
 }
 
 :host([label-placement="start"]) .base { flex-direction: row-reverse; }
@@ -170,20 +170,20 @@
 :host([label-placement="bottom"]) .base { flex-direction: column; gap: 0.35em; }
 
 :host(:hover) .control {
-  background: var(--is-switch-bg-hover);
+  background: var(--iswc-switch-bg-hover);
 }
 
 :host([checked]) .control,
 :host(:state(checked)) .control {
-  background: var(--is-switch-accent);
-  border-color: var(--is-switch-accent);
+  background: var(--iswc-switch-accent);
+  border-color: var(--iswc-switch-accent);
 }
 
 :host([checked]) .thumb,
 :host(:state(checked)) .thumb {
-  background: var(--is-switch-thumb);
-  color: var(--is-switch-icon-checked);
-  transform: translate(calc(var(--is-switch-width) - var(--is-switch-height) + 0.05em), -50%);
+  background: var(--iswc-switch-thumb);
+  color: var(--iswc-switch-icon-checked);
+  transform: translate(calc(var(--iswc-switch-width) - var(--iswc-switch-height) + 0.05em), -50%);
 }
 
 :host([checked]) .track-label.on,
@@ -193,15 +193,15 @@
 :host(:state(checked)) .track-label.off { opacity: 0; }
 
 :host(:hover) .thumb {
-  box-shadow: 0 0 0 var(--is-switch-halo) color-mix(in srgb, var(--is-switch-accent) 18%, transparent);
+  box-shadow: 0 0 0 var(--iswc-switch-halo) color-mix(in srgb, var(--iswc-switch-accent) 18%, transparent);
 }
 
 :host(:focus-visible) .thumb {
-  box-shadow: 0 0 0 var(--is-switch-halo) color-mix(in srgb, var(--is-switch-focus) 30%, transparent);
+  box-shadow: 0 0 0 var(--iswc-switch-halo) color-mix(in srgb, var(--iswc-switch-focus) 30%, transparent);
 }
 
 :host(:focus-visible) .control {
-  outline: 2px solid var(--is-switch-focus);
+  outline: 2px solid var(--iswc-switch-focus);
   outline-offset: 2px;
 }
 

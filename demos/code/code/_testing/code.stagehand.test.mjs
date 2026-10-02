@@ -84,8 +84,8 @@ async function checkDeterministic(page) {
         clientWidth: el.clientWidth,
         rootScrollWidth: root ? root.scrollWidth : 0,
         rootClientWidth: root ? root.clientWidth : 0,
-        hostBg: hostCs.getPropertyValue('--is-code-bg').trim(),
-        hostFg: hostCs.getPropertyValue('--is-code-fg').trim(),
+        hostBg: hostCs.getPropertyValue('--iswc-code-bg').trim(),
+        hostFg: hostCs.getPropertyValue('--iswc-code-fg').trim(),
         rootOverflowX: rootCs ? rootCs.overflowX : '',
       };
     });
@@ -134,11 +134,11 @@ async function checkDeterministic(page) {
     assert.equal(d.actualLines, d.expectedLines,
       `${tag}: esperaba ${d.expectedLines} .ic-line, hay ${d.actualLines}`);
 
-    // (5) CONSISTENCIA DE TEMA — en dark, --is-code-bg = #1e1e1e.
+    // (5) CONSISTENCIA DE TEMA — en dark, --iswc-code-bg = #1e1e1e.
     assert.match(d.hostBg, /#1e1e1e|30,30,30/i,
-      `${tag}: --is-code-bg debe ser oscuro en dark (fue "${d.hostBg}")`);
+      `${tag}: --iswc-code-bg debe ser oscuro en dark (fue "${d.hostBg}")`);
     assert.match(d.hostFg, /#eeffff|238,255,255/i,
-      `${tag}: --is-code-fg debe ser claro en dark (fue "${d.hostFg}")`);
+      `${tag}: --iswc-code-fg debe ser claro en dark (fue "${d.hostFg}")`);
   }
 
   // (5b) Cambio de tema — al pasar a "light" la variable de bg cambia. El
@@ -153,12 +153,12 @@ async function checkDeterministic(page) {
     return scenes.map((s) => {
       const el = document.getElementById(s.id);
       const hostCs = getComputedStyle(el);
-      return { id: s.id, bg: hostCs.getPropertyValue('--is-code-bg').trim() };
+      return { id: s.id, bg: hostCs.getPropertyValue('--iswc-code-bg').trim() };
     });
   }, SCENES);
   for (const d of light) {
     assert.match(d.bg, /#fff|#ffffff|255,255,255|ffffff/i,
-      `code#${d.id}: --is-code-bg en light debe ser claro (fue "${d.bg}")`);
+      `code#${d.id}: --iswc-code-bg en light debe ser claro (fue "${d.bg}")`);
   }
 
   // (5c) Modo dark simulado por emulateMedia — el componente no responde al

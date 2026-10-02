@@ -20,7 +20,7 @@
  * interfaz, que no se puede inventar desde aquí. Se deja `HTMLElement` y se
  * decide a mano.
  *
- *   node scripts/ts-tipo-por-selector.ts src/components
+ *   deno run -A --no-check scripts/ts-tipo-por-selector.ts src/components
  */
 import { readdirSync, readFileSync, statSync, writeFileSync } from 'node:fs';
 import { join } from 'node:path';
@@ -120,7 +120,7 @@ function ficheros(dir: string): string[] {
 
 const objetivo = process.argv[2];
 if (!objetivo) {
-  console.error('uso: node scripts/ts-tipo-por-selector.ts <fichero-o-carpeta>');
+  console.error('uso: deno run -A --no-check scripts/ts-tipo-por-selector.ts <fichero-o-carpeta>');
   process.exit(2);
 }
 const lista = statSync(objetivo).isDirectory() ? ficheros(objetivo) : [objetivo];

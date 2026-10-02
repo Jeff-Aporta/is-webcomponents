@@ -19,7 +19,7 @@ Muestra un bloque copy-paste de dos tags:
 1. `<script type="module" src="…/loader.min.js">` — carga el loader.
 2. `<script type="module">` — `loadCSSBase` + `loadCSSPalettesDefault` + `load(…)`.
 
-Radio de alcance: **solo `tag`** (cargar este componente atómicamente). Las opciones "cargar la categoría completa" y "cargar todo el kit" están **erradicadas** — cada componente debe cargarse individualmente. Con `url-key` la elección persiste dentro de `?s=` (sobrevive al F5); sin `url-key` el panel siempre arranca en `tag` y el snippet muestra solo la línea `load('is-foo')`.
+El snippet siempre hace `load('is-foo')`: un componente por llamada. El loader ya carga cada tag por separado, así que el panel no ofrece radio de alcance.
 
 Sin tab de mirrors. Sin filas sueltas de `all.min.js` / categoría / tag. Docs para agentes vía `<is-md-editor>`. Dependencias externas opcionales (slot `deps` / atributo `dependencies`).
 
@@ -40,7 +40,7 @@ import './cdn-snippet.js';
 ## Ejemplo mínimo
 
 ```html
-<is-cdn-snippet tag="is-button" category="actions"></is-cdn-snippet>
+<is-cdn-snippet tag="is-button"></is-cdn-snippet>
 ```
 
 ## API
@@ -50,12 +50,10 @@ import './cdn-snippet.js';
 | Atributo | Notas |
 | --- | --- |
 | `tag` | p. ej. `is-button` → `load('is-button')` |
-| `category` | p. ej. `actions` → `load('actions')` |
 | `base` | override del CDN base (opcional) |
 | `title` | título del panel |
 | `dependencies` / slot `deps` | deps externas (link/script) |
 | `config` | JSON con `docs[]` para el prompt LLM |
-| `url-key` | opt-in: persiste el radio (`tag`\|`category`\|`all`) dentro de `?s=` |
 
 ### Snippet generado (forma canónica)
 
@@ -71,8 +69,7 @@ import './cdn-snippet.js';
 
 ## Qué hacer
 
-- Preferir siempre `loader.min.js` + `load(tag|cat|all)`.
-- Persistir el alcance elegido con `url-key` (opt-in): el F5 vuelve al radio tag|category|all que el usuario dejó activo.
+- Preferir siempre `loader.min.js` + `load(tag)`.
 
 ## Qué no hacer
 
@@ -85,6 +82,5 @@ import './cdn-snippet.js';
 | Trampa | Fix |
 | --- | --- |
 | Panel enseña `all.min.js` | Solo `loader.min.js` + `L.load(tag)` |
-| Radio de alcance sin tag/category | No se muestra (sin sentido); las opciones cuyo atributo falte quedan deshabilitadas |
 
 Guardián: `tests/cdn-mirrors.test.ts` (contrato loader copy-paste) · `tests/url-nav.test.ts`.

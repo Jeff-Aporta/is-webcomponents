@@ -70,12 +70,9 @@ assert.equal(
 //
 // Verificación 1: la paleta 'insoft' declara `accentLabel: 'Soft'`
 // (capitalizada) en el data del componente.
-const selector = await readFile(join(root, 'src/components/feedback/palette-selector.ts'), 'utf8');
-assert.match(
-  selector,
-  /accentLabel:\s*'Soft'/,
-  'is-palette-selector debe componer el wordmark con "Soft" (S mayúscula), no "soft"',
-);
+const catalog = JSON.parse(await readFile(join(root, 'src/styles/palettes.json'), 'utf8'));
+const insoft = catalog.find((p) => p.value === 'insoft');
+assert.equal(insoft?.accentLabel, 'Soft', 'palettes.json debe componer el wordmark con "Soft"');
 
 // Verificación 2: gallery/app.ts pinta el accent del wordmark leyendo
 // brandData.accent (lo que garantiza que las mayúsculas del data se
@@ -83,7 +80,7 @@ assert.match(
 const galleryApp = await readFile(join(root, 'src/gallery/app.ts'), 'utf8');
 assert.match(
   galleryApp,
-  /brandAccent\.textContent\s*=\s*brandData\.accent/,
+  /brandAccent\.textContent\s*=\s*brandData\.accentLabel/,
   'gallery/app.ts debe pintar el accent del wordmark desde brandData.accent (S mayúscula del data)',
 );
 assert.match(
@@ -93,9 +90,10 @@ assert.match(
 );
 
 // El identificador de paleta sigue en minúsculas: es API, no texto.
+const catalogIds = await readFile(join(root, 'src/styles/palettes.json'), 'utf8');
 assert.match(
-  selector,
-  /value:\s*'insoft'/,
+  catalogIds,
+  /"value": "insoft"/,
   'el identificador de paleta `insoft` debe seguir en minúsculas (data-palette / theming)',
 );
 

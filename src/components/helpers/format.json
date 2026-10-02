@@ -8,7 +8,7 @@
   "sections": [
     {
       "id": "intro",
-      "title": "<is-format>",
+      "title": "Uso",
       "lede": "Formateo con <code class=\"code\">Intl</code> y presets estilo Excel vía <code class=\"code\">pattern</code>. Un solo elemento cubre número, fecha/hora, texto, bytes y tiempo relativo.",
       "blocks": [
         {

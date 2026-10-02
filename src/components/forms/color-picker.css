@@ -1,15 +1,15 @@
 :host {
-  --is-picker-radius: var(--is-radius-sm, 0.375em);
-  --is-picker-border: var(--is-control-border, #adb5bd);
-  --is-picker-bg: var(--is-control-bg, #f1f3f5);
-  --is-picker-text: var(--is-control-text, #212529);
-  --is-picker-focus: var(--is-focus, var(--is-accent, #339af0));
+  --iswc-picker-radius: var(--iswc-radius-sm, 0.375em);
+  --iswc-picker-border: var(--iswc-control-border, #adb5bd);
+  --iswc-picker-bg: var(--iswc-control-bg, #f1f3f5);
+  --iswc-picker-text: var(--iswc-control-text, #212529);
+  --iswc-picker-focus: var(--iswc-focus, var(--iswc-accent, #339af0));
   display: block;
   position: relative;
   width: 100%;
   min-width: 0;
-  font-family: var(--is-sans, inherit);
-  color: var(--is-text, inherit);
+  font-family: var(--iswc-sans, inherit);
+  color: var(--iswc-text, inherit);
   box-sizing: border-box;
 
   [hidden] { display: none !important; }
@@ -24,12 +24,12 @@
   .label {
     font-size: 0.875em;
     font-weight: 500;
-    color: var(--is-text-soft, inherit);
+    color: var(--iswc-text-soft, inherit);
   }
 
   .hint {
     font-size: 0.8em;
-    color: var(--is-text-dim, #7a8390);
+    color: var(--iswc-text-dim, #7a8390);
   }
 
   .base {
@@ -47,16 +47,16 @@
     min-width: 0;
     min-height: 2.5em;
     padding: 0.25em 0.45em 0.25em 0.55em;
-    background: var(--is-picker-bg);
-    border: 1px solid var(--is-picker-border);
-    border-radius: var(--is-picker-radius);
-    color: var(--is-picker-text);
+    background: var(--iswc-picker-bg);
+    border: 1px solid var(--iswc-picker-border);
+    border-radius: var(--iswc-picker-radius);
+    color: var(--iswc-picker-text);
     font: inherit;
     cursor: pointer;
     box-sizing: border-box;
-    &:hover { background: var(--is-control-bg-hover, #e9ecef); }
+    &:hover { background: var(--iswc-control-bg-hover, #e9ecef); }
     &:focus-visible {
-      outline: 2px solid var(--is-picker-focus);
+      outline: 2px solid var(--iswc-picker-focus);
       outline-offset: 1px;
     }
   }
@@ -65,7 +65,7 @@
     flex: none;
     width: 1.5em;
     height: 1.5em;
-    border-radius: calc(var(--is-picker-radius) - 1px);
+    border-radius: calc(var(--iswc-picker-radius) - 1px);
     box-shadow: inset 0 0 0 1px rgb(0 0 0 / 22%);
   }
 
@@ -73,7 +73,7 @@
     flex: 1 1 auto;
     min-width: 0;
     text-align: left;
-    font-family: var(--is-mono, ui-monospace, monospace);
+    font-family: var(--iswc-mono, ui-monospace, monospace);
     font-size: 0.9em;
     text-transform: uppercase;
     overflow: hidden;
@@ -83,7 +83,7 @@
 
   .caret {
     flex: none;
-    color: var(--is-text-dim, #7a8390);
+    color: var(--iswc-text-dim, #7a8390);
     transition: transform 0.15s ease;
   }
 
@@ -114,13 +114,13 @@
     flex-direction: column;
     gap: 0.65em;
     padding: 0.65em;
-    background: var(--is-bg-elev, #fff);
-    border: 1px solid var(--is-border, #d0d7de);
-    border-radius: var(--is-radius, 0.625em);
+    background: var(--iswc-bg-elev, #fff);
+    border: 1px solid var(--iswc-border, #d0d7de);
+    border-radius: var(--iswc-radius, 0.625em);
     box-shadow:
-      0 0 0 1px color-mix(in srgb, var(--is-text) 4%, transparent) inset,
-      var(--is-shadow, 0 10px 28px rgb(0 0 0 / 18%));
-    color: var(--is-text, inherit);
+      0 0 0 1px color-mix(in srgb, var(--iswc-text) 4%, transparent) inset,
+      var(--iswc-shadow, 0 10px 28px rgb(0 0 0 / 18%));
+    color: var(--iswc-text, inherit);
     /* El JS fija width al del trigger; esto evita saltos antes del layout. */
     min-width: 13rem;
     max-width: min(18rem, calc(100vw - 1rem));
@@ -145,8 +145,8 @@
     width: 2.5em;
     height: 2.35em;
     padding: 0;
-    border: 1px solid var(--is-picker-border);
-    border-radius: var(--is-picker-radius);
+    border: 1px solid var(--iswc-picker-border);
+    border-radius: var(--iswc-picker-radius);
     background: transparent;
     cursor: pointer;
     box-sizing: border-box;
@@ -173,13 +173,13 @@
     min-width: 0;
     padding: 0;
     border: 0;
-    border-radius: var(--is-picker-radius);
+    border-radius: var(--iswc-picker-radius);
     box-shadow: inset 0 0 0 1px rgb(0 0 0 / 22%);
     cursor: pointer;
     transition: transform 100ms ease;
     &:hover { transform: scale(1.06); }
     &:focus-visible {
-      outline: 2px solid var(--is-picker-focus);
+      outline: 2px solid var(--iswc-picker-focus);
       outline-offset: 1px;
     }
   }
@@ -187,8 +187,8 @@
   .swatch-btn[data-selected] {
     box-shadow:
       inset 0 0 0 1px rgb(0 0 0 / 22%),
-      0 0 0 2px var(--is-bg-elev, #fff),
-      0 0 0 4px var(--is-accent, #339af0);
+      0 0 0 2px var(--iswc-bg-elev, #fff),
+      0 0 0 4px var(--iswc-accent, #339af0);
   }
 }
 
@@ -198,7 +198,7 @@
 }
 
 :host(:state(open)) .trigger {
-  outline: 2px solid var(--is-picker-focus);
+  outline: 2px solid var(--iswc-picker-focus);
   outline-offset: 1px;
 }
 

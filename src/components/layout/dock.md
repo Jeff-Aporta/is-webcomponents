@@ -102,14 +102,14 @@ No expone custom states.
 
 | Token | Uso |
 | --- | --- |
-| `--is-bg-elev` | Fondo de la barra. |
-| `--is-bg-soft` | Fondo del ítem en reposo. |
-| `--is-border` | Borde de la barra. |
-| `--is-text` | Color de icono y etiqueta. |
-| `--is-text-soft` | Etiqueta atenuada. |
-| `--is-accent` | Fondo del ítem activo. |
-| `--is-on-accent` | Contenido sobre el ítem activo. |
-| `--is-focus` | Anillo de foco. |
+| `--iswc-bg-elev` | Fondo de la barra. |
+| `--iswc-bg-soft` | Fondo del ítem en reposo. |
+| `--iswc-border` | Borde de la barra. |
+| `--iswc-text` | Color de icono y etiqueta. |
+| `--iswc-text-soft` | Etiqueta atenuada. |
+| `--iswc-accent` | Fondo del ítem activo. |
+| `--iswc-on-accent` | Contenido sobre el ítem activo. |
+| `--iswc-focus` | Anillo de foco. |
 
 ### Integración con formularios
 

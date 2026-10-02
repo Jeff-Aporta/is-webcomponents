@@ -1,4 +1,4 @@
-﻿# `ISWebComponentsLoader` (`loader.min.js`)
+# `ISWebComponentsLoader` (`loader.min.js`)
 
 Entry CDN liviano del kit. Carga solo lo pedido, con pin, mirrors y anti-redundancia.
 

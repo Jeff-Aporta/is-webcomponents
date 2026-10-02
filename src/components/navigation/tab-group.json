@@ -9,7 +9,7 @@
   "sections": [
     {
       "id": "intro",
-      "title": "<is-tab-group>",
+      "title": "Uso",
       "lede": "Tabs accesibles con navegación por teclado (←/→), activación automática o\r\n          manual, indicator animado, placements (top/bottom/start/end), scroll horizontal\r\n          automático y soporte para tabs cerrables.",
       "blocks": [
         {

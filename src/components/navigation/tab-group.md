@@ -124,15 +124,15 @@ No expone.
 | Token | Uso |
 | --- | --- |
 | `--track-color` | Token leído o definido por componente. |
-| `--is-border` | Token leído o definido por componente. |
+| `--iswc-border` | Token leído o definido por componente. |
 | `--indicator-color` | Token leído o definido por componente. |
-| `--is-brand` | Token leído o definido por componente. |
+| `--iswc-brand` | Token leído o definido por componente. |
 | `--track-width` | Token leído o definido por componente. |
-| `--is-font-family` | Token leído o definido por componente. |
-| `--is-radius` | Token leído o definido por componente. |
-| `--is-text-muted` | Token leído o definido por componente. |
-| `--is-text` | Token leído o definido por componente. |
-| `--is-bg-elev` | Token leído o definido por componente. |
+| `--iswc-font-family` | Token leído o definido por componente. |
+| `--iswc-radius` | Token leído o definido por componente. |
+| `--iswc-text-muted` | Token leído o definido por componente. |
+| `--iswc-text` | Token leído o definido por componente. |
+| `--iswc-bg-elev` | Token leído o definido por componente. |
 
 ### Integración con formularios
 

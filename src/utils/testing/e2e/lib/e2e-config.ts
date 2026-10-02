@@ -1,7 +1,7 @@
 // e2e-config.ts — Configuración E2E estándar del ecosistema (vendor/copia de main/cdn).
 // Norma de título de pestaña (emoji estado al inicio) para los e2e Stagehand y CLIs.
 // NO EDITAR: en los repos que usan "vendor strategy" se sobrescribe con
-//   `node scripts/vendor-e2e-config.mjs --out <dir>` (vendor DL con timestamp).
+//   `deno run -A --no-check scripts/vendor-e2e-config.mjs --out <dir>` (vendor DL con timestamp).
 // Editar la fuente única en `Personal/Muéstralo/main/cdn/e2e-config.ts`.
 
 /** Estados soportados por el estándar. */

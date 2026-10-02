@@ -8,7 +8,7 @@
   "sections": [
     {
       "id": "intro",
-      "title": "<is-quadrant-chart>",
+      "title": "Uso",
       "lede": "Matriz 2×2 en SVG: dos ejes continuos, cuatro cuadrantes nombrados y los puntos ubicados en 0..1.",
       "blocks": [
         {

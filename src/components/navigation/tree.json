@@ -9,7 +9,7 @@
   "sections": [
     {
       "id": "intro",
-      "title": "<is-tree>",
+      "title": "Uso",
       "lede": "Árbol jerárquico accesible: expansión, selección, navegación por teclado\r\n          (↑/↓/←/→/Home/End/Enter/Space), iconos por slot y selección\r\n          <code class=\"code\">single</code> | <code class=\"code\">leaf</code> | <code class=\"code\">multiple</code> | <code class=\"code\">none</code>.",
       "blocks": [
         {

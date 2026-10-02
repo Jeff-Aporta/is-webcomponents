@@ -38,8 +38,8 @@ limpio`.
 | H4 | `src/utils/health/e2e/run.ts` L11 | ✅ Cerrado |
 
 **Verificación post-fix:**
-- `npm run typecheck` → PASS exit 0
-- `npm test` → 286/286 pass
+- `deno task typecheck` → PASS exit 0
+- `deno task test` → 286/286 pass
 - `python -B auditor.py audit ... --sin-deep` → 0 hallazgos `PREF-IMPORT-TYPE`
 
 ### H5-H10 · `S-C1` archivos sin import relativo detectado (BAJO)
@@ -61,7 +61,7 @@ del catálogo ISWC, cargados por la galería vía dynamic import.
 1. Los 6 archivos son invocados por nombre desde
    `src/previews/catalog.ts` (registro `behavior:`).
 2. La galería los importa vía dynamic import
-   (`import('${path}.js')` con ts-resolve-hook que mapea `.js → .ts`).
+   (`import('${path}.js')`; Deno resuelve `.js` → `.ts` con sloppy-imports).
 3. Sus tipos de retorno se declaran vía JSDoc `import(...)` (no
    relativos) — patrón canónico de la previews ISWC kit.
 4. Sus dependencias son **globales del DOM** (`document`, `window`,
@@ -149,9 +149,9 @@ que matcheen algún patrón.
 cd C:\ContaPyme\Personal\apps\is-webcomponents
 
 # Gate local
-npm run typecheck                                     # exit 0
-npm test                                              # 286/286 pass
-npm run build                                         # PASS
+deno task typecheck                                     # exit 0
+deno task test                                              # 286/286 pass
+deno task build                                         # PASS
 
 # Audit
 python -B auditor.py audit . --sin-deep --sin-preguntas --sin-documentar \

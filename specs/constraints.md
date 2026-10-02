@@ -14,14 +14,11 @@ Prohibiciones y reglas transversales ya pagadas. Detalle por dominio: [`componen
 
 ## E2E (suite Stagehand)
 
-- No importar fuentes `.ts` del kit desde la suite e2e con specifier `.js`:
-  usar `.ts` explícito (`'../../system/toons.ts'`). Causa: la suite corre con
-  `--experimental-strip-types`, que NO remapea `.js`→`.ts`, y el archivo muere
-  con `ERR_MODULE_NOT_FOUND` al cargar (mató `01-is-code`).
+- No hace falta un loader de Node para los imports `.js` de fuentes `.ts`:
+  Deno los resuelve con `sloppy-imports` (`deno.json`).
 - No re-escribir `.ts`/`.html` con literales acentuados desde PowerShell
   (`Set-Content`, redirección `>` u `Out-File` sin `-Encoding utf8`): re-encoda
-  y corrompe UTF-8 (`ó`→`Ã³`); editar desde Node `writeFileSync(p, s, 'utf8')`
-  o la herramienta de edición. Causa: literales del nav en `00-arranque` y el
+  y corrompe UTF-8 (`ó`→`Ã³`); editar con la herramienta de edición en UTF-8. Causa: literales del nav en `00-arranque` y el
   harness HTML de PatyIA quedaron con mojibake.
 
 ## Repo y estructura

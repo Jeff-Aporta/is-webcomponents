@@ -4,13 +4,13 @@
   "category": "layout",
   "title": "<is-dock>",
   "titleHtml": true,
-  "styles": ".stage {\r\n      height: 28rem;\r\n      border: 1px dashed var(--is-border);\r\n      border-radius: var(--is-radius);\r\n      background:\r\n        radial-gradient(60rem 30rem at 50% 100%,\r\n          color-mix(in srgb, var(--is-accent) 14%, transparent),\r\n          transparent 60%);\r\n      position: relative;\r\n      transform: translateZ(0);\r\n      overflow: hidden;\r\n    }\r\n    pre.log {\r\n      font-family: ui-monospace, monospace; font-size: .8rem;\r\n      background: var(--is-bg-elev); border: 1px solid var(--is-border);\r\n      border-radius: var(--is-radius); padding: .55rem .75rem;\r\n      max-height: 9rem; overflow: auto;\r\n    }",
+  "styles": ".stage {\r\n      height: 28rem;\r\n      border: 1px dashed var(--iswc-border);\r\n      border-radius: var(--iswc-radius);\r\n      background:\r\n        radial-gradient(60rem 30rem at 50% 100%,\r\n          color-mix(in srgb, var(--iswc-accent) 14%, transparent),\r\n          transparent 60%);\r\n      position: relative;\r\n      transform: translateZ(0);\r\n      overflow: hidden;\r\n    }\r\n    pre.log {\r\n      font-family: ui-monospace, monospace; font-size: .8rem;\r\n      background: var(--iswc-bg-elev); border: 1px solid var(--iswc-border);\r\n      border-radius: var(--iswc-radius); padding: .55rem .75rem;\r\n      max-height: 9rem; overflow: auto;\r\n    }",
   "storageKey": "docs-is-dock",
   "hasBehavior": true,
   "sections": [
     {
       "id": "intro",
-      "title": "<is-dock>",
+      "title": "Uso",
       "lede": "Barra tipo macOS: los íconos se magnifican al acercar el cursor. Anclada abajo por defecto; podés moverla con el atributo <code class=\"code\">position</code>.",
       "blocks": []
     },

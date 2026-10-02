@@ -28,9 +28,9 @@ import { withStyleAttrs } from '../../core/attrs.js';
   class IsDivider extends withStyleAttrs(HTMLElement) {
     /** Personalización por atributo (ver `core/attrs.ts`). */
     static styleAttrs = {
-    color: { prop: '--is-divider-color', onlyColorValues: true },
-    spacing: '--is-divider-spacing',
-    width: '--is-divider-width',
+    color: { prop: '--iswc-divider-color', onlyColorValues: true },
+    spacing: '--iswc-divider-spacing',
+    width: '--iswc-divider-width',
     };
 
     static get observedAttributes(): string[] { return [...OBSERVED, 'color', 'spacing', 'width']; }

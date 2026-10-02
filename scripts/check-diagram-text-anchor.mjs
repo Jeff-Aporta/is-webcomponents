@@ -1,4 +1,4 @@
-#!/usr/bin/env node
+#!/usr/bin/env -S deno run -A --no-check
 // scripts/check-diagram-text-anchor.mjs
 // Detecta qué archivos de diagramas tienen el bug de text-anchor en buildTspans.
 // Para cada callsite de buildTspans, busca el <text> element que precede

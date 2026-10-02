@@ -86,9 +86,9 @@ import { ElementBase } from '../../core/element-base.js';
   class IsDatePicker extends ElementBase {
     /** Personalización por atributo (ver `core/attrs.ts`). */
     static styleAttrs = {
-    radius: '--is-datepicker-radius',
-    'border-color': { prop: '--is-datepicker-border', onlyColorValues: true },
-    bg: { prop: '--is-datepicker-bg', onlyColorValues: true },
+    radius: '--iswc-datepicker-radius',
+    'border-color': { prop: '--iswc-datepicker-border', onlyColorValues: true },
+    bg: { prop: '--iswc-datepicker-bg', onlyColorValues: true },
     };
 
     static get observedAttributes(): string[] { return [...OBSERVED, 'radius', 'border-color', 'bg']; }
@@ -525,7 +525,7 @@ import { ElementBase } from '../../core/element-base.js';
     #renderDays(year: number, month: number): void {
       const fdow = this.firstDayOfWeek;
       this.#renderWeekdays(fdow);
-      this.#base.style.setProperty('--is-dp-cols', this.showWeekNumbers ? '2.2em repeat(7, 1fr)' : 'repeat(7, 1fr)');
+      this.#base.style.setProperty('--iswc-dp-cols', this.showWeekNumbers ? '2.2em repeat(7, 1fr)' : 'repeat(7, 1fr)');
 
       const total = daysInMonth(year, month);
       const lead = (new Date(year, month, 1).getDay() - fdow + 7) % 7;

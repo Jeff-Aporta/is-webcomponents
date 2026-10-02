@@ -110,7 +110,7 @@
 
 /* ============ <is-kanban-card> ============ */
 .card {
-  background: var(--is-bg, #0f1117);
+  background: var(--iswc-bg, #0f1117);
   border: 1px solid var(--border);
   border-radius: 0.5rem;
   padding: 0.75rem;

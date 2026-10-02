@@ -88,11 +88,11 @@ test('10. emite is-md-change o is-change al cambiar contenido (modo edit)', () =
 });
 
 test('11. el módulo no depende de marked/remark (vanilla)', () => {
-  const pkg = JSON.parse(readFileSync(join(ROOT, 'package.json'), 'utf8'));
-  for (const dep of Object.keys({ ...pkg.dependencies, ...pkg.devDependencies })) {
+  const cfg = JSON.parse(readFileSync(join(ROOT, 'deno.json'), 'utf8'));
+  for (const dep of Object.keys(cfg.imports ?? {})) {
     assert.ok(
       !/^(marked|remark|markdown-it)$/.test(dep),
-      `${dep} no debe estar en package.json (el parser es local)`,
+      `${dep} no debe estar en deno.json (el parser es local)`,
     );
   }
 });

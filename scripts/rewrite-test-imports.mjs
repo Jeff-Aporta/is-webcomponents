@@ -1,4 +1,4 @@
-#!/usr/bin/env node
+#!/usr/bin/env -S deno run -A --no-check
 /**
  * scripts/rewrite-test-imports.mjs
  *
@@ -12,7 +12,7 @@
  *   Old: tests/foo.test.ts — 2 niveles arriba de fileURLToPath = root
  *   New: src/utils/health/<cat>/foo.test.ts — 5 niveles arriba de fileURLToPath = root
  *
- * Uso: node scripts/rewrite-test-imports.mjs
+ * Uso: deno run -A --no-check scripts/rewrite-test-imports.mjs
  */
 import { readdirSync, readFileSync, writeFileSync } from 'node:fs';
 import { join } from 'node:path';

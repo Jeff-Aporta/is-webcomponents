@@ -21,7 +21,7 @@
 
 ## Verificación
 
-- ✓ `npm run typecheck` verde
+- ✓ `deno task typecheck` verde
 - ✓ `npx tsc -p tsconfig.strict-audit.json --noEmit` — los 3 archivos en 0 errores
 - N/A Playwright (no se tocaron demos)
 - N/A round-trip JSON (no se tocó er-archify)

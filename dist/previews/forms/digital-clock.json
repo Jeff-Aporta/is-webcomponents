@@ -9,7 +9,7 @@
   "sections": [
     {
       "id": "intro",
-      "title": "<is-digital-clock>",
+      "title": "Uso",
       "lede": "Reloj digital: muestra la hora en formato numérico y admite selección por teclado.",
       "blocks": [
         {

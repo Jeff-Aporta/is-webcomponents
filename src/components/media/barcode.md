@@ -49,7 +49,7 @@ import './barcode.js';
 | `value` | string | Texto a codificar. Requerido. |
 | `type` | string | `ean13` \| `code128`. Default `code128`. |
 | `height` | number | Alto del módulo en px. Default `60`. |
-| `fg` | string | Color de las barras. Default `var(--is-text)`. |
+| `fg` | string | Color de las barras. Default `var(--iswc-text)`. |
 | `bg` | string | Color de fondo. Default `transparent`. |
 | `show-text` | boolean | Imprime el texto debajo. `true` por defecto en `ean13`. |
 | `quiet` | number | Zonas de silencio en módulos, solo EAN13. Default `9`. |
@@ -92,7 +92,7 @@ No expone.
 
 ### CSS custom properties
 
-Tokens del tema (`--is-*`) según CSS del módulo.
+Tokens del tema (`--iswc-*`) según CSS del módulo.
 
 ### Integración con formularios
 

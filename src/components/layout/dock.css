@@ -17,12 +17,12 @@
   align-items: end;
   gap: .35rem;
   padding: .4rem .55rem;
-  border: 1px solid var(--is-border);
+  border: 1px solid var(--iswc-border);
   border-radius: 18px;
   background:
     linear-gradient(180deg,
-      color-mix(in srgb, var(--is-bg-elev) 96%, transparent),
-      color-mix(in srgb, var(--is-bg-elev) 80%, transparent));
+      color-mix(in srgb, var(--iswc-bg-elev) 96%, transparent),
+      color-mix(in srgb, var(--iswc-bg-elev) 80%, transparent));
   backdrop-filter: blur(16px);
   box-shadow: 0 18px 50px rgba(0,0,0,.32);
 }
@@ -33,7 +33,7 @@
   display: inline-flex;
 }
 .item {
-  --is-dock-scale-unit: var(--scale, 1);
+  --iswc-dock-scale-unit: var(--scale, 1);
   display: inline-flex;
   flex-direction: column;
   align-items: center;
@@ -43,32 +43,32 @@
   text-decoration: none;
   color: inherit;
   transition: transform 120ms ease;
-  transform: scale(var(--is-dock-scale-unit));
+  transform: scale(var(--iswc-dock-scale-unit));
   transform-origin: center bottom;
   cursor: pointer;
 }
-.item:focus-visible { outline: 2px solid var(--is-focus); outline-offset: 2px; }
+.item:focus-visible { outline: 2px solid var(--iswc-focus); outline-offset: 2px; }
 .item .ico {
-  width: calc(2.5rem * var(--is-dock-scale-unit));
-  height: calc(2.5rem * var(--is-dock-scale-unit));
+  width: calc(2.5rem * var(--iswc-dock-scale-unit));
+  height: calc(2.5rem * var(--iswc-dock-scale-unit));
   display: grid; place-items: center;
   border-radius: 14px;
-  background: color-mix(in srgb, var(--is-bg-soft) 80%, transparent);
-  border: 1px solid var(--is-border);
-  color: var(--is-text);
+  background: color-mix(in srgb, var(--iswc-bg-soft) 80%, transparent);
+  border: 1px solid var(--iswc-border);
+  color: var(--iswc-text);
   font-size: 1.15rem;
   box-shadow: 0 4px 14px rgba(0,0,0,.18);
   transition: background-color 120ms ease, color 120ms ease;
 }
-.item:hover .ico { background: color-mix(in srgb, var(--is-accent) 22%, var(--is-bg-soft)); color: var(--is-accent); }
+.item:hover .ico { background: color-mix(in srgb, var(--iswc-accent) 22%, var(--iswc-bg-soft)); color: var(--iswc-accent); }
 .item.active .ico {
-  background: var(--is-accent);
-  color: var(--is-on-accent, #fff);
-  border-color: color-mix(in srgb, var(--is-accent) 60%, transparent);
+  background: var(--iswc-accent);
+  color: var(--iswc-on-accent, #fff);
+  border-color: color-mix(in srgb, var(--iswc-accent) 60%, transparent);
 }
 .item .label {
   font-size: .7rem;
-  color: var(--is-text-soft);
+  color: var(--iswc-text-soft);
   max-width: 6rem;
   text-align: center;
   white-space: nowrap;

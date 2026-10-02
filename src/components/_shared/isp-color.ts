@@ -3,7 +3,7 @@
  *
  * Orden de resolución del atributo `color`:
  *   1. Semántico: brand | neutral | info | success | warning | danger
- *      → lo resuelve el CSS `:host([color=…])` a tokens `--is-*`.
+ *      → lo resuelve el CSS `:host([color=…])` a tokens `--iswc-*`.
  *   2. `current` → `currentColor` (hereda el color tipográfico del contexto,
  *      análogo a los tamaños en `em`).
  *   3. Cualquier otro string → color CSS/HTML tal cual (`#hex`, `rgb()`,
@@ -46,7 +46,7 @@ export function resolveMixWith(raw: unknown) {
   const s = String(raw).trim();
   if (!s) return null;
   const lower = s.toLowerCase();
-  if (lower === 'text') return 'var(--is-text, currentColor)';
+  if (lower === 'text') return 'var(--iswc-text, currentColor)';
   if (lower === 'transparent') return 'transparent';
   if (lower === 'white') return '#fff';
   if (lower === 'black') return '#000';

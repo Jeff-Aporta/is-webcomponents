@@ -1,4 +1,4 @@
-#!/usr/bin/env node
+#!/usr/bin/env -S deno run -A --no-check
 import { readFileSync, writeFileSync } from 'node:fs';
 const FILE = 'src/components/isp/modal-verificacion.json';
 let s = readFileSync(FILE, 'utf8');

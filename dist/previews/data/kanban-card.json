@@ -9,7 +9,7 @@
   "sections": [
     {
       "id": "intro",
-      "title": "<is-kanban-card>",
+      "title": "Uso",
       "lede": "Tarjeta de un tablero. Es arrastrable entre columnas y admite encabezado, meta, etiqueta y pie.",
       "blocks": [
         {

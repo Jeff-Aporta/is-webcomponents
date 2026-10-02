@@ -19,16 +19,16 @@ const STYLES = /* css */ `
   .stack { display: flex; flex-direction: column; align-items: flex-start; gap: 1rem; }
   .field { display: grid; gap: 0.4rem; justify-items: start; }
   .field > .cap {
-    font-family: "JetBrains Mono", var(--is-mono);
+    font-family: "JetBrains Mono", var(--iswc-mono);
     font-size: 0.7rem;
-    color: var(--is-text-dim);
+    color: var(--iswc-text-dim);
   }
   .native-demo {
     font: inherit;
     padding: 0.55em 1em;
-    border: 1px solid var(--is-border);
-    background: var(--is-control-bg);
-    color: var(--is-text);
+    border: 1px solid var(--iswc-border);
+    background: var(--iswc-control-bg);
+    color: var(--iswc-text);
     cursor: pointer;
   }
 `;
@@ -423,7 +423,7 @@ export class ButtonGroupPreview extends ISComponentPreview {
                 ['part', '<code>base</code>'],
                 ['en los hijos', 'el grupo escribe <code>selected</code> y <code>aria-pressed</code>'],
                 ['valor de un hijo', 'atributo <code>value</code>; si falta, texto; si vacío, índice'],
-                ['tokens', '<code>--is-button-group-radius</code> <code>--is-button-group-gap</code> <code>--is-button-group-pad</code> <code>--is-button-group-accent</code>'],
+                ['tokens', '<code>--iswc-button-group-radius</code> <code>--iswc-button-group-gap</code> <code>--iswc-button-group-pad</code> <code>--iswc-button-group-accent</code>'],
               ],
             },
           ],

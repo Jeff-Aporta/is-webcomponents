@@ -4,13 +4,13 @@
   "category": "data",
   "title": "<is-data-grid>",
   "titleHtml": true,
-  "styles": ".grid-tall { --is-grid-height: 30rem; }\r\n    .grid-short { --is-grid-height: 18rem; }\r\n    .demo-bar { display: flex; flex-wrap: wrap; gap: .5rem; margin-bottom: .75rem; }\r\n    .demo-bar button { font: inherit; font-size: .85em; padding: .35em .7em; border: 1px solid var(--is-border); border-radius: var(--is-radius-sm); background: var(--is-control-bg); color: inherit; cursor: pointer; }\r\n    .demo-bar button:hover { background: var(--is-control-bg-hover); }\r\n    .out { font-family: var(--is-mono); font-size: .8em; opacity: .85; min-height: 1.2em; }\r\n    .tag-cell { display: inline-flex; align-items: center; gap: .3em; padding: .1em .5em; border-radius: 1em; font-size: .8em; }\r\n    .tag-ok { background: rgb(47 158 68 / 18%); color: #51cf66; }\r\n    .tag-no { background: rgb(224 49 49 / 18%); color: #ff8787; }",
+  "styles": ".grid-tall { --iswc-grid-height: 30rem; }\r\n    .grid-short { --iswc-grid-height: 18rem; }\r\n    .demo-bar { display: flex; flex-wrap: wrap; gap: .5rem; margin-bottom: .75rem; }\r\n    .demo-bar button { font: inherit; font-size: .85em; padding: .35em .7em; border: 1px solid var(--iswc-border); border-radius: var(--iswc-radius-sm); background: var(--iswc-control-bg); color: inherit; cursor: pointer; }\r\n    .demo-bar button:hover { background: var(--iswc-control-bg-hover); }\r\n    .out { font-family: var(--iswc-mono); font-size: .8em; opacity: .85; min-height: 1.2em; }\r\n    .tag-cell { display: inline-flex; align-items: center; gap: .3em; padding: .1em .5em; border-radius: 1em; font-size: .8em; }\r\n    .tag-ok { background: rgb(47 158 68 / 18%); color: #51cf66; }\r\n    .tag-no { background: rgb(224 49 49 / 18%); color: #ff8787; }",
   "storageKey": "docs-is-data-grid",
   "hasBehavior": true,
   "sections": [
     {
       "id": "intro",
-      "title": "<is-data-grid>",
+      "title": "Uso",
       "lede": "Tabla de datos con la superficie de MUI X Data Grid: columnas tipadas, multi-orden, filtros con Y/O,\r\n          quick filter, paginación, selección de filas y de rangos de celdas, edición por celda o por fila,\r\n          agrupación con agregación, tree data, pivot, virtualización y exportación.",
       "blocks": [
         {
@@ -305,7 +305,7 @@
             ],
             [
               "<code>auto-height</code>",
-              "off (alto por <code>--is-grid-height</code>)"
+              "off (alto por <code>--iswc-grid-height</code>)"
             ],
             [
               "<code>pagination</code> / <code>page-size</code> / <code>page-size-options</code>",
@@ -505,7 +505,7 @@
         },
         {
           "kind": "html",
-          "html": "<p class=\"lede\">\r\n          Parts: <code>base</code>, <code>toolbar</code>, <code>toolbar-button</code>, <code>quick-filter</code>,\r\n          <code>viewport</code>, <code>header</code>, <code>header-row</code>, <code>header-cell</code>,\r\n          <code>column-groups</code>, <code>header-filters</code>, <code>body</code>, <code>row</code>,\r\n          <code>cell</code>, <code>pinned-top</code>, <code>pinned-bottom</code>,\r\n          <code>aggregation-row</code>, <code>detail-panel</code>, <code>overlay</code>, <code>footer</code>,\r\n          <code>pagination</code>. Alto vía <code>--is-grid-height</code>.\r\n        </p>"
+          "html": "<p class=\"lede\">\r\n          Parts: <code>base</code>, <code>toolbar</code>, <code>toolbar-button</code>, <code>quick-filter</code>,\r\n          <code>viewport</code>, <code>header</code>, <code>header-row</code>, <code>header-cell</code>,\r\n          <code>column-groups</code>, <code>header-filters</code>, <code>body</code>, <code>row</code>,\r\n          <code>cell</code>, <code>pinned-top</code>, <code>pinned-bottom</code>,\r\n          <code>aggregation-row</code>, <code>detail-panel</code>, <code>overlay</code>, <code>footer</code>,\r\n          <code>pagination</code>. Alto vía <code>--iswc-grid-height</code>.\r\n        </p>"
         }
       ]
     }

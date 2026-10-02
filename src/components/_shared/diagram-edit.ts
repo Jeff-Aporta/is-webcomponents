@@ -243,9 +243,9 @@ export function openInlineEditor({ anchor, initial = {}, onSave, onCancel }: Ope
     left: ${Math.round(anchor.x)}px;
     top: ${Math.round(anchor.y)}px;
     z-index: 10000;
-    background: var(--is-bg-elev, #1f2937);
-    color: var(--is-text, #e2e8f0);
-    border: 1px solid var(--is-border, rgba(255,255,255,0.2));
+    background: var(--iswc-bg-elev, #1f2937);
+    color: var(--iswc-text, #e2e8f0);
+    border: 1px solid var(--iswc-border, rgba(255,255,255,0.2));
     border-radius: 6px;
     padding: 8px;
     box-shadow: 0 8px 24px rgba(0,0,0,0.35);
@@ -263,7 +263,7 @@ export function openInlineEditor({ anchor, initial = {}, onSave, onCancel }: Ope
     min-width: 120px;
     background: transparent;
     color: inherit;
-    border: 1px solid var(--is-border, rgba(255,255,255,0.2));
+    border: 1px solid var(--iswc-border, rgba(255,255,255,0.2));
     border-radius: 4px;
     padding: 4px 6px;
     font: inherit;
@@ -275,7 +275,7 @@ export function openInlineEditor({ anchor, initial = {}, onSave, onCancel }: Ope
     width: 32px;
     height: 28px;
     padding: 0;
-    border: 1px solid var(--is-border, rgba(255,255,255,0.2));
+    border: 1px solid var(--iswc-border, rgba(255,255,255,0.2));
     border-radius: 4px;
     background: transparent;
     cursor: pointer;
@@ -328,7 +328,7 @@ function btnStyle(): string {
   return `
     width: 28px;
     height: 28px;
-    border: 1px solid var(--is-border, rgba(255,255,255,0.2));
+    border: 1px solid var(--iswc-border, rgba(255,255,255,0.2));
     border-radius: 4px;
     background: transparent;
     color: inherit;

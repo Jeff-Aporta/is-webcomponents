@@ -9,7 +9,7 @@
   "sections": [
     {
       "id": "intro",
-      "title": "<is-color-picker>",
+      "title": "Uso",
       "lede": "Trigger con muestra + hex. El panel (<code>input type=\"color\"</code>, campo hex y paleta) vive en un <code>&lt;dialog&gt;</code> en el top layer.",
       "blocks": [
         {

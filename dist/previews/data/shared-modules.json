@@ -1,5 +1,5 @@
 {
-  "generatedAt": "2026-10-02T14:42:33.000Z",
+  "generatedAt": "2026-10-02T17:47:00.592Z",
   "count": 61,
   "modules": [
     {
@@ -26,7 +26,7 @@
       "id": "chart-palette",
       "path": "src/components/_shared/chart-palette.ts",
       "summary": "Módulo compartido `chart-palette.ts`.",
-      "bytes": 3206,
+      "bytes": 3212,
       "exports": [
         "resolvePaletteKey",
         "resolveMode",
@@ -68,7 +68,7 @@
       "id": "code-highlight",
       "path": "src/components/_shared/code-highlight.ts",
       "summary": "code-highlight — Sustituye a CM5 (runMode / fromTextArea): tokeniza con un escáner por",
-      "bytes": 19531,
+      "bytes": 20109,
       "exports": [
         "normalizeLang",
         "emptyState",
@@ -128,7 +128,7 @@
       "id": "code-theme",
       "path": "src/components/_shared/code-theme.ts",
       "summary": "code-theme — El consumidor pasa un objeto de colores (como un theme de VS Code / CM).",
-      "bytes": 7084,
+      "bytes": 7290,
       "exports": [
         "THEME_PROP_MAP",
         "BUILTIN_THEMES",
@@ -256,7 +256,7 @@
       "id": "diagram-edit",
       "path": "src/components/_shared/diagram-edit.ts",
       "summary": "Helpers de edición para diagramas SVG (modo lectura / edición). — API común a todos los diagramas:",
-      "bytes": 12572,
+      "bytes": 12584,
       "exports": [
         "loadOverrides",
         "saveOverrides",
@@ -484,7 +484,7 @@
       "id": "isp-color",
       "path": "src/components/_shared/isp-color.ts",
       "summary": "isp-color — Orden de resolución del atributo `color`:",
-      "bytes": 4317,
+      "bytes": 4321,
       "exports": [
         "SEMANTIC_COLORS",
         "normalizeMix",
@@ -609,7 +609,7 @@
       "id": "picker-element",
       "path": "src/components/_shared/picker-element.ts",
       "summary": "Módulo compartido `picker-element.ts`.",
-      "bytes": 22368,
+      "bytes": 22370,
       "exports": [
         "definePickerInput"
       ]
@@ -771,7 +771,7 @@
       "id": "tk-icon-inline",
       "path": "src/components/_shared/tk-icon-inline.ts",
       "summary": "Iconos inline en MD/HTML TK. El SVG lo resuelve el sistema propio de — iconos (_shared/icon-loader.js); no hay dependencia de terceros.",
-      "bytes": 12029,
+      "bytes": 16217,
       "exports": [
         "TK_ICON_TOKEN_RE",
         "iconAssetPath",
@@ -779,12 +779,12 @@
         "resolveIconToken",
         "hasIconJsonSugar",
         "svgIconGroup",
+        "iconAttrsHtml",
         "iconInlineHtmlWeb",
         "iconInlineHtmlEmail",
         "replaceIconTokensWeb",
         "replaceIconTokensEmail",
-        "stripIconTokensPlain",
-        "extractLeadingIconToken"
+        "splitIconRuns"
       ]
     },
     {
@@ -792,9 +792,10 @@
       "id": "tk-inline-md",
       "path": "src/components/_shared/tk-inline-md.ts",
       "summary": "Módulo compartido `tk-inline-md.ts`.",
-      "bytes": 1025,
+      "bytes": 4223,
       "exports": [
-        "inlineMdWeb"
+        "inlineMdWeb",
+        "applySvgTextContent"
       ]
     },
     {

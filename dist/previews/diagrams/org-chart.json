@@ -4,13 +4,13 @@
   "category": "diagrams",
   "title": "<is-org-chart>",
   "titleHtml": true,
-  "styles": "pre.log {\r\n      font-family: ui-monospace, monospace; font-size: .8rem;\r\n      background: var(--is-bg-elev); border: 1px solid var(--is-border);\r\n      border-radius: var(--is-radius); padding: .55rem .75rem;\r\n      max-height: 6rem; overflow: auto;\r\n    }",
+  "styles": "pre.log {\r\n      font-family: ui-monospace, monospace; font-size: .8rem;\r\n      background: var(--iswc-bg-elev); border: 1px solid var(--iswc-border);\r\n      border-radius: var(--iswc-radius); padding: .55rem .75rem;\r\n      max-height: 6rem; overflow: auto;\r\n    }",
   "storageKey": "docs-is-org-chart",
   "hasBehavior": true,
   "sections": [
     {
       "id": "intro",
-      "title": "<is-org-chart>",
+      "title": "Uso",
       "lede": "Organigrama jerárquico a partir de un árbol JSON. Cada nodo tiene foto (o iniciales), nombre y cargo; los hijos se pliegan con el botón redondo con una animación suave, y un clic en el fondo abre el visor a pantalla completa.",
       "blocks": []
     },

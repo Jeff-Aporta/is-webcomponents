@@ -4,13 +4,13 @@
   "category": "code",
   "title": "<is-code>",
   "titleHtml": true,
-  "styles": ".stack { display: grid; gap: 1rem; }\n.ed { min-height: 14rem; }\n.row { display: flex; flex-wrap: wrap; gap: 0.5rem; align-items: center; }\n.out { font-family: var(--is-mono, monospace); font-size: 0.75rem; white-space: pre-wrap; background: var(--is-bg-soft); border: 1px solid var(--is-border); border-radius: 8px; padding: 0.75rem; max-height: 12rem; overflow: auto; }\n.prose { line-height: 1.7; font-size: 1rem; max-width: 42rem; }\n.prose is-code { margin-inline: 0.2em; }\n.playground .stage { align-items: stretch; justify-content: stretch; display: grid; gap: 1rem; }\n.playground .stage.is-inline { align-items: center; }\n.playground .stage .pg-prose { margin: 0; line-height: 1.75; }\n.playground #pgCode[mode=\"block\"] { min-height: 12rem; width: 100%; }",
+  "styles": ".stack { display: grid; gap: 1rem; }\n.ed { min-height: 14rem; }\n.row { display: flex; flex-wrap: wrap; gap: 0.5rem; align-items: center; }\n.out { font-family: var(--iswc-mono, monospace); font-size: 0.75rem; white-space: pre-wrap; background: var(--iswc-bg-soft); border: 1px solid var(--iswc-border); border-radius: 8px; padding: 0.75rem; max-height: 12rem; overflow: auto; }\n.prose { line-height: 1.7; font-size: 1rem; max-width: 42rem; }\n.prose is-code { margin-inline: 0.2em; }\n.playground .stage { align-items: stretch; justify-content: stretch; display: grid; gap: 1rem; }\n.playground .stage.is-inline { align-items: center; }\n.playground .stage .pg-prose { margin: 0; line-height: 1.75; }\n.playground #pgCode[mode=\"block\"] { min-height: 12rem; width: 100%; }",
   "storageKey": "docs-is-code",
   "hasBehavior": true,
   "sections": [
     {
       "id": "intro",
-      "title": "<is-code>",
+      "title": "Uso",
       "lede": "Editor de código con motor NATIVO de resaltado y editor integrado (sin CodeMirror): lenguajes, temas JSON, formateo estilo Prettier, números de línea, word-wrap y anotaciones externas (highlight / tooltips). API texto ↔ JSON <code class=\"code\">is-code-doc/v1</code>.",
       "blocks": [
         {
@@ -37,7 +37,7 @@
       "blocks": [
         {
           "kind": "demo",
-          "html": "<div class=\"stack\">\n  <p class=\"prose\">\n    Usa <is-code mode=\"inline\" lang=\"javascript\" readonly value=\"openModal()\"></is-code>\n    para disparar el diálogo, o edita\n    <is-code id=\"demo-inline-edit\" mode=\"inline\" lang=\"css\" value=\"--is-accent\"></is-code>\n    en vivo.\n  </p>\n  <is-code class=\"ed\" mode=\"block\" lang=\"javascript\" wrap line-numbers\n    value=\"export function openModal() {&#10;  dialog.show();&#10;}\"></is-code>\n</div>"
+          "html": "<div class=\"stack\">\n  <p class=\"prose\">\n    Usa <is-code mode=\"inline\" lang=\"javascript\" readonly value=\"openModal()\"></is-code>\n    para disparar el diálogo, o edita\n    <is-code id=\"demo-inline-edit\" mode=\"inline\" lang=\"css\" value=\"--iswc-accent\"></is-code>\n    en vivo.\n  </p>\n  <is-code class=\"ed\" mode=\"block\" lang=\"javascript\" wrap line-numbers\n    value=\"export function openModal() {&#10;  dialog.show();&#10;}\"></is-code>\n</div>"
         },
         {
           "kind": "code",
@@ -81,7 +81,7 @@
     },
     {
       "id": "format",
-      "title": "Formateo (JSON tipo Prettier)",
+      "title": "Formato legible",
       "lede": "Atributo/propiedad <code class=\"code\">format</code> / <code class=\"code\">formatConfig</code>. Método <code class=\"code\">format()</code>.",
       "blocks": [
         {
@@ -161,7 +161,7 @@
       "blocks": [
         {
           "kind": "demo",
-          "html": "<div class=\"playground\">\n  <div class=\"stage\" id=\"pgStage\">\n    <p class=\"pg-prose\" id=\"pgProse\" hidden>\n      En el flujo:\n      <span id=\"pgInlineHost\"></span>\n      y sigue el texto.\n    </p>\n    <is-code id=\"pgCode\" mode=\"block\" lang=\"javascript\" wrap line-numbers\n      value=\"function greet(name) {&#10;  return `Hola, ${name}`;&#10;}\"></is-code>\n  </div>\n  <div class=\"controls\">\n    <h4>Configuración</h4>\n    <div class=\"ctl-row\">\n      <label for=\"pgMode\">mode</label>\n      <select id=\"pgMode\">\n        <option value=\"block\" selected>block</option>\n        <option value=\"inline\">inline</option>\n      </select>\n    </div>\n    <div class=\"ctl-row\">\n      <label for=\"pgLang\">lang</label>\n      <select id=\"pgLang\">\n        <option>javascript</option>\n        <option>typescript</option>\n        <option>html</option>\n        <option>css</option>\n        <option>json</option>\n        <option>python</option>\n        <option>plaintext</option>\n      </select>\n    </div>\n    <div class=\"ctl-row\">\n      <label>flags</label>\n      <div class=\"checks\">\n        <label class=\"chip\"><input type=\"checkbox\" id=\"pgReadonly\" /> readonly</label>\n        <label class=\"chip\"><input type=\"checkbox\" id=\"pgWrap\" checked /> wrap</label>\n        <label class=\"chip\"><input type=\"checkbox\" id=\"pgLines\" checked /> line-numbers</label>\n        <label class=\"chip\"><input type=\"checkbox\" id=\"pgCompact\" /> compact</label>\n        <label class=\"chip\"><input type=\"checkbox\" id=\"pgDisabled\" /> disabled</label>\n      </div>\n    </div>\n    <div class=\"ctl-row\">\n      <label for=\"pgValue\">value</label>\n      <textarea id=\"pgValue\" rows=\"5\" style=\"width:100%;font:inherit\"></textarea>\n    </div>\n    <div class=\"ctl-row\">\n      <label>acciones</label>\n      <div class=\"row\">\n        <is-button id=\"pgFormat\" color=\"neutral\" variant=\"outlined\" type=\"button\">format()</is-button>\n        <is-button id=\"pgFocus\" color=\"neutral\" variant=\"plain\" type=\"button\">focus()</is-button>\n      </div>\n    </div>\n    <p class=\"pg-meta\" id=\"pgMeta\" style=\"margin:0.75rem 0 0;color:var(--is-text-soft);font-size:0.8rem\"></p>\n  </div>\n</div>"
+          "html": "<div class=\"playground\">\n  <div class=\"stage\" id=\"pgStage\">\n    <p class=\"pg-prose\" id=\"pgProse\" hidden>\n      En el flujo:\n      <span id=\"pgInlineHost\"></span>\n      y sigue el texto.\n    </p>\n    <is-code id=\"pgCode\" mode=\"block\" lang=\"javascript\" wrap line-numbers\n      value=\"function greet(name) {&#10;  return `Hola, ${name}`;&#10;}\"></is-code>\n  </div>\n  <div class=\"controls\">\n    <h4>Configuración</h4>\n    <div class=\"ctl-row\">\n      <label for=\"pgMode\">mode</label>\n      <select id=\"pgMode\">\n        <option value=\"block\" selected>block</option>\n        <option value=\"inline\">inline</option>\n      </select>\n    </div>\n    <div class=\"ctl-row\">\n      <label for=\"pgLang\">lang</label>\n      <select id=\"pgLang\">\n        <option>javascript</option>\n        <option>typescript</option>\n        <option>html</option>\n        <option>css</option>\n        <option>json</option>\n        <option>python</option>\n        <option>plaintext</option>\n      </select>\n    </div>\n    <div class=\"ctl-row\">\n      <label>flags</label>\n      <div class=\"checks\">\n        <label class=\"chip\"><input type=\"checkbox\" id=\"pgReadonly\" /> readonly</label>\n        <label class=\"chip\"><input type=\"checkbox\" id=\"pgWrap\" checked /> wrap</label>\n        <label class=\"chip\"><input type=\"checkbox\" id=\"pgLines\" checked /> line-numbers</label>\n        <label class=\"chip\"><input type=\"checkbox\" id=\"pgCompact\" /> compact</label>\n        <label class=\"chip\"><input type=\"checkbox\" id=\"pgDisabled\" /> disabled</label>\n      </div>\n    </div>\n    <div class=\"ctl-row\">\n      <label for=\"pgValue\">value</label>\n      <textarea id=\"pgValue\" rows=\"5\" style=\"width:100%;font:inherit\"></textarea>\n    </div>\n    <div class=\"ctl-row\">\n      <label>acciones</label>\n      <div class=\"row\">\n        <is-button id=\"pgFormat\" color=\"neutral\" variant=\"outlined\" type=\"button\">format()</is-button>\n        <is-button id=\"pgFocus\" color=\"neutral\" variant=\"plain\" type=\"button\">focus()</is-button>\n      </div>\n    </div>\n    <p class=\"pg-meta\" id=\"pgMeta\" style=\"margin:0.75rem 0 0;color:var(--iswc-text-soft);font-size:0.8rem\"></p>\n  </div>\n</div>"
         }
       ]
     },

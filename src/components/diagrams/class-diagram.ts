@@ -5,7 +5,7 @@ import { sequenceThemeDark, sequenceThemeLight } from './sequence-spec.js';
 import { SequenceTurtle } from './sequence-turtle.js';
 import { tkHueToHex } from '../_shared/tk-hue.js';
 import { edgeStrokeHex, edgeChipFill, edgeChipText } from '../_shared/diagram-edge-style.js';
-import { inlineMdWeb } from '../_shared/tk-inline-md.js';
+import { inlineMdWeb, applySvgTextContent } from '../_shared/tk-inline-md.js';
 import { wrapText, buildTspans } from '../_shared/diagram-text-wrap.js';
 import { registerDiagramKind } from './diagram-kinds.js';
 import { svgEl } from '../_shared/svg-chart-engine.js';
@@ -386,8 +386,8 @@ class IsClassDiagram extends DiagramElementBase {
             x: n.x + 8, y: n.y + section.y + ri * 16 + 8, 'dominant-baseline': 'middle', fill: theme.text,
             'font-size': '10.5', 'font-family': 'Consolas,Menlo,monospace',
           });
-          t.innerHTML = inlineMdWeb(row);
           g.appendChild(t);
+          applySvgTextContent(t, row);
         });
       }
 

@@ -47,8 +47,8 @@ type DropdownItemEl = HTMLElement & { disabled?: boolean; type?: string; closeSu
 
   /** Personalización por atributo (ver `core/attrs.ts`). */
   const STYLE_ATTRS = {
-    'show-duration': '--is-dropdown-show-duration',
-    'hide-duration': '--is-dropdown-hide-duration',
+    'show-duration': '--iswc-dropdown-show-duration',
+    'hide-duration': '--iswc-dropdown-hide-duration',
   };
 
   class IsDropdown extends withStyleAttrs(HTMLElement) {

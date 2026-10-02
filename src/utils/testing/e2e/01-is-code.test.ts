@@ -213,7 +213,7 @@ testE2E('tema reactivo: data-theme + is-theme-change repinta sin CodeMirror', { 
   await abrirGaleria(page, 'is-code', { ms: 5000 });
   const base = await page.evaluate(() => {
     const h = document.querySelector('#previewHost is-code');
-    return h ? getComputedStyle(h).getPropertyValue('--is-code-bg').trim() : '';
+    return h ? getComputedStyle(h).getPropertyValue('--iswc-code-bg').trim() : '';
   });
   await page.evaluate(() => {
     document.documentElement.dataset.theme = 'light';
@@ -222,9 +222,9 @@ testE2E('tema reactivo: data-theme + is-theme-change repinta sin CodeMirror', { 
   await esperarMs(1500);
   const luz = await page.evaluate(() => {
     const h = document.querySelector('#previewHost is-code');
-    return h ? getComputedStyle(h).getPropertyValue('--is-code-bg').trim() : '';
+    return h ? getComputedStyle(h).getPropertyValue('--iswc-code-bg').trim() : '';
   });
-  assert.ok(base && luz, 'debe existir --is-code-bg en el host');
+  assert.ok(base && luz, 'debe existir --iswc-code-bg en el host');
   assert.notEqual(base, luz, `el tema debe repintar el fondo (${base} â†’ ${luz})`);
   const rastro: RastroCodeMirror = await rastroCodeMirror(page);
   assert.equal(rastro.total, 0, 'el cambio de tema no debe cargar nada de CodeMirror');

@@ -99,7 +99,7 @@ No expone.
 | --- | --- |
 | `--size` | Diámetro del botón (default `3.5em`). Escala con el `font-size` del host. |
 | `--fab-shadow` | Sombra flotante. |
-| `--is-brand` | Color de marca usado por el pulso de atención. |
+| `--iswc-brand` | Color de marca usado por el pulso de atención. |
 
 ### Integración con formularios
 

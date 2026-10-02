@@ -9,7 +9,7 @@
   "sections": [
     {
       "id": "intro",
-      "title": "<is-offscreen-canvas>",
+      "title": "Uso",
       "lede": "Lienzo que transfiere el control a OffscreenCanvas (y opcionalmente a un Worker).",
       "blocks": [
         {

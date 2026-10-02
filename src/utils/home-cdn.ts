@@ -90,15 +90,15 @@ const buildDemoHtml = (variant: string): string => {
     body {
       margin: 0;
       font-family: system-ui, -apple-system, "Segoe UI", Roboto, sans-serif;
-      background: var(--is-bg);
-      color: var(--is-text);
+      background: var(--iswc-bg);
+      color: var(--iswc-text);
     }
     header {
       display: flex;
       align-items: center;
       gap: 1rem;
       padding: 1rem 1.5rem;
-      border-bottom: 1px solid var(--is-border);
+      border-bottom: 1px solid var(--iswc-border);
     }
     header h1 { margin: 0; font-size: 1rem; font-weight: 700; }
     main {
@@ -115,15 +115,15 @@ const buildDemoHtml = (variant: string): string => {
       font-weight: 700;
       letter-spacing: 0.06em;
       text-transform: uppercase;
-      color: var(--is-text-soft);
+      color: var(--iswc-text-soft);
     }
     .row { display: flex; flex-wrap: wrap; gap: 0.6rem; align-items: center; }
     .grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(11rem, 1fr)); gap: 0.75rem; }
     .tile {
-      border: 1px solid var(--is-border);
+      border: 1px solid var(--iswc-border);
       border-radius: 0.65rem;
       padding: 0.85rem 1rem;
-      background: var(--is-bg-elev);
+      background: var(--iswc-bg-elev);
     }
     is-bar-chart, is-line-chart, is-doughnut-chart, is-pie-chart,
     is-polar-area-chart, is-radar-chart, is-scatter-chart, is-bubble-chart,
@@ -132,16 +132,16 @@ const buildDemoHtml = (variant: string): string => {
     is-doughnut-chart, is-pie-chart, is-polar-area-chart, is-radar-chart,
     is-scatter-chart, is-bubble-chart { height: 12rem; }
     pre.code {
-      background: var(--is-code-bg, #0f1318);
-      border: 1px solid var(--is-border);
+      background: var(--iswc-code-bg, #0f1318);
+      border: 1px solid var(--iswc-border);
       border-radius: 0.4rem;
       padding: 0.5rem 0.65rem;
       font-family: ui-monospace, Consolas, monospace;
       font-size: 0.8rem;
       overflow-x: auto;
-      color: var(--is-text);
+      color: var(--iswc-text);
     }
-    small { color: var(--is-text-soft); }
+    small { color: var(--iswc-text-soft); }
   </style>
 </head>
 <body>
@@ -157,7 +157,7 @@ const buildDemoHtml = (variant: string): string => {
         <is-theme-toggle id="theme"></is-theme-toggle>
         <label class="row" style="gap:0.35rem">
           <span>Paleta</span>
-          <select id="palette" style="background:transparent;color:inherit;border:1px solid var(--is-border);border-radius:0.4rem;padding:0.25rem 0.5rem">
+          <select id="palette" style="background:transparent;color:inherit;border:1px solid var(--iswc-border);border-radius:0.4rem;padding:0.25rem 0.5rem">
             <option value="contapyme">ContaPyme</option>
             <option value="insoft">InSoft</option>
             <option value="agrowin">AgroWin</option>

@@ -1,4 +1,4 @@
-#!/usr/bin/env node
+#!/usr/bin/env -S deno run -A --no-check
 // scripts/build-demo-groups.mjs
 //
 // F0.2 variante: agrupa por CATEGORÍA DE DEMO (no por path de archivo).
@@ -7,7 +7,7 @@
 //
 // Output: .audit/demo-groups.json
 //
-// Uso: node scripts/build-demo-groups.mjs
+// Uso: deno run -A --no-check scripts/build-demo-groups.mjs
 
 import { readdirSync, readFileSync, writeFileSync } from 'node:fs';
 import { join, relative } from 'node:path';

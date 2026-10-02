@@ -10,7 +10,7 @@
 //   2) variant → solo consume --_tone-* (sin repetir nombres de color)
 //
 // Extensión: *.test.mjs (tests/ se commitea; no .test.ts sin pipeline TS).
-// Uso: node --test tests/button-color-appearance.test.ts
+// Uso: deno test -A --no-check tests/button-color-appearance.test.ts
 
 import { readFileSync } from 'node:fs';
 import { join, dirname } from 'node:path';
@@ -58,7 +58,7 @@ test('las apariencias consumen --_tone-* sin matriz por color', () => {
   }
 
   // Prohibido volver a la matriz N×M.
-  // Excepción permitida: neutral×ghost (hover invierte contra --is-bg, no --_tone-on).
+  // Excepción permitida: neutral×ghost (hover invierte contra --iswc-bg, no --_tone-on).
   const ALLOW_MATRIX = new Set(['neutral×ghost']);
   const matrixHits = [];
   for (const c of COLORS) {
@@ -82,18 +82,18 @@ test('button.css no consume escala numérica de familias semánticas', () => {
   // info/error nunca tuvieron -600 en el tema → filled/outlined transparentes.
   // success/warning/danger tampoco deben volver a -N si el tema es relativo.
   const stale = [
-    ...css.matchAll(/var\(\s*(--is-color-(?:info|error|success|warning|danger|brand)-\d+)/g),
+    ...css.matchAll(/var\(\s*(--iswc-color-(?:info|error|success|warning|danger|brand)-\d+)/g),
   ].map((m) => m[1]);
   assert.deepEqual(
     [...new Set(stale)],
     [],
     `button.css aún pide tokens numerados: ${[...new Set(stale)].join(', ')}. ` +
-      `Usar --is-color-X-strong / -stronger / base / -pale / -paler (o hex en el 2º arg de var).`,
+      `Usar --iswc-color-X-strong / -stronger / base / -pale / -paler (o hex en el 2º arg de var).`,
   );
 });
 
 test('filled y outlined del mismo color comparten la misma familia de tono', () => {
-  // El bug brand: filled caía a hex azul hardcodeado y outlined a --is-brand-text.
+  // El bug brand: filled caía a hex azul hardcodeado y outlined a --iswc-brand-text.
   // Ambos deben pasar por --_tone-*.
   const filledIdx = css.search(/:host\(\[color\]\[variant="filled"\]\)|:host\(\[color\]:not\(\[variant\]\)\)/);
   const outlinedIdx = css.search(/:host\(\[color\]\[variant="outlined"\]\)/);

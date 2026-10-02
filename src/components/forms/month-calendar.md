@@ -97,16 +97,16 @@ No expone.
 
 | Token | Uso |
 | --- | --- |
-| `--is-month-columns` | Token leído o definido por componente. |
-| `--is-sans` | Token leído o definido por componente. |
-| `--is-text` | Token leído o definido por componente. |
-| `--is-radius-sm` | Token leído o definido por componente. |
-| `--is-control-bg-hover` | Token leído o definido por componente. |
-| `--is-focus` | Token leído o definido por componente. |
-| `--is-accent` | Token leído o definido por componente. |
-| `--is-color-brand-500` | Token leído o definido por componente. |
-| `--is-color-brand-600` | Token leído o definido por componente. |
-| `--is-on-brand` | Token leído o definido por componente. |
+| `--iswc-month-columns` | Token leído o definido por componente. |
+| `--iswc-sans` | Token leído o definido por componente. |
+| `--iswc-text` | Token leído o definido por componente. |
+| `--iswc-radius-sm` | Token leído o definido por componente. |
+| `--iswc-control-bg-hover` | Token leído o definido por componente. |
+| `--iswc-focus` | Token leído o definido por componente. |
+| `--iswc-accent` | Token leído o definido por componente. |
+| `--iswc-color-brand-500` | Token leído o definido por componente. |
+| `--iswc-color-brand-600` | Token leído o definido por componente. |
+| `--iswc-on-brand` | Token leído o definido por componente. |
 
 ### Integración con formularios
 

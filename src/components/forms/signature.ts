@@ -5,7 +5,7 @@ import { adoptCss, defineElement, emit } from '../../core/element.js';
  *
  * Atributos
  *   width, height   dimensiones del canvas en píxeles (default 320 × 140)
- *   pen-color       color del trazo (default var(--is-text))
+ *   pen-color       color del trazo (default var(--iswc-text))
  *   line-width      grosor del trazo (default 2)
  *   background      color de fondo (default transparent)
  *   hint            texto placeholder cuando está vacío

@@ -51,7 +51,7 @@
   // Cargar el bundle pre-construido. Esto hace funcionar el demo con cualquier
   // servidor estático (incluido VS Code Live Server), no solo con el dev
   // server que transpila TS. La promesa resuelve cuando is-code está definido.
-  await import('../../../dist/cdn/code/code.min.js?h=6vb9gg');
+  await import('../../../dist/cdn/code/code.min.js?h=r61e18');
   await customElements.whenDefined('is-code');
 
   const samples = {
@@ -66,8 +66,8 @@
     css: [
       '/* estilos del propio editor */',
       ':host {',
-      '  --is-code-bg: #1e1e1e;',
-      '  --is-code-fg: #eeffff;',
+      '  --iswc-code-bg: #1e1e1e;',
+      '  --iswc-code-fg: #eeffff;',
       '  border-radius: 8px;',
       '}',
     ].join('\n'),

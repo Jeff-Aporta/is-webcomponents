@@ -54,7 +54,7 @@ checks.push({
   run: async (page) => {
     // NOTA: progress-bar extiende ElementBase, que NO sincroniza styleAttrs
     // como inline CSS vars (eso lo hace withStyleAttrs). Por lo tanto el
-    // atributo track-height="14" se setea pero la CSS var --is-progress-bar-track-height
+    // atributo track-height="14" se setea pero la CSS var --iswc-progress-bar-track-height
     // queda con su valor default — el visual NO cambia. Esto es un gap en
     // el código del componente (no en este test). El test verifica que al
     // menos el atributo se acepta y queda como atributo válido.

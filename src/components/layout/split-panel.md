@@ -113,10 +113,10 @@ No expone.
 | `--max` | Token leído o definido por componente. |
 | `--_divider-width` | Token leído o definido por componente. |
 | `--_divider-hit-area` | Token leído o definido por componente. |
-| `--is-border` | Token leído o definido por componente. |
-| `--is-accent` | Token leído o definido por componente. |
-| `--is-color-brand-500` | Token leído o definido por componente. |
-| `--is-focus` | Token leído o definido por componente. |
+| `--iswc-border` | Token leído o definido por componente. |
+| `--iswc-accent` | Token leído o definido por componente. |
+| `--iswc-color-brand-500` | Token leído o definido por componente. |
+| `--iswc-focus` | Token leído o definido por componente. |
 
 ### Integración con formularios
 

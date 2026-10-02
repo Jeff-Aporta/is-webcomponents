@@ -9,7 +9,7 @@
   "sections": [
     {
       "id": "intro",
-      "title": "<is-toast>",
+      "title": "Uso",
       "lede": "Contenedor fijo de notificaciones. Crea ítems con <code class=\"code\">create()</code> o declara <code class=\"code\">&lt;is-toast-item&gt;</code>.",
       "blocks": [
         {

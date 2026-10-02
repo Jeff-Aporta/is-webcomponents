@@ -8,7 +8,7 @@
   "sections": [
     {
       "id": "intro",
-      "title": "<is-venn-diagram>",
+      "title": "Uso",
       "lede": "Diagrama de Venn de dos o tres conjuntos, con las posiciones canónicas de cualquier libro de texto.",
       "blocks": [
         {

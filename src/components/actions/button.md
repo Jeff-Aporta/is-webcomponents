@@ -131,43 +131,43 @@ Propiedades públicas aparecen en tabla anterior; APIs heredadas se verifican en
 
 | Token | Uso |
 | --- | --- |
-| `--is-accent` | Token leído o definido por componente. |
-| `--is-button-font-family` | Token leído o definido por componente. |
-| `--is-button-font-weight` | Token leído o definido por componente. |
-| `--is-button-border-radius` | Token leído o definido por componente. |
-| `--is-button-border-width` | Token leído o definido por componente. |
-| `--is-button-transition-duration` | Token leído o definido por componente. |
-| `--is-button-selected-hue` | Token leído o definido por componente. |
-| `--is-button-selected-color` | Token leído o definido por componente. |
-| `--is-color-success-50` | Token leído o definido por componente. |
-| `--is-color-success-100` | Token leído o definido por componente. |
-| `--is-color-success-500` | Token leído o definido por componente. |
-| `--is-color-success-600` | Token leído o definido por componente. |
-| `--is-color-success-700` | Token leído o definido por componente. |
-| `--is-color-warning-50` | Token leído o definido por componente. |
-| `--is-color-warning-100` | Token leído o definido por componente. |
-| `--is-color-warning-500` | Token leído o definido por componente. |
-| `--is-color-warning-600` | Token leído o definido por componente. |
-| `--is-color-warning-700` | Token leído o definido por componente. |
-| `--is-color-danger-50` | Token leído o definido por componente. |
-| `--is-color-danger-100` | Token leído o definido por componente. |
-| `--is-color-danger-500` | Token leído o definido por componente. |
-| `--is-color-danger-600` | Token leído o definido por componente. |
-| `--is-color-danger-700` | Token leído o definido por componente. |
-| `--is-font-family` | Token leído o definido por componente. |
+| `--iswc-accent` | Token leído o definido por componente. |
+| `--iswc-button-font-family` | Token leído o definido por componente. |
+| `--iswc-button-font-weight` | Token leído o definido por componente. |
+| `--iswc-button-border-radius` | Token leído o definido por componente. |
+| `--iswc-button-border-width` | Token leído o definido por componente. |
+| `--iswc-button-transition-duration` | Token leído o definido por componente. |
+| `--iswc-button-selected-hue` | Token leído o definido por componente. |
+| `--iswc-button-selected-color` | Token leído o definido por componente. |
+| `--iswc-color-success-50` | Token leído o definido por componente. |
+| `--iswc-color-success-100` | Token leído o definido por componente. |
+| `--iswc-color-success-500` | Token leído o definido por componente. |
+| `--iswc-color-success-600` | Token leído o definido por componente. |
+| `--iswc-color-success-700` | Token leído o definido por componente. |
+| `--iswc-color-warning-50` | Token leído o definido por componente. |
+| `--iswc-color-warning-100` | Token leído o definido por componente. |
+| `--iswc-color-warning-500` | Token leído o definido por componente. |
+| `--iswc-color-warning-600` | Token leído o definido por componente. |
+| `--iswc-color-warning-700` | Token leído o definido por componente. |
+| `--iswc-color-danger-50` | Token leído o definido por componente. |
+| `--iswc-color-danger-100` | Token leído o definido por componente. |
+| `--iswc-color-danger-500` | Token leído o definido por componente. |
+| `--iswc-color-danger-600` | Token leído o definido por componente. |
+| `--iswc-color-danger-700` | Token leído o definido por componente. |
+| `--iswc-font-family` | Token leído o definido por componente. |
 | `--_bg` | Token leído o definido por componente. |
-| `--is-control-bg` | Token leído o definido por componente. |
+| `--iswc-control-bg` | Token leído o definido por componente. |
 | `--_bg-hover` | Token leído o definido por componente. |
-| `--is-control-bg-hover` | Token leído o definido por componente. |
+| `--iswc-control-bg-hover` | Token leído o definido por componente. |
 | `--_bg-active` | Token leído o definido por componente. |
-| `--is-control-bg-active` | Token leído o definido por componente. |
+| `--iswc-control-bg-active` | Token leído o definido por componente. |
 | `--_border` | Token leído o definido por componente. |
-| `--is-control-border` | Token leído o definido por componente. |
+| `--iswc-control-border` | Token leído o definido por componente. |
 | `--_text` | Token leído o definido por componente. |
-| `--is-control-text` | Token leído o definido por componente. |
+| `--iswc-control-text` | Token leído o definido por componente. |
 | `--_focus` | Token leído o definido por componente. |
-| `--is-focus` | Token leído o definido por componente. |
-| `--is-color-brand-500` | Token leído o definido por componente. |
+| `--iswc-focus` | Token leído o definido por componente. |
+| `--iswc-color-brand-500` | Token leído o definido por componente. |
 | `--_height` | Token leído o definido por componente. |
 | `--_hpad` | Token leído o definido por componente. |
 | `--_button-horizontal-indent` | Token leído o definido por componente. |
@@ -176,24 +176,24 @@ Propiedades públicas aparecen en tabla anterior; APIs heredadas se verifican en
 | `--_button-start-end-radius` | Token leído o definido por componente. |
 | `--_button-end-start-radius` | Token leído o definido por componente. |
 | `--_button-end-end-radius` | Token leído o definido por componente. |
-| `--is-color-brand-600` | Token leído o definido por componente. |
-| `--is-color-brand-700` | Token leído o definido por componente. |
-| `--is-color-brand-800` | Token leído o definido por componente. |
-| `--is-on-brand` | Token leído o definido por componente. |
-| `--is-brand-soft` | Token leído o definido por componente. |
-| `--is-color-brand-50` | Token leído o definido por componente. |
-| `--is-brand-soft-active` | Token leído o definido por componente. |
-| `--is-color-brand-100` | Token leído o definido por componente. |
-| `--is-brand-text` | Token leído o definido por componente. |
-| `--is-success-soft` | Token leído o definido por componente. |
-| `--is-success-soft-active` | Token leído o definido por componente. |
-| `--is-success-text` | Token leído o definido por componente. |
-| `--is-warning-soft` | Token leído o definido por componente. |
-| `--is-warning-soft-active` | Token leído o definido por componente. |
-| `--is-warning-text` | Token leído o definido por componente. |
-| `--is-danger-soft` | Token leído o definido por componente. |
-| `--is-danger-soft-active` | Token leído o definido por componente. |
-| `--is-danger-text` | Token leído o definido por componente. |
+| `--iswc-color-brand-600` | Token leído o definido por componente. |
+| `--iswc-color-brand-700` | Token leído o definido por componente. |
+| `--iswc-color-brand-800` | Token leído o definido por componente. |
+| `--iswc-on-brand` | Token leído o definido por componente. |
+| `--iswc-brand-soft` | Token leído o definido por componente. |
+| `--iswc-color-brand-50` | Token leído o definido por componente. |
+| `--iswc-brand-soft-active` | Token leído o definido por componente. |
+| `--iswc-color-brand-100` | Token leído o definido por componente. |
+| `--iswc-brand-text` | Token leído o definido por componente. |
+| `--iswc-success-soft` | Token leído o definido por componente. |
+| `--iswc-success-soft-active` | Token leído o definido por componente. |
+| `--iswc-success-text` | Token leído o definido por componente. |
+| `--iswc-warning-soft` | Token leído o definido por componente. |
+| `--iswc-warning-soft-active` | Token leído o definido por componente. |
+| `--iswc-warning-text` | Token leído o definido por componente. |
+| `--iswc-danger-soft` | Token leído o definido por componente. |
+| `--iswc-danger-soft-active` | Token leído o definido por componente. |
+| `--iswc-danger-text` | Token leído o definido por componente. |
 | `--_button-horizontal-indent-outlined` | Token leído o definido por componente. |
 | `--_button-vertical-indent-outlined` | Token leído o definido por componente. |
 
@@ -214,7 +214,7 @@ Documentación de cabecera preservada desde fuente:
 >  variant   filled | outlined | plain | ghost | soft | text  (default: filled)
 >  hue          number (0-360)  color propio para el highlight cuando está
 >                             [selected] dentro de <is-button-group>. Si no
->                             se define, el grupo usa su --is-accent.
+>                             se define, el grupo usa su --iswc-accent.
 >  disabled     boolean
 >  loading      boolean
 >  pill         boolean
@@ -259,11 +259,11 @@ Documentación de cabecera preservada desde fuente:
 > Color × appearance ortogonales: cada color enlaza roles `--_tone-*` a
 > tokens relativos de is-base; cada variant solo consume esos roles.
 > Tokens de familia X (brand|success|warning|danger|info|error):
->  --is-color-X, --is-color-X-strong/-stronger/-strongest/-pale/-paler
->  --is-X-text, --is-X-soft, --is-X-soft-active (brand → --is-brand-*)
->  --is-button-font-family, --is-button-font-weight
->  --is-button-border-radius, --is-button-border-width
->  --is-button-transition-duration
+>  --iswc-color-X, --iswc-color-X-strong/-stronger/-strongest/-pale/-paler
+>  --iswc-X-text, --iswc-X-soft, --iswc-X-soft-active (brand → --iswc-brand-*)
+>  --iswc-button-font-family, --iswc-button-font-weight
+>  --iswc-button-border-radius, --iswc-button-border-width
+>  --iswc-button-transition-duration
 
 ## Dependencias y componentes relacionados
 

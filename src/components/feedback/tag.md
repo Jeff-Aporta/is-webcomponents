@@ -97,26 +97,26 @@ No expone.
 | Token | Uso |
 | --- | --- |
 | `--_bg` | Token leído o definido por componente. |
-| `--is-control-bg` | Token leído o definido por componente. |
+| `--iswc-control-bg` | Token leído o definido por componente. |
 | `--_border` | Token leído o definido por componente. |
-| `--is-control-border` | Token leído o definido por componente. |
+| `--iswc-control-border` | Token leído o definido por componente. |
 | `--_text` | Token leído o definido por componente. |
-| `--is-control-text` | Token leído o definido por componente. |
-| `--is-font-family` | Token leído o definido por componente. |
-| `--is-focus` | Token leído o definido por componente. |
-| `--is-color-brand-100` | Token leído o definido por componente. |
-| `--is-color-brand-500` | Token leído o definido por componente. |
-| `--is-color-brand-700` | Token leído o definido por componente. |
-| `--is-color-success-100` | Token leído o definido por componente. |
-| `--is-color-success-500` | Token leído o definido por componente. |
-| `--is-color-success-700` | Token leído o definido por componente. |
-| `--is-color-warning-100` | Token leído o definido por componente. |
-| `--is-color-warning-500` | Token leído o definido por componente. |
-| `--is-color-warning-700` | Token leído o definido por componente. |
-| `--is-color-danger-100` | Token leído o definido por componente. |
-| `--is-color-danger-500` | Token leído o definido por componente. |
-| `--is-color-danger-700` | Token leído o definido por componente. |
-| `--is-on-brand` | Token leído o definido por componente. |
+| `--iswc-control-text` | Token leído o definido por componente. |
+| `--iswc-font-family` | Token leído o definido por componente. |
+| `--iswc-focus` | Token leído o definido por componente. |
+| `--iswc-color-brand-100` | Token leído o definido por componente. |
+| `--iswc-color-brand-500` | Token leído o definido por componente. |
+| `--iswc-color-brand-700` | Token leído o definido por componente. |
+| `--iswc-color-success-100` | Token leído o definido por componente. |
+| `--iswc-color-success-500` | Token leído o definido por componente. |
+| `--iswc-color-success-700` | Token leído o definido por componente. |
+| `--iswc-color-warning-100` | Token leído o definido por componente. |
+| `--iswc-color-warning-500` | Token leído o definido por componente. |
+| `--iswc-color-warning-700` | Token leído o definido por componente. |
+| `--iswc-color-danger-100` | Token leído o definido por componente. |
+| `--iswc-color-danger-500` | Token leído o definido por componente. |
+| `--iswc-color-danger-700` | Token leído o definido por componente. |
+| `--iswc-on-brand` | Token leído o definido por componente. |
 
 ### Integración con formularios
 

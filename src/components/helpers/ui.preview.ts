@@ -80,12 +80,12 @@ export async function mount(ctx: PreviewMountContext): Promise<void> {
           .box {
             padding: 0.85rem 1rem;
             border-radius: 8px;
-            border: 1px solid var(--is-border);
-            background: var(--is-bg);
-            color: var(--is-text);
+            border: 1px solid var(--iswc-border);
+            background: var(--iswc-bg);
+            color: var(--iswc-text);
           }
           :host([data-tone="brand"]) .box {
-            border-color: color-mix(in srgb, var(--is-accent) 55%, var(--is-border));
+            border-color: color-mix(in srgb, var(--iswc-accent) 55%, var(--iswc-border));
           }
         `);
         this.#root.append(html`<div class="box"><slot></slot></div>`);

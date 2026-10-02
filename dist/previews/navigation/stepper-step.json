@@ -9,7 +9,7 @@
   "sections": [
     {
       "id": "intro",
-      "title": "<is-stepper-step>",
+      "title": "Uso",
       "lede": "Paso de un <code class=\"code\">&lt;is-stepper&gt;</code>, con su título, descripción y estado.",
       "blocks": [
         {

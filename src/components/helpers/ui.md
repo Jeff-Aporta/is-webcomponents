@@ -89,7 +89,7 @@ No aplica.
 
 ### CSS custom properties
 
-No declara tokens propios; usa `--is-*` del kit en el CSS hermano de la app.
+No declara tokens propios; usa `--iswc-*` del kit en el CSS hermano de la app.
 
 ### Integración con formularios
 

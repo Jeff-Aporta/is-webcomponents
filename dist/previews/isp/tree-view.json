@@ -10,7 +10,7 @@
   "sections": [
     {
       "id": "intro",
-      "title": "<is-tree-view>",
+      "title": "Uso",
       "lede": "Port de <code class=\"code\">TreeRowView</code> (ClientesIS). No es <code class=\"code\">&lt;is-tree&gt;</code>:\n          este sí muta, arrastra y guarda historial. El consumidor pasa <code class=\"code\">list</code> +\n          <code class=\"code\">customs</code> (mapeo <code class=\"code\">iplan</code> ↔ <code class=\"code\">flatPath</code>).",
       "blocks": [
         {

@@ -139,19 +139,19 @@ Propiedades públicas aparecen en tabla anterior; APIs heredadas se verifican en
 
 | Token | Uso |
 | --- | --- |
-| `--is-sans` | Token leído o definido por componente. |
-| `--is-text` | Token leído o definido por componente. |
-| `--is-text-soft` | Token leído o definido por componente. |
-| `--is-text-dim` | Token leído o definido por componente. |
-| `--is-danger-text` | Token leído o definido por componente. |
-| `--is-color-danger-600` | Token leído o definido por componente. |
-| `--is-radio-accent` | Token leído o definido por componente. |
-| `--is-accent` | Token leído o definido por componente. |
-| `--is-color-brand-500` | Token leído o definido por componente. |
-| `--is-control-border` | Token leído o definido por componente. |
-| `--is-color-success-500` | Token leído o definido por componente. |
-| `--is-color-warning-500` | Token leído o definido por componente. |
-| `--is-color-danger-500` | Token leído o definido por componente. |
+| `--iswc-sans` | Token leído o definido por componente. |
+| `--iswc-text` | Token leído o definido por componente. |
+| `--iswc-text-soft` | Token leído o definido por componente. |
+| `--iswc-text-dim` | Token leído o definido por componente. |
+| `--iswc-danger-text` | Token leído o definido por componente. |
+| `--iswc-color-danger-600` | Token leído o definido por componente. |
+| `--iswc-radio-accent` | Token leído o definido por componente. |
+| `--iswc-accent` | Token leído o definido por componente. |
+| `--iswc-color-brand-500` | Token leído o definido por componente. |
+| `--iswc-control-border` | Token leído o definido por componente. |
+| `--iswc-color-success-500` | Token leído o definido por componente. |
+| `--iswc-color-warning-500` | Token leído o definido por componente. |
+| `--iswc-color-danger-500` | Token leído o definido por componente. |
 
 ### Integración con formularios
 

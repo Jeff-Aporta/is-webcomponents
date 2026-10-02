@@ -8,7 +8,7 @@
   "sections": [
     {
       "id": "intro",
-      "title": "<is-er-editor>",
+      "title": "Uso",
       "lede": "Editor visual de entidad-relación. Compartir el resultado se hace con la app de edición, sin reescribir el enlace de entrada.",
       "blocks": [
         {

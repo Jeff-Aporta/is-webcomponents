@@ -4,13 +4,13 @@
   "category": "forms",
   "title": "<is-rte>",
   "titleHtml": true,
-  "styles": ".rte-pair { display: grid; grid-template-columns: 1fr 1fr; gap: 1rem; }\r\n    @media (max-width: 800px) { .rte-pair { grid-template-columns: 1fr; } }\r\n    pre.output {\r\n      font-family: ui-monospace, monospace; font-size: .78rem;\r\n      background: var(--is-bg-elev); border: 1px solid var(--is-border);\r\n      border-radius: var(--is-radius); padding: .65rem .85rem;\r\n      max-height: 12rem; overflow: auto;\r\n      white-space: pre-wrap;\r\n    }",
+  "styles": ".rte-pair { display: grid; grid-template-columns: 1fr 1fr; gap: 1rem; }\r\n    @media (max-width: 800px) { .rte-pair { grid-template-columns: 1fr; } }\r\n    pre.output {\r\n      font-family: ui-monospace, monospace; font-size: .78rem;\r\n      background: var(--iswc-bg-elev); border: 1px solid var(--iswc-border);\r\n      border-radius: var(--iswc-radius); padding: .65rem .85rem;\r\n      max-height: 12rem; overflow: auto;\r\n      white-space: pre-wrap;\r\n    }",
   "storageKey": "docs-is-rte",
   "hasBehavior": true,
   "sections": [
     {
       "id": "intro",
-      "title": "<is-rte>",
+      "title": "Uso",
       "lede": "Editor de texto enriquecido mínimo sobre <code>contentEditable</code>. Toolbar configurable; salida en HTML.",
       "blocks": []
     },

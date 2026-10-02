@@ -3,7 +3,7 @@
  * src/components/_shared/ (sin ocultar ninguno). Lo consume el preview
  * «Ecosistema JS».
  *
- * Uso: node scripts/gen-shared-index.ts
+ * Uso: deno run -A --no-check scripts/gen-shared-index.ts
  */
 import fs from 'node:fs';
 import path from 'node:path';
@@ -60,7 +60,7 @@ console.log(`shared-modules.json: ${modules.length} módulos → ${path.relative
 // bundlearse resuelve a `dist/previews/data/`. Sin esta copia la página
 // ecosystem recibe un 404 y pinta el fallback "No se pudo cargar
 // shared-modules.json" en vez del catálogo. Se escribe aquí (y no en
-// bundle-scripts.mjs) porque `npm run build` corre DESPUÉS de `bundle`:
+// bundle-scripts.mjs) porque `deno task build` corre DESPUÉS de `bundle`:
 // copiar en bundle dejaría en dist/ la versión del build anterior.
 const distDir = path.join(root, 'dist/previews/data');
 const distFile = path.join(distDir, 'shared-modules.json');

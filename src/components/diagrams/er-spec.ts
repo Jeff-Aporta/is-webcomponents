@@ -3,6 +3,7 @@ import { makeCostGrid, blockRect, applyRectCost, snapDiagramGrid, snapPointAwayF
 import { routeOrthogonal, pixelToGrid, gridPathToSvg, buildOrthogonalPath } from '../_shared/diagram-astar.js';
 import type { ForbiddenRegion } from '../_shared/diagram-astar.js';
 import { resolveTkHue } from '../_shared/tk-hue.js';
+import { countIconTokens, stripIconTokensPlain } from '../_shared/tk-icon-inline.js';
 import { applyEdgeActorLayout } from '../_shared/diagram-edge-actors.js';
 import { assignEdgeHues } from '../_shared/diagram-edge-style.js';
 import { wrapLabel } from './component-spec.js';
@@ -281,10 +282,11 @@ export function resolveErSpec(payload: unknown): ErSpec | null {
 /* ───────────────────────── tamaño de caja ───────────────────────── */
 
 function entityWidth(entity: ErSpecEntity): number {
-  let maxChars = entity.name.length + 4;
+  const chars = (text: string) => stripIconTokensPlain(text).length + countIconTokens(text) * 2;
+  let maxChars = chars(entity.name) + 4;
   for (const a of entity.attributes) {
     const keyW = a.key ? 3 : 0;
-    maxChars = Math.max(maxChars, keyW + a.name.length + 2 + (a.type?.length ?? 0));
+    maxChars = Math.max(maxChars, keyW + chars(a.name) + 2 + (a.type?.length ?? 0));
   }
   const est = Math.ceil(maxChars * 6.4) + PAD_X * 2;
   return snapDiagramGrid(Math.min(MAX_W, Math.max(MIN_W, est)));

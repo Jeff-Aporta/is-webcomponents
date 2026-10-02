@@ -5,12 +5,12 @@
   "title": "<is-fab>",
   "titleHtml": true,
   "description": "Documentación y demos de is-fab (Floating Action Button) de InSoft.",
-  "styles": ".fab-stage {\r\n      /* `position: relative` NO contiene hijos `position: fixed` — solo lo\r\n         hacen transform/filter/contain/perspective. Sin esto el FAB del\r\n         ejemplo se ancla al viewport y se sale de la caja del demo. */\r\n      position: relative;\r\n      transform: translateZ(0);\r\n      height: 360px;\r\n      border: 1px dashed var(--is-border, #2a2f3a);\r\n      border-radius: 0.5rem;\r\n      background: var(--is-bg, #0f1117);\r\n      overflow: hidden;\r\n    }\r\n    /* Los demos se organizan con flex: alineados por linea base, con hueco\r\n       uniforme y envolviendo en pantallas estrechas. */\r\n    .fab-row {\r\n      display: flex;\r\n      flex-wrap: wrap;\r\n      align-items: flex-end;\r\n      gap: 1.5rem;\r\n    }\r\n    .fab-row__item {\r\n      display: inline-flex;\r\n      flex-direction: column;\r\n      align-items: center;\r\n      gap: 0.5rem;\r\n    }",
+  "styles": ".fab-stage {\r\n      /* `position: relative` NO contiene hijos `position: fixed` — solo lo\r\n         hacen transform/filter/contain/perspective. Sin esto el FAB del\r\n         ejemplo se ancla al viewport y se sale de la caja del demo. */\r\n      position: relative;\r\n      transform: translateZ(0);\r\n      height: 360px;\r\n      border: 1px dashed var(--iswc-border, #2a2f3a);\r\n      border-radius: 0.5rem;\r\n      background: var(--iswc-bg, #0f1117);\r\n      overflow: hidden;\r\n    }\r\n    /* Los demos se organizan con flex: alineados por linea base, con hueco\r\n       uniforme y envolviendo en pantallas estrechas. */\r\n    .fab-row {\r\n      display: flex;\r\n      flex-wrap: wrap;\r\n      align-items: flex-end;\r\n      gap: 1.5rem;\r\n    }\r\n    .fab-row__item {\r\n      display: inline-flex;\r\n      flex-direction: column;\r\n      align-items: center;\r\n      gap: 0.5rem;\r\n    }",
   "storageKey": "docs-is-fab",
   "sections": [
     {
       "id": "intro",
-      "title": "<is-fab>",
+      "title": "Uso",
       "lede": "Floating Action Button: botón circular principal que se posiciona de\r\n          forma fija en la ventana. Soporta variantes, tamaños, etiquetas\r\n          extendidas, pulso de atención y posicionamiento en cualquier esquina.",
       "blocks": [
         {

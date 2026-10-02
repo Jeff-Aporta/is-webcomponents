@@ -81,8 +81,8 @@ No expone.
 | --- | --- |
 | `--color` | Token leído o definido por componente. |
 | `--sheen-color` | Token leído o definido por componente. |
-| `--is-control-bg` | Token leído o definido por componente. |
-| `--is-text` | Token leído o definido por componente. |
+| `--iswc-control-bg` | Token leído o definido por componente. |
+| `--iswc-text` | Token leído o definido por componente. |
 
 ### Integración con formularios
 

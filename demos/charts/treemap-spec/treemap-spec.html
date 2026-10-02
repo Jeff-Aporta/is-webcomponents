@@ -18,7 +18,7 @@
   is-treemap:not(:defined) { visibility: hidden; }
 </style>
 <script type="module">
-  const lib = await import('../../../dist/cdn/charts/treemap-spec.min.js?h=ei9j83');
+  const lib = await import('../../../dist/cdn/charts/treemap-spec.min.js?h=9kqrmt');
   const { resolveTreemapSpec, computeTreemapLayout } = lib;
   document.getElementById('exports').textContent = JSON.stringify(Object.keys(lib).sort(), null, 2);
 
@@ -48,7 +48,7 @@
   }, null, 2);
 
   // Demo en vivo con <is-treemap>
-  await import('../../../dist/cdn/data-viz/treemap.min.js?h=cntzly');
+  await import('../../../dist/cdn/data-viz/treemap.min.js?h=eu27t1');
   await customElements.whenDefined('is-treemap');
 
   const tm = document.createElement('is-treemap');

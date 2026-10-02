@@ -115,13 +115,13 @@ No expone custom states.
 
 | Token | Uso |
 | --- | --- |
-| `--is-bg-elev` | Fondo de las tarjetas. |
-| `--is-border` | Borde de tarjetas y aristas. |
-| `--is-radius` | Radio de las tarjetas. |
-| `--is-text` | Nombre del nodo. |
-| `--is-text-soft` | Cargo del nodo. |
-| `--is-accent` | Realce del nodo seleccionado. |
-| `--is-on-accent` | Contenido sobre el acento. |
+| `--iswc-bg-elev` | Fondo de las tarjetas. |
+| `--iswc-border` | Borde de tarjetas y aristas. |
+| `--iswc-radius` | Radio de las tarjetas. |
+| `--iswc-text` | Nombre del nodo. |
+| `--iswc-text-soft` | Cargo del nodo. |
+| `--iswc-accent` | Realce del nodo seleccionado. |
+| `--iswc-on-accent` | Contenido sobre el acento. |
 
 ### Integración con formularios
 

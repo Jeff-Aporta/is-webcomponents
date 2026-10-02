@@ -90,12 +90,12 @@ No expone.
 | `--track-width` | Token leído o definido por componente. |
 | `--indicator-width` | Token leído o definido por componente. |
 | `--track-color` | Token leído o definido por componente. |
-| `--is-control-border` | Token leído o definido por componente. |
+| `--iswc-control-border` | Token leído o definido por componente. |
 | `--indicator-color` | Token leído o definido por componente. |
-| `--is-accent` | Token leído o definido por componente. |
-| `--is-color-brand-500` | Token leído o definido por componente. |
-| `--is-font-family` | Token leído o definido por componente. |
-| `--is-text` | Token leído o definido por componente. |
+| `--iswc-accent` | Token leído o definido por componente. |
+| `--iswc-color-brand-500` | Token leído o definido por componente. |
+| `--iswc-font-family` | Token leído o definido por componente. |
+| `--iswc-text` | Token leído o definido por componente. |
 
 ### Integración con formularios
 

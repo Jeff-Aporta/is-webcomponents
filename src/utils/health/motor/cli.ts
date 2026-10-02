@@ -1,9 +1,10 @@
-#!/usr/bin/env node
+#!/usr/bin/env -S deno run -A --no-check
 /**
  * CLI del motor auditor (iswc-audit).
  *
  * Uso:
- *   node --import ./scripts/ts-resolve-hook.ts src/utils/health/motor/cli.ts [opciones]
+ *   deno task audit
+ *   deno run -A --no-check src/utils/health/motor/cli.ts [opciones]
  *
  * Opciones (todas con --):
  *   --solo <tags>         Filtra por tag (coma-separado). Vacío = todos.
@@ -95,7 +96,7 @@ function mostrarAyuda(): void {
   console.log(`iswc-audit v${MOTOR_VERSION} — auditor del kit iswc (is-webcomponents).`);
   console.log('');
   console.log('Uso:');
-  console.log('  node --import ./scripts/ts-resolve-hook.ts src/utils/health/motor/cli.ts [opciones]');
+  console.log('  deno run -A --no-check src/utils/health/motor/cli.ts [opciones]');
   console.log('');
   console.log('Opciones:');
   for (const s of ESPECES) {
@@ -105,13 +106,13 @@ function mostrarAyuda(): void {
   console.log('');
   console.log('Ejemplos:');
   console.log('  # Auditoría completa del catálogo (sin browser)');
-  console.log('  node --import ./scripts/ts-resolve-hook.ts src/utils/health/motor/cli.ts --solo-json');
+  console.log('  deno run -A --no-check src/utils/health/motor/cli.ts --solo-json');
   console.log('');
   console.log('  # Auditoría de un tag puntual con E2E');
-  console.log('  node --import ./scripts/ts-resolve-hook.ts src/utils/health/motor/cli.ts --solo is-button --puerto 8391');
+  console.log('  deno run -A --no-check src/utils/health/motor/cli.ts --solo is-button --puerto 8391');
   console.log('');
   console.log('  # Solo la categoría de charts');
-  console.log('  node --import ./scripts/ts-resolve-hook.ts src/utils/health/motor/cli.ts --categoria data-viz --solo-json');
+  console.log('  deno run -A --no-check src/utils/health/motor/cli.ts --categoria data-viz --solo-json');
   console.log('');
   console.log('Exit codes:');
   console.log('  0 = sin hallazgos fatales/errores');

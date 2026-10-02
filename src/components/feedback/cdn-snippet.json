@@ -8,12 +8,12 @@
   "sections": [
     {
       "id": "intro",
-      "title": "<is-cdn-snippet>",
-      "lede": "Panel copy-paste vía <code>loader.min.js</code>: un\r\n          <code>&lt;script type=\"module\" src&gt;</code> + un script que hace\r\n          <code>loadCSS*</code> y <code>load(tag\\|categoría\\|all)</code>. Radio para elegir el alcance.",
+      "title": "Uso",
+      "lede": "Panel copy-paste via <code>loader.min.js</code>: un script del loader y otro que hace <code>loadCSS*</code> y <code>load(tag)</code>. Cada componente se carga solo.",
       "blocks": [
         {
           "kind": "demo",
-          "html": "<is-cdn-snippet tag=\"is-button\" category=\"actions\"></is-cdn-snippet>",
+          "html": "<is-cdn-snippet tag=\"is-button\"></is-cdn-snippet>",
           "controls": [
             {
               "control": "select",
@@ -24,17 +24,6 @@
                 "is-popconfirm",
                 "is-chart",
                 "is-textarea"
-              ]
-            },
-            {
-              "control": "select",
-              "prop": "attr:category",
-              "label": "category",
-              "options": [
-                "actions",
-                "feedback",
-                "data",
-                "forms"
               ]
             },
             {
@@ -232,11 +221,7 @@
           "rows": [
             [
               "<code>tag</code>",
-              "string — p. ej. <code>\"is-button\"</code> (obligatorio para single + category)"
-            ],
-            [
-              "<code>category</code>",
-              "string — p. ej. <code>\"actions\"</code> (categoría del manifest)"
+              "string — p. ej. <code>\"is-button\"</code>. El snippet siempre hace load de ese tag."
             ],
             [
               "<code>base</code>",

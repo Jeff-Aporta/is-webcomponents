@@ -5,12 +5,12 @@
   "title": "<is-speed-dial-action>",
   "titleHtml": true,
   "description": "Documentación y demos de is-speed-dial-action de InSoft.",
-  "styles": ".sd-stage { position:relative; transform:translateZ(0); height:320px;\r\n      border:1px dashed var(--is-border); border-radius:.6rem; }",
+  "styles": ".sd-stage { position:relative; transform:translateZ(0); height:320px;\r\n      border:1px dashed var(--iswc-border); border-radius:.6rem; }",
   "storageKey": "docs-is-speed-dial-action",
   "sections": [
     {
       "id": "intro",
-      "title": "<is-speed-dial-action>",
+      "title": "Uso",
       "lede": "Cada acción que despliega un <code class=\"code\">&lt;is-speed-dial&gt;</code>, con su icono y su etiqueta.",
       "blocks": [
         {

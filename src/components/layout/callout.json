@@ -9,7 +9,7 @@
   "sections": [
     {
       "id": "intro",
-      "title": "<is-callout>",
+      "title": "Uso",
       "lede": "Mensaje en línea con borde y fondo suaves. Pensado para tips, info, warnings y\r\n          errores que el usuario no debe pasar por alto. Cinco variantes y cinco apariencias,\r\n          con icono automático según la variante (sobrescribible vía <code class=\"code\">icon</code>\r\n          o slot <code class=\"code\">icon</code>).",
       "blocks": [
         {
@@ -245,7 +245,7 @@
           "rows": [
             [
               "<code>--spacing</code>",
-              "<code>var(--is-space-l, 1rem)</code>",
+              "<code>var(--iswc-space-l, 1rem)</code>",
               "Padding/gap interno."
             ],
             [

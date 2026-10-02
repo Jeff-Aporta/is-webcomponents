@@ -5,16 +5,16 @@
   height: 100%;
   min-height: 0;
   font-size: 0.875rem;
-  color: var(--is-text);
-  --trvwr-hvr-dflt: color-mix(in srgb, var(--is-text) 8%, transparent);
-  --trvwr-ctv-dflt: color-mix(in srgb, var(--is-text) 14%, transparent);
-  --trvwr-hghlght-bg: color-mix(in srgb, var(--is-accent) 12%, transparent);
-  --trvwr-hghlght-hvr-bg: color-mix(in srgb, var(--is-accent) 20%, transparent);
-  --trvwr-swp-bg: color-mix(in srgb, var(--is-color-success, #2e7d32) 30%, transparent);
-  --trvwr-swp-err-bg: color-mix(in srgb, var(--is-color-danger, #e53935) 30%, transparent);
-  --trvwr-fcs-rng: color-mix(in srgb, var(--is-accent) 55%, transparent);
-  --trvwr-drp-ndctr-bg: color-mix(in srgb, var(--is-accent) 20%, transparent);
-  --trvwr-sel-brd: var(--is-border);
+  color: var(--iswc-text);
+  --trvwr-hvr-dflt: color-mix(in srgb, var(--iswc-text) 8%, transparent);
+  --trvwr-ctv-dflt: color-mix(in srgb, var(--iswc-text) 14%, transparent);
+  --trvwr-hghlght-bg: color-mix(in srgb, var(--iswc-accent) 12%, transparent);
+  --trvwr-hghlght-hvr-bg: color-mix(in srgb, var(--iswc-accent) 20%, transparent);
+  --trvwr-swp-bg: color-mix(in srgb, var(--iswc-color-success, #2e7d32) 30%, transparent);
+  --trvwr-swp-err-bg: color-mix(in srgb, var(--iswc-color-danger, #e53935) 30%, transparent);
+  --trvwr-fcs-rng: color-mix(in srgb, var(--iswc-accent) 55%, transparent);
+  --trvwr-drp-ndctr-bg: color-mix(in srgb, var(--iswc-accent) 20%, transparent);
+  --trvwr-sel-brd: var(--iswc-border);
 }
 
 :host([disabled]) { opacity: 0.6; pointer-events: none; }
@@ -155,12 +155,12 @@
   left: 0.35rem;
   right: 0.35rem;
   height: 2px;
-  background: var(--is-accent, var(--is-primary));
+  background: var(--iswc-accent, var(--iswc-primary));
   border: none;
   border-radius: 1px;
   pointer-events: none;
   z-index: 2;
-  box-shadow: -5px 0 0 3px var(--is-accent, var(--is-primary));
+  box-shadow: -5px 0 0 3px var(--iswc-accent, var(--iswc-primary));
 }
 .trvwr-itm-sum--drg-bf::before,
 .trvwr-itm-sum--drg-forbidden-bf::before { top: -1px; }
@@ -168,20 +168,20 @@
 .trvwr-itm-sum--drg-forbidden-aftr::after { bottom: -1px; }
 .trvwr-itm-sum--drg-forbidden-bf::before,
 .trvwr-itm-sum--drg-forbidden-aftr::after {
-  background: var(--is-color-danger, #e53935);
-  box-shadow: -5px 0 0 3px var(--is-color-danger, #e53935);
+  background: var(--iswc-color-danger, #e53935);
+  box-shadow: -5px 0 0 3px var(--iswc-color-danger, #e53935);
 }
 .trvwr-itm-sum--drg-into {
   border-radius: 0.25rem;
-  outline: 2px dashed var(--is-accent, var(--is-primary));
+  outline: 2px dashed var(--iswc-accent, var(--iswc-primary));
   outline-offset: -2px;
   background: var(--trvwr-drp-ndctr-bg);
 }
 .trvwr-itm-sum--drg-forbidden-into {
   border-radius: 0.25rem;
-  outline: 2px dashed var(--is-color-danger, #e53935);
+  outline: 2px dashed var(--iswc-color-danger, #e53935);
   outline-offset: -2px;
-  background: color-mix(in srgb, var(--is-color-danger, #e53935) 18%, transparent);
+  background: color-mix(in srgb, var(--iswc-color-danger, #e53935) 18%, transparent);
 }
 
 .trvwr-sum-row {
@@ -202,7 +202,7 @@
   width: 1.25em;
   height: 100%;
   cursor: grab;
-  color: var(--is-text);
+  color: var(--iswc-text);
   opacity: 0.45;
 }
 .trvwr-drag-handle:active { cursor: grabbing; }
@@ -218,7 +218,7 @@
   align-items: center;
   gap: 0.45rem;
   cursor: pointer;
-  color: var(--is-text);
+  color: var(--iswc-text);
 }
 .trvwr-chevron { transition: transform 150ms; }
 
@@ -242,7 +242,7 @@
 .trvwr-itm-helper {
   flex: 0 0 auto;
   margin-left: 0.5rem;
-  color: var(--is-text-muted);
+  color: var(--iswc-text-muted);
 }
 
 is-float-card {

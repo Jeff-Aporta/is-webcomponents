@@ -2,22 +2,22 @@
 :host {
   display: block;
   font: inherit;
-  color: var(--is-text);
+  color: var(--iswc-text);
   --_row-h: 4rem;
 }
 .root {
   display: flex; flex-direction: column;
-  border: 1px solid var(--is-border);
-  border-radius: var(--is-radius);
-  background: var(--is-bg-elev);
+  border: 1px solid var(--iswc-border);
+  border-radius: var(--iswc-radius);
+  background: var(--iswc-bg-elev);
   overflow: hidden;
 }
 .toolbar {
   display: flex; align-items: center;
   gap: .35rem;
   padding: .5rem .75rem;
-  border-bottom: 1px solid var(--is-border-soft);
-  background: color-mix(in srgb, var(--is-bg-elev) 92%, transparent);
+  border-bottom: 1px solid var(--iswc-border-soft);
+  background: color-mix(in srgb, var(--iswc-bg-elev) 92%, transparent);
 }
 /* Botones de la barra: <is-button>. La apariencia (incluida la del botón de
    vista activo) se pide por atributos `variant`/`color`; pintar fondo o borde
@@ -41,14 +41,14 @@
   font-size: .72rem;
   letter-spacing: .04em;
   text-transform: uppercase;
-  color: var(--is-text-dim);
+  color: var(--iswc-text-dim);
   text-align: right;
-  border-bottom: 1px solid var(--is-border-soft);
+  border-bottom: 1px solid var(--iswc-border-soft);
 }
 .month .day {
   text-align: left;
-  border-right: 1px solid var(--is-border-soft);
-  border-bottom: 1px solid var(--is-border-soft);
+  border-right: 1px solid var(--iswc-border-soft);
+  border-bottom: 1px solid var(--iswc-border-soft);
   padding: .25rem .35rem;
   display: flex;
   flex-direction: column;
@@ -59,8 +59,8 @@
   color: inherit;
   cursor: pointer;
 }
-.month .day.out { background: color-mix(in srgb, var(--is-text) 4%, transparent); color: var(--is-text-soft); }
-.month .day.today { background: color-mix(in srgb, var(--is-accent) 14%, transparent); }
+.month .day.out { background: color-mix(in srgb, var(--iswc-text) 4%, transparent); color: var(--iswc-text-soft); }
+.month .day.today { background: color-mix(in srgb, var(--iswc-accent) 14%, transparent); }
 .month .day .num { font-weight: 600; font-size: .78rem; }
 .month .events { list-style: none; margin: 0; padding: 0; display: flex; flex-direction: column; gap: 1px; }
 .month .ev {
@@ -68,40 +68,40 @@
   border-radius: 4px;
   font-size: .7rem;
   white-space: nowrap; overflow: hidden; text-overflow: ellipsis;
-  background: var(--c, var(--is-accent));
+  background: var(--c, var(--iswc-accent));
   color: white;
   border: 0;
 }
 .month .ev:hover { opacity: .85; }
 
-.grid-week { display: grid; grid-template-columns: 4rem repeat(var(--cc, 7), 1fr); border-bottom: 1px solid var(--is-border-soft); }
+.grid-week { display: grid; grid-template-columns: 4rem repeat(var(--cc, 7), 1fr); border-bottom: 1px solid var(--iswc-border-soft); }
 .grid-week .col-head {
   padding: .35rem .45rem;
   font-size: .78rem;
-  color: var(--is-text-soft);
+  color: var(--iswc-text-soft);
   text-transform: capitalize;
-  border-right: 1px solid var(--is-border-soft);
+  border-right: 1px solid var(--iswc-border-soft);
   font-weight: 500;
 }
-.grid-week .axis { background: color-mix(in srgb, var(--is-bg-elev) 92%, transparent); }
+.grid-week .axis { background: color-mix(in srgb, var(--iswc-bg-elev) 92%, transparent); }
 
 .hours {
   display: grid;
   grid-template-columns: 4rem repeat(var(--cc, 7), 1fr);
   position: relative;
 }
-.hours .axis { border-right: 1px solid var(--is-border-soft); }
+.hours .axis { border-right: 1px solid var(--iswc-border-soft); }
 .hours .axis .hour {
   height: var(--_row-h);
   padding: 2px 6px;
   font-size: .7rem;
-  color: var(--is-text-soft);
-  border-top: 1px solid var(--is-border-soft);
+  color: var(--iswc-text-soft);
+  border-top: 1px solid var(--iswc-border-soft);
   font-variant-numeric: tabular-nums;
 }
 .day-col {
   position: relative;
-  border-right: 1px solid var(--is-border-soft);
+  border-right: 1px solid var(--iswc-border-soft);
   min-height: calc(var(--_row-h) * 13);
 }
 .cell-hour {
@@ -112,11 +112,11 @@
   height: var(--_row-h);
 }
 .cell-hour[data-hour="7"] { top: 0; }
-.cell-hour:hover { background: color-mix(in srgb, var(--is-accent) 6%, transparent); }
+.cell-hour:hover { background: color-mix(in srgb, var(--iswc-accent) 6%, transparent); }
 .ev-block {
   position: absolute;
   left: 2px; right: 2px;
-  background: var(--c, var(--is-accent));
+  background: var(--c, var(--iswc-accent));
   color: white;
   border-radius: 6px;
   padding: 4px 6px;

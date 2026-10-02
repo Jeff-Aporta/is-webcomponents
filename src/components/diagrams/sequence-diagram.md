@@ -98,9 +98,9 @@ No expone.
 
 | Token | Uso |
 | --- | --- |
-| `--is-sans` | Token leído o definido por componente. |
-| `--is-border` | Token leído o definido por componente. |
-| `--is-text-soft` | Token leído o definido por componente. |
+| `--iswc-sans` | Token leído o definido por componente. |
+| `--iswc-border` | Token leído o definido por componente. |
+| `--iswc-text-soft` | Token leído o definido por componente. |
 
 ### Integración con formularios
 

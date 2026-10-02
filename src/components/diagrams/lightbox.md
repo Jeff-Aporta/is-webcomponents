@@ -128,10 +128,10 @@ No expone.
 | `--lb-toolbar-bg` | Token leído o definido por componente. |
 | `--lb-backdrop` | Token leído o definido por componente. |
 | `--has-user-toolbar` | Token leído o definido por componente. |
-| `--is-font-family` | Token leído o definido por componente. |
-| `--is-radius` | Token leído o definido por componente. |
-| `--is-color-brand-500` | Token leído o definido por componente. |
-| `--is-icon-size` | Token leído o definido por componente. |
+| `--iswc-font-family` | Token leído o definido por componente. |
+| `--iswc-radius` | Token leído o definido por componente. |
+| `--iswc-color-brand-500` | Token leído o definido por componente. |
+| `--iswc-icon-size` | Token leído o definido por componente. |
 
 ### Integración con formularios
 

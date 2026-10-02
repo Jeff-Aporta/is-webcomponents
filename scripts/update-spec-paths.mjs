@@ -1,4 +1,4 @@
-#!/usr/bin/env node
+#!/usr/bin/env -S deno run -A --no-check
 /**
  * scripts/update-spec-paths.mjs
  *
@@ -8,7 +8,7 @@
  *
  * Mapeo de tests/ → src/utils/health/<sub>/ derivado del estado real del repo.
  *
- * Uso: node scripts/update-spec-paths.mjs [--dry-run]
+ * Uso: deno run -A --no-check scripts/update-spec-paths.mjs [--dry-run]
  */
 import { readdirSync, readFileSync, writeFileSync, existsSync } from 'node:fs';
 import { join } from 'node:path';

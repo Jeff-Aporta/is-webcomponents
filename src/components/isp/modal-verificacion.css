@@ -2,9 +2,9 @@
    <is-dialog> interno (y `_shared/modal-chrome.css` a través de él). Aquí sólo
    queda lo propio del contenido. */
 :host {
-  --is-modal-verificacion-accent: var(--is-color-info, #339af0);
+  --iswc-modal-verificacion-accent: var(--iswc-color-info, #339af0);
   display: contents;
-  font-family: var(--is-sans, inherit);
+  font-family: var(--iswc-sans, inherit);
 
   .dlg {
     --width: 30em;
@@ -16,7 +16,7 @@
     gap: 0.4em;
     font-size: 1em;
     font-weight: 600;
-    color: var(--is-modal-verificacion-accent);
+    color: var(--iswc-modal-verificacion-accent);
   }
 
   .results-title {
@@ -41,7 +41,7 @@
     .msg-hr {
       margin: 0;
       border: none;
-      border-block-start: 1px solid var(--is-border, #2a3038);
+      border-block-start: 1px solid var(--iswc-border, #2a3038);
     }
 
     .msg-block:last-child .msg-hr {
@@ -54,7 +54,7 @@
     gap: 1.25em;
     margin-block-start: 0.75em;
     padding-block: 0.25em;
-    border-block: 1px solid var(--is-border, #2a3038);
+    border-block: 1px solid var(--iswc-border, #2a3038);
 
     .stat {
       display: flex;

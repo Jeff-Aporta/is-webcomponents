@@ -64,13 +64,13 @@ import { hasSlotted } from '../_shared/dom-utils.js';
   class IsSwitch extends ElementBase {
     /** Personalización por atributo (ver `core/attrs.ts`). */
     static styleAttrs = {
-    height: '--is-switch-height',
-    width: '--is-switch-width',
-    bg: { prop: '--is-switch-bg', onlyColorValues: true },
-    accent: { prop: '--is-switch-accent', onlyColorValues: true },
-    'thumb-color': { prop: '--is-switch-thumb', onlyColorValues: true },
-    'focus-color': { prop: '--is-switch-focus', onlyColorValues: true },
-    halo: '--is-switch-halo',
+    height: '--iswc-switch-height',
+    width: '--iswc-switch-width',
+    bg: { prop: '--iswc-switch-bg', onlyColorValues: true },
+    accent: { prop: '--iswc-switch-accent', onlyColorValues: true },
+    'thumb-color': { prop: '--iswc-switch-thumb', onlyColorValues: true },
+    'focus-color': { prop: '--iswc-switch-focus', onlyColorValues: true },
+    halo: '--iswc-switch-halo',
     };
 
     static formAssociated = true;

@@ -8,7 +8,7 @@
   "sections": [
     {
       "id": "intro",
-      "title": "<is-timeline>",
+      "title": "Uso",
       "lede": "Línea de tiempo de hitos en SVG, sin Mermaid. Declaras eventos con\r\n          fecha; el componente los reparte a lo largo de un eje y separa los\r\n          que caen demasiado cerca en el tiempo para que no se encimen.",
       "blocks": [
         {

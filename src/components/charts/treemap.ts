@@ -153,7 +153,7 @@ class IsTreemap extends HTMLElement {
     // tesela — igual que pie/doughnut usan `--chart-surface` como separador
     // en vez del propio color de cada porción.
     const cs = getComputedStyle(this);
-    theme.surface = cs.getPropertyValue('--is-bg-elev').trim() || (dark ? '#1c2128' : '#ffffff');
+    theme.surface = cs.getPropertyValue('--iswc-bg-elev').trim() || (dark ? '#1c2128' : '#ffffff');
     theme.headerTint = dark ? 'rgba(0,0,0,.22)' : 'rgba(0,0,0,.10)';
 
     const availW = this.#wrap.clientWidth || 0;

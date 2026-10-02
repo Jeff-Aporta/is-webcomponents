@@ -10,7 +10,7 @@
   "sections": [
     {
       "id": "intro",
-      "title": "<is-modal-verificacion>",
+      "title": "Uso",
       "lede": "Al abrirse ejecuta <code class=\"code\">controller.actVerificar(record)</code>\r\n          y pinta los mensajes devueltos coloreados por severidad, con contadores\r\n          de infos, warnings y errores.",
       "blocks": [
         {

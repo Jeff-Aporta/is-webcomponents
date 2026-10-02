@@ -28,7 +28,7 @@ import { setStringAttr } from '../_shared/reflect.js';
  * Eventos
  *   is-input, is-change, is-complete (bubbles + composed)
  *
- * Token CSS: --is-field-width
+ * Token CSS: --iswc-field-width
  */
 (() => {
   const OBSERVED: string[] = [

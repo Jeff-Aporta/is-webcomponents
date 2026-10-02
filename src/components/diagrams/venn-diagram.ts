@@ -28,7 +28,7 @@ interface VennLayoutRegion {
 import { sequenceThemeDark, sequenceThemeLight } from './sequence-spec.js';
 import { tkHueToHex } from '../_shared/tk-hue.js';
 import type { DiagramTheme } from './diagram-types.js';
-import { inlineMdWeb } from '../_shared/tk-inline-md.js';
+import { inlineMdWeb, applySvgTextContent } from '../_shared/tk-inline-md.js';
 import { wrapText, buildTspans } from '../_shared/diagram-text-wrap.js';
 import type { TSpanSpec } from '../_shared/diagram-text-wrap.js';
 import { registerDiagramKind } from './diagram-kinds.js';
@@ -158,8 +158,8 @@ class IsVennDiagram extends DiagramElementBase {
         'font-size': '11', 'font-weight': '600', 'font-family': 'Tahoma,Arial,sans-serif',
         class: 'vn-set__label',
       });
-      t.innerHTML = inlineMdWeb(c.label);
       g.appendChild(t);
+      applySvgTextContent(t, c.label);
 
       this.svg.appendChild(g);
       this.#circleNodes.set(c.id, { c, g: g as SVGGElement });
@@ -185,7 +185,6 @@ class IsVennDiagram extends DiagramElementBase {
           t.setAttribute('y', String(r.y));
           t.setAttribute('text-anchor', 'middle');
           t.setAttribute('dominant-baseline', 'middle');
-          t.innerHTML = inlineMdWeb(text);
         } else {
           // `overflow` no está declarado en VennLayoutRegion; cast para leer.
           const rawOverflow = (r as { overflow?: string }).overflow;
@@ -216,6 +215,7 @@ class IsVennDiagram extends DiagramElementBase {
           }
         }
         g.appendChild(t);
+        if (vnHasMd) applySvgTextContent(t, text);
       }
       if (r.value != null) {
         const v = svgEl('text', {

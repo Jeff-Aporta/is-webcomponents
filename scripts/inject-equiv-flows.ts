@@ -2,7 +2,7 @@
  * Inyecta equivFlow (+ note) en el primer demo de la sección intro
  * de previews que aún no lo tienen. Idempotente.
  *
- * Uso: node scripts/inject-equiv-flows.ts
+ * Uso: deno run -A --no-check scripts/inject-equiv-flows.ts
  */
 import { readFileSync, writeFileSync } from 'node:fs';
 import { join, dirname } from 'node:path';

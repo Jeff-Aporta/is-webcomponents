@@ -9,7 +9,7 @@
   "sections": [
     {
       "id": "intro",
-      "title": "<is-details>",
+      "title": "Uso",
       "lede": "Disclosure colapsable: muestra un resumen y, al expandir, el contenido. Equivalente\r\n          accesible al <code class=\"code\">&lt;details&gt;</code> nativo, con apariencias,\r\n          iconos, animaciones y comportamiento de accordion opcional.",
       "blocks": [
         {
@@ -104,7 +104,7 @@
     },
     {
       "id": "rich-summary",
-      "title": "Summary rico (slot)",
+      "title": "Resumen con contenido",
       "lede": "En lugar del atributo <code class=\"code\">summary</code>, usa el slot\r\n          <code class=\"code\">summary</code> para contenido rico (iconos, badges, etc.).",
       "blocks": [
         {
@@ -119,7 +119,7 @@
     },
     {
       "id": "accordion",
-      "title": "Accordion (varios <code>name</code>)",
+      "title": "Acordeón",
       "titleHtml": true,
       "lede": "Cuando varios <code class=\"code\">is-details</code> comparten el atributo\r\n          <code class=\"code\">name</code>, abrir uno cierra los demás.",
       "blocks": [
@@ -368,7 +368,7 @@
           "rows": [
             [
               "<code>--spacing</code>",
-              "<code>var(--is-space-m)</code>",
+              "<code>var(--iswc-space-m)</code>",
               "Padding del header / contenido."
             ],
             [

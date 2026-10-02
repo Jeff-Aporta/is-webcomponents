@@ -50,10 +50,10 @@ import '../actions/button.js';
   class IsConfirmModal extends ElementBase {
     /** Personalización por atributo (ver `core/attrs.ts`). */
     static styleAttrs = {
-    bg: { prop: '--is-confirm-modal-bg', onlyColorValues: true },
-    'text-color': { prop: '--is-confirm-modal-text', onlyColorValues: true },
-    'border-color': { prop: '--is-confirm-modal-border', onlyColorValues: true },
-    accent: { prop: '--is-confirm-modal-accent', onlyColorValues: true },
+    bg: { prop: '--iswc-confirm-modal-bg', onlyColorValues: true },
+    'text-color': { prop: '--iswc-confirm-modal-text', onlyColorValues: true },
+    'border-color': { prop: '--iswc-confirm-modal-border', onlyColorValues: true },
+    accent: { prop: '--iswc-confirm-modal-accent', onlyColorValues: true },
     };
 
     static get observedAttributes(): string[] { return [...OBSERVED, 'bg', 'text-color', 'border-color', 'accent']; }

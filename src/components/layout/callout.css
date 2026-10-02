@@ -5,25 +5,25 @@
  */
 
 :host {
-  --is-callout-bg: var(--is-bg-elev, #1c2128);
-  --is-callout-border: var(--is-border, #2a3038);
-  --is-callout-text: var(--is-text, #e6e8eb);
-  --is-callout-accent: var(--is-color-brand, #339af0);
+  --iswc-callout-bg: var(--iswc-bg-elev, #1c2128);
+  --iswc-callout-border: var(--iswc-border, #2a3038);
+  --iswc-callout-text: var(--iswc-text, #e6e8eb);
+  --iswc-callout-accent: var(--iswc-color-brand, #339af0);
 
   display: block;
   box-sizing: border-box;
-  font-family: var(--is-font-family, system-ui, sans-serif);
-  color: var(--is-callout-text);
+  font-family: var(--iswc-font-family, system-ui, sans-serif);
+  color: var(--iswc-callout-text);
 
   /* Escala: todo en em y relativo a --spacing, que también es em. Cambiar el
      font-size del contexto (o del propio elemento) reescala el componente
      entero. Sin variantes de tamaño: el atributo `size` ya no existe. */
-  --is-callout-spacing: 1em;
+  --iswc-callout-spacing: 1em;
   --_pad-y: 0.85em;
   --_pad-x: 1em;
   --_icon-size: 1.4em;
   --_gap: 0.65em;
-  --_radius: var(--is-radius, 0.625em);
+  --_radius: var(--iswc-radius, 0.625em);
 }
 
 .callout {
@@ -35,7 +35,7 @@
   line-height: 1.45;
   box-sizing: border-box;
   overflow: hidden;
-  border-radius: var(--_radius, var(--is-radius, 0.625em));
+  border-radius: var(--_radius, var(--iswc-radius, 0.625em));
   color: inherit;
 }
 
@@ -43,7 +43,7 @@
   display: inline-flex;
   align-items: center;
   justify-content: center;
-  color: var(--is-callout-accent);
+  color: var(--iswc-callout-accent);
   font-size: var(--_icon-size);
   line-height: 1;
   padding-top: 0.1em;
@@ -74,72 +74,72 @@
    el tema los reescribe a pastel. `-pale` se mezcla con blanco y en dark queda
    un recuadro de tema claro. */
 :host([color="brand"]) {
-  --is-callout-accent: var(--is-color-brand, #339af0);
-  --is-callout-bg: var(--is-brand-soft, rgb(51 154 240 / 18%));
-  --is-callout-border: var(--is-color-brand, #339af0);
-  --is-callout-text: var(--is-brand-text, #7ec8ff);
+  --iswc-callout-accent: var(--iswc-color-brand, #339af0);
+  --iswc-callout-bg: var(--iswc-brand-soft, rgb(51 154 240 / 18%));
+  --iswc-callout-border: var(--iswc-color-brand, #339af0);
+  --iswc-callout-text: var(--iswc-brand-text, #7ec8ff);
 }
 
 :host([color="neutral"]) {
-  --is-callout-accent: var(--is-text-muted, var(--is-text-dim, #7a8390));
-  --is-callout-bg: var(--is-control-bg, #21262d);
-  --is-callout-border: var(--is-control-border, #59636e);
-  --is-callout-text: var(--is-text, #e6e8eb);
+  --iswc-callout-accent: var(--iswc-text-muted, var(--iswc-text-dim, #7a8390));
+  --iswc-callout-bg: var(--iswc-control-bg, #21262d);
+  --iswc-callout-border: var(--iswc-control-border, #59636e);
+  --iswc-callout-text: var(--iswc-text, #e6e8eb);
 }
 
 :host([color="success"]) {
-  --is-callout-accent: var(--is-color-success, #40c057);
-  --is-callout-bg: var(--is-success-soft, rgb(64 192 87 / 18%));
-  --is-callout-border: var(--is-color-success, #40c057);
-  --is-callout-text: var(--is-success-text, #69db7c);
+  --iswc-callout-accent: var(--iswc-color-success, #40c057);
+  --iswc-callout-bg: var(--iswc-success-soft, rgb(64 192 87 / 18%));
+  --iswc-callout-border: var(--iswc-color-success, #40c057);
+  --iswc-callout-text: var(--iswc-success-text, #69db7c);
 }
 
 :host([color="warning"]) {
-  --is-callout-accent: var(--is-color-warning, #f59f00);
-  --is-callout-bg: var(--is-warning-soft, rgb(245 159 0 / 18%));
-  --is-callout-border: var(--is-color-warning, #f59f00);
-  --is-callout-text: var(--is-warning-text, #fcc419);
+  --iswc-callout-accent: var(--iswc-color-warning, #f59f00);
+  --iswc-callout-bg: var(--iswc-warning-soft, rgb(245 159 0 / 18%));
+  --iswc-callout-border: var(--iswc-color-warning, #f59f00);
+  --iswc-callout-text: var(--iswc-warning-text, #fcc419);
 }
 
 :host([color="danger"]) {
-  --is-callout-accent: var(--is-color-danger, #fa5252);
-  --is-callout-bg: var(--is-danger-soft, rgb(250 82 82 / 18%));
-  --is-callout-border: var(--is-color-danger, #fa5252);
-  --is-callout-text: var(--is-danger-text, #ffb4b4);
+  --iswc-callout-accent: var(--iswc-color-danger, #fa5252);
+  --iswc-callout-bg: var(--iswc-danger-soft, rgb(250 82 82 / 18%));
+  --iswc-callout-border: var(--iswc-color-danger, #fa5252);
+  --iswc-callout-text: var(--iswc-danger-text, #ffb4b4);
 }
 
 :host([variant="filled"]) .callout {
-  background: var(--is-callout-border);
-  color: var(--is-on-brand, #fff);
-  --is-callout-text: var(--is-on-brand, #fff);
-  --is-callout-accent: var(--is-on-brand, #fff);
+  background: var(--iswc-callout-border);
+  color: var(--iswc-on-brand, #fff);
+  --iswc-callout-text: var(--iswc-on-brand, #fff);
+  --iswc-callout-accent: var(--iswc-on-brand, #fff);
   border: 0;
 }
 
 :host([variant="outlined"]) .callout {
   background: transparent;
-  color: var(--is-callout-text);
-  border: 1px solid var(--is-callout-border);
+  color: var(--iswc-callout-text);
+  border: 1px solid var(--iswc-callout-border);
 }
 
 :host([variant="filled-outlined"]) .callout,
 :host(:not([variant])) .callout {
-  background: var(--is-callout-bg);
-  color: var(--is-callout-text);
-  border: 1px solid var(--is-callout-border);
+  background: var(--iswc-callout-bg);
+  color: var(--iswc-callout-text);
+  border: 1px solid var(--iswc-callout-border);
 }
 
 :host([variant="plain"]) .callout {
   background: transparent;
-  color: var(--is-callout-text);
+  color: var(--iswc-callout-text);
   border: 0;
 }
 
 :host([variant="accent"]) .callout {
-  background: var(--is-callout-bg);
-  color: var(--is-callout-text);
+  background: var(--iswc-callout-bg);
+  color: var(--iswc-callout-text);
   border: 0;
-  box-shadow: inset 3px 0 0 var(--is-callout-border);
+  box-shadow: inset 3px 0 0 var(--iswc-callout-border);
 }
 
 /* Cuando no hay icono (text-only), saltamos la primera columna. La

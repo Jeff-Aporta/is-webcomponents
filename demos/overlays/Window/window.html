@@ -22,7 +22,7 @@
     border: 1px solid rgba(255,255,255,0.18);
     background: rgba(255,255,255,0.04); color: inherit; cursor: pointer;
   }
-  header button:hover { border-color: var(--is-accent, #38bdf8); color: var(--is-accent, #38bdf8); }
+  header button:hover { border-color: var(--iswc-accent, #38bdf8); color: var(--iswc-accent, #38bdf8); }
   main {
     position: relative; overflow: hidden;
     background: radial-gradient(ellipse at center, #11202e 0%, #0c1118 80%);
@@ -37,7 +37,7 @@
 <script type="module">
   // Cargar el bundle pre-construido desde dist/cdn/. Funciona con cualquier
   // servidor estático (incluido VS Code Live Server), no solo con dev server.
-  await import('../../../dist/cdn/overlays/window.min.js?h=v92pxt');
+  await import('../../../dist/cdn/overlays/window.min.js?h=xjmagn');
   await customElements.whenDefined('is-window');
 
   // Spawner de ventanas — cada botón crea una <is-window> con la config
@@ -68,7 +68,7 @@
 
     // Contenido principal
     const p = document.createElement('p');
-    p.style.cssText = 'margin:0 0 .5rem;font-size:.85rem;color:var(--is-text-soft,#94a3b8)';
+    p.style.cssText = 'margin:0 0 .5rem;font-size:.85rem;color:var(--iswc-text-soft,#94a3b8)';
     p.textContent = `Esta es la ventana ${count}. Puedes arrastrar el header, redimensionar desde la esquina (si aplica) o usar los controles arriba a la derecha.`;
     win.appendChild(p);
 

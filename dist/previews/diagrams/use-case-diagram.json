@@ -8,7 +8,7 @@
   "sections": [
     {
       "id": "intro",
-      "title": "<is-use-case-diagram>",
+      "title": "Uso",
       "lede": "Diagrama de casos de uso UML: actores fuera del sistema, casos en elipses dentro del límite y relaciones con su estereotipo.",
       "blocks": [
         {

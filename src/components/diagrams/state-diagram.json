@@ -8,7 +8,7 @@
   "sections": [
     {
       "id": "intro",
-      "title": "<is-state-diagram>",
+      "title": "Uso",
       "lede": "Diagrama de estados en SVG, sin Mermaid. Tú declaras estados y\r\n          transiciones; el componente decide las capas, reduce los cruces y\r\n          rutea las flechas rodeando los estados.",
       "blocks": [
         {

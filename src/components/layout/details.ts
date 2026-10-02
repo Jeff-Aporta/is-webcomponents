@@ -73,9 +73,9 @@ import { TONE } from '../_shared/tone.js';
   class IsDetails extends ElementBase {
     /** Personalización por atributo (ver `core/attrs.ts`). */
     static styleAttrs = {
-    spacing: '--is-details-spacing',
-    'show-duration': '--is-details-show-duration',
-    'hide-duration': '--is-details-hide-duration',
+    spacing: '--iswc-details-spacing',
+    'show-duration': '--iswc-details-show-duration',
+    'hide-duration': '--iswc-details-hide-duration',
     };
 
     static get observedAttributes(): string[] { return [...OBSERVED, 'spacing', 'show-duration', 'hide-duration']; }

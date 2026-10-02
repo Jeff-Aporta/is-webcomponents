@@ -93,37 +93,37 @@ No expone.
 | Token | Uso |
 | --- | --- |
 | `--spacing` | Token leído o definido por componente. |
-| `--is-space-l` | Token leído o definido por componente. |
+| `--iswc-space-l` | Token leído o definido por componente. |
 | `--callout-bg` | Token leído o definido por componente. |
 | `--callout-border` | Token leído o definido por componente. |
 | `--callout-text` | Token leído o definido por componente. |
 | `--callout-accent` | Token leído o definido por componente. |
-| `--is-bg-elev` | Token leído o definido por componente. |
-| `--is-border` | Token leído o definido por componente. |
-| `--is-text` | Token leído o definido por componente. |
-| `--is-color-brand-500` | Token leído o definido por componente. |
-| `--is-font-family` | Token leído o definido por componente. |
+| `--iswc-bg-elev` | Token leído o definido por componente. |
+| `--iswc-border` | Token leído o definido por componente. |
+| `--iswc-text` | Token leído o definido por componente. |
+| `--iswc-color-brand-500` | Token leído o definido por componente. |
+| `--iswc-font-family` | Token leído o definido por componente. |
 | `--_pad-y` | Token leído o definido por componente. |
 | `--_pad-x` | Token leído o definido por componente. |
 | `--_icon-size` | Token leído o definido por componente. |
 | `--_gap` | Token leído o definido por componente. |
 | `--_radius` | Token leído o definido por componente. |
-| `--is-radius` | Token leído o definido por componente. |
-| `--is-color-brand-100` | Token leído o definido por componente. |
-| `--is-color-brand-700` | Token leído o definido por componente. |
-| `--is-text-muted` | Token leído o definido por componente. |
-| `--is-control-bg` | Token leído o definido por componente. |
-| `--is-control-border` | Token leído o definido por componente. |
-| `--is-color-success-500` | Token leído o definido por componente. |
-| `--is-color-success-100` | Token leído o definido por componente. |
-| `--is-color-success-700` | Token leído o definido por componente. |
-| `--is-color-warning-500` | Token leído o definido por componente. |
-| `--is-color-warning-100` | Token leído o definido por componente. |
-| `--is-color-warning-700` | Token leído o definido por componente. |
-| `--is-color-danger-500` | Token leído o definido por componente. |
-| `--is-color-danger-100` | Token leído o definido por componente. |
-| `--is-color-danger-700` | Token leído o definido por componente. |
-| `--is-on-brand` | Token leído o definido por componente. |
+| `--iswc-radius` | Token leído o definido por componente. |
+| `--iswc-color-brand-100` | Token leído o definido por componente. |
+| `--iswc-color-brand-700` | Token leído o definido por componente. |
+| `--iswc-text-muted` | Token leído o definido por componente. |
+| `--iswc-control-bg` | Token leído o definido por componente. |
+| `--iswc-control-border` | Token leído o definido por componente. |
+| `--iswc-color-success-500` | Token leído o definido por componente. |
+| `--iswc-color-success-100` | Token leído o definido por componente. |
+| `--iswc-color-success-700` | Token leído o definido por componente. |
+| `--iswc-color-warning-500` | Token leído o definido por componente. |
+| `--iswc-color-warning-100` | Token leído o definido por componente. |
+| `--iswc-color-warning-700` | Token leído o definido por componente. |
+| `--iswc-color-danger-500` | Token leído o definido por componente. |
+| `--iswc-color-danger-100` | Token leído o definido por componente. |
+| `--iswc-color-danger-700` | Token leído o definido por componente. |
+| `--iswc-on-brand` | Token leído o definido por componente. |
 
 ### Integración con formularios
 
@@ -149,7 +149,7 @@ Documentación de cabecera preservada desde fuente:
 >   icon       icono propio (gana sobre el atributo icon)
 > CSS Parts:  ::part(icon)  ::part(message)
 > CSS custom properties
->   --spacing        espacio alrededor del callout (default var(--is-space-l, 1rem))
+>   --spacing        espacio alrededor del callout (default var(--iswc-space-l, 1rem))
 >   --callout-bg     fondo computado por color/variant
 >   --callout-border color del borde
 >   --callout-text   color del texto

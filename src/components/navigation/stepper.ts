@@ -55,10 +55,10 @@ import { ElementBase } from '../../core/element-base.js';
   class IsStepper extends ElementBase {
     /** Personalización por atributo (ver `core/attrs.ts`). */
     static styleAttrs = {
-    accent: { prop: '--is-stepper-accent', onlyColorValues: true },
-    'text-color': { prop: '--is-stepper-text', onlyColorValues: true },
-    'muted-color': { prop: '--is-stepper-muted', onlyColorValues: true },
-    'border-color': { prop: '--is-stepper-border', onlyColorValues: true },
+    accent: { prop: '--iswc-stepper-accent', onlyColorValues: true },
+    'text-color': { prop: '--iswc-stepper-text', onlyColorValues: true },
+    'muted-color': { prop: '--iswc-stepper-muted', onlyColorValues: true },
+    'border-color': { prop: '--iswc-stepper-border', onlyColorValues: true },
     };
 
     static get observedAttributes(): string[] { return [...TG_OBSERVED, ...IsStepper.styleAttrNames]; }

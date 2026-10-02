@@ -18,7 +18,7 @@
  *   - No borra el JSDoc. El texto de cada `@param` suele explicar el parámetro,
  *     no solo tiparlo, y eso se pierde si se elimina el bloque.
  *
- *   node scripts/ts-jsdoc-a-tipos.ts src/components/_shared
+ *   deno run -A --no-check scripts/ts-jsdoc-a-tipos.ts src/components/_shared
  */
 import { readdirSync, readFileSync, statSync, writeFileSync } from 'node:fs';
 import { join } from 'node:path';
@@ -88,7 +88,7 @@ function ficheros(dir) {
 }
 
 const objetivo = process.argv[2];
-if (!objetivo) { console.error('uso: node scripts/ts-jsdoc-a-tipos.ts <carpeta>'); process.exit(2); }
+if (!objetivo) { console.error('uso: deno run -A --no-check scripts/ts-jsdoc-a-tipos.ts <carpeta>'); process.exit(2); }
 const lista = statSync(objetivo).isDirectory() ? ficheros(objetivo) : [objetivo];
 
 let tocados = 0;

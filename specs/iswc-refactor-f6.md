@@ -9,9 +9,9 @@
 
 | Gate | Resultado |
 |---|---|
-| 1. `npm run typecheck` | ✅ PASS exit 0 |
-| 2. `npm test` | ✅ PASS 286/286 |
-| 3. `npm run build` | ✅ PASS dist/cdn 212 components |
+| 1. `deno task typecheck` | ✅ PASS exit 0 |
+| 2. `deno task test` | ✅ PASS 286/286 |
+| 3. `deno task build` | ✅ PASS dist/cdn 212 components |
 | 4. `python -B -m pytest tests/` (motor) | ✅ 908 passed, 1 skipped, 1 xfailed |
 | 5. `auditor.py audit --sin-deep` | ✅ 0 hallazgos canónicos H1-H10 |
 | 6. `auditor.py fast is-webcomponents` | ✅ 0 categorías de perfil-violation |
@@ -39,11 +39,11 @@
 
 ---
 
-## Gate 1 — `npm run typecheck`
+## Gate 1 — `deno task typecheck`
 
 ```bash
 cd C:\ContaPyme\Personal\apps\is-webcomponents
-npm run typecheck
+deno task typecheck
 ```
 
 **Resultado:**
@@ -57,10 +57,10 @@ EXIT_CODE: 0
 
 ---
 
-## Gate 2 — `npm test`
+## Gate 2 — `deno task test`
 
 ```bash
-npm test
+deno task test
 ```
 
 **Resultado:**
@@ -78,10 +78,10 @@ EXIT_CODE: 0
 
 ---
 
-## Gate 3 — `npm run build`
+## Gate 3 — `deno task build`
 
 ```bash
-npm run build
+deno task build
 ```
 
 **Resultado:**

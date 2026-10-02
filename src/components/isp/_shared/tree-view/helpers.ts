@@ -32,23 +32,23 @@ export function capitalizar(s: string): string {
 }
 
 const COLOR_VARS: Record<string, string> = {
-  border: '--is-border',
-  bg: '--is-bg',
-  color: '--is-text',
-  text: '--is-text',
-  primary: '--is-accent',
-  brand: '--is-accent',
-  success: '--is-color-success',
-  danger: '--is-color-danger',
-  warning: '--is-color-warning',
-  info: '--is-color-info',
-  error: '--is-color-danger',
-  neutral: '--is-text-muted',
+  border: '--iswc-border',
+  bg: '--iswc-bg',
+  color: '--iswc-text',
+  text: '--iswc-text',
+  primary: '--iswc-accent',
+  brand: '--iswc-accent',
+  success: '--iswc-color-success',
+  danger: '--iswc-color-danger',
+  warning: '--iswc-color-warning',
+  info: '--iswc-color-info',
+  error: '--iswc-color-danger',
+  neutral: '--iswc-text-muted',
 };
 
 export function resolveColor(color: string): string {
   if (!color) return '';
   const s = String(color);
   if (/^(#|rgb|hsl|oklch|var\()/i.test(s)) return s;
-  return `var(${COLOR_VARS[s] || `--is-color-${s}`})`;
+  return `var(${COLOR_VARS[s] || `--iswc-color-${s}`})`;
 }

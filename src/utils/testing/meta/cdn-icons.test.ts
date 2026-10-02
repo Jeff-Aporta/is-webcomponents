@@ -6,7 +6,7 @@
 //   - Bug en icon-loader.ts que rompe la cadena local.
 //   - assets/icons/{prefix}/ vacio aunque el .json diga que existe.
 //
-// Requiere el dev server arriba:  node scripts/serve.mjs 8391
+// Requiere el dev server arriba:  deno run -A --no-check scripts/serve.mjs 8391
 // Uso:                PORT=8391 node tests/cdn-icons.test.ts
 
 import { readFile, readdir } from 'node:fs/promises';
@@ -52,7 +52,7 @@ try {
   if (!res.ok) throw new Error(`status ${res.status}`);
 } catch (e) {
   console.log(`SKIP cdn-icons — dev server no responde en ${BASE}: ${e.message}`);
-  console.log('  Para ejecutarlo: CDN_PORT=8391 node scripts/serve.mjs 8391 & npm test');
+  console.log('  Para ejecutarlo: CDN_PORT=8391 deno run -A --no-check scripts/serve.mjs 8391 & deno task test');
   process.exit(0);
 }
 
@@ -91,7 +91,7 @@ for (const f of previews) {
 }
 
 if (candidates.length === 0) {
-  console.error('Ningun preview tiene 2+ iconos locales para probar. Ejecuta npm run icons:download --only=mdi --only=tabler');
+  console.error('Ningun preview tiene 2+ iconos locales para probar. Ejecuta deno task icons:download --only=mdi --only=tabler');
   process.exit(1);
 }
 candidates.sort((a, b) => b.count - a.count);

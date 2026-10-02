@@ -5,7 +5,7 @@ import { sequenceThemeDark, sequenceThemeLight } from './sequence-spec.js';
 import type { DiagramTheme } from './diagram-types.js';
 import { tkHueToHex } from '../_shared/tk-hue.js';
 import { edgeStrokeHex, edgeChipFill, edgeChipText } from '../_shared/diagram-edge-style.js';
-import { inlineMdWeb } from '../_shared/tk-inline-md.js';
+import { inlineMdWeb, applySvgTextContent } from '../_shared/tk-inline-md.js';
 import { wrapText, buildTspans } from '../_shared/diagram-text-wrap.js';
 import { registerDiagramKind } from './diagram-kinds.js';
 import { svgEl } from '../_shared/svg-chart-engine.js';
@@ -234,8 +234,8 @@ class IsSwimlaneDiagram extends DiagramElementBase {
         'font-size': '11', 'font-weight': '600', 'font-family': 'Tahoma,Arial,sans-serif',
         class: 'sw-lane__label',
       });
-      t.innerHTML = inlineMdWeb(lane.name);
       g.appendChild(t);
+      applySvgTextContent(t, lane.name);
 
       this.svg.appendChild(g);
     });
@@ -308,7 +308,6 @@ g.appendChild(svgArrowHead({
         // del centro). text-anchor='middle' ya estaba.
         t.setAttribute('dominant-baseline', 'middle');
         t.setAttribute('text-anchor', 'middle');
-        t.innerHTML = inlineMdWeb(s.label);
       } else {
         const swresult = wrapText({
           text: s.label,
@@ -335,6 +334,7 @@ g.appendChild(svgArrowHead({
         }
       }
       g.appendChild(t);
+      if (swHasMd) applySvgTextContent(t, s.label);
 
       this.svg.appendChild(g);
       this.#stepNodes.set(s.id, { s, g });

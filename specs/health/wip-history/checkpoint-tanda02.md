@@ -65,7 +65,7 @@ NO se tocaron:
 
 ## Gates verificados
 
-- ✓ `npm run typecheck` (tsconfig.json): verde
+- ✓ `deno task typecheck` (tsconfig.json): verde
 - ✓ `npx tsc -p tsconfig.strict-audit.json`: 7,897 errores (de 8,777 baseline)
 - ✓ Tests básicos: 115/115 pasando
 - ✓ Stagehand: skip graceful (sin LLM; opt-in con STAGEHAND=1)

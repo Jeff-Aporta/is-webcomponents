@@ -76,16 +76,16 @@ No expone.
 
 | Token | Uso |
 | --- | --- |
-| `--is-sans` | Token leído o definido por componente. |
-| `--is-text` | Token leído o definido por componente. |
-| `--is-text-dim` | Token leído o definido por componente. |
-| `--is-control-bg` | Token leído o definido por componente. |
-| `--is-border` | Token leído o definido por componente. |
-| `--is-radius-sm` | Token leído o definido por componente. |
-| `--is-accent` | Token leído o definido por componente. |
-| `--is-accent-bg` | Token leído o definido por componente. |
-| `--is-color-danger-500` | Token leído o definido por componente. |
-| `--is-control-bg-hover` | Token leído o definido por componente. |
+| `--iswc-sans` | Token leído o definido por componente. |
+| `--iswc-text` | Token leído o definido por componente. |
+| `--iswc-text-dim` | Token leído o definido por componente. |
+| `--iswc-control-bg` | Token leído o definido por componente. |
+| `--iswc-border` | Token leído o definido por componente. |
+| `--iswc-radius-sm` | Token leído o definido por componente. |
+| `--iswc-accent` | Token leído o definido por componente. |
+| `--iswc-accent-bg` | Token leído o definido por componente. |
+| `--iswc-color-danger-500` | Token leído o definido por componente. |
+| `--iswc-control-bg-hover` | Token leído o definido por componente. |
 
 ### Integración con formularios
 

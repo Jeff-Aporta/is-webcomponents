@@ -14,7 +14,7 @@ El kit se consume desde jsDelivr/GitHub Pages como módulos por tag. La galería
 - Solo `dist/cdn/<categoria>/<tag>.min.js` (+ `.min.css` si el componente tiene estilos).
 - `dist/cdn/core/loader.min.js` + `core/loader.md` (banner con rutas MD).
 - **No** `dist/cdn/all.min.js`, **no** `category.*.min.js`, **no** `.js` sueltos en `dist/` raíz.
-- Build: `npm run build` → `node scripts/build.mjs`.
+- Build: `deno task build` → `deno run -A --no-check scripts/build.mjs`.
 
 ## S-C2 Loader
 
@@ -72,7 +72,7 @@ Skills: `npx skills add Jeff-Aporta/is-webcomponents -s is-cdn-install` · `-s i
 - Apps CDN: `loadCSSBase()` + `loadCSSPalettesDefault()` explícitos (CSS no "mágico").
 - `load('actions')` o tags puntuales; revisar `{ loaded, skipped }`. Usar `has('is-button')`/`getLoaded()` antes de forzar otra carga.
 - Pin SHA en jsDelivr cuando la app necesite reproducible.
-- Tras `node scripts/build.mjs`, verificar banner `/*! … docs (LLM) */` en `.min.js` y que exista `dist/cdn/core/loader.md`.
+- Tras `deno run -A --no-check scripts/build.mjs`, verificar banner `/*! … docs (LLM) */` en `.min.js` y que exista `dist/cdn/core/loader.md`.
 - **Galería:** CSS en `<link>`; shell tags + preview desde `dist/cdn`; resto background. Respetar error #43 — no rehacer el boot "bonito" con `await all`.
 
 ### Qué no hacer
@@ -116,8 +116,8 @@ Skills: `npx skills add Jeff-Aporta/is-webcomponents -s is-cdn-install` · `-s i
 
 | Pieza | Contrato |
 |---|---|
-| Build | `npm run build` |
-| Dev CDN local | `node scripts/serve.mjs` |
+| Build | `deno task build` |
+| Dev CDN local | `deno run -A --no-check scripts/serve.mjs` |
 | Carga | `core/loader.min.js` + `L.load(...)` |
 | Iconos en dist | `dist/assets/icons/` (fuente versionada, fuera de `dist/cdn/`) |
 

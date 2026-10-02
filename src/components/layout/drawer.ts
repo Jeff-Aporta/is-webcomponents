@@ -83,11 +83,11 @@ import { ModalBase } from '../_shared/modal-base.js';
   class IsDrawer extends ModalBase {
     /** Personalización por atributo (ver `core/attrs.ts`). */
     static styleAttrs = {
-      size: '--is-drawer-size',
-      spacing: '--is-drawer-spacing',
-      'backdrop-color': { prop: '--is-drawer-backdrop-color', onlyColorValues: true },
-      'show-duration': '--is-drawer-show-duration',
-      'hide-duration': '--is-drawer-hide-duration',
+      size: '--iswc-drawer-size',
+      spacing: '--iswc-drawer-spacing',
+      'backdrop-color': { prop: '--iswc-drawer-backdrop-color', onlyColorValues: true },
+      'show-duration': '--iswc-drawer-show-duration',
+      'hide-duration': '--iswc-drawer-hide-duration',
     };
 
     static __TEMPLATE = TEMPLATE;
@@ -128,7 +128,7 @@ import { ModalBase } from '../_shared/modal-base.js';
     // ---- animaciones ----
 
     animateOpen(): Promise<void> {
-      const dur = this.#readDur('--is-drawer-show-duration', 220);
+      const dur = this.#readDur('--iswc-drawer-show-duration', 220);
       this.$modal.animate(
         [this.#hiddenKeyframe(), this.#visibleKeyframe()],
         { duration: dur, easing: 'cubic-bezier(0.2, 0.7, 0.2, 1)', fill: 'forwards' },
@@ -141,7 +141,7 @@ import { ModalBase } from '../_shared/modal-base.js';
     }
 
     animateClose(): Promise<void> {
-      const dur = this.#readDur('--is-drawer-hide-duration', 180);
+      const dur = this.#readDur('--iswc-drawer-hide-duration', 180);
       this.$modal.animate(
         [this.#visibleKeyframe(), this.#hiddenKeyframe()],
         { duration: dur, easing: 'cubic-bezier(0.4, 0, 0.6, 1)', fill: 'forwards' },

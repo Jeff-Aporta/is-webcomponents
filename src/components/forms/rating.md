@@ -140,22 +140,22 @@ Propiedades públicas aparecen en tabla anterior; APIs heredadas se verifican en
 | Token | Uso |
 | --- | --- |
 | `--fill` | Token leído o definido por componente. |
-| `--is-rating-size` | Token leído o definido por componente. |
-| `--is-rating-gap` | Token leído o definido por componente. |
-| `--is-rating-color` | Token leído o definido por componente. |
-| `--is-accent` | Token leído o definido por componente. |
-| `--is-rating-empty` | Token leído o definido por componente. |
-| `--is-control-border` | Token leído o definido por componente. |
-| `--is-rating-focus` | Token leído o definido por componente. |
-| `--is-focus` | Token leído o definido por componente. |
-| `--is-sans` | Token leído o definido por componente. |
-| `--is-text` | Token leído o definido por componente. |
-| `--is-control-text` | Token leído o definido por componente. |
-| `--is-color-success-500` | Token leído o definido por componente. |
-| `--is-color-warning-500` | Token leído o definido por componente. |
-| `--is-color-danger-500` | Token leído o definido por componente. |
-| `--is-text-soft` | Token leído o definido por componente. |
-| `--is-radius-sm` | Token leído o definido por componente. |
+| `--iswc-rating-size` | Token leído o definido por componente. |
+| `--iswc-rating-gap` | Token leído o definido por componente. |
+| `--iswc-rating-color` | Token leído o definido por componente. |
+| `--iswc-accent` | Token leído o definido por componente. |
+| `--iswc-rating-empty` | Token leído o definido por componente. |
+| `--iswc-control-border` | Token leído o definido por componente. |
+| `--iswc-rating-focus` | Token leído o definido por componente. |
+| `--iswc-focus` | Token leído o definido por componente. |
+| `--iswc-sans` | Token leído o definido por componente. |
+| `--iswc-text` | Token leído o definido por componente. |
+| `--iswc-control-text` | Token leído o definido por componente. |
+| `--iswc-color-success-500` | Token leído o definido por componente. |
+| `--iswc-color-warning-500` | Token leído o definido por componente. |
+| `--iswc-color-danger-500` | Token leído o definido por componente. |
+| `--iswc-text-soft` | Token leído o definido por componente. |
+| `--iswc-radius-sm` | Token leído o definido por componente. |
 
 ### Integración con formularios
 

@@ -20,7 +20,7 @@ assert(html.includes('data-palette="insoft"'), 'missing root palette');
 assert(!/<(?:svg|symbol|use)\b/i.test(html), 'index contains inline SVG');
 assert(!/<(?:svg|symbol|use)\b/i.test(component), 'component contains inline SVG');
 assert(!/--pg-/.test(styles), 'presentation tokens still use --pg- prefix');
-assert(styles.includes('--is-bg:'), 'missing generic --is-* surface tokens');
+assert(styles.includes('--iswc-bg:'), 'missing generic --iswc-* surface tokens');
 assert(!/\bsize\s*=|["']size["']|pgSize|small\s*\|\s*medium\s*\|\s*large/.test(`${html}\n${component}`), 'size API remains');
 assert(!/\b(?:height|padding(?:-inline)?|gap):\s*\d+(?:\.\d+)?px/.test(component), 'component geometry must use em');
 const manifestPath = path.join(root, 'manifest.js');

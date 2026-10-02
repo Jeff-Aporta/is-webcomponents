@@ -9,7 +9,7 @@
   "sections": [
     {
       "id": "intro",
-      "title": "<is-video>",
+      "title": "Uso",
       "lede": "Reproductor con chrome propio al estilo YouTube: barra de progreso con buffer y\r\n          scrubber, fila de controles con volumen desplegable, velocidad, picture-in-picture\r\n          y pantalla completa. Los controles se ocultan solos mientras reproduce.",
       "blocks": [
         {
@@ -154,7 +154,7 @@
             ],
             [
               "tokens",
-              "<code>--is-video-accent</code> (default <code>--is-accent</code>)"
+              "<code>--iswc-video-accent</code> (default <code>--iswc-accent</code>)"
             ],
             [
               "parts",

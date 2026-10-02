@@ -112,18 +112,18 @@ No expone.
 | Token | Uso |
 | --- | --- |
 | `--brand` | Token leído o definido por componente. |
-| `--is-brand` | Token leído o definido por componente. |
+| `--iswc-brand` | Token leído o definido por componente. |
 | `--brand-fg` | Token leído o definido por componente. |
-| `--is-brand-fg` | Token leído o definido por componente. |
+| `--iswc-brand-fg` | Token leído o definido por componente. |
 | `--text` | Token leído o definido por componente. |
-| `--is-text` | Token leído o definido por componente. |
+| `--iswc-text` | Token leído o definido por componente. |
 | `--muted` | Token leído o definido por componente. |
 | `--border` | Token leído o definido por componente. |
-| `--is-border` | Token leído o definido por componente. |
+| `--iswc-border` | Token leído o definido por componente. |
 | `--success` | Token leído o definido por componente. |
-| `--is-success` | Token leído o definido por componente. |
+| `--iswc-success` | Token leído o definido por componente. |
 | `--danger` | Token leído o definido por componente. |
-| `--is-danger` | Token leído o definido por componente. |
+| `--iswc-danger` | Token leído o definido por componente. |
 | `--bg-pending` | Token leído o definido por componente. |
 
 ### Integración con formularios

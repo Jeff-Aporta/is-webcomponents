@@ -8,7 +8,7 @@
   "sections": [
     {
       "id": "intro",
-      "title": "<is-date-field>",
+      "title": "Uso",
       "lede": "Campo editable por secciones (DateField de MUI X). Cada sección es un spinbutton: flechas, dígitos, izquierda/derecha, Retroceso. El orden lo decide el locale.",
       "blocks": [
         {
@@ -69,13 +69,13 @@
         },
         {
           "kind": "html",
-          "html": "<p class=\"lede\" id=\"log\" style=\"font-family:var(--is-mono);font-size:.85em\"></p>"
+          "html": "<p class=\"lede\" id=\"log\" style=\"font-family:var(--iswc-mono);font-size:.85em\"></p>"
         }
       ]
     },
     {
       "id": "time",
-      "title": "<is-time-field>",
+      "title": "Campo de hora",
       "blocks": [
         {
           "kind": "demo",
@@ -85,7 +85,7 @@
     },
     {
       "id": "datetime",
-      "title": "<is-date-time-field>",
+      "title": "Fecha y hora",
       "blocks": [
         {
           "kind": "demo",

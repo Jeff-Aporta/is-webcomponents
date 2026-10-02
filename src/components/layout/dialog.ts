@@ -43,7 +43,7 @@ import { ModalBase } from '../_shared/modal-base.js';
  *
  * CSS custom properties
  *   --width          ancho preferido (default 500px)
- *   --spacing        padding interno (default var(--is-space-l, 1rem))
+ *   --spacing        padding interno (default var(--iswc-space-l, 1rem))
  *   --show-duration  duración de la animación de apertura
  *   --hide-duration  duración de la animación de cierre
  *   --backdrop-color color del backdrop (override fino; basic ya trae uno)
@@ -88,11 +88,11 @@ import { ModalBase } from '../_shared/modal-base.js';
   class IsDialog extends ModalBase {
     /** Personalización por atributo (ver `core/attrs.ts`). */
     static styleAttrs = {
-      spacing: '--is-dialog-spacing',
-      width: '--is-dialog-width',
-      'backdrop-color': { prop: '--is-dialog-backdrop-color', onlyColorValues: true },
-      'show-duration': '--is-dialog-show-duration',
-      'hide-duration': '--is-dialog-hide-duration',
+      spacing: '--iswc-dialog-spacing',
+      width: '--iswc-dialog-width',
+      'backdrop-color': { prop: '--iswc-dialog-backdrop-color', onlyColorValues: true },
+      'show-duration': '--iswc-dialog-show-duration',
+      'hide-duration': '--iswc-dialog-hide-duration',
     };
 
     static get observedAttributes(): string[] {
@@ -149,7 +149,7 @@ import { ModalBase } from '../_shared/modal-base.js';
     }
 
     animateOpen(): Promise<void> {
-      const dur = this.#readDur('--is-dialog-show-duration', 200);
+      const dur = this.#readDur('--iswc-dialog-show-duration', 200);
       this.$modal.animate(
         [
           { opacity: 0, transform: 'translateY(8px) scale(0.98)' },
@@ -165,7 +165,7 @@ import { ModalBase } from '../_shared/modal-base.js';
     }
 
     animateClose(): Promise<void> {
-      const dur = this.#readDur('--is-dialog-hide-duration', 160);
+      const dur = this.#readDur('--iswc-dialog-hide-duration', 160);
       this.$modal.animate(
         [
           { opacity: 1, transform: 'none' },

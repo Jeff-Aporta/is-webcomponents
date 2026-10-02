@@ -4,13 +4,13 @@
   "category": "diagrams",
   "title": "<is-diagram-lightbox>",
   "titleHtml": true,
-  "styles": ".demo { display: flex; flex-direction: column; gap: 0.65rem; }\r\n    .demo-row { display: flex; flex-wrap: wrap; align-items: center; gap: 0.5rem; }\r\n    .demo-bar { display: flex; flex-wrap: wrap; gap: 0.5rem; align-items: center; }\r\n    .demo-bar is-select { min-width: 12rem; }\r\n    .pill {\r\n      display: inline-flex;\r\n      align-items: center;\r\n      gap: 0.35rem;\r\n      padding: 0.25rem 0.65rem;\r\n      border-radius: 999px;\r\n      background: color-mix(in srgb, var(--is-accent) 14%, transparent);\r\n      border: 1px solid color-mix(in srgb, var(--is-accent) 30%, transparent);\r\n      color: var(--is-accent);\r\n      font-size: 0.72rem;\r\n      font-weight: 700;\r\n      letter-spacing: 0.04em;\r\n      text-transform: uppercase;\r\n    }",
+  "styles": ".demo { display: flex; flex-direction: column; gap: 0.65rem; }\r\n    .demo-row { display: flex; flex-wrap: wrap; align-items: center; gap: 0.5rem; }\r\n    .demo-bar { display: flex; flex-wrap: wrap; gap: 0.5rem; align-items: center; }\r\n    .demo-bar is-select { min-width: 12rem; }\r\n    .pill {\r\n      display: inline-flex;\r\n      align-items: center;\r\n      gap: 0.35rem;\r\n      padding: 0.25rem 0.65rem;\r\n      border-radius: 999px;\r\n      background: color-mix(in srgb, var(--iswc-accent) 14%, transparent);\r\n      border: 1px solid color-mix(in srgb, var(--iswc-accent) 30%, transparent);\r\n      color: var(--iswc-accent);\r\n      font-size: 0.72rem;\r\n      font-weight: 700;\r\n      letter-spacing: 0.04em;\r\n      text-transform: uppercase;\r\n    }",
   "storageKey": "docs-is-diagram-lightbox",
   "hasBehavior": true,
   "sections": [
     {
       "id": "intro",
-      "title": "<is-diagram-lightbox>",
+      "title": "Uso",
       "lede": "Visor a pantalla completa pensado para diagramas: hereda del\r\n          <code class=\"code\">&lt;is-lightbox&gt;</code> genérico el zoom anclado al\r\n          cursor, el pan y el dialog top-layer, y le suma la barra de la animación\r\n          tortuga (play / pause / prev / next), el anillo de auto-replay, el panel\r\n          de código JSON y el enlace compartible con el payload en <code class=\"code\">?d=</code>.",
       "blocks": [
         {

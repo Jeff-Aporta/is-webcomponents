@@ -78,7 +78,7 @@ import { ElementBase } from '../../core/element-base.js';
   class IsTransfer extends ElementBase {
     /** Personalización por atributo (ver `core/attrs.ts`). */
     static styleAttrs = {
-    'row-height': '--is-transfer-row-height',
+    'row-height': '--iswc-transfer-row-height',
     };
 
     static get observedAttributes(): string[] { return [...TRANSFER_OBSERVED, ...IsTransfer.styleAttrNames]; }

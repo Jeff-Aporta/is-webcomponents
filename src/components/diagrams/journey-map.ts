@@ -4,7 +4,7 @@ import { resolveJourneySpec, computeJourneyLayout } from './journey-spec.js';
 import { sequenceThemeDark, sequenceThemeLight } from './sequence-spec.js';
 import type { DiagramTheme } from './diagram-types.js';
 import { tkHueToHex } from '../_shared/tk-hue.js';
-import { inlineMdWeb } from '../_shared/tk-inline-md.js';
+import { inlineMdWeb, applySvgTextContent } from '../_shared/tk-inline-md.js';
 import { wrapText, buildTspans } from '../_shared/diagram-text-wrap.js';
 import { registerDiagramKind } from './diagram-kinds.js';
 import { svgEl } from '../_shared/svg-chart-engine.js';
@@ -265,8 +265,8 @@ class IsJourneyMap extends DiagramElementBase {
         'font-size': '10.5', 'font-weight': '600', 'font-family': 'Tahoma,Arial,sans-serif',
         class: 'jn-step__label',
       });
-      t.innerHTML = inlineMdWeb(s.label);
       g.appendChild(t);
+      applySvgTextContent(t, s.label);
 
       if (s.actor) {
         const a = svgEl('text', {

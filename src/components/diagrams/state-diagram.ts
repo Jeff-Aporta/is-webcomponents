@@ -14,7 +14,7 @@ import type { PathTurtle, TurtleTheme } from '../_shared/path-turtle.js';
 import { tkHueToHex } from '../_shared/tk-hue.js';
 import { edgeStrokeHex, edgeChipFill, edgeChipText } from '../_shared/diagram-edge-style.js';
 import type { DiagramTheme } from './diagram-types.js';
-import { inlineMdWeb } from '../_shared/tk-inline-md.js';
+import { inlineMdWeb, applySvgTextContent } from '../_shared/tk-inline-md.js';
 import { wrapText, buildTspans } from '../_shared/diagram-text-wrap.js';
 import type { TSpanSpec } from '../_shared/diagram-text-wrap.js';
 import { registerDiagramKind } from './diagram-kinds.js';
@@ -314,7 +314,6 @@ class IsStateDiagram extends DiagramElementBase {
           t.setAttribute('y', String(n.y + n.h / 2));
           t.setAttribute('text-anchor', 'middle');
           t.setAttribute('dominant-baseline', 'middle');
-          t.innerHTML = inlineMdWeb(n.label);
         } else {
           // `overflow` no está declarado en StateLayoutNode; el spec lo añade
           // opcionalmente en runtime. Cast para preservar el comportamiento.
@@ -346,6 +345,7 @@ class IsStateDiagram extends DiagramElementBase {
           }
         }
         g.appendChild(t);
+        if (stHasMd) applySvgTextContent(t, n.label);
       }
 
       this.svg.appendChild(g);

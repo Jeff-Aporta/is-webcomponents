@@ -14,13 +14,13 @@ const OUT_DIR = join(ROOT, '.shots');
 const BASE = 'http://127.0.0.1:8491';
 mkdirSync(OUT_DIR, { recursive: true });
 
-// Extrae los tags con behavior usando node + experimental-strip-types.
+// Extrae los tags con behavior.
 const probe = `
 import catalog from './src/previews/catalog.ts';
 const tags = Object.keys(catalog).filter((t) => !!catalog[t]?.behavior).sort();
 process.stdout.write(JSON.stringify(tags));
 `;
-const r = spawnSync('node', ['--experimental-strip-types', '--eval', probe], {
+const r = spawnSync(process.execPath, ['eval', '--no-check', probe], {
   encoding: 'utf8',
   cwd: ROOT,
 });

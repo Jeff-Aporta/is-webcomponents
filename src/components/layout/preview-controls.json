@@ -8,7 +8,7 @@
   "sections": [
     {
       "id": "intro",
-      "title": "<is-preview-controls>",
+      "title": "Uso",
       "lede": "Panel de knobs del playground. La galería le pasa spec y escucha is-controls-change.",
       "blocks": [
         {

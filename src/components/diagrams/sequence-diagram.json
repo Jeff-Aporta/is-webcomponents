@@ -9,7 +9,7 @@
   "sections": [
     {
       "id": "intro",
-      "title": "<is-sequence-diagram>",
+      "title": "Uso",
       "lede": "Diagrama de secuencia en SVG, sin Mermaid. La configuración es un JSON\r\n          con actores, mensajes y grupos; el layout (posiciones, ruteo ortogonal\r\n          de las flechas y colocación de etiquetas) se calcula solo.",
       "blocks": [
         {

@@ -1,8 +1,8 @@
 :host {
   display: contents;
-  --is-tooltip-max-width: 16rem;
-  --is-tooltip-bg: #212529;
-  --is-tooltip-fg: #fff;
+  --iswc-tooltip-max-width: 16rem;
+  --iswc-tooltip-bg: #212529;
+  --iswc-tooltip-fg: #fff;
 }
 
 :host([hidden]) {
@@ -10,21 +10,21 @@
 }
 
 .popup {
-  --is-tooltip-arrow-color: var(--is-tooltip-bg);
-  --is-tooltip-arrow-size: var(--is-tooltip-arrow-size, 8px);
+  --iswc-tooltip-arrow-color: var(--iswc-tooltip-bg);
+  --iswc-tooltip-arrow-size: var(--iswc-tooltip-arrow-size, 8px);
 }
 
 .tooltip {
   display: block;
-  max-width: var(--is-tooltip-max-width);
+  max-width: var(--iswc-tooltip-max-width);
   padding: 0.4em 0.65em;
-  border-radius: var(--is-radius-sm, 0.25em);
-  background: var(--is-tooltip-bg);
-  color: var(--is-tooltip-fg);
-  font-family: var(--is-font-family, system-ui, sans-serif);
-  font-size: var(--is-tooltip-font-size, 0.8125em);
-  line-height: var(--is-tooltip-line-height, 1.35);
-  box-shadow: var(--is-shadow, 0 4px 16px rgb(0 0 0 / 25%));
+  border-radius: var(--iswc-radius-sm, 0.25em);
+  background: var(--iswc-tooltip-bg);
+  color: var(--iswc-tooltip-fg);
+  font-family: var(--iswc-font-family, system-ui, sans-serif);
+  font-size: var(--iswc-tooltip-font-size, 0.8125em);
+  line-height: var(--iswc-tooltip-line-height, 1.35);
+  box-shadow: var(--iswc-shadow, 0 4px 16px rgb(0 0 0 / 25%));
   pointer-events: none;
 }
 
@@ -56,7 +56,7 @@
 }
 
 .body ::slotted(code) {
-  font-family: var(--is-mono, ui-monospace, monospace);
+  font-family: var(--iswc-mono, ui-monospace, monospace);
   font-size: 0.92em;
   opacity: 0.92;
 }

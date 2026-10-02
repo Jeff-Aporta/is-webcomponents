@@ -48,8 +48,8 @@ interface DrawerEl extends HTMLElement {
 class IsPreviewComponent extends withStyleAttrs(HTMLElement) {
     /** Personalización por atributo (ver `core/attrs.ts`). */
     static styleAttrs = {
-    size: '--is-preview-size',
-    spacing: '--is-preview-spacing',
+    size: '--iswc-preview-size',
+    spacing: '--iswc-preview-spacing',
     };
 
   #preview: ISComponentPreviewLike | null = null;
@@ -163,7 +163,7 @@ class IsPreviewComponent extends withStyleAttrs(HTMLElement) {
   /**
    * Ancho: TOC al lado del contenido en el split. Compacto: TOC dentro del
    * drawer derecho y el split cede todo el ancho al contenido.
-   * `withoutToc` en la definición: sin índice ni panel derecho (home).
+   * `withoutToc`, o una sola seccion: sin indice ni panel derecho.
    */
   #syncLayout(): void {
     const panel = this.#panel();
@@ -172,7 +172,8 @@ class IsPreviewComponent extends withStyleAttrs(HTMLElement) {
     const toggle = this.#toggle();
     if (!panel || !aside || !drawer || !toggle) return;
 
-    const withoutToc = !!this.#preview?.definition?.withoutToc;
+    const defToc = this.#preview?.definition;
+    const withoutToc = !!defToc?.withoutToc || (defToc?.sections?.length ?? 0) < 2;
     if (withoutToc) {
       this.dataset.layout = 'full';
       toggle.hidden = true;

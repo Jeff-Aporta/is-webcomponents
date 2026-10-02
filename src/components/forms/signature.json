@@ -4,13 +4,13 @@
   "category": "forms",
   "title": "<is-signature>",
   "titleHtml": true,
-  "styles": ".sig-row { display: flex; gap: 1.5rem; flex-wrap: wrap; align-items: start; }\r\n    .sig-card { border: 1px solid var(--is-border); border-radius: var(--is-radius); padding: .85rem; background: var(--is-bg-elev); }\r\n    .sig-card h4 { margin: 0 0 .55rem; font-size: .85rem; }\r\n    .sig-toolbar { display: flex; gap: .35rem; margin-top: .55rem; }\r\n    .sig-toolbar button { font: inherit; padding: .25rem .55rem; border: 1px solid var(--is-border); background: var(--is-bg-soft); color: inherit; border-radius: 6px; cursor: pointer; font-size: .82rem; }\r\n    .sig-toolbar button:hover { background: color-mix(in srgb, var(--is-accent) 14%, var(--is-bg-soft)); }\r\n    .sig-output { display: flex; gap: 1rem; align-items: end; }\r\n    .sig-output figure { margin: 0; }\r\n    .sig-output figcaption { font-size: .7rem; color: var(--is-text-soft); }\r\n    .sig-output img { border: 1px solid var(--is-border); border-radius: 6px; background: white; padding: 4px; max-width: 16rem; }",
+  "styles": ".sig-row { display: flex; gap: 1.5rem; flex-wrap: wrap; align-items: start; }\r\n    .sig-card { border: 1px solid var(--iswc-border); border-radius: var(--iswc-radius); padding: .85rem; background: var(--iswc-bg-elev); }\r\n    .sig-card h4 { margin: 0 0 .55rem; font-size: .85rem; }\r\n    .sig-toolbar { display: flex; gap: .35rem; margin-top: .55rem; }\r\n    .sig-toolbar button { font: inherit; padding: .25rem .55rem; border: 1px solid var(--iswc-border); background: var(--iswc-bg-soft); color: inherit; border-radius: 6px; cursor: pointer; font-size: .82rem; }\r\n    .sig-toolbar button:hover { background: color-mix(in srgb, var(--iswc-accent) 14%, var(--iswc-bg-soft)); }\r\n    .sig-output { display: flex; gap: 1rem; align-items: end; }\r\n    .sig-output figure { margin: 0; }\r\n    .sig-output figcaption { font-size: .7rem; color: var(--iswc-text-soft); }\r\n    .sig-output img { border: 1px solid var(--iswc-border); border-radius: 6px; background: white; padding: 4px; max-width: 16rem; }",
   "storageKey": "docs-is-signature",
   "hasBehavior": true,
   "sections": [
     {
       "id": "intro",
-      "title": "<is-signature>",
+      "title": "Uso",
       "lede": "Pad de firma manuscrita. Funciona con ratón, táctil y stylus. Exporta a PNG y SVG.",
       "blocks": []
     },
@@ -30,7 +30,7 @@
       "blocks": [
         {
           "kind": "html",
-          "html": "<div class=\"sig-output\" id=\"output\">\r\n            <small style=\"color:var(--is-text-soft)\">— presioná \"Exportar\" para ver el resultado —</small>\r\n          </div>"
+          "html": "<div class=\"sig-output\" id=\"output\">\r\n            <small style=\"color:var(--iswc-text-soft)\">— presioná \"Exportar\" para ver el resultado —</small>\r\n          </div>"
         }
       ]
     },

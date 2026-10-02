@@ -42,9 +42,9 @@ import './text.js';
 
 ## Mapeo Svelte → Web Component
 
-- `color` en ISP pasaba por `colorVar()` → `var(--is-<color>)`. Aquí el mapeo
+- `color` en ISP pasaba por `colorVar()` → `var(--iswc-<color>)`. Aquí el mapeo
   vive en el CSS (`:host([color=…])`) y cae siempre a tokens del tema
-  (`--is-brand-text`, `--is-color-success-500`, …), nunca a un literal.
+  (`--iswc-brand-text`, `--iswc-color-success-500`, …), nunca a un literal.
 - El clamp: ISP resolvía `--mx-lns` con `attr(data-clamp-lines type(<integer>))`,
   soportado hoy solo en Chrome. Aquí el JS escribe `--mx-lns` en el host desde
   el atributo `lines`, con la misma normalización (`max(0, floor(Number(lines)))`

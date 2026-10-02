@@ -8,7 +8,7 @@
   "sections": [
     {
       "id": "intro",
-      "title": "<is-block-diagram>",
+      "title": "Uso",
       "lede": "Diagrama de bloques en SVG, sin Mermaid. A diferencia de\r\n          <code>&lt;is-flowchart&gt;</code>, los bloques no se organizan en capas: se\r\n          ubican en una rejilla de <code>columns</code> columnas fijas, fluyendo de\r\n          izquierda a derecha y bajando de fila cuando no caben.",
       "blocks": [
         {

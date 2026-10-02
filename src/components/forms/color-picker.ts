@@ -82,11 +82,11 @@ interface WindowWithEyeDropper { EyeDropper?: EyeDropperConstructor }
   class IsColorPicker extends ElementBase {
     /** Personalización por atributo (ver `core/attrs.ts`). */
     static styleAttrs = {
-    radius: '--is-picker-radius',
-    'border-color': { prop: '--is-picker-border', onlyColorValues: true },
-    bg: { prop: '--is-picker-bg', onlyColorValues: true },
-    'text-color': { prop: '--is-picker-text', onlyColorValues: true },
-    'focus-color': { prop: '--is-picker-focus', onlyColorValues: true },
+    radius: '--iswc-picker-radius',
+    'border-color': { prop: '--iswc-picker-border', onlyColorValues: true },
+    bg: { prop: '--iswc-picker-bg', onlyColorValues: true },
+    'text-color': { prop: '--iswc-picker-text', onlyColorValues: true },
+    'focus-color': { prop: '--iswc-picker-focus', onlyColorValues: true },
     };
 
     static formAssociated = true;

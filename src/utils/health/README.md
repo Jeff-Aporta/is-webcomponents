@@ -19,20 +19,20 @@ aplica, número de línea.
 
 ```bash
 # Auditoría rápida: solo JSON, sin browser, en menos de 1 segundo
-npm run audit -- --solo-json
+deno task audit -- --solo-json
 
 # Auditoría completa: con Stagehead contra el dev server
-npm run audit:stagehand
+deno task audit:stagehand
 
 # Solo un tag puntual
-npm run audit:tag -- is-button
+deno task audit:tag -- is-button
 
 # Solo la categoría data-viz
-npm run audit:category -- data-viz
+deno task audit:category -- data-viz
 
 # Generar reporte JSON y Markdown
-npm run audit:json -- --solo-json
-npm run audit:md -- --solo-json
+deno task audit:json -- --solo-json
+deno task audit:md -- --solo-json
 ```
 
 ---

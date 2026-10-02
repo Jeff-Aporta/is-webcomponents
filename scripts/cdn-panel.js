@@ -82,8 +82,6 @@ function mountCdnPanel(tag) {
   snippet.setAttribute('tag', entry.tag);
   snippet.setAttribute('category', entry.category || '');
   snippet.setAttribute('title', `CDN · ${entry.title || entry.tag}`);
-  // Opt-in: F5 recuerda alcance tag|category|all dentro de ?s= (key cdnTab)
-  snippet.setAttribute('url-key', 'cdnTab');
   // Los enlaces a la documentación viajan como `config` del propio snippet:
   // es él quien decide si los pinta. Son opcionales, no obligatorios.
   snippet.setAttribute('config', JSON.stringify({ docs: llmDocs(entry) }));
@@ -94,5 +92,10 @@ document.addEventListener('is-preview-ready', (e) => {
   const { tag } = e.detail ?? {};
   if (typeof tag === 'string') mountCdnPanel(tag);
 });
+
+// El preview a veces ya emitio ready antes de que este modulo enganche.
+const ya = document.querySelector('is-preview-component');
+const tagListo = ya?.preview?.definition?.tag;
+if (typeof tagListo === 'string') mountCdnPanel(tagListo);
 
 export { mountCdnPanel };

@@ -177,7 +177,7 @@ class IsChart extends withStyleAttrs(HTMLElement) {
       'text-color': { prop: '--chart-text', onlyColorValues: true },
       'muted-color': { prop: '--chart-muted', onlyColorValues: true },
       surface: { prop: '--chart-surface', onlyColorValues: true },
-      'grid-color': { prop: '--is-chart-grid-color', onlyColorValues: true },
+      'grid-color': { prop: '--iswc-chart-grid-color', onlyColorValues: true },
       'axis-color': { prop: '--chart-axis-color', onlyColorValues: true },
       'bar-radius': '--chart-bar-radius',
       'bar-gap': '--chart-bar-gap',

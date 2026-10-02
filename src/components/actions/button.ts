@@ -20,7 +20,7 @@ import { setCustomState } from '../_shared/form-associated.js';
  *                             `pill` = cápsula (equivalente al booleano `pill`).
  *  hue          number (0-360)  color propio para el highlight cuando está
  *                             [selected] dentro de <is-button-group>. Si no
- *                             se define, el grupo usa su --is-accent.
+ *                             se define, el grupo usa su --iswc-accent.
  *  disabled     boolean
  *  loading      boolean
  *  pill         boolean
@@ -79,12 +79,12 @@ import { setCustomState } from '../_shared/form-associated.js';
  * Añadir color = una regla de enlace; añadir apariencia = una de variant.
  *
  * Tokens de familia (por color X = brand|success|warning|danger|info|error):
- *  --is-color-X, --is-color-X-strong, -stronger, -strongest, -pale, -paler
- *  --is-X-text, --is-X-soft, --is-X-soft-active  (brand usa --is-brand-*)
+ *  --iswc-color-X, --iswc-color-X-strong, -stronger, -strongest, -pale, -paler
+ *  --iswc-X-text, --iswc-X-soft, --iswc-X-soft-active  (brand usa --iswc-brand-*)
  * Componente:
- *  --is-button-font-family, --is-button-font-weight
- *  --is-button-border-radius, --is-button-border-width
- *  --is-button-transition-duration
+ *  --iswc-button-font-family, --iswc-button-font-weight
+ *  --iswc-button-border-radius, --iswc-button-border-width
+ *  --iswc-button-transition-duration
  */
 
 (() => {
@@ -144,11 +144,11 @@ import { setCustomState } from '../_shared/form-associated.js';
      * (`#ae3ec9`, `var(--x)`, `oklch(…)`) pinta el tono base directamente.
      */
     static styleAttrs = {
-      radius: '--is-button-border-radius',
-      'border-width': '--is-button-border-width',
-      'font-weight': '--is-button-font-weight',
-      'font-family': '--is-button-font-family',
-      'transition-duration': '--is-button-transition-duration',
+      radius: '--iswc-button-border-radius',
+      'border-width': '--iswc-button-border-width',
+      'font-weight': '--iswc-button-font-weight',
+      'font-family': '--iswc-button-font-family',
+      'transition-duration': '--iswc-button-transition-duration',
       // `color` literal no se mapea aquí: deriva la rampa entera en
       // `#syncToneColor()`. Estos tres afinan roles concretos por encima
       // de esa rampa (o del tono semántico, si `color` es una familia).
@@ -267,9 +267,9 @@ import { setCustomState } from '../_shared/form-associated.js';
 
     /**
      * Hue HSL opcional (0-360). Cuando está presente, el botón expone
-     *   --is-button-selected-hue
+     *   --iswc-button-selected-hue
      * en el :host para que <is-button-group> lo consuma en el highlight
-     * del estado [selected]. Si no se define, el grupo usa su --is-accent.
+     * del estado [selected]. Si no se define, el grupo usa su --iswc-accent.
      */
     get hue() {
       const raw = this.getAttribute("hue");
@@ -472,17 +472,17 @@ import { setCustomState } from '../_shared/form-associated.js';
      * Publica el hue en una CSS var del host para que el padre
      * (p.ej. <is-button-group>) pinte el highlight del estado [selected]
      * con el color del botón. Si no hay hue, la var queda sin definir y
-     * el consumidor cae a su propio --is-accent.
+     * el consumidor cae a su propio --iswc-accent.
      */
     #syncHue() {
       const h = this.hue;
       if (h == null) {
-        this.style.removeProperty("--is-button-selected-hue");
-        this.style.removeProperty("--is-button-selected-color");
+        this.style.removeProperty("--iswc-button-selected-hue");
+        this.style.removeProperty("--iswc-button-selected-color");
       } else {
         const norm = ((Number(h) % 360) + 360) % 360;
-        this.style.setProperty("--is-button-selected-hue", String(norm));
-        this.style.setProperty("--is-button-selected-color", `hsl(${norm} 70% 45%)`);
+        this.style.setProperty("--iswc-button-selected-hue", String(norm));
+        this.style.setProperty("--iswc-button-selected-color", `hsl(${norm} 70% 45%)`);
       }
     }
   }

@@ -105,14 +105,14 @@ No expone custom states.
 
 | Token | Uso |
 | --- | --- |
-| `--is-control-bg` | Fondo de las casillas. |
-| `--is-control-border` | Borde de las casillas. |
-| `--is-bg-soft` | Fondo del contenedor. |
-| `--is-border` | Borde del contenedor. |
-| `--is-text` | Color de los dígitos. |
-| `--is-text-soft` | Separadores y adornos. |
-| `--is-accent` | Realce de la casilla activa. |
-| `--is-radius` | Radio de bordes. |
+| `--iswc-control-bg` | Fondo de las casillas. |
+| `--iswc-control-border` | Borde de las casillas. |
+| `--iswc-bg-soft` | Fondo del contenedor. |
+| `--iswc-border` | Borde del contenedor. |
+| `--iswc-text` | Color de los dígitos. |
+| `--iswc-text-soft` | Separadores y adornos. |
+| `--iswc-accent` | Realce de la casilla activa. |
+| `--iswc-radius` | Radio de bordes. |
 
 ### Integración con formularios
 

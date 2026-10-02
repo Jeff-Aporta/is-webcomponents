@@ -3,11 +3,11 @@
  * captura pantallazos y recolecta errores de consola / pageerror.
  *
  * Uso:
- *   node scripts/serve.mjs 8391          # en otra terminal
- *   node scripts/ux-audit.ts            # barrido completo
- *   node scripts/ux-audit.ts --only is-button,is-toast
- *   node scripts/ux-audit.ts --limit 10
- *   node scripts/ux-audit.ts --port 8391 --out .tmp/ux-audit
+ *   deno run -A --no-check scripts/serve.mjs 8391          # en otra terminal
+ *   deno run -A --no-check scripts/ux-audit.ts            # barrido completo
+ *   deno run -A --no-check scripts/ux-audit.ts --only is-button,is-toast
+ *   deno run -A --no-check scripts/ux-audit.ts --limit 10
+ *   deno run -A --no-check scripts/ux-audit.ts --port 8391 --out .tmp/ux-audit
  *
  * Playwright: reusa el de Personal/apps/src/screenshot/node_modules.
  */

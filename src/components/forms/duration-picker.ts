@@ -32,8 +32,8 @@ import { ElementBase } from '../../core/element-base.js';
   class IsDurationPicker extends ElementBase {
     /** Personalización por atributo (ver `core/attrs.ts`). */
     static styleAttrs = {
-    bg: { prop: '--is-duration-picker-bg', onlyColorValues: true },
-    'border-color': { prop: '--is-duration-picker-border', onlyColorValues: true },
+    bg: { prop: '--iswc-duration-picker-bg', onlyColorValues: true },
+    'border-color': { prop: '--iswc-duration-picker-border', onlyColorValues: true },
     };
 
     static get observedAttributes(): string[] { return [...OBSERVED, 'bg', 'border-color']; }

@@ -11,8 +11,8 @@
 
 :host {
   display: inline-block;
-  font-family: var(--is-sans, inherit);
-  color: var(--is-text, inherit);
+  font-family: var(--iswc-sans, inherit);
+  color: var(--iswc-text, inherit);
   box-sizing: border-box;
 
   .form-control {
@@ -24,7 +24,7 @@
   .label {
     font-size: 0.8em;
     font-weight: 600;
-    color: var(--is-text-dim, #7a8390);
+    color: var(--iswc-text-dim, #7a8390);
   }
 
   .base {
@@ -32,21 +32,21 @@
     align-items: center;
     gap: 0.15em;
     padding: 0.45em 0.6em;
-    background: var(--is-control-bg, #fff);
-    border: 1px solid var(--is-border, #d0d7de);
-    border-radius: var(--is-radius-sm, 0.375em);
+    background: var(--iswc-control-bg, #fff);
+    border: 1px solid var(--iswc-border, #d0d7de);
+    border-radius: var(--iswc-radius-sm, 0.375em);
     font-variant-numeric: tabular-nums;
     cursor: text;
   }
 
   /* El anillo se pinta en el contenedor aunque el foco esté en una sección. */
   .base:has(.sec:focus-visible) {
-    border-color: var(--is-accent, #e03131);
-    box-shadow: 0 0 0 2px var(--is-accent-bg, rgb(224 49 49 / 12%));
+    border-color: var(--iswc-accent, #e03131);
+    box-shadow: 0 0 0 2px var(--iswc-accent-bg, rgb(224 49 49 / 12%));
   }
 
   .base[data-invalid] {
-    border-color: var(--is-color-danger, #e03131);
+    border-color: var(--iswc-color-danger, #e03131);
   }
 
   .base[data-disabled] {
@@ -69,12 +69,12 @@
 
   .sec:focus-visible,
   .sec:focus {
-    background: var(--is-accent-bg, rgb(224 49 49 / 12%));
-    color: var(--is-accent, #e03131);
+    background: var(--iswc-accent-bg, rgb(224 49 49 / 12%));
+    color: var(--iswc-accent, #e03131);
   }
 
   .sec[data-empty] {
-    color: var(--is-text-dim, #7a8390);
+    color: var(--iswc-text-dim, #7a8390);
   }
 
   .sep {
@@ -87,12 +87,12 @@
     margin-inline-start: 0.15em;
     font-size: 0.95em;
     line-height: 0;
-    color: var(--is-text-dim, #7a8390);
+    color: var(--iswc-text-dim, #7a8390);
     &[hidden] { display: none !important; }
   }
 
   .hint {
     font-size: 0.75em;
-    color: var(--is-text-dim, #7a8390);
+    color: var(--iswc-text-dim, #7a8390);
   }
 }

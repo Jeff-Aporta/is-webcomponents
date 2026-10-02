@@ -90,7 +90,7 @@ tests.push({
 });
 
 tests.push({
-  name: 'funcional: size custom se aplica como --is-heading-size en host',
+  name: 'funcional: size custom se aplica como --iswc-heading-size en host',
   run: async (page) => {
     await page.goto(URL, { waitUntil: 'domcontentloaded' });
     await waitReady(page, 'data-heading-ready');
@@ -99,7 +99,7 @@ tests.push({
       const h = document.createElement('is-heading');
       h.size = '2.5rem';
       document.body.appendChild(h);
-      const varValue = h.style.getPropertyValue('--is-heading-size');
+      const varValue = h.style.getPropertyValue('--iswc-heading-size');
       const r = { varValue, attrValue: h.getAttribute('size') };
       h.remove();
       return r;

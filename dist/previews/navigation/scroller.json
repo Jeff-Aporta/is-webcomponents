@@ -9,7 +9,7 @@
   "sections": [
     {
       "id": "intro",
-      "title": "<is-scroller>",
+      "title": "Uso",
       "lede": "Wrapper que añade scroll horizontal (o vertical) con botones prev/next\r\n          automáticos cuando el contenido del slot desborda. Ideal para\r\n          listas de pills, carruseles de chips, drawers inline, etc.",
       "blocks": [
         {

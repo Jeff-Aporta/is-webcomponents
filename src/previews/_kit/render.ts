@@ -166,6 +166,13 @@ export function renderBlock(block: PreviewBlock): HTMLElement {
   }
 }
 
+/** Indice: texto plano. Un titulo que es solo un tag no cae en el id. */
+function etiquetaIndice(title: string, id: string): string {
+  const plano = title.replace(/<[^>]+>/g, ' ').replace(/\s+/g, ' ').trim();
+  if (plano) return plano;
+  return id === 'intro' ? 'Uso' : id;
+}
+
 /** Contenedores permitidos para una sección: nunca un tag arbitrario del JSON. */
 const CONTENEDORES = new Set(['section', 'aside']);
 
@@ -239,7 +246,8 @@ export function renderDefinition(def: PreviewDefinition, targets: { main: HTMLEl
   }
   if (destino !== main) main.append(destino);
 
-  if (def.withoutToc) return;
+  // Una sola seccion no tiene indice: el panel derecho quedaria vacio.
+  if (def.withoutToc || def.sections.length < 2) return;
 
   const h1 = document.createElement('h1');
   h1.textContent = def.tag;
@@ -250,7 +258,7 @@ export function renderDefinition(def: PreviewDefinition, targets: { main: HTMLEl
   for (const section of def.sections) {
     const a = document.createElement('a');
     a.href = `#${section.id}`;
-    a.textContent = section.title.replace(/<[^>]+>/g, '') || section.id;
+    a.textContent = etiquetaIndice(section.title, section.id);
     spy.append(a);
   }
   aside.append(spy);

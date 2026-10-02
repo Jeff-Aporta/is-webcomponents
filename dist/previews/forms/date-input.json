@@ -8,7 +8,7 @@
   "sections": [
     {
       "id": "intro",
-      "title": "<is-date-input>",
+      "title": "Uso",
       "lede": "Campo + calendario en un panel del top layer (DatePicker de MUI X). Edita por secciones o abre el calendario. Alt+↓ abre el panel.",
       "blocks": [
         {
@@ -49,13 +49,13 @@
         },
         {
           "kind": "html",
-          "html": "<p class=\"lede\" id=\"log\" style=\"font-family:var(--is-mono);font-size:.85em\"></p>"
+          "html": "<p class=\"lede\" id=\"log\" style=\"font-family:var(--iswc-mono);font-size:.85em\"></p>"
         }
       ]
     },
     {
       "id": "time",
-      "title": "<is-time-input>",
+      "title": "Hora",
       "lede": "<code>panel</code> elige la superficie: columnas, lista o reloj analógico.",
       "blocks": [
         {
@@ -66,7 +66,7 @@
     },
     {
       "id": "datetime",
-      "title": "<is-date-time-input>",
+      "title": "Fecha y hora",
       "blocks": [
         {
           "kind": "demo",
@@ -76,7 +76,7 @@
     },
     {
       "id": "range",
-      "title": "<is-date-range-input>",
+      "title": "Rango de fechas",
       "lede": "Dos campos (inicio y fin) con el calendario de rango y atajos en el panel.",
       "blocks": [
         {

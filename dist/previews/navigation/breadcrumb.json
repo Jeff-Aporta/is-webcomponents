@@ -9,7 +9,7 @@
   "sections": [
     {
       "id": "intro",
-      "title": "<is-breadcrumb>",
+      "title": "Uso",
       "lede": "Migas de pan accesibles con marcado <code class=\"code\">&lt;nav&gt;</code>,\r\n          ARIA roles y separador automático entre items.",
       "blocks": [
         {
@@ -99,7 +99,7 @@
     },
     {
       "id": "reference",
-      "title": "Referencia completa — <code class=\"code\">&lt;is-breadcrumb&gt;</code>",
+      "title": "Referencia",
       "titleHtml": true,
       "blocks": [
         {

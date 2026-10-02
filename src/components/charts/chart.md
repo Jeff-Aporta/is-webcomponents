@@ -124,16 +124,16 @@ No expone.
 | `--chart-doughnut-ratio` | Token leído o definido por componente. |
 | `--dash` | Token leído o definido por componente. |
 | `--square` | Token leído o definido por componente. |
-| `--is-sans` | Token leído o definido por componente. |
+| `--iswc-sans` | Token leído o definido por componente. |
 | `--chart-tick-size` | Token leído o definido por componente. |
 | `--chart-legend-size` | Token leído o definido por componente. |
 | `--chart-title-size` | Token leído o definido por componente. |
 | `--chart-tooltip-size` | Token leído o definido por componente. |
-| `--is-text` | Token leído o definido por componente. |
+| `--iswc-text` | Token leído o definido por componente. |
 | `--chart-muted` | Token leído o definido por componente. |
-| `--is-text-dim` | Token leído o definido por componente. |
-| `--is-bg-elev` | Token leído o definido por componente. |
-| `--is-border` | Token leído o definido por componente. |
+| `--iswc-text-dim` | Token leído o definido por componente. |
+| `--iswc-bg-elev` | Token leído o definido por componente. |
+| `--iswc-border` | Token leído o definido por componente. |
 | `--chart-axis-color` | Token leído o definido por componente. |
 | `--border-color-1` | Token leído o definido por componente. |
 | `--fill-color-1` | Token leído o definido por componente. |
@@ -151,8 +151,8 @@ No expone.
 | `--fill-color-6` | Token leído o definido por componente. |
 | `--fill-color-7` | Token leído o definido por componente. |
 | `--fill-color-8` | Token leído o definido por componente. |
-| `--is-radius-sm` | Token leído o definido por componente. |
-| `--is-focus` | Token leído o definido por componente. |
+| `--iswc-radius-sm` | Token leído o definido por componente. |
+| `--iswc-focus` | Token leído o definido por componente. |
 
 ### Integración con formularios
 

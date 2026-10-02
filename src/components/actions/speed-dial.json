@@ -4,13 +4,13 @@
   "category": "actions",
   "title": "<is-speed-dial>",
   "titleHtml": true,
-  "styles": ".stage {\r\n      position: relative;\r\n      min-height: 16rem;\r\n      border: 1px dashed var(--is-border);\r\n      border-radius: var(--is-radius);\r\n      display: grid;\r\n      place-items: end center;\r\n      padding: 1rem;\r\n    }\r\n    .col { display: flex; flex-direction: column; gap: .85rem; padding: .5rem; }\r\n    .col > h4 { margin: 0; font-size: .85rem; }\r\n    .row-2 { display: grid; grid-template-columns: 1fr 1fr; gap: 1rem; }\r\n    pre.log {\r\n      font-family: ui-monospace, monospace; font-size: .8rem;\r\n      background: var(--is-bg-elev); border: 1px solid var(--is-border);\r\n      border-radius: var(--is-radius); padding: .55rem .75rem;\r\n      max-height: 9rem; overflow: auto;\r\n    }\r\n    /* Lienzos del demo radial: `transform` crea el containing block para que\r\n       el abanico se calcule (y se acote) contra ESTA caja, no el viewport. */\r\n    .radial-stage {\r\n      position: relative;\r\n      transform: translateZ(0);\r\n      display: grid;\r\n      place-items: center;\r\n      height: 340px;\r\n      border: 1px dashed var(--is-border);\r\n      border-radius: 0.6rem;\r\n      background: var(--is-bg);\r\n    }\r\n    .radial-stage--tall { height: 440px; }\r\n    .radial-stage--corner { place-items: end start; padding: 1rem; }",
+  "styles": ".stage {\r\n      position: relative;\r\n      min-height: 16rem;\r\n      border: 1px dashed var(--iswc-border);\r\n      border-radius: var(--iswc-radius);\r\n      display: grid;\r\n      place-items: end center;\r\n      padding: 1rem;\r\n    }\r\n    .col { display: flex; flex-direction: column; gap: .85rem; padding: .5rem; }\r\n    .col > h4 { margin: 0; font-size: .85rem; }\r\n    .row-2 { display: grid; grid-template-columns: 1fr 1fr; gap: 1rem; }\r\n    pre.log {\r\n      font-family: ui-monospace, monospace; font-size: .8rem;\r\n      background: var(--iswc-bg-elev); border: 1px solid var(--iswc-border);\r\n      border-radius: var(--iswc-radius); padding: .55rem .75rem;\r\n      max-height: 9rem; overflow: auto;\r\n    }\r\n    /* Lienzos del demo radial: `transform` crea el containing block para que\r\n       el abanico se calcule (y se acote) contra ESTA caja, no el viewport. */\r\n    .radial-stage {\r\n      position: relative;\r\n      transform: translateZ(0);\r\n      display: grid;\r\n      place-items: center;\r\n      height: 340px;\r\n      border: 1px dashed var(--iswc-border);\r\n      border-radius: 0.6rem;\r\n      background: var(--iswc-bg);\r\n    }\r\n    .radial-stage--tall { height: 440px; }\r\n    .radial-stage--corner { place-items: end start; padding: 1rem; }",
   "storageKey": "docs-is-speed-dial",
   "hasBehavior": true,
   "sections": [
     {
       "id": "intro",
-      "title": "<is-speed-dial>",
+      "title": "Uso",
       "lede": "FAB que al clic despliega un puñado de acciones rápidas. Apunta arriba por defecto; cambiá la dirección con el atributo <code class=\"code\">direction</code>.",
       "blocks": []
     },

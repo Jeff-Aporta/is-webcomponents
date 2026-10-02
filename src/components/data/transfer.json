@@ -9,7 +9,7 @@
   "sections": [
     {
       "id": "intro",
-      "title": "<is-transfer>",
+      "title": "Uso",
       "lede": "Doble lista de selección tipo Material/Ant. Mueve elementos entre\r\n          origen y destino con botones, click individual, filtro de búsqueda y\r\n          límite máximo configurable.",
       "blocks": [
         {

@@ -18,7 +18,7 @@
   is-waterfall-chart:not(:defined) { visibility: hidden; }
 </style>
 <script type="module">
-  const lib = await import('../../../dist/cdn/charts/marks-waterfall.min.js?h=zndhvn');
+  const lib = await import('../../../dist/cdn/charts/marks-waterfall.min.js?h=vbc5nx');
   const { waterfallBars, drawWaterfallMarks } = lib;
   document.getElementById('exports').textContent = JSON.stringify(Object.keys(lib).sort(), null, 2);
 
@@ -27,7 +27,7 @@
   document.getElementById('bars').textContent = JSON.stringify(bars, null, 2);
 
   // Demo en vivo vía <is-waterfall-chart>
-  await import('../../../dist/cdn/data-viz/waterfall-chart.min.js?h=b24hio');
+  await import('../../../dist/cdn/data-viz/waterfall-chart.min.js?h=wyzk3w');
   await customElements.whenDefined('is-waterfall-chart');
 
   const wf = document.createElement('is-waterfall-chart');

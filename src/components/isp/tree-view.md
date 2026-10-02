@@ -130,8 +130,8 @@ No expone.
 | `--trvwr-hvr-dflt` | Hover de fila. |
 | `--trvwr-hghlght-bg` | Fila seleccionada/enfocada. |
 | `--trvwr-fcs-rng` | Anillo de foco. |
-| `--is-text` | Color de texto. |
-| `--is-accent` | Acento (drop + caret). |
+| `--iswc-text` | Color de texto. |
+| `--iswc-accent` | Acento (drop + caret). |
 
 ### Integración con formularios
 

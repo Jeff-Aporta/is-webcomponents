@@ -36,7 +36,7 @@ import { TONE } from '../_shared/tone.js';
   class IsBadge extends withStyleAttrs(HTMLElement) {
     /** Personalización por atributo (ver `core/attrs.ts`). */
     static styleAttrs = {
-    'pulse-color': { prop: '--is-badge-pulse-color', onlyColorValues: true },
+    'pulse-color': { prop: '--iswc-badge-pulse-color', onlyColorValues: true },
     };
 
     static get observedAttributes(): string[] { return [...OBSERVED, 'pulse-color']; }

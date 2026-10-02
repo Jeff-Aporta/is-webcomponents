@@ -56,11 +56,11 @@ import '../actions/button.js';
   class IsPopconfirm extends ElementBase {
     /** Personalización por atributo (ver `core/attrs.ts`). */
     static styleAttrs = {
-    bg: { prop: '--is-popconfirm-bg', onlyColorValues: true },
-    'text-color': { prop: '--is-popconfirm-text', onlyColorValues: true },
-    'border-color': { prop: '--is-popconfirm-border', onlyColorValues: true },
-    accent: { prop: '--is-popconfirm-accent', onlyColorValues: true },
-    'danger-color': { prop: '--is-popconfirm-danger', onlyColorValues: true },
+    bg: { prop: '--iswc-popconfirm-bg', onlyColorValues: true },
+    'text-color': { prop: '--iswc-popconfirm-text', onlyColorValues: true },
+    'border-color': { prop: '--iswc-popconfirm-border', onlyColorValues: true },
+    accent: { prop: '--iswc-popconfirm-accent', onlyColorValues: true },
+    'danger-color': { prop: '--iswc-popconfirm-danger', onlyColorValues: true },
     };
 
     static get observedAttributes(): string[] { return [...OBSERVED, 'bg', 'text-color', 'border-color', 'accent', 'danger-color']; }

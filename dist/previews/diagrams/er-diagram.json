@@ -8,7 +8,7 @@
   "sections": [
     {
       "id": "intro",
-      "title": "<is-er-diagram>",
+      "title": "Uso",
       "lede": "Diagrama entidad-relación en SVG, sin Mermaid. Declaras entidades con sus\r\n          atributos y las relaciones entre ellas; el componente ubica las cajas,\r\n          rutea las líneas con A* y dibuja la notación de pata de gallo en cada extremo.",
       "blocks": [
         {

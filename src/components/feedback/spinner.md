@@ -81,8 +81,8 @@ No expone.
 | `--track-color` | Token leído o definido por componente. |
 | `--indicator-color` | Token leído o definido por componente. |
 | `--speed` | Token leído o definido por componente. |
-| `--is-control-border` | Token leído o definido por componente. |
-| `--is-color-brand-500` | Token leído o definido por componente. |
+| `--iswc-control-border` | Token leído o definido por componente. |
+| `--iswc-color-brand-500` | Token leído o definido por componente. |
 
 ### Integración con formularios
 

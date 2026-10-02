@@ -103,14 +103,14 @@ No expone.
 
 | Token | Uso |
 | --- | --- |
-| `--is-bg-elev` | Token leído o definido por componente. |
-| `--is-text` | Token leído o definido por componente. |
-| `--is-border` | Token leído o definido por componente. |
-| `--is-accent` | Token leído o definido por componente. |
-| `--is-radius` | Token leído o definido por componente. |
-| `--is-shadow` | Token leído o definido por componente. |
-| `--is-popover-radius` | Token leído o definido por componente. |
-| `--is-popover-shadow` | Token leído o definido por componente. |
+| `--iswc-bg-elev` | Token leído o definido por componente. |
+| `--iswc-text` | Token leído o definido por componente. |
+| `--iswc-border` | Token leído o definido por componente. |
+| `--iswc-accent` | Token leído o definido por componente. |
+| `--iswc-radius` | Token leído o definido por componente. |
+| `--iswc-shadow` | Token leído o definido por componente. |
+| `--iswc-popover-radius` | Token leído o definido por componente. |
+| `--iswc-popover-shadow` | Token leído o definido por componente. |
 
 ### Integración con formularios
 

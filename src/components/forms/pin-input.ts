@@ -46,13 +46,13 @@ import { ElementBase } from '../../core/element-base.js';
   class IsPinInput extends ElementBase {
     /** Personalización por atributo (ver `core/attrs.ts`). */
     static styleAttrs = {
-    'cell-size': '--is-pin-cell-size',
-    gap: '--is-pin-gap',
-    bg: { prop: '--is-pin-bg', onlyColorValues: true },
-    'text-color': { prop: '--is-pin-text', onlyColorValues: true },
-    'border-color': { prop: '--is-pin-border', onlyColorValues: true },
-    'focus-color': { prop: '--is-pin-focus', onlyColorValues: true },
-    'danger-color': { prop: '--is-pin-danger', onlyColorValues: true },
+    'cell-size': '--iswc-pin-cell-size',
+    gap: '--iswc-pin-gap',
+    bg: { prop: '--iswc-pin-bg', onlyColorValues: true },
+    'text-color': { prop: '--iswc-pin-text', onlyColorValues: true },
+    'border-color': { prop: '--iswc-pin-border', onlyColorValues: true },
+    'focus-color': { prop: '--iswc-pin-focus', onlyColorValues: true },
+    'danger-color': { prop: '--iswc-pin-danger', onlyColorValues: true },
     };
 
     static get observedAttributes(): string[] { return [...OBSERVED, 'cell-size', 'gap', 'bg', 'text-color', 'border-color', 'focus-color', 'danger-color']; }

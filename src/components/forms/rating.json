@@ -10,7 +10,7 @@
   "sections": [
     {
       "id": "intro",
-      "title": "<is-rating>",
+      "title": "Uso",
       "lede": "Valoración form-associated con paridad funcional con el\r\n          <a href=\"https://mui.com/material-ui/react-rating/\" target=\"_blank\" rel=\"noreferrer\">Rating de MUI</a>:\r\n          precisión arbitraria, iconos propios, textos de hover, variantes de color y reset.",
       "blocks": [
         {
@@ -131,7 +131,7 @@
     {
       "id": "basics",
       "title": "Básicos",
-      "lede": "<code class=\"code\">max</code> define cuántos iconos hay.\r\n          El tamaño no es un atributo: los iconos escalan con el\r\n          <code class=\"code\">font-size</code> del contexto (o con\r\n          <code class=\"code\">--is-rating-size</code>).",
+      "lede": "<code class=\"code\">max</code> define cuántos iconos hay.\r\n          El tamaño no es un atributo: los iconos escalan con el\r\n          <code class=\"code\">font-size</code> del contexto (o con\r\n          <code class=\"code\">--iswc-rating-size</code>).",
       "blocks": [
         {
           "kind": "demo",
@@ -206,15 +206,15 @@
     {
       "id": "color",
       "title": "Color",
-      "lede": "<code class=\"code\">variant</code> redefine <code class=\"code\">--is-rating-color</code>.\r\n          El hueco usa siempre <code class=\"code\">--is-rating-empty</code>.",
+      "lede": "<code class=\"code\">variant</code> redefine <code class=\"code\">--iswc-rating-color</code>.\r\n          El hueco usa siempre <code class=\"code\">--iswc-rating-empty</code>.",
       "blocks": [
         {
           "kind": "demo",
-          "html": "<div class=\"stack\">\r\n            <is-rating label=\"brand (default)\" value=\"3\"></is-rating>\r\n            <is-rating color=\"neutral\" label=\"neutral\" value=\"3\"></is-rating>\r\n            <is-rating color=\"success\" label=\"success\" value=\"3\"></is-rating>\r\n            <is-rating color=\"warning\" label=\"warning\" value=\"3\"></is-rating>\r\n            <is-rating color=\"danger\" label=\"danger\" value=\"3\"></is-rating>\r\n            <is-rating label=\"Token propio\" value=\"3\" style=\"--is-rating-color:#845ef7;\"></is-rating>\r\n          </div>"
+          "html": "<div class=\"stack\">\r\n            <is-rating label=\"brand (default)\" value=\"3\"></is-rating>\r\n            <is-rating color=\"neutral\" label=\"neutral\" value=\"3\"></is-rating>\r\n            <is-rating color=\"success\" label=\"success\" value=\"3\"></is-rating>\r\n            <is-rating color=\"warning\" label=\"warning\" value=\"3\"></is-rating>\r\n            <is-rating color=\"danger\" label=\"danger\" value=\"3\"></is-rating>\r\n            <is-rating label=\"Token propio\" value=\"3\" style=\"--iswc-rating-color:#845ef7;\"></is-rating>\r\n          </div>"
         },
         {
           "kind": "code",
-          "code": "<is-rating color=\"success\" value=\"3\"></is-rating>\n<is-rating style=\"--is-rating-color:#845ef7\" value=\"3\"></is-rating>"
+          "code": "<is-rating color=\"success\" value=\"3\"></is-rating>\n<is-rating style=\"--iswc-rating-color:#845ef7\" value=\"3\"></is-rating>"
         }
       ]
     },
@@ -235,7 +235,7 @@
     },
     {
       "id": "clearable",
-      "title": "Reset (clearable)",
+      "title": "Reiniciar",
       "lede": "Con <code class=\"code\">clearable</code>, volver a pulsar el valor ya seleccionado lo pone a\r\n          <code class=\"code\">0</code> (solo si <code class=\"code\">value &gt;= 1</code>).\r\n          <code class=\"code\">Delete</code> y <code class=\"code\">Backspace</code> hacen lo mismo desde el teclado.\r\n          Sin el atributo, el segundo clic no hace nada.",
       "blocks": [
         {
@@ -250,7 +250,7 @@
     },
     {
       "id": "form",
-      "title": "Dentro de un <form>",
+      "title": "Dentro de un formulario",
       "lede": "El valor se envía bajo <code class=\"code\">name</code>; con <code class=\"code\">value = 0</code>\r\n          la entrada se omite y <code class=\"code\">required</code> bloquea el envío.\r\n          <code class=\"code\">form.reset()</code> vuelve al valor del atributo.",
       "blocks": [
         {
@@ -383,7 +383,7 @@
             ],
             [
               "tokens",
-              "<code>--is-rating-size</code> <code>--is-rating-gap</code> <code>--is-rating-color</code> <code>--is-rating-empty</code> <code>--is-rating-focus</code>"
+              "<code>--iswc-rating-size</code> <code>--iswc-rating-gap</code> <code>--iswc-rating-color</code> <code>--iswc-rating-empty</code> <code>--iswc-rating-focus</code>"
             ]
           ]
         }

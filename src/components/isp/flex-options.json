@@ -10,7 +10,7 @@
   "sections": [
     {
       "id": "intro",
-      "title": "<is-flex-options>",
+      "title": "Uso",
       "lede": "Port de <code class=\"code\">FlexOptions</code>. El consumidor pasa <code class=\"code\">actions</code> / <code class=\"code\">more</code>; el tag pinta el kit.",
       "blocks": [
         {

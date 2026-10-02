@@ -4,7 +4,7 @@
   "category": "data-viz",
   "title": "Sparkline",
   "titleHtml": false,
-  "styles": ".spark-row { display: flex; flex-wrap: wrap; gap: 1.25rem 2rem; align-items: center; }\r\n    .spark-metric { display: inline-flex; align-items: baseline; gap: 0.5rem; font-size: 1rem; }\r\n    .spark-metric is-sparkline { width: 5.5em; height: 1.35em; }\r\n    .spark-big is-sparkline { width: 12em; height: 3em; }\r\n    .spark-table { width: 100%; border-collapse: collapse; font-size: 0.9rem; }\r\n    .spark-table th, .spark-table td {\r\n      padding: 0.55em 0.75em; border-bottom: 1px solid var(--is-border-soft); text-align: left;\r\n    }\r\n    .spark-table is-sparkline { width: 6em; height: 1.25em; }",
+  "styles": ".spark-row { display: flex; flex-wrap: wrap; gap: 1.25rem 2rem; align-items: center; }\r\n    .spark-metric { display: inline-flex; align-items: baseline; gap: 0.5rem; font-size: 1rem; }\r\n    .spark-metric is-sparkline { width: 5.5em; height: 1.35em; }\r\n    .spark-big is-sparkline { width: 12em; height: 3em; }\r\n    .spark-table { width: 100%; border-collapse: collapse; font-size: 0.9rem; }\r\n    .spark-table th, .spark-table td {\r\n      padding: 0.55em 0.75em; border-bottom: 1px solid var(--iswc-border-soft); text-align: left;\r\n    }\r\n    .spark-table is-sparkline { width: 6em; height: 1.25em; }",
   "storageKey": "docs-is-sparkline",
   "sections": [
     {

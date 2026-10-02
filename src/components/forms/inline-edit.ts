@@ -32,8 +32,8 @@ import { setOptionalAttr } from '../_shared/reflect.js';
  *   is-cancel    detalle: { value, previous }
  *
  * Tokens CSS:
- *   --is-inline-edit-min-h   altura mínima del textarea (modo textarea)
- *   --is-inline-edit-radius
+ *   --iswc-inline-edit-min-h   altura mínima del textarea (modo textarea)
+ *   --iswc-inline-edit-radius
  */
 (() => {
   const STATES: string[] = ['idle', 'editing', 'saved', 'cancelled'];

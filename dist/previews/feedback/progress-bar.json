@@ -4,7 +4,7 @@
   "category": "feedback",
   "title": "Progress Bar",
   "titleHtml": false,
-  "styles": ".pb-demo { max-width: 28rem; display: flex; flex-direction: column; gap: 0.85rem; }\r\n    .pb-meta {\r\n      display: flex; justify-content: space-between; align-items: baseline;\r\n      font-size: 0.9rem; color: var(--is-text-soft);\r\n    }\r\n    .pb-meta strong { color: var(--is-text); font-variant-numeric: tabular-nums; }\r\n    .pb-actions { display: flex; flex-wrap: wrap; gap: 0.5rem; }",
+  "styles": ".pb-demo { max-width: 28rem; display: flex; flex-direction: column; gap: 0.85rem; }\r\n    .pb-meta {\r\n      display: flex; justify-content: space-between; align-items: baseline;\r\n      font-size: 0.9rem; color: var(--iswc-text-soft);\r\n    }\r\n    .pb-meta strong { color: var(--iswc-text); font-variant-numeric: tabular-nums; }\r\n    .pb-actions { display: flex; flex-wrap: wrap; gap: 0.5rem; }",
   "storageKey": "docs-is-progress-bar",
   "hasBehavior": true,
   "sections": [
@@ -51,7 +51,7 @@
       "blocks": [
         {
           "kind": "demo",
-          "html": "<div class=\"pb-demo\">\r\n            <is-progress-bar value=\"30\" label=\"30%\"></is-progress-bar>\r\n            <is-progress-bar value=\"100\" label=\"Completado\"\r\n              style=\"--indicator-color: var(--is-color-success)\"></is-progress-bar>\r\n            <is-progress-bar indeterminate label=\"Procesando\"></is-progress-bar>\r\n          </div>"
+          "html": "<div class=\"pb-demo\">\r\n            <is-progress-bar value=\"30\" label=\"30%\"></is-progress-bar>\r\n            <is-progress-bar value=\"100\" label=\"Completado\"\r\n              style=\"--indicator-color: var(--iswc-color-success)\"></is-progress-bar>\r\n            <is-progress-bar indeterminate label=\"Procesando\"></is-progress-bar>\r\n          </div>"
         },
         {
           "kind": "code",

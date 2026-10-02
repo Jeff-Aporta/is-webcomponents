@@ -113,15 +113,15 @@ Propiedades públicas aparecen en tabla anterior; APIs heredadas se verifican en
 
 | Token | Uso |
 | --- | --- |
-| `--is-font-family` | Token leído o definido por componente. |
-| `--is-text` | Token leído o definido por componente. |
-| `--is-text-soft` | Token leído o definido por componente. |
-| `--is-control-border` | Token leído o definido por componente. |
-| `--is-control-bg` | Token leído o definido por componente. |
-| `--is-color-brand-500` | Token leído o definido por componente. |
-| `--is-focus` | Token leído o definido por componente. |
-| `--is-surface` | Token leído o definido por componente. |
-| `--is-color-danger-500` | Token leído o definido por componente. |
+| `--iswc-font-family` | Token leído o definido por componente. |
+| `--iswc-text` | Token leído o definido por componente. |
+| `--iswc-text-soft` | Token leído o definido por componente. |
+| `--iswc-control-border` | Token leído o definido por componente. |
+| `--iswc-control-bg` | Token leído o definido por componente. |
+| `--iswc-color-brand-500` | Token leído o definido por componente. |
+| `--iswc-focus` | Token leído o definido por componente. |
+| `--iswc-surface` | Token leído o definido por componente. |
+| `--iswc-color-danger-500` | Token leído o definido por componente. |
 
 ### Integración con formularios
 

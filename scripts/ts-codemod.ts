@@ -11,7 +11,7 @@
  * TS2339. Eso exige leer el selector y el uso, y un `as HTMLElement` puesto a
  * ciegas silencia el error mintiendo. Esos se corrigen a mano.
  *
- *   node scripts/ts-codemod.ts src/components/actions
+ *   deno run -A --no-check scripts/ts-codemod.ts src/components/actions
  */
 import { readdirSync, readFileSync, statSync, writeFileSync } from 'node:fs';
 import { join } from 'node:path';
@@ -111,7 +111,7 @@ function ficheros(dir) {
 
 const objetivo = process.argv[2];
 if (!objetivo) {
-  console.error('uso: node scripts/ts-codemod.ts <carpeta o fichero>');
+  console.error('uso: deno run -A --no-check scripts/ts-codemod.ts <carpeta o fichero>');
   process.exit(2);
 }
 const lista = statSync(objetivo).isDirectory() ? ficheros(objetivo) : [objetivo];

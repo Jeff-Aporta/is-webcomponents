@@ -96,20 +96,20 @@ No expone.
 
 | Token | Uso |
 | --- | --- |
-| `--is-text-soft` | Token leído o definido por componente. |
-| `--is-mono` | Token leído o definido por componente. |
-| `--is-radius-sm` | Token leído o definido por componente. |
-| `--is-border` | Token leído o definido por componente. |
-| `--is-code-bg` | Token leído o definido por componente. |
-| `--is-code-text` | Token leído o definido por componente. |
-| `--is-focus` | Token leído o definido por componente. |
-| `--is-danger-text` | Token leído o definido por componente. |
-| `--is-control-border` | Token leído o definido por componente. |
-| `--is-control-bg` | Token leído o definido por componente. |
-| `--is-control-text` | Token leído o definido por componente. |
-| `--is-control-bg-hover` | Token leído o definido por componente. |
-| `--is-accent` | Token leído o definido por componente. |
-| `--is-on-brand` | Token leído o definido por componente. |
+| `--iswc-text-soft` | Token leído o definido por componente. |
+| `--iswc-mono` | Token leído o definido por componente. |
+| `--iswc-radius-sm` | Token leído o definido por componente. |
+| `--iswc-border` | Token leído o definido por componente. |
+| `--iswc-code-bg` | Token leído o definido por componente. |
+| `--iswc-code-text` | Token leído o definido por componente. |
+| `--iswc-focus` | Token leído o definido por componente. |
+| `--iswc-danger-text` | Token leído o definido por componente. |
+| `--iswc-control-border` | Token leído o definido por componente. |
+| `--iswc-control-bg` | Token leído o definido por componente. |
+| `--iswc-control-text` | Token leído o definido por componente. |
+| `--iswc-control-bg-hover` | Token leído o definido por componente. |
+| `--iswc-accent` | Token leído o definido por componente. |
+| `--iswc-on-brand` | Token leído o definido por componente. |
 
 ### Integración con formularios
 

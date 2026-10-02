@@ -9,7 +9,7 @@
   "sections": [
     {
       "id": "intro",
-      "title": "<is-popconfirm>",
+      "title": "Uso",
       "lede": "Cuadro de confirmación rápido anclado a un botón. Sin modal, sin tapar\r\n          la pantalla. Perfecto para \"¿Seguro que quieres borrar?\" en línea.",
       "blocks": [
         {
@@ -57,7 +57,7 @@
     },
     {
       "id": "custom",
-      "title": "Slot message",
+      "title": "Mensaje propio",
       "lede": "El contenido del slot <code class=\"code\">message</code> reemplaza el atributo.",
       "blocks": [
         {

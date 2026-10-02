@@ -3,8 +3,8 @@
   display: block;
   position: relative;
   width: 100%;
-  font-family: var(--is-sans, inherit);
-  color: var(--is-text, inherit);
+  font-family: var(--iswc-sans, inherit);
+  color: var(--iswc-text, inherit);
 
   .base {
     position: relative;
@@ -23,7 +23,7 @@
     padding-top: 20px;
     font-size: 0.8rem;
     line-height: 1rem;
-    color: var(--is-color, var(--is-text, #222));
+    color: var(--iswc-color, var(--iswc-text, #222));
     width: 100%;
     overflow: hidden;
     text-overflow: ellipsis;
@@ -34,7 +34,7 @@
   }
 
   .value-label .missing {
-    color: var(--is-color-danger, crimson);
+    color: var(--iswc-color-danger, crimson);
   }
 
   .open {
@@ -44,7 +44,7 @@
     top: 6px;
     height: 20px;
     padding: 0.375rem;
-    color: var(--is-color, var(--is-text, #222));
+    color: var(--iswc-color, var(--iswc-text, #222));
     background: transparent;
     cursor: pointer;
     line-height: inherit;
@@ -53,7 +53,7 @@
   }
 
   .open:disabled {
-    color: var(--is-b-readonly, #888);
+    color: var(--iswc-b-readonly, #888);
     cursor: default;
   }
 
@@ -61,7 +61,7 @@
   .open:not(:disabled):hover {
     outline: 2px solid transparent;
     outline-offset: 2px;
-    color: var(--is-primary, var(--is-accent, #3b82f6));
+    color: var(--iswc-primary, var(--iswc-accent, #3b82f6));
   }
 
   .dlg-footer {
@@ -73,10 +73,10 @@
 }
 
 :host([required]:not([optional])) .open:focus {
-  color: var(--is-b-required, var(--is-color-danger, crimson));
+  color: var(--iswc-b-required, var(--iswc-color-danger, crimson));
 }
 
 :host(:not([required])) .open:focus,
 :host([optional]) .open:focus {
-  color: var(--is-b-optional, #80c080);
+  color: var(--iswc-b-optional, #80c080);
 }

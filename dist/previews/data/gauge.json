@@ -5,13 +5,13 @@
   "title": "<is-gauge>",
   "titleHtml": true,
   "description": "Documentación y demos de is-gauge de InSoft.",
-  "styles": ".gauge-grid {\r\n      display: grid;\r\n      grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));\r\n      gap: 1rem;\r\n      align-items: center;\r\n    }\r\n    .gauge-cell {\r\n      display: flex;\r\n      flex-direction: column;\r\n      align-items: center;\r\n      gap: 0.5rem;\r\n      padding: 1rem;\r\n      background: var(--is-bg-2, #181b22);\r\n      border: 1px solid var(--is-border, #2a2f3a);\r\n      border-radius: 0.5rem;\r\n    }",
+  "styles": ".gauge-grid {\r\n      display: grid;\r\n      grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));\r\n      gap: 1rem;\r\n      align-items: center;\r\n    }\r\n    .gauge-cell {\r\n      display: flex;\r\n      flex-direction: column;\r\n      align-items: center;\r\n      gap: 0.5rem;\r\n      padding: 1rem;\r\n      background: var(--iswc-bg-2, #181b22);\r\n      border: 1px solid var(--iswc-border, #2a2f3a);\r\n      border-radius: 0.5rem;\r\n    }",
   "storageKey": "docs-is-gauge",
   "hasBehavior": true,
   "sections": [
     {
       "id": "intro",
-      "title": "<is-gauge>",
+      "title": "Uso",
       "lede": "Medidor circular SVG de porcentaje. Soporta variantes, semicírculo,\r\n          custom min/max, unidad, formato y tamaño.",
       "blocks": [
         {

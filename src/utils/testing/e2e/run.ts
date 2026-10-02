@@ -1,8 +1,8 @@
 // run.ts: runner de la suite E2E de is-webcomponents. Levanta un servidor
 // estatico con la galeria (transpilando TS al vuelo, igual que serve.mjs) al
-// empezar, corre `node --test` sobre los *.test.ts y apaga el servidor al
+// empezar, corre `deno test` sobre los *.test.ts y apaga el servidor al
 // terminar (pase o falle). Para apuntar a un host externo:
-//   E2E_AUTOSERVE=0 E2E_BASE_URL=http://127.0.0.1:8391/index.html npm run test:e2e
+//   E2E_AUTOSERVE=0 E2E_BASE_URL=http://127.0.0.1:8391/index.html deno task test:e2e
 import { spawn } from 'node:child_process';
 import { readdirSync } from 'node:fs';
 import { join, dirname } from 'node:path';
@@ -101,7 +101,7 @@ await descargarConfigE2E();
 
 const child = spawn(
   process.execPath,
-  ['--experimental-strip-types', '--test', '--test-concurrency=1', ...archivos],
+  ['test', '-A', '--no-check', ...archivos],
   { stdio: 'inherit', env: { ...process.env, E2E_BASE_URL: String(base) } },
 );
 

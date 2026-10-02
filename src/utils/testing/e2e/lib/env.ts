@@ -9,10 +9,10 @@ import { fileURLToPath } from 'node:url';
 
 const e2eDir: string = path.resolve(path.dirname(fileURLToPath(import.meta.url)), '..');
 
-function subirHastaPackageJson(inicio: string): string {
+function subirHastaRaiz(inicio: string): string {
   let d = inicio;
   for (let i = 0; i < 10; i++) {
-    if (existsSync(path.join(d, 'package.json'))) return d;
+    if (existsSync(path.join(d, 'deno.json'))) return d;
     const padre = path.resolve(d, '..');
     if (padre === d) break;
     d = padre;
@@ -26,7 +26,7 @@ function subir(inicio: string, niveles: number): string {
   return d;
 }
 
-const repoDir: string = subirHastaPackageJson(e2eDir);
+const repoDir: string = subirHastaRaiz(e2eDir);
 // Raíz del workspace: C:\ContaPyme (repo en ...\Personal\apps\is-webcomponents)
 const workspaceDir: string = subir(repoDir, 3);
 

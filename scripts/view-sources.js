@@ -65,8 +65,8 @@ function ensureDialog() {
   dlg.setAttribute('light-dismiss', '');
   dlg.setAttribute('width', '100vw');
   dlg.setAttribute('spacing', '0');
-  dlg.style.setProperty('--is-dialog-width', '100vw');
-  dlg.style.setProperty('--is-dialog-spacing', '0px');
+  dlg.style.setProperty('--iswc-dialog-width', '100vw');
+  dlg.style.setProperty('--iswc-dialog-spacing', '0px');
   dlg.innerHTML = `
     <span slot="label" class="vs-title">Fuentes</span>
     <div slot="header-actions" class="vs-header-actions">

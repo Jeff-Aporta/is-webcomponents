@@ -13,9 +13,9 @@
  * Estado persistente en `src/assets/icons/.state/` (ignorado por git).
  *
  * Uso:
- *   node scripts/download-icons.ts              # descarga todas las colecciones
- *   node scripts/download-icons.ts --only=mdi   # descarga solo una coleccion
- *   node scripts/download-icons.ts --no-skip    # re-descarga siempre
+ *   deno run -A --no-check scripts/download-icons.ts              # descarga todas las colecciones
+ *   deno run -A --no-check scripts/download-icons.ts --only=mdi   # descarga solo una coleccion
+ *   deno run -A --no-check scripts/download-icons.ts --no-skip    # re-descarga siempre
  *
  * Output final:
  *   src/assets/icons/<prefix>/<name>.svg   ~13K-300K SVGs

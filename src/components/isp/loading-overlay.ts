@@ -46,8 +46,8 @@ import { ElementBase } from '../../core/element-base.js';
   class IsLoadingOverlay extends ElementBase {
     /** Personalización por atributo (ver `core/attrs.ts`). */
     static styleAttrs = {
-    'backdrop-color': { prop: '--is-loading-backdrop', onlyColorValues: true },
-    'indicator-color': { prop: '--is-loading-indicator', onlyColorValues: true },
+    'backdrop-color': { prop: '--iswc-loading-backdrop', onlyColorValues: true },
+    'indicator-color': { prop: '--iswc-loading-indicator', onlyColorValues: true },
     };
 
     static get observedAttributes(): string[] { return [...OBSERVED, 'backdrop-color', 'indicator-color']; }

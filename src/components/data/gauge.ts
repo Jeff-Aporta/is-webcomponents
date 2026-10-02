@@ -43,7 +43,7 @@ import { ElementBase } from '../../core/element-base.js';
   class IsGauge extends ElementBase {
     /** Personalización por atributo (ver `core/attrs.ts`). */
     static styleAttrs = {
-    'track-color': { prop: '--is-gauge-track-color', onlyColorValues: true },
+    'track-color': { prop: '--iswc-gauge-track-color', onlyColorValues: true },
     };
 
     static get observedAttributes(): string[] { return [...OBSERVED, 'track-color']; }

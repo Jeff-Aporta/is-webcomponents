@@ -5,7 +5,7 @@
  * ocultar Columnas/Filtros/Densidad/Exportar y se intentó con CSS o flags
  * inventados. El contrato canónico es toolbar-tools="false".
  *
- *   node --test tests/data-grid-toolbar.test.ts
+ *   deno test -A --no-check tests/data-grid-toolbar.test.ts
  */
 import { test } from 'node:test';
 import assert from 'node:assert/strict';

@@ -59,15 +59,15 @@ import { hasSlotted } from '../_shared/dom-utils.js';
   class IsCheckbox extends ElementBase {
     /** Personalización por atributo (ver `core/attrs.ts`). */
     static styleAttrs = {
-    size: '--is-checkbox-size',
-    radius: '--is-checkbox-radius',
-    bg: { prop: '--is-checkbox-bg', onlyColorValues: true },
-    'bg-hover': { prop: '--is-checkbox-bg-hover', onlyColorValues: true },
-    'border-color': { prop: '--is-checkbox-border', onlyColorValues: true },
-    accent: { prop: '--is-checkbox-accent', onlyColorValues: true },
-    'focus-color': { prop: '--is-checkbox-focus', onlyColorValues: true },
-    'mark-color': { prop: '--is-checkbox-mark', onlyColorValues: true },
-    halo: '--is-checkbox-halo',
+    size: '--iswc-checkbox-size',
+    radius: '--iswc-checkbox-radius',
+    bg: { prop: '--iswc-checkbox-bg', onlyColorValues: true },
+    'bg-hover': { prop: '--iswc-checkbox-bg-hover', onlyColorValues: true },
+    'border-color': { prop: '--iswc-checkbox-border', onlyColorValues: true },
+    accent: { prop: '--iswc-checkbox-accent', onlyColorValues: true },
+    'focus-color': { prop: '--iswc-checkbox-focus', onlyColorValues: true },
+    'mark-color': { prop: '--iswc-checkbox-mark', onlyColorValues: true },
+    halo: '--iswc-checkbox-halo',
     };
 
     static formAssociated = true;

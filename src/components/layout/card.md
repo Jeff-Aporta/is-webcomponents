@@ -97,16 +97,16 @@ No expone.
 | Token | Uso |
 | --- | --- |
 | `--spacing` | Token leído o definido por componente. |
-| `--is-space-l` | Token leído o definido por componente. |
+| `--iswc-space-l` | Token leído o definido por componente. |
 | `--card-bg` | Token leído o definido por componente. |
 | `--card-border` | Token leído o definido por componente. |
-| `--is-radius` | Token leído o definido por componente. |
-| `--is-text` | Token leído o definido por componente. |
-| `--is-sans` | Token leído o definido por componente. |
-| `--is-border` | Token leído o definido por componente. |
-| `--is-bg-elev` | Token leído o definido por componente. |
-| `--is-accent-bg` | Token leído o definido por componente. |
-| `--is-accent` | Token leído o definido por componente. |
+| `--iswc-radius` | Token leído o definido por componente. |
+| `--iswc-text` | Token leído o definido por componente. |
+| `--iswc-sans` | Token leído o definido por componente. |
+| `--iswc-border` | Token leído o definido por componente. |
+| `--iswc-bg-elev` | Token leído o definido por componente. |
+| `--iswc-accent-bg` | Token leído o definido por componente. |
+| `--iswc-accent` | Token leído o definido por componente. |
 
 ### Integración con formularios
 
@@ -134,7 +134,7 @@ Documentación de cabecera preservada desde fuente:
 >   footer-actions   acciones dentro del footer (vertical only)
 > CSS Parts:  ::part(media) ::part(header) ::part(body) ::part(footer) ::part(actions)
 > CSS custom properties
->   --spacing     padding/gap entre secciones (default var(--is-space-l, 1rem))
+>   --spacing     padding/gap entre secciones (default var(--iswc-space-l, 1rem))
 > Layout:
 >   vertical  → media → header → body → footer  (column)
 >   horizontal→ media | body | actions           (row, body grows)

@@ -6,7 +6,7 @@
 <title>Demo <is-theme-toggle> · is-webcomponents</title>
 <meta name="description" content="Demo de <is-theme-toggle>: alterna theme-dark / theme-light en el contenedor más cercano." />
 <style>
-  html, body { margin: 0; padding: 0; background: var(--is-bg, #0c1118); color: var(--is-fg, #e2e8f0); font-family: ui-sans-serif, system-ui, sans-serif; min-height: 100vh; }
+  html, body { margin: 0; padding: 0; background: var(--iswc-bg, #0c1118); color: var(--iswc-fg, #e2e8f0); font-family: ui-sans-serif, system-ui, sans-serif; min-height: 100vh; }
   body { padding: 24px; display: grid; gap: 24px; }
   header h1 { font-size: 18px; margin: 0 0 4px; }
   header p  { font-size: 13px; color: rgba(255,255,255,0.6); margin: 0; }
@@ -17,7 +17,7 @@
   is-theme-toggle:not(:defined) { visibility: hidden; }
 </style>
 <script type="module">
-  await import('../../../dist/cdn/feedback/theme-toggle.min.js?h=mz4c1x');
+  await import('../../../dist/cdn/feedback/theme-toggle.min.js?h=82vhpq');
 
   await customElements.whenDefined('is-theme-toggle');
   document.documentElement.dataset.themeToggleReady = '1';

@@ -66,9 +66,9 @@ export type Status = 'success' | 'warning' | 'danger';
 export function getStatusColor(el: Element, status: Status): string {
   const cs = getComputedStyle(el);
   const map: Record<Status, string> = {
-    success: '--is-success-text',
-    warning: '--is-warning-text',
-    danger: '--is-danger-text',
+    success: '--iswc-success-text',
+    warning: '--iswc-warning-text',
+    danger: '--iswc-danger-text',
   };
   return cs.getPropertyValue(map[status] ?? map.success).trim();
 }

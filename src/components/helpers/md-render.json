@@ -9,7 +9,7 @@
   "sections": [
     {
       "id": "intro",
-      "title": "<is-md-render>",
+      "title": "Uso",
       "lede": "Render inline de MD/HTML + chips <code class=\"code\">{{variable}}</code>. Sin toolbar ni diálogo.",
       "blocks": [
         {
@@ -43,7 +43,7 @@
     },
     {
       "id": "vs-editor",
-      "title": "vs <is-md-editor>",
+      "title": "Frente al editor",
       "blocks": [
         {
           "kind": "table",

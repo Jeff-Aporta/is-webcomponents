@@ -5,7 +5,7 @@ import { sequenceThemeDark, sequenceThemeLight } from './sequence-spec.js';
 import { SequenceTurtle } from './sequence-turtle.js';
 import { tkHueToHex } from '../_shared/tk-hue.js';
 import { edgeStrokeHex, edgeChipFill, edgeChipText } from '../_shared/diagram-edge-style.js';
-import { inlineMdWeb } from '../_shared/tk-inline-md.js';
+import { inlineMdWeb, applySvgTextContent } from '../_shared/tk-inline-md.js';
 import { wrapText, buildTspans } from '../_shared/diagram-text-wrap.js';
 import { svgIconGroup } from '../_shared/tk-icon-inline.js';
 import { registerDiagramKind } from './diagram-kinds.js';
@@ -433,8 +433,9 @@ class IsErDiagram extends DiagramElementBase {
           x: leftX, y: ry, fill: theme.text, 'font-size': '10.5',
           'font-family': 'Tahoma,Arial,sans-serif',
         });
-        nameEl.textContent = a.name;
         g.appendChild(nameEl);
+        if (a.name.includes('{{')) applySvgTextContent(nameEl, a.name);
+        else nameEl.textContent = a.name;
 
         if (a.type) {
           const typeEl = svgEl('text', {

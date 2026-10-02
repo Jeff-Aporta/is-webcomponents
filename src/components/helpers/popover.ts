@@ -24,7 +24,7 @@ import './floating.js';
  *         is-reposition { placement, x, y }, is-hover-bridge { hovering }
  * Parts: ::part(body) ::part(dialog) ::part(popup) ::part(arrow)
  *        ::part(hover-bridge) ::part(anchor)
- * CSS: --is-popover-max-width --is-popover-arrow-size --is-popover-show-duration --is-popover-hide-duration
+ * CSS: --iswc-popover-max-width --iswc-popover-arrow-size --iswc-popover-show-duration --iswc-popover-hide-duration
  *        --auto-size-available-width --auto-size-available-height
  * data-popover="close" en hijos cierra el popover.
  */
@@ -87,10 +87,10 @@ interface FloatingElement extends HTMLElement {
   class IsPopover extends withStyleAttrs(HTMLElement) {
     /** Personalización por atributo (ver `core/attrs.ts`). */
     static styleAttrs = {
-      'max-width': '--is-popover-max-width',
-      'arrow-size': '--is-popover-arrow-size',
-      'show-duration': '--is-popover-show-duration',
-      'hide-duration': '--is-popover-hide-duration',
+      'max-width': '--iswc-popover-max-width',
+      'arrow-size': '--iswc-popover-arrow-size',
+      'show-duration': '--iswc-popover-show-duration',
+      'hide-duration': '--iswc-popover-hide-duration',
     };
 
     static get observedAttributes(): string[] {

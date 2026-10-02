@@ -1,1 +1,1 @@
-:host{--is-focus-fallback: var(--is-color-brand, dodgerblue);--is-focus-offset: 2px}.is-focus-ring:focus-visible{outline:2px solid var(--is-focus, var(--is-focus-fallback));outline-offset:var(--is-focus-offset)}
+:host{--iswc-focus-fallback: var(--iswc-color-brand, dodgerblue);--iswc-focus-offset: 2px}.is-focus-ring:focus-visible{outline:2px solid var(--iswc-focus, var(--iswc-focus-fallback));outline-offset:var(--iswc-focus-offset)}

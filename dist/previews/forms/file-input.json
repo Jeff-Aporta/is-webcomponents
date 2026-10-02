@@ -9,7 +9,7 @@
   "sections": [
     {
       "id": "intro",
-      "title": "<is-file-input>",
+      "title": "Uso",
       "lede": "Dropzone con input nativo oculto, lista de archivos y estados <code class=\"code\">blank</code> / <code class=\"code\">dragging</code>.",
       "blocks": [
         {

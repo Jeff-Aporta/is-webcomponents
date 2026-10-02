@@ -4,7 +4,7 @@ import { resolveQuadrantSpec, computeQuadrantLayout } from './quadrant-spec.js';
 import { sequenceThemeDark, sequenceThemeLight } from './sequence-spec.js';
 import type { DiagramTheme } from './diagram-types.js';
 import { tkHueToHex } from '../_shared/tk-hue.js';
-import { inlineMdWeb } from '../_shared/tk-inline-md.js';
+import { inlineMdWeb, applySvgTextContent } from '../_shared/tk-inline-md.js';
 import { wrapText, buildTspans } from '../_shared/diagram-text-wrap.js';
 import { registerDiagramKind } from './diagram-kinds.js';
 import { svgEl } from '../_shared/svg-chart-engine.js';
@@ -270,8 +270,8 @@ class IsQuadrantChart extends DiagramElementBase {
         'font-size': '10', 'font-weight': '600', 'font-family': 'Tahoma,Arial,sans-serif',
         class: 'qd-point__label',
       });
-      t.innerHTML = inlineMdWeb(pt.label);
       g.appendChild(t);
+      applySvgTextContent(t, pt.label);
 
       this.svg.appendChild(g);
       this.#pointNodes.set(pt.id, { pt, g });

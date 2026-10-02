@@ -66,8 +66,8 @@ import './button.js';
   class IsFab extends ElementBase {
     /** Personalización por atributo (ver `core/attrs.ts`). */
     static styleAttrs = {
-      size: '--is-fab-size',
-      shadow: '--is-fab-shadow',
+      size: '--iswc-fab-size',
+      shadow: '--iswc-fab-shadow',
     };
 
     static get observedAttributes(): string[] { return [...OBSERVED, ...IsFab.styleAttrNames]; }

@@ -58,11 +58,11 @@ import { ElementBase } from '../../core/element-base.js';
   class IsTree extends ElementBase {
     /** Personalización por atributo (ver `core/attrs.ts`). */
     static styleAttrs = {
-    indent: '--is-tree-indent',
-    'row-padding-y': '--is-tree-row-padding-y',
-    'row-padding-x': '--is-tree-row-padding-x',
-    'row-hover': { prop: '--is-tree-row-hover', onlyColorValues: true },
-    'row-selected-bg': { prop: '--is-tree-row-selected-bg', onlyColorValues: true },
+    indent: '--iswc-tree-indent',
+    'row-padding-y': '--iswc-tree-row-padding-y',
+    'row-padding-x': '--iswc-tree-row-padding-x',
+    'row-hover': { prop: '--iswc-tree-row-hover', onlyColorValues: true },
+    'row-selected-bg': { prop: '--iswc-tree-row-selected-bg', onlyColorValues: true },
     };
 
     static get observedAttributes(): string[] { return [...TREE_OBSERVED, ...IsTree.styleAttrNames]; }

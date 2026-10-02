@@ -17,7 +17,7 @@ Flujo: [flujo-sdd.md](flujo-sdd.md).
 | Inventario de tags | [`manifest.js`](../src/manifest.ts) |
 | Fuentes de componentes | `src/components/` |
 | Previews | `src/previews/<cat>/<tag>.json` + `behaviors/` |
-| Estilos / tokens | `src/styles/` (`--is-*`) |
+| Estilos / tokens | `src/styles/` (`--iswc-*`) |
 | Artefactos CDN | `dist/cdn/` (generado; no editar a mano) |
 | Contrato SDD | `specs/` (esta carpeta) |
 | Diario operativo | [`lessons.md`](lessons.md) |

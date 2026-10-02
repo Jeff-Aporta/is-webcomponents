@@ -9,7 +9,7 @@
   "sections": [
     {
       "id": "intro",
-      "title": "<is-radio-group>",
+      "title": "Uso",
       "lede": "Agrupa varios <code class=\"code\">&lt;is-radio&gt;</code> bajo un mismo nombre y expone el valor seleccionado como un único control de formulario.",
       "blocks": [
         {

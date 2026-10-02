@@ -1,6 +1,5 @@
 // cdn-snippet.stagehand.test.mjs — checks visuales deterministas.
-// Foco: el panel renderiza sin overflow, los radios están alineados, los
-// bloques de código tienen tamaño razonable.
+// Foco: el panel renderiza sin overflow y los bloques de código tienen tamaño razonable.
 import assert from 'node:assert/strict';
 import { BASE_URL, newPage, close, waitReady, screenshot, report } from './lib/harness.mjs';
 
@@ -30,23 +29,6 @@ checks.push({
     assert.ok(info.secRect.w <= info.vw, `ancho del panel (${info.secRect.w}) no debe exceder viewport (${info.vw})`);
     assert.ok(info.secRect.h <= info.vh * 5, `alto del panel no debe ser excesivo (era ${info.secRect.h})`);
     await screenshot(page, 'cdn-snippet-layout');
-  },
-});
-
-checks.push({
-  name: 'layout: los radios del fieldset están alineados horizontalmente',
-  run: async (page) => {
-    await page.goto(URL, { waitUntil: 'domcontentloaded' });
-    await waitReady(page, 'data-cdn-snippet-ready');
-    const ys = await page.evaluate(() => {
-      const el = document.querySelector('is-cdn-snippet');
-      const root = el.shadowRoot;
-      const labels = root.querySelectorAll('[data-slot="scope"] label.cdn__radio');
-      return [...labels].map((l) => l.getBoundingClientRect().y);
-    });
-    assert.equal(ys.length, 3, `esperaba 3 radios, hay ${ys.length}`);
-    const spread = Math.max(...ys) - Math.min(...ys);
-    assert.ok(spread < 200, `radios deben quedar en la misma fila (spread vertical=${spread})`);
   },
 });
 

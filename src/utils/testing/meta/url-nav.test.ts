@@ -76,12 +76,12 @@ test('snippet CDN loader: script src + loadCSS/load', async () => {
   assert.doesNotMatch(src, /#buildBootSnippet/);
 });
 
-test('is-cdn-snippet url-key persiste alcance tag|category|all', async () => {
+test('is-cdn-snippet carga solo el tag, sin radio ni url-key', async () => {
   const src = await readFile(join(raiz, 'src/components/feedback/cdn-snippet.ts'), 'utf8');
-  assert.match(src, /'url-key'/);
-  assert.match(src, /#persistScopeToUrl|#restoreScopeFromUrl/);
-  assert.match(src, /tag['"]\s*\|\s*['"]category['"]\s*\|\s*['"]all|SCOPES/);
-  assert.match(src, /\?s=/);
+  assert.doesNotMatch(src, /'url-key'/);
+  assert.doesNotMatch(src, /name="cdn-scope"/);
+  assert.doesNotMatch(src, /readUrlNav|writeUrlNav/);
+  assert.match(src, /return tag/);
 });
 
 test('galería mergea nav keys al actualizar component en ?s=', async () => {

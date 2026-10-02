@@ -5,12 +5,12 @@
   "title": "<is-button-group>",
   "titleHtml": true,
   "description": "Documentación y demos del componente is-button-group de InSoft.",
-  "styles": "\n  .bar { display: flex; flex-wrap: wrap; align-items: center; gap: 0.75rem; }\n  .stack { display: flex; flex-direction: column; align-items: flex-start; gap: 1rem; }\n  .field { display: grid; gap: 0.4rem; justify-items: start; }\n  .field > .cap {\n    font-family: \"JetBrains Mono\", var(--is-mono);\n    font-size: 0.7rem;\n    color: var(--is-text-dim);\n  }\n  .native-demo {\n    font: inherit;\n    padding: 0.55em 1em;\n    border: 1px solid var(--is-border);\n    background: var(--is-control-bg);\n    color: var(--is-text);\n    cursor: pointer;\n  }\n",
+  "styles": "\n  .bar { display: flex; flex-wrap: wrap; align-items: center; gap: 0.75rem; }\n  .stack { display: flex; flex-direction: column; align-items: flex-start; gap: 1rem; }\n  .field { display: grid; gap: 0.4rem; justify-items: start; }\n  .field > .cap {\n    font-family: \"JetBrains Mono\", var(--iswc-mono);\n    font-size: 0.7rem;\n    color: var(--iswc-text-dim);\n  }\n  .native-demo {\n    font: inherit;\n    padding: 0.55em 1em;\n    border: 1px solid var(--iswc-border);\n    background: var(--iswc-control-bg);\n    color: var(--iswc-text);\n    cursor: pointer;\n  }\n",
   "storageKey": "docs-is-button-group",
   "sections": [
     {
       "id": "intro",
-      "title": "<is-button-group>",
+      "title": "Uso",
       "titleHtml": true,
       "lede": "Agrupa botones relacionados en una sola unidad visual y, si se lo pides, gestiona cuál está activo. Sirve para controles segmentados, toolbars y split buttons.",
       "blocks": [
@@ -363,7 +363,7 @@
             ],
             [
               "tokens",
-              "<code>--is-button-group-radius</code> <code>--is-button-group-gap</code> <code>--is-button-group-pad</code> <code>--is-button-group-accent</code>"
+              "<code>--iswc-button-group-radius</code> <code>--iswc-button-group-gap</code> <code>--iswc-button-group-pad</code> <code>--iswc-button-group-accent</code>"
             ]
           ]
         }

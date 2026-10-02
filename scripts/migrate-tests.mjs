@@ -1,4 +1,4 @@
-#!/usr/bin/env node
+#!/usr/bin/env -S deno run -A --no-check
 /**
  * scripts/migrate-tests.mjs
  *
@@ -11,7 +11,7 @@
  *   - domain/    → componentes y features específicos
  *   - e2e/       → (ya existe; no tocamos)
  *
- * Uso: node scripts/migrate-tests.mjs
+ * Uso: deno run -A --no-check scripts/migrate-tests.mjs
  */
 import { readdirSync, statSync, mkdirSync, renameSync } from 'node:fs';
 import { join, dirname } from 'node:path';

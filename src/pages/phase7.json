@@ -5,7 +5,7 @@
   "title": "Fase 7 — Composiciones",
   "titleHtml": false,
   "description": "Composiciones reales integrando múltiples componentes IS: dialogs con forms, cards con acciones, drawers con tabs, selects múltiples y listas con avatares.",
-  "styles": ".grid-2 {\r\n      display: grid;\r\n      grid-template-columns: 1fr 1fr;\r\n      gap: 0.5rem;\r\n    }\r\n    .muted {\r\n      color: var(--is-text-muted, #8a90a0);\r\n      font-size: 0.85em;\r\n    }\r\n    .list-custom {\r\n      list-style: none;\r\n      margin: 0;\r\n      padding: 0;\r\n      display: flex;\r\n      flex-direction: column;\r\n      gap: 0.25rem;\r\n    }\r\n    .list-row {\r\n      display: flex;\r\n      align-items: center;\r\n      gap: 0.75rem;\r\n      padding: 0.5rem 0.75rem;\r\n      border-radius: 0.5rem;\r\n      transition: background 0.1s;\r\n    }\r\n    .list-row:hover {\r\n      background: rgba(255,255,255,0.04);\r\n    }\r\n    .list-meta {\r\n      flex: 1 1 auto;\r\n      display: flex;\r\n      flex-direction: column;\r\n    }",
+  "styles": ".grid-2 {\r\n      display: grid;\r\n      grid-template-columns: 1fr 1fr;\r\n      gap: 0.5rem;\r\n    }\r\n    .muted {\r\n      color: var(--iswc-text-muted, #8a90a0);\r\n      font-size: 0.85em;\r\n    }\r\n    .list-custom {\r\n      list-style: none;\r\n      margin: 0;\r\n      padding: 0;\r\n      display: flex;\r\n      flex-direction: column;\r\n      gap: 0.25rem;\r\n    }\r\n    .list-row {\r\n      display: flex;\r\n      align-items: center;\r\n      gap: 0.75rem;\r\n      padding: 0.5rem 0.75rem;\r\n      border-radius: 0.5rem;\r\n      transition: background 0.1s;\r\n    }\r\n    .list-row:hover {\r\n      background: rgba(255,255,255,0.04);\r\n    }\r\n    .list-meta {\r\n      flex: 1 1 auto;\r\n      display: flex;\r\n      flex-direction: column;\r\n    }",
   "storageKey": "docs-phase7",
   "sections": [
     {
@@ -16,7 +16,7 @@
     },
     {
       "id": "dialog-form",
-      "title": "7.1 — Dialog + form",
+      "title": "Diálogo con formulario",
       "lede": "Un mini-CRM: crear contacto con nombre, email, rol, suscripción a newsletter y notas.",
       "blocks": [
         {
@@ -31,7 +31,7 @@
     },
     {
       "id": "card-actions",
-      "title": "7.2 — Card + header-actions",
+      "title": "Tarjeta con acciones",
       "lede": "Card con badges, dropdown de más acciones y tabs de detalle dentro.",
       "blocks": [
         {
@@ -42,7 +42,7 @@
     },
     {
       "id": "drawer-tabs",
-      "title": "7.3 — Drawer + tab + split-panel",
+      "title": "Cajón, pestañas y panel",
       "lede": "Sidebar persistente a la izquierda + drawer deslizante a la derecha con tabs.",
       "blocks": [
         {
@@ -53,7 +53,7 @@
     },
     {
       "id": "multi-select",
-      "title": "7.4 — Select múltiple (tag + popup + checkbox)",
+      "title": "Selección múltiple",
       "lede": "Tags seleccionados + popover para agregar/quitar. Patrón típico de invitaciones.",
       "blocks": [
         {
@@ -64,7 +64,7 @@
     },
     {
       "id": "list",
-      "title": "7.5 — List patterns con avatar, badge, button, dropdown",
+      "title": "Listas con avatar y acciones",
       "lede": "Una lista de equipo combinando avatar + badge + button + dropdown.",
       "blocks": [
         {

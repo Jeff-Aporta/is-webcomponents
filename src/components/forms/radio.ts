@@ -40,7 +40,7 @@ import { setOptionalAttr } from '../_shared/reflect.js';
   class IsRadio extends ElementBase {
     /** Personalización por atributo (ver `core/attrs.ts`). */
     static styleAttrs = {
-    accent: { prop: '--is-radio-accent', onlyColorValues: true },
+    accent: { prop: '--iswc-radio-accent', onlyColorValues: true },
     };
 
     static get observedAttributes(): string[] { return [...OBSERVED, 'accent']; }

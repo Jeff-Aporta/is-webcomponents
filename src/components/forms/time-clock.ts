@@ -55,8 +55,8 @@ interface PickOpts { advance?: boolean }
   class IsTimeClock extends ElementBase {
     /** Personalización por atributo (ver `core/attrs.ts`). */
     static styleAttrs = {
-    size: '--is-clock-size',
-    'face-color': { prop: '--is-clock-face', onlyColorValues: true },
+    size: '--iswc-clock-size',
+    'face-color': { prop: '--iswc-clock-face', onlyColorValues: true },
     };
 
     static get observedAttributes(): string[] { return [...OBSERVED, 'size', 'face-color']; }

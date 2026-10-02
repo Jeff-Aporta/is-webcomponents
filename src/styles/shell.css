@@ -15,9 +15,9 @@ body {
     "main";
   min-height: 100%;
   overflow: hidden;
-  background: var(--is-bg);
-  color: var(--is-text);
-  font: 0.9375rem/1.4 var(--is-sans);
+  background: var(--iswc-bg);
+  color: var(--iswc-text);
+  font: 0.9375rem/1.4 var(--iswc-sans);
 }
 
 .main-split {
@@ -42,10 +42,10 @@ body {
   min-height: 3.75em;
   padding: 0.625em 0.875em;
   /* Cristal sobrio: elevación por profundidad, no por color. */
-  background: color-mix(in srgb, var(--is-bg-elev) 88%, transparent);
+  background: color-mix(in srgb, var(--iswc-bg-elev) 88%, transparent);
   backdrop-filter: blur(14px) saturate(120%);
   -webkit-backdrop-filter: blur(14px) saturate(120%);
-  border-bottom: 1px solid var(--is-border);
+  border-bottom: 1px solid var(--iswc-border);
   box-shadow:
     0 1px 0 color-mix(in srgb, #fff 5%, transparent) inset,
     0 6px 20px rgb(0 0 0 / 14%);
@@ -58,8 +58,8 @@ body {
     inset: auto 0 -1px;
     height: 1px;
     background: linear-gradient(90deg,
-      var(--is-accent),
-      color-mix(in srgb, var(--is-accent) 25%, transparent) 42%,
+      var(--iswc-accent),
+      color-mix(in srgb, var(--iswc-accent) 25%, transparent) 42%,
       transparent 72%);
     opacity: 0.7;
     pointer-events: none;
@@ -80,8 +80,8 @@ body {
     padding: 0.45em 0.8em;
     border: 0;
     border-radius: 0.45em;
-    background: var(--is-logo-bg);
-    color: var(--is-logo-fg);
+    background: var(--iswc-logo-bg);
+    color: var(--iswc-logo-fg);
     font: inherit;
     font-weight: 800;
     letter-spacing: -0.045em;
@@ -92,11 +92,11 @@ body {
     &:hover { filter: brightness(1.04); }
     &:active { transform: translateY(1px); }
     &:focus-visible {
-      outline: 2px solid var(--is-focus);
+      outline: 2px solid var(--iswc-focus);
       outline-offset: 2px;
     }
 
-    & .brand__accent { color: var(--is-logo-accent); }
+    & .brand__accent { color: var(--iswc-logo-accent); }
   }
 
   & .brand-menu {
@@ -108,10 +108,10 @@ body {
     margin: 0;
     padding: 0.35em;
     list-style: none;
-    background: var(--is-bg-elev);
-    border: 1px solid var(--is-border);
+    background: var(--iswc-bg-elev);
+    border: 1px solid var(--iswc-border);
     border-radius: 0.55em;
-    box-shadow: var(--is-shadow);
+    box-shadow: var(--iswc-shadow);
 
     & [role="option"] {
       display: flex;
@@ -119,7 +119,7 @@ body {
       gap: 0.55em;
       padding: 0.5em 0.7em;
       border-radius: 0.4em;
-      color: var(--is-text);
+      color: var(--iswc-text);
       font-size: 0.875rem;
       font-weight: 600;
       cursor: pointer;
@@ -127,29 +127,26 @@ body {
       opacity: 0.55;
       transition: opacity 120ms ease, background-color 120ms ease, color 120ms ease;
 
-      &:hover { opacity: 1; background: var(--is-control-bg-hover); }
+      &:hover { opacity: 1; background: var(--iswc-control-bg-hover); }
       /* focus (teclado): mismo nivel visual que hover para no perdernos. */
-      &:focus-visible { opacity: 1; outline: 2px solid var(--is-focus); outline-offset: -2px; }
+      &:focus-visible { opacity: 1; outline: 2px solid var(--iswc-focus); outline-offset: -2px; }
 
       &[aria-selected="true"] {
         opacity: 1;
-        background: var(--is-brand-soft);
-        color: var(--is-brand-text);
+        background: var(--iswc-brand-soft);
+        color: var(--iswc-brand-text);
       }
     }
 
-    /* Punto de color: gradiente de marca por paleta, ring neutro. */
-    & [data-palette="insoft"]    .brand-menu__swatch { background: var(--is-color-brand, #e03131); }
-    & [data-palette="contapyme"] .brand-menu__swatch { background: var(--is-color-brand, dodgerblue); }
-    & [data-palette="agrowin"]   .brand-menu__swatch { background: var(--is-color-brand, yellowgreen); }
-
+    /* El li trae data-palette, asi que --iswc-color-brand ya es el de esa paleta. */
     & .brand-menu__swatch {
+      background: var(--iswc-color-brand);
       flex: 0 0 auto;
       width: 0.85em;
       height: 0.85em;
       border-radius: 50%;
       /* ring neutro para que destaque sobre fondos suaves */
-      box-shadow: 0 0 0 1px var(--is-border);
+      box-shadow: 0 0 0 1px var(--iswc-border);
     }
 
     & .brand-menu__label {
@@ -171,20 +168,20 @@ body {
   }
 
   & .brand-wrap.is-open .brand {
-    outline: 2px solid var(--is-focus);
+    outline: 2px solid var(--iswc-focus);
     outline-offset: 2px;
   }
 
   & button {
     min-height: 2.25em;
-    border: 1px solid var(--is-control-border);
+    border: 1px solid var(--iswc-control-border);
     border-radius: 0.4em;
-    background: var(--is-control-bg);
-    color: var(--is-control-text);
+    background: var(--iswc-control-bg);
+    color: var(--iswc-control-text);
     font: inherit;
 
     &:focus-visible {
-      outline: 2px solid var(--is-focus);
+      outline: 2px solid var(--iswc-focus);
       outline-offset: 2px;
     }
   }
@@ -211,11 +208,11 @@ body {
   overflow-y: auto;
   /* Tinte de marca mínimo arriba: ubica la columna sin gritar. */
   background:
-    linear-gradient(180deg, color-mix(in srgb, var(--is-accent) 5%, transparent) 0, transparent 7em),
-    var(--is-bg-elev);
-  border-right: 1px solid var(--is-border);
+    linear-gradient(180deg, color-mix(in srgb, var(--iswc-accent) 5%, transparent) 0, transparent 7em),
+    var(--iswc-bg-elev);
+  border-right: 1px solid var(--iswc-border);
   scrollbar-width: thin;
-  scrollbar-color: color-mix(in srgb, var(--is-accent) 35%, var(--is-control-border)) transparent;
+  scrollbar-color: color-mix(in srgb, var(--iswc-accent) 35%, var(--iswc-control-border)) transparent;
 
   &::-webkit-scrollbar { width: 9px; }
   &::-webkit-scrollbar-track { background: transparent; }
@@ -223,10 +220,10 @@ body {
     border: 3px solid transparent;
     border-radius: 999px;
     background-clip: content-box;
-    background-color: color-mix(in srgb, var(--is-control-border) 70%, transparent);
+    background-color: color-mix(in srgb, var(--iswc-control-border) 70%, transparent);
   }
   &:hover::-webkit-scrollbar-thumb {
-    background-color: color-mix(in srgb, var(--is-accent) 45%, var(--is-control-border));
+    background-color: color-mix(in srgb, var(--iswc-accent) 45%, var(--iswc-control-border));
   }
 
   & .shell-nav__group {
@@ -246,7 +243,7 @@ body {
     font-weight: 700;
     letter-spacing: 0.11em;
     text-transform: uppercase;
-    color: var(--is-text-dim);
+    color: var(--iswc-text-dim);
     line-height: 1.25;
     user-select: text;
 
@@ -254,7 +251,7 @@ body {
       content: "";
       flex: 1;
       height: 1px;
-      background: linear-gradient(90deg, var(--is-border), transparent);
+      background: linear-gradient(90deg, var(--iswc-border), transparent);
       /* El hilo decorativo no debe robar selección del título. */
       user-select: none;
       pointer-events: none;
@@ -275,7 +272,7 @@ body {
     border: 1px solid transparent;
     border-radius: 0.35em;
     background: transparent;
-    color: var(--is-text);
+    color: var(--iswc-text);
     font: inherit;
     font-size: 0.9em;
     line-height: 1.22;
@@ -287,11 +284,11 @@ body {
                 color 140ms ease, padding-inline-start 140ms ease;
 
     &:hover {
-      background: var(--is-control-bg-hover);
+      background: var(--iswc-control-bg-hover);
       padding-inline-start: 1.15em;
     }
     &:focus-visible {
-      outline: 2px solid var(--is-focus);
+      outline: 2px solid var(--iswc-focus);
       outline-offset: 1px;
     }
 
@@ -306,22 +303,22 @@ body {
       width: 0.35em;
       height: 0.35em;
       border-radius: 50%;
-      background: color-mix(in srgb, var(--is-text-dim, #64748b) 70%, transparent);
-      box-shadow: 0 0 0 1px color-mix(in srgb, var(--is-border, #273040) 50%, transparent);
+      background: color-mix(in srgb, var(--iswc-text-dim, #64748b) 70%, transparent);
+      box-shadow: 0 0 0 1px color-mix(in srgb, var(--iswc-border, #273040) 50%, transparent);
     }
     & .shell-nav__tag {
-      font-family: var(--is-mono, ui-monospace, monospace);
+      font-family: var(--iswc-mono, ui-monospace, monospace);
       font-size: 0.72em;
       font-weight: 500;
       line-height: 1.15;
-      color: var(--is-text-dim);
+      color: var(--iswc-text-dim);
       word-break: break-all;
     }
 
     &[aria-current="true"] {
-      background: var(--is-brand-soft);
-      border-color: var(--is-brand-soft-active);
-      color: var(--is-brand-text);
+      background: var(--iswc-brand-soft);
+      border-color: var(--iswc-brand-soft-active);
+      color: var(--iswc-brand-text);
       font-weight: 600;
 
       /* Barra de acento a la izquierda: el activo se lee de un golpe. */
@@ -333,11 +330,11 @@ body {
         bottom: 0.4em;
         width: 3px;
         border-radius: 999px;
-        background: var(--is-accent);
+        background: var(--iswc-accent);
       }
 
       & .shell-nav__tag {
-        color: color-mix(in srgb, var(--is-brand-text) 75%, var(--is-text-dim));
+        color: color-mix(in srgb, var(--iswc-brand-text) 75%, var(--iswc-text-dim));
       }
     }
   }
@@ -347,7 +344,7 @@ body {
   width: 100%;
   height: 100%;
   border: 0;
-  background: var(--is-bg);
+  background: var(--iswc-bg);
 }
 
 .preview-stage {
@@ -356,7 +353,7 @@ body {
   height: 100%;
   min-height: 0;
   display: grid;
-  background: var(--is-bg);
+  background: var(--iswc-bg);
 }
 
 .preview-stage > .preview-frame,
@@ -370,7 +367,7 @@ body {
 
 .preview-host {
   overflow: auto;
-  background: var(--is-bg);
+  background: var(--iswc-bg);
 }
 
 .preview-host[hidden],

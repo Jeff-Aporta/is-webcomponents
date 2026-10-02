@@ -31,7 +31,7 @@ La galería (`index.html` + `src/previews/`) es el laboratorio visual del kit. C
 
 - CSS en `<link>` estático; shell mínimo con `await`; resto on-demand (`GALLERY_CHROME_TAGS` + tags del JSON activo).
 - `setHostPreview`: borrar own-property `.preview` antes de asignar al CE.
-- Dev server oficial: `node scripts/serve.mjs` (puerto 8391, `Cache-Control: no-store`).
+- Dev server oficial: `deno run -A --no-check scripts/serve.mjs` (puerto 8391, `Cache-Control: no-store`).
 
 ## Contratos
 

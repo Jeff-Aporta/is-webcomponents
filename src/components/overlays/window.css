@@ -6,10 +6,10 @@
   --_w: 380px;
   --_h: 260px;
   /* La sombra propia de la ventana: más profunda que la del popover base. */
-  --is-popover-shadow:
-    0 0 0 1px color-mix(in srgb, var(--is-text) 4%, transparent) inset,
+  --iswc-popover-shadow:
+    0 0 0 1px color-mix(in srgb, var(--iswc-text) 4%, transparent) inset,
     0 26px 60px rgba(0, 0, 0, .36);
-  position: fixed;
+  position: absolute;
   left: 50%; top: 12%;
   transform: translate(-50%, 0);
   display: block;
@@ -17,8 +17,23 @@
   height: var(--_h);
   z-index: var(--z, 100);
   font: inherit;
-  color: var(--is-text);
+  color: var(--iswc-text);
 }
+
+/* Global usa el viewport. position explicito gana sobre el default del scope. */
+:host([scope="global"]) { position: fixed; }
+:host([position="absolute"]) { position: absolute; }
+:host([position="fixed"]) { position: fixed; }
+
+/* Pastilla: max 100px, abajo del contexto. Global se pega al viewport. */
+:host([data-state="minimized"]) {
+  width: max-content;
+  max-width: 100px;
+  height: auto;
+  min-width: 0;
+  cursor: pointer;
+}
+:host([data-state="minimized"][scope="global"]) { position: fixed; }
 
 /* Borde, radio, fondo y sombra vienen de `.is-popover-panel`. */
 .root {
@@ -31,12 +46,12 @@
 
 /* La fila flex, el padding y el separador vienen de `.is-surface-bar`. */
 .header {
-  --is-surface-bar-gap: .35rem;
-  --is-surface-bar-padding: .45rem .65rem;
+  --iswc-surface-bar-gap: .35rem;
+  --iswc-surface-bar-padding: .45rem .65rem;
   background:
     linear-gradient(180deg,
-      color-mix(in srgb, var(--is-bg-elev) 96%, transparent),
-      color-mix(in srgb, var(--is-bg-elev) 86%, transparent));
+      color-mix(in srgb, var(--iswc-bg-elev) 96%, transparent),
+      color-mix(in srgb, var(--iswc-bg-elev) 86%, transparent));
   cursor: grab;
   user-select: none;
 
@@ -66,7 +81,7 @@
    `:host([variant=…]) .btn` (0,2,0), así que hace falta llegar a esa
    especificidad: `is-button.ctrl::part(button)` es (0,2,1) y gana. */
 is-button.ctrl {
-  --is-button-border-radius: 6px;
+  --iswc-button-border-radius: 6px;
   font-size: .8rem;
 
   &::part(button) {
@@ -92,19 +107,36 @@ is-button.ctrl {
   background:
     linear-gradient(135deg,
       transparent 50%,
-      color-mix(in srgb, var(--is-text) 25%, transparent) 50%,
-      color-mix(in srgb, var(--is-text) 25%, transparent) 60%,
+      color-mix(in srgb, var(--iswc-text) 25%, transparent) 50%,
+      color-mix(in srgb, var(--iswc-text) 25%, transparent) 60%,
       transparent 60%,
       transparent 75%,
-      color-mix(in srgb, var(--is-text) 25%, transparent) 75%,
-      color-mix(in srgb, var(--is-text) 25%, transparent) 85%,
+      color-mix(in srgb, var(--iswc-text) 25%, transparent) 75%,
+      color-mix(in srgb, var(--iswc-text) 25%, transparent) 85%,
       transparent 85%);
 }
 
-.is-minimized {
-  width: 14rem !important;
-  height: auto !important;
-
-  & .body { display: none; }
-  & .resizer { display: none; }
+:host([data-state="minimized"]) .root {
+  position: relative;
+  inset: auto;
+  width: auto;
+  max-width: 100px;
+  height: auto;
+  border-radius: 999px;
 }
+
+:host([data-state="minimized"]) .header {
+  border-bottom: 0;
+  padding: .28rem .65rem;
+  cursor: pointer;
+}
+
+:host([data-state="minimized"]) .title,
+:host([data-state="minimized"]) .title-wrap {
+  font-size: .78rem;
+  max-width: 100px;
+}
+
+:host([data-state="minimized"]) .body,
+:host([data-state="minimized"]) .resizer,
+:host([data-state="minimized"]) .controls { display: none; }

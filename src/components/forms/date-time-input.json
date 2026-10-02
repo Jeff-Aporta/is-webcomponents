@@ -9,7 +9,7 @@
   "sections": [
     {
       "id": "intro",
-      "title": "<is-date-time-input>",
+      "title": "Uso",
       "lede": "Entrada de fecha y hora con calendario y reloj en el mismo desplegable.",
       "blocks": [
         {

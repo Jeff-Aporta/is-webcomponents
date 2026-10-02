@@ -269,7 +269,7 @@ try {
   const skillsList = await readdir('dist/cdn/skills');
   console.log(`\nskills/ ${skillsList.length} → dist/cdn/skills/ (verificado)`);
 } catch {
-  console.error('  ⚠ dist/cdn/skills no existe — ¿corrió `npm run build`?');
+  console.error('  ⚠ dist/cdn/skills no existe — ¿corrió `deno task build`?');
 }
 
 console.log(`\nOK ${ok} bundleados/copiados (${failed} fallaron) en total.`);

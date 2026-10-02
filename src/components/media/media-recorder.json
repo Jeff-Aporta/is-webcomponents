@@ -9,7 +9,7 @@
   "sections": [
     {
       "id": "intro",
-      "title": "<is-media-recorder>",
+      "title": "Uso",
       "lede": "Graba cámara, micrófono o pantalla (`getDisplayMedia`) con `MediaRecorder` y entrega un Blob.",
       "blocks": [
         {

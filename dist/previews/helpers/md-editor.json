@@ -9,7 +9,7 @@
   "sections": [
     {
       "id": "intro",
-      "title": "<is-md-editor>",
+      "title": "Uso",
       "lede": "Vista previa MD/HTML + chips <code class=\"code\">{{variable}}</code>. Clic abre diálogo fullscreen.\n          Toolbar completa (disabled en solo lectura). Footer: meta + Descargar (siempre).",
       "blocks": [
         {
@@ -80,7 +80,7 @@
     },
     {
       "id": "vs-render",
-      "title": "vs <is-md-render>",
+      "title": "Frente al visor",
       "blocks": [
         {
           "kind": "table",

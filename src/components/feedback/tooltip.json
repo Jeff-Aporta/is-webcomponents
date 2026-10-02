@@ -10,7 +10,7 @@
   "sections": [
     {
       "id": "intro",
-      "title": "<is-tooltip>",
+      "title": "Uso",
       "lede": "Tip breve anclado con <code class=\"code\">for</code>. Depende de <code class=\"code\">is-popover</code>.",
       "blocks": [
         {
@@ -77,7 +77,7 @@
       "blocks": [
         {
           "kind": "demo",
-          "html": "<is-button id=\"t-html\" color=\"brand\">Auditoría · tip largo</is-button>\r\n          <is-tooltip\r\n            for=\"t-html\"\r\n            trigger=\"click\"\r\n            placement=\"bottom-start\"\r\n            style=\"--max-width: 22rem\"\r\n          >\r\n            <p><strong>Resumen de cumplimiento</strong></p>\r\n            <p>\r\n              Este tip muestra contenido enriquecido para revisar wrapping,\r\n              contraste y dismiss al clic fuera.\r\n            </p>\r\n            <ul>\r\n              <li>Tokens <code>--is-*</code> y tipografía del tema</li>\r\n              <li>Máximo ancho vía <code>--max-width</code></li>\r\n              <li>Enlace de ejemplo:\r\n                <a href=\"https://developer.mozilla.org/en-US/docs/Web/Accessibility/ARIA/Roles/tooltip_role\" target=\"_blank\" rel=\"noopener\">ARIA tooltip</a>\r\n              </li>\r\n            </ul>\r\n            <p>Última revisión: sprint actual · owner: Design System</p>\r\n          </is-tooltip>"
+          "html": "<is-button id=\"t-html\" color=\"brand\">Auditoría · tip largo</is-button>\r\n          <is-tooltip\r\n            for=\"t-html\"\r\n            trigger=\"click\"\r\n            placement=\"bottom-start\"\r\n            style=\"--max-width: 22rem\"\r\n          >\r\n            <p><strong>Resumen de cumplimiento</strong></p>\r\n            <p>\r\n              Este tip muestra contenido enriquecido para revisar wrapping,\r\n              contraste y dismiss al clic fuera.\r\n            </p>\r\n            <ul>\r\n              <li>Tokens <code>--iswc-*</code> y tipografía del tema</li>\r\n              <li>Máximo ancho vía <code>--max-width</code></li>\r\n              <li>Enlace de ejemplo:\r\n                <a href=\"https://developer.mozilla.org/en-US/docs/Web/Accessibility/ARIA/Roles/tooltip_role\" target=\"_blank\" rel=\"noopener\">ARIA tooltip</a>\r\n              </li>\r\n            </ul>\r\n            <p>Última revisión: sprint actual · owner: Design System</p>\r\n          </is-tooltip>"
         },
         {
           "kind": "code",

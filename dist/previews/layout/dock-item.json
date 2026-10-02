@@ -5,12 +5,12 @@
   "title": "<is-dock-item>",
   "titleHtml": true,
   "description": "Documentación y demos de is-dock-item de InSoft.",
-  "styles": ".dock-stage { position:relative; transform:translateZ(0); height:200px;\r\n      border:1px dashed var(--is-border); border-radius:.6rem; }",
+  "styles": ".dock-stage { position:relative; transform:translateZ(0); height:200px;\r\n      border:1px dashed var(--iswc-border); border-radius:.6rem; }",
   "storageKey": "docs-is-dock-item",
   "sections": [
     {
       "id": "intro",
-      "title": "<is-dock-item>",
+      "title": "Uso",
       "lede": "Icono de un <code class=\"code\">&lt;is-dock&gt;</code>, con su etiqueta y estado activo.",
       "blocks": [
         {

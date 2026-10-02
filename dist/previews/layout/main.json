@@ -9,7 +9,7 @@
   "sections": [
     {
       "id": "intro",
-      "title": "<is-main>",
+      "title": "Uso",
       "lede": "Contenedor scrollable equivalente a <code class=\"code\">&lt;main&gt;</code>.\r\n          La persistencia de scroll es <strong>opt-in estricta</strong>: requiere\r\n          <code class=\"code\">remember-scroll</code> y <code class=\"code\">storage-key</code>.",
       "blocks": [
         {
@@ -77,7 +77,7 @@
         },
         {
           "kind": "html",
-          "html": "<div style=\"height:120vh;border:1px dashed var(--is-border);border-radius:8px;padding:1rem;color:var(--is-text-soft)\">\r\n          Zona alta — scrollea y recarga (F5) para ver restore.\r\n        </div>"
+          "html": "<div style=\"height:120vh;border:1px dashed var(--iswc-border);border-radius:8px;padding:1rem;color:var(--iswc-text-soft)\">\r\n          Zona alta — scrollea y recarga (F5) para ver restore.\r\n        </div>"
         }
       ]
     }

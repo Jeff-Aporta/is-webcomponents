@@ -113,16 +113,16 @@ No expone.
 | --- | --- |
 | `--max-width` | Token leído o definido por componente. |
 | `--arrow-color` | Token leído o definido por componente. |
-| `--is-tooltip-bg` | Token leído o definido por componente. |
-| `--is-tooltip-fg` | Token leído o definido por componente. |
+| `--iswc-tooltip-bg` | Token leído o definido por componente. |
+| `--iswc-tooltip-fg` | Token leído o definido por componente. |
 | `--arrow-size` | Token leído o definido por componente. |
-| `--is-tooltip-arrow-size` | Token leído o definido por componente. |
-| `--is-radius-sm` | Token leído o definido por componente. |
-| `--is-font-family` | Token leído o definido por componente. |
-| `--is-tooltip-font-size` | Token leído o definido por componente. |
-| `--is-tooltip-line-height` | Token leído o definido por componente. |
-| `--is-shadow` | Token leído o definido por componente. |
-| `--is-mono` | Token leído o definido por componente. |
+| `--iswc-tooltip-arrow-size` | Token leído o definido por componente. |
+| `--iswc-radius-sm` | Token leído o definido por componente. |
+| `--iswc-font-family` | Token leído o definido por componente. |
+| `--iswc-tooltip-font-size` | Token leído o definido por componente. |
+| `--iswc-tooltip-line-height` | Token leído o definido por componente. |
+| `--iswc-shadow` | Token leído o definido por componente. |
+| `--iswc-mono` | Token leído o definido por componente. |
 
 ### Integración con formularios
 

@@ -4,12 +4,12 @@
   "category": "data-viz",
   "title": "<is-maps>",
   "titleHtml": true,
-  "styles": ".row { padding-bottom: 1rem; }\r\n    .legend {\r\n      display: flex; flex-wrap: wrap; gap: .35rem;\r\n      margin-bottom: .5rem;\r\n      font-size: .75rem;\r\n    }\r\n    .legend b { color: var(--is-accent); }\r\n    pre.log {\r\n      font-family: ui-monospace, monospace; font-size: .78rem;\r\n      background: var(--is-bg-elev); border: 1px solid var(--is-border);\r\n      border-radius: var(--is-radius); padding: .55rem .75rem;\r\n      max-height: 6rem; overflow: auto;\r\n    }",
+  "styles": ".row { padding-bottom: 1rem; }\r\n    .legend {\r\n      display: flex; flex-wrap: wrap; gap: .35rem;\r\n      margin-bottom: .5rem;\r\n      font-size: .75rem;\r\n    }\r\n    .legend b { color: var(--iswc-accent); }\r\n    pre.log {\r\n      font-family: ui-monospace, monospace; font-size: .78rem;\r\n      background: var(--iswc-bg-elev); border: 1px solid var(--iswc-border);\r\n      border-radius: var(--iswc-radius); padding: .55rem .75rem;\r\n      max-height: 6rem; overflow: auto;\r\n    }",
   "storageKey": "docs-is-maps",
   "sections": [
     {
       "id": "intro",
-      "title": "<is-maps>",
+      "title": "Uso",
       "lede": "Modo nativo (default): lienzo SVG con proyección equirectangular, sin dependencias externas. Modo <code class=\"ic\">engine=\"tile\"</code>: iframe al proveedor de tiles (OpenStreetMap, etc.).",
       "blocks": []
     },

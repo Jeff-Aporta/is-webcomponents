@@ -4,12 +4,12 @@
   "category": "forms",
   "title": "<is-inline-edit>",
   "titleHtml": true,
-  "styles": ".ie-row { padding: .55rem 0; display: flex; gap: 1.25rem; align-items: baseline; flex-wrap: wrap; }\r\n    .ie-row > span.label { font-size: .82rem; color: var(--is-text-soft); width: 7rem; flex: 0 0 auto; }\r\n    .ie-row p { margin: 0; font-size: .82rem; color: var(--is-text-dim); }",
+  "styles": ".ie-row { padding: .55rem 0; display: flex; gap: 1.25rem; align-items: baseline; flex-wrap: wrap; }\r\n    .ie-row > span.label { font-size: .82rem; color: var(--iswc-text-soft); width: 7rem; flex: 0 0 auto; }\r\n    .ie-row p { margin: 0; font-size: .82rem; color: var(--iswc-text-dim); }",
   "storageKey": "docs-is-inline-edit",
   "sections": [
     {
       "id": "intro",
-      "title": "<is-inline-edit>",
+      "title": "Uso",
       "lede": "Texto plano que se vuelve editable al clic. Enter guarda y sale. Esc cancela y revierte. Blur guarda por defecto; usá <code class=\"code\">cancel-on-blur</code> para invertirlo.",
       "blocks": []
     },
@@ -56,13 +56,13 @@
       "blocks": [
         {
           "kind": "demo",
-          "html": "<is-inline-edit mode=\"textarea\" rows=\"3\" value=\"Acá podés tipear varias líneas. Enter adentro inserta un salto de línea; afuera del área Enter sigue guardando.\" style=\"--is-inline-edit-min-h: 4.5rem; width: 100%;\"></is-inline-edit>"
+          "html": "<is-inline-edit mode=\"textarea\" rows=\"3\" value=\"Acá podés tipear varias líneas. Enter adentro inserta un salto de línea; afuera del área Enter sigue guardando.\" style=\"--iswc-inline-edit-min-h: 4.5rem; width: 100%;\"></is-inline-edit>"
         }
       ]
     },
     {
       "id": "contenido",
-      "title": "Slot display (HTML personalizado)",
+      "title": "Texto visible",
       "blocks": [
         {
           "kind": "html",

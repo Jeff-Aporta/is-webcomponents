@@ -87,9 +87,9 @@ import { readUrlNav, writeUrlNav } from '../_shared/url-nav.js';
   class IsTabGroup extends withStyleAttrs(HTMLElement) {
     /** Personalización por atributo (ver `core/attrs.ts`). */
     static styleAttrs = {
-      'track-color': { prop: '--is-tab-group-track-color', onlyColorValues: true },
-      'track-width': '--is-tab-group-track-width',
-      'indicator-color': { prop: '--is-tab-group-indicator-color', onlyColorValues: true },
+      'track-color': { prop: '--iswc-tab-group-track-color', onlyColorValues: true },
+      'track-width': '--iswc-tab-group-track-width',
+      'indicator-color': { prop: '--iswc-tab-group-indicator-color', onlyColorValues: true },
     };
 
     static get observedAttributes(): string[] { return [...TG_OBSERVED, ...IsTabGroup.styleAttrNames]; }

@@ -106,20 +106,20 @@ No expone.
 | Token | Uso |
 | --- | --- |
 | `--bg` | Token leído o definido por componente. |
-| `--is-bg-2` | Token leído o definido por componente. |
+| `--iswc-bg-2` | Token leído o definido por componente. |
 | `--fg` | Token leído o definido por componente. |
-| `--is-text` | Token leído o definido por componente. |
+| `--iswc-text` | Token leído o definido por componente. |
 | `--muted` | Token leído o definido por componente. |
 | `--border` | Token leído o definido por componente. |
-| `--is-border` | Token leído o definido por componente. |
+| `--iswc-border` | Token leído o definido por componente. |
 | `--brand` | Token leído o definido por componente. |
-| `--is-brand` | Token leído o definido por componente. |
+| `--iswc-brand` | Token leído o definido por componente. |
 | `--success` | Token leído o definido por componente. |
-| `--is-success` | Token leído o definido por componente. |
+| `--iswc-success` | Token leído o definido por componente. |
 | `--danger` | Token leído o definido por componente. |
-| `--is-danger` | Token leído o definido por componente. |
+| `--iswc-danger` | Token leído o definido por componente. |
 | `--warning` | Token leído o definido por componente. |
-| `--is-warning` | Token leído o definido por componente. |
+| `--iswc-warning` | Token leído o definido por componente. |
 
 ### Integración con formularios
 

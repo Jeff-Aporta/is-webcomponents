@@ -107,16 +107,16 @@ Tasa de éxito global: **92.33%** (638/691).
 
 ```bash
 # Todos los exhaustivos
-node --import ./scripts/ts-resolve-hook.ts --test "src/utils/health/exhaustive/**/*.test.ts"
+deno test -A --no-check "src/utils/health/exhaustive/**/*.test.ts"
 
 # Por categoría
-node --import ./scripts/ts-resolve-hook.ts --test "src/utils/health/exhaustive/charts/*.test.ts"
+deno test -A --no-check "src/utils/health/exhaustive/charts/*.test.ts"
 
 # Ver resumen consolidado
 node src/utils/health/exhaustive/count.mjs
 
 # Solo el template (referencia)
-node --import ./scripts/ts-resolve-hook.ts --test src/utils/health/exhaustive/_template/template.test.ts
+deno test -A --no-check src/utils/health/exhaustive/_template/template.test.ts
 ```
 
 ---

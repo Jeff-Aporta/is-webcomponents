@@ -4,13 +4,13 @@
   "category": "actions",
   "title": "<is-dropdown>",
   "titleHtml": true,
-  "styles": ".cluster { display: flex; flex-wrap: wrap; gap: 1rem; align-items: flex-start; }\r\n    #log { color: var(--is-text-soft); font-size: 0.9em; }",
+  "styles": ".cluster { display: flex; flex-wrap: wrap; gap: 1rem; align-items: flex-start; }\r\n    #log { color: var(--iswc-text-soft); font-size: 0.9em; }",
   "storageKey": "docs-is-dropdown",
   "hasBehavior": true,
   "sections": [
     {
       "id": "intro",
-      "title": "<is-dropdown>",
+      "title": "Uso",
       "lede": "Menú anclado a un trigger. Panel en <code class=\"code\">&lt;dialog&gt;</code> modal\r\n          (top layer) para no quedar debajo de otras secciones. Items:\r\n          <code class=\"code\">is-dropdown-item</code>, <code class=\"code\">is-divider</code> e iconos.",
       "blocks": [
         {

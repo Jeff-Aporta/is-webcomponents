@@ -42,11 +42,11 @@ import { withStyleAttrs } from '../../core/attrs.js';
 
   /** Personalización por atributo (ver `core/attrs.ts`). */
   const STYLE_ATTRS = {
-    radius: '--is-button-group-radius',
-    gap: '--is-button-group-gap',
-    padding: '--is-button-group-pad',
-    accent: { prop: '--is-button-group-accent', onlyColorValues: true },
-    'border-width': '--is-button-border-width',
+    radius: '--iswc-button-group-radius',
+    gap: '--iswc-button-group-gap',
+    padding: '--iswc-button-group-pad',
+    accent: { prop: '--iswc-button-group-accent', onlyColorValues: true },
+    'border-width': '--iswc-button-border-width',
   };
 
   const OBSERVED = [

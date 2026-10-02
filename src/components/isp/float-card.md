@@ -106,10 +106,10 @@ No expone.
 
 | Token | Uso |
 | --- | --- |
-| `--is-bg-elev` | Fondo del panel. |
-| `--is-border` | Borde. |
-| `--is-radius-sm` | Radio. |
-| `--is-shadow` | Sombra. |
+| `--iswc-bg-elev` | Fondo del panel. |
+| `--iswc-border` | Borde. |
+| `--iswc-radius-sm` | Radio. |
+| `--iswc-shadow` | Sombra. |
 
 ### Integración con formularios
 

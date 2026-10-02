@@ -10,7 +10,7 @@
   "sections": [
     {
       "id": "intro",
-      "title": "<is-stat>",
+      "title": "Uso",
       "lede": "Tarjeta KPI para dashboards: label, número principal, helper text,\r\n          trend (subida/bajada) e icono. Detecta automáticamente la dirección\r\n          del trend según el signo del valor.",
       "blocks": [
         {

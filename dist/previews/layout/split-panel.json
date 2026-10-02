@@ -5,12 +5,12 @@
   "title": "<is-split-panel>",
   "titleHtml": true,
   "description": "Documentación y demos del componente is-split-panel de InSoft.",
-  "styles": ".panel-demo {\r\n      display: grid;\r\n      place-items: center;\r\n      height: 100%;\r\n      padding: 1em;\r\n      background: var(--is-bg-soft);\r\n      color: var(--is-text);\r\n      font: 0.95rem var(--is-sans);\r\n      border-radius: 6px;\r\n      overflow: hidden;\r\n    }\r\n    .panel-demo--alt { background: var(--is-bg-elev); }\r\n    .panel-demo h4 {\r\n      margin: 0 0 0.5em;\r\n      font-size: 0.95rem;\r\n      color: var(--is-text-soft);\r\n    }\r\n    .split-stage {\r\n      height: 220px;\r\n      border: 1px solid var(--is-border);\r\n      border-radius: var(--is-radius);\r\n      overflow: hidden;\r\n      margin: 12px 0 24px;\r\n      box-shadow: var(--is-shadow);\r\n    }\r\n    .split-stage--tall { height: 360px; }\r\n    .split-stage--square { height: 320px; }\r\n    .reposition-log {\r\n      font-family: var(--is-mono);\r\n      font-size: 0.78rem;\r\n      color: var(--is-text-soft);\r\n      margin: 6px 0 18px;\r\n    }",
+  "styles": ".panel-demo {\r\n      display: grid;\r\n      place-items: center;\r\n      height: 100%;\r\n      padding: 1em;\r\n      background: var(--iswc-bg-soft);\r\n      color: var(--iswc-text);\r\n      font: 0.95rem var(--iswc-sans);\r\n      border-radius: 6px;\r\n      overflow: hidden;\r\n    }\r\n    .panel-demo--alt { background: var(--iswc-bg-elev); }\r\n    .panel-demo h4 {\r\n      margin: 0 0 0.5em;\r\n      font-size: 0.95rem;\r\n      color: var(--iswc-text-soft);\r\n    }\r\n    .split-stage {\r\n      height: 220px;\r\n      border: 1px solid var(--iswc-border);\r\n      border-radius: var(--iswc-radius);\r\n      overflow: hidden;\r\n      margin: 12px 0 24px;\r\n      box-shadow: var(--iswc-shadow);\r\n    }\r\n    .split-stage--tall { height: 360px; }\r\n    .split-stage--square { height: 320px; }\r\n    .reposition-log {\r\n      font-family: var(--iswc-mono);\r\n      font-size: 0.78rem;\r\n      color: var(--iswc-text-soft);\r\n      margin: 6px 0 18px;\r\n    }",
   "storageKey": "docs-is-split-panel",
   "sections": [
     {
       "id": "intro",
-      "title": "<is-split-panel>",
+      "title": "Uso",
       "lede": "Dos paneles adyacentes separados por un divisor arrastrable.\r\n          Componente InSoft accesible, escrito en JavaScript nativo con Shadow DOM, sin frameworks.",
       "blocks": [
         {

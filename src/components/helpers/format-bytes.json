@@ -8,7 +8,7 @@
   "sections": [
     {
       "id": "intro",
-      "title": "<is-format-bytes>",
+      "title": "Uso",
       "lede": "Tamaños de archivo legibles. <code class=\"code\">value</code> se interpreta según <code class=\"code\">unit</code> (default byte).",
       "blocks": [
         {
@@ -78,7 +78,7 @@
     },
     {
       "id": "units",
-      "title": "Unidades de entrada (<code>unit</code>)",
+      "title": "Unidades de entrada",
       "titleHtml": true,
       "lede": "El mismo tamaño conceptual con distinta unidad de entrada.",
       "blocks": [

@@ -1,4 +1,4 @@
-﻿# Intención → componente is-*
+# Intención → componente is-*
 
 Usar este mapa al elegir tag. API exacta: MD del módulo en el repo.
 
@@ -96,7 +96,7 @@ Referencia real: wrappers de dominio tipo `tk-badges` → `is-tag`, `tk-chart` �
 ```
 
 `data-theme="dark|light"` · `data-palette="contapyme|…"` en `<html>`.  
-CSS de app: preferir `var(--is-text)`, `var(--is-bg-soft)`, `var(--is-border-soft)`, `var(--is-accent)`.
+CSS de app: preferir `var(--iswc-text)`, `var(--iswc-bg-soft)`, `var(--iswc-border-soft)`, `var(--iswc-accent)`.
 
 ## Cuando SÍ crear componente propio
 

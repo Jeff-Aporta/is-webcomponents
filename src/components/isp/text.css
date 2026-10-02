@@ -1,14 +1,14 @@
 /* <is-text> — texto en línea con color semántico / CSS libre / current + mix.
    Índice de --vars:
-     --is-text-color: color tipográfico resuelto.
-     --is-text-mix    : % hacia --is-text-mix-with (solo con attr mix).
-     --is-text-mix-with: destino del mix (default: texto del tema).
+     --iswc-text-color: color tipográfico resuelto.
+     --iswc-text-mix    : % hacia --iswc-text-mix-with (solo con attr mix).
+     --iswc-text-mix-with: destino del mix (default: texto del tema).
      --mx-lns         : líneas del clamp (lo escribe el JS). */
 
 :host {
-  --is-text-mix-with: var(--is-text, currentColor);
+  --iswc-text-mix-with: var(--iswc-text, currentColor);
   display: inline;
-  color: var(--is-text-color, inherit);
+  color: var(--iswc-text-color, inherit);
   font: inherit;
   min-width: 0;
   max-width: 100%;
@@ -19,25 +19,25 @@
 /* Con mix: atenuar / aclarar / oscurecer vía color-mix. */
 :host([mix]),
 :host([data-has-mix]) {
-  color: var(--is-text-color, currentColor);
+  color: var(--iswc-text-color, currentColor);
   color: color-mix(
     in srgb,
-    var(--is-text-color, currentColor),
-    var(--is-text-mix-with) var(--is-text-mix, 0%)
+    var(--iswc-text-color, currentColor),
+    var(--iswc-text-mix-with) var(--iswc-text-mix, 0%)
   );
 }
 
 /* Semánticos → tokens del tema. */
 :host([color="brand"]) {
-  --is-text-color: var(--is-brand-text, var(--is-accent, var(--is-color-brand, var(--is-text))));
+  --iswc-text-color: var(--iswc-brand-text, var(--iswc-accent, var(--iswc-color-brand, var(--iswc-text))));
 }
-:host([color="neutral"]) { --is-text-color: var(--is-text-soft, var(--is-text)); }
-:host([color="info"]) { --is-text-color: var(--is-info-text, var(--is-color-info, var(--is-text))); }
-:host([color="success"]) { --is-text-color: var(--is-success-text, var(--is-color-success, var(--is-text))); }
-:host([color="warning"]) { --is-text-color: var(--is-warning-text, var(--is-color-warning, var(--is-text))); }
-:host([color="danger"]) { --is-text-color: var(--is-danger-text, var(--is-color-danger, var(--is-text))); }
+:host([color="neutral"]) { --iswc-text-color: var(--iswc-text-soft, var(--iswc-text)); }
+:host([color="info"]) { --iswc-text-color: var(--iswc-info-text, var(--iswc-color-info, var(--iswc-text))); }
+:host([color="success"]) { --iswc-text-color: var(--iswc-success-text, var(--iswc-color-success, var(--iswc-text))); }
+:host([color="warning"]) { --iswc-text-color: var(--iswc-warning-text, var(--iswc-color-warning, var(--iswc-text))); }
+:host([color="danger"]) { --iswc-text-color: var(--iswc-danger-text, var(--iswc-color-danger, var(--iswc-text))); }
 
-:host([color="current"]) { --is-text-color: currentColor; }
+:host([color="current"]) { --iswc-text-color: currentColor; }
 
 :host([lines]) {
   display: -webkit-box;

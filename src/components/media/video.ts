@@ -152,7 +152,7 @@ interface IsCheckIconButton extends HTMLElement {
   class IsVideo extends withStyleAttrs(HTMLElement) {
     /** Personalización por atributo (ver `core/attrs.ts`). */
     static styleAttrs = {
-    accent: { prop: '--is-video-accent', onlyColorValues: true },
+    accent: { prop: '--iswc-video-accent', onlyColorValues: true },
     };
 
     static get observedAttributes(): string[] { return [...OBSERVED, 'accent']; }

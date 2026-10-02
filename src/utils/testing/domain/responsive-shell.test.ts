@@ -117,8 +117,8 @@ test('is-preview-component: el índice se muda a un drawer derecho en compacto',
     'toc-toggle debe ser is-button plain con color brand',
   );
   assert.ok(
-    /withoutToc/.test(previewJs) && /dataset\.layout = 'full'/.test(previewJs),
-    'withoutToc debe forzar layout full sin panel derecho',
+    /withoutToc/.test(previewJs) && /sections\?\.length/.test(previewJs) && /dataset\.layout = 'full'/.test(previewJs),
+    'withoutToc o una sola seccion deben forzar layout full sin panel derecho',
   );
 });
 

@@ -116,15 +116,15 @@ No expone custom states.
 
 | Token | Uso |
 | --- | --- |
-| `--is-b-required` | Marca visual de campo obligatorio. |
-| `--is-b-optional` | Marca visual de campo opcional. |
-| `--is-b-readonly` | Marca visual de solo lectura. |
-| `--is-color` | Color base del texto. |
-| `--is-color-danger` | Color de error de validación. |
-| `--is-primary` | Color del botón filtro. |
-| `--is-accent` | Realce del campo enfocado. |
-| `--is-text` | Color del valor. |
-| `--is-sans` | Familia tipográfica. |
+| `--iswc-b-required` | Marca visual de campo obligatorio. |
+| `--iswc-b-optional` | Marca visual de campo opcional. |
+| `--iswc-b-readonly` | Marca visual de solo lectura. |
+| `--iswc-color` | Color base del texto. |
+| `--iswc-color-danger` | Color de error de validación. |
+| `--iswc-primary` | Color del botón filtro. |
+| `--iswc-accent` | Realce del campo enfocado. |
+| `--iswc-text` | Color del valor. |
+| `--iswc-sans` | Familia tipográfica. |
 
 ### Integración con formularios
 

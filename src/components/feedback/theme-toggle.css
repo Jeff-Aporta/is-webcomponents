@@ -3,7 +3,7 @@
   place-items: center;
   width: 2.5em;
   aspect-ratio: 1 / 1;
-  color: var(--is-control-text);
+  color: var(--iswc-control-text);
   font: inherit;
   vertical-align: middle;
   line-height: 0;

@@ -8,7 +8,7 @@ import { svgEl } from '../_shared/svg-chart-engine.js';
  *   value     texto a codificar (requerido)
  *   type      ean13 | code128 (default code128)
  *   height    alto del módulo (default 60)
- *   fg        color de barras (default var(--is-text))
+ *   fg        color de barras (default var(--iswc-text))
  *   bg        color de fondo (default transparent)
  *   show-text boolean — imprimir el texto debajo (true por defecto en ean13)
  *   quiet     zonas de silencio en módulos EAN13 (default 9)

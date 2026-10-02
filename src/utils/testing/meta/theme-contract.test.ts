@@ -44,12 +44,12 @@ check(!/<(?:svg|symbol|use)\b/i.test(html), 'index.html contiene <svg>/<use>/<sy
 check(!/<(?:svg|symbol|use)\b/i.test(component), 'components/actions/button.ts contiene <svg>/<use>/<symbol> inline');
 
 check(!/--pg-/.test(styles), 'tokens legacy --pg- encontrados');
-check(styles.includes('--is-bg:'), 'missing --is-bg: token');
+check(styles.includes('--iswc-bg:'), 'missing --iswc-bg: token');
 
 // 8. Tokens de estado de campo: deben existir en AMBOS temas de is-base.css
 //    (los componentes los consumen sin fallback literal, asi que si una
 //    paleta futura los olvida el campo se queda sin borde).
-const FIELD_TOKENS = ['--is-b-required', '--is-b-optional', '--is-b-readonly', '--is-bg-readonly'];
+const FIELD_TOKENS = ['--iswc-b-required', '--iswc-b-optional', '--iswc-b-readonly', '--iswc-bg-readonly'];
 // Bloque dark = ':root,\n.theme-dark {…}'  /  bloque light = '.theme-light {…}'
 const darkBlock = isBase.slice(isBase.indexOf(':root'));
 const lightBlocks = isBase.split('.theme-light').slice(1).join('\n');
@@ -58,17 +58,22 @@ for (const t of FIELD_TOKENS) {
   check(lightBlocks.includes(`${t}:`), `is-base.css: falta ${t} en tema light`);
 }
 
-// 9. ContaPyme brand canónico = CSS dodgerblue (#1E90FF).
-//    ContaPyme es la primera paleta del archivo (default); cortamos hasta insoft.
+// 9. ContaPyme = hsl(210 100% 56%), que es dodgerblue. El brand no se escribe a mano.
 const cp = palettes.slice(palettes.indexOf('[data-palette="contapyme"]'), palettes.indexOf('[data-palette="insoft"]'));
-check(/\bdodgerblue\b|#1e90ff/i.test(cp), 'paleta contapyme debe usar dodgerblue/#1e90ff');
-check(/--is-color-brand:\s*dodgerblue/i.test(cp), 'contapyme --is-color-brand debe ser dodgerblue');
-check(/--is-color-brand-strong:\s*dodgerblue/i.test(cp), 'contapyme --is-color-brand-strong debe ser dodgerblue (filled)');
-check(/--is-accent:\s*dodgerblue/i.test(cp), 'contapyme --is-accent debe ser dodgerblue');
-check(/#7ec8ff/i.test(cp), 'paleta contapyme debe usar #7ec8ff como brand-text dark');
+check(/--iswc-brand-h:\s*210/.test(cp), 'contapyme --iswc-brand-h debe ser 210 (dodgerblue)');
+check(/--iswc-brand-s:\s*100%/.test(cp), 'contapyme --iswc-brand-s debe ser 100%');
+check(/--iswc-brand-b:\s*56%/.test(cp), 'contapyme --iswc-brand-b debe ser 56%');
+check(!/--iswc-color-brand:\s*(?:dodgerblue|#[0-9a-f]{3,8})/i.test(cp), 'contapyme no debe fijar --iswc-color-brand a mano');
+check(/--iswc-color-brand:\s*hsl\(calc\(var\(--iswc-brand-h\)/.test(palettes), 'el brand se deriva de h, s y b');
+check(/rgb\(from var\(--iswc-accent\) r g b \/ 12%\)/.test(palettes), 'el alpha del acento sale de rgb(from var(--iswc-accent))');
+check(/--iswc-hue-rotate:\s*calc\(\(var\(--iswc-brand-h\) - var\(--iswc-logo-h\)\) \* 1deg\)/.test(palettes), 'falta --iswc-hue-rotate');
 check(/:root,\s*\[data-palette="contapyme"\]/.test(palettes), 'contapyme debe aplicarse en :root como default');
-// filled usa --_tone-strong: no volver a poner strong en un azul distinto (ej. #1c7ed6).
-check(!/--is-color-brand-strong:\s*#1c7ed6/i.test(cp), 'contapyme strong no debe ser #1c7ed6 (desvía de dodgerblue en filled)');
+const catalog = JSON.parse(await readFile(join(root, 'src', 'styles', 'palettes.json'), 'utf8'));
+for (const p of catalog) {
+  check(palettes.includes(`--iswc-brand-h: ${p.h};`), `palettes.css no tiene el h de ${p.value}`);
+  check(palettes.includes(`--iswc-brand-s: ${p.s};`), `palettes.css no tiene la s de ${p.value}`);
+  check(palettes.includes(`--iswc-brand-b: ${p.b};`), `palettes.css no tiene la b de ${p.value}`);
+}
 
 check(!/\bsize\s*=|["']size["']|pgSize|small\s*\|\s*medium\s*\|\s*large/.test(`${html}\n${component}`), 'size API legacy encontrada');
 
@@ -111,4 +116,4 @@ if (failures.length) {
   process.exit(1);
 }
 
-console.log(`theme-contract.test.ts: PASS — 2 temas, 3 paletas, tokens --is-*, sin Web Awesome`);
+console.log(`theme-contract.test.ts: PASS — 2 temas, 3 paletas, tokens --iswc-*, sin Web Awesome`);

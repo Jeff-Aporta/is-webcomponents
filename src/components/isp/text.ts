@@ -29,7 +29,7 @@ import {
   class IsText extends ElementBase {
     /** Personalización por atributo (ver `core/attrs.ts`). */
     static styleAttrs = {
-    'mix-with': { prop: '--is-text-mix-with', onlyColorValues: true },
+    'mix-with': { prop: '--iswc-text-mix-with', onlyColorValues: true },
     };
 
     static TEMPLATE = TEMPLATE;
@@ -55,13 +55,13 @@ import {
 
     #syncColor() {
       syncIspColor(this, {
-        colorVar: '--is-text-color',
-        mixVar: '--is-text-mix',
-        mixWithVar: '--is-text-mix-with',
+        colorVar: '--iswc-text-color',
+        mixVar: '--iswc-text-mix',
+        mixWithVar: '--iswc-text-mix-with',
       });
       // Sin attr mix → no forzar --text-mix (el CSS solo mezcla si hay [mix]).
       if (!normalizeMix(this.getAttribute('mix'))) {
-        this.style.removeProperty('--is-text-mix');
+        this.style.removeProperty('--iswc-text-mix');
       }
       this.toggleAttribute('data-has-mix', !!normalizeMix(this.getAttribute('mix')));
     }

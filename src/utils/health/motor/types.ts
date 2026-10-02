@@ -132,7 +132,7 @@ export interface ContextoPrueba {
 
 /**
  * Opciones del runner (CLI). Todos los campos son opcionales: defaults
- * razonables permiten correr `node --import ... motor/cli.ts` sin args.
+ * razonables permiten correr `deno task audit` sin args.
  */
 export interface OpcionesRunner {
   /** Tag(s) a auditar (separados por coma). Vacío = todos. */

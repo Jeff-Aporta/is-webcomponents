@@ -9,7 +9,7 @@
   "sections": [
     {
       "id": "intro",
-      "title": "<is-dialog>",
+      "title": "Uso",
       "lede": "Modal accesible que requiere la atención inmediata del usuario. Equivalente\r\n          a <code class=\"code\">&lt;dialog&gt;</code> nativo, con header, footer, animaciones,\r\n          light-dismiss y API declarativa <code class=\"code\">data-dialog=\"close\"</code>.",
       "blocks": [
         {
@@ -334,7 +334,7 @@
             ],
             [
               "<code>--spacing</code>",
-              "<code>var(--is-space-l, 1rem)</code>",
+              "<code>var(--iswc-space-l, 1rem)</code>",
               "Padding interno."
             ],
             [

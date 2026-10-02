@@ -23,7 +23,7 @@ import { hasSlotted } from '../_shared/dom-utils.js';
  * Parts: form-control, label, base, textarea, support, hint, error-text, count
  * Custom states: blank, disabled, readonly, focused, invalid
  * Eventos: is-input, is-change (bubbles + composed) y los nativos input/change
- * Tokens: --is-field-width, --is-field-label-width, --is-textarea-*
+ * Tokens: --iswc-field-width, --iswc-field-label-width, --iswc-textarea-*
  */
 
 (() => {
@@ -57,12 +57,12 @@ import { hasSlotted } from '../_shared/dom-utils.js';
   class IsTextarea extends ElementBase {
     /** Personalización por atributo (ver `core/attrs.ts`). */
     static styleAttrs = {
-    radius: '--is-textarea-border-radius',
-    'border-color': { prop: '--is-textarea-border', onlyColorValues: true },
-    bg: { prop: '--is-textarea-bg', onlyColorValues: true },
-    'text-color': { prop: '--is-textarea-text', onlyColorValues: true },
-    'focus-color': { prop: '--is-textarea-focus', onlyColorValues: true },
-    'danger-color': { prop: '--is-textarea-danger', onlyColorValues: true },
+    radius: '--iswc-textarea-border-radius',
+    'border-color': { prop: '--iswc-textarea-border', onlyColorValues: true },
+    bg: { prop: '--iswc-textarea-bg', onlyColorValues: true },
+    'text-color': { prop: '--iswc-textarea-text', onlyColorValues: true },
+    'focus-color': { prop: '--iswc-textarea-focus', onlyColorValues: true },
+    'danger-color': { prop: '--iswc-textarea-danger', onlyColorValues: true },
     };
 
     static formAssociated = true;

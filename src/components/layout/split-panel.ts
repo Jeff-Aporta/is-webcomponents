@@ -37,8 +37,8 @@ import { clampTo } from '../_shared/misc-utils.js';
  * CSS custom properties
  *   --divider-width    5px
  *   --divider-hit-area 12px
- *   --is-split-panel-min   0px   (atributo min-size)
- *   --is-split-panel-max   100%  (atributo max-size)
+ *   --iswc-split-panel-min   0px   (atributo min-size)
+ *   --iswc-split-panel-max   100%  (atributo max-size)
  *
  * Eventos
  *   reposition  CustomEvent<number> bubbles+composed — detail = nueva posición (%)
@@ -72,8 +72,8 @@ import { clampTo } from '../_shared/misc-utils.js';
   class IsSplitPanel extends withStyleAttrs(HTMLElement) {
     /** Personalización por atributo (ver `core/attrs.ts`). */
     static styleAttrs = {
-    'min-size': '--is-split-panel-min',
-    'max-size': '--is-split-panel-max',
+    'min-size': '--iswc-split-panel-min',
+    'max-size': '--iswc-split-panel-max',
     };
 
     static get observedAttributes(): string[] { return [...OBSERVED, 'min-size', 'max-size']; }
@@ -378,10 +378,10 @@ import { clampTo } from '../_shared/misc-utils.js';
       if (Number.isFinite(px)) {
         const bounded = this._clampPrimaryPixels(px);
         this._cachedPositionInPixels = bounded;
-        primaryTrack = `minmax(0px, min(max(${Math.max(0, bounded)}px, var(--is-split-panel-min, 0px)), var(--is-split-panel-max, 100%)))`;
+        primaryTrack = `minmax(0px, min(max(${Math.max(0, bounded)}px, var(--iswc-split-panel-min, 0px)), var(--iswc-split-panel-max, 100%)))`;
       } else {
         const pct = this.position;
-        primaryTrack = `clamp(0%, clamp(var(--is-split-panel-min, 0%), ${pct}% - var(--_divider-width) / 2, var(--is-split-panel-max, 100%)), calc(100% - var(--_divider-width)))`;
+        primaryTrack = `clamp(0%, clamp(var(--iswc-split-panel-min, 0%), ${pct}% - var(--_divider-width) / 2, var(--iswc-split-panel-max, 100%)), calc(100% - var(--_divider-width)))`;
       }
 
       const template = this.primary === 'end'

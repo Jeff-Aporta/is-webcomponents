@@ -90,28 +90,28 @@ No expone.
 | Token | Uso |
 | --- | --- |
 | `--pulse-color` | Token leído o definido por componente. |
-| `--is-accent` | Token leído o definido por componente. |
+| `--iswc-accent` | Token leído o definido por componente. |
 | `--_bg` | Token leído o definido por componente. |
-| `--is-brand-soft` | Token leído o definido por componente. |
+| `--iswc-brand-soft` | Token leído o definido por componente. |
 | `--_border` | Token leído o definido por componente. |
 | `--_text` | Token leído o definido por componente. |
-| `--is-brand-text` | Token leído o definido por componente. |
+| `--iswc-brand-text` | Token leído o definido por componente. |
 | `--_on` | Token leído o definido por componente. |
-| `--is-on-brand` | Token leído o definido por componente. |
-| `--is-font-family` | Token leído o definido por componente. |
-| `--is-control-bg` | Token leído o definido por componente. |
-| `--is-control-border` | Token leído o definido por componente. |
-| `--is-text` | Token leído o definido por componente. |
-| `--is-text-dim` | Token leído o definido por componente. |
-| `--is-success-soft` | Token leído o definido por componente. |
-| `--is-color-success-500` | Token leído o definido por componente. |
-| `--is-success-text` | Token leído o definido por componente. |
-| `--is-warning-soft` | Token leído o definido por componente. |
-| `--is-color-warning-500` | Token leído o definido por componente. |
-| `--is-warning-text` | Token leído o definido por componente. |
-| `--is-danger-soft` | Token leído o definido por componente. |
-| `--is-color-danger-500` | Token leído o definido por componente. |
-| `--is-danger-text` | Token leído o definido por componente. |
+| `--iswc-on-brand` | Token leído o definido por componente. |
+| `--iswc-font-family` | Token leído o definido por componente. |
+| `--iswc-control-bg` | Token leído o definido por componente. |
+| `--iswc-control-border` | Token leído o definido por componente. |
+| `--iswc-text` | Token leído o definido por componente. |
+| `--iswc-text-dim` | Token leído o definido por componente. |
+| `--iswc-success-soft` | Token leído o definido por componente. |
+| `--iswc-color-success-500` | Token leído o definido por componente. |
+| `--iswc-success-text` | Token leído o definido por componente. |
+| `--iswc-warning-soft` | Token leído o definido por componente. |
+| `--iswc-color-warning-500` | Token leído o definido por componente. |
+| `--iswc-warning-text` | Token leído o definido por componente. |
+| `--iswc-danger-soft` | Token leído o definido por componente. |
+| `--iswc-color-danger-500` | Token leído o definido por componente. |
+| `--iswc-danger-text` | Token leído o definido por componente. |
 
 ### Integración con formularios
 

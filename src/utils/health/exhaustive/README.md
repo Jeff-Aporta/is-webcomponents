@@ -74,13 +74,13 @@ test(`<componente>: atributos observados reaccionan`, async () => {
 
 ```bash
 # Todos los tests exhaustivos de una categoría
-node --import ./scripts/ts-resolve-hook.ts --test src/utils/health/exhaustive/<categoría>/*.test.ts
+deno test -A --no-check src/utils/health/exhaustive/<categoría>/*.test.ts
 
 # Todos los exhaustivos
-node --import ./scripts/ts-resolve-hook.ts --test src/utils/health/exhaustive/**/*.test.ts
+deno test -A --no-check src/utils/health/exhaustive/**/*.test.ts
 
 # Solo un componente
-node --import ./scripts/ts-resolve-hook.ts --test src/utils/health/exhaustive/<categoría>/<componente>.test.ts
+deno test -A --no-check src/utils/health/exhaustive/<categoría>/<componente>.test.ts
 ```
 
 ## Estado actual (post-tanda 1)

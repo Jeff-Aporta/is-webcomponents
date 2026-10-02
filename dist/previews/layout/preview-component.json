@@ -8,7 +8,7 @@
   "sections": [
     {
       "id": "intro",
-      "title": "<is-preview-component>",
+      "title": "Uso",
       "lede": "Shell que monta una definición JSON de la galería. La propia galería es el ejemplo vivo.",
       "blocks": [
         {

@@ -182,13 +182,13 @@ No expone custom states.
 
 | Token | Uso |
 | --- | --- |
-| `--is-grid-row-h` | Alto de fila. |
-| `--is-grid-header-h` | Alto del encabezado. |
-| `--is-grid-header-bg` | Fondo del encabezado. |
-| `--is-grid-stripe` | Fondo alterno de filas. |
-| `--is-grid-row-hover` | Fondo de fila en hover. |
-| `--is-grid-selected` | Fondo de fila seleccionada. |
-| `--is-grid-selected-bar` | Barra indicadora de selección. |
+| `--iswc-grid-row-h` | Alto de fila. |
+| `--iswc-grid-header-h` | Alto del encabezado. |
+| `--iswc-grid-header-bg` | Fondo del encabezado. |
+| `--iswc-grid-stripe` | Fondo alterno de filas. |
+| `--iswc-grid-row-hover` | Fondo de fila en hover. |
+| `--iswc-grid-selected` | Fondo de fila seleccionada. |
+| `--iswc-grid-selected-bar` | Barra indicadora de selección. |
 
 ### Integración con formularios
 
@@ -213,7 +213,7 @@ su propio valor y lo devuelven al modelo del core.
 - Reset → `removeComponentPrefs` + reaplicar defs originales (`#rawColumns`).
 - Columnas show/hide → sidebar/checks existentes; cablear, no rehacer UI.
 - Motor → `datagrid-core` (`hideColumn`, `serializeState`, `loadState`).
-- Tras cambiar JS/CSS → `npm run build` (previews cargan `dist/cdn/all.min.js`).
+- Tras cambiar JS/CSS → `deno task build` (previews cargan `dist/cdn/all.min.js`).
 - Migrar legacy flat keys / `is-components` / `sessionStorage` al root nuevo (ya hay helpers).
 
 ## Qué no hacer
@@ -301,7 +301,7 @@ para poder restaurarlas por teclado.
 
 ```bash
 node tests/prefs-contract.test.ts
-node scripts/docs-consistency.selfcheck.mjs
+deno run -A --no-check scripts/docs-consistency.selfcheck.mjs
 ```
 
 ## Navegación

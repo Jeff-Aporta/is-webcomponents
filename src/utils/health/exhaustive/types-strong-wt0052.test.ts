@@ -11,7 +11,7 @@
  * jsdom y eso queda fuera del smoke test.
  *
  * Cómo correr:
- *   node --import ./scripts/ts-resolve-hook.ts --test \
+ *   deno test -A --no-check \
  *     src/utils/health/exhaustive/types-strong-wt0052.test.ts
  */
 

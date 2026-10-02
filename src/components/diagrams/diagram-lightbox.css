@@ -49,7 +49,7 @@
 .lb-step {
   font-size: 0.75rem;
   font-variant-numeric: tabular-nums;
-  color: var(--is-text-soft, #9aa0a6);
+  color: var(--iswc-text-soft, #9aa0a6);
   min-width: 2.5em;
 }
 
@@ -62,7 +62,7 @@
 }
 
 .lb-code__hint {
-  color: var(--is-text-soft, #9aa0a6);
+  color: var(--iswc-text-soft, #9aa0a6);
   font-size: 0.75rem;
 }
 
@@ -70,25 +70,25 @@
   width: 100%;
   min-height: 14rem;
   resize: vertical;
-  font-family: var(--is-mono, ui-monospace, Consolas, monospace);
+  font-family: var(--iswc-mono, ui-monospace, Consolas, monospace);
   font-size: 0.8125rem;
   line-height: 1.5;
   padding: 0.625rem;
-  border-radius: var(--is-radius-sm, 0.375em);
-  border: 1px solid var(--is-border, #2a3038);
-  background: var(--is-code-bg, #0f1318);
-  color: var(--is-code-text, #d4d8de);
+  border-radius: var(--iswc-radius-sm, 0.375em);
+  border: 1px solid var(--iswc-border, #2a3038);
+  background: var(--iswc-code-bg, #0f1318);
+  color: var(--iswc-code-text, #d4d8de);
   tab-size: 2;
 }
 
 .lb-code__area:focus-visible {
-  outline: 2px solid var(--is-focus, #4aabff);
+  outline: 2px solid var(--iswc-focus, #4aabff);
   outline-offset: -1px;
 }
 
 .lb-code__err {
   margin: 0;
-  color: var(--is-danger-text, #ff8787);
+  color: var(--iswc-danger-text, #ff8787);
   font-size: 0.75rem;
 }
 
@@ -102,30 +102,30 @@
 
 .lb-text-btn {
   padding: 0.4em 0.9em;
-  border-radius: var(--is-radius-sm, 0.375em);
-  border: 1px solid var(--is-control-border, #59636e);
-  background: var(--is-control-bg, #21262d);
-  color: var(--is-control-text, #f0f3f6);
+  border-radius: var(--iswc-radius-sm, 0.375em);
+  border: 1px solid var(--iswc-control-border, #59636e);
+  background: var(--iswc-control-bg, #21262d);
+  color: var(--iswc-control-text, #f0f3f6);
   font: inherit;
   font-size: 0.8125rem;
   cursor: pointer;
 }
 
-.lb-text-btn:hover { background: var(--is-control-bg-hover, #30363d); }
+.lb-text-btn:hover { background: var(--iswc-control-bg-hover, #30363d); }
 
 .lb-text-btn.is-primary {
-  background: var(--is-accent, #1e90ff);
+  background: var(--iswc-accent, #1e90ff);
   border-color: transparent;
-  color: var(--is-on-brand, #fff);
+  color: var(--iswc-on-brand, #fff);
 }
 
 .lb-text-btn:focus-visible {
-  outline: 2px solid var(--is-focus, #4aabff);
+  outline: 2px solid var(--iswc-focus, #4aabff);
   outline-offset: 1px;
 }
 
 .lb-unsupported {
-  color: var(--is-text-soft, #a8b0bb);
+  color: var(--iswc-text-soft, #a8b0bb);
   font-size: 0.875rem;
   text-align: center;
 }

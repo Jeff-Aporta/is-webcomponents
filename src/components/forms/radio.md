@@ -117,34 +117,34 @@ Propiedades públicas aparecen en tabla anterior; APIs heredadas se verifican en
 | Token | Uso |
 | --- | --- |
 | `--_size` | Token leído o definido por componente. |
-| `--is-radio-size` | Token leído o definido por componente. |
+| `--iswc-radio-size` | Token leído o definido por componente. |
 | `--_bg` | Token leído o definido por componente. |
-| `--is-radio-bg` | Token leído o definido por componente. |
-| `--is-control-bg` | Token leído o definido por componente. |
+| `--iswc-radio-bg` | Token leído o definido por componente. |
+| `--iswc-control-bg` | Token leído o definido por componente. |
 | `--_bg-hover` | Token leído o definido por componente. |
-| `--is-radio-bg-hover` | Token leído o definido por componente. |
-| `--is-control-bg-hover` | Token leído o definido por componente. |
+| `--iswc-radio-bg-hover` | Token leído o definido por componente. |
+| `--iswc-control-bg-hover` | Token leído o definido por componente. |
 | `--_border` | Token leído o definido por componente. |
-| `--is-radio-border` | Token leído o definido por componente. |
-| `--is-control-border` | Token leído o definido por componente. |
+| `--iswc-radio-border` | Token leído o definido por componente. |
+| `--iswc-control-border` | Token leído o definido por componente. |
 | `--_accent` | Token leído o definido por componente. |
-| `--is-radio-accent` | Token leído o definido por componente. |
-| `--is-accent` | Token leído o definido por componente. |
-| `--is-color-brand-500` | Token leído o definido por componente. |
+| `--iswc-radio-accent` | Token leído o definido por componente. |
+| `--iswc-accent` | Token leído o definido por componente. |
+| `--iswc-color-brand-500` | Token leído o definido por componente. |
 | `--_dot` | Token leído o definido por componente. |
-| `--is-radio-dot` | Token leído o definido por componente. |
-| `--is-on-brand` | Token leído o definido por componente. |
+| `--iswc-radio-dot` | Token leído o definido por componente. |
+| `--iswc-on-brand` | Token leído o definido por componente. |
 | `--_focus` | Token leído o definido por componente. |
-| `--is-radio-focus` | Token leído o definido por componente. |
+| `--iswc-radio-focus` | Token leído o definido por componente. |
 | `--_halo` | Token leído o definido por componente. |
-| `--is-radio-halo-size` | Token leído o definido por componente. |
-| `--is-sans` | Token leído o definido por componente. |
-| `--is-text` | Token leído o definido por componente. |
-| `--is-control-text` | Token leído o definido por componente. |
-| `--is-text-dim` | Token leído o definido por componente. |
-| `--is-color-success-500` | Token leído o definido por componente. |
-| `--is-color-warning-500` | Token leído o definido por componente. |
-| `--is-color-danger-500` | Token leído o definido por componente. |
+| `--iswc-radio-halo-size` | Token leído o definido por componente. |
+| `--iswc-sans` | Token leído o definido por componente. |
+| `--iswc-text` | Token leído o definido por componente. |
+| `--iswc-control-text` | Token leído o definido por componente. |
+| `--iswc-text-dim` | Token leído o definido por componente. |
+| `--iswc-color-success-500` | Token leído o definido por componente. |
+| `--iswc-color-warning-500` | Token leído o definido por componente. |
+| `--iswc-color-danger-500` | Token leído o definido por componente. |
 
 ### Integración con formularios
 

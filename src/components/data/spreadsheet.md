@@ -126,14 +126,14 @@ heredados de [`_sticky.css`](./_sticky.css)).
 
 | Token | Uso |
 | --- | --- |
-| `--is-text` | Color de texto del host; el `input` de edición lo hereda. |
-| `--is-bg-elev` | Fondo del contenedor y base del `color-mix` de la cabecera, la esquina y las cabeceras de fila. |
-| `--is-border` | Borde exterior del contenedor. |
-| `--is-border-soft` | Líneas internas de la rejilla. |
-| `--is-radius` | Radio de las esquinas del contenedor. |
-| `--is-accent` | Fondo de la celda enfocada (`color-mix` al 8%) y color de foco cuando `--is-focus` no está definido. |
-| `--is-focus` | Color del `outline` de la celda enfocada; si falta, se usa `--is-accent`. |
-| `--is-text-soft` | Color del texto de la cabecera de columna y de fila. |
+| `--iswc-text` | Color de texto del host; el `input` de edición lo hereda. |
+| `--iswc-bg-elev` | Fondo del contenedor y base del `color-mix` de la cabecera, la esquina y las cabeceras de fila. |
+| `--iswc-border` | Borde exterior del contenedor. |
+| `--iswc-border-soft` | Líneas internas de la rejilla. |
+| `--iswc-radius` | Radio de las esquinas del contenedor. |
+| `--iswc-accent` | Fondo de la celda enfocada (`color-mix` al 8%) y color de foco cuando `--iswc-focus` no está definido. |
+| `--iswc-focus` | Color del `outline` de la celda enfocada; si falta, se usa `--iswc-accent`. |
+| `--iswc-text-soft` | Color del texto de la cabecera de columna y de fila. |
 
 ### Integración con formularios
 
@@ -235,7 +235,7 @@ Tags del módulo: `<is-spreadsheet>`.
 - Cada celda es focalizable (`tabindex="0"`), lo que hace la hoja recorrible
   con `Tab` y con flechas; en rejillas grandes eso significa muchas paradas de
   tabulación, porque no se aplica el patrón de un único `tabindex="0"` móvil.
-- El foco es visible: `outline` de 2px con `--is-focus` (o `--is-accent`) y
+- El foco es visible: `outline` de 2px con `--iswc-focus` (o `--iswc-accent`) y
   fondo tenue.
 - El `input` de edición no tiene etiqueta accesible propia; el contexto lo dan
   las cabeceras de fila y columna, que sí son `<th>`.
@@ -322,7 +322,7 @@ Tags del módulo: `<is-spreadsheet>`.
   `read-only="false"`.
 - Cualquier carga o recarga de datos pasa por el atributo `value` con JSON
   serializado.
-- Para estilizar usa `::part(root)` y `::part(grid)` o los tokens `--is-*` del
+- Para estilizar usa `::part(root)` y `::part(grid)` o los tokens `--iswc-*` del
   tema; no crees variantes de tamaño, escala con `font-size` contextual y
   unidades `em`.
 - Reusa los helpers de `../_shared/` antes de escribir lógica paralela, y lee

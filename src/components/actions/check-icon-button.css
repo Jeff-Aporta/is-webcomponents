@@ -5,7 +5,7 @@
   width: 2.25em;
   aspect-ratio: 1 / 1;
   box-sizing: border-box;
-  color: var(--is-control-text, inherit);
+  color: var(--iswc-control-text, inherit);
   font: inherit;
   vertical-align: middle;
   line-height: 0;
@@ -71,17 +71,17 @@ is-button.btn {
   }
 
   &:hover::part(button) {
-    background: var(--is-control-bg-hover, color-mix(in srgb, currentColor 12%, transparent));
+    background: var(--iswc-control-bg-hover, color-mix(in srgb, currentColor 12%, transparent));
   }
 
   &:active::part(button) {
-    background: var(--is-control-bg-active, color-mix(in srgb, currentColor 18%, transparent));
+    background: var(--iswc-control-bg-active, color-mix(in srgb, currentColor 18%, transparent));
   }
 }
 
 :host(:focus-visible) {
-  outline: 2px solid var(--is-focus, var(--is-focus-fallback));
-  outline-offset: var(--is-focus-offset);
+  outline: 2px solid var(--iswc-focus, var(--iswc-focus-fallback));
+  outline-offset: var(--iswc-focus-offset);
 }
 
 :host(:focus:not(:focus-visible)) {

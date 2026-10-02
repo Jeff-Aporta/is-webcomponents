@@ -104,11 +104,11 @@ No expone.
 | --- | --- |
 | `--btn-size` | Token leído o definido por componente. |
 | `--btn-bg` | Token leído o definido por componente. |
-| `--is-bg-2` | Token leído o definido por componente. |
+| `--iswc-bg-2` | Token leído o definido por componente. |
 | `--btn-fg` | Token leído o definido por componente. |
-| `--is-text` | Token leído o definido por componente. |
+| `--iswc-text` | Token leído o definido por componente. |
 | `--btn-border` | Token leído o definido por componente. |
-| `--is-border` | Token leído o definido por componente. |
+| `--iswc-border` | Token leído o definido por componente. |
 
 ### Integración con formularios
 

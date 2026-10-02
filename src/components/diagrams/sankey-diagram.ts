@@ -4,7 +4,7 @@ import { resolveSankeySpec, computeSankeyLayout } from './sankey-spec.js';
 import { sequenceThemeDark, sequenceThemeLight } from './sequence-spec.js';
 import type { DiagramTheme } from './diagram-types.js';
 import { tkHueToHex } from '../_shared/tk-hue.js';
-import { inlineMdWeb } from '../_shared/tk-inline-md.js';
+import { inlineMdWeb, applySvgTextContent } from '../_shared/tk-inline-md.js';
 import { wrapText, buildTspans } from '../_shared/diagram-text-wrap.js';
 import { registerDiagramKind } from './diagram-kinds.js';
 import { svgEl } from '../_shared/svg-chart-engine.js';
@@ -245,7 +245,6 @@ class IsSankeyDiagram extends DiagramElementBase {
         t.setAttribute('y', String(n.y + n.h / 2));
         t.setAttribute('text-anchor', right ? 'start' : 'end');
         t.setAttribute('dominant-baseline', 'middle');
-        t.innerHTML = inlineMdWeb(n.label);
       } else {
         // Wrap con el helper. El ancho disponible es el alto del nodo
         // (porque los labels van horizontales a la derecha/izquierda del bar).
@@ -276,6 +275,7 @@ class IsSankeyDiagram extends DiagramElementBase {
         }
       }
       g.appendChild(t);
+      if (labelHasMd) applySvgTextContent(t, n.label);
 
       const value = svgEl('text', {
         x: right ? n.x + n.w + 8 : n.x - 8,

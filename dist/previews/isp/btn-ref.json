@@ -10,7 +10,7 @@
   "sections": [
     {
       "id": "intro",
-      "title": "<is-btn-ref>",
+      "title": "Uso",
       "lede": "Campo con selector modal (port <code class=\"code\">BtnRef</code>). El modal usa\n          <code class=\"code\">&lt;is-catalogo-gen select-mode&gt;</code> centrado. Controller vía\n          <code class=\"code\">createBtnRefController</code> — <strong>sin acciones CRUD</strong>, solo listado y selección.",
       "blocks": [
         {

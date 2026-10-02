@@ -10,12 +10,12 @@
   "sections": [
     {
       "id": "intro",
-      "title": "<is-block-layout>",
+      "title": "Uso",
       "lede": "Caja de bloque que mide su propio ancho y publica el breakpoint como\r\n          <code class=\"code\">data-sizew</code>, banderas <code class=\"code\">data-szw-*</code> y las custom properties\r\n          <code class=\"code\">--clientw</code> / <code class=\"code\">--lerpw</code>. Port del <code class=\"code\">BlockLayout.svelte</code> de ISP.",
       "blocks": [
         {
           "kind": "demo",
-          "html": "<is-block-layout id=\"bl-intro\" style=\"border:1px solid var(--is-border);padding:1rem;resize:horizontal;overflow:auto;min-width:180px\">\r\n            <p>Redimensiona esta caja tirando de la esquina inferior derecha.</p>\r\n            <p>sizew actual: <strong id=\"bl-out\">—</strong></p>\r\n          </is-block-layout>",
+          "html": "<is-block-layout id=\"bl-intro\" style=\"border:1px solid var(--iswc-border);padding:1rem;resize:horizontal;overflow:auto;min-width:180px\">\r\n            <p>Redimensiona esta caja tirando de la esquina inferior derecha.</p>\r\n            <p>sizew actual: <strong id=\"bl-out\">—</strong></p>\r\n          </is-block-layout>",
           "controls": [
             {
               "control": "boolean",
@@ -41,7 +41,7 @@
         },
         {
           "kind": "demo",
-          "html": "<is-block-layout class=\"bl-demo\" style=\"border:1px dashed var(--is-border);padding:1rem;resize:horizontal;overflow:auto;min-width:180px\">\r\n            <p class=\"bl-title\">Título que crece con el ancho del contenedor</p>\r\n          </is-block-layout>"
+          "html": "<is-block-layout class=\"bl-demo\" style=\"border:1px dashed var(--iswc-border);padding:1rem;resize:horizontal;overflow:auto;min-width:180px\">\r\n            <p class=\"bl-title\">Título que crece con el ancho del contenedor</p>\r\n          </is-block-layout>"
         },
         {
           "kind": "code",
@@ -53,11 +53,11 @@
         },
         {
           "kind": "demo",
-          "html": "<is-block-layout inline style=\"border:1px solid var(--is-border);padding:0.5rem 1rem\">inline</is-block-layout>\r\n          <is-block-layout inline style=\"border:1px solid var(--is-border);padding:0.5rem 1rem\">otro inline</is-block-layout>"
+          "html": "<is-block-layout inline style=\"border:1px solid var(--iswc-border);padding:0.5rem 1rem\">inline</is-block-layout>\r\n          <is-block-layout inline style=\"border:1px solid var(--iswc-border);padding:0.5rem 1rem\">otro inline</is-block-layout>"
         },
         {
           "kind": "demo",
-          "html": "<is-block-layout cscroll style=\"border:1px solid var(--is-border);padding:1rem;max-height:6rem;width:100%\">\r\n            <p>Con <code class=\"code\">cscroll</code> la caja hace scroll con el scrollbar del tema.</p>\r\n            <p>Línea 2</p><p>Línea 3</p><p>Línea 4</p><p>Línea 5</p><p>Línea 6</p>\r\n          </is-block-layout>"
+          "html": "<is-block-layout cscroll style=\"border:1px solid var(--iswc-border);padding:1rem;max-height:6rem;width:100%\">\r\n            <p>Con <code class=\"code\">cscroll</code> la caja hace scroll con el scrollbar del tema.</p>\r\n            <p>Línea 2</p><p>Línea 3</p><p>Línea 4</p><p>Línea 5</p><p>Línea 6</p>\r\n          </is-block-layout>"
         }
       ]
     },
@@ -68,7 +68,7 @@
       "blocks": [
         {
           "kind": "demo",
-          "html": "<is-block-layout id=\"blJson\" style=\"border:1px solid var(--is-border);padding:1rem;min-height:6rem\"></is-block-layout>\n          <div style=\"display:flex;gap:0.5rem;margin:0.75rem 0\">\n            <is-button id=\"blBtnToJson\" variant=\"outlined\" color=\"neutral\">html2json()</is-button>\n            <is-button id=\"blBtnFromJson\" color=\"brand\">fromJSON(body)</is-button>\n          </div>\n          <pre id=\"blJsonOut\" style=\"margin:0;padding:0.65rem 0.75rem;border:1px solid var(--is-border);border-radius:0.5rem;background:var(--is-bg-elev);font-family:ui-monospace,Menlo,Consolas,monospace;font-size:0.75rem;white-space:pre-wrap;max-height:12rem;overflow:auto\"></pre>"
+          "html": "<is-block-layout id=\"blJson\" style=\"border:1px solid var(--iswc-border);padding:1rem;min-height:6rem\"></is-block-layout>\n          <div style=\"display:flex;gap:0.5rem;margin:0.75rem 0\">\n            <is-button id=\"blBtnToJson\" variant=\"outlined\" color=\"neutral\">html2json()</is-button>\n            <is-button id=\"blBtnFromJson\" color=\"brand\">fromJSON(body)</is-button>\n          </div>\n          <pre id=\"blJsonOut\" style=\"margin:0;padding:0.65rem 0.75rem;border:1px solid var(--iswc-border);border-radius:0.5rem;background:var(--iswc-bg-elev);font-family:ui-monospace,Menlo,Consolas,monospace;font-size:0.75rem;white-space:pre-wrap;max-height:12rem;overflow:auto\"></pre>"
         },
         {
           "kind": "code",

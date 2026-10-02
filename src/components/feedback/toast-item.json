@@ -9,7 +9,7 @@
   "sections": [
     {
       "id": "intro",
-      "title": "<is-toast-item>",
+      "title": "Uso",
       "lede": "Ítem individual de notificación. Se crea normalmente con <code class=\"code\">toaster.create()</code>, pero también se puede declarar suelto para controlar su ciclo de vida a mano.",
       "blocks": [
         {

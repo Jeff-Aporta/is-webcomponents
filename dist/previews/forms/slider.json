@@ -10,7 +10,7 @@
   "sections": [
     {
       "id": "intro",
-      "title": "<is-slider>",
+      "title": "Uso",
       "lede": "Control de rango form-associated con paridad funcional con el\r\n          <a href=\"https://mui.com/material-ui/react-slider/\" target=\"_blank\" rel=\"noreferrer\">Slider de MUI</a>:\r\n          rango de dos thumbs, marks, escala no lineal, orientación vertical y track invertido.",
       "blocks": [
         {
@@ -234,7 +234,7 @@
     {
       "id": "vertical",
       "title": "Vertical",
-      "lede": "<code class=\"code\">orientation=\"vertical\"</code>. La longitud se controla con\r\n          <code class=\"code\">--is-slider-length</code>.",
+      "lede": "<code class=\"code\">orientation=\"vertical\"</code>. La longitud se controla con\r\n          <code class=\"code\">--iswc-slider-length</code>.",
       "blocks": [
         {
           "kind": "demo",
@@ -396,7 +396,7 @@
             ],
             [
               "tokens",
-              "<code>--is-slider-track-size</code> <code>--is-slider-thumb-size</code> <code>--is-slider-length</code> <code>--is-slider-rail</code> <code>--is-slider-fill</code>"
+              "<code>--iswc-slider-track-size</code> <code>--iswc-slider-thumb-size</code> <code>--iswc-slider-length</code> <code>--iswc-slider-rail</code> <code>--iswc-slider-fill</code>"
             ]
           ]
         }

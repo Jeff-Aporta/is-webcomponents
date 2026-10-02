@@ -1,10 +1,10 @@
-#!/usr/bin/env node
+#!/usr/bin/env -S deno run -A --no-check
 /**
  * runner exhaustivo: corre TODOS los tests exhaustivos por categoría y
  * emite un reporte consolidado. Úsalo tras mergear los WTs hijos para
  * verificar que la suite completa pasa.
  *
- * Uso: node scripts/run-exhaustive-tests.mjs
+ * Uso: deno run -A --no-check scripts/run-exhaustive-tests.mjs
  */
 
 import { execSync } from 'node:child_process';
@@ -39,7 +39,7 @@ for (const cat of categorias) {
   console.log(`▶ ${cat}: ${tests.length} archivos de test`);
   try {
     const out = execSync(
-      `node --import ./scripts/ts-resolve-hook.ts --test "${dir}/*.test.ts"`,
+      `deno test -A --no-check "${dir}/*.test.ts"`,
       { encoding: 'utf8', stdio: 'pipe' },
     );
     // Parsear TAP output: contar "ok" y "not ok".

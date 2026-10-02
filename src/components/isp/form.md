@@ -143,8 +143,8 @@ No expone custom states.
 
 | Token | Uso |
 | --- | --- |
-| `--is-text` | Color del texto. |
-| `--is-sans` | Familia tipográfica. |
+| `--iswc-text` | Color del texto. |
+| `--iswc-sans` | Familia tipográfica. |
 
 ### Integración con formularios
 

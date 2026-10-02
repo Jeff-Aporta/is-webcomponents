@@ -126,7 +126,7 @@ No expone.
 
 | Token | Uso |
 | --- | --- |
-| `--is-accent` | Token leído o definido por componente. |
+| `--iswc-accent` | Token leído o definido por componente. |
 
 ### Integración con formularios
 

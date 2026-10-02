@@ -4,6 +4,6 @@
   display: block;
   width: 100%;
   max-width: 100%;
-  background: var(--is-bg-elev, transparent);
-  border-radius: var(--is-radius, 0.4em);
+  background: var(--iswc-bg-elev, transparent);
+  border-radius: var(--iswc-radius, 0.4em);
 }

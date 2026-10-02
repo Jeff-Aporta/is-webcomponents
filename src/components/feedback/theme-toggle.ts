@@ -14,7 +14,9 @@ import { findThemeContainer } from '../_shared/theme-scope.js';
  *   4. Emite `is-theme-change` { detail: { theme, dark, container } }
  *
  * Attributes
- *   dark  boolean (reflected) — tema actual (dark=true → icono de sol / próximo click a light)
+ *   dark   boolean (reflected) — tema actual (dark=true → icono de sol / próximo click a light)
+ *   scope  root | closest. root escribe <html>. closest (default) usa el
+ *          primer contenedor de tema. Si no hay, <html>.
  */
 
 (() => {
@@ -54,7 +56,7 @@ import { findThemeContainer } from '../_shared/theme-scope.js';
   interface IsCheckIconButtonEvent extends CustomEvent<{ checked: boolean }> {}
 
   class IsThemeToggle extends HTMLElement {
-    static get observedAttributes(): string[] { return ['dark']; }
+    static get observedAttributes(): string[] { return ['dark', 'scope']; }
 
     #btn!: HTMLElement;
     #mounted = false;
@@ -84,15 +86,24 @@ import { findThemeContainer } from '../_shared/theme-scope.js';
     }
 
     attributeChangedCallback(name: string, oldVal: string | null, newVal: string | null): void {
-      if (name !== 'dark' || oldVal === newVal || !this.#mounted) return;
-      this.#render();
+      if (!this.#mounted || oldVal === newVal) return;
+      if (name === 'scope') {
+        this.#syncFromScope();
+        this.#watchScope();
+        this.#render();
+        return;
+      }
+      if (name === 'dark') this.#render();
     }
 
     get dark(): boolean { return this.hasAttribute('dark'); }
     set dark(v: boolean) { this.toggleAttribute('dark', !!v); }
 
-    /** Contenedor de tema más cercano; atraviesa Shadow DOM (closest no). */
+    /** root = html. closest = primer contenedor; atraviesa Shadow DOM. */
     get themeContainer(): HTMLElement {
+      if ((this.getAttribute('scope') || '').trim().toLowerCase() === 'root') {
+        return document.documentElement;
+      }
       const found = findThemeContainer(this) || this.closest(SCOPE);
       return (found as HTMLElement | null) || document.documentElement;
     }
@@ -125,6 +136,9 @@ import { findThemeContainer } from '../_shared/theme-scope.js';
       this.#applying = false;
       this.#render();
       emit(this, 'is-theme-change', { theme: next, dark: next === 'dark', container });
+      if (container === document.documentElement && window.parent !== window) {
+        window.parent.postMessage({ type: 'is-shell-sync', theme: next }, location.origin);
+      }
     };
 
     /** Re-sincroniza el icono desde fuera (p.ej. is-context por postMessage)

@@ -6,7 +6,7 @@
 
 ## TL;DR
 
-Antes del push → corre `npm run prepush` (levanta `serve.mjs` local + ejecuta `tour-deploy.mjs --local`). Después del push → `npm run postpush` (corre `tour-deploy.mjs --remote` contra `jeff-aporta.github.io/is-webcomponents`).
+Antes del push → corre `deno task prepush` (levanta `serve.mjs` local + ejecuta `tour-deploy.mjs --local`). Después del push → `deno task postpush` (corre `tour-deploy.mjs --remote` contra `jeff-aporta.github.io/is-webcomponents`).
 
 Si el tour rojo (cualquier 404), NO hacer push hasta corregir.
 
@@ -58,16 +58,16 @@ Captura console errors con playwright/stagehand. Para añadir:
 
 | Comando | Cuándo | Qué hace |
 |---|---|---|
-| `npm run prepush` (alias de `tour:local`) | Antes de `git push origin main` | Levanta `serve.mjs` local (puerto 8491) → ejecuta tour HEAD + catalog walk |
-| `npm run postpush` (alias de `tour:remote`) | Después de `git push origin main` (esperar ~90s para cache GH Pages) | Ejecuta tour contra `jeff-aporta.github.io/is-webcomponents` |
-| `npm run bundle` | Antes de cualquier push | Regenera `dist/scripts/`, `dist/pages/`, `dist/previews/`, `dist/cdn/skills/` |
-| `npm run test:all` | Antes de cualquier push | typecheck + tests + audit |
+| `deno task prepush` (alias de `tour:local`) | Antes de `git push origin main` | Levanta `serve.mjs` local (puerto 8491) → ejecuta tour HEAD + catalog walk |
+| `deno task postpush` (alias de `tour:remote`) | Después de `git push origin main` (esperar ~90s para cache GH Pages) | Ejecuta tour contra `jeff-aporta.github.io/is-webcomponents` |
+| `deno task bundle` | Antes de cualquier push | Regenera `dist/scripts/`, `dist/pages/`, `dist/previews/`, `dist/cdn/skills/` |
+| `deno task test:all` | Antes de cualquier push | typecheck + tests + audit |
 
 ## Diagnóstico de fallos frecuentes
 
 | Síntoma | Causa probable | Fix |
 |---|---|---|
-| `FAIL dist/scripts/<x>.min.js (404)` | `bundle-scripts.mjs` no se corrió | `npm run bundle` |
+| `FAIL dist/scripts/<x>.min.js (404)` | `bundle-scripts.mjs` no se corrió | `deno task bundle` |
 | `FAIL dist/pages/<x>.min.js (404)` | Page agregada sin bundle | Añadir `<x>` a `pages` array en `bundle-scripts.mjs` |
 | `FAIL dist/previews/<cat>/<tag>.preview.min.js (404)` | Preview.ts no se bundleó | Verificar que `bundle-scripts.mjs` lo detectó (revisar logs) |
 | `FAIL dist/cdn/skills/.../PROMPT.md (404)` | Skill no copiado | Verificar `cp -r src/skills dist/cdn/skills` en build.mjs |
@@ -79,7 +79,7 @@ Captura console errors con playwright/stagehand. Para añadir:
 - ❌ NO añadir `?v=Ticks` o similar al URL del fetch (rompe el tour-script).
 - ❌ NO usar `Promise.all` en catalog walk (golpea GH Pages con N requests simultáneos → throttle).
 - ❌ NO skip al tour "porque ya sé que está verde" — la fuente del bug es precisamente el bypass.
-- ❌ NO hacer push sin `npm run prepush` previo.
+- ❌ NO hacer push sin `deno task prepush` previo.
 
 ## Roadmap
 

@@ -1,0 +1,42 @@
+{
+  "nodeModulesDir": "auto",
+  "unstable": ["sloppy-imports"],
+  "imports": {
+    "esbuild": "npm:esbuild@^0.25.0",
+    "playwright": "npm:playwright@^1.62.1",
+    "@browserbasehq/stagehand": "npm:@browserbasehq/stagehand@^4.0.2",
+    "typescript": "npm:typescript@^5.9.0"
+  },
+  "tasks": {
+    "build": "deno run -A --no-check scripts/build.mjs",
+    "dev": "deno run -A --no-check scripts/serve.mjs",
+    "dev:demos": "deno run -A --no-check scripts/serve-demos.mjs",
+    "icons:download": "deno run -A --no-check scripts/download-icons.ts",
+    "typecheck": "deno run -A --no-check npm:typescript@5.9.3/lib/tsc.js -p tsconfig.json",
+    "test": "deno test -A --no-check src/utils/health/meta/ src/utils/health/diagrams/ src/utils/health/domain/ src/utils/health/audit/",
+    "test:e2e": "deno run -A --no-check src/utils/testing/e2e/run.ts",
+    "test:demos": "deno run -A --no-check demos/diagramas/ER/_testing/run.mjs",
+    "audit": "deno run -A --no-check src/utils/health/motor/cli.ts --solo-json",
+    "audit:full": "deno run -A --no-check src/utils/health/motor/cli.ts",
+    "audit:stagehand": "deno run -A --no-check src/utils/health/motor/cli.ts --puerto 8391",
+    "audit:json": "deno run -A --no-check src/utils/health/motor/cli.ts --solo-json --salida-json .audit/last.json",
+    "audit:md": "deno run -A --no-check src/utils/health/motor/cli.ts --solo-json --salida-md .audit/last.md",
+    "audit:tag": "deno run -A --no-check src/utils/health/motor/cli.ts --solo-json --solo",
+    "audit:category": "deno run -A --no-check src/utils/health/motor/cli.ts --solo-json --categoria",
+    "audit:python": "python -B \"%DSH_HOME%\\profiles\\auditor\\motor\\auditor.py\" audit is-webcomponents --sin-deep --sin-preguntas --sin-documentar",
+    "test:all": "deno task typecheck && deno task test && deno task audit",
+    "test:all:e2e": "deno task test:all && deno task test:e2e",
+    "test:all:demos": "deno task test:all && deno task test:demos",
+    "test:all:full": "deno task test:all && deno task tour:interactions && deno task test:e2e --only=10-ux-proposals && deno task test:e2e && deno task test:demos",
+    "bundle": "deno run -A --no-check scripts/bundle-scripts.mjs",
+    "tour:local": "deno run -A --no-check scripts/tour-deploy.mjs --local",
+    "tour:remote": "deno run -A --no-check scripts/tour-deploy.mjs --remote",
+    "tour:content": "deno run -A --no-check scripts/tour-content.mjs",
+    "tour:content:local": "deno run -A --no-check scripts/tour-content.mjs --local",
+    "tour:content:remote": "deno run -A --no-check scripts/tour-content.mjs --remote",
+    "tour:interactions": "deno run -A --no-check scripts/tour-interactions.mjs --local",
+    "tour:interactions:remote": "deno run -A --no-check scripts/tour-interactions.mjs --remote",
+    "prepush": "deno task tour:local",
+    "postpush": "deno task tour:remote"
+  }
+}

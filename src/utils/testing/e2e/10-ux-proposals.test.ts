@@ -4220,7 +4220,7 @@ test('g08 combobox: contrato ARIA + teclado (proposals 23-28)', { timeout: 60_00
 //
 // Los controles interactivos transversales (search global, drawer, view
 // toggles, theme/palette switchers) viven en el chrome de la galería y se
-// validan en el tour de interacciones (npm run tour:interactions); aquí
+// validan en el tour de interacciones (deno task tour:interactions); aquí
 // sólo se verifica el contrato de las pages.
 // ---------------------------------------------------------------------------
 

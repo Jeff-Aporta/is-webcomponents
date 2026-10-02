@@ -97,7 +97,7 @@ No expone.
 
 ### CSS custom properties
 
-Tokens del tema (`--is-*`) según CSS del módulo.
+Tokens del tema (`--iswc-*`) según CSS del módulo.
 
 ### Integración con formularios
 

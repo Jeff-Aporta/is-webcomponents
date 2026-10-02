@@ -49,7 +49,7 @@ export class ElementBase extends HTMLElement {
   /**
    * Mapa `atributo → custom property`, para personalizar sin `<style>` aparte.
    *
-   *   static override styleAttrs = { radius: '--is-foo-radius' };
+   *   static override styleAttrs = { radius: '--iswc-foo-radius' };
    */
   static styleAttrs: StyleAttrMap = {};
 

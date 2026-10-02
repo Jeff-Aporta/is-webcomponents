@@ -2,6 +2,7 @@ import { adoptCss, defineElement, emit } from '../../core/element.js';
 import '../media/icon.js';
 import { ElementBase } from '../../core/element-base.js';
 import { createPopupDismiss } from '../_shared/popup-dismiss.js';
+import { PALETTES } from '../../styles/palette-build.js';
 
 /**
  * <is-palette-selector> — Web Component (vanilla).
@@ -17,12 +18,16 @@ import { createPopupDismiss } from '../_shared/popup-dismiss.js';
  * hojas: se cargan bajo demanda.
  *
  * Atributos
- *   palettes      JSON string con array de { value, label, accent, css?,
- *                                              lead?, leadColor?,
- *                                              accentColor?, bg?, fg? }.
- *                 Default = DEFAULT_PALETTES (contapyme, insoft, agrowin).
- *   value         string — la paleta activa. Reflect → data-palette en <html>.
- *   storage-key   string — clave de localStorage (default 'is-palette')
+ *   palettes      JSON string con array de { value, label, h, s, b, css?,
+ *                                              lead?, accentLabel?, leadColor?,
+ *                                              accentColor?, bg?, fg?, accent? }.
+ *                 h/s/b derivan el swatch. accent (hex) solo si no hay hsb.
+ *                 Default = palettes.json (contapyme, insoft, agrowin).
+ *   value         string — la paleta activa. La escribe en el target del scope.
+ *   scope         root | closest. root escribe <html>. closest escribe el
+ *                 primer ancestro con data-palette (si no hay, <html>).
+ *   storage-key   string — clave de localStorage (default 'is-palette').
+ *                 Solo persiste cuando el target es <html>.
  *   aria-label    string — etiqueta del botón trigger (default "Elegir paleta")
  *
  * Slots
@@ -31,32 +36,19 @@ import { createPopupDismiss } from '../_shared/popup-dismiss.js';
  *              icono + texto, etc.). El componente solo se preocupa de
  *              abrir/cerrar el menú y emitir el evento cuando el usuario
  *              selecciona una opción. Si el slot está VACÍO, se renderiza
- *              un trigger por defecto con bg + label.
+ *              un trigger por defecto con el wordmark del JSON.
  *
- *   option     opcional — sustituye el render de cada item del dropdown.
- *              El consumidor pone un `<template slot="option">` (un único
- *              `<template>` compartido) con placeholders `{value}`,
- *              `{label}`, `{accent}`, `{lead}`, `{accentLabel}`,
- *              `{leadColor}`, `{accentColor}`, `{bg}`, `{fg}`. El componente
- *              clona la plantilla para cada paleta y bindea:
- *                - data-palette="<value>"
- *                - role="option"
- *                - aria-selected="true|false"
- *                - data-role="lead|accent|swatch|label|check" (los
- *                  elementos con estos roles reciben el contenido y
- *                  color de la paleta). El escape { se hace con {{}.
- *              Atajo: dentro de un atributo style=, el componente
- *              encuentra {tokens} y los reemplaza. En texto, simplemente
- *              pone el valor del campo de la paleta.
- *              Si el slot está vacío, se renderiza el item default
- *              (swatch + label + check).
+ *   El menu no se personaliza con HTML. Cada item sale del JSON
+ *   (palettes.json o el array `palettes` del consumidor): swatch, label y check.
  *
  * Eventos
  *   is-palette-change  detail: { value, palette }   bubbles, composed
  *
  * Mutaciones que produce
- *   <html data-palette="X">   — activa la paleta visualmente
- *   localStorage[storageKey]  — persiste la elección
+ *   data-palette en el target del scope (html o el ancestro)
+ *   localStorage[storageKey]  — solo si el target es <html>
+ *   Dos selectores con el mismo target y la misma paleta en su lista
+ *   se siguen: observan data-palette y adoptan el valor.
  *
  * API JS del consumer
  *   el.palettes = [...]      // setter que escribe el atributo JSON
@@ -78,6 +70,9 @@ interface Palette {
   accentColor: string;
   bg: string;
   fg: string;
+  h: number | null;
+  s: string;
+  b: string;
 }
 
 /** Entrada cruda que puede llegar en el atributo `palettes`. */
@@ -92,40 +87,67 @@ interface PaletteCruda {
   accentColor?: unknown;
   bg?: unknown;
   fg?: unknown;
+  h?: unknown;
+  s?: unknown;
+  b?: unknown;
 }
-
-/** Tokens disponibles para sustitución dentro de `{...}`. */
-type TemplateTokens = Record<keyof Palette, string>;
 
 (() => {
   // 3 paletas por defecto. Primera = default del kit (ContaPyme). El
   // `lead`/`accent` permiten que el trigger represente la marca en dos
   // colores. Como ESTOS CSS ya están enlazados en el <head>, no hace
   // falta inyectar <link> extra: solo se respeta data-palette="X" en <html>.
-  const DEFAULT_PALETTES: Palette[] = [
-    { value: 'contapyme', label: 'ContaPyme', accent: 'dodgerblue', css: '', lead: 'conta', accentLabel: 'pyme', leadColor: '#111', accentColor: 'dodgerblue', bg: '#fff', fg: '#111' },
-    // El logo InSoft lleva la S en MAYUSCULA y en el color de marca: in + Soft.
-    { value: 'insoft',    label: 'InSoft',    accent: '#e03131',    css: '', lead: 'in',    accentLabel: 'Soft', leadColor: '#111', accentColor: '#e03131',    bg: '#fff', fg: '#111' },
-    { value: 'agrowin',   label: 'AgroWin',   accent: 'yellowgreen',css: '', lead: 'agro',  accentLabel: 'win',  leadColor: '#111', accentColor: 'yellowgreen',bg: '#fff', fg: '#111' },
-  ];
+  const DEFAULT_PALETTES: Palette[] = PALETTES.map((p) => ({
+    value: p.value,
+    label: p.label,
+    accent: '',
+    css: '',
+    lead: p.lead,
+    accentLabel: p.accentLabel,
+    leadColor: p.leadColor || '#111',
+    accentColor: p.accentColor || '',
+    bg: '',
+    fg: '',
+    h: p.h,
+    s: p.s,
+    b: p.b,
+  }));
 
   const TEMPLATE = document.createElement('template');
   TEMPLATE.innerHTML = /* html */ `
     <div class="root">
       <slot name="trigger"></slot>
       <button type="button" part="trigger" class="trigger is-focus-ring" aria-haspopup="listbox" aria-expanded="false" aria-label="Elegir paleta" title="Elegir paleta">
-        <span part="lead" class="trigger__lead" aria-hidden="true"></span>
-        <span part="label" class="trigger__label">Paleta</span>
-        <is-icon part="caret" class="trigger__caret" icon="mdi:chevron-down" aria-hidden="true"></is-icon>
+        <span part="lead" class="trigger__lead"></span><span part="label" class="trigger__accent"></span>
       </button>
       <ul part="menu" class="menu" role="listbox" hidden aria-label="Paletas disponibles">
-        <!-- opciones se inyectan en #render() -->
+        <!-- opciones se inyectan en #render() desde el JSON -->
       </ul>
-      <slot name="option"></slot>
     </div>
   `;
 
-  const OBSERVED = ['palettes', 'value', 'storage-key', 'aria-label'];
+  const OBSERVED = ['palettes', 'value', 'storage-key', 'aria-label', 'scope'];
+
+  // Primer ancestro con data-palette. No cuenta el host: el host lleva
+  // data-palette solo para pintar la pastilla con los tokens de ESA marca.
+  function findPaletteContainer(from: Element | null | undefined): HTMLElement {
+    let node: Element | null = from && from.nodeType === 1 ? from : null;
+    while (node) {
+      const parent = node.parentElement;
+      if (parent) {
+        const hit = parent.closest('[data-palette]');
+        if (hit) return hit as HTMLElement;
+      }
+      const root = node.getRootNode?.();
+      if (root instanceof ShadowRoot && root.host) {
+        if (root.host !== from && root.host.hasAttribute('data-palette')) return root.host as HTMLElement;
+        node = root.host;
+        continue;
+      }
+      break;
+    }
+    return document.documentElement;
+  }
 
   class IsPaletteSelector extends ElementBase {
     static get observedAttributes(): string[] { return OBSERVED; }
@@ -134,11 +156,14 @@ type TemplateTokens = Record<keyof Palette, string>;
     #trigger!: HTMLElement;
     #menu!: HTMLElement;
     #slotTrigger!: HTMLSlotElement;
-    #slotOption!: HTMLSlotElement;
     #palettes: Palette[] = [];
     #value = '';
     /** CSS cargado dinámicamente por paleta, para no recargar dos veces. */
     #loadedCSS = new Set<string>();
+    #scopeObs: MutationObserver | null = null;
+    #applying = false;
+    #fromOutside = false;
+    #hold = false;
 
     /** Ciclo "menú abierto" compartido con is-dropdown / is-context-menu. */
     #dismiss = createPopupDismiss(this, {
@@ -155,7 +180,6 @@ type TemplateTokens = Record<keyof Palette, string>;
       this.#trigger = shadow.querySelector<HTMLElement>('.trigger')!;
       this.#menu = shadow.querySelector<HTMLElement>('.menu')!;
       this.#slotTrigger = shadow.querySelector<HTMLSlotElement>('slot[name="trigger"]')!;
-      this.#slotOption = shadow.querySelector<HTMLSlotElement>('slot[name="option"]')!;
 
       // Eventos dentro del Shadow DOM NO se re-dirigen al host por defecto;
       // los capturamos en el tree shadow directamente.
@@ -164,7 +188,6 @@ type TemplateTokens = Record<keyof Palette, string>;
       // Los slots viven en el light DOM; escuchar cambios para ajustar
       // el rendering del trigger y de los items del dropdown.
       this.#slotTrigger.addEventListener('slotchange', this.#onTriggerSlotChange);
-      this.#slotOption.addEventListener('slotchange', this.#onOptionSlotChange);
       // Si el consumidor puso su propio trigger en el slot, capturamos
       // clicks en el root para delegación (slot content vive en light DOM).
       this.addEventListener('click', this.#onSlotClick);
@@ -172,14 +195,16 @@ type TemplateTokens = Record<keyof Palette, string>;
 
     onDisconnected(): void {
       this.#dismiss.detach();
+      this.#scopeObs?.disconnect();
+      this.#scopeObs = null;
       this.#menu?.removeEventListener('click', this.#onClick);
       this.#trigger?.removeEventListener('click', this.#onClick);
       this.#slotTrigger?.removeEventListener('slotchange', this.#onTriggerSlotChange);
-      this.#slotOption?.removeEventListener('slotchange', this.#onOptionSlotChange);
     }
 
     onConnected(): void {
       this.#parsePalettes();
+      this.#watchScope();
       this.#loadInitial();
       this.#render();
       // Ajustar visibilidad trigger interno vs slot.
@@ -191,9 +216,13 @@ type TemplateTokens = Record<keyof Palette, string>;
         this.#parsePalettes();
         this.#render();
       } else if (name === 'value') {
+        if (this.#applying || this.#hold) return;
         this.#apply(newVal);
       } else if (name === 'aria-label') {
         this.#trigger.setAttribute('aria-label', newVal || 'Elegir paleta');
+      } else if (name === 'scope' && oldVal !== newVal) {
+        this.#watchScope();
+        this.#loadInitial();
       }
     }
 
@@ -232,33 +261,79 @@ type TemplateTokens = Record<keyof Palette, string>;
       this.#palettes = list.map((p): Palette => ({
         value: String(p.value || '').trim(),
         label: String(p.label || p.value || '').trim(),
-        accent: String(p.accent || '#888'),
+        accent: p.accent ? String(p.accent) : '',
         css: p.css ? String(p.css) : '',
-        // Para el trigger estilo logo (dos mitades de texto).
         lead: p.lead ? String(p.lead) : '',
         accentLabel: p.accentLabel ? String(p.accentLabel) : '',
         leadColor: p.leadColor ? String(p.leadColor) : '',
         accentColor: p.accentColor ? String(p.accentColor) : '',
         bg: p.bg ? String(p.bg) : '',
         fg: p.fg ? String(p.fg) : '',
+        h: p.h == null || p.h === '' ? null : Number(p.h),
+        s: p.s ? String(p.s) : '',
+        b: p.b ? String(p.b) : '',
       })).filter((p) => p.value);
     }
 
+    #scopeTarget(): HTMLElement {
+      const mode = (this.getAttribute('scope') || 'root').trim().toLowerCase();
+      if (mode === 'closest') return findPaletteContainer(this);
+      return document.documentElement;
+    }
+
+    #storageKey(): string {
+      const key = this.getAttribute('storage-key');
+      if (key === '') return '';
+      return key || 'is-palette';
+    }
+
+    #known(value: string): boolean {
+      return !!value && this.#palettes.some((p) => p.value === value);
+    }
+
+    #watchScope(): void {
+      this.#scopeObs?.disconnect();
+      const target = this.#scopeTarget();
+      const obs = new MutationObserver(() => {
+        if (this.#applying) return;
+        const next = target.dataset.palette || '';
+        if (!next || next === this.#value || !this.#known(next)) return;
+        this.#fromOutside = true;
+        if (this.getAttribute('value') !== next) this.setAttribute('value', next);
+        else this.#apply(next);
+        this.#fromOutside = false;
+      });
+      this.#scopeObs = obs;
+      obs.observe(target, { attributes: true, attributeFilter: ['data-palette'] });
+    }
+
     #loadInitial(): void {
-      const root = document.documentElement;
-      const fromDom = root.dataset.palette;
-      const key = this.getAttribute('storage-key') || 'is-palette';
-      const fromStorage = localStorage.getItem(key);
-      const initial = (fromDom && this.#palettes.some((p) => p.value === fromDom))
-        ? fromDom
-        : (fromStorage && this.#palettes.some((p) => p.value === fromStorage))
-          ? fromStorage
-          : this.#palettes[0]?.value || '';
-      if (initial && initial !== this.getAttribute('value')) {
-        this.setAttribute('value', initial);
-      } else {
-        this.#apply(initial);
+      const target = this.#scopeTarget();
+      const onRoot = target === document.documentElement;
+      let stored = '';
+      const key = this.#storageKey();
+      if (onRoot && key) {
+        try { stored = localStorage.getItem(key) || ''; } catch { /* ignore */ }
       }
+      const fromDom = target.dataset.palette || '';
+      const initial = (onRoot && this.#known(stored))
+        ? stored
+        : this.#known(fromDom)
+          ? fromDom
+          : this.#palettes[0]?.value || '';
+      if (!initial) return;
+      // Paleta ajena en el target: no la pises (otro catalogo de prueba).
+      const foreign = !!fromDom && !this.#known(fromDom) && !(onRoot && this.#known(stored));
+      if (foreign) {
+        this.#hold = true;
+        if (this.getAttribute('value') !== initial) this.setAttribute('value', initial);
+        this.#value = initial;
+        this.#hold = false;
+        this.#paintTrigger();
+        return;
+      }
+      if (initial !== this.getAttribute('value')) this.setAttribute('value', initial);
+      else this.#apply(initial);
     }
 
     /** Devuelve la paleta activa o la primera. */
@@ -292,11 +367,6 @@ type TemplateTokens = Record<keyof Palette, string>;
       this.#paintTrigger();
     };
 
-    /** Handler del slot "option" — re-render menu items. */
-    #onOptionSlotChange = (): void => {
-      this.#render();
-    };
-
     #paintTrigger(): void {
       const current = this.#current();
       if (!current) return;
@@ -307,18 +377,32 @@ type TemplateTokens = Record<keyof Palette, string>;
       // Trigger interno: estilo logo (lead + accent) si tenemos esos datos,
       // sino bg + label plano.
       const lead = this.#trigger.querySelector<HTMLElement>('.trigger__lead');
-      const label = this.#trigger.querySelector<HTMLElement>('.trigger__label');
-      if (current.lead && current.accentLabel) {
-        if (lead) lead.textContent = current.lead;
-        if (lead) lead.style.color = current.leadColor || 'currentColor';
-        if (label) label.textContent = current.accentLabel;
-        if (label) label.style.color = current.accentColor || 'currentColor';
-      } else {
-        if (lead) lead.textContent = '';
-        if (label) label.textContent = current.label;
+      const accent = this.#trigger.querySelector<HTMLElement>('.trigger__accent');
+      if (lead) {
+        lead.textContent = current.lead || '';
+        lead.style.color = current.leadColor || '';
       }
-      this.#trigger.style.background = current.bg || '';
-      this.#trigger.style.color = current.fg || '';
+      if (accent) {
+        accent.textContent = current.accentLabel || (current.lead ? '' : current.label);
+        accent.style.color = current.accentColor || '';
+      }
+      this.#trigger.style.background = '';
+      this.#trigger.style.color = '';
+      // La pastilla hereda --iswc-logo-* del host: palettes.css pinta [data-palette].
+      this.dataset.palette = current.value;
+      if (current.h != null && current.s && current.b) {
+        this.style.setProperty('--iswc-brand-h', String(current.h));
+        this.style.setProperty('--iswc-brand-s', current.s);
+        this.style.setProperty('--iswc-brand-b', current.b);
+      }
+      if (current.bg) this.style.setProperty('--iswc-logo-bg', current.bg);
+      else this.style.removeProperty('--iswc-logo-bg');
+      if (current.fg) this.style.setProperty('--iswc-logo-fg', current.fg);
+      else this.style.removeProperty('--iswc-logo-fg');
+      const name = current.label || current.value;
+      if (!this.getAttribute('aria-label')) {
+        this.#trigger.setAttribute('aria-label', `${name} — elegir paleta`);
+      }
     }
 
     #render(): void {
@@ -330,115 +414,12 @@ type TemplateTokens = Record<keyof Palette, string>;
 
       // Menu items
       this.#menu.innerHTML = '';
-      const tmpl = this.#getOptionTemplate();
       for (const p of this.#palettes) {
-        const li = tmpl ? this.#buildOptionFromTemplate(tmpl, p, current) : this.#buildDefaultOption(p, current);
-        this.#menu.appendChild(li);
+        this.#menu.appendChild(this.#buildDefaultOption(p, current));
       }
     }
 
-    /** Devuelve el <template> del slot si el consumidor proveyó uno. */
-    #getOptionTemplate(): HTMLTemplateElement | null {
-      const nodes = this.#slotOption?.assignedNodes({ flatten: true }) || [];
-      const found = nodes.find((n) => n.nodeName === 'TEMPLATE');
-      return (found as HTMLTemplateElement | undefined) ?? null;
-    }
-
-    /**
-     * Clona el <template> del consumidor, reemplaza {tokens} y bindea
-     * data-palette / aria-selected / role="option". Si el árbol tiene
-     * [data-role="..."], el helper los rellena con campos específicos.
-     */
-    #buildOptionFromTemplate(template: HTMLTemplateElement, p: Palette, current: Palette): HTMLElement {
-      const frag = template.content.cloneNode(true) as DocumentFragment;
-      // El elemento root del item. El consumidor puede marcarlo con
-      // cualquier tag (li, button, div). Le añadimos los attrs ARIA.
-      let root = frag.firstElementChild as HTMLElement | null;
-      if (!root) {
-        // Fallback: el consumidor puso texto o múltiples nodos.
-        // Envolvemos en un <li>.
-        root = document.createElement('li');
-        root.appendChild(frag);
-      }
-      root.setAttribute('role', 'option');
-      root.setAttribute('part', 'option');
-      root.tabIndex = -1;
-      root.dataset.palette = p.value;
-      root.setAttribute('aria-selected', p.value === current.value ? 'true' : 'false');
-
-      // Reemplazar {tokens} en atributos y textos.
-      this.#bindTemplate(root, p);
-
-      // data-role="*" -> setters específicos.
-      const swatch = root.querySelector<HTMLElement>('[data-role="swatch"]');
-      if (swatch) {
-        swatch.style.background = p.accent;
-      }
-      const lead = root.querySelector<HTMLElement>('[data-role="lead"]');
-      if (lead) {
-        lead.textContent = p.lead || '';
-        if (p.leadColor) lead.style.color = p.leadColor;
-      }
-      const accent = root.querySelector<HTMLElement>('[data-role="accent"]');
-      if (accent) {
-        accent.textContent = p.accentLabel || p.label || '';
-        if (p.accentColor) accent.style.color = p.accentColor;
-      }
-      const label = root.querySelector<HTMLElement>('[data-role="label"]');
-      if (label) label.textContent = p.label || '';
-      const check = root.querySelector<HTMLElement>('[data-role="check"]');
-      if (check) {
-        if (p.value !== current.value) check.style.opacity = '0';
-      }
-      return root;
-    }
-
-    /**
-     * Reemplaza {token} en atributos y textContent del subtree.
-     * Escape {{ }}. Tokens disponibles: value, label, accent,
-     * lead, accentLabel, leadColor, accentColor, bg, fg.
-     */
-    #bindTemplate(root: Node, p: Palette): void {
-      const tokens: TemplateTokens = {
-        value: p.value,
-        label: p.label,
-        accent: p.accent,
-        css: p.css,
-        lead: p.lead,
-        accentLabel: p.accentLabel,
-        leadColor: p.leadColor,
-        accentColor: p.accentColor,
-        bg: p.bg,
-        fg: p.fg,
-      };
-      const replace = (raw: string): string => raw
-        .replace(/\{\{([^}]+)\}\}/g, '{$1}')
-        .replace(/\{([a-zA-Z]+)\}/g, (_: string, k: string): string => (k in tokens ? tokens[k as keyof Palette] : ''));
-      const walk = (node: Node): void => {
-        if (node.nodeType === 1) {
-          const el = node as Element;
-          for (const attr of [...el.attributes]) {
-            const v = attr.value;
-            if (v.includes('{')) {
-              const next = replace(v);
-              if (next !== v) attr.value = next;
-            }
-          }
-        } else if (node.nodeType === 3) {
-          const t = node as Text;
-          const v = t.nodeValue ?? '';
-          if (v.includes('{')) {
-            const next = replace(v);
-            if (next !== v) t.nodeValue = next;
-          }
-        }
-        for (const child of [...node.childNodes]) walk(child);
-      };
-      walk(root);
-    }
-
-    /** Item default cuando el slot está vacío (swatch + lead/accent + check,
-     *  a juego con el trigger "logo style" por defecto). */
+    /** Item del menu: swatch + label + check, datos del JSON de paletas. */
     #buildDefaultOption(p: Palette, current: Palette): HTMLElement {
       const li = document.createElement('li');
       li.setAttribute('role', 'option');
@@ -448,32 +429,22 @@ type TemplateTokens = Record<keyof Palette, string>;
       li.setAttribute('aria-selected', p.value === current.value ? 'true' : 'false');
       const swatch = document.createElement('span');
       swatch.className = 'menu__swatch';
-      swatch.style.background = p.accent;
-      li.appendChild(swatch);
-
-      // Lead + accent (estilo logo) si la paleta tiene esos datos.
-      if (p.lead && p.accentLabel) {
-        const lead = document.createElement('span');
-        lead.className = 'menu__lead';
-        lead.textContent = p.lead;
-        if (p.leadColor) lead.style.color = p.leadColor;
-        const accent = document.createElement('span');
-        accent.className = 'menu__accent';
-        accent.textContent = p.accentLabel;
-        if (p.accentColor) accent.style.color = p.accentColor;
-        li.append(lead, accent);
-      } else {
-        const label = document.createElement('span');
-        label.className = 'menu__label';
-        label.textContent = p.label;
-        li.appendChild(label);
+      if (p.h != null && p.s && p.b) {
+        li.style.setProperty('--iswc-brand-h', String(p.h));
+        li.style.setProperty('--iswc-brand-s', p.s);
+        li.style.setProperty('--iswc-brand-b', p.b);
+      } else if (p.accent) {
+        li.style.setProperty('--iswc-swatch', p.accent);
       }
-
+      li.appendChild(swatch);
+      const label = document.createElement('span');
+      label.className = 'menu__label';
+      label.textContent = p.label;
+      li.appendChild(label);
       const check = document.createElement('is-icon');
       check.className = 'menu__check';
       check.setAttribute('icon', 'mdi:check');
       check.setAttribute('aria-hidden', 'true');
-      if (p.value !== current.value) check.style.opacity = '0';
       li.appendChild(check);
       return li;
     }
@@ -483,8 +454,15 @@ type TemplateTokens = Record<keyof Palette, string>;
       const palette = this.#palettes.find((p) => p.value === value);
       if (!palette) return;
       this.#value = value;
-      // data-palette en <html>
-      document.documentElement.dataset.palette = value;
+      if (this.getAttribute('value') !== value) {
+        this.#applying = true;
+        this.setAttribute('value', value);
+        this.#applying = false;
+      }
+      const target = this.#scopeTarget();
+      this.#applying = true;
+      if (target.dataset.palette !== value) target.dataset.palette = value;
+      this.#applying = false;
       // Cargar CSS si la paleta lo trae y aún no está cargado.
       if (palette.css && !this.#loadedCSS.has(palette.css)) {
         const link = document.createElement('link');
@@ -494,16 +472,18 @@ type TemplateTokens = Record<keyof Palette, string>;
         document.head.appendChild(link);
         this.#loadedCSS.add(palette.css);
       }
-      // Persistir.
-      const key = this.getAttribute('storage-key') || 'is-palette';
-      try { localStorage.setItem(key, value); } catch (_err) { /* ignore */ }
-      // Emitir evento.
-      emit(this, 'is-palette-change', { value, palette });
-      // Actualizar aria-selected del menu.
+      // Persistir solo el target de pagina: un scope=closest no pisa is-palette.
+      const onRoot = target === document.documentElement;
+      const key = this.#storageKey();
+      if (onRoot && key) {
+        try { localStorage.setItem(key, value); } catch { /* ignore */ }
+      }
+      emit(this, 'is-palette-change', { value, palette, container: target });
       for (const opt of this.#menu.querySelectorAll<HTMLElement>('[role="option"]')) {
         opt.setAttribute('aria-selected', opt.dataset.palette === value ? 'true' : 'false');
-        const check = opt.querySelector<HTMLElement>('.menu__check');
-        if (check) check.style.opacity = opt.dataset.palette === value ? '1' : '0';
+      }
+      if (!this.#fromOutside && onRoot && window.parent !== window) {
+        window.parent.postMessage({ type: 'is-shell-sync', palette: value }, location.origin);
       }
       // Repintar trigger (cambia colores si el consumidor tiene uno custom,
       // ese se queda; si es el interno, lo repintamos).

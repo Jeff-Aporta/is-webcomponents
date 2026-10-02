@@ -29,8 +29,8 @@ Lecciones pagadas, agrupadas por tema. Cada fila: síntoma → regla/fix → gua
 | Lección | Regla | Guardián |
 |---|---|---|
 | `color` y `variant` mezclados / matriz N×M | Dimensiones ortogonales: `color`→`--_tone-*`, `variant`→consume; una regla por color/variant | `button-color-appearance` |
-| Fallbacks `--is-color-*-600` en `:host` → desajuste invisible con el tema | Fallback `var(--x, #hex)` solo en el sitio de uso | `token-vocabulary` |
-| Hex de marca distinto en filled vs outlined (`#228be6` vs `--is-brand-text`) | Ambas apariencias por `--_tone-*` de la misma familia | `button-color-appearance` |
+| Fallbacks `--iswc-color-*-600` en `:host` → desajuste invisible con el tema | Fallback `var(--x, #hex)` solo en el sitio de uso | `token-vocabulary` |
+| Hex de marca distinto en filled vs outlined (`#228be6` vs `--iswc-brand-text`) | Ambas apariencias por `--_tone-*` de la misma familia | `button-color-appearance` |
 | `danger` / `error` casi indistinguibles | `danger: crimson` (destructivo), `error: red` (fallo); mover fallbacks a la vez | — |
 
 ## Enums / API / eventos
@@ -128,7 +128,7 @@ Lecciones pagadas, agrupadas por tema. Cada fila: síntoma → regla/fix → gua
 | `&&` no funciona en PowerShell | Usar `;` o `cmd /c "... && ..."` | — |
 | `wc -l`/`ls -la`/`rm -rf` no existen | `(git status --short -- path).Count`, `Get-ChildItem`, `Remove-Item -Recurse -Force` | — |
 | `git show … > file` en UTF-16 → Node lee basura | `execSync('git show …', { encoding:'utf8' })` u `Out-File -Encoding utf8` | — |
-| Mojibake UTF-8 al reescribir `.ts`/`.html` desde PowerShell | Editar desde Node `writeFileSync(p, s, 'utf8')` o herramienta de edición | `npm run test:e2e` (00 nav «Código») |
+| Mojibake UTF-8 al reescribir `.ts`/`.html` desde PowerShell | Editar desde Node `writeFileSync(p, s, 'utf8')` o herramienta de edición | `deno task test:e2e` (00 nav «Código») |
 | Heredoc bash se come el escapado de una regex | Escribir archivos con la herramienta de edición (no `cat > file << 'EOF'`) | — |
 | `git add assets/icons/` "colgado" (~60 s) | Esperar; el comando está corriendo | — |
 | Bundles `bundle:true` colapsan `import.meta.url` | Los bundles (`category.*.min.js`/`all.min.js`) solo re-importan `.min.js` individuales (`bundle:false`) | `cdn-folders` |

@@ -17,19 +17,19 @@
   padding: 8px 12px;
   font-size: 0.8125rem;
   font-weight: 500;
-  color: var(--is-text-soft);
+  color: var(--iswc-text-soft);
   text-decoration: none;
   transition: background 140ms ease, color 140ms ease, box-shadow 140ms ease;
 }
 ::slotted(a:hover) {
-  background: color-mix(in srgb, var(--is-bg-elev) 80%, transparent);
-  color: var(--is-text);
+  background: color-mix(in srgb, var(--iswc-bg-elev) 80%, transparent);
+  color: var(--iswc-text);
   text-decoration: none;
 }
 ::slotted(a.is-scrollspy-active) {
-  background: var(--is-accent-bg);
-  color: var(--is-brand-text);
+  background: var(--iswc-accent-bg);
+  color: var(--iswc-brand-text);
   font-weight: 650;
-  box-shadow: inset 2.5px 0 0 var(--is-accent);
+  box-shadow: inset 2.5px 0 0 var(--iswc-accent);
 }
 

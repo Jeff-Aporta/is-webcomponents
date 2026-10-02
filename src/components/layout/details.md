@@ -114,19 +114,19 @@ No expone.
 | `--spacing` | Token leído o definido por componente. |
 | `--show-duration` | Token leído o definido por componente. |
 | `--hide-duration` | Token leído o definido por componente. |
-| `--is-space-m` | Token leído o definido por componente. |
+| `--iswc-space-m` | Token leído o definido por componente. |
 | `--_bg` | Token leído o definido por componente. |
-| `--is-bg-elev` | Token leído o definido por componente. |
+| `--iswc-bg-elev` | Token leído o definido por componente. |
 | `--_border` | Token leído o definido por componente. |
-| `--is-border` | Token leído o definido por componente. |
+| `--iswc-border` | Token leído o definido por componente. |
 | `--_text` | Token leído o definido por componente. |
-| `--is-text` | Token leído o definido por componente. |
+| `--iswc-text` | Token leído o definido por componente. |
 | `--_header-bg` | Token leído o definido por componente. |
 | `--_header-bg-hover` | Token leído o definido por componente. |
-| `--is-font-family` | Token leído o definido por componente. |
-| `--is-radius` | Token leído o definido por componente. |
-| `--is-focus` | Token leído o definido por componente. |
-| `--is-text-muted` | Token leído o definido por componente. |
+| `--iswc-font-family` | Token leído o definido por componente. |
+| `--iswc-radius` | Token leído o definido por componente. |
+| `--iswc-focus` | Token leído o definido por componente. |
+| `--iswc-text-muted` | Token leído o definido por componente. |
 
 ### Integración con formularios
 

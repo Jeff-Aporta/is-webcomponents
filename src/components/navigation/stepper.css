@@ -1,13 +1,13 @@
 :host {
   display: block;
-  --is-stepper-accent: var(--is-brand, dodgerblue);
-  --is-stepper-on-accent: var(--is-brand-fg, #fff);
-  --is-stepper-text: var(--is-text, #e8eaf1);
-  --is-stepper-muted: color-mix(in srgb, var(--is-stepper-text) 65%, transparent);
-  --is-stepper-border: var(--is-border, #2a2f3a);
-  --is-stepper-success: var(--is-success, #0bb783);
-  --is-stepper-danger: var(--is-danger, #f64e60);
-  --is-stepper-bg-pending: color-mix(in srgb, var(--is-stepper-text) 8%, transparent);
+  --iswc-stepper-accent: var(--iswc-brand, dodgerblue);
+  --iswc-stepper-on-accent: var(--iswc-brand-fg, #fff);
+  --iswc-stepper-text: var(--iswc-text, #e8eaf1);
+  --iswc-stepper-muted: color-mix(in srgb, var(--iswc-stepper-text) 65%, transparent);
+  --iswc-stepper-border: var(--iswc-border, #2a2f3a);
+  --iswc-stepper-success: var(--iswc-success, #0bb783);
+  --iswc-stepper-danger: var(--iswc-danger, #f64e60);
+  --iswc-stepper-bg-pending: color-mix(in srgb, var(--iswc-stepper-text) 8%, transparent);
 }
 
 .stepper {
@@ -57,10 +57,10 @@
   display: inline-flex;
   align-items: center;
   justify-content: center;
-  background: var(--is-stepper-bg-pending);
-  color: var(--is-stepper-muted);
+  background: var(--iswc-stepper-bg-pending);
+  color: var(--iswc-stepper-muted);
   font-weight: 600;
-  border: 2px solid var(--is-stepper-border);
+  border: 2px solid var(--iswc-stepper-border);
   transition: background 0.2s, color 0.2s, border-color 0.2s;
   position: relative;
   z-index: 1;
@@ -70,7 +70,7 @@
   width: 100%;
   flex: 1 1 auto;
   min-height: 1.5rem;
-  background: var(--is-stepper-border);
+  background: var(--iswc-stepper-border);
   border: 0;
   transition: background 0.2s;
 }
@@ -124,33 +124,33 @@
 
 .label {
   font-weight: 500;
-  color: var(--is-stepper-text);
+  color: var(--iswc-stepper-text);
   font-size: 0.95rem;
 }
 
 .description {
   font-size: 0.85rem;
-  color: var(--is-stepper-muted);
+  color: var(--iswc-stepper-muted);
 }
 
 /* Estados heredados del dataset.state en el host */
 :host([data-state="done"]) .dot {
-  background: var(--is-stepper-success);
-  color: var(--is-stepper-accent-fg);
-  border-color: var(--is-stepper-success);
+  background: var(--iswc-stepper-success);
+  color: var(--iswc-stepper-accent-fg);
+  border-color: var(--iswc-stepper-success);
 }
 
 :host([data-state="active"]) .dot {
-  background: var(--is-stepper-accent);
-  color: var(--is-stepper-accent-fg);
-  border-color: var(--is-stepper-accent);
-  box-shadow: 0 0 0 4px color-mix(in srgb, var(--is-stepper-accent) 20%, transparent);
+  background: var(--iswc-stepper-accent);
+  color: var(--iswc-stepper-accent-fg);
+  border-color: var(--iswc-stepper-accent);
+  box-shadow: 0 0 0 4px color-mix(in srgb, var(--iswc-stepper-accent) 20%, transparent);
 }
 
 :host([data-state="error"]) .dot {
-  background: var(--is-stepper-danger);
-  color: var(--is-stepper-accent-fg);
-  border-color: var(--is-stepper-danger);
+  background: var(--iswc-stepper-danger);
+  color: var(--iswc-stepper-accent-fg);
+  border-color: var(--iswc-stepper-danger);
 }
 
 :host([data-state="disabled"]) .dot {
@@ -158,7 +158,7 @@
 }
 
 :host([data-state="done"]) ~ :host .line {
-  background: var(--is-stepper-success);
+  background: var(--iswc-stepper-success);
 }
 
 /* Variants */

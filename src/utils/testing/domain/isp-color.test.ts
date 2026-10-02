@@ -20,7 +20,7 @@ check(classifyColor('oklch(0.5 0.1 40)').kind === 'css', 'oklch');
 check(normalizeMix(30) === '30%', 'mix número');
 check(normalizeMix('40%') === '40%', 'mix %');
 check(resolveMixWith('transparent') === 'transparent', 'mix-with transparent');
-check(resolveMixWith('text')?.includes('--is-text'), 'mix-with text');
+check(resolveMixWith('text')?.includes('--iswc-text'), 'mix-with text');
 check(resolveMixWith('#abc') === '#abc', 'mix-with css');
 
 if (failures.length) {

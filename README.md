@@ -9,17 +9,17 @@ Galería de [Web Components](https://developer.mozilla.org/en-US/docs/Web/API/We
 ## Uso local
 
 ```bash
-# Servir la raíz del repo (ES modules necesitan HTTP)
-npx --yes serve .
+deno install
+deno task dev
 ```
 
-Abre la URL que imprima `serve` (p. ej. `http://localhost:3000`).
+Abre `http://127.0.0.1:8391/`.
 
 ## CDN (build)
 
 ```bash
-npm install
-npm run build
+deno install
+deno task build
 ```
 
 Artefactos en `dist/cdn/` (`{name}.min.js` + `{name}.min.css` + `is-base.min.css`).

@@ -6,6 +6,7 @@
  * - {{mdi:icon-name}} o alias {{thumb-up}}
  * - {{icon: {icon: "mdi:account", hue: 239}}}   (canonica)
  * - {{iconify: {...}}}                          (alias legacy, aun soportado)
+ * - {{"is-icon": {icon: "mdi:key", color: "#e11"}}}  (attrs del componente)
  *
  * Se procesa en segmentos de texto plano (tk-rich-text / inlineMd).
  */
@@ -52,55 +53,114 @@ export function resolveIconId(raw: string | null | undefined): string | null {
   return null;
 }
 
-function parseSugarObject(objRaw: string): { icon?: string; hue?: number } | null {
+/** Objeto JSON o estilo JS `{icon: mdi:key, color: #e11}`. Valores sueltos admiten `:`. */
+function parseLooseObject(objRaw: string): Record<string, string> | null {
   const s = objRaw.trim();
   if (!s.startsWith('{') || !s.endsWith('}')) return null;
   try {
     const parsed: unknown = JSON.parse(s);
-    if (parsed && typeof parsed === 'object') {
-      const p = parsed as { icon?: unknown; hue?: unknown };
-      const hueNum = typeof p.hue === 'number' ? p.hue : Number(p.hue);
-      return {
-        icon: p.icon != null ? String(p.icon) : undefined,
-        hue: Number.isFinite(hueNum) ? normalizeTkHue(hueNum) ?? undefined : undefined,
-      };
+    if (parsed && typeof parsed === 'object' && !Array.isArray(parsed)) {
+      const out: Record<string, string> = {};
+      for (const [k, v] of Object.entries(parsed as Record<string, unknown>)) {
+        if (v == null) continue;
+        out[k] = typeof v === 'object' ? JSON.stringify(v) : String(v);
+      }
+      return Object.keys(out).length ? out : null;
     }
-  } catch {
-    // JS-like: {icon: "mdi:foo", hue: 239}
+  } catch { /* sigue el lector suelto */ }
+  const body = s.slice(1, -1);
+  const out: Record<string, string> = {};
+  let i = 0;
+  const skip = () => { while (i < body.length && /\s/.test(body[i]!)) i++; };
+  while (i < body.length) {
+    skip();
+    if (i >= body.length) break;
+    if (body[i] === ',') { i++; continue; }
+    let key = '';
+    const q0 = body[i];
+    if (q0 === '"' || q0 === "'") {
+      i++;
+      while (i < body.length && body[i] !== q0) key += body[i++];
+      i++;
+    } else {
+      while (i < body.length && body[i] !== ':' && !/\s/.test(body[i]!)) key += body[i++];
+    }
+    skip();
+    if (body[i] !== ':') break;
+    i++;
+    skip();
+    let val = '';
+    const q1 = body[i];
+    if (q1 === '"' || q1 === "'") {
+      i++;
+      while (i < body.length && body[i] !== q1) val += body[i++];
+      i++;
+    } else if (q1 === '{') {
+      let depth = 0;
+      const start = i;
+      for (; i < body.length; i++) {
+        if (body[i] === '{') depth++;
+        else if (body[i] === '}') { depth--; if (depth === 0) { i++; break; } }
+      }
+      val = body.slice(start, i);
+    } else {
+      while (i < body.length && body[i] !== ',' && body[i] !== '}') val += body[i++];
+      val = val.trim();
+    }
+    if (key) out[key] = val;
   }
-  const iconM = /\bicon\s*:\s*(?:"([^"]*)"|'([^']*)')/i.exec(s);
-  const hueM = /\bhue\s*:\s*(\d+(?:\.\d+)?)/i.exec(s);
-  const icon = iconM?.[1] ?? iconM?.[2];
-  const hueNum = hueM?.[1] != null ? Number(hueM[1]) : NaN;
-  const hue = Number.isFinite(hueNum) ? normalizeTkHue(hueNum) ?? undefined : undefined;
-  if (!icon) return null;
-  return { icon, hue };
+  return Object.keys(out).length ? out : null;
 }
 
-export type ResolvedIconToken = { iconId: string; hue?: number };
+export type ResolvedIconToken = {
+  iconId: string;
+  hue?: number;
+  size?: number;
+  color?: string;
+  /** Atributos tal cual, para <is-icon key="value">. */
+  attrs: Record<string, string>;
+};
 
-/** Resuelve contenido interno de {{…}} (simple o sugar con objeto). */
+function tokenFromAttrs(obj: Record<string, string>): ResolvedIconToken | null {
+  const name = obj.name?.trim() ?? '';
+  const iconRaw = obj.icon?.trim()
+    || (name ? (name.includes(':') || name.includes('/') ? name : `${obj.library || 'mdi'}:${name}`) : '');
+  const iconId = resolveIconId(iconRaw);
+  if (!iconId) return null;
+  const hueNum = obj.hue != null && obj.hue !== '' ? Number(obj.hue) : NaN;
+  const hue = Number.isFinite(hueNum) ? normalizeTkHue(hueNum) ?? undefined : undefined;
+  const sizeRaw = obj.size ?? '';
+  const sizeNum = sizeRaw && !/em|%|rem/i.test(sizeRaw) ? parseFloat(sizeRaw) : NaN;
+  const size = Number.isFinite(sizeNum) && sizeNum > 0 ? sizeNum : undefined;
+  const color = obj.color?.trim() || undefined;
+  return { iconId, hue, size, color, attrs: { ...obj, icon: iconId } };
+}
+
+/** Resuelve contenido interno de {{…}} (id simple, sugar o componente is-icon). */
 export function resolveIconToken(raw: string | null | undefined): ResolvedIconToken | null {
   const token = String(raw ?? '').trim();
   if (!token) return null;
 
+  const comp = /^(?:"is-icon"|'is-icon'|is-icon)\s*:\s*/i.exec(token);
+  if (comp) {
+    const obj = parseLooseObject(token.slice(comp[0].length).trim());
+    return obj ? tokenFromAttrs(obj) : null;
+  }
+
   const sugar = sugarPrefixOf(token);
   if (sugar) {
-    const parsed = parseSugarObject(token.slice(sugar.length).trim());
-    if (!parsed?.icon) return null;
-    const iconId = resolveIconId(parsed.icon);
-    if (!iconId) return null;
-    return { iconId, hue: parsed.hue };
+    const obj = parseLooseObject(token.slice(sugar.length).trim());
+    return obj ? tokenFromAttrs(obj) : null;
   }
 
   const iconId = resolveIconId(token);
-  return iconId ? { iconId } : null;
+  return iconId ? { iconId, attrs: { icon: iconId } } : null;
 }
 
 /** Etiqueta con icono embebido vía sugar JSON (diagramas de secuencia). */
 export function hasIconJsonSugar(raw: string) {
   const text = String(raw ?? '');
-  return text.includes('{{icon:') || text.includes('{{iconify:');
+  return text.includes('{{icon:') || text.includes('{{iconify:') || /\{\{\s*["']?is-icon["']?\s*:/i.test(text);
 }
 
 function scanIconTemplateTokens(text: string, onToken: (start: number, end: number, inner: string) => void): void {
@@ -110,9 +170,9 @@ function scanIconTemplateTokens(text: string, onToken: (start: number, end: numb
     if (open === -1) break;
 
     const tail = text.slice(open);
-    const sugarHead = /^\{\{(?:icon|iconify):\s*/i.exec(tail);
+    const sugarHead = /^\{\{\s*(?:"is-icon"|'is-icon'|is-icon|icon|iconify)\s*:\s*\{/i.exec(tail);
     if (sugarHead) {
-      const jsonStart = open + sugarHead[0].length;
+      const jsonStart = open + sugarHead[0].length - 1;
       if (text[jsonStart] !== '{') {
         i = open + 2;
         continue;
@@ -167,19 +227,18 @@ export type SvgIconGroupOpts = {
   y?: number;
   size?: number;
   hue?: number;
+  color?: string;
   fallback?: string;
 };
 
 export function svgIconGroup(iconId: string, opts: SvgIconGroupOpts = {}): SVGGElement {
-  const { x = 0, y = 0, size = 16, hue, fallback = ICONO_FALLBACK } = opts;
+  const { x = 0, y = 0, size = 16, hue, color, fallback = ICONO_FALLBACK } = opts;
   const NS = 'http://www.w3.org/2000/svg';
   const g = document.createElementNS(NS, 'g');
   g.setAttribute('class', 'tk-svg-icon');
   g.setAttribute('aria-hidden', 'true');
-  if (hue != null) {
-    const fill = tkHueToHex(hue as number);
-    if (fill) g.setAttribute('fill', fill);
-  }
+  const tint = color || (hue != null ? tkHueToHex(hue as number) : undefined);
+  if (tint) g.setAttribute('fill', tint);
 
   const path = iconAssetPath(iconId);
   const sep = path.indexOf('/');
@@ -210,7 +269,7 @@ export function svgIconGroup(iconId: string, opts: SvgIconGroupOpts = {}): SVGGE
     inner.setAttribute('width', String(size));
     inner.setAttribute('height', String(size));
     // El fill del <g> gobierna: los paths con color propio se neutralizan.
-    if (hue != null) {
+    if (tint) {
       for (const el of inner.querySelectorAll<HTMLElement>('[fill]')) {
         if (el.getAttribute('fill') !== 'none') el.removeAttribute('fill');
       }
@@ -225,17 +284,36 @@ export type IconInlineOpts = {
   size?: string | number;
   className?: string;
   hue?: number;
+  attrs?: Record<string, string>;
 };
 
 export type IconHtmlRender = string;
 
-/** HTML web — `<is-icon>`, la unica API de iconos del kit. */
+function escAttr(v: string): string {
+  return String(v).replace(/&/g, '&amp;').replace(/"/g, '&quot;').replace(/</g, '&lt;');
+}
+
+/** Cada key del objeto queda como atributo. color y size tambien van al style para que pinten. */
+export function iconAttrsHtml(iconId: string, opts: IconInlineOpts = {}): string {
+  const attrs: Record<string, string> = { ...(opts.attrs ?? {}) };
+  attrs.icon = iconId;
+  if (!attrs.class) attrs.class = opts.className ?? 'tk-inline-icon';
+  if (!attrs['aria-hidden'] && !attrs['aria-label']) attrs['aria-hidden'] = 'true';
+  const size = String(opts.size ?? attrs.size ?? '1.1em');
+  const color = attrs.color || (opts.hue != null ? tkHueToCss(opts.hue) : undefined);
+  const style = [`font-size:${size}`];
+  if (color) style.push(`color:${color}`);
+  if (attrs.style) style.push(attrs.style);
+  attrs.style = style.join(';');
+  return Object.entries(attrs)
+    .filter(([, v]) => v != null && v !== '')
+    .map(([k, v]) => `${k}="${escAttr(v)}"`)
+    .join(' ');
+}
+
+/** HTML web — `<is-icon key="value">`, la unica API de iconos del kit. */
 export function iconInlineHtmlWeb(iconId: string, opts: IconInlineOpts = {}): IconHtmlRender {
-  const size = opts.size ?? '1.1em';
-  const cls = opts.className ?? 'tk-inline-icon';
-  const css = opts.hue != null ? tkHueToCss(opts.hue) : undefined;
-  const style = `font-size:${size}${css ? `;color:${css}` : ''}`;
-  return `<is-icon class="${cls}" icon="${iconId}" style="${style}" aria-hidden="true"></is-icon>`;
+  return `<is-icon ${iconAttrsHtml(iconId, opts)}></is-icon>`;
 }
 
 /** HTML email-safe — img contra el CDN publico del repo (no api.iconify). */
@@ -249,7 +327,7 @@ export function iconInlineHtmlEmail(iconId: string, opts: IconInlineOpts = {}): 
 function replaceIconTokens(
   raw: string,
   transformPlain: (text: string) => string,
-  renderIcon: (iconId: string, hue: number | undefined) => string,
+  renderIcon: (tok: ResolvedIconToken) => string,
 ): string {
   if (!raw.includes('{{')) return transformPlain(raw);
   let out = '';
@@ -257,7 +335,7 @@ function replaceIconTokens(
   scanIconTemplateTokens(raw, (start: number, end: number, inner: string) => {
     if (start > last) out += transformPlain(raw.slice(last, start));
     const tok = resolveIconToken(inner);
-    out += tok ? renderIcon(tok.iconId, tok.hue) : transformPlain(raw.slice(start, end));
+    out += tok ? renderIcon(tok) : transformPlain(raw.slice(start, end));
     last = end;
   });
   if (last < raw.length) out += transformPlain(raw.slice(last));
@@ -265,15 +343,39 @@ function replaceIconTokens(
 }
 
 export function replaceIconTokensWeb(raw: string, transformPlain: (t: string) => string, opts: IconInlineOpts): string {
-  return replaceIconTokens(raw, transformPlain, (id, hue) =>
-    iconInlineHtmlWeb(id, { ...opts, hue: hue ?? opts?.hue }),
+  return replaceIconTokens(raw, transformPlain, (tok) =>
+    iconInlineHtmlWeb(tok.iconId, { ...opts, hue: tok.hue ?? opts?.hue, size: tok.size ?? opts?.size, attrs: tok.attrs }),
   );
 }
 
 export function replaceIconTokensEmail(raw: string, transformPlain: (t: string) => string, opts: IconInlineOpts): string {
-  return replaceIconTokens(raw, transformPlain, (id, hue) =>
-    iconInlineHtmlEmail(id, { ...opts, hue: hue ?? opts?.hue }),
+  return replaceIconTokens(raw, transformPlain, (tok) =>
+    iconInlineHtmlEmail(tok.iconId, { ...opts, hue: tok.hue ?? opts?.hue, size: tok.size ?? opts?.size }),
   );
+}
+
+export type IconRun =
+  | { kind: 'text'; text: string }
+  | { kind: 'icon'; token: ResolvedIconToken };
+
+/** Parte el texto en tramos planos y tokens de icono resueltos. */
+export function splitIconRuns(raw: string | null | undefined): IconRun[] {
+  const text = String(raw ?? '');
+  if (!text.includes('{{')) return [{ kind: 'text', text }];
+  const runs: IconRun[] = [];
+  let last = 0;
+  let any = false;
+  scanIconTemplateTokens(text, (start, end, inner) => {
+    const tok = resolveIconToken(inner);
+    if (!tok) return;
+    if (start > last) runs.push({ kind: 'text', text: text.slice(last, start) });
+    runs.push({ kind: 'icon', token: tok });
+    last = end;
+    any = true;
+  });
+  if (!any) return [{ kind: 'text', text }];
+  if (last < text.length) runs.push({ kind: 'text', text: text.slice(last) });
+  return runs;
 }
 
 /** Texto plano — quita markup de iconos para tooltips/búsqueda. */
@@ -292,7 +394,7 @@ export function stripIconTokensPlain(raw: string | null | undefined): string {
 }
 
 /** Primer token de icono al inicio del texto (p. ej. label de actor). */
-export type LeadingIcon = { iconId: string; hue: number | undefined; rest: string };
+export type LeadingIcon = { iconId: string; hue: number | undefined; color?: string; size?: number; rest: string };
 
 export function extractLeadingIconToken(raw: string | null | undefined): LeadingIcon | null {
   const text = String(raw ?? '');
@@ -305,7 +407,11 @@ export function extractLeadingIconToken(raw: string | null | undefined): Leading
     done = true;
     if (start !== offset) return;
     const tok = resolveIconToken(inner);
-    if (tok) result = { iconId: tok.iconId, hue: tok.hue, rest: text.slice(end).trim() };
+    if (tok) {
+      result = { iconId: tok.iconId, hue: tok.hue, rest: text.slice(end).trim() };
+      if (tok.color) result.color = tok.color;
+      if (tok.size != null) result.size = tok.size;
+    }
   });
   return result;
 }

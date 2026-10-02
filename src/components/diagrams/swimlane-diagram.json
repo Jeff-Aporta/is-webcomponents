@@ -8,7 +8,7 @@
   "sections": [
     {
       "id": "intro",
-      "title": "<is-swimlane-diagram>",
+      "title": "Uso",
       "lede": "Diagrama de actividad con carriles: cada fila es un responsable y cada columna un momento del proceso.",
       "blocks": [
         {

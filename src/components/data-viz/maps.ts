@@ -50,8 +50,8 @@ type TileCfg = {
   class IsMaps extends withStyleAttrs(HTMLElement) {
     /** Personalización por atributo (ver `core/attrs.ts`). */
     static styleAttrs = {
-    'grid-color': { prop: '--is-maps-grid-color', onlyColorValues: true },
-    'meridian-color': { prop: '--is-maps-meridian-color', onlyColorValues: true },
+    'grid-color': { prop: '--iswc-maps-grid-color', onlyColorValues: true },
+    'meridian-color': { prop: '--iswc-maps-meridian-color', onlyColorValues: true },
     };
 
     static get observedAttributes(): string[] { return [...OBSERVED, 'grid-color', 'meridian-color']; }

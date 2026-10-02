@@ -3,8 +3,8 @@
 :host {
   display: inline-block;
   position: relative;
-  color: var(--is-text-muted, var(--is-control-text, #495057));
-  font-family: var(--is-sans, inherit);
+  color: var(--iswc-text-muted, var(--iswc-control-text, #495057));
+  font-family: var(--iswc-sans, inherit);
   font-size: inherit;
   vertical-align: middle;
 
@@ -30,7 +30,7 @@
         padding: 0;
         background: transparent;
         border: none;
-        border-radius: var(--is-radius, 6px);
+        border-radius: var(--iswc-radius, 6px);
         color: inherit;
         font: inherit;
         height: 2em;
@@ -42,11 +42,11 @@
       }
 
       &:hover:not([disabled])::part(button),
-      &:focus-within:not([disabled])::part(button) { background: var(--is-control-bg-hover, #e9ecef); }
+      &:focus-within:not([disabled])::part(button) { background: var(--iswc-control-bg-hover, #e9ecef); }
 
       &::part(button):focus-visible {
-        outline: 2px solid var(--is-focus, var(--is-focus-fallback));
-        outline-offset: var(--is-focus-offset);
+        outline: 2px solid var(--iswc-focus, var(--iswc-focus-fallback));
+        outline-offset: var(--iswc-focus-offset);
       }
 
       &[disabled]::part(button) { opacity: 0.5; cursor: not-allowed; }
@@ -68,11 +68,11 @@
     }
   }
 
-  /* is-tooltip pinta la burbuja y la flecha con --is-tooltip-bg, así que teñir
+  /* is-tooltip pinta la burbuja y la flecha con --iswc-tooltip-bg, así que teñir
    * esa variable basta para el feedback de éxito / error. */
   .tip {
-    --is-tooltip-font-size: 0.75em;
-    --is-copy-button-max-width: 18rem;
+    --iswc-tooltip-font-size: 0.75em;
+    --iswc-copy-button-max-width: 18rem;
   }
 
   @media (prefers-reduced-motion: reduce) {
@@ -92,10 +92,10 @@
  * eso mismo. El estado del host se consulta siempre como :host([...]). */
 
 :host(:state(success)) .tip,
-:host([data-state-success]) .tip { --is-tooltip-bg: var(--is-color-success-strong, #2f9e44); }
+:host([data-state-success]) .tip { --iswc-tooltip-bg: var(--iswc-color-success-strong, #2f9e44); }
 
 :host(:state(error)) .tip,
-:host([data-state-error]) .tip { --is-tooltip-bg: var(--is-color-danger-strong, #e03131); }
+:host([data-state-error]) .tip { --iswc-tooltip-bg: var(--iswc-color-danger-strong, #e03131); }
 
 @keyframes is-copy-show {
   from { scale: 0.25; opacity: 0.25; }

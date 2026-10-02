@@ -13,10 +13,10 @@ import {
  *   level      1 | 2 | 3 | 4 | 5 | 6                       (default 1)
  *   color      brand | neutral | info | success | warning | danger
  *              | current | <color CSS>                     (default: acento)
- *   mix        % → `--is-heading-mix`; ausente = default del nivel
+ *   mix        % → `--iswc-heading-mix`; ausente = default del nivel
  *   mix-with   text | transparent | white | black | current | <color CSS>
  *              (default: texto del tema)
- *   size       string CSS → `--is-heading-size`; ausente = default del nivel
+ *   size       string CSS → `--iswc-heading-size`; ausente = default del nivel
  *
  * `current` hereda el color tipográfico del contexto (`currentColor`).
  * Cualquier otro string no semántico se usa como color CSS tal cual.
@@ -31,7 +31,7 @@ import {
     static styleAttrs = {
     // `color` y `mix` los resuelve #syncVars() vía syncIspColor: aquí solo
     // se expone el destino de la mezcla, que no tenía forma de tocarse.
-    'mix-with': { prop: '--is-heading-mix-with', onlyColorValues: true },
+    'mix-with': { prop: '--iswc-heading-mix-with', onlyColorValues: true },
     };
 
     static get observedAttributes(): string[] {
@@ -66,20 +66,20 @@ import {
 
     #syncVars() {
       syncIspColor(this, {
-        colorVar: '--is-heading-color',
-        mixVar: '--is-heading-mix',
-        mixWithVar: '--is-heading-mix-with',
+        colorVar: '--iswc-heading-color',
+        mixVar: '--iswc-heading-mix',
+        mixWithVar: '--iswc-heading-mix-with',
       });
 
       // mix: si el attr está ausente, quitar override para que gane el default del nivel.
       const mix = normalizeMix(this.getAttribute('mix'));
-      if (!mix) this.style.removeProperty('--is-heading-mix');
+      if (!mix) this.style.removeProperty('--iswc-heading-mix');
 
       const size = this.getAttribute('size');
       if (size != null && String(size).trim() !== '') {
-        this.style.setProperty('--is-heading-size', String(size).trim());
+        this.style.setProperty('--iswc-heading-size', String(size).trim());
       } else {
-        this.style.removeProperty('--is-heading-size');
+        this.style.removeProperty('--iswc-heading-size');
       }
     }
 

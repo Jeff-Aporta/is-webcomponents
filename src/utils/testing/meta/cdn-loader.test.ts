@@ -36,7 +36,7 @@ test('src/cdn/loader.ts expone API pública + mirrors/pin + has/getLoaded', () =
 });
 
 test('dist/cdn/core/loader.min.js y loader.md existen; banner con docs', () => {
-  assert.ok(existsSync(dist), 'falta dist/cdn/core/loader.min.js — corre npm run build');
+  assert.ok(existsSync(dist), 'falta dist/cdn/core/loader.min.js — corre deno task build');
   assert.ok(existsSync(join(root, 'dist', 'cdn', 'core', 'loader.md')), 'falta dist/cdn/core/loader.md');
   const code = readFileSync(dist, 'utf8');
   assert.ok(code.length < 120_000, `loader.min.js demasiado grande (${code.length} B)`);

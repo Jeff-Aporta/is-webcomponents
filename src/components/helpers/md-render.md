@@ -92,7 +92,7 @@ No expone. El host refleja `editable` cuando `can-edit` está activo y no hay `r
 
 ### CSS custom properties
 
-Usa tokens `--is-text`, `--is-code-bg`, `--is-border`, `--is-focus`, etc. Por chip: `--var-tone-h`.
+Usa tokens `--iswc-text`, `--iswc-code-bg`, `--iswc-border`, `--iswc-focus`, etc. Por chip: `--var-tone-h`.
 
 ### Integración con formularios
 

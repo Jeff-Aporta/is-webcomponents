@@ -154,31 +154,31 @@ Propiedades públicas aparecen en tabla anterior; APIs heredadas se verifican en
 
 | Token | Uso |
 | --- | --- |
-| `--is-field-width` | Token leído o definido por componente. |
-| `--is-field-label-width` | Token leído o definido por componente. |
-| `--is-textarea-border-radius` | Token leído o definido por componente. |
-| `--is-radius-sm` | Token leído o definido por componente. |
-| `--is-textarea-border` | Token leído o definido por componente. |
-| `--is-control-border` | Token leído o definido por componente. |
-| `--is-textarea-bg` | Token leído o definido por componente. |
-| `--is-control-bg` | Token leído o definido por componente. |
-| `--is-textarea-text` | Token leído o definido por componente. |
-| `--is-control-text` | Token leído o definido por componente. |
-| `--is-textarea-focus` | Token leído o definido por componente. |
-| `--is-focus` | Token leído o definido por componente. |
-| `--is-accent` | Token leído o definido por componente. |
-| `--is-textarea-danger` | Token leído o definido por componente. |
-| `--is-color-danger-500` | Token leído o definido por componente. |
-| `--is-textarea-danger-text` | Token leído o definido por componente. |
-| `--is-danger-text` | Token leído o definido por componente. |
-| `--is-color-danger-700` | Token leído o definido por componente. |
+| `--iswc-field-width` | Token leído o definido por componente. |
+| `--iswc-field-label-width` | Token leído o definido por componente. |
+| `--iswc-textarea-border-radius` | Token leído o definido por componente. |
+| `--iswc-radius-sm` | Token leído o definido por componente. |
+| `--iswc-textarea-border` | Token leído o definido por componente. |
+| `--iswc-control-border` | Token leído o definido por componente. |
+| `--iswc-textarea-bg` | Token leído o definido por componente. |
+| `--iswc-control-bg` | Token leído o definido por componente. |
+| `--iswc-textarea-text` | Token leído o definido por componente. |
+| `--iswc-control-text` | Token leído o definido por componente. |
+| `--iswc-textarea-focus` | Token leído o definido por componente. |
+| `--iswc-focus` | Token leído o definido por componente. |
+| `--iswc-accent` | Token leído o definido por componente. |
+| `--iswc-textarea-danger` | Token leído o definido por componente. |
+| `--iswc-color-danger-500` | Token leído o definido por componente. |
+| `--iswc-textarea-danger-text` | Token leído o definido por componente. |
+| `--iswc-danger-text` | Token leído o definido por componente. |
+| `--iswc-color-danger-700` | Token leído o definido por componente. |
 | `--_border` | Token leído o definido por componente. |
 | `--_focus` | Token leído o definido por componente. |
-| `--is-sans` | Token leído o definido por componente. |
-| `--is-text` | Token leído o definido por componente. |
-| `--is-text-soft` | Token leído o definido por componente. |
-| `--is-text-dim` | Token leído o definido por componente. |
-| `--is-control-bg-hover` | Token leído o definido por componente. |
+| `--iswc-sans` | Token leído o definido por componente. |
+| `--iswc-text` | Token leído o definido por componente. |
+| `--iswc-text-soft` | Token leído o definido por componente. |
+| `--iswc-text-dim` | Token leído o definido por componente. |
+| `--iswc-control-bg-hover` | Token leído o definido por componente. |
 
 ### Integración con formularios
 
@@ -203,7 +203,7 @@ Documentación de cabecera preservada desde fuente:
 > Parts: form-control, label, base, textarea, support, hint, error-text, count
 > Custom states: blank, disabled, readonly, focused, invalid
 > Eventos: is-input, is-change (bubbles + composed) y los nativos input/change
-> Tokens: --is-field-width, --is-field-label-width, --is-textarea-*
+> Tokens: --iswc-field-width, --iswc-field-label-width, --iswc-textarea-*
 
 ## Dependencias y componentes relacionados
 

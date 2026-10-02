@@ -8,7 +8,7 @@
   "sections": [
     {
       "id": "intro",
-      "title": "<is-bar-chart>",
+      "title": "Uso",
       "lede": "Barras para comparar cantidades entre categorías.",
       "blocks": [
         {

@@ -5,12 +5,12 @@
   "title": "<is-stepper>",
   "titleHtml": true,
   "description": "Documentación y demos de is-stepper / is-stepper-step de InSoft.",
-  "styles": ".wizard-card {\r\n      margin-top: 1rem;\r\n      padding: 1.25rem;\r\n      background: var(--is-bg-2, #181b22);\r\n      border: 1px solid var(--is-border, #2a2f3a);\r\n      border-radius: 0.5rem;\r\n    }",
+  "styles": ".wizard-card {\r\n      margin-top: 1rem;\r\n      padding: 1.25rem;\r\n      background: var(--iswc-bg-2, #181b22);\r\n      border: 1px solid var(--iswc-border, #2a2f3a);\r\n      border-radius: 0.5rem;\r\n    }",
   "storageKey": "docs-is-stepper",
   "sections": [
     {
       "id": "intro",
-      "title": "<is-stepper>",
+      "title": "Uso",
       "lede": "Indicador de flujo por pasos. Ideal para wizards y formularios multipaso.\r\n          Soporta orientación horizontal y vertical, variantes visualmente\r\n          distintas, iconos por slot, descripción y manejo de errores.",
       "blocks": [
         {

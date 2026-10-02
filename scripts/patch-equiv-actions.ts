@@ -1,6 +1,6 @@
 /**
  * Añade equivHtml a demos piloto (button-group toolbar/api, fab, button).
- * node scripts/patch-equiv-actions.ts
+ * deno run -A --no-check scripts/patch-equiv-actions.ts
  */
 import { readFileSync, writeFileSync } from 'node:fs';
 import { join, dirname } from 'node:path';

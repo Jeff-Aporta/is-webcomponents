@@ -4,7 +4,7 @@
 // y extrae <script type="module"> inline a behaviors/<tag>.js.
 // Conserva solo _shell.html.
 //
-// Uso: node scripts/migrate-previews-to-json.ts [--dry]
+// Uso: deno run -A --no-check scripts/migrate-previews-to-json.ts [--dry]
 // Luego regenera catalog: se escribe src/previews/catalog.ts
 
 import { readFileSync, writeFileSync, mkdirSync, readdirSync, statSync, unlinkSync, existsSync } from 'node:fs';

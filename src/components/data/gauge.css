@@ -2,7 +2,7 @@
 
 :host {
   display: inline-block;
-  --is-gauge-track-color: color-mix(in srgb, var(--fg) 8%, transparent);
+  --iswc-gauge-track-color: color-mix(in srgb, var(--fg) 8%, transparent);
 }
 
 .gauge {
@@ -24,7 +24,7 @@ svg[data-half="true"] { height: calc(var(--gauge-size, 7.5em) / 2); }
 
 .track {
   fill: none;
-  stroke: var(--is-gauge-track-color);
+  stroke: var(--iswc-gauge-track-color);
   stroke-width: 8;
   stroke-linecap: round;
 }

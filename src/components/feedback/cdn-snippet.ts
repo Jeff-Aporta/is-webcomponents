@@ -2,7 +2,6 @@ import { adoptCss, defineElement } from '../../core/element.js';
 import { withStyleAttrs } from '../../core/attrs.js';
 
 import { escapeHtml, copyText } from '../_shared/dom-utils.js';
-import { readUrlNav, writeUrlNav } from '../_shared/url-nav.js';
 
 import {
   resolveRef,
@@ -28,19 +27,10 @@ import '../code/code.js';
  *
  *   tag / category / base / title / dependencies / config
  *
- * Alcance de la carga (radio tag | category | all): el fieldset aparece cuando
- * el host trae tag y/o category; las opciones cuyo atributo falte quedan
- * deshabilitadas. Con `url-key` el alcance se persiste dentro de ?s= (b64url
- * JSON, mismo contrato de url-nav.js que usa <is-tab-group>) y sobrevive al
- * F5; sin url-key el snippet arranca en tag (o category si no hay tag).
+ * La carga es siempre el tag: un componente por L.load. No hay radio de alcance.
  */
 (() => {
   const LLM_PROMPT = buildLlmPrompt(SKILL_DOCS, { sha: 'main', base: LLM_PROMPT_FALLBACK });
-
-  /** Alcance único: SOLO componente (`tag`). Cargar la categoría completa
-   *  o el kit completo están erradicados: cada componente debe cargarse
-   *  atómicamente, uno a uno. Ver ticket "erradicar category/all del CDN". */
-  const SCOPES = ['tag'] as const;
 
   const TEMPLATE = document.createElement('template');
   TEMPLATE.innerHTML = /* html */ `
@@ -67,11 +57,6 @@ import '../code/code.js';
         <is-code class="cdn__pre code is-code-view" data-slot="loader" readonly compact wrap
                  line-numbers="false" lang="html"></is-code>
       </div>
-
-      <fieldset class="cdn__scope" data-slot="scope" hidden>
-        <legend class="cdn__scope-legend">Alcance de la carga</legend>
-        <label class="cdn__radio"><input type="radio" name="cdn-scope" value="tag" checked><span>Cargar solo este componente (<code data-slot="scope-tag"></code>)</span></label>
-      </fieldset>
 
       <ol class="cdn__list" data-slot="deps-list">
         <li class="cdn__row cdn__row--dep" data-kind="dep" hidden>
@@ -115,13 +100,13 @@ import '../code/code.js';
 
   class IsCdnSnippet extends withStyleAttrs(HTMLElement) {
     static styleAttrs = {
-      radius: '--is-cdn-snippet-radius',
-      'border-color': '--is-cdn-snippet-border',
-      'pre-bg': '--is-cdn-snippet-pre-bg',
+      radius: '--iswc-cdn-snippet-radius',
+      'border-color': '--iswc-cdn-snippet-border',
+      'pre-bg': '--iswc-cdn-snippet-pre-bg',
     };
 
     static get observedAttributes(): string[] {
-      return ['tag', 'category', 'base', 'title', 'dependencies', 'config', 'url-key', ...IsCdnSnippet.styleAttrNames];
+      return ['tag', 'category', 'base', 'title', 'dependencies', 'config', ...IsCdnSnippet.styleAttrNames];
     }
 
     #mounted = false;
@@ -130,25 +115,18 @@ import '../code/code.js';
     #deps: { name: string; version: string; css: string; js: string; note: string }[] = [];
     #docs: { label: string; url: string; }[] = [];
     #resolvedRef = 'main';
-    /** Alcance elegido (radio o ?s=); null = automático según atributos. */
-    #scope: string | null = null;
 
     constructor() {
       super();
       const shadow = this.attachShadow({ mode: 'open' });
       adoptCss(shadow, import.meta.url);
       shadow.appendChild(TEMPLATE.content.cloneNode(true));
-      shadow.querySelector<HTMLElement>('[data-slot="scope"]')
-        ?.addEventListener('change', this.#onScopeChange);
       shadow.addEventListener('click', this.#onClick);
     }
 
     connectedCallback(): void {
       super.connectedCallback();
       this.#mounted = true;
-      // url-key opt-in: restaurar el alcance persistido en ?s= ANTES del
-      // primer render, para que el snippet arranque con la elección recordada.
-      if (this.#urlKey) this.#restoreScopeFromUrl();
       this.#render();
       void this.#ensurePromptLoaded();
       resolveRef().then((ref) => {
@@ -167,9 +145,6 @@ import '../code/code.js';
     attributeChangedCallback(name: string, oldVal: string | null, newVal: string | null): void {
       super.attributeChangedCallback(name, oldVal, newVal);
       if (!this.#mounted || oldVal === newVal) return;
-      // La key puede llegar tras el mount (cdn-panel la setea al crear el
-      // elemento): adoptar el alcance persistido al aparecer.
-      if (name === 'url-key') this.#restoreScopeFromUrl();
       this.#render();
     }
 
@@ -182,69 +157,9 @@ import '../code/code.js';
       return `${this.#cdnBase()}core/loader.min.js`;
     }
 
-    /** Key del estado en ?s= (url-nav). Vacío = sin persistencia. */
-    get #urlKey() {
-      return (this.getAttribute('url-key') || '').trim();
-    }
-
-    /** ¿El host trae tag? Sin tag el radio no tiene sentido (la carga es
-     *  siempre atómica, un componente a la vez). */
-    #hasScopeTargets() {
-      return !!(this.getAttribute('tag') || '').trim();
-    }
-
-    /** Alcance único: `tag`. */
-    #defaultScope(): 'tag' {
-      return 'tag';
-    }
-
     #loadArg() {
       const tag = (this.getAttribute('tag') || '').trim();
       return tag;
-    }
-
-    /** Sincroniza el fieldset: oculto sin tag. */
-    #syncScopeUi() {
-      const fieldset = this.shadowRoot?.querySelector<HTMLFieldSetElement>('[data-slot="scope"]');
-      if (!fieldset) return;
-      const tag = (this.getAttribute('tag') || '').trim();
-      fieldset.hidden = !this.#hasScopeTargets();
-      const tagCode = fieldset.querySelector<HTMLElement>('[data-slot="scope-tag"]');
-      if (tagCode) tagCode.textContent = tag || '(sin tag)';
-      // Solo hay una opcion ("tag"); siempre marcada.
-      const input = fieldset.querySelector<HTMLInputElement>('input[name="cdn-scope"]');
-      if (input) input.checked = true;
-    }
-
-    #onScopeChange = (e: Event) => {
-      // El radio es informativo (siempre "tag"); no hay otra opcion. Mantenemos
-      // el listener para no romper integraciones que lo invoquen.
-      const input = e.target as HTMLInputElement;
-      if (!input || !input.matches?.('input[name="cdn-scope"]')) return;
-      const value = input.value;
-      if (!SCOPES.includes(value as 'tag')) return;
-      this.#scope = value;
-      if (this.#urlKey) this.#persistScopeToUrl(value);
-      this.#render();
-    };
-
-    /** url-key opt-in: adopta el alcance persistido en ?s= si la opción existe
-     *  y no está deshabilitada (su atributo está presente). */
-    #restoreScopeFromUrl() {
-      const key = this.#urlKey;
-      if (!key) return;
-      const fromUrl = readUrlNav(key);
-      if (!fromUrl || !SCOPES.includes(fromUrl as 'tag')) return;
-      const tag = (this.getAttribute('tag') || '').trim();
-      if (fromUrl === 'tag' && !tag) return;
-      this.#scope = fromUrl;
-    }
-
-    /** url-key opt-in: escribe el alcance dentro de ?s= (b64url JSON). */
-    #persistScopeToUrl(scope: string) {
-      const key = this.#urlKey;
-      if (!key) return;
-      writeUrlNav(key, scope);
     }
 
     #parseConfig() {
@@ -395,7 +310,6 @@ import '../code/code.js';
 
       this.#parseDeps();
       this.#renderDeps();
-      this.#syncScopeUi();
       this.#highlight();
     }
 

@@ -8,7 +8,7 @@
   "sections": [
     {
       "id": "intro",
-      "title": "<is-gantt>",
+      "title": "Uso",
       "lede": "Diagrama de Gantt en SVG, sin Mermaid. Una fila por tarea, en el\r\n          orden que la declares; el componente calcula la escala de tiempo,\r\n          dibuja las barras y rutea las flechas de dependencia rodeando las\r\n          demás barras.",
       "blocks": [
         {

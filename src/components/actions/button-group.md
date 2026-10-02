@@ -108,14 +108,14 @@ No expone.
 
 | Token | Uso |
 | --- | --- |
-| `--is-button-border-width` | Token leído o definido por componente. |
-| `--is-control-border-width` | Token leído o definido por componente. |
-| `--is-button-group-radius` | Token leído o definido por componente. |
-| `--is-button-border-radius` | Token leído o definido por componente. |
-| `--is-button-group-gap` | Token leído o definido por componente. |
-| `--is-button-group-pad` | Token leído o definido por componente. |
-| `--is-button-group-accent` | Token leído o definido por componente. |
-| `--is-accent` | Token leído o definido por componente. |
+| `--iswc-button-border-width` | Token leído o definido por componente. |
+| `--iswc-control-border-width` | Token leído o definido por componente. |
+| `--iswc-button-group-radius` | Token leído o definido por componente. |
+| `--iswc-button-border-radius` | Token leído o definido por componente. |
+| `--iswc-button-group-gap` | Token leído o definido por componente. |
+| `--iswc-button-group-pad` | Token leído o definido por componente. |
+| `--iswc-button-group-accent` | Token leído o definido por componente. |
+| `--iswc-accent` | Token leído o definido por componente. |
 | `--_button-horizontal-indent` | Token leído o definido por componente. |
 | `--_button-horizontal-indent-outlined` | Token leído o definido por componente. |
 | `--_button-start-end-radius` | Token leído o definido por componente. |
@@ -124,18 +124,18 @@ No expone.
 | `--_button-end-start-radius` | Token leído o definido por componente. |
 | `--_button-vertical-indent` | Token leído o definido por componente. |
 | `--_button-vertical-indent-outlined` | Token leído o definido por componente. |
-| `--is-bg-soft` | Token leído o definido por componente. |
-| `--is-bg-elev` | Token leído o definido por componente. |
-| `--is-border-soft` | Token leído o definido por componente. |
-| `--is-control-bg` | Token leído o definido por componente. |
-| `--is-control-bg-hover` | Token leído o definido por componente. |
-| `--is-text` | Token leído o definido por componente. |
-| `--is-control-bg-active` | Token leído o definido por componente. |
-| `--is-control-border` | Token leído o definido por componente. |
-| `--is-control-text` | Token leído o definido por componente. |
-| `--is-text-soft` | Token leído o definido por componente. |
+| `--iswc-bg-soft` | Token leído o definido por componente. |
+| `--iswc-bg-elev` | Token leído o definido por componente. |
+| `--iswc-border-soft` | Token leído o definido por componente. |
+| `--iswc-control-bg` | Token leído o definido por componente. |
+| `--iswc-control-bg-hover` | Token leído o definido por componente. |
+| `--iswc-text` | Token leído o definido por componente. |
+| `--iswc-control-bg-active` | Token leído o definido por componente. |
+| `--iswc-control-border` | Token leído o definido por componente. |
+| `--iswc-control-text` | Token leído o definido por componente. |
+| `--iswc-text-soft` | Token leído o definido por componente. |
 | `--_sel` | Token leído o definido por componente. |
-| `--is-button-selected-color` | Token leído o definido por componente. |
+| `--iswc-button-selected-color` | Token leído o definido por componente. |
 
 ### Integración con formularios
 

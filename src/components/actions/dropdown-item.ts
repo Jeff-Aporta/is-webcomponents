@@ -41,12 +41,12 @@ import { setStringAttr } from '../_shared/reflect.js';
 
   /** Personalización por atributo (ver `core/attrs.ts`). */
   const STYLE_ATTRS = {
-    radius: '--is-dropdown-item-radius',
-    padding: '--is-dropdown-item-padding',
-    gap: '--is-dropdown-item-gap',
-    'text-color': { prop: '--is-dropdown-item-text', onlyColorValues: true },
-    'bg-hover': { prop: '--is-dropdown-item-bg-hover', onlyColorValues: true },
-    'danger-color': { prop: '--is-dropdown-item-danger', onlyColorValues: true },
+    radius: '--iswc-dropdown-item-radius',
+    padding: '--iswc-dropdown-item-padding',
+    gap: '--iswc-dropdown-item-gap',
+    'text-color': { prop: '--iswc-dropdown-item-text', onlyColorValues: true },
+    'bg-hover': { prop: '--iswc-dropdown-item-bg-hover', onlyColorValues: true },
+    'danger-color': { prop: '--iswc-dropdown-item-danger', onlyColorValues: true },
   };
 
   const OBSERVED = [

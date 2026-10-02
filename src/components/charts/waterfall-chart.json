@@ -8,7 +8,7 @@
   "sections": [
     {
       "id": "intro",
-      "title": "<is-waterfall-chart>",
+      "title": "Uso",
       "lede": "Cascada para explicar cómo un saldo inicial llega a un saldo final.",
       "blocks": [
         {

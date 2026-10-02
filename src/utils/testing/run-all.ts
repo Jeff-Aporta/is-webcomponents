@@ -3,9 +3,8 @@
 // Lanza todos los tests en secuencia y resume. Cada test se ejecuta como
 // subproceso para que los fallos no contaminen al runner.
 //
-// Los tests son *.test.ts e importan fuentes TS con extensión .js
-// (ts-resolve-hook), así que cada subproceso arranca con
-// `--import <abs>/scripts/ts-resolve-hook.ts`.
+// Los tests son *.test.ts e importan fuentes TS con extensión .js.
+// Deno los resuelve con sloppy-imports; cada subproceso es `deno test`.
 //
 // Estructura:
 //   src/utils/health/
@@ -15,16 +14,15 @@
 //     ├── e2e/       ← end-to-end (playwright)
 //     └── run-all.ts ← este runner
 //
-// Tests que SI requieren servidor (PORT=8391 con node scripts/serve.mjs):
+// Tests que SI requieren servidor (PORT=8391 con deno task dev):
 //   - meta/cdn-icons.test.ts
 
 import { spawn } from 'node:child_process';
 import { readdir } from 'node:fs/promises';
-import { fileURLToPath, pathToFileURL } from 'node:url';
+import { fileURLToPath } from 'node:url';
 import { dirname, join, relative } from 'node:path';
 
 const here = dirname(fileURLToPath(import.meta.url));
-const root = join(here, '..', '..', '..');
 const ALL = process.env.PORT != null;
 const NEEDS_SERVER = new Set<string>([join('meta', 'cdn-icons.test.ts')]);
 const only = (rel: string): boolean => (ALL ? true : !NEEDS_SERVER.has(rel));
@@ -41,8 +39,6 @@ async function collect(dir: string, acc: string[] = []): Promise<string[]> {
 const files = (await collect(here)).filter(only).sort();
 console.log(`corriendo ${files.length} tests${ALL ? ' (con servidor)' : ' (sin servidor)'}\n`);
 
-const hook = pathToFileURL(join(root, 'scripts', 'ts-resolve-hook.ts')).href;
-
 let pass = 0;
 let fail = 0;
 const failed: string[] = [];
@@ -50,7 +46,7 @@ const failed: string[] = [];
 for (const f of files) {
   const start = Date.now();
   const code = await new Promise((resolve) => {
-    const child = spawn(process.execPath, ['--import', hook, join(here, f)], {
+    const child = spawn(process.execPath, ['test', '-A', '--no-check', join(here, f)], {
       stdio: 'inherit',
       env: process.env,
     });

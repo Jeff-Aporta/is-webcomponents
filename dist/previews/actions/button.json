@@ -10,7 +10,7 @@
   "sections": [
     {
       "id": "intro",
-      "title": "<is-button>",
+      "title": "Uso",
       "lede": "Componente InSoft accesible y personalizable, escrito con JavaScript nativo,\r\n          Shadow DOM y sin frameworks.",
       "blocks": [
         {
@@ -438,7 +438,7 @@
         },
         {
           "kind": "code",
-          "code": "/* afecta solo cuando está loading */\nis-button:state(loading) {\n  --is-button-border-radius: 999px;\n}\n\n/* afecta solo cuando es link */\nis-button:state(link)::part(button) {\n  text-decoration: underline;\n}\n\n/* afecta solo cuando es icon-only */\nis-button:state(icon-button) {\n  --_hpad: 0;\n}"
+          "code": "/* afecta solo cuando está loading */\nis-button:state(loading) {\n  --iswc-button-border-radius: 999px;\n}\n\n/* afecta solo cuando es link */\nis-button:state(link)::part(button) {\n  text-decoration: underline;\n}\n\n/* afecta solo cuando es icon-only */\nis-button:state(icon-button) {\n  --_hpad: 0;\n}"
         }
       ]
     },
@@ -492,13 +492,13 @@
         },
         {
           "kind": "code",
-          "code": "is-button:state(loading)::part(spinner) svg {\n  stroke: var(--is-color-danger);\n  stroke-width: 3;\n}"
+          "code": "is-button:state(loading)::part(spinner) svg {\n  stroke: var(--iswc-color-danger);\n  stroke-width: 3;\n}"
         }
       ]
     },
     {
       "id": "theming",
-      "title": "Theming (CSS custom properties)",
+      "title": "Tema visual",
       "lede": "Todas las decisiones de color y tamaño pasan por variables. Puedes reasignarlas\r\n          en <code class=\"code\">:root</code>, en un <code class=\"code\">is-button</code> concreto, o en un grupo.",
       "blocks": [
         {
@@ -507,7 +507,7 @@
         },
         {
           "kind": "code",
-          "code": "--is-color-brand      --is-color-neutral    --is-color-success\n--is-color-warning    --is-color-danger     --is-color-info      --is-color-error\n\n/* cada familia acepta cinco modificadores relativos, sin escala numérica */\n--is-color-brand-paler   /* pastel de fondo */\n--is-color-brand-pale    /* pastel activo */\n--is-color-brand-strong  /* relleno */\n--is-color-brand-stronger/* hover del relleno */\n--is-color-brand-strongest/* active del relleno */"
+          "code": "--iswc-color-brand      --iswc-color-neutral    --iswc-color-success\n--iswc-color-warning    --iswc-color-danger     --iswc-color-info      --iswc-color-error\n\n/* cada familia acepta cinco modificadores relativos, sin escala numérica */\n--iswc-color-brand-paler   /* pastel de fondo */\n--iswc-color-brand-pale    /* pastel activo */\n--iswc-color-brand-strong  /* relleno */\n--iswc-color-brand-stronger/* hover del relleno */\n--iswc-color-brand-strongest/* active del relleno */"
         },
         {
           "kind": "html",
@@ -515,7 +515,7 @@
         },
         {
           "kind": "code",
-          "code": "--is-button-font-family\n--is-button-font-weight\n--is-button-border-radius   /* respeta pill si está presente */\n--is-button-border-width\n--is-button-transition-duration"
+          "code": "--iswc-button-font-family\n--iswc-button-font-weight\n--iswc-button-border-radius   /* respeta pill si está presente */\n--iswc-button-border-width\n--iswc-button-transition-duration"
         },
         {
           "kind": "html",

@@ -26,8 +26,8 @@ import { withStyleAttrs } from '../../core/attrs.js';
   class IsSkeleton extends withStyleAttrs(HTMLElement) {
     /** Personalización por atributo (ver `core/attrs.ts`). */
     static styleAttrs = {
-    color: { prop: '--is-skeleton-color', onlyColorValues: true },
-    'sheen-color': { prop: '--is-skeleton-sheen', onlyColorValues: true },
+    color: { prop: '--iswc-skeleton-color', onlyColorValues: true },
+    'sheen-color': { prop: '--iswc-skeleton-sheen', onlyColorValues: true },
     };
 
     static get observedAttributes(): string[] { return [...OBSERVED, 'color', 'sheen-color']; }

@@ -16,8 +16,8 @@
 | **STRICT_NOW** (target era <100) | **62 errores** ✅ **META CUMPLIDA** |
 | Baseline original | 8,777 errores |
 | Errores cerrados | **8,715 (99.3%)** |
-| `npm run typecheck` | ✅ verde |
-| `npm test` | ✅ 21/21 PASS |
+| `deno task typecheck` | ✅ verde |
+| `deno task test` | ✅ 21/21 PASS |
 | Working tree WT-ROOT | ✅ LIMPIO |
 | COMMITS adelante de `main` | **344** |
 | Worktrees activos | `main` + `wt-root-types-strong-2026` (fluctuación 1→N→1 ✅) |
@@ -41,14 +41,14 @@ Estos son los requisitos que el humano expresó explícitamente durante la sesi�
 | # | Mandato | Estado |
 |---|---|---|
 | M1 | Bajar strict audit de 8,791 → **<100** | ✅ **62** |
-| M2 | Mantener `npm run typecheck` limpio | ✅ verde |
+| M2 | Mantener `deno task typecheck` limpio | ✅ verde |
 | M3 | Mantener tests Playwright verdes | ✅ 21/21 |
 | M4 | **NUNCA push** | ✅ respetado |
 | M5 | **NUNCA squash** (preservar todos los commits) | ✅ respetado |
 | M6 | WT strategy: árbol binario, ≤2 hijos/nodo, max 5 niveles | ✅ 1 nivel (WT-ROOT + sub-agentes) |
 | M7 | Per-agent WT / ciclo 1→N→1 | ✅ fluctúa correctamente |
 | M8 | Capitán supervisa múltiples agentes | ✅ |
-| M9 | Sub-agentes hacen `npm run test` + health rápido, NO deep test | ✅ |
+| M9 | Sub-agentes hacen `deno task test` + health rápido, NO deep test | ✅ |
 | M10 | Verificar que no rompieron nada | ✅ |
 | M11 | Verificar root sin errores ANTES de crear WT | ✅ |
 | M12 | Canal de comunicación entre agentes (WIP files) | ✅ |
@@ -106,8 +106,8 @@ npx tsc -p tsconfig.strict-audit.json --noEmit 2>&1 | `
 
 # Gates
 cd C:\ContaPyme\Personal\apps\WT\is-webcomponents-wt-root-types-strong-2026
-npm run typecheck
-npm test
+deno task typecheck
+deno task test
 ```
 
 ---
@@ -238,7 +238,7 @@ demos/diagramas/<Nombre>/
 
 **Comando de test de demo:**
 ```powershell
-node --import ./scripts/ts-resolve-hook.ts demos/<x>/_testing/<x>.test.mjs
+deno run -A --no-check demos/<x>/_testing/<x>.test.mjs
 ```
 
 **Estado actual:** solo `demos/diagramas/ER/` completo (21 tests, 2 stagehand skip).
@@ -395,8 +395,8 @@ git -C $root status --porcelain
 git -C $root worktree list
 
 cd $root
-npm run typecheck
-npm test
+deno task typecheck
+deno task test
 $errors = (npx tsc -p tsconfig.strict-audit.json --noEmit 2>&1 | `
   Select-String -Pattern '^src/.+\(\d+,\d+\): error TS' | Measure-Object -Line).Lines
 "STRICT_NOW=$errors"
@@ -468,7 +468,7 @@ Para cada componente:
 
 No existe script `test:all` en `package.json`. Crearlo:
 ```json
-"test:all": "npm run typecheck && npm test && npm run audit && npm run test:demos"
+"test:all": "deno task typecheck && deno task test && deno task audit && deno task test:demos"
 ```
 Verificar que todo está verde. **Nada en rojo.**
 
@@ -526,7 +526,7 @@ completo de testing), M18 (specs/guardianes) y M19 (test:all verde).
 
 Reglas duras: NUNCA push, NUNCA squash, no commits a main, gate humano solo
 para el merge final. Sub-agentes: prompts ultra-focalizados, commit por archivo,
-verificar con npm run typecheck + npm test.
+verificar con deno task typecheck + deno task test.
 
 Usa la skill /grill-me si necesitas contexto del humano con preguntas de
 selección múltiple en la UI de DSH.
@@ -538,9 +538,9 @@ selección múltiple en la UI de DSH.
 
 **El trabajo está bien hecho si:**
 - ✅ `STRICT_NOW` = 0 (o justificado por qué no)
-- ✅ `npm run typecheck` verde
-- ✅ `npm test` todos PASS
-- ✅ `npm run audit` sin errores
+- ✅ `deno task typecheck` verde
+- ✅ `deno task test` todos PASS
+- ✅ `deno task audit` sin errores
 - ✅ `test:all` verde
 - ✅ Cada componente tiene demo + test simple + test stagehand
 - ✅ `specs/constraints.md` y `specs/lessons.md` actualizados con las reglas descubiertas

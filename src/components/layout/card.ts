@@ -27,7 +27,7 @@ import { TONE } from '../_shared/tone.js';
  * CSS Parts:  ::part(media) ::part(header) ::part(body) ::part(footer) ::part(actions)
  *
  * CSS custom properties
- *   --spacing     padding/gap entre secciones (default var(--is-space-l, 1rem))
+ *   --spacing     padding/gap entre secciones (default var(--iswc-space-l, 1rem))
  *
  * Layout:
  *   vertical  → media → header → body → footer  (column)
@@ -71,7 +71,7 @@ import { TONE } from '../_shared/tone.js';
   class IsCard extends withStyleAttrs(HTMLElement) {
     /** Personalización por atributo (ver `core/attrs.ts`). */
     static styleAttrs = {
-    spacing: '--is-card-spacing',
+    spacing: '--iswc-card-spacing',
     };
 
     static get observedAttributes(): string[] { return [...OBSERVED, 'spacing']; }

@@ -8,8 +8,8 @@
 .preview {
   width: 100%;
   aspect-ratio: 16 / 9;
-  background: var(--is-bg-elev, #111);
-  border-radius: var(--is-radius, 0.5em);
+  background: var(--iswc-bg-elev, #111);
+  border-radius: var(--iswc-radius, 0.5em);
   object-fit: cover;
 }
 
@@ -17,7 +17,7 @@
 .dl { font-size: 0.85em; }
 
 /* F0.3 g12 [a11y/focus]: foco visible solo con teclado. */
-:host(:focus-visible) { outline: 2px solid var(--is-accent, #339af0); outline-offset: 3px; }
+:host(:focus-visible) { outline: 2px solid var(--iswc-accent, #339af0); outline-offset: 3px; }
 :host(:focus) { outline: none; }
 
 /* F0.3 g12 [media/loading]: spinner accesible mientras aria-busy=true.
@@ -26,5 +26,5 @@
 :host([aria-busy="true"]) .go { opacity: 0.7; pointer-events: none; }
 :host([disabled]) .go { opacity: 0.5; cursor: not-allowed; }
 
-.status { margin: 0; font-size: 0.78em; color: var(--is-text-soft, inherit); min-height: 1em; }
+.status { margin: 0; font-size: 0.78em; color: var(--iswc-text-soft, inherit); min-height: 1em; }
 .status:empty { display: none; }

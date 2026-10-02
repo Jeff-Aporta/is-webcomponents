@@ -36,44 +36,44 @@
       font-size: .65rem;
       letter-spacing: .12em;
       text-transform: uppercase;
-      color: var(--is-accent);
+      color: var(--iswc-accent);
       margin-bottom: .35rem;
       font-weight: 600;
     }
-    .section .lede { color: var(--is-text-soft); margin: 0 0 1rem; font-size: .9rem; }
-    .section > p:not(.lede) { color: var(--is-text-dim); font-size: .85rem; margin: 0 0 .85rem; }
+    .section .lede { color: var(--iswc-text-soft); margin: 0 0 1rem; font-size: .9rem; }
+    .section > p:not(.lede) { color: var(--iswc-text-dim); font-size: .85rem; margin: 0 0 .85rem; }
 
     /* ── Hero ───────────────────────────────────────────────────────── */
     .hero {
       position: relative;
-      border: 1px solid var(--is-border);
-      border-radius: calc(var(--is-radius) + 4px);
+      border: 1px solid var(--iswc-border);
+      border-radius: calc(var(--iswc-radius) + 4px);
       background:
-        radial-gradient(900px 320px at 12% -10%, color-mix(in srgb, var(--is-accent) 14%, transparent), transparent 60%),
-        radial-gradient(620px 280px at 100% 0%, color-mix(in srgb, var(--is-brand, var(--is-accent)) 10%, transparent), transparent 55%),
-        linear-gradient(180deg, color-mix(in srgb, var(--is-bg-elev) 92%, transparent), var(--is-bg-elev));
+        radial-gradient(900px 320px at 12% -10%, color-mix(in srgb, var(--iswc-accent) 14%, transparent), transparent 60%),
+        radial-gradient(620px 280px at 100% 0%, color-mix(in srgb, var(--iswc-brand, var(--iswc-accent)) 10%, transparent), transparent 55%),
+        linear-gradient(180deg, color-mix(in srgb, var(--iswc-bg-elev) 92%, transparent), var(--iswc-bg-elev));
       padding: 1.1rem 1.25rem 1rem;
       overflow: hidden;
     }
     .hero .crumbs {
       display: inline-flex; align-items: center; gap: .4rem;
       padding: .15rem .5rem;
-      border: 1px solid var(--is-border);
+      border: 1px solid var(--iswc-border);
       border-radius: 999px;
-      background: color-mix(in srgb, var(--is-bg-elev) 80%, transparent);
+      background: color-mix(in srgb, var(--iswc-bg-elev) 80%, transparent);
       font-size: .7rem;
-      color: var(--is-text-soft);
+      color: var(--iswc-text-soft);
     }
-    .hero .crumbs .dot { width: 6px; height: 6px; border-radius: 50%; background: var(--is-accent); box-shadow: 0 0 0 3px color-mix(in srgb, var(--is-accent) 20%, transparent); }
+    .hero .crumbs .dot { width: 6px; height: 6px; border-radius: 50%; background: var(--iswc-accent); box-shadow: 0 0 0 3px color-mix(in srgb, var(--iswc-accent) 20%, transparent); }
     .hero h1 {
       margin: .6rem 0 .25rem;
       font-size: clamp(1.4rem, 2.4vw, 1.85rem);
       letter-spacing: -.01em;
       font-weight: 700;
     }
-    .hero h1 b { font-weight: 800; color: var(--is-accent); }
-    .hero p { color: var(--is-text-soft); margin: 0 0 .85rem; max-width: 60ch; font-size: .9rem; }
-    .hero .demo { height: 17rem; border-radius: var(--is-radius); overflow: hidden; }
+    .hero h1 b { font-weight: 800; color: var(--iswc-accent); }
+    .hero p { color: var(--iswc-text-soft); margin: 0 0 .85rem; max-width: 60ch; font-size: .9rem; }
+    .hero .demo { height: 17rem; border-radius: var(--iswc-radius); overflow: hidden; }
     .hero .demo::before { content: ""; }
 
     /* ── Stat tiles ─────────────────────────────────────────────────── */
@@ -84,9 +84,9 @@
       margin: 1rem 0 0;
     }
     .stat-tile {
-      border: 1px solid var(--is-border);
-      border-radius: var(--is-radius);
-      background: color-mix(in srgb, var(--is-bg-elev) 88%, transparent);
+      border: 1px solid var(--iswc-border);
+      border-radius: var(--iswc-radius);
+      background: color-mix(in srgb, var(--iswc-bg-elev) 88%, transparent);
       padding: .7rem .85rem;
       display: flex; align-items: center; gap: .75rem;
     }
@@ -94,28 +94,28 @@
       width: 38px; height: 38px;
       border-radius: 10px;
       display: grid; place-items: center;
-      background: color-mix(in srgb, var(--is-accent) 14%, transparent);
-      color: var(--is-accent);
+      background: color-mix(in srgb, var(--iswc-accent) 14%, transparent);
+      color: var(--iswc-accent);
       font-size: 1.05rem;
     }
     .stat-tile b { font-size: 1.05rem; font-weight: 700; display: block; line-height: 1.1; }
-    .stat-tile small { color: var(--is-text-dim); font-size: .72rem; letter-spacing: .02em; }
+    .stat-tile small { color: var(--iswc-text-dim); font-size: .72rem; letter-spacing: .02em; }
 
     /* ── Override .demo defaults when it wears the chart-card skin ─── */
     .chart-card.demo {
       margin: 0;
       padding: .85rem .9rem .9rem;
       background:
-        linear-gradient(180deg, color-mix(in srgb, var(--is-bg-elev) 96%, transparent), var(--is-bg-elev));
+        linear-gradient(180deg, color-mix(in srgb, var(--iswc-bg-elev) 96%, transparent), var(--iswc-bg-elev));
       box-shadow: none;
-      border: 1px solid var(--is-border);
-      border-radius: calc(var(--is-radius) + 2px);
+      border: 1px solid var(--iswc-border);
+      border-radius: calc(var(--iswc-radius) + 2px);
       overflow: hidden;
     }
     .chart-card.demo::before { display: none; }
     .chart-card.demo.demo--with-code { padding-right: 2.5rem; }
-    .chart-card.demo .demo-code-btn { color: var(--is-text-soft); }
-    .chart-card.demo .demo-code-btn:hover { color: var(--is-accent); background: color-mix(in srgb, var(--is-accent) 12%, transparent); }
+    .chart-card.demo .demo-code-btn { color: var(--iswc-text-soft); }
+    .chart-card.demo .demo-code-btn:hover { color: var(--iswc-accent); background: color-mix(in srgb, var(--iswc-accent) 12%, transparent); }
 
     /* ── Card grid ──────────────────────────────────────────────────── */
     .chart-grid {
@@ -126,10 +126,10 @@
     }
     .chart-card {
       position: relative;
-      border: 1px solid var(--is-border);
-      border-radius: calc(var(--is-radius) + 2px);
+      border: 1px solid var(--iswc-border);
+      border-radius: calc(var(--iswc-radius) + 2px);
       background:
-        linear-gradient(180deg, color-mix(in srgb, var(--is-bg-elev) 96%, transparent), var(--is-bg-elev));
+        linear-gradient(180deg, color-mix(in srgb, var(--iswc-bg-elev) 96%, transparent), var(--iswc-bg-elev));
       padding: .85rem .9rem .9rem;
       min-width: 0;
       display: flex; flex-direction: column;
@@ -137,7 +137,7 @@
       transition: border-color .15s ease, transform .15s ease;
     }
     .chart-card:hover {
-      border-color: color-mix(in srgb, var(--is-accent) 45%, var(--is-border));
+      border-color: color-mix(in srgb, var(--iswc-accent) 45%, var(--iswc-border));
       transform: translateY(-1px);
     }
     .chart-card .card-h {
@@ -148,12 +148,12 @@
       width: 32px; height: 32px;
       border-radius: 9px;
       display: grid; place-items: center;
-      background: color-mix(in srgb, var(--is-accent) 14%, transparent);
-      color: var(--is-accent);
+      background: color-mix(in srgb, var(--iswc-accent) 14%, transparent);
+      color: var(--iswc-accent);
       font-size: .9rem;
     }
     .chart-card.is-line .ico       { background: color-mix(in srgb, #5b9bff 18%, transparent); color: #5b9bff; }
-    .chart-card.is-bar .ico        { background: color-mix(in srgb, var(--is-accent) 18%, transparent); color: var(--is-accent); }
+    .chart-card.is-bar .ico        { background: color-mix(in srgb, var(--iswc-accent) 18%, transparent); color: var(--iswc-accent); }
     .chart-card.is-pie .ico        { background: color-mix(in srgb, #f59e0b 18%, transparent); color: #f59e0b; }
     .chart-card.is-doughnut .ico   { background: color-mix(in srgb, #f59e0b 14%, transparent); color: #f59e0b; }
     .chart-card.is-polar .ico      { background: color-mix(in srgb, #ec4899 14%, transparent); color: #ec4899; }
@@ -162,7 +162,7 @@
     .chart-card.is-bubble .ico     { background: color-mix(in srgb, #14b8a6 16%, transparent); color: #14b8a6; }
     .chart-card.is-waterfall .ico  { background: color-mix(in srgb, #22c55e 18%, transparent); color: #22c55e; }
     .chart-card.is-funnel .ico     { background: color-mix(in srgb, #f43f5e 16%, transparent); color: #f43f5e; }
-    .chart-card.is-spark .ico      { background: color-mix(in srgb, var(--is-text-soft) 14%, transparent); color: var(--is-text-soft); }
+    .chart-card.is-spark .ico      { background: color-mix(in srgb, var(--iswc-text-soft) 14%, transparent); color: var(--iswc-text-soft); }
 
     .chart-card h4 {
       margin: 0; font-size: .86rem; font-weight: 650; line-height: 1.25;
@@ -171,7 +171,7 @@
     .chart-card .desc {
       margin: .1rem 0 0;
       font-size: .74rem; line-height: 1.45;
-      color: var(--is-text-dim);
+      color: var(--iswc-text-dim);
     }
     .chart-card .pills {
       display: flex; flex-wrap: wrap; gap: .25rem;
@@ -182,18 +182,18 @@
       font-size: .65rem;
       padding: .12rem .4rem;
       border-radius: 999px;
-      border: 1px solid var(--is-border);
-      background: color-mix(in srgb, var(--is-bg-elev) 80%, transparent);
-      color: var(--is-text-soft);
+      border: 1px solid var(--iswc-border);
+      background: color-mix(in srgb, var(--iswc-bg-elev) 80%, transparent);
+      color: var(--iswc-text-soft);
     }
-    .pill.tone-accent { color: var(--is-accent); border-color: color-mix(in srgb, var(--is-accent) 35%, var(--is-border)); }
-    .pill.tone-success { color: var(--is-success, #16a34a); border-color: color-mix(in srgb, var(--is-success, #16a34a) 35%, var(--is-border)); }
-    .pill.tone-danger { color: var(--is-danger, #dc2626); border-color: color-mix(in srgb, var(--is-danger, #dc2626) 35%, var(--is-border)); }
+    .pill.tone-accent { color: var(--iswc-accent); border-color: color-mix(in srgb, var(--iswc-accent) 35%, var(--iswc-border)); }
+    .pill.tone-success { color: var(--iswc-success, #16a34a); border-color: color-mix(in srgb, var(--iswc-success, #16a34a) 35%, var(--iswc-border)); }
+    .pill.tone-danger { color: var(--iswc-danger, #dc2626); border-color: color-mix(in srgb, var(--iswc-danger, #dc2626) 35%, var(--iswc-border)); }
 
     .chart-card__plot {
       flex: 1 1 auto;
       height: 15rem;
-      border-top: 1px dashed var(--is-border-soft);
+      border-top: 1px dashed var(--iswc-border-soft);
       padding-top: .6rem;
       min-width: 0;
     }
@@ -205,17 +205,17 @@
     .spark-row {
       display: flex; align-items: center; justify-content: space-between; gap: .75rem;
       padding: .45rem 0;
-      border-bottom: 1px solid var(--is-border-soft);
+      border-bottom: 1px solid var(--iswc-border-soft);
       font-size: .8125rem;
     }
     .spark-row:last-child { border-bottom: 0; }
     .spark-row b { font-variant-numeric: tabular-nums; }
-    .spark-row small { color: var(--is-text-dim); font-size: .72rem; margin-left: auto; }
+    .spark-row small { color: var(--iswc-text-dim); font-size: .72rem; margin-left: auto; }
 
     /* ── Ref tables ─────────────────────────────────────────────────── */
     table.ref { width: 100%; border-collapse: collapse; font-size: .82rem; }
-    table.ref th, table.ref td { text-align: left; padding: .4rem .55rem; border-bottom: 1px solid var(--is-border-soft); vertical-align: top; }
-    table.ref th { color: var(--is-text-dim); font-weight: 600; font-size: .68rem; text-transform: uppercase; letter-spacing: .06em; }
+    table.ref th, table.ref td { text-align: left; padding: .4rem .55rem; border-bottom: 1px solid var(--iswc-border-soft); vertical-align: top; }
+    table.ref th { color: var(--iswc-text-dim); font-weight: 600; font-size: .68rem; text-transform: uppercase; letter-spacing: .06em; }
     table.ref code { font-size: .75rem; }
 
     /* ── Two-up demo (atributos comparados) ─────────────────────────── */
@@ -232,9 +232,9 @@
       font-size: .72rem;
       padding: .05rem .35rem;
       border-radius: 4px;
-      background: color-mix(in srgb, var(--is-bg-elev) 80%, transparent);
-      border: 1px solid var(--is-border-soft);
-      color: var(--is-text);
+      background: color-mix(in srgb, var(--iswc-bg-elev) 80%, transparent);
+      border: 1px solid var(--iswc-border-soft);
+      color: var(--iswc-text);
     }
 
     /* ── Apertura del lightbox: la card entera se siente "clickable" ── */
@@ -242,7 +242,7 @@
     .chart-card.is-clickable::after {
       content: "↗";
       position: absolute; top: .65rem; right: .7rem;
-      font-size: .9rem; color: var(--is-text-dim);
+      font-size: .9rem; color: var(--iswc-text-dim);
     }
   </style>
 </head>
@@ -263,7 +263,7 @@
           </p>
           <div class="demo">
             <is-chart type="bar" label="Ingresos vs gastos" x-label="Mes" y-label="Millones COP"
-                      style="--border-color-1: var(--is-success, #16a34a); --fill-color-1: color-mix(in srgb, var(--is-success, #16a34a) 22%, transparent); --border-color-2: var(--is-danger, #dc2626); --fill-color-2: color-mix(in srgb, var(--is-danger, #dc2626) 22%, transparent);">
+                      style="--border-color-1: var(--iswc-success, #16a34a); --fill-color-1: color-mix(in srgb, var(--iswc-success, #16a34a) 22%, transparent); --border-color-2: var(--iswc-danger, #dc2626); --fill-color-2: color-mix(in srgb, var(--iswc-danger, #dc2626) 22%, transparent);">
               <script type="application/json">
                 {
                   "data": {

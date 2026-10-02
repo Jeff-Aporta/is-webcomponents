@@ -9,7 +9,7 @@
   "sections": [
     {
       "id": "intro",
-      "title": "<is-time-input>",
+      "title": "Uso",
       "lede": "Entrada de hora con selector desplegable.",
       "blocks": [
         {

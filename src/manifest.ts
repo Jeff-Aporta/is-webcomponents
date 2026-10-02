@@ -10,7 +10,7 @@
  * real; el guardián `tests/manifest-paths.test.ts` las valida desde la misma
  * base y acepta `.js` o `.ts` en disco.
  *
- * No commitear cambios aquí sin correr `npm test` — el guardián rompe el
+ * No commitear cambios aquí sin correr `deno task test` — el guardián rompe el
  * build si una ruta apunta a un archivo inexistente.
  */
 export interface ComponentManifestItem {

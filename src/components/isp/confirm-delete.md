@@ -129,8 +129,8 @@ No expone custom states.
 
 | Token | Uso |
 | --- | --- |
-| `--is-confirm-delete-accent` | Color del título y del icono. |
-| `--is-z-modal` | Capa de apilado. |
+| `--iswc-confirm-delete-accent` | Color del título y del icono. |
+| `--iswc-z-modal` | Capa de apilado. |
 
 
 ### Integración con formularios

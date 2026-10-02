@@ -19,7 +19,7 @@
  * cosas de tipos distintos, o si el tipo que sale es `any`/`never`/`unknown`,
  * no hay una respuesta única y el campo se deja como está.
  *
- *   node scripts/ts-tipo-arrays.ts
+ *   deno run -A --no-check scripts/ts-tipo-arrays.ts
  */
 import { readFileSync, writeFileSync } from 'node:fs';
 import ts from 'typescript';

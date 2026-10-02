@@ -1,15 +1,15 @@
 :host {
-  --_size: var(--is-radio-size, 1.15em);
-  --_bg: var(--is-radio-bg, var(--is-control-bg, #f1f3f5));
-  --_bg-hover: var(--is-radio-bg-hover, var(--is-control-bg-hover, #e9ecef));
-  --_border: var(--is-radio-border, var(--is-control-border, #adb5bd));
-  --_accent: var(--is-radio-accent, var(--is-accent, var(--is-color-brand, #339af0)));
-  --_dot: var(--is-radio-dot, var(--is-on-brand, #fff));
-  --_focus: var(--is-radio-focus, var(--_accent));
-  --_halo: var(--is-radio-halo-size, 0.45em);
+  --_size: var(--iswc-radio-size, 1.15em);
+  --_bg: var(--iswc-radio-bg, var(--iswc-control-bg, #f1f3f5));
+  --_bg-hover: var(--iswc-radio-bg-hover, var(--iswc-control-bg-hover, #e9ecef));
+  --_border: var(--iswc-radio-border, var(--iswc-control-border, #adb5bd));
+  --_accent: var(--iswc-radio-accent, var(--iswc-accent, var(--iswc-color-brand, #339af0)));
+  --_dot: var(--iswc-radio-dot, var(--iswc-on-brand, #fff));
+  --_focus: var(--iswc-radio-focus, var(--_accent));
+  --_halo: var(--iswc-radio-halo-size, 0.45em);
   display: inline-flex;
-  font-family: var(--is-sans, inherit);
-  color: var(--is-text, inherit);
+  font-family: var(--iswc-sans, inherit);
+  color: var(--iswc-text, inherit);
   box-sizing: border-box;
   cursor: pointer;
   outline: none;
@@ -53,12 +53,12 @@
   }
 
   .label {
-    color: var(--is-control-text, var(--is-text, inherit));
+    color: var(--iswc-control-text, var(--iswc-text, inherit));
   }
 
   .description {
     font-size: 0.8em;
-    color: var(--is-text-dim, #7a8390);
+    color: var(--iswc-text-dim, #7a8390);
     &[hidden] { display: none; }
   }
 }
@@ -69,17 +69,17 @@
 }
 
 /* ---- variant ----------------------------------------------------------
-   Sin atributo se hereda el --is-radio-accent que publica el grupo; con él,
+   Sin atributo se hereda el --iswc-radio-accent que publica el grupo; con él,
    la declaración local gana a la heredada. */
 
-:host([color="brand"]) { --is-radio-accent: var(--is-accent, var(--is-color-brand, #339af0)); }
-:host([color="neutral"]) { --is-radio-accent: var(--is-control-border, #59636e); }
-:host([color="success"]) { --is-radio-accent: var(--is-color-success, #40c057); }
-:host([color="warning"]) { --is-radio-accent: var(--is-color-warning, #f59f00); }
-:host([color="danger"]) { --is-radio-accent: var(--is-color-danger, #fa5252); }
+:host([color="brand"]) { --iswc-radio-accent: var(--iswc-accent, var(--iswc-color-brand, #339af0)); }
+:host([color="neutral"]) { --iswc-radio-accent: var(--iswc-control-border, #59636e); }
+:host([color="success"]) { --iswc-radio-accent: var(--iswc-color-success, #40c057); }
+:host([color="warning"]) { --iswc-radio-accent: var(--iswc-color-warning, #f59f00); }
+:host([color="danger"]) { --iswc-radio-accent: var(--iswc-color-danger, #fa5252); }
 
 /* El error del grupo manda sobre cualquier variant */
-:host(:state(error)) { --is-radio-accent: var(--is-color-danger, #fa5252); }
+:host(:state(error)) { --iswc-radio-accent: var(--iswc-color-danger, #fa5252); }
 
 /* ---- label-placement (propio o heredado del grupo) -------------------- */
 

@@ -60,7 +60,7 @@ import {
 
   class IsThemeImg extends ElementBase {
     static styleAttrs = {
-      fit: '--is-theme-img-fit',
+      fit: '--iswc-theme-img-fit',
     };
 
     static get observedAttributes(): string[] {

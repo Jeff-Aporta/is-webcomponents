@@ -60,9 +60,9 @@ import '../helpers/floating.js';
   class IsTooltip extends withStyleAttrs(HTMLElement) {
     /** Personalización por atributo (ver `core/attrs.ts`). */
     static styleAttrs = {
-    'max-width': '--is-tooltip-max-width',
-    'arrow-size': '--is-tooltip-arrow-size',
-    'arrow-color': { prop: '--is-tooltip-arrow-color', onlyColorValues: true },
+    'max-width': '--iswc-tooltip-max-width',
+    'arrow-size': '--iswc-tooltip-arrow-size',
+    'arrow-color': { prop: '--iswc-tooltip-arrow-color', onlyColorValues: true },
     };
 
     static get observedAttributes(): string[] { return [...OBSERVED, 'max-width', 'arrow-size', 'arrow-color']; }
@@ -152,7 +152,7 @@ import '../helpers/floating.js';
       this.#popup.skidding = this.skidding;
       this.#popup.arrow = !this.withoutArrow;
       this.#popup.hoverBridge = true;
-      this.#popup.style.setProperty('--is-tooltip-arrow-color', 'var(--is-tooltip-bg, #212529)');
+      this.#popup.style.setProperty('--iswc-tooltip-arrow-color', 'var(--iswc-tooltip-bg, #212529)');
     }
 
     #bindTarget() {

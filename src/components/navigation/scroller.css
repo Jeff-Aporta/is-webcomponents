@@ -4,10 +4,10 @@
   width: 100%;
   height: 100%;
   overflow: hidden;
-  --is-scroller-button-size: 2rem;
-  --is-scroller-button-bg: var(--is-bg-elev, #1c2128);
-  --is-scroller-button-text: var(--is-text, #e8eaf1);
-  --is-scroller-button-border: var(--is-border, #2a2f3a);
+  --iswc-scroller-button-size: 2rem;
+  --iswc-scroller-button-bg: var(--iswc-bg-elev, #1c2128);
+  --iswc-scroller-button-text: var(--iswc-text, #e8eaf1);
+  --iswc-scroller-button-border: var(--iswc-border, #2a2f3a);
 }
 
 .scroller {
@@ -47,14 +47,14 @@
 
 .scroll-btn {
   flex: 0 0 auto;
-  width: var(--is-scroller-button-size);
-  height: var(--is-scroller-button-size);
+  width: var(--iswc-scroller-button-size);
+  height: var(--iswc-scroller-button-size);
   display: inline-flex;
   align-items: center;
   justify-content: center;
-  border: 1px solid var(--is-scroller-button-border);
-  background: var(--is-scroller-button-bg);
-  color: var(--is-scroller-button-text);
+  border: 1px solid var(--iswc-scroller-button-border);
+  background: var(--iswc-scroller-button-bg);
+  color: var(--iswc-scroller-button-text);
   border-radius: 0.5rem;
   cursor: pointer;
   transition: opacity 0.2s, transform 0.2s;

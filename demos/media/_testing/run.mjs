@@ -4,9 +4,9 @@
 // servidor al terminar.
 //
 // Uso:
-//   node --experimental-strip-types demos/media/_testing/run.mjs
-//   node --experimental-strip-types demos/media/_testing/run.mjs --only=avatar
-//   DEMOS_PORT=8501 node --experimental-strip-types demos/media/_testing/run.mjs
+//   deno run -A --no-check demos/media/_testing/run.mjs
+//   deno run -A --no-check demos/media/_testing/run.mjs --only=avatar
+//   DEMOS_PORT=8501 deno run -A --no-check demos/media/_testing/run.mjs
 import { spawn } from 'node:child_process';
 import { readdirSync } from 'node:fs';
 import { join } from 'node:path';
@@ -120,7 +120,7 @@ let failures = 0;
 process.env.DEMOS_BASE_URL = `http://${HOST}:${PORT}`;
 for (const f of filtered) {
   console.log(`\n[demos-test] corriendo ${f.replace(repoRoot, '')} ...`);
-  const proc = spawn(process.execPath, ['--experimental-strip-types', f], {
+  const proc = spawn(process.execPath, ['run', '-A', '--no-check', f], {
     cwd: repoRoot,
     stdio: 'inherit',
     env: { ...process.env, DEMOS_BASE_URL: process.env.DEMOS_BASE_URL },

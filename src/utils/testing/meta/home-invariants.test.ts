@@ -1,7 +1,7 @@
 // tests/home-invariants.test.ts
 //
 // Invariantes estáticos sobre previews/home.html. Sin navegador, sin
-// test runner externo: `node --test tests/`. Si rompe, alguien revirtió
+// test runner externo: `deno test -A --no-check tests/`. Si rompe, alguien revirtió
 // una de las reglas del LLM.md.
 //
 // Migrar a .ts + tsx si el proyecto agrega TypeScript.
@@ -198,7 +198,7 @@ test('reset prefers-reduced-motion desactiva transforms de cards', () => {
 //
 // `background-clip: text` + `-webkit-text-fill-color: transparent` deja el
 // texto SIN color propio: lo pinta el degradado. Los hues (--hue-a..e) se
-// derivan de --is-accent con la MISMA luminosidad en ambos temas, y varias
+// derivan de --iswc-accent con la MISMA luminosidad en ambos temas, y varias
 // paradas se mezclan hacia #fff. Sobre el fondo blanco del tema light eso es
 // texto ilegible — el sintoma reportado: "en modo light esto no se lee".
 //

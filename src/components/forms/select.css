@@ -1,15 +1,15 @@
 :host {
-  --is-select-border-radius: var(--is-radius-sm, 0.375em);
-  --is-select-border: var(--is-control-border, #adb5bd);
-  --is-select-bg: var(--is-control-bg, #f1f3f5);
-  --is-select-text: var(--is-control-text, #212529);
-  --is-select-focus: var(--is-focus, var(--is-accent, #339af0));
-  --is-select-danger: var(--is-color-danger, #fa5252);
-  --is-select-danger-text: var(--is-danger-text, var(--is-color-danger-strong, #e03131));
+  --iswc-select-border-radius: var(--iswc-radius-sm, 0.375em);
+  --iswc-select-border: var(--iswc-control-border, #adb5bd);
+  --iswc-select-bg: var(--iswc-control-bg, #f1f3f5);
+  --iswc-select-text: var(--iswc-control-text, #212529);
+  --iswc-select-focus: var(--iswc-focus, var(--iswc-accent, #339af0));
+  --iswc-select-danger: var(--iswc-color-danger, #fa5252);
+  --iswc-select-danger-text: var(--iswc-danger-text, var(--iswc-color-danger-strong, #e03131));
   display: block;
   position: relative;
-  font-family: var(--is-sans, inherit);
-  color: var(--is-text, inherit);
+  font-family: var(--iswc-sans, inherit);
+  color: var(--iswc-text, inherit);
   box-sizing: border-box;
 
   /* Las reglas de autor ganan a `[hidden]` del UA: hay que reafirmarlo */
@@ -24,17 +24,17 @@
   .label {
     font-size: 0.875em;
     font-weight: 500;
-    color: var(--is-text-soft, inherit);
+    color: var(--iswc-text-soft, inherit);
   }
 
   .hint {
     font-size: 0.8em;
-    color: var(--is-text-dim, #7a8390);
+    color: var(--iswc-text-dim, #7a8390);
   }
 
   .error-text {
     font-size: 0.8em;
-    color: var(--is-select-danger-text);
+    color: var(--iswc-select-danger-text);
   }
 
   .base {
@@ -43,13 +43,13 @@
     gap: 0.15em;
     min-height: 2.5em;
     padding: 0.2em 0.35em 0.2em 0.75em;
-    background: var(--is-select-bg);
-    border: 1px solid var(--is-select-border);
-    border-radius: var(--is-select-border-radius);
-    color: var(--is-select-text);
+    background: var(--iswc-select-bg);
+    border: 1px solid var(--iswc-select-border);
+    border-radius: var(--iswc-select-border-radius);
+    color: var(--iswc-select-text);
     cursor: pointer;
     &:focus-within {
-      outline: 2px solid var(--is-select-focus);
+      outline: 2px solid var(--iswc-select-focus);
       outline-offset: 1px;
     }
   }
@@ -67,7 +67,7 @@
   /* `contents` evita que el hueco del slot vacío genere gap en el trigger */
   .start {
     display: contents;
-    color: var(--is-text-dim, #7a8390);
+    color: var(--iswc-text-dim, #7a8390);
   }
 
   .content {
@@ -84,7 +84,7 @@
   }
 
   .display.is-placeholder {
-    color: var(--is-text-dim, #7a8390);
+    color: var(--iswc-text-dim, #7a8390);
   }
 
   .tags {
@@ -96,7 +96,7 @@
 
   .clear {
     flex: none;
-    color: var(--is-text-dim, #7a8390);
+    color: var(--iswc-text-dim, #7a8390);
     line-height: 0;
     &[hidden] { display: none !important; }
   }
@@ -106,7 +106,7 @@
     align-items: center;
     justify-content: center;
     width: 1.5em;
-    color: var(--is-text-dim, #7a8390);
+    color: var(--iswc-text-dim, #7a8390);
     transition: transform 0.15s ease;
   }
 
@@ -137,11 +137,11 @@
     max-height: 16em;
     overflow: auto;
     padding: 0.35em;
-    background: var(--is-bg-elev, #fff);
-    border: 1px solid var(--is-border, #d0d7de);
-    border-radius: var(--is-radius, 0.625em);
-    box-shadow: var(--is-shadow, 0 8px 24px rgb(0 0 0 / 12%));
-    color: var(--is-text, inherit);
+    background: var(--iswc-bg-elev, #fff);
+    border: 1px solid var(--iswc-border, #d0d7de);
+    border-radius: var(--iswc-radius, 0.625em);
+    box-shadow: var(--iswc-shadow, 0 8px 24px rgb(0 0 0 / 12%));
+    color: var(--iswc-text, inherit);
   }
 
   .group-label {
@@ -150,13 +150,13 @@
     font-weight: 600;
     letter-spacing: 0.05em;
     text-transform: uppercase;
-    color: var(--is-text-dim, #7a8390);
+    color: var(--iswc-text-dim, #7a8390);
     cursor: default;
   }
 
   .group + .group .group-label {
     margin-top: 0.25em;
-    border-top: 1px solid var(--is-border-soft, #e1e4e8);
+    border-top: 1px solid var(--iswc-border-soft, #e1e4e8);
   }
 
   .option {
@@ -164,10 +164,10 @@
     align-items: center;
     gap: 0.5em;
     padding: 0.45em 0.6em;
-    border-radius: var(--is-radius-sm, 0.375em);
+    border-radius: var(--iswc-radius-sm, 0.375em);
     cursor: pointer;
     line-height: 1.3;
-    &:hover { background: var(--is-control-bg-hover, #e9ecef); }
+    &:hover { background: var(--iswc-control-bg-hover, #e9ecef); }
   }
 
   .option-body {
@@ -186,7 +186,7 @@
     display: block;
     font-size: 0.8em;
     line-height: 1.35;
-    color: var(--is-text-dim, #7a8390);
+    color: var(--iswc-text-dim, #7a8390);
     white-space: nowrap;
     overflow: hidden;
     text-overflow: ellipsis;
@@ -198,7 +198,7 @@
     flex: none;
     line-height: 0;
     font-size: 1.15em;
-    color: var(--is-text-dim, #7a8390);
+    color: var(--iswc-text-dim, #7a8390);
   }
 
   /* Sin `checkmarks` el marco no existe: solo el icono ocupa su hueco */
@@ -209,18 +209,18 @@
   .check {
     flex: none;
     visibility: hidden;
-    color: var(--is-accent, currentColor);
+    color: var(--iswc-accent, currentColor);
   }
 
   .option[aria-selected="true"] {
-    background: var(--is-accent-bg, rgb(224 49 49 / 12%));
-    color: var(--is-brand-text, var(--is-accent, inherit));
+    background: var(--iswc-accent-bg, rgb(224 49 49 / 12%));
+    color: var(--iswc-brand-text, var(--iswc-accent, inherit));
     .check { visibility: visible; }
     .option-desc { color: inherit; opacity: 0.75; }
   }
 
   .option[data-active] {
-    outline: 1px solid var(--is-select-focus);
+    outline: 1px solid var(--iswc-select-focus);
     outline-offset: -1px;
   }
 
@@ -242,7 +242,7 @@
 
 :host([open]) .base,
 :host(:state(open)) .base {
-  outline: 2px solid var(--is-select-focus);
+  outline: 2px solid var(--iswc-select-focus);
   outline-offset: 1px;
 }
 
@@ -255,14 +255,14 @@
 
 :host([variant="filled"]) .base {
   border-color: transparent;
-  border-bottom-color: var(--is-select-border);
-  border-radius: var(--is-select-border-radius) var(--is-select-border-radius) 0 0;
+  border-bottom-color: var(--iswc-select-border);
+  border-radius: var(--iswc-select-border-radius) var(--iswc-select-border-radius) 0 0;
 }
 
 :host([variant="underlined"]) .base {
   background: transparent;
   border-color: transparent;
-  border-bottom-color: var(--is-select-border);
+  border-bottom-color: var(--iswc-select-border);
   border-radius: 0;
   padding-inline: 0.15em;
 }
@@ -270,12 +270,12 @@
 /* --- error --------------------------------------------------------- */
 
 :host([error]) {
-  --is-select-border: var(--is-select-danger);
-  --is-select-focus: var(--is-select-danger);
+  --iswc-select-border: var(--iswc-select-danger);
+  --iswc-select-focus: var(--iswc-select-danger);
 }
 
 :host([error]) .label {
-  color: var(--is-select-danger-text);
+  color: var(--iswc-select-danger-text);
 }
 
 /* --- checkmarks (solo en multiple) --------------------------------- */
@@ -288,16 +288,16 @@
   box-sizing: border-box;
   width: 1.15em;
   height: 1.15em;
-  border: 1px solid var(--is-control-border, #adb5bd);
+  border: 1px solid var(--iswc-control-border, #adb5bd);
   border-radius: 0.25em;
 }
 
 :host([multiple][checkmarks]) .check {
   font-size: 0.85em;
-  color: var(--is-on-brand, #fff);
+  color: var(--iswc-on-brand, #fff);
 }
 
 :host([multiple][checkmarks]) .option[aria-selected="true"] .mark {
-  background: var(--is-accent, #339af0);
-  border-color: var(--is-accent, #339af0);
+  background: var(--iswc-accent, #339af0);
+  border-color: var(--iswc-accent, #339af0);
 }

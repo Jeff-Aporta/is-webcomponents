@@ -398,7 +398,7 @@ const OBSERVED = [
     #syncChrome(): void {
       this.#toolbar.hidden = !this.showHeader || this.selectMode;
       this.#search.hidden = !this.showSearch;
-      this.#toolbar.style.setProperty('--is-cat-rows', String(this.qRowsHeader));
+      this.#toolbar.style.setProperty('--iswc-cat-rows', String(this.qRowsHeader));
       if (!this.#grid) return;
       this.#grid.setAttribute('row-selection', this.multiSelect || this.selectMode ? 'multiple' : 'single');
       if (this.multiSelect || this.selectMode) this.#grid.setAttribute('selectable', '');

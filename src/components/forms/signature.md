@@ -100,11 +100,11 @@ No expone custom states.
 
 | Token | Uso |
 | --- | --- |
-| `--is-bg-elev` | Fondo del pad. |
-| `--is-border` | Borde del pad. |
-| `--is-radius` | Radio de bordes. |
-| `--is-text` | Color por defecto del trazo (`currentColor`). |
-| `--is-text-dim` | Color del texto de ayuda. |
+| `--iswc-bg-elev` | Fondo del pad. |
+| `--iswc-border` | Borde del pad. |
+| `--iswc-radius` | Radio de bordes. |
+| `--iswc-text` | Color por defecto del trazo (`currentColor`). |
+| `--iswc-text-dim` | Color del texto de ayuda. |
 
 El componente fija `--_w` y `--_h` en el host con las dimensiones vigentes.
 

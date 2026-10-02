@@ -114,22 +114,22 @@ No expone custom states.
 
 | Token | Uso |
 | --- | --- |
-| `--is-rte-toolbar-bg` | Fondo de la toolbar. |
-| `--is-rte-content-min-h` | Altura mínima del área editable. |
-| `--is-rte-button-radius` | Radio de los botones de la toolbar. |
-| `--is-rte-token-bg` | Fondo de los tokens insertados por comandos externos. |
-| `--is-rte-token-color` | Color de esos tokens. |
-| `--is-rte-token-radius` | Radio de esos tokens. |
-| `--is-bg` | Fondo del editor. |
-| `--is-bg-elev` | Fondo elevado de la toolbar. |
-| `--is-border` | Borde del contenedor. |
-| `--is-border-soft` | Separadores. |
-| `--is-control-border` | Borde del `textarea` de fuente. |
-| `--is-control-radius` | Radio de bordes. |
-| `--is-text` | Color del contenido. |
-| `--is-text-soft` | Color del placeholder. |
-| `--is-accent` | Botón activo. |
-| `--is-focus` | Anillo de foco. |
+| `--iswc-rte-toolbar-bg` | Fondo de la toolbar. |
+| `--iswc-rte-content-min-h` | Altura mínima del área editable. |
+| `--iswc-rte-button-radius` | Radio de los botones de la toolbar. |
+| `--iswc-rte-token-bg` | Fondo de los tokens insertados por comandos externos. |
+| `--iswc-rte-token-color` | Color de esos tokens. |
+| `--iswc-rte-token-radius` | Radio de esos tokens. |
+| `--iswc-bg` | Fondo del editor. |
+| `--iswc-bg-elev` | Fondo elevado de la toolbar. |
+| `--iswc-border` | Borde del contenedor. |
+| `--iswc-border-soft` | Separadores. |
+| `--iswc-control-border` | Borde del `textarea` de fuente. |
+| `--iswc-control-radius` | Radio de bordes. |
+| `--iswc-text` | Color del contenido. |
+| `--iswc-text-soft` | Color del placeholder. |
+| `--iswc-accent` | Botón activo. |
+| `--iswc-focus` | Anillo de foco. |
 
 ### Integración con formularios
 

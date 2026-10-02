@@ -18,7 +18,7 @@ Cada tag es un Custom Element con Shadow DOM. El inventario y rutas de build sal
 
 ## S-K2 Shadow DOM y estilos
 
-- Tokens `--is-*` desde light DOM (`is-base.css` / paletas). Default paleta: `contapyme`.
+- Tokens `--iswc-*` desde light DOM (`is-base.css` / paletas). Default paleta: `contapyme`.
 - `adoptCss(shadowRoot, import.meta.url)` + CSS hermano `.css` cuando aplique. Tras `innerHTML=''` del shadow, volver a llamar `adoptCss` (los `<link>` se borran).
 - Scrollbars: `src/components/_shared/scrollbars.css` vía adopt (no reimportar en cada tag).
 - Escala: preferir `em` / `font-size` en controles; no `size=` legacy, no `size` colors. Las bases se derivan de `import.meta.url`, no de `location.pathname`.
@@ -48,7 +48,7 @@ Cada tag es un Custom Element con Shadow DOM. El inventario y rutas de build sal
 
 ### S-K6 actions
 
-- **`color` × `variant` son dimensiones ortogonales.** `color` → roles `--_tone-*` (tokens relativos de `is-base`/`palettes`); `variant` → consume `--_tone-*`. Añadir un color = una regla de enlace `:host([color="nuevo"])`; añadir una apariencia = una regla de variant genérica. **No** reabrir la matriz N×M `:host([color=X][variant=Y])`. **No** pedir `--is-color-*-600/-500` (el tema ya no los define → filled/outlined transparentes sin error). Fallback `var(--is-color-X-strong, #hex)` en el sitio de uso, **nunca** un bloque `--is-color-X-600:` en `:host` (marca invisible al desajustar con el tema).
+- **`color` × `variant` son dimensiones ortogonales.** `color` → roles `--_tone-*` (tokens relativos de `is-base`/`palettes`); `variant` → consume `--_tone-*`. Añadir un color = una regla de enlace `:host([color="nuevo"])`; añadir una apariencia = una regla de variant genérica. **No** reabrir la matriz N×M `:host([color=X][variant=Y])`. **No** pedir `--iswc-color-*-600/-500` (el tema ya no los define → filled/outlined transparentes sin error). Fallback `var(--iswc-color-X-strong, #hex)` en el sitio de uso, **nunca** un bloque `--iswc-color-X-600:` en `:host` (marca invisible al desajustar con el tema).
 - **Escala em real.** Controles nativos (`<button>`/`<input>`) dentro del shadow DEBEN `font: inherit`/`font-size: inherit`; el host debe `font-size: inherit`. Sin eso la escala `em` miente (UA fija ~16px). Tono en JS → `this.color`, **no** `this.variant`.
 - **Context menu + scroll:** no reposicionar el panel en cada scroll; cerrar al `scroll` (capture en `window`) salvo scroll interno; `scroll-lock` → `documentElement.overflow = hidden` mientras está abierto (patrón de `is-loading-overlay`). **No** bloquear scroll por defecto.
 - **Submit de forms:** un `<is-button type="submit">` dentro de un form light-DOM **no** envía el form por sí solo (el `<button>` real está en shadow). Usar `requestSubmit`/`reset` cableados en `button.js`, o `onclick` que dispare el submit.
@@ -60,12 +60,12 @@ Cada tag es un Custom Element con Shadow DOM. El inventario y rutas de build sal
 - **`viewBox` 1:1 con píxeles** — el SVG NO escala: al crecer se re-maqueta. El `font-size` base del SVG se ata a su propia geometría con exponente < 1 (crecer lineal lo dispara). La leyenda es HTML fuera del SVG: hay que escalarla aparte y reaplicar `--chart-legend-size` (0.75).
 - **Hit-test de hover por proximidad a un punto deja zonas muertas en marks grandes.** Primero la geometría real (`e.target.closest('.mark')`, sin retargeting porque el listener vive en el mismo shadow root); la proximidad queda de respaldo (para line/scatter sí es el modelo correcto).
 - **`@import` a hermanos se resuelve contra el CSS publicado:** el navegador lo resuelve contra la ruta del `.css` en `dist`, no el bundler. Reescribir a nombre publicado (`./chart.css` → `chart.min.css`); si el archivo no se emite, el import da 404 en silencio. `tests/css-imports.test.ts`.
-- **Rampa de intensidad** (heatmap, data-viz) = valores de dato, **no** tokens `--is-*`.
+- **Rampa de intensidad** (heatmap, data-viz) = valores de dato, **no** tokens `--iswc-*`.
 
 ### S-K8 code
 
 - **Tag canónico `is-code`.** **No existe** `is-code-editor` (rename histórico). URLs/bookmarks viejos con `component:'is-code-editor'` abren preview vacío. Preview en `?s={"component":"is-code"}`.
-- **Motor de resaltado NATIVO** (`_shared/code-highlight.ts` → tokens `.tok-*` ↔ `--is-code-*`, tema `code-theme.js`). **No** CodeMirror (ni 5 ni 6), **no** themes `cm-s-*`, **no** CSS CDN. `highlight-code.js` pinta `<pre class="code">` → `<is-code readonly compact>` (marcador `data-cm` = ya montado).
+- **Motor de resaltado NATIVO** (`_shared/code-highlight.ts` → tokens `.tok-*` ↔ `--iswc-code-*`, tema `code-theme.js`). **No** CodeMirror (ni 5 ni 6), **no** themes `cm-s-*`, **no** CSS CDN. `highlight-code.js` pinta `<pre class="code">` → `<is-code readonly compact>` (marcador `data-cm` = ya montado).
 - **Snippets de demos HTML:** `lang="html"` explícito **o** dejar que `inferLanguage` corra. **No** marcar `data-cm="1"` prematuro: sin `lang` el default es `javascript` y `<` se pinta como operador (cian). Snippets docs: `readonly` + `compact` + `softFormat`.
 - **Galería — fuentes (`view-sources.js`, `demo-file-meta.js`, `component-sources.js`):**
   - Barra `.file-meta-page` **una sola vez** tras el título del preview (botones JS/CSS/MD + chips path `.min` + `<is-format-bytes autofit>`). **No** repetir bajo cada `h2`/`is-demo`; **no** `.vs-page-bar` con hints; **no** `position: sticky` (fluye con el scroll).
@@ -84,14 +84,14 @@ Cada tag es un Custom Element con Shadow DOM. El inventario y rutas de build sal
   - Prop JS: `el.toolbarTools = false` ↔ attr `toolbar-tools="false"`.
   - **No** ocultar con CSS del host (el shadow no es contrato estable). **No** inventar un segundo flag (`hide-tools`, `chrome=false`) — canónico `toolbar-tools`. `disable-column-menu` solo afecta al menú de columna.
 - **`is-ag-grid`:** núcleo `datagrid-core/` (port de mimicus-react) separado del render; `createGridModel({rows,columns})` ⇒ `GridApi` (store observable). Atributos: `get-row-id`, `density`, `group-by`, `remember-state`, `storage-key`, `toolbar`. Columnas: `flex`, `rowGroup`, `enableRowGroup`, `aggFunc`, `filterType`, `minWidth`, `maxWidth`, pinned. Eventos: `is-state-loaded`, `is-column-reorder/resize/pin/hide`.
-  - `#readData()` auto-corrige cols/rows (primer `<script type="application/json">` = columnas; segundo = filas; si el primero es claramente rows, se corrige). **No** usar `getAttribute('rows')` directo. **No** hardcodear `DENSITY_ROW_HEIGHT` (usar `#rowHeight()` que respeta `--is-grid-row-h`). **No** overrides `--is-*` de scrollbar dentro del shadow.
+  - `#readData()` auto-corrige cols/rows (primer `<script type="application/json">` = columnas; segundo = filas; si el primero es claramente rows, se corrige). **No** usar `getAttribute('rows')` directo. **No** hardcodear `DENSITY_ROW_HEIGHT` (usar `#rowHeight()` que respeta `--iswc-grid-row-h`). **No** overrides `--iswc-*` de scrollbar dentro del shadow.
 - **Persistencia:** un solo `localStorage['is-webcomponents'][tag][storage-key]` vía `_shared/prefs.js`. Opt-in (`remember-state`/`remember-scroll`). **No** keys planas / `sessionStorage`.
 - Guardianes: `prefs-contract`, `data-grid-toolbar`.
 
 ### S-K10 data-viz
 
 - La categoría lógica `data-viz` del manifest se reparte en **dos carpetas**: la mayoría de las gráficas vive en `charts/`; aquí solo `is-heatmap` y `is-maps`/`is-map-marker`. Al buscar la doc de un tag, seguir su `script` en `manifest.js`, **no** el nombre de la categoría.
-- **Rampa de intensidad de heatmap** = valores de dato, no de tema: no sustituir por tokens `--is-*`.
+- **Rampa de intensidad de heatmap** = valores de dato, no de tema: no sustituir por tokens `--iswc-*`.
 - `<is-map-marker>` solo tiene sentido dentro de `<is-maps>`: el padre proyecta los marcadores y los posiciona. `maps.js` registra ambos tags (un módulo, un doc).
 
 ### S-K11 diagrams
@@ -141,7 +141,7 @@ Cada tag es un Custom Element con Shadow DOM. El inventario y rutas de build sal
 
 - **Ports de ISP-SvelteComponents (ContaPyme).** `block-layout.js` exporta `BreakpointHost` + helpers (`sizewFor`, `flagsFor`, `lerpFor`, `BREAKPOINTS`, `BREAKPOINT_W`). Los tres layouts heredan de ahí: reflejan `data-sizew`/`data-szw-*`, escriben `--clientw`/`--lerpw` y emiten `is-breakpoint`.
 - **Slot props de Svelte** (`sizew`, `boolszw`, `lerpw`) **no existen** en Web Components: su equivalente exacto está documentado en `block-layout.md`.
-- **Fallbacks de custom properties SIEMPRE a tokens del tema** (`--is-text`, `--is-accent`, …), **nunca** a un color literal. Verificar contra ISP con `data-palette="contapyme"`.
+- **Fallbacks de custom properties SIEMPRE a tokens del tema** (`--iswc-text`, `--iswc-accent`, …), **nunca** a un color literal. Verificar contra ISP con `data-palette="contapyme"`.
 - **ISP no define tokens** (no tiene `app.css`/`:root`, ni tipografía, ni tema oscuro). Al portar, la fuente de verdad son los **fallbacks dentro de los `var()`** de cada `.svelte`, no un archivo de tema.
 - **No** `&[attr]` dentro de `:host`; **no** crear `size` colors ni un módulo por nivel de heading; **no** duplicar la maquinaria de breakpoints en cada layout.
 
@@ -149,7 +149,7 @@ Cada tag es un Custom Element con Shadow DOM. El inventario y rutas de build sal
 
 - **`<is-preview-component>`** es chrome del sistema de preview; se publica en `dist/cdn/preview/preview-component.min.js`. **No está en el catálogo del loader** (`L.load('is-preview-component')` no resuelve; no figura en `categories.layout`). Importar desde `dist/` (nunca desde `src/`: Pages 404 lucide). Ver errores #42–#43.
 - **Full-page dialog:** `width="100vw"` + `spacing="0"`; en light DOM `::part(dialog) { width/height:100%; align-self/justify-self: stretch; border-radius:0; box-shadow:none }`. Ver `presentation.css` + clase `.is-view-sources`.
-- **Style-attrs de `<is-dialog>`:** `width → --is-dialog-width`, `spacing → --is-dialog-spacing`; padding del host = `var(--is-dialog-spacing)`.
+- **Style-attrs de `<is-dialog>`:** `width → --iswc-dialog-width`, `spacing → --iswc-dialog-spacing`; padding del host = `var(--iswc-dialog-spacing)`.
 - **No** `is-split-panel` con % alto como sidebar fijo (deja hueco enorme): grid CSS con ancho fijo (`14.5rem`) o `position-in-pixels`.
 - **ModalBase** centraliza ciclo de vida de `is-dialog`/`is-drawer` (focus trap, Escape, light-dismiss, `is-show`/`is-hide`/`is-after-show`/`is-after-hide`). Subclase define `__TEMPLATE`, `modalClass`, `closeAttr`, `animateOpen/Close`, hooks; refs vía `$modal`/`$backdrop`.
 - **No** dejar un dialog "casi fullscreen" cuando el requisito es full page (padding del host + `max-height` del panel lo dejan a medias).
@@ -193,7 +193,7 @@ Cada tag es un Custom Element con Shadow DOM. El inventario y rutas de build sal
 |---|---|---|
 | Manifest coherente | page/script/style existen | `src/utils/health/meta/manifest-paths.test.ts` |
 | Enums en previews | solo valores válidos | `src/utils/health/domain/attr-enums.test.ts` |
-| Tokens `--is-color-*` | vocabulario estable | `src/utils/health/domain/token-vocabulary.test.ts` |
+| Tokens `--iswc-color-*` | vocabulario estable | `src/utils/health/domain/token-vocabulary.test.ts` |
 | Botones eventos/color | contrato UI | `src/utils/health/domain/button-events.test.ts`, `src/utils/health/domain/button-color-appearance.test.ts` |
 | Escala em en controles | herencia font-size | `src/utils/health/domain/em-scale-font-inherit.test.ts` |
 | Helpers homogéneos | tab + json + md | `src/utils/health/meta/helpers-homogeneity.test.ts` |

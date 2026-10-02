@@ -38,17 +38,9 @@ check(
 );
 
 check(
-  /aria-selected="true"[^>]*data-palette="contapyme"|data-palette="contapyme"[^>]*aria-selected="true"/.test(indexHtml)
-    || /data-palette="contapyme"[^>]*>[\s\S]*?aria-selected="true"/.test(
-      indexHtml.match(/<ul[^>]*id="brandMenu"[\s\S]*?<\/ul>/)?.[0] || '',
-    ),
-  'index.html: el item ContaPyme del brand-menu debe ser el seleccionado por defecto',
+  /<is-palette-selector\b[^>]*\bid="brandPalette"[^>]*\bscope="root"/.test(indexHtml),
+  'index.html: el shell usa <is-palette-selector id="brandPalette" scope="root">',
 );
-
-const brandMenu = indexHtml.match(/<ul[^>]*id="brandMenu"[\s\S]*?<\/ul>/)?.[0] || '';
-const selectedPalette = brandMenu.match(/<li[^>]*aria-selected="true"[^>]*data-palette="([^"]+)"|<li[^>]*data-palette="([^"]+)"[^>]*aria-selected="true"/);
-const sel = selectedPalette?.[1] || selectedPalette?.[2];
-check(sel === 'contapyme', `index.html brand-menu: seleccionado="${sel || '?'}", esperaba contapyme`);
 
 check(
   /dataset\.palette\s*\|\|\s*['"]contapyme['"]/.test(previewBoot)

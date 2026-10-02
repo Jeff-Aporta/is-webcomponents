@@ -19,8 +19,8 @@ import { hasSlotted } from '../_shared/dom-utils.js';
  *   label-placement top (default) | start | float
  *                   `float` = etiqueta flotante (paridad con ISP `form/Input.svelte`):
  *                   la etiqueta descansa sobre el campo y sube al enfocar o al
- *                   tener valor. Colorea el borde con --is-b-required /
- *                   --is-b-optional / --is-b-readonly / --is-bg-readonly.
+ *                   tener valor. Colorea el borde con --iswc-b-required /
+ *                   --iswc-b-optional / --iswc-b-readonly / --iswc-bg-readonly.
  *   data-typing-delay  número (ms, default 600) — debounce del evento
  *                   `is-typing-end`. `0` lo emite en el siguiente tick.
  *   error-text      mensaje mostrado en lugar del hint cuando hay error
@@ -35,7 +35,7 @@ import { hasSlotted } from '../_shared/dom-utils.js';
  * Custom states: blank, disabled, readonly, focused, invalid, password-visible
  * Eventos: is-input, is-change, is-typing-end, is-enter (bubbles + composed) y los
  *          nativos input/change
- * Tokens: --is-field-width, --is-field-label-width, --is-input-*
+ * Tokens: --iswc-field-width, --iswc-field-label-width, --iswc-input-*
  */
 
 (() => {
@@ -114,12 +114,12 @@ import { hasSlotted } from '../_shared/dom-utils.js';
   class IsInput extends ElementBase {
     /** Personalización por atributo (ver `core/attrs.ts`). */
     static styleAttrs = {
-    radius: '--is-input-border-radius',
-    'border-color': { prop: '--is-input-border', onlyColorValues: true },
-    bg: { prop: '--is-input-bg', onlyColorValues: true },
-    'text-color': { prop: '--is-input-text', onlyColorValues: true },
-    'focus-color': { prop: '--is-input-focus', onlyColorValues: true },
-    'danger-color': { prop: '--is-input-danger', onlyColorValues: true },
+    radius: '--iswc-input-border-radius',
+    'border-color': { prop: '--iswc-input-border', onlyColorValues: true },
+    bg: { prop: '--iswc-input-bg', onlyColorValues: true },
+    'text-color': { prop: '--iswc-input-text', onlyColorValues: true },
+    'focus-color': { prop: '--iswc-input-focus', onlyColorValues: true },
+    'danger-color': { prop: '--iswc-input-danger', onlyColorValues: true },
     };
 
     static formAssociated = true;

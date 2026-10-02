@@ -130,9 +130,9 @@ No expone.
 | `--played` | Token leído o definido por componente. |
 | `--buffered` | Token leído o definido por componente. |
 | `--vol` | Token leído o definido por componente. |
-| `--is-font-family` | Token leído o definido por componente. |
-| `--is-video-accent` | Token leído o definido por componente. |
-| `--is-accent` | Token leído o definido por componente. |
+| `--iswc-font-family` | Token leído o definido por componente. |
+| `--iswc-video-accent` | Token leído o definido por componente. |
+| `--iswc-accent` | Token leído o definido por componente. |
 
 ### Integración con formularios
 

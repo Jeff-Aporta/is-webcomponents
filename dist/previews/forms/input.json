@@ -10,7 +10,7 @@
   "sections": [
     {
       "id": "intro",
-      "title": "<is-input>",
+      "title": "Uso",
       "lede": "Campo de texto form-associated con paridad funcional con el\r\n          <a href=\"https://mui.com/material-ui/react-text-field/\" target=\"_blank\" rel=\"noreferrer\">TextField de MUI</a>:\r\n          tres <em>appearances</em>, estado de error ligado a la validación nativa, adornos, contador de\r\n          caracteres y ancho controlable. Participa en <code class=\"code\">&lt;form&gt;</code> vía\r\n          <code class=\"code\">ElementInternals</code>.",
       "blocks": [
         {
@@ -116,30 +116,30 @@
     {
       "id": "width",
       "title": "Ancho",
-      "lede": "El ancho se controla con el token <code class=\"code\">--is-field-width</code> (heredable: puedes\r\n          ponerlo en el contenedor y afecta a todos los campos de dentro).\r\n          <code class=\"code\">full-width</code> lo ignora y ocupa el 100% disponible, como el\r\n          <code class=\"code\">fullWidth</code> de MUI.",
+      "lede": "El ancho se controla con el token <code class=\"code\">--iswc-field-width</code> (heredable: puedes\r\n          ponerlo en el contenedor y afecta a todos los campos de dentro).\r\n          <code class=\"code\">full-width</code> lo ignora y ocupa el 100% disponible, como el\r\n          <code class=\"code\">fullWidth</code> de MUI.",
       "blocks": [
         {
           "kind": "demo",
-          "html": "<div style=\"display:grid; gap:1.25rem; --is-field-width:14rem;\">\r\n            <is-input label=\"--is-field-width: 14rem\" placeholder=\"Heredado del contenedor\"></is-input>\r\n            <is-input label=\"Mismo contenedor, full-width\" full-width placeholder=\"Ignora el token\"></is-input>\r\n            <is-input label=\"Override local\" style=\"--is-field-width:8rem;\" type=\"number\" value=\"42\"></is-input>\r\n          </div>"
+          "html": "<div style=\"display:grid; gap:1.25rem; --iswc-field-width:14rem;\">\r\n            <is-input label=\"--iswc-field-width: 14rem\" placeholder=\"Heredado del contenedor\"></is-input>\r\n            <is-input label=\"Mismo contenedor, full-width\" full-width placeholder=\"Ignora el token\"></is-input>\r\n            <is-input label=\"Override local\" style=\"--iswc-field-width:8rem;\" type=\"number\" value=\"42\"></is-input>\r\n          </div>"
         },
         {
           "kind": "code",
-          "code": "<div style=\"--is-field-width: 14rem\">\n  <is-input label=\"Estrecho\"></is-input>\n  <is-input label=\"Ancho completo\" full-width></is-input>\n</div>"
+          "code": "<div style=\"--iswc-field-width: 14rem\">\n  <is-input label=\"Estrecho\"></is-input>\n  <is-input label=\"Ancho completo\" full-width></is-input>\n</div>"
         }
       ]
     },
     {
       "id": "label-placement",
       "title": "Label a la izquierda",
-      "lede": "<code class=\"code\">label-placement=\"start\"</code> pasa el layout a rejilla de dos columnas para\r\n          formularios horizontales. <code class=\"code\">--is-field-label-width</code> fija la columna del label\r\n          para que varios campos queden alineados.",
+      "lede": "<code class=\"code\">label-placement=\"start\"</code> pasa el layout a rejilla de dos columnas para\r\n          formularios horizontales. <code class=\"code\">--iswc-field-label-width</code> fija la columna del label\r\n          para que varios campos queden alineados.",
       "blocks": [
         {
           "kind": "demo",
-          "html": "<div style=\"display:grid; gap:0.75rem; --is-field-label-width:7rem; max-width:34rem;\">\r\n            <is-input label-placement=\"start\" label=\"Nombre\" full-width placeholder=\"Jane Doe\"></is-input>\r\n            <is-input label-placement=\"start\" label=\"Correo\" type=\"email\" full-width placeholder=\"jane@empresa.com\" hint=\"Se usa para la factura\"></is-input>\r\n            <is-input label-placement=\"start\" label=\"NIT\" full-width prefix=\"CO\" show-count maxlength=\"12\"></is-input>\r\n          </div>"
+          "html": "<div style=\"display:grid; gap:0.75rem; --iswc-field-label-width:7rem; max-width:34rem;\">\r\n            <is-input label-placement=\"start\" label=\"Nombre\" full-width placeholder=\"Jane Doe\"></is-input>\r\n            <is-input label-placement=\"start\" label=\"Correo\" type=\"email\" full-width placeholder=\"jane@empresa.com\" hint=\"Se usa para la factura\"></is-input>\r\n            <is-input label-placement=\"start\" label=\"NIT\" full-width prefix=\"CO\" show-count maxlength=\"12\"></is-input>\r\n          </div>"
         },
         {
           "kind": "code",
-          "code": "<div style=\"--is-field-label-width: 7rem\">\n  <is-input label-placement=\"start\" label=\"Nombre\" full-width></is-input>\n  <is-input label-placement=\"start\" label=\"Correo\" full-width></is-input>\n</div>"
+          "code": "<div style=\"--iswc-field-label-width: 7rem\">\n  <is-input label-placement=\"start\" label=\"Nombre\" full-width></is-input>\n  <is-input label-placement=\"start\" label=\"Correo\" full-width></is-input>\n</div>"
         }
       ]
     },
@@ -156,7 +156,7 @@
     },
     {
       "id": "form",
-      "title": "Dentro de un <form>",
+      "title": "Dentro de un formulario",
       "lede": "El valor entra en <code class=\"code\">FormData</code> con la clave de <code class=\"code\">name</code>.\r\n          <code class=\"code\">reset</code> restaura el atributo <code class=\"code\">value</code> y limpia el\r\n          estado de error.",
       "blocks": [
         {
@@ -234,7 +234,7 @@
             ],
             [
               "<code>full-width</code>",
-              "boolean · 100% del ancho disponible, ignora <code>--is-field-width</code>"
+              "boolean · 100% del ancho disponible, ignora <code>--iswc-field-width</code>"
             ]
           ]
         },
@@ -328,23 +328,23 @@
           ],
           "rows": [
             [
-              "<code>--is-field-width</code>",
+              "<code>--iswc-field-width</code>",
               "ancho del control (default <code>auto</code>); heredable desde el contenedor"
             ],
             [
-              "<code>--is-field-label-width</code>",
+              "<code>--iswc-field-label-width</code>",
               "columna del label con <code>label-placement=\"start\"</code>"
             ],
             [
-              "<code>--is-input-bg</code> <code>--is-input-border</code> <code>--is-input-text</code>",
-              "caen en <code>--is-control-*</code>"
+              "<code>--iswc-input-bg</code> <code>--iswc-input-border</code> <code>--iswc-input-text</code>",
+              "caen en <code>--iswc-control-*</code>"
             ],
             [
-              "<code>--is-input-border-radius</code> <code>--is-input-focus</code>",
-              "caen en <code>--is-radius-sm</code> / <code>--is-focus</code>"
+              "<code>--iswc-input-border-radius</code> <code>--iswc-input-focus</code>",
+              "caen en <code>--iswc-radius-sm</code> / <code>--iswc-focus</code>"
             ],
             [
-              "<code>--is-input-danger</code> <code>--is-input-danger-text</code>",
+              "<code>--iswc-input-danger</code> <code>--iswc-input-danger-text</code>",
               "borde y texto del estado de error"
             ]
           ]

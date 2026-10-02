@@ -1,6 +1,6 @@
 // bundle-demos.mjs — rebuilds dist/cdn/diagrams/er-{diagram,editor}.min.js
 // desde src/. Necesario porque los HTML de los demos cargan desde dist/cdn/ y
-// el build principal (npm run build) tiene fallos pre-existentes en otros
+// el build principal (deno task build) tiene fallos pre-existentes en otros
 // componentes (media-recorder.ts: Private name "#attach"). Sólo recompilamos
 // lo que los demos necesitan.
 import { build } from 'esbuild';

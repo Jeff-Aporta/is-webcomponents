@@ -9,7 +9,7 @@
   "sections": [
     {
       "id": "intro",
-      "title": "<is-barcode-scanner>",
+      "title": "Uso",
       "lede": "Decodifica QR/EAN con `BarcodeDetector` sobre la cámara. No genera códigos: eso es `is-barcode` / `is-qrcode`.",
       "blocks": [
         {

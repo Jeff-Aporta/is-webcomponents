@@ -9,7 +9,7 @@
   "sections": [
     {
       "id": "intro",
-      "title": "<is-accordion-group>",
+      "title": "Uso",
       "lede": "Coordina varios <code class=\"code\">&lt;is-details&gt;</code>: por defecto solo uno\r\n          queda abierto. No reimplementa el disclosure, solo lo orquesta.",
       "blocks": [
         {

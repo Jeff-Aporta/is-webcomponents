@@ -36,10 +36,10 @@ import { ElementBase } from '../../core/element-base.js';
  *   is-input, is-change, is-blur, is-source-change
  *
  * Tokens CSS
- *   --is-rte-toolbar-bg
- *   --is-rte-content-min-h
- *   --is-rte-button-radius
- *   --is-rte-token-bg / --is-rte-token-color / --is-rte-token-radius
+ *   --iswc-rte-toolbar-bg
+ *   --iswc-rte-content-min-h
+ *   --iswc-rte-button-radius
+ *   --iswc-rte-token-bg / --iswc-rte-token-color / --iswc-rte-token-radius
  */
 
 /** Registro de comandos de toolbar aportados por OTROS componentes.

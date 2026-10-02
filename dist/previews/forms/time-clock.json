@@ -8,7 +8,7 @@
   "sections": [
     {
       "id": "intro",
-      "title": "<is-time-clock>",
+      "title": "Uso",
       "lede": "Reloj analógico (TimeClock de MUI X). Arrastra la manecilla, haz clic o usa el teclado. Al soltar avanza de horas a minutos.",
       "blocks": [
         {
@@ -58,13 +58,13 @@
         },
         {
           "kind": "html",
-          "html": "<p class=\"lede\" id=\"log\" style=\"font-family:var(--is-mono);font-size:.85em\"></p>"
+          "html": "<p class=\"lede\" id=\"log\" style=\"font-family:var(--iswc-mono);font-size:.85em\"></p>"
         }
       ]
     },
     {
       "id": "digital",
-      "title": "<is-digital-clock>",
+      "title": "Reloj digital",
       "lede": "Lista (DigitalClock) o columnas (MultiSectionDigitalClock). <code>step</code> controla el intervalo de la lista; <code>minutes-step</code> el de las columnas.",
       "blocks": [
         {

@@ -9,7 +9,7 @@
   "sections": [
     {
       "id": "intro",
-      "title": "<is-breadcrumb-item>",
+      "title": "Uso",
       "lede": "Cada eslabón de un <code class=\"code\">&lt;is-breadcrumb&gt;</code>. Puede ser enlace (<code class=\"code\">href</code>) o texto plano cuando es la página actual.",
       "blocks": [
         {

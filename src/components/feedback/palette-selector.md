@@ -14,9 +14,11 @@ preview: ./palette-selector.json
 
 Selector visual de paletas de marca. Expone por defecto las tres paletas de
 `styles/palettes.css` (contapyme, insoft, agrowin) y admite un array JSON
-propio en el atributo `palettes`. Al seleccionar, escribe `data-palette` en
-`<html>`, persiste la elección en `localStorage` y, si la paleta trae `css`,
-inyecta esa hoja bajo demanda.
+propio en el atributo `palettes`. `scope="root"` escribe `data-palette` en
+`<html>`. `scope="closest"` lo escribe en el primer ancestro que ya tenga
+`data-palette`. Si el target es `<html>`, persiste en `localStorage`. Si la
+paleta trae `css`, inyecta esa hoja bajo demanda. Dos selectores con el mismo
+target y la misma paleta en su lista quedan sincronizados.
 
 Este módulo registra `<is-palette-selector>`.
 
@@ -48,7 +50,7 @@ import './palette-selector.js';
 
 | Atributo | Tipo | Notas |
 | --- | --- | --- |
-| `palettes` | string JSON | Array de `{ value, label, accent, css?, lead?, accentLabel?, leadColor?, accentColor?, bg?, fg? }`. |
+| `palettes` | string JSON | Array de `{ value, label, h, s, b, css?, lead?, accentLabel?, leadColor?, accentColor?, bg?, fg?, accent? }`. `h` `s` `b` arman el swatch; `accent` (hex) solo si no hay HSB. |
 | `value` | string/según contrato | Paleta activa; se refleja en `data-palette` de `<html>`. |
 | `storage-key` | string/según contrato | Clave de `localStorage` (default `is-palette`). |
 | `aria-label` | string/según contrato | Etiqueta del trigger (default "Elegir paleta"). |
@@ -102,14 +104,14 @@ No expone.
 
 | Token | Uso |
 | --- | --- |
-| `--is-accent` | Token leído o definido por componente. |
-| `--is-bg-elev` | Token leído o definido por componente. |
-| `--is-border` | Token leído o definido por componente. |
-| `--is-text` | Token leído o definido por componente. |
-| `--is-control-bg-hover` | Token leído o definido por componente. |
-| `--is-font-family` | Token leído o definido por componente. |
-| `--is-logo-bg` | Token leído o definido por componente. |
-| `--is-logo-fg` | Token leído o definido por componente. |
+| `--iswc-accent` | Token leído o definido por componente. |
+| `--iswc-bg-elev` | Token leído o definido por componente. |
+| `--iswc-border` | Token leído o definido por componente. |
+| `--iswc-text` | Token leído o definido por componente. |
+| `--iswc-control-bg-hover` | Token leído o definido por componente. |
+| `--iswc-font-family` | Token leído o definido por componente. |
+| `--iswc-logo-bg` | Token leído o definido por componente. |
+| `--iswc-logo-fg` | Token leído o definido por componente. |
 
 ### Integración con formularios
 
@@ -137,9 +139,7 @@ Documentación de cabecera preservada desde fuente:
 >   aria-label    string — etiqueta del botón trigger (default "Elegir paleta")
 > Slots
 >   trigger    opcional — sustituye el botón trigger interno.
->   option     opcional — <template slot="option"> con placeholders {value},
->              {label}, {accent}, {lead}, {accentLabel}, {leadColor},
->              {accentColor}, {bg}, {fg}. El escape { se hace con {{}.
+>   El menu sale del JSON (palettes.json o el array palettes).
 > Eventos
 >   is-palette-change  detail: { value, palette }   bubbles, composed
 > Mutaciones que produce
@@ -151,10 +151,9 @@ Documentación de cabecera preservada desde fuente:
 >   el.open() / close() / toggle()
 >   el.addEventListener('is-palette-change', e => e.detail)
 
-La paleta inicial se resuelve en este orden: `data-palette` de `<html>`,
-valor guardado en `localStorage` y, si nada aplica, la primera del array.
-En la plantilla de `option`, los elementos con `data-role="lead|accent|swatch|label|check"`
-reciben el contenido y el color de cada paleta.
+La paleta inicial se resuelve en este orden: `data-palette` del target,
+valor guardado en `localStorage` (solo si el target es `<html>`) y, si nada
+aplica, la primera del array. El menu pinta swatch, label y check desde ese JSON.
 
 ## Dependencias y componentes relacionados
 
@@ -178,15 +177,7 @@ Preservar semántica, foco, teclado, labels y ARIA. ARIA detectado:
 
 ```html
 <is-palette-selector storage-key="mi-app-paleta"
-  palettes='[{"value":"azul","label":"Azul","accent":"#1971c2","css":"/css/azul.css"}]'>
-  <button slot="trigger">Cambiar tema</button>
-  <template slot="option">
-    <li style="border-left: 4px solid {accent}">
-      <span data-role="swatch"></span>
-      <span data-role="label"></span>
-      <is-icon data-role="check" icon="mdi:check"></is-icon>
-    </li>
-  </template>
+  palettes='[{"value":"azul","label":"Azul","h":210,"s":"100%","b":"56%","css":"/css/azul.css"}]'>
 </is-palette-selector>
 ```
 

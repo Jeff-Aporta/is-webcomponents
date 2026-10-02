@@ -10,7 +10,7 @@
   "sections": [
     {
       "id": "intro",
-      "title": "<is-carousel>",
+      "title": "Uso",
       "lede": "Carrusel tipo slides con paginación, autoplay, loop, navegación prev/next,\r\n          indicadores, scroll-snap y soporte para swipe en touch.",
       "blocks": [
         {

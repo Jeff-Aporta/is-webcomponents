@@ -47,10 +47,10 @@ import './heading.js';
 - Seis componentes `H1`…`H6` → un módulo con el atributo `level` (1-6). El
   shadow root construye el `<hN>` REAL, así que la semántica y el árbol de
   accesibilidad se conservan sin duplicar seis archivos.
-- ISP pintaba `color-mix(in srgb, var(--h-clr), var(--is-color) var(--h-mix))`
+- ISP pintaba `color-mix(in srgb, var(--h-clr), var(--iswc-color) var(--h-mix))`
   con `--h-clr = colorVar(color, "primary")`. Aquí `--h-clr` cae a
-  `--is-accent` → `--is-color-brand-500` → `--is-text`, y el color de mezcla es
-  `--is-text` (el equivalente de `--is-color` en este kit). Los porcentajes son
+  `--iswc-accent` → `--iswc-color-brand-500` → `--iswc-text`, y el color de mezcla es
+  `--iswc-text` (el equivalente de `--iswc-color` en este kit). Los porcentajes son
   los mismos: 15 / 30 / 45 / 65 / 80 / 90 %.
 - ISP envolvía el contenido en un `<Text>` interno; aquí no hace falta, porque
   el clamp y el color semántico ya se resuelven en el propio host.
@@ -108,7 +108,7 @@ No expone custom states.
 | Token | Uso |
 | --- | --- |
 | `--h-clr` | Color base del título. |
-| `--h-mix` | Porcentaje de `--is-text` mezclado; default según nivel. |
+| `--h-mix` | Porcentaje de `--iswc-text` mezclado; default según nivel. |
 | `--h-size` | Tamaño en em del nivel. |
 
 

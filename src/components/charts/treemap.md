@@ -95,10 +95,10 @@ No expone.
 | Token | Uso |
 | --- | --- |
 | `--chart-surface` | Token leído o definido por componente. |
-| `--is-bg-elev` | Token leído o definido por componente. |
-| `--is-sans` | Token leído o definido por componente. |
-| `--is-border` | Token leído o definido por componente. |
-| `--is-text-soft` | Token leído o definido por componente. |
+| `--iswc-bg-elev` | Token leído o definido por componente. |
+| `--iswc-sans` | Token leído o definido por componente. |
+| `--iswc-border` | Token leído o definido por componente. |
+| `--iswc-text-soft` | Token leído o definido por componente. |
 
 ### Integración con formularios
 

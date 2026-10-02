@@ -18,15 +18,15 @@
 }
 
 .modal {
-  --is-confirm-modal-bg: var(--is-bg-elev, #1c2128);
-  --is-confirm-modal-text: var(--is-text, #e8eaf1);
-  --is-confirm-modal-border: var(--is-border, #2a2f3a);
-  --is-confirm-modal-accent: var(--is-brand, dodgerblue);
-  --is-confirm-modal-on-accent: var(--is-brand-fg, #fff);
+  --iswc-confirm-modal-bg: var(--iswc-bg-elev, #1c2128);
+  --iswc-confirm-modal-text: var(--iswc-text, #e8eaf1);
+  --iswc-confirm-modal-border: var(--iswc-border, #2a2f3a);
+  --iswc-confirm-modal-accent: var(--iswc-brand, dodgerblue);
+  --iswc-confirm-modal-on-accent: var(--iswc-brand-fg, #fff);
 
-  background: var(--is-confirm-modal-bg);
-  color: var(--is-confirm-modal-text);
-  border: 1px solid var(--is-confirm-modal-border);
+  background: var(--iswc-confirm-modal-bg);
+  color: var(--iswc-confirm-modal-text);
+  border: 1px solid var(--iswc-confirm-modal-border);
   border-radius: 0.65rem;
   padding: 1.1rem 1.2rem;
   min-width: 280px;
@@ -61,7 +61,7 @@
 .message {
   margin-bottom: 0.9rem;
   line-height: 1.45;
-  color: var(--is-text-soft, var(--is-confirm-modal-text));
+  color: var(--iswc-text-soft, var(--iswc-confirm-modal-text));
 }
 
 .actions {

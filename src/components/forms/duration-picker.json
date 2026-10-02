@@ -4,13 +4,13 @@
   "category": "forms",
   "title": "<is-duration-picker>",
   "titleHtml": true,
-  "styles": "pre.log {\r\n      font-family: ui-monospace, monospace; font-size: .8rem;\r\n      background: var(--is-bg-elev); border: 1px solid var(--is-border);\r\n      border-radius: var(--is-radius); padding: .55rem .75rem;\r\n      max-height: 6rem; overflow: auto;\r\n    }",
+  "styles": "pre.log {\r\n      font-family: ui-monospace, monospace; font-size: .8rem;\r\n      background: var(--iswc-bg-elev); border: 1px solid var(--iswc-border);\r\n      border-radius: var(--iswc-radius); padding: .55rem .75rem;\r\n      max-height: 6rem; overflow: auto;\r\n    }",
   "storageKey": "docs-is-duration-picker",
   "hasBehavior": true,
   "sections": [
     {
       "id": "intro",
-      "title": "<is-duration-picker>",
+      "title": "Uso",
       "lede": "Duración HH:MM:SS. Tres columnas con botones ±, inputs numéricos y saltos con <kbd class=\"ic\">:</kbd> o <kbd class=\"ic\">Tab</kbd>.",
       "blocks": []
     },
@@ -20,7 +20,7 @@
       "blocks": [
         {
           "kind": "demo",
-          "html": "<is-duration-picker id=\"dur\" value=\"3725\"></is-duration-picker>\r\n          <p class=\"kbd-hint\" style=\"color:var(--is-text-soft); font-size:.78rem; margin-top:.5rem\">\r\n            <code>value=\"3725\"</code> = 1h 02m 05s\r\n          </p>",
+          "html": "<is-duration-picker id=\"dur\" value=\"3725\"></is-duration-picker>\r\n          <p class=\"kbd-hint\" style=\"color:var(--iswc-text-soft); font-size:.78rem; margin-top:.5rem\">\r\n            <code>value=\"3725\"</code> = 1h 02m 05s\r\n          </p>",
           "controls": [
             {
               "control": "number",
@@ -64,7 +64,7 @@
       "blocks": [
         {
           "kind": "demo",
-          "html": "<is-duration-picker min=\"60\" max=\"5400\" step=\"5\" value=\"600\"></is-duration-picker>\r\n          <p class=\"kbd-hint\" style=\"color:var(--is-text-soft); font-size:.78rem\">De 1 minuto a 1:30:00, paso de 5 segundos.</p>"
+          "html": "<is-duration-picker min=\"60\" max=\"5400\" step=\"5\" value=\"600\"></is-duration-picker>\r\n          <p class=\"kbd-hint\" style=\"color:var(--iswc-text-soft); font-size:.78rem\">De 1 minuto a 1:30:00, paso de 5 segundos.</p>"
         }
       ]
     },

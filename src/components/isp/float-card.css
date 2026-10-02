@@ -22,10 +22,10 @@
   gap: 0.15rem;
   max-width: min(100%, 18rem);
   padding: 0.1rem 0.2rem;
-  background: var(--is-bg-elev, var(--is-bg));
-  border: 1px solid var(--is-border);
-  border-radius: var(--is-radius-sm, 0.35rem);
-  box-shadow: var(--is-shadow, 0 4px 16px color-mix(in srgb, #000 18%, transparent));
+  background: var(--iswc-bg-elev, var(--iswc-bg));
+  border: 1px solid var(--iswc-border);
+  border-radius: var(--iswc-radius-sm, 0.35rem);
+  box-shadow: var(--iswc-shadow, 0 4px 16px color-mix(in srgb, #000 18%, transparent));
   pointer-events: none;
   overflow: visible;
   opacity: 0;
@@ -57,10 +57,10 @@
   }
 }
 @media (prefers-color-scheme: light) {
-  :host(:focus-visible) { outline-color: var(--is-brand, #2563eb); }
+  :host(:focus-visible) { outline-color: var(--iswc-brand, #2563eb); }
   .panel { box-shadow: 0 4px 16px color-mix(in srgb, #000 12%, transparent); }
 }
 @media (prefers-color-scheme: dark) {
-  :host(:focus-visible) { outline-color: var(--is-brand, #60a5fa); }
+  :host(:focus-visible) { outline-color: var(--iswc-brand, #60a5fa); }
   .panel { box-shadow: 0 4px 16px color-mix(in srgb, #000 30%, transparent); }
 }

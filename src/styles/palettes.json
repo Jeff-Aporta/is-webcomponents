@@ -1,0 +1,38 @@
+[
+  {
+    "value": "contapyme",
+    "label": "ContaPyme",
+    "lead": "conta",
+    "accentLabel": "pyme",
+    "tail": "",
+    "h": 210,
+    "s": "100%",
+    "b": "56%",
+    "leadColor": "#000",
+    "accentColor": "#fff"
+  },
+  {
+    "value": "insoft",
+    "label": "InSoft",
+    "lead": "in",
+    "accentLabel": "Soft",
+    "tail": "",
+    "h": 0,
+    "s": "74%",
+    "b": "54%",
+    "leadColor": "#000",
+    "accentColor": "#d71920"
+  },
+  {
+    "value": "agrowin",
+    "label": "AgroWin",
+    "lead": "agro",
+    "accentLabel": "win",
+    "tail": "",
+    "h": 80,
+    "s": "61%",
+    "b": "50%",
+    "leadColor": "#000",
+    "accentColor": "#fff"
+  }
+]

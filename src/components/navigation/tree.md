@@ -116,10 +116,10 @@ No expone.
 | `--row-pad-y` | Token leído o definido por componente. |
 | `--row-pad-x` | Token leído o definido por componente. |
 | `--row-hover` | Token leído o definido por componente. |
-| `--is-brand` | Token leído o definido por componente. |
+| `--iswc-brand` | Token leído o definido por componente. |
 | `--row-selected-bg` | Token leído o definido por componente. |
 | `--row-selected-fg` | Token leído o definido por componente. |
-| `--is-text` | Token leído o definido por componente. |
+| `--iswc-text` | Token leído o definido por componente. |
 
 ### Integración con formularios
 

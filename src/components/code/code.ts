@@ -16,7 +16,7 @@
  *   mode              block (default) | inline — inserción en página (flujo de texto vs bloque)
  *   name              form-associated
  *   placeholder
- *   min-height        CSS length → --is-code-min-height
+ *   min-height        CSS length → --iswc-code-min-height
  *
  * Props JS: value, lang, mode, formatConfig, themeConfig, document, marks
  * Métodos: format(), getDocument(), setDocument(), code2json(), json2code(doc),
@@ -109,11 +109,11 @@ function editRange(oldText: string, newText: string): [number, number, number] {
 
 class IsCode extends ElementBase {
   static styleAttrs = {
-    radius: '--is-code-radius',
-    'border-color': { prop: '--is-code-border', onlyColorValues: true },
-    bg: { prop: '--is-code-bg', onlyColorValues: true },
-    'text-color': { prop: '--is-code-fg', onlyColorValues: true },
-    'min-height': '--is-code-min-height',
+    radius: '--iswc-code-radius',
+    'border-color': { prop: '--iswc-code-border', onlyColorValues: true },
+    bg: { prop: '--iswc-code-bg', onlyColorValues: true },
+    'text-color': { prop: '--iswc-code-fg', onlyColorValues: true },
+    'min-height': '--iswc-code-min-height',
   };
 
   static formAssociated = true;
@@ -204,8 +204,8 @@ class IsCode extends ElementBase {
         this.#applyOptions();
         break;
       case 'min-height':
-        if (value) this.style.setProperty('--is-code-min-height', value);
-        else this.style.removeProperty('--is-code-min-height');
+        if (value) this.style.setProperty('--iswc-code-min-height', value);
+        else this.style.removeProperty('--iswc-code-min-height');
         this.refresh();
         break;
       case 'name':

@@ -4,17 +4,17 @@
   "category": "media",
   "title": "<is-icon>",
   "titleHtml": true,
-  "styles": ".xp-embed {\r\n      border: 1px solid var(--is-border);\r\n      border-radius: 0.6rem;\r\n      overflow: hidden;\r\n      background: var(--is-bg);\r\n      /* Alto fijo: el explorador scrollea internamente (su .xp), así que un\r\n         alto en auto lo colapsaría a 0. */\r\n      height: min(72vh, 720px);\r\n    }\r\n    .xp-embed iframe { display: block; width: 100%; height: 100%; border: 0; }",
+  "styles": ".xp-embed {\r\n      border: 1px solid var(--iswc-border);\r\n      border-radius: 0.6rem;\r\n      overflow: hidden;\r\n      background: var(--iswc-bg);\r\n      /* Alto fijo: el explorador scrollea internamente (su .xp), así que un\r\n         alto en auto lo colapsaría a 0. */\r\n      height: min(72vh, 720px);\r\n    }\r\n    .xp-embed iframe { display: block; width: 100%; height: 100%; border: 0; }",
   "storageKey": "docs-is-icon",
   "sections": [
     {
       "id": "intro",
-      "title": "<is-icon>",
+      "title": "Uso",
       "lede": "API única de iconos del kit. Usa <code class=\"code\">icon=\"grupo:nombre\"</code> (ids Iconify)\r\n          o <code class=\"code\">src</code> para un SVG/imagen. Escala con <code class=\"code\">font-size</code>.\r\n          Iconify se carga solo como dependencia interna.",
       "blocks": [
         {
           "kind": "demo",
-          "html": "<div class=\"demo-row\" style=\"font-size:1.5rem; gap:1rem; align-items:center;\">\r\n            <is-icon icon=\"mdi:home\"></is-icon>\r\n            <is-icon icon=\"mdi:check-circle\" style=\"color:var(--is-accent)\"></is-icon>\r\n            <is-icon icon=\"mdi:star\" label=\"Favorito\"></is-icon>\r\n            <is-icon icon=\"mdi:cog-outline\"></is-icon>\r\n          </div>",
+          "html": "<div class=\"demo-row\" style=\"font-size:1.5rem; gap:1rem; align-items:center;\">\r\n            <is-icon icon=\"mdi:home\"></is-icon>\r\n            <is-icon icon=\"mdi:check-circle\" style=\"color:var(--iswc-accent)\"></is-icon>\r\n            <is-icon icon=\"mdi:star\" label=\"Favorito\"></is-icon>\r\n            <is-icon icon=\"mdi:cog-outline\"></is-icon>\r\n          </div>",
           "controls": [
             {
               "control": "select",
@@ -40,7 +40,7 @@
       "blocks": [
         {
           "kind": "demo",
-          "html": "<span class=\"demo-label\">src personalizado</span>\r\n          <is-icon src=\"{assets}icons/mdi/heart.svg\" label=\"Corazón\" style=\"font-size:1.5rem;color:var(--is-accent)\"></is-icon>"
+          "html": "<span class=\"demo-label\">src personalizado</span>\r\n          <is-icon src=\"{assets}icons/mdi/heart.svg\" label=\"Corazón\" style=\"font-size:1.5rem;color:var(--iswc-accent)\"></is-icon>"
         },
         {
           "kind": "code",

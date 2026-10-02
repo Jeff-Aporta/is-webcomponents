@@ -10,7 +10,7 @@
   "sections": [
     {
       "id": "intro",
-      "title": "<is-textarea>",
+      "title": "Uso",
       "lede": "Área de texto form-associated con las mismas piezas que\r\n          <a href=\"https://mui.com/material-ui/react-text-field/\" target=\"_blank\" rel=\"noreferrer\">TextField</a>\r\n          en modo <em>multiline</em> y el crecimiento automático de\r\n          <a href=\"https://mui.com/material-ui/react-textarea-autosize/\" target=\"_blank\" rel=\"noreferrer\">TextareaAutosize</a>:\r\n          appearances, error, contador y <code class=\"code\">autosize</code> con\r\n          <code class=\"code\">min-rows</code> / <code class=\"code\">max-rows</code>.",
       "blocks": [
         {
@@ -204,30 +204,30 @@
     {
       "id": "width",
       "title": "Ancho",
-      "lede": "Mismo token que <code class=\"code\">is-input</code>: <code class=\"code\">--is-field-width</code>\r\n          (heredable) y <code class=\"code\">full-width</code> para ocupar todo el ancho disponible.",
+      "lede": "Mismo token que <code class=\"code\">is-input</code>: <code class=\"code\">--iswc-field-width</code>\r\n          (heredable) y <code class=\"code\">full-width</code> para ocupar todo el ancho disponible.",
       "blocks": [
         {
           "kind": "demo",
-          "html": "<div style=\"display:grid; gap:1.25rem; --is-field-width:18rem;\">\r\n            <is-textarea label=\"--is-field-width: 18rem\" rows=\"2\" placeholder=\"Heredado del contenedor\"></is-textarea>\r\n            <is-textarea label=\"full-width\" full-width rows=\"2\" placeholder=\"Ignora el token\"></is-textarea>\r\n          </div>"
+          "html": "<div style=\"display:grid; gap:1.25rem; --iswc-field-width:18rem;\">\r\n            <is-textarea label=\"--iswc-field-width: 18rem\" rows=\"2\" placeholder=\"Heredado del contenedor\"></is-textarea>\r\n            <is-textarea label=\"full-width\" full-width rows=\"2\" placeholder=\"Ignora el token\"></is-textarea>\r\n          </div>"
         },
         {
           "kind": "code",
-          "code": "<div style=\"--is-field-width: 18rem\">\n  <is-textarea label=\"Estrecho\" rows=\"2\"></is-textarea>\n  <is-textarea label=\"Ancho completo\" full-width rows=\"2\"></is-textarea>\n</div>"
+          "code": "<div style=\"--iswc-field-width: 18rem\">\n  <is-textarea label=\"Estrecho\" rows=\"2\"></is-textarea>\n  <is-textarea label=\"Ancho completo\" full-width rows=\"2\"></is-textarea>\n</div>"
         }
       ]
     },
     {
       "id": "label-placement",
       "title": "Label a la izquierda",
-      "lede": "<code class=\"code\">label-placement=\"start\"</code> para formularios horizontales.\r\n          El label se alinea con la primera línea del textarea y\r\n          <code class=\"code\">--is-field-label-width</code> fija su columna.",
+      "lede": "<code class=\"code\">label-placement=\"start\"</code> para formularios horizontales.\r\n          El label se alinea con la primera línea del textarea y\r\n          <code class=\"code\">--iswc-field-label-width</code> fija su columna.",
       "blocks": [
         {
           "kind": "demo",
-          "html": "<div style=\"display:grid; gap:0.75rem; --is-field-label-width:7rem; max-width:34rem;\">\r\n            <is-textarea label-placement=\"start\" label=\"Asunto\" full-width rows=\"1\"></is-textarea>\r\n            <is-textarea label-placement=\"start\" label=\"Mensaje\" full-width autosize min-rows=\"3\" max-rows=\"8\"\r\n              hint=\"Crece con el texto\" show-count maxlength=\"500\"></is-textarea>\r\n          </div>"
+          "html": "<div style=\"display:grid; gap:0.75rem; --iswc-field-label-width:7rem; max-width:34rem;\">\r\n            <is-textarea label-placement=\"start\" label=\"Asunto\" full-width rows=\"1\"></is-textarea>\r\n            <is-textarea label-placement=\"start\" label=\"Mensaje\" full-width autosize min-rows=\"3\" max-rows=\"8\"\r\n              hint=\"Crece con el texto\" show-count maxlength=\"500\"></is-textarea>\r\n          </div>"
         },
         {
           "kind": "code",
-          "code": "<div style=\"--is-field-label-width: 7rem\">\n  <is-textarea label-placement=\"start\" label=\"Mensaje\" full-width autosize min-rows=\"3\"></is-textarea>\n</div>"
+          "code": "<div style=\"--iswc-field-label-width: 7rem\">\n  <is-textarea label-placement=\"start\" label=\"Mensaje\" full-width autosize min-rows=\"3\"></is-textarea>\n</div>"
         }
       ]
     },
@@ -243,7 +243,7 @@
     },
     {
       "id": "form",
-      "title": "Dentro de un <form>",
+      "title": "Dentro de un formulario",
       "lede": "FormData: —",
       "blocks": [
         {
@@ -321,7 +321,7 @@
             ],
             [
               "<code>full-width</code>",
-              "boolean · 100% del ancho disponible, ignora <code>--is-field-width</code>"
+              "boolean · 100% del ancho disponible, ignora <code>--iswc-field-width</code>"
             ]
           ]
         },
@@ -411,23 +411,23 @@
           ],
           "rows": [
             [
-              "<code>--is-field-width</code>",
+              "<code>--iswc-field-width</code>",
               "ancho del control (default <code>auto</code>); heredable desde el contenedor"
             ],
             [
-              "<code>--is-field-label-width</code>",
+              "<code>--iswc-field-label-width</code>",
               "columna del label con <code>label-placement=\"start\"</code>"
             ],
             [
-              "<code>--is-textarea-bg</code> <code>--is-textarea-border</code> <code>--is-textarea-text</code>",
-              "caen en <code>--is-control-*</code>"
+              "<code>--iswc-textarea-bg</code> <code>--iswc-textarea-border</code> <code>--iswc-textarea-text</code>",
+              "caen en <code>--iswc-control-*</code>"
             ],
             [
-              "<code>--is-textarea-border-radius</code> <code>--is-textarea-focus</code>",
-              "caen en <code>--is-radius-sm</code> / <code>--is-focus</code>"
+              "<code>--iswc-textarea-border-radius</code> <code>--iswc-textarea-focus</code>",
+              "caen en <code>--iswc-radius-sm</code> / <code>--iswc-focus</code>"
             ],
             [
-              "<code>--is-textarea-danger</code> <code>--is-textarea-danger-text</code>",
+              "<code>--iswc-textarea-danger</code> <code>--iswc-textarea-danger-text</code>",
               "borde y texto del estado de error"
             ]
           ]

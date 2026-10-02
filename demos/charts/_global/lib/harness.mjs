@@ -1,6 +1,6 @@
 // harness.mjs: utilidades compartidas por las suites Playwright de los
 // demos de la categoría `charts`. Réplica de demos/diagramas/ER/_testing/lib/
-// para que cada suite pueda correr aislada con `node --experimental-strip-types`.
+// para que cada suite pueda correr aislada con `deno run -A --no-check`.
 import { chromium } from 'playwright';
 import { mkdir } from 'node:fs/promises';
 import { join } from 'node:path';

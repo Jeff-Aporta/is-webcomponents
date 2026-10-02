@@ -8,7 +8,7 @@
   "sections": [
     {
       "id": "intro",
-      "title": "<is-date-picker>",
+      "title": "Uso",
       "lede": "Calendario inline (DateCalendar de <a href=\"https://mui.com/x/react-date-pickers/\" target=\"_blank\" rel=\"noopener\">MUI X</a>). Tres vistas (día, mes, año), teclado, números de semana y reglas de deshabilitado. El mes y el año del encabezado abren un <code>is-dropdown</code>.",
       "blocks": [
         {
@@ -86,7 +86,7 @@
         },
         {
           "kind": "html",
-          "html": "<p class=\"lede\" id=\"log\" style=\"font-family:var(--is-mono);font-size:.85em\"></p>"
+          "html": "<p class=\"lede\" id=\"log\" style=\"font-family:var(--iswc-mono);font-size:.85em\"></p>"
         }
       ]
     },

@@ -71,11 +71,11 @@ import { ElementBase } from '../../core/element-base.js';
   class IsCarousel extends ElementBase {
     /** Personalización por atributo (ver `core/attrs.ts`). */
     static styleAttrs = {
-    'control-bg': { prop: '--is-carousel-control-bg', onlyColorValues: true },
-    'control-color': { prop: '--is-carousel-control-text', onlyColorValues: true },
-    'control-border': { prop: '--is-carousel-control-border', onlyColorValues: true },
-    'indicator-color': { prop: '--is-carousel-indicator', onlyColorValues: true },
-    'indicator-active': { prop: '--is-carousel-indicator-active', onlyColorValues: true },
+    'control-bg': { prop: '--iswc-carousel-control-bg', onlyColorValues: true },
+    'control-color': { prop: '--iswc-carousel-control-text', onlyColorValues: true },
+    'control-border': { prop: '--iswc-carousel-control-border', onlyColorValues: true },
+    'indicator-color': { prop: '--iswc-carousel-indicator', onlyColorValues: true },
+    'indicator-active': { prop: '--iswc-carousel-indicator-active', onlyColorValues: true },
     };
 
     static get observedAttributes(): string[] { return [...TG_OBSERVED, ...IsCarousel.styleAttrNames]; }

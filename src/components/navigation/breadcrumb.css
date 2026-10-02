@@ -2,7 +2,7 @@
 
 :host {
   display: block;
-  font-family: var(--is-font-family, inherit);
+  font-family: var(--iswc-font-family, inherit);
 }
 
 .bc {
@@ -14,7 +14,7 @@
   padding: 0;
   list-style: none;
   font-size: 0.9em;
-  color: var(--is-text-muted, #6c757d);
+  color: var(--iswc-text-muted, #6c757d);
 }
 
 .bc ::slotted(is-breadcrumb-item) {

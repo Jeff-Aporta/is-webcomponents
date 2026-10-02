@@ -25,14 +25,14 @@ Humanos y agentes consumen el kit vía galería, CDN y markdown raw en GitHub. L
 
 ## S-D3 SEO vs agentes
 
-- `docs/` en raíz: HTML plano generado (`npm run docs`) para crawlers.
+- `docs/` en raíz: HTML plano generado (`deno task docs`) para crawlers.
 - `src/docs/`: notas de agente / superpowers; no confundir con `docs/` SEO.
 
 ## Contratos
 
 | Pieza | Contrato |
 |---|---|
-| Generar SEO | `npm run docs` |
+| Generar SEO | `deno task docs` |
 | Banner loader | comentario `/*! … */` en bundles + `dist/cdn/loader.md` |
 | Catálogo skill | `src/skills/is-webcomponents/catalog.md` |
 

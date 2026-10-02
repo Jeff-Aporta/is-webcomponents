@@ -150,15 +150,15 @@ Tokens que el `.css` lee realmente:
 
 | Token | Uso |
 | --- | --- |
-| `--is-text` | Color de texto y base de los tramados y fondos con `color-mix`. |
-| `--is-border` | Borde punteado de la zona y borde de cada fila de la cola. |
-| `--is-radius` | Radio de la zona y de las filas; default `12px` en la zona, `8px` en las filas. |
-| `--is-accent` | Icono, borde y fondo al enfocar o arrastrar, y color de la barra de progreso. |
-| `--is-text-soft` | Subtítulo, tamaño de archivo, texto de estado y color del botón de quitar. |
-| `--is-bg-elev` | Fondo de cada fila de la cola. |
-| `--is-bg-soft` | Fondo de la miniatura. |
-| `--is-success` | Color del texto de estado cuando el archivo terminó; fallback `#16a34a`. |
-| `--is-danger` | Fondo del botón de quitar al pasar el mouse y color del estado de error; fallback `#dc2626`. |
+| `--iswc-text` | Color de texto y base de los tramados y fondos con `color-mix`. |
+| `--iswc-border` | Borde punteado de la zona y borde de cada fila de la cola. |
+| `--iswc-radius` | Radio de la zona y de las filas; default `12px` en la zona, `8px` en las filas. |
+| `--iswc-accent` | Icono, borde y fondo al enfocar o arrastrar, y color de la barra de progreso. |
+| `--iswc-text-soft` | Subtítulo, tamaño de archivo, texto de estado y color del botón de quitar. |
+| `--iswc-bg-elev` | Fondo de cada fila de la cola. |
+| `--iswc-bg-soft` | Fondo de la miniatura. |
+| `--iswc-success` | Color del texto de estado cuando el archivo terminó; fallback `#16a34a`. |
+| `--iswc-danger` | Fondo del botón de quitar al pasar el mouse y color del estado de error; fallback `#dc2626`. |
 
 ### Integración con formularios
 

@@ -9,7 +9,7 @@
   "sections": [
     {
       "id": "intro",
-      "title": "<is-confirm-delete>",
+      "title": "Uso",
       "lede": "Confirmación destructiva \"escribe para confirmar\": el botón Eliminar\r\n          sigue bloqueado hasta que el usuario re-escribe la clave del registro.\r\n          En la demo, el NIT es <code class=\"code\">900123456</code>.",
       "blocks": [
         {

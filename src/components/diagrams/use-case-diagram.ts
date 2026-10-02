@@ -12,7 +12,7 @@ import { sequenceThemeDark, sequenceThemeLight } from './sequence-spec.js';
 import { tkHueToHex } from '../_shared/tk-hue.js';
 import { edgeStrokeHex, edgeChipFill, edgeChipText } from '../_shared/diagram-edge-style.js';
 import type { DiagramTheme } from './diagram-types.js';
-import { inlineMdWeb } from '../_shared/tk-inline-md.js';
+import { inlineMdWeb, applySvgTextContent } from '../_shared/tk-inline-md.js';
 import { wrapText, buildTspans } from '../_shared/diagram-text-wrap.js';
 import type { TSpanSpec } from '../_shared/diagram-text-wrap.js';
 import { registerDiagramKind } from './diagram-kinds.js';
@@ -316,7 +316,6 @@ class IsUseCaseDiagram extends DiagramElementBase {
         t.setAttribute('x', String(c.x + c.w / 2));
         t.setAttribute('y', String(c.y + c.h / 2 + 4));
         t.setAttribute('text-anchor', 'middle');
-        t.innerHTML = inlineMdWeb(c.label);
       } else {
         // `overflow` no está declarado en UseCaseLayoutCase; cast para leer.
         const rawOverflow = (c as { overflow?: string }).overflow;
@@ -347,6 +346,7 @@ class IsUseCaseDiagram extends DiagramElementBase {
         }
       }
       g.appendChild(t);
+      if (ucHasMd) applySvgTextContent(t, c.label);
 
       this.svg.appendChild(g);
       this.#nodeNodes.set(c.id, { n: c, g: g as SVGGElement });
@@ -365,8 +365,8 @@ class IsUseCaseDiagram extends DiagramElementBase {
         x: a.x + a.w / 2, y: a.y + a.h - 2, 'text-anchor': 'middle', fill: theme.text,
         'font-size': '10.5', 'font-weight': '600', 'font-family': 'Tahoma,Arial,sans-serif',
       });
-      t.innerHTML = inlineMdWeb(a.label);
       g.appendChild(t);
+      applySvgTextContent(t, a.label);
 
       this.svg.appendChild(g);
       this.#nodeNodes.set(a.id, { n: a, g: g as SVGGElement });

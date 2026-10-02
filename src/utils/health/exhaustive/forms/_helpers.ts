@@ -152,12 +152,12 @@ export function customStates(src: string): string[] {
   return [...states];
 }
 
-/** Tokens CSS declarados (`--is-foo` en styleAttrs o TEMPLATE inline). */
+/** Tokens CSS declarados (`--iswc-foo` en styleAttrs o TEMPLATE inline). */
 export function tokensCss(src: string): string[] {
   const toks = new Set<string>();
-  for (const m of src.matchAll(/['"`](--is-[a-z0-9-]+)['"`]/g)) toks.add(m[1]);
-  // styleAttrs con prefijo `--is-x`
-  for (const m of src.matchAll(/prop:\s*['"`](--is-[a-z0-9-]+)['"`]/g)) toks.add(m[1]);
+  for (const m of src.matchAll(/['"`](--iswc-[a-z0-9-]+)['"`]/g)) toks.add(m[1]);
+  // styleAttrs con prefijo `--iswc-x`
+  for (const m of src.matchAll(/prop:\s*['"`](--iswc-[a-z0-9-]+)['"`]/g)) toks.add(m[1]);
   return [...toks];
 }
 

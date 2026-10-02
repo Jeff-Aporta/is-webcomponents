@@ -8,7 +8,7 @@
   "sections": [
     {
       "id": "intro",
-      "title": "<is-class-diagram>",
+      "title": "Uso",
       "lede": "Diagrama de clases UML en SVG, sin Mermaid. Tú declaras clases y\r\n          relaciones; el componente decide las capas, dibuja los tres\r\n          compartimentos clásicos (nombre, atributos, métodos) y rutea las\r\n          relaciones rodeando las cajas.",
       "blocks": [
         {

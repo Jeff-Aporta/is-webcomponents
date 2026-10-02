@@ -91,11 +91,11 @@ No expone.
 | --- | --- |
 | `--track-height` | Token leído o definido por componente. |
 | `--track-color` | Token leído o definido por componente. |
-| `--is-control-bg` | Token leído o definido por componente. |
+| `--iswc-control-bg` | Token leído o definido por componente. |
 | `--indicator-color` | Token leído o definido por componente. |
-| `--is-color-brand-500` | Token leído o definido por componente. |
-| `--is-font-family` | Token leído o definido por componente. |
-| `--is-text-soft` | Token leído o definido por componente. |
+| `--iswc-color-brand-500` | Token leído o definido por componente. |
+| `--iswc-font-family` | Token leído o definido por componente. |
+| `--iswc-text-soft` | Token leído o definido por componente. |
 
 ### Integración con formularios
 

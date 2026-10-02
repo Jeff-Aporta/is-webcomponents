@@ -37,13 +37,13 @@
  *   theme                 auto | light | dark (default auto)
  *
  * Tokens CSS
- *   --is-grid-row-h       alto en px/rem (default 2.5rem)
- *   --is-grid-header-bg
- *   --is-grid-stripe
- *   --is-grid-accent-row
- *   --is-grid-row-hover
- *   --is-grid-selected
- *   --is-grid-selected-bar
+ *   --iswc-grid-row-h       alto en px/rem (default 2.5rem)
+ *   --iswc-grid-header-bg
+ *   --iswc-grid-stripe
+ *   --iswc-grid-accent-row
+ *   --iswc-grid-row-hover
+ *   --iswc-grid-selected
+ *   --iswc-grid-selected-bar
  *
  * Eventos
  *   is-sort-change        detail: { column, direction }
@@ -375,11 +375,11 @@ function asHTMLElement(target: EventTarget | null): HTMLElement | null {
 export class IsAgGrid extends ElementBase {
     /** Personalización por atributo (ver `core/attrs.ts`). */
     static styleAttrs = {
-    'header-height': '--is-grid-header-h',
-    'header-bg': { prop: '--is-grid-header-bg', onlyColorValues: true },
-    'stripe-color': { prop: '--is-grid-stripe', onlyColorValues: true },
-    'row-hover': { prop: '--is-grid-row-hover', onlyColorValues: true },
-    'selected-color': { prop: '--is-grid-selected', onlyColorValues: true },
+    'header-height': '--iswc-grid-header-h',
+    'header-bg': { prop: '--iswc-grid-header-bg', onlyColorValues: true },
+    'stripe-color': { prop: '--iswc-grid-stripe', onlyColorValues: true },
+    'row-hover': { prop: '--iswc-grid-row-hover', onlyColorValues: true },
+    'selected-color': { prop: '--iswc-grid-selected', onlyColorValues: true },
     };
 
   static TEMPLATE = TEMPLATE;
@@ -1154,7 +1154,7 @@ export class IsAgGrid extends ElementBase {
     if (t === 'enum' || t === 'badge') {
       const enumColors = (col.def as ColumnDefWithActions & { enumColors?: Record<string, string> }).enumColors;
       const c = enumColors?.[String(value)];
-      const color = c || 'var(--is-accent)';
+      const color = c || 'var(--iswc-accent)';
       return `<span class="mim-dg-tag" style="--c:${escapeHtml(color)}">${escapeHtml(value == null ? '' : String(value))}</span>`;
     }
     if (t === 'tags' && Array.isArray(value)) {
@@ -1764,13 +1764,13 @@ export class IsAgGrid extends ElementBase {
 
   #rowHeight(): number {
     return this.#cssLengthPx(
-      '--is-grid-row-h',
+      '--iswc-grid-row-h',
       DENSITY_ROW_HEIGHT[this.#density] ?? DENSITY_ROW_HEIGHT[Density.NORMAL] ?? DEFAULT_HEADER_HEIGHT,
     );
   }
 
   #headerHeight(): number {
-    return this.#cssLengthPx('--is-grid-header-h', DEFAULT_HEADER_HEIGHT);
+    return this.#cssLengthPx('--iswc-grid-header-h', DEFAULT_HEADER_HEIGHT);
   }
 
   /* ── Public API ───────────────────────────────────────────────────────── */
@@ -2022,12 +2022,12 @@ const FLOATING_CSS = /* css */ `
   overflow: auto;
   margin: 0;
   padding: 0.3rem;
-  border: 1px solid var(--is-border, #2a3140);
-  border-radius: var(--is-radius, 10px);
-  background: var(--is-bg-elev, #12151a);
-  color: var(--is-text, #e6edf3);
-  box-shadow: 0 18px 48px rgb(0 0 0 / 45%), 0 0 0 1px color-mix(in srgb, var(--is-accent, #1e90ff) 12%, transparent);
-  font: 0.82rem/1.35 var(--is-font-sans, system-ui, sans-serif);
+  border: 1px solid var(--iswc-border, #2a3140);
+  border-radius: var(--iswc-radius, 10px);
+  background: var(--iswc-bg-elev, #12151a);
+  color: var(--iswc-text, #e6edf3);
+  box-shadow: 0 18px 48px rgb(0 0 0 / 45%), 0 0 0 1px color-mix(in srgb, var(--iswc-accent, #1e90ff) 12%, transparent);
+  font: 0.82rem/1.35 var(--iswc-font-sans, system-ui, sans-serif);
 }
 .mim-dg__menu-item {
   display: flex;
@@ -2045,15 +2045,15 @@ const FLOATING_CSS = /* css */ `
 }
 .mim-dg__menu-item:hover,
 .mim-dg__menu-item:focus-visible {
-  background: color-mix(in srgb, var(--is-accent, #1e90ff) 16%, transparent);
-  color: var(--is-accent, #1e90ff);
+  background: color-mix(in srgb, var(--iswc-accent, #1e90ff) 16%, transparent);
+  color: var(--iswc-accent, #1e90ff);
   outline: none;
 }
 .mim-dg__menu-item is-icon { flex: 0 0 auto; }
 .mim-dg__menu-sep {
   height: 1px;
   margin: 0.3rem 0.35rem;
-  background: var(--is-border-soft, #3a4252);
+  background: var(--iswc-border-soft, #3a4252);
 }
 .mim-dg__filter {
   padding: 0.65rem 0.75rem;
@@ -2066,9 +2066,9 @@ const FLOATING_CSS = /* css */ `
 .mim-dg__filter input {
   width: 100%;
   font: inherit;
-  color: var(--is-text, #e6edf3);
-  background: var(--is-bg-soft, #0e1116);
-  border: 1px solid var(--is-border, #2a3140);
+  color: var(--iswc-text, #e6edf3);
+  background: var(--iswc-bg-soft, #0e1116);
+  border: 1px solid var(--iswc-border, #2a3140);
   border-radius: 6px;
   padding: 0.35rem 0.5rem;
 }
@@ -2085,20 +2085,20 @@ const FLOATING_CSS = /* css */ `
   font-size: 0.78rem;
   border-radius: 6px;
   cursor: pointer;
-  border: 1px solid var(--is-border, #2a3140);
+  border: 1px solid var(--iswc-border, #2a3140);
   background: transparent;
   color: inherit;
   padding: 0.3rem 0.65rem;
 }
 .mim-dg__filter-btn:hover,
 .mim-dg__filter-link:hover {
-  background: color-mix(in srgb, var(--is-accent, #1e90ff) 14%, transparent);
-  color: var(--is-accent, #1e90ff);
+  background: color-mix(in srgb, var(--iswc-accent, #1e90ff) 14%, transparent);
+  color: var(--iswc-accent, #1e90ff);
 }
 .mim-dg__filter-btn[data-act="apply"] {
-  background: color-mix(in srgb, var(--is-accent, #1e90ff) 22%, transparent);
-  border-color: color-mix(in srgb, var(--is-accent, #1e90ff) 45%, var(--is-border, #2a3140));
-  color: var(--is-accent, #1e90ff);
+  background: color-mix(in srgb, var(--iswc-accent, #1e90ff) 22%, transparent);
+  border-color: color-mix(in srgb, var(--iswc-accent, #1e90ff) 45%, var(--iswc-border, #2a3140));
+  color: var(--iswc-accent, #1e90ff);
   font-weight: 700;
 }
 .mim-dg__filter-set {
@@ -2107,7 +2107,7 @@ const FLOATING_CSS = /* css */ `
   gap: 2px;
   max-height: 12rem;
   overflow: auto;
-  border: 1px solid var(--is-border-soft, #3a4252);
+  border: 1px solid var(--iswc-border-soft, #3a4252);
   border-radius: 4px;
   padding: 0.25rem;
 }
@@ -2126,7 +2126,7 @@ const FLOATING_CSS = /* css */ `
   width: 100%;
 }
 .mim-dg__filter-set-item:hover {
-  background: color-mix(in srgb, var(--is-accent, #1e90ff) 12%, transparent);
+  background: color-mix(in srgb, var(--iswc-accent, #1e90ff) 12%, transparent);
 }
 `;
 

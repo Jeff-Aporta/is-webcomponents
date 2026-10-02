@@ -8,7 +8,7 @@
  * Contrato (LLM.md): sin atributo `size`; métricas en em; controles nativos
  * (button/input) deben declarar `font: inherit` / `font-size: inherit`.
  *
- *   npm test -- tests/em-scale-font-inherit.test.ts
+ *   deno task test -- tests/em-scale-font-inherit.test.ts
  */
 import { test } from 'node:test';
 import assert from 'node:assert/strict';
@@ -40,10 +40,10 @@ test('is-fab: host + .fab heredan font-size (escala em)', async () => {
   );
   assert.match(
     css,
-    // Renombrada a `--is-fab-size`: `--size` era genérica y colisionaba por
+    // Renombrada a `--iswc-fab-size`: `--size` era genérica y colisionaba por
     // herencia con la del drawer y la de preview-component.
-    /--is-fab-size:\s*[\d.]+em/,
-    '--is-fab-size debe estar en em, no en px/rem fijos',
+    /--iswc-fab-size:\s*[\d.]+em/,
+    '--iswc-fab-size debe estar en em, no en px/rem fijos',
   );
   assert.doesNotMatch(
     css,

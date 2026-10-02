@@ -138,13 +138,13 @@ No expone. No se usa `ElementInternals` ni `CustomStateSet`.
 
 | Token | Uso |
 | --- | --- |
-| `--is-text` | Color de texto del host y de las etiquetas de marcador; base de `--grid-color` y `--meridian`. |
-| `--is-text-soft` | Ticks de grados, texto del viewport, atribución y caja `.zoom-info`. |
-| `--is-border` | Borde de la caja exterior. |
-| `--is-radius` | Radio de la caja exterior. |
-| `--is-bg-elev` | Fondo de la caja, del contorno de los marcadores y de las cajas flotantes. |
-| `--is-accent` | Relleno de los marcadores y del halo radial de fondo del mapa. |
-| `--is-danger` | Relleno del marcador en hover; usa `#dc2626` como fallback. |
+| `--iswc-text` | Color de texto del host y de las etiquetas de marcador; base de `--grid-color` y `--meridian`. |
+| `--iswc-text-soft` | Ticks de grados, texto del viewport, atribución y caja `.zoom-info`. |
+| `--iswc-border` | Borde de la caja exterior. |
+| `--iswc-radius` | Radio de la caja exterior. |
+| `--iswc-bg-elev` | Fondo de la caja, del contorno de los marcadores y de las cajas flotantes. |
+| `--iswc-accent` | Relleno de los marcadores y del halo radial de fondo del mapa. |
+| `--iswc-danger` | Relleno del marcador en hover; usa `#dc2626` como fallback. |
 | `--grid-color` | Definido en `:host`; trazo de la rejilla decorativa punteada. Sobrescribible desde fuera. |
 | `--meridian` | Definido en `:host`; trazo de paralelos y meridianos. Sobrescribible desde fuera. |
 

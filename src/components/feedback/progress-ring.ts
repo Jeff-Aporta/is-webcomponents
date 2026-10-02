@@ -33,10 +33,10 @@ import { setStringAttr } from '../_shared/reflect.js';
   class IsProgressRing extends ElementBase {
     /** Personalización por atributo (ver `core/attrs.ts`). */
     static styleAttrs = {
-    'track-width': '--is-progress-ring-track-width',
-    width: '--is-progress-ring-width',
-    'track-color': { prop: '--is-progress-ring-track-color', onlyColorValues: true },
-    color: { prop: '--is-progress-ring-color', onlyColorValues: true },
+    'track-width': '--iswc-progress-ring-track-width',
+    width: '--iswc-progress-ring-width',
+    'track-color': { prop: '--iswc-progress-ring-track-color', onlyColorValues: true },
+    color: { prop: '--iswc-progress-ring-color', onlyColorValues: true },
     };
 
     static get observedAttributes(): string[] { return [...OBSERVED, 'track-width', 'width', 'track-color', 'color']; }

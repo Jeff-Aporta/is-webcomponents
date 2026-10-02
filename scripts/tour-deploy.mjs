@@ -2,9 +2,9 @@
 // Detecta 404s, MIME errors, y console errors via browser run.
 //
 // Uso:
-//   PRE-PUSH (local):  node scripts/tour-deploy.mjs --local
-//   POST-PUSH (remote): node scripts/tour-deploy.mjs --remote
-//   Custom base:       node scripts/tour-deploy.mjs --base=https://...
+//   PRE-PUSH (local):  deno run -A --no-check scripts/tour-deploy.mjs --local
+//   POST-PUSH (remote): deno run -A --no-check scripts/tour-deploy.mjs --remote
+//   Custom base:       deno run -A --no-check scripts/tour-deploy.mjs --base=https://...
 //
 // Salidas:
 //   stdout: JSON-like summary, headFailed/demosFailed listados
@@ -42,7 +42,7 @@ const MODE = (() => {
 })();
 
 if (!BASE && !MODE) {
-  console.error('Uso: node scripts/tour-deploy.mjs --local|--remote|--base=<URL>');
+  console.error('Uso: deno run -A --no-check scripts/tour-deploy.mjs --local|--remote|--base=<URL>');
   process.exit(2);
 }
 const effectiveBase = BASE ?? (MODE === 'local' ? 'http://127.0.0.1:8491' : 'https://jeff-aporta.github.io/is-webcomponents');

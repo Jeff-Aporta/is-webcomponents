@@ -6,8 +6,8 @@
   block-size: 100%;
   inline-size: 100%;
   box-sizing: border-box;
-  font-family: var(--is-sans, inherit);
-  color: var(--is-text, inherit);
+  font-family: var(--iswc-sans, inherit);
+  color: var(--iswc-text, inherit);
   /* El breakpoint es el ancho PROPIO del formulario, no el de la ventana. */
   container-type: inline-size;
 

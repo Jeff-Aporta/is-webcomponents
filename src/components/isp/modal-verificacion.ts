@@ -128,7 +128,7 @@ export function lowerCase(value: string) {
   class IsModalVerificacion extends ElementBase {
     /** Personalización por atributo (ver `core/attrs.ts`). */
     static styleAttrs = {
-    accent: { prop: '--is-modal-verificacion-accent', onlyColorValues: true },
+    accent: { prop: '--iswc-modal-verificacion-accent', onlyColorValues: true },
     };
 
     static get observedAttributes(): string[] { return [...OBSERVED, 'accent']; }

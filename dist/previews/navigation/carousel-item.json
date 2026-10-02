@@ -5,12 +5,12 @@
   "title": "<is-carousel-item>",
   "titleHtml": true,
   "description": "Documentación y demos de is-carousel-item de InSoft.",
-  "styles": ".slide { display:grid; place-items:center; height:180px; border-radius:.6rem;\r\n      background: color-mix(in srgb, var(--is-accent) 14%, var(--is-bg-elev)); font-weight:600; }",
+  "styles": ".slide { display:grid; place-items:center; height:180px; border-radius:.6rem;\r\n      background: color-mix(in srgb, var(--iswc-accent) 14%, var(--iswc-bg-elev)); font-weight:600; }",
   "storageKey": "docs-is-carousel-item",
   "sections": [
     {
       "id": "intro",
-      "title": "<is-carousel-item>",
+      "title": "Uso",
       "lede": "Cada diapositiva de un <code class=\"code\">&lt;is-carousel&gt;</code>.",
       "blocks": [
         {

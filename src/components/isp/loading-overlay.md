@@ -99,9 +99,9 @@ No expone custom states.
 
 | Token | Uso |
 | --- | --- |
-| `--is-loading-backdrop` | Color del velo. |
-| `--is-loading-indicator` | Color del spinner. |
-| `--is-z-overlay` | Capa de apilado. |
+| `--iswc-loading-backdrop` | Color del velo. |
+| `--iswc-loading-indicator` | Color del spinner. |
+| `--iswc-z-overlay` | Capa de apilado. |
 
 
 ### Integración con formularios

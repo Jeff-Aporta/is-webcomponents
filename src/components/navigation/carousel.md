@@ -118,13 +118,13 @@ No expone.
 | --- | --- |
 | `--aspect-ratio` | Token leído o definido por componente. |
 | `--ctrl-bg` | Token leído o definido por componente. |
-| `--is-bg-2` | Token leído o definido por componente. |
+| `--iswc-bg-2` | Token leído o definido por componente. |
 | `--ctrl-fg` | Token leído o definido por componente. |
-| `--is-text` | Token leído o definido por componente. |
+| `--iswc-text` | Token leído o definido por componente. |
 | `--ctrl-border` | Token leído o definido por componente. |
-| `--is-border` | Token leído o definido por componente. |
+| `--iswc-border` | Token leído o definido por componente. |
 | `--indicator-active` | Token leído o definido por componente. |
-| `--is-brand` | Token leído o definido por componente. |
+| `--iswc-brand` | Token leído o definido por componente. |
 | `--indicator` | Token leído o definido por componente. |
 
 ### Integración con formularios

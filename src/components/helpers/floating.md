@@ -122,9 +122,9 @@ No expone custom states.
 | `--auto-size-available-height` | Escrita por el componente con el alto disponible. |
 | `--show-duration` | Duración de la aparición. |
 | `--hide-duration` | Duración del ocultamiento. |
-| `--is-bg-elev` | Fondo del panel. |
-| `--is-border` | Borde del panel. |
-| `--is-color-brand-500` | Realce de marca. |
+| `--iswc-bg-elev` | Fondo del panel. |
+| `--iswc-border` | Borde del panel. |
+| `--iswc-color-brand-500` | Realce de marca. |
 
 ### Integración con formularios
 

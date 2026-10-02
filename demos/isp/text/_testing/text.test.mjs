@@ -63,7 +63,7 @@ tests.push({
 });
 
 tests.push({
-  name: 'funcional: mix se traduce a --is-text-mix y data-has-mix',
+  name: 'funcional: mix se traduce a --iswc-text-mix y data-has-mix',
   run: async (page) => {
     await page.goto(URL, { waitUntil: 'domcontentloaded' });
     await waitReady(page, 'data-text-ready');
@@ -74,21 +74,21 @@ tests.push({
       t.mix = '30%';
       document.body.appendChild(t);
       const r = {
-        mixVar: t.style.getPropertyValue('--is-text-mix'),
+        mixVar: t.style.getPropertyValue('--iswc-text-mix'),
         hasMixAttr: t.hasAttribute('data-has-mix'),
         attr: t.getAttribute('mix'),
       };
       // Limpiar mix → debe quitar var y quitar attr
       t.mix = '';
       const after = {
-        mixVar: t.style.getPropertyValue('--is-text-mix'),
+        mixVar: t.style.getPropertyValue('--iswc-text-mix'),
         hasMixAttr: t.hasAttribute('data-has-mix'),
         attr: t.getAttribute('mix'),
       };
       t.remove();
       return { withMix: r, withoutMix: after };
     });
-    assert.equal(result.withMix.mixVar, '30%', `--is-text-mix debe ser '30%'`);
+    assert.equal(result.withMix.mixVar, '30%', `--iswc-text-mix debe ser '30%'`);
     assert.equal(result.withMix.attr, '30%');
     assert.equal(result.withMix.hasMixAttr, true, 'data-has-mix debe estar presente');
     assert.equal(result.withoutMix.mixVar, '', 'mix var debe limpiarse al quitar mix');

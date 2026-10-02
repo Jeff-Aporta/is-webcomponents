@@ -2,11 +2,11 @@
 :host {
   display: inline-block;
   font: inherit;
-  color: var(--is-text);
+  color: var(--iswc-text);
 
   &([variant="underlined"]) {
     border: 0;
-    border-bottom: 1px solid var(--is-control-border, var(--is-border));
+    border-bottom: 1px solid var(--iswc-control-border, var(--iswc-border));
     border-radius: 0;
     background: transparent;
   }
@@ -16,14 +16,14 @@
   position: relative;
   display: flex;
   align-items: center;
-  width: var(--is-field-width, 16rem);
+  width: var(--iswc-field-width, 16rem);
   max-width: 100%;
-  border: 1px solid var(--is-control-border, var(--is-border));
-  background: var(--is-control-bg, var(--is-bg-soft));
-  border-radius: var(--is-control-radius, 6px);
+  border: 1px solid var(--iswc-control-border, var(--iswc-border));
+  background: var(--iswc-control-bg, var(--iswc-bg-soft));
+  border-radius: var(--iswc-control-radius, 6px);
   transition: border-color 120ms ease, background-color 120ms ease;
 
-  :host([variant="filled"]) & { background: var(--is-control-bg, var(--is-bg-soft)); }
+  :host([variant="filled"]) & { background: var(--iswc-control-bg, var(--iswc-bg-soft)); }
 
   :host([variant="underlined"]) & {
     border: 0;
@@ -36,12 +36,12 @@
   }
 
   :host(:focus-within) & {
-    border-color: var(--is-focus, var(--is-accent));
+    border-color: var(--iswc-focus, var(--iswc-accent));
     outline: 0;
-    box-shadow: 0 0 0 2px color-mix(in srgb, var(--is-focus, var(--is-accent)) 25%, transparent);
+    box-shadow: 0 0 0 2px color-mix(in srgb, var(--iswc-focus, var(--iswc-accent)) 25%, transparent);
   }
 
-  :host([invalid]) & { border-color: var(--is-danger, #dc2626); }
+  :host([invalid]) & { border-color: var(--iswc-danger, #dc2626); }
 }
 
 .input {
@@ -60,7 +60,7 @@
   &.with-end { padding-inline-end: .25rem; }
 
   &::placeholder {
-    color: var(--is-text-soft);
+    color: var(--iswc-text-soft);
     opacity: .7;
   }
 }

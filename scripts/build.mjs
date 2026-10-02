@@ -28,7 +28,7 @@ await import('./gen-shared-index.ts');
 // genera desde `src/` — `src/assets/` se eliminó para no duplicar.
 //
 // Consecuencias practicas:
-//   - `npm run icons:download` escribe en dist/assets/icons/.
+//   - `deno task icons:download` escribe en dist/assets/icons/.
 //   - Mas abajo se VERIFICA que el set siga entero (MIN_ICONOS); no se copia.
 //   - Quien anada material nuevo al kit lo pone en dist/assets/, no en src.
 //
@@ -436,7 +436,7 @@ const iconsOut = join(root, 'dist', 'assets', 'icons');
       console.error(`
 ERROR assets/icons: ${n} ficheros, se esperaban >= ${MIN_ICONOS}.`);
       console.error('dist/assets/ es la unica copia y el build NUNCA la borra.');
-      console.error('Si falta, recuperala con `git checkout -- dist/assets` o `npm run icons:download`.');
+      console.error('Si falta, recuperala con `git checkout -- dist/assets` o `deno task icons:download`.');
       process.exit(1);
     }
     console.log(`  assets/icons         ${n} preservados (no se regeneran: unica copia)`);

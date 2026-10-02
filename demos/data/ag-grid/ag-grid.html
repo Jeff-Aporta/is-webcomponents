@@ -15,7 +15,7 @@
   section { background: #0f1620; border: 1px solid rgba(255,255,255,0.1); border-radius: 8px; padding: 16px; }
   section h2 { font-size: 11px; text-transform: uppercase; letter-spacing: 0.08em; margin: 0 0 12px 0; color: #94a3b8; }
   is-ag-grid:not(:defined) { visibility: hidden; }
-  is-ag-grid { display: block; min-height: 280px; --is-grid-height: 280px; }
+  is-ag-grid { display: block; min-height: 280px; --iswc-grid-height: 280px; }
   .log { font: 11px ui-monospace, Menlo, Consolas, monospace; background: rgba(0,0,0,0.3); padding: 8px; border-radius: 4px; min-height: 40px; max-height: 100px; overflow: auto; color: #94a3b8; margin-top: 8px; }
   footer { padding: 12px 20px; border-top: 1px solid rgba(255,255,255,0.1); background: #0f1620; font-size: 11px; color: #94a3b8; }
   footer code { background: rgba(255,255,255,0.06); padding: 1px 5px; border-radius: 3px; font: 11px ui-monospace, Menlo, Consolas, monospace; }
@@ -28,7 +28,7 @@
   cssLink.href = '../../../dist/cdn/data/ag-grid.min.css';
   document.head.appendChild(cssLink);
 
-  await import('../../../dist/cdn/data/ag-grid.min.js?h=nt2vxi');
+  await import('../../../dist/cdn/data/ag-grid.min.js?h=r74jkp');
   await customElements.whenDefined('is-ag-grid');
 
   // ── (1) Básico: 6 columnas, 8 filas, paginado.
@@ -75,7 +75,7 @@
     const g = document.createElement('is-ag-grid');
     g.setAttribute('density', density);
     g.setAttribute('toolbar', 'false');
-    g.style.setProperty('--is-grid-height', '180px');
+    g.style.setProperty('--iswc-grid-height', '180px');
     document.getElementById(density).appendChild(g);
     g.api.setColumns(cols2);
     g.api.setRows(rows2);

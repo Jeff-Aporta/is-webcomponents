@@ -4,18 +4,18 @@
   "category": "forms",
   "title": "<is-masked-input>",
   "titleHtml": true,
-  "styles": ".mask-row { display: grid; grid-template-columns: 12rem 1fr; gap: 1rem; align-items: center; padding: .35rem 0; }\r\n    .mask-row label { font-size: .82rem; color: var(--is-text-soft); }",
+  "styles": ".mask-row { display: grid; grid-template-columns: 12rem 1fr; gap: 1rem; align-items: center; padding: .35rem 0; }\r\n    .mask-row label { font-size: .82rem; color: var(--iswc-text-soft); }",
   "storageKey": "docs-is-masked-input",
   "sections": [
     {
       "id": "intro",
-      "title": "<is-masked-input>",
+      "title": "Uso",
       "lede": "Campo de texto que aplica un patrón mientras el usuario tipea. Útil para tarjetas, fechas, teléfonos y todo formato con estructura fija.",
       "blocks": []
     },
     {
       "id": "tokens",
-      "title": "Tokens de patrón",
+      "title": "Patrones de la máscara",
       "blocks": [
         {
           "kind": "table",

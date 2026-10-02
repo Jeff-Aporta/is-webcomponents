@@ -8,7 +8,7 @@
   "sections": [
     {
       "id": "intro",
-      "title": "<is-prefs-clear>",
+      "title": "Uso",
       "lede": "Borra <code>localStorage['is-webcomponents']</code> (splits, scrolls, grids) para auditar la carga inicial limpia.",
       "blocks": [
         {

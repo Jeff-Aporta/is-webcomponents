@@ -9,7 +9,7 @@
   "sections": [
     {
       "id": "intro",
-      "title": "<is-wake-lock>",
+      "title": "Uso",
       "lede": "Mantiene la pantalla encendida con Screen Wake Lock mientras `active` está puesto.",
       "blocks": [
         {

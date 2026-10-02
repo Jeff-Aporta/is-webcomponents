@@ -9,7 +9,7 @@
   "sections": [
     {
       "id": "intro",
-      "title": "<is-year-calendar>",
+      "title": "Uso",
       "lede": "Vista de los 12 meses de un año para saltar rápido de periodo.",
       "blocks": [
         {

@@ -17,8 +17,8 @@ test('is-dialog observa backdrop-variant', () => {
 });
 
 test('default none: backdrop transparente sin blur', () => {
-  assert.match(css, /--is-dialog-backdrop-color:\s*transparent/);
-  assert.match(css, /--is-dialog-backdrop-blur:\s*0px/);
+  assert.match(css, /--iswc-dialog-backdrop-color:\s*transparent/);
+  assert.match(css, /--iswc-dialog-backdrop-blur:\s*0px/);
 });
 
 test('basic: oscuridad + blur', () => {

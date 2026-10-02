@@ -119,20 +119,20 @@ No expone.
 | --- | --- |
 | `--width` | Token leído o definido por componente. |
 | `--spacing` | Token leído o definido por componente. |
-| `--is-space-l` | Token leído o definido por componente. |
+| `--iswc-space-l` | Token leído o definido por componente. |
 | `--show-duration` | Token leído o definido por componente. |
 | `--hide-duration` | Token leído o definido por componente. |
 | `--backdrop-color` | Token leído o definido por componente. |
 | `--_radius` | Token leído o definido por componente. |
-| `--is-radius` | Token leído o definido por componente. |
+| `--iswc-radius` | Token leído o definido por componente. |
 | `--_shadow` | Token leído o definido por componente. |
-| `--is-bg` | Token leído o definido por componente. |
-| `--is-text` | Token leído o definido por componente. |
-| `--is-border` | Token leído o definido por componente. |
-| `--is-font-family` | Token leído o definido por componente. |
-| `--is-text-muted` | Token leído o definido por componente. |
-| `--is-bg-elev` | Token leído o definido por componente. |
-| `--is-focus` | Token leído o definido por componente. |
+| `--iswc-bg` | Token leído o definido por componente. |
+| `--iswc-text` | Token leído o definido por componente. |
+| `--iswc-border` | Token leído o definido por componente. |
+| `--iswc-font-family` | Token leído o definido por componente. |
+| `--iswc-text-muted` | Token leído o definido por componente. |
+| `--iswc-bg-elev` | Token leído o definido por componente. |
+| `--iswc-focus` | Token leído o definido por componente. |
 
 ### Integración con formularios
 
@@ -167,7 +167,7 @@ Documentación de cabecera preservada desde fuente:
 >   dialog, header, title, close-button, header-actions, body, footer
 > CSS custom properties
 >   --width          ancho preferido (default 500px)
->   --spacing        padding interno (default var(--is-space-l, 1rem))
+>   --spacing        padding interno (default var(--iswc-space-l, 1rem))
 >   --show-duration  duración de la animación de apertura
 >   --hide-duration  duración de la animación de cierre
 >   --backdrop-color color del backdrop

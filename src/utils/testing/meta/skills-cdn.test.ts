@@ -1,7 +1,7 @@
 /**
  * skills-cdn.test.ts — skills de agentes publicadas en dist/cdn/skills/.
  *
- *   node --test tests/skills-cdn.test.ts
+ *   deno test -A --no-check tests/skills-cdn.test.ts
  */
 import { test } from 'node:test';
 import assert from 'node:assert/strict';

@@ -6,8 +6,8 @@ tanda, para que quien retome no tenga que volver a medirlo.
 ## Hecho
 
 - [x] `src/` completo en TypeScript: 393 ficheros, **0 `.js` y 0 `.mjs`**.
-- [x] `tests/` (80) y `scripts/` (24) pasados a `.ts`. `npm test` corre sin
-      compilar, con `--import ./scripts/ts-resolve-hook.ts`.
+- [x] `tests/` (80) y `scripts/` (24) pasados a `.ts`. `deno task test` corre sin
+      compilar (`deno test -A --no-check`, sloppy-imports).
 - [x] Especificadores de import unificados en `.js` (S-TS2). Eran 816 en `.js`
       contra 76 que se habían pasado a `.ts` durante la migración.
 - [x] Convenciones escritas en [`spec.md`](spec.md) e indexadas en el RAG.

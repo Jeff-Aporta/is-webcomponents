@@ -75,7 +75,7 @@ import { createPopupDismiss } from '../_shared/popup-dismiss.js';
 
   /** Personalización por atributo (ver `core/attrs.ts`). */
   const STYLE_ATTRS = {
-    radius: '--is-speed-dial-radius',
+    radius: '--iswc-speed-dial-radius',
   };
 
   class IsSpeedDial extends withStyleAttrs(HTMLElement) {

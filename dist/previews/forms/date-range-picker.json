@@ -8,7 +8,7 @@
   "sections": [
     {
       "id": "intro",
-      "title": "<is-date-range-picker>",
+      "title": "Uso",
       "lede": "Rango de fechas con varios meses a la vista y panel de atajos (DateRangeCalendar de MUI X). El hover en un mes pinta la banda tentativa en todos.",
       "blocks": [
         {
@@ -37,7 +37,7 @@
         },
         {
           "kind": "html",
-          "html": "<p class=\"lede\" id=\"log\" style=\"font-family:var(--is-mono);font-size:.85em\"></p>"
+          "html": "<p class=\"lede\" id=\"log\" style=\"font-family:var(--iswc-mono);font-size:.85em\"></p>"
         }
       ]
     },

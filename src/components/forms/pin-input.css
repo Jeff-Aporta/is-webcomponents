@@ -1,23 +1,23 @@
 :host {
   display: inline-block;
   font-size: inherit;
-  --is-pin-cell-size: 2.5em;
-  --is-pin-gap: 0.5em;
-  --is-pin-bg: var(--is-control-bg, #f1f3f5);
-  --is-pin-text: var(--is-control-text, var(--is-text, #212529));
-  --is-pin-border: var(--is-control-border, #adb5bd);
-  --is-pin-focus: var(--is-focus, var(--is-accent, #339af0));
-  --is-pin-danger: var(--is-color-danger, #fa5252);
+  --iswc-pin-cell-size: 2.5em;
+  --iswc-pin-gap: 0.5em;
+  --iswc-pin-bg: var(--iswc-control-bg, #f1f3f5);
+  --iswc-pin-text: var(--iswc-control-text, var(--iswc-text, #212529));
+  --iswc-pin-border: var(--iswc-control-border, #adb5bd);
+  --iswc-pin-focus: var(--iswc-focus, var(--iswc-accent, #339af0));
+  --iswc-pin-danger: var(--iswc-color-danger, #fa5252);
 }
 
 .pin {
   display: inline-flex;
   align-items: center;
-  gap: var(--is-pin-gap);
+  gap: var(--iswc-pin-gap);
   position: relative;
 
   &[data-state="invalid"] .cell {
-    border-color: var(--is-pin-danger);
+    border-color: var(--iswc-pin-danger);
     animation: pin-shake 0.3s;
   }
 }
@@ -32,28 +32,28 @@
 
 .cells {
   display: flex;
-  gap: var(--is-pin-gap);
+  gap: var(--iswc-pin-gap);
 }
 
 .cell {
-  width: var(--is-pin-cell-size);
-  height: var(--is-pin-cell-size);
+  width: var(--iswc-pin-cell-size);
+  height: var(--iswc-pin-cell-size);
   text-align: center;
-  /* <input> no hereda font del host (UA); sin inherit --is-pin-cell-size en em no escala. */
+  /* <input> no hereda font del host (UA); sin inherit --iswc-pin-cell-size en em no escala. */
   font: inherit;
   font-size: 1.25em;
   font-weight: 500;
-  background: var(--is-pin-bg);
-  color: var(--is-pin-text);
-  border: 1px solid var(--is-pin-border);
-  border-radius: var(--is-radius-sm, 0.5em);
+  background: var(--iswc-pin-bg);
+  color: var(--iswc-pin-text);
+  border: 1px solid var(--iswc-pin-border);
+  border-radius: var(--iswc-radius-sm, 0.5em);
   outline: none;
   transition: border-color 0.15s, box-shadow 0.15s;
   caret-color: transparent;
 
   &:focus {
-    border-color: var(--is-pin-focus);
-    box-shadow: 0 0 0 3px color-mix(in srgb, var(--is-pin-focus) 25%, transparent);
+    border-color: var(--iswc-pin-focus);
+    box-shadow: 0 0 0 3px color-mix(in srgb, var(--iswc-pin-focus) 25%, transparent);
   }
 
   &.mask {

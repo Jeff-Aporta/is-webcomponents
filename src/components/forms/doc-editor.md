@@ -130,15 +130,15 @@ Tokens que el `.css` lee realmente:
 
 | Token | Uso |
 | --- | --- |
-| `--is-text` | Color del texto del editor y base del fondo del bloque `code`. |
-| `--is-control-border` | Color del borde del contenedor; cae a `--is-border`. |
-| `--is-border` | Borde por defecto del contenedor y del menú de tipos. |
-| `--is-control-radius` | Radio del contenedor; default `8px`. |
-| `--is-bg-elev` | Fondo del contenedor y del menú de tipos. |
-| `--is-accent` | Realce del bloque enfocado, barra de la cita y hover del menú. |
-| `--is-text-soft` | Color del placeholder, de la cita y del texto tachado. |
-| `--is-border-soft` | Línea del bloque `divider`. |
-| `--is-radius` | Radio del menú de tipos; default `8px`. |
+| `--iswc-text` | Color del texto del editor y base del fondo del bloque `code`. |
+| `--iswc-control-border` | Color del borde del contenedor; cae a `--iswc-border`. |
+| `--iswc-border` | Borde por defecto del contenedor y del menú de tipos. |
+| `--iswc-control-radius` | Radio del contenedor; default `8px`. |
+| `--iswc-bg-elev` | Fondo del contenedor y del menú de tipos. |
+| `--iswc-accent` | Realce del bloque enfocado, barra de la cita y hover del menú. |
+| `--iswc-text-soft` | Color del placeholder, de la cita y del texto tachado. |
+| `--iswc-border-soft` | Línea del bloque `divider`. |
+| `--iswc-radius` | Radio del menú de tipos; default `8px`. |
 
 ### Integración con formularios
 

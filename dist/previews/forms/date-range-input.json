@@ -9,7 +9,7 @@
   "sections": [
     {
       "id": "intro",
-      "title": "<is-date-range-input>",
+      "title": "Uso",
       "lede": "Entrada de rango de fechas: una sola caja para inicio y fin.",
       "blocks": [
         {

@@ -10,7 +10,7 @@
   "sections": [
     {
       "id": "intro",
-      "title": "<is-video-playlist>",
+      "title": "Uso",
       "lede": "Reproductor de playlist con look YouTube: cabecera con título y canal,\r\n          barra inferior overlay con play / seek / vol, lista colapsable debajo.\r\n          Las herramientas adicionales (prev / next / autoplay) se proyectan\r\n          automáticamente en los slots <code class=\"code\">tools-left</code>\r\n          y <code class=\"code\">tools-right</code> del reproductor.",
       "blocks": [
         {
@@ -56,7 +56,7 @@
     },
     {
       "id": "tools",
-      "title": "Slots de herramientas",
+      "title": "Herramientas",
       "lede": "El reproductor expone dos slots: <code class=\"code\">tools-left</code>\r\n          (a la izquierda del play) y <code class=\"code\">tools-right</code>\r\n          (a la derecha del volumen). El playlist inyecta por defecto\r\n          <em>Primero / Anterior / Siguiente</em> en <code class=\"code\">tools-left</code>\r\n          y <em>Autoplay</em> en <code class=\"code\">tools-right</code>. Si quieres\r\n          reemplazarlos, basta con añadir tus propios botones con esos slots\r\n          desde fuera (o usa el atributo <code class=\"code\">no-default-tools</code>\r\n          para desactivarlos).",
       "blocks": [
         {
@@ -82,7 +82,7 @@
     },
     {
       "id": "config",
-      "title": "Slot <code class=\"code\">config</code>",
+      "title": "Configuración",
       "titleHtml": true,
       "lede": "La esquina superior derecha de la cabecera acepta un slot\r\n          <code class=\"code\">config</code> para colgar un botón / menú opcional.\r\n          Si no se usa, esa zona queda vacía.",
       "blocks": [

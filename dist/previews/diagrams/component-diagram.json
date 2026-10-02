@@ -8,7 +8,7 @@
   "sections": [
     {
       "id": "intro",
-      "title": "<is-component-diagram>",
+      "title": "Uso",
       "lede": "Diagrama de componentes UML en SVG, sin Mermaid: paquetes, componentes con estereotipo e interfaces provided/required.",
       "blocks": [
         {

@@ -9,7 +9,7 @@
   "sections": [
     {
       "id": "intro",
-      "title": "<is-format-date>",
+      "title": "Uso",
       "lede": "Formatea fechas con <code class=\"code\">Intl.DateTimeFormat</code>. En esta página todos los ejemplos usan la <strong>hora actual</strong> y se actualizan cada 1&nbsp;s.",
       "blocks": [
         {
@@ -102,7 +102,7 @@
     },
     {
       "id": "inputs",
-      "title": "Entradas de <code>date</code>",
+      "title": "Valores de fecha",
       "titleHtml": true,
       "lede": "El behavior escribe el instante actual en <code class=\"code\">date</code> (ISO). Aquí se ve el mismo now con distintos atributos de formato.",
       "blocks": [
@@ -114,12 +114,12 @@
     },
     {
       "id": "locales",
-      "title": "Locales (Intl nativo)",
+      "title": "Idiomas",
       "lede": "Se filtran con <code class=\"code\">Intl.DateTimeFormat.supportedLocalesOf()</code>. Cada tarjeta muestra el <strong>ahora</strong> en ese locale (con segundos).",
       "blocks": [
         {
           "kind": "html",
-          "html": "<p class=\"demo-caption\" id=\"localeCaption\">Cargando locales…</p>\n          <div class=\"demo-locale-grid\" id=\"localeGrid\"></div>\n          <label class=\"demo-caption\" style=\"display:flex;align-items:center;gap:.5rem;margin-top:1rem;flex-wrap:wrap\">\n            Probar locale\n            <input id=\"localeProbe\" type=\"text\" value=\"es-MX\" list=\"localeHints\"\n              style=\"font:inherit;padding:.35em .6em;border:1px solid var(--is-border);border-radius:var(--is-radius-sm);background:var(--is-control-bg);color:var(--is-text);max-width:10rem\" />\n            <datalist id=\"localeHints\"></datalist>\n            <span id=\"localeProbeOut\"></span>\n          </label>"
+          "html": "<p class=\"demo-caption\" id=\"localeCaption\">Cargando locales…</p>\n          <div class=\"demo-locale-grid\" id=\"localeGrid\"></div>\n          <label class=\"demo-caption\" style=\"display:flex;align-items:center;gap:.5rem;margin-top:1rem;flex-wrap:wrap\">\n            Probar locale\n            <input id=\"localeProbe\" type=\"text\" value=\"es-MX\" list=\"localeHints\"\n              style=\"font:inherit;padding:.35em .6em;border:1px solid var(--iswc-border);border-radius:var(--iswc-radius-sm);background:var(--iswc-control-bg);color:var(--iswc-text);max-width:10rem\" />\n            <datalist id=\"localeHints\"></datalist>\n            <span id=\"localeProbeOut\"></span>\n          </label>"
         },
         {
           "kind": "code",
@@ -141,7 +141,7 @@
     },
     {
       "id": "time",
-      "title": "Hora · hour-format (en vivo)",
+      "title": "Formato de hora",
       "lede": "Segundos visibles: el valor cambia cada segundo.",
       "blocks": [
         {

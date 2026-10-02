@@ -9,7 +9,7 @@
   "sections": [
     {
       "id": "intro",
-      "title": "<is-option>",
+      "title": "Uso",
       "lede": "Opción de un <code class=\"code\">&lt;is-combobox&gt;</code> o <code class=\"code\">&lt;is-select&gt;</code>. El <code class=\"code\">value</code> es lo que expone el control; el contenido es lo que ve el usuario.",
       "blocks": [
         {

@@ -8,7 +8,7 @@
   "sections": [
     {
       "id": "intro",
-      "title": "<is-sankey-diagram>",
+      "title": "Uso",
       "lede": "Diagrama de Sankey en SVG, sin Mermaid. El grosor de cada banda es el dato: los flujos se ven en proporción, no en anécdota.",
       "blocks": [
         {

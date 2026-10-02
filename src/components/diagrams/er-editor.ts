@@ -36,8 +36,8 @@ const EDITOR_CSS = `
   position: relative;
   width: 100%;
   height: 100%;
-  font-family: var(--is-ui, ui-sans-serif, system-ui, sans-serif);
-  color: var(--is-text, #e2e8f0);
+  font-family: var(--iswc-ui, ui-sans-serif, system-ui, sans-serif);
+  color: var(--iswc-text, #e2e8f0);
 }
 .stage {
   position: relative;
@@ -50,8 +50,8 @@ const EDITOR_CSS = `
 }
 .canvas {
   position: relative;
-  background: var(--is-bg, #0c1118);
-  border: 1px solid var(--is-border, rgba(255,255,255,0.12));
+  background: var(--iswc-bg, #0c1118);
+  border: 1px solid var(--iswc-border, rgba(255,255,255,0.12));
   border-radius: 8px;
   overflow: hidden;
   min-height: 400px;
@@ -65,30 +65,30 @@ const EDITOR_CSS = `
   display: flex;
   gap: 6px;
   z-index: 5;
-  background: var(--is-bg-elev, #131a24);
-  border: 1px solid var(--is-border, rgba(255,255,255,0.12));
+  background: var(--iswc-bg-elev, #131a24);
+  border: 1px solid var(--iswc-border, rgba(255,255,255,0.12));
   border-radius: 8px;
   padding: 6px;
   box-shadow: 0 6px 16px rgba(0,0,0,0.35);
 }
 .toolbar button {
   appearance: none;
-  border: 1px solid var(--is-border, rgba(255,255,255,0.18));
+  border: 1px solid var(--iswc-border, rgba(255,255,255,0.18));
   background: transparent;
-  color: var(--is-text, #e2e8f0);
+  color: var(--iswc-text, #e2e8f0);
   padding: 6px 10px;
   border-radius: 6px;
   cursor: pointer;
-  font: 12px var(--is-ui, ui-sans-serif, system-ui, sans-serif);
+  font: 12px var(--iswc-ui, ui-sans-serif, system-ui, sans-serif);
 }
 .toolbar button:hover { background: rgba(255,255,255,0.06); }
 .toolbar button[aria-pressed="true"] {
-  background: var(--is-accent, #2563eb);
+  background: var(--iswc-accent, #2563eb);
   border-color: transparent;
 }
 .panel {
-  background: var(--is-bg-elev, #131a24);
-  border: 1px solid var(--is-border, rgba(255,255,255,0.12));
+  background: var(--iswc-bg-elev, #131a24);
+  border: 1px solid var(--iswc-border, rgba(255,255,255,0.12));
   border-radius: 8px;
   padding: 14px;
   display: flex;
@@ -101,18 +101,18 @@ const EDITOR_CSS = `
   text-transform: uppercase;
   letter-spacing: 0.08em;
   margin: 0;
-  color: var(--is-text-soft, #94a3b8);
+  color: var(--iswc-text-soft, #94a3b8);
   font-weight: 700;
 }
 .panel fieldset {
-  border: 1px solid var(--is-border, rgba(255,255,255,0.08));
+  border: 1px solid var(--iswc-border, rgba(255,255,255,0.08));
   border-radius: 6px;
   padding: 8px 10px;
 }
 .panel fieldset legend {
   font-size: 10px;
   text-transform: uppercase;
-  color: var(--is-text-soft, #94a3b8);
+  color: var(--iswc-text-soft, #94a3b8);
   padding: 0 4px;
 }
 .panel label {
@@ -137,8 +137,8 @@ const EDITOR_CSS = `
 .panel fieldset[data-attrs] .attr-row select {
   width: 100%;
   background: transparent;
-  color: var(--is-text, #e2e8f0);
-  border: 1px solid var(--is-border, rgba(255,255,255,0.18));
+  color: var(--iswc-text, #e2e8f0);
+  border: 1px solid var(--iswc-border, rgba(255,255,255,0.18));
   border-radius: 3px;
   padding: 3px 5px;
   font: 11px ui-monospace, Menlo, Consolas, monospace;
@@ -147,12 +147,12 @@ const EDITOR_CSS = `
 }
 .panel fieldset[data-attrs] .attr-row input:focus,
 .panel fieldset[data-attrs] .attr-row select:focus {
-  outline: 1px solid var(--is-accent, #2563eb);
+  outline: 1px solid var(--iswc-accent, #2563eb);
   outline-offset: 0;
-  border-color: var(--is-accent, #2563eb);
+  border-color: var(--iswc-accent, #2563eb);
 }
 .panel fieldset[data-attrs] .attr-row .key-pk {
-  border-color: var(--is-accent, #2563eb);
+  border-color: var(--iswc-accent, #2563eb);
   background: rgba(37, 99, 235, 0.12);
 }
 .panel fieldset[data-attrs] .attr-row .key-fk {
@@ -161,9 +161,9 @@ const EDITOR_CSS = `
 }
 .panel fieldset[data-attrs] .attr-row .attr-del {
   appearance: none;
-  border: 1px solid var(--is-border, rgba(255,255,255,0.18));
+  border: 1px solid var(--iswc-border, rgba(255,255,255,0.18));
   background: transparent;
-  color: var(--is-danger, #f87171);
+  color: var(--iswc-danger, #f87171);
   border-radius: 3px;
   cursor: pointer;
   font: 12px ui-monospace, Menlo, Consolas, monospace;
@@ -172,7 +172,7 @@ const EDITOR_CSS = `
 }
 .panel fieldset[data-attrs] .attr-row .attr-del:hover {
   background: rgba(248, 113, 113, 0.16);
-  border-color: var(--is-danger, #f87171);
+  border-color: var(--iswc-danger, #f87171);
 }
 .panel fieldset[data-attrs] button[data-action="add-attr"] {
   width: 100%;
@@ -183,18 +183,18 @@ const EDITOR_CSS = `
 .panel select {
   width: 100%;
   background: transparent;
-  color: var(--is-text, #e2e8f0);
-  border: 1px solid var(--is-border, rgba(255,255,255,0.18));
+  color: var(--iswc-text, #e2e8f0);
+  border: 1px solid var(--iswc-border, rgba(255,255,255,0.18));
   border-radius: 4px;
   padding: 4px 6px;
-  font: 12px var(--is-ui, ui-sans-serif, system-ui, sans-serif);
+  font: 12px var(--iswc-ui, ui-sans-serif, system-ui, sans-serif);
   box-sizing: border-box;
 }
 .panel input[type="color"] {
   width: 100%;
   height: 28px;
   padding: 0;
-  border: 1px solid var(--is-border, rgba(255,255,255,0.18));
+  border: 1px solid var(--iswc-border, rgba(255,255,255,0.18));
   border-radius: 4px;
   background: transparent;
   cursor: pointer;
@@ -202,31 +202,31 @@ const EDITOR_CSS = `
 .panel .row { display: flex; gap: 6px; }
 .panel button {
   appearance: none;
-  border: 1px solid var(--is-border, rgba(255,255,255,0.18));
+  border: 1px solid var(--iswc-border, rgba(255,255,255,0.18));
   background: transparent;
-  color: var(--is-text, #e2e8f0);
+  color: var(--iswc-text, #e2e8f0);
   padding: 6px 10px;
   border-radius: 4px;
   cursor: pointer;
-  font: 12px var(--is-ui, ui-sans-serif, system-ui, sans-serif);
+  font: 12px var(--iswc-ui, ui-sans-serif, system-ui, sans-serif);
 }
 .panel button:hover { background: rgba(255,255,255,0.06); }
 .panel button.primary {
-  background: var(--is-accent, #2563eb);
+  background: var(--iswc-accent, #2563eb);
   border-color: transparent;
   color: #fff;
 }
-.panel button.danger { color: var(--is-danger, #f87171); }
+.panel button.danger { color: var(--iswc-danger, #f87171); }
 .selection-info {
   font-size: 11px;
-  color: var(--is-text-soft, #94a3b8);
+  color: var(--iswc-text-soft, #94a3b8);
 }
 textarea[data-json-readout] {
   width: 100%;
   height: 160px;
   background: transparent;
-  color: var(--is-text-soft, #94a3b8);
-  border: 1px solid var(--is-border, rgba(255,255,255,0.08));
+  color: var(--iswc-text-soft, #94a3b8);
+  border: 1px solid var(--iswc-border, rgba(255,255,255,0.08));
   border-radius: 4px;
   font: 11px ui-monospace, Menlo, Consolas, monospace;
   padding: 6px;
@@ -239,7 +239,7 @@ textarea[data-json-readout] {
   display: flex;
   align-items: center;
   justify-content: center;
-  color: var(--is-text-soft, #94a3b8);
+  color: var(--iswc-text-soft, #94a3b8);
   font-size: 14px;
   pointer-events: none;
 }
@@ -806,7 +806,7 @@ class IsErEditor extends HTMLElement {
     const input = document.createElement('input');
     input.type = 'text';
     input.value = textNode.textContent ?? '';
-    const rectCss = `position:fixed;left:${r.left}px;top:${r.top}px;width:${r.width}px;height:${r.height}px;font:inherit;color:inherit;background:#000a;border:1px solid var(--is-accent,#2563eb);border-radius:2px;z-index:9999;padding:0 4px;`;
+    const rectCss = `position:fixed;left:${r.left}px;top:${r.top}px;width:${r.width}px;height:${r.height}px;font:inherit;color:inherit;background:#000a;border:1px solid var(--iswc-accent,#2563eb);border-radius:2px;z-index:9999;padding:0 4px;`;
     input.style.cssText = rectCss;
     document.body.appendChild(input);
     input.focus();

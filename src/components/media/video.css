@@ -5,7 +5,7 @@
 :host {
   display: block;
   position: relative;
-  font-family: var(--is-font-family, system-ui, sans-serif);
+  font-family: var(--iswc-font-family, system-ui, sans-serif);
   font-size: inherit;
   color: #fff;
   background: #000;
@@ -15,7 +15,7 @@
   max-width: 100%;
   box-sizing: border-box;
 
-  --is-video-accent: var(--is-accent, #f03);
+  --iswc-video-accent: var(--iswc-accent, #f03);
   --played: 0%;
   --buffered: 0%;
   --vol: 100%;
@@ -93,7 +93,7 @@ slot { display: none; }
   & is-icon { font-size: 2em; }
 
   &:hover {
-    background: color-mix(in srgb, var(--is-video-accent) 82%, #000);
+    background: color-mix(in srgb, var(--iswc-video-accent) 82%, #000);
     box-shadow: 0 0 0 1px rgb(255 255 255 / 30%), 0 8px 26px rgb(0 0 0 / 45%);
   }
 
@@ -169,7 +169,7 @@ slot { display: none; }
 
 .played {
   width: var(--played);
-  background: var(--is-video-accent);
+  background: var(--iswc-video-accent);
 }
 
 /* Scrubber: aparece al pasar el ratón, como YouTube */
@@ -180,7 +180,7 @@ slot { display: none; }
   width: 0.85em;
   height: 0.85em;
   border-radius: 50%;
-  background: var(--is-video-accent);
+  background: var(--iswc-video-accent);
   transform: translate(-50%, -50%) scale(0);
   transition: transform 120ms ease;
   pointer-events: none;
@@ -410,7 +410,7 @@ is-button.iconbtn {
   cursor: pointer;
 
   &:hover { background: rgb(255 255 255 / 14%); }
-  &[aria-checked="true"] { color: var(--is-video-accent); font-weight: 700; }
+  &[aria-checked="true"] { color: var(--iswc-video-accent); font-weight: 700; }
 
   &::before {
     content: "";
@@ -455,7 +455,7 @@ is-button.iconbtn {
   height: 2em;
   border-radius: 50%;
   border: 0.18em solid rgb(255 255 255 / 20%);
-  border-top-color: var(--is-video-accent);
+  border-top-color: var(--iswc-video-accent);
   animation: is-video-spin 0.8s linear infinite;
   pointer-events: none;
   z-index: 3;

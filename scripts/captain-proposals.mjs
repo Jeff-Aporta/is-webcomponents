@@ -1,11 +1,11 @@
-#!/usr/bin/env node
+#!/usr/bin/env -S deno run -A --no-check
 // scripts/captain-proposals.mjs
 //
 // F0.3 fallback capitán-led (Lección 25): para grupos que fallaron en
 // sub-agentes, genera proposals concisas pero completas a partir de un
 // template base + lista de demos.
 //
-// Uso: node scripts/captain-proposals.mjs <group-id>
+// Uso: deno run -A --no-check scripts/captain-proposals.mjs <group-id>
 
 import { readFileSync, writeFileSync } from 'node:fs';
 import { join } from 'node:path';
@@ -14,7 +14,7 @@ const ROOT = process.cwd();
 const GROUPS = JSON.parse(readFileSync(join(ROOT, '.audit/demo-groups.json'), 'utf8'));
 const targetId = process.argv[2];
 if (!targetId) {
-  console.error('Uso: node scripts/captain-proposals.mjs <group-id>');
+  console.error('Uso: deno run -A --no-check scripts/captain-proposals.mjs <group-id>');
   process.exit(1);
 }
 const g = GROUPS.groups.find((x) => x.id === targetId);

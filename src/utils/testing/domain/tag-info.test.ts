@@ -32,9 +32,9 @@ test('is-tag.css define los tokens de color=info', () => {
   // de tema define paler/pale/base/strong/stronger/strongest y NADA numerado
   // (lo vigila token-vocabulary.test.ts); pedir -100/-500/-700 aquí obligaba
   // a mantener dos idiomas de color a la vez.
-  assert.ok(/--is-color-info-pale/.test(block), '--_bg debe usar --is-color-info-pale');
-  assert.ok(/--is-color-info/.test(block), '--_border debe usar --is-color-info');
-  assert.ok(/--is-color-info-stronger/.test(block), '--_text debe usar --is-color-info-stronger');
+  assert.ok(/--iswc-color-info-pale/.test(block), '--_bg debe usar --iswc-color-info-pale');
+  assert.ok(/--iswc-color-info/.test(block), '--_border debe usar --iswc-color-info');
+  assert.ok(/--iswc-color-info-stronger/.test(block), '--_text debe usar --iswc-color-info-stronger');
 });
 
 test('is-tag.css NO anida selectores con atributos del host dentro de :host', () => {
@@ -101,11 +101,11 @@ test('callout.css NO anida selectores con atributos del host dentro de :host', (
   }
 });
 
-test('Las 3 paletas definen --is-color-info', () => {
+test('Las 3 paletas definen --iswc-color-info', () => {
   const css = readFileSync(join(root, 'src', 'styles', 'palettes.css'), 'utf8');
   for (const pal of ['insoft', 'contapyme', 'agrowin']) {
-    const re = new RegExp(`\\[data-palette=["']${pal}["']\\][\\s\\S]*?--is-color-info\\s*:`);
-    assert.ok(re.test(css), `La paleta "${pal}" debe definir --is-color-info`);
+    const re = new RegExp(`\\[data-palette=["']${pal}["']\\][\\s\\S]*?--iswc-color-info\\s*:`);
+    assert.ok(re.test(css), `La paleta "${pal}" debe definir --iswc-color-info`);
   }
 });
 
@@ -118,8 +118,8 @@ test('Las 3 paletas definen la rampa relativa completa de info', () => {
     const block = blockMatch[1];
     // Rampa relativa: el mismo idioma que el resto de familias del tema.
     for (const step of ['paler', 'pale', 'strong', 'stronger', 'strongest']) {
-      const ok = new RegExp(`--is-color-info-${step}\\s*:`).test(block);
-      assert.ok(ok, `paleta ${pal} debe tener --is-color-info-${step}`);
+      const ok = new RegExp(`--iswc-color-info-${step}\\s*:`).test(block);
+      assert.ok(ok, `paleta ${pal} debe tener --iswc-color-info-${step}`);
     }
   }
 });

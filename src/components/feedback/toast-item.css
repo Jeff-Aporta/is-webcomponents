@@ -1,10 +1,10 @@
 :host {
-  --_bg: var(--is-control-bg, #f1f3f5);
-  --_border: var(--is-control-border, #dee2e6);
-  --_text: var(--is-control-text, #212529);
-  --_accent: var(--is-muted, #868e96);
+  --_bg: var(--iswc-control-bg, #f1f3f5);
+  --_border: var(--iswc-control-border, #dee2e6);
+  --_text: var(--iswc-control-text, #212529);
+  --_accent: var(--iswc-muted, #868e96);
   display: block;
-  font-family: var(--is-font-family, system-ui, sans-serif);
+  font-family: var(--iswc-font-family, system-ui, sans-serif);
   font-size: inherit;
   box-sizing: border-box;
   pointer-events: auto;
@@ -17,34 +17,34 @@
 }
 
 :host([color="brand"]) {
-  --_bg: var(--is-color-brand-paler, #d0ebff);
-  --_border: var(--is-color-brand, #339af0);
-  --_text: var(--is-color-brand-stronger, #1971c2);
-  --_accent: var(--is-color-brand, #339af0);
+  --_bg: var(--iswc-color-brand-paler, #d0ebff);
+  --_border: var(--iswc-color-brand, #339af0);
+  --_text: var(--iswc-color-brand-stronger, #1971c2);
+  --_accent: var(--iswc-color-brand, #339af0);
 }
 :host([color="success"]) {
-  --_bg: var(--is-color-success-paler, #ebfbee);
-  --_border: var(--is-color-success, #40c057);
-  --_text: var(--is-color-success-stronger, #237a35);
-  --_accent: var(--is-color-success, #40c057);
+  --_bg: var(--iswc-color-success-paler, #ebfbee);
+  --_border: var(--iswc-color-success, #40c057);
+  --_text: var(--iswc-color-success-stronger, #237a35);
+  --_accent: var(--iswc-color-success, #40c057);
 }
 :host([color="warning"]) {
-  --_bg: var(--is-color-warning-paler, #fff9db);
-  --_border: var(--is-color-warning, #f59f00);
-  --_text: var(--is-color-warning-stronger, #9a4f00);
-  --_accent: var(--is-color-warning, #f59f00);
+  --_bg: var(--iswc-color-warning-paler, #fff9db);
+  --_border: var(--iswc-color-warning, #f59f00);
+  --_text: var(--iswc-color-warning-stronger, #9a4f00);
+  --_accent: var(--iswc-color-warning, #f59f00);
 }
 :host([color="danger"]) {
-  --_bg: var(--is-color-danger-paler, #fff5f5);
-  --_border: var(--is-color-danger, #fa5252);
-  --_text: var(--is-color-danger-stronger, #b02525);
-  --_accent: var(--is-color-danger, #fa5252);
+  --_bg: var(--iswc-color-danger-paler, #fff5f5);
+  --_border: var(--iswc-color-danger, #fa5252);
+  --_text: var(--iswc-color-danger-stronger, #b02525);
+  --_accent: var(--iswc-color-danger, #fa5252);
 }
 :host([color="neutral"]) {
-  --_bg: var(--is-control-bg, #f1f3f5);
-  --_border: var(--is-control-border, #dee2e6);
-  --_text: var(--is-control-text, #212529);
-  --_accent: var(--is-muted, #868e96);
+  --_bg: var(--iswc-control-bg, #f1f3f5);
+  --_border: var(--iswc-control-border, #dee2e6);
+  --_text: var(--iswc-control-text, #212529);
+  --_accent: var(--iswc-muted, #868e96);
 }
 
 .base {

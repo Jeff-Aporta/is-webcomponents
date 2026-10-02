@@ -1,23 +1,23 @@
 /* Estados del host en `:host([attr])` a nivel superior (nunca `&[attr]`
    anidado bajo `:host {}`: eso compila a `:host[attr]` y es CSS muerto). */
 :host {
-  --is-loading-backdrop: color-mix(in srgb, var(--is-bg, #101418) 72%, transparent);
-  --is-loading-indicator: var(--is-accent, var(--is-color-brand, #339af0));
+  --iswc-loading-backdrop: color-mix(in srgb, var(--iswc-bg, #101418) 72%, transparent);
+  --iswc-loading-indicator: var(--iswc-accent, var(--iswc-color-brand, #339af0));
   display: contents;
-  font-family: var(--is-sans, inherit);
+  font-family: var(--iswc-sans, inherit);
 
   /* El JS no lo reposiciona, pero DEBE ser fixed: es una capa de bloqueo que
      no puede ocupar sitio en el flujo del documento. */
   .backdrop {
     position: fixed;
     inset: 0;
-    z-index: var(--is-z-overlay, 1000);
+    z-index: var(--iswc-z-overlay, 1000);
     display: flex;
     flex-direction: column;
     align-items: center;
     justify-content: center;
     gap: 1em;
-    background: var(--is-loading-backdrop);
+    background: var(--iswc-loading-backdrop);
     backdrop-filter: blur(2px);
     user-select: none;
     -webkit-user-select: none;
@@ -39,18 +39,18 @@
   .indicator {
     font-size: 3em;
     line-height: 1;
-    color: var(--is-loading-indicator);
+    color: var(--iswc-loading-indicator);
   }
 
   .message {
     margin: 0;
     font-size: 1em;
-    color: var(--is-text, inherit);
+    color: var(--iswc-text, inherit);
   }
 
   .message[hidden] { display: none; }
 }
 
 @media (prefers-reduced-motion: reduce) {
-  :host { --is-loading-backdrop: var(--is-bg, #101418); }
+  :host { --iswc-loading-backdrop: var(--iswc-bg, #101418); }
 }

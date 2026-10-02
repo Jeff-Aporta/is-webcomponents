@@ -10,7 +10,7 @@
   "sections": [
     {
       "id": "intro",
-      "title": "<is-loading-overlay>",
+      "title": "Uso",
       "lede": "Capa de bloqueo a pantalla completa con spinner y mensaje. No se cierra\r\n          con Escape ni con clic fuera: solo el código que la abrió la cierra.",
       "blocks": [
         {

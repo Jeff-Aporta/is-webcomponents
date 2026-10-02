@@ -3,17 +3,17 @@
 /* <is-dialog> — modal accesible. */
 
 :host {
-  --is-dialog-width: 500px;
-  --is-dialog-spacing: var(--is-space-l, 1rem);
+  --iswc-dialog-width: 500px;
+  --iswc-dialog-spacing: var(--iswc-space-l, 1rem);
   /* modal-chrome.css lee --spacing; sin este alias header/body/footer quedan sin padding. */
-  --spacing: var(--is-dialog-spacing);
+  --spacing: var(--iswc-dialog-spacing);
   /* Default backdrop-variant=none: sin oscuridad. basic pisa el color. */
-  --is-dialog-backdrop-color: transparent;
-  --is-dialog-backdrop-blur: 0px;
-  --is-dialog-show-duration: 200ms;
-  --is-dialog-hide-duration: 160ms;
+  --iswc-dialog-backdrop-color: transparent;
+  --iswc-dialog-backdrop-blur: 0px;
+  --iswc-dialog-show-duration: 200ms;
+  --iswc-dialog-hide-duration: 160ms;
 
-  --_radius: calc(var(--is-radius, 0.75em));
+  --_radius: calc(var(--iswc-radius, 0.75em));
   --_shadow: 0 24px 56px -16px rgba(0, 0, 0, 0.4), 0 4px 14px rgba(0, 0, 0, 0.12);
 
   position: fixed;
@@ -26,7 +26,7 @@
      translate(-50%,-50%) en CSS quedaría pisado. */
   display: grid;
   place-items: center;
-  padding: var(--is-dialog-spacing);
+  padding: var(--iswc-dialog-spacing);
   box-sizing: border-box;
 }
 
@@ -40,29 +40,29 @@
 :host(:not([data-state])) .dialog { visibility: hidden; }
 :host(:not([data-state])) .backdrop { visibility: hidden; }
 
-/* Variante oficial: oscuridad + blur. Override fino vía --is-dialog-backdrop-*. */
+/* Variante oficial: oscuridad + blur. Override fino vía --iswc-dialog-backdrop-*. */
 :host([backdrop-variant="basic"]) {
-  --is-dialog-backdrop-color: rgba(0, 0, 0, 0.55);
-  --is-dialog-backdrop-blur: 8px;
+  --iswc-dialog-backdrop-color: rgba(0, 0, 0, 0.55);
+  --iswc-dialog-backdrop-blur: 8px;
 }
 
 .backdrop {
   position: fixed;
   inset: 0;
-  background: var(--is-dialog-backdrop-color);
-  backdrop-filter: blur(var(--is-dialog-backdrop-blur));
-  -webkit-backdrop-filter: blur(var(--is-dialog-backdrop-blur));
+  background: var(--iswc-dialog-backdrop-color);
+  backdrop-filter: blur(var(--iswc-dialog-backdrop-blur));
+  -webkit-backdrop-filter: blur(var(--iswc-dialog-backdrop-blur));
   opacity: 0;
   pointer-events: auto;
 }
 
 .dialog {
   position: relative;
-  width: min(var(--width, var(--is-dialog-width)), 100%);
-  max-height: min(100%, calc(100dvh - 2 * var(--is-dialog-spacing)));
-  background: var(--is-bg, #fff);
-  color: var(--is-text, inherit);
-  border: 1px solid var(--is-border, color-mix(in srgb, currentColor 14%, transparent));
+  width: min(var(--width, var(--iswc-dialog-width)), 100%);
+  max-height: min(100%, calc(100dvh - 2 * var(--iswc-dialog-spacing)));
+  background: var(--iswc-bg, #fff);
+  color: var(--iswc-text, inherit);
+  border: 1px solid var(--iswc-border, color-mix(in srgb, currentColor 14%, transparent));
   border-radius: var(--_radius);
   box-shadow: var(--_shadow);
   display: grid;
@@ -88,9 +88,9 @@
   font-size: 1.15rem;
   line-height: 0;
   opacity: 0.72;
-  color: var(--is-text, currentColor);
+  color: var(--iswc-text, currentColor);
 }
 .close-btn:hover { opacity: 1; }
 .close-btn is-icon { font-size: 1.25em; color: inherit; }
 
-.body.is-only { padding: var(--is-dialog-spacing); }
+.body.is-only { padding: var(--iswc-dialog-spacing); }

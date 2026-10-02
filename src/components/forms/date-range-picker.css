@@ -8,11 +8,11 @@
 }
 
 :host {
-  --is-daterange-border: var(--is-border, #d0d7de);
-  --is-daterange-bg: var(--is-bg-elev, #fff);
+  --iswc-daterange-border: var(--iswc-border, #d0d7de);
+  --iswc-daterange-bg: var(--iswc-bg-elev, #fff);
   display: inline-block;
-  font-family: var(--is-sans, inherit);
-  color: var(--is-text, inherit);
+  font-family: var(--iswc-sans, inherit);
+  color: var(--iswc-text, inherit);
   box-sizing: border-box;
 
   .base {
@@ -20,10 +20,10 @@
     align-items: stretch;
     gap: 0.85em;
     padding: 0.85em;
-    background: var(--is-daterange-bg);
-    border: 1px solid var(--is-daterange-border);
-    border-radius: var(--is-radius, 0.625em);
-    box-shadow: var(--is-shadow, none);
+    background: var(--iswc-daterange-bg);
+    border: 1px solid var(--iswc-daterange-border);
+    border-radius: var(--iswc-radius, 0.625em);
+    box-shadow: var(--iswc-shadow, none);
   }
 
   .shortcuts {
@@ -31,7 +31,7 @@
     flex-direction: column;
     gap: 0.35em;
     padding-inline-end: 0.85em;
-    border-inline-end: 1px solid var(--is-daterange-border);
+    border-inline-end: 1px solid var(--iswc-daterange-border);
     min-width: 9.5em;
   }
 
@@ -51,7 +51,7 @@
   /* Separador entre meses: ayuda a leer que son dos rejillas, no una de 14. */
   .calendars > is-date-picker + is-date-picker {
     padding-inline-start: 1.25em;
-    border-inline-start: 1px solid var(--is-daterange-border);
+    border-inline-start: 1px solid var(--iswc-daterange-border);
   }
 }
 
@@ -66,7 +66,7 @@
     padding-inline-end: 0;
     border-inline-end: 0;
     padding-bottom: 0.6em;
-    border-bottom: 1px solid var(--is-daterange-border);
+    border-bottom: 1px solid var(--iswc-daterange-border);
   }
 
   :host .presets {
@@ -82,6 +82,6 @@
     padding-inline-start: 0;
     border-inline-start: 0;
     padding-top: 1em;
-    border-top: 1px solid var(--is-daterange-border);
+    border-top: 1px solid var(--iswc-daterange-border);
   }
 }

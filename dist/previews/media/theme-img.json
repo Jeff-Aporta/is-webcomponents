@@ -8,7 +8,7 @@
   "sections": [
     {
       "id": "intro",
-      "title": "<is-theme-img>",
+      "title": "Uso",
       "lede": "Una sola imagen dark↔light según el tema del contenedor. Caja <code class=\"code\">1em × 1em</code>; escala con <code class=\"code\">font-size</code>.",
       "blocks": [
         {

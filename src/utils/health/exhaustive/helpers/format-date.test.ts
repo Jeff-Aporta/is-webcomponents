@@ -6,7 +6,7 @@
  * validan estructura, contrato y consistencia con el JSDoc.
  *
  * Cómo correr:
- *   node --import ./scripts/ts-resolve-hook.ts --test \
+ *   deno test -A --no-check \
  *     src/utils/health/exhaustive/helpers/format-date.test.ts
  */
 

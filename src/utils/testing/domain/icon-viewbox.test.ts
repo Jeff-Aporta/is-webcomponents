@@ -14,7 +14,7 @@
 // masivos. La referencia es `assets/icons/viewbox.snapshot.json`, tomado
 // despues de reparar contra la API de Iconify.
 //
-// Reparar / regenerar snapshot:  node scripts/fix-icon-viewbox.ts
+// Reparar / regenerar snapshot:  deno run -A --no-check scripts/fix-icon-viewbox.ts
 //
 // Uso:  node tests/icon-viewbox.test.ts
 
@@ -32,7 +32,7 @@ const readJson = async (f) => JSON.parse(await readFile(join(assetsIcons, f), 'u
 let snap;
 try { snap = await readJson('viewbox.snapshot.json'); }
 catch {
-  console.log('SKIP icon-viewbox — falta viewbox.snapshot.json (corre `node scripts/fix-icon-viewbox.ts`)');
+  console.log('SKIP icon-viewbox — falta viewbox.snapshot.json (corre `deno run -A --no-check scripts/fix-icon-viewbox.ts`)');
   process.exit(0);
 }
 
@@ -69,7 +69,7 @@ assert.equal(
   offenders.length,
   0,
   'SVG con viewBox distinto al del snapshot — alguien reescribio los headers.\n' +
-    'Si el cambio es legitimo, regenera con `node scripts/fix-icon-viewbox.ts`.\n  ' +
+    'Si el cambio es legitimo, regenera con `deno run -A --no-check scripts/fix-icon-viewbox.ts`.\n  ' +
     offenders.slice(0, 20).join('\n  ') +
     (offenders.length > 20 ? `\n  ...y ${offenders.length - 20} mas` : ''),
 );
@@ -87,7 +87,7 @@ const sinMeta = index.families.map((f) => f.prefix).filter((p) => !meta[p]);
 assert.equal(
   sinMeta.length,
   0,
-  `collections.json no cubre estas familias (corre \`node scripts/sync-icon-collections.ts\`): ${sinMeta.join(', ')}`,
+  `collections.json no cubre estas familias (corre \`deno run -A --no-check scripts/sync-icon-collections.ts\`): ${sinMeta.join(', ')}`,
 );
 
 console.log(`OK icon-viewbox — ${checked} svg muestreados en ${Object.keys(snap).length} colecciones`);

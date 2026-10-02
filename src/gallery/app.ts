@@ -1,4 +1,5 @@
 import components from '../manifest.js';
+import { PALETTES, type PaletteConfig } from '../styles/palette-build.js';
 import type { ComponentManifestItem } from '../manifest.js';
 import { hasControlledPreview, hasCachedPreview, loadPreview } from '../previews/registry.js';
 import { collectIsTags, GALLERY_CHROME_TAGS } from '../cdn/collect-is-tags.js';
@@ -17,16 +18,6 @@ interface GalleryState {
 /** Temas y paletas reconocidos. */
 type ThemeName = 'light' | 'dark';
 type PaletteName = 'contapyme' | 'insoft' | 'agrowin';
-
-/** Datos del wordmark por paleta (mismo orden de inserción que `palettes`). */
-interface BrandData {
-  lead: string;
-  accent: string;
-  tail: string;
-  label: string;
-  leadColor: string;
-  accentColor: string;
-}
 
 /** Categoría visible en el nav: id estable + label traducido. */
 interface CategoryMeta {
@@ -47,6 +38,12 @@ interface CatalogItem {
 /** Subset del `<is-theme-toggle>` que la galería consulta. */
 interface ThemeToggleElement extends HTMLElement {
   dark: boolean;
+}
+
+/** Subset del `<is-palette-selector>` del shell. */
+interface PaletteSelectorElement extends HTMLElement {
+  close(): void;
+  value: string;
 }
 
 /** Forma mínima de un preview (JsonPreview satisface esta estructura). */
@@ -106,28 +103,12 @@ const fullscreenBtn = el<HTMLElement>('fullscreenBtn');
 const shellNav = el<HTMLElement>('shellNav');
 const frame = el<FrameElement>('previewFrame');
 const previewHost = el<PreviewHostElement>('previewHost');
-const brand = el<HTMLElement>('brand');
-const brandMenu = el<HTMLElement>('brandMenu');
-const brandWrap = el<HTMLElement>('brandWrap');
-const brandLead = el<HTMLElement>('brandLead');
-const brandAccent = el<HTMLElement>('brandAccent');
-const brandTail = el<HTMLElement>('brandTail');
+const brandPalette = el<PaletteSelectorElement>('brandPalette');
 
 const params = new URLSearchParams(location.search);
 const themes = new Set<ThemeName>(['light', 'dark']);
-const palettes = new Set<PaletteName>(['contapyme', 'insoft', 'agrowin']);
-const brands: Record<PaletteName, BrandData> = {
-  contapyme: { lead: 'conta', accent: 'pyme', tail: '',    label: 'ContaPyme', leadColor: '#000', accentColor: '#fff'    },
-  // El logo de InSoft lleva la S en mayuscula y en rojo: in + Soft.
-  insoft:    { lead: 'in',    accent: 'Soft', tail: '',    label: 'InSoft',    leadColor: '#000', accentColor: '#d71920' },
-  agrowin:   { lead: 'agro',  accent: 'win',  tail: '',    label: 'AgroWin',   leadColor: '#000', accentColor: '#fff'    },
-};
-
-const setMenuOpen = (open: boolean): void => {
-  brand.setAttribute('aria-expanded', open ? 'true' : 'false');
-  brandMenu.hidden = !open;
-  brandWrap.classList.toggle('is-open', open);
-};
+const palettes = new Set<PaletteName>(PALETTES.map((p) => p.value as PaletteName));
+const brands: Record<string, PaletteConfig> = Object.fromEntries(PALETTES.map((p) => [p.value, p]));
 
 // --- b64url helpers (inline; pattern from isa-patyia-paws router.ts) ---
 const b64urlEncode = (input: string): string => {
@@ -432,18 +413,7 @@ function renderContext({ navSmooth = false }: { navSmooth?: boolean } = {}): voi
     node.setAttribute('aria-current', ds.tag === component.tag ? 'true' : 'false');
   }
   scheduleScrollNavToCurrent({ smooth: navSmooth });
-  for (const opt of brandMenu.querySelectorAll<HTMLElement>('[role="option"]')) {
-    const ds = opt.dataset;
-    opt.setAttribute('aria-selected', ds.palette === palette ? 'true' : 'false');
-  }
   const brandData = brands[palette] ?? brands.contapyme;
-  brandLead.textContent = brandData.lead;
-  brandTail.textContent = brandData.tail || '';
-  brandTail.style.color = brandData.leadColor;
-  brandAccent.textContent = brandData.accent;
-  brandLead.style.color = brandData.leadColor;
-  brandAccent.style.color = brandData.accentColor;
-  brand.setAttribute('aria-label', `${brandData.label} — elegir paleta`);
   document.title = `${component.title} | ${brandData.label}`;
   localStorage.setItem('is-theme', theme);
   localStorage.setItem('is-palette', palette);
@@ -511,45 +481,44 @@ window.addEventListener('message', (e: MessageEvent) => {
   const data = asRecord(e.data);
   if (data.type === 'is-select' && typeof data.tag === 'string') {
     selectComponent(data.tag);
+    return;
+  }
+  if (data.type !== 'is-shell-sync' || e.source === window) return;
+  if (typeof data.palette === 'string' && palettes.has(data.palette as PaletteName) && data.palette !== palette) {
+    palette = data.palette as PaletteName;
+    renderContext();
+  }
+  if (typeof data.theme === 'string' && themes.has(data.theme as ThemeName) && data.theme !== theme) {
+    theme = data.theme as ThemeName;
+    renderContext();
   }
 });
 
 frame.addEventListener('load', () => {
   sendContext();
-  // clic dentro del iframe no burbujea al parent → cerrar menú ahí
   try {
-    frame.contentDocument?.addEventListener('pointerdown', () => setMenuOpen(false), { capture: true });
+    frame.contentDocument?.addEventListener('pointerdown', () => brandPalette.close(), { capture: true });
   } catch { /* cross-origin */ }
 });
-brand.addEventListener('click', (e: MouseEvent) => {
-  e.stopPropagation();
-  setMenuOpen(brandMenu.hidden);
-});
-brandMenu.addEventListener('click', (e: MouseEvent) => {
-  const target = e.target as HTMLElement | null;
-  const opt = target?.closest<HTMLElement>('[data-palette]');
-  if (!opt) return;
-  const next = opt.dataset.palette;
-  palette = (next && palettes.has(next as PaletteName)) ? (next as PaletteName) : 'contapyme';
-  setMenuOpen(false);
-  renderContext();
-});
-document.addEventListener('pointerdown', (e: PointerEvent) => {
-  if (!brandWrap.contains(e.target as Node | null)) setMenuOpen(false);
-}, true);
-// focus al iframe (o blur de la ventana) también cierra
 window.addEventListener('blur', () => {
   queueMicrotask(() => {
-    if (document.activeElement === frame) setMenuOpen(false);
+    if (document.activeElement === frame) brandPalette.close();
   });
 });
-document.addEventListener('keydown', (e: KeyboardEvent) => {
-  if (e.key === 'Escape') setMenuOpen(false);
+document.addEventListener('is-theme-change', (e: Event) => {
+  const ce = e as CustomEvent<{ theme?: string; container?: EventTarget }>;
+  if (ce.detail?.container !== root) return;
+  const next: ThemeName = ce.detail?.theme === 'light' ? 'light' : 'dark';
+  if (next === theme) return;
+  theme = next;
+  renderContext();
 });
-themeToggle.addEventListener('is-theme-change', (e: Event) => {
-  // El toggle ya cambió el contenedor (html); sincronizar estado de la galería
-  const ce = e as CustomEvent<{ theme?: string }>;
-  theme = ce.detail?.theme === 'light' ? 'light' : 'dark';
+document.addEventListener('is-palette-change', (e: Event) => {
+  const ce = e as CustomEvent<{ value?: string; container?: EventTarget }>;
+  if (ce.detail?.container !== root) return;
+  const next = ce.detail?.value;
+  if (!next || !palettes.has(next as PaletteName) || next === palette) return;
+  palette = next as PaletteName;
   renderContext();
 });
 fullscreenBtn.addEventListener('click', () => {

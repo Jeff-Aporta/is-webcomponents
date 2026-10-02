@@ -11,7 +11,7 @@
  *
  * Uso (desde el proyecto consumidor o desde este repo):
  *   node path/to/download-iconify.mjs --projectRoot=. --outputDir=assets/icons
- *   node scripts/download-iconify.mjs --projectRoot=../mi-app --outputDir=assets/icons
+ *   deno run -A --no-check scripts/download-iconify.mjs --projectRoot=../mi-app --outputDir=assets/icons
  *
  * También exporta `downloadIconifyIcons(options)` para invocarlo desde otro script.
  *

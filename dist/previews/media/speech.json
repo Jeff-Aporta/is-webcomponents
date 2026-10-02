@@ -9,7 +9,7 @@
   "sections": [
     {
       "id": "intro",
-      "title": "<is-speech>",
+      "title": "Uso",
       "lede": "Dictado (`SpeechRecognition`) y lectura (`SpeechSynthesis`) con `lang` del documento.",
       "blocks": [
         {

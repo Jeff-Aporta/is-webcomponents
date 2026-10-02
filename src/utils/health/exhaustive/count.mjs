@@ -6,7 +6,7 @@ const cwd = process.cwd();
 const outFile = join(cwd, '.audit-results.txt');
 
 try {
-  execSync(`node --import ./scripts/ts-resolve-hook.ts --test "src/utils/health/exhaustive/**/*.test.ts"`, {
+  execSync(`deno test -A --no-check "src/utils/health/exhaustive/**/*.test.ts"`, {
     encoding: 'utf8',
     stdio: ['ignore', 'pipe', 'pipe'],
   });

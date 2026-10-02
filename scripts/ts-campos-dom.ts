@@ -27,7 +27,7 @@
  * el documento, un argumento), la suposición ya no se sostiene y el fichero se
  * deja como está para mirarlo a mano.
  *
- *   node scripts/ts-campos-dom.ts src/components/forms
+ *   deno run -A --no-check scripts/ts-campos-dom.ts src/components/forms
  */
 import { readdirSync, readFileSync, statSync, writeFileSync } from 'node:fs';
 import { join } from 'node:path';
@@ -175,7 +175,7 @@ function ficheros(dir: string): string[] {
 
 const objetivo = process.argv[2];
 if (!objetivo) {
-  console.error('uso: node scripts/ts-campos-dom.ts <fichero-o-carpeta>');
+  console.error('uso: deno run -A --no-check scripts/ts-campos-dom.ts <fichero-o-carpeta>');
   process.exit(2);
 }
 const lista = statSync(objetivo).isDirectory() ? ficheros(objetivo) : [objetivo];

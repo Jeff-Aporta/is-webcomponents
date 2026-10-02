@@ -4,7 +4,7 @@
 // valida respuesta (cambio de DOM), Tab order, ARIA roles, y captura
 // console errors/warnings.
 //
-// Uso: node scripts/tour-interactions.mjs [--local|--remote] [--base=URL]
+// Uso: deno run -A --no-check scripts/tour-interactions.mjs [--local|--remote] [--base=URL]
 //      [tags...]
 
 import { chromium } from 'playwright';

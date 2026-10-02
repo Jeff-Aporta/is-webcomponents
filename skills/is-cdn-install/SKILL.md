@@ -3,27 +3,27 @@ name: is-cdn-install
 description: >-
   Instala y consume el kit IS Web Components solo por CDN (jsDelivr / GitHub Pages),
   sin npm ni npx. Cubre bootstrap (is-base + palettes + .min.js), espejos, pin por
-  SHA, boot con fallback, y lectura de docs vía is-cdn-snippet. Usar cuando el
+  SHA, boot con fallback, y lectura de docs vÃ­a is-cdn-snippet. Usar cuando el
   usuario pida instalar is-*, enlaces CDN, loader.min.js, L.load,
   mirrors, o copiar el panel Consumo por CDN.
 ---
 
-# IS Web Components — instalación por CDN
+# IS Web Components â€” instalaciÃ³n por CDN
 
 ## Regla absoluta
 
-- **No** `npm install` / `npx` / `yarn` / `pnpm` / `bun` / bundler (`vite`, `webpack`, …) del kit (no hay canal npm; no hace falta build step para consumirlo).
-- **Un solo origen** por página: no mezclar jsDelivr + Pages en el mismo documento (rompe imports relativos).
+- **No** `npm install` / `npx` / `yarn` / `pnpm` / `bun` / bundler (`vite`, `webpack`, â€”) del kit (no hay canal npm; no hace falta build step para consumirlo).
+- **Un solo origen** por pÃ¡gina: no mezclar jsDelivr + Pages en el mismo documento (rompe imports relativos).
 - En el `<head>` solo van **tema + paletas + JS**. El CSS de cada `is-*` lo carga el propio componente.
-- Si la app no puede depender de red en runtime: usar copia **local** en vez de CDN puro — ver [`/is-webcomponents:local`](../is-webcomponents/tools/local.md) en la skill del kit.
+- Si la app no puede depender de red en runtime: usar copia **local** en vez de CDN puro â€” ver [`/is-webcomponents:local`](../is-webcomponents/tools/local.md) en la skill del kit.
 
 ## Prompt LLM y herramientas
 
 Prompt completo listo para copiar: [`../is-webcomponents/PROMPT.md`](https://github.com/Jeff-Aporta/is-webcomponents/blob/main/src/skills/is-webcomponents/PROMPT.md).
-Herramientas tipo slash del kit: [`../is-webcomponents/tools/`](https://github.com/Jeff-Aporta/is-webcomponents/tree/main/src/skills/is-webcomponents/tools) —
+Herramientas tipo slash del kit: [`../is-webcomponents/tools/`](https://github.com/Jeff-Aporta/is-webcomponents/tree/main/src/skills/is-webcomponents/tools) â€”
 en particular [`/is-webcomponents:local`](https://github.com/Jeff-Aporta/is-webcomponents/blob/main/src/skills/is-webcomponents/tools/local.md) para vendorizar el kit y bootear local-first.
 
-## Skill publicada (léela primero)
+## Skill publicada (lÃ©ela primero)
 
 Los agentes instalan/siguen mejor skills desde URLs de **repo de GitHub**. Usa raw solo para lectura como texto plano.
 
@@ -40,12 +40,12 @@ Skill general del kit (reuso de tags, arquitectura, prompt, herramientas): [`src
 
 | id | Base | Pin SHA |
 | --- | --- | --- |
-| `jsdelivr` (primario) | `https://cdn.jsdelivr.net/gh/Jeff-Aporta/is-webcomponents@<ref>/dist/cdn` | Sí (`@sha` o `@main`) |
+| `jsdelivr` (primario) | `https://cdn.jsdelivr.net/gh/Jeff-Aporta/is-webcomponents@<ref>/dist/cdn` | SÃ­ (`@sha` o `@main`) |
 | `pages` (reserva) | `https://jeff-aporta.github.io/is-webcomponents/dist/cdn` | No (tip desplegado) |
 
 `<ref>` preferido: **commit SHA** de `main`. `@main` solo si la app declara seguimiento continuo.
 
-## Bootstrap mínimo (loader — preferido)
+## Bootstrap mÃ­nimo (loader â€” preferido)
 
 ```html
 <html lang="es" data-theme="dark" data-palette="contapyme">
@@ -65,15 +65,15 @@ Skill general del kit (reuso de tags, arquitectura, prompt, herramientas): [`src
 </html>
 ```
 
-Alcance de `load(…)`:
+Alcance de `load(â€¦)`:
 
 | Necesidad | Argumento |
 | --- | --- |
 | Un tag | `'is-button'` |
-| Una categoría | `'actions'` |
+| Una categorÃ­a | `'actions'` |
 | Kit completo | `'all'` |
 
-La galería lo pinta en `<is-cdn-snippet>` (copy-paste del loader + `L.load(tag)`).
+La galerÃ­a lo pinta en `<is-cdn-snippet>` (copy-paste del loader + `L.load(tag)`).
 
 `load('all')` / `load('actions')` expanden a cada `<cat>/<file>.min.js`. No se publican `all.min.js` ni `category.*.min.js`.
 
@@ -104,10 +104,10 @@ async function boot(files) {
       await Promise.all(files.js.map((f) => import(`${base}/${f}`)));
       return base;
     } catch (e) {
-      console.warn("[is-wc] mirror falló", base, e);
+      console.warn("[is-wc] mirror fallÃ³", base, e);
     }
   }
-  throw new Error("[is-wc] ningún espejo respondió");
+  throw new Error("[is-wc] ningÃºn espejo respondiÃ³");
 }
 await boot({
   css: ["is-base.min.css", "palettes.min.css"],
@@ -116,7 +116,7 @@ await boot({
 </script>
 ```
 
-## Panel `<is-cdn-snippet>` (galería)
+## Panel `<is-cdn-snippet>` (galerÃ­a)
 
 En la demo del kit, cada preview monta el panel **Consumo por CDN**:
 
@@ -125,37 +125,37 @@ En la demo del kit, cada preview monta el panel **Consumo por CDN**:
 
 Al instalar en otra app, **copia los mismos URLs** que muestra el panel (no inventes rutas).
 
-## Docs API (después del bootstrap)
+## Docs API (despuÃ©s del bootstrap)
 
-1. Índice: `specs/componentes.md`
-2. Categoría: `specs/componentes.md`
-3. Módulo: `src/components/<carpeta>/<modulo>.md`
+1. Ã­ndice: `specs/componentes.md`
+2. CategorÃ­a: `specs/componentes.md`
+3. MÃ³dulo: `src/components/<carpeta>/<modulo>.md`
 
 Base raw: `https://raw.githubusercontent.com/Jeff-Aporta/is-webcomponents/main/src/components/`
 
-No inventar props/eventos que no estén en el MD.
+No inventar props/eventos que no estÃ¡n en el MD.
 
-## Checklist de instalación
+## Checklist de instalaciÃ³n
 
 - [ ] Solo CDN (sin npm del kit)
-- [ ] Un solo espejo / un solo `base` en la página
-- [ ] `loader.min.js` + `L.loadCSSBase` + `L.loadCSSPalettesDefault` + `L.load(tags…)`
+- [ ] Un solo espejo / un solo `base` en la pÃ¡gina
+- [ ] `loader.min.js` + `L.loadCSSBase` + `L.loadCSSPalettesDefault` + `L.load(tagsâ€¦)`
 - [ ] JS: solo los tags de la vista (no `all.min.js`)
 - [ ] `data-theme` + `data-palette` en `<html>`
-- [ ] Pin `@<sha>` (o `@main` justificado, o copia local vía `/is-webcomponents:local`)
-- [ ] Skill + MD del módulo leídos antes de componer UI
+- [ ] Pin `@<sha>` (o `@main` justificado, o copia local vÃ­a `/is-webcomponents:local`)
+- [ ] Skill + MD del mÃ³dulo leÃ­dos antes de componer UI
 
 ## Prohibido
 
-- Mezclar orígenes CDN en la misma página
+- Mezclar orÃ­genes CDN en la misma pÃ¡gina
 - Meter CSS de componentes del kit en el `<head>`
 - Usar Iconify CDN / Chart.js / MUI cuando el kit cubre el caso
 - Asumir que Pages pinnea el mismo SHA que jsDelivr
 - `npm`/`npx`/`yarn`/`pnpm`/`bun`/`vite`/`webpack` para instalar o servir el kit
 
-## Más detalle
+## MÃ¡s detalle
 
 - Prompt LLM completo: [`../is-webcomponents/PROMPT.md`](https://github.com/Jeff-Aporta/is-webcomponents/blob/main/src/skills/is-webcomponents/PROMPT.md)
 - Herramientas `/is-webcomponents:build|migrate|local`: [`../is-webcomponents/tools/`](https://github.com/Jeff-Aporta/is-webcomponents/tree/main/src/skills/is-webcomponents/tools)
-- Espejos y resolución de ref: [reference.md](reference.md)
+- Espejos y resoluciÃ³n de ref: [reference.md](reference.md)
 - Skill de reuso de tags: `../is-webcomponents/SKILL.md`

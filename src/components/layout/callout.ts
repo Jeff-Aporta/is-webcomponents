@@ -26,7 +26,7 @@ import { TONE } from '../_shared/tone.js';
  * CSS Parts:  ::part(icon)  ::part(message)
  *
  * CSS custom properties
- *   --spacing        espacio alrededor del callout (default var(--is-space-l, 1rem))
+ *   --spacing        espacio alrededor del callout (default var(--iswc-space-l, 1rem))
  *   --callout-bg     fondo computado por color/variant
  *   --callout-border color del borde
  *   --callout-text   color del texto
@@ -66,11 +66,11 @@ import { TONE } from '../_shared/tone.js';
   class IsCallout extends ElementBase {
     /** Personalización por atributo (ver `core/attrs.ts`). */
     static styleAttrs = {
-    bg: { prop: '--is-callout-bg', onlyColorValues: true },
-    'border-color': { prop: '--is-callout-border', onlyColorValues: true },
-    'text-color': { prop: '--is-callout-text', onlyColorValues: true },
-    accent: { prop: '--is-callout-accent', onlyColorValues: true },
-    spacing: '--is-callout-spacing',
+    bg: { prop: '--iswc-callout-bg', onlyColorValues: true },
+    'border-color': { prop: '--iswc-callout-border', onlyColorValues: true },
+    'text-color': { prop: '--iswc-callout-text', onlyColorValues: true },
+    accent: { prop: '--iswc-callout-accent', onlyColorValues: true },
+    spacing: '--iswc-callout-spacing',
     };
 
     static get observedAttributes(): string[] { return [...OBSERVED, 'bg', 'border-color', 'text-color', 'accent', 'spacing']; }

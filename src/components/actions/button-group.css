@@ -2,11 +2,11 @@
  * Usar siempre :host([attr]) como reglas hermanas, nunca &[attr] anidado. */
 
 :host {
-  --is-button-border-width: var(--is-control-border-width, 1px);
-  --is-button-group-radius: var(--is-button-border-radius, 6px);
-  --is-button-group-gap: 0.3em;
-  --is-button-group-pad: 0.25em;
-  --is-button-group-accent: var(--is-accent, #339af0);
+  --iswc-button-border-width: var(--iswc-control-border-width, 1px);
+  --iswc-button-group-radius: var(--iswc-button-border-radius, 6px);
+  --iswc-button-group-gap: 0.3em;
+  --iswc-button-group-pad: 0.25em;
+  --iswc-button-group-accent: var(--iswc-accent, #339af0);
   display: inline-flex;
   vertical-align: middle;
   max-width: 100%;
@@ -19,7 +19,7 @@
   position: relative;
   isolation: isolate;
   flex-wrap: wrap;
-  border-radius: var(--is-button-group-radius);
+  border-radius: var(--iswc-button-group-radius);
 }
 
 /* El foco y la selección se dibujan por encima de los bordes vecinos */
@@ -44,8 +44,8 @@
 }
 
 :host([variant='joined'][orientation='horizontal']) {
-  --_button-horizontal-indent: calc(var(--is-button-border-width) * -1);
-  --_button-horizontal-indent-outlined: calc(var(--is-button-border-width) * -1);
+  --_button-horizontal-indent: calc(var(--iswc-button-border-width) * -1);
+  --_button-horizontal-indent-outlined: calc(var(--iswc-button-border-width) * -1);
 }
 
 :host([variant='joined'][orientation='horizontal']) ::slotted(:first-child) {
@@ -65,7 +65,7 @@
 
 :host([variant='joined'][orientation='horizontal']) ::slotted(button:not(:first-child)),
 :host([variant='joined'][orientation='horizontal']) ::slotted(.is-filled:not(:first-child)) {
-  margin-inline-start: calc(var(--is-button-border-width) * -1);
+  margin-inline-start: calc(var(--iswc-button-border-width) * -1);
 }
 
 :host([variant='joined'][orientation='horizontal']) ::slotted(button:first-child:not(:last-child)) {
@@ -79,8 +79,8 @@
 }
 
 :host([variant='joined'][orientation='vertical']) {
-  --_button-vertical-indent: calc(var(--is-button-border-width) * -1);
-  --_button-vertical-indent-outlined: calc(var(--is-button-border-width) * -1);
+  --_button-vertical-indent: calc(var(--iswc-button-border-width) * -1);
+  --_button-vertical-indent-outlined: calc(var(--iswc-button-border-width) * -1);
 }
 
 :host([variant='joined'][orientation='vertical']) ::slotted(:first-child) {
@@ -100,7 +100,7 @@
 
 :host([variant='joined'][orientation='vertical']) ::slotted(button:not(:first-child)),
 :host([variant='joined'][orientation='vertical']) ::slotted(.is-filled:not(:first-child)) {
-  margin-block-start: calc(var(--is-button-border-width) * -1);
+  margin-block-start: calc(var(--iswc-button-border-width) * -1);
 }
 
 :host([variant='joined'][orientation='vertical']) ::slotted(button:first-child:not(:last-child)) {
@@ -132,35 +132,35 @@
 /* La pista crece lo que mide su padding para que la pastilla interior conserve
  * el radio natural del botón. */
 :host([variant='segmented']) {
-  --is-button-group-radius: calc(var(--is-button-border-radius, 6px) + var(--is-button-group-pad));
+  --iswc-button-group-radius: calc(var(--iswc-button-border-radius, 6px) + var(--iswc-button-group-pad));
 }
 
-/* --is-bg-soft queda por debajo de --is-bg-elev en claro y en oscuro, así la
+/* --iswc-bg-soft queda por debajo de --iswc-bg-elev en claro y en oscuro, así la
  * pista se lee hundida en ambos temas sin depender de la elevación. */
 :host([variant='segmented']) .button-group {
   gap: 0.15em;
-  padding: var(--is-button-group-pad);
-  background: var(--is-bg-soft, #f6f8fa);
-  border: var(--is-button-border-width) solid var(--is-border-soft, #e1e4e8);
+  padding: var(--iswc-button-group-pad);
+  background: var(--iswc-bg-soft, #f6f8fa);
+  border: var(--iswc-button-border-width) solid var(--iswc-border-soft, #e1e4e8);
   box-shadow: inset 0 1px 2px rgb(0 0 0 / 12%);
 }
 
 :host([variant='segmented']) ::slotted(*) {
-  --is-control-bg: transparent;
-  --is-control-bg-hover: color-mix(in srgb, var(--is-text, #f0f3f6) 8%, transparent);
-  --is-control-bg-active: color-mix(in srgb, var(--is-text, #f0f3f6) 14%, transparent);
-  --is-control-border: transparent;
-  --is-control-text: var(--is-text-soft, var(--is-text, inherit));
+  --iswc-control-bg: transparent;
+  --iswc-control-bg-hover: color-mix(in srgb, var(--iswc-text, #f0f3f6) 8%, transparent);
+  --iswc-control-bg-active: color-mix(in srgb, var(--iswc-text, #f0f3f6) 14%, transparent);
+  --iswc-control-border: transparent;
+  --iswc-control-text: var(--iswc-text-soft, var(--iswc-text, inherit));
 }
 
 :host([variant='segmented']) ::slotted([selected]) {
-  --_sel: var(--is-button-selected-color, var(--is-button-group-accent));
-  --is-control-bg: color-mix(in srgb, var(--_sel) 18%, var(--is-bg-elev, #fff));
-  --is-control-bg-hover: color-mix(in srgb, var(--_sel) 26%, var(--is-bg-elev, #fff));
-  --is-control-bg-active: color-mix(in srgb, var(--_sel) 32%, var(--is-bg-elev, #fff));
-  --is-control-border: color-mix(in srgb, var(--_sel) 45%, transparent);
-  --is-control-text: var(--_sel);
-  border-radius: var(--is-button-border-radius, 6px);
+  --_sel: var(--iswc-button-selected-color, var(--iswc-button-group-accent));
+  --iswc-control-bg: color-mix(in srgb, var(--_sel) 18%, var(--iswc-bg-elev, #fff));
+  --iswc-control-bg-hover: color-mix(in srgb, var(--_sel) 26%, var(--iswc-bg-elev, #fff));
+  --iswc-control-bg-active: color-mix(in srgb, var(--_sel) 32%, var(--iswc-bg-elev, #fff));
+  --iswc-control-border: color-mix(in srgb, var(--_sel) 45%, transparent);
+  --iswc-control-text: var(--_sel);
+  border-radius: var(--iswc-button-border-radius, 6px);
   box-shadow: 0 1px 3px rgb(0 0 0 / 22%);
 }
 
@@ -168,29 +168,29 @@
 /* Botones independientes con separación: toolbars y acciones sueltas. */
 
 :host([variant='separated']) .button-group {
-  gap: var(--is-button-group-gap);
+  gap: var(--iswc-button-group-gap);
 }
 
 /* ---- selección (select="single|multiple") ----------------------------- */
 
 :host([variant='joined']) ::slotted([selected]),
 :host([variant='separated']) ::slotted([selected]) {
-  --_sel: var(--is-button-selected-color, var(--is-button-group-accent));
-  --is-control-bg: color-mix(in srgb, var(--_sel) 16%, transparent);
-  --is-control-bg-hover: color-mix(in srgb, var(--_sel) 24%, transparent);
-  --is-control-bg-active: color-mix(in srgb, var(--_sel) 30%, transparent);
-  --is-control-border: color-mix(in srgb, var(--_sel) 60%, transparent);
-  --is-control-text: var(--_sel);
+  --_sel: var(--iswc-button-selected-color, var(--iswc-button-group-accent));
+  --iswc-control-bg: color-mix(in srgb, var(--_sel) 16%, transparent);
+  --iswc-control-bg-hover: color-mix(in srgb, var(--_sel) 24%, transparent);
+  --iswc-control-bg-active: color-mix(in srgb, var(--_sel) 30%, transparent);
+  --iswc-control-border: color-mix(in srgb, var(--_sel) 60%, transparent);
+  --iswc-control-text: var(--_sel);
 }
 
 /* ---- modificadores --------------------------------------------------- */
 
 :host([pill]) {
-  --is-button-group-radius: 999px;
-  --is-button-group-pad: 0.3em;
+  --iswc-button-group-radius: 999px;
+  --iswc-button-group-pad: 0.3em;
 }
 
-:host([pill]) ::slotted(*) { --is-button-border-radius: 999px; }
+:host([pill]) ::slotted(*) { --iswc-button-border-radius: 999px; }
 :host([pill][variant='segmented']) ::slotted([selected]) { border-radius: 999px; }
 
 /* Pill + joined: forzar radios exteriores en --_button-* (is-button las

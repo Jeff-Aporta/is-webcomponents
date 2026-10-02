@@ -102,11 +102,11 @@ No expone.
 
 | Token | Uso |
 | --- | --- |
-| `--is-control-text` | Token leído o definido por componente. |
-| `--is-control-bg-hover` | Token leído o definido por componente. |
-| `--is-control-bg-active` | Token leído o definido por componente. |
-| `--is-focus` | Token leído o definido por componente. |
-| `--is-color-brand-500` | Token leído o definido por componente. |
+| `--iswc-control-text` | Token leído o definido por componente. |
+| `--iswc-control-bg-hover` | Token leído o definido por componente. |
+| `--iswc-control-bg-active` | Token leído o definido por componente. |
+| `--iswc-focus` | Token leído o definido por componente. |
+| `--iswc-color-brand-500` | Token leído o definido por componente. |
 
 ### Integración con formularios
 

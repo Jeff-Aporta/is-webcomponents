@@ -84,13 +84,13 @@ async function mountPlayground(root: ParentNode, opts: AddEventListenerOptions |
 
   let catalog: LoaderCatalog = { categories: {}, tags: {} };
   try {
-    // El bundle del loader se genera con `npm run build` (dist/cdn/core/loader.min.js).
+    // El bundle del loader se genera con `deno task build` (dist/cdn/core/loader.min.js).
     // En dev / lint no existe: el catch muestra el mensaje y sale.
     // @ts-expect-error — generado en build, no presente en strict-audit.
     const mod = (await import('../../dist/cdn/core/loader.min.js')) as { ISWebComponentsLoader: LoaderModule };
     catalog = mod.ISWebComponentsLoader.catalog;
   } catch {
-    catsEl.innerHTML = '<p class="lede">Corré <code>npm run build</code> para generar <code>loader.min.js</code>.</p>';
+    catsEl.innerHTML = '<p class="lede">Corré <code>deno task build</code> para generar <code>loader.min.js</code>.</p>';
     return;
   }
 
@@ -187,7 +187,7 @@ async function mountSharedCatalog(
     modules = catalog.modules || [];
   } catch (err) {
     const msg = err instanceof Error ? err.message : String(err);
-    list.innerHTML = `<p class="lede">No se pudo cargar <code>shared-modules.json</code>. Ejecuta <code>node scripts/gen-shared-index.ts</code>. (${msg})</p>`;
+    list.innerHTML = `<p class="lede">No se pudo cargar <code>shared-modules.json</code>. Ejecuta <code>deno run -A --no-check scripts/gen-shared-index.ts</code>. (${msg})</p>`;
     return;
   }
 

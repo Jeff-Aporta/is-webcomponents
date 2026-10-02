@@ -8,29 +8,29 @@
  * Shadow DOM: :host:is([attr]) NO matchea. Usar :host([attr]) hermanas.
  */
 :host {
-  --is-button-font-family: var(--is-font-family, system-ui, -apple-system, "Segoe UI", Roboto, sans-serif);
-  --is-button-font-weight: 500;
-  /* No fijar --is-button-border-radius aquí: si no, pisa el 999px de
+  --iswc-button-font-family: var(--iswc-font-family, system-ui, -apple-system, "Segoe UI", Roboto, sans-serif);
+  --iswc-button-font-weight: 500;
+  /* No fijar --iswc-button-border-radius aquí: si no, pisa el 999px de
      <is-button-group pill> vía ::slotted (el :host gana al padre). El
      default 6px vive como fallback en .btn y en shape/pill. */
-  --is-button-border-width: 1px;
-  --is-button-transition-duration: 120ms;
-  --_bg: var(--is-control-bg, #f1f3f5);
-  --_bg-hover: var(--is-control-bg-hover, #e9ecef);
-  --_bg-active: var(--is-control-bg-active, #dee2e6);
-  --_border: var(--is-control-border, #dee2e6);
-  --_text: var(--is-control-text, #212529);
+  --iswc-button-border-width: 1px;
+  --iswc-button-transition-duration: 120ms;
+  --_bg: var(--iswc-control-bg, #f1f3f5);
+  --_bg-hover: var(--iswc-control-bg-hover, #e9ecef);
+  --_bg-active: var(--iswc-control-bg-active, #dee2e6);
+  --_border: var(--iswc-control-border, #dee2e6);
+  --_text: var(--iswc-control-text, #212529);
   /* Por defecto el hover no toca texto ni borde; `ghost` los usa para
      pasar de outlined a filled sin dejar el label ilegible. */
   --_text-hover: var(--_text);
   --_border-hover: var(--_border);
-  --_focus: var(--is-focus, var(--is-color-brand, dodgerblue));
+  --_focus: var(--iswc-focus, var(--iswc-color-brand, dodgerblue));
   --_height: 2.5em;
   --_hpad: 1em;
   display: inline-flex;
   vertical-align: middle;
   isolation: isolate;
-  font-family: var(--is-button-font-family);
+  font-family: var(--iswc-button-font-family);
   font-size: inherit;
   max-width: 100%;
   margin-inline-start: var(--_button-horizontal-indent, 0px);
@@ -49,14 +49,14 @@
     margin: 0;
     background: var(--_bg);
     color: var(--_text);
-    border: var(--is-button-border-width) solid var(--_border);
-    border-start-start-radius: var(--_button-start-start-radius, var(--is-button-border-radius, 6px));
-    border-start-end-radius: var(--_button-start-end-radius, var(--is-button-border-radius, 6px));
-    border-end-start-radius: var(--_button-end-start-radius, var(--is-button-border-radius, 6px));
-    border-end-end-radius: var(--_button-end-end-radius, var(--is-button-border-radius, 6px));
+    border: var(--iswc-button-border-width) solid var(--_border);
+    border-start-start-radius: var(--_button-start-start-radius, var(--iswc-button-border-radius, 6px));
+    border-start-end-radius: var(--_button-start-end-radius, var(--iswc-button-border-radius, 6px));
+    border-end-start-radius: var(--_button-end-start-radius, var(--iswc-button-border-radius, 6px));
+    border-end-end-radius: var(--_button-end-end-radius, var(--iswc-button-border-radius, 6px));
     font: inherit;
-    font-family: var(--is-button-font-family);
-    font-weight: var(--is-button-font-weight);
+    font-family: var(--iswc-button-font-family);
+    font-weight: var(--iswc-button-font-weight);
     line-height: 1;
     text-decoration: none;
     white-space: nowrap;
@@ -65,11 +65,11 @@
     -webkit-user-select: none;
     position: relative;
     transition:
-      background-color var(--is-button-transition-duration) ease,
-      border-color var(--is-button-transition-duration) ease,
-      color var(--is-button-transition-duration) ease,
+      background-color var(--iswc-button-transition-duration) ease,
+      border-color var(--iswc-button-transition-duration) ease,
+      color var(--iswc-button-transition-duration) ease,
       transform 60ms ease,
-      box-shadow var(--is-button-transition-duration) ease;
+      box-shadow var(--iswc-button-transition-duration) ease;
     &:hover {
       background: var(--_bg-hover);
       color: var(--_text-hover);
@@ -121,91 +121,91 @@
 :host([color="brand"]) {
   /* Solo tokens relativos (+ hex). Nunca -500/-600 aquí: el tema ya no los define
      y el fallback numérico en var() hace que token-vocabulary / el ojo vean dos idiomas. */
-  --_tone: var(--is-color-brand, dodgerblue);
-  --_tone-strong: var(--is-color-brand-strong, dodgerblue);
-  --_tone-stronger: var(--is-color-brand-stronger, color-mix(in srgb, dodgerblue 86%, black));
-  --_tone-strongest: var(--is-color-brand-strongest, color-mix(in srgb, dodgerblue 74%, black));
-  --_tone-paler: var(--is-color-brand-paler, #e7f5ff);
-  --_tone-pale: var(--is-color-brand-pale, #d0ebff);
-  --_tone-text: var(--is-brand-text, var(--_tone-stronger));
-  --_tone-soft: var(--is-brand-soft, var(--_tone-paler));
-  --_tone-soft-active: var(--is-brand-soft-active, var(--_tone-pale));
-  --_tone-on: var(--is-on-brand, #fff);
+  --_tone: var(--iswc-color-brand, dodgerblue);
+  --_tone-strong: var(--iswc-color-brand-strong, dodgerblue);
+  --_tone-stronger: var(--iswc-color-brand-stronger, color-mix(in srgb, dodgerblue 86%, black));
+  --_tone-strongest: var(--iswc-color-brand-strongest, color-mix(in srgb, dodgerblue 74%, black));
+  --_tone-paler: var(--iswc-color-brand-paler, #e7f5ff);
+  --_tone-pale: var(--iswc-color-brand-pale, #d0ebff);
+  --_tone-text: var(--iswc-brand-text, var(--_tone-stronger));
+  --_tone-soft: var(--iswc-brand-soft, var(--_tone-paler));
+  --_tone-soft-active: var(--iswc-brand-soft-active, var(--_tone-pale));
+  --_tone-on: var(--iswc-on-brand, #fff);
 }
 :host([color="success"]) {
-  --_tone: var(--is-color-success, #40c057);
-  --_tone-strong: var(--is-color-success-strong, #2f9e44);
-  --_tone-stronger: var(--is-color-success-stronger, #237a35);
-  --_tone-strongest: var(--is-color-success-stronger, #237a35);
-  --_tone-paler: var(--is-color-success-paler, #ebfbee);
-  --_tone-pale: var(--is-color-success-pale, #d3f9d8);
-  --_tone-text: var(--is-success-text, var(--_tone-stronger));
-  --_tone-soft: var(--is-success-soft, var(--_tone-paler));
-  --_tone-soft-active: var(--is-success-soft-active, var(--_tone-pale));
-  --_tone-on: var(--is-on-brand, #fff);
+  --_tone: var(--iswc-color-success, #40c057);
+  --_tone-strong: var(--iswc-color-success-strong, #2f9e44);
+  --_tone-stronger: var(--iswc-color-success-stronger, #237a35);
+  --_tone-strongest: var(--iswc-color-success-stronger, #237a35);
+  --_tone-paler: var(--iswc-color-success-paler, #ebfbee);
+  --_tone-pale: var(--iswc-color-success-pale, #d3f9d8);
+  --_tone-text: var(--iswc-success-text, var(--_tone-stronger));
+  --_tone-soft: var(--iswc-success-soft, var(--_tone-paler));
+  --_tone-soft-active: var(--iswc-success-soft-active, var(--_tone-pale));
+  --_tone-on: var(--iswc-on-brand, #fff);
 }
 :host([color="warning"]) {
-  --_tone: var(--is-color-warning, #f59f00);
-  --_tone-strong: var(--is-color-warning-strong, #d97706);
-  --_tone-stronger: var(--is-color-warning-stronger, #9a4f00);
-  --_tone-strongest: var(--is-color-warning-stronger, #9a4f00);
-  --_tone-paler: var(--is-color-warning-paler, #fff9db);
-  --_tone-pale: var(--is-color-warning-pale, #fff3bf);
-  --_tone-text: var(--is-warning-text, var(--_tone-stronger));
-  --_tone-soft: var(--is-warning-soft, var(--_tone-paler));
-  --_tone-soft-active: var(--is-warning-soft-active, var(--_tone-pale));
-  --_tone-on: var(--is-on-brand, #fff);
+  --_tone: var(--iswc-color-warning, #f59f00);
+  --_tone-strong: var(--iswc-color-warning-strong, #d97706);
+  --_tone-stronger: var(--iswc-color-warning-stronger, #9a4f00);
+  --_tone-strongest: var(--iswc-color-warning-stronger, #9a4f00);
+  --_tone-paler: var(--iswc-color-warning-paler, #fff9db);
+  --_tone-pale: var(--iswc-color-warning-pale, #fff3bf);
+  --_tone-text: var(--iswc-warning-text, var(--_tone-stronger));
+  --_tone-soft: var(--iswc-warning-soft, var(--_tone-paler));
+  --_tone-soft-active: var(--iswc-warning-soft-active, var(--_tone-pale));
+  --_tone-on: var(--iswc-on-brand, #fff);
 }
 :host([color="danger"]) {
-  --_tone: var(--is-color-danger, crimson);
-  --_tone-strong: var(--is-color-danger-strong, #e03131);
-  --_tone-stronger: var(--is-color-danger-stronger, #b02525);
-  --_tone-strongest: var(--is-color-danger-stronger, #b02525);
-  --_tone-paler: var(--is-color-danger-paler, #fff5f5);
-  --_tone-pale: var(--is-color-danger-pale, #ffe3e3);
-  --_tone-text: var(--is-danger-text, var(--_tone-stronger));
-  --_tone-soft: var(--is-danger-soft, var(--_tone-paler));
-  --_tone-soft-active: var(--is-danger-soft-active, var(--_tone-pale));
-  --_tone-on: var(--is-on-brand, #fff);
+  --_tone: var(--iswc-color-danger, crimson);
+  --_tone-strong: var(--iswc-color-danger-strong, #e03131);
+  --_tone-stronger: var(--iswc-color-danger-stronger, #b02525);
+  --_tone-strongest: var(--iswc-color-danger-stronger, #b02525);
+  --_tone-paler: var(--iswc-color-danger-paler, #fff5f5);
+  --_tone-pale: var(--iswc-color-danger-pale, #ffe3e3);
+  --_tone-text: var(--iswc-danger-text, var(--_tone-stronger));
+  --_tone-soft: var(--iswc-danger-soft, var(--_tone-paler));
+  --_tone-soft-active: var(--iswc-danger-soft-active, var(--_tone-pale));
+  --_tone-on: var(--iswc-on-brand, #fff);
 }
 /* info: dato a notar sin implicar éxito ni fallo (p.ej. "Nueva versión"). */
 :host([color="info"]) {
-  --_tone: var(--is-color-info, #339af0);
-  --_tone-strong: var(--is-color-info-strong, #1c7ed6);
-  --_tone-stronger: var(--is-color-info-stronger, #1864ab);
-  --_tone-strongest: var(--is-color-info-strongest, var(--is-color-info-stronger, #145591));
-  --_tone-paler: var(--is-color-info-paler, #e7f5ff);
-  --_tone-pale: var(--is-color-info-pale, #d0ebff);
-  --_tone-text: var(--is-info-text, var(--_tone-stronger));
-  --_tone-soft: var(--is-info-soft, var(--_tone-paler));
-  --_tone-soft-active: var(--is-info-soft-active, var(--_tone-pale));
-  --_tone-on: var(--is-on-brand, #fff);
+  --_tone: var(--iswc-color-info, #339af0);
+  --_tone-strong: var(--iswc-color-info-strong, #1c7ed6);
+  --_tone-stronger: var(--iswc-color-info-stronger, #1864ab);
+  --_tone-strongest: var(--iswc-color-info-strongest, var(--iswc-color-info-stronger, #145591));
+  --_tone-paler: var(--iswc-color-info-paler, #e7f5ff);
+  --_tone-pale: var(--iswc-color-info-pale, #d0ebff);
+  --_tone-text: var(--iswc-info-text, var(--_tone-stronger));
+  --_tone-soft: var(--iswc-info-soft, var(--_tone-paler));
+  --_tone-soft-active: var(--iswc-info-soft-active, var(--_tone-pale));
+  --_tone-on: var(--iswc-on-brand, #fff);
 }
 /* error: fallo ("Error al guardar"), distinto de danger (acción destructiva). */
 :host([color="error"]) {
-  --_tone: var(--is-color-error, red);
-  --_tone-strong: var(--is-color-error-strong, #e03131);
-  --_tone-stronger: var(--is-color-error-stronger, #c92a2a);
-  --_tone-strongest: var(--is-color-error-stronger, #c92a2a);
-  --_tone-paler: var(--is-color-error-paler, #fff5f5);
-  --_tone-pale: var(--is-color-error-pale, #ffe3e3);
-  --_tone-text: var(--is-error-text, var(--_tone-stronger));
-  --_tone-soft: var(--is-error-soft, var(--_tone-paler));
-  --_tone-soft-active: var(--is-error-soft-active, var(--_tone-pale));
-  --_tone-on: var(--is-on-brand, #fff);
+  --_tone: var(--iswc-color-error, red);
+  --_tone-strong: var(--iswc-color-error-strong, #e03131);
+  --_tone-stronger: var(--iswc-color-error-stronger, #c92a2a);
+  --_tone-strongest: var(--iswc-color-error-stronger, #c92a2a);
+  --_tone-paler: var(--iswc-color-error-paler, #fff5f5);
+  --_tone-pale: var(--iswc-color-error-pale, #ffe3e3);
+  --_tone-text: var(--iswc-error-text, var(--_tone-stronger));
+  --_tone-soft: var(--iswc-error-soft, var(--_tone-paler));
+  --_tone-soft-active: var(--iswc-error-soft-active, var(--_tone-pale));
+  --_tone-on: var(--iswc-on-brand, #fff);
 }
 /* neutral: controles del tema, no una familia semántica. */
 :host([color="neutral"]) {
-  --_tone: var(--is-control-border, #adb5bd);
-  --_tone-strong: var(--is-control-bg, #f1f3f5);
-  --_tone-stronger: var(--is-control-bg-hover, #e9ecef);
-  --_tone-strongest: var(--is-control-bg-active, #dee2e6);
-  --_tone-paler: var(--is-control-bg, #f1f3f5);
-  --_tone-pale: var(--is-control-bg-hover, #e9ecef);
-  --_tone-text: var(--is-control-text, #212529);
-  --_tone-soft: var(--is-control-bg-hover, #e9ecef);
-  --_tone-soft-active: var(--is-control-bg-active, #dee2e6);
-  --_tone-on: var(--is-control-text, #212529);
+  --_tone: var(--iswc-control-border, #adb5bd);
+  --_tone-strong: var(--iswc-control-bg, #f1f3f5);
+  --_tone-stronger: var(--iswc-control-bg-hover, #e9ecef);
+  --_tone-strongest: var(--iswc-control-bg-active, #dee2e6);
+  --_tone-paler: var(--iswc-control-bg, #f1f3f5);
+  --_tone-pale: var(--iswc-control-bg-hover, #e9ecef);
+  --_tone-text: var(--iswc-control-text, #212529);
+  --_tone-soft: var(--iswc-control-bg-hover, #e9ecef);
+  --_tone-soft-active: var(--iswc-control-bg-active, #dee2e6);
+  --_tone-on: var(--iswc-control-text, #212529);
 }
 
 /* ── 2. Appearance → consume roles (no conoce nombres de color) ─────────
@@ -254,28 +254,28 @@
 }
 :host([color="neutral"][variant="ghost"]) {
   /* Relleno = color de texto del tema; on-brand (blanco) fallaba en dark. */
-  --_bg-hover: var(--is-control-text, #212529);
-  --_bg-active: var(--is-control-text, #212529);
-  --_border-hover: var(--is-control-text, #212529);
-  --_text-hover: var(--is-bg, #fff);
+  --_bg-hover: var(--iswc-control-text, #212529);
+  --_bg-active: var(--iswc-control-text, #212529);
+  --_border-hover: var(--iswc-control-text, #212529);
+  --_text-hover: var(--iswc-bg, #fff);
 }
 :host([variant="ghost"]:not([color])) {
   --_bg: transparent;
-  --_border: var(--is-control-border, #adb5bd);
-  --_text: var(--is-control-text, #212529);
-  --_bg-hover: var(--is-control-text, #212529);
-  --_bg-active: var(--is-control-text, #212529);
-  --_border-hover: var(--is-control-text, #212529);
-  --_text-hover: var(--is-bg, #fff);
+  --_border: var(--iswc-control-border, #adb5bd);
+  --_text: var(--iswc-control-text, #212529);
+  --_bg-hover: var(--iswc-control-text, #212529);
+  --_bg-active: var(--iswc-control-text, #212529);
+  --_border-hover: var(--iswc-control-text, #212529);
+  --_text-hover: var(--iswc-bg, #fff);
 }
 
 /* soft: ya nace teñido (plain no). */
 :host([variant="soft"]) {
-  --_bg: var(--is-control-bg, #f1f3f5);
-  --_bg-hover: var(--is-control-bg-hover, #e9ecef);
-  --_bg-active: var(--is-control-bg-active, #dee2e6);
+  --_bg: var(--iswc-control-bg, #f1f3f5);
+  --_bg-hover: var(--iswc-control-bg-hover, #e9ecef);
+  --_bg-active: var(--iswc-control-bg-active, #dee2e6);
   --_border: transparent;
-  --_text: var(--is-control-text, #212529);
+  --_text: var(--iswc-control-text, #212529);
 }
 :host([color][variant="soft"]) {
   --_bg: var(--_tone-soft);
@@ -293,8 +293,8 @@
   --_bg-active: transparent;
   --_border: transparent;
   --_border-hover: transparent;
-  --_text: var(--is-control-text, #212529);
-  --_text-hover: var(--is-control-text, #212529);
+  --_text: var(--iswc-control-text, #212529);
+  --_text-hover: var(--iswc-control-text, #212529);
 }
 :host([variant="text"]) .btn:hover { text-decoration: underline; }
 :host([color][variant="text"]) {
@@ -303,11 +303,11 @@
 }
 
 /* ── shape: ortogonal a color y variant ─────────────────────────────────── */
-:host([shape="round"]) { --is-button-border-radius: var(--is-radius-sm, 6px); }
-:host([shape="rect"]) { --is-button-border-radius: 0; }
-:host([shape="pill"]) { --is-button-border-radius: 999px; }
+:host([shape="round"]) { --iswc-button-border-radius: var(--iswc-radius-sm, 6px); }
+:host([shape="rect"]) { --iswc-button-border-radius: 0; }
+:host([shape="pill"]) { --iswc-button-border-radius: 999px; }
 
-:host([pill]) { --is-button-border-radius: 999px; }
+:host([pill]) { --iswc-button-border-radius: 999px; }
 :host([variant="outlined"]),
 :host([variant="ghost"]) {
   margin-inline-start: var(--_button-horizontal-indent-outlined, var(--_button-horizontal-indent, 0px));

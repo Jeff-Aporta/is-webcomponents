@@ -8,7 +8,7 @@
  *
  * No usa DOM: trabaja sobre el layout geométrico y el source estático de los
  * módulos. Sigue el patrón del resto de selfchecks del repo (console.log con
- * `PASS` para que `npm run` lo detecte).
+ * `PASS` para que el runner lo detecte).
  */
 import assert from 'node:assert/strict';
 import { readFileSync } from 'node:fs';

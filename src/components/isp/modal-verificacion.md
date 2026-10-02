@@ -134,8 +134,8 @@ No expone custom states.
 
 | Token | Uso |
 | --- | --- |
-| `--is-modal-verificacion-accent` | Color del título. |
-| `--is-z-modal` | Capa de apilado. |
+| `--iswc-modal-verificacion-accent` | Color del título. |
+| `--iswc-z-modal` | Capa de apilado. |
 
 ### Integración con formularios
 

@@ -110,18 +110,18 @@ Propiedades públicas aparecen en tabla anterior; APIs heredadas se verifican en
 
 | Token | Uso |
 | --- | --- |
-| `--is-text-muted` | Token leído o definido por componente. |
-| `--is-control-text` | Token leído o definido por componente. |
-| `--is-sans` | Token leído o definido por componente. |
-| `--is-radius` | Token leído o definido por componente. |
-| `--is-control-bg-hover` | Token leído o definido por componente. |
-| `--is-focus` | Token leído o definido por componente. |
-| `--is-color-brand-500` | Token leído o definido por componente. |
-| `--is-tooltip-bg` | Token leído o definido por componente. |
-| `--is-tooltip-font-size` | Token leído o definido por componente. |
+| `--iswc-text-muted` | Token leído o definido por componente. |
+| `--iswc-control-text` | Token leído o definido por componente. |
+| `--iswc-sans` | Token leído o definido por componente. |
+| `--iswc-radius` | Token leído o definido por componente. |
+| `--iswc-control-bg-hover` | Token leído o definido por componente. |
+| `--iswc-focus` | Token leído o definido por componente. |
+| `--iswc-color-brand-500` | Token leído o definido por componente. |
+| `--iswc-tooltip-bg` | Token leído o definido por componente. |
+| `--iswc-tooltip-font-size` | Token leído o definido por componente. |
 | `--max-width` | Token leído o definido por componente. |
-| `--is-color-success-600` | Token leído o definido por componente. |
-| `--is-color-danger-600` | Token leído o definido por componente. |
+| `--iswc-color-success-600` | Token leído o definido por componente. |
+| `--iswc-color-danger-600` | Token leído o definido por componente. |
 
 ### Integración con formularios
 

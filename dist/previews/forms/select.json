@@ -10,7 +10,7 @@
   "sections": [
     {
       "id": "intro",
-      "title": "<is-select>",
+      "title": "Uso",
       "lede": "Select form-associated con paridad funcional con el\r\n          <a href=\"https://mui.com/material-ui/react-select/\" target=\"_blank\" rel=\"noreferrer\">Select de MUI</a>:\r\n          variants, error, selección múltiple con chips o checkmarks, agrupación, opciones ricas y typeahead.\r\n          El listbox vive en un <code class=\"code\">&lt;dialog&gt;</code> del top layer, así que nunca lo recorta\r\n          el <code class=\"code\">overflow</code> de un ancestro.",
       "blocks": [
         {
@@ -466,7 +466,7 @@
             ],
             [
               "tokens",
-              "<code>--is-select-border-radius</code> <code>--is-select-border</code> <code>--is-select-bg</code> <code>--is-select-text</code> <code>--is-select-focus</code> <code>--is-select-danger</code> <code>--is-select-danger-text</code>"
+              "<code>--iswc-select-border-radius</code> <code>--iswc-select-border</code> <code>--iswc-select-bg</code> <code>--iswc-select-text</code> <code>--iswc-select-focus</code> <code>--iswc-select-danger</code> <code>--iswc-select-danger-text</code>"
             ]
           ]
         },

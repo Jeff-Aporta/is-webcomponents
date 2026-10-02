@@ -7,11 +7,11 @@
   "description": "Ficha ISP — cuerpo en JSON compacto (json2html / html2json).",
   "storageKey": "docs-is-form",
   "hasBehavior": true,
-  "styles": ".f-json-row {\n      display: flex;\n      flex-wrap: wrap;\n      gap: 0.5rem;\n      margin: 0.5rem 0 0.75rem;\n    }\n    .f-json-out {\n      margin: 0.5rem 0 0;\n      padding: 0.65rem 0.75rem;\n      border-radius: var(--is-radius, 0.5em);\n      border: 1px solid var(--is-border);\n      background: var(--is-bg-elev);\n      font-family: ui-monospace, SFMono-Regular, Menlo, Consolas, monospace;\n      font-size: 0.75rem;\n      line-height: 1.4;\n      white-space: pre-wrap;\n      word-break: break-word;\n      max-height: 16rem;\n      overflow: auto;\n    }\n    .f-frame {\n      height: 24rem;\n      border: 1px solid var(--is-border);\n      border-radius: 0.5rem;\n    }",
+  "styles": ".f-json-row {\n      display: flex;\n      flex-wrap: wrap;\n      gap: 0.5rem;\n      margin: 0.5rem 0 0.75rem;\n    }\n    .f-json-out {\n      margin: 0.5rem 0 0;\n      padding: 0.65rem 0.75rem;\n      border-radius: var(--iswc-radius, 0.5em);\n      border: 1px solid var(--iswc-border);\n      background: var(--iswc-bg-elev);\n      font-family: ui-monospace, SFMono-Regular, Menlo, Consolas, monospace;\n      font-size: 0.75rem;\n      line-height: 1.4;\n      white-space: pre-wrap;\n      word-break: break-word;\n      max-height: 16rem;\n      overflow: auto;\n    }\n    .f-frame {\n      height: 24rem;\n      border: 1px solid var(--iswc-border);\n      border-radius: 0.5rem;\n    }",
   "sections": [
     {
       "id": "intro",
-      "title": "<is-form>",
+      "title": "Uso",
       "lede": "Ficha con Aceptar / Cancelar. El cuerpo se define en JSON compacto\n          (<code class=\"code\">[tag, attrs?, …hijos]</code>) vía\n          <code class=\"code\">json2html</code> / <code class=\"code\">html2json</code>.",
       "blocks": [
         {

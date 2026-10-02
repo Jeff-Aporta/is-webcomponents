@@ -9,7 +9,7 @@
   "sections": [
     {
       "id": "intro",
-      "title": "<is-tab-panel>",
+      "title": "Uso",
       "lede": "Contenido asociado a una <code class=\"code\">&lt;is-tab&gt;</code>. Solo se muestra el panel cuyo <code class=\"code\">name</code> coincide con el <code class=\"code\">panel</code> de la pestaña activa.",
       "blocks": [
         {

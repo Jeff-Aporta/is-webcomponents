@@ -137,7 +137,7 @@ export interface PreviewDefinition {
   hasBehavior?: boolean;
   /**
    * Si true, el chrome no pinta TOC ni reserva el panel derecho del split
-   * (p. ej. home a ancho completo).
+   * (p. ej. home a ancho completo). Una sola seccion hace lo mismo sola.
    */
   withoutToc?: boolean;
   sections: PreviewSection[];

@@ -76,7 +76,7 @@ import { ElementBase } from '../../core/element-base.js';
       const selected = this.year;
       const current = new Date().getFullYear();
       const cols = Number(this.getAttribute('columns')) || 3;
-      this.#base.style.setProperty('--is-year-columns', String(cols));
+      this.#base.style.setProperty('--iswc-year-columns', String(cols));
 
       const cells: HTMLButtonElement[] = [];
       for (let y = this.min; y <= this.max; y++) {

@@ -9,7 +9,7 @@
   "sections": [
     {
       "id": "intro",
-      "title": "<is-pin-input>",
+      "title": "Uso",
       "lede": "Casillas para OTP / PIN de 3 a 8 dígitos. Auto-avance al escribir,\r\n          Backspace retrocede, pegar reparte todos los dígitos, navegación con\r\n          flechas y soporte para enmascarar el contenido.",
       "blocks": [
         {

@@ -62,9 +62,9 @@ import { ElementBase } from '../../core/element-base.js';
   class IsCommandPalette extends ElementBase {
     /** Personalización por atributo (ver `core/attrs.ts`). */
     static styleAttrs = {
-    radius: '--is-popover-radius',
-    shadow: '--is-popover-shadow',
-    'bar-gap': '--is-surface-bar-gap',
+    radius: '--iswc-popover-radius',
+    shadow: '--iswc-popover-shadow',
+    'bar-gap': '--iswc-surface-bar-gap',
     };
 
     static get observedAttributes(): string[] { return [...OBSERVED, 'radius', 'shadow', 'bar-gap']; }

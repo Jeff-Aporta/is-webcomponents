@@ -53,7 +53,7 @@ export interface OpcionesEnumerador {
 }
 
 /**
- * @param raiz raíz del proyecto (donde vive src/, package.json).
+ * @param raiz raíz del proyecto (donde vive src/ y deno.json).
  * @param opciones flags del enumerador.
  * @returns lista estable y ordenada de entradas.
  */

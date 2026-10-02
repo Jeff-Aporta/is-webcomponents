@@ -9,7 +9,7 @@
   "sections": [
     {
       "id": "intro",
-      "title": "<is-share-button>",
+      "title": "Uso",
       "lede": "Comparte título, texto y URL con las apps nativas (Web Share). Si no hay share, copia al portapapeles.",
       "blocks": [
         {

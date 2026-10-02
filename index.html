@@ -41,23 +41,24 @@
     html.theme-light, html.theme-light body { background: #f4f7fb; color: #142033; }
   </style>
   <!-- Kit: siempre dist/cdn (transpilado). Shell de galería: CSS local. -->
-  <link rel="stylesheet" href="dist/cdn/is-base.min.css?h=mlygeb">
-  <link rel="stylesheet" href="dist/cdn/palettes.min.css?h=rjan2p">
+  <link rel="stylesheet" href="dist/cdn/is-base.min.css?h=uhnlmd">
+  <link rel="stylesheet" href="dist/cdn/palettes.min.css?h=gqt8j7">
   <link rel="stylesheet" href="src/styles/shell.css">
   <link rel="stylesheet" href="src/styles/presentation.css">
-  <link rel="stylesheet" href="dist/cdn/preview/preview-component.min.css?h=5cx1o5">
+  <link rel="stylesheet" href="dist/cdn/preview/preview-component.min.css?h=h0ofkx">
   <style>
     /* Chrome del shell: no mostrar tags crudos mientras upgradan. */
     .shell-bar is-button:not(:defined),
     .shell-bar is-icon:not(:defined),
-    .shell-bar is-theme-toggle:not(:defined) {
+    .shell-bar is-theme-toggle:not(:defined),
+    .shell-bar is-palette-selector:not(:defined) {
       visibility: hidden;
     }
   </style>
   <link rel="icon" href="dist/assets/favicon.svg" type="image/svg+xml">
   <script src="scripts/preview-boot.js"></script>
   <script type="module">
-    import { ISWebComponentsLoader as L } from './dist/cdn/core/loader.min.js?h=d0ml0q';
+    import { ISWebComponentsLoader as L } from './dist/cdn/core/loader.min.js?h=6ibfwp';
     // Galería local: self (dist/cdn) primero; espejos CDN como fallback.
     L.configure({ preferSelf: true, mirrors: ['jsdelivr', 'pages'] });
 
@@ -77,9 +78,10 @@
           'is-button',
           'is-icon',
           'is-theme-toggle',
+          'is-palette-selector',
           'is-code',
         ),
-        import('./dist/cdn/preview/preview-component.min.js?h=i8tw4v'),
+        import('./dist/cdn/preview/preview-component.min.js?h=q7u4i1'),
       ]);
       document.documentElement.dataset.kitShell = '1';
       window.dispatchEvent(new Event('is-gallery-shell-ready'));
@@ -110,34 +112,13 @@
       <is-icon slot="start" icon="mdi:menu"></is-icon>
     </is-button>
 
-    <div class="brand-wrap" id="brandWrap">
-      <button type="button" class="brand" id="brand" aria-haspopup="listbox" aria-expanded="false" aria-controls="brandMenu" aria-label="ContaPyme — elegir paleta" title="Elegir paleta">
-        <span id="brandLead">conta</span><span class="brand__accent" id="brandAccent">pyme</span><span id="brandTail"></span>
-      </button>
-      <ul class="brand-menu" id="brandMenu" role="listbox" hidden aria-label="Paleta de marca">
-        <li role="option" tabindex="-1" data-palette="contapyme" aria-selected="true">
-          <span class="brand-menu__swatch" aria-hidden="true"></span>
-          <span class="brand-menu__label">ContaPyme</span>
-          <is-icon class="brand-menu__check" icon="mdi:check" aria-hidden="true"></is-icon>
-        </li>
-        <li role="option" tabindex="-1" data-palette="insoft" aria-selected="false">
-          <span class="brand-menu__swatch" aria-hidden="true"></span>
-          <span class="brand-menu__label">InSoft</span>
-          <is-icon class="brand-menu__check" icon="mdi:check" aria-hidden="true"></is-icon>
-        </li>
-        <li role="option" tabindex="-1" data-palette="agrowin" aria-selected="false">
-          <span class="brand-menu__swatch" aria-hidden="true"></span>
-          <span class="brand-menu__label">AgroWin</span>
-          <is-icon class="brand-menu__check" icon="mdi:check" aria-hidden="true"></is-icon>
-        </li>
-      </ul>
-    </div>
+    <is-palette-selector id="brandPalette" scope="root" storage-key="is-palette" aria-label="Elegir paleta"></is-palette-selector>
 
     <is-button class="shell-icon-btn" id="fullscreenBtn" color="neutral" variant="plain" pill type="button" aria-label="Abrir preview en pantalla completa" title="Abrir preview en pantalla completa">
       <is-icon slot="start" icon="mdi:open-in-new"></is-icon>
     </is-button>
 
-    <is-theme-toggle id="themeToggle" dark="true"></is-theme-toggle>
+    <is-theme-toggle id="themeToggle" scope="root" dark="true"></is-theme-toggle>
   </header>
 
   <is-split-panel id="mainSplit" class="main-split" orientation="horizontal" position-in-pixels="200" primary="start" storage-key="gallery-nav">
@@ -153,6 +134,6 @@
              label="Componentes"></is-drawer>
 
   <!-- Gallery SPA: dist/gallery-app.min.js (from src/gallery/app.ts). -->
-  <script type="module" src="./dist/gallery-app.min.js?h=8pykw7"></script>
+  <script type="module" src="./dist/gallery-app.min.js?h=jnbsh0"></script>
 </body>
 </html>

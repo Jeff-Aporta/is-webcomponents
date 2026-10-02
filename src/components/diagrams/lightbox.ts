@@ -88,11 +88,11 @@ function isActionable(n: EventTarget | null): n is HTMLElement {
 class IsLightbox extends withStyleAttrs(HTMLElement) {
     /** Personalización por atributo (ver `core/attrs.ts`). */
     static styleAttrs = {
-    bg: { prop: '--is-lightbox-bg', onlyColorValues: true },
-    'text-color': { prop: '--is-lightbox-text', onlyColorValues: true },
-    'border-color': { prop: '--is-lightbox-border', onlyColorValues: true },
-    'backdrop-color': { prop: '--is-lightbox-backdrop', onlyColorValues: true },
-    'backdrop-blur': '--is-lightbox-backdrop-blur',
+    bg: { prop: '--iswc-lightbox-bg', onlyColorValues: true },
+    'text-color': { prop: '--iswc-lightbox-text', onlyColorValues: true },
+    'border-color': { prop: '--iswc-lightbox-border', onlyColorValues: true },
+    'backdrop-color': { prop: '--iswc-lightbox-backdrop', onlyColorValues: true },
+    'backdrop-blur': '--iswc-lightbox-backdrop-blur',
     };
 
   static get observedAttributes(): string[] {

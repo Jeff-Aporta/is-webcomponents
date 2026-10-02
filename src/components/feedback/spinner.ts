@@ -21,10 +21,10 @@ import { withStyleAttrs } from '../../core/attrs.js';
   class IsSpinner extends withStyleAttrs(HTMLElement) {
     /** Personalización por atributo (ver `core/attrs.ts`). */
     static styleAttrs = {
-      'track-width': '--is-spinner-track-width',
-      'track-color': { prop: '--is-spinner-track-color', onlyColorValues: true },
-      color: { prop: '--is-spinner-color', onlyColorValues: true },
-      speed: '--is-spinner-speed',
+      'track-width': '--iswc-spinner-track-width',
+      'track-color': { prop: '--iswc-spinner-track-color', onlyColorValues: true },
+      color: { prop: '--iswc-spinner-color', onlyColorValues: true },
+      speed: '--iswc-spinner-speed',
     };
 
     static get observedAttributes(): string[] { return IsSpinner.styleAttrNames; }

@@ -4,13 +4,13 @@
   "category": "forms",
   "title": "<is-mention>",
   "titleHtml": true,
-  "styles": ".mention-wrap { padding: 1.25rem; border: 1px solid var(--is-border); border-radius: var(--is-radius); background: var(--is-bg-elev); }\r\n    .mention-wrap > is-mention { width: 100%; }\r\n    pre.log {\r\n      font-family: ui-monospace, monospace; font-size: .8rem;\r\n      background: var(--is-bg-elev); border: 1px solid var(--is-border);\r\n      border-radius: var(--is-radius); padding: .55rem .75rem;\r\n      max-height: 9rem; overflow: auto;\r\n    }",
+  "styles": ".mention-wrap { padding: 1.25rem; border: 1px solid var(--iswc-border); border-radius: var(--iswc-radius); background: var(--iswc-bg-elev); }\r\n    .mention-wrap > is-mention { width: 100%; }\r\n    pre.log {\r\n      font-family: ui-monospace, monospace; font-size: .8rem;\r\n      background: var(--iswc-bg-elev); border: 1px solid var(--iswc-border);\r\n      border-radius: var(--iswc-radius); padding: .55rem .75rem;\r\n      max-height: 9rem; overflow: auto;\r\n    }",
   "storageKey": "docs-is-mention",
   "hasBehavior": true,
   "sections": [
     {
       "id": "intro",
-      "title": "<is-mention>",
+      "title": "Uso",
       "lede": "Input con autocompletado al tipear <code class=\"code\">@</code> (usuario) o <code class=\"code\">#</code> (etiqueta). Popup se posiciona y se navega con flechas + Enter.",
       "blocks": []
     },
@@ -20,7 +20,7 @@
       "blocks": [
         {
           "kind": "demo",
-          "html": "<div class=\"mention-wrap\">\r\n            <label for=\"cmt\" style=\"font-size:.85rem;display:block;margin-bottom:.35rem;color:var(--is-text-soft)\">Comentario</label>\r\n            <is-mention id=\"cmt\" trigger=\"@#\" placeholder=\"Escribe @ o # para autocompletar…\">\r\n              <script type=\"application/json\">\r\n                {\r\n                  \"@\": [\"Ana Ramírez\", \"Pedro Castaño\", \"Sofía Velez\", \"Jorge Arias\", \"Lina Mora\", \"Camilo Pérez\", \"Valentina López\"],\r\n                  \"#\": [\"urgente\", \"bug\", \"idea\", \"blocked\", \"wip\", \"ready-to-ship\", \"tech-debt\"]\r\n                }\r\n              </script>\r\n            </is-mention>\r\n          </div>",
+          "html": "<div class=\"mention-wrap\">\r\n            <label for=\"cmt\" style=\"font-size:.85rem;display:block;margin-bottom:.35rem;color:var(--iswc-text-soft)\">Comentario</label>\r\n            <is-mention id=\"cmt\" trigger=\"@#\" placeholder=\"Escribe @ o # para autocompletar…\">\r\n              <script type=\"application/json\">\r\n                {\r\n                  \"@\": [\"Ana Ramírez\", \"Pedro Castaño\", \"Sofía Velez\", \"Jorge Arias\", \"Lina Mora\", \"Camilo Pérez\", \"Valentina López\"],\r\n                  \"#\": [\"urgente\", \"bug\", \"idea\", \"blocked\", \"wip\", \"ready-to-ship\", \"tech-debt\"]\r\n                }\r\n              </script>\r\n            </is-mention>\r\n          </div>",
           "controls": [
             {
               "control": "select",
@@ -45,7 +45,7 @@
         },
         {
           "kind": "demo",
-          "html": "<div class=\"mention-wrap\">\r\n            <label style=\"font-size:.85rem;display:block;margin-bottom:.35rem;color:var(--is-text-soft)\">Solo usuarios</label>\r\n            <is-mention trigger=\"@\" placeholder=\"Escribe @ para nombrar…\">\r\n              <script type=\"application/json\">\r\n                { \"@\": [\"Ana\", \"Pedro\", \"Sofía\", \"Jorge\", \"Lina\", \"Camilo\"] }\r\n              </script>\r\n            </is-mention>\r\n          </div>"
+          "html": "<div class=\"mention-wrap\">\r\n            <label style=\"font-size:.85rem;display:block;margin-bottom:.35rem;color:var(--iswc-text-soft)\">Solo usuarios</label>\r\n            <is-mention trigger=\"@\" placeholder=\"Escribe @ para nombrar…\">\r\n              <script type=\"application/json\">\r\n                { \"@\": [\"Ana\", \"Pedro\", \"Sofía\", \"Jorge\", \"Lina\", \"Camilo\"] }\r\n              </script>\r\n            </is-mention>\r\n          </div>"
         }
       ]
     },

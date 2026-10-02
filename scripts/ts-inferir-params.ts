@@ -19,7 +19,7 @@
  * cualquier objeto pueda tener— y dos señales de tipos distintos descartan la
  * deducción y dejan el parámetro para decidirlo a mano.
  *
- *   node scripts/ts-inferir-params.ts src/components/_shared
+ *   deno run -A --no-check scripts/ts-inferir-params.ts src/components/_shared
  */
 import { readdirSync, readFileSync, statSync, writeFileSync } from 'node:fs';
 import { join } from 'node:path';
@@ -144,7 +144,7 @@ function ficheros(dir: string): string[] {
 
 const objetivo = process.argv[2];
 if (!objetivo) {
-  console.error('uso: node scripts/ts-inferir-params.ts <fichero-o-carpeta>');
+  console.error('uso: deno run -A --no-check scripts/ts-inferir-params.ts <fichero-o-carpeta>');
   process.exit(2);
 }
 const lista = statSync(objetivo).isDirectory() ? ficheros(objetivo) : [objetivo];

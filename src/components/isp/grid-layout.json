@@ -8,7 +8,7 @@
   "sections": [
     {
       "id": "intro",
-      "title": "<is-grid-layout>",
+      "title": "Uso",
       "lede": "Grid declarativo. Port del <code class=\"code\">GridLayout.svelte</code> de ISP:\r\n          <code class=\"code\">cells</code> acepta un número o una track list CSS cruda.",
       "blocks": [
         {

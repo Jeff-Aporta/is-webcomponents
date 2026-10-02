@@ -10,7 +10,7 @@
   "sections": [
     {
       "id": "intro",
-      "title": "<is-checkbox>",
+      "title": "Uso",
       "lede": "Casilla <em>form-associated</em> con paridad funcional con el\r\n          <a href=\"https://mui.com/material-ui/react-checkbox/\" target=\"_blank\" rel=\"noreferrer\">Checkbox de MUI</a>:\r\n          entra en <code class=\"code\">FormData</code> y en la validación nativa del <code class=\"code\">&lt;form&gt;</code>\r\n          sin input oculto, con color por <code class=\"code\">variant</code>, posición de etiqueta, iconos propios y\r\n          estado de error.",
       "blocks": [
         {
@@ -356,7 +356,7 @@
             ],
             [
               "tokens",
-              "<code>--is-checkbox-size</code> <code>--is-checkbox-radius</code> <code>--is-checkbox-bg</code> <code>--is-checkbox-bg-hover</code> <code>--is-checkbox-border</code> <code>--is-checkbox-accent</code> <code>--is-checkbox-fill</code> <code>--is-checkbox-mark</code> <code>--is-checkbox-on-accent</code> <code>--is-checkbox-focus</code> <code>--is-checkbox-halo</code>"
+              "<code>--iswc-checkbox-size</code> <code>--iswc-checkbox-radius</code> <code>--iswc-checkbox-bg</code> <code>--iswc-checkbox-bg-hover</code> <code>--iswc-checkbox-border</code> <code>--iswc-checkbox-accent</code> <code>--iswc-checkbox-fill</code> <code>--iswc-checkbox-mark</code> <code>--iswc-checkbox-on-accent</code> <code>--iswc-checkbox-focus</code> <code>--iswc-checkbox-halo</code>"
             ]
           ]
         }

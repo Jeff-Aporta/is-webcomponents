@@ -10,7 +10,7 @@
   "sections": [
     {
       "id": "intro",
-      "title": "<is-switch>",
+      "title": "Uso",
       "lede": "Interruptor <em>form-associated</em> con paridad funcional con el\r\n          <a href=\"https://mui.com/material-ui/react-switch/\" target=\"_blank\" rel=\"noreferrer\">Switch de MUI</a>:\r\n          mismo contrato de formulario que <code class=\"code\">is-checkbox</code>, con carril y perilla deslizante,\r\n          color por <code class=\"code\">variant</code>, iconos en la perilla y rótulos dentro del carril.",
       "blocks": [
         {
@@ -345,7 +345,7 @@
             ],
             [
               "tokens",
-              "<code>--is-switch-height</code> <code>--is-switch-width</code> <code>--is-switch-bg</code> <code>--is-switch-bg-hover</code> <code>--is-switch-border</code> <code>--is-switch-accent</code> <code>--is-switch-thumb</code> <code>--is-switch-icon</code> <code>--is-switch-icon-checked</code> <code>--is-switch-focus</code> <code>--is-switch-halo</code>"
+              "<code>--iswc-switch-height</code> <code>--iswc-switch-width</code> <code>--iswc-switch-bg</code> <code>--iswc-switch-bg-hover</code> <code>--iswc-switch-border</code> <code>--iswc-switch-accent</code> <code>--iswc-switch-thumb</code> <code>--iswc-switch-icon</code> <code>--iswc-switch-icon-checked</code> <code>--iswc-switch-focus</code> <code>--iswc-switch-halo</code>"
             ]
           ]
         }

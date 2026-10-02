@@ -6,7 +6,7 @@
  *   - default → cerrar al scroll (fuera del panel)
  *   - scroll-lock → bloquear overflow del documento, no cerrar por scroll
  *
- *   npm test -- tests/context-menu-scroll.test.ts
+ *   deno task test -- tests/context-menu-scroll.test.ts
  */
 import { test } from 'node:test';
 import assert from 'node:assert/strict';

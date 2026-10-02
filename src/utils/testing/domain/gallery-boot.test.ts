@@ -86,9 +86,9 @@ test('SPA de galeria se consume desde dist/gallery-app.min.js (no src/*.ts)', ()
     existsSync(join(root, 'src', 'gallery', 'app.ts')),
     'fuente: src/gallery/app.ts',
   );
-  // Tras build debe existir el artefacto; si falta, el test avisa (correr npm run build).
+  // Tras build debe existir el artefacto; si falta, el test avisa (correr deno task build).
   if (!existsSync(join(root, 'dist', 'gallery-app.min.js'))) {
-    console.warn('gallery-boot: falta dist/gallery-app.min.js — corre npm run build');
+    console.warn('gallery-boot: falta dist/gallery-app.min.js — corre deno task build');
   }
 });
 

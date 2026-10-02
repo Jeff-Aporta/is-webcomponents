@@ -4,13 +4,13 @@
   "category": "data",
   "title": "<is-pivot-table>",
   "titleHtml": true,
-  "styles": "pre.log {\r\n      font-family: ui-monospace, monospace; font-size: .8rem;\r\n      background: var(--is-bg-elev); border: 1px solid var(--is-border);\r\n      border-radius: var(--is-radius); padding: .55rem .75rem;\r\n      max-height: 8rem; overflow: auto;\r\n    }",
+  "styles": "pre.log {\r\n      font-family: ui-monospace, monospace; font-size: .8rem;\r\n      background: var(--iswc-bg-elev); border: 1px solid var(--iswc-border);\r\n      border-radius: var(--iswc-radius); padding: .55rem .75rem;\r\n      max-height: 8rem; overflow: auto;\r\n    }",
   "storageKey": "docs-is-pivot-table",
   "hasBehavior": true,
   "sections": [
     {
       "id": "intro",
-      "title": "<is-pivot-table>",
+      "title": "Uso",
       "lede": "Tabla pivot: agrupa por filas y columnas, agrega una medida. Soporta <code>sum</code>, <code>avg</code>, <code>count</code>, <code>min</code> y <code>max</code>.",
       "blocks": []
     },

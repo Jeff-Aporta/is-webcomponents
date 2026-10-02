@@ -9,7 +9,7 @@
  *
  * No se carga CodeMirror (ni aquí ni en <is-code>): el resaltado y el tema
  * los resuelve el propio `<is-code>` con su motor nativo (code-highlight) y
- * las custom properties --is-code-* (reacciona a is-theme-change).
+ * las custom properties --iswc-code-* (reacciona a is-theme-change).
  *
  * Ya no hay puentes en `window`: quien necesite pintar importa `paint`.
  */

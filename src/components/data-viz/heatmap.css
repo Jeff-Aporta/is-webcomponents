@@ -2,9 +2,9 @@
 :host {
   display: block;
   font: inherit;
-  color: var(--is-text);
-  --is-heatmap-text: var(--is-text);
-  --is-heatmap-grid-color: color-mix(in srgb, var(--is-text) 12%, transparent);
+  color: var(--iswc-text);
+  --iswc-heatmap-text: var(--iswc-text);
+  --iswc-heatmap-grid-color: color-mix(in srgb, var(--iswc-text) 12%, transparent);
 }
 .root {
   display: grid;
@@ -22,7 +22,7 @@
 .cell {
   transition: opacity 120ms ease, transform 100ms ease;
 }
-.cell:hover, .cell.is-hover { opacity: .85; stroke: var(--is-text); stroke-width: 1; }
+.cell:hover, .cell.is-hover { opacity: .85; stroke: var(--iswc-text); stroke-width: 1; }
 .tick-label { font-size: .65rem; }
 .axis-title { font-size: .7rem; font-weight: 600; }
 .cell-val { font-size: .65rem; font-variant-numeric: tabular-nums; }
@@ -34,11 +34,11 @@
 .legend-grad {
   flex: 1 1 auto;
   border-radius: 4px;
-  border: 1px solid color-mix(in srgb, var(--is-text) 10%, transparent);
+  border: 1px solid color-mix(in srgb, var(--iswc-text) 10%, transparent);
 }
 .legend-tick {
   font-size: .65rem;
-  color: var(--is-text-soft);
+  color: var(--iswc-text-soft);
   font-variant-numeric: tabular-nums;
 }
 

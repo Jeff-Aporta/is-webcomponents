@@ -25,7 +25,7 @@ const failures = [];
 const check = (cond, msg) => { if (!cond) failures.push(msg); };
 
 if (!existsSync(dist)) {
-  console.log('css-imports.test.ts: SKIP — dist/cdn no existe (corre `node scripts/build.mjs`)');
+  console.log('css-imports.test.ts: SKIP — dist/cdn no existe (corre `deno run -A --no-check scripts/build.mjs`)');
   process.exit(0);
 }
 

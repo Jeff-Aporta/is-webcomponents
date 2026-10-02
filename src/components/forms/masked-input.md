@@ -125,17 +125,17 @@ el valor pasa a estar completo.
 
 | Token | Uso |
 | --- | --- |
-| `--is-field-width` | Ancho del campo, default `16rem`. |
-| `--is-control-bg` | Fondo del campo. |
-| `--is-control-border` | Borde del campo. |
-| `--is-control-radius` | Radio de bordes. |
-| `--is-bg-soft` | Fondo de reserva. |
-| `--is-border` | Borde de reserva. |
-| `--is-text` | Color del texto. |
-| `--is-text-soft` | Color del placeholder. |
-| `--is-accent` | Reserva del color de foco. |
-| `--is-focus` | Color del anillo de foco. |
-| `--is-danger` | Borde en estado inválido. |
+| `--iswc-field-width` | Ancho del campo, default `16rem`. |
+| `--iswc-control-bg` | Fondo del campo. |
+| `--iswc-control-border` | Borde del campo. |
+| `--iswc-control-radius` | Radio de bordes. |
+| `--iswc-bg-soft` | Fondo de reserva. |
+| `--iswc-border` | Borde de reserva. |
+| `--iswc-text` | Color del texto. |
+| `--iswc-text-soft` | Color del placeholder. |
+| `--iswc-accent` | Reserva del color de foco. |
+| `--iswc-focus` | Color del anillo de foco. |
+| `--iswc-danger` | Borde en estado inválido. |
 
 ### Integración con formularios
 

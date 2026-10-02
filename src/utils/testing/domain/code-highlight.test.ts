@@ -56,6 +56,12 @@ test('html: tag + atributo + string; regiones script/style tokenizadas como js/c
   const flat = lines.flatMap((l) => l.tokens);
   const types = typesOf(flat);
   assert.ok(types.includes('tag'), 'nombre del tag');
+  assert.ok(types.includes('tagPunct'), 'simbolos < / >');
+  const names = flat.filter((t) => t.type === 'tag').map((t) => t.text).join('');
+  const punct = flat.filter((t) => t.type === 'tagPunct').map((t) => t.text).join('');
+  assert.equal(names.includes('<') || names.includes('>'), false);
+  assert.ok(names.includes('button'));
+  assert.ok(punct.includes('<') && punct.includes('>') && punct.includes('/'));
   assert.ok(types.includes('string'), 'valor del atributo');
   assert.ok(!types.includes('keyword'), 'texto plano no se pinta como código');
 

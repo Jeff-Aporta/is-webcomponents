@@ -15,9 +15,9 @@
  * verdad es el metadato de Iconify.
  *
  * Uso:
- *   node scripts/fix-icon-viewbox.ts --detect     # sondea colecciones (rapido)
- *   node scripts/fix-icon-viewbox.ts             # sondea y repara las sucias
- *   node scripts/fix-icon-viewbox.ts --only fa,academicons
+ *   deno run -A --no-check scripts/fix-icon-viewbox.ts --detect     # sondea colecciones (rapido)
+ *   deno run -A --no-check scripts/fix-icon-viewbox.ts             # sondea y repara las sucias
+ *   deno run -A --no-check scripts/fix-icon-viewbox.ts --only fa,academicons
  */
 import { readFile, writeFile, readdir } from 'node:fs/promises';
 import { join, dirname } from 'node:path';

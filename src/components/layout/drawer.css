@@ -3,15 +3,15 @@
 /* <is-drawer> — panel deslizante desde un borde del viewport. */
 
 :host {
-  --is-drawer-size: 380px;
-  --is-drawer-spacing: var(--is-space-l, 1rem);
+  --iswc-drawer-size: 380px;
+  --iswc-drawer-spacing: var(--iswc-space-l, 1rem);
   /* modal-chrome.css lee --spacing; sin alias el chrome interno queda sin padding. */
-  --spacing: var(--is-drawer-spacing);
-  --is-drawer-backdrop-color: rgba(0, 0, 0, 0.45);
-  --is-drawer-show-duration: 220ms;
-  --is-drawer-hide-duration: 180ms;
+  --spacing: var(--iswc-drawer-spacing);
+  --iswc-drawer-backdrop-color: rgba(0, 0, 0, 0.45);
+  --iswc-drawer-show-duration: 220ms;
+  --iswc-drawer-hide-duration: 180ms;
 
-  --_radius: calc(var(--is-radius, 0.75em));
+  --_radius: calc(var(--iswc-radius, 0.75em));
   --_shadow: 0 -8px 24px rgba(0, 0, 0, 0.18), 8px 0 24px rgba(0, 0, 0, 0.18);
 
   position: fixed;
@@ -27,15 +27,15 @@
 .backdrop {
   position: fixed;
   inset: 0;
-  background: var(--is-drawer-backdrop-color);
+  background: var(--iswc-drawer-backdrop-color);
   opacity: 0;
   pointer-events: auto;
 }
 
 .drawer {
   position: fixed;
-  background: var(--is-bg, #fff);
-  color: var(--is-text, inherit);
+  background: var(--iswc-bg, #fff);
+  color: var(--iswc-text, inherit);
   box-shadow: var(--_shadow);
   display: grid;
   grid-template-rows: auto 1fr auto;
@@ -50,7 +50,7 @@
    expuesta. */
 :host([placement="start"]) .drawer,
 :host([placement="end"]) .drawer {
-  width: min(var(--is-drawer-size), calc(100% - 2 * var(--is-drawer-spacing)));
+  width: min(var(--iswc-drawer-size), calc(100% - 2 * var(--iswc-drawer-spacing)));
   height: 100%;
   top: 0;
   bottom: 0;
@@ -70,7 +70,7 @@
 
 :host([placement="top"]) .drawer,
 :host([placement="bottom"]) .drawer {
-  height: min(var(--is-drawer-size), calc(100% - 2 * var(--is-drawer-spacing)));
+  height: min(var(--iswc-drawer-size), calc(100% - 2 * var(--iswc-drawer-spacing)));
   width: 100%;
   left: 0;
   right: 0;
@@ -107,6 +107,6 @@
   flex: 0 0 auto;
   font-size: 1rem;
   line-height: 0;
-  color: var(--is-text-muted, #6c757d);
+  color: var(--iswc-text-muted, #6c757d);
 }
-.close-btn:hover { color: var(--is-text, #212529); }
+.close-btn:hover { color: var(--iswc-text, #212529); }

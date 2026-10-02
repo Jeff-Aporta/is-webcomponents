@@ -41,13 +41,13 @@ export const GLOBAL_SNIPPET_CSS = `
   max-width: 100%;
   padding: 0.5em 0.65em;
   font: inherit;
-  color: var(--is-control-text, var(--is-text, inherit));
-  background: var(--is-control-bg, #f1f3f5);
-  border: 1px solid var(--is-control-border, #adb5bd);
-  border-radius: var(--is-radius-sm, 0.375em);
+  color: var(--iswc-control-text, var(--iswc-text, inherit));
+  background: var(--iswc-control-bg, #f1f3f5);
+  border: 1px solid var(--iswc-control-border, #adb5bd);
+  border-radius: var(--iswc-radius-sm, 0.375em);
 }
 .demo-native-field:focus-visible {
-  outline: 2px solid var(--is-focus, var(--is-accent, #339af0));
+  outline: 2px solid var(--iswc-focus, var(--iswc-accent, #339af0));
   outline-offset: 1px;
 }
 textarea.demo-native-field {
@@ -65,9 +65,9 @@ textarea.demo-native-field {
   flex-direction: column;
   gap: 0.35em;
   padding: 0.7em 0.85em;
-  border: 1px solid var(--is-border-soft);
-  border-radius: var(--is-radius-sm);
-  background: color-mix(in srgb, var(--is-bg) 55%, transparent);
+  border: 1px solid var(--iswc-border-soft);
+  border-radius: var(--iswc-radius-sm);
+  background: color-mix(in srgb, var(--iswc-bg) 55%, transparent);
   min-width: 0;
 }
 .demo-locale-card__meta {
@@ -79,21 +79,21 @@ textarea.demo-native-field {
 .demo-locale-card__name {
   font-size: 0.78rem;
   font-weight: 650;
-  color: var(--is-text);
+  color: var(--iswc-text);
   overflow: hidden;
   text-overflow: ellipsis;
   white-space: nowrap;
 }
 .demo-locale-card__code {
   flex-shrink: 0;
-  font-family: "JetBrains Mono", var(--is-mono);
+  font-family: "JetBrains Mono", var(--iswc-mono);
   font-size: 0.68rem;
-  color: var(--is-text-dim);
+  color: var(--iswc-text-dim);
 }
 .demo-locale-card is-format-date,
 .demo-locale-card is-relative-time {
   font-size: 0.92rem;
-  color: var(--is-text-soft);
+  color: var(--iswc-text-soft);
 }
 
 .format-grid {
@@ -107,14 +107,14 @@ textarea.demo-native-field {
 .format-grid__tag {
   align-self: center;
   justify-self: start;
-  font-family: var(--is-mono, ui-monospace, Consolas, monospace);
+  font-family: var(--iswc-mono, ui-monospace, Consolas, monospace);
   font-size: 0.78rem;
   letter-spacing: 0.01em;
-  color: var(--is-text-soft);
-  background: color-mix(in srgb, var(--is-bg-soft) 70%, transparent);
+  color: var(--iswc-text-soft);
+  background: color-mix(in srgb, var(--iswc-bg-soft) 70%, transparent);
   padding: 0.18em 0.55em;
   border-radius: 999px;
-  border: 1px solid color-mix(in srgb, var(--is-border) 60%, transparent);
+  border: 1px solid color-mix(in srgb, var(--iswc-border) 60%, transparent);
   white-space: nowrap;
 }
 .format-grid__value {
@@ -122,7 +122,7 @@ textarea.demo-native-field {
   justify-self: start;
   font-weight: 600;
   font-size: 1rem;
-  color: var(--is-text);
+  color: var(--iswc-text);
   min-width: 0;
 }
 @media (max-width: 38rem) {
@@ -146,9 +146,9 @@ textarea.demo-native-field {
   align-content: space-between;
   gap: 0.4rem 0.6rem;
   padding: 0.85rem 1rem;
-  border: 1px solid var(--is-border);
-  border-radius: var(--is-radius, 0.5em);
-  background: color-mix(in srgb, var(--is-bg-elev, #1c2128) 70%, transparent);
+  border: 1px solid var(--iswc-border);
+  border-radius: var(--iswc-radius, 0.5em);
+  background: color-mix(in srgb, var(--iswc-bg-elev, #1c2128) 70%, transparent);
   min-height: 4.5rem;
 }
 .format-grid--cards .format-grid__tag {
@@ -188,12 +188,12 @@ textarea.demo-native-field {
   font-weight: 600;
   text-transform: uppercase;
   letter-spacing: 0.06em;
-  color: var(--is-text-dim);
+  color: var(--iswc-text-dim);
   text-align: center;
 }
 .matrix > .row-label {
   font-size: 0.82rem;
-  color: var(--is-text-soft);
+  color: var(--iswc-text-soft);
   font-weight: 600;
   grid-column: 1;
 }
@@ -203,41 +203,41 @@ textarea.demo-native-field {
   justify-content: flex-start;
   min-height: 2.75em;
   padding: 8px 10px;
-  background: color-mix(in srgb, var(--is-bg) 55%, transparent);
-  border: 1px solid var(--is-border-soft);
-  border-radius: var(--is-radius-sm);
+  background: color-mix(in srgb, var(--iswc-bg) 55%, transparent);
+  border: 1px solid var(--iswc-border-soft);
+  border-radius: var(--iswc-radius-sm);
 }
 
 .log {
-  background: var(--is-code-bg);
-  color: var(--is-code-text);
-  font-family: "JetBrains Mono", var(--is-mono);
+  background: var(--iswc-code-bg);
+  color: var(--iswc-code-text);
+  font-family: "JetBrains Mono", var(--iswc-mono);
   font-size: 0.78rem;
-  border-radius: var(--is-radius-sm);
+  border-radius: var(--iswc-radius-sm);
   padding: 10px 12px;
   max-height: 160px;
   overflow-y: auto;
-  border: 1px solid var(--is-border-soft);
+  border: 1px solid var(--iswc-border-soft);
   margin-top: 8px;
   min-height: 2.5em;
 }
 .log:empty { display: none; }
 .log .row { padding: 2px 0; }
-.log .t { color: var(--is-text-dim); }
+.log .t { color: var(--iswc-text-dim); }
 .log .e { color: #74c0fc; }
-.log .hint { color: var(--is-text-dim); font-style: italic; }
+.log .hint { color: var(--iswc-text-dim); font-style: italic; }
 
 .callout {
-  background: color-mix(in srgb, var(--is-accent) 7%, var(--is-bg-soft));
-  border: 1px solid color-mix(in srgb, var(--is-accent) 32%, var(--is-border-soft));
+  background: color-mix(in srgb, var(--iswc-accent) 7%, var(--iswc-bg-soft));
+  border: 1px solid color-mix(in srgb, var(--iswc-accent) 32%, var(--iswc-border-soft));
   padding: 12px 16px;
   margin: 14px 0 20px;
-  border-radius: var(--is-radius-sm);
+  border-radius: var(--iswc-radius-sm);
   font-size: 0.9rem;
-  color: var(--is-text-soft);
+  color: var(--iswc-text-soft);
   line-height: 1.5;
 }
-.callout strong { color: var(--is-text); font-weight: 700; }
+.callout strong { color: var(--iswc-text); font-weight: 700; }
 
 .card-grid {
   display: grid;
@@ -248,7 +248,7 @@ textarea.demo-native-field {
 .card-grid > is-card { align-self: stretch; }
 .card-meta {
   font-size: 0.85rem;
-  color: var(--is-text-soft);
+  color: var(--iswc-text-soft);
   margin: 6px 0 0;
   line-height: 1.45;
 }
@@ -256,11 +256,11 @@ textarea.demo-native-field {
 .card-stage-h {
   height: auto;
   min-height: 0;
-  border: 1px solid var(--is-border);
-  border-radius: var(--is-radius);
+  border: 1px solid var(--iswc-border);
+  border-radius: var(--iswc-radius);
   padding: 20px;
   margin: 12px 0 28px;
-  background: var(--is-bg-soft);
+  background: var(--iswc-bg-soft);
   box-shadow: inset 0 1px 0 rgb(255 255 255 / 3%);
   display: flex;
   align-items: flex-start;
@@ -272,8 +272,8 @@ textarea.demo-native-field {
   object-fit: cover;
   background:
     linear-gradient(135deg,
-      color-mix(in srgb, var(--is-color-brand) 85%, #fff),
-      var(--is-color-brand-stronger));
+      color-mix(in srgb, var(--iswc-color-brand) 85%, #fff),
+      var(--iswc-color-brand-stronger));
 }
 `.trim();
 

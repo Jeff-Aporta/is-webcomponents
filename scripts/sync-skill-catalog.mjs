@@ -104,12 +104,12 @@ const pages = [
   ['diagrams/diagram-view-app.json', preview(
     'is-diagram-view-app', 'diagrams', 'Visor de diagramas (API)',
     'Abre cualquier diagrama con ?kind= y ?json= en base64url. La dirección no cambia al mirar el documento.',
-    `<iframe title="Visor de diagramas" src="demos/diagramas/app/view.html?kind=flowchart" style="width:100%;height:720px;border:1px solid var(--is-border);border-radius:12px;background:var(--is-bg)"></iframe><ul>${links}</ul>`,
+    `<iframe title="Visor de diagramas" src="demos/diagramas/app/view.html?kind=flowchart" style="width:100%;height:720px;border:1px solid var(--iswc-border);border-radius:12px;background:var(--iswc-bg)"></iframe><ul>${links}</ul>`,
   )],
   ['diagrams/diagram-edit-app.json', preview(
     'is-diagram-edit-app', 'diagrams', 'Editor de diagramas (API)',
     'Edita el diagrama y comparte un enlace nuevo. El ?json= con el que se abrió la página se queda igual.',
-    `<iframe title="Editor de diagramas" src="demos/diagramas/app/edit.html?kind=er" style="width:100%;height:720px;border:1px solid var(--is-border);border-radius:12px;background:var(--is-bg)"></iframe><ul>${links}</ul>`,
+    `<iframe title="Editor de diagramas" src="demos/diagramas/app/edit.html?kind=er" style="width:100%;height:720px;border:1px solid var(--iswc-border);border-radius:12px;background:var(--iswc-bg)"></iframe><ul>${links}</ul>`,
   )],
   ['diagrams/er-editor.json', preview(
     'is-er-editor', 'diagrams', '<is-er-editor>',

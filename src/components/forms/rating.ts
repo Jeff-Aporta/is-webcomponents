@@ -79,11 +79,11 @@ import { clampTo, tidyToStep } from '../_shared/misc-utils.js';
   class IsRating extends ElementBase {
     /** Personalización por atributo (ver `core/attrs.ts`). */
     static styleAttrs = {
-    size: '--is-rating-size',
-    gap: '--is-rating-gap',
-    color: { prop: '--is-rating-color', onlyColorValues: true },
-    'empty-color': { prop: '--is-rating-empty', onlyColorValues: true },
-    'focus-color': { prop: '--is-rating-focus', onlyColorValues: true },
+    size: '--iswc-rating-size',
+    gap: '--iswc-rating-gap',
+    color: { prop: '--iswc-rating-color', onlyColorValues: true },
+    'empty-color': { prop: '--iswc-rating-empty', onlyColorValues: true },
+    'focus-color': { prop: '--iswc-rating-focus', onlyColorValues: true },
     };
 
     static formAssociated = true;

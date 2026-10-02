@@ -33,7 +33,7 @@ Orden en `src/components/_shared/iconify-loader.js`:
 ## S-I4 Corpus commiteado
 
 - Default commiteado: `mdi` + `tabler` (~5 MB).
-- Descarga completa: `npm run icons:download` (no commitear 231 colecciones).
+- Descarga completa: `deno task icons:download` (no commitear 231 colecciones).
 - Por proyecto: `scripts/download-iconify.ts --projectRoot=…`
 
 ## Contratos

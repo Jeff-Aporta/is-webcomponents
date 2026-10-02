@@ -51,7 +51,7 @@ import './sparkline.js';
 | `label` | string/según contrato | Fuente define default/restricción. |
 | `variant` | string/según contrato | Fuente define default/restricción. |
 | `curve` | string/según contrato | Fuente define default/restricción. |
-| `trend` | `positive \| negative \| neutral` (sin atributo = color de acento de marca) | Controla `--line-color`/`--border-color-1`/`--fill-color-1` vía tokens de estado (`--is-success-text`, `--is-danger-text`, `--is-text-dim`). |
+| `trend` | `positive \| negative \| neutral` (sin atributo = color de acento de marca) | Controla `--line-color`/`--border-color-1`/`--fill-color-1` vía tokens de estado (`--iswc-success-text`, `--iswc-danger-text`, `--iswc-text-dim`). |
 
 #### Propiedades públicas
 
@@ -91,11 +91,11 @@ No expone.
 | `--line-color` | Token leído o definido por componente. |
 | `--fill-color-1` | Token leído o definido por componente. |
 | `--line-width` | Token leído o definido por componente. |
-| `--is-accent` | Token leído o definido por componente. |
+| `--iswc-accent` | Token leído o definido por componente. |
 | `--border-color-1` | Token leído o definido por componente. |
-| `--is-success-text` | Token leído o definido por componente. |
-| `--is-danger-text` | Token leído o definido por componente. |
-| `--is-text-dim` | Token leído o definido por componente. |
+| `--iswc-success-text` | Token leído o definido por componente. |
+| `--iswc-danger-text` | Token leído o definido por componente. |
+| `--iswc-text-dim` | Token leído o definido por componente. |
 
 ### Integración con formularios
 

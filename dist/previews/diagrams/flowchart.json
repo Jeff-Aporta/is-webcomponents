@@ -8,7 +8,7 @@
   "sections": [
     {
       "id": "intro",
-      "title": "<is-flowchart>",
+      "title": "Uso",
       "lede": "Diagrama de flujo en SVG, sin Mermaid. Tú declaras nodos y aristas; el\r\n          componente decide las capas, reduce los cruces y rutea las flechas\r\n          rodeando las cajas.",
       "blocks": [
         {

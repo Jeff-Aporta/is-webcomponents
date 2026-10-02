@@ -9,7 +9,7 @@
   "sections": [
     {
       "id": "intro",
-      "title": "<is-polar-area-chart>",
+      "title": "Uso",
       "lede": "Chart.js <code class=\"code\">polarArea</code> themed. Ángulos iguales por categoría;\r\n          el <strong>radio</strong> refleja la magnitud (a diferencia de un pie, donde el tamaño\r\n          es el ángulo). Ideal para comparar escalas en el mismo “reloj”.",
       "blocks": [
         {

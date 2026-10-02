@@ -4,7 +4,7 @@ import { ElementBase } from '../../core/element-base.js';
 import { createPopupDismiss } from '../_shared/popup-dismiss.js';
 
 /**
- * <is-window> — Ventana flotante dockable (estilo escritorio).
+ * <is-window> — Ventana flotante (estilo escritorio).
  *
  * Atributos
  *   title       encabezado de la ventana
@@ -13,7 +13,9 @@ import { createPopupDismiss } from '../_shared/popup-dismiss.js';
  *   maximizable, minimizable, closable  boolean
  *   default     maximized | minimized | normal  (default normal)
  *   resizable   boolean — drag de la esquina inferior derecha
- *   dock        bottom-right (default) | bottom | top | none  — destino al minimizar
+ *   scope       local (default) | global — local vive en el wrapper; global usa el viewport
+ *   position    absolute | fixed — local arranca en absolute; global en fixed si no se declara
+ *   dock        se ignora: al minimizar van a la barra de pastillas del contexto
  *
  * Slots
  *   default     contenido principal
@@ -33,7 +35,7 @@ import { createPopupDismiss } from '../_shared/popup-dismiss.js';
  *   win.minimize() / .restore() / .maximize() / .unmaximize() / .close()
  */
 (() => {
-  const OBSERVED = ['title', 'x', 'y', 'width', 'height', 'maximizable', 'minimizable', 'closable', 'default', 'resizable', 'dock'];
+  const OBSERVED = ['title', 'x', 'y', 'width', 'height', 'maximizable', 'minimizable', 'closable', 'default', 'resizable', 'dock', 'scope', 'position'];
 
   /** Igual que el de _shared/modal-base.js, que no lo exporta. */
   const FOCUSABLE =
@@ -42,6 +44,8 @@ import { createPopupDismiss } from '../_shared/popup-dismiss.js';
     + ' button:not([disabled]), iframe, [tabindex]:not([tabindex="-1"])';
 
   type WindowState = 'normal' | 'minimized' | 'maximized';
+  const boxIds = new WeakMap<Element, number>();
+  let boxSeq = 0;
   interface Rect { x: number; y: number; w: number; h: number; }
   interface DragState { x: number; y: number; rect: Rect; }
   interface ResizeState { x: number; y: number; rect: Rect; }
@@ -49,9 +53,9 @@ import { createPopupDismiss } from '../_shared/popup-dismiss.js';
   class IsWindow extends ElementBase {
     /** Personalización por atributo (ver `core/attrs.ts`). */
     static styleAttrs = {
-    shadow: '--is-popover-shadow',
-    'bar-gap': '--is-surface-bar-gap',
-    'bar-padding': '--is-surface-bar-padding',
+    shadow: '--iswc-popover-shadow',
+    'bar-gap': '--iswc-surface-bar-gap',
+    'bar-padding': '--iswc-surface-bar-padding',
     };
 
     static get observedAttributes(): string[] { return [...OBSERVED, 'shadow', 'bar-gap', 'bar-padding']; }
@@ -64,6 +68,10 @@ import { createPopupDismiss } from '../_shared/popup-dismiss.js';
     #lastRect: Rect | null = null;
     /** Elemento que tenia el foco antes de abrir la ventana; se restaura al close. */
     #previouslyFocused: HTMLElement | null = null;
+    /** Evita teardown al mudar el nodo a body por scope=global. */
+    #moving = false;
+    /** Padre original para devolver la ventana cuando scope vuelve a local. */
+    #slot: { parent: ParentNode; next: ChildNode | null } | null = null;
 
     constructor() {
       super();
@@ -101,6 +109,7 @@ import { createPopupDismiss } from '../_shared/popup-dismiss.js';
     }
 
     onConnected() {
+      if (this.#moving) return;
       emit(this, 'is-show');
       if (!this.hasAttribute('role')) this.setAttribute('role', 'dialog');
       // aria-modal="true" indica a lectores de pantalla que el contenido
@@ -128,9 +137,11 @@ import { createPopupDismiss } from '../_shared/popup-dismiss.js';
       const h = this.getAttribute('height');
       if (w) this.style.setProperty('--_w', this.#cssSize(w));
       if (h) this.style.setProperty('--_h', this.#cssSize(h));
+      this.#placeScope();
       const def = this.getAttribute('default') || 'normal';
       if (def === 'maximized') this.maximize();
-      if (def === 'minimized') this.minimize();
+      else if (def === 'minimized') this.minimize();
+      else this.dataset.state = 'normal';
       // Mover foco al body de la ventana (focuseable via tabindex=0) para que
       // aria-modal="true" tenga sentido y el foco no se quede en el documento.
       // Se difiere al siguiente tick para evitar robar el foco durante el
@@ -142,6 +153,7 @@ import { createPopupDismiss } from '../_shared/popup-dismiss.js';
     }
 
     onDisconnected() {
+      if (this.#moving) return;
       window.removeEventListener('pointermove', this.#onWinMove);
       window.removeEventListener('pointerup', this.#onWinUp);
       this.#dismiss.detach();
@@ -151,10 +163,13 @@ import { createPopupDismiss } from '../_shared/popup-dismiss.js';
         try { this.#previouslyFocused.focus({ preventScroll: true }); } catch { /* noop */ }
       }
       this.#previouslyFocused = null;
+      this.#reflowBars();
     }
 
-    onAttributeChanged() {
+    onAttributeChanged(name: string) {
       this.#sync();
+      if (name === 'scope') this.#placeScope();
+      if (name === 'scope' || name === 'position') this.#reflowBars();
     }
 
     /** Escape cierra; Tab se queda dentro mientras el foco esté en la ventana.
@@ -213,23 +228,20 @@ import { createPopupDismiss } from '../_shared/popup-dismiss.js';
       this.#lastRect = this.#rect();
       this.#state = 'minimized';
       this.#root.dataset.state = 'minimized';
-      const dock = this.getAttribute('dock') || 'bottom-right';
-      if (dock !== 'none') {
-        this.style.left = '';
-        this.style.top = '';
-        this.style.right = '0';
-        this.style.bottom = '0';
-        this.style.transform = 'none';
-        this.#root.classList.add('is-minimized');
-      }
+      this.dataset.state = 'minimized';
+      this.style.width = '';
+      this.style.height = '';
+      this.#raise();
+      this.#reflowBars();
       emit(this, 'is-minimize');
     }
 
     maximize() {
       if (this.#state === 'maximized') return;
-      this.#lastRect = this.#rect();
+      if (this.#state !== 'minimized') this.#lastRect = this.#rect();
       this.#state = 'maximized';
       this.#root.dataset.state = 'maximized';
+      this.dataset.state = 'maximized';
       this.style.left = '0';
       this.style.top = '0';
       this.style.right = '0';
@@ -237,6 +249,7 @@ import { createPopupDismiss } from '../_shared/popup-dismiss.js';
       this.style.width = '100%';
       this.style.height = '100%';
       this.style.transform = 'none';
+      this.#reflowBars();
       emit(this, 'is-maximize');
     }
 
@@ -244,7 +257,7 @@ import { createPopupDismiss } from '../_shared/popup-dismiss.js';
       const target = this.#state;
       this.#state = 'normal';
       this.#root.dataset.state = 'normal';
-      this.#root.classList.remove('is-minimized');
+      this.dataset.state = 'normal';
       this.style.right = '';
       this.style.bottom = '';
       this.style.width = '';
@@ -257,6 +270,7 @@ import { createPopupDismiss } from '../_shared/popup-dismiss.js';
         this.style.setProperty('--_h', `${this.#lastRect.h}px`);
       }
       emit(this, 'is-restore', { was: target });
+      this.#reflowBars();
     }
 
     unmaximize() {
@@ -278,7 +292,7 @@ import { createPopupDismiss } from '../_shared/popup-dismiss.js';
     }
 
     #onHeaderDown(e: PointerEvent) {
-      if (this.#state === 'maximized') return;
+      if (this.#state === 'maximized' || this.#state === 'minimized') return;
       if (e.target instanceof Element && e.target.closest('.ctrl')) return;
       this.#drag = { x: e.clientX, y: e.clientY, rect: this.#rect() };
       this.#header.setPointerCapture(e.pointerId);
@@ -315,6 +329,7 @@ import { createPopupDismiss } from '../_shared/popup-dismiss.js';
     #onClick(e: MouseEvent) {
       const target = e.target as Element | null;
       const btn = target?.closest('[data-act]') as HTMLElement | null;
+      if (this.#state === 'minimized' && !btn) { this.restore(); return; }
       if (!btn) return;
       if (btn.dataset.act === 'min') this.#state === 'minimized' ? this.restore() : this.minimize();
       if (btn.dataset.act === 'max') this.#state === 'maximized' ? this.restore() : this.maximize();
@@ -329,6 +344,59 @@ import { createPopupDismiss } from '../_shared/popup-dismiss.js';
         return { x: r.left - pr.left, y: r.top - pr.top, w: r.width, h: r.height };
       }
       return { x: r.left, y: r.top, w: r.width, h: r.height };
+    }
+
+    /** Global sale del wrapper (un transform del padre atrapa al fixed) y usa el viewport. */
+    #placeScope() {
+      const global = this.getAttribute('scope') === 'global';
+      if (global) {
+        if (this.parentNode === document.body) return;
+        this.#slot = { parent: this.parentNode!, next: this.nextSibling };
+        this.#moving = true;
+        document.body.append(this);
+        this.#moving = false;
+        return;
+      }
+      if (!this.#slot || this.parentNode !== document.body) return;
+      const { parent, next } = this.#slot;
+      this.#slot = null;
+      this.#moving = true;
+      if (next && next.parentNode === parent) parent.insertBefore(this, next);
+      else parent.append(this);
+      this.#moving = false;
+    }
+
+    /** Pastillas minimizadas, de izquierda a derecha, abajo del mismo contexto. */
+    #reflowBars() {
+      const wins = [...document.querySelectorAll('is-window')] as IsWindow[];
+      const groups = new Map<string, IsWindow[]>();
+      for (const w of wins) {
+        if (w.#state !== 'minimized' || !w.isConnected) continue;
+        const key = w.#barKey();
+        const list = groups.get(key) ?? [];
+        list.push(w);
+        groups.set(key, list);
+      }
+      for (const list of groups.values()) {
+        list.forEach((w, i) => {
+          w.style.left = `${8 + i * 106}px`;
+          w.style.top = 'auto';
+          w.style.right = 'auto';
+          w.style.bottom = '8px';
+          w.style.transform = 'none';
+          w.style.width = '';
+          w.style.height = '';
+        });
+      }
+    }
+
+    #barKey(): string {
+      if (this.getAttribute('scope') === 'global') return 'global';
+      const box = this.offsetParent || this.parentElement;
+      if (!box) return 'local';
+      let id = boxIds.get(box);
+      if (id == null) { id = ++boxSeq; boxIds.set(box, id); }
+      return `local:${id}`;
     }
 
     /** Acepta "22rem", "380" o "380px" sin duplicar la unidad. */

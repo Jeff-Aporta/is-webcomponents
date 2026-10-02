@@ -28,8 +28,8 @@ test('sidebar: font-family Manrope y peso ligero', () => {
   const block = pickBlock(css, '.sidebar');
   assert.ok(block, '.sidebar { ... } existe en presentation.css');
   assert.ok(
-    /font-family:\s*["']Manrope["']\s*,\s*var\(--is-sans\)/.test(block),
-    '.sidebar debe declarar font-family Manrope + --is-sans',
+    /font-family:\s*["']Manrope["']\s*,\s*var\(--iswc-sans\)/.test(block),
+    '.sidebar debe declarar font-family Manrope + --iswc-sans',
   );
   assert.ok(
     /font-weight:\s*400\b/.test(block),
@@ -40,14 +40,14 @@ test('sidebar: font-family Manrope y peso ligero', () => {
 test('sidebar: acento de marca sutil en el borde', () => {
   const block = pickBlock(css, '.sidebar');
   assert.ok(block, '.sidebar { ... } existe');
-  // Acento sutil: 1px teñido con --is-accent (no side-tab grueso).
+  // Acento sutil: 1px teñido con --iswc-accent (no side-tab grueso).
   assert.ok(
-    /border-left:\s*1px\s+solid\s+color-mix\(in srgb, var\(--is-accent\)/.test(block),
-    '.sidebar debe tener border-left 1px teñido con var(--is-accent)',
+    /border-left:\s*1px\s+solid\s+color-mix\(in srgb, var\(--iswc-accent\)/.test(block),
+    '.sidebar debe tener border-left 1px teñido con var(--iswc-accent)',
   );
   // No debe quedar el border gris antiguo de 1px.
   assert.ok(
-    !/border-left:\s*1px\s+solid\s+color-mix\(in srgb, var\(--is-border\)/.test(block),
+    !/border-left:\s*1px\s+solid\s+color-mix\(in srgb, var\(--iswc-border\)/.test(block),
     '.sidebar NO debe tener el border-left antiguo de 1px gris',
   );
 });
@@ -61,7 +61,7 @@ test('sidebar responsive: en móvil el accent pasa a border-top', () => {
     'En móvil el border-left debe desactivarse (0 o none)',
   );
   assert.ok(
-    /border-top:\s*1px\s+solid\s+color-mix\(in srgb, var\(--is-accent\)/.test(block),
-    'En móvil el accent debe pasar a border-top 1px teñido con var(--is-accent)',
+    /border-top:\s*1px\s+solid\s+color-mix\(in srgb, var\(--iswc-accent\)/.test(block),
+    'En móvil el accent debe pasar a border-top 1px teñido con var(--iswc-accent)',
   );
 });

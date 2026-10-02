@@ -6,7 +6,7 @@
  * `../components/`, `../scripts/` y `../styles/` que tenian antes apuntan
  * un nivel por debajo de donde deberian. Las reescribe a `../../...`.
  *
- *   node scripts/fix-preview-paths.ts
+ *   deno run -A --no-check scripts/fix-preview-paths.ts
  */
 
 import { readdir, readFile, writeFile } from 'node:fs/promises';

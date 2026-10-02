@@ -9,7 +9,7 @@
   "sections": [
     {
       "id": "intro",
-      "title": "<is-drawer>",
+      "title": "Uso",
       "lede": "Panel que se desliza desde un borde del viewport (derecha, izquierda, arriba o abajo).\r\n          Ideal para menús, filtros y contenido secundario.",
       "blocks": [
         {
@@ -268,7 +268,7 @@
             ],
             [
               "<code>--spacing</code>",
-              "<code>var(--is-space-l, 1rem)</code>",
+              "<code>var(--iswc-space-l, 1rem)</code>",
               "Padding interno."
             ],
             [

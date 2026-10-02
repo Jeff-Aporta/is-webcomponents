@@ -9,7 +9,7 @@
   "sections": [
     {
       "id": "intro",
-      "title": "<is-time-field>",
+      "title": "Uso",
       "lede": "Campo de hora con máscara y validación, asociable a formularios.",
       "blocks": [
         {

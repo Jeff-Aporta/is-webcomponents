@@ -1,11 +1,11 @@
 :host {
   display: block;
-  --is-tree-indent: 1rem;
-  --is-tree-row-padding-y: 0.25rem;
-  --is-tree-row-padding-x: 0.5rem;
-  --is-tree-row-hover: color-mix(in srgb, var(--is-brand, dodgerblue) 8%, transparent);
-  --is-tree-row-selected-bg: color-mix(in srgb, var(--is-brand, dodgerblue) 18%, transparent);
-  --is-tree-row-selected-text: var(--is-text, #e8eaf1);
+  --iswc-tree-indent: 1rem;
+  --iswc-tree-row-padding-y: 0.25rem;
+  --iswc-tree-row-padding-x: 0.5rem;
+  --iswc-tree-row-hover: color-mix(in srgb, var(--iswc-brand, dodgerblue) 8%, transparent);
+  --iswc-tree-row-selected-bg: color-mix(in srgb, var(--iswc-brand, dodgerblue) 18%, transparent);
+  --iswc-tree-row-selected-text: var(--iswc-text, #e8eaf1);
 }
 
 .tree {
@@ -41,21 +41,21 @@
   display: flex;
   align-items: center;
   gap: 0.25rem;
-  padding: var(--is-tree-row-padding-y) var(--is-tree-row-padding-x);
+  padding: var(--iswc-tree-row-padding-y) var(--iswc-tree-row-padding-x);
   border-radius: 0.375rem;
   transition: background 0.1s;
 }
 
 .row:hover {
-  background: var(--is-tree-row-hover);
+  background: var(--iswc-tree-row-hover);
 }
 
 :host([selection="none"]) ::slotted(is-tree-item) {
   /* sin highlight */
 }
 :host(:not([selection="none"])) ::slotted(is-tree-item[selected]) .row {
-  background: var(--is-tree-row-selected-bg);
-  color: var(--is-tree-row-selected-text);
+  background: var(--iswc-tree-row-selected-bg);
+  color: var(--iswc-tree-row-selected-text);
 }
 
 .expand-toggle {
@@ -81,7 +81,7 @@
 }
 
 .expand-toggle:hover {
-  background: var(--is-control-bg-hover, rgba(255, 255, 255, 0.08));
+  background: var(--iswc-control-bg-hover, rgba(255, 255, 255, 0.08));
 }
 
 .checkbox {
@@ -102,7 +102,7 @@
   justify-content: center;
   width: 1.25rem;
   height: 1.25rem;
-  color: color-mix(in srgb, var(--is-text, #e8eaf1) 80%, transparent);
+  color: color-mix(in srgb, var(--iswc-text, #e8eaf1) 80%, transparent);
 }
 
 .content {
@@ -113,7 +113,7 @@
 }
 
 .children {
-  padding-left: var(--is-tree-indent);
+  padding-left: var(--iswc-tree-indent);
   display: flex;
   flex-direction: column;
   gap: 1px;
@@ -124,5 +124,5 @@
 }
 
 :host([selected]) .row {
-  background: var(--is-tree-row-selected-bg);
+  background: var(--iswc-tree-row-selected-bg);
 }

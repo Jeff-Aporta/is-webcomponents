@@ -288,11 +288,11 @@ tests.push({
     const dark = await page.evaluate(() => {
       const ed = document.getElementById('code-js');
       const cs = getComputedStyle(ed);
-      return { bg: cs.getPropertyValue('--is-code-bg').trim() };
+      return { bg: cs.getPropertyValue('--iswc-code-bg').trim() };
     });
-    // El bundle define --is-code-bg = #1e1e1e en dark.
+    // El bundle define --iswc-code-bg = #1e1e1e en dark.
     assert.match(dark.bg, /#1e1e1e|30,30,30/i,
-      `--is-code-bg debe ser oscuro en dark (fue "${dark.bg}")`);
+      `--iswc-code-bg debe ser oscuro en dark (fue "${dark.bg}")`);
 
     // Cambiamos a light. <is-code> escucha `is-theme-change` en document para
     // re-aplicar el preset (no se re-monta en cada cambio de atributo).
@@ -304,10 +304,10 @@ tests.push({
     const light = await page.evaluate(() => {
       const ed = document.getElementById('code-js');
       const cs = getComputedStyle(ed);
-      return { bg: cs.getPropertyValue('--is-code-bg').trim() };
+      return { bg: cs.getPropertyValue('--iswc-code-bg').trim() };
     });
     assert.notEqual(light.bg, dark.bg,
-      `--is-code-bg debe cambiar al pasar a light (light="${light.bg}" vs dark="${dark.bg}")`);
+      `--iswc-code-bg debe cambiar al pasar a light (light="${light.bg}" vs dark="${dark.bg}")`);
     // Volvemos a dark para no contaminar otros tests.
     await page.evaluate(() => {
       document.documentElement.dataset.theme = 'dark';

@@ -13,8 +13,8 @@
  * Eventos que el panel ESCUCHA (en el host):
  *   - `is-editor-selection-changed` (detail: { nodeId: string | null })
  *
- * Temas: hereda de las CSS vars `--is-bg-elev`, `--is-border`, `--is-text`,
- * `--is-text-soft`, `--is-accent`.
+ * Temas: hereda de las CSS vars `--iswc-bg-elev`, `--iswc-border`, `--iswc-text`,
+ * `--iswc-text-soft`, `--iswc-accent`.
  *
  * Sin registro en `customElements`: cada editor llama `createEditorPanel()`
  * para obtener un HTMLElement y attachearlo al shadow.
@@ -50,34 +50,34 @@ export const EDITOR_SELECTION_CHANGED_EVENT = 'is-editor-selection-changed';
 const PANEL_CSS = `
 :host {
   display: block;
-  background: var(--is-bg-elev, #131a24);
-  border: 1px solid var(--is-border, rgba(255,255,255,0.12));
+  background: var(--iswc-bg-elev, #131a24);
+  border: 1px solid var(--iswc-border, rgba(255,255,255,0.12));
   border-radius: 8px;
   padding: 14px;
   display: flex;
   flex-direction: column;
   gap: 12px;
   overflow: auto;
-  font-family: var(--is-ui, ui-sans-serif, system-ui, sans-serif);
-  color: var(--is-text, #e2e8f0);
+  font-family: var(--iswc-ui, ui-sans-serif, system-ui, sans-serif);
+  color: var(--iswc-text, #e2e8f0);
 }
 h3 {
   font-size: 11px;
   text-transform: uppercase;
   letter-spacing: 0.08em;
   margin: 0;
-  color: var(--is-text-soft, #94a3b8);
+  color: var(--iswc-text-soft, #94a3b8);
   font-weight: 700;
 }
 fieldset {
-  border: 1px solid var(--is-border, rgba(255,255,255,0.08));
+  border: 1px solid var(--iswc-border, rgba(255,255,255,0.08));
   border-radius: 6px;
   padding: 8px 10px;
 }
 fieldset legend {
   font-size: 10px;
   text-transform: uppercase;
-  color: var(--is-text-soft, #94a3b8);
+  color: var(--iswc-text-soft, #94a3b8);
   padding: 0 4px;
 }
 .node-list {
@@ -97,10 +97,10 @@ fieldset legend {
 .node-list li:hover { background: rgba(255,255,255,0.04); }
 .node-list li[aria-selected="true"] {
   background: rgba(37,99,235,0.12);
-  border-color: var(--is-accent, #2563eb);
+  border-color: var(--iswc-accent, #2563eb);
 }
-.node-list li:focus-visible { outline: 2px solid var(--is-accent, #2563eb); outline-offset: 1px; }
-.empty { font-size: 11px; color: var(--is-text-soft, #94a3b8); font-style: italic; }
+.node-list li:focus-visible { outline: 2px solid var(--iswc-accent, #2563eb); outline-offset: 1px; }
+.empty { font-size: 11px; color: var(--iswc-text-soft, #94a3b8); font-style: italic; }
 .export-row {
   display: flex;
   gap: 6px;
@@ -108,23 +108,23 @@ fieldset legend {
 }
 .export-row button {
   appearance: none;
-  border: 1px solid var(--is-border, rgba(255,255,255,0.18));
+  border: 1px solid var(--iswc-border, rgba(255,255,255,0.18));
   background: transparent;
-  color: var(--is-text, #e2e8f0);
+  color: var(--iswc-text, #e2e8f0);
   padding: 4px 8px;
   border-radius: 4px;
   cursor: pointer;
-  font: 11px var(--is-ui, ui-sans-serif, system-ui, sans-serif);
+  font: 11px var(--iswc-ui, ui-sans-serif, system-ui, sans-serif);
 }
 .export-row button:hover { background: rgba(255,255,255,0.06); }
-.export-row button:focus-visible { outline: 2px solid var(--is-accent, #2563eb); outline-offset: 1px; }
+.export-row button:focus-visible { outline: 2px solid var(--iswc-accent, #2563eb); outline-offset: 1px; }
 textarea[data-json-readout] {
   width: 100%;
   box-sizing: border-box;
   font: 11px ui-monospace, Menlo, Consolas, monospace;
   background: rgba(0,0,0,0.2);
-  color: var(--is-text, #e2e8f0);
-  border: 1px solid var(--is-border, rgba(255,255,255,0.08));
+  color: var(--iswc-text, #e2e8f0);
+  border: 1px solid var(--iswc-border, rgba(255,255,255,0.08));
   border-radius: 4px;
   padding: 6px;
   resize: vertical;

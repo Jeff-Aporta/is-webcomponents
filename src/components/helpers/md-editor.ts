@@ -278,7 +278,7 @@ interface EditorHistory {
   class IsMdEditor extends ElementBase {
     /** Personalización por atributo (ver `core/attrs.ts`). */
     static styleAttrs = {
-      'preview-max-height': '--is-md-editor-preview-max-height',
+      'preview-max-height': '--iswc-md-editor-preview-max-height',
     };
 
     static override get observedAttributes(): string[] {

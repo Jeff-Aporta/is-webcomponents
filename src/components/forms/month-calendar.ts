@@ -91,7 +91,7 @@ import { ElementBase } from '../../core/element-base.js';
       });
       const selected = this.month;
       const cols = Number(this.getAttribute('columns')) || 3;
-      this.#base.style.setProperty('--is-month-columns', String(cols));
+      this.#base.style.setProperty('--iswc-month-columns', String(cols));
       const now = new Date();
       const isThisYear = now.getFullYear() === this.year;
 

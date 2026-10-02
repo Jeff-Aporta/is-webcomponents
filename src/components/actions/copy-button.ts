@@ -87,7 +87,7 @@ import { copyText } from '../_shared/dom-utils.js';
   class IsCopyButton extends withStyleAttrs(HTMLElement) {
     /** Personalización por atributo (ver `core/attrs.ts`). */
     static styleAttrs = {
-    'max-width': '--is-copy-button-max-width',
+    'max-width': '--iswc-copy-button-max-width',
     };
 
     static get observedAttributes(): string[] {

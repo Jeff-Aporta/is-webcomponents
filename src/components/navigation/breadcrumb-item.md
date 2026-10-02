@@ -101,12 +101,12 @@ No expone.
 | Token | Uso |
 | --- | --- |
 | `--_gap` | Token leído o definido por componente. |
-| `--is-text-muted` | Token leído o definido por componente. |
-| `--is-text` | Token leído o definido por componente. |
-| `--is-link` | Token leído o definido por componente. |
-| `--is-radius` | Token leído o definido por componente. |
-| `--is-link-hover` | Token leído o definido por componente. |
-| `--is-focus` | Token leído o definido por componente. |
+| `--iswc-text-muted` | Token leído o definido por componente. |
+| `--iswc-text` | Token leído o definido por componente. |
+| `--iswc-link` | Token leído o definido por componente. |
+| `--iswc-radius` | Token leído o definido por componente. |
+| `--iswc-link-hover` | Token leído o definido por componente. |
+| `--iswc-focus` | Token leído o definido por componente. |
 
 ### Integración con formularios
 

@@ -358,12 +358,12 @@ import '../forms/checkbox.js';
   class IsDataGrid extends withStyleAttrs(HTMLElement) {
     /** Personalización por atributo (ver `core/attrs.ts`). */
     static styleAttrs = {
-      radius: '--is-grid-radius',
-      accent: { prop: '--is-grid-accent', onlyColorValues: true },
-      'header-bg': { prop: '--is-grid-header-bg', onlyColorValues: true },
-      'row-hover': { prop: '--is-grid-row-hover', onlyColorValues: true },
-      height: '--is-grid-height',
-      padding: '--is-grid-pad',
+      radius: '--iswc-grid-radius',
+      accent: { prop: '--iswc-grid-accent', onlyColorValues: true },
+      'header-bg': { prop: '--iswc-grid-header-bg', onlyColorValues: true },
+      'row-hover': { prop: '--iswc-grid-row-hover', onlyColorValues: true },
+      height: '--iswc-grid-height',
+      padding: '--iswc-grid-pad',
     };
 
     static get observedAttributes(): string[] {
@@ -1238,8 +1238,8 @@ import '../forms/checkbox.js';
 
     #syncChrome(): void {
       this.#base.dataset.density = this.density;
-      this.#base.style.setProperty('--is-grid-row-h', `${this.rowHeight}px`);
-      this.#base.style.setProperty('--is-grid-head-h', `${this.headerHeight}px`);
+      this.#base.style.setProperty('--iswc-grid-row-h', `${this.rowHeight}px`);
+      this.#base.style.setProperty('--iswc-grid-head-h', `${this.headerHeight}px`);
       this.#base.toggleAttribute('data-list-view', this.listView);
       this.#base.toggleAttribute('data-auto-height', this.hasAttribute('auto-height'));
       this.#base.toggleAttribute('data-cell-selection', this.cellSelection);
@@ -1287,7 +1287,7 @@ import '../forms/checkbox.js';
       this.#renderFooter(totalRows);
       this.#renderOverlay();
       this.#syncFilterBadge();
-      this.#base.style.setProperty('--is-grid-head-total', `${this.#head.offsetHeight}px`);
+      this.#base.style.setProperty('--iswc-grid-head-total', `${this.#head.offsetHeight}px`);
     }
 
     /** Las filas llenan el viewport aunque las columnas no lleguen a cubrirlo. */

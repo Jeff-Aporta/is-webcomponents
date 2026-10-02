@@ -4,9 +4,9 @@
   font-size: inherit;
   width: 1em;
   height: 1em;
-  font-family: var(--is-font-family, system-ui, sans-serif);
+  font-family: var(--iswc-font-family, system-ui, sans-serif);
   font-weight: 600;
-  color: var(--is-text, #212529);
+  color: var(--iswc-text, #212529);
   line-height: 1;
 }
 
@@ -16,8 +16,8 @@
   width: 100%;
   height: 100%;
   overflow: hidden;
-  background: var(--is-control-bg, #f1f3f5);
-  border: 1px solid var(--is-control-border, #dee2e6);
+  background: var(--iswc-control-bg, #f1f3f5);
+  border: 1px solid var(--iswc-control-border, #dee2e6);
   box-sizing: border-box;
 }
 
@@ -47,7 +47,7 @@
 
 .icon {
   font-size: 0.55em;
-  color: var(--is-muted, #868e96);
+  color: var(--iswc-muted, #868e96);
 }
 
 .icon ::slotted(*),

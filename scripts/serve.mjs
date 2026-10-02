@@ -6,8 +6,9 @@
  * heurísticamente y una recarga normal sigue ejecutando el JS anterior, así que
  * los cambios en src/components/ parecen no aplicarse.
  *
- *   node serve.mjs [puerto]                # raíz = este repo
- *   SERVE_ROOT=C:\ruta\workspace node serve.mjs 5505
+ *   deno task dev                          # raíz = este repo, puerto 8391
+ *   deno run -A --no-check scripts/serve.mjs 5505
+ *   SERVE_ROOT=C:\ruta\workspace deno run -A --no-check scripts/serve.mjs 5505
  *        # raíz = el workspace padre (modo Live Server): sirve /apps/<repo>/…
  *        # igual que Live Server pero con transpilado TS + mapeo .js→.ts, que
  *        # Live Server NO hace (sirve .ts como video/mp2t y los specifiers
@@ -30,6 +31,7 @@ const TYPES = {
   '.mjs': 'text/javascript; charset=utf-8',
   '.css': 'text/css; charset=utf-8',
   '.json': 'application/json; charset=utf-8',
+  '.md': 'text/markdown; charset=utf-8',
   '.svg': 'image/svg+xml',
   '.png': 'image/png',
   '.jpg': 'image/jpeg',

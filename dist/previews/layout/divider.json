@@ -8,7 +8,7 @@
   "sections": [
     {
       "id": "intro",
-      "title": "<is-divider>",
+      "title": "Uso",
       "lede": "Separador horizontal o vertical. Opacidad default <code class=\"code\">20</code>; color vía tokens del theme.",
       "blocks": [
         {

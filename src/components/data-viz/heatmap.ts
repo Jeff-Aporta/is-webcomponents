@@ -45,14 +45,14 @@ type HeatmapCfg = {
 
   function intensitySteps(hex: string): string[] {
     // 5 pasos de opacidad (0.15, 0.3, 0.5, 0.7, 0.9)
-    return [0.18, 0.36, 0.55, 0.75, 0.95].map((a: number) => `color-mix(in srgb, ${hex} ${Math.round(a * 100)}%, var(--is-bg-elev))`);
+    return [0.18, 0.36, 0.55, 0.75, 0.95].map((a: number) => `color-mix(in srgb, ${hex} ${Math.round(a * 100)}%, var(--iswc-bg-elev))`);
   }
 
   class IsHeatmap extends withStyleAttrs(HTMLElement) {
     /** Personalización por atributo (ver `core/attrs.ts`). */
     static styleAttrs = {
-    'text-color': { prop: '--is-heatmap-text', onlyColorValues: true },
-    'grid-color': { prop: '--is-heatmap-grid-color', onlyColorValues: true },
+    'text-color': { prop: '--iswc-heatmap-text', onlyColorValues: true },
+    'grid-color': { prop: '--iswc-heatmap-grid-color', onlyColorValues: true },
     };
 
     static get observedAttributes(): string[] { return [...OBSERVED, 'text-color', 'grid-color']; }
@@ -258,7 +258,7 @@ type HeatmapCfg = {
               x: x0 + cellW / 2, y: y0 + cellH / 2 + 4, 'text-anchor': 'middle', class: 'cell-val',
             });
             t.textContent = formatVal(v);
-            t.style.fill = (v - domain[0]) / (domain[1] - domain[0] + 1e-9) > 0.5 ? 'var(--is-bg-elev)' : 'var(--is-text)';
+            t.style.fill = (v - domain[0]) / (domain[1] - domain[0] + 1e-9) > 0.5 ? 'var(--iswc-bg-elev)' : 'var(--iswc-text)';
             this.#svg.appendChild(t);
           }
         });

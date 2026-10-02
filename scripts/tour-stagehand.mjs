@@ -1,7 +1,7 @@
 // tour-stagehand.mjs — Tour browser real via playwright (captures console
 // errors + network 404s). Capa 3 del tour-deploy. Run via:
-//   node scripts/tour-stagehand.mjs --remote
-//   node scripts/tour-stagehand.mjs --local --base=http://127.0.0.1:8491
+//   deno run -A --no-check scripts/tour-stagehand.mjs --remote
+//   deno run -A --no-check scripts/tour-stagehand.mjs --local --base=http://127.0.0.1:8491
 
 import { chromium } from 'playwright';
 import { existsSync, readdirSync } from 'node:fs';

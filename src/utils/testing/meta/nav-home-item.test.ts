@@ -105,8 +105,8 @@ const itemCurrentBlock = (() => {
 check(itemCurrentBlock.length > 0,
   'shell.css: .shell-nav__item[aria-current="true"] debe tener su propio bloque de highlight');
 
-check(/--is-brand-soft/.test(itemCurrentBlock),
-  'shell.css: el highlight del item activo debe usar --is-brand-soft');
+check(/--iswc-brand-soft/.test(itemCurrentBlock),
+  'shell.css: el highlight del item activo debe usar --iswc-brand-soft');
 
 // ─── Sanity: el bloque eliminado deja el highlighting por cascada ────────────
 //

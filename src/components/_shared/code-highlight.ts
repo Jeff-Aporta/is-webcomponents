@@ -15,14 +15,14 @@
  * documento al repintar.
  *
  * El color lo pone el CSS del componente mapeando `.tok-*` a las custom
- * properties --is-code-* (code-theme.js), el mismo rol que jugaban los .cm-*
+ * properties --iswc-code-* (code-theme.js), el mismo rol que jugaban los .cm-*
  * en la era CodeMirror.
  */
 
 /** Tipos de token reconocidos por el highlighter. */
 export type TokenType =
   | 'comment' | 'string' | 'number' | 'keyword' | 'operator'
-  | 'punctuation' | 'tag' | 'attribute' | 'property' | 'function'
+  | 'punctuation' | 'tag' | 'tagPunct' | 'attribute' | 'property' | 'function'
   | 'variable' | 'atom' | 'builtin' | 'type' | 'meta' | 'plain';
 
 /** Token producido por los escáneres: tipo semántico + texto. */
@@ -282,6 +282,18 @@ function scanCssLine(line: string, st: HighlightState, out: Token[]): void {
 
 const TAG_OPEN_RE = /^<\/?([a-zA-Z][\w:-]*)/;
 
+/** < / > van en tagPunct; el nombre del tag se queda en tag. */
+function emitHtmlCloser(out: Token[], chunk: string): void {
+  const m = /^<(\/?)([A-Za-z][\w:-]*)?(>)?/.exec(chunk);
+  if (!m) { add(out, 'tag', chunk); return; }
+  add(out, 'tagPunct', '<');
+  if (m[1]) add(out, 'tagPunct', '/');
+  if (m[2]) add(out, 'tag', m[2]);
+  if (m[3]) add(out, 'tagPunct', '>');
+  const rest = chunk.slice(m[0].length);
+  if (rest) add(out, 'tag', rest);
+}
+
 /** HTML: tags/atributos/strings + regiones <script>/<style> tokenizadas como js/css. */
 function scanHtmlLine(line: string, st: HighlightState, out: Token[]): void {
   let i = 0;
@@ -303,7 +315,7 @@ function scanHtmlLine(line: string, st: HighlightState, out: Token[]): void {
       i += m.index;
       const end = line.indexOf('>', i);
       const chunk = line.slice(i, end === -1 ? len : end + 1);
-      add(out, 'tag', chunk);
+      emitHtmlCloser(out, chunk);
       st.region = null;
       i += chunk.length;
       continue;
@@ -340,12 +352,14 @@ function scanHtmlLine(line: string, st: HighlightState, out: Token[]): void {
         const tagName = m0[2]!.toLowerCase();
         let p = i + m0[0]!.length;
         let selfClose = false;
-        add(out, 'tag', m0[0]!);
+        add(out, 'tagPunct', '<');
+        if (isClose) add(out, 'tagPunct', '/');
+        add(out, 'tag', m0[2]!);
         // dentro del tag: atributos (name="value") + '>'
         while (p < len) {
           const ch = line[p]!;
-          if (ch === '>') { add(out, 'tag', '>'); p += 1; break; }
-          if (ch === '/' && line[p + 1] === '>') { add(out, 'tag', '/>'); p += 2; selfClose = true; break; }
+          if (ch === '>') { add(out, 'tagPunct', '>'); p += 1; break; }
+          if (ch === '/' && line[p + 1] === '>') { add(out, 'tagPunct', '/>'); p += 2; selfClose = true; break; }
           if (ch === ' ' || ch === '\t') { add(out, 'plain', ch); p += 1; continue; }
           if (isIdentStart(ch) || ch === '@' || ch === ':') {
             let j = p + 1;
@@ -494,7 +508,7 @@ export function tokenizeCode(text: string | null | undefined, langId?: string, s
   return { lines, state: st, lang };
 }
 
-/** Token type → clase CSS (el CSS mapea .tok-* a --is-code-*). */
+/** Token type → clase CSS (el CSS mapea .tok-* a --iswc-code-*). */
 export function tokenClass(type: TokenType | null | undefined): string {
   if (!type || type === 'plain') return '';
   return `tok-${type}`;

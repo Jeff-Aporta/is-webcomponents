@@ -136,10 +136,10 @@ No expone custom states.
 
 | Token | Uso |
 | --- | --- |
-| `--is-cat-rows` | Filas visibles del grid de botones de la toolbar. |
-| `--is-text` | Color del texto. |
-| `--is-text-muted` | Texto secundario de la toolbar. |
-| `--is-sans` | Familia tipográfica. |
+| `--iswc-cat-rows` | Filas visibles del grid de botones de la toolbar. |
+| `--iswc-text` | Color del texto. |
+| `--iswc-text-muted` | Texto secundario de la toolbar. |
+| `--iswc-sans` | Familia tipográfica. |
 
 ### Integración con formularios
 

@@ -1,4 +1,4 @@
-#!/usr/bin/env node
+#!/usr/bin/env -S deno run -A --no-check
 import { spawnSync } from 'node:child_process';
 import { join } from 'node:path';
 
@@ -11,7 +11,7 @@ const tests = [
 
 for (const rel of tests) {
   const abs = join(root, rel);
-  const r = spawnSync(process.execPath, ['--import', './scripts/ts-resolve-hook.ts', '--test', abs], {
+  const r = spawnSync(process.execPath, ['test', '-A', '--no-check', abs], {
     encoding: 'utf8', cwd: root, timeout: 30000,
   });
   const out = (r.stdout || '') + (r.stderr || '');

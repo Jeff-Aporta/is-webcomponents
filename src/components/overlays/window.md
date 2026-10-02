@@ -12,7 +12,7 @@ preview: ./window.json
 
 ## Propósito
 
-Ventana flotante dockable (estilo escritorio): arrastre, resize, minimizar/maximizar.
+Ventana flotante (estilo escritorio): arrastre, resize, minimizar a pastilla, maximizar. `scope=local` vive en el wrapper; `scope=global` usa el viewport.
 
 Este módulo registra `<is-window>`.
 
@@ -57,7 +57,9 @@ import './window.js';
 | `closable` | boolean | Permite cerrar. |
 | `default` | string | `maximized` | `minimized` | `normal`. |
 | `resizable` | boolean | Drag esquina inferior derecha. |
-| `dock` | string | `bottom-right` | `bottom` | `top` | `none`. |
+| `scope` | string | `local` (default) queda en el wrapper. `global` usa el viewport. |
+| `position` | string | `absolute` o `fixed`. Local arranca en absolute; global en fixed si no se declara. |
+| `dock` | string | Ignorado. Minimizar deja una pastilla de max 100px abajo del contexto. |
 | `aria-modal` | string | Por defecto `"true"`. Pasar `"false"` para que conviva con la página como una ventana no modal. |
 
 #### Propiedades públicas
@@ -115,7 +117,7 @@ No expone.
 
 ### CSS custom properties
 
-Tokens del tema (`--is-*`) según CSS del módulo.
+Tokens del tema (`--iswc-*`) según CSS del módulo.
 
 ### Integración con formularios
 
@@ -125,7 +127,7 @@ No declara integración form-associated propia en este módulo.
 
 Documentación de cabecera preservada desde fuente:
 
-> <is-window> — dockable. API minimize/restore/maximize/unmaximize/close. Posición absolute/fixed en CSS.
+> <is-window> — API minimize/restore/maximize/unmaximize/close. scope local|global. position absolute|fixed.
 
 ## Dependencias y componentes relacionados
 

@@ -44,7 +44,7 @@ export function isCssColorValue(value: string | null | undefined): boolean {
 
 /**
  * Una entrada del mapa puede ser:
- *   'radius': '--is-button-border-radius'          → siempre se aplica
+ *   'radius': '--iswc-button-border-radius'          → siempre se aplica
  *   'color':  { prop: '--x', onlyColorValues: true } → solo si parece color
  */
 
@@ -138,7 +138,7 @@ export function applyToneRamp(el: HTMLElement, color: string | null, opts: { pre
  * atributo, sin que cada componente repita el cableado.
  *
  *   class IsFoo extends withStyleAttrs(HTMLElement) {
- *     static styleAttrs = { radius: '--is-foo-radius' };
+ *     static styleAttrs = { radius: '--iswc-foo-radius' };
  *     static get observedAttributes() { return [...OBSERVED, ...IsFoo.styleAttrNames]; }
  *   }
  *
