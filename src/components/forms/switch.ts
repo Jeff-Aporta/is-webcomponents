@@ -29,7 +29,7 @@ import { hasSlotted } from '../_shared/dom-utils.js';
  * Custom states: checked, disabled, readonly, error
  * Events: is-change { checked, value }
  *
- * Sin atributo `size`: escala con el font-size del contexto.
+ * Sin `color`: el acento es currentColor. Sin `size`: escala con el font-size del contexto.
  */
 
 (() => {

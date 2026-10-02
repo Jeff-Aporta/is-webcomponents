@@ -217,6 +217,9 @@
   color: var(--is-text-soft, inherit);
   font-weight: 600;
 }
+.ft-btn {
+  font-size: 0.72em;
+}
 .ft-actions {
   display: flex;
   flex-wrap: wrap;
