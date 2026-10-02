@@ -59,6 +59,14 @@ await L.load('is-dropdown');
 | `query` | Mapa o string de search params en cada asset |
 | `mirrors: ['githack']` | Tip `raw.githack.com` (útil si jsDelivr `@main` está frío) |
 
+## Hash de contenido (`?h=`)
+
+Cada build deja un mapa de 6 caracteres en el loader (`__IS_ASSET_HASHES__`) y en `dist/cdn/asset-hashes.json`. `load`, `loadCSS*` y `assetUrl` agregan `?h=` al enrutar. Si el archivo cambia, el hash cambia y el navegador pide esa URL: no hace falta un refresco forzado.
+
+Los `import` relativos entre `.min.js` llevan el mismo `?h=`, sellado en el build en orden de dependencias. El CSS de documento que no usa `url()` relativo se guarda en IndexedDB con la clave ruta+hash; localStorage recuerda el mapa para tirar los cuerpos viejos.
+
+Generadores para otros proyectos (CDN o vendor): `src/cdn/build/` (`bundleMinJs`, `bundleLoader`, `stampHashTexts`, `contentHash`). El build los publica en `dist/cdn/build/`.
+
 ## Sheet cache (apps)
 
 Evita flicker de CSS en ShadowRoot: Cache Storage + `adoptedStyleSheets`.

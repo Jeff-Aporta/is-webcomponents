@@ -8,9 +8,10 @@
  * - Fallbacks entre espejos (jsDelivr → Pages)
  * - Registro persistente: si ya cargaste `actions`, `load('is-button')` no re-fetch
  * - loadPageStyles / loadPageModules para la galería
+ * - `?h=` sale del mapa de build: si el archivo cambia, la URL cambia
  *
  * Docs: ./loader.md (también en dist/cdn/core/loader.md)
- * Build sustituye __IS_LOADER_CATALOG__.
+ * Build sustituye __IS_LOADER_CATALOG__ y __IS_ASSET_HASHES__.
  */
 import {
   resolveRef,
@@ -34,8 +35,11 @@ import {
 import type { LoadJob } from './load-plan.js';
 import { installSheetCache, getSheetCache, createSheetCache, type SheetCacheApi } from './sheet-cache.js';
 import { ensureElement, isElementReady } from './ensure-element.js';
+import { lookupHash, withAssetHash } from './build/asset-url.js';
+import { readBody, writeBody, syncHashMemory } from './asset-store.js';
 
 declare const __IS_LOADER_CATALOG__: Catalog;
+declare const __IS_ASSET_HASHES__: Record<string, string>;
 
 export interface Mirror {
   id: string;
@@ -51,6 +55,7 @@ export interface AppComponentEntry {
 }
 
 const CATALOG: Catalog = __IS_LOADER_CATALOG__;
+const HASHES: Record<string, string> = __IS_ASSET_HASHES__;
 
 const SELF_BASE = new URL('./', import.meta.url).href.replace(/\/?$/, '/');
 
@@ -194,8 +199,49 @@ function withQuery(href: string): string {
   return u.href;
 }
 
+/** Ruta publicada + `?h=` del mapa. Si no hay hash, deja el href. */
+function routeHref(href: string): string {
+  if (!href) return href;
+  let abs = href;
+  try {
+    const base = typeof location !== 'undefined' ? location.href : SELF_BASE;
+    abs = new URL(href, base).href;
+  } catch { /* href raro: se busca igual en el mapa */ }
+  const hash = lookupHash(HASHES, abs) || lookupHash(HASHES, href);
+  if (!hash) return href;
+  if (/^https?:/i.test(href) || href.startsWith('//')) {
+    const u = new URL(abs);
+    if (u.searchParams.get('h') === hash) return u.href;
+    u.searchParams.set('h', hash);
+    return u.href;
+  }
+  return withAssetHash(href, hash);
+}
+
 function assetHref(base: string, rel: string): string {
-  return withQuery(new URL(rel.replace(/^\//, ''), slash(base)).href);
+  return routeHref(withQuery(new URL(rel.replace(/^\//, ''), slash(base)).href));
+}
+
+function cssNeedsLink(css: string): boolean {
+  return /url\(\s*['"]?(?!data:|https?:|\/\/|#)/i.test(css);
+}
+
+function injectStyleText(key: string, css: string): void {
+  if (cssDone.has(key)) return;
+  if (typeof document === 'undefined') {
+    cssDone.add(key);
+    return;
+  }
+  const id = `is-cdn-css:${key}`;
+  if (document.head.querySelector(`style[data-is-cdn-css="${id}"]`)) {
+    cssDone.add(key);
+    return;
+  }
+  const style = document.createElement('style');
+  style.setAttribute('data-is-cdn-css', id);
+  style.textContent = css;
+  document.head.appendChild(style);
+  cssDone.add(key);
 }
 
 /**
@@ -274,16 +320,38 @@ function injectStylesheet(href: string): Promise<void> {
 
 async function injectCdnStylesheet(rel: string): Promise<string> {
   const bases = await coreAssetBases();
+  const hash = lookupHash(HASHES, rel);
+  const key = rel.replace(/^\.\//, '');
+  if (hash) {
+    const hit = await readBody(key, hash);
+    if (hit != null && !cssNeedsLink(hit)) {
+      injectStyleText(key, hit);
+      return assetHref(bases[0] || SELF_BASE, rel);
+    }
+  }
   let last: Error | null = null;
   for (const base of bases) {
     const href = assetHref(base, rel);
     try {
+      if (hash && typeof fetch === 'function') {
+        const res = await fetch(href);
+        if (!res.ok) throw new Error(`CSS ${res.status}: ${href}`);
+        const text = await res.text();
+        if (!cssNeedsLink(text)) {
+          await writeBody(key, hash, text);
+          injectStyleText(key, text);
+          return href;
+        }
+      }
       await injectStylesheet(href);
       return href;
     } catch (e: unknown) {
       last = e instanceof Error ? e : new Error(String(e));
       cssDone.delete(href);
-      document.head.querySelector<HTMLElement>(`link[data-is-cdn-css="${href}"]`)?.remove();
+      cssDone.delete(key);
+      if (typeof document !== 'undefined') {
+        document.head.querySelector<HTMLElement>(`link[data-is-cdn-css="${href}"]`)?.remove();
+      }
     }
   }
   throw last || new Error(`ISWebComponentsLoader: no hay espejo para ${rel}`);
@@ -375,7 +443,7 @@ async function warmEntryCss(entry: AppComponentEntry): Promise<void> {
   } else if (entry.href) {
     list.push(entry.href.replace(/\.min\.js$/i, '.min.css').replace(/\.js$/i, '.css'));
   }
-  if (list.length) await sheets.calentar(list);
+  if (list.length) await sheets.calentar(list.map((href) => routeHref(href)));
 }
 
 export interface ConfigureOpts {
@@ -409,6 +477,10 @@ export interface LoaderSheets {
 
 export const ISWebComponentsLoader = {
   get catalog(): Catalog { return CATALOG; },
+  /** Mapa de hashes del build (`ruta` → 6 caracteres). */
+  get hashes(): Record<string, string> { return HASHES; },
+  /** Pega `?h=` si la ruta esta en el mapa. Lo usan adoptCss y las apps. */
+  assetUrl(href: string): string { return routeHref(href); },
   get repo(): string { return GH_REPO; },
   get mirrors(): Mirror[] { return state.mirrors.slice(); },
   get selfBase(): string { return SELF_BASE; },
@@ -565,7 +637,7 @@ export const ISWebComponentsLoader = {
   async loadPageStyles(hrefs: string[]) {
     const jobs = (hrefs || []).map((h) => {
       const abs = new URL(resolvePageModuleHref(h), typeof location !== 'undefined' ? location.href : SELF_BASE).href;
-      return injectStylesheet(abs);
+      return injectStylesheet(routeHref(abs));
     });
     await Promise.all(jobs);
   },
@@ -573,7 +645,7 @@ export const ISWebComponentsLoader = {
   async loadPageModules(hrefs: string[]) {
     const jobs = (hrefs || []).map((h) => {
       const abs = new URL(resolvePageModuleHref(h), typeof location !== 'undefined' ? location.href : SELF_BASE).href;
-      return importOnce(abs);
+      return importOnce(routeHref(abs));
     });
     await Promise.all(jobs);
   },
@@ -640,7 +712,7 @@ export const ISWebComponentsLoader = {
       const entry = appComponents.get(tag);
       if (!entry) continue;
       await warmEntryCss(entry);
-      await importOnce(entry.href);
+      await importOnce(routeHref(entry.href));
       registry.tags.add(tag);
       loaded.push(entry.href);
     }
@@ -688,6 +760,16 @@ if (typeof globalThis !== 'undefined' && !(globalThis as Record<string, unknown>
   // y `L.load(tag)` pediría URLs tipo `dist/pages/{cat}/{tag}.min.js` → 48× 404
   // en cada nav-click posterior. Guardian: tests/loader-global-guardian.test.ts.
   (globalThis as Record<string, unknown>).ISWebComponentsLoader = ISWebComponentsLoader;
+}
+
+syncHashMemory(HASHES);
+
+if (typeof document !== 'undefined') {
+  const links = document.querySelectorAll<HTMLLinkElement>('link[rel="stylesheet"][href]');
+  for (const link of links) {
+    const next = routeHref(link.href);
+    if (next && next !== link.href) link.href = next;
+  }
 }
 
 export default ISWebComponentsLoader;

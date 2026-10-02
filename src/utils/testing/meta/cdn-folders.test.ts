@@ -42,6 +42,7 @@ const ROOT_ALLOWED = new Set([
   'is-base.min.css',
   'palettes.min.css',
   'loader.min.js',
+  'asset-hashes.json',
 ]);
 
 const CORE_REQUIRED = [
@@ -53,7 +54,7 @@ const categories = [];
 for (const name of rootEntries) {
   const full = join(dist, name);
   if (statSync(full).isDirectory()) {
-    if (name !== 'llm' && name !== 'skills' && name !== 'core') categories.push(name);
+    if (name !== 'llm' && name !== 'skills' && name !== 'core' && name !== 'build') categories.push(name);
     continue;
   }
   check(ROOT_ALLOWED.has(name),

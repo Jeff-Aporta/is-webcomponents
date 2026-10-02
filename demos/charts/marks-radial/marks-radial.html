@@ -19,15 +19,15 @@
 </style>
 <script type="module">
   // El bundle marks-radial.min.js exporta las funciones puras.
-  const lib = await import('../../../dist/cdn/charts/marks-radial.min.js');
+  const lib = await import('../../../dist/cdn/charts/marks-radial.min.js?h=aecgyz');
   document.getElementById('exports').textContent = JSON.stringify(Object.keys(lib).sort(), null, 2);
 
   // Para invocarlas en vivo, importamos los wrappers tipados que las usan.
   await Promise.all([
-    import('../../../dist/cdn/data-viz/pie-chart.min.js'),
-    import('../../../dist/cdn/data-viz/doughnut-chart.min.js'),
-    import('../../../dist/cdn/data-viz/polar-area-chart.min.js'),
-    import('../../../dist/cdn/data-viz/radar-chart.min.js'),
+    import('../../../dist/cdn/data-viz/pie-chart.min.js?h=1buit8'),
+    import('../../../dist/cdn/data-viz/doughnut-chart.min.js?h=uc489y'),
+    import('../../../dist/cdn/data-viz/polar-area-chart.min.js?h=v2gqpw'),
+    import('../../../dist/cdn/data-viz/radar-chart.min.js?h=3l4ayk'),
   ]);
   await Promise.all([
     customElements.whenDefined('is-pie-chart'),

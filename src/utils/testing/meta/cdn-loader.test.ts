@@ -30,6 +30,9 @@ test('src/cdn/loader.ts expone API pública + mirrors/pin + has/getLoaded', () =
   assert.match(code, /planLoads/);
   assert.match(code, /cdn-ref\.js/);
   assert.match(code, /__IS_LOADER_CATALOG__/);
+  assert.match(code, /__IS_ASSET_HASHES__/);
+  assert.match(code, /assetUrl/);
+  assert.match(code, /syncHashMemory/);
 });
 
 test('dist/cdn/core/loader.min.js y loader.md existen; banner con docs', () => {
@@ -57,7 +60,7 @@ test('min.js de componente lleva banner de docs MD', () => {
 
 test('index.html arranca con loader (sin all.min suelto; CSS dist)', () => {
   assert.match(indexHtml, /loader\.min\.js/);
-  assert.match(indexHtml, /<link\s+rel="stylesheet"\s+href="dist\/cdn\/is-base\.min\.css"/);
+  assert.match(indexHtml, /<link\s+rel="stylesheet"\s+href="dist\/cdn\/is-base\.min\.css\?h=[0-9a-z]{6}"/);
   assert.doesNotMatch(indexHtml, /L\.load\(['"]all['"]\)/);
   assert.doesNotMatch(indexHtml, /<script type="module" src="dist\/cdn\/all\.min\.js"/);
   // Detalle del orden await/shell → tests/gallery-boot.test.ts (error #43)

@@ -14,6 +14,7 @@
 
 import { sheetsBase, soportaHojasAdoptadas } from './base-sheets.js';
 import { materializarAtributos } from './attrs.js';
+import { routeThroughLoader } from '../cdn/build/asset-url.js';
 
 /* ─────────────────────────────── registro ─────────────────────────────── */
 
@@ -123,7 +124,7 @@ export function adoptCss(shadowRoot: ShadowRoot, moduleUrl: string, baseUrl: str
   const hoja = (href: string): HTMLLinkElement => {
     const el = document.createElement('link');
     el.rel = 'stylesheet';
-    el.href = href;
+    el.href = routeThroughLoader(href);
     return el;
   };
 

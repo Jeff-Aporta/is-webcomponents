@@ -51,7 +51,7 @@
   // Cargar el bundle pre-construido. Esto hace funcionar el demo con cualquier
   // servidor estático (incluido VS Code Live Server), no solo con el dev
   // server que transpila TS. La promesa resuelve cuando is-code está definido.
-  await import('../../../dist/cdn/code/code.min.js');
+  await import('../../../dist/cdn/code/code.min.js?h=6vb9gg');
   await customElements.whenDefined('is-code');
 
   const samples = {

@@ -43,7 +43,7 @@
   // Cargar solo los tags que necesitamos, desde los bundles pre-construidos en
   // dist/cdn/. Esto hace funcionar los demos con cualquier servidor estático
   // (incluido VS Code Live Server), no solo con el dev server que transpila TS.
-  await import('../../../dist/cdn/overlays/command-palette.min.js');
+  await import('../../../dist/cdn/overlays/command-palette.min.js?h=msd57j');
   await customElements.whenDefined('is-command-palette');
 
   // Comandos declarados como JSON hijo (script[ type="application/json" ]).

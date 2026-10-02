@@ -17,7 +17,7 @@
 <script type="module">
   // Carga el bundle pre-compilado. funnel-chart.min.js importa transitivamente
   // chart.min.js + marks-funnel.min.js.
-  await import('../../../dist/cdn/data-viz/funnel-chart.min.js');
+  await import('../../../dist/cdn/data-viz/funnel-chart.min.js?h=klwji7');
   await customElements.whenDefined('is-funnel-chart');
 
   const chart = document.createElement('is-funnel-chart');

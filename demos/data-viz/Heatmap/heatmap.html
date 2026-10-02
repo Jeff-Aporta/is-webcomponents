@@ -42,7 +42,7 @@
 <script type="module">
   // Cargar el bundle pre-construido desde dist/cdn/. Funciona con cualquier
   // servidor estático (incluido VS Code Live Server), no solo con dev server.
-  await import('../../../dist/cdn/data-viz/heatmap.min.js');
+  await import('../../../dist/cdn/data-viz/heatmap.min.js?h=f6e95l');
   await customElements.whenDefined('is-heatmap');
 
   // Payload 1: heatmap denso 12x8 con paleta brand + show-values

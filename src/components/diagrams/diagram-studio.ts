@@ -72,7 +72,9 @@ type Host = HTMLElement & { payload?: unknown; exportJson?: () => string };
 
 function moduleHref(stem: string): string {
   const name = import.meta.url.includes('.min.js') ? `${stem}.min.js` : `${stem}.ts`;
-  return new URL(`./${name}`, import.meta.url).href;
+  const href = new URL(`./${name}`, import.meta.url).href;
+  const loader = (globalThis as { ISWebComponentsLoader?: { assetUrl?: (h: string) => string } }).ISWebComponentsLoader;
+  return loader?.assetUrl ? loader.assetUrl(href) : href;
 }
 
 function previewHref(file: string): string {

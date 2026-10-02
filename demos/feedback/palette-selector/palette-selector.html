@@ -16,7 +16,7 @@
   is-palette-selector:not(:defined) { visibility: hidden; }
 </style>
 <script type="module">
-  await import('../../../dist/cdn/feedback/palette-selector.min.js');
+  await import('../../../dist/cdn/feedback/palette-selector.min.js?h=hvmsig');
 
   await customElements.whenDefined('is-palette-selector');
   document.documentElement.dataset.paletteSelectorReady = '1';

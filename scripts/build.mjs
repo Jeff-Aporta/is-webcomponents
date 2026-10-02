@@ -5,6 +5,8 @@ import { existsSync } from 'node:fs';
 import { join, dirname, basename, relative, resolve, sep } from 'node:path';
 import { fileURLToPath } from 'node:url';
 import { build } from 'esbuild';
+import { bundleMinJs, bundleMinCss, docsBanner, bundleLoader } from '../src/cdn/build/bundle-min.ts';
+import { stampDirectory, hashFile, rewriteHtmlTree, hashesJson, applyHashToHtml, ASSET_HASHES_NAME } from '../src/cdn/build/stamp-hashes.ts';
 
 const here = dirname(fileURLToPath(import.meta.url));
 const root = dirname(here);
@@ -50,18 +52,7 @@ for (const entry of await readdir(dist, { withFileTypes: true })) {
 }
 
 const bundleJs = (entry, outfile, plugins = [], bannerJs = '', define = undefined) =>
-  build({
-    entryPoints: [entry],
-    outfile,
-    bundle: true,
-    minify: true,
-    format: 'esm',
-    target: 'es2020',
-    legalComments: 'none',
-    plugins,
-    ...(define ? { define } : {}),
-    ...(bannerJs ? { banner: { js: bannerJs } } : {}),
-  });
+  bundleMinJs({ entry, outfile, plugins, banner: bannerJs, define });
 
 // El CSS de cada componente viaja DENTRO de su .min.js, no como fetch aparte.
 // El href del .css hermano solo se conocia tras ejecutar el .js, asi que esas
@@ -90,10 +81,6 @@ const KIT_SKILL = `${GH_RAW}/src/skills/is-webcomponents/SKILL.md`;
 const CDN_COMP_INDEX = `${GH_RAW}/specs/componentes.md`;
 const CDN_LOADER_MD = `${GH_RAW}/src/cdn/loader.md`;
 
-/** Banner inicial de cada .min.js con rutas MD para LLMs. */
-const docsBanner = (lines) =>
-  ['/*!', ' * IS Web Components - docs (LLM)', ...lines.map((l) => ` * ${l}`), ' */'].join('\n');
-
 const componentDocsBanner = (folder, tag) => {
   const skillFile = join(compRoot, folder, `${tag}.md`);
   const componentSkill = existsSync(skillFile)
@@ -118,8 +105,7 @@ const kitDocsBanner = (extra = []) => docsBanner([
   ...extra,
 ]);
 
-const bundleCss = (entry, outfile) =>
-  build({ entryPoints: [entry], outfile, minify: true, bundle: true });
+const bundleCss = (entry, outfile) => bundleMinCss(entry, outfile);
 
 async function walk(dir, out = []) {
   for (const name of await readdir(dir, { withFileTypes: true })) {
@@ -421,26 +407,9 @@ const loaderBanner = docsBanner([
   `kit: ${CDN_COMP_INDEX}`,
   `cdn-install: ${CDN_SKILL}`,
 ]);
-await build({
-  entryPoints: [loaderSrc],
-  outfile: loaderOut,
-  bundle: true,
-  minify: true,
-  format: 'esm',
-  target: 'es2020',
-  legalComments: 'none',
-  banner: { js: loaderBanner },
-  define: {
-    __IS_LOADER_CATALOG__: JSON.stringify(loaderCatalog),
-  },
-});
-const loaderStat = await stat(loaderOut);
-console.log(`  ${'loader.min'.padEnd(18)} js ${String(loaderStat.size).padStart(6)}  (${Object.keys(loaderCatalog.categories).length} cats, ${Object.keys(loaderCatalog.tags).length / 2 | 0} tags)`);
 await copyFile(join(root, 'src', 'cdn', 'loader.md'), join(coreDist, 'loader.md'));
 console.log(`  ${'loader.md'.padEnd(18)} docs`);
-// Alias raíz: apps (PatyIA) importan …/dist/cdn/loader.min.js — canónico es core/.
-await copyFile(loaderOut, join(dist, 'loader.min.js'));
-console.log(`  ${'loader.min'.padEnd(18)} alias raíz (compat)`);
+// El .min.js del loader se emite al final, cuando el mapa de hashes ya existe.
 // Consolidación 2026-09-07: src/cdn/LLM.md eliminado. El contenido del visor del
 // loader vive en specs/cdn.md (catálogo visible por LLM); no se copia nada a
 // dist/cdn/LLM.md raíz (apps que lo enlazaban fueron migradas al spec).
@@ -517,5 +486,53 @@ await build({
 });
 const galleryStat = await stat(galleryOut);
 console.log(`  ${'gallery-app'.padEnd(18)} js ${String(galleryStat.size).padStart(6)}  (SPA → dist/)`);
+
+// ── hashes: sellar imports y embeber el mapa en el loader ────────
+const hashes = await stampDirectory(dist);
+const addHash = async (key, abs) => {
+  try { hashes[key] = await hashFile(abs); } catch { /* todavia no existe */ }
+};
+await addHash('dist/gallery-app.min.js', galleryOut);
+for (const bucket of ['scripts', 'pages']) {
+  const dir = join(root, 'dist', bucket);
+  let names = [];
+  try { names = await readdir(dir); } catch { names = []; }
+  for (const name of names) {
+    if (!/\.(?:min\.js|js|css)$/.test(name) || name.endsWith('.map')) continue;
+    await addHash(`dist/${bucket}/${name}`, join(dir, name));
+  }
+}
+await bundleLoader({
+  entry: loaderSrc,
+  outfile: loaderOut,
+  banner: loaderBanner,
+  catalog: loaderCatalog,
+  hashes,
+});
+const loaderHash = await hashFile(loaderOut);
+hashes['core/loader.min.js'] = loaderHash;
+hashes['loader.min.js'] = loaderHash;
+await copyFile(loaderOut, join(dist, 'loader.min.js'));
+await writeFile(join(dist, ASSET_HASHES_NAME), hashesJson(hashes));
+const loaderStat = await stat(loaderOut);
+console.log(`  ${'loader.min'.padEnd(18)} js ${String(loaderStat.size).padStart(6)}  (${Object.keys(loaderCatalog.categories).length} cats, ${Object.keys(hashes).length} hashes)`);
+console.log(`  ${'loader.min'.padEnd(18)} alias raíz (compat)`);
+
+const buildSrc = join(root, 'src', 'cdn', 'build');
+const buildOut = join(dist, 'build');
+await mkdir(buildOut, { recursive: true });
+for (const name of await readdir(buildSrc)) {
+  if (!name.endsWith('.ts')) continue;
+  await copyFile(join(buildSrc, name), join(buildOut, name));
+}
+await copyFile(join(root, 'src', 'cdn', 'asset-store.ts'), join(buildOut, 'asset-store.ts'));
+console.log(`  ${'build/'.padEnd(18)} ts vendor (hash + bundle)`);
+
+const indexPath = join(root, 'index.html');
+const indexPrev = await readFile(indexPath, 'utf8');
+const indexNext = applyHashToHtml(indexPrev, hashes);
+if (indexNext !== indexPrev) await writeFile(indexPath, indexNext);
+const htmlTouched = await rewriteHtmlTree(join(root, 'demos'), hashes) + (indexNext !== indexPrev ? 1 : 0);
+console.log(`  html                 ${htmlTouched} con ?h=`);
 
 console.log(`OK dist/cdn  ${entries.length} components + is-base + loader + gallery-app`);

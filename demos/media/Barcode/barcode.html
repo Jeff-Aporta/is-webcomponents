@@ -22,7 +22,7 @@
 </style>
 <script type="module">
   // Cargar solo el bundle que necesitamos desde dist/cdn/.
-  await import('../../../dist/cdn/media/barcode.min.js');
+  await import('../../../dist/cdn/media/barcode.min.js?h=mgcpol');
   await customElements.whenDefined('is-barcode');
 
   // Suscribirse a is-render para logging (útil en tests)

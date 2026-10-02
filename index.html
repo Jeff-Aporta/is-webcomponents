@@ -41,11 +41,11 @@
     html.theme-light, html.theme-light body { background: #f4f7fb; color: #142033; }
   </style>
   <!-- Kit: siempre dist/cdn (transpilado). Shell de galería: CSS local. -->
-  <link rel="stylesheet" href="dist/cdn/is-base.min.css">
-  <link rel="stylesheet" href="dist/cdn/palettes.min.css">
+  <link rel="stylesheet" href="dist/cdn/is-base.min.css?h=mlygeb">
+  <link rel="stylesheet" href="dist/cdn/palettes.min.css?h=rjan2p">
   <link rel="stylesheet" href="src/styles/shell.css">
   <link rel="stylesheet" href="src/styles/presentation.css">
-  <link rel="stylesheet" href="dist/cdn/preview/preview-component.min.css">
+  <link rel="stylesheet" href="dist/cdn/preview/preview-component.min.css?h=5cx1o5">
   <style>
     /* Chrome del shell: no mostrar tags crudos mientras upgradan. */
     .shell-bar is-button:not(:defined),
@@ -57,7 +57,7 @@
   <link rel="icon" href="dist/assets/favicon.svg" type="image/svg+xml">
   <script src="scripts/preview-boot.js"></script>
   <script type="module">
-    import { ISWebComponentsLoader as L } from './dist/cdn/core/loader.min.js';
+    import { ISWebComponentsLoader as L } from './dist/cdn/core/loader.min.js?h=d0ml0q';
     // Galería local: self (dist/cdn) primero; espejos CDN como fallback.
     L.configure({ preferSelf: true, mirrors: ['jsdelivr', 'pages'] });
 
@@ -79,7 +79,7 @@
           'is-theme-toggle',
           'is-code',
         ),
-        import('./dist/cdn/preview/preview-component.min.js'),
+        import('./dist/cdn/preview/preview-component.min.js?h=i8tw4v'),
       ]);
       document.documentElement.dataset.kitShell = '1';
       window.dispatchEvent(new Event('is-gallery-shell-ready'));
@@ -153,6 +153,6 @@
              label="Componentes"></is-drawer>
 
   <!-- Gallery SPA: dist/gallery-app.min.js (from src/gallery/app.ts). -->
-  <script type="module" src="./dist/gallery-app.min.js"></script>
+  <script type="module" src="./dist/gallery-app.min.js?h=8pykw7"></script>
 </body>
 </html>

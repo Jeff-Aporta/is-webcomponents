@@ -19,11 +19,11 @@
 <script type="module">
   // marks-cartesian exports drawBarMarks, drawLineMarks, drawScatterMarks, drawBubbleMarks.
   // No hay custom element: las funciones reciben un `ctx` con plot, scales, colors, etc.
-  const lib = await import('../../../dist/cdn/charts/marks-cartesian.min.js');
+  const lib = await import('../../../dist/cdn/charts/marks-cartesian.min.js?h=gi8xts');
   const { drawBarMarks, drawLineMarks } = lib;
 
   // Construir un ctx mínimo: usamos <is-chart> como host para tener ejes/escala reales.
-  await import('../../../dist/cdn/data-viz/chart.min.js');
+  await import('../../../dist/cdn/data-viz/chart.min.js?h=l9t1fg');
   await customElements.whenDefined('is-chart');
 
   // Demo 1: Bar via chart (real ctx)

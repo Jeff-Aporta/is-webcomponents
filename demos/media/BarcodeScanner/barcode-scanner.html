@@ -22,9 +22,9 @@
 </style>
 <script type="module">
   // Cargar solo el bundle + sus deps (button, icon) desde dist/cdn/.
-  await import('../../../dist/cdn/actions/button.min.js');
-  await import('../../../dist/cdn/media/icon.min.js');
-  await import('../../../dist/cdn/media/barcode-scanner.min.js');
+  await import('../../../dist/cdn/actions/button.min.js?h=bwgqa1');
+  await import('../../../dist/cdn/media/icon.min.js?h=vyqmcq');
+  await import('../../../dist/cdn/media/barcode-scanner.min.js?h=jdy537');
   await customElements.whenDefined('is-barcode-scanner');
 
   // Suscribirse a is-detect e is-error para logging (útil para tests)

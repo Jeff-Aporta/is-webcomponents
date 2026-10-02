@@ -17,7 +17,7 @@
 <script type="module">
   // Carga el bundle pre-compilado. bar-chart.min.js importa transitivamente
   // chart.min.js + marks-cartesian.min.js.
-  await import('../../../dist/cdn/data-viz/bar-chart.min.js');
+  await import('../../../dist/cdn/data-viz/bar-chart.min.js?h=i9znx9');
   await customElements.whenDefined('is-bar-chart');
 
   const chart = document.createElement('is-bar-chart');

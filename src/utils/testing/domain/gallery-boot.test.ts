@@ -28,13 +28,13 @@ function headBootModule(html) {
 }
 
 test('CSS del kit es dist/cdn (consumo); shell local', () => {
-  assert.match(indexHtml, /<link\s+rel="stylesheet"\s+href="dist\/cdn\/is-base\.min\.css"/);
-  assert.match(indexHtml, /<link\s+rel="stylesheet"\s+href="dist\/cdn\/palettes\.min\.css"/);
+  assert.match(indexHtml, /<link\s+rel="stylesheet"\s+href="dist\/cdn\/is-base\.min\.css\?h=[0-9a-z]{6}"/);
+  assert.match(indexHtml, /<link\s+rel="stylesheet"\s+href="dist\/cdn\/palettes\.min\.css\?h=[0-9a-z]{6}"/);
   assert.match(indexHtml, /<link\s+rel="stylesheet"\s+href="src\/styles\/shell\.css"/);
   assert.match(indexHtml, /<link\s+rel="stylesheet"\s+href="src\/styles\/presentation\.css"/);
   assert.match(
     indexHtml,
-    /<link\s+rel="stylesheet"\s+href="dist\/cdn\/preview\/preview-component\.min\.css"/,
+    /<link\s+rel="stylesheet"\s+href="dist\/cdn\/preview\/preview-component\.min\.css\?h=[0-9a-z]{6}"/,
   );
   assert.doesNotMatch(indexHtml, /href="src\/styles\/is-base\.css"/);
 });
@@ -52,7 +52,7 @@ test('await critico del head = shell tags + preview dist (no all, no pageModules
   assert.match(boot, /L\.load\s*\([\s\S]*is-split-panel[\s\S]*is-button/);
   assert.match(
     boot,
-    /import\s*\(\s*['"]\.\/dist\/cdn\/preview\/preview-component\.min\.js['"]\s*\)/,
+    /import\s*\(\s*['"]\.\/dist\/cdn\/preview\/preview-component\.min\.js\?h=[0-9a-z]{6}['"]\s*\)/,
   );
   assert.match(boot, /dataset\.kitShell\s*=\s*['"]1['"]/);
 
@@ -79,7 +79,7 @@ test('no reimportar preview-component ni icon-loader desde src/', () => {
 });
 
 test('SPA de galeria se consume desde dist/gallery-app.min.js (no src/*.ts)', () => {
-  assert.match(indexHtml, /src=["']\.\/dist\/gallery-app\.min\.js["']/);
+  assert.match(indexHtml, /src=["']\.\/dist\/gallery-app\.min\.js\?h=[0-9a-z]{6}["']/);
   assert.doesNotMatch(indexHtml, /from\s+['"]\.\/src\/previews\/registry\.ts['"]/);
   assert.doesNotMatch(indexHtml, /from\s+['"]\.\/src\/cdn\/collect-is-tags\.ts['"]/);
   assert.ok(
