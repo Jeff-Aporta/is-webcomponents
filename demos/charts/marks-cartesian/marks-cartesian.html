@@ -22,23 +22,23 @@
   const lib = await import('../../../dist/cdn/charts/marks-cartesian.min.js?h=gi8xts');
   const { drawBarMarks, drawLineMarks } = lib;
 
-  // Construir un ctx mínimo: usamos <is-chart> como host para tener ejes/escala reales.
-  await import('../../../dist/cdn/data-viz/chart.min.js?h=ke2piz');
-  await customElements.whenDefined('is-chart');
+  // Construir un ctx mínimo: usamos <iswc-chart> como host para tener ejes/escala reales.
+  await import('../../../dist/cdn/data-viz/chart.min.js?h=xbzc2f');
+  await customElements.whenDefined('iswc-chart');
 
   // Demo 1: Bar via chart (real ctx)
-  const bar = document.createElement('is-chart');
+  const bar = document.createElement('iswc-chart');
   bar.setAttribute('type', 'bar');
-  bar.setAttribute('label', 'drawBarMarks vía is-chart');
+  bar.setAttribute('label', 'drawBarMarks vía iswc-chart');
   bar.payload = {
     data: { labels: ['A','B','C'], datasets: [{ label: 'S', data: [10, 25, 15] }] },
   };
   document.getElementById('bar-host').appendChild(bar);
 
   // Demo 2: Line via chart
-  const line = document.createElement('is-chart');
+  const line = document.createElement('iswc-chart');
   line.setAttribute('type', 'line');
-  line.setAttribute('label', 'drawLineMarks vía is-chart');
+  line.setAttribute('label', 'drawLineMarks vía iswc-chart');
   line.payload = {
     data: { labels: ['Ene','Feb','Mar','Abr'], datasets: [{ label: 'Tendencia', data: [10, 22, 18, 35], tension: 0.4 }] },
   };
@@ -54,7 +54,7 @@
 <body>
 <header>
   <h1>marks-cartesian (utility)</h1>
-  <p>Funciones puras <code>drawBarMarks</code>, <code>drawLineMarks</code>, <code>drawScatterMarks</code>, <code>drawBubbleMarks</code>. Se invocan desde el motor <code>&lt;is-chart&gt;</code>.</p>
+  <p>Funciones puras <code>drawBarMarks</code>, <code>drawLineMarks</code>, <code>drawScatterMarks</code>, <code>drawBubbleMarks</code>. Se invocan desde el motor <code>&lt;iswc-chart&gt;</code>.</p>
 </header>
 <main>
   <section><h2>Exports del bundle</h2><pre id="exports"></pre></section>

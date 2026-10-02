@@ -5,7 +5,7 @@ import { INTENT } from '../_shared/intent.js';
 import { TONE } from '../_shared/tone.js';
 
 /**
- * <is-badge> — Web Component (vanilla).
+ * <iswc-badge> — Web Component (vanilla).
  *
  * Etiqueta compacta con colores semánticas.
  *
@@ -33,7 +33,7 @@ import { TONE } from '../_shared/tone.js';
   const VALID_VARIANT = TONE.filter((t) => t !== 'plain');
   const VALID_ATTENTION = ['none', 'pulse', 'bounce'];
 
-  class IsBadge extends withStyleAttrs(HTMLElement) {
+  class IswcBadge extends withStyleAttrs(HTMLElement) {
     /** Personalización por atributo (ver `core/attrs.ts`). */
     static styleAttrs = {
     'pulse-color': { prop: '--iswc-badge-pulse-color', onlyColorValues: true },
@@ -102,5 +102,5 @@ import { TONE } from '../_shared/tone.js';
     }
   }
 
-  defineElement('is-badge', IsBadge, 'IsBadge');
+  defineElement('iswc-badge', IswcBadge, 'IswcBadge');
 })();

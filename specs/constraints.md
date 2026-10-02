@@ -8,7 +8,7 @@ Prohibiciones y reglas transversales ya pagadas. Detalle por dominio: [`componen
 - No cerrar un cambio sin `node tests/run-all.ts` verde (al menos tests sin servidor).
 - No aflojar un guardián para "que pase": se arregla código o spec.
 - No commitear `tests/` entero en gitignore — solo `*.tmp`, `coverage/`, `.cache/`.
-- **Reusar antes de inventar.** Si el kit ya tiene `is-*`, `IsUi`, `_shared/*` o un preview controlado, úsalo. No rehacer la rueda (button/dialog/table/toast/icon).
+- **Reusar antes de inventar.** Si el kit ya tiene `is-*`, `IswcUi`, `_shared/*` o un preview controlado, úsalo. No rehacer la rueda (button/dialog/table/toast/icon).
 - Fuente manda sobre preview; la ruta del preview sale de `manifest.js.page`. Preservar accesibilidad, validación y fallbacks. Leer callers antes de tocar un helper compartido.
 - Preservar cambios concurrentes; el usuario gestiona commits.
 
@@ -26,8 +26,8 @@ Prohibiciones y reglas transversales ya pagadas. Detalle por dominio: [`componen
 - **Toda la fuente vive bajo `src/`**: `src/components`, `src/styles`, `src/previews`, `src/skills`, `src/utils` (health/e2e + system), `src/manifest.js`. En la raíz: `scripts/`, `dist/`, `tests/`, `specs/` (**contrato SDD**), `index.html`, `robots.txt`.
 - No recrear carpetas de fuente en la raíz (`components/`, `styles/`, `previews/`, `skills/`); guardián `src-layout`.
 - No hay `docs/` ni `src/docs/` (HTML SEO y planes de superpowers eliminados 31-ago y 03-sep-2026). El HTML SEO generado se retiró: no recrear un `docs/` en la raíz.
-- **Previews = JSON homogéneo** `is-preview/v1` + `<is-preview-component>` + `behaviors/<tag>.js`. Único HTML permitido bajo previews: `src/previews/_shell.html`. **No** HTML por tag.
-- **Utilerías (`helpers/`)**: cada módulo público tiene `manifest.page` (`.json`) + MD. `is-floating` = internal (sin tab). Guardián `helpers-homogeneity`.
+- **Previews = JSON homogéneo** `iswc-preview/v1` + `<iswc-preview-component>` + `behaviors/<tag>.js`. Único HTML permitido bajo previews: `src/previews/_shell.html`. **No** HTML por tag.
+- **Utilerías (`helpers/`)**: cada módulo público tiene `manifest.page` (`.json`) + MD. `iswc-floating` = internal (sin tab). Guardián `helpers-homogeneity`.
 - No mezclar profundidades en previews: desde categoría styles/components `../../`, scripts/dist `../../../`; desde `_shell.html` styles `../`, scripts/dist `../../`. `../../dist` desde categoría resuelve a `src/dist` (404, página en blanco).
 - **No usar rutas root-absolute (`/...`)** en previews ni scripts: el sitio se publica en GH Pages bajo `/<repo>/`.
 
@@ -69,7 +69,7 @@ Prohibiciones y reglas transversales ya pagadas. Detalle por dominio: [`componen
 - No hardcodear `color-scheme` en `:root` (solo `.theme-dark`/`.theme-light`); no `html,body { background }` en `is-base`/`palettes`; no default de paleta `insoft` (producto = `contapyme`).
 - No presentar `marks-*`, engines internos ni `_shared/*` como custom elements públicos.
 - No crear `size` colors; usar `font-size` contextual y `em`. Controles nativos en shadow con `font: inherit`.
-- No CSS gigante en string dentro del `.ts`: archivo `.css` hermano + `adoptCss(shadow, import.meta.url)`. App/`tk-*` wrappers = datos → `is-*` + `.css` hermano + `IsUi.adoptCss`.
+- No CSS gigante en string dentro del `.ts`: archivo `.css` hermano + `adoptCss(shadow, import.meta.url)`. App/`tk-*` wrappers = datos → `is-*` + `.css` hermano + `IswcUi.adoptCss`.
 - No escribir `mi-tag .algo` en la hoja adoptada por `mi-tag` (CSS muerto; ver `::slotted`/`:host(mi-tag)`). No `&[attr]` dentro de `:host`.
 - No duplicar `escapeHtml`/`copyText`/`tidy`/`clampTo` (ya en `_shared/`).
 - No animar propiedades de layout (padding/width/height); usar `transform`/`translate`.

@@ -1,5 +1,5 @@
 /**
- * Contrato TypeScript del documento y endpoints CRUD de `<is-md-editor>`.
+ * Contrato TypeScript del documento y endpoints CRUD de `<iswc-md-editor>`.
  *
  * Uso (consumidor):
  *   import type { IsMdEditorDocument, IsMdEditorApiConfig } from '…/md-editor-api.d.ts';
@@ -71,7 +71,7 @@ export interface IsMdEditorActions {
   delete?: (doc: IsMdEditorDocument) => Promise<void>;
 }
 
-/** Payload emitido en `is-persist` / `is-change` cuando hay API o actions. */
+/** Payload emitido en `iswc-persist` / `iswc-change` cuando hay API o actions. */
 export interface IsMdEditorPersistDetail {
   value: string;
   document: IsMdEditorDocument;

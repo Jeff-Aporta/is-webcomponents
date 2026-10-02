@@ -1,5 +1,5 @@
 /**
- * intersection-observer.test.ts — Tier A (12 aserciones) para `<is-intersection-observer>`.
+ * intersection-observer.test.ts — Tier A (12 aserciones) para `<iswc-intersection-observer>`.
  *
  * Wrapper legacy que delega en createObserverElement('intersection').
  */
@@ -12,7 +12,7 @@ import { fileURLToPath } from 'node:url';
 
 const HERE = dirname(fileURLToPath(import.meta.url));
 const ROOT = join(HERE, '..', '..', '..', '..', '..');
-const TAG = 'is-intersection-observer';
+const TAG = 'iswc-intersection-observer';
 const TS  = join(ROOT, 'src', 'components', 'helpers', 'intersection-observer.ts');
 const CSS = join(ROOT, 'src', 'components', 'helpers', 'intersection-observer.css');
 const JSON_PATH = join(ROOT, 'src', 'components', 'helpers', 'intersection-observer.json');
@@ -25,10 +25,10 @@ test('2. CSS hermano existe', () => {
   assert.ok(existsSync(CSS));
 });
 
-test('3. JSON existe y respeta is-preview/v1', () => {
+test('3. JSON existe y respeta iswc-preview/v1', () => {
   const json = JSON.parse(readFileSync(JSON_PATH, 'utf8'));
   assert.equal(json.tag, TAG);
-  assert.equal(json.$schema, 'is-preview/v1');
+  assert.equal(json.$schema, 'iswc-preview/v1');
 });
 
 test('4. delega en createObserverElement("intersection") del factory observer.ts', () => {
@@ -46,7 +46,7 @@ test('5. importa createObserverElement desde ./observer.js', () => {
 
 test('6. está registrado con defineElement', () => {
   const src = readFileSync(TS, 'utf8');
-  assert.ok(/defineElement\s*\(\s*['"]is-intersection-observer['"]/.test(src));
+  assert.ok(/defineElement\s*\(\s*['"]iswc-intersection-observer['"]/.test(src));
 });
 
 test('7. hereda OBSERVED del observer genérico', () => {
@@ -62,14 +62,14 @@ test('8. el JSDoc documenta los atributos intersection (intersect-class, once, r
   }
 });
 
-test('9. el JSDoc documenta el evento is-intersect', () => {
+test('9. el JSDoc documenta el evento iswc-intersect', () => {
   const src = readFileSync(TS, 'utf8');
-  assert.ok(/is-intersect/.test(src));
+  assert.ok(/iswc-intersect/.test(src));
 });
 
 test('10. el componente existe en el manifest (catalog.ts)', () => {
   const cat = readFileSync(join(ROOT, 'src', 'previews', 'catalog.ts'), 'utf8');
-  assert.ok(cat.includes(`"is-intersection-observer"`), 'debe estar registrado en catalog.ts');
+  assert.ok(cat.includes(`"iswc-intersection-observer"`), 'debe estar registrado en catalog.ts');
 });
 
 test('11. CSS tiene regla para display:contents o similar (es transparente)', () => {

@@ -21,7 +21,7 @@ export interface PreviewDemoBlock {
   /** Nota corta bajo el título de la sección equivalente. */
   equivNote?: string;
   /**
-   * Markup opcional (p. ej. `<is-flowchart>…`) que aclara ramas cuando hay
+   * Markup opcional (p. ej. `<iswc-flowchart>…`) que aclara ramas cuando hay
    * varios HTML distintos según el caso. Va debajo del `<pre>` equivalente.
    */
   equivFlow?: string;
@@ -103,9 +103,9 @@ export interface PreviewSection {
  * Todos los previews comparten esta interface (homogeneidad).
  */
 export interface PreviewDefinition {
-  /** Schema id — siempre "is-preview/v1" */
-  $schema: 'is-preview/v1';
-  /** Tag del catálogo (manifest), p. ej. is-button-group */
+  /** Schema id — siempre "iswc-preview/v1" */
+  $schema: 'iswc-preview/v1';
+  /** Tag del catálogo (manifest), p. ej. iswc-button-group */
   tag: string;
   /** Categoría (carpeta bajo previews/) */
   category: string;
@@ -115,10 +115,10 @@ export interface PreviewDefinition {
   description?: string;
   /** CSS local del preview (string de estilos, no comportamiento). */
   styles?: string;
-  /** Clave remember-scroll de is-main */
+  /** Clave remember-scroll de iswc-main */
   storageKey?: string;
   /**
-   * Clases extra para el `is-main` del chrome. Una página completa (el home)
+   * Clases extra para el `iswc-main` del chrome. Una página completa (el home)
    * necesita marcar su propio scroller: su CSS y su behavior lo seleccionan.
    */
   mainClass?: string;

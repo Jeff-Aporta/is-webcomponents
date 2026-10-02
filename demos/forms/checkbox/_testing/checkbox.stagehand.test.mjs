@@ -4,7 +4,7 @@
 // La rama LLM con Stagehand queda opt-in al final del archivo.
 //
 // Checks que pasamos (todos sobre el demo checkbox.html):
-//   1. COMPONENTE RENDERIZADO: <is-checkbox> definido, shadow DOM presente.
+//   1. COMPONENTE RENDERIZADO: <iswc-checkbox> definido, shadow DOM presente.
 //   2. ELEMENTOS VISIBLES: cada checkbox tiene control + label dentro del rect.
 //   3. TEXTO LEGIBLE: etiquetas con font-size >= 8px, sin overlaps entre cajas.
 //   4. ESTADOS DISTINGUIBLES: checkboxes con checked/indeterminate/disabled se
@@ -20,12 +20,12 @@ async function checkDeterministic(page, demo) {
   await page.waitForTimeout(200);
 
   // 1) COMPONENTE RENDERIZADO.
-  const defined = await page.evaluate(() => !!customElements.get('is-checkbox'));
-  assert.equal(defined, true, 'is-checkbox debe estar definido');
+  const defined = await page.evaluate(() => !!customElements.get('iswc-checkbox'));
+  assert.equal(defined, true, 'iswc-checkbox debe estar definido');
 
   // 2-4) Inspección de cada checkbox del demo.
   const data = await page.evaluate(() => {
-    const checkboxes = [...document.querySelectorAll('is-checkbox')];
+    const checkboxes = [...document.querySelectorAll('iswc-checkbox')];
     return checkboxes.map((cb) => {
       const sr = cb.shadowRoot;
       const control = sr?.querySelector('.control');
@@ -106,7 +106,7 @@ for (const demo of DEMOS) {
 // Rama opt-in con Stagehand LLM. Sólo corre si STAGEHAND=1 + credenciales.
 // ─────────────────────────────────────────────────────────────────────────
 const VISUAL_RUBRIC = `
-Evalúa la calidad visual del demo del componente <is-checkbox>.
+Evalúa la calidad visual del demo del componente <iswc-checkbox>.
 
 Checklist (cada una PASS o FAIL):
 

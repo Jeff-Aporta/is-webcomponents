@@ -1,20 +1,20 @@
 {
-  "$schema": "is-preview/v1",
-  "tag": "is-confirm-modal",
+  "$schema": "iswc-preview/v1",
+  "tag": "iswc-confirm-modal",
   "category": "feedback",
-  "title": "<is-confirm-modal>",
+  "title": "<iswc-confirm-modal>",
   "titleHtml": true,
-  "description": "Documentación y demos de is-confirm-modal de InSoft.",
-  "storageKey": "docs-is-confirm-modal",
+  "description": "Documentación y demos de iswc-confirm-modal de InSoft.",
+  "storageKey": "docs-iswc-confirm-modal",
   "sections": [
     {
       "id": "intro",
       "title": "Uso",
-      "lede": "Confirmación en modal centrado con backdrop. Para decisiones que\r\n          merecen foco total. Si prefieres confirmar en línea sin tapar la\r\n          pantalla, usa <code class=\"code\">&lt;is-popconfirm&gt;</code>.",
+      "lede": "Confirmación en modal centrado con backdrop. Para decisiones que\r\n          merecen foco total. Si prefieres confirmar en línea sin tapar la\r\n          pantalla, usa <code class=\"code\">&lt;iswc-popconfirm&gt;</code>.",
       "blocks": [
         {
           "kind": "demo",
-          "html": "<is-button id=\"btnDelete\" color=\"danger\">\r\n            <is-icon slot=\"start\" icon=\"mdi:trash-can\"></is-icon>\r\n            Eliminar cuenta\r\n          </is-button>\r\n          <is-confirm-modal for=\"btnDelete\" heading=\"Eliminar cuenta\" message=\"Se borrarán todos tus datos. Esta acción no se puede deshacer.\">\r\n            <is-button slot=\"confirm\" color=\"danger\">Sí, eliminar</is-button>\r\n            <is-button slot=\"cancel\">Cancelar</is-button>\r\n          </is-confirm-modal>\r\n          <p id=\"cmLog\">Última acción: <code class=\"code\">—</code></p>",
+          "html": "<iswc-button id=\"btnDelete\" color=\"danger\">\r\n            <iswc-icon slot=\"start\" icon=\"mdi:trash-can\"></iswc-icon>\r\n            Eliminar cuenta\r\n          </iswc-button>\r\n          <iswc-confirm-modal for=\"btnDelete\" heading=\"Eliminar cuenta\" message=\"Se borrarán todos tus datos. Esta acción no se puede deshacer.\">\r\n            <iswc-button slot=\"confirm\" color=\"danger\">Sí, eliminar</iswc-button>\r\n            <iswc-button slot=\"cancel\">Cancelar</iswc-button>\r\n          </iswc-confirm-modal>\r\n          <p id=\"cmLog\">Última acción: <code class=\"code\">—</code></p>",
           "controls": [
             {
               "control": "select",
@@ -29,7 +29,7 @@
         },
         {
           "kind": "code",
-          "code": "<is-button id=\"btnDelete\">Eliminar cuenta</is-button>\n<is-confirm-modal for=\"btnDelete\" heading=\"Eliminar cuenta\" message=\"¿Seguro?\">\n  <is-button slot=\"confirm\" color=\"danger\">Sí, eliminar</is-button>\n  <is-button slot=\"cancel\">Cancelar</is-button>\n</is-confirm-modal>"
+          "code": "<iswc-button id=\"btnDelete\">Eliminar cuenta</iswc-button>\n<iswc-confirm-modal for=\"btnDelete\" heading=\"Eliminar cuenta\" message=\"¿Seguro?\">\n  <iswc-button slot=\"confirm\" color=\"danger\">Sí, eliminar</iswc-button>\n  <iswc-button slot=\"cancel\">Cancelar</iswc-button>\n</iswc-confirm-modal>"
         }
       ]
     },
@@ -40,7 +40,7 @@
       "blocks": [
         {
           "kind": "demo",
-          "html": "<is-button id=\"cmMega\" color=\"brand\">Publicar cambios</is-button>\r\n          <is-confirm-modal for=\"cmMega\" heading=\"Publicar a producción\">\r\n            <div slot=\"message\">\r\n              <strong>Vas a publicar 12 cambios.</strong>\r\n              <p style=\"margin:0.25rem 0;font-size:0.85em;color:color-mix(in srgb,currentColor 70%,transparent)\">\r\n                Los usuarios verán la nueva versión de inmediato.\r\n              </p>\r\n            </div>\r\n            <is-button slot=\"cancel\">Revisar de nuevo</is-button>\r\n            <is-button slot=\"confirm\" color=\"brand\">Publicar</is-button>\r\n          </is-confirm-modal>"
+          "html": "<iswc-button id=\"cmMega\" color=\"brand\">Publicar cambios</iswc-button>\r\n          <iswc-confirm-modal for=\"cmMega\" heading=\"Publicar a producción\">\r\n            <div slot=\"message\">\r\n              <strong>Vas a publicar 12 cambios.</strong>\r\n              <p style=\"margin:0.25rem 0;font-size:0.85em;color:color-mix(in srgb,currentColor 70%,transparent)\">\r\n                Los usuarios verán la nueva versión de inmediato.\r\n              </p>\r\n            </div>\r\n            <iswc-button slot=\"cancel\">Revisar de nuevo</iswc-button>\r\n            <iswc-button slot=\"confirm\" color=\"brand\">Publicar</iswc-button>\r\n          </iswc-confirm-modal>"
         }
       ]
     },
@@ -50,7 +50,7 @@
       "blocks": [
         {
           "kind": "html",
-          "html": "<h3><code class=\"code\">&lt;is-confirm-modal&gt;</code></h3>"
+          "html": "<h3><code class=\"code\">&lt;iswc-confirm-modal&gt;</code></h3>"
         },
         {
           "kind": "table",
@@ -99,19 +99,19 @@
           ],
           "rows": [
             [
-              "<code>is-confirm-show</code>",
+              "<code>iswc-confirm-show</code>",
               "Modal visible."
             ],
             [
-              "<code>is-confirm-hide</code>",
+              "<code>iswc-confirm-hide</code>",
               "Modal se cierra."
             ],
             [
-              "<code>is-confirm-confirm</code>",
+              "<code>iswc-confirm-confirm</code>",
               "Click en confirmar."
             ],
             [
-              "<code>is-confirm-cancel</code>",
+              "<code>iswc-confirm-cancel</code>",
               "Click en cancelar, backdrop o Escape."
             ]
           ]

@@ -4,7 +4,7 @@ import { withStyleAttrs } from '../../core/attrs.js';
 import '../helpers/floating.js';
 
 /**
- * <is-tooltip> — tip contextual anclado vía `for`.
+ * <iswc-tooltip> — tip contextual anclado vía `for`.
  *
  * Attrs: for, open, placement, trigger, distance, skidding,
  *        show-delay, hide-delay, disabled, without-arrow
@@ -14,7 +14,7 @@ import '../helpers/floating.js';
  *   none   → solo show()/hide(), sin cierre automático (lo controla el dueño)
  *
  * Methods: show(), hide()
- * Events: is-show, is-after-show, is-hide, is-after-hide
+ * Events: iswc-show, iswc-after-show, iswc-hide, iswc-after-hide
  * Parts: ::part(tooltip) ::part(body) ::part(base__popup) ::part(base__arrow)
  * CSS: --max-width
  */
@@ -22,7 +22,7 @@ import '../helpers/floating.js';
 (() => {
   const TEMPLATE = document.createElement('template');
   TEMPLATE.innerHTML = /* html */ `
-    <is-floating
+    <iswc-floating
       part="base"
       class="popup"
       exportparts="popup:base__popup, arrow:base__arrow"
@@ -37,7 +37,7 @@ import '../helpers/floating.js';
       <div part="tooltip base" class="tooltip" role="tooltip">
         <div part="body" class="body"><slot></slot></div>
       </div>
-    </is-floating>
+    </iswc-floating>
   `;
 
   const OBSERVED = [
@@ -45,7 +45,7 @@ import '../helpers/floating.js';
     'show-delay', 'hide-delay', 'disabled', 'without-arrow',
   ];
 
-  /** Tipo del subcomponente `<is-floating>` que envuelve el tooltip. */
+  /** Tipo del subcomponente `<iswc-floating>` que envuelve el tooltip. */
   type PopupRef = HTMLElement & {
     placement: string;
     distance: number;
@@ -57,7 +57,7 @@ import '../helpers/floating.js';
     reposition(): void;
   };
 
-  class IsTooltip extends withStyleAttrs(HTMLElement) {
+  class IswcTooltip extends withStyleAttrs(HTMLElement) {
     /** Personalización por atributo (ver `core/attrs.ts`). */
     static styleAttrs = {
     'max-width': '--iswc-tooltip-max-width',
@@ -79,7 +79,7 @@ import '../helpers/floating.js';
       const shadow = this.attachShadow({ mode: 'open' });
       adoptCss(shadow, import.meta.url);
       shadow.appendChild(TEMPLATE.content.cloneNode(true));
-      this.#popup = shadow.querySelector<PopupRef>('is-floating')!;
+      this.#popup = shadow.querySelector<PopupRef>('iswc-floating')!;
     }
 
     connectedCallback(): void {
@@ -161,7 +161,7 @@ import '../helpers/floating.js';
       const root = this.getRootNode() as Document | ShadowRoot;
       const el = root.getElementById?.(this.for) || document.getElementById(this.for);
       if (!el) {
-        console.warn(`[is-tooltip] No se encontró #${this.for}`);
+        console.warn(`[iswc-tooltip] No se encontró #${this.for}`);
         return;
       }
       this.#target = el;
@@ -171,7 +171,7 @@ import '../helpers/floating.js';
       if (this.#hasTrigger('hover')) {
         el.addEventListener('pointerenter', this.#onEnter);
         el.addEventListener('pointerleave', this.#onLeave);
-        (this.#popup as HTMLElement).addEventListener('is-hover-bridge', (e) =>
+        (this.#popup as HTMLElement).addEventListener('iswc-hover-bridge', (e) =>
           this.#onBridge(e as CustomEvent<{ hovering: boolean }>));
       }
       if (this.#hasTrigger('focus')) {
@@ -184,12 +184,12 @@ import '../helpers/floating.js';
     }
 
     #ensureId() {
-      if (!this.id) this.id = `is-tooltip-${Math.random().toString(36).slice(2, 9)}`;
+      if (!this.id) this.id = `iswc-tooltip-${Math.random().toString(36).slice(2, 9)}`;
       return this.id;
     }
 
     #unbindTarget() {
-      (this.#popup as HTMLElement).removeEventListener('is-hover-bridge', this.#onBridge as EventListener);
+      (this.#popup as HTMLElement).removeEventListener('iswc-hover-bridge', this.#onBridge as EventListener);
       const el = this.#target;
       if (!el) return;
       el.removeEventListener('pointerenter', this.#onEnter);
@@ -272,7 +272,7 @@ import '../helpers/floating.js';
         this.removeAttribute('open');
         return;
       }
-      const ev = new CustomEvent('is-show', { bubbles: false, composed: true, cancelable: true });
+      const ev = new CustomEvent('iswc-show', { bubbles: false, composed: true, cancelable: true });
       if (!this.dispatchEvent(ev)) {
         this.removeAttribute('open');
         return;
@@ -287,11 +287,11 @@ import '../helpers/floating.js';
         document.addEventListener('pointerdown', this.#onDocPointer, true);
         document.addEventListener('keydown', this.#onDocKey, true);
       }
-      emit(this, 'is-after-show', undefined, { bubbles: false });
+      emit(this, 'iswc-after-show', undefined, { bubbles: false });
     }
 
     #doHide() {
-      const ev = new CustomEvent('is-hide', { bubbles: false, composed: true, cancelable: true });
+      const ev = new CustomEvent('iswc-hide', { bubbles: false, composed: true, cancelable: true });
       if (!this.dispatchEvent(ev)) {
         this.setAttribute('open', '');
         return;
@@ -299,9 +299,9 @@ import '../helpers/floating.js';
       this.#popup.active = false;
       document.removeEventListener('pointerdown', this.#onDocPointer, true);
       document.removeEventListener('keydown', this.#onDocKey, true);
-      emit(this, 'is-after-hide', undefined, { bubbles: false });
+      emit(this, 'iswc-after-hide', undefined, { bubbles: false });
     }
   }
 
-  defineElement('is-tooltip', IsTooltip, 'IsTooltip');
+  defineElement('iswc-tooltip', IswcTooltip, 'IswcTooltip');
 })();

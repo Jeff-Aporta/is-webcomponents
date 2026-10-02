@@ -1,14 +1,14 @@
 ---
-tag: is-component-diagram
+tag: iswc-component-diagram
 tags:
-  - is-component-diagram
+  - iswc-component-diagram
 category: diagrams
 status: public
 source: ./component-diagram.js
 style: ./component-diagram.css
 preview: ./component-diagram.json
 ---
-# `<is-component-diagram>`
+# `<iswc-component-diagram>`
 
 ## Propósito
 
@@ -31,7 +31,7 @@ declarados); `min-gap` es el piso de esas separaciones. Los componentes
 automática mételos en paquetes, o usa `manual` y colócalos tú.
 `manual` deja x/y tal cual.
 
-Este módulo registra `<is-component-diagram>`.
+Este módulo registra `<iswc-component-diagram>`.
 
 ## Cuándo usarlo
 
@@ -42,8 +42,8 @@ interfaces provided/required y los paquetes que los agrupan.
 ## Cuándo no usarlo
 
 Si lo que necesitas son clases UML con atributos y métodos → usa
-`<is-class-diagram>`. Si solo quieres nodos y conexiones simples sin la
-semántica UML → `<is-block-diagram>`.
+`<iswc-class-diagram>`. Si solo quieres nodos y conexiones simples sin la
+semántica UML → `<iswc-block-diagram>`.
 
 ## Importación
 
@@ -54,7 +54,7 @@ import './component-diagram.js';
 ## Ejemplo mínimo
 
 ```html
-<is-component-diagram min-gap="64"></is-component-diagram>
+<iswc-component-diagram min-gap="64"></iswc-component-diagram>
 ```
 
 ## API
@@ -84,8 +84,8 @@ import './component-diagram.js';
 
 | Evento | detail | bubbles | composed | cancelable |
 | --- | --- | --- | --- | --- |
-| `is-render` | sí | sí | sí | no |
-| `is-open-viewer` | sí | sí | sí | sí |
+| `iswc-render` | sí | sí | sí | no |
+| `iswc-open-viewer` | sí | sí | sí | sí |
 
 ### Métodos y propiedades públicas
 
@@ -199,7 +199,7 @@ No declara integración form-associated propia en este módulo.
 - El título del paquete (`«estereotipo» nombre`) es una caja: las aristas
   la rodean. Sin eso el rótulo queda ilegible.
 - El estilo (cajón translúcido, dashed `2 5`, Tahoma, cajas `chipFill`)
-  sigue al `<is-er-diagram>` para que ER y componentes convivan en la ficha.
+  sigue al `<iswc-er-diagram>` para que ER y componentes convivan en la ficha.
 
 ## Dependencias y componentes relacionados
 
@@ -224,7 +224,7 @@ provided/required:
 - Declarar `edges` que referencien componentes/interfaces inexistentes.
   El spec las descarta silenciosamente (es trazable contando nodos).
 - Olvidar `x`/`y` en un nodo: cae a `(0, 0)` y se solapa con el origen.
-- Usar este componente para clases UML: para eso es `<is-class-diagram>`.
+- Usar este componente para clases UML: para eso es `<iswc-class-diagram>`.
 
 ## Reglas para LLM
 

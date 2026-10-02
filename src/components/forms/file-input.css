@@ -52,19 +52,24 @@
   }
 }
 
-:host([data-state-dragging]) .dropzone,
-:host(:state(dragging)) .dropzone {
-  border-color: var(--iswc-color-brand, #339af0);
-  border-style: solid;
-  background: color-mix(in srgb, var(--iswc-color-brand, #339af0) 30%, transparent);
+/* Drag-over y disabled se exponen como atributos `data-state-*` por el JS
+ * (toggled desde ElementInternals). Mantenerlos en formato atributo evita el
+ * selector `:state(...)` que esbuild rechaza dentro de nesting de Shadow DOM. */
+:host([data-state-dragging]) {
+  .dropzone {
+    border-color: var(--iswc-color-brand, #339af0);
+    border-style: solid;
+    background: color-mix(in srgb, var(--iswc-color-brand, #339af0) 30%, transparent);
+  }
 }
 
-:host([disabled]) .dropzone,
-:host([data-state-disabled]) .dropzone,
-:host(:state(disabled)) .dropzone {
-  opacity: 0.55;
-  cursor: not-allowed;
-  pointer-events: none;
+:host([disabled]),
+:host([data-state-disabled]) {
+  .dropzone {
+    opacity: 0.55;
+    cursor: not-allowed;
+    pointer-events: none;
+  }
 }
 
 .dropzone-default {
@@ -77,8 +82,8 @@
   font-size: 0.95em;
   pointer-events: none;
 
-  & is-icon,
-  & ::slotted(is-icon) {
+  & iswc-icon,
+  & ::slotted(iswc-icon) {
     font-size: 1.75em;
     color: var(--iswc-color-brand, #339af0);
   }

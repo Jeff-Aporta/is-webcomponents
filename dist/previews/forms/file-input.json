@@ -1,10 +1,10 @@
 {
-  "$schema": "is-preview/v1",
-  "tag": "is-file-input",
+  "$schema": "iswc-preview/v1",
+  "tag": "iswc-file-input",
   "category": "forms",
-  "title": "<is-file-input>",
+  "title": "<iswc-file-input>",
   "titleHtml": true,
-  "storageKey": "docs-is-file-input",
+  "storageKey": "docs-iswc-file-input",
   "hasBehavior": true,
   "sections": [
     {
@@ -14,7 +14,7 @@
       "blocks": [
         {
           "kind": "demo",
-          "html": "<is-file-input\r\n            id=\"fi\"\r\n            label=\"Adjuntos\"\r\n            hint=\"PDF o imágenes · máx. varios archivos\"\r\n            accept=\"image/*,.pdf\"\r\n            multiple\r\n            name=\"attachments\"\r\n          ></is-file-input>",
+          "html": "<iswc-file-input\r\n            id=\"fi\"\r\n            label=\"Adjuntos\"\r\n            hint=\"PDF o imágenes · máx. varios archivos\"\r\n            accept=\"image/*,.pdf\"\r\n            multiple\r\n            name=\"attachments\"\r\n          ></iswc-file-input>",
           "controls": [
             {
               "control": "select",
@@ -58,11 +58,11 @@
       "blocks": [
         {
           "kind": "demo",
-          "html": "<is-file-input label=\"Avatar\" accept=\"image/*\" required hint=\"Obligatorio\"></is-file-input>"
+          "html": "<iswc-file-input label=\"Avatar\" accept=\"image/*\" required hint=\"Obligatorio\"></iswc-file-input>"
         },
         {
           "kind": "code",
-          "code": "<is-file-input\n  label=\"Adjuntos\"\n  accept=\"image/*,.pdf\"\n  multiple\n  name=\"attachments\"\n></is-file-input>"
+          "code": "<iswc-file-input\n  label=\"Adjuntos\"\n  accept=\"image/*,.pdf\"\n  multiple\n  name=\"attachments\"\n></iswc-file-input>"
         }
       ]
     },
@@ -95,7 +95,7 @@
             ],
             [
               "events",
-              "input, change, is-change"
+              "input, change, iswc-change"
             ]
           ]
         }

@@ -4,7 +4,7 @@ import '../actions/button.js';
 import { ModalBase } from '../_shared/modal-base.js';
 
 /**
- * <is-dialog> — Web Component (vanilla, zero dependencies).
+ * <iswc-dialog> — Web Component (vanilla, zero dependencies).
  *
  * Modal sobre la página que requiere atención inmediata del usuario. Equivalente
  * accesible a <dialog> nativo + wa-dialog (Web Awesome).
@@ -32,11 +32,11 @@ import { ModalBase } from '../_shared/modal-base.js';
  *   show() / hide() / toggle()
  *
  * Eventos
- *   is-show        detail: {} — antes de abrir.
- *   is-after-show  detail: {} — tras la animación de apertura.
- *   is-hide        detail: { source } — antes de cerrar (cancelable).
+ *   iswc-show        detail: {} — antes de abrir.
+ *   iswc-after-show  detail: {} — tras la animación de apertura.
+ *   iswc-hide        detail: { source } — antes de cerrar (cancelable).
  *                  source = null (Escape) | elemento que disparó el cierre.
- *   is-after-hide  detail: {} — tras la animación de cierre.
+ *   iswc-after-hide  detail: {} — tras la animación de cierre.
  *
  * CSS Parts
  *   dialog, header, title, close-button, header-actions, body, footer, backdrop
@@ -61,7 +61,7 @@ import { ModalBase } from '../_shared/modal-base.js';
         </h2>
         <div class="header-actions" part="header-actions">
           <slot name="header-actions"></slot>
-          <is-button
+          <iswc-button
             type="button"
             class="close-btn"
             part="close-button"
@@ -69,8 +69,8 @@ import { ModalBase } from '../_shared/modal-base.js';
             color="neutral"
             aria-label="Cerrar"
           >
-            <is-icon icon="mdi:close" aria-hidden="true"></is-icon>
-          </is-button>
+            <iswc-icon icon="mdi:close" aria-hidden="true"></iswc-icon>
+          </iswc-button>
         </div>
       </header>
       <div class="body" part="body">
@@ -85,7 +85,7 @@ import { ModalBase } from '../_shared/modal-base.js';
   /** Valores oficiales del componente. Cualquier otro → se trata como none. */
   const BACKDROP_VARIANTS = new Set(['none', 'basic']);
 
-  class IsDialog extends ModalBase {
+  class IswcDialog extends ModalBase {
     /** Personalización por atributo (ver `core/attrs.ts`). */
     static styleAttrs = {
       spacing: '--iswc-dialog-spacing',
@@ -96,7 +96,7 @@ import { ModalBase } from '../_shared/modal-base.js';
     };
 
     static get observedAttributes(): string[] {
-      return [...super.observedAttributes, 'backdrop-variant', ...IsDialog.styleAttrNames];
+      return [...super.observedAttributes, 'backdrop-variant', ...IswcDialog.styleAttrNames];
     }
 
     static __TEMPLATE = TEMPLATE;
@@ -186,5 +186,5 @@ import { ModalBase } from '../_shared/modal-base.js';
     }
   }
 
-  defineElement('is-dialog', IsDialog, 'IsDialog');
+  defineElement('iswc-dialog', IswcDialog, 'IswcDialog');
 })();

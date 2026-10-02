@@ -42,7 +42,7 @@ for (const component of components) {
     const themes = new Set(['light', 'dark']);
     const palettes = new Set(['insoft', 'contapyme', 'agrowin']);
     addEventListener('message', ({ data }) => {
-      if (data?.type !== 'is-context') return;
+      if (data?.type !== 'iswc-context') return;
       if (themes.has(data.theme)) {
         root.classList.toggle('theme-light', data.theme === 'light');
         root.classList.toggle('theme-dark', data.theme === 'dark');

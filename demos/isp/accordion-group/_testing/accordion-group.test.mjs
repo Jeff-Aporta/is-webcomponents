@@ -1,4 +1,4 @@
-// accordion-group.test.mjs — tests exhaustivos del demo <is-accordion-group>.
+// accordion-group.test.mjs — tests exhaustivos del demo <iswc-accordion-group>.
 // Cobertura: smoke + funcional (single open vs multi open + change events)
 // + API (showAll/hideAll) + accesibilidad básica.
 import assert from 'node:assert/strict';
@@ -17,8 +17,8 @@ tests.push({
       const single = document.getElementById('single');
       const multi = document.getElementById('multi');
       return {
-        groupDefined: !!customElements.get('is-accordion-group'),
-        detailsDefined: !!customElements.get('is-details'),
+        groupDefined: !!customElements.get('iswc-accordion-group'),
+        detailsDefined: !!customElements.get('iswc-details'),
         singleItems: single.items.length,
         multiItems: multi.items.length,
         singleInitialOpen: single.items.filter((d) => d.open).length,
@@ -27,8 +27,8 @@ tests.push({
         multiMultiple: multi.multiple,
       };
     });
-    assert.equal(initial.groupDefined, true, '<is-accordion-group> debe estar definido');
-    assert.equal(initial.detailsDefined, true, '<is-details> debe estar definido');
+    assert.equal(initial.groupDefined, true, '<iswc-accordion-group> debe estar definido');
+    assert.equal(initial.detailsDefined, true, '<iswc-details> debe estar definido');
     assert.equal(initial.singleItems, 3, 'single group debe tener 3 detalles');
     assert.equal(initial.multiItems, 3, 'multi group debe tener 3 detalles');
     assert.equal(initial.singleInitialOpen, 1, 'single debe empezar con 1 abierto');
@@ -127,7 +127,7 @@ tests.push({
 });
 
 tests.push({
-  name: 'eventos: is-accordion-change se emite con opened/closed',
+  name: 'eventos: iswc-accordion-change se emite con opened/closed',
   run: async (page) => {
     await page.goto(URL, { waitUntil: 'domcontentloaded' });
     await waitReady(page, 'data-accordion-ready');
@@ -136,7 +136,7 @@ tests.push({
     const events = await page.evaluate(() => {
       const group = document.getElementById('multi');
       const captured = [];
-      group.addEventListener('is-accordion-change', (e) => {
+      group.addEventListener('iswc-accordion-change', (e) => {
         captured.push({
           opened: e.detail.opened?.summary ?? null,
           closed: e.detail.closed?.summary ?? null,
@@ -157,8 +157,8 @@ tests.push({
     assert.ok(hideEvents.length >= 1, `esperaba >=1 closing, hay ${hideEvents.length}`);
     // bubbles + composed
     const last = events[events.length - 1];
-    assert.equal(last.bubbles, true, 'is-accordion-change debe burbujear');
-    assert.equal(last.composed, true, 'is-accordion-change debe atravesar shadow DOM');
+    assert.equal(last.bubbles, true, 'iswc-accordion-change debe burbujear');
+    assert.equal(last.composed, true, 'iswc-accordion-change debe atravesar shadow DOM');
   },
 });
 
@@ -173,12 +173,12 @@ tests.push({
       return {
         itemsLen: group.items.length,
         openItemsLen: group.openItems.length,
-        allAreDetails: group.items.every((el) => el.localName === 'is-details'),
+        allAreDetails: group.items.every((el) => el.localName === 'iswc-details'),
       };
     });
     assert.equal(result.itemsLen, 3, 'items.length debe ser 3');
     assert.equal(result.openItemsLen, 1, 'openItems.length debe ser 1');
-    assert.equal(result.allAreDetails, true, 'items deben ser <is-details>');
+    assert.equal(result.allAreDetails, true, 'items deben ser <iswc-details>');
   },
 });
 

@@ -5,7 +5,7 @@ import '../media/icon.js';
 import { sharePayload } from '../_shared/web-share.js';
 
 /**
- * <is-lightbox> — visor a pantalla completa para cualquier contenido.
+ * <iswc-lightbox> — visor a pantalla completa para cualquier contenido.
  *
  * Es el building block que ya usaba el visor de diagramas, pero ahora
  * pensado como componente genérico: lo que metas en el slot default se
@@ -44,9 +44,9 @@ import { sharePayload } from '../_shared/web-share.js';
  *   resetView()          scale=1, x=0, y=0
  *
  * Eventos:
- *   is-after-show   dialog abierto
- *   is-after-hide   dialog cerrado
- *   is-reposition detail: { scale, x, y }
+ *   iswc-after-show   dialog abierto
+ *   iswc-after-hide   dialog cerrado
+ *   iswc-reposition detail: { scale, x, y }
  *
  * CSS parts: dialog, toolbar, toolbar__lead, toolbar__trail, stage,
  *            host, code-panel, code-panel__area, code-panel__actions,
@@ -85,7 +85,7 @@ function isActionable(n: EventTarget | null): n is HTMLElement {
   return n instanceof HTMLElement && !!n.dataset.act;
 }
 
-class IsLightbox extends withStyleAttrs(HTMLElement) {
+class IswcLightbox extends withStyleAttrs(HTMLElement) {
     /** Personalización por atributo (ver `core/attrs.ts`). */
     static styleAttrs = {
     bg: { prop: '--iswc-lightbox-bg', onlyColorValues: true },
@@ -97,7 +97,7 @@ class IsLightbox extends withStyleAttrs(HTMLElement) {
 
   static get observedAttributes(): string[] {
     return ['open', 'variant', 'zoomable', 'close-on-backdrop', 'toolbar', 'no-default-actions',
-      ...IsLightbox.styleAttrNames];
+      ...IswcLightbox.styleAttrNames];
   }
 
   #dialog!: HTMLDialogElement;
@@ -127,19 +127,19 @@ class IsLightbox extends withStyleAttrs(HTMLElement) {
           <div class="lb-bar__group lb-bar__trail" part="toolbar__trail">
             <slot name="toolbar"></slot>
             <button type="button" class="lb-btn" data-act="zoom-out" title="Zoom −" aria-label="Reducir zoom" hidden>
-              <is-icon icon="${ICON.zoomOut}"></is-icon>
+              <iswc-icon icon="${ICON.zoomOut}"></iswc-icon>
             </button>
             <button type="button" class="lb-btn" data-act="zoom-reset" title="Restablecer zoom" aria-label="Restablecer zoom" hidden>
-              <is-icon icon="${ICON.fit}"></is-icon>
+              <iswc-icon icon="${ICON.fit}"></iswc-icon>
             </button>
             <button type="button" class="lb-btn" data-act="zoom-in" title="Zoom +" aria-label="Aumentar zoom" hidden>
-              <is-icon icon="${ICON.zoomIn}"></is-icon>
+              <iswc-icon icon="${ICON.zoomIn}"></iswc-icon>
             </button>
             <button type="button" class="lb-btn" data-act="share" title="Copiar enlace" aria-label="Copiar enlace" hidden>
-              <is-icon icon="${ICON.share}"></is-icon>
+              <iswc-icon icon="${ICON.share}"></iswc-icon>
             </button>
             <button type="button" class="lb-btn" data-act="close" title="Cerrar" aria-label="Cerrar">
-              <is-icon icon="${ICON.close}"></is-icon>
+              <iswc-icon icon="${ICON.close}"></iswc-icon>
             </button>
           </div>
         </div>
@@ -262,7 +262,7 @@ class IsLightbox extends withStyleAttrs(HTMLElement) {
         // defecto) para que el usuario de teclado tenga un ancla clara.
         const first = this.#defaultToolbar.querySelector<HTMLElement>('[data-act="close"]');
         (first ?? this.#dialog).focus();
-        emit(this, 'is-after-show');
+        emit(this, 'iswc-after-show');
       }
     } else if (this.#dialog.open) {
       this.#dialog.close();
@@ -304,7 +304,7 @@ class IsLightbox extends withStyleAttrs(HTMLElement) {
   #onDialogClose = () => {
     if (this.open) this.removeAttribute('open');
     this.#restoreFocus();
-    emit(this, 'is-after-hide');
+    emit(this, 'iswc-after-hide');
   };
 
   #onDialogCancel = (e: Event): void => {
@@ -340,7 +340,7 @@ class IsLightbox extends withStyleAttrs(HTMLElement) {
       t.hidden = false;
       setTimeout(() => { t.hidden = true; }, 1800);
     }
-    emit(this, 'is-share', { url, how });
+    emit(this, 'iswc-share', { url, how });
   }
 
   /* ── zoom / pan ── */
@@ -362,7 +362,7 @@ class IsLightbox extends withStyleAttrs(HTMLElement) {
   #applyView(): void {
     const { scale, x, y } = this.#view;
     this.#host.style.transform = `translate(${x}px, ${y}px) scale(${scale})`;
-    emit(this, 'is-reposition', { ...this.#view });
+    emit(this, 'iswc-reposition', { ...this.#view });
   }
 
   /** Zoom anclado al cursor: el punto bajo el puntero no se mueve. */
@@ -448,6 +448,6 @@ class IsLightbox extends withStyleAttrs(HTMLElement) {
   }
 }
 
-defineElement('is-lightbox', IsLightbox, 'IsLightbox');
+defineElement('iswc-lightbox', IswcLightbox, 'IswcLightbox');
 
-export { IsLightbox };
+export { IswcLightbox };

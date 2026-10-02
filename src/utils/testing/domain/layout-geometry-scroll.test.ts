@@ -14,7 +14,7 @@ const grid = readFileSync(join(ROOT, 'src/components/isp/grid-layout.ts'), 'utf8
 const shared = readFileSync(join(ROOT, 'src/components/_shared/scroll-memory.ts'), 'utf8');
 const main = readFileSync(join(ROOT, 'src/components/layout/main.ts'), 'utf8');
 
-test('scroll-memory compartido entre is-main y layouts', () => {
+test('scroll-memory compartido entre iswc-main y layouts', () => {
   assert.match(shared, /export class ScrollMemory/);
   assert.match(shared, /restorePolicy/);
   assert.match(main, /from '\.\.\/_shared\/scroll-memory\.js'/);
@@ -45,7 +45,7 @@ test('flex admite cscroll como block/grid', () => {
   assert.match(css, /:host\(\[cscroll\]\)/);
 });
 
-test('is-main sigue siendo delgado (delega a ScrollMemory)', () => {
+test('iswc-main sigue siendo delgado (delega a ScrollMemory)', () => {
   assert.ok(main.length < 2_500, 'main.ts no debe reintroducir la lógica completa');
   assert.match(main, /bindScrollMemoryApi/);
 });

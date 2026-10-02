@@ -1,11 +1,11 @@
 {
-  "$schema": "is-preview/v1",
-  "tag": "is-context-menu",
+  "$schema": "iswc-preview/v1",
+  "tag": "iswc-context-menu",
   "category": "actions",
-  "title": "<is-context-menu>",
+  "title": "<iswc-context-menu>",
   "titleHtml": true,
   "styles": ".canvas {\r\n      position: relative;\r\n      min-height: 14rem;\r\n      border: 2px dashed var(--iswc-border);\r\n      border-radius: var(--iswc-radius);\r\n      background:\r\n        repeating-linear-gradient(45deg,\r\n          color-mix(in srgb, var(--iswc-bg-elev) 60%, transparent) 0 8px,\r\n          transparent 8px 16px);\r\n      display: grid; place-items: center;\r\n      color: var(--iswc-text-soft);\r\n      font-size: .85rem;\r\n      cursor: context-menu;\r\n    }\r\n    .log {\r\n      font-family: ui-monospace, monospace;\r\n      font-size: .8rem;\r\n      background: var(--iswc-bg-elev);\r\n      border: 1px solid var(--iswc-border);\r\n      border-radius: var(--iswc-radius);\r\n      padding: .55rem .75rem;\r\n      margin-top: .85rem;\r\n      max-height: 9rem;\r\n      overflow: auto;\r\n    }",
-  "storageKey": "docs-is-context-menu",
+  "storageKey": "docs-iswc-context-menu",
   "hasBehavior": true,
   "sections": [
     {
@@ -15,7 +15,7 @@
       "blocks": [
         {
           "kind": "demo",
-          "html": "<div style=\"display:grid;grid-template-columns:1fr 1fr 1fr;gap:.85rem;min-height:11rem\">\n            <div class=\"canvas\" id=\"cm-intro-1\" data-label=\"Archivo\">\n              <span>📄 reporte-mensual.xlsx</span>\n              <small style=\"opacity:.6;font-size:.75em\">Clic derecho aquí</small>\n            </div>\n            <ul style=\"list-style:none;padding:0;margin:0;border:2px dashed var(--iswc-border);border-radius:var(--iswc-radius);background:repeating-linear-gradient(45deg,color-mix(in srgb,var(--iswc-bg-elev) 60%,transparent) 0 8px,transparent 8px 16px);min-height:11rem\" id=\"cm-intro-2\">\n              <li class=\"row\" data-id=\"r1\" style=\"padding:.6rem .75rem;border-bottom:1px solid var(--iswc-border)\">Reporte mensual</li>\n              <li class=\"row\" data-id=\"r2\" style=\"padding:.6rem .75rem;border-bottom:1px solid var(--iswc-border)\">Inventario</li>\n              <li class=\"row\" data-id=\"r3\" style=\"padding:.6rem .75rem\">Cartera vencida</li>\n            </ul>\n            <div class=\"canvas\" id=\"cm-intro-3\" data-label=\"Scroll-lock\">\n              <span>🔒 Acción importante</span>\n              <small style=\"opacity:.6;font-size:.75em\">Bloquea scroll al abrir</small>\n            </div>\n          </div>\n          <is-context-menu for=\"#cm-intro-1\">\n            <button class=\"item\" data-value=\"open\">Abrir</button>\n            <button class=\"item\" data-value=\"download\">Descargar</button>\n            <hr />\n            <button class=\"item\" data-value=\"rename\">Renombrar…</button>\n            <button class=\"item\" data-value=\"delete\">Eliminar</button>\n          </is-context-menu>\n          <is-context-menu for=\".row\">\n            <button class=\"item\" data-value=\"view\">Ver detalle</button>\n            <button class=\"item\" data-value=\"archive\">Archivar</button>\n            <hr />\n            <button class=\"item\" data-value=\"delete\">Eliminar</button>\n          </is-context-menu>\n          <is-context-menu for=\"#cm-intro-3\" scroll-lock>\n            <button class=\"item\" data-value=\"confirm\">Confirmar acción</button>\n            <button class=\"item\" data-value=\"cancel\">Cancelar</button>\n          </is-context-menu>"
+          "html": "<div style=\"display:grid;grid-template-columns:1fr 1fr 1fr;gap:.85rem;min-height:11rem\">\n            <div class=\"canvas\" id=\"cm-intro-1\" data-label=\"Archivo\">\n              <span>📄 reporte-mensual.xlsx</span>\n              <small style=\"opacity:.6;font-size:.75em\">Clic derecho aquí</small>\n            </div>\n            <ul style=\"list-style:none;padding:0;margin:0;border:2px dashed var(--iswc-border);border-radius:var(--iswc-radius);background:repeating-linear-gradient(45deg,color-mix(in srgb,var(--iswc-bg-elev) 60%,transparent) 0 8px,transparent 8px 16px);min-height:11rem\" id=\"cm-intro-2\">\n              <li class=\"row\" data-id=\"r1\" style=\"padding:.6rem .75rem;border-bottom:1px solid var(--iswc-border)\">Reporte mensual</li>\n              <li class=\"row\" data-id=\"r2\" style=\"padding:.6rem .75rem;border-bottom:1px solid var(--iswc-border)\">Inventario</li>\n              <li class=\"row\" data-id=\"r3\" style=\"padding:.6rem .75rem\">Cartera vencida</li>\n            </ul>\n            <div class=\"canvas\" id=\"cm-intro-3\" data-label=\"Scroll-lock\">\n              <span>🔒 Acción importante</span>\n              <small style=\"opacity:.6;font-size:.75em\">Bloquea scroll al abrir</small>\n            </div>\n          </div>\n          <iswc-context-menu for=\"#cm-intro-1\">\n            <button class=\"item\" data-value=\"open\">Abrir</button>\n            <button class=\"item\" data-value=\"download\">Descargar</button>\n            <hr />\n            <button class=\"item\" data-value=\"rename\">Renombrar…</button>\n            <button class=\"item\" data-value=\"delete\">Eliminar</button>\n          </iswc-context-menu>\n          <iswc-context-menu for=\".row\">\n            <button class=\"item\" data-value=\"view\">Ver detalle</button>\n            <button class=\"item\" data-value=\"archive\">Archivar</button>\n            <hr />\n            <button class=\"item\" data-value=\"delete\">Eliminar</button>\n          </iswc-context-menu>\n          <iswc-context-menu for=\"#cm-intro-3\" scroll-lock>\n            <button class=\"item\" data-value=\"confirm\">Confirmar acción</button>\n            <button class=\"item\" data-value=\"cancel\">Cancelar</button>\n          </iswc-context-menu>"
         }
       ]
     },
@@ -26,7 +26,7 @@
       "blocks": [
         {
           "kind": "demo",
-          "html": "<div class=\"canvas\" id=\"canvas1\">Clic derecho aquí →</div>\r\n          <is-context-menu for=\"#canvas1\">\r\n            <button class=\"item\" data-value=\"open\">Abrir</button>\r\n            <button class=\"item\" data-value=\"open-tab\">Abrir en pestaña nueva</button>\r\n            <button class=\"item\" data-value=\"duplicate\">Duplicar</button>\r\n            <hr />\r\n            <button class=\"item\" data-value=\"rename\">Renombrar…</button>\r\n            <button class=\"item\" data-value=\"properties\">Propiedades</button>\r\n            <hr />\r\n            <button class=\"item\" data-value=\"delete\" disabled>Eliminar</button>\r\n          </is-context-menu>",
+          "html": "<div class=\"canvas\" id=\"canvas1\">Clic derecho aquí →</div>\r\n          <iswc-context-menu for=\"#canvas1\">\r\n            <button class=\"item\" data-value=\"open\">Abrir</button>\r\n            <button class=\"item\" data-value=\"open-tab\">Abrir en pestaña nueva</button>\r\n            <button class=\"item\" data-value=\"duplicate\">Duplicar</button>\r\n            <hr />\r\n            <button class=\"item\" data-value=\"rename\">Renombrar…</button>\r\n            <button class=\"item\" data-value=\"properties\">Propiedades</button>\r\n            <hr />\r\n            <button class=\"item\" data-value=\"delete\" disabled>Eliminar</button>\r\n          </iswc-context-menu>",
           "controls": [
               {
                 "control": "boolean",
@@ -36,7 +36,7 @@
           ],
           "equivNote": "Por defecto el scroll cierra el menú; scroll-lock lo evita.",
           "equivHtml": "<!-- ver diagrama de ramas -->",
-          "equivFlow": "<is-flowchart open-on-click animation=\"flow\">\n  <script type=\"application/json\">\n  {\n    \"flowchart\": {\n      \"title\": \"is-context-menu: scroll\",\n      \"direction\": \"TB\",\n      \"nodes\": [\n        {\n          \"id\": \"q\",\n          \"label\": \"scroll-lock?\",\n          \"shape\": \"diamond\"\n        },\n        {\n          \"id\": \"a\",\n          \"label\": \"congela documento\",\n          \"shape\": \"stadium\"\n        },\n        {\n          \"id\": \"b\",\n          \"label\": \"scroll → cierra\",\n          \"shape\": \"stadium\"\n        }\n      ],\n      \"edges\": [\n        {\n          \"from\": \"q\",\n          \"to\": \"a\",\n          \"label\": \"si\"\n        },\n        {\n          \"from\": \"q\",\n          \"to\": \"b\",\n          \"label\": \"no\"\n        }\n      ]\n    }\n  }\n  </script>\n</is-flowchart>"
+          "equivFlow": "<iswc-flowchart open-on-click animation=\"flow\">\n  <script type=\"application/json\">\n  {\n    \"flowchart\": {\n      \"title\": \"iswc-context-menu: scroll\",\n      \"direction\": \"TB\",\n      \"nodes\": [\n        {\n          \"id\": \"q\",\n          \"label\": \"scroll-lock?\",\n          \"shape\": \"diamond\"\n        },\n        {\n          \"id\": \"a\",\n          \"label\": \"congela documento\",\n          \"shape\": \"stadium\"\n        },\n        {\n          \"id\": \"b\",\n          \"label\": \"scroll → cierra\",\n          \"shape\": \"stadium\"\n        }\n      ],\n      \"edges\": [\n        {\n          \"from\": \"q\",\n          \"to\": \"a\",\n          \"label\": \"si\"\n        },\n        {\n          \"from\": \"q\",\n          \"to\": \"b\",\n          \"label\": \"no\"\n        }\n      ]\n    }\n  }\n  </script>\n</iswc-flowchart>"
         }
       ]
     },
@@ -47,11 +47,11 @@
       "blocks": [
         {
           "kind": "demo",
-          "html": "<div class=\"canvas\" id=\"canvas-lock\">Clic derecho (scroll bloqueado) →</div>\r\n          <is-context-menu for=\"#canvas-lock\" scroll-lock>\r\n            <button class=\"item\" data-value=\"confirm\">Confirmar acción</button>\r\n            <button class=\"item\" data-value=\"cancel\">Cancelar</button>\r\n          </is-context-menu>"
+          "html": "<div class=\"canvas\" id=\"canvas-lock\">Clic derecho (scroll bloqueado) →</div>\r\n          <iswc-context-menu for=\"#canvas-lock\" scroll-lock>\r\n            <button class=\"item\" data-value=\"confirm\">Confirmar acción</button>\r\n            <button class=\"item\" data-value=\"cancel\">Cancelar</button>\r\n          </iswc-context-menu>"
         },
         {
           "kind": "code",
-          "code": "<is-context-menu for=\"#canvas\" scroll-lock>\n  <button class=\"item\" data-value=\"ok\">Confirmar</button>\n</is-context-menu>",
+          "code": "<iswc-context-menu for=\"#canvas\" scroll-lock>\n  <button class=\"item\" data-value=\"ok\">Confirmar</button>\n</iswc-context-menu>",
           "lang": "html"
         }
       ]
@@ -66,7 +66,7 @@
         },
         {
           "kind": "demo",
-          "html": "<ul style=\"list-style:none; padding:0; margin:0;\">\r\n            <li class=\"row\" data-id=\"row-1\" style=\"padding:.55rem .65rem; border-bottom:1px solid var(--iswc-border); display:flex; justify-content:space-between\"><span>Reporte mensual</span><small>2026-07</small></li>\r\n            <li class=\"row\" data-id=\"row-2\" style=\"padding:.55rem .65rem; border-bottom:1px solid var(--iswc-border); display:flex; justify-content:space-between\"><span>Inventario</span><small>2026-07</small></li>\r\n            <li class=\"row\" data-id=\"row-3\" style=\"padding:.55rem .65rem; display:flex; justify-content:space-between\"><span>Cartera vencida</span><small>2026-07</small></li>\r\n          </ul>\r\n          <is-context-menu for=\".row\">\r\n            <button class=\"item\" data-value=\"open\">Ver</button>\r\n            <button class=\"item\" data-value=\"download\">Descargar</button>\r\n            <hr />\r\n            <button class=\"item\" data-value=\"archive\">Archivar</button>\r\n            <button class=\"item\" data-value=\"delete\">Eliminar</button>\r\n          </is-context-menu>"
+          "html": "<ul style=\"list-style:none; padding:0; margin:0;\">\r\n            <li class=\"row\" data-id=\"row-1\" style=\"padding:.55rem .65rem; border-bottom:1px solid var(--iswc-border); display:flex; justify-content:space-between\"><span>Reporte mensual</span><small>2026-07</small></li>\r\n            <li class=\"row\" data-id=\"row-2\" style=\"padding:.55rem .65rem; border-bottom:1px solid var(--iswc-border); display:flex; justify-content:space-between\"><span>Inventario</span><small>2026-07</small></li>\r\n            <li class=\"row\" data-id=\"row-3\" style=\"padding:.55rem .65rem; display:flex; justify-content:space-between\"><span>Cartera vencida</span><small>2026-07</small></li>\r\n          </ul>\r\n          <iswc-context-menu for=\".row\">\r\n            <button class=\"item\" data-value=\"open\">Ver</button>\r\n            <button class=\"item\" data-value=\"download\">Descargar</button>\r\n            <hr />\r\n            <button class=\"item\" data-value=\"archive\">Archivar</button>\r\n            <button class=\"item\" data-value=\"delete\">Eliminar</button>\r\n          </iswc-context-menu>"
         }
       ]
     },
@@ -76,7 +76,7 @@
       "blocks": [
         {
           "kind": "code",
-          "code": "const menu = document.querySelector('is-context-menu');\nmenu.openAt(x, y);\nmenu.close();\nmenu.isOpen;\nmenu.scrollLock = true; // opcional: bloquear scroll en vez de cerrar\n\nmenu.addEventListener('is-select', e => {\n  console.log('elegido:', e.detail.value);\n});\n\n// Default: cierra al scroll. Importante: scroll-lock.\n<is-context-menu for=\"#canvas\">…</is-context-menu>\n<is-context-menu for=\"#canvas\" scroll-lock>…</is-context-menu>"
+          "code": "const menu = document.querySelector('iswc-context-menu');\nmenu.openAt(x, y);\nmenu.close();\nmenu.isOpen;\nmenu.scrollLock = true; // opcional: bloquear scroll en vez de cerrar\n\nmenu.addEventListener('iswc-select', e => {\n  console.log('elegido:', e.detail.value);\n});\n\n// Default: cierra al scroll. Importante: scroll-lock.\n<iswc-context-menu for=\"#canvas\">…</iswc-context-menu>\n<iswc-context-menu for=\"#canvas\" scroll-lock>…</iswc-context-menu>"
         }
       ]
     },

@@ -1,15 +1,15 @@
 ---
-tag: is-dock-item
+tag: iswc-dock-item
 tags:
-  - is-dock-item
+  - iswc-dock-item
 category: layout
 status: public
 ---
-# `<is-dock-item>`
+# `<iswc-dock-item>`
 
 ## Propósito
 
-Ítem de `<is-dock>`. Un acceso del dock, con icono y acción.
+Ítem de `<iswc-dock>`. Un acceso del dock, con icono y acción.
 
 ## Cuándo usarlo
 
@@ -22,5 +22,5 @@ No lo reimplementes ni lo uses para sustituir al padre. La guía del padre docum
 ## Ejemplo mínimo
 
 ```html
-<is-dock-item></is-dock-item>
+<iswc-dock-item></iswc-dock-item>
 ```

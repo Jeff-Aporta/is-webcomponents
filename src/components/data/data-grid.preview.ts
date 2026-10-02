@@ -1,7 +1,7 @@
 import { paint } from '../_shared/highlight-code.js';
 import type { ColumnDef, Row } from '../_shared/grid-types.js';
 
-/** El componente `is-data-grid` visto desde fuera: HTMLElement con API extendida. */
+/** El componente `iswc-data-grid` visto desde fuera: HTMLElement con API extendida. */
 type DataGridElement = HTMLElement & {
   columns: ColumnDef[];
   rows: Row[];
@@ -49,7 +49,7 @@ type DataGridElement = HTMLElement & {
 };
 
 /**
- * Behavior migrado desde HTML inline de is-data-grid.
+ * Behavior migrado desde HTML inline de iswc-data-grid.
  * Se ejecuta en mount() tras pintar la definition JSON.
  * @param ctx Contexto de montaje (root, main, aside, definition).
  */
@@ -141,7 +141,7 @@ export async function mount(ctx: import('../../previews/_kit/types.d.ts').Previe
         ],
       });
 
-      /** Helper: cast seguro de `document.getElementById` a IsDataGrid. */
+      /** Helper: cast seguro de `document.getElementById` a IswcDataGrid. */
       const $grid = (id: string): DataGridElement | null => {
         const el = document.getElementById(id);
         return el as DataGridElement | null;
@@ -175,7 +175,7 @@ export async function mount(ctx: import('../../previews/_kit/types.d.ts').Previe
             hired: r.hired instanceof Date ? r.hired.toISOString().slice(0, 10) : r.hired,
           }));
           const code = [
-            '<is-data-grid show-toolbar quick-filter checkbox-selection',
+            '<iswc-data-grid show-toolbar quick-filter checkbox-selection',
             '  pagination page-size="10" page-size-options="10,25,50"',
             '  editable undo-redo clipboard tab-navigation="all" style="height:30rem">',
             '  <!-- Reemplaza tagCell / money por tus helpers reales -->',
@@ -192,14 +192,14 @@ export async function mount(ctx: import('../../previews/_kit/types.d.ts').Previe
             '    grid.rows    = ' + JSON.stringify(sampleRows, null, 2) + ';',
             '    grid.aggregationModel = ' + JSON.stringify({ gross: 'sum', costs: 'sum', profit: 'avg' }, null, 2) + ';',
             '  </' + 'script>',
-            '</' + 'is-data-grid>',
+            '</' + 'iswc-data-grid>',
           ].join('\n');
-          if (introCode.localName === 'is-code') (introCode as unknown as { value: string }).value = code;
+          if (introCode.localName === 'iswc-code') (introCode as unknown as { value: string }).value = code;
           else introCode.textContent = code;
           paint(introCode as unknown as Document);
         }
       }
-      for (const type of ['is-sort-change', 'is-filter-change', 'is-select', 'is-page-change', 'is-row-update', 'is-column-pin', 'is-export']) {
+      for (const type of ['iswc-sort-change', 'iswc-filter-change', 'iswc-select', 'iswc-page-change', 'iswc-row-update', 'iswc-column-pin', 'iswc-export']) {
         full?.addEventListener(type, logTo(outFull));
       }
       full?.addEventListener('demo-view', (e: Event) => {
@@ -263,7 +263,7 @@ export async function mount(ctx: import('../../previews/_kit/types.d.ts').Previe
             return next;
           },
         };
-        for (const type of ['is-edit-start', 'is-edit-stop', 'is-copy', 'is-paste', 'is-undo', 'is-redo']) {
+        for (const type of ['iswc-edit-start', 'iswc-edit-stop', 'iswc-copy', 'iswc-paste', 'iswc-undo', 'iswc-redo']) {
           edit.addEventListener(type, (e: Event) => {
             const detail = (e as CustomEvent).detail;
             if (outEdit) outEdit.textContent = `${e.type} → ${JSON.stringify(detail, replacer)}`;
@@ -278,12 +278,12 @@ export async function mount(ctx: import('../../previews/_kit/types.d.ts').Previe
         select.rows = rows.slice(0, 15) as unknown as Row[];
         select.hooks = { isRowSelectable: ({ row }: { row: Row }) => Boolean(row['active']) };
         const outSelect = $el('out-select');
-        select.addEventListener('is-select', (e: Event) => {
+        select.addEventListener('iswc-select', (e: Event) => {
           const detail = (e as CustomEvent).detail as { rowSelectionModel: unknown[] };
           const ids = detail.rowSelectionModel as number[];
           if (outSelect) outSelect.textContent = `filas → [${ids.join(', ')}]`;
         });
-        select.addEventListener('is-cell-select', (e: Event) => {
+        select.addEventListener('iswc-cell-select', (e: Event) => {
           const detail = (e as CustomEvent).detail as { cellSelectionModel: { start: { id: unknown; field: string }; end: { id: unknown; field: string } } };
           const start = detail.cellSelectionModel?.start;
           const end = detail.cellSelectionModel?.end;
@@ -297,11 +297,11 @@ export async function mount(ctx: import('../../previews/_kit/types.d.ts').Previe
         sort.columns = baseColumns();
         sort.rows = rows.slice(0, 30) as unknown as Row[];
         const outSort = $el('out-sort');
-        sort.addEventListener('is-sort-change', (e: Event) => {
+        sort.addEventListener('iswc-sort-change', (e: Event) => {
           const detail = (e as CustomEvent).detail as { sortModel: unknown };
           if (outSort) outSort.textContent = `sortModel → ${JSON.stringify(detail.sortModel)}`;
         });
-        sort.addEventListener('is-filter-change', (e: Event) => {
+        sort.addEventListener('iswc-filter-change', (e: Event) => {
           const detail = (e as CustomEvent).detail as { filterModel: unknown };
           if (outSort) outSort.textContent = `filterModel → ${JSON.stringify(detail.filterModel)}`;
         });
@@ -370,8 +370,8 @@ export async function mount(ctx: import('../../previews/_kit/types.d.ts').Previe
         virtual.columns = baseColumns();
         virtual.rows = makeRows(50000) as unknown as Row[];
         const outVirtual = $el('out-virtual');
-        virtual.addEventListener('is-rows-scroll-end', () => {
-          if (outVirtual) outVirtual.textContent = `is-rows-scroll-end → ${virtual.rows.length} filas cargadas`;
+        virtual.addEventListener('iswc-rows-scroll-end', () => {
+          if (outVirtual) outVirtual.textContent = `iswc-rows-scroll-end → ${virtual.rows.length} filas cargadas`;
         });
       }
 

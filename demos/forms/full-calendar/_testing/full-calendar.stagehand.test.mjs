@@ -23,7 +23,7 @@ async function checkDeterministic(page) {
 
   // (1)-(2): estado inicial
   const initial = await page.evaluate(() => {
-    const cals = [...document.querySelectorAll('is-full-calendar')];
+    const cals = [...document.querySelectorAll('iswc-full-calendar')];
     return cals.map((c) => {
       const sr = c.shadowRoot;
       const tb = sr.querySelector('.toolbar');

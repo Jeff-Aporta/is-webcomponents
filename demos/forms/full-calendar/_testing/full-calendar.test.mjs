@@ -20,11 +20,11 @@ tests.push({
     await page.goto(URL, { waitUntil: 'domcontentloaded' });
     await waitReady(page, 'data-full-calendar-ready');
     const data = await page.evaluate(() => {
-      const cals = [...document.querySelectorAll('is-full-calendar')];
+      const cals = [...document.querySelectorAll('iswc-full-calendar')];
       return cals.map((c) => {
         const sr = c.shadowRoot;
         return {
-          defined: !!customElements.get('is-full-calendar'),
+          defined: !!customElements.get('iswc-full-calendar'),
           hasShadow: !!sr,
           hasToolbar: !!sr?.querySelector('.toolbar'),
           hasGrid: !!sr?.querySelector('.grid'),
@@ -34,7 +34,7 @@ tests.push({
       });
     });
     assert.equal(data.length, 3, 'debe haber 3 calendarios (mes, semana, día)');
-    assert.equal(data[0].defined, true, 'is-full-calendar debe estar definido');
+    assert.equal(data[0].defined, true, 'iswc-full-calendar debe estar definido');
     assert.equal(data[0].hasShadow, true, 'shadow root presente');
     assert.equal(data[0].hasToolbar, true, '.toolbar presente');
     assert.equal(data[0].hasGrid, true, '.grid presente');
@@ -108,14 +108,14 @@ tests.push({
 });
 
 tests.push({
-  name: 'funcional: click en un día emite is-day-click con detail.date',
+  name: 'funcional: click en un día emite iswc-day-click con detail.date',
   run: async (page) => {
     await page.goto(URL, { waitUntil: 'domcontentloaded' });
     await waitReady(page, 'data-full-calendar-ready');
     const result = await page.evaluate(() => {
       return new Promise((resolve) => {
         const c = document.querySelector('#mes');
-        c.addEventListener('is-day-click', (e) => resolve(e.detail), { once: true });
+        c.addEventListener('iswc-day-click', (e) => resolve(e.detail), { once: true });
         const days = [...c.shadowRoot.querySelectorAll('button.day[data-iso]')];
         const target = days.find((d) => !d.classList.contains('out'));
         target.click();
@@ -127,14 +127,14 @@ tests.push({
 });
 
 tests.push({
-  name: 'funcional: click en un evento emite is-event-click',
+  name: 'funcional: click en un evento emite iswc-event-click',
   run: async (page) => {
     await page.goto(URL, { waitUntil: 'domcontentloaded' });
     await waitReady(page, 'data-full-calendar-ready');
     const result = await page.evaluate(() => {
       return new Promise((resolve) => {
         const c = document.querySelector('#mes');
-        c.addEventListener('is-event-click', (e) => resolve(e.detail), { once: true });
+        c.addEventListener('iswc-event-click', (e) => resolve(e.detail), { once: true });
         // Los eventos son <li class="ev" data-evid="...">
         const evs = c.shadowRoot.querySelectorAll('.ev');
         if (!evs.length) resolve({ skipped: true });

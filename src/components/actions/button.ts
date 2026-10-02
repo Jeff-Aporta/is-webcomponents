@@ -6,9 +6,9 @@ import { applyToneRamp, isCssColorValue, syncPresentStyleAttrs } from '../../cor
 import { setCustomState } from '../_shared/form-associated.js';
 
 /**
- * <is-button> — Web Component (vanilla).
+ * <iswc-button> — Web Component (vanilla).
  *
- * Define el custom element `is-button` automáticamente al importarse.
+ * Define el custom element `iswc-button` automáticamente al importarse.
  * Usa Shadow DOM con CSS propio, es form-associated (participa en <form>),
  * y expone parts + custom states para personalización desde fuera.
  *
@@ -19,7 +19,7 @@ import { setCustomState } from '../_shared/form-associated.js';
  *                             `round` = radio del tema, `rect` = esquinas vivas,
  *                             `pill` = cápsula (equivalente al booleano `pill`).
  *  hue          number (0-360)  color propio para el highlight cuando está
- *                             [selected] dentro de <is-button-group>. Si no
+ *                             [selected] dentro de <iswc-button-group>. Si no
  *                             se define, el grupo usa su --iswc-accent.
  *  disabled     boolean
  *  loading      boolean
@@ -39,7 +39,7 @@ import { setCustomState } from '../_shared/form-associated.js';
  *  aria-current                                              (se reenvían al inner)
  *  tabindex     se reenvía al <button> interno, que es el que está en el
  *               orden de tabulación. `tabindex="-1"` lo saca del recorrido:
- *               es lo que necesita un componente que envuelva is-button y
+ *               es lo que necesita un componente que envuelva iswc-button y
  *               quiera ser él mismo el control accesible.
  *
  * Slots
@@ -56,19 +56,19 @@ import { setCustomState } from '../_shared/form-associated.js';
  *
  * Custom events (composed:true, bubbles:true — cruzan Shadow DOM y son
  * consumibles desde React via addEventListener o React 19+ on<EventName>):
- *   is-focus   — emitido al recibir foco (mismo momento que `focus`)
- *   is-blur    — emitido al perder foco
- *   is-click   — emitido al hacer click (mismo momento que `click`)
- *   is-invalid — emitido cuando la validación de formulario falla
+ *   iswc-focus   — emitido al recibir foco (mismo momento que `focus`)
+ *   iswc-blur    — emitido al perder foco
+ *   iswc-click   — emitido al hacer click (mismo momento que `click`)
+ *   iswc-invalid — emitido cuando la validación de formulario falla
  *
  * Mapping para React:
  *   onClick       → click  (nativo, React 17+)
  *   onFocus       → focus  (nativo, React 17+)
  *   onBlur        → blur   (nativo, React 17+)
- *   onIsFocus     → is-focus   (React 19+  |  ref.addEventListener('is-focus', fn))
- *   onIsBlur      → is-blur
- *   onIsClick     → is-click
- *   onIsInvalid   → is-invalid
+ *   onIsFocus     → iswc-focus   (React 19+  |  ref.addEventListener('iswc-focus', fn))
+ *   onIsBlur      → iswc-blur
+ *   onIsClick     → iswc-click
+ *   onIsInvalid   → iswc-invalid
  *
  * El host expone los custom states :state(loading|disabled|link|icon-button)
  * (y como fallback los atributos data-state-* equivalentes para entornos sin
@@ -98,10 +98,10 @@ import { setCustomState } from '../_shared/form-associated.js';
       <span part="label"   class="btn__label"><slot></slot></span>
       <span part="end"     class="btn__suffix"><slot name="end"></slot></span>
       <span part="caret"   class="btn__caret" aria-hidden="true">
-        <is-icon icon="mdi:chevron-down"></is-icon>
+        <iswc-icon icon="mdi:chevron-down"></iswc-icon>
       </span>
       <span part="spinner" class="btn__spinner" aria-hidden="true">
-        <is-icon icon="mdi:loading"></is-icon>
+        <iswc-icon icon="mdi:loading"></iswc-icon>
       </span>
     </button>
     <span class="btn__sr-status" part="sr-status" aria-live="polite" aria-atomic="true"></span>
@@ -128,13 +128,13 @@ import { setCustomState } from '../_shared/form-associated.js';
     // `tabindex` va en la misma lista porque tiene el mismo problema: el que
     // entra en el orden de tabulación es el <button> del Shadow DOM, no el
     // host, así que ponerlo fuera no lo saca del recorrido. Lo necesita
-    // cualquier componente que envuelva is-button y quiera ser ÉL el control
-    // accesible (is-check-icon-button): sin esto quedan dos paradas de tab,
+    // cualquier componente que envuelva iswc-button y quiera ser ÉL el control
+    // accesible (iswc-check-icon-button): sin esto quedan dos paradas de tab,
     // la del host envolvente y la del botón interno.
     "tabindex",
   ];
 
-  class IsButton extends ElementBase {
+  class IswcButton extends ElementBase {
     static formAssociated = true;
 
     /**
@@ -158,7 +158,7 @@ import { setCustomState } from '../_shared/form-associated.js';
     };
 
     static get observedAttributes(): string[] {
-      return [...OBSERVED, ...ARIA_FORWARD, ...IsButton.styleAttrNames];
+      return [...OBSERVED, ...ARIA_FORWARD, ...IswcButton.styleAttrNames];
     }
 
     /** `color` es doble: familia semántica (la resuelve el CSS) o color CSS
@@ -168,7 +168,7 @@ import { setCustomState } from '../_shared/form-associated.js';
       applyToneRamp(this, isCssColorValue(raw) ? raw : null);
       // La rampa pisa los mismos roles que `color-hover` / `color-active` /
       // `color-text`: re-aplicarlos deja mandando al ajuste fino explícito.
-      syncPresentStyleAttrs(this, IsButton.styleAttrs);
+      syncPresentStyleAttrs(this, IswcButton.styleAttrs);
     }
 
     #internals: ElementInternals | null = null;
@@ -268,7 +268,7 @@ import { setCustomState } from '../_shared/form-associated.js';
     /**
      * Hue HSL opcional (0-360). Cuando está presente, el botón expone
      *   --iswc-button-selected-hue
-     * en el :host para que <is-button-group> lo consuma en el highlight
+     * en el :host para que <iswc-button-group> lo consuma en el highlight
      * del estado [selected]. Si no se define, el grupo usa su --iswc-accent.
      */
     get hue() {
@@ -304,10 +304,10 @@ import { setCustomState } from '../_shared/form-associated.js';
 
     // Custom events composed+bubbles para cruzar Shadow DOM.
     // React: onIsFocus / onIsBlur / onIsClick / onIsInvalid (o addEventListener).
-    #boundFocus = (e: Event) => { emit(this, "is-focus",   { originalEvent: e }); };
-    #boundBlur  = (e: Event) => { emit(this, "is-blur",    { originalEvent: e }); };
+    #boundFocus = (e: Event) => { emit(this, "iswc-focus",   { originalEvent: e }); };
+    #boundBlur  = (e: Event) => { emit(this, "iswc-blur",    { originalEvent: e }); };
     #boundClick = (e: Event) => {
-      emit(this, "is-click", { originalEvent: e });
+      emit(this, "iswc-click", { originalEvent: e });
       // El <button> interno está en Shadow DOM: no es descendiente del <form>
       // light, así que type=submit|reset no hace nada solos. Activamos el
       // formulario asociado vía ElementInternals (o closest como fallback).
@@ -336,7 +336,7 @@ import { setCustomState } from '../_shared/form-associated.js';
     // y este control no pasa la validación. Escuchar el evento nativo —en vez
     // de envolver checkValidity()/reportValidity()— es lo que cubre también el
     // submit, donde el navegador valida sin pasar por nuestros métodos.
-    #boundInvalid = (e: Event) => { emit(this, "is-invalid", { originalEvent: e, validationMessage: this.validationMessage }); };
+    #boundInvalid = (e: Event) => { emit(this, "iswc-invalid", { originalEvent: e, validationMessage: this.validationMessage }); };
 
     #wireEvents() {
       if (this.#wired) return;
@@ -424,7 +424,7 @@ import { setCustomState } from '../_shared/form-associated.js';
       // sobre el HOST, y hacía dos cosas mal: con `disabled` escribía
       // `tabindex=""` (que el navegador lee como 0, o sea seguía siendo
       // enfocable), y sin `disabled` BORRABA el tabindex que hubiera puesto
-      // el autor — `<is-button tabindex="-1">` perdía su valor al conectarse.
+      // el autor — `<iswc-button tabindex="-1">` perdía su valor al conectarse.
       if (disabled) {
         this.#btn.setAttribute("tabindex", "-1");
       } else {
@@ -470,7 +470,7 @@ import { setCustomState } from '../_shared/form-associated.js';
 
     /**
      * Publica el hue en una CSS var del host para que el padre
-     * (p.ej. <is-button-group>) pinte el highlight del estado [selected]
+     * (p.ej. <iswc-button-group>) pinte el highlight del estado [selected]
      * con el color del botón. Si no hay hue, la var queda sin definir y
      * el consumidor cae a su propio --iswc-accent.
      */
@@ -487,11 +487,11 @@ import { setCustomState } from '../_shared/form-associated.js';
     }
   }
 
-  defineElement("is-button", IsButton);
+  defineElement("iswc-button", IswcButton);
 
   // Exponer para tests / dev
   if (typeof window !== "undefined") {
     // `window` no declara los globals del kit; se expone por indice.
-    (window as unknown as Record<string, unknown>).IsButton = IsButton;
+    (window as unknown as Record<string, unknown>).IswcButton = IswcButton;
   }
 })();

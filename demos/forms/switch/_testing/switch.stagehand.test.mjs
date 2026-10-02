@@ -1,7 +1,7 @@
 // switch.stagehand.test.mjs — verificaciones visuales deterministas.
 //
 // Checks:
-//   1. COMPONENTE RENDERIZADO: <is-switch> definido, shadow DOM, role=switch.
+//   1. COMPONENTE RENDERIZADO: <iswc-switch> definido, shadow DOM, role=switch.
 //   2. ELEMENTOS VISIBLES: track + thumb + label visibles por cada switch.
 //   3. TEXTO LEGIBLE: labels con font-size >= 8px.
 //   4. SIN OVERLAPS: los switches no se solapan entre sí.
@@ -15,11 +15,11 @@ const DEMOS = [
 async function checkDeterministic(page, demo) {
   await page.waitForTimeout(200);
 
-  const defined = await page.evaluate(() => !!customElements.get('is-switch'));
-  assert.equal(defined, true, 'is-switch debe estar definido');
+  const defined = await page.evaluate(() => !!customElements.get('iswc-switch'));
+  assert.equal(defined, true, 'iswc-switch debe estar definido');
 
   const data = await page.evaluate(() => {
-    const sws = [...document.querySelectorAll('is-switch')];
+    const sws = [...document.querySelectorAll('iswc-switch')];
     return sws.map((sw) => {
       const sr = sw.shadowRoot;
       const control = sr?.querySelector('.control');
@@ -82,7 +82,7 @@ for (const demo of DEMOS) {
 }
 
 const VISUAL_RUBRIC = `
-Evalúa la calidad visual del demo del componente <is-switch>.
+Evalúa la calidad visual del demo del componente <iswc-switch>.
 
 Checklist (cada una PASS o FAIL):
 

@@ -1,4 +1,4 @@
-// main.stagehand.test.mjs — verificaciones de calidad visual para is-main.
+// main.stagehand.test.mjs — verificaciones de calidad visual para iswc-main.
 import assert from 'node:assert/strict';
 import { BASE_URL, newPage, close, waitReady, screenshot, report, maybeStagehand } from './lib/harness.mjs';
 
@@ -11,7 +11,7 @@ const results = [];
 async function checkDeterministic(page, demo) {
   await page.waitForTimeout(200);
   const data = await page.evaluate(() => {
-    const mains = [...document.querySelectorAll('main is-main')];
+    const mains = [...document.querySelectorAll('main iswc-main')];
     return mains.map((m, idx) => {
       const r = m.getBoundingClientRect();
       // Medimos scrollHeight vs clientHeight para verificar que el contenido es
@@ -26,7 +26,7 @@ async function checkDeterministic(page, demo) {
       };
     });
   });
-  assert.ok(data.length > 0, `${demo.name}: debe haber is-main, hay ${data.length}`);
+  assert.ok(data.length > 0, `${demo.name}: debe haber iswc-main, hay ${data.length}`);
   for (const d of data) {
     const tag = `${demo.name}#${d.idx}`;
     assert.equal(d.role, 'main', `${tag}: role="main"`);
@@ -55,19 +55,19 @@ for (const demo of DEMOS) {
 }
 
 const VISUAL_RUBRIC = `
-Evalúa la calidad visual del <is-main> en el screenshot.
+Evalúa la calidad visual del <iswc-main> en el screenshot.
 
 Checklist (todas deben cumplirse; marca cada una PASS o FAIL):
 
-1. RENDERIZA: los is-main aparecen como contenedores con su contenido visible.
+1. RENDERIZA: los iswc-main aparecen como contenedores con su contenido visible.
 
-2. SCROLLBAR PRESENTE: cada is-main tiene scroll (el contenido es más alto que el viewport) y muestra una scrollbar funcional.
+2. SCROLLBAR PRESENTE: cada iswc-main tiene scroll (el contenido es más alto que el viewport) y muestra una scrollbar funcional.
 
-3. SEPARACIÓN VISUAL: los is-main están separados entre sí y visualmente identificables.
+3. SEPARACIÓN VISUAL: los iswc-main están separados entre sí y visualmente identificables.
 
-4. LAYOUT NO VACÍO: cada is-main tiene tamaño visible (ancho/alto > 0).
+4. LAYOUT NO VACÍO: cada iswc-main tiene tamaño visible (ancho/alto > 0).
 
-5. SCROLL CONSISTENTE: todos los is-main siguen el mismo patrón visual (mismo padding, mismo tipo de scrollbar).
+5. SCROLL CONSISTENTE: todos los iswc-main siguen el mismo patrón visual (mismo padding, mismo tipo de scrollbar).
 
 Responde SOLO con un JSON con la forma:
 {

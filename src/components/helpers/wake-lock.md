@@ -1,20 +1,20 @@
 ---
-tag: is-wake-lock
+tag: iswc-wake-lock
 tags:
-  - is-wake-lock
+  - iswc-wake-lock
 category: helpers
 status: public
 source: ./wake-lock.js
 style: ./wake-lock.css
 preview: ./wake-lock.json
 ---
-# `<is-wake-lock>`
+# `<iswc-wake-lock>`
 
 ## Propósito
 
 Mantiene la pantalla encendida con Screen Wake Lock mientras `active` está puesto.
 
-Este módulo registra `<is-wake-lock>`.
+Este módulo registra `<iswc-wake-lock>`.
 
 ## Cuándo usarlo
 
@@ -33,7 +33,7 @@ import './wake-lock.js';
 ## Ejemplo mínimo
 
 ```html
-<is-wake-lock active>El documento no apaga la pantalla.</is-wake-lock>
+<iswc-wake-lock active>El documento no apaga la pantalla.</iswc-wake-lock>
 ```
 
 ## API
@@ -63,7 +63,7 @@ import './wake-lock.js';
 
 | Evento | detail | bubbles | composed | cancelable |
 | --- | --- | --- | --- | --- |
-| `is-change` | sí `{ held }` | sí | sí | no |
+| `iswc-change` | sí `{ held }` | sí | sí | no |
 
 ### Métodos y propiedades públicas
 
@@ -101,7 +101,7 @@ No altera el árbol.
 ## Ejemplo avanzado
 
 ```html
-<is-wake-lock id="wl"></is-wake-lock>
+<iswc-wake-lock id="wl"></iswc-wake-lock>
 ```
 
 ## Errores comunes

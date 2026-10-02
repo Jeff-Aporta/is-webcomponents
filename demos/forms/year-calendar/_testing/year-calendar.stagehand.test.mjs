@@ -5,7 +5,7 @@
 //  (2) #basico tiene 13 años (2020-2032)
 //  (3) #historico tiene 21 años (1990-2010)
 //  (4) El año value=2026 está marcado como data-selected y aria-checked=true
-//  (5) Click en otro año emite is-change y lo marca como selected
+//  (5) Click en otro año emite iswc-change y lo marca como selected
 //  (6) El #bloqueado tiene todos los botones disabled
 //
 // Opt-in LLM con STAGEHAND=1 al final.
@@ -23,7 +23,7 @@ async function checkDeterministic(page) {
 
   // (1)-(3): 4 calendarios con conteos correctos
   const initial = await page.evaluate(() => {
-    const cals = [...document.querySelectorAll('is-year-calendar')];
+    const cals = [...document.querySelectorAll('iswc-year-calendar')];
     return cals.map((c) => {
       const sr = c.shadowRoot;
       const buttons = [...sr.querySelectorAll('button.year')];
@@ -66,11 +66,11 @@ async function checkDeterministic(page) {
   assert.equal(a11y.ariaChecked, 'true', '2026 aria-checked=true');
   assert.equal(a11y.role, 'radio', '2026 role=radio');
 
-  // (5): click en 2030 → is-change y selected
+  // (5): click en 2030 → iswc-change y selected
   const changed = await page.evaluate(() => {
     return new Promise((resolve) => {
       const c = document.querySelector('#basico');
-      c.addEventListener('is-change', (e) => resolve(e.detail), { once: true });
+      c.addEventListener('iswc-change', (e) => resolve(e.detail), { once: true });
       const btn = c.shadowRoot.querySelector('button.year[data-year="2030"]');
       btn.click();
     });

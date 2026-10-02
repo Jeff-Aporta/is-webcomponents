@@ -17,7 +17,7 @@ async function checkDeterministic(page, demo) {
   await page.waitForTimeout(200);
 
   const data = await page.evaluate(() => {
-    const avatars = [...document.querySelectorAll('main is-avatar')];
+    const avatars = [...document.querySelectorAll('main iswc-avatar')];
     return avatars.map((el, idx) => {
       const shadow = el.shadowRoot;
       const avatarBox = shadow.querySelector('.avatar').getBoundingClientRect();
@@ -27,7 +27,7 @@ async function checkDeterministic(page, demo) {
       const initialsFontSize = parseFloat(getComputedStyle(initials).fontSize);
       const icon = shadow.querySelector('.icon');
       const iconVisible = !icon.hidden;
-      const isIconInIcon = icon.querySelector('is-icon');
+      const isIconInIcon = icon.querySelector('iswc-icon');
       const img = shadow.querySelector('.image');
       const imgVisible = !img.hidden;
       const role = el.getAttribute('role');
@@ -65,9 +65,9 @@ async function checkDeterministic(page, demo) {
       assert.ok(a.initialsFontSize >= 6, `${tag}: initials font-size debe ser >= 6px (got ${a.initialsFontSize})`);
     }
 
-    // (4) Si icon visible, debe haber un <is-icon> dentro.
+    // (4) Si icon visible, debe haber un <iswc-icon> dentro.
     if (a.iconVisible) {
-      assert.ok(a.hasIsIcon, `${tag}: .icon visible debe contener un <is-icon>`);
+      assert.ok(a.hasIsIcon, `${tag}: .icon visible debe contener un <iswc-icon>`);
     }
 
     // (5) Accesibilidad: role=img y aria-label no vacío.

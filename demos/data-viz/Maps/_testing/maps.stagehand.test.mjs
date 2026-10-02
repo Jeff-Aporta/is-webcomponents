@@ -26,7 +26,7 @@ async function checkDeterministic(page, demo) {
   await page.waitForTimeout(300);
   const data = await page.evaluate(() => {
     const out = { maps: [], summary: { totalMarkers: 0, tileIframe: null } };
-    for (const m of document.querySelectorAll('is-maps')) {
+    for (const m of document.querySelectorAll('iswc-maps')) {
       const engine = m.getAttribute('engine');
       if (engine === 'svg') {
         const svg = m.shadowRoot.querySelector('svg.map');

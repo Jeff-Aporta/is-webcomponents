@@ -3,8 +3,8 @@
 <head>
 <meta charset="utf-8" />
 <meta name="viewport" content="width=device-width, initial-scale=1" />
-<title><is-format> · is-webcomponents</title>
-<meta name="description" content="Demo del helper <is-format>: switch universal entre date/number/bytes/relative/text con presets Excel-like." />
+<title><iswc-format> · is-webcomponents</title>
+<meta name="description" content="Demo del helper <iswc-format>: switch universal entre date/number/bytes/relative/text con presets Excel-like." />
 <style>
   html, body { margin: 0; padding: 0; height: 100%; background: #0c1118; color: #e2e8f0; font-family: ui-sans-serif, system-ui, sans-serif; }
   body { display: grid; grid-template-rows: auto 1fr; }
@@ -20,11 +20,11 @@
   .row code { color: #94a3b8; font-size: 12px; }
   section { margin-top: 14px; }
   section h2 { font-size: 13px; font-weight: 600; color: #94a3b8; margin: 0 0 6px; text-transform: uppercase; letter-spacing: 0.04em; }
-  is-format:not(:defined) { visibility: hidden; }
+  iswc-format:not(:defined) { visibility: hidden; }
 </style>
 <script type="module">
-  await import('../../../dist/cdn/helpers/format.min.js?h=s4iym1');
-  await customElements.whenDefined('is-format');
+  await import('../../../dist/cdn/helpers/format.min.js?h=dlilmi');
+  await customElements.whenDefined('iswc-format');
 
   const main = document.querySelector('main');
 
@@ -38,8 +38,8 @@
       row.className = 'row';
       const label = document.createElement('code');
       const attrs = Object.entries(c).map(([k, v]) => `${k}=${typeof v === 'string' ? JSON.stringify(v) : ''}`).join(' ');
-      label.textContent = `<is-format ${attrs}>`;
-      const el = document.createElement('is-format');
+      label.textContent = `<iswc-format ${attrs}>`;
+      const el = document.createElement('iswc-format');
       for (const [k, v] of Object.entries(c)) {
         if (v === true) el.setAttribute(k, '');
         else el.setAttribute(k, String(v));
@@ -99,7 +99,7 @@
 </head>
 <body>
 <header>
-  <h1><is-format> — formateo universal con presets Excel</h1>
+  <h1><iswc-format> — formateo universal con presets Excel</h1>
   <p>Atributos: <code>type</code> <code>value</code> <code>date</code> <code>pattern</code> <code>format</code> <code>currency</code> <code>locale</code> <code>case</code> <code>truncate</code> <code>pad-start</code>/<code>pad-length</code> <code>sync</code></p>
 </header>
 <main></main>

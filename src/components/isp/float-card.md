@@ -1,23 +1,23 @@
 ---
-tag: is-float-card
+tag: iswc-float-card
 tags:
-  - is-float-card
+  - iswc-float-card
 category: isp
 status: public
 source: ./float-card.js
 style: ./float-card.css
 preview: ./float-card.json
 ---
-# `<is-float-card>`
+# `<iswc-float-card>`
 
 ## Propósito
 
 Caja con un panel flotante anclado al contenido. Port de
 `FloatingComponent.svelte` (ClientesIS). El panel (slot `float`) se muestra
 con `open` o `lock()`; **no se desmonta**: opacity/visibility, para que
-`is-button` / `is-icon` no se re-upgraden en cada hover.
+`iswc-button` / `iswc-icon` no se re-upgraden en cada hover.
 
-Este módulo registra `<is-float-card>`.
+Este módulo registra `<iswc-float-card>`.
 
 ## Cuándo usarlo
 
@@ -27,7 +27,7 @@ recrear el DOM. Toolbar flotante de un árbol, acciones sobre un ítem.
 ## Cuándo no usarlo
 
 Panel que se abre con clic y se cierra con Escape / clic fuera →
-`<is-popover>`. Tooltip breve → `<is-tooltip>`. No usar `<is-floating>`
+`<iswc-popover>`. Tooltip breve → `<iswc-tooltip>`. No usar `<iswc-floating>`
 (building block interno).
 
 ## Importación
@@ -39,10 +39,10 @@ import './float-card.js';
 ## Ejemplo mínimo
 
 ```html
-<is-float-card open horizontal="right" vertical="center">
+<iswc-float-card open horizontal="right" vertical="center">
   <span>Fila</span>
-  <is-button slot="float" variant="plain">Acción</is-button>
-</is-float-card>
+  <iswc-button slot="float" variant="plain">Acción</iswc-button>
+</iswc-float-card>
 ```
 
 ## API
@@ -81,8 +81,8 @@ import './float-card.js';
 | --- | --- | --- | --- | --- |
 | — | — | — | — | — |
 
-No emite eventos propios. Escucha `is-show` / `is-hide` de hijos (p. ej.
-`<is-dropdown>`) para `lock()` / `unlock()`.
+No emite eventos propios. Escucha `iswc-show` / `iswc-hide` de hijos (p. ej.
+`<iswc-dropdown>`) para `lock()` / `unlock()`.
 
 ### Métodos y propiedades públicas
 
@@ -118,7 +118,7 @@ No declara integración form-associated.
 ## Comportamiento
 
 El panel vive siempre en el DOM. Sin `open` ni `locked`: `opacity: 0` +
-`visibility: hidden`. Un `<is-dropdown>` interno que emite `is-show` llama
+`visibility: hidden`. Un `<iswc-dropdown>` interno que emite `iswc-show` llama
 `lock()` para que el panel no se apague al salir el hover hacia el menú.
 
 ## Dependencias y componentes relacionados
@@ -127,7 +127,7 @@ El panel vive siempre en el DOM. Sin `open` ni `locked`: `opacity: 0` +
 - [`flex-options.md`](./flex-options.md) — toolbar típica en `slot="float"`
 - [`../helpers/popover.md`](../helpers/popover.md) — overlay click, no hover
 
-Tags del módulo: `<is-float-card>`.
+Tags del módulo: `<iswc-float-card>`.
 
 ## Accesibilidad
 
@@ -138,10 +138,10 @@ ocultas.
 ## Ejemplo avanzado
 
 ```html
-<is-float-card id="fc" horizontal="right" vertical="top+50">
+<iswc-float-card id="fc" horizontal="right" vertical="top+50">
   <span>Lección</span>
-  <is-flex-options slot="float" compact></is-flex-options>
-</is-float-card>
+  <iswc-flex-options slot="float" compact></iswc-flex-options>
+</iswc-float-card>
 <script type="module">
   const fc = document.getElementById('fc');
   fc.addEventListener('pointerenter', () => { fc.open = true; });

@@ -1,12 +1,12 @@
 {
-  "$schema": "is-preview/v1",
-  "tag": "is-gauge",
+  "$schema": "iswc-preview/v1",
+  "tag": "iswc-gauge",
   "category": "data-viz",
-  "title": "<is-gauge>",
+  "title": "<iswc-gauge>",
   "titleHtml": true,
-  "description": "Documentación y demos de is-gauge de InSoft.",
+  "description": "Documentación y demos de iswc-gauge de InSoft.",
   "styles": ".gauge-grid {\r\n      display: grid;\r\n      grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));\r\n      gap: 1rem;\r\n      align-items: center;\r\n    }\r\n    .gauge-cell {\r\n      display: flex;\r\n      flex-direction: column;\r\n      align-items: center;\r\n      gap: 0.5rem;\r\n      padding: 1rem;\r\n      background: var(--iswc-bg-2, #181b22);\r\n      border: 1px solid var(--iswc-border, #2a2f3a);\r\n      border-radius: 0.5rem;\r\n    }",
-  "storageKey": "docs-is-gauge",
+  "storageKey": "docs-iswc-gauge",
   "hasBehavior": true,
   "sections": [
     {
@@ -16,7 +16,7 @@
       "blocks": [
         {
           "kind": "demo",
-          "html": "<div class=\"gauge-grid\">\r\n            <div class=\"gauge-cell\">\r\n              <is-gauge id=\"g1\" value=\"67\" label=\"Conversión\" unit=\"%\"></is-gauge>\r\n            </div>\r\n            <div class=\"gauge-cell\">\r\n              <is-gauge value=\"42\" label=\"CPU\" unit=\"%\" color=\"warning\"></is-gauge>\r\n            </div>\r\n            <div class=\"gauge-cell\">\r\n              <is-gauge value=\"92\" label=\"RAM\" unit=\"%\" color=\"success\"></is-gauge>\r\n            </div>\r\n            <div class=\"gauge-cell\">\r\n              <is-gauge value=\"15\" label=\"Errores\" unit=\"%\" color=\"danger\"></is-gauge>\r\n            </div>\r\n          </div>",
+          "html": "<div class=\"gauge-grid\">\r\n            <div class=\"gauge-cell\">\r\n              <iswc-gauge id=\"g1\" value=\"67\" label=\"Conversión\" unit=\"%\"></iswc-gauge>\r\n            </div>\r\n            <div class=\"gauge-cell\">\r\n              <iswc-gauge value=\"42\" label=\"CPU\" unit=\"%\" color=\"warning\"></iswc-gauge>\r\n            </div>\r\n            <div class=\"gauge-cell\">\r\n              <iswc-gauge value=\"92\" label=\"RAM\" unit=\"%\" color=\"success\"></iswc-gauge>\r\n            </div>\r\n            <div class=\"gauge-cell\">\r\n              <iswc-gauge value=\"15\" label=\"Errores\" unit=\"%\" color=\"danger\"></iswc-gauge>\r\n            </div>\r\n          </div>",
           "controls": [
             {
               "control": "select",
@@ -93,7 +93,7 @@
         },
         {
           "kind": "code",
-          "code": "<is-gauge value=\"67\" label=\"Conversión\" unit=\"%\"></is-gauge>"
+          "code": "<iswc-gauge value=\"67\" label=\"Conversión\" unit=\"%\"></iswc-gauge>"
         }
       ]
     },
@@ -104,7 +104,7 @@
       "blocks": [
         {
           "kind": "demo",
-          "html": "<div class=\"gauge-grid\">\r\n            <div class=\"gauge-cell\"><is-gauge style=\"font-size:0.7em\" value=\"42\" label=\"0.7em\"></is-gauge></div>\r\n            <div class=\"gauge-cell\"><is-gauge value=\"42\" label=\"1em\"></is-gauge></div>\r\n            <div class=\"gauge-cell\"><is-gauge style=\"font-size:1.35em\" value=\"42\" label=\"1.35em\"></is-gauge></div>\r\n          </div>"
+          "html": "<div class=\"gauge-grid\">\r\n            <div class=\"gauge-cell\"><iswc-gauge style=\"font-size:0.7em\" value=\"42\" label=\"0.7em\"></iswc-gauge></div>\r\n            <div class=\"gauge-cell\"><iswc-gauge value=\"42\" label=\"1em\"></iswc-gauge></div>\r\n            <div class=\"gauge-cell\"><iswc-gauge style=\"font-size:1.35em\" value=\"42\" label=\"1.35em\"></iswc-gauge></div>\r\n          </div>"
         }
       ]
     },
@@ -115,7 +115,7 @@
       "blocks": [
         {
           "kind": "demo",
-          "html": "<div class=\"gauge-grid\">\r\n            <div class=\"gauge-cell\"><is-gauge half value=\"68\" label=\"Velocímetro\"></is-gauge></div>\r\n            <div class=\"gauge-cell\"><is-gauge half value=\"42\" label=\"Velocímetro\" color=\"warning\"></is-gauge></div>\r\n            <div class=\"gauge-cell\"><is-gauge half value=\"88\" label=\"Velocímetro\" color=\"success\"></is-gauge></div>\r\n          </div>"
+          "html": "<div class=\"gauge-grid\">\r\n            <div class=\"gauge-cell\"><iswc-gauge half value=\"68\" label=\"Velocímetro\"></iswc-gauge></div>\r\n            <div class=\"gauge-cell\"><iswc-gauge half value=\"42\" label=\"Velocímetro\" color=\"warning\"></iswc-gauge></div>\r\n            <div class=\"gauge-cell\"><iswc-gauge half value=\"88\" label=\"Velocímetro\" color=\"success\"></iswc-gauge></div>\r\n          </div>"
         }
       ]
     },
@@ -126,7 +126,7 @@
       "blocks": [
         {
           "kind": "demo",
-          "html": "<div class=\"gauge-grid\">\r\n            <div class=\"gauge-cell\"><is-gauge value=\"3.14159\" label=\"π\" format=\"0.00\"></is-gauge></div>\r\n            <div class=\"gauge-cell\"><is-gauge value=\"12345\" label=\"USD\" format=\"0,0\" unit=\"€\"></is-gauge></div>\r\n            <div class=\"gauge-cell\"><is-gauge value=\"0.5\" label=\"CTR\" format=\"0.0%\" unit=\"\"></is-gauge></div>\r\n          </div>"
+          "html": "<div class=\"gauge-grid\">\r\n            <div class=\"gauge-cell\"><iswc-gauge value=\"3.14159\" label=\"π\" format=\"0.00\"></iswc-gauge></div>\r\n            <div class=\"gauge-cell\"><iswc-gauge value=\"12345\" label=\"USD\" format=\"0,0\" unit=\"€\"></iswc-gauge></div>\r\n            <div class=\"gauge-cell\"><iswc-gauge value=\"0.5\" label=\"CTR\" format=\"0.0%\" unit=\"\"></iswc-gauge></div>\r\n          </div>"
         }
       ]
     },
@@ -137,7 +137,7 @@
       "blocks": [
         {
           "kind": "demo",
-          "html": "<is-gauge id=\"gInteractive\" value=\"50\" label=\"Dinámico\"></is-gauge>\r\n          <is-slider id=\"gSlider\" min=\"0\" max=\"100\" value=\"50\" label=\"Valor\"></is-slider>"
+          "html": "<iswc-gauge id=\"gInteractive\" value=\"50\" label=\"Dinámico\"></iswc-gauge>\r\n          <iswc-slider id=\"gSlider\" min=\"0\" max=\"100\" value=\"50\" label=\"Valor\"></iswc-slider>"
         }
       ]
     },
@@ -147,7 +147,7 @@
       "blocks": [
         {
           "kind": "html",
-          "html": "<h3><code class=\"code\">&lt;is-gauge&gt;</code></h3>"
+          "html": "<h3><code class=\"code\">&lt;iswc-gauge&gt;</code></h3>"
         },
         {
           "kind": "table",

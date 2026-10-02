@@ -14,16 +14,16 @@ import {
 import { ElementBase } from '../../core/element-base.js';
 import { setStringAttr } from '../_shared/reflect.js';
 /**
- * <is-select> — Select form-associated con listbox en <dialog modal> (top layer),
+ * <iswc-select> — Select form-associated con listbox en <dialog modal> (top layer),
  * así el desplegable nunca se pierde por overflow/clipping de ancestros.
  *
  * Atributos: name, value, multiple, placeholder, label, hint, disabled, required,
  *            clearable, open, variant, checkmarks, selection-display, limit-tags,
  *            error, error-text, full-width, auto-width, max-visible
- * Slots: default (<is-option>), label, hint, start
+ * Slots: default (<iswc-option>), label, hint, start
  * Parts: base, trigger, listbox, group, group-label, option, check, option-start,
  *        option-description, tag, clear, label, hint, error-text
- * Events: is-change { value, values }, is-show, is-hide
+ * Events: iswc-change { value, values }, iswc-show, iswc-hide
  *
  * En modo `multiple` con `name`, el valor de formulario se envía como FormData
  * con una entrada por opción seleccionada.
@@ -43,7 +43,7 @@ import { setStringAttr } from '../_shared/reflect.js';
             <span class="tags" hidden></span>
           </span>
         </div>
-        <is-button
+        <iswc-button
           type="button"
           part="clear"
           class="clear"
@@ -53,9 +53,9 @@ import { setStringAttr } from '../_shared/reflect.js';
           aria-label="Limpiar"
           hidden
         >
-          <is-icon icon="mdi:close" aria-hidden="true"></is-icon>
-        </is-button>
-        <span class="caret" aria-hidden="true"><is-icon icon="mdi:chevron-down"></is-icon></span>
+          <iswc-icon icon="mdi:close" aria-hidden="true"></iswc-icon>
+        </iswc-button>
+        <span class="caret" aria-hidden="true"><iswc-icon icon="mdi:chevron-down"></iswc-icon></span>
       </div>
       <div part="hint" class="hint" hidden><slot name="hint"><span class="hint-text"></span></slot></div>
       <div part="error-text" class="error-text" hidden></div>
@@ -95,7 +95,7 @@ import { setStringAttr } from '../_shared/reflect.js';
 
   let uidSeq = 0;
 
-  class IsSelect extends ElementBase {
+  class IswcSelect extends ElementBase {
     /** Personalización por atributo (ver `core/attrs.ts`). */
     static styleAttrs = {
     radius: '--iswc-select-border-radius',
@@ -123,7 +123,7 @@ import { setStringAttr } from '../_shared/reflect.js';
     #dialog!: HTMLDialogElement;
     #listbox!: HTMLElement;
     #slot!: HTMLSlotElement;
-    #uid = `is-sel-${++uidSeq}`;
+    #uid = `iswc-sel-${++uidSeq}`;
     #formDisabled = false;
     #defaultsRead = false;
     #defaultValues: string[] = [];
@@ -163,7 +163,7 @@ import { setStringAttr } from '../_shared/reflect.js';
       this.#base.addEventListener('click', this.#onBaseClick);
       this.#trigger.addEventListener('keydown', this.#onKeydown);
       this.#clearBtn.addEventListener('click', this.#onClear);
-      this.#tags.addEventListener('is-remove', this.#onTagRemove as EventListener);
+      this.#tags.addEventListener('iswc-remove', this.#onTagRemove as EventListener);
       this.#listbox.addEventListener('click', this.#onOptionClick);
       this.#dialog.addEventListener('click', this.#onDialogClick);
       this.#dialog.addEventListener('cancel', this.#onDialogCancel);
@@ -345,7 +345,7 @@ import { setStringAttr } from '../_shared/reflect.js';
       const list: SelectOption[] = [];
       for (const el of source) {
         const tag = el.tagName.toLowerCase();
-        if (tag !== 'is-option' && tag !== 'option') continue;
+        if (tag !== 'iswc-option' && tag !== 'option') continue;
         const elAny = el as Element & { label?: string };
         const label = typeof elAny.label === 'string' ? elAny.label : (el.textContent || '').trim();
         list.push({
@@ -444,7 +444,7 @@ import { setStringAttr } from '../_shared/reflect.js';
       this.#values = this.multiple ? [...new Set(values)] : values.slice(0, 1);
       this.#writeValueAttr();
       this.#apply();
-      if (this.value !== prev) emit(this, 'is-change', { value: this.value, values: this.values });
+      if (this.value !== prev) emit(this, 'iswc-change', { value: this.value, values: this.values });
     }
 
     #toggleValue(value: string): void {
@@ -520,10 +520,10 @@ import { setStringAttr } from '../_shared/reflect.js';
         if (!n) {
           this.#showTags(false);
           this.#display.textContent = placeholder;
-          this.#display.classList.add('is-placeholder');
+          this.#display.classList.add('iswc-placeholder');
           return;
         }
-        this.#display.classList.remove('is-placeholder');
+        this.#display.classList.remove('iswc-placeholder');
         if (mode === 'tags') {
           this.#showTags(true);
           this.#renderTags();
@@ -539,7 +539,7 @@ import { setStringAttr } from '../_shared/reflect.js';
       const selected = this.#values[0];
       const empty = selected == null || selected === '';
       this.#display.textContent = empty ? placeholder : this.#labelOf(selected);
-      this.#display.classList.toggle('is-placeholder', empty);
+      this.#display.classList.toggle('iswc-placeholder', empty);
     }
 
     #showTags(on: boolean): void {
@@ -554,7 +554,7 @@ import { setStringAttr } from '../_shared/reflect.js';
       const shown = limit ? this.#values.slice(0, limit) : this.#values;
       for (const v of shown) {
         const label = this.#labelOf(v);
-        const tag = document.createElement('is-tag') as HTMLElement & { dataset: DOMStringMap };
+        const tag = document.createElement('iswc-tag') as HTMLElement & { dataset: DOMStringMap };
         tag.setAttribute('part', 'tag');
         tag.setAttribute('with-remove', '');
         tag.setAttribute('remove-label', `Quitar ${label}`);
@@ -564,7 +564,7 @@ import { setStringAttr } from '../_shared/reflect.js';
       }
       const rest = this.#values.length - shown.length;
       if (!rest) return;
-      const more = document.createElement('is-tag');
+      const more = document.createElement('iswc-tag');
       more.setAttribute('part', 'tag tag-more');
       more.textContent = `+${rest}`;
       this.#tags.appendChild(more);
@@ -619,7 +619,7 @@ import { setStringAttr } from '../_shared/reflect.js';
       const mark = document.createElement('span');
       mark.className = 'mark';
       mark.setAttribute('part', 'check');
-      const check = document.createElement('is-icon');
+      const check = document.createElement('iswc-icon');
       check.className = 'check';
       check.setAttribute('icon', 'mdi:check');
       check.setAttribute('aria-hidden', 'true');
@@ -720,13 +720,13 @@ import { setStringAttr } from '../_shared/reflect.js';
           try { this.#dialog.focus({ preventScroll: true }); } catch { /* noop */ }
           this.#scrollActive();
         });
-        if (!this.#wasOpen) emit(this, 'is-show', {});
+        if (!this.#wasOpen) emit(this, 'iswc-show', {});
       } else {
         this.#activeIndex = -1;
         this.#typeBuf = '';
         this.#syncActiveDescendant();
         if (this.#dialog.open) this.#dialog.close();
-        if (this.#wasOpen) emit(this, 'is-hide', {});
+        if (this.#wasOpen) emit(this, 'iswc-hide', {});
       }
       this.#wasOpen = open;
     }
@@ -757,7 +757,7 @@ import { setStringAttr } from '../_shared/reflect.js';
 
     #onTagRemove = (e: Event): void => {
       const target = e.target as Element | null;
-      const tag = target?.closest('is-tag') as HTMLElement | null;
+      const tag = target?.closest('iswc-tag') as HTMLElement | null;
       const value = tag?.dataset['value'];
       if (!value || this.#isDisabled) return;
       e.stopPropagation();
@@ -877,5 +877,5 @@ import { setStringAttr } from '../_shared/reflect.js';
     };
   }
 
-  defineElement('is-select', IsSelect, 'IsSelect');
+  defineElement('iswc-select', IswcSelect, 'IswcSelect');
 })();

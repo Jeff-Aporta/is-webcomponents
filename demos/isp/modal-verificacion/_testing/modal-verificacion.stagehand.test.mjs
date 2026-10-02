@@ -18,7 +18,7 @@ try {
     const m = document.getElementById('verif');
     const sr = m.shadowRoot;
     return {
-      dlg: !!sr.querySelector('is-dialog.dlg'),
+      dlg: !!sr.querySelector('iswc-dialog.dlg'),
       headingText: sr.querySelector('.heading-text')?.textContent?.trim() || '',
       titleIcon: !!sr.querySelector('.title-icon'),
       resultsPart: !!sr.querySelector('[part="results"]'),
@@ -43,7 +43,7 @@ try {
     const resultsEl = sr.querySelector('[part="results"]');
     const blocks = [...resultsEl.querySelectorAll('.msg-block')];
     const colors = blocks.map((b) => {
-      const text = b.querySelector('is-text');
+      const text = b.querySelector('iswc-text');
       return text?.getAttribute('color');
     });
     return {
@@ -64,7 +64,7 @@ try {
     const ae = document.activeElement;
     return {
       tag: ae?.localName,
-      inModal: !!ae?.closest('is-modal-verificacion'),
+      inModal: !!ae?.closest('iswc-modal-verificacion'),
     };
   });
   assert.equal(focus.inModal, true, 'foco debe estar atrapado dentro del modal');

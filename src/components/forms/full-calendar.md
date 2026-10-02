@@ -1,21 +1,21 @@
 ---
-tag: is-full-calendar
+tag: iswc-full-calendar
 tags:
-  - is-full-calendar
+  - iswc-full-calendar
 category: forms
 status: public
 source: ./full-calendar.js
 style: ./full-calendar.css
 preview: ./full-calendar.json
 ---
-# `<is-full-calendar>`
+# `<iswc-full-calendar>`
 
 ## Propósito
 
 Calendario con vistas de mes, semana y día, con eventos posicionados por fecha
 y hora, barra de navegación propia y formateo por `Intl`.
 
-Este módulo registra `<is-full-calendar>`.
+Este módulo registra `<iswc-full-calendar>`.
 
 ## Cuándo usarlo
 
@@ -23,9 +23,9 @@ Mostrar y navegar una agenda: reservas, vencimientos, programación de tareas.
 
 ## Cuándo no usarlo
 
-Para elegir una fecha en un formulario usar `<is-date-input>` o
-`<is-date-picker>`; para un rango, `<is-date-range-input>`; para una sola
-rejilla mensual sin eventos, `<is-month-calendar>`.
+Para elegir una fecha en un formulario usar `<iswc-date-input>` o
+`<iswc-date-picker>`; para un rango, `<iswc-date-range-input>`; para una sola
+rejilla mensual sin eventos, `<iswc-month-calendar>`.
 
 ## Importación
 
@@ -36,11 +36,11 @@ import './full-calendar.js';
 ## Ejemplo mínimo
 
 ```html
-<is-full-calendar>
+<iswc-full-calendar>
   <script type="application/json">
     { "events": [{ "id": 1, "title": "Cierre", "date": "2026-08-31", "start": "09:00" }] }
   </script>
-</is-full-calendar>
+</iswc-full-calendar>
 ```
 
 ## API
@@ -76,11 +76,11 @@ Forma de un evento: `{ id, title, date: 'YYYY-MM-DD', start: 'HH:MM', end?: 'HH:
 
 | Evento | detail | bubbles | composed | cancelable |
 | --- | --- | --- | --- | --- |
-| `is-day-click` | `{ date }` | sí | sí | no |
-| `is-event-click` | `{ event, date }` | sí | sí | no |
-| `is-view-change` | `{ view, date }` | sí | sí | no |
+| `iswc-day-click` | `{ date }` | sí | sí | no |
+| `iswc-event-click` | `{ event, date }` | sí | sí | no |
+| `iswc-view-change` | `{ view, date }` | sí | sí | no |
 
-`is-view-change` se emite al usar los botones de vista de la toolbar, no al
+`iswc-view-change` se emite al usar los botones de vista de la toolbar, no al
 cambiar el atributo `view` por código.
 
 ### Métodos y propiedades públicas
@@ -133,7 +133,7 @@ No es form-associated: es una vista de agenda, no un campo.
 - Las vistas `week` y `day` dibujan solo el rango `hours-start`..`hours-end`;
   un evento fuera de ese rango no se ve.
 - Los clics se resuelven por delegación en la rejilla: sobre un evento se emite
-  `is-event-click`, sobre el día `is-day-click`.
+  `iswc-event-click`, sobre el día `iswc-day-click`.
 - Cambiar cualquier atributo observado repinta.
 
 ## Dependencias y componentes relacionados
@@ -143,7 +143,7 @@ No es form-associated: es una vista de agenda, no un campo.
 - [`../_shared/emit.js`](../_shared/emit.js)
 - [`../_shared/dom-utils.js`](../_shared/dom-utils.js)
 
-Tags del módulo: `<is-full-calendar>`.
+Tags del módulo: `<iswc-full-calendar>`.
 
 ## Accesibilidad
 
@@ -155,9 +155,9 @@ flujo debe ser navegable por teclado, exponer las mismas acciones (`prev()`,
 ## Ejemplo avanzado
 
 ```html
-<is-full-calendar id="agenda" view="week" first-day="1"
+<iswc-full-calendar id="agenda" view="week" first-day="1"
                   hours-start="6" hours-end="22" locale="es-CO">
-</is-full-calendar>
+</iswc-full-calendar>
 
 <script type="module">
   const agenda = document.getElementById('agenda');
@@ -165,8 +165,8 @@ flujo debe ser navegable por teclado, exponer las mismas acciones (`prev()`,
     { id: 'a', title: 'Conciliación', date: '2026-08-10', start: '08:00', end: '09:30', color: '#7048e8' },
     { id: 'b', title: 'Nómina', date: '2026-08-10', start: '14:00', end: '15:00' },
   ];
-  agenda.addEventListener('is-event-click', (e) => console.log(e.detail.event.title));
-  agenda.addEventListener('is-day-click', (e) => agenda.setDate(e.detail.date));
+  agenda.addEventListener('iswc-event-click', (e) => console.log(e.detail.event.title));
+  agenda.addEventListener('iswc-day-click', (e) => agenda.setDate(e.detail.date));
 </script>
 ```
 
@@ -174,7 +174,7 @@ flujo debe ser navegable por teclado, exponer las mismas acciones (`prev()`,
 
 - Cambiar el `<script type="application/json">` tras conectar: solo se lee al
   conectar; después usar la propiedad `events`.
-- Esperar `is-view-change` al hacer `setView()`: ese evento es de la toolbar.
+- Esperar `iswc-view-change` al hacer `setView()`: ese evento es de la toolbar.
 - Fijar horas fuera de `hours-start`..`hours-end` y no ver los eventos.
 - Pasar `date` en formato distinto de ISO.
 - Usar tag sin importar módulo primero.

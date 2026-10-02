@@ -1,4 +1,4 @@
-// catalogo-gen.test.mjs — tests exhaustivos del demo <is-catalogo-gen>.
+// catalogo-gen.test.mjs — tests exhaustivos del demo <iswc-catalogo-gen>.
 // Cobertura: smoke (monta grid + toolbar + drawer + modales) + API (controller,
 // Lista, seleccionar, eventos) + form slot + modal verificacion.
 import assert from 'node:assert/strict';
@@ -17,20 +17,20 @@ tests.push({
       const cat = document.getElementById('cat');
       const sr = cat.shadowRoot;
       return {
-        defined: !!customElements.get('is-catalogo-gen'),
-        grid: !!sr.querySelector('is-ag-grid.grid'),
+        defined: !!customElements.get('iswc-catalogo-gen'),
+        grid: !!sr.querySelector('iswc-ag-grid.grid'),
         toolbar: !!sr.querySelector('section[part="toolbar"], .toolbar'),
-        drawer: !!sr.querySelector('is-drawer.drawer'),
-        modalVerify: !!sr.querySelector('is-modal-verificacion.modal-verify'),
-        modalDelete: !!sr.querySelector('is-confirm-delete.modal-delete'),
+        drawer: !!sr.querySelector('iswc-drawer.drawer'),
+        modalVerify: !!sr.querySelector('iswc-modal-verificacion.modal-verify'),
+        modalDelete: !!sr.querySelector('iswc-confirm-delete.modal-delete'),
         controllerPresent: !!cat.controller,
       };
     });
     assert.equal(info.defined, true);
-    assert.equal(info.grid, true, '<is-ag-grid> debe estar en shadow');
-    assert.equal(info.drawer, true, '<is-drawer> debe estar en shadow');
-    assert.equal(info.modalVerify, true, '<is-modal-verificacion> debe estar en shadow');
-    assert.equal(info.modalDelete, true, '<is-confirm-delete> debe estar en shadow');
+    assert.equal(info.grid, true, '<iswc-ag-grid> debe estar en shadow');
+    assert.equal(info.drawer, true, '<iswc-drawer> debe estar en shadow');
+    assert.equal(info.modalVerify, true, '<iswc-modal-verificacion> debe estar en shadow');
+    assert.equal(info.modalDelete, true, '<iswc-confirm-delete> debe estar en shadow');
     assert.equal(info.controllerPresent, true);
     await screenshot(page, 'catalogo-smoke');
   },
@@ -48,7 +48,7 @@ tests.push({
         await cat.refreshGrid();
         await new Promise((r) => setTimeout(r, 200));
       }
-      const grid = cat.shadowRoot.querySelector('is-ag-grid.grid');
+      const grid = cat.shadowRoot.querySelector('iswc-ag-grid.grid');
       const sr = grid?.shadowRoot;
       // Buscar filas en el shadow del ag-grid (puede ser rows / .ag-row).
       const rows = sr ? sr.querySelectorAll('[role="row"], .ag-row, .row, tr') : [];
@@ -59,7 +59,7 @@ tests.push({
 });
 
 tests.push({
-  name: 'eventos: is-selection-change emite al seleccionar filas del grid',
+  name: 'eventos: iswc-selection-change emite al seleccionar filas del grid',
   run: async (page) => {
     await page.goto(URL, { waitUntil: 'domcontentloaded' });
     await waitReady(page, 'data-catalogo-ready');
@@ -67,9 +67,9 @@ tests.push({
     const events = await page.evaluate(async () => {
       const cat = document.getElementById('cat');
       const captured = [];
-      cat.addEventListener('is-selection-change', (e) => captured.push({ detail: e.detail }));
+      cat.addEventListener('iswc-selection-change', (e) => captured.push({ detail: e.detail }));
       cat.selectionData = [{ app: 'CP', descripcion: 'ContaPyme', activo: true }];
-      cat.dispatchEvent(new CustomEvent('is-selection-change', {
+      cat.dispatchEvent(new CustomEvent('iswc-selection-change', {
         detail: { records: [{ app: 'CP', descripcion: 'ContaPyme' }] },
         bubbles: true,
         composed: true,
@@ -95,7 +95,7 @@ tests.push({
       };
     });
     assert.equal(slotInfo.slotExists, true, 'demo debe haber provisto un slot="frm"');
-    assert.equal(slotInfo.tagName, 'is-form', 'slot="frm" debe contener un <is-form>');
+    assert.equal(slotInfo.tagName, 'iswc-form', 'slot="frm" debe contener un <iswc-form>');
   },
 });
 
@@ -107,7 +107,7 @@ tests.push({
     await page.waitForTimeout(200);
     const result = await page.evaluate(async () => {
       const cat = document.getElementById('cat');
-      const mv = cat.shadowRoot.querySelector('is-modal-verificacion.modal-verify');
+      const mv = cat.shadowRoot.querySelector('iswc-modal-verificacion.modal-verify');
       mv.record = { app: 'CP' };
       mv.controller = cat.controller;
       const mensajes = await mv.verify();

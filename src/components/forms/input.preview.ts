@@ -1,5 +1,5 @@
 /**
- * Behavior migrado desde HTML inline de is-input.
+ * Behavior migrado desde HTML inline de iswc-input.
  * Se ejecuta en mount() tras pintar la definition JSON.
  * @param {import('../../previews/_kit/types.d.ts').PreviewMountContext} ctx
  */
@@ -9,7 +9,7 @@ export async function mount(ctx: import('../../previews/_kit/types.d.ts').Previe
   const demo = document.getElementById('demo') as HTMLElement | null;
   const log = document.getElementById('log') as HTMLElement | null;
   if (demo && log) {
-    demo.addEventListener('is-input', (e: Event) => {
+    demo.addEventListener('iswc-input', (e: Event) => {
       const detail = (e as CustomEvent<{ value: unknown }>).detail;
       log.innerHTML = `value: <code class="code">${JSON.stringify(detail.value)}</code>`;
     });

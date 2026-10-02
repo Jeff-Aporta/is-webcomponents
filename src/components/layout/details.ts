@@ -3,7 +3,7 @@ import { ElementBase } from '../../core/element-base.js';
 import { TONE } from '../_shared/tone.js';
 
 /**
- * <is-details> — Web Component (vanilla, zero dependencies).
+ * <iswc-details> — Web Component (vanilla, zero dependencies).
  *
  * Disclosure colapsable: muestra un resumen y, al expandir, el contenido.
  * Equivalente a wa-details / <details>.
@@ -11,7 +11,7 @@ import { TONE } from '../_shared/tone.js';
  * Atributos
  *   open             boolean — si está expandido (reflected)
  *   summary          string  — texto del summary si no se usa el slot
- *   name             string  — grupo accordion: si dos <is-details> comparten
+ *   name             string  — grupo accordion: si dos <iswc-details> comparten
  *                             `name`, abrir uno cierra el resto
  *   disabled         boolean
  *   variant       filled | outlined | filled-outlined | plain
@@ -29,10 +29,10 @@ import { TONE } from '../_shared/tone.js';
  *   show() / hide() / toggle()
  *
  * Eventos
- *   is-show       detail: {} — antes de abrir (cancelable)
- *   is-after-show detail: {} — tras la animación de apertura
- *   is-hide       detail: {} — antes de cerrar (cancelable)
- *   is-after-hide detail: {} — tras la animación de cierre
+ *   iswc-show       detail: {} — antes de abrir (cancelable)
+ *   iswc-after-show detail: {} — tras la animación de apertura
+ *   iswc-hide       detail: {} — antes de cerrar (cancelable)
+ *   iswc-after-hide detail: {} — tras la animación de cierre
  *
  * CSS Parts: ::part(base) ::part(header) ::part(summary) ::part(icon) ::part(content)
  *
@@ -54,7 +54,7 @@ import { TONE } from '../_shared/tone.js';
           </span>
           <span class="summary-icon" part="icon" aria-hidden="true">
             <slot name="expand-icon" class="slot-expand">
-              <is-icon class="default-icon" icon="mdi:chevron-down" aria-hidden="true"></is-icon>
+              <iswc-icon class="default-icon" icon="mdi:chevron-down" aria-hidden="true"></iswc-icon>
             </slot>
           </span>
         </button>
@@ -70,7 +70,7 @@ import { TONE } from '../_shared/tone.js';
   const VALID_VARIANT = TONE.filter((t) => t !== 'accent');
   const VALID_ICON_PLACEMENT = ['start', 'end'];
 
-  class IsDetails extends ElementBase {
+  class IswcDetails extends ElementBase {
     /** Personalización por atributo (ver `core/attrs.ts`). */
     static styleAttrs = {
     spacing: '--iswc-details-spacing',
@@ -209,7 +209,7 @@ import { TONE } from '../_shared/tone.js';
     }
 
     #onNameChanged() {
-      // Al cambiar `name`, si este <is-details> está abierto, cerramos los
+      // Al cambiar `name`, si este <iswc-details> está abierto, cerramos los
       // demás con el mismo `name`. El responsable de mantener la consistencia
       // es el que cambie el atributo (programáticamente); no forzamos nada
       // automático.
@@ -250,9 +250,9 @@ import { TONE } from '../_shared/tone.js';
       if (desired === this.open) return Promise.resolve();
       if (this.disabled) return Promise.resolve();
 
-      // Emite el evento is-show / is-hide cancelable. Si alguien llama
+      // Emite el evento iswc-show / iswc-hide cancelable. Si alguien llama
       // preventDefault(), abortamos.
-      const evtName = desired ? 'is-show' : 'is-hide';
+      const evtName = desired ? 'iswc-show' : 'iswc-hide';
       const cancelable = fromUser;
       const evt = new CustomEvent(evtName, { detail: {}, bubbles: true, composed: true, cancelable });
       this.dispatchEvent(evt);
@@ -267,7 +267,7 @@ import { TONE } from '../_shared/tone.js';
       else this.removeAttribute('open');
 
       // Animación: si el contenido tiene altura conocida, animar; si no, snap.
-      const afterEvtName = desired ? 'is-after-show' : 'is-after-hide';
+      const afterEvtName = desired ? 'iswc-after-show' : 'iswc-after-hide';
       return this.#animateContent(desired).then(() => {
         emit(this, afterEvtName, {});
       });
@@ -276,7 +276,7 @@ import { TONE } from '../_shared/tone.js';
     #closeOthers(): void {
       const name = this.name;
       if (!name) return;
-      const group = document.querySelectorAll<HTMLElement>(`is-details[name="${CSS.escape(name)}"]`);
+      const group = document.querySelectorAll<HTMLElement>(`iswc-details[name="${CSS.escape(name)}"]`);
       group.forEach((el) => {
         if (el === this) return;
         const me = el as HTMLElement & { open: boolean; hide(): void };
@@ -346,5 +346,5 @@ import { TONE } from '../_shared/tone.js';
     }
   }
 
-  defineElement('is-details', IsDetails, 'IsDetails');
+  defineElement('iswc-details', IswcDetails, 'IswcDetails');
 })();

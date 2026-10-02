@@ -1,7 +1,7 @@
 // server.ts: servidor estatico para los tests E2E de is-webcomponents (sin
 // dependencias propias; usa esbuild del repo, que ya es devDep).
 // A diferencia de un servidor estatico simple, la galeria importa MODULOS TS
-// en crudo (src/previews/registry.ts, src/cdn/collect-is-tags.ts) y los
+// en crudo (src/previews/registry.ts, src/cdn/collect-iswc-tags.ts) y los
 // componentes piden ./x.js cuando en disco hay x.ts: hay que transpilar TS al
 // vuelo y mapear .js → .ts, igual que scripts/serve.mjs del repo.
 import { createServer } from 'node:http';

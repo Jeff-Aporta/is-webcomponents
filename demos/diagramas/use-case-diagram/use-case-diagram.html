@@ -3,7 +3,7 @@
 <head>
 <meta charset="utf-8" />
 <meta name="viewport" content="width=device-width, initial-scale=1" />
-<title>Demo — <is-use-case-diagram> · is-webcomponents</title>
+<title>Demo — <iswc-use-case-diagram> · is-webcomponents</title>
 <meta name="description" content="Diagrama de casos de uso UML con actores, sistema (frontera) y enlaces include/extend." />
 <style>
   html, body { margin: 0; padding: 0; min-height: 100%; background: #0c1118; color: #e2e8f0; font-family: ui-sans-serif, system-ui, sans-serif; }
@@ -12,14 +12,14 @@
   header h1 { font-size: 16px; font-weight: 700; margin: 0; }
   header p { font-size: 12px; color: #94a3b8; margin: 4px 0 0 0; }
   main { display: grid; place-items: stretch; min-height: 0; padding: 12px; }
-  is-use-case-diagram { width: 100%; height: 100%; min-height: 480px; display: block; }
-  is-use-case-diagram:not(:defined) { visibility: hidden; }
+  iswc-use-case-diagram { width: 100%; height: 100%; min-height: 480px; display: block; }
+  iswc-use-case-diagram:not(:defined) { visibility: hidden; }
 </style>
 <script type="module">
-  await import('../../../dist/cdn/diagrams/use-case-diagram.min.js?h=e0zqpi');
-  await customElements.whenDefined('is-use-case-diagram');
+  await import('../../../dist/cdn/diagrams/use-case-diagram.min.js?h=8dr01n');
+  await customElements.whenDefined('iswc-use-case-diagram');
 
-  const el = document.createElement('is-use-case-diagram');
+  const el = document.createElement('iswc-use-case-diagram');
   el.payload = {
     useCase: {
       title: 'Sistema de ventas',
@@ -50,7 +50,7 @@
 </head>
 <body>
   <header>
-    <h1>Demo — <code>&lt;is-use-case-diagram&gt;</code></h1>
+    <h1>Demo — <code>&lt;iswc-use-case-diagram&gt;</code></h1>
     <p>Casos de uso UML: actores (stickman) + casos (óvalo) + sistema (rectángulo) + aristas include/extend.</p>
   </header>
   <main></main>

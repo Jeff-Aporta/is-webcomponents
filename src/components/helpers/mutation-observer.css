@@ -1,7 +1,1 @@
-:host {
-  display: contents;
-}
-
-.base {
-  display: contents;
-}
+:host, .base { display: contents; }

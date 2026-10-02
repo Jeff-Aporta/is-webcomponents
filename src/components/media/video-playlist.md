@@ -1,14 +1,14 @@
 ---
-tag: is-video-playlist
+tag: iswc-video-playlist
 tags:
-  - is-video-playlist
+  - iswc-video-playlist
 category: media
 status: public
 source: ./video-playlist.js
 style: ./video-playlist.css
 preview: ./video-playlist.json
 ---
-# `<is-video-playlist>`
+# `<iswc-video-playlist>`
 
 ## Propósito
 
@@ -18,7 +18,7 @@ Las herramientas adicionales (prev / next / autoplay) se proyectan
 automáticamente en los slots tools-left
 y tools-right del reproductor.
 
-Este módulo registra `<is-video-playlist>`.
+Este módulo registra `<iswc-video-playlist>`.
 
 ## Cuándo usarlo
 
@@ -37,11 +37,11 @@ import './video-playlist.js';
 ## Ejemplo mínimo
 
 ```html
-<is-video-playlist autoplay-next placement="bottom">
-<is-video title="Big Buck Bunny" channel="Blender" poster="…" src="01.mp4"></is-video>
-<is-video title="Sintel" poster="…" src="02.mp4"></is-video>
-<is-video title="Elephants Dream" poster="…" src="03.mp4"></is-video>
-</is-video-playlist>
+<iswc-video-playlist autoplay-next placement="bottom">
+<iswc-video title="Big Buck Bunny" channel="Blender" poster="…" src="01.mp4"></iswc-video>
+<iswc-video title="Sintel" poster="…" src="02.mp4"></iswc-video>
+<iswc-video title="Elephants Dream" poster="…" src="03.mp4"></iswc-video>
+</iswc-video-playlist>
 ```
 
 ## API
@@ -81,8 +81,8 @@ import './video-playlist.js';
 
 | Evento | detail | bubbles | composed | cancelable |
 | --- | --- | --- | --- | --- |
-| `is-video-change` | sí | sí | sí | no |
-| `is-change` | sí | sí | sí | no |
+| `iswc-video-change` | sí | sí | sí | no |
+| `iswc-change` | sí | sí | sí | no |
 
 ### Métodos y propiedades públicas
 
@@ -136,8 +136,8 @@ No declara integración form-associated propia en este módulo.
 
 Documentación de cabecera preservada desde fuente:
 
-> <is-video-playlist> — player + lista tipo YouTube.
-> Cada clip es un <is-video> dentro del slot default. El componente
+> <iswc-video-playlist> — player + lista tipo YouTube.
+> Cada clip es un <iswc-video> dentro del slot default. El componente
 > renderiza un reproductor con cabecera (título + canal) y una barra
 > inferior estilo YouTube con controles + herramientas inyectadas
 > (anterior / siguiente / autoplay) mediante slots.
@@ -147,14 +147,14 @@ Documentación de cabecera preservada desde fuente:
 >   accordion      auto | open | closed (default auto: cerrado en móvil)
 >   channel        caption opcional que se muestra bajo el título
 > Slots
->   default        is-video (uno por clip)
+>   default        iswc-video (uno por clip)
 >   tools-left     botones / iconos que se muestran a la izquierda del play
 >                  (el playlist inyecta prev/next aquí por defecto)
 >   tools-right    botones / iconos que se muestran a la derecha del vol
 >                  (el playlist inyecta autoplay aquí por defecto)
 >   config         botón / menú opcional en la cabecera YouTube
 > Métodos: goTo(index), next(), previous(), play(index)
-> Eventos: is-video-change, is-change
+> Eventos: iswc-video-change, iswc-change
 > Parts: video-playlist, playlist-head, playlist-toggle, playlist-items,
 >        playlist-item, playlist-title, playlist-duration, channel,
 >        title, header, header-actions, player-toolbar, tools-left,
@@ -166,7 +166,7 @@ Documentación de cabecera preservada desde fuente:
 - [`./video.js`](./video.js)
 - [`./icon.js`](./icon.js)
 
-Tags del módulo: `<is-video-playlist>`.
+Tags del módulo: `<iswc-video-playlist>`.
 
 ## Accesibilidad
 
@@ -175,7 +175,7 @@ Preservar semántica, foco, teclado, labels y ARIA. ARIA detectado: `aria-label`
 ## Ejemplo avanzado
 
 ```html
-<is-video-playlist placement="right">…</is-video-playlist>
+<iswc-video-playlist placement="right">…</iswc-video-playlist>
 ```
 
 ## Errores comunes

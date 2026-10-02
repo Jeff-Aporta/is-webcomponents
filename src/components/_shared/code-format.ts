@@ -1,5 +1,5 @@
 /**
- * code-format.js — formateo ligero estilo Prettier para `<is-code>`.
+ * code-format.js — formateo ligero estilo Prettier para `<iswc-code>`.
  *
  * No es Prettier completo (sin AST de terceros). Acepta un JSON de opciones
  * compatible en espíritu y aplica reglas útiles por lenguaje:

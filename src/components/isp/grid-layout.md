@@ -1,14 +1,14 @@
 ---
-tag: is-grid-layout
+tag: iswc-grid-layout
 tags:
-  - is-grid-layout
+  - iswc-grid-layout
 category: isp
 status: public
 source: ./grid-layout.js
 style: ./grid-layout.css
 preview: ./grid-layout.json
 ---
-# `<is-grid-layout>`
+# `<iswc-grid-layout>`
 
 ## Propósito
 
@@ -16,7 +16,7 @@ Rejilla CSS declarativa: número de celdas (o track list cruda), gap,
 justificación y alineación por atributos. Port de
 `src/lib/layout/GridLayout.svelte` de ISP.
 
-Este módulo registra `<is-grid-layout>`.
+Este módulo registra `<iswc-grid-layout>`.
 
 ## Cuándo usarlo
 
@@ -25,8 +25,8 @@ bidimensional que quiera declararse en el markup.
 
 ## Cuándo no usarlo
 
-No usar para una sola fila o columna (usa `<is-flex-layout>`) ni para tablas de
-datos (usa `<is-data-grid>` / `<is-ag-grid>`).
+No usar para una sola fila o columna (usa `<iswc-flex-layout>`) ni para tablas de
+datos (usa `<iswc-data-grid>` / `<iswc-ag-grid>`).
 
 ## Importación
 
@@ -37,11 +37,11 @@ import './grid-layout.js';
 ## Ejemplo mínimo
 
 ```html
-<is-grid-layout cells="3" gap="0.5rem">
-  <is-card>1</is-card>
-  <is-card>2</is-card>
-  <is-card>3</is-card>
-</is-grid-layout>
+<iswc-grid-layout cells="3" gap="0.5rem">
+  <iswc-card>1</iswc-card>
+  <iswc-card>2</iswc-card>
+  <iswc-card>3</iswc-card>
+</iswc-grid-layout>
 ```
 
 ## Mapeo Svelte → Web Component
@@ -95,7 +95,7 @@ También refleja `data-sizew` y `data-szw-*`.
 
 | Evento | detail | bubbles | composed | cancelable |
 | --- | --- | --- | --- | --- |
-| `is-breakpoint` | `{ width, sizew, boolszw, lerpw }` | sí | sí | no |
+| `iswc-breakpoint` | `{ width, sizew, boolszw, lerpw }` | sí | sí | no |
 
 ### Métodos y propiedades públicas
 
@@ -134,7 +134,7 @@ fluyen en una sola columna implícita.
 - [`block-layout.js`](block-layout.js) (`BreakpointHost`)
 - [`../_shared/adopt-css.js`](../_shared/adopt-css.js)
 
-Tags del módulo: `<is-grid-layout>`.
+Tags del módulo: `<iswc-grid-layout>`.
 
 ## Accesibilidad
 
@@ -144,12 +144,12 @@ tabulares.
 ## Ejemplo avanzado
 
 ```html
-<is-grid-layout cells="12rem 1fr" gap="0.75rem" items="center">
-  <is-text color="neutral">Nombre</is-text>
-  <is-input></is-input>
-  <is-text color="neutral">Correo</is-text>
-  <is-input type="email"></is-input>
-</is-grid-layout>
+<iswc-grid-layout cells="12rem 1fr" gap="0.75rem" items="center">
+  <iswc-text color="neutral">Nombre</iswc-text>
+  <iswc-input></iswc-input>
+  <iswc-text color="neutral">Correo</iswc-text>
+  <iswc-input type="email"></iswc-input>
+</iswc-grid-layout>
 ```
 
 ## Errores comunes
@@ -161,7 +161,7 @@ tabulares.
 
 ## Reglas para LLM
 
-- Reusar `<is-flex-layout>` si el caso es unidimensional.
+- Reusar `<iswc-flex-layout>` si el caso es unidimensional.
 - Booleano se activa por presencia; no usar `attr="false"`.
 - No modificar API basándose solo en el preview.
 

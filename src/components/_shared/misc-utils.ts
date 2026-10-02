@@ -1,8 +1,8 @@
 /**
  * misc-utils.js — Utilidades numéricas y de texto compartidas.
  *
- * Sustituye copias dispersas en is-slider, is-rating, is-split-panel,
- * is-format, etc.
+ * Sustituye copias dispersas en iswc-slider, iswc-rating, iswc-split-panel,
+ * iswc-format, etc.
  */
 
 /**
@@ -25,11 +25,11 @@ export function tidy(n: number, unit: string = '') {
  * OJO: no es lo mismo que `tidy(n, unit)` de arriba, aunque el nombre se le
  * parezca. `tidy` redondea SIEMPRE a 3 decimales y concatena una unidad de
  * texto (`'12.5px'`); esto mira cuántos decimales trae el step y redondea a
- * esos, devolviendo un número. `<is-slider step="0.01">` necesita 2
+ * esos, devolviendo un número. `<iswc-slider step="0.01">` necesita 2
  * decimales, no 3, y necesita el valor como número para seguir sumando.
  *
  * Existía duplicado —con el nombre `tidy`, que es justo el de la otra
- * función— en `is-slider` e `is-rating`.
+ * función— en `iswc-slider` e `iswc-rating`.
  *
  * @param {number} n
  * @param {number|string} step

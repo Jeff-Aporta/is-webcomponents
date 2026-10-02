@@ -14,21 +14,21 @@ tests.push({
     await page.goto(URL, { waitUntil: 'domcontentloaded' });
     await waitReady(page, 'data-doughnut-chart-ready');
     const info = await page.evaluate(() => {
-      const el = document.querySelector('is-doughnut-chart');
+      const el = document.querySelector('iswc-doughnut-chart');
       const svg = el.shadowRoot.querySelector('svg');
       const marks = el.shadowRoot.querySelectorAll('.mark');
       const slices = el.shadowRoot.querySelectorAll('.mark-slice');
       return {
-        defined: !!customElements.get('is-doughnut-chart'),
-        chartDefined: !!customElements.get('is-chart'),
+        defined: !!customElements.get('iswc-doughnut-chart'),
+        chartDefined: !!customElements.get('iswc-chart'),
         svg: !!svg,
         viewBox: svg?.getAttribute('viewBox'),
         marks: marks.length,
         slices: slices.length,
       };
     });
-    assert.equal(info.defined, true, 'is-doughnut-chart debe estar definido');
-    assert.equal(info.chartDefined, true, 'is-chart también debe estar definido');
+    assert.equal(info.defined, true, 'iswc-doughnut-chart debe estar definido');
+    assert.equal(info.chartDefined, true, 'iswc-chart también debe estar definido');
     assert.ok(info.svg, 'debe haber un SVG en shadow DOM');
     assert.ok(info.marks > 0, `debe haber marcas renderizadas, hay ${info.marks}`);
     assert.ok(info.slices > 0, `debe haber slices renderizadas, hay ${info.slices}`);
@@ -44,11 +44,11 @@ tests.push({
     await waitReady(page, 'data-doughnut-chart-ready');
     await page.waitForTimeout(200);
     const before = await page.evaluate(() => {
-      const el = document.querySelector('is-doughnut-chart');
+      const el = document.querySelector('iswc-doughnut-chart');
       return el.shadowRoot.querySelectorAll('.mark-slice').length;
     });
     await page.evaluate(() => {
-      const el = document.querySelector('is-doughnut-chart');
+      const el = document.querySelector('iswc-doughnut-chart');
       el.payload = {
         type: 'doughnut',
         data: {
@@ -60,7 +60,7 @@ tests.push({
     });
     await page.waitForTimeout(200);
     const after = await page.evaluate(() => {
-      const el = document.querySelector('is-doughnut-chart');
+      const el = document.querySelector('iswc-doughnut-chart');
       return el.shadowRoot.querySelectorAll('.mark-slice').length;
     });
     assert.equal(after, 3, `re-asignar payload debe dar 3 slices, hay ${after}`);
@@ -75,7 +75,7 @@ tests.push({
     await waitReady(page, 'data-doughnut-chart-ready');
     await page.waitForTimeout(200);
     const counts = await page.evaluate(() => {
-      const el = document.querySelector('is-doughnut-chart');
+      const el = document.querySelector('iswc-doughnut-chart');
       const slices = el.shadowRoot.querySelectorAll('.mark-slice');
       return {
         slices: slices.length,
@@ -89,7 +89,7 @@ tests.push({
     );
     // Cada slice debe tener un path `d` con comandos válidos (pathArc → M ... A ...).
     const allValid = await page.evaluate(() => {
-      const el = document.querySelector('is-doughnut-chart');
+      const el = document.querySelector('iswc-doughnut-chart');
       const slices = [...el.shadowRoot.querySelectorAll('.mark-slice')];
       return slices.every((s) => {
         const d = s.getAttribute('d') ?? '';
@@ -107,7 +107,7 @@ tests.push({
     await waitReady(page, 'data-doughnut-chart-ready');
     await page.waitForTimeout(200);
     const info = await page.evaluate(() => {
-      const el = document.querySelector('is-doughnut-chart');
+      const el = document.querySelector('iswc-doughnut-chart');
       const centerValue = el.shadowRoot.querySelector('.center-value');
       const centerCaption = el.shadowRoot.querySelector('.center-caption');
       return {
@@ -132,7 +132,7 @@ tests.push({
     await waitReady(page, 'data-doughnut-chart-ready');
     await page.waitForTimeout(200);
     const legend = await page.evaluate(() => {
-      const el = document.querySelector('is-doughnut-chart');
+      const el = document.querySelector('iswc-doughnut-chart');
       const leg = el.shadowRoot.querySelector('.legend');
       if (!leg || leg.hidden) return { hidden: true, items: [] };
       const items = [...leg.querySelectorAll('.legend-item')].map((it) => ({
@@ -156,7 +156,7 @@ tests.push({
     await waitReady(page, 'data-doughnut-chart-ready');
     await page.waitForTimeout(200);
     const result = await page.evaluate(() => {
-      const el = document.querySelector('is-doughnut-chart');
+      const el = document.querySelector('iswc-doughnut-chart');
       const before = el.shadowRoot.querySelectorAll('.mark-slice').length;
       const item = el.shadowRoot.querySelector('.legend-item');
       item?.dispatchEvent(new MouseEvent('click', { bubbles: true, composed: true }));
@@ -174,16 +174,16 @@ tests.push({
 });
 
 tests.push({
-  name: 'is-render: emite el evento is-render tras montar',
+  name: 'iswc-render: emite el evento iswc-render tras montar',
   run: async (page) => {
     await page.goto(URL, { waitUntil: 'domcontentloaded' });
     await waitReady(page, 'data-doughnut-chart-ready');
     const fired = await page.evaluate(() => {
       return new Promise((resolve) => {
-        const el = document.createElement('is-doughnut-chart');
+        const el = document.createElement('iswc-doughnut-chart');
         document.body.appendChild(el);
         let n = 0;
-        el.addEventListener('is-render', () => n++);
+        el.addEventListener('iswc-render', () => n++);
         el.payload = {
           type: 'doughnut',
           data: { labels: ['a', 'b'], datasets: [{ label: 's', data: [1, 2] }] },
@@ -192,7 +192,7 @@ tests.push({
         setTimeout(() => { el.remove(); resolve(n); }, 250);
       });
     });
-    assert.ok(fired >= 1, `is-render debió dispararse >=1 vez (fue ${fired})`);
+    assert.ok(fired >= 1, `iswc-render debió dispararse >=1 vez (fue ${fired})`);
   },
 });
 

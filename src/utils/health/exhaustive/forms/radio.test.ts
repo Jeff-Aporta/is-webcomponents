@@ -1,8 +1,8 @@
 /**
- * radio.test.ts — Tests exhaustivos de <is-radio>.
+ * radio.test.ts — Tests exhaustivos de <iswc-radio>.
  *
- * NOTA: <is-radio> NO es form-associated. El valor lo publica <is-radio-group>.
- * El radio avisa al grupo con el evento `is-radio-select`.
+ * NOTA: <iswc-radio> NO es form-associated. El valor lo publica <iswc-radio-group>.
+ * El radio avisa al grupo con el evento `iswc-radio-select`.
  */
 
 import test from 'node:test';
@@ -14,45 +14,45 @@ import {
   extiendeElementBase,
 } from './_helpers.js';
 
-const TAG = 'is-radio';
+const TAG = 'iswc-radio';
 const src = leerComponente(TAG);
 
 test('radio: archivo y registro', () => {
   assert.ok(src.length > 300);
   assert.ok(existeCss(TAG));
-  assert.ok(/defineElement\s*\(\s*['"`]is-radio['"`]/.test(src));
+  assert.ok(/defineElement\s*\(\s*['"`]iswc-radio['"`]/.test(src));
 });
 
 test('radio: atributos observados', () => {
   const obs = atributosObservados(src);
   for (const a of ['value', 'checked', 'disabled', 'color', 'label-placement']) {
-    assert.ok(obs.includes(a), `<is-radio> debe observar "${a}"`);
+    assert.ok(obs.includes(a), `<iswc-radio> debe observar "${a}"`);
   }
 });
 
-test('radio: emite is-radio-select para el grupo', () => {
+test('radio: emite iswc-radio-select para el grupo', () => {
   const evs = eventosEmitidos(src);
-  assert.ok(evs.includes('is-radio-select'),
-    '<is-radio> debe emitir is-radio-select (consumido por is-radio-group)');
+  assert.ok(evs.includes('iswc-radio-select'),
+    '<iswc-radio> debe emitir iswc-radio-select (consumido por iswc-radio-group)');
 });
 
 test('radio: shadow DOM parts', () => {
   const parts = partsDeclaradas(src);
   for (const p of ['base', 'control', 'dot', 'text', 'label', 'description']) {
-    assert.ok(parts.includes(p), `<is-radio> part="${p}"`);
+    assert.ok(parts.includes(p), `<iswc-radio> part="${p}"`);
   }
 });
 
 test('radio: slots (default, description)', () => {
   const slots = slotsDeclarados(src);
   assert.ok(slots.includes('default') || slots.includes('description'),
-    '<is-radio> debe tener slot default y/o description');
+    '<iswc-radio> debe tener slot default y/o description');
 });
 
 test('radio: NO es form-associated (delegado al grupo)', () => {
   // Por diseño: el radio no participa en <form>, solo el grupo.
   assert.ok(!/static\s+formAssociated\s*=\s*true/.test(src),
-    '<is-radio> NO debe ser form-associated (delegado al grupo)');
+    '<iswc-radio> NO debe ser form-associated (delegado al grupo)');
 });
 
 test('radio: extiende ElementBase', () => {
@@ -62,5 +62,5 @@ test('radio: extiende ElementBase', () => {
 test('radio: preview JSON', () => {
   const prev = leerPreview(TAG);
   assert.ok(prev);
-  assert.equal(prev!['$schema'], 'is-preview/v1');
+  assert.equal(prev!['$schema'], 'iswc-preview/v1');
 });

@@ -35,14 +35,14 @@ async function checkDeterministic(page, demo) {
   // de open() — el demo ya incluye un botón "Abrir paleta" y Ctrl+K como
   // hotkey, así que podemos abrirla sin tocar el input).
   await page.evaluate(async () => {
-    const p = document.querySelector('main is-command-palette');
+    const p = document.querySelector('main iswc-command-palette');
     p.open();
     await new Promise((r) => requestAnimationFrame(r));
   });
   await page.waitForTimeout(200);
 
   const data = await page.evaluate(() => {
-    const p = document.querySelector('main is-command-palette');
+    const p = document.querySelector('main iswc-command-palette');
     const dialog = p.shadowRoot.querySelector('dialog[part="dialog"]');
     const panel = p.shadowRoot.querySelector('.panel[part="panel"]');
     const input = p.shadowRoot.querySelector('input[part="input"]');
@@ -54,7 +54,7 @@ async function checkDeterministic(page, demo) {
     const inputRect = input?.getBoundingClientRect();
     const dialogRect = dialog.getBoundingClientRect();
     const firstResult = results[0]?.getBoundingClientRect();
-    const active = p.shadowRoot.querySelector('.opt.is-active');
+    const active = p.shadowRoot.querySelector('.opt.iswc-active');
 
     // El CSS del componente posiciona el panel top:14% con transform
     // translateX(-50%) → debe quedar centrado horizontalmente.
@@ -101,7 +101,7 @@ async function checkDeterministic(page, demo) {
 
   // (4) HIGHLIGHTS COHERENTES: hay exactamente 1 elemento activo y debe
   // coincidir con el primer resultado (la paleta arranca con #active=0).
-  assert.equal(data.hasActive, true, `${tag}: debe haber exactamente un .opt.is-active tras abrir`);
+  assert.equal(data.hasActive, true, `${tag}: debe haber exactamente un .opt.iswc-active tras abrir`);
 
   // (5) FOOTER CON ATAJOS: el footer embebido expone los kbd de ↑↓/↵/Esc.
   // El demo declara 3 hint-items con sendos <kbd> (↑↓ cuenta como 2).
@@ -165,7 +165,7 @@ async function runStagehandRubric(demo) {
     await waitReady(page, demo.readyAttr);
     // abrir la paleta antes de la captura
     await page.evaluate(async () => {
-      const p = document.querySelector('main is-command-palette');
+      const p = document.querySelector('main iswc-command-palette');
       p.open();
       await new Promise((r) => requestAnimationFrame(r));
     });

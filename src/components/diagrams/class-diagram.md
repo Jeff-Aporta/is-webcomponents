@@ -1,14 +1,14 @@
 ---
-tag: is-class-diagram
+tag: iswc-class-diagram
 tags:
-  - is-class-diagram
+  - iswc-class-diagram
 category: diagrams
 status: public
 source: ./class-diagram.js
 style: ./class-diagram.css
 preview: ./class-diagram.json
 ---
-# `<is-class-diagram>`
+# `<iswc-class-diagram>`
 
 ## Propósito
 
@@ -17,7 +17,7 @@ relaciones; el componente decide las capas, dibuja los tres
 compartimentos clásicos (nombre, atributos, métodos) y rutea las
 relaciones rodeando las cajas.
 
-Este módulo registra `<is-class-diagram>`.
+Este módulo registra `<iswc-class-diagram>`.
 
 ## Cuándo usarlo
 
@@ -36,7 +36,7 @@ import './class-diagram.js';
 ## Ejemplo mínimo
 
 ```html
-<is-class-diagram></is-class-diagram>
+<iswc-class-diagram></iswc-class-diagram>
 ```
 
 ## API
@@ -70,10 +70,10 @@ import './class-diagram.js';
 
 | Evento | detail | bubbles | composed | cancelable |
 | --- | --- | --- | --- | --- |
-| `is-turtle-state` | sí | sí | sí | no |
-| `is-render` | sí | sí | sí | no |
-| `is-toggle-group` | sí | sí | sí | sí |
-| `is-open-viewer` | sí | sí | sí | sí |
+| `iswc-turtle-state` | sí | sí | sí | no |
+| `iswc-render` | sí | sí | sí | no |
+| `iswc-toggle-group` | sí | sí | sí | sí |
+| `iswc-open-viewer` | sí | sí | sí | sí |
 
 ### Métodos y propiedades públicas
 
@@ -111,16 +111,16 @@ No declara integración form-associated propia en este módulo.
 
 Documentación de cabecera preservada desde fuente:
 
-> <is-class-diagram> — diagrama de clases UML en SVG, sin Mermaid.
-> Configuración por JSON, igual que <is-flowchart>:
->   <is-class-diagram>
+> <iswc-class-diagram> — diagrama de clases UML en SVG, sin Mermaid.
+> Configuración por JSON, igual que <iswc-flowchart>:
+>   <iswc-class-diagram>
 >     <script type="application/json">
 >       { "classDiagram": { "direction": "TB", "classes": [...], "relations": [...] } }
 >     </script>
->   </is-class-diagram>
+>   </iswc-class-diagram>
 > Atributos: color (inline | viewer), open-on-click
 > Propiedades: payload, spec, layout, turtle, hiddenGroups
-> Eventos: is-render, is-turtle-state, is-open-viewer, is-toggle-group
+> Eventos: iswc-render, iswc-turtle-state, iswc-open-viewer, iswc-toggle-group
 
 ## Dependencias y componentes relacionados
 
@@ -132,7 +132,7 @@ Documentación de cabecera preservada desde fuente:
 - [`../_shared/tk-inline-md.js`](../_shared/tk-inline-md.js)
 - [`./diagram-kinds.js`](./diagram-kinds.js)
 
-Tags del módulo: `<is-class-diagram>`.
+Tags del módulo: `<iswc-class-diagram>`.
 
 ## Accesibilidad
 
@@ -141,7 +141,7 @@ Preservar semántica, foco, teclado, labels y ARIA. ARIA detectado: `aria-label`
 ## Ejemplo avanzado
 
 ```html
-<is-class-diagram></is-class-diagram>
+<iswc-class-diagram></iswc-class-diagram>
 ```
 
 ## Errores comunes

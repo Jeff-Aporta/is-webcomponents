@@ -1,21 +1,21 @@
 ---
-tag: is-mega-menu
+tag: iswc-mega-menu
 tags:
-  - is-mega-menu
+  - iswc-mega-menu
 category: navigation
 status: public
 source: ./mega-menu.js
 style: ./mega-menu.css
 preview: ./mega-menu.json
 ---
-# `<is-mega-menu>`
+# `<iswc-mega-menu>`
 
 ## Propósito
 
 Mega-menú para portal o e-commerce: abre un panel ancho de varias columnas,
 cada una con encabezado y enlaces, más un bloque destacado opcional.
 
-Este módulo registra `<is-mega-menu>`.
+Este módulo registra `<iswc-mega-menu>`.
 
 ## Cuándo usarlo
 
@@ -23,8 +23,8 @@ Cabeceras con muchas secciones que no caben en un dropdown de una columna.
 
 ## Cuándo no usarlo
 
-Para un menú corto de acciones usar `<is-dropdown>`; para navegación
-jerárquica en panel lateral, `<is-tree>`.
+Para un menú corto de acciones usar `<iswc-dropdown>`; para navegación
+jerárquica en panel lateral, `<iswc-tree>`.
 
 ## Importación
 
@@ -35,12 +35,12 @@ import './mega-menu.js';
 ## Ejemplo mínimo
 
 ```html
-<is-mega-menu label="Catálogo">
+<iswc-mega-menu label="Catálogo">
   <div slot="column" title="Muebles">
     <a href="/sillas">Sillas</a>
     <a href="/mesas">Mesas</a>
   </div>
-</is-mega-menu>
+</iswc-mega-menu>
 ```
 
 ## API
@@ -77,13 +77,13 @@ enganchar CSS desde fuera.
 
 | Evento | detail | bubbles | composed | cancelable |
 | --- | --- | --- | --- | --- |
-| `is-show` | no | sí | sí | no |
-| `is-after-show` | no | sí | sí | no |
-| `is-hide` | no | sí | sí | no |
-| `is-after-hide` | no | sí | sí | no |
-| `is-select` | `{ href, text }` | sí | sí | no |
+| `iswc-show` | no | sí | sí | no |
+| `iswc-after-show` | no | sí | sí | no |
+| `iswc-hide` | no | sí | sí | no |
+| `iswc-after-hide` | no | sí | sí | no |
+| `iswc-select` | `{ href, text }` | sí | sí | no |
 
-Vocabulario unificado con `ModalBase`. Los antiguos `is-open` / `is-close`
+Vocabulario unificado con `ModalBase`. Los antiguos `iswc-open` / `iswc-close`
 ya no se emiten.
 
 ### Métodos y propiedades públicas
@@ -99,7 +99,7 @@ ya no se emiten.
 | Part | Uso |
 | --- | --- |
 | `root` | Contenedor relativo del trigger y el panel. |
-| `trigger` | El `<is-button>` que abre el menú. |
+| `trigger` | El `<iswc-button>` que abre el menú. |
 | `panel` | El `<dialog>` con las columnas. |
 
 ### Custom states
@@ -117,11 +117,11 @@ No declara integración form-associated propia en este módulo.
 ## Comportamiento
 
 El panel es un `<dialog>` nativo en modo `show()` (no modal): es un popover
-anclado al trigger, no un diálogo. Migrarlo a `<is-dialog>` cambiaría la
+anclado al trigger, no un diálogo. Migrarlo a `<iswc-dialog>` cambiaría la
 semántica (focus-trap, backdrop, centrado) y el posicionamiento fijo que
 calcula el propio componente, así que se mantiene el `<dialog>` nativo.
 
-Un clic sobre cualquier `<a href>` proyectado emite `is-select` y cierra el
+Un clic sobre cualquier `<a href>` proyectado emite `iswc-select` y cierra el
 panel: la navegación la decide quien integra.
 
 ## Dependencias y componentes relacionados
@@ -130,18 +130,18 @@ panel: la navegación la decide quien integra.
 - [`../actions/button.js`](../actions/button.js)
 - [`../media/icon.js`](../media/icon.js)
 
-Tags del módulo: `<is-mega-menu>`.
+Tags del módulo: `<iswc-mega-menu>`.
 
 ## Accesibilidad
 
-El trigger es un `<is-button>` con `aria-haspopup="true"` y `aria-expanded`
+El trigger es un `<iswc-button>` con `aria-haspopup="true"` y `aria-expanded`
 sincronizado. El panel lleva `aria-label`. Con `hover`, el menú sigue siendo
 operable por teclado a través del trigger.
 
 ## Ejemplo avanzado
 
 ```html
-<is-mega-menu label="Catálogo" icon="mdi:view-grid" placement="bottom-end" width="52rem">
+<iswc-mega-menu label="Catálogo" icon="mdi:view-grid" placement="bottom-end" width="52rem">
   <div slot="column" title="Muebles">
     <a href="/sillas">Sillas</a>
     <a href="/mesas">Mesas</a>
@@ -153,13 +153,13 @@ operable por teclado a través del trigger.
     <strong>Nuevo catálogo 2026</strong>
     <a href="/catalogo">Ver ahora</a>
   </div>
-</is-mega-menu>
+</iswc-mega-menu>
 ```
 
 ## Errores comunes
 
 - Usar tag sin importar módulo primero.
-- Esperar navegación automática: `is-select` no cambia la URL.
+- Esperar navegación automática: `iswc-select` no cambia la URL.
 - Poner los enlaces fuera de un `slot="column"`: no se proyectan.
 - Copiar preview contra fuente actual; JS/CSS prevalecen.
 - Crear size color; usar font-size contextual y em.

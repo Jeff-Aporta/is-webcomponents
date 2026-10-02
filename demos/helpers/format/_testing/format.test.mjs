@@ -1,4 +1,4 @@
-// format.test.mjs — tests funcionales de <is-format> (switch universal date/number/bytes/relative/text).
+// format.test.mjs — tests funcionales de <iswc-format> (switch universal date/number/bytes/relative/text).
 //
 // Cubre cada rama:
 //   - date con pattern Excel: yyyy-mm-dd, dd/mm/yyyy, d-mmm-yyyy, h:mm am/pm.
@@ -13,7 +13,7 @@ const URL = `${BASE_URL}/demos/helpers/format/format.html`;
 
 function getByAttrs(page, attrs) {
   return page.evaluate((want) => {
-    const all = [...document.querySelectorAll('main is-format')];
+    const all = [...document.querySelectorAll('main iswc-format')];
     const el = all.find((e) => Object.entries(want).every(([k, v]) => {
       if (v === true) return e.hasAttribute(k);
       return e.getAttribute(k) === v;
@@ -33,7 +33,7 @@ tests.push({
     await page.goto(URL, { waitUntil: 'domcontentloaded' });
     await waitReady(page, 'data-format-ready');
     const r = await page.evaluate(() => {
-      const all = [...document.querySelectorAll('main is-format')];
+      const all = [...document.querySelectorAll('main iswc-format')];
       return {
         total: all.length,
         perType: {

@@ -1,6 +1,6 @@
 /**
  * code-highlight.test.ts — invariantes del motor nativo de resaltado
- * (sustituto de CodeMirror en <is-code>). No toca DOM ni CM: puro Node.
+ * (sustituto de CodeMirror en <iswc-code>). No toca DOM ni CM: puro Node.
  */
 import test from 'node:test';
 import assert from 'node:assert/strict';
@@ -81,13 +81,13 @@ test('css: propiedad, atom y comentario', () => {
 });
 
 test('diff: clase de línea por banda y tokens', () => {
-  assert.equal(diffLineClass('@@ -1,3 +1,4 @@'), 'is-diff-line-hunk');
-  assert.equal(diffLineClass('+hola'), 'is-diff-line-add');
-  assert.equal(diffLineClass('-chau'), 'is-diff-line-del');
-  assert.equal(diffLineClass('diff --git a/x b/x'), 'is-diff-line-file');
+  assert.equal(diffLineClass('@@ -1,3 +1,4 @@'), 'iswc-diff-line-hunk');
+  assert.equal(diffLineClass('+hola'), 'iswc-diff-line-add');
+  assert.equal(diffLineClass('-chau'), 'iswc-diff-line-del');
+  assert.equal(diffLineClass('diff --git a/x b/x'), 'iswc-diff-line-file');
   const { lines } = tokenizeCode('@@ -1 +1 @@\n+agregado\n normal\n', 'diff');
-  assert.equal(lines[0].lineClass, 'is-diff-line-hunk');
-  assert.equal(lines[1].lineClass, 'is-diff-line-add');
+  assert.equal(lines[0].lineClass, 'iswc-diff-line-hunk');
+  assert.equal(lines[1].lineClass, 'iswc-diff-line-add');
   assert.equal(lines[2].lineClass, null);
 });
 
@@ -103,6 +103,37 @@ test('seguridad: lineToHtml escapa y reconstruye el texto', () => {
   assert.ok(!html.includes('<b &&'), 'no debe quedar < crudo');
   assert.ok(html.includes('&lt;'), 'escapa <');
   assert.equal(tokensToText(lines[0].tokens), 'if (a < b && c > "&") { x = 1; }');
+});
+
+test('html: json multilínea en atributo no se traga el tag de cierre', () => {
+  const src = [
+    '<iswc-palette-selector value="acme" palettes=\'[',
+    '  { "value": "acme" }',
+    ']\'></iswc-palette-selector>',
+  ].join('\n');
+  const { lines, state } = tokenizeCode(src, 'html');
+  assert.equal(lines.map((l) => tokensToText(l.tokens)).join('\n'), src);
+  const mid = typesOf(lines[1].tokens);
+  assert.ok(mid.includes('string'), 'claves y textos del json');
+  assert.ok(mid.includes('punctuation'), 'llaves del json');
+  const last = lines[2].tokens;
+  const close = last.filter((t) => t.type === 'tag').map((t) => t.text).join('');
+  const punct = last.filter((t) => t.type === 'tagPunct').map((t) => t.text).join('');
+  assert.equal(close, 'iswc-palette-selector');
+  assert.ok(punct.includes('<') && punct.includes('/') && punct.includes('>'));
+  const swallowed = last.filter((t) => t.type === 'string').map((t) => t.text).join('');
+  assert.equal(swallowed.includes('iswc-palette-selector'), false);
+  assert.equal(state.htmlAttr, null);
+  assert.equal(state.inHtmlTag, false);
+});
+
+test('html: atributo de texto multilínea cierra y sigue el tag', () => {
+  const src = '<button title=\'hola\nmundo\'></button>';
+  const { lines } = tokenizeCode(src, 'html');
+  assert.equal(lines.map((l) => tokensToText(l.tokens)).join('\n'), src);
+  const last = lines[1].tokens;
+  assert.ok(last.some((t) => t.type === 'tag' && t.text === 'button'));
+  assert.ok(last.some((t) => t.type === 'tagPunct' && t.text === '>'));
 });
 
 test('estado vacío no se muta entre llamadas', () => {

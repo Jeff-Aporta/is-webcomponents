@@ -4,7 +4,7 @@
 //   - smoke: custom element definido, shadow DOM, input role=combobox,
 //     aria-autocomplete=list, listbox en dialog
 //   - funcional: filtrado en tiempo real al tipear, selección cierra el
-//     dialog, clearable limpia y emite is-input, value se sincroniza al input
+//     dialog, clearable limpia y emite iswc-input, value se sincroniza al input
 //   - accesibilidad: aria-expanded cambia, aria-controls referencia listbox,
 //     role=listbox, options con role=option, aria-selected
 //   - keyboard: ArrowDown/Up navega opciones filtradas, Enter confirma,
@@ -24,12 +24,12 @@ tests.push({
     await page.goto(URL, { waitUntil: 'domcontentloaded' });
     await waitReady(page, 'data-combobox-ready');
     const data = await page.evaluate(() => {
-      const cbs = [...document.querySelectorAll('is-combobox')];
+      const cbs = [...document.querySelectorAll('iswc-combobox')];
       return cbs.map((c) => {
         const sr = c.shadowRoot;
         const input = sr.querySelector('input.input');
         return {
-          defined: !!customElements.get('is-combobox'),
+          defined: !!customElements.get('iswc-combobox'),
           hasShadow: !!sr,
           inputRole: input?.getAttribute('role'),
           ariaAutoComplete: input?.getAttribute('aria-autocomplete'),
@@ -38,12 +38,12 @@ tests.push({
           listboxRole: sr.querySelector('[part="listbox"]')?.getAttribute('role'),
           listboxId: sr.querySelector('[part="listbox"]')?.id,
           dialog: !!sr.querySelector('dialog.popup'),
-          optionCount: c.querySelectorAll('is-option').length,
+          optionCount: c.querySelectorAll('iswc-option').length,
         };
       });
     });
     assert.equal(data.length, 4, 'debe haber 4 comboboxes');
-    assert.equal(data[0].defined, true, 'is-combobox debe estar definido');
+    assert.equal(data[0].defined, true, 'iswc-combobox debe estar definido');
     assert.equal(data[0].inputRole, 'combobox', 'input tiene role=combobox');
     assert.equal(data[0].ariaAutoComplete, 'list', 'aria-autocomplete=list');
     assert.equal(data[0].listboxRole, 'listbox', 'listbox tiene role=listbox');
@@ -60,7 +60,7 @@ tests.push({
     await page.goto(URL, { waitUntil: 'domcontentloaded' });
     await waitReady(page, 'data-combobox-ready');
     const r = await page.evaluate(() => {
-      const c = document.querySelector('#sec-basico is-combobox');
+      const c = document.querySelector('#sec-basico iswc-combobox');
       const input = c.shadowRoot.querySelector('input.input');
       return { value: c.value, inputValue: input.value };
     });
@@ -76,21 +76,21 @@ tests.push({
     await waitReady(page, 'data-combobox-ready');
     // Limpia valor inicial y enfoca para abrir el dialog
     await page.evaluate(() => {
-      const c = document.querySelector('#sec-basico is-combobox');
+      const c = document.querySelector('#sec-basico iswc-combobox');
       const input = c.shadowRoot.querySelector('input.input');
       c.value = '';
       input.focus();
     });
     await page.waitForTimeout(80);
     await page.evaluate(() => {
-      const c = document.querySelector('#sec-basico is-combobox');
+      const c = document.querySelector('#sec-basico iswc-combobox');
       const input = c.shadowRoot.querySelector('input.input');
       input.value = 'va';
       input.dispatchEvent(new Event('input', { bubbles: true }));
     });
     await page.waitForTimeout(50);
     const r = await page.evaluate(() => {
-      const c = document.querySelector('#sec-basico is-combobox');
+      const c = document.querySelector('#sec-basico iswc-combobox');
       const sr = c.shadowRoot;
       const opts = [...sr.querySelectorAll('[role="option"]')];
       return {
@@ -111,13 +111,13 @@ tests.push({
     await page.goto(URL, { waitUntil: 'domcontentloaded' });
     await waitReady(page, 'data-combobox-ready');
     await page.evaluate(() => {
-      const c = document.querySelector('#sec-basico is-combobox');
+      const c = document.querySelector('#sec-basico iswc-combobox');
       const input = c.shadowRoot.querySelector('input.input');
       input.focus();
     });
     await page.waitForTimeout(50);
     const r = await page.evaluate(() => {
-      const c = document.querySelector('#sec-basico is-combobox');
+      const c = document.querySelector('#sec-basico iswc-combobox');
       const sr = c.shadowRoot;
       // Filtrar por "val" para que solo aparezca Valencia
       const input = sr.querySelector('input.input');
@@ -134,12 +134,12 @@ tests.push({
 });
 
 tests.push({
-  name: 'funcional: clearable limpia y emite is-input',
+  name: 'funcional: clearable limpia y emite iswc-input',
   run: async (page) => {
     await page.goto(URL, { waitUntil: 'domcontentloaded' });
     await waitReady(page, 'data-combobox-ready');
     const r = await page.evaluate(() => {
-      const c = document.querySelector('#sec-clear is-combobox');
+      const c = document.querySelector('#sec-clear iswc-combobox');
       const sr = c.shadowRoot;
       const clearBtn = sr.querySelector('[part="clear"]');
       const before = { value: c.value, hidden: clearBtn.hidden };
@@ -168,7 +168,7 @@ tests.push({
     await waitReady(page, 'data-combobox-ready');
     // Limpia valor inicial para que el filtro no filtre por "mad"
     await page.evaluate(() => {
-      const c = document.querySelector('#sec-basico is-combobox');
+      const c = document.querySelector('#sec-basico iswc-combobox');
       c.value = 'sev';
       const input = c.shadowRoot.querySelector('input.input');
       input.focus();
@@ -178,7 +178,7 @@ tests.push({
     });
     await page.waitForTimeout(80);
     const data = await page.evaluate(() => {
-      const c = document.querySelector('#sec-basico is-combobox');
+      const c = document.querySelector('#sec-basico iswc-combobox');
       const sr = c.shadowRoot;
       const opts = [...sr.querySelectorAll('[role="option"]')];
       return opts.map((o) => ({
@@ -199,7 +199,7 @@ tests.push({
     await page.goto(URL, { waitUntil: 'domcontentloaded' });
     await waitReady(page, 'data-combobox-ready');
     await page.evaluate(() => {
-      const c = document.querySelector('#sec-basico is-combobox');
+      const c = document.querySelector('#sec-basico iswc-combobox');
       const sr = c.shadowRoot;
       c.value = '';
       sr.querySelector('input.input').focus();
@@ -207,7 +207,7 @@ tests.push({
     await page.waitForTimeout(50);
     // Filtrar para que aparezca "Barcelona"
     await page.evaluate(() => {
-      const c = document.querySelector('#sec-basico is-combobox');
+      const c = document.querySelector('#sec-basico iswc-combobox');
       const sr = c.shadowRoot;
       const input = sr.querySelector('input.input');
       input.value = 'barc';
@@ -218,7 +218,7 @@ tests.push({
     await page.keyboard.press('ArrowDown');
     await page.waitForTimeout(50);
     const active = await page.evaluate(() => {
-      const sr = document.querySelector('#sec-basico is-combobox').shadowRoot;
+      const sr = document.querySelector('#sec-basico iswc-combobox').shadowRoot;
       return sr.querySelector('[data-active]')?.textContent?.trim();
     });
     assert.equal(active, 'Barcelona', 'ArrowDown activa Barcelona');
@@ -227,7 +227,7 @@ tests.push({
     await page.keyboard.press('Enter');
     await page.waitForTimeout(80);
     const after = await page.evaluate(() => {
-      const c = document.querySelector('#sec-basico is-combobox');
+      const c = document.querySelector('#sec-basico iswc-combobox');
       return { value: c.value, inputValue: c.shadowRoot.querySelector('input.input').value };
     });
     assert.equal(after.value, 'bcn', 'Enter confirma Barcelona');
@@ -241,16 +241,16 @@ tests.push({
     await page.goto(URL, { waitUntil: 'domcontentloaded' });
     await waitReady(page, 'data-combobox-ready');
     const before = await page.evaluate(() => {
-      const c = document.querySelector('#sec-clear is-combobox');
+      const c = document.querySelector('#sec-clear iswc-combobox');
       return c.value;
     });
     await page.evaluate(() => {
-      document.querySelector('#sec-clear is-combobox').shadowRoot.querySelector('input.input').focus();
+      document.querySelector('#sec-clear iswc-combobox').shadowRoot.querySelector('input.input').focus();
     });
     await page.waitForTimeout(50);
     // Tipear algo que no coincide
     await page.evaluate(() => {
-      const c = document.querySelector('#sec-clear is-combobox');
+      const c = document.querySelector('#sec-clear iswc-combobox');
       const sr = c.shadowRoot;
       const input = sr.querySelector('input.input');
       input.value = 'xyz';
@@ -260,7 +260,7 @@ tests.push({
     await page.keyboard.press('Escape');
     await page.waitForTimeout(80);
     const after = await page.evaluate(() => {
-      const c = document.querySelector('#sec-clear is-combobox');
+      const c = document.querySelector('#sec-clear iswc-combobox');
       const sr = c.shadowRoot;
       return {
         value: c.value,
@@ -280,15 +280,15 @@ tests.push({
     await page.goto(URL, { waitUntil: 'domcontentloaded' });
     await waitReady(page, 'data-combobox-ready');
     await page.evaluate(() => {
-      const c = document.querySelector('#sec-clear is-combobox');
+      const c = document.querySelector('#sec-clear iswc-combobox');
       // deshabilitar la primera opción
-      const opt = c.querySelector('is-option[value="brasil"]');
+      const opt = c.querySelector('iswc-option[value="brasil"]');
       opt.setAttribute('disabled', '');
       c.shadowRoot.querySelector('input.input').focus();
     });
     await page.waitForTimeout(50);
     const r = await page.evaluate(() => {
-      const c = document.querySelector('#sec-clear is-combobox');
+      const c = document.querySelector('#sec-clear iswc-combobox');
       const sr = c.shadowRoot;
       const opts = [...sr.querySelectorAll('[role="option"]')];
       return opts.map((o) => o.getAttribute('data-value'));
@@ -303,7 +303,7 @@ tests.push({
     await page.goto(URL, { waitUntil: 'domcontentloaded' });
     await waitReady(page, 'data-combobox-ready');
     const r = await page.evaluate(() => {
-      const c = document.querySelector('#sec-required is-combobox');
+      const c = document.querySelector('#sec-required iswc-combobox');
       const valid = c.checkValidity();
       const required = c.required;
       return { valid, required };
@@ -319,14 +319,14 @@ tests.push({
     await page.goto(URL, { waitUntil: 'domcontentloaded' });
     await waitReady(page, 'data-combobox-ready');
     await page.evaluate(() => {
-      const c = document.querySelector('#sec-basico is-combobox');
+      const c = document.querySelector('#sec-basico iswc-combobox');
       const sr = c.shadowRoot;
       c.value = '';
       sr.querySelector('input.input').focus();
     });
     await page.waitForTimeout(80);
     const r = await page.evaluate(() => {
-      const c = document.querySelector('#sec-basico is-combobox');
+      const c = document.querySelector('#sec-basico iswc-combobox');
       const sr = c.shadowRoot;
       return sr.querySelectorAll('[role="option"]').length;
     });

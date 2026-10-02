@@ -20,12 +20,12 @@ tests.push({
     await page.goto(URL, { waitUntil: 'domcontentloaded' });
     await waitReady(page, 'data-pin-input-ready');
     const data = await page.evaluate(() => {
-      const pins = [...document.querySelectorAll('is-pin-input')];
+      const pins = [...document.querySelectorAll('iswc-pin-input')];
       return pins.map((p) => {
         const sr = p.shadowRoot;
         const cells = [...sr.querySelectorAll('input.cell')];
         return {
-          defined: !!customElements.get('is-pin-input'),
+          defined: !!customElements.get('iswc-pin-input'),
           hasShadow: !!sr,
           cellsCount: cells.length,
           groupRole: sr?.querySelector('.pin')?.getAttribute('role'),
@@ -37,7 +37,7 @@ tests.push({
       });
     });
     assert.equal(data.length, 5, 'debe haber 5 pin-inputs (otp, pin, corto, texto, bloqueado)');
-    assert.equal(data[0].defined, true, 'is-pin-input definido');
+    assert.equal(data[0].defined, true, 'iswc-pin-input definido');
     assert.equal(data[0].hasShadow, true, 'shadow root presente');
     assert.equal(data[0].cellsCount, 6, '#otp tiene 6 celdas');
     assert.equal(data[1].cellsCount, 4, '#pin tiene 4 celdas');
@@ -106,20 +106,20 @@ tests.push({
 });
 
 tests.push({
-  name: 'funcional: setear value rellena las celdas y emite is-pin-complete si está lleno',
+  name: 'funcional: setear value rellena las celdas y emite iswc-pin-complete si está lleno',
   run: async (page) => {
     await page.goto(URL, { waitUntil: 'domcontentloaded' });
     await waitReady(page, 'data-pin-input-ready');
     const result = await page.evaluate(() => {
       return new Promise((resolve) => {
         const pin = document.querySelector('#otp');
-        pin.addEventListener('is-pin-complete', (e) => {
+        pin.addEventListener('iswc-pin-complete', (e) => {
           resolve({ eventValue: e.detail.value });
         }, { once: true });
         pin.value = '424242';
       });
     });
-    assert.equal(result.eventValue, '424242', 'is-pin-complete disparado con "424242"');
+    assert.equal(result.eventValue, '424242', 'iswc-pin-complete disparado con "424242"');
   },
 });
 

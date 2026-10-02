@@ -298,7 +298,7 @@
 13. **Persistencia tras refresh con paleta custom** — [Estado visual y edge cases]
     - Setup: crear paleta custom; refrescar (F5).
     - Acción: comparar paleta persistida.
-    - Assertion: la paleta custom reaparece; `localStorage` key se mantiene estable (p. ej. `is-palette-custom-v1`); no se cae a default.
+    - Assertion: la paleta custom reaparece; `localStorage` key se mantiene estable (p. ej. `iswc-palette-custom-v1`); no se cae a default.
     - Cobertura: refresh persistence + storage schema.
 
 14. **Contraste de texto en preview cumple AA en todos los temas** — [ARIA / a11y]
@@ -330,7 +330,7 @@
 1. **Persistencia del theme switcher cross-page** — [Estado visual y edge cases]
    - Setup: cambiar a `dark` en home.
    - Acción: navegar a ecosystem, theming y de vuelta a home.
-   - Assertion: en los tres destinos `data-theme="dark"` está activo; `localStorage.is-theme` mantiene valor; el switcher del navbar muestra icono consistente en las 3 vistas.
+   - Assertion: en los tres destinos `data-theme="dark"` está activo; `localStorage.iswc-theme` mantiene valor; el switcher del navbar muestra icono consistente en las 3 vistas.
    - Cobertura: cross-page state integrity.
 
 2. **Persistencia del palette switcher cross-page** — [Interacción]
@@ -388,7 +388,7 @@
     - Cobertura: landmark navigation, not tab trap.
 
 11. **Cambiar tema con `prefers-color-scheme` se respeta al primer load** — [Estado visual y edge cases]
-    - Setup: limpiar `localStorage.is-theme`; emular `prefers-color-scheme: dark`.
+    - Setup: limpiar `localStorage.iswc-theme`; emular `prefers-color-scheme: dark`.
     - Acción: cargar home por primera vez.
     - Assertion: el sitio abre en dark; el switcher refleja `aria-pressed=true` para dark.
     - Cobertura: first-paint theme inference.

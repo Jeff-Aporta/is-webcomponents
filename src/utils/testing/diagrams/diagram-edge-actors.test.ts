@@ -52,7 +52,7 @@ const spec = resolveComponentSpec({
     components: [
       {
         id: 'a', name: 'Portal', x: 20, y: 40, w: 160, h: 70,
-        items: ['GET /api/is-swagger'],
+        items: ['GET /api/iswc-swagger'],
       },
       {
         id: 'b', name: 'auth', x: 360, y: 40, w: 220, h: 90,

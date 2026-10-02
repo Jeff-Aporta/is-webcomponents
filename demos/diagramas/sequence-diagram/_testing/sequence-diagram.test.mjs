@@ -9,21 +9,21 @@ const URL = `${BASE_URL}/demos/diagramas/sequence-diagram/sequence-diagram.html`
 const tests = [];
 
 tests.push({
-  name: 'smoke: <is-sequence-diagram> monta y renderiza actores y mensajes',
+  name: 'smoke: <iswc-sequence-diagram> monta y renderiza actores y mensajes',
   run: async (page) => {
     await page.goto(URL, { waitUntil: 'domcontentloaded' });
     await waitReady(page, 'data-sequence-ready');
     const info = await page.evaluate(() => {
-      const el = document.querySelector('main is-sequence-diagram');
+      const el = document.querySelector('main iswc-sequence-diagram');
       const shadow = el?.shadowRoot;
       return {
-        defined: !!customElements.get('is-sequence-diagram'),
+        defined: !!customElements.get('iswc-sequence-diagram'),
         actors: shadow?.querySelectorAll('.seq-actor').length ?? 0,
         messages: shadow?.querySelectorAll('[data-msg-id]').length ?? 0,
         hasSvg: !!shadow?.querySelector('svg.seq-svg'),
       };
     });
-    assert.equal(info.defined, true, 'is-sequence-diagram debe estar definido');
+    assert.equal(info.defined, true, 'iswc-sequence-diagram debe estar definido');
     assert.ok(info.actors >= 4, `esperaba >=4 actores, hay ${info.actors}`);
     assert.ok(info.messages >= 5, `esperaba >=5 mensajes (3 + 2 alt), hay ${info.messages}`);
     assert.equal(info.hasSvg, true, 'debe existir <svg class="seq-svg">');
@@ -37,7 +37,7 @@ tests.push({
     await page.goto(URL, { waitUntil: 'domcontentloaded' });
     await waitReady(page, 'data-sequence-ready');
     const labels = await page.evaluate(() => {
-      const el = document.querySelector('main is-sequence-diagram');
+      const el = document.querySelector('main iswc-sequence-diagram');
       return [...el.shadowRoot.querySelectorAll('.seq-actor')].map((g) => g.textContent.trim());
     });
     const joined = labels.join(' | ');
@@ -53,7 +53,7 @@ tests.push({
     await page.goto(URL, { waitUntil: 'domcontentloaded' });
     await waitReady(page, 'data-sequence-ready');
     const lifelines = await page.evaluate(() => {
-      const el = document.querySelector('main is-sequence-diagram');
+      const el = document.querySelector('main iswc-sequence-diagram');
       return [...el.shadowRoot.querySelectorAll('svg line')].filter((l) => l.getAttribute('stroke-dasharray')).length;
     });
     assert.ok(lifelines >= 4, `esperaba >=4 lifelines (líneas dashed), hay ${lifelines}`);
@@ -66,7 +66,7 @@ tests.push({
     await page.goto(URL, { waitUntil: 'domcontentloaded' });
     await waitReady(page, 'data-sequence-ready');
     const ids = await page.evaluate(() => {
-      const el = document.querySelector('main is-sequence-diagram');
+      const el = document.querySelector('main iswc-sequence-diagram');
       return [...el.shadowRoot.querySelectorAll('[data-msg-id]')].map((g) => g.dataset.msgId);
     });
     assert.ok(ids.includes('m1'), 'debe existir mensaje "m1"');
@@ -80,7 +80,7 @@ tests.push({
     await page.goto(URL, { waitUntil: 'domcontentloaded' });
     await waitReady(page, 'data-sequence-ready');
     const conditions = await page.evaluate(() => {
-      const el = document.querySelector('main is-sequence-diagram');
+      const el = document.querySelector('main iswc-sequence-diagram');
       const texts = [...el.shadowRoot.querySelectorAll('text')].map((t) => t.textContent.trim());
       return texts.filter((t) => /pwd OK|pwd FAIL/.test(t));
     });
@@ -95,16 +95,16 @@ tests.push({
     await page.goto(URL, { waitUntil: 'domcontentloaded' });
     await waitReady(page, 'data-sequence-ready');
     const before = await page.evaluate(() => {
-      const el = document.querySelector('main is-sequence-diagram');
+      const el = document.querySelector('main iswc-sequence-diagram');
       return el.shadowRoot.querySelector('svg.seq-svg').getAttribute('viewBox');
     });
     await page.evaluate(() => {
-      const el = document.querySelector('main is-sequence-diagram');
+      const el = document.querySelector('main iswc-sequence-diagram');
       el.payload = el.payload;
     });
     await page.waitForTimeout(150);
     const after = await page.evaluate(() => {
-      const el = document.querySelector('main is-sequence-diagram');
+      const el = document.querySelector('main iswc-sequence-diagram');
       return el.shadowRoot.querySelector('svg.seq-svg').getAttribute('viewBox');
     });
     assert.equal(before, after, 'viewBox idéntico tras re-asignar payload');
@@ -117,7 +117,7 @@ tests.push({
     await page.goto(URL, { waitUntil: 'domcontentloaded' });
     await waitReady(page, 'data-sequence-ready');
     const meta = await page.evaluate(() => {
-      const el = document.querySelector('main is-sequence-diagram');
+      const el = document.querySelector('main iswc-sequence-diagram');
       const svg = el.shadowRoot.querySelector('svg.seq-svg');
       return { aria: svg.getAttribute('aria-label'), role: svg.getAttribute('role') };
     });

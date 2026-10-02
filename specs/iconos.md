@@ -1,6 +1,6 @@
 # Spec — Iconos
 
-Resolución de `<is-icon>` y corpus local Iconify.
+Resolución de `<iswc-icon>` y corpus local Iconify.
 
 Diario (errores, entorno): [`lessons.md`](lessons.md) §Iconos · [`constraints.md`](constraints.md) §CDN e iconos.
 
@@ -10,8 +10,8 @@ Los iconos usan colecciones Iconify. El kit prioriza SVG local para latencia y `
 
 ## S-I1 API pública
 
-- `<is-icon icon="mdi:home">` o `icon="tabler:…"` (prefijo colección).
-- `<is-icon src="…">` para SVG/imagen custom.
+- `<iswc-icon icon="mdi:home">` o `icon="tabler:…"` (prefijo colección).
+- `<iswc-icon src="…">` para SVG/imagen custom.
 - **Prohibido** `<iconify-icon>` en light DOM del consumidor.
 
 ## S-I2 Cadena de resolución

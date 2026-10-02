@@ -6,9 +6,9 @@ import { INTENT } from '../_shared/intent.js';
 import { TONE } from '../_shared/tone.js';
 
 /**
- * <is-tag> — Web Component (vanilla).
+ * <iswc-tag> — Web Component (vanilla).
  *
- * Similar a is-badge; default variant filled-outlined, color neutral.
+ * Similar a iswc-badge; default variant filled-outlined, color neutral.
  * Escala con font-size del contexto (métricas en em).
  *
  * Atributos
@@ -19,7 +19,7 @@ import { TONE } from '../_shared/tone.js';
  *   remove-label  string — aria-label del botón (default Quitar)
  *
  * Eventos
- *   is-remove  — click en botón quitar (bubbles, composed)
+ *   iswc-remove  — click en botón quitar (bubbles, composed)
  */
 
 (() => {
@@ -29,7 +29,7 @@ import { TONE } from '../_shared/tone.js';
       <span part="start" class="prefix"><slot name="start"></slot></span>
       <span part="label" class="label"><slot></slot></span>
       <span part="end" class="suffix"><slot name="end"></slot></span>
-      <is-button
+      <iswc-button
         type="button"
         part="remove-button"
         class="remove"
@@ -38,8 +38,8 @@ import { TONE } from '../_shared/tone.js';
         aria-label="Quitar"
         hidden
       >
-        <is-icon icon="mdi:close" aria-hidden="true"></is-icon>
-      </is-button>
+        <iswc-icon icon="mdi:close" aria-hidden="true"></iswc-icon>
+      </iswc-button>
     </span>
   `;
 
@@ -47,7 +47,7 @@ import { TONE } from '../_shared/tone.js';
   const VALID_COLOR = [...INTENT, 'info'];
   const VALID_VARIANT = TONE.filter((t) => t !== 'plain');
 
-  class IsTag extends ElementBase {
+  class IswcTag extends ElementBase {
     static get observedAttributes(): string[] { return OBSERVED; }
 
     #remove!: HTMLElement;
@@ -117,9 +117,9 @@ import { TONE } from '../_shared/tone.js';
 
     #onRemove = (e: Event) => {
       e.stopPropagation();
-      emit(this, 'is-remove');
+      emit(this, 'iswc-remove');
     };
   }
 
-  defineElement('is-tag', IsTag, 'IsTag');
+  defineElement('iswc-tag', IswcTag, 'IswcTag');
 })();

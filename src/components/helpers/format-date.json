@@ -1,10 +1,10 @@
 {
-  "$schema": "is-preview/v1",
-  "tag": "is-format-date",
+  "$schema": "iswc-preview/v1",
+  "tag": "iswc-format-date",
   "category": "helpers",
-  "title": "<is-format-date>",
+  "title": "<iswc-format-date>",
   "titleHtml": true,
-  "storageKey": "docs-is-format-date",
+  "storageKey": "docs-iswc-format-date",
   "hasBehavior": true,
   "sections": [
     {
@@ -14,7 +14,7 @@
       "blocks": [
         {
           "kind": "demo",
-          "html": "<span class=\"demo-label\">ahora · en vivo</span>\n          <p style=\"margin:0;font-size:1.25rem;font-weight:600\">\n            <is-format-date hour=\"numeric\" minute=\"numeric\" second=\"numeric\" year=\"numeric\" month=\"short\" day=\"numeric\"></is-format-date>\n          </p>",
+          "html": "<span class=\"demo-label\">ahora · en vivo</span>\n          <p style=\"margin:0;font-size:1.25rem;font-weight:600\">\n            <iswc-format-date hour=\"numeric\" minute=\"numeric\" second=\"numeric\" year=\"numeric\" month=\"short\" day=\"numeric\"></iswc-format-date>\n          </p>",
           "controls": [
             {
               "control": "text",
@@ -108,7 +108,7 @@
       "blocks": [
         {
           "kind": "demo",
-          "html": "<div class=\"format-grid format-grid--cards\">\n            <div class=\"format-grid__row\">\n              <code class=\"format-grid__tag\">fecha + hora + s</code>\n              <is-format-date class=\"format-grid__value\" year=\"numeric\" month=\"short\" day=\"numeric\" hour=\"numeric\" minute=\"numeric\" second=\"numeric\"></is-format-date>\n            </div>\n            <div class=\"format-grid__row\">\n              <code class=\"format-grid__tag\">solo día</code>\n              <is-format-date class=\"format-grid__value\" year=\"numeric\" month=\"short\" day=\"numeric\"></is-format-date>\n            </div>\n            <div class=\"format-grid__row\">\n              <code class=\"format-grid__tag\">timestamp (attr)</code>\n              <is-format-date class=\"format-grid__value\" year=\"numeric\" month=\"short\" day=\"numeric\" hour=\"numeric\" minute=\"numeric\" second=\"numeric\"></is-format-date>\n            </div>\n          </div>"
+          "html": "<div class=\"format-grid format-grid--cards\">\n            <div class=\"format-grid__row\">\n              <code class=\"format-grid__tag\">fecha + hora + s</code>\n              <iswc-format-date class=\"format-grid__value\" year=\"numeric\" month=\"short\" day=\"numeric\" hour=\"numeric\" minute=\"numeric\" second=\"numeric\"></iswc-format-date>\n            </div>\n            <div class=\"format-grid__row\">\n              <code class=\"format-grid__tag\">solo día</code>\n              <iswc-format-date class=\"format-grid__value\" year=\"numeric\" month=\"short\" day=\"numeric\"></iswc-format-date>\n            </div>\n            <div class=\"format-grid__row\">\n              <code class=\"format-grid__tag\">timestamp (attr)</code>\n              <iswc-format-date class=\"format-grid__value\" year=\"numeric\" month=\"short\" day=\"numeric\" hour=\"numeric\" minute=\"numeric\" second=\"numeric\"></iswc-format-date>\n            </div>\n          </div>"
         }
       ]
     },
@@ -123,7 +123,7 @@
         },
         {
           "kind": "code",
-          "code": "<is-format-date\n  locale=\"ja\"\n  weekday=\"long\" month=\"long\" day=\"numeric\" year=\"numeric\"\n  hour=\"numeric\" minute=\"numeric\" second=\"numeric\"\n></is-format-date>\n<!-- en el preview, date se reescribe cada 1s con Date.now() -->",
+          "code": "<iswc-format-date\n  locale=\"ja\"\n  weekday=\"long\" month=\"long\" day=\"numeric\" year=\"numeric\"\n  hour=\"numeric\" minute=\"numeric\" second=\"numeric\"\n></iswc-format-date>\n<!-- en el preview, date se reescribe cada 1s con Date.now() -->",
           "lang": "html"
         }
       ]
@@ -135,7 +135,7 @@
       "blocks": [
         {
           "kind": "demo",
-          "html": "<div class=\"format-grid format-grid--cards\">\n            <div class=\"format-grid__row\">\n              <code class=\"format-grid__tag\">weekday long</code>\n              <is-format-date class=\"format-grid__value\" weekday=\"long\"></is-format-date>\n            </div>\n            <div class=\"format-grid__row\">\n              <code class=\"format-grid__tag\">month short</code>\n              <is-format-date class=\"format-grid__value\" month=\"short\" day=\"numeric\"></is-format-date>\n            </div>\n            <div class=\"format-grid__row\">\n              <code class=\"format-grid__tag\">month narrow · 2-digit</code>\n              <is-format-date class=\"format-grid__value\" month=\"narrow\" day=\"numeric\" year=\"2-digit\"></is-format-date>\n            </div>\n            <div class=\"format-grid__row\">\n              <code class=\"format-grid__tag\">era · short</code>\n              <is-format-date class=\"format-grid__value\" era=\"short\" year=\"numeric\" month=\"long\" day=\"numeric\"></is-format-date>\n            </div>\n            <div class=\"format-grid__row\">\n              <code class=\"format-grid__tag\">year 2-digit</code>\n              <is-format-date class=\"format-grid__value\" year=\"2-digit\" month=\"numeric\" day=\"numeric\"></is-format-date>\n            </div>\n          </div>"
+          "html": "<div class=\"format-grid format-grid--cards\">\n            <div class=\"format-grid__row\">\n              <code class=\"format-grid__tag\">weekday long</code>\n              <iswc-format-date class=\"format-grid__value\" weekday=\"long\"></iswc-format-date>\n            </div>\n            <div class=\"format-grid__row\">\n              <code class=\"format-grid__tag\">month short</code>\n              <iswc-format-date class=\"format-grid__value\" month=\"short\" day=\"numeric\"></iswc-format-date>\n            </div>\n            <div class=\"format-grid__row\">\n              <code class=\"format-grid__tag\">month narrow · 2-digit</code>\n              <iswc-format-date class=\"format-grid__value\" month=\"narrow\" day=\"numeric\" year=\"2-digit\"></iswc-format-date>\n            </div>\n            <div class=\"format-grid__row\">\n              <code class=\"format-grid__tag\">era · short</code>\n              <iswc-format-date class=\"format-grid__value\" era=\"short\" year=\"numeric\" month=\"long\" day=\"numeric\"></iswc-format-date>\n            </div>\n            <div class=\"format-grid__row\">\n              <code class=\"format-grid__tag\">year 2-digit</code>\n              <iswc-format-date class=\"format-grid__value\" year=\"2-digit\" month=\"numeric\" day=\"numeric\"></iswc-format-date>\n            </div>\n          </div>"
         }
       ]
     },
@@ -146,11 +146,11 @@
       "blocks": [
         {
           "kind": "demo",
-          "html": "<div class=\"format-grid format-grid--cards\">\n            <div class=\"format-grid__row\">\n              <code class=\"format-grid__tag\">24h</code>\n              <is-format-date class=\"format-grid__value\" hour=\"numeric\" minute=\"numeric\" second=\"numeric\" hour-format=\"24\"></is-format-date>\n            </div>\n            <div class=\"format-grid__row\">\n              <code class=\"format-grid__tag\">12h</code>\n              <is-format-date class=\"format-grid__value\" hour=\"numeric\" minute=\"numeric\" second=\"numeric\" hour-format=\"12\"></is-format-date>\n            </div>\n            <div class=\"format-grid__row\">\n              <code class=\"format-grid__tag\">auto</code>\n              <is-format-date class=\"format-grid__value\" hour=\"numeric\" minute=\"numeric\" second=\"numeric\" hour-format=\"auto\"></is-format-date>\n            </div>\n          </div>"
+          "html": "<div class=\"format-grid format-grid--cards\">\n            <div class=\"format-grid__row\">\n              <code class=\"format-grid__tag\">24h</code>\n              <iswc-format-date class=\"format-grid__value\" hour=\"numeric\" minute=\"numeric\" second=\"numeric\" hour-format=\"24\"></iswc-format-date>\n            </div>\n            <div class=\"format-grid__row\">\n              <code class=\"format-grid__tag\">12h</code>\n              <iswc-format-date class=\"format-grid__value\" hour=\"numeric\" minute=\"numeric\" second=\"numeric\" hour-format=\"12\"></iswc-format-date>\n            </div>\n            <div class=\"format-grid__row\">\n              <code class=\"format-grid__tag\">auto</code>\n              <iswc-format-date class=\"format-grid__value\" hour=\"numeric\" minute=\"numeric\" second=\"numeric\" hour-format=\"auto\"></iswc-format-date>\n            </div>\n          </div>"
         },
         {
           "kind": "code",
-          "code": "<is-format-date hour=\"numeric\" minute=\"numeric\" second=\"numeric\" hour-format=\"24\"></is-format-date>\n<is-format-date hour=\"numeric\" minute=\"numeric\" second=\"numeric\" hour-format=\"12\"></is-format-date>",
+          "code": "<iswc-format-date hour=\"numeric\" minute=\"numeric\" second=\"numeric\" hour-format=\"24\"></iswc-format-date>\n<iswc-format-date hour=\"numeric\" minute=\"numeric\" second=\"numeric\" hour-format=\"12\"></iswc-format-date>",
           "lang": "html"
         }
       ]
@@ -162,7 +162,7 @@
       "blocks": [
         {
           "kind": "demo",
-          "html": "<div class=\"format-grid format-grid--cards\">\n            <div class=\"format-grid__row\">\n              <code class=\"format-grid__tag\">UTC · short</code>\n              <is-format-date class=\"format-grid__value\" time-zone=\"UTC\" time-zone-name=\"short\"\n                year=\"numeric\" month=\"short\" day=\"numeric\" hour=\"numeric\" minute=\"numeric\" second=\"numeric\" hour-format=\"24\"></is-format-date>\n            </div>\n            <div class=\"format-grid__row\">\n              <code class=\"format-grid__tag\">America/Bogota</code>\n              <is-format-date class=\"format-grid__value\" time-zone=\"America/Bogota\" time-zone-name=\"short\"\n                year=\"numeric\" month=\"short\" day=\"numeric\" hour=\"numeric\" minute=\"numeric\" second=\"numeric\" hour-format=\"24\"></is-format-date>\n            </div>\n            <div class=\"format-grid__row\">\n              <code class=\"format-grid__tag\">Europe/Madrid</code>\n              <is-format-date class=\"format-grid__value\" time-zone=\"Europe/Madrid\" time-zone-name=\"shortOffset\"\n                hour=\"numeric\" minute=\"numeric\" second=\"numeric\" hour-format=\"24\"></is-format-date>\n            </div>\n            <div class=\"format-grid__row\">\n              <code class=\"format-grid__tag\">Asia/Tokyo</code>\n              <is-format-date class=\"format-grid__value\" time-zone=\"Asia/Tokyo\" time-zone-name=\"short\"\n                hour=\"numeric\" minute=\"numeric\" second=\"numeric\" hour-format=\"24\"></is-format-date>\n            </div>\n          </div>"
+          "html": "<div class=\"format-grid format-grid--cards\">\n            <div class=\"format-grid__row\">\n              <code class=\"format-grid__tag\">UTC · short</code>\n              <iswc-format-date class=\"format-grid__value\" time-zone=\"UTC\" time-zone-name=\"short\"\n                year=\"numeric\" month=\"short\" day=\"numeric\" hour=\"numeric\" minute=\"numeric\" second=\"numeric\" hour-format=\"24\"></iswc-format-date>\n            </div>\n            <div class=\"format-grid__row\">\n              <code class=\"format-grid__tag\">America/Bogota</code>\n              <iswc-format-date class=\"format-grid__value\" time-zone=\"America/Bogota\" time-zone-name=\"short\"\n                year=\"numeric\" month=\"short\" day=\"numeric\" hour=\"numeric\" minute=\"numeric\" second=\"numeric\" hour-format=\"24\"></iswc-format-date>\n            </div>\n            <div class=\"format-grid__row\">\n              <code class=\"format-grid__tag\">Europe/Madrid</code>\n              <iswc-format-date class=\"format-grid__value\" time-zone=\"Europe/Madrid\" time-zone-name=\"shortOffset\"\n                hour=\"numeric\" minute=\"numeric\" second=\"numeric\" hour-format=\"24\"></iswc-format-date>\n            </div>\n            <div class=\"format-grid__row\">\n              <code class=\"format-grid__tag\">Asia/Tokyo</code>\n              <iswc-format-date class=\"format-grid__value\" time-zone=\"Asia/Tokyo\" time-zone-name=\"short\"\n                hour=\"numeric\" minute=\"numeric\" second=\"numeric\" hour-format=\"24\"></iswc-format-date>\n            </div>\n          </div>"
         }
       ]
     },

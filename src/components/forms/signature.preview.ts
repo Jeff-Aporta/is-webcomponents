@@ -1,5 +1,5 @@
 /**
- * Behavior migrado desde HTML inline de is-signature.
+ * Behavior migrado desde HTML inline de iswc-signature.
  * Se ejecuta en mount() tras pintar la definition JSON.
  * @param {import('../../previews/_kit/types.d.ts').PreviewMountContext} ctx
  */

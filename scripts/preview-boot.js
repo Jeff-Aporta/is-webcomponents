@@ -35,11 +35,11 @@
   let palette = PALETTES.has(paletteParam) ? paletteParam : null;
 
   if (!theme) {
-    const ls = localStorage.getItem('is-theme');
+    const ls = localStorage.getItem('iswc-theme');
     theme = THEMES.has(ls) ? ls : (root.dataset.theme || 'dark');
   }
   if (!palette) {
-    const ls = localStorage.getItem('is-palette');
+    const ls = localStorage.getItem('iswc-palette');
     palette = PALETTES.has(ls) ? ls : (root.dataset.palette || 'contapyme');
   }
 

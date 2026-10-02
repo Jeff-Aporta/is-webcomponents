@@ -1,22 +1,22 @@
 ---
-tag: is-btn-ref
+tag: iswc-btn-ref
 tags:
-  - is-btn-ref
+  - iswc-btn-ref
 category: isp
 status: public
 source: ./btn-ref.js
 style: ./btn-ref.css
 preview: ./btn-ref.json
 ---
-# `<is-btn-ref>`
+# `<iswc-btn-ref>`
 
 ## Propósito
 
 Campo de referencia portado de `BtnRef.svelte` (ISP): input + botón filtro que
-abre un modal con `<is-catalogo-gen select-mode>` para elegir un registro y
+abre un modal con `<iswc-catalogo-gen select-mode>` para elegir un registro y
 mostrar la descripción (`ColumnsBtnRef`) bajo el valor.
 
-Este módulo registra `<is-btn-ref>`.
+Este módulo registra `<iswc-btn-ref>`.
 
 ## Cuándo usarlo
 
@@ -25,8 +25,8 @@ clave o la busca en modal.
 
 ## Cuándo no usarlo
 
-Listado CRUD completo → `<is-catalogo-gen>`. Combobox de opciones estáticas →
-`<is-combobox>` / `<is-select>`.
+Listado CRUD completo → `<iswc-catalogo-gen>`. Combobox de opciones estáticas →
+`<iswc-combobox>` / `<iswc-select>`.
 
 ## Importación
 
@@ -37,7 +37,7 @@ import './btn-ref.js';
 ## Ejemplo mínimo
 
 ```html
-<is-btn-ref id="ref" label="Aplicación" style="width: 20rem;"></is-btn-ref>
+<iswc-btn-ref id="ref" label="Aplicación" style="width: 20rem;"></iswc-btn-ref>
 <script type="module">
   const el = document.getElementById('ref');
   el.controller = {
@@ -49,7 +49,7 @@ import './btn-ref.js';
       return { datos: [{ app: 'ContaPyme' }, { app: 'AgroWin' }] };
     },
   };
-  el.addEventListener('is-selected-record', (e) => console.log(e.detail));
+  el.addEventListener('iswc-selected-record', (e) => console.log(e.detail));
 </script>
 ```
 
@@ -87,10 +87,10 @@ No expone: el campo, el botón filtro y el modal se construyen internamente.
 
 | Evento | detail | bubbles | composed | cancelable |
 | --- | --- | --- | --- | --- |
-| `is-input` | `{ value }` | sí | sí | no |
-| `is-change` | `{ value }` | sí | sí | no |
-| `is-typing-end` | `{ value }` | sí | sí | no |
-| `is-selected-record` | `{ record, value, label }` | sí | sí | no |
+| `iswc-input` | `{ value }` | sí | sí | no |
+| `iswc-change` | `{ value }` | sí | sí | no |
+| `iswc-typing-end` | `{ value }` | sí | sí | no |
+| `iswc-selected-record` | `{ record, value, label }` | sí | sí | no |
 
 ### Métodos y propiedades públicas
 
@@ -134,13 +134,13 @@ Form-associated vía `ElementInternals`: con `name` presente aporta `value` a
 
 ## Comportamiento
 
-- El campo es un `<is-input label-placement="float">`; el botón filtro abre un
-  `<is-dialog>` con `<is-catalogo-gen select-mode>`.
+- El campo es un `<iswc-input label-placement="float">`; el botón filtro abre un
+  `<iswc-dialog>` con `<iswc-catalogo-gen select-mode>`.
 - Al elegir un registro se toma la clave de `primaryKeys` y la descripción de
-  `ColumnsBtnRef`, se emite `is-selected-record` y se llama a
+  `ColumnsBtnRef`, se emite `iswc-selected-record` y se llama a
   `onSelectedRecord` si existe.
-- Escribir a mano emite `is-input` y, al detenerse la escritura,
-  `is-typing-end`.
+- Escribir a mano emite `iswc-input` y, al detenerse la escritura,
+  `iswc-typing-end`.
 - La resolución de campos del registro usa `_shared/isp-record-utils.js`
   (`asStr`, `getProp`, `isPresent`), igual que el catálogo.
 
@@ -157,19 +157,19 @@ Form-associated vía `ElementInternals`: con `name` presente aporta `value` a
 - [`../_shared/define.js`](../_shared/define.js)
 - [`../_shared/emit.js`](../_shared/emit.js)
 
-Tags del módulo: `<is-btn-ref>`.
+Tags del módulo: `<iswc-btn-ref>`.
 
 ## Accesibilidad
 
-La etiqueta flotante la aporta `<is-input>`; el botón filtro lleva su propio
-texto accesible y el modal es un `<is-dialog>`, con foco atrapado y cierre por
+La etiqueta flotante la aporta `<iswc-input>`; el botón filtro lleva su propio
+texto accesible y el modal es un `<iswc-dialog>`, con foco atrapado y cierre por
 `Escape`. El icono del filtro es `aria-hidden`.
 
 ## Ejemplo avanzado
 
 ```html
-<is-btn-ref id="tercero" label="Tercero" name="tercero" required maxlength="15">
-</is-btn-ref>
+<iswc-btn-ref id="tercero" label="Tercero" name="tercero" required maxlength="15">
+</iswc-btn-ref>
 
 <script type="module">
   const campo = document.getElementById('tercero');
@@ -186,7 +186,7 @@ texto accesible y el modal es un `<is-dialog>`, con foco atrapado y cierre por
       return { datos: await r.json() };
     },
   };
-  campo.addEventListener('is-selected-record', (e) => {
+  campo.addEventListener('iswc-selected-record', (e) => {
     console.log(e.detail.value, e.detail.label);
   });
   campo.open();
@@ -197,7 +197,7 @@ texto accesible y el modal es un `<is-dialog>`, con foco atrapado y cierre por
 
 - No asignar `controller`: sin `Lista` el modal no tiene datos.
 - Declarar `primaryKeys` con un campo que la fuente no devuelve: `value` queda vacío.
-- Usarlo para catálogos completos con alta/baja: eso es `<is-catalogo-gen>`.
+- Usarlo para catálogos completos con alta/baja: eso es `<iswc-catalogo-gen>`.
 - Combinar `required` y `optional` esperando que gane `required`: `optional` lo relaja.
 - Usar tag sin importar módulo primero.
 

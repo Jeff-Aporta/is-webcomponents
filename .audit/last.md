@@ -25,7 +25,7 @@
 
 ## Componentes con hallazgos
 
-### ⚠️ `is-button` — Button `(actions)`
+### ⚠️ `iswc-button` — Button `(actions)`
 
 - **Ruta JSON**: `src/components/actions/button.json`
 - **Ruta módulo**: `src/components/actions/button.ts`
@@ -38,7 +38,7 @@
 - 🟡 📝 **json-contenido** — Bloque html contiene <style>; usar el campo `styles` raíz o un behavior en su lugar.
   - 📄 `src/components/actions/button.json`
 
-### ⚠️ `is-check-icon-button` — Check Icon Button `(actions)`
+### ⚠️ `iswc-check-icon-button` — Check Icon Button `(actions)`
 
 - **Ruta JSON**: `src/components/actions/check-icon-button.json`
 - **Ruta módulo**: `src/components/actions/check-icon-button.ts`
@@ -52,7 +52,7 @@
   - 📄 `C:\ContaPyme\Personal\apps\is-webcomponents\src\components\actions\check-icon-button.ts`
   - 💡 Agregá 'variant' al array devuelto por static get observedAttributes().
 
-### ❌ `is-speech` — Speech `(media)`
+### ❌ `iswc-speech` — Speech `(media)`
 
 - **Ruta JSON**: `src/components/media/speech.json`
 - **Ruta módulo**: `src/components/media/speech.ts`
@@ -68,7 +68,7 @@
 - 🔴 ⚙️ **runtime** — observedAttributes declarado pero sin attributeChangedCallback: los cambios de atributo nunca se procesan. El playground del demo no será reactivo.
   - 📄 `C:\ContaPyme\Personal\apps\is-webcomponents\src\components\media\speech.ts`
 
-### ❌ `is-media-recorder` — Media Recorder `(media)`
+### ❌ `iswc-media-recorder` — Media Recorder `(media)`
 
 - **Ruta JSON**: `src/components/media/media-recorder.json`
 - **Ruta módulo**: `src/components/media/media-recorder.ts`
@@ -84,7 +84,7 @@
 - 🔴 ⚙️ **runtime** — observedAttributes declarado pero sin attributeChangedCallback: los cambios de atributo nunca se procesan. El playground del demo no será reactivo.
   - 📄 `C:\ContaPyme\Personal\apps\is-webcomponents\src\components\media\media-recorder.ts`
 
-### ⚠️ `is-theme-toggle` — Theme Toggle `(feedback)`
+### ⚠️ `iswc-theme-toggle` — Theme Toggle `(feedback)`
 
 - **Ruta JSON**: `src/components/feedback/theme-toggle.json`
 - **Ruta módulo**: `src/components/feedback/theme-toggle.ts`
@@ -98,7 +98,7 @@
   - 📄 `C:\ContaPyme\Personal\apps\is-webcomponents\src\components\feedback\theme-toggle.ts`
   - 💡 Agregá 'dark' al array devuelto por static get observedAttributes().
 
-### ⚠️ `is-prefs-clear` — Prefs Clear `(feedback)`
+### ⚠️ `iswc-prefs-clear` — Prefs Clear `(feedback)`
 
 - **Ruta JSON**: `src/components/feedback/prefs-clear.json`
 - **Ruta módulo**: `src/components/feedback/prefs-clear.ts`
@@ -112,7 +112,7 @@
   - 📄 `C:\ContaPyme\Personal\apps\is-webcomponents\src\components\feedback\prefs-clear.ts`
   - 💡 Agregá 'reload' al array devuelto por static get observedAttributes().
 
-### ⚠️ `is-split-panel` — Panel dividido `(layout)`
+### ⚠️ `iswc-split-panel` — Panel dividido `(layout)`
 
 - **Ruta JSON**: `src/components/layout/split-panel.json`
 - **Ruta módulo**: `src/components/layout/split-panel.ts`
@@ -124,17 +124,17 @@
 
 - 🟡 📝 **json-contenido** — Bloque code parece tener un placeholder sin expandir (TODO/FIXME/...).
   - 📄 `src/components/layout/split-panel.json`
-  - 🔎 {"code":"<is-split-panel disabled>\n  ...\n</is-split-panel>"}
+  - 🔎 {"code":"<iswc-split-panel disabled>\n  ...\n</iswc-split-panel>"}
 
-### ⚠️ `is-demo` — Demo `(layout)`
+### ⚠️ `iswc-demo` — Demo `(layout)`
 
 - **Ruta JSON**: ``
 - **Ruta módulo**: `src/components/layout/demo.ts`
 
-- 🟡 📐 **json-schema** — No se encontró JSON de preview para <is-demo>.
-  - 💡 Creá un archivo de definición siguiendo el esquema is-preview/v1.
+- 🟡 📐 **json-schema** — No se encontró JSON de preview para <iswc-demo>.
+  - 💡 Creá un archivo de definición siguiendo el esquema iswc-preview/v1.
 
-### ❌ `is-ui` — IsUi `(helpers)`
+### ❌ `iswc-ui` — IsUi `(helpers)`
 
 - **Ruta JSON**: `src/components/helpers/ui.json`
 - **Ruta módulo**: `src/components/helpers/ui.ts`
@@ -156,10 +156,10 @@
   - 📄 `src/components/helpers/ui.json`
   - 💡 Si el demo no usa ningún is-*, convertilo a bloque `html` (no necesita chrome de demo).
   - 🔎 {"html":"<span class=\"demo-label\">// demo-card registrado en esta página</span>\r\n        …"}
-- 🔴 🔗 **consistencia** — Módulo del componente no llama customElements.define('is-ui', …). El JSON declara demos de <is-ui> pero el tag nunca se registra.
+- 🔴 🔗 **consistencia** — Módulo del componente no llama customElements.define('iswc-ui', …). El JSON declara demos de <iswc-ui> pero el tag nunca se registra.
   - 📄 `C:\ContaPyme\Personal\apps\is-webcomponents\src\components\helpers\ui.ts`
 
-### ❌ `is-tree` — Tree `(navigation)`
+### ❌ `iswc-tree` — Tree `(navigation)`
 
 - **Ruta JSON**: `src/components/navigation/tree.json`
 - **Ruta módulo**: `src/components/navigation/tree.ts`
@@ -169,23 +169,23 @@
   - `demos`: 5
   - `controles`: 3
 
-- 🔴 🧩 **json-complejidad** — Demo de <is-tree> no declara <script type="application/json"> con payload.
+- 🔴 🧩 **json-complejidad** — Demo de <iswc-tree> no declara <script type="application/json"> con payload.
   - 📄 `src/components/navigation/tree.json`
-  - 💡 Pasale la data por JSON al host: <is-tree><script type="application/json">{…}</script></is-tree>.
-- 🔴 🧩 **json-complejidad** — Demo de <is-tree> no declara <script type="application/json"> con payload.
+  - 💡 Pasale la data por JSON al host: <iswc-tree><script type="application/json">{…}</script></iswc-tree>.
+- 🔴 🧩 **json-complejidad** — Demo de <iswc-tree> no declara <script type="application/json"> con payload.
   - 📄 `src/components/navigation/tree.json`
-  - 💡 Pasale la data por JSON al host: <is-tree><script type="application/json">{…}</script></is-tree>.
-- 🔴 🧩 **json-complejidad** — Demo de <is-tree> no declara <script type="application/json"> con payload.
+  - 💡 Pasale la data por JSON al host: <iswc-tree><script type="application/json">{…}</script></iswc-tree>.
+- 🔴 🧩 **json-complejidad** — Demo de <iswc-tree> no declara <script type="application/json"> con payload.
   - 📄 `src/components/navigation/tree.json`
-  - 💡 Pasale la data por JSON al host: <is-tree><script type="application/json">{…}</script></is-tree>.
-- 🔴 🧩 **json-complejidad** — Demo de <is-tree> no declara <script type="application/json"> con payload.
+  - 💡 Pasale la data por JSON al host: <iswc-tree><script type="application/json">{…}</script></iswc-tree>.
+- 🔴 🧩 **json-complejidad** — Demo de <iswc-tree> no declara <script type="application/json"> con payload.
   - 📄 `src/components/navigation/tree.json`
-  - 💡 Pasale la data por JSON al host: <is-tree><script type="application/json">{…}</script></is-tree>.
-- 🔴 🧩 **json-complejidad** — Demo de <is-tree> no declara <script type="application/json"> con payload.
+  - 💡 Pasale la data por JSON al host: <iswc-tree><script type="application/json">{…}</script></iswc-tree>.
+- 🔴 🧩 **json-complejidad** — Demo de <iswc-tree> no declara <script type="application/json"> con payload.
   - 📄 `src/components/navigation/tree.json`
-  - 💡 Pasale la data por JSON al host: <is-tree><script type="application/json">{…}</script></is-tree>.
+  - 💡 Pasale la data por JSON al host: <iswc-tree><script type="application/json">{…}</script></iswc-tree>.
 
-### ❌ `is-tree-item` — Tree Item `(navigation)`
+### ❌ `iswc-tree-item` — Tree Item `(navigation)`
 
 - **Ruta JSON**: `src/components/navigation/tree-item.json`
 - **Ruta módulo**: `src/components/navigation/tree.ts`
@@ -195,11 +195,11 @@
   - `demos`: 1
   - `controles`: 1
 
-- 🔴 🧩 **json-complejidad** — Demo de <is-tree> no declara <script type="application/json"> con payload.
+- 🔴 🧩 **json-complejidad** — Demo de <iswc-tree> no declara <script type="application/json"> con payload.
   - 📄 `src/components/navigation/tree-item.json`
-  - 💡 Pasale la data por JSON al host: <is-tree><script type="application/json">{…}</script></is-tree>.
+  - 💡 Pasale la data por JSON al host: <iswc-tree><script type="application/json">{…}</script></iswc-tree>.
 
-### ❌ `is-date-picker` — Date Picker `(forms)`
+### ❌ `iswc-date-picker` — Date Picker `(forms)`
 
 - **Ruta JSON**: `src/components/forms/date-picker.json`
 - **Ruta módulo**: `src/components/forms/date-picker.ts`
@@ -209,29 +209,29 @@
   - `demos`: 6
   - `controles`: 11
 
-- 🔴 🧩 **json-complejidad** — Demo de <is-date-picker> no declara <script type="application/json"> con payload.
+- 🔴 🧩 **json-complejidad** — Demo de <iswc-date-picker> no declara <script type="application/json"> con payload.
   - 📄 `src/components/forms/date-picker.json`
-  - 💡 Pasale la data por JSON al host: <is-date-picker><script type="application/json">{…}</script></is-date-picker>.
-- 🔴 🧩 **json-complejidad** — Demo de <is-date-picker> no declara <script type="application/json"> con payload.
+  - 💡 Pasale la data por JSON al host: <iswc-date-picker><script type="application/json">{…}</script></iswc-date-picker>.
+- 🔴 🧩 **json-complejidad** — Demo de <iswc-date-picker> no declara <script type="application/json"> con payload.
   - 📄 `src/components/forms/date-picker.json`
-  - 💡 Pasale la data por JSON al host: <is-date-picker><script type="application/json">{…}</script></is-date-picker>.
-- 🔴 🧩 **json-complejidad** — Demo de <is-date-picker> no declara <script type="application/json"> con payload.
+  - 💡 Pasale la data por JSON al host: <iswc-date-picker><script type="application/json">{…}</script></iswc-date-picker>.
+- 🔴 🧩 **json-complejidad** — Demo de <iswc-date-picker> no declara <script type="application/json"> con payload.
   - 📄 `src/components/forms/date-picker.json`
-  - 💡 Pasale la data por JSON al host: <is-date-picker><script type="application/json">{…}</script></is-date-picker>.
-- 🔴 🧩 **json-complejidad** — Demo de <is-date-picker> no declara <script type="application/json"> con payload.
+  - 💡 Pasale la data por JSON al host: <iswc-date-picker><script type="application/json">{…}</script></iswc-date-picker>.
+- 🔴 🧩 **json-complejidad** — Demo de <iswc-date-picker> no declara <script type="application/json"> con payload.
   - 📄 `src/components/forms/date-picker.json`
-  - 💡 Pasale la data por JSON al host: <is-date-picker><script type="application/json">{…}</script></is-date-picker>.
-- 🔴 🧩 **json-complejidad** — Demo de <is-date-picker> no declara <script type="application/json"> con payload.
+  - 💡 Pasale la data por JSON al host: <iswc-date-picker><script type="application/json">{…}</script></iswc-date-picker>.
+- 🔴 🧩 **json-complejidad** — Demo de <iswc-date-picker> no declara <script type="application/json"> con payload.
   - 📄 `src/components/forms/date-picker.json`
-  - 💡 Pasale la data por JSON al host: <is-date-picker><script type="application/json">{…}</script></is-date-picker>.
-- 🔴 🧩 **json-complejidad** — Demo de <is-month-calendar> no declara <script type="application/json"> con payload.
+  - 💡 Pasale la data por JSON al host: <iswc-date-picker><script type="application/json">{…}</script></iswc-date-picker>.
+- 🔴 🧩 **json-complejidad** — Demo de <iswc-month-calendar> no declara <script type="application/json"> con payload.
   - 📄 `src/components/forms/date-picker.json`
-  - 💡 Pasale la data por JSON al host: <is-month-calendar><script type="application/json">{…}</script></is-month-calendar>.
-- 🔴 🧩 **json-complejidad** — Demo de <is-year-calendar> no declara <script type="application/json"> con payload.
+  - 💡 Pasale la data por JSON al host: <iswc-month-calendar><script type="application/json">{…}</script></iswc-month-calendar>.
+- 🔴 🧩 **json-complejidad** — Demo de <iswc-year-calendar> no declara <script type="application/json"> con payload.
   - 📄 `src/components/forms/date-picker.json`
-  - 💡 Pasale la data por JSON al host: <is-year-calendar><script type="application/json">{…}</script></is-year-calendar>.
+  - 💡 Pasale la data por JSON al host: <iswc-year-calendar><script type="application/json">{…}</script></iswc-year-calendar>.
 
-### ❌ `is-month-calendar` — Month Calendar `(forms)`
+### ❌ `iswc-month-calendar` — Month Calendar `(forms)`
 
 - **Ruta JSON**: `src/components/forms/month-calendar.json`
 - **Ruta módulo**: `src/components/forms/month-calendar.ts`
@@ -241,11 +241,11 @@
   - `demos`: 1
   - `controles`: 1
 
-- 🔴 🧩 **json-complejidad** — Demo de <is-month-calendar> no declara <script type="application/json"> con payload.
+- 🔴 🧩 **json-complejidad** — Demo de <iswc-month-calendar> no declara <script type="application/json"> con payload.
   - 📄 `src/components/forms/month-calendar.json`
-  - 💡 Pasale la data por JSON al host: <is-month-calendar><script type="application/json">{…}</script></is-month-calendar>.
+  - 💡 Pasale la data por JSON al host: <iswc-month-calendar><script type="application/json">{…}</script></iswc-month-calendar>.
 
-### ❌ `is-year-calendar` — Year Calendar `(forms)`
+### ❌ `iswc-year-calendar` — Year Calendar `(forms)`
 
 - **Ruta JSON**: `src/components/forms/year-calendar.json`
 - **Ruta módulo**: `src/components/forms/year-calendar.ts`
@@ -255,11 +255,11 @@
   - `demos`: 1
   - `controles`: 1
 
-- 🔴 🧩 **json-complejidad** — Demo de <is-year-calendar> no declara <script type="application/json"> con payload.
+- 🔴 🧩 **json-complejidad** — Demo de <iswc-year-calendar> no declara <script type="application/json"> con payload.
   - 📄 `src/components/forms/year-calendar.json`
-  - 💡 Pasale la data por JSON al host: <is-year-calendar><script type="application/json">{…}</script></is-year-calendar>.
+  - 💡 Pasale la data por JSON al host: <iswc-year-calendar><script type="application/json">{…}</script></iswc-year-calendar>.
 
-### ❌ `is-date-field` — Date Field `(forms)`
+### ❌ `iswc-date-field` — Date Field `(forms)`
 
 - **Ruta JSON**: `src/components/forms/date-field.json`
 - **Ruta módulo**: `src/components/forms/date-field.ts`
@@ -269,7 +269,7 @@
   - `demos`: 4
   - `controles`: 7
 
-- 🔴 🔗 **consistencia** — Módulo del componente no llama customElements.define('is-date-field', …). El JSON declara demos de <is-date-field> pero el tag nunca se registra.
+- 🔴 🔗 **consistencia** — Módulo del componente no llama customElements.define('iswc-date-field', …). El JSON declara demos de <iswc-date-field> pero el tag nunca se registra.
   - 📄 `C:\ContaPyme\Personal\apps\is-webcomponents\src\components\forms\date-field.ts`
 - 🟡 🔗 **consistencia** — Control "label" (prop="attr:label") en src/components/forms/date-field.json#sections[0].blocks[0].controls[0] apunta a un atributo que el módulo no declara como observado.
   - 📄 `C:\ContaPyme\Personal\apps\is-webcomponents\src\components\forms\date-field.ts`
@@ -293,7 +293,7 @@
   - 📄 `C:\ContaPyme\Personal\apps\is-webcomponents\src\components\forms\date-field.ts`
   - 💡 Agregá 'readonly' al array devuelto por static get observedAttributes().
 
-### ❌ `is-time-field` — Time Field `(forms)`
+### ❌ `iswc-time-field` — Time Field `(forms)`
 
 - **Ruta JSON**: `src/components/forms/time-field.json`
 - **Ruta módulo**: `src/components/forms/time-field.ts`
@@ -303,13 +303,13 @@
   - `demos`: 1
   - `controles`: 1
 
-- 🔴 🔗 **consistencia** — Módulo del componente no llama customElements.define('is-time-field', …). El JSON declara demos de <is-time-field> pero el tag nunca se registra.
+- 🔴 🔗 **consistencia** — Módulo del componente no llama customElements.define('iswc-time-field', …). El JSON declara demos de <iswc-time-field> pero el tag nunca se registra.
   - 📄 `C:\ContaPyme\Personal\apps\is-webcomponents\src\components\forms\time-field.ts`
 - 🟡 🔗 **consistencia** — Control "value" (prop="attr:value") en src/components/forms/time-field.json#sections[0].blocks[0].controls[0] apunta a un atributo que el módulo no declara como observado.
   - 📄 `C:\ContaPyme\Personal\apps\is-webcomponents\src\components\forms\time-field.ts`
   - 💡 Agregá 'value' al array devuelto por static get observedAttributes().
 
-### ❌ `is-date-time-field` — Date Time Field `(forms)`
+### ❌ `iswc-date-time-field` — Date Time Field `(forms)`
 
 - **Ruta JSON**: `src/components/forms/date-time-field.json`
 - **Ruta módulo**: `src/components/forms/date-time-field.ts`
@@ -319,13 +319,13 @@
   - `demos`: 1
   - `controles`: 1
 
-- 🔴 🔗 **consistencia** — Módulo del componente no llama customElements.define('is-date-time-field', …). El JSON declara demos de <is-date-time-field> pero el tag nunca se registra.
+- 🔴 🔗 **consistencia** — Módulo del componente no llama customElements.define('iswc-date-time-field', …). El JSON declara demos de <iswc-date-time-field> pero el tag nunca se registra.
   - 📄 `C:\ContaPyme\Personal\apps\is-webcomponents\src\components\forms\date-time-field.ts`
 - 🟡 🔗 **consistencia** — Control "value" (prop="attr:value") en src/components/forms/date-time-field.json#sections[0].blocks[0].controls[0] apunta a un atributo que el módulo no declara como observado.
   - 📄 `C:\ContaPyme\Personal\apps\is-webcomponents\src\components\forms\date-time-field.ts`
   - 💡 Agregá 'value' al array devuelto por static get observedAttributes().
 
-### ❌ `is-date-input` — Date Input `(forms)`
+### ❌ `iswc-date-input` — Date Input `(forms)`
 
 - **Ruta JSON**: `src/components/forms/date-input.json`
 - **Ruta módulo**: `src/components/forms/date-input.ts`
@@ -335,7 +335,7 @@
   - `demos`: 5
   - `controles`: 5
 
-- 🔴 🔗 **consistencia** — Módulo del componente no llama customElements.define('is-date-input', …). El JSON declara demos de <is-date-input> pero el tag nunca se registra.
+- 🔴 🔗 **consistencia** — Módulo del componente no llama customElements.define('iswc-date-input', …). El JSON declara demos de <iswc-date-input> pero el tag nunca se registra.
   - 📄 `C:\ContaPyme\Personal\apps\is-webcomponents\src\components\forms\date-input.ts`
 - 🟡 🔗 **consistencia** — Control "label" (prop="attr:label") en src/components/forms/date-input.json#sections[0].blocks[0].controls[0] apunta a un atributo que el módulo no declara como observado.
   - 📄 `C:\ContaPyme\Personal\apps\is-webcomponents\src\components\forms\date-input.ts`
@@ -353,7 +353,7 @@
   - 📄 `C:\ContaPyme\Personal\apps\is-webcomponents\src\components\forms\date-input.ts`
   - 💡 Agregá 'action-bar' al array devuelto por static get observedAttributes().
 
-### ❌ `is-time-input` — Time Input `(forms)`
+### ❌ `iswc-time-input` — Time Input `(forms)`
 
 - **Ruta JSON**: `src/components/forms/time-input.json`
 - **Ruta módulo**: `src/components/forms/time-input.ts`
@@ -363,7 +363,7 @@
   - `demos`: 1
   - `controles`: 2
 
-- 🔴 🔗 **consistencia** — Módulo del componente no llama customElements.define('is-time-input', …). El JSON declara demos de <is-time-input> pero el tag nunca se registra.
+- 🔴 🔗 **consistencia** — Módulo del componente no llama customElements.define('iswc-time-input', …). El JSON declara demos de <iswc-time-input> pero el tag nunca se registra.
   - 📄 `C:\ContaPyme\Personal\apps\is-webcomponents\src\components\forms\time-input.ts`
 - 🟡 🔗 **consistencia** — Control "label" (prop="attr:label") en src/components/forms/time-input.json#sections[0].blocks[0].controls[0] apunta a un atributo que el módulo no declara como observado.
   - 📄 `C:\ContaPyme\Personal\apps\is-webcomponents\src\components\forms\time-input.ts`
@@ -372,7 +372,7 @@
   - 📄 `C:\ContaPyme\Personal\apps\is-webcomponents\src\components\forms\time-input.ts`
   - 💡 Agregá 'value' al array devuelto por static get observedAttributes().
 
-### ❌ `is-date-time-input` — Date Time Input `(forms)`
+### ❌ `iswc-date-time-input` — Date Time Input `(forms)`
 
 - **Ruta JSON**: `src/components/forms/date-time-input.json`
 - **Ruta módulo**: `src/components/forms/date-time-input.ts`
@@ -382,7 +382,7 @@
   - `demos`: 1
   - `controles`: 2
 
-- 🔴 🔗 **consistencia** — Módulo del componente no llama customElements.define('is-date-time-input', …). El JSON declara demos de <is-date-time-input> pero el tag nunca se registra.
+- 🔴 🔗 **consistencia** — Módulo del componente no llama customElements.define('iswc-date-time-input', …). El JSON declara demos de <iswc-date-time-input> pero el tag nunca se registra.
   - 📄 `C:\ContaPyme\Personal\apps\is-webcomponents\src\components\forms\date-time-input.ts`
 - 🟡 🔗 **consistencia** — Control "label" (prop="attr:label") en src/components/forms/date-time-input.json#sections[0].blocks[0].controls[0] apunta a un atributo que el módulo no declara como observado.
   - 📄 `C:\ContaPyme\Personal\apps\is-webcomponents\src\components\forms\date-time-input.ts`
@@ -391,7 +391,7 @@
   - 📄 `C:\ContaPyme\Personal\apps\is-webcomponents\src\components\forms\date-time-input.ts`
   - 💡 Agregá 'value' al array devuelto por static get observedAttributes().
 
-### ❌ `is-date-range-input` — Date Range Input `(forms)`
+### ❌ `iswc-date-range-input` — Date Range Input `(forms)`
 
 - **Ruta JSON**: `src/components/forms/date-range-input.json`
 - **Ruta módulo**: `src/components/forms/date-range-input.ts`
@@ -401,7 +401,7 @@
   - `demos`: 1
   - `controles`: 3
 
-- 🔴 🔗 **consistencia** — Módulo del componente no llama customElements.define('is-date-range-input', …). El JSON declara demos de <is-date-range-input> pero el tag nunca se registra.
+- 🔴 🔗 **consistencia** — Módulo del componente no llama customElements.define('iswc-date-range-input', …). El JSON declara demos de <iswc-date-range-input> pero el tag nunca se registra.
   - 📄 `C:\ContaPyme\Personal\apps\is-webcomponents\src\components\forms\date-range-input.ts`
 - 🟡 🔗 **consistencia** — Control "label" (prop="attr:label") en src/components/forms/date-range-input.json#sections[0].blocks[0].controls[0] apunta a un atributo que el módulo no declara como observado.
   - 📄 `C:\ContaPyme\Personal\apps\is-webcomponents\src\components\forms\date-range-input.ts`
@@ -413,7 +413,7 @@
   - 📄 `C:\ContaPyme\Personal\apps\is-webcomponents\src\components\forms\date-range-input.ts`
   - 💡 Agregá 'end' al array devuelto por static get observedAttributes().
 
-### ❌ `is-data-grid` — Data Grid `(data)`
+### ❌ `iswc-data-grid` — Data Grid `(data)`
 
 - **Ruta JSON**: `src/components/data/data-grid.json`
 - **Ruta módulo**: `src/components/data/data-grid.ts`
@@ -424,46 +424,46 @@
   - `controles`: 0
 
 - 🔴 📐 **json-schema** — sections[0].blocks[2].code: bloque code sin texto.
-- 🔴 🧩 **json-complejidad** — Demo de <is-data-grid> no declara <script type="application/json"> con payload.
+- 🔴 🧩 **json-complejidad** — Demo de <iswc-data-grid> no declara <script type="application/json"> con payload.
   - 📄 `src/components/data/data-grid.json`
-  - 💡 Pasale la data por JSON al host: <is-data-grid><script type="application/json">{…}</script></is-data-grid>.
+  - 💡 Pasale la data por JSON al host: <iswc-data-grid><script type="application/json">{…}</script></iswc-data-grid>.
 - 🔴 📝 **json-contenido** — Bloque code en sections[0].blocks[2] está vacío.
   - 📄 `src/components/data/data-grid.json`
-- 🔴 🧩 **json-complejidad** — Demo de <is-data-grid> no declara <script type="application/json"> con payload.
+- 🔴 🧩 **json-complejidad** — Demo de <iswc-data-grid> no declara <script type="application/json"> con payload.
   - 📄 `src/components/data/data-grid.json`
-  - 💡 Pasale la data por JSON al host: <is-data-grid><script type="application/json">{…}</script></is-data-grid>.
-- 🔴 🧩 **json-complejidad** — Demo de <is-data-grid> no declara <script type="application/json"> con payload.
+  - 💡 Pasale la data por JSON al host: <iswc-data-grid><script type="application/json">{…}</script></iswc-data-grid>.
+- 🔴 🧩 **json-complejidad** — Demo de <iswc-data-grid> no declara <script type="application/json"> con payload.
   - 📄 `src/components/data/data-grid.json`
-  - 💡 Pasale la data por JSON al host: <is-data-grid><script type="application/json">{…}</script></is-data-grid>.
-- 🔴 🧩 **json-complejidad** — Demo de <is-data-grid> no declara <script type="application/json"> con payload.
+  - 💡 Pasale la data por JSON al host: <iswc-data-grid><script type="application/json">{…}</script></iswc-data-grid>.
+- 🔴 🧩 **json-complejidad** — Demo de <iswc-data-grid> no declara <script type="application/json"> con payload.
   - 📄 `src/components/data/data-grid.json`
-  - 💡 Pasale la data por JSON al host: <is-data-grid><script type="application/json">{…}</script></is-data-grid>.
-- 🔴 🧩 **json-complejidad** — Demo de <is-data-grid> no declara <script type="application/json"> con payload.
+  - 💡 Pasale la data por JSON al host: <iswc-data-grid><script type="application/json">{…}</script></iswc-data-grid>.
+- 🔴 🧩 **json-complejidad** — Demo de <iswc-data-grid> no declara <script type="application/json"> con payload.
   - 📄 `src/components/data/data-grid.json`
-  - 💡 Pasale la data por JSON al host: <is-data-grid><script type="application/json">{…}</script></is-data-grid>.
-- 🔴 🧩 **json-complejidad** — Demo de <is-data-grid> no declara <script type="application/json"> con payload.
+  - 💡 Pasale la data por JSON al host: <iswc-data-grid><script type="application/json">{…}</script></iswc-data-grid>.
+- 🔴 🧩 **json-complejidad** — Demo de <iswc-data-grid> no declara <script type="application/json"> con payload.
   - 📄 `src/components/data/data-grid.json`
-  - 💡 Pasale la data por JSON al host: <is-data-grid><script type="application/json">{…}</script></is-data-grid>.
-- 🔴 🧩 **json-complejidad** — Demo de <is-data-grid> no declara <script type="application/json"> con payload.
+  - 💡 Pasale la data por JSON al host: <iswc-data-grid><script type="application/json">{…}</script></iswc-data-grid>.
+- 🔴 🧩 **json-complejidad** — Demo de <iswc-data-grid> no declara <script type="application/json"> con payload.
   - 📄 `src/components/data/data-grid.json`
-  - 💡 Pasale la data por JSON al host: <is-data-grid><script type="application/json">{…}</script></is-data-grid>.
-- 🔴 🧩 **json-complejidad** — Demo de <is-data-grid> no declara <script type="application/json"> con payload.
+  - 💡 Pasale la data por JSON al host: <iswc-data-grid><script type="application/json">{…}</script></iswc-data-grid>.
+- 🔴 🧩 **json-complejidad** — Demo de <iswc-data-grid> no declara <script type="application/json"> con payload.
   - 📄 `src/components/data/data-grid.json`
-  - 💡 Pasale la data por JSON al host: <is-data-grid><script type="application/json">{…}</script></is-data-grid>.
-- 🔴 🧩 **json-complejidad** — Demo de <is-data-grid> no declara <script type="application/json"> con payload.
+  - 💡 Pasale la data por JSON al host: <iswc-data-grid><script type="application/json">{…}</script></iswc-data-grid>.
+- 🔴 🧩 **json-complejidad** — Demo de <iswc-data-grid> no declara <script type="application/json"> con payload.
   - 📄 `src/components/data/data-grid.json`
-  - 💡 Pasale la data por JSON al host: <is-data-grid><script type="application/json">{…}</script></is-data-grid>.
-- 🔴 🧩 **json-complejidad** — Demo de <is-data-grid> no declara <script type="application/json"> con payload.
+  - 💡 Pasale la data por JSON al host: <iswc-data-grid><script type="application/json">{…}</script></iswc-data-grid>.
+- 🔴 🧩 **json-complejidad** — Demo de <iswc-data-grid> no declara <script type="application/json"> con payload.
   - 📄 `src/components/data/data-grid.json`
-  - 💡 Pasale la data por JSON al host: <is-data-grid><script type="application/json">{…}</script></is-data-grid>.
-- 🔴 🧩 **json-complejidad** — Demo de <is-data-grid> no declara <script type="application/json"> con payload.
+  - 💡 Pasale la data por JSON al host: <iswc-data-grid><script type="application/json">{…}</script></iswc-data-grid>.
+- 🔴 🧩 **json-complejidad** — Demo de <iswc-data-grid> no declara <script type="application/json"> con payload.
   - 📄 `src/components/data/data-grid.json`
-  - 💡 Pasale la data por JSON al host: <is-data-grid><script type="application/json">{…}</script></is-data-grid>.
-- 🔴 🧩 **json-complejidad** — Demo de <is-data-grid> no declara <script type="application/json"> con payload.
+  - 💡 Pasale la data por JSON al host: <iswc-data-grid><script type="application/json">{…}</script></iswc-data-grid>.
+- 🔴 🧩 **json-complejidad** — Demo de <iswc-data-grid> no declara <script type="application/json"> con payload.
   - 📄 `src/components/data/data-grid.json`
-  - 💡 Pasale la data por JSON al host: <is-data-grid><script type="application/json">{…}</script></is-data-grid>.
+  - 💡 Pasale la data por JSON al host: <iswc-data-grid><script type="application/json">{…}</script></iswc-data-grid>.
 
-### ❌ `is-chart` — Chart `(data-viz)`
+### ❌ `iswc-chart` — Chart `(data-viz)`
 
 - **Ruta JSON**: `src/components/charts/chart.json`
 - **Ruta módulo**: `src/components/charts/chart.ts`
@@ -473,11 +473,11 @@
   - `demos`: 2
   - `controles`: 4
 
-- 🔴 🧩 **json-complejidad** — Demo de <is-chart> no declara <script type="application/json"> con payload.
+- 🔴 🧩 **json-complejidad** — Demo de <iswc-chart> no declara <script type="application/json"> con payload.
   - 📄 `src/components/charts/chart.json`
-  - 💡 Pasale la data por JSON al host: <is-chart><script type="application/json">{…}</script></is-chart>.
+  - 💡 Pasale la data por JSON al host: <iswc-chart><script type="application/json">{…}</script></iswc-chart>.
 
-### ❌ `is-bar-chart` — Bar Chart `(data-viz)`
+### ❌ `iswc-bar-chart` — Bar Chart `(data-viz)`
 
 - **Ruta JSON**: `src/components/charts/bar-chart.json`
 - **Ruta módulo**: `src/components/charts/bar-chart.ts`
@@ -487,7 +487,7 @@
   - `demos`: 1
   - `controles`: 2
 
-- 🔴 🔗 **consistencia** — Módulo del componente no llama customElements.define('is-bar-chart', …). El JSON declara demos de <is-bar-chart> pero el tag nunca se registra.
+- 🔴 🔗 **consistencia** — Módulo del componente no llama customElements.define('iswc-bar-chart', …). El JSON declara demos de <iswc-bar-chart> pero el tag nunca se registra.
   - 📄 `C:\ContaPyme\Personal\apps\is-webcomponents\src\components\charts\bar-chart.ts`
 - 🟡 🔗 **consistencia** — Módulo no usa guard idempotente (customElements.get(tag)). Llamar el módulo dos veces rompe.
   - 📄 `C:\ContaPyme\Personal\apps\is-webcomponents\src\components\charts\bar-chart.ts`
@@ -499,7 +499,7 @@
   - 📄 `C:\ContaPyme\Personal\apps\is-webcomponents\src\components\charts\bar-chart.ts`
   - 💡 Agregá 'stacked' al array devuelto por static get observedAttributes().
 
-### ❌ `is-line-chart` — Line Chart `(data-viz)`
+### ❌ `iswc-line-chart` — Line Chart `(data-viz)`
 
 - **Ruta JSON**: `src/components/charts/line-chart.json`
 - **Ruta módulo**: `src/components/charts/line-chart.ts`
@@ -509,7 +509,7 @@
   - `demos`: 1
   - `controles`: 1
 
-- 🔴 🔗 **consistencia** — Módulo del componente no llama customElements.define('is-line-chart', …). El JSON declara demos de <is-line-chart> pero el tag nunca se registra.
+- 🔴 🔗 **consistencia** — Módulo del componente no llama customElements.define('iswc-line-chart', …). El JSON declara demos de <iswc-line-chart> pero el tag nunca se registra.
   - 📄 `C:\ContaPyme\Personal\apps\is-webcomponents\src\components\charts\line-chart.ts`
 - 🟡 🔗 **consistencia** — Módulo no usa guard idempotente (customElements.get(tag)). Llamar el módulo dos veces rompe.
   - 📄 `C:\ContaPyme\Personal\apps\is-webcomponents\src\components\charts\line-chart.ts`
@@ -518,7 +518,7 @@
   - 📄 `C:\ContaPyme\Personal\apps\is-webcomponents\src\components\charts\line-chart.ts`
   - 💡 Agregá 'open-on-click' al array devuelto por static get observedAttributes().
 
-### ❌ `is-pie-chart` — Pie Chart `(data-viz)`
+### ❌ `iswc-pie-chart` — Pie Chart `(data-viz)`
 
 - **Ruta JSON**: `src/components/charts/pie-chart.json`
 - **Ruta módulo**: `src/components/charts/pie-chart.ts`
@@ -528,7 +528,7 @@
   - `demos`: 1
   - `controles`: 1
 
-- 🔴 🔗 **consistencia** — Módulo del componente no llama customElements.define('is-pie-chart', …). El JSON declara demos de <is-pie-chart> pero el tag nunca se registra.
+- 🔴 🔗 **consistencia** — Módulo del componente no llama customElements.define('iswc-pie-chart', …). El JSON declara demos de <iswc-pie-chart> pero el tag nunca se registra.
   - 📄 `C:\ContaPyme\Personal\apps\is-webcomponents\src\components\charts\pie-chart.ts`
 - 🟡 🔗 **consistencia** — Módulo no usa guard idempotente (customElements.get(tag)). Llamar el módulo dos veces rompe.
   - 📄 `C:\ContaPyme\Personal\apps\is-webcomponents\src\components\charts\pie-chart.ts`
@@ -537,7 +537,7 @@
   - 📄 `C:\ContaPyme\Personal\apps\is-webcomponents\src\components\charts\pie-chart.ts`
   - 💡 Agregá 'open-on-click' al array devuelto por static get observedAttributes().
 
-### ❌ `is-doughnut-chart` — Doughnut Chart `(data-viz)`
+### ❌ `iswc-doughnut-chart` — Doughnut Chart `(data-viz)`
 
 - **Ruta JSON**: `src/components/charts/doughnut-chart.json`
 - **Ruta módulo**: `src/components/charts/doughnut-chart.ts`
@@ -547,7 +547,7 @@
   - `demos`: 1
   - `controles`: 1
 
-- 🔴 🔗 **consistencia** — Módulo del componente no llama customElements.define('is-doughnut-chart', …). El JSON declara demos de <is-doughnut-chart> pero el tag nunca se registra.
+- 🔴 🔗 **consistencia** — Módulo del componente no llama customElements.define('iswc-doughnut-chart', …). El JSON declara demos de <iswc-doughnut-chart> pero el tag nunca se registra.
   - 📄 `C:\ContaPyme\Personal\apps\is-webcomponents\src\components\charts\doughnut-chart.ts`
 - 🟡 🔗 **consistencia** — Módulo no usa guard idempotente (customElements.get(tag)). Llamar el módulo dos veces rompe.
   - 📄 `C:\ContaPyme\Personal\apps\is-webcomponents\src\components\charts\doughnut-chart.ts`
@@ -556,7 +556,7 @@
   - 📄 `C:\ContaPyme\Personal\apps\is-webcomponents\src\components\charts\doughnut-chart.ts`
   - 💡 Agregá 'open-on-click' al array devuelto por static get observedAttributes().
 
-### ❌ `is-radar-chart` — Radar Chart `(data-viz)`
+### ❌ `iswc-radar-chart` — Radar Chart `(data-viz)`
 
 - **Ruta JSON**: `src/components/charts/radar-chart.json`
 - **Ruta módulo**: `src/components/charts/radar-chart.ts`
@@ -566,13 +566,13 @@
   - `demos`: 5
   - `controles`: 3
 
-- 🔴 🧩 **json-complejidad** — Demo de <is-radar-chart> no declara <script type="application/json"> con payload.
+- 🔴 🧩 **json-complejidad** — Demo de <iswc-radar-chart> no declara <script type="application/json"> con payload.
   - 📄 `src/components/charts/radar-chart.json`
-  - 💡 Pasale la data por JSON al host: <is-radar-chart><script type="application/json">{…}</script></is-radar-chart>.
-- 🔴 🧩 **json-complejidad** — Demo de <is-radar-chart> no declara <script type="application/json"> con payload.
+  - 💡 Pasale la data por JSON al host: <iswc-radar-chart><script type="application/json">{…}</script></iswc-radar-chart>.
+- 🔴 🧩 **json-complejidad** — Demo de <iswc-radar-chart> no declara <script type="application/json"> con payload.
   - 📄 `src/components/charts/radar-chart.json`
-  - 💡 Pasale la data por JSON al host: <is-radar-chart><script type="application/json">{…}</script></is-radar-chart>.
-- 🔴 🔗 **consistencia** — Módulo del componente no llama customElements.define('is-radar-chart', …). El JSON declara demos de <is-radar-chart> pero el tag nunca se registra.
+  - 💡 Pasale la data por JSON al host: <iswc-radar-chart><script type="application/json">{…}</script></iswc-radar-chart>.
+- 🔴 🔗 **consistencia** — Módulo del componente no llama customElements.define('iswc-radar-chart', …). El JSON declara demos de <iswc-radar-chart> pero el tag nunca se registra.
   - 📄 `C:\ContaPyme\Personal\apps\is-webcomponents\src\components\charts\radar-chart.ts`
 - 🟡 🔗 **consistencia** — Módulo no usa guard idempotente (customElements.get(tag)). Llamar el módulo dos veces rompe.
   - 📄 `C:\ContaPyme\Personal\apps\is-webcomponents\src\components\charts\radar-chart.ts`
@@ -587,7 +587,7 @@
   - 📄 `C:\ContaPyme\Personal\apps\is-webcomponents\src\components\charts\radar-chart.ts`
   - 💡 Agregá 'legend-position' al array devuelto por static get observedAttributes().
 
-### ❌ `is-polar-area-chart` — Polar Area Chart `(data-viz)`
+### ❌ `iswc-polar-area-chart` — Polar Area Chart `(data-viz)`
 
 - **Ruta JSON**: `src/components/charts/polar-area-chart.json`
 - **Ruta módulo**: `src/components/charts/polar-area-chart.ts`
@@ -597,7 +597,7 @@
   - `demos`: 6
   - `controles`: 5
 
-- 🔴 🔗 **consistencia** — Módulo del componente no llama customElements.define('is-polar-area-chart', …). El JSON declara demos de <is-polar-area-chart> pero el tag nunca se registra.
+- 🔴 🔗 **consistencia** — Módulo del componente no llama customElements.define('iswc-polar-area-chart', …). El JSON declara demos de <iswc-polar-area-chart> pero el tag nunca se registra.
   - 📄 `C:\ContaPyme\Personal\apps\is-webcomponents\src\components\charts\polar-area-chart.ts`
 - 🟡 🔗 **consistencia** — Módulo no usa guard idempotente (customElements.get(tag)). Llamar el módulo dos veces rompe.
   - 📄 `C:\ContaPyme\Personal\apps\is-webcomponents\src\components\charts\polar-area-chart.ts`
@@ -618,7 +618,7 @@
   - 📄 `C:\ContaPyme\Personal\apps\is-webcomponents\src\components\charts\polar-area-chart.ts`
   - 💡 Agregá 'without-animation' al array devuelto por static get observedAttributes().
 
-### ❌ `is-scatter-chart` — Scatter Chart `(data-viz)`
+### ❌ `iswc-scatter-chart` — Scatter Chart `(data-viz)`
 
 - **Ruta JSON**: `src/components/charts/scatter-chart.json`
 - **Ruta módulo**: `src/components/charts/scatter-chart.ts`
@@ -628,13 +628,13 @@
   - `demos`: 5
   - `controles`: 5
 
-- 🔴 🧩 **json-complejidad** — Demo de <is-scatter-chart> no declara <script type="application/json"> con payload.
+- 🔴 🧩 **json-complejidad** — Demo de <iswc-scatter-chart> no declara <script type="application/json"> con payload.
   - 📄 `src/components/charts/scatter-chart.json`
-  - 💡 Pasale la data por JSON al host: <is-scatter-chart><script type="application/json">{…}</script></is-scatter-chart>.
-- 🔴 🧩 **json-complejidad** — Demo de <is-scatter-chart> no declara <script type="application/json"> con payload.
+  - 💡 Pasale la data por JSON al host: <iswc-scatter-chart><script type="application/json">{…}</script></iswc-scatter-chart>.
+- 🔴 🧩 **json-complejidad** — Demo de <iswc-scatter-chart> no declara <script type="application/json"> con payload.
   - 📄 `src/components/charts/scatter-chart.json`
-  - 💡 Pasale la data por JSON al host: <is-scatter-chart><script type="application/json">{…}</script></is-scatter-chart>.
-- 🔴 🔗 **consistencia** — Módulo del componente no llama customElements.define('is-scatter-chart', …). El JSON declara demos de <is-scatter-chart> pero el tag nunca se registra.
+  - 💡 Pasale la data por JSON al host: <iswc-scatter-chart><script type="application/json">{…}</script></iswc-scatter-chart>.
+- 🔴 🔗 **consistencia** — Módulo del componente no llama customElements.define('iswc-scatter-chart', …). El JSON declara demos de <iswc-scatter-chart> pero el tag nunca se registra.
   - 📄 `C:\ContaPyme\Personal\apps\is-webcomponents\src\components\charts\scatter-chart.ts`
 - 🟡 🔗 **consistencia** — Módulo no usa guard idempotente (customElements.get(tag)). Llamar el módulo dos veces rompe.
   - 📄 `C:\ContaPyme\Personal\apps\is-webcomponents\src\components\charts\scatter-chart.ts`
@@ -655,7 +655,7 @@
   - 📄 `C:\ContaPyme\Personal\apps\is-webcomponents\src\components\charts\scatter-chart.ts`
   - 💡 Agregá 'grid' al array devuelto por static get observedAttributes().
 
-### ❌ `is-bubble-chart` — Bubble Chart `(data-viz)`
+### ❌ `iswc-bubble-chart` — Bubble Chart `(data-viz)`
 
 - **Ruta JSON**: `src/components/charts/bubble-chart.json`
 - **Ruta módulo**: `src/components/charts/bubble-chart.ts`
@@ -665,7 +665,7 @@
   - `demos`: 1
   - `controles`: 1
 
-- 🔴 🔗 **consistencia** — Módulo del componente no llama customElements.define('is-bubble-chart', …). El JSON declara demos de <is-bubble-chart> pero el tag nunca se registra.
+- 🔴 🔗 **consistencia** — Módulo del componente no llama customElements.define('iswc-bubble-chart', …). El JSON declara demos de <iswc-bubble-chart> pero el tag nunca se registra.
   - 📄 `C:\ContaPyme\Personal\apps\is-webcomponents\src\components\charts\bubble-chart.ts`
 - 🟡 🔗 **consistencia** — Módulo no usa guard idempotente (customElements.get(tag)). Llamar el módulo dos veces rompe.
   - 📄 `C:\ContaPyme\Personal\apps\is-webcomponents\src\components\charts\bubble-chart.ts`
@@ -674,7 +674,7 @@
   - 📄 `C:\ContaPyme\Personal\apps\is-webcomponents\src\components\charts\bubble-chart.ts`
   - 💡 Agregá 'open-on-click' al array devuelto por static get observedAttributes().
 
-### ❌ `is-sparkline` — Sparkline `(data-viz)`
+### ❌ `iswc-sparkline` — Sparkline `(data-viz)`
 
 - **Ruta JSON**: `src/components/charts/sparkline.json`
 - **Ruta módulo**: `src/components/charts/sparkline.ts`
@@ -684,26 +684,26 @@
   - `demos`: 6
   - `controles`: 4
 
-- 🔴 🧩 **json-complejidad** — Demo de <is-sparkline> no declara <script type="application/json"> con payload.
+- 🔴 🧩 **json-complejidad** — Demo de <iswc-sparkline> no declara <script type="application/json"> con payload.
   - 📄 `src/components/charts/sparkline.json`
-  - 💡 Pasale la data por JSON al host: <is-sparkline><script type="application/json">{…}</script></is-sparkline>.
-- 🔴 🧩 **json-complejidad** — Demo de <is-sparkline> no declara <script type="application/json"> con payload.
+  - 💡 Pasale la data por JSON al host: <iswc-sparkline><script type="application/json">{…}</script></iswc-sparkline>.
+- 🔴 🧩 **json-complejidad** — Demo de <iswc-sparkline> no declara <script type="application/json"> con payload.
   - 📄 `src/components/charts/sparkline.json`
-  - 💡 Pasale la data por JSON al host: <is-sparkline><script type="application/json">{…}</script></is-sparkline>.
-- 🔴 🧩 **json-complejidad** — Demo de <is-sparkline> no declara <script type="application/json"> con payload.
+  - 💡 Pasale la data por JSON al host: <iswc-sparkline><script type="application/json">{…}</script></iswc-sparkline>.
+- 🔴 🧩 **json-complejidad** — Demo de <iswc-sparkline> no declara <script type="application/json"> con payload.
   - 📄 `src/components/charts/sparkline.json`
-  - 💡 Pasale la data por JSON al host: <is-sparkline><script type="application/json">{…}</script></is-sparkline>.
-- 🔴 🧩 **json-complejidad** — Demo de <is-sparkline> no declara <script type="application/json"> con payload.
+  - 💡 Pasale la data por JSON al host: <iswc-sparkline><script type="application/json">{…}</script></iswc-sparkline>.
+- 🔴 🧩 **json-complejidad** — Demo de <iswc-sparkline> no declara <script type="application/json"> con payload.
   - 📄 `src/components/charts/sparkline.json`
-  - 💡 Pasale la data por JSON al host: <is-sparkline><script type="application/json">{…}</script></is-sparkline>.
-- 🔴 🧩 **json-complejidad** — Demo de <is-sparkline> no declara <script type="application/json"> con payload.
+  - 💡 Pasale la data por JSON al host: <iswc-sparkline><script type="application/json">{…}</script></iswc-sparkline>.
+- 🔴 🧩 **json-complejidad** — Demo de <iswc-sparkline> no declara <script type="application/json"> con payload.
   - 📄 `src/components/charts/sparkline.json`
-  - 💡 Pasale la data por JSON al host: <is-sparkline><script type="application/json">{…}</script></is-sparkline>.
-- 🔴 🧩 **json-complejidad** — Demo de <is-sparkline> no declara <script type="application/json"> con payload.
+  - 💡 Pasale la data por JSON al host: <iswc-sparkline><script type="application/json">{…}</script></iswc-sparkline>.
+- 🔴 🧩 **json-complejidad** — Demo de <iswc-sparkline> no declara <script type="application/json"> con payload.
   - 📄 `src/components/charts/sparkline.json`
-  - 💡 Pasale la data por JSON al host: <is-sparkline><script type="application/json">{…}</script></is-sparkline>.
+  - 💡 Pasale la data por JSON al host: <iswc-sparkline><script type="application/json">{…}</script></iswc-sparkline>.
 
-### ⚠️ `is-lightbox` — Lightbox `(helpers)`
+### ⚠️ `iswc-lightbox` — Lightbox `(helpers)`
 
 - **Ruta JSON**: `src/components/diagrams/lightbox.json`
 - **Ruta módulo**: `src/components/diagrams/lightbox.ts`
@@ -718,7 +718,7 @@
   - 💡 Si el demo no usa ningún is-*, convertilo a bloque `html` (no necesita chrome de demo).
   - 🔎 {"html":"<figure>\r\n            <div class=\"lb-target\" data-tone=\"brand\" data-lb-target=\"s…"}
 
-### ⚠️ `is-relative-time` — Tiempo relativo `(helpers)`
+### ⚠️ `iswc-relative-time` — Tiempo relativo `(helpers)`
 
 - **Ruta JSON**: `src/components/helpers/relative-time.json`
 - **Ruta módulo**: `src/components/helpers/relative-time.ts`
@@ -733,7 +733,7 @@
   - 💡 Si el demo no usa ningún is-*, convertilo a bloque `html` (no necesita chrome de demo).
   - 🔎 {"html":"<p class=\"demo-caption\" id=\"localeCaption\">Cargando locales…</p>\n          <div …"}
 
-### ⚠️ `is-offscreen-canvas` — Offscreen Canvas `(helpers)`
+### ⚠️ `iswc-offscreen-canvas` — Offscreen Canvas `(helpers)`
 
 - **Ruta JSON**: `src/components/helpers/offscreen-canvas.json`
 - **Ruta módulo**: `src/components/helpers/offscreen-canvas.ts`
@@ -750,7 +750,7 @@
   - 📄 `C:\ContaPyme\Personal\apps\is-webcomponents\src\components\helpers\offscreen-canvas.ts`
   - 💡 Agregá 'height' al array devuelto por static get observedAttributes().
 
-### ⚠️ `is-format-date` — Formato de fecha `(helpers)`
+### ⚠️ `iswc-format-date` — Formato de fecha `(helpers)`
 
 - **Ruta JSON**: `src/components/helpers/format-date.json`
 - **Ruta módulo**: `src/components/helpers/format-date.ts`
@@ -765,7 +765,7 @@
   - 💡 Si el demo no usa ningún is-*, convertilo a bloque `html` (no necesita chrome de demo).
   - 🔎 {"html":"<p class=\"demo-caption\" id=\"localeCaption\">Cargando locales…</p>\n          <div …"}
 
-### ⚠️ `is-intersection-observer` — Observador de intersección `(helpers)`
+### ⚠️ `iswc-intersection-observer` — Observador de intersección `(helpers)`
 
 - **Ruta JSON**: `src/components/helpers/intersection-observer.json`
 - **Ruta módulo**: `src/components/helpers/intersection-observer.ts`
@@ -788,7 +788,7 @@
   - 📄 `C:\ContaPyme\Personal\apps\is-webcomponents\src\components\helpers\intersection-observer.ts`
   - 💡 Agregá 'once' al array devuelto por static get observedAttributes().
 
-### ⚠️ `is-mutation-observer` — Observador de mutación `(helpers)`
+### ⚠️ `iswc-mutation-observer` — Observador de mutación `(helpers)`
 
 - **Ruta JSON**: `src/components/helpers/mutation-observer.json`
 - **Ruta módulo**: `src/components/helpers/mutation-observer.ts`
@@ -805,7 +805,7 @@
   - 📄 `C:\ContaPyme\Personal\apps\is-webcomponents\src\components\helpers\mutation-observer.ts`
   - 💡 Agregá 'attr' al array devuelto por static get observedAttributes().
 
-### ⚠️ `is-md-render` — Render Markdown `(helpers)`
+### ⚠️ `iswc-md-render` — Render Markdown `(helpers)`
 
 - **Ruta JSON**: `src/components/helpers/md-render.json`
 - **Ruta módulo**: `src/components/helpers/md-render.ts`
@@ -820,7 +820,7 @@
 - 🟡 📝 **json-contenido** — Bloque demo contiene un <script> ejecutable. La lógica debería vivir en un behavior (módulo .preview.js).
   - 📄 `src/components/helpers/md-render.json`
 
-### ⚠️ `is-md-editor` — Editor Markdown `(helpers)`
+### ⚠️ `iswc-md-editor` — Editor Markdown `(helpers)`
 
 - **Ruta JSON**: `src/components/helpers/md-editor.json`
 - **Ruta módulo**: `src/components/helpers/md-editor.ts`
@@ -837,7 +837,7 @@
 - 🟡 📝 **json-contenido** — Bloque demo contiene un <script> ejecutable. La lógica debería vivir en un behavior (módulo .preview.js).
   - 📄 `src/components/helpers/md-editor.json`
 
-### ❌ `is-waterfall-chart` — Waterfall Chart `(data-viz)`
+### ❌ `iswc-waterfall-chart` — Waterfall Chart `(data-viz)`
 
 - **Ruta JSON**: `src/components/charts/waterfall-chart.json`
 - **Ruta módulo**: `src/components/charts/waterfall-chart.ts`
@@ -847,7 +847,7 @@
   - `demos`: 1
   - `controles`: 1
 
-- 🔴 🔗 **consistencia** — Módulo del componente no llama customElements.define('is-waterfall-chart', …). El JSON declara demos de <is-waterfall-chart> pero el tag nunca se registra.
+- 🔴 🔗 **consistencia** — Módulo del componente no llama customElements.define('iswc-waterfall-chart', …). El JSON declara demos de <iswc-waterfall-chart> pero el tag nunca se registra.
   - 📄 `C:\ContaPyme\Personal\apps\is-webcomponents\src\components\charts\waterfall-chart.ts`
 - 🟡 🔗 **consistencia** — Módulo no usa guard idempotente (customElements.get(tag)). Llamar el módulo dos veces rompe.
   - 📄 `C:\ContaPyme\Personal\apps\is-webcomponents\src\components\charts\waterfall-chart.ts`
@@ -856,7 +856,7 @@
   - 📄 `C:\ContaPyme\Personal\apps\is-webcomponents\src\components\charts\waterfall-chart.ts`
   - 💡 Agregá 'open-on-click' al array devuelto por static get observedAttributes().
 
-### ❌ `is-funnel-chart` — Funnel Chart `(data-viz)`
+### ❌ `iswc-funnel-chart` — Funnel Chart `(data-viz)`
 
 - **Ruta JSON**: `src/components/charts/funnel-chart.json`
 - **Ruta módulo**: `src/components/charts/funnel-chart.ts`
@@ -866,7 +866,7 @@
   - `demos`: 1
   - `controles`: 1
 
-- 🔴 🔗 **consistencia** — Módulo del componente no llama customElements.define('is-funnel-chart', …). El JSON declara demos de <is-funnel-chart> pero el tag nunca se registra.
+- 🔴 🔗 **consistencia** — Módulo del componente no llama customElements.define('iswc-funnel-chart', …). El JSON declara demos de <iswc-funnel-chart> pero el tag nunca se registra.
   - 📄 `C:\ContaPyme\Personal\apps\is-webcomponents\src\components\charts\funnel-chart.ts`
 - 🟡 🔗 **consistencia** — Módulo no usa guard idempotente (customElements.get(tag)). Llamar el módulo dos veces rompe.
   - 📄 `C:\ContaPyme\Personal\apps\is-webcomponents\src\components\charts\funnel-chart.ts`
@@ -875,7 +875,7 @@
   - 📄 `C:\ContaPyme\Personal\apps\is-webcomponents\src\components\charts\funnel-chart.ts`
   - 💡 Agregá 'open-on-click' al array devuelto por static get observedAttributes().
 
-### ⚠️ `is-treemap` — Treemap `(data-viz)`
+### ⚠️ `iswc-treemap` — Treemap `(data-viz)`
 
 - **Ruta JSON**: `src/components/charts/treemap.json`
 - **Ruta módulo**: `src/components/charts/treemap.ts`
@@ -889,7 +889,7 @@
   - 📄 `C:\ContaPyme\Personal\apps\is-webcomponents\src\components\charts\treemap.ts`
   - 💡 Agregá 'open-on-click' al array devuelto por static get observedAttributes().
 
-### ❌ `is-stat` — Stat KPI `(data)`
+### ❌ `iswc-stat` — Stat KPI `(data)`
 
 - **Ruta JSON**: `src/components/data/stat.json`
 - **Ruta módulo**: `src/components/data/stat.ts`
@@ -899,20 +899,20 @@
   - `demos`: 4
   - `controles`: 0
 
-- 🔴 🧩 **json-complejidad** — Demo de <is-stat> no declara <script type="application/json"> con payload.
+- 🔴 🧩 **json-complejidad** — Demo de <iswc-stat> no declara <script type="application/json"> con payload.
   - 📄 `src/components/data/stat.json`
-  - 💡 Pasale la data por JSON al host: <is-stat><script type="application/json">{…}</script></is-stat>.
-- 🔴 🧩 **json-complejidad** — Demo de <is-stat> no declara <script type="application/json"> con payload.
+  - 💡 Pasale la data por JSON al host: <iswc-stat><script type="application/json">{…}</script></iswc-stat>.
+- 🔴 🧩 **json-complejidad** — Demo de <iswc-stat> no declara <script type="application/json"> con payload.
   - 📄 `src/components/data/stat.json`
-  - 💡 Pasale la data por JSON al host: <is-stat><script type="application/json">{…}</script></is-stat>.
-- 🔴 🧩 **json-complejidad** — Demo de <is-stat> no declara <script type="application/json"> con payload.
+  - 💡 Pasale la data por JSON al host: <iswc-stat><script type="application/json">{…}</script></iswc-stat>.
+- 🔴 🧩 **json-complejidad** — Demo de <iswc-stat> no declara <script type="application/json"> con payload.
   - 📄 `src/components/data/stat.json`
-  - 💡 Pasale la data por JSON al host: <is-stat><script type="application/json">{…}</script></is-stat>.
-- 🔴 🧩 **json-complejidad** — Demo de <is-stat> no declara <script type="application/json"> con payload.
+  - 💡 Pasale la data por JSON al host: <iswc-stat><script type="application/json">{…}</script></iswc-stat>.
+- 🔴 🧩 **json-complejidad** — Demo de <iswc-stat> no declara <script type="application/json"> con payload.
   - 📄 `src/components/data/stat.json`
-  - 💡 Pasale la data por JSON al host: <is-stat><script type="application/json">{…}</script></is-stat>.
+  - 💡 Pasale la data por JSON al host: <iswc-stat><script type="application/json">{…}</script></iswc-stat>.
 
-### ❌ `is-transfer` — Transfer `(data)`
+### ❌ `iswc-transfer` — Transfer `(data)`
 
 - **Ruta JSON**: `src/components/data/transfer.json`
 - **Ruta módulo**: `src/components/data/transfer.ts`
@@ -922,20 +922,20 @@
   - `demos`: 4
   - `controles`: 0
 
-- 🔴 🧩 **json-complejidad** — Demo de <is-transfer> no declara <script type="application/json"> con payload.
+- 🔴 🧩 **json-complejidad** — Demo de <iswc-transfer> no declara <script type="application/json"> con payload.
   - 📄 `src/components/data/transfer.json`
-  - 💡 Pasale la data por JSON al host: <is-transfer><script type="application/json">{…}</script></is-transfer>.
-- 🔴 🧩 **json-complejidad** — Demo de <is-transfer> no declara <script type="application/json"> con payload.
+  - 💡 Pasale la data por JSON al host: <iswc-transfer><script type="application/json">{…}</script></iswc-transfer>.
+- 🔴 🧩 **json-complejidad** — Demo de <iswc-transfer> no declara <script type="application/json"> con payload.
   - 📄 `src/components/data/transfer.json`
-  - 💡 Pasale la data por JSON al host: <is-transfer><script type="application/json">{…}</script></is-transfer>.
-- 🔴 🧩 **json-complejidad** — Demo de <is-transfer> no declara <script type="application/json"> con payload.
+  - 💡 Pasale la data por JSON al host: <iswc-transfer><script type="application/json">{…}</script></iswc-transfer>.
+- 🔴 🧩 **json-complejidad** — Demo de <iswc-transfer> no declara <script type="application/json"> con payload.
   - 📄 `src/components/data/transfer.json`
-  - 💡 Pasale la data por JSON al host: <is-transfer><script type="application/json">{…}</script></is-transfer>.
-- 🔴 🧩 **json-complejidad** — Demo de <is-transfer> no declara <script type="application/json"> con payload.
+  - 💡 Pasale la data por JSON al host: <iswc-transfer><script type="application/json">{…}</script></iswc-transfer>.
+- 🔴 🧩 **json-complejidad** — Demo de <iswc-transfer> no declara <script type="application/json"> con payload.
   - 📄 `src/components/data/transfer.json`
-  - 💡 Pasale la data por JSON al host: <is-transfer><script type="application/json">{…}</script></is-transfer>.
+  - 💡 Pasale la data por JSON al host: <iswc-transfer><script type="application/json">{…}</script></iswc-transfer>.
 
-### ❌ `is-transfer-item` — Transfer Item `(data)`
+### ❌ `iswc-transfer-item` — Transfer Item `(data)`
 
 - **Ruta JSON**: `src/components/data/transfer-item.json`
 - **Ruta módulo**: `src/components/data/transfer.ts`
@@ -945,11 +945,11 @@
   - `demos`: 1
   - `controles`: 0
 
-- 🔴 🧩 **json-complejidad** — Demo de <is-transfer> no declara <script type="application/json"> con payload.
+- 🔴 🧩 **json-complejidad** — Demo de <iswc-transfer> no declara <script type="application/json"> con payload.
   - 📄 `src/components/data/transfer-item.json`
-  - 💡 Pasale la data por JSON al host: <is-transfer><script type="application/json">{…}</script></is-transfer>.
+  - 💡 Pasale la data por JSON al host: <iswc-transfer><script type="application/json">{…}</script></iswc-transfer>.
 
-### ❌ `is-gauge` — Gauge `(data-viz)`
+### ❌ `iswc-gauge` — Gauge `(data-viz)`
 
 - **Ruta JSON**: `src/components/data/gauge.json`
 - **Ruta módulo**: `src/components/data/gauge.ts`
@@ -959,23 +959,23 @@
   - `demos`: 5
   - `controles`: 6
 
-- 🔴 🧩 **json-complejidad** — Demo de <is-gauge> no declara <script type="application/json"> con payload.
+- 🔴 🧩 **json-complejidad** — Demo de <iswc-gauge> no declara <script type="application/json"> con payload.
   - 📄 `src/components/data/gauge.json`
-  - 💡 Pasale la data por JSON al host: <is-gauge><script type="application/json">{…}</script></is-gauge>.
-- 🔴 🧩 **json-complejidad** — Demo de <is-gauge> no declara <script type="application/json"> con payload.
+  - 💡 Pasale la data por JSON al host: <iswc-gauge><script type="application/json">{…}</script></iswc-gauge>.
+- 🔴 🧩 **json-complejidad** — Demo de <iswc-gauge> no declara <script type="application/json"> con payload.
   - 📄 `src/components/data/gauge.json`
-  - 💡 Pasale la data por JSON al host: <is-gauge><script type="application/json">{…}</script></is-gauge>.
-- 🔴 🧩 **json-complejidad** — Demo de <is-gauge> no declara <script type="application/json"> con payload.
+  - 💡 Pasale la data por JSON al host: <iswc-gauge><script type="application/json">{…}</script></iswc-gauge>.
+- 🔴 🧩 **json-complejidad** — Demo de <iswc-gauge> no declara <script type="application/json"> con payload.
   - 📄 `src/components/data/gauge.json`
-  - 💡 Pasale la data por JSON al host: <is-gauge><script type="application/json">{…}</script></is-gauge>.
-- 🔴 🧩 **json-complejidad** — Demo de <is-gauge> no declara <script type="application/json"> con payload.
+  - 💡 Pasale la data por JSON al host: <iswc-gauge><script type="application/json">{…}</script></iswc-gauge>.
+- 🔴 🧩 **json-complejidad** — Demo de <iswc-gauge> no declara <script type="application/json"> con payload.
   - 📄 `src/components/data/gauge.json`
-  - 💡 Pasale la data por JSON al host: <is-gauge><script type="application/json">{…}</script></is-gauge>.
-- 🔴 🧩 **json-complejidad** — Demo de <is-gauge> no declara <script type="application/json"> con payload.
+  - 💡 Pasale la data por JSON al host: <iswc-gauge><script type="application/json">{…}</script></iswc-gauge>.
+- 🔴 🧩 **json-complejidad** — Demo de <iswc-gauge> no declara <script type="application/json"> con payload.
   - 📄 `src/components/data/gauge.json`
-  - 💡 Pasale la data por JSON al host: <is-gauge><script type="application/json">{…}</script></is-gauge>.
+  - 💡 Pasale la data por JSON al host: <iswc-gauge><script type="application/json">{…}</script></iswc-gauge>.
 
-### ❌ `is-kanban` — Kanban `(data)`
+### ❌ `iswc-kanban` — Kanban `(data)`
 
 - **Ruta JSON**: `src/components/data/kanban.json`
 - **Ruta módulo**: `src/components/data/kanban.ts`
@@ -985,14 +985,14 @@
   - `demos`: 2
   - `controles`: 0
 
-- 🔴 🧩 **json-complejidad** — Demo de <is-kanban> no declara <script type="application/json"> con payload.
+- 🔴 🧩 **json-complejidad** — Demo de <iswc-kanban> no declara <script type="application/json"> con payload.
   - 📄 `src/components/data/kanban.json`
-  - 💡 Pasale la data por JSON al host: <is-kanban><script type="application/json">{…}</script></is-kanban>.
-- 🔴 🧩 **json-complejidad** — Demo de <is-kanban> no declara <script type="application/json"> con payload.
+  - 💡 Pasale la data por JSON al host: <iswc-kanban><script type="application/json">{…}</script></iswc-kanban>.
+- 🔴 🧩 **json-complejidad** — Demo de <iswc-kanban> no declara <script type="application/json"> con payload.
   - 📄 `src/components/data/kanban.json`
-  - 💡 Pasale la data por JSON al host: <is-kanban><script type="application/json">{…}</script></is-kanban>.
+  - 💡 Pasale la data por JSON al host: <iswc-kanban><script type="application/json">{…}</script></iswc-kanban>.
 
-### ❌ `is-kanban-column` — Kanban Column `(data)`
+### ❌ `iswc-kanban-column` — Kanban Column `(data)`
 
 - **Ruta JSON**: `src/components/data/kanban-column.json`
 - **Ruta módulo**: `src/components/data/kanban.ts`
@@ -1002,11 +1002,11 @@
   - `demos`: 1
   - `controles`: 0
 
-- 🔴 🧩 **json-complejidad** — Demo de <is-kanban> no declara <script type="application/json"> con payload.
+- 🔴 🧩 **json-complejidad** — Demo de <iswc-kanban> no declara <script type="application/json"> con payload.
   - 📄 `src/components/data/kanban-column.json`
-  - 💡 Pasale la data por JSON al host: <is-kanban><script type="application/json">{…}</script></is-kanban>.
+  - 💡 Pasale la data por JSON al host: <iswc-kanban><script type="application/json">{…}</script></iswc-kanban>.
 
-### ❌ `is-kanban-card` — Kanban Card `(data)`
+### ❌ `iswc-kanban-card` — Kanban Card `(data)`
 
 - **Ruta JSON**: `src/components/data/kanban-card.json`
 - **Ruta módulo**: `src/components/data/kanban.ts`
@@ -1016,11 +1016,11 @@
   - `demos`: 1
   - `controles`: 0
 
-- 🔴 🧩 **json-complejidad** — Demo de <is-kanban> no declara <script type="application/json"> con payload.
+- 🔴 🧩 **json-complejidad** — Demo de <iswc-kanban> no declara <script type="application/json"> con payload.
   - 📄 `src/components/data/kanban-card.json`
-  - 💡 Pasale la data por JSON al host: <is-kanban><script type="application/json">{…}</script></is-kanban>.
+  - 💡 Pasale la data por JSON al host: <iswc-kanban><script type="application/json">{…}</script></iswc-kanban>.
 
-### ❌ `is-barcode-scanner` — Barcode Scanner `(media)`
+### ❌ `iswc-barcode-scanner` — Barcode Scanner `(media)`
 
 - **Ruta JSON**: `src/components/media/barcode-scanner.json`
 - **Ruta módulo**: `src/components/media/barcode-scanner.ts`
@@ -1036,7 +1036,7 @@
 - 🔴 ⚙️ **runtime** — observedAttributes declarado pero sin attributeChangedCallback: los cambios de atributo nunca se procesan. El playground del demo no será reactivo.
   - 📄 `C:\ContaPyme\Personal\apps\is-webcomponents\src\components\media\barcode-scanner.ts`
 
-### ⚠️ `is-signature` — Signature `(forms)`
+### ⚠️ `iswc-signature` — Signature `(forms)`
 
 - **Ruta JSON**: `src/components/forms/signature.json`
 - **Ruta módulo**: `src/components/forms/signature.ts`
@@ -1051,7 +1051,7 @@
   - 💡 Si el demo no usa ningún is-*, convertilo a bloque `html` (no necesita chrome de demo).
   - 🔎 {"html":"<div class=\"sig-output\" id=\"output\">\r\n            <small style=\"color:var(--is-t…"}
 
-### ❌ `is-spreadsheet` — Spreadsheet `(data)`
+### ❌ `iswc-spreadsheet` — Spreadsheet `(data)`
 
 - **Ruta JSON**: `src/components/data/spreadsheet.json`
 - **Ruta módulo**: `src/components/data/spreadsheet.ts`
@@ -1061,11 +1061,11 @@
   - `demos`: 1
   - `controles`: 0
 
-- 🔴 🧩 **json-complejidad** — Demo de <is-spreadsheet> no declara <script type="application/json"> con payload.
+- 🔴 🧩 **json-complejidad** — Demo de <iswc-spreadsheet> no declara <script type="application/json"> con payload.
   - 📄 `src/components/data/spreadsheet.json`
-  - 💡 Pasale la data por JSON al host: <is-spreadsheet><script type="application/json">{…}</script></is-spreadsheet>.
+  - 💡 Pasale la data por JSON al host: <iswc-spreadsheet><script type="application/json">{…}</script></iswc-spreadsheet>.
 
-### ⚠️ `is-org-chart` — Org Chart `(diagrams)`
+### ⚠️ `iswc-org-chart` — Org Chart `(diagrams)`
 
 - **Ruta JSON**: `src/components/diagrams/org-chart.json`
 - **Ruta módulo**: `src/components/diagrams/org-chart.ts`
@@ -1079,56 +1079,56 @@
   - 📄 `C:\ContaPyme\Personal\apps\is-webcomponents\src\components\diagrams\org-chart.ts`
   - 💡 Agregá 'open-on-click' al array devuelto por static get observedAttributes().
 
-### ⚠️ `is-preview-component` — Preview Component `(preview)`
+### ⚠️ `iswc-preview-component` — Preview Component `(preview)`
 
 - **Ruta JSON**: ``
 - **Ruta módulo**: `src/components/layout/preview-component.ts`
 
-- 🟡 📐 **json-schema** — No se encontró JSON de preview para <is-preview-component>.
-  - 💡 Creá un archivo de definición siguiendo el esquema is-preview/v1.
+- 🟡 📐 **json-schema** — No se encontró JSON de preview para <iswc-preview-component>.
+  - 💡 Creá un archivo de definición siguiendo el esquema iswc-preview/v1.
 
-### ⚠️ `is-preview-controls` — Preview Controls `(preview)`
+### ⚠️ `iswc-preview-controls` — Preview Controls `(preview)`
 
 - **Ruta JSON**: ``
 - **Ruta módulo**: `src/components/layout/preview-controls.ts`
 
-- 🟡 📐 **json-schema** — No se encontró JSON de preview para <is-preview-controls>.
-  - 💡 Creá un archivo de definición siguiendo el esquema is-preview/v1.
+- 🟡 📐 **json-schema** — No se encontró JSON de preview para <iswc-preview-controls>.
+  - 💡 Creá un archivo de definición siguiendo el esquema iswc-preview/v1.
 
 ### ⚠️ `home` — home `()`
 
 - **Ruta JSON**: ``
 
 - 🟡 📐 **json-schema** — No se encontró JSON de preview para <home>.
-  - 💡 Creá un archivo de definición siguiendo el esquema is-preview/v1.
+  - 💡 Creá un archivo de definición siguiendo el esquema iswc-preview/v1.
 
 ### ⚠️ `icon-explorer` — icon-explorer `()`
 
 - **Ruta JSON**: ``
 
 - 🟡 📐 **json-schema** — No se encontró JSON de preview para <icon-explorer>.
-  - 💡 Creá un archivo de definición siguiendo el esquema is-preview/v1.
+  - 💡 Creá un archivo de definición siguiendo el esquema iswc-preview/v1.
 
 ### ⚠️ `phase7` — phase7 `()`
 
 - **Ruta JSON**: ``
 
 - 🟡 📐 **json-schema** — No se encontró JSON de preview para <phase7>.
-  - 💡 Creá un archivo de definición siguiendo el esquema is-preview/v1.
+  - 💡 Creá un archivo de definición siguiendo el esquema iswc-preview/v1.
 
 ### ⚠️ `theming` — theming `()`
 
 - **Ruta JSON**: ``
 
 - 🟡 📐 **json-schema** — No se encontró JSON de preview para <theming>.
-  - 💡 Creá un archivo de definición siguiendo el esquema is-preview/v1.
+  - 💡 Creá un archivo de definición siguiendo el esquema iswc-preview/v1.
 
 ### ⚠️ `ecosystem` — ecosystem `()`
 
 - **Ruta JSON**: ``
 
 - 🟡 📐 **json-schema** — No se encontró JSON de preview para <ecosystem>.
-  - 💡 Creá un archivo de definición siguiendo el esquema is-preview/v1.
+  - 💡 Creá un archivo de definición siguiendo el esquema iswc-preview/v1.
 
 ## Cobertura por categoría
 

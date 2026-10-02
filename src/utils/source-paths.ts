@@ -94,7 +94,7 @@ export interface CdnMinPaths {
 
 export function resolveCdnMinPaths(entry: ManifestEntry): CdnMinPaths | null {
   if (!entry?.tag || !entry?.category) return null;
-  const short = String(entry.tag).replace(/^is-/, '');
+  const short = String(entry.tag).replace(/^iswc-/, '');
   const category = entry.category;
   const js = `${category}/${short}.min.js`;
   const css = `${category}/${short}.min.css`;

@@ -10,21 +10,21 @@ const URL = `${BASE_URL}/demos/diagramas/flowchart/flowchart.html`;
 const tests = [];
 
 tests.push({
-  name: 'smoke: <is-flowchart> monta y renderiza nodos y aristas',
+  name: 'smoke: <iswc-flowchart> monta y renderiza nodos y aristas',
   run: async (page) => {
     await page.goto(URL, { waitUntil: 'domcontentloaded' });
     await waitReady(page, 'data-flowchart-ready');
     const info = await page.evaluate(() => {
-      const el = document.querySelector('main is-flowchart');
+      const el = document.querySelector('main iswc-flowchart');
       const shadow = el?.shadowRoot;
       return {
-        defined: !!customElements.get('is-flowchart'),
+        defined: !!customElements.get('iswc-flowchart'),
         nodes: shadow?.querySelectorAll('.flow-node').length ?? 0,
         edges: shadow?.querySelectorAll('.flow-edge').length ?? 0,
         hasSvg: !!shadow?.querySelector('svg.flow-svg'),
       };
     });
-    assert.equal(info.defined, true, 'is-flowchart debe estar definido');
+    assert.equal(info.defined, true, 'iswc-flowchart debe estar definido');
     assert.ok(info.nodes >= 4, `esperaba >=4 nodos, hay ${info.nodes}`);
     assert.ok(info.edges >= 4, `esperaba >=4 aristas, hay ${info.edges}`);
     assert.equal(info.hasSvg, true, 'debe existir <svg class="flow-svg">');
@@ -38,7 +38,7 @@ tests.push({
     await page.goto(URL, { waitUntil: 'domcontentloaded' });
     await waitReady(page, 'data-flowchart-ready');
     const ids = await page.evaluate(() => {
-      const el = document.querySelector('main is-flowchart');
+      const el = document.querySelector('main iswc-flowchart');
       return [...el.shadowRoot.querySelectorAll('.flow-node')].map((g) => g.dataset.nodeId);
     });
     assert.ok(ids.includes('start'), 'debe haber un nodo "start"');
@@ -54,7 +54,7 @@ tests.push({
     await page.goto(URL, { waitUntil: 'domcontentloaded' });
     await waitReady(page, 'data-flowchart-ready');
     const shapes = await page.evaluate(() => {
-      const el = document.querySelector('main is-flowchart');
+      const el = document.querySelector('main iswc-flowchart');
       const start = el.shadowRoot.querySelector('.flow-node[data-node-id="start"] path');
       const verify = el.shadowRoot.querySelector('.flow-node[data-node-id="verify"] path');
       return {
@@ -75,7 +75,7 @@ tests.push({
     await page.goto(URL, { waitUntil: 'domcontentloaded' });
     await waitReady(page, 'data-flowchart-ready');
     const has = await page.evaluate(() => {
-      const el = document.querySelector('main is-flowchart');
+      const el = document.querySelector('main iswc-flowchart');
       // Con animation="flow", cada arista sólida (no dashed) añade una capa
       // .flow-edge__flow con stroke-dasharray visible.
       const flowLayers = el.shadowRoot.querySelectorAll('.flow-edge__flow');
@@ -91,7 +91,7 @@ tests.push({
     await page.goto(URL, { waitUntil: 'domcontentloaded' });
     await waitReady(page, 'data-flowchart-ready');
     const has = await page.evaluate(() => {
-      const el = document.querySelector('main is-flowchart');
+      const el = document.querySelector('main iswc-flowchart');
       const dashed = [...el.shadowRoot.querySelectorAll('.flow-edge__path')]
         .filter((p) => p.getAttribute('stroke-dasharray'));
       return dashed.length;
@@ -106,16 +106,16 @@ tests.push({
     await page.goto(URL, { waitUntil: 'domcontentloaded' });
     await waitReady(page, 'data-flowchart-ready');
     const before = await page.evaluate(() => {
-      const el = document.querySelector('main is-flowchart');
+      const el = document.querySelector('main iswc-flowchart');
       return el.shadowRoot.querySelector('svg.flow-svg').getAttribute('viewBox');
     });
     await page.evaluate(() => {
-      const el = document.querySelector('main is-flowchart');
+      const el = document.querySelector('main iswc-flowchart');
       el.payload = el.payload;
     });
     await page.waitForTimeout(150);
     const after = await page.evaluate(() => {
-      const el = document.querySelector('main is-flowchart');
+      const el = document.querySelector('main iswc-flowchart');
       return el.shadowRoot.querySelector('svg.flow-svg').getAttribute('viewBox');
     });
     assert.equal(before, after, 'viewBox idéntico tras re-asignar payload');
@@ -128,7 +128,7 @@ tests.push({
     await page.goto(URL, { waitUntil: 'domcontentloaded' });
     await waitReady(page, 'data-flowchart-ready');
     const meta = await page.evaluate(() => {
-      const el = document.querySelector('main is-flowchart');
+      const el = document.querySelector('main iswc-flowchart');
       const svg = el.shadowRoot.querySelector('svg.flow-svg');
       return { aria: svg.getAttribute('aria-label'), role: svg.getAttribute('role') };
     });

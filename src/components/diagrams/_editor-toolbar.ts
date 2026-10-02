@@ -41,7 +41,7 @@ export type EditorAction =
   | 'fit';
 
 /** Evento custom que la toolbar usa para propagar la acción al host. */
-export const EDITOR_ACTION_EVENT = 'is-editor-action';
+export const EDITOR_ACTION_EVENT = 'iswc-editor-action';
 export interface EditorActionDetail {
   action: EditorAction;
 }

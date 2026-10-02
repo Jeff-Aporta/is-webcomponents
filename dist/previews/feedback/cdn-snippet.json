@@ -1,10 +1,10 @@
 {
-  "$schema": "is-preview/v1",
-  "tag": "is-cdn-snippet",
+  "$schema": "iswc-preview/v1",
+  "tag": "iswc-cdn-snippet",
   "category": "feedback",
-  "title": "<is-cdn-snippet>",
+  "title": "<iswc-cdn-snippet>",
   "titleHtml": true,
-  "storageKey": "docs-is-cdn-snippet",
+  "storageKey": "docs-iswc-cdn-snippet",
   "sections": [
     {
       "id": "intro",
@@ -13,17 +13,17 @@
       "blocks": [
         {
           "kind": "demo",
-          "html": "<is-cdn-snippet tag=\"is-button\"></is-cdn-snippet>",
+          "html": "<iswc-cdn-snippet tag=\"iswc-button\"></iswc-cdn-snippet>",
           "controls": [
             {
               "control": "select",
               "prop": "attr:tag",
               "label": "tag",
               "options": [
-                "is-button",
-                "is-popconfirm",
-                "is-chart",
-                "is-textarea"
+                "iswc-button",
+                "iswc-popconfirm",
+                "iswc-chart",
+                "iswc-textarea"
               ]
             },
             {
@@ -118,8 +118,8 @@
             },
             {
               "control": "boolean",
-              "prop": "attr:is-chart",
-              "label": "is-chart"
+              "prop": "attr:iswc-chart",
+              "label": "iswc-chart"
             },
             {
               "control": "boolean",
@@ -160,7 +160,7 @@
         },
         {
           "kind": "code",
-          "code": "<is-cdn-snippet\n  tag=\"is-button\"\n  category=\"actions\"\n></is-cdn-snippet>",
+          "code": "<iswc-cdn-snippet\n  tag=\"iswc-button\"\n  category=\"actions\"\n></iswc-cdn-snippet>",
           "lang": "html"
         }
       ]
@@ -172,11 +172,11 @@
       "blocks": [
         {
           "kind": "demo",
-          "html": "<is-cdn-snippet\r\n            tag=\"is-popconfirm\"\r\n            category=\"feedback\"\r\n            title=\"Popconfirm — Consumo por CDN\"\r\n          >\r\n            <script type=\"application/json\" slot=\"deps\">\r\n              [\r\n                {\r\n                  \"name\": \"dayjs\",\r\n                  \"version\": \"1.11.13\",\r\n                  \"js\":  \"https://cdn.jsdelivr.net/npm/dayjs@1.11.13/dayjs.min.js\",\r\n                  \"note\": \"Formatea fechas y horas en la UI del componente (API estilo Moment, ~2 kB). Sin CSS propio.\"\r\n                }\r\n              ]\r\n            </script>\r\n          </is-cdn-snippet>"
+          "html": "<iswc-cdn-snippet\r\n            tag=\"iswc-popconfirm\"\r\n            category=\"feedback\"\r\n            title=\"Popconfirm — Consumo por CDN\"\r\n          >\r\n            <script type=\"application/json\" slot=\"deps\">\r\n              [\r\n                {\r\n                  \"name\": \"dayjs\",\r\n                  \"version\": \"1.11.13\",\r\n                  \"js\":  \"https://cdn.jsdelivr.net/npm/dayjs@1.11.13/dayjs.min.js\",\r\n                  \"note\": \"Formatea fechas y horas en la UI del componente (API estilo Moment, ~2 kB). Sin CSS propio.\"\r\n                }\r\n              ]\r\n            </script>\r\n          </iswc-cdn-snippet>"
         },
         {
           "kind": "code",
-          "code": "<is-cdn-snippet tag=\"is-popconfirm\" category=\"feedback\">\n  <script type=\"application/json\" slot=\"deps\">\n    [\n      {\n        \"name\": \"dayjs\",\n        \"version\": \"1.11.13\",\n        \"js\":  \"https://cdn.jsdelivr.net/npm/dayjs@1.11.13/dayjs.min.js\",\n        \"note\": \"Formatea fechas y horas (sin CSS).\"\n      }\n    ]\n  </script>\n</is-cdn-snippet>",
+          "code": "<iswc-cdn-snippet tag=\"iswc-popconfirm\" category=\"feedback\">\n  <script type=\"application/json\" slot=\"deps\">\n    [\n      {\n        \"name\": \"dayjs\",\n        \"version\": \"1.11.13\",\n        \"js\":  \"https://cdn.jsdelivr.net/npm/dayjs@1.11.13/dayjs.min.js\",\n        \"note\": \"Formatea fechas y horas (sin CSS).\"\n      }\n    ]\n  </script>\n</iswc-cdn-snippet>",
           "lang": "html"
         }
       ]
@@ -188,11 +188,11 @@
       "blocks": [
         {
           "kind": "demo",
-          "html": "<is-cdn-snippet\r\n            tag=\"is-chart\"\r\n            category=\"data\"\r\n            dependencies='[\r\n              {\"name\":\"Chart.js\",\"version\":\"4.4.0\",\"js\":\"https://cdn.jsdelivr.net/npm/chart.js@4.4.0/dist/chart.umd.min.js\",\"note\":\"Necesario si usas &lt;is-chart&gt; con type=&quot;bar&quot; o &quot;line&quot;.\"}\r\n            ]'\r\n          ></is-cdn-snippet>"
+          "html": "<iswc-cdn-snippet\r\n            tag=\"iswc-chart\"\r\n            category=\"data\"\r\n            dependencies='[\r\n              {\"name\":\"Chart.js\",\"version\":\"4.4.0\",\"js\":\"https://cdn.jsdelivr.net/npm/chart.js@4.4.0/dist/chart.umd.min.js\",\"note\":\"Necesario si usas &lt;iswc-chart&gt; con type=&quot;bar&quot; o &quot;line&quot;.\"}\r\n            ]'\r\n          ></iswc-cdn-snippet>"
         },
         {
           "kind": "code",
-          "code": "<is-cdn-snippet\n  tag=\"is-chart\"\n  category=\"data\"\n  dependencies='[\n    { \"name\": \"Chart.js\", \"version\": \"4.4.0\",\n      \"js\": \"https://cdn.jsdelivr.net/npm/chart.js@4.4.0/dist/chart.umd.min.js\" }\n  ]'\n></is-cdn-snippet>",
+          "code": "<iswc-cdn-snippet\n  tag=\"iswc-chart\"\n  category=\"data\"\n  dependencies='[\n    { \"name\": \"Chart.js\", \"version\": \"4.4.0\",\n      \"js\": \"https://cdn.jsdelivr.net/npm/chart.js@4.4.0/dist/chart.umd.min.js\" }\n  ]'\n></iswc-cdn-snippet>",
           "lang": "html"
         }
       ]
@@ -204,7 +204,7 @@
       "blocks": [
         {
           "kind": "demo",
-          "html": "<is-cdn-snippet tag=\"is-textarea\" category=\"forms\" title=\"Textarea + dayjs + plugin\">\r\n            <script type=\"application/json\" slot=\"deps\">\r\n              [\r\n                {\r\n                  \"name\": \"dayjs\",\r\n                  \"version\": \"1.11.13\",\r\n                  \"js\":  \"https://cdn.jsdelivr.net/npm/dayjs@1.11.13/dayjs.min.js\",\r\n                  \"note\": \"Formatea fechas y horas en el campo.\"\r\n                },\r\n                {\r\n                  \"name\": \"dayjs · plugin relativeTime\",\r\n                  \"version\": \"1.11.13\",\r\n                  \"js\":  \"https://cdn.jsdelivr.net/npm/dayjs@1.11.13/plugin/relativeTime.js\",\r\n                  \"note\": \"Opcional. Muestra horas relativas (p. ej. \\\"hace 2 días\\\").\"\r\n                }\r\n              ]\r\n            </script>\r\n          </is-cdn-snippet>"
+          "html": "<iswc-cdn-snippet tag=\"iswc-textarea\" category=\"forms\" title=\"Textarea + dayjs + plugin\">\r\n            <script type=\"application/json\" slot=\"deps\">\r\n              [\r\n                {\r\n                  \"name\": \"dayjs\",\r\n                  \"version\": \"1.11.13\",\r\n                  \"js\":  \"https://cdn.jsdelivr.net/npm/dayjs@1.11.13/dayjs.min.js\",\r\n                  \"note\": \"Formatea fechas y horas en el campo.\"\r\n                },\r\n                {\r\n                  \"name\": \"dayjs · plugin relativeTime\",\r\n                  \"version\": \"1.11.13\",\r\n                  \"js\":  \"https://cdn.jsdelivr.net/npm/dayjs@1.11.13/plugin/relativeTime.js\",\r\n                  \"note\": \"Opcional. Muestra horas relativas (p. ej. \\\"hace 2 días\\\").\"\r\n                }\r\n              ]\r\n            </script>\r\n          </iswc-cdn-snippet>"
         }
       ]
     },
@@ -221,7 +221,7 @@
           "rows": [
             [
               "<code>tag</code>",
-              "string — p. ej. <code>\"is-button\"</code>. El snippet siempre hace load de ese tag."
+              "string — p. ej. <code>\"iswc-button\"</code>. El snippet siempre hace load de ese tag."
             ],
             [
               "<code>base</code>",

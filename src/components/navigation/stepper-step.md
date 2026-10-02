@@ -1,15 +1,15 @@
 ---
-tag: is-stepper-step
+tag: iswc-stepper-step
 tags:
-  - is-stepper-step
+  - iswc-stepper-step
 category: navigation
 status: public
 ---
-# `<is-stepper-step>`
+# `<iswc-stepper-step>`
 
 ## Propósito
 
-Paso de `<is-stepper>`. Marca una etapa; el stepper lleva el estado activo.
+Paso de `<iswc-stepper>`. Marca una etapa; el stepper lleva el estado activo.
 
 ## Cuándo usarlo
 
@@ -22,5 +22,5 @@ No lo reimplementes ni lo uses para sustituir al padre. La guía del padre docum
 ## Ejemplo mínimo
 
 ```html
-<is-stepper-step></is-stepper-step>
+<iswc-stepper-step></iswc-stepper-step>
 ```

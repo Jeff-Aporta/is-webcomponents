@@ -17,7 +17,7 @@ checks.push({
     await page.click('#btn-success');
     await page.waitForTimeout(200);
     const size = await page.evaluate(() => {
-      const all = document.querySelectorAll('is-toast-item');
+      const all = document.querySelectorAll('iswc-toast-item');
       const visible = [...all].filter((t) => !t.hidden);
       return visible.map((t) => {
         const r = t.getBoundingClientRect();
@@ -41,7 +41,7 @@ checks.push({
     await page.click('#btn-success');
     await page.waitForTimeout(200);
     const data = await page.evaluate(() => {
-      const item = [...document.querySelectorAll('is-toast-item')].pop();
+      const item = [...document.querySelectorAll('iswc-toast-item')].pop();
       const progress = item.shadowRoot.querySelector('.progress');
       const bar = item.shadowRoot.querySelector('.progress-bar');
       return {
@@ -62,7 +62,7 @@ checks.push({
     await page.click('#btn-warning');
     await page.waitForTimeout(200);
     const data = await page.evaluate(() => {
-      const item = [...document.querySelectorAll('is-toast-item')].pop();
+      const item = [...document.querySelectorAll('iswc-toast-item')].pop();
       const progress = item.shadowRoot.querySelector('.progress');
       return progress.hidden;
     });

@@ -9,21 +9,21 @@ const URL = `${BASE_URL}/demos/forms/file-input/file-input.html`;
 const tests = [];
 
 tests.push({
-  name: 'smoke: el custom element está definido y los cuatro <is-file-input> están montados',
+  name: 'smoke: el custom element está definido y los cuatro <iswc-file-input> están montados',
   run: async (page) => {
     await page.goto(URL, { waitUntil: 'domcontentloaded' });
     await waitReady(page, 'data-file-input-ready');
     const info = await page.evaluate(() => {
-      const els = [...document.querySelectorAll('is-file-input')];
+      const els = [...document.querySelectorAll('iswc-file-input')];
       return {
-        defined: !!customElements.get('is-file-input'),
+        defined: !!customElements.get('iswc-file-input'),
         count: els.length,
         definedClass: els[0]?.constructor?.name,
         dropzones: els.map((el) => el.shadowRoot.querySelector('.dropzone')),
         labels: els.map((el) => el.shadowRoot.querySelector('.label')?.textContent?.trim()),
       };
     });
-    assert.equal(info.defined, true, 'is-file-input debe estar definido');
+    assert.equal(info.defined, true, 'iswc-file-input debe estar definido');
     assert.equal(info.count, 4, `esperaba 4 elementos, hay ${info.count}`);
     assert.equal(info.definedClass, 'IsFileInput', 'clase esperada IsFileInput');
     for (let i = 0; i < 4; i++) {
@@ -35,19 +35,19 @@ tests.push({
 });
 
 tests.push({
-  name: 'funcional: asignar `files` actualiza la lista interna y dispara is-change',
+  name: 'funcional: asignar `files` actualiza la lista interna y dispara iswc-change',
   run: async (page) => {
     await page.goto(URL, { waitUntil: 'domcontentloaded' });
     await waitReady(page, 'data-file-input-ready');
-    // Capturar el evento is-change en la página
+    // Capturar el evento iswc-change en la página
     await page.evaluate(() => {
       window.__isChangeCount = 0;
-      document.querySelectorAll('is-file-input').forEach((el) => {
-        el.addEventListener('is-change', () => { window.__isChangeCount += 1; });
+      document.querySelectorAll('iswc-file-input').forEach((el) => {
+        el.addEventListener('iswc-change', () => { window.__isChangeCount += 1; });
       });
     });
     const result = await page.evaluate(() => {
-      const el = document.querySelectorAll('is-file-input')[0];
+      const el = document.querySelectorAll('iswc-file-input')[0];
       const f = new File(['hola mundo'], 'demo.txt', { type: 'text/plain' });
       el.files = [f];
       // Pequeño ciclo para que se emita el evento
@@ -66,7 +66,7 @@ tests.push({
     assert.equal(result.nativeInputFiles, 1, 'el input nativo debe reflejar el archivo');
     await page.waitForTimeout(50);
     const isChangeCount = await page.evaluate(() => window.__isChangeCount);
-    assert.ok(isChangeCount >= 1, `esperaba >=1 evento is-change, hubo ${isChangeCount}`);
+    assert.ok(isChangeCount >= 1, `esperaba >=1 evento iswc-change, hubo ${isChangeCount}`);
   },
 });
 
@@ -76,7 +76,7 @@ tests.push({
     await page.goto(URL, { waitUntil: 'domcontentloaded' });
     await waitReady(page, 'data-file-input-ready');
     const multi = await page.evaluate(() => {
-      const el = document.querySelectorAll('is-file-input')[1]; // multiple
+      const el = document.querySelectorAll('iswc-file-input')[1]; // multiple
       const f1 = new File(['a'], 'a.png', { type: 'image/png' });
       const f2 = new File(['b'], 'b.png', { type: 'image/png' });
       el.files = [f1, f2];
@@ -89,7 +89,7 @@ tests.push({
     assert.deepEqual(multi.names, ['a.png', 'b.png']);
 
     const single = await page.evaluate(() => {
-      const el = document.querySelectorAll('is-file-input')[0]; // sin multiple
+      const el = document.querySelectorAll('iswc-file-input')[0]; // sin multiple
       const f1 = new File(['a'], 'a.txt', { type: 'text/plain' });
       const f2 = new File(['b'], 'b.txt', { type: 'text/plain' });
       el.files = [f1];
@@ -110,7 +110,7 @@ tests.push({
     await page.goto(URL, { waitUntil: 'domcontentloaded' });
     await waitReady(page, 'data-file-input-ready');
     const result = await page.evaluate(() => {
-      const el = document.querySelectorAll('is-file-input')[3]; // disabled
+      const el = document.querySelectorAll('iswc-file-input')[3]; // disabled
       const dz = el.shadowRoot.querySelector('.dropzone');
       const inp = el.shadowRoot.querySelector('input.native');
       return {
@@ -133,7 +133,7 @@ tests.push({
     await page.goto(URL, { waitUntil: 'domcontentloaded' });
     await waitReady(page, 'data-file-input-ready');
     const aria = await page.evaluate(() => {
-      const el = document.querySelectorAll('is-file-input')[0];
+      const el = document.querySelectorAll('iswc-file-input')[0];
       const dz = el.shadowRoot.querySelector('.dropzone');
       const labelId = dz.getAttribute('aria-labelledby');
       const descId = dz.getAttribute('aria-describedby');
@@ -159,7 +159,7 @@ tests.push({
     await page.goto(URL, { waitUntil: 'domcontentloaded' });
     await waitReady(page, 'data-file-input-ready');
     const validity = await page.evaluate(() => {
-      const el = document.querySelectorAll('is-file-input')[2]; // required
+      const el = document.querySelectorAll('iswc-file-input')[2]; // required
       // Accedemos al internals; está disponible en el componente
       const internals = el.formAssociated ? el : null;
       // El elemento es formAssociated: tiene internals con validity
@@ -184,7 +184,7 @@ tests.push({
     await page.goto(URL, { waitUntil: 'domcontentloaded' });
     await waitReady(page, 'data-file-input-ready');
     const result = await page.evaluate(() => {
-      const el = document.querySelectorAll('is-file-input')[0];
+      const el = document.querySelectorAll('iswc-file-input')[0];
       el.files = [new File(['x'], 'x.txt', { type: 'text/plain' })];
       const before = {
         listHidden: el.shadowRoot.querySelector('.file-list').hidden,
@@ -214,7 +214,7 @@ tests.push({
     await page.goto(URL, { waitUntil: 'domcontentloaded' });
     await waitReady(page, 'data-file-input-ready');
     const result = await page.evaluate(() => {
-      const el = document.querySelectorAll('is-file-input')[0];
+      const el = document.querySelectorAll('iswc-file-input')[0];
       el.files = [
         new File(['a'], 'a.txt', { type: 'text/plain' }),
         new File(['b'], 'b.txt', { type: 'text/plain' }),

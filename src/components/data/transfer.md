@@ -1,15 +1,15 @@
 ---
-tag: is-transfer
+tag: iswc-transfer
 tags:
-  - is-transfer
-  - is-transfer-item
+  - iswc-transfer
+  - iswc-transfer-item
 category: data
 status: public
 source: ./transfer.js
 style: ./transfer.css
 preview: ./transfer.json
 ---
-# `<is-transfer>` / `<is-transfer-item>`
+# `<iswc-transfer>` / `<iswc-transfer-item>`
 
 ## Propósito
 
@@ -17,7 +17,7 @@ Doble lista de selección tipo Material/Ant. Mueve elementos entre
 origen y destino con botones, click individual, filtro de búsqueda y
 límite máximo configurable.
 
-Este módulo registra `<is-transfer>`, `<is-transfer-item>`.
+Este módulo registra `<iswc-transfer>`, `<iswc-transfer-item>`.
 
 ## Cuándo usarlo
 
@@ -36,12 +36,12 @@ import './transfer.js';
 ## Ejemplo mínimo
 
 ```html
-<is-transfer searchable>
-<is-transfer-item value="a">Alpha</is-transfer-item>
-<is-transfer-item value="b" selected>Beta</is-transfer-item>
-<is-transfer-item value="c">Gamma</is-transfer-item>
+<iswc-transfer searchable>
+<iswc-transfer-item value="a">Alpha</iswc-transfer-item>
+<iswc-transfer-item value="b" selected>Beta</iswc-transfer-item>
+<iswc-transfer-item value="c">Gamma</iswc-transfer-item>
 …
-</is-transfer>
+</iswc-transfer>
 ```
 
 ## API
@@ -78,7 +78,7 @@ import './transfer.js';
 
 | Evento | detail | bubbles | composed | cancelable |
 | --- | --- | --- | --- | --- |
-| `is-transfer-change` | sí | sí | sí | no |
+| `iswc-transfer-change` | sí | sí | sí | no |
 
 ### Métodos y propiedades públicas
 
@@ -128,33 +128,33 @@ No declara integración form-associated propia en este módulo.
 
 Documentación de cabecera preservada desde fuente:
 
-> <is-transfer> — Doble lista de selección (vanilla, zero dependencies).
+> <iswc-transfer> — Doble lista de selección (vanilla, zero dependencies).
 > Mueve elementos entre una lista de origen y una lista de destino.
->   <is-transfer id="t1">
->     <is-transfer-item value="a">Alpha</is-transfer-item>
->     <is-transfer-item value="b" selected>Beta</is-transfer-item>
->   </is-transfer>
-> Atributos <is-transfer>
+>   <iswc-transfer id="t1">
+>     <iswc-transfer-item value="a">Alpha</iswc-transfer-item>
+>     <iswc-transfer-item value="b" selected>Beta</iswc-transfer-item>
+>   </iswc-transfer>
+> Atributos <iswc-transfer>
 >   source-title       string
 >   target-title       string
 >   searchable         boolean
 >   without-buttons    boolean  — sin botones prev/next
 >   without-headings   boolean
 >   max-target         number   — máximo de items en target.
-> Atributos <is-transfer-item>
+> Atributos <iswc-transfer-item>
 >   value        string
 >   disabled     boolean
 > Slots
->   <is-transfer-item>
+>   <iswc-transfer-item>
 >     (default)   label.
 > Eventos
->   is-transfer-change  detail: { item, source, target, values }
+>   iswc-transfer-change  detail: { item, source, target, values }
 
 ## Dependencias y componentes relacionados
 
 - [`../_shared/adopt-css.js`](../_shared/adopt-css.js)
 
-Tags del módulo: `<is-transfer>`, `<is-transfer-item>`.
+Tags del módulo: `<iswc-transfer>`, `<iswc-transfer-item>`.
 
 ## Accesibilidad
 
@@ -163,12 +163,12 @@ Preservar semántica, foco, teclado, labels y ARIA. ARIA detectado: `aria-label`
 ## Ejemplo avanzado
 
 ```html
-<is-transfer searchable>
-<is-transfer-item value="a">Alpha</is-transfer-item>
-<is-transfer-item value="b" selected>Beta</is-transfer-item>
-<is-transfer-item value="c">Gamma</is-transfer-item>
+<iswc-transfer searchable>
+<iswc-transfer-item value="a">Alpha</iswc-transfer-item>
+<iswc-transfer-item value="b" selected>Beta</iswc-transfer-item>
+<iswc-transfer-item value="c">Gamma</iswc-transfer-item>
 …
-</is-transfer>
+</iswc-transfer>
 ```
 
 ## Errores comunes

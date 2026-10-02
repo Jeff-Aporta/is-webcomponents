@@ -1,5 +1,5 @@
 /**
- * <is-preview-component> — shell homogéneo de documentación/demo.
+ * <iswc-preview-component> — shell homogéneo de documentación/demo.
  *
  * Recibe una instancia de ISComponentPreview (propiedad `.preview`) y:
  * 1. Pinta split-panel + main + TOC desde `preview.definition`
@@ -28,16 +28,16 @@ const COMPACT_QUERY = '(max-width: 900px)';
 
 const TEMPLATE = document.createElement('template');
 TEMPLATE.innerHTML = /* html */ `
-  <is-split-panel class="page" part="page" orientation="horizontal" position-in-pixels="220" primary="end">
-    <is-main class="main" part="main" slot="start"></is-main>
+  <iswc-split-panel class="page" part="page" orientation="horizontal" position-in-pixels="220" primary="end">
+    <iswc-main class="main" part="main" slot="start"></iswc-main>
     <aside class="sidebar" part="aside" slot="end"></aside>
-  </is-split-panel>
-  <is-button class="toc-toggle" part="toc-toggle" color="brand" variant="plain" pill type="button"
+  </iswc-split-panel>
+  <iswc-button class="toc-toggle" part="toc-toggle" color="brand" variant="plain" pill type="button"
           aria-expanded="false" aria-label="Abrir el índice de la página" title="Índice de la página" hidden>
-    <is-icon slot="start" icon="mdi:format-list-bulleted"></is-icon>
-  </is-button>
-  <is-drawer class="toc-drawer" part="toc-drawer" placement="end" light-dismiss
-             label="Índice"></is-drawer>
+    <iswc-icon slot="start" icon="mdi:format-list-bulleted"></iswc-icon>
+  </iswc-button>
+  <iswc-drawer class="toc-drawer" part="toc-drawer" placement="end" light-dismiss
+             label="Índice"></iswc-drawer>
 `;
 
 interface DrawerEl extends HTMLElement {
@@ -45,7 +45,7 @@ interface DrawerEl extends HTMLElement {
   hide?(): void;
 }
 
-class IsPreviewComponent extends withStyleAttrs(HTMLElement) {
+class IswcPreviewComponent extends withStyleAttrs(HTMLElement) {
     /** Personalización por atributo (ver `core/attrs.ts`). */
     static styleAttrs = {
     size: '--iswc-preview-size',
@@ -62,7 +62,7 @@ class IsPreviewComponent extends withStyleAttrs(HTMLElement) {
   #onCompactChange = (): void => { this.#syncLayout(); };
 
   static get observedAttributes(): string[] {
-    return ['storage-key', ...IsPreviewComponent.styleAttrNames];
+    return ['storage-key', ...IswcPreviewComponent.styleAttrNames];
   }
 
   constructor() {
@@ -73,7 +73,7 @@ class IsPreviewComponent extends withStyleAttrs(HTMLElement) {
   connectedCallback(): void {
 
     super.connectedCallback();
-    if (!this.querySelector<HTMLElement>(':scope > is-split-panel')) {
+    if (!this.querySelector<HTMLElement>(':scope > iswc-split-panel')) {
       this.append(TEMPLATE.content.cloneNode(true));
     }
     this.#mounted = true;
@@ -85,7 +85,7 @@ class IsPreviewComponent extends withStyleAttrs(HTMLElement) {
    * `storage-key` se leía sólo dentro de `#paint()`, así que declararlo en
    * `observedAttributes` no servía de nada: cambiarlo en caliente no movía
    * la clave de scroll hasta el siguiente cambio de componente. Propagarlo
-   * al `<is-main>` es todo lo que hace falta.
+   * al `<iswc-main>` es todo lo que hace falta.
    */
   attributeChangedCallback(name: string, oldVal: string | null, newVal: string | null): void {
     super.attributeChangedCallback(name, oldVal, newVal);
@@ -120,11 +120,11 @@ class IsPreviewComponent extends withStyleAttrs(HTMLElement) {
   }
 
   #panel(): HTMLElement | null {
-    return this.querySelector<HTMLElement>(':scope > is-split-panel');
+    return this.querySelector<HTMLElement>(':scope > iswc-split-panel');
   }
 
   #main(): HTMLElement | null {
-    return this.querySelector<HTMLElement>('is-main');
+    return this.querySelector<HTMLElement>('iswc-main');
   }
 
   #aside(): HTMLElement | null {
@@ -132,11 +132,11 @@ class IsPreviewComponent extends withStyleAttrs(HTMLElement) {
   }
 
   #drawer(): HTMLElement | null {
-    return this.querySelector<HTMLElement>(':scope > is-drawer.toc-drawer');
+    return this.querySelector<HTMLElement>(':scope > iswc-drawer.toc-drawer');
   }
 
   #toggle(): HTMLElement | null {
-    return this.querySelector<HTMLElement>(':scope > is-button.toc-toggle, :scope > button.toc-toggle');
+    return this.querySelector<HTMLElement>(':scope > iswc-button.toc-toggle, :scope > button.toc-toggle');
   }
 
   /** Hamburguesa + drawer del TOC: solo hace falta atarlos una vez. */
@@ -147,8 +147,8 @@ class IsPreviewComponent extends withStyleAttrs(HTMLElement) {
 
     if (!this.#compactMql) {
       toggle.addEventListener('click', () => drawer.show?.() ?? drawer.setAttribute('open', ''));
-      drawer.addEventListener('is-show', () => toggle.setAttribute('aria-expanded', 'true'));
-      drawer.addEventListener('is-after-hide', () => toggle.setAttribute('aria-expanded', 'false'));
+      drawer.addEventListener('iswc-show', () => toggle.setAttribute('aria-expanded', 'true'));
+      drawer.addEventListener('iswc-after-hide', () => toggle.setAttribute('aria-expanded', 'false'));
       // Ir a una sección cierra el índice: en compacto el drawer tapa el texto.
       drawer.addEventListener('click', (e: Event) => {
         const target = e.target as Element | null;
@@ -214,7 +214,7 @@ class IsPreviewComponent extends withStyleAttrs(HTMLElement) {
       try {
         this.#preview.unmount(this.#ctx);
       } catch (err: unknown) {
-        console.error('[is-preview-component] unmount', err);
+        console.error('[iswc-preview-component] unmount', err);
       }
     }
     this.#ctx = null;
@@ -240,7 +240,7 @@ class IsPreviewComponent extends withStyleAttrs(HTMLElement) {
       def.storageKey ||
       `docs-${def.tag}`;
     // remember-scroll + storage-key juntos: si el attr va en el template sin
-    // key, is-main avisa en consola en el tick 0 (antes de #paint).
+    // key, iswc-main avisa en consola en el tick 0 (antes de #paint).
     main.setAttribute('storage-key', storageKey);
     main.toggleAttribute('remember-scroll', true);
     panel.setAttribute('storage-key', `docs-toc-${def.tag}`);
@@ -265,7 +265,7 @@ class IsPreviewComponent extends withStyleAttrs(HTMLElement) {
     try {
       await preview.mount(this.#ctx);
     } catch (err: unknown) {
-      console.error(`[is-preview-component] mount ${def.tag}`, err);
+      console.error(`[iswc-preview-component] mount ${def.tag}`, err);
     }
 
     // Otro `preview =` arrancó mientras montábamos: no emitir ready viejo.
@@ -273,7 +273,7 @@ class IsPreviewComponent extends withStyleAttrs(HTMLElement) {
 
     // Avisar a docs-chrome / demo-code por si ya estaban cargados
     this.dispatchEvent(
-      new CustomEvent('is-preview-ready', {
+      new CustomEvent('iswc-preview-ready', {
         bubbles: true,
         composed: true,
         detail: { tag: def.tag },
@@ -282,7 +282,7 @@ class IsPreviewComponent extends withStyleAttrs(HTMLElement) {
   }
 }
 
-defineElement('is-preview-component', IsPreviewComponent);
+defineElement('iswc-preview-component', IswcPreviewComponent);
 
-export { IsPreviewComponent };
-export default IsPreviewComponent;
+export { IswcPreviewComponent };
+export default IswcPreviewComponent;

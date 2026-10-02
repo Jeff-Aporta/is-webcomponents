@@ -1,23 +1,23 @@
 ---
-tag: is-block-diagram
+tag: iswc-block-diagram
 tags:
-  - is-block-diagram
+  - iswc-block-diagram
 category: diagrams
 status: public
 source: ./block-diagram.js
 style: ./block-diagram.css
 preview: ./block-diagram.json
 ---
-# `<is-block-diagram>`
+# `<iswc-block-diagram>`
 
 ## Propósito
 
 Diagrama de bloques en SVG, sin Mermaid. A diferencia de
-<is-flowchart>, los bloques no se organizan en capas: se
+<iswc-flowchart>, los bloques no se organizan en capas: se
 ubican en una rejilla de columns columnas fijas, fluyendo de
 izquierda a derecha y bajando de fila cuando no caben.
 
-Este módulo registra `<is-block-diagram>`.
+Este módulo registra `<iswc-block-diagram>`.
 
 ## Cuándo usarlo
 
@@ -36,7 +36,7 @@ import './block-diagram.js';
 ## Ejemplo mínimo
 
 ```html
-<is-block-diagram></is-block-diagram>
+<iswc-block-diagram></iswc-block-diagram>
 ```
 
 ## API
@@ -70,10 +70,10 @@ import './block-diagram.js';
 
 | Evento | detail | bubbles | composed | cancelable |
 | --- | --- | --- | --- | --- |
-| `is-turtle-state` | sí | sí | sí | no |
-| `is-render` | sí | sí | sí | no |
-| `is-toggle-group` | sí | sí | sí | sí |
-| `is-open-viewer` | sí | sí | sí | sí |
+| `iswc-turtle-state` | sí | sí | sí | no |
+| `iswc-render` | sí | sí | sí | no |
+| `iswc-toggle-group` | sí | sí | sí | sí |
+| `iswc-open-viewer` | sí | sí | sí | sí |
 
 ### Métodos y propiedades públicas
 
@@ -111,18 +111,18 @@ No declara integración form-associated propia en este módulo.
 
 Documentación de cabecera preservada desde fuente:
 
-> <is-block-diagram> — diagrama de bloques en SVG, sin Mermaid.
-> Configuración por JSON, igual que <is-flowchart>:
->   <is-block-diagram>
+> <iswc-block-diagram> — diagrama de bloques en SVG, sin Mermaid.
+> Configuración por JSON, igual que <iswc-flowchart>:
+>   <iswc-block-diagram>
 >     <script type="application/json">
 >       { "blockDiagram": { "columns": 3, "blocks": [...], "edges": [...] } }
 >     </script>
->   </is-block-diagram>
+>   </iswc-block-diagram>
 > A diferencia del flujo, aquí los bloques se ubican en una rejilla explícita
 > (columnas fijas + `span`), no en capas node-link.
 > Atributos: color (inline | viewer), open-on-click
 > Propiedades: payload, spec, layout, turtle, hiddenGroups
-> Eventos: is-render, is-turtle-state, is-open-viewer, is-toggle-group
+> Eventos: iswc-render, iswc-turtle-state, iswc-open-viewer, iswc-toggle-group
 
 ## Dependencias y componentes relacionados
 
@@ -136,7 +136,7 @@ Documentación de cabecera preservada desde fuente:
 - [`../_shared/icon-loader.js`](../_shared/icon-loader.js)
 - [`./diagram-kinds.js`](./diagram-kinds.js)
 
-Tags del módulo: `<is-block-diagram>`.
+Tags del módulo: `<iswc-block-diagram>`.
 
 ## Accesibilidad
 
@@ -145,7 +145,7 @@ Preservar semántica, foco, teclado, labels y ARIA. ARIA detectado: `aria-label`
 ## Ejemplo avanzado
 
 ```html
-<is-block-diagram></is-block-diagram>
+<iswc-block-diagram></iswc-block-diagram>
 ```
 
 ## Errores comunes

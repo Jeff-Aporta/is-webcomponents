@@ -16,7 +16,7 @@ import { TreeCustomsBase } from './_shared/tree-view/customs-base.js';
 import { paintForest } from './_shared/tree-view/render-rows.js';
 import type { TNode, TRecord, TreeActionEntry, TreeCustoms } from './_shared/tree-view/_types.js';
 
-/** Subset del adapter que `IsTreeView` consume (no necesita el tipo completo). */
+/** Subset del adapter que `IswcTreeView` consume (no necesita el tipo completo). */
 interface _AdapterLike {
   treeRootId: string;
   _domRoot?: HTMLElement | null;
@@ -62,7 +62,7 @@ export { objRootsToNodes, TreeNode, groupedWithSeparators } from './_shared/tree
 export { TreeRowAdapter } from './_shared/tree-view/row-adapter.js';
 
 /**
- * <is-tree-view> — port de TreeRowView.svelte (ClientesIS / cursos).
+ * <iswc-tree-view> — port de TreeRowView.svelte (ClientesIS / cursos).
  *
  * Árbol editable: drag, historial, protección, drawer de ficha y
  * confirm-delete. La cascada del adapter se trae tal cual; la UI
@@ -81,7 +81,7 @@ export { TreeRowAdapter } from './_shared/tree-view/row-adapter.js';
  *   readonly / draggable / disabled / label-field / helper-field
  *
  * Slots: header, frm
- * Eventos: is-frm-open, is-frm-close, is-select, is-error, is-action
+ * Eventos: iswc-frm-open, iswc-frm-close, iswc-select, iswc-error, iswc-action
  */
 
 const TEMPLATE = document.createElement('template');
@@ -90,18 +90,18 @@ TEMPLATE.innerHTML = /* html */ `
     <div part="toolbar" class="isp-tree-toolbar" hidden></div>
     <slot name="header"></slot>
     <div part="body" class="isp-tree-body isp-tree-focus-scope" data-testid="tree" role="tree"></div>
-    <is-drawer part="drawer" class="drawer" light-dismiss label="Ficha">
+    <iswc-drawer part="drawer" class="drawer" light-dismiss label="Ficha">
       <div class="drawer-body"><slot name="frm"></slot></div>
-    </is-drawer>
-    <is-confirm-delete class="modal-delete" case-sensitive></is-confirm-delete>
-    <is-dialog class="protect-dlg" label="Árbol protegido">
+    </iswc-drawer>
+    <iswc-confirm-delete class="modal-delete" case-sensitive></iswc-confirm-delete>
+    <iswc-dialog class="protect-dlg" label="Árbol protegido">
       <p class="protect-msg">El árbol está protegido contra edición. ¿Cómo desea continuar?</p>
       <div slot="footer" class="protect-actions">
-        <is-button class="protect-cancel" color="neutral" variant="outlined" data-dialog="close">Cancelar</is-button>
-        <is-button class="protect-redo" color="warning" variant="ghost">Rehacer al actual</is-button>
-        <is-button class="protect-ok" color="warning">Desproteger</is-button>
+        <iswc-button class="protect-cancel" color="neutral" variant="outlined" data-dialog="close">Cancelar</iswc-button>
+        <iswc-button class="protect-redo" color="warning" variant="ghost">Rehacer al actual</iswc-button>
+        <iswc-button class="protect-ok" color="warning">Desproteger</iswc-button>
       </div>
-    </is-dialog>
+    </iswc-dialog>
   </div>
 `;
 
@@ -128,7 +128,7 @@ interface _DialogLike extends HTMLElement {
   hide?: () => void;
 }
 
-class IsTreeView extends HTMLElement {
+class IswcTreeView extends HTMLElement {
   static get observedAttributes(): string[] { return OBSERVED; }
 
   #mounted = false;
@@ -229,11 +229,11 @@ class IsTreeView extends HTMLElement {
     this.#upgrade();
     if (!this.#adapter) this.#adapter = new TreeRowViewAdapter() as unknown as _AdapterLike;
     this.#wireAdapter();
-    this.#drawer.addEventListener('is-after-hide', this.#onDrawerHide);
-    this.#modalDelete.addEventListener('is-confirm-delete', this.#onDeleteConfirm as unknown as EventListener);
+    this.#drawer.addEventListener('iswc-after-hide', this.#onDrawerHide);
+    this.#modalDelete.addEventListener('iswc-confirm-delete', this.#onDeleteConfirm as unknown as EventListener);
     this.#protectOk.addEventListener('click', this.#onProtectOk);
     this.#protectRedo.addEventListener('click', this.#onProtectRedo);
-    this.#protectDlg.addEventListener('is-hide', this.#onProtectDismiss);
+    this.#protectDlg.addEventListener('iswc-hide', this.#onProtectDismiss);
     document.addEventListener('pointerdown', this.#onOutside, true);
     document.addEventListener('dragend', this.#onDragEnd, true);
     document.addEventListener('pointerup', this.#onDragPointerUp, true);
@@ -245,11 +245,11 @@ class IsTreeView extends HTMLElement {
     this.#mounted = false;
     this.#offUi?.();
     this.#offUi = null;
-    this.#drawer.removeEventListener('is-after-hide', this.#onDrawerHide);
-    this.#modalDelete.removeEventListener('is-confirm-delete', this.#onDeleteConfirm as unknown as EventListener);
+    this.#drawer.removeEventListener('iswc-after-hide', this.#onDrawerHide);
+    this.#modalDelete.removeEventListener('iswc-confirm-delete', this.#onDeleteConfirm as unknown as EventListener);
     this.#protectOk.removeEventListener('click', this.#onProtectOk);
     this.#protectRedo.removeEventListener('click', this.#onProtectRedo);
-    this.#protectDlg.removeEventListener('is-hide', this.#onProtectDismiss);
+    this.#protectDlg.removeEventListener('iswc-hide', this.#onProtectDismiss);
     document.removeEventListener('pointerdown', this.#onOutside, true);
     document.removeEventListener('dragend', this.#onDragEnd, true);
     document.removeEventListener('pointerup', this.#onDragPointerUp, true);
@@ -273,7 +273,7 @@ class IsTreeView extends HTMLElement {
   #reportError(msg: unknown): void {
     const s = String(msg || '');
     this.#onError?.(s);
-    emit(this, 'is-error', { message: s });
+    emit(this, 'iswc-error', { message: s });
   }
 
   #wireAdapter(): void {
@@ -313,7 +313,7 @@ class IsTreeView extends HTMLElement {
     const path = rec?.flatPath ?? '';
     if (path === this.#lastSelectPath) return;
     this.#lastSelectPath = path;
-    if (rec) emit(this, 'is-select', { node: rec, flatPath: rec.flatPath });
+    if (rec) emit(this, 'iswc-select', { node: rec, flatPath: rec.flatPath });
   }
 
   #pushState(): void {
@@ -347,9 +347,9 @@ class IsTreeView extends HTMLElement {
     const showTb = !!(customsExtra?.menu || customsExtra?.moreMenu) || (actions?.length ?? 0) > 0;
     this.#toolbar.hidden = !showTb;
     if (showTb) {
-      let fo = this.#toolbar.querySelector<HTMLElement & { actions?: TreeActionEntry[] }>('is-flex-options');
+      let fo = this.#toolbar.querySelector<HTMLElement & { actions?: TreeActionEntry[] }>('iswc-flex-options');
       if (!fo) {
-        fo = document.createElement('is-flex-options');
+        fo = document.createElement('iswc-flex-options');
         this.#toolbar.append(fo);
       }
       fo.actions = actions;
@@ -371,7 +371,7 @@ class IsTreeView extends HTMLElement {
     const rec = this.#pendingRecord || a.record;
     this.#drawer.label = this.#editMode === 'view' ? 'Visualizar' : this.#editMode === 'create' ? 'Crear' : 'Modificar';
     this.#drawer.show?.() ?? this.#drawer.setAttribute('open', '');
-    emit(this, 'is-frm-open', {
+    emit(this, 'iswc-frm-open', {
       record: rec,
       itdForm: this.#editMode,
       ancestors: rec ? a.walkAncestors(rec) : [],
@@ -385,7 +385,7 @@ class IsTreeView extends HTMLElement {
 
   #onDrawerHide = (): void => {
     this.#adapter?.closeEditForm?.();
-    emit(this, 'is-frm-close', {});
+    emit(this, 'iswc-frm-close', {});
   };
 
   #onDeleteConfirm = async (e: CustomEvent<{ value?: string }>): Promise<void> => {
@@ -438,4 +438,4 @@ class IsTreeView extends HTMLElement {
   runCustomsPreSubmit(): unknown { return this.#adapter?.runCustomsPreSubmit?.(); }
 }
 
-defineElement('is-tree-view', IsTreeView, 'IsTreeView');
+defineElement('iswc-tree-view', IswcTreeView, 'IswcTreeView');

@@ -5,10 +5,10 @@
  * anotaciones externas (highlights de error, tooltips de docs) viven en
  * `marks[]` con offsets UTF-16 (igual que JS String).
  *
- * Schema: `is-code-doc/v1`
+ * Schema: `iswc-code-doc/v1`
  *
  * {
- *   "$schema": "is-code-doc/v1",
+ *   "$schema": "iswc-code-doc/v1",
  *   "lang": "javascript",
  *   "value": "…",
  *   "marks": [
@@ -22,7 +22,7 @@
  * }
  */
 
-export const CODE_DOC_SCHEMA = 'is-code-doc/v1';
+export const CODE_DOC_SCHEMA = 'iswc-code-doc/v1';
 
 export type CodeMarkKind = 'highlight' | 'tooltip' | 'message';
 export type CodeMarkTone = 'error' | 'warning' | 'info' | 'success' | 'neutral';

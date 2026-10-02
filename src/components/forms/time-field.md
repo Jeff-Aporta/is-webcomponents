@@ -1,20 +1,20 @@
 ---
-tag: is-time-field
+tag: iswc-time-field
 tags:
-  - is-time-field
+  - iswc-time-field
 category: forms
 status: public
 source: ./time-field.js
 style: ./time-field.css
 preview: ./time-field.json
 ---
-# `<is-time-field>`
+# `<iswc-time-field>`
 
 ## Propósito
 
 Campo editable por secciones (DateField de MUI X). Cada sección es un spinbutton: flechas, dígitos, izquierda/derecha, Retroceso. El orden lo decide el locale.
 
-Este módulo registra `<is-time-field>`.
+Este módulo registra `<iswc-time-field>`.
 
 ## Cuándo usarlo
 
@@ -33,7 +33,7 @@ import './time-field.js';
 ## Ejemplo mínimo
 
 ```html
-<is-time-field></is-time-field>
+<iswc-time-field></iswc-time-field>
 ```
 
 ## API
@@ -95,18 +95,18 @@ No declara integración form-associated propia en este módulo.
 
 Documentación de cabecera preservada desde fuente:
 
-> <is-time-field> — Campo de hora editable por secciones (MUI TimeField).
+> <iswc-time-field> — Campo de hora editable por secciones (MUI TimeField).
 > Atributos: label, hint, name, value (HH:mm[:ss]), min, max, required,
 >            disabled, readonly, clearable, locale, ampm, hour24, seconds,
 >            invalid
 > Slots: start, end
-> Events: is-change, is-input
+> Events: iswc-change, iswc-input
 
 ## Dependencias y componentes relacionados
 
 - [`../_shared/date-field-element.js`](../_shared/date-field-element.js)
 
-Tags del módulo: `<is-time-field>`.
+Tags del módulo: `<iswc-time-field>`.
 
 ## Accesibilidad
 
@@ -115,7 +115,7 @@ Preservar semántica, foco, teclado, labels y ARIA. ARIA detectado: ninguno expl
 ## Ejemplo avanzado
 
 ```html
-<is-time-field></is-time-field>
+<iswc-time-field></iswc-time-field>
 ```
 
 ## Errores comunes

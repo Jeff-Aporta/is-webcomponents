@@ -1,11 +1,11 @@
 {
-  "$schema": "is-preview/v1",
-  "tag": "is-details",
+  "$schema": "iswc-preview/v1",
+  "tag": "iswc-details",
   "category": "layout",
-  "title": "<is-details>",
+  "title": "<iswc-details>",
   "titleHtml": true,
-  "description": "Documentación y demos del componente is-details de InSoft.",
-  "storageKey": "docs-is-details",
+  "description": "Documentación y demos del componente iswc-details de InSoft.",
+  "storageKey": "docs-iswc-details",
   "sections": [
     {
       "id": "intro",
@@ -14,7 +14,7 @@
       "blocks": [
         {
           "kind": "demo",
-          "html": "<span class=\"demo-label\">caso mínimo</span>\r\n          <is-details summary=\"¿Qué es InSoft?\">\r\n            InSoft es un ERP modular para empresas medianas que necesitan integrar\r\n            contabilidad, inventario, facturación y CRM en una sola plataforma.\r\n          </is-details>",
+          "html": "<span class=\"demo-label\">caso mínimo</span>\r\n          <iswc-details summary=\"¿Qué es InSoft?\">\r\n            InSoft es un ERP modular para empresas medianas que necesitan integrar\r\n            contabilidad, inventario, facturación y CRM en una sola plataforma.\r\n          </iswc-details>",
           "controls": [
               {
                 "control": "select",
@@ -49,11 +49,11 @@
           ],
           "equivNote": "Varios details con el mismo name se comportan como accordion.",
           "equivHtml": "<!-- ver diagrama de ramas -->",
-          "equivFlow": "<is-flowchart open-on-click animation=\"flow\">\n  <script type=\"application/json\">\n  {\n    \"flowchart\": {\n      \"title\": \"is-details: accordion\",\n      \"direction\": \"TB\",\n      \"nodes\": [\n        {\n          \"id\": \"q\",\n          \"label\": \"mismo name?\",\n          \"shape\": \"diamond\"\n        },\n        {\n          \"id\": \"a\",\n          \"label\": \"accordion (uno abierto)\",\n          \"shape\": \"stadium\"\n        },\n        {\n          \"id\": \"b\",\n          \"label\": \"disclosure independiente\",\n          \"shape\": \"stadium\"\n        }\n      ],\n      \"edges\": [\n        {\n          \"from\": \"q\",\n          \"to\": \"a\",\n          \"label\": \"si\"\n        },\n        {\n          \"from\": \"q\",\n          \"to\": \"b\",\n          \"label\": \"no\"\n        }\n      ]\n    }\n  }\n  </script>\n</is-flowchart>"
+          "equivFlow": "<iswc-flowchart open-on-click animation=\"flow\">\n  <script type=\"application/json\">\n  {\n    \"flowchart\": {\n      \"title\": \"iswc-details: accordion\",\n      \"direction\": \"TB\",\n      \"nodes\": [\n        {\n          \"id\": \"q\",\n          \"label\": \"mismo name?\",\n          \"shape\": \"diamond\"\n        },\n        {\n          \"id\": \"a\",\n          \"label\": \"accordion (uno abierto)\",\n          \"shape\": \"stadium\"\n        },\n        {\n          \"id\": \"b\",\n          \"label\": \"disclosure independiente\",\n          \"shape\": \"stadium\"\n        }\n      ],\n      \"edges\": [\n        {\n          \"from\": \"q\",\n          \"to\": \"a\",\n          \"label\": \"si\"\n        },\n        {\n          \"from\": \"q\",\n          \"to\": \"b\",\n          \"label\": \"no\"\n        }\n      ]\n    }\n  }\n  </script>\n</iswc-flowchart>"
         },
         {
           "kind": "code",
-          "code": "<is-details summary=\"¿Qué es InSoft?\">\n  InSoft es un ERP modular…\n</is-details>"
+          "code": "<iswc-details summary=\"¿Qué es InSoft?\">\n  InSoft es un ERP modular…\n</iswc-details>"
         }
       ]
     },
@@ -64,11 +64,11 @@
       "blocks": [
         {
           "kind": "html",
-          "html": "<div class=\"demo-stack\">\r\n          <is-details variant=\"outlined\" summary=\"outlined\">Borde 1px, fondo transparente.</is-details>\r\n          <is-details variant=\"filled\" summary=\"filled\">Fondo elevado, sin borde.</is-details>\r\n          <is-details variant=\"filled-outlined\" summary=\"filled-outlined\">Fondo + borde.</is-details>\r\n          <is-details variant=\"plain\" summary=\"plain\">Sin fondo ni borde, solo espaciado.</is-details>\r\n        </div>"
+          "html": "<div class=\"demo-stack\">\r\n          <iswc-details variant=\"outlined\" summary=\"outlined\">Borde 1px, fondo transparente.</iswc-details>\r\n          <iswc-details variant=\"filled\" summary=\"filled\">Fondo elevado, sin borde.</iswc-details>\r\n          <iswc-details variant=\"filled-outlined\" summary=\"filled-outlined\">Fondo + borde.</iswc-details>\r\n          <iswc-details variant=\"plain\" summary=\"plain\">Sin fondo ni borde, solo espaciado.</iswc-details>\r\n        </div>"
         },
         {
           "kind": "code",
-          "code": "<is-details variant=\"filled\" summary=\"…\">…</is-details>"
+          "code": "<iswc-details variant=\"filled\" summary=\"…\">…</iswc-details>"
         }
       ]
     },
@@ -79,11 +79,11 @@
       "blocks": [
         {
           "kind": "html",
-          "html": "<div class=\"demo-stack\">\r\n          <is-details icon-placement=\"end\" summary=\"icono al final (default)\">Contenido que se revela al hacer click.</is-details>\r\n          <is-details icon-placement=\"start\" summary=\"icono al inicio\">El chevron rota 180° al expandir y se ubica a la izquierda.</is-details>\r\n        </div>"
+          "html": "<div class=\"demo-stack\">\r\n          <iswc-details icon-placement=\"end\" summary=\"icono al final (default)\">Contenido que se revela al hacer click.</iswc-details>\r\n          <iswc-details icon-placement=\"start\" summary=\"icono al inicio\">El chevron rota 180° al expandir y se ubica a la izquierda.</iswc-details>\r\n        </div>"
         },
         {
           "kind": "code",
-          "code": "<is-details icon-placement=\"start\" summary=\"…\">…</is-details>"
+          "code": "<iswc-details icon-placement=\"start\" summary=\"…\">…</iswc-details>"
         }
       ]
     },
@@ -94,11 +94,11 @@
       "blocks": [
         {
           "kind": "html",
-          "html": "<div class=\"demo-stack\">\r\n          <is-details summary=\"Resumen con icono plus/minus\">\r\n            <is-icon slot=\"expand-icon\" icon=\"mdi:plus\" aria-hidden=\"true\"></is-icon>\r\n            <is-icon slot=\"collapse-icon\" icon=\"mdi:minus\" aria-hidden=\"true\"></is-icon>\r\n            Al expandirse se muestra un signo menos; al colapsarse, un más.\r\n          </is-details>\r\n\r\n          <is-details summary=\"Pregunta frecuente\" icon-placement=\"start\">\r\n            <is-icon slot=\"expand-icon\" icon=\"mdi:help-circle-outline\" aria-hidden=\"true\"></is-icon>\r\n            <is-icon slot=\"collapse-icon\" icon=\"mdi:help-circle\" aria-hidden=\"true\"></is-icon>\r\n            Cambia el icono según el estado.\r\n          </is-details>\r\n        </div>"
+          "html": "<div class=\"demo-stack\">\r\n          <iswc-details summary=\"Resumen con icono plus/minus\">\r\n            <iswc-icon slot=\"expand-icon\" icon=\"mdi:plus\" aria-hidden=\"true\"></iswc-icon>\r\n            <iswc-icon slot=\"collapse-icon\" icon=\"mdi:minus\" aria-hidden=\"true\"></iswc-icon>\r\n            Al expandirse se muestra un signo menos; al colapsarse, un más.\r\n          </iswc-details>\r\n\r\n          <iswc-details summary=\"Pregunta frecuente\" icon-placement=\"start\">\r\n            <iswc-icon slot=\"expand-icon\" icon=\"mdi:help-circle-outline\" aria-hidden=\"true\"></iswc-icon>\r\n            <iswc-icon slot=\"collapse-icon\" icon=\"mdi:help-circle\" aria-hidden=\"true\"></iswc-icon>\r\n            Cambia el icono según el estado.\r\n          </iswc-details>\r\n        </div>"
         },
         {
           "kind": "code",
-          "code": "<is-details summary=\"…\">\n  <is-icon slot=\"expand-icon\" icon=\"mdi:plus\"></is-icon>\n  <is-icon slot=\"collapse-icon\" icon=\"mdi:minus\"></is-icon>\n  Contenido…\n</is-details>"
+          "code": "<iswc-details summary=\"…\">\n  <iswc-icon slot=\"expand-icon\" icon=\"mdi:plus\"></iswc-icon>\n  <iswc-icon slot=\"collapse-icon\" icon=\"mdi:minus\"></iswc-icon>\n  Contenido…\n</iswc-details>"
         }
       ]
     },
@@ -109,11 +109,11 @@
       "blocks": [
         {
           "kind": "html",
-          "html": "<div class=\"demo-stack\">\r\n          <is-details>\r\n            <div slot=\"summary\">\r\n              <strong>Pedido #A-10293</strong>\r\n              <is-badge color=\"success\" variant=\"filled\" style=\"margin-left:.5em\">Enviado</is-badge>\r\n            </div>\r\n            Cliente: Distribuidora del Norte · Total: $1.245,00 · 3 ítems.\r\n          </is-details>\r\n        </div>"
+          "html": "<div class=\"demo-stack\">\r\n          <iswc-details>\r\n            <div slot=\"summary\">\r\n              <strong>Pedido #A-10293</strong>\r\n              <iswc-badge color=\"success\" variant=\"filled\" style=\"margin-left:.5em\">Enviado</iswc-badge>\r\n            </div>\r\n            Cliente: Distribuidora del Norte · Total: $1.245,00 · 3 ítems.\r\n          </iswc-details>\r\n        </div>"
         },
         {
           "kind": "code",
-          "code": "<is-details>\n  <div slot=\"summary\">\n    <strong>Pedido #A-10293</strong>\n    <is-badge color=\"success\">Enviado</is-badge>\n  </div>\n  Cliente: …\n</is-details>"
+          "code": "<iswc-details>\n  <div slot=\"summary\">\n    <strong>Pedido #A-10293</strong>\n    <iswc-badge color=\"success\">Enviado</iswc-badge>\n  </div>\n  Cliente: …\n</iswc-details>"
         }
       ]
     },
@@ -121,15 +121,15 @@
       "id": "accordion",
       "title": "Acordeón",
       "titleHtml": true,
-      "lede": "Cuando varios <code class=\"code\">is-details</code> comparten el atributo\r\n          <code class=\"code\">name</code>, abrir uno cierra los demás.",
+      "lede": "Cuando varios <code class=\"code\">iswc-details</code> comparten el atributo\r\n          <code class=\"code\">name</code>, abrir uno cierra los demás.",
       "blocks": [
         {
           "kind": "html",
-          "html": "<div class=\"demo-stack\">\r\n          <is-details name=\"faq\" summary=\"¿Cómo cambio de plan?\">\r\n            Ve a Configuración → Plan y elige el nuevo plan. El cambio se aplica al final del ciclo.\r\n          </is-details>\r\n          <is-details name=\"faq\" summary=\"¿Puedo exportar mis datos?\">\r\n            Sí. En Configuración → Datos encontrarás exports en CSV, JSON y Excel.\r\n          </is-details>\r\n          <is-details name=\"faq\" summary=\"¿Cómo cancelo la cuenta?\">\r\n            Puedes cancelar desde Configuración → Plan → Cancelar. Mantienes acceso hasta el fin del ciclo.\r\n          </is-details>\r\n        </div>"
+          "html": "<div class=\"demo-stack\">\r\n          <iswc-details name=\"faq\" summary=\"¿Cómo cambio de plan?\">\r\n            Ve a Configuración → Plan y elige el nuevo plan. El cambio se aplica al final del ciclo.\r\n          </iswc-details>\r\n          <iswc-details name=\"faq\" summary=\"¿Puedo exportar mis datos?\">\r\n            Sí. En Configuración → Datos encontrarás exports en CSV, JSON y Excel.\r\n          </iswc-details>\r\n          <iswc-details name=\"faq\" summary=\"¿Cómo cancelo la cuenta?\">\r\n            Puedes cancelar desde Configuración → Plan → Cancelar. Mantienes acceso hasta el fin del ciclo.\r\n          </iswc-details>\r\n        </div>"
         },
         {
           "kind": "code",
-          "code": "<is-details name=\"faq\" summary=\"…\">…</is-details>\n<is-details name=\"faq\" summary=\"…\">…</is-details>"
+          "code": "<iswc-details name=\"faq\" summary=\"…\">…</iswc-details>\n<iswc-details name=\"faq\" summary=\"…\">…</iswc-details>"
         }
       ]
     },
@@ -140,11 +140,11 @@
       "blocks": [
         {
           "kind": "html",
-          "html": "<div class=\"demo-stack\">\r\n          <is-details open summary=\"Empieza abierto por defecto\">\r\n            El atributo <code class=\"code\">open</code> lo deja expandido desde el primer render.\r\n          </is-details>\r\n          <is-details disabled summary=\"Bloqueado (no se puede expandir)\">\r\n            El atributo <code class=\"code\">disabled</code> desactiva el toggle.\r\n          </is-details>\r\n        </div>"
+          "html": "<div class=\"demo-stack\">\r\n          <iswc-details open summary=\"Empieza abierto por defecto\">\r\n            El atributo <code class=\"code\">open</code> lo deja expandido desde el primer render.\r\n          </iswc-details>\r\n          <iswc-details disabled summary=\"Bloqueado (no se puede expandir)\">\r\n            El atributo <code class=\"code\">disabled</code> desactiva el toggle.\r\n          </iswc-details>\r\n        </div>"
         },
         {
           "kind": "code",
-          "code": "<is-details open summary=\"…\">…</is-details>\n<is-details disabled summary=\"…\">…</is-details>"
+          "code": "<iswc-details open summary=\"…\">…</iswc-details>\n<iswc-details disabled summary=\"…\">…</iswc-details>"
         }
       ]
     },
@@ -155,26 +155,26 @@
       "blocks": [
         {
           "kind": "demo",
-          "html": "<is-details id=\"apiDetails\" summary=\"Demo controlada\">\r\n            Esto lo abro y cierro desde los botones de abajo.\r\n          </is-details>\r\n          <div class=\"card-row-actions\" style=\"margin-top:.5em\">\r\n            <is-button id=\"btnOpen\">show()</is-button>\r\n            <is-button id=\"btnClose\">hide()</is-button>\r\n            <is-button id=\"btnToggle\" variant=\"outlined\">toggle()</is-button>\r\n          </div>"
+          "html": "<iswc-details id=\"apiDetails\" summary=\"Demo controlada\">\r\n            Esto lo abro y cierro desde los botones de abajo.\r\n          </iswc-details>\r\n          <div class=\"card-row-actions\" style=\"margin-top:.5em\">\r\n            <iswc-button id=\"btnOpen\">show()</iswc-button>\r\n            <iswc-button id=\"btnClose\">hide()</iswc-button>\r\n            <iswc-button id=\"btnToggle\" variant=\"outlined\">toggle()</iswc-button>\r\n          </div>"
         },
         {
           "kind": "code",
-          "code": "<is-details id=\"apiDetails\" summary=\"Demo\">…</is-details>\n<script>\n  document.getElementById('btnOpen').onclick  = () => document.getElementById('apiDetails').show();\n  document.getElementById('btnClose').onclick = () => document.getElementById('apiDetails').hide();\n  document.getElementById('btnToggle').onclick = () => document.getElementById('apiDetails').toggle();\n</script>"
+          "code": "<iswc-details id=\"apiDetails\" summary=\"Demo\">…</iswc-details>\n<script>\n  document.getElementById('btnOpen').onclick  = () => document.getElementById('apiDetails').show();\n  document.getElementById('btnClose').onclick = () => document.getElementById('apiDetails').hide();\n  document.getElementById('btnToggle').onclick = () => document.getElementById('apiDetails').toggle();\n</script>"
         }
       ]
     },
     {
       "id": "events",
       "title": "Eventos",
-      "lede": "Burbujean y son <code class=\"code\">composed: true</code>: <code class=\"code\">is-show</code>,\r\n          <code class=\"code\">is-after-show</code>, <code class=\"code\">is-hide</code>,\r\n          <code class=\"code\">is-after-hide</code>.",
+      "lede": "Burbujean y son <code class=\"code\">composed: true</code>: <code class=\"code\">iswc-show</code>,\r\n          <code class=\"code\">iswc-after-show</code>, <code class=\"code\">iswc-hide</code>,\r\n          <code class=\"code\">iswc-after-hide</code>.",
       "blocks": [
         {
           "kind": "demo",
-          "html": "<is-details id=\"evtDetails\" summary=\"Pulsa y mira la consola\">\r\n            El evento <code class=\"code\">is-after-show</code> se dispara tras la animación de apertura.\r\n          </is-details>\r\n          <div id=\"evtLog\" class=\"callout\" style=\"margin-top:.5em\">Log:</div>"
+          "html": "<iswc-details id=\"evtDetails\" summary=\"Pulsa y mira la consola\">\r\n            El evento <code class=\"code\">iswc-after-show</code> se dispara tras la animación de apertura.\r\n          </iswc-details>\r\n          <div id=\"evtLog\" class=\"callout\" style=\"margin-top:.5em\">Log:</div>"
         },
         {
           "kind": "code",
-          "code": "document.getElementById('evtDetails').addEventListener('is-after-show', () => {\n  console.log('abierto');\n});"
+          "code": "document.getElementById('evtDetails').addEventListener('iswc-after-show', () => {\n  console.log('abierto');\n});"
         }
       ]
     },
@@ -300,22 +300,22 @@
           ],
           "rows": [
             [
-              "<code>is-show</code>",
+              "<code>iswc-show</code>",
               "Antes de abrir.",
               "sí (solo desde click)"
             ],
             [
-              "<code>is-after-show</code>",
+              "<code>iswc-after-show</code>",
               "Tras la animación de apertura.",
               "no"
             ],
             [
-              "<code>is-hide</code>",
+              "<code>iswc-hide</code>",
               "Antes de cerrar.",
               "sí (solo desde click)"
             ],
             [
-              "<code>is-after-hide</code>",
+              "<code>iswc-after-hide</code>",
               "Tras la animación de cierre.",
               "no"
             ]

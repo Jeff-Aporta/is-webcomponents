@@ -1,11 +1,13 @@
 import { adoptCss, defineElement, emit } from '../../core/element.js';
 import '../media/icon.js';
+import '../isp/text.js';
 import { ElementBase } from '../../core/element-base.js';
 import { createPopupDismiss } from '../_shared/popup-dismiss.js';
+import { json2html } from '../_shared/json-html.js';
 import { PALETTES } from '../../styles/palette-build.js';
 
 /**
- * <is-palette-selector> — Web Component (vanilla).
+ * <iswc-palette-selector> — Web Component (vanilla).
  *
  * Selector visual de paletas de marca. Por defecto expone las 3 paletas
  * que viven en `styles/palettes.css` (contapyme, insoft, agrowin) pero
@@ -26,7 +28,7 @@ import { PALETTES } from '../../styles/palette-build.js';
  *   value         string — la paleta activa. La escribe en el target del scope.
  *   scope         root | closest. root escribe <html>. closest escribe el
  *                 primer ancestro con data-palette (si no hay, <html>).
- *   storage-key   string — clave de localStorage (default 'is-palette').
+ *   storage-key   string — clave de localStorage (default 'iswc-palette').
  *                 Solo persiste cuando el target es <html>.
  *   aria-label    string — etiqueta del botón trigger (default "Elegir paleta")
  *
@@ -42,7 +44,7 @@ import { PALETTES } from '../../styles/palette-build.js';
  *   (palettes.json o el array `palettes` del consumidor): swatch, label y check.
  *
  * Eventos
- *   is-palette-change  detail: { value, palette }   bubbles, composed
+ *   iswc-palette-change  detail: { value, palette }   bubbles, composed
  *
  * Mutaciones que produce
  *   data-palette en el target del scope (html o el ancestro)
@@ -54,7 +56,7 @@ import { PALETTES } from '../../styles/palette-build.js';
  *   el.palettes = [...]      // setter que escribe el atributo JSON
  *   el.value    = 'contapyme' // activa paleta y notifica
  *   el.open() / close() / toggle()
- *   el.addEventListener('is-palette-change', e => e.detail)
+ *   el.addEventListener('iswc-palette-change', e => e.detail)
  */
 
 /** Entrada normalizada de paleta, lista para render. */
@@ -73,6 +75,8 @@ interface Palette {
   h: number | null;
   s: string;
   b: string;
+  /** Hijos del wordmark, forma json2xml. Si falta, se arma con lead/accent. */
+  content: unknown[] | null;
 }
 
 /** Entrada cruda que puede llegar en el atributo `palettes`. */
@@ -90,6 +94,7 @@ interface PaletteCruda {
   h?: unknown;
   s?: unknown;
   b?: unknown;
+  content?: unknown;
 }
 
 (() => {
@@ -111,14 +116,15 @@ interface PaletteCruda {
     h: p.h,
     s: p.s,
     b: p.b,
+    content: null,
   }));
 
   const TEMPLATE = document.createElement('template');
   TEMPLATE.innerHTML = /* html */ `
     <div class="root">
       <slot name="trigger"></slot>
-      <button type="button" part="trigger" class="trigger is-focus-ring" aria-haspopup="listbox" aria-expanded="false" aria-label="Elegir paleta" title="Elegir paleta">
-        <span part="lead" class="trigger__lead"></span><span part="label" class="trigger__accent"></span>
+      <button type="button" part="trigger" class="trigger iswc-focus-ring" aria-haspopup="listbox" aria-expanded="false" aria-label="Elegir paleta" title="Elegir paleta">
+        <span part="mark" class="trigger__mark"></span>
       </button>
       <ul part="menu" class="menu" role="listbox" hidden aria-label="Paletas disponibles">
         <!-- opciones se inyectan en #render() desde el JSON -->
@@ -149,7 +155,21 @@ interface PaletteCruda {
     return document.documentElement;
   }
 
-  class IsPaletteSelector extends ElementBase {
+  /** Wordmark: `content` json2xml, o lead/accent del JSON si no viene content. */
+  function wordmarkOf(p: Palette): unknown[] {
+    if (p.content?.length) return p.content;
+    const nodes: unknown[] = [];
+    if (p.lead) nodes.push({ 'iswc-text': { color: p.leadColor || '#000', content: [p.lead] } });
+    const accent = p.accentLabel || (p.lead ? '' : p.label);
+    if (accent) {
+      const spec: Record<string, unknown> = { content: [accent] };
+      if (p.accentColor) spec.color = p.accentColor;
+      nodes.push({ 'iswc-text': spec });
+    }
+    return nodes;
+  }
+
+  class IswcPaletteSelector extends ElementBase {
     static get observedAttributes(): string[] { return OBSERVED; }
 
     #root!: HTMLElement;
@@ -165,7 +185,7 @@ interface PaletteCruda {
     #fromOutside = false;
     #hold = false;
 
-    /** Ciclo "menú abierto" compartido con is-dropdown / is-context-menu. */
+    /** Ciclo "menú abierto" compartido con iswc-dropdown / iswc-context-menu. */
     #dismiss = createPopupDismiss(this, {
       onEscape: () => { this.#setOpen(false); this.#trigger.focus(); },
       onOutside: () => this.#setOpen(false),
@@ -254,7 +274,7 @@ interface PaletteCruda {
           const parsed: unknown = JSON.parse(raw);
           if (Array.isArray(parsed) && parsed.length) list = parsed as PaletteCruda[];
         } catch (err) {
-          console.warn('[is-palette-selector] palettes no es JSON válido:', err);
+          console.warn('[iswc-palette-selector] palettes no es JSON válido:', err);
         }
       }
       // Normaliza cada entrada.
@@ -272,6 +292,7 @@ interface PaletteCruda {
         h: p.h == null || p.h === '' ? null : Number(p.h),
         s: p.s ? String(p.s) : '',
         b: p.b ? String(p.b) : '',
+        content: Array.isArray(p.content) ? p.content : null,
       })).filter((p) => p.value);
     }
 
@@ -284,7 +305,7 @@ interface PaletteCruda {
     #storageKey(): string {
       const key = this.getAttribute('storage-key');
       if (key === '') return '';
-      return key || 'is-palette';
+      return key || 'iswc-palette';
     }
 
     #known(value: string): boolean {
@@ -361,6 +382,40 @@ interface PaletteCruda {
       }
     }
 
+    /** Wordmark del slot: mitades y bg salen del JSON de la paleta activa. */
+    #paintSlottedMark(current: Palette): void {
+      const btn = this.querySelector<HTMLElement>('[slot="trigger"]');
+      if (btn) {
+        if (current.bg) btn.style.background = current.bg;
+        else btn.style.background = '';
+        if (current.fg) btn.style.color = current.fg;
+      }
+      const lead = this.querySelector<HTMLElement>('[data-role="lead"]');
+      const accent = this.querySelector<HTMLElement>('[data-role="accent"]');
+      if (lead) {
+        if (current.lead) lead.textContent = current.lead;
+        lead.style.color = current.leadColor || '#000';
+      }
+      if (accent) {
+        if (current.accentLabel) accent.textContent = current.accentLabel;
+        if (current.accentColor) accent.style.color = current.accentColor;
+      }
+    }
+
+    /** Pinta el wordmark (json2xml) y el fondo dentro del trigger interno. */
+    #paintOwnMark(current: Palette): void {
+      const mark = this.#trigger.querySelector<HTMLElement>('.trigger__mark');
+      if (mark) {
+        mark.replaceChildren();
+        const nodes = wordmarkOf(current);
+        if (nodes.length) json2html(nodes, mark);
+      }
+      if (current.bg) this.#trigger.style.background = current.bg;
+      else this.#trigger.style.background = '';
+      if (current.fg) this.#trigger.style.color = current.fg;
+      else this.#trigger.style.color = '';
+    }
+
     /** Handler del slot "trigger" — sólo afecta el trigger button. */
     #onTriggerSlotChange = (): void => {
       this.#syncTriggerVisibility();
@@ -371,23 +426,8 @@ interface PaletteCruda {
       const current = this.#current();
       if (!current) return;
 
-      // Si el consumidor proveyó su propio trigger, NO sobrescribimos su HTML.
-      if (this.#hasCustomTrigger()) return;
-
-      // Trigger interno: estilo logo (lead + accent) si tenemos esos datos,
-      // sino bg + label plano.
-      const lead = this.#trigger.querySelector<HTMLElement>('.trigger__lead');
-      const accent = this.#trigger.querySelector<HTMLElement>('.trigger__accent');
-      if (lead) {
-        lead.textContent = current.lead || '';
-        lead.style.color = current.leadColor || '';
-      }
-      if (accent) {
-        accent.textContent = current.accentLabel || (current.lead ? '' : current.label);
-        accent.style.color = current.accentColor || '';
-      }
-      this.#trigger.style.background = '';
-      this.#trigger.style.color = '';
+      if (this.#hasCustomTrigger()) this.#paintSlottedMark(current);
+      else this.#paintOwnMark(current);
       // La pastilla hereda --iswc-logo-* del host: palettes.css pinta [data-palette].
       this.dataset.palette = current.value;
       if (current.h != null && current.s && current.b) {
@@ -441,7 +481,7 @@ interface PaletteCruda {
       label.className = 'menu__label';
       label.textContent = p.label;
       li.appendChild(label);
-      const check = document.createElement('is-icon');
+      const check = document.createElement('iswc-icon');
       check.className = 'menu__check';
       check.setAttribute('icon', 'mdi:check');
       check.setAttribute('aria-hidden', 'true');
@@ -472,18 +512,18 @@ interface PaletteCruda {
         document.head.appendChild(link);
         this.#loadedCSS.add(palette.css);
       }
-      // Persistir solo el target de pagina: un scope=closest no pisa is-palette.
+      // Persistir solo el target de pagina: un scope=closest no pisa iswc-palette.
       const onRoot = target === document.documentElement;
       const key = this.#storageKey();
       if (onRoot && key) {
         try { localStorage.setItem(key, value); } catch { /* ignore */ }
       }
-      emit(this, 'is-palette-change', { value, palette, container: target });
+      emit(this, 'iswc-palette-change', { value, palette, container: target });
       for (const opt of this.#menu.querySelectorAll<HTMLElement>('[role="option"]')) {
         opt.setAttribute('aria-selected', opt.dataset.palette === value ? 'true' : 'false');
       }
       if (!this.#fromOutside && onRoot && window.parent !== window) {
-        window.parent.postMessage({ type: 'is-shell-sync', palette: value }, location.origin);
+        window.parent.postMessage({ type: 'iswc-shell-sync', palette: value }, location.origin);
       }
       // Repintar trigger (cambia colores si el consumidor tiene uno custom,
       // ese se queda; si es el interno, lo repintamos).
@@ -528,5 +568,5 @@ interface PaletteCruda {
 
   }
 
-  defineElement('is-palette-selector', IsPaletteSelector, 'IsPaletteSelector');
+  defineElement('iswc-palette-selector', IswcPaletteSelector, 'IswcPaletteSelector');
 })();

@@ -45,7 +45,7 @@ const results = [];
 async function checkDeterministic(page) {
   await page.waitForTimeout(200);
   const data = await page.evaluate(() => {
-    const pickers = [...document.querySelectorAll('is-date-picker')];
+    const pickers = [...document.querySelectorAll('iswc-date-picker')];
     return pickers.map((p, idx) => {
       const r = p.getBoundingClientRect();
       const nav = p.shadowRoot.querySelector('[part="nav"]');
@@ -76,7 +76,7 @@ async function checkDeterministic(page) {
 
     // (2) Botones de navegación visibles: comprobar que hay 2 botones con data-nav.
     const hasNavButtons = await page.evaluate((idx) => {
-      const p = document.querySelectorAll('is-date-picker')[idx];
+      const p = document.querySelectorAll('iswc-date-picker')[idx];
       return p.shadowRoot.querySelectorAll('[data-nav]').length === 2;
     }, d.idx);
     assert.equal(hasNavButtons, true, `${tag}: debe haber 2 botones de navegación (prev/next)`);

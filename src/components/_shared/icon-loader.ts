@@ -151,7 +151,7 @@ export async function resolveIconRaw(prefix: string, name: string, signal?: Abor
   if (cached !== undefined) return cached;
   // Resuelve primero si el icono existe y desde que base (loadIndex/baseCache),
   // igual que resolveIconSvg; el fetch del SVG respeta la senal de abort para
-  // que <is-icon> pueda cancelar renders obsoletos.
+  // que <iswc-icon> pueda cancelar renders obsoletos.
   const url = await resolveIconSvg(prefix, name);
   if (!url) return null;
   const base = baseCache.get(prefix) ?? '';

@@ -45,9 +45,9 @@ interface _CatalogEl extends HTMLElement {
   selectionData?: _RecordLike[];
 }
 /**
- * <is-btn-ref> — port de `src/lib/form/BtnRef.svelte` (ISP).
+ * <iswc-btn-ref> — port de `src/lib/form/BtnRef.svelte` (ISP).
  *
- * Campo de texto + botón filtro que abre un modal con `<is-catalogo-gen
+ * Campo de texto + botón filtro que abre un modal con `<iswc-catalogo-gen
  * select-mode>` para elegir un registro. Muestra la etiqueta resuelta
  * (`ColumnsBtnRef`) bajo el valor.
  *
@@ -61,10 +61,10 @@ interface _CatalogEl extends HTMLElement {
  *   label, value, name, id, required, optional, readonly, maxlength
  *
  * Eventos (bubbles + composed)
- *   is-change           detail: { value }
- *   is-typing-end       detail: { value }
- *   is-selected-record  detail: { record, value, label }
- *   is-input            detail: { value }
+ *   iswc-change           detail: { value }
+ *   iswc-typing-end       detail: { value }
+ *   iswc-selected-record  detail: { record, value, label }
+ *   iswc-input            detail: { value }
  *
  * Métodos: focus(), open(), close()
  *
@@ -79,24 +79,24 @@ const FILTER_SVG = `<svg fill="currentColor" width="20" height="20" viewBox="0 0
   const TEMPLATE = document.createElement('template');
   TEMPLATE.innerHTML = /* html */ `
     <div part="base" class="base">
-      <is-input class="field" label-placement="float"></is-input>
+      <iswc-input class="field" label-placement="float"></iswc-input>
       <span part="label-text" class="value-label"></span>
       <button type="button" part="open" class="open" aria-label="Open BtnRef">${FILTER_SVG}</button>
     </div>
-    <is-dialog class="dlg" label="Seleccionar" light-dismiss style="--width: min(90vw, 48rem);">
-      <is-catalogo-gen class="cat" select-mode show-header="false" q-rows-header="1"></is-catalogo-gen>
+    <iswc-dialog class="dlg" label="Seleccionar" light-dismiss style="--width: min(90vw, 48rem);">
+      <iswc-catalogo-gen class="cat" select-mode show-header="false" q-rows-header="1"></iswc-catalogo-gen>
       <div slot="footer" class="dlg-footer">
-        <is-button class="cancel" color="neutral" variant="outlined">Cancelar</is-button>
-        <is-button class="pick" color="brand">Seleccionar</is-button>
+        <iswc-button class="cancel" color="neutral" variant="outlined">Cancelar</iswc-button>
+        <iswc-button class="pick" color="brand">Seleccionar</iswc-button>
       </div>
-    </is-dialog>
+    </iswc-dialog>
   `;
 
   const OBSERVED = [
     'label', 'value', 'name', 'id', 'required', 'optional', 'readonly', 'maxlength', 'multi',
   ];
 
-  class IsBtnRef extends HTMLElement {
+  class IswcBtnRef extends HTMLElement {
     static formAssociated = true;
     static get observedAttributes(): string[] { return OBSERVED; }
 
@@ -141,13 +141,13 @@ const FILTER_SVG = `<svg fill="currentColor" width="20" height="20" viewBox="0 0
       this.#mounted = true;
       this.#upgradeProps();
       this.#syncFieldAttrs();
-      this.#field.addEventListener('is-input', this.#onInput);
-      this.#field.addEventListener('is-change', this.#onFieldChange);
-      this.#field.addEventListener('is-typing-end', this.#onTypingEndEvt);
+      this.#field.addEventListener('iswc-input', this.#onInput);
+      this.#field.addEventListener('iswc-change', this.#onFieldChange);
+      this.#field.addEventListener('iswc-typing-end', this.#onTypingEndEvt);
       this.#openBtn.addEventListener('click', this.#onOpen);
       this.#cancelBtn.addEventListener('click', () => this.close());
       this.#pickBtn.addEventListener('click', this.#onPick);
-      this.#cat.addEventListener('is-double-click', this.#onCatDbl as EventListener);
+      this.#cat.addEventListener('iswc-double-click', this.#onCatDbl as EventListener);
       this.#valueLabel.addEventListener('click', () => this.focus());
       if (this.controller) this.#cat.controller = this.controller;
       void this.#resolveLabel();
@@ -157,12 +157,12 @@ const FILTER_SVG = `<svg fill="currentColor" width="20" height="20" viewBox="0 0
     disconnectedCallback(): void {
       this.#mounted = false;
       clearTimeout(this.#typingTimer);
-      this.#field.removeEventListener('is-input', this.#onInput);
-      this.#field.removeEventListener('is-change', this.#onFieldChange);
-      this.#field.removeEventListener('is-typing-end', this.#onTypingEndEvt);
+      this.#field.removeEventListener('iswc-input', this.#onInput);
+      this.#field.removeEventListener('iswc-change', this.#onFieldChange);
+      this.#field.removeEventListener('iswc-typing-end', this.#onTypingEndEvt);
       this.#openBtn.removeEventListener('click', this.#onOpen);
       this.#pickBtn.removeEventListener('click', this.#onPick);
-      this.#cat.removeEventListener('is-double-click', this.#onCatDbl as EventListener);
+      this.#cat.removeEventListener('iswc-double-click', this.#onCatDbl as EventListener);
     }
 
     attributeChangedCallback(name: string): void {
@@ -341,8 +341,8 @@ const FILTER_SVG = `<svg fill="currentColor" width="20" height="20" viewBox="0 0
       this.#setValueLabel(label || value, !label);
       this.onSelectedRecord(record);
       this.onChange();
-      emit(this, 'is-selected-record', { record, records: [record], value, label });
-      emit(this, 'is-change', { value });
+      emit(this, 'iswc-selected-record', { record, records: [record], value, label });
+      emit(this, 'iswc-change', { value });
       this.#syncValidity();
       this.close();
     }
@@ -359,8 +359,8 @@ const FILTER_SVG = `<svg fill="currentColor" width="20" height="20" viewBox="0 0
       const record = records.at(-1);
       this.onSelectedRecord(record as _RecordLike);
       this.onChange();
-      emit(this, 'is-selected-record', { record, records, value, label });
-      emit(this, 'is-change', { value });
+      emit(this, 'iswc-selected-record', { record, records, value, label });
+      emit(this, 'iswc-change', { value });
       this.#syncValidity();
       this.close();
     }
@@ -389,21 +389,21 @@ const FILTER_SVG = `<svg fill="currentColor" width="20" height="20" viewBox="0 0
       }
       this.setAttribute('value', v);
       this.handleInput();
-      emit(this, 'is-input', { value: v });
+      emit(this, 'iswc-input', { value: v });
       this.#syncValidity();
     };
 
     #onFieldChange = (): void => {
       this.onChange();
-      emit(this, 'is-change', { value: this.value });
+      emit(this, 'iswc-change', { value: this.value });
     };
 
     #onTypingEndEvt = (): void => {
       void this.#resolveLabel();
       this.onTypingEnd();
-      emit(this, 'is-typing-end', { value: this.value });
+      emit(this, 'iswc-typing-end', { value: this.value });
     };
   }
 
-  defineElement('is-btn-ref', IsBtnRef);
+  defineElement('iswc-btn-ref', IswcBtnRef);
 })();

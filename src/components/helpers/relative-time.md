@@ -1,20 +1,20 @@
 ---
-tag: is-relative-time
+tag: iswc-relative-time
 tags:
-  - is-relative-time
+  - iswc-relative-time
 category: helpers
 status: public
 source: ./relative-time.js
 style: ./relative-time.css
 preview: ./relative-time.json
 ---
-# `<is-relative-time>`
+# `<iswc-relative-time>`
 
 ## Propósito
 
 Fechas relativas con Intl.RelativeTimeFormat.
 
-Este módulo registra `<is-relative-time>`.
+Este módulo registra `<iswc-relative-time>`.
 
 ## Cuándo usarlo
 
@@ -33,7 +33,7 @@ import './relative-time.js';
 ## Ejemplo mínimo
 
 ```html
-<is-relative-time date="2026-07-30T10:00:00" sync></is-relative-time>
+<iswc-relative-time date="2026-07-30T10:00:00" sync></iswc-relative-time>
 ```
 
 ## API
@@ -94,7 +94,7 @@ No declara integración form-associated propia en este módulo.
 
 Documentación de cabecera preservada desde fuente:
 
-> <is-relative-time> — Web Component (vanilla).
+> <iswc-relative-time> — Web Component (vanilla).
 > Formatea fechas relativas con Intl.RelativeTimeFormat.
 > Atributos
 >   date      string | number — ISO o timestamp
@@ -106,7 +106,7 @@ Documentación de cabecera preservada desde fuente:
 
 - [`../_shared/adopt-css.js`](../_shared/adopt-css.js)
 
-Tags del módulo: `<is-relative-time>`.
+Tags del módulo: `<iswc-relative-time>`.
 
 ## Accesibilidad
 
@@ -115,7 +115,7 @@ Preservar semántica, foco, teclado, labels y ARIA. ARIA detectado: ninguno expl
 ## Ejemplo avanzado
 
 ```html
-<is-relative-time date="2026-07-30T10:00:00" sync></is-relative-time>
+<iswc-relative-time date="2026-07-30T10:00:00" sync></iswc-relative-time>
 ```
 
 ## Errores comunes

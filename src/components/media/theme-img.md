@@ -1,18 +1,18 @@
 ---
-tag: is-theme-img
+tag: iswc-theme-img
 tags:
-  - is-theme-img
+  - iswc-theme-img
 category: media
 status: public
 source: ./theme-img.js
 style: ./theme-img.css
 preview: ./theme-img.json
 ---
-# `<is-theme-img>`
+# `<iswc-theme-img>`
 
 ## Propósito
 
-Una sola imagen que muestra la variante **dark** o **light** según el contenedor de tema del kit (misma cascada que `<is-theme-toggle>`). Escala con `font-size` (`1em × 1em`), como `<is-avatar>` / `<is-icon>`.
+Una sola imagen que muestra la variante **dark** o **light** según el contenedor de tema del kit (misma cascada que `<iswc-theme-toggle>`). Escala con `font-size` (`1em × 1em`), como `<iswc-avatar>` / `<iswc-icon>`.
 
 Sirve para logos de marca, favicons en nav y cualquier asset dual-tema sin montar dos `<img>` a la vez.
 
@@ -23,19 +23,19 @@ Sirve para logos de marca, favicons en nav y cualquier asset dual-tema sin monta
 
 ## Cuándo no usarlo
 
-- Una sola imagen sin variante de tema: `<img>` o `<is-avatar image>`.
-- Iconos vectoriales del set: `<is-icon>`.
+- Una sola imagen sin variante de tema: `<img>` o `<iswc-avatar image>`.
+- Iconos vectoriales del set: `<iswc-icon>`.
 
 ## Ejemplo mínimo
 
 ```html
 <span style="font-size: 2rem">
-  <is-theme-img
+  <iswc-theme-img
     src-dark="./logo-dark.svg"
     src-light="./logo-light.svg"
     alt="Marca"
     shape="circle"
-  ></is-theme-img>
+  ></iswc-theme-img>
 </span>
 ```
 

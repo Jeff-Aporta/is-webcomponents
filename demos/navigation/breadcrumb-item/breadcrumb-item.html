@@ -3,7 +3,7 @@
 <head>
 <meta charset="utf-8" />
 <meta name="viewport" content="width=device-width, initial-scale=1" />
-<title>Demo de <is-breadcrumb-item> · is-webcomponents</title>
+<title>Demo de <iswc-breadcrumb-item> · is-webcomponents</title>
 <meta name="description" content="Variantes del item individual: con/sin href, current page, target/rel, icon attribute, slots start/end/separator." />
 <style>
   html, body { margin: 0; padding: 0; min-height: 100%; background: #0c1118; color: #e2e8f0; font-family: ui-sans-serif, system-ui, sans-serif; }
@@ -38,7 +38,7 @@
     flex: 0 0 120px; font-size: 11px; color: #94a3b8;
     text-transform: uppercase; letter-spacing: 0.04em;
   }
-  is-breadcrumb-item:not(:defined) { visibility: hidden; }
+  iswc-breadcrumb-item:not(:defined) { visibility: hidden; }
   footer {
     padding: 12px 20px; border-top: 1px solid rgba(255,255,255,0.1);
     background: #0f1620; font-size: 11px; color: #94a3b8;
@@ -46,12 +46,12 @@
   footer code { background: rgba(255,255,255,0.06); padding: 1px 5px; border-radius: 3px; font: 11px ui-monospace, Menlo, Consolas, monospace; }
 </style>
 <script type="module">
-  await import('../../../dist/cdn/navigation/breadcrumb-item.min.js?h=dfw531');
-  await customElements.whenDefined('is-breadcrumb-item');
+  await import('../../../dist/cdn/navigation/breadcrumb-item.min.js?h=s9avlh');
+  await customElements.whenDefined('iswc-breadcrumb-item');
 
   // Helper: crea un item con texto + props.
   function makeItem(text, props = {}) {
-    const item = document.createElement('is-breadcrumb-item');
+    const item = document.createElement('iswc-breadcrumb-item');
     for (const [k, v] of Object.entries(props)) {
       if (v != null && v !== false) item.setAttribute(k, v === true ? '' : v);
     }
@@ -73,7 +73,7 @@
     makeItem('Abrir en nueva pestaña', { href: 'https://example.com', target: '_blank', rel: 'noopener' }),
   );
 
-  // (5) Icon attribute (inyecta <is-icon> interno)
+  // (5) Icon attribute (inyecta <iswc-icon> interno)
   document.getElementById('icon-attr').appendChild(makeItem('Inicio', { href: '/', icon: 'mdi:home' }));
 
   // (6) Slot start custom (gana sobre el icon attribute)
@@ -119,7 +119,7 @@
 </head>
 <body>
 <header>
-  <h1>Demo — <code>&lt;is-breadcrumb-item&gt;</code></h1>
+  <h1>Demo — <code>&lt;iswc-breadcrumb-item&gt;</code></h1>
   <p>Item individual: <code>href</code> → <code>&lt;a&gt;</code>, <code>href=""</code> → current, sin href → <code>&lt;span&gt;</code>. Slots: <code>start</code>, <code>end</code>, <code>separator</code>.</p>
 </header>
 <main>
@@ -132,7 +132,7 @@
   </section>
   <section>
     <h2>Icono</h2>
-    <p class="desc">El atributo <code>icon</code> inyecta un <code>&lt;is-icon&gt;</code> interno en el slot start (si start está vacío).</p>
+    <p class="desc">El atributo <code>icon</code> inyecta un <code>&lt;iswc-icon&gt;</code> interno en el slot start (si start está vacío).</p>
     <div class="row"><span class="label">icon="mdi:home"</span><span id="icon-attr"></span></div>
     <div class="row"><span class="label">current + icon</span><span id="current-icon"></span></div>
   </section>
@@ -151,7 +151,7 @@
   </section>
 </main>
 <footer>
-  Estado: <code>is-breadcrumb-item</code> definido. <code>href=""</code> marca current con <code>aria-current="page"</code>.
+  Estado: <code>iswc-breadcrumb-item</code> definido. <code>href=""</code> marca current con <code>aria-current="page"</code>.
 </footer>
 </body>
 </html>

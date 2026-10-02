@@ -19,7 +19,7 @@ import { routeThroughLoader } from '../cdn/build/asset-url.js';
 /* ─────────────────────────────── registro ─────────────────────────────── */
 
 /**
- * Deriva el nombre global PascalCase de un tag: `is-date-input` → `IsDateInput`.
+ * Deriva el nombre global PascalCase de un tag: `iswc-date-input` → `IswcDateInput`.
  *
  * Las tres fábricas del kit (`defineTypedChart`, `definePickerInput`,
  * `defineDateField`) llevaban cada una su copia de este `replace`.
@@ -37,7 +37,7 @@ export function globalNameFor(tag: string): string {
  * Gana el primero que defina.
  *
  * @param globalName Nombre bajo el que exponer `ctor` en `window`, para tests y
- *   consumidores sin módulos que hacen `new window.IsTag()`. `true` lo deriva
+ *   consumidores sin módulos que hacen `new window.IswcTag()`. `true` lo deriva
  *   del tag. Omitido, no se expone.
  * @returns El mismo `ctor`, para poder encadenar.
  */
@@ -191,7 +191,7 @@ export function emit<T = unknown>(
 /**
  * Variante cancelable. Devuelve `true` si NINGÚN listener vetó.
  *
- *   if (!emitCancelable(this, 'is-before-close')) return;
+ *   if (!emitCancelable(this, 'iswc-before-close')) return;
  */
 export function emitCancelable<T = unknown>(
   host: EventTarget,

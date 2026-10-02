@@ -1,4 +1,4 @@
-// progress-ring.test.mjs — tests exhaustivos del demo is-progress-ring.
+// progress-ring.test.mjs — tests exhaustivos del demo iswc-progress-ring.
 // Cobertura: smoke + funcional (value, label, aria, stroke-dashoffset) +
 // gap 1: prefers-reduced-motion afecta a la transición del stroke.
 import assert from 'node:assert/strict';
@@ -14,15 +14,15 @@ tests.push({
     await page.goto(URL, { waitUntil: 'domcontentloaded' });
     await waitReady(page, 'data-progress-ring-ready');
     const data = await page.evaluate(() => {
-      const all = document.querySelectorAll('is-progress-ring');
+      const all = document.querySelectorAll('iswc-progress-ring');
       return {
-        defined: !!customElements.get('is-progress-ring'),
+        defined: !!customElements.get('iswc-progress-ring'),
         count: all.length,
         hasSvg: [...all].every((p) => !!p.shadowRoot.querySelector('svg')),
         hasCircles: [...all].every((p) => p.shadowRoot.querySelectorAll('circle').length === 2),
       };
     });
-    assert.equal(data.defined, true, 'is-progress-ring debe estar definido');
+    assert.equal(data.defined, true, 'iswc-progress-ring debe estar definido');
     assert.ok(data.count >= 8, `esperaba >=8 rings, hay ${data.count}`);
     assert.equal(data.hasSvg, true, 'todos deben tener un <svg>');
     assert.equal(data.hasCircles, true, 'todos deben tener track + indicator');
@@ -37,7 +37,7 @@ tests.push({
     await waitReady(page, 'data-progress-ring-ready');
     const data = await page.evaluate(() => {
       const CIRC = 2 * Math.PI * 15.9155;
-      return [...document.querySelectorAll('is-progress-ring[value]')].map((p) => {
+      return [...document.querySelectorAll('iswc-progress-ring[value]')].map((p) => {
         const ind = p.shadowRoot.querySelector('.indicator');
         const offset = parseFloat(ind.style.strokeDashoffset);
         const value = Number(p.getAttribute('value'));
@@ -57,7 +57,7 @@ tests.push({
     await page.goto(URL, { waitUntil: 'domcontentloaded' });
     await waitReady(page, 'data-progress-ring-ready');
     const data = await page.evaluate(() => {
-      return [...document.querySelectorAll('is-progress-ring')].map((p) => {
+      return [...document.querySelectorAll('iswc-progress-ring')].map((p) => {
         const wrap = p.shadowRoot.querySelector('.ring-wrap');
         return {
           value: p.getAttribute('value'),
@@ -84,7 +84,7 @@ tests.push({
     await page.goto(URL, { waitUntil: 'domcontentloaded' });
     await waitReady(page, 'data-progress-ring-ready');
     const data = await page.evaluate(() => {
-      const labelled = document.querySelector('is-progress-ring[label]');
+      const labelled = document.querySelector('iswc-progress-ring[label]');
       const lbl = labelled.shadowRoot.querySelector('.label');
       return { text: lbl.textContent.trim(), hidden: lbl.hidden };
     });
@@ -99,7 +99,7 @@ tests.push({
     await page.goto(URL, { waitUntil: 'domcontentloaded' });
     await waitReady(page, 'data-progress-ring-ready');
     const text = await page.evaluate(() => {
-      const p = document.querySelector('is-progress-ring[value="50"]');
+      const p = document.querySelector('iswc-progress-ring[value="50"]');
       return p.shadowRoot.querySelector('.label').textContent.trim();
     });
     assert.equal(text, '50%', `sin label, debe mostrarse "50%" (vimos "${text}")`);
@@ -113,7 +113,7 @@ tests.push({
     await page.goto(URL, { waitUntil: 'domcontentloaded' });
     await waitReady(page, 'data-progress-ring-ready');
     const data = await page.evaluate(() => {
-      const p = document.querySelector('is-progress-ring[value="50"]');
+      const p = document.querySelector('iswc-progress-ring[value="50"]');
       const ind = p.shadowRoot.querySelector('.indicator');
       const cs = getComputedStyle(ind);
       return {

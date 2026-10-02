@@ -1,20 +1,20 @@
 ---
-tag: is-window
+tag: iswc-window
 tags:
-  - is-window
+  - iswc-window
 category: overlays
 status: public
 source: ./window.js
 style: ./window.css
 preview: ./window.json
 ---
-# `<is-window>`
+# `<iswc-window>`
 
 ## Propósito
 
 Ventana flotante (estilo escritorio): arrastre, resize, minimizar a pastilla, maximizar. `scope=local` vive en el wrapper; `scope=global` usa el viewport.
 
-Este módulo registra `<is-window>`.
+Este módulo registra `<iswc-window>`.
 
 ## Cuándo usarlo
 
@@ -22,7 +22,7 @@ Paleta de comandos, visor de documentos y ventanas flotantes.
 
 ## Cuándo no usarlo
 
-Para diálogos/cajones genéricos usar `<is-dialog>` / `<is-drawer>` en layout.
+Para diálogos/cajones genéricos usar `<iswc-dialog>` / `<iswc-drawer>` en layout.
 No reinventar overlays si este módulo cubre el caso.
 
 ## Importación
@@ -34,9 +34,9 @@ import './window.js';
 ## Ejemplo mínimo
 
 ```html
-<is-window title="Detalle" width="480" height="320" resizable closable>
+<iswc-window title="Detalle" width="480" height="320" resizable closable>
   <p>Contenido de la ventana</p>
-</is-window>
+</iswc-window>
 ```
 
 ## API
@@ -79,16 +79,16 @@ import './window.js';
 
 | Evento | detail | bubbles | composed | cancelable |
 | --- | --- | --- | --- | --- |
-| `is-show` | no | sí | sí | no |
-| `is-after-show` | no | sí | sí | no |
-| `is-hide` | no | sí | sí | no |
-| `is-after-hide` | no | sí | sí | no |
-| `is-minimize` | no | sí | sí | no |
-| `is-restore` | `{ was }` | sí | sí | no |
-| `is-maximize` | no | sí | sí | no |
+| `iswc-show` | no | sí | sí | no |
+| `iswc-after-show` | no | sí | sí | no |
+| `iswc-hide` | no | sí | sí | no |
+| `iswc-after-hide` | no | sí | sí | no |
+| `iswc-minimize` | no | sí | sí | no |
+| `iswc-restore` | `{ was }` | sí | sí | no |
+| `iswc-maximize` | no | sí | sí | no |
 
-Vocabulario unificado con `ModalBase` (`is-show` / `is-after-show` /
-`is-hide` / `is-after-hide`). Los antiguos `is-open` / `is-close` ya no se
+Vocabulario unificado con `ModalBase` (`iswc-show` / `iswc-after-show` /
+`iswc-hide` / `iswc-after-hide`). Los antiguos `iswc-open` / `iswc-close` ya no se
 emiten.
 
 ### Métodos y propiedades públicas
@@ -127,14 +127,14 @@ No declara integración form-associated propia en este módulo.
 
 Documentación de cabecera preservada desde fuente:
 
-> <is-window> — API minimize/restore/maximize/unmaximize/close. scope local|global. position absolute|fixed.
+> <iswc-window> — API minimize/restore/maximize/unmaximize/close. scope local|global. position absolute|fixed.
 
 ## Dependencias y componentes relacionados
 
 - [`../_shared/adopt-css.js`](../_shared/adopt-css.js)
 - [`../media/icon.js`](../media/icon.js)
 
-Tags del módulo: `<is-window>`.
+Tags del módulo: `<iswc-window>`.
 
 ## Accesibilidad
 
@@ -171,9 +171,9 @@ Preservar semántica, foco, teclado, labels y ARIA. Listeners globales solo en
 ## Ejemplo avanzado
 
 ```html
-<is-window title="Detalle" width="480" height="320" resizable closable>
+<iswc-window title="Detalle" width="480" height="320" resizable closable>
   <p>Contenido de la ventana</p>
-</is-window>
+</iswc-window>
 ```
 
 ## Errores comunes

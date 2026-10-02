@@ -1,11 +1,11 @@
 {
-  "$schema": "is-preview/v1",
-  "tag": "is-dock",
+  "$schema": "iswc-preview/v1",
+  "tag": "iswc-dock",
   "category": "layout",
-  "title": "<is-dock>",
+  "title": "<iswc-dock>",
   "titleHtml": true,
   "styles": ".stage {\r\n      height: 28rem;\r\n      border: 1px dashed var(--iswc-border);\r\n      border-radius: var(--iswc-radius);\r\n      background:\r\n        radial-gradient(60rem 30rem at 50% 100%,\r\n          color-mix(in srgb, var(--iswc-accent) 14%, transparent),\r\n          transparent 60%);\r\n      position: relative;\r\n      transform: translateZ(0);\r\n      overflow: hidden;\r\n    }\r\n    pre.log {\r\n      font-family: ui-monospace, monospace; font-size: .8rem;\r\n      background: var(--iswc-bg-elev); border: 1px solid var(--iswc-border);\r\n      border-radius: var(--iswc-radius); padding: .55rem .75rem;\r\n      max-height: 9rem; overflow: auto;\r\n    }",
-  "storageKey": "docs-is-dock",
+  "storageKey": "docs-iswc-dock",
   "hasBehavior": true,
   "sections": [
     {
@@ -20,7 +20,7 @@
       "blocks": [
         {
           "kind": "demo",
-          "html": "<div class=\"stage\"></div>\r\n          <is-dock>\r\n            <is-dock-item label=\"Inicio\"     icon=\"mdi:home-variant\" active></is-dock-item>\r\n            <is-dock-item label=\"Buscar\"     icon=\"mdi:magnify\"></is-dock-item>\r\n            <is-dock-item label=\"Mensajes\"   icon=\"mdi:message-text\"></is-dock-item>\r\n            <is-dock-item label=\"Calendario\" icon=\"mdi:calendar\"></is-dock-item>\r\n            <is-dock-item label=\"Notas\"      icon=\"mdi:notebook\"></is-dock-item>\r\n            <is-dock-item label=\"Música\"     icon=\"mdi:music\"></is-dock-item>\r\n            <is-dock-item label=\"Ajustes\"    icon=\"mdi:cog\"></is-dock-item>\r\n          </is-dock>",
+          "html": "<div class=\"stage\"></div>\r\n          <iswc-dock>\r\n            <iswc-dock-item label=\"Inicio\"     icon=\"mdi:home-variant\" active></iswc-dock-item>\r\n            <iswc-dock-item label=\"Buscar\"     icon=\"mdi:magnify\"></iswc-dock-item>\r\n            <iswc-dock-item label=\"Mensajes\"   icon=\"mdi:message-text\"></iswc-dock-item>\r\n            <iswc-dock-item label=\"Calendario\" icon=\"mdi:calendar\"></iswc-dock-item>\r\n            <iswc-dock-item label=\"Notas\"      icon=\"mdi:notebook\"></iswc-dock-item>\r\n            <iswc-dock-item label=\"Música\"     icon=\"mdi:music\"></iswc-dock-item>\r\n            <iswc-dock-item label=\"Ajustes\"    icon=\"mdi:cog\"></iswc-dock-item>\r\n          </iswc-dock>",
           "controls": [
               {
                 "control": "select",
@@ -62,7 +62,7 @@
       "blocks": [
         {
           "kind": "demo",
-          "html": "<div class=\"stage\"></div>\r\n          <is-dock position=\"left\">\r\n            <is-dock-item label=\"VS Code\"  icon=\"mdi:code-braces\"></is-dock-item>\r\n            <is-dock-item label=\"Git\"      icon=\"mdi:source-branch\"></is-dock-item>\r\n            <is-dock-item label=\"Terminal\" icon=\"mdi:console\"></is-dock-item>\r\n            <is-dock-item label=\"Docker\"   icon=\"mdi:docker\"></is-dock-item>\r\n            <is-dock-item label=\"Browser\"  icon=\"mdi:web\"></is-dock-item>\r\n          </is-dock>",
+          "html": "<div class=\"stage\"></div>\r\n          <iswc-dock position=\"left\">\r\n            <iswc-dock-item label=\"VS Code\"  icon=\"mdi:code-braces\"></iswc-dock-item>\r\n            <iswc-dock-item label=\"Git\"      icon=\"mdi:source-branch\"></iswc-dock-item>\r\n            <iswc-dock-item label=\"Terminal\" icon=\"mdi:console\"></iswc-dock-item>\r\n            <iswc-dock-item label=\"Docker\"   icon=\"mdi:docker\"></iswc-dock-item>\r\n            <iswc-dock-item label=\"Browser\"  icon=\"mdi:web\"></iswc-dock-item>\r\n          </iswc-dock>",
           "contain": true
         }
       ]
@@ -73,7 +73,7 @@
       "blocks": [
         {
           "kind": "code",
-          "code": "// Cambia el ítem activo programáticamente\ndocument.querySelector('is-dock-item[label=\"Inicio\"]').setAttribute('active', '');\n\n// Escucha selección\ndock.addEventListener('is-select', e => console.log(e.detail.item.getAttribute('label')));\n\n// Atributos\n// position    bottom (default) | top | left | right\n// max-scale   factor máximo (default 1.6)\n// range       píxeles de alcance (default 110)\n\n<is-dock-item label=\"…\" icon=\"mdi:…\" href=\"…\" active />"
+          "code": "// Cambia el ítem activo programáticamente\ndocument.querySelector('iswc-dock-item[label=\"Inicio\"]').setAttribute('active', '');\n\n// Escucha selección\ndock.addEventListener('iswc-select', e => console.log(e.detail.item.getAttribute('label')));\n\n// Atributos\n// position    bottom (default) | top | left | right\n// max-scale   factor máximo (default 1.6)\n// range       píxeles de alcance (default 110)\n\n<iswc-dock-item label=\"…\" icon=\"mdi:…\" href=\"…\" active />"
         }
       ]
     },

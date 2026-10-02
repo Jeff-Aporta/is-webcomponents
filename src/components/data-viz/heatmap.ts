@@ -12,7 +12,7 @@ type HeatmapCfg = {
 };
 
 /**
- * <is-heatmap> — Mapa de calor: matriz de celdas coloreadas por valor numérico.
+ * <iswc-heatmap> — Mapa de calor: matriz de celdas coloreadas por valor numérico.
  *
  * Atributos
  *   x-label, y-label      títulos de los ejes
@@ -28,8 +28,8 @@ type HeatmapCfg = {
  *   o bien { xLabels, yLabels, points: [{x, y, v}, ...] }
  *
  * Eventos
- *   is-cell-hover   detail: { x, y, value }
- *   is-render
+ *   iswc-cell-hover   detail: { x, y, value }
+ *   iswc-render
  */
 (() => {
   const OBSERVED = ['x-label', 'y-label', 'color', 'cell-radius', 'show-values', 'legend-position'];
@@ -48,7 +48,7 @@ type HeatmapCfg = {
     return [0.18, 0.36, 0.55, 0.75, 0.95].map((a: number) => `color-mix(in srgb, ${hex} ${Math.round(a * 100)}%, var(--iswc-bg-elev))`);
   }
 
-  class IsHeatmap extends withStyleAttrs(HTMLElement) {
+  class IswcHeatmap extends withStyleAttrs(HTMLElement) {
     /** Personalización por atributo (ver `core/attrs.ts`). */
     static styleAttrs = {
     'text-color': { prop: '--iswc-heatmap-text', onlyColorValues: true },
@@ -267,7 +267,7 @@ type HeatmapCfg = {
       // legend
       this.#renderLegend(domain, palette, W - legendW + 6, plot.y, legendW - 12, plot.height);
 
-      emit(this, 'is-render', { svg: this.#svg });
+      emit(this, 'iswc-render', { svg: this.#svg });
     }
 
     #renderLegend(domain: [number, number], palette: string[], x: number, y: number, w: number, h: number): void {
@@ -295,15 +295,15 @@ type HeatmapCfg = {
       const target = e.target as Element | null;
       const cell = target?.closest('.cell') as HTMLElement | null;
       if (!cell) return this.#clearHover();
-      cell.classList.add('is-hover');
+      cell.classList.add('iswc-hover');
       const detail = { x: cell.dataset['x'], y: cell.dataset['y'], value: Number(cell.dataset['v']) };
-      // Anuncio polite al sr-status: replica el detail del evento is-cell-hover.
+      // Anuncio polite al sr-status: replica el detail del evento iswc-cell-hover.
       this.#srStatusEl.textContent = `${detail.y} · ${detail.x} = ${formatVal(Number(detail.value))}`;
-      emit(this, 'is-cell-hover', detail);
+      emit(this, 'iswc-cell-hover', detail);
     }
 
     #clearHover(): void {
-      this.#svg.querySelectorAll<HTMLElement>('.cell.is-hover').forEach((c) => c.classList.remove('is-hover'));
+      this.#svg.querySelectorAll<HTMLElement>('.cell.iswc-hover').forEach((c) => c.classList.remove('iswc-hover'));
       // No limpiamos srStatusEl.textContent: los lectores de pantalla polite
       // necesitan mantener el último mensaje hasta que llegue uno nuevo.
     }
@@ -322,5 +322,5 @@ type HeatmapCfg = {
     return Number(v.toFixed(2)).toString();
   }
 
-  defineElement('is-heatmap', IsHeatmap);
+  defineElement('iswc-heatmap', IswcHeatmap);
 })();

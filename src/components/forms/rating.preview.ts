@@ -1,5 +1,5 @@
 /**
- * Behavior migrado desde HTML inline de is-rating.
+ * Behavior migrado desde HTML inline de iswc-rating.
  * Se ejecuta en mount() tras pintar la definition JSON.
  * @param {import('../../previews/_kit/types.d.ts').PreviewMountContext} ctx
  */
@@ -9,7 +9,7 @@ export async function mount(ctx: import('../../previews/_kit/types.d.ts').Previe
   const demo = document.getElementById('demo') as HTMLElement | null;
   const log = document.getElementById('log') as HTMLElement | null;
   if (demo && log) {
-    demo.addEventListener('is-change', (e: Event) => {
+    demo.addEventListener('iswc-change', (e: Event) => {
       const detail = (e as CustomEvent<{ value: unknown }>).detail;
       log.innerHTML = `value: <code class="code">${String(detail.value)}</code>`;
     });
@@ -31,7 +31,7 @@ export async function mount(ctx: import('../../previews/_kit/types.d.ts').Previe
   const hoverLog = document.getElementById('hoverLog') as HTMLElement | null;
   if (labelled && fn && hoverLog) {
     for (const el of [labelled, fn] as HTMLElement[]) {
-      el.addEventListener('is-hover', (e: Event) => {
+      el.addEventListener('iswc-hover', (e: Event) => {
         const detail = (e as CustomEvent<{ phantomValue: number | null; label: string }>).detail;
         const { phantomValue, label } = detail;
         hoverLog.innerHTML = `hover: <code class="code">${phantomValue === null ? '—' : `${phantomValue} · ${label}`}</code>`;
@@ -43,7 +43,7 @@ export async function mount(ctx: import('../../previews/_kit/types.d.ts').Previe
   const clearDemo = document.getElementById('clearDemo') as HTMLElement | null;
   const clearLog = document.getElementById('clearLog') as HTMLElement | null;
   if (clearDemo && clearLog) {
-    clearDemo.addEventListener('is-change', (e: Event) => {
+    clearDemo.addEventListener('iswc-change', (e: Event) => {
       const detail = (e as CustomEvent<{ value: unknown }>).detail;
       clearLog.innerHTML = `value: <code class="code">${String(detail.value)}</code>`;
     });

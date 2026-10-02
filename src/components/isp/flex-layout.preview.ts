@@ -1,5 +1,5 @@
 /**
- * Playground <is-flex-layout>: switches booleanos + selects + snippet en vivo.
+ * Playground <iswc-flex-layout>: switches booleanos + selects + snippet en vivo.
  * @param {import('../../previews/_kit/types.d.ts').PreviewMountContext} ctx
  */
 
@@ -46,14 +46,14 @@ export async function mount(ctx: import('../../previews/_kit/types.d.ts').Previe
     el?.addEventListener('change', sync);
   }
   for (const sw of [wrap, grow, inline]) {
-    sw?.addEventListener('is-change', sync);
+    sw?.addEventListener('iswc-change', sync);
   }
 
   sync();
 }
 
 function buildSnippet(el: HTMLElement): string {
-  const parts = ['<is-flex-layout'];
+  const parts = ['<iswc-flex-layout'];
   for (const name of [
     'direction', 'justify', 'align', 'gap',
     'wrap', 'grow', 'inline',
@@ -63,7 +63,7 @@ function buildSnippet(el: HTMLElement): string {
     if (v === '' || v == null) parts.push(` ${name}`);
     else parts.push(` ${name}="${v}"`);
   }
-  parts.push('>…</is-flex-layout>');
+  parts.push('>…</iswc-flex-layout>');
   return parts.join('');
 }
 

@@ -1,21 +1,21 @@
 ---
-tag: is-journey-map
+tag: iswc-journey-map
 tags:
-  - is-journey-map
+  - iswc-journey-map
 category: diagrams
 status: public
 source: ./journey-map.js
 style: ./journey-map.css
 preview: ./journey-map.json
 ---
-# `<is-journey-map>`
+# `<iswc-journey-map>`
 
 ## Propósito
 
 Mapa de **recorrido de usuario** en SVG, sin Mermaid: fases arriba, pasos en
 orden y la curva de satisfacción que los atraviesa.
 
-Este módulo registra `<is-journey-map>`.
+Este módulo registra `<iswc-journey-map>`.
 
 ## Cuándo usarlo
 
@@ -24,8 +24,8 @@ experiencia, en qué fase, y de quién es ese paso.
 
 ## Cuándo no usarlo
 
-Si solo hay hitos en el tiempo → `<is-timeline>`. Si hay decisiones y
-bifurcaciones → `<is-flowchart>`.
+Si solo hay hitos en el tiempo → `<iswc-timeline>`. Si hay decisiones y
+bifurcaciones → `<iswc-flowchart>`.
 
 ## Importación
 
@@ -36,11 +36,11 @@ import './journey-map.js';
 ## Ejemplo mínimo
 
 ```html
-<is-journey-map>
+<iswc-journey-map>
   <script type="application/json">
     {}
   </script>
-</is-journey-map>
+</iswc-journey-map>
 ```
 
 ## API
@@ -73,9 +73,9 @@ import './journey-map.js';
 
 | Evento | detail | bubbles | composed | cancelable |
 | --- | --- | --- | --- | --- |
-| `is-render` | sí | sí | sí | no |
-| `is-open-viewer` | sí | sí | sí | sí |
-| `is-toggle-phase` | sí | sí | sí | no |
+| `iswc-render` | sí | sí | sí | no |
+| `iswc-open-viewer` | sí | sí | sí | sí |
+| `iswc-toggle-phase` | sí | sí | sí | no |
 
 ### Métodos y propiedades públicas
 
@@ -115,17 +115,17 @@ La escala por defecto es 1..5 y se cambia con `scale`. Un paso sin `score` se di
 
 Documentación de cabecera preservada desde fuente:
 
-> <is-journey-map> — mapa de recorrido (user journey) en SVG, sin Mermaid.
->   <is-journey-map>
+> <iswc-journey-map> — mapa de recorrido (user journey) en SVG, sin Mermaid.
+>   <iswc-journey-map>
 >     <script type="application/json">
 >       { "journey": { "phases": [...], "steps": [{ "label": "...", "score": 4 }] } }
 >     </script>
->   </is-journey-map>
-> Mismo esqueleto que <is-flowchart>: shadow DOM, slot JSON + MutationObserver,
+>   </iswc-journey-map>
+> Mismo esqueleto que <iswc-flowchart>: shadow DOM, slot JSON + MutationObserver,
 > tema por atributo `data-theme`, `color` (inline | viewer), lightbox propio.
 > Atributos: color (inline | viewer), open-on-click
 > Propiedades: payload, spec, layout, hiddenPhases
-> Eventos: is-render, is-open-viewer, is-toggle-phase
+> Eventos: iswc-render, iswc-open-viewer, iswc-toggle-phase
 
 ## Dependencias y componentes relacionados
 
@@ -140,7 +140,7 @@ Documentación de cabecera preservada desde fuente:
 - [`../_shared/emit.js`](../_shared/emit.js)
 - [`../_shared/svg-chart-engine.js`](../_shared/svg-chart-engine.js)
 
-Tags del módulo: `<is-journey-map>`.
+Tags del módulo: `<iswc-journey-map>`.
 
 ## Accesibilidad
 

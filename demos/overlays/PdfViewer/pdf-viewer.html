@@ -3,7 +3,7 @@
 <head>
 <meta charset="utf-8" />
 <meta name="viewport" content="width=device-width, initial-scale=1" />
-<title>Visor de PDF de <is-pdf-viewer> · is-webcomponents</title>
+<title>Visor de PDF de <iswc-pdf-viewer> · is-webcomponents</title>
 <meta name="description" content="Visor de PDF basado en iframe nativo (o pdfjs opcional) con toolbar configurable: descargar, imprimir, título y slot personalizado." />
 <style>
   html, body { margin: 0; padding: 0; height: 100%; background: #0c1118; color: #e2e8f0; font-family: ui-sans-serif, system-ui, sans-serif; }
@@ -29,18 +29,18 @@
     font-size: 12px; text-transform: uppercase; letter-spacing: 0.08em;
     margin: 0 0 12px 0; color: #94a3b8;
   }
-  is-pdf-viewer {
+  iswc-pdf-viewer {
     display: block; width: 100%; height: 100%; min-height: 480px;
   }
-  is-pdf-viewer:not(:defined) { visibility: hidden; }
+  iswc-pdf-viewer:not(:defined) { visibility: hidden; }
   footer { padding: 12px 20px; border-top: 1px solid rgba(255,255,255,0.1); background: #0f1620; font-size: 11px; color: #94a3b8; }
   footer code { background: rgba(255,255,255,0.06); padding: 1px 5px; border-radius: 3px; font: 11px ui-monospace, Menlo, Consolas, monospace; }
 </style>
 <script type="module">
   // Cargar el bundle pre-construido desde dist/cdn/. Funciona con cualquier
   // servidor estático (incluido VS Code Live Server), no solo con dev server.
-  await import('../../../dist/cdn/overlays/pdf-viewer.min.js?h=derbop');
-  await customElements.whenDefined('is-pdf-viewer');
+  await import('../../../dist/cdn/overlays/pdf-viewer.min.js?h=58bjvj');
+  await customElements.whenDefined('iswc-pdf-viewer');
 
   // El visor usa <iframe type="application/pdf"> por defecto; los browsers
   // modernos renderizan PDFs nativamente. Si el binario del PDF no está
@@ -53,7 +53,7 @@
   const SAMPLE_PDF = 'https://raw.githubusercontent.com/mozilla/pdf.js/web/compressed.tracemonkey-pldi-09.pdf';
 
   // Demo 1: básico con src + download + print + título vía slot.
-  const basic = document.createElement('is-pdf-viewer');
+  const basic = document.createElement('iswc-pdf-viewer');
   basic.setAttribute('src', SAMPLE_PDF);
   basic.setAttribute('download', '');
   basic.setAttribute('print', '');
@@ -65,7 +65,7 @@
   document.getElementById('host-basic').appendChild(basic);
 
   // Demo 2: con altura custom + slot toolbar extra.
-  const custom = document.createElement('is-pdf-viewer');
+  const custom = document.createElement('iswc-pdf-viewer');
   custom.setAttribute('src', SAMPLE_PDF);
   custom.setAttribute('height', '500px');
   const t2Title = document.createElement('span');
@@ -81,12 +81,12 @@
   custom.appendChild(tb);
   document.getElementById('host-custom').appendChild(custom);
 
-  // Log de eventos is-load / is-error
+  // Log de eventos iswc-load / iswc-error
   const log = document.getElementById('log');
   const append = (line) => { log.textContent = line + '\n' + log.textContent; };
   for (const v of [basic, custom]) {
-    v.addEventListener('is-load', () => append(`[is-load] ${v.getAttribute('src').slice(-30)}`));
-    v.addEventListener('is-error', () => append(`[is-error] ${v.getAttribute('src').slice(-30)}`));
+    v.addEventListener('iswc-load', () => append(`[iswc-load] ${v.getAttribute('src').slice(-30)}`));
+    v.addEventListener('iswc-error', () => append(`[iswc-error] ${v.getAttribute('src').slice(-30)}`));
   }
 
   document.documentElement.dataset.pdfViewerReady = '1';
@@ -95,7 +95,7 @@
 <body>
 <header>
   <div>
-    <h1>Visor de PDF — <code>&lt;is-pdf-viewer&gt;</code></h1>
+    <h1>Visor de PDF — <code>&lt;iswc-pdf-viewer&gt;</code></h1>
     <p>Toolbar con <code>download</code> / <code>print</code> opcionales · título vía <code>slot="title"</code> · <code>engine="pdfjs"</code> para integraciones avanzadas</p>
   </div>
   <div class="spacer"></div>
@@ -112,7 +112,7 @@
   </section>
 </main>
 <footer>
-  Estado: <code>customElements.whenDefined('is-pdf-viewer')</code> resuelto. Atributos <code>download</code> / <code>print</code> booleanos (presencia, no valor).
+  Estado: <code>customElements.whenDefined('iswc-pdf-viewer')</code> resuelto. Atributos <code>download</code> / <code>print</code> booleanos (presencia, no valor).
   <pre id="log" hidden></pre>
 </footer>
 </body>

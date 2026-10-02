@@ -7,28 +7,28 @@ const comp = join(root, 'src', 'components');
 const gh = 'https://github.com/Jeff-Aporta/is-webcomponents/blob/main/src/components';
 
 const faltantes = [
-  ['actions/speed-dial-action.md', 'is-speed-dial-action', 'actions', 'Acción hija de `<is-speed-dial>`. No se usa sola: vive dentro del speed dial y dispara su comando.'],
-  ['data/kanban-column.md', 'is-kanban-column', 'data', 'Columna de `<is-kanban>`. Declara el estado del tablero; las tarjetas van dentro.'],
-  ['data/kanban-card.md', 'is-kanban-card', 'data', 'Tarjeta de `<is-kanban>`. Representa un ítem movible dentro de una columna.'],
-  ['data/transfer-item.md', 'is-transfer-item', 'data', 'Ítem de `<is-transfer>`. Es una opción de la lista origen o destino, no un control suelto.'],
-  ['data-viz/map-marker.md', 'is-map-marker', 'data-viz', 'Marcador de `<is-maps>`. Señala un punto; el mapa lo posiciona.'],
-  ['layout/dock-item.md', 'is-dock-item', 'layout', 'Ítem de `<is-dock>`. Un acceso del dock, con icono y acción.'],
-  ['layout/demo.md', 'is-demo', 'layout', 'Caja de demostración de la galería. Envuelve un ejemplo y ofrece ver código y fuentes.'],
-  ['layout/preview-component.md', 'is-preview-component', 'preview', 'Shell de la galería. Pinta una definición JSON de preview; no es un control de producto.'],
-  ['layout/preview-controls.md', 'is-preview-controls', 'preview', 'Panel de controles del playground. Aplica props de la definición JSON al ejemplo activo.'],
-  ['navigation/carousel-item.md', 'is-carousel-item', 'navigation', 'Lámina de `<is-carousel>`. Un paso del carrusel; el grupo controla el avance.'],
-  ['navigation/stepper-step.md', 'is-stepper-step', 'navigation', 'Paso de `<is-stepper>`. Marca una etapa; el stepper lleva el estado activo.'],
-  ['navigation/tab.md', 'is-tab', 'navigation', 'Pestaña de `<is-tab-group>`. Elige el panel; no sustituye al grupo.'],
-  ['navigation/tab-panel.md', 'is-tab-panel', 'navigation', 'Panel de `<is-tab-group>`. El contenido que se muestra al activar su `<is-tab>`.'],
-  ['navigation/tree-item.md', 'is-tree-item', 'navigation', 'Nodo de `<is-tree>`. Puede tener hijos y se expande dentro del árbol.'],
-  ['helpers/floating.md', 'is-floating', 'helpers', 'Posicionamiento anclado interno. No es API de producto: en apps se usa `<is-popover>` o `<is-tooltip>`.'],
+  ['actions/speed-dial-action.md', 'iswc-speed-dial-action', 'actions', 'Acción hija de `<iswc-speed-dial>`. No se usa sola: vive dentro del speed dial y dispara su comando.'],
+  ['data/kanban-column.md', 'iswc-kanban-column', 'data', 'Columna de `<iswc-kanban>`. Declara el estado del tablero; las tarjetas van dentro.'],
+  ['data/kanban-card.md', 'iswc-kanban-card', 'data', 'Tarjeta de `<iswc-kanban>`. Representa un ítem movible dentro de una columna.'],
+  ['data/transfer-item.md', 'iswc-transfer-item', 'data', 'Ítem de `<iswc-transfer>`. Es una opción de la lista origen o destino, no un control suelto.'],
+  ['data-viz/map-marker.md', 'iswc-map-marker', 'data-viz', 'Marcador de `<iswc-maps>`. Señala un punto; el mapa lo posiciona.'],
+  ['layout/dock-item.md', 'iswc-dock-item', 'layout', 'Ítem de `<iswc-dock>`. Un acceso del dock, con icono y acción.'],
+  ['layout/demo.md', 'iswc-demo', 'layout', 'Caja de demostración de la galería. Envuelve un ejemplo y ofrece ver código y fuentes.'],
+  ['layout/preview-component.md', 'iswc-preview-component', 'preview', 'Shell de la galería. Pinta una definición JSON de preview; no es un control de producto.'],
+  ['layout/preview-controls.md', 'iswc-preview-controls', 'preview', 'Panel de controles del playground. Aplica props de la definición JSON al ejemplo activo.'],
+  ['navigation/carousel-item.md', 'iswc-carousel-item', 'navigation', 'Lámina de `<iswc-carousel>`. Un paso del carrusel; el grupo controla el avance.'],
+  ['navigation/stepper-step.md', 'iswc-stepper-step', 'navigation', 'Paso de `<iswc-stepper>`. Marca una etapa; el stepper lleva el estado activo.'],
+  ['navigation/tab.md', 'iswc-tab', 'navigation', 'Pestaña de `<iswc-tab-group>`. Elige el panel; no sustituye al grupo.'],
+  ['navigation/tab-panel.md', 'iswc-tab-panel', 'navigation', 'Panel de `<iswc-tab-group>`. El contenido que se muestra al activar su `<iswc-tab>`.'],
+  ['navigation/tree-item.md', 'iswc-tree-item', 'navigation', 'Nodo de `<iswc-tree>`. Puede tener hijos y se expande dentro del árbol.'],
+  ['helpers/floating.md', 'iswc-floating', 'helpers', 'Posicionamiento anclado interno. No es API de producto: en apps se usa `<iswc-popover>` o `<iswc-tooltip>`.'],
 ];
 
 for (const [rel, tag, category, resumen] of faltantes) {
   const file = join(comp, rel);
   if (existsSync(file)) continue;
   mkdirSync(dirname(file), { recursive: true });
-  const interno = tag === 'is-floating' ? 'internal' : 'public';
+  const interno = tag === 'iswc-floating' ? 'internal' : 'public';
   writeFileSync(file, `---
 tag: ${tag}
 tags:
@@ -61,7 +61,7 @@ No lo reimplementes ni lo uses para sustituir al padre. La guía del padre docum
 
 function preview(tag, category, title, lede, html) {
   return {
-    $schema: 'is-preview/v1',
+    $schema: 'iswc-preview/v1',
     tag,
     category,
     title,
@@ -102,39 +102,39 @@ const links = kinds.map(([kind, title]) =>
 
 const pages = [
   ['diagrams/diagram-view-app.json', preview(
-    'is-diagram-view-app', 'diagrams', 'Visor de diagramas (API)',
+    'iswc-diagram-view-app', 'diagrams', 'Visor de diagramas (API)',
     'Abre cualquier diagrama con ?kind= y ?json= en base64url. La dirección no cambia al mirar el documento.',
     `<iframe title="Visor de diagramas" src="demos/diagramas/app/view.html?kind=flowchart" style="width:100%;height:720px;border:1px solid var(--iswc-border);border-radius:12px;background:var(--iswc-bg)"></iframe><ul>${links}</ul>`,
   )],
   ['diagrams/diagram-edit-app.json', preview(
-    'is-diagram-edit-app', 'diagrams', 'Editor de diagramas (API)',
+    'iswc-diagram-edit-app', 'diagrams', 'Editor de diagramas (API)',
     'Edita el diagrama y comparte un enlace nuevo. El ?json= con el que se abrió la página se queda igual.',
     `<iframe title="Editor de diagramas" src="demos/diagramas/app/edit.html?kind=er" style="width:100%;height:720px;border:1px solid var(--iswc-border);border-radius:12px;background:var(--iswc-bg)"></iframe><ul>${links}</ul>`,
   )],
   ['diagrams/er-editor.json', preview(
-    'is-er-editor', 'diagrams', '<is-er-editor>',
+    'iswc-er-editor', 'diagrams', '<iswc-er-editor>',
     'Editor visual de entidad-relación. Compartir el resultado se hace con la app de edición, sin reescribir el enlace de entrada.',
-    `<p><a href="demos/diagramas/app/edit.html?kind=er" target="_blank" rel="noopener">Abrir editor (API)</a> · <a href="demos/diagramas/app/view.html?kind=er" target="_blank" rel="noopener">Abrir visor</a></p><is-er-editor style="display:block;height:560px"><script type="application/json">{"entities":[{"id":"cliente","name":"Cliente","attributes":[{"name":"id","key":"PK","type":"uuid"}],"pos":[80,80]},{"id":"pedido","name":"Pedido","attributes":[{"name":"id","key":"PK","type":"uuid"},{"name":"cliente_id","key":"FK","type":"uuid"}],"pos":[380,80]}],"relations":[{"id":"r1","from":"cliente","to":"pedido","label":"hace","fromCard":"one","toCard":"many"}]}</script></is-er-editor>`,
+    `<p><a href="demos/diagramas/app/edit.html?kind=er" target="_blank" rel="noopener">Abrir editor (API)</a> · <a href="demos/diagramas/app/view.html?kind=er" target="_blank" rel="noopener">Abrir visor</a></p><iswc-er-editor style="display:block;height:560px"><script type="application/json">{"entities":[{"id":"cliente","name":"Cliente","attributes":[{"name":"id","key":"PK","type":"uuid"}],"pos":[80,80]},{"id":"pedido","name":"Pedido","attributes":[{"name":"id","key":"PK","type":"uuid"},{"name":"cliente_id","key":"FK","type":"uuid"}],"pos":[380,80]}],"relations":[{"id":"r1","from":"cliente","to":"pedido","label":"hace","fromCard":"one","toCard":"many"}]}</script></iswc-er-editor>`,
   )],
   ['layout/demo.json', preview(
-    'is-demo', 'layout', '<is-demo>',
+    'iswc-demo', 'layout', '<iswc-demo>',
     'Caja de los ejemplos de la galería.',
-    '<is-demo heading="Ejemplo"><p>El contenido del ejemplo va en light DOM.</p></is-demo>',
+    '<iswc-demo heading="Ejemplo"><p>El contenido del ejemplo va en light DOM.</p></iswc-demo>',
   )],
   ['helpers/floating.json', preview(
-    'is-floating', 'helpers', '<is-floating> (interno)',
-    'Building block interno. En producto usa is-popover o is-tooltip.',
-    '<is-floating placement="bottom" active><button slot="anchor" type="button">Ancla</button><div>Contenido anclado. No usar este tag en apps.</div></is-floating>',
+    'iswc-floating', 'helpers', '<iswc-floating> (interno)',
+    'Building block interno. En producto usa iswc-popover o iswc-tooltip.',
+    '<iswc-floating placement="bottom" active><button slot="anchor" type="button">Ancla</button><div>Contenido anclado. No usar este tag en apps.</div></iswc-floating>',
   )],
   ['layout/preview-component.json', preview(
-    'is-preview-component', 'preview', '<is-preview-component>',
+    'iswc-preview-component', 'preview', '<iswc-preview-component>',
     'Shell que monta una definición JSON de la galería. La propia galería es el ejemplo vivo.',
     '<p>La galería asigna la propiedad <code>preview</code> y este tag pinta el documento, el índice y los demos. No evalúa código de comportamiento.</p>',
   )],
   ['layout/preview-controls.json', preview(
-    'is-preview-controls', 'preview', '<is-preview-controls>',
-    'Panel de knobs del playground. La galería le pasa spec y escucha is-controls-change.',
-    '<is-preview-controls label="Controles"></is-preview-controls>',
+    'iswc-preview-controls', 'preview', '<iswc-preview-controls>',
+    'Panel de knobs del playground. La galería le pasa spec y escucha iswc-controls-change.',
+    '<iswc-preview-controls label="Controles"></iswc-preview-controls>',
   )],
 ];
 

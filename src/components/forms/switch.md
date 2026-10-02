@@ -1,23 +1,23 @@
 ---
-tag: is-switch
+tag: iswc-switch
 tags:
-  - is-switch
+  - iswc-switch
 category: forms
 status: public
 source: ./switch.js
 style: ./switch.css
 preview: ./switch.json
 ---
-# `<is-switch>`
+# `<iswc-switch>`
 
 ## Propósito
 
 Interruptor form-associated con paridad funcional con el
 Switch de MUI:
-mismo contrato de formulario que is-checkbox, con carril y perilla deslizante,
+mismo contrato de formulario que iswc-checkbox, con carril y perilla deslizante,
 color por color, iconos en la perilla y rótulos dentro del carril.
 
-Este módulo registra `<is-switch>`.
+Este módulo registra `<iswc-switch>`.
 
 ## Cuándo usarlo
 
@@ -36,7 +36,7 @@ import './switch.js';
 ## Ejemplo mínimo
 
 ```html
-<is-switch color="success" checked>success</is-switch>
+<iswc-switch color="success" checked>success</iswc-switch>
 ```
 
 ## API
@@ -95,7 +95,7 @@ import './switch.js';
 
 | Evento | detail | bubbles | composed | cancelable |
 | --- | --- | --- | --- | --- |
-| `is-change` | sí | sí | sí | no |
+| `iswc-change` | sí | sí | sí | no |
 
 ### Métodos y propiedades públicas
 
@@ -169,20 +169,20 @@ Participa mediante ElementInternals/helpers form-associated; respetar name, valu
 
 Documentación de cabecera preservada desde fuente:
 
-> <is-switch> — Interruptor form-associated (track + thumb).
+> <iswc-switch> — Interruptor form-associated (track + thumb).
 > Atributos
 >   name, value (default "on"), hint
 >   color          brand (default) | neutral | success | warning | danger
 >   label-placement  end (default) | start | top | bottom
->   icon             nombre de <is-icon> dentro del thumb apagado
->   checked-icon     nombre de <is-icon> dentro del thumb encendido
+>   icon             nombre de <iswc-icon> dentro del thumb apagado
+>   checked-icon     nombre de <iswc-icon> dentro del thumb encendido
 >   on-label         texto corto dentro del track cuando está encendido
 >   off-label        texto corto dentro del track cuando está apagado
 >   checked, disabled, readonly, required, error   (boolean)
 > Slots: default (etiqueta), hint
 > Parts: form-control, base, control, track-label, thumb, mark, label, hint
 > Custom states: checked, disabled, readonly, error
-> Events: is-change { checked, value }
+> Events: iswc-change { checked, value }
 > Sin atributo `size`: escala con el font-size del contexto.
 
 ## Dependencias y componentes relacionados
@@ -191,7 +191,7 @@ Documentación de cabecera preservada desde fuente:
 - [`../media/icon.js`](../media/icon.js)
 - [`../_shared/form-associated.js`](../_shared/form-associated.js)
 
-Tags del módulo: `<is-switch>`.
+Tags del módulo: `<iswc-switch>`.
 
 ## Accesibilidad
 
@@ -200,8 +200,8 @@ Preservar semántica, foco, teclado, labels y ARIA. ARIA detectado: `aria-checke
 ## Ejemplo avanzado
 
 ```html
-<is-switch icon="mdi:weather-night" checked-icon="mdi:white-balance-sunny"
-color="warning" checked>Tema claro</is-switch>
+<iswc-switch icon="mdi:weather-night" checked-icon="mdi:white-balance-sunny"
+color="warning" checked>Tema claro</iswc-switch>
 ```
 
 ## Errores comunes

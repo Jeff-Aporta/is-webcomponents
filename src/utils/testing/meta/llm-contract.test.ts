@@ -37,8 +37,8 @@ const consolidated = `${lessons}\n${constraints}\n${componentes}`;
 // migra: comprueba que cada concepto sigue documentado en alguna parte.
 const requiredConcepts = [
   ['Reusar antes de inventar|reusar|reuso', 'carta de leyes: reuso'],
-  ['inferLanguage|is-code infer|code-langs', 'is-code infer lang'],
-  ['GALLERY_CHROME_TAGS|is-tab-group', 'chrome galería incluye tabs'],
+  ['inferLanguage|iswc-code infer|code-langs', 'iswc-code infer lang'],
+  ['GALLERY_CHROME_TAGS|iswc-tab-group', 'chrome galería incluye tabs'],
   ['gallery-boot|FOUC', 'guardián gallery-boot'],
   ['preview-paths|preview-component', 'previews controlados'],
   ['specs/README|flujo-sdd|SDD', 'contrato SDD specs'],

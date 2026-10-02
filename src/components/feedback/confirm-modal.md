@@ -1,23 +1,23 @@
 ---
-tag: is-confirm-modal
+tag: iswc-confirm-modal
 tags:
-  - is-confirm-modal
+  - iswc-confirm-modal
 category: feedback
 status: public
 source: ./confirm-modal.js
 style: ./confirm-modal.css
 preview: ./confirm-modal.json
 ---
-# `<is-confirm-modal>`
+# `<iswc-confirm-modal>`
 
 ## Propósito
 
 Confirmación en modal centrado con backdrop. Es el complemento de
-`<is-popconfirm>`: donde el popconfirm ancla un popover al disparador y no
+`<iswc-popconfirm>`: donde el popconfirm ancla un popover al disparador y no
 bloquea el fondo, este abre un diálogo centrado, oscurece la página y exige
 una respuesta antes de seguir.
 
-Este módulo registra `<is-confirm-modal>`.
+Este módulo registra `<iswc-confirm-modal>`.
 
 ## Cuándo usarlo
 
@@ -26,7 +26,7 @@ borrar un registro, descartar cambios sin guardar, cerrar sesión.
 
 ## Cuándo no usarlo
 
-Para confirmaciones triviales o de bajo riesgo. Ahí basta `<is-popconfirm>`,
+Para confirmaciones triviales o de bajo riesgo. Ahí basta `<iswc-popconfirm>`,
 que no interrumpe el flujo de la página.
 
 ## Importación
@@ -38,8 +38,8 @@ import './confirm-modal.js';
 ## Ejemplo mínimo
 
 ```html
-<is-button id="del">Borrar</is-button>
-<is-confirm-modal for="del" heading="Eliminar registro" message="¿Seguro?"></is-confirm-modal>
+<iswc-button id="del">Borrar</iswc-button>
+<iswc-confirm-modal for="del" heading="Eliminar registro" message="¿Seguro?"></iswc-confirm-modal>
 ```
 
 ## API
@@ -64,17 +64,17 @@ No declara propiedades reflejadas propias; se opera por atributos y métodos.
 | Slot | Uso |
 | --- | --- |
 | `message` | Contenido rico en vez del atributo `message`. |
-| `confirm` | Botón de confirmación. Default: `<is-button color="brand">Aceptar</is-button>`. |
-| `cancel` | Botón de cancelar. Default: `<is-button variant="text" color="neutral">Cancelar</is-button>`. |
+| `confirm` | Botón de confirmación. Default: `<iswc-button color="brand">Aceptar</iswc-button>`. |
+| `cancel` | Botón de cancelar. Default: `<iswc-button variant="text" color="neutral">Cancelar</iswc-button>`. |
 
 ### Eventos
 
 | Evento | detail | bubbles | composed | cancelable |
 | --- | --- | --- | --- | --- |
-| `is-confirm-show` | sí | sí | sí | no |
-| `is-confirm-hide` | sí | sí | sí | no |
-| `is-confirm-confirm` | sí | sí | sí | no |
-| `is-confirm-cancel` | sí | sí | sí | no |
+| `iswc-confirm-show` | sí | sí | sí | no |
+| `iswc-confirm-hide` | sí | sí | sí | no |
+| `iswc-confirm-confirm` | sí | sí | sí | no |
+| `iswc-confirm-cancel` | sí | sí | sí | no |
 
 `detail` en los cuatro: `{ trigger }` — el elemento referenciado por `for`,
 o `null` si no hay.
@@ -83,8 +83,8 @@ o `null` si no hay.
 
 | Método | Uso |
 | --- | --- |
-| `show()` | Abre el modal y emite `is-confirm-show`. |
-| `hide()` | Cierra el modal y emite `is-confirm-hide`. |
+| `show()` | Abre el modal y emite `iswc-confirm-show`. |
+| `hide()` | Cierra el modal y emite `iswc-confirm-hide`. |
 
 ### CSS parts
 
@@ -111,7 +111,7 @@ No expone.
 | `--iswc-brand` | Color de marca (vía `--brand`). |
 | `--iswc-brand-fg` | Texto sobre el color de marca (vía `--brand-fg`). |
 
-Los botones por defecto de los slots `confirm` / `cancel` son `<is-button>`:
+Los botones por defecto de los slots `confirm` / `cancel` son `<iswc-button>`:
 su color y apariencia se controlan desde el propio botón, no desde aquí.
 
 ### Integración con formularios
@@ -122,11 +122,11 @@ No declara integración form-associated propia en este módulo.
 
 - El cierre por Escape y el bloqueo de scroll del fondo salen de
   `_shared/popup-dismiss.js` (`createPopupDismiss` con `scrollLock`), el mismo
-  ciclo que usan `is-dropdown`, `is-context-menu` y `is-popconfirm`.
+  ciclo que usan `iswc-dropdown`, `iswc-context-menu` y `iswc-popconfirm`.
 - El click fuera lo resuelve el propio backdrop: sólo cancela si el click cae
   en el backdrop, no en la caja del modal.
 - Escape y el click fuera equivalen a **cancelar**: emiten
-  `is-confirm-cancel` y luego `is-confirm-hide`.
+  `iswc-confirm-cancel` y luego `iswc-confirm-hide`.
 - Al abrir se guarda el elemento enfocado y se enfoca el botón de confirmar;
   al cerrar se devuelve el foco al elemento original.
 
@@ -137,7 +137,7 @@ No declara integración form-associated propia en este módulo.
 - [`../actions/button.js`](../actions/button.js)
 - [`./popconfirm.md`](./popconfirm.md) — la variante anclada, sin backdrop.
 
-Tags del módulo: `<is-confirm-modal>`.
+Tags del módulo: `<iswc-confirm-modal>`.
 
 ## Accesibilidad
 
@@ -148,14 +148,14 @@ cerrar. Escape siempre cancela.
 ## Ejemplo avanzado
 
 ```html
-<is-button id="btnDelete" color="danger">Borrar</is-button>
-<is-confirm-modal for="btnDelete" heading="Eliminar factura">
+<iswc-button id="btnDelete" color="danger">Borrar</iswc-button>
+<iswc-confirm-modal for="btnDelete" heading="Eliminar factura">
   <div slot="message">
     Se borrará la factura y sus movimientos asociados. Esta acción no se puede deshacer.
   </div>
-  <is-button slot="confirm" color="danger">Sí, eliminar</is-button>
-  <is-button slot="cancel">Volver</is-button>
-</is-confirm-modal>
+  <iswc-button slot="confirm" color="danger">Sí, eliminar</iswc-button>
+  <iswc-button slot="cancel">Volver</iswc-button>
+</iswc-confirm-modal>
 ```
 
 ## Errores comunes

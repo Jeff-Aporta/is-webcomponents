@@ -26,7 +26,7 @@ async function checkDeterministic(page, demo) {
   await page.waitForTimeout(200);
 
   const data = await page.evaluate(() => {
-    const wins = [...document.querySelectorAll('is-window')];
+    const wins = [...document.querySelectorAll('iswc-window')];
     return wins.map((w, idx) => {
       const root = w.shadowRoot.querySelector('.root[part="root"]');
       const header = w.shadowRoot.querySelector('header[part="header"]');
@@ -38,9 +38,9 @@ async function checkDeterministic(page, demo) {
       // dataset.state: 'normal' | 'minimized' | 'maximized'
       const state = root?.dataset.state;
       const titleAttr = w.getAttribute('title');
-      const hasMinimizeBtn = !!w.shadowRoot.querySelector('[data-act="min"]')?.closest('is-button');
-      const hasMaximizeBtn = !!w.shadowRoot.querySelector('[data-act="max"]')?.closest('is-button');
-      const hasCloseBtn = !!w.shadowRoot.querySelector('[data-act="close"]')?.closest('is-button');
+      const hasMinimizeBtn = !!w.shadowRoot.querySelector('[data-act="min"]')?.closest('iswc-button');
+      const hasMaximizeBtn = !!w.shadowRoot.querySelector('[data-act="max"]')?.closest('iswc-button');
+      const hasCloseBtn = !!w.shadowRoot.querySelector('[data-act="close"]')?.closest('iswc-button');
       return {
         idx,
         rect,
@@ -80,9 +80,9 @@ async function checkDeterministic(page, demo) {
 
     // (3) CONTROLES A LA DERECHA — los botones min/max/close están en
     // `.controls` dentro del header, alineados a la derecha.
-    assert.ok(w.hasMinimizeBtn, `${subTag}: debe existir botón minimize (is-button)`);
-    assert.ok(w.hasMaximizeBtn, `${subTag}: debe existir botón maximize (is-button)`);
-    assert.ok(w.hasCloseBtn, `${subTag}: debe existir botón close (is-button)`);
+    assert.ok(w.hasMinimizeBtn, `${subTag}: debe existir botón minimize (iswc-button)`);
+    assert.ok(w.hasMaximizeBtn, `${subTag}: debe existir botón maximize (iswc-button)`);
+    assert.ok(w.hasCloseBtn, `${subTag}: debe existir botón close (iswc-button)`);
 
     // (4) RESIZER VISIBLE SI APLICA — sólo si resizable está presente.
     // La ventana inicial se spawnea con kind='all' → resizable="". Pero a

@@ -11,12 +11,12 @@
   .trigger {
     display: inline-flex;
     align-items: center;
-    /* La caja pintada es el <button> de <is-button>, alcanzable por
+    /* La caja pintada es el <button> de <iswc-button>, alcanzable por
        ::part(button). El tipo va delante porque las reglas internas del kit
        son `:host([color=…]) .btn` (0,2,0): sin él estas serían (0,1,1) y el
        botón saldría con el alto y el fondo del botón normal en vez del
        cuadrado transparente que pide el copy. */
-    is-button.button {
+    iswc-button.button {
       display: inline-flex;
       color: inherit;
       font: inherit;
@@ -39,17 +39,20 @@
         aspect-ratio: 1;
         cursor: pointer;
         transition: background-color 120ms ease, color 120ms ease;
+        &:focus-visible {
+          outline: 2px solid var(--iswc-focus, var(--iswc-focus-fallback));
+          outline-offset: var(--iswc-focus-offset);
+        }
       }
 
-      &:hover:not([disabled])::part(button),
-      &:focus-within:not([disabled])::part(button) { background: var(--iswc-control-bg-hover, #e9ecef); }
-
-      &::part(button):focus-visible {
-        outline: 2px solid var(--iswc-focus, var(--iswc-focus-fallback));
-        outline-offset: var(--iswc-focus-offset);
+      &:hover:not([disabled]),
+      &:focus-within:not([disabled]) {
+        &::part(button) { background: var(--iswc-control-bg-hover, #e9ecef); }
       }
 
-      &[disabled]::part(button) { opacity: 0.5; cursor: not-allowed; }
+      &[disabled] {
+        &::part(button) { opacity: 0.5; cursor: not-allowed; }
+      }
       &[hidden] { display: none !important; }
     }
     .icon {
@@ -58,17 +61,17 @@
       justify-content: center;
       line-height: 0;
       &[hidden] { display: none !important; }
-      & is-icon, & ::slotted(*) {
+      & iswc-icon, & ::slotted(*) {
         width: 1.1em;
         height: 1.1em;
         font-size: 1.1em;
       }
-      &.show { animation: is-copy-show 140ms ease; }
-      &.hide { animation: is-copy-show 140ms ease reverse; }
+      &.show { animation: iswc-copy-show 140ms ease; }
+      &.hide { animation: iswc-copy-show 140ms ease reverse; }
     }
   }
 
-  /* is-tooltip pinta la burbuja y la flecha con --iswc-tooltip-bg, así que teñir
+  /* iswc-tooltip pinta la burbuja y la flecha con --iswc-tooltip-bg, así que teñir
    * esa variable basta para el feedback de éxito / error. */
   .tip {
     --iswc-tooltip-font-size: 0.75em;
@@ -76,7 +79,9 @@
   }
 
   @media (prefers-reduced-motion: reduce) {
-    .icon.show, .icon.hide { animation-duration: 1ms; }
+    .icon {
+      &.show, &.hide { animation-duration: 1ms; }
+    }
   }
 
   .sr-only {
@@ -89,15 +94,21 @@
 }
 
 /* Shadow DOM: :host[attr] no matchea y `&[attr]` anidado bajo :host compila a
- * eso mismo. El estado del host se consulta siempre como :host([...]). */
+ * eso mismo. El estado del host se consulta siempre como :host([...]).
+ *
+ * El JS alterna `:state(success|error)` Y los atributos `data-state-*`.
+ * Usamos solo los atributos (selector CSS-puro) para evitar el :state() en
+ * nesting que esbuild rechaza. */
 
-:host(:state(success)) .tip,
-:host([data-state-success]) .tip { --iswc-tooltip-bg: var(--iswc-color-success-strong, #2f9e44); }
+:host([data-state-success]) {
+  .tip { --iswc-tooltip-bg: var(--iswc-color-success-strong, #2f9e44); }
+}
 
-:host(:state(error)) .tip,
-:host([data-state-error]) .tip { --iswc-tooltip-bg: var(--iswc-color-danger-strong, #e03131); }
+:host([data-state-error]) {
+  .tip { --iswc-tooltip-bg: var(--iswc-color-danger-strong, #e03131); }
+}
 
-@keyframes is-copy-show {
+@keyframes iswc-copy-show {
   from { scale: 0.25; opacity: 0.25; }
   to { scale: 1; opacity: 1; }
 }

@@ -1,7 +1,7 @@
 /**
- * bubble-chart.test.ts — verificación exhaustiva de <is-bubble-chart>.
+ * bubble-chart.test.ts — verificación exhaustiva de <iswc-bubble-chart>.
  *
- * Wrapper de <is-chart> con tipo "bubble". Cada punto XY tiene un tercer
+ * Wrapper de <iswc-chart> con tipo "bubble". Cada punto XY tiene un tercer
  * eje (radius) que codifica el valor z.
  */
 import assert from 'node:assert/strict';
@@ -20,41 +20,41 @@ import {
 const MOD = 'src/components/charts/bubble-chart.ts';
 const WRAPPER = 'src/components/charts/chart.ts';
 
-test('is-bubble-chart: archivo existe', () => {
+test('iswc-bubble-chart: archivo existe', () => {
   assert.ok(exists(MOD));
 });
 
-test('is-bubble-chart: wrapper registra tag is-bubble-chart y tipo bubble', () => {
+test('iswc-bubble-chart: wrapper registra tag iswc-bubble-chart y tipo bubble', () => {
   const src = read(MOD);
-  assert.match(src, /window\.__isDefineTypedChart\s*\?\s*\.?\s*\(\s*['"`]is-bubble-chart['"`]/);
+  assert.match(src, /window\.__isDefineTypedChart\s*\?\s*\.?\s*\(\s*['"`]iswc-bubble-chart['"`]/);
   assert.match(src, /['"`]bubble['"`]/);
 });
 
-test('is-bubble-chart: motor monta shadow DOM con svg', () => {
+test('iswc-bubble-chart: motor monta shadow DOM con svg', () => {
   const src = read(WRAPPER);
   assert.ok(tieneShadow(src));
   assert.match(src, /<svg\b/);
 });
 
-test('is-bubble-chart: observados del motor', () => {
+test('iswc-bubble-chart: observados del motor', () => {
   const obs = extraerObservados(read(WRAPPER));
   assert.ok(obs.includes('type'));
   assert.ok(obs.includes('label'));
 });
 
-test('is-bubble-chart: lee JSON embebido', () => {
+test('iswc-bubble-chart: lee JSON embebido', () => {
   assert.ok(leeJsonScript(read(WRAPPER)));
 });
 
-test('is-bubble-chart: usa ResizeObserver', () => {
+test('iswc-bubble-chart: usa ResizeObserver', () => {
   assert.ok(usaResizeObserver(read(WRAPPER)));
 });
 
-test('is-bubble-chart: registrado', () => {
+test('iswc-bubble-chart: registrado', () => {
   const src = read(WRAPPER);
-  assert.ok(estaRegistrado(src, 'is-chart') || estaRegistrado(read(MOD), 'is-bubble-chart'));
+  assert.ok(estaRegistrado(src, 'iswc-chart') || estaRegistrado(read(MOD), 'iswc-bubble-chart'));
 });
 
-test('is-bubble-chart: edge case guards', () => {
+test('iswc-bubble-chart: edge case guards', () => {
   assert.ok(tieneEdgeCaseGuards(read(WRAPPER)));
 });

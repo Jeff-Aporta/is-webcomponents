@@ -1,20 +1,20 @@
 ---
-tag: is-digital-clock
+tag: iswc-digital-clock
 tags:
-  - is-digital-clock
+  - iswc-digital-clock
 category: forms
 status: public
 source: ./digital-clock.js
 style: ./digital-clock.css
 preview: ./digital-clock.json
 ---
-# `<is-digital-clock>`
+# `<iswc-digital-clock>`
 
 ## Propósito
 
 Reloj analógico (TimeClock de MUI X). Arrastra la manecilla, haz clic o usa el teclado. Al soltar avanza de horas a minutos.
 
-Este módulo registra `<is-digital-clock>`.
+Este módulo registra `<iswc-digital-clock>`.
 
 ## Cuándo usarlo
 
@@ -33,7 +33,7 @@ import './digital-clock.js';
 ## Ejemplo mínimo
 
 ```html
-<is-digital-clock></is-digital-clock>
+<iswc-digital-clock></iswc-digital-clock>
 ```
 
 ## API
@@ -82,7 +82,7 @@ No expone.
 
 | Evento | detail | bubbles | composed | cancelable |
 | --- | --- | --- | --- | --- |
-| `is-change` | sí | sí | sí | no |
+| `iswc-change` | sí | sí | sí | no |
 
 ### Métodos y propiedades públicas
 
@@ -128,19 +128,19 @@ No declara integración form-associated propia en este módulo.
 
 Documentación de cabecera preservada desde fuente:
 
-> <is-digital-clock> — Selector de hora en lista (MUI DigitalClock) o en
+> <iswc-digital-clock> — Selector de hora en lista (MUI DigitalClock) o en
 > columnas de horas / minutos / segundos / AM-PM (MultiSectionDigitalClock).
 > Atributos: value (HH:mm[:ss]), layout (list|sections), step (minutos en
 >            lista), minutes-step, seconds, ampm, hour24, min-time, max-time,
 >            skip-disabled, locale, disabled, readonly
-> Events: is-change { value }
+> Events: iswc-change { value }
 
 ## Dependencias y componentes relacionados
 
 - [`../_shared/adopt-css.js`](../_shared/adopt-css.js)
 - [`../_shared/date-utils.js`](../_shared/date-utils.js)
 
-Tags del módulo: `<is-digital-clock>`.
+Tags del módulo: `<iswc-digital-clock>`.
 
 ## Accesibilidad
 
@@ -149,7 +149,7 @@ Preservar semántica, foco, teclado, labels y ARIA. ARIA detectado: `aria-select
 ## Ejemplo avanzado
 
 ```html
-<is-digital-clock></is-digital-clock>
+<iswc-digital-clock></iswc-digital-clock>
 ```
 
 ## Errores comunes

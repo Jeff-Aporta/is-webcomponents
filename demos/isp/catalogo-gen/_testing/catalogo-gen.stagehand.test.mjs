@@ -17,18 +17,18 @@ try {
     const cat = document.getElementById('cat');
     const sr = cat.shadowRoot;
     const hostRect = cat.getBoundingClientRect();
-    const grid = sr.querySelector('is-ag-grid.grid');
+    const grid = sr.querySelector('iswc-ag-grid.grid');
     const gridRect = grid?.getBoundingClientRect();
-    const drawer = sr.querySelector('is-drawer.drawer');
-    const verify = sr.querySelector('is-modal-verificacion.modal-verify');
-    const del = sr.querySelector('is-confirm-delete.modal-delete');
+    const drawer = sr.querySelector('iswc-drawer.drawer');
+    const verify = sr.querySelector('iswc-modal-verificacion.modal-verify');
+    const del = sr.querySelector('iswc-confirm-delete.modal-delete');
     return {
       hostRect,
       gridRect,
       drawerPresent: !!drawer,
       verifyPresent: !!verify,
       deletePresent: !!del,
-      gridDefined: !!customElements.get('is-ag-grid'),
+      gridDefined: !!customElements.get('iswc-ag-grid'),
     };
   });
 
@@ -40,12 +40,12 @@ try {
   assert.equal(data.drawerPresent, true);
   assert.equal(data.verifyPresent, true);
   assert.equal(data.deletePresent, true);
-  assert.equal(data.gridDefined, true, '<is-ag-grid> debe estar definido');
+  assert.equal(data.gridDefined, true, '<iswc-ag-grid> debe estar definido');
 
   // Verificar que la verificación abre y muestra resultados.
   await page.evaluate(async () => {
     const cat = document.getElementById('cat');
-    const mv = cat.shadowRoot.querySelector('is-modal-verificacion.modal-verify');
+    const mv = cat.shadowRoot.querySelector('iswc-modal-verificacion.modal-verify');
     mv.controller = cat.controller;
     mv.record = { app: 'CP' };
     mv.show();
@@ -53,8 +53,8 @@ try {
   await page.waitForTimeout(400);
   const verifyState = await page.evaluate(() => {
     const cat = document.getElementById('cat');
-    const mv = cat.shadowRoot.querySelector('is-modal-verificacion.modal-verify');
-    const dlg = mv.shadowRoot.querySelector('is-dialog.dlg');
+    const mv = cat.shadowRoot.querySelector('iswc-modal-verificacion.modal-verify');
+    const dlg = mv.shadowRoot.querySelector('iswc-dialog.dlg');
     return {
       mvOpen: mv.open,
       dlgPresent: !!dlg,

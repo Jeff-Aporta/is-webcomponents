@@ -1,22 +1,22 @@
 ---
-tag: is-popover
+tag: iswc-popover
 tags:
-  - is-popover
+  - iswc-popover
 category: helpers
 status: public
 source: ./popover.js
 style: ./popover.css
 preview: ./popover.json
 ---
-# `<is-popover>`
+# `<iswc-popover>`
 
 ## Propósito
 
 Panel flotante con contenido interactivo. Ancla con for.
 Cierra con Escape, click fuera o data-popover="close".
-El posicionamiento (flip, shift, auto-size, arrow) lo hace un `<is-floating>` interno — el wrapper aporta ancla declarativa, ciclo de vida y accesibilidad.
+El posicionamiento (flip, shift, auto-size, arrow) lo hace un `<iswc-floating>` interno — el wrapper aporta ancla declarativa, ciclo de vida y accesibilidad.
 
-Este módulo registra `<is-popover>`.
+Este módulo registra `<iswc-popover>`.
 
 ## Cuándo usarlo
 
@@ -35,11 +35,11 @@ import './popover.js';
 ## Ejemplo mínimo
 
 ```html
-<is-button id="pop1">Show popover</is-button>
-<is-popover for="pop1">
+<iswc-button id="pop1">Show popover</iswc-button>
+<iswc-popover for="pop1">
 …contenido…
-<is-button data-popover="close">Dismiss</is-button>
-</is-popover>
+<iswc-button data-popover="close">Dismiss</iswc-button>
+</iswc-popover>
 ```
 
 ## API
@@ -87,10 +87,10 @@ import './popover.js';
 
 | Evento | detail | bubbles | composed | cancelable |
 | --- | --- | --- | --- | --- |
-| `is-show` | no | sí | sí | sí |
-| `is-after-show` | no | sí | sí | sí |
-| `is-hide` | no | sí | sí | sí |
-| `is-after-hide` | no | sí | sí | no |
+| `iswc-show` | no | sí | sí | sí |
+| `iswc-after-show` | no | sí | sí | sí |
+| `iswc-hide` | no | sí | sí | sí |
+| `iswc-after-hide` | no | sí | sí | no |
 
 ### Métodos y propiedades públicas
 
@@ -139,22 +139,22 @@ No declara integración form-associated propia en este módulo.
 
 Documentación de cabecera preservada desde fuente:
 
-> <is-popover> — panel flotante con contenido interactivo, anclado vía `for`.
-> Es el wrapper de alto nivel sobre `<is-floating>` (el building block de
+> <iswc-popover> — panel flotante con contenido interactivo, anclado vía `for`.
+> Es el wrapper de alto nivel sobre `<iswc-floating>` (el building block de
 > posicionamiento). Popover añade: anchor declarativo por id, ciclo de
 > vida (mostrar / ocultar), accesibilidad del ancla (aria-haspopup +
 > aria-expanded), `data-popover="close"` en hijos para cerrar y la marca
 > de "panel activo global" para que sólo haya un popover visible a la vez.
 > Como ya no hay diferencia funcional entre un panel flotante y un popover,
-> API pública: solo `<is-popover>`. El building block interno es `<is-floating>` (no usar en apps).
+> API pública: solo `<iswc-popover>`. El building block interno es `<iswc-floating>` (no usar en apps).
 > Attrs: for, open, placement, distance, skidding, without-arrow,
 >        strategy, flip, shift, arrow, auto-size, boundary,
 >        flip-fallback-placements, flip-fallback-strategy,
 >        flip-padding, shift-padding, auto-size-padding
 > Props: anchor (Element | string | VirtualElement)
 > Methods: show(), hide(), reposition()
-> Events: is-show, is-after-show, is-hide, is-after-hide (cancelables),
->         is-reposition { placement, x, y }, is-hover-bridge { hovering }
+> Events: iswc-show, iswc-after-show, iswc-hide, iswc-after-hide (cancelables),
+>         iswc-reposition { placement, x, y }, iswc-hover-bridge { hovering }
 > Parts: ::part(body) ::part(dialog) ::part(popup) ::part(arrow)
 >        ::part(hover-bridge) ::part(anchor)
 > CSS: --max-width --arrow-size --show-duration --hide-duration
@@ -166,7 +166,7 @@ Documentación de cabecera preservada desde fuente:
 - [`../_shared/adopt-css.js`](../_shared/adopt-css.js)
 - [`./floating.js`](./floating.js) (interno)
 
-Tags del módulo: `<is-popover>`.
+Tags del módulo: `<iswc-popover>`.
 
 ## Accesibilidad
 
@@ -175,11 +175,11 @@ Preservar semántica, foco, teclado, labels y ARIA. ARIA detectado: `aria-haspop
 ## Ejemplo avanzado
 
 ```html
-<is-button id="pop1">Show popover</is-button>
-<is-popover for="pop1">
+<iswc-button id="pop1">Show popover</iswc-button>
+<iswc-popover for="pop1">
 …contenido…
-<is-button data-popover="close">Dismiss</is-button>
-</is-popover>
+<iswc-button data-popover="close">Dismiss</iswc-button>
+</iswc-popover>
 ```
 
 ## Errores comunes

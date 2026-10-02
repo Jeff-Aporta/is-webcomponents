@@ -1,20 +1,20 @@
 ---
-tag: is-date-time-input
+tag: iswc-date-time-input
 tags:
-  - is-date-time-input
+  - iswc-date-time-input
 category: forms
 status: public
 source: ./date-time-input.js
 style: ./date-time-input.css
 preview: ./date-time-input.json
 ---
-# `<is-date-time-input>`
+# `<iswc-date-time-input>`
 
 ## Propósito
 
 Campo + calendario en un panel del top layer (DatePicker de MUI X). Edita por secciones o abre el calendario. Alt+↓ abre el panel.
 
-Este módulo registra `<is-date-time-input>`.
+Este módulo registra `<iswc-date-time-input>`.
 
 ## Cuándo usarlo
 
@@ -33,7 +33,7 @@ import './date-time-input.js';
 ## Ejemplo mínimo
 
 ```html
-<is-date-time-input></is-date-time-input>
+<iswc-date-time-input></iswc-date-time-input>
 ```
 
 ## API
@@ -100,10 +100,10 @@ No declara integración form-associated propia en este módulo.
 
 Documentación de cabecera preservada desde fuente:
 
-> <is-date-time-input> — Fecha y hora en un solo campo con calendario y reloj
+> <iswc-date-time-input> — Fecha y hora en un solo campo con calendario y reloj
 > lado a lado (MUI DateTimePicker). El valor es `yyyy-mm-ddTHH:mm[:ss]`.
-> Atributos: los de is-date-input más ampm, hour24, seconds, step
-> Events: is-change, is-show, is-hide
+> Atributos: los de iswc-date-input más ampm, hour24, seconds, step
+> Events: iswc-change, iswc-show, iswc-hide
 > Methods: show(), hide()
 
 ## Dependencias y componentes relacionados
@@ -113,7 +113,7 @@ Documentación de cabecera preservada desde fuente:
 - [`./date-picker.js`](./date-picker.js)
 - [`./digital-clock.js`](./digital-clock.js)
 
-Tags del módulo: `<is-date-time-input>`.
+Tags del módulo: `<iswc-date-time-input>`.
 
 ## Accesibilidad
 
@@ -122,7 +122,7 @@ Preservar semántica, foco, teclado, labels y ARIA. ARIA detectado: ninguno expl
 ## Ejemplo avanzado
 
 ```html
-<is-date-time-input></is-date-time-input>
+<iswc-date-time-input></iswc-date-time-input>
 ```
 
 ## Errores comunes

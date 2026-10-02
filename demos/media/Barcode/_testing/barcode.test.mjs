@@ -16,12 +16,12 @@ tests.push({
     await waitReady(page, 'data-barcode-ready');
     await page.waitForTimeout(200);
     const data = await page.evaluate(() => {
-      const list = [...document.querySelectorAll('main is-barcode')];
+      const list = [...document.querySelectorAll('main iswc-barcode')];
       return list.map((el) => {
         const svg = el.shadowRoot.querySelector('svg');
         const rects = el.shadowRoot.querySelectorAll('svg rect');
         return {
-          registered: !!customElements.get('is-barcode'),
+          registered: !!customElements.get('iswc-barcode'),
           hasSvg: !!svg,
           viewBox: svg?.getAttribute('viewBox') ?? '',
           width: svg?.getAttribute('width') ?? '',
@@ -30,7 +30,7 @@ tests.push({
         };
       });
     });
-    assert.equal(data[0].registered, true, 'is-barcode debe estar registrado');
+    assert.equal(data[0].registered, true, 'iswc-barcode debe estar registrado');
     assert.ok(data.length >= 4, `esperaba >=4 barcodes, hay ${data.length}`);
     for (const d of data) {
       assert.ok(d.hasSvg, 'todos los barcodes deben tener un <svg>');
@@ -48,7 +48,7 @@ tests.push({
     await waitReady(page, 'data-barcode-ready');
     await page.waitForTimeout(200);
     const data = await page.evaluate(() => {
-      const el = document.querySelector('is-barcode[value^="HELLO"]');
+      const el = document.querySelector('iswc-barcode[value^="HELLO"]');
       const rects = el.shadowRoot.querySelectorAll('svg rect');
       const textEl = el.shadowRoot.querySelector('.text');
       return {
@@ -72,7 +72,7 @@ tests.push({
     await waitReady(page, 'data-barcode-ready');
     await page.waitForTimeout(200);
     const data = await page.evaluate(() => {
-      const el = document.querySelector('is-barcode[value="7790070410027"]');
+      const el = document.querySelector('iswc-barcode[value="7790070410027"]');
       const rects = el.shadowRoot.querySelectorAll('svg rect');
       const textEl = el.shadowRoot.querySelector('.text');
       return {
@@ -95,19 +95,19 @@ tests.push({
     await waitReady(page, 'data-barcode-ready');
     await page.waitForTimeout(200);
     const before = await page.evaluate(() => {
-      const el = document.querySelector('is-barcode[value^="HELLO"]');
+      const el = document.querySelector('iswc-barcode[value^="HELLO"]');
       return {
         rectCount: el.shadowRoot.querySelectorAll('svg rect').length,
         text: el.shadowRoot.querySelector('.text').textContent.trim(),
       };
     });
     await page.evaluate(() => {
-      const el = document.querySelector('is-barcode[value^="HELLO"]');
+      const el = document.querySelector('iswc-barcode[value^="HELLO"]');
       el.setAttribute('value', 'GOODBYE-2026');
     });
     await page.waitForTimeout(200);
     const after = await page.evaluate(() => {
-      const el = document.querySelector('is-barcode[value^="GOODBYE"]');
+      const el = document.querySelector('iswc-barcode[value^="GOODBYE"]');
       return {
         rectCount: el.shadowRoot.querySelectorAll('svg rect').length,
         text: el.shadowRoot.querySelector('.text').textContent.trim(),
@@ -125,7 +125,7 @@ tests.push({
     await waitReady(page, 'data-barcode-ready');
     await page.waitForTimeout(200);
     const data = await page.evaluate(() => {
-      const el = document.querySelector('is-barcode[bg="#0f1620"]');
+      const el = document.querySelector('iswc-barcode[bg="#0f1620"]');
       const rects = [...el.shadowRoot.querySelectorAll('svg rect')];
       const fills = rects.map((r) => r.getAttribute('fill'));
       const uniqueFills = [...new Set(fills)];
@@ -138,19 +138,19 @@ tests.push({
 });
 
 tests.push({
-  name: 'funcional: is-render se dispara al cambiar atributos',
+  name: 'funcional: iswc-render se dispara al cambiar atributos',
   run: async (page) => {
     await page.goto(URL, { waitUntil: 'domcontentloaded' });
     await waitReady(page, 'data-barcode-ready');
     await page.waitForTimeout(200);
-    // Re-disparar is-render cambiando height en uno existente
+    // Re-disparar iswc-render cambiando height en uno existente
     await page.evaluate(() => {
-      const el = document.querySelector('is-barcode[value^="HELLO"]');
+      const el = document.querySelector('iswc-barcode[value^="HELLO"]');
       el.setAttribute('height', '90');
     });
     await page.waitForTimeout(200);
     const fired = await page.evaluate(() => document.documentElement.dataset.barcodeRenderFired === '1');
-    assert.equal(fired, true, 'is-render debe haberse disparado tras cambios de atributo');
+    assert.equal(fired, true, 'iswc-render debe haberse disparado tras cambios de atributo');
   },
 });
 
@@ -161,11 +161,11 @@ tests.push({
     await waitReady(page, 'data-barcode-ready');
     await page.waitForTimeout(200);
     const before = await page.evaluate(() => {
-      const el = document.querySelector('is-barcode[value^="HELLO"]');
+      const el = document.querySelector('iswc-barcode[value^="HELLO"]');
       return el.shadowRoot.querySelectorAll('svg rect').length;
     });
     await page.evaluate(() => {
-      const el = document.querySelector('is-barcode[value^="HELLO"]');
+      const el = document.querySelector('iswc-barcode[value^="HELLO"]');
       // Truco: forzar re-render cambiando height y volviendo al original
       const original = el.getAttribute('height');
       el.setAttribute('height', '85');
@@ -173,7 +173,7 @@ tests.push({
     });
     await page.waitForTimeout(200);
     const after = await page.evaluate(() => {
-      const el = document.querySelector('is-barcode[value^="HELLO"]');
+      const el = document.querySelector('iswc-barcode[value^="HELLO"]');
       return el.shadowRoot.querySelectorAll('svg rect').length;
     });
     assert.equal(before, after, `mismo value debe producir el mismo número de barras (${before} → ${after})`);
@@ -187,7 +187,7 @@ tests.push({
     await waitReady(page, 'data-barcode-ready');
     await page.waitForTimeout(200);
     const data = await page.evaluate(() => {
-      const el = document.querySelector('is-barcode[value^="HELLO"]');
+      const el = document.querySelector('iswc-barcode[value^="HELLO"]');
       const svg = el.shadowRoot.querySelector('svg');
       return {
         role: svg.getAttribute('role'),

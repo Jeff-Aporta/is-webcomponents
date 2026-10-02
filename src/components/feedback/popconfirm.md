@@ -1,21 +1,21 @@
 ---
-tag: is-popconfirm
+tag: iswc-popconfirm
 tags:
-  - is-popconfirm
+  - iswc-popconfirm
 category: feedback
 status: public
 source: ./popconfirm.js
 style: ./popconfirm.css
 preview: ./popconfirm.json
 ---
-# `<is-popconfirm>`
+# `<iswc-popconfirm>`
 
 ## Propósito
 
 Cuadro de confirmación rápido anclado a un botón. Sin modal, sin tapar
 la pantalla. Perfecto para "¿Seguro que quieres borrar?" en línea.
 
-Este módulo registra `<is-popconfirm>`.
+Este módulo registra `<iswc-popconfirm>`.
 
 ## Cuándo usarlo
 
@@ -34,11 +34,11 @@ import './popconfirm.js';
 ## Ejemplo mínimo
 
 ```html
-<is-button id="btnDelete">Borrar</is-button>
-<is-popconfirm for="btnDelete" message="¿Seguro?">
-<is-button slot="confirm" color="danger">Sí, borrar</is-button>
-<is-button slot="cancel">Cancelar</is-button>
-</is-popconfirm>
+<iswc-button id="btnDelete">Borrar</iswc-button>
+<iswc-popconfirm for="btnDelete" message="¿Seguro?">
+<iswc-button slot="confirm" color="danger">Sí, borrar</iswc-button>
+<iswc-button slot="cancel">Cancelar</iswc-button>
+</iswc-popconfirm>
 ```
 
 ## API
@@ -74,10 +74,10 @@ import './popconfirm.js';
 
 | Evento | detail | bubbles | composed | cancelable |
 | --- | --- | --- | --- | --- |
-| `is-popconfirm-show` | sí | sí | sí | no |
-| `is-popconfirm-hide` | sí | sí | sí | no |
-| `is-popconfirm-confirm` | sí | sí | sí | no |
-| `is-popconfirm-cancel` | sí | sí | sí | no |
+| `iswc-popconfirm-show` | sí | sí | sí | no |
+| `iswc-popconfirm-hide` | sí | sí | sí | no |
+| `iswc-popconfirm-confirm` | sí | sí | sí | no |
+| `iswc-popconfirm-cancel` | sí | sí | sí | no |
 
 ### Métodos y propiedades públicas
 
@@ -112,7 +112,7 @@ No expone.
 | `--iswc-brand-fg` | Texto sobre el color de marca (vía `--brand-fg`). |
 | `--iswc-danger` | Tono destructivo (vía `--danger`). |
 
-Los botones por defecto de los slots `confirm` / `cancel` son `<is-button>`:
+Los botones por defecto de los slots `confirm` / `cancel` son `<iswc-button>`:
 su color y apariencia se controlan desde el propio botón, no desde aquí.
 
 ### Integración con formularios
@@ -123,13 +123,13 @@ No declara integración form-associated propia en este módulo.
 
 Documentación de cabecera preservada desde fuente:
 
-> <is-popconfirm> — Web Component (vanilla, zero dependencies).
+> <iswc-popconfirm> — Web Component (vanilla, zero dependencies).
 > Cuadro de confirmación emergente anclado a un disparador. Sin modal de fondo.
->   <is-button id="trigger">Borrar</is-button>
->   <is-popconfirm for="trigger" message="¿Seguro?">
->     <is-button slot="confirm" color="danger">Sí</is-button>
->     <is-button slot="cancel">No</is-button>
->   </is-popconfirm>
+>   <iswc-button id="trigger">Borrar</iswc-button>
+>   <iswc-popconfirm for="trigger" message="¿Seguro?">
+>     <iswc-button slot="confirm" color="danger">Sí</iswc-button>
+>     <iswc-button slot="cancel">No</iswc-button>
+>   </iswc-popconfirm>
 > Atributos
 >   for          string — id del trigger element.
 >   message      string — texto principal.
@@ -141,16 +141,16 @@ Documentación de cabecera preservada desde fuente:
 >   confirm — slot del botón de confirmación.
 >   cancel  — slot del botón de cancelar.
 > Eventos
->   is-popconfirm-show  detail: { trigger }
->   is-popconfirm-hide  detail: { trigger }
->   is-popconfirm-confirm detail: { trigger }
->   is-popconfirm-cancel detail: { trigger }
+>   iswc-popconfirm-show  detail: { trigger }
+>   iswc-popconfirm-hide  detail: { trigger }
+>   iswc-popconfirm-confirm detail: { trigger }
+>   iswc-popconfirm-cancel detail: { trigger }
 
 ## Dependencias y componentes relacionados
 
 - [`../_shared/adopt-css.js`](../_shared/adopt-css.js)
 
-Tags del módulo: `<is-popconfirm>`.
+Tags del módulo: `<iswc-popconfirm>`.
 
 ## Accesibilidad
 
@@ -159,11 +159,11 @@ Preservar semántica, foco, teclado, labels y ARIA. ARIA detectado: `aria-modal`
 ## Ejemplo avanzado
 
 ```html
-<is-button id="btnDelete">Borrar</is-button>
-<is-popconfirm for="btnDelete" message="¿Seguro?">
-<is-button slot="confirm" color="danger">Sí, borrar</is-button>
-<is-button slot="cancel">Cancelar</is-button>
-</is-popconfirm>
+<iswc-button id="btnDelete">Borrar</iswc-button>
+<iswc-popconfirm for="btnDelete" message="¿Seguro?">
+<iswc-button slot="confirm" color="danger">Sí, borrar</iswc-button>
+<iswc-button slot="cancel">Cancelar</iswc-button>
+</iswc-popconfirm>
 ```
 
 ## Errores comunes

@@ -1,20 +1,20 @@
 ---
-tag: is-sparkline
+tag: iswc-sparkline
 tags:
-  - is-sparkline
+  - iswc-sparkline
 category: charts
 status: public
 source: ./sparkline.js
 style: ./sparkline.css
 preview: ./sparkline.json
 ---
-# `<is-sparkline>`
+# `<iswc-sparkline>`
 
 ## Propósito
 
-<is-sparkline>
+<iswc-sparkline>
 
-Este módulo registra `<is-sparkline>`.
+Este módulo registra `<iswc-sparkline>`.
 
 ## Cuándo usarlo
 
@@ -33,8 +33,8 @@ import './sparkline.js';
 ## Ejemplo mínimo
 
 ```html
-<is-sparkline data="3 5 4 8 6 9 7 10" label="Ventas"></is-sparkline>
-<is-sparkline type="bar" data="2 1 3 2 4 1 2" label="Errores"></is-sparkline>
+<iswc-sparkline data="3 5 4 8 6 9 7 10" label="Ventas"></iswc-sparkline>
+<iswc-sparkline type="bar" data="2 1 3 2 4 1 2" label="Errores"></iswc-sparkline>
 ```
 
 ## API
@@ -112,7 +112,7 @@ Documentación de cabecera preservada desde fuente:
 - [`../_shared/adopt-css.js`](../_shared/adopt-css.js)
 - [`../_shared/svg-chart-engine.js`](../_shared/svg-chart-engine.js)
 
-Tags del módulo: `<is-sparkline>`.
+Tags del módulo: `<iswc-sparkline>`.
 
 ## Accesibilidad
 
@@ -121,9 +121,9 @@ Preservar semántica, foco, teclado, labels y ARIA. ARIA detectado: ninguno expl
 ## Ejemplo avanzado
 
 ```html
-<is-sparkline variant="solid" data="…"></is-sparkline>
-<is-sparkline variant="gradient" data="…"></is-sparkline>
-<is-sparkline variant="line" data="…"></is-sparkline>
+<iswc-sparkline variant="solid" data="…"></iswc-sparkline>
+<iswc-sparkline variant="gradient" data="…"></iswc-sparkline>
+<iswc-sparkline variant="line" data="…"></iswc-sparkline>
 ```
 
 ## Errores comunes

@@ -1,5 +1,5 @@
 /**
- * Behavior migrado desde HTML inline de is-ag-grid.
+ * Behavior migrado desde HTML inline de iswc-ag-grid.
  * Se ejecuta en mount() tras pintar la definition JSON.
  */
 import type { PreviewMountContext } from '../../previews/_kit/types.d.ts';
@@ -27,29 +27,29 @@ export async function mount(ctx: PreviewMountContext): Promise<void> {
 
   function attach(g: IsAgGridEl | null | undefined): void {
     if (!g) return;
-    g.addEventListener('is-cell-click', (e: Event) =>
+    g.addEventListener('iswc-cell-click', (e: Event) =>
       append(`cell-click ${(e as CustomEvent<{ column?: { field?: string }; value?: unknown }>).detail?.column?.field}=${(e as CustomEvent<{ column?: { field?: string }; value?: unknown }>).detail?.value}`));
-    g.addEventListener('is-cell-edit', (e: Event) =>
+    g.addEventListener('iswc-cell-edit', (e: Event) =>
       append(`cell-edit ${(e as CustomEvent<{ column?: { field?: string }; oldValue?: unknown; newValue?: unknown }>).detail?.column?.field}: ${(e as CustomEvent<{ column?: { field?: string }; oldValue?: unknown; newValue?: unknown }>).detail?.oldValue} → ${(e as CustomEvent<{ column?: { field?: string }; oldValue?: unknown; newValue?: unknown }>).detail?.newValue}`));
-    g.addEventListener('is-row-select', (e: Event) =>
+    g.addEventListener('iswc-row-select', (e: Event) =>
       append(`row-select n=${(e as CustomEvent<{ rows?: unknown[] }>).detail?.rows?.length}`));
-    g.addEventListener('is-sort-change', (e: Event) =>
+    g.addEventListener('iswc-sort-change', (e: Event) =>
       append(`sort ${(e as CustomEvent<{ column?: string; direction?: string }>).detail?.column} ${(e as CustomEvent<{ column?: string; direction?: string }>).detail?.direction}`));
-    g.addEventListener('is-filter-change', (e: Event) =>
+    g.addEventListener('iswc-filter-change', (e: Event) =>
       append(`filter ${(e as CustomEvent<{ column?: string; op?: string; value?: unknown }>).detail?.column} ${(e as CustomEvent<{ column?: string; op?: string; value?: unknown }>).detail?.op} ${JSON.stringify((e as CustomEvent<{ column?: string; op?: string; value?: unknown }>).detail?.value)}`));
-    g.addEventListener('is-quick-filter', (e: Event) =>
+    g.addEventListener('iswc-quick-filter', (e: Event) =>
       append(`quick-filter ${JSON.stringify((e as CustomEvent<{ value?: unknown }>).detail?.value)}`));
-    g.addEventListener('is-action', (e: Event) =>
+    g.addEventListener('iswc-action', (e: Event) =>
       append(`action ${(e as CustomEvent<{ action?: string; row?: { sku?: string } }>).detail?.action} on ${(e as CustomEvent<{ action?: string; row?: { sku?: string } }>).detail?.row?.sku ?? ''}`));
-    g.addEventListener('is-page-change', (e: Event) =>
+    g.addEventListener('iswc-page-change', (e: Event) =>
       append(`page ${(e as CustomEvent<{ page?: number; pageSize?: number }>).detail?.page}/${(e as CustomEvent<{ page?: number; pageSize?: number }>).detail?.pageSize}`));
-    g.addEventListener('is-column-reorder', (e: Event) =>
+    g.addEventListener('iswc-column-reorder', (e: Event) =>
       append(`reorder ${(e as CustomEvent<{ colId?: string; toIndex?: number }>).detail?.colId} → ${(e as CustomEvent<{ colId?: string; toIndex?: number }>).detail?.toIndex}`));
-    g.addEventListener('is-column-resize', (e: Event) =>
+    g.addEventListener('iswc-column-resize', (e: Event) =>
       append(`resize ${(e as CustomEvent<{ colId?: string; width?: number }>).detail?.colId} → ${(e as CustomEvent<{ colId?: string; width?: number }>).detail?.width}`));
-    g.addEventListener('is-column-pin', (e: Event) =>
+    g.addEventListener('iswc-column-pin', (e: Event) =>
       append(`pin ${(e as CustomEvent<{ colId?: string; side?: string }>).detail?.colId} ${(e as CustomEvent<{ colId?: string; side?: string }>).detail?.side}`));
-    g.addEventListener('is-column-hide', (e: Event) =>
+    g.addEventListener('iswc-column-hide', (e: Event) =>
       append(`hide ${(e as CustomEvent<{ colId?: string }>).detail?.colId}`));
   }
 

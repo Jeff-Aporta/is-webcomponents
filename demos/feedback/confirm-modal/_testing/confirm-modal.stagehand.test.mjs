@@ -18,7 +18,7 @@ checks.push({
     await page.keyboard.press('Enter');
     await page.waitForTimeout(250);
     const info = await page.evaluate(() => {
-      const m = document.querySelectorAll('is-confirm-modal')[0];
+      const m = document.querySelectorAll('iswc-confirm-modal')[0];
       const modal = m.shadowRoot.querySelector('.modal');
       const rect = modal.getBoundingClientRect();
       const vw = window.innerWidth;
@@ -49,7 +49,7 @@ checks.push({
     await page.keyboard.press('Enter');
     await page.waitForTimeout(250);
     const inside = await page.evaluate(() => {
-      const m = document.querySelectorAll('is-confirm-modal')[0];
+      const m = document.querySelectorAll('iswc-confirm-modal')[0];
       const r = m.shadowRoot.querySelector('.modal').getBoundingClientRect();
       return r.x >= 0 && r.y >= 0 && r.x + r.width <= window.innerWidth && r.y + r.height <= window.innerHeight;
     });
@@ -67,7 +67,7 @@ checks.push({
     await page.keyboard.press('Enter');
     await page.waitForTimeout(250);
     const bg = await page.evaluate(() => {
-      const m = document.querySelectorAll('is-confirm-modal')[0];
+      const m = document.querySelectorAll('iswc-confirm-modal')[0];
       const backdrop = m.shadowRoot.querySelector('.backdrop');
       const cs = getComputedStyle(backdrop);
       return {
@@ -91,7 +91,7 @@ checks.push({
     await page.keyboard.press('Enter');
     await page.waitForTimeout(250);
     const txt = await page.evaluate(() => {
-      const m = document.querySelectorAll('is-confirm-modal')[0];
+      const m = document.querySelectorAll('iswc-confirm-modal')[0];
       const heading = m.shadowRoot.querySelector('.heading');
       const message = m.shadowRoot.querySelector('.message-text');
       return {

@@ -1,14 +1,14 @@
 /**
  * dom-utils.js — Utilidades de DOM compartidas.
  *
- * Sustituye copias dispersas en is-checkbox, is-switch, is-input,
- * is-textarea, is-slider, is-rating, is-split-panel, is-popover, etc.
+ * Sustituye copias dispersas en iswc-checkbox, iswc-switch, iswc-input,
+ * iswc-textarea, iswc-slider, iswc-rating, iswc-split-panel, iswc-popover, etc.
  */
 
 /**
  * Devuelve true si el slot tiene nodos asignados (no sólo whitespace).
  * Usado por componentes que aceptan tanto atributos como slot para el mismo
- * dato (p.ej. `<is-input label="X">` vs `<is-input><span slot="label">X</span></is-input>`).
+ * dato (p.ej. `<iswc-input label="X">` vs `<iswc-input><span slot="label">X</span></iswc-input>`).
  *
  * @param {HTMLSlotElement|null} slot
  * @param {object} [opts]

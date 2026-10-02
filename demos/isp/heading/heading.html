@@ -3,7 +3,7 @@
 <head>
 <meta charset="utf-8" />
 <meta name="viewport" content="width=device-width, initial-scale=1" />
-<title>&lt;is-heading&gt; · is-webcomponents</title>
+<title>&lt;iswc-heading&gt; · is-webcomponents</title>
 <meta name="description" content="Título H1-H6 con tinte de marca, color semántico, mix y override de tamaño." />
 <style>
   html, body { margin: 0; padding: 0; min-height: 100%; background: #0c1118; color: #e2e8f0; font-family: ui-sans-serif, system-ui, sans-serif; }
@@ -18,73 +18,73 @@
   main { display: grid; gap: 18px; padding: 20px; max-width: 900px; margin: 0 auto; width: 100%; box-sizing: border-box; }
   section h2 { font-size: 12px; font-weight: 600; margin: 0 0 8px; color: #94a3b8; text-transform: uppercase; letter-spacing: 0.5px; }
   .row { display: grid; gap: 4px; padding: 8px; background: rgba(255,255,255,0.04); border-radius: 4px; }
-  is-heading:not(:defined) { visibility: hidden; }
+  iswc-heading:not(:defined) { visibility: hidden; }
 </style>
 <script type="module">
-  await import('../../../dist/cdn/isp/heading.min.js?h=dbujxu');
-  await customElements.whenDefined('is-heading');
+  await import('../../../dist/cdn/isp/heading.min.js?h=mqv7ud');
+  await customElements.whenDefined('iswc-heading');
   document.documentElement.dataset.headingReady = '1';
 </script>
 </head>
 <body>
 <header>
   <div>
-    <h1>&lt;is-heading&gt; — títulos tintados</h1>
+    <h1>&lt;iswc-heading&gt; — títulos tintados</h1>
     <p>Seis niveles (H1-H6) con color semántico, mix hacia texto y override de size.</p>
   </div>
   <div class="spacer"></div>
-  <code>is-heading</code>
+  <code>iswc-heading</code>
 </header>
 <main>
   <section>
     <h2>Niveles 1 a 6 (default color)</h2>
     <div class="row">
-      <is-heading level="1">Encabezado nivel 1</is-heading>
-      <is-heading level="2">Encabezado nivel 2</is-heading>
-      <is-heading level="3">Encabezado nivel 3</is-heading>
-      <is-heading level="4">Encabezado nivel 4</is-heading>
-      <is-heading level="5">Encabezado nivel 5</is-heading>
-      <is-heading level="6">Encabezado nivel 6</is-heading>
+      <iswc-heading level="1">Encabezado nivel 1</iswc-heading>
+      <iswc-heading level="2">Encabezado nivel 2</iswc-heading>
+      <iswc-heading level="3">Encabezado nivel 3</iswc-heading>
+      <iswc-heading level="4">Encabezado nivel 4</iswc-heading>
+      <iswc-heading level="5">Encabezado nivel 5</iswc-heading>
+      <iswc-heading level="6">Encabezado nivel 6</iswc-heading>
     </div>
   </section>
 
   <section>
     <h2>Colores semánticos</h2>
     <div class="row">
-      <is-heading level="2" color="brand">Brand</is-heading>
-      <is-heading level="2" color="neutral">Neutral</is-heading>
-      <is-heading level="2" color="info">Info</is-heading>
-      <is-heading level="2" color="success">Success</is-heading>
-      <is-heading level="2" color="warning">Warning</is-heading>
-      <is-heading level="2" color="danger">Danger</is-heading>
-      <is-heading level="2" color="current">Current (hereda)</is-heading>
+      <iswc-heading level="2" color="brand">Brand</iswc-heading>
+      <iswc-heading level="2" color="neutral">Neutral</iswc-heading>
+      <iswc-heading level="2" color="info">Info</iswc-heading>
+      <iswc-heading level="2" color="success">Success</iswc-heading>
+      <iswc-heading level="2" color="warning">Warning</iswc-heading>
+      <iswc-heading level="2" color="danger">Danger</iswc-heading>
+      <iswc-heading level="2" color="current">Current (hereda)</iswc-heading>
     </div>
   </section>
 
   <section>
     <h2>Mix hacia texto (mix y mix-with)</h2>
     <div class="row">
-      <is-heading level="3" mix="0%">Mix 0% (acento puro)</is-heading>
-      <is-heading level="3" mix="30%">Mix 30% hacia texto</is-heading>
-      <is-heading level="3" mix="60%">Mix 60% hacia texto</is-heading>
-      <is-heading level="3" mix="90%" mix-with="white">Mix 90% hacia blanco</is-heading>
+      <iswc-heading level="3" mix="0%">Mix 0% (acento puro)</iswc-heading>
+      <iswc-heading level="3" mix="30%">Mix 30% hacia texto</iswc-heading>
+      <iswc-heading level="3" mix="60%">Mix 60% hacia texto</iswc-heading>
+      <iswc-heading level="3" mix="90%" mix-with="white">Mix 90% hacia blanco</iswc-heading>
     </div>
   </section>
 
   <section>
     <h2>Override de tamaño (size)</h2>
     <div class="row">
-      <is-heading level="2" size="3rem">Tamaño 3rem</is-heading>
-      <is-heading level="4" size="1.5rem">Tamaño 1.5rem</is-heading>
-      <is-heading level="5" size="14px">Tamaño 14px</is-heading>
+      <iswc-heading level="2" size="3rem">Tamaño 3rem</iswc-heading>
+      <iswc-heading level="4" size="1.5rem">Tamaño 1.5rem</iswc-heading>
+      <iswc-heading level="5" size="14px">Tamaño 14px</iswc-heading>
     </div>
   </section>
 
   <section>
     <h2>Color CSS arbitrario</h2>
     <div class="row">
-      <is-heading level="3" color="#ec4899">Color #ec4899 (rosa)</is-heading>
-      <is-heading level="3" color="hotpink">Color 'hotpink'</is-heading>
+      <iswc-heading level="3" color="#ec4899">Color #ec4899 (rosa)</iswc-heading>
+      <iswc-heading level="3" color="hotpink">Color 'hotpink'</iswc-heading>
     </div>
   </section>
 </main>

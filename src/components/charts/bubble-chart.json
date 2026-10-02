@@ -1,10 +1,10 @@
 {
-  "$schema": "is-preview/v1",
-  "tag": "is-bubble-chart",
+  "$schema": "iswc-preview/v1",
+  "tag": "iswc-bubble-chart",
   "category": "data-viz",
-  "title": "<is-bubble-chart>",
+  "title": "<iswc-bubble-chart>",
   "titleHtml": true,
-  "storageKey": "docs-is-bubble-chart",
+  "storageKey": "docs-iswc-bubble-chart",
   "sections": [
     {
       "id": "intro",
@@ -13,7 +13,7 @@
       "blocks": [
         {
           "kind": "demo",
-          "html": "<is-bubble-chart open-on-click>\r\n            <script type=\"application/json\">\r\n              {\"data\":{\"datasets\":[{\"label\":\"Canales\",\"data\":[{\"x\":0.4,\"y\":8.5,\"r\":10},{\"x\":1.8,\"y\":6.9,\"r\":13},{\"x\":2.8,\"y\":5.2,\"r\":20}]}]}}\r\n            </script>\r\n          </is-bubble-chart>",
+          "html": "<iswc-bubble-chart open-on-click>\r\n            <script type=\"application/json\">\r\n              {\"data\":{\"datasets\":[{\"label\":\"Canales\",\"data\":[{\"x\":0.4,\"y\":8.5,\"r\":10},{\"x\":1.8,\"y\":6.9,\"r\":13},{\"x\":2.8,\"y\":5.2,\"r\":20}]}]}}\r\n            </script>\r\n          </iswc-bubble-chart>",
           "controls": [
             {
               "control": "boolean",

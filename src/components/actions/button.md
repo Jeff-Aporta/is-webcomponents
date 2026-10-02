@@ -1,21 +1,21 @@
 ---
-tag: is-button
+tag: iswc-button
 tags:
-  - is-button
+  - iswc-button
 category: actions
 status: public
 source: ./button.js
 style: ./button.css
 preview: ./button.json
 ---
-# `<is-button>`
+# `<iswc-button>`
 
 ## Propósito
 
 Componente InSoft accesible y personalizable, escrito con JavaScript nativo,
 Shadow DOM y sin frameworks.
 
-Este módulo registra `<is-button>`.
+Este módulo registra `<iswc-button>`.
 
 ## Cuándo usarlo
 
@@ -34,8 +34,8 @@ import './button.js';
 ## Ejemplo mínimo
 
 ```html
-<is-button color="success">Aprobado</is-button>
-<is-button color="danger" variant="outlined">Eliminar</is-button>
+<iswc-button color="success">Aprobado</iswc-button>
+<iswc-button color="danger" variant="outlined">Eliminar</iswc-button>
 ```
 
 ## API
@@ -91,10 +91,10 @@ import './button.js';
 
 | Evento | detail | bubbles | composed | cancelable |
 | --- | --- | --- | --- | --- |
-| `is-focus` | sí | sí | sí | no |
-| `is-blur` | sí | sí | sí | no |
-| `is-click` | sí | sí | sí | no |
-| `is-invalid` | según cabecera | según cabecera | según cabecera | según cabecera |
+| `iswc-focus` | sí | sí | sí | no |
+| `iswc-blur` | sí | sí | sí | no |
+| `iswc-click` | sí | sí | sí | no |
+| `iswc-invalid` | según cabecera | según cabecera | según cabecera | según cabecera |
 
 ### Métodos y propiedades públicas
 
@@ -205,15 +205,15 @@ Participa mediante ElementInternals/helpers form-associated; respetar name, valu
 
 Documentación de cabecera preservada desde fuente:
 
-> <is-button> — Web Component (vanilla).
-> Define el custom element `is-button` automáticamente al importarse.
+> <iswc-button> — Web Component (vanilla).
+> Define el custom element `iswc-button` automáticamente al importarse.
 > Usa Shadow DOM con CSS propio, es form-associated (participa en <form>),
 > y expone parts + custom states para personalización desde fuera.
 > Atributos
 >  color      brand | neutral | success | warning | danger | info | error   (default: brand)
 >  variant   filled | outlined | plain | ghost | soft | text  (default: filled)
 >  hue          number (0-360)  color propio para el highlight cuando está
->                             [selected] dentro de <is-button-group>. Si no
+>                             [selected] dentro de <iswc-button-group>. Si no
 >                             se define, el grupo usa su --iswc-accent.
 >  disabled     boolean
 >  loading      boolean
@@ -241,18 +241,18 @@ Documentación de cabecera preservada desde fuente:
 > Events nativos (burbujean, composed:true): focus, blur, click
 > Custom events (composed:true, bubbles:true — cruzan Shadow DOM y son
 > consumibles desde React via addEventListener o React 19+ on<EventName>):
->   is-focus   — emitido al recibir foco (mismo momento que `focus`)
->   is-blur    — emitido al perder foco
->   is-click   — emitido al hacer click (mismo momento que `click`)
->   is-invalid — emitido cuando la validación de formulario falla
+>   iswc-focus   — emitido al recibir foco (mismo momento que `focus`)
+>   iswc-blur    — emitido al perder foco
+>   iswc-click   — emitido al hacer click (mismo momento que `click`)
+>   iswc-invalid — emitido cuando la validación de formulario falla
 > Mapping para React:
 >   onClick       → click  (nativo, React 17+)
 >   onFocus       → focus  (nativo, React 17+)
 >   onBlur        → blur   (nativo, React 17+)
->   onIsFocus     → is-focus   (React 19+  |  ref.addEventListener('is-focus', fn))
->   onIsBlur      → is-blur
->   onIsClick     → is-click
->   onIsInvalid   → is-invalid
+>   onIsFocus     → iswc-focus   (React 19+  |  ref.addEventListener('iswc-focus', fn))
+>   onIsBlur      → iswc-blur
+>   onIsClick     → iswc-click
+>   onIsInvalid   → iswc-invalid
 > El host expone los custom states :state(loading|disabled|link|icon-button)
 > (y como fallback los atributos data-state-* equivalentes para entornos sin
 > soporte de ElementInternals.states).
@@ -270,7 +270,7 @@ Documentación de cabecera preservada desde fuente:
 - [`../_shared/adopt-css.js`](../_shared/adopt-css.js)
 - [`../media/icon.js`](../media/icon.js)
 
-Tags del módulo: `<is-button>`.
+Tags del módulo: `<iswc-button>`.
 
 ## Accesibilidad
 
@@ -280,7 +280,7 @@ Preservar semántica, foco, teclado, labels y ARIA. ARIA detectado: `aria-label`
 
 ```html
 <div style="font-size: 1.25rem">
-<is-button color="brand">Grande</is-button>
+<iswc-button color="brand">Grande</iswc-button>
 </div>
 ```
 

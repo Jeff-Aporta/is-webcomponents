@@ -3,7 +3,7 @@
 <head>
 <meta charset="utf-8" />
 <meta name="viewport" content="width=device-width, initial-scale=1" />
-<title>&lt;is-bar-chart&gt; · demo</title>
+<title>&lt;iswc-bar-chart&gt; · demo</title>
 <style>
   html, body { margin: 0; padding: 0; min-height: 100%; background: #0c1118; color: #e2e8f0; font-family: ui-sans-serif, system-ui, sans-serif; }
   body { display: grid; grid-template-rows: auto 1fr; }
@@ -11,16 +11,16 @@
   header h1 { font-size: 16px; font-weight: 700; margin: 0; }
   header p { font-size: 12px; color: #94a3b8; margin: 4px 0 0 0; }
   main { display: grid; place-items: center; padding: 20px; min-height: 0; }
-  is-bar-chart { width: 720px; height: 360px; }
-  is-bar-chart:not(:defined) { visibility: hidden; }
+  iswc-bar-chart { width: 720px; height: 360px; }
+  iswc-bar-chart:not(:defined) { visibility: hidden; }
 </style>
 <script type="module">
   // Carga el bundle pre-compilado. bar-chart.min.js importa transitivamente
   // chart.min.js + marks-cartesian.min.js.
-  await import('../../../dist/cdn/data-viz/bar-chart.min.js?h=tcqpu3');
-  await customElements.whenDefined('is-bar-chart');
+  await import('../../../dist/cdn/data-viz/bar-chart.min.js?h=hcvfvd');
+  await customElements.whenDefined('iswc-bar-chart');
 
-  const chart = document.createElement('is-bar-chart');
+  const chart = document.createElement('iswc-bar-chart');
   chart.setAttribute('label', 'Ventas por trimestre');
   chart.payload = {
     type: 'bar',
@@ -42,8 +42,8 @@
 </head>
 <body>
 <header>
-  <h1>&lt;is-bar-chart&gt;</h1>
-  <p>Wrapper de <code>&lt;is-chart&gt;</code> con tipo fijo <code>bar</code>. Acepta config tipo Chart.js.</p>
+  <h1>&lt;iswc-bar-chart&gt;</h1>
+  <p>Wrapper de <code>&lt;iswc-chart&gt;</code> con tipo fijo <code>bar</code>. Acepta config tipo Chart.js.</p>
 </header>
 <main></main>
 </body>

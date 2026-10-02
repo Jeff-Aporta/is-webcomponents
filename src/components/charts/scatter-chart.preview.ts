@@ -1,5 +1,5 @@
 /**
- * Behavior migrado desde HTML inline de is-scatter-chart.
+ * Behavior migrado desde HTML inline de iswc-scatter-chart.
  * Se ejecuta en mount() tras pintar la definition JSON.
  */
 import type { PreviewMountContext } from '../../previews/_kit/types.d.ts';
@@ -15,7 +15,7 @@ interface ScatterChartLike extends HTMLElement {
 export async function mount(ctx: PreviewMountContext): Promise<void> {
   const root = ctx.main;
   void root;
-  await customElements.whenDefined('is-scatter-chart');
+  await customElements.whenDefined('iswc-scatter-chart');
   const single = document.querySelector<ScatterChartLike>('#scatterJs');
   if (single) {
     single.config = {

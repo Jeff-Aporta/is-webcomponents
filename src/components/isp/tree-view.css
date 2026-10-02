@@ -1,9 +1,34 @@
+/* <iswc-tree-view> — árbol editable: drag, historial, protección, drawer
+   de ficha y confirm-delete.
+
+   Las clases que empiezan por `trvwr-` (item, item-sum, --drg-bf, etc.) las
+   AÑADE / QUITA el JS dinámicamente con `classList.toggle()` /
+   `el.className = ...` (ver _shared/tree-view/render-rows.ts y
+   00-as-row.ts). No renombres ninguna: el CSS está acoplado por nombre. */
+
+/* Tipos registrados para que color-mix() herede transiciones suaves. */
+@property --trvwr-hvr-dflt {
+  syntax: "<color>";
+  inherits: true;
+  initial-value: rgb(0 0 0 / 8%);
+}
+@property --trvwr-ctv-dflt {
+  syntax: "<color>";
+  inherits: true;
+  initial-value: rgb(0 0 0 / 14%);
+}
+@property --trvwr-hghlght-bg {
+  syntax: "<color>";
+  inherits: true;
+  initial-value: rgb(0 0 0 / 12%);
+}
+
 :host {
   display: flex;
   flex-direction: column;
-  width: 100%;
-  height: 100%;
-  min-height: 0;
+  inline-size: 100%;
+  block-size: 100%;
+  min-block-size: 0;
   font-size: 0.875rem;
   color: var(--iswc-text);
   --trvwr-hvr-dflt: color-mix(in srgb, var(--iswc-text) 8%, transparent);
@@ -17,16 +42,20 @@
   --trvwr-sel-brd: var(--iswc-border);
 }
 
-:host([disabled]) { opacity: 0.6; pointer-events: none; }
+:host([disabled]) {
+  opacity: 0.6;
+  pointer-events: none;
+}
 
-.isp-tree-host,
-.isp-tree {
+/* `.isp-tree-host` lo añade el adapter para marcar el root del bosque;
+   `.isp-tree` es la clase del <div> raíz del shadow. Comparten layout. */
+:host :is(.isp-tree-host, .isp-tree) {
   position: relative;
   display: flex;
   flex-direction: column;
-  width: 100%;
-  height: 100%;
-  min-height: 0;
+  inline-size: 100%;
+  block-size: 100%;
+  min-block-size: 0;
   flex: 1 1 auto;
 }
 
@@ -35,18 +64,18 @@
   flex-wrap: nowrap;
   align-items: center;
   gap: 0.25rem;
-  margin-bottom: 0.25rem;
+  margin-block-end: 0.25rem;
   align-self: flex-start;
-  width: max-content;
-  max-width: 100%;
+  inline-size: max-content;
+  max-inline-size: 100%;
   overflow: auto;
   flex: 0 0 auto;
 }
 
 .isp-tree-body {
-  width: 100%;
-  min-width: 0;
-  min-height: 0;
+  inline-size: 100%;
+  min-inline-size: 0;
+  min-block-size: 0;
   flex: 1 1 auto;
   overflow-y: auto;
   overflow-x: hidden;
@@ -55,7 +84,7 @@
 .drawer-body {
   display: flex;
   flex-direction: column;
-  min-height: 0;
+  min-block-size: 0;
   flex: 1 1 auto;
 }
 
@@ -70,49 +99,53 @@
 
 .trvwr-row-host {
   display: block;
-  width: 100%;
-  min-width: 0;
+  inline-size: 100%;
+  min-inline-size: 0;
 }
 
 .trvwr-itm {
   display: block;
-  width: 100%;
-  min-width: 0;
+  inline-size: 100%;
+  min-inline-size: 0;
   overflow: visible;
   list-style: none;
-}
 
-.trvwr-itm.highlight {
-  border-radius: 0.25rem;
-  background: #8881;
-  box-shadow: inset 0 0 0 1px var(--trvwr-sel-brd);
+  &.highlight {
+    border-radius: 0.25rem;
+    background: #8881;
+    box-shadow: inset 0 0 0 1px var(--trvwr-sel-brd);
+  }
 }
 
 .trvwr-itm-sum {
   position: relative;
   box-sizing: border-box;
   display: block;
-  width: 100%;
-  min-width: 0;
+  inline-size: 100%;
+  min-inline-size: 0;
   list-style: none;
   border-radius: 0;
-  padding: 0.35rem 0.5rem;
+  padding-block: 0.35rem;
+  padding-inline: 0.5rem;
   user-select: none;
   cursor: pointer;
-}
-.trvwr-itm-sum::-webkit-details-marker { display: none; }
-.trvwr-itm-sum::marker { content: ""; }
 
-.trvwr-itm-sum:hover:not(.trvwr-itm-sum--disabled) {
-  background: var(--trvwr-hvr-dflt);
+  &::-webkit-details-marker { display: none; }
+  &::marker { content: ""; }
+
+  &:hover:not(.trvwr-itm-sum--disabled) {
+    background: var(--trvwr-hvr-dflt);
+  }
+  &:active:not(.trvwr-itm-sum--disabled) {
+    background: var(--trvwr-ctv-dflt);
+  }
+  &:focus-visible {
+    outline: 2px solid var(--trvwr-fcs-rng);
+    outline-offset: -1px;
+  }
 }
-.trvwr-itm-sum:active:not(.trvwr-itm-sum--disabled) {
-  background: var(--trvwr-ctv-dflt);
-}
-.trvwr-itm-sum:focus-visible {
-  outline: 2px solid var(--trvwr-fcs-rng);
-  outline-offset: -1px;
-}
+
+/* Modificadores de la suma: foco persistente y deshabilitado. */
 .trvwr-itm-sum--focused {
   outline: 2px solid var(--trvwr-fcs-rng);
   outline-offset: -1px;
@@ -122,39 +155,51 @@
   opacity: 0.5;
 }
 
-.trvwr-itm.highlight > .trvwr-itm-sum {
-  background: var(--trvwr-hghlght-bg);
-}
-.trvwr-itm.highlight > .trvwr-itm-sum:hover:not(.trvwr-itm-sum--disabled) {
-  background: var(--trvwr-hghlght-hvr-bg);
-}
-.trvwr-itm.should-flash > .trvwr-itm-sum {
-  animation: trvwr-swap-flash 0.6s ease-out;
-}
-.trvwr-itm.should-flash--error > .trvwr-itm-sum {
-  animation: trvwr-swap-flash-error 0.6s ease-out;
+/* Estados visuales de la fila (mutuamente excluyentes; los pone el adapter). */
+.trvwr-itm {
+  &.highlight > .trvwr-itm-sum {
+    background: var(--trvwr-hghlght-bg);
+
+    &:hover:not(.trvwr-itm-sum--disabled) {
+      background: var(--trvwr-hghlght-hvr-bg);
+    }
+  }
+
+  &.should-flash > .trvwr-itm-sum {
+    animation: trvwr-swap-flash 0.6s ease-out;
+  }
+  &.should-flash--error > .trvwr-itm-sum {
+    animation: trvwr-swap-flash-error 0.6s ease-out;
+  }
 }
 
-.trvwr--dragging is-icon,
-.trvwr--dragging is-flex-options,
-.trvwr--dragging .trvwr-itm-helper,
-.trvwr--dragging is-button,
-.trvwr--dragging is-check-icon-button,
-.trvwr--dragging is-dropdown {
-  pointer-events: none;
+.trvwr--dragging {
+  iswc-icon,
+  iswc-flex-options,
+  .trvwr-itm-helper,
+  iswc-button,
+  iswc-check-icon-button,
+  iswc-dropdown {
+    pointer-events: none;
+  }
 }
-.trvwr-itm--dragging > .trvwr-itm-sum { opacity: 0.45; }
-.trvwr-itm--dragging > [role="group"] { opacity: 0.35; }
 
+.trvwr-itm--dragging {
+  > .trvwr-itm-sum { opacity: 0.45; }
+  > [role="group"] { opacity: 0.35; }
+}
+
+/* Drop indicators (líneas de posición): comparten geometría; el lado y el
+   color los decide el modificador. JS los aplica de uno en uno, así que
+   cada selector empareja SOLO el pseudo-elemento correcto. */
 .trvwr-itm-sum--drg-bf::before,
 .trvwr-itm-sum--drg-aftr::after,
 .trvwr-itm-sum--drg-forbidden-bf::before,
 .trvwr-itm-sum--drg-forbidden-aftr::after {
   content: "";
   position: absolute;
-  left: 0.35rem;
-  right: 0.35rem;
-  height: 2px;
+  inset-inline: 0.35rem;
+  block-size: 2px;
   background: var(--iswc-accent, var(--iswc-primary));
   border: none;
   border-radius: 1px;
@@ -162,15 +207,21 @@
   z-index: 2;
   box-shadow: -5px 0 0 3px var(--iswc-accent, var(--iswc-primary));
 }
+
 .trvwr-itm-sum--drg-bf::before,
-.trvwr-itm-sum--drg-forbidden-bf::before { top: -1px; }
+.trvwr-itm-sum--drg-forbidden-bf::before { inset-block-start: -1px; }
+
 .trvwr-itm-sum--drg-aftr::after,
-.trvwr-itm-sum--drg-forbidden-aftr::after { bottom: -1px; }
+.trvwr-itm-sum--drg-forbidden-aftr::after { inset-block-end: -1px; }
+
+/* Variantes de peligro: cambian solo el color de la línea. */
 .trvwr-itm-sum--drg-forbidden-bf::before,
 .trvwr-itm-sum--drg-forbidden-aftr::after {
   background: var(--iswc-color-danger, #e53935);
   box-shadow: -5px 0 0 3px var(--iswc-color-danger, #e53935);
 }
+
+/* Indicadores "into" (contenedor receptor): outline dashed. */
 .trvwr-itm-sum--drg-into {
   border-radius: 0.25rem;
   outline: 2px dashed var(--iswc-accent, var(--iswc-primary));
@@ -188,9 +239,9 @@
   display: flex;
   align-items: center;
   gap: 0.45rem;
-  width: 100%;
-  min-height: 2em;
-  min-width: 0;
+  inline-size: 100%;
+  min-block-size: 2em;
+  min-inline-size: 0;
   flex: 1;
 }
 
@@ -199,15 +250,17 @@
   flex-shrink: 0;
   align-items: center;
   justify-content: center;
-  width: 1.25em;
-  height: 100%;
+  inline-size: 1.25em;
+  block-size: 100%;
   cursor: grab;
   color: var(--iswc-text);
   opacity: 0.45;
+
+  &:active { cursor: grabbing; }
 }
-.trvwr-drag-handle:active { cursor: grabbing; }
-.trvwr-drag-handle--locked,
-.trvwr-drag-handle--frozen {
+
+/* Modificadores del handle. */
+:where(.trvwr-drag-handle--locked, .trvwr-drag-handle--frozen) {
   cursor: not-allowed;
   opacity: 0.55;
 }
@@ -227,28 +280,36 @@
   flex-shrink: 0;
   align-items: center;
   justify-content: center;
-  width: 1.25em;
+  inline-size: 1.25em;
 }
-.trvwr-itm-lead--add { cursor: pointer; border-radius: 0.2em; }
-.trvwr-itm-lead--add:hover { background: var(--trvwr-ctv-dflt); }
+
+/* esbuild no acepta `&--add` después de `.trvwr-itm-lead` (lo lee como
+   parent + type selector `--add`). Mantenemos la regla suelta para evitar
+   el workaround `:is(&--add)`. */
+.trvwr-itm-lead--add {
+  cursor: pointer;
+  border-radius: 0.2em;
+
+  &:hover { background: var(--trvwr-ctv-dflt); }
+}
 
 .trvwr-itm-content {
   flex: 1;
-  min-width: 0;
+  min-inline-size: 0;
   overflow: hidden;
   text-overflow: ellipsis;
   white-space: nowrap;
 }
 .trvwr-itm-helper {
   flex: 0 0 auto;
-  margin-left: 0.5rem;
+  margin-inline-start: 0.5rem;
   color: var(--iswc-text-muted);
 }
 
-is-float-card {
+iswc-float-card {
   display: block;
-  width: 100%;
-  min-width: 0;
+  inline-size: 100%;
+  min-inline-size: 0;
 }
 
 .trvwr-kids {
@@ -260,6 +321,7 @@ is-float-card {
 .protect-actions {
   display: flex;
   gap: 0.5rem;
-  width: 100%;
+  inline-size: 100%;
+
+  > * { flex: 1 1 0; }
 }
-.protect-actions > * { flex: 1 1 0; }

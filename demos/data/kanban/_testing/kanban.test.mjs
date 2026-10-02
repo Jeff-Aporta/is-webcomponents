@@ -9,24 +9,24 @@ const URL = `${BASE_URL}/demos/data/kanban/kanban.html`;
 const tests = [];
 
 tests.push({
-  name: 'smoke: is-kanban/column/card están definidos y los 3 tableros renderizan',
+  name: 'smoke: iswc-kanban/column/card están definidos y los 3 tableros renderizan',
   run: async (page) => {
     await page.goto(URL, { waitUntil: 'domcontentloaded' });
     await waitReady(page, 'data-kanban-ready');
     const initial = await page.evaluate(() => {
-      const boards = [...document.querySelectorAll('main is-kanban')];
+      const boards = [...document.querySelectorAll('main iswc-kanban')];
       return {
-        boardDefined: !!customElements.get('is-kanban'),
-        columnDefined: !!customElements.get('is-kanban-column'),
-        cardDefined: !!customElements.get('is-kanban-card'),
+        boardDefined: !!customElements.get('iswc-kanban'),
+        columnDefined: !!customElements.get('iswc-kanban-column'),
+        cardDefined: !!customElements.get('iswc-kanban-card'),
         boardCount: boards.length,
-        columnCounts: boards.map((b) => b.querySelectorAll(':scope > is-kanban-column').length),
-        cardCounts: boards.map((b) => b.querySelectorAll(':scope > is-kanban-column > is-kanban-card').length),
+        columnCounts: boards.map((b) => b.querySelectorAll(':scope > iswc-kanban-column').length),
+        cardCounts: boards.map((b) => b.querySelectorAll(':scope > iswc-kanban-column > iswc-kanban-card').length),
       };
     });
-    assert.equal(initial.boardDefined, true, 'is-kanban debe estar definido');
-    assert.equal(initial.columnDefined, true, 'is-kanban-column debe estar definido');
-    assert.equal(initial.cardDefined, true, 'is-kanban-card debe estar definido');
+    assert.equal(initial.boardDefined, true, 'iswc-kanban debe estar definido');
+    assert.equal(initial.columnDefined, true, 'iswc-kanban-column debe estar definido');
+    assert.equal(initial.cardDefined, true, 'iswc-kanban-card debe estar definido');
     assert.equal(initial.boardCount, 3, `esperaba 3 tableros, hay ${initial.boardCount}`);
     // El primer tablero debe tener 3 columnas, segundo 1, tercero 2
     assert.deepEqual(initial.columnCounts, [3, 1, 2], `columnCounts ${initial.columnCounts}`);
@@ -43,14 +43,14 @@ tests.push({
     await page.goto(URL, { waitUntil: 'domcontentloaded' });
     await waitReady(page, 'data-kanban-ready');
     const badges = await page.evaluate(() => {
-      const basic = document.querySelector('main is-kanban');
-      const cols = [...basic.querySelectorAll(':scope > is-kanban-column')];
+      const basic = document.querySelector('main iswc-kanban');
+      const cols = [...basic.querySelectorAll(':scope > iswc-kanban-column')];
       return cols.map((c) => {
         const title = c.getAttribute('title');
         const explicit = c.getAttribute('badge');
         const badgeEl = c.shadowRoot.querySelector('[part="badge"]');
         const badgeText = badgeEl?.textContent?.trim() || '';
-        const cardCount = c.querySelectorAll(':scope > is-kanban-card').length;
+        const cardCount = c.querySelectorAll(':scope > iswc-kanban-card').length;
         return { title, explicit, badgeText, cardCount };
       });
     });
@@ -65,7 +65,7 @@ tests.push({
     assert.equal(hecho.badgeText, '3', `Hecho badge debe ser "3", fue "${hecho.badgeText}"`);
     // Backlog: badge="0" explícito
     const backlog = await page.evaluate(() => {
-      const allCols = [...document.querySelectorAll('main is-kanban is-kanban-column')];
+      const allCols = [...document.querySelectorAll('main iswc-kanban iswc-kanban-column')];
       const bg = allCols.find((c) => c.getAttribute('title') === 'Backlog');
       return {
         explicit: bg.getAttribute('badge'),
@@ -83,7 +83,7 @@ tests.push({
     await page.goto(URL, { waitUntil: 'domcontentloaded' });
     await waitReady(page, 'data-kanban-ready');
     const accents = await page.evaluate(() => {
-      const cols = [...document.querySelectorAll('main is-kanban is-kanban-column')];
+      const cols = [...document.querySelectorAll('main iswc-kanban iswc-kanban-column')];
       return cols.map((c) => {
         const accent = c.getAttribute('accent');
         const root = c.shadowRoot.querySelector('[part="column"]');
@@ -104,17 +104,17 @@ tests.push({
 });
 
 tests.push({
-  name: 'funcional: click en card emite is-kanban-card-click con detail { card, column }',
+  name: 'funcional: click en card emite iswc-kanban-card-click con detail { card, column }',
   run: async (page) => {
     await page.goto(URL, { waitUntil: 'domcontentloaded' });
     await waitReady(page, 'data-kanban-ready');
     const captured = await page.evaluate(() => {
       return new Promise((resolve) => {
-        const basic = document.querySelector('main is-kanban');
+        const basic = document.querySelector('main iswc-kanban');
         let detail = null;
-        basic.addEventListener('is-kanban-card-click', (e) => { detail = e.detail; });
+        basic.addEventListener('iswc-kanban-card-click', (e) => { detail = e.detail; });
         // Click en la primera card del primer column
-        const firstCard = basic.querySelector('is-kanban-column > is-kanban-card');
+        const firstCard = basic.querySelector('iswc-kanban-column > iswc-kanban-card');
         const root = firstCard.shadowRoot.querySelector('[part="card"]');
         root.click();
         setTimeout(() => {
@@ -143,7 +143,7 @@ tests.push({
     await page.goto(URL, { waitUntil: 'domcontentloaded' });
     await waitReady(page, 'data-kanban-ready');
     const tags = await page.evaluate(() => {
-      const cards = [...document.querySelectorAll('main is-kanban is-kanban-card')];
+      const cards = [...document.querySelectorAll('main iswc-kanban iswc-kanban-card')];
       return cards.slice(0, 4).map((c) => {
         const tagEl = c.shadowRoot.querySelector('[part="tag"]');
         return {
@@ -179,7 +179,7 @@ tests.push({
     await page.goto(URL, { waitUntil: 'domcontentloaded' });
     await waitReady(page, 'data-kanban-ready');
     const covers = await page.evaluate(() => {
-      const cards = [...document.querySelectorAll('main is-kanban is-kanban-card')];
+      const cards = [...document.querySelectorAll('main iswc-kanban iswc-kanban-card')];
       return cards.map((c) => {
         const cover = c.shadowRoot.querySelector('[part="cover"]');
         const heading = c.getAttribute('heading');
@@ -208,13 +208,13 @@ tests.push({
     await page.goto(URL, { waitUntil: 'domcontentloaded' });
     await waitReady(page, 'data-kanban-ready');
     const orientations = await page.evaluate(() => {
-      const boards = [...document.querySelectorAll('main is-kanban')];
+      const boards = [...document.querySelectorAll('main iswc-kanban')];
       const rowBoard = boards[2];
       return {
         attr: rowBoard.getAttribute('orientation'),
-        columns: [...rowBoard.querySelectorAll(':scope > is-kanban-column')].map((c) => c.getAttribute('data-orientation')),
+        columns: [...rowBoard.querySelectorAll(':scope > iswc-kanban-column')].map((c) => c.getAttribute('data-orientation')),
         // El primer tablero debe seguir sin data-orientation (orientation default).
-        defaultBoardColumns: [...boards[0].querySelectorAll(':scope > is-kanban-column')].map((c) => c.getAttribute('data-orientation')),
+        defaultBoardColumns: [...boards[0].querySelectorAll(':scope > iswc-kanban-column')].map((c) => c.getAttribute('data-orientation')),
       };
     });
     assert.equal(orientations.attr, 'row');
@@ -225,7 +225,7 @@ tests.push({
 });
 
 tests.push({
-  name: 'funcional: drag & drop mueve la card entre columnas y emite is-kanban-move',
+  name: 'funcional: drag & drop mueve la card entre columnas y emite iswc-kanban-move',
   run: async (page) => {
     await page.goto(URL, { waitUntil: 'domcontentloaded' });
     await waitReady(page, 'data-kanban-ready');
@@ -233,14 +233,14 @@ tests.push({
     // Simular drag & drop usando el API HTML5 directo sobre shadow DOM.
     const captured = await page.evaluate(() => {
       return new Promise((resolve) => {
-        const basic = document.querySelector('main is-kanban');
+        const basic = document.querySelector('main iswc-kanban');
         let moveDetail = null;
-        basic.addEventListener('is-kanban-move', (e) => { moveDetail = e.detail; });
+        basic.addEventListener('iswc-kanban-move', (e) => { moveDetail = e.detail; });
 
-        const cols = [...basic.querySelectorAll(':scope > is-kanban-column')];
+        const cols = [...basic.querySelectorAll(':scope > iswc-kanban-column')];
         const sourceCol = cols[0]; // Pendiente
         const targetCol = cols[1]; // En curso
-        const cardToMove = sourceCol.querySelector('is-kanban-card');
+        const cardToMove = sourceCol.querySelector('iswc-kanban-card');
         const heading = cardToMove.getAttribute('heading');
 
         // 1. dragstart
@@ -273,14 +273,14 @@ tests.push({
             heading: moveDetail?.card?.getAttribute('heading') ?? null,
             fromTitle: moveDetail?.from?.getAttribute?.('title') ?? null,
             toTitle: moveDetail?.to?.getAttribute?.('title') ?? null,
-            cardMoved: targetCol.querySelector('is-kanban-card')?.getAttribute('heading') ?? null,
-            sourceCount: sourceCol.querySelectorAll('is-kanban-card').length,
-            targetCount: targetCol.querySelectorAll('is-kanban-card').length,
+            cardMoved: targetCol.querySelector('iswc-kanban-card')?.getAttribute('heading') ?? null,
+            sourceCount: sourceCol.querySelectorAll('iswc-kanban-card').length,
+            targetCount: targetCol.querySelectorAll('iswc-kanban-card').length,
           });
         }, 120);
       });
     });
-    assert.equal(captured.moveFired, true, 'el evento is-kanban-move debió dispararse');
+    assert.equal(captured.moveFired, true, 'el evento iswc-kanban-move debió dispararse');
     assert.equal(captured.heading, 'Diseñar API REST');
     assert.equal(captured.fromTitle, 'Pendiente');
     assert.equal(captured.toTitle, 'En curso');
@@ -296,12 +296,12 @@ tests.push({
     await page.goto(URL, { waitUntil: 'domcontentloaded' });
     await waitReady(page, 'data-kanban-ready');
     const aria = await page.evaluate(() => {
-      const basic = document.querySelector('main is-kanban');
+      const basic = document.querySelector('main iswc-kanban');
       return {
         boardRole: basic.getAttribute('role'),
-        colRole: basic.querySelector('is-kanban-column').getAttribute('role'),
-        cardRole: basic.querySelector('is-kanban-card').getAttribute('role'),
-        cardDraggable: basic.querySelector('is-kanban-card').getAttribute('draggable'),
+        colRole: basic.querySelector('iswc-kanban-column').getAttribute('role'),
+        cardRole: basic.querySelector('iswc-kanban-card').getAttribute('role'),
+        cardDraggable: basic.querySelector('iswc-kanban-card').getAttribute('draggable'),
       };
     });
     assert.equal(aria.boardRole, 'list', `board role debe ser "list", fue "${aria.boardRole}"`);

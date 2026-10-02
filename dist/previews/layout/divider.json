@@ -1,10 +1,10 @@
 {
-  "$schema": "is-preview/v1",
-  "tag": "is-divider",
+  "$schema": "iswc-preview/v1",
+  "tag": "iswc-divider",
   "category": "layout",
-  "title": "<is-divider>",
+  "title": "<iswc-divider>",
   "titleHtml": true,
-  "storageKey": "docs-is-divider",
+  "storageKey": "docs-iswc-divider",
   "sections": [
     {
       "id": "intro",
@@ -13,7 +13,7 @@
       "blocks": [
         {
           "kind": "demo",
-          "html": "<p>Sección A</p>\r\n          <is-divider></is-divider>\r\n          <p>Sección B</p>",
+          "html": "<p>Sección A</p>\r\n          <iswc-divider></iswc-divider>\r\n          <p>Sección B</p>",
           "controls": [
             {
               "control": "number",
@@ -46,19 +46,19 @@
       "blocks": [
         {
           "kind": "demo",
-          "html": "<div style=\"display:flex;align-items:stretch;height:3rem;gap:0\">\r\n            <span style=\"padding:0 1rem;display:flex;align-items:center\">Izq</span>\r\n            <is-divider orientation=\"vertical\"></is-divider>\r\n            <span style=\"padding:0 1rem;display:flex;align-items:center\">Der</span>\r\n          </div>"
+          "html": "<div style=\"display:flex;align-items:stretch;height:3rem;gap:0\">\r\n            <span style=\"padding:0 1rem;display:flex;align-items:center\">Izq</span>\r\n            <iswc-divider orientation=\"vertical\"></iswc-divider>\r\n            <span style=\"padding:0 1rem;display:flex;align-items:center\">Der</span>\r\n          </div>"
         },
         {
           "kind": "demo",
-          "html": "<div class=\"demo-row\" style=\"flex-direction:column;gap:0;width:100%\">\r\n            <span class=\"demo-label\">opacity 20 · 50 · 100</span>\r\n            <is-divider opacity=\"20\"></is-divider>\r\n            <is-divider opacity=\"50\"></is-divider>\r\n            <is-divider opacity=\"100\"></is-divider>\r\n          </div>"
+          "html": "<div class=\"demo-row\" style=\"flex-direction:column;gap:0;width:100%\">\r\n            <span class=\"demo-label\">opacity 20 · 50 · 100</span>\r\n            <iswc-divider opacity=\"20\"></iswc-divider>\r\n            <iswc-divider opacity=\"50\"></iswc-divider>\r\n            <iswc-divider opacity=\"100\"></iswc-divider>\r\n          </div>"
         },
         {
           "kind": "demo",
-          "html": "<div class=\"demo-row\" style=\"flex-direction:column;gap:0.35rem;width:100%\">\r\n            <span class=\"demo-label\">color theme</span>\r\n            <is-divider color=\"text\" opacity=\"80\"></is-divider>\r\n            <is-divider color=\"brand\" opacity=\"80\"></is-divider>\r\n            <is-divider color=\"success\" opacity=\"80\"></is-divider>\r\n            <is-divider color=\"warning\" opacity=\"80\"></is-divider>\r\n            <is-divider color=\"danger\" opacity=\"80\"></is-divider>\r\n            <is-divider color=\"border\" opacity=\"100\"></is-divider>\r\n          </div>"
+          "html": "<div class=\"demo-row\" style=\"flex-direction:column;gap:0.35rem;width:100%\">\r\n            <span class=\"demo-label\">color theme</span>\r\n            <iswc-divider color=\"text\" opacity=\"80\"></iswc-divider>\r\n            <iswc-divider color=\"brand\" opacity=\"80\"></iswc-divider>\r\n            <iswc-divider color=\"success\" opacity=\"80\"></iswc-divider>\r\n            <iswc-divider color=\"warning\" opacity=\"80\"></iswc-divider>\r\n            <iswc-divider color=\"danger\" opacity=\"80\"></iswc-divider>\r\n            <iswc-divider color=\"border\" opacity=\"100\"></iswc-divider>\r\n          </div>"
         },
         {
           "kind": "code",
-          "code": "<is-divider></is-divider>\n<is-divider opacity=\"80\" color=\"brand\"></is-divider>\n<is-divider orientation=\"vertical\" color=\"accent\"></is-divider>"
+          "code": "<iswc-divider></iswc-divider>\n<iswc-divider opacity=\"80\" color=\"brand\"></iswc-divider>\n<iswc-divider orientation=\"vertical\" color=\"accent\"></iswc-divider>"
         }
       ]
     },

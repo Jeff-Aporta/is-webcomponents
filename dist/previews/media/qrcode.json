@@ -1,11 +1,11 @@
 {
-  "$schema": "is-preview/v1",
-  "tag": "is-qrcode",
+  "$schema": "iswc-preview/v1",
+  "tag": "iswc-qrcode",
   "category": "media",
-  "title": "<is-qrcode>",
+  "title": "<iswc-qrcode>",
   "titleHtml": true,
   "styles": ".qr-row { display: flex; gap: 1.5rem; flex-wrap: wrap; align-items: start; }\r\n    pre.log {\r\n      font-family: ui-monospace, monospace; font-size: .78rem;\r\n      background: var(--iswc-bg-elev); border: 1px solid var(--iswc-border);\r\n      border-radius: var(--iswc-radius); padding: .55rem .75rem;\r\n      max-height: 8rem; overflow: auto;\r\n    }",
-  "storageKey": "docs-is-qrcode",
+  "storageKey": "docs-iswc-qrcode",
   "sections": [
     {
       "id": "intro",
@@ -19,7 +19,7 @@
       "blocks": [
         {
           "kind": "demo",
-          "html": "<div class=\"qr-row\">\r\n            <is-qrcode id=\"qr1\" value=\"https://is-webcomponents\" level=\"M\" cell=\"6\"></is-qrcode>\r\n            <is-qrcode value=\"mailto:hola@empresa.co\" level=\"Q\" cell=\"6\"></is-qrcode>\r\n            <is-qrcode value=\"WIFI:T:WPA;S:InSoft;P:clave123;;\" level=\"H\" cell=\"6\"></is-qrcode>\r\n          </div>",
+          "html": "<div class=\"qr-row\">\r\n            <iswc-qrcode id=\"qr1\" value=\"https://is-webcomponents\" level=\"M\" cell=\"6\"></iswc-qrcode>\r\n            <iswc-qrcode value=\"mailto:hola@empresa.co\" level=\"Q\" cell=\"6\"></iswc-qrcode>\r\n            <iswc-qrcode value=\"WIFI:T:WPA;S:InSoft;P:clave123;;\" level=\"H\" cell=\"6\"></iswc-qrcode>\r\n          </div>",
           "controls": [
             {
               "control": "select",
@@ -54,7 +54,7 @@
       "blocks": [
         {
           "kind": "demo",
-          "html": "<div class=\"qr-row\">\r\n            <is-qrcode value=\"https://insoft.co\" fg=\"var(--iswc-accent)\" bg=\"var(--iswc-bg-soft)\" cell=\"8\"></is-qrcode>\r\n            <is-qrcode value=\"https://contapyme.co\" fg=\"var(--iswc-success, #16a34a)\" cell=\"8\"></is-qrcode>\r\n          </div>"
+          "html": "<div class=\"qr-row\">\r\n            <iswc-qrcode value=\"https://insoft.co\" fg=\"var(--iswc-accent)\" bg=\"var(--iswc-bg-soft)\" cell=\"8\"></iswc-qrcode>\r\n            <iswc-qrcode value=\"https://contapyme.co\" fg=\"var(--iswc-success, #16a34a)\" cell=\"8\"></iswc-qrcode>\r\n          </div>"
         }
       ]
     },
@@ -64,7 +64,7 @@
       "blocks": [
         {
           "kind": "code",
-          "code": "const qr = document.querySelector('is-qrcode');\nconst dataURL = await qr.dataURL('image/png');\n// descargar, pegar en input[type=file], etc."
+          "code": "const qr = document.querySelector('iswc-qrcode');\nconst dataURL = await qr.dataURL('image/png');\n// descargar, pegar en input[type=file], etc."
         }
       ]
     },

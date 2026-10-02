@@ -3,7 +3,7 @@
 <head>
 <meta charset="utf-8" />
 <meta name="viewport" content="width=device-width, initial-scale=1" />
-<title>Demo de <is-radio> · is-webcomponents</title>
+<title>Demo de <iswc-radio> · is-webcomponents</title>
 <meta name="description" content="Radio button individual con role=radio, valor, color y descripción opcional." />
 <style>
   html, body { margin: 0; padding: 0; min-height: 100%; background: #0c1118; color: #e2e8f0; font-family: ui-sans-serif, system-ui, sans-serif; }
@@ -18,12 +18,12 @@
   code { background: rgba(255,255,255,0.06); padding: 1px 5px; border-radius: 3px; font: 12px ui-monospace, Menlo, Consolas, monospace; }
   output { font: 12px ui-monospace, Menlo, Consolas, monospace; color: #94a3b8; white-space: pre-wrap; }
   /* Anti-FOUC */
-  is-radio:not(:defined) { visibility: hidden; }
+  iswc-radio:not(:defined) { visibility: hidden; }
 </style>
 <script type="module">
-  await import('../../../dist/cdn/forms/radio.min.js?h=iovw0s');
+  await import('../../../dist/cdn/forms/radio.min.js?h=ubj2qt');
 
-  await customElements.whenDefined('is-radio');
+  await customElements.whenDefined('iswc-radio');
 
   // Standalone (sin grupo): el radio se auto-marca al activarse.
   const demo = document.getElementById('demo');
@@ -35,11 +35,11 @@
       checked: demo.checked,
       disabled: demo.disabled,
       role: demo.getAttribute('role'),
-      group: !!demo.closest('is-radio-group'),
+      group: !!demo.closest('iswc-radio-group'),
     }, null, 2);
   };
   demo.addEventListener('click', () => setTimeout(render, 0));
-  demo.addEventListener('is-radio-select', (e) => {
+  demo.addEventListener('iswc-radio-select', (e) => {
     console.log('[radio] select', e.detail);
     render();
   });
@@ -56,16 +56,16 @@
 <body>
 <main>
   <header>
-    <h1>Demo de <code>&lt;is-radio&gt;</code></h1>
-    <p>Radio button individual. Sin grupo padre, se marca a sí mismo al activarse. Dentro de <code>&lt;is-radio-group&gt;</code> el dueño del valor es el grupo.</p>
+    <h1>Demo de <code>&lt;iswc-radio&gt;</code></h1>
+    <p>Radio button individual. Sin grupo padre, se marca a sí mismo al activarse. Dentro de <code>&lt;iswc-radio-group&gt;</code> el dueño del valor es el grupo.</p>
   </header>
 
   <section>
     <h2>Básico (standalone)</h2>
-    <is-radio id="demo" value="opt-1" hint="Opción individual">
+    <iswc-radio id="demo" value="opt-1" hint="Opción individual">
       Opción uno
       <span slot="description">Texto secundario opcional en el slot <code>description</code>.</span>
-    </is-radio>
+    </iswc-radio>
     <div class="row">
       <button id="btn-toggle" type="button">Toggle</button>
     </div>
@@ -75,22 +75,22 @@
   <section>
     <h2>Estados</h2>
     <div class="row">
-      <is-radio value="a">Marcado (checked)</is-radio>
-      <is-radio value="b">Sin marcar</is-radio>
-      <is-radio value="c" disabled>Deshabilitado</is-radio>
-      <is-radio value="d" disabled checked>Marcado y deshabilitado</is-radio>
+      <iswc-radio value="a">Marcado (checked)</iswc-radio>
+      <iswc-radio value="b">Sin marcar</iswc-radio>
+      <iswc-radio value="c" disabled>Deshabilitado</iswc-radio>
+      <iswc-radio value="d" disabled checked>Marcado y deshabilitado</iswc-radio>
     </div>
   </section>
 
   <section>
     <h2>Colores y label-placement</h2>
     <div class="row">
-      <is-radio value="r1" checked color="brand">brand</is-radio>
-      <is-radio value="r2" checked color="success">success</is-radio>
-      <is-radio value="r3" checked color="danger">danger</is-radio>
-      <is-radio value="r4" checked color="neutral">neutral</is-radio>
-      <is-radio value="r5" checked label-placement="top">top</is-radio>
-      <is-radio value="r6" checked label-placement="bottom">bottom</is-radio>
+      <iswc-radio value="r1" checked color="brand">brand</iswc-radio>
+      <iswc-radio value="r2" checked color="success">success</iswc-radio>
+      <iswc-radio value="r3" checked color="danger">danger</iswc-radio>
+      <iswc-radio value="r4" checked color="neutral">neutral</iswc-radio>
+      <iswc-radio value="r5" checked label-placement="top">top</iswc-radio>
+      <iswc-radio value="r6" checked label-placement="bottom">bottom</iswc-radio>
     </div>
   </section>
 </main>

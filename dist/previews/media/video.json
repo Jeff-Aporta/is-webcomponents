@@ -1,10 +1,10 @@
 {
-  "$schema": "is-preview/v1",
-  "tag": "is-video",
+  "$schema": "iswc-preview/v1",
+  "tag": "iswc-video",
   "category": "media",
-  "title": "<is-video>",
+  "title": "<iswc-video>",
   "titleHtml": true,
-  "storageKey": "docs-is-video",
+  "storageKey": "docs-iswc-video",
   "hasBehavior": true,
   "sections": [
     {
@@ -14,7 +14,7 @@
       "blocks": [
         {
           "kind": "demo",
-          "html": "<is-video\r\n            id=\"v1\"\r\n            controls\r\n            playsinline\r\n            src=\"{assets}playlist/01-big-buck-bunny.mp4\"\r\n            style=\"max-width:36rem\"\r\n          ></is-video>",
+          "html": "<iswc-video\r\n            id=\"v1\"\r\n            controls\r\n            playsinline\r\n            src=\"{assets}playlist/01-big-buck-bunny.mp4\"\r\n            style=\"max-width:36rem\"\r\n          ></iswc-video>",
           "controls": [
             {
               "control": "text",
@@ -50,11 +50,11 @@
       "blocks": [
         {
           "kind": "demo",
-          "html": "<is-video\r\n            muted\r\n            loop\r\n            playsinline\r\n            controls=\"false\"\r\n            src=\"{assets}playlist/01-big-buck-bunny.mp4\"\r\n            style=\"max-width:20rem\"\r\n          ></is-video>"
+          "html": "<iswc-video\r\n            muted\r\n            loop\r\n            playsinline\r\n            controls=\"false\"\r\n            src=\"{assets}playlist/01-big-buck-bunny.mp4\"\r\n            style=\"max-width:20rem\"\r\n          ></iswc-video>"
         },
         {
           "kind": "code",
-          "code": "<is-video\n  controls\n  playsinline\n  src=\"video.mp4\"\n></is-video>"
+          "code": "<iswc-video\n  controls\n  playsinline\n  src=\"video.mp4\"\n></iswc-video>"
         }
       ]
     },
@@ -146,7 +146,7 @@
             ],
             [
               "events",
-              "is-play, is-pause, is-ended (+ play/pause/ended)"
+              "iswc-play, iswc-pause, iswc-ended (+ play/pause/ended)"
             ],
             [
               "estado",

@@ -5,7 +5,7 @@
  * borde), filled (relleno sólido), plain (texto plano), accent (borde +
  * acento lateral), filled-outlined (combinación).
  *
- * Compartido por: is-tag, is-badge, is-card, is-callout, is-details.
+ * Compartido por: iswc-tag, iswc-badge, iswc-card, iswc-callout, iswc-details.
  *
  * Diferencia con intent.js: el intent define QUÉ color aplica; el tone
  * define CUÁNTO PESO VISUAL tiene ese color.

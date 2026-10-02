@@ -1,37 +1,33 @@
 import { adoptCss, defineElement } from '../../core/element.js';
 import { withStyleAttrs } from '../../core/attrs.js';
 
-import { escapeHtml, copyText } from '../_shared/dom-utils.js';
+import { copyText } from '../_shared/dom-utils.js';
 
 import {
   resolveRef,
   jsdelivrBase,
 } from '../_shared/cdn-ref.js';
 import { paint } from '../_shared/highlight-code.js';
-import {
-  SKILL_DOCS,
-  LLM_PROMPT_FALLBACK,
-  loadAgentPromptMd,
-  buildLlmPrompt,
-} from '../_shared/llm-agent-prompt.js';
+import { SKILL_DOCS } from '../_shared/llm-agent-prompt.js';
+import type { SkillDoc } from '../_shared/llm-agent-prompt.js';
 import '../media/icon.js';
-import '../helpers/md-editor.js';
+import '../actions/button.js';
 import '../code/code.js';
 
 /**
- * <is-cdn-snippet> — panel CDN copy-paste vía loader.min.js (sin npm/npx).
+ * <iswc-cdn-snippet> — panel CDN copy-paste vía loader.min.js (sin npm/npx).
  *
  * Un solo bloque:
  *   <script type="module" src="…/loader.min.js"></script>
  *   <script type="module"> … loadCSS* + load(…) …</script>
+ *
+ * Más fila Skill simple (enlaces + ver): sin visor MD embebido.
  *
  *   tag / category / base / title / dependencies / config
  *
  * La carga es siempre el tag: un componente por L.load. No hay radio de alcance.
  */
 (() => {
-  const LLM_PROMPT = buildLlmPrompt(SKILL_DOCS, { sha: 'main', base: LLM_PROMPT_FALLBACK });
-
   const TEMPLATE = document.createElement('template');
   TEMPLATE.innerHTML = /* html */ `
     <section class="cdn" aria-label="Consumo por CDN">
@@ -48,57 +44,42 @@ import '../code/code.js';
       <div class="cdn__row" data-kind="loader">
         <div class="cdn__row-head">
           <span class="cdn__label">Copy-paste · loader</span>
-          <button type="button" class="cdn__copy is-focus-ring" data-copy="loader"
+          <button type="button" class="cdn__copy iswc-focus-ring" data-copy="loader"
                   aria-label="Copiar snippet del loader">
-            <is-icon icon="mdi:content-copy" aria-hidden="true"></is-icon>
+            <iswc-icon icon="mdi:content-copy" aria-hidden="true"></iswc-icon>
             Copiar
           </button>
         </div>
-        <is-code class="cdn__pre code is-code-view" data-slot="loader" readonly compact wrap
-                 line-numbers="false" lang="html"></is-code>
+        <iswc-code class="cdn__pre code iswc-code-view" data-slot="loader" readonly compact wrap
+                 line-numbers="false" lang="html"></iswc-code>
       </div>
 
       <ol class="cdn__list" data-slot="deps-list">
         <li class="cdn__row cdn__row--dep" data-kind="dep" hidden>
           <div class="cdn__row-head">
             <span class="cdn__label cdn__dep-name">Dependencia · <code data-slot="dep-name"></code></span>
-            <button type="button" class="cdn__copy is-focus-ring" data-copy="dep"
+            <button type="button" class="cdn__copy iswc-focus-ring" data-copy="dep"
                     aria-label="Copiar enlaces de la dependencia">
-              <is-icon icon="mdi:content-copy" aria-hidden="true"></is-icon>
+              <iswc-icon icon="mdi:content-copy" aria-hidden="true"></iswc-icon>
               Copiar
             </button>
           </div>
-          <is-code class="cdn__pre code is-code-view" data-slot="dep-pre" readonly compact wrap
-                   line-numbers="false" lang="html"></is-code>
+          <iswc-code class="cdn__pre code iswc-code-view" data-slot="dep-pre" readonly compact wrap
+                   line-numbers="false" lang="html"></iswc-code>
           <p class="cdn__dep-note" data-slot="dep-note" hidden></p>
         </li>
       </ol>
 
-      <section class="cdn__agents" aria-label="Documentación para agentes">
+      <section class="cdn__agents" aria-label="Skill">
         <header class="cdn__head">
-          <h4 class="cdn__docs-title">Para agentes / LLM</h4>
-          <p class="cdn__hint">
-            Prompt canónico (CDN-only + tools). Vista previa con scroll;
-            clic para abrir y copiar. Solo lectura aquí.
-          </p>
+          <h4 class="cdn__docs-title">Skill</h4>
         </header>
-        <div class="cdn__row" data-kind="llm-prompt">
-          <div class="cdn__row-head">
-            <span class="cdn__label">Prompt · agents</span>
-            <button type="button" class="cdn__copy is-focus-ring" data-copy="llm-prompt"
-                    aria-label="Copiar prompt para agentes">
-              <is-icon icon="mdi:content-copy" aria-hidden="true"></is-icon>
-              Copiar
-            </button>
-          </div>
-          <is-md-editor data-slot="llm-prompt" readonly compact preview="split"
-                        aria-label="Prompt para agentes"></is-md-editor>
-        </div>
+        <div class="cdn__skill" data-slot="skills" role="list"></div>
       </section>
     </section>
   `;
 
-  class IsCdnSnippet extends withStyleAttrs(HTMLElement) {
+  class IswcCdnSnippet extends withStyleAttrs(HTMLElement) {
     static styleAttrs = {
       radius: '--iswc-cdn-snippet-radius',
       'border-color': '--iswc-cdn-snippet-border',
@@ -106,14 +87,14 @@ import '../code/code.js';
     };
 
     static get observedAttributes(): string[] {
-      return ['tag', 'category', 'base', 'title', 'dependencies', 'config', ...IsCdnSnippet.styleAttrNames];
+      return ['tag', 'category', 'base', 'title', 'dependencies', 'config', ...IswcCdnSnippet.styleAttrNames];
     }
 
     #mounted = false;
-    #urls: { loader: string; llmPrompt: string; loadArg: string } = { loader: '', llmPrompt: LLM_PROMPT, loadArg: '' };
+    #urls: { loader: string; loadArg: string } = { loader: '', loadArg: '' };
     #onHighlightReady = () => this.#render();
     #deps: { name: string; version: string; css: string; js: string; note: string }[] = [];
-    #docs: { label: string; url: string; }[] = [];
+    #docs: SkillDoc[] = [];
     #resolvedRef = 'main';
 
     constructor() {
@@ -122,24 +103,24 @@ import '../code/code.js';
       adoptCss(shadow, import.meta.url);
       shadow.appendChild(TEMPLATE.content.cloneNode(true));
       shadow.addEventListener('click', this.#onClick);
+      shadow.addEventListener('iswc-click', this.#onClick);
     }
 
     connectedCallback(): void {
       super.connectedCallback();
       this.#mounted = true;
       this.#render();
-      void this.#ensurePromptLoaded();
       resolveRef().then((ref) => {
         if (!this.#mounted) return;
         this.#resolvedRef = ref;
         this.#render();
       }).catch(() => { /* sin red: se queda en main */ });
-      document.addEventListener('is-theme-change', this.#onHighlightReady);
+      document.addEventListener('iswc-theme-change', this.#onHighlightReady);
     }
 
     disconnectedCallback(): void {
       this.#mounted = false;
-      document.removeEventListener('is-theme-change', this.#onHighlightReady);
+      document.removeEventListener('iswc-theme-change', this.#onHighlightReady);
     }
 
     attributeChangedCallback(name: string, oldVal: string | null, newVal: string | null): void {
@@ -162,23 +143,41 @@ import '../code/code.js';
       return tag;
     }
 
+    /** Huella estable del doc (ignora blob/raw/host). */
+    #docKey(url: string): string {
+      let u = String(url || '').split(/[?#]/)[0] || '';
+      u = u.replace(/^https?:\/\/raw\.githubusercontent\.com\/[^/]+\/[^/]+\/[^/]+\//i, '');
+      u = u.replace(/^https?:\/\/github\.com\/[^/]+\/[^/]+\/(?:blob|raw)\/[^/]+\//i, '');
+      u = u.replace(/^https?:\/\/cdn\.jsdelivr\.net\/gh\/[^/]+@[^/]+\//i, '');
+      u = u.replace(/^(?:dist\/cdn\/|src\/)/i, '');
+      return u.toLowerCase();
+    }
+
     #parseConfig() {
       let raw = this.getAttribute('config');
       if (!raw) {
         const script = this.querySelector<HTMLElement>('script[type="application/json"][slot="config"]');
         raw = script?.textContent || '';
       }
-      this.#docs = [...SKILL_DOCS];
+      const seen = new Set<string>();
+      this.#docs = [];
+      for (const d of SKILL_DOCS) {
+        if (!d?.url) continue;
+        const key = this.#docKey(d.url);
+        if (seen.has(key)) continue;
+        seen.add(key);
+        this.#docs.push({ label: d.label, url: d.url });
+      }
       if (!raw?.trim()) return null;
       try {
         const cfg = JSON.parse(raw) || {};
         if (Array.isArray(cfg.docs)) {
-          const seen = new Set(this.#docs.map((d) => d.url));
           for (const d of cfg.docs) {
             if (!d?.url) continue;
             const url = String(d.url);
-            if (seen.has(url)) continue;
-            seen.add(url);
+            const key = this.#docKey(url);
+            if (seen.has(key)) continue;
+            seen.add(key);
             this.#docs.push({ label: String(d.label || 'Documentación'), url });
           }
         }
@@ -188,19 +187,52 @@ import '../code/code.js';
       }
     }
 
-    #syncLlmPrompt() {
-      this.#urls.llmPrompt = buildLlmPrompt(this.#docs, {
-        sha: this.#resolvedRef || 'main',
-      });
-      const ed = this.shadowRoot?.querySelector<HTMLElement & { value: string }>('is-md-editor[data-slot="llm-prompt"]');
-      if (ed && ed.value !== this.#urls.llmPrompt) ed.value = this.#urls.llmPrompt;
-    }
+    /** Lista Skill tipo Paty: enlace + botón ojo (abre MD en pestaña). */
+    #renderSkills() {
+      const host = this.shadowRoot?.querySelector<HTMLElement>('[data-slot="skills"]');
+      if (!host) return;
+      host.replaceChildren();
+      const docs = this.#docs.filter((d) => d?.url);
+      if (!docs.length) {
+        host.hidden = true;
+        return;
+      }
+      host.hidden = false;
+      docs.forEach((doc, i) => {
+        if (i > 0) {
+          const sep = document.createElement('span');
+          sep.className = 'cdn__skill-sep';
+          sep.setAttribute('aria-hidden', 'true');
+          sep.textContent = '·';
+          host.append(sep);
+        }
+        const item = document.createElement('span');
+        item.className = 'cdn__skill-item';
+        item.setAttribute('role', 'listitem');
 
-    async #ensurePromptLoaded() {
-      await loadAgentPromptMd();
-      if (!this.#mounted) return;
-      this.#parseConfig();
-      this.#syncLlmPrompt();
+        const a = document.createElement('a');
+        a.className = 'cdn__skill-link';
+        a.href = doc.url;
+        a.target = '_blank';
+        a.rel = 'noopener noreferrer';
+        a.textContent = doc.label || 'Documentación';
+
+        const btn = document.createElement('iswc-button');
+        btn.setAttribute('variant', 'soft');
+        btn.setAttribute('color', 'neutral');
+        btn.setAttribute('size', 'sm');
+        btn.setAttribute('data-ver-md', '');
+        btn.setAttribute('data-href', doc.url);
+        btn.setAttribute('aria-label', `Ver ${doc.label || 'markdown'}`);
+        btn.setAttribute('title', 'Ver');
+        const ico = document.createElement('iswc-icon');
+        ico.setAttribute('icon', 'mdi:eye-outline');
+        ico.setAttribute('aria-hidden', 'true');
+        btn.append(ico);
+
+        item.append(a, btn);
+        host.append(item);
+      });
     }
 
     #parseDeps() {
@@ -273,7 +305,7 @@ import '../code/code.js';
     #setCode(el: HTMLElement | null, text: string) {
       if (!el) return;
       const src = text || '';
-      if (el.localName === 'is-code') {
+      if (el.localName === 'iswc-code') {
         const codeEl = el as HTMLElement & { value: string };
         if (codeEl.value !== src) codeEl.value = src;
         codeEl.dataset.cmSource = src;
@@ -291,7 +323,6 @@ import '../code/code.js';
       this.#urls = {
         loader: this.#buildLoaderSnippet(),
         loadArg,
-        llmPrompt: this.#urls.llmPrompt || LLM_PROMPT,
       };
 
       const titleEl = root.querySelector<HTMLElement>('.cdn__title');
@@ -302,11 +333,7 @@ import '../code/code.js';
 
       const cfg = this.#parseConfig();
       if (cfg?.title && titleEl) titleEl.textContent = cfg.title;
-      this.#syncLlmPrompt();
-      const llmPromptEd = root.querySelector<HTMLElement & { value: string }>('[data-slot="llm-prompt"]');
-      if (llmPromptEd && llmPromptEd.tagName === 'IS-MD-EDITOR') {
-        llmPromptEd.value = this.#urls.llmPrompt;
-      }
+      this.#renderSkills();
 
       this.#parseDeps();
       this.#renderDeps();
@@ -314,7 +341,7 @@ import '../code/code.js';
     }
 
     #highlight() {
-      for (const ed of this.shadowRoot!.querySelectorAll<HTMLElement & { value: string }>('is-code.cdn__pre')) {
+      for (const ed of this.shadowRoot!.querySelectorAll<HTMLElement & { value: string }>('iswc-code.cdn__pre')) {
         if (!(ed.value || '').trim()) continue;
         ed.dataset.cmMode = 'htmlmixed';
         delete ed.dataset.cm;
@@ -324,25 +351,32 @@ import '../code/code.js';
 
     #onClick = async (e: Event) => {
       const target = e.target as Element | null;
+      const ver = target?.closest('[data-ver-md]') as HTMLElement | null;
+      if (ver) {
+        e.preventDefault();
+        e.stopPropagation();
+        const href = ver.getAttribute('data-href') || '';
+        if (href) window.open(href, '_blank', 'noopener');
+        return;
+      }
       const btn = target?.closest('.cdn__copy') as HTMLElement | null;
       if (!btn) return;
       e.preventDefault();
       const kind = btn.dataset.copy;
       let text = '';
       if (kind === 'dep') text = btn.dataset.copyValue || '';
-      else if (kind === 'llm-prompt') text = this.#urls.llmPrompt || LLM_PROMPT;
       else if (kind === 'loader') text = this.#urls.loader || this.#buildLoaderSnippet();
       if (!text) return;
       await copyText(text);
       const original = btn.innerHTML;
-      btn.innerHTML = '<is-icon icon="mdi:check" aria-hidden="true"></is-icon> Copiado';
-      btn.classList.add('is-copied');
+      btn.innerHTML = '<iswc-icon icon="mdi:check" aria-hidden="true"></iswc-icon> Copiado';
+      btn.classList.add('iswc-copied');
       setTimeout(() => {
         btn.innerHTML = original;
-        btn.classList.remove('is-copied');
+        btn.classList.remove('iswc-copied');
       }, 1200);
     };
   }
 
-  defineElement('is-cdn-snippet', IsCdnSnippet, 'IsCdnSnippet');
+  defineElement('iswc-cdn-snippet', IswcCdnSnippet, 'IswcCdnSnippet');
 })();

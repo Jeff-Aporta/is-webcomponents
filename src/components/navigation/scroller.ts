@@ -2,7 +2,7 @@ import { adoptCss, defineElement, emit } from '../../core/element.js';
 import { ElementBase } from '../../core/element-base.js';
 
 /**
- * <is-scroller> — Web Component (vanilla, zero dependencies).
+ * <iswc-scroller> — Web Component (vanilla, zero dependencies).
  *
  * Añade scroll horizontal con botones cuando el contenido del slot desborda.
  *
@@ -21,10 +21,10 @@ import { ElementBase } from '../../core/element-base.js';
  *   ::part(scroll-button)   botones prev/next.
  *
  * Eventos:
- *   is-scroll-start    detail: { direction: -1 }
- *   is-scroll-end      detail: { direction: +1 }
- *   is-scroll-overflow detail: { overflowing: boolean }
- *   is-scroll-position detail: { scrollLeft, scrollTop }
+ *   iswc-scroll-start    detail: { direction: -1 }
+ *   iswc-scroll-end      detail: { direction: +1 }
+ *   iswc-scroll-overflow detail: { overflowing: boolean }
+ *   iswc-scroll-position detail: { scrollLeft, scrollTop }
  */
 (() => {
   const TEMPLATE = document.createElement('template');
@@ -32,7 +32,7 @@ import { ElementBase } from '../../core/element-base.js';
     <div class="scroller" part="base" data-orientation="horizontal">
       <button type="button" class="scroll-btn scroll-start" part="scroll-button" tabindex="-1" aria-label="Anterior">
         <slot name="scroll-button-start">
-          <is-icon icon="mdi:chevron-left" aria-hidden="true"></is-icon>
+          <iswc-icon icon="mdi:chevron-left" aria-hidden="true"></iswc-icon>
         </slot>
       </button>
       <div class="viewport" part="viewport" role="region" aria-label="Área desplazable" tabindex="0">
@@ -40,7 +40,7 @@ import { ElementBase } from '../../core/element-base.js';
       </div>
       <button type="button" class="scroll-btn scroll-end" part="scroll-button" tabindex="-1" aria-label="Siguiente">
         <slot name="scroll-button-end">
-          <is-icon icon="mdi:chevron-right" aria-hidden="true"></is-icon>
+          <iswc-icon icon="mdi:chevron-right" aria-hidden="true"></iswc-icon>
         </slot>
       </button>
     </div>
@@ -48,7 +48,7 @@ import { ElementBase } from '../../core/element-base.js';
 
   const OBSERVED = ['orientation', 'without-scroll-buttons', 'label'];
 
-  class IsScroller extends ElementBase {
+  class IswcScroller extends ElementBase {
     /** Personalización por atributo (ver `core/attrs.ts`). */
     static styleAttrs = {
     'button-size': '--iswc-scroller-button-size',
@@ -152,7 +152,7 @@ import { ElementBase } from '../../core/element-base.js';
       const dx = horiz ? direction * 120 : 0;
       const dy = vert ? direction * 120 : 0;
       this.#viewport.scrollBy({ left: dx, top: dy, behavior: 'smooth' });
-      emit(this, direction < 0 ? 'is-scroll-start' : 'is-scroll-end', { direction });
+      emit(this, direction < 0 ? 'iswc-scroll-start' : 'iswc-scroll-end', { direction });
     }
 
     #syncOverflow = () => {
@@ -171,10 +171,10 @@ import { ElementBase } from '../../core/element-base.js';
       const overflow = (horiz && sm > 1) || (vert && sm2 > 1);
       this.#btnStart.hidden = !overflow;
       this.#btnEnd.hidden = !overflow;
-      emit(this, 'is-scroll-overflow', { overflowing: overflow });
-      emit(this, 'is-scroll-position', { scrollLeft: sl, scrollTop: st });
+      emit(this, 'iswc-scroll-overflow', { overflowing: overflow });
+      emit(this, 'iswc-scroll-position', { scrollLeft: sl, scrollTop: st });
     };
   }
 
-  defineElement('is-scroller', IsScroller, 'IsScroller');
+  defineElement('iswc-scroller', IswcScroller, 'IswcScroller');
 })();

@@ -446,7 +446,7 @@ class TARowBase extends TARoles {
     const keep = this._hoveredFlatPath;
     const root = this._domRoot;
     if (!root) return;
-    const fcList = root.querySelectorAll("is-float-card");
+    const fcList = root.querySelectorAll("iswc-float-card");
     fcList.forEach((fc: Element) => {
       const fcEl = fc as HTMLElement & { locked?: boolean; open?: boolean };
       if (fcEl.locked) return;

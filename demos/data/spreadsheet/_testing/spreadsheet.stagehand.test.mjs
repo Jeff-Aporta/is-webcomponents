@@ -19,7 +19,7 @@ async function checkDeterministic(page, demo) {
   await page.waitForTimeout(200);
 
   const data = await page.evaluate(() => {
-    const sheets = [...document.querySelectorAll('main is-spreadsheet')];
+    const sheets = [...document.querySelectorAll('main iswc-spreadsheet')];
     return sheets.map((s, idx) => {
       const sr = s.shadowRoot;
       const table = sr.querySelector('table.grid');
@@ -114,7 +114,7 @@ for (const demo of DEMOS) {
 // Rama opt-in con Stagehand LLM. Sólo corre si STAGEHAND=1 + credenciales.
 // ─────────────────────────────────────────────────────────────────────────
 const VISUAL_RUBRIC = `
-Evalúa la calidad visual de la hoja de cálculo <is-spreadsheet> que aparece en el screenshot.
+Evalúa la calidad visual de la hoja de cálculo <iswc-spreadsheet> que aparece en el screenshot.
 
 Checklist (todas deben cumplirse; marca cada una PASS o FAIL):
 

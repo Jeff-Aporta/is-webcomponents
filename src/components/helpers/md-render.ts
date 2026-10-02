@@ -7,13 +7,27 @@ import {
   editorHtmlToBody,
   surfaceHasRawVarTokens,
 } from '../_shared/prompt-md.js';
+import { hydrateMdEmbeds } from './md-hydrate.js';
 
 /**
- * <is-md-render> — render inline de markdown/HTML + chips {{var}}.
+ * <iswc-md-render> — render inline de markdown/HTML + chips {{var}}.
  * Sin toolbar, diálogo ni API. Con `can-edit` edita in-place (contenteditable).
+ * Tras pintar: lazy-load de iswc-* (código, diagramas, HTML embebido) vía loader.
+ *
+ * Host: display block + width 100% (también en light DOM; style="" lo pisa).
  */
 
 (() => {
+  // CE sin estilo de página queda inline (UA). :host cubre tras upgrade; esta
+  // hoja fija el default antes y gana sobre el UA. style="" del autor pisa.
+  const HOST_STYLE_ID = 'iswc-md-render-host';
+  if (typeof document !== 'undefined' && !document.getElementById(HOST_STYLE_ID)) {
+    const style = document.createElement('style');
+    style.id = HOST_STYLE_ID;
+    style.textContent =
+      'iswc-md-render{display:block;width:100%;max-width:100%;min-width:0;box-sizing:border-box}';
+    (document.head || document.documentElement).appendChild(style);
+  }
   const TEMPLATE = document.createElement('template');
   TEMPLATE.innerHTML = /* html */ `
     <div class="body prompt-md-preview" part="body" spellcheck="false"></div>
@@ -74,12 +88,13 @@ import {
     requestAnimationFrame(() => setCaretOffset(root, offset));
   }
 
-  class IsMdRender extends ElementBase {
+  class IswcMdRender extends ElementBase {
     static get observedAttributes(): string[] { return OBSERVED; }
 
     #body!: HTMLElement;
     #empty!: HTMLElement;
     #dirty = false;
+    #hydrateGen = 0;
 
     constructor() {
       super();
@@ -163,8 +178,23 @@ import {
       const hasContent = !!html;
       this.#body.hidden = !hasContent;
       this.#empty.hidden = hasContent;
-      if (hasContent) this.#body.innerHTML = html;
-      else this.#empty.textContent = this.placeholder || 'Sin contenido';
+      if (hasContent) {
+        this.#body.innerHTML = html;
+        void this.#hydrate();
+      } else {
+        this.#empty.textContent = this.placeholder || 'Sin contenido';
+      }
+    }
+
+    /** Solo carga is-* que el MD pide; el loader no duplica. */
+    async #hydrate(): Promise<void> {
+      const gen = ++this.#hydrateGen;
+      try {
+        await hydrateMdEmbeds(this.#body);
+      } catch (err) {
+        console.warn('[iswc-md-render] hydrate', err);
+      }
+      if (gen !== this.#hydrateGen) return;
     }
 
     #onInput() {
@@ -176,7 +206,7 @@ import {
         this.#body.innerHTML = bodyToEditorHtml(next);
         restoreCaret(this.#body, caret);
       }
-      emit(this, 'is-input', { value: next });
+      emit(this, 'iswc-input', { value: next });
     }
 
     #onBlur() {
@@ -185,7 +215,7 @@ import {
       this.#dirty = false;
       if (next === this.value) return;
       setOptionalAttr(this, 'value', next);
-      emit(this, 'is-change', { value: next });
+      emit(this, 'iswc-change', { value: next });
     }
 
     #onKeyDown(e: KeyboardEvent): void {
@@ -206,10 +236,10 @@ import {
       const next = editorHtmlToBody(this.#body);
       this.#dirty = false;
       setOptionalAttr(this, 'value', next);
-      emit(this, 'is-change', { value: next });
-      emit(this, 'is-persist', { value: next });
+      emit(this, 'iswc-change', { value: next });
+      emit(this, 'iswc-persist', { value: next });
     }
   }
 
-  defineElement('is-md-render', IsMdRender, 'IsMdRender');
+  defineElement('iswc-md-render', IswcMdRender, 'IswcMdRender');
 })();

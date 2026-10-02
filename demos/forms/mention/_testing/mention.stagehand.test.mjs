@@ -24,7 +24,7 @@ async function checkDeterministic(page) {
 
   // (1) y (2): layout + roles
   const initial = await page.evaluate(() => {
-    const ms = [...document.querySelectorAll('is-mention')];
+    const ms = [...document.querySelectorAll('iswc-mention')];
     return ms.map((m) => {
       const sr = m.shadowRoot;
       const rect = m.getBoundingClientRect();
@@ -53,7 +53,7 @@ async function checkDeterministic(page) {
 
   // (3) y (4): abrir el popup del primero
   await page.evaluate(() => {
-    const m = document.querySelector('#sec-basico is-mention');
+    const m = document.querySelector('#sec-basico iswc-mention');
     const sr = m.shadowRoot;
     const input = sr.querySelector('input.input');
     input.focus();
@@ -62,7 +62,7 @@ async function checkDeterministic(page) {
   });
   await page.waitForTimeout(100);
   const open = await page.evaluate(() => {
-    const m = document.querySelector('#sec-basico is-mention');
+    const m = document.querySelector('#sec-basico iswc-mention');
     const sr = m.shadowRoot;
     const popup = sr.querySelector('.popup');
     const popupRect = popup.getBoundingClientRect();
@@ -72,7 +72,7 @@ async function checkDeterministic(page) {
       popupRect: { x: popupRect.x, y: popupRect.y, w: popupRect.width, h: popupRect.height },
       optCount: opts.length,
       allHaveRole: opts.every((o) => o.getAttribute('role') === 'option'),
-      activeCount: opts.filter((o) => o.classList.contains('is-active')).length,
+      activeCount: opts.filter((o) => o.classList.contains('iswc-active')).length,
       vp: { w: window.innerWidth, h: window.innerHeight },
     };
   });
@@ -92,13 +92,13 @@ async function checkDeterministic(page) {
 
   // (5) seleccionar primera opción
   await page.evaluate(() => {
-    const m = document.querySelector('#sec-basico is-mention');
+    const m = document.querySelector('#sec-basico iswc-mention');
     const sr = m.shadowRoot;
     sr.querySelector('.opt').click();
   });
   await page.waitForTimeout(50);
   const after = await page.evaluate(() => {
-    const m = document.querySelector('#sec-basico is-mention');
+    const m = document.querySelector('#sec-basico iswc-mention');
     const sr = m.shadowRoot;
     return {
       value: m.value,
@@ -110,7 +110,7 @@ async function checkDeterministic(page) {
 
   // (6) disabled
   const dis = await page.evaluate(() => {
-    const m = document.querySelector('#sec-disabled is-mention');
+    const m = document.querySelector('#sec-disabled iswc-mention');
     const sr = m.shadowRoot;
     const input = sr.querySelector('input.input');
     return { disabled: input.disabled, popupHidden: sr.querySelector('.popup').hidden };
@@ -167,7 +167,7 @@ async function runStagehandRubric() {
     await page.goto(DEMO.url, { waitUntil: 'domcontentloaded' });
     await waitReady(page, DEMO.readyAttr);
     await page.evaluate(() => {
-      const m = document.querySelector('#sec-basico is-mention');
+      const m = document.querySelector('#sec-basico iswc-mention');
       const sr = m.shadowRoot;
       const input = sr.querySelector('input.input');
       input.focus();

@@ -1,7 +1,7 @@
 // marks-waterfall.stagehand.test.mjs — visual rubric determinista (Playwright puro).
 // Cero LLM, cero API keys — solo geometría y atributos del SVG. marks-waterfall
 // es un utility bundle: waterfallBars (pura) + drawWaterfallMarks (ctx). El
-// demo pinta <is-waterfall-chart> en vivo y además muestra el JSON de la
+// demo pinta <iswc-waterfall-chart> en vivo y además muestra el JSON de la
 // función pura y el listado de exports en dos <pre>.
 import assert from 'node:assert/strict';
 import { BASE_URL, newPage, close, waitReady, screenshot, report, maybeStagehand } from '../../_global/lib/harness.mjs';
@@ -18,7 +18,7 @@ async function checkDeterministic(page) {
   const data = await page.evaluate(() => {
     const pres = [...document.querySelectorAll('pre')];
     const presText = pres.map((p) => (p.textContent ?? '').trim());
-    const wf = document.querySelector('is-waterfall-chart');
+    const wf = document.querySelector('iswc-waterfall-chart');
     const svg = wf?.shadowRoot?.querySelector('svg');
     const svgRect = svg?.getBoundingClientRect();
     const marks = [...(wf?.shadowRoot?.querySelectorAll('.mark') ?? [])].map((m) => {
@@ -59,7 +59,7 @@ async function checkDeterministic(page) {
   assert.ok(barsPre.includes('"down"'), `<pre id="bars"> debe contener el kind "down"`);
 
   // (2) El chart vivo debe estar montado y dimensionado.
-  assert.ok(data.svgRect, 'is-waterfall-chart debe haber montado SVG');
+  assert.ok(data.svgRect, 'iswc-waterfall-chart debe haber montado SVG');
   assert.ok(data.svgRect.w > 100 && data.svgRect.h > 100, `SVG debe dimensionarse (got ${data.svgRect.w}x${data.svgRect.h})`);
 
   // (3) Marcas válidas — todas con d no vacío.

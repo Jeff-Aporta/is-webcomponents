@@ -10,24 +10,24 @@ const URL = `${BASE_URL}/demos/forms/doc-editor/doc-editor.html`;
 const tests = [];
 
 tests.push({
-  name: 'smoke: <is-doc-editor> queda definido y renderiza los bloques iniciales',
+  name: 'smoke: <iswc-doc-editor> queda definido y renderiza los bloques iniciales',
   run: async (page) => {
     await page.goto(URL, { waitUntil: 'domcontentloaded' });
     await waitReady(page, 'data-doc-editor-ready');
     const data = await page.evaluate(() => {
-      const docs = [...document.querySelectorAll('main is-doc-editor')];
+      const docs = [...document.querySelectorAll('main iswc-doc-editor')];
       const d1 = docs[0];
       const shadow = d1.shadowRoot;
       const blocks = [...shadow.querySelectorAll('.block')];
       return {
-        defined: !!customElements.get('is-doc-editor'),
+        defined: !!customElements.get('iswc-doc-editor'),
         count: docs.length,
         blockCount: blocks.length,
         types: blocks.map((b) => b.className.match(/block-(\S+)/)?.[1]),
         blockNames: docs.map((d) => d.getAttribute('name')),
       };
     });
-    assert.equal(data.defined, true, 'is-doc-editor debe estar definido');
+    assert.equal(data.defined, true, 'iswc-doc-editor debe estar definido');
     assert.ok(data.count >= 3, `esperaba >=3 doc-editors, hay ${data.count}`);
     assert.ok(data.blockCount >= 7, `el primer doc debe tener >=7 bloques, tiene ${data.blockCount}`);
     assert.ok(data.types.includes('heading-1'), 'debe haber un bloque heading-1');
@@ -46,7 +46,7 @@ tests.push({
     await page.goto(URL, { waitUntil: 'domcontentloaded' });
     await waitReady(page, 'data-doc-editor-ready');
     const data = await page.evaluate(() => {
-      const d = document.querySelector('is-doc-editor[name="meeting"]');
+      const d = document.querySelector('iswc-doc-editor[name="meeting"]');
       const valueStr = d.value;
       let parsed = null;
       try { parsed = JSON.parse(valueStr); } catch {}
@@ -64,15 +64,15 @@ tests.push({
 });
 
 tests.push({
-  name: 'funcional: addBlock() añade un nuevo bloque y dispara is-change',
+  name: 'funcional: addBlock() añade un nuevo bloque y dispara iswc-change',
   run: async (page) => {
     await page.goto(URL, { waitUntil: 'domcontentloaded' });
     await waitReady(page, 'data-doc-editor-ready');
     const data = await page.evaluate(async () => {
-      const d = document.querySelector('is-doc-editor[name="scratch"]');
+      const d = document.querySelector('iswc-doc-editor[name="scratch"]');
       const before = d.blocks.length;
       const changePromise = new Promise((resolve) => {
-        d.addEventListener('is-change', (e) => resolve(e.detail?.blocks?.length), { once: true });
+        d.addEventListener('iswc-change', (e) => resolve(e.detail?.blocks?.length), { once: true });
       });
       d.addBlock('paragraph');
       const afterRender = d.blocks.length;
@@ -84,7 +84,7 @@ tests.push({
     });
     assert.equal(data.before, 1, 'el doc vacío debe tener 1 bloque por defecto');
     assert.equal(data.afterRender, 2, 'addBlock debe incrementar a 2 bloques');
-    assert.ok(data.changed >= 2, `is-change debe emitirse con blocks.length >= 2, obtuve ${data.changed}`);
+    assert.ok(data.changed >= 2, `iswc-change debe emitirse con blocks.length >= 2, obtuve ${data.changed}`);
   },
 });
 
@@ -94,7 +94,7 @@ tests.push({
     await page.goto(URL, { waitUntil: 'domcontentloaded' });
     await waitReady(page, 'data-doc-editor-ready');
     const data = await page.evaluate(() => {
-      const d = document.querySelector('is-doc-editor[name="meeting"]');
+      const d = document.querySelector('iswc-doc-editor[name="meeting"]');
       const todoBlock = d.blocks.find((b) => b.type === 'todo' && b.text.startsWith('Enviar'));
       const id = todoBlock.id;
       d.updateBlock(id, { text: 'Enviar el informe mensual', checked: true });
@@ -116,7 +116,7 @@ tests.push({
     await page.goto(URL, { waitUntil: 'domcontentloaded' });
     await waitReady(page, 'data-doc-editor-ready');
     const data = await page.evaluate(() => {
-      const d = document.querySelector('is-doc-editor[name="meeting"]');
+      const d = document.querySelector('iswc-doc-editor[name="meeting"]');
       const before = d.blocks.length;
       const target = d.blocks.find((b) => b.type === 'code');
       const id = target.id;
@@ -138,7 +138,7 @@ tests.push({
     await page.goto(URL, { waitUntil: 'domcontentloaded' });
     await waitReady(page, 'data-doc-editor-ready');
     const data = await page.evaluate(async () => {
-      const d = document.querySelector('is-doc-editor[name="scratch"]');
+      const d = document.querySelector('iswc-doc-editor[name="scratch"]');
       // Simular pulsar "/" en el primer bloque (vacío)
       const first = d.shadowRoot.querySelector('.block [contenteditable="true"]');
       first.focus();
@@ -173,7 +173,7 @@ tests.push({
     await page.goto(URL, { waitUntil: 'domcontentloaded' });
     await waitReady(page, 'data-doc-editor-ready');
     const data = await page.evaluate(() => {
-      const d = document.querySelector('is-doc-editor[name="inline-json"]');
+      const d = document.querySelector('iswc-doc-editor[name="inline-json"]');
       const blocks = d.blocks;
       return {
         count: blocks.length,
@@ -195,7 +195,7 @@ tests.push({
     await page.goto(URL, { waitUntil: 'domcontentloaded' });
     await waitReady(page, 'data-doc-editor-ready');
     const data = await page.evaluate(() => {
-      const d = document.querySelector('is-doc-editor[name="meeting"]');
+      const d = document.querySelector('iswc-doc-editor[name="meeting"]');
       const editables = [...d.shadowRoot.querySelectorAll('[contenteditable="true"]')];
       return {
         count: editables.length,
@@ -217,7 +217,7 @@ tests.push({
     await waitReady(page, 'data-doc-editor-ready');
     const data = await page.evaluate(() => {
       // Creamos un doc-editor aislado sin value ni script
-      const d = document.createElement('is-doc-editor');
+      const d = document.createElement('iswc-doc-editor');
       document.body.appendChild(d);
       // forzar render
       const blocks = d.blocks;
@@ -238,13 +238,13 @@ tests.push({
     await page.goto(URL, { waitUntil: 'domcontentloaded' });
     await waitReady(page, 'data-doc-editor-ready');
     const data = await page.evaluate(() => {
-      const d = document.createElement('is-doc-editor');
+      const d = document.createElement('iswc-doc-editor');
       document.body.appendChild(d);
       // Asignar value inválido
       d.setAttribute('value', '{esto no es json válido');
       const after = {
         count: d.blocks.length,
-        defined: !!customElements.get('is-doc-editor'),
+        defined: !!customElements.get('iswc-doc-editor'),
         type: d.blocks[0]?.type,
       };
       d.remove();

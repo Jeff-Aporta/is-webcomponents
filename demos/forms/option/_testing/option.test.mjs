@@ -9,19 +9,19 @@ const URL = `${BASE_URL}/demos/forms/option/option.html`;
 const tests = [];
 
 tests.push({
-  name: 'smoke: <is-option> definido, shadow DOM con role=option',
+  name: 'smoke: <iswc-option> definido, shadow DOM con role=option',
   run: async (page) => {
     await page.goto(URL, { waitUntil: 'domcontentloaded' });
     await waitReady(page, 'data-option-ready');
     const data = await page.evaluate(() => {
-      const o = document.querySelector('is-option[value="es"]');
+      const o = document.querySelector('iswc-option[value="es"]');
       const sr = o.shadowRoot;
       const root = sr.querySelector('[role="option"]');
       const label = sr.querySelector('.label');
       const desc = sr.querySelector('.description');
       const start = sr.querySelector('.start');
       return {
-        defined: !!customElements.get('is-option'),
+        defined: !!customElements.get('iswc-option'),
         hasShadow: !!sr,
         rootRole: root?.getAttribute('role'),
         ariaSelected: root?.getAttribute('aria-selected'),
@@ -35,7 +35,7 @@ tests.push({
           .map((n) => n.textContent || '').join('').trim(),
       };
     });
-    assert.equal(data.defined, true, 'is-option debe estar definido');
+    assert.equal(data.defined, true, 'iswc-option debe estar definido');
     assert.equal(data.hasShadow, true, 'debe tener shadow DOM');
     assert.equal(data.rootRole, 'option', 'el root interno debe tener role=option');
     assert.equal(data.ariaSelected, 'true', 'la opción "es" debe estar seleccionada (selected)');
@@ -54,7 +54,7 @@ tests.push({
     await page.goto(URL, { waitUntil: 'domcontentloaded' });
     await waitReady(page, 'data-option-ready');
     const data = await page.evaluate(() => {
-      const opts = [...document.querySelectorAll('is-option')];
+      const opts = [...document.querySelectorAll('iswc-option')];
       const mx = opts.find((o) => o.value === 'mx');
       mx.selected = true;
       const root = mx.shadowRoot.querySelector('[role="option"]');
@@ -76,7 +76,7 @@ tests.push({
     await page.goto(URL, { waitUntil: 'domcontentloaded' });
     await waitReady(page, 'data-option-ready');
     const data = await page.evaluate(() => {
-      const o = [...document.querySelectorAll('is-option[disabled]')][0];
+      const o = [...document.querySelectorAll('iswc-option[disabled]')][0];
       const root = o.shadowRoot.querySelector('[role="option"]');
       return {
         ariaDisabled: root.getAttribute('aria-disabled'),
@@ -94,7 +94,7 @@ tests.push({
     await page.goto(URL, { waitUntil: 'domcontentloaded' });
     await waitReady(page, 'data-option-ready');
     const data = await page.evaluate(() => {
-      const opts = [...document.querySelectorAll('is-option[group]')];
+      const opts = [...document.querySelectorAll('iswc-option[group]')];
       return opts.map((o) => ({ value: o.value, group: o.group }));
     });
     assert.ok(data.length >= 2, 'debe haber opciones con group');
@@ -109,7 +109,7 @@ tests.push({
     await page.goto(URL, { waitUntil: 'domcontentloaded' });
     await waitReady(page, 'data-option-ready');
     const data = await page.evaluate(async () => {
-      const opts = [...document.querySelectorAll('#list is-option')];
+      const opts = [...document.querySelectorAll('#list iswc-option')];
       const mx = opts.find((o) => o.value === 'mx');
       const ar = opts.find((o) => o.value === 'ar');
       // Click en mx.
@@ -133,7 +133,7 @@ tests.push({
     await page.goto(URL, { waitUntil: 'domcontentloaded' });
     await waitReady(page, 'data-option-ready');
     const data = await page.evaluate(() => {
-      const opts = [...document.querySelectorAll('is-option')];
+      const opts = [...document.querySelectorAll('iswc-option')];
       return opts.slice(0, 4).map((o) => ({
         value: o.value,
         label: o.label,

@@ -5,12 +5,12 @@
 // según WAI-ARIA APG. Si falla, documenta un bug real del componente.
 //
 // Bugs detectados durante F0:
-//   - <is-tab-group> no setea role="tablist" en el contenedor de tabs.
-//   - <is-tab> no setea aria-controls apuntando al panel.
-//   - <is-tab-panel> no setea aria-labelledby apuntando al tab.
-//   - <is-tab-group> no hace scrollIntoView del tab activado por teclado.
-//   - <is-toast> con color="danger" no eleva a role="alert" + aria-live="assertive".
-//   - <is-progress-bar> no desactiva la animación indeterminate en prefers-reduced-motion.
+//   - <iswc-tab-group> no setea role="tablist" en el contenedor de tabs.
+//   - <iswc-tab> no setea aria-controls apuntando al panel.
+//   - <iswc-tab-panel> no setea aria-labelledby apuntando al tab.
+//   - <iswc-tab-group> no hace scrollIntoView del tab activado por teclado.
+//   - <iswc-toast> con color="danger" no eleva a role="alert" + aria-live="assertive".
+//   - <iswc-progress-bar> no desactiva la animación indeterminate en prefers-reduced-motion.
 //
 // Estos tests son el "contrato a11y" del proyecto: si se rompe uno, hay regresión.
 // Hasta que se arreglen, son la documentación viva del trabajo pendiente.
@@ -46,7 +46,7 @@ function pagina(): Page {
 }
 
 // ──────────────────────────────────────────────────────────────────
-// <is-tab-group>: role="tablist" + aria-controls + aria-labelledby
+// <iswc-tab-group>: role="tablist" + aria-controls + aria-labelledby
 // ──────────────────────────────────────────────────────────────────
 
 testE2E(
@@ -55,9 +55,9 @@ testE2E(
   async (t) => {
     if (!DISPONIBLE) return t.skip('faltan variables E2E');
     const page = pagina();
-    await abrirGaleria(page, 'is-tab-group', { ms: 4000 });
+    await abrirGaleria(page, 'iswc-tab-group', { ms: 4000 });
     const r = await page.evaluate(() => {
-      const groups = [...document.querySelectorAll<HTMLElement>('#previewHost is-tab-group')];
+      const groups = [...document.querySelectorAll<HTMLElement>('#previewHost iswc-tab-group')];
       const issues: string[] = [];
       for (const g of groups) {
         const tabs = g.shadowRoot?.querySelector('.tabs') as HTMLElement | null;
@@ -75,17 +75,17 @@ testE2E(
 );
 
 testE2E(
-  'tab-group: <is-tab> expone aria-controls apuntando al panel correspondiente',
+  'tab-group: <iswc-tab> expone aria-controls apuntando al panel correspondiente',
   { timeout: 60000 },
   async (t) => {
     if (!DISPONIBLE) return t.skip('faltan variables E2E');
     const page = pagina();
-    await abrirGaleria(page, 'is-tab-group', { ms: 4000 });
+    await abrirGaleria(page, 'iswc-tab-group', { ms: 4000 });
     const r = await page.evaluate(() => {
-      const groups = [...document.querySelectorAll<HTMLElement>('#previewHost is-tab-group')];
+      const groups = [...document.querySelectorAll<HTMLElement>('#previewHost iswc-tab-group')];
       const issues: string[] = [];
       for (const g of groups) {
-        const tabs = [...g.querySelectorAll<HTMLElement>('is-tab')];
+        const tabs = [...g.querySelectorAll<HTMLElement>('iswc-tab')];
         for (const t of tabs) {
           const panelName = t.getAttribute('panel');
           if (!panelName) continue;
@@ -102,17 +102,17 @@ testE2E(
 );
 
 testE2E(
-  'tab-group: <is-tab-panel> expone aria-labelledby apuntando al tab',
+  'tab-group: <iswc-tab-panel> expone aria-labelledby apuntando al tab',
   { timeout: 60000 },
   async (t) => {
     if (!DISPONIBLE) return t.skip('faltan variables E2E');
     const page = pagina();
-    await abrirGaleria(page, 'is-tab-group', { ms: 4000 });
+    await abrirGaleria(page, 'iswc-tab-group', { ms: 4000 });
     const r = await page.evaluate(() => {
-      const groups = [...document.querySelectorAll<HTMLElement>('#previewHost is-tab-group')];
+      const groups = [...document.querySelectorAll<HTMLElement>('#previewHost iswc-tab-group')];
       const issues: string[] = [];
       for (const g of groups) {
-        const panels = [...g.querySelectorAll<HTMLElement>('is-tab-panel')];
+        const panels = [...g.querySelectorAll<HTMLElement>('iswc-tab-panel')];
         for (const p of panels) {
           const al = p.getAttribute('aria-labelledby');
           if (!al) {
@@ -127,7 +127,7 @@ testE2E(
 );
 
 // ──────────────────────────────────────────────────────────────────
-// <is-tab-group>: scrollIntoView al activar por teclado
+// <iswc-tab-group>: scrollIntoView al activar por teclado
 // ──────────────────────────────────────────────────────────────────
 
 testE2E(
@@ -136,10 +136,10 @@ testE2E(
   async (t) => {
     if (!DISPONIBLE) return t.skip('faltan variables E2E');
     const page = pagina();
-    await abrirGaleria(page, 'is-tab-group', { ms: 4000 });
+    await abrirGaleria(page, 'iswc-tab-group', { ms: 4000 });
     // Si hay tabs con overflow horizontal, tab → flecha → tab debería hacer scroll.
     const r = await page.evaluate(() => {
-      const g = document.querySelector<HTMLElement>('#previewHost is-tab-group[without-scroll-controls="false"], #previewHost is-tab-group:not([without-scroll-controls])');
+      const g = document.querySelector<HTMLElement>('#previewHost iswc-tab-group[without-scroll-controls="false"], #previewHost iswc-tab-group:not([without-scroll-controls])');
       if (!g) return { hasOverflow: false };
       const tabs = g.shadowRoot?.querySelector('.tabs') as HTMLElement | null;
       return {
@@ -156,14 +156,14 @@ testE2E(
     }
     // Tab al final y verificar que scrollLeft > 0 (scrollIntoView hizo efecto).
     const initialScroll = await page.evaluate(() => {
-      const g = document.querySelector<HTMLElement>('#previewHost is-tab-group');
+      const g = document.querySelector<HTMLElement>('#previewHost iswc-tab-group');
       const tabs = g?.shadowRoot?.querySelector('.tabs') as HTMLElement | null;
       return tabs?.scrollLeft ?? 0;
     });
     await page.keyboard.press('End');
     await esperarMs(400);
     const afterScroll = await page.evaluate(() => {
-      const g = document.querySelector<HTMLElement>('#previewHost is-tab-group');
+      const g = document.querySelector<HTMLElement>('#previewHost iswc-tab-group');
       const tabs = g?.shadowRoot?.querySelector('.tabs') as HTMLElement | null;
       return tabs?.scrollLeft ?? 0;
     });
@@ -175,7 +175,7 @@ testE2E(
 );
 
 // ──────────────────────────────────────────────────────────────────
-// <is-toast>: role="alert" + aria-live="assertive" para danger
+// <iswc-toast>: role="alert" + aria-live="assertive" para danger
 // ──────────────────────────────────────────────────────────────────
 
 testE2E(
@@ -184,23 +184,23 @@ testE2E(
   async (t) => {
     if (!DISPONIBLE) return t.skip('faltan variables E2E');
     const page = pagina();
-    await abrirGaleria(page, 'is-toast', { ms: 4000 });
-    // Disparar un toast de tipo danger (la API estática es `IsToast.danger()` o `error()`).
+    await abrirGaleria(page, 'iswc-toast', { ms: 4000 });
+    // Disparar un toast de tipo danger (la API estática es `IswcToast.danger()` o `error()`).
     const r = await page.evaluate(() => {
       // Crear un toast de prueba directamente en el DOM para inspeccionarlo.
       const host = document.getElementById('previewHost');
       if (!host) return null;
       // Limpiar cualquier toast previo.
-      host.querySelectorAll('is-toast-item, is-toast').forEach((el) => el.remove());
+      host.querySelectorAll('iswc-toast-item, iswc-toast').forEach((el) => el.remove());
       // Llamar al método estático del toast para crear uno.
-      // `IsToast.error()` y `IsToast.success()` están documentados.
-      const Toast = (window as unknown as { IsToast?: { error: (msg: string) => unknown } }).IsToast;
+      // `IswcToast.error()` y `IswcToast.success()` están documentados.
+      const Toast = (window as unknown as { IswcToast?: { error: (msg: string) => unknown } }).IswcToast;
       if (Toast?.error) {
         Toast.error('Test danger message');
         return { method: 'Toast.error' };
       }
       // Fallback: crear uno manualmente.
-      const item = document.createElement('is-toast-item');
+      const item = document.createElement('iswc-toast-item');
       item.setAttribute('color', 'danger');
       item.setAttribute('open', '');
       item.textContent = 'Test danger message';
@@ -213,9 +213,9 @@ testE2E(
     }
     await esperarMs(400);
     const a11y = await page.evaluate(() => {
-      const item = document.querySelector<HTMLElement>('#previewHost is-toast-item[color="danger"], #previewHost is-toast:has(is-toast-item[color="danger"])');
-      // Buscar el item dentro del host o dentro del is-toast.
-      const items = [...document.querySelectorAll<HTMLElement>('#previewHost is-toast-item')];
+      const item = document.querySelector<HTMLElement>('#previewHost iswc-toast-item[color="danger"], #previewHost iswc-toast:has(iswc-toast-item[color="danger"])');
+      // Buscar el item dentro del host o dentro del iswc-toast.
+      const items = [...document.querySelectorAll<HTMLElement>('#previewHost iswc-toast-item')];
       const danger = items.find((it) => it.getAttribute('color') === 'danger');
       if (!danger) return { found: false };
       return {
@@ -241,7 +241,7 @@ testE2E(
 );
 
 // ──────────────────────────────────────────────────────────────────
-// <is-progress-bar>: prefers-reduced-motion desactiva indeterminate
+// <iswc-progress-bar>: prefers-reduced-motion desactiva indeterminate
 // ──────────────────────────────────────────────────────────────────
 
 testE2E(
@@ -250,14 +250,14 @@ testE2E(
   async (t) => {
     if (!DISPONIBLE) return t.skip('faltan variables E2E');
     const page = pagina();
-    await abrirGaleria(page, 'is-progress-bar', { ms: 4000 });
+    await abrirGaleria(page, 'iswc-progress-bar', { ms: 4000 });
     // Simular prefers-reduced-motion en el navegador.
     await page.emulateMedia({ reducedMotion: 'reduce' });
-    await abrirGaleria(page, 'is-progress-bar', { ms: 3000 });
+    await abrirGaleria(page, 'iswc-progress-bar', { ms: 3000 });
     await esperarMs(800);
     // Verificar que la animación del indicator es "none" en reduced-motion.
     const r = await page.evaluate(() => {
-      const bars = [...document.querySelectorAll<HTMLElement>('#previewHost is-progress-bar[indeterminate]')];
+      const bars = [...document.querySelectorAll<HTMLElement>('#previewHost iswc-progress-bar[indeterminate]')];
       if (!bars.length) return { found: false };
       const indicator = bars[0].shadowRoot?.querySelector('.indicator, .bar, [class*="indicator"]') as HTMLElement | null;
       if (!indicator) return { found: true, hasIndicator: false };

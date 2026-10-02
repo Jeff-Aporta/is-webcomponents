@@ -1,20 +1,20 @@
 ---
-tag: is-spinner
+tag: iswc-spinner
 tags:
-  - is-spinner
+  - iswc-spinner
 category: feedback
 status: public
 source: ./spinner.js
 style: ./spinner.css
 preview: ./spinner.json
 ---
-# `<is-spinner>`
+# `<iswc-spinner>`
 
 ## Propósito
 
 Indicador de carga animado. Sin atributos; personalizable vía CSS vars.
 
-Este módulo registra `<is-spinner>`.
+Este módulo registra `<iswc-spinner>`.
 
 ## Cuándo usarlo
 
@@ -33,8 +33,8 @@ import './spinner.js';
 ## Ejemplo mínimo
 
 ```html
-<is-spinner></is-spinner>
-<is-spinner style="font-size:2rem;--indicator-color:#40c057"></is-spinner>
+<iswc-spinner></iswc-spinner>
+<iswc-spinner style="font-size:2rem;--indicator-color:#40c057"></iswc-spinner>
 ```
 
 ## API
@@ -92,7 +92,7 @@ No declara integración form-associated propia en este módulo.
 
 Documentación de cabecera preservada desde fuente:
 
-> <is-spinner> — Web Component (vanilla).
+> <iswc-spinner> — Web Component (vanilla).
 > Indicador de carga animado (anillo via border).
 > role=status en el host; respeta prefers-reduced-motion.
 > CSS Parts: ::part(spinner)
@@ -102,7 +102,7 @@ Documentación de cabecera preservada desde fuente:
 
 - [`../_shared/adopt-css.js`](../_shared/adopt-css.js)
 
-Tags del módulo: `<is-spinner>`.
+Tags del módulo: `<iswc-spinner>`.
 
 ## Accesibilidad
 
@@ -111,7 +111,7 @@ Preservar semántica, foco, teclado, labels y ARIA. ARIA detectado: `aria-hidden
 ## Ejemplo avanzado
 
 ```html
-<is-spinner style="--speed:1.05s"></is-spinner>
+<iswc-spinner style="--speed:1.05s"></iswc-spinner>
 ```
 
 ## Errores comunes

@@ -3,7 +3,7 @@
 <head>
 <meta charset="utf-8" />
 <meta name="viewport" content="width=device-width, initial-scale=1" />
-<title>&lt;is-radar-chart&gt; · demo</title>
+<title>&lt;iswc-radar-chart&gt; · demo</title>
 <style>
   html, body { margin: 0; padding: 0; min-height: 100%; background: #0c1118; color: #e2e8f0; font-family: ui-sans-serif, system-ui, sans-serif; }
   body { display: grid; grid-template-rows: auto 1fr; }
@@ -11,14 +11,14 @@
   header h1 { font-size: 16px; font-weight: 700; margin: 0; }
   header p { font-size: 12px; color: #94a3b8; margin: 4px 0 0 0; }
   main { display: grid; place-items: center; padding: 20px; min-height: 0; }
-  is-radar-chart { width: 600px; height: 480px; }
-  is-radar-chart:not(:defined) { visibility: hidden; }
+  iswc-radar-chart { width: 600px; height: 480px; }
+  iswc-radar-chart:not(:defined) { visibility: hidden; }
 </style>
 <script type="module">
-  await import('../../../dist/cdn/data-viz/radar-chart.min.js?h=zjxtf2');
-  await customElements.whenDefined('is-radar-chart');
+  await import('../../../dist/cdn/data-viz/radar-chart.min.js?h=1zxuyk');
+  await customElements.whenDefined('iswc-radar-chart');
 
-  const chart = document.createElement('is-radar-chart');
+  const chart = document.createElement('iswc-radar-chart');
   chart.setAttribute('label', 'Comparativa de frameworks');
   chart.payload = {
     type: 'radar',
@@ -40,8 +40,8 @@
 </head>
 <body>
 <header>
-  <h1>&lt;is-radar-chart&gt;</h1>
-  <p>Wrapper de <code>&lt;is-chart&gt;</code> con tipo fijo <code>radar</code>. Polígono con relleno.</p>
+  <h1>&lt;iswc-radar-chart&gt;</h1>
+  <p>Wrapper de <code>&lt;iswc-chart&gt;</code> con tipo fijo <code>radar</code>. Polígono con relleno.</p>
 </header>
 <main></main>
 </body>

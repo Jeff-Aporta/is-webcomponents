@@ -1,9 +1,9 @@
 /**
- * Playground <is-text>: color / mix / lines / texto.
+ * Playground <iswc-text>: color / mix / lines / texto.
  * @param {import('../../previews/_kit/types.d.ts').PreviewMountContext} ctx
  */
 
-/** `<is-text>` con `color`, `mix`, `mixWith`, `lines`. */
+/** `<iswc-text>` con `color`, `mix`, `mixWith`, `lines`. */
 interface _TextLike extends HTMLElement {
   color: string | null;
   mix: string | null;
@@ -70,7 +70,7 @@ export async function mount(ctx: import('../../previews/_kit/types.d.ts').Previe
       if (el.mixWith) attrs.push(`mix-with="${el.mixWith}"`);
       if (n >= 1) attrs.push(`lines="${n}"`);
       const a = attrs.length ? ` ${attrs.join(' ')}` : '';
-      snippet.textContent = `<is-text${a}>${body.slice(0, 48)}${body.length > 48 ? '…' : ''}</is-text>`;
+      snippet.textContent = `<iswc-text${a}>${body.slice(0, 48)}${body.length > 48 ? '…' : ''}</iswc-text>`;
     }
   };
 

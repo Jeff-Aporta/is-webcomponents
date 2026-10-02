@@ -1,14 +1,14 @@
 ---
-tag: is-inline-edit
+tag: iswc-inline-edit
 tags:
-  - is-inline-edit
+  - iswc-inline-edit
 category: forms
 status: public
 source: ./inline-edit.js
 style: ./inline-edit.css
 preview: ./inline-edit.json
 ---
-# `<is-inline-edit>`
+# `<iswc-inline-edit>`
 
 ## Propósito
 
@@ -16,7 +16,7 @@ Edición "in place": muestra `value` como texto; al hacer clic se convierte en
 un `input` o `textarea`; Enter guarda, Esc cancela y revierte, y `blur`
 guarda salvo que se pida lo contrario.
 
-Este módulo registra `<is-inline-edit>`.
+Este módulo registra `<iswc-inline-edit>`.
 
 ## Cuándo usarlo
 
@@ -25,8 +25,8 @@ nota, nombre de fila) sin abrir un formulario ni un modal.
 
 ## Cuándo no usarlo
 
-Para varios campos a la vez usar `<is-form>` con `<is-input>` / `<is-textarea>`.
-Para edición de celdas tabulares usar `<is-data-grid>` o `<is-spreadsheet>`.
+Para varios campos a la vez usar `<iswc-form>` con `<iswc-input>` / `<iswc-textarea>`.
+Para edición de celdas tabulares usar `<iswc-data-grid>` o `<iswc-spreadsheet>`.
 
 ## Importación
 
@@ -37,7 +37,7 @@ import './inline-edit.js';
 ## Ejemplo mínimo
 
 ```html
-<is-inline-edit value="Factura de venta"></is-inline-edit>
+<iswc-inline-edit value="Factura de venta"></iswc-inline-edit>
 ```
 
 ## API
@@ -78,11 +78,11 @@ import './inline-edit.js';
 
 | Evento | detail | bubbles | composed | cancelable |
 | --- | --- | --- | --- | --- |
-| `is-edit` | `{}` | sí | sí | no |
-| `is-save` | `{ value, previous }` | sí | sí | no |
-| `is-cancel` | `{ value, previous }` | sí | sí | no |
+| `iswc-edit` | `{}` | sí | sí | no |
+| `iswc-save` | `{ value, previous }` | sí | sí | no |
+| `iswc-cancel` | `{ value, previous }` | sí | sí | no |
 
-`is-save` se emite antes de escribir `value`: `detail.value` es el valor
+`iswc-save` se emite antes de escribir `value`: `detail.value` es el valor
 nuevo y `detail.previous` el vigente al entrar en edición.
 
 ### Métodos y propiedades públicas
@@ -151,7 +151,7 @@ obligatorio.
 - [`../_shared/form-associated.js`](../_shared/form-associated.js)
 - [`../_shared/reflect.js`](../_shared/reflect.js)
 
-Tags del módulo: `<is-inline-edit>`.
+Tags del módulo: `<iswc-inline-edit>`.
 
 ## Accesibilidad
 
@@ -164,23 +164,23 @@ accesible propio.
 ## Ejemplo avanzado
 
 ```html
-<is-inline-edit id="nota" mode="textarea" rows="3" max-rows="8"
+<iswc-inline-edit id="nota" mode="textarea" rows="3" max-rows="8"
                 name="nota" placeholder="Sin observaciones" cancel-on-blur>
-</is-inline-edit>
+</iswc-inline-edit>
 
 <script type="module">
   const nota = document.getElementById('nota');
-  nota.addEventListener('is-save', async (e) => {
+  nota.addEventListener('iswc-save', async (e) => {
     await fetch('/api/nota', { method: 'PUT', body: e.detail.value });
   });
-  nota.addEventListener('is-cancel', (e) => console.log('revertido a', e.detail.previous));
+  nota.addEventListener('iswc-cancel', (e) => console.log('revertido a', e.detail.previous));
 </script>
 ```
 
 ## Errores comunes
 
 - Esperar que `Enter` guarde en `mode="textarea"`: allí inserta salto de línea.
-- Leer `detail.value` de `is-save` esperando el valor viejo: ese es `previous`.
+- Leer `detail.value` de `iswc-save` esperando el valor viejo: ese es `previous`.
 - Poner contenido en el slot `display` y esperar que el texto plano desaparezca:
   conviven; el texto plano se oculta desde CSS si el slot está lleno.
 - Usar tag sin importar módulo primero.

@@ -1,22 +1,22 @@
 ---
-tag: is-catalogo-gen
+tag: iswc-catalogo-gen
 tags:
-  - is-catalogo-gen
+  - iswc-catalogo-gen
 category: isp
 status: public
 source: ./catalogo-gen.js
 style: ./catalogo-gen.css
 preview: ./catalogo-gen.json
 ---
-# `<is-catalogo-gen>`
+# `<iswc-catalogo-gen>`
 
 ## Propósito
 
 Catálogo CRUD genérico portado de `CatalogoGen.svelte` (ISP-SvelteComponents):
-toolbar de acciones, grilla (`<is-ag-grid>`), drawer de ficha y modales de
+toolbar de acciones, grilla (`<iswc-ag-grid>`), drawer de ficha y modales de
 verificar / eliminar / recodificar / duplicar / consolidar.
 
-Este módulo registra `<is-catalogo-gen>`.
+Este módulo registra `<iswc-catalogo-gen>`.
 
 ## Cuándo usarlo
 
@@ -25,8 +25,8 @@ Listados maestros ContaPyme con controller que implementa `Lista` + acciones
 
 ## Cuándo no usarlo
 
-Tablas de solo lectura sin CRUD → `<is-ag-grid>` o `<is-data-grid>` directo.
-Selector de un registro en un formulario → `<is-btn-ref>`.
+Tablas de solo lectura sin CRUD → `<iswc-ag-grid>` o `<iswc-data-grid>` directo.
+Selector de un registro en un formulario → `<iswc-btn-ref>`.
 
 ## Importación
 
@@ -37,7 +37,7 @@ import './catalogo-gen.js';
 ## Ejemplo mínimo
 
 ```html
-<is-catalogo-gen id="cat" style="height: 28rem;"></is-catalogo-gen>
+<iswc-catalogo-gen id="cat" style="height: 28rem;"></iswc-catalogo-gen>
 <script type="module">
   const cat = document.getElementById('cat');
   cat.controller = {
@@ -72,7 +72,7 @@ import './catalogo-gen.js';
 | `show-search` | boolean | Campo de búsqueda. Activo por defecto. |
 | `mode-filter` | boolean | Etiqueta modo filtro / lista. Activo por defecto. |
 | `multi-select` | boolean | Selección múltiple. |
-| `select-mode` | boolean | Oculta el CRUD; es el modo que usa `<is-btn-ref>`. |
+| `select-mode` | boolean | Oculta el CRUD; es el modo que usa `<iswc-btn-ref>`. |
 | `q-registros` | number | Tope de filas al cargar, default `10000`. |
 | `q-rows-header` | number | Filas del grid de botones, default `2`. |
 | `icon-*` | string | Icono por acción (`mdi:…`). |
@@ -97,12 +97,12 @@ import './catalogo-gen.js';
 
 | Evento | detail | bubbles | composed | cancelable |
 | --- | --- | --- | --- | --- |
-| `is-selection-change` | `{ records }` | sí | sí | no |
-| `is-double-click` | `{ record }` | sí | sí | no |
-| `is-action` | `{ action, record? }` | sí | sí | no |
-| `is-frm-open` | modo del formulario | sí | sí | no |
-| `is-frm-close` | sin detail | sí | sí | no |
-| `is-error` | `{ message }` | sí | sí | no |
+| `iswc-selection-change` | `{ records }` | sí | sí | no |
+| `iswc-double-click` | `{ record }` | sí | sí | no |
+| `iswc-action` | `{ action, record? }` | sí | sí | no |
+| `iswc-frm-open` | modo del formulario | sí | sí | no |
+| `iswc-frm-close` | sin detail | sí | sí | no |
+| `iswc-error` | `{ message }` | sí | sí | no |
 
 ### Métodos y propiedades públicas
 
@@ -152,11 +152,11 @@ slot `frm` y gestiona su propio envío.
   recortando a `q-registros`.
 - Las acciones de la toolbar se habilitan según `bAllowed` y la presencia de
   la acción `act*` correspondiente en el controller.
-- Doble clic sobre una fila emite `is-double-click` y abre la ficha en el modo
+- Doble clic sobre una fila emite `iswc-double-click` y abre la ficha en el modo
   permitido.
 - Con `select-mode` se oculta el CRUD y el catálogo actúa como selector: es el
-  modo que consume `<is-btn-ref>`.
-- Los errores de las acciones se anuncian por `is-error` y por `onError`.
+  modo que consume `<iswc-btn-ref>`.
+- Los errores de las acciones se anuncian por `iswc-error` y por `onError`.
 
 ## Dependencias y componentes relacionados
 
@@ -167,22 +167,22 @@ slot `frm` y gestiona su propio envío.
 - [`../_shared/isp-record-utils.js`](../_shared/isp-record-utils.js)
 - Consumidor: [`btn-ref.md`](btn-ref.md).
 
-Tags del módulo: `<is-catalogo-gen>`.
+Tags del módulo: `<iswc-catalogo-gen>`.
 
 ## Accesibilidad
 
-La ficha es un `<is-drawer>` y los modales son `<is-dialog>`: ambos atrapan el
+La ficha es un `<iswc-drawer>` y los modales son `<iswc-dialog>`: ambos atrapan el
 foco y cierran con `Escape`. Los botones de la toolbar llevan texto accesible
 aunque muestren solo icono.
 
 ## Ejemplo avanzado
 
 ```html
-<is-catalogo-gen id="cat" multi-select style="height: 32rem">
+<iswc-catalogo-gen id="cat" multi-select style="height: 32rem">
   <form slot="frm">
-    <is-input name="app" label="Aplicación"></is-input>
+    <iswc-input name="app" label="Aplicación"></iswc-input>
   </form>
-</is-catalogo-gen>
+</iswc-catalogo-gen>
 
 <script type="module">
   const cat = document.getElementById('cat');
@@ -195,7 +195,7 @@ aunque muestren solo icono.
     async Lista() { return { datos: await (await fetch('/api/apps')).json() }; },
     async actCrear(o) { return o; },
   };
-  cat.addEventListener('is-selection-change', (e) => console.log(e.detail.records));
+  cat.addEventListener('iswc-selection-change', (e) => console.log(e.detail.records));
   cat.refreshGrid();
 </script>
 ```

@@ -1,14 +1,14 @@
 ---
-tag: is-dropzone
+tag: iswc-dropzone
 tags:
-  - is-dropzone
+  - iswc-dropzone
 category: forms
 status: public
 source: ./dropzone.js
 style: ./dropzone.css
 preview: ./dropzone.json
 ---
-# `<is-dropzone>`
+# `<iswc-dropzone>`
 
 ## Propósito
 
@@ -16,7 +16,7 @@ Zona de arrastrar-y-soltar archivos con cola visible: miniatura (o icono por
 tipo MIME), nombre, tamaño formateado, barra de progreso y botón de quitar.
 Valida cantidad, tamaño y tipo antes de encolar.
 
-Este módulo registra `<is-dropzone>`.
+Este módulo registra `<iswc-dropzone>`.
 
 ## Cuándo usarlo
 
@@ -26,7 +26,7 @@ de verdad y se lee por `dz.files`.
 
 ## Cuándo no usarlo
 
-- Para un solo archivo sin previsualización: `<is-file-input>` o
+- Para un solo archivo sin previsualización: `<iswc-file-input>` o
   `<input type="file">` bastan y sí llegan al `FormData`.
 - Dentro de un `<form>` esperando envío automático: **no es form-associated**
   (ver [Integración con formularios](#integración-con-formularios)).
@@ -42,7 +42,7 @@ import './dropzone.js';
 ## Ejemplo mínimo
 
 ```html
-<is-dropzone multiple accept="image/*,.pdf"></is-dropzone>
+<iswc-dropzone multiple accept="image/*,.pdf"></iswc-dropzone>
 ```
 
 ## API
@@ -53,10 +53,10 @@ import './dropzone.js';
 
 | Atributo | Tipo | Default | Descripción |
 | --- | --- | --- | --- |
-| `accept` | string | *(todo)* | Mismo formato que `<input type="file">`: extensiones (`.pdf`), comodines (`image/*`) o MIME exactos, separados por coma. Se refleja al input interno y además se valida en JS; un archivo que no encaje emite `is-error` con `reason: 'accept'`. |
+| `accept` | string | *(todo)* | Mismo formato que `<input type="file">`: extensiones (`.pdf`), comodines (`image/*`) o MIME exactos, separados por coma. Se refleja al input interno y además se valida en JS; un archivo que no encaje emite `iswc-error` con `reason: 'accept'`. |
 | `multiple` | boolean | ausente | Permite elegir varios archivos en el diálogo nativo. **Ojo**: no limita el arrastre — sin `multiple` el usuario puede soltar varios y todos se encolan. |
-| `max-files` | number | `Infinity` | Tope de archivos en la cola. Al alcanzarlo emite `is-error` con `reason: 'max-files'` y **corta el resto del lote** (`break`). |
-| `max-size` | number (bytes) | `Infinity` | Tamaño máximo por archivo. El que lo supere se salta y emite `is-error` con `reason: 'max-size'`. |
+| `max-files` | number | `Infinity` | Tope de archivos en la cola. Al alcanzarlo emite `iswc-error` con `reason: 'max-files'` y **corta el resto del lote** (`break`). |
+| `max-size` | number (bytes) | `Infinity` | Tamaño máximo por archivo. El que lo supere se salta y emite `iswc-error` con `reason: 'max-size'`. |
 | `chunked` | boolean | ausente | Declarado en `observedAttributes` pero **nunca leído**. `upload()` simula progreso por partes con o sin él; el atributo no cambia ningún comportamiento. |
 
 Un valor no numérico (o `0`) en `max-files` / `max-size` cae a `Infinity` por
@@ -92,16 +92,16 @@ reemplazar desde el light DOM.
 
 | Evento | detail | bubbles | composed | cancelable |
 | --- | --- | --- | --- | --- |
-| `is-files-change` | `{ files }` — referencia al array vivo de la cola | sí | sí | no |
-| `is-upload-start` | `{ id, file }` | sí | sí | no |
-| `is-upload-progress` | `{ id, file, progress }` — `progress` 0–100 | sí | sí | no |
-| `is-upload-end` | `{ id, file, ok }` — `ok` siempre `true` | sí | sí | no |
-| `is-error` | `{ reason, limit }` o `{ id, file, reason }` según el caso | sí | sí | no |
+| `iswc-files-change` | `{ files }` — referencia al array vivo de la cola | sí | sí | no |
+| `iswc-upload-start` | `{ id, file }` | sí | sí | no |
+| `iswc-upload-progress` | `{ id, file, progress }` — `progress` 0–100 | sí | sí | no |
+| `iswc-upload-end` | `{ id, file, ok }` — `ok` siempre `true` | sí | sí | no |
+| `iswc-error` | `{ reason, limit }` o `{ id, file, reason }` según el caso | sí | sí | no |
 
-`is-files-change` se emite al terminar de procesar un lote (arrastre,
+`iswc-files-change` se emite al terminar de procesar un lote (arrastre,
 selección, `addFile`, `addFiles`) y al quitar un archivo con `removeFile`.
 
-Formas del `detail` de `is-error`:
+Formas del `detail` de `iswc-error`:
 
 | `reason` | detail | Cuándo |
 | --- | --- | --- |
@@ -109,8 +109,8 @@ Formas del `detail` de `is-error`:
 | `'max-size'` | `{ id: null, file, reason, limit }` | El archivo supera `max-size`. |
 | `'accept'` | `{ id: null, file, reason }` — **sin** `limit` | El archivo no encaja con `accept`. |
 
-La cabecera del `.js` documenta `is-upload-end` con un campo `error?` y un
-`is-error` uniforme con `{ id, file, reason }`. En el código no hay ninguna
+La cabecera del `.js` documenta `iswc-upload-end` con un campo `error?` y un
+`iswc-error` uniforme con `{ id, file, reason }`. En el código no hay ninguna
 ruta que produzca error de subida, así que `error` nunca aparece y `id`/`file`
 faltan en el caso `max-files`.
 
@@ -119,8 +119,8 @@ faltan en el caso `max-files`.
 | Método | Firma | Descripción |
 | --- | --- | --- |
 | `addFile(file)` | `(File) => void` | Azúcar sobre `addFiles([file])`. |
-| `addFiles(files)` | `(File[]) => void` | Valida y encola un lote; re-renderiza y emite `is-files-change`. |
-| `removeFile(id)` | `(string) => void` | Quita el registro, revoca su object URL si existe, re-renderiza y emite `is-files-change`. |
+| `addFiles(files)` | `(File[]) => void` | Valida y encola un lote; re-renderiza y emite `iswc-files-change`. |
+| `removeFile(id)` | `(string) => void` | Quita el registro, revoca su object URL si existe, re-renderiza y emite `iswc-files-change`. |
 | `upload()` | `() => Promise<void>` | **Simulación.** Recorre los registros en `'queued'` y, para cada uno, emite 24 pasos de progreso con esperas de 30–90 ms antes de marcarlo `'done'`. No hace ninguna petición HTTP. |
 
 `upload()` es asíncrona y secuencial: procesa un archivo tras otro. La subida
@@ -140,7 +140,7 @@ Las filas de la cola, la miniatura, la barra de progreso y el botón de quitar
 ### Custom states
 
 No expone. No usa `ElementInternals`. El estado de arrastre y el de cada fila
-viajan por clases internas del shadow DOM (`.is-over` sobre la zona,
+viajan por clases internas del shadow DOM (`.iswc-over` sobre la zona,
 `.status-queued` / `.status-uploading` / `.status-done` sobre la fila), no
 accesibles con `:state()` desde el light DOM.
 
@@ -171,7 +171,7 @@ así que **tampoco** aporta al `FormData` del `<form>` que lo contenga, y
 Para enviarlo, construye el `FormData` a mano desde `dz.files`:
 
 ```js
-const dz = document.querySelector('is-dropzone');
+const dz = document.querySelector('iswc-dropzone');
 const form = new FormData();
 for (const rec of dz.files) form.append('soportes[]', rec.file, rec.name);
 await fetch('/api/soportes', { method: 'POST', body: form });
@@ -180,7 +180,7 @@ await fetch('/api/soportes', { method: 'POST', body: form });
 ## Comportamiento
 
 - La zona responde a click, Enter y Espacio abriendo el diálogo nativo, y a
-  `dragover` / `dragleave` / `drop` con la clase `.is-over`.
+  `dragover` / `dragleave` / `drop` con la clase `.iswc-over`.
 - Tras cada selección el `<input>` interno se limpia (`value = ''`), así que
   volver a elegir el mismo archivo sí dispara `change`.
 - El orden de validación por archivo es: cupo (`max-files`, corta el lote) →
@@ -206,7 +206,7 @@ await fetch('/api/soportes', { method: 'POST', body: form });
 - [`../media/icon.js`](../media/icon.js) — importado por el módulo, no hace
   falta importarlo aparte.
 
-Tags del módulo: `<is-dropzone>`.
+Tags del módulo: `<iswc-dropzone>`.
 
 ## Accesibilidad
 
@@ -219,18 +219,18 @@ Tags del módulo: `<is-dropzone>`.
 - Puntos a cubrir desde el consumidor: la zona no tiene `role="button"` ni
   etiqueta accesible propia (un lector anuncia solo su texto interno), la cola
   no es una *live region*, así que el progreso y los errores no se anuncian
-  solos, y los `is-error` no producen mensaje visible — píntalo tú.
+  solos, y los `iswc-error` no producen mensaje visible — píntalo tú.
 
 ## Ejemplo avanzado
 
 ```html
-<is-dropzone
+<iswc-dropzone
   id="soportes"
   multiple
   accept="image/*,.pdf"
   max-files="5"
   max-size="5242880"
-></is-dropzone>
+></iswc-dropzone>
 <button type="button" id="enviar">Subir soportes</button>
 <p id="aviso" role="status"></p>
 
@@ -240,11 +240,11 @@ Tags del módulo: `<is-dropzone>`.
   const dz = document.getElementById('soportes');
   const aviso = document.getElementById('aviso');
 
-  dz.addEventListener('is-files-change', (e) => {
+  dz.addEventListener('iswc-files-change', (e) => {
     aviso.textContent = `${e.detail.files.length} archivo(s) en cola`;
   });
 
-  dz.addEventListener('is-error', (e) => {
+  dz.addEventListener('iswc-error', (e) => {
     const { reason, limit, file } = e.detail;
     if (reason === 'max-files') aviso.textContent = `Máximo ${limit} archivos.`;
     if (reason === 'max-size')  aviso.textContent = `"${file.name}" supera los ${limit} bytes.`;
@@ -275,7 +275,7 @@ Tags del módulo: `<is-dropzone>`.
 - Omitir `multiple` creyendo que limita a un archivo: solo afecta al diálogo
   nativo, no al arrastre. Usa `max-files="1"`.
 - Usar `max-files="0"` o `max-size="0"` para bloquear: ambos caen a `Infinity`.
-- Leer `e.detail.file` en un `is-error` de `max-files`: ahí no viene.
+- Leer `e.detail.file` en un `iswc-error` de `max-files`: ahí no viene.
 - Mutar `dz.files` directamente en vez de usar `addFile` / `removeFile`.
 - Usar tag sin importar módulo primero.
 

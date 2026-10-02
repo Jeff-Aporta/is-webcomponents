@@ -11,7 +11,7 @@ const results = [];
 async function checkDeterministic(page) {
   await page.waitForTimeout(200);
   const data = await page.evaluate(() => {
-    const items = [...document.querySelectorAll('main is-inline-edit')];
+    const items = [...document.querySelectorAll('main iswc-inline-edit')];
     return items.map((r, idx) => {
       const shadow = r.shadowRoot;
       const root = shadow.querySelector('.root');
@@ -58,7 +58,7 @@ async function checkDeterministic(page) {
     // (4) Texto visible coherente: si no tiene value ni placeholder, debe estar vacío.
     //     Si tiene value, debe verse; si está vacío y tiene placeholder, debe verse el placeholder.
     const value = await page.evaluate((name) => {
-      return document.querySelector(`is-inline-edit[name="${name}"]`).value;
+      return document.querySelector(`iswc-inline-edit[name="${name}"]`).value;
     }, r.name).catch(() => '');
     if (r.text.length > 0 || (value && value.length > 0)) {
       assert.ok(r.text.length > 0, `${tag}: con value="${value}" el display debe mostrar texto`);
@@ -99,7 +99,7 @@ try {
 // Rama opt-in con Stagehand LLM.
 // ─────────────────────────────────────────────────────────────────────────
 const VISUAL_RUBRIC = `
-Evalúa la calidad visual del componente de edición inline (<is-inline-edit>) que aparece en el screenshot.
+Evalúa la calidad visual del componente de edición inline (<iswc-inline-edit>) que aparece en el screenshot.
 
 Checklist (todas deben cumplirse; marca cada una PASS o FAIL):
 

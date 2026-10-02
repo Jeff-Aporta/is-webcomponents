@@ -3,7 +3,7 @@
 <head>
 <meta charset="utf-8" />
 <meta name="viewport" content="width=device-width, initial-scale=1" />
-<title>Demo de <is-card> · is-webcomponents</title>
+<title>Demo de <iswc-card> · is-webcomponents</title>
 <meta name="description" content="Card con slots media/header/body/footer/actions y orientación vertical/horizontal. Variants accent/filled/outlined/filled-outlined/plain." />
 <style>
   html, body { margin: 0; padding: 0; min-height: 100%; background: #0c1118; color: #e2e8f0; font-family: ui-sans-serif, system-ui, sans-serif; }
@@ -17,9 +17,9 @@
   .row { display: flex; gap: 12px; flex-wrap: wrap; }
   .vertical-host { display: grid; gap: 12px; grid-template-columns: repeat(auto-fit, minmax(220px, 1fr)); }
   .horizontal-host { display: grid; gap: 12px; grid-template-columns: repeat(auto-fit, minmax(320px, 1fr)); }
-  is-card { display: block; min-width: 200px; }
-  is-card:not(:defined) { visibility: hidden; }
-  is-card .img-placeholder {
+  iswc-card { display: block; min-width: 200px; }
+  iswc-card:not(:defined) { visibility: hidden; }
+  iswc-card .img-placeholder {
     display: grid; place-items: center; height: 120px;
     background: linear-gradient(135deg, #1e293b, #334155);
     color: #94a3b8; font-size: 12px; border-radius: 4px;
@@ -29,12 +29,12 @@
   footer code { background: rgba(255,255,255,0.06); padding: 1px 5px; border-radius: 3px; font: 11px ui-monospace, Menlo, Consolas, monospace; }
 </style>
 <script type="module">
-  await import('../../../dist/cdn/layout/card.min.js?h=h5vigs');
-  await customElements.whenDefined('is-card');
+  await import('../../../dist/cdn/layout/card.min.js?h=hlbqc0');
+  await customElements.whenDefined('iswc-card');
 
   // (1) Cards verticales (default orientation) con todas las slots.
   function makeVertical({ header, body, footer, media }) {
-    const card = document.createElement('is-card');
+    const card = document.createElement('iswc-card');
     card.setAttribute('variant', 'outlined');
     if (media) {
       const m = document.createElement('div');
@@ -79,14 +79,14 @@
   const variants = ['accent', 'filled', 'outlined', 'filled-outlined', 'plain'];
   const vHost = document.getElementById('variants');
   for (const v of variants) {
-    const card = document.createElement('is-card');
+    const card = document.createElement('iswc-card');
     card.setAttribute('variant', v);
     card.textContent = `variant="${v}"`;
     vHost.appendChild(card);
   }
 
   // (3) Orientación horizontal.
-  const horiz = document.createElement('is-card');
+  const horiz = document.createElement('iswc-card');
   horiz.setAttribute('orientation', 'horizontal');
   horiz.setAttribute('variant', 'outlined');
   const media = document.createElement('div');
@@ -104,7 +104,7 @@
   document.getElementById('horizontal-host').appendChild(horiz);
 
   // (4) Interactivo: cambiar variant en caliente + invalid fallback.
-  const interactive = document.createElement('is-card');
+  const interactive = document.createElement('iswc-card');
   interactive.setAttribute('variant', 'filled-outlined');
   interactive.id = 'interactive';
   interactive.textContent = 'Cambia variant / orientation para verificar el reflejo en el atributo y los fallbacks.';
@@ -132,7 +132,7 @@
 </head>
 <body>
 <header>
-  <h1>Demo — <code>&lt;is-card&gt;</code></h1>
+  <h1>Demo — <code>&lt;iswc-card&gt;</code></h1>
   <p>Card con slots media / header / body / footer / actions. Vertical u horizontal. Variants accent / filled / outlined / filled-outlined / plain. Slots vacíos no ocupan espacio.</p>
 </header>
 <main>
@@ -160,7 +160,7 @@
   </section>
 </main>
 <footer>
-  Estado: <code>customElements.whenDefined('is-card')</code> resuelto. Atributos inválidos se resetean a <code>variant="outlined"</code> / <code>orientation="vertical"</code>.
+  Estado: <code>customElements.whenDefined('iswc-card')</code> resuelto. Atributos inválidos se resetean a <code>variant="outlined"</code> / <code>orientation="vertical"</code>.
 </footer>
 </body>
 </html>

@@ -36,8 +36,8 @@ export function exists(rel: string): boolean {
   return existsSync(join(ROOT, rel));
 }
 
-/** Extrae eventos `is-*` que el componente emite. Acepta `emit(this, 'is-x', …)`,
- *  `emit(dragCard, 'is-x', …)`, `dispatchEvent(new CustomEvent('is-x', …))`. */
+/** Extrae eventos `is-*` que el componente emite. Acepta `emit(this, 'iswc-x', …)`,
+ *  `emit(dragCard, 'iswc-x', …)`, `dispatchEvent(new CustomEvent('iswc-x', …))`. */
 export function extraerEventos(src: string): string[] {
   const eventos = new Set<string>();
   for (const m of src.matchAll(/emit(?:Cancelable)?\s*\([^,]+,\s*['"`](is-[a-z0-9-]+)['"`]/g)) {

@@ -1,14 +1,14 @@
 ---
-tag: is-radio
+tag: iswc-radio
 tags:
-  - is-radio
+  - iswc-radio
 category: forms
 status: public
 source: ./radio.js
 style: ./radio.css
 preview: ./radio.json
 ---
-# `<is-radio>`
+# `<iswc-radio>`
 
 ## Propósito
 
@@ -17,9 +17,9 @@ Radio Group de MUI:
 color por color, posición de etiqueta, estado de error, solo lectura y
 navegación por teclado según el patrón ARIA radiogroup.
 El grupo es el elemento form-associated: publica el valor, valida y gobierna el teclado.
-Los is-radio son las opciones y solo avisan al grupo cuando se eligen.
+Los iswc-radio son las opciones y solo avisan al grupo cuando se eligen.
 
-Este módulo registra `<is-radio>`.
+Este módulo registra `<iswc-radio>`.
 
 ## Cuándo usarlo
 
@@ -38,11 +38,11 @@ import './radio.js';
 ## Ejemplo mínimo
 
 ```html
-<is-radio-group name="plan" value="pro" label="Plan">
-<is-radio value="free">Gratis</is-radio>
-<is-radio value="pro">Profesional</is-radio>
-<is-radio value="legacy" disabled>Heredado</is-radio>
-</is-radio-group>
+<iswc-radio-group name="plan" value="pro" label="Plan">
+<iswc-radio value="free">Gratis</iswc-radio>
+<iswc-radio value="pro">Profesional</iswc-radio>
+<iswc-radio value="legacy" disabled>Heredado</iswc-radio>
+</iswc-radio-group>
 ```
 
 ## API
@@ -81,7 +81,7 @@ import './radio.js';
 
 | Evento | detail | bubbles | composed | cancelable |
 | --- | --- | --- | --- | --- |
-| `is-radio-select` | sí | sí | sí | no |
+| `iswc-radio-select` | sí | sí | sí | no |
 
 ### Métodos y propiedades públicas
 
@@ -154,8 +154,8 @@ No declara integración form-associated propia en este módulo.
 
 Documentación de cabecera preservada desde fuente:
 
-> <is-radio> — Opción de radio. NO es form-associated a propósito: el valor lo
-> publica <is-radio-group>, que es quien participa en el <form>.
+> <iswc-radio> — Opción de radio. NO es form-associated a propósito: el valor lo
+> publica <iswc-radio-group>, que es quien participa en el <form>.
 > Atributos
 >   value, checked, disabled
 >   color          brand (default) | neutral | success | warning | danger
@@ -164,14 +164,14 @@ Documentación de cabecera preservada desde fuente:
 > Slots: default (etiqueta), description (texto secundario)
 > Parts: base, control, dot, text, label, description
 > Custom states: placement-* readonly error (heredados del grupo)
-> Events: is-radio-select { value } — lo consume el grupo. Sin grupo, se marca solo.
+> Events: iswc-radio-select { value } — lo consume el grupo. Sin grupo, se marca solo.
 
 ## Dependencias y componentes relacionados
 
 - [`../_shared/adopt-css.js`](../_shared/adopt-css.js)
 - [`../_shared/form-associated.js`](../_shared/form-associated.js)
 
-Tags del módulo: `<is-radio>`.
+Tags del módulo: `<iswc-radio>`.
 
 ## Accesibilidad
 
@@ -180,10 +180,10 @@ Preservar semántica, foco, teclado, labels y ARIA. ARIA detectado: `aria-checke
 ## Ejemplo avanzado
 
 ```html
-<is-radio-group color="success" row>
-<is-radio value="c">Hereda success</is-radio>
-<is-radio value="d" color="danger">Se sale del grupo</is-radio>
-</is-radio-group>
+<iswc-radio-group color="success" row>
+<iswc-radio value="c">Hereda success</iswc-radio>
+<iswc-radio value="d" color="danger">Se sale del grupo</iswc-radio>
+</iswc-radio-group>
 ```
 
 ## Errores comunes

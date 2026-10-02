@@ -7,13 +7,9 @@
   position: relative;
   box-sizing: border-box;
   font-family: var(--iswc-sans, ui-sans-serif, system-ui, sans-serif);
-}
 
-:host([hidden]) { display: none; }
-
-:host([color="viewer"]) {
-  width: 100%;
-  height: 100%;
+  &[hidden] { display: none; }
+  &[color="viewer"] { width: 100%; height: 100%; }
 }
 
 .wrap {
@@ -33,22 +29,22 @@
   min-height: 0;
   display: flex;
   flex-direction: column;
-}
 
-.wrap.is-viewer {
-  width: 100%;
-  height: 100%;
-  border: 0;
-  padding: 0;
-  cursor: default;
-}
+  &.iswc-viewer {
+    width: 100%;
+    height: 100%;
+    border: 0;
+    padding: 0;
+    cursor: default;
+  }
 
-.wrap[data-empty]::after {
-  content: 'Mapa mental no disponible (payload inválido).';
-  display: block;
-  padding: 1rem;
-  font-size: 0.875em;
-  color: var(--iswc-text-soft, #a8b0bb);
+  &[data-empty]::after {
+    content: 'Mapa mental no disponible (payload inválido).';
+    display: block;
+    padding: 1rem;
+    font-size: 0.875em;
+    color: var(--iswc-text-soft, #a8b0bb);
+  }
 }
 
 .slot-hidden { display: none !important; }
@@ -70,32 +66,31 @@
 .mm-node,
 .mm-edge {
   transition: opacity 0.18s ease;
-}
-
-.mm-node.is-dim,
-.mm-edge.is-dim {
-  opacity: 0.32;
+  &.iswc-dim { opacity: 0.32; }
 }
 
 .mm-node__pill {
   transition: filter 0.12s ease-out;
 }
 
-.mm-node.is-active .mm-node__pill,
-.mm-node.is-active .mm-node__underline {
-  filter: brightness(1.12);
+.mm-node {
+  &.iswc-active {
+    .mm-node__pill,
+    .mm-node__underline { filter: brightness(1.12); }
+  }
 }
 
-.mm-node-label .tk-inline-icon,
-.mm-node-label is-icon.tk-inline-icon {
-  width: 1em;
-  height: 1em;
-  vertical-align: -0.14em;
-  margin: 0 0.2em;
+.mm-node-label {
+  :is(.tk-inline-icon, iswc-icon.tk-inline-icon) {
+    width: 1em;
+    height: 1em;
+    vertical-align: -0.14em;
+    margin: 0 0.2em;
+  }
 }
 
 /* El visor es opt-in: sin `open-on-click` el componente no abre nada,
    asi que tampoco debe insinuar con el cursor que se puede hacer clic. */
-:host([open-on-click]) .wrap {
-  cursor: zoom-in;
+:host([open-on-click]) {
+  .wrap { cursor: zoom-in; }
 }

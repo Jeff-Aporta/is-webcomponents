@@ -12,20 +12,20 @@ tests.push({
     await page.goto(URL, { waitUntil: 'domcontentloaded' });
     await waitReady(page, 'data-bubble-chart-ready');
     const info = await page.evaluate(() => {
-      const el = document.querySelector('is-bubble-chart');
+      const el = document.querySelector('iswc-bubble-chart');
       const svg = el.shadowRoot.querySelector('svg');
       const marks = el.shadowRoot.querySelectorAll('.mark');
       return {
-        defined: !!customElements.get('is-bubble-chart'),
-        chartDefined: !!customElements.get('is-chart'),
+        defined: !!customElements.get('iswc-bubble-chart'),
+        chartDefined: !!customElements.get('iswc-chart'),
         svg: !!svg,
         viewBox: svg?.getAttribute('viewBox'),
         marks: marks.length,
         markClasses: [...marks].map((m) => m.getAttribute('class')),
       };
     });
-    assert.equal(info.defined, true, 'is-bubble-chart debe estar definido');
-    assert.equal(info.chartDefined, true, 'is-chart también debe estar definido');
+    assert.equal(info.defined, true, 'iswc-bubble-chart debe estar definido');
+    assert.equal(info.chartDefined, true, 'iswc-chart también debe estar definido');
     assert.ok(info.svg, 'debe haber un SVG en shadow DOM');
     assert.ok(info.marks > 0, `debe haber marcas renderizadas, hay ${info.marks}`);
     assert.ok(
@@ -43,10 +43,10 @@ tests.push({
     await waitReady(page, 'data-bubble-chart-ready');
     await page.waitForTimeout(200);
     const before = await page.evaluate(() => {
-      return document.querySelector('is-bubble-chart').shadowRoot.querySelectorAll('.mark.mark-bubble').length;
+      return document.querySelector('iswc-bubble-chart').shadowRoot.querySelectorAll('.mark.mark-bubble').length;
     });
     await page.evaluate(() => {
-      const el = document.querySelector('is-bubble-chart');
+      const el = document.querySelector('iswc-bubble-chart');
       el.payload = {
         type: 'bubble',
         data: {
@@ -63,7 +63,7 @@ tests.push({
     });
     await page.waitForTimeout(200);
     const after = await page.evaluate(() => {
-      return document.querySelector('is-bubble-chart').shadowRoot.querySelectorAll('.mark.mark-bubble').length;
+      return document.querySelector('iswc-bubble-chart').shadowRoot.querySelectorAll('.mark.mark-bubble').length;
     });
     assert.notEqual(after, before, `re-asignar payload debe cambiar el render (before=${before}, after=${after})`);
     assert.equal(after, 3, 'el nuevo dataset tiene 3 burbujas');
@@ -76,7 +76,7 @@ tests.push({
     await page.goto(URL, { waitUntil: 'domcontentloaded' });
     await waitReady(page, 'data-bubble-chart-ready');
     const radii = await page.evaluate(() => {
-      const root = document.querySelector('is-bubble-chart').shadowRoot;
+      const root = document.querySelector('iswc-bubble-chart').shadowRoot;
       return [...root.querySelectorAll('.mark.mark-bubble')].map((m) => Number(m.getAttribute('r')));
     });
     assert.equal(radii.length, 8, 'el dataset original tiene 8 burbujas, deben renderizarse 8');
@@ -93,7 +93,7 @@ tests.push({
     await page.goto(URL, { waitUntil: 'domcontentloaded' });
     await waitReady(page, 'data-bubble-chart-ready');
     const radii = await page.evaluate(() => {
-      const root = document.querySelector('is-bubble-chart').shadowRoot;
+      const root = document.querySelector('iswc-bubble-chart').shadowRoot;
       return [...root.querySelectorAll('.mark.mark-bubble')].map((m) => Number(m.getAttribute('r')));
     });
     const minR = Math.min(...radii);
@@ -109,7 +109,7 @@ tests.push({
     await page.goto(URL, { waitUntil: 'domcontentloaded' });
     await waitReady(page, 'data-bubble-chart-ready');
     const info = await page.evaluate(() => {
-      const root = document.querySelector('is-bubble-chart').shadowRoot;
+      const root = document.querySelector('iswc-bubble-chart').shadowRoot;
       const texts = [...root.querySelectorAll('text')].map((t) => (t.textContent ?? '').trim());
       return {
         xAxisLabel: texts.includes('Población (M)'),
@@ -128,7 +128,7 @@ tests.push({
     await waitReady(page, 'data-bubble-chart-ready');
     await page.waitForTimeout(150);
     await page.evaluate(() => {
-      const el = document.querySelector('is-bubble-chart');
+      const el = document.querySelector('iswc-bubble-chart');
       el.payload = {
         type: 'bubble',
         data: {
@@ -141,7 +141,7 @@ tests.push({
     });
     await page.waitForTimeout(200);
     const total = await page.evaluate(() => {
-      return document.querySelector('is-bubble-chart').shadowRoot.querySelectorAll('.mark.mark-bubble').length;
+      return document.querySelector('iswc-bubble-chart').shadowRoot.querySelectorAll('.mark.mark-bubble').length;
     });
     assert.equal(total, 5, '5 burbujas totales (2 + 3) deben renderizarse');
   },
@@ -153,7 +153,7 @@ tests.push({
     await page.goto(URL, { waitUntil: 'domcontentloaded' });
     await waitReady(page, 'data-bubble-chart-ready');
     const info = await page.evaluate(() => {
-      const root = document.querySelector('is-bubble-chart').shadowRoot;
+      const root = document.querySelector('iswc-bubble-chart').shadowRoot;
       const bubbles = [...root.querySelectorAll('.mark.mark-bubble')];
       return {
         allCircles: bubbles.every((m) => m.tagName.toLowerCase() === 'circle'),

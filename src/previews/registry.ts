@@ -1,5 +1,5 @@
 /**
- * Registry de previews: JSON homogéneo (is-preview/v1) + behavior opcional.
+ * Registry de previews: JSON homogéneo (iswc-preview/v1) + behavior opcional.
  * No hay HTML por componente — solo `_shell.html` para fullscreen.
  *
  * El servidor de docs manda `Cache-Control: no-store` (serve.mjs) para que los

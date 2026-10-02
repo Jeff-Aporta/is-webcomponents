@@ -3,7 +3,7 @@
 <head>
 <meta charset="utf-8" />
 <meta name="viewport" content="width=device-width, initial-scale=1" />
-<title>Calendario completo &lt;is-full-calendar&gt; · is-webcomponents</title>
+<title>Calendario completo &lt;iswc-full-calendar&gt; · is-webcomponents</title>
 <meta name="description" content="Calendario con vistas mes / semana / día, eventos y toolbar con prev/next/today." />
 <style>
   html, body { margin: 0; padding: 0; min-height: 100%; background: #0c1118; color: #e2e8f0; font-family: ui-sans-serif, system-ui, sans-serif; }
@@ -14,28 +14,28 @@
   section { background: #131a24; border: 1px solid rgba(255,255,255,0.08); border-radius: 10px; padding: 16px; display: grid; gap: 10px; }
   section h2 { font-size: 13px; margin: 0; font-weight: 600; color: #cbd5e1; }
   section .desc { font-size: 12px; color: #94a3b8; margin: 0; }
-  is-full-calendar { width: 100%; min-height: 480px; }
-  is-full-calendar + div { margin-top: 8px; font: 12px ui-monospace, Menlo, Consolas, monospace; color: #94a3b8; }
+  iswc-full-calendar { width: 100%; min-height: 480px; }
+  iswc-full-calendar + div { margin-top: 8px; font: 12px ui-monospace, Menlo, Consolas, monospace; color: #94a3b8; }
   code { background: rgba(255,255,255,0.06); padding: 1px 5px; border-radius: 3px; font: 12px ui-monospace, Menlo, Consolas, monospace; }
   /* Anti-FOUC */
-  is-full-calendar:not(:defined) { visibility: hidden; }
+  iswc-full-calendar:not(:defined) { visibility: hidden; }
 </style>
 <script type="module">
-  // full-calendar importa is-button internamente.
-  await import('../../../dist/cdn/actions/button.min.js?h=ki2dk5');
-  await import('../../../dist/cdn/forms/full-calendar.min.js?h=tdwiee');
-  await customElements.whenDefined('is-full-calendar');
+  // full-calendar importa iswc-button internamente.
+  await import('../../../dist/cdn/actions/button.min.js?h=5i9tzt');
+  await import('../../../dist/cdn/forms/full-calendar.min.js?h=ecwwpw');
+  await customElements.whenDefined('iswc-full-calendar');
 
   // (1) vista mes con eventos de ejemplo
-  const mes = document.createElement('is-full-calendar');
+  const mes = document.createElement('iswc-full-calendar');
   mes.id = 'mes';
   mes.view = 'month';
   mes.label = 'Agenda del mes';
   mes.hint = 'Click en un día o evento para navegar';
-  mes.addEventListener('is-day-click', (e) => {
+  mes.addEventListener('iswc-day-click', (e) => {
     document.getElementById('mes-day').textContent = `Día clickeado: ${e.detail.date}`;
   });
-  mes.addEventListener('is-event-click', (e) => {
+  mes.addEventListener('iswc-event-click', (e) => {
     document.getElementById('mes-ev').textContent = `Evento: ${e.detail.event.title}`;
   });
   const events = [
@@ -53,7 +53,7 @@
   document.querySelector('#sec-mes').appendChild(mes);
 
   // (2) vista semana
-  const semana = document.createElement('is-full-calendar');
+  const semana = document.createElement('iswc-full-calendar');
   semana.id = 'semana';
   semana.view = 'week';
   semana.label = 'Vista semanal';
@@ -61,7 +61,7 @@
   document.querySelector('#sec-semana').appendChild(semana);
 
   // (3) vista día
-  const dia = document.createElement('is-full-calendar');
+  const dia = document.createElement('iswc-full-calendar');
   dia.id = 'dia';
   dia.view = 'day';
   dia.label = 'Vista de un día';
@@ -87,13 +87,13 @@
 <body>
 <main>
   <header>
-    <h1>&lt;is-full-calendar&gt; · Vista mes / semana / día con eventos</h1>
-    <p>Toolbar con prev/next/today + 3 botones de vista. Eventos se cargan desde <code>&lt;script type="application/json"&gt;</code> con <code>{ events: [...] }</code>. Emite <code>is-day-click</code> y <code>is-event-click</code>.</p>
+    <h1>&lt;iswc-full-calendar&gt; · Vista mes / semana / día con eventos</h1>
+    <p>Toolbar con prev/next/today + 3 botones de vista. Eventos se cargan desde <code>&lt;script type="application/json"&gt;</code> con <code>{ events: [...] }</code>. Emite <code>iswc-day-click</code> y <code>iswc-event-click</code>.</p>
   </header>
 
   <section id="sec-mes">
     <h2>Vista mes</h2>
-    <p class="desc">Click en una día → <code>is-day-click</code>. Click en un evento → <code>is-event-click</code>.</p>
+    <p class="desc">Click en una día → <code>iswc-day-click</code>. Click en un evento → <code>iswc-event-click</code>.</p>
     <div id="mes-day">—</div>
     <div id="mes-ev">—</div>
   </section>

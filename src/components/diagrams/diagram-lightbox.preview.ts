@@ -1,5 +1,5 @@
 /**
- * Behavior migrado desde HTML inline de is-diagram-lightbox.
+ * Behavior migrado desde HTML inline de iswc-diagram-lightbox.
  * Se ejecuta en mount() tras pintar la definition JSON.
  */
 

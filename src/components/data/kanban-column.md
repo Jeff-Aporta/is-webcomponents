@@ -1,15 +1,15 @@
 ---
-tag: is-kanban-column
+tag: iswc-kanban-column
 tags:
-  - is-kanban-column
+  - iswc-kanban-column
 category: data
 status: public
 ---
-# `<is-kanban-column>`
+# `<iswc-kanban-column>`
 
 ## Propósito
 
-Columna de `<is-kanban>`. Declara el estado del tablero; las tarjetas van dentro.
+Columna de `<iswc-kanban>`. Declara el estado del tablero; las tarjetas van dentro.
 
 ## Cuándo usarlo
 
@@ -22,5 +22,5 @@ No lo reimplementes ni lo uses para sustituir al padre. La guía del padre docum
 ## Ejemplo mínimo
 
 ```html
-<is-kanban-column></is-kanban-column>
+<iswc-kanban-column></iswc-kanban-column>
 ```

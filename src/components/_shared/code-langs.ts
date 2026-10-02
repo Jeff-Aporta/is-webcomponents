@@ -1,5 +1,5 @@
 /**
- * code-langs.js — registro de lenguajes para `<is-code>`.
+ * code-langs.js — registro de lenguajes para `<iswc-code>`.
  *
  * El resaltado lo hace el motor NATIVO (code-highlight): aquí solo vive el
  * registro de ids/alias, la inferencia por texto y las clases de línea.

@@ -14,10 +14,10 @@ tests.push({
     await page.goto(URL, { waitUntil: 'domcontentloaded' });
     await waitReady(page, 'data-date-time-field-ready');
     const info = await page.evaluate(() => {
-      const fields = [...document.querySelectorAll('is-date-time-field')];
+      const fields = [...document.querySelectorAll('iswc-date-time-field')];
       return {
         count: fields.length,
-        defined: !!customElements.get('is-date-time-field'),
+        defined: !!customElements.get('iswc-date-time-field'),
         sectionsByField: fields.map((f) => f.shadowRoot.querySelectorAll('[role="spinbutton"]').length),
         hasFormAssociated: 'formAssociated' in fields[0],
         sectionsHaveAriaValue: fields.every((f) => {
@@ -26,7 +26,7 @@ tests.push({
         }),
       };
     });
-    assert.equal(info.defined, true, 'is-date-time-field debe estar definido');
+    assert.equal(info.defined, true, 'iswc-date-time-field debe estar definido');
     assert.ok(info.count >= 6, `esperaba >=6 campos en la página, hay ${info.count}`);
     // El campo base (24h sin segundos) tiene 5 secciones: y/m/d/h/M.
     // El campo con segundos tiene 6 secciones; el de AM/PM tiene 6 secciones (h12/M/dPeriod).
@@ -133,20 +133,20 @@ tests.push({
 });
 
 tests.push({
-  name: 'funcional: is-change emite evento al cambiar valor',
+  name: 'funcional: iswc-change emite evento al cambiar valor',
   run: async (page) => {
     await page.goto(URL, { waitUntil: 'domcontentloaded' });
     await waitReady(page, 'data-date-time-field-ready');
     await page.evaluate(() => {
       window.__changes = [];
-      document.getElementById('basic').addEventListener('is-change', (e) => {
+      document.getElementById('basic').addEventListener('iswc-change', (e) => {
         window.__changes.push(e.detail?.value ?? '');
       });
     });
     await page.evaluate(() => { document.getElementById('basic').value = '2026-01-15T10:30'; });
     await page.waitForTimeout(50);
     const changes = await page.evaluate(() => window.__changes);
-    assert.deepEqual(changes, ['2026-01-15T10:30'], 'is-change debe emitir el nuevo valor');
+    assert.deepEqual(changes, ['2026-01-15T10:30'], 'iswc-change debe emitir el nuevo valor');
   },
 });
 

@@ -1,5 +1,5 @@
 /**
- * md-editor.test.ts — Tier A (12 aserciones) para `<is-md-editor>`.
+ * md-editor.test.ts — Tier A (12 aserciones) para `<iswc-md-editor>`.
  *
  * Dimensiones: módulo, CSS, JSON, OBSERVED, textarea, contenteditable,
  * eventos, label, placeholder, filename attr, slot para acciones, registro.
@@ -13,7 +13,7 @@ import { fileURLToPath } from 'node:url';
 
 const HERE = dirname(fileURLToPath(import.meta.url));
 const ROOT = join(HERE, '..', '..', '..', '..', '..');
-const TAG = 'is-md-editor';
+const TAG = 'iswc-md-editor';
 const TS  = join(ROOT, 'src', 'components', 'helpers', 'md-editor.ts');
 const CSS = join(ROOT, 'src', 'components', 'helpers', 'md-editor.css');
 const JSON_PATH = join(ROOT, 'src', 'components', 'helpers', 'md-editor.json');
@@ -26,10 +26,10 @@ test('2. CSS hermano existe', async () => {
   assert.ok(existsSync(CSS));
 });
 
-test('3. JSON existe y respeta is-preview/v1', async () => {
+test('3. JSON existe y respeta iswc-preview/v1', async () => {
   const json = JSON.parse(readFileSync(JSON_PATH, 'utf8'));
   assert.equal(json.tag, TAG);
-  assert.equal(json.$schema, 'is-preview/v1');
+  assert.equal(json.$schema, 'iswc-preview/v1');
 });
 
 test('4. OBSERVED incluye label, placeholder, filename, value', async () => {
@@ -51,10 +51,10 @@ test('6. expone getter/setter para value', async () => {
   assert.ok(/set\s+value\s*\(/.test(src));
 });
 
-test('7. emite eventos de editor (is-persist, is-change, is-delete, is-load)', async () => {
+test('7. emite eventos de editor (iswc-persist, iswc-change, iswc-delete, iswc-load)', async () => {
   const src = readFileSync(TS, 'utf8');
   // El editor emite varios eventos (persist, change, delete, load, error, download).
-  for (const ev of ['is-persist', 'is-change', 'is-delete', 'is-load']) {
+  for (const ev of ['iswc-persist', 'iswc-change', 'iswc-delete', 'iswc-load']) {
     assert.ok(src.includes(`'${ev}'`) || src.includes(`"${ev}"`), `debe emitir ${ev}`);
   }
 });
@@ -73,8 +73,8 @@ test('9. shadow DOM expone parte label/input/footer', async () => {
 test('10. custom element registrado', async () => {
   const src = readFileSync(TS, 'utf8');
   assert.ok(
-    /customElements\.define\s*\(\s*['"]is-md-editor['"]/.test(src) ||
-    /defineElement\s*\(\s*['"]is-md-editor['"]/.test(src),
+    /customElements\.define\s*\(\s*['"]iswc-md-editor['"]/.test(src) ||
+    /defineElement\s*\(\s*['"]iswc-md-editor['"]/.test(src),
   );
 });
 
@@ -82,7 +82,7 @@ test('11. integra con md-render (preview en vivo)', async () => {
   const src = readFileSync(TS, 'utf8');
   // Puede importar md-render directamente o usar el mismo parser md-lite.
   assert.ok(
-    /from\s*['"][./]+md-lite/.test(src) || /is-md-render/.test(src),
+    /from\s*['"][./]+md-lite/.test(src) || /iswc-md-render/.test(src),
     'md-editor debe compartir el parser con md-render',
   );
 });

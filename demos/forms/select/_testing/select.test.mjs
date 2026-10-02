@@ -24,11 +24,11 @@ tests.push({
     await page.goto(URL, { waitUntil: 'domcontentloaded' });
     await waitReady(page, 'data-select-ready');
     const data = await page.evaluate(() => {
-      const sels = [...document.querySelectorAll('is-select')];
+      const sels = [...document.querySelectorAll('iswc-select')];
       return sels.map((s) => {
         const sr = s.shadowRoot;
         return {
-          defined: !!customElements.get('is-select'),
+          defined: !!customElements.get('iswc-select'),
           hasShadow: !!sr,
           triggerRole: sr?.querySelector('.trigger')?.getAttribute('role'),
           triggerHasPopup: sr?.querySelector('.trigger')?.getAttribute('aria-haspopup'),
@@ -36,13 +36,13 @@ tests.push({
           listboxRole: sr?.querySelector('[part="listbox"]')?.getAttribute('role'),
           listboxId: sr?.querySelector('[part="listbox"]')?.id,
           dialogOpen: sr?.querySelector('dialog.popup')?.open ?? null,
-          optionCount: s.querySelectorAll('is-option').length,
+          optionCount: s.querySelectorAll('iswc-option').length,
           ariaExpanded: sr?.querySelector('.trigger')?.getAttribute('aria-expanded'),
         };
       });
     });
     assert.equal(data.length, 4, 'debe haber 4 selects');
-    assert.equal(data[0].defined, true, 'is-select debe estar definido');
+    assert.equal(data[0].defined, true, 'iswc-select debe estar definido');
     assert.equal(data[0].hasShadow, true, 'shadow root existe');
     assert.equal(data[0].triggerRole, 'combobox', 'trigger tiene role=combobox');
     assert.equal(data[0].triggerHasPopup, 'listbox', 'aria-haspopup=listbox');
@@ -60,7 +60,7 @@ tests.push({
     await page.goto(URL, { waitUntil: 'domcontentloaded' });
     await waitReady(page, 'data-select-ready');
     const r = await page.evaluate(() => {
-      const s = document.querySelector('#sec-basico is-select');
+      const s = document.querySelector('#sec-basico iswc-select');
       const sr = s.shadowRoot;
       const before = sr.querySelector('.display')?.textContent;
       s.value = 'fr';
@@ -73,17 +73,17 @@ tests.push({
 });
 
 tests.push({
-  name: 'funcional: click en opción cambia value y emite is-change',
+  name: 'funcional: click en opción cambia value y emite iswc-change',
   run: async (page) => {
     await page.goto(URL, { waitUntil: 'domcontentloaded' });
     await waitReady(page, 'data-select-ready');
     await page.evaluate(() => {
-      const s = document.querySelector('#sec-basico is-select');
+      const s = document.querySelector('#sec-basico iswc-select');
       s.show();
     });
     await page.waitForTimeout(80);
     const r = await page.evaluate(() => {
-      const s = document.querySelector('#sec-basico is-select');
+      const s = document.querySelector('#sec-basico iswc-select');
       const sr = s.shadowRoot;
       const opts = [...sr.querySelectorAll('[role="option"]')];
       // click en la 3ra opción (fr)
@@ -101,7 +101,7 @@ tests.push({
     await page.goto(URL, { waitUntil: 'domcontentloaded' });
     await waitReady(page, 'data-select-ready');
     const initial = await page.evaluate(() => {
-      const s = document.querySelector('#sec-multi is-select');
+      const s = document.querySelector('#sec-multi iswc-select');
       return { values: s.values, value: s.value };
     });
     assert.deepEqual(initial.values, ['frontend', 'design'], 'values iniciales: 2 tags');
@@ -109,7 +109,7 @@ tests.push({
 
     // limpiar
     const afterClear = await page.evaluate(() => {
-      const s = document.querySelector('#sec-multi is-select');
+      const s = document.querySelector('#sec-multi iswc-select');
       const sr = s.shadowRoot;
       sr.querySelector('[part="clear"]').click();
       return { values: s.values, value: s.value, attr: s.getAttribute('value') };
@@ -126,8 +126,8 @@ tests.push({
     await page.goto(URL, { waitUntil: 'domcontentloaded' });
     await waitReady(page, 'data-select-ready');
     const r = await page.evaluate(() => {
-      const single = document.querySelector('#sec-basico is-select');
-      const multi = document.querySelector('#sec-multi is-select');
+      const single = document.querySelector('#sec-basico iswc-select');
+      const multi = document.querySelector('#sec-multi iswc-select');
       return {
         single: single.shadowRoot.querySelector('[part="listbox"]').getAttribute('aria-multiselectable'),
         multi: multi.shadowRoot.querySelector('[part="listbox"]').getAttribute('aria-multiselectable'),
@@ -145,14 +145,14 @@ tests.push({
     await waitReady(page, 'data-select-ready');
     // foco en el trigger
     await page.evaluate(() => {
-      document.querySelector('#sec-basico is-select').shadowRoot.querySelector('.trigger').focus();
+      document.querySelector('#sec-basico iswc-select').shadowRoot.querySelector('.trigger').focus();
     });
     await page.keyboard.press('ArrowDown');
     await page.waitForTimeout(50);
     await page.keyboard.press('ArrowDown');
     await page.waitForTimeout(50);
     const active = await page.evaluate(() => {
-      const s = document.querySelector('#sec-basico is-select');
+      const s = document.querySelector('#sec-basico iswc-select');
       const sr = s.shadowRoot;
       return {
         open: sr.querySelector('dialog.popup').open,
@@ -167,7 +167,7 @@ tests.push({
     await page.keyboard.press('Enter');
     await page.waitForTimeout(50);
     const after = await page.evaluate(() => {
-      const s = document.querySelector('#sec-basico is-select');
+      const s = document.querySelector('#sec-basico iswc-select');
       const sr = s.shadowRoot;
       return {
         value: s.value,
@@ -184,12 +184,12 @@ tests.push({
   run: async (page) => {
     await page.goto(URL, { waitUntil: 'domcontentloaded' });
     await waitReady(page, 'data-select-ready');
-    await page.evaluate(() => document.querySelector('#sec-basico is-select').show());
+    await page.evaluate(() => document.querySelector('#sec-basico iswc-select').show());
     await page.waitForTimeout(50);
     await page.keyboard.press('End');
     await page.waitForTimeout(50);
     const atEnd = await page.evaluate(() => {
-      const sr = document.querySelector('#sec-basico is-select').shadowRoot;
+      const sr = document.querySelector('#sec-basico iswc-select').shadowRoot;
       return sr.querySelector('[data-active]')?.textContent?.trim();
     });
     assert.equal(atEnd, 'Deutsch', 'End salta a la última opción (de)');
@@ -197,7 +197,7 @@ tests.push({
     await page.keyboard.press('Home');
     await page.waitForTimeout(50);
     const atHome = await page.evaluate(() => {
-      const sr = document.querySelector('#sec-basico is-select').shadowRoot;
+      const sr = document.querySelector('#sec-basico iswc-select').shadowRoot;
       return sr.querySelector('[data-active]')?.textContent?.trim();
     });
     assert.equal(atHome, 'Español', 'Home salta a la primera opción (es)');
@@ -211,15 +211,15 @@ tests.push({
   run: async (page) => {
     await page.goto(URL, { waitUntil: 'domcontentloaded' });
     await waitReady(page, 'data-select-ready');
-    const before = await page.evaluate(() => document.querySelector('#sec-basico is-select').value);
-    await page.evaluate(() => document.querySelector('#sec-basico is-select').show());
+    const before = await page.evaluate(() => document.querySelector('#sec-basico iswc-select').value);
+    await page.evaluate(() => document.querySelector('#sec-basico iswc-select').show());
     await page.waitForTimeout(50);
     await page.keyboard.press('ArrowDown');
     await page.waitForTimeout(50);
     await page.keyboard.press('Escape');
     await page.waitForTimeout(50);
     const after = await page.evaluate(() => {
-      const s = document.querySelector('#sec-basico is-select');
+      const s = document.querySelector('#sec-basico iswc-select');
       const sr = s.shadowRoot;
       return { value: s.value, open: sr.querySelector('dialog.popup').open };
     });
@@ -233,12 +233,12 @@ tests.push({
   run: async (page) => {
     await page.goto(URL, { waitUntil: 'domcontentloaded' });
     await waitReady(page, 'data-select-ready');
-    await page.evaluate(() => document.querySelector('#sec-basico is-select').show());
+    await page.evaluate(() => document.querySelector('#sec-basico iswc-select').show());
     await page.waitForTimeout(50);
     await page.keyboard.press('p'); // Português
     await page.waitForTimeout(50);
     const r = await page.evaluate(() => {
-      const sr = document.querySelector('#sec-basico is-select').shadowRoot;
+      const sr = document.querySelector('#sec-basico iswc-select').shadowRoot;
       return sr.querySelector('[data-active]')?.textContent?.trim();
     });
     assert.equal(r, 'Português', 'typeahead por "p" selecciona Português');
@@ -251,7 +251,7 @@ tests.push({
   run: async (page) => {
     await page.goto(URL, { waitUntil: 'domcontentloaded' });
     await waitReady(page, 'data-select-ready');
-    await page.evaluate(() => document.querySelector('#sec-grupos is-select').show());
+    await page.evaluate(() => document.querySelector('#sec-grupos iswc-select').show());
     await page.waitForTimeout(50);
     // navegar hasta "Soporte" (disabled) y verificar que ArrowDown la salta
     const labels = [];
@@ -259,7 +259,7 @@ tests.push({
       await page.keyboard.press('ArrowDown');
       await page.waitForTimeout(30);
       const lbl = await page.evaluate(() => {
-        const sr = document.querySelector('#sec-grupos is-select').shadowRoot;
+        const sr = document.querySelector('#sec-grupos iswc-select').shadowRoot;
         const active = sr.querySelector('[data-active]');
         return { label: active?.querySelector('.option-label')?.textContent?.trim(), disabled: active?.hasAttribute('data-disabled') };
       });
@@ -277,7 +277,7 @@ tests.push({
     await page.goto(URL, { waitUntil: 'domcontentloaded' });
     await waitReady(page, 'data-select-ready');
     const r = await page.evaluate(() => {
-      const s = document.querySelector('#sec-grupos is-select');
+      const s = document.querySelector('#sec-grupos iswc-select');
       s.show();
       const sr = s.shadowRoot;
       const groups = [...sr.querySelectorAll('[part="group"]')];
@@ -299,7 +299,7 @@ tests.push({
     await page.goto(URL, { waitUntil: 'domcontentloaded' });
     await waitReady(page, 'data-select-ready');
     const r = await page.evaluate(() => {
-      const s = document.querySelector('#sec-basico is-select');
+      const s = document.querySelector('#sec-basico iswc-select');
       s.value = '';
       return { attr: s.getAttribute('value'), prop: s.value };
     });

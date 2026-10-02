@@ -14,15 +14,19 @@
     background: var(--iswc-progress-bar-track-color);
     border-radius: 999px;
     overflow: hidden;
+
     .indicator {
       height: 100%;
       background: var(--iswc-progress-bar-color);
       border-radius: inherit;
       transition: width 200ms ease;
       min-width: 0;
-      &.is-indeterminate {
+
+      &.iswc-indeterminate {
         width: 40% !important;
         animation: indeterminate 1.2s ease-in-out infinite;
+
+        @media (prefers-reduced-motion: reduce) { animation: none; }
       }
     }
   }
@@ -32,6 +36,7 @@
     margin-top: 0.35em;
     color: var(--iswc-text-soft, #868e96);
     font-size: 0.85em;
+
     &:empty { display: none; }
   }
 }

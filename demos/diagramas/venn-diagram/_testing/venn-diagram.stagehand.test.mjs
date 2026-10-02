@@ -12,7 +12,7 @@ const DEMO = {
 async function checkDeterministic(page) {
   await page.waitForTimeout(200);
   const data = await page.evaluate(() => {
-    const el = document.querySelector('main is-venn-diagram');
+    const el = document.querySelector('main iswc-venn-diagram');
     const shadow = el.shadowRoot;
     const svg = shadow.querySelector('svg.vn-svg');
     const svgRect = svg.getBoundingClientRect();

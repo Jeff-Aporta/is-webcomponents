@@ -1,20 +1,20 @@
 ---
-tag: is-time-input
+tag: iswc-time-input
 tags:
-  - is-time-input
+  - iswc-time-input
 category: forms
 status: public
 source: ./time-input.js
 style: ./time-input.css
 preview: ./time-input.json
 ---
-# `<is-time-input>`
+# `<iswc-time-input>`
 
 ## Propósito
 
 Campo + calendario en un panel del top layer (DatePicker de MUI X). Edita por secciones o abre el calendario. Alt+↓ abre el panel.
 
-Este módulo registra `<is-time-input>`.
+Este módulo registra `<iswc-time-input>`.
 
 ## Cuándo usarlo
 
@@ -33,7 +33,7 @@ import './time-input.js';
 ## Ejemplo mínimo
 
 ```html
-<is-time-input></is-time-input>
+<iswc-time-input></iswc-time-input>
 ```
 
 ## API
@@ -100,14 +100,14 @@ No declara integración form-associated propia en este módulo.
 
 Documentación de cabecera preservada desde fuente:
 
-> <is-time-input> — Campo de hora con panel (MUI TimePicker).
+> <iswc-time-input> — Campo de hora con panel (MUI TimePicker).
 > `panel` elige la superficie: columnas digitales (por defecto, como el picker
 > de escritorio de MUI), lista simple o reloj analógico.
 > Atributos: label, hint, name, value (HH:mm[:ss]), min, max, required,
 >            disabled, readonly, clearable, locale, ampm, hour24, seconds,
 >            panel (sections|list|clock), minutes-step, step, color,
 >            action-bar, placement, close-on-select
-> Events: is-change, is-show, is-hide
+> Events: iswc-change, iswc-show, iswc-hide
 > Methods: show(), hide()
 
 ## Dependencias y componentes relacionados
@@ -117,7 +117,7 @@ Documentación de cabecera preservada desde fuente:
 - [`./time-clock.js`](./time-clock.js)
 - [`./digital-clock.js`](./digital-clock.js)
 
-Tags del módulo: `<is-time-input>`.
+Tags del módulo: `<iswc-time-input>`.
 
 ## Accesibilidad
 
@@ -126,7 +126,7 @@ Preservar semántica, foco, teclado, labels y ARIA. ARIA detectado: ninguno expl
 ## Ejemplo avanzado
 
 ```html
-<is-time-input></is-time-input>
+<iswc-time-input></iswc-time-input>
 ```
 
 ## Errores comunes

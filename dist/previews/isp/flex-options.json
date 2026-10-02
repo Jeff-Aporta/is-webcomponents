@@ -1,11 +1,11 @@
 {
-  "$schema": "is-preview/v1",
-  "tag": "is-flex-options",
+  "$schema": "iswc-preview/v1",
+  "tag": "iswc-flex-options",
   "category": "isp",
-  "title": "<is-flex-options>",
+  "title": "<iswc-flex-options>",
   "titleHtml": true,
-  "description": "Toolbar de acciones ISP pintada con is-button / is-dropdown.",
-  "storageKey": "docs-is-flex-options",
+  "description": "Toolbar de acciones ISP pintada con iswc-button / iswc-dropdown.",
+  "storageKey": "docs-iswc-flex-options",
   "hasBehavior": true,
   "sections": [
     {
@@ -15,7 +15,7 @@
       "blocks": [
         {
           "kind": "demo",
-          "html": "<is-flex-options id=\"foDemo\"></is-flex-options>"
+          "html": "<iswc-flex-options id=\"foDemo\"></iswc-flex-options>"
         },
         {
           "kind": "code",
@@ -31,7 +31,7 @@
       "blocks": [
         {
           "kind": "demo",
-          "html": "<is-flex-options id=\"foCompact\" compact></is-flex-options>"
+          "html": "<iswc-flex-options id=\"foCompact\" compact></iswc-flex-options>"
         }
       ]
     }

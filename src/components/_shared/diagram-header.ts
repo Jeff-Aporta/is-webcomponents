@@ -6,7 +6,7 @@ import { richTextPlain } from './tk-rich-text.js';
  * El título y el subtítulo se pintan centrados en `width / 2`, así que cuando
  * el contenido del diagrama es más estrecho que el texto, la cabecera se sale
  * del lienzo por los dos lados y el PNG exportado sale con las frases cortadas.
- * Esto pasó de verdad con varios diagramas del proyecto is-tkts.
+ * Esto pasó de verdad con varios diagramas del proyecto iswc-tkts.
  *
  * El cálculo es una estimación por número de caracteres — el mismo criterio
  * que ya usan los specs para medir etiquetas — con los pesos reales del

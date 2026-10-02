@@ -18,7 +18,7 @@
  *   filter: hue-rotate(var(--iswc-hue-rotate));
  *
  * Los seeds viven tambien en palettes.json. El brand-wrap se arma con
- * buildBrandMenu() (palette-build.ts). Default = contapyme, en :root.
+ * buildBrandMenu() (palette-build.ts). Default palette = contapyme, en :root.
  */
 
 /* ─── Capa comun: cualquiera con h/s/b hereda la rampa ────────────── */
@@ -64,11 +64,11 @@
   --iswc-brand-b: 56%;
 }
 
-/* Lienzo predominante = #10151C. El tint sale del brand, no de un hex suelto. */
-.theme-dark:not([data-palette]),
-.theme-dark[data-palette="contapyme"],
-[data-theme="dark"]:not([data-palette]),
-[data-theme="dark"][data-palette="contapyme"] {
+/* Tema oscuro: ContaPyme default y `:not([data-palette])` significan lo mismo
+ * (sin atributo el browser cae a la primera coincidencia con :root o
+ * .theme-dark, y `data-palette="contapyme"` lo explicita). Misma firma para
+ * el bloque claro: tres formas de decir "sin paleta" o "conta explícito". */
+:is(.theme-dark, [data-theme="dark"]):is(:not([data-palette]), [data-palette="contapyme"]) {
   --iswc-contapyme-surface: oklch(from var(--iswc-color-brand) l calc(c * 0.25) h);
   --iswc-bg: #10151c;
   --iswc-bg-soft: color-mix(in srgb, var(--iswc-contapyme-surface) 5.5%, #121820);
@@ -83,12 +83,7 @@
   --iswc-shadow: 0 1px 0 rgb(255 255 255 / 3%), 0 8px 24px color-mix(in srgb, var(--iswc-contapyme-surface) 14%, rgb(0 0 0 / 25%));
 }
 
-.theme-light:not([data-palette]),
-.theme-light[data-palette="contapyme"],
-:root[data-theme="light"]:not([data-palette]),
-:root[data-theme="light"][data-palette="contapyme"],
-[data-theme="light"]:not([data-palette]),
-[data-theme="light"][data-palette="contapyme"] {
+:is(.theme-light, [data-theme="light"]):is(:not([data-palette]), [data-palette="contapyme"]) {
   --iswc-contapyme-surface: oklch(from var(--iswc-color-brand) l calc(c * 0.25) h);
   --iswc-bg: #fff;
   --iswc-bg-soft: color-mix(in srgb, var(--iswc-contapyme-surface) 4%, #f6f8fa);
@@ -121,8 +116,7 @@
   --iswc-logo-accent: var(--iswc-color-brand);
 }
 
-.theme-dark[data-palette="insoft"],
-[data-theme="dark"][data-palette="insoft"] {
+:is(.theme-dark, [data-theme="dark"])[data-palette="insoft"] {
   --iswc-bg: #0b0d10;
   --iswc-bg-soft: #14181d;
   --iswc-bg-elev: #1c2128;
@@ -135,9 +129,7 @@
   --iswc-control-border: #59636e;
   --iswc-shadow: 0 1px 0 rgb(255 255 255 / 3%), 0 8px 24px rgb(0 0 0 / 25%);
 }
-.theme-light[data-palette="insoft"],
-:root[data-theme="light"][data-palette="insoft"],
-[data-theme="light"][data-palette="insoft"] {
+:is(.theme-light, [data-theme="light"])[data-palette="insoft"] {
   --iswc-bg: #fff;
   --iswc-bg-soft: #f6f8fa;
   --iswc-bg-elev: #fff;
@@ -161,8 +153,7 @@
   --iswc-logo-accent: #17200a;
 }
 
-.theme-dark[data-palette="agrowin"],
-[data-theme="dark"][data-palette="agrowin"] {
+:is(.theme-dark, [data-theme="dark"])[data-palette="agrowin"] {
   --iswc-agrowin-surface: oklch(from var(--iswc-color-brand) l calc(c * 0.3) h);
   --iswc-bg: color-mix(in srgb, var(--iswc-agrowin-surface) 22%, #050505);
   --iswc-bg-soft: color-mix(in srgb, var(--iswc-agrowin-surface) 18%, #0a0a0a);
@@ -176,9 +167,7 @@
   --iswc-control-border: color-mix(in srgb, var(--iswc-agrowin-surface) 20%, #3a3a3a);
   --iswc-shadow: 0 1px 0 rgb(255 255 255 / 2%), 0 8px 24px color-mix(in srgb, var(--iswc-agrowin-surface) 35%, rgb(0 0 0 / 40%));
 }
-.theme-light[data-palette="agrowin"],
-:root[data-theme="light"][data-palette="agrowin"],
-[data-theme="light"][data-palette="agrowin"] {
+:is(.theme-light, [data-theme="light"])[data-palette="agrowin"] {
   --iswc-agrowin-surface: oklch(from var(--iswc-color-brand) l calc(c * 0.3) h);
   --iswc-bg: color-mix(in srgb, var(--iswc-agrowin-surface) 1%, #fefefe);
   --iswc-bg-soft: color-mix(in srgb, var(--iswc-agrowin-surface) 2%, #fbfbfb);

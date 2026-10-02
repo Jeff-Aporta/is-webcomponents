@@ -1,14 +1,14 @@
 ---
-tag: is-loading-overlay
+tag: iswc-loading-overlay
 tags:
-  - is-loading-overlay
+  - iswc-loading-overlay
 category: isp
 status: public
 source: ./loading-overlay.js
 style: ./loading-overlay.css
 preview: ./loading-overlay.json
 ---
-# `<is-loading-overlay>`
+# `<iswc-loading-overlay>`
 
 ## Propósito
 
@@ -16,7 +16,7 @@ Capa de bloqueo a pantalla completa con spinner y mensaje. Port de
 `src/lib/overlays/Loading.svelte` (ISP-SvelteComponents), que abre su diálogo
 con `notClose`.
 
-Este módulo registra `<is-loading-overlay>`.
+Este módulo registra `<iswc-loading-overlay>`.
 
 ## Cuándo usarlo
 
@@ -25,8 +25,8 @@ consolidar, cerrar periodo.
 
 ## Cuándo no usarlo
 
-No usar para cargas parciales de una zona (ahí van `<is-skeleton>` o
-`<is-spinner>` en línea) ni para nada cancelable — esta capa no se cierra sola.
+No usar para cargas parciales de una zona (ahí van `<iswc-skeleton>` o
+`<iswc-spinner>` en línea) ni para nada cancelable — esta capa no se cierra sola.
 
 ## Importación
 
@@ -37,7 +37,7 @@ import './loading-overlay.js';
 ## Ejemplo mínimo
 
 ```html
-<is-loading-overlay open message="Guardando…"></is-loading-overlay>
+<iswc-loading-overlay open message="Guardando…"></iswc-loading-overlay>
 ```
 
 ## API
@@ -64,15 +64,15 @@ import './loading-overlay.js';
 
 | Slot | Uso |
 | --- | --- |
-| `default` | Indicador propio en lugar de `<is-spinner>`. |
+| `default` | Indicador propio en lugar de `<iswc-spinner>`. |
 | `message` | Contenido rico en lugar del atributo `message`. |
 
 ### Eventos
 
 | Evento | detail | bubbles | composed | cancelable |
 | --- | --- | --- | --- | --- |
-| `is-show` | `{}` | sí | sí | no |
-| `is-hide` | `{}` | sí | sí | no |
+| `iswc-show` | `{}` | sí | sí | no |
+| `iswc-hide` | `{}` | sí | sí | no |
 
 ### Métodos y propiedades públicas
 
@@ -118,21 +118,21 @@ que la abrió puede cerrarla.
 - [`../_shared/adopt-css.js`](../_shared/adopt-css.js)
 - [`../feedback/spinner.js`](../feedback/spinner.js)
 
-Tags del módulo: `<is-loading-overlay>`.
+Tags del módulo: `<iswc-loading-overlay>`.
 
 ## Accesibilidad
 
-`role="alertdialog"` + `aria-busy="true"` en el velo; `<is-spinner>` aporta el
+`role="alertdialog"` + `aria-busy="true"` en el velo; `<iswc-spinner>` aporta el
 `role="status"`.
 
 ## Ejemplo avanzado
 
 ```html
-<is-block-layout style="position: relative">
-  <is-loading-overlay id="cargando" message="Consultando saldos…" scroll-lock>
-  </is-loading-overlay>
-  <is-data-grid></is-data-grid>
-</is-block-layout>
+<iswc-block-layout style="position: relative">
+  <iswc-loading-overlay id="cargando" message="Consultando saldos…" scroll-lock>
+  </iswc-loading-overlay>
+  <iswc-data-grid></iswc-data-grid>
+</iswc-block-layout>
 
 <script type="module">
   const overlay = document.getElementById('cargando');

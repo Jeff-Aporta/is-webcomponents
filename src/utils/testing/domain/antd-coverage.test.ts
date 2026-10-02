@@ -16,82 +16,82 @@ const ourTitles = new Set(manifest.map((c) => c.title.toLowerCase().trim()));
 // Mapeo oficial: nombre canónico de Ant Design → tag nuestro (o null si falta)
 const ANT_DESIGN = [
   // ── General (4) ──
-  { antd: 'Button',             ours: 'is-button',               tier: 'core' },
-  { antd: 'FloatButton',        ours: 'is-fab',                  tier: 'core' },
-  { antd: 'Icon',               ours: 'is-icon',                 tier: 'core' },
-  { antd: 'Typography',         ours: null,                      tier: 'nice' }, // puro CSS, podría mapear a is-callout/is-tag
+  { antd: 'Button',             ours: 'iswc-button',               tier: 'core' },
+  { antd: 'FloatButton',        ours: 'iswc-fab',                  tier: 'core' },
+  { antd: 'Icon',               ours: 'iswc-icon',                 tier: 'core' },
+  { antd: 'Typography',         ours: null,                      tier: 'nice' }, // puro CSS, podría mapear a iswc-callout/iswc-tag
 
   // ── Layout (7) ──
-  { antd: 'Divider',            ours: 'is-divider',              tier: 'core' },
+  { antd: 'Divider',            ours: 'iswc-divider',              tier: 'core' },
   { antd: 'Flex',               ours: null,                      tier: 'pure-css' }, // CSS layout
   { antd: 'Grid',               ours: null,                      tier: 'pure-css' }, // CSS grid
-  { antd: 'Layout',             ours: 'is-split-panel',          tier: 'core' },     // Header/Sider/Content → split-panel + main
+  { antd: 'Layout',             ours: 'iswc-split-panel',          tier: 'core' },     // Header/Sider/Content → split-panel + main
   { antd: 'Masonry',            ours: null,                      tier: 'nice' },     // layout avanzado (CSS columns o masonry nativo)
   { antd: 'Space',              ours: null,                      tier: 'pure-css' }, // CSS gap/margin
-  { antd: 'Splitter',           ours: 'is-split-panel',          tier: 'core' },
+  { antd: 'Splitter',           ours: 'iswc-split-panel',          tier: 'core' },
 
   // ── Navigation (7) ──
-  { antd: 'Anchor',             ours: 'is-scrollspy',            tier: 'core' },   // nav por anclas que resalta según scroll
-  { antd: 'Breadcrumb',         ours: 'is-breadcrumb',           tier: 'core' },
-  { antd: 'Dropdown',           ours: 'is-dropdown',             tier: 'core' },
-  { antd: 'Menu',               ours: 'is-mega-menu',            tier: 'core' },   // + is-context-menu para el menú contextual
+  { antd: 'Anchor',             ours: 'iswc-scrollspy',            tier: 'core' },   // nav por anclas que resalta según scroll
+  { antd: 'Breadcrumb',         ours: 'iswc-breadcrumb',           tier: 'core' },
+  { antd: 'Dropdown',           ours: 'iswc-dropdown',             tier: 'core' },
+  { antd: 'Menu',               ours: 'iswc-mega-menu',            tier: 'core' },   // + iswc-context-menu para el menú contextual
   { antd: 'Pagination',         ours: null,                      tier: 'core' },
-  { antd: 'Steps',              ours: 'is-stepper',              tier: 'core' },
-  { antd: 'Tabs',               ours: 'is-tab-group',            tier: 'core' },
+  { antd: 'Steps',              ours: 'iswc-stepper',              tier: 'core' },
+  { antd: 'Tabs',               ours: 'iswc-tab-group',            tier: 'core' },
 
   // ── Data Entry (18) ──
-  { antd: 'AutoComplete',       ours: 'is-combobox',             tier: 'core' },
+  { antd: 'AutoComplete',       ours: 'iswc-combobox',             tier: 'core' },
   { antd: 'Cascader',           ours: null,                      tier: 'core' },
-  { antd: 'Checkbox',           ours: 'is-checkbox',             tier: 'core' },
-  { antd: 'ColorPicker',        ours: 'is-color-picker',         tier: 'core' },
-  { antd: 'DatePicker',         ours: 'is-date-picker',          tier: 'core' },
-  { antd: 'Form',               ours: 'is-form',                 tier: 'core' },
-  { antd: 'Input',              ours: 'is-input',                tier: 'core' },
+  { antd: 'Checkbox',           ours: 'iswc-checkbox',             tier: 'core' },
+  { antd: 'ColorPicker',        ours: 'iswc-color-picker',         tier: 'core' },
+  { antd: 'DatePicker',         ours: 'iswc-date-picker',          tier: 'core' },
+  { antd: 'Form',               ours: 'iswc-form',                 tier: 'core' },
+  { antd: 'Input',              ours: 'iswc-input',                tier: 'core' },
   { antd: 'InputNumber',        ours: null,                      tier: 'core' },   // tenemos input, falta spinbutton
   { antd: 'Mentions',           ours: null,                      tier: 'nice' },   // input con @-references
-  { antd: 'Radio',              ours: 'is-radio',                tier: 'core' },
-  { antd: 'Rate',               ours: 'is-rating',               tier: 'core' },
-  { antd: 'Select',             ours: 'is-select',               tier: 'core' },
-  { antd: 'Slider',             ours: 'is-slider',               tier: 'core' },
-  { antd: 'Switch',             ours: 'is-switch',               tier: 'core' },
-  { antd: 'TimePicker',         ours: 'is-time-clock',           tier: 'core' },
-  { antd: 'Transfer',           ours: 'is-transfer',             tier: 'core' },
-  { antd: 'TreeSelect',         ours: 'is-tree',                 tier: 'core' },   // tree implementa expand/collapse
-  { antd: 'Upload',             ours: 'is-file-input',           tier: 'core' },
+  { antd: 'Radio',              ours: 'iswc-radio',                tier: 'core' },
+  { antd: 'Rate',               ours: 'iswc-rating',               tier: 'core' },
+  { antd: 'Select',             ours: 'iswc-select',               tier: 'core' },
+  { antd: 'Slider',             ours: 'iswc-slider',               tier: 'core' },
+  { antd: 'Switch',             ours: 'iswc-switch',               tier: 'core' },
+  { antd: 'TimePicker',         ours: 'iswc-time-clock',           tier: 'core' },
+  { antd: 'Transfer',           ours: 'iswc-transfer',             tier: 'core' },
+  { antd: 'TreeSelect',         ours: 'iswc-tree',                 tier: 'core' },   // tree implementa expand/collapse
+  { antd: 'Upload',             ours: 'iswc-file-input',           tier: 'core' },
 
   // ── Data Display (20) ──
-  { antd: 'Avatar',             ours: 'is-avatar',               tier: 'core' },
-  { antd: 'Badge',              ours: 'is-badge',                tier: 'core' },
-  { antd: 'Calendar',           ours: 'is-month-calendar',       tier: 'core' },
-  { antd: 'Card',               ours: 'is-card',                 tier: 'core' },
-  { antd: 'Carousel',           ours: 'is-carousel',             tier: 'core' },
-  { antd: 'Collapse',           ours: 'is-details',              tier: 'core' },
+  { antd: 'Avatar',             ours: 'iswc-avatar',               tier: 'core' },
+  { antd: 'Badge',              ours: 'iswc-badge',                tier: 'core' },
+  { antd: 'Calendar',           ours: 'iswc-month-calendar',       tier: 'core' },
+  { antd: 'Card',               ours: 'iswc-card',                 tier: 'core' },
+  { antd: 'Carousel',           ours: 'iswc-carousel',             tier: 'core' },
+  { antd: 'Collapse',           ours: 'iswc-details',              tier: 'core' },
   { antd: 'Descriptions',       ours: null,                      tier: 'core' },
   { antd: 'Empty',              ours: null,                      tier: 'core' },
   { antd: 'Image',              ours: null,                      tier: 'core' },   // img wrapper con preview
   { antd: 'List',               ours: null,                      tier: 'core' },   // Deprecated en antd 6.x
-  { antd: 'Popover',            ours: 'is-popover',              tier: 'core' },
+  { antd: 'Popover',            ours: 'iswc-popover',              tier: 'core' },
   { antd: 'QRCode',             ours: null,                      tier: 'nice' },
-  { antd: 'Segmented',          ours: 'is-button-group',         tier: 'core' },   // control segmentado con selección
-  { antd: 'Statistic',          ours: 'is-stat',                 tier: 'core' },
-  { antd: 'Table',              ours: 'is-data-grid',            tier: 'core' },
-  { antd: 'Tag',                ours: 'is-tag',                  tier: 'core' },
-  { antd: 'Timeline',           ours: 'is-timeline',             tier: 'core' },
-  { antd: 'Tooltip',            ours: 'is-tooltip',              tier: 'core' },
+  { antd: 'Segmented',          ours: 'iswc-button-group',         tier: 'core' },   // control segmentado con selección
+  { antd: 'Statistic',          ours: 'iswc-stat',                 tier: 'core' },
+  { antd: 'Table',              ours: 'iswc-data-grid',            tier: 'core' },
+  { antd: 'Tag',                ours: 'iswc-tag',                  tier: 'core' },
+  { antd: 'Timeline',           ours: 'iswc-timeline',             tier: 'core' },
+  { antd: 'Tooltip',            ours: 'iswc-tooltip',              tier: 'core' },
   { antd: 'Tour',               ours: null,                      tier: 'nice' },
-  { antd: 'Tree',               ours: 'is-tree',                 tier: 'core' },
+  { antd: 'Tree',               ours: 'iswc-tree',                 tier: 'core' },
 
   // ── Feedback (11) ──
-  { antd: 'Alert',              ours: 'is-callout',              tier: 'core' },
-  { antd: 'Drawer',             ours: 'is-drawer',               tier: 'core' },
-  { antd: 'Message',            ours: 'is-toast',                tier: 'core' },
-  { antd: 'Modal',              ours: 'is-dialog',               tier: 'core' },
-  { antd: 'Notification',       ours: 'is-toast',                tier: 'core' },
-  { antd: 'Popconfirm',         ours: 'is-popconfirm',           tier: 'core' },
-  { antd: 'Progress',           ours: 'is-progress-bar',         tier: 'core' },
+  { antd: 'Alert',              ours: 'iswc-callout',              tier: 'core' },
+  { antd: 'Drawer',             ours: 'iswc-drawer',               tier: 'core' },
+  { antd: 'Message',            ours: 'iswc-toast',                tier: 'core' },
+  { antd: 'Modal',              ours: 'iswc-dialog',               tier: 'core' },
+  { antd: 'Notification',       ours: 'iswc-toast',                tier: 'core' },
+  { antd: 'Popconfirm',         ours: 'iswc-popconfirm',           tier: 'core' },
+  { antd: 'Progress',           ours: 'iswc-progress-bar',         tier: 'core' },
   { antd: 'Result',             ours: null,                      tier: 'core' },
-  { antd: 'Skeleton',           ours: 'is-skeleton',             tier: 'core' },
-  { antd: 'Spin',               ours: 'is-spinner',              tier: 'core' },
+  { antd: 'Skeleton',           ours: 'iswc-skeleton',             tier: 'core' },
+  { antd: 'Spin',               ours: 'iswc-spinner',              tier: 'core' },
   { antd: 'Watermark',          ours: null,                      tier: 'nice' },
 
   // ── Other (5) ──
@@ -105,13 +105,13 @@ const ANT_DESIGN = [
 // regresiones. Mantener aquí la lista exacta y con su motivo — el test de
 // cobertura exige que los core sin `ours` coincidan 1:1 con este mapa.
 const ROADMAP_CORE = {
-  Pagination: 'paginador standalone; hoy la paginación vive dentro de is-data-grid (pagination / page-size / page-size-options)',
+  Pagination: 'paginador standalone; hoy la paginación vive dentro de iswc-data-grid (pagination / page-size / page-size-options)',
   Cascader: 'selector jerárquico en cascada (p. ej. provincia/ciudad)',
-  InputNumber: 'input numérico con steppers; is-input cubre type="number" + min/max/step pero sin botones +/-',
+  InputNumber: 'input numérico con steppers; iswc-input cubre type="number" + min/max/step pero sin botones +/-',
   Descriptions: 'lista clave/valor de un registro (definition list)',
   Empty: 'estado vacío ilustrado para listas/resultados',
-  Image: 'imagen con preview; is-lightbox es el visor full-screen (zoom/pan/share), no el <img> en línea',
-  List: 'deprecado en Ant Design 6.x — su caso se cubre con is-data-grid / ag-grid',
+  Image: 'imagen con preview; iswc-lightbox es el visor full-screen (zoom/pan/share), no el <img> en línea',
+  List: 'deprecado en Ant Design 6.x — su caso se cubre con iswc-data-grid / ag-grid',
   Result: 'página de estado (éxito/error) con icono y acciones',
   ConfigProvider: 'tema/paleta: el kit lo resuelve con data-theme/data-palette + tokens --iswc-* (no con un provider JS)',
 };

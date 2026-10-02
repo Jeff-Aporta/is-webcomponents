@@ -1,14 +1,14 @@
 ---
-tag: is-flowchart
+tag: iswc-flowchart
 tags:
-  - is-flowchart
+  - iswc-flowchart
 category: diagrams
 status: public
 source: ./flowchart.js
 style: ./flowchart.css
 preview: ./flowchart.json
 ---
-# `<is-flowchart>`
+# `<iswc-flowchart>`
 
 ## Propósito
 
@@ -16,7 +16,7 @@ Diagrama de flujo en SVG, sin Mermaid. Tú declaras nodos y aristas; el
 componente decide las capas, reduce los cruces y rutea las flechas
 rodeando las cajas.
 
-Este módulo registra `<is-flowchart>`.
+Este módulo registra `<iswc-flowchart>`.
 
 ## Cuándo usarlo
 
@@ -35,11 +35,11 @@ import './flowchart.js';
 ## Ejemplo mínimo
 
 ```html
-<is-flowchart open-on-click animation="flow">
+<iswc-flowchart open-on-click animation="flow">
   <script type="application/json">
     { "flowchart": { "direction": "TB", "nodes": […], "edges": […] } }
   </script>
-</is-flowchart>
+</iswc-flowchart>
 ```
 
 `animation="flow"` dibuja una arista dashed brand (con transparencia) detrás de cada arista continua; los dash se desplazan en el sentido del flujo. Ausente = sin animación. Tokens futuros se suman con espacios (`animation="flow …"`).
@@ -54,7 +54,7 @@ import './flowchart.js';
 | --- | --- | --- |
 | `color` | `inline` \| `viewer` | Modo visor vs embebido. |
 | `mode` | `read` \| `edit` | Edición de layout (drag). |
-| `open-on-click` | boolean | Clic abre `<is-diagram-lightbox>`. |
+| `open-on-click` | boolean | Clic abre `<iswc-diagram-lightbox>`. |
 | `animation` | tokens (`flow`, …) | Efectos opcionales (espacio-separados). Default: off. |
 | `persist` / `storage-key` | string | Persistencia de overrides en edit. |
 
@@ -82,10 +82,10 @@ import './flowchart.js';
 
 | Evento | detail | bubbles | composed | cancelable |
 | --- | --- | --- | --- | --- |
-| `is-turtle-state` | sí | sí | sí | no |
-| `is-render` | sí | sí | sí | no |
-| `is-toggle-group` | sí | sí | sí | sí |
-| `is-open-viewer` | sí | sí | sí | sí |
+| `iswc-turtle-state` | sí | sí | sí | no |
+| `iswc-render` | sí | sí | sí | no |
+| `iswc-toggle-group` | sí | sí | sí | sí |
+| `iswc-open-viewer` | sí | sí | sí | sí |
 
 ### Métodos y propiedades públicas
 
@@ -123,16 +123,16 @@ No declara integración form-associated propia en este módulo.
 
 Documentación de cabecera preservada desde fuente:
 
-> <is-flowchart> — diagrama de flujo en SVG, sin Mermaid.
-> Configuración por JSON, igual que <is-sequence-diagram>:
->   <is-flowchart>
+> <iswc-flowchart> — diagrama de flujo en SVG, sin Mermaid.
+> Configuración por JSON, igual que <iswc-sequence-diagram>:
+>   <iswc-flowchart>
 >     <script type="application/json">
 >       { "flowchart": { "direction": "TB", "nodes": [...], "edges": [...] } }
 >     </script>
->   </is-flowchart>
+>   </iswc-flowchart>
 > Atributos: color (inline | viewer), open-on-click
 > Propiedades: payload, spec, layout, turtle, hiddenGroups
-> Eventos: is-render, is-turtle-state, is-open-viewer, is-toggle-group
+> Eventos: iswc-render, iswc-turtle-state, iswc-open-viewer, iswc-toggle-group
 
 ## Dependencias y componentes relacionados
 
@@ -147,7 +147,7 @@ Documentación de cabecera preservada desde fuente:
 - [`./diagram-kinds.js`](./diagram-kinds.js)
 - [`../_shared/diagram-edit.js`](../_shared/diagram-edit.js)
 
-Tags del módulo: `<is-flowchart>`.
+Tags del módulo: `<iswc-flowchart>`.
 
 ## Accesibilidad
 
@@ -156,7 +156,7 @@ Preservar semántica, foco, teclado, labels y ARIA. ARIA detectado: `aria-label`
 ## Ejemplo avanzado
 
 ```html
-<is-flowchart></is-flowchart>
+<iswc-flowchart></iswc-flowchart>
 ```
 
 ## Errores comunes

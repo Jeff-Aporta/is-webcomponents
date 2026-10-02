@@ -38,56 +38,56 @@
   <p class="lead">Componentes SVG-nativos (sin librerías externas) para visualizar datos. Cada uno tiene tests exhaustivos (Playwright puro, sin Stagehand LLM).</p>
 
   <div class="grid">
-    <span class="group-title">Custom elements tipados (wrapper sobre <code>&lt;is-chart&gt;</code>)</span>
+    <span class="group-title">Custom elements tipados (wrapper sobre <code>&lt;iswc-chart&gt;</code>)</span>
 
     <a class="card" href="./bar-chart/bar-chart.html">
       <span class="tag">typed · bar</span>
-      <h2>&lt;is-bar-chart&gt;</h2>
+      <h2>&lt;iswc-bar-chart&gt;</h2>
       <p>Barras verticales. Acepta <code>{type, data:{labels,datasets}}</code>.</p>
     </a>
     <a class="card" href="./line-chart/line-chart.html">
       <span class="tag">typed · line</span>
-      <h2>&lt;is-line-chart&gt;</h2>
+      <h2>&lt;iswc-line-chart&gt;</h2>
       <p>Líneas con curva configurable (linear, natural, step).</p>
     </a>
     <a class="card" href="./scatter-chart/scatter-chart.html">
       <span class="tag">typed · scatter</span>
-      <h2>&lt;is-scatter-chart&gt;</h2>
+      <h2>&lt;iswc-scatter-chart&gt;</h2>
       <p>XY numérico puro. Datasets con <code>{x, y}</code>.</p>
     </a>
     <a class="card" href="./bubble-chart/bubble-chart.html">
       <span class="tag">typed · bubble</span>
-      <h2>&lt;is-bubble-chart&gt;</h2>
+      <h2>&lt;iswc-bubble-chart&gt;</h2>
       <p>XY numérico con radio variable. <code>{x, y, r}</code>.</p>
     </a>
     <a class="card" href="./pie-chart/pie-chart.html">
       <span class="tag">typed · pie</span>
-      <h2>&lt;is-pie-chart&gt;</h2>
+      <h2>&lt;iswc-pie-chart&gt;</h2>
       <p>Rebanadas en SVG. Leyenda interactiva.</p>
     </a>
     <a class="card" href="./doughnut-chart/doughnut-chart.html">
       <span class="tag">typed · doughnut</span>
-      <h2>&lt;is-doughnut-chart&gt;</h2>
+      <h2>&lt;iswc-doughnut-chart&gt;</h2>
       <p>Pie con hueco central (cutout). Total al centro.</p>
     </a>
     <a class="card" href="./polar-area-chart/polar-area-chart.html">
       <span class="tag">typed · polarArea</span>
-      <h2>&lt;is-polar-area-chart&gt;</h2>
+      <h2>&lt;iswc-polar-area-chart&gt;</h2>
       <p>Sectores polares con radio variable por valor.</p>
     </a>
     <a class="card" href="./radar-chart/radar-chart.html">
       <span class="tag">typed · radar</span>
-      <h2>&lt;is-radar-chart&gt;</h2>
+      <h2>&lt;iswc-radar-chart&gt;</h2>
       <p>Polígono radar con relleno.</p>
     </a>
     <a class="card" href="./funnel-chart/funnel-chart.html">
       <span class="tag">typed · funnel</span>
-      <h2>&lt;is-funnel-chart&gt;</h2>
+      <h2>&lt;iswc-funnel-chart&gt;</h2>
       <p>Embudo. <code>dropPct</code> entre pasos.</p>
     </a>
     <a class="card" href="./waterfall-chart/waterfall-chart.html">
       <span class="tag">typed · waterfall</span>
-      <h2>&lt;is-waterfall-chart&gt;</h2>
+      <h2>&lt;iswc-waterfall-chart&gt;</h2>
       <p>Cascada con deltas y totales.</p>
     </a>
 
@@ -95,17 +95,17 @@
 
     <a class="card" href="./chart/chart.html">
       <span class="tag">generic · multi-tipo</span>
-      <h2>&lt;is-chart&gt;</h2>
+      <h2>&lt;iswc-chart&gt;</h2>
       <p>Motor genérico. Acepta <code>type</code> y config tipo Chart.js.</p>
     </a>
     <a class="card" href="./sparkline/sparkline.html">
       <span class="tag">standalone</span>
-      <h2>&lt;is-sparkline&gt;</h2>
+      <h2>&lt;iswc-sparkline&gt;</h2>
       <p>Mini-gráfico inline. Atributo <code>values</code> o propiedad <code>data</code>.</p>
     </a>
     <a class="card" href="./treemap/treemap.html">
       <span class="tag">standalone</span>
-      <h2>&lt;is-treemap&gt;</h2>
+      <h2>&lt;iswc-treemap&gt;</h2>
       <p>Teselado squarified anidado en SVG. Tooltip y visor propios.</p>
     </a>
 
@@ -141,10 +141,10 @@
   <div class="meta">
     <p><strong>Arquitectura:</strong></p>
     <ul>
-      <li><code>&lt;is-chart&gt;</code> — motor SVG genérico, expone <code>window.__isDefineTypedChart</code>.</li>
+      <li><code>&lt;iswc-chart&gt;</code> — motor SVG genérico, expone <code>window.__isDefineTypedChart</code>.</li>
       <li><code>is-X-chart</code> — wrappers que llaman <code>__isDefineTypedChart</code> con su tipo fijo y su drawMarks.</li>
       <li><code>marks-*</code> — funciones puras (<code>drawXxxMarks(ctx)</code>) usadas por el motor.</li>
-      <li><code>treemap</code> / <code>sparkline</code> — componentes standalone (no usan el motor <code>is-chart</code>).</li>
+      <li><code>treemap</code> / <code>sparkline</code> — componentes standalone (no usan el motor <code>iswc-chart</code>).</li>
     </ul>
   </div>
 </main>

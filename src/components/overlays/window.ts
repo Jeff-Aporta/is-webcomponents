@@ -4,7 +4,7 @@ import { ElementBase } from '../../core/element-base.js';
 import { createPopupDismiss } from '../_shared/popup-dismiss.js';
 
 /**
- * <is-window> — Ventana flotante (estilo escritorio).
+ * <iswc-window> — Ventana flotante (estilo escritorio).
  *
  * Atributos
  *   title       encabezado de la ventana
@@ -22,10 +22,10 @@ import { createPopupDismiss } from '../_shared/popup-dismiss.js';
  *   title       slot opcional que reemplaza el atributo title
  *
  * Eventos (vocabulario de ModalBase)
- *   is-show / is-after-show     al conectarse la ventana
- *   is-hide  / is-after-hide    al cerrarse
- *   is-minimize, is-restore
- *   is-maximize
+ *   iswc-show / iswc-after-show     al conectarse la ventana
+ *   iswc-hide  / iswc-after-hide    al cerrarse
+ *   iswc-minimize, iswc-restore
+ *   iswc-maximize
  *
  * Accesibilidad
  *   role="dialog" + aria-label del título. Escape cierra (si `closable`) y
@@ -50,7 +50,7 @@ import { createPopupDismiss } from '../_shared/popup-dismiss.js';
   interface DragState { x: number; y: number; rect: Rect; }
   interface ResizeState { x: number; y: number; rect: Rect; }
 
-  class IsWindow extends ElementBase {
+  class IswcWindow extends ElementBase {
     /** Personalización por atributo (ver `core/attrs.ts`). */
     static styleAttrs = {
     shadow: '--iswc-popover-shadow',
@@ -77,13 +77,13 @@ import { createPopupDismiss } from '../_shared/popup-dismiss.js';
       super();
       this.attachShadow({ mode: 'open' });
       this.shadowRoot!.innerHTML = /* html */ `
-        <div part="root" class="root is-popover-panel" data-state="normal">
-          <header part="header" class="header is-surface-bar">
+        <div part="root" class="root iswc-popover-panel" data-state="normal">
+          <header part="header" class="header iswc-surface-bar">
             <span class="title-wrap"><slot name="title"></slot><span class="title" id="ttl"></span></span>
             <span class="controls">
-              <is-button variant="plain" class="ctrl" data-act="min" title="Minimizar" aria-label="Minimizar" hidden><span aria-hidden="true">▁</span></is-button>
-              <is-button variant="plain" class="ctrl" data-act="max" title="Maximizar" aria-label="Maximizar" hidden><span aria-hidden="true">▢</span></is-button>
-              <is-button variant="plain" color="danger" class="ctrl" data-act="close" title="Cerrar" aria-label="Cerrar" hidden><span aria-hidden="true">✕</span></is-button>
+              <iswc-button variant="plain" class="ctrl" data-act="min" title="Minimizar" aria-label="Minimizar" hidden><span aria-hidden="true">▁</span></iswc-button>
+              <iswc-button variant="plain" class="ctrl" data-act="max" title="Maximizar" aria-label="Maximizar" hidden><span aria-hidden="true">▢</span></iswc-button>
+              <iswc-button variant="plain" color="danger" class="ctrl" data-act="close" title="Cerrar" aria-label="Cerrar" hidden><span aria-hidden="true">✕</span></iswc-button>
             </span>
           </header>
           <div part="body" class="body" tabindex="0">
@@ -110,7 +110,7 @@ import { createPopupDismiss } from '../_shared/popup-dismiss.js';
 
     onConnected() {
       if (this.#moving) return;
-      emit(this, 'is-show');
+      emit(this, 'iswc-show');
       if (!this.hasAttribute('role')) this.setAttribute('role', 'dialog');
       // aria-modal="true" indica a lectores de pantalla que el contenido
       // fuera del dialog esta inerte (mantiene focus trap / sin Tab).
@@ -149,7 +149,7 @@ import { createPopupDismiss } from '../_shared/popup-dismiss.js';
       queueMicrotask(() => {
         if (this.isConnected && this.#body) this.#body.focus({ preventScroll: true });
       });
-      emit(this, 'is-after-show');
+      emit(this, 'iswc-after-show');
     }
 
     onDisconnected() {
@@ -173,7 +173,7 @@ import { createPopupDismiss } from '../_shared/popup-dismiss.js';
     }
 
     /** Escape cierra; Tab se queda dentro mientras el foco esté en la ventana.
-     *  El foco NO se atrapa si el usuario está fuera: is-window no es modal,
+     *  El foco NO se atrapa si el usuario está fuera: iswc-window no es modal,
      *  conviven varias en pantalla y secuestrar el Tab global las rompería.
      *  Si aria-modal="true" esta activo, si se aplica el focus trap tambien
      *  con el foco en el light DOM del componente (slotted children). */
@@ -209,11 +209,11 @@ import { createPopupDismiss } from '../_shared/popup-dismiss.js';
       },
     });
 
-    /** ¿Esta ventana es la de mayor zIndex entre las is-window visibles? Para
+    /** ¿Esta ventana es la de mayor zIndex entre las iswc-window visibles? Para
      *  aria-modal=true: si el usuario clico otra ventana, esta deja de ser
      *  la "top" y deberia dejar de atrapar el foco. */
     #isTopMostWindow(): boolean {
-      const all = [...document.querySelectorAll<HTMLElement>('is-window')]
+      const all = [...document.querySelectorAll<HTMLElement>('iswc-window')]
         .filter((w) => w !== this && !w.hasAttribute('hidden'));
       const myZ = Number(this.style.zIndex) || 100;
       for (const w of all) {
@@ -233,7 +233,7 @@ import { createPopupDismiss } from '../_shared/popup-dismiss.js';
       this.style.height = '';
       this.#raise();
       this.#reflowBars();
-      emit(this, 'is-minimize');
+      emit(this, 'iswc-minimize');
     }
 
     maximize() {
@@ -250,7 +250,7 @@ import { createPopupDismiss } from '../_shared/popup-dismiss.js';
       this.style.height = '100%';
       this.style.transform = 'none';
       this.#reflowBars();
-      emit(this, 'is-maximize');
+      emit(this, 'iswc-maximize');
     }
 
     restore() {
@@ -269,7 +269,7 @@ import { createPopupDismiss } from '../_shared/popup-dismiss.js';
         this.style.setProperty('--_w', `${this.#lastRect.w}px`);
         this.style.setProperty('--_h', `${this.#lastRect.h}px`);
       }
-      emit(this, 'is-restore', { was: target });
+      emit(this, 'iswc-restore', { was: target });
       this.#reflowBars();
     }
 
@@ -279,13 +279,13 @@ import { createPopupDismiss } from '../_shared/popup-dismiss.js';
     }
 
     close() {
-      emit(this, 'is-hide');
+      emit(this, 'iswc-hide');
       this.remove();
-      emit(this, 'is-after-hide');
+      emit(this, 'iswc-after-hide');
     }
 
     #raise() {
-      const all = document.querySelectorAll<HTMLElement>('is-window');
+      const all = document.querySelectorAll<HTMLElement>('iswc-window');
       let max = 0;
       all.forEach((w: HTMLElement) => { const z = Number(w.style.zIndex) || 100; if (z > max) max = z; });
       this.style.zIndex = String(max + 1);
@@ -368,8 +368,8 @@ import { createPopupDismiss } from '../_shared/popup-dismiss.js';
 
     /** Pastillas minimizadas, de izquierda a derecha, abajo del mismo contexto. */
     #reflowBars() {
-      const wins = [...document.querySelectorAll('is-window')] as IsWindow[];
-      const groups = new Map<string, IsWindow[]>();
+      const wins = [...document.querySelectorAll('iswc-window')] as IswcWindow[];
+      const groups = new Map<string, IswcWindow[]>();
       for (const w of wins) {
         if (w.#state !== 'minimized' || !w.isConnected) continue;
         const key = w.#barKey();
@@ -427,5 +427,5 @@ import { createPopupDismiss } from '../_shared/popup-dismiss.js';
     #titleSlot!: HTMLSlotElement;
   }
 
-  defineElement('is-window', IsWindow);
+  defineElement('iswc-window', IswcWindow);
 })();

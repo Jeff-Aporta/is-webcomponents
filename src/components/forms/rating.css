@@ -15,7 +15,7 @@
 :host([color="neutral"]) { --iswc-rating-color: var(--iswc-control-text, #f0f3f6); }
 :host([color="success"]) { --iswc-rating-color: var(--iswc-color-success, #40c057); }
 :host([color="warning"]) { --iswc-rating-color: var(--iswc-color-warning, #f59f00); }
-:host([color="danger"]) { --iswc-rating-color: var(--iswc-color-danger, #fa5252); }
+:host([color="danger"])  { --iswc-rating-color: var(--iswc-color-danger, #fa5252); }
 
 .form-control {
   display: flex;
@@ -27,33 +27,33 @@
   font-size: 0.875em;
   font-weight: 500;
   color: var(--iswc-text-soft, inherit);
-  width: fit-content;
-}
+  inline-size: fit-content;
 
-.label[hidden] { display: none !important; }
+  &[hidden] { display: none !important; }
+}
 
 .row {
   display: flex;
   align-items: center;
   gap: 0.75em;
-  width: fit-content;
+  inline-size: fit-content;
 }
 
 .base {
   display: inline-flex;
   align-items: center;
   gap: var(--iswc-rating-gap);
-  width: fit-content;
+  inline-size: fit-content;
   padding: 0.1em;
   border-radius: var(--iswc-radius-sm, 0.375em);
   outline: none;
   cursor: pointer;
   touch-action: manipulation;
-}
 
-.base:focus-visible {
-  outline: 2px solid var(--iswc-rating-focus);
-  outline-offset: 2px;
+  &:focus-visible {
+    outline: 2px solid var(--iswc-rating-focus);
+    outline-offset: 2px;
+  }
 }
 
 .star {
@@ -62,6 +62,8 @@
   font-size: var(--iswc-rating-size);
   line-height: 0;
   transition: scale 100ms ease;
+
+  &:hover { scale: 1.12; }
 }
 
 .layer {
@@ -74,29 +76,27 @@
 /* El relleno se recorta a la fracción exacta del valor (--fill) */
 .layer-fill {
   position: absolute;
-  top: 0;
-  left: 0;
+  inset-block-start: 0;
+  inset-inline-start: 0;
   color: var(--iswc-rating-color);
   clip-path: inset(0 calc(100% - var(--fill, 0%)) 0 0);
   transition: clip-path 100ms ease;
 }
 
-.star:hover { scale: 1.12; }
-
 .hover-label {
   font-size: 0.875em;
   color: var(--iswc-text-soft, inherit);
   white-space: nowrap;
+
+  &[hidden],
+  &:empty { display: none !important; }
 }
 
-.hover-label[hidden],
-.hover-label:empty { display: none !important; }
+:host(:is([readonly], :state(readonly))) {
+  .base { cursor: default; }
 
-:host([readonly]) .base,
-:host(:state(readonly)) .base { cursor: default; }
-
-:host([readonly]) .star:hover,
-:host(:state(readonly)) .star:hover { scale: 1; }
+  .star:hover { scale: 1; }
+}
 
 :host([disabled]) {
   opacity: 0.55;

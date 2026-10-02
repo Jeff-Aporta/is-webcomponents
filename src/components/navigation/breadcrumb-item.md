@@ -1,21 +1,21 @@
 ---
-tag: is-breadcrumb-item
+tag: iswc-breadcrumb-item
 tags:
-  - is-breadcrumb-item
+  - iswc-breadcrumb-item
 category: navigation
 status: public
 source: ./breadcrumb-item.js
 style: ./breadcrumb-item.css
 preview: ./breadcrumb-item.json
 ---
-# `<is-breadcrumb-item>`
+# `<iswc-breadcrumb-item>`
 
 ## Propósito
 
 Migas de pan accesibles con marcado <nav>,
 ARIA roles y separador automático entre items.
 
-Este módulo registra `<is-breadcrumb-item>`.
+Este módulo registra `<iswc-breadcrumb-item>`.
 
 ## Cuándo usarlo
 
@@ -34,12 +34,12 @@ import './breadcrumb-item.js';
 ## Ejemplo mínimo
 
 ```html
-<is-breadcrumb label="Catálogo">
-<is-breadcrumb-item href="/">Catálogo</is-breadcrumb-item>
-<is-breadcrumb-item href="/ropa">Ropa</is-breadcrumb-item>
-<is-breadcrumb-item href="/ropa/mujer">Mujer</is-breadcrumb-item>
-<is-breadcrumb-item href="">Camisetas</is-breadcrumb-item>
-</is-breadcrumb>
+<iswc-breadcrumb label="Catálogo">
+<iswc-breadcrumb-item href="/">Catálogo</iswc-breadcrumb-item>
+<iswc-breadcrumb-item href="/ropa">Ropa</iswc-breadcrumb-item>
+<iswc-breadcrumb-item href="/ropa/mujer">Mujer</iswc-breadcrumb-item>
+<iswc-breadcrumb-item href="">Camisetas</iswc-breadcrumb-item>
+</iswc-breadcrumb>
 ```
 
 ## API
@@ -116,7 +116,7 @@ No declara integración form-associated propia en este módulo.
 
 Documentación de cabecera preservada desde fuente:
 
-> <is-breadcrumb-item> — un paso individual dentro de un <is-breadcrumb>.
+> <iswc-breadcrumb-item> — un paso individual dentro de un <iswc-breadcrumb>.
 > Si tiene `href` (incluido `href=""`), el item se renderiza como <a href>.
 > Con `href=""` se marca como current page (aria-current="page", CSS [current]).
 > Si no tiene href, se renderiza como <span> (SPAs: el desarrollador maneja eventos).
@@ -136,7 +136,7 @@ Documentación de cabecera preservada desde fuente:
 
 - [`../_shared/adopt-css.js`](../_shared/adopt-css.js)
 
-Tags del módulo: `<is-breadcrumb-item>`.
+Tags del módulo: `<iswc-breadcrumb-item>`.
 
 ## Accesibilidad
 
@@ -145,11 +145,11 @@ Preservar semántica, foco, teclado, labels y ARIA. ARIA detectado: `aria-curren
 ## Ejemplo avanzado
 
 ```html
-<is-breadcrumb-item icon="mdi:home">Inicio</is-breadcrumb-item>
-<is-breadcrumb-item>
-<is-icon slot="start" icon="mdi:home"></is-icon>
+<iswc-breadcrumb-item icon="mdi:home">Inicio</iswc-breadcrumb-item>
+<iswc-breadcrumb-item>
+<iswc-icon slot="start" icon="mdi:home"></iswc-icon>
 Inicio
-</is-breadcrumb-item>
+</iswc-breadcrumb-item>
 ```
 
 ## Errores comunes

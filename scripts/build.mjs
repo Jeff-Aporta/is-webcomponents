@@ -2,6 +2,7 @@
 // + is-base/palettes + loader.min.js. Sin all.min.js ni category.*.min.js.
 import { access, readdir, mkdir, stat, rm, writeFile, readFile, copyFile, unlink } from 'node:fs/promises';
 import { existsSync } from 'node:fs';
+import { execSync } from 'node:child_process';
 import { join, dirname, basename, relative, resolve, sep } from 'node:path';
 import { fileURLToPath } from 'node:url';
 import { build } from 'esbuild';
@@ -12,6 +13,15 @@ const here = dirname(fileURLToPath(import.meta.url));
 const root = dirname(here);
 const dist = join(root, 'dist', 'cdn');
 const compRoot = join(root, 'src', 'components');
+
+/** SHA de HEAD para shaDefault. Sin git, el loader queda en main. */
+function shaDelBuild() {
+  try {
+    const sha = execSync('git rev-parse HEAD', { cwd: root, encoding: 'utf8' }).trim();
+    if (/^[0-9a-f]{40}$/i.test(sha)) return sha;
+  } catch { /* sin git */ }
+  return 'main';
+}
 
 // Índice de utilidades _shared para el preview «Ecosistema JS».
 await import('./gen-shared-index.ts');
@@ -57,7 +67,7 @@ const bundleJs = (entry, outfile, plugins = [], bannerJs = '', define = undefine
 // El CSS de cada componente viaja DENTRO de su .min.js, no como fetch aparte.
 // El href del .css hermano solo se conocia tras ejecutar el .js, asi que esas
 // peticiones eran cascada pura y no se paralelizaban con nada: para pintar un
-// <is-tree-view> eran 24 de 38. `define` sustituye el identificador por el
+// <iswc-tree-view> eran 24 de 38. `define` sustituye el identificador por el
 // literal ya minificado; `adoptCss` lo adopta con replaceSync.
 //
 // Se sigue emitiendo el .min.css hermano: lo consumen el sheet-cache del
@@ -150,7 +160,7 @@ for (const e of entries) {
 // internos (marks, specs, datagrid-core...) usan su carpeta top-level en
 // components/ como fallback.
 const manifestCategoryByTag = new Map(
-  manifest.map((m) => [m.tag.replace(/^is-/, ''), m.category]),
+  manifest.map((m) => [m.tag.replace(/^iswc-/, ''), m.category]),
 );
 const folderFor = (file) => {
   const tag = basename(file).replace(/\.(ts|js)$/, '');
@@ -161,7 +171,7 @@ const folderFor = (file) => {
 // Los componentes que importan OTROS componentes (p. ej. casi todos importan
 // media/icon.js) no deben inlinearlos: esbuild duplicaria la clase y, peor,
 // `import.meta.url` del componente inlineado apuntaria al ARCHIVO ANFITRION,
-// asi que adoptCss pedia el CSS equivocado (is-icon acababa cargando
+// asi que adoptCss pedia el CSS equivocado (iswc-icon acababa cargando
 // actions/button.min.css y perdia su tamano). Se marcan como externos y se
 // reescriben al hermano folderizado, que ya existe en dist.
 const externalComponents = {
@@ -227,7 +237,7 @@ for (const name of sharedImports) {
 
 // base-sheets: host-base + scrollbars incrustados, externo y compartido por
 // toda la pagina. Sustituye a los dos <link> que adoptCss ponia en CADA
-// instancia de CADA componente (10 de las 38 peticiones de un <is-tree-view>).
+// instancia de CADA componente (10 de las 38 peticiones de un <iswc-tree-view>).
 {
   const coreRoot = join(root, 'src', 'core');
   const outBase = join(dist, '_shared', 'base-sheets.min.js');
@@ -389,7 +399,7 @@ const loaderCatalog = {
 for (const [category, items] of byCategory) {
   const files = [];
   for (const m of items) {
-    const file = m.tag.replace(/^is-/, '');
+    const file = m.tag.replace(/^iswc-/, '');
     if (!tagToComponent.has(file)) continue;
     files.push(file);
     loaderCatalog.tags[m.tag] = { category, file };
@@ -508,6 +518,7 @@ await bundleLoader({
   banner: loaderBanner,
   catalog: loaderCatalog,
   hashes,
+  sha: shaDelBuild(),
 });
 const loaderHash = await hashFile(loaderOut);
 hashes['core/loader.min.js'] = loaderHash;

@@ -3,7 +3,7 @@
 <head>
 <meta charset="utf-8" />
 <meta name="viewport" content="width=device-width, initial-scale=1" />
-<title>Demo de <is-date-range-input> · is-webcomponents</title>
+<title>Demo de <iswc-date-range-input> · is-webcomponents</title>
 <meta name="description" content="Dos campos (inicio y fin) con un selector de rango en un panel top-layer. El valor se almacena como 'inicio/fin' en formato yyyy-mm-dd." />
 <style>
   html, body { margin: 0; padding: 0; min-height: 100%; background: #0c1118; color: #e2e8f0; font-family: ui-sans-serif, system-ui, sans-serif; }
@@ -20,18 +20,18 @@
   .value-readout code { color: #e2e8f0; }
   code { background: rgba(255,255,255,0.06); padding: 1px 5px; border-radius: 3px; font: 12px ui-monospace, Menlo, Consolas, monospace; }
   .actions { display: flex; gap: 8px; }
-  is-button.how { cursor: pointer; font: 12px ui-sans-serif; padding: 6px 10px; border: 1px solid rgba(255,255,255,0.1); border-radius: 6px; background: rgba(255,255,255,0.04); color: #93c5fd; }
-  is-button.how:hover { background: rgba(255,255,255,0.08); }
+  iswc-button.how { cursor: pointer; font: 12px ui-sans-serif; padding: 6px 10px; border: 1px solid rgba(255,255,255,0.1); border-radius: 6px; background: rgba(255,255,255,0.04); color: #93c5fd; }
+  iswc-button.how:hover { background: rgba(255,255,255,0.08); }
   /* Anti-FOUC */
-  is-date-range-input:not(:defined) { visibility: hidden; }
+  iswc-date-range-input:not(:defined) { visibility: hidden; }
 </style>
 <script type="module">
-  await import('../../../dist/cdn/forms/date-range-input.min.js?h=ay4wnh');
+  await import('../../../dist/cdn/forms/date-range-input.min.js?h=yug4xr');
 
-  await customElements.whenDefined('is-date-range-input');
+  await customElements.whenDefined('iswc-date-range-input');
 
   const wire = (el, outputId) => {
-    el.addEventListener('is-change', (e) => {
+    el.addEventListener('iswc-change', (e) => {
       const out = document.getElementById(outputId);
       if (out) out.textContent = e.detail?.value ?? '(vacío)';
     });
@@ -70,40 +70,40 @@
 <body>
 <main>
   <header>
-    <h1>&lt;is-date-range-input&gt; — Dos campos + calendario de rango</h1>
-    <p>Compone dos &lt;is-date-field&gt; (inicio y fin) con un &lt;is-date-range-picker&gt; en un panel. El valor es <code>inicio/fin</code> en formato <code>yyyy-mm-dd/yyyy-mm-dd</code>.</p>
+    <h1>&lt;iswc-date-range-input&gt; — Dos campos + calendario de rango</h1>
+    <p>Compone dos &lt;iswc-date-field&gt; (inicio y fin) con un &lt;iswc-date-range-picker&gt; en un panel. El valor es <code>inicio/fin</code> en formato <code>yyyy-mm-dd/yyyy-mm-dd</code>.</p>
   </header>
 
   <section class="card">
     <h2>Básico</h2>
-    <is-date-range-input id="basic" start-label="Desde" end-label="Hasta" hint="Selecciona el periodo" name="period"></is-date-range-input>
+    <iswc-date-range-input id="basic" start-label="Desde" end-label="Hasta" hint="Selecciona el periodo" name="period"></iswc-date-range-input>
     <div class="value-readout">Valor actual: <code id="basic-value">(vacío)</code></div>
   </section>
 
   <section class="card">
     <h2>Con valor inicial</h2>
-    <is-date-range-input id="with-value" start-label="Inicio" end-label="Fin" clearable name="pr"></is-date-range-input>
+    <iswc-date-range-input id="with-value" start-label="Inicio" end-label="Fin" clearable name="pr"></iswc-date-range-input>
     <div class="value-readout">Valor actual: <code id="with-value-value">(vacío)</code></div>
   </section>
 
   <section class="card">
     <h2>Con atajos (shortcuts)</h2>
-    <is-date-range-input id="with-shortcuts" start-label="Inicio" end-label="Fin" name="s"></is-date-range-input>
+    <iswc-date-range-input id="with-shortcuts" start-label="Inicio" end-label="Fin" name="s"></iswc-date-range-input>
     <div class="value-readout">Valor actual: <code id="with-shortcuts-value">(vacío)</code></div>
   </section>
 
   <section class="card">
     <h2>Con min / max</h2>
-    <is-date-range-input id="ranged" start-label="Desde" end-label="Hasta" hint="Rango 2025–2026" name="r"></is-date-range-input>
+    <iswc-date-range-input id="ranged" start-label="Desde" end-label="Hasta" hint="Rango 2025–2026" name="r"></iswc-date-range-input>
     <div class="value-readout">Valor actual: <code id="ranged-value">(vacío)</code></div>
   </section>
 
   <section class="card">
     <h2>Apertura programática</h2>
-    <is-date-range-input id="demo" start-label="Inicio" end-label="Fin" name="prog"></is-date-range-input>
+    <iswc-date-range-input id="demo" start-label="Inicio" end-label="Fin" name="prog"></iswc-date-range-input>
     <div class="actions">
-      <is-button id="open-btn" class="how" variant="text">Abrir</is-button>
-      <is-button id="close-btn" class="how" variant="text">Cerrar</is-button>
+      <iswc-button id="open-btn" class="how" variant="text">Abrir</iswc-button>
+      <iswc-button id="close-btn" class="how" variant="text">Cerrar</iswc-button>
     </div>
     <div class="value-readout">Valor actual: <code id="demo-value">(vacío)</code></div>
   </section>

@@ -1,24 +1,24 @@
 ---
-tag: is-diagram-lightbox
+tag: iswc-diagram-lightbox
 tags:
-  - is-diagram-lightbox
+  - iswc-diagram-lightbox
 category: diagrams
 status: public
 source: ./diagram-lightbox.js
 style: ./diagram-lightbox.css
 preview: ./diagram-lightbox.json
 ---
-# `<is-diagram-lightbox>`
+# `<iswc-diagram-lightbox>`
 
 ## Propósito
 
 Visor a pantalla completa pensado para diagramas: hereda del
-<is-lightbox> genérico el zoom anclado al
+<iswc-lightbox> genérico el zoom anclado al
 cursor, el pan y el dialog top-layer, y le suma la barra de la animación
 tortuga (play / pause / prev / next), el anillo de auto-replay, el panel
 de código JSON y el enlace compartible con el payload en ?d=.
 
-Este módulo registra `<is-diagram-lightbox>`.
+Este módulo registra `<iswc-diagram-lightbox>`.
 
 ## Cuándo usarlo
 
@@ -37,13 +37,13 @@ import './diagram-lightbox.js';
 ## Ejemplo mínimo
 
 ```html
-<is-diagram-lightbox id="lb" kind="sequence"></is-diagram-lightbox>
+<iswc-diagram-lightbox id="lb" kind="sequence"></iswc-diagram-lightbox>
 <script type="module">
 const lb = document.getElementById('lb');
 lb.payload = { preset: 'tk1437191' };
 lb.open = true;
 // O abrirlo con un click:
-lb.addEventListener('is-share', (e) => {
+lb.addEventListener('iswc-share', (e) => {
 console.log('Compartir:', e.detail.url);
 });
 </script>
@@ -74,7 +74,7 @@ No expone.
 
 | Evento | detail | bubbles | composed | cancelable |
 | --- | --- | --- | --- | --- |
-| `is-share` | sí | sí | sí | no |
+| `iswc-share` | sí | sí | sí | no |
 
 ### Métodos y propiedades públicas
 
@@ -119,23 +119,23 @@ No declara integración form-associated propia en este módulo.
 
 Documentación de cabecera preservada desde fuente:
 
-> <is-diagram-lightbox> — colore del lightbox para diagramas.
-> Es un <is-lightbox> con la barra específica de la animación tortuga
+> <iswc-diagram-lightbox> — colore del lightbox para diagramas.
+> Es un <iswc-lightbox> con la barra específica de la animación tortuga
 > (<< ▶/⏸ ■ >>), el anillo de cuenta regresiva del auto-replay, el botón
 > de código JSON y el botón de compartir enlace. El resto del visor
-> (zoom, pan, dialog, slots) lo hereda de is-lightbox.
+> (zoom, pan, dialog, slots) lo hereda de iswc-lightbox.
 > Conceptualmente, un diagrama es "un nodo que tiene un payload JSON y
 > expone una API turtle {play,pause,stop,next,prev}". El visor hace de
 > puente entre ese contrato y la barra por defecto. Si en algún momento
 > hay otro componente con la misma forma, se hace un wrapper igual sin
 > tocar el lightbox genérico.
 > Atributos: kind (default "sequence"), open
->             + todos los de <is-lightbox>
+>             + todos los de <iswc-lightbox>
 > Propiedades: payload, kind, open
->              + todas las de <is-lightbox>
-> Eventos: is-close, is-share, is-reposition
->          + is-turtle-state { playing, idx, total, replay }
->          + is-toggle-group { id }
+>              + todas las de <iswc-lightbox>
+> Eventos: iswc-close, iswc-share, iswc-reposition
+>          + iswc-turtle-state { playing, idx, total, replay }
+>          + iswc-toggle-group { id }
 
 ## Dependencias y componentes relacionados
 
@@ -145,7 +145,7 @@ Documentación de cabecera preservada desde fuente:
 - [`./sequence-spec.js`](./sequence-spec.js)
 - [`../media/icon.js`](../media/icon.js)
 
-Tags del módulo: `<is-diagram-lightbox>`.
+Tags del módulo: `<iswc-diagram-lightbox>`.
 
 ## Accesibilidad
 
@@ -154,13 +154,13 @@ Preservar semántica, foco, teclado, labels y ARIA. ARIA detectado: `aria-label`
 ## Ejemplo avanzado
 
 ```html
-<is-diagram-lightbox id="lb" kind="sequence"></is-diagram-lightbox>
+<iswc-diagram-lightbox id="lb" kind="sequence"></iswc-diagram-lightbox>
 <script type="module">
 const lb = document.getElementById('lb');
 lb.payload = { preset: 'tk1437191' };
 lb.open = true;
 // O abrirlo con un click:
-lb.addEventListener('is-share', (e) => {
+lb.addEventListener('iswc-share', (e) => {
 console.log('Compartir:', e.detail.url);
 });
 </script>

@@ -1,6 +1,6 @@
 @import url('../_shared/modal-chrome.css');
 
-/* <is-drawer> — panel deslizante desde un borde del viewport. */
+/* <iswc-drawer> — panel deslizante desde un borde del viewport. */
 
 :host {
   --iswc-drawer-size: 380px;
@@ -21,8 +21,10 @@
 }
 
 /* Por defecto: oculto pero proyectando slots (visibility preserva slot projection). */
-:host(:not([data-state])) .drawer { visibility: hidden; }
-:host(:not([data-state])) .backdrop { visibility: hidden; }
+:host(:not([data-state])) {
+  .drawer,
+  .backdrop { visibility: hidden; }
+}
 
 .backdrop {
   position: fixed;
@@ -48,50 +50,61 @@
    fixed inset:0, así que 100% sigue al viewport visible en móvil, al
    contrario que 100vh). Cada placement redondea y sombrea solo su cara
    expuesta. */
-:host([placement="start"]) .drawer,
-:host([placement="end"]) .drawer {
-  width: min(var(--iswc-drawer-size), calc(100% - 2 * var(--iswc-drawer-spacing)));
-  height: 100%;
-  top: 0;
-  bottom: 0;
-}
-:host([placement="start"]) .drawer {
-  left: 0;
-  right: auto;
-  border-start-end-radius: var(--_radius);
-  border-end-end-radius: var(--_radius);
-}
-:host([placement="end"]) .drawer {
-  right: 0;
-  left: auto;
-  border-start-start-radius: var(--_radius);
-  border-end-start-radius: var(--_radius);
+:host(:is([placement="start"], [placement="end"])) .drawer {
+  inline-size: min(var(--iswc-drawer-size), calc(100% - 2 * var(--iswc-drawer-spacing)));
+  block-size: 100%;
+  inset-block: 0;
 }
 
-:host([placement="top"]) .drawer,
-:host([placement="bottom"]) .drawer {
-  height: min(var(--iswc-drawer-size), calc(100% - 2 * var(--iswc-drawer-spacing)));
-  width: 100%;
-  left: 0;
-  right: 0;
-}
-:host([placement="top"]) .drawer {
-  top: 0;
-  bottom: auto;
-  border-end-start-radius: var(--_radius);
-  border-end-end-radius: var(--_radius);
-}
-:host([placement="bottom"]) .drawer {
-  bottom: 0;
-  top: auto;
-  border-start-start-radius: var(--_radius);
-  border-start-end-radius: var(--_radius);
+:host([placement="start"]) {
+  --_shadow: 8px 0 24px rgba(0, 0, 0, 0.18);
+
+  .drawer {
+    inset-inline-start: 0;
+    inset-inline-end: auto;
+    border-start-end-radius: var(--_radius);
+    border-end-end-radius: var(--_radius);
+  }
 }
 
-:host([placement="start"])  { --_shadow: 8px 0 24px rgba(0, 0, 0, 0.18); }
-:host([placement="end"])    { --_shadow: -8px 0 24px rgba(0, 0, 0, 0.18); }
-:host([placement="top"])    { --_shadow: 0 8px 24px rgba(0, 0, 0, 0.18); }
-:host([placement="bottom"]) { --_shadow: 0 -8px 24px rgba(0, 0, 0, 0.18); }
+:host([placement="end"]) {
+  --_shadow: -8px 0 24px rgba(0, 0, 0, 0.18);
+
+  .drawer {
+    inset-inline-end: 0;
+    inset-inline-start: auto;
+    border-start-start-radius: var(--_radius);
+    border-end-start-radius: var(--_radius);
+  }
+}
+
+:host(:is([placement="top"], [placement="bottom"])) .drawer {
+  block-size: min(var(--iswc-drawer-size), calc(100% - 2 * var(--iswc-drawer-spacing)));
+  inline-size: 100%;
+  inset-inline: 0;
+}
+
+:host([placement="top"]) {
+  --_shadow: 0 8px 24px rgba(0, 0, 0, 0.18);
+
+  .drawer {
+    inset-block-start: 0;
+    inset-block-end: auto;
+    border-end-start-radius: var(--_radius);
+    border-end-end-radius: var(--_radius);
+  }
+}
+
+:host([placement="bottom"]) {
+  --_shadow: 0 -8px 24px rgba(0, 0, 0, 0.18);
+
+  .drawer {
+    inset-block-end: 0;
+    inset-block-start: auto;
+    border-start-start-radius: var(--_radius);
+    border-start-end-radius: var(--_radius);
+  }
+}
 
 /* .header / .title / .body / .footer → _shared/modal-chrome.css */
 
@@ -100,13 +113,15 @@
   align-items: center;
   gap: 0.25em;
   flex: 0 0 auto;
+
+  &:empty { display: none; }
 }
-.header-actions:empty { display: none; }
 
 .close-btn {
   flex: 0 0 auto;
   font-size: 1rem;
   line-height: 0;
   color: var(--iswc-text-muted, #6c757d);
+
+  &:hover { color: var(--iswc-text, #212529); }
 }
-.close-btn:hover { color: var(--iswc-text, #212529); }

@@ -2,25 +2,25 @@ import { adoptCss, defineElement, emit } from '../../core/element.js';
 import { ElementBase } from '../../core/element-base.js';
 
 /**
- * <is-kanban> + <is-kanban-column> + <is-kanban-card> — Tablero (vanilla, zero dependencies).
+ * <iswc-kanban> + <iswc-kanban-column> + <iswc-kanban-card> — Tablero (vanilla, zero dependencies).
  *
- *   <is-kanban>
- *     <is-kanban-column title="Pendiente">
- *       <is-kanban-card heading="Tarea 1">Descripción</is-kanban-card>
- *     </is-kanban-column>
- *   </is-kanban>
+ *   <iswc-kanban>
+ *     <iswc-kanban-column title="Pendiente">
+ *       <iswc-kanban-card heading="Tarea 1">Descripción</iswc-kanban-card>
+ *     </iswc-kanban-column>
+ *   </iswc-kanban>
  *
- * Atributos <is-kanban>
+ * Atributos <iswc-kanban>
  *   columns        number — nº columnas visibles al estilo "compact".
  *   orientation    column | row — layout de los stacks (default column:
  *                  stacks lado a lado; row: stacks apilados en filas).
  *
- * Atributos <is-kanban-column>
+ * Atributos <iswc-kanban-column>
  *   title          string
  *   accent         string (color, e.g. dodgerblue, #0bb783)
  *   badge          string — opcional en el header.
  *
- * Atributos <is-kanban-card>
+ * Atributos <iswc-kanban-card>
  *   heading        string
  *   meta           string — bajo el heading.
  *   tag            string — texto de la badge lateral.
@@ -29,16 +29,16 @@ import { ElementBase } from '../../core/element-base.js';
  *   without-shadow boolean
  *
  * Slots
- *   <is-kanban-column>
+ *   <iswc-kanban-column>
  *     (default)       cards.
  *     header-actions  elementos en la cabecera.
- *   <is-kanban-card>
+ *   <iswc-kanban-card>
  *     (default)        descripción.
  *     footer           pie de la card.
  *
  * Eventos
- *   is-kanban-card-click  detail: { card, column }
- *   is-kanban-move        detail: { card, from, to } — card soltada en otra
+ *   iswc-kanban-card-click  detail: { card, column }
+ *   iswc-kanban-move        detail: { card, from, to } — card soltada en otra
  *                         columna (o reordenada en la misma).
  */
 (() => {
@@ -88,7 +88,7 @@ import { ElementBase } from '../../core/element-base.js';
   const COLUMN_OBSERVED = ['title', 'accent', 'badge'];
   const CARD_OBSERVED = ['heading', 'meta', 'tag', 'tag-color', 'cover', 'without-shadow'];
 
-  class IsKanban extends HTMLElement {
+  class IswcKanban extends HTMLElement {
     static get observedAttributes(): string[] { return BOARD_OBSERVED; }
     #mo: MutationObserver | null = null;
     connectedCallback(): void {
@@ -108,15 +108,15 @@ import { ElementBase } from '../../core/element-base.js';
     /** Propaga la orientación a las columnas (su lane fluye horizontal en row). */
     #syncOrientation() {
       const row = this.getAttribute('orientation') === 'row';
-      for (const col of this.querySelectorAll<HTMLElement>(':scope > is-kanban-column')) {
+      for (const col of this.querySelectorAll<HTMLElement>(':scope > iswc-kanban-column')) {
         if (row) col.setAttribute('data-orientation', 'row');
         else col.removeAttribute('data-orientation');
       }
     }
   }
-  defineElement('is-kanban', IsKanban);
+  defineElement('iswc-kanban', IswcKanban);
 
-  class IsKanbanColumn extends ElementBase {
+  class IswcKanbanColumn extends ElementBase {
     static get observedAttributes(): string[] { return COLUMN_OBSERVED; }
     #root!: HTMLElement | null;
     #title!: HTMLElement;
@@ -163,7 +163,7 @@ import { ElementBase } from '../../core/element-base.js';
         this.#root?.classList.remove('drop-target');
         const from = dragCard.parentElement;
         // Insertar antes de la card bajo el cursor; si no hay, al final.
-        const cards = [...this.querySelectorAll<HTMLElement>(':scope > is-kanban-card')].filter((c) => c !== dragCard);
+        const cards = [...this.querySelectorAll<HTMLElement>(':scope > iswc-kanban-card')].filter((c) => c !== dragCard);
         const horizontal = this.getAttribute('data-orientation') === 'row';
         const after = cards.find((c) => {
           const r = c.getBoundingClientRect();
@@ -175,7 +175,7 @@ import { ElementBase } from '../../core/element-base.js';
         if (from && from !== this && typeof (from as HTMLElement & { refreshBadge?: () => void }).refreshBadge === 'function') {
           (from as HTMLElement & { refreshBadge: () => void }).refreshBadge();
         }
-        emit(dragCard, 'is-kanban-move', { card: dragCard, from, to: this });
+        emit(dragCard, 'iswc-kanban-move', { card: dragCard, from, to: this });
       });
     }
 
@@ -197,7 +197,7 @@ import { ElementBase } from '../../core/element-base.js';
         this.#root.style.setProperty('--accent', accent);
       }
       // Update badge count
-      const cards = this.querySelectorAll<HTMLElement>(':scope > is-kanban-card');
+      const cards = this.querySelectorAll<HTMLElement>(':scope > iswc-kanban-card');
       this.#badge.textContent = badge || String(cards.length);
       // aria-label accesible de la lane (lista de cards).
       const lane = this.#lane;
@@ -207,9 +207,9 @@ import { ElementBase } from '../../core/element-base.js';
       }
     }
   }
-  defineElement('is-kanban-column', IsKanbanColumn);
+  defineElement('iswc-kanban-column', IswcKanbanColumn);
 
-  class IsKanbanCard extends ElementBase {
+  class IswcKanbanCard extends ElementBase {
     static get observedAttributes(): string[] { return CARD_OBSERVED; }
     #root!: HTMLElement;
     #cover!: HTMLElement;
@@ -243,16 +243,16 @@ import { ElementBase } from '../../core/element-base.js';
           e.dataTransfer.setData('text/plain', this.getAttribute('heading') || 'card');
         }
         this.setAttribute('aria-grabbed', 'true');
-        this.classList.add('is-dragging');
+        this.classList.add('iswc-dragging');
       });
       this.addEventListener('dragend', () => {
         dragCard = null;
         this.setAttribute('aria-grabbed', 'false');
-        this.classList.remove('is-dragging');
+        this.classList.remove('iswc-dragging');
       });
       this.#root.addEventListener('click', (e) => {
         const column = this.parentElement;
-        emit(this, 'is-kanban-card-click', { card: this, column });
+        emit(this, 'iswc-kanban-card-click', { card: this, column });
       });
     }
 
@@ -286,5 +286,5 @@ import { ElementBase } from '../../core/element-base.js';
       this.#footer.hidden = !footerSlot || footerSlot.assignedNodes().length === 0;
     }
   }
-  defineElement('is-kanban-card', IsKanbanCard);
+  defineElement('iswc-kanban-card', IswcKanbanCard);
 })();

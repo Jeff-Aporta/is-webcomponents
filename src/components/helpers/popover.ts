@@ -4,15 +4,15 @@ import { withStyleAttrs } from '../../core/attrs.js';
 import './floating.js';
 
 /**
- * <is-popover> — panel flotante con contenido interactivo, anclado vía `for`.
+ * <iswc-popover> — panel flotante con contenido interactivo, anclado vía `for`.
  *
- * Es el wrapper de alto nivel sobre `<is-floating>` (el building block de
+ * Es el wrapper de alto nivel sobre `<iswc-floating>` (el building block de
  * posicionamiento). Popover añade: anchor declarativo por id, ciclo de
  * vida (mostrar / ocultar), accesibilidad del ancla (aria-haspopup +
  * aria-expanded), `data-popover="close"` en hijos para cerrar y la marca
  * de "panel activo global" para que sólo haya un popover visible a la vez.
  *
- * API publica: solo `<is-popover>`. El tag `is-popup` ya no existe ni como alias.
+ * API publica: solo `<iswc-popover>`. El tag `iswc-popup` ya no existe ni como alias.
  *
  * Attrs: for, open, placement, distance, skidding, without-arrow,
  *        strategy, flip, shift, arrow, auto-size, boundary,
@@ -20,8 +20,8 @@ import './floating.js';
  *        flip-padding, shift-padding, auto-size-padding
  * Props: anchor (Element | string | VirtualElement)
  * Methods: show(), hide(), reposition()
- * Events: is-show, is-after-show, is-hide, is-after-hide (cancelables),
- *         is-reposition { placement, x, y }, is-hover-bridge { hovering }
+ * Events: iswc-show, iswc-after-show, iswc-hide, iswc-after-hide (cancelables),
+ *         iswc-reposition { placement, x, y }, iswc-hover-bridge { hovering }
  * Parts: ::part(body) ::part(dialog) ::part(popup) ::part(arrow)
  *        ::part(hover-bridge) ::part(anchor)
  * CSS: --iswc-popover-max-width --iswc-popover-arrow-size --iswc-popover-show-duration --iswc-popover-hide-duration
@@ -29,7 +29,7 @@ import './floating.js';
  * data-popover="close" en hijos cierra el popover.
  */
 
-// ── Subset del contrato público de <is-floating> que este wrapper consume ──
+// ── Subset del contrato público de <iswc-floating> que este wrapper consume ──
 interface FloatingElement extends HTMLElement {
   active: boolean;
   placement: string;
@@ -52,11 +52,11 @@ interface FloatingElement extends HTMLElement {
 }
 
 (() => {
-  let openPopover: IsPopover | null = null;
+  let openPopover: IswcPopover | null = null;
 
   const TEMPLATE = document.createElement('template');
   TEMPLATE.innerHTML = /* html */ `
-    <is-floating
+    <iswc-floating
       part="popup"
       class="popup"
       exportparts="popup:popup__popup, arrow:popup__arrow, hover-bridge:popup__hover-bridge"
@@ -70,11 +70,11 @@ interface FloatingElement extends HTMLElement {
       <div part="dialog" class="dialog" role="dialog" hidden>
         <div part="body" class="body"><slot></slot></div>
       </div>
-    </is-floating>
+    </iswc-floating>
   `;
 
-  // Atributos que se delegan literalmente al `<is-floating>` interno. Cualquiera
-  // que el building block entienda y que `is-popover` no reinterpretó.
+  // Atributos que se delegan literalmente al `<iswc-floating>` interno. Cualquiera
+  // que el building block entienda y que `iswc-popover` no reinterpretó.
   const POPUP_DELEGATED: readonly string[] = [
     'placement', 'distance', 'skidding', 'without-arrow', 'strategy',
     'flip', 'shift', 'auto-size', 'boundary',
@@ -84,7 +84,7 @@ interface FloatingElement extends HTMLElement {
 
   const OBSERVED: readonly string[] = ['for', 'open', ...POPUP_DELEGATED];
 
-  class IsPopover extends withStyleAttrs(HTMLElement) {
+  class IswcPopover extends withStyleAttrs(HTMLElement) {
     /** Personalización por atributo (ver `core/attrs.ts`). */
     static styleAttrs = {
       'max-width': '--iswc-popover-max-width',
@@ -113,7 +113,7 @@ interface FloatingElement extends HTMLElement {
       const shadow = this.attachShadow({ mode: 'open' });
       adoptCss(shadow, import.meta.url);
       shadow.appendChild(TEMPLATE.content.cloneNode(true));
-      this.#popup = shadow.querySelector<HTMLElement>('is-floating') as FloatingElement;
+      this.#popup = shadow.querySelector<HTMLElement>('iswc-floating') as FloatingElement;
       this.#dialog = shadow.querySelector<HTMLElement>('.dialog')!;
 
       this.#dialog.addEventListener('click', (e: Event) => {
@@ -256,7 +256,7 @@ interface FloatingElement extends HTMLElement {
         ? root.getElementById(this.for)
         : document.getElementById(this.for);
       if (!el) {
-        console.warn(`[is-popover] El ancla #${this.for} debe existir en el DOM antes de conectar.`);
+        console.warn(`[iswc-popover] El ancla #${this.for} debe existir en el DOM antes de conectar.`);
         return;
       }
       this.#anchor = el;
@@ -298,7 +298,7 @@ interface FloatingElement extends HTMLElement {
 
     #doShow(silent?: boolean): void {
       if (!silent) {
-        const ev = new CustomEvent('is-show', { bubbles: true, composed: true, cancelable: true });
+        const ev = new CustomEvent('iswc-show', { bubbles: true, composed: true, cancelable: true });
         if (!this.dispatchEvent(ev)) {
           this.removeAttribute('open');
           return;
@@ -317,12 +317,12 @@ interface FloatingElement extends HTMLElement {
 
       document.addEventListener('pointerdown', this.#onDocPointer, true);
       document.addEventListener('keydown', this.#onDocKey, true);
-      emit(this, 'is-after-show');
+      emit(this, 'iswc-after-show');
     }
 
     #doHide(silent?: boolean): void {
       if (!silent) {
-        const ev = new CustomEvent('is-hide', { bubbles: true, composed: true, cancelable: true });
+        const ev = new CustomEvent('iswc-hide', { bubbles: true, composed: true, cancelable: true });
         if (!this.dispatchEvent(ev)) {
           this.setAttribute('open', '');
           return;
@@ -335,10 +335,10 @@ interface FloatingElement extends HTMLElement {
       document.removeEventListener('pointerdown', this.#onDocPointer, true);
       document.removeEventListener('keydown', this.#onDocKey, true);
       this.#anchor?.focus?.();
-      emit(this, 'is-after-hide');
+      emit(this, 'iswc-after-hide');
     }
   }
 
-  defineElement('is-popover', IsPopover, 'IsPopover');
+  defineElement('iswc-popover', IswcPopover, 'IswcPopover');
 
 })();

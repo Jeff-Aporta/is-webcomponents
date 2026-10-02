@@ -17,9 +17,9 @@ const results = [];
 async function runDeterministicChecks(page) {
   await page.waitForTimeout(200);
 
-  // (1) Un solo <nav part="breadcrumb"> por is-breadcrumb.
+  // (1) Un solo <nav part="breadcrumb"> por iswc-breadcrumb.
   const navCount = await page.evaluate(() => {
-    return [...document.querySelectorAll('is-breadcrumb')].map((bc) => {
+    return [...document.querySelectorAll('iswc-breadcrumb')].map((bc) => {
       return bc.shadowRoot.querySelectorAll('nav[part="breadcrumb"]').length;
     });
   });
@@ -32,8 +32,8 @@ async function runDeterministicChecks(page) {
   // con items - 1 (o items si el breadcrumb tiene un separator global — no
   // es el caso aquí: cada item tiene su propio .separator).
   const sepStats = await page.evaluate(() => {
-    return [...document.querySelectorAll('is-breadcrumb')].map((bc) => {
-      const items = [...bc.querySelectorAll(':scope > is-breadcrumb-item')];
+    return [...document.querySelectorAll('iswc-breadcrumb')].map((bc) => {
+      const items = [...bc.querySelectorAll(':scope > iswc-breadcrumb-item')];
       const seps = items.map((it) => !!it.shadowRoot.querySelector('.separator'));
       return { items: items.length, seps: seps.filter(Boolean).length };
     });
@@ -47,7 +47,7 @@ async function runDeterministicChecks(page) {
 
   // (3) Items activos (con href) tienen bounding box > 0.
   const activeBoxes = await page.evaluate(() => {
-    return [...document.querySelectorAll('is-breadcrumb-item')].map((it) => {
+    return [...document.querySelectorAll('iswc-breadcrumb-item')].map((it) => {
       const a = it.shadowRoot.querySelector('a');
       if (!a) return { hasLink: false };
       const r = a.getBoundingClientRect();
@@ -64,8 +64,8 @@ async function runDeterministicChecks(page) {
 
   // (4) Cada breadcrumb tiene EXACTAMENTE un item con aria-current="page".
   const currentPerBc = await page.evaluate(() => {
-    return [...document.querySelectorAll('is-breadcrumb')].map((bc) => {
-      const items = [...bc.querySelectorAll(':scope > is-breadcrumb-item')];
+    return [...document.querySelectorAll('iswc-breadcrumb')].map((bc) => {
+      const items = [...bc.querySelectorAll(':scope > iswc-breadcrumb-item')];
       return items.filter((it) => {
         const lbl = it.shadowRoot.querySelector('.label');
         return lbl?.getAttribute('aria-current') === 'page';
@@ -80,7 +80,7 @@ async function runDeterministicChecks(page) {
 
   // (5) aria-label no vacío y ≠ "Ruta" para todos.
   const labels = await page.evaluate(() => {
-    return [...document.querySelectorAll('is-breadcrumb')].map((bc) => {
+    return [...document.querySelectorAll('iswc-breadcrumb')].map((bc) => {
       const nav = bc.shadowRoot.querySelector('nav');
       return nav?.getAttribute('aria-label') ?? '';
     });

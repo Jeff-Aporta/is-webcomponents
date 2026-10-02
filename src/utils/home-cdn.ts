@@ -12,7 +12,7 @@ const CDN = 'https://cdn.jsdelivr.net/gh/Jeff-Aporta/is-webcomponents@main/dist/
 
 // dist/cdn folderizado por categoria: <categoria>/<tag>.min.js
 const catOf = (name: string): string =>
-  manifest.find((c) => c.tag === `is-${name}`)?.category || 'helpers';
+  manifest.find((c) => c.tag === `iswc-${name}`)?.category || 'helpers';
 const cdnJs = (name: string): string => `${CDN}/${catOf(name)}/${name}.min.js`;
 const open = String.fromCharCode(60);
 const slash = String.fromCharCode(47);
@@ -28,11 +28,11 @@ const buildJsCssSnippet = (): string => [
   `${open}script type="module" src="${cdnJs('sparkline')}"${close}${open}${slash}script${close}`,
   '',
   `${open}!-- ...y úsalos como HTML nativo --${close}`,
-  `${open}is-button color="brand"${close}Explorar${open}${slash}is-button${close}`,
-  `${open}is-badge color="success"${close}+12%${open}${slash}is-badge${close}`,
-  `${open}is-rating value="4" readonly${close}${open}${slash}is-rating${close}`,
-  `${open}is-switch checked${close}${open}${slash}is-switch${close}`,
-  `${open}is-sparkline values="4,6,5,8,7,11,13"${close}${open}${slash}is-sparkline${close}`,
+  `${open}iswc-button color="brand"${close}Explorar${open}${slash}iswc-button${close}`,
+  `${open}iswc-badge color="success"${close}+12%${open}${slash}iswc-badge${close}`,
+  `${open}iswc-rating value="4" readonly${close}${open}${slash}iswc-rating${close}`,
+  `${open}iswc-switch checked${close}${open}${slash}iswc-switch${close}`,
+  `${open}iswc-sparkline values="4,6,5,8,7,11,13"${close}${open}${slash}iswc-sparkline${close}`,
 ].join('\n');
 
 const buildBundleSnippet = (): string => [
@@ -41,10 +41,10 @@ const buildBundleSnippet = (): string => [
   `  const L = globalThis.ISWebComponentsLoader;`,
   `  await L.loadCSSBase();`,
   `  await L.loadCSSPalettesDefault();`,
-  `  await L.load("is-button");`,
+  `  await L.load("iswc-button");`,
   `${open}${slash}script${close}`,
   '',
-  `${open}is-button color="brand"${close}Hola mundo${open}${slash}is-button${close}`,
+  `${open}iswc-button color="brand"${close}Hola mundo${open}${slash}iswc-button${close}`,
 ].join('\n');
 
 // ── html autocontenido para descargar ─────────────────────────────
@@ -64,11 +64,11 @@ const modules: string[] = [
 
 const chartTile = (type: string, json: string): string => `        ${open}div class="tile"${close}
           ${open}small${close}${type}${open}${slash}small${close}
-          ${open}is-${type}${close}
+          ${open}iswc-${type}${close}
             ${open}script type="application/json"${close}
               ${json}
             ${open}${slash}script${close}
-          ${open}${slash}is-${type}${close}
+          ${open}${slash}iswc-${type}${close}
         ${open}${slash}div${close}`;
 
 const buildDemoHtml = (variant: string): string => {
@@ -125,12 +125,12 @@ const buildDemoHtml = (variant: string): string => {
       padding: 0.85rem 1rem;
       background: var(--iswc-bg-elev);
     }
-    is-bar-chart, is-line-chart, is-doughnut-chart, is-pie-chart,
-    is-polar-area-chart, is-radar-chart, is-scatter-chart, is-bubble-chart,
-    is-sparkline { display: block; width: 100%; }
-    is-bar-chart, is-line-chart { height: 9rem; }
-    is-doughnut-chart, is-pie-chart, is-polar-area-chart, is-radar-chart,
-    is-scatter-chart, is-bubble-chart { height: 12rem; }
+    iswc-bar-chart, iswc-line-chart, iswc-doughnut-chart, iswc-pie-chart,
+    iswc-polar-area-chart, iswc-radar-chart, iswc-scatter-chart, iswc-bubble-chart,
+    iswc-sparkline { display: block; width: 100%; }
+    iswc-bar-chart, iswc-line-chart { height: 9rem; }
+    iswc-doughnut-chart, iswc-pie-chart, iswc-polar-area-chart, iswc-radar-chart,
+    iswc-scatter-chart, iswc-bubble-chart { height: 12rem; }
     pre.code {
       background: var(--iswc-code-bg, #0f1318);
       border: 1px solid var(--iswc-border);
@@ -154,7 +154,7 @@ const buildDemoHtml = (variant: string): string => {
     <section>
       <h2>Tema y tokens</h2>
       <div class="row">
-        <is-theme-toggle id="theme"></is-theme-toggle>
+        <iswc-theme-toggle id="theme"></iswc-theme-toggle>
         <label class="row" style="gap:0.35rem">
           <span>Paleta</span>
           <select id="palette" style="background:transparent;color:inherit;border:1px solid var(--iswc-border);border-radius:0.4rem;padding:0.25rem 0.5rem">
@@ -170,37 +170,37 @@ const buildDemoHtml = (variant: string): string => {
     <section>
       <h2>Acciones</h2>
       <div class="row">
-        <is-button color="brand" variant="filled">Primario</is-button>
-        <is-button color="neutral" variant="outlined">Secundario</is-button>
-        <is-button color="danger" variant="plain">Peligro</is-button>
-        <is-tag color="brand">InSoft</is-tag>
-        <is-tag color="success">Success</is-tag>
-        <is-badge color="danger">new</is-badge>
-        <is-avatar initials="JE" label="Jeff"></is-avatar>
+        <iswc-button color="brand" variant="filled">Primario</iswc-button>
+        <iswc-button color="neutral" variant="outlined">Secundario</iswc-button>
+        <iswc-button color="danger" variant="plain">Peligro</iswc-button>
+        <iswc-tag color="brand">InSoft</iswc-tag>
+        <iswc-tag color="success">Success</iswc-tag>
+        <iswc-badge color="danger">new</iswc-badge>
+        <iswc-avatar initials="JE" label="Jeff"></iswc-avatar>
       </div>
     </section>
 
     <section>
       <h2>Forms</h2>
       <div class="row">
-        <is-input label="Email" type="email" placeholder="hola@insoft.co" style="min-width:14rem"></is-input>
-        <is-select label="Rol">
-          <is-option value="dev">Dev</is-option>
-          <is-option value="qa">QA</is-option>
-          <is-option value="pm">PM</is-option>
-        </is-select>
-        <is-switch label="Notificaciones" checked></is-switch>
-        <is-checkbox checked>Acepto términos</is-checkbox>
-        <is-slider min="0" max="100" value="42" label="Volumen"></is-slider>
-        <is-rating value="4" max="5"></is-rating>
+        <iswc-input label="Email" type="email" placeholder="hola@insoft.co" style="min-width:14rem"></iswc-input>
+        <iswc-select label="Rol">
+          <iswc-option value="dev">Dev</iswc-option>
+          <iswc-option value="qa">QA</iswc-option>
+          <iswc-option value="pm">PM</iswc-option>
+        </iswc-select>
+        <iswc-switch label="Notificaciones" checked></iswc-switch>
+        <iswc-checkbox checked>Acepto términos</iswc-checkbox>
+        <iswc-slider min="0" max="100" value="42" label="Volumen"></iswc-slider>
+        <iswc-rating value="4" max="5"></iswc-rating>
       </div>
     </section>
 
     <section>
       <h2>Format</h2>
-      <is-format-bytes value="1536"></is-format-bytes>,
-      <is-format-number value="1234567.89" minimum-fraction-digits="2"></is-format-number>,
-      <is-format-date value="2026-07-31" date-style="long"></is-format-date>
+      <iswc-format-bytes value="1536"></iswc-format-bytes>,
+      <iswc-format-number value="1234567.89" minimum-fraction-digits="2"></iswc-format-number>,
+      <iswc-format-date value="2026-07-31" date-style="long"></iswc-format-date>
     </section>
 
     <section>
@@ -211,14 +211,14 @@ ${chartTile('line-chart', '{ "data": { "labels": ["L","M","X","J","V","S","D"], 
 ${chartTile('doughnut-chart', '{ "data": { "labels": ["Inventario","Cartera","Bancos"], "datasets": [{ "data": [42, 28, 30] }] } }')}
         <div class="tile">
           <small>Sparkline</small>
-          <is-sparkline data="4 6 5 8 7 11 13" trend="positive"></is-sparkline>
+          <iswc-sparkline data="4 6 5 8 7 11 13" trend="positive"></iswc-sparkline>
         </div>
       </div>
     </section>
 
     <section>
       <h2>Data grid</h2>
-      <is-data-grid style="height:18rem" show-toolbar quick-filter checkbox-selection pagination page-size="5">
+      <iswc-data-grid style="height:18rem" show-toolbar quick-filter checkbox-selection pagination page-size="5">
         <script type="application/json">
           {
             "columns": [
@@ -237,13 +237,13 @@ ${chartTile('doughnut-chart', '{ "data": { "labels": ["Inventario","Cartera","Ba
             ]
           }
         </script>
-      </is-data-grid>
+      </iswc-data-grid>
     </section>
 
     <section>
       <h2>Diagrama</h2>
       <button type="button" id="openDiag">Abrir visor a pantalla completa</button>
-      <is-diagram-lightbox id="dlb" kind="sequence"></is-diagram-lightbox>
+      <iswc-diagram-lightbox id="dlb" kind="sequence"></iswc-diagram-lightbox>
     </section>
 
     <pre class="code">${variant === 'bundle'
@@ -312,31 +312,31 @@ let copiaCableada = false;
 export function init(raiz: ParentNode = document): void {
   const preJs = raiz.querySelector('#cdnJsCss');
   const preB = raiz.querySelector('#cdnBundle');
-  // iswc-audit: diagnóstico para entender por qué los is-code no recibían
+  // iswc-audit: diagnóstico para entender por qué los iswc-code no recibían
   // contenido. Antes: `preJs` se buscaba con el id solo, pero al haber
-  // cambiado el contenedor `<pre>` por `<is-code>` el lookup seguía
+  // cambiado el contenedor `<pre>` por `<iswc-code>` el lookup seguía
   // funcionando. Lo que NO se actualizaba era el dataset cmSource + value
-  // cuando el is-code aún no había sido upgraded: en ese momento
+  // cuando el iswc-code aún no había sido upgraded: en ese momento
   // `el.value = text` no hace nada (la propiedad se setea DESPUÉS del
   // upgrade, vía attributeChangedCallback). Por eso el snippet quedaba
   // vacío. Fix: usar el atributo `value` directamente, que sí es
   // observado desde antes del upgrade.
-  if (preJs && preJs.localName === 'is-code') {
+  if (preJs && preJs.localName === 'iswc-code') {
     (preJs as HTMLElement).setAttribute('value', jsCssSnippet);
     (preJs as HTMLElement).dataset.cmSource = jsCssSnippet;
   } else if (preJs) {
     preJs.textContent = jsCssSnippet;
   }
-  if (preB && preB.localName === 'is-code') {
+  if (preB && preB.localName === 'iswc-code') {
     (preB as HTMLElement).setAttribute('value', bundleSnippet);
     (preB as HTMLElement).dataset.cmSource = bundleSnippet;
   } else if (preB) {
     preB.textContent = bundleSnippet;
   }
   // setSnippet ya no se necesita: el bloque de arriba cubre los tres
-  // casos (is-code, pre/textarea, no-encontrado).
+  // casos (iswc-code, pre/textarea, no-encontrado).
 
-  // Resaltado vía <is-code readonly> (paint sustituye pre.code legacy).
+  // Resaltado vía <iswc-code readonly> (paint sustituye pre.code legacy).
   // Cast a Document: la firma de paint usa `(root = document)` por lo que TS
   // infiere el parámetro como `Document`, pero la implementación interna
   // acepta cualquier Element/ParentNode/ShadowRoot.
@@ -392,7 +392,7 @@ function cablearCopiaYDescarga(): void {
       try {
         await writeText(text);
         btn.setAttribute('aria-pressed', 'true');
-        const label = btn.querySelector('is-icon');
+        const label = btn.querySelector('iswc-icon');
         if (label) label.setAttribute('icon', 'mdi:check');
         btn.lastChild && (btn.lastChild.textContent = ' Copiado');
         setTimeout(() => {

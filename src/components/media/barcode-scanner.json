@@ -1,20 +1,20 @@
 {
-  "$schema": "is-preview/v1",
-  "tag": "is-barcode-scanner",
+  "$schema": "iswc-preview/v1",
+  "tag": "iswc-barcode-scanner",
   "category": "media",
-  "title": "<is-barcode-scanner>",
+  "title": "<iswc-barcode-scanner>",
   "titleHtml": true,
-  "description": "Decodifica QR/EAN con `BarcodeDetector` sobre la cámara. No genera códigos: eso es `is-barcode` / `is-qrcode`.",
-  "storageKey": "docs-is-barcode-scanner",
+  "description": "Decodifica QR/EAN con `BarcodeDetector` sobre la cámara. No genera códigos: eso es `iswc-barcode` / `iswc-qrcode`.",
+  "storageKey": "docs-iswc-barcode-scanner",
   "sections": [
     {
       "id": "intro",
       "title": "Uso",
-      "lede": "Decodifica QR/EAN con `BarcodeDetector` sobre la cámara. No genera códigos: eso es `is-barcode` / `is-qrcode`.",
+      "lede": "Decodifica QR/EAN con `BarcodeDetector` sobre la cámara. No genera códigos: eso es `iswc-barcode` / `iswc-qrcode`.",
       "blocks": [
         {
           "kind": "demo",
-          "html": "<is-barcode-scanner formats=\"qr_code,ean_13\"></is-barcode-scanner>",
+          "html": "<iswc-barcode-scanner formats=\"qr_code,ean_13\"></iswc-barcode-scanner>",
           "controls": [
             {
               "control": "text",
@@ -26,7 +26,7 @@
         {
           "kind": "code",
           "lang": "html",
-          "code": "<is-barcode-scanner formats=\"qr_code,ean_13\"></is-barcode-scanner>"
+          "code": "<iswc-barcode-scanner formats=\"qr_code,ean_13\"></iswc-barcode-scanner>"
         },
         {
           "kind": "callout",

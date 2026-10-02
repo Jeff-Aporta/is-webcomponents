@@ -101,9 +101,9 @@ test('runtime: open en observedAttributes dispara ACC tras define', async () => 
         illegal = true;
       }
 
-      defineElement('is-probe-attr', IsProbe);
+      defineElement('iswc-probe-attr', IsProbe);
       const frozen = IsProbe.observedAttributes.slice();
-      const el = document.createElement('is-probe-attr');
+      const el = document.createElement('iswc-probe-attr');
       document.body.appendChild(el);
       el.open = true;
       return {

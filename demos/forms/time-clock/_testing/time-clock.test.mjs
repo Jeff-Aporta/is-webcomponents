@@ -15,11 +15,11 @@ tests.push({
     await page.goto(URL, { waitUntil: 'domcontentloaded' });
     await waitReady(page, 'data-time-clock-ready');
     const info = await page.evaluate(() => {
-      const clocks = [...document.querySelectorAll('is-time-clock')];
+      const clocks = [...document.querySelectorAll('iswc-time-clock')];
       const probe = clocks[0];
       return {
         count: clocks.length,
-        defined: !!customElements.get('is-time-clock'),
+        defined: !!customElements.get('iswc-time-clock'),
         hasHeader: !!probe.shadowRoot.querySelector('[part="header"]'),
         hasClock: !!probe.shadowRoot.querySelector('[part="clock"]'),
         hasHand: !!probe.shadowRoot.querySelector('[part="hand"]'),
@@ -30,7 +30,7 @@ tests.push({
         view: probe.getAttribute('view'),
       };
     });
-    assert.equal(info.defined, true, 'is-time-clock debe estar definido');
+    assert.equal(info.defined, true, 'iswc-time-clock debe estar definido');
     assert.ok(info.count >= 6, `esperaba >=6 relojes en la página, hay ${info.count}`);
     assert.equal(info.hasHeader, true, 'debe existir el header con horas y minutos');
     assert.equal(info.hasClock, true, 'debe existir el disco del reloj');
@@ -213,21 +213,21 @@ tests.push({
 });
 
 tests.push({
-  name: 'funcional: is-change emite evento al cambiar la hora',
+  name: 'funcional: iswc-change emite evento al cambiar la hora',
   run: async (page) => {
     await page.goto(URL, { waitUntil: 'domcontentloaded' });
     await waitReady(page, 'data-time-clock-ready');
     await page.evaluate(() => {
       window.__changes = [];
       const el = document.getElementById('basic');
-      el.addEventListener('is-change', (e) => window.__changes.push(e.detail?.value ?? ''));
+      el.addEventListener('iswc-change', (e) => window.__changes.push(e.detail?.value ?? ''));
       el.shadowRoot.querySelector('[part="clock"]').focus();
     });
     await page.waitForTimeout(40);
     await page.keyboard.press('ArrowUp');
     await page.waitForTimeout(40);
     const changes = await page.evaluate(() => window.__changes);
-    assert.deepEqual(changes, ['15:30'], 'is-change debe emitir el nuevo valor tras ArrowUp');
+    assert.deepEqual(changes, ['15:30'], 'iswc-change debe emitir el nuevo valor tras ArrowUp');
   },
 });
 
@@ -356,7 +356,7 @@ tests.push({
     await page.goto(URL, { waitUntil: 'domcontentloaded' });
     await waitReady(page, 'data-time-clock-ready');
     const info = await page.evaluate(() => {
-      const el = document.createElement('is-time-clock');
+      const el = document.createElement('iswc-time-clock');
       document.body.appendChild(el);
       const clock = el.shadowRoot.querySelector('[part="clock"]');
       const result = {

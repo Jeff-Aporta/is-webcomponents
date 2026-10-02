@@ -1,11 +1,11 @@
 {
-  "$schema": "is-preview/v1",
-  "tag": "is-form",
+  "$schema": "iswc-preview/v1",
+  "tag": "iswc-form",
   "category": "isp",
-  "title": "<is-form>",
+  "title": "<iswc-form>",
   "titleHtml": true,
   "description": "Ficha ISP — cuerpo en JSON compacto (json2html / html2json).",
-  "storageKey": "docs-is-form",
+  "storageKey": "docs-iswc-form",
   "hasBehavior": true,
   "styles": ".f-json-row {\n      display: flex;\n      flex-wrap: wrap;\n      gap: 0.5rem;\n      margin: 0.5rem 0 0.75rem;\n    }\n    .f-json-out {\n      margin: 0.5rem 0 0;\n      padding: 0.65rem 0.75rem;\n      border-radius: var(--iswc-radius, 0.5em);\n      border: 1px solid var(--iswc-border);\n      background: var(--iswc-bg-elev);\n      font-family: ui-monospace, SFMono-Regular, Menlo, Consolas, monospace;\n      font-size: 0.75rem;\n      line-height: 1.4;\n      white-space: pre-wrap;\n      word-break: break-word;\n      max-height: 16rem;\n      overflow: auto;\n    }\n    .f-frame {\n      height: 24rem;\n      border: 1px solid var(--iswc-border);\n      border-radius: 0.5rem;\n    }",
   "sections": [
@@ -20,7 +20,7 @@
         },
         {
           "kind": "demo",
-          "html": "<div class=\"f-frame\">\n            <is-form id=\"fDemo\"></is-form>\n          </div>\n          <div class=\"f-json-row\">\n            <is-button id=\"fBtnToJson\" variant=\"outlined\" color=\"neutral\">html2json / toJSON</is-button>\n            <is-button id=\"fBtnSet\" variant=\"outlined\" color=\"neutral\">setValues(demo)</is-button>\n          </div>\n          <pre class=\"f-json-out\" id=\"fJsonOut\"></pre>\n          <p id=\"fLog\">Última acción: <code class=\"code\">—</code></p>",
+          "html": "<div class=\"f-frame\">\n            <iswc-form id=\"fDemo\"></iswc-form>\n          </div>\n          <div class=\"f-json-row\">\n            <iswc-button id=\"fBtnToJson\" variant=\"outlined\" color=\"neutral\">html2json / toJSON</iswc-button>\n            <iswc-button id=\"fBtnSet\" variant=\"outlined\" color=\"neutral\">setValues(demo)</iswc-button>\n          </div>\n          <pre class=\"f-json-out\" id=\"fJsonOut\"></pre>\n          <p id=\"fLog\">Última acción: <code class=\"code\">—</code></p>",
           "controls": [
             {
               "control": "text",
@@ -31,7 +31,7 @@
         },
         {
           "kind": "code",
-          "code": "form.fromJSON({\n  mode: 'edit',\n  body: [\n    ['h3', { slot: 'header' }, 'Curso'],\n    ['div', { slot: 'content', style: 'display:flex;flex-direction:column;gap:0.75rem;padding:0.5rem' },\n      ['is-input', { name: 'icurso', label: 'Código', required: true, 'full-width': true }],\n      ['is-input', { name: 'ncurso', label: 'Nombre', 'full-width': true }],\n      ['is-switch', { name: 'activo' }, 'Activo'],\n    ],\n  ],\n  values: { icurso: 'C001', ncurso: 'Nómina', activo: true },\n});\n\nform.html2json(); // solo el light DOM\nform.toJSON();    // chrome + body + values",
+          "code": "form.fromJSON({\n  mode: 'edit',\n  body: [\n    ['h3', { slot: 'header' }, 'Curso'],\n    ['div', { slot: 'content', style: 'display:flex;flex-direction:column;gap:0.75rem;padding:0.5rem' },\n      ['iswc-input', { name: 'icurso', label: 'Código', required: true, 'full-width': true }],\n      ['iswc-input', { name: 'ncurso', label: 'Nombre', 'full-width': true }],\n      ['iswc-switch', { name: 'activo' }, 'Activo'],\n    ],\n  ],\n  values: { icurso: 'C001', ncurso: 'Nómina', activo: true },\n});\n\nform.html2json(); // solo el light DOM\nform.toJSON();    // chrome + body + values",
           "lang": "js"
         }
       ]
@@ -43,7 +43,7 @@
       "blocks": [
         {
           "kind": "demo",
-          "html": "<div class=\"f-frame\" style=\"height:20rem\">\n            <is-form id=\"fRound\" submit-label=\"Guardar\"></is-form>\n          </div>\n          <div class=\"f-json-row\">\n            <is-button id=\"fBtnRemount\" color=\"brand\">fromJSON(body)</is-button>\n          </div>\n          <pre class=\"f-json-out\" id=\"fBodyOut\"></pre>"
+          "html": "<div class=\"f-frame\" style=\"height:20rem\">\n            <iswc-form id=\"fRound\" submit-label=\"Guardar\"></iswc-form>\n          </div>\n          <div class=\"f-json-row\">\n            <iswc-button id=\"fBtnRemount\" color=\"brand\">fromJSON(body)</iswc-button>\n          </div>\n          <pre class=\"f-json-out\" id=\"fBodyOut\"></pre>"
         }
       ]
     },
@@ -79,7 +79,7 @@
               "mapa de controles con <code>name</code>"
             ],
             [
-              "<code>IsForm.json2html</code> / <code>html2json</code>",
+              "<code>IswcForm.json2html</code> / <code>html2json</code>",
               "estáticos (mismo codec global)"
             ]
           ]

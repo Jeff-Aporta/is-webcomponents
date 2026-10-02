@@ -1,11 +1,11 @@
 {
-  "$schema": "is-preview/v1",
-  "tag": "is-inline-edit",
+  "$schema": "iswc-preview/v1",
+  "tag": "iswc-inline-edit",
   "category": "forms",
-  "title": "<is-inline-edit>",
+  "title": "<iswc-inline-edit>",
   "titleHtml": true,
   "styles": ".ie-row { padding: .55rem 0; display: flex; gap: 1.25rem; align-items: baseline; flex-wrap: wrap; }\r\n    .ie-row > span.label { font-size: .82rem; color: var(--iswc-text-soft); width: 7rem; flex: 0 0 auto; }\r\n    .ie-row p { margin: 0; font-size: .82rem; color: var(--iswc-text-dim); }",
-  "storageKey": "docs-is-inline-edit",
+  "storageKey": "docs-iswc-inline-edit",
   "sections": [
     {
       "id": "intro",
@@ -19,7 +19,7 @@
       "blocks": [
         {
           "kind": "demo",
-          "html": "<div class=\"ie-row\">\r\n            <span class=\"label\">Nombre</span>\r\n            <is-inline-edit id=\"ie1\" value=\"Carolina Méndez\" placeholder=\"Sin nombre\"></is-inline-edit>\r\n          </div>\r\n          <div class=\"ie-row\">\r\n            <span class=\"label\">Email</span>\r\n            <is-inline-edit id=\"ie2\" value=\"caro@empresa.co\"></is-inline-edit>\r\n          </div>\r\n          <div class=\"ie-row\">\r\n            <span class=\"label\">Vacío</span>\r\n            <is-inline-edit placeholder=\"Clic para escribir\"></is-inline-edit>\r\n          </div>",
+          "html": "<div class=\"ie-row\">\r\n            <span class=\"label\">Nombre</span>\r\n            <iswc-inline-edit id=\"ie1\" value=\"Carolina Méndez\" placeholder=\"Sin nombre\"></iswc-inline-edit>\r\n          </div>\r\n          <div class=\"ie-row\">\r\n            <span class=\"label\">Email</span>\r\n            <iswc-inline-edit id=\"ie2\" value=\"caro@empresa.co\"></iswc-inline-edit>\r\n          </div>\r\n          <div class=\"ie-row\">\r\n            <span class=\"label\">Vacío</span>\r\n            <iswc-inline-edit placeholder=\"Clic para escribir\"></iswc-inline-edit>\r\n          </div>",
           "controls": [
               {
                 "control": "select",
@@ -46,7 +46,7 @@
           ],
           "equivNote": "mode elige control; cancel-on-blur decide si blur guarda o cancela.",
           "equivHtml": "<!-- ver diagrama de ramas -->",
-          "equivFlow": "<is-flowchart open-on-click animation=\"flow\">\n  <script type=\"application/json\">\n  {\n    \"flowchart\": {\n      \"title\": \"is-inline-edit: blur\",\n      \"direction\": \"TB\",\n      \"nodes\": [\n        {\n          \"id\": \"q\",\n          \"label\": \"mode=?\",\n          \"shape\": \"diamond\"\n        },\n        {\n          \"id\": \"a\",\n          \"label\": \"text → input\",\n          \"shape\": \"round\"\n        },\n        {\n          \"id\": \"b\",\n          \"label\": \"textarea\",\n          \"shape\": \"round\"\n        },\n        {\n          \"id\": \"c\",\n          \"label\": \"cancel-on-blur?\",\n          \"shape\": \"diamond\"\n        },\n        {\n          \"id\": \"d\",\n          \"label\": \"descarta\",\n          \"shape\": \"stadium\"\n        },\n        {\n          \"id\": \"e\",\n          \"label\": \"guarda (is-change)\",\n          \"shape\": \"stadium\"\n        }\n      ],\n      \"edges\": [\n        {\n          \"from\": \"q\",\n          \"to\": \"a\",\n          \"label\": \"text\"\n        },\n        {\n          \"from\": \"q\",\n          \"to\": \"b\",\n          \"label\": \"textarea\"\n        },\n        {\n          \"from\": \"a\",\n          \"to\": \"c\"\n        },\n        {\n          \"from\": \"b\",\n          \"to\": \"c\"\n        },\n        {\n          \"from\": \"c\",\n          \"to\": \"d\",\n          \"label\": \"si\"\n        },\n        {\n          \"from\": \"c\",\n          \"to\": \"e\",\n          \"label\": \"no\"\n        }\n      ]\n    }\n  }\n  </script>\n</is-flowchart>"
+          "equivFlow": "<iswc-flowchart open-on-click animation=\"flow\">\n  <script type=\"application/json\">\n  {\n    \"flowchart\": {\n      \"title\": \"iswc-inline-edit: blur\",\n      \"direction\": \"TB\",\n      \"nodes\": [\n        {\n          \"id\": \"q\",\n          \"label\": \"mode=?\",\n          \"shape\": \"diamond\"\n        },\n        {\n          \"id\": \"a\",\n          \"label\": \"text → input\",\n          \"shape\": \"round\"\n        },\n        {\n          \"id\": \"b\",\n          \"label\": \"textarea\",\n          \"shape\": \"round\"\n        },\n        {\n          \"id\": \"c\",\n          \"label\": \"cancel-on-blur?\",\n          \"shape\": \"diamond\"\n        },\n        {\n          \"id\": \"d\",\n          \"label\": \"descarta\",\n          \"shape\": \"stadium\"\n        },\n        {\n          \"id\": \"e\",\n          \"label\": \"guarda (iswc-change)\",\n          \"shape\": \"stadium\"\n        }\n      ],\n      \"edges\": [\n        {\n          \"from\": \"q\",\n          \"to\": \"a\",\n          \"label\": \"text\"\n        },\n        {\n          \"from\": \"q\",\n          \"to\": \"b\",\n          \"label\": \"textarea\"\n        },\n        {\n          \"from\": \"a\",\n          \"to\": \"c\"\n        },\n        {\n          \"from\": \"b\",\n          \"to\": \"c\"\n        },\n        {\n          \"from\": \"c\",\n          \"to\": \"d\",\n          \"label\": \"si\"\n        },\n        {\n          \"from\": \"c\",\n          \"to\": \"e\",\n          \"label\": \"no\"\n        }\n      ]\n    }\n  }\n  </script>\n</iswc-flowchart>"
         }
       ]
     },
@@ -56,7 +56,7 @@
       "blocks": [
         {
           "kind": "demo",
-          "html": "<is-inline-edit mode=\"textarea\" rows=\"3\" value=\"Acá podés tipear varias líneas. Enter adentro inserta un salto de línea; afuera del área Enter sigue guardando.\" style=\"--iswc-inline-edit-min-h: 4.5rem; width: 100%;\"></is-inline-edit>"
+          "html": "<iswc-inline-edit mode=\"textarea\" rows=\"3\" value=\"Acá podés tipear varias líneas. Enter adentro inserta un salto de línea; afuera del área Enter sigue guardando.\" style=\"--iswc-inline-edit-min-h: 4.5rem; width: 100%;\"></iswc-inline-edit>"
         }
       ]
     },
@@ -70,7 +70,7 @@
         },
         {
           "kind": "demo",
-          "html": "<is-inline-edit value=\"InSoft\" style=\"font-size:1.15rem; font-weight:600;\">\r\n            <span slot=\"display\"><is-icon icon=\"mdi:office-building\" style=\"vertical-align:middle\"></is-icon> InSoft S.A.</span>\r\n          </is-inline-edit>"
+          "html": "<iswc-inline-edit value=\"InSoft\" style=\"font-size:1.15rem; font-weight:600;\">\r\n            <span slot=\"display\"><iswc-icon icon=\"mdi:office-building\" style=\"vertical-align:middle\"></iswc-icon> InSoft S.A.</span>\r\n          </iswc-inline-edit>"
         }
       ]
     },
@@ -80,7 +80,7 @@
       "blocks": [
         {
           "kind": "code",
-          "code": "const ie = document.querySelector('is-inline-edit');\nie.value              // string actual\nie.editing            // boolean\nie.edit()             // entra en modo edición (programáticamente)\nie.save()             // guarda y sale\nie.cancel()           // revierte y sale\nie.addEventListener('is-save',   e => console.log('nuevo:', e.detail.value, 'prev:', e.detail.previous));\nie.addEventListener('is-cancel', e => ...);\nie.addEventListener('is-edit',   () => ...);\n\n// form-associated\n// <form><is-inline-edit name=\"label\"></is-inline-edit></form>\nnew FormData(form).get('label')  // = ie.value"
+          "code": "const ie = document.querySelector('iswc-inline-edit');\nie.value              // string actual\nie.editing            // boolean\nie.edit()             // entra en modo edición (programáticamente)\nie.save()             // guarda y sale\nie.cancel()           // revierte y sale\nie.addEventListener('iswc-save',   e => console.log('nuevo:', e.detail.value, 'prev:', e.detail.previous));\nie.addEventListener('iswc-cancel', e => ...);\nie.addEventListener('iswc-edit',   () => ...);\n\n// form-associated\n// <form><iswc-inline-edit name=\"label\"></iswc-inline-edit></form>\nnew FormData(form).get('label')  // = ie.value"
         }
       ]
     }

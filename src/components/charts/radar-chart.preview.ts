@@ -1,5 +1,5 @@
 /**
- * Behavior migrado desde HTML inline de is-radar-chart.
+ * Behavior migrado desde HTML inline de iswc-radar-chart.
  * Se ejecuta en mount() tras pintar la definition JSON.
  */
 import type { PreviewMountContext } from '../../previews/_kit/types.d.ts';
@@ -16,7 +16,7 @@ interface RadarChartLike extends HTMLElement {
 export async function mount(ctx: PreviewMountContext): Promise<void> {
   const root = ctx.main;
   void root;
-  await customElements.whenDefined('is-radar-chart');
+  await customElements.whenDefined('iswc-radar-chart');
   const single = document.querySelector<RadarChartLike>('#radarJs');
   if (single) {
     single.config = {

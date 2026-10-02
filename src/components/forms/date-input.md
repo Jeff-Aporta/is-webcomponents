@@ -1,20 +1,20 @@
 ---
-tag: is-date-input
+tag: iswc-date-input
 tags:
-  - is-date-input
+  - iswc-date-input
 category: forms
 status: public
 source: ./date-input.js
 style: ./date-input.css
 preview: ./date-input.json
 ---
-# `<is-date-input>`
+# `<iswc-date-input>`
 
 ## Propósito
 
 Campo + calendario en un panel del top layer (DatePicker de MUI X). Edita por secciones o abre el calendario. Alt+↓ abre el panel.
 
-Este módulo registra `<is-date-input>`.
+Este módulo registra `<iswc-date-input>`.
 
 ## Cuándo usarlo
 
@@ -33,7 +33,7 @@ import './date-input.js';
 ## Ejemplo mínimo
 
 ```html
-<is-date-input></is-date-input>
+<iswc-date-input></iswc-date-input>
 ```
 
 ## API
@@ -100,8 +100,8 @@ No declara integración form-associated propia en este módulo.
 
 Documentación de cabecera preservada desde fuente:
 
-> <is-date-input> — Campo de fecha con calendario en un panel (MUI DatePicker).
-> Compone <is-date-field> (edición por secciones) e <is-date-picker> (el
+> <iswc-date-input> — Campo de fecha con calendario en un panel (MUI DatePicker).
+> Compone <iswc-date-field> (edición por secciones) e <iswc-date-picker> (el
 > calendario) dentro de un <dialog> del top layer.
 > Atributos: label, hint, name, value (yyyy-mm-dd), min, max, required,
 >            disabled, readonly, clearable, locale, color (desktop|mobile),
@@ -109,7 +109,7 @@ Documentación de cabecera preservada desde fuente:
 >            first-day-of-week, show-outside-days, fixed-weeks,
 >            show-week-numbers, disable-past, disable-future, disabled-dates,
 >            disabled-days
-> Events: is-change, is-show, is-hide
+> Events: iswc-change, iswc-show, iswc-hide
 > Methods: show(), hide()
 
 ## Dependencias y componentes relacionados
@@ -118,7 +118,7 @@ Documentación de cabecera preservada desde fuente:
 - [`./date-field.js`](./date-field.js)
 - [`./date-picker.js`](./date-picker.js)
 
-Tags del módulo: `<is-date-input>`.
+Tags del módulo: `<iswc-date-input>`.
 
 ## Accesibilidad
 
@@ -127,7 +127,7 @@ Preservar semántica, foco, teclado, labels y ARIA. ARIA detectado: ninguno expl
 ## Ejemplo avanzado
 
 ```html
-<is-date-input></is-date-input>
+<iswc-date-input></iswc-date-input>
 ```
 
 ## Errores comunes

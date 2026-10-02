@@ -2,7 +2,7 @@
 //
 // Sin LLM: chequeamos con Playwright + atributos del shadow DOM que el input
 // cumple cinco invariantes visuales:
-//   1. Cada input tiene un is-date-time-field interno con secciones spinbutton.
+//   1. Cada input tiene un iswc-date-time-field interno con secciones spinbutton.
 //   2. El campo base del field cabe en el viewport.
 //   3. El trigger del reloj está presente y es clickeable.
 //   4. Al abrir el dialog se monta el panel con date-picker + digital-clock.
@@ -45,10 +45,10 @@ const results = [];
 async function checkDeterministic(page) {
   await page.waitForTimeout(200);
   const data = await page.evaluate(() => {
-    const inputs = [...document.querySelectorAll('is-date-time-input')];
+    const inputs = [...document.querySelectorAll('iswc-date-time-input')];
     return inputs.map((el, idx) => {
       const r = el.getBoundingClientRect();
-      const field = el.shadowRoot.querySelector('is-date-time-field');
+      const field = el.shadowRoot.querySelector('iswc-date-time-field');
       const secs = field ? [...field.shadowRoot.querySelectorAll('[role="spinbutton"]')] : [];
       const trigger = el.shadowRoot.querySelector('.trigger');
       const dialog = el.shadowRoot.querySelector('dialog.popup');
@@ -86,7 +86,7 @@ async function checkDeterministic(page) {
     // (5) Si el dialog está abierto, el panel debe caber en el viewport.
     if (f.dialogOpen) {
       const panelRect = await page.evaluate((idx) => {
-        const inputs = [...document.querySelectorAll('is-date-time-input')];
+        const inputs = [...document.querySelectorAll('iswc-date-time-input')];
         const el = inputs[idx];
         const panel = el.shadowRoot.querySelector('.panel');
         if (!panel) return null;

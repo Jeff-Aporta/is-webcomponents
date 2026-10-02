@@ -9,21 +9,21 @@ import { inlineMdWeb } from '../_shared/tk-inline-md.js';
 import { registerDiagramKind } from '../diagrams/diagram-kinds.js';
 
 /**
- * <is-treemap> — treemap anidado en SVG (algoritmo squarified), sin librerías.
+ * <iswc-treemap> — treemap anidado en SVG (algoritmo squarified), sin librerías.
  *
- *   <is-treemap>
+ *   <iswc-treemap>
  *     <script type="application/json">
  *       { "treemap": { "nodes": [{ "id":"inv", "label":"Inventario", "value":3200 }] } }
  *     </script>
- *   </is-treemap>
+ *   </iswc-treemap>
  *
- * Mismo esqueleto que <is-flowchart> / <is-mindmap>: shadow DOM, slot JSON +
+ * Mismo esqueleto que <iswc-flowchart> / <iswc-mindmap>: shadow DOM, slot JSON +
  * MutationObserver, tema por atributo `data-theme`, `color` (inline | viewer),
  * lightbox propio.
  *
  * Atributos: color (inline | viewer), open-on-click
  * Propiedades: payload, spec, layout
- * Eventos: is-render, is-open-viewer
+ * Eventos: iswc-render, iswc-open-viewer
  */
 
 const SVG_NS = 'http://www.w3.org/2000/svg';
@@ -32,7 +32,7 @@ function fmtValue(v: number) {
   return new Intl.NumberFormat('es-CO').format(Math.round(v));
 }
 
-class IsTreemap extends HTMLElement {
+class IswcTreemap extends HTMLElement {
   static get observedAttributes(): string[] { return ['color', 'open-on-click']; }
 
   #wrap!: HTMLElement; #svg!: HTMLElement; #tooltipEl!: HTMLElement;
@@ -54,7 +54,7 @@ class IsTreemap extends HTMLElement {
     shadow.innerHTML = /* html */ `
       <div part="base" class="wrap">
         <svg part="canvas" class="tm-svg" xmlns="${SVG_NS}" role="img"></svg>
-        <div part="tooltip" class="tm-tooltip dg-tooltip is-rich" hidden></div>
+        <div part="tooltip" class="tm-tooltip dg-tooltip iswc-rich" hidden></div>
         <div class="slot-hidden"><slot></slot></div>
       </div>
     `;
@@ -163,7 +163,7 @@ class IsTreemap extends HTMLElement {
     this.#lastWidth = availW;
     this.#layout = layout;
     this.#buildSvg(layout, theme);
-    this.#wrap.classList.toggle('is-viewer', this.isViewer);
+    this.#wrap.classList.toggle('iswc-viewer', this.isViewer);
   }
 
   #buildSvg(layout: TreemapLayout, theme: DiagramTheme & { surface?: string; headerTint?: string }): void {
@@ -196,7 +196,7 @@ class IsTreemap extends HTMLElement {
 
     this.#buildNodes(layout, theme);
 
-    emit(this, 'is-render', { layout, svg: this.#svg });
+    emit(this, 'iswc-render', { layout, svg: this.#svg });
   }
 
   #buildNodes(layout: TreemapLayout, theme: DiagramTheme & { surface?: string; headerTint?: string }): void {
@@ -248,9 +248,9 @@ class IsTreemap extends HTMLElement {
 
   #onClick = (): void => {
     // El visor es opt-in: sin `open-on-click` el clic no hace nada y tampoco
-    // se anuncia `is-open-viewer`, que prometeria una apertura que no ocurre.
+    // se anuncia `iswc-open-viewer`, que prometeria una apertura que no ocurre.
     if (!this.hasAttribute('open-on-click')) return;
-    const ev = new CustomEvent('is-open-viewer', {
+    const ev = new CustomEvent('iswc-open-viewer', {
       bubbles: true, composed: true, cancelable: true, detail: { payload: this.#payload },
     });
     this.dispatchEvent(ev);
@@ -261,9 +261,9 @@ class IsTreemap extends HTMLElement {
     await import('../diagrams/diagram-lightbox.js');
     let lb = this.#ownLightbox;
     if (!lb || !lb.isConnected) {
-      const newLb = document.createElement('is-diagram-lightbox');
+      const newLb = document.createElement('iswc-diagram-lightbox');
       newLb.setAttribute('kind', 'treemap');
-      newLb.addEventListener('is-after-hide', () => newLb.remove());
+      newLb.addEventListener('iswc-after-hide', () => newLb.remove());
       document.body.appendChild(newLb);
       lb = newLb;
       this.#ownLightbox = newLb;
@@ -299,8 +299,8 @@ class IsTreemap extends HTMLElement {
 
     for (const [nodeId, node] of this.#nodeNodes) {
       const active = nodeId === id;
-      node.g.classList.toggle('is-active', active);
-      node.g.classList.toggle('is-dim', !!id && !active);
+      node.g.classList.toggle('iswc-active', active);
+      node.g.classList.toggle('iswc-dim', !!id && !active);
     }
 
     if (!entry) {
@@ -321,8 +321,8 @@ class IsTreemap extends HTMLElement {
   }
 }
 
-defineElement('is-treemap', IsTreemap, 'IsTreemap');
+defineElement('iswc-treemap', IswcTreemap, 'IswcTreemap');
 
-registerDiagramKind('treemap', 'is-treemap');
+registerDiagramKind('treemap', 'iswc-treemap');
 
-export { IsTreemap };
+export { IswcTreemap };

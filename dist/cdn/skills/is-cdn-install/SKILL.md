@@ -3,7 +3,7 @@ name: is-cdn-install
 description: >-
   Instala y consume el kit IS Web Components solo por CDN (jsDelivr / GitHub Pages),
   sin npm ni npx. Cubre bootstrap (is-base + palettes + .min.js), espejos, pin por
-  SHA, boot con fallback, y lectura de docs vía is-cdn-snippet. Usar cuando el
+  SHA, boot con fallback, y lectura de docs vía iswc-cdn-snippet. Usar cuando el
   usuario pida instalar is-*, enlaces CDN, loader.min.js, L.load,
   mirrors, o copiar el panel Consumo por CDN.
 ---
@@ -56,11 +56,11 @@ Skill general del kit (reuso de tags, arquitectura, prompt, herramientas): [`src
     const L = globalThis.ISWebComponentsLoader;
     await L.loadCSSBase();
     await L.loadCSSPalettesDefault();
-    await L.load('is-button'); // o 'actions' | 'all'
+    await L.load('iswc-button'); // o 'actions' | 'all'
   </script>
 </head>
 <body>
-  <is-button>Hola</is-button>
+  <iswc-button>Hola</iswc-button>
 </body>
 </html>
 ```
@@ -69,11 +69,11 @@ Alcance de `load(…)`:
 
 | Necesidad | Argumento |
 | --- | --- |
-| Un tag | `'is-button'` |
+| Un tag | `'iswc-button'` |
 | Una categoría | `'actions'` |
 | Kit completo | `'all'` |
 
-La galería lo pinta en `<is-cdn-snippet>` (copy-paste del loader + `L.load(tag)`).
+La galería lo pinta en `<iswc-cdn-snippet>` (copy-paste del loader + `L.load(tag)`).
 
 `load('all')` / `load('actions')` expanden a cada `<cat>/<file>.min.js`. No se publican `all.min.js` ni `category.*.min.js`.
 
@@ -84,7 +84,7 @@ Probar bases **en orden**, siempre el mismo `base` para CSS y JS:
 1. jsDelivr `@<sha>` (o `@main`)
 2. GitHub Pages
 
-Plantilla (misma idea que el tab **Mirrors** de `<is-cdn-snippet>`):
+Plantilla (misma idea que el tab **Mirrors** de `<iswc-cdn-snippet>`):
 
 ```html
 <script type="module">
@@ -104,10 +104,10 @@ async function boot(files) {
       await Promise.all(files.js.map((f) => import(`${base}/${f}`)));
       return base;
     } catch (e) {
-      console.warn("[is-wc] mirror falló", base, e);
+      console.warn("[iswc-wc] mirror falló", base, e);
     }
   }
-  throw new Error("[is-wc] ningún espejo respondió");
+  throw new Error("[iswc-wc] ningún espejo respondió");
 }
 await boot({
   css: ["is-base.min.css", "palettes.min.css"],
@@ -116,7 +116,7 @@ await boot({
 </script>
 ```
 
-## Panel `<is-cdn-snippet>` (galería)
+## Panel `<iswc-cdn-snippet>` (galería)
 
 En la demo del kit, cada preview monta el panel **Consumo por CDN**:
 

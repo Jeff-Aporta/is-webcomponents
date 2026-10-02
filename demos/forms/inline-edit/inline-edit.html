@@ -3,7 +3,7 @@
 <head>
 <meta charset="utf-8" />
 <meta name="viewport" content="width=device-width, initial-scale=1" />
-<title>Edición inline &lt;is-inline-edit&gt; · is-webcomponents</title>
+<title>Edición inline &lt;iswc-inline-edit&gt; · is-webcomponents</title>
 <meta name="description" content="Edición inplace click-to-edit: clic activa el editor, Enter guarda, Esc cancela, blur guarda por defecto." />
 <style>
   html, body { margin: 0; padding: 0; min-height: 100%; background: #0c1118; color: #e2e8f0; font-family: ui-sans-serif, system-ui, sans-serif; }
@@ -16,21 +16,21 @@
   section .desc { font-size: 12px; color: #94a3b8; margin: 0; }
   code { background: rgba(255,255,255,0.06); padding: 1px 5px; border-radius: 3px; font: 12px ui-monospace, Menlo, Consolas, monospace; }
   /* Anti-FOUC */
-  is-inline-edit:not(:defined) { visibility: hidden; }
+  iswc-inline-edit:not(:defined) { visibility: hidden; }
 </style>
 <script type="module">
-  await import('../../../dist/cdn/forms/inline-edit.min.js?h=6i6a1y');
-  await customElements.whenDefined('is-inline-edit');
+  await import('../../../dist/cdn/forms/inline-edit.min.js?h=yekkp2');
+  await customElements.whenDefined('iswc-inline-edit');
 
   // (1) básico: nombre de tarea
-  const task = document.createElement('is-inline-edit');
+  const task = document.createElement('iswc-inline-edit');
   task.setAttribute('name', 'task');
   task.setAttribute('value', 'Comprar pan');
   task.setAttribute('placeholder', '¿Qué hay que hacer?');
   document.querySelector('#sec-task').appendChild(task);
 
   // (2) descripción multilínea (textarea)
-  const desc = document.createElement('is-inline-edit');
+  const desc = document.createElement('iswc-inline-edit');
   desc.setAttribute('name', 'description');
   desc.setAttribute('mode', 'textarea');
   desc.setAttribute('value', 'Notas adicionales del proyecto…');
@@ -39,7 +39,7 @@
   document.querySelector('#sec-desc').appendChild(desc);
 
   // (3) con cancel-on-blur: blur revierte en lugar de guardar
-  const cancelOnBlur = document.createElement('is-inline-edit');
+  const cancelOnBlur = document.createElement('iswc-inline-edit');
   cancelOnBlur.setAttribute('name', 'nickname');
   cancelOnBlur.setAttribute('value', 'usuario123');
   cancelOnBlur.setAttribute('cancel-on-blur', '');
@@ -47,14 +47,14 @@
   document.querySelector('#sec-cancel').appendChild(cancelOnBlur);
 
   // (4) deshabilitado
-  const disabled = document.createElement('is-inline-edit');
+  const disabled = document.createElement('iswc-inline-edit');
   disabled.setAttribute('name', 'locked');
   disabled.setAttribute('value', 'No editable');
   disabled.setAttribute('disabled', '');
   document.querySelector('#sec-disabled').appendChild(disabled);
 
   // (5) requerido y vacío
-  const required = document.createElement('is-inline-edit');
+  const required = document.createElement('iswc-inline-edit');
   required.setAttribute('name', 'title');
   required.setAttribute('placeholder', 'Título obligatorio');
   required.setAttribute('required', '');
@@ -62,9 +62,9 @@
 
   // Eventos
   [task, desc, cancelOnBlur, disabled, required].forEach((r) => {
-    r.addEventListener('is-edit', () => console.log('[inline-edit] edit start'));
-    r.addEventListener('is-save', (e) => console.log('[inline-edit] save', e.detail?.value?.slice(0, 40)));
-    r.addEventListener('is-cancel', (e) => console.log('[inline-edit] cancel', e.detail?.value?.slice(0, 40)));
+    r.addEventListener('iswc-edit', () => console.log('[inline-edit] edit start'));
+    r.addEventListener('iswc-save', (e) => console.log('[inline-edit] save', e.detail?.value?.slice(0, 40)));
+    r.addEventListener('iswc-cancel', (e) => console.log('[inline-edit] cancel', e.detail?.value?.slice(0, 40)));
   });
 
   document.documentElement.dataset.inlineEditReady = '1';
@@ -73,8 +73,8 @@
 <body>
 <main>
   <header>
-    <h1>&lt;is-inline-edit&gt; · Edición inplace click-to-edit</h1>
-    <p>Clic activa el editor · <code>Enter</code> guarda · <code>Esc</code> cancela · <code>blur</code> guarda por defecto · eventos <code>is-edit</code>, <code>is-save</code>, <code>is-cancel</code>.</p>
+    <h1>&lt;iswc-inline-edit&gt; · Edición inplace click-to-edit</h1>
+    <p>Clic activa el editor · <code>Enter</code> guarda · <code>Esc</code> cancela · <code>blur</code> guarda por defecto · eventos <code>iswc-edit</code>, <code>iswc-save</code>, <code>iswc-cancel</code>.</p>
   </header>
 
   <section id="sec-task">

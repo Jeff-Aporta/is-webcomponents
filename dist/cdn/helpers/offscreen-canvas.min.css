@@ -1,1 +1,1 @@
-:host{display:block}.cv{display:block;width:100%;max-width:100%;background:var(--iswc-bg-elev, transparent);border-radius:var(--iswc-radius, .4em)}
+:host{display:block}.cv{display:block;inline-size:100%;max-inline-size:100%;background:var(--iswc-bg-elev, transparent);border-radius:var(--iswc-radius, .4em)}

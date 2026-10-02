@@ -19,7 +19,7 @@ async function checkDeterministic(page, demo) {
   await page.waitForTimeout(200);
 
   const data = await page.evaluate(() => {
-    const transfers = [...document.querySelectorAll('main is-transfer')];
+    const transfers = [...document.querySelectorAll('main iswc-transfer')];
     return transfers.map((t, idx) => {
       const sr = t.shadowRoot;
       const base = sr.querySelector('[part="base"]');
@@ -103,7 +103,7 @@ for (const demo of DEMOS) {
 // Rama opt-in con Stagehand LLM. Sólo corre si STAGEHAND=1 + credenciales.
 // ─────────────────────────────────────────────────────────────────────────
 const VISUAL_RUBRIC = `
-Evalúa la calidad visual del doble selector <is-transfer> (lista origen + lista destino + botones centrales).
+Evalúa la calidad visual del doble selector <iswc-transfer> (lista origen + lista destino + botones centrales).
 
 Checklist (todas deben cumplirse; marca cada una PASS o FAIL):
 

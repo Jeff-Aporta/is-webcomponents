@@ -10,14 +10,14 @@ const URL = `${BASE_URL}/demos/layout/details/details.html`;
 const tests = [];
 
 tests.push({
-  name: 'smoke: is-details está definido y los details están montados',
+  name: 'smoke: iswc-details está definido y los details están montados',
   run: async (page) => {
     await page.goto(URL, { waitUntil: 'domcontentloaded' });
     await waitReady(page, 'data-details-ready');
     const data = await page.evaluate(() => {
-      const details = [...document.querySelectorAll('main is-details')];
+      const details = [...document.querySelectorAll('main iswc-details')];
       return {
-        defined: !!customElements.get('is-details'),
+        defined: !!customElements.get('iswc-details'),
         count: details.length,
         baseParts: details.map((d) => ({
           base: !!d.shadowRoot?.querySelector('[part="base"]'),
@@ -27,7 +27,7 @@ tests.push({
         })),
       };
     });
-    assert.equal(data.defined, true, 'is-details debe estar definido');
+    assert.equal(data.defined, true, 'iswc-details debe estar definido');
     assert.ok(data.count >= 10, `esperaba >=10 details, hay ${data.count}`);
     for (const p of data.baseParts) {
       assert.equal(p.base, true, 'cada details debe exponer part="base"');
@@ -207,7 +207,7 @@ tests.push({
     await waitReady(page, 'data-details-ready');
     const result = await page.evaluate(() => {
       // Crear un details ad-hoc con variant inválido y leer la propiedad.
-      const d = document.createElement('is-details');
+      const d = document.createElement('iswc-details');
       d.setAttribute('variant', 'shiny');
       d.setAttribute('summary', 'x');
       document.body.appendChild(d);
@@ -220,7 +220,7 @@ tests.push({
 });
 
 tests.push({
-  name: 'eventos: is-show → is-after-show se emiten al abrir',
+  name: 'eventos: iswc-show → iswc-after-show se emiten al abrir',
   run: async (page) => {
     await page.goto(URL, { waitUntil: 'domcontentloaded' });
     await waitReady(page, 'data-details-ready');
@@ -229,13 +229,13 @@ tests.push({
     await page.click('#btn-open');
     await page.waitForTimeout(350);
     const log = await page.evaluate(() => document.getElementById('event-log').textContent || '');
-    assert.match(log, /is-show.*d1|is-show\s*←\s*d1/, `log debe contener "is-show ← d1", fue: ${log}`);
-    assert.match(log, /is-after-show.*d1|is-after-show\s*←\s*d1/, `log debe contener "is-after-show ← d1", fue: ${log}`);
+    assert.match(log, /iswc-show.*d1|iswc-show\s*←\s*d1/, `log debe contener "iswc-show ← d1", fue: ${log}`);
+    assert.match(log, /iswc-after-show.*d1|iswc-after-show\s*←\s*d1/, `log debe contener "iswc-after-show ← d1", fue: ${log}`);
   },
 });
 
 tests.push({
-  name: 'eventos: is-hide → is-after-hide se emiten al cerrar',
+  name: 'eventos: iswc-hide → iswc-after-hide se emiten al cerrar',
   run: async (page) => {
     await page.goto(URL, { waitUntil: 'domcontentloaded' });
     await waitReady(page, 'data-details-ready');
@@ -244,8 +244,8 @@ tests.push({
     await page.evaluate(() => { document.getElementById('d2').open = false; });
     await page.waitForTimeout(350);
     const log = await page.evaluate(() => document.getElementById('event-log').textContent || '');
-    assert.match(log, /is-hide.*d2|is-hide\s*←\s*d2/, `log debe contener "is-hide ← d2", fue: ${log}`);
-    assert.match(log, /is-after-hide.*d2|is-after-hide\s*←\s*d2/, `log debe contener "is-after-hide ← d2", fue: ${log}`);
+    assert.match(log, /iswc-hide.*d2|iswc-hide\s*←\s*d2/, `log debe contener "iswc-hide ← d2", fue: ${log}`);
+    assert.match(log, /iswc-after-hide.*d2|iswc-after-hide\s*←\s*d2/, `log debe contener "iswc-after-hide ← d2", fue: ${log}`);
   },
 });
 

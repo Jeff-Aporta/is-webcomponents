@@ -12,20 +12,20 @@ tests.push({
     await page.goto(URL, { waitUntil: 'domcontentloaded' });
     await waitReady(page, 'data-scatter-chart-ready');
     const info = await page.evaluate(() => {
-      const el = document.querySelector('is-scatter-chart');
+      const el = document.querySelector('iswc-scatter-chart');
       const svg = el.shadowRoot.querySelector('svg');
       const marks = el.shadowRoot.querySelectorAll('.mark');
       return {
-        defined: !!customElements.get('is-scatter-chart'),
-        chartDefined: !!customElements.get('is-chart'),
+        defined: !!customElements.get('iswc-scatter-chart'),
+        chartDefined: !!customElements.get('iswc-chart'),
         svg: !!svg,
         viewBox: svg?.getAttribute('viewBox'),
         marks: marks.length,
         markClasses: [...marks].map((m) => m.getAttribute('class')),
       };
     });
-    assert.equal(info.defined, true, 'is-scatter-chart debe estar definido');
-    assert.equal(info.chartDefined, true, 'is-chart también debe estar definido');
+    assert.equal(info.defined, true, 'iswc-scatter-chart debe estar definido');
+    assert.equal(info.chartDefined, true, 'iswc-chart también debe estar definido');
     assert.ok(info.svg, 'debe haber un SVG en shadow DOM');
     assert.ok(info.marks > 0, `debe haber marcas renderizadas, hay ${info.marks}`);
     assert.ok(
@@ -43,10 +43,10 @@ tests.push({
     await waitReady(page, 'data-scatter-chart-ready');
     await page.waitForTimeout(200);
     const before = await page.evaluate(() => {
-      return document.querySelector('is-scatter-chart').shadowRoot.querySelectorAll('.mark').length;
+      return document.querySelector('iswc-scatter-chart').shadowRoot.querySelectorAll('.mark').length;
     });
     await page.evaluate(() => {
-      const el = document.querySelector('is-scatter-chart');
+      const el = document.querySelector('iswc-scatter-chart');
       el.payload = {
         type: 'scatter',
         data: {
@@ -62,7 +62,7 @@ tests.push({
     });
     await page.waitForTimeout(200);
     const after = await page.evaluate(() => {
-      return document.querySelector('is-scatter-chart').shadowRoot.querySelectorAll('.mark').length;
+      return document.querySelector('iswc-scatter-chart').shadowRoot.querySelectorAll('.mark').length;
     });
     assert.notEqual(after, before, `re-asignar payload debe cambiar el render (before=${before}, after=${after})`);
     assert.equal(after, 5, 'el nuevo dataset tiene 5 puntos');
@@ -75,7 +75,7 @@ tests.push({
     await page.goto(URL, { waitUntil: 'domcontentloaded' });
     await waitReady(page, 'data-scatter-chart-ready');
     const data = await page.evaluate(() => {
-      const root = document.querySelector('is-scatter-chart').shadowRoot;
+      const root = document.querySelector('iswc-scatter-chart').shadowRoot;
       const marks = [...root.querySelectorAll('.mark.mark-point')];
       return {
         total: marks.length,
@@ -97,7 +97,7 @@ tests.push({
     await page.goto(URL, { waitUntil: 'domcontentloaded' });
     await waitReady(page, 'data-scatter-chart-ready');
     const info = await page.evaluate(() => {
-      const root = document.querySelector('is-scatter-chart').shadowRoot;
+      const root = document.querySelector('iswc-scatter-chart').shadowRoot;
       // Buscamos cualquier tick del eje X: chart.ts usa .tick-label o <text>
       const texts = [...root.querySelectorAll('text')].map((t) => (t.textContent ?? '').trim());
       return {
@@ -116,7 +116,7 @@ tests.push({
     await page.goto(URL, { waitUntil: 'domcontentloaded' });
     await waitReady(page, 'data-scatter-chart-ready');
     const info = await page.evaluate(() => {
-      const root = document.querySelector('is-scatter-chart').shadowRoot;
+      const root = document.querySelector('iswc-scatter-chart').shadowRoot;
       const texts = [...root.querySelectorAll('text')].map((t) => (t.textContent ?? '').trim());
       return {
         xAxisLabel: texts.includes('Edad (años)'),
@@ -135,7 +135,7 @@ tests.push({
     await waitReady(page, 'data-scatter-chart-ready');
     await page.waitForTimeout(150);
     await page.evaluate(() => {
-      const el = document.querySelector('is-scatter-chart');
+      const el = document.querySelector('iswc-scatter-chart');
       el.payload = {
         type: 'scatter',
         data: {
@@ -148,7 +148,7 @@ tests.push({
     });
     await page.waitForTimeout(200);
     const total = await page.evaluate(() => {
-      return document.querySelector('is-scatter-chart').shadowRoot.querySelectorAll('.mark.mark-point').length;
+      return document.querySelector('iswc-scatter-chart').shadowRoot.querySelectorAll('.mark.mark-point').length;
     });
     assert.equal(total, 5, '5 puntos totales (2 + 3) deben renderizarse');
   },
@@ -160,9 +160,9 @@ tests.push({
     await page.goto(URL, { waitUntil: 'domcontentloaded' });
     await waitReady(page, 'data-scatter-chart-ready');
     const visible = await page.evaluate(() => {
-      const el = document.querySelector('is-scatter-chart');
+      const el = document.querySelector('iswc-scatter-chart');
       const cs = getComputedStyle(el);
-      return { defined: !!customElements.get('is-scatter-chart'), visibility: cs.visibility };
+      return { defined: !!customElements.get('iswc-scatter-chart'), visibility: cs.visibility };
     });
     assert.equal(visible.defined, true, 'el elemento debe estar definido');
     assert.notEqual(visible.visibility, 'hidden', 'el elemento no debe quedar visibility:hidden tras definir');

@@ -1,6 +1,6 @@
 // avatar.test.mjs — tests exhaustivos del demo avatar.html.
 // Cobertura: smoke + funcional (initials, image con fallback, slot icon,
-// eventos is-error, formas) + determinismo (mismo initials produce mismo texto)
+// eventos iswc-error, formas) + determinismo (mismo initials produce mismo texto)
 // + accesibilidad básica.
 import assert from 'node:assert/strict';
 import { BASE_URL, newPage, close, waitReady, screenshot, report } from '../../_testing/lib/harness.mjs';
@@ -15,14 +15,14 @@ tests.push({
     await page.goto(URL, { waitUntil: 'domcontentloaded' });
     await waitReady(page, 'data-avatar-ready');
     const data = await page.evaluate(() => {
-      const list = [...document.querySelectorAll('main is-avatar')];
+      const list = [...document.querySelectorAll('main iswc-avatar')];
       return {
-        registered: !!customElements.get('is-avatar'),
+        registered: !!customElements.get('iswc-avatar'),
         count: list.length,
         eachHasShadow: list.every((el) => !!el.shadowRoot),
       };
     });
-    assert.equal(data.registered, true, 'is-avatar debe estar registrado');
+    assert.equal(data.registered, true, 'iswc-avatar debe estar registrado');
     assert.ok(data.count >= 6, `esperaba >=6 avatares en main, hay ${data.count}`);
     assert.ok(data.eachHasShadow, 'todos los avatares deben tener shadowRoot');
     await screenshot(page, 'avatar-smoke');
@@ -36,7 +36,7 @@ tests.push({
     await waitReady(page, 'data-avatar-ready');
     await page.waitForTimeout(150);
     const data = await page.evaluate(() => {
-      const a = document.querySelector('is-avatar[initials="JD"]');
+      const a = document.querySelector('iswc-avatar[initials="JD"]');
       const text = a.shadowRoot.querySelector('.initials').textContent.trim();
       const visible = !a.shadowRoot.querySelector('.initials').hidden;
       const ariaLabel = a.getAttribute('aria-label');
@@ -56,9 +56,9 @@ tests.push({
     await page.goto(URL, { waitUntil: 'domcontentloaded' });
     await waitReady(page, 'data-avatar-ready');
     const data = await page.evaluate(() => {
-      const circles = [...document.querySelectorAll('is-avatar[shape="circle"], is-avatar:not([shape])')];
-      const rounded = [...document.querySelectorAll('is-avatar[shape="rounded"]')];
-      const square = [...document.querySelectorAll('is-avatar[shape="square"]')];
+      const circles = [...document.querySelectorAll('iswc-avatar[shape="circle"], iswc-avatar:not([shape])')];
+      const rounded = [...document.querySelectorAll('iswc-avatar[shape="rounded"]')];
+      const square = [...document.querySelectorAll('iswc-avatar[shape="square"]')];
       return {
         circles: circles.map((a) => a.dataset.shape),
         rounded: rounded.map((a) => a.dataset.shape),
@@ -78,12 +78,12 @@ tests.push({
     await waitReady(page, 'data-avatar-ready');
     await page.waitForTimeout(150);
     await page.evaluate(() => {
-      const a = document.querySelector('is-avatar[initials="JD"]');
+      const a = document.querySelector('iswc-avatar[initials="JD"]');
       a.setAttribute('initials', 'foo bar baz');
     });
     await page.waitForTimeout(150);
     const text = await page.evaluate(() => {
-      const a = document.querySelector('is-avatar[initials="foo bar baz"]');
+      const a = document.querySelector('iswc-avatar[initials="foo bar baz"]');
       return a.shadowRoot.querySelector('.initials').textContent.trim();
     });
     // El componente hace slice(0, 2).toUpperCase() → "FO"
@@ -92,13 +92,13 @@ tests.push({
 });
 
 tests.push({
-  name: 'funcional: is-error se dispara cuando la imagen falla',
+  name: 'funcional: iswc-error se dispara cuando la imagen falla',
   run: async (page) => {
     await page.goto(URL, { waitUntil: 'domcontentloaded' });
     await waitReady(page, 'data-avatar-ready');
     await page.waitForTimeout(800); // esperar intento de fetch
     const fired = await page.evaluate(() => document.documentElement.dataset.avatarErrorFired === '1');
-    assert.equal(fired, true, 'is-error debe haberse disparado en al menos un avatar con image inválida');
+    assert.equal(fired, true, 'iswc-error debe haberse disparado en al menos un avatar con image inválida');
   },
 });
 
@@ -109,12 +109,12 @@ tests.push({
     await waitReady(page, 'data-avatar-ready');
     await page.waitForTimeout(150);
     const data = await page.evaluate(() => {
-      const a = [...document.querySelectorAll('is-avatar')].find((x) => !x.hasAttribute('initials') && !x.hasAttribute('image') && !x.querySelector('[slot="icon"]'));
+      const a = [...document.querySelectorAll('iswc-avatar')].find((x) => !x.hasAttribute('initials') && !x.hasAttribute('image') && !x.querySelector('[slot="icon"]'));
       const iconVisible = !a.shadowRoot.querySelector('.icon').hidden;
       const initialsVisible = !a.shadowRoot.querySelector('.initials').hidden;
       const imgVisible = !a.shadowRoot.querySelector('.image').hidden;
-      // El icono por defecto es <is-icon icon="mdi:account">
-      const isIcon = a.shadowRoot.querySelector('.icon is-icon');
+      // El icono por defecto es <iswc-icon icon="mdi:account">
+      const isIcon = a.shadowRoot.querySelector('.icon iswc-icon');
       return {
         iconVisible,
         initialsVisible,
@@ -126,7 +126,7 @@ tests.push({
     assert.equal(data.iconVisible, true, '.icon debe estar visible cuando no hay image/initials');
     assert.equal(data.initialsVisible, false, '.initials debe estar oculto');
     assert.equal(data.imgVisible, false, '.image debe estar oculto');
-    assert.equal(data.hasDefaultIcon, true, 'debe tener el <is-icon> fallback');
+    assert.equal(data.hasDefaultIcon, true, 'debe tener el <iswc-icon> fallback');
     assert.match(data.iconAttr, /mdi:account/, `icon default debe ser mdi:account, got "${data.iconAttr}"`);
   },
 });
@@ -138,7 +138,7 @@ tests.push({
     await waitReady(page, 'data-avatar-ready');
     await page.waitForTimeout(150);
     const data = await page.evaluate(() => {
-      const a = [...document.querySelectorAll('is-avatar')].find((x) => x.querySelector('[slot="icon"][icon="mdi:robot"]'));
+      const a = [...document.querySelectorAll('iswc-avatar')].find((x) => x.querySelector('[slot="icon"][icon="mdi:robot"]'));
       const slot = a.shadowRoot.querySelector('slot[name="icon"]');
       const assigned = slot.assignedElements({ flatten: true });
       const iconVisible = !a.shadowRoot.querySelector('.icon').hidden;
@@ -151,7 +151,7 @@ tests.push({
     });
     assert.equal(data.iconVisible, true, '.icon debe estar visible con slot icon proyectado');
     assert.equal(data.assignedCount, 1, 'slot debe recibir exactamente 1 elemento');
-    assert.equal(data.assignedTag, 'is-icon', 'el elemento proyectado debe ser is-icon');
+    assert.equal(data.assignedTag, 'iswc-icon', 'el elemento proyectado debe ser iswc-icon');
     assert.match(data.assignedIcon, /mdi:robot/, `icon custom debe ser mdi:robot, got "${data.assignedIcon}"`);
   },
 });
@@ -162,7 +162,7 @@ tests.push({
     await page.goto(URL, { waitUntil: 'domcontentloaded' });
     await waitReady(page, 'data-avatar-ready');
     const aria = await page.evaluate(() => {
-      const a = document.querySelector('is-avatar[initials="AB"]');
+      const a = document.querySelector('iswc-avatar[initials="AB"]');
       return a.getAttribute('aria-label');
     });
     // Cuando label="" y hay initials, aria-label = initials ("AB").

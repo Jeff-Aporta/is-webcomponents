@@ -3,7 +3,7 @@ import { resolveIconRaw } from '../_shared/icon-loader.js';
 import { setStringAttr } from '../_shared/reflect.js';
 
 /**
- * <is-icon> — Web Component (vanilla, zero dependencies).
+ * <iswc-icon> — Web Component (vanilla, zero dependencies).
  *
  * UNICA API de iconos del kit. No depende del web component `<iconify-icon>`
  * ni de ningun script externo: el SVG se trae por fetch desde el sistema de
@@ -34,7 +34,7 @@ import { setStringAttr } from '../_shared/reflect.js';
 
   const OBSERVED = ['icon', 'name', 'library', 'label', 'src'];
 
-  class IsIcon extends HTMLElement {
+  class IswcIcon extends HTMLElement {
     static get observedAttributes(): string[] { return OBSERVED; }
 
     #inline!: HTMLElement;
@@ -198,7 +198,7 @@ import { setStringAttr } from '../_shared/reflect.js';
         for (const attr of ['fill', 'stroke']) {
           const v = el.getAttribute(attr);
           if (!v || v === 'none') continue;
-          if (!IsIcon.#NEUTRAL.has(v.trim().toLowerCase().replace(/\s+/g, ''))) return true;
+          if (!IswcIcon.#NEUTRAL.has(v.trim().toLowerCase().replace(/\s+/g, ''))) return true;
         }
       }
       return false;
@@ -223,11 +223,11 @@ import { setStringAttr } from '../_shared/reflect.js';
       svg.setAttribute('height', '1em');
       svg.setAttribute('focusable', 'false');
 
-      if (IsIcon.#isMulticolor(svg)) {
-        this.#inline.classList.add('is-multicolor');
+      if (IswcIcon.#isMulticolor(svg)) {
+        this.#inline.classList.add('iswc-multicolor');
         return;
       }
-      this.#inline.classList.remove('is-multicolor');
+      this.#inline.classList.remove('iswc-multicolor');
 
       svg.style.fill = 'currentColor';
       // OJO: no forzar stroke a nivel de <svg> — los iconos de relleno no
@@ -241,5 +241,5 @@ import { setStringAttr } from '../_shared/reflect.js';
     }
   }
 
-  defineElement('is-icon', IsIcon, 'IsIcon');
+  defineElement('iswc-icon', IswcIcon, 'IswcIcon');
 })();

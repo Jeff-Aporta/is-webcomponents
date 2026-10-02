@@ -1,7 +1,7 @@
 @import url('../_shared/popover-panel.css');
 @import './_surface-bar.css';
 
-/* is-command-palette */
+/* iswc-command-palette */
 :host {
   /* La paleta usa un radio mayor y una sombra más difusa que el popover base. */
   --iswc-popover-radius: var(--iswc-radius, 12px);
@@ -15,10 +15,10 @@
   padding: 0;
   margin: 0;
   inset: 0;
-  width: 100vw;
-  height: 100vh;
-  max-width: none;
-  max-height: none;
+  inline-size: 100vw;
+  block-size: 100vh;
+  max-inline-size: none;
+  max-block-size: none;
   color: var(--iswc-text);
 
   &::backdrop {
@@ -27,20 +27,20 @@
   }
 }
 
-/* Borde, radio, fondo y sombra vienen de `.is-popover-panel`. */
+/* Borde, radio, fondo y sombra vienen de `.iswc-popover-panel`. */
 .panel {
   position: absolute;
-  top: 14%;
-  left: 50%;
+  inset-block-start: 14%;
+  inset-inline-start: 50%;
   transform: translateX(-50%);
-  width: min(36rem, 92vw);
-  max-height: 70vh;
+  inline-size: min(36rem, 92vw);
+  max-block-size: 70vh;
   display: flex;
   flex-direction: column;
   overflow: hidden;
 }
 
-/* La fila flex, el padding y el separador vienen de `.is-surface-bar`. */
+/* La fila flex, el padding y el separador vienen de `.iswc-surface-bar`. */
 .bar {
   --iswc-surface-bar-gap: .55rem;
   --iswc-surface-bar-padding: .65rem .8rem;
@@ -57,7 +57,7 @@
   font: inherit;
   font-size: 1rem;
   color: inherit;
-  padding: .25rem 0;
+  padding-block: .25rem;
 }
 
 .results {
@@ -79,8 +79,10 @@
 /* Solo para lectores de pantalla: anuncia cambios de filtro sin ensuciar la UI. */
 .sr-status {
   position: absolute;
-  width: 1px; height: 1px;
-  padding: 0; margin: -1px;
+  inline-size: 1px;
+  block-size: 1px;
+  padding: 0;
+  margin: -1px;
   overflow: hidden;
   clip: rect(0, 0, 0, 0);
   white-space: nowrap;
@@ -98,7 +100,7 @@
   user-select: none;
 
   &[aria-selected="true"],
-  &.is-active {
+  &.iswc-active {
     background: color-mix(in srgb, var(--iswc-accent) 18%, transparent);
     color: var(--iswc-accent);
 
@@ -108,14 +110,21 @@
   & .ico {
     display: inline-grid;
     place-items: center;
-    width: 1.65rem; height: 1.65rem;
+    inline-size: 1.65rem;
+    block-size: 1.65rem;
     border-radius: 6px;
     background: color-mix(in srgb, var(--iswc-accent) 12%, transparent);
     color: var(--iswc-accent);
     font-size: 1rem;
   }
 
-  & .label { display: flex; flex-direction: column; gap: 2px; min-width: 0; }
+  & .label {
+    display: flex;
+    flex-direction: column;
+    gap: 2px;
+    min-inline-size: 0;
+  }
+
   & .t { font-weight: 600; font-size: .9rem; }
   & .hint { color: var(--iswc-text-soft); font-size: .76rem; }
 
@@ -130,8 +139,8 @@
   }
 }
 
-.opt kbd,
-.footer kbd {
+/* Chip <kbd>: compartido por `.opt` y `.footer`. */
+:is(.opt, .footer) kbd {
   font-family: ui-monospace, SFMono-Regular, Menlo, Consolas, monospace;
   font-size: .68rem;
   font-weight: 500;
@@ -152,7 +161,7 @@
 }
 
 .footer {
-  border-top: 1px solid var(--iswc-border-soft);
+  border-block-start: 1px solid var(--iswc-border-soft);
   padding: .45rem .8rem;
   font-size: .72rem;
   color: var(--iswc-text-soft);

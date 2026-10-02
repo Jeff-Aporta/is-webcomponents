@@ -1,6 +1,6 @@
 /**
  * code-diff.js — clasificador y alineador de diffs unificados y resúmenes de
- * commit para el motor nativo de `<is-code>`.
+ * commit para el motor nativo de `<iswc-code>`.
  *
  * Por qué existe: pintar un diff con el tokenizador de lenguaje (javascript u
  * otro) sale mal siempre, y de forma engañosa. El `+` y el `-` de la primera
@@ -25,11 +25,11 @@
 
 /** Clases de línea (fondo) que expone el modo. */
 export const DIFF_LINE_CLASS = Object.freeze({
-  add: 'is-diff-line-add',
-  del: 'is-diff-line-del',
-  hunk: 'is-diff-line-hunk',
-  file: 'is-diff-line-file',
-  commit: 'is-diff-line-commit',
+  add: 'iswc-diff-line-add',
+  del: 'iswc-diff-line-del',
+  hunk: 'iswc-diff-line-hunk',
+  file: 'iswc-diff-line-file',
+  commit: 'iswc-diff-line-commit',
 });
 
 /** Todas las clases de línea, para poder limpiarlas sin saber cuál había. */
@@ -77,7 +77,7 @@ export function classifyDiffLine(line: string | null | undefined): DiffLineKind 
 }
 
 /** Clase de fondo para una línea, o `null` si la línea no lleva banda.
- * La usa `<is-code>` vía `CodeLangDef.lineClass`.
+ * La usa `<iswc-code>` vía `CodeLangDef.lineClass`.
  */
 export function diffLineClass(line: string | null | undefined): string | null {
   const kind = classifyDiffLine(line);

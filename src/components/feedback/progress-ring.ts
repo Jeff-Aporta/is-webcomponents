@@ -3,7 +3,7 @@ import { ElementBase } from '../../core/element-base.js';
 import { setStringAttr } from '../_shared/reflect.js';
 
 /**
- * <is-progress-ring> — Web Component (vanilla).
+ * <iswc-progress-ring> — Web Component (vanilla).
  *
  * Anillo de progreso SVG.
  *
@@ -30,7 +30,7 @@ import { setStringAttr } from '../_shared/reflect.js';
   const OBSERVED = ['value', 'label', 'indeterminate'];
   const CIRC = 2 * Math.PI * 15.9155;
 
-  class IsProgressRing extends ElementBase {
+  class IswcProgressRing extends ElementBase {
     /** Personalización por atributo (ver `core/attrs.ts`). */
     static styleAttrs = {
     'track-width': '--iswc-progress-ring-track-width',
@@ -94,7 +94,7 @@ import { setStringAttr } from '../_shared/reflect.js';
         this.#wrap.removeAttribute('aria-valuenow');
         this.#wrap.setAttribute('aria-busy', 'true');
         this.#wrap.setAttribute('aria-valuetext', label || '');
-        this.#indicator.classList.add('is-indeterminate');
+        this.#indicator.classList.add('iswc-indeterminate');
       } else {
         const offset = CIRC * (1 - val / 100);
         this.#indicator.style.strokeDasharray = `${CIRC}`;
@@ -102,7 +102,7 @@ import { setStringAttr } from '../_shared/reflect.js';
         this.#wrap.setAttribute('aria-valuenow', String(val));
         this.#wrap.setAttribute('aria-busy', 'false');
         this.#wrap.setAttribute('aria-valuetext', label || `${val}%`);
-        this.#indicator.classList.remove('is-indeterminate');
+        this.#indicator.classList.remove('iswc-indeterminate');
       }
 
       if (label) {
@@ -122,5 +122,5 @@ import { setStringAttr } from '../_shared/reflect.js';
     }
   }
 
-  defineElement('is-progress-ring', IsProgressRing, 'IsProgressRing');
+  defineElement('iswc-progress-ring', IswcProgressRing, 'IswcProgressRing');
 })();

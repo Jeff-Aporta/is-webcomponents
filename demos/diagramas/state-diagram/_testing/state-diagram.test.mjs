@@ -9,21 +9,21 @@ const URL = `${BASE_URL}/demos/diagramas/state-diagram/state-diagram.html`;
 const tests = [];
 
 tests.push({
-  name: 'smoke: <is-state-diagram> monta y renderiza estados y transiciones',
+  name: 'smoke: <iswc-state-diagram> monta y renderiza estados y transiciones',
   run: async (page) => {
     await page.goto(URL, { waitUntil: 'domcontentloaded' });
     await waitReady(page, 'data-state-ready');
     const info = await page.evaluate(() => {
-      const el = document.querySelector('main is-state-diagram');
+      const el = document.querySelector('main iswc-state-diagram');
       const shadow = el?.shadowRoot;
       return {
-        defined: !!customElements.get('is-state-diagram'),
+        defined: !!customElements.get('iswc-state-diagram'),
         nodes: shadow?.querySelectorAll('.st-node').length ?? 0,
         edges: shadow?.querySelectorAll('.st-trans').length ?? 0,
         hasSvg: !!shadow?.querySelector('svg.st-svg'),
       };
     });
-    assert.equal(info.defined, true, 'is-state-diagram debe estar definido');
+    assert.equal(info.defined, true, 'iswc-state-diagram debe estar definido');
     assert.ok(info.nodes >= 6, `esperaba >=6 estados, hay ${info.nodes}`);
     assert.ok(info.edges >= 6, `esperaba >=6 transiciones, hay ${info.edges}`);
     assert.equal(info.hasSvg, true, 'debe existir <svg class="st-svg">');
@@ -37,7 +37,7 @@ tests.push({
     await page.goto(URL, { waitUntil: 'domcontentloaded' });
     await waitReady(page, 'data-state-ready');
     const ids = await page.evaluate(() => {
-      const el = document.querySelector('main is-state-diagram');
+      const el = document.querySelector('main iswc-state-diagram');
       return [...el.shadowRoot.querySelectorAll('.st-node')].map((g) => g.dataset.nodeId);
     });
     assert.ok(ids.includes('init'), 'debe existir el estado inicial "init"');
@@ -52,7 +52,7 @@ tests.push({
     await page.goto(URL, { waitUntil: 'domcontentloaded' });
     await waitReady(page, 'data-state-ready');
     const ids = await page.evaluate(() => {
-      const el = document.querySelector('main is-state-diagram');
+      const el = document.querySelector('main iswc-state-diagram');
       return [...el.shadowRoot.querySelectorAll('.st-trans')].map((g) => g.dataset.edgeId);
     });
     assert.ok(ids.includes('e1'), 'debe existir la transición "e1"');
@@ -68,7 +68,7 @@ tests.push({
     // state-diagram distingue start (círculo sólido) y end (doble círculo)
     // por los hijos de .st-node — path para start, circles para end.
     const kinds = await page.evaluate(() => {
-      const el = document.querySelector('main is-state-diagram');
+      const el = document.querySelector('main iswc-state-diagram');
       const nodes = [...el.shadowRoot.querySelectorAll('.st-node')];
       let start = 0, end = 0;
       for (const n of nodes) {
@@ -88,7 +88,7 @@ tests.push({
     await page.goto(URL, { waitUntil: 'domcontentloaded' });
     await waitReady(page, 'data-state-ready');
     const edges = await page.evaluate(() => {
-      const el = document.querySelector('main is-state-diagram');
+      const el = document.querySelector('main iswc-state-diagram');
       return [...el.shadowRoot.querySelectorAll('.st-trans path')].map((p) => ({
         d: p.getAttribute('d'),
         stroke: p.getAttribute('stroke') || getComputedStyle(p).stroke,
@@ -108,16 +108,16 @@ tests.push({
     await page.goto(URL, { waitUntil: 'domcontentloaded' });
     await waitReady(page, 'data-state-ready');
     const before = await page.evaluate(() => {
-      const el = document.querySelector('main is-state-diagram');
+      const el = document.querySelector('main iswc-state-diagram');
       return el.shadowRoot.querySelector('svg.st-svg').getAttribute('viewBox');
     });
     await page.evaluate(() => {
-      const el = document.querySelector('main is-state-diagram');
+      const el = document.querySelector('main iswc-state-diagram');
       el.payload = el.payload;
     });
     await page.waitForTimeout(150);
     const after = await page.evaluate(() => {
-      const el = document.querySelector('main is-state-diagram');
+      const el = document.querySelector('main iswc-state-diagram');
       return el.shadowRoot.querySelector('svg.st-svg').getAttribute('viewBox');
     });
     assert.equal(before, after, 'viewBox idéntico tras re-asignar payload');
@@ -130,7 +130,7 @@ tests.push({
     await page.goto(URL, { waitUntil: 'domcontentloaded' });
     await waitReady(page, 'data-state-ready');
     const meta = await page.evaluate(() => {
-      const el = document.querySelector('main is-state-diagram');
+      const el = document.querySelector('main iswc-state-diagram');
       const svg = el.shadowRoot.querySelector('svg.st-svg');
       return { aria: svg.getAttribute('aria-label'), role: svg.getAttribute('role') };
     });

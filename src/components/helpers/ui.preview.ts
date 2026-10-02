@@ -1,5 +1,5 @@
 /**
- * Behavior migrado desde HTML inline de is-ui.
+ * Behavior migrado desde HTML inline de iswc-ui.
  * Se ejecuta en mount() tras pintar la definition JSON.
  */
 import type { PreviewMountContext } from '../../previews/_kit/types.d.ts';
@@ -14,15 +14,15 @@ interface IsUiApi {
 
 declare global {
   interface Window {
-    IsUi?: IsUiApi;
+    IswcUi?: IsUiApi;
     Ui?: IsUiApi;
   }
 }
 
 const getIsUi = (): IsUiApi | undefined => {
   if (typeof globalThis === 'undefined') return undefined;
-  const w = globalThis as { IsUi?: IsUiApi };
-  return w.IsUi;
+  const w = globalThis as { IswcUi?: IsUiApi };
+  return w.IswcUi;
 };
 
 export async function mount(ctx: PreviewMountContext): Promise<void> {
@@ -33,29 +33,29 @@ export async function mount(ctx: PreviewMountContext): Promise<void> {
     return ui && typeof ui.html === 'function' ? ui : undefined;
   };
 
-  const paintIntro = (IsUi: IsUiApi): void => {
+  const paintIntro = (IswcUi: IsUiApi): void => {
     const stage = document.getElementById('introStage');
     if (!stage) return;
-    const { html, esc } = IsUi;
+    const { html, esc } = IswcUi;
     stage.replaceChildren(html`
       <div class="ui-stage__meta">
-        <code>typeof IsUi.html</code> = <strong>${typeof IsUi.html}</strong>
-        · alias <code>Ui</code> = <strong>${(globalThis as { Ui?: IsUiApi }).Ui === IsUi ? 'mismo objeto' : '—'}</strong>
+        <code>typeof IswcUi.html</code> = <strong>${typeof IswcUi.html}</strong>
+        · alias <code>Ui</code> = <strong>${(globalThis as { Ui?: IsUiApi }).Ui === IswcUi ? 'mismo objeto' : '—'}</strong>
       </div>
-      <is-button color="brand" variant="soft">
-        <is-icon slot="start" icon="mdi:check"></is-icon>
+      <iswc-button color="brand" variant="soft">
+        <iswc-icon slot="start" icon="mdi:check"></iswc-icon>
         Kit listo
-      </is-button>
-      <is-tag color="info">${esc('helpers/ui.min.js')}</is-tag>
+      </iswc-button>
+      <iswc-tag color="info">${esc('helpers/ui.min.js')}</iswc-tag>
     `);
   };
 
-  const paintHtml = (IsUi: IsUiApi): void => {
+  const paintHtml = (IswcUi: IsUiApi): void => {
     const stage = document.getElementById('htmlStage');
     if (!stage) return;
-    const { html } = IsUi;
+    const { html } = IswcUi;
     let n = 0;
-    const counter = html`<is-badge color="brand">${String(n)}</is-badge>`;
+    const counter = html`<iswc-badge color="brand">${String(n)}</iswc-badge>`;
     const counterEl = (counter as unknown as HTMLElement);
     const bump = (): void => {
       n += 1;
@@ -63,15 +63,15 @@ export async function mount(ctx: PreviewMountContext): Promise<void> {
     };
     stage.replaceChildren(html`
       <div style="display:flex;gap:.75rem;flex-wrap:wrap;align-items:center">
-        <is-button color="brand" onclick=${bump}>Incrementar</is-button>
+        <iswc-button color="brand" onclick=${bump}>Incrementar</iswc-button>
         ${counter}
-        <is-format type="relative" date=${new Date().toISOString()} sync></is-format>
+        <iswc-format type="relative" date=${new Date().toISOString()} sync></iswc-format>
       </div>
     `);
   };
 
-  const registerDemoCard = (IsUi: IsUiApi): void => {
-    const { define, html, css } = IsUi;
+  const registerDemoCard = (IswcUi: IsUiApi): void => {
+    const { define, html, css } = IswcUi;
     define('demo-card', class extends HTMLElement {
       #root = this.attachShadow({ mode: 'open' });
       connectedCallback(): void {
@@ -94,14 +94,14 @@ export async function mount(ctx: PreviewMountContext): Promise<void> {
   };
 
   const boot = (): void => {
-    const IsUi = ready();
-    if (!IsUi) {
+    const IswcUi = ready();
+    if (!IswcUi) {
       requestAnimationFrame(boot);
       return;
     }
-    registerDemoCard(IsUi);
-    paintIntro(IsUi);
-    paintHtml(IsUi);
+    registerDemoCard(IswcUi);
+    paintIntro(IswcUi);
+    paintHtml(IswcUi);
   };
   boot();
 }

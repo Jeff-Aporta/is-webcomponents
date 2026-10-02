@@ -3,7 +3,7 @@
 <head>
 <meta charset="utf-8" />
 <meta name="viewport" content="width=device-width, initial-scale=1" />
-<title>Demo &lt;is-icon&gt; · is-webcomponents</title>
+<title>Demo &lt;iswc-icon&gt; · is-webcomponents</title>
 <meta name="description" content="Sistema de iconos unificado. Carga SVG inline desde el bundle propio (sin iconify-icon). Soporta currentColor, themes dark/light, iconos multicolor (banderas) y atributo src para SVG custom." />
 <style>
   html, body { margin: 0; padding: 0; min-height: 100%; background: #0c1118; color: #e2e8f0; font-family: ui-sans-serif, system-ui, sans-serif; }
@@ -20,13 +20,13 @@
   footer { padding: 12px 20px; border-top: 1px solid rgba(255,255,255,0.1); background: #0f1620; font-size: 11px; color: #94a3b8; }
   footer code { background: rgba(255,255,255,0.06); padding: 1px 5px; border-radius: 3px; font: 11px ui-monospace, Menlo, Consolas, monospace; }
   /* Anti-FOUC */
-  is-icon:not(:defined) { visibility: hidden; }
+  iswc-icon:not(:defined) { visibility: hidden; }
 </style>
 <script type="module">
   // Cargar solo el bundle de icon desde dist/cdn/. El icono se trae por
   // fetch desde el sistema de iconos propio (assets/icons → dist/assets/icons).
-  await import('../../../dist/cdn/media/icon.min.js?h=y6tzub');
-  await customElements.whenDefined('is-icon');
+  await import('../../../dist/cdn/media/icon.min.js?h=sp71yy');
+  await customElements.whenDefined('iswc-icon');
 
   // Esperar a que se resuelvan algunos iconos (puede ser async)
   await new Promise((r) => setTimeout(r, 300));
@@ -36,43 +36,43 @@
 </head>
 <body>
 <header>
-  <h1>Demo — <code>&lt;is-icon&gt;</code></h1>
+  <h1>Demo — <code>&lt;iswc-icon&gt;</code></h1>
   <p>Iconografía unificada (sin <code>iconify-icon</code>). Carga SVG inline; respeta <code>currentColor</code>.</p>
 </header>
 <main>
   <section>
     <h2>Monocromáticos (currentColor)</h2>
     <div class="row lg">
-      <is-icon icon="mdi:home" label="Inicio"></is-icon>
-      <is-icon icon="mdi:account" label="Cuenta"></is-icon>
-      <is-icon icon="mdi:cog-outline" label="Ajustes"></is-icon>
-      <is-icon icon="mdi:star" label="Favorito"></is-icon>
-      <is-icon icon="mdi:bell-outline" label="Notificaciones"></is-icon>
-      <is-icon icon="mdi:magnify" label="Buscar"></is-icon>
+      <iswc-icon icon="mdi:home" label="Inicio"></iswc-icon>
+      <iswc-icon icon="mdi:account" label="Cuenta"></iswc-icon>
+      <iswc-icon icon="mdi:cog-outline" label="Ajustes"></iswc-icon>
+      <iswc-icon icon="mdi:star" label="Favorito"></iswc-icon>
+      <iswc-icon icon="mdi:bell-outline" label="Notificaciones"></iswc-icon>
+      <iswc-icon icon="mdi:magnify" label="Buscar"></iswc-icon>
     </div>
   </section>
   <section>
     <h2>Con label (accesible)</h2>
     <div class="row lg">
-      <is-icon icon="mdi:play" label="Reproducir"></is-icon>
-      <is-icon icon="mdi:pause" label="Pausar"></is-icon>
-      <is-icon icon="mdi:skip-next" label="Siguiente"></is-icon>
+      <iswc-icon icon="mdi:play" label="Reproducir"></iswc-icon>
+      <iswc-icon icon="mdi:pause" label="Pausar"></iswc-icon>
+      <iswc-icon icon="mdi:skip-next" label="Siguiente"></iswc-icon>
     </div>
   </section>
   <section>
     <h2>Sobre fondo claro (legibilidad)</h2>
     <div class="row lg swatch-light">
-      <is-icon icon="mdi:home"></is-icon>
-      <is-icon icon="mdi:cog-outline"></is-icon>
-      <is-icon icon="mdi:star"></is-icon>
+      <iswc-icon icon="mdi:home"></iswc-icon>
+      <iswc-icon icon="mdi:cog-outline"></iswc-icon>
+      <iswc-icon icon="mdi:star"></iswc-icon>
     </div>
   </section>
   <section>
     <h2>Compat name + library</h2>
     <div class="row lg">
-      <is-icon name="github" library="mdi" label="GitHub"></is-icon>
-      <is-icon name="robot" library="mdi"></is-icon>
-      <is-icon name="cloud" library="mdi"></is-icon>
+      <iswc-icon name="github" library="mdi" label="GitHub"></iswc-icon>
+      <iswc-icon name="robot" library="mdi"></iswc-icon>
+      <iswc-icon name="cloud" library="mdi"></iswc-icon>
     </div>
   </section>
 </main>

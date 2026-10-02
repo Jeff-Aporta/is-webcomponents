@@ -9,22 +9,22 @@ const URL = `${BASE_URL}/demos/diagramas/venn-diagram/venn-diagram.html`;
 const tests = [];
 
 tests.push({
-  name: 'smoke: <is-venn-diagram> monta y renderiza 3 conjuntos + regiones',
+  name: 'smoke: <iswc-venn-diagram> monta y renderiza 3 conjuntos + regiones',
   run: async (page) => {
     await page.goto(URL, { waitUntil: 'domcontentloaded' });
     await waitReady(page, 'data-venn-ready');
     const info = await page.evaluate(() => {
-      const el = document.querySelector('main is-venn-diagram');
+      const el = document.querySelector('main iswc-venn-diagram');
       const shadow = el?.shadowRoot;
       return {
-        defined: !!customElements.get('is-venn-diagram'),
+        defined: !!customElements.get('iswc-venn-diagram'),
         sets: shadow?.querySelectorAll('.vn-set').length ?? 0,
         regions: shadow?.querySelectorAll('[data-region-id]').length ?? 0,
         circles: shadow?.querySelectorAll('circle').length ?? 0,
         hasSvg: !!shadow?.querySelector('svg.vn-svg'),
       };
     });
-    assert.equal(info.defined, true, 'is-venn-diagram debe estar definido');
+    assert.equal(info.defined, true, 'iswc-venn-diagram debe estar definido');
     assert.equal(info.sets, 3, `esperaba 3 conjuntos, hay ${info.sets}`);
     assert.equal(info.circles, 3, `esperaba 3 círculos, hay ${info.circles}`);
     assert.ok(info.regions >= 5, `esperaba >=5 regiones, hay ${info.regions}`);
@@ -39,7 +39,7 @@ tests.push({
     await page.goto(URL, { waitUntil: 'domcontentloaded' });
     await waitReady(page, 'data-venn-ready');
     const ids = await page.evaluate(() => {
-      const el = document.querySelector('main is-venn-diagram');
+      const el = document.querySelector('main iswc-venn-diagram');
       return [...el.shadowRoot.querySelectorAll('.vn-set')].map((g) => g.dataset.setId);
     });
     assert.ok(ids.includes('frontend'), 'debe existir el conjunto "frontend"');
@@ -54,7 +54,7 @@ tests.push({
     await page.goto(URL, { waitUntil: 'domcontentloaded' });
     await waitReady(page, 'data-venn-ready');
     const ids = await page.evaluate(() => {
-      const el = document.querySelector('main is-venn-diagram');
+      const el = document.querySelector('main iswc-venn-diagram');
       return [...el.shadowRoot.querySelectorAll('[data-region-id]')].map((g) => g.dataset.regionId);
     });
     assert.ok(ids.includes('r-fe'), 'debe existir la región "r-fe"');
@@ -68,7 +68,7 @@ tests.push({
     await page.goto(URL, { waitUntil: 'domcontentloaded' });
     await waitReady(page, 'data-venn-ready');
     const texts = await page.evaluate(() => {
-      const el = document.querySelector('main is-venn-diagram');
+      const el = document.querySelector('main iswc-venn-diagram');
       return [...el.shadowRoot.querySelectorAll('text')].map((t) => t.textContent.trim()).join(' | ');
     });
     assert.match(texts, /FullStack/, 'debe aparecer la etiqueta "FullStack"');
@@ -82,7 +82,7 @@ tests.push({
     await page.goto(URL, { waitUntil: 'domcontentloaded' });
     await waitReady(page, 'data-venn-ready');
     const circles = await page.evaluate(() => {
-      const el = document.querySelector('main is-venn-diagram');
+      const el = document.querySelector('main iswc-venn-diagram');
       return [...el.shadowRoot.querySelectorAll('circle')].map((c) => ({
         cx: c.getAttribute('cx'),
         cy: c.getAttribute('cy'),
@@ -102,16 +102,16 @@ tests.push({
     await page.goto(URL, { waitUntil: 'domcontentloaded' });
     await waitReady(page, 'data-venn-ready');
     const before = await page.evaluate(() => {
-      const el = document.querySelector('main is-venn-diagram');
+      const el = document.querySelector('main iswc-venn-diagram');
       return el.shadowRoot.querySelector('svg.vn-svg').getAttribute('viewBox');
     });
     await page.evaluate(() => {
-      const el = document.querySelector('main is-venn-diagram');
+      const el = document.querySelector('main iswc-venn-diagram');
       el.payload = el.payload;
     });
     await page.waitForTimeout(150);
     const after = await page.evaluate(() => {
-      const el = document.querySelector('main is-venn-diagram');
+      const el = document.querySelector('main iswc-venn-diagram');
       return el.shadowRoot.querySelector('svg.vn-svg').getAttribute('viewBox');
     });
     assert.equal(before, after, 'viewBox idéntico tras re-asignar payload');
@@ -124,7 +124,7 @@ tests.push({
     await page.goto(URL, { waitUntil: 'domcontentloaded' });
     await waitReady(page, 'data-venn-ready');
     const meta = await page.evaluate(() => {
-      const el = document.querySelector('main is-venn-diagram');
+      const el = document.querySelector('main iswc-venn-diagram');
       const svg = el.shadowRoot.querySelector('svg.vn-svg');
       return { aria: svg.getAttribute('aria-label'), role: svg.getAttribute('role') };
     });

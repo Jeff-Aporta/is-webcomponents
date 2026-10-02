@@ -7,7 +7,7 @@ import {
 } from '../_shared/isp-color.js';
 
 /**
- * <is-text> — port de ISP `typography/Text.svelte`.
+ * <iswc-text> — port de ISP `typography/Text.svelte`.
  *
  * Atributos
  *   color      brand | neutral | info | success | warning | danger
@@ -26,7 +26,7 @@ import {
   const TEMPLATE = document.createElement('template');
   TEMPLATE.innerHTML = /* html */ `<slot part="content"></slot>`;
 
-  class IsText extends ElementBase {
+  class IswcText extends ElementBase {
     /** Personalización por atributo (ver `core/attrs.ts`). */
     static styleAttrs = {
     'mix-with': { prop: '--iswc-text-mix-with', onlyColorValues: true },
@@ -104,5 +104,5 @@ import {
     }
   }
 
-  defineElement('is-text', IsText, 'IsText');
+  defineElement('iswc-text', IswcText, 'IswcText');
 })();

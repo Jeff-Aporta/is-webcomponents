@@ -14,14 +14,14 @@ async function checkDeterministic(page, demo) {
   await page.waitForTimeout(2000);
 
   const data = await page.evaluate(() => {
-    const icons = [...document.querySelectorAll('main is-icon')];
+    const icons = [...document.querySelectorAll('main iswc-icon')];
     return icons.map((el, idx) => {
       const shadow = el.shadowRoot;
       const wrap = shadow.querySelector('.wrap');
       const wrapRect = wrap?.getBoundingClientRect();
       const svg = shadow.querySelector('.inline svg');
       const hidden = shadow.querySelector('.inline').hasAttribute('hidden');
-      const isMulticolor = shadow.querySelector('.inline').classList.contains('is-multicolor');
+      const isMulticolor = shadow.querySelector('.inline').classList.contains('iswc-multicolor');
       const cs = svg ? getComputedStyle(svg) : null;
       return {
         idx,

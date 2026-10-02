@@ -1,14 +1,14 @@
 ---
-tag: is-toast-item
+tag: iswc-toast-item
 tags:
-  - is-toast-item
+  - iswc-toast-item
 category: feedback
 status: public
 source: ./toast-item.js
 style: ./toast-item.css
 preview: ./toast-item.json
 ---
-# `<is-toast-item>`
+# `<iswc-toast-item>`
 
 ## Propósito
 
@@ -16,11 +16,11 @@ Un toast individual: la tarjeta que muestra el mensaje, su icono opcional, el
 botón de cerrar y la barra de countdown que se agota hasta auto-ocultarse
 (pausa al pasar el ratón o al enfocar dentro).
 
-Es la pieza que apila `<is-toast>`; normalmente no se instancia a mano, pero
+Es la pieza que apila `<iswc-toast>`; normalmente no se instancia a mano, pero
 puede declararse suelto cuando se quiere un aviso fijo en una zona concreta.
-No tiene `create()` — eso vive en `<is-toast>` (ver [toast.md](./toast.md)).
+No tiene `create()` — eso vive en `<iswc-toast>` (ver [toast.md](./toast.md)).
 
-Este módulo registra `<is-toast-item>`.
+Este módulo registra `<iswc-toast-item>`.
 
 ## Cuándo usarlo
 
@@ -39,7 +39,7 @@ import './toast-item.js';
 ## Ejemplo mínimo
 
 ```html
-<is-toast-item></is-toast-item>
+<iswc-toast-item></iswc-toast-item>
 ```
 
 ## API
@@ -75,8 +75,8 @@ import './toast-item.js';
 
 | Evento | detail | bubbles | composed | cancelable |
 | --- | --- | --- | --- | --- |
-| `is-after-show` | `{ color, message, caption, log }` | sí | sí | no |
-| `is-after-hide` | no | sí | sí | no |
+| `iswc-after-show` | `{ color, message, caption, log }` | sí | sí | no |
+| `iswc-after-hide` | no | sí | sí | no |
 
 ### Métodos y propiedades públicas
 
@@ -138,7 +138,7 @@ No declara integración form-associated propia en este módulo.
 
 Documentación de cabecera preservada desde fuente:
 
-> <is-toast-item> — Web Component (vanilla).
+> <iswc-toast-item> — Web Component (vanilla).
 > Ítem individual de toast con countdown y cierre.
 > Atributos
 >   color   brand | success | warning | danger | neutral (default brand)
@@ -146,7 +146,7 @@ Documentación de cabecera preservada desde fuente:
 >   open      boolean — visible
 > Slots: default (título), caption, icon | start
 > Métodos: show(), hide()
-> Eventos (bubbles, composed): is-after-show { color, message, caption, log }, is-after-hide
+> Eventos (bubbles, composed): iswc-after-show { color, message, caption, log }, iswc-after-hide
 > CSS Parts: ::part(base) ::part(icon) ::part(message) ::part(title) ::part(caption) ::part(close-button) ::part(progress)
 
 ## Dependencias y componentes relacionados
@@ -154,7 +154,7 @@ Documentación de cabecera preservada desde fuente:
 - [`../_shared/adopt-css.js`](../_shared/adopt-css.js)
 - [`../media/icon.js`](../media/icon.js)
 
-Tags del módulo: `<is-toast-item>`.
+Tags del módulo: `<iswc-toast-item>`.
 
 ## Accesibilidad
 
@@ -163,7 +163,7 @@ Preservar semántica, foco, teclado, labels y ARIA. ARIA detectado: `aria-live`,
 ## Ejemplo avanzado
 
 ```html
-<is-toast-item></is-toast-item>
+<iswc-toast-item></iswc-toast-item>
 ```
 
 ## Errores comunes

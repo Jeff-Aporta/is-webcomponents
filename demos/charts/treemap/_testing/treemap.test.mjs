@@ -12,11 +12,11 @@ tests.push({
     await page.goto(URL, { waitUntil: 'domcontentloaded' });
     await waitReady(page, 'data-treemap-ready');
     const info = await page.evaluate(() => {
-      const el = document.querySelector('is-treemap');
+      const el = document.querySelector('iswc-treemap');
       const svg = el.shadowRoot.querySelector('svg');
       const nodes = el.shadowRoot.querySelectorAll('.tm-node');
       return {
-        defined: !!customElements.get('is-treemap'),
+        defined: !!customElements.get('iswc-treemap'),
         svg: !!svg,
         nodes: nodes.length,
         viewBox: svg?.getAttribute('viewBox'),
@@ -36,7 +36,7 @@ tests.push({
     await page.goto(URL, { waitUntil: 'domcontentloaded' });
     await waitReady(page, 'data-treemap-ready');
     const data = await page.evaluate(() => {
-      const root = document.querySelector('is-treemap').shadowRoot;
+      const root = document.querySelector('iswc-treemap').shadowRoot;
       const byId = {};
       for (const g of root.querySelectorAll('.tm-node')) {
         const rect = g.querySelector('rect.tm-node__rect');

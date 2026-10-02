@@ -1,30 +1,30 @@
 ---
-tag: is-form
+tag: iswc-form
 tags:
-  - is-form
+  - iswc-form
 category: isp
 status: public
 source: ./form.js
 style: ./form.css
 preview: ./form.json
 ---
-# `<is-form>`
+# `<iswc-form>`
 
 ## Propósito
 
 Formulario de ficha: cabecera, cuerpo scrolleable y pie Aceptar / Cancelar.
 El **cuerpo se define en JSON compacto** (`json2html` / `html2json`), el mismo
-lenguaje que usa `<is-block-layout>` y el que se persiste en BD.
+lenguaje que usa `<iswc-block-layout>` y el que se persiste en BD.
 
 ## Cuándo usarlo
 
 Fichas de catálogo y formularios cuyo cuerpo se declara en JSON y se persiste
-en base de datos, con la misma gramática de `<is-block-layout>`.
+en base de datos, con la misma gramática de `<iswc-block-layout>`.
 
 ## Cuándo no usarlo
 
 Para un `<form>` HTML corriente escrito a mano no hace falta este componente.
-Para el listado que abre la ficha usar `<is-catalogo-gen>`.
+Para el listado que abre la ficha usar `<iswc-catalogo-gen>`.
 
 ## Importación
 
@@ -40,8 +40,8 @@ form.fromJSON({
   body: [
     ['h3', { slot: 'header' }, 'Curso'],
     ['div', { slot: 'content' },
-      ['is-input', { name: 'icurso', label: 'Código', required: true }],
-      ['is-switch', { name: 'activo' }, 'Activo'],
+      ['iswc-input', { name: 'icurso', label: 'Código', required: true }],
+      ['iswc-switch', { name: 'activo' }, 'Activo'],
     ],
   ],
   values: { icurso: 'C001', activo: true },
@@ -59,19 +59,19 @@ Formato hyperscript: `[tag, attrs?, ...hijos]` — attrs booleanos como `true`.
 | `toJSON()` | `{ mode, submitLabel, cancelLabel, loading, body, values }`. |
 | `fromJSON(json)` | Aplica chrome + `body` + `values`. |
 | `getValues()` / `setValues(obj)` | Mapa de controles con `name`. |
-| `IsForm.json2html` / `IsForm.html2json` | Estáticos (codec compartido). |
+| `IswcForm.json2html` / `IswcForm.html2json` | Estáticos (codec compartido). |
 
 También: hijo `<script type="application/json">` con el mismo objeto.
 
 ## Ejemplo mínimo
 
 ```html
-<is-form id="ficha">
+<iswc-form id="ficha">
   <h3 slot="header">Curso</h3>
   <div slot="content">
-    <is-input name="icurso" label="Código" required></is-input>
+    <iswc-input name="icurso" label="Código" required></iswc-input>
   </div>
-</is-form>
+</iswc-form>
 ```
 
 ## API
@@ -107,8 +107,8 @@ También: hijo `<script type="application/json">` con el mismo objeto.
 
 | Evento | detail | bubbles | composed | cancelable |
 | --- | --- | --- | --- | --- |
-| `is-submit` | `{ form, values, json }` | sí | sí | no |
-| `is-cancel` | `{ form, values, json }` | sí | sí | no |
+| `iswc-submit` | `{ form, values, json }` | sí | sí | no |
+| `iswc-cancel` | `{ form, values, json }` | sí | sí | no |
 
 ### Métodos y propiedades públicas
 
@@ -120,7 +120,7 @@ También: hijo `<script type="application/json">` con el mismo objeto.
 | `fromJSON(json)` | Aplica chrome, `body` y `values`. |
 | `getValues()` | Mapa de controles con `name`. |
 | `setValues(obj)` | Asigna valores por `name`. |
-| `IsForm.json2html` / `IsForm.html2json` | Estáticos del codec compartido. |
+| `IswcForm.json2html` / `IswcForm.html2json` | Estáticos del codec compartido. |
 
 También se acepta un hijo `<script type="application/json">` con el mismo
 objeto que recibe `fromJSON()`.
@@ -149,7 +149,7 @@ No expone custom states.
 ### Integración con formularios
 
 El `<form>` interno se declara `novalidate`: la validación la aportan los
-controles (`<is-input>`, `<is-switch>`, …), que sí son form-associated.
+controles (`<iswc-input>`, `<iswc-switch>`, …), que sí son form-associated.
 `getValues()` recorre los controles con `name` del light DOM.
 
 ## Comportamiento
@@ -159,7 +159,7 @@ controles (`<is-input>`, `<is-switch>`, …), que sí son form-associated.
 - `fromJSON()` aplica chrome (`mode`, etiquetas, `loading`), monta el `body` y
   luego asigna `values`.
 - `mode="view"` presenta la ficha en solo lectura.
-- Aceptar emite `is-submit` y Cancelar `is-cancel`, ambos con el estado
+- Aceptar emite `iswc-submit` y Cancelar `iswc-cancel`, ambos con el estado
   completo (`form`, `values`, `json`).
 
 ## Dependencias y componentes relacionados
@@ -168,7 +168,7 @@ controles (`<is-input>`, `<is-switch>`, …), que sí son form-associated.
 - [`block-layout.md`](block-layout.md) — misma gramática JSON.
 - [`catalogo-gen.md`](catalogo-gen.md) — consumidor habitual de la ficha.
 
-Tags del módulo: `<is-form>`.
+Tags del módulo: `<iswc-form>`.
 
 ## Accesibilidad
 
@@ -186,14 +186,14 @@ form.fromJSON({
   body: [
     ['h3', { slot: 'header' }, 'Curso'],
     ['div', { slot: 'content' },
-      ['is-input', { name: 'icurso', label: 'Código', required: true }],
-      ['is-switch', { name: 'activo' }, 'Activo'],
+      ['iswc-input', { name: 'icurso', label: 'Código', required: true }],
+      ['iswc-switch', { name: 'activo' }, 'Activo'],
     ],
   ],
   values: { icurso: 'C001', activo: true },
 });
 
-form.addEventListener('is-submit', async (e) => {
+form.addEventListener('iswc-submit', async (e) => {
   form.loading = true;
   await fetch('/api/curso', { method: 'POST', body: JSON.stringify(e.detail.values) });
   form.loading = false;

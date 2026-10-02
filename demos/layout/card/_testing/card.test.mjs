@@ -9,14 +9,14 @@ const URL = `${BASE_URL}/demos/layout/card/card.html`;
 const tests = [];
 
 tests.push({
-  name: 'smoke: is-card está definido y los 3 cards verticales están montados',
+  name: 'smoke: iswc-card está definido y los 3 cards verticales están montados',
   run: async (page) => {
     await page.goto(URL, { waitUntil: 'domcontentloaded' });
     await waitReady(page, 'data-card-ready');
     const data = await page.evaluate(() => {
-      const cards = [...document.querySelectorAll('#vertical-all is-card')];
+      const cards = [...document.querySelectorAll('#vertical-all iswc-card')];
       return {
-        defined: !!customElements.get('is-card'),
+        defined: !!customElements.get('iswc-card'),
         count: cards.length,
         details: cards.map((c) => {
           const sr = c.shadowRoot;
@@ -27,14 +27,14 @@ tests.push({
             hasBody: !!sr?.querySelector('[part="body"]'),
             hasFooter: !!sr?.querySelector('[part="footer"]'),
             hasActions: !!sr?.querySelector('[part="actions"]'),
-            mediaEmpty: sr?.querySelector('[part="media"]')?.classList.contains('is-empty'),
-            headerEmpty: sr?.querySelector('[part="header"]')?.classList.contains('is-empty'),
-            footerEmpty: sr?.querySelector('[part="footer"]')?.classList.contains('is-empty'),
+            mediaEmpty: sr?.querySelector('[part="media"]')?.classList.contains('iswc-empty'),
+            headerEmpty: sr?.querySelector('[part="header"]')?.classList.contains('iswc-empty'),
+            footerEmpty: sr?.querySelector('[part="footer"]')?.classList.contains('iswc-empty'),
           };
         }),
       };
     });
-    assert.equal(data.defined, true, 'is-card debe estar definido');
+    assert.equal(data.defined, true, 'iswc-card debe estar definido');
     assert.equal(data.count, 3, `esperaba 3 cards verticales, hay ${data.count}`);
     // card 0: con media + header + footer → no vacíos
     assert.equal(data.details[0].mediaEmpty, false, 'card[0].media no debe estar vacío');
@@ -54,7 +54,7 @@ tests.push({
     await page.goto(URL, { waitUntil: 'domcontentloaded' });
     await waitReady(page, 'data-card-ready');
     const data = await page.evaluate(() => {
-      const cards = [...document.querySelectorAll('#variants is-card')];
+      const cards = [...document.querySelectorAll('#variants iswc-card')];
       return cards.map((c) => ({
         attr: c.getAttribute('variant'),
         prop: c.variant,
@@ -74,7 +74,7 @@ tests.push({
     await page.goto(URL, { waitUntil: 'domcontentloaded' });
     await waitReady(page, 'data-card-ready');
     const data = await page.evaluate(() => {
-      const card = document.querySelector('#horizontal-host is-card');
+      const card = document.querySelector('#horizontal-host iswc-card');
       const sr = card.shadowRoot;
       const mediaRect = sr.querySelector('[part="media"]')?.getBoundingClientRect();
       const actionsRect = sr.querySelector('[part="actions"]')?.getBoundingClientRect();
@@ -154,7 +154,7 @@ tests.push({
     await page.goto(URL, { waitUntil: 'domcontentloaded' });
     await waitReady(page, 'data-card-ready');
     const parts = await page.evaluate(() => {
-      const card = document.querySelector('main is-card');
+      const card = document.querySelector('main iswc-card');
       const sr = card.shadowRoot;
       return {
         media: !!sr.querySelector('[part="media"]'),
@@ -181,29 +181,29 @@ tests.push({
     const snap = (sel) => sel ? [...document.querySelectorAll(sel)].map((c) => ({
       v: c.getAttribute('variant'),
       o: c.getAttribute('orientation'),
-      parts: [...c.shadowRoot.querySelectorAll('[part]')].map((p) => p.getAttribute('part') + ':' + (p.classList.contains('is-empty') ? 'empty' : 'filled')),
+      parts: [...c.shadowRoot.querySelectorAll('[part]')].map((p) => p.getAttribute('part') + ':' + (p.classList.contains('iswc-empty') ? 'empty' : 'filled')),
     })) : [];
     const a = await page.evaluate(() => {
-      const cards = [...document.querySelectorAll('main is-card')];
+      const cards = [...document.querySelectorAll('main iswc-card')];
       return cards.map((c) => ({
         v: c.getAttribute('variant'),
         o: c.getAttribute('orientation'),
-        empty: [...c.shadowRoot.querySelectorAll('[part]')].map((p) => p.getAttribute('part') + ':' + p.classList.contains('is-empty')),
+        empty: [...c.shadowRoot.querySelectorAll('[part]')].map((p) => p.getAttribute('part') + ':' + p.classList.contains('iswc-empty')),
       }));
     });
     await page.evaluate(() => {
-      document.querySelectorAll('main is-card').forEach((c) => {
+      document.querySelectorAll('main iswc-card').forEach((c) => {
         const v = c.getAttribute('variant'); if (v) { c.removeAttribute('variant'); c.setAttribute('variant', v); }
         const o = c.getAttribute('orientation'); if (o) { c.removeAttribute('orientation'); c.setAttribute('orientation', o); }
       });
     });
     await page.waitForTimeout(100);
     const b = await page.evaluate(() => {
-      const cards = [...document.querySelectorAll('main is-card')];
+      const cards = [...document.querySelectorAll('main iswc-card')];
       return cards.map((c) => ({
         v: c.getAttribute('variant'),
         o: c.getAttribute('orientation'),
-        empty: [...c.shadowRoot.querySelectorAll('[part]')].map((p) => p.getAttribute('part') + ':' + p.classList.contains('is-empty')),
+        empty: [...c.shadowRoot.querySelectorAll('[part]')].map((p) => p.getAttribute('part') + ':' + p.classList.contains('iswc-empty')),
       }));
     });
     assert.deepEqual(a, b, 're-asignar mismos attrs produce el mismo render');

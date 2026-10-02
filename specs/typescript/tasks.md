@@ -37,7 +37,7 @@ Por concentración:
 | `components/data/ag-grid.ts` | 208 |
 | `components/diagrams/component-pack.ts` | 157 |
 | `previews/behaviors/icon-explorer.ts` | 218 |
-| `previews/behaviors/is-data-grid.ts` | 210 |
+| `previews/behaviors/iswc-data-grid.ts` | 210 |
 | `components/diagrams/component-spec.ts` | 103 |
 
 **`datagrid-core/` está en cero** (eran 205). Tipar sus contratos destapó tres

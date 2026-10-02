@@ -1,16 +1,16 @@
-// er-editor.ts: editor visual COMPLETO para <is-er-diagram>. Versión FULL del
+// er-editor.ts: editor visual COMPLETO para <iswc-er-diagram>. Versión FULL del
 // componente: state, undo/redo, multi-select, drag, click-to-connect, panel
 // de estilos, exportación JSON/SVG.
 //
-// Comparte TODO el rendering con <is-er-diagram> (lite) por COMPOSICIÓN: el
-// editor monta un <is-er-diagram> en su shadow DOM y le pasa el payload.
+// Comparte TODO el rendering con <iswc-er-diagram> (lite) por COMPOSICIÓN: el
+// editor monta un <iswc-er-diagram> en su shadow DOM y le pasa el payload.
 // Cualquier cambio en el componente (lite) se refleja aquí gratis.
 //
 // API pública:
-//   <is-er-editor payload={...}></is-er-editor>
+//   <iswc-er-editor payload={...}></iswc-er-editor>
 // Atributos: animation="trace"
-// Eventos: is-state-change (detail: { entities, relations }), is-export-svg,
-//          is-export-json
+// Eventos: iswc-state-change (detail: { entities, relations }), iswc-export-svg,
+//          iswc-export-json
 //
 // Tests exhaustivos:
 //   Playwright: smoke + funcional (drag, click-to-connect, undo/redo,
@@ -57,7 +57,7 @@ const EDITOR_CSS = `
   min-height: 400px;
 }
 .canvas-inner { position: absolute; inset: 0; }
-.canvas-inner > is-er-diagram { width: 100%; height: 100%; display: block; }
+.canvas-inner > iswc-er-diagram { width: 100%; height: 100%; display: block; }
 .toolbar {
   position: absolute;
   top: 12px;
@@ -331,7 +331,7 @@ const EDITOR_TEMPLATE = `
 </div>
 `;
 
-class IsErEditor extends HTMLElement {
+class IswcErEditor extends HTMLElement {
   static get observedAttributes(): string[] {
     return ['animation'];
   }
@@ -442,9 +442,9 @@ class IsErEditor extends HTMLElement {
   #ensureDiagram(): void {
     if (this.#diagram) return;
     const host = this.shadowRoot!.querySelector('[data-canvas-inner]')!;
-    const diagram = document.createElement('is-er-diagram') as unknown as HTMLElement & { payload: unknown; svg: SVGElement };
+    const diagram = document.createElement('iswc-er-diagram') as unknown as HTMLElement & { payload: unknown; svg: SVGElement };
     diagram.setAttribute('animation', this.getAttribute('animation') ?? '');
-    diagram.addEventListener('is-render', this.#onDiagramRender as EventListener);
+    diagram.addEventListener('iswc-render', this.#onDiagramRender as EventListener);
     host.appendChild(diagram);
     this.#diagram = diagram;
   }
@@ -563,7 +563,7 @@ class IsErEditor extends HTMLElement {
   }
 
   #emitStateChange(): void {
-    emit(this, 'is-state-change', { entities: this.#state?.entities, relations: this.#state?.relations });
+    emit(this, 'iswc-state-change', { entities: this.#state?.entities, relations: this.#state?.relations });
     this.#syncJsonReadout();
   }
 
@@ -1196,6 +1196,6 @@ function cloneEntities(arr: ErSpecEntity[]): ErSpecEntity[] {
 }
 function cloneRelations(arr: ErSpecRelation[]): ErSpecRelation[] { return arr.map((r) => ({ ...r })); }
 
-defineElement('is-er-editor', IsErEditor, 'IsErEditor');
+defineElement('iswc-er-editor', IswcErEditor, 'IswcErEditor');
 
-export { IsErEditor };
+export { IswcErEditor };

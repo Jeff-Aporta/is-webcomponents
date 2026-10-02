@@ -14,18 +14,18 @@ tests.push({
     await page.goto(URL, { waitUntil: 'domcontentloaded' });
     await waitReady(page, 'data-date-range-input-ready');
     const info = await page.evaluate(() => {
-      const inputs = [...document.querySelectorAll('is-date-range-input')];
+      const inputs = [...document.querySelectorAll('iswc-date-range-input')];
       return {
-        defined: !!customElements.get('is-date-range-input'),
+        defined: !!customElements.get('iswc-date-range-input'),
         count: inputs.length,
-        fieldsPerInput: inputs.map((i) => i.shadowRoot.querySelectorAll('is-date-field').length),
+        fieldsPerInput: inputs.map((i) => i.shadowRoot.querySelectorAll('iswc-date-field').length),
         triggersPerInput: inputs.map((i) => i.shadowRoot.querySelectorAll('[part="trigger"]').length),
         dialogPresent: inputs.every((i) => !!i.shadowRoot.querySelector('dialog')),
-        rangePickerDefined: !!customElements.get('is-date-range-picker'),
+        rangePickerDefined: !!customElements.get('iswc-date-range-picker'),
       };
     });
-    assert.equal(info.defined, true, 'is-date-range-input debe estar definido');
-    assert.equal(info.rangePickerDefined, true, 'is-date-range-picker debe estar definido (composición)');
+    assert.equal(info.defined, true, 'iswc-date-range-input debe estar definido');
+    assert.equal(info.rangePickerDefined, true, 'iswc-date-range-picker debe estar definido (composición)');
     assert.ok(info.count >= 4, `esperaba >=4 inputs, hay ${info.count}`);
     assert.ok(info.fieldsPerInput.every((n) => n === 2), `cada input debe tener 2 campos, hay ${JSON.stringify(info.fieldsPerInput)}`);
     assert.ok(info.triggersPerInput.every((n) => n === 2), `cada input debe tener 2 triggers, hay ${JSON.stringify(info.triggersPerInput)}`);
@@ -43,7 +43,7 @@ tests.push({
     await page.waitForTimeout(50);
     const data = await page.evaluate(() => {
       const el = document.getElementById('basic');
-      const fields = [...el.shadowRoot.querySelectorAll('is-date-field')];
+      const fields = [...el.shadowRoot.querySelectorAll('iswc-date-field')];
       return {
         attr: el.getAttribute('value'),
         prop: el.value,
@@ -74,7 +74,7 @@ tests.push({
 });
 
 tests.push({
-  name: 'funcional: show() abre el panel y muestra el is-date-range-picker',
+  name: 'funcional: show() abre el panel y muestra el iswc-date-range-picker',
   run: async (page) => {
     await page.goto(URL, { waitUntil: 'domcontentloaded' });
     await waitReady(page, 'data-date-range-input-ready');
@@ -83,32 +83,32 @@ tests.push({
     const info = await page.evaluate(() => {
       const el = document.getElementById('demo');
       const dialog = el.shadowRoot.querySelector('dialog');
-      const range = el.shadowRoot.querySelector('is-date-range-picker');
+      const range = el.shadowRoot.querySelector('iswc-date-range-picker');
       return {
         open: el.open,
         dialogOpen: dialog.open,
         hasRangePicker: !!range,
-        pickers: range?.shadowRoot?.querySelectorAll('is-date-picker').length ?? 0,
+        pickers: range?.shadowRoot?.querySelectorAll('iswc-date-picker').length ?? 0,
       };
     });
     assert.equal(info.open, true);
     assert.equal(info.dialogOpen, true);
-    assert.equal(info.hasRangePicker, true, 'el panel debe contener is-date-range-picker');
+    assert.equal(info.hasRangePicker, true, 'el panel debe contener iswc-date-range-picker');
     assert.ok(info.pickers >= 2, `el range-picker debe contener >=2 calendarios, hay ${info.pickers}`);
     await page.evaluate(() => document.getElementById('demo').hide());
   },
 });
 
 tests.push({
-  name: 'funcional: is-show / is-hide emiten eventos al abrir/cerrar',
+  name: 'funcional: iswc-show / iswc-hide emiten eventos al abrir/cerrar',
   run: async (page) => {
     await page.goto(URL, { waitUntil: 'domcontentloaded' });
     await waitReady(page, 'data-date-range-input-ready');
     await page.evaluate(() => {
       window.__events = [];
       const el = document.getElementById('demo');
-      el.addEventListener('is-show', () => window.__events.push('show'));
-      el.addEventListener('is-hide', () => window.__events.push('hide'));
+      el.addEventListener('iswc-show', () => window.__events.push('show'));
+      el.addEventListener('iswc-hide', () => window.__events.push('hide'));
     });
     await page.evaluate(() => document.getElementById('demo').show());
     await page.waitForTimeout(100);
@@ -128,8 +128,8 @@ tests.push({
     await page.waitForTimeout(150);
     await page.evaluate(() => {
       const el = document.getElementById('demo');
-      const range = el.shadowRoot.querySelector('is-date-range-picker');
-      const pickers = [...range.shadowRoot.querySelectorAll('is-date-picker')];
+      const range = el.shadowRoot.querySelector('iswc-date-range-picker');
+      const pickers = [...range.shadowRoot.querySelectorAll('iswc-date-picker')];
       // Clic día 10 en el primer calendario (inicio)
       const day10 = [...pickers[0].shadowRoot.querySelectorAll('button.day:not([data-outside])')]
         .find((b) => b.textContent.trim() === '10');
@@ -138,8 +138,8 @@ tests.push({
     await page.waitForTimeout(100);
     await page.evaluate(() => {
       const el = document.getElementById('demo');
-      const range = el.shadowRoot.querySelector('is-date-range-picker');
-      const pickers = [...range.shadowRoot.querySelectorAll('is-date-picker')];
+      const range = el.shadowRoot.querySelector('iswc-date-range-picker');
+      const pickers = [...range.shadowRoot.querySelectorAll('iswc-date-picker')];
       // Clic día 20 en el primer calendario (fin)
       const day20 = [...pickers[0].shadowRoot.querySelectorAll('button.day:not([data-outside])')]
         .find((b) => b.textContent.trim() === '20');
@@ -169,7 +169,7 @@ tests.push({
     await page.waitForTimeout(150);
     await page.evaluate(() => {
       const el = document.getElementById('with-shortcuts');
-      const range = el.shadowRoot.querySelector('is-date-range-picker');
+      const range = el.shadowRoot.querySelector('iswc-date-range-picker');
       // Click directo en el botón del preset.
       const btn = range.shadowRoot.querySelector('[data-preset="this-week"]');
       btn.click();
@@ -210,7 +210,7 @@ tests.push({
     await waitReady(page, 'data-date-range-input-ready');
     const info = await page.evaluate(() => {
       const el = document.getElementById('basic');
-      const fields = [...el.shadowRoot.querySelectorAll('is-date-field')];
+      const fields = [...el.shadowRoot.querySelectorAll('iswc-date-field')];
       return {
         startLabel: fields[0].shadowRoot.querySelector('[part="label"]').textContent.trim(),
         endLabel: fields[1].shadowRoot.querySelector('[part="label"]').textContent.trim(),
@@ -245,7 +245,7 @@ tests.push({
     await page.waitForTimeout(50);
     const data = await page.evaluate(() => {
       const el = document.getElementById('basic');
-      const fields = [...el.shadowRoot.querySelectorAll('is-date-field')];
+      const fields = [...el.shadowRoot.querySelectorAll('iswc-date-field')];
       return {
         value: el.value,
         start: el.start,
@@ -270,9 +270,9 @@ tests.push({
     await page.waitForTimeout(150);
     const info = await page.evaluate(() => {
       const el = document.getElementById('ranged');
-      const fields = [...el.shadowRoot.querySelectorAll('is-date-field')];
-      const range = el.shadowRoot.querySelector('is-date-range-picker');
-      const pickers = [...range.shadowRoot.querySelectorAll('is-date-picker')];
+      const fields = [...el.shadowRoot.querySelectorAll('iswc-date-field')];
+      const range = el.shadowRoot.querySelector('iswc-date-range-picker');
+      const pickers = [...range.shadowRoot.querySelectorAll('iswc-date-picker')];
       return {
         fieldMin: fields[0].getAttribute('min'),
         fieldMax: fields[0].getAttribute('max'),

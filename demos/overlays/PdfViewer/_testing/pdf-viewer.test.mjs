@@ -9,7 +9,7 @@
 //   - funcional: height attribute aplica style.height al iframe
 //   - funcional: slot="title" reemplaza el título por defecto
 //   - funcional: slot="toolbar" proyecta botones adicionales
-//   - funcional: is-load emite cuando el iframe carga
+//   - funcional: iswc-load emite cuando el iframe carga
 //   - determinismo: setear el mismo src dos veces no genera eventos extra
 //   - accesibilidad: title del iframe siempre presente
 import assert from 'node:assert/strict';
@@ -26,19 +26,19 @@ const TINY_PDF_DATA_URI =
 const tests = [];
 
 tests.push({
-  name: 'smoke: dos <is-pdf-viewer> montan con toolbar e iframe',
+  name: 'smoke: dos <iswc-pdf-viewer> montan con toolbar e iframe',
   run: async (page) => {
     await page.goto(URL, { waitUntil: 'domcontentloaded' });
     await waitReady(page, 'data-pdf-viewer-ready');
     const info = await page.evaluate(() => {
-      const viewers = document.querySelectorAll('is-pdf-viewer');
+      const viewers = document.querySelectorAll('iswc-pdf-viewer');
       return [...viewers].map((v) => {
         const toolbar = v.shadowRoot.querySelector('[part="toolbar"]');
         const iframe = v.shadowRoot.querySelector('iframe[part="frame"]');
         const dl = v.shadowRoot.querySelector('[part="download"]');
         const print = v.shadowRoot.querySelector('[part="print"]');
         return {
-          defined: !!customElements.get('is-pdf-viewer'),
+          defined: !!customElements.get('iswc-pdf-viewer'),
           hasToolbar: !!toolbar,
           hasIframe: !!iframe,
           dlEl: !!dl,
@@ -51,7 +51,7 @@ tests.push({
       });
     });
     assert.equal(info.length, 2, 'demo debe tener 2 visores');
-    assert.equal(info[0].defined, true, 'is-pdf-viewer debe estar definido');
+    assert.equal(info[0].defined, true, 'iswc-pdf-viewer debe estar definido');
     for (const v of info) {
       assert.ok(v.hasToolbar, 'cada visor debe tener [part="toolbar"]');
       assert.ok(v.hasIframe, 'cada visor debe tener <iframe part="frame">');
@@ -73,7 +73,7 @@ tests.push({
     await page.goto(URL, { waitUntil: 'domcontentloaded' });
     await waitReady(page, 'data-pdf-viewer-ready');
     const result = await page.evaluate(() => {
-      const v = document.querySelectorAll('is-pdf-viewer')[0];
+      const v = document.querySelectorAll('iswc-pdf-viewer')[0];
       const iframe = v.shadowRoot.querySelector('iframe');
       return {
         attrSrc: v.getAttribute('src'),
@@ -94,7 +94,7 @@ tests.push({
     await page.goto(URL, { waitUntil: 'domcontentloaded' });
     await waitReady(page, 'data-pdf-viewer-ready');
     const result = await page.evaluate((tiny) => {
-      const v = document.querySelectorAll('is-pdf-viewer')[1];
+      const v = document.querySelectorAll('iswc-pdf-viewer')[1];
       const beforeSrc = v.shadowRoot.querySelector('iframe').src;
       v.src = tiny;
       const afterSrc = v.shadowRoot.querySelector('iframe').src;
@@ -112,7 +112,7 @@ tests.push({
     await page.goto(URL, { waitUntil: 'domcontentloaded' });
     await waitReady(page, 'data-pdf-viewer-ready');
     const result = await page.evaluate((tiny) => {
-      const v = document.createElement('is-pdf-viewer');
+      const v = document.createElement('iswc-pdf-viewer');
       v.setAttribute('engine', 'pdfjs');
       v.setAttribute('src', tiny);
       document.body.appendChild(v);
@@ -129,7 +129,7 @@ tests.push({
     await page.goto(URL, { waitUntil: 'domcontentloaded' });
     await waitReady(page, 'data-pdf-viewer-ready');
     const result = await page.evaluate(() => {
-      const v = document.querySelectorAll('is-pdf-viewer')[0];
+      const v = document.querySelectorAll('iswc-pdf-viewer')[0];
       const iframe = v.shadowRoot.querySelector('iframe');
       const h = v.getAttribute('height');
       return { attrHeight: h, inlineHeight: iframe.style.height };
@@ -145,7 +145,7 @@ tests.push({
     await page.goto(URL, { waitUntil: 'domcontentloaded' });
     await waitReady(page, 'data-pdf-viewer-ready');
     const result = await page.evaluate(() => {
-      const v = document.querySelectorAll('is-pdf-viewer')[0];
+      const v = document.querySelectorAll('iswc-pdf-viewer')[0];
       const titleSpan = v.querySelector('[slot="title"]');
       return {
         hasTitleSlot: !!titleSpan,
@@ -163,7 +163,7 @@ tests.push({
     await page.goto(URL, { waitUntil: 'domcontentloaded' });
     await waitReady(page, 'data-pdf-viewer-ready');
     const result = await page.evaluate(() => {
-      const v = document.querySelectorAll('is-pdf-viewer')[1];
+      const v = document.querySelectorAll('iswc-pdf-viewer')[1];
       const tbSlot = v.querySelector('[slot="toolbar"]');
       return {
         hasToolbarSlot: !!tbSlot,
@@ -184,7 +184,7 @@ tests.push({
     // Verificamos que ese flujo existe y produce un anchor en el documento
     // (interceptando el click antes de que se dispare la navegación).
     const result = await page.evaluate(() => {
-      const v = document.querySelectorAll('is-pdf-viewer')[0];
+      const v = document.querySelectorAll('iswc-pdf-viewer')[0];
       const dl = v.shadowRoot.querySelector('[part="download"]');
       // Mock HTMLAnchorElement.click para que no navegue realmente.
       let anchorHref = null;
@@ -211,7 +211,7 @@ tests.push({
     await page.goto(URL, { waitUntil: 'domcontentloaded' });
     await waitReady(page, 'data-pdf-viewer-ready');
     const result = await page.evaluate((tiny) => {
-      const v = document.querySelectorAll('is-pdf-viewer')[0];
+      const v = document.querySelectorAll('iswc-pdf-viewer')[0];
       // Sin #page → default 1
       v.src = tiny;
       const def = v.currentPage;
@@ -236,7 +236,7 @@ tests.push({
     await page.goto(URL, { waitUntil: 'domcontentloaded' });
     await waitReady(page, 'data-pdf-viewer-ready');
     const result = await page.evaluate((tiny) => {
-      const v = document.querySelectorAll('is-pdf-viewer')[1];
+      const v = document.querySelectorAll('iswc-pdf-viewer')[1];
       v.src = tiny;
       const a = v.shadowRoot.querySelector('iframe').src;
       v.src = tiny;
@@ -253,7 +253,7 @@ tests.push({
     await page.goto(URL, { waitUntil: 'domcontentloaded' });
     await waitReady(page, 'data-pdf-viewer-ready');
     const result = await page.evaluate(() => {
-      const viewers = [...document.querySelectorAll('is-pdf-viewer')];
+      const viewers = [...document.querySelectorAll('iswc-pdf-viewer')];
       return viewers.map((v) => {
         const iframe = v.shadowRoot.querySelector('iframe');
         return iframe?.getAttribute('title') ?? null;

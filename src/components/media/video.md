@@ -1,14 +1,14 @@
 ---
-tag: is-video
+tag: iswc-video
 tags:
-  - is-video
+  - iswc-video
 category: media
 status: public
 source: ./video.js
 style: ./video.css
 preview: ./video.json
 ---
-# `<is-video>`
+# `<iswc-video>`
 
 ## Propósito
 
@@ -16,7 +16,7 @@ Reproductor con chrome propio al estilo YouTube: barra de progreso con buffer y
 scrubber, fila de controles con volumen desplegable, velocidad, picture-in-picture
 y pantalla completa. Los controles se ocultan solos mientras reproduce.
 
-Este módulo registra `<is-video>`.
+Este módulo registra `<iswc-video>`.
 
 ## Cuándo usarlo
 
@@ -35,11 +35,11 @@ import './video.js';
 ## Ejemplo mínimo
 
 ```html
-<is-video
+<iswc-video
 controls
 playsinline
 src="video.mp4"
-></is-video>
+></iswc-video>
 ```
 
 ## API
@@ -82,9 +82,9 @@ src="video.mp4"
 
 | Evento | detail | bubbles | composed | cancelable |
 | --- | --- | --- | --- | --- |
-| `is-play` | no | sí | sí | no |
-| `is-pause` | no | sí | sí | no |
-| `is-ended` | no | sí | sí | no |
+| `iswc-play` | no | sí | sí | no |
+| `iswc-pause` | no | sí | sí | no |
+| `iswc-ended` | no | sí | sí | no |
 | `play` | no | sí | sí | no |
 | `pause` | no | sí | sí | no |
 | `ended` | no | sí | sí | no |
@@ -142,7 +142,7 @@ No declara integración form-associated propia en este módulo.
 
 Documentación de cabecera preservada desde fuente:
 
-> <is-video> — Web Component (vanilla).
+> <iswc-video> — Web Component (vanilla).
 > Reproductor con chrome tipo YouTube: barra de progreso propia (con buffer y
 > scrubber) sobre la fila de botones, scrim inferior, overlay de play central,
 > auto-ocultado mientras reproduce, atajos de teclado, pantalla completa,
@@ -153,7 +153,7 @@ Documentación de cabecera preservada desde fuente:
 >   muted, loop, autoplay, playsinline  boolean
 > Slots: default — tracks / sources
 > Métodos: play(), pause(), toggleFullscreen(), togglePictureInPicture()
-> Eventos (bubbles, composed): is-play, is-pause, is-ended
+> Eventos (bubbles, composed): iswc-play, iswc-pause, iswc-ended
 > También reenvía play/pause/ended nativos (bubbles, composed)
 > Teclado (con foco en el reproductor)
 >   espacio / k  play-pausa      m  silenciar        f  pantalla completa
@@ -170,7 +170,7 @@ Documentación de cabecera preservada desde fuente:
 - [`../actions/check-icon-button.js`](../actions/check-icon-button.js)
 - [`./icon.js`](./icon.js)
 
-Tags del módulo: `<is-video>`.
+Tags del módulo: `<iswc-video>`.
 
 ## Accesibilidad
 
@@ -179,11 +179,11 @@ Preservar semántica, foco, teclado, labels y ARIA. ARIA detectado: `aria-hidden
 ## Ejemplo avanzado
 
 ```html
-<is-video
+<iswc-video
 controls
 playsinline
 src="video.mp4"
-></is-video>
+></iswc-video>
 ```
 
 ## Errores comunes

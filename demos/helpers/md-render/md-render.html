@@ -3,8 +3,8 @@
 <head>
 <meta charset="utf-8" />
 <meta name="viewport" content="width=device-width, initial-scale=1" />
-<title><is-md-render> · is-webcomponents</title>
-<meta name="description" content="Demo del helper <is-md-render>: render inline de markdown/HTML + chips {{var}}. Con can-edit edita in-place." />
+<title><iswc-md-render> · is-webcomponents</title>
+<meta name="description" content="Demo del helper <iswc-md-render>: render inline de markdown/HTML + chips {{var}}. Con can-edit edita in-place." />
 <style>
   html, body { margin: 0; padding: 0; height: 100%; background: #0c1118; color: #e2e8f0; font-family: ui-sans-serif, system-ui, sans-serif; }
   body { display: grid; grid-template-rows: auto 1fr; }
@@ -19,12 +19,12 @@
   section { display: grid; gap: 6px; }
   section h2 { font-size: 13px; font-weight: 600; color: #94a3b8; margin: 0; text-transform: uppercase; letter-spacing: 0.04em; }
   section .desc { color: #94a3b8; font-size: 12px; }
-  is-md-render:not(:defined) { visibility: hidden; }
-  is-md-render { display: block; padding: 10px 12px; background: #0f1620; border: 1px solid rgba(255,255,255,0.06); border-radius: 6px; }
+  iswc-md-render:not(:defined) { visibility: hidden; }
+  iswc-md-render { display: block; padding: 10px 12px; background: #0f1620; border: 1px solid rgba(255,255,255,0.06); border-radius: 6px; }
 </style>
 <script type="module">
-  await import('../../../dist/cdn/helpers/md-render.min.js?h=c48qu1');
-  await customElements.whenDefined('is-md-render');
+  await import('../../../dist/cdn/helpers/md-render.min.js?h=5rmest');
+  await customElements.whenDefined('iswc-md-render');
 
   const main = document.querySelector('main');
 
@@ -45,28 +45,28 @@
 
   // 1) Solo lectura con value markdown
   addSection('Solo lectura · markdown', 'value con markdown → HTML renderizado', (sec) => {
-    const el = document.createElement('is-md-render');
+    const el = document.createElement('iswc-md-render');
     el.value = '# Título\n\nHola **mundo** y *cursiva* con `código`.';
     sec.appendChild(el);
   });
 
   // 2) Solo lectura con chips de variables {{var}}
   addSection('Solo lectura · chips {{var}}', '{{nombre}} se renderiza como chip', (sec) => {
-    const el = document.createElement('is-md-render');
+    const el = document.createElement('iswc-md-render');
     el.value = 'Hola {{nombre}}, tu **pedido #{{id}}** está listo.';
     sec.appendChild(el);
   });
 
   // 3) Vacío (placeholder)
   addSection('Solo lectura · vacío', 'value="" muestra placeholder', (sec) => {
-    const el = document.createElement('is-md-render');
+    const el = document.createElement('iswc-md-render');
     el.placeholder = 'Sin contenido aún';
     sec.appendChild(el);
   });
 
   // 4) Hidratado desde <script type="text/markdown">
   addSection('Hidratado · <script type="text/markdown">', 'value implícito desde hijo', (sec) => {
-    const el = document.createElement('is-md-render');
+    const el = document.createElement('iswc-md-render');
     const s = document.createElement('script');
     s.type = 'text/markdown';
     s.textContent = 'Lista:\n\n- item A\n- item B\n- item C';
@@ -75,18 +75,18 @@
   });
 
   // 5) can-edit: editable in-place
-  addSection('can-edit · editable', 'contenteditable, eventos is-input / is-change', (sec) => {
-    const el = document.createElement('is-md-render');
+  addSection('can-edit · editable', 'contenteditable, eventos iswc-input / iswc-change', (sec) => {
+    const el = document.createElement('iswc-md-render');
     el.setAttribute('can-edit', '');
-    el.value = 'Edita este texto y verás eventos **is-input**.';
+    el.value = 'Edita este texto y verás eventos **iswc-input**.';
     sec.appendChild(el);
-    el.addEventListener('is-input', (e) => console.log('[md-render] is-input', e.detail?.value?.slice(0, 40)));
-    el.addEventListener('is-change', (e) => console.log('[md-render] is-change', e.detail?.value?.slice(0, 40)));
+    el.addEventListener('iswc-input', (e) => console.log('[md-render] iswc-input', e.detail?.value?.slice(0, 40)));
+    el.addEventListener('iswc-change', (e) => console.log('[md-render] iswc-change', e.detail?.value?.slice(0, 40)));
   });
 
   // 6) readonly: combina con can-edit, gana readonly
   addSection('readonly · bloquea edición', 'can-edit + readonly → readonly gana', (sec) => {
-    const el = document.createElement('is-md-render');
+    const el = document.createElement('iswc-md-render');
     el.setAttribute('can-edit', '');
     el.setAttribute('readonly', '');
     el.value = 'Esto NO debe ser editable.';
@@ -98,8 +98,8 @@
 </head>
 <body>
 <header>
-  <h1><is-md-render> — render markdown con chips</h1>
-  <p>Atributos: <code>value</code> <code>can-edit</code> <code>readonly</code> <code>placeholder</code>. Eventos: <code>is-input</code> <code>is-change</code>.</p>
+  <h1><iswc-md-render> — render markdown con chips</h1>
+  <p>Atributos: <code>value</code> <code>can-edit</code> <code>readonly</code> <code>placeholder</code>. Eventos: <code>iswc-input</code> <code>iswc-change</code>.</p>
 </header>
 <main></main>
 </body>

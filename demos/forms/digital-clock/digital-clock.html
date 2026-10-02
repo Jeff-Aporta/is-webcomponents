@@ -3,7 +3,7 @@
 <head>
 <meta charset="utf-8" />
 <meta name="viewport" content="width=device-width, initial-scale=1" />
-<title>Reloj digital &lt;is-digital-clock&gt; · is-webcomponents</title>
+<title>Reloj digital &lt;iswc-digital-clock&gt; · is-webcomponents</title>
 <meta name="description" content="Selector de hora en lista o en columnas (horas/minutos/segundos/AM-PM) con teclado y scroll-to-selection." />
 <style>
   html, body { margin: 0; padding: 0; min-height: 100%; background: #0c1118; color: #e2e8f0; font-family: ui-sans-serif, system-ui, sans-serif; }
@@ -14,25 +14,25 @@
   section { background: #131a24; border: 1px solid rgba(255,255,255,0.08); border-radius: 10px; padding: 16px; display: grid; gap: 10px; }
   section h2 { font-size: 13px; margin: 0; font-weight: 600; color: #cbd5e1; }
   section .desc { font-size: 12px; color: #94a3b8; margin: 0; }
-  is-digital-clock { width: 100%; min-height: 220px; }
+  iswc-digital-clock { width: 100%; min-height: 220px; }
   .row { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; }
   code { background: rgba(255,255,255,0.06); padding: 1px 5px; border-radius: 3px; font: 12px ui-monospace, Menlo, Consolas, monospace; }
   /* Anti-FOUC */
-  is-digital-clock:not(:defined) { visibility: hidden; }
+  iswc-digital-clock:not(:defined) { visibility: hidden; }
 </style>
 <script type="module">
-  await import('../../../dist/cdn/forms/digital-clock.min.js?h=fqvfc1');
-  await customElements.whenDefined('is-digital-clock');
+  await import('../../../dist/cdn/forms/digital-clock.min.js?h=y6qiq5');
+  await customElements.whenDefined('iswc-digital-clock');
 
   // (1) lista por defecto (cada 30 min)
-  const lista = document.createElement('is-digital-clock');
+  const lista = document.createElement('iswc-digital-clock');
   lista.label = 'Hora de la cita';
   lista.value = '09:30';
   lista.hint = 'Lista con paso de 30 minutos';
   document.querySelector('#sec-lista').appendChild(lista);
 
   // (2) layout sections: horas, minutos, segundos y AM/PM
-  const secciones = document.createElement('is-digital-clock');
+  const secciones = document.createElement('iswc-digital-clock');
   secciones.layout = 'sections';
   secciones.value = '14:30:00';
   secciones.seconds = true;
@@ -42,7 +42,7 @@
   document.querySelector('#sec-sections').appendChild(secciones);
 
   // (3) modo 24h
-  const reloj24 = document.createElement('is-digital-clock');
+  const reloj24 = document.createElement('iswc-digital-clock');
   reloj24.value = '18:45';
   reloj24.ampm = false;
   reloj24.step = 15;
@@ -51,7 +51,7 @@
   document.querySelector('#sec-24h').appendChild(reloj24);
 
   // (4) deshabilitado
-  const bloqueado = document.createElement('is-digital-clock');
+  const bloqueado = document.createElement('iswc-digital-clock');
   bloqueado.value = '10:00';
   bloqueado.disabled = true;
   bloqueado.label = 'Hora bloqueada';
@@ -65,8 +65,8 @@
 <body>
 <main>
   <header>
-    <h1>&lt;is-digital-clock&gt; · Selector de hora en lista / secciones</h1>
-    <p>Lista plana (MUI <code>DigitalClock</code>) o columnas hour/min/sec + AM/PM (<code>MultiSectionDigitalClock</code>). Emite <code>is-change</code> al confirmar.</p>
+    <h1>&lt;iswc-digital-clock&gt; · Selector de hora en lista / secciones</h1>
+    <p>Lista plana (MUI <code>DigitalClock</code>) o columnas hour/min/sec + AM/PM (<code>MultiSectionDigitalClock</code>). Emite <code>iswc-change</code> al confirmar.</p>
   </header>
 
   <section id="sec-lista">

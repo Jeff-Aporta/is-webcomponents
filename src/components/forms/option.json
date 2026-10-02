@@ -1,20 +1,20 @@
 {
-  "$schema": "is-preview/v1",
-  "tag": "is-option",
+  "$schema": "iswc-preview/v1",
+  "tag": "iswc-option",
   "category": "forms",
-  "title": "<is-option>",
+  "title": "<iswc-option>",
   "titleHtml": true,
-  "description": "Documentación y demos de is-option de InSoft.",
-  "storageKey": "docs-is-option",
+  "description": "Documentación y demos de iswc-option de InSoft.",
+  "storageKey": "docs-iswc-option",
   "sections": [
     {
       "id": "intro",
       "title": "Uso",
-      "lede": "Opción de un <code class=\"code\">&lt;is-combobox&gt;</code> o <code class=\"code\">&lt;is-select&gt;</code>. El <code class=\"code\">value</code> es lo que expone el control; el contenido es lo que ve el usuario.",
+      "lede": "Opción de un <code class=\"code\">&lt;iswc-combobox&gt;</code> o <code class=\"code\">&lt;iswc-select&gt;</code>. El <code class=\"code\">value</code> es lo que expone el control; el contenido es lo que ve el usuario.",
       "blocks": [
         {
           "kind": "demo",
-          "html": "<is-combobox label=\"Ciudad\" placeholder=\"Elige una\" style=\"max-width:320px\">\r\n            <is-option value=\"bog\">Bogotá</is-option>\r\n            <is-option value=\"mde\">Medellín</is-option>\r\n            <is-option value=\"cal\">Cali</is-option>\r\n            <is-option value=\"brr\" disabled>Barranquilla (sin cobertura)</is-option>\r\n          </is-combobox>",
+          "html": "<iswc-combobox label=\"Ciudad\" placeholder=\"Elige una\" style=\"max-width:320px\">\r\n            <iswc-option value=\"bog\">Bogotá</iswc-option>\r\n            <iswc-option value=\"mde\">Medellín</iswc-option>\r\n            <iswc-option value=\"cal\">Cali</iswc-option>\r\n            <iswc-option value=\"brr\" disabled>Barranquilla (sin cobertura)</iswc-option>\r\n          </iswc-combobox>",
           "controls": [
             {
               "control": "select",
@@ -36,7 +36,7 @@
         },
         {
           "kind": "code",
-          "code": "<is-combobox label=\"Ciudad\" placeholder=\"Elige una\" style=\"max-width:320px\">\n  <is-option value=\"bog\">Bogotá</is-option>\n  <is-option value=\"mde\">Medellín</is-option>\n  <is-option value=\"cal\">Cali</is-option>\n  <is-option value=\"brr\" disabled>Barranquilla (sin cobertura)</is-option>\n</is-combobox>",
+          "code": "<iswc-combobox label=\"Ciudad\" placeholder=\"Elige una\" style=\"max-width:320px\">\n  <iswc-option value=\"bog\">Bogotá</iswc-option>\n  <iswc-option value=\"mde\">Medellín</iswc-option>\n  <iswc-option value=\"cal\">Cali</iswc-option>\n  <iswc-option value=\"brr\" disabled>Barranquilla (sin cobertura)</iswc-option>\n</iswc-combobox>",
           "lang": "html"
         }
       ]
@@ -44,7 +44,7 @@
     {
       "id": "reference",
       "title": "Referencia",
-      "lede": "&lt;is-option&gt; — Opción para is-combobox / is-select (listboxes). Atributos: value, disabled, selected, group Slots: default (etiqueta), start (icono/avatar), description (texto secundario) Parts: base, start, label, description",
+      "lede": "&lt;iswc-option&gt; — Opción para iswc-combobox / iswc-select (listboxes). Atributos: value, disabled, selected, group Slots: default (etiqueta), start (icono/avatar), description (texto secundario) Parts: base, start, label, description",
       "blocks": [
         {
           "kind": "html",

@@ -14,13 +14,13 @@ tests.push({
     await page.goto(URL, { waitUntil: 'domcontentloaded' });
     await waitReady(page, 'data-line-chart-ready');
     const info = await page.evaluate(() => {
-      const el = document.querySelector('is-line-chart');
+      const el = document.querySelector('iswc-line-chart');
       const svg = el.shadowRoot.querySelector('svg');
       const marks = el.shadowRoot.querySelectorAll('.mark');
       const rects = svg.getBoundingClientRect();
       return {
-        defined: !!customElements.get('is-line-chart'),
-        chartDefined: !!customElements.get('is-chart'),
+        defined: !!customElements.get('iswc-line-chart'),
+        chartDefined: !!customElements.get('iswc-chart'),
         svg: !!svg,
         viewBox: svg?.getAttribute('viewBox'),
         marks: marks.length,
@@ -28,8 +28,8 @@ tests.push({
         height: rects.height,
       };
     });
-    assert.equal(info.defined, true, 'is-line-chart debe estar definido');
-    assert.equal(info.chartDefined, true, 'is-chart también debe estar definido');
+    assert.equal(info.defined, true, 'iswc-line-chart debe estar definido');
+    assert.equal(info.chartDefined, true, 'iswc-chart también debe estar definido');
     assert.ok(info.svg, 'debe haber un SVG en shadow DOM');
     assert.ok(info.marks > 0, `debe haber marcas renderizadas, hay ${info.marks}`);
     assert.ok(info.viewBox, 'el SVG debe tener viewBox');
@@ -44,11 +44,11 @@ tests.push({
     await waitReady(page, 'data-line-chart-ready');
     await page.waitForTimeout(200);
     const before = await page.evaluate(() => {
-      const el = document.querySelector('is-line-chart');
+      const el = document.querySelector('iswc-line-chart');
       return el.shadowRoot.querySelectorAll('.mark').length;
     });
     await page.evaluate(() => {
-      const el = document.querySelector('is-line-chart');
+      const el = document.querySelector('iswc-line-chart');
       el.payload = {
         type: 'line',
         data: {
@@ -59,7 +59,7 @@ tests.push({
     });
     await page.waitForTimeout(200);
     const after = await page.evaluate(() => {
-      const el = document.querySelector('is-line-chart');
+      const el = document.querySelector('iswc-line-chart');
       return {
         marks: el.shadowRoot.querySelectorAll('.mark').length,
       };
@@ -75,7 +75,7 @@ tests.push({
     await waitReady(page, 'data-line-chart-ready');
     await page.waitForTimeout(200);
     const info = await page.evaluate(() => {
-      const el = document.querySelector('is-line-chart');
+      const el = document.querySelector('iswc-line-chart');
       const lines = [...el.shadowRoot.querySelectorAll('.mark.mark-line')];
       const areas = [...el.shadowRoot.querySelectorAll('.mark.mark-area')];
       const points = [...el.shadowRoot.querySelectorAll('.mark.mark-point')];
@@ -119,7 +119,7 @@ tests.push({
     await waitReady(page, 'data-line-chart-ready');
     await page.waitForTimeout(200);
     const info = await page.evaluate(() => {
-      const el = document.querySelector('is-line-chart');
+      const el = document.querySelector('iswc-line-chart');
       const lines = [...el.shadowRoot.querySelectorAll('.mark.mark-line')];
       return lines.map((l) => ({
         d: l.getAttribute('d') ?? '',
@@ -145,7 +145,7 @@ tests.push({
     await waitReady(page, 'data-line-chart-ready');
     await page.waitForTimeout(200);
     await page.evaluate(() => {
-      const el = document.querySelector('is-line-chart');
+      const el = document.querySelector('iswc-line-chart');
       el.payload = {
         type: 'line',
         data: {
@@ -156,7 +156,7 @@ tests.push({
     });
     await page.waitForTimeout(200);
     const info = await page.evaluate(() => {
-      const el = document.querySelector('is-line-chart');
+      const el = document.querySelector('iswc-line-chart');
       const lines = [...el.shadowRoot.querySelectorAll('.mark.mark-line')];
       return lines.map((l) => l.getAttribute('d') ?? '');
     });
@@ -178,7 +178,7 @@ tests.push({
     await waitReady(page, 'data-line-chart-ready');
     await page.waitForTimeout(200);
     const tickLabels = await page.evaluate(() => {
-      const el = document.querySelector('is-line-chart');
+      const el = document.querySelector('iswc-line-chart');
       const texts = [...el.shadowRoot.querySelectorAll('text.tick-label')];
       return texts.map((t) => (t.textContent ?? '').trim());
     });
@@ -199,7 +199,7 @@ tests.push({
     await waitReady(page, 'data-line-chart-ready');
     await page.waitForTimeout(200);
     const legend = await page.evaluate(() => {
-      const el = document.querySelector('is-line-chart');
+      const el = document.querySelector('iswc-line-chart');
       const leg = el.shadowRoot.querySelector('.legend');
       if (!leg || leg.hidden) return { hidden: true, items: [] };
       const items = [...leg.querySelectorAll('.legend-item')].map((it) => ({
@@ -223,7 +223,7 @@ tests.push({
     await page.waitForTimeout(200);
     const result = await page.evaluate(() => {
       return new Promise((resolve) => {
-        const el = document.querySelector('is-line-chart');
+        const el = document.querySelector('iswc-line-chart');
         const dot = el.shadowRoot.querySelector('.mark.mark-point');
         if (!dot) return resolve({ dot: false });
         const box = dot.getBoundingClientRect();
@@ -244,16 +244,16 @@ tests.push({
 });
 
 tests.push({
-  name: 'is-render: emite el evento is-render tras montar',
+  name: 'iswc-render: emite el evento iswc-render tras montar',
   run: async (page) => {
     await page.goto(URL, { waitUntil: 'domcontentloaded' });
     await waitReady(page, 'data-line-chart-ready');
     const fired = await page.evaluate(() => {
       return new Promise((resolve) => {
-        const el = document.createElement('is-line-chart');
+        const el = document.createElement('iswc-line-chart');
         document.body.appendChild(el);
         let n = 0;
-        el.addEventListener('is-render', () => n++);
+        el.addEventListener('iswc-render', () => n++);
         el.payload = {
           type: 'line',
           data: { labels: ['a', 'b'], datasets: [{ label: 's', data: [1, 2] }] },
@@ -261,7 +261,7 @@ tests.push({
         setTimeout(() => { el.remove(); resolve(n); }, 250);
       });
     });
-    assert.ok(fired >= 1, `is-render debió dispararse >=1 vez (fue ${fired})`);
+    assert.ok(fired >= 1, `iswc-render debió dispararse >=1 vez (fue ${fired})`);
   },
 });
 

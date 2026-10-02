@@ -12,7 +12,7 @@ async function checkDeterministic(page, demo) {
   await page.waitForTimeout(200);
 
   const data = await page.evaluate(() => {
-    const cards = [...document.querySelectorAll('main is-card')];
+    const cards = [...document.querySelectorAll('main iswc-card')];
     return cards.map((c, idx) => {
       const sr = c.shadowRoot;
       const r = c.getBoundingClientRect();
@@ -71,7 +71,7 @@ for (const demo of DEMOS) {
 }
 
 const VISUAL_RUBRIC = `
-Evalúa la calidad visual del <is-card> que aparece en el screenshot.
+Evalúa la calidad visual del <iswc-card> que aparece en el screenshot.
 
 Checklist (todas deben cumplirse; marca cada una PASS o FAIL):
 

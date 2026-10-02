@@ -12,7 +12,7 @@ async function clearPrefs(page) {
   await page.evaluate(() => {
     try {
       const root = JSON.parse(localStorage.getItem('is-webcomponents') || '{}');
-      if (root['is-split-panel']?.['demo-sp-3']) delete root['is-split-panel']['demo-sp-3'];
+      if (root['iswc-split-panel']?.['demo-sp-3']) delete root['iswc-split-panel']['demo-sp-3'];
       localStorage.setItem('is-webcomponents', JSON.stringify(root));
     } catch {}
   });
@@ -21,16 +21,16 @@ async function clearPrefs(page) {
 const tests = [];
 
 tests.push({
-  name: 'smoke: is-split-panel está definido y los 5 están montados',
+  name: 'smoke: iswc-split-panel está definido y los 5 están montados',
   run: async (page) => {
     await page.goto(URL, { waitUntil: 'domcontentloaded' });
     await clearPrefs(page);
     await page.reload({ waitUntil: 'domcontentloaded' });
     await waitReady(page, 'data-split-panel-ready');
     const data = await page.evaluate(() => {
-      const sps = [...document.querySelectorAll('main is-split-panel')];
+      const sps = [...document.querySelectorAll('main iswc-split-panel')];
       return {
-        defined: !!customElements.get('is-split-panel'),
+        defined: !!customElements.get('iswc-split-panel'),
         count: sps.length,
         orientations: sps.map((sp) => sp.getAttribute('orientation')),
         // Cada uno debe tener un divider con role=separator.
@@ -44,7 +44,7 @@ tests.push({
         }),
       };
     });
-    assert.equal(data.defined, true, 'is-split-panel debe estar definido');
+    assert.equal(data.defined, true, 'iswc-split-panel debe estar definido');
     assert.equal(data.count, 5, `esperaba 5 split-panels, hay ${data.count}`);
     assert.equal(data.orientations[0], 'horizontal');
     assert.equal(data.orientations[1], 'vertical');
@@ -284,7 +284,7 @@ tests.push({
     await page.waitForTimeout(200);
     const ls = await page.evaluate(() => {
       const root = JSON.parse(localStorage.getItem('is-webcomponents') || '{}');
-      return root['is-split-panel']?.['demo-sp-3'] ?? null;
+      return root['iswc-split-panel']?.['demo-sp-3'] ?? null;
     });
     assert.ok(ls, 'sp3 debe haber escrito prefs en localStorage tras drag');
     assert.ok(typeof ls.positionInPixels === 'number',
@@ -315,7 +315,7 @@ tests.push({
     await page.waitForTimeout(300);
     const savedPx = await page.evaluate(() => {
       const root = JSON.parse(localStorage.getItem('is-webcomponents') || '{}');
-      return root['is-split-panel']?.['demo-sp-3']?.positionInPixels ?? null;
+      return root['iswc-split-panel']?.['demo-sp-3']?.positionInPixels ?? null;
     });
     assert.ok(savedPx !== null && savedPx > 300, `positionInPixels guardado debe ser > 300, fue ${savedPx}`);
     // Recargar.

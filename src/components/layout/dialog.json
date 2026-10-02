@@ -1,11 +1,11 @@
 {
-  "$schema": "is-preview/v1",
-  "tag": "is-dialog",
+  "$schema": "iswc-preview/v1",
+  "tag": "iswc-dialog",
   "category": "layout",
-  "title": "<is-dialog>",
+  "title": "<iswc-dialog>",
   "titleHtml": true,
-  "description": "Documentación y demos del componente is-dialog de InSoft.",
-  "storageKey": "docs-is-dialog",
+  "description": "Documentación y demos del componente iswc-dialog de InSoft.",
+  "storageKey": "docs-iswc-dialog",
   "sections": [
     {
       "id": "intro",
@@ -14,18 +14,18 @@
       "blocks": [
         {
           "kind": "demo",
-          "html": "<is-button id=\"openStandard\">Abrir diálogo</is-button>",
-          "equivNote": "light-dismiss y cancelación de is-hide controlan el cierre.",
+          "html": "<iswc-button id=\"openStandard\">Abrir diálogo</iswc-button>",
+          "equivNote": "light-dismiss y cancelación de iswc-hide controlan el cierre.",
           "equivHtml": "<!-- ver diagrama de ramas -->",
-          "equivFlow": "<is-flowchart open-on-click animation=\"flow\">\n  <script type=\"application/json\">\n  {\n    \"flowchart\": {\n      \"title\": \"is-dialog: cierre\",\n      \"direction\": \"TB\",\n      \"nodes\": [\n        {\n          \"id\": \"q\",\n          \"label\": \"light-dismiss?\",\n          \"shape\": \"diamond\"\n        },\n        {\n          \"id\": \"a\",\n          \"label\": \"clic fuera → hide\",\n          \"shape\": \"round\"\n        },\n        {\n          \"id\": \"b\",\n          \"label\": \"solo X / Escape\",\n          \"shape\": \"round\"\n        },\n        {\n          \"id\": \"c\",\n          \"label\": \"is-hide cancelado?\",\n          \"shape\": \"diamond\"\n        },\n        {\n          \"id\": \"d\",\n          \"label\": \"pulse / no cierra\",\n          \"shape\": \"stadium\"\n        },\n        {\n          \"id\": \"e\",\n          \"label\": \"cierra\",\n          \"shape\": \"stadium\"\n        }\n      ],\n      \"edges\": [\n        {\n          \"from\": \"q\",\n          \"to\": \"a\",\n          \"label\": \"si\"\n        },\n        {\n          \"from\": \"q\",\n          \"to\": \"b\",\n          \"label\": \"no\"\n        },\n        {\n          \"from\": \"a\",\n          \"to\": \"c\"\n        },\n        {\n          \"from\": \"b\",\n          \"to\": \"c\"\n        },\n        {\n          \"from\": \"c\",\n          \"to\": \"d\",\n          \"label\": \"si\"\n        },\n        {\n          \"from\": \"c\",\n          \"to\": \"e\",\n          \"label\": \"no\"\n        }\n      ]\n    }\n  }\n  </script>\n</is-flowchart>"
+          "equivFlow": "<iswc-flowchart open-on-click animation=\"flow\">\n  <script type=\"application/json\">\n  {\n    \"flowchart\": {\n      \"title\": \"iswc-dialog: cierre\",\n      \"direction\": \"TB\",\n      \"nodes\": [\n        {\n          \"id\": \"q\",\n          \"label\": \"light-dismiss?\",\n          \"shape\": \"diamond\"\n        },\n        {\n          \"id\": \"a\",\n          \"label\": \"clic fuera → hide\",\n          \"shape\": \"round\"\n        },\n        {\n          \"id\": \"b\",\n          \"label\": \"solo X / Escape\",\n          \"shape\": \"round\"\n        },\n        {\n          \"id\": \"c\",\n          \"label\": \"iswc-hide cancelado?\",\n          \"shape\": \"diamond\"\n        },\n        {\n          \"id\": \"d\",\n          \"label\": \"pulse / no cierra\",\n          \"shape\": \"stadium\"\n        },\n        {\n          \"id\": \"e\",\n          \"label\": \"cierra\",\n          \"shape\": \"stadium\"\n        }\n      ],\n      \"edges\": [\n        {\n          \"from\": \"q\",\n          \"to\": \"a\",\n          \"label\": \"si\"\n        },\n        {\n          \"from\": \"q\",\n          \"to\": \"b\",\n          \"label\": \"no\"\n        },\n        {\n          \"from\": \"a\",\n          \"to\": \"c\"\n        },\n        {\n          \"from\": \"b\",\n          \"to\": \"c\"\n        },\n        {\n          \"from\": \"c\",\n          \"to\": \"d\",\n          \"label\": \"si\"\n        },\n        {\n          \"from\": \"c\",\n          \"to\": \"e\",\n          \"label\": \"no\"\n        }\n      ]\n    }\n  }\n  </script>\n</iswc-flowchart>"
         },
         {
           "kind": "html",
-          "html": "<is-dialog id=\"dlgStandard\" label=\"Diálogo estándar\" backdrop-variant=\"basic\">\r\n          <p>Esto es un diálogo estándar. Puedes poner cualquier contenido aquí.</p>\r\n          <div slot=\"footer\">\r\n            <is-button data-dialog=\"close\" variant=\"outlined\">Cancelar</is-button>\r\n            <is-button data-dialog=\"close\" color=\"brand\">Aceptar</is-button>\r\n          </div>\r\n        </is-dialog>"
+          "html": "<iswc-dialog id=\"dlgStandard\" label=\"Diálogo estándar\" backdrop-variant=\"basic\">\r\n          <p>Esto es un diálogo estándar. Puedes poner cualquier contenido aquí.</p>\r\n          <div slot=\"footer\">\r\n            <iswc-button data-dialog=\"close\" variant=\"outlined\">Cancelar</iswc-button>\r\n            <iswc-button data-dialog=\"close\" color=\"brand\">Aceptar</iswc-button>\r\n          </div>\r\n        </iswc-dialog>"
         },
         {
           "kind": "code",
-          "code": "<is-button onclick=\"document.getElementById('dlg').open = true\">Abrir</is-button>\n<is-dialog id=\"dlg\" label=\"Título\">\n  Contenido.\n  <div slot=\"footer\">\n    <is-button data-dialog=\"close\">Cancelar</is-button>\n  </div>\n</is-dialog>"
+          "code": "<iswc-button onclick=\"document.getElementById('dlg').open = true\">Abrir</iswc-button>\n<iswc-dialog id=\"dlg\" label=\"Título\">\n  Contenido.\n  <div slot=\"footer\">\n    <iswc-button data-dialog=\"close\">Cancelar</iswc-button>\n  </div>\n</iswc-dialog>"
         }
       ]
     },
@@ -36,15 +36,15 @@
       "blocks": [
         {
           "kind": "demo",
-          "html": "<is-button id=\"openNoHeader\">Abrir sin header</is-button>"
+          "html": "<iswc-button id=\"openNoHeader\">Abrir sin header</iswc-button>"
         },
         {
           "kind": "html",
-          "html": "<is-dialog id=\"dlgNoHeader\" without-header>\r\n          <p>¡Mira mamá, sin header! A veces solo necesitas un diálogo limpio y simple.</p>\r\n          <div slot=\"footer\">\r\n            <is-button data-dialog=\"close\" variant=\"outlined\">Cerrar</is-button>\r\n          </div>\r\n        </is-dialog>"
+          "html": "<iswc-dialog id=\"dlgNoHeader\" without-header>\r\n          <p>¡Mira mamá, sin header! A veces solo necesitas un diálogo limpio y simple.</p>\r\n          <div slot=\"footer\">\r\n            <iswc-button data-dialog=\"close\" variant=\"outlined\">Cerrar</iswc-button>\r\n          </div>\r\n        </iswc-dialog>"
         },
         {
           "kind": "code",
-          "code": "<is-dialog without-header>…</is-dialog>"
+          "code": "<iswc-dialog without-header>…</iswc-dialog>"
         }
       ]
     },
@@ -55,15 +55,15 @@
       "blocks": [
         {
           "kind": "demo",
-          "html": "<is-button id=\"openWide\">Diálogo ancho</is-button>"
+          "html": "<iswc-button id=\"openWide\">Diálogo ancho</iswc-button>"
         },
         {
           "kind": "html",
-          "html": "<is-dialog id=\"dlgWide\" label=\"Diálogo ancho\" style=\"--width: 800px\">\r\n          <p>Este diálogo es más ancho que el predeterminado, útil cuando necesitas más espacio para el contenido.</p>\r\n          <div slot=\"footer\">\r\n            <is-button data-dialog=\"close\" color=\"brand\">Entendido</is-button>\r\n          </div>\r\n        </is-dialog>"
+          "html": "<iswc-dialog id=\"dlgWide\" label=\"Diálogo ancho\" style=\"--width: 800px\">\r\n          <p>Este diálogo es más ancho que el predeterminado, útil cuando necesitas más espacio para el contenido.</p>\r\n          <div slot=\"footer\">\r\n            <iswc-button data-dialog=\"close\" color=\"brand\">Entendido</iswc-button>\r\n          </div>\r\n        </iswc-dialog>"
         },
         {
           "kind": "code",
-          "code": "<is-dialog style=\"--width: 800px\">…</is-dialog>"
+          "code": "<iswc-dialog style=\"--width: 800px\">…</iswc-dialog>"
         }
       ]
     },
@@ -74,15 +74,15 @@
       "blocks": [
         {
           "kind": "demo",
-          "html": "<is-button id=\"openActions\">Abrir</is-button>"
+          "html": "<iswc-button id=\"openActions\">Abrir</iswc-button>"
         },
         {
           "kind": "html",
-          "html": "<is-dialog id=\"dlgActions\" label=\"Con header-actions\">\r\n          <div slot=\"header-actions\">\r\n            <is-button variant=\"plain\" aria-label=\"Maximizar\">\r\n              <is-icon slot=\"start\" icon=\"mdi:arrow-top-right-bottom-left\" aria-hidden=\"true\"></is-icon>\r\n            </is-button>\r\n          </div>\r\n          <p>Añade acciones custom al header.</p>\r\n          <div slot=\"footer\">\r\n            <is-button data-dialog=\"close\" color=\"brand\">OK</is-button>\r\n          </div>\r\n        </is-dialog>"
+          "html": "<iswc-dialog id=\"dlgActions\" label=\"Con header-actions\">\r\n          <div slot=\"header-actions\">\r\n            <iswc-button variant=\"plain\" aria-label=\"Maximizar\">\r\n              <iswc-icon slot=\"start\" icon=\"mdi:arrow-top-right-bottom-left\" aria-hidden=\"true\"></iswc-icon>\r\n            </iswc-button>\r\n          </div>\r\n          <p>Añade acciones custom al header.</p>\r\n          <div slot=\"footer\">\r\n            <iswc-button data-dialog=\"close\" color=\"brand\">OK</iswc-button>\r\n          </div>\r\n        </iswc-dialog>"
         },
         {
           "kind": "code",
-          "code": "<is-dialog label=\"…\">\n  <div slot=\"header-actions\">\n    <is-button>…</is-button>\n  </div>\n  …\n</is-dialog>"
+          "code": "<iswc-dialog label=\"…\">\n  <div slot=\"header-actions\">\n    <iswc-button>…</iswc-button>\n  </div>\n  …\n</iswc-dialog>"
         }
       ]
     },
@@ -93,34 +93,34 @@
       "blocks": [
         {
           "kind": "demo",
-          "html": "<is-button id=\"openLD\">Abrir (click fuera cierra)</is-button>"
+          "html": "<iswc-button id=\"openLD\">Abrir (click fuera cierra)</iswc-button>"
         },
         {
           "kind": "html",
-          "html": "<is-dialog id=\"dlgLD\" label=\"Light dismiss\" light-dismiss>\r\n          <p>Haz click fuera del diálogo para cerrarlo.</p>\r\n        </is-dialog>"
+          "html": "<iswc-dialog id=\"dlgLD\" label=\"Light dismiss\" light-dismiss>\r\n          <p>Haz click fuera del diálogo para cerrarlo.</p>\r\n        </iswc-dialog>"
         },
         {
           "kind": "code",
-          "code": "<is-dialog light-dismiss>…</is-dialog>"
+          "code": "<iswc-dialog light-dismiss>…</iswc-dialog>"
         }
       ]
     },
     {
       "id": "prevent-close",
       "title": "Prevenir el cierre",
-      "lede": "Cancela el evento <code class=\"code\">is-hide</code> con\r\n          <code class=\"code\">event.preventDefault()</code> para impedir el cierre. Si el usuario\r\n          intenta cerrar, el diálogo pulsa brevemente para llamar la atención.",
+      "lede": "Cancela el evento <code class=\"code\">iswc-hide</code> con\r\n          <code class=\"code\">event.preventDefault()</code> para impedir el cierre. Si el usuario\r\n          intenta cerrar, el diálogo pulsa brevemente para llamar la atención.",
       "blocks": [
         {
           "kind": "demo",
-          "html": "<is-button id=\"openPrevent\">Diálogo protegido</is-button>"
+          "html": "<iswc-button id=\"openPrevent\">Diálogo protegido</iswc-button>"
         },
         {
           "kind": "html",
-          "html": "<is-dialog id=\"dlgPrevent\" label=\"¿Salir sin guardar?\">\r\n          <p>Este diálogo solo se cierra con el botón \"Guardar y salir\". Si cierras con Escape o el botón X, el diálogo pulsa brevemente.</p>\r\n          <div slot=\"footer\">\r\n            <is-button id=\"btnForceClose\" color=\"brand\">Guardar y salir</is-button>\r\n          </div>\r\n        </is-dialog>"
+          "html": "<iswc-dialog id=\"dlgPrevent\" label=\"¿Salir sin guardar?\">\r\n          <p>Este diálogo solo se cierra con el botón \"Guardar y salir\". Si cierras con Escape o el botón X, el diálogo pulsa brevemente.</p>\r\n          <div slot=\"footer\">\r\n            <iswc-button id=\"btnForceClose\" color=\"brand\">Guardar y salir</iswc-button>\r\n          </div>\r\n        </iswc-dialog>"
         },
         {
           "kind": "code",
-          "code": "dialog.addEventListener('is-hide', (e) => {\n  if (e.detail.source !== closeButton) e.preventDefault();\n});"
+          "code": "dialog.addEventListener('iswc-hide', (e) => {\n  if (e.detail.source !== closeButton) e.preventDefault();\n});"
         }
       ]
     },
@@ -131,15 +131,15 @@
       "blocks": [
         {
           "kind": "demo",
-          "html": "<is-button id=\"openForm\">Editar perfil</is-button>"
+          "html": "<iswc-button id=\"openForm\">Editar perfil</iswc-button>"
         },
         {
           "kind": "html",
-          "html": "<is-dialog id=\"dlgForm\" label=\"Editar perfil\" style=\"--width: 480px\">\r\n          <form id=\"profileForm\" style=\"display:grid;gap:.75em\">\r\n            <label>Nombre\r\n              <is-input name=\"name\" required value=\"Jeff Aporta\"></is-input>\r\n            </label>\r\n            <label>Email\r\n              <is-input name=\"email\" type=\"email\" required value=\"jeff@example.com\"></is-input>\r\n            </label>\r\n            <label>Bio\r\n              <is-input name=\"bio\" value=\"Ingeniero\"></is-input>\r\n            </label>\r\n          </form>\r\n          <div slot=\"footer\">\r\n            <is-button id=\"btnFormCancel\" data-dialog=\"close\" variant=\"outlined\">Cancelar</is-button>\r\n            <is-button id=\"btnFormSave\" color=\"brand\">Guardar</is-button>\r\n          </div>\r\n        </is-dialog>"
+          "html": "<iswc-dialog id=\"dlgForm\" label=\"Editar perfil\" style=\"--width: 480px\">\r\n          <form id=\"profileForm\" style=\"display:grid;gap:.75em\">\r\n            <label>Nombre\r\n              <iswc-input name=\"name\" required value=\"Jeff Aporta\"></iswc-input>\r\n            </label>\r\n            <label>Email\r\n              <iswc-input name=\"email\" type=\"email\" required value=\"jeff@example.com\"></iswc-input>\r\n            </label>\r\n            <label>Bio\r\n              <iswc-input name=\"bio\" value=\"Ingeniero\"></iswc-input>\r\n            </label>\r\n          </form>\r\n          <div slot=\"footer\">\r\n            <iswc-button id=\"btnFormCancel\" data-dialog=\"close\" variant=\"outlined\">Cancelar</iswc-button>\r\n            <iswc-button id=\"btnFormSave\" color=\"brand\">Guardar</iswc-button>\r\n          </div>\r\n        </iswc-dialog>"
         },
         {
           "kind": "code",
-          "code": "<is-dialog label=\"Editar perfil\">\n  <form>\n    <label>Nombre <is-input name=\"name\" required></is-input></label>\n  </form>\n  <div slot=\"footer\">\n    <is-button data-dialog=\"close\">Cancelar</is-button>\n    <is-button color=\"brand\">Guardar</is-button>\n  </div>\n</is-dialog>"
+          "code": "<iswc-dialog label=\"Editar perfil\">\n  <form>\n    <label>Nombre <iswc-input name=\"name\" required></iswc-input></label>\n  </form>\n  <div slot=\"footer\">\n    <iswc-button data-dialog=\"close\">Cancelar</iswc-button>\n    <iswc-button color=\"brand\">Guardar</iswc-button>\n  </div>\n</iswc-dialog>"
         }
       ]
     },
@@ -253,22 +253,22 @@
           ],
           "rows": [
             [
-              "<code>is-show</code>",
+              "<code>iswc-show</code>",
               "no",
               "Antes de abrir."
             ],
             [
-              "<code>is-after-show</code>",
+              "<code>iswc-after-show</code>",
               "no",
               "Tras la animación de apertura."
             ],
             [
-              "<code>is-hide</code>",
+              "<code>iswc-hide</code>",
               "sí",
               "Antes de cerrar. <code>detail.source</code> indica qué elemento lo pidió."
             ],
             [
-              "<code>is-after-hide</code>",
+              "<code>iswc-after-hide</code>",
               "no",
               "Tras la animación de cierre."
             ]

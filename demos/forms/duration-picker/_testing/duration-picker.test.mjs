@@ -10,25 +10,25 @@ const URL = `${BASE_URL}/demos/forms/duration-picker/duration-picker.html`;
 const tests = [];
 
 tests.push({
-  name: 'smoke: <is-duration-picker> queda definido y expone 3 celdas (h/m/s)',
+  name: 'smoke: <iswc-duration-picker> queda definido y expone 3 celdas (h/m/s)',
   run: async (page) => {
     await page.goto(URL, { waitUntil: 'domcontentloaded' });
     await waitReady(page, 'data-duration-picker-ready');
     const data = await page.evaluate(() => {
-      const pickers = [...document.querySelectorAll('main is-duration-picker')];
+      const pickers = [...document.querySelectorAll('main iswc-duration-picker')];
       const p = pickers[0];
       const shadow = p.shadowRoot;
       return {
-        defined: !!customElements.get('is-duration-picker'),
+        defined: !!customElements.get('iswc-duration-picker'),
         count: pickers.length,
         hasHours: !!shadow.querySelector('input#h'),
         hasMinutes: !!shadow.querySelector('input#m'),
         hasSeconds: !!shadow.querySelector('input#s'),
-        upButtons: shadow.querySelectorAll('is-button.up').length,
-        downButtons: shadow.querySelectorAll('is-button.down').length,
+        upButtons: shadow.querySelectorAll('iswc-button.up').length,
+        downButtons: shadow.querySelectorAll('iswc-button.down').length,
       };
     });
-    assert.equal(data.defined, true, 'is-duration-picker debe estar definido');
+    assert.equal(data.defined, true, 'iswc-duration-picker debe estar definido');
     assert.ok(data.count >= 3, `esperaba >=3 pickers, hay ${data.count}`);
     assert.equal(data.hasHours, true, 'debe existir celda de horas (#h)');
     assert.equal(data.hasMinutes, true, 'debe existir celda de minutos (#m)');
@@ -45,7 +45,7 @@ tests.push({
     await page.goto(URL, { waitUntil: 'domcontentloaded' });
     await waitReady(page, 'data-duration-picker-ready');
     const data = await page.evaluate(() => {
-      const p = document.querySelector('main is-duration-picker[name="duration"]');
+      const p = document.querySelector('main iswc-duration-picker[name="duration"]');
       const shadow = p.shadowRoot;
       return {
         value: p.value,
@@ -78,7 +78,7 @@ tests.push({
     // verificar que set(1, 30, 0) y el texto se corresponden con ese formato
     // humano: 1h 30m == 5400s == 01:30:00.
     const data = await page.evaluate(() => {
-      const p = document.querySelector('main is-duration-picker[name="programmatic"]');
+      const p = document.querySelector('main iswc-duration-picker[name="programmatic"]');
       p.set(1, 30, 0);
       return {
         value: p.value,
@@ -102,7 +102,7 @@ tests.push({
     await page.goto(URL, { waitUntil: 'domcontentloaded' });
     await waitReady(page, 'data-duration-picker-ready');
     const data = await page.evaluate(() => {
-      const p = document.querySelector('main is-duration-picker[name="programmatic"]');
+      const p = document.querySelector('main iswc-duration-picker[name="programmatic"]');
       p.set(2, 45, 30);
       return {
         value: p.value,
@@ -127,7 +127,7 @@ tests.push({
     await page.goto(URL, { waitUntil: 'domcontentloaded' });
     await waitReady(page, 'data-duration-picker-ready');
     const data = await page.evaluate(() => {
-      const p = document.querySelector('main is-duration-picker[name="programmatic"]');
+      const p = document.querySelector('main iswc-duration-picker[name="programmatic"]');
       p.set(0, 5, 9); // 5m 9s
       return { value: p.value, text: p.text, h: p.hours, m: p.minutes, s: p.seconds };
     });
@@ -142,7 +142,7 @@ tests.push({
     await page.goto(URL, { waitUntil: 'domcontentloaded' });
     await waitReady(page, 'data-duration-picker-ready');
     const data = await page.evaluate(() => {
-      const p = document.querySelector('main is-duration-picker[name="timer"]');
+      const p = document.querySelector('main iswc-duration-picker[name="timer"]');
       // Estado inicial: 600s (10m). min=0, max=3600 (1h), step=5.
       const before = p.value;
       p.tick(120); // +2 min
@@ -169,11 +169,11 @@ tests.push({
     await page.goto(URL, { waitUntil: 'domcontentloaded' });
     await waitReady(page, 'data-duration-picker-ready');
     const data = await page.evaluate(() => {
-      const p = document.querySelector('main is-duration-picker[name="programmatic"]');
+      const p = document.querySelector('main iswc-duration-picker[name="programmatic"]');
       p.set(0, 0, 0); // reset a 0
       const before = p.value;
       // Click en el botón "+" de horas (data-target="h", classList contiene "up")
-      const upH = p.shadowRoot.querySelector('is-button[data-target="h"].up');
+      const upH = p.shadowRoot.querySelector('iswc-button[data-target="h"].up');
       upH.click();
       const after = p.value;
       return { before, after, text: p.text };
@@ -190,10 +190,10 @@ tests.push({
     await page.goto(URL, { waitUntil: 'domcontentloaded' });
     await waitReady(page, 'data-duration-picker-ready');
     const data = await page.evaluate(() => {
-      const p = document.querySelector('main is-duration-picker[name="programmatic"]');
+      const p = document.querySelector('main iswc-duration-picker[name="programmatic"]');
       p.set(0, 0, 0);
       const before = p.value;
-      const upM = p.shadowRoot.querySelector('is-button[data-target="m"].up');
+      const upM = p.shadowRoot.querySelector('iswc-button[data-target="m"].up');
       upM.click();
       return { before, after: p.value };
     });
@@ -208,7 +208,7 @@ tests.push({
     await page.goto(URL, { waitUntil: 'domcontentloaded' });
     await waitReady(page, 'data-duration-picker-ready');
     const data = await page.evaluate(() => {
-      const p = document.querySelector('main is-duration-picker[name="programmatic"]');
+      const p = document.querySelector('main iswc-duration-picker[name="programmatic"]');
       p.set(0, 0, 0);
       const h = p.shadowRoot.querySelector('#h');
       const m = p.shadowRoot.querySelector('#m');
@@ -231,12 +231,12 @@ tests.push({
     await page.goto(URL, { waitUntil: 'domcontentloaded' });
     await waitReady(page, 'data-duration-picker-ready');
     const a11y = await page.evaluate(() => {
-      const p = document.querySelector('main is-duration-picker[name="duration"]');
+      const p = document.querySelector('main iswc-duration-picker[name="duration"]');
       const h = p.shadowRoot.querySelector('#h');
       const m = p.shadowRoot.querySelector('#m');
       const s = p.shadowRoot.querySelector('#s');
-      const upH = p.shadowRoot.querySelector('is-button[data-target="h"].up');
-      const upM = p.shadowRoot.querySelector('is-button[data-target="m"].up');
+      const upH = p.shadowRoot.querySelector('iswc-button[data-target="h"].up');
+      const upM = p.shadowRoot.querySelector('iswc-button[data-target="m"].up');
       return {
         hLabel: h.getAttribute('aria-label'),
         mLabel: m.getAttribute('aria-label'),
@@ -259,7 +259,7 @@ tests.push({
     await page.goto(URL, { waitUntil: 'domcontentloaded' });
     await waitReady(page, 'data-duration-picker-ready');
     const data = await page.evaluate(() => {
-      const p = document.querySelector('main is-duration-picker[name="programmatic"]');
+      const p = document.querySelector('main iswc-duration-picker[name="programmatic"]');
       p.value = 0;
       return {
         value: p.value,
@@ -278,21 +278,21 @@ tests.push({
 });
 
 tests.push({
-  name: 'caso límite: tick() emite is-change con value y text',
+  name: 'caso límite: tick() emite iswc-change con value y text',
   run: async (page) => {
     await page.goto(URL, { waitUntil: 'domcontentloaded' });
     await waitReady(page, 'data-duration-picker-ready');
     const data = await page.evaluate(() => {
-      const p = document.querySelector('main is-duration-picker[name="programmatic"]');
+      const p = document.querySelector('main iswc-duration-picker[name="programmatic"]');
       p.set(0, 0, 0);
       let captured = null;
       const handler = (e) => { captured = e.detail; };
-      p.addEventListener('is-change', handler);
+      p.addEventListener('iswc-change', handler);
       p.tick(65); // +1m 5s
-      p.removeEventListener('is-change', handler);
+      p.removeEventListener('iswc-change', handler);
       return captured;
     });
-    assert.ok(data, 'debe haberse emitido is-change');
+    assert.ok(data, 'debe haberse emitido iswc-change');
     assert.equal(data.value, 65, `value debe ser 65, obtuve ${data.value}`);
     assert.equal(data.text, '01:05', `text debe ser "01:05", obtuve "${data.text}"`);
   },

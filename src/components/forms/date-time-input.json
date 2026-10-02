@@ -1,11 +1,11 @@
 {
-  "$schema": "is-preview/v1",
-  "tag": "is-date-time-input",
+  "$schema": "iswc-preview/v1",
+  "tag": "iswc-date-time-input",
   "category": "forms",
-  "title": "<is-date-time-input>",
+  "title": "<iswc-date-time-input>",
   "titleHtml": true,
-  "description": "Documentación y demos de is-date-time-input de InSoft.",
-  "storageKey": "docs-is-date-time-input",
+  "description": "Documentación y demos de iswc-date-time-input de InSoft.",
+  "storageKey": "docs-iswc-date-time-input",
   "sections": [
     {
       "id": "intro",
@@ -14,7 +14,7 @@
       "blocks": [
         {
           "kind": "demo",
-          "html": "<is-date-time-input label=\"Vencimiento\" value=\"2026-08-15T17:00\" style=\"max-width:340px\"></is-date-time-input>",
+          "html": "<iswc-date-time-input label=\"Vencimiento\" value=\"2026-08-15T17:00\" style=\"max-width:340px\"></iswc-date-time-input>",
           "controls": [
             {
               "control": "text",
@@ -30,7 +30,7 @@
         },
         {
           "kind": "code",
-          "code": "<is-date-time-input label=\"Vencimiento\" value=\"2026-08-15T17:00\" style=\"max-width:340px\"></is-date-time-input>",
+          "code": "<iswc-date-time-input label=\"Vencimiento\" value=\"2026-08-15T17:00\" style=\"max-width:340px\"></iswc-date-time-input>",
           "lang": "html"
         }
       ]
@@ -38,7 +38,7 @@
     {
       "id": "reference",
       "title": "Referencia",
-      "lede": "&lt;is-date-time-input&gt; — Fecha y hora en un solo campo con calendario y reloj lado a lado (MUI DateTimePicker). El valor es `yyyy-mm-ddTHH:mm[:ss]`. Atributos: los de is-date-input más ampm, hour24, seconds, step Events: is-change, is-show, is-hide Methods: show(), hide()",
+      "lede": "&lt;iswc-date-time-input&gt; — Fecha y hora en un solo campo con calendario y reloj lado a lado (MUI DateTimePicker). El valor es `yyyy-mm-ddTHH:mm[:ss]`. Atributos: los de iswc-date-input más ampm, hour24, seconds, step Events: iswc-change, iswc-show, iswc-hide Methods: show(), hide()",
       "blocks": [
         {
           "kind": "html",

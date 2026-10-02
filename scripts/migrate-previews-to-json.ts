@@ -1,6 +1,6 @@
 // scripts/migrate-previews-to-json.ts
 //
-// Convierte src/previews/**/*.html → *.json (PreviewDefinition is-preview/v1)
+// Convierte src/previews/**/*.html → *.json (PreviewDefinition iswc-preview/v1)
 // y extrae <script type="module"> inline a behaviors/<tag>.js.
 // Conserva solo _shell.html.
 //
@@ -72,19 +72,19 @@ function parseSectionInner(inner) {
 
   // Tokenizar bloques conocidos en orden de aparición
   const tokenRe =
-    /<(is-demo\b[^>]*>[\s\S]*?<\/is-demo)|(?:div\s+class="callout"[^>]*>[\s\S]*?<\/div)|(?:is-callout\b[^>]*>[\s\S]*?<\/is-callout)|(?:pre\s+class="code"[^>]*>[\s\S]*?<\/pre)|(?:table\b[^>]*>[\s\S]*?<\/table)|(?:h3\b[^>]*>[\s\S]*?<\/h3)>/gi;
+    /<(iswc-demo\b[^>]*>[\s\S]*?<\/iswc-demo)|(?:div\s+class="callout"[^>]*>[\s\S]*?<\/div)|(?:iswc-callout\b[^>]*>[\s\S]*?<\/iswc-callout)|(?:pre\s+class="code"[^>]*>[\s\S]*?<\/pre)|(?:table\b[^>]*>[\s\S]*?<\/table)|(?:h3\b[^>]*>[\s\S]*?<\/h3)>/gi;
 
-  // Approach más simple: split por is-demo / callout / pre.code / table / h3
+  // Approach más simple: split por iswc-demo / callout / pre.code / table / h3
   const pieces = [];
   const re =
-    /<is-demo\b([^>]*)>([\s\S]*?)<\/is-demo>|<div\s+class="callout"[^>]*>([\s\S]*?)<\/div>|<is-callout\b[^>]*>([\s\S]*?)<\/is-callout>|<pre\s+class="code"[^>]*>([\s\S]*?)<\/pre>|<table\b([^>]*)>([\s\S]*?)<\/table>|<h3\b[^>]*>([\s\S]*?)<\/h3>/gi;
+    /<iswc-demo\b([^>]*)>([\s\S]*?)<\/iswc-demo>|<div\s+class="callout"[^>]*>([\s\S]*?)<\/div>|<iswc-callout\b[^>]*>([\s\S]*?)<\/iswc-callout>|<pre\s+class="code"[^>]*>([\s\S]*?)<\/pre>|<table\b([^>]*)>([\s\S]*?)<\/table>|<h3\b[^>]*>([\s\S]*?)<\/h3>/gi;
 
   let last = 0;
   let m;
   while ((m = re.exec(inner)) !== null) {
     const before = inner.slice(last, m.index).trim();
     if (before) pieces.push({ type: 'raw', html: before });
-    if (m[0].startsWith('<is-demo')) {
+    if (m[0].startsWith('<iswc-demo')) {
       const attrs = m[1] || '';
       const html = m[2] || '';
       const heading = (attrs.match(/heading="([^"]*)"/) || [])[1];
@@ -97,7 +97,7 @@ function parseSectionInner(inner) {
         contain,
         noCode,
       });
-    } else if (m[0].startsWith('<div') || m[0].startsWith('<is-callout')) {
+    } else if (m[0].startsWith('<div') || m[0].startsWith('<iswc-callout')) {
       pieces.push({ type: 'callout', html: (m[3] || m[4] || '').trim() });
     } else if (m[0].startsWith('<pre')) {
       pieces.push({ type: 'code', code: decodeEntities(m[5] || '').replace(/^\n/, '') });
@@ -182,7 +182,7 @@ function convertFile(html, filePath) {
     ((html.match(/<meta\s+name="description"\s+content="([^"]*)"/i) || [])[1] || '').trim() || undefined;
 
   const storageKey =
-    ((html.match(/<is-main[^>]*storage-key="([^"]+)"/i) || [])[1] || `docs-${tag}`).trim();
+    ((html.match(/<iswc-main[^>]*storage-key="([^"]+)"/i) || [])[1] || `docs-${tag}`).trim();
 
   // Estilos locales del body/preview (todos los <style> del archivo)
   const styles = [...html.matchAll(/<style[^>]*>([\s\S]*?)<\/style>/gi)]
@@ -192,7 +192,7 @@ function convertFile(html, filePath) {
 
   // Contenido principal
   let mainInner = '';
-  const mainM = html.match(/<is-main\b[^>]*>([\s\S]*?)<\/is-main>/i);
+  const mainM = html.match(/<iswc-main\b[^>]*>([\s\S]*?)<\/iswc-main>/i);
   if (mainM) mainInner = mainM[1];
   else {
     const bodyM = html.match(/<body[^>]*>([\s\S]*?)<\/body>/i);
@@ -244,7 +244,7 @@ function convertFile(html, filePath) {
   // Ignorar scripts que solo importan el preview host (shells finos)
   const realScripts = scripts.filter(
     (s) =>
-      !/is-preview-component/.test(s) ||
+      !/iswc-preview-component/.test(s) ||
       s.length > 400 ||
       /addEventListener|querySelector|getElementById/.test(s),
   );
@@ -259,10 +259,10 @@ function convertFile(html, filePath) {
 
   /** @type {import('../src/previews/_kit/types.d.ts').PreviewDefinition} */
   const def = {
-    $schema: 'is-preview/v1',
+    $schema: 'iswc-preview/v1',
     tag,
     category: category === '_root' ? '' : category,
-    title: sections[0]?.titleHtml ? sections[0].title : pageTitle.includes('<') ? pageTitle : tag.startsWith('is-') ? `<${tag}>` : pageTitle,
+    title: sections[0]?.titleHtml ? sections[0].title : pageTitle.includes('<') ? pageTitle : tag.startsWith('iswc-') ? `<${tag}>` : pageTitle,
     titleHtml: true,
     ...(description ? { description } : {}),
     ...(styles ? { styles } : {}),
@@ -376,7 +376,7 @@ for (const filePath of htmlFiles) {
         sections: fromClass.sections,
       });
       // strip non-serializable if any
-      def.$schema = 'is-preview/v1';
+      def.$schema = 'iswc-preview/v1';
       def.tag = tag;
       def.category = result.category;
     } catch (err) {

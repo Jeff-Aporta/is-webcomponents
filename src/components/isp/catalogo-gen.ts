@@ -23,9 +23,9 @@ import {
   toGridRow,
 } from '../_shared/isp-record-utils.js';
 /**
- * <is-catalogo-gen> — port de `src/lib/base/CatalogoGen.svelte` (ISP).
+ * <iswc-catalogo-gen> — port de `src/lib/base/CatalogoGen.svelte` (ISP).
  *
- * Catálogo CRUD: toolbar de acciones + `<is-ag-grid>` + drawer de ficha
+ * Catálogo CRUD: toolbar de acciones + `<iswc-ag-grid>` + drawer de ficha
  * (`slot="frm"`) + modales Verificar / Eliminar / Recodificar / Duplicar /
  * Consolidar. Cada botón aparece solo si el `controller` expone la acción.
  *
@@ -47,12 +47,12 @@ import {
  *   frm   contenido del formulario en el drawer (create/edit/view)
  *
  * Eventos
- *   is-selection-change  { records }
- *   is-double-click      { record }
- *   is-action            { action, record? }
- *   is-error             { message }
- *   is-frm-open          { mode, record }
- *   is-frm-close         {}
+ *   iswc-selection-change  { records }
+ *   iswc-double-click      { record }
+ *   iswc-action            { action, record? }
+ *   iswc-error             { message }
+ *   iswc-frm-open          { mode, record }
+ *   iswc-frm-close         {}
  *
  * Métodos: refreshGrid(), showFrmCrear(), showFrmModificar(r), …
  */
@@ -93,7 +93,7 @@ type IconKind =
 
 type FrmMode = 'create' | 'edit' | 'view';
 
-/** Subset de la API del `<is-input>` que consume este componente. */
+/** Subset de la API del `<iswc-input>` que consume este componente. */
 interface InputElement extends HTMLElement {
   value: string;
   label: string;
@@ -103,13 +103,13 @@ interface InputElement extends HTMLElement {
   maxlength: number | null;
 }
 
-/** Subset de la API del `<is-button>` que consume este componente. */
+/** Subset de la API del `<iswc-button>` que consume este componente. */
 interface ButtonElement extends HTMLElement {
   disabled: boolean;
   loading: boolean;
 }
 
-/** Subset de la API del `<is-ag-grid>` que consume este componente. */
+/** Subset de la API del `<iswc-ag-grid>` que consume este componente. */
 interface AgGridElement extends HTMLElement {
   api: {
     setRows(rows: Array<IspRecord & { id: string; __record?: IspRecord }>): void;
@@ -118,7 +118,7 @@ interface AgGridElement extends HTMLElement {
   };
 }
 
-/** Subset de la API del `<is-modal-verificacion>` que consume este componente. */
+/** Subset de la API del `<iswc-modal-verificacion>` que consume este componente. */
 interface VerifyModalElement extends HTMLElement {
   controller: IspController | null;
   record: IspRecord | null;
@@ -128,32 +128,32 @@ interface VerifyModalElement extends HTMLElement {
   hide(): void;
 }
 
-/** Subset de la API del `<is-confirm-delete>` que consume este componente. */
+/** Subset de la API del `<iswc-confirm-delete>` que consume este componente. */
 interface ConfirmDeleteElement extends HTMLElement {
   entity: string;
   show(): void;
   hide(): void;
 }
 
-/** Subset de la API del `<is-dialog>` que consume este componente. */
+/** Subset de la API del `<iswc-dialog>` que consume este componente. */
 interface DialogElement extends HTMLElement {
   show(): void;
   hide(): void;
 }
 
-/** Subset del `<is-drawer>` que consume este componente. */
+/** Subset del `<iswc-drawer>` que consume este componente. */
 interface DrawerElement extends HTMLElement {
   label: string;
   show(): void;
   hide(): void;
 }
 
-/** Detalle del evento `is-row-select` de `<is-ag-grid>`. */
+/** Detalle del evento `iswc-row-select` de `<iswc-ag-grid>`. */
 interface GridRowSelectDetail {
   rows: Array<{ id?: string | number; __record?: IspRecord }>;
 }
 
-/** Detalle del evento `is-cell-click` de `<is-ag-grid>`. */
+/** Detalle del evento `iswc-cell-click` de `<iswc-ag-grid>`. */
 interface GridCellClickDetail {
   row: { id?: string | number; __record?: IspRecord };
 }
@@ -213,31 +213,31 @@ const OBSERVED = [
     <div part="root" class="root">
       <section part="toolbar" class="toolbar" hidden>
         <div class="actions"></div>
-        <is-input class="search" label="Buscar..." label-placement="float" data-typing-delay="400"></is-input>
+        <iswc-input class="search" label="Buscar..." label-placement="float" data-typing-delay="400"></iswc-input>
       </section>
       <div part="grid-wrap" class="grid-wrap">
-        <is-ag-grid class="grid" selectable toolbar="false" style="height: 100%; min-height: 16rem;"></is-ag-grid>
+        <iswc-ag-grid class="grid" selectable toolbar="false" style="height: 100%; min-height: 16rem;"></iswc-ag-grid>
       </div>
-      <is-drawer part="drawer" class="drawer" light-dismiss label="Ficha">
+      <iswc-drawer part="drawer" class="drawer" light-dismiss label="Ficha">
         <div class="drawer-body">
           <slot name="frm"></slot>
         </div>
-      </is-drawer>
-      <is-modal-verificacion class="modal-verify"></is-modal-verificacion>
-      <is-confirm-delete class="modal-delete"></is-confirm-delete>
-      <is-dialog class="pk-dlg" exportparts="backdrop: pk-backdrop, dialog: pk-modal">
+      </iswc-drawer>
+      <iswc-modal-verificacion class="modal-verify"></iswc-modal-verificacion>
+      <iswc-confirm-delete class="modal-delete"></iswc-confirm-delete>
+      <iswc-dialog class="pk-dlg" exportparts="backdrop: pk-backdrop, dialog: pk-modal">
         <span slot="label" class="pk-title"></span>
         <div class="pk-fields"></div>
         <div class="pk-actions" slot="footer">
-          <is-button class="pk-cancel" color="neutral" variant="outlined"
-                     data-dialog="close" tabindex="0">Cancelar</is-button>
-          <is-button class="pk-ok" color="brand" tabindex="0">Aceptar</is-button>
+          <iswc-button class="pk-cancel" color="neutral" variant="outlined"
+                     data-dialog="close" tabindex="0">Cancelar</iswc-button>
+          <iswc-button class="pk-ok" color="brand" tabindex="0">Aceptar</iswc-button>
         </div>
-      </is-dialog>
+      </iswc-dialog>
     </div>
   `;
 
-  class IsCatalogoGen extends HTMLElement {
+  class IswcCatalogoGen extends HTMLElement {
     static get observedAttributes(): string[] { return [...OBSERVED]; }
 
     #mounted = false;
@@ -273,16 +273,16 @@ const OBSERVED = [
     /** Permisos por acción; ausente → todas permitidas (ver `DEFAULT_ALLOWED`). */
     bAllowed: BAllowed = { ...DEFAULT_ALLOWED };
 
-    /** Callback de error. Default: emite `is-error` + `console.error`. */
+    /** Callback de error. Default: emite `iswc-error` + `console.error`. */
     onError: (msg: string) => void = (msg) => {
-      emit(this, 'is-error', { message: msg });
+      emit(this, 'iswc-error', { message: msg });
       console.error(msg);
     };
 
     /** Cómo construir un objeto nuevo; opcional (default = `controller.klass`). */
     onNewObject: (() => Promise<IspRecord>) | null = null;
 
-    /** Selección viva; se reescribe al disparar `is-row-select` del grid. */
+    /** Selección viva; se reescribe al disparar `iswc-row-select` del grid. */
     selectionData: IspRecord[] = [];
 
     constructor() {
@@ -308,15 +308,15 @@ const OBSERVED = [
     connectedCallback(): void {
       this.#mounted = true;
       this.#upgradeProps();
-      this.#search.addEventListener('is-typing-end', this.#onSearch);
-      this.#grid?.addEventListener('is-row-select', this.#onRowSelect);
-      this.#grid?.addEventListener('is-cell-click', this.#onCellClick);
-      this.#drawer.addEventListener('is-after-hide', this.#onDrawerHide);
-      this.#modalDelete.addEventListener('is-confirm-delete', this.#onDeleteConfirm);
+      this.#search.addEventListener('iswc-typing-end', this.#onSearch);
+      this.#grid?.addEventListener('iswc-row-select', this.#onRowSelect);
+      this.#grid?.addEventListener('iswc-cell-click', this.#onCellClick);
+      this.#drawer.addEventListener('iswc-after-hide', this.#onDrawerHide);
+      this.#modalDelete.addEventListener('iswc-confirm-delete', this.#onDeleteConfirm);
       this.#pkOk.addEventListener('click', this.#onPkOk);
       // Cancelar lleva `data-dialog="close"`; Escape / backdrop / ese botón
-      // pasan todos por `is-hide` de ModalBase, así que basta un listener.
-      this.#pkDlg.addEventListener('is-hide', this.#onPkDismiss);
+      // pasan todos por `iswc-hide` de ModalBase, así que basta un listener.
+      this.#pkDlg.addEventListener('iswc-hide', this.#onPkDismiss);
       this.#syncChrome();
       this.#rebuildToolbar();
       void this.refreshGrid();
@@ -324,13 +324,13 @@ const OBSERVED = [
 
     disconnectedCallback(): void {
       this.#mounted = false;
-      this.#search.removeEventListener('is-typing-end', this.#onSearch);
-      this.#grid?.removeEventListener('is-row-select', this.#onRowSelect);
-      this.#grid?.removeEventListener('is-cell-click', this.#onCellClick);
-      this.#drawer.removeEventListener('is-after-hide', this.#onDrawerHide);
-      this.#modalDelete.removeEventListener('is-confirm-delete', this.#onDeleteConfirm);
+      this.#search.removeEventListener('iswc-typing-end', this.#onSearch);
+      this.#grid?.removeEventListener('iswc-row-select', this.#onRowSelect);
+      this.#grid?.removeEventListener('iswc-cell-click', this.#onCellClick);
+      this.#drawer.removeEventListener('iswc-after-hide', this.#onDrawerHide);
+      this.#modalDelete.removeEventListener('iswc-confirm-delete', this.#onDeleteConfirm);
       this.#pkOk.removeEventListener('click', this.#onPkOk);
-      this.#pkDlg.removeEventListener('is-hide', this.#onPkDismiss);
+      this.#pkDlg.removeEventListener('iswc-hide', this.#onPkDismiss);
     }
 
     attributeChangedCallback(): void {
@@ -447,13 +447,13 @@ const OBSERVED = [
 
       for (const d of defs) {
         if (!this.#hasAct(d.act)) continue;
-        const btn = document.createElement('is-button') as unknown as ButtonElement;
+        const btn = document.createElement('iswc-button') as unknown as ButtonElement;
         btn.setAttribute('variant', 'plain');
         btn.setAttribute('color', 'neutral');
         btn.className = 'tool-btn';
         btn.dataset['allow'] = d.allow;
         btn.dataset['needsSel'] = d.needsSel ? '1' : '0';
-        btn.innerHTML = `<is-icon slot="start" icon="${this.#icon(d.icon)}"></is-icon>${d.label}`;
+        btn.innerHTML = `<iswc-icon slot="start" icon="${this.#icon(d.icon)}"></iswc-icon>${d.label}`;
         btn.addEventListener('click', () => {
           if (btn.disabled) return;
           if (!this.#allowed(d.allow)) return this.onError(`No tiene permisos para ${d.label.toLowerCase()}`);
@@ -462,22 +462,22 @@ const OBSERVED = [
         this.#actionsEl.appendChild(btn);
       }
 
-      const refresh = document.createElement('is-button') as unknown as ButtonElement;
+      const refresh = document.createElement('iswc-button') as unknown as ButtonElement;
       refresh.setAttribute('variant', 'plain');
       refresh.setAttribute('color', 'neutral');
       refresh.className = 'tool-btn';
       refresh.dataset['static'] = 'refresh';
-      refresh.innerHTML = `<is-icon slot="start" icon="${this.#icon('refrescar')}"></is-icon>Refrescar`;
+      refresh.innerHTML = `<iswc-icon slot="start" icon="${this.#icon('refrescar')}"></iswc-icon>Refrescar`;
       refresh.addEventListener('click', () => void this.refreshGrid());
       this.#actionsEl.appendChild(refresh);
 
-      const modeBtn = document.createElement('is-button') as unknown as ButtonElement;
+      const modeBtn = document.createElement('iswc-button') as unknown as ButtonElement;
       modeBtn.setAttribute('variant', 'plain');
       modeBtn.setAttribute('color', 'neutral');
       modeBtn.className = 'tool-btn';
       modeBtn.dataset['static'] = 'mode';
       const filtro = this.modeFilter;
-      modeBtn.innerHTML = `<is-icon slot="start" icon="${filtro ? 'mdi:database-arrow-down-outline' : 'mdi:download-multiple-outline'}"></is-icon>Modo&nbsp;${filtro ? 'filtro' : 'lista'}`;
+      modeBtn.innerHTML = `<iswc-icon slot="start" icon="${filtro ? 'mdi:database-arrow-down-outline' : 'mdi:download-multiple-outline'}"></iswc-icon>Modo&nbsp;${filtro ? 'filtro' : 'lista'}`;
       modeBtn.addEventListener('click', () => {
         this.modeFilter = !this.modeFilter;
         this.#actionsEl.replaceChildren();
@@ -512,7 +512,7 @@ const OBSERVED = [
         .map((r) => r.__record ?? this.#recordsById.get(asStr(r.id)) ?? r)
         .filter((r): r is IspRecord => Boolean(r));
       this.#rebuildToolbar();
-      emit(this, 'is-selection-change', { records: this.selectionData });
+      emit(this, 'iswc-selection-change', { records: this.selectionData });
     };
 
     #lastClick: { id: string | null; t: number } = { id: null, t: 0 };
@@ -524,7 +524,7 @@ const OBSERVED = [
       const now = Date.now();
       if (this.#lastClick.id === id && now - this.#lastClick.t < 400) {
         const record = row.__record ?? this.#recordsById.get(id) ?? row;
-        emit(this, 'is-double-click', { record });
+        emit(this, 'iswc-double-click', { record });
         if (this.selectMode) return;
         if (this.#hasAct('actModificar') && this.#allowed('Modificar')) this.showFrmModificar(record);
         else if (this.#hasAct('actVisualizar') && this.#allowed('Visualizar')) this.showFrmVisualizar(record);
@@ -533,7 +533,7 @@ const OBSERVED = [
     };
 
     #onDrawerHide = (): void => {
-      emit(this, 'is-frm-close', {});
+      emit(this, 'iswc-frm-close', {});
     };
 
     async refreshGrid(): Promise<void> {
@@ -571,8 +571,8 @@ const OBSERVED = [
       this.#working = record;
       this.#drawer.label = `${mode === 'create' ? 'Crear' : mode === 'edit' ? 'Modificar' : 'Visualizar'} ${asStr(this.controller?.entrie || '')}`;
       this.#drawer.show?.() ?? this.#drawer.setAttribute('open', '');
-      emit(this, 'is-frm-open', { mode, record });
-      emit(this, 'is-action', { action: mode === 'create' ? 'Crear' : mode === 'edit' ? 'Modificar' : 'Visualizar', record });
+      emit(this, 'iswc-frm-open', { mode, record });
+      emit(this, 'iswc-action', { action: mode === 'create' ? 'Crear' : mode === 'edit' ? 'Modificar' : 'Visualizar', record });
     }
 
     closeFrm(): void {
@@ -609,7 +609,7 @@ const OBSERVED = [
       this.#modalVerify.entity = asStr(this.controller?.entrie || '');
       this.#modalVerify.onError = this.onError;
       this.#modalVerify.show?.();
-      emit(this, 'is-action', { action: 'Verificar', record: obj });
+      emit(this, 'iswc-action', { action: 'Verificar', record: obj });
     }
 
     showEliminar(obj: IspRecord | undefined): void {
@@ -622,7 +622,7 @@ const OBSERVED = [
       this.#modalDelete.setAttribute('pk-label', asStr(this.controller?.labelPk || pk));
       this.#modalDelete.setAttribute('confirm-value', val);
       this.#modalDelete.show?.() ?? this.#modalDelete.setAttribute('open', '');
-      emit(this, 'is-action', { action: 'Eliminar', record: obj });
+      emit(this, 'iswc-action', { action: 'Eliminar', record: obj });
     }
 
     #onDeleteConfirm = async (): Promise<void> => {
@@ -731,7 +731,7 @@ const OBSERVED = [
       for (const f of cfg.fields) {
         if (f.btnRef && this.controller?.CtxBtnRef) {
           await import('./btn-ref.js');
-          const br = document.createElement('is-btn-ref') as unknown as HTMLElement & {
+          const br = document.createElement('iswc-btn-ref') as unknown as HTMLElement & {
             label: string;
             controller: IspController | null;
             required: boolean;
@@ -746,7 +746,7 @@ const OBSERVED = [
           this.#pkFields.appendChild(br);
           inputs.set(f.key, br);
         } else {
-          const inp = document.createElement('is-input') as unknown as InputElement;
+          const inp = document.createElement('iswc-input') as unknown as InputElement;
           inp.setAttribute('label-placement', 'float');
           inp.tabIndex = 0;
           inp.label = f.label;
@@ -792,5 +792,5 @@ const OBSERVED = [
     }
   }
 
-  defineElement('is-catalogo-gen', IsCatalogoGen);
+  defineElement('iswc-catalogo-gen', IswcCatalogoGen);
 })();

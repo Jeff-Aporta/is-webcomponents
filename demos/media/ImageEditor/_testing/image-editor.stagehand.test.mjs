@@ -13,7 +13,7 @@ async function checkDeterministic(page, demo) {
   await page.waitForTimeout(800);
 
   const data = await page.evaluate(() => {
-    const editor = document.querySelector('is-image-editor');
+    const editor = document.querySelector('iswc-image-editor');
     const shadow = editor.shadowRoot;
     const root = shadow.querySelector('.root');
     const canvas = shadow.querySelector('canvas');
@@ -26,7 +26,7 @@ async function checkDeterministic(page, demo) {
     // canvas tenga píxeles (proxy de "imagen cargada y dibujada").
     const canvasHasPixels = canvas && canvas.width > 0 && canvas.height > 0;
     return {
-      registered: !!customElements.get('is-image-editor'),
+      registered: !!customElements.get('iswc-image-editor'),
       rootRect: root?.getBoundingClientRect(),
       canvasRect: canvas?.getBoundingClientRect(),
       viewportRect: viewport?.getBoundingClientRect(),
@@ -42,7 +42,7 @@ async function checkDeterministic(page, demo) {
   const tag = `${demo.name}`;
 
   // (1) El componente está registrado.
-  assert.equal(data.registered, true, `${tag}: is-image-editor debe estar registrado`);
+  assert.equal(data.registered, true, `${tag}: iswc-image-editor debe estar registrado`);
 
   // (2) Tiene estructura interna: root, viewport, canvas, toolbar.
   assert.ok(data.rootRect && data.rootRect.width > 0 && data.rootRect.height > 0, `${tag}: .root debe tener tamaño positivo`);
@@ -55,7 +55,7 @@ async function checkDeterministic(page, demo) {
   assert.ok(data.canvasWidth > 0 && data.canvasHeight > 0, `${tag}: canvas debe tener width/height internos > 0 (got ${data.canvasWidth}×${data.canvasHeight})`);
 
   // (4) La selección es visible (tras cargar la imagen, hay cropRect inicial).
-  assert.equal(data.selectionVisible, true, `${tag}: .selection (overlay de crop) debe estar visible tras is-load`);
+  assert.equal(data.selectionVisible, true, `${tag}: .selection (overlay de crop) debe estar visible tras iswc-load`);
 }
 
 for (const demo of DEMOS) {

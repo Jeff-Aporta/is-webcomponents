@@ -5,11 +5,11 @@ interface CatalogEl extends HTMLElement {
 }
 
 /**
- * Demo <is-catalogo-gen> con controller JSON (acciones CRUD completas).
+ * Demo <iswc-catalogo-gen> con controller JSON (acciones CRUD completas).
  */
 export async function mount(ctx: import('../../previews/_kit/types.d.ts').PreviewMountContext) {
   const root = ctx.main;
-  const cat = (root.querySelector<CatalogEl>('#catDemo') || root.querySelector<CatalogEl>('is-catalogo-gen'));
+  const cat = (root.querySelector<CatalogEl>('#catDemo') || root.querySelector<CatalogEl>('iswc-catalogo-gen'));
   if (!cat) return;
 
   cat.controller = createCatalogController({
@@ -44,11 +44,11 @@ export async function mount(ctx: import('../../previews/_kit/types.d.ts').Previe
     const code = log.querySelector<HTMLElement>('code') || log;
     code.textContent = msg;
   };
-  cat.addEventListener('is-action', (e: Event) => {
+  cat.addEventListener('iswc-action', (e: Event) => {
     const detail = (e as CustomEvent<{ action?: string }>).detail;
     paint(detail?.action || '—');
   });
-  cat.addEventListener('is-selection-change', (e: Event) => {
+  cat.addEventListener('iswc-selection-change', (e: Event) => {
     const detail = (e as CustomEvent<{ records?: unknown[] }>).detail;
     paint(`selección ×${detail?.records?.length ?? 0}`);
   });

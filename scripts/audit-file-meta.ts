@@ -1,6 +1,6 @@
 import { chromium } from 'playwright';
 
-const state = Buffer.from(JSON.stringify({ component: 'is-code' })).toString('base64');
+const state = Buffer.from(JSON.stringify({ component: 'iswc-code' })).toString('base64');
 const url = `http://127.0.0.1:5505/apps/is-webcomponents/index.html?s=${state}&_=${Date.now()}`;
 
 const browser = await chromium.launch({ headless: true });
@@ -21,7 +21,7 @@ try {
   if (underH2 === 0) ok('sin meta bajo h2');
   else bad(`meta bajo h2: ${underH2}`);
 
-  const inDemos = await page.locator('is-demo > .file-meta, .demo > .file-meta').count();
+  const inDemos = await page.locator('iswc-demo > .file-meta, .demo > .file-meta').count();
   if (inDemos === 0) ok('sin meta dentro de demos/papers');
   else bad(`meta en demos: ${inDemos}`);
 
@@ -29,9 +29,9 @@ try {
   if (paths?.includes('.min.js')) ok(`path min: ${paths}`);
   else bad(`path no minificado: ${paths}`);
 
-  const bytes = await page.locator('.file-meta-page is-format-bytes[value]').count();
+  const bytes = await page.locator('.file-meta-page iswc-format-bytes[value]').count();
   if (bytes > 0) ok(`format-bytes con value: ${bytes}`);
-  else bad('sin pesos (is-format-bytes value)');
+  else bad('sin pesos (iswc-format-bytes value)');
 
   const srcBtns = await page.locator('.file-meta-page .file-meta__src-btn').count();
   if (srcBtns >= 3) ok(`botones src: ${srcBtns}`);
@@ -39,10 +39,10 @@ try {
 
   await page.locator('.file-meta-page .file-meta__src-btn[data-kind="js"]').first().click();
   await page.waitForTimeout(800);
-  const dlg = await page.locator('is-dialog.is-view-sources').count();
-  const open = await page.locator('is-dialog.is-view-sources[open], is-dialog.is-view-sources[data-open]').count()
+  const dlg = await page.locator('iswc-dialog.iswc-view-sources').count();
+  const open = await page.locator('iswc-dialog.iswc-view-sources[open], iswc-dialog.iswc-view-sources[data-open]').count()
     || await page.evaluate(() => {
-      const d = document.querySelector('is-dialog.is-view-sources');
+      const d = document.querySelector('iswc-dialog.iswc-view-sources');
       return d && (d.open || d.hasAttribute('open') || d.getAttribute('aria-hidden') === 'false') ? 1 : 0;
     });
   if (dlg) ok(`dialog fuentes presente (open≈${open})`);

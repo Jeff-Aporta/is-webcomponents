@@ -1,10 +1,10 @@
 {
-  "$schema": "is-preview/v1",
-  "tag": "is-color-picker",
+  "$schema": "iswc-preview/v1",
+  "tag": "iswc-color-picker",
   "category": "forms",
-  "title": "<is-color-picker>",
+  "title": "<iswc-color-picker>",
   "titleHtml": true,
-  "storageKey": "docs-is-color-picker",
+  "storageKey": "docs-iswc-color-picker",
   "hasBehavior": true,
   "sections": [
     {
@@ -14,7 +14,7 @@
       "blocks": [
         {
           "kind": "demo",
-          "html": "<is-color-picker id=\"cp\" label=\"Color de marca\" hint=\"Formato #rrggbb\" name=\"brand\" value=\"#1971c2\" style=\"max-width:14rem\"></is-color-picker>\r\n          <span id=\"chip\" style=\"width:3rem;height:3rem;border-radius:0.5rem;background:#1971c2;box-shadow:inset 0 0 0 1px rgb(0 0 0 / 20%)\"></span>",
+          "html": "<iswc-color-picker id=\"cp\" label=\"Color de marca\" hint=\"Formato #rrggbb\" name=\"brand\" value=\"#1971c2\" style=\"max-width:14rem\"></iswc-color-picker>\r\n          <span id=\"chip\" style=\"width:3rem;height:3rem;border-radius:0.5rem;background:#1971c2;box-shadow:inset 0 0 0 1px rgb(0 0 0 / 20%)\"></span>",
           "controls": [
             {
               "control": "select",
@@ -59,11 +59,11 @@
       "blocks": [
         {
           "kind": "demo",
-          "html": "<is-color-picker\r\n            label=\"Paleta corta\"\r\n            swatches=\"#e03131,#f59f00,#2f9e44,#1971c2,#6741d9,#212529\"\r\n            value=\"#2f9e44\"\r\n            style=\"min-width:13rem\"\r\n          ></is-color-picker>\r\n          <is-color-picker label=\"Deshabilitado\" value=\"#c2255c\" disabled style=\"min-width:13rem\"></is-color-picker>"
+          "html": "<iswc-color-picker\r\n            label=\"Paleta corta\"\r\n            swatches=\"#e03131,#f59f00,#2f9e44,#1971c2,#6741d9,#212529\"\r\n            value=\"#2f9e44\"\r\n            style=\"min-width:13rem\"\r\n          ></iswc-color-picker>\r\n          <iswc-color-picker label=\"Deshabilitado\" value=\"#c2255c\" disabled style=\"min-width:13rem\"></iswc-color-picker>"
         },
         {
           "kind": "code",
-          "code": "<is-color-picker\n  label=\"Color de marca\"\n  name=\"brand\"\n  value=\"#1971c2\"\n  swatches=\"#e03131,#f59f00,#2f9e44\"\n></is-color-picker>"
+          "code": "<iswc-color-picker\n  label=\"Color de marca\"\n  name=\"brand\"\n  value=\"#1971c2\"\n  swatches=\"#e03131,#f59f00,#2f9e44\"\n></iswc-color-picker>"
         }
       ]
     },
@@ -74,7 +74,7 @@
       "blocks": [
         {
           "kind": "demo",
-          "html": "<form id=\"demo-form\" style=\"display:flex;flex-direction:column;gap:0.75rem;max-width:18rem\">\r\n            <is-color-picker label=\"Fondo\" name=\"bg\" value=\"#212529\"></is-color-picker>\r\n            <is-color-picker label=\"Texto\" name=\"fg\" value=\"#f8f9fa\"></is-color-picker>\r\n            <div style=\"display:flex;gap:0.5rem\">\r\n              <button type=\"submit\">Enviar</button>\r\n              <button type=\"reset\">Reset</button>\r\n            </div>\r\n          </form>"
+          "html": "<form id=\"demo-form\" style=\"display:flex;flex-direction:column;gap:0.75rem;max-width:18rem\">\r\n            <iswc-color-picker label=\"Fondo\" name=\"bg\" value=\"#212529\"></iswc-color-picker>\r\n            <iswc-color-picker label=\"Texto\" name=\"fg\" value=\"#f8f9fa\"></iswc-color-picker>\r\n            <div style=\"display:flex;gap:0.5rem\">\r\n              <button type=\"submit\">Enviar</button>\r\n              <button type=\"reset\">Reset</button>\r\n            </div>\r\n          </form>"
         }
       ]
     },
@@ -115,7 +115,7 @@
             ],
             [
               "eventos",
-              "<code>is-input</code> { value } · <code>is-change</code> { value }"
+              "<code>iswc-input</code> { value } · <code>iswc-change</code> { value }"
             ],
             [
               "métodos",

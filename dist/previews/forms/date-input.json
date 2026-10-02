@@ -1,10 +1,10 @@
 {
-  "$schema": "is-preview/v1",
-  "tag": "is-date-input",
+  "$schema": "iswc-preview/v1",
+  "tag": "iswc-date-input",
   "category": "forms",
-  "title": "<is-date-input>",
+  "title": "<iswc-date-input>",
   "titleHtml": true,
-  "storageKey": "docs-is-date-input",
+  "storageKey": "docs-iswc-date-input",
   "sections": [
     {
       "id": "intro",
@@ -13,7 +13,7 @@
       "blocks": [
         {
           "kind": "demo",
-          "html": "<is-date-input id=\"di\" label=\"Fecha\" value=\"2026-07-30\" locale=\"es\" clearable></is-date-input>\r\n          <is-date-input label=\"Con barra\" value=\"2026-07-30\" locale=\"es\" action-bar></is-date-input>",
+          "html": "<iswc-date-input id=\"di\" label=\"Fecha\" value=\"2026-07-30\" locale=\"es\" clearable></iswc-date-input>\r\n          <iswc-date-input label=\"Con barra\" value=\"2026-07-30\" locale=\"es\" action-bar></iswc-date-input>",
           "controls": [
             {
               "control": "select",
@@ -60,7 +60,7 @@
       "blocks": [
         {
           "kind": "demo",
-          "html": "<is-time-input label=\"Columnas\" value=\"09:30\" locale=\"es\"></is-time-input>\r\n          <is-time-input label=\"Lista\" value=\"09:30\" locale=\"es\" panel=\"list\"></is-time-input>\r\n          <is-time-input label=\"Reloj\" value=\"09:30\" ampm locale=\"en-US\" panel=\"clock\"></is-time-input>"
+          "html": "<iswc-time-input label=\"Columnas\" value=\"09:30\" locale=\"es\"></iswc-time-input>\r\n          <iswc-time-input label=\"Lista\" value=\"09:30\" locale=\"es\" panel=\"list\"></iswc-time-input>\r\n          <iswc-time-input label=\"Reloj\" value=\"09:30\" ampm locale=\"en-US\" panel=\"clock\"></iswc-time-input>"
         }
       ]
     },
@@ -70,7 +70,7 @@
       "blocks": [
         {
           "kind": "demo",
-          "html": "<is-date-time-input id=\"dti\" label=\"Cita\" locale=\"es\" action-bar></is-date-time-input>"
+          "html": "<iswc-date-time-input id=\"dti\" label=\"Cita\" locale=\"es\" action-bar></iswc-date-time-input>"
         }
       ]
     },
@@ -81,7 +81,7 @@
       "blocks": [
         {
           "kind": "demo",
-          "html": "<is-date-range-input\r\n            id=\"ri\"\r\n            start-label=\"Desde\"\r\n            end-label=\"Hasta\"\r\n            locale=\"es\"\r\n            calendars=\"2\"\r\n            shortcuts=\"this-week last-7-days current-month reset\"\r\n          ></is-date-range-input>"
+          "html": "<iswc-date-range-input\r\n            id=\"ri\"\r\n            start-label=\"Desde\"\r\n            end-label=\"Hasta\"\r\n            locale=\"es\"\r\n            calendars=\"2\"\r\n            shortcuts=\"this-week last-7-days current-month reset\"\r\n          ></iswc-date-range-input>"
         }
       ]
     },
@@ -92,14 +92,14 @@
       "blocks": [
         {
           "kind": "demo",
-          "html": "<is-date-input label=\"Móvil\" locale=\"es\" color=\"mobile\" value=\"2026-07-30\"></is-date-input>"
+          "html": "<iswc-date-input label=\"Móvil\" locale=\"es\" color=\"mobile\" value=\"2026-07-30\"></iswc-date-input>"
         }
       ]
     },
     {
       "id": "reference",
       "title": "Referencia",
-      "lede": "Eventos: <code>is-change { value, source }</code>, <code>is-show</code>, <code>is-hide</code>. Métodos: <code>show()</code>, <code>hide()</code>.",
+      "lede": "Eventos: <code>iswc-change { value, source }</code>, <code>iswc-show</code>, <code>iswc-hide</code>. Métodos: <code>show()</code>, <code>hide()</code>.",
       "blocks": [
         {
           "kind": "table",

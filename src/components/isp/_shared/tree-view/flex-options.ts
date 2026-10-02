@@ -1,5 +1,5 @@
 /**
- * Pinta FlexOptionsInput[] como is-button / is-check-icon-button / is-dropdown.
+ * Pinta FlexOptionsInput[] como iswc-button / iswc-check-icon-button / iswc-dropdown.
  * Misma forma que ISP FlexOptions: grupos, separator, icon+title, toggle checked.
  */
 
@@ -41,7 +41,7 @@ interface MoreOpts {
 }
 
 function mkIcon(name: string): HTMLElement {
-  const ic = document.createElement("is-icon");
+  const ic = document.createElement("iswc-icon");
   ic.setAttribute("icon", name);
   ic.setAttribute("slot", "start");
   return ic;
@@ -66,7 +66,7 @@ function bindAction(el: HTMLElement, spec: FlexActionSpec | null | undefined): v
 function mkBtn(spec: FlexActionSpec | null | undefined, opts: CompactOpts = {}): HTMLElement {
   const compact = opts.compact ?? false;
   if (spec && typeof spec === "object" && "checked" in spec && (spec.iconTrue || spec.iconFalse)) {
-    const btn = document.createElement("is-check-icon-button");
+    const btn = document.createElement("iswc-check-icon-button");
     btn.setAttribute("icon", spec.iconFalse || spec.icon || "mdi:circle-outline");
     btn.setAttribute("checked-icon", spec.iconTrue || spec.icon || "mdi:circle");
     if (spec.checked) btn.setAttribute("checked", "");
@@ -78,7 +78,7 @@ function mkBtn(spec: FlexActionSpec | null | undefined, opts: CompactOpts = {}):
     bindAction(btn, spec);
     return btn;
   }
-  const btn = document.createElement("is-button");
+  const btn = document.createElement("iswc-button");
   btn.setAttribute("variant", "plain");
   btn.setAttribute("color", spec?.color || "neutral");
   if (spec?.disabled) btn.setAttribute("disabled", "");
@@ -106,11 +106,11 @@ function flattenActionable(list: FlexActionEntry[] | null | undefined): FlexActi
 }
 
 function applyHandlers(host: HTMLElement, actions: FlexActionEntry[], more: FlexActionEntry[]): void {
-  const btns = [...host.querySelectorAll<HTMLElement>(":scope > is-button-group > is-button, :scope > is-button-group > is-check-icon-button")];
+  const btns = [...host.querySelectorAll<HTMLElement>(":scope > iswc-button-group > iswc-button, :scope > iswc-button-group > iswc-check-icon-button")];
   flattenActionable(actions).forEach((spec, i) => { if (btns[i]) bindAction(btns[i], spec); });
-  const dd = host.querySelector<HTMLElement>(":scope > is-dropdown");
+  const dd = host.querySelector<HTMLElement>(":scope > iswc-dropdown");
   if (!dd) return;
-  const items = [...dd.querySelectorAll<HTMLElement>(":scope > is-dropdown-item")];
+  const items = [...dd.querySelectorAll<HTMLElement>(":scope > iswc-dropdown-item")];
   flattenActionable(more).forEach((spec, i) => { if (items[i]) bindAction(items[i], spec); });
 }
 
@@ -150,10 +150,10 @@ export function paintFlexOptions(
   const flat: FlexActionSpec[] = [];
   for (const entry of actions || []) flattenEntry(entry, flat);
 
-  let group = document.createElement("is-button-group");
+  let group = document.createElement("iswc-button-group");
   const flushGroup = (): void => {
     if (group.childElementCount) host.appendChild(group);
-    group = document.createElement("is-button-group");
+    group = document.createElement("iswc-button-group");
   };
   for (const spec of flat) {
     if (spec?.separator) {
@@ -169,8 +169,8 @@ export function paintFlexOptions(
   const actionable = moreFlat.filter((it) => it && !it.separator);
   if (!actionable.length) return;
 
-  const dd = document.createElement("is-dropdown");
-  const trigger = document.createElement("is-button");
+  const dd = document.createElement("iswc-dropdown");
+  const trigger = document.createElement("iswc-button");
   trigger.setAttribute("slot", "trigger");
   trigger.setAttribute("variant", "plain");
   trigger.setAttribute("color", "neutral");
@@ -180,15 +180,15 @@ export function paintFlexOptions(
   dd.appendChild(trigger);
   for (const spec of moreFlat) {
     if (spec?.separator) {
-      const div = document.createElement("is-divider");
+      const div = document.createElement("iswc-divider");
       dd.appendChild(div);
       continue;
     }
-    const item = document.createElement("is-dropdown-item");
+    const item = document.createElement("iswc-dropdown-item");
     if (spec.color) item.setAttribute("color", spec.color);
     if (spec.disabled) item.setAttribute("disabled", "");
     if (spec.icon) {
-      const ic = document.createElement("is-icon");
+      const ic = document.createElement("iswc-icon");
       ic.setAttribute("icon", spec.icon);
       ic.setAttribute("slot", "icon");
       item.appendChild(ic);

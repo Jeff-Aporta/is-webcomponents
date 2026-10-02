@@ -7,13 +7,9 @@
   position: relative;
   box-sizing: border-box;
   font-family: var(--iswc-sans, ui-sans-serif, system-ui, sans-serif);
-}
 
-:host([hidden]) { display: none; }
-
-:host([color="viewer"]) {
-  width: 100%;
-  height: 100%;
+  &[hidden] { display: none; }
+  &[color="viewer"] { width: 100%; height: 100%; }
 }
 
 .wrap {
@@ -33,22 +29,22 @@
   min-height: 0;
   display: flex;
   flex-direction: column;
-}
 
-.wrap.is-viewer {
-  width: 100%;
-  height: 100%;
-  border: 0;
-  padding: 0;
-  cursor: default;
-}
+  &.iswc-viewer {
+    width: 100%;
+    height: 100%;
+    border: 0;
+    padding: 0;
+    cursor: default;
+  }
 
-.wrap[data-empty]::after {
-  content: 'Diagrama entidad-relación no disponible (payload inválido).';
-  display: block;
-  padding: 1rem;
-  font-size: 0.875em;
-  color: var(--iswc-text-soft, #a8b0bb);
+  &[data-empty]::after {
+    content: 'Diagrama entidad-relación no disponible (payload inválido).';
+    display: block;
+    padding: 1rem;
+    font-size: 0.875em;
+    color: var(--iswc-text-soft, #a8b0bb);
+  }
 }
 
 .slot-hidden { display: none !important; }
@@ -63,29 +59,26 @@
   max-height: 100%;
   margin: auto;
   overflow: hidden;
+  .wrap[data-theme="dark"] & { --er-circle-fill: #10141a; }
+  .wrap[data-theme="light"] & { --er-circle-fill: #ffffff; }
 }
-
-.wrap[data-theme="dark"] .er-svg { --er-circle-fill: #10141a; }
-.wrap[data-theme="light"] .er-svg { --er-circle-fill: #ffffff; }
 
 /* ── Entidades y relaciones ── */
 
 .er-entity,
 .er-rel {
   transition: opacity 0.18s ease;
-}
-
-.er-entity.is-dim,
-.er-rel.is-dim {
-  opacity: 0.32;
+  &.iswc-dim { opacity: 0.32; }
 }
 
 .er-entity__box {
   transition: stroke-width 0.12s ease-out;
 }
 
-.er-rel.is-active .er-rel__path {
-  stroke-width: 2.2;
+.er-rel {
+  &.iswc-active {
+    .er-rel__path { stroke-width: 2.2; }
+  }
 }
 
 .er-legend__item {
@@ -94,6 +87,6 @@
 
 /* El visor es opt-in: sin `open-on-click` el componente no abre nada,
    asi que tampoco debe insinuar con el cursor que se puede hacer clic. */
-:host([open-on-click]) .wrap {
-  cursor: zoom-in;
+:host([open-on-click]) {
+  .wrap { cursor: zoom-in; }
 }

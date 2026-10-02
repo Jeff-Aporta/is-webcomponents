@@ -183,6 +183,46 @@ export const BUILTIN_THEMES = Object.freeze({
 });
 
 /**
+ * Tema monochrome para inline en MD: sin fondo, un solo tono de marca.
+ * Los fences (bloque) usan el preset dark/light completo — no este.
+ */
+export function brandMonoTheme(): CodeThemeConfig {
+  const brand = 'var(--iswc-color-brand, var(--iswc-brand, #339af0))';
+  const fg = `color-mix(in srgb, ${brand} 58%, var(--iswc-text, #e6e8eb))`;
+  return {
+    background: 'transparent',
+    foreground: fg,
+    caret: brand,
+    selection: `color-mix(in srgb, ${brand} 22%, transparent)`,
+    selectionMatch: `color-mix(in srgb, ${brand} 14%, transparent)`,
+    gutterBackground: 'transparent',
+    gutterForeground: fg,
+    gutterBorder: 'transparent',
+    activeLine: 'transparent',
+    activeGutter: 'transparent',
+    matchingBracket: brand,
+    comment: fg,
+    keyword: fg,
+    string: fg,
+    number: fg,
+    operator: fg,
+    punctuation: fg,
+    function: fg,
+    variable: fg,
+    property: fg,
+    tag: fg,
+    tagPunct: fg,
+    attribute: fg,
+    atom: fg,
+    definition: fg,
+    meta: fg,
+    qualifier: fg,
+    builtin: fg,
+    type: fg,
+  };
+}
+
+/**
  * @param {HTMLElement} el
  * @param {CodeThemeConfig | null | undefined} theme
  * @param {'dark'|'light'|string} [fallbackPreset]

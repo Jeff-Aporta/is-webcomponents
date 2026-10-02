@@ -1,20 +1,20 @@
 ---
-tag: is-format-bytes
+tag: iswc-format-bytes
 tags:
-  - is-format-bytes
+  - iswc-format-bytes
 category: helpers
 status: public
 source: ./format-bytes.js
 style: ./format-bytes.css
 preview: ./format-bytes.json
 ---
-# `<is-format-bytes>`
+# `<iswc-format-bytes>`
 
 ## Propósito
 
 Tamaños de archivo legibles. value se interpreta según unit (default byte).
 
-Este módulo registra `<is-format-bytes>`.
+Este módulo registra `<iswc-format-bytes>`.
 
 ## Cuándo usarlo
 
@@ -33,8 +33,8 @@ import './format-bytes.js';
 ## Ejemplo mínimo
 
 ```html
-<is-format-bytes value="2.5" unit="megabyte"></is-format-bytes>
-<is-format-bytes value="1" unit="gigabyte"></is-format-bytes>
+<iswc-format-bytes value="2.5" unit="megabyte"></iswc-format-bytes>
+<iswc-format-bytes value="1" unit="gigabyte"></iswc-format-bytes>
 ```
 
 ## API
@@ -94,7 +94,7 @@ No declara integración form-associated propia en este módulo.
 
 Documentación de cabecera preservada desde fuente:
 
-> <is-format-bytes> — Web Component (vanilla).
+> <iswc-format-bytes> — Web Component (vanilla).
 > Formatea tamaños de archivo legibles.
 > Atributos
 >   value    number — bytes (o según unit)
@@ -107,7 +107,7 @@ Documentación de cabecera preservada desde fuente:
 
 - [`../_shared/adopt-css.js`](../_shared/adopt-css.js)
 
-Tags del módulo: `<is-format-bytes>`.
+Tags del módulo: `<iswc-format-bytes>`.
 
 ## Accesibilidad
 
@@ -116,9 +116,9 @@ Preservar semántica, foco, teclado, labels y ARIA. ARIA detectado: ninguno expl
 ## Ejemplo avanzado
 
 ```html
-<is-format-bytes value="1073741824" display="short"></is-format-bytes>
-<is-format-bytes value="1073741824" display="long"></is-format-bytes>
-<is-format-bytes autofit value="204800"></is-format-bytes>
+<iswc-format-bytes value="1073741824" display="short"></iswc-format-bytes>
+<iswc-format-bytes value="1073741824" display="long"></iswc-format-bytes>
+<iswc-format-bytes autofit value="204800"></iswc-format-bytes>
 ```
 
 ## Errores comunes

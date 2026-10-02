@@ -19,7 +19,7 @@ async function checkDeterministic(page, demo) {
   await page.waitForTimeout(300);
 
   const data = await page.evaluate(() => {
-    const grids = [...document.querySelectorAll('main is-ag-grid')];
+    const grids = [...document.querySelectorAll('main iswc-ag-grid')];
     return grids.map((g, idx) => {
       const sr = g.shadowRoot;
       const root = sr.querySelector('.mim-dg');
@@ -95,7 +95,7 @@ for (const demo of DEMOS) {
 // Rama opt-in con Stagehand LLM. Sólo corre si STAGEHAND=1 + credenciales.
 // ─────────────────────────────────────────────────────────────────────────
 const VISUAL_RUBRIC = `
-Evalúa la calidad visual del data grid (<is-ag-grid>) que aparece en el screenshot.
+Evalúa la calidad visual del data grid (<iswc-ag-grid>) que aparece en el screenshot.
 
 Checklist (todas deben cumplirse; marca cada una PASS o FAIL):
 

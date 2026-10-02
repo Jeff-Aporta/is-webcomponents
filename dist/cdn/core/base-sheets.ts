@@ -4,7 +4,7 @@
  *
  * Antes cada instancia de cada componente metía dos `<link>` a estas hojas en
  * su shadow, y el build las copiaba a las 14 carpetas de categoría. Para pintar
- * un `<is-tree-view>` eso eran 10 de las 38 peticiones, y ninguna se podía
+ * un `<iswc-tree-view>` eso eran 10 de las 38 peticiones, y ninguna se podía
  * paralelizar: el `href` sólo se conoce cuando el módulo que lo pide ya se
  * ejecutó.
  *

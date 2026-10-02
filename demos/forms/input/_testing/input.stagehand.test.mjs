@@ -1,7 +1,7 @@
 // input.stagehand.test.mjs — verificaciones visuales deterministas.
 //
 // Checks:
-//   1. COMPONENTE RENDERIZADO: <is-input> definido, shadow DOM presente, input
+//   1. COMPONENTE RENDERIZADO: <iswc-input> definido, shadow DOM presente, input
 //      nativo accesible.
 //   2. ELEMENTOS VISIBLES: label, hint y el propio input son visibles y no se
 //      salen del viewport.
@@ -17,11 +17,11 @@ const DEMOS = [
 async function checkDeterministic(page, demo) {
   await page.waitForTimeout(200);
 
-  const defined = await page.evaluate(() => !!customElements.get('is-input'));
-  assert.equal(defined, true, 'is-input debe estar definido');
+  const defined = await page.evaluate(() => !!customElements.get('iswc-input'));
+  assert.equal(defined, true, 'iswc-input debe estar definido');
 
   const data = await page.evaluate(() => {
-    const inputs = [...document.querySelectorAll('is-input')];
+    const inputs = [...document.querySelectorAll('iswc-input')];
     return inputs.map((inp) => {
       const sr = inp.shadowRoot;
       const native = sr?.querySelector('input');
@@ -91,7 +91,7 @@ for (const demo of DEMOS) {
 }
 
 const VISUAL_RUBRIC = `
-Evalúa la calidad visual del demo del componente <is-input>.
+Evalúa la calidad visual del demo del componente <iswc-input>.
 
 Checklist (cada una PASS o FAIL):
 

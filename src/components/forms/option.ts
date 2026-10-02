@@ -3,7 +3,7 @@ import { ElementBase } from '../../core/element-base.js';
 import { setStringAttr } from '../_shared/reflect.js';
 
 /**
- * <is-option> — Opción para is-combobox / is-select (listboxes).
+ * <iswc-option> — Opción para iswc-combobox / iswc-select (listboxes).
  *
  * Atributos: value, disabled, selected, group
  * Slots: default (etiqueta), start (icono/avatar), description (texto secundario)
@@ -24,7 +24,7 @@ import { setStringAttr } from '../_shared/reflect.js';
 
   const OBSERVED: string[] = ['value', 'disabled', 'selected', 'group'];
 
-  class IsOption extends ElementBase {
+  class IswcOption extends ElementBase {
     static get observedAttributes(): string[] { return OBSERVED; }
 
     #root!: HTMLElement;
@@ -84,5 +84,5 @@ import { setStringAttr } from '../_shared/reflect.js';
     }
   }
 
-  defineElement('is-option', IsOption, 'IsOption');
+  defineElement('iswc-option', IswcOption, 'IswcOption');
 })();

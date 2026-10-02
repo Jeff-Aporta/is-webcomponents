@@ -1,5 +1,5 @@
 /**
- * Behavior migrado desde HTML inline de is-progress-bar.
+ * Behavior migrado desde HTML inline de iswc-progress-bar.
  * Se ejecuta en mount() tras pintar la definition JSON.
  * @param {import('../../previews/_kit/types.d.ts').PreviewMountContext} ctx
  */
@@ -11,8 +11,8 @@ interface ProgressBarEl extends HTMLElement {
 
 export async function mount(ctx: import('../../previews/_kit/types.d.ts').PreviewMountContext): Promise<void> {
   void ctx.main;
-  await customElements.whenDefined('is-progress-bar');
-  await customElements.whenDefined('is-button');
+  await customElements.whenDefined('iswc-progress-bar');
+  await customElements.whenDefined('iswc-button');
 
   let value = 0;
   const bar = document.getElementById('pbLive') as ProgressBarEl | null;

@@ -1,9 +1,9 @@
 // tests/icon-references.test.ts
 //
-// Verifica que cada <is-icon icon="X:Y"> en los previews apunta a un icono
+// Verifica que cada <iswc-icon icon="X:Y"> en los previews apunta a un icono
 // que existe localmente en assets/icons/X.json (es decir, descargado).
 //
-// Esto evita el bug clasico: alguien escribe <is-icon icon="mdi:foo-bar">
+// Esto evita el bug clasico: alguien escribe <iswc-icon icon="mdi:foo-bar">
 // sin descargar `foo-bar`, y la pagina queda en blanco porque el loader no
 // lo encuentra local y cae al CDN. Aqui lo detectamos en CI antes del push.
 //
@@ -23,7 +23,7 @@ const root = dirname(dirname(dirname(dirname(here))));
 const previewsDir = join(root, 'src', 'previews');
 const iconsDir = join(root, 'src', 'assets', 'icons');
 
-const ICON_RE = /<is-icon\b[^>]*\bicon\s*=\s*["']([a-z0-9-]+):([a-z0-9-]+)["']/gi;
+const ICON_RE = /<iswc-icon\b[^>]*\bicon\s*=\s*["']([a-z0-9-]+):([a-z0-9-]+)["']/gi;
 
 async function walk(dir) {
   const out = [];

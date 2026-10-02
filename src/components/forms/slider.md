@@ -1,14 +1,14 @@
 ---
-tag: is-slider
+tag: iswc-slider
 tags:
-  - is-slider
+  - iswc-slider
 category: forms
 status: public
 source: ./slider.js
 style: ./slider.css
 preview: ./slider.json
 ---
-# `<is-slider>`
+# `<iswc-slider>`
 
 ## Propósito
 
@@ -16,7 +16,7 @@ Control de rango form-associated con paridad funcional con el
 Slider de MUI:
 rango de dos thumbs, marks, escala no lineal, orientación vertical y track invertido.
 
-Este módulo registra `<is-slider>`.
+Este módulo registra `<iswc-slider>`.
 
 ## Cuándo usarlo
 
@@ -35,8 +35,8 @@ import './slider.js';
 ## Ejemplo mínimo
 
 ```html
-<is-slider label="Volumen" value="30"></is-slider>
-<is-slider value="30" disabled></is-slider>
+<iswc-slider label="Volumen" value="30"></iswc-slider>
+<iswc-slider value="30" disabled></iswc-slider>
 ```
 
 ## API
@@ -110,8 +110,8 @@ import './slider.js';
 
 | Evento | detail | bubbles | composed | cancelable |
 | --- | --- | --- | --- | --- |
-| `is-input` | sí | sí | sí | no |
-| `is-change` | sí | sí | sí | no |
+| `iswc-input` | sí | sí | sí | no |
+| `iswc-change` | sí | sí | sí | no |
 
 ### Métodos y propiedades públicas
 
@@ -184,7 +184,7 @@ Participa mediante ElementInternals/helpers form-associated; respetar name, valu
 
 Documentación de cabecera preservada desde fuente:
 
-> <is-slider> — Control de rango form-associated (vanilla + Shadow DOM).
+> <iswc-slider> — Control de rango form-associated (vanilla + Shadow DOM).
 > Atributos
 >   name, label, hint, color (brand|neutral|success|warning|danger)
 >   value          number | "20,37" (rango con dos o más thumbs)
@@ -208,14 +208,14 @@ Documentación de cabecera preservada desde fuente:
 > Parts: form-control, label, base, rail, track, mark, mark-label, thumb,
 >        value-label, hint
 > Custom states: disabled, readonly, dragging, focused
-> Eventos: is-input (arrastre/tecla), is-change (al confirmar)
+> Eventos: iswc-input (arrastre/tecla), iswc-change (al confirmar)
 
 ## Dependencias y componentes relacionados
 
 - [`../_shared/adopt-css.js`](../_shared/adopt-css.js)
 - [`../_shared/form-associated.js`](../_shared/form-associated.js)
 
-Tags del módulo: `<is-slider>`.
+Tags del módulo: `<iswc-slider>`.
 
 ## Accesibilidad
 
@@ -224,8 +224,8 @@ Preservar semántica, foco, teclado, labels y ARIA. ARIA detectado: `aria-hidden
 ## Ejemplo avanzado
 
 ```html
-<is-slider style="font-size:0.8em" value="70" value-label="auto"></is-slider>
-<is-slider value="50" value-label="auto"></is-slider>
+<iswc-slider style="font-size:0.8em" value="70" value-label="auto"></iswc-slider>
+<iswc-slider value="50" value-label="auto"></iswc-slider>
 ```
 
 ## Errores comunes

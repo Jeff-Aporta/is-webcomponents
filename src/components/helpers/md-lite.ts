@@ -1,20 +1,16 @@
 import { escapeHtml } from '../_shared/dom-utils.js';
+import { escapeJsonForScript, resolveIswcFenceTag } from './md-iswc-fences.js';
 
 /**
  * md-lite.js — Markdown → HTML minimalista, sin dependencias npm.
  *
- * Cubre el subconjunto que necesita `<is-md-editor>`: encabezados ATX,
- * párrafos (con hard-break de dos espacios + salto), listas simples (ul/ol),
- * blockquote, hr, bloque de código con fence, tablas GFM, negrita/cursiva/
- * código inline, enlaces e imágenes — y conserva sin tocar cualquier bloque
- * que ya empiece por una etiqueta HTML (`<div>`, `<table>`, …), porque ese
- * HTML viene de una serialización previa (ver `_shared/prompt-md.js`) y debe
- * sobrevivir intacto al round-trip.
+ * Cubre el subconjunto que necesita `<iswc-md-editor>` / `<iswc-md-render>`:
+ * encabezados ATX, párrafos, listas, blockquote, hr, fences (código e
+ * `iswc-*` → diagrama), tablas GFM, negrita/cursiva/código inline, enlaces
+ * e imágenes. Conserva bloques HTML crudos (`<is-*>`, `<div>`, …).
  *
- * No es CommonMark completo: no hay listas anidadas por indentación, ni
- * referencias de enlace, ni HTML inline mezclado con texto en la misma
- * línea. Para el editor de instrucciones (MD + HTML por bloques + chips de
- * variable) es suficiente.
+ * Los fences y el código inline salen como marcadores `.md-iswc-code` /
+ * tags `is-*`; `<iswc-md-render>` hace lazy-load y los monta.
  */
 
 const ATX_HEADING = /^(#{1,6})\s+(.*)$/;
@@ -23,6 +19,7 @@ const UL_ITEM = /^\s*[-*+]\s+(.*)$/;
 const OL_ITEM = /^\s*\d+[.)]\s+(.*)$/;
 const TABLE_SEP = /^\s*\|?\s*:?-{2,}:?\s*(\|\s*:?-{2,}:?\s*)+\|?\s*$/;
 const FENCE_LINE = /^\s*```/;
+const FENCE_OPEN = /^\s*```([\w:.#+-]*)\s*$/;
 const BLOCKQUOTE_LINE = /^\s*>/;
 const RAW_HTML_LINE = /^\s*</;
 /** Apertura de etiqueta HTML (no comentario / doctype). Captura el nombre. */
@@ -43,8 +40,8 @@ function isSpecialLine(line: string) {
 /**
  * Consume un bloque HTML embebido.
  *
- * Antes se cortaba en la primera línea en blanco: eso partía `<is-flowchart>`
- * / `<is-code>` con JSON o código multilínea. Ahora, si hay etiqueta de
+ * Antes se cortaba en la primera línea en blanco: eso partía `<iswc-flowchart>`
+ * / `<iswc-code>` con JSON o código multilínea. Ahora, si hay etiqueta de
  * apertura, se lee hasta el `</tag>` que cierra (con profundidad); si no,
  * se mantiene el fallback “hasta línea vacía”.
  */
@@ -112,7 +109,8 @@ function inline(text: string): string {
   s = s.replace(/__([^_]+)__/g, '<strong>$1</strong>');
   s = s.replace(/\*([^*]+)\*/g, '<em>$1</em>');
   s = s.replace(/(?<![\w])_([^_]+)_(?![\w])/g, '<em>$1</em>');
-  s = s.replace(/\u0000C(\d+)\u0000/g, (_m: string, i: string) => `<code>${codeSpans[Number(i)]}</code>`);
+  s = s.replace(/\u0000C(\d+)\u0000/g, (_m: string, i: string) =>
+    `<code class="md-iswc-code" data-mode="inline">${codeSpans[Number(i)]}</code>`);
   return s;
 }
 
@@ -170,6 +168,16 @@ function parseList(lines: string[], start: number): { html: string; next: number
   return { html: `<${tag}>${items.map((it) => `<li>${it}</li>`).join('')}</${tag}>`, next: i };
 }
 
+function renderFence(langRaw: string, body: string): string {
+  const lang = String(langRaw || '').trim();
+  const iswcTag = resolveIswcFenceTag(lang);
+  if (iswcTag) {
+    return `<${iswcTag} class="md-iswc-diagram" color="viewer"><script type="application/json">${escapeJsonForScript(body.trim())}</script></${iswcTag}>`;
+  }
+  const safeLang = escapeHtml(lang || 'plaintext');
+  return `<pre class="md-iswc-code" data-lang="${safeLang}" data-mode="block"><code>${escapeHtml(body)}</code></pre>`;
+}
+
 /**
  * Convierte markdown (+ HTML embebido) a HTML.
  * @param {string} src
@@ -193,12 +201,14 @@ export function mdToHtml(src: string): string {
       continue;
     }
 
-    if (FENCE_LINE.test(line)) {
-      const buf = [];
+    const fenceOpen = line.match(FENCE_OPEN);
+    if (fenceOpen || FENCE_LINE.test(line)) {
+      const lang = fenceOpen ? (fenceOpen[1] || '') : '';
+      const buf: string[] = [];
       i += 1;
       while (i < lines.length && !FENCE_LINE.test(lines[i])) { buf.push(lines[i]); i += 1; }
       i += 1;
-      out.push(`<pre><code>${escapeHtml(buf.join('\n'))}</code></pre>`);
+      out.push(renderFence(lang, buf.join('\n')));
       continue;
     }
 

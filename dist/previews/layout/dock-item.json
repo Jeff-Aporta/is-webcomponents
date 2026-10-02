@@ -1,21 +1,21 @@
 {
-  "$schema": "is-preview/v1",
-  "tag": "is-dock-item",
+  "$schema": "iswc-preview/v1",
+  "tag": "iswc-dock-item",
   "category": "layout",
-  "title": "<is-dock-item>",
+  "title": "<iswc-dock-item>",
   "titleHtml": true,
-  "description": "Documentación y demos de is-dock-item de InSoft.",
+  "description": "Documentación y demos de iswc-dock-item de InSoft.",
   "styles": ".dock-stage { position:relative; transform:translateZ(0); height:200px;\r\n      border:1px dashed var(--iswc-border); border-radius:.6rem; }",
-  "storageKey": "docs-is-dock-item",
+  "storageKey": "docs-iswc-dock-item",
   "sections": [
     {
       "id": "intro",
       "title": "Uso",
-      "lede": "Icono de un <code class=\"code\">&lt;is-dock&gt;</code>, con su etiqueta y estado activo.",
+      "lede": "Icono de un <code class=\"code\">&lt;iswc-dock&gt;</code>, con su etiqueta y estado activo.",
       "blocks": [
         {
           "kind": "demo",
-          "html": "<div class=\"dock-stage\">\r\n            <is-dock>\r\n              <is-dock-item icon=\"mdi:home\" label=\"Inicio\" active></is-dock-item>\r\n              <is-dock-item icon=\"mdi:chart-box\" label=\"Reportes\"></is-dock-item>\r\n              <is-dock-item icon=\"mdi:cog\" label=\"Ajustes\"></is-dock-item>\r\n            </is-dock>\r\n          </div>",
+          "html": "<div class=\"dock-stage\">\r\n            <iswc-dock>\r\n              <iswc-dock-item icon=\"mdi:home\" label=\"Inicio\" active></iswc-dock-item>\r\n              <iswc-dock-item icon=\"mdi:chart-box\" label=\"Reportes\"></iswc-dock-item>\r\n              <iswc-dock-item icon=\"mdi:cog\" label=\"Ajustes\"></iswc-dock-item>\r\n            </iswc-dock>\r\n          </div>",
           "controls": [
               {
                 "control": "select",
@@ -37,7 +37,7 @@
         },
         {
           "kind": "code",
-          "code": "<div class=\"dock-stage\">\n  <is-dock>\n    <is-dock-item icon=\"mdi:home\" label=\"Inicio\" active></is-dock-item>\n    <is-dock-item icon=\"mdi:chart-box\" label=\"Reportes\"></is-dock-item>\n    <is-dock-item icon=\"mdi:cog\" label=\"Ajustes\"></is-dock-item>\n  </is-dock>\n</div>",
+          "code": "<div class=\"dock-stage\">\n  <iswc-dock>\n    <iswc-dock-item icon=\"mdi:home\" label=\"Inicio\" active></iswc-dock-item>\n    <iswc-dock-item icon=\"mdi:chart-box\" label=\"Reportes\"></iswc-dock-item>\n    <iswc-dock-item icon=\"mdi:cog\" label=\"Ajustes\"></iswc-dock-item>\n  </iswc-dock>\n</div>",
           "lang": "html"
         }
       ]
@@ -45,7 +45,7 @@
     {
       "id": "reference",
       "title": "Referencia",
-      "lede": "&lt;is-dock&gt; — Barra tipo macOS. Los hijos se redimensionan al pasar el puntero cerca, simulando la lupa del Dock. &lt;is-dock&gt; &lt;is-dock-item label=\"Inicio\"     icon=\"mdi:home\"&gt;&lt;/is-dock-item&gt; &lt;is-dock-item label=\"Buscar\"     icon=\"mdi:magnify\"&gt;&lt;/is-dock-item&gt; ... &lt;/is-dock&gt; Atributos position    bottom (default) | top | left | right max-scale   factor máximo de magnificación (default 1.6) range       píxeles: la magnificación cae a 0 a esta distancia del item bajo el cursor (default 110) Custom states: hovering Eventos: is-select   detail: { item } is-dock-item acepta: icon, label, href, active (booleano, marca el ítem activo)",
+      "lede": "&lt;iswc-dock&gt; — Barra tipo macOS. Los hijos se redimensionan al pasar el puntero cerca, simulando la lupa del Dock. &lt;iswc-dock&gt; &lt;iswc-dock-item label=\"Inicio\"     icon=\"mdi:home\"&gt;&lt;/iswc-dock-item&gt; &lt;iswc-dock-item label=\"Buscar\"     icon=\"mdi:magnify\"&gt;&lt;/iswc-dock-item&gt; ... &lt;/iswc-dock&gt; Atributos position    bottom (default) | top | left | right max-scale   factor máximo de magnificación (default 1.6) range       píxeles: la magnificación cae a 0 a esta distancia del item bajo el cursor (default 110) Custom states: hovering Eventos: iswc-select   detail: { item } iswc-dock-item acepta: icon, label, href, active (booleano, marca el ítem activo)",
       "blocks": [
         {
           "kind": "html",

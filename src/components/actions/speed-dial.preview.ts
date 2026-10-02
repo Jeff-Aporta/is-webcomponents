@@ -1,5 +1,5 @@
 /**
- * Behavior migrado desde HTML inline de is-speed-dial.
+ * Behavior migrado desde HTML inline de iswc-speed-dial.
  * Se ejecuta en mount() tras pintar la definition JSON.
  */
 import type { PreviewMountContext } from '../../previews/_kit/types.d.ts';
@@ -36,7 +36,7 @@ export async function mount(ctx: PreviewMountContext): Promise<void> {
     table.append(logBody);
   }
 
-  // Los diales que arrancan con `open` emiten is-toggle al montarse: eso no
+  // Los diales que arrancan con `open` emiten iswc-toggle al montarse: eso no
   // es interaccion del usuario y solo llenaba la bitacora de lineas
   // identicas ("toggle: open=false" repetido), asi que se ignora.
   let userInteracted = false;
@@ -63,15 +63,15 @@ export async function mount(ctx: PreviewMountContext): Promise<void> {
     while (logBody.rows.length > MAX_ROWS) logBody.deleteRow(-1);
   };
 
-  root.querySelectorAll<HTMLElement>('is-speed-dial').forEach((d: HTMLElement, i: number) => {
+  root.querySelectorAll<HTMLElement>('iswc-speed-dial').forEach((d: HTMLElement, i: number) => {
     const nombre = d.id || d.getAttribute('data-layout') || d.getAttribute('direction') || (`dial ${i + 1}`);
-    d.addEventListener('is-select', (e: Event) => {
+    d.addEventListener('iswc-select', (e: Event) => {
       const detail = (e as CustomEventWithDetail<{ action?: { getAttribute?: (n: string) => string | null } }>).detail;
-      append(nombre, 'is-select', detail?.action?.getAttribute?.('label') || '-');
+      append(nombre, 'iswc-select', detail?.action?.getAttribute?.('label') || '-');
     });
-    d.addEventListener('is-toggle', (e: Event) => {
+    d.addEventListener('iswc-toggle', (e: Event) => {
       const detail = (e as CustomEventWithDetail<{ open?: boolean }>).detail;
-      append(nombre, 'is-toggle', detail?.open ? 'abierto' : 'cerrado');
+      append(nombre, 'iswc-toggle', detail?.open ? 'abierto' : 'cerrado');
     });
   });
 }

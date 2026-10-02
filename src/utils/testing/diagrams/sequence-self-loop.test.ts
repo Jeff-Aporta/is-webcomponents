@@ -1,6 +1,6 @@
 // tests/sequence-self-loop.test.ts
 //
-// Guardian del fix de self-loop en <is-sequence-diagram>.
+// Guardian del fix de self-loop en <iswc-sequence-diagram>.
 //
 // El router basado en A* que existía colapsaba el self-loop a una línea
 // vertical con banderín (un solo segmento visible). El fix traza la

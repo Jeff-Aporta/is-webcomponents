@@ -26,7 +26,7 @@ test('url-nav.ts solo toca ?s= (sin storage ni params sueltos)', async () => {
 
 test('read/writeUrlNav mergean keys en ?s= y limpian params legado', async () => {
   const href0 = 'https://example.test/gallery?s=eyJjb21wb25lbnQiOiJpcy1idXR0b24ifQ&docs=legacy';
-  // eyJjb21wb25lbnQiOiJpcy1idXR0b24ifQ = {"component":"is-button"}
+  // eyJjb21wb25lbnQiOiJpcy1idXR0b24ifQ = {"component":"iswc-button"}
   let href = href0;
   const history = {
     state: null,
@@ -42,21 +42,21 @@ test('read/writeUrlNav mergean keys en ?s= y limpian params legado', async () =>
   assert.equal(readUrlNav('docs'), null);
   writeUrlNav('docs', 'api');
   assert.equal(readUrlNav('docs'), 'api');
-  assert.equal(readUrlState().component, 'is-button');
+  assert.equal(readUrlState().component, 'iswc-button');
   assert.equal(readUrlState().docs, 'api');
 
   const u = new URL(href);
   assert.equal(u.searchParams.has('docs'), false, 'no debe quedar ?docs= suelto');
   assert.ok(u.searchParams.get('s'), 'debe existir ?s=');
   const decoded = JSON.parse(b64urlDecode(u.searchParams.get('s')));
-  assert.deepEqual(decoded, { component: 'is-button', docs: 'api' });
+  assert.deepEqual(decoded, { component: 'iswc-button', docs: 'api' });
 
   writeUrlNav('docs', null);
   assert.equal(readUrlNav('docs'), null);
-  assert.equal(readUrlState().component, 'is-button');
+  assert.equal(readUrlState().component, 'iswc-button');
 });
 
-test('is-tab-group: url-key opt-in', async () => {
+test('iswc-tab-group: url-key opt-in', async () => {
   const src = await readFile(join(raiz, 'src/components/navigation/tab-group.ts'), 'utf8');
   assert.match(src, /url-key/);
   assert.match(src, /readUrlNav|writeUrlNav/);
@@ -76,7 +76,7 @@ test('snippet CDN loader: script src + loadCSS/load', async () => {
   assert.doesNotMatch(src, /#buildBootSnippet/);
 });
 
-test('is-cdn-snippet carga solo el tag, sin radio ni url-key', async () => {
+test('iswc-cdn-snippet carga solo el tag, sin radio ni url-key', async () => {
   const src = await readFile(join(raiz, 'src/components/feedback/cdn-snippet.ts'), 'utf8');
   assert.doesNotMatch(src, /'url-key'/);
   assert.doesNotMatch(src, /name="cdn-scope"/);

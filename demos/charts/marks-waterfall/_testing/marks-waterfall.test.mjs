@@ -1,7 +1,7 @@
 // marks-waterfall.test.mjs — tests exhaustivos del demo marks-waterfall.html.
 // marks-waterfall es un utility bundle: exporta waterfallBars (pura) y
 // drawWaterfallMarks (requiere ctx SVG). El demo pinta el wrapper
-// <is-waterfall-chart> en vivo + invoca waterfallBars directamente para
+// <iswc-waterfall-chart> en vivo + invoca waterfallBars directamente para
 // mostrar el resultado de la función pura.
 import assert from 'node:assert/strict';
 import { BASE_URL, newPage, close, waitReady, screenshot, report } from '../../_global/lib/harness.mjs';
@@ -20,12 +20,12 @@ tests.push({
       const exports = Object.keys(lib).sort();
       const types = {};
       for (const k of exports) types[k] = typeof lib[k];
-      const wf = document.querySelector('is-waterfall-chart');
+      const wf = document.querySelector('iswc-waterfall-chart');
       return {
         exports,
         types,
-        wfDefined: !!customElements.get('is-waterfall-chart'),
-        chartDefined: !!customElements.get('is-chart'),
+        wfDefined: !!customElements.get('iswc-waterfall-chart'),
+        chartDefined: !!customElements.get('iswc-chart'),
         svg: !!wf?.shadowRoot?.querySelector('svg'),
         marks: wf?.shadowRoot?.querySelectorAll('.mark.mark-waterfall').length || 0,
         connectors: wf?.shadowRoot?.querySelectorAll('.waterfall-connector').length || 0,
@@ -40,8 +40,8 @@ tests.push({
     );
     assert.equal(info.types.waterfallBars, 'function', 'waterfallBars debe ser function');
     assert.equal(info.types.drawWaterfallMarks, 'function', 'drawWaterfallMarks debe ser function');
-    assert.equal(info.wfDefined, true, 'is-waterfall-chart debe estar definido');
-    assert.equal(info.chartDefined, true, 'is-chart también debe estar definido');
+    assert.equal(info.wfDefined, true, 'iswc-waterfall-chart debe estar definido');
+    assert.equal(info.chartDefined, true, 'iswc-chart también debe estar definido');
     assert.ok(info.svg, 'debe haber un SVG en el shadow DOM del wrapper');
     assert.ok(info.marks >= 5, `esperaba >=5 marks waterfall, hay ${info.marks}`);
     assert.ok(info.exportsPre.includes('waterfallBars'), '<pre> exports debe listar waterfallBars');
@@ -121,13 +121,13 @@ tests.push({
 });
 
 tests.push({
-  name: 'live: <is-waterfall-chart> pinta 5 marks .mark-waterfall + conectores entre barras',
+  name: 'live: <iswc-waterfall-chart> pinta 5 marks .mark-waterfall + conectores entre barras',
   run: async (page) => {
     await page.goto(URL, { waitUntil: 'domcontentloaded' });
     await waitReady(page, 'data-marks-waterfall-ready');
     await page.waitForTimeout(150);
     const data = await page.evaluate(() => {
-      const el = document.querySelector('is-waterfall-chart');
+      const el = document.querySelector('iswc-waterfall-chart');
       const marks = [...el.shadowRoot.querySelectorAll('.mark.mark-waterfall')];
       const connectors = [...el.shadowRoot.querySelectorAll('.waterfall-connector')];
       const tickLabels = [...el.shadowRoot.querySelectorAll('text.tick-label')].map((t) => (t.textContent ?? '').trim());
@@ -156,10 +156,10 @@ tests.push({
     await waitReady(page, 'data-marks-waterfall-ready');
     await page.waitForTimeout(150);
     const before = await page.evaluate(() => {
-      return document.querySelector('is-waterfall-chart').shadowRoot.querySelectorAll('.mark.mark-waterfall').length;
+      return document.querySelector('iswc-waterfall-chart').shadowRoot.querySelectorAll('.mark.mark-waterfall').length;
     });
     await page.evaluate(() => {
-      const el = document.querySelector('is-waterfall-chart');
+      const el = document.querySelector('iswc-waterfall-chart');
       el.payload = {
         data: {
           labels: ['A', 'B', 'C', 'D'],
@@ -169,7 +169,7 @@ tests.push({
     });
     await page.waitForTimeout(200);
     const after = await page.evaluate(() => {
-      const root = document.querySelector('is-waterfall-chart').shadowRoot;
+      const root = document.querySelector('iswc-waterfall-chart').shadowRoot;
       return {
         marks: root.querySelectorAll('.mark.mark-waterfall').length,
         ticks: [...root.querySelectorAll('text.tick-label')].map((t) => (t.textContent ?? '').trim()),

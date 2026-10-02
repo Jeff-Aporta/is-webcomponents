@@ -1,4 +1,4 @@
-// badge.test.mjs — tests exhaustivos del demo is-badge.
+// badge.test.mjs — tests exhaustivos del demo iswc-badge.
 // Cobertura: smoke + funcional (color/variant/pill/attention) +
 // slots + atributos inválidos caen a default + accesibilidad básica.
 import assert from 'node:assert/strict';
@@ -14,15 +14,15 @@ tests.push({
     await page.goto(URL, { waitUntil: 'domcontentloaded' });
     await waitReady(page, 'data-badge-ready');
     const data = await page.evaluate(() => {
-      const all = document.querySelectorAll('is-badge');
+      const all = document.querySelectorAll('iswc-badge');
       return {
         count: all.length,
-        defined: !!customElements.get('is-badge'),
+        defined: !!customElements.get('iswc-badge'),
         first: all[0]?.getAttribute('color'),
         second: all[0]?.getAttribute('variant'),
       };
     });
-    assert.equal(data.defined, true, 'is-badge debe estar definido');
+    assert.equal(data.defined, true, 'iswc-badge debe estar definido');
     assert.ok(data.count >= 5, `esperaba >=5 badges en la página, hay ${data.count}`);
     assert.equal(data.first, 'brand', 'primer badge debe tener color=brand');
     assert.equal(data.second, 'accent', 'variant por defecto debe ser accent');
@@ -37,7 +37,7 @@ tests.push({
     await waitReady(page, 'data-badge-ready');
     const colors = await page.evaluate(() => {
       return [...document.querySelectorAll('section')].flatMap((sec) =>
-        [...sec.querySelectorAll('is-badge')].map((b) => b.getAttribute('color')),
+        [...sec.querySelectorAll('iswc-badge')].map((b) => b.getAttribute('color')),
       );
     });
     // Confirmar presencia de los 5 colores canónicos en la sección "Colores"
@@ -55,7 +55,7 @@ tests.push({
     const variants = await page.evaluate(() => {
       const sec = [...document.querySelectorAll('section')].find((s) => s.textContent.includes('Variantes'));
       if (!sec) return [];
-      return [...sec.querySelectorAll('is-badge')].map((b) => b.getAttribute('variant'));
+      return [...sec.querySelectorAll('iswc-badge')].map((b) => b.getAttribute('variant'));
     });
     assert.deepEqual(
       variants,
@@ -72,7 +72,7 @@ tests.push({
     await waitReady(page, 'data-badge-ready');
     const has = await page.evaluate(() => {
       const sec = [...document.querySelectorAll('section')].find((s) => s.textContent.includes('Pill'));
-      return [...sec.querySelectorAll('is-badge')].map((b) => b.hasAttribute('pill'));
+      return [...sec.querySelectorAll('iswc-badge')].map((b) => b.hasAttribute('pill'));
     });
     assert.ok(has.length >= 3, 'sección Pill debe tener >=3 badges');
     assert.ok(has.every(Boolean), 'todos los badges de la sección Pill deben llevar atributo pill');
@@ -86,7 +86,7 @@ tests.push({
     await waitReady(page, 'data-badge-ready');
     const attentions = await page.evaluate(() => {
       const sec = [...document.querySelectorAll('section')].find((s) => s.textContent.includes('Atención'));
-      return [...sec.querySelectorAll('is-badge')].map((b) => b.getAttribute('attention'));
+      return [...sec.querySelectorAll('iswc-badge')].map((b) => b.getAttribute('attention'));
     });
     assert.deepEqual(attentions, ['pulse', 'bounce'], `attentions deben ser [pulse, bounce], se vio ${JSON.stringify(attentions)}`);
   },
@@ -99,7 +99,7 @@ tests.push({
     await waitReady(page, 'data-badge-ready');
     const slotCount = await page.evaluate(() => {
       const sec = [...document.querySelectorAll('section')].find((s) => s.textContent.includes('Slots'));
-      const badges = sec.querySelectorAll('is-badge');
+      const badges = sec.querySelectorAll('iswc-badge');
       let start = 0;
       let end = 0;
       for (const b of badges) {
@@ -119,7 +119,7 @@ tests.push({
     await page.goto(URL, { waitUntil: 'domcontentloaded' });
     await waitReady(page, 'data-badge-ready');
     const fallback = await page.evaluate(() => {
-      const el = document.createElement('is-badge');
+      const el = document.createElement('iswc-badge');
       el.setAttribute('color', 'no-existe-este-color');
       document.body.appendChild(el);
       const got = el.getAttribute('color');
@@ -136,7 +136,7 @@ tests.push({
     await page.goto(URL, { waitUntil: 'domcontentloaded' });
     await waitReady(page, 'data-badge-ready');
     const fallback = await page.evaluate(() => {
-      const el = document.createElement('is-badge');
+      const el = document.createElement('iswc-badge');
       el.setAttribute('variant', 'no-existe');
       document.body.appendChild(el);
       const got = el.getAttribute('variant');
@@ -154,7 +154,7 @@ tests.push({
     await waitReady(page, 'data-badge-ready');
     const visibleText = await page.evaluate(() => {
       const sec = [...document.querySelectorAll('section')].find((s) => s.textContent.includes('Colores'));
-      return [...sec.querySelectorAll('is-badge')].map((b) => b.textContent.trim());
+      return [...sec.querySelectorAll('iswc-badge')].map((b) => b.textContent.trim());
     });
     for (const expected of ['Brand', 'Neutral', 'Success', 'Warning', 'Danger']) {
       assert.ok(visibleText.includes(expected), `esperaba ver texto "${expected}" en los badges`);

@@ -1,20 +1,20 @@
 ---
-tag: is-command-palette
+tag: iswc-command-palette
 tags:
-  - is-command-palette
+  - iswc-command-palette
 category: overlays
 status: public
 source: ./command-palette.js
 style: ./command-palette.css
 preview: ./command-palette.json
 ---
-# `<is-command-palette>`
+# `<iswc-command-palette>`
 
 ## Propósito
 
 Paleta de comandos al estilo Cmd+K / Ctrl+K: busca y ejecuta comandos declarados en JSON.
 
-Este módulo registra `<is-command-palette>`.
+Este módulo registra `<iswc-command-palette>`.
 
 ## Cuándo usarlo
 
@@ -22,7 +22,7 @@ Paleta de comandos, visor de documentos y ventanas flotantes.
 
 ## Cuándo no usarlo
 
-Para diálogos/cajones genéricos usar `<is-dialog>` / `<is-drawer>` en layout.
+Para diálogos/cajones genéricos usar `<iswc-dialog>` / `<iswc-drawer>` en layout.
 No reinventar overlays si este módulo cubre el caso.
 
 ## Importación
@@ -34,13 +34,13 @@ import './command-palette.js';
 ## Ejemplo mínimo
 
 ```html
-<is-command-palette placeholder="Buscar…">
+<iswc-command-palette placeholder="Buscar…">
   <script type="application/json">
   [
     { "id": "new", "title": "Nuevo", "group": "Archivo", "icon": "mdi:file-plus" }
   ]
   </script>
-</is-command-palette>
+</iswc-command-palette>
 ```
 
 ## API
@@ -79,13 +79,13 @@ import './command-palette.js';
 
 | Evento | detail | bubbles | composed | cancelable |
 | --- | --- | --- | --- | --- |
-| `is-show` | no | sí | sí | no |
-| `is-after-show` | no | sí | sí | no |
-| `is-hide` | no | sí | sí | no |
-| `is-after-hide` | no | sí | sí | no |
-| `is-select` | `{ command, id }` | sí | sí | no |
+| `iswc-show` | no | sí | sí | no |
+| `iswc-after-show` | no | sí | sí | no |
+| `iswc-hide` | no | sí | sí | no |
+| `iswc-after-hide` | no | sí | sí | no |
+| `iswc-select` | `{ command, id }` | sí | sí | no |
 
-Vocabulario unificado con `ModalBase`. Los antiguos `is-open` / `is-close`
+Vocabulario unificado con `ModalBase`. Los antiguos `iswc-open` / `iswc-close`
 ya no se emiten. Escape lo cierra el propio `<dialog>` (evento `cancel`).
 
 ### Métodos y propiedades públicas
@@ -129,13 +129,13 @@ Ejemplos:
 
 ```html
 <!-- Ctrl+K y Ctrl+Shift+P abren la misma paleta -->
-<is-command-palette hotkey="mod+k,mod+shift+p"></is-command-palette>
+<iswc-command-palette hotkey="mod+k,mod+shift+p"></iswc-command-palette>
 
 <!-- Solo Cmd+/ (Mac) / Ctrl+/ (Win/Linux) -->
-<is-command-palette hotkey="mod+/"></is-command-palette>
+<iswc-command-palette hotkey="mod+/"></iswc-command-palette>
 
 <!-- Desactivar atajo global; abrir solo via .open() -->
-<is-command-palette hotkey=""></is-command-palette>
+<iswc-command-palette hotkey=""></iswc-command-palette>
 ```
 
 Las combinaciones se parsean como pares `{mod,key}` donde `mod` puede
@@ -156,14 +156,14 @@ pierde al recargar). `↑` con el input vacío cicla por ese historial;
 
 Documentación de cabecera preservada desde fuente:
 
-> <is-command-palette> — Cmd/Ctrl+K. Comandos vía JSON hijo; eventos is-show/is-after-show/is-hide/is-after-hide/is-select.
+> <iswc-command-palette> — Cmd/Ctrl+K. Comandos vía JSON hijo; eventos iswc-show/iswc-after-show/iswc-hide/iswc-after-hide/iswc-select.
 
 ## Dependencias y componentes relacionados
 
 - [`../_shared/adopt-css.js`](../_shared/adopt-css.js)
 - [`../media/icon.js`](../media/icon.js)
 
-Tags del módulo: `<is-command-palette>`.
+Tags del módulo: `<iswc-command-palette>`.
 
 ## Accesibilidad
 
@@ -198,7 +198,7 @@ Preservar semántica, foco, teclado, labels y ARIA. Listeners globales solo en
 ## Ejemplo avanzado
 
 ```html
-<is-command-palette
+<iswc-command-palette
   placeholder="Buscar…"
   hotkey="mod+k,mod+/"
   max-results="10"
@@ -208,7 +208,7 @@ Preservar semántica, foco, teclado, labels y ARIA. Listeners globales solo en
     { "id": "new", "title": "Nuevo", "group": "Archivo", "icon": "mdi:file-plus" }
   ]
   </script>
-</is-command-palette>
+</iswc-command-palette>
 ```
 
 ## Errores comunes

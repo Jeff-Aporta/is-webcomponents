@@ -15,7 +15,7 @@ checks.push({
     await waitReady(page, 'data-progress-ring-ready');
     const sizes = await page.evaluate(() => {
       // Mide el HOST (no el inner SVG, que puede tener su propio size por viewBox).
-      return [...document.querySelectorAll('is-progress-ring')].map((p) => {
+      return [...document.querySelectorAll('iswc-progress-ring')].map((p) => {
         const r = p.getBoundingClientRect();
         return { w: r.width, h: r.height };
       });
@@ -32,7 +32,7 @@ checks.push({
     await page.goto(URL, { waitUntil: 'domcontentloaded' });
     await waitReady(page, 'data-progress-ring-ready');
     const aligned = await page.evaluate(() => {
-      return [...document.querySelectorAll('is-progress-ring')].every((p) => {
+      return [...document.querySelectorAll('iswc-progress-ring')].every((p) => {
         const circles = p.shadowRoot.querySelectorAll('circle');
         if (circles.length < 2) return false;
         const t = circles[0].getBoundingClientRect();
@@ -55,8 +55,8 @@ checks.push({
     await page.goto(URL, { waitUntil: 'domcontentloaded' });
     await waitReady(page, 'data-progress-ring-ready');
     const info = await page.evaluate(() => {
-      const def = document.querySelector('is-progress-ring[value="0"]');
-      const big = document.querySelector('is-progress-ring[width="120"]');
+      const def = document.querySelector('iswc-progress-ring[value="0"]');
+      const big = document.querySelector('iswc-progress-ring[width="120"]');
       return {
         defAttr: def.getAttribute('width'),
         bigAttr: big.getAttribute('width'),

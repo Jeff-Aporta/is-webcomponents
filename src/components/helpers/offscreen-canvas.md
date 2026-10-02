@@ -1,20 +1,20 @@
 ---
-tag: is-offscreen-canvas
+tag: iswc-offscreen-canvas
 tags:
-  - is-offscreen-canvas
+  - iswc-offscreen-canvas
 category: helpers
 status: public
 source: ./offscreen-canvas.js
 style: ./offscreen-canvas.css
 preview: ./offscreen-canvas.json
 ---
-# `<is-offscreen-canvas>`
+# `<iswc-offscreen-canvas>`
 
 ## Propósito
 
 Lienzo que transfiere el control a OffscreenCanvas (y opcionalmente a un Worker).
 
-Este módulo registra `<is-offscreen-canvas>`.
+Este módulo registra `<iswc-offscreen-canvas>`.
 
 ## Cuándo usarlo
 
@@ -22,7 +22,7 @@ Pintar 2D/3D pesado sin congelar el hilo de UI.
 
 ## Cuándo no usarlo
 
-Edición con puntero sobre el canvas visible: `is-image-editor` necesita el contexto en el hilo principal.
+Edición con puntero sobre el canvas visible: `iswc-image-editor` necesita el contexto en el hilo principal.
 
 ## Importación
 
@@ -33,7 +33,7 @@ import './offscreen-canvas.js';
 ## Ejemplo mínimo
 
 ```html
-<is-offscreen-canvas width="320" height="180"></is-offscreen-canvas>
+<iswc-offscreen-canvas width="320" height="180"></iswc-offscreen-canvas>
 ```
 
 ## API
@@ -65,7 +65,7 @@ import './offscreen-canvas.js';
 
 | Evento | detail | bubbles | composed | cancelable |
 | --- | --- | --- | --- | --- |
-| `is-ready` | sí `{ offscreen, fallback }` | sí | sí | no |
+| `iswc-ready` | sí `{ offscreen, fallback }` | sí | sí | no |
 
 ### Métodos y propiedades públicas
 
@@ -103,7 +103,7 @@ Canvas decorativo salvo que el consumidor ponga `aria-label`.
 ## Ejemplo avanzado
 
 ```html
-<is-offscreen-canvas worker-src="./worker.js" width="640" height="360"></is-offscreen-canvas>
+<iswc-offscreen-canvas worker-src="./worker.js" width="640" height="360"></iswc-offscreen-canvas>
 ```
 
 ## Errores comunes

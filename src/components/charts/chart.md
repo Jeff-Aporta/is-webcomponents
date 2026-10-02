@@ -1,14 +1,14 @@
 ---
-tag: is-chart
+tag: iswc-chart
 tags:
-  - is-chart
+  - iswc-chart
 category: charts
 status: public
 source: ./chart.js
 style: ./chart.css
 preview: ./chart.json
 ---
-# `<is-chart>`
+# `<iswc-chart>`
 
 ## Propósito
 
@@ -16,7 +16,7 @@ Motor de gráficos en SVG, sin dependencias externas. La configuración usa el
 mismo esquema de Chart.js, así que un config existente funciona
 sin cambios.
 
-Este módulo registra `<is-chart>`.
+Este módulo registra `<iswc-chart>`.
 
 ## Cuándo usarlo
 
@@ -35,7 +35,7 @@ import './chart.js';
 ## Ejemplo mínimo
 
 ```html
-<is-chart></is-chart>
+<iswc-chart></iswc-chart>
 ```
 
 ## API
@@ -83,9 +83,9 @@ import './chart.js';
 
 | Evento | detail | bubbles | composed | cancelable |
 | --- | --- | --- | --- | --- |
-| `is-render` | sí | sí | sí | no |
-| `is-turtle-state` | sí | sí | sí | no |
-| `is-open-viewer` | sí | sí | sí | sí |
+| `iswc-render` | sí | sí | sí | no |
+| `iswc-turtle-state` | sí | sí | sí | no |
+| `iswc-open-viewer` | sí | sí | sí | sí |
 
 ### Métodos y propiedades públicas
 
@@ -162,14 +162,14 @@ No declara integración form-associated propia en este módulo.
 
 Documentación de cabecera preservada desde fuente:
 
-> <is-chart> — motor de charts en SVG, sin dependencias.
+> <iswc-chart> — motor de charts en SVG, sin dependencias.
 > Consumo compatible con Chart.js: `config` (propiedad) o <script type="application/json">
 > hijo, con la forma `{ type, data: { labels, datasets }, options }`.
 > Los atributos del elemento tienen precedencia sobre `options` cuando están presentes.
 > Atributos: type, label, legend-position, index-axis, min, max, grid,
 >            stacked, without-animation, without-legend, without-tooltip, x-label, y-label
 > Propiedades: config, svg, chart (alias de svg)
-> Evento: is-render
+> Evento: iswc-render
 
 ## Dependencias y componentes relacionados
 
@@ -179,7 +179,7 @@ Documentación de cabecera preservada desde fuente:
 - [`../_shared/path-turtle.js`](../_shared/path-turtle.js)
 - [`../diagrams/diagram-kinds.js`](../diagrams/diagram-kinds.js)
 
-Tags del módulo: `<is-chart>`.
+Tags del módulo: `<iswc-chart>`.
 
 ## Accesibilidad
 
@@ -188,7 +188,7 @@ Preservar semántica, foco, teclado, labels y ARIA. ARIA detectado: `aria-presse
 ## Ejemplo avanzado
 
 ```html
-<is-chart></is-chart>
+<iswc-chart></iswc-chart>
 ```
 
 ## Errores comunes

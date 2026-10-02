@@ -1,5 +1,5 @@
 /**
- * Behavior migrado desde HTML inline de is-mega-menu.
+ * Behavior migrado desde HTML inline de iswc-mega-menu.
  * Se ejecuta en mount() tras pintar la definition JSON.
  * @param {import('../../previews/_kit/types.d.ts').PreviewMountContext} ctx
  */
@@ -8,8 +8,8 @@ export async function mount(ctx: import('../../previews/_kit/types.d.ts').Previe
   void root;
   const log = document.getElementById('log');
   if (!log) return;
-  document.querySelectorAll<HTMLElement>('is-mega-menu').forEach((m: HTMLElement) => {
-    m.addEventListener('is-select', (e: Event) => {
+  document.querySelectorAll<HTMLElement>('iswc-mega-menu').forEach((m: HTMLElement) => {
+    m.addEventListener('iswc-select', (e: Event) => {
       const detail = (e as CustomEvent<{ href: string; text: string }>).detail;
       log.textContent = `${detail.href} (${detail.text})\n${log.textContent || ''}`;
     });

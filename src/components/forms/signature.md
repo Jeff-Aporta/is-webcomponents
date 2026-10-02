@@ -1,21 +1,21 @@
 ---
-tag: is-signature
+tag: iswc-signature
 tags:
-  - is-signature
+  - iswc-signature
 category: forms
 status: public
 source: ./signature.js
 style: ./signature.css
 preview: ./signature.json
 ---
-# `<is-signature>`
+# `<iswc-signature>`
 
 ## Propósito
 
 Pad de firma manuscrita sobre `<canvas>`, con puntero unificado (mouse, touch,
 lápiz). Guarda los trazos como puntos y exporta a PNG o SVG.
 
-Este módulo registra `<is-signature>`.
+Este módulo registra `<iswc-signature>`.
 
 ## Cuándo usarlo
 
@@ -24,8 +24,8 @@ Capturar una firma o un trazo libre para adjuntarlo a un documento
 
 ## Cuándo no usarlo
 
-Para dibujo con herramientas y capas usar `<is-image-editor>`; para adjuntar
-una imagen ya firmada usar `<is-file-input>` o `<is-dropzone>`.
+Para dibujo con herramientas y capas usar `<iswc-image-editor>`; para adjuntar
+una imagen ya firmada usar `<iswc-file-input>` o `<iswc-dropzone>`.
 
 ## Importación
 
@@ -36,7 +36,7 @@ import './signature.js';
 ## Ejemplo mínimo
 
 ```html
-<is-signature></is-signature>
+<iswc-signature></iswc-signature>
 ```
 
 ## API
@@ -70,17 +70,17 @@ No expone.
 
 | Evento | detail | bubbles | composed | cancelable |
 | --- | --- | --- | --- | --- |
-| `is-stroke-end` | `{ dataURL }` | sí | sí | no |
-| `is-change` | `{ strokes }` | sí | sí | no |
+| `iswc-stroke-end` | `{ dataURL }` | sí | sí | no |
+| `iswc-change` | `{ strokes }` | sí | sí | no |
 
-`is-change` se emite al terminar cada trazo y también en `clear()`.
+`iswc-change` se emite al terminar cada trazo y también en `clear()`.
 `strokes` es el arreglo interno de trazos (`[{ x, y }, ...]` por trazo).
 
 ### Métodos y propiedades públicas
 
 | Método | Uso |
 | --- | --- |
-| `clear()` | Borra los trazos, repinta y emite `is-change`. |
+| `clear()` | Borra los trazos, repinta y emite `iswc-change`. |
 | `toDataURL(type = 'image/png')` | Data URL del canvas; con `image/svg+xml` devuelve el SVG codificado. |
 | `toSVG()` | SVG inline con un `<path>` por trazo, en coordenadas de px CSS. |
 
@@ -111,7 +111,7 @@ El componente fija `--_w` y `--_h` en el host con las dimensiones vigentes.
 ### Integración con formularios
 
 No es form-associated. Para enviar la firma, escribir `toDataURL()` en un
-campo oculto desde `is-change` o `is-stroke-end`.
+campo oculto desde `iswc-change` o `iswc-stroke-end`.
 
 ## Comportamiento
 
@@ -130,7 +130,7 @@ campo oculto desde `is-change` o `is-stroke-end`.
 - [`../_shared/define.js`](../_shared/define.js)
 - [`../_shared/emit.js`](../_shared/emit.js)
 
-Tags del módulo: `<is-signature>`.
+Tags del módulo: `<iswc-signature>`.
 
 ## Accesibilidad
 
@@ -141,15 +141,15 @@ puntero: si el flujo debe ser operable sin puntero, ofrecer una alternativa
 ## Ejemplo avanzado
 
 ```html
-<is-signature id="firma" width="480" height="180"
+<iswc-signature id="firma" width="480" height="180"
               pen-color="#111827" line-width="3"
-              background="#ffffff" hint="Firme dentro del recuadro"></is-signature>
-<is-button id="limpiar">Limpiar</is-button>
+              background="#ffffff" hint="Firme dentro del recuadro"></iswc-signature>
+<iswc-button id="limpiar">Limpiar</iswc-button>
 
 <script type="module">
   const firma = document.getElementById('firma');
   document.getElementById('limpiar').addEventListener('click', () => firma.clear());
-  firma.addEventListener('is-stroke-end', (e) => {
+  firma.addEventListener('iswc-stroke-end', (e) => {
     document.querySelector('input[name="firma"]').value = e.detail.dataURL;
   });
   // Exportar como vector

@@ -5,15 +5,15 @@ import { createPopupDismiss } from '../_shared/popup-dismiss.js';
 import '../actions/button.js';
 
 /**
- * <is-popconfirm> — Web Component (vanilla, zero dependencies).
+ * <iswc-popconfirm> — Web Component (vanilla, zero dependencies).
  *
  * Cuadro de confirmación emergente anclado a un disparador. Sin modal de fondo.
  *
- *   <is-button id="trigger">Borrar</is-button>
- *   <is-popconfirm for="trigger" message="¿Seguro?">
- *     <is-button slot="confirm" color="danger">Sí</is-button>
- *     <is-button slot="cancel">No</is-button>
- *   </is-popconfirm>
+ *   <iswc-button id="trigger">Borrar</iswc-button>
+ *   <iswc-popconfirm for="trigger" message="¿Seguro?">
+ *     <iswc-button slot="confirm" color="danger">Sí</iswc-button>
+ *     <iswc-button slot="cancel">No</iswc-button>
+ *   </iswc-popconfirm>
  *
  * Atributos
  *   for          string — id del trigger element.
@@ -28,10 +28,10 @@ import '../actions/button.js';
  *   cancel  — slot del botón de cancelar.
  *
  * Eventos
- *   is-popconfirm-show  detail: { trigger }
- *   is-popconfirm-hide  detail: { trigger }
- *   is-popconfirm-confirm detail: { trigger }
- *   is-popconfirm-cancel detail: { trigger }
+ *   iswc-popconfirm-show  detail: { trigger }
+ *   iswc-popconfirm-hide  detail: { trigger }
+ *   iswc-popconfirm-confirm detail: { trigger }
+ *   iswc-popconfirm-cancel detail: { trigger }
  */
 (() => {
   const TEMPLATE = document.createElement('template');
@@ -40,8 +40,8 @@ import '../actions/button.js';
       <div class="arrow" part="arrow"></div>
       <div class="message" part="message"><slot name="message"></slot></div>
       <div class="actions" part="actions">
-        <span class="cancel-wrap"><slot name="cancel"><is-button variant="text" color="neutral" class="cancel" data-popconfirm-cancel>Cancelar</is-button></slot></span>
-        <span class="confirm-wrap"><slot name="confirm"><is-button color="brand" class="confirm" data-popconfirm-confirm>Aceptar</is-button></slot></span>
+        <span class="cancel-wrap"><slot name="cancel"><iswc-button variant="text" color="neutral" class="cancel" data-popconfirm-cancel>Cancelar</iswc-button></slot></span>
+        <span class="confirm-wrap"><slot name="confirm"><iswc-button color="brand" class="confirm" data-popconfirm-confirm>Aceptar</iswc-button></slot></span>
       </div>
     </div>
   `;
@@ -53,7 +53,7 @@ import '../actions/button.js';
     'top-start', 'top-end', 'bottom-start', 'bottom-end',
   ];
 
-  class IsPopconfirm extends ElementBase {
+  class IswcPopconfirm extends ElementBase {
     /** Personalización por atributo (ver `core/attrs.ts`). */
     static styleAttrs = {
     bg: { prop: '--iswc-popconfirm-bg', onlyColorValues: true },
@@ -75,11 +75,11 @@ import '../actions/button.js';
     #restoreFocus: HTMLElement | null = null;
 
     /**
-     * Ciclo "abierto" compartido con is-dropdown / is-context-menu
+     * Ciclo "abierto" compartido con iswc-dropdown / iswc-context-menu
      * (_shared/popup-dismiss.js): Escape + reposicionado en scroll/resize.
      * El cierre por click fuera sigue siendo propio (ver #onDocClick más
      * abajo) porque hay que EXCLUIR el trigger externo — igual que
-     * is-dropdown no le pasa `onOutside` porque resuelve el suyo con el
+     * iswc-dropdown no le pasa `onOutside` porque resuelve el suyo con el
      * backdrop del <dialog>.
      */
     #dismiss = createPopupDismiss(this, {
@@ -158,7 +158,7 @@ import '../actions/button.js';
       if (active instanceof HTMLElement) this.#restoreFocus = active;
       this.setAttribute('open', '');
       this.#show();
-      emit(this, 'is-popconfirm-show', { trigger });
+      emit(this, 'iswc-popconfirm-show', { trigger });
     }
 
     hide() {
@@ -175,14 +175,14 @@ import '../actions/button.js';
       } else if (this.#trigger && document.contains(this.#trigger)) {
         try { this.#trigger.focus({ preventScroll: true }); } catch { this.#trigger.focus(); }
       }
-      emit(this, 'is-popconfirm-hide', { trigger: this.#trigger });
+      emit(this, 'iswc-popconfirm-hide', { trigger: this.#trigger });
     }
 
     #show() {
       this.#popup.style.display = 'block';
       this.#popup.setAttribute('aria-hidden', 'false');
       // g07 (Cat 24): al abrir, foco al primer focusable del popup. Se hace
-      // tras el layout (rAF) para que el popup esté pintado y los is-button
+      // tras el layout (rAF) para que el popup esté pintado y los iswc-button
       // hayan completado su upgrade.
       requestAnimationFrame(() => {
         this.#reposition();
@@ -197,7 +197,7 @@ import '../actions/button.js';
     #focusFirst() {
       const root = this.#pop;
       if (!root) return;
-      const sel = 'button, [href], input, select, textarea, is-button, is-input, [tabindex]:not([tabindex="-1"])';
+      const sel = 'button, [href], input, select, textarea, iswc-button, iswc-input, [tabindex]:not([tabindex="-1"])';
       const visit = (scope: ParentNode): HTMLElement | null => {
         const direct = scope.querySelectorAll<HTMLElement>(sel);
         for (const el of Array.from(direct)) {
@@ -217,7 +217,7 @@ import '../actions/button.js';
       };
       const target = visit(root);
       if (!target) return;
-      // Para is-button / is-input, el foco debe ir al <button>/<input> interno.
+      // Para iswc-button / iswc-input, el foco debe ir al <button>/<input> interno.
       const inner = (target as HTMLElement & { shadowRoot?: ShadowRoot | null }).shadowRoot
         ?.querySelector<HTMLElement>('button, input, textarea, [tabindex]:not([tabindex="-1"])');
       try {
@@ -309,11 +309,11 @@ import '../actions/button.js';
       this.#pop.addEventListener('click', (e: Event) => {
         const target = e.target as Element | null;
         if (target?.closest('[data-popconfirm-confirm]')) {
-          emit(this, 'is-popconfirm-confirm', { trigger: this.#trigger });
+          emit(this, 'iswc-popconfirm-confirm', { trigger: this.#trigger });
           this.hide();
         }
         if (target?.closest('[data-popconfirm-cancel]')) {
-          emit(this, 'is-popconfirm-cancel', { trigger: this.#trigger });
+          emit(this, 'iswc-popconfirm-cancel', { trigger: this.#trigger });
           this.hide();
         }
       });
@@ -330,5 +330,5 @@ import '../actions/button.js';
     }
   }
 
-  defineElement('is-popconfirm', IsPopconfirm, 'IsPopconfirm');
+  defineElement('iswc-popconfirm', IswcPopconfirm, 'IswcPopconfirm');
 })();

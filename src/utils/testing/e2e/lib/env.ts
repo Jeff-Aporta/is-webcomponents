@@ -86,7 +86,7 @@ export const ENV: ConfigE2E = {
   puerto: Number(o('E2E_PORT', '0')),
   host: o('E2E_HOST', '127.0.0.1'),
   sweep: o('E2E_SWEEP',
-    'is-code,is-component-diagram,is-flowchart,is-er-diagram,is-bar-chart,is-cdn-snippet,is-progress-bar,is-button,is-input,is-icon,is-confirm-modal,is-split-panel')
+    'iswc-code,iswc-component-diagram,iswc-flowchart,iswc-er-diagram,iswc-bar-chart,iswc-cdn-snippet,iswc-progress-bar,iswc-button,iswc-input,iswc-icon,iswc-confirm-modal,iswc-split-panel')
     .split(',').map((s) => s.trim()).filter(Boolean),
 };
 

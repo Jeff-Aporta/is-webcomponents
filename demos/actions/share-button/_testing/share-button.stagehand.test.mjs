@@ -13,7 +13,7 @@ test('stagehand: la página expone data-share-button-ready y 3 botones', async (
   const page = await browser.newPage();
   await page.goto(URL_DEMO, { waitUntil: 'domcontentloaded' });
   await page.waitForSelector('html[data-share-button-ready]');
-  const n = await page.evaluate(() => document.querySelectorAll('is-share-button').length);
+  const n = await page.evaluate(() => document.querySelectorAll('iswc-share-button').length);
   assert.equal(n, 3);
   await page.close();
 });
@@ -27,16 +27,16 @@ test('stagehand: click en s2 llama a navigator.share o al fallback', async () =>
     });
   });
   await page.goto(URL_DEMO, { waitUntil: 'domcontentloaded' });
-  await page.waitForSelector('is-share-button:defined');
+  await page.waitForSelector('iswc-share-button:defined');
   await page.evaluate(() => {
     window.__share = null;
-    document.getElementById('s2').addEventListener('is-share', (e) => { window.__share = e.detail; });
+    document.getElementById('s2').addEventListener('iswc-share', (e) => { window.__share = e.detail; });
   });
-  await page.click('is-share-button#s2 is-button');
-  // El share-button es un is-button interno
+  await page.click('iswc-share-button#s2 iswc-button');
+  // El share-button es un iswc-button interno
   await page.waitForTimeout(150);
   const detail = await page.evaluate(() => window.__share);
-  assert.ok(detail, 'is-share debe haberse emitido');
+  assert.ok(detail, 'iswc-share debe haberse emitido');
   await page.close();
 });
 
@@ -49,8 +49,8 @@ test('stagehand: el log registra los eventos en orden', async () => {
     });
   });
   await page.goto(URL_DEMO, { waitUntil: 'domcontentloaded' });
-  await page.waitForSelector('is-share-button:defined');
-  await page.click('is-share-button#s1 is-button');
+  await page.waitForSelector('iswc-share-button:defined');
+  await page.click('iswc-share-button#s1 iswc-button');
   await page.waitForTimeout(120);
   const text = await page.evaluate(() => document.getElementById('log').textContent);
   assert.match(text, /share/);
@@ -60,9 +60,9 @@ test('stagehand: el log registra los eventos en orden', async () => {
 test('stagehand: click en disabled no hace nada', async () => {
   const page = await browser.newPage();
   await page.goto(URL_DEMO, { waitUntil: 'domcontentloaded' });
-  await page.waitForSelector('is-share-button[disabled]:defined');
+  await page.waitForSelector('iswc-share-button[disabled]:defined');
   const beforeText = await page.evaluate(() => document.getElementById('log').textContent);
-  await page.click('is-share-button#s3 is-button');
+  await page.click('iswc-share-button#s3 iswc-button');
   await page.waitForTimeout(80);
   const afterText = await page.evaluate(() => document.getElementById('log').textContent);
   assert.equal(beforeText, afterText, 'el log no debe cambiar tras click en disabled');
@@ -72,7 +72,7 @@ test('stagehand: click en disabled no hace nada', async () => {
 test('stagehand: cada botón tiene su propio title/url/disabled en el DOM', async () => {
   const page = await browser.newPage();
   await page.goto(URL_DEMO, { waitUntil: 'domcontentloaded' });
-  await page.waitForSelector('is-share-button:defined');
+  await page.waitForSelector('iswc-share-button:defined');
   const info = await page.evaluate(() => {
     return {
       s1: {
@@ -101,8 +101,8 @@ test('stagehand: prefers-reduced-motion no afecta el comportamiento', async () =
     });
   });
   await page.goto(URL_DEMO, { waitUntil: 'domcontentloaded' });
-  await page.waitForSelector('is-share-button:defined');
-  await page.click('is-share-button#s1 is-button');
+  await page.waitForSelector('iswc-share-button:defined');
+  await page.click('iswc-share-button#s1 iswc-button');
   await page.waitForTimeout(120);
   const ok = await page.evaluate(() => /share/.test(document.getElementById('log').textContent));
   assert.equal(ok, true);

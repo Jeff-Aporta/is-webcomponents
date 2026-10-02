@@ -1,5 +1,5 @@
 /**
- * rating.test.ts — Tests exhaustivos de <is-rating>.
+ * rating.test.ts — Tests exhaustivos de <iswc-rating>.
  */
 
 import test from 'node:test';
@@ -11,13 +11,13 @@ import {
   esFormAssociated,
 } from './_helpers.js';
 
-const TAG = 'is-rating';
+const TAG = 'iswc-rating';
 const src = leerComponente(TAG);
 
 test('rating: archivo y registro', () => {
   assert.ok(src.length > 500);
   assert.ok(existeCss(TAG));
-  assert.ok(/defineElement\s*\(\s*['"`]is-rating['"`]/.test(src));
+  assert.ok(/defineElement\s*\(\s*['"`]iswc-rating['"`]/.test(src));
 });
 
 test('rating: atributos observados', () => {
@@ -26,20 +26,20 @@ test('rating: atributos observados', () => {
                    'icon', 'empty-icon', 'highlight-selected-only', 'color',
                    'label-format', 'show-label', 'clearable', 'disabled',
                    'readonly', 'required', 'label']) {
-    assert.ok(obs.includes(a), `<is-rating> debe observar "${a}"`);
+    assert.ok(obs.includes(a), `<iswc-rating> debe observar "${a}"`);
   }
 });
 
-test('rating: eventos (is-change, is-hover)', () => {
+test('rating: eventos (iswc-change, iswc-hover)', () => {
   const evs = eventosEmitidos(src);
-  for (const e of ['is-change', 'is-hover']) {
-    assert.ok(evs.includes(e), `<is-rating> debe emitir "${e}"`);
+  for (const e of ['iswc-change', 'iswc-hover']) {
+    assert.ok(evs.includes(e), `<iswc-rating> debe emitir "${e}"`);
   }
 });
 
 test('rating: precision enum (1|0.5|0.25|0.1)', () => {
   // La doc promete 1 (default) | 0.5 | 0.25 | 0.1; verificamos que los valores aparecen.
-  assert.ok(/precision/.test(src), '<is-rating> debe declarar el atributo precision');
+  assert.ok(/precision/.test(src), '<iswc-rating> debe declarar el atributo precision');
   assert.ok(/0\.5/.test(src), 'precision debe aceptar 0.5');
   assert.ok(/0\.25/.test(src), 'precision debe aceptar 0.25');
   assert.ok(/0\.1/.test(src), 'precision debe aceptar 0.1');
@@ -71,5 +71,5 @@ test('rating: form-associated', () => {
 test('rating: preview JSON', () => {
   const prev = leerPreview(TAG);
   assert.ok(prev);
-  assert.equal(prev!['$schema'], 'is-preview/v1');
+  assert.equal(prev!['$schema'], 'iswc-preview/v1');
 });

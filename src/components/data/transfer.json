@@ -1,11 +1,11 @@
 {
-  "$schema": "is-preview/v1",
-  "tag": "is-transfer",
+  "$schema": "iswc-preview/v1",
+  "tag": "iswc-transfer",
   "category": "data",
-  "title": "<is-transfer>",
+  "title": "<iswc-transfer>",
   "titleHtml": true,
-  "description": "Documentación y demos de is-transfer / is-transfer-item de InSoft.",
-  "storageKey": "docs-is-transfer",
+  "description": "Documentación y demos de iswc-transfer / iswc-transfer-item de InSoft.",
+  "storageKey": "docs-iswc-transfer",
   "sections": [
     {
       "id": "intro",
@@ -14,11 +14,11 @@
       "blocks": [
         {
           "kind": "demo",
-          "html": "<is-transfer id=\"tr1\" source-title=\"Disponibles\" target-title=\"Asignados\" searchable>\r\n            <is-transfer-item value=\"a\">Alpha</is-transfer-item>\r\n            <is-transfer-item value=\"b\" selected>Beta</is-transfer-item>\r\n            <is-transfer-item value=\"c\">Gamma</is-transfer-item>\r\n            <is-transfer-item value=\"d\">Delta</is-transfer-item>\r\n            <is-transfer-item value=\"e\">Epsilon</is-transfer-item>\r\n            <is-transfer-item value=\"f\">Zeta</is-transfer-item>\r\n            <is-transfer-item value=\"g\">Eta</is-transfer-item>\r\n            <is-transfer-item value=\"h\">Theta</is-transfer-item>\r\n          </is-transfer>\r\n          <p id=\"tr1Log\">Seleccionados: <code class=\"code\">b</code></p>"
+          "html": "<iswc-transfer id=\"tr1\" source-title=\"Disponibles\" target-title=\"Asignados\" searchable>\r\n            <iswc-transfer-item value=\"a\">Alpha</iswc-transfer-item>\r\n            <iswc-transfer-item value=\"b\" selected>Beta</iswc-transfer-item>\r\n            <iswc-transfer-item value=\"c\">Gamma</iswc-transfer-item>\r\n            <iswc-transfer-item value=\"d\">Delta</iswc-transfer-item>\r\n            <iswc-transfer-item value=\"e\">Epsilon</iswc-transfer-item>\r\n            <iswc-transfer-item value=\"f\">Zeta</iswc-transfer-item>\r\n            <iswc-transfer-item value=\"g\">Eta</iswc-transfer-item>\r\n            <iswc-transfer-item value=\"h\">Theta</iswc-transfer-item>\r\n          </iswc-transfer>\r\n          <p id=\"tr1Log\">Seleccionados: <code class=\"code\">b</code></p>"
         },
         {
           "kind": "code",
-          "code": "<is-transfer searchable>\n  <is-transfer-item value=\"a\">Alpha</is-transfer-item>\n  <is-transfer-item value=\"b\" selected>Beta</is-transfer-item>\n  <is-transfer-item value=\"c\">Gamma</is-transfer-item>\n  …\n</is-transfer>"
+          "code": "<iswc-transfer searchable>\n  <iswc-transfer-item value=\"a\">Alpha</iswc-transfer-item>\n  <iswc-transfer-item value=\"b\" selected>Beta</iswc-transfer-item>\n  <iswc-transfer-item value=\"c\">Gamma</iswc-transfer-item>\n  …\n</iswc-transfer>"
         }
       ]
     },
@@ -29,7 +29,7 @@
       "blocks": [
         {
           "kind": "demo",
-          "html": "<is-transfer max-target=\"3\" source-title=\"Suscriptores\" target-title=\"Newsletter (máx 3)\" searchable>\r\n            <is-transfer-item value=\"a\">Alice</is-transfer-item>\r\n            <is-transfer-item value=\"b\">Bob</is-transfer-item>\r\n            <is-transfer-item value=\"c\" selected>Carol</is-transfer-item>\r\n            <is-transfer-item value=\"d\">David</is-transfer-item>\r\n            <is-transfer-item value=\"e\">Eve</is-transfer-item>\r\n            <is-transfer-item value=\"f\">Frank</is-transfer-item>\r\n          </is-transfer>"
+          "html": "<iswc-transfer max-target=\"3\" source-title=\"Suscriptores\" target-title=\"Newsletter (máx 3)\" searchable>\r\n            <iswc-transfer-item value=\"a\">Alice</iswc-transfer-item>\r\n            <iswc-transfer-item value=\"b\">Bob</iswc-transfer-item>\r\n            <iswc-transfer-item value=\"c\" selected>Carol</iswc-transfer-item>\r\n            <iswc-transfer-item value=\"d\">David</iswc-transfer-item>\r\n            <iswc-transfer-item value=\"e\">Eve</iswc-transfer-item>\r\n            <iswc-transfer-item value=\"f\">Frank</iswc-transfer-item>\r\n          </iswc-transfer>"
         }
       ]
     },
@@ -40,7 +40,7 @@
       "blocks": [
         {
           "kind": "demo",
-          "html": "<is-transfer source-title=\"Permisos\" target-title=\"Asignados\">\r\n            <is-transfer-item value=\"read\">read</is-transfer-item>\r\n            <is-transfer-item value=\"write\" selected>write</is-transfer-item>\r\n            <is-transfer-item value=\"delete\" disabled>delete</is-transfer-item>\r\n            <is-transfer-item value=\"admin\">admin</is-transfer-item>\r\n          </is-transfer>"
+          "html": "<iswc-transfer source-title=\"Permisos\" target-title=\"Asignados\">\r\n            <iswc-transfer-item value=\"read\">read</iswc-transfer-item>\r\n            <iswc-transfer-item value=\"write\" selected>write</iswc-transfer-item>\r\n            <iswc-transfer-item value=\"delete\" disabled>delete</iswc-transfer-item>\r\n            <iswc-transfer-item value=\"admin\">admin</iswc-transfer-item>\r\n          </iswc-transfer>"
         }
       ]
     },
@@ -51,7 +51,7 @@
       "blocks": [
         {
           "kind": "demo",
-          "html": "<is-transfer without-buttons without-headings searchable>\r\n            <is-transfer-item value=\"rojo\">Rojo</is-transfer-item>\r\n            <is-transfer-item value=\"verde\" selected>Verde</is-transfer-item>\r\n            <is-transfer-item value=\"azul\">Azul</is-transfer-item>\r\n            <is-transfer-item value=\"amarillo\">Amarillo</is-transfer-item>\r\n          </is-transfer>"
+          "html": "<iswc-transfer without-buttons without-headings searchable>\r\n            <iswc-transfer-item value=\"rojo\">Rojo</iswc-transfer-item>\r\n            <iswc-transfer-item value=\"verde\" selected>Verde</iswc-transfer-item>\r\n            <iswc-transfer-item value=\"azul\">Azul</iswc-transfer-item>\r\n            <iswc-transfer-item value=\"amarillo\">Amarillo</iswc-transfer-item>\r\n          </iswc-transfer>"
         }
       ]
     },
@@ -61,7 +61,7 @@
       "blocks": [
         {
           "kind": "html",
-          "html": "<h3><code class=\"code\">&lt;is-transfer&gt;</code></h3>"
+          "html": "<h3><code class=\"code\">&lt;iswc-transfer&gt;</code></h3>"
         },
         {
           "kind": "table",
@@ -112,7 +112,7 @@
         },
         {
           "kind": "html",
-          "html": "<h3><code class=\"code\">&lt;is-transfer-item&gt;</code></h3>"
+          "html": "<h3><code class=\"code\">&lt;iswc-transfer-item&gt;</code></h3>"
         },
         {
           "kind": "table",
@@ -155,7 +155,7 @@
           ],
           "rows": [
             [
-              "<code>is-transfer-change</code>",
+              "<code>iswc-transfer-change</code>",
               "Cambia selección. <code>detail: { item, source, target, values }</code>."
             ]
           ]

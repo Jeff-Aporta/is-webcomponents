@@ -1,4 +1,4 @@
-// format-number.test.mjs — tests funcionales de <is-format-number>.
+// format-number.test.mjs — tests funcionales de <iswc-format-number>.
 //
 // Cubre:
 //   - smoke: 12 instancias renderizan texto no vacío.
@@ -22,7 +22,7 @@ tests.push({
     await page.goto(URL, { waitUntil: 'domcontentloaded' });
     await waitReady(page, 'data-format-number-ready');
     const r = await page.evaluate(() => {
-      const all = [...document.querySelectorAll('main is-format-number')];
+      const all = [...document.querySelectorAll('main iswc-format-number')];
       return all.map((el) => el.shadowRoot.querySelector('span')?.textContent ?? '');
     });
     assert.equal(r.length, 12, `esperaba 12 instancias, hay ${r.length}`);
@@ -37,7 +37,7 @@ tests.push({
     await page.goto(URL, { waitUntil: 'domcontentloaded' });
     await waitReady(page, 'data-format-number-ready');
     const r = await page.evaluate(() => {
-      const el = [...document.querySelectorAll('main is-format-number')].find((e) => e.getAttribute('value') === '1234.5' && !e.getAttribute('locale'));
+      const el = [...document.querySelectorAll('main iswc-format-number')].find((e) => e.getAttribute('value') === '1234.5' && !e.getAttribute('locale'));
       return el?.shadowRoot.querySelector('span')?.textContent ?? '';
     });
     // es-CO: "1234,5" o en-US: "1,234.5" dependiendo del locale default del navegador.
@@ -53,7 +53,7 @@ tests.push({
     await page.goto(URL, { waitUntil: 'domcontentloaded' });
     await waitReady(page, 'data-format-number-ready');
     const r = await page.evaluate(() => {
-      const el = [...document.querySelectorAll('main is-format-number')].find((e) => e.getAttribute('value') === '1234567' && e.getAttribute('minimum-fraction-digits') === '2');
+      const el = [...document.querySelectorAll('main iswc-format-number')].find((e) => e.getAttribute('value') === '1234567' && e.getAttribute('minimum-fraction-digits') === '2');
       return el?.shadowRoot.querySelector('span')?.textContent ?? '';
     });
     // 1234567.00 (es-CO) o 1,234,567.00 (en-US) — pero siempre 2 decimales.
@@ -67,7 +67,7 @@ tests.push({
     await page.goto(URL, { waitUntil: 'domcontentloaded' });
     await waitReady(page, 'data-format-number-ready');
     const r = await page.evaluate(() => {
-      const el = [...document.querySelectorAll('main is-format-number')].find((e) => e.getAttribute('value') === '0.42' && e.getAttribute('type') === 'percent');
+      const el = [...document.querySelectorAll('main iswc-format-number')].find((e) => e.getAttribute('value') === '0.42' && e.getAttribute('type') === 'percent');
       return el?.shadowRoot.querySelector('span')?.textContent ?? '';
     });
     assert.match(r, /%/, `debe contener % (era "${r}")`);
@@ -81,7 +81,7 @@ tests.push({
     await page.goto(URL, { waitUntil: 'domcontentloaded' });
     await waitReady(page, 'data-format-number-ready');
     const r = await page.evaluate(() => {
-      const el = [...document.querySelectorAll('main is-format-number')].find((e) => e.getAttribute('value') === '99.5' && e.getAttribute('type') === 'currency' && e.getAttribute('currency') === 'USD');
+      const el = [...document.querySelectorAll('main iswc-format-number')].find((e) => e.getAttribute('value') === '99.5' && e.getAttribute('type') === 'currency' && e.getAttribute('currency') === 'USD');
       return el?.shadowRoot.querySelector('span')?.textContent ?? '';
     });
     assert.match(r, /\$/, `USD debe llevar $ (era "${r}")`);
@@ -95,7 +95,7 @@ tests.push({
     await page.goto(URL, { waitUntil: 'domcontentloaded' });
     await waitReady(page, 'data-format-number-ready');
     const r = await page.evaluate(() => {
-      const el = [...document.querySelectorAll('main is-format-number')].find((e) => e.getAttribute('value') === '99.5' && e.getAttribute('type') === 'currency' && e.getAttribute('currency') === 'COP');
+      const el = [...document.querySelectorAll('main iswc-format-number')].find((e) => e.getAttribute('value') === '99.5' && e.getAttribute('type') === 'currency' && e.getAttribute('currency') === 'COP');
       return el?.shadowRoot.querySelector('span')?.textContent ?? '';
     });
     assert.match(r, /(COP|\$)/, `COP debe llevar COP o $ (era "${r}")`);
@@ -108,7 +108,7 @@ tests.push({
     await page.goto(URL, { waitUntil: 'domcontentloaded' });
     await waitReady(page, 'data-format-number-ready');
     const r = await page.evaluate(() => {
-      const el = [...document.querySelectorAll('main is-format-number')].find((e) => e.getAttribute('value') === '42' && e.getAttribute('type') === 'unit');
+      const el = [...document.querySelectorAll('main iswc-format-number')].find((e) => e.getAttribute('value') === '42' && e.getAttribute('type') === 'unit');
       return el?.shadowRoot.querySelector('span')?.textContent ?? '';
     });
     assert.match(r, /(°|celsius)/i, `unit debe llevar ° o "celsius" (era "${r}")`);
@@ -121,7 +121,7 @@ tests.push({
     await page.goto(URL, { waitUntil: 'domcontentloaded' });
     await waitReady(page, 'data-format-number-ready');
     const r = await page.evaluate(() => {
-      const el = [...document.querySelectorAll('main is-format-number')].find((e) => e.getAttribute('value') === '7' && e.getAttribute('pad-length') === '4');
+      const el = [...document.querySelectorAll('main iswc-format-number')].find((e) => e.getAttribute('value') === '7' && e.getAttribute('pad-length') === '4');
       return el?.shadowRoot.querySelector('span')?.textContent ?? '';
     });
     // "7" → debe tener exactamente 4 caracteres y empezar por ceros.
@@ -136,7 +136,7 @@ tests.push({
     await page.goto(URL, { waitUntil: 'domcontentloaded' });
     await waitReady(page, 'data-format-number-ready');
     const r = await page.evaluate(() => {
-      const el = [...document.querySelectorAll('main is-format-number')].find((e) => e.getAttribute('value') === '42' && e.getAttribute('pad-length') === '6');
+      const el = [...document.querySelectorAll('main iswc-format-number')].find((e) => e.getAttribute('value') === '42' && e.getAttribute('pad-length') === '6');
       return el?.shadowRoot.querySelector('span')?.textContent ?? '';
     });
     assert.equal(r.length, 6, `debe tener exactamente 6 caracteres (era "${r}" de longitud ${r.length})`);
@@ -150,7 +150,7 @@ tests.push({
     await page.goto(URL, { waitUntil: 'domcontentloaded' });
     await waitReady(page, 'data-format-number-ready');
     const r = await page.evaluate(() => {
-      const all = [...document.querySelectorAll('main is-format-number')];
+      const all = [...document.querySelectorAll('main iswc-format-number')];
       const co = all.find((e) => e.getAttribute('value') === '1234' && e.getAttribute('locale') === 'es-CO');
       const us = all.find((e) => e.getAttribute('value') === '1234' && e.getAttribute('locale') === 'en-US');
       return {

@@ -3,7 +3,7 @@
 <head>
 <meta charset="utf-8" />
 <meta name="viewport" content="width=device-width, initial-scale=1" />
-<title>Demo — <is-data-grid> · is-webcomponents</title>
+<title>Demo — <iswc-data-grid> · is-webcomponents</title>
 <meta name="description" content="Data grid estilo MUI X: columnas tipadas, multi-orden, filtros Y/O, quick filter, paginación, edición, agrupación y pivot." />
 <style>
   html, body { margin: 0; padding: 0; min-height: 100%; background: #0c1118; color: #e2e8f0; font-family: ui-sans-serif, system-ui, sans-serif; }
@@ -14,8 +14,8 @@
   main { padding: 20px; display: grid; gap: 20px; }
   section { background: #0f1620; border: 1px solid rgba(255,255,255,0.1); border-radius: 8px; padding: 16px; }
   section h2 { font-size: 11px; text-transform: uppercase; letter-spacing: 0.08em; margin: 0 0 12px 0; color: #94a3b8; }
-  is-data-grid:not(:defined) { visibility: hidden; }
-  is-data-grid { display: block; --iswc-grid-height: 280px; min-height: 280px; }
+  iswc-data-grid:not(:defined) { visibility: hidden; }
+  iswc-data-grid { display: block; --iswc-grid-height: 280px; min-height: 280px; }
   .log { font: 11px ui-monospace, Menlo, Consolas, monospace; background: rgba(0,0,0,0.3); padding: 8px; border-radius: 4px; min-height: 40px; max-height: 100px; overflow: auto; color: #94a3b8; margin-top: 8px; }
   footer { padding: 12px 20px; border-top: 1px solid rgba(255,255,255,0.1); background: #0f1620; font-size: 11px; color: #94a3b8; }
   footer code { background: rgba(255,255,255,0.06); padding: 1px 5px; border-radius: 3px; font: 11px ui-monospace, Menlo, Consolas, monospace; }
@@ -27,8 +27,8 @@
   cssLink.href = '../../../dist/cdn/data/data-grid.min.css';
   document.head.appendChild(cssLink);
 
-  await import('../../../dist/cdn/data/data-grid.min.js?h=g0sdz6');
-  await customElements.whenDefined('is-data-grid');
+  await import('../../../dist/cdn/data/data-grid.min.js?h=5xdy8y');
+  await customElements.whenDefined('iswc-data-grid');
 
   const sampleRows = [
     { id: 'r1', name: 'Ana López',     role: 'Dev',     hired: '2024-03-12', gross: 4200, costs: 1200, active: true,  city: 'Bogotá' },
@@ -52,7 +52,7 @@
     { field: 'hired', headerName: 'Alta', type: 'date', width: 110 },
     { field: 'active', headerName: 'Activo', type: 'boolean', width: 80 },
   ];
-  const g1 = document.createElement('is-data-grid');
+  const g1 = document.createElement('iswc-data-grid');
   g1.setAttribute('show-toolbar', '');
   g1.setAttribute('pagination', '');
   g1.setAttribute('page-size', '5');
@@ -64,7 +64,7 @@
   g1.rows = sampleRows;
 
   // ── (2) Sin toolbar, sólo grid puro (8 filas visibles).
-  const g2 = document.createElement('is-data-grid');
+  const g2 = document.createElement('iswc-data-grid');
   g2.setAttribute('show-toolbar', 'false');
   g2.id = 'g2';
   document.getElementById('plain').appendChild(g2);
@@ -72,7 +72,7 @@
   g2.rows = sampleRows;
 
   // ── (3) Sólo 3 columnas y columnas con renderCell custom.
-  const g3 = document.createElement('is-data-grid');
+  const g3 = document.createElement('iswc-data-grid');
   g3.setAttribute('show-toolbar', 'false');
   const cols3 = [
     { field: 'name', headerName: 'Nombre', flex: 1 },
@@ -91,23 +91,23 @@
 
   // ── Logging
   function attachLog(el, logEl) {
-    el.addEventListener('is-cell-click', (e) => {
+    el.addEventListener('iswc-cell-click', (e) => {
       const line = `cell-click id=${e.detail?.id} field=${e.detail?.field}`;
       logEl.textContent = `${line}\n${logEl.textContent || ''}`.slice(0, 500);
       logEl.dataset.lastId = String(e.detail?.id ?? '');
       logEl.dataset.lastField = String(e.detail?.field ?? '');
     });
-    el.addEventListener('is-sort-change', (e) => {
+    el.addEventListener('iswc-sort-change', (e) => {
       const line = `sort ${JSON.stringify(e.detail?.sortModel || [])}`;
       logEl.textContent = `${line}\n${logEl.textContent || ''}`.slice(0, 500);
     });
-    el.addEventListener('is-page-change', (e) => {
+    el.addEventListener('iswc-page-change', (e) => {
       const line = `page ${e.detail?.page}/${e.detail?.pageSize}`;
       logEl.textContent = `${line}\n${logEl.textContent || ''}`.slice(0, 500);
       logEl.dataset.lastPage = String(e.detail?.page ?? '');
       logEl.dataset.lastPageSize = String(e.detail?.pageSize ?? '');
     });
-    el.addEventListener('is-select', (e) => {
+    el.addEventListener('iswc-select', (e) => {
       const line = `select ids=${(e.detail?.ids || []).length}`;
       logEl.textContent = `${line}\n${logEl.textContent || ''}`.slice(0, 500);
       logEl.dataset.lastSelected = String((e.detail?.ids || []).length);
@@ -121,7 +121,7 @@
 </head>
 <body>
 <header>
-  <h1>Demo — <code>&lt;is-data-grid&gt;</code></h1>
+  <h1>Demo — <code>&lt;iswc-data-grid&gt;</code></h1>
   <p>Data grid estilo MUI X: columnas tipadas, multi-orden, filtros Y/O, quick filter, paginación, edición, agrupación y pivot.</p>
 </header>
 <main>
@@ -141,7 +141,7 @@
   </section>
 </main>
 <footer>
-  API: <code>grid.columns = [...]; grid.rows = [...]</code>. Eventos <code>is-cell-click</code>, <code>is-sort-change</code>, <code>is-page-change</code>, <code>is-select</code>.
+  API: <code>grid.columns = [...]; grid.rows = [...]</code>. Eventos <code>iswc-cell-click</code>, <code>iswc-sort-change</code>, <code>iswc-page-change</code>, <code>iswc-select</code>.
 </footer>
 </body>
 </html>

@@ -14,7 +14,7 @@ try {
   await page.waitForTimeout(200);
 
   const data = await page.evaluate(() => {
-    const hosts = [...document.querySelectorAll('is-block-layout')];
+    const hosts = [...document.querySelectorAll('iswc-block-layout')];
     return hosts.map((h, idx) => {
       const r = h.getBoundingClientRect();
       const clientw = parseFloat(h.style.getPropertyValue('--clientw')) || 0;

@@ -1,4 +1,4 @@
-// progress-bar.test.mjs — tests exhaustivos del demo is-progress-bar.
+// progress-bar.test.mjs — tests exhaustivos del demo iswc-progress-bar.
 // Cobertura: smoke + funcional (value, indeterminate, label, aria-valuenow)
 // + gap 1: prefers-reduced-motion debe neutralizar la animación indeterminate.
 import assert from 'node:assert/strict';
@@ -14,14 +14,14 @@ tests.push({
     await page.goto(URL, { waitUntil: 'domcontentloaded' });
     await waitReady(page, 'data-progress-bar-ready');
     const data = await page.evaluate(() => {
-      const all = document.querySelectorAll('is-progress-bar');
+      const all = document.querySelectorAll('iswc-progress-bar');
       return {
-        defined: !!customElements.get('is-progress-bar'),
+        defined: !!customElements.get('iswc-progress-bar'),
         count: all.length,
         allHaveRole: [...all].every((p) => p.shadowRoot.querySelector('[role="progressbar"]')),
       };
     });
-    assert.equal(data.defined, true, 'is-progress-bar debe estar definido');
+    assert.equal(data.defined, true, 'iswc-progress-bar debe estar definido');
     assert.ok(data.count >= 6, `esperaba >=6 progress-bars, hay ${data.count}`);
     assert.equal(data.allHaveRole, true, 'todos deben tener role=progressbar en shadow');
     await screenshot(page, 'progress-bar-smoke');
@@ -34,7 +34,7 @@ tests.push({
     await page.goto(URL, { waitUntil: 'domcontentloaded' });
     await waitReady(page, 'data-progress-bar-ready');
     const data = await page.evaluate(() => {
-      return [...document.querySelectorAll('is-progress-bar')]
+      return [...document.querySelectorAll('iswc-progress-bar')]
         .filter((p) => p.hasAttribute('value'))
         .map((p) => {
           const t = p.shadowRoot.querySelector('.track');
@@ -61,7 +61,7 @@ tests.push({
     await page.goto(URL, { waitUntil: 'domcontentloaded' });
     await waitReady(page, 'data-progress-bar-ready');
     const data = await page.evaluate(() => {
-      const el = document.createElement('is-progress-bar');
+      const el = document.createElement('iswc-progress-bar');
       document.body.appendChild(el);
       el.value = 150;
       const highWidth = el.shadowRoot.querySelector('.indicator').style.width;
@@ -81,19 +81,19 @@ tests.push({
     await page.goto(URL, { waitUntil: 'domcontentloaded' });
     await waitReady(page, 'data-progress-bar-ready');
     const data = await page.evaluate(() => {
-      const indet = document.querySelector('is-progress-bar[indeterminate]');
+      const indet = document.querySelector('iswc-progress-bar[indeterminate]');
       const t = indet.shadowRoot.querySelector('.track');
       const ind = indet.shadowRoot.querySelector('.indicator');
       return {
         ariaNow: t.getAttribute('aria-valuenow'),
         ariaText: t.getAttribute('aria-valuetext'),
-        indetClass: ind.classList.contains('is-indeterminate'),
+        indetClass: ind.classList.contains('iswc-indeterminate'),
         width: ind.style.width,
       };
     });
     assert.equal(data.ariaNow, null, `indeterminate no debe tener aria-valuenow (vimos "${data.ariaNow}")`);
     assert.match(data.ariaText, /cargando|loading/i, `aria-valuetext debe ser "Cargando" / "Loading" (vimos "${data.ariaText}")`);
-    assert.equal(data.indetClass, true, 'indicator debe tener clase is-indeterminate');
+    assert.equal(data.indetClass, true, 'indicator debe tener clase iswc-indeterminate');
     assert.equal(data.width, '', `width debe estar vacío en indeterminate (vimos "${data.width}")`);
   },
 });
@@ -104,7 +104,7 @@ tests.push({
     await page.goto(URL, { waitUntil: 'domcontentloaded' });
     await waitReady(page, 'data-progress-bar-ready');
     const data = await page.evaluate(() => {
-      const el = document.createElement('is-progress-bar');
+      const el = document.createElement('iswc-progress-bar');
       el.value = 50;
       el.label = 'Mi carga';
       document.body.appendChild(el);
@@ -127,7 +127,7 @@ tests.push({
     await page.goto(URL, { waitUntil: 'domcontentloaded' });
     await waitReady(page, 'data-progress-bar-ready');
     const data = await page.evaluate(() => {
-      const indet = document.querySelector('is-progress-bar[indeterminate]');
+      const indet = document.querySelector('iswc-progress-bar[indeterminate]');
       const ind = indet.shadowRoot.querySelector('.indicator');
       const cs = getComputedStyle(ind);
       return {
@@ -136,7 +136,7 @@ tests.push({
         animPlayState: cs.animationPlayState,
       };
     });
-    // Sin reduced-motion la animación es "is-progress-bar-indet 1.2s linear infinite"
+    // Sin reduced-motion la animación es "iswc-progress-bar-indet 1.2s linear infinite"
     // (o similar). Con reduced-motion debe quedar "none" o duración 0s.
     const isNeutralized =
       data.animName === 'none' ||
@@ -157,7 +157,7 @@ tests.push({
     await page.goto(URL, { waitUntil: 'domcontentloaded' });
     await waitReady(page, 'data-progress-bar-ready');
     const data = await page.evaluate(() => {
-      const indet = document.querySelector('is-progress-bar[indeterminate]');
+      const indet = document.querySelector('iswc-progress-bar[indeterminate]');
       const ind = indet.shadowRoot.querySelector('.indicator');
       const cs = getComputedStyle(ind);
       return {

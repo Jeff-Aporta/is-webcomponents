@@ -33,15 +33,15 @@ import {
 } from '../_shared/diagram-edit.js';
 import type { DiagramOverrides } from '../_shared/diagram-edit.js';
 /**
- * <is-flowchart> — diagrama de flujo en SVG, sin Mermaid.
+ * <iswc-flowchart> — diagrama de flujo en SVG, sin Mermaid.
  *
- * Configuración por JSON, igual que <is-sequence-diagram>:
+ * Configuración por JSON, igual que <iswc-sequence-diagram>:
  *
- *   <is-flowchart>
+ *   <iswc-flowchart>
  *     <script type="application/json">
  *       { "flowchart": { "direction": "TB", "nodes": [...], "edges": [...] } }
  *     </script>
- *   </is-flowchart>
+ *   </iswc-flowchart>
  *
  * Atributos: color (inline | viewer), open-on-click,
  *   mode (read | edit), persist (none | session | local — leído por
@@ -49,7 +49,7 @@ import type { DiagramOverrides } from '../_shared/diagram-edit.js';
  *   animation (tokens separados por espacio; default off).
  *   Token actual: `flow` — arista dashed brand animada detrás de la continua.
  * Propiedades: payload, spec, layout, turtle, hiddenGroups, animation
- * Eventos: is-render, is-turtle-state, is-open-viewer, is-toggle-group
+ * Eventos: iswc-render, iswc-turtle-state, iswc-open-viewer, iswc-toggle-group
  */
 
 const SVG_NS = 'http://www.w3.org/2000/svg';
@@ -90,7 +90,7 @@ function parseAnimationTokens(raw: string | null | undefined): string[] {
   return out;
 }
 
-class IsFlowchart extends DiagramElementBase {
+class IswcFlowchart extends DiagramElementBase {
   static get observedAttributes(): string[] {
     return [...DiagramElementBase.observedAttributes, 'mode', 'persist', 'storage-key', 'animation'];
   }
@@ -192,8 +192,8 @@ class IsFlowchart extends DiagramElementBase {
     const layout: FlowLayout = computeFlowchartLayout(visible, this.#overrides);
     this.layout = layout;
     this.#buildSvg(layout, theme);
-    this.wrap.classList.toggle('is-viewer', this.isViewer);
-    this.wrap.classList.toggle('is-editable', this.mode === 'edit');
+    this.wrap.classList.toggle('iswc-viewer', this.isViewer);
+    this.wrap.classList.toggle('iswc-editable', this.mode === 'edit');
     if (this.mode === 'edit') this.#installEditInteractions();
   }
 
@@ -242,10 +242,10 @@ class IsFlowchart extends DiagramElementBase {
       viewW: W,
       viewH: H,
       autoLoop: this.isViewer,
-      onState: (state: TurtleState) => emit(this, 'is-turtle-state', state),
+      onState: (state: TurtleState) => emit(this, 'iswc-turtle-state', state),
     });
 
-    emit(this, 'is-render', { layout, svg: this.svg });
+    emit(this, 'iswc-render', { layout, svg: this.svg });
   }
 
   #buildLegend(layout: FlowLayout, theme: DiagramTheme): void {
@@ -458,14 +458,14 @@ class IsFlowchart extends DiagramElementBase {
     if (this.isViewer) {
       const item = e.composedPath().find((x: EventTarget | null) => (x as HTMLElement | undefined)?.dataset?.groupId);
       if (item) {
-        emitCancelable(this, 'is-toggle-group', { id: (item as HTMLElement).dataset.groupId });
+        emitCancelable(this, 'iswc-toggle-group', { id: (item as HTMLElement).dataset.groupId });
       }
       return;
     }
     // El visor es opt-in: sin `open-on-click` el clic no hace nada y tampoco
-    // se anuncia `is-open-viewer`, que prometeria una apertura que no ocurre.
+    // se anuncia `iswc-open-viewer`, que prometeria una apertura que no ocurre.
     if (!this.hasAttribute('open-on-click')) return;
-    const ev = new CustomEvent('is-open-viewer', {
+    const ev = new CustomEvent('iswc-open-viewer', {
       bubbles: true, composed: true, cancelable: true, detail: { payload: this.payload },
     });
     this.dispatchEvent(ev);
@@ -568,14 +568,14 @@ class IsFlowchart extends DiagramElementBase {
     // Resalta el nodo y las aristas que lo tocan; atenúa el resto.
     for (const [nodeId, node] of this.#nodeNodes) {
       const active = nodeId === id;
-      node.g.classList.toggle('is-active', active);
-      node.g.classList.toggle('is-dim', !!id && !active);
+      node.g.classList.toggle('iswc-active', active);
+      node.g.classList.toggle('iswc-dim', !!id && !active);
       node.box.setAttribute('stroke-width', String(active ? 2.1 : 1.3));
     }
     for (const [, edge] of this.#edgeNodes) {
       const touches = !!id && (edge.e.from === id || edge.e.to === id);
-      edge.g.classList.toggle('is-active', touches);
-      edge.g.classList.toggle('is-dim', !!id && !touches);
+      edge.g.classList.toggle('iswc-active', touches);
+      edge.g.classList.toggle('iswc-dim', !!id && !touches);
     }
 
     this.#turtle?.setPaused(!!id);
@@ -600,10 +600,10 @@ class IsFlowchart extends DiagramElementBase {
   }
 }
 
-defineElement('is-flowchart', IsFlowchart, 'IsFlowchart');
+defineElement('iswc-flowchart', IswcFlowchart, 'IswcFlowchart');
 
-registerDiagramKind('flowchart', 'is-flowchart');
-registerDiagramKind('flow', 'is-flowchart');
-registerDiagramKind('graph', 'is-flowchart');
+registerDiagramKind('flowchart', 'iswc-flowchart');
+registerDiagramKind('flow', 'iswc-flowchart');
+registerDiagramKind('graph', 'iswc-flowchart');
 
-export { IsFlowchart };
+export { IswcFlowchart };

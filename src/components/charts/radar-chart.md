@@ -1,22 +1,22 @@
 ---
-tag: is-radar-chart
+tag: iswc-radar-chart
 tags:
-  - is-radar-chart
+  - iswc-radar-chart
 category: charts
 status: public
 source: ./radar-chart.js
 style: ./radar-chart.css
 preview: ./radar-chart.json
 ---
-# `<is-radar-chart>`
+# `<iswc-radar-chart>`
 
 ## Propósito
 
-Wrapper tipado de `<is-chart>` con `type` fijo en `radar`. Misma API
+Wrapper tipado de `<iswc-chart>` con `type` fijo en `radar`. Misma API
 de configuración Chart.js (`config` / `<script type="application/json">`);
 el atributo `type` no se cambia.
 
-Este módulo registra `<is-radar-chart>`.
+Este módulo registra `<iswc-radar-chart>`.
 
 ## Cuándo usarlo
 
@@ -25,7 +25,7 @@ de gráfica es siempre radar chart.
 
 ## Cuándo no usarlo
 
-Si el tipo puede cambiar en runtime, usar `<is-chart type="radar">`.
+Si el tipo puede cambiar en runtime, usar `<iswc-chart type="radar">`.
 No crear otro engine: hereda marks/engine de `chart.js`.
 
 ## Importación
@@ -37,7 +37,7 @@ import './radar-chart.js';
 ## Ejemplo mínimo
 
 ```html
-<is-radar-chart>
+<iswc-radar-chart>
   <script type="application/json">
   {
     "data": {
@@ -46,14 +46,14 @@ import './radar-chart.js';
     }
   }
   </script>
-</is-radar-chart>
+</iswc-radar-chart>
 ```
 
 ## API
 
 ### Atributos y propiedades
 
-Hereda de `<is-chart>` (ver [chart.md](./chart.md)). `type` queda fijado
+Hereda de `<iswc-chart>` (ver [chart.md](./chart.md)). `type` queda fijado
 en `radar` por la clase tipada.
 
 #### Atributos observados
@@ -95,9 +95,9 @@ en `radar` por la clase tipada.
 
 | Evento | detail | bubbles | composed | cancelable |
 | --- | --- | --- | --- | --- |
-| `is-render` | sí | sí | sí | no |
-| `is-turtle-state` | sí | sí | sí | no |
-| `is-open-viewer` | sí | sí | sí | sí |
+| `iswc-render` | sí | sí | sí | no |
+| `iswc-turtle-state` | sí | sí | sí | no |
+| `iswc-open-viewer` | sí | sí | sí | sí |
 
 ### Métodos y propiedades públicas
 
@@ -122,7 +122,7 @@ No expone.
 
 ### CSS custom properties
 
-Misma familia de tokens que `<is-chart>` (ver [chart.md](./chart.md)).
+Misma familia de tokens que `<iswc-chart>` (ver [chart.md](./chart.md)).
 
 ### Integración con formularios
 
@@ -132,7 +132,7 @@ No declara integración form-associated propia en este módulo.
 
 Documentación de cabecera preservada desde fuente:
 
-> `<is-radar-chart>` — wrapper tipado vía `defineTypedChart('is-radar-chart', 'radar', …)`.
+> `<iswc-radar-chart>` — wrapper tipado vía `defineTypedChart('iswc-radar-chart', 'radar', …)`.
 > Importa `./chart.js` y registra marks del tipo fijo.
 > Consumo compatible con Chart.js: `config` o `<script type="application/json">`
 > hijo con forma `{ data: { labels, datasets }, options }` (`type` lo fija el tag).
@@ -145,16 +145,16 @@ Documentación de cabecera preservada desde fuente:
 - [`../_shared/svg-chart-engine.js`](../_shared/svg-chart-engine.js)
 - [`../_shared/chart-palette.js`](../_shared/chart-palette.js)
 
-Tags del módulo: `<is-radar-chart>`.
+Tags del módulo: `<iswc-radar-chart>`.
 
 ## Accesibilidad
 
-Preservar semántica, foco, teclado, labels y ARIA. Hereda contrato de `<is-chart>`.
+Preservar semántica, foco, teclado, labels y ARIA. Hereda contrato de `<iswc-chart>`.
 
 ## Ejemplo avanzado
 
 ```html
-<is-radar-chart label="Radar Chart" legend-position="bottom">
+<iswc-radar-chart label="Radar Chart" legend-position="bottom">
   <script type="application/json">
   {
     "data": {
@@ -163,7 +163,7 @@ Preservar semántica, foco, teclado, labels y ARIA. Hereda contrato de `<is-char
     }
   }
   </script>
-</is-radar-chart>
+</iswc-radar-chart>
 ```
 
 ## Errores comunes

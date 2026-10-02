@@ -4,7 +4,7 @@ import '../media/icon.js';
 import { ElementBase } from '../../core/element-base.js';
 
 /**
- * <is-command-palette> — Paleta de comandos al estilo Cmd+K / Ctrl+K.
+ * <iswc-command-palette> — Paleta de comandos al estilo Cmd+K / Ctrl+K.
  *
  * Atributos
  *   hotkey           combinación que abre el menú. Default "mod+k" (Ctrl en
@@ -31,8 +31,8 @@ import { ElementBase } from '../../core/element-base.js';
  *            embebidos en el shadow; el slot se suma a la derecha)
  *
  * Eventos (vocabulario de ModalBase)
- *   is-show / is-after-show, is-hide / is-after-hide
- *   is-select   detail: { command, id }
+ *   iswc-show / iswc-after-show, iswc-hide / iswc-after-hide
+ *   iswc-select   detail: { command, id }
  *
  * API
  *   palette.open() / .close() / .toggle()
@@ -59,7 +59,7 @@ import { ElementBase } from '../../core/element-base.js';
   /** Letras/numeros previos a la query (LIFO). Solo memoria de la sesion. */
   type History = string[];
 
-  class IsCommandPalette extends ElementBase {
+  class IswcCommandPalette extends ElementBase {
     /** Personalización por atributo (ver `core/attrs.ts`). */
     static styleAttrs = {
     radius: '--iswc-popover-radius',
@@ -95,9 +95,9 @@ import { ElementBase } from '../../core/element-base.js';
       const rootId = `cmd-palette-${Math.random().toString(36).slice(2, 8)}`;
       this.shadowRoot!.innerHTML = /* html */ `
         <dialog part="dialog" class="dialog" aria-label="Paleta de comandos">
-          <div class="panel is-popover-panel" part="panel">
-            <header class="bar is-surface-bar">
-              <span class="ico"><is-icon icon="mdi:magnify"></is-icon></span>
+          <div class="panel iswc-popover-panel" part="panel">
+            <header class="bar iswc-surface-bar">
+              <span class="ico"><iswc-icon icon="mdi:magnify"></iswc-icon></span>
               <input part="input" class="input" id="input" type="text" autocomplete="off"
                 role="combobox" aria-controls="${rootId}-listbox"
                 aria-expanded="false" aria-autocomplete="list"
@@ -162,7 +162,7 @@ import { ElementBase } from '../../core/element-base.js';
 
     open() {
       if (this.hasAttribute('disabled')) return;
-      emit(this, 'is-show');
+      emit(this, 'iswc-show');
       this.#input.value = '';
       this.#query = '';
       this.#historyPos = -1;
@@ -174,7 +174,7 @@ import { ElementBase } from '../../core/element-base.js';
       this.setAttribute('aria-expanded', 'true');
       this.#input.setAttribute('aria-expanded', 'true');
       this.#input.focus();
-      emit(this, 'is-after-show');
+      emit(this, 'iswc-after-show');
     }
 
     close() {
@@ -185,13 +185,13 @@ import { ElementBase } from '../../core/element-base.js';
         this.#history = [q, ...this.#history.filter((x) => x !== q)].slice(0, 16);
       }
       this.#historyPos = -1;
-      emit(this, 'is-hide');
+      emit(this, 'iswc-hide');
       if (this.#dialog.open) this.#dialog.close();
       this.removeAttribute('open');
       this.setAttribute('aria-expanded', 'false');
       this.#input.setAttribute('aria-expanded', 'false');
       this.#input.removeAttribute('aria-activedescendant');
-      emit(this, 'is-after-hide');
+      emit(this, 'iswc-after-hide');
     }
 
     toggle() { this.#dialog.open ? this.close() : this.open(); }
@@ -396,9 +396,9 @@ import { ElementBase } from '../../core/element-base.js';
           opt.setAttribute('role', 'option');
           opt.setAttribute('aria-selected', String(flatIdx === this.#active));
           opt.dataset.idx = String(i);
-          opt.className = 'opt' + (flatIdx === this.#active ? ' is-active' : '');
+          opt.className = 'opt' + (flatIdx === this.#active ? ' iswc-active' : '');
           const keysHtml = this.#keysHtml(c);
-          const iconHtml = c.icon ? `<is-icon icon="${escapeHtml(c.icon)}"></is-icon>` : '';
+          const iconHtml = c.icon ? `<iswc-icon icon="${escapeHtml(c.icon)}"></iswc-icon>` : '';
           opt.innerHTML = `<span class="ico">${iconHtml}</span><span class="label"><span class="t">${escapeHtml(c.title || c.id)}</span>${c.hint ? `<span class="hint">${escapeHtml(c.hint)}</span>` : ''}</span>${keysHtml ? `<span class="keys" part="keys">${keysHtml}</span>` : '<span class="keys" aria-hidden="true"></span>'}`;
           this.#resultsEl.appendChild(opt);
           flatIdx++;
@@ -409,7 +409,7 @@ import { ElementBase } from '../../core/element-base.js';
       if (activeId) this.#input.setAttribute('aria-activedescendant', activeId);
       else this.#input.removeAttribute('aria-activedescendant');
       if (!this.#results.length) return;
-      const active = this.#resultsEl.querySelector<HTMLElement>(`.opt.is-active`);
+      const active = this.#resultsEl.querySelector<HTMLElement>(`.opt.iswc-active`);
       active?.scrollIntoView({ block: 'nearest' });
     }
 
@@ -427,7 +427,7 @@ import { ElementBase } from '../../core/element-base.js';
     #selectByIndex(idx: number) {
       const c = this.#results[idx];
       if (!c) return;
-      emit(this, 'is-select', { command: c, id: c.id });
+      emit(this, 'iswc-select', { command: c, id: c.id });
       try { if (typeof c.run === 'function') c.run(); } catch { /* noop */ }
       this.close();
     }
@@ -441,5 +441,5 @@ import { ElementBase } from '../../core/element-base.js';
     #hotkeyCombos: string[] = [];
   }
 
-  defineElement('is-command-palette', IsCommandPalette);
+  defineElement('iswc-command-palette', IswcCommandPalette);
 })();

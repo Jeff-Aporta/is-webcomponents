@@ -3,8 +3,8 @@
 <head>
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1" />
-  <title>Demo: <is-dropdown-item> · is-webcomponents</title>
-  <meta name="description" content="Demo de <is-dropdown-item>: ítem de menú (normal/checkbox), con color danger y soporte para submenús." />
+  <title>Demo: <iswc-dropdown-item> · is-webcomponents</title>
+  <meta name="description" content="Demo de <iswc-dropdown-item>: ítem de menú (normal/checkbox), con color danger y soporte para submenús." />
   <style>
     html, body {
       margin: 0; padding: 24px; min-height: 100%;
@@ -23,42 +23,42 @@
     }
     pre { background: #0a0f17; padding: 10px; border-radius: 6px; font: 12px ui-monospace, Menlo, Consolas, monospace; color: #cbd5e1; overflow: auto; }
     /* Anti-FOUC */
-    is-dropdown-item:not(:defined) { visibility: hidden; }
+    iswc-dropdown-item:not(:defined) { visibility: hidden; }
   </style>
 </head>
 <body>
   <header>
-    <h1>Demo: <code>&lt;is-dropdown-item&gt;</code></h1>
-    <p>Ítem de menú para <code>&lt;is-dropdown&gt;</code>. Soporta <code>type="checkbox"</code>, <code>color="danger"</code> y submenús vía <code>&lt;slot name="submenu"&gt;</code>.</p>
+    <h1>Demo: <code>&lt;iswc-dropdown-item&gt;</code></h1>
+    <p>Ítem de menú para <code>&lt;iswc-dropdown&gt;</code>. Soporta <code>type="checkbox"</code>, <code>color="danger"</code> y submenús vía <code>&lt;slot name="submenu"&gt;</code>.</p>
   </header>
 
   <section>
-    <h2>Items standalone (sin is-dropdown)</h2>
+    <h2>Items standalone (sin iswc-dropdown)</h2>
     <div class="menu-row">
-      <is-dropdown-item id="i1" value="edit">Editar</is-dropdown-item>
-      <is-dropdown-item id="i2" value="duplicate">Duplicar</is-dropdown-item>
-      <is-dropdown-item id="i3" value="delete" color="danger">Eliminar</is-dropdown-item>
+      <iswc-dropdown-item id="i1" value="edit">Editar</iswc-dropdown-item>
+      <iswc-dropdown-item id="i2" value="duplicate">Duplicar</iswc-dropdown-item>
+      <iswc-dropdown-item id="i3" value="delete" color="danger">Eliminar</iswc-dropdown-item>
     </div>
   </section>
 
   <section>
     <h2>type="checkbox"</h2>
     <div class="menu-row">
-      <is-dropdown-item id="c1" type="checkbox" checked>Mostrar toolbar</is-dropdown-item>
-      <is-dropdown-item id="c2" type="checkbox">Mostrar statusbar</is-dropdown-item>
-      <is-dropdown-item id="c3" type="checkbox">Mostrar minimap</is-dropdown-item>
+      <iswc-dropdown-item id="c1" type="checkbox" checked>Mostrar toolbar</iswc-dropdown-item>
+      <iswc-dropdown-item id="c2" type="checkbox">Mostrar statusbar</iswc-dropdown-item>
+      <iswc-dropdown-item id="c3" type="checkbox">Mostrar minimap</iswc-dropdown-item>
     </div>
   </section>
 
   <section>
     <h2>Item con submenú</h2>
     <div class="menu-row">
-      <is-dropdown-item id="sub1" value="export">
+      <iswc-dropdown-item id="sub1" value="export">
         Exportar
-        <is-dropdown-item slot="submenu" value="pdf">como PDF</is-dropdown-item>
-        <is-dropdown-item slot="submenu" value="csv">como CSV</is-dropdown-item>
-        <is-dropdown-item slot="submenu" value="json">como JSON</is-dropdown-item>
-      </is-dropdown-item>
+        <iswc-dropdown-item slot="submenu" value="pdf">como PDF</iswc-dropdown-item>
+        <iswc-dropdown-item slot="submenu" value="csv">como CSV</iswc-dropdown-item>
+        <iswc-dropdown-item slot="submenu" value="json">como JSON</iswc-dropdown-item>
+      </iswc-dropdown-item>
     </div>
     <p style="font-size:12px;color:#94a3b8;">Click en "Exportar" o pulsa → para abrir el submenú.</p>
   </section>
@@ -69,8 +69,8 @@
   </section>
 
   <script type="module">
-    await import('../../../dist/cdn/actions/dropdown-item.min.js?h=gwwvkx');
-    await customElements.whenDefined('is-dropdown-item');
+    await import('../../../dist/cdn/actions/dropdown-item.min.js?h=pz46gs');
+    await customElements.whenDefined('iswc-dropdown-item');
 
     const log = document.getElementById('log');
     const events = [];
@@ -84,8 +84,8 @@
       log.textContent = JSON.stringify(events, null, 2);
     };
 
-    document.querySelectorAll('is-dropdown-item').forEach((it) => {
-      it.addEventListener('is-dropdown-item-select', record);
+    document.querySelectorAll('iswc-dropdown-item').forEach((it) => {
+      it.addEventListener('iswc-dropdown-item-select', record);
       it.addEventListener('click', (e) => {
         // Para los checkbox items, 'click' togglea checked.
         if (it.type === 'checkbox') {

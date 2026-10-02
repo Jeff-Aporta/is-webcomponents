@@ -1,14 +1,14 @@
 ---
-tag: is-rte
+tag: iswc-rte
 tags:
-  - is-rte
+  - iswc-rte
 category: forms
 status: public
 source: ./rte.js
 style: ./rte.css
 preview: ./rte.json
 ---
-# `<is-rte>`
+# `<iswc-rte>`
 
 ## Propósito
 
@@ -16,7 +16,7 @@ Editor de texto enriquecido sobre `contentEditable`, con toolbar configurable,
 modo código fuente HTML y registro de comandos aportados por otros
 componentes.
 
-Este módulo registra `<is-rte>` y exporta `registerRteCommand()`.
+Este módulo registra `<iswc-rte>` y exporta `registerRteCommand()`.
 
 ## Cuándo usarlo
 
@@ -25,8 +25,8 @@ cuando el destino es HTML.
 
 ## Cuándo no usarlo
 
-Para texto plano usar `<is-textarea>`; para Markdown usar `<is-md-editor>`;
-para menciones sobre texto plano usar `<is-mention>`.
+Para texto plano usar `<iswc-textarea>`; para Markdown usar `<iswc-md-editor>`;
+para menciones sobre texto plano usar `<iswc-mention>`.
 
 ## Importación
 
@@ -39,7 +39,7 @@ import { registerRteCommand } from './rte.js';
 ## Ejemplo mínimo
 
 ```html
-<is-rte placeholder="Escribe aquí"></is-rte>
+<iswc-rte placeholder="Escribe aquí"></iswc-rte>
 ```
 
 ## API
@@ -73,10 +73,10 @@ No expone.
 
 | Evento | detail | bubbles | composed | cancelable |
 | --- | --- | --- | --- | --- |
-| `is-input` | sin detail | sí | sí | no |
-| `is-change` | `{ value, text }` | sí | sí | no |
-| `is-blur` | sin detail | sí | sí | no |
-| `is-source-change` | `{ source }` | sí | sí | no |
+| `iswc-input` | sin detail | sí | sí | no |
+| `iswc-change` | `{ value, text }` | sí | sí | no |
+| `iswc-blur` | sin detail | sí | sí | no |
+| `iswc-source-change` | `{ source }` | sí | sí | no |
 
 ### Métodos y propiedades públicas
 
@@ -94,7 +94,7 @@ Función exportada del módulo:
 
 | Función | Uso |
 | --- | --- |
-| `registerRteCommand(name, { icon, title, run })` | Registra un botón extra invocable desde el atributo `toolbar`. `run` recibe la instancia de `<is-rte>`. |
+| `registerRteCommand(name, { icon, title, run })` | Registra un botón extra invocable desde el atributo `toolbar`. `run` recibe la instancia de `<iswc-rte>`. |
 
 ### CSS parts
 
@@ -133,7 +133,7 @@ No expone custom states.
 
 ### Integración con formularios
 
-No es form-associated: reflejar `value` en un campo oculto desde `is-change`
+No es form-associated: reflejar `value` en un campo oculto desde `iswc-change`
 si se envía por formulario nativo.
 
 ## Comportamiento
@@ -145,7 +145,7 @@ si se envía por formulario nativo.
   / `insertOrderedList` para listas.
 - `link()` abre un `prompt` del navegador para pedir la URL.
 - `source-mode` alterna entre el área editable y el `textarea` de HTML crudo;
-  al alternar se emite `is-source-change` y `value` cambia de origen.
+  al alternar se emite `iswc-source-change` y `value` cambia de origen.
 - Los comandos registrados con `registerRteCommand()` se resuelven por nombre
   al construir la toolbar, sin que este módulo conozca al componente que los
   aporta.
@@ -157,21 +157,21 @@ si se envía por formulario nativo.
 - [`../_shared/emit.js`](../_shared/emit.js)
 - [`../_shared/element-base.js`](../_shared/element-base.js)
 
-Tags del módulo: `<is-rte>`.
+Tags del módulo: `<iswc-rte>`.
 
 ## Accesibilidad
 
 La toolbar declara `role="toolbar"` y cada botón lleva `title` y `aria-label`.
 El área editable es `contenteditable` y participa del orden de foco natural.
 `link()` usa un `prompt` del navegador: en flujos que requieran un diálogo
-accesible propio, registrar un comando personalizado que abra `<is-dialog>`.
+accesible propio, registrar un comando personalizado que abra `<iswc-dialog>`.
 
 ## Ejemplo avanzado
 
 ```html
-<is-rte id="editor"
+<iswc-rte id="editor"
         toolbar="bold,italic,|,h2,ul,|,firma,|,undo,redo"
-        placeholder="Cuerpo del correo"></is-rte>
+        placeholder="Cuerpo del correo"></iswc-rte>
 
 <script type="module">
   import { registerRteCommand } from './rte.js';
@@ -183,7 +183,7 @@ accesible propio, registrar un comando personalizado que abra `<is-dialog>`.
   });
 
   const editor = document.getElementById('editor');
-  editor.addEventListener('is-change', (e) => console.log(e.detail.value));
+  editor.addEventListener('iswc-change', (e) => console.log(e.detail.value));
   editor.sourceMode = true;   // ver el HTML crudo
 </script>
 ```

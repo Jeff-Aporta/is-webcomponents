@@ -1,23 +1,23 @@
 ---
-tag: is-flex-options
+tag: iswc-flex-options
 tags:
-  - is-flex-options
+  - iswc-flex-options
 category: isp
 status: public
 source: ./flex-options.js
 style: ./flex-options.css
 preview: ./flex-options.json
 ---
-# `<is-flex-options>`
+# `<iswc-flex-options>`
 
 ## Propósito
 
 Toolbar de acciones a partir de un array tipo ISP `FlexOptionsInput[]`.
-Port de `FlexOptions.svelte` (ClientesIS). Pinta `<is-button>`,
-`<is-check-icon-button>`, `<is-button-group>` y `<is-dropdown>` — no
+Port de `FlexOptions.svelte` (ClientesIS). Pinta `<iswc-button>`,
+`<iswc-check-icon-button>`, `<iswc-button-group>` y `<iswc-dropdown>` — no
 reimplementa botones.
 
-Este módulo registra `<is-flex-options>`.
+Este módulo registra `<iswc-flex-options>`.
 
 ## Cuándo usarlo
 
@@ -26,8 +26,8 @@ contrato ya es `{ icon, title, onClick, disabled, separator }` o grupos.
 
 ## Cuándo no usarlo
 
-Un solo botón → `<is-button>`. Menú anclado con clic y Escape →
-`<is-dropdown>` directo. No crear otra toolbar con `<button>` nativos.
+Un solo botón → `<iswc-button>`. Menú anclado con clic y Escape →
+`<iswc-dropdown>` directo. No crear otra toolbar con `<button>` nativos.
 
 ## Importación
 
@@ -38,7 +38,7 @@ import './flex-options.js';
 ## Ejemplo mínimo
 
 ```html
-<is-flex-options id="opts"></is-flex-options>
+<iswc-flex-options id="opts"></iswc-flex-options>
 <script type="module">
   document.getElementById('opts').actions = [
     { icon: 'mdi:plus', title: 'Agregar', onClick: () => {} },
@@ -103,7 +103,7 @@ No expone.
 
 ### CSS custom properties
 
-No declara tokens propios; usa los de `<is-button>` / `<is-dropdown>`.
+No declara tokens propios; usa los de `<iswc-button>` / `<iswc-dropdown>`.
 
 ### Integración con formularios
 
@@ -122,7 +122,7 @@ flicker de upgrade de custom elements). `compact` omite el texto del botón.
 - [`../actions/check-icon-button.md`](../actions/check-icon-button.md)
 - [`float-card.md`](./float-card.md)
 
-Tags del módulo: `<is-flex-options>`.
+Tags del módulo: `<iswc-flex-options>`.
 
 ## Accesibilidad
 
@@ -131,7 +131,7 @@ Tags del módulo: `<is-flex-options>`.
 ## Ejemplo avanzado
 
 ```html
-<is-flex-options id="tb" compact></is-flex-options>
+<iswc-flex-options id="tb" compact></iswc-flex-options>
 <script type="module">
   const tb = document.getElementById('tb');
   tb.actions = [
@@ -146,7 +146,7 @@ Tags del módulo: `<is-flex-options>`.
 ## Errores comunes
 
 - Recrear el elemento en cada hover: asignar `actions` una vez y togglear
-  visibilidad en `<is-float-card open>`.
+  visibilidad en `<iswc-float-card open>`.
 - Meter HTML de botones en light DOM: este tag pinta en shadow.
 
 ## Reglas para LLM

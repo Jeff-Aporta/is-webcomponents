@@ -11,8 +11,7 @@
   max-width: min(24rem, 100vw - 2rem);
 }
 
-:host([hidden]),
-:host(:not([open])) {
+:host(:is([hidden], :not([open]))) {
   display: none !important;
 }
 
@@ -94,8 +93,8 @@
   opacity: 0.82;
 }
 
-:host(:has([slot="caption"])) .caption {
-  display: block;
+:host(:has([slot="caption"])) {
+  .caption { display: block; }
 }
 
 .close {
@@ -116,6 +115,7 @@
 
   &[hidden] { display: none !important; }
 }
+
 .progress-bar {
   height: 100%;
   width: 100%;
@@ -123,16 +123,14 @@
   transform-origin: left center;
 }
 
-/* Spinner del toast loading (toaster.promise): el is-icon marcado con
+/* Spinner del toast loading (toaster.promise): el iswc-icon marcado con
    data-loading gira hasta que la promesa resuelve. */
-::slotted(is-icon[data-loading]) {
-  animation: is-toast-spin 0.9s linear infinite;
+::slotted(iswc-icon[data-loading]) {
+  animation: iswc-toast-spin 0.9s linear infinite;
+
+  @media (prefers-reduced-motion: reduce) { animation: none; }
 }
 
-@keyframes is-toast-spin {
+@keyframes iswc-toast-spin {
   to { transform: rotate(360deg); }
-}
-
-@media (prefers-reduced-motion: reduce) {
-  ::slotted(is-icon[data-loading]) { animation: none; }
 }

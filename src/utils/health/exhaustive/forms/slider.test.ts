@@ -1,5 +1,5 @@
 /**
- * slider.test.ts — Tests exhaustivos de <is-slider>.
+ * slider.test.ts — Tests exhaustivos de <iswc-slider>.
  */
 
 import test from 'node:test';
@@ -15,13 +15,13 @@ import {
 // así que usamos el helper del root `_helpers.ts` que cubre ambos casos.
 import { extraerParts } from '../_helpers.js';
 
-const TAG = 'is-slider';
+const TAG = 'iswc-slider';
 const src = leerComponente(TAG);
 
 test('slider: archivo y registro', () => {
   assert.ok(src.length > 500);
   assert.ok(existeCss(TAG));
-  assert.ok(/defineElement\s*\(\s*['"`]is-slider['"`]/.test(src));
+  assert.ok(/defineElement\s*\(\s*['"`]iswc-slider['"`]/.test(src));
 });
 
 test('slider: atributos observados', () => {
@@ -31,13 +31,13 @@ test('slider: atributos observados', () => {
                    'with-tooltip', 'min-distance', 'disable-swap', 'range',
                    'format', 'disabled', 'readonly', 'required', 'label',
                    'hint']) {
-    assert.ok(obs.includes(a), `<is-slider> debe observar "${a}"`);
+    assert.ok(obs.includes(a), `<iswc-slider> debe observar "${a}"`);
   }
 });
 
-test('slider: eventos (is-input drag/tecla, is-change al confirmar)', () => {
+test('slider: eventos (iswc-input drag/tecla, iswc-change al confirmar)', () => {
   const evs = eventosEmitidos(src);
-  for (const e of ['is-input', 'is-change']) {
+  for (const e of ['iswc-input', 'iswc-change']) {
     assert.ok(evs.includes(e));
   }
 });
@@ -51,37 +51,37 @@ test('slider: orientation enum (horizontal|vertical)', () => {
 test('slider: track enum (normal|none|inverted)', () => {
   for (const t of ['normal', 'none', 'inverted']) {
     assert.ok(new RegExp(`['"\`]${t}['"\`]`).test(src),
-      `<is-slider> track enum debe incluir "${t}"`);
+      `<iswc-slider> track enum debe incluir "${t}"`);
   }
 });
 
 test('slider: value-label enum (off|auto|on)', () => {
   for (const v of ['off', 'auto', 'on']) {
     assert.ok(new RegExp(`['"\`]${v}['"\`]`).test(src),
-      `<is-slider> value-label enum debe incluir "${v}"`);
+      `<iswc-slider> value-label enum debe incluir "${v}"`);
   }
 });
 
 test('slider: rango con 2 thumbs (value="20,37")', () => {
-  assert.ok(/range/.test(src), '<is-slider> debe soportar rango (2 thumbs)');
-  assert.ok(/disable-swap/.test(src), '<is-slider> debe soportar disable-swap');
+  assert.ok(/range/.test(src), '<iswc-slider> debe soportar rango (2 thumbs)');
+  assert.ok(/disable-swap/.test(src), '<iswc-slider> debe soportar disable-swap');
 });
 
 test('slider: edge case — valor fuera de rango (clampTo)', () => {
   // Importado de misc-utils.
   assert.ok(/clampTo/.test(src),
-    '<is-slider> debe usar clampTo() para limitar al rango [min, max]');
+    '<iswc-slider> debe usar clampTo() para limitar al rango [min, max]');
 });
 
 test('slider: edge case — step="null" restringe a los marks', () => {
   assert.ok(/tidyToStep|step/.test(src));
   assert.ok(/'null'/.test(src) || /"null"/.test(src),
-    '<is-slider> debe aceptar step="null" (restringe a marks)');
+    '<iswc-slider> debe aceptar step="null" (restringe a marks)');
 });
 
 test('slider: thumb con role=slider + aria-valuenow', () => {
   assert.ok(/role\s*=\s*["']slider["']/.test(src),
-    '<is-slider> thumb debe tener role=slider (a11y)');
+    '<iswc-slider> thumb debe tener role=slider (a11y)');
   assert.ok(/aria-valuenow/.test(src));
 });
 
@@ -100,5 +100,5 @@ test('slider: form-associated', () => {
 test('slider: preview JSON', () => {
   const prev = leerPreview(TAG);
   assert.ok(prev);
-  assert.equal(prev!['$schema'], 'is-preview/v1');
+  assert.equal(prev!['$schema'], 'iswc-preview/v1');
 });

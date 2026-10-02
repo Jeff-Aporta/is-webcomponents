@@ -5,7 +5,7 @@
 // opt-in al final del archivo (STAGEHAND=1).
 //
 // Checks que pasamos (todos sobre el demo file-input.html):
-//   1. COMPONENTE RENDERIZADO: <is-file-input> definido, shadow DOM presente,
+//   1. COMPONENTE RENDERIZADO: <iswc-file-input> definido, shadow DOM presente,
 //      input nativo accesible.
 //   2. ELEMENTOS VISIBLES: cada instancia expone label, hint, dropzone e input
 //      nativo, todos con rect visible y dentro del viewport.
@@ -28,12 +28,12 @@ async function checkDeterministic(page, demo) {
   await page.waitForTimeout(200);
 
   // 1) COMPONENTE RENDERIZADO.
-  const defined = await page.evaluate(() => !!customElements.get('is-file-input'));
-  assert.equal(defined, true, 'is-file-input debe estar definido');
+  const defined = await page.evaluate(() => !!customElements.get('iswc-file-input'));
+  assert.equal(defined, true, 'iswc-file-input debe estar definido');
 
   // 2-6) Inspección de cada file-input del demo.
   const data = await page.evaluate(() => {
-    const els = [...document.querySelectorAll('is-file-input')];
+    const els = [...document.querySelectorAll('iswc-file-input')];
     const vp = { w: window.innerWidth, h: window.innerHeight };
     return els.map((el, idx) => {
       const sr = el.shadowRoot;
@@ -181,7 +181,7 @@ async function checkDeterministic(page, demo) {
   // 6) FILE LIST DINÁMICO: tras asignar files, la lista aparece con un <li>
   // por archivo y un botón remove por cada uno.
   await page.evaluate(() => {
-    const el = document.querySelectorAll('is-file-input')[0];
+    const el = document.querySelectorAll('iswc-file-input')[0];
     el.files = [
       new File(['a'], 'a.txt', { type: 'text/plain' }),
       new File(['b'], 'b.txt', { type: 'text/plain' }),
@@ -190,7 +190,7 @@ async function checkDeterministic(page, demo) {
   await page.waitForTimeout(60);
 
   const populated = await page.evaluate(() => {
-    const el = document.querySelectorAll('is-file-input')[0];
+    const el = document.querySelectorAll('iswc-file-input')[0];
     const sr = el.shadowRoot;
     const list = sr.querySelector('.file-list');
     const items = [...sr.querySelectorAll('.file')];
@@ -211,7 +211,7 @@ async function checkDeterministic(page, demo) {
 
   // Limpieza: vaciar la lista para no contaminar screenshots subsiguientes.
   await page.evaluate(() => {
-    document.querySelectorAll('is-file-input')[0].files = [];
+    document.querySelectorAll('iswc-file-input')[0].files = [];
   });
 }
 
@@ -237,7 +237,7 @@ for (const demo of DEMOS) {
 // Rama opt-in con Stagehand LLM. Sólo corre si STAGEHAND=1 + credenciales.
 // ─────────────────────────────────────────────────────────────────────────
 const VISUAL_RUBRIC = `
-Evalúa la calidad visual del demo del componente <is-file-input>.
+Evalúa la calidad visual del demo del componente <iswc-file-input>.
 
 Checklist (cada una PASS o FAIL):
 
@@ -272,7 +272,7 @@ async function runStagehandRubric(demo) {
     await waitReady(page, demo.readyAttr);
     // Poblar el primer input para que la captura incluya la file-list.
     await page.evaluate(() => {
-      const el = document.querySelectorAll('is-file-input')[0];
+      const el = document.querySelectorAll('iswc-file-input')[0];
       el.files = [
         new File(['hello'], 'demo.txt', { type: 'text/plain' }),
         new File(['world'], 'otra-imagen.png', { type: 'image/png' }),

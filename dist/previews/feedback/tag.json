@@ -1,10 +1,10 @@
 {
-  "$schema": "is-preview/v1",
-  "tag": "is-tag",
+  "$schema": "iswc-preview/v1",
+  "tag": "iswc-tag",
   "category": "feedback",
-  "title": "<is-tag>",
+  "title": "<iswc-tag>",
   "titleHtml": true,
-  "storageKey": "docs-is-tag",
+  "storageKey": "docs-iswc-tag",
   "sections": [
     {
       "id": "intro",
@@ -13,7 +13,7 @@
       "blocks": [
         {
           "kind": "demo",
-          "html": "<div class=\"demo-row\" style=\"flex-wrap:wrap;gap:.5rem\">\r\n            <is-tag>General</is-tag>\r\n            <is-tag color=\"brand\">InSoft</is-tag>\r\n            <is-tag color=\"neutral\">Neutral</is-tag>\r\n            <is-tag color=\"info\">Info</is-tag>\r\n            <is-tag color=\"success\">Success</is-tag>\r\n            <is-tag color=\"warning\">Warning</is-tag>\r\n            <is-tag color=\"danger\">Danger</is-tag>\r\n            <is-tag with-remove id=\"rmTag\">Removible</is-tag>\r\n          </div>",
+          "html": "<div class=\"demo-row\" style=\"flex-wrap:wrap;gap:.5rem\">\r\n            <iswc-tag>General</iswc-tag>\r\n            <iswc-tag color=\"brand\">InSoft</iswc-tag>\r\n            <iswc-tag color=\"neutral\">Neutral</iswc-tag>\r\n            <iswc-tag color=\"info\">Info</iswc-tag>\r\n            <iswc-tag color=\"success\">Success</iswc-tag>\r\n            <iswc-tag color=\"warning\">Warning</iswc-tag>\r\n            <iswc-tag color=\"danger\">Danger</iswc-tag>\r\n            <iswc-tag with-remove id=\"rmTag\">Removible</iswc-tag>\r\n          </div>",
           "controls": [
             {
               "control": "select",
@@ -48,11 +48,11 @@
       "blocks": [
         {
           "kind": "demo",
-          "html": "<div class=\"demo-row\" style=\"align-items:center;gap:.5rem;flex-wrap:wrap\">\r\n            <span style=\"font-size:.75rem\"><is-tag>0.75rem</is-tag></span>\r\n            <span style=\"font-size:1rem\"><is-tag>1rem</is-tag></span>\r\n            <span style=\"font-size:1.25rem\"><is-tag pill>1.25rem pill</is-tag></span>\r\n          </div>"
+          "html": "<div class=\"demo-row\" style=\"align-items:center;gap:.5rem;flex-wrap:wrap\">\r\n            <span style=\"font-size:.75rem\"><iswc-tag>0.75rem</iswc-tag></span>\r\n            <span style=\"font-size:1rem\"><iswc-tag>1rem</iswc-tag></span>\r\n            <span style=\"font-size:1.25rem\"><iswc-tag pill>1.25rem pill</iswc-tag></span>\r\n          </div>"
         },
         {
           "kind": "code",
-          "code": "<span style=\"font-size:1.25rem\">\n  <is-tag pill>Grande</is-tag>\n</span>"
+          "code": "<span style=\"font-size:1.25rem\">\n  <iswc-tag pill>Grande</iswc-tag>\n</span>"
         },
         {
           "kind": "html",
@@ -63,7 +63,7 @@
     {
       "id": "reference",
       "title": "Referencia",
-      "lede": "Evento <code class=\"code\">is-remove</code> al pulsar quitar. Sin atributo <code class=\"code\">size</code> — usa <code class=\"code\">font-size</code>.",
+      "lede": "Evento <code class=\"code\">iswc-remove</code> al pulsar quitar. Sin atributo <code class=\"code\">size</code> — usa <code class=\"code\">font-size</code>.",
       "blocks": [
         {
           "kind": "table",

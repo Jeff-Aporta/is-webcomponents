@@ -4,7 +4,7 @@
 //   - smoke: la ventana inicial monta con role=dialog, controles visibles
 //   - funcional: minimize / restore alterna el dataset.state
 //   - funcional: maximize / unmaximize ocupa el viewport entero
-//   - funcional: close() remueve la ventana del DOM y emite is-after-hide
+//   - funcional: close() remueve la ventana del DOM y emite iswc-after-hide
 //   - funcional: drag del header reposiciona la ventana
 //   - funcional: resizer arrastra cambia las dimensiones (resizable)
 //   - funcional: maximizable/minimizable/closable ocultan sus botones si faltan
@@ -25,7 +25,7 @@ tests.push({
     await waitReady(page, 'data-window-ready');
     await page.waitForTimeout(100);
     const info = await page.evaluate(() => {
-      const win = document.querySelector('is-window');
+      const win = document.querySelector('iswc-window');
       const root = win.shadowRoot.querySelector('.root[part="root"]');
       const header = win.shadowRoot.querySelector('header[part="header"]');
       const body = win.shadowRoot.querySelector('.body[part="body"]');
@@ -33,7 +33,7 @@ tests.push({
       const maxBtn = win.shadowRoot.querySelector('[data-act="max"]');
       const closeBtn = win.shadowRoot.querySelector('[data-act="close"]');
       return {
-        defined: !!customElements.get('is-window'),
+        defined: !!customElements.get('iswc-window'),
         role: win.getAttribute('role'),
         ariaLabel: win.getAttribute('aria-label'),
         hasRoot: !!root,
@@ -48,7 +48,7 @@ tests.push({
         state: root?.dataset.state,
       };
     });
-    assert.equal(info.defined, true, 'is-window debe estar definido');
+    assert.equal(info.defined, true, 'iswc-window debe estar definido');
     assert.equal(info.role, 'dialog', 'debe setear role=dialog automáticamente');
     assert.ok(info.ariaLabel && info.ariaLabel.length > 0,
       `aria-label debe poblarse desde title (fue "${info.ariaLabel}")`);
@@ -65,15 +65,15 @@ tests.push({
 });
 
 tests.push({
-  name: 'funcional: minimize() cambia dataset.state y emite is-minimize',
+  name: 'funcional: minimize() cambia dataset.state y emite iswc-minimize',
   run: async (page) => {
     await page.goto(URL, { waitUntil: 'domcontentloaded' });
     await waitReady(page, 'data-window-ready');
     await page.waitForTimeout(100);
     const result = await page.evaluate(() => {
-      const win = document.querySelector('is-window');
+      const win = document.querySelector('iswc-window');
       let fired = false;
-      win.addEventListener('is-minimize', () => { fired = true; });
+      win.addEventListener('iswc-minimize', () => { fired = true; });
       win.minimize();
       return {
         fired,
@@ -81,14 +81,14 @@ tests.push({
         // El dock="bottom-right" default reposiciona al minimizar.
         styleRight: win.style.right,
         styleBottom: win.style.bottom,
-        isMinimizedClass: win.shadowRoot.querySelector('.root').classList.contains('is-minimized'),
+        isMinimizedClass: win.shadowRoot.querySelector('.root').classList.contains('iswc-minimized'),
       };
     });
-    assert.equal(result.fired, true, 'minimize() debe emitir is-minimize');
+    assert.equal(result.fired, true, 'minimize() debe emitir iswc-minimize');
     assert.equal(result.state, 'minimized', 'dataset.state debe ser "minimized"');
     assert.equal(result.styleRight, '0px', 'dock=bottom-right debe aplicar right:0');
     assert.equal(result.styleBottom, '0px', 'dock=bottom-right debe aplicar bottom:0');
-    assert.equal(result.isMinimizedClass, true, 'clase is-minimized debe estar aplicada');
+    assert.equal(result.isMinimizedClass, true, 'clase iswc-minimized debe estar aplicada');
   },
 });
 
@@ -99,7 +99,7 @@ tests.push({
     await waitReady(page, 'data-window-ready');
     await page.waitForTimeout(100);
     const result = await page.evaluate(() => {
-      const win = document.querySelector('is-window');
+      const win = document.querySelector('iswc-window');
       const before = win.getBoundingClientRect();
       win.minimize();
       // Tras minimizar, el dock="bottom-right" posiciona la ventana en la
@@ -142,10 +142,10 @@ tests.push({
     await waitReady(page, 'data-window-ready');
     await page.waitForTimeout(100);
     const result = await page.evaluate(() => {
-      const win = document.querySelector('is-window');
+      const win = document.querySelector('iswc-window');
       const before = win.getBoundingClientRect();
       let maxFired = false;
-      win.addEventListener('is-maximize', () => { maxFired = true; });
+      win.addEventListener('iswc-maximize', () => { maxFired = true; });
       win.maximize();
       const max = win.getBoundingClientRect();
       win.unmaximize();
@@ -160,7 +160,7 @@ tests.push({
         stateAfter: win.shadowRoot.querySelector('.root').dataset.state,
       };
     });
-    assert.equal(result.maxFired, true, 'maximize() debe emitir is-maximize');
+    assert.equal(result.maxFired, true, 'maximize() debe emitir iswc-maximize');
     // El viewport del harness es 1400x900.
     assert.equal(Math.round(result.maxW), 1400, `maximizada debe medir 1400px de ancho (mide ${result.maxW})`);
     assert.equal(Math.round(result.maxH), 900, `maximizada debe medir 900px de alto (mide ${result.maxH})`);
@@ -172,17 +172,17 @@ tests.push({
 });
 
 tests.push({
-  name: 'funcional: close() remueve la ventana del DOM y emite is-after-hide',
+  name: 'funcional: close() remueve la ventana del DOM y emite iswc-after-hide',
   run: async (page) => {
     await page.goto(URL, { waitUntil: 'domcontentloaded' });
     await waitReady(page, 'data-window-ready');
     await page.waitForTimeout(100);
     const result = await page.evaluate(async () => {
-      const win = document.querySelector('is-window');
+      const win = document.querySelector('iswc-window');
       let hideFired = false;
       let afterHideFired = false;
-      win.addEventListener('is-hide', () => { hideFired = true; });
-      win.addEventListener('is-after-hide', () => { afterHideFired = true; });
+      win.addEventListener('iswc-hide', () => { hideFired = true; });
+      win.addEventListener('iswc-after-hide', () => { afterHideFired = true; });
       const ref = win;
       ref.close();
       // close() llama this.remove(); la referencia sigue viva pero detached.
@@ -194,8 +194,8 @@ tests.push({
         detached: !ref.isConnected,
       };
     });
-    assert.equal(result.hideFired, true, 'close() debe emitir is-hide');
-    assert.equal(result.afterHideFired, true, 'close() debe emitir is-after-hide');
+    assert.equal(result.hideFired, true, 'close() debe emitir iswc-hide');
+    assert.equal(result.afterHideFired, true, 'close() debe emitir iswc-after-hide');
     assert.equal(result.inDom, false, 'close() debe quitar la ventana del DOM');
     assert.equal(result.detached, true, 'la ventana debe quedar detached');
   },
@@ -208,7 +208,7 @@ tests.push({
     await waitReady(page, 'data-window-ready');
     await page.waitForTimeout(100);
     const result = await page.evaluate(() => {
-      const win = document.querySelector('is-window');
+      const win = document.querySelector('iswc-window');
       const header = win.shadowRoot.querySelector('.header');
       const before = win.getBoundingClientRect();
       const hRect = header.getBoundingClientRect();
@@ -249,7 +249,7 @@ tests.push({
     await page.waitForTimeout(100);
     // Spawn una ventana resizable para tener el resizer visible
     await page.evaluate(() => {
-      const win = document.createElement('is-window');
+      const win = document.createElement('iswc-window');
       win.setAttribute('resizable', '');
       win.setAttribute('width', '320');
       win.setAttribute('height', '200');
@@ -260,8 +260,8 @@ tests.push({
     });
     await page.waitForTimeout(50);
     const result = await page.evaluate(() => {
-      // El último <is-window> es el resizable que acabamos de crear.
-      const wins = [...document.querySelectorAll('is-window')];
+      // El último <iswc-window> es el resizable que acabamos de crear.
+      const wins = [...document.querySelectorAll('iswc-window')];
       const win = wins[wins.length - 1];
       const resizer = win.shadowRoot.querySelector('.resizer');
       const before = win.getBoundingClientRect();
@@ -300,7 +300,7 @@ tests.push({
     await page.waitForTimeout(100);
     // Spawn una ventana sin closable ni minimizable: sólo con maximizable.
     const result = await page.evaluate(() => {
-      const win = document.createElement('is-window');
+      const win = document.createElement('iswc-window');
       win.setAttribute('maximizable', '');
       // Sin closable, sin minimizable, sin resizable.
       win.setAttribute('width', '320');
@@ -335,7 +335,7 @@ tests.push({
     await page.waitForTimeout(100);
     const result = await page.evaluate(() => {
       // La ventana inicial se spawnea con title="Ventana #1 · all" + slot title="#1".
-      const win = document.querySelector('is-window');
+      const win = document.querySelector('iswc-window');
       const titleSpan = win.shadowRoot.querySelector('.title');
       const slotTitle = win.querySelector('[slot="title"]');
       return {
@@ -362,7 +362,7 @@ tests.push({
     // Spawn 3 ventanas extra y compara z-index tras focus
     const result = await page.evaluate(async () => {
       for (let i = 0; i < 3; i++) {
-        const w = document.createElement('is-window');
+        const w = document.createElement('iswc-window');
         w.setAttribute('closable', '');
         w.setAttribute('title', `Layer ${i}`);
         w.setAttribute('x', String(50 + i * 30));
@@ -370,7 +370,7 @@ tests.push({
         document.getElementById('desktop').appendChild(w);
       }
       await new Promise((r) => requestAnimationFrame(r));
-      const wins = [...document.querySelectorAll('is-window')];
+      const wins = [...document.querySelectorAll('iswc-window')];
       // Captura z-index inicial
       const before = wins.map((w) => Number(w.style.zIndex) || 100);
       // Click sobre la primera ventana
@@ -399,21 +399,21 @@ tests.push({
     // dentro de la ventana. El .body tiene tabindex="0", así que enfocamos
     // ese nodo vía el shadow root.
     await page.evaluate(() => {
-      const win = document.querySelector('is-window');
+      const win = document.querySelector('iswc-window');
       const body = win.shadowRoot.querySelector('.body[part="body"]');
       body.focus();
     });
     await page.waitForTimeout(50);
     const focused = await page.evaluate(() => {
-      const win = document.querySelector('is-window');
+      const win = document.querySelector('iswc-window');
       const body = win.shadowRoot.querySelector('.body[part="body"]');
       return win.shadowRoot.activeElement === body;
     });
     assert.equal(focused, true, 'el .body tabindex="0" debe poder recibir foco');
-    const before = await page.evaluate(() => document.querySelectorAll('is-window').length);
+    const before = await page.evaluate(() => document.querySelectorAll('iswc-window').length);
     await page.keyboard.press('Escape');
     await page.waitForTimeout(100);
-    const after = await page.evaluate(() => document.querySelectorAll('is-window').length);
+    const after = await page.evaluate(() => document.querySelectorAll('iswc-window').length);
     assert.equal(after, before - 1, `Escape con foco dentro debe cerrar 1 ventana (de ${before} a ${after})`);
   },
 });
@@ -426,7 +426,7 @@ tests.push({
     await page.waitForTimeout(100);
     // Spawn una ventana sin closable
     await page.evaluate(() => {
-      const w = document.createElement('is-window');
+      const w = document.createElement('iswc-window');
       w.setAttribute('title', 'Sin cerrar');
       w.setAttribute('x', '120');
       w.setAttribute('y', '120');
@@ -437,16 +437,16 @@ tests.push({
     await page.waitForTimeout(50);
     // Foco dentro de la nueva ventana (la última spawneada).
     await page.evaluate(() => {
-      const wins = [...document.querySelectorAll('is-window')];
+      const wins = [...document.querySelectorAll('iswc-window')];
       const target = wins[wins.length - 1];
       const body = target.shadowRoot.querySelector('.body[part="body"]');
       body.focus();
     });
     await page.waitForTimeout(50);
-    const before = await page.evaluate(() => document.querySelectorAll('is-window').length);
+    const before = await page.evaluate(() => document.querySelectorAll('iswc-window').length);
     await page.keyboard.press('Escape');
     await page.waitForTimeout(100);
-    const after = await page.evaluate(() => document.querySelectorAll('is-window').length);
+    const after = await page.evaluate(() => document.querySelectorAll('iswc-window').length);
     assert.equal(after, before, `sin closable Escape no debe cerrar (sigue en ${after}, era ${before})`);
   },
 });

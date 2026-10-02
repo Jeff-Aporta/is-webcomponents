@@ -3,7 +3,7 @@
 <head>
 <meta charset="utf-8" />
 <meta name="viewport" content="width=device-width, initial-scale=1" />
-<title>Demo de <is-heatmap> · is-webcomponents</title>
+<title>Demo de <iswc-heatmap> · is-webcomponents</title>
 <meta name="description" content="Matriz de celdas coloreadas por valor numérico: gradiente de color, etiquetas y tooltips de hover." />
 <style>
   html, body { margin: 0; padding: 0; height: 100%; background: #0c1118; color: #e2e8f0; font-family: ui-sans-serif, system-ui, sans-serif; }
@@ -30,8 +30,8 @@
     margin: 0 0 12px 0; color: #94a3b8;
   }
   .panel .body { flex: 1; display: grid; place-items: stretch; min-height: 0; }
-  is-heatmap { width: 100%; height: 100%; min-height: 320px; display: block; }
-  is-heatmap:not(:defined) { visibility: hidden; }
+  iswc-heatmap { width: 100%; height: 100%; min-height: 320px; display: block; }
+  iswc-heatmap:not(:defined) { visibility: hidden; }
   pre#log {
     margin: 0; padding: 12px; flex: 1; overflow: auto;
     background: #0c1118; border-radius: 4px;
@@ -42,8 +42,8 @@
 <script type="module">
   // Cargar el bundle pre-construido desde dist/cdn/. Funciona con cualquier
   // servidor estático (incluido VS Code Live Server), no solo con dev server.
-  await import('../../../dist/cdn/data-viz/heatmap.min.js?h=q3jca0');
-  await customElements.whenDefined('is-heatmap');
+  await import('../../../dist/cdn/data-viz/heatmap.min.js?h=dfj624');
+  await customElements.whenDefined('iswc-heatmap');
 
   // Payload 1: heatmap denso 12x8 con paleta brand + show-values
   const dense = {
@@ -76,7 +76,7 @@
   };
 
   // Demo 1: paleta brand + show-values + axis labels
-  const h1 = document.createElement('is-heatmap');
+  const h1 = document.createElement('iswc-heatmap');
   h1.setAttribute('color', 'brand');
   h1.setAttribute('show-values', '');
   h1.setAttribute('cell-radius', '3');
@@ -87,7 +87,7 @@
   document.getElementById('heatmap-brand').appendChild(h1);
 
   // Demo 2: paleta divergente red-blue + legend a la derecha
-  const h2 = document.createElement('is-heatmap');
+  const h2 = document.createElement('iswc-heatmap');
   h2.setAttribute('color', 'red-blue');
   h2.setAttribute('legend-position', 'end');
   h2.config = sparse;
@@ -96,8 +96,8 @@
   // Log de eventos hover (esencial para verificar tooltips en tests).
   const log = document.getElementById('log');
   const append = (line) => { log.textContent = line + '\n' + log.textContent; log.scrollTop = 0; };
-  document.querySelectorAll('is-heatmap').forEach((h) => {
-    h.addEventListener('is-cell-hover', (e) => {
+  document.querySelectorAll('iswc-heatmap').forEach((h) => {
+    h.addEventListener('iswc-cell-hover', (e) => {
       append(`hover: ${e.detail.x} · ${e.detail.y} = ${e.detail.value}`);
     });
   });
@@ -108,8 +108,8 @@
 <body>
 <header>
   <div>
-    <h1>Mapa de calor — <code>&lt;is-heatmap&gt;</code></h1>
-    <p>Gradiente por valor · <code>show-values</code> escribe el número en cada celda · <code>is-cell-hover</code> emite la celda bajo el puntero</p>
+    <h1>Mapa de calor — <code>&lt;iswc-heatmap&gt;</code></h1>
+    <p>Gradiente por valor · <code>show-values</code> escribe el número en cada celda · <code>iswc-cell-hover</code> emite la celda bajo el puntero</p>
   </div>
   <div class="spacer"></div>
   <code data-readout="cells">cells: —</code>

@@ -1,14 +1,14 @@
 ---
-tag: is-input
+tag: iswc-input
 tags:
-  - is-input
+  - iswc-input
 category: forms
 status: public
 source: ./input.js
 style: ./input.css
 preview: ./input.json
 ---
-# `<is-input>`
+# `<iswc-input>`
 
 ## Propósito
 
@@ -18,7 +18,7 @@ tres variants, estado de error ligado a la validación nativa, adornos, contador
 caracteres y ancho controlable. Participa en <form> vía
 ElementInternals.
 
-Este módulo registra `<is-input>`.
+Este módulo registra `<iswc-input>`.
 
 ## Cuándo usarlo
 
@@ -37,9 +37,9 @@ import './input.js';
 ## Ejemplo mínimo
 
 ```html
-<is-input label="outlined (default)"></is-input>
-<is-input variant="filled" label="filled"></is-input>
-<is-input variant="underlined" label="underlined"></is-input>
+<iswc-input label="outlined (default)"></iswc-input>
+<iswc-input variant="filled" label="filled"></iswc-input>
+<iswc-input variant="underlined" label="underlined"></iswc-input>
 ```
 
 ## API
@@ -72,7 +72,7 @@ import './input.js';
 | `prefix` | string/según contrato | Fuente define default/restricción. |
 | `suffix` | string/según contrato | Fuente define default/restricción. |
 | `label-placement` | `top` / `start` / `float` | Default `top`. `float` = etiqueta flotante estilo ISP. |
-| `data-typing-delay` | número (ms) | Debounce de `is-typing-end`. Default 600. |
+| `data-typing-delay` | número (ms) | Debounce de `iswc-typing-end`. Default 600. |
 
 #### Propiedades públicas
 
@@ -124,10 +124,10 @@ import './input.js';
 | --- | --- | --- | --- | --- |
 | `input` | no | sí | sí | no |
 | `change` | no | sí | sí | no |
-| `is-input` | sí | sí | sí | no |
-| `is-change` | sí | sí | sí | no |
-| `is-typing-end` | `{ value }` | sí | sí | no |
-| `is-otp` | `{ code }` | sí | sí | no |
+| `iswc-input` | sí | sí | sí | no |
+| `iswc-change` | sí | sí | sí | no |
+| `iswc-typing-end` | `{ value }` | sí | sí | no |
+| `iswc-otp` | `{ code }` | sí | sí | no |
 
 ### Métodos y propiedades públicas
 
@@ -211,7 +211,7 @@ Participa mediante ElementInternals/helpers form-associated; respetar name, valu
 
 Documentación de cabecera preservada desde fuente:
 
-> <is-input> — Campo de texto form-associated (vanilla + Shadow DOM).
+> <iswc-input> — Campo de texto form-associated (vanilla + Shadow DOM).
 > Atributos
 >   type            text | email | password | number | search | tel | url | date  (default text)
 >   name, value, placeholder, label, hint, autocomplete
@@ -226,11 +226,11 @@ Documentación de cabecera preservada desde fuente:
 > Parts: form-control, label, base, start, prefix, input, clear, toggle, suffix, end,
 >        support, hint, error-text, count
 > Custom states: blank, disabled, readonly, focused, invalid, password-visible
-> Eventos: is-input, is-change (bubbles + composed) y los nativos input/change
+> Eventos: iswc-input, iswc-change (bubbles + composed) y los nativos input/change
 > Tokens: --iswc-field-width, --iswc-field-label-width, --iswc-input-*
 >
 > Web OTP: si `autocomplete` es `one-time-code` u `otp`, `navigator.credentials.get({ otp })`
-> rellena `value` y emite `is-otp`. El SMS debe incluir el origen (HTTPS).
+> rellena `value` y emite `iswc-otp`. El SMS debe incluir el origen (HTTPS).
 
 ## Dependencias y componentes relacionados
 
@@ -239,7 +239,7 @@ Documentación de cabecera preservada desde fuente:
 - [`../_shared/web-otp.js`](../_shared/web-otp.js)
 - [`../media/icon.js`](../media/icon.js)
 
-Tags del módulo: `<is-input>`.
+Tags del módulo: `<iswc-input>`.
 
 ## Accesibilidad
 
@@ -248,9 +248,9 @@ Preservar semántica, foco, teclado, labels y ARIA. ARIA detectado: `aria-descri
 ## Ejemplo avanzado
 
 ```html
-<is-input type="password" label="Contraseña" password-toggle></is-input>
-<is-input type="number" label="Cantidad" min="0" max="100" step="5"></is-input>
-<is-input type="search" label="Buscar" clearable></is-input>
+<iswc-input type="password" label="Contraseña" password-toggle></iswc-input>
+<iswc-input type="number" label="Cantidad" min="0" max="100" step="5"></iswc-input>
+<iswc-input type="search" label="Buscar" clearable></iswc-input>
 ```
 
 ## Errores comunes

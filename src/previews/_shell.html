@@ -7,7 +7,7 @@
   <title>Preview · IS Web Components</title>
   <script type="module">
     import { ISWebComponentsLoader as L } from '../../dist/cdn/core/loader.min.js';
-    import { GALLERY_CHROME_TAGS } from '../../src/cdn/collect-is-tags.js';
+    import { GALLERY_CHROME_TAGS } from '../../src/cdn/collect-iswc-tags.js';
     L.configure({ preferSelf: true, mirrors: ['jsdelivr', 'pages'] });
     await L.loadCSSBase();
     await L.loadCSSPalettesDefault();
@@ -28,14 +28,14 @@
   </script>
   <style>
     html, body { height: 100%; margin: 0; }
-    is-preview-component { height: 100%; }
+    iswc-preview-component { height: 100%; }
   </style>
 </head>
 <body>
-  <is-preview-component id="host"></is-preview-component>
+  <iswc-preview-component id="host"></iswc-preview-component>
   <script type="module">
     import { loadPreview } from './registry.js';
-    import { collectIsTags } from '../../src/cdn/collect-is-tags.js';
+    import { collectIsTags } from '../../src/cdn/collect-iswc-tags.js';
 
     const params = new URLSearchParams(location.search);
     const tag = params.get('tag');

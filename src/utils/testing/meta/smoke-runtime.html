@@ -33,7 +33,7 @@ for (const item of manifest) {
     filas.push(fila); continue;
   }
   // `module: true` en el manifest = no es un custom element sino un módulo
-  // de utilidades (`is-ui`); cargar sin lanzar es todo lo que se le pide.
+  // de utilidades (`iswc-ui`); cargar sin lanzar es todo lo que se le pide.
   if (item.module) { filas.push(fila); continue; }
   if (!customElements.get(item.tag)) {
     fila.ok = false; fila.notas.push('no registrado');

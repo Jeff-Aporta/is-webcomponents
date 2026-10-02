@@ -1,21 +1,21 @@
 ---
-tag: is-quadrant-chart
+tag: iswc-quadrant-chart
 tags:
-  - is-quadrant-chart
+  - iswc-quadrant-chart
 category: diagrams
 status: public
 source: ./quadrant-chart.js
 style: ./quadrant-chart.css
 preview: ./quadrant-chart.json
 ---
-# `<is-quadrant-chart>`
+# `<iswc-quadrant-chart>`
 
 ## Propósito
 
 Matriz **2×2** en SVG, sin Mermaid. Dos ejes continuos, cuatro cuadrantes
 nombrados y puntos ubicados con coordenadas `x` / `y` entre 0 y 1.
 
-Este módulo registra `<is-quadrant-chart>`.
+Este módulo registra `<iswc-quadrant-chart>`.
 
 ## Cuándo usarlo
 
@@ -36,11 +36,11 @@ import './quadrant-chart.js';
 ## Ejemplo mínimo
 
 ```html
-<is-quadrant-chart>
+<iswc-quadrant-chart>
   <script type="application/json">
     {}
   </script>
-</is-quadrant-chart>
+</iswc-quadrant-chart>
 ```
 
 ## API
@@ -73,9 +73,9 @@ import './quadrant-chart.js';
 
 | Evento | detail | bubbles | composed | cancelable |
 | --- | --- | --- | --- | --- |
-| `is-render` | sí | sí | sí | no |
-| `is-open-viewer` | sí | sí | sí | sí |
-| `is-toggle-group` | sí | sí | sí | no |
+| `iswc-render` | sí | sí | sí | no |
+| `iswc-open-viewer` | sí | sí | sí | sí |
+| `iswc-toggle-group` | sí | sí | sí | no |
 
 ### Métodos y propiedades públicas
 
@@ -115,17 +115,17 @@ Las coordenadas se recortan a 0..1: un punto fuera de rango se pega al borde en 
 
 Documentación de cabecera preservada desde fuente:
 
-> <is-quadrant-chart> — matriz 2×2 en SVG, sin Mermaid.
->   <is-quadrant-chart>
+> <iswc-quadrant-chart> — matriz 2×2 en SVG, sin Mermaid.
+>   <iswc-quadrant-chart>
 >     <script type="application/json">
 >       { "quadrant": { "xAxis": { "left": "Bajo", "right": "Alto" }, "points": [...] } }
 >     </script>
->   </is-quadrant-chart>
-> Mismo esqueleto que <is-flowchart>: shadow DOM, slot JSON + MutationObserver,
+>   </iswc-quadrant-chart>
+> Mismo esqueleto que <iswc-flowchart>: shadow DOM, slot JSON + MutationObserver,
 > tema por atributo `data-theme`, `color` (inline | viewer), lightbox propio.
 > Atributos: color (inline | viewer), open-on-click
 > Propiedades: payload, spec, layout, hiddenGroups
-> Eventos: is-render, is-open-viewer, is-toggle-group
+> Eventos: iswc-render, iswc-open-viewer, iswc-toggle-group
 
 ## Dependencias y componentes relacionados
 
@@ -140,7 +140,7 @@ Documentación de cabecera preservada desde fuente:
 - [`../_shared/emit.js`](../_shared/emit.js)
 - [`../_shared/svg-chart-engine.js`](../_shared/svg-chart-engine.js)
 
-Tags del módulo: `<is-quadrant-chart>`.
+Tags del módulo: `<iswc-quadrant-chart>`.
 
 ## Accesibilidad
 

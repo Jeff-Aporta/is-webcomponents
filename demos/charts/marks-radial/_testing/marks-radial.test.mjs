@@ -2,7 +2,7 @@
 // marks-radial es un utility bundle (sin custom element propio); exporta
 // drawPieMarks, drawDoughnutMarks, drawPolarAreaMarks y drawRadarMarks.
 // El demo invoca esas funciones a través de los wrappers tipados
-// <is-pie-chart>, <is-doughnut-chart>, <is-polar-area-chart> y <is-radar-chart>.
+// <iswc-pie-chart>, <iswc-doughnut-chart>, <iswc-polar-area-chart> y <iswc-radar-chart>.
 import assert from 'node:assert/strict';
 import { BASE_URL, newPage, close, waitReady, screenshot, report } from '../../_global/lib/harness.mjs';
 
@@ -20,19 +20,19 @@ tests.push({
       const exports = Object.keys(lib).sort();
       const types = {};
       for (const k of exports) types[k] = typeof lib[k];
-      const pieEl = document.querySelector('is-pie-chart');
-      const doughEl = document.querySelector('is-doughnut-chart');
-      const polEl = document.querySelector('is-polar-area-chart');
-      const radEl = document.querySelector('is-radar-chart');
+      const pieEl = document.querySelector('iswc-pie-chart');
+      const doughEl = document.querySelector('iswc-doughnut-chart');
+      const polEl = document.querySelector('iswc-polar-area-chart');
+      const radEl = document.querySelector('iswc-radar-chart');
       return {
         exports,
         types,
         defined: {
-          pie: !!customElements.get('is-pie-chart'),
-          dough: !!customElements.get('is-doughnut-chart'),
-          pol: !!customElements.get('is-polar-area-chart'),
-          rad: !!customElements.get('is-radar-chart'),
-          chart: !!customElements.get('is-chart'),
+          pie: !!customElements.get('iswc-pie-chart'),
+          dough: !!customElements.get('iswc-doughnut-chart'),
+          pol: !!customElements.get('iswc-polar-area-chart'),
+          rad: !!customElements.get('iswc-radar-chart'),
+          chart: !!customElements.get('iswc-chart'),
         },
         counts: {
           pie: pieEl?.shadowRoot?.querySelectorAll('.mark-slice').length || 0,
@@ -52,10 +52,10 @@ tests.push({
     for (const k of info.exports) {
       assert.equal(info.types[k], 'function', `${k} debe ser function`);
     }
-    assert.equal(info.defined.pie, true, 'is-pie-chart debe estar definido');
-    assert.equal(info.defined.dough, true, 'is-doughnut-chart debe estar definido');
-    assert.equal(info.defined.pol, true, 'is-polar-area-chart debe estar definido');
-    assert.equal(info.defined.rad, true, 'is-radar-chart debe estar definido');
+    assert.equal(info.defined.pie, true, 'iswc-pie-chart debe estar definido');
+    assert.equal(info.defined.dough, true, 'iswc-doughnut-chart debe estar definido');
+    assert.equal(info.defined.pol, true, 'iswc-polar-area-chart debe estar definido');
+    assert.equal(info.defined.rad, true, 'iswc-radar-chart debe estar definido');
     assert.ok(info.counts.pie > 0, `pie debe renderizar marcas, hay ${info.counts.pie}`);
     assert.ok(info.counts.dough > 0, `doughnut debe renderizar marcas, hay ${info.counts.dough}`);
     assert.ok(info.counts.pol > 0, `polar debe renderizar marcas, hay ${info.counts.pol}`);
@@ -73,7 +73,7 @@ tests.push({
     await waitReady(page, 'data-marks-radial-ready');
     await page.waitForTimeout(150);
     const data = await page.evaluate(() => {
-      const el = document.querySelector('is-pie-chart');
+      const el = document.querySelector('iswc-pie-chart');
       const slices = [...el.shadowRoot.querySelectorAll('.mark.mark-slice')];
       return {
         count: slices.length,
@@ -95,7 +95,7 @@ tests.push({
     await waitReady(page, 'data-marks-radial-ready');
     await page.waitForTimeout(150);
     const data = await page.evaluate(() => {
-      const el = document.querySelector('is-radar-chart');
+      const el = document.querySelector('iswc-radar-chart');
       const polys = [...el.shadowRoot.querySelectorAll('.mark.mark-radar')];
       const points = [...el.shadowRoot.querySelectorAll('.mark.mark-point')];
       const ticks = [...el.shadowRoot.querySelectorAll('text.tick-label')].map((t) => (t.textContent ?? '').trim());
@@ -123,7 +123,7 @@ tests.push({
     await waitReady(page, 'data-marks-radial-ready');
     await page.waitForTimeout(150);
     const data = await page.evaluate(() => {
-      const el = document.querySelector('is-doughnut-chart');
+      const el = document.querySelector('iswc-doughnut-chart');
       const slices = [...el.shadowRoot.querySelectorAll('.mark.mark-slice')];
       return {
         count: slices.length,
@@ -142,7 +142,7 @@ tests.push({
     await waitReady(page, 'data-marks-radial-ready');
     await page.waitForTimeout(150);
     const data = await page.evaluate(() => {
-      const el = document.querySelector('is-polar-area-chart');
+      const el = document.querySelector('iswc-polar-area-chart');
       const slices = [...el.shadowRoot.querySelectorAll('.mark.mark-slice')];
       return {
         count: slices.length,

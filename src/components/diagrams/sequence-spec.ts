@@ -536,7 +536,7 @@ export function computeSequenceLayout(spec: SequenceResolvedSpec): SequenceLayou
       const missing = !idx.has(m.from) ? m.from : m.to;
       if (missing && !warnedActors.has(missing)) {
         warnedActors.add(missing);
-        console.warn(`[is-sequence-diagram] actor "${missing}" no declarado; se ignora el mensaje "${m.id}"`);
+        console.warn(`[iswc-sequence-diagram] actor "${missing}" no declarado; se ignora el mensaje "${m.id}"`);
       }
       return null;
     }

@@ -1,11 +1,11 @@
 {
-  "$schema": "is-preview/v1",
-  "tag": "is-checkbox",
+  "$schema": "iswc-preview/v1",
+  "tag": "iswc-checkbox",
   "category": "forms",
-  "title": "<is-checkbox>",
+  "title": "<iswc-checkbox>",
   "titleHtml": true,
   "styles": ".stack { display: flex; flex-direction: column; align-items: flex-start; gap: 0.7rem; }\r\n    .inline { display: flex; flex-wrap: wrap; align-items: center; gap: 1.5rem; }\r\n    .placements { display: flex; flex-wrap: wrap; align-items: flex-start; gap: 2rem; }",
-  "storageKey": "docs-is-checkbox",
+  "storageKey": "docs-iswc-checkbox",
   "hasBehavior": true,
   "sections": [
     {
@@ -15,7 +15,7 @@
       "blocks": [
         {
           "kind": "demo",
-          "html": "<div class=\"inline\">\r\n            <is-checkbox name=\"a\" checked>Marcada</is-checkbox>\r\n            <is-checkbox name=\"b\">Sin marcar</is-checkbox>\r\n            <is-checkbox name=\"c\" indeterminate>Indeterminada</is-checkbox>\r\n            <is-checkbox name=\"d\" checked disabled>Deshabilitada</is-checkbox>\r\n          </div>",
+          "html": "<div class=\"inline\">\r\n            <iswc-checkbox name=\"a\" checked>Marcada</iswc-checkbox>\r\n            <iswc-checkbox name=\"b\">Sin marcar</iswc-checkbox>\r\n            <iswc-checkbox name=\"c\" indeterminate>Indeterminada</iswc-checkbox>\r\n            <iswc-checkbox name=\"d\" checked disabled>Deshabilitada</iswc-checkbox>\r\n          </div>",
           "controls": [
               {
                 "control": "boolean",
@@ -104,7 +104,7 @@
           ],
           "equivNote": "checked / indeterminate / bloqueo (readonly vs disabled).",
           "equivHtml": "<!-- ver diagrama de ramas -->",
-          "equivFlow": "<is-flowchart open-on-click animation=\"flow\">\n  <script type=\"application/json\">\n  {\n    \"flowchart\": {\n      \"title\": \"is-checkbox: estado\",\n      \"direction\": \"TB\",\n      \"nodes\": [\n        {\n          \"id\": \"q\",\n          \"label\": \"indeterminate?\",\n          \"shape\": \"diamond\"\n        },\n        {\n          \"id\": \"a\",\n          \"label\": \"tri-state UI\",\n          \"shape\": \"stadium\"\n        },\n        {\n          \"id\": \"b\",\n          \"label\": \"checked?\",\n          \"shape\": \"diamond\"\n        },\n        {\n          \"id\": \"c\",\n          \"label\": \"on → FormData\",\n          \"shape\": \"round\"\n        },\n        {\n          \"id\": \"d\",\n          \"label\": \"off\",\n          \"shape\": \"round\"\n        },\n        {\n          \"id\": \"e\",\n          \"label\": \"readonly / disabled\",\n          \"shape\": \"stadium\"\n        }\n      ],\n      \"edges\": [\n        {\n          \"from\": \"q\",\n          \"to\": \"a\",\n          \"label\": \"si\"\n        },\n        {\n          \"from\": \"q\",\n          \"to\": \"b\",\n          \"label\": \"no\"\n        },\n        {\n          \"from\": \"b\",\n          \"to\": \"c\",\n          \"label\": \"si\"\n        },\n        {\n          \"from\": \"b\",\n          \"to\": \"d\",\n          \"label\": \"no\"\n        },\n        {\n          \"from\": \"c\",\n          \"to\": \"e\"\n        },\n        {\n          \"from\": \"d\",\n          \"to\": \"e\"\n        },\n        {\n          \"from\": \"a\",\n          \"to\": \"e\"\n        }\n      ]\n    }\n  }\n  </script>\n</is-flowchart>"
+          "equivFlow": "<iswc-flowchart open-on-click animation=\"flow\">\n  <script type=\"application/json\">\n  {\n    \"flowchart\": {\n      \"title\": \"iswc-checkbox: estado\",\n      \"direction\": \"TB\",\n      \"nodes\": [\n        {\n          \"id\": \"q\",\n          \"label\": \"indeterminate?\",\n          \"shape\": \"diamond\"\n        },\n        {\n          \"id\": \"a\",\n          \"label\": \"tri-state UI\",\n          \"shape\": \"stadium\"\n        },\n        {\n          \"id\": \"b\",\n          \"label\": \"checked?\",\n          \"shape\": \"diamond\"\n        },\n        {\n          \"id\": \"c\",\n          \"label\": \"on → FormData\",\n          \"shape\": \"round\"\n        },\n        {\n          \"id\": \"d\",\n          \"label\": \"off\",\n          \"shape\": \"round\"\n        },\n        {\n          \"id\": \"e\",\n          \"label\": \"readonly / disabled\",\n          \"shape\": \"stadium\"\n        }\n      ],\n      \"edges\": [\n        {\n          \"from\": \"q\",\n          \"to\": \"a\",\n          \"label\": \"si\"\n        },\n        {\n          \"from\": \"q\",\n          \"to\": \"b\",\n          \"label\": \"no\"\n        },\n        {\n          \"from\": \"b\",\n          \"to\": \"c\",\n          \"label\": \"si\"\n        },\n        {\n          \"from\": \"b\",\n          \"to\": \"d\",\n          \"label\": \"no\"\n        },\n        {\n          \"from\": \"c\",\n          \"to\": \"e\"\n        },\n        {\n          \"from\": \"d\",\n          \"to\": \"e\"\n        },\n        {\n          \"from\": \"a\",\n          \"to\": \"e\"\n        }\n      ]\n    }\n  }\n  </script>\n</iswc-flowchart>"
         },
         {
           "kind": "html",
@@ -119,11 +119,11 @@
       "blocks": [
         {
           "kind": "demo",
-          "html": "<div class=\"inline\">\r\n            <is-checkbox checked>brand (default)</is-checkbox>\r\n            <is-checkbox color=\"neutral\" checked>neutral</is-checkbox>\r\n            <is-checkbox color=\"success\" checked>success</is-checkbox>\r\n            <is-checkbox color=\"warning\" checked>warning</is-checkbox>\r\n            <is-checkbox color=\"danger\" checked>danger</is-checkbox>\r\n          </div>"
+          "html": "<div class=\"inline\">\r\n            <iswc-checkbox checked>brand (default)</iswc-checkbox>\r\n            <iswc-checkbox color=\"neutral\" checked>neutral</iswc-checkbox>\r\n            <iswc-checkbox color=\"success\" checked>success</iswc-checkbox>\r\n            <iswc-checkbox color=\"warning\" checked>warning</iswc-checkbox>\r\n            <iswc-checkbox color=\"danger\" checked>danger</iswc-checkbox>\r\n          </div>"
         },
         {
           "kind": "code",
-          "code": "<is-checkbox color=\"success\" checked>success</is-checkbox>"
+          "code": "<iswc-checkbox color=\"success\" checked>success</iswc-checkbox>"
         }
       ]
     },
@@ -134,30 +134,30 @@
       "blocks": [
         {
           "kind": "demo",
-          "html": "<div class=\"placements\">\r\n            <is-checkbox checked>end (default)</is-checkbox>\r\n            <is-checkbox label-placement=\"start\" checked>start</is-checkbox>\r\n            <is-checkbox label-placement=\"top\" checked>top</is-checkbox>\r\n            <is-checkbox label-placement=\"bottom\" checked>bottom</is-checkbox>\r\n          </div>"
+          "html": "<div class=\"placements\">\r\n            <iswc-checkbox checked>end (default)</iswc-checkbox>\r\n            <iswc-checkbox label-placement=\"start\" checked>start</iswc-checkbox>\r\n            <iswc-checkbox label-placement=\"top\" checked>top</iswc-checkbox>\r\n            <iswc-checkbox label-placement=\"bottom\" checked>bottom</iswc-checkbox>\r\n          </div>"
         },
         {
           "kind": "code",
-          "code": "<is-checkbox label-placement=\"start\" checked>start</is-checkbox>\n<is-checkbox label-placement=\"top\" checked>top</is-checkbox>"
+          "code": "<iswc-checkbox label-placement=\"start\" checked>start</iswc-checkbox>\n<iswc-checkbox label-placement=\"top\" checked>top</iswc-checkbox>"
         }
       ]
     },
     {
       "id": "groups",
       "title": "Grupos",
-      "lede": "No hay componente de grupo: <code class=\"code\">is-checkbox</code> es <code class=\"code\">inline-flex</code>\r\n          y se apila con el <code class=\"code\">display:flex</code> del contenedor. En columna, alinea\r\n          <code class=\"code\">align-items:flex-start</code> para que el halo no recorte.",
+      "lede": "No hay componente de grupo: <code class=\"code\">iswc-checkbox</code> es <code class=\"code\">inline-flex</code>\r\n          y se apila con el <code class=\"code\">display:flex</code> del contenedor. En columna, alinea\r\n          <code class=\"code\">align-items:flex-start</code> para que el halo no recorte.",
       "blocks": [
         {
           "kind": "demo",
-          "html": "<div class=\"stack\">\r\n            <is-checkbox name=\"g1\" value=\"gilad\" checked>Gilad Gray</is-checkbox>\r\n            <is-checkbox name=\"g2\" value=\"jason\" checked>Jason Killian</is-checkbox>\r\n            <is-checkbox name=\"g3\" value=\"antoine\">Antoine Llorca</is-checkbox>\r\n          </div>"
+          "html": "<div class=\"stack\">\r\n            <iswc-checkbox name=\"g1\" value=\"gilad\" checked>Gilad Gray</iswc-checkbox>\r\n            <iswc-checkbox name=\"g2\" value=\"jason\" checked>Jason Killian</iswc-checkbox>\r\n            <iswc-checkbox name=\"g3\" value=\"antoine\">Antoine Llorca</iswc-checkbox>\r\n          </div>"
         },
         {
           "kind": "demo",
-          "html": "<div class=\"inline\">\r\n            <is-checkbox name=\"r1\" value=\"lun\" checked>Lun</is-checkbox>\r\n            <is-checkbox name=\"r2\" value=\"mar\" checked>Mar</is-checkbox>\r\n            <is-checkbox name=\"r3\" value=\"mie\">Mié</is-checkbox>\r\n            <is-checkbox name=\"r4\" value=\"jue\">Jue</is-checkbox>\r\n            <is-checkbox name=\"r5\" value=\"vie\" checked>Vie</is-checkbox>\r\n          </div>"
+          "html": "<div class=\"inline\">\r\n            <iswc-checkbox name=\"r1\" value=\"lun\" checked>Lun</iswc-checkbox>\r\n            <iswc-checkbox name=\"r2\" value=\"mar\" checked>Mar</iswc-checkbox>\r\n            <iswc-checkbox name=\"r3\" value=\"mie\">Mié</iswc-checkbox>\r\n            <iswc-checkbox name=\"r4\" value=\"jue\">Jue</iswc-checkbox>\r\n            <iswc-checkbox name=\"r5\" value=\"vie\" checked>Vie</iswc-checkbox>\r\n          </div>"
         },
         {
           "kind": "code",
-          "code": "<div style=\"display:flex;flex-direction:column;align-items:flex-start;gap:.7rem\">\n  <is-checkbox name=\"g1\" value=\"gilad\" checked>Gilad Gray</is-checkbox>\n  <is-checkbox name=\"g2\" value=\"jason\" checked>Jason Killian</is-checkbox>\n</div>"
+          "code": "<div style=\"display:flex;flex-direction:column;align-items:flex-start;gap:.7rem\">\n  <iswc-checkbox name=\"g1\" value=\"gilad\" checked>Gilad Gray</iswc-checkbox>\n  <iswc-checkbox name=\"g2\" value=\"jason\" checked>Jason Killian</iswc-checkbox>\n</div>"
         },
         {
           "kind": "html",
@@ -169,7 +169,7 @@
         },
         {
           "kind": "demo",
-          "html": "<div class=\"stack\">\r\n            <is-checkbox id=\"parentBox\">Todos los permisos</is-checkbox>\r\n            <div class=\"stack\" style=\"padding-left:1.6rem\">\r\n              <is-checkbox class=\"childBox\" checked>Lectura</is-checkbox>\r\n              <is-checkbox class=\"childBox\">Escritura</is-checkbox>\r\n              <is-checkbox class=\"childBox\">Borrado</is-checkbox>\r\n            </div>\r\n          </div>"
+          "html": "<div class=\"stack\">\r\n            <iswc-checkbox id=\"parentBox\">Todos los permisos</iswc-checkbox>\r\n            <div class=\"stack\" style=\"padding-left:1.6rem\">\r\n              <iswc-checkbox class=\"childBox\" checked>Lectura</iswc-checkbox>\r\n              <iswc-checkbox class=\"childBox\">Escritura</iswc-checkbox>\r\n              <iswc-checkbox class=\"childBox\">Borrado</iswc-checkbox>\r\n            </div>\r\n          </div>"
         },
         {
           "kind": "code",
@@ -180,15 +180,15 @@
     {
       "id": "icons",
       "title": "Iconos personalizados",
-      "lede": "<code class=\"code\">icon</code>, <code class=\"code\">checked-icon</code> e\r\n          <code class=\"code\">indeterminate-icon</code> reciben nombres de <code class=\"code\">is-icon</code>\r\n          (Iconify). Al definir <code class=\"code\">icon</code> el control pierde la caja y queda solo el glifo,\r\n          como el ejemplo de iconos de MUI. Sin estos atributos el <em>look</em> por defecto es el check dibujado.",
+      "lede": "<code class=\"code\">icon</code>, <code class=\"code\">checked-icon</code> e\r\n          <code class=\"code\">indeterminate-icon</code> reciben nombres de <code class=\"code\">iswc-icon</code>\r\n          (Iconify). Al definir <code class=\"code\">icon</code> el control pierde la caja y queda solo el glifo,\r\n          como el ejemplo de iconos de MUI. Sin estos atributos el <em>look</em> por defecto es el check dibujado.",
       "blocks": [
         {
           "kind": "demo",
-          "html": "<div class=\"inline\">\r\n            <is-checkbox icon=\"mdi:heart-outline\" checked-icon=\"mdi:heart\" color=\"danger\" checked>Favorito</is-checkbox>\r\n            <is-checkbox icon=\"mdi:bookmark-outline\" checked-icon=\"mdi:bookmark\">Guardar</is-checkbox>\r\n            <is-checkbox icon=\"mdi:star-outline\" checked-icon=\"mdi:star\" color=\"warning\" checked>Destacar</is-checkbox>\r\n            <is-checkbox checked-icon=\"mdi:check-bold\" indeterminate-icon=\"mdi:dots-horizontal\" indeterminate>Con caja</is-checkbox>\r\n          </div>"
+          "html": "<div class=\"inline\">\r\n            <iswc-checkbox icon=\"mdi:heart-outline\" checked-icon=\"mdi:heart\" color=\"danger\" checked>Favorito</iswc-checkbox>\r\n            <iswc-checkbox icon=\"mdi:bookmark-outline\" checked-icon=\"mdi:bookmark\">Guardar</iswc-checkbox>\r\n            <iswc-checkbox icon=\"mdi:star-outline\" checked-icon=\"mdi:star\" color=\"warning\" checked>Destacar</iswc-checkbox>\r\n            <iswc-checkbox checked-icon=\"mdi:check-bold\" indeterminate-icon=\"mdi:dots-horizontal\" indeterminate>Con caja</iswc-checkbox>\r\n          </div>"
         },
         {
           "kind": "code",
-          "code": "<is-checkbox icon=\"mdi:heart-outline\" checked-icon=\"mdi:heart\" color=\"danger\" checked>\n  Favorito\n</is-checkbox>"
+          "code": "<iswc-checkbox icon=\"mdi:heart-outline\" checked-icon=\"mdi:heart\" color=\"danger\" checked>\n  Favorito\n</iswc-checkbox>"
         }
       ]
     },
@@ -199,11 +199,11 @@
       "blocks": [
         {
           "kind": "demo",
-          "html": "<div class=\"inline\">\r\n            <is-checkbox name=\"ro1\" checked readonly>Solo lectura (marcada)</is-checkbox>\r\n            <is-checkbox name=\"ro2\" readonly>Solo lectura (sin marcar)</is-checkbox>\r\n            <is-checkbox name=\"di1\" checked disabled>Deshabilitada</is-checkbox>\r\n          </div>"
+          "html": "<div class=\"inline\">\r\n            <iswc-checkbox name=\"ro1\" checked readonly>Solo lectura (marcada)</iswc-checkbox>\r\n            <iswc-checkbox name=\"ro2\" readonly>Solo lectura (sin marcar)</iswc-checkbox>\r\n            <iswc-checkbox name=\"di1\" checked disabled>Deshabilitada</iswc-checkbox>\r\n          </div>"
         },
         {
           "kind": "code",
-          "code": "<is-checkbox name=\"ro1\" checked readonly>Solo lectura</is-checkbox>"
+          "code": "<iswc-checkbox name=\"ro1\" checked readonly>Solo lectura</iswc-checkbox>"
         }
       ]
     },
@@ -214,11 +214,11 @@
       "blocks": [
         {
           "kind": "demo",
-          "html": "<div class=\"stack\">\r\n            <is-checkbox hint=\"Puedes cambiarlo más tarde en Ajustes.\">Recibir novedades</is-checkbox>\r\n            <is-checkbox error hint=\"Debes aceptar los términos para continuar.\" required>Acepto los términos</is-checkbox>\r\n            <is-checkbox error checked>\r\n              Consentimiento revocado\r\n              <span slot=\"hint\">El texto de ayuda también admite un <b>slot</b>.</span>\r\n            </is-checkbox>\r\n          </div>"
+          "html": "<div class=\"stack\">\r\n            <iswc-checkbox hint=\"Puedes cambiarlo más tarde en Ajustes.\">Recibir novedades</iswc-checkbox>\r\n            <iswc-checkbox error hint=\"Debes aceptar los términos para continuar.\" required>Acepto los términos</iswc-checkbox>\r\n            <iswc-checkbox error checked>\r\n              Consentimiento revocado\r\n              <span slot=\"hint\">El texto de ayuda también admite un <b>slot</b>.</span>\r\n            </iswc-checkbox>\r\n          </div>"
         },
         {
           "kind": "code",
-          "code": "<is-checkbox error hint=\"Debes aceptar los términos para continuar.\" required>\n  Acepto los términos\n</is-checkbox>"
+          "code": "<iswc-checkbox error hint=\"Debes aceptar los términos para continuar.\" required>\n  Acepto los términos\n</iswc-checkbox>"
         }
       ]
     },
@@ -229,7 +229,7 @@
       "blocks": [
         {
           "kind": "demo",
-          "html": "<form id=\"demoForm\">\r\n            <div class=\"stack\">\r\n              <is-checkbox name=\"terminos\" value=\"si\" required>Acepto los términos (obligatorio)</is-checkbox>\r\n              <is-checkbox name=\"boletin\" value=\"semanal\">Recibir boletín</is-checkbox>\r\n              <is-checkbox name=\"archivado\" value=\"si\" checked readonly hint=\"Fijado por la política de la empresa.\">Archivar copia</is-checkbox>\r\n              <div class=\"inline\" style=\"gap:.5rem\">\r\n                <is-button color=\"brand\" id=\"btnSend\">Enviar</is-button>\r\n                <is-button variant=\"outlined\" id=\"btnReset\">Reset</is-button>\r\n              </div>\r\n            </div>\r\n          </form>"
+          "html": "<form id=\"demoForm\">\r\n            <div class=\"stack\">\r\n              <iswc-checkbox name=\"terminos\" value=\"si\" required>Acepto los términos (obligatorio)</iswc-checkbox>\r\n              <iswc-checkbox name=\"boletin\" value=\"semanal\">Recibir boletín</iswc-checkbox>\r\n              <iswc-checkbox name=\"archivado\" value=\"si\" checked readonly hint=\"Fijado por la política de la empresa.\">Archivar copia</iswc-checkbox>\r\n              <div class=\"inline\" style=\"gap:.5rem\">\r\n                <iswc-button color=\"brand\" id=\"btnSend\">Enviar</iswc-button>\r\n                <iswc-button variant=\"outlined\" id=\"btnReset\">Reset</iswc-button>\r\n              </div>\r\n            </div>\r\n          </form>"
         },
         {
           "kind": "html",
@@ -237,7 +237,7 @@
         },
         {
           "kind": "code",
-          "code": "<is-checkbox name=\"terminos\" value=\"si\" required>\n  Acepto los términos\n</is-checkbox>"
+          "code": "<iswc-checkbox name=\"terminos\" value=\"si\" required>\n  Acepto los términos\n</iswc-checkbox>"
         }
       ]
     },
@@ -248,11 +248,11 @@
       "blocks": [
         {
           "kind": "demo",
-          "html": "<div class=\"inline\">\r\n            <span style=\"font-size:.8rem\"><is-checkbox checked>0.8rem</is-checkbox></span>\r\n            <span style=\"font-size:1rem\"><is-checkbox checked>1rem</is-checkbox></span>\r\n            <span style=\"font-size:1.35rem\"><is-checkbox checked>1.35rem</is-checkbox></span>\r\n          </div>"
+          "html": "<div class=\"inline\">\r\n            <span style=\"font-size:.8rem\"><iswc-checkbox checked>0.8rem</iswc-checkbox></span>\r\n            <span style=\"font-size:1rem\"><iswc-checkbox checked>1rem</iswc-checkbox></span>\r\n            <span style=\"font-size:1.35rem\"><iswc-checkbox checked>1.35rem</iswc-checkbox></span>\r\n          </div>"
         },
         {
           "kind": "code",
-          "code": "<span style=\"font-size:1.35rem\"><is-checkbox checked>Grande</is-checkbox></span>"
+          "code": "<span style=\"font-size:1.35rem\"><iswc-checkbox checked>Grande</iswc-checkbox></span>"
         }
       ]
     },
@@ -273,7 +273,7 @@
             ],
             [
               "<code>Espacio</code>",
-              "alterna marcada / sin marcar y emite <code>is-change</code>"
+              "alterna marcada / sin marcar y emite <code>iswc-change</code>"
             ]
           ]
         }
@@ -348,7 +348,7 @@
             ],
             [
               "eventos",
-              "<code>is-change</code> · detail <code>{ checked, value }</code>"
+              "<code>iswc-change</code> · detail <code>{ checked, value }</code>"
             ],
             [
               "métodos",

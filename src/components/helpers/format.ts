@@ -5,14 +5,14 @@ import { formatBytes, toBytes } from './format-bytes.js';
 import { parseLooseDate } from './format-date.js';
 
 /**
- * <is-format type="…" value="…"> — Formateo con Intl + presets estilo Excel.
+ * <iswc-format type="…" value="…"> — Formateo con Intl + presets estilo Excel.
  *
- *   <is-format type="date"   value="2026-08-01" pattern="yyyy-mm-dd"></is-format>
- *   <is-format type="number" value="1234.5"     pattern="#,##0.00"></is-format>
- *   <is-format type="number" value="0.42"       format="percent"></is-format>
- *   <is-format type="text"   value="hola mundo" case="title"></is-format>
- *   <is-format type="bytes"  value="2048"       display="long"></is-format>
- *   <is-format type="relative" date="2026-08-01T00:00:00Z" sync></is-format>
+ *   <iswc-format type="date"   value="2026-08-01" pattern="yyyy-mm-dd"></iswc-format>
+ *   <iswc-format type="number" value="1234.5"     pattern="#,##0.00"></iswc-format>
+ *   <iswc-format type="number" value="0.42"       format="percent"></iswc-format>
+ *   <iswc-format type="text"   value="hola mundo" case="title"></iswc-format>
+ *   <iswc-format type="bytes"  value="2048"       display="long"></iswc-format>
+ *   <iswc-format type="relative" date="2026-08-01T00:00:00Z" sync></iswc-format>
  *
  * Atributos comunes
  *   type     date | number | bytes | relative | text
@@ -586,7 +586,7 @@ class FormatElement extends ElementBase {
   }
 }
 
-defineElement('is-format', FormatElement, 'IsFormat');
+defineElement('iswc-format', FormatElement, 'IswcFormat');
 
 /**
  * @param {'date'|'number'|'bytes'|'relative'|'text'} defaultType

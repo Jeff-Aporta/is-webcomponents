@@ -3,7 +3,7 @@
 <head>
 <meta charset="utf-8" />
 <meta name="viewport" content="width=device-width, initial-scale=1" />
-<title>Demo de <is-checkbox> · is-webcomponents</title>
+<title>Demo de <iswc-checkbox> · is-webcomponents</title>
 <meta name="description" content="Casilla de verificación form-associated (booleana) con estado indeterminate, color, label-placement y validación required." />
 <style>
   html, body { margin: 0; padding: 0; min-height: 100%; background: #0c1118; color: #e2e8f0; font-family: ui-sans-serif, system-ui, sans-serif; }
@@ -19,14 +19,14 @@
   code { background: rgba(255,255,255,0.06); padding: 1px 5px; border-radius: 3px; font: 12px ui-monospace, Menlo, Consolas, monospace; }
   output { font: 12px ui-monospace, Menlo, Consolas, monospace; color: #94a3b8; }
   /* Anti-FOUC */
-  is-checkbox:not(:defined) { visibility: hidden; }
-  is-icon:not(:defined) { visibility: hidden; }
+  iswc-checkbox:not(:defined) { visibility: hidden; }
+  iswc-icon:not(:defined) { visibility: hidden; }
 </style>
 <script type="module">
   // Bundle pre-construido (CDN-friendly). Funciona con cualquier servidor estático.
-  await import('../../../dist/cdn/forms/checkbox.min.js?h=0hgv3b');
+  await import('../../../dist/cdn/forms/checkbox.min.js?h=4leq51');
 
-  await customElements.whenDefined('is-checkbox');
+  await customElements.whenDefined('iswc-checkbox');
 
   const demo = document.getElementById('demo');
   const out = document.getElementById('out');
@@ -40,10 +40,10 @@
       disabled: demo.disabled,
       required: demo.required,
       value: demo.value,
-      formChecked: refform.querySelector('is-checkbox[name="tos"]').checked,
+      formChecked: refform.querySelector('iswc-checkbox[name="tos"]').checked,
     }, null, 2);
   };
-  demo.addEventListener('is-change', (e) => {
+  demo.addEventListener('iswc-change', (e) => {
     console.log('[checkbox] change', e.detail);
     render();
   });
@@ -65,16 +65,16 @@
 <body>
 <main>
   <header>
-    <h1>Demo de <code>&lt;is-checkbox&gt;</code></h1>
+    <h1>Demo de <code>&lt;iswc-checkbox&gt;</code></h1>
     <p>Casilla form-associated con <code>checked</code>, <code>indeterminate</code>, <code>required</code>, <code>hint</code> y colores. Pulsa o usa la barra espaciadora para alternar.</p>
   </header>
 
   <section>
     <h2>Básica</h2>
     <form id="check-form">
-      <is-checkbox id="demo" name="tos" value="accepted" hint="Marca para aceptar los términos">
+      <iswc-checkbox id="demo" name="tos" value="accepted" hint="Marca para aceptar los términos">
         Acepto los términos y condiciones
-      </is-checkbox>
+      </iswc-checkbox>
     </form>
     <div class="row">
       <button id="btn-toggle" type="button">Toggle</button>
@@ -86,32 +86,32 @@
   <section>
     <h2>Variantes y estados</h2>
     <div class="row">
-      <is-checkbox checked>Acepto</is-checkbox>
-      <is-checkbox indeterminate>Selección parcial</is-checkbox>
-      <is-checkbox disabled>Deshabilitado</is-checkbox>
-      <is-checkbox checked disabled>Marcado y deshabilitado</is-checkbox>
-      <is-checkbox required error>Required con error</is-checkbox>
+      <iswc-checkbox checked>Acepto</iswc-checkbox>
+      <iswc-checkbox indeterminate>Selección parcial</iswc-checkbox>
+      <iswc-checkbox disabled>Deshabilitado</iswc-checkbox>
+      <iswc-checkbox checked disabled>Marcado y deshabilitado</iswc-checkbox>
+      <iswc-checkbox required error>Required con error</iswc-checkbox>
     </div>
   </section>
 
   <section>
     <h2>Colores</h2>
     <div class="row">
-      <is-checkbox checked color="brand">Brand</is-checkbox>
-      <is-checkbox checked color="success">Success</is-checkbox>
-      <is-checkbox checked color="warning">Warning</is-checkbox>
-      <is-checkbox checked color="danger">Danger</is-checkbox>
-      <is-checkbox checked color="neutral">Neutral</is-checkbox>
+      <iswc-checkbox checked color="brand">Brand</iswc-checkbox>
+      <iswc-checkbox checked color="success">Success</iswc-checkbox>
+      <iswc-checkbox checked color="warning">Warning</iswc-checkbox>
+      <iswc-checkbox checked color="danger">Danger</iswc-checkbox>
+      <iswc-checkbox checked color="neutral">Neutral</iswc-checkbox>
     </div>
   </section>
 
   <section>
     <h2>label-placement</h2>
     <div class="row">
-      <is-checkbox checked label-placement="end">end (default)</is-checkbox>
-      <is-checkbox checked label-placement="start">start</is-checkbox>
-      <is-checkbox checked label-placement="top">top</is-checkbox>
-      <is-checkbox checked label-placement="bottom">bottom</is-checkbox>
+      <iswc-checkbox checked label-placement="end">end (default)</iswc-checkbox>
+      <iswc-checkbox checked label-placement="start">start</iswc-checkbox>
+      <iswc-checkbox checked label-placement="top">top</iswc-checkbox>
+      <iswc-checkbox checked label-placement="bottom">bottom</iswc-checkbox>
     </div>
   </section>
 </main>

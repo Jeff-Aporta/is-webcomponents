@@ -12,7 +12,7 @@ const DEMO = {
 async function checkDeterministic(page) {
   await page.waitForTimeout(200);
   const data = await page.evaluate(() => {
-    const el = document.querySelector('main is-gantt');
+    const el = document.querySelector('main iswc-gantt');
     const shadow = el.shadowRoot;
     const svg = shadow.querySelector('svg.gantt-svg');
     const svgRect = svg.getBoundingClientRect();

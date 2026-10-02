@@ -1,7 +1,7 @@
 // tests/helpers-homogeneity.test.ts
 //
 // Toda utilería pública en helpers/ debe tener tab (manifest.page) + JSON
-// presentador junto al componente (src/components/helpers/, is-preview/v1).
+// presentador junto al componente (src/components/helpers/, iswc-preview/v1).
 //
 // Uso: node tests/helpers-homogeneity.test.ts
 

@@ -1,21 +1,21 @@
 ---
-tag: is-venn-diagram
+tag: iswc-venn-diagram
 tags:
-  - is-venn-diagram
+  - iswc-venn-diagram
 category: diagrams
 status: public
 source: ./venn-diagram.js
 style: ./venn-diagram.css
 preview: ./venn-diagram.json
 ---
-# `<is-venn-diagram>`
+# `<iswc-venn-diagram>`
 
 ## Propósito
 
 Diagrama de **Venn** de dos o tres conjuntos en SVG, sin Mermaid, con las
 posiciones canónicas y las regiones etiquetadas.
 
-Este módulo registra `<is-venn-diagram>`.
+Este módulo registra `<iswc-venn-diagram>`.
 
 ## Cuándo usarlo
 
@@ -25,7 +25,7 @@ usuarios de dos módulos, cobertura de dos catálogos.
 ## Cuándo no usarlo
 
 Con cuatro o más conjuntos: los círculos no pueden representar todas las
-regiones y el diagrama miente. Si lo que hay es jerarquía → `<is-mindmap>`.
+regiones y el diagrama miente. Si lo que hay es jerarquía → `<iswc-mindmap>`.
 
 ## Importación
 
@@ -36,11 +36,11 @@ import './venn-diagram.js';
 ## Ejemplo mínimo
 
 ```html
-<is-venn-diagram>
+<iswc-venn-diagram>
   <script type="application/json">
     {}
   </script>
-</is-venn-diagram>
+</iswc-venn-diagram>
 ```
 
 ## API
@@ -72,8 +72,8 @@ import './venn-diagram.js';
 
 | Evento | detail | bubbles | composed | cancelable |
 | --- | --- | --- | --- | --- |
-| `is-render` | sí | sí | sí | no |
-| `is-open-viewer` | sí | sí | sí | sí |
+| `iswc-render` | sí | sí | sí | no |
+| `iswc-open-viewer` | sí | sí | sí | sí |
 
 ### Métodos y propiedades públicas
 
@@ -113,17 +113,17 @@ El relleno es translúcido y la intersección aparece por superposición, sin m�
 
 Documentación de cabecera preservada desde fuente:
 
-> <is-venn-diagram> — diagrama de Venn (2 o 3 conjuntos) en SVG, sin Mermaid.
->   <is-venn-diagram>
+> <iswc-venn-diagram> — diagrama de Venn (2 o 3 conjuntos) en SVG, sin Mermaid.
+>   <iswc-venn-diagram>
 >     <script type="application/json">
 >       { "venn": { "sets": [...], "regions": [{ "sets": ["a","b"], "label": "Ambos" }] } }
 >     </script>
->   </is-venn-diagram>
-> Mismo esqueleto que <is-flowchart>: shadow DOM, slot JSON + MutationObserver,
+>   </iswc-venn-diagram>
+> Mismo esqueleto que <iswc-flowchart>: shadow DOM, slot JSON + MutationObserver,
 > tema por atributo `data-theme`, `color` (inline | viewer), lightbox propio.
 > Atributos: color (inline | viewer), open-on-click
 > Propiedades: payload, spec, layout
-> Eventos: is-render, is-open-viewer
+> Eventos: iswc-render, iswc-open-viewer
 
 ## Dependencias y componentes relacionados
 
@@ -138,7 +138,7 @@ Documentación de cabecera preservada desde fuente:
 - [`../_shared/emit.js`](../_shared/emit.js)
 - [`../_shared/svg-chart-engine.js`](../_shared/svg-chart-engine.js)
 
-Tags del módulo: `<is-venn-diagram>`.
+Tags del módulo: `<iswc-venn-diagram>`.
 
 ## Accesibilidad
 

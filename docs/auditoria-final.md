@@ -25,29 +25,29 @@
 
 ## Componentes con hallazgos
 
-### ✅ `is-demo` — Demo `(layout)`
+### ✅ `iswc-demo` — Demo `(layout)`
 
 - **Ruta JSON**: ``
 - **Ruta módulo**: `src/components/layout/demo.ts`
 
-- 🔵 📐 **json-schema** — No se encontró JSON de preview para <is-demo>.
-  - 💡 Creá un archivo de definición siguiendo el esquema is-preview/v1.
+- 🔵 📐 **json-schema** — No se encontró JSON de preview para <iswc-demo>.
+  - 💡 Creá un archivo de definición siguiendo el esquema iswc-preview/v1.
 
-### ✅ `is-preview-component` — Preview Component `(preview)`
+### ✅ `iswc-preview-component` — Preview Component `(preview)`
 
 - **Ruta JSON**: ``
 - **Ruta módulo**: `src/components/layout/preview-component.ts`
 
-- 🔵 📐 **json-schema** — No se encontró JSON de preview para <is-preview-component>.
-  - 💡 Creá un archivo de definición siguiendo el esquema is-preview/v1.
+- 🔵 📐 **json-schema** — No se encontró JSON de preview para <iswc-preview-component>.
+  - 💡 Creá un archivo de definición siguiendo el esquema iswc-preview/v1.
 
-### ✅ `is-preview-controls` — Preview Controls `(preview)`
+### ✅ `iswc-preview-controls` — Preview Controls `(preview)`
 
 - **Ruta JSON**: ``
 - **Ruta módulo**: `src/components/layout/preview-controls.ts`
 
-- 🔵 📐 **json-schema** — No se encontró JSON de preview para <is-preview-controls>.
-  - 💡 Creá un archivo de definición siguiendo el esquema is-preview/v1.
+- 🔵 📐 **json-schema** — No se encontró JSON de preview para <iswc-preview-controls>.
+  - 💡 Creá un archivo de definición siguiendo el esquema iswc-preview/v1.
 
 ### ✅ `phase7` — phase7 `()`
 
@@ -58,11 +58,11 @@
   - `demos`: 5
   - `controles`: 0
 
-- 🔵 📝 **json-contenido** — Demo con 9 tags distintos: is-button, is-icon, is-dialog, is-input, is-select, is-option, is-textarea, is-switch…. Considerá partirlo en varios bloques.
+- 🔵 📝 **json-contenido** — Demo con 9 tags distintos: iswc-button, iswc-icon, iswc-dialog, iswc-input, iswc-select, iswc-option, iswc-textarea, iswc-switch…. Considerá partirlo en varios bloques.
   - 📄 `C:/ContaPyme/Personal/apps/is-webcomponents/src/pages/phase7.json`
-- 🔵 📝 **json-contenido** — Demo con 11 tags distintos: is-card, is-badge, is-dropdown, is-button, is-icon, is-dropdown-item, is-tag, is-tab-group…. Considerá partirlo en varios bloques.
+- 🔵 📝 **json-contenido** — Demo con 11 tags distintos: iswc-card, iswc-badge, iswc-dropdown, iswc-button, iswc-icon, iswc-dropdown-item, iswc-tag, iswc-tab-group…. Considerá partirlo en varios bloques.
   - 📄 `C:/ContaPyme/Personal/apps/is-webcomponents/src/pages/phase7.json`
-- 🔵 📝 **json-contenido** — Demo con 11 tags distintos: is-button, is-icon, is-split-panel, is-tree, is-tree-item, is-drawer, is-tab-group, is-tab…. Considerá partirlo en varios bloques.
+- 🔵 📝 **json-contenido** — Demo con 11 tags distintos: iswc-button, iswc-icon, iswc-split-panel, iswc-tree, iswc-tree-item, iswc-drawer, iswc-tab-group, iswc-tab…. Considerá partirlo en varios bloques.
   - 📄 `C:/ContaPyme/Personal/apps/is-webcomponents/src/pages/phase7.json`
 
 ## Cobertura por categoría

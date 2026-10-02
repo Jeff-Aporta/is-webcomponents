@@ -6,13 +6,13 @@
 //
 // 1) SELECTOR DE TAG PROPIO.
 //    adopt-css.js adopta la hoja en CADA shadow root por separado. Dentro del
-//    shadow de <is-tab>, una regla `is-tab .tab {}` no matchea NADA: el host
+//    shadow de <iswc-tab>, una regla `iswc-tab .tab {}` no matchea NADA: el host
 //    queda fuera del arbol del shadow y solo se alcanza con :host(...). Y desde
-//    el shadow de <is-tab-group> tampoco, porque los tabs entran slotted y los
+//    el shadow de <iswc-tab-group> tampoco, porque los tabs entran slotted y los
 //    descendientes del light DOM no los alcanza el selector.
-//    Paso de verdad: TODAS las reglas de <is-tab> en tab-group.css eran muertas
+//    Paso de verdad: TODAS las reglas de <iswc-tab> en tab-group.css eran muertas
 //    y los tabs se veian como botones nativos sin estilar.
-//    Correcto: `:host(is-tab) .tab {}` — o `::slotted(is-tab)` desde el padre.
+//    Correcto: `:host(iswc-tab) .tab {}` — o `::slotted(iswc-tab)` desde el padre.
 //
 // 2) `&[attr]` ANIDADO DENTRO DE `:host {}`.
 //    El nesting nativo lo compila a `:host[attr]`, que NO es lo mismo que
@@ -46,7 +46,7 @@ const walk = (dir, out = []) => {
 /**
  * Tags que registra el .js hermano: son los hosts que adoptan esta hoja.
  * Un componente sin shadow root (light DOM a propósito, como
- * is-preview-component) no adopta nada: ahí `is-x .y {}` es la única forma de
+ * iswc-preview-component) no adopta nada: ahí `iswc-x .y {}` es la única forma de
  * estilarlo y no hay CSS muerto que perseguir.
  */
 const tagsOf = (cssFile) => {
@@ -70,11 +70,11 @@ for (const cssFile of walk(compRoot)) {
   // ---- 1) selectores que usan como elemento un tag de este mismo modulo ----
   for (const match of css.matchAll(/([^{}]+)\{/g)) {
     // Lo capturado arrastra las declaraciones previas del bloque padre
-    // (`container-name: is-form; .y {`), y un valor de propiedad no es un
+    // (`container-name: iswc-form; .y {`), y un valor de propiedad no es un
     // selector: quedarse solo con lo que sigue al último `;`.
     const selector = match[1].split(';').pop().trim();
     if (!selector || selector.startsWith('@')) continue;
-    // :host(is-x) y ::slotted(is-x) son las formas CORRECTAS de nombrar el tag.
+    // :host(iswc-x) y ::slotted(iswc-x) son las formas CORRECTAS de nombrar el tag.
     const exposed = selector
       .replace(/:host\([^)]*\)/g, '')
       .replace(/::slotted\([^)]*\)/g, '');

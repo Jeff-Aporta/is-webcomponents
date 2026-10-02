@@ -1,22 +1,22 @@
 ---
-tag: is-intersection-observer
+tag: iswc-intersection-observer
 tags:
-  - is-intersection-observer
+  - iswc-intersection-observer
 category: helpers
 status: public
 source: ./intersection-observer.js
 style: ./intersection-observer.css
 preview: ./intersection-observer.json
 ---
-# `<is-intersection-observer>`
+# `<iswc-intersection-observer>`
 
 ## Propósito
 
 Responde a una pregunta simple: ¿este elemento está (parcialmente) visible
 dentro de un contenedor? Si sí, aplica una clase y/o dispara el evento
-is-intersect.
+iswc-intersect.
 
-Este módulo registra `<is-intersection-observer>`.
+Este módulo registra `<iswc-intersection-observer>`.
 
 ## Cuándo usarlo
 
@@ -35,9 +35,9 @@ import './intersection-observer.js';
 ## Ejemplo mínimo
 
 ```html
-<is-intersection-observer root="#scroller" intersect-class="is-in" threshold="0.4" once>
+<iswc-intersection-observer root="#scroller" intersect-class="iswc-in" threshold="0.4" once>
 <article class="io-card">…</article>
-</is-intersection-observer>
+</iswc-intersection-observer>
 ```
 
 ## API
@@ -71,7 +71,7 @@ import './intersection-observer.js';
 
 | Evento | detail | bubbles | composed | cancelable |
 | --- | --- | --- | --- | --- |
-| `is-intersect` | sí | sí | sí | no |
+| `iswc-intersect` | sí | sí | sí | no |
 
 ### Métodos y propiedades públicas
 
@@ -99,7 +99,7 @@ No declara integración form-associated propia en este módulo.
 
 Documentación de cabecera preservada desde fuente:
 
-> <is-intersection-observer> — Web Component (vanilla).
+> <iswc-intersection-observer> — Web Component (vanilla).
 > display:contents — observa hijos directos con IntersectionObserver.
 > Atributos
 >   disabled         boolean
@@ -109,13 +109,13 @@ Documentación de cabecera preservada desde fuente:
 >   root-margin      string
 >   threshold        number 0–1
 > Eventos
->   is-intersect  detail: { entry }
+>   iswc-intersect  detail: { entry }
 
 ## Dependencias y componentes relacionados
 
 - [`../_shared/adopt-css.js`](../_shared/adopt-css.js)
 
-Tags del módulo: `<is-intersection-observer>`.
+Tags del módulo: `<iswc-intersection-observer>`.
 
 ## Accesibilidad
 
@@ -124,9 +124,9 @@ Preservar semántica, foco, teclado, labels y ARIA. ARIA detectado: ninguno expl
 ## Ejemplo avanzado
 
 ```html
-<is-intersection-observer root="#scroller" intersect-class="is-in" threshold="0.4" once>
+<iswc-intersection-observer root="#scroller" intersect-class="iswc-in" threshold="0.4" once>
 <article class="io-card">…</article>
-</is-intersection-observer>
+</iswc-intersection-observer>
 ```
 
 ## Errores comunes

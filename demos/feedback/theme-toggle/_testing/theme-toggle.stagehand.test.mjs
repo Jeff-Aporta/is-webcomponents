@@ -15,8 +15,8 @@ checks.push({
     await waitReady(page, 'data-theme-toggle-ready');
     await page.waitForTimeout(100);
     const sizes = await page.evaluate(() => {
-      return [...document.querySelectorAll('is-theme-toggle')].map((t) => {
-        const btn = t.shadowRoot.querySelector('is-check-icon-button');
+      return [...document.querySelectorAll('iswc-theme-toggle')].map((t) => {
+        const btn = t.shadowRoot.querySelector('iswc-check-icon-button');
         const r = btn.getBoundingClientRect();
         return { w: r.width, h: r.height };
       });
@@ -52,9 +52,9 @@ checks.push({
     await page.waitForTimeout(100);
     const hasToggle = await page.evaluate(() => {
       const sec = [...document.querySelectorAll('section')].find((s) => s.classList.contains('light-theme-demo'));
-      return sec.querySelector('is-theme-toggle') !== null;
+      return sec.querySelector('iswc-theme-toggle') !== null;
     });
-    assert.ok(hasToggle, 'la sección clara debe contener un is-theme-toggle');
+    assert.ok(hasToggle, 'la sección clara debe contener un iswc-theme-toggle');
   },
 });
 

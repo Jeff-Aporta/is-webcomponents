@@ -1,60 +1,61 @@
 /**
- * is-preview-component.css — el chrome visual lo aporta presentation.css
+ * iswc-preview-component.css — el chrome visual lo aporta presentation.css
  * del documento anfitrión. Aquí solo mínimos del host y el chrome propio del
  * modo compacto (hamburguesa del índice + TOC dentro del drawer), que viaja
  * con el componente porque el componente es quien lo monta.
  */
 :host {
   display: block;
-  height: 100%;
-  min-height: 0;
+  block-size: 100%;
+  min-block-size: 0;
 }
 
-is-preview-component {
+iswc-preview-component {
   display: block;
   position: relative; /* ancla de la hamburguesa del índice */
-  height: 100%;
-  min-height: 0;
-}
+  block-size: 100%;
+  min-block-size: 0;
 
-is-preview-component > .page,
-is-preview-component > is-split-panel.page {
-  height: 100%;
-  min-height: 0;
-}
+  /* `.page` es el contenedor principal: `<iswc-split-panel class="page">` o
+     un wrapper equivalente. */
+  > :is(.page, iswc-split-panel.page) {
+    block-size: 100%;
+    min-block-size: 0;
+  }
 
-/* --- Modo compacto: índice en drawer ---------------------------------- */
+  /* --- Modo compacto: índice en drawer ---------------------------------- */
 
-is-preview-component > .toc-toggle {
-  position: absolute;
-  top: 10px;
-  right: 10px;
-  z-index: 30;
-  /* El look lo trae is-button (plain + brand + pill); aquí solo anclaje. */
-  box-shadow: 0 6px 18px rgb(0 0 0 / 18%);
-  backdrop-filter: blur(10px) saturate(120%);
-  -webkit-backdrop-filter: blur(10px) saturate(120%);
-}
+  > .toc-toggle {
+    position: absolute;
+    inset-block-start: 10px;
+    inset-inline-end: 10px;
+    z-index: 30;
+    /* El look lo trae iswc-button (plain + brand + pill); aquí solo anclaje. */
+    box-shadow: 0 6px 18px rgb(0 0 0 / 18%);
+    backdrop-filter: blur(10px) saturate(120%);
+    -webkit-backdrop-filter: blur(10px) saturate(120%);
 
-is-preview-component > .toc-toggle[hidden] { display: none; }
+    &[hidden] { display: none; }
+  }
 
-is-preview-component > is-drawer.toc-drawer {
-  --iswc-preview-size: min(320px, 86vw);
-  --iswc-preview-spacing: 0.9rem;
-}
+  > iswc-drawer.toc-drawer {
+    --iswc-preview-size: min(320px, 86vw);
+    --iswc-preview-spacing: 0.9rem;
+  }
 
-/* El aside viaja tal cual al drawer: dentro ya no es una columna con borde
-   propia, sino el cuerpo del panel. */
-is-preview-component is-drawer.toc-drawer > aside.sidebar {
-  height: auto;
-  padding: 0;
-  border: 0;
-  background: none;
-  overflow: visible;
-}
+  /* El aside viaja tal cual al drawer: dentro ya no es una columna con borde
+     propia, sino el cuerpo del panel. */
+  iswc-drawer.toc-drawer > aside.sidebar {
+    block-size: auto;
+    padding: 0;
+    border: 0;
+    background: none;
+    overflow: visible;
 
-is-preview-component is-drawer.toc-drawer > aside.sidebar h1 {
-  position: static;
-  padding: 0 0 10px;
-  background: none;
+    h1 {
+      position: static;
+      padding: 0 0 10px;
+      background: none;
+    }
+  }
 }

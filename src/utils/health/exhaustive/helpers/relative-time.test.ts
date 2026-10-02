@@ -1,8 +1,8 @@
 /**
- * relative-time.test.ts — Tier A (12 aserciones) para `<is-relative-time>`.
+ * relative-time.test.ts — Tier A (12 aserciones) para `<iswc-relative-time>`.
  *
  * Dimensiones: módulo existe, CSS hermano, JSON+schema, OBSERVED, parseo
- * de fechas, soporte de `sync`, soporte de `format`, eventos is-change,
+ * de fechas, soporte de `sync`, soporte de `format`, eventos iswc-change,
  * shadow DOM, registro custom element, getter/setter, partes CSS.
  */
 
@@ -14,7 +14,7 @@ import { fileURLToPath } from 'node:url';
 
 const HERE = dirname(fileURLToPath(import.meta.url));
 const ROOT = join(HERE, '..', '..', '..', '..', '..');
-const TAG = 'is-relative-time';
+const TAG = 'iswc-relative-time';
 const TS  = join(ROOT, 'src', 'components', 'helpers', 'relative-time.ts');
 const CSS = join(ROOT, 'src', 'components', 'helpers', 'relative-time.css');
 const JSON_PATH = join(ROOT, 'src', 'components', 'helpers', 'relative-time.json');
@@ -28,10 +28,10 @@ test('2. CSS hermano existe', async () => {
   assert.ok(existsSync(CSS));
 });
 
-test('3. JSON existe y respeta is-preview/v1', async () => {
+test('3. JSON existe y respeta iswc-preview/v1', async () => {
   const json = JSON.parse(readFileSync(JSON_PATH, 'utf8'));
   assert.equal(json.tag, TAG);
-  assert.equal(json.$schema, 'is-preview/v1');
+  assert.equal(json.$schema, 'iswc-preview/v1');
 });
 
 test('4. OBSERVED incluye date, sync, locale, format', async () => {
@@ -74,8 +74,8 @@ test('9. shadow DOM expone parte formateada (part="text" o similar)', async () =
 test('10. custom element registrado correctamente', async () => {
   const src = readFileSync(TS, 'utf8');
   assert.ok(
-    /customElements\.define\s*\(\s*['"]is-relative-time['"]/.test(src) ||
-    /defineElement\s*\(\s*['"]is-relative-time['"]/.test(src),
+    /customElements\.define\s*\(\s*['"]iswc-relative-time['"]/.test(src) ||
+    /defineElement\s*\(\s*['"]iswc-relative-time['"]/.test(src),
   );
 });
 

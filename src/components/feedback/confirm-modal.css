@@ -9,7 +9,7 @@
   display: grid;
   place-items: center;
   padding: 1rem;
-  background: rgb(0 0 0 / 45%);
+  background: color-mix(in srgb, #000 45%, transparent);
   backdrop-filter: blur(2px);
   -webkit-backdrop-filter: blur(2px);
   animation: confirm-backdrop-in 0.14s ease-out;
@@ -31,23 +31,11 @@
   padding: 1.1rem 1.2rem;
   min-width: 280px;
   max-width: min(420px, 92vw);
-  box-shadow: 0 14px 42px rgb(0 0 0 / 32%), 0 3px 10px rgb(0 0 0 / 18%);
+  box-shadow:
+    0 14px 42px color-mix(in srgb, #000 32%, transparent),
+    0 3px 10px color-mix(in srgb, #000 18%, transparent);
   font-size: 0.92rem;
   animation: confirm-modal-in 0.16s ease-out;
-}
-
-@keyframes confirm-backdrop-in {
-  from { opacity: 0; }
-  to { opacity: 1; }
-}
-
-@keyframes confirm-modal-in {
-  from { opacity: 0; transform: translateY(8px) scale(0.97); }
-  to { opacity: 1; transform: none; }
-}
-
-@media (prefers-reduced-motion: reduce) {
-  .backdrop, .modal { animation: none; }
 }
 
 .heading {
@@ -68,4 +56,18 @@
   display: flex;
   justify-content: flex-end;
   gap: 0.5rem;
+}
+
+@keyframes confirm-backdrop-in {
+  from { opacity: 0; }
+  to { opacity: 1; }
+}
+
+@keyframes confirm-modal-in {
+  from { opacity: 0; transform: translateY(8px) scale(0.97); }
+  to { opacity: 1; transform: none; }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .backdrop, .modal { animation: none; }
 }

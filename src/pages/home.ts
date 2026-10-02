@@ -3,11 +3,11 @@
  * contadores KPI, cintas en bucle y botón «abrir demo» de cada card.
  *
  * Todo se cablea contra `ctx.main`, que es el scroller que pinta el chrome. La
- * versión anterior buscaba `is-main.home-main` por `document`: cuando ese nodo
+ * versión anterior buscaba `iswc-main.home-main` por `document`: cuando ese nodo
  * cambia de clase o de dueño, las mediciones de scroll se quedan mudas sin dar
  * ningún error.
  *
- * El chrome reusa ese `is-main` entre previews, así que los listeners de scroll
+ * El chrome reusa ese `iswc-main` entre previews, así que los listeners de scroll
  * y resize van con el `signal` del preview: al desmontar se cortan solos en vez
  * de seguir midiendo un DOM que ya es de otro componente.
  *
@@ -19,9 +19,9 @@ import { init as pintarConsumoCdn } from '../utils/home-cdn.js';
 
 /** Tags con demo propia: definen en qué cards aparece el botón de «abrir». */
 const CON_DEMO = new Set([
-  'is-bar-chart', 'is-line-chart', 'is-doughnut-chart', 'is-pie-chart',
-  'is-polar-area-chart', 'is-radar-chart', 'is-scatter-chart',
-  'is-bubble-chart', 'is-sparkline', 'is-flowchart', 'is-timeline',
+  'iswc-bar-chart', 'iswc-line-chart', 'iswc-doughnut-chart', 'iswc-pie-chart',
+  'iswc-polar-area-chart', 'iswc-radar-chart', 'iswc-scatter-chart',
+  'iswc-bubble-chart', 'iswc-sparkline', 'iswc-flowchart', 'iswc-timeline',
 ]);
 
 /**
@@ -34,16 +34,16 @@ const CON_DEMO = new Set([
  * @param {string} tag
  */
 function seleccionar(tag: string) {
-  window.parent.postMessage({ type: 'is-select', tag }, location.origin);
+  window.parent.postMessage({ type: 'iswc-select', tag }, location.origin);
 }
 
 /** @param {HTMLElement} raiz */
 function cablearCtas(raiz: HTMLElement) {
   /** @type {Array<[string, string]>} */
   const ctas = [
-    ['ctaExplore', 'is-button'],
-    ['ctaButton', 'is-button'],
-    ['ctaCharts', 'is-bar-chart'],
+    ['ctaExplore', 'iswc-button'],
+    ['ctaButton', 'iswc-button'],
+    ['ctaCharts', 'iswc-bar-chart'],
   ];
   for (const [id, tag] of ctas) {
     raiz.querySelector<HTMLElement>(`#${id}`)?.addEventListener('click', () => seleccionar(tag));
@@ -135,12 +135,12 @@ function revelarAlEntrar(raiz: HTMLElement, signal: AbortSignal) {
   if (CSS.supports('animation-timeline: view()')) return;
   const objetivos = raiz.querySelectorAll<HTMLElement>('.tile, .lab-card, .home-lab__head');
   if (!objetivos.length) return;
-  for (const el of objetivos) el.classList.add('is-reveal');
+  for (const el of objetivos) el.classList.add('iswc-reveal');
   const io = new IntersectionObserver(
     (entradas) => {
       for (const e of entradas) {
         if (!e.isIntersecting) continue;
-        e.target.classList.add('is-revealed');
+        e.target.classList.add('iswc-revealed');
         io.unobserve(e.target);
       }
     },
@@ -235,7 +235,7 @@ function botonesDeDemo(raiz: HTMLElement) {
     boton.className = 'card-demo';
     boton.title = 'Abrir demo';
     boton.setAttribute('aria-label', `Abrir demo de ${tag}`);
-    const icono = document.createElement('is-icon');
+    const icono = document.createElement('iswc-icon');
     icono.setAttribute('icon', 'mdi:open-in-new');
     boton.appendChild(icono);
     boton.addEventListener('click', (e: Event) => {

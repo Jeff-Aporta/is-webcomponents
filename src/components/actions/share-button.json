@@ -1,11 +1,11 @@
 {
-  "$schema": "is-preview/v1",
-  "tag": "is-share-button",
+  "$schema": "iswc-preview/v1",
+  "tag": "iswc-share-button",
   "category": "actions",
-  "title": "<is-share-button>",
+  "title": "<iswc-share-button>",
   "titleHtml": true,
   "description": "Comparte título, texto y URL con las apps nativas (Web Share). Si no hay share, copia al portapapeles.",
-  "storageKey": "docs-is-share-button",
+  "storageKey": "docs-iswc-share-button",
   "sections": [
     {
       "id": "intro",
@@ -14,12 +14,12 @@
       "blocks": [
         {
           "kind": "demo",
-          "html": "<is-share-button share-title=\"IS Web Components\" text=\"Galería is-*\" url=\"https://jeff-aporta.github.io/is-webcomponents/\"></is-share-button>"
+          "html": "<iswc-share-button share-title=\"IS Web Components\" text=\"Galería is-*\" url=\"https://jeff-aporta.github.io/is-webcomponents/\"></iswc-share-button>"
         },
         {
           "kind": "code",
           "lang": "html",
-          "code": "<is-share-button share-title=\"IS Web Components\" text=\"Galería is-*\" url=\"https://jeff-aporta.github.io/is-webcomponents/\"></is-share-button>"
+          "code": "<iswc-share-button share-title=\"IS Web Components\" text=\"Galería is-*\" url=\"https://jeff-aporta.github.io/is-webcomponents/\"></iswc-share-button>"
         },
         {
           "kind": "callout",

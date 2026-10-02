@@ -45,7 +45,7 @@
       "hasAria": true
     },
     {
-      "tag": "is-icon-explorer",
+      "tag": "iswc-icon-explorer",
       "ok": false,
       "failure": "",
       "errors": [
@@ -64,7 +64,7 @@
       "hasAria": true
     },
     {
-      "tag": "is-ui",
+      "tag": "iswc-ui",
       "ok": false,
       "failure": "",
       "errors": [
@@ -102,7 +102,7 @@
       "hasAria": true
     },
     {
-      "tag": "is-ag-grid",
+      "tag": "iswc-ag-grid",
       "ok": false,
       "failure": "",
       "errors": [
@@ -121,7 +121,7 @@
       "hasAria": true
     },
     {
-      "tag": "is-block-layout",
+      "tag": "iswc-block-layout",
       "ok": false,
       "failure": "",
       "errors": [
@@ -140,7 +140,7 @@
       "hasAria": true
     },
     {
-      "tag": "is-btn-ref",
+      "tag": "iswc-btn-ref",
       "ok": false,
       "failure": "",
       "errors": [
@@ -159,7 +159,7 @@
       "hasAria": true
     },
     {
-      "tag": "is-button",
+      "tag": "iswc-button",
       "ok": false,
       "failure": "",
       "errors": [
@@ -178,7 +178,7 @@
       "hasAria": true
     },
     {
-      "tag": "is-button-group",
+      "tag": "iswc-button-group",
       "ok": false,
       "failure": "",
       "errors": [
@@ -197,7 +197,7 @@
       "hasAria": true
     },
     {
-      "tag": "is-catalogo-gen",
+      "tag": "iswc-catalogo-gen",
       "ok": false,
       "failure": "",
       "errors": [
@@ -216,7 +216,7 @@
       "hasAria": true
     },
     {
-      "tag": "is-chart",
+      "tag": "iswc-chart",
       "ok": false,
       "failure": "",
       "errors": [
@@ -235,7 +235,7 @@
       "hasAria": true
     },
     {
-      "tag": "is-checkbox",
+      "tag": "iswc-checkbox",
       "ok": false,
       "failure": "",
       "errors": [
@@ -254,7 +254,7 @@
       "hasAria": true
     },
     {
-      "tag": "is-code",
+      "tag": "iswc-code",
       "ok": false,
       "failure": "",
       "errors": [
@@ -273,7 +273,7 @@
       "hasAria": true
     },
     {
-      "tag": "is-color-picker",
+      "tag": "iswc-color-picker",
       "ok": false,
       "failure": "",
       "errors": [
@@ -292,7 +292,7 @@
       "hasAria": true
     },
     {
-      "tag": "is-command-palette",
+      "tag": "iswc-command-palette",
       "ok": false,
       "failure": "",
       "errors": [
@@ -311,7 +311,7 @@
       "hasAria": true
     },
     {
-      "tag": "is-context-menu",
+      "tag": "iswc-context-menu",
       "ok": false,
       "failure": "",
       "errors": [
@@ -330,7 +330,7 @@
       "hasAria": true
     },
     {
-      "tag": "is-data-grid",
+      "tag": "iswc-data-grid",
       "ok": false,
       "failure": "",
       "errors": [
@@ -349,7 +349,7 @@
       "hasAria": true
     },
     {
-      "tag": "is-diagram-lightbox",
+      "tag": "iswc-diagram-lightbox",
       "ok": false,
       "failure": "",
       "errors": [
@@ -368,7 +368,7 @@
       "hasAria": true
     },
     {
-      "tag": "is-doc-editor",
+      "tag": "iswc-doc-editor",
       "ok": false,
       "failure": "",
       "errors": [
@@ -387,7 +387,7 @@
       "hasAria": true
     },
     {
-      "tag": "is-dock",
+      "tag": "iswc-dock",
       "ok": false,
       "failure": "",
       "errors": [
@@ -406,7 +406,7 @@
       "hasAria": true
     },
     {
-      "tag": "is-dropdown",
+      "tag": "iswc-dropdown",
       "ok": false,
       "failure": "",
       "errors": [
@@ -425,7 +425,7 @@
       "hasAria": true
     },
     {
-      "tag": "is-dropzone",
+      "tag": "iswc-dropzone",
       "ok": false,
       "failure": "",
       "errors": [
@@ -444,7 +444,7 @@
       "hasAria": true
     },
     {
-      "tag": "is-duration-picker",
+      "tag": "iswc-duration-picker",
       "ok": false,
       "failure": "",
       "errors": [
@@ -463,7 +463,7 @@
       "hasAria": true
     },
     {
-      "tag": "is-file-input",
+      "tag": "iswc-file-input",
       "ok": false,
       "failure": "",
       "errors": [
@@ -482,7 +482,7 @@
       "hasAria": true
     },
     {
-      "tag": "is-flex-layout",
+      "tag": "iswc-flex-layout",
       "ok": false,
       "failure": "",
       "errors": [
@@ -501,7 +501,7 @@
       "hasAria": true
     },
     {
-      "tag": "is-flex-options",
+      "tag": "iswc-flex-options",
       "ok": false,
       "failure": "",
       "errors": [
@@ -520,7 +520,7 @@
       "hasAria": true
     },
     {
-      "tag": "is-float-card",
+      "tag": "iswc-float-card",
       "ok": false,
       "failure": "",
       "errors": [
@@ -539,7 +539,7 @@
       "hasAria": true
     },
     {
-      "tag": "is-form",
+      "tag": "iswc-form",
       "ok": false,
       "failure": "",
       "errors": [
@@ -558,7 +558,7 @@
       "hasAria": true
     },
     {
-      "tag": "is-format-date",
+      "tag": "iswc-format-date",
       "ok": false,
       "failure": "",
       "errors": [
@@ -577,7 +577,7 @@
       "hasAria": true
     },
     {
-      "tag": "is-full-calendar",
+      "tag": "iswc-full-calendar",
       "ok": false,
       "failure": "",
       "errors": [
@@ -596,7 +596,7 @@
       "hasAria": true
     },
     {
-      "tag": "is-gauge",
+      "tag": "iswc-gauge",
       "ok": false,
       "failure": "",
       "errors": [
@@ -615,7 +615,7 @@
       "hasAria": true
     },
     {
-      "tag": "is-heading",
+      "tag": "iswc-heading",
       "ok": false,
       "failure": "",
       "errors": [
@@ -634,7 +634,7 @@
       "hasAria": true
     },
     {
-      "tag": "is-heatmap",
+      "tag": "iswc-heatmap",
       "ok": false,
       "failure": "",
       "errors": [
@@ -653,7 +653,7 @@
       "hasAria": true
     },
     {
-      "tag": "is-icon",
+      "tag": "iswc-icon",
       "ok": false,
       "failure": "",
       "errors": [
@@ -672,7 +672,7 @@
       "hasAria": true
     },
     {
-      "tag": "is-image-editor",
+      "tag": "iswc-image-editor",
       "ok": false,
       "failure": "",
       "errors": [
@@ -691,7 +691,7 @@
       "hasAria": true
     },
     {
-      "tag": "is-input",
+      "tag": "iswc-input",
       "ok": false,
       "failure": "",
       "errors": [
@@ -710,7 +710,7 @@
       "hasAria": true
     },
     {
-      "tag": "is-lightbox",
+      "tag": "iswc-lightbox",
       "ok": false,
       "failure": "",
       "errors": [
@@ -729,7 +729,7 @@
       "hasAria": true
     },
     {
-      "tag": "is-loading-overlay",
+      "tag": "iswc-loading-overlay",
       "ok": false,
       "failure": "",
       "errors": [
@@ -748,7 +748,7 @@
       "hasAria": true
     },
     {
-      "tag": "is-main",
+      "tag": "iswc-main",
       "ok": false,
       "failure": "",
       "errors": [
@@ -767,7 +767,7 @@
       "hasAria": true
     },
     {
-      "tag": "is-mega-menu",
+      "tag": "iswc-mega-menu",
       "ok": false,
       "failure": "",
       "errors": [
@@ -786,7 +786,7 @@
       "hasAria": true
     },
     {
-      "tag": "is-mention",
+      "tag": "iswc-mention",
       "ok": false,
       "failure": "",
       "errors": [
@@ -805,7 +805,7 @@
       "hasAria": true
     },
     {
-      "tag": "is-modal-verificacion",
+      "tag": "iswc-modal-verificacion",
       "ok": false,
       "failure": "",
       "errors": [
@@ -824,7 +824,7 @@
       "hasAria": true
     },
     {
-      "tag": "is-mutation-observer",
+      "tag": "iswc-mutation-observer",
       "ok": false,
       "failure": "",
       "errors": [
@@ -843,7 +843,7 @@
       "hasAria": true
     },
     {
-      "tag": "is-observer",
+      "tag": "iswc-observer",
       "ok": false,
       "failure": "",
       "errors": [
@@ -862,7 +862,7 @@
       "hasAria": true
     },
     {
-      "tag": "is-org-chart",
+      "tag": "iswc-org-chart",
       "ok": false,
       "failure": "",
       "errors": [
@@ -881,7 +881,7 @@
       "hasAria": true
     },
     {
-      "tag": "is-pivot-table",
+      "tag": "iswc-pivot-table",
       "ok": false,
       "failure": "",
       "errors": [
@@ -900,7 +900,7 @@
       "hasAria": true
     },
     {
-      "tag": "is-progress-bar",
+      "tag": "iswc-progress-bar",
       "ok": false,
       "failure": "",
       "errors": [
@@ -919,7 +919,7 @@
       "hasAria": true
     },
     {
-      "tag": "is-radar-chart",
+      "tag": "iswc-radar-chart",
       "ok": false,
       "failure": "",
       "errors": [
@@ -938,7 +938,7 @@
       "hasAria": true
     },
     {
-      "tag": "is-rating",
+      "tag": "iswc-rating",
       "ok": false,
       "failure": "",
       "errors": [
@@ -957,7 +957,7 @@
       "hasAria": true
     },
     {
-      "tag": "is-relative-time",
+      "tag": "iswc-relative-time",
       "ok": false,
       "failure": "",
       "errors": [
@@ -976,7 +976,7 @@
       "hasAria": true
     },
     {
-      "tag": "is-resize-observer",
+      "tag": "iswc-resize-observer",
       "ok": false,
       "failure": "",
       "errors": [
@@ -995,7 +995,7 @@
       "hasAria": true
     },
     {
-      "tag": "is-rte",
+      "tag": "iswc-rte",
       "ok": false,
       "failure": "",
       "errors": [
@@ -1014,7 +1014,7 @@
       "hasAria": true
     },
     {
-      "tag": "is-scatter-chart",
+      "tag": "iswc-scatter-chart",
       "ok": false,
       "failure": "",
       "errors": [
@@ -1033,7 +1033,7 @@
       "hasAria": true
     },
     {
-      "tag": "is-select",
+      "tag": "iswc-select",
       "ok": false,
       "failure": "",
       "errors": [
@@ -1052,7 +1052,7 @@
       "hasAria": true
     },
     {
-      "tag": "is-sequence-diagram",
+      "tag": "iswc-sequence-diagram",
       "ok": false,
       "failure": "",
       "errors": [
@@ -1071,7 +1071,7 @@
       "hasAria": true
     },
     {
-      "tag": "is-signature",
+      "tag": "iswc-signature",
       "ok": false,
       "failure": "",
       "errors": [
@@ -1090,7 +1090,7 @@
       "hasAria": true
     },
     {
-      "tag": "is-slider",
+      "tag": "iswc-slider",
       "ok": false,
       "failure": "",
       "errors": [
@@ -1109,7 +1109,7 @@
       "hasAria": true
     },
     {
-      "tag": "is-speed-dial",
+      "tag": "iswc-speed-dial",
       "ok": false,
       "failure": "",
       "errors": [
@@ -1128,7 +1128,7 @@
       "hasAria": true
     },
     {
-      "tag": "is-switch",
+      "tag": "iswc-switch",
       "ok": false,
       "failure": "",
       "errors": [
@@ -1147,7 +1147,7 @@
       "hasAria": true
     },
     {
-      "tag": "is-text",
+      "tag": "iswc-text",
       "ok": false,
       "failure": "",
       "errors": [
@@ -1166,7 +1166,7 @@
       "hasAria": true
     },
     {
-      "tag": "is-textarea",
+      "tag": "iswc-textarea",
       "ok": false,
       "failure": "",
       "errors": [
@@ -1185,7 +1185,7 @@
       "hasAria": true
     },
     {
-      "tag": "is-toast",
+      "tag": "iswc-toast",
       "ok": false,
       "failure": "",
       "errors": [
@@ -1204,7 +1204,7 @@
       "hasAria": true
     },
     {
-      "tag": "is-tooltip",
+      "tag": "iswc-tooltip",
       "ok": false,
       "failure": "",
       "errors": [
@@ -1223,7 +1223,7 @@
       "hasAria": true
     },
     {
-      "tag": "is-tree-view",
+      "tag": "iswc-tree-view",
       "ok": false,
       "failure": "",
       "errors": [
@@ -1242,7 +1242,7 @@
       "hasAria": true
     },
     {
-      "tag": "is-video",
+      "tag": "iswc-video",
       "ok": false,
       "failure": "",
       "errors": [
@@ -1261,7 +1261,7 @@
       "hasAria": true
     },
     {
-      "tag": "is-video-playlist",
+      "tag": "iswc-video-playlist",
       "ok": false,
       "failure": "",
       "errors": [

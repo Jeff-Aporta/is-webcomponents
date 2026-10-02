@@ -3,7 +3,7 @@
 <head>
 <meta charset="utf-8" />
 <meta name="viewport" content="width=device-width, initial-scale=1" />
-<title>Demo — <is-timeline> · is-webcomponents</title>
+<title>Demo — <iswc-timeline> · is-webcomponents</title>
 <meta name="description" content="Línea de tiempo con eventos datados y agrupación por color/grupo." />
 <style>
   html, body { margin: 0; padding: 0; min-height: 100%; background: #0c1118; color: #e2e8f0; font-family: ui-sans-serif, system-ui, sans-serif; }
@@ -12,14 +12,14 @@
   header h1 { font-size: 16px; font-weight: 700; margin: 0; }
   header p { font-size: 12px; color: #94a3b8; margin: 4px 0 0 0; }
   main { display: grid; place-items: stretch; min-height: 0; padding: 12px; }
-  is-timeline { width: 100%; height: 100%; min-height: 480px; display: block; }
-  is-timeline:not(:defined) { visibility: hidden; }
+  iswc-timeline { width: 100%; height: 100%; min-height: 480px; display: block; }
+  iswc-timeline:not(:defined) { visibility: hidden; }
 </style>
 <script type="module">
-  await import('../../../dist/cdn/diagrams/timeline.min.js?h=nzbmab');
-  await customElements.whenDefined('is-timeline');
+  await import('../../../dist/cdn/diagrams/timeline.min.js?h=4cb1dy');
+  await customElements.whenDefined('iswc-timeline');
 
-  const el = document.createElement('is-timeline');
+  const el = document.createElement('iswc-timeline');
   el.payload = {
     timeline: {
       title: 'Historia del proyecto',
@@ -45,7 +45,7 @@
 </head>
 <body>
   <header>
-  <h1>Demo — <code>&lt;is-timeline&gt;</code></h1>
+  <h1>Demo — <code>&lt;iswc-timeline&gt;</code></h1>
   <p>Línea de tiempo horizontal: eventos datados, agrupados por color y ordenados cronológicamente.</p>
 </header>
 <main></main>

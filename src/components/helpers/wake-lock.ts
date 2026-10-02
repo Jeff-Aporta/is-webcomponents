@@ -1,16 +1,16 @@
 import { adoptCss, defineElement, emit } from '../../core/element.js';
 
 /**
- * <is-wake-lock> — Screen Wake Lock. Host display:contents.
+ * <iswc-wake-lock> — Screen Wake Lock. Host display:contents.
  *
  * Atributos: active (boolean). Si está, pide el lock; si se quita, lo suelta.
- * Eventos: is-change { held }
+ * Eventos: iswc-change { held }
  */
 (() => {
   const TEMPLATE = document.createElement('template');
   TEMPLATE.innerHTML = '<slot></slot>';
 
-  class IsWakeLock extends HTMLElement {
+  class IswcWakeLock extends HTMLElement {
     static get observedAttributes(): string[] { return ['active']; }
 
     #lock: WakeLockSentinel | null = null;
@@ -50,11 +50,11 @@ import { adoptCss, defineElement, emit } from '../../core/element.js';
         this.#lock = sentinel;
         sentinel.addEventListener('release', () => {
           this.#lock = null;
-          emit(this, 'is-change', { held: false });
+          emit(this, 'iswc-change', { held: false });
         });
-        emit(this, 'is-change', { held: true });
+        emit(this, 'iswc-change', { held: true });
       } catch {
-        emit(this, 'is-change', { held: false });
+        emit(this, 'iswc-change', { held: false });
       }
     }
 
@@ -66,5 +66,5 @@ import { adoptCss, defineElement, emit } from '../../core/element.js';
     }
   }
 
-  defineElement('is-wake-lock', IsWakeLock, 'IsWakeLock');
+  defineElement('iswc-wake-lock', IswcWakeLock, 'IswcWakeLock');
 })();

@@ -1,22 +1,22 @@
 ---
-tag: is-mutation-observer
+tag: iswc-mutation-observer
 tags:
-  - is-mutation-observer
+  - iswc-mutation-observer
 category: helpers
 status: public
 source: ./mutation-observer.js
 style: ./mutation-observer.css
 preview: ./mutation-observer.json
 ---
-# `<is-mutation-observer>`
+# `<iswc-mutation-observer>`
 
 ## Propósito
 
 Responde a: ¿cambió el HTML de este nodo?
 Cuando alguien añade/quita hijos, cambia un atributo o el texto, emite
-is-mutate con el detalle de qué pasó.
+iswc-mutate con el detalle de qué pasó.
 
-Este módulo registra `<is-mutation-observer>`.
+Este módulo registra `<iswc-mutation-observer>`.
 
 ## Cuándo usarlo
 
@@ -35,7 +35,7 @@ import './mutation-observer.js';
 ## Ejemplo mínimo
 
 ```html
-<is-mutation-observer></is-mutation-observer>
+<iswc-mutation-observer></iswc-mutation-observer>
 ```
 
 ## API
@@ -65,7 +65,7 @@ No expone.
 
 | Evento | detail | bubbles | composed | cancelable |
 | --- | --- | --- | --- | --- |
-| `is-mutate` | sí | sí | sí | no |
+| `iswc-mutate` | sí | sí | sí | no |
 
 ### Métodos y propiedades públicas
 
@@ -93,7 +93,7 @@ No declara integración form-associated propia en este módulo.
 
 Documentación de cabecera preservada desde fuente:
 
-> <is-mutation-observer> — Web Component (vanilla).
+> <iswc-mutation-observer> — Web Component (vanilla).
 > display:contents — observa mutaciones en el host y sus hijos.
 > Atributos (booleanos salvo attr)
 >   disabled         boolean
@@ -101,13 +101,13 @@ Documentación de cabecera preservada desde fuente:
 >   child-list       boolean (default true)
 >   character-data   boolean
 > Eventos
->   is-mutate  detail: { records }
+>   iswc-mutate  detail: { records }
 
 ## Dependencias y componentes relacionados
 
 - [`../_shared/adopt-css.js`](../_shared/adopt-css.js)
 
-Tags del módulo: `<is-mutation-observer>`.
+Tags del módulo: `<iswc-mutation-observer>`.
 
 ## Accesibilidad
 
@@ -116,7 +116,7 @@ Preservar semántica, foco, teclado, labels y ARIA. ARIA detectado: ninguno expl
 ## Ejemplo avanzado
 
 ```html
-<is-mutation-observer></is-mutation-observer>
+<iswc-mutation-observer></iswc-mutation-observer>
 ```
 
 ## Errores comunes

@@ -29,7 +29,7 @@ interface SharedCatalogJSON {
   modules: SharedModuleEntry[];
 }
 
-/** Snippet editable: <is-code>, <textarea> o <input>. */
+/** Snippet editable: <iswc-code>, <textarea> o <input>. */
 type SnippetEditor = HTMLElement & { value: string };
 
 export async function mount(ctx: PreviewMountContext, preview: ISComponentPreviewLike): Promise<void> {
@@ -48,12 +48,12 @@ export async function mount(ctx: PreviewMountContext, preview: ISComponentPrevie
 
   await ISWebComponentsLoader.loadCSSBase();
   await ISWebComponentsLoader.loadCSSPalettesDefault();
-  await ISWebComponentsLoader.load('is-button', 'is-button-group');
+  await ISWebComponentsLoader.load('iswc-button', 'iswc-button-group');
   // Categorías: load('actions', 'data-viz')  // alias: charts → data-viz
   // Todo el kit: load('all')
 </script>
 
-<is-button color="brand">Hola</is-button>`;
+<iswc-button color="brand">Hola</iswc-button>`;
     setEditorValue(getStarted, snip);
   }
 
@@ -61,9 +61,9 @@ export async function mount(ctx: PreviewMountContext, preview: ISComponentPrevie
   await mountSharedCatalog(root, preview, opts);
 }
 
-/** Asigna valor a un editor de snippet (is-code / textarea / input / pre). */
+/** Asigna valor a un editor de snippet (iswc-code / textarea / input / pre). */
 function setEditorValue(el: HTMLElement, value: string): void {
-  if ('value' in el && (el.localName === 'is-code' || el.localName === 'textarea' || el.localName === 'input')) {
+  if ('value' in el && (el.localName === 'iswc-code' || el.localName === 'textarea' || el.localName === 'input')) {
     (el as SnippetEditor).value = value;
   } else {
     el.textContent = value;
@@ -94,7 +94,7 @@ async function mountPlayground(root: ParentNode, opts: AddEventListenerOptions |
     return;
   }
 
-  const quickTags = ['is-button', 'is-button-group', 'is-icon', 'is-input', 'is-card', 'is-toast', 'is-code'];
+  const quickTags = ['iswc-button', 'iswc-button-group', 'iswc-icon', 'iswc-input', 'iswc-card', 'iswc-toast', 'iswc-code'];
   const catNames = Object.keys(catalog.categories).sort();
 
   for (const c of catNames) {
@@ -121,7 +121,7 @@ async function mountPlayground(root: ParentNode, opts: AddEventListenerOptions |
     const args = [...cats, ...tags].map((x) => `'${x}'`).join(', ');
     const body = args
       ? `await ISWebComponentsLoader.load(${args});`
-      : `await ISWebComponentsLoader.load('is-button'); // elegí arriba`;
+      : `await ISWebComponentsLoader.load('iswc-button'); // elegí arriba`;
     const snip = `<script type="module">
   import { ISWebComponentsLoader } from '../previews/behaviors/dist/cdn/core/loader.min.js';
   await ISWebComponentsLoader.loadCSSBase();
@@ -148,8 +148,8 @@ async function mountPlayground(root: ParentNode, opts: AddEventListenerOptions |
       await mod.ISWebComponentsLoader.load(...ids);
       if (liveEl) {
         liveEl.replaceChildren();
-        if (ids.some((id) => id === 'is-button' || id === 'actions' || catalog.tags[id]?.file === 'button')) {
-          const b = document.createElement('is-button');
+        if (ids.some((id) => id === 'iswc-button' || id === 'actions' || catalog.tags[id]?.file === 'button')) {
+          const b = document.createElement('iswc-button');
           b.setAttribute('color', 'brand');
           b.textContent = 'Brand listo';
           liveEl.appendChild(b);
@@ -217,7 +217,7 @@ async function mountSharedCatalog(
       card.className = 'eco-card';
       card.innerHTML = `
         <div class="eco-card__head">
-          <is-heading class="eco-card__id" level="4">${esc(m.id)}</is-heading>
+          <iswc-heading class="eco-card__id" level="4">${esc(m.id)}</iswc-heading>
           <span class="eco-card__path">${esc(m.path)}</span>
         </div>
         <p class="eco-card__sum">${esc(m.summary)}</p>

@@ -1,8 +1,8 @@
 :host {
   display: inline-block;
   vertical-align: middle;
-  width: 6em;
-  height: 1.5em;
+  inline-size: 6em;
+  block-size: 1.5em;
   aspect-ratio: 4 / 1;
   box-sizing: border-box;
 
@@ -36,14 +36,14 @@
 
 .wrap {
   display: block;
-  width: 100%;
-  height: 100%;
+  inline-size: 100%;
+  block-size: 100%;
 }
 
 .chart-svg {
   display: block;
-  width: 100%;
-  height: 100%;
+  inline-size: 100%;
+  block-size: 100%;
   overflow: visible;
 }
 
@@ -56,8 +56,8 @@
 /* Screen-reader status (aria-live polite) — visible a SR, oculto visual. */
 .sr-status {
   position: absolute;
-  width: 1px;
-  height: 1px;
+  inline-size: 1px;
+  block-size: 1px;
   padding: 0;
   margin: -1px;
   overflow: hidden;

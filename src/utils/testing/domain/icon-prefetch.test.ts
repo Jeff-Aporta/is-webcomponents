@@ -32,9 +32,9 @@ test('src/assets no se intenta para prefijos no shipped', () => {
   assert.match(loader, /SRC_SHIPPED_PREFIXES\.has\(prefix\)/);
 });
 
-test('is-preview-component no pone remember-scroll sin storage-key en el template', () => {
+test('iswc-preview-component no pone remember-scroll sin storage-key en el template', () => {
   const start = preview.indexOf('TEMPLATE.innerHTML');
-  const end = preview.indexOf('class IsPreviewComponent');
+  const end = preview.indexOf('class IswcPreviewComponent');
   const tpl = preview.slice(start, end > start ? end : start + 800);
   assert.doesNotMatch(tpl, /remember-scroll/);
   assert.match(preview, /toggleAttribute\(['"]remember-scroll['"]/);

@@ -13,9 +13,9 @@
   main { display: grid; grid-template-columns: 1fr 1fr; gap: 14px; padding: 20px; }
   section { background: #0f1620; border: 1px solid rgba(255,255,255,0.1); border-radius: 8px; padding: 14px; }
   section h2 { font-size: 11px; text-transform: uppercase; margin: 0 0 8px 0; color: #94a3b8; letter-spacing: 0.05em; }
-  is-pie-chart, is-doughnut-chart, is-polar-area-chart, is-radar-chart { display: block; width: 100%; height: 240px; }
+  iswc-pie-chart, iswc-doughnut-chart, iswc-polar-area-chart, iswc-radar-chart { display: block; width: 100%; height: 240px; }
   pre { background: #06090e; padding: 8px; border-radius: 6px; overflow: auto; font-size: 11px; color: #94a3b8; grid-column: 1 / -1; }
-  is-pie-chart:not(:defined), is-doughnut-chart:not(:defined), is-polar-area-chart:not(:defined), is-radar-chart:not(:defined) { visibility: hidden; }
+  iswc-pie-chart:not(:defined), iswc-doughnut-chart:not(:defined), iswc-polar-area-chart:not(:defined), iswc-radar-chart:not(:defined) { visibility: hidden; }
 </style>
 <script type="module">
   // El bundle marks-radial.min.js exporta las funciones puras.
@@ -24,20 +24,20 @@
 
   // Para invocarlas en vivo, importamos los wrappers tipados que las usan.
   await Promise.all([
-    import('../../../dist/cdn/data-viz/pie-chart.min.js?h=as1wpm'),
-    import('../../../dist/cdn/data-viz/doughnut-chart.min.js?h=nero0w'),
-    import('../../../dist/cdn/data-viz/polar-area-chart.min.js?h=r6dgv2'),
-    import('../../../dist/cdn/data-viz/radar-chart.min.js?h=zjxtf2'),
+    import('../../../dist/cdn/data-viz/pie-chart.min.js?h=ll767o'),
+    import('../../../dist/cdn/data-viz/doughnut-chart.min.js?h=h752gm'),
+    import('../../../dist/cdn/data-viz/polar-area-chart.min.js?h=wgv9so'),
+    import('../../../dist/cdn/data-viz/radar-chart.min.js?h=1zxuyk'),
   ]);
   await Promise.all([
-    customElements.whenDefined('is-pie-chart'),
-    customElements.whenDefined('is-doughnut-chart'),
-    customElements.whenDefined('is-polar-area-chart'),
-    customElements.whenDefined('is-radar-chart'),
+    customElements.whenDefined('iswc-pie-chart'),
+    customElements.whenDefined('iswc-doughnut-chart'),
+    customElements.whenDefined('iswc-polar-area-chart'),
+    customElements.whenDefined('iswc-radar-chart'),
   ]);
 
   // Pie
-  const pie = document.createElement('is-pie-chart');
+  const pie = document.createElement('iswc-pie-chart');
   pie.setAttribute('label', 'drawPieMarks');
   pie.payload = {
     data: { labels: ['Rojo','Azul','Verde'], datasets: [{ label: 'Mix', data: [40, 35, 25] }] },
@@ -45,7 +45,7 @@
   document.getElementById('pie-host').appendChild(pie);
 
   // Doughnut
-  const dough = document.createElement('is-doughnut-chart');
+  const dough = document.createElement('iswc-doughnut-chart');
   dough.setAttribute('label', 'drawDoughnutMarks');
   dough.payload = {
     data: { labels: ['Op','Mkt','RRHH','I+D'], datasets: [{ label: '2024', data: [42, 18, 15, 25] }] },
@@ -53,7 +53,7 @@
   document.getElementById('dough-host').appendChild(dough);
 
   // Polar area
-  const pol = document.createElement('is-polar-area-chart');
+  const pol = document.createElement('iswc-polar-area-chart');
   pol.setAttribute('label', 'drawPolarAreaMarks');
   pol.payload = {
     data: { labels: ['N','NE','E','SE','S','SO','O','NO'], datasets: [{ label: 'Vientos', data: [3, 5, 8, 6, 4, 7, 9, 2] }] },
@@ -61,7 +61,7 @@
   document.getElementById('pol-host').appendChild(pol);
 
   // Radar
-  const rad = document.createElement('is-radar-chart');
+  const rad = document.createElement('iswc-radar-chart');
   rad.setAttribute('label', 'drawRadarMarks');
   rad.payload = {
     data: { labels: ['A','B','C','D','E'], datasets: [{ label: 'P1', data: [80, 60, 75, 90, 55] }] },

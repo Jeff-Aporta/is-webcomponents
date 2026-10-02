@@ -9,15 +9,15 @@ const URL = `${BASE_URL}/demos/data/data-grid/data-grid.html`;
 const tests = [];
 
 tests.push({
-  name: 'smoke: is-data-grid está definido y los 3 grids renderizan',
+  name: 'smoke: iswc-data-grid está definido y los 3 grids renderizan',
   run: async (page) => {
     await page.goto(URL, { waitUntil: 'domcontentloaded' });
     await waitReady(page, 'data-data-grid-ready');
     await page.waitForTimeout(400); // el grid puede tardar en pintar
     const initial = await page.evaluate(() => {
-      const grids = [...document.querySelectorAll('main is-data-grid')];
+      const grids = [...document.querySelectorAll('main iswc-data-grid')];
       return {
-        defined: !!customElements.get('is-data-grid'),
+        defined: !!customElements.get('iswc-data-grid'),
         count: grids.length,
         perGrid: grids.map((g) => {
           const sr = g.shadowRoot;
@@ -38,7 +38,7 @@ tests.push({
         }),
       };
     });
-    assert.equal(initial.defined, true, 'is-data-grid debe estar definido');
+    assert.equal(initial.defined, true, 'iswc-data-grid debe estar definido');
     assert.equal(initial.count, 3, `esperaba 3 grids, hay ${initial.count}`);
     for (let i = 0; i < initial.perGrid.length; i++) {
       const r = initial.perGrid[i];
@@ -59,7 +59,7 @@ tests.push({
     await waitReady(page, 'data-data-grid-ready');
     await page.waitForTimeout(400);
     const state = await page.evaluate(() => {
-      const grids = [...document.querySelectorAll('main is-data-grid')];
+      const grids = [...document.querySelectorAll('main iswc-data-grid')];
       const g1 = grids[0];
       return {
         columnsCount: g1.columns.length,
@@ -83,7 +83,7 @@ tests.push({
     await waitReady(page, 'data-data-grid-ready');
     await page.waitForTimeout(400);
     const state = await page.evaluate(() => {
-      const grids = [...document.querySelectorAll('main is-data-grid')];
+      const grids = [...document.querySelectorAll('main iswc-data-grid')];
       const g1 = grids[0]; // basic paginado con page-size=5
       const sr = g1.shadowRoot;
       const body = sr.querySelector('.grid-body');
@@ -108,7 +108,7 @@ tests.push({
     await page.waitForTimeout(400);
     // Sin toolbar (g2) muestra todas las filas.
     const profits = await page.evaluate(() => {
-      const grids = [...document.querySelectorAll('main is-data-grid')];
+      const grids = [...document.querySelectorAll('main iswc-data-grid')];
       const g2 = grids[1];
       const sr = g2.shadowRoot;
       const body = sr.querySelector('.grid-body');
@@ -134,7 +134,7 @@ tests.push({
     await waitReady(page, 'data-data-grid-ready');
     await page.waitForTimeout(400);
     const result = await page.evaluate(() => {
-      const grids = [...document.querySelectorAll('main is-data-grid')];
+      const grids = [...document.querySelectorAll('main iswc-data-grid')];
       const g3 = grids[2]; // custom
       const sr = g3.shadowRoot;
       const body = sr.querySelector('.grid-body');
@@ -156,17 +156,17 @@ tests.push({
 });
 
 tests.push({
-  name: 'funcional: evento is-cell-click emite detail { id, field, row }',
+  name: 'funcional: evento iswc-cell-click emite detail { id, field, row }',
   run: async (page) => {
     await page.goto(URL, { waitUntil: 'domcontentloaded' });
     await waitReady(page, 'data-data-grid-ready');
     await page.waitForTimeout(400);
     const captured = await page.evaluate(() => {
       return new Promise((resolve) => {
-        const grids = [...document.querySelectorAll('main is-data-grid')];
+        const grids = [...document.querySelectorAll('main iswc-data-grid')];
         const g2 = grids[1]; // sin paginación, 8 filas
         let detail = null;
-        g2.addEventListener('is-cell-click', (e) => { detail = e.detail; });
+        g2.addEventListener('iswc-cell-click', (e) => { detail = e.detail; });
         const sr = g2.shadowRoot;
         const body = sr.querySelector('.grid-body');
         const firstRow = body.querySelector('.grid-row');
@@ -195,17 +195,17 @@ tests.push({
 });
 
 tests.push({
-  name: 'funcional: evento is-page-change emite al cambiar página',
+  name: 'funcional: evento iswc-page-change emite al cambiar página',
   run: async (page) => {
     await page.goto(URL, { waitUntil: 'domcontentloaded' });
     await waitReady(page, 'data-data-grid-ready');
     await page.waitForTimeout(400);
     const captured = await page.evaluate(() => {
       return new Promise((resolve) => {
-        const grids = [...document.querySelectorAll('main is-data-grid')];
+        const grids = [...document.querySelectorAll('main iswc-data-grid')];
         const g1 = grids[0];
         let detail = null;
-        g1.addEventListener('is-page-change', (e) => { detail = e.detail; });
+        g1.addEventListener('iswc-page-change', (e) => { detail = e.detail; });
         g1.paginationModel = { ...g1.paginationModel, page: 1 };
         setTimeout(() => {
           resolve({
@@ -223,17 +223,17 @@ tests.push({
 });
 
 tests.push({
-  name: 'funcional: evento is-sort-change emite al ordenar',
+  name: 'funcional: evento iswc-sort-change emite al ordenar',
   run: async (page) => {
     await page.goto(URL, { waitUntil: 'domcontentloaded' });
     await waitReady(page, 'data-data-grid-ready');
     await page.waitForTimeout(400);
     const captured = await page.evaluate(() => {
       return new Promise((resolve) => {
-        const grids = [...document.querySelectorAll('main is-data-grid')];
+        const grids = [...document.querySelectorAll('main iswc-data-grid')];
         const g1 = grids[0];
         let detail = null;
-        g1.addEventListener('is-sort-change', (e) => { detail = e.detail; });
+        g1.addEventListener('iswc-sort-change', (e) => { detail = e.detail; });
         // Aplicar sort via API
         g1.sortModel = [{ field: 'gross', sort: 'asc' }];
         setTimeout(() => {
@@ -256,7 +256,7 @@ tests.push({
     await waitReady(page, 'data-data-grid-ready');
     await page.waitForTimeout(400);
     const toolbars = await page.evaluate(() => {
-      const grids = [...document.querySelectorAll('main is-data-grid')];
+      const grids = [...document.querySelectorAll('main iswc-data-grid')];
       return grids.map((g) => ({
         attr: g.getAttribute('show-toolbar'),
         hasToolbar: !!g.shadowRoot?.querySelector('.grid-toolbar'),
@@ -275,7 +275,7 @@ tests.push({
     await waitReady(page, 'data-data-grid-ready');
     await page.waitForTimeout(400);
     const a = await page.evaluate(() => {
-      const grids = [...document.querySelectorAll('main is-data-grid')];
+      const grids = [...document.querySelectorAll('main iswc-data-grid')];
       const g2 = grids[1];
       const cols = g2.columns;
       const rows = g2.rows;
@@ -286,7 +286,7 @@ tests.push({
     });
     await page.waitForTimeout(50);
     const b = await page.evaluate(() => {
-      const grids = [...document.querySelectorAll('main is-data-grid')];
+      const grids = [...document.querySelectorAll('main iswc-data-grid')];
       const g2 = grids[1];
       const body = g2.shadowRoot.querySelector('.grid-body');
       return [...(body?.querySelectorAll('.grid-row') ?? [])].map((r) => r.textContent.trim());

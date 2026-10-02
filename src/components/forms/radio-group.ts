@@ -11,8 +11,8 @@ import {
 import { ElementBase } from '../../core/element-base.js';
 import { setStringAttr, setOptionalAttr } from '../_shared/reflect.js';
 /**
- * <is-radio-group> — Grupo form-associated de <is-radio>. El grupo es el dueño
- * del valor: los radios solo avisan con `is-radio-select`.
+ * <iswc-radio-group> — Grupo form-associated de <iswc-radio>. El grupo es el dueño
+ * del valor: los radios solo avisan con `iswc-radio-select`.
  *
  * Atributos
  *   name, value, label, hint
@@ -22,13 +22,13 @@ import { setStringAttr, setOptionalAttr } from '../_shared/reflect.js';
  *   error-text       mensaje de error; sustituye al hint y activa el estado de error
  *   disabled, required, readonly, error   (boolean)
  *
- * Slots: default (<is-radio>), label, hint, error-text
+ * Slots: default (<iswc-radio>), label, hint, error-text
  * Parts: form-control, label, base, hint, error-text
  * Custom states: disabled, readonly, error, blank
- * Events: is-change { value }
+ * Events: iswc-change { value }
  */
 
-// Subset tipado de <is-radio> (lo que el grupo necesita saber de cada hijo).
+// Subset tipado de <iswc-radio> (lo que el grupo necesita saber de cada hijo).
 interface IsRadioElement extends HTMLElement {
   value: string;
   checked: boolean;
@@ -57,7 +57,7 @@ interface IsRadioElement extends HTMLElement {
   const NEXT_KEYS = ['ArrowDown', 'ArrowRight'];
   const PREV_KEYS = ['ArrowUp', 'ArrowLeft'];
 
-  class IsRadioGroup extends ElementBase {
+  class IswcRadioGroup extends ElementBase {
     /** Personalización por atributo (ver `core/attrs.ts`). */
     static styleAttrs = {
     accent: { prop: '--iswc-radio-accent', onlyColorValues: true },
@@ -97,7 +97,7 @@ interface IsRadioElement extends HTMLElement {
       this.#labelSlot.addEventListener('slotchange', this.#syncMeta);
       this.#hintSlot.addEventListener('slotchange', this.#syncMeta);
       this.#errorSlot.addEventListener('slotchange', this.#onErrorSlotChange);
-      this.addEventListener('is-radio-select', this.#onRadioSelect);
+      this.addEventListener('iswc-radio-select', this.#onRadioSelect);
       this.addEventListener('keydown', this.#onKey);
     }
 
@@ -212,7 +212,7 @@ interface IsRadioElement extends HTMLElement {
 
     /** Radios propios: ignora los de un grupo anidado. */
     #radios(): IsRadioElement[] {
-      return [...this.querySelectorAll<HTMLElement>('is-radio')].filter((r) => r.closest('is-radio-group') === this) as IsRadioElement[];
+      return [...this.querySelectorAll<HTMLElement>('iswc-radio')].filter((r) => r.closest('iswc-radio-group') === this) as IsRadioElement[];
     }
 
     /** Muestra el texto del atributo salvo que el slot homónimo traiga contenido. */
@@ -287,7 +287,7 @@ interface IsRadioElement extends HTMLElement {
       const changed = this.value !== value;
       this.value = value;
       this.#sync();
-      if (changed) emit(this, 'is-change', { value });
+      if (changed) emit(this, 'iswc-change', { value });
     }
 
     /** Mueve foco (y selección, salvo readonly) al radio habilitado vecino, con wrap. */
@@ -312,8 +312,8 @@ interface IsRadioElement extends HTMLElement {
 
     #onRadioSelect = (e: Event): void => {
       const target = e.target as HTMLElement | null;
-      const radio = target?.closest('is-radio') as IsRadioElement | null;
-      if (!radio || radio.closest('is-radio-group') !== this) return;
+      const radio = target?.closest('iswc-radio') as IsRadioElement | null;
+      if (!radio || radio.closest('iswc-radio-group') !== this) return;
       e.stopPropagation();
       this.#select(radio.value);
     };
@@ -321,8 +321,8 @@ interface IsRadioElement extends HTMLElement {
     #onKey = (e: KeyboardEvent): void => {
       if (this.#isDisabled) return;
       const target = e.target as HTMLElement | null;
-      const radio = target?.closest('is-radio') as IsRadioElement | null;
-      if (!radio || radio.closest('is-radio-group') !== this) return;
+      const radio = target?.closest('iswc-radio') as IsRadioElement | null;
+      if (!radio || radio.closest('iswc-radio-group') !== this) return;
       if (NEXT_KEYS.includes(e.key)) {
         e.preventDefault();
         this.#move(radio, 1);
@@ -337,5 +337,5 @@ interface IsRadioElement extends HTMLElement {
     };
   }
 
-  defineElement('is-radio-group', IsRadioGroup, 'IsRadioGroup');
+  defineElement('iswc-radio-group', IswcRadioGroup, 'IswcRadioGroup');
 })();

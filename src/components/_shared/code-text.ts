@@ -36,6 +36,24 @@ export const unwrapHandHighlight = (text: unknown): string => {
 
 const VOID_HTML = /^(?:area|base|br|col|embed|hr|img|input|link|meta|param|source|track|wbr)\b/i;
 
+/** true si una comilla de atributo sigue abierta al saltar de línea. */
+function quoteCrossesLine(text: string): boolean {
+  let q: '"' | "'" | null = null;
+  const lines = text.split('\n');
+  for (let li = 0; li < lines.length; li += 1) {
+    const line = lines[li]!;
+    for (let i = 0; i < line.length; i += 1) {
+      const c = line[i];
+      if (q) {
+        if (c === '\\') { i += 1; continue; }
+        if (c === q) q = null;
+      } else if (c === '"' || c === "'") q = c as '"' | "'";
+    }
+    if (q && li < lines.length - 1) return true;
+  }
+  return false;
+}
+
 export const prettyHtml = (text: unknown): string => {
   const lines = String(text)
     .replace(/\r\n/g, '\n')
@@ -81,7 +99,8 @@ export const softFormat = (text: unknown, mode?: string): string => {
   const inlineNest = t.split('\n').some((line) => />\s*</.test(line));
 
   // Snippets HTML: pretty si hay nesting o pocas líneas con tags.
-  if ((mode === 'htmlmixed' || mode === 'html') && t.includes('<') && (fewLines || inlineNest)) {
+  // Un atributo ya partido en líneas trae su sangría: no recortar.
+  if ((mode === 'htmlmixed' || mode === 'html') && t.includes('<') && (fewLines || inlineNest) && !quoteCrossesLine(t)) {
     t = prettyHtml(t);
   }
 

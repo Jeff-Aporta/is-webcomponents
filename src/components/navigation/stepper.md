@@ -1,15 +1,15 @@
 ---
-tag: is-stepper
+tag: iswc-stepper
 tags:
-  - is-stepper
-  - is-stepper-step
+  - iswc-stepper
+  - iswc-stepper-step
 category: navigation
 status: public
 source: ./stepper.js
 style: ./stepper.css
 preview: ./stepper.json
 ---
-# `<is-stepper>` / `<is-stepper-step>`
+# `<iswc-stepper>` / `<iswc-stepper-step>`
 
 ## Propósito
 
@@ -17,7 +17,7 @@ Indicador de flujo por pasos. Ideal para wizards y formularios multipaso.
 Soporta orientación horizontal y vertical, colores visualmente
 distintas, iconos por slot, descripción y manejo de errores.
 
-Este módulo registra `<is-stepper>`, `<is-stepper-step>`.
+Este módulo registra `<iswc-stepper>`, `<iswc-stepper-step>`.
 
 ## Cuándo usarlo
 
@@ -36,11 +36,11 @@ import './stepper.js';
 ## Ejemplo mínimo
 
 ```html
-<is-stepper active="1">
-<is-stepper-step label="Cuenta" icon="mdi:account"></is-stepper-step>
-<is-stepper-step label="Perfil" icon="mdi:card-account-details"></is-stepper-step>
-<is-stepper-step label="Confirmar" icon="mdi:check-circle"></is-stepper-step>
-</is-stepper>
+<iswc-stepper active="1">
+<iswc-stepper-step label="Cuenta" icon="mdi:account"></iswc-stepper-step>
+<iswc-stepper-step label="Perfil" icon="mdi:card-account-details"></iswc-stepper-step>
+<iswc-stepper-step label="Confirmar" icon="mdi:check-circle"></iswc-stepper-step>
+</iswc-stepper>
 ```
 
 ## API
@@ -80,8 +80,8 @@ import './stepper.js';
 
 | Evento | detail | bubbles | composed | cancelable |
 | --- | --- | --- | --- | --- |
-| `is-stepper-complete` | no | sí | sí | no |
-| `is-stepper-change` | sí | sí | sí | no |
+| `iswc-stepper-complete` | no | sí | sí | no |
+| `iswc-stepper-change` | sí | sí | sí | no |
 
 ### Métodos y propiedades públicas
 
@@ -134,44 +134,44 @@ No declara integración form-associated propia en este módulo.
 
 Documentación de cabecera preservada desde fuente:
 
-> <is-stepper> + <is-stepper-step> — Web Components (vanilla, zero dependencies).
+> <iswc-stepper> + <iswc-stepper-step> — Web Components (vanilla, zero dependencies).
 > Indicador de flujo por pasos. Ideal para wizards y formularios multipaso.
->   <is-stepper active="1">
->     <is-stepper-step label="Cuenta">…</is-stepper-step>
->     <is-stepper-step label="Perfil">…</is-stepper-step>
->     <is-stepper-step label="Confirmar">…</is-stepper-step>
->   </is-stepper>
-> Atributos <is-stepper>
+>   <iswc-stepper active="1">
+>     <iswc-stepper-step label="Cuenta">…</iswc-stepper-step>
+>     <iswc-stepper-step label="Perfil">…</iswc-stepper-step>
+>     <iswc-stepper-step label="Confirmar">…</iswc-stepper-step>
+>   </iswc-stepper>
+> Atributos <iswc-stepper>
 >   active       number  — paso activo (0-indexed).
 >   orientation  horizontal | vertical    (default horizontal)
 >   without-line boolean  — oculta la línea conectora.
 >   color      default | simple | numbered | glass (default 'default')
-> Atributos <is-stepper-step>
+> Atributos <iswc-stepper-step>
 >   label       string
 >   description string
 >   icon        string (iconify id)
 >   disabled    boolean
 >   error       boolean
 > Slots
->   <is-stepper>
+>   <iswc-stepper>
 >     (default)  steps.
->   <is-stepper-step>
+>   <iswc-stepper-step>
 >     (default)  contenido del paso (si el padre lo pinta dentro de un wizard).
 >     icon       override del icono del step.
 >     label      override del label.
 >     description override del description.
 > Eventos
->   is-stepper-change  detail: { from, to, step }
->   is-stepper-complete detail: { step } — cuando active >= total.
+>   iswc-stepper-change  detail: { from, to, step }
+>   iswc-stepper-complete detail: { step } — cuando active >= total.
 > CSS Parts
->   is-stepper: ::part(base) ::part(steps)
->   is-stepper-step: ::part(base) ::part(indicator) ::part(label) ::part(line)
+>   iswc-stepper: ::part(base) ::part(steps)
+>   iswc-stepper-step: ::part(base) ::part(indicator) ::part(label) ::part(line)
 
 ## Dependencias y componentes relacionados
 
 - [`../_shared/adopt-css.js`](../_shared/adopt-css.js)
 
-Tags del módulo: `<is-stepper>`, `<is-stepper-step>`.
+Tags del módulo: `<iswc-stepper>`, `<iswc-stepper-step>`.
 
 ## Accesibilidad
 
@@ -180,11 +180,11 @@ Preservar semántica, foco, teclado, labels y ARIA. ARIA detectado: `aria-hidden
 ## Ejemplo avanzado
 
 ```html
-<is-stepper active="1">
-<is-stepper-step label="Cuenta" icon="mdi:account"></is-stepper-step>
-<is-stepper-step label="Perfil" icon="mdi:card-account-details"></is-stepper-step>
-<is-stepper-step label="Confirmar" icon="mdi:check-circle"></is-stepper-step>
-</is-stepper>
+<iswc-stepper active="1">
+<iswc-stepper-step label="Cuenta" icon="mdi:account"></iswc-stepper-step>
+<iswc-stepper-step label="Perfil" icon="mdi:card-account-details"></iswc-stepper-step>
+<iswc-stepper-step label="Confirmar" icon="mdi:check-circle"></iswc-stepper-step>
+</iswc-stepper>
 ```
 
 ## Errores comunes

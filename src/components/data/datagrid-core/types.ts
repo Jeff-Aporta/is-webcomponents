@@ -1,5 +1,5 @@
 /**
- * datagrid-core/types — Motor agnóstico del <is-ag-grid>.
+ * datagrid-core/types — Motor agnóstico del <iswc-ag-grid>.
  *
  * Espejo del core mimicus-react (Jeff-Aporta/mimicus-react · src/datagrid/core/types.ts)
  * pero en JavaScript vanilla para web components. Sin React, sin ShadowDOM, sin DOM.
@@ -15,7 +15,7 @@
  *   - GridState  : snapshot derivado de filter→sort→group→paginate.
  *   - GridApi    : store observable con subscribe().
  *
- * Capa de render encima (adentro de is-ag-grid.js) usa estos tipos para:
+ * Capa de render encima (adentro de iswc-ag-grid.js) usa estos tipos para:
  *   - Estructurar columnas con resolveColumns() → ColumnState[].
  *   - Pintar celdas con getCellValue() + formatCellValue().
  *   - Renderizar ventana con rowWindow() + columnLayout().

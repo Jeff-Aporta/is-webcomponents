@@ -1,9 +1,11 @@
+/* <iswc-avatar> — imagen, iniciales o icono en un cuadro 1em × 1em. */
+
 :host {
   display: inline-flex;
   vertical-align: middle;
   font-size: inherit;
-  width: 1em;
-  height: 1em;
+  inline-size: 1em;
+  block-size: 1em;
   font-family: var(--iswc-font-family, system-ui, sans-serif);
   font-weight: 600;
   color: var(--iswc-text, #212529);
@@ -13,24 +15,22 @@
 .avatar {
   position: relative;
   display: block;
-  width: 100%;
-  height: 100%;
+  inline-size: 100%;
+  block-size: 100%;
   overflow: hidden;
   background: var(--iswc-control-bg, #f1f3f5);
   border: 1px solid var(--iswc-control-border, #dee2e6);
   box-sizing: border-box;
 }
 
-.image,
-.initials,
-.icon {
+:where(.image, .initials, .icon) {
   position: absolute;
   inset: 0;
   display: flex;
   align-items: center;
   justify-content: center;
-  width: 100%;
-  height: 100%;
+  inline-size: 100%;
+  block-size: 100%;
   margin: 0;
   box-sizing: border-box;
 
@@ -48,13 +48,11 @@
 .icon {
   font-size: 0.55em;
   color: var(--iswc-muted, #868e96);
+
+  & ::slotted(*),
+  & iswc-icon { font-size: 1em; }
 }
 
-.icon ::slotted(*),
-.icon is-icon {
-  font-size: 1em;
-}
-
-:host([shape="circle"]) .avatar { border-radius: 50%; }
-:host([shape="square"]) .avatar { border-radius: 0; }
+:host([shape="circle"])  .avatar { border-radius: 50%; }
+:host([shape="square"])  .avatar { border-radius: 0; }
 :host([shape="rounded"]) .avatar { border-radius: 0.2em; }

@@ -33,6 +33,17 @@ test('softFormat no aplana HTML ya bien indentado sin anidación inline', () => 
   assert.equal(hl.softFormat(src, 'htmlmixed'), src);
 });
 
+test('softFormat conserva el json indentado dentro de un atributo multilínea', () => {
+  const src = [
+    '<iswc-palette-selector palettes=\'[',
+    '  {',
+    '    "value": "acme"',
+    '  }',
+    ']\'></iswc-palette-selector>',
+  ].join('\n');
+  assert.equal(hl.softFormat(src, 'htmlmixed'), src);
+});
+
 test('softFormat repara el markup a mano de anatomy y lo indenta', () => {
   const dirty = [
     '<span class="tag"><button</span> <span class="attr">part</span>=<span class="val">"button"</span> <span class="attr">class</span>=<span class="val">"btn"</span><span class="tag">></span>',
@@ -49,7 +60,7 @@ test('softFormat repara el markup a mano de anatomy y lo indenta', () => {
 test('sin cm-error en el docs: el rojo de CodeMirror ya no existe (motor nativo)', () => {
   const css = readFileSync(join(root, 'src/styles/presentation.css'), 'utf8');
   // El docs ya no estiliza tramos .cm-error (no hay runMode); el coloreado a
-  // mano se limpia con unwrapHandHighlight/softFormat antes de montar <is-code>.
+  // mano se limpia con unwrapHandHighlight/softFormat antes de montar <iswc-code>.
   assert.doesNotMatch(css, /\.cm-error/);
 });
 
@@ -58,7 +69,7 @@ test('el highlighter vigila el DOM: nada se queda sin colorear', () => {
   assert.equal(typeof hl.repaint, 'function', 'falta repaint');
 
   const src = readFileSync(join(root, 'src/components/_shared/highlight-code.ts'), 'utf8');
-  // Tras migrar a <is-code>, el criterio de “contenido cambió” es value.
+  // Tras migrar a <iswc-code>, el criterio de “contenido cambió” es value.
   assert.match(src, /el\.value\s*!==\s*el\.dataset\.cmSource/);
   // paintOne muta el DOM (replaceWith): sin esta guarda el observer se
   // dispara con sus propias mutaciones y no para nunca.
@@ -69,7 +80,7 @@ test('el highlighter vigila el DOM: nada se queda sin colorear', () => {
   assert.match(boot, /watchDom\(\)/, 'highlight-pre.js debe arrancar el observer');
 });
 
-test('las salidas vivas del docs son pre.code o is-code (paint → editor)', () => {
+test('las salidas vivas del docs son pre.code o iswc-code (paint → editor)', () => {
   const casos = [
     ['src/pages/theming.json', 'cssOut', 'css'],
     ['src/components/forms/rte.json', 'outHTML', 'html'],
@@ -80,17 +91,17 @@ test('las salidas vivas del docs son pre.code o is-code (paint → editor)', () 
     const def = JSON.parse(raw);
     const html = (def.sections ?? []).flatMap((s) => s.blocks ?? [])
       .map((b) => b.html).filter((h) => typeof h === 'string').join('\n');
-    const tag = html.match(new RegExp(`<(?:pre|is-code)\\b[^>]*id="${id}"[^>]*>`))?.[0];
-    assert.ok(tag, `${archivo}: no encontré #${id} (pre o is-code)`);
+    const tag = html.match(new RegExp(`<(?:pre|iswc-code)\\b[^>]*id="${id}"[^>]*>`))?.[0];
+    assert.ok(tag, `${archivo}: no encontré #${id} (pre o iswc-code)`);
     assert.match(tag, /class="[^"]*\bcode\b/, `${archivo}#${id}: sin la clase code no se monta el editor`);
     assert.match(tag, new RegExp(`data-lang="${lang}"`), `${archivo}#${id}: falta data-lang="${lang}"`);
   }
 });
 
-test('el prompt para agentes del CDN no se tokeniza como markup', () => {
+test('el panel CDN no embebe prompt LLM como MD editor', () => {
   const src = readFileSync(join(root, 'src/components/feedback/cdn-snippet.ts'), 'utf8');
-  // El prompt LLM vive en <is-md-editor>, no en is-code.cdn__pre.
-  assert.match(src, /data-slot="llm-prompt"/);
-  assert.match(src, /IS-MD-EDITOR/);
-  assert.doesNotMatch(src, /#adoptCodeMirrorCss/);
+  // Skill simple: lista + ojo. Sin iswc-md-editor de prompt.
+  assert.match(src, /data-slot="skills"/);
+  assert.doesNotMatch(src, /data-slot="llm-prompt"/);
+  assert.doesNotMatch(src, /iswc-md-editor/);
 });

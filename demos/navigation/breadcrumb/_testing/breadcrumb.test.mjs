@@ -16,19 +16,19 @@ tests.push({
     const info = await page.evaluate(() => {
       const sections = [...document.querySelectorAll('main section')];
       return {
-        breadcrumbDefined: !!customElements.get('is-breadcrumb'),
-        itemDefined: !!customElements.get('is-breadcrumb-item'),
+        breadcrumbDefined: !!customElements.get('iswc-breadcrumb'),
+        itemDefined: !!customElements.get('iswc-breadcrumb-item'),
         breadcrumbs: sections.length,
-        items: document.querySelectorAll('is-breadcrumb-item').length,
-        navs: document.querySelectorAll('is-breadcrumb').length,
+        items: document.querySelectorAll('iswc-breadcrumb-item').length,
+        navs: document.querySelectorAll('iswc-breadcrumb').length,
       };
     });
-    assert.equal(info.breadcrumbDefined, true, 'is-breadcrumb debe estar definido');
-    assert.equal(info.itemDefined, true, 'is-breadcrumb-item debe estar definido');
-    assert.equal(info.navs, 5, `esperaba 5 <is-breadcrumb>, hay ${info.navs}`);
+    assert.equal(info.breadcrumbDefined, true, 'iswc-breadcrumb debe estar definido');
+    assert.equal(info.itemDefined, true, 'iswc-breadcrumb-item debe estar definido');
+    assert.equal(info.navs, 5, `esperaba 5 <iswc-breadcrumb>, hay ${info.navs}`);
     assert.equal(info.breadcrumbs, 5, 'esperaba 5 <section> contenedores');
     // Items: basic=4, en=3, spa=3, separator=3, target=3 → 16 totales
-    assert.ok(info.items >= 15, `esperaba >=15 <is-breadcrumb-item>, hay ${info.items}`);
+    assert.ok(info.items >= 15, `esperaba >=15 <iswc-breadcrumb-item>, hay ${info.items}`);
     await screenshot(page, 'breadcrumb-smoke');
   },
 });
@@ -39,7 +39,7 @@ tests.push({
     await page.goto(URL, { waitUntil: 'domcontentloaded' });
     await waitReady(page, 'data-breadcrumb-ready');
     const labels = await page.evaluate(() => {
-      return [...document.querySelectorAll('is-breadcrumb')].map((bc) => {
+      return [...document.querySelectorAll('iswc-breadcrumb')].map((bc) => {
         const nav = bc.shadowRoot.querySelector('nav');
         return {
           tag: nav?.tagName.toLowerCase(),
@@ -69,9 +69,9 @@ tests.push({
     const info = await page.evaluate(() => {
       const sections = [...document.querySelectorAll('main section')];
       // Section 0 = basic: 3 con href + 1 current (href="")
-      const basic = sections[0].querySelectorAll('is-breadcrumb-item');
+      const basic = sections[0].querySelectorAll('iswc-breadcrumb-item');
       // Section 2 = spa: 3 sin href
-      const spa = sections[2].querySelectorAll('is-breadcrumb-item');
+      const spa = sections[2].querySelectorAll('iswc-breadcrumb-item');
       const inspect = (item) => {
         const label = item.shadowRoot.querySelector('.label');
         return {
@@ -111,7 +111,7 @@ tests.push({
     await waitReady(page, 'data-breadcrumb-ready');
     const target = await page.evaluate(() => {
       const sections = [...document.querySelectorAll('main section')];
-      const targetSection = sections[4].querySelector('is-breadcrumb-item:nth-of-type(2)');
+      const targetSection = sections[4].querySelector('iswc-breadcrumb-item:nth-of-type(2)');
       const label = targetSection.shadowRoot.querySelector('.label');
       return {
         attrTarget: targetSection.getAttribute('target'),
@@ -128,34 +128,34 @@ tests.push({
 });
 
 tests.push({
-  name: 'funcional: item con icon y sin slot start genera un <is-icon>',
+  name: 'funcional: item con icon y sin slot start genera un <iswc-icon>',
   run: async (page) => {
     await page.goto(URL, { waitUntil: 'domcontentloaded' });
     await waitReady(page, 'data-breadcrumb-ready');
     const info = await page.evaluate(() => {
       const sections = [...document.querySelectorAll('main section')];
-      const firstItem = sections[0].querySelector('is-breadcrumb-item'); // tiene icon="mdi:home"
+      const firstItem = sections[0].querySelector('iswc-breadcrumb-item'); // tiene icon="mdi:home"
       const start = firstItem.shadowRoot.querySelector('.start');
       return {
         attrIcon: firstItem.getAttribute('icon'),
-        hasIconEl: !!start?.querySelector('is-icon'),
-        iconAttr: start?.querySelector('is-icon')?.getAttribute('icon'),
+        hasIconEl: !!start?.querySelector('iswc-icon'),
+        iconAttr: start?.querySelector('iswc-icon')?.getAttribute('icon'),
         // El segundo item del basic no tiene icon → debe estar vacío.
         secondItem: (() => {
-          const second = sections[0].querySelectorAll('is-breadcrumb-item')[1];
+          const second = sections[0].querySelectorAll('iswc-breadcrumb-item')[1];
           const s = second.shadowRoot.querySelector('.start');
           return {
             attrIcon: second.getAttribute('icon'),
-            hasIconEl: !!s?.querySelector('is-icon'),
+            hasIconEl: !!s?.querySelector('iswc-icon'),
           };
         })(),
       };
     });
     assert.equal(info.attrIcon, 'mdi:home');
-    assert.equal(info.hasIconEl, true, 'icon attr debe inyectar <is-icon>');
-    assert.equal(info.iconAttr, 'mdi:home', 'icon debe propagarse al is-icon');
+    assert.equal(info.hasIconEl, true, 'icon attr debe inyectar <iswc-icon>');
+    assert.equal(info.iconAttr, 'mdi:home', 'icon debe propagarse al iswc-icon');
     assert.equal(info.secondItem.attrIcon, null);
-    assert.equal(info.secondItem.hasIconEl, false, 'sin icon no debe inyectar <is-icon>');
+    assert.equal(info.secondItem.hasIconEl, false, 'sin icon no debe inyectar <iswc-icon>');
   },
 });
 
@@ -166,15 +166,15 @@ tests.push({
     await waitReady(page, 'data-breadcrumb-ready');
     const info = await page.evaluate(() => {
       const sections = [...document.querySelectorAll('main section')];
-      const sepSection = sections[3].querySelector('is-breadcrumb');
-      const firstItem = sepSection.querySelector('is-breadcrumb-item');
+      const sepSection = sections[3].querySelector('iswc-breadcrumb');
+      const firstItem = sepSection.querySelector('iswc-breadcrumb-item');
       const sepEl = firstItem.shadowRoot.querySelector('.separator');
       const slot = sepEl?.querySelector('slot[name="separator"]');
       const assigned = slot ? slot.assignedNodes({ flatten: true }) : [];
       return {
         separatorText: assigned.length > 0 ? assigned[0].textContent : null,
         defaultFirst: (() => {
-          const basicItem = sections[0].querySelector('is-breadcrumb-item');
+          const basicItem = sections[0].querySelector('iswc-breadcrumb-item');
           const defSep = basicItem.shadowRoot.querySelector('.separator');
           const defSlot = defSep?.querySelector('slot[name="separator"]');
           const defAssigned = defSlot ? defSlot.assignedNodes({ flatten: true }) : [];
@@ -183,7 +183,7 @@ tests.push({
       };
     });
     assert.equal(info.separatorText, '/', 'separator override debe ser "/"');
-    assert.equal(info.defaultFirst, 'IS-ICON', 'separator por defecto debe ser un <is-icon>');
+    assert.equal(info.defaultFirst, 'IS-ICON', 'separator por defecto debe ser un <iswc-icon>');
   },
 });
 
@@ -193,7 +193,7 @@ tests.push({
     await page.goto(URL, { waitUntil: 'domcontentloaded' });
     await waitReady(page, 'data-breadcrumb-ready');
     const labels = await page.evaluate(() => {
-      return [...document.querySelectorAll('is-breadcrumb')].map((bc) => {
+      return [...document.querySelectorAll('iswc-breadcrumb')].map((bc) => {
         const nav = bc.shadowRoot.querySelector('nav');
         return nav?.getAttribute('aria-label')?.length ?? 0;
       });
@@ -211,7 +211,7 @@ tests.push({
     await page.goto(URL, { waitUntil: 'domcontentloaded' });
     await waitReady(page, 'data-breadcrumb-ready');
     const currents = await page.evaluate(() => {
-      return [...document.querySelectorAll('is-breadcrumb-item')].map((it) => {
+      return [...document.querySelectorAll('iswc-breadcrumb-item')].map((it) => {
         const label = it.shadowRoot.querySelector('.label');
         return {
           attrHref: it.getAttribute('href'),
@@ -237,18 +237,18 @@ tests.push({
     await waitReady(page, 'data-breadcrumb-ready');
     const before = await page.evaluate(() => {
       const sections = [...document.querySelectorAll('main section')];
-      return sections[0].querySelector('is-breadcrumb').shadowRoot.querySelector('nav').getAttribute('aria-label');
+      return sections[0].querySelector('iswc-breadcrumb').shadowRoot.querySelector('nav').getAttribute('aria-label');
     });
     assert.equal(before, 'Ruta de página');
     await page.evaluate(() => {
       const sections = [...document.querySelectorAll('main section')];
-      const bc = sections[0].querySelector('is-breadcrumb');
+      const bc = sections[0].querySelector('iswc-breadcrumb');
       bc.setAttribute('label', 'Ruta actualizada');
     });
     await page.waitForTimeout(50);
     const after = await page.evaluate(() => {
       const sections = [...document.querySelectorAll('main section')];
-      return sections[0].querySelector('is-breadcrumb').shadowRoot.querySelector('nav').getAttribute('aria-label');
+      return sections[0].querySelector('iswc-breadcrumb').shadowRoot.querySelector('nav').getAttribute('aria-label');
     });
     assert.equal(after, 'Ruta actualizada', 'label debe reflejarse en aria-label del nav');
   },
@@ -260,8 +260,8 @@ tests.push({
     await page.goto(URL, { waitUntil: 'domcontentloaded' });
     await waitReady(page, 'data-breadcrumb-ready');
     const parts = await page.evaluate(() => {
-      const bc = document.querySelector('is-breadcrumb');
-      const item = bc.querySelector('is-breadcrumb-item');
+      const bc = document.querySelector('iswc-breadcrumb');
+      const item = bc.querySelector('iswc-breadcrumb-item');
       return {
         breadcrumb: !!bc.shadowRoot.querySelector('[part="breadcrumb"]'),
         label: !!item.shadowRoot.querySelector('[part="label"]'),

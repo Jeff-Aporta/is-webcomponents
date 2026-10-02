@@ -2,7 +2,7 @@ import components from '../manifest.js';
 import { PALETTES, type PaletteConfig } from '../styles/palette-build.js';
 import type { ComponentManifestItem } from '../manifest.js';
 import { hasControlledPreview, hasCachedPreview, loadPreview } from '../previews/registry.js';
-import { collectIsTags, GALLERY_CHROME_TAGS } from '../cdn/collect-is-tags.js';
+import { collectIsTags, GALLERY_CHROME_TAGS } from '../cdn/collect-iswc-tags.js';
 
 /* ──────────────────────────── Tipos locales ───────────────────────────── */
 
@@ -35,12 +35,12 @@ interface CatalogItem {
   origin?: string;
 }
 
-/** Subset del `<is-theme-toggle>` que la galería consulta. */
+/** Subset del `<iswc-theme-toggle>` que la galería consulta. */
 interface ThemeToggleElement extends HTMLElement {
   dark: boolean;
 }
 
-/** Subset del `<is-palette-selector>` del shell. */
+/** Subset del `<iswc-palette-selector>` del shell. */
 interface PaletteSelectorElement extends HTMLElement {
   close(): void;
   value: string;
@@ -53,12 +53,12 @@ interface PreviewLike {
   unmount?(ctx: Record<string, unknown>): void;
 }
 
-/** Subset del `<is-preview-component>` que la galería cablea con `.preview`. */
+/** Subset del `<iswc-preview-component>` que la galería cablea con `.preview`. */
 interface PreviewHostElement extends HTMLElement {
   preview?: PreviewLike | null;
 }
 
-/** Subset de `<is-split-panel>` con la propiedad `positionInPixels`. */
+/** Subset de `<iswc-split-panel>` con la propiedad `positionInPixels`. */
 interface SplitPanelElement extends HTMLElement {
   positionInPixels: number;
 }
@@ -66,7 +66,7 @@ interface SplitPanelElement extends HTMLElement {
 /** Subset del `<iframe>` con `contentWindow` / `contentDocument` strict. */
 type FrameElement = HTMLIFrameElement;
 
-/** Subset del `<is-drawer>` con `show` / `hide` cancelables. */
+/** Subset del `<iswc-drawer>` con `show` / `hide` cancelables. */
 interface DrawerElement extends HTMLElement {
   show(): void | Promise<void>;
   hide(): void | Promise<void>;
@@ -268,13 +268,13 @@ for (const key of categoryOrder) {
 // --- initial state ---
 const stateFromUrl = readStateParam();
 const themeFromUrl = typeof stateFromUrl?.theme === 'string' ? stateFromUrl.theme : null;
-const themeStored = localStorage.getItem('is-theme');
+const themeStored = localStorage.getItem('iswc-theme');
 let theme: ThemeName = themes.has(themeFromUrl as ThemeName)
   ? (themeFromUrl as ThemeName)
   : (themes.has(themeStored as ThemeName) ? (themeStored as ThemeName) : 'dark');
 
 const paletteFromUrl = typeof stateFromUrl?.palette === 'string' ? stateFromUrl.palette : null;
-const paletteStored = localStorage.getItem('is-palette');
+const paletteStored = localStorage.getItem('iswc-palette');
 let palette: PaletteName = palettes.has(paletteFromUrl as PaletteName)
   ? (paletteFromUrl as PaletteName)
   : (palettes.has(paletteStored as PaletteName) ? (paletteStored as PaletteName) : 'contapyme');
@@ -300,7 +300,7 @@ function controlledShellSrc(tag: string): string {
  * Asigna `.preview` al host ya upgraded. Importante: el módulo del body
  * puede correr mientras el `<head>` aún carga el shell (TLA no bloquea
  * siblings). Si asignamos antes del upgrade, queda una own property que
- * tapa el setter de `<is-preview-component>` y el main nunca se pinta.
+ * tapa el setter de `<iswc-preview-component>` y el main nunca se pinta.
  */
 function setHostPreview(value: PreviewLike | null): void {
   if (Object.prototype.hasOwnProperty.call(previewHost, 'preview')) {
@@ -314,7 +314,7 @@ function setHostPreview(value: PreviewLike | null): void {
  * Sin all.min.js: cada vista pide solo lo que pinta.
  */
 async function ensurePreviewDeps(tag: string, preview: PreviewLike): Promise<void> {
-  await customElements.whenDefined('is-preview-component');
+  await customElements.whenDefined('iswc-preview-component');
   const L = (globalThis as Record<string, unknown>).ISWebComponentsLoader as LoaderLike | undefined;
   if (!L) return;
   let tags: string[] = [...new Set<string>([
@@ -322,7 +322,7 @@ async function ensurePreviewDeps(tag: string, preview: PreviewLike): Promise<voi
     ...(collectIsTags(preview.definition ?? preview) as string[]),
   ])];
   // Los demos pueden citar tags de soporte sin catálogo (chrome hijos como
-  // is-tab): pedirlos al loader tiraba el mount entero. Solo cargar los
+  // iswc-tab): pedirlos al loader tiraba el mount entero. Solo cargar los
   // que el catálogo sabe resolver; el resto queda como markup declarativo.
   tags = tags.filter((t) => {
     const cat = L.catalog?.categories;
@@ -331,12 +331,12 @@ async function ensurePreviewDeps(tag: string, preview: PreviewLike): Promise<voi
       || Boolean(cat?.[aliases?.[t] ?? t]);
   });
   if (tags.length) await L.load(...tags);
-  if (tag.startsWith('is-') && !customElements.get(tag)) {
+  if (tag.startsWith('iswc-') && !customElements.get(tag)) {
     // Solo esperar cuando el loader conoce el tag Y lo va a definir.
     // Hay dos clases de "tag conocido pero no definido":
-    //   1. Meta-previews como `is-icon-explorer` (no están en el catálogo
+    //   1. Meta-previews como `iswc-icon-explorer` (no están en el catálogo
     //      del loader → fix anterior).
-    //   2. Module-only entries del manifest (p.ej. `is-ui`) — el loader
+    //   2. Module-only entries del manifest (p.ej. `iswc-ui`) — el loader
     //      SÍ los conoce y los carga, pero el módulo no llama
     //      `customElements.define()` porque son utilidades, no componentes.
     //      En ese caso `whenDefined` cuelga para siempre.
@@ -367,14 +367,14 @@ async function showPreview(): Promise<void> {
     if (component.tag !== tag) return;
     const previewLike = preview as unknown as PreviewLike;
     await ensurePreviewDeps(tag, previewLike);
-    await customElements.whenDefined('is-preview-component');
+    await customElements.whenDefined('iswc-preview-component');
     setHostPreview(previewLike);
     return;
   }
 
   console.warn(`[gallery] sin JSON de preview para ${tag}`);
   previewHost.hidden = true;
-  if (customElements.get('is-preview-component')) setHostPreview(null);
+  if (customElements.get('iswc-preview-component')) setHostPreview(null);
   else if (Object.prototype.hasOwnProperty.call(previewHost, 'preview')) {
     delete previewHost.preview;
   }
@@ -384,7 +384,7 @@ async function showPreview(): Promise<void> {
 
 function sendContext(): void {
   if (!frame.hidden) {
-    frame.contentWindow?.postMessage({ type: 'is-context', theme, palette }, location.origin);
+    frame.contentWindow?.postMessage({ type: 'iswc-context', theme, palette }, location.origin);
   }
 }
 
@@ -415,8 +415,8 @@ function renderContext({ navSmooth = false }: { navSmooth?: boolean } = {}): voi
   scheduleScrollNavToCurrent({ smooth: navSmooth });
   const brandData = brands[palette] ?? brands.contapyme;
   document.title = `${component.title} | ${brandData.label}`;
-  localStorage.setItem('is-theme', theme);
-  localStorage.setItem('is-palette', palette);
+  localStorage.setItem('iswc-theme', theme);
+  localStorage.setItem('iswc-palette', palette);
   updateUrl();
   sendContext();
 }
@@ -479,11 +479,11 @@ function selectComponent(tag: string): void {
 window.addEventListener('message', (e: MessageEvent) => {
   if (e.origin !== location.origin) return;
   const data = asRecord(e.data);
-  if (data.type === 'is-select' && typeof data.tag === 'string') {
+  if (data.type === 'iswc-select' && typeof data.tag === 'string') {
     selectComponent(data.tag);
     return;
   }
-  if (data.type !== 'is-shell-sync' || e.source === window) return;
+  if (data.type !== 'iswc-shell-sync' || e.source === window) return;
   if (typeof data.palette === 'string' && palettes.has(data.palette as PaletteName) && data.palette !== palette) {
     palette = data.palette as PaletteName;
     renderContext();
@@ -505,7 +505,7 @@ window.addEventListener('blur', () => {
     if (document.activeElement === frame) brandPalette.close();
   });
 });
-document.addEventListener('is-theme-change', (e: Event) => {
+document.addEventListener('iswc-theme-change', (e: Event) => {
   const ce = e as CustomEvent<{ theme?: string; container?: EventTarget }>;
   if (ce.detail?.container !== root) return;
   const next: ThemeName = ce.detail?.theme === 'light' ? 'light' : 'dark';
@@ -513,7 +513,7 @@ document.addEventListener('is-theme-change', (e: Event) => {
   theme = next;
   renderContext();
 });
-document.addEventListener('is-palette-change', (e: Event) => {
+document.addEventListener('iswc-palette-change', (e: Event) => {
   const ce = e as CustomEvent<{ value?: string; container?: EventTarget }>;
   if (ce.detail?.container !== root) return;
   const next = ce.detail?.value;
@@ -541,7 +541,7 @@ mainSplit?.addEventListener('reposition', () => {
   scheduleScrollNavToCurrent();
 });
 
-customElements.whenDefined('is-split-panel').then(() => bootScrollNavToCurrent());
+customElements.whenDefined('iswc-split-panel').then(() => bootScrollNavToCurrent());
 window.addEventListener('load', () => bootScrollNavToCurrent());
 if (typeof ResizeObserver !== 'undefined') {
   let roT: number = 0;
@@ -582,13 +582,13 @@ const syncNavLayout = (): void => {
 
 compactNav.addEventListener?.('change', syncNavLayout);
 navToggle?.addEventListener('click', () => navDrawer?.show?.());
-navDrawer?.addEventListener('is-show', () => {
+navDrawer?.addEventListener('iswc-show', () => {
   navToggle?.setAttribute('aria-expanded', 'true');
   // El nav acaba de ganar tamaño: centrar el ítem activo.
   scheduleScrollNavToCurrent();
 });
-navDrawer?.addEventListener('is-after-show', () => scrollNavToCurrent());
-navDrawer?.addEventListener('is-after-hide', () => {
+navDrawer?.addEventListener('iswc-after-show', () => scrollNavToCurrent());
+navDrawer?.addEventListener('iswc-after-hide', () => {
   navToggle?.setAttribute('aria-expanded', 'false');
 });
 syncNavLayout();

@@ -1,5 +1,5 @@
 /**
- * Behavior migrado desde HTML inline de is-video.
+ * Behavior migrado desde HTML inline de iswc-video.
  * Se ejecuta en mount() tras pintar la definition JSON.
  * @param {import('../../previews/_kit/types.d.ts').PreviewMountContext} ctx
  */
@@ -9,7 +9,7 @@ export async function mount(ctx: import('../../previews/_kit/types.d.ts').Previe
   const v = document.getElementById('v1');
   const log = document.getElementById('log');
   if (v && log) {
-    for (const ev of ['is-play', 'is-pause', 'is-ended']) {
+    for (const ev of ['iswc-play', 'iswc-pause', 'iswc-ended']) {
       v.addEventListener(ev, () => { log.textContent = `eventos: ${ev}`; });
     }
   }

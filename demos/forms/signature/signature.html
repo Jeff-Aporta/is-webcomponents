@@ -3,7 +3,7 @@
 <head>
 <meta charset="utf-8" />
 <meta name="viewport" content="width=device-width, initial-scale=1" />
-<title>Pad de firma &lt;is-signature&gt; · is-webcomponents</title>
+<title>Pad de firma &lt;iswc-signature&gt; · is-webcomponents</title>
 <meta name="description" content="Pad de firma manuscrita (touch + mouse) con export PNG y SVG inline." />
 <style>
   html, body { margin: 0; padding: 0; min-height: 100%; background: #0c1118; color: #e2e8f0; font-family: ui-sans-serif, system-ui, sans-serif; }
@@ -14,7 +14,7 @@
   section { background: #131a24; border: 1px solid rgba(255,255,255,0.08); border-radius: 10px; padding: 16px; display: grid; gap: 10px; }
   section h2 { font-size: 13px; margin: 0; font-weight: 600; color: #cbd5e1; }
   section .desc { font-size: 12px; color: #94a3b8; margin: 0; }
-  is-signature { display: block; }
+  iswc-signature { display: block; }
   code { background: rgba(255,255,255,0.06); padding: 1px 5px; border-radius: 3px; font: 12px ui-monospace, Menlo, Consolas, monospace; }
   .actions { display: flex; gap: 8px; align-items: center; }
   .actions button {
@@ -24,20 +24,20 @@
   .actions button:hover { border-color: #2563eb; }
   pre { background: rgba(0,0,0,0.35); color: #94a3b8; padding: 10px; border-radius: 6px; font: 11px ui-monospace, Menlo, Consolas, monospace; white-space: pre-wrap; max-height: 120px; overflow: auto; margin: 0; }
   /* Anti-FOUC */
-  is-signature:not(:defined) { visibility: hidden; }
+  iswc-signature:not(:defined) { visibility: hidden; }
 </style>
 <script type="module">
-  await import('../../../dist/cdn/forms/signature.min.js?h=e8nkiu');
-  await customElements.whenDefined('is-signature');
+  await import('../../../dist/cdn/forms/signature.min.js?h=i23twi');
+  await customElements.whenDefined('iswc-signature');
 
   // (1) Pad por defecto (320 × 140)
-  const pad1 = document.createElement('is-signature');
+  const pad1 = document.createElement('iswc-signature');
   pad1.setAttribute('name', 'signature');
   pad1.setAttribute('hint', 'Firma aquí con el ratón o el dedo');
   document.querySelector('#sec-default').appendChild(pad1);
 
   // (2) Pad con tamaño, color y grosor personalizados
-  const pad2 = document.createElement('is-signature');
+  const pad2 = document.createElement('iswc-signature');
   pad2.setAttribute('name', 'contract');
   pad2.setAttribute('width', '480');
   pad2.setAttribute('height', '160');
@@ -48,7 +48,7 @@
   document.querySelector('#sec-custom').appendChild(pad2);
 
   // (3) Pad con fondo blanco y trazo oscuro (caso típico "papel")
-  const pad3 = document.createElement('is-signature');
+  const pad3 = document.createElement('iswc-signature');
   pad3.setAttribute('name', 'paper');
   pad3.setAttribute('width', '360');
   pad3.setAttribute('height', '120');
@@ -94,8 +94,8 @@
 
   // Eventos
   [pad1, pad2, pad3].forEach((p) => {
-    p.addEventListener('is-stroke-end', (e) => console.log('[signature] stroke-end', !!e.detail?.dataURL));
-    p.addEventListener('is-change', (e) => console.log('[signature] change strokes', e.detail?.strokes?.length));
+    p.addEventListener('iswc-stroke-end', (e) => console.log('[signature] stroke-end', !!e.detail?.dataURL));
+    p.addEventListener('iswc-change', (e) => console.log('[signature] change strokes', e.detail?.strokes?.length));
   });
 
   document.documentElement.dataset.signatureReady = '1';
@@ -104,8 +104,8 @@
 <body>
 <main>
   <header>
-    <h1>&lt;is-signature&gt; · Pad de firma manuscrita</h1>
-    <p>Canvas con captura de puntero (mouse + touch) · export a PNG (<code>toDataURL</code>) y SVG inline (<code>toSVG</code>) · <code>is-stroke-end</code> por trazo.</p>
+    <h1>&lt;iswc-signature&gt; · Pad de firma manuscrita</h1>
+    <p>Canvas con captura de puntero (mouse + touch) · export a PNG (<code>toDataURL</code>) y SVG inline (<code>toSVG</code>) · <code>iswc-stroke-end</code> por trazo.</p>
   </header>
 
   <section id="sec-default">

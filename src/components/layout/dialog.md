@@ -1,14 +1,14 @@
 ---
-tag: is-dialog
+tag: iswc-dialog
 tags:
-  - is-dialog
+  - iswc-dialog
 category: layout
 status: public
 source: ./dialog.js
 style: ./dialog.css
 preview: ./dialog.json
 ---
-# `<is-dialog>`
+# `<iswc-dialog>`
 
 ## Propósito
 
@@ -16,7 +16,7 @@ Modal accesible que requiere la atención inmediata del usuario. Equivalente
 a <dialog> nativo, con header, footer, animaciones,
 light-dismiss y API declarativa data-dialog="close".
 
-Este módulo registra `<is-dialog>`.
+Este módulo registra `<iswc-dialog>`.
 
 ## Cuándo usarlo
 
@@ -35,13 +35,13 @@ import './dialog.js';
 ## Ejemplo mínimo
 
 ```html
-<is-button onclick="document.getElementById('dlg').open = true">Abrir</is-button>
-<is-dialog id="dlg" label="Título">
+<iswc-button onclick="document.getElementById('dlg').open = true">Abrir</iswc-button>
+<iswc-dialog id="dlg" label="Título">
 Contenido.
 <div slot="footer">
-<is-button data-dialog="close">Cancelar</is-button>
+<iswc-button data-dialog="close">Cancelar</iswc-button>
 </div>
-</is-dialog>
+</iswc-dialog>
 ```
 
 ## API
@@ -81,10 +81,10 @@ Contenido.
 
 | Evento | detail | bubbles | composed | cancelable |
 | --- | --- | --- | --- | --- |
-| `is-hide` | sí | sí | sí | sí |
-| `is-show` | sí | sí | sí | no |
-| `is-after-show` | sí | sí | sí | no |
-| `is-after-hide` | sí | sí | sí | no |
+| `iswc-hide` | sí | sí | sí | sí |
+| `iswc-show` | sí | sí | sí | no |
+| `iswc-after-show` | sí | sí | sí | no |
+| `iswc-after-hide` | sí | sí | sí | no |
 
 ### Métodos y propiedades públicas
 
@@ -142,7 +142,7 @@ No declara integración form-associated propia en este módulo.
 
 Documentación de cabecera preservada desde fuente:
 
-> <is-dialog> — Web Component (vanilla, zero dependencies).
+> <iswc-dialog> — Web Component (vanilla, zero dependencies).
 > Modal sobre la página que requiere atención inmediata del usuario. Equivalente
 > accesible a <dialog> nativo + wa-dialog (Web Awesome).
 > Atributos
@@ -158,11 +158,11 @@ Documentación de cabecera preservada desde fuente:
 > Métodos
 >   show() / hide() / toggle()
 > Eventos
->   is-show        detail: {} — antes de abrir.
->   is-after-show  detail: {} — tras la animación de apertura.
->   is-hide        detail: { source } — antes de cerrar (cancelable).
+>   iswc-show        detail: {} — antes de abrir.
+>   iswc-after-show  detail: {} — tras la animación de apertura.
+>   iswc-hide        detail: { source } — antes de cerrar (cancelable).
 >                  source = null (Escape) | elemento que disparó el cierre.
->   is-after-hide  detail: {} — tras la animación de cierre.
+>   iswc-after-hide  detail: {} — tras la animación de cierre.
 > CSS Parts
 >   dialog, header, title, close-button, header-actions, body, footer
 > CSS custom properties
@@ -179,7 +179,7 @@ Documentación de cabecera preservada desde fuente:
   completo del modal (focus-trap, `Escape`, backdrop light-dismiss, restore de foco,
   `data-*="close"`, eventos). Aquí sólo queda el chrome y las animaciones.
 
-Tags del módulo: `<is-dialog>`.
+Tags del módulo: `<iswc-dialog>`.
 
 ## Accesibilidad
 
@@ -188,7 +188,7 @@ Preservar semántica, foco, teclado, labels y ARIA. ARIA detectado: `aria-modal`
 ## Ejemplo avanzado
 
 ```html
-<is-dialog without-header>…</is-dialog>
+<iswc-dialog without-header>…</iswc-dialog>
 ```
 
 ## Errores comunes

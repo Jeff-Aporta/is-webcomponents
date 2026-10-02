@@ -18,13 +18,12 @@
   justify-content: center;
   width: 22px;
   height: 22px;
-  margin-left: 0.25rem;
-}
-
-.lb-ring svg {
-  position: absolute;
-  inset: 0;
-  transform: rotate(-90deg);
+  margin-inline-start: 0.25rem;
+  svg {
+    position: absolute;
+    inset: 0;
+    transform: rotate(-90deg);
+  }
 }
 
 .lb-ring__track {
@@ -79,20 +78,18 @@
   background: var(--iswc-code-bg, #0f1318);
   color: var(--iswc-code-text, #d4d8de);
   tab-size: 2;
-}
-
-.lb-code__area:focus-visible {
-  outline: 2px solid var(--iswc-focus, #4aabff);
-  outline-offset: -1px;
+  &:focus-visible {
+    outline: 2px solid var(--iswc-focus, #4aabff);
+    outline-offset: -1px;
+  }
 }
 
 .lb-code__err {
   margin: 0;
   color: var(--iswc-danger-text, #ff8787);
   font-size: 0.75rem;
+  &[hidden] { display: none; }
 }
-
-.lb-code__err[hidden] { display: none; }
 
 .lb-code__actions {
   display: flex;
@@ -109,19 +106,16 @@
   font: inherit;
   font-size: 0.8125rem;
   cursor: pointer;
-}
-
-.lb-text-btn:hover { background: var(--iswc-control-bg-hover, #30363d); }
-
-.lb-text-btn.is-primary {
-  background: var(--iswc-accent, #1e90ff);
-  border-color: transparent;
-  color: var(--iswc-on-brand, #fff);
-}
-
-.lb-text-btn:focus-visible {
-  outline: 2px solid var(--iswc-focus, #4aabff);
-  outline-offset: 1px;
+  &:hover { background: var(--iswc-control-bg-hover, #30363d); }
+  &.iswc-primary {
+    background: var(--iswc-accent, #1e90ff);
+    border-color: transparent;
+    color: var(--iswc-on-brand, #fff);
+  }
+  &:focus-visible {
+    outline: 2px solid var(--iswc-focus, #4aabff);
+    outline-offset: 1px;
+  }
 }
 
 .lb-unsupported {

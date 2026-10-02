@@ -4,9 +4,9 @@
  * La clave incluye el hash: un hit es el contenido de ese build.
  */
 
-const DB_NAME = 'is-wc-assets';
+const DB_NAME = 'iswc-wc-assets';
 const STORE = 'bodies';
-const LS_KEY = 'is-wc-asset-hashes';
+const LS_KEY = 'iswc-wc-asset-hashes';
 
 function db(): Promise<IDBDatabase | null> {
   if (typeof indexedDB === 'undefined') return Promise.resolve(null);

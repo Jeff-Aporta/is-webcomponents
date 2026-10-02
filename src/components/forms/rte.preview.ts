@@ -1,5 +1,5 @@
 /**
- * Behavior migrado desde HTML inline de is-rte.
+ * Behavior migrado desde HTML inline de iswc-rte.
  * Se ejecuta en mount() tras pintar la definition JSON.
  * @param {import('../../previews/_kit/types.d.ts').PreviewMountContext} ctx
  */
@@ -10,7 +10,7 @@ export async function mount(ctx: import('../../previews/_kit/types.d.ts').Previe
   const out = document.getElementById('outHTML') as HTMLElement | null;
   if (rte && out) {
     const sync = (): void => { out.textContent = rte.value ?? ''; };
-    rte.addEventListener('is-input', sync);
+    rte.addEventListener('iswc-input', sync);
     sync();
   }
 }

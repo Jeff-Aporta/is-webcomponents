@@ -1,14 +1,14 @@
 ---
-tag: is-gantt
+tag: iswc-gantt
 tags:
-  - is-gantt
+  - iswc-gantt
 category: diagrams
 status: public
 source: ./gantt.js
 style: ./gantt.css
 preview: ./gantt.json
 ---
-# `<is-gantt>`
+# `<iswc-gantt>`
 
 ## Propósito
 
@@ -17,7 +17,7 @@ orden que la declares; el componente calcula la escala de tiempo,
 dibuja las barras y rutea las flechas de dependencia rodeando las
 demás barras.
 
-Este módulo registra `<is-gantt>`.
+Este módulo registra `<iswc-gantt>`.
 
 ## Cuándo usarlo
 
@@ -36,7 +36,7 @@ import './gantt.js';
 ## Ejemplo mínimo
 
 ```html
-<is-gantt></is-gantt>
+<iswc-gantt></iswc-gantt>
 ```
 
 ## API
@@ -70,10 +70,10 @@ import './gantt.js';
 
 | Evento | detail | bubbles | composed | cancelable |
 | --- | --- | --- | --- | --- |
-| `is-turtle-state` | sí | sí | sí | no |
-| `is-render` | sí | sí | sí | no |
-| `is-toggle-group` | sí | sí | sí | sí |
-| `is-open-viewer` | sí | sí | sí | sí |
+| `iswc-turtle-state` | sí | sí | sí | no |
+| `iswc-render` | sí | sí | sí | no |
+| `iswc-toggle-group` | sí | sí | sí | sí |
+| `iswc-open-viewer` | sí | sí | sí | sí |
 
 ### Métodos y propiedades públicas
 
@@ -111,18 +111,18 @@ No declara integración form-associated propia en este módulo.
 
 Documentación de cabecera preservada desde fuente:
 
-> <is-gantt> — diagrama de Gantt en SVG, sin Mermaid.
->   <is-gantt>
+> <iswc-gantt> — diagrama de Gantt en SVG, sin Mermaid.
+>   <iswc-gantt>
 >     <script type="application/json">
 >       { "gantt": { "title": "...", "groups": [...], "tasks": [...] } }
 >     </script>
->   </is-gantt>
+>   </iswc-gantt>
 > Una fila por tarea (orden de declaración, sin empaquetar). Las flechas
 > `after:` se rutean con A* sobre la rejilla de costos, igual que las
 > aristas de flowchart.
 > Atributos: color (inline | viewer), open-on-click
 > Propiedades: payload, spec, layout, turtle, hiddenGroups
-> Eventos: is-render, is-turtle-state, is-open-viewer, is-toggle-group
+> Eventos: iswc-render, iswc-turtle-state, iswc-open-viewer, iswc-toggle-group
 
 ## Dependencias y componentes relacionados
 
@@ -135,7 +135,7 @@ Documentación de cabecera preservada desde fuente:
 - [`../_shared/tk-inline-md.js`](../_shared/tk-inline-md.js)
 - [`./diagram-kinds.js`](./diagram-kinds.js)
 
-Tags del módulo: `<is-gantt>`.
+Tags del módulo: `<iswc-gantt>`.
 
 ## Accesibilidad
 
@@ -144,7 +144,7 @@ Preservar semántica, foco, teclado, labels y ARIA. ARIA detectado: `aria-label`
 ## Ejemplo avanzado
 
 ```html
-<is-gantt></is-gantt>
+<iswc-gantt></iswc-gantt>
 ```
 
 ## Errores comunes

@@ -1,14 +1,14 @@
 ---
-tag: is-cdn-snippet
+tag: iswc-cdn-snippet
 tags:
-  - is-cdn-snippet
+  - iswc-cdn-snippet
 category: feedback
 status: public
 source: ./cdn-snippet.js
 style: ./cdn-snippet.css
 preview: ./cdn-snippet.json
 ---
-# `<is-cdn-snippet>`
+# `<iswc-cdn-snippet>`
 
 ## Propósito
 
@@ -19,9 +19,9 @@ Muestra un bloque copy-paste de dos tags:
 1. `<script type="module" src="…/loader.min.js">` — carga el loader.
 2. `<script type="module">` — `loadCSSBase` + `loadCSSPalettesDefault` + `load(…)`.
 
-El snippet siempre hace `load('is-foo')`: un componente por llamada. El loader ya carga cada tag por separado, así que el panel no ofrece radio de alcance.
+El snippet siempre hace `load('iswc-foo')`: un componente por llamada. El loader ya carga cada tag por separado, así que el panel no ofrece radio de alcance.
 
-Sin tab de mirrors. Sin filas sueltas de `all.min.js` / categoría / tag. Docs para agentes vía `<is-md-editor>`. Dependencias externas opcionales (slot `deps` / atributo `dependencies`).
+Sin tab de mirrors. Sin filas sueltas de `all.min.js` / categoría / tag. Docs para agentes vía `<iswc-md-editor>`. Dependencias externas opcionales (slot `deps` / atributo `dependencies`).
 
 ## Cuándo usarlo
 
@@ -40,7 +40,7 @@ import './cdn-snippet.js';
 ## Ejemplo mínimo
 
 ```html
-<is-cdn-snippet tag="is-button"></is-cdn-snippet>
+<iswc-cdn-snippet tag="iswc-button"></iswc-cdn-snippet>
 ```
 
 ## API
@@ -49,7 +49,7 @@ import './cdn-snippet.js';
 
 | Atributo | Notas |
 | --- | --- |
-| `tag` | p. ej. `is-button` → `load('is-button')` |
+| `tag` | p. ej. `iswc-button` → `load('iswc-button')` |
 | `base` | override del CDN base (opcional) |
 | `title` | título del panel |
 | `dependencies` / slot `deps` | deps externas (link/script) |
@@ -63,7 +63,7 @@ import './cdn-snippet.js';
   const L = globalThis.ISWebComponentsLoader;
   await L.loadCSSBase();
   await L.loadCSSPalettesDefault();
-  await L.load('is-button');
+  await L.load('iswc-button');
 </script>
 ```
 

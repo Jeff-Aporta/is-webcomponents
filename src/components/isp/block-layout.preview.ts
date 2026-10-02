@@ -1,9 +1,9 @@
 /**
- * Demo <is-block-layout>: breakpoint + json2html/html2json.
+ * Demo <iswc-block-layout>: breakpoint + json2html/html2json.
  * @param {import('../../previews/_kit/types.d.ts').PreviewMountContext} ctx
  */
 
-/** `<is-block-layout>` con APIs específicas. */
+/** `<iswc-block-layout>` con APIs específicas. */
 interface _BlockLayoutLike extends HTMLElement {
   sizew: string;
   clientWidthMeasured: number;
@@ -21,7 +21,7 @@ export async function mount(ctx: import('../../previews/_kit/types.d.ts').Previe
     const paint = (): void => {
       out.textContent = `${(intro as _BlockLayoutLike).sizew} (${Math.round((intro as _BlockLayoutLike).clientWidthMeasured)}px)`;
     };
-    intro.addEventListener('is-breakpoint', paint as EventListener);
+    intro.addEventListener('iswc-breakpoint', paint as EventListener);
     paint();
   }
 

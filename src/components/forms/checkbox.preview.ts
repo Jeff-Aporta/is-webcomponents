@@ -1,12 +1,12 @@
 /**
- * Behavior migrado desde HTML inline de is-checkbox.
+ * Behavior migrado desde HTML inline de iswc-checkbox.
  * Se ejecuta en mount() tras pintar la definition JSON.
  * @param {import('../../previews/_kit/types.d.ts').PreviewMountContext} ctx
  */
 export async function mount(ctx: import('../../previews/_kit/types.d.ts').PreviewMountContext): Promise<void> {
   const root = ctx.main;
   void root;
-  await customElements.whenDefined('is-checkbox');
+  await customElements.whenDefined('iswc-checkbox');
 
   const parent = document.getElementById('parentBox') as (HTMLElement & { checked: boolean; indeterminate: boolean }) | null;
   const children = [...document.querySelectorAll<HTMLElement>('.childBox')] as (HTMLElement & { checked: boolean })[];
@@ -16,12 +16,12 @@ export async function mount(ctx: import('../../previews/_kit/types.d.ts').Previe
       parent.checked = all;
       parent.indeterminate = !all && children.some((c) => c.checked);
     };
-    parent.addEventListener('is-change', (e: Event) => {
+    parent.addEventListener('iswc-change', (e: Event) => {
       const detail = (e as CustomEvent<{ checked: boolean }>).detail;
       children.forEach((c) => { c.checked = detail.checked; });
       syncParent();
     });
-    children.forEach((c) => c.addEventListener('is-change', syncParent));
+    children.forEach((c) => c.addEventListener('iswc-change', syncParent));
     syncParent();
   }
 

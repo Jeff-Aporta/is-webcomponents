@@ -1,18 +1,20 @@
-/* is-mega-menu */
+/* iswc-mega-menu */
 :host {
   display: inline-block;
   font: inherit;
   color: var(--iswc-text);
+  --iswc-mega-menu-focus: var(--iswc-accent, dodgerblue);
 }
+
 .root {
   position: relative;
   display: inline-block;
 }
 
-/* El trigger es <is-button variant="text">: la caja pintada es su
+/* El trigger es <iswc-button variant="text">: la caja pintada es su
    ::part(button). Se antepone el tipo por especificidad (0,2,1), igual que
    en check-icon-button.css, para ganar a las reglas internas del botón. */
-is-button.trigger {
+iswc-button.trigger {
   font-size: .92rem;
 
   &::part(button) {
@@ -22,7 +24,7 @@ is-button.trigger {
     background: transparent;
     border-radius: var(--iswc-radius, 8px);
     color: inherit;
-    min-height: 0;
+    min-block-size: 0;
   }
 
   &:hover::part(button) {
@@ -42,9 +44,9 @@ is-button.trigger {
   background: var(--iswc-bg-elev);
   padding: 1.25rem 1.5rem;
   margin: 0;
-  box-shadow: 0 30px 80px rgba(0,0,0,.42), 0 0 0 1px color-mix(in srgb, var(--iswc-text) 4%, transparent) inset;
+  box-shadow: 0 30px 80px rgb(0 0 0 / 42%), 0 0 0 1px color-mix(in srgb, var(--iswc-text) 4%, transparent) inset;
   color: var(--iswc-text);
-  max-height: 75vh;
+  max-block-size: 75vh;
   overflow: auto;
   position: fixed;
   /* Explicit: sin esto `display:grid` anula el display:none del UA en dialog cerrado
@@ -64,7 +66,7 @@ is-button.trigger {
     display: flex;
     flex-direction: column;
     gap: 0.15rem;
-    min-width: 11rem;
+    min-inline-size: 11rem;
   }
 
   & ::slotted([slot="column"][title])::before {
@@ -75,14 +77,14 @@ is-button.trigger {
     font-size: .8rem;
     letter-spacing: .04em;
     text-transform: uppercase;
-    margin-bottom: .65rem;
-    padding-bottom: .35rem;
-    border-bottom: 1px solid color-mix(in srgb, var(--iswc-accent) 30%, var(--iswc-border));
+    margin-block-end: .65rem;
+    padding-block-end: .35rem;
+    border-block-end: 1px solid color-mix(in srgb, var(--iswc-accent) 30%, var(--iswc-border));
   }
 
   & ::slotted(a) {
     display: block;
-    padding: .25rem 0;
+    padding-block: .25rem;
     color: var(--iswc-text-soft);
     text-decoration: none;
     font-size: .88rem;
@@ -105,11 +107,16 @@ is-button.trigger {
     display: flex; flex-direction: column; gap: .55rem;
   }
 
-  & ::slotted([aria-disabled="true"]),
-  & ::slotted([disabled]) {
+  & ::slotted(:is([aria-disabled="true"], [disabled])) {
     opacity: 0.5;
     cursor: not-allowed;
     pointer-events: none;
+  }
+
+  /* Reduced-motion: cierra y abre sin animación. */
+  @media (prefers-reduced-motion: reduce) {
+    transition: none !important;
+    animation: none !important;
   }
 }
 
@@ -117,9 +124,3 @@ is-button.trigger {
    de las columnas (sólo un nivel). El outline por defecto del navegador sobre
    <a>/<button> cubre el caso; aquí solo aseguramos que no quede anulado por
    resets globales. */
-:host { --iswc-mega-menu-focus: var(--iswc-accent, dodgerblue); }
-
-/* Reduced-motion: cierra y abre sin animación. */
-@media (prefers-reduced-motion: reduce) {
-  .panel { transition: none !important; animation: none !important; }
-}

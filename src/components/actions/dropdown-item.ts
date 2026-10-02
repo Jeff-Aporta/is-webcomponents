@@ -6,7 +6,7 @@ import '../media/icon.js';
 import { setStringAttr } from '../_shared/reflect.js';
 
 /**
- * <is-dropdown-item> — ítem de menú para is-dropdown.
+ * <iswc-dropdown-item> — ítem de menú para iswc-dropdown.
  *
  * El submenú va en un popover (top layer) y se posiciona con computePosition: el
  * menú padre scrollea (`overflow: auto`), así que un panel `absolute` quedaría
@@ -23,13 +23,13 @@ import { setStringAttr } from '../_shared/reflect.js';
   TEMPLATE.innerHTML = /* html */ `
     <div part="base" class="item" role="menuitem">
       <span part="checkmark" class="checkmark" aria-hidden="true" hidden>
-        <is-icon icon="mdi:check"></is-icon>
+        <iswc-icon icon="mdi:check"></iswc-icon>
       </span>
       <span part="icon" class="icon"><slot name="icon"></slot></span>
       <span part="label" class="label"><slot></slot></span>
       <span part="details" class="details"><slot name="details"></slot></span>
       <span part="submenu-icon" class="submenu-icon" hidden aria-hidden="true">
-        <is-icon icon="mdi:chevron-right"></is-icon>
+        <iswc-icon icon="mdi:chevron-right"></iswc-icon>
       </span>
     </div>
     <div part="submenu" class="submenu" hidden role="menu">
@@ -54,7 +54,7 @@ import { setStringAttr } from '../_shared/reflect.js';
     ...Object.keys(STYLE_ATTRS),
   ];
 
-  class IsDropdownItem extends withStyleAttrs(HTMLElement) {
+  class IswcDropdownItem extends withStyleAttrs(HTMLElement) {
     static styleAttrs = STYLE_ATTRS;
 
     static get observedAttributes(): string[] { return OBSERVED; }
@@ -237,7 +237,7 @@ import { setStringAttr } from '../_shared/reflect.js';
         return;
       }
       if (this.type === 'checkbox') this.checked = !this.checked;
-      emit(this, 'is-dropdown-item-select', { item: this });
+      emit(this, 'iswc-dropdown-item-select', { item: this });
     };
 
     #onKey = (e: KeyboardEvent) => {
@@ -255,5 +255,5 @@ import { setStringAttr } from '../_shared/reflect.js';
     };
   }
 
-  defineElement('is-dropdown-item', IsDropdownItem, 'IsDropdownItem');
+  defineElement('iswc-dropdown-item', IswcDropdownItem, 'IswcDropdownItem');
 })();

@@ -9,14 +9,14 @@ const URL = `${BASE_URL}/demos/data/spreadsheet/spreadsheet.html`;
 const tests = [];
 
 tests.push({
-  name: 'smoke: is-spreadsheet está definido y los 4 spreadsheets renderizan',
+  name: 'smoke: iswc-spreadsheet está definido y los 4 spreadsheets renderizan',
   run: async (page) => {
     await page.goto(URL, { waitUntil: 'domcontentloaded' });
     await waitReady(page, 'data-spreadsheet-ready');
     const initial = await page.evaluate(() => {
-      const sheets = [...document.querySelectorAll('main is-spreadsheet')];
+      const sheets = [...document.querySelectorAll('main iswc-spreadsheet')];
       return {
-        defined: !!customElements.get('is-spreadsheet'),
+        defined: !!customElements.get('iswc-spreadsheet'),
         count: sheets.length,
         perSheet: sheets.map((s) => {
           const sr = s.shadowRoot;
@@ -35,7 +35,7 @@ tests.push({
         }),
       };
     });
-    assert.equal(initial.defined, true, 'is-spreadsheet debe estar definido');
+    assert.equal(initial.defined, true, 'iswc-spreadsheet debe estar definido');
     assert.equal(initial.count, 4, `esperaba 4 spreadsheets, hay ${initial.count}`);
     for (let i = 0; i < initial.perSheet.length; i++) {
       const r = initial.perSheet[i];
@@ -57,7 +57,7 @@ tests.push({
     await page.goto(URL, { waitUntil: 'domcontentloaded' });
     await waitReady(page, 'data-spreadsheet-ready');
     const sums = await page.evaluate(() => {
-      const s = document.querySelector('main is-spreadsheet'); // el primero (formulas)
+      const s = document.querySelector('main iswc-spreadsheet'); // el primero (formulas)
       const sr = s.shadowRoot;
       const rows = [...sr.querySelectorAll('tbody tr')];
       // Fila 6 (índice 5) — primera fila de fórmulas
@@ -80,7 +80,7 @@ tests.push({
     await page.goto(URL, { waitUntil: 'domcontentloaded' });
     await waitReady(page, 'data-spreadsheet-ready');
     const result = await page.evaluate(() => {
-      const sheets = [...document.querySelectorAll('main is-spreadsheet')];
+      const sheets = [...document.querySelectorAll('main iswc-spreadsheet')];
       const mixed = sheets[1]; // segundo: mixed
       const rows = [...mixed.shadowRoot.querySelectorAll('tbody tr')];
       // Fila 6 (índice 5): ['=COUNT(B2:B5)', '=SUM(B2:B5)']
@@ -100,7 +100,7 @@ tests.push({
     await page.goto(URL, { waitUntil: 'domcontentloaded' });
     await waitReady(page, 'data-spreadsheet-ready');
     const result = await page.evaluate(() => {
-      const sheets = [...document.querySelectorAll('main is-spreadsheet')];
+      const sheets = [...document.querySelectorAll('main iswc-spreadsheet')];
       const empty = sheets[3]; // el cuarto
       const rows = [...empty.shadowRoot.querySelectorAll('tbody tr')];
       // Fila 2 (índice 1): ['', '=MIN(A1:C1)', '=MAX(A1:C1)']
@@ -116,7 +116,7 @@ tests.push({
 });
 
 tests.push({
-  name: 'funcional: edición de celda actualiza el DOM y emite is-change',
+  name: 'funcional: edición de celda actualiza el DOM y emite iswc-change',
   run: async (page) => {
     await page.goto(URL, { waitUntil: 'domcontentloaded' });
     await waitReady(page, 'data-spreadsheet-ready');
@@ -124,10 +124,10 @@ tests.push({
     // Suscribirse y editar cell A1 del cuarto (empty) que está vacío.
     const captured = await page.evaluate(() => {
       return new Promise((resolve) => {
-        const sheets = [...document.querySelectorAll('main is-spreadsheet')];
+        const sheets = [...document.querySelectorAll('main iswc-spreadsheet')];
         const empty = sheets[3];
         let detail = null;
-        empty.addEventListener('is-change', (e) => { detail = e.detail; });
+        empty.addEventListener('iswc-change', (e) => { detail = e.detail; });
 
         // Buscar la celda data-r=0 data-c=0 (A1)
         const cell = empty.shadowRoot.querySelector('td.cell[data-r="0"][data-c="0"]');
@@ -173,7 +173,7 @@ tests.push({
     await waitReady(page, 'data-spreadsheet-ready');
     await page.waitForTimeout(100);
     const result = await page.evaluate(() => {
-      const sheets = [...document.querySelectorAll('main is-spreadsheet')];
+      const sheets = [...document.querySelectorAll('main iswc-spreadsheet')];
       const ro = sheets[2]; // tercero: read-only
       assert(ro.hasAttribute('read-only'), 'el sheet debe tener atributo read-only');
       const cell = ro.shadowRoot.querySelector('td.cell[data-r="1"][data-c="1"]');
@@ -197,7 +197,7 @@ tests.push({
     await page.waitForTimeout(100);
     const result = await page.evaluate(() => {
       return new Promise((resolve) => {
-        const sheets = [...document.querySelectorAll('main is-spreadsheet')];
+        const sheets = [...document.querySelectorAll('main iswc-spreadsheet')];
         const empty = sheets[3];
         const cell = empty.shadowRoot.querySelector('td.cell[data-r="0"][data-c="0"]');
         cell.click();
@@ -224,7 +224,7 @@ tests.push({
     await waitReady(page, 'data-spreadsheet-ready');
     await page.waitForTimeout(100);
     const result = await page.evaluate(() => {
-      const s = document.createElement('is-spreadsheet');
+      const s = document.createElement('iswc-spreadsheet');
       s.setAttribute('rows', '2');
       s.setAttribute('cols', '2');
       s.setAttribute('value', JSON.stringify([
@@ -248,14 +248,14 @@ tests.push({
     await waitReady(page, 'data-spreadsheet-ready');
     await page.waitForTimeout(100);
     const a = await page.evaluate(() => {
-      const sheets = [...document.querySelectorAll('main is-spreadsheet')];
+      const sheets = [...document.querySelectorAll('main iswc-spreadsheet')];
       const empty = sheets[3];
       return [...empty.shadowRoot.querySelectorAll('td.cell[data-r="1"][data-c]')]
         .map((c) => c.textContent.trim());
     });
     // Re-asignar el mismo value attribute
     await page.evaluate(() => {
-      const sheets = [...document.querySelectorAll('main is-spreadsheet')];
+      const sheets = [...document.querySelectorAll('main iswc-spreadsheet')];
       const empty = sheets[3];
       const v = empty.getAttribute('value');
       empty.removeAttribute('value');
@@ -263,7 +263,7 @@ tests.push({
     });
     await page.waitForTimeout(80);
     const b = await page.evaluate(() => {
-      const sheets = [...document.querySelectorAll('main is-spreadsheet')];
+      const sheets = [...document.querySelectorAll('main iswc-spreadsheet')];
       const empty = sheets[3];
       return [...empty.shadowRoot.querySelectorAll('td.cell[data-r="1"][data-c]')]
         .map((c) => c.textContent.trim());
@@ -278,7 +278,7 @@ tests.push({
     await page.goto(URL, { waitUntil: 'domcontentloaded' });
     await waitReady(page, 'data-spreadsheet-ready');
     const role = await page.evaluate(() => {
-      const sheets = [...document.querySelectorAll('main is-spreadsheet')];
+      const sheets = [...document.querySelectorAll('main iswc-spreadsheet')];
       const table = sheets[0].shadowRoot.querySelector('table.grid');
       return table?.getAttribute('role');
     });

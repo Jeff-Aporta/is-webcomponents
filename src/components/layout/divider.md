@@ -1,20 +1,20 @@
 ---
-tag: is-divider
+tag: iswc-divider
 tags:
-  - is-divider
+  - iswc-divider
 category: layout
 status: public
 source: ./divider.js
 style: ./divider.css
 preview: ./divider.json
 ---
-# `<is-divider>`
+# `<iswc-divider>`
 
 ## Propósito
 
 Separador horizontal o vertical. Opacidad default 20; color vía tokens del theme.
 
-Este módulo registra `<is-divider>`.
+Este módulo registra `<iswc-divider>`.
 
 ## Cuándo usarlo
 
@@ -33,9 +33,9 @@ import './divider.js';
 ## Ejemplo mínimo
 
 ```html
-<is-divider></is-divider>
-<is-divider opacity="80" color="brand"></is-divider>
-<is-divider orientation="vertical" color="accent"></is-divider>
+<iswc-divider></iswc-divider>
+<iswc-divider opacity="80" color="brand"></iswc-divider>
+<iswc-divider orientation="vertical" color="accent"></iswc-divider>
 ```
 
 ## API
@@ -109,7 +109,7 @@ No declara integración form-associated propia en este módulo.
 
 Documentación de cabecera preservada desde fuente:
 
-> <is-divider> — Web Component (vanilla).
+> <iswc-divider> — Web Component (vanilla).
 > Separador visual horizontal o vertical.
 > Atributos
 >   orientation  horizontal | vertical (default horizontal)
@@ -123,7 +123,7 @@ Documentación de cabecera preservada desde fuente:
 
 - [`../_shared/adopt-css.js`](../_shared/adopt-css.js)
 
-Tags del módulo: `<is-divider>`.
+Tags del módulo: `<iswc-divider>`.
 
 ## Accesibilidad
 
@@ -132,9 +132,9 @@ Preservar semántica, foco, teclado, labels y ARIA. ARIA detectado: `aria-orient
 ## Ejemplo avanzado
 
 ```html
-<is-divider></is-divider>
-<is-divider opacity="80" color="brand"></is-divider>
-<is-divider orientation="vertical" color="accent"></is-divider>
+<iswc-divider></iswc-divider>
+<iswc-divider opacity="80" color="brand"></iswc-divider>
+<iswc-divider orientation="vertical" color="accent"></iswc-divider>
 ```
 
 ## Errores comunes

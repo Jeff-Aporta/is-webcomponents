@@ -1,6 +1,6 @@
 {
-  "$schema": "is-preview/v1",
-  "tag": "is-diagram-edit-app",
+  "$schema": "iswc-preview/v1",
+  "tag": "iswc-diagram-edit-app",
   "category": "diagrams",
   "title": "Editor de diagramas (API)",
   "titleHtml": false,

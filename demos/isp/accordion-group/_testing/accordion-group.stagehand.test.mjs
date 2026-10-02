@@ -11,7 +11,7 @@ const results = [];
 async function checkDeterministic(page) {
   await page.waitForTimeout(200);
   const data = await page.evaluate(() => {
-    const groups = [...document.querySelectorAll('is-accordion-group')];
+    const groups = [...document.querySelectorAll('iswc-accordion-group')];
     return groups.map((g) => {
       const root = g.shadowRoot;
       const accordionEl = root?.querySelector('.accordion');

@@ -2,7 +2,7 @@ import { mdToHtml } from '../helpers/md-lite.js';
 
 /**
  * prompt-md.js — Variables {{nombre}} + render MD/HTML híbrido para
- * `<is-md-render>` / `<is-md-editor>`. Port de PatyIA (`core/promptVariables.ts` +
+ * `<iswc-md-render>` / `<iswc-md-editor>`. Port de PatyIA (`core/promptVariables.ts` +
  * `ui/promptMdEditorHtml.ts`) a vanilla JS, sin dependencias npm.
  */
 

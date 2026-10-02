@@ -1,24 +1,26 @@
 {
-  "generatedAt": "2026-10-02T17:47:00.592Z",
+  "generatedAt": "2026-10-02T21:36:44.187Z",
   "count": 61,
   "modules": [
     {
       "file": "cdn-ref.ts",
       "id": "cdn-ref",
       "path": "src/components/_shared/cdn-ref.ts",
-      "summary": "cdn-ref — Primario: jsDelivr (`@<sha>` inmutable). Espejo: GitHub Pages (tip",
-      "bytes": 2711,
+      "summary": "cdn-ref — Orden de fallback al cargar assets:",
+      "bytes": 3549,
       "exports": [
         "GH_REPO",
         "resolveRef",
         "jsdelivrBase",
+        "githackBase",
         "pagesBase",
         "MIRRORS",
         "mirrorById",
         "readMirrorId",
         "writeMirrorId",
         "resolvedBase",
-        "fallbackBases"
+        "fallbackBases",
+        "fillHostTemplate"
       ]
     },
     {
@@ -40,8 +42,8 @@
       "file": "code-diff.ts",
       "id": "code-diff",
       "path": "src/components/_shared/code-diff.ts",
-      "summary": "code-diff — commit para el motor nativo de `<is-code>`.",
-      "bytes": 7120,
+      "summary": "code-diff — commit para el motor nativo de `<iswc-code>`.",
+      "bytes": 7134,
       "exports": [
         "DIFF_LINE_CLASS",
         "DIFF_LINE_CLASSES",
@@ -56,7 +58,7 @@
       "id": "code-format",
       "path": "src/components/_shared/code-format.ts",
       "summary": "code-format — No es Prettier completo (sin AST de terceros). Acepta un JSON de opciones",
-      "bytes": 6591,
+      "bytes": 6593,
       "exports": [
         "DEFAULT_FORMAT",
         "normalizeFormatConfig",
@@ -68,7 +70,7 @@
       "id": "code-highlight",
       "path": "src/components/_shared/code-highlight.ts",
       "summary": "code-highlight — Sustituye a CM5 (runMode / fromTextArea): tokeniza con un escáner por",
-      "bytes": 20109,
+      "bytes": 22053,
       "exports": [
         "normalizeLang",
         "emptyState",
@@ -85,7 +87,7 @@
       "id": "code-langs",
       "path": "src/components/_shared/code-langs.ts",
       "summary": "code-langs — El resaltado lo hace el motor NATIVO (code-highlight): aquí solo vive el",
-      "bytes": 5180,
+      "bytes": 5182,
       "exports": [
         "registerLanguage",
         "resolveLanguage",
@@ -99,7 +101,7 @@
       "id": "code-model",
       "path": "src/components/_shared/code-model.ts",
       "summary": "code-model — Analogía con html2json / json2html: el texto plano es `value`; las",
-      "bytes": 6062,
+      "bytes": 6068,
       "exports": [
         "CODE_DOC_SCHEMA",
         "normalizeMark",
@@ -114,7 +116,7 @@
       "id": "code-text",
       "path": "src/components/_shared/code-text.ts",
       "summary": "code-text — Extraído para evitar ciclos highlight-code ↔ code ↔ code-format.",
-      "bytes": 3870,
+      "bytes": 4557,
       "exports": [
         "dedent",
         "unwrapHandHighlight",
@@ -128,10 +130,11 @@
       "id": "code-theme",
       "path": "src/components/_shared/code-theme.ts",
       "summary": "code-theme — El consumidor pasa un objeto de colores (como un theme de VS Code / CM).",
-      "bytes": 7290,
+      "bytes": 8396,
       "exports": [
         "THEME_PROP_MAP",
         "BUILTIN_THEMES",
+        "brandMonoTheme",
         "applyThemeConfig",
         "parseThemeConfig"
       ]
@@ -152,7 +155,7 @@
       "id": "date-field-element",
       "path": "src/components/_shared/date-field-element.ts",
       "summary": "Módulo compartido `date-field-element.ts`.",
-      "bytes": 11892,
+      "bytes": 11910,
       "exports": [
         "defineDateField"
       ]
@@ -256,7 +259,7 @@
       "id": "diagram-edit",
       "path": "src/components/_shared/diagram-edit.ts",
       "summary": "Helpers de edición para diagramas SVG (modo lectura / edición). — API común a todos los diagramas:",
-      "bytes": 12584,
+      "bytes": 12600,
       "exports": [
         "loadOverrides",
         "saveOverrides",
@@ -274,7 +277,7 @@
       "id": "diagram-element-base",
       "path": "src/components/_shared/diagram-element-base.ts",
       "summary": "diagram-element-base — (block-diagram, class-diagram, er-diagram, flowchart, gantt, mindmap,",
-      "bytes": 9395,
+      "bytes": 9407,
       "exports": [
         "DiagramElementBase extends ElementBase \r\n  static get observedAttributes"
       ]
@@ -305,7 +308,7 @@
       "id": "diagram-header",
       "path": "src/components/_shared/diagram-header.ts",
       "summary": "Módulo compartido `diagram-header.ts`.",
-      "bytes": 1142,
+      "bytes": 1144,
       "exports": [
         "diagramHeaderWidth"
       ]
@@ -335,8 +338,8 @@
       "file": "dom-utils.ts",
       "id": "dom-utils",
       "path": "src/components/_shared/dom-utils.ts",
-      "summary": "dom-utils — Sustituye copias dispersas en is-checkbox, is-switch, is-input,",
-      "bytes": 2957,
+      "summary": "dom-utils — Sustituye copias dispersas en iswc-checkbox, iswc-switch, iswc-input,",
+      "bytes": 2979,
       "exports": [
         "hasSlotted",
         "assignedNodes",
@@ -364,7 +367,7 @@
       "id": "form-control-mixin",
       "path": "src/components/_shared/form-control-mixin.ts",
       "summary": "form-control-mixin — Muchos componentes de formulario (checkbox, input, select, etc.) repiten",
-      "bytes": 7642,
+      "bytes": 7644,
       "exports": [
         "formControlTemplate",
         "getFormControlTemplate",
@@ -419,7 +422,7 @@
       "id": "grid-ui",
       "path": "src/components/_shared/grid-ui.ts",
       "summary": "Popovers del data grid: menú de columna, panel de columnas, panel de filtros, — menús de densidad y exportación.",
-      "bytes": 13541,
+      "bytes": 13577,
       "exports": [
         "createPopover",
         "showPopover",
@@ -437,7 +440,7 @@
       "id": "highlight-code",
       "path": "src/components/_shared/highlight-code.ts",
       "summary": "highlight-code — `<pre class=\"code\">` de la documentación (antes se coloreaban con",
-      "bytes": 8536,
+      "bytes": 8586,
       "exports": [
         "dedent",
         "unwrapHandHighlight",
@@ -456,7 +459,7 @@
       "id": "icon-loader",
       "path": "src/components/_shared/icon-loader.ts",
       "summary": "icon-loader — resuelve el SVG de un icono Iconify SIN el web component — `<iconify-icon>` ni su script de CDN. Todo el sistema de iconos vive en",
-      "bytes": 7502,
+      "bytes": 7504,
       "exports": [
         "hasIconLocal",
         "iconSourceBase",
@@ -471,7 +474,7 @@
       "id": "intent",
       "path": "src/components/_shared/intent.ts",
       "summary": "intent — Un \"intent\" describe EL SIGNIFICADO del color que aplica el componente,",
-      "bytes": 1885,
+      "bytes": 1911,
       "exports": [
         "INTENT",
         "DEFAULT_INTENT",
@@ -499,7 +502,7 @@
       "id": "isp-record-utils",
       "path": "src/components/_shared/isp-record-utils.ts",
       "summary": "Helpers de registro planos / TObject-like (ispgen) para componentes ISP. — No depende de `@ingenieria_insoft/ispgen`.",
-      "bytes": 6108,
+      "bytes": 6114,
       "exports": [
         "isPresent",
         "asStr",
@@ -517,11 +520,12 @@
       "id": "json-html",
       "path": "src/components/_shared/json-html.ts",
       "summary": "Codec compacto HTML ↔ JSON (lenguaje de definición del kit). — Node     = string | [tag, attrs?, ...children]",
-      "bytes": 8592,
+      "bytes": 9811,
       "exports": [
         "json2html",
         "html2json",
         "json2dom",
+        "json2xml",
         "applyJsonBody",
         "hostToJson"
       ]
@@ -546,7 +550,7 @@
       "id": "llm-agent-prompt",
       "path": "src/components/_shared/llm-agent-prompt.ts",
       "summary": "Prompt canónico para agentes + helpers de ensamblaje. — Fuente de verdad en prosa: `src/skills/is-webcomponents/PROMPT.md`",
-      "bytes": 4575,
+      "bytes": 4577,
       "exports": [
         "SKILL_DOCS",
         "LLM_PROMPT_FALLBACK",
@@ -559,8 +563,8 @@
       "file": "misc-utils.ts",
       "id": "misc-utils",
       "path": "src/components/_shared/misc-utils.ts",
-      "summary": "misc-utils — Sustituye copias dispersas en is-slider, is-rating, is-split-panel,",
-      "bytes": 2139,
+      "summary": "misc-utils — Sustituye copias dispersas en iswc-slider, iswc-rating, iswc-split-panel,",
+      "bytes": 2153,
       "exports": [
         "tidy",
         "tidyToStep",
@@ -573,7 +577,7 @@
       "id": "modal-base",
       "path": "src/components/_shared/modal-base.ts",
       "summary": "modal-base — Centraliza TODO el ciclo de vida de un modal accesible que no es nativo:",
-      "bytes": 14062,
+      "bytes": 14084,
       "exports": [
         "ModalBase extends withStyleAttrs"
       ]
@@ -609,7 +613,7 @@
       "id": "picker-element",
       "path": "src/components/_shared/picker-element.ts",
       "summary": "Módulo compartido `picker-element.ts`.",
-      "bytes": 22370,
+      "bytes": 22392,
       "exports": [
         "definePickerInput"
       ]
@@ -618,8 +622,8 @@
       "file": "popup-dismiss.ts",
       "id": "popup-dismiss",
       "path": "src/components/_shared/popup-dismiss.ts",
-      "summary": "popup-dismiss — Todo panel flotante del kit (is-dropdown, is-context-menu, y cualquiera que",
-      "bytes": 5000,
+      "summary": "popup-dismiss — Todo panel flotante del kit (iswc-dropdown, iswc-context-menu, y cualquiera que",
+      "bytes": 5014,
       "exports": [
         "createPopupDismiss"
       ]
@@ -640,8 +644,8 @@
       "file": "prefs.ts",
       "id": "prefs",
       "path": "src/components/_shared/prefs.ts",
-      "summary": "Preferencias compartidas de Web Components (un solo JSON en localStorage). — \"is-split-panel\": { \"gallery-nav\": { \"positionInPixels\": 200 } },",
-      "bytes": 4580,
+      "summary": "Preferencias compartidas de Web Components (un solo JSON en localStorage). — \"iswc-split-panel\": { \"gallery-nav\": { \"positionInPixels\": 200 } },",
+      "bytes": 4588,
       "exports": [
         "getComponentPrefs",
         "setComponentPrefs",
@@ -658,7 +662,7 @@
       "id": "prompt-md",
       "path": "src/components/_shared/prompt-md.ts",
       "summary": "Módulo compartido `prompt-md.ts`.",
-      "bytes": 10963,
+      "bytes": 10967,
       "exports": [
         "PROMPT_VAR_PATTERN",
         "MALFORMED_PROMPT_VAR_PATTERN",
@@ -703,7 +707,7 @@
       "id": "scroll-memory",
       "path": "src/components/_shared/scroll-memory.ts",
       "summary": "ScrollMemory — persistencia opt-in de scrollTop para cualquier host scrolleable. — Requiere remember-scroll + storage-key. Sin ambos no lee ni escribe.",
-      "bytes": 8630,
+      "bytes": 8632,
       "exports": [
         "SCROLL_MEMORY_ATTRS",
         "ScrollMemory \r\n  host",
@@ -733,8 +737,8 @@
       "file": "theme-scope.ts",
       "id": "theme-scope",
       "path": "src/components/_shared/theme-scope.ts",
-      "summary": "Contenedor de tema del kit — misma cascada que is-theme-toggle. — Atraviesa Shadow DOM (Element.closest se corta en el shadow root).",
-      "bytes": 2089,
+      "summary": "Contenedor de tema del kit — misma cascada que iswc-theme-toggle. — Atraviesa Shadow DOM (Element.closest se corta en el shadow root).",
+      "bytes": 2097,
       "exports": [
         "THEME_SCOPE",
         "findThemeContainer",
@@ -771,7 +775,7 @@
       "id": "tk-icon-inline",
       "path": "src/components/_shared/tk-icon-inline.ts",
       "summary": "Iconos inline en MD/HTML TK. El SVG lo resuelve el sistema propio de — iconos (_shared/icon-loader.js); no hay dependencia de terceros.",
-      "bytes": 16217,
+      "bytes": 16243,
       "exports": [
         "TK_ICON_TOKEN_RE",
         "iconAssetPath",
@@ -792,7 +796,7 @@
       "id": "tk-inline-md",
       "path": "src/components/_shared/tk-inline-md.ts",
       "summary": "Módulo compartido `tk-inline-md.ts`.",
-      "bytes": 4223,
+      "bytes": 4227,
       "exports": [
         "inlineMdWeb",
         "applySvgTextContent"
@@ -817,7 +821,7 @@
       "id": "tone",
       "path": "src/components/_shared/tone.ts",
       "summary": "tone — Un \"tone\" describe EL GRADO DE PESO VISUAL: outlined (sin relleno, sólo",
-      "bytes": 1730,
+      "bytes": 1740,
       "exports": [
         "TONE",
         "DEFAULT_TONE",

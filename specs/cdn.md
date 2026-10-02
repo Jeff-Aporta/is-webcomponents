@@ -24,7 +24,7 @@ El kit se consume desde jsDelivr/GitHub Pages como módulos por tag. La galería
 
 ## S-C3 Metadatos
 
-- UI de pesos en galería: `<is-format-bytes autofit>` cuando haya bytes conocidos (p. ej. fuente TS en `_shared`).
+- UI de pesos en galería: `<iswc-format-bytes autofit>` cuando haya bytes conocidos (p. ej. fuente TS en `_shared`).
 
 ## S-C4 Publicación
 
@@ -57,10 +57,11 @@ Iconos: `dist/assets/icons/` (fuera de `dist/cdn/`; única copia versionada). **
   import { ISWebComponentsLoader } from '…/dist/cdn/core/loader.min.js';
   // Pin opcional (SHA o branch). Sin pin → tip de main (API GitHub).
   // ISWebComponentsLoader.pin('abcdef0123…');
-  ISWebComponentsLoader.configure({ mirrors: ['jsdelivr', 'pages'] });
+  // Fallback canónico (si no configuras mirrors): jsDelivr → githack → Pages.
+  // ISWebComponentsLoader.configure({ mirrors: ['jsdelivr', 'githack', 'pages'] });
   await ISWebComponentsLoader.loadCSSBase();
   await ISWebComponentsLoader.loadCSSPalettesDefault();
-  await ISWebComponentsLoader.load('is-button', 'is-button-group');
+  await ISWebComponentsLoader.load('iswc-button', 'iswc-button-group');
   // o: load('actions') expande a cada tag.min.js (sin bundle de categoría)
 </script>
 ```
@@ -70,20 +71,20 @@ Skills: `npx skills add Jeff-Aporta/is-webcomponents -s is-cdn-install` · `-s i
 ### Qué hacer
 
 - Apps CDN: `loadCSSBase()` + `loadCSSPalettesDefault()` explícitos (CSS no "mágico").
-- `load('actions')` o tags puntuales; revisar `{ loaded, skipped }`. Usar `has('is-button')`/`getLoaded()` antes de forzar otra carga.
+- `load('actions')` o tags puntuales; revisar `{ loaded, skipped }`. Usar `has('iswc-button')`/`getLoaded()` antes de forzar otra carga.
 - Pin SHA en jsDelivr cuando la app necesite reproducible.
 - Tras `deno run -A --no-check scripts/build.mjs`, verificar banner `/*! … docs (LLM) */` en `.min.js` y que exista `dist/cdn/core/loader.md`.
 - **Galería:** CSS en `<link>`; shell tags + preview desde `dist/cdn`; resto background. Respetar error #43 — no rehacer el boot "bonito" con `await all`.
 
 ### Qué no hacer
 
-- **No** re-cargar un tag ya cubierto por su categoría (`actions` → `is-button`).
+- **No** re-cargar un tag ya cubierto por su categoría (`actions` → `iswc-button`).
 - **No** default a `load('all')` "por comodidad" (expande a cada tag.min.js).
 - **No** volver a emitir `all.min.js` ni `category.*.min.js`.
 - **No** marcar `coveredTag` por categoría **antes** de empujar los jobs del lote (`planLoads(['actions'])` quedaría en 0 jobs).
 - **No** inventar un segundo entry aparte de `src/cdn/loader.ts` + `load-plan.js`.
 - **No** quitar el banner MD ni dejar de copiar `loader.md` al dist.
-- **No** mezclar espejos (jsDelivr + Pages) en la misma página.
+- **No** forzar un solo espejo sin fallback: el loader ya encadena jsDelivr → githack → Pages; un espejo caído no debe tumbar la app.
 - **No** bloquear el primer paint de la galería con `await loadCSS*` / `await load('all')` / `await loadPageModules(cdn-panel)`.
 - **No** importar `preview-component` ni `cdn-snippet` desde `src/` en el boot de Pages/galería.
 
@@ -101,7 +102,7 @@ Skills: `npx skills add Jeff-Aporta/is-webcomponents -s is-cdn-install` · `-s i
 ### jsDelivr y peso
 
 - **`@main`** es lo que se consume: el repo supera 50 MB por `dist/assets/icons` y jsDelivr aplica el límite (403 "Package size exceeded") al resolver un SHA aún no cacheado; `@main` responde 200 porque está caliente. **Conclusión:** un consumidor externo no puede pinear versión mientras los iconos vivan dentro de `dist/`.
-- Con `@main` cacheado 24 h, `all.min.js` servido puede ser **anterior** a que existiera un componente: el componente nuevo no queda definido aunque su archivo sí se sirva fresco. Síntoma: `customElements.get('is-button')` true y `customElements.get('is-code')` false, sin error. **Solución:** pedir el componente por su ruta propia (`dist/cdn/<cat>/<comp>.min.js`) además de `all.min.js`.
+- Con `@main` cacheado 24 h, `all.min.js` servido puede ser **anterior** a que existiera un componente: el componente nuevo no queda definido aunque su archivo sí se sirva fresco. Síntoma: `customElements.get('iswc-button')` true y `customElements.get('iswc-code')` false, sin error. **Solución:** pedir el componente por su ruta propia (`dist/cdn/<cat>/<comp>.min.js`) además de `all.min.js`.
 - `all.min.js` y `category.*.min.js` son **solo listas de `import`** (~250 B): sumar su tamaño literal da el ranking invertido; hay que expandirlos a los `.min.js` reales (UI con `autofit`).
 
 ### Contrato de boot de la galería (`index.html`)

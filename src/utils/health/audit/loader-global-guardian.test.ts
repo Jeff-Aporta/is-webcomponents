@@ -2,7 +2,7 @@
 //
 // Síntoma: tras navegar a `ecosystem` (cuyo behavior bundlea el loader dentro
 // porque usa `await import('../../dist/cdn/core/loader.min.js')`), los nav-clicks
-// subsiguientes (`home`, `is-flex-options`, etc.) generaban 48× 404 contra
+// subsiguientes (`home`, `iswc-flex-options`, etc.) generaban 48× 404 contra
 // `dist/pages/{cat}/{tag}.min.js`. Causa: el loader bundled dentro de
 // `dist/pages/ecosystem.min.js` se asigna a `globalThis.ISWebComponentsLoader`
 // con SELF_BASE = `dist/pages/`, pisando la instancia canónica que la galería

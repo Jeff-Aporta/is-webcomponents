@@ -76,7 +76,7 @@ export function renderMenu(el: HTMLElement, items: readonly MenuItem[]): void {
       frag.appendChild(hr);
       continue;
     }
-    const btn = document.createElement('is-button') as HTMLElement & { variant?: string };
+    const btn = document.createElement('iswc-button') as HTMLElement & { variant?: string };
     btn.variant = 'plain';
     btn.className = 'pop-item';
     btn.dataset.action = item.action ?? '';
@@ -108,7 +108,7 @@ export function renderColumnsPanel(el: HTMLElement, { columns, isVisible, search
   el.replaceChildren();
   const head = document.createElement('div');
   head.className = 'pop-head';
-  const searchEl = document.createElement('is-input') as HTMLElement & { type?: string };
+  const searchEl = document.createElement('iswc-input') as HTMLElement & { type?: string };
   searchEl.type = 'search';
   searchEl.className = 'pop-search';
   searchEl.setAttribute('placeholder', 'Buscar columna');
@@ -125,7 +125,7 @@ export function renderColumnsPanel(el: HTMLElement, { columns, isVisible, search
     if (needle && !String(col.headerName ?? '').toLowerCase().includes(needle)) continue;
     const row = document.createElement('label');
     row.className = 'pop-check';
-    const cb = document.createElement('is-checkbox') as HTMLElement & { dataset: DOMStringMap };
+    const cb = document.createElement('iswc-checkbox') as HTMLElement & { dataset: DOMStringMap };
     cb.dataset.field = col.field ?? '';
     if (isVisible(col.field ?? '')) cb.setAttribute('checked', '');
     const label = document.createElement('span');
@@ -137,12 +137,12 @@ export function renderColumnsPanel(el: HTMLElement, { columns, isVisible, search
 
   const foot = document.createElement('div');
   foot.className = 'pop-foot';
-  const showAll = document.createElement('is-button') as HTMLElement & { variant?: string };
+  const showAll = document.createElement('iswc-button') as HTMLElement & { variant?: string };
   showAll.variant = 'plain';
   showAll.className = 'pop-btn';
   showAll.dataset.action = 'show-all';
   showAll.textContent = 'Mostrar todo';
-  const hideAll = document.createElement('is-button') as HTMLElement & { variant?: string };
+  const hideAll = document.createElement('iswc-button') as HTMLElement & { variant?: string };
   hideAll.variant = 'plain';
   hideAll.className = 'pop-btn';
   hideAll.dataset.action = 'hide-all';
@@ -197,7 +197,7 @@ export function renderFilterPanel(el: HTMLElement, { columns, model }: RenderFil
     }
     row.appendChild(logic);
 
-    const del = document.createElement('is-button') as HTMLElement & { variant?: string; pill?: boolean };
+    const del = document.createElement('iswc-button') as HTMLElement & { variant?: string; pill?: boolean };
     del.variant = 'plain';
     del.pill = true;
     del.className = 'filter-del';
@@ -206,11 +206,11 @@ export function renderFilterPanel(el: HTMLElement, { columns, model }: RenderFil
     del.textContent = '×';
     row.appendChild(del);
 
-    const colSel = document.createElement('is-select') as HTMLElement & { className: string };
+    const colSel = document.createElement('iswc-select') as HTMLElement & { className: string };
     colSel.className = 'filter-col';
     colSel.setAttribute('aria-label', 'Columna');
     for (const c of columns.filter((c) => c.filterable !== false && c.type !== 'actions')) {
-      const opt = document.createElement('is-option') as HTMLElement & { value: string; textContent: string };
+      const opt = document.createElement('iswc-option') as HTMLElement & { value: string; textContent: string };
       opt.value = c.field ?? '';
       opt.textContent = c.headerName ?? c.field ?? '';
       if (c.field === item.field) opt.setAttribute('selected', '');
@@ -218,11 +218,11 @@ export function renderFilterPanel(el: HTMLElement, { columns, model }: RenderFil
     }
     row.appendChild(colSel);
 
-    const opSel = document.createElement('is-select') as HTMLElement & { className: string };
+    const opSel = document.createElement('iswc-select') as HTMLElement & { className: string };
     opSel.className = 'filter-op';
     opSel.setAttribute('aria-label', 'Operador');
     for (const o of col?.operators ?? []) {
-      const opt = document.createElement('is-option') as HTMLElement & { value: string; textContent: string };
+      const opt = document.createElement('iswc-option') as HTMLElement & { value: string; textContent: string };
       opt.value = o.value;
       opt.textContent = o.label;
       if (o.value === item.operator) opt.setAttribute('selected', '');
@@ -245,12 +245,12 @@ export function renderFilterPanel(el: HTMLElement, { columns, model }: RenderFil
 
   const foot = document.createElement('div');
   foot.className = 'pop-foot';
-  const addFilter = document.createElement('is-button') as HTMLElement & { variant?: string };
+  const addFilter = document.createElement('iswc-button') as HTMLElement & { variant?: string };
   addFilter.variant = 'plain';
   addFilter.className = 'pop-btn';
   addFilter.dataset.action = 'add-filter';
   addFilter.textContent = '+ Añadir filtro';
-  const clearFilters = document.createElement('is-button') as HTMLElement & { variant?: string };
+  const clearFilters = document.createElement('iswc-button') as HTMLElement & { variant?: string };
   clearFilters.variant = 'plain';
   clearFilters.className = 'pop-btn';
   clearFilters.dataset.action = 'clear-filters';
@@ -270,11 +270,11 @@ export function filterValueInput(col: ColumnDef | undefined, op: Operator | unde
 
   const type = op?.inputType || col?.type;
   if (type === 'boolean') {
-    const sel = document.createElement('is-select') as HTMLElement & { className: string };
+    const sel = document.createElement('iswc-select') as HTMLElement & { className: string };
     sel.className = 'filter-input';
     sel.setAttribute('aria-label', 'Valor');
     for (const [value, label] of [['', 'cualquiera'], ['true', 'sí'], ['false', 'no']]) {
-      const opt = document.createElement('is-option') as HTMLElement & { value: string; textContent: string };
+      const opt = document.createElement('iswc-option') as HTMLElement & { value: string; textContent: string };
       opt.value = value;
       opt.textContent = label;
       if (String(item.value ?? '') === value) opt.setAttribute('selected', '');
@@ -285,17 +285,17 @@ export function filterValueInput(col: ColumnDef | undefined, op: Operator | unde
   }
 
   if (type === 'select' && Array.isArray(col?.valueOptions) && !op?.multiple) {
-    const sel = document.createElement('is-select') as HTMLElement & { className: string };
+    const sel = document.createElement('iswc-select') as HTMLElement & { className: string };
     sel.className = 'filter-input';
     sel.setAttribute('aria-label', 'Valor');
-    const blank = document.createElement('is-option') as HTMLElement & { value: string; textContent: string };
+    const blank = document.createElement('iswc-option') as HTMLElement & { value: string; textContent: string };
     blank.value = '';
     blank.textContent = 'cualquiera';
     sel.appendChild(blank);
     for (const raw of col.valueOptions) {
       const value = typeof raw === 'object' && raw !== null ? (raw as { value: unknown }).value : raw;
       const label = typeof raw === 'object' && raw !== null ? (raw as { label: unknown }).label : raw;
-      const opt = document.createElement('is-option') as HTMLElement & { value: string; textContent: string };
+      const opt = document.createElement('iswc-option') as HTMLElement & { value: string; textContent: string };
       opt.value = String(value);
       opt.textContent = String(label);
       if (String(item.value ?? '') === String(value)) opt.setAttribute('selected', '');
@@ -305,7 +305,7 @@ export function filterValueInput(col: ColumnDef | undefined, op: Operator | unde
     return wrap;
   }
 
-  const input = document.createElement('is-input') as HTMLElement & { className: string; type?: string; placeholder?: string; value?: unknown };
+  const input = document.createElement('iswc-input') as HTMLElement & { className: string; type?: string; placeholder?: string; value?: unknown };
   input.className = 'filter-input';
   input.setAttribute('aria-label', 'Valor');
   input.type = op?.multiple || op?.range ? 'text' : (type === 'number' ? 'number' : type === 'date' ? 'date' : type === 'dateTime' ? 'datetime-local' : 'text');

@@ -9,12 +9,12 @@ import { setCustomState } from '../_shared/form-associated.js';
 import { copyText } from '../_shared/dom-utils.js';
 
 /**
- * <is-copy-button> — Web Component (vanilla).
+ * <iswc-copy-button> — Web Component (vanilla).
  *
  * Copia texto al portapapeles con feedback visual (éxito / error).
  * Usa clipboard.writeText() y cae a execCommand fuera de contexto seguro.
  *
- * Compone <is-tooltip> (posicionamiento, flip, flecha) e <is-icon>. El tooltip
+ * Compone <iswc-tooltip> (posicionamiento, flip, flecha) e <iswc-icon>. El tooltip
  * va en `trigger="none"`: quién lo abre y con qué texto lo decide el estado de
  * la copia (reposo / éxito / error), no el hover del propio tooltip.
  *
@@ -26,7 +26,7 @@ import { copyText } from '../_shared/dom-utils.js';
  *   error-label         tooltip si falla
  *   feedback-duration   ms de feedback (default 1000)
  *   tooltip             full | copy | none  (default full)
- *   tooltip-placement   cualquier placement de is-popover: top | top-start |
+ *   tooltip-placement   cualquier placement de iswc-popover: top | top-start |
  *                       top-end | bottom* | left* | right*  (default top)
  *   disabled            boolean
  *
@@ -36,7 +36,7 @@ import { copyText } from '../_shared/dom-utils.js';
  *   success-icon    icono de éxito
  *   error-icon      icono de error
  *
- * Events (bubbles + composed): is-copy { value }, is-error
+ * Events (bubbles + composed): iswc-copy { value }, iswc-error
  * Custom states: :state(success) :state(error)
  * CSS Parts: button, copy-icon, success-icon, error-icon,
  *            feedback (burbuja del tooltip), feedback-body
@@ -47,7 +47,7 @@ import { copyText } from '../_shared/dom-utils.js';
   TEMPLATE.innerHTML = /* html */ `
     <span class="trigger" id="anchor">
       <slot></slot>
-      <is-button
+      <iswc-button
         class="button"
         id="copy-btn"
         variant="text"
@@ -55,23 +55,23 @@ import { copyText } from '../_shared/dom-utils.js';
         exportparts="button: button"
       >
         <span part="copy-icon" class="icon" data-state="copy">
-          <slot name="copy-icon"><is-icon icon="mdi:content-copy"></is-icon></slot>
+          <slot name="copy-icon"><iswc-icon icon="mdi:content-copy"></iswc-icon></slot>
         </span>
         <span part="success-icon" class="icon" data-state="success" hidden>
-          <slot name="success-icon"><is-icon icon="mdi:check"></is-icon></slot>
+          <slot name="success-icon"><iswc-icon icon="mdi:check"></iswc-icon></slot>
         </span>
         <span part="error-icon" class="icon" data-state="error" hidden>
-          <slot name="error-icon"><is-icon icon="mdi:close"></is-icon></slot>
+          <slot name="error-icon"><iswc-icon icon="mdi:close"></iswc-icon></slot>
         </span>
-      </is-button>
+      </iswc-button>
     </span>
-    <is-tooltip
+    <iswc-tooltip
       class="tip"
       exportparts="tooltip: feedback, body: feedback-body"
       for="anchor"
       trigger="none"
       placement="top"
-    ></is-tooltip>
+    ></iswc-tooltip>
     <span class="sr-only" aria-live="polite"></span>
   `;
 
@@ -84,7 +84,7 @@ import { copyText } from '../_shared/dom-utils.js';
     'right', 'right-start', 'right-end',
   ];
 
-  class IsCopyButton extends withStyleAttrs(HTMLElement) {
+  class IswcCopyButton extends withStyleAttrs(HTMLElement) {
     /** Personalización por atributo (ver `core/attrs.ts`). */
     static styleAttrs = {
     'max-width': '--iswc-copy-button-max-width',
@@ -95,12 +95,12 @@ import { copyText } from '../_shared/dom-utils.js';
         'value', 'from', 'disabled',
         'copy-label', 'success-label', 'error-label',
         'feedback-duration', 'tooltip', 'tooltip-placement',
-        ...IsCopyButton.styleAttrNames,
+        ...IswcCopyButton.styleAttrNames,
       ];
     }
 
     #btn!: HTMLElement;
-    // `is-tooltip` es un custom element hermano: se declara la forma minima
+    // `iswc-tooltip` es un custom element hermano: se declara la forma minima
     // que se consume en vez de importar su clase, que crearia un ciclo.
     #tip!: HTMLElement & { placement?: string; disabled?: boolean; show?: () => void; hide?: () => void };
     #live!: HTMLElement;
@@ -119,8 +119,8 @@ import { copyText } from '../_shared/dom-utils.js';
       const shadow = this.attachShadow({ mode: 'open' });
       adoptCss(shadow, import.meta.url);
       shadow.appendChild(TEMPLATE.content.cloneNode(true));
-      this.#btn = shadow.querySelector<HTMLElement>('is-button')!;
-      this.#tip = shadow.querySelector<HTMLElement>('is-tooltip')!;
+      this.#btn = shadow.querySelector<HTMLElement>('iswc-button')!;
+      this.#tip = shadow.querySelector<HTMLElement>('iswc-tooltip')!;
       this.#live = shadow.querySelector<HTMLElement>('.sr-only')!;
       this.#icons = {
         copy: shadow.querySelector<HTMLElement>('[data-state="copy"]')!,
@@ -143,7 +143,7 @@ import { copyText } from '../_shared/dom-utils.js';
       this.#mounted = true;
       if (!this.hasAttribute('tooltip')) this.setAttribute('tooltip', 'full');
       if (!this.hasAttribute('tooltip-placement')) this.setAttribute('tooltip-placement', 'top');
-      upgradeProperties(this, IsCopyButton.observedAttributes);
+      upgradeProperties(this, IswcCopyButton.observedAttributes);
       this.#onSlotChange();
       this.#syncDisabled();
       this.#syncTipPlacement();
@@ -214,7 +214,7 @@ import { copyText } from '../_shared/dom-utils.js';
     }
 
     #syncDisabled() {
-      // is-button expone `disabled` como atributo, no como propiedad del
+      // iswc-button expone `disabled` como atributo, no como propiedad del
       // elemento (no es un <button> nativo).
       this.#btn.toggleAttribute('disabled', this.disabled);
       setCustomState(this.#internals, 'disabled', this.disabled);
@@ -290,7 +290,7 @@ import { copyText } from '../_shared/dom-utils.js';
         const raiz = root as ParentNode & { getElementById?: (id: string) => HTMLElement | null };
         const target = raiz.getElementById ? raiz.getElementById(id) : null;
         if (!target) {
-          emit(this, 'is-error');
+          emit(this, 'iswc-error');
           await this.#showStatus('error');
           return;
         }
@@ -302,7 +302,7 @@ import { copyText } from '../_shared/dom-utils.js';
       }
 
       if (!valueToCopy) {
-        emit(this, 'is-error');
+        emit(this, 'iswc-error');
         await this.#showStatus('error');
         return;
       }
@@ -310,10 +310,10 @@ import { copyText } from '../_shared/dom-utils.js';
       // copyText ya trae el fallback a execCommand para contextos sin
       // Clipboard API (http, iframes sin permiso).
       if (await copyText(valueToCopy)) {
-        emit(this, 'is-copy', { value: String(valueToCopy) });
+        emit(this, 'iswc-copy', { value: String(valueToCopy) });
         await this.#showStatus('success');
       } else {
-        emit(this, 'is-error');
+        emit(this, 'iswc-error');
         await this.#showStatus('error');
       }
     }
@@ -372,5 +372,5 @@ import { copyText } from '../_shared/dom-utils.js';
     }
   }
 
-  defineElement('is-copy-button', IsCopyButton, 'IsCopyButton');
+  defineElement('iswc-copy-button', IswcCopyButton, 'IswcCopyButton');
 })();

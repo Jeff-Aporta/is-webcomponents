@@ -27,8 +27,8 @@
     display: inline-flex;
     align-items: center;
     justify-content: center;
-    width: var(--_size);
-    height: var(--_size);
+    inline-size: var(--_size);
+    block-size: var(--_size);
     box-sizing: border-box;
     background: var(--_bg);
     border: 1px solid var(--_border);
@@ -37,8 +37,8 @@
   }
 
   .dot {
-    width: 0.4em;
-    height: 0.4em;
+    inline-size: 0.4em;
+    block-size: 0.4em;
     border-radius: 50%;
     background: var(--_dot);
     transform: scale(0);
@@ -49,7 +49,7 @@
     display: flex;
     flex-direction: column;
     gap: 0.1em;
-    min-width: 0;
+    min-inline-size: 0;
   }
 
   .label {
@@ -64,48 +64,55 @@
 }
 
 /* Con descripción el control se alinea a la primera línea, no al bloque */
-.base:has(.description:not([hidden])) {
-  align-items: flex-start;
+.base {
+  &:has(.description:not([hidden])) {
+    align-items: flex-start;
+  }
 }
 
 /* ---- variant ----------------------------------------------------------
    Sin atributo se hereda el --iswc-radio-accent que publica el grupo; con él,
    la declaración local gana a la heredada. */
 
-:host([color="brand"]) { --iswc-radio-accent: var(--iswc-accent, var(--iswc-color-brand, #339af0)); }
+:host([color="brand"])   { --iswc-radio-accent: var(--iswc-accent, var(--iswc-color-brand, #339af0)); }
 :host([color="neutral"]) { --iswc-radio-accent: var(--iswc-control-border, #59636e); }
 :host([color="success"]) { --iswc-radio-accent: var(--iswc-color-success, #40c057); }
 :host([color="warning"]) { --iswc-radio-accent: var(--iswc-color-warning, #f59f00); }
-:host([color="danger"]) { --iswc-radio-accent: var(--iswc-color-danger, #fa5252); }
+:host([color="danger"])  { --iswc-radio-accent: var(--iswc-color-danger, #fa5252); }
 
 /* El error del grupo manda sobre cualquier variant */
 :host(:state(error)) { --iswc-radio-accent: var(--iswc-color-danger, #fa5252); }
 
 /* ---- label-placement (propio o heredado del grupo) -------------------- */
 
-:host([label-placement="start"]) .base,
-:host(:state(placement-start)) .base { flex-direction: row-reverse; }
+:host(:is([label-placement="start"], :state(placement-start))) {
+  .base { flex-direction: row-reverse; }
+}
 
-:host([label-placement="top"]) .base,
-:host(:state(placement-top)) .base { flex-direction: column-reverse; align-items: center; }
+:host(:is([label-placement="top"], :state(placement-top))) {
+  .base { flex-direction: column-reverse; align-items: center; }
+}
 
-:host([label-placement="bottom"]) .base,
-:host(:state(placement-bottom)) .base { flex-direction: column; align-items: center; }
+:host(:is([label-placement="bottom"], :state(placement-bottom))) {
+  .base { flex-direction: column; align-items: center; }
+}
 
 /* ---- estados ---------------------------------------------------------- */
 
-:host(:hover) .control {
-  background: var(--_bg-hover);
-  box-shadow: 0 0 0 var(--_halo) color-mix(in srgb, var(--_accent) 14%, transparent);
+:host(:hover) {
+  .control {
+    background: var(--_bg-hover);
+    box-shadow: 0 0 0 var(--_halo) color-mix(in srgb, var(--_accent) 14%, transparent);
+  }
 }
 
-:host([checked]) .control {
-  background: var(--_accent);
-  border-color: var(--_accent);
-}
+:host([checked]) {
+  .control {
+    background: var(--_accent);
+    border-color: var(--_accent);
+  }
 
-:host([checked]) .dot {
-  transform: scale(1);
+  .dot { transform: scale(1); }
 }
 
 :host(:state(readonly)) {
@@ -118,13 +125,14 @@
 }
 
 /* Sin halo de hover cuando no se puede cambiar (el de foco se restaura debajo) */
-:host([disabled]) .control,
-:host(:state(readonly)) .control {
-  box-shadow: none;
+:host(:is([disabled], :state(readonly))) {
+  .control { box-shadow: none; }
 }
 
-:host(:focus-visible) .control {
-  box-shadow: 0 0 0 var(--_halo) color-mix(in srgb, var(--_focus) 32%, transparent);
+:host(:focus-visible) {
+  .control {
+    box-shadow: 0 0 0 var(--_halo) color-mix(in srgb, var(--_focus) 32%, transparent);
+  }
 }
 
 :host([hidden]) {

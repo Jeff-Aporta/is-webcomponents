@@ -1,13 +1,20 @@
-/* Estados del host en `:host([attr])` a nivel superior (nunca `&[attr]`
-   anidado bajo `:host {}`: eso compila a `:host[attr]` y es CSS muerto). */
+/* <iswc-loading-overlay> — capa de bloqueo a pantalla completa con spinner.
+   El JS no lo reposiciona, pero DEBE ser fixed: es una capa de bloqueo que
+   no puede ocupar sitio en el flujo del documento. No dismissable: el clic
+   se traga aquí, no llega al contenido de abajo. */
+
+@property --iswc-loading-backdrop {
+  syntax: "<color>";
+  inherits: true;
+  initial-value: rgb(0 0 0 / 72%);
+}
+
 :host {
   --iswc-loading-backdrop: color-mix(in srgb, var(--iswc-bg, #101418) 72%, transparent);
   --iswc-loading-indicator: var(--iswc-accent, var(--iswc-color-brand, #339af0));
   display: contents;
   font-family: var(--iswc-sans, inherit);
 
-  /* El JS no lo reposiciona, pero DEBE ser fixed: es una capa de bloqueo que
-     no puede ocupar sitio en el flujo del documento. */
   .backdrop {
     position: fixed;
     inset: 0;
@@ -21,11 +28,10 @@
     backdrop-filter: blur(2px);
     user-select: none;
     -webkit-user-select: none;
-    /* No dismissable: el clic se traga aquí, no llega al contenido de abajo. */
     cursor: progress;
-  }
 
-  .backdrop[hidden] { display: none; }
+    &[hidden] { display: none; }
+  }
 
   .panel {
     display: flex;
@@ -46,11 +52,12 @@
     margin: 0;
     font-size: 1em;
     color: var(--iswc-text, inherit);
+
+    &[hidden] { display: none; }
   }
 
-  .message[hidden] { display: none; }
-}
-
-@media (prefers-reduced-motion: reduce) {
-  :host { --iswc-loading-backdrop: var(--iswc-bg, #101418); }
+  /* prefers-reduced-motion: backdrop sólido (sin transparencia). */
+  @media (prefers-reduced-motion: reduce) {
+    --iswc-loading-backdrop: var(--iswc-bg, #101418);
+  }
 }

@@ -1,4 +1,4 @@
-// er-archify.ts: extensiones archify-style para <is-er-diagram>, opcionales
+// er-archify.ts: extensiones archify-style para <iswc-er-diagram>, opcionales
 // y aditivas (cero impacto en JSON histórico). Inspirado en archify:
 //   schema_version, meta.animation, entities[].pos/size/style,
 //   relations[].route/fromSide/toSide/via/labelAt/dashStyle/style/variant.

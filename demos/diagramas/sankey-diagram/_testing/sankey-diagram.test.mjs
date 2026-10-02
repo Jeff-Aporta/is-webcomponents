@@ -9,21 +9,21 @@ const URL = `${BASE_URL}/demos/diagramas/sankey-diagram/sankey-diagram.html`;
 const tests = [];
 
 tests.push({
-  name: 'smoke: <is-sankey-diagram> monta y renderiza nodos y links',
+  name: 'smoke: <iswc-sankey-diagram> monta y renderiza nodos y links',
   run: async (page) => {
     await page.goto(URL, { waitUntil: 'domcontentloaded' });
     await waitReady(page, 'data-sankey-ready');
     const info = await page.evaluate(() => {
-      const el = document.querySelector('main is-sankey-diagram');
+      const el = document.querySelector('main iswc-sankey-diagram');
       const shadow = el?.shadowRoot;
       return {
-        defined: !!customElements.get('is-sankey-diagram'),
+        defined: !!customElements.get('iswc-sankey-diagram'),
         nodes: shadow?.querySelectorAll('.sk-node').length ?? 0,
         links: shadow?.querySelectorAll('[data-link-id]').length ?? 0,
         hasSvg: !!shadow?.querySelector('svg.sk-svg'),
       };
     });
-    assert.equal(info.defined, true, 'is-sankey-diagram debe estar definido');
+    assert.equal(info.defined, true, 'iswc-sankey-diagram debe estar definido');
     assert.ok(info.nodes >= 4, `esperaba >=4 nodos, hay ${info.nodes}`);
     assert.ok(info.links >= 3, `esperaba >=3 links, hay ${info.links}`);
     assert.equal(info.hasSvg, true, 'debe existir <svg class="sk-svg">');
@@ -37,7 +37,7 @@ tests.push({
     await page.goto(URL, { waitUntil: 'domcontentloaded' });
     await waitReady(page, 'data-sankey-ready');
     const ids = await page.evaluate(() => {
-      const el = document.querySelector('main is-sankey-diagram');
+      const el = document.querySelector('main iswc-sankey-diagram');
       return [...el.shadowRoot.querySelectorAll('.sk-node')].map((g) => g.dataset.nodeId);
     });
     assert.ok(ids.includes('src'), 'debe existir el nodo "src"');
@@ -52,7 +52,7 @@ tests.push({
     await page.goto(URL, { waitUntil: 'domcontentloaded' });
     await waitReady(page, 'data-sankey-ready');
     const ids = await page.evaluate(() => {
-      const el = document.querySelector('main is-sankey-diagram');
+      const el = document.querySelector('main iswc-sankey-diagram');
       return [...el.shadowRoot.querySelectorAll('[data-link-id]')].map((g) => g.dataset.linkId);
     });
     assert.ok(ids.includes('l1'), 'debe existir el link "l1"');
@@ -67,7 +67,7 @@ tests.push({
     await page.goto(URL, { waitUntil: 'domcontentloaded' });
     await waitReady(page, 'data-sankey-ready');
     const widths = await page.evaluate(() => {
-      const el = document.querySelector('main is-sankey-diagram');
+      const el = document.querySelector('main iswc-sankey-diagram');
       const l1 = el.shadowRoot.querySelector('[data-link-id="l1"] path, [data-link-id="l1"]');
       const l3 = el.shadowRoot.querySelector('[data-link-id="l3"] path, [data-link-id="l3"]');
       const w1 = l1?.getBoundingClientRect().height ?? 0;
@@ -85,16 +85,16 @@ tests.push({
     await page.goto(URL, { waitUntil: 'domcontentloaded' });
     await waitReady(page, 'data-sankey-ready');
     const before = await page.evaluate(() => {
-      const el = document.querySelector('main is-sankey-diagram');
+      const el = document.querySelector('main iswc-sankey-diagram');
       return el.shadowRoot.querySelector('svg.sk-svg').getAttribute('viewBox');
     });
     await page.evaluate(() => {
-      const el = document.querySelector('main is-sankey-diagram');
+      const el = document.querySelector('main iswc-sankey-diagram');
       el.payload = el.payload;
     });
     await page.waitForTimeout(150);
     const after = await page.evaluate(() => {
-      const el = document.querySelector('main is-sankey-diagram');
+      const el = document.querySelector('main iswc-sankey-diagram');
       return el.shadowRoot.querySelector('svg.sk-svg').getAttribute('viewBox');
     });
     assert.equal(before, after, 'viewBox idéntico tras re-asignar payload');
@@ -107,7 +107,7 @@ tests.push({
     await page.goto(URL, { waitUntil: 'domcontentloaded' });
     await waitReady(page, 'data-sankey-ready');
     const meta = await page.evaluate(() => {
-      const el = document.querySelector('main is-sankey-diagram');
+      const el = document.querySelector('main iswc-sankey-diagram');
       const svg = el.shadowRoot.querySelector('svg.sk-svg');
       return { aria: svg.getAttribute('aria-label'), role: svg.getAttribute('role') };
     });

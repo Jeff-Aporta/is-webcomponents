@@ -14,7 +14,7 @@ import type { ServidorE2E } from './lib/server.ts';
 
 const e2eDir = dirname(fileURLToPath(import.meta.url));
 
-/** `--only=dropdown` o `--only=is-dropdown,is-button` → filtro de archivos/tags. */
+/** `--only=dropdown` o `--only=iswc-dropdown,iswc-button` → filtro de archivos/tags. */
 function parseOnly(argv: string[]): string[] {
   const out: string[] = [];
   for (let i = 0; i < argv.length; i++) {
@@ -32,7 +32,7 @@ const only = parseOnly(process.argv.slice(2));
 if (only.length) {
   process.env.E2E_ONLY = only.join(',');
   // Compat con suites que ya leen E2E_TAGS
-  if (!process.env.E2E_TAGS) process.env.E2E_TAGS = only.map((t) => (t.startsWith('is-') ? t : `is-${t}`)).join(',');
+  if (!process.env.E2E_TAGS) process.env.E2E_TAGS = only.map((t) => (t.startsWith('iswc-') ? t : `iswc-${t}`)).join(',');
   console.log(`[e2e] --only → E2E_ONLY/E2E_TAGS=${process.env.E2E_TAGS}`);
 }
 
@@ -43,7 +43,7 @@ const archivos = readdirSync(e2eDir)
     // Archivo dedicado (05-dropdown) o nombre que mencione el tag/slug
     const base = f.toLowerCase();
     return only.some((t) => {
-      const slug = t.replace(/^is-/, '').toLowerCase();
+      const slug = t.replace(/^iswc-/, '').toLowerCase();
       return base.includes(slug) || base.includes(t.toLowerCase());
     });
   })

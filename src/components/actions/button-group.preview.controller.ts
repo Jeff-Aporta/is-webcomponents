@@ -1,5 +1,5 @@
 /**
- * Preview controlador de <is-button-group>.
+ * Preview controlador de <iswc-button-group>.
  * Estructura = definition (datos). Comportamiento = mount() con funciones reales.
  */
 import { ISComponentPreview } from '../../previews/_kit/ISComponentPreview.js';
@@ -36,18 +36,18 @@ const STYLES = /* css */ `
 export class ButtonGroupPreview extends ISComponentPreview {
   constructor() {
     super({
-      $schema: 'is-preview/v1',
-      tag: 'is-button-group',
+      $schema: 'iswc-preview/v1',
+      tag: 'iswc-button-group',
       category: 'actions',
-      title: '<is-button-group>',
+      title: '<iswc-button-group>',
       titleHtml: true,
-      description: 'Documentación y demos del componente is-button-group de InSoft.',
-      storageKey: 'docs-is-button-group',
+      description: 'Documentación y demos del componente iswc-button-group de InSoft.',
+      storageKey: 'docs-iswc-button-group',
       styles: STYLES,
       sections: [
         {
           id: 'intro',
-          title: '<is-button-group>',
+          title: '<iswc-button-group>',
           titleHtml: true,
           lede: 'Agrupa botones relacionados en una sola unidad visual y, si se lo pides, gestiona cuál está activo. Sirve para controles segmentados, toolbars y split buttons.',
           blocks: [
@@ -57,20 +57,20 @@ export class ButtonGroupPreview extends ISComponentPreview {
                 <div class="stack">
                   <div class="field">
                     <span class="cap">appearance="segmented" · select="single" · <code class="code">hue</code> por botón</span>
-                    <is-button-group label="Vista" variant="segmented" select="single" value="lista">
-                      <is-button variant="plain" value="lista" hue="210">
-                        <is-icon slot="start" icon="mdi:format-list-bulleted"></is-icon>
+                    <iswc-button-group label="Vista" variant="segmented" select="single" value="lista">
+                      <iswc-button variant="plain" value="lista" hue="210">
+                        <iswc-icon slot="start" icon="mdi:format-list-bulleted"></iswc-icon>
                         Lista
-                      </is-button>
-                      <is-button variant="plain" value="tabla" hue="160">
-                        <is-icon slot="start" icon="mdi:table"></is-icon>
+                      </iswc-button>
+                      <iswc-button variant="plain" value="tabla" hue="160">
+                        <iswc-icon slot="start" icon="mdi:table"></iswc-icon>
                         Tabla
-                      </is-button>
-                      <is-button variant="plain" value="tarjetas" hue="35">
-                        <is-icon slot="start" icon="mdi:view-grid-outline"></is-icon>
+                      </iswc-button>
+                      <iswc-button variant="plain" value="tarjetas" hue="35">
+                        <iswc-icon slot="start" icon="mdi:view-grid-outline"></iswc-icon>
                         Tarjetas
-                      </is-button>
-                    </is-button-group>
+                      </iswc-button>
+                    </iswc-button-group>
                   </div>
                   <p class="lede" id="introLog">vista: <code class="code">lista</code></p>
                 </div>`,
@@ -82,11 +82,11 @@ export class ButtonGroupPreview extends ISComponentPreview {
             {
               kind: 'code',
               lang: 'html',
-              code: `<is-button-group label="Vista" variant="segmented" select="single" value="lista">
-  <is-button variant="plain" value="lista" hue="210">Lista</is-button>
-  <is-button variant="plain" value="tabla" hue="160">Tabla</is-button>
-  <is-button variant="plain" value="tarjetas" hue="35">Tarjetas</is-button>
-</is-button-group>`,
+              code: `<iswc-button-group label="Vista" variant="segmented" select="single" value="lista">
+  <iswc-button variant="plain" value="lista" hue="210">Lista</iswc-button>
+  <iswc-button variant="plain" value="tabla" hue="160">Tabla</iswc-button>
+  <iswc-button variant="plain" value="tarjetas" hue="35">Tarjetas</iswc-button>
+</iswc-button-group>`,
             },
           ],
         },
@@ -101,34 +101,34 @@ export class ButtonGroupPreview extends ISComponentPreview {
                 <div class="stack">
                   <div class="field">
                     <span class="cap">joined</span>
-                    <is-button-group label="Alineación" select="single" value="Centro">
-                      <is-button variant="outlined">Izquierda</is-button>
-                      <is-button variant="outlined">Centro</is-button>
-                      <is-button variant="outlined">Derecha</is-button>
-                    </is-button-group>
+                    <iswc-button-group label="Alineación" select="single" value="Centro">
+                      <iswc-button variant="outlined">Izquierda</iswc-button>
+                      <iswc-button variant="outlined">Centro</iswc-button>
+                      <iswc-button variant="outlined">Derecha</iswc-button>
+                    </iswc-button-group>
                   </div>
                   <div class="field">
                     <span class="cap">segmented</span>
-                    <is-button-group label="Alineación" variant="segmented" select="single" value="Centro">
-                      <is-button variant="plain">Izquierda</is-button>
-                      <is-button variant="plain">Centro</is-button>
-                      <is-button variant="plain">Derecha</is-button>
-                    </is-button-group>
+                    <iswc-button-group label="Alineación" variant="segmented" select="single" value="Centro">
+                      <iswc-button variant="plain">Izquierda</iswc-button>
+                      <iswc-button variant="plain">Centro</iswc-button>
+                      <iswc-button variant="plain">Derecha</iswc-button>
+                    </iswc-button-group>
                   </div>
                   <div class="field">
                     <span class="cap">separated</span>
-                    <is-button-group label="Alineación" variant="separated" select="single" value="Centro">
-                      <is-button variant="outlined">Izquierda</is-button>
-                      <is-button variant="outlined">Centro</is-button>
-                      <is-button variant="outlined">Derecha</is-button>
-                    </is-button-group>
+                    <iswc-button-group label="Alineación" variant="separated" select="single" value="Centro">
+                      <iswc-button variant="outlined">Izquierda</iswc-button>
+                      <iswc-button variant="outlined">Centro</iswc-button>
+                      <iswc-button variant="outlined">Derecha</iswc-button>
+                    </iswc-button-group>
                   </div>
                 </div>`,
             },
             {
               kind: 'code',
               lang: 'html',
-              code: '<is-button-group variant="segmented" select="single">…</is-button-group>',
+              code: '<iswc-button-group variant="segmented" select="single">…</iswc-button-group>',
             },
           ],
         },
@@ -143,36 +143,36 @@ export class ButtonGroupPreview extends ISComponentPreview {
                 <div class="bar" style="align-items: flex-start;">
                   <div class="field">
                     <span class="cap">joined</span>
-                    <is-button-group orientation="vertical" label="Opciones" select="single" value="Medio">
-                      <is-button variant="outlined">Arriba</is-button>
-                      <is-button variant="outlined">Medio</is-button>
-                      <is-button variant="outlined">Abajo</is-button>
-                    </is-button-group>
+                    <iswc-button-group orientation="vertical" label="Opciones" select="single" value="Medio">
+                      <iswc-button variant="outlined">Arriba</iswc-button>
+                      <iswc-button variant="outlined">Medio</iswc-button>
+                      <iswc-button variant="outlined">Abajo</iswc-button>
+                    </iswc-button-group>
                   </div>
                   <div class="field">
                     <span class="cap">segmented</span>
-                    <is-button-group orientation="vertical" variant="segmented" label="Opciones" select="single" value="Medio">
-                      <is-button variant="plain">Arriba</is-button>
-                      <is-button variant="plain">Medio</is-button>
-                      <is-button variant="plain">Abajo</is-button>
-                    </is-button-group>
+                    <iswc-button-group orientation="vertical" variant="segmented" label="Opciones" select="single" value="Medio">
+                      <iswc-button variant="plain">Arriba</iswc-button>
+                      <iswc-button variant="plain">Medio</iswc-button>
+                      <iswc-button variant="plain">Abajo</iswc-button>
+                    </iswc-button-group>
                   </div>
                 </div>`,
             },
             {
               kind: 'code',
               lang: 'html',
-              code: `<is-button-group orientation="vertical" label="Opciones">
-  <is-button variant="outlined">Arriba</is-button>
+              code: `<iswc-button-group orientation="vertical" label="Opciones">
+  <iswc-button variant="outlined">Arriba</iswc-button>
   …
-</is-button-group>`,
+</iswc-button-group>`,
             },
           ],
         },
         {
           id: 'select',
           title: 'Selección',
-          lede: '<code class="code">select="single"</code> se comporta como un grupo de radios; <code class="code">select="multiple"</code> como casillas. Añade <code class="code">allow-empty</code> para poder deseleccionar el activo en modo single. El grupo escribe <code class="code">selected</code> y <code class="code">aria-pressed</code> en cada botón, y emite <code class="code">is-change</code>.',
+          lede: '<code class="code">select="single"</code> se comporta como un grupo de radios; <code class="code">select="multiple"</code> como casillas. Añade <code class="code">allow-empty</code> para poder deseleccionar el activo en modo single. El grupo escribe <code class="code">selected</code> y <code class="code">aria-pressed</code> en cada botón, y emite <code class="code">iswc-change</code>.',
           blocks: [
             {
               kind: 'demo',
@@ -180,34 +180,34 @@ export class ButtonGroupPreview extends ISComponentPreview {
                 <div class="stack">
                   <div class="field">
                     <span class="cap">single</span>
-                    <is-button-group id="selSingle" label="Periodo" variant="segmented" select="single" value="mes">
-                      <is-button variant="plain" value="dia">Día</is-button>
-                      <is-button variant="plain" value="semana">Semana</is-button>
-                      <is-button variant="plain" value="mes">Mes</is-button>
-                      <is-button variant="plain" value="anio">Año</is-button>
-                    </is-button-group>
+                    <iswc-button-group id="selSingle" label="Periodo" variant="segmented" select="single" value="mes">
+                      <iswc-button variant="plain" value="dia">Día</iswc-button>
+                      <iswc-button variant="plain" value="semana">Semana</iswc-button>
+                      <iswc-button variant="plain" value="mes">Mes</iswc-button>
+                      <iswc-button variant="plain" value="anio">Año</iswc-button>
+                    </iswc-button-group>
                   </div>
                   <div class="field">
                     <span class="cap">multiple</span>
-                    <is-button-group id="selMulti" label="Formato" select="multiple" value="bold">
-                      <is-button variant="outlined" value="bold" aria-label="Negrita">
-                        <is-icon icon="mdi:format-bold" label="Negrita"></is-icon>
-                      </is-button>
-                      <is-button variant="outlined" value="italic" aria-label="Cursiva">
-                        <is-icon icon="mdi:format-italic" label="Cursiva"></is-icon>
-                      </is-button>
-                      <is-button variant="outlined" value="underline" aria-label="Subrayado">
-                        <is-icon icon="mdi:format-underline" label="Subrayado"></is-icon>
-                      </is-button>
-                    </is-button-group>
+                    <iswc-button-group id="selMulti" label="Formato" select="multiple" value="bold">
+                      <iswc-button variant="outlined" value="bold" aria-label="Negrita">
+                        <iswc-icon icon="mdi:format-bold" label="Negrita"></iswc-icon>
+                      </iswc-button>
+                      <iswc-button variant="outlined" value="italic" aria-label="Cursiva">
+                        <iswc-icon icon="mdi:format-italic" label="Cursiva"></iswc-icon>
+                      </iswc-button>
+                      <iswc-button variant="outlined" value="underline" aria-label="Subrayado">
+                        <iswc-icon icon="mdi:format-underline" label="Subrayado"></iswc-icon>
+                      </iswc-button>
+                    </iswc-button-group>
                   </div>
                   <div class="field">
                     <span class="cap">single + allow-empty</span>
-                    <is-button-group id="selEmpty" label="Prioridad" select="single" allow-empty>
-                      <is-button variant="outlined" value="baja">Baja</is-button>
-                      <is-button variant="outlined" value="media">Media</is-button>
-                      <is-button variant="outlined" value="alta">Alta</is-button>
-                    </is-button-group>
+                    <iswc-button-group id="selEmpty" label="Prioridad" select="single" allow-empty>
+                      <iswc-button variant="outlined" value="baja">Baja</iswc-button>
+                      <iswc-button variant="outlined" value="media">Media</iswc-button>
+                      <iswc-button variant="outlined" value="alta">Alta</iswc-button>
+                    </iswc-button-group>
                   </div>
                   <p class="lede" id="selLog">Sin cambios todavía.</p>
                 </div>`,
@@ -215,7 +215,7 @@ export class ButtonGroupPreview extends ISComponentPreview {
             {
               kind: 'code',
               lang: 'javascript',
-              code: `group.addEventListener('is-change', (e: Event) => {
+              code: `group.addEventListener('iswc-change', (e: Event) => {
   e.detail.value;   // 'mes'  ·  ['bold', 'italic'] en multiple
   e.detail.values;  // siempre array
 });`,
@@ -233,58 +233,58 @@ export class ButtonGroupPreview extends ISComponentPreview {
                 <div class="stack" style="align-self: stretch;">
                   <div class="field">
                     <span class="cap">pill</span>
-                    <is-button-group label="Alineación" pill select="single" value="Centro">
-                      <is-button variant="outlined">Izquierda</is-button>
-                      <is-button variant="outlined">Centro</is-button>
-                      <is-button variant="outlined">Derecha</is-button>
-                    </is-button-group>
+                    <iswc-button-group label="Alineación" pill select="single" value="Centro">
+                      <iswc-button variant="outlined">Izquierda</iswc-button>
+                      <iswc-button variant="outlined">Centro</iswc-button>
+                      <iswc-button variant="outlined">Derecha</iswc-button>
+                    </iswc-button-group>
                   </div>
                   <div class="field">
                     <span class="cap">pill + segmented</span>
-                    <is-button-group label="Alineación" pill variant="segmented" select="single" value="Centro">
-                      <is-button variant="plain">Izquierda</is-button>
-                      <is-button variant="plain">Centro</is-button>
-                      <is-button variant="plain">Derecha</is-button>
-                    </is-button-group>
+                    <iswc-button-group label="Alineación" pill variant="segmented" select="single" value="Centro">
+                      <iswc-button variant="plain">Izquierda</iswc-button>
+                      <iswc-button variant="plain">Centro</iswc-button>
+                      <iswc-button variant="plain">Derecha</iswc-button>
+                    </iswc-button-group>
                   </div>
                   <div class="field" style="justify-items: stretch; width: 100%;">
                     <span class="cap">stretch + segmented</span>
-                    <is-button-group label="Plan" stretch variant="segmented" select="single" value="pro">
-                      <is-button variant="plain" value="free">Free</is-button>
-                      <is-button variant="plain" value="pro">Pro</is-button>
-                      <is-button variant="plain" value="empresa">Empresa</is-button>
-                    </is-button-group>
+                    <iswc-button-group label="Plan" stretch variant="segmented" select="single" value="pro">
+                      <iswc-button variant="plain" value="free">Free</iswc-button>
+                      <iswc-button variant="plain" value="pro">Pro</iswc-button>
+                      <iswc-button variant="plain" value="empresa">Empresa</iswc-button>
+                    </iswc-button-group>
                   </div>
                 </div>`,
             },
             {
               kind: 'code',
               lang: 'html',
-              code: '<is-button-group pill stretch variant="segmented" select="single">…</is-button-group>',
+              code: '<iswc-button-group pill stretch variant="segmented" select="single">…</iswc-button-group>',
             },
           ],
         },
         {
           id: 'split',
           title: 'Split button',
-          lede: 'Empareja un botón primario con uno de caret para acciones secundarias. (Con <code class="code">is-dropdown</code>: usa <code class="code">with-caret</code> en el trigger.)',
+          lede: 'Empareja un botón primario con uno de caret para acciones secundarias. (Con <code class="code">iswc-dropdown</code>: usa <code class="code">with-caret</code> en el trigger.)',
           blocks: [
             {
               kind: 'demo',
               html: `
                 <div class="bar">
-                  <is-button-group label="Guardar">
-                    <is-button variant="filled" color="brand">Guardar</is-button>
-                    <is-button variant="filled" color="brand" aria-label="Más opciones de guardado">
-                      <is-icon icon="mdi:chevron-down" label="Más opciones de guardado"></is-icon>
-                    </is-button>
-                  </is-button-group>
-                  <is-button-group label="Exportar" variant="joined">
-                    <is-button variant="outlined">Exportar</is-button>
-                    <is-button variant="outlined" aria-label="Formatos de exportación">
-                      <is-icon icon="mdi:chevron-down" label="Formatos de exportación"></is-icon>
-                    </is-button>
-                  </is-button-group>
+                  <iswc-button-group label="Guardar">
+                    <iswc-button variant="filled" color="brand">Guardar</iswc-button>
+                    <iswc-button variant="filled" color="brand" aria-label="Más opciones de guardado">
+                      <iswc-icon icon="mdi:chevron-down" label="Más opciones de guardado"></iswc-icon>
+                    </iswc-button>
+                  </iswc-button-group>
+                  <iswc-button-group label="Exportar" variant="joined">
+                    <iswc-button variant="outlined">Exportar</iswc-button>
+                    <iswc-button variant="outlined" aria-label="Formatos de exportación">
+                      <iswc-icon icon="mdi:chevron-down" label="Formatos de exportación"></iswc-icon>
+                    </iswc-button>
+                  </iswc-button-group>
                 </div>`,
             },
           ],
@@ -298,36 +298,36 @@ export class ButtonGroupPreview extends ISComponentPreview {
               kind: 'demo',
               html: `
                 <div class="bar">
-                  <is-button-group label="Historial">
-                    <is-button variant="outlined" aria-label="Deshacer">
-                      <is-icon icon="mdi:undo" label="Deshacer"></is-icon>
-                    </is-button>
-                    <is-button variant="outlined" aria-label="Rehacer">
-                      <is-icon icon="mdi:redo" label="Rehacer"></is-icon>
-                    </is-button>
-                  </is-button-group>
-                  <is-button-group label="Formato" select="multiple">
-                    <is-button variant="outlined" value="bold" aria-label="Negrita">
-                      <is-icon icon="mdi:format-bold" label="Negrita"></is-icon>
-                    </is-button>
-                    <is-button variant="outlined" value="italic" aria-label="Cursiva">
-                      <is-icon icon="mdi:format-italic" label="Cursiva"></is-icon>
-                    </is-button>
-                    <is-button variant="outlined" value="underline" aria-label="Subrayado">
-                      <is-icon icon="mdi:format-underline" label="Subrayado"></is-icon>
-                    </is-button>
-                  </is-button-group>
-                  <is-button-group label="Alineación" select="single" value="left">
-                    <is-button variant="outlined" value="left" aria-label="Izquierda">
-                      <is-icon icon="mdi:format-align-left" label="Izquierda"></is-icon>
-                    </is-button>
-                    <is-button variant="outlined" value="center" aria-label="Centro">
-                      <is-icon icon="mdi:format-align-center" label="Centro"></is-icon>
-                    </is-button>
-                    <is-button variant="outlined" value="right" aria-label="Derecha">
-                      <is-icon icon="mdi:format-align-right" label="Derecha"></is-icon>
-                    </is-button>
-                  </is-button-group>
+                  <iswc-button-group label="Historial">
+                    <iswc-button variant="outlined" aria-label="Deshacer">
+                      <iswc-icon icon="mdi:undo" label="Deshacer"></iswc-icon>
+                    </iswc-button>
+                    <iswc-button variant="outlined" aria-label="Rehacer">
+                      <iswc-icon icon="mdi:redo" label="Rehacer"></iswc-icon>
+                    </iswc-button>
+                  </iswc-button-group>
+                  <iswc-button-group label="Formato" select="multiple">
+                    <iswc-button variant="outlined" value="bold" aria-label="Negrita">
+                      <iswc-icon icon="mdi:format-bold" label="Negrita"></iswc-icon>
+                    </iswc-button>
+                    <iswc-button variant="outlined" value="italic" aria-label="Cursiva">
+                      <iswc-icon icon="mdi:format-italic" label="Cursiva"></iswc-icon>
+                    </iswc-button>
+                    <iswc-button variant="outlined" value="underline" aria-label="Subrayado">
+                      <iswc-icon icon="mdi:format-underline" label="Subrayado"></iswc-icon>
+                    </iswc-button>
+                  </iswc-button-group>
+                  <iswc-button-group label="Alineación" select="single" value="left">
+                    <iswc-button variant="outlined" value="left" aria-label="Izquierda">
+                      <iswc-icon icon="mdi:format-align-left" label="Izquierda"></iswc-icon>
+                    </iswc-button>
+                    <iswc-button variant="outlined" value="center" aria-label="Centro">
+                      <iswc-icon icon="mdi:format-align-center" label="Centro"></iswc-icon>
+                    </iswc-button>
+                    <iswc-button variant="outlined" value="right" aria-label="Derecha">
+                      <iswc-icon icon="mdi:format-align-right" label="Derecha"></iswc-icon>
+                    </iswc-button>
+                  </iswc-button-group>
                 </div>`,
             },
           ],
@@ -341,11 +341,11 @@ export class ButtonGroupPreview extends ISComponentPreview {
               kind: 'demo',
               html: `
                 <div class="bar">
-                  <is-button-group label="Alineación">
+                  <iswc-button-group label="Alineación">
                     <button type="button" class="native-demo">Izquierda</button>
                     <button type="button" class="native-demo">Centro</button>
                     <button type="button" class="native-demo">Derecha</button>
-                  </is-button-group>
+                  </iswc-button-group>
                 </div>`,
             },
           ],
@@ -378,16 +378,16 @@ export class ButtonGroupPreview extends ISComponentPreview {
               kind: 'demo',
               html: `
                 <div class="stack">
-                  <is-button-group id="apiGroup" label="Demo" select="single" value="B">
-                    <is-button variant="outlined">A</is-button>
-                    <is-button variant="outlined">B</is-button>
-                    <is-button variant="outlined">C</is-button>
-                  </is-button-group>
+                  <iswc-button-group id="apiGroup" label="Demo" select="single" value="B">
+                    <iswc-button variant="outlined">A</iswc-button>
+                    <iswc-button variant="outlined">B</iswc-button>
+                    <iswc-button variant="outlined">C</iswc-button>
+                  </iswc-button-group>
                   <div class="bar">
-                    <is-button id="apiOrient" variant="outlined">Toggle orientation</is-button>
-                    <is-button id="apiAppear" variant="outlined">Ciclar appearance</is-button>
-                    <is-button id="apiPill" variant="outlined">Toggle pill</is-button>
-                    <is-button id="apiValue" variant="outlined">value = 'C'</is-button>
+                    <iswc-button id="apiOrient" variant="outlined">Toggle orientation</iswc-button>
+                    <iswc-button id="apiAppear" variant="outlined">Ciclar appearance</iswc-button>
+                    <iswc-button id="apiPill" variant="outlined">Toggle pill</iswc-button>
+                    <iswc-button id="apiValue" variant="outlined">value = 'C'</iswc-button>
                   </div>
                 </div>
                 <div class="log" id="apiLog"><div class="row"><span class="hint">Acciones de API aparecerán aquí.</span></div></div>`,
@@ -418,8 +418,8 @@ export class ButtonGroupPreview extends ISComponentPreview {
               columns: ['API', 'Detalle'],
               rows: [
                 ['propiedades', '<code>value</code> · <code>values</code> · <code>items</code> · <code>selectedItems</code>'],
-                ['eventos', '<code>is-change</code> con <code>{ value, values }</code>'],
-                ['slot', 'default: uno o más <code class="code">is-button</code> o <code class="code">button</code>'],
+                ['eventos', '<code>iswc-change</code> con <code>{ value, values }</code>'],
+                ['slot', 'default: uno o más <code class="code">iswc-button</code> o <code class="code">button</code>'],
                 ['part', '<code>base</code>'],
                 ['en los hijos', 'el grupo escribe <code>selected</code> y <code>aria-pressed</code>'],
                 ['valor de un hijo', 'atributo <code>value</code>; si falta, texto; si vacío, índice'],
@@ -437,12 +437,12 @@ export class ButtonGroupPreview extends ISComponentPreview {
    */
   async mount(ctx: PreviewMountContext): Promise<void> {
     const { main } = ctx;
-    await this.whenDefined('is-button-group');
+    await this.whenDefined('iswc-button-group');
 
     const introLog = main.querySelector<HTMLElement>('#introLog');
-    const introGroup = main.querySelector<HTMLElement>('#intro is-button-group');
+    const introGroup = main.querySelector<HTMLElement>('#intro iswc-button-group');
     if (introLog && introGroup) {
-      this.on(introGroup, 'is-change', (e: Event) => {
+      this.on(introGroup, 'iswc-change', (e: Event) => {
         const value = (e as CustomEvent<GroupChangeDetail>).detail?.value;
         introLog.innerHTML = `vista: <code class="code">${value || '—'}</code>`;
       });
@@ -461,7 +461,7 @@ export class ButtonGroupPreview extends ISComponentPreview {
     };
     for (const id of ['selSingle', 'selMulti', 'selEmpty']) {
       const el = main.querySelector<HTMLElement>(`#${id}`);
-      if (el) this.on(el, 'is-change', paintSel);
+      if (el) this.on(el, 'iswc-change', paintSel);
     }
     paintSel();
 
@@ -507,8 +507,8 @@ export class ButtonGroupPreview extends ISComponentPreview {
           logLine(`value = 'C'`);
         });
       }
-      this.on(apiGroup, 'is-change', (e: Event) => {
-        logLine(`is-change → '${(e as CustomEvent<GroupChangeDetail>).detail?.value}'`);
+      this.on(apiGroup, 'iswc-change', (e: Event) => {
+        logLine(`iswc-change → '${(e as CustomEvent<GroupChangeDetail>).detail?.value}'`);
       });
     }
   }

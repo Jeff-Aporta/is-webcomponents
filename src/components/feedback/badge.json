@@ -1,10 +1,10 @@
 {
-  "$schema": "is-preview/v1",
-  "tag": "is-badge",
+  "$schema": "iswc-preview/v1",
+  "tag": "iswc-badge",
   "category": "feedback",
-  "title": "<is-badge>",
+  "title": "<iswc-badge>",
   "titleHtml": true,
-  "storageKey": "docs-is-badge",
+  "storageKey": "docs-iswc-badge",
   "sections": [
     {
       "id": "intro",
@@ -13,7 +13,7 @@
       "blocks": [
         {
           "kind": "demo",
-          "html": "<div class=\"demo-row\">\r\n            <is-badge id=\"badge-play\">Nuevo</is-badge>\r\n            <is-badge color=\"success\">Activo</is-badge>\r\n            <is-badge color=\"warning\" attention=\"pulse\">Pendiente</is-badge>\r\n          </div>",
+          "html": "<div class=\"demo-row\">\r\n            <iswc-badge id=\"badge-play\">Nuevo</iswc-badge>\r\n            <iswc-badge color=\"success\">Activo</iswc-badge>\r\n            <iswc-badge color=\"warning\" attention=\"pulse\">Pendiente</iswc-badge>\r\n          </div>",
           "target": "#badge-play",
           "controls": [
             { "control": "select", "prop": "attr:color", "label": "Color", "options": ["brand", "success", "warning", "danger", "neutral"] },
@@ -30,11 +30,11 @@
       "blocks": [
         {
           "kind": "demo",
-          "html": "<div class=\"demo-row\" style=\"flex-wrap:wrap;gap:.5rem;margin-bottom:.75rem\">\r\n            <is-badge color=\"brand\" variant=\"accent\">accent</is-badge>\r\n            <is-badge color=\"brand\" variant=\"filled\">filled</is-badge>\r\n            <is-badge color=\"brand\" variant=\"outlined\">outlined</is-badge>\r\n            <is-badge color=\"brand\" variant=\"filled-outlined\">filled-outlined</is-badge>\r\n            <is-badge color=\"danger\" pill attention=\"bounce\">pill bounce</is-badge>\r\n          </div>\r\n          <div class=\"demo-row\" style=\"flex-wrap:wrap;gap:.5rem\">\r\n            <is-badge color=\"neutral\" variant=\"filled\">neutral</is-badge>\r\n            <is-badge color=\"success\" variant=\"filled\">success</is-badge>\r\n            <is-badge color=\"warning\" variant=\"outlined\">warning</is-badge>\r\n            <is-badge color=\"danger\" variant=\"accent\">danger</is-badge>\r\n            <is-badge attention=\"pulse\">pulse</is-badge>\r\n          </div>"
+          "html": "<div class=\"demo-row\" style=\"flex-wrap:wrap;gap:.5rem;margin-bottom:.75rem\">\r\n            <iswc-badge color=\"brand\" variant=\"accent\">accent</iswc-badge>\r\n            <iswc-badge color=\"brand\" variant=\"filled\">filled</iswc-badge>\r\n            <iswc-badge color=\"brand\" variant=\"outlined\">outlined</iswc-badge>\r\n            <iswc-badge color=\"brand\" variant=\"filled-outlined\">filled-outlined</iswc-badge>\r\n            <iswc-badge color=\"danger\" pill attention=\"bounce\">pill bounce</iswc-badge>\r\n          </div>\r\n          <div class=\"demo-row\" style=\"flex-wrap:wrap;gap:.5rem\">\r\n            <iswc-badge color=\"neutral\" variant=\"filled\">neutral</iswc-badge>\r\n            <iswc-badge color=\"success\" variant=\"filled\">success</iswc-badge>\r\n            <iswc-badge color=\"warning\" variant=\"outlined\">warning</iswc-badge>\r\n            <iswc-badge color=\"danger\" variant=\"accent\">danger</iswc-badge>\r\n            <iswc-badge attention=\"pulse\">pulse</iswc-badge>\r\n          </div>"
         },
         {
           "kind": "code",
-          "code": "<is-badge color=\"success\" variant=\"filled\">OK</is-badge>\n<is-badge pill attention=\"pulse\">Live</is-badge>"
+          "code": "<iswc-badge color=\"success\" variant=\"filled\">OK</iswc-badge>\n<iswc-badge pill attention=\"pulse\">Live</iswc-badge>"
         }
       ]
     },

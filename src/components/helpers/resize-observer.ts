@@ -2,7 +2,7 @@ import { defineElement } from '../../core/element.js';
 import { createObserverElement } from './observer.js';
 
 /**
- * <is-resize-observer> — alias histórico de <is-observer type="resize">.
+ * <iswc-resize-observer> — alias histórico de <iswc-observer type="resize">.
  *
  * display:contents — observa hijos directos con ResizeObserver.
  *
@@ -10,11 +10,11 @@ import { createObserverElement } from './observer.js';
  *   disabled  boolean
  *
  * Eventos
- *   is-resize  detail: { entries }
+ *   iswc-resize  detail: { entries }
  */
 
 defineElement(
-  'is-resize-observer',
+  'iswc-resize-observer',
   createObserverElement('resize'),
-  'IsResizeObserver',
+  'IswcResizeObserver',
 );

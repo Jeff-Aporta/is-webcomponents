@@ -1,11 +1,11 @@
 {
-  "$schema": "is-preview/v1",
-  "tag": "is-input",
+  "$schema": "iswc-preview/v1",
+  "tag": "iswc-input",
   "category": "forms",
-  "title": "<is-input>",
+  "title": "<iswc-input>",
   "titleHtml": true,
   "styles": ".stack { display: grid; gap: 1.25rem; max-width: 26rem; }\r\n    .stack--wide { max-width: 34rem; }\r\n    .actions { display: flex; gap: 0.5rem; margin-top: 1rem; }",
-  "storageKey": "docs-is-input",
+  "storageKey": "docs-iswc-input",
   "hasBehavior": true,
   "sections": [
     {
@@ -15,7 +15,7 @@
       "blocks": [
         {
           "kind": "demo",
-          "html": "<is-input id=\"demo\" label=\"Nombre\" hint=\"Como aparece en la factura\" placeholder=\"Escribe aquí\" clearable name=\"nombre\"></is-input>",
+          "html": "<iswc-input id=\"demo\" label=\"Nombre\" hint=\"Como aparece en la factura\" placeholder=\"Escribe aquí\" clearable name=\"nombre\"></iswc-input>",
           "target": "#demo",
           "controls": [
             { "control": "text", "prop": "attr:label", "label": "Label", "group": "Contenido" },
@@ -26,7 +26,7 @@
           ],
           "equivNote": "type especializa chrome (ojo, clear, steppers) sobre el FA base.",
           "equivHtml": "<!-- ver diagrama de ramas -->",
-          "equivFlow": "<is-flowchart open-on-click animation=\"flow\">\n  <script type=\"application/json\">\n  {\n    \"flowchart\": {\n      \"title\": \"is-input: type\",\n      \"direction\": \"TB\",\n      \"nodes\": [\n        {\n          \"id\": \"q\",\n          \"label\": \"type=?\",\n          \"shape\": \"diamond\"\n        },\n        {\n          \"id\": \"a\",\n          \"label\": \"password → toggle\",\n          \"shape\": \"stadium\"\n        },\n        {\n          \"id\": \"b\",\n          \"label\": \"search → clearable\",\n          \"shape\": \"stadium\"\n        },\n        {\n          \"id\": \"c\",\n          \"label\": \"number → min/max\",\n          \"shape\": \"stadium\"\n        },\n        {\n          \"id\": \"d\",\n          \"label\": \"input genérico FA\",\n          \"shape\": \"stadium\"\n        }\n      ],\n      \"edges\": [\n        {\n          \"from\": \"q\",\n          \"to\": \"a\",\n          \"label\": \"password\"\n        },\n        {\n          \"from\": \"q\",\n          \"to\": \"b\",\n          \"label\": \"search\"\n        },\n        {\n          \"from\": \"q\",\n          \"to\": \"c\",\n          \"label\": \"number\"\n        },\n        {\n          \"from\": \"q\",\n          \"to\": \"d\",\n          \"label\": \"otro\"\n        }\n      ]\n    }\n  }\n  </script>\n</is-flowchart>"
+          "equivFlow": "<iswc-flowchart open-on-click animation=\"flow\">\n  <script type=\"application/json\">\n  {\n    \"flowchart\": {\n      \"title\": \"iswc-input: type\",\n      \"direction\": \"TB\",\n      \"nodes\": [\n        {\n          \"id\": \"q\",\n          \"label\": \"type=?\",\n          \"shape\": \"diamond\"\n        },\n        {\n          \"id\": \"a\",\n          \"label\": \"password → toggle\",\n          \"shape\": \"stadium\"\n        },\n        {\n          \"id\": \"b\",\n          \"label\": \"search → clearable\",\n          \"shape\": \"stadium\"\n        },\n        {\n          \"id\": \"c\",\n          \"label\": \"number → min/max\",\n          \"shape\": \"stadium\"\n        },\n        {\n          \"id\": \"d\",\n          \"label\": \"input genérico FA\",\n          \"shape\": \"stadium\"\n        }\n      ],\n      \"edges\": [\n        {\n          \"from\": \"q\",\n          \"to\": \"a\",\n          \"label\": \"password\"\n        },\n        {\n          \"from\": \"q\",\n          \"to\": \"b\",\n          \"label\": \"search\"\n        },\n        {\n          \"from\": \"q\",\n          \"to\": \"c\",\n          \"label\": \"number\"\n        },\n        {\n          \"from\": \"q\",\n          \"to\": \"d\",\n          \"label\": \"otro\"\n        }\n      ]\n    }\n  }\n  </script>\n</iswc-flowchart>"
         },
         {
           "kind": "html",
@@ -41,11 +41,11 @@
       "blocks": [
         {
           "kind": "demo",
-          "html": "<div class=\"stack\">\r\n            <is-input label=\"outlined (default)\" placeholder=\"Caja con borde completo\"></is-input>\r\n            <is-input variant=\"filled\" label=\"filled\" placeholder=\"Superficie + línea inferior\"></is-input>\r\n            <is-input variant=\"underlined\" label=\"underlined\" placeholder=\"Solo línea inferior\"></is-input>\r\n          </div>"
+          "html": "<div class=\"stack\">\r\n            <iswc-input label=\"outlined (default)\" placeholder=\"Caja con borde completo\"></iswc-input>\r\n            <iswc-input variant=\"filled\" label=\"filled\" placeholder=\"Superficie + línea inferior\"></iswc-input>\r\n            <iswc-input variant=\"underlined\" label=\"underlined\" placeholder=\"Solo línea inferior\"></iswc-input>\r\n          </div>"
         },
         {
           "kind": "code",
-          "code": "<is-input label=\"outlined (default)\"></is-input>\n<is-input variant=\"filled\" label=\"filled\"></is-input>\n<is-input variant=\"underlined\" label=\"underlined\"></is-input>"
+          "code": "<iswc-input label=\"outlined (default)\"></iswc-input>\n<iswc-input variant=\"filled\" label=\"filled\"></iswc-input>\n<iswc-input variant=\"underlined\" label=\"underlined\"></iswc-input>"
         }
       ]
     },
@@ -56,11 +56,11 @@
       "blocks": [
         {
           "kind": "demo",
-          "html": "<div class=\"stack\">\r\n            <is-input type=\"email\" label=\"Email\" placeholder=\"tu@empresa.com\" required hint=\"Obligatorio\"></is-input>\r\n            <is-input type=\"password\" label=\"Contraseña\" password-toggle placeholder=\"••••••••\"></is-input>\r\n            <is-input type=\"number\" label=\"Cantidad\" value=\"10\" min=\"0\" max=\"100\" step=\"5\"></is-input>\r\n            <is-input type=\"search\" label=\"Buscar\" clearable placeholder=\"Filtrar…\"></is-input>\r\n            <is-input type=\"tel\" label=\"Teléfono\" placeholder=\"+57 300 000 0000\" autocomplete=\"tel\"></is-input>\r\n            <is-input type=\"url\" label=\"Sitio web\" placeholder=\"https://…\"></is-input>\r\n            <is-input type=\"date\" label=\"Fecha\"></is-input>\r\n          </div>"
+          "html": "<div class=\"stack\">\r\n            <iswc-input type=\"email\" label=\"Email\" placeholder=\"tu@empresa.com\" required hint=\"Obligatorio\"></iswc-input>\r\n            <iswc-input type=\"password\" label=\"Contraseña\" password-toggle placeholder=\"••••••••\"></iswc-input>\r\n            <iswc-input type=\"number\" label=\"Cantidad\" value=\"10\" min=\"0\" max=\"100\" step=\"5\"></iswc-input>\r\n            <iswc-input type=\"search\" label=\"Buscar\" clearable placeholder=\"Filtrar…\"></iswc-input>\r\n            <iswc-input type=\"tel\" label=\"Teléfono\" placeholder=\"+57 300 000 0000\" autocomplete=\"tel\"></iswc-input>\r\n            <iswc-input type=\"url\" label=\"Sitio web\" placeholder=\"https://…\"></iswc-input>\r\n            <iswc-input type=\"date\" label=\"Fecha\"></iswc-input>\r\n          </div>"
         },
         {
           "kind": "code",
-          "code": "<is-input type=\"password\" label=\"Contraseña\" password-toggle></is-input>\n<is-input type=\"number\" label=\"Cantidad\" min=\"0\" max=\"100\" step=\"5\"></is-input>\n<is-input type=\"search\" label=\"Buscar\" clearable></is-input>"
+          "code": "<iswc-input type=\"password\" label=\"Contraseña\" password-toggle></iswc-input>\n<iswc-input type=\"number\" label=\"Cantidad\" min=\"0\" max=\"100\" step=\"5\"></iswc-input>\n<iswc-input type=\"search\" label=\"Buscar\" clearable></iswc-input>"
         }
       ]
     },
@@ -71,11 +71,11 @@
       "blocks": [
         {
           "kind": "demo",
-          "html": "<div class=\"stack\">\r\n            <is-input label=\"Importe\" type=\"number\" value=\"1200\" prefix=\"$\" suffix=\"COP\"></is-input>\r\n            <is-input label=\"Peso\" type=\"number\" value=\"72\" suffix=\"kg\"></is-input>\r\n            <is-input label=\"Con iconos\" placeholder=\"Buscar…\">\r\n              <is-icon slot=\"start\" icon=\"mdi:magnify\"></is-icon>\r\n              <is-icon slot=\"end\" icon=\"mdi:filter-variant\"></is-icon>\r\n            </is-input>\r\n            <is-input label=\"Slot + prefix\" prefix=\"https://\" placeholder=\"empresa.com\">\r\n              <is-icon slot=\"start\" icon=\"mdi:web\"></is-icon>\r\n            </is-input>\r\n          </div>"
+          "html": "<div class=\"stack\">\r\n            <iswc-input label=\"Importe\" type=\"number\" value=\"1200\" prefix=\"$\" suffix=\"COP\"></iswc-input>\r\n            <iswc-input label=\"Peso\" type=\"number\" value=\"72\" suffix=\"kg\"></iswc-input>\r\n            <iswc-input label=\"Con iconos\" placeholder=\"Buscar…\">\r\n              <iswc-icon slot=\"start\" icon=\"mdi:magnify\"></iswc-icon>\r\n              <iswc-icon slot=\"end\" icon=\"mdi:filter-variant\"></iswc-icon>\r\n            </iswc-input>\r\n            <iswc-input label=\"Slot + prefix\" prefix=\"https://\" placeholder=\"empresa.com\">\r\n              <iswc-icon slot=\"start\" icon=\"mdi:web\"></iswc-icon>\r\n            </iswc-input>\r\n          </div>"
         },
         {
           "kind": "code",
-          "code": "<is-input label=\"Importe\" type=\"number\" prefix=\"$\" suffix=\"COP\"></is-input>\n\n<is-input label=\"Con iconos\">\n  <is-icon slot=\"start\" icon=\"mdi:magnify\"></is-icon>\n  <is-icon slot=\"end\" icon=\"mdi:filter-variant\"></is-icon>\n</is-input>"
+          "code": "<iswc-input label=\"Importe\" type=\"number\" prefix=\"$\" suffix=\"COP\"></iswc-input>\n\n<iswc-input label=\"Con iconos\">\n  <iswc-icon slot=\"start\" icon=\"mdi:magnify\"></iswc-icon>\n  <iswc-icon slot=\"end\" icon=\"mdi:filter-variant\"></iswc-icon>\n</iswc-input>"
         },
         {
           "kind": "html",
@@ -90,11 +90,11 @@
       "blocks": [
         {
           "kind": "demo",
-          "html": "<div class=\"stack\">\r\n            <is-input label=\"Error forzado\" value=\"valor@malo\" error error-text=\"Ese correo no existe en el sistema\"></is-input>\r\n            <is-input label=\"Error sin error-text\" value=\"12\" error hint=\"El hint se pinta en rojo\"></is-input>\r\n            <is-input id=\"autoErr\" type=\"email\" label=\"Correo (sale del campo para validar)\" required\r\n              hint=\"Se valida al perder el foco\" error-text=\"Escribe un correo válido\"></is-input>\r\n            <is-input id=\"reportErr\" label=\"Obligatorio\" required hint=\"Pulsa «Validar»\"></is-input>\r\n          </div>\r\n          <div class=\"actions\">\r\n            <button type=\"button\" id=\"btnReport\">Validar</button>\r\n            <button type=\"button\" id=\"btnToggleErr\">Alternar error</button>\r\n          </div>"
+          "html": "<div class=\"stack\">\r\n            <iswc-input label=\"Error forzado\" value=\"valor@malo\" error error-text=\"Ese correo no existe en el sistema\"></iswc-input>\r\n            <iswc-input label=\"Error sin error-text\" value=\"12\" error hint=\"El hint se pinta en rojo\"></iswc-input>\r\n            <iswc-input id=\"autoErr\" type=\"email\" label=\"Correo (sale del campo para validar)\" required\r\n              hint=\"Se valida al perder el foco\" error-text=\"Escribe un correo válido\"></iswc-input>\r\n            <iswc-input id=\"reportErr\" label=\"Obligatorio\" required hint=\"Pulsa «Validar»\"></iswc-input>\r\n          </div>\r\n          <div class=\"actions\">\r\n            <button type=\"button\" id=\"btnReport\">Validar</button>\r\n            <button type=\"button\" id=\"btnToggleErr\">Alternar error</button>\r\n          </div>"
         },
         {
           "kind": "code",
-          "code": "<is-input error error-text=\"Ese correo no existe en el sistema\"></is-input>\n\n// error derivado de la validación nativa\ninput.reportValidity();          // marca el campo como tocado y pinta el error\ninput.error = true;              // o fuérzalo desde fuera"
+          "code": "<iswc-input error error-text=\"Ese correo no existe en el sistema\"></iswc-input>\n\n// error derivado de la validación nativa\ninput.reportValidity();          // marca el campo como tocado y pinta el error\ninput.error = true;              // o fuérzalo desde fuera"
         }
       ]
     },
@@ -105,11 +105,11 @@
       "blocks": [
         {
           "kind": "demo",
-          "html": "<div class=\"stack\">\r\n            <is-input label=\"Titular\" maxlength=\"40\" show-count hint=\"Máximo 40 caracteres\" value=\"Facturación electrónica\"></is-input>\r\n            <is-input label=\"Sin límite\" show-count placeholder=\"Escribe algo…\"></is-input>\r\n            <is-input label=\"Solo contador\" maxlength=\"10\" show-count></is-input>\r\n          </div>"
+          "html": "<div class=\"stack\">\r\n            <iswc-input label=\"Titular\" maxlength=\"40\" show-count hint=\"Máximo 40 caracteres\" value=\"Facturación electrónica\"></iswc-input>\r\n            <iswc-input label=\"Sin límite\" show-count placeholder=\"Escribe algo…\"></iswc-input>\r\n            <iswc-input label=\"Solo contador\" maxlength=\"10\" show-count></iswc-input>\r\n          </div>"
         },
         {
           "kind": "code",
-          "code": "<is-input label=\"Titular\" maxlength=\"40\" show-count hint=\"Máximo 40 caracteres\"></is-input>"
+          "code": "<iswc-input label=\"Titular\" maxlength=\"40\" show-count hint=\"Máximo 40 caracteres\"></iswc-input>"
         }
       ]
     },
@@ -120,11 +120,11 @@
       "blocks": [
         {
           "kind": "demo",
-          "html": "<div style=\"display:grid; gap:1.25rem; --iswc-field-width:14rem;\">\r\n            <is-input label=\"--iswc-field-width: 14rem\" placeholder=\"Heredado del contenedor\"></is-input>\r\n            <is-input label=\"Mismo contenedor, full-width\" full-width placeholder=\"Ignora el token\"></is-input>\r\n            <is-input label=\"Override local\" style=\"--iswc-field-width:8rem;\" type=\"number\" value=\"42\"></is-input>\r\n          </div>"
+          "html": "<div style=\"display:grid; gap:1.25rem; --iswc-field-width:14rem;\">\r\n            <iswc-input label=\"--iswc-field-width: 14rem\" placeholder=\"Heredado del contenedor\"></iswc-input>\r\n            <iswc-input label=\"Mismo contenedor, full-width\" full-width placeholder=\"Ignora el token\"></iswc-input>\r\n            <iswc-input label=\"Override local\" style=\"--iswc-field-width:8rem;\" type=\"number\" value=\"42\"></iswc-input>\r\n          </div>"
         },
         {
           "kind": "code",
-          "code": "<div style=\"--iswc-field-width: 14rem\">\n  <is-input label=\"Estrecho\"></is-input>\n  <is-input label=\"Ancho completo\" full-width></is-input>\n</div>"
+          "code": "<div style=\"--iswc-field-width: 14rem\">\n  <iswc-input label=\"Estrecho\"></iswc-input>\n  <iswc-input label=\"Ancho completo\" full-width></iswc-input>\n</div>"
         }
       ]
     },
@@ -135,11 +135,11 @@
       "blocks": [
         {
           "kind": "demo",
-          "html": "<div style=\"display:grid; gap:0.75rem; --iswc-field-label-width:7rem; max-width:34rem;\">\r\n            <is-input label-placement=\"start\" label=\"Nombre\" full-width placeholder=\"Jane Doe\"></is-input>\r\n            <is-input label-placement=\"start\" label=\"Correo\" type=\"email\" full-width placeholder=\"jane@empresa.com\" hint=\"Se usa para la factura\"></is-input>\r\n            <is-input label-placement=\"start\" label=\"NIT\" full-width prefix=\"CO\" show-count maxlength=\"12\"></is-input>\r\n          </div>"
+          "html": "<div style=\"display:grid; gap:0.75rem; --iswc-field-label-width:7rem; max-width:34rem;\">\r\n            <iswc-input label-placement=\"start\" label=\"Nombre\" full-width placeholder=\"Jane Doe\"></iswc-input>\r\n            <iswc-input label-placement=\"start\" label=\"Correo\" type=\"email\" full-width placeholder=\"jane@empresa.com\" hint=\"Se usa para la factura\"></iswc-input>\r\n            <iswc-input label-placement=\"start\" label=\"NIT\" full-width prefix=\"CO\" show-count maxlength=\"12\"></iswc-input>\r\n          </div>"
         },
         {
           "kind": "code",
-          "code": "<div style=\"--iswc-field-label-width: 7rem\">\n  <is-input label-placement=\"start\" label=\"Nombre\" full-width></is-input>\n  <is-input label-placement=\"start\" label=\"Correo\" full-width></is-input>\n</div>"
+          "code": "<div style=\"--iswc-field-label-width: 7rem\">\n  <iswc-input label-placement=\"start\" label=\"Nombre\" full-width></iswc-input>\n  <iswc-input label-placement=\"start\" label=\"Correo\" full-width></iswc-input>\n</div>"
         }
       ]
     },
@@ -150,7 +150,7 @@
       "blocks": [
         {
           "kind": "demo",
-          "html": "<div class=\"stack\">\r\n            <is-input label=\"Solo lectura\" value=\"No editable\" readonly></is-input>\r\n            <is-input label=\"Deshabilitado\" value=\"Sin acceso\" disabled></is-input>\r\n            <is-input variant=\"filled\" label=\"filled · readonly\" value=\"No editable\" readonly></is-input>\r\n            <is-input variant=\"underlined\" label=\"underlined · disabled\" value=\"Sin acceso\" disabled></is-input>\r\n          </div>"
+          "html": "<div class=\"stack\">\r\n            <iswc-input label=\"Solo lectura\" value=\"No editable\" readonly></iswc-input>\r\n            <iswc-input label=\"Deshabilitado\" value=\"Sin acceso\" disabled></iswc-input>\r\n            <iswc-input variant=\"filled\" label=\"filled · readonly\" value=\"No editable\" readonly></iswc-input>\r\n            <iswc-input variant=\"underlined\" label=\"underlined · disabled\" value=\"Sin acceso\" disabled></iswc-input>\r\n          </div>"
         }
       ]
     },
@@ -161,7 +161,7 @@
       "blocks": [
         {
           "kind": "demo",
-          "html": "<form id=\"f\" style=\"display:grid; gap:0.75rem; max-width:26rem;\">\r\n            <is-input name=\"usuario\" label=\"Usuario\" required clearable maxlength=\"20\" show-count></is-input>\r\n            <is-input name=\"correo\" type=\"email\" label=\"Correo\" required error-text=\"Correo no válido\"></is-input>\r\n            <is-input name=\"cargo\" label=\"Cargo\" value=\"Contador\"></is-input>\r\n            <div class=\"actions\">\r\n              <button type=\"submit\">Enviar</button>\r\n              <button type=\"reset\">Reset</button>\r\n            </div>\r\n          </form>"
+          "html": "<form id=\"f\" style=\"display:grid; gap:0.75rem; max-width:26rem;\">\r\n            <iswc-input name=\"usuario\" label=\"Usuario\" required clearable maxlength=\"20\" show-count></iswc-input>\r\n            <iswc-input name=\"correo\" type=\"email\" label=\"Correo\" required error-text=\"Correo no válido\"></iswc-input>\r\n            <iswc-input name=\"cargo\" label=\"Cargo\" value=\"Contador\"></iswc-input>\r\n            <div class=\"actions\">\r\n              <button type=\"submit\">Enviar</button>\r\n              <button type=\"reset\">Reset</button>\r\n            </div>\r\n          </form>"
         },
         {
           "kind": "html",
@@ -312,7 +312,7 @@
             ],
             [
               "events",
-              "<code>is-input</code> <code>is-change</code> (<code>detail.value</code>) + nativos <code>input</code> / <code>change</code>"
+              "<code>iswc-input</code> <code>iswc-change</code> (<code>detail.value</code>) + nativos <code>input</code> / <code>change</code>"
             ]
           ]
         },

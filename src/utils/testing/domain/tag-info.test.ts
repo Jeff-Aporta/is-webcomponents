@@ -7,7 +7,7 @@ import { fileURLToPath } from 'node:url';
 const here = dirname(fileURLToPath(import.meta.url));
 const root = dirname(dirname(dirname(dirname(here))));
 
-test('is-tag declara color="info" en VALID_COLOR', () => {
+test('iswc-tag declara color="info" en VALID_COLOR', () => {
   const src = readFileSync(join(root, 'src', 'components', 'feedback', 'tag.ts'), 'utf8');
   assert.ok(
     /VALID_COLOR\s*=\s*\[[^\]]*'info'/.test(src),
@@ -15,7 +15,7 @@ test('is-tag declara color="info" en VALID_COLOR', () => {
   );
 });
 
-test('is-tag actualiza doc-block con la colore info', () => {
+test('iswc-tag actualiza doc-block con la colore info', () => {
   const src = readFileSync(join(root, 'src', 'components', 'feedback', 'tag.ts'), 'utf8');
   assert.ok(
     /brand\s*\|\s*neutral\s*\|\s*info\s*\|\s*success/.test(src),
@@ -23,7 +23,7 @@ test('is-tag actualiza doc-block con la colore info', () => {
   );
 });
 
-test('is-tag.css define los tokens de color=info', () => {
+test('iswc-tag.css define los tokens de color=info', () => {
   const css = readFileSync(join(root, 'src', 'components', 'feedback', 'tag.css'), 'utf8');
   const m = /:host\(\[\s*color\s*=\s*["']info["']\s*\]\)\s*\{([\s\S]*?)\}/m.exec(css);
   assert.ok(m, 'Debe existir el bloque :host([color="info"]) { ... }');
@@ -37,7 +37,7 @@ test('is-tag.css define los tokens de color=info', () => {
   assert.ok(/--iswc-color-info-stronger/.test(block), '--_text debe usar --iswc-color-info-stronger');
 });
 
-test('is-tag.css NO anida selectores con atributos del host dentro de :host', () => {
+test('iswc-tag.css NO anida selectores con atributos del host dentro de :host', () => {
   const css = readFileSync(join(root, 'src', 'components', 'feedback', 'tag.css'), 'utf8');
   const idx = css.indexOf(':host {');
   assert.ok(idx > -1, ':host { ... } existe en tag.css');
@@ -124,14 +124,14 @@ test('Las 3 paletas definen la rampa relativa completa de info', () => {
   }
 });
 
-test('preview de is-tag muestra la colore info', () => {
+test('preview de iswc-tag muestra la colore info', () => {
   const def = JSON.parse(
     readFileSync(join(root, 'src', 'components', 'feedback', 'tag.json'), 'utf8'),
   );
   const html = JSON.stringify(def.sections);
   assert.ok(
     html.includes('color=\\"info\\"') || html.includes("color=\\\"info\\\""),
-    'El preview debe incluir al menos un <is-tag color="info">',
+    'El preview debe incluir al menos un <iswc-tag color="info">',
   );
   for (const v of ['brand', 'neutral', 'info', 'success', 'warning', 'danger']) {
     const needle = `color=\\"${v}\\"`;

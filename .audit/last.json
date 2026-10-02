@@ -18,7 +18,7 @@
   },
   "componentes": [
     {
-      "tag": "is-accordion-group",
+      "tag": "iswc-accordion-group",
       "titulo": "Accordion Group",
       "categoria": "isp",
       "estado": "ok",
@@ -39,7 +39,7 @@
       }
     },
     {
-      "tag": "is-block-layout",
+      "tag": "iswc-block-layout",
       "titulo": "Block Layout",
       "categoria": "isp",
       "estado": "ok",
@@ -60,7 +60,7 @@
       }
     },
     {
-      "tag": "is-btn-ref",
+      "tag": "iswc-btn-ref",
       "titulo": "Btn Ref",
       "categoria": "isp",
       "estado": "ok",
@@ -81,7 +81,7 @@
       }
     },
     {
-      "tag": "is-catalogo-gen",
+      "tag": "iswc-catalogo-gen",
       "titulo": "Catálogo Gen",
       "categoria": "isp",
       "estado": "ok",
@@ -102,7 +102,7 @@
       }
     },
     {
-      "tag": "is-confirm-delete",
+      "tag": "iswc-confirm-delete",
       "titulo": "Confirm Delete",
       "categoria": "isp",
       "estado": "ok",
@@ -123,7 +123,7 @@
       }
     },
     {
-      "tag": "is-flex-layout",
+      "tag": "iswc-flex-layout",
       "titulo": "Flex Layout",
       "categoria": "isp",
       "estado": "ok",
@@ -144,7 +144,7 @@
       }
     },
     {
-      "tag": "is-flex-options",
+      "tag": "iswc-flex-options",
       "titulo": "Flex Options",
       "categoria": "isp",
       "estado": "ok",
@@ -165,7 +165,7 @@
       }
     },
     {
-      "tag": "is-float-card",
+      "tag": "iswc-float-card",
       "titulo": "Float Card",
       "categoria": "isp",
       "estado": "ok",
@@ -186,7 +186,7 @@
       }
     },
     {
-      "tag": "is-form",
+      "tag": "iswc-form",
       "titulo": "Form",
       "categoria": "isp",
       "estado": "ok",
@@ -207,7 +207,7 @@
       }
     },
     {
-      "tag": "is-modal-verificacion",
+      "tag": "iswc-modal-verificacion",
       "titulo": "Modal Verificación",
       "categoria": "isp",
       "estado": "ok",
@@ -228,7 +228,7 @@
       }
     },
     {
-      "tag": "is-grid-layout",
+      "tag": "iswc-grid-layout",
       "titulo": "Grid Layout",
       "categoria": "isp",
       "estado": "ok",
@@ -249,7 +249,7 @@
       }
     },
     {
-      "tag": "is-heading",
+      "tag": "iswc-heading",
       "titulo": "Heading",
       "categoria": "isp",
       "estado": "ok",
@@ -270,7 +270,7 @@
       }
     },
     {
-      "tag": "is-loading-overlay",
+      "tag": "iswc-loading-overlay",
       "titulo": "Loading Overlay",
       "categoria": "isp",
       "estado": "ok",
@@ -291,7 +291,7 @@
       }
     },
     {
-      "tag": "is-text",
+      "tag": "iswc-text",
       "titulo": "Text",
       "categoria": "isp",
       "estado": "ok",
@@ -312,7 +312,7 @@
       }
     },
     {
-      "tag": "is-tree-view",
+      "tag": "iswc-tree-view",
       "titulo": "Tree View",
       "categoria": "isp",
       "estado": "ok",
@@ -333,7 +333,7 @@
       }
     },
     {
-      "tag": "is-button",
+      "tag": "iswc-button",
       "titulo": "Button",
       "categoria": "actions",
       "estado": "ok",
@@ -354,7 +354,7 @@
       }
     },
     {
-      "tag": "is-button-group",
+      "tag": "iswc-button-group",
       "titulo": "Button Group",
       "categoria": "actions",
       "estado": "ok",
@@ -375,7 +375,7 @@
       }
     },
     {
-      "tag": "is-copy-button",
+      "tag": "iswc-copy-button",
       "titulo": "Copy Button",
       "categoria": "actions",
       "estado": "ok",
@@ -396,7 +396,7 @@
       }
     },
     {
-      "tag": "is-share-button",
+      "tag": "iswc-share-button",
       "titulo": "Share Button",
       "categoria": "actions",
       "estado": "ok",
@@ -417,7 +417,7 @@
       }
     },
     {
-      "tag": "is-check-icon-button",
+      "tag": "iswc-check-icon-button",
       "titulo": "Check Icon Button",
       "categoria": "actions",
       "estado": "ok",
@@ -438,7 +438,7 @@
       }
     },
     {
-      "tag": "is-dropdown",
+      "tag": "iswc-dropdown",
       "titulo": "Dropdown",
       "categoria": "actions",
       "estado": "ok",
@@ -459,7 +459,7 @@
       }
     },
     {
-      "tag": "is-dropdown-item",
+      "tag": "iswc-dropdown-item",
       "titulo": "Dropdown Item",
       "categoria": "actions",
       "estado": "ok",
@@ -480,7 +480,7 @@
       }
     },
     {
-      "tag": "is-icon",
+      "tag": "iswc-icon",
       "titulo": "Icon",
       "categoria": "media",
       "estado": "ok",
@@ -501,7 +501,7 @@
       }
     },
     {
-      "tag": "is-avatar",
+      "tag": "iswc-avatar",
       "titulo": "Avatar",
       "categoria": "media",
       "estado": "ok",
@@ -522,7 +522,7 @@
       }
     },
     {
-      "tag": "is-theme-img",
+      "tag": "iswc-theme-img",
       "titulo": "Theme Img",
       "categoria": "media",
       "estado": "ok",
@@ -543,7 +543,7 @@
       }
     },
     {
-      "tag": "is-video",
+      "tag": "iswc-video",
       "titulo": "Video",
       "categoria": "media",
       "estado": "ok",
@@ -564,7 +564,7 @@
       }
     },
     {
-      "tag": "is-speech",
+      "tag": "iswc-speech",
       "titulo": "Speech",
       "categoria": "media",
       "estado": "ok",
@@ -585,7 +585,7 @@
       }
     },
     {
-      "tag": "is-media-recorder",
+      "tag": "iswc-media-recorder",
       "titulo": "Media Recorder",
       "categoria": "media",
       "estado": "ok",
@@ -606,7 +606,7 @@
       }
     },
     {
-      "tag": "is-video-playlist",
+      "tag": "iswc-video-playlist",
       "titulo": "Video Playlist",
       "categoria": "media",
       "estado": "ok",
@@ -627,7 +627,7 @@
       }
     },
     {
-      "tag": "is-spinner",
+      "tag": "iswc-spinner",
       "titulo": "Spinner",
       "categoria": "feedback",
       "estado": "ok",
@@ -648,7 +648,7 @@
       }
     },
     {
-      "tag": "is-badge",
+      "tag": "iswc-badge",
       "titulo": "Badge",
       "categoria": "feedback",
       "estado": "ok",
@@ -669,7 +669,7 @@
       }
     },
     {
-      "tag": "is-tag",
+      "tag": "iswc-tag",
       "titulo": "Tag",
       "categoria": "feedback",
       "estado": "ok",
@@ -690,7 +690,7 @@
       }
     },
     {
-      "tag": "is-skeleton",
+      "tag": "iswc-skeleton",
       "titulo": "Skeleton",
       "categoria": "feedback",
       "estado": "ok",
@@ -711,7 +711,7 @@
       }
     },
     {
-      "tag": "is-progress-bar",
+      "tag": "iswc-progress-bar",
       "titulo": "Progress Bar",
       "categoria": "feedback",
       "estado": "ok",
@@ -732,7 +732,7 @@
       }
     },
     {
-      "tag": "is-progress-ring",
+      "tag": "iswc-progress-ring",
       "titulo": "Progress Ring",
       "categoria": "feedback",
       "estado": "ok",
@@ -753,7 +753,7 @@
       }
     },
     {
-      "tag": "is-theme-toggle",
+      "tag": "iswc-theme-toggle",
       "titulo": "Theme Toggle",
       "categoria": "feedback",
       "estado": "ok",
@@ -774,7 +774,7 @@
       }
     },
     {
-      "tag": "is-prefs-clear",
+      "tag": "iswc-prefs-clear",
       "titulo": "Prefs Clear",
       "categoria": "feedback",
       "estado": "ok",
@@ -795,7 +795,7 @@
       }
     },
     {
-      "tag": "is-toast",
+      "tag": "iswc-toast",
       "titulo": "Toast",
       "categoria": "feedback",
       "estado": "ok",
@@ -816,7 +816,7 @@
       }
     },
     {
-      "tag": "is-toast-item",
+      "tag": "iswc-toast-item",
       "titulo": "Toast Item",
       "categoria": "feedback",
       "estado": "ok",
@@ -837,7 +837,7 @@
       }
     },
     {
-      "tag": "is-tooltip",
+      "tag": "iswc-tooltip",
       "titulo": "Tooltip",
       "categoria": "feedback",
       "estado": "ok",
@@ -858,7 +858,7 @@
       }
     },
     {
-      "tag": "is-cdn-snippet",
+      "tag": "iswc-cdn-snippet",
       "titulo": "CDN Snippet",
       "categoria": "feedback",
       "estado": "ok",
@@ -879,7 +879,7 @@
       }
     },
     {
-      "tag": "is-split-panel",
+      "tag": "iswc-split-panel",
       "titulo": "Panel dividido",
       "categoria": "layout",
       "estado": "ok",
@@ -900,7 +900,7 @@
       }
     },
     {
-      "tag": "is-main",
+      "tag": "iswc-main",
       "titulo": "Main",
       "categoria": "layout",
       "estado": "ok",
@@ -921,7 +921,7 @@
       }
     },
     {
-      "tag": "is-card",
+      "tag": "iswc-card",
       "titulo": "Card",
       "categoria": "layout",
       "estado": "ok",
@@ -942,7 +942,7 @@
       }
     },
     {
-      "tag": "is-callout",
+      "tag": "iswc-callout",
       "titulo": "Callout",
       "categoria": "layout",
       "estado": "ok",
@@ -963,7 +963,7 @@
       }
     },
     {
-      "tag": "is-details",
+      "tag": "iswc-details",
       "titulo": "Details",
       "categoria": "layout",
       "estado": "ok",
@@ -984,7 +984,7 @@
       }
     },
     {
-      "tag": "is-dialog",
+      "tag": "iswc-dialog",
       "titulo": "Dialog",
       "categoria": "layout",
       "estado": "ok",
@@ -1005,7 +1005,7 @@
       }
     },
     {
-      "tag": "is-drawer",
+      "tag": "iswc-drawer",
       "titulo": "Drawer",
       "categoria": "layout",
       "estado": "ok",
@@ -1026,7 +1026,7 @@
       }
     },
     {
-      "tag": "is-divider",
+      "tag": "iswc-divider",
       "titulo": "Divider",
       "categoria": "layout",
       "estado": "ok",
@@ -1047,7 +1047,7 @@
       }
     },
     {
-      "tag": "is-scrollspy",
+      "tag": "iswc-scrollspy",
       "titulo": "Scrollspy",
       "categoria": "layout",
       "estado": "ok",
@@ -1068,7 +1068,7 @@
       }
     },
     {
-      "tag": "is-demo",
+      "tag": "iswc-demo",
       "titulo": "Demo",
       "categoria": "layout",
       "estado": "ok",
@@ -1084,14 +1084,14 @@
         {
           "categoria": "json-schema",
           "severidad": "info",
-          "tag": "is-demo",
-          "mensaje": "No se encontró JSON de preview para <is-demo>.",
-          "sugerencia": "Creá un archivo de definición siguiendo el esquema is-preview/v1."
+          "tag": "iswc-demo",
+          "mensaje": "No se encontró JSON de preview para <iswc-demo>.",
+          "sugerencia": "Creá un archivo de definición siguiendo el esquema iswc-preview/v1."
         }
       ]
     },
     {
-      "tag": "is-popover",
+      "tag": "iswc-popover",
       "titulo": "Popover",
       "categoria": "helpers",
       "estado": "ok",
@@ -1112,7 +1112,7 @@
       }
     },
     {
-      "tag": "is-ui",
+      "tag": "iswc-ui",
       "titulo": "IsUi",
       "categoria": "helpers",
       "estado": "ok",
@@ -1133,7 +1133,7 @@
       }
     },
     {
-      "tag": "is-breadcrumb",
+      "tag": "iswc-breadcrumb",
       "titulo": "Breadcrumb",
       "categoria": "navigation",
       "estado": "ok",
@@ -1154,7 +1154,7 @@
       }
     },
     {
-      "tag": "is-breadcrumb-item",
+      "tag": "iswc-breadcrumb-item",
       "titulo": "Breadcrumb Item",
       "categoria": "navigation",
       "estado": "ok",
@@ -1175,7 +1175,7 @@
       }
     },
     {
-      "tag": "is-tab-group",
+      "tag": "iswc-tab-group",
       "titulo": "Tab Group",
       "categoria": "navigation",
       "estado": "ok",
@@ -1196,7 +1196,7 @@
       }
     },
     {
-      "tag": "is-tab",
+      "tag": "iswc-tab",
       "titulo": "Tab",
       "categoria": "navigation",
       "estado": "ok",
@@ -1217,7 +1217,7 @@
       }
     },
     {
-      "tag": "is-tab-panel",
+      "tag": "iswc-tab-panel",
       "titulo": "Tab Panel",
       "categoria": "navigation",
       "estado": "ok",
@@ -1238,7 +1238,7 @@
       }
     },
     {
-      "tag": "is-scroller",
+      "tag": "iswc-scroller",
       "titulo": "Scroller",
       "categoria": "navigation",
       "estado": "ok",
@@ -1259,7 +1259,7 @@
       }
     },
     {
-      "tag": "is-carousel",
+      "tag": "iswc-carousel",
       "titulo": "Carousel",
       "categoria": "navigation",
       "estado": "ok",
@@ -1280,7 +1280,7 @@
       }
     },
     {
-      "tag": "is-carousel-item",
+      "tag": "iswc-carousel-item",
       "titulo": "Carousel Item",
       "categoria": "navigation",
       "estado": "ok",
@@ -1301,7 +1301,7 @@
       }
     },
     {
-      "tag": "is-tree",
+      "tag": "iswc-tree",
       "titulo": "Tree",
       "categoria": "navigation",
       "estado": "ok",
@@ -1322,7 +1322,7 @@
       }
     },
     {
-      "tag": "is-tree-item",
+      "tag": "iswc-tree-item",
       "titulo": "Tree Item",
       "categoria": "navigation",
       "estado": "ok",
@@ -1343,7 +1343,7 @@
       }
     },
     {
-      "tag": "is-stepper",
+      "tag": "iswc-stepper",
       "titulo": "Stepper",
       "categoria": "navigation",
       "estado": "ok",
@@ -1364,7 +1364,7 @@
       }
     },
     {
-      "tag": "is-stepper-step",
+      "tag": "iswc-stepper-step",
       "titulo": "Stepper Step",
       "categoria": "navigation",
       "estado": "ok",
@@ -1385,7 +1385,7 @@
       }
     },
     {
-      "tag": "is-combobox",
+      "tag": "iswc-combobox",
       "titulo": "Combobox",
       "categoria": "forms",
       "estado": "ok",
@@ -1406,7 +1406,7 @@
       }
     },
     {
-      "tag": "is-option",
+      "tag": "iswc-option",
       "titulo": "Option",
       "categoria": "forms",
       "estado": "ok",
@@ -1427,7 +1427,7 @@
       }
     },
     {
-      "tag": "is-checkbox",
+      "tag": "iswc-checkbox",
       "titulo": "Checkbox",
       "categoria": "forms",
       "estado": "ok",
@@ -1448,7 +1448,7 @@
       }
     },
     {
-      "tag": "is-switch",
+      "tag": "iswc-switch",
       "titulo": "Switch",
       "categoria": "forms",
       "estado": "ok",
@@ -1469,7 +1469,7 @@
       }
     },
     {
-      "tag": "is-radio-group",
+      "tag": "iswc-radio-group",
       "titulo": "Radio Group",
       "categoria": "forms",
       "estado": "ok",
@@ -1490,7 +1490,7 @@
       }
     },
     {
-      "tag": "is-radio",
+      "tag": "iswc-radio",
       "titulo": "Radio",
       "categoria": "forms",
       "estado": "ok",
@@ -1511,7 +1511,7 @@
       }
     },
     {
-      "tag": "is-input",
+      "tag": "iswc-input",
       "titulo": "Input",
       "categoria": "forms",
       "estado": "ok",
@@ -1532,7 +1532,7 @@
       }
     },
     {
-      "tag": "is-textarea",
+      "tag": "iswc-textarea",
       "titulo": "Textarea",
       "categoria": "forms",
       "estado": "ok",
@@ -1553,7 +1553,7 @@
       }
     },
     {
-      "tag": "is-code",
+      "tag": "iswc-code",
       "titulo": "Code",
       "categoria": "code",
       "estado": "ok",
@@ -1574,7 +1574,7 @@
       }
     },
     {
-      "tag": "is-slider",
+      "tag": "iswc-slider",
       "titulo": "Slider",
       "categoria": "forms",
       "estado": "ok",
@@ -1595,7 +1595,7 @@
       }
     },
     {
-      "tag": "is-rating",
+      "tag": "iswc-rating",
       "titulo": "Rating",
       "categoria": "forms",
       "estado": "ok",
@@ -1616,7 +1616,7 @@
       }
     },
     {
-      "tag": "is-select",
+      "tag": "iswc-select",
       "titulo": "Select",
       "categoria": "forms",
       "estado": "ok",
@@ -1637,7 +1637,7 @@
       }
     },
     {
-      "tag": "is-color-picker",
+      "tag": "iswc-color-picker",
       "titulo": "Color Picker",
       "categoria": "forms",
       "estado": "ok",
@@ -1658,7 +1658,7 @@
       }
     },
     {
-      "tag": "is-file-input",
+      "tag": "iswc-file-input",
       "titulo": "File Input",
       "categoria": "forms",
       "estado": "ok",
@@ -1679,7 +1679,7 @@
       }
     },
     {
-      "tag": "is-date-picker",
+      "tag": "iswc-date-picker",
       "titulo": "Date Picker",
       "categoria": "forms",
       "estado": "ok",
@@ -1700,7 +1700,7 @@
       }
     },
     {
-      "tag": "is-month-calendar",
+      "tag": "iswc-month-calendar",
       "titulo": "Month Calendar",
       "categoria": "forms",
       "estado": "ok",
@@ -1721,7 +1721,7 @@
       }
     },
     {
-      "tag": "is-year-calendar",
+      "tag": "iswc-year-calendar",
       "titulo": "Year Calendar",
       "categoria": "forms",
       "estado": "ok",
@@ -1742,7 +1742,7 @@
       }
     },
     {
-      "tag": "is-date-range-picker",
+      "tag": "iswc-date-range-picker",
       "titulo": "Date Range Picker",
       "categoria": "forms",
       "estado": "ok",
@@ -1763,7 +1763,7 @@
       }
     },
     {
-      "tag": "is-time-clock",
+      "tag": "iswc-time-clock",
       "titulo": "Time Clock",
       "categoria": "forms",
       "estado": "ok",
@@ -1784,7 +1784,7 @@
       }
     },
     {
-      "tag": "is-digital-clock",
+      "tag": "iswc-digital-clock",
       "titulo": "Digital Clock",
       "categoria": "forms",
       "estado": "ok",
@@ -1805,7 +1805,7 @@
       }
     },
     {
-      "tag": "is-date-field",
+      "tag": "iswc-date-field",
       "titulo": "Date Field",
       "categoria": "forms",
       "estado": "ok",
@@ -1826,7 +1826,7 @@
       }
     },
     {
-      "tag": "is-time-field",
+      "tag": "iswc-time-field",
       "titulo": "Time Field",
       "categoria": "forms",
       "estado": "ok",
@@ -1847,7 +1847,7 @@
       }
     },
     {
-      "tag": "is-date-time-field",
+      "tag": "iswc-date-time-field",
       "titulo": "Date Time Field",
       "categoria": "forms",
       "estado": "ok",
@@ -1868,7 +1868,7 @@
       }
     },
     {
-      "tag": "is-date-input",
+      "tag": "iswc-date-input",
       "titulo": "Date Input",
       "categoria": "forms",
       "estado": "ok",
@@ -1889,7 +1889,7 @@
       }
     },
     {
-      "tag": "is-time-input",
+      "tag": "iswc-time-input",
       "titulo": "Time Input",
       "categoria": "forms",
       "estado": "ok",
@@ -1910,7 +1910,7 @@
       }
     },
     {
-      "tag": "is-date-time-input",
+      "tag": "iswc-date-time-input",
       "titulo": "Date Time Input",
       "categoria": "forms",
       "estado": "ok",
@@ -1931,7 +1931,7 @@
       }
     },
     {
-      "tag": "is-date-range-input",
+      "tag": "iswc-date-range-input",
       "titulo": "Date Range Input",
       "categoria": "forms",
       "estado": "ok",
@@ -1952,7 +1952,7 @@
       }
     },
     {
-      "tag": "is-data-grid",
+      "tag": "iswc-data-grid",
       "titulo": "Data Grid",
       "categoria": "data",
       "estado": "ok",
@@ -1973,7 +1973,7 @@
       }
     },
     {
-      "tag": "is-chart",
+      "tag": "iswc-chart",
       "titulo": "Chart",
       "categoria": "data-viz",
       "estado": "ok",
@@ -1994,7 +1994,7 @@
       }
     },
     {
-      "tag": "is-bar-chart",
+      "tag": "iswc-bar-chart",
       "titulo": "Bar Chart",
       "categoria": "data-viz",
       "estado": "ok",
@@ -2015,7 +2015,7 @@
       }
     },
     {
-      "tag": "is-line-chart",
+      "tag": "iswc-line-chart",
       "titulo": "Line Chart",
       "categoria": "data-viz",
       "estado": "ok",
@@ -2036,7 +2036,7 @@
       }
     },
     {
-      "tag": "is-pie-chart",
+      "tag": "iswc-pie-chart",
       "titulo": "Pie Chart",
       "categoria": "data-viz",
       "estado": "ok",
@@ -2057,7 +2057,7 @@
       }
     },
     {
-      "tag": "is-doughnut-chart",
+      "tag": "iswc-doughnut-chart",
       "titulo": "Doughnut Chart",
       "categoria": "data-viz",
       "estado": "ok",
@@ -2078,7 +2078,7 @@
       }
     },
     {
-      "tag": "is-radar-chart",
+      "tag": "iswc-radar-chart",
       "titulo": "Radar Chart",
       "categoria": "data-viz",
       "estado": "ok",
@@ -2099,7 +2099,7 @@
       }
     },
     {
-      "tag": "is-polar-area-chart",
+      "tag": "iswc-polar-area-chart",
       "titulo": "Polar Area Chart",
       "categoria": "data-viz",
       "estado": "ok",
@@ -2120,7 +2120,7 @@
       }
     },
     {
-      "tag": "is-scatter-chart",
+      "tag": "iswc-scatter-chart",
       "titulo": "Scatter Chart",
       "categoria": "data-viz",
       "estado": "ok",
@@ -2141,7 +2141,7 @@
       }
     },
     {
-      "tag": "is-bubble-chart",
+      "tag": "iswc-bubble-chart",
       "titulo": "Bubble Chart",
       "categoria": "data-viz",
       "estado": "ok",
@@ -2162,7 +2162,7 @@
       }
     },
     {
-      "tag": "is-sparkline",
+      "tag": "iswc-sparkline",
       "titulo": "Sparkline",
       "categoria": "data-viz",
       "estado": "ok",
@@ -2183,7 +2183,7 @@
       }
     },
     {
-      "tag": "is-flowchart",
+      "tag": "iswc-flowchart",
       "titulo": "Diagrama de flujo",
       "categoria": "diagrams",
       "estado": "ok",
@@ -2204,7 +2204,7 @@
       }
     },
     {
-      "tag": "is-sequence-diagram",
+      "tag": "iswc-sequence-diagram",
       "titulo": "Diagrama de secuencia",
       "categoria": "diagrams",
       "estado": "ok",
@@ -2225,7 +2225,7 @@
       }
     },
     {
-      "tag": "is-lightbox",
+      "tag": "iswc-lightbox",
       "titulo": "Lightbox",
       "categoria": "helpers",
       "estado": "ok",
@@ -2246,7 +2246,7 @@
       }
     },
     {
-      "tag": "is-diagram-lightbox",
+      "tag": "iswc-diagram-lightbox",
       "titulo": "Visor de diagramas",
       "categoria": "diagrams",
       "estado": "ok",
@@ -2267,7 +2267,7 @@
       }
     },
     {
-      "tag": "is-relative-time",
+      "tag": "iswc-relative-time",
       "titulo": "Tiempo relativo",
       "categoria": "helpers",
       "estado": "ok",
@@ -2288,7 +2288,7 @@
       }
     },
     {
-      "tag": "is-format",
+      "tag": "iswc-format",
       "titulo": "Formato",
       "categoria": "helpers",
       "estado": "ok",
@@ -2309,7 +2309,7 @@
       }
     },
     {
-      "tag": "is-observer",
+      "tag": "iswc-observer",
       "titulo": "Observer",
       "categoria": "helpers",
       "estado": "ok",
@@ -2330,7 +2330,7 @@
       }
     },
     {
-      "tag": "is-wake-lock",
+      "tag": "iswc-wake-lock",
       "titulo": "Wake Lock",
       "categoria": "helpers",
       "estado": "ok",
@@ -2351,7 +2351,7 @@
       }
     },
     {
-      "tag": "is-offscreen-canvas",
+      "tag": "iswc-offscreen-canvas",
       "titulo": "Offscreen Canvas",
       "categoria": "helpers",
       "estado": "ok",
@@ -2372,7 +2372,7 @@
       }
     },
     {
-      "tag": "is-format-date",
+      "tag": "iswc-format-date",
       "titulo": "Formato de fecha",
       "categoria": "helpers",
       "estado": "ok",
@@ -2393,7 +2393,7 @@
       }
     },
     {
-      "tag": "is-format-number",
+      "tag": "iswc-format-number",
       "titulo": "Formato de número",
       "categoria": "helpers",
       "estado": "ok",
@@ -2414,7 +2414,7 @@
       }
     },
     {
-      "tag": "is-format-bytes",
+      "tag": "iswc-format-bytes",
       "titulo": "Formato de bytes",
       "categoria": "helpers",
       "estado": "ok",
@@ -2435,7 +2435,7 @@
       }
     },
     {
-      "tag": "is-intersection-observer",
+      "tag": "iswc-intersection-observer",
       "titulo": "Observador de intersección",
       "categoria": "helpers",
       "estado": "ok",
@@ -2456,7 +2456,7 @@
       }
     },
     {
-      "tag": "is-mutation-observer",
+      "tag": "iswc-mutation-observer",
       "titulo": "Observador de mutación",
       "categoria": "helpers",
       "estado": "ok",
@@ -2477,7 +2477,7 @@
       }
     },
     {
-      "tag": "is-resize-observer",
+      "tag": "iswc-resize-observer",
       "titulo": "Resize Observer",
       "categoria": "helpers",
       "estado": "ok",
@@ -2498,7 +2498,7 @@
       }
     },
     {
-      "tag": "is-md-render",
+      "tag": "iswc-md-render",
       "titulo": "Render Markdown",
       "categoria": "helpers",
       "estado": "ok",
@@ -2519,7 +2519,7 @@
       }
     },
     {
-      "tag": "is-md-editor",
+      "tag": "iswc-md-editor",
       "titulo": "Editor Markdown",
       "categoria": "helpers",
       "estado": "ok",
@@ -2540,7 +2540,7 @@
       }
     },
     {
-      "tag": "is-waterfall-chart",
+      "tag": "iswc-waterfall-chart",
       "titulo": "Waterfall Chart",
       "categoria": "data-viz",
       "estado": "ok",
@@ -2561,7 +2561,7 @@
       }
     },
     {
-      "tag": "is-funnel-chart",
+      "tag": "iswc-funnel-chart",
       "titulo": "Funnel Chart",
       "categoria": "data-viz",
       "estado": "ok",
@@ -2582,7 +2582,7 @@
       }
     },
     {
-      "tag": "is-class-diagram",
+      "tag": "iswc-class-diagram",
       "titulo": "Diagrama de clases",
       "categoria": "diagrams",
       "estado": "ok",
@@ -2603,7 +2603,7 @@
       }
     },
     {
-      "tag": "is-state-diagram",
+      "tag": "iswc-state-diagram",
       "titulo": "Diagrama de estados",
       "categoria": "diagrams",
       "estado": "ok",
@@ -2624,7 +2624,7 @@
       }
     },
     {
-      "tag": "is-er-diagram",
+      "tag": "iswc-er-diagram",
       "titulo": "Diagrama entidad-relación",
       "categoria": "diagrams",
       "estado": "ok",
@@ -2645,7 +2645,7 @@
       }
     },
     {
-      "tag": "is-block-diagram",
+      "tag": "iswc-block-diagram",
       "titulo": "Diagrama de bloques",
       "categoria": "diagrams",
       "estado": "ok",
@@ -2666,7 +2666,7 @@
       }
     },
     {
-      "tag": "is-component-diagram",
+      "tag": "iswc-component-diagram",
       "titulo": "Diagrama de componentes",
       "categoria": "diagrams",
       "estado": "ok",
@@ -2687,7 +2687,7 @@
       }
     },
     {
-      "tag": "is-treemap",
+      "tag": "iswc-treemap",
       "titulo": "Treemap",
       "categoria": "data-viz",
       "estado": "ok",
@@ -2708,7 +2708,7 @@
       }
     },
     {
-      "tag": "is-mindmap",
+      "tag": "iswc-mindmap",
       "titulo": "Mapa mental",
       "categoria": "diagrams",
       "estado": "ok",
@@ -2729,7 +2729,7 @@
       }
     },
     {
-      "tag": "is-gantt",
+      "tag": "iswc-gantt",
       "titulo": "Diagrama de Gantt",
       "categoria": "diagrams",
       "estado": "ok",
@@ -2750,7 +2750,7 @@
       }
     },
     {
-      "tag": "is-timeline",
+      "tag": "iswc-timeline",
       "titulo": "Línea de tiempo",
       "categoria": "diagrams",
       "estado": "ok",
@@ -2771,7 +2771,7 @@
       }
     },
     {
-      "tag": "is-fab",
+      "tag": "iswc-fab",
       "titulo": "Floating Action Button",
       "categoria": "actions",
       "estado": "ok",
@@ -2792,7 +2792,7 @@
       }
     },
     {
-      "tag": "is-popconfirm",
+      "tag": "iswc-popconfirm",
       "titulo": "Popconfirm",
       "categoria": "feedback",
       "estado": "ok",
@@ -2813,7 +2813,7 @@
       }
     },
     {
-      "tag": "is-confirm-modal",
+      "tag": "iswc-confirm-modal",
       "titulo": "Confirm Modal",
       "categoria": "feedback",
       "estado": "ok",
@@ -2834,7 +2834,7 @@
       }
     },
     {
-      "tag": "is-pin-input",
+      "tag": "iswc-pin-input",
       "titulo": "Pin Input",
       "categoria": "forms",
       "estado": "ok",
@@ -2855,7 +2855,7 @@
       }
     },
     {
-      "tag": "is-stat",
+      "tag": "iswc-stat",
       "titulo": "Stat KPI",
       "categoria": "data",
       "estado": "ok",
@@ -2876,7 +2876,7 @@
       }
     },
     {
-      "tag": "is-transfer",
+      "tag": "iswc-transfer",
       "titulo": "Transfer",
       "categoria": "data",
       "estado": "ok",
@@ -2897,7 +2897,7 @@
       }
     },
     {
-      "tag": "is-transfer-item",
+      "tag": "iswc-transfer-item",
       "titulo": "Transfer Item",
       "categoria": "data",
       "estado": "ok",
@@ -2918,7 +2918,7 @@
       }
     },
     {
-      "tag": "is-gauge",
+      "tag": "iswc-gauge",
       "titulo": "Gauge",
       "categoria": "data-viz",
       "estado": "ok",
@@ -2939,7 +2939,7 @@
       }
     },
     {
-      "tag": "is-kanban",
+      "tag": "iswc-kanban",
       "titulo": "Kanban",
       "categoria": "data",
       "estado": "ok",
@@ -2960,7 +2960,7 @@
       }
     },
     {
-      "tag": "is-kanban-column",
+      "tag": "iswc-kanban-column",
       "titulo": "Kanban Column",
       "categoria": "data",
       "estado": "ok",
@@ -2981,7 +2981,7 @@
       }
     },
     {
-      "tag": "is-kanban-card",
+      "tag": "iswc-kanban-card",
       "titulo": "Kanban Card",
       "categoria": "data",
       "estado": "ok",
@@ -3002,7 +3002,7 @@
       }
     },
     {
-      "tag": "is-context-menu",
+      "tag": "iswc-context-menu",
       "titulo": "Context Menu",
       "categoria": "actions",
       "estado": "ok",
@@ -3023,7 +3023,7 @@
       }
     },
     {
-      "tag": "is-speed-dial",
+      "tag": "iswc-speed-dial",
       "titulo": "Speed Dial",
       "categoria": "actions",
       "estado": "ok",
@@ -3044,7 +3044,7 @@
       }
     },
     {
-      "tag": "is-speed-dial-action",
+      "tag": "iswc-speed-dial-action",
       "titulo": "Speed Dial Action",
       "categoria": "actions",
       "estado": "ok",
@@ -3065,7 +3065,7 @@
       }
     },
     {
-      "tag": "is-barcode",
+      "tag": "iswc-barcode",
       "titulo": "Barcode",
       "categoria": "media",
       "estado": "ok",
@@ -3086,7 +3086,7 @@
       }
     },
     {
-      "tag": "is-barcode-scanner",
+      "tag": "iswc-barcode-scanner",
       "titulo": "Barcode Scanner",
       "categoria": "media",
       "estado": "ok",
@@ -3107,7 +3107,7 @@
       }
     },
     {
-      "tag": "is-image-editor",
+      "tag": "iswc-image-editor",
       "titulo": "Image Editor",
       "categoria": "media",
       "estado": "ok",
@@ -3128,7 +3128,7 @@
       }
     },
     {
-      "tag": "is-qrcode",
+      "tag": "iswc-qrcode",
       "titulo": "QR Code",
       "categoria": "media",
       "estado": "ok",
@@ -3149,7 +3149,7 @@
       }
     },
     {
-      "tag": "is-palette-selector",
+      "tag": "iswc-palette-selector",
       "titulo": "Palette Selector",
       "categoria": "feedback",
       "estado": "ok",
@@ -3170,7 +3170,7 @@
       }
     },
     {
-      "tag": "is-dock",
+      "tag": "iswc-dock",
       "titulo": "Dock",
       "categoria": "layout",
       "estado": "ok",
@@ -3191,7 +3191,7 @@
       }
     },
     {
-      "tag": "is-dock-item",
+      "tag": "iswc-dock-item",
       "titulo": "Dock Item",
       "categoria": "layout",
       "estado": "ok",
@@ -3212,7 +3212,7 @@
       }
     },
     {
-      "tag": "is-masked-input",
+      "tag": "iswc-masked-input",
       "titulo": "Masked Input",
       "categoria": "forms",
       "estado": "ok",
@@ -3233,7 +3233,7 @@
       }
     },
     {
-      "tag": "is-inline-edit",
+      "tag": "iswc-inline-edit",
       "titulo": "Inline Edit",
       "categoria": "forms",
       "estado": "ok",
@@ -3254,7 +3254,7 @@
       }
     },
     {
-      "tag": "is-mention",
+      "tag": "iswc-mention",
       "titulo": "Mention",
       "categoria": "forms",
       "estado": "ok",
@@ -3275,7 +3275,7 @@
       }
     },
     {
-      "tag": "is-duration-picker",
+      "tag": "iswc-duration-picker",
       "titulo": "Duration Picker",
       "categoria": "forms",
       "estado": "ok",
@@ -3296,7 +3296,7 @@
       }
     },
     {
-      "tag": "is-dropzone",
+      "tag": "iswc-dropzone",
       "titulo": "Dropzone",
       "categoria": "forms",
       "estado": "ok",
@@ -3317,7 +3317,7 @@
       }
     },
     {
-      "tag": "is-full-calendar",
+      "tag": "iswc-full-calendar",
       "titulo": "Full Calendar",
       "categoria": "forms",
       "estado": "ok",
@@ -3338,7 +3338,7 @@
       }
     },
     {
-      "tag": "is-signature",
+      "tag": "iswc-signature",
       "titulo": "Signature",
       "categoria": "forms",
       "estado": "ok",
@@ -3359,7 +3359,7 @@
       }
     },
     {
-      "tag": "is-rte",
+      "tag": "iswc-rte",
       "titulo": "Rich Text Editor",
       "categoria": "forms",
       "estado": "ok",
@@ -3380,7 +3380,7 @@
       }
     },
     {
-      "tag": "is-doc-editor",
+      "tag": "iswc-doc-editor",
       "titulo": "Document Editor",
       "categoria": "forms",
       "estado": "ok",
@@ -3401,7 +3401,7 @@
       }
     },
     {
-      "tag": "is-mega-menu",
+      "tag": "iswc-mega-menu",
       "titulo": "Mega Menu",
       "categoria": "navigation",
       "estado": "ok",
@@ -3422,7 +3422,7 @@
       }
     },
     {
-      "tag": "is-pivot-table",
+      "tag": "iswc-pivot-table",
       "titulo": "Pivot Table",
       "categoria": "data",
       "estado": "ok",
@@ -3443,7 +3443,7 @@
       }
     },
     {
-      "tag": "is-spreadsheet",
+      "tag": "iswc-spreadsheet",
       "titulo": "Spreadsheet",
       "categoria": "data",
       "estado": "ok",
@@ -3464,7 +3464,7 @@
       }
     },
     {
-      "tag": "is-ag-grid",
+      "tag": "iswc-ag-grid",
       "titulo": "AG Grid",
       "categoria": "data",
       "estado": "ok",
@@ -3485,7 +3485,7 @@
       }
     },
     {
-      "tag": "is-heatmap",
+      "tag": "iswc-heatmap",
       "titulo": "Heatmap",
       "categoria": "data-viz",
       "estado": "ok",
@@ -3506,7 +3506,7 @@
       }
     },
     {
-      "tag": "is-maps",
+      "tag": "iswc-maps",
       "titulo": "Maps",
       "categoria": "data-viz",
       "estado": "ok",
@@ -3527,7 +3527,7 @@
       }
     },
     {
-      "tag": "is-map-marker",
+      "tag": "iswc-map-marker",
       "titulo": "Map Marker",
       "categoria": "data-viz",
       "estado": "ok",
@@ -3548,7 +3548,7 @@
       }
     },
     {
-      "tag": "is-org-chart",
+      "tag": "iswc-org-chart",
       "titulo": "Org Chart",
       "categoria": "diagrams",
       "estado": "ok",
@@ -3569,7 +3569,7 @@
       }
     },
     {
-      "tag": "is-sankey-diagram",
+      "tag": "iswc-sankey-diagram",
       "titulo": "Diagrama de Sankey",
       "categoria": "diagrams",
       "estado": "ok",
@@ -3590,7 +3590,7 @@
       }
     },
     {
-      "tag": "is-quadrant-chart",
+      "tag": "iswc-quadrant-chart",
       "titulo": "Matriz de cuadrantes",
       "categoria": "diagrams",
       "estado": "ok",
@@ -3611,7 +3611,7 @@
       }
     },
     {
-      "tag": "is-venn-diagram",
+      "tag": "iswc-venn-diagram",
       "titulo": "Diagrama de Venn",
       "categoria": "diagrams",
       "estado": "ok",
@@ -3632,7 +3632,7 @@
       }
     },
     {
-      "tag": "is-use-case-diagram",
+      "tag": "iswc-use-case-diagram",
       "titulo": "Diagrama de casos de uso",
       "categoria": "diagrams",
       "estado": "ok",
@@ -3653,7 +3653,7 @@
       }
     },
     {
-      "tag": "is-swimlane-diagram",
+      "tag": "iswc-swimlane-diagram",
       "titulo": "Diagrama de carriles",
       "categoria": "diagrams",
       "estado": "ok",
@@ -3674,7 +3674,7 @@
       }
     },
     {
-      "tag": "is-journey-map",
+      "tag": "iswc-journey-map",
       "titulo": "Mapa de recorrido",
       "categoria": "diagrams",
       "estado": "ok",
@@ -3695,7 +3695,7 @@
       }
     },
     {
-      "tag": "is-command-palette",
+      "tag": "iswc-command-palette",
       "titulo": "Command Palette",
       "categoria": "overlays",
       "estado": "ok",
@@ -3716,7 +3716,7 @@
       }
     },
     {
-      "tag": "is-pdf-viewer",
+      "tag": "iswc-pdf-viewer",
       "titulo": "PDF Viewer",
       "categoria": "overlays",
       "estado": "ok",
@@ -3737,7 +3737,7 @@
       }
     },
     {
-      "tag": "is-window",
+      "tag": "iswc-window",
       "titulo": "Window",
       "categoria": "overlays",
       "estado": "ok",
@@ -3758,7 +3758,7 @@
       }
     },
     {
-      "tag": "is-preview-component",
+      "tag": "iswc-preview-component",
       "titulo": "Preview Component",
       "categoria": "preview",
       "estado": "ok",
@@ -3774,14 +3774,14 @@
         {
           "categoria": "json-schema",
           "severidad": "info",
-          "tag": "is-preview-component",
-          "mensaje": "No se encontró JSON de preview para <is-preview-component>.",
-          "sugerencia": "Creá un archivo de definición siguiendo el esquema is-preview/v1."
+          "tag": "iswc-preview-component",
+          "mensaje": "No se encontró JSON de preview para <iswc-preview-component>.",
+          "sugerencia": "Creá un archivo de definición siguiendo el esquema iswc-preview/v1."
         }
       ]
     },
     {
-      "tag": "is-preview-controls",
+      "tag": "iswc-preview-controls",
       "titulo": "Preview Controls",
       "categoria": "preview",
       "estado": "ok",
@@ -3797,9 +3797,9 @@
         {
           "categoria": "json-schema",
           "severidad": "info",
-          "tag": "is-preview-controls",
-          "mensaje": "No se encontró JSON de preview para <is-preview-controls>.",
-          "sugerencia": "Creá un archivo de definición siguiendo el esquema is-preview/v1."
+          "tag": "iswc-preview-controls",
+          "mensaje": "No se encontró JSON de preview para <iswc-preview-controls>.",
+          "sugerencia": "Creá un archivo de definición siguiendo el esquema iswc-preview/v1."
         }
       ]
     },
@@ -3863,21 +3863,21 @@
           "severidad": "info",
           "tag": "phase7",
           "ruta": "C:/ContaPyme/Personal/apps/is-webcomponents/src/pages/phase7.json",
-          "mensaje": "Demo con 9 tags distintos: is-button, is-icon, is-dialog, is-input, is-select, is-option, is-textarea, is-switch…. Considerá partirlo en varios bloques."
+          "mensaje": "Demo con 9 tags distintos: iswc-button, iswc-icon, iswc-dialog, iswc-input, iswc-select, iswc-option, iswc-textarea, iswc-switch…. Considerá partirlo en varios bloques."
         },
         {
           "categoria": "json-contenido",
           "severidad": "info",
           "tag": "phase7",
           "ruta": "C:/ContaPyme/Personal/apps/is-webcomponents/src/pages/phase7.json",
-          "mensaje": "Demo con 11 tags distintos: is-card, is-badge, is-dropdown, is-button, is-icon, is-dropdown-item, is-tag, is-tab-group…. Considerá partirlo en varios bloques."
+          "mensaje": "Demo con 11 tags distintos: iswc-card, iswc-badge, iswc-dropdown, iswc-button, iswc-icon, iswc-dropdown-item, iswc-tag, iswc-tab-group…. Considerá partirlo en varios bloques."
         },
         {
           "categoria": "json-contenido",
           "severidad": "info",
           "tag": "phase7",
           "ruta": "C:/ContaPyme/Personal/apps/is-webcomponents/src/pages/phase7.json",
-          "mensaje": "Demo con 11 tags distintos: is-button, is-icon, is-split-panel, is-tree, is-tree-item, is-drawer, is-tab-group, is-tab…. Considerá partirlo en varios bloques."
+          "mensaje": "Demo con 11 tags distintos: iswc-button, iswc-icon, iswc-split-panel, iswc-tree, iswc-tree-item, iswc-drawer, iswc-tab-group, iswc-tab…. Considerá partirlo en varios bloques."
         }
       ],
       "metricas": {

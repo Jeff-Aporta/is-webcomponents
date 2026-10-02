@@ -1,5 +1,5 @@
 // radio-group.test.mjs — tests exhaustivos del demo radio-group.html.
-// Cobertura: smoke + funcional (selección, is-change, roving tabindex)
+// Cobertura: smoke + funcional (selección, iswc-change, roving tabindex)
 // + accesibilidad (role=radiogroup, aria-orientation) + edge case (teclado, required, form reset).
 import assert from 'node:assert/strict';
 import { BASE_URL, newPage, close, waitReady, screenshot, report } from './lib/harness.mjs';
@@ -9,17 +9,17 @@ const URL = `${BASE_URL}/demos/forms/radio-group/radio-group.html`;
 const tests = [];
 
 tests.push({
-  name: 'smoke: <is-radio-group> definido, radiogroup y radios internos',
+  name: 'smoke: <iswc-radio-group> definido, radiogroup y radios internos',
   run: async (page) => {
     await page.goto(URL, { waitUntil: 'domcontentloaded' });
     await waitReady(page, 'data-radio-group-ready');
     const data = await page.evaluate(() => {
-      const g = document.querySelector('is-radio-group#group');
+      const g = document.querySelector('iswc-radio-group#group');
       const sr = g.shadowRoot;
       const base = sr.querySelector('.base');
-      const radios = [...g.querySelectorAll('is-radio')];
+      const radios = [...g.querySelectorAll('iswc-radio')];
       return {
-        defined: !!customElements.get('is-radio-group'),
+        defined: !!customElements.get('iswc-radio-group'),
         hasShadow: !!sr,
         baseRole: base.getAttribute('role'),
         baseOrient: base.getAttribute('aria-orientation'),
@@ -29,7 +29,7 @@ tests.push({
         radiosTabindex: radios.map((r) => r.getAttribute('tabindex')),
       };
     });
-    assert.equal(data.defined, true, 'is-radio-group debe estar definido');
+    assert.equal(data.defined, true, 'iswc-radio-group debe estar definido');
     assert.equal(data.hasShadow, true, 'debe tener shadow DOM');
     assert.equal(data.baseRole, 'radiogroup', 'el contenedor interno debe tener role=radiogroup');
     assert.equal(data.baseOrient, 'vertical', 'orientación por defecto debe ser vertical');
@@ -44,22 +44,22 @@ tests.push({
 });
 
 tests.push({
-  name: 'funcional: click en un radio → group.value refleja y emite is-change',
+  name: 'funcional: click en un radio → group.value refleja y emite iswc-change',
   run: async (page) => {
     await page.goto(URL, { waitUntil: 'domcontentloaded' });
     await waitReady(page, 'data-radio-group-ready');
     const data = await page.evaluate(async () => {
-      const g = document.querySelector('is-radio-group#group');
-      const target = [...g.querySelectorAll('is-radio')].find((r) => r.value === 'dos');
+      const g = document.querySelector('iswc-radio-group#group');
+      const target = [...g.querySelectorAll('iswc-radio')].find((r) => r.value === 'dos');
       const evt = await new Promise((resolve) => {
-        g.addEventListener('is-change', (e) => resolve(e.detail), { once: true });
+        g.addEventListener('iswc-change', (e) => resolve(e.detail), { once: true });
         target.click();
       });
       await new Promise((r) => setTimeout(r, 20));
       return {
         groupValue: g.value,
         radioChecked: target.checked,
-        othersChecked: [...g.querySelectorAll('is-radio')]
+        othersChecked: [...g.querySelectorAll('iswc-radio')]
           .filter((r) => r.value !== 'dos').map((r) => r.checked),
         eventValue: evt.value,
       };
@@ -67,7 +67,7 @@ tests.push({
     assert.equal(data.groupValue, 'dos', 'group.value debe ser "dos"');
     assert.equal(data.radioChecked, true, 'el radio "dos" debe estar checked');
     assert.ok(data.othersChecked.every((c) => c === false), 'los demás radios deben estar desmarcados');
-    assert.equal(data.eventValue, 'dos', 'is-change.detail.value debe ser "dos"');
+    assert.equal(data.eventValue, 'dos', 'iswc-change.detail.value debe ser "dos"');
   },
 });
 
@@ -77,10 +77,10 @@ tests.push({
     await page.goto(URL, { waitUntil: 'domcontentloaded' });
     await waitReady(page, 'data-radio-group-ready');
     const data = await page.evaluate(async () => {
-      const g = document.querySelector('is-radio-group#group');
+      const g = document.querySelector('iswc-radio-group#group');
       g.value = 'tres';
       await new Promise((r) => setTimeout(r, 20));
-      const checkedRadios = [...g.querySelectorAll('is-radio')]
+      const checkedRadios = [...g.querySelectorAll('iswc-radio')]
         .filter((r) => r.checked)
         .map((r) => r.value);
       return { groupValue: g.value, checkedRadios };
@@ -96,7 +96,7 @@ tests.push({
     await page.goto(URL, { waitUntil: 'domcontentloaded' });
     await waitReady(page, 'data-radio-group-ready');
     const data = await page.evaluate(() => {
-      const g = document.querySelector('is-radio-group#group-h');
+      const g = document.querySelector('iswc-radio-group#group-h');
       const base = g.shadowRoot.querySelector('.base');
       return {
         propOrient: g.orientation,
@@ -114,13 +114,13 @@ tests.push({
     await page.goto(URL, { waitUntil: 'domcontentloaded' });
     await waitReady(page, 'data-radio-group-ready');
     // Focus en el primer radio.
-    await page.focus('is-radio-group#group is-radio[value="uno"]');
+    await page.focus('iswc-radio-group#group iswc-radio[value="uno"]');
     await page.keyboard.press('ArrowDown');
     const data = await page.evaluate(async () => {
       // Esperar al próximo tick.
       await new Promise((r) => setTimeout(r, 30));
-      const g = document.querySelector('is-radio-group#group');
-      const checked = [...g.querySelectorAll('is-radio')].find((r) => r.checked);
+      const g = document.querySelector('iswc-radio-group#group');
+      const checked = [...g.querySelectorAll('iswc-radio')].find((r) => r.checked);
       return { value: g.value, checkedValue: checked?.value };
     });
     assert.equal(data.value, 'dos', 'después de ArrowDown el value debe ser "dos"');
@@ -134,7 +134,7 @@ tests.push({
     await page.goto(URL, { waitUntil: 'domcontentloaded' });
     await waitReady(page, 'data-radio-group-ready');
     const data = await page.evaluate(() => {
-      const g = document.querySelector('is-radio-group#group');
+      const g = document.querySelector('iswc-radio-group#group');
       g.value = '';
       return {
         valueMissing: g.validity?.valueMissing,
@@ -152,9 +152,9 @@ tests.push({
     await page.goto(URL, { waitUntil: 'domcontentloaded' });
     await waitReady(page, 'data-radio-group-ready');
     const data = await page.evaluate(() => {
-      const g = document.querySelector('is-radio-group#group-dis');
+      const g = document.querySelector('iswc-radio-group#group-dis');
       const before = g.value;
-      const target = [...g.querySelectorAll('is-radio')].find((r) => r.value === 'b');
+      const target = [...g.querySelectorAll('iswc-radio')].find((r) => r.value === 'b');
       target.click();
       return {
         before,
@@ -173,7 +173,7 @@ tests.push({
     await page.goto(URL, { waitUntil: 'domcontentloaded' });
     await waitReady(page, 'data-radio-group-ready');
     const data = await page.evaluate(() => {
-      const g = document.querySelector('is-radio-group#group-err');
+      const g = document.querySelector('iswc-radio-group#group-err');
       const base = g.shadowRoot.querySelector('.base');
       const errEl = g.shadowRoot.getElementById('error');
       return {
@@ -194,14 +194,14 @@ tests.push({
     await page.goto(URL, { waitUntil: 'domcontentloaded' });
     await waitReady(page, 'data-radio-group-ready');
     const data = await page.evaluate(async () => {
-      const g = document.querySelector('is-radio-group#group');
+      const g = document.querySelector('iswc-radio-group#group');
       g.value = 'tres';
       const form = document.createElement('form');
       g.parentNode.insertBefore(form, g);
       form.appendChild(g);
       form.reset();
       await new Promise((r) => setTimeout(r, 50));
-      return { value: g.value, checked: [...g.querySelectorAll('is-radio')].find((r) => r.checked)?.value };
+      return { value: g.value, checked: [...g.querySelectorAll('iswc-radio')].find((r) => r.checked)?.value };
     });
     assert.equal(data.value, 'uno', 'form.reset debe restaurar el value inicial');
     assert.equal(data.checked, 'uno', 'el radio "uno" debe volver a estar checked');

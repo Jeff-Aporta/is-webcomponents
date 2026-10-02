@@ -1,14 +1,14 @@
 ---
-tag: is-mindmap
+tag: iswc-mindmap
 tags:
-  - is-mindmap
+  - iswc-mindmap
 category: diagrams
 status: public
 source: ./mindmap.js
 style: ./mindmap.css
 preview: ./mindmap.json
 ---
-# `<is-mindmap>`
+# `<iswc-mindmap>`
 
 ## Propósito
 
@@ -16,7 +16,7 @@ Mapa mental en SVG, sin Mermaid. Declaras ideas con un `parent`
 opcional y el componente arma el árbol, reparte las ramas y las une
 con curvas suaves coloreadas por rama.
 
-Este módulo registra `<is-mindmap>`.
+Este módulo registra `<iswc-mindmap>`.
 
 ## Cuándo usarlo
 
@@ -35,7 +35,7 @@ import './mindmap.js';
 ## Ejemplo mínimo
 
 ```html
-<is-mindmap></is-mindmap>
+<iswc-mindmap></iswc-mindmap>
 ```
 
 ## API
@@ -67,8 +67,8 @@ import './mindmap.js';
 
 | Evento | detail | bubbles | composed | cancelable |
 | --- | --- | --- | --- | --- |
-| `is-render` | sí | sí | sí | no |
-| `is-open-viewer` | sí | sí | sí | sí |
+| `iswc-render` | sí | sí | sí | no |
+| `iswc-open-viewer` | sí | sí | sí | sí |
 
 ### Métodos y propiedades públicas
 
@@ -106,17 +106,17 @@ No declara integración form-associated propia en este módulo.
 
 Documentación de cabecera preservada desde fuente:
 
-> <is-mindmap> — mapa mental en SVG, sin Mermaid.
->   <is-mindmap>
+> <iswc-mindmap> — mapa mental en SVG, sin Mermaid.
+>   <iswc-mindmap>
 >     <script type="application/json">
 >       { "mindmap": { "layout": "radial", "nodes": [...] } }
 >     </script>
->   </is-mindmap>
-> Mismo esqueleto que <is-flowchart>: shadow DOM, slot JSON + MutationObserver,
+>   </iswc-mindmap>
+> Mismo esqueleto que <iswc-flowchart>: shadow DOM, slot JSON + MutationObserver,
 > tema por atributo `data-theme`, `color` (inline | viewer), lightbox propio.
 > Atributos: color (inline | viewer), open-on-click
 > Propiedades: payload, spec, layout
-> Eventos: is-render, is-open-viewer
+> Eventos: iswc-render, iswc-open-viewer
 
 ## Dependencias y componentes relacionados
 
@@ -129,7 +129,7 @@ Documentación de cabecera preservada desde fuente:
 - [`../_shared/icon-loader.js`](../_shared/icon-loader.js)
 - [`./diagram-kinds.js`](./diagram-kinds.js)
 
-Tags del módulo: `<is-mindmap>`.
+Tags del módulo: `<iswc-mindmap>`.
 
 ## Accesibilidad
 
@@ -138,7 +138,7 @@ Preservar semántica, foco, teclado, labels y ARIA. ARIA detectado: `aria-label`
 ## Ejemplo avanzado
 
 ```html
-<is-mindmap></is-mindmap>
+<iswc-mindmap></iswc-mindmap>
 ```
 
 ## Errores comunes

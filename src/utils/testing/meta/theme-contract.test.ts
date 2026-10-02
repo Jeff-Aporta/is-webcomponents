@@ -82,7 +82,7 @@ check(!/\b(?:height|padding(?:-inline)?|gap):\s*\d+(?:\.\d+)?px/.test(component)
 check(/<iframe\b/.test(html), '<iframe> del preview no encontrado en index.html');
 check(/id="themeToggle"/.test(html), '#themeToggle no encontrado');
 check(/id="fullscreenBtn"/.test(html), '#fullscreenBtn no encontrado');
-check(/<is-theme-toggle\b[^>]*id="themeToggle"/.test(html), '#themeToggle debe ser <is-theme-toggle>');
+check(/<iswc-theme-toggle\b[^>]*id="themeToggle"/.test(html), '#themeToggle debe ser <iswc-theme-toggle>');
 
 const WA_RE = /webawesome|Web Awesome|\bwa-[a-z]/i;
 check(!WA_RE.test(html), 'index.html contiene Web Awesome');

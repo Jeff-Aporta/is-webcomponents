@@ -3,7 +3,7 @@ import '../feedback/spinner.js';
 import { ElementBase } from '../../core/element-base.js';
 
 /**
- * <is-loading-overlay> — Capa de bloqueo a pantalla completa con spinner.
+ * <iswc-loading-overlay> — Capa de bloqueo a pantalla completa con spinner.
  *
  * Port de `src/lib/overlays/Loading.svelte` (ISP-SvelteComponents), donde el
  * diálogo se abre con `notClose`: NO se cierra con Escape, ni con clic fuera,
@@ -23,7 +23,7 @@ import { ElementBase } from '../../core/element-base.js';
  *   show() / hide() / toggle()
  *
  * Eventos (bubbles + composed)
- *   is-show / is-hide  detail: {}
+ *   iswc-show / iswc-hide  detail: {}
  *
  * CSS Parts: ::part(backdrop) ::part(panel) ::part(indicator) ::part(message)
  */
@@ -34,7 +34,7 @@ import { ElementBase } from '../../core/element-base.js';
     <div part="backdrop" class="backdrop" role="alertdialog" aria-modal="true" aria-busy="true" hidden>
       <div part="panel" class="panel">
         <div part="indicator" class="indicator">
-          <slot><is-spinner></is-spinner></slot>
+          <slot><iswc-spinner></iswc-spinner></slot>
         </div>
         <p part="message" class="message" hidden><span class="message-text"></span><slot name="message"></slot></p>
       </div>
@@ -43,7 +43,7 @@ import { ElementBase } from '../../core/element-base.js';
 
   const OBSERVED = ['open', 'message', 'scroll-lock'];
 
-  class IsLoadingOverlay extends ElementBase {
+  class IswcLoadingOverlay extends ElementBase {
     /** Personalización por atributo (ver `core/attrs.ts`). */
     static styleAttrs = {
     'backdrop-color': { prop: '--iswc-loading-backdrop', onlyColorValues: true },
@@ -115,7 +115,7 @@ import { ElementBase } from '../../core/element-base.js';
 
     // ---- privados ---------------------------------------------------------
 
-    #emit(name: 'is-show' | 'is-hide'): void {
+    #emit(name: 'iswc-show' | 'iswc-hide'): void {
       emit(this, name, {});
     }
 
@@ -124,7 +124,7 @@ import { ElementBase } from '../../core/element-base.js';
       this.#backdrop.hidden = !open;
       if (open) this.#lockScroll();
       else this.#releaseScroll();
-      this.#emit(open ? 'is-show' : 'is-hide');
+      this.#emit(open ? 'iswc-show' : 'iswc-hide');
     }
 
     #syncMessage = (): void => {
@@ -148,5 +148,5 @@ import { ElementBase } from '../../core/element-base.js';
     }
   }
 
-  defineElement('is-loading-overlay', IsLoadingOverlay, 'IsLoadingOverlay');
+  defineElement('iswc-loading-overlay', IswcLoadingOverlay, 'IswcLoadingOverlay');
 })();

@@ -9,14 +9,14 @@
  *   - debounce de render a microtask (`queueRender` / `updateComplete`).
  *   - MutationObserver de tema sobre <html> (class/data-theme/data-palette).
  *   - `isViewer`, `payload`/`spec`/`layout`.
- *   - apertura de un <is-diagram-lightbox> propio (`openOwnViewer(kind)`).
+ *   - apertura de un <iswc-diagram-lightbox> propio (`openOwnViewer(kind)`).
  *
  * Uso por la subclase:
  *
  *   import { DiagramElementBase } from '../_shared/diagram-element-base.js';
  *   import { adoptCss } from '../../core/element.js';
  *
- *   class IsFlowchart extends DiagramElementBase {
+ *   class IswcFlowchart extends DiagramElementBase {
  *     static get observedAttributes(): string[] {
  *       return [...DiagramElementBase.observedAttributes, 'mode'];
  *     }
@@ -82,7 +82,7 @@ export class DiagramElementBase extends ElementBase {
     shadow.innerHTML = /* html */ `
       <div part="base" class="wrap">
         <svg part="canvas" class="${svgClass}" xmlns="${SVG_NS}" role="img"></svg>
-        <div part="tooltip" class="${tooltipClass} dg-tooltip is-rich" hidden></div>
+        <div part="tooltip" class="${tooltipClass} dg-tooltip iswc-rich" hidden></div>
         <div class="slot-hidden"><slot></slot></div>
       </div>
     `;
@@ -180,7 +180,7 @@ export class DiagramElementBase extends ElementBase {
     throw new Error(`${this.constructor.name} debe implementar renderDiagram()`);
   }
 
-  /** Abre (o reutiliza) un <is-diagram-lightbox> propio con `kind` fijo y
+  /** Abre (o reutiliza) un <iswc-diagram-lightbox> propio con `kind` fijo y
    *  le pasa el payload actual. Mismo mecanismo que hoy en cada diagrama,
    *  parametrizado por el `kind` de `diagram-kinds.js`.
    *  Pasa de largo atributos opt-in (hoy `animation`) para que la copia
@@ -189,9 +189,9 @@ export class DiagramElementBase extends ElementBase {
     await import('../diagrams/diagram-lightbox.js');
     let lb = this.#ownViewer as HTMLElement & { payload: unknown; open: boolean } | null;
     if (!lb || !lb.isConnected) {
-      lb = document.createElement('is-diagram-lightbox') as unknown as HTMLElement & { payload: unknown; open: boolean };
+      lb = document.createElement('iswc-diagram-lightbox') as unknown as HTMLElement & { payload: unknown; open: boolean };
       lb.setAttribute('kind', kind);
-      lb.addEventListener('is-after-hide', () => lb!.remove());
+      lb.addEventListener('iswc-after-hide', () => lb!.remove());
       document.body.appendChild(lb);
       this.#ownViewer = lb;
     }

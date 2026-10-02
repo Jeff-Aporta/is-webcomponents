@@ -1,1 +1,1 @@
-:host{display:inline}:host{.number{display:inline;font-variant-numeric:tabular-nums}}
+:host{display:inline}:host .number{display:inline;font-variant-numeric:tabular-nums}

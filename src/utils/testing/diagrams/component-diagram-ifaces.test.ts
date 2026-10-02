@@ -1,6 +1,6 @@
 // tests/component-diagram-ifaces.test.ts
 //
-// Guardian del bug de ifaceById en <is-component-diagram> y de la
+// Guardian del bug de ifaceById en <iswc-component-diagram> y de la
 // síntesis de lollipops: un payload con `links` y sin `interfaces`
 // tiene que salir con O/C y path, o el PNG solo enseña cajas.
 
@@ -127,7 +127,7 @@ const connects = resolveComponentSpec({
 check(connects.edges.length >= 1, 'connects[] en el componente debe generar arista');
 check(connects.interfaces.length >= 2, 'connects[] debe sintetizar O y C');
 
-check(parseHttpEndpoint('GET /api/is-swagger').method === 'GET', 'parse GET');
+check(parseHttpEndpoint('GET /api/iswc-swagger').method === 'GET', 'parse GET');
 check(parseHttpEndpoint('POST /api/jwt').path === '/api/jwt', 'parse path');
 
 const fan = computeComponentLayout(resolveComponentSpec({

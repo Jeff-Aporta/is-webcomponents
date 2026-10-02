@@ -8,8 +8,8 @@
 
 | # | Grupo | Testable | Propuesta | Impacto |
 |---|---|---|---|---|
-| 1 | g-navigation | is-carousel | Autoplay pausa al hacer hover | 0 |
-| 2 | g-navigation | is-breadcrumb | JSON-LD BreadcrumbList | 0 |
+| 1 | g-navigation | iswc-carousel | Autoplay pausa al hacer hover | 0 |
+| 2 | g-navigation | iswc-breadcrumb | JSON-LD BreadcrumbList | 0 |
 | 3 | g14 | er-spec (entity-relationship) | Atributo multivaluado: ellipse doble | 0 |
 | 4 | g14 | value-formatter | cellText combina getCellValue + formatCellValue | 0 |
 | 5 | g14 | server-datasource (SQL generation + fake server) | buildJSONFiltro: startRow=0,endRow=100 → pagina... | 0 |
@@ -24,12 +24,12 @@
 ## Detalle de las top-15 (con descripción completa)
 
 ### 1. Autoplay pausa al hacer hover
-- **Testable**: `is-carousel`
+- **Testable**: `iswc-carousel`
 - **Grupo**: g-navigation · **Impacto**: 0
 - **Descripción**: mouseenter congela, mouseleave reanuda con remaining.
 
 ### 2. JSON-LD BreadcrumbList
-- **Testable**: `is-breadcrumb`
+- **Testable**: `iswc-breadcrumb`
 - **Grupo**: g-navigation · **Impacto**: 0
 - **Descripción**: *(gap SEO)*.
 

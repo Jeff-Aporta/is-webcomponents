@@ -1,11 +1,11 @@
 {
-  "$schema": "is-preview/v1",
-  "tag": "is-block-layout",
+  "$schema": "iswc-preview/v1",
+  "tag": "iswc-block-layout",
   "category": "isp",
-  "title": "<is-block-layout>",
+  "title": "<iswc-block-layout>",
   "titleHtml": true,
-  "styles": ".bl-title { font-size: calc(1rem + var(--lerpw, 0) * 0.75rem); margin: 0; }\r\n    is-block-layout[data-szw-lg] .bl-title { font-weight: 700; }",
-  "storageKey": "docs-is-block-layout",
+  "styles": ".bl-title { font-size: calc(1rem + var(--lerpw, 0) * 0.75rem); margin: 0; }\r\n    iswc-block-layout[data-szw-lg] .bl-title { font-weight: 700; }",
+  "storageKey": "docs-iswc-block-layout",
   "hasBehavior": true,
   "sections": [
     {
@@ -15,7 +15,7 @@
       "blocks": [
         {
           "kind": "demo",
-          "html": "<is-block-layout id=\"bl-intro\" style=\"border:1px solid var(--iswc-border);padding:1rem;resize:horizontal;overflow:auto;min-width:180px\">\r\n            <p>Redimensiona esta caja tirando de la esquina inferior derecha.</p>\r\n            <p>sizew actual: <strong id=\"bl-out\">—</strong></p>\r\n          </is-block-layout>",
+          "html": "<iswc-block-layout id=\"bl-intro\" style=\"border:1px solid var(--iswc-border);padding:1rem;resize:horizontal;overflow:auto;min-width:180px\">\r\n            <p>Redimensiona esta caja tirando de la esquina inferior derecha.</p>\r\n            <p>sizew actual: <strong id=\"bl-out\">—</strong></p>\r\n          </iswc-block-layout>",
           "controls": [
             {
               "control": "boolean",
@@ -41,38 +41,38 @@
         },
         {
           "kind": "demo",
-          "html": "<is-block-layout class=\"bl-demo\" style=\"border:1px dashed var(--iswc-border);padding:1rem;resize:horizontal;overflow:auto;min-width:180px\">\r\n            <p class=\"bl-title\">Título que crece con el ancho del contenedor</p>\r\n          </is-block-layout>"
+          "html": "<iswc-block-layout class=\"bl-demo\" style=\"border:1px dashed var(--iswc-border);padding:1rem;resize:horizontal;overflow:auto;min-width:180px\">\r\n            <p class=\"bl-title\">Título que crece con el ancho del contenedor</p>\r\n          </iswc-block-layout>"
         },
         {
           "kind": "code",
-          "code": "<is-block-layout>…</is-block-layout>\n\n/* light DOM */\nis-block-layout[data-szw-lg] .bl-title { font-weight: 700; }\n.bl-title { font-size: calc(1rem + var(--lerpw, 0) * 0.75rem); }"
+          "code": "<iswc-block-layout>…</iswc-block-layout>\n\n/* light DOM */\niswc-block-layout[data-szw-lg] .bl-title { font-weight: 700; }\n.bl-title { font-size: calc(1rem + var(--lerpw, 0) * 0.75rem); }"
         },
         {
           "kind": "html",
-          "html": "<is-heading level=\"2\">Inline y scroll</is-heading>"
+          "html": "<iswc-heading level=\"2\">Inline y scroll</iswc-heading>"
         },
         {
           "kind": "demo",
-          "html": "<is-block-layout inline style=\"border:1px solid var(--iswc-border);padding:0.5rem 1rem\">inline</is-block-layout>\r\n          <is-block-layout inline style=\"border:1px solid var(--iswc-border);padding:0.5rem 1rem\">otro inline</is-block-layout>"
+          "html": "<iswc-block-layout inline style=\"border:1px solid var(--iswc-border);padding:0.5rem 1rem\">inline</iswc-block-layout>\r\n          <iswc-block-layout inline style=\"border:1px solid var(--iswc-border);padding:0.5rem 1rem\">otro inline</iswc-block-layout>"
         },
         {
           "kind": "demo",
-          "html": "<is-block-layout cscroll style=\"border:1px solid var(--iswc-border);padding:1rem;max-height:6rem;width:100%\">\r\n            <p>Con <code class=\"code\">cscroll</code> la caja hace scroll con el scrollbar del tema.</p>\r\n            <p>Línea 2</p><p>Línea 3</p><p>Línea 4</p><p>Línea 5</p><p>Línea 6</p>\r\n          </is-block-layout>"
+          "html": "<iswc-block-layout cscroll style=\"border:1px solid var(--iswc-border);padding:1rem;max-height:6rem;width:100%\">\r\n            <p>Con <code class=\"code\">cscroll</code> la caja hace scroll con el scrollbar del tema.</p>\r\n            <p>Línea 2</p><p>Línea 3</p><p>Línea 4</p><p>Línea 5</p><p>Línea 6</p>\r\n          </iswc-block-layout>"
         }
       ]
     },
     {
       "id": "json",
       "title": "json2html · html2json",
-      "lede": "El cuerpo se define en JSON compacto <code class=\"code\">[tag, attrs?, …hijos]</code>\n          (mismo codec que <code class=\"code\">&lt;is-form&gt;</code>).",
+      "lede": "El cuerpo se define en JSON compacto <code class=\"code\">[tag, attrs?, …hijos]</code>\n          (mismo codec que <code class=\"code\">&lt;iswc-form&gt;</code>).",
       "blocks": [
         {
           "kind": "demo",
-          "html": "<is-block-layout id=\"blJson\" style=\"border:1px solid var(--iswc-border);padding:1rem;min-height:6rem\"></is-block-layout>\n          <div style=\"display:flex;gap:0.5rem;margin:0.75rem 0\">\n            <is-button id=\"blBtnToJson\" variant=\"outlined\" color=\"neutral\">html2json()</is-button>\n            <is-button id=\"blBtnFromJson\" color=\"brand\">fromJSON(body)</is-button>\n          </div>\n          <pre id=\"blJsonOut\" style=\"margin:0;padding:0.65rem 0.75rem;border:1px solid var(--iswc-border);border-radius:0.5rem;background:var(--iswc-bg-elev);font-family:ui-monospace,Menlo,Consolas,monospace;font-size:0.75rem;white-space:pre-wrap;max-height:12rem;overflow:auto\"></pre>"
+          "html": "<iswc-block-layout id=\"blJson\" style=\"border:1px solid var(--iswc-border);padding:1rem;min-height:6rem\"></iswc-block-layout>\n          <div style=\"display:flex;gap:0.5rem;margin:0.75rem 0\">\n            <iswc-button id=\"blBtnToJson\" variant=\"outlined\" color=\"neutral\">html2json()</iswc-button>\n            <iswc-button id=\"blBtnFromJson\" color=\"brand\">fromJSON(body)</iswc-button>\n          </div>\n          <pre id=\"blJsonOut\" style=\"margin:0;padding:0.65rem 0.75rem;border:1px solid var(--iswc-border);border-radius:0.5rem;background:var(--iswc-bg-elev);font-family:ui-monospace,Menlo,Consolas,monospace;font-size:0.75rem;white-space:pre-wrap;max-height:12rem;overflow:auto\"></pre>"
         },
         {
           "kind": "code",
-          "code": "block.fromJSON({\n  body: [\n    ['p', 'Hola desde JSON'],\n    ['is-text', { color: 'neutral' }, 'secundario'],\n  ],\n});\nblock.html2json();",
+          "code": "block.fromJSON({\n  body: [\n    ['p', 'Hola desde JSON'],\n    ['iswc-text', { color: 'neutral' }, 'secundario'],\n  ],\n});\nblock.html2json();",
           "lang": "js"
         }
       ]
@@ -117,7 +117,7 @@
               "ancho px · progreso sm→xl"
             ],
             [
-              "<code>is-breakpoint</code>",
+              "<code>iswc-breakpoint</code>",
               "detail <code>{ width, sizew, boolszw, lerpw(b0,b1) }</code>"
             ]
           ]

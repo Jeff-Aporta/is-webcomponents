@@ -23,13 +23,13 @@ tests.push({
     // Esperar a que se resuelvan los iconos (fetch asíncrono).
     await page.waitForTimeout(1500);
     const data = await page.evaluate(() => {
-      const list = [...document.querySelectorAll('main is-icon')];
+      const list = [...document.querySelectorAll('main iswc-icon')];
       return list.map((el) => {
         const inline = el.shadowRoot.querySelector('.inline');
         const svg = inline?.querySelector('svg');
         const hidden = inline?.hasAttribute('hidden');
         return {
-          registered: !!customElements.get('is-icon'),
+          registered: !!customElements.get('iswc-icon'),
           hasInline: !!inline,
           hasSvg: !!svg,
           hidden,
@@ -38,7 +38,7 @@ tests.push({
         };
       });
     });
-    assert.equal(data[0].registered, true, 'is-icon debe estar registrado');
+    assert.equal(data[0].registered, true, 'iswc-icon debe estar registrado');
     assert.ok(data.length >= 12, `esperaba >=12 iconos en main, hay ${data.length}`);
     // Al menos algunos iconos deben haberse cargado (los más comunes sí)
     const loadedCount = data.filter((d) => d.hasSvg && !d.hidden).length;
@@ -54,7 +54,7 @@ tests.push({
     await waitReady(page, 'data-icon-ready');
     await page.waitForTimeout(300);
     const data = await page.evaluate(() => {
-      const list = [...document.querySelectorAll('main is-icon[icon]')];
+      const list = [...document.querySelectorAll('main iswc-icon[icon]')];
       return list.map((el) => ({ id: el.icon, attr: el.getAttribute('icon') }));
     });
     assert.ok(data.length >= 6, `esperaba >=6 iconos con atributo icon, hay ${data.length}`);
@@ -72,7 +72,7 @@ tests.push({
     await waitReady(page, 'data-icon-ready');
     await page.waitForTimeout(300);
     const data = await page.evaluate(() => {
-      const el = document.querySelector('is-icon[name="github"]');
+      const el = document.querySelector('iswc-icon[name="github"]');
       return { iconProp: el.icon };
     });
     assert.equal(data.iconProp, 'mdi:github', `name="github" + library default mdi → "mdi:github", got "${data.iconProp}"`);
@@ -86,16 +86,16 @@ tests.push({
     await waitReady(page, 'data-icon-ready');
     await page.waitForTimeout(300);
     const before = await page.evaluate(() => {
-      const el = document.querySelector('is-icon[icon="mdi:home"]');
+      const el = document.querySelector('iswc-icon[icon="mdi:home"]');
       return { icon: el.icon };
     });
     await page.evaluate(() => {
-      const el = document.querySelector('is-icon[icon="mdi:home"]');
+      const el = document.querySelector('iswc-icon[icon="mdi:home"]');
       el.setAttribute('icon', 'mdi:cog-outline');
     });
     await page.waitForTimeout(300);
     const after = await page.evaluate(() => {
-      const el = document.querySelector('is-icon[icon="mdi:cog-outline"]');
+      const el = document.querySelector('iswc-icon[icon="mdi:cog-outline"]');
       return { icon: el.icon };
     });
     assert.equal(before.icon, 'mdi:home', 'estado inicial mdi:home');
@@ -111,7 +111,7 @@ tests.push({
     await page.waitForTimeout(2000); // esperar fetch
     const data = await page.evaluate(() => {
       // Buscar un icono cargado (no data-missing)
-      const loaded = [...document.querySelectorAll('main is-icon')].find((el) => !el.hasAttribute('data-missing') && !el.hasAttribute('data-loading'));
+      const loaded = [...document.querySelectorAll('main iswc-icon')].find((el) => !el.hasAttribute('data-missing') && !el.hasAttribute('data-loading'));
       if (!loaded) return { found: false };
       const svg = loaded.shadowRoot.querySelector('.inline svg');
       return {
@@ -137,7 +137,7 @@ tests.push({
     await page.goto(URL, { waitUntil: 'domcontentloaded' });
     await waitReady(page, 'data-icon-ready');
     const result = await page.evaluate(async () => {
-      const el = document.createElement('is-icon');
+      const el = document.createElement('iswc-icon');
       el.setAttribute('icon', 'mdi:this-icon-definitely-does-not-exist-xyz');
       document.body.appendChild(el);
       // Esperar a que termine el fetch (fallo)
@@ -161,9 +161,9 @@ tests.push({
     await waitReady(page, 'data-icon-ready');
     const data = await page.evaluate(() => {
       // Con label: el primero que tenga label="Inicio"
-      const withLabel = document.querySelector('is-icon[label="Inicio"]');
+      const withLabel = document.querySelector('iswc-icon[label="Inicio"]');
       // Sin label: en la sección de fondo claro (la .swatch-light) hay iconos sin label
-      const withoutLabel = document.querySelector('.swatch-light is-icon');
+      const withoutLabel = document.querySelector('.swatch-light iswc-icon');
       return {
         withLabel: {
           role: withLabel.getAttribute('role'),
@@ -191,7 +191,7 @@ tests.push({
     await page.goto(URL, { waitUntil: 'domcontentloaded' });
     await waitReady(page, 'data-icon-ready');
     const result = await page.evaluate(async () => {
-      const el = document.createElement('is-icon');
+      const el = document.createElement('iswc-icon');
       el.setAttribute('icon', 'mdi:home');
       document.body.appendChild(el);
       // Esperar un instante a que arranque el fetch

@@ -25,12 +25,12 @@ tests.push({
     await page.goto(URL, { waitUntil: 'domcontentloaded' });
     await waitReady(page, 'data-slider-ready');
     const data = await page.evaluate(() => {
-      const sl = [...document.querySelectorAll('is-slider')];
+      const sl = [...document.querySelectorAll('iswc-slider')];
       return sl.map((s) => {
         const sr = s.shadowRoot;
         const thumbs = [...sr.querySelectorAll('[role="slider"]')];
         return {
-          defined: !!customElements.get('is-slider'),
+          defined: !!customElements.get('iswc-slider'),
           hasShadow: !!sr,
           thumbCount: thumbs.length,
           firstRole: thumbs[0]?.getAttribute('role'),
@@ -45,7 +45,7 @@ tests.push({
       });
     });
     assert.equal(data.length, 5, 'debe haber 5 sliders');
-    assert.equal(data[0].defined, true, 'is-slider definido');
+    assert.equal(data[0].defined, true, 'iswc-slider definido');
     assert.equal(data[0].hasShadow, true, 'shadow root existe');
     assert.equal(data[0].thumbCount, 1, 'slider single tiene 1 thumb');
     assert.equal(data[0].firstRole, 'slider', 'thumb tiene role=slider');
@@ -71,9 +71,9 @@ tests.push({
     await page.goto(URL, { waitUntil: 'domcontentloaded' });
     await waitReady(page, 'data-slider-ready');
     const r = await page.evaluate(() => {
-      const s = document.querySelector('#sec-basico is-slider');
+      const s = document.querySelector('#sec-basico iswc-slider');
       const sr = s.shadowRoot;
-      // El setter de value en <is-slider> NO refleja al atributo automáticamente,
+      // El setter de value en <iswc-slider> NO refleja al atributo automáticamente,
       // sólo a #values + re-render. Hay que usar setAttribute para persistir
       // el atributo; aquí verificamos que la propiedad sí actualiza el DOM.
       s.value = 70;
@@ -90,7 +90,7 @@ tests.push({
 
     // Verificar que setAttribute sí refleja el atributo
     const afterSetAttr = await page.evaluate(() => {
-      const s = document.querySelector('#sec-basico is-slider');
+      const s = document.querySelector('#sec-basico iswc-slider');
       s.setAttribute('value', '85');
       return { prop: s.value, attr: s.getAttribute('value'), ariaNow: s.shadowRoot.querySelector('[role="slider"]').getAttribute('aria-valuenow') };
     });
@@ -106,7 +106,7 @@ tests.push({
     await page.goto(URL, { waitUntil: 'domcontentloaded' });
     await waitReady(page, 'data-slider-ready');
     const r = await page.evaluate(() => {
-      const s = document.querySelector('#sec-rango is-slider');
+      const s = document.querySelector('#sec-rango iswc-slider');
       const sr = s.shadowRoot;
       const thumbs = [...sr.querySelectorAll('[role="slider"]')];
       return {
@@ -129,7 +129,7 @@ tests.push({
     await page.goto(URL, { waitUntil: 'domcontentloaded' });
     await waitReady(page, 'data-slider-ready');
     const r = await page.evaluate(() => {
-      const s = document.querySelector('#sec-marks is-slider');
+      const s = document.querySelector('#sec-marks iswc-slider');
       const sr = s.shadowRoot;
       const labels = [...sr.querySelectorAll('[part="mark-label"]')];
       return labels.map((l) => l.textContent.trim());
@@ -144,7 +144,7 @@ tests.push({
     await page.goto(URL, { waitUntil: 'domcontentloaded' });
     await waitReady(page, 'data-slider-ready');
     const r = await page.evaluate(() => {
-      const s = document.querySelector('#sec-rango is-slider');
+      const s = document.querySelector('#sec-rango iswc-slider');
       const sr = s.shadowRoot;
       const thumbs = [...sr.querySelectorAll('[role="slider"]')];
       return thumbs.map((t) => t.getAttribute('aria-valuetext'));
@@ -160,11 +160,11 @@ tests.push({
     await page.goto(URL, { waitUntil: 'domcontentloaded' });
     await waitReady(page, 'data-slider-ready');
     await page.evaluate(() => {
-      const s = document.querySelector('#sec-basico is-slider');
+      const s = document.querySelector('#sec-basico iswc-slider');
       s.shadowRoot.querySelector('[role="slider"]').focus();
     });
     const before = await page.evaluate(() => {
-      const s = document.querySelector('#sec-basico is-slider');
+      const s = document.querySelector('#sec-basico iswc-slider');
       return s.value;
     });
     assert.equal(before, 35, 'valor inicial 35');
@@ -172,7 +172,7 @@ tests.push({
     await page.keyboard.press('ArrowRight');
     await page.waitForTimeout(50);
     const up = await page.evaluate(() => {
-      const s = document.querySelector('#sec-basico is-slider');
+      const s = document.querySelector('#sec-basico iswc-slider');
       return s.value;
     });
     assert.equal(up, 40, 'ArrowRight: 35 + step(5) = 40');
@@ -181,7 +181,7 @@ tests.push({
     await page.keyboard.press('ArrowLeft');
     await page.waitForTimeout(50);
     const down = await page.evaluate(() => {
-      const s = document.querySelector('#sec-basico is-slider');
+      const s = document.querySelector('#sec-basico iswc-slider');
       return s.value;
     });
     assert.equal(down, 30, 'ArrowLeft x2: 40 - 5 - 5 = 30');
@@ -194,13 +194,13 @@ tests.push({
     await page.goto(URL, { waitUntil: 'domcontentloaded' });
     await waitReady(page, 'data-slider-ready');
     await page.evaluate(() => {
-      const s = document.querySelector('#sec-basico is-slider');
+      const s = document.querySelector('#sec-basico iswc-slider');
       s.shadowRoot.querySelector('[role="slider"]').focus();
     });
     await page.keyboard.press('End');
     await page.waitForTimeout(50);
     const atMax = await page.evaluate(() => {
-      const s = document.querySelector('#sec-basico is-slider');
+      const s = document.querySelector('#sec-basico iswc-slider');
       return s.value;
     });
     assert.equal(atMax, 100, 'End → max=100');
@@ -208,7 +208,7 @@ tests.push({
     await page.keyboard.press('Home');
     await page.waitForTimeout(50);
     const atMin = await page.evaluate(() => {
-      const s = document.querySelector('#sec-basico is-slider');
+      const s = document.querySelector('#sec-basico iswc-slider');
       return s.value;
     });
     assert.equal(atMin, 0, 'Home → min=0');
@@ -221,14 +221,14 @@ tests.push({
     await page.goto(URL, { waitUntil: 'domcontentloaded' });
     await waitReady(page, 'data-slider-ready');
     await page.evaluate(() => {
-      const s = document.querySelector('#sec-basico is-slider');
+      const s = document.querySelector('#sec-basico iswc-slider');
       s.shadowRoot.querySelector('[role="slider"]').focus();
     });
     // valor inicial 35, step=5, shiftStep default = step*10 = 50
     await page.keyboard.press('PageUp');
     await page.waitForTimeout(50);
     const up = await page.evaluate(() => {
-      const s = document.querySelector('#sec-basico is-slider');
+      const s = document.querySelector('#sec-basico iswc-slider');
       return s.value;
     });
     assert.equal(up, 85, `PageUp: 35 + shiftStep(50) = 85 (got ${up})`);
@@ -236,7 +236,7 @@ tests.push({
     await page.keyboard.press('PageDown');
     await page.waitForTimeout(50);
     const down = await page.evaluate(() => {
-      const s = document.querySelector('#sec-basico is-slider');
+      const s = document.querySelector('#sec-basico iswc-slider');
       return s.value;
     });
     assert.equal(down, 35, `PageDown: 85 - 50 = 35 (got ${down})`);
@@ -249,7 +249,7 @@ tests.push({
     await page.goto(URL, { waitUntil: 'domcontentloaded' });
     await waitReady(page, 'data-slider-ready');
     const r = await page.evaluate(() => {
-      const s = document.querySelector('#sec-required is-slider');
+      const s = document.querySelector('#sec-required iswc-slider');
       // quitar value para que sea "valueMissing"
       s.removeAttribute('value');
       return { required: s.required, valid: s.checkValidity() };
@@ -265,7 +265,7 @@ tests.push({
     await page.goto(URL, { waitUntil: 'domcontentloaded' });
     await waitReady(page, 'data-slider-ready');
     const r = await page.evaluate(() => {
-      const s = document.querySelector('#sec-disabled is-slider');
+      const s = document.querySelector('#sec-disabled iswc-slider');
       const sr = s.shadowRoot;
       const thumb = sr.querySelector('[role="slider"]');
       return {
@@ -286,7 +286,7 @@ tests.push({
     await page.goto(URL, { waitUntil: 'domcontentloaded' });
     await waitReady(page, 'data-slider-ready');
     const r = await page.evaluate(() => {
-      const s = document.querySelector('#sec-rango is-slider');
+      const s = document.querySelector('#sec-rango iswc-slider');
       s.disableSwap = true;
       s.value = [300, 100]; // intento swap
       return s.values;
@@ -294,7 +294,7 @@ tests.push({
     assert.deepEqual(r, [100, 300], 'disableSwap=true ordena ascendente');
     // Sin disableSwap, podría reordenarse; limpiamos
     await page.evaluate(() => {
-      const s = document.querySelector('#sec-rango is-slider');
+      const s = document.querySelector('#sec-rango iswc-slider');
       s.disableSwap = false;
       s.value = [50, 250];
     });
@@ -307,7 +307,7 @@ tests.push({
     await page.goto(URL, { waitUntil: 'domcontentloaded' });
     await waitReady(page, 'data-slider-ready');
     const r = await page.evaluate(() => {
-      const s = document.querySelector('#sec-marks is-slider');
+      const s = document.querySelector('#sec-marks iswc-slider');
       s.step = 'null';
       s.value = 17; // no es un mark
       return { value: s.value, markValues: s.marks.map((m) => m.value) };
@@ -324,11 +324,11 @@ tests.push({
     await page.goto(URL, { waitUntil: 'domcontentloaded' });
     await waitReady(page, 'data-slider-ready');
     await page.evaluate(() => {
-      const s = document.querySelector('#sec-basico is-slider');
+      const s = document.querySelector('#sec-basico iswc-slider');
       s.shadowRoot.querySelector('[role="slider"]').focus();
     });
     const before = await page.evaluate(() => {
-      const s = document.querySelector('#sec-basico is-slider');
+      const s = document.querySelector('#sec-basico iswc-slider');
       return s.value;
     });
     await page.keyboard.down('Shift');
@@ -336,7 +336,7 @@ tests.push({
     await page.keyboard.up('Shift');
     await page.waitForTimeout(50);
     const after = await page.evaluate(() => {
-      const s = document.querySelector('#sec-basico is-slider');
+      const s = document.querySelector('#sec-basico iswc-slider');
       return s.value;
     });
     assert.equal(after - before, 50, `Shift+ArrowRight suma shiftStep(50): ${before}→${after}`);

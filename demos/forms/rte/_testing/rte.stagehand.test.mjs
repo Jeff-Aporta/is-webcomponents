@@ -11,7 +11,7 @@ const results = [];
 async function checkDeterministic(page) {
   await page.waitForTimeout(200);
   const data = await page.evaluate(() => {
-    const rtes = [...document.querySelectorAll('main is-rte')];
+    const rtes = [...document.querySelectorAll('main iswc-rte')];
     return rtes.map((r, idx) => {
       const shadow = r.shadowRoot;
       const tb = shadow.querySelector('.toolbar');
@@ -93,7 +93,7 @@ try {
 // Rama opt-in con Stagehand LLM.
 // ─────────────────────────────────────────────────────────────────────────
 const VISUAL_RUBRIC = `
-Evalúa la calidad visual del editor de texto enriquecido (<is-rte>) que aparece en el screenshot.
+Evalúa la calidad visual del editor de texto enriquecido (<iswc-rte>) que aparece en el screenshot.
 
 Checklist (todas deben cumplirse; marca cada una PASS o FAIL):
 

@@ -1,7 +1,7 @@
 // textarea.stagehand.test.mjs — verificaciones visuales deterministas.
 //
 // Checks:
-//   1. COMPONENTE RENDERIZADO: <is-textarea> definido, shadow DOM, textarea
+//   1. COMPONENTE RENDERIZADO: <iswc-textarea> definido, shadow DOM, textarea
 //      nativo accesible.
 //   2. ELEMENTOS VISIBLES: cada textarea tiene label + textarea visibles.
 //   3. TEXTO LEGIBLE: labels y hints con font-size >= 8px.
@@ -16,11 +16,11 @@ const DEMOS = [
 async function checkDeterministic(page, demo) {
   await page.waitForTimeout(200);
 
-  const defined = await page.evaluate(() => !!customElements.get('is-textarea'));
-  assert.equal(defined, true, 'is-textarea debe estar definido');
+  const defined = await page.evaluate(() => !!customElements.get('iswc-textarea'));
+  assert.equal(defined, true, 'iswc-textarea debe estar definido');
 
   const data = await page.evaluate(() => {
-    const tas = [...document.querySelectorAll('is-textarea')];
+    const tas = [...document.querySelectorAll('iswc-textarea')];
     return tas.map((ta) => {
       const sr = ta.shadowRoot;
       const native = sr?.querySelector('textarea');
@@ -79,7 +79,7 @@ for (const demo of DEMOS) {
 }
 
 const VISUAL_RUBRIC = `
-Evalúa la calidad visual del demo del componente <is-textarea>.
+Evalúa la calidad visual del demo del componente <iswc-textarea>.
 
 Checklist (cada una PASS o FAIL):
 

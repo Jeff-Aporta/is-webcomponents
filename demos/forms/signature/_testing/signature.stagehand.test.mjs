@@ -11,7 +11,7 @@ const results = [];
 async function checkDeterministic(page) {
   await page.waitForTimeout(200);
   const data = await page.evaluate(() => {
-    const pads = [...document.querySelectorAll('main is-signature')];
+    const pads = [...document.querySelectorAll('main iswc-signature')];
     return pads.map((p, idx) => {
       const shadow = p.shadowRoot;
       const canvas = shadow.querySelector('canvas');
@@ -97,7 +97,7 @@ try {
 // Rama opt-in con Stagehand LLM.
 // ─────────────────────────────────────────────────────────────────────────
 const VISUAL_RUBRIC = `
-Evalúa la calidad visual del pad de firma (<is-signature>) que aparece en el screenshot.
+Evalúa la calidad visual del pad de firma (<iswc-signature>) que aparece en el screenshot.
 
 Checklist (todas deben cumplirse; marca cada una PASS o FAIL):
 

@@ -1,14 +1,14 @@
 ---
-tag: is-select
+tag: iswc-select
 tags:
-  - is-select
+  - iswc-select
 category: forms
 status: public
 source: ./select.js
 style: ./select.css
 preview: ./select.json
 ---
-# `<is-select>`
+# `<iswc-select>`
 
 ## Propósito
 
@@ -18,7 +18,7 @@ colors, error, selección múltiple con chips o checkmarks, agrupación, opcione
 El listbox vive en un <dialog> del top layer, así que nunca lo recorta
 el overflow de un ancestro.
 
-Este módulo registra `<is-select>`.
+Este módulo registra `<iswc-select>`.
 
 ## Cuándo usarlo
 
@@ -37,10 +37,10 @@ import './select.js';
 ## Ejemplo mínimo
 
 ```html
-<is-select label="Ciudad" name="city" placeholder="Elige una ciudad…" clearable>
-<is-option value="bog">Bogotá</is-option>
-<is-option value="med">Medellín</is-option>
-</is-select>
+<iswc-select label="Ciudad" name="city" placeholder="Elige una ciudad…" clearable>
+<iswc-option value="bog">Bogotá</iswc-option>
+<iswc-option value="med">Medellín</iswc-option>
+</iswc-select>
 ```
 
 ## API
@@ -111,9 +111,9 @@ import './select.js';
 
 | Evento | detail | bubbles | composed | cancelable |
 | --- | --- | --- | --- | --- |
-| `is-change` | sí | sí | sí | no |
-| `is-show` | sí | sí | sí | no |
-| `is-hide` | sí | sí | sí | no |
+| `iswc-change` | sí | sí | sí | no |
+| `iswc-show` | sí | sí | sí | no |
+| `iswc-hide` | sí | sí | sí | no |
 
 ### Métodos y propiedades públicas
 
@@ -191,15 +191,15 @@ Participa mediante ElementInternals/helpers form-associated; respetar name, valu
 
 Documentación de cabecera preservada desde fuente:
 
-> <is-select> — Select form-associated con listbox en <dialog modal> (top layer),
+> <iswc-select> — Select form-associated con listbox en <dialog modal> (top layer),
 > así el desplegable nunca se pierde por overflow/clipping de ancestros.
 > Atributos: name, value, multiple, placeholder, label, hint, disabled, required,
 >            clearable, open, variant, checkmarks, selection-display, limit-tags,
 >            error, error-text, full-width, auto-width, max-visible
-> Slots: default (<is-option>), label, hint, start
+> Slots: default (<iswc-option>), label, hint, start
 > Parts: base, trigger, listbox, group, group-label, option, check, option-start,
 >        option-description, tag, clear, label, hint, error-text
-> Events: is-change { value, values }, is-show, is-hide
+> Events: iswc-change { value, values }, iswc-show, iswc-hide
 > En modo `multiple` con `name`, el valor de formulario se envía como FormData
 > con una entrada por opción seleccionada.
 
@@ -211,7 +211,7 @@ Documentación de cabecera preservada desde fuente:
 - [`../feedback/tag.js`](../feedback/tag.js)
 - [`../_shared/form-associated.js`](../_shared/form-associated.js)
 
-Tags del módulo: `<is-select>`.
+Tags del módulo: `<iswc-select>`.
 
 ## Accesibilidad
 
@@ -220,8 +220,8 @@ Preservar semántica, foco, teclado, labels y ARIA. ARIA detectado: `aria-haspop
 ## Ejemplo avanzado
 
 ```html
-<is-select variant="filled" label="filled">…</is-select>
-<is-select variant="underlined" label="underlined">…</is-select>
+<iswc-select variant="filled" label="filled">…</iswc-select>
+<iswc-select variant="underlined" label="underlined">…</iswc-select>
 ```
 
 ## Errores comunes

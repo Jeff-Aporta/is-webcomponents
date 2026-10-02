@@ -1,4 +1,4 @@
-// 06-modales.test.ts: tests UI/UX de <is-dialog> y <is-drawer>.
+// 06-modales.test.ts: tests UI/UX de <iswc-dialog> y <iswc-drawer>.
 //
 // Implementa el top-10 priorizado por el subagente auditor de layout:
 //
@@ -7,7 +7,7 @@
 //     2. Escape cierra Y restaura foco al trigger original
 //     3. Initial focus al primer focuseable / autofocus al [autofocus]
 //     4. Backdrop cierra SOLO con `light-dismiss`
-//     5. `is-hide` cancelable dispara shake animation (preventDefault)
+//     5. `iswc-hide` cancelable dispara shake animation (preventDefault)
 //     6. backdrop-variant="basic" aplica oscuridad + blur
 //     7. role="dialog" + aria-modal="true" siempre presentes
 //
@@ -17,7 +17,7 @@
 //    10. data-drawer="close" cierra el drawer desde descendientes
 //
 // Estrategia Stagehand:
-//   - abrirGaleria(page, 'is-dialog' | 'is-drawer') carga el docs con demos reales
+//   - abrirGaleria(page, 'iswc-dialog' | 'iswc-drawer') carga el docs con demos reales
 //   - page.evaluate ejecuta JS en el navegador para inspeccionar DOM/Shadow DOM
 //   - page.locator(...).click() interactúa con elementos (penetra shadow)
 //   - page.keyboard.press(...) simula teclado
@@ -54,12 +54,12 @@ function pagina(): Page {
 }
 
 /**
- * Abre el primer <is-dialog> o <is-dialog id="..."> del demo, devolviendo
+ * Abre el primer <iswc-dialog> o <iswc-dialog id="..."> del demo, devolviendo
  * el id y referencia del wrapper. Penetra shadow DOM.
  */
 async function primerDialog(page: Page): Promise<{ id: string; open: boolean } | null> {
   return (await page.evaluate(() => {
-    const dlgs = [...document.querySelectorAll<HTMLElement>('#previewHost is-dialog')];
+    const dlgs = [...document.querySelectorAll<HTMLElement>('#previewHost iswc-dialog')];
     if (!dlgs.length) return null;
     const d = dlgs[0];
     return { id: d.id || '(no-id)', open: d.hasAttribute('open') };
@@ -115,14 +115,14 @@ testE2E(
   async (t) => {
     if (!DISPONIBLE) return t.skip('faltan variables E2E');
     const page = pagina();
-    await abrirGaleria(page, 'is-dialog', { ms: 4000 });
+    await abrirGaleria(page, 'iswc-dialog', { ms: 4000 });
     const dlgs = await page.evaluate(() => {
-      const all = [...document.querySelectorAll<HTMLElement>('#previewHost is-dialog')];
+      const all = [...document.querySelectorAll<HTMLElement>('#previewHost iswc-dialog')];
       return all
         .map((d) => ({ id: d.id, open: d.hasAttribute('open'), label: d.getAttribute('label') }))
         .filter((x) => x.id);
     });
-    assert.ok(dlgs.length >= 1, `el docs debe montar al menos 1 is-dialog con id, hay ${dlgs.length}`);
+    assert.ok(dlgs.length >= 1, `el docs debe montar al menos 1 iswc-dialog con id, hay ${dlgs.length}`);
     const target = dlgs.find((d) => d.open) ?? dlgs[0];
     if (!target.open) await abrirDialogPorId(page, target.id);
     assert.ok(await esperarAbierto(page, target.id), `dialog ${target.id} debe abrir`);
@@ -158,15 +158,15 @@ testE2E(
   async (t) => {
     if (!DISPONIBLE) return t.skip('faltan variables E2E');
     const page = pagina();
-    await abrirGaleria(page, 'is-dialog', { ms: 4000 });
+    await abrirGaleria(page, 'iswc-dialog', { ms: 4000 });
     // Buscar el trigger (botón "Abrir") del primer dialog y focusearlo.
     const triggerInfo = (await page.evaluate(() => {
-      const dlg = document.querySelector<HTMLElement>('#previewHost is-dialog[id]');
+      const dlg = document.querySelector<HTMLElement>('#previewHost iswc-dialog[id]');
       if (!dlg) return null;
       // El trigger suele estar en el slot default del demo, antes del dialog
-      // o como un <is-button> con onclick.
-      const triggerBtn = dlg.previousElementSibling?.querySelector?.('is-button,button')
-        ?? dlg.parentElement?.querySelector?.('is-button[onclick]');
+      // o como un <iswc-button> con onclick.
+      const triggerBtn = dlg.previousElementSibling?.querySelector?.('iswc-button,button')
+        ?? dlg.parentElement?.querySelector?.('iswc-button[onclick]');
       if (!triggerBtn) return null;
       (triggerBtn as HTMLElement).setAttribute('data-test-trigger', '1');
       return { triggerId: triggerBtn.id || '(no-id)', dialogId: dlg.id };
@@ -207,9 +207,9 @@ testE2E(
   async (t) => {
     if (!DISPONIBLE) return t.skip('faltan variables E2E');
     const page = pagina();
-    await abrirGaleria(page, 'is-dialog', { ms: 4000 });
+    await abrirGaleria(page, 'iswc-dialog', { ms: 4000 });
     const target = await page.evaluate(() => {
-      const dlg = document.querySelector<HTMLElement>('#previewHost is-dialog[id]');
+      const dlg = document.querySelector<HTMLElement>('#previewHost iswc-dialog[id]');
       if (!dlg) return null;
       return dlg.id;
     }) as string | null;
@@ -239,10 +239,10 @@ testE2E(
   async (t) => {
     if (!DISPONIBLE) return t.skip('faltan variables E2E');
     const page = pagina();
-    await abrirGaleria(page, 'is-dialog', { ms: 4000 });
+    await abrirGaleria(page, 'iswc-dialog', { ms: 4000 });
     // Hay dos dialogs relevantes: uno sin light-dismiss (estándar) y uno CON.
     const dialogs = await page.evaluate(() => {
-      const all = [...document.querySelectorAll<HTMLElement>('#previewHost is-dialog[id]')];
+      const all = [...document.querySelectorAll<HTMLElement>('#previewHost iswc-dialog[id]')];
       return all.map((d) => ({
         id: d.id,
         lightDismiss: d.hasAttribute('light-dismiss'),
@@ -288,19 +288,19 @@ testE2E(
 );
 
 // ═══════════════════════════════════════════════════════════════════════
-// DIALOG #5: is-hide cancelable dispara shake (preventDefault)
+// DIALOG #5: iswc-hide cancelable dispara shake (preventDefault)
 // ═══════════════════════════════════════════════════════════════════════
 testE2E(
-  'dialog: is-hide cancelable con preventDefault impide cierre',
+  'dialog: iswc-hide cancelable con preventDefault impide cierre',
   { timeout: 60000 },
   async (t) => {
     if (!DISPONIBLE) return t.skip('faltan variables E2E');
     const page = pagina();
-    await abrirGaleria(page, 'is-dialog', { ms: 4000 });
+    await abrirGaleria(page, 'iswc-dialog', { ms: 4000 });
     // El dialog dlgPrevent ("¿Salir sin guardar?") usa preventDefault
-    // en su listener de is-hide — el código del demo así lo implementa.
+    // en su listener de iswc-hide — el código del demo así lo implementa.
     const preventId = await page.evaluate(() => {
-      const d = document.querySelector<HTMLElement>('#previewHost is-dialog[id="dlgPrevent"]');
+      const d = document.querySelector<HTMLElement>('#previewHost iswc-dialog[id="dlgPrevent"]');
       return d?.id ?? null;
     });
     assert.ok(preventId, 'docs debe tener dialog dlgPrevent (cancelable)');
@@ -308,12 +308,12 @@ testE2E(
       (document.getElementById(id) as unknown as { show: () => void }).show();
     }, preventId);
     await esperarAbierto(page, preventId);
-    // Disparamos Escape → is-hide se emite, listener preventDefault → shake.
+    // Disparamos Escape → iswc-hide se emite, listener preventDefault → shake.
     await page.keyboard.press('Escape');
     await esperarMs(500);
     const sigueAbierto = await page.evaluate((id: string) =>
       document.getElementById(id)?.hasAttribute('open') ?? false, preventId);
-    assert.ok(sigueAbierto, 'preventDefault en is-hide debe impedir el cierre (cancelable)');
+    assert.ok(sigueAbierto, 'preventDefault en iswc-hide debe impedir el cierre (cancelable)');
     // Forzamos el cierre con show=hide del consumidor (botón "Guardar y salir").
     const cerradoManual = await page.evaluate((id: string) => {
       const d = document.getElementById(id) as unknown as { hide: () => void };
@@ -334,9 +334,9 @@ testE2E(
   async (t) => {
     if (!DISPONIBLE) return t.skip('faltan variables E2E');
     const page = pagina();
-    await abrirGaleria(page, 'is-dialog', { ms: 4000 });
+    await abrirGaleria(page, 'iswc-dialog', { ms: 4000 });
     const styleBasic = await page.evaluate(() => {
-      const d = document.querySelector<HTMLElement>('#previewHost is-dialog[backdrop-variant="basic"]');
+      const d = document.querySelector<HTMLElement>('#previewHost iswc-dialog[backdrop-variant="basic"]');
       if (!d) return null;
       const bd = d.shadowRoot?.querySelector('.backdrop') as HTMLElement | null;
       if (!bd) return null;
@@ -366,9 +366,9 @@ testE2E(
 testE2E('dialog: role="dialog" y aria-modal="true" siempre presentes', { timeout: 60000 }, async (t) => {
   if (!DISPONIBLE) return t.skip('faltan variables E2E');
   const page = pagina();
-  await abrirGaleria(page, 'is-dialog', { ms: 4000 });
+  await abrirGaleria(page, 'iswc-dialog', { ms: 4000 });
   const result = await page.evaluate(() => {
-    const dialogs = [...document.querySelectorAll<HTMLElement>('#previewHost is-dialog')];
+    const dialogs = [...document.querySelectorAll<HTMLElement>('#previewHost iswc-dialog')];
     const issues: string[] = [];
     for (const d of dialogs) {
       const inner = d.shadowRoot?.querySelector('.dialog, [role="dialog"]') as HTMLElement | null;
@@ -395,9 +395,9 @@ testE2E(
   async (t) => {
     if (!DISPONIBLE) return t.skip('faltan variables E2E');
     const page = pagina();
-    await abrirGaleria(page, 'is-drawer', { ms: 4000 });
+    await abrirGaleria(page, 'iswc-drawer', { ms: 4000 });
     const samples = (await page.evaluate(() => {
-      const all = [...document.querySelectorAll<HTMLElement>('#previewHost is-drawer[id]')];
+      const all = [...document.querySelectorAll<HTMLElement>('#previewHost iswc-drawer[id]')];
       return all.map((d) => {
         const dr = d.shadowRoot?.querySelector('.drawer') as HTMLElement | null;
         if (!dr) return null;
@@ -435,10 +435,10 @@ testE2E(
   async (t) => {
     if (!DISPONIBLE) return t.skip('faltan variables E2E');
     const page = pagina();
-    await abrirGaleria(page, 'is-drawer', { ms: 4000 });
+    await abrirGaleria(page, 'iswc-drawer', { ms: 4000 });
     // Buscar 2 drawers (uno start, uno end).
     const pair = await page.evaluate(() => {
-      const all = [...document.querySelectorAll<HTMLElement>('#previewHost is-drawer[id]')];
+      const all = [...document.querySelectorAll<HTMLElement>('#previewHost iswc-drawer[id]')];
       const start = all.find((d) => d.getAttribute('placement') === 'start');
       const end = all.find((d) => (d.getAttribute('placement') ?? 'end') === 'end');
       return {
@@ -491,10 +491,10 @@ testE2E(
   async (t) => {
     if (!DISPONIBLE) return t.skip('faltan variables E2E');
     const page = pagina();
-    await abrirGaleria(page, 'is-drawer', { ms: 4000 });
+    await abrirGaleria(page, 'iswc-drawer', { ms: 4000 });
     // Encontrar drawer con un [data-drawer="close"] en su slot.
     const found = (await page.evaluate(() => {
-      const drawers = [...document.querySelectorAll<HTMLElement>('#previewHost is-drawer[id]')];
+      const drawers = [...document.querySelectorAll<HTMLElement>('#previewHost iswc-drawer[id]')];
       for (const d of drawers) {
         const closer = d.querySelector('[data-drawer="close"]') as HTMLElement | null;
         if (closer) {

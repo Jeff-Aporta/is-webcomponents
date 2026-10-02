@@ -1,4 +1,4 @@
-// demo.stagehand.test.mjs — checks deterministas para is-demo (light DOM shell).
+// demo.stagehand.test.mjs — checks deterministas para iswc-demo (light DOM shell).
 import assert from 'node:assert/strict';
 import { BASE_URL, newPage, close, waitReady, screenshot, report, maybeStagehand } from './lib/harness.mjs';
 
@@ -11,7 +11,7 @@ const results = [];
 async function checkDeterministic(page, demo) {
   await page.waitForTimeout(200);
   const data = await page.evaluate(() => {
-    const demos = [...document.querySelectorAll('main is-demo')];
+    const demos = [...document.querySelectorAll('main iswc-demo')];
     return demos.map((d, idx) => {
       const r = d.getBoundingClientRect();
       const heading = d.querySelector(':scope > .demo__heading');
@@ -54,11 +54,11 @@ for (const demo of DEMOS) {
 }
 
 const VISUAL_RUBRIC = `
-Evalúa la calidad visual del shell <is-demo> en el screenshot.
+Evalúa la calidad visual del shell <iswc-demo> en el screenshot.
 
 Checklist (todas deben cumplirse; marca cada una PASS o FAIL):
 
-1. RENDERIZA: cada <is-demo> muestra su contenido (heading opcional + cuerpo) en el DOM visible.
+1. RENDERIZA: cada <iswc-demo> muestra su contenido (heading opcional + cuerpo) en el DOM visible.
 
 2. LAYOUT NO VACÍO: los shells tienen tamaño visible (alto/ancho > 0).
 

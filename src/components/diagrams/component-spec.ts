@@ -20,7 +20,7 @@
  * requiere". Si el usuario prefiere una arista cruda entre componentes, basta
  * con no declarar `via` y el router la resuelve de borde a borde.
  *
- *   <is-component-diagram>
+ *   <iswc-component-diagram>
  *     <script type="application/json">
  *       {
  *         "componentDiagram": {
@@ -41,7 +41,7 @@
  *         }
  *       }
  *     </script>
- *   </is-component-diagram>
+ *   </iswc-component-diagram>
  *
  * Decisiones que NO son negociables sin pedir:
  *   - tema claro por defecto (prefijo `theme-light` en <html>).

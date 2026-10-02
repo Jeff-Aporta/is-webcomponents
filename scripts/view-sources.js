@@ -1,7 +1,7 @@
 /**
  * view-sources.js — visor full-page de fuentes JS / CSS / MD del componente.
  *
- * En cada `<is-demo>` / `.demo` puede haber un botón que abre un `<is-dialog>`
+ * En cada `<iswc-demo>` / `.demo` puede haber un botón que abre un `<iswc-dialog>`
  * a viewport completo con tabs (JS · CSS · MD). El contenido es el archivo
  * fuente del repo (local same-origin o raw.githubusercontent).
  *
@@ -24,7 +24,7 @@ import {
   localSourceUrl,
 } from '../src/utils/source-paths.js';
 
-const DIALOG_ID = 'is-view-sources-dialog';
+const DIALOG_ID = 'iswc-view-sources-dialog';
 const KINDS = /** @type {const} */ (['js', 'css', 'md']);
 const LANG = { js: 'javascript', css: 'css', md: 'markdown' };
 
@@ -59,9 +59,9 @@ function ensureDialog() {
   }
   if (dlg) return dlg;
 
-  dlg = document.createElement('is-dialog');
+  dlg = document.createElement('iswc-dialog');
   dlg.id = DIALOG_ID;
-  dlg.className = 'is-view-sources';
+  dlg.className = 'iswc-view-sources';
   dlg.setAttribute('light-dismiss', '');
   dlg.setAttribute('width', '100vw');
   dlg.setAttribute('spacing', '0');
@@ -71,42 +71,42 @@ function ensureDialog() {
     <span slot="label" class="vs-title">Fuentes</span>
     <div slot="header-actions" class="vs-header-actions">
       <a class="vs-open" id="vsOpenRaw" href="#" target="_blank" rel="noopener noreferrer" hidden>Abrir</a>
-      <is-copy-button id="vsCopy" copy-label="Copiar" success-label="Copiado"
-                      tooltip-placement="bottom"></is-copy-button>
+      <iswc-copy-button id="vsCopy" copy-label="Copiar" success-label="Copiado"
+                      tooltip-placement="bottom"></iswc-copy-button>
     </div>
     <div class="vs-body">
       <a class="vs-path" id="vsPath" href="#" target="_blank" rel="noopener noreferrer" hidden></a>
-      <is-tab-group class="vs-tabs" id="vsTabs" active="js" activation="manual"
+      <iswc-tab-group class="vs-tabs" id="vsTabs" active="js" activation="manual"
                     without-scroll-controls aria-label="Tipo de fuente">
-        <is-tab slot="nav" panel="js">JS</is-tab>
-        <is-tab slot="nav" panel="css">CSS</is-tab>
-        <is-tab slot="nav" panel="md">MD</is-tab>
+        <iswc-tab slot="nav" panel="js">JS</iswc-tab>
+        <iswc-tab slot="nav" panel="css">CSS</iswc-tab>
+        <iswc-tab slot="nav" panel="md">MD</iswc-tab>
         ${KINDS.map((k) => `
-          <is-tab-panel name="${k}">
+          <iswc-tab-panel name="${k}">
             <div class="vs-panel" data-kind="${k}">
-              <is-code class="code vs-pre is-code-view" data-lang="${LANG[k]}" data-kind="${k}"
+              <iswc-code class="code vs-pre iswc-code-view" data-lang="${LANG[k]}" data-kind="${k}"
                 readonly compact wrap line-numbers="false"
-                lang="${LANG[k] === 'markdown' ? 'plaintext' : LANG[k]}"></is-code>
+                lang="${LANG[k] === 'markdown' ? 'plaintext' : LANG[k]}"></iswc-code>
               <p class="vs-empty" data-kind="${k}" hidden>No hay archivo o no se pudo cargar.</p>
             </div>
-          </is-tab-panel>
+          </iswc-tab-panel>
         `).join('')}
-      </is-tab-group>
+      </iswc-tab-group>
     </div>
-    <is-button slot="footer" id="vsClose" color="neutral" variant="outlined">Cerrar</is-button>
+    <iswc-button slot="footer" id="vsClose" color="neutral" variant="outlined">Cerrar</iswc-button>
   `;
   document.body.append(dlg);
 
   dlg.querySelector('#vsClose')?.addEventListener('click', () => dlg.hide());
   const tabs = dlg.querySelector('#vsTabs');
-  tabs?.addEventListener('is-tab-show', (e) => {
+  tabs?.addEventListener('iswc-tab-show', (e) => {
     const kind = e.detail?.name;
     if (KINDS.includes(kind)) {
       syncActiveMeta(dlg, kind);
       refreshEditor(panelEditor(dlg, kind));
     }
   });
-  dlg.addEventListener('is-after-show', () => {
+  dlg.addEventListener('iswc-after-show', () => {
     const kind = tabs?.active || 'js';
     refreshEditor(panelEditor(dlg, kind));
   });
@@ -253,7 +253,7 @@ export async function openViewSources(tag, prefer = 'js') {
   syncActiveMeta(dlg, start);
 
   dlg.show();
-  await customElements.whenDefined('is-code');
+  await customElements.whenDefined('iswc-code');
   await loadKind(dlg, start, files[start]);
   syncActiveMeta(dlg, start);
   refreshEditor(panelEditor(dlg, start));
@@ -273,7 +273,7 @@ function enhanceDemo(demo) {
   if (demo.dataset.sourcesReady || demo.hasAttribute('data-no-sources')) return;
 
   const tag = currentTag
-    || demo.closest('is-preview-component')?.preview?.definition?.tag
+    || demo.closest('iswc-preview-component')?.preview?.definition?.tag
     || null;
   if (!tag || !entryFor(tag)) return;
 
@@ -285,7 +285,7 @@ function enhanceDemo(demo) {
   btn.className = 'demo-sources-btn';
   btn.setAttribute('aria-label', 'Ver fuentes JS / CSS / MD');
   btn.title = 'Ver fuentes (JS · CSS · MD)';
-  btn.innerHTML = '<is-icon icon="mdi:file-code-outline"></is-icon>';
+  btn.innerHTML = '<iswc-icon icon="mdi:file-code-outline"></iswc-icon>';
   btn.addEventListener('click', (ev) => {
     ev.preventDefault();
     ev.stopPropagation();
@@ -299,22 +299,22 @@ function mountPageButton(_tag) {
   document.querySelectorAll('.vs-page-bar').forEach((el) => el.remove());
 }
 
-document.addEventListener('is-demo-connected', (e) => {
+document.addEventListener('iswc-demo-connected', (e) => {
   const el = e.target;
   if (el instanceof Element) enhanceDemo(el);
 });
 
-document.addEventListener('is-preview-ready', (e) => {
+document.addEventListener('iswc-preview-ready', (e) => {
   const { tag } = e.detail ?? {};
   if (typeof tag !== 'string') return;
   currentTag = tag;
   cache.clear();
   mountPageButton(tag);
-  document.querySelectorAll('.demo, is-demo').forEach(enhanceDemo);
+  document.querySelectorAll('.demo, iswc-demo').forEach(enhanceDemo);
 });
 
 const boot = () => {
-  document.querySelectorAll('.demo, is-demo').forEach(enhanceDemo);
+  document.querySelectorAll('.demo, iswc-demo').forEach(enhanceDemo);
 };
 if (document.readyState === 'loading') {
   document.addEventListener('DOMContentLoaded', boot, { once: true });

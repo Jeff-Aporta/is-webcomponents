@@ -1,11 +1,11 @@
 {
-  "$schema": "is-preview/v1",
-  "tag": "is-drawer",
+  "$schema": "iswc-preview/v1",
+  "tag": "iswc-drawer",
   "category": "layout",
-  "title": "<is-drawer>",
+  "title": "<iswc-drawer>",
   "titleHtml": true,
-  "description": "Documentación y demos del componente is-drawer de InSoft.",
-  "storageKey": "docs-is-drawer",
+  "description": "Documentación y demos del componente iswc-drawer de InSoft.",
+  "storageKey": "docs-iswc-drawer",
   "sections": [
     {
       "id": "intro",
@@ -14,18 +14,18 @@
       "blocks": [
         {
           "kind": "demo",
-          "html": "<is-button id=\"openDefault\">Abrir drawer (end)</is-button>",
+          "html": "<iswc-button id=\"openDefault\">Abrir drawer (end)</iswc-button>",
           "equivNote": "placement define el eje; light-dismiss el cierre por backdrop.",
           "equivHtml": "<!-- ver diagrama de ramas -->",
-          "equivFlow": "<is-flowchart open-on-click animation=\"flow\">\n  <script type=\"application/json\">\n  {\n    \"flowchart\": {\n      \"title\": \"is-drawer: placement\",\n      \"direction\": \"TB\",\n      \"nodes\": [\n        {\n          \"id\": \"q\",\n          \"label\": \"placement=?\",\n          \"shape\": \"diamond\"\n        },\n        {\n          \"id\": \"a\",\n          \"label\": \"start / end → ancho\",\n          \"shape\": \"round\"\n        },\n        {\n          \"id\": \"b\",\n          \"label\": \"top / bottom → alto\",\n          \"shape\": \"round\"\n        },\n        {\n          \"id\": \"c\",\n          \"label\": \"light-dismiss?\",\n          \"shape\": \"diamond\"\n        },\n        {\n          \"id\": \"d\",\n          \"label\": \"clic fuera cierra\",\n          \"shape\": \"stadium\"\n        },\n        {\n          \"id\": \"e\",\n          \"label\": \"solo chrome / Escape\",\n          \"shape\": \"stadium\"\n        }\n      ],\n      \"edges\": [\n        {\n          \"from\": \"q\",\n          \"to\": \"a\",\n          \"label\": \"lat\"\n        },\n        {\n          \"from\": \"q\",\n          \"to\": \"b\",\n          \"label\": \"vert\"\n        },\n        {\n          \"from\": \"a\",\n          \"to\": \"c\"\n        },\n        {\n          \"from\": \"b\",\n          \"to\": \"c\"\n        },\n        {\n          \"from\": \"c\",\n          \"to\": \"d\",\n          \"label\": \"si\"\n        },\n        {\n          \"from\": \"c\",\n          \"to\": \"e\",\n          \"label\": \"no\"\n        }\n      ]\n    }\n  }\n  </script>\n</is-flowchart>"
+          "equivFlow": "<iswc-flowchart open-on-click animation=\"flow\">\n  <script type=\"application/json\">\n  {\n    \"flowchart\": {\n      \"title\": \"iswc-drawer: placement\",\n      \"direction\": \"TB\",\n      \"nodes\": [\n        {\n          \"id\": \"q\",\n          \"label\": \"placement=?\",\n          \"shape\": \"diamond\"\n        },\n        {\n          \"id\": \"a\",\n          \"label\": \"start / end → ancho\",\n          \"shape\": \"round\"\n        },\n        {\n          \"id\": \"b\",\n          \"label\": \"top / bottom → alto\",\n          \"shape\": \"round\"\n        },\n        {\n          \"id\": \"c\",\n          \"label\": \"light-dismiss?\",\n          \"shape\": \"diamond\"\n        },\n        {\n          \"id\": \"d\",\n          \"label\": \"clic fuera cierra\",\n          \"shape\": \"stadium\"\n        },\n        {\n          \"id\": \"e\",\n          \"label\": \"solo chrome / Escape\",\n          \"shape\": \"stadium\"\n        }\n      ],\n      \"edges\": [\n        {\n          \"from\": \"q\",\n          \"to\": \"a\",\n          \"label\": \"lat\"\n        },\n        {\n          \"from\": \"q\",\n          \"to\": \"b\",\n          \"label\": \"vert\"\n        },\n        {\n          \"from\": \"a\",\n          \"to\": \"c\"\n        },\n        {\n          \"from\": \"b\",\n          \"to\": \"c\"\n        },\n        {\n          \"from\": \"c\",\n          \"to\": \"d\",\n          \"label\": \"si\"\n        },\n        {\n          \"from\": \"c\",\n          \"to\": \"e\",\n          \"label\": \"no\"\n        }\n      ]\n    }\n  }\n  </script>\n</iswc-flowchart>"
         },
         {
           "kind": "html",
-          "html": "<is-drawer id=\"drwDefault\" label=\"Drawer estándar\">\r\n          <p>Un drawer es una excelente manera de mostrar contenido adicional sin salir de la página actual.</p>\r\n          <div slot=\"footer\">\r\n            <is-button data-drawer=\"close\" variant=\"outlined\">Cancelar</is-button>\r\n            <is-button data-drawer=\"close\" color=\"brand\">Aceptar</is-button>\r\n          </div>\r\n        </is-drawer>"
+          "html": "<iswc-drawer id=\"drwDefault\" label=\"Drawer estándar\">\r\n          <p>Un drawer es una excelente manera de mostrar contenido adicional sin salir de la página actual.</p>\r\n          <div slot=\"footer\">\r\n            <iswc-button data-drawer=\"close\" variant=\"outlined\">Cancelar</iswc-button>\r\n            <iswc-button data-drawer=\"close\" color=\"brand\">Aceptar</iswc-button>\r\n          </div>\r\n        </iswc-drawer>"
         },
         {
           "kind": "code",
-          "code": "<is-drawer label=\"Drawer estándar\">\n  Contenido.\n  <div slot=\"footer\">\n    <is-button data-drawer=\"close\">Cancelar</is-button>\n  </div>\n</is-drawer>"
+          "code": "<iswc-drawer label=\"Drawer estándar\">\n  Contenido.\n  <div slot=\"footer\">\n    <iswc-button data-drawer=\"close\">Cancelar</iswc-button>\n  </div>\n</iswc-drawer>"
         }
       ]
     },
@@ -36,11 +36,11 @@
       "blocks": [
         {
           "kind": "html",
-          "html": "<div class=\"demo-stack\">\r\n          <is-button id=\"openEnd\">end (default)</is-button>\r\n          <is-button id=\"openStart\">start</is-button>\r\n          <is-button id=\"openTop\">top</is-button>\r\n          <is-button id=\"openBottom\">bottom</is-button>\r\n        </div>\r\n\r\n        <is-drawer id=\"drwEnd\" label=\"End\" placement=\"end\">\r\n          <p>Este drawer se desliza desde la derecha (default).</p>\r\n        </is-drawer>\r\n        <is-drawer id=\"drwStart\" label=\"Start\" placement=\"start\">\r\n          <p>Este drawer se desliza desde la izquierda.</p>\r\n        </is-drawer>\r\n        <is-drawer id=\"drwTop\" label=\"Top\" placement=\"top\">\r\n          <p>Este drawer se desliza desde arriba.</p>\r\n        </is-drawer>\r\n        <is-drawer id=\"drwBottom\" label=\"Bottom\" placement=\"bottom\">\r\n          <p>Este drawer se desliza desde abajo.</p>\r\n        </is-drawer>"
+          "html": "<div class=\"demo-stack\">\r\n          <iswc-button id=\"openEnd\">end (default)</iswc-button>\r\n          <iswc-button id=\"openStart\">start</iswc-button>\r\n          <iswc-button id=\"openTop\">top</iswc-button>\r\n          <iswc-button id=\"openBottom\">bottom</iswc-button>\r\n        </div>\r\n\r\n        <iswc-drawer id=\"drwEnd\" label=\"End\" placement=\"end\">\r\n          <p>Este drawer se desliza desde la derecha (default).</p>\r\n        </iswc-drawer>\r\n        <iswc-drawer id=\"drwStart\" label=\"Start\" placement=\"start\">\r\n          <p>Este drawer se desliza desde la izquierda.</p>\r\n        </iswc-drawer>\r\n        <iswc-drawer id=\"drwTop\" label=\"Top\" placement=\"top\">\r\n          <p>Este drawer se desliza desde arriba.</p>\r\n        </iswc-drawer>\r\n        <iswc-drawer id=\"drwBottom\" label=\"Bottom\" placement=\"bottom\">\r\n          <p>Este drawer se desliza desde abajo.</p>\r\n        </iswc-drawer>"
         },
         {
           "kind": "code",
-          "code": "<is-drawer placement=\"start\">…</is-drawer>\n<is-drawer placement=\"top\">…</is-drawer>\n<is-drawer placement=\"bottom\">…</is-drawer>"
+          "code": "<iswc-drawer placement=\"start\">…</iswc-drawer>\n<iswc-drawer placement=\"top\">…</iswc-drawer>\n<iswc-drawer placement=\"bottom\">…</iswc-drawer>"
         }
       ]
     },
@@ -51,15 +51,15 @@
       "blocks": [
         {
           "kind": "demo",
-          "html": "<is-button id=\"openWide\">Drawer ancho (50%)</is-button>"
+          "html": "<iswc-button id=\"openWide\">Drawer ancho (50%)</iswc-button>"
         },
         {
           "kind": "html",
-          "html": "<is-drawer id=\"drwWide\" label=\"50%\" size=\"50%\">\r\n          <p>Este drawer ocupa siempre el 50% del viewport.</p>\r\n        </is-drawer>"
+          "html": "<iswc-drawer id=\"drwWide\" label=\"50%\" size=\"50%\">\r\n          <p>Este drawer ocupa siempre el 50% del viewport.</p>\r\n        </iswc-drawer>"
         },
         {
           "kind": "code",
-          "code": "<is-drawer size=\"50%\">…</is-drawer>"
+          "code": "<iswc-drawer size=\"50%\">…</iswc-drawer>"
         }
       ]
     },
@@ -70,15 +70,15 @@
       "blocks": [
         {
           "kind": "demo",
-          "html": "<is-button id=\"openNoHeader\">Abrir sin header</is-button>"
+          "html": "<iswc-button id=\"openNoHeader\">Abrir sin header</iswc-button>"
         },
         {
           "kind": "html",
-          "html": "<is-drawer id=\"drwNoHeader\" without-header>\r\n          <p>¡Mira mamá, sin header!</p>\r\n          <div slot=\"footer\">\r\n            <is-button data-drawer=\"close\" color=\"brand\">Cerrar</is-button>\r\n          </div>\r\n        </is-drawer>"
+          "html": "<iswc-drawer id=\"drwNoHeader\" without-header>\r\n          <p>¡Mira mamá, sin header!</p>\r\n          <div slot=\"footer\">\r\n            <iswc-button data-drawer=\"close\" color=\"brand\">Cerrar</iswc-button>\r\n          </div>\r\n        </iswc-drawer>"
         },
         {
           "kind": "code",
-          "code": "<is-drawer without-header>…</is-drawer>"
+          "code": "<iswc-drawer without-header>…</iswc-drawer>"
         }
       ]
     },
@@ -89,15 +89,15 @@
       "blocks": [
         {
           "kind": "demo",
-          "html": "<is-button id=\"openLD\">Abrir (click fuera cierra)</is-button>"
+          "html": "<iswc-button id=\"openLD\">Abrir (click fuera cierra)</iswc-button>"
         },
         {
           "kind": "html",
-          "html": "<is-drawer id=\"drwLD\" label=\"Light dismiss\" light-dismiss>\r\n          <p>Haz click fuera del drawer para cerrarlo.</p>\r\n        </is-drawer>"
+          "html": "<iswc-drawer id=\"drwLD\" label=\"Light dismiss\" light-dismiss>\r\n          <p>Haz click fuera del drawer para cerrarlo.</p>\r\n        </iswc-drawer>"
         },
         {
           "kind": "code",
-          "code": "<is-drawer light-dismiss>…</is-drawer>"
+          "code": "<iswc-drawer light-dismiss>…</iswc-drawer>"
         }
       ]
     },
@@ -108,15 +108,15 @@
       "blocks": [
         {
           "kind": "demo",
-          "html": "<is-button id=\"openNav\">Menú</is-button>"
+          "html": "<iswc-button id=\"openNav\">Menú</iswc-button>"
         },
         {
           "kind": "html",
-          "html": "<is-drawer id=\"drwNav\" placement=\"start\" label=\"Navegación\" size=\"280px\">\r\n          <nav style=\"display:flex;flex-direction:column;gap:.5em\">\r\n            <a href=\"#\" style=\"text-decoration:none\">Inicio</a>\r\n            <a href=\"#\" style=\"text-decoration:none\">Productos</a>\r\n            <a href=\"#\" style=\"text-decoration:none\">Clientes</a>\r\n            <a href=\"#\" style=\"text-decoration:none\">Reportes</a>\r\n            <a href=\"#\" style=\"text-decoration:none\">Configuración</a>\r\n          </nav>\r\n        </is-drawer>"
+          "html": "<iswc-drawer id=\"drwNav\" placement=\"start\" label=\"Navegación\" size=\"280px\">\r\n          <nav style=\"display:flex;flex-direction:column;gap:.5em\">\r\n            <a href=\"#\" style=\"text-decoration:none\">Inicio</a>\r\n            <a href=\"#\" style=\"text-decoration:none\">Productos</a>\r\n            <a href=\"#\" style=\"text-decoration:none\">Clientes</a>\r\n            <a href=\"#\" style=\"text-decoration:none\">Reportes</a>\r\n            <a href=\"#\" style=\"text-decoration:none\">Configuración</a>\r\n          </nav>\r\n        </iswc-drawer>"
         },
         {
           "kind": "code",
-          "code": "<is-drawer placement=\"start\" label=\"Menú\" size=\"280px\">\n  <nav>…</nav>\n</is-drawer>"
+          "code": "<iswc-drawer placement=\"start\" label=\"Menú\" size=\"280px\">\n  <nav>…</nav>\n</iswc-drawer>"
         }
       ]
     },
@@ -228,22 +228,22 @@
           ],
           "rows": [
             [
-              "<code>is-show</code>",
+              "<code>iswc-show</code>",
               "no",
               "Antes de abrir."
             ],
             [
-              "<code>is-after-show</code>",
+              "<code>iswc-after-show</code>",
               "no",
               "Tras la animación de apertura."
             ],
             [
-              "<code>is-hide</code>",
+              "<code>iswc-hide</code>",
               "sí",
               "Antes de cerrar. <code>detail.source</code> indica quién lo pidió."
             ],
             [
-              "<code>is-after-hide</code>",
+              "<code>iswc-after-hide</code>",
               "no",
               "Tras la animación de cierre."
             ]

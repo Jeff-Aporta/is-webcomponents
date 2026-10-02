@@ -22,11 +22,11 @@ tests.push({
     await page.goto(URL, { waitUntil: 'domcontentloaded' });
     await waitReady(page, 'data-color-picker-ready');
     const data = await page.evaluate(() => {
-      const pickers = [...document.querySelectorAll('is-color-picker')];
+      const pickers = [...document.querySelectorAll('iswc-color-picker')];
       return pickers.map((p) => {
         const sr = p.shadowRoot;
         return {
-          defined: !!customElements.get('is-color-picker'),
+          defined: !!customElements.get('iswc-color-picker'),
           hasShadow: !!sr,
           hasTrigger: !!sr?.querySelector('.trigger'),
           hasDialog: !!sr?.querySelector('dialog.popup'),
@@ -43,7 +43,7 @@ tests.push({
       });
     });
     assert.equal(data.length, 4, 'debe haber 4 pickers en el demo (básico, swatches, disabled, required)');
-    assert.equal(data[0].defined, true, 'is-color-picker debe estar definido');
+    assert.equal(data[0].defined, true, 'iswc-color-picker debe estar definido');
     assert.equal(data[0].hasShadow, true, 'shadow root debe existir');
     assert.equal(data[0].hasTrigger, true, 'debe haber un botón trigger');
     assert.equal(data[0].hasDialog, true, 'debe existir el <dialog> del popup');
@@ -65,12 +65,12 @@ tests.push({
     await page.goto(URL, { waitUntil: 'domcontentloaded' });
     await waitReady(page, 'data-color-picker-ready');
     await page.evaluate(() => {
-      const p = document.querySelector('#sec-basico is-color-picker');
+      const p = document.querySelector('#sec-basico iswc-color-picker');
       p.value = '#ff6b35';
     });
     await page.waitForTimeout(50);
     const state = await page.evaluate(() => {
-      const p = document.querySelector('#sec-basico is-color-picker');
+      const p = document.querySelector('#sec-basico iswc-color-picker');
       const sr = p.shadowRoot;
       return {
         attr: p.getAttribute('value'),
@@ -97,11 +97,11 @@ tests.push({
     await page.goto(URL, { waitUntil: 'domcontentloaded' });
     await waitReady(page, 'data-color-picker-ready');
     await page.evaluate(() => {
-      document.querySelector('#sec-basico is-color-picker').show();
+      document.querySelector('#sec-basico iswc-color-picker').show();
     });
     await page.waitForTimeout(80);
     const open = await page.evaluate(() => {
-      const p = document.querySelector('#sec-basico is-color-picker');
+      const p = document.querySelector('#sec-basico iswc-color-picker');
       const sr = p.shadowRoot;
       const dlg = sr.querySelector('dialog.popup');
       return {
@@ -113,21 +113,21 @@ tests.push({
     assert.equal(open.open, true, 'el <dialog> debe estar abierto');
     assert.equal(open.ariaExpanded, 'true', 'aria-expanded=true tras show()');
     assert.equal(open.stateOpen, true, 'custom state :state(open) presente');
-    await page.evaluate(() => document.querySelector('#sec-basico is-color-picker').hide());
+    await page.evaluate(() => document.querySelector('#sec-basico iswc-color-picker').hide());
   },
 });
 
 tests.push({
-  name: 'funcional: click en un swatch setea el valor y emite is-change',
+  name: 'funcional: click en un swatch setea el valor y emite iswc-change',
   run: async (page) => {
     await page.goto(URL, { waitUntil: 'domcontentloaded' });
     await waitReady(page, 'data-color-picker-ready');
     await page.evaluate(() => {
-      document.querySelector('#sec-basico is-color-picker').show();
+      document.querySelector('#sec-basico iswc-color-picker').show();
     });
     await page.waitForTimeout(50);
     const swatchValue = await page.evaluate(() => {
-      const p = document.querySelector('#sec-basico is-color-picker');
+      const p = document.querySelector('#sec-basico iswc-color-picker');
       const sr = p.shadowRoot;
       const swatches = [...sr.querySelectorAll('.swatch-btn')];
       const target = swatches[7]; // el 8vo swatch del default
@@ -136,7 +136,7 @@ tests.push({
     });
     await page.waitForTimeout(50);
     const after = await page.evaluate((sv) => {
-      const p = document.querySelector('#sec-basico is-color-picker');
+      const p = document.querySelector('#sec-basico iswc-color-picker');
       const sr = p.shadowRoot;
       const selected = [...sr.querySelectorAll('.swatch-btn[data-selected]')].map((s) => s.dataset.value);
       return {
@@ -159,7 +159,7 @@ tests.push({
     await page.goto(URL, { waitUntil: 'domcontentloaded' });
     await waitReady(page, 'data-color-picker-ready');
     const a11y = await page.evaluate(() => {
-      const req = document.querySelector('#sec-required is-color-picker');
+      const req = document.querySelector('#sec-required iswc-color-picker');
       const sr = req.shadowRoot;
       return {
         ariaRequired: sr.querySelector('.trigger').getAttribute('aria-required'),
@@ -178,7 +178,7 @@ tests.push({
     await page.goto(URL, { waitUntil: 'domcontentloaded' });
     await waitReady(page, 'data-color-picker-ready');
     const dis = await page.evaluate(() => {
-      const p = document.querySelector('#sec-disabled is-color-picker');
+      const p = document.querySelector('#sec-disabled iswc-color-picker');
       const sr = p.shadowRoot;
       return {
         triggerDisabled: sr.querySelector('.trigger').disabled,
@@ -200,7 +200,7 @@ tests.push({
     await page.goto(URL, { waitUntil: 'domcontentloaded' });
     await waitReady(page, 'data-color-picker-ready');
     const result = await page.evaluate(() => {
-      const p = document.querySelector('#sec-basico is-color-picker');
+      const p = document.querySelector('#sec-basico iswc-color-picker');
       p.value = '#abc';
       const norm = p.value;
       const attrAbc = p.getAttribute('value');
@@ -224,7 +224,7 @@ tests.push({
     await page.goto(URL, { waitUntil: 'domcontentloaded' });
     await waitReady(page, 'data-color-picker-ready');
     const r = await page.evaluate(() => {
-      const p = document.querySelector('#sec-basico is-color-picker');
+      const p = document.querySelector('#sec-basico iswc-color-picker');
       p.setAttribute('value', 'ff00aa');
       return { attr: p.getAttribute('value'), prop: p.value };
     });
@@ -239,7 +239,7 @@ tests.push({
     await page.goto(URL, { waitUntil: 'domcontentloaded' });
     await waitReady(page, 'data-color-picker-ready');
     const sw = await page.evaluate(() => {
-      const p = document.querySelector('#sec-swatches is-color-picker');
+      const p = document.querySelector('#sec-swatches iswc-color-picker');
       const sr = p.shadowRoot;
       const buttons = [...sr.querySelectorAll('.swatch-btn')];
       return {

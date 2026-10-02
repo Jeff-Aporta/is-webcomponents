@@ -9,24 +9,24 @@ const URL = `${BASE_URL}/demos/forms/rating/rating.html`;
 const tests = [];
 
 tests.push({
-  name: 'smoke: <is-rating> queda definido y se renderiza con 5 estrellas',
+  name: 'smoke: <iswc-rating> queda definido y se renderiza con 5 estrellas',
   run: async (page) => {
     await page.goto(URL, { waitUntil: 'domcontentloaded' });
     await waitReady(page, 'data-rating-ready');
     const data = await page.evaluate(() => {
-      const ratings = [...document.querySelectorAll('main is-rating')];
+      const ratings = [...document.querySelectorAll('main iswc-rating')];
       const basico = ratings.find((r) => r.getAttribute('name') === 'score');
       const starCount = basico.shadowRoot.querySelectorAll('[part="star"]').length;
       const slider = basico.shadowRoot.querySelector('[role="slider"]');
       return {
-        defined: !!customElements.get('is-rating'),
+        defined: !!customElements.get('iswc-rating'),
         count: ratings.length,
         starCount,
         hasSlider: !!slider,
         tabindex: slider.getAttribute('tabindex'),
       };
     });
-    assert.equal(data.defined, true, 'is-rating debe estar definido');
+    assert.equal(data.defined, true, 'iswc-rating debe estar definido');
     assert.ok(data.count >= 5, `esperaba >=5 ratings, hay ${data.count}`);
     assert.equal(data.starCount, 5, 'el rating básico debe tener 5 estrellas por defecto');
     assert.ok(data.hasSlider, 'la base debe llevar role="slider"');
@@ -36,17 +36,17 @@ tests.push({
 });
 
 tests.push({
-  name: 'funcional: clic en la 4ª estrella cambia el value a 4 y emite is-change',
+  name: 'funcional: clic en la 4ª estrella cambia el value a 4 y emite iswc-change',
   run: async (page) => {
     await page.goto(URL, { waitUntil: 'domcontentloaded' });
     await waitReady(page, 'data-rating-ready');
     await page.waitForTimeout(150);
 
-    // Capturar el evento is-change y simular el clic
+    // Capturar el evento iswc-change y simular el clic
     const changed = await page.evaluate(async () => {
-      const r = document.querySelector('is-rating[name="score"]');
+      const r = document.querySelector('iswc-rating[name="score"]');
       const promise = new Promise((resolve) => {
-        r.addEventListener('is-change', (e) => resolve(e.detail), { once: true });
+        r.addEventListener('iswc-change', (e) => resolve(e.detail), { once: true });
       });
       const base = r.shadowRoot.querySelector('.base');
       const stars = r.shadowRoot.querySelectorAll('[part="star"]');
@@ -60,7 +60,7 @@ tests.push({
       base.dispatchEvent(new PointerEvent('pointerup', {
         clientX: cx, clientY: cy, button: 0, bubbles: true, composed: true,
       }));
-      // El componente mapea click → #onClick → #commit → is-change
+      // El componente mapea click → #onClick → #commit → iswc-change
       base.dispatchEvent(new MouseEvent('click', {
         clientX: cx, clientY: cy, button: 0, bubbles: true, composed: true,
       }));
@@ -72,8 +72,8 @@ tests.push({
     });
     assert.equal(changed.value, 4, `esperaba value=4 tras click en la 4ª estrella, obtuve ${changed.value}`);
     assert.equal(changed.attr, '4', 'el atributo value debe estar sincronizado');
-    assert.ok(changed.detail, 'debe haberse emitido is-change');
-    assert.equal(changed.detail.value, 4, 'detail.value del is-change debe ser 4');
+    assert.ok(changed.detail, 'debe haberse emitido iswc-change');
+    assert.equal(changed.detail.value, 4, 'detail.value del iswc-change debe ser 4');
   },
 });
 
@@ -85,7 +85,7 @@ tests.push({
     await page.waitForTimeout(150);
 
     const result = await page.evaluate(() => {
-      const r = document.querySelector('is-rating[name="quality"]');
+      const r = document.querySelector('iswc-rating[name="quality"]');
       // Estado inicial: value=2
       const first = r.shadowRoot.querySelectorAll('[part="star"]')[0];
       const rect = first.getBoundingClientRect();
@@ -118,7 +118,7 @@ tests.push({
     await page.waitForTimeout(150);
 
     const a11y = await page.evaluate(() => {
-      const r = document.querySelector('is-rating[name="score"]');
+      const r = document.querySelector('iswc-rating[name="score"]');
       const slider = r.shadowRoot.querySelector('[role="slider"]');
       return {
         role: slider.getAttribute('role'),
@@ -147,7 +147,7 @@ tests.push({
 
     const edge = await page.evaluate(() => {
       // El required es el 5º (experience)
-      const ratings = [...document.querySelectorAll('main is-rating')];
+      const ratings = [...document.querySelectorAll('main iswc-rating')];
       const req = ratings.find((r) => r.getAttribute('name') === 'experience');
       const internals = req.constructor.formAssociated ? req : null;
       // valueMissing se chequea con checkValidity() (delegado a ElementInternals)
@@ -173,7 +173,7 @@ tests.push({
     await page.waitForTimeout(150);
 
     const data = await page.evaluate(() => {
-      const ratings = [...document.querySelectorAll('main is-rating')];
+      const ratings = [...document.querySelectorAll('main iswc-rating')];
       const half = ratings.find((r) => r.getAttribute('name') === 'service');
       const ro = ratings.find((r) => r.getAttribute('name') === 'opinion');
       return {

@@ -20,8 +20,10 @@
     color: var(--_text);
     box-sizing: border-box;
     white-space: nowrap;
-    .prefix:not(:empty), .suffix:not(:empty) { display: inline-flex; align-items: center; }
-    .prefix:empty, .suffix:empty { display: none; }
+
+    & :is(.prefix, .suffix):not(:empty) { display: inline-flex; align-items: center; }
+    & :is(.prefix, .suffix):empty { display: none; }
+
     .remove {
       margin-inline-start: 0.15em;
       font-size: 1.1em;
@@ -37,7 +39,9 @@
 /* Selectores de atributos del host a top-level (no anidados en :host):
    `&[attr]` dentro de :host compila a `:host [attr]` en algunos parsers y
    el estado del host deja de aplicar. */
-:host([pill]) .tag { border-radius: 999px; }
+:host([pill]) {
+  .tag { border-radius: 999px; }
+}
 
 :host([color="brand"]) {
   --_bg: var(--iswc-color-brand-pale, #d0ebff);
@@ -70,17 +74,23 @@
   --_text: var(--iswc-color-danger-stronger, #b02525);
 }
 
-:host([variant="filled"]) .tag {
-  background: var(--_border);
-  color: var(--iswc-on-brand, #fff);
-  border-color: var(--_border);
+:host([variant="filled"]) {
+  .tag {
+    background: var(--_border);
+    color: var(--iswc-on-brand, #fff);
+    border-color: var(--_border);
+  }
 }
-:host([variant="outlined"]) .tag {
-  background: transparent;
-  border-color: var(--_border);
-  color: var(--_text);
+:host([variant="outlined"]) {
+  .tag {
+    background: transparent;
+    border-color: var(--_border);
+    color: var(--_text);
+  }
 }
-:host([variant="accent"]) .tag {
-  border-left-width: 3px;
-  border-left-color: var(--_border);
+:host([variant="accent"]) {
+  .tag {
+    border-inline-start-width: 3px;
+    border-inline-start-color: var(--_border);
+  }
 }

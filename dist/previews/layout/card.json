@@ -1,11 +1,11 @@
 {
-  "$schema": "is-preview/v1",
-  "tag": "is-card",
+  "$schema": "iswc-preview/v1",
+  "tag": "iswc-card",
   "category": "layout",
-  "title": "<is-card>",
+  "title": "<iswc-card>",
   "titleHtml": true,
-  "description": "Documentación y demos del componente is-card de InSoft.",
-  "storageKey": "docs-is-card",
+  "description": "Documentación y demos del componente iswc-card de InSoft.",
+  "storageKey": "docs-iswc-card",
   "sections": [
     {
       "id": "intro",
@@ -14,7 +14,7 @@
       "blocks": [
         {
           "kind": "demo",
-          "html": "<span class=\"demo-label\">caso mínimo</span>\r\n          <is-card>Hola mundo</is-card>",
+          "html": "<span class=\"demo-label\">caso mínimo</span>\r\n          <iswc-card>Hola mundo</iswc-card>",
           "controls": [
             {
               "control": "select",
@@ -32,7 +32,7 @@
         },
         {
           "kind": "code",
-          "code": "<is-card>Hola mundo</is-card>"
+          "code": "<iswc-card>Hola mundo</iswc-card>"
         }
       ]
     },
@@ -43,11 +43,11 @@
       "blocks": [
         {
           "kind": "html",
-          "html": "<div class=\"card-grid\">\r\n          <is-card variant=\"outlined\">\r\n            <strong>outlined</strong>\r\n            <p class=\"card-meta\">Borde 1px, fondo transparente.</p>\r\n          </is-card>\r\n          <is-card variant=\"filled\">\r\n            <strong>filled</strong>\r\n            <p class=\"card-meta\">Fondo elevado, sin borde.</p>\r\n          </is-card>\r\n          <is-card variant=\"filled-outlined\">\r\n            <strong>filled-outlined</strong>\r\n            <p class=\"card-meta\">Fondo + borde.</p>\r\n          </is-card>\r\n          <is-card variant=\"plain\">\r\n            <strong>plain</strong>\r\n            <p class=\"card-meta\">Sin fondo ni borde, solo espaciado.</p>\r\n          </is-card>\r\n          <is-card variant=\"accent\">\r\n            <strong>accent</strong>\r\n            <p class=\"card-meta\">Borde lateral de color de marca.</p>\r\n          </is-card>\r\n        </div>"
+          "html": "<div class=\"card-grid\">\r\n          <iswc-card variant=\"outlined\">\r\n            <strong>outlined</strong>\r\n            <p class=\"card-meta\">Borde 1px, fondo transparente.</p>\r\n          </iswc-card>\r\n          <iswc-card variant=\"filled\">\r\n            <strong>filled</strong>\r\n            <p class=\"card-meta\">Fondo elevado, sin borde.</p>\r\n          </iswc-card>\r\n          <iswc-card variant=\"filled-outlined\">\r\n            <strong>filled-outlined</strong>\r\n            <p class=\"card-meta\">Fondo + borde.</p>\r\n          </iswc-card>\r\n          <iswc-card variant=\"plain\">\r\n            <strong>plain</strong>\r\n            <p class=\"card-meta\">Sin fondo ni borde, solo espaciado.</p>\r\n          </iswc-card>\r\n          <iswc-card variant=\"accent\">\r\n            <strong>accent</strong>\r\n            <p class=\"card-meta\">Borde lateral de color de marca.</p>\r\n          </iswc-card>\r\n        </div>"
         },
         {
           "kind": "code",
-          "code": "<is-card variant=\"accent\">...</is-card>\n<is-card variant=\"filled-outlined\">...</is-card>"
+          "code": "<iswc-card variant=\"accent\">...</iswc-card>\n<iswc-card variant=\"filled-outlined\">...</iswc-card>"
         }
       ]
     },
@@ -58,11 +58,11 @@
       "blocks": [
         {
           "kind": "html",
-          "html": "<div class=\"card-stage-h\">\r\n          <is-card style=\"max-width: 360px; width: 100%;\">\r\n            <div slot=\"media\">\r\n              <div class=\"card-demo-img\" role=\"img\" aria-label=\"Mockup\"></div>\r\n            </div>\r\n            <div slot=\"header\"><strong>Notificación importante</strong></div>\r\n            <p>Hemos detectado actividad inusual en tu cuenta. Revisa los detalles y confirma si fuiste tú.</p>\r\n            <div slot=\"footer\" class=\"card-row-actions\">\r\n              <is-button color=\"neutral\" variant=\"plain\">Más tarde</is-button>\r\n              <is-button color=\"brand\">Revisar</is-button>\r\n            </div>\r\n          </is-card>\r\n        </div>"
+          "html": "<div class=\"card-stage-h\">\r\n          <iswc-card style=\"max-width: 360px; width: 100%;\">\r\n            <div slot=\"media\">\r\n              <div class=\"card-demo-img\" role=\"img\" aria-label=\"Mockup\"></div>\r\n            </div>\r\n            <div slot=\"header\"><strong>Notificación importante</strong></div>\r\n            <p>Hemos detectado actividad inusual en tu cuenta. Revisa los detalles y confirma si fuiste tú.</p>\r\n            <div slot=\"footer\" class=\"card-row-actions\">\r\n              <iswc-button color=\"neutral\" variant=\"plain\">Más tarde</iswc-button>\r\n              <iswc-button color=\"brand\">Revisar</iswc-button>\r\n            </div>\r\n          </iswc-card>\r\n        </div>"
         },
         {
           "kind": "code",
-          "code": "<is-card>\n  <div slot=\"media\"><img src=\"...\" alt=\"...\"/></div>\n  <div slot=\"header\">Título</div>\n  Contenido del body.\n  <div slot=\"footer\">\n    <is-button>Cancelar</is-button>\n    <is-button color=\"brand\">Aceptar</is-button>\n  </div>\n</is-card>"
+          "code": "<iswc-card>\n  <div slot=\"media\"><img src=\"...\" alt=\"...\"/></div>\n  <div slot=\"header\">Título</div>\n  Contenido del body.\n  <div slot=\"footer\">\n    <iswc-button>Cancelar</iswc-button>\n    <iswc-button color=\"brand\">Aceptar</iswc-button>\n  </div>\n</iswc-card>"
         }
       ]
     },
@@ -73,11 +73,11 @@
       "blocks": [
         {
           "kind": "html",
-          "html": "<div class=\"card-stage-h\">\r\n          <is-card orientation=\"horizontal\" style=\"max-width: 560px; width: 100%;\">\r\n            <div slot=\"media\">\r\n              <is-icon icon=\"mdi:bell-ring-outline\" style=\"font-size: 2.4rem; color: var(--iswc-accent);\"></is-icon>\r\n            </div>\r\n            <div>\r\n              <strong>Nueva mención</strong>\r\n              <p class=\"card-meta\">Te han mencionado en <code>#general</code> hace 3 min.</p>\r\n            </div>\r\n            <div slot=\"actions\" class=\"card-row-actions\">\r\n              <is-button color=\"neutral\" variant=\"outlined\">Ignorar</is-button>\r\n              <is-button color=\"brand\">Ver</is-button>\r\n            </div>\r\n          </is-card>\r\n        </div>"
+          "html": "<div class=\"card-stage-h\">\r\n          <iswc-card orientation=\"horizontal\" style=\"max-width: 560px; width: 100%;\">\r\n            <div slot=\"media\">\r\n              <iswc-icon icon=\"mdi:bell-ring-outline\" style=\"font-size: 2.4rem; color: var(--iswc-accent);\"></iswc-icon>\r\n            </div>\r\n            <div>\r\n              <strong>Nueva mención</strong>\r\n              <p class=\"card-meta\">Te han mencionado en <code>#general</code> hace 3 min.</p>\r\n            </div>\r\n            <div slot=\"actions\" class=\"card-row-actions\">\r\n              <iswc-button color=\"neutral\" variant=\"outlined\">Ignorar</iswc-button>\r\n              <iswc-button color=\"brand\">Ver</iswc-button>\r\n            </div>\r\n          </iswc-card>\r\n        </div>"
         },
         {
           "kind": "code",
-          "code": "<is-card orientation=\"horizontal\">\n  <is-icon slot=\"media\" icon=\"mdi:bell\"></is-icon>\n  <strong>Nueva mención</strong>\n  <div slot=\"actions\"><is-button>Ver</is-button></div>\n</is-card>"
+          "code": "<iswc-card orientation=\"horizontal\">\n  <iswc-icon slot=\"media\" icon=\"mdi:bell\"></iswc-icon>\n  <strong>Nueva mención</strong>\n  <div slot=\"actions\"><iswc-button>Ver</iswc-button></div>\n</iswc-card>"
         }
       ]
     },
@@ -88,18 +88,18 @@
       "blocks": [
         {
           "kind": "html",
-          "html": "<div class=\"card-stage-h\">\r\n          <is-card style=\"max-width: 420px; width: 100%;\">\r\n            <div slot=\"header\"><strong>Proyecto InSoft</strong></div>\r\n            <div slot=\"header-actions\">\r\n              <is-button color=\"neutral\" variant=\"plain\" pill title=\"Más opciones\">\r\n                <is-icon icon=\"mdi:dots-horizontal\"></is-icon>\r\n              </is-button>\r\n            </div>\r\n            <p>Repositorio privado con 3 issues abiertos y 12 PRs en revisión.</p>\r\n            <div slot=\"footer\" class=\"card-meta\">Actualizado hace 2 horas</div>\r\n            <div slot=\"footer-actions\">\r\n              <is-button color=\"brand\" variant=\"outlined\">Ver repo</is-button>\r\n            </div>\r\n          </is-card>\r\n        </div>"
+          "html": "<div class=\"card-stage-h\">\r\n          <iswc-card style=\"max-width: 420px; width: 100%;\">\r\n            <div slot=\"header\"><strong>Proyecto InSoft</strong></div>\r\n            <div slot=\"header-actions\">\r\n              <iswc-button color=\"neutral\" variant=\"plain\" pill title=\"Más opciones\">\r\n                <iswc-icon icon=\"mdi:dots-horizontal\"></iswc-icon>\r\n              </iswc-button>\r\n            </div>\r\n            <p>Repositorio privado con 3 issues abiertos y 12 PRs en revisión.</p>\r\n            <div slot=\"footer\" class=\"card-meta\">Actualizado hace 2 horas</div>\r\n            <div slot=\"footer-actions\">\r\n              <iswc-button color=\"brand\" variant=\"outlined\">Ver repo</iswc-button>\r\n            </div>\r\n          </iswc-card>\r\n        </div>"
         },
         {
           "kind": "code",
-          "code": "<is-card>\n  <strong slot=\"header\">Título</strong>\n  <is-button slot=\"header-actions\">...</is-button>\n  Contenido.\n  <span slot=\"footer\">Meta</span>\n  <is-button slot=\"footer-actions\">CTA</is-button>\n</is-card>"
+          "code": "<iswc-card>\n  <strong slot=\"header\">Título</strong>\n  <iswc-button slot=\"header-actions\">...</iswc-button>\n  Contenido.\n  <span slot=\"footer\">Meta</span>\n  <iswc-button slot=\"footer-actions\">CTA</iswc-button>\n</iswc-card>"
         }
       ]
     },
     {
       "id": "methods",
       "title": "API JavaScript",
-      "lede": "Como cualquier custom element, accedes con <code class=\"code\">document.querySelector('is-card')</code>.",
+      "lede": "Como cualquier custom element, accedes con <code class=\"code\">document.querySelector('iswc-card')</code>.",
       "blocks": [
         {
           "kind": "table",
@@ -127,11 +127,11 @@
         },
         {
           "kind": "demo",
-          "html": "<span class=\"demo-label\">cambia propiedades</span>\r\n          <is-card id=\"apiCard\" variant=\"outlined\">\r\n            <strong id=\"apiLabel\">Hola</strong>\r\n            <p class=\"card-meta\">Cambia appearance / orientation desde los botones.</p>\r\n          </is-card>\r\n          <div class=\"demo-row\" style=\"margin-top: 12px; flex-wrap: wrap;\">\r\n            <is-button id=\"apiOutlined\"  color=\"neutral\" variant=\"outlined\">outlined</is-button>\r\n            <is-button id=\"apiFilled\"    color=\"neutral\" variant=\"outlined\">filled</is-button>\r\n            <is-button id=\"apiFilledOut\"  color=\"neutral\" variant=\"outlined\">filled-outlined</is-button>\r\n            <is-button id=\"apiAccent\"     color=\"neutral\" variant=\"outlined\">accent</is-button>\r\n            <is-button id=\"apiPlain\"      color=\"neutral\" variant=\"outlined\">plain</is-button>\r\n            <is-button id=\"apiOrient\"     color=\"brand\" variant=\"outlined\">toggle orientation</is-button>\r\n          </div>\r\n          <div class=\"log\" id=\"apiLog\" aria-live=\"polite\" style=\"margin-top: 12px;\">\r\n            <div class=\"row hint\">El log aparece al cambiar appearance u orientation.</div>\r\n          </div>"
+          "html": "<span class=\"demo-label\">cambia propiedades</span>\r\n          <iswc-card id=\"apiCard\" variant=\"outlined\">\r\n            <strong id=\"apiLabel\">Hola</strong>\r\n            <p class=\"card-meta\">Cambia appearance / orientation desde los botones.</p>\r\n          </iswc-card>\r\n          <div class=\"demo-row\" style=\"margin-top: 12px; flex-wrap: wrap;\">\r\n            <iswc-button id=\"apiOutlined\"  color=\"neutral\" variant=\"outlined\">outlined</iswc-button>\r\n            <iswc-button id=\"apiFilled\"    color=\"neutral\" variant=\"outlined\">filled</iswc-button>\r\n            <iswc-button id=\"apiFilledOut\"  color=\"neutral\" variant=\"outlined\">filled-outlined</iswc-button>\r\n            <iswc-button id=\"apiAccent\"     color=\"neutral\" variant=\"outlined\">accent</iswc-button>\r\n            <iswc-button id=\"apiPlain\"      color=\"neutral\" variant=\"outlined\">plain</iswc-button>\r\n            <iswc-button id=\"apiOrient\"     color=\"brand\" variant=\"outlined\">toggle orientation</iswc-button>\r\n          </div>\r\n          <div class=\"log\" id=\"apiLog\" aria-live=\"polite\" style=\"margin-top: 12px;\">\r\n            <div class=\"row hint\">El log aparece al cambiar appearance u orientation.</div>\r\n          </div>"
         },
         {
           "kind": "code",
-          "code": "const c = document.querySelector('is-card');\nc.variant = 'filled';\nc.orientation = 'horizontal';\nc.addEventListener('slotchange', e => this.log(e));"
+          "code": "const c = document.querySelector('iswc-card');\nc.variant = 'filled';\nc.orientation = 'horizontal';\nc.addEventListener('slotchange', e => this.log(e));"
         }
       ]
     },

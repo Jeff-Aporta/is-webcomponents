@@ -1,4 +1,4 @@
-/* <is-breadcrumb-item> — paso individual. */
+/* <iswc-breadcrumb-item> — paso individual. */
 
 :host {
   --_gap: 0.4em;
@@ -10,7 +10,6 @@
   color: var(--iswc-text-muted, #6c757d);
   position: relative;
 }
-
 :host([current]) {
   color: var(--iswc-text, inherit);
   font-weight: 600;
@@ -32,16 +31,20 @@
   display: inline-flex;
   align-items: center;
   cursor: default;
-}
-a.label {
-  cursor: pointer;
-  color: var(--iswc-link, inherit);
-  text-decoration: none;
-  border-radius: calc(var(--iswc-radius, 0.25em));
-  transition: color 120ms ease;
 
-  &:hover { color: var(--iswc-link-hover, inherit); text-decoration: underline; }
-  &:focus-visible { outline: 2px solid var(--iswc-focus, #339af0); outline-offset: 2px; }
+  a& {
+    cursor: pointer;
+    color: var(--iswc-link, inherit);
+    text-decoration: none;
+    border-radius: calc(var(--iswc-radius, 0.25em));
+    transition: color 120ms ease;
+
+    &:hover { color: var(--iswc-link-hover, inherit); text-decoration: underline; }
+    &:focus-visible {
+      outline: 2px solid var(--iswc-focus, #339af0);
+      outline-offset: 2px;
+    }
+  }
 }
 
 /* El separador va delante del label: solo el primero lo oculta. */

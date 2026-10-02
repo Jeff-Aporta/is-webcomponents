@@ -3,24 +3,24 @@ import './date-field.js';
 import './date-range-picker.js';
 
 /**
- * <is-date-range-input> — Dos campos (inicio y fin) con el calendario de rango
+ * <iswc-date-range-input> — Dos campos (inicio y fin) con el calendario de rango
  * en el panel (MUI DateRangePicker). El valor es `inicio/fin`.
  *
  * Atributos: start-label, end-label, hint, name, value, min, max, required,
  *            disabled, readonly, clearable, locale, calendars, shortcuts,
  *            color, action-bar, placement, close-on-select
- * Events: is-change, is-show, is-hide
+ * Events: iswc-change, iswc-show, iswc-hide
  * Methods: show(), hide()
  */
 
 definePickerInput({
-  tag: 'is-date-range-input',
+  tag: 'iswc-date-range-input',
   kind: 'date',
   cssUrl: import.meta.url,
-  fieldTag: 'is-date-field',
+  fieldTag: 'iswc-date-field',
   range: true,
   panels: () => {
-    const calendar = document.createElement('is-date-range-picker');
+    const calendar = document.createElement('iswc-date-range-picker');
     calendar.dataset.role = 'range';
     calendar.className = 'flush';
     return [calendar];

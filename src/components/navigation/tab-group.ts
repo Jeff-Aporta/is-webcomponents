@@ -4,18 +4,18 @@ import { withStyleAttrs } from '../../core/attrs.js';
 import { readUrlNav, writeUrlNav } from '../_shared/url-nav.js';
 
 /**
- * <is-tab-group>, <is-tab>, <is-tab-panel> — Web Components (vanilla, zero dependencies).
+ * <iswc-tab-group>, <iswc-tab>, <iswc-tab-panel> — Web Components (vanilla, zero dependencies).
  *
  * Tres componentes cohabitantes:
  *
- *   <is-tab-group active="general" placement="top" activation="auto">
- *     <is-tab slot="nav" panel="general">General</is-tab>
- *     <is-tab slot="nav" panel="custom" disabled>Custom</is-tab>
- *     <is-tab-panel name="general">…</is-tab-panel>
- *     <is-tab-panel name="custom">…</is-tab-panel>
- *   </is-tab-group>
+ *   <iswc-tab-group active="general" placement="top" activation="auto">
+ *     <iswc-tab slot="nav" panel="general">General</iswc-tab>
+ *     <iswc-tab slot="nav" panel="custom" disabled>Custom</iswc-tab>
+ *     <iswc-tab-panel name="general">…</iswc-tab-panel>
+ *     <iswc-tab-panel name="custom">…</iswc-tab-panel>
+ *   </iswc-tab-group>
  *
- * Atributos <is-tab-group>
+ * Atributos <iswc-tab-group>
  *   active        string   — nombre del panel activo.
  *   placement     top | bottom | start | end  (default 'top')
  *   activation    auto | manual (default 'auto')
@@ -24,53 +24,53 @@ import { readUrlNav, writeUrlNav } from '../_shared/url-nav.js';
  *                            `{ [url-key]: panel }` (b64url JSON). Vacío = off.
  *                            Nunca crea query params sueltos.
  *
- * Atributos <is-tab>
+ * Atributos <iswc-tab>
  *   panel         string   — nombre del panel al que apunta (required).
  *   disabled      boolean
  *   closable      boolean  — muestra un botón de cerrar (slot close-button).
  *
- * Atributos <is-tab-panel>
+ * Atributos <iswc-tab-panel>
  *   name          string   — id único dentro del tab-group (required).
  *
  * Slots
- *   <is-tab-group>
+ *   <iswc-tab-group>
  *     nav        — tabs (se proyectan automáticamente).
  *     (default)  — paneles.
- *   <is-tab>
+ *   <iswc-tab>
  *     (default)   label del tab.
  *     start       icono al inicio.
  *     end         icono al final.
  *     close-button  botón de cerrar (cuando closable).
- *   <is-tab-panel>
+ *   <iswc-tab-panel>
  *     (default)  contenido del panel.
  *
  * Eventos
- *   is-tab-show   detail: { name, panel, tab } — al activar un panel.
- *   is-tab-hide   detail: { name, panel, tab } — al ocultar un panel.
- *   is-tab-close  detail: { tab, name }  — cuando se hace click en el close-btn de un is-tab closable.
+ *   iswc-tab-show   detail: { name, panel, tab } — al activar un panel.
+ *   iswc-tab-hide   detail: { name, panel, tab } — al ocultar un panel.
+ *   iswc-tab-close  detail: { tab, name }  — cuando se hace click en el close-btn de un iswc-tab closable.
  *
  * CSS Parts
- *   is-tab-group: ::part(tab-group) ::part(nav) ::part(body) ::part(tabs)
- *   is-tab: ::part(base) ::part(active-indicator)
- *   is-tab-panel: ::part(base)
+ *   iswc-tab-group: ::part(tab-group) ::part(nav) ::part(body) ::part(tabs)
+ *   iswc-tab: ::part(base) ::part(active-indicator)
+ *   iswc-tab-panel: ::part(base)
  */
 
 (() => {
-  // ============ <is-tab-group> ============
+  // ============ <iswc-tab-group> ============
   const TG_TEMPLATE = document.createElement('template');
   TG_TEMPLATE.innerHTML = /* html */ `
     <div class="tg" part="tab-group">
       <div class="nav" part="nav">
         <button type="button" class="scroll scroll-start" part="scroll-button scroll-button-start" tabindex="-1"
                 aria-label="Anterior">
-          <is-icon icon="mdi:chevron-left" aria-hidden="true"></is-icon>
+          <iswc-icon icon="mdi:chevron-left" aria-hidden="true"></iswc-icon>
         </button>
         <div class="tabs" part="tabs">
           <slot name="nav"></slot>
         </div>
         <button type="button" class="scroll scroll-end" part="scroll-button scroll-button-end" tabindex="-1"
                 aria-label="Siguiente">
-          <is-icon icon="mdi:chevron-right" aria-hidden="true"></is-icon>
+          <iswc-icon icon="mdi:chevron-right" aria-hidden="true"></iswc-icon>
         </button>
       </div>
       <div class="body" part="body">
@@ -84,7 +84,7 @@ import { readUrlNav, writeUrlNav } from '../_shared/url-nav.js';
   const VALID_PLACEMENT = ['top', 'bottom', 'start', 'end'];
   const VALID_ACTIVATION = ['auto', 'manual'];
 
-  class IsTabGroup extends withStyleAttrs(HTMLElement) {
+  class IswcTabGroup extends withStyleAttrs(HTMLElement) {
     /** Personalización por atributo (ver `core/attrs.ts`). */
     static styleAttrs = {
       'track-color': { prop: '--iswc-tab-group-track-color', onlyColorValues: true },
@@ -92,7 +92,7 @@ import { readUrlNav, writeUrlNav } from '../_shared/url-nav.js';
       'indicator-color': { prop: '--iswc-tab-group-indicator-color', onlyColorValues: true },
     };
 
-    static get observedAttributes(): string[] { return [...TG_OBSERVED, ...IsTabGroup.styleAttrNames]; }
+    static get observedAttributes(): string[] { return [...TG_OBSERVED, ...IswcTabGroup.styleAttrNames]; }
     #mounted = false;
     #navSlot!: HTMLSlotElement;
     #tabsWrap!: HTMLElement;
@@ -238,11 +238,11 @@ import { readUrlNav, writeUrlNav } from '../_shared/url-nav.js';
     }
 
     #allTabs() {
-      return [...this.querySelectorAll<HTMLElement>(':scope > is-tab[slot="nav"]')];
+      return [...this.querySelectorAll<HTMLElement>(':scope > iswc-tab[slot="nav"]')];
     }
 
     #allPanels() {
-      return [...this.querySelectorAll<HTMLElement>(':scope > is-tab-panel')];
+      return [...this.querySelectorAll<HTMLElement>(':scope > iswc-tab-panel')];
     }
 
     #syncPanels() {
@@ -252,12 +252,12 @@ import { readUrlNav, writeUrlNav } from '../_shared/url-nav.js';
       // Identificadores estables para cross-ARIA entre tab ↔ panel.
       let hostNs = (this.id || '').trim();
       if (!hostNs) {
-        hostNs = `is-tab-group-${Math.random().toString(36).slice(2, 10)}`;
+        hostNs = `iswc-tab-group-${Math.random().toString(36).slice(2, 10)}`;
         this.id = hostNs;
       }
       for (const t of tabs) {
         const on = t.getAttribute('panel') === activeName;
-        // El shadow del <is-tab> no puede leer el placement del grupo
+        // El shadow del <iswc-tab> no puede leer el placement del grupo
         // (:host-context no es universal): se lo sellamos como atributo.
         t.setAttribute('data-placement', this.placement);
         t.toggleAttribute('active', on);
@@ -299,7 +299,7 @@ import { readUrlNav, writeUrlNav } from '../_shared/url-nav.js';
 
     #onClick = (e: PointerEvent) => {
       if (!(e.target instanceof Element)) return;
-      const tab = e.target.closest('is-tab[slot="nav"]');
+      const tab = e.target.closest('iswc-tab[slot="nav"]');
       if (!tab) return;
       if (tab.hasAttribute('disabled')) return;
       const name = tab.getAttribute('panel');
@@ -307,13 +307,13 @@ import { readUrlNav, writeUrlNav } from '../_shared/url-nav.js';
       const oldName = this.active;
       this.active = name;
       if (oldName !== name) {
-        emit(this, 'is-tab-show', { name, panel: this.querySelector<HTMLElement>(`is-tab-panel[name="${name}"]`), tab });
+        emit(this, 'iswc-tab-show', { name, panel: this.querySelector<HTMLElement>(`iswc-tab-panel[name="${name}"]`), tab });
       }
     };
 
     #onKeyDown = (e: KeyboardEvent) => {
       if (!(e.target instanceof Element)) return;
-      const target = e.target.closest('is-tab[slot="nav"]');
+      const target = e.target.closest('iswc-tab[slot="nav"]');
       if (!(target instanceof HTMLElement)) return;
       const tabs = this.#allTabs().filter((t: HTMLElement) => !t.hasAttribute('disabled'));
       const idx = tabs.indexOf(target);
@@ -376,9 +376,9 @@ import { readUrlNav, writeUrlNav } from '../_shared/url-nav.js';
     }
   }
 
-  defineElement('is-tab-group', IsTabGroup, 'IsTabGroup');
+  defineElement('iswc-tab-group', IswcTabGroup, 'IswcTabGroup');
 
-  // ============ <is-tab> ============
+  // ============ <iswc-tab> ============
   const TAB_TEMPLATE = document.createElement('template');
   TAB_TEMPLATE.innerHTML = /* html */ `
     <button type="button" class="tab" part="base">
@@ -387,7 +387,7 @@ import { readUrlNav, writeUrlNav } from '../_shared/url-nav.js';
       <span class="tab-end" part="end"><slot name="end"></slot></span>
       <slot name="close-button">
         <button type="button" class="tab-close" part="close-button" tabindex="-1" data-tab-close aria-label="Cerrar">
-          <is-icon icon="mdi:close" aria-hidden="true"></is-icon>
+          <iswc-icon icon="mdi:close" aria-hidden="true"></iswc-icon>
         </button>
       </slot>
       <span class="indicator" part="active-indicator" aria-hidden="true"></span>
@@ -396,7 +396,7 @@ import { readUrlNav, writeUrlNav } from '../_shared/url-nav.js';
 
   const TAB_OBSERVED = ['panel', 'disabled', 'closable', 'active'];
 
-  class IsTab extends HTMLElement {
+  class IswcTab extends HTMLElement {
     static get observedAttributes(): string[] { return TAB_OBSERVED; }
 
     #mounted = false;
@@ -406,14 +406,14 @@ import { readUrlNav, writeUrlNav } from '../_shared/url-nav.js';
       const shadow = this.attachShadow({ mode: 'open' });
       adoptCss(shadow, import.meta.url);
       shadow.appendChild(TAB_TEMPLATE.content.cloneNode(true));
-      // Capturar el click en el close button y emitir un evento 'is-tab-close' en el host.
+      // Capturar el click en el close button y emitir un evento 'iswc-tab-close' en el host.
       shadow.addEventListener('click', (e: Event) => {
         if (!(e.target instanceof Element)) return;
         const close = e.target.closest('[data-tab-close]');
         if (!close) return;
         e.stopPropagation();
         e.preventDefault();
-        emit(this, 'is-tab-close', { tab: this, name: this.getAttribute('panel') });
+        emit(this, 'iswc-tab-close', { tab: this, name: this.getAttribute('panel') });
       });
     }
 
@@ -441,9 +441,9 @@ import { readUrlNav, writeUrlNav } from '../_shared/url-nav.js';
     }
   }
 
-  defineElement('is-tab', IsTab, 'IsTab');
+  defineElement('iswc-tab', IswcTab, 'IswcTab');
 
-  // ============ <is-tab-panel> ============
+  // ============ <iswc-tab-panel> ============
   const PANEL_TEMPLATE = document.createElement('template');
   PANEL_TEMPLATE.innerHTML = /* html */ `
     <div class="panel" part="base">
@@ -453,7 +453,7 @@ import { readUrlNav, writeUrlNav } from '../_shared/url-nav.js';
 
   const PANEL_OBSERVED = ['name'];
 
-  class IsTabPanel extends HTMLElement {
+  class IswcTabPanel extends HTMLElement {
     static get observedAttributes(): string[] { return PANEL_OBSERVED; }
 
     #mounted = false;
@@ -476,5 +476,5 @@ import { readUrlNav, writeUrlNav } from '../_shared/url-nav.js';
     }
   }
 
-  defineElement('is-tab-panel', IsTabPanel, 'IsTabPanel');
+  defineElement('iswc-tab-panel', IswcTabPanel, 'IswcTabPanel');
 })();

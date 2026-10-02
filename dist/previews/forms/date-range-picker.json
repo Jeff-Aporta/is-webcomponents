@@ -1,10 +1,10 @@
 {
-  "$schema": "is-preview/v1",
-  "tag": "is-date-range-picker",
+  "$schema": "iswc-preview/v1",
+  "tag": "iswc-date-range-picker",
   "category": "forms",
-  "title": "<is-date-range-picker>",
+  "title": "<iswc-date-range-picker>",
   "titleHtml": true,
-  "storageKey": "docs-is-date-range-picker",
+  "storageKey": "docs-iswc-date-range-picker",
   "sections": [
     {
       "id": "intro",
@@ -13,7 +13,7 @@
       "blocks": [
         {
           "kind": "demo",
-          "html": "<is-date-range-picker\r\n            id=\"rp\"\r\n            locale=\"es\"\r\n            calendars=\"2\"\r\n            shortcuts=\"this-week last-week last-7-days current-month next-month reset\"\r\n          ></is-date-range-picker>",
+          "html": "<iswc-date-range-picker\r\n            id=\"rp\"\r\n            locale=\"es\"\r\n            calendars=\"2\"\r\n            shortcuts=\"this-week last-week last-7-days current-month next-month reset\"\r\n          ></iswc-date-range-picker>",
           "controls": [
             {
               "control": "text",
@@ -47,7 +47,7 @@
       "blocks": [
         {
           "kind": "demo",
-          "html": "<is-date-range-picker locale=\"es\" calendars=\"3\" value=\"2026-07-10/2026-08-05\"></is-date-range-picker>"
+          "html": "<iswc-date-range-picker locale=\"es\" calendars=\"3\" value=\"2026-07-10/2026-08-05\"></iswc-date-range-picker>"
         }
       ]
     },
@@ -58,14 +58,14 @@
       "blocks": [
         {
           "kind": "demo",
-          "html": "<is-date-range-picker locale=\"es\" calendars=\"2\" shortcuts=\"none\">\r\n            <is-button slot=\"shortcut\" variant=\"outlined\" pill data-range=\"2026-07-01/2026-07-15\">Primera quincena</is-button>\r\n            <is-button slot=\"shortcut\" variant=\"outlined\" pill data-range=\"2026-07-16/2026-07-31\">Segunda quincena</is-button>\r\n            <is-button slot=\"shortcut\" variant=\"outlined\" color=\"neutral\" pill data-preset=\"reset\">Limpiar</is-button>\r\n          </is-date-range-picker>"
+          "html": "<iswc-date-range-picker locale=\"es\" calendars=\"2\" shortcuts=\"none\">\r\n            <iswc-button slot=\"shortcut\" variant=\"outlined\" pill data-range=\"2026-07-01/2026-07-15\">Primera quincena</iswc-button>\r\n            <iswc-button slot=\"shortcut\" variant=\"outlined\" pill data-range=\"2026-07-16/2026-07-31\">Segunda quincena</iswc-button>\r\n            <iswc-button slot=\"shortcut\" variant=\"outlined\" color=\"neutral\" pill data-preset=\"reset\">Limpiar</iswc-button>\r\n          </iswc-date-range-picker>"
         }
       ]
     },
     {
       "id": "reference",
       "title": "Referencia",
-      "lede": "Eventos: <code>is-change { start, end, source }</code>, <code>is-month-change</code>. Método: <code>clear()</code>.",
+      "lede": "Eventos: <code>iswc-change { start, end, source }</code>, <code>iswc-month-change</code>. Método: <code>clear()</code>.",
       "blocks": [
         {
           "kind": "table",
@@ -92,7 +92,7 @@
             ],
             [
               "resto",
-              "igual que <code>is-date-picker</code> (min, max, locale, disable-*, etc.)"
+              "igual que <code>iswc-date-picker</code> (min, max, locale, disable-*, etc.)"
             ]
           ]
         }

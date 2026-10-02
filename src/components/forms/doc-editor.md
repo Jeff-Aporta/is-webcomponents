@@ -1,14 +1,14 @@
 ---
-tag: is-doc-editor
+tag: iswc-doc-editor
 tags:
-  - is-doc-editor
+  - iswc-doc-editor
 category: forms
 status: public
 source: ./doc-editor.js
 style: ./doc-editor.css
 preview: ./doc-editor.json
 ---
-# `<is-doc-editor>`
+# `<iswc-doc-editor>`
 
 ## Propósito
 
@@ -18,7 +18,7 @@ Editor de documento por bloques al estilo Notion. Cada bloque es un
 `numbered-list`, `quote`, `code` o `divider`. El menú de tipos se abre
 escribiendo `/` en un bloque vacío.
 
-Este módulo registra `<is-doc-editor>`.
+Este módulo registra `<iswc-doc-editor>`.
 
 ## Cuándo usarlo
 
@@ -28,7 +28,7 @@ operación — y el resultado se guarda como JSON de bloques, no como HTML.
 
 ## Cuándo no usarlo
 
-- Para texto plano de una o pocas líneas: usa `<is-textarea>` o un
+- Para texto plano de una o pocas líneas: usa `<iswc-textarea>` o un
   `<textarea>` nativo.
 - Dentro de un `<form>` esperando que el contenido se envíe solo: **no es
   form-associated** (ver [Integración con formularios](#integración-con-formularios)).
@@ -44,7 +44,7 @@ import './doc-editor.js';
 ## Ejemplo mínimo
 
 ```html
-<is-doc-editor placeholder="Escribe algo…"></is-doc-editor>
+<iswc-doc-editor placeholder="Escribe algo…"></iswc-doc-editor>
 ```
 
 ## API
@@ -79,11 +79,11 @@ en light DOM **no se proyecta**. El único uso del light DOM es la semilla
 declarativa:
 
 ```html
-<is-doc-editor>
+<iswc-doc-editor>
   <script type="application/json">
     [{ "type": "heading-1", "text": "Acta de reunión" }]
   </script>
-</is-doc-editor>
+</iswc-doc-editor>
 ```
 
 La cabecera del `.js` documenta un slot `default`; no existe en el código.
@@ -92,10 +92,10 @@ La cabecera del `.js` documenta un slot `default`; no existe en el código.
 
 | Evento | detail | bubbles | composed | cancelable |
 | --- | --- | --- | --- | --- |
-| `is-change` | `{ blocks }` — copia profunda (`structuredClone`) del array de bloques | sí | sí | no |
-| `is-focus` | `{ id }` — id del bloque que recibió el foco | sí | sí | no |
+| `iswc-change` | `{ blocks }` — copia profunda (`structuredClone`) del array de bloques | sí | sí | no |
+| `iswc-focus` | `{ id }` — id del bloque que recibió el foco | sí | sí | no |
 
-`is-change` se emite en cada tecla escrita dentro de un bloque y al marcar o
+`iswc-change` se emite en cada tecla escrita dentro de un bloque y al marcar o
 desmarcar un `todo`. **No** se emite al crear un bloque con Enter, al
 borrarlo con Backspace ni al cambiar su tipo desde el menú `/`.
 
@@ -122,7 +122,7 @@ través de `::part(blocks)` y sus tokens.
 
 No expone. El componente no usa `ElementInternals`, así que no hay
 `:state()`. El estado interno viaja por clases del shadow DOM
-(`.block-<tipo>`, `.is-checked`), no accesibles desde el light DOM.
+(`.block-<tipo>`, `.iswc-checked`), no accesibles desde el light DOM.
 
 ### CSS custom properties
 
@@ -151,14 +151,14 @@ Para enviarlo, copia el contenido a un campo oculto:
 
 ```html
 <form id="acta">
-  <is-doc-editor id="doc"></is-doc-editor>
+  <iswc-doc-editor id="doc"></iswc-doc-editor>
   <input type="hidden" name="contenido" id="oculto" />
 </form>
 
 <script type="module">
   const doc = document.getElementById('doc');
   const oculto = document.getElementById('oculto');
-  doc.addEventListener('is-change', () => { oculto.value = doc.value; });
+  doc.addEventListener('iswc-change', () => { oculto.value = doc.value; });
 </script>
 ```
 
@@ -189,7 +189,7 @@ no están implementados: Tab mueve el foco con el comportamiento nativo.
 - [`../_shared/define.js`](../_shared/define.js)
 - [`../_shared/emit.js`](../_shared/emit.js)
 
-Tags del módulo: `<is-doc-editor>`.
+Tags del módulo: `<iswc-doc-editor>`.
 
 ## Accesibilidad
 
@@ -210,7 +210,7 @@ Si la accesibilidad del editor es un requisito duro del proyecto, añade
 ## Ejemplo avanzado
 
 ```html
-<is-doc-editor id="acta">
+<iswc-doc-editor id="acta">
   <script type="application/json">
     [
       { "type": "heading-1",    "text": "Acta de comité" },
@@ -222,21 +222,21 @@ Si la accesibilidad del editor es un requisito duro del proyecto, añade
       { "type": "code",         "text": "SELECT * FROM movimientos;" }
     ]
   </script>
-</is-doc-editor>
+</iswc-doc-editor>
 
 <script type="module">
   import './doc-editor.js';
 
   const acta = document.getElementById('acta');
 
-  acta.addEventListener('is-change', (e) => {
+  acta.addEventListener('iswc-change', (e) => {
     const pendientes = e.detail.blocks
       .filter((b) => b.type === 'todo' && !b.checked)
       .map((b) => b.text);
     console.log('Pendientes:', pendientes);
   });
 
-  acta.addEventListener('is-focus', (e) => {
+  acta.addEventListener('iswc-focus', (e) => {
     console.log('Bloque activo:', e.detail.id);
   });
 

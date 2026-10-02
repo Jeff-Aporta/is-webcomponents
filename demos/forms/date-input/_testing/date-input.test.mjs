@@ -14,20 +14,20 @@ tests.push({
     await page.goto(URL, { waitUntil: 'domcontentloaded' });
     await waitReady(page, 'data-date-input-ready');
     const info = await page.evaluate(() => {
-      const inputs = [...document.querySelectorAll('is-date-input')];
+      const inputs = [...document.querySelectorAll('iswc-date-input')];
       return {
-        defined: !!customElements.get('is-date-input'),
-        fieldDefined: !!customElements.get('is-date-field'),
+        defined: !!customElements.get('iswc-date-input'),
+        fieldDefined: !!customElements.get('iswc-date-field'),
         count: inputs.length,
-        firstHasField: !!inputs[0].shadowRoot.querySelector('is-date-field'),
+        firstHasField: !!inputs[0].shadowRoot.querySelector('iswc-date-field'),
         triggersPerInput: inputs.map((i) => i.shadowRoot.querySelectorAll('[part="trigger"]').length),
         dialogPresent: inputs.every((i) => !!i.shadowRoot.querySelector('dialog')),
       };
     });
-    assert.equal(info.defined, true, 'is-date-input debe estar definido');
-    assert.equal(info.fieldDefined, true, 'is-date-field debe estar definido (composición)');
+    assert.equal(info.defined, true, 'iswc-date-input debe estar definido');
+    assert.equal(info.fieldDefined, true, 'iswc-date-field debe estar definido (composición)');
     assert.ok(info.count >= 5, `esperaba >=5 inputs, hay ${info.count}`);
-    assert.equal(info.firstHasField, true, 'el primer input debe contener un is-date-field');
+    assert.equal(info.firstHasField, true, 'el primer input debe contener un iswc-date-field');
     assert.ok(info.triggersPerInput.every((n) => n === 1), `cada input debe tener 1 trigger, hay ${JSON.stringify(info.triggersPerInput)}`);
     assert.equal(info.dialogPresent, true, 'cada input debe contener un <dialog>');
     await screenshot(page, 'date-input-smoke');
@@ -43,7 +43,7 @@ tests.push({
     await page.waitForTimeout(50);
     const data = await page.evaluate(() => {
       const el = document.getElementById('basic');
-      const field = el.shadowRoot.querySelector('is-date-field');
+      const field = el.shadowRoot.querySelector('iswc-date-field');
       const secs = [...field.shadowRoot.querySelectorAll('[role="spinbutton"]')];
       return {
         attr: el.getAttribute('value'),
@@ -60,7 +60,7 @@ tests.push({
 });
 
 tests.push({
-  name: 'funcional: show() abre el diálogo y expone is-date-picker dentro',
+  name: 'funcional: show() abre el diálogo y expone iswc-date-picker dentro',
   run: async (page) => {
     await page.goto(URL, { waitUntil: 'domcontentloaded' });
     await waitReady(page, 'data-date-input-ready');
@@ -69,7 +69,7 @@ tests.push({
     const info = await page.evaluate(() => {
       const el = document.getElementById('demo');
       const dialog = el.shadowRoot.querySelector('dialog');
-      const picker = el.shadowRoot.querySelector('is-date-picker');
+      const picker = el.shadowRoot.querySelector('iswc-date-picker');
       return {
         open: el.open,
         dialogOpen: dialog.open,
@@ -79,7 +79,7 @@ tests.push({
     });
     assert.equal(info.open, true, 'la propiedad open debe ser true');
     assert.equal(info.dialogOpen, true, 'el <dialog> debe estar abierto');
-    assert.equal(info.hasPicker, true, 'debe haber un is-date-picker en el panel');
+    assert.equal(info.hasPicker, true, 'debe haber un iswc-date-picker en el panel');
     assert.ok(info.grid >= 28, `la rejilla debe tener >=28 días (puede incluir outside-days), hay ${info.grid}`);
     // Cerrar para dejar el estado limpio
     await page.evaluate(() => { document.getElementById('demo').hide(); });
@@ -87,22 +87,22 @@ tests.push({
 });
 
 tests.push({
-  name: 'funcional: is-show / is-hide emiten eventos',
+  name: 'funcional: iswc-show / iswc-hide emiten eventos',
   run: async (page) => {
     await page.goto(URL, { waitUntil: 'domcontentloaded' });
     await waitReady(page, 'data-date-input-ready');
     await page.evaluate(() => {
       window.__events = [];
       const el = document.getElementById('demo');
-      el.addEventListener('is-show', () => window.__events.push('show'));
-      el.addEventListener('is-hide', () => window.__events.push('hide'));
+      el.addEventListener('iswc-show', () => window.__events.push('show'));
+      el.addEventListener('iswc-hide', () => window.__events.push('hide'));
     });
     await page.evaluate(() => document.getElementById('demo').show());
     await page.waitForTimeout(100);
     await page.evaluate(() => document.getElementById('demo').hide());
     await page.waitForTimeout(100);
     const events = await page.evaluate(() => window.__events);
-    assert.deepEqual(events, ['show', 'hide'], 'deben emitirse is-show y luego is-hide');
+    assert.deepEqual(events, ['show', 'hide'], 'deben emitirse iswc-show y luego iswc-hide');
   },
 });
 
@@ -131,7 +131,7 @@ tests.push({
     await page.waitForTimeout(150);
     await page.evaluate(() => {
       const el = document.getElementById('demo');
-      const picker = el.shadowRoot.querySelector('is-date-picker');
+      const picker = el.shadowRoot.querySelector('iswc-date-picker');
       // Hacer click sobre el día 15 (no el de hoy, así podemos distinguirlo)
       const btn = [...picker.shadowRoot.querySelectorAll('button.day:not([data-outside])')]
         .find((b) => b.textContent.trim() === '15');
@@ -175,8 +175,8 @@ tests.push({
     await waitReady(page, 'data-date-input-ready');
     const info = await page.evaluate(() => {
       const el = document.getElementById('required');
-      const label = el.shadowRoot.querySelector('is-date-field').shadowRoot.querySelector('[part="label"]');
-      const hint = el.shadowRoot.querySelector('is-date-field').shadowRoot.querySelector('[part="hint"]');
+      const label = el.shadowRoot.querySelector('iswc-date-field').shadowRoot.querySelector('[part="label"]');
+      const hint = el.shadowRoot.querySelector('iswc-date-field').shadowRoot.querySelector('[part="hint"]');
       return {
         labelText: label.textContent.trim(),
         hintText: hint.textContent.trim(),
@@ -225,8 +225,8 @@ tests.push({
     await page.waitForTimeout(150);
     const info = await page.evaluate(() => {
       const el = document.getElementById('ranged');
-      const field = el.shadowRoot.querySelector('is-date-field');
-      const picker = el.shadowRoot.querySelector('is-date-picker');
+      const field = el.shadowRoot.querySelector('iswc-date-field');
+      const picker = el.shadowRoot.querySelector('iswc-date-picker');
       return {
         fieldMin: field.getAttribute('min'),
         fieldMax: field.getAttribute('max'),

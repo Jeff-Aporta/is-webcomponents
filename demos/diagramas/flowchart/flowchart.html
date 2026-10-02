@@ -3,7 +3,7 @@
 <head>
 <meta charset="utf-8" />
 <meta name="viewport" content="width=device-width, initial-scale=1" />
-<title>Demo — <is-flowchart> · is-webcomponents</title>
+<title>Demo — <iswc-flowchart> · is-webcomponents</title>
 <meta name="description" content="Diagrama de flujo (sin Mermaid): nodos con shape, aristas con label y kind, layout node-link." />
 <style>
   html, body { margin: 0; padding: 0; min-height: 100%; background: #0c1118; color: #e2e8f0; font-family: ui-sans-serif, system-ui, sans-serif; }
@@ -12,14 +12,14 @@
   header h1 { font-size: 16px; font-weight: 700; margin: 0; }
   header p { font-size: 12px; color: #94a3b8; margin: 4px 0 0 0; }
   main { display: grid; place-items: stretch; min-height: 0; padding: 12px; }
-  is-flowchart { width: 100%; height: 100%; min-height: 480px; display: block; }
-  is-flowchart:not(:defined) { visibility: hidden; }
+  iswc-flowchart { width: 100%; height: 100%; min-height: 480px; display: block; }
+  iswc-flowchart:not(:defined) { visibility: hidden; }
 </style>
 <script type="module">
-  await import('../../../dist/cdn/diagrams/flowchart.min.js?h=vh62ra');
-  await customElements.whenDefined('is-flowchart');
+  await import('../../../dist/cdn/diagrams/flowchart.min.js?h=3wdsqw');
+  await customElements.whenDefined('iswc-flowchart');
 
-  const el = document.createElement('is-flowchart');
+  const el = document.createElement('iswc-flowchart');
   el.setAttribute('animation', 'flow');
   el.payload = {
     flowchart: {
@@ -47,7 +47,7 @@
 </head>
 <body>
   <header>
-    <h1>Demo — <code>&lt;is-flowchart&gt;</code></h1>
+    <h1>Demo — <code>&lt;iswc-flowchart&gt;</code></h1>
     <p>Layout node-link con capas + baricentro; aristas ruteadas con A*. Atributo <code>animation="flow"</code> activa aristas dashed brand.</p>
   </header>
   <main></main>

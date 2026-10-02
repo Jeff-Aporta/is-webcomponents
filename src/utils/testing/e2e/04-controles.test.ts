@@ -1,10 +1,10 @@
 // 04-controles.test.ts: e2e DATA-DRIVEN por componente sobre el playground.
-// Descubre en src/previews los JSON (is-preview/v1) cuyos bloques declaran
+// Descubre en src/previews los JSON (iswc-preview/v1) cuyos bloques declaran
 // `controls` y, por cada tag: abre la vista, localiza los paneles
-// <is-preview-controls>, manipula cada control (select/boolean/text/number/
+// <iswc-preview-controls>, manipula cada control (select/boolean/text/number/
 // range/color/json) y verifica que el host del componente reacciona
 // (prop/attr) — el cambio SIEMPRE viaja JSON -> prop/attr, nunca otro sistema.
-// Filtro opcional: E2E_TAGS=is-button,is-code (coma separada).
+// Filtro opcional: E2E_TAGS=iswc-button,iswc-code (coma separada).
 import { before, after } from 'node:test';
 import assert from 'node:assert/strict';
 import { readdirSync, readFileSync, statSync } from 'node:fs';
@@ -44,7 +44,7 @@ const previewsDir = join(repoDir, 'src', 'previews');
 export type TagConControles = { tag: string; cat: string; nControles: number; nPaneles: number; };
 /** Documentación .md del componente (si existe) para verificar objetivos. */
 function mdDelComponente(tag: string, cat: string): string | null {
-  const base = tag.replace(/^is-/, '');
+  const base = tag.replace(/^iswc-/, '');
   const candidatos = [
     join(repoDir, 'src', 'components', cat, `${tag}.md`),
     join(repoDir, 'src', 'components', cat, `${base}.md`),
@@ -106,7 +106,7 @@ export type ControlVivo = { control: string; prop: string; label: string; option
 export type PanelVivo = { idx: number; target: string; spec: ControlVivo[]; };
 async function panelesVivos(page: Page): Promise<PanelVivo[]> {
   return (await page.evaluate(() => {
-    const paneles = [...document.querySelectorAll('is-preview-controls')];
+    const paneles = [...document.querySelectorAll('iswc-preview-controls')];
     return paneles.map((p, idx) => ({
       idx,
       target: (p as HTMLElement).dataset.target ?? '',
@@ -160,7 +160,7 @@ async function manipularYVerificar(
 ): Promise<{ ok: boolean; actual: unknown } | null> {
   return (await page.evaluate(({ idx, control, prop, vRaw, esp }) => {
     const esc = (s: string): string => String(s).replace(/[\\"]/g, '\\$&');
-    const paneles = [...document.querySelectorAll('is-preview-controls')];
+    const paneles = [...document.querySelectorAll('iswc-preview-controls')];
     const panel = paneles[idx] as HTMLElement | undefined;
     if (!panel?.shadowRoot) return null;
     const fila = panel.shadowRoot.querySelector<HTMLElement>(`[data-control-prop="${esc(prop)}"]`);
@@ -180,11 +180,11 @@ async function manipularYVerificar(
     // 2) resolver el host (misma lógica que system/controles)
     const target = panel.dataset.target ?? '';
     const caja = panel.closest('.demo-block');
-    const raiz = (caja?.querySelector('is-demo') ?? caja) as ParentNode | null;
+    const raiz = (caja?.querySelector('iswc-demo') ?? caja) as ParentNode | null;
     if (!raiz) return { ok: false, actual: '(sin demo-block)' };
     const host = target
       ? raiz.querySelector<HTMLElement>(target)
-      : [...raiz.querySelectorAll('*')].find((el) => el.tagName.toLowerCase().startsWith('is-')) ?? null;
+      : [...raiz.querySelectorAll('*')].find((el) => el.tagName.toLowerCase().startsWith('iswc-')) ?? null;
     if (!host) return { ok: false, actual: '(host no resuelto)' };
 
     // 3) leer el valor actual del host (espejo de leerValor)

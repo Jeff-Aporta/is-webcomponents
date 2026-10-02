@@ -1,14 +1,14 @@
 ---
-tag: is-pivot-table
+tag: iswc-pivot-table
 tags:
-  - is-pivot-table
+  - iswc-pivot-table
 category: data
 status: public
 source: ./pivot-table.js
 style: ./pivot-table.css
 preview: ./pivot-table.json
 ---
-# `<is-pivot-table>`
+# `<iswc-pivot-table>`
 
 ## Propósito
 
@@ -17,7 +17,7 @@ un campo de filas × un campo de columnas, agrega una medida numérica y arma la
 tabla con totales por fila, por columna y gran total. Los números se formatean
 con `Intl.NumberFormat` en `es-CO` por defecto.
 
-Este módulo registra `<is-pivot-table>`.
+Este módulo registra `<iswc-pivot-table>`.
 
 ## Cuándo usarlo
 
@@ -30,12 +30,12 @@ Este módulo registra `<is-pivot-table>`.
 ## Cuándo no usarlo
 
 - Listados planos con muchas columnas y sin cruce: usa
-  [`<is-data-grid>`](./data-grid.md) o [`<is-ag-grid>`](./ag-grid.md).
+  [`<iswc-data-grid>`](./data-grid.md) o [`<iswc-ag-grid>`](./ag-grid.md).
 - Volúmenes grandes o paginados desde servidor: el componente re-renderiza la
   tabla completa en cada cambio de atributo y no vitualiza filas.
 - Cuando el usuario debe reordenar, filtrar o exportar interactivamente: aquí
   la configuración vive solo en los atributos, no hay UI de configuración.
-- Cuando necesitas editar celdas: eso es [`<is-spreadsheet>`](./spreadsheet.md).
+- Cuando necesitas editar celdas: eso es [`<iswc-spreadsheet>`](./spreadsheet.md).
 
 ## Importación
 
@@ -46,7 +46,7 @@ import './pivot-table.js';
 ## Ejemplo mínimo
 
 ```html
-<is-pivot-table rows="vendedor" cols="mes" measure="total" agg="sum">
+<iswc-pivot-table rows="vendedor" cols="mes" measure="total" agg="sum">
   <script type="application/json">
     [
       { "vendedor": "Ana",  "mes": "Enero",   "total": 1200000 },
@@ -54,7 +54,7 @@ import './pivot-table.js';
       { "vendedor": "Luis", "mes": "Enero",   "total": 1450000 }
     ]
   </script>
-</is-pivot-table>
+</iswc-pivot-table>
 ```
 
 ## API
@@ -90,7 +90,7 @@ proyectado no se muestra.
 
 | Evento | detail | bubbles | composed | cancelable |
 | --- | --- | --- | --- | --- |
-| `is-cell-click` | `{ row, col, value }` — valor de la fila, de la columna y el agregado de la celda (`null` si la celda está vacía) | sí | sí | no |
+| `iswc-cell-click` | `{ row, col, value }` — valor de la fila, de la columna y el agregado de la celda (`null` si la celda está vacía) | sí | sí | no |
 
 Solo las celdas de datos (`td.cell`) emiten el evento; las cabeceras, los
 totales de fila/columna y el gran total no.
@@ -136,7 +136,7 @@ que hereda de [`_sticky.css`](./_sticky.css)).
 
 No es form-associated. No declara `static formAssociated`, no llama a
 `attachInternals()` y no aporta ningún valor al `FormData` del formulario que
-lo contenga. Si necesitas enviar el resultado, léelo en `is-cell-click` o
+lo contenga. Si necesitas enviar el resultado, léelo en `iswc-cell-click` o
 recalcula el agregado en tu propio código y escríbelo en un `<input type="hidden">`.
 
 ## Comportamiento
@@ -182,16 +182,16 @@ recalcula el agregado en tu propio código y escríbelo en un `<input type="hidd
 - [`../_shared/define.js`](../_shared/define.js) — registro idempotente del tag.
 - [`../_shared/element-base.js`](../_shared/element-base.js) — ciclo de vida y
   hooks `onConnected` / `onAttributeChanged`.
-- [`../_shared/emit.js`](../_shared/emit.js) — emisión de `is-cell-click` con
+- [`../_shared/emit.js`](../_shared/emit.js) — emisión de `iswc-cell-click` con
   `bubbles: true, composed: true`.
 - [`./_sticky.css`](./_sticky.css) — cabeceras de fila y esquina pegadas,
-  compartido con [`<is-spreadsheet>`](./spreadsheet.md).
+  compartido con [`<iswc-spreadsheet>`](./spreadsheet.md).
 
-Relacionados: [`<is-spreadsheet>`](./spreadsheet.md) para edición de celdas,
-[`<is-data-grid>`](./data-grid.md) y [`<is-ag-grid>`](./ag-grid.md) para
-listados tabulares, [`<is-stat>`](./stat.md) para un único KPI.
+Relacionados: [`<iswc-spreadsheet>`](./spreadsheet.md) para edición de celdas,
+[`<iswc-data-grid>`](./data-grid.md) y [`<iswc-ag-grid>`](./ag-grid.md) para
+listados tabulares, [`<iswc-stat>`](./stat.md) para un único KPI.
 
-Tags del módulo: `<is-pivot-table>`.
+Tags del módulo: `<iswc-pivot-table>`.
 
 ## Accesibilidad
 
@@ -199,7 +199,7 @@ Tags del módulo: `<is-pivot-table>`.
   pero inofensivo) y usa `<thead>`, `<tbody>` y `<tfoot>` reales, así que los
   lectores de pantalla navegan la estructura de forma nativa.
 - Las celdas de datos son clicables pero **no** son focalizables por teclado:
-  no tienen `tabindex` ni manejador de `Enter`/`Space`. Si `is-cell-click`
+  no tienen `tabindex` ni manejador de `Enter`/`Space`. Si `iswc-cell-click`
   dispara una acción importante en tu pantalla, ofrece una vía alternativa
   accesible por teclado.
 - Las cabeceras de columna y la esquina son `<th>`; las cabeceras de fila se
@@ -212,7 +212,7 @@ Tags del módulo: `<is-pivot-table>`.
 ## Ejemplo avanzado
 
 ```html
-<is-pivot-table
+<iswc-pivot-table
   id="ventas"
   rows="sucursal"
   cols="linea"
@@ -230,14 +230,14 @@ Tags del módulo: `<is-pivot-table>`.
       { "sucursal": "Cali",     "linea": "Software", "valor": 5600000 }
     ]
   </script>
-</is-pivot-table>
+</iswc-pivot-table>
 
 <script type="module">
   import './pivot-table.js';
 
   const pivot = document.getElementById('ventas');
 
-  pivot.addEventListener('is-cell-click', (e) => {
+  pivot.addEventListener('iswc-cell-click', (e) => {
     const { row, col, value } = e.detail;
     if (value == null) return;            // celda sin datos
     console.log(`${row} / ${col}: ${value}`);
@@ -278,19 +278,19 @@ Tags del módulo: `<is-pivot-table>`.
 
 ## Reglas para LLM
 
-- El tag exacto es `<is-pivot-table>` y se registra al importar `./pivot-table.js`.
+- El tag exacto es `<iswc-pivot-table>` y se registra al importar `./pivot-table.js`.
 - No inventes atributos: solo existen `rows`, `cols`, `measure`, `agg`, `format`
   y `decimals`. No hay `data`, `title`, `sortable` ni `sticky`.
 - No hay slots ni propiedades públicas; los datos siempre van en un hijo
   `<script type="application/json">`.
-- El único evento emitido es `is-cell-click`. No generes código que escuche
-  `is-change` ni `is-select` sobre este componente.
+- El único evento emitido es `iswc-cell-click`. No generes código que escuche
+  `iswc-change` ni `iswc-select` sobre este componente.
 - Para estilizar usa `::part(root)` y `::part(table)` o redefine los tokens
   `--iswc-*` del tema; no crees variantes de tamaño, escala con `font-size`
   contextual y unidades `em`.
 - Reusa los helpers de `../_shared/` antes de escribir lógica paralela.
 - Si el requisito incluye editar celdas, el componente correcto es
-  `<is-spreadsheet>`, no este.
+  `<iswc-spreadsheet>`, no este.
 
 ## Fuentes
 

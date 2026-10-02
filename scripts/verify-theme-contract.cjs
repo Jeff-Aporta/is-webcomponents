@@ -25,7 +25,7 @@ assert(!/\bsize\s*=|["']size["']|pgSize|small\s*\|\s*medium\s*\|\s*large/.test(`
 assert(!/\b(?:height|padding(?:-inline)?|gap):\s*\d+(?:\.\d+)?px/.test(component), 'component geometry must use em');
 const manifestPath = path.join(root, 'manifest.js');
 const generatorPath = path.join(root, 'scripts', 'generate-templates.ts');
-const previewPath = path.join(root, 'src', 'previews', 'actions', 'is-button.html');
+const previewPath = path.join(root, 'src', 'previews', 'actions', 'iswc-button.html');
 const systemPath = path.join(root, 'src', 'styles', 'is-base.css');
 const shellPath = path.join(root, 'src', 'styles', 'shell.css');
 for (const file of [manifestPath, generatorPath, previewPath, systemPath, shellPath]) {
@@ -35,11 +35,11 @@ const preview = fs.readFileSync(previewPath, 'utf8');
 assert(/<iframe\b/.test(html), 'shell iframe missing');
 assert(/id="themeToggle"/.test(html), 'theme toggle missing');
 assert(/id="fullscreenBtn"[\s\S]*?variant="plain"[\s\S]*?pill/.test(html) || /variant="plain"[\s\S]*?pill[\s\S]*?id="fullscreenBtn"/.test(html), 'fullscreen must be plain+pill icon button');
-assert(/<is-button\b[^>]*id="fullscreenBtn"[^>]*>[\s\n]*<is-icon[^>]*>[\s\n]*<\/is-icon>[\s\n]*<\/is-button>/.test(html), 'fullscreen button must be icon-only is-button');
-assert(/<is-theme-toggle\b[^>]*id="themeToggle"/.test(html), 'theme toggle must be is-theme-toggle');
+assert(/<iswc-button\b[^>]*id="fullscreenBtn"[^>]*>[\s\n]*<iswc-icon[^>]*>[\s\n]*<\/iswc-icon>[\s\n]*<\/iswc-button>/.test(html), 'fullscreen button must be icon-only iswc-button');
+assert(/<iswc-theme-toggle\b[^>]*id="themeToggle"/.test(html), 'theme toggle must be iswc-theme-toggle');
 assert(preview.includes('https://www.youtube.com/@JeffAporta'), 'JeffAporta channel missing');
 const WA_RE = /webawesome|Web Awesome|\bwa-[a-z]/i;
-assert(!WA_RE.test(preview), 'Web Awesome reference remains in is-button preview');
+assert(!WA_RE.test(preview), 'Web Awesome reference remains in iswc-button preview');
 const previewsDir = path.join(root, 'src', 'previews');
 const collectHtml = (dir) => {
   const out = [];

@@ -30,7 +30,7 @@ El objetivo es consumir la librería exactamente como se publica en
 - Antes de escribir código, verifica si la librería ya ofrece un componente adecuado.
 - Si existen varios componentes similares, utiliza el más específico.
 - Si un componente depende de otros componentes, reutiliza la composición existente; no la reimplementes.
-- Utiliza siempre el sistema de iconos propio mediante `<is-icon icon="prefix:name">`.
+- Utiliza siempre el sistema de iconos propio mediante `<iswc-icon icon="prefix:name">`.
 - No utilices Iconify, FontAwesome, Material Icons ni otras librerías externas de iconos, salvo que el usuario lo solicite explícitamente.
 - Configura el tema mediante `data-theme`.
 - Configura la paleta mediante `data-palette`.
@@ -126,7 +126,7 @@ Sustituye `{{SHA}}` por el tip de `main` (referencia: `ca31ad04be5bba79c8ef4652b
   const L = globalThis.ISWebComponentsLoader;
   await L.loadCSSBase();
   await L.loadCSSPalettesDefault();
-  await L.load("is-button");
+  await L.load("iswc-button");
 </script>
 ```
 
@@ -163,7 +163,7 @@ for(const base of MIRRORS){
   const L = globalThis.ISWebComponentsLoader;
   await L.loadCSSBase();
   await L.loadCSSPalettesDefault();
-  await L.load("is-button");
+  await L.load("iswc-button");
   break;
  }catch{}
 }
@@ -250,7 +250,7 @@ Leer siempre el archivo `.md` del componente antes de utilizarlo.
 - Utilizar `connectedCallback()` y `disconnectedCallback()` correctamente para listeners y observers.
 - Mantener separados los conceptos `color` y `variant`.
 - Escalar componentes mediante `font-size`; no implementar un atributo `size`.
-- Utilizar únicamente `<is-icon>` para iconografía.
+- Utilizar únicamente `<iswc-icon>` para iconografía.
 - Corregir la causa raíz de un problema en lugar de crear soluciones duplicadas.
 - Si modificas un componente compartido, revisa primero sus consumidores.
 

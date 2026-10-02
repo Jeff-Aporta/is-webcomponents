@@ -4,7 +4,7 @@
  * Es lo único que se publica en `.ts` sobre el CDN, y la razón es la forma de
  * consumo, no una preferencia de formato:
  *
- *   - Un COMPONENTE se consume como etiqueta (`<is-dropdown>`): lo ejecuta el
+ *   - Un COMPONENTE se consume como etiqueta (`<iswc-dropdown>`): lo ejecuta el
  *     navegador, así que viaja en `.js` minificado.
  *   - El CORE se consume para *escribir* componentes nuevos: se extiende, no se
  *     ejecuta suelto. Ahí el artefacto útil es el `.ts`, con decoradores

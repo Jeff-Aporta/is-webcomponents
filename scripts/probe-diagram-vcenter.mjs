@@ -3,7 +3,7 @@
 // Reproduce el bug vertical que el usuario reportó (texto en cuadrante superior del óvalo).
 import { chromium } from 'playwright';
 
-const TAG = process.argv[2] || 'is-use-case-diagram';
+const TAG = process.argv[2] || 'iswc-use-case-diagram';
 const state = Buffer.from(JSON.stringify({ component: TAG }), 'utf8').toString('base64url');
 const browser = await chromium.launch({ headless: true });
 const ctx = await browser.newContext({ viewport: { width: 1440, height: 900 } });
@@ -13,7 +13,7 @@ await page.waitForTimeout(2500);
 
 const data = await page.evaluate((tag) => {
   const host = document.getElementById('previewHost');
-  const main = host?.querySelector('is-main.main');
+  const main = host?.querySelector('iswc-main.main');
   const comp = main?.querySelector(tag);
   const svg = comp?.shadowRoot?.querySelector('svg');
   if (!svg) return { error: 'no svg' };

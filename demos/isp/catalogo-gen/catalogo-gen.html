@@ -3,7 +3,7 @@
 <head>
 <meta charset="utf-8" />
 <meta name="viewport" content="width=device-width, initial-scale=1" />
-<title>&lt;is-catalogo-gen&gt; · is-webcomponents</title>
+<title>&lt;iswc-catalogo-gen&gt; · is-webcomponents</title>
 <meta name="description" content="Catálogo CRUD genérico: toolbar + ag-grid + drawer de ficha + modal verificación + confirm-delete + recodificar." />
 <style>
   html, body { margin: 0; padding: 0; min-height: 100%; background: #0c1118; color: #e2e8f0; font-family: ui-sans-serif, system-ui, sans-serif; }
@@ -17,25 +17,25 @@
   header .spacer { flex: 1; }
   main { display: grid; padding: 20px; max-width: 1200px; margin: 0 auto; width: 100%; box-sizing: border-box; min-height: 0; }
   .log { font: 12px ui-monospace, Menlo, Consolas, monospace; background: rgba(0,0,0,0.3); padding: 8px; border-radius: 4px; min-height: 60px; white-space: pre-wrap; margin-top: 12px; }
-  is-catalogo-gen { height: 70vh; display: block; border: 1px solid rgba(255,255,255,0.1); border-radius: 6px; overflow: hidden; }
-  is-catalogo-gen:not(:defined) { visibility: hidden; }
+  iswc-catalogo-gen { height: 70vh; display: block; border: 1px solid rgba(255,255,255,0.1); border-radius: 6px; overflow: hidden; }
+  iswc-catalogo-gen:not(:defined) { visibility: hidden; }
 </style>
 <script type="module">
-  // Dependencias transitivas de <is-catalogo-gen>.
-  await import('../../../dist/cdn/actions/button.min.js?h=ki2dk5');
-  await import('../../../dist/cdn/forms/input.min.js?h=kbtjsy');
-  await import('../../../dist/cdn/media/icon.min.js?h=y6tzub');
-  await import('../../../dist/cdn/data/ag-grid.min.js?h=r74jkp');
-  await import('../../../dist/cdn/layout/drawer.min.js?h=e60ru2');
-  await import('../../../dist/cdn/layout/dialog.min.js?h=fvgmyx');
-  await import('../../../dist/cdn/isp/text.min.js?h=12962d');
-  await import('../../../dist/cdn/isp/heading.min.js?h=dbujxu');
-  await import('../../../dist/cdn/isp/confirm-delete.min.js?h=b5imiq');
-  await import('../../../dist/cdn/isp/modal-verificacion.min.js?h=z9av8a');
-  await import('../../../dist/cdn/isp/form.min.js?h=mtoivy');
+  // Dependencias transitivas de <iswc-catalogo-gen>.
+  await import('../../../dist/cdn/actions/button.min.js?h=5i9tzt');
+  await import('../../../dist/cdn/forms/input.min.js?h=268af7');
+  await import('../../../dist/cdn/media/icon.min.js?h=sp71yy');
+  await import('../../../dist/cdn/data/ag-grid.min.js?h=7rrgq8');
+  await import('../../../dist/cdn/layout/drawer.min.js?h=bycvbv');
+  await import('../../../dist/cdn/layout/dialog.min.js?h=6ocp5e');
+  await import('../../../dist/cdn/isp/text.min.js?h=ymvems');
+  await import('../../../dist/cdn/isp/heading.min.js?h=mqv7ud');
+  await import('../../../dist/cdn/isp/confirm-delete.min.js?h=tiji0m');
+  await import('../../../dist/cdn/isp/modal-verificacion.min.js?h=qro1v0');
+  await import('../../../dist/cdn/isp/form.min.js?h=qftbsa');
   await import('../../../dist/cdn/isp/controller-from-config.min.js?h=fn9l37');
-  await import('../../../dist/cdn/isp/catalogo-gen.min.js?h=f0zf9d');
-  await customElements.whenDefined('is-catalogo-gen');
+  await import('../../../dist/cdn/isp/catalogo-gen.min.js?h=ol07ry');
+  await customElements.whenDefined('iswc-catalogo-gen');
 
   // ── Datos fake en memoria ────────────────────────────────────────────
   const PRODUCTOS = [
@@ -88,20 +88,20 @@
 
   const eventLog = document.getElementById('event-log');
   const log = (m) => { eventLog.textContent += new Date().toISOString().slice(11, 19) + ' ' + m + '\n'; };
-  for (const evt of ['is-selection-change', 'is-double-click', 'is-action', 'is-error', 'is-frm-open', 'is-frm-close']) {
+  for (const evt of ['iswc-selection-change', 'iswc-double-click', 'iswc-action', 'iswc-error', 'iswc-frm-open', 'iswc-frm-close']) {
     cat.addEventListener(evt, (e) => log(`${evt}: ${JSON.stringify(e.detail || {}).slice(0, 140)}`));
   }
 
   // Form slot
   cat.innerHTML = `
-    <is-form slot="frm" id="frm">
+    <iswc-form slot="frm" id="frm">
       <h3 slot="header">Aplicación</h3>
       <div slot="content" style="padding: 12px; display: grid; gap: 8px;">
-        <is-input name="app" label="Código" required></is-input>
-        <is-input name="descripcion" label="Descripción" required></is-input>
-        <is-switch name="activo">Activo</is-switch>
+        <iswc-input name="app" label="Código" required></iswc-input>
+        <iswc-input name="descripcion" label="Descripción" required></iswc-input>
+        <iswc-switch name="activo">Activo</iswc-switch>
       </div>
-    </is-form>
+    </iswc-form>
   `;
 
   document.documentElement.dataset.catalogoReady = '1';
@@ -110,14 +110,14 @@
 <body>
 <header>
   <div>
-    <h1>&lt;is-catalogo-gen&gt; — catálogo CRUD genérico</h1>
+    <h1>&lt;iswc-catalogo-gen&gt; — catálogo CRUD genérico</h1>
     <p>Toolbar + ag-grid + drawer de ficha + modales de verificación y borrado.</p>
   </div>
   <div class="spacer"></div>
-  <code>is-catalogo-gen</code>
+  <code>iswc-catalogo-gen</code>
 </header>
 <main>
-  <is-catalogo-gen id="cat" show-header></is-catalogo-gen>
+  <iswc-catalogo-gen id="cat" show-header></iswc-catalogo-gen>
   <pre id="event-log" class="log"></pre>
 </main>
 </body>

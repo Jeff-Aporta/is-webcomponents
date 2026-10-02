@@ -45,10 +45,10 @@ async function checkDeterministic(page) {
   await page.waitForTimeout(200);
 
   const data = await page.evaluate(() => {
-    const inputs = [...document.querySelectorAll('is-date-range-input')];
+    const inputs = [...document.querySelectorAll('iswc-date-range-input')];
     return inputs.map((i, idx) => {
       const r = i.getBoundingClientRect();
-      const fields = [...i.shadowRoot.querySelectorAll('is-date-field')];
+      const fields = [...i.shadowRoot.querySelectorAll('iswc-date-field')];
       const triggers = [...i.shadowRoot.querySelectorAll('[part="trigger"]')];
       const fieldRects = fields.map((f) => {
         const fr = f.getBoundingClientRect();
@@ -94,8 +94,8 @@ async function checkDeterministic(page) {
   await page.waitForTimeout(200);
   const panelInfo = await page.evaluate(() => {
     const el = document.getElementById('demo');
-    const range = el.shadowRoot.querySelector('is-date-range-picker');
-    const pickers = range ? [...range.shadowRoot.querySelectorAll('is-date-picker')] : [];
+    const range = el.shadowRoot.querySelector('iswc-date-range-picker');
+    const pickers = range ? [...range.shadowRoot.querySelectorAll('iswc-date-picker')] : [];
     return {
       pickers: pickers.length,
       firstDays: pickers[0]?.shadowRoot?.querySelectorAll('button.day').length ?? 0,

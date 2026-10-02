@@ -1,5 +1,5 @@
 /**
- * color-picker.test.ts — Tests exhaustivos de <is-color-picker>.
+ * color-picker.test.ts — Tests exhaustivos de <iswc-color-picker>.
  *
  * Selector de color form-associated. Panel en <dialog modal> (top layer).
  */
@@ -13,13 +13,13 @@ import {
   esFormAssociated, usaShadowDom,
 } from './_helpers.js';
 
-const TAG = 'is-color-picker';
+const TAG = 'iswc-color-picker';
 const src = leerComponente(TAG);
 
 test('color-picker: archivo y registro', () => {
   assert.ok(src.length > 500);
   assert.ok(existeCss(TAG));
-  assert.ok(/defineElement\s*\(\s*['"`]is-color-picker['"`]/.test(src));
+  assert.ok(/defineElement\s*\(\s*['"`]iswc-color-picker['"`]/.test(src));
   assert.ok(usaShadowDom(src));
 });
 
@@ -27,33 +27,33 @@ test('color-picker: atributos observados', () => {
   const obs = atributosObservados(src);
   for (const a of ['name', 'value', 'label', 'hint', 'disabled',
                    'required', 'swatches']) {
-    assert.ok(obs.includes(a), `<is-color-picker> debe observar "${a}"`);
+    assert.ok(obs.includes(a), `<iswc-color-picker> debe observar "${a}"`);
   }
 });
 
-test('color-picker: eventos (is-input, is-change)', () => {
+test('color-picker: eventos (iswc-input, iswc-change)', () => {
   const evs = eventosEmitidos(src);
-  for (const e of ['is-input', 'is-change']) {
+  for (const e of ['iswc-input', 'iswc-change']) {
     assert.ok(evs.includes(e),
-      `<is-color-picker> debe emitir "${e}"`);
+      `<iswc-color-picker> debe emitir "${e}"`);
   }
 });
 
 test('color-picker: value default (#808080)', () => {
   assert.ok(/#808080/.test(src),
-    '<is-color-picker> value default debe ser #808080');
+    '<iswc-color-picker> value default debe ser #808080');
 });
 
 test('color-picker: usa <dialog> en top layer', () => {
   assert.ok(/<dialog/.test(src),
-    '<is-color-picker> debe usar <dialog>');
+    '<iswc-color-picker> debe usar <dialog>');
 });
 
-test('color-picker: input color nativo + is-input hex', () => {
+test('color-picker: input color nativo + iswc-input hex', () => {
   assert.ok(/type\s*=\s*["']color["']/.test(src),
-    '<is-color-picker> debe usar <input type="color">');
-  assert.ok(/['"]is-input['"]/.test(src) || /'is-input'/.test(src),
-    '<is-color-picker> debe usar <is-input> para el hex');
+    '<iswc-color-picker> debe usar <input type="color">');
+  assert.ok(/['"]iswc-input['"]/.test(src) || /'iswc-input'/.test(src),
+    '<iswc-color-picker> debe usar <iswc-input> para el hex');
 });
 
 test('color-picker: shadow DOM parts', () => {
@@ -66,20 +66,20 @@ test('color-picker: shadow DOM parts', () => {
 
 test('color-picker: trigger accesible (aria-haspopup=dialog)', () => {
   assert.ok(/aria-haspopup\s*=\s*["']dialog["']/.test(src),
-    '<is-color-picker> trigger debe tener aria-haspopup=dialog');
+    '<iswc-color-picker> trigger debe tener aria-haspopup=dialog');
   assert.ok(/aria-expanded/.test(src));
 });
 
 test('color-picker: swatches predefinidos (paleta por defecto)', () => {
   assert.ok(/DEFAULT_SWATCHES/.test(src),
-    '<is-color-picker> debe tener paleta de swatches predefinidos');
+    '<iswc-color-picker> debe tener paleta de swatches predefinidos');
   // Verifica que el atributo swatches="..." se puede pasar.
   assert.ok(/swatches/.test(src));
 });
 
 test('color-picker: eyedropper (EyeDropper API)', () => {
   assert.ok(/EyeDropper/.test(src) || /eyedropper/.test(src),
-    '<is-color-picker> debe ofrecer eyedropper (EyeDropper API)');
+    '<iswc-color-picker> debe ofrecer eyedropper (EyeDropper API)');
 });
 
 test('color-picker: form-associated', () => {
@@ -89,7 +89,7 @@ test('color-picker: form-associated', () => {
 test('color-picker: preview JSON', () => {
   const prev = leerPreview(TAG);
   assert.ok(prev);
-  assert.equal(prev!['$schema'], 'is-preview/v1');
+  assert.equal(prev!['$schema'], 'iswc-preview/v1');
 });
 
 test('color-picker: edge case — hex inválido (no rompe)', () => {

@@ -1,6 +1,6 @@
 // dock.test.mjs — tests exhaustivos del demo dock.html.
 // Cobertura: smoke + funcional (position attr, items con icon/label/active,
-// magnification via --scale, click → is-select, hover sobre item ajusta --scale
+// magnification via --scale, click → iswc-select, hover sobre item ajusta --scale
 // del item cercano) + determinismo.
 import assert from 'node:assert/strict';
 import { BASE_URL, newPage, close, waitReady, screenshot, report } from './lib/harness.mjs';
@@ -10,16 +10,16 @@ const URL = `${BASE_URL}/demos/layout/dock/dock.html`;
 const tests = [];
 
 tests.push({
-  name: 'smoke: is-dock + is-dock-item están definidos y los 11 items están montados',
+  name: 'smoke: iswc-dock + iswc-dock-item están definidos y los 11 items están montados',
   run: async (page) => {
     await page.goto(URL, { waitUntil: 'domcontentloaded' });
     await waitReady(page, 'data-dock-ready');
     const data = await page.evaluate(() => {
-      const docks = [...document.querySelectorAll('main is-dock')];
-      const items = [...document.querySelectorAll('main is-dock-item')];
+      const docks = [...document.querySelectorAll('main iswc-dock')];
+      const items = [...document.querySelectorAll('main iswc-dock-item')];
       return {
-        dockDefined: !!customElements.get('is-dock'),
-        itemDefined: !!customElements.get('is-dock-item'),
+        dockDefined: !!customElements.get('iswc-dock'),
+        itemDefined: !!customElements.get('iswc-dock-item'),
         dockCount: docks.length,
         itemCount: items.length,
         positions: docks.map((d) => d.shadowRoot.querySelector('[part="root"]')?.dataset.position),
@@ -27,8 +27,8 @@ tests.push({
         itemsWithIcon: items.filter((i) => i.getAttribute('icon')).length,
       };
     });
-    assert.equal(data.dockDefined, true, 'is-dock debe estar definido');
-    assert.equal(data.itemDefined, true, 'is-dock-item debe estar definido');
+    assert.equal(data.dockDefined, true, 'iswc-dock debe estar definido');
+    assert.equal(data.itemDefined, true, 'iswc-dock-item debe estar definido');
     assert.equal(data.dockCount, 3, `esperaba 3 docks, hay ${data.dockCount}`);
     assert.equal(data.itemCount, 11, `esperaba 11 dock-items (5+3+3), hay ${data.itemCount}`);
     assert.deepEqual(data.positions, ['bottom', 'top', 'bottom']);
@@ -77,7 +77,7 @@ tests.push({
 });
 
 tests.push({
-  name: 'funcional: click en item emite is-select con detail.item',
+  name: 'funcional: click en item emite iswc-select con detail.item',
   run: async (page) => {
     await page.goto(URL, { waitUntil: 'domcontentloaded' });
     await waitReady(page, 'data-dock-ready');
@@ -85,8 +85,8 @@ tests.push({
     await page.evaluate(() => document.getElementById('item-buscar').click());
     await page.waitForTimeout(50);
     const log = await page.evaluate(() => document.getElementById('log').textContent || '');
-    assert.match(log, /is-select.*Buscar|is-select\s*←\s*Buscar/,
-      `log debe contener "is-select ← Buscar", fue: ${log}`);
+    assert.match(log, /iswc-select.*Buscar|iswc-select\s*←\s*Buscar/,
+      `log debe contener "iswc-select ← Buscar", fue: ${log}`);
   },
 });
 
@@ -104,8 +104,8 @@ tests.push({
     await page.keyboard.press('Enter');
     await page.waitForTimeout(50);
     const log = await page.evaluate(() => document.getElementById('log').textContent || '');
-    assert.match(log, /is-select.*Ayuda|is-select\s*←\s*Ayuda/,
-      `Enter en item debe emitir is-select, fue: ${log}`);
+    assert.match(log, /iswc-select.*Ayuda|iswc-select\s*←\s*Ayuda/,
+      `Enter en item debe emitir iswc-select, fue: ${log}`);
   },
 });
 
@@ -140,7 +140,7 @@ tests.push({
     });
     await page.waitForTimeout(150);
     const after = await page.evaluate(() => {
-      const items = [...document.querySelectorAll('#dock-main is-dock-item')];
+      const items = [...document.querySelectorAll('#dock-main iswc-dock-item')];
       return items.map((i) => parseFloat(i.style.getPropertyValue('--scale')) || 1);
     });
     // Al menos UN item debe tener scale > 1 (la magnificación funciona).
@@ -175,7 +175,7 @@ tests.push({
     });
     await page.waitForTimeout(150);
     const scales = await page.evaluate(() => {
-      const items = [...document.querySelectorAll('#dock-main is-dock-item')];
+      const items = [...document.querySelectorAll('#dock-main iswc-dock-item')];
       return items.map((i) => i.style.getPropertyValue('--scale'));
     });
     // Después del leave, todos los items deben tener --scale vacío (reset).
@@ -190,7 +190,7 @@ tests.push({
     await page.goto(URL, { waitUntil: 'domcontentloaded' });
     await waitReady(page, 'data-dock-ready');
     const data = await page.evaluate(() => {
-      const docks = [...document.querySelectorAll('main is-dock')];
+      const docks = [...document.querySelectorAll('main iswc-dock')];
       return docks.map((d) => ({
         attr: d.getAttribute('position'),
         dataPos: d.shadowRoot.querySelector('[part="root"]')?.dataset?.position,
@@ -226,20 +226,20 @@ tests.push({
     await page.goto(URL, { waitUntil: 'domcontentloaded' });
     await waitReady(page, 'data-dock-ready');
     const before = await page.evaluate(() => {
-      return [...document.querySelectorAll('main is-dock')].map((d) => ({
+      return [...document.querySelectorAll('main iswc-dock')].map((d) => ({
         attr: d.getAttribute('position'),
         dataPos: d.shadowRoot.querySelector('[part="root"]')?.dataset?.position,
       }));
     });
     await page.evaluate(() => {
-      document.querySelectorAll('main is-dock').forEach((d) => {
+      document.querySelectorAll('main iswc-dock').forEach((d) => {
         const p = d.getAttribute('position');
         if (p) { d.removeAttribute('position'); d.setAttribute('position', p); }
       });
     });
     await page.waitForTimeout(50);
     const after = await page.evaluate(() => {
-      return [...document.querySelectorAll('main is-dock')].map((d) => ({
+      return [...document.querySelectorAll('main iswc-dock')].map((d) => ({
         attr: d.getAttribute('position'),
         dataPos: d.shadowRoot.querySelector('[part="root"]')?.dataset?.position,
       }));

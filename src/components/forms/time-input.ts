@@ -4,7 +4,7 @@ import './time-clock.js';
 import './digital-clock.js';
 
 /**
- * <is-time-input> — Campo de hora con panel (MUI TimePicker).
+ * <iswc-time-input> — Campo de hora con panel (MUI TimePicker).
  *
  * `panel` elige la superficie: columnas digitales (por defecto, como el picker
  * de escritorio de MUI), lista simple o reloj analógico.
@@ -13,23 +13,23 @@ import './digital-clock.js';
  *            disabled, readonly, clearable, locale, ampm, hour24, seconds,
  *            panel (sections|list|clock), minutes-step, step, color,
  *            action-bar, placement, close-on-select
- * Events: is-change, is-show, is-hide
+ * Events: iswc-change, iswc-show, iswc-hide
  * Methods: show(), hide()
  */
 
 definePickerInput({
-  tag: 'is-time-input',
+  tag: 'iswc-time-input',
   kind: 'time',
   cssUrl: import.meta.url,
-  fieldTag: 'is-time-field',
+  fieldTag: 'iswc-time-field',
   panels: ({ host }: { host: HTMLElement }): HTMLElement[] => {
     const mode = host.getAttribute('panel') || 'sections';
     if (mode === 'clock') {
-      const clock = document.createElement('is-time-clock');
+      const clock = document.createElement('iswc-time-clock');
       clock.dataset.role = 'time';
       return [clock];
     }
-    const clock = document.createElement('is-digital-clock');
+    const clock = document.createElement('iswc-digital-clock');
     clock.dataset.role = 'time';
     clock.setAttribute('layout', mode === 'list' ? 'list' : 'sections');
     return [clock];

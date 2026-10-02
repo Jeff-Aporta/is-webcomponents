@@ -1,20 +1,20 @@
 {
-  "$schema": "is-preview/v1",
-  "tag": "is-month-calendar",
+  "$schema": "iswc-preview/v1",
+  "tag": "iswc-month-calendar",
   "category": "forms",
-  "title": "<is-month-calendar>",
+  "title": "<iswc-month-calendar>",
   "titleHtml": true,
-  "description": "Documentación y demos de is-month-calendar de InSoft.",
-  "storageKey": "docs-is-month-calendar",
+  "description": "Documentación y demos de iswc-month-calendar de InSoft.",
+  "storageKey": "docs-iswc-month-calendar",
   "sections": [
     {
       "id": "intro",
       "title": "Uso",
-      "lede": "Calendario de un mes, suelto. Es la pieza que <code class=\"code\">&lt;is-date-picker&gt;</code> usa por dentro, y sirve por sí sola para vistas de agenda.",
+      "lede": "Calendario de un mes, suelto. Es la pieza que <code class=\"code\">&lt;iswc-date-picker&gt;</code> usa por dentro, y sirve por sí sola para vistas de agenda.",
       "blocks": [
         {
           "kind": "demo",
-          "html": "<is-month-calendar value=\"2026-08-12\"></is-month-calendar>",
+          "html": "<iswc-month-calendar value=\"2026-08-12\"></iswc-month-calendar>",
           "controls": [
             {
               "control": "text",
@@ -25,7 +25,7 @@
         },
         {
           "kind": "code",
-          "code": "<is-month-calendar value=\"2026-08-12\"></is-month-calendar>",
+          "code": "<iswc-month-calendar value=\"2026-08-12\"></iswc-month-calendar>",
           "lang": "html"
         }
       ]
@@ -33,7 +33,7 @@
     {
       "id": "reference",
       "title": "Referencia",
-      "lede": "&lt;is-month-calendar&gt; — Rejilla de los 12 meses de un año (MUI MonthCalendar). Atributos: value (yyyy-mm), year, min, max (ISO), locale, columns, month-width (short|long), disabled, readonly Events: is-change  detail { value, year, month }",
+      "lede": "&lt;iswc-month-calendar&gt; — Rejilla de los 12 meses de un año (MUI MonthCalendar). Atributos: value (yyyy-mm), year, min, max (ISO), locale, columns, month-width (short|long), disabled, readonly Events: iswc-change  detail { value, year, month }",
       "blocks": [
         {
           "kind": "html",

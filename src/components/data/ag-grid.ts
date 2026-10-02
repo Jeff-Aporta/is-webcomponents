@@ -1,5 +1,5 @@
 /**
- * <is-ag-grid> — Data grid avanzado (estilo ag-grid.com en vanilla web component).
+ * <iswc-ag-grid> — Data grid avanzado (estilo ag-grid.com en vanilla web component).
  *
  * Reimplementación mayor basada en el motor datagrid-core (migrada del
  * mimicus-react @Jeff-Aporta). Soporta:
@@ -46,20 +46,20 @@
  *   --iswc-grid-selected-bar
  *
  * Eventos
- *   is-sort-change        detail: { column, direction }
- *   is-filter-change      detail: { column, op, value }
- *   is-quick-filter       detail: { value }
- *   is-cell-click         detail: { row, column, value }
- *   is-cell-edit          detail: { row, column, oldValue, newValue }
- *   is-row-select         detail: { rows: [...] }
- *   is-action             detail: { row, action, column }
- *   is-page-change        detail: { page, pageSize }
- *   is-column-reorder     detail: { colId, toIndex }
- *   is-column-resize      detail: { colId, width }
- *   is-column-pin         detail: { colId, side }
- *   is-column-hide        detail: { colId }
- *   is-state-saved        detail: { json }
- *   is-state-loaded       detail: { columns, sortModel, ... }
+ *   iswc-sort-change        detail: { column, direction }
+ *   iswc-filter-change      detail: { column, op, value }
+ *   iswc-quick-filter       detail: { value }
+ *   iswc-cell-click         detail: { row, column, value }
+ *   iswc-cell-edit          detail: { row, column, oldValue, newValue }
+ *   iswc-row-select         detail: { rows: [...] }
+ *   iswc-action             detail: { row, action, column }
+ *   iswc-page-change        detail: { page, pageSize }
+ *   iswc-column-reorder     detail: { colId, toIndex }
+ *   iswc-column-resize      detail: { colId, width }
+ *   iswc-column-pin         detail: { colId, side }
+ *   iswc-column-hide        detail: { colId }
+ *   iswc-state-saved        detail: { json }
+ *   iswc-state-loaded       detail: { columns, sortModel, ... }
  *
  * API
  *   grid.rows             array vivo (read-only)
@@ -141,30 +141,30 @@ TEMPLATE.innerHTML = /* html */ `
       <slot name="header-extra"></slot>
       <span class="mim-dg__toolbar-spacer"></span>
       <label class="mim-dg__quick">
-        <is-icon icon="mdi:magnify"></is-icon>
-        <is-input class="mim-dg__quick-input" type="search" placeholder="Buscar…" aria-label="Búsqueda rápida"></is-input>
+        <iswc-icon icon="mdi:magnify"></iswc-icon>
+        <iswc-input class="mim-dg__quick-input" type="search" placeholder="Buscar…" aria-label="Búsqueda rápida"></iswc-input>
       </label>
       <div class="mim-dg__density" role="group" aria-label="Densidad">
-        <is-button variant="plain" pill class="mim-dg__density-btn" data-density="compact" title="Compacta" aria-label="Compacta">
-          <is-icon icon="mdi:view-headline"></is-icon>
-        </is-button>
-        <is-button variant="plain" pill class="mim-dg__density-btn is-active" data-density="normal" title="Normal" aria-label="Normal">
-          <is-icon icon="mdi:view-sequential"></is-icon>
-        </is-button>
-        <is-button variant="plain" pill class="mim-dg__density-btn" data-density="comfortable" title="Cómoda" aria-label="Cómoda">
-          <is-icon icon="mdi:view-stream"></is-icon>
-        </is-button>
+        <iswc-button variant="plain" pill class="mim-dg__density-btn" data-density="compact" title="Compacta" aria-label="Compacta">
+          <iswc-icon icon="mdi:view-headline"></iswc-icon>
+        </iswc-button>
+        <iswc-button variant="plain" pill class="mim-dg__density-btn iswc-active" data-density="normal" title="Normal" aria-label="Normal">
+          <iswc-icon icon="mdi:view-sequential"></iswc-icon>
+        </iswc-button>
+        <iswc-button variant="plain" pill class="mim-dg__density-btn" data-density="comfortable" title="Cómoda" aria-label="Cómoda">
+          <iswc-icon icon="mdi:view-stream"></iswc-icon>
+        </iswc-button>
       </div>
-      <is-button variant="plain" color="neutral" class="mim-dg__tool-btn mim-dg__columns-btn" title="Columnas" aria-label="Columnas">
-        <is-icon icon="mdi:view-column-outline"></is-icon>
-      </is-button>
-      <is-button variant="plain" color="neutral" class="mim-dg__tool-btn mim-dg__reset-btn" title="Reiniciar personalización" aria-label="Reiniciar personalización" hidden>
-        <is-icon icon="mdi:backup-restore"></is-icon>
-      </is-button>
-      <is-button variant="plain" color="neutral" class="mim-dg__tool-btn mim-dg__export-btn" title="Exportar CSV">
-        <is-icon icon="mdi:file-delimited-outline"></is-icon>
+      <iswc-button variant="plain" color="neutral" class="mim-dg__tool-btn mim-dg__columns-btn" title="Columnas" aria-label="Columnas">
+        <iswc-icon icon="mdi:view-column-outline"></iswc-icon>
+      </iswc-button>
+      <iswc-button variant="plain" color="neutral" class="mim-dg__tool-btn mim-dg__reset-btn" title="Reiniciar personalización" aria-label="Reiniciar personalización" hidden>
+        <iswc-icon icon="mdi:backup-restore"></iswc-icon>
+      </iswc-button>
+      <iswc-button variant="plain" color="neutral" class="mim-dg__tool-btn mim-dg__export-btn" title="Exportar CSV">
+        <iswc-icon icon="mdi:file-delimited-outline"></iswc-icon>
         <span class="mim-dg__tool-btn-label">CSV</span>
-      </is-button>
+      </iswc-button>
     </header>
 
     <div class="mim-dg__group-panel" part="group-panel">
@@ -172,12 +172,12 @@ TEMPLATE.innerHTML = /* html */ `
       <span class="mim-dg__group-chips"></span>
       <span class="mim-dg__group-hint">arrastra una columna aquí</span>
       <div class="mim-dg__group-panel-actions">
-        <is-button variant="plain" pill class="mim-dg__group-panel-btn" data-action="expand-all" title="Expandir todos" aria-label="Expandir todos">
-          <is-icon icon="mdi:unfold-more-horizontal"></is-icon>
-        </is-button>
-        <is-button variant="plain" pill class="mim-dg__group-panel-btn" data-action="collapse-all" title="Plegar todos" aria-label="Plegar todos">
-          <is-icon icon="mdi:unfold-less-horizontal"></is-icon>
-        </is-button>
+        <iswc-button variant="plain" pill class="mim-dg__group-panel-btn" data-action="expand-all" title="Expandir todos" aria-label="Expandir todos">
+          <iswc-icon icon="mdi:unfold-more-horizontal"></iswc-icon>
+        </iswc-button>
+        <iswc-button variant="plain" pill class="mim-dg__group-panel-btn" data-action="collapse-all" title="Plegar todos" aria-label="Plegar todos">
+          <iswc-icon icon="mdi:unfold-less-horizontal"></iswc-icon>
+        </iswc-button>
       </div>
     </div>
 
@@ -191,12 +191,12 @@ TEMPLATE.innerHTML = /* html */ `
       <aside class="mim-dg__sidebar" part="sidebar" hidden>
         <div class="mim-dg__panel" part="tool-panel" hidden></div>
         <div class="mim-dg__sidebar-tabs" role="tablist" aria-orientation="vertical">
-          <is-button variant="plain" pill class="mim-dg__sidebar-tab" role="tab" data-panel="columns" aria-selected="false" title="Columnas">
-            <is-icon icon="mdi:view-column-outline"></is-icon><span>Columnas</span>
-          </is-button>
-          <is-button variant="plain" pill class="mim-dg__sidebar-tab" role="tab" data-panel="filters" aria-selected="false" title="Filtro">
-            <is-icon icon="mdi:filter-outline"></is-icon><span>Filtro</span>
-          </is-button>
+          <iswc-button variant="plain" pill class="mim-dg__sidebar-tab" role="tab" data-panel="columns" aria-selected="false" title="Columnas">
+            <iswc-icon icon="mdi:view-column-outline"></iswc-icon><span>Columnas</span>
+          </iswc-button>
+          <iswc-button variant="plain" pill class="mim-dg__sidebar-tab" role="tab" data-panel="filters" aria-selected="false" title="Filtro">
+            <iswc-icon icon="mdi:filter-outline"></iswc-icon><span>Filtro</span>
+          </iswc-button>
         </div>
       </aside>
     </div>
@@ -206,20 +206,20 @@ TEMPLATE.innerHTML = /* html */ `
       <span class="mim-dg__footer-spacer"></span>
       <label class="mim-dg__page-size">
         Filas:
-        <is-select class="mim-dg__page-size-select" aria-label="Filas por página">
-          <is-option value="25">25</is-option>
-          <is-option value="50">50</is-option>
-          <is-option value="100">100</is-option>
-          <is-option value="200">200</is-option>
-        </is-select>
+        <iswc-select class="mim-dg__page-size-select" aria-label="Filas por página">
+          <iswc-option value="25">25</iswc-option>
+          <iswc-option value="50">50</iswc-option>
+          <iswc-option value="100">100</iswc-option>
+          <iswc-option value="200">200</iswc-option>
+        </iswc-select>
       </label>
-      <is-button variant="plain" pill class="mim-dg__pager-btn" data-action="page-prev" aria-label="Anterior">
-        <is-icon icon="mdi:chevron-left"></is-icon>
-      </is-button>
+      <iswc-button variant="plain" pill class="mim-dg__pager-btn" data-action="page-prev" aria-label="Anterior">
+        <iswc-icon icon="mdi:chevron-left"></iswc-icon>
+      </iswc-button>
       <span class="mim-dg__pager-info"></span>
-      <is-button variant="plain" pill class="mim-dg__pager-btn" data-action="page-next" aria-label="Siguiente">
-        <is-icon icon="mdi:chevron-right"></is-icon>
-      </is-button>
+      <iswc-button variant="plain" pill class="mim-dg__pager-btn" data-action="page-next" aria-label="Siguiente">
+        <iswc-icon icon="mdi:chevron-right"></iswc-icon>
+      </iswc-button>
     </footer>
   </div>
 `;
@@ -290,7 +290,7 @@ interface ColumnStateWithSticky extends ColumnState {
   cellStyle?: Record<string, string>;
 }
 
-/** Detalle del evento `is-cell-edit`. */
+/** Detalle del evento `iswc-cell-edit`. */
 interface CellEditDetail {
   row: RowData;
   column: ColumnState;
@@ -298,51 +298,51 @@ interface CellEditDetail {
   newValue: unknown;
 }
 
-/** Detalle del evento `is-cell-click`. */
+/** Detalle del evento `iswc-cell-click`. */
 interface CellClickDetail {
   row: RowData;
   column: ColumnState | null;
   value: unknown;
 }
 
-/** Detalle del evento `is-row-select`. */
+/** Detalle del evento `iswc-row-select`. */
 interface RowSelectDetail {
   rows: RowData[];
 }
 
-/** Detalle del evento `is-sort-change`. */
+/** Detalle del evento `iswc-sort-change`. */
 interface SortChangeDetail {
   column: string;
   direction: SortDirName | null;
 }
 
-/** Detalle del evento `is-filter-change`. */
+/** Detalle del evento `iswc-filter-change`. */
 interface FilterChangeDetail {
   column: string;
   op: string | null | undefined;
   value: unknown;
 }
 
-/** Detalle del evento `is-action`. */
+/** Detalle del evento `iswc-action`. */
 interface ActionEventDetail {
   row: RowData;
   column: ColumnState | undefined;
   action: string | undefined;
 }
 
-/** Detalle del evento `is-column-pin`. */
+/** Detalle del evento `iswc-column-pin`. */
 interface ColumnPinDetail {
   colId: string;
   side: PinSideName | null;
 }
 
-/** Detalle del evento `is-page-change`. */
+/** Detalle del evento `iswc-page-change`. */
 interface PageChangeDetail {
   page: number;
   pageSize: number;
 }
 
-/** Detalle del evento `is-state-saved`. */
+/** Detalle del evento `iswc-state-saved`. */
 interface StateSavedDetail {
   key: string;
   state: unknown;
@@ -350,16 +350,16 @@ interface StateSavedDetail {
 
 const FILTER_ACTIONS_HTML = `
   <div class="mim-dg__filter-actions">
-    <is-button class="mim-dg__filter-btn" data-act="clear" variant="text">Limpiar</is-button>
-    <is-button class="mim-dg__filter-btn" data-act="apply">Aplicar</is-button>
+    <iswc-button class="mim-dg__filter-btn" data-act="clear" variant="text">Limpiar</iswc-button>
+    <iswc-button class="mim-dg__filter-btn" data-act="apply">Aplicar</iswc-button>
   </div>`;
 
-/** Renderiza un `<is-select>` con las opciones de operador del filtro. */
+/** Renderiza un `<iswc-select>` con las opciones de operador del filtro. */
 function opSelectHTML(labels: Record<string, string>, op: string): string {
   const opts = Object.entries(labels)
-    .map(([v, l]) => `<is-option value="${v}"${v === op ? ' selected' : ''}>${escapeHtml(l)}</is-option>`)
+    .map(([v, l]) => `<iswc-option value="${v}"${v === op ? ' selected' : ''}>${escapeHtml(l)}</iswc-option>`)
     .join('');
-  return `<is-select class="mim-dg__filter-op" data-role="op">${opts}</is-select>`;
+  return `<iswc-select class="mim-dg__filter-op" data-role="op">${opts}</iswc-select>`;
 }
 
 /** Type guard para HTMLElement en e.target. */
@@ -372,7 +372,7 @@ function asHTMLElement(target: EventTarget | null): HTMLElement | null {
   return target instanceof HTMLElement ? target : null;
 }
 
-export class IsAgGrid extends ElementBase {
+export class IswcAgGrid extends ElementBase {
     /** Personalización por atributo (ver `core/attrs.ts`). */
     static styleAttrs = {
     'header-height': '--iswc-grid-header-h',
@@ -391,7 +391,7 @@ export class IsAgGrid extends ElementBase {
       'quick-filter', 'group-by',
       'remember-state', 'storage-key',
       'toolbar', 'theme',
-      ...IsAgGrid.styleAttrNames,
+      ...IswcAgGrid.styleAttrNames,
     ];
   }
 
@@ -469,7 +469,7 @@ export class IsAgGrid extends ElementBase {
       qf.addEventListener('input', () => {
         if (!this.#api) return;
         this.#api.setQuickFilter(qf.value);
-        emit(this, 'is-quick-filter', { value: qf.value });
+        emit(this, 'iswc-quick-filter', { value: qf.value });
       });
     }
 
@@ -507,7 +507,7 @@ export class IsAgGrid extends ElementBase {
     }
     const panel = this.shadowRoot!.querySelector<HTMLElement>('.mim-dg__panel');
     if (panel) {
-      panel.addEventListener('is-change', (e: Event): void => {
+      panel.addEventListener('iswc-change', (e: Event): void => {
         const target = asElement(e.target);
         if (!target) return;
         const item = target.closest('[data-col-id]');
@@ -532,7 +532,7 @@ export class IsAgGrid extends ElementBase {
     const footer = this.shadowRoot!.querySelector<HTMLElement>('.mim-dg__footer');
     if (footer) {
       footer.addEventListener('click', (e: Event): void => {
-        // Los controles son <is-button>: el click se retarget al host, así que
+        // Los controles son <iswc-button>: el click se retarget al host, así que
         // buscar `button` no encuentra nada.
         const target = asElement(e.target);
         if (!target) return;
@@ -565,14 +565,14 @@ export class IsAgGrid extends ElementBase {
     this.#groupPanel.addEventListener('click', this.#onGroupPanelClick);
     this.#groupPanel.addEventListener('dragover', (e: DragEvent): void => {
       e.preventDefault();
-      this.#groupPanel.classList.add('is-over');
+      this.#groupPanel.classList.add('iswc-over');
     });
     this.#groupPanel.addEventListener('dragleave', () => {
-      this.#groupPanel.classList.remove('is-over');
+      this.#groupPanel.classList.remove('iswc-over');
     });
     this.#groupPanel.addEventListener('drop', (e: DragEvent): void => {
       e.preventDefault();
-      this.#groupPanel.classList.remove('is-over');
+      this.#groupPanel.classList.remove('iswc-over');
       const colId = e.dataTransfer?.getData('application/x-is-col-id');
       if (colId) this.#api?.addRowGroupCol(colId);
     });
@@ -619,7 +619,7 @@ export class IsAgGrid extends ElementBase {
       const cols = this.#api.getColumns();
       const toIndex = cols.findIndex((c) => c.colId === targetColId);
       if (toIndex >= 0) this.#api.reorderColumn(sourceColId, toIndex);
-      emit(this, 'is-column-reorder', { colId: sourceColId, toIndex });
+      emit(this, 'iswc-column-reorder', { colId: sourceColId, toIndex });
     });
   }
 
@@ -662,7 +662,7 @@ export class IsAgGrid extends ElementBase {
       window.removeEventListener('pointermove', onMove as EventListener);
       window.removeEventListener('pointerup', onUp as EventListener);
       const w = this.#api?.getColumns().find((c) => c.colId === colId)?.width;
-      if (w != null) emit(this, 'is-column-resize', { colId, width: w });
+      if (w != null) emit(this, 'iswc-column-resize', { colId, width: w });
     };
     window.addEventListener('pointermove', onMove as EventListener);
     window.addEventListener('pointerup', onUp as EventListener);
@@ -676,7 +676,7 @@ export class IsAgGrid extends ElementBase {
     this.#stateLoaded = false;
     if (this.#rememberState) {
       const key = this.#storageKey || this.#defaultStorageKey();
-      const saved = getComponentPrefs('is-ag-grid', key);
+      const saved = getComponentPrefs('iswc-ag-grid', key);
       if (saved && this.#api) this.#api.loadState(JSON.stringify(saved));
     }
     this.#render();
@@ -754,21 +754,21 @@ export class IsAgGrid extends ElementBase {
     try { return JSON.parse(String(raw)); } catch { return null; }
   }
 
-  /** Snapshot completo bajo `localStorage['is-webcomponents']['is-ag-grid'][key]`.
+  /** Snapshot completo bajo `localStorage['is-webcomponents']['iswc-ag-grid'][key]`.
    *  Se reemplaza entero (no merge): un merge dejaría columnas o filtros que
    *  ya no existen en el estado nuevo. */
   #persistState(): void {
     if (!this.#api) return;
     const key = this.#storageKey || this.#defaultStorageKey();
     const raw = this.#api.serializeState();
-    const state = IsAgGrid.#parseState(raw);
+    const state = IswcAgGrid.#parseState(raw);
     if (!state) return;
-    replaceComponentPrefs('is-ag-grid', key, state as PrefsEntry);
-    emit(this, 'is-state-saved', { key, state } satisfies StateSavedDetail);
+    replaceComponentPrefs('iswc-ag-grid', key, state as PrefsEntry);
+    emit(this, 'iswc-state-saved', { key, state } satisfies StateSavedDetail);
   }
 
   #defaultStorageKey(): string {
-    return `is-ag-grid:${this.id || this.getAttribute('name') || 'session'}`;
+    return `iswc-ag-grid:${this.id || this.getAttribute('name') || 'session'}`;
   }
 
   async #readData(): Promise<void> {
@@ -819,7 +819,7 @@ export class IsAgGrid extends ElementBase {
       .split(',').map((s: string) => Number(s.trim())).filter((n: number) => Number.isFinite(n) && n > 0);
     this.#pageSizeOptions = opts.length ? opts : [DEFAULT_PAGE_SIZE];
     this.#pageSizeSelect.replaceChildren(...this.#pageSizeOptions.map((o: number) => {
-      const opt = document.createElement('is-option') as HTMLElement & { value: string; textContent: string };
+      const opt = document.createElement('iswc-option') as HTMLElement & { value: string; textContent: string };
       opt.value = String(o);
       opt.textContent = String(o);
       return opt;
@@ -883,7 +883,7 @@ export class IsAgGrid extends ElementBase {
     if (!this.#api) return;
     this.#unsubscribe = this.#api.subscribe((_state: GridState, reason?: string): void => {
       // Selección: pintar clases/checkbox in-place. Un #renderBody completo
-      // recreaba is-icon en cada clic → flickering visible en catalogo-gen.
+      // recreaba iswc-icon en cada clic → flickering visible en catalogo-gen.
       if (reason === 'selection') {
         this.#paintSelection();
         this.#paintHeaderCheckbox();
@@ -898,7 +898,7 @@ export class IsAgGrid extends ElementBase {
     });
   }
 
-  /** Actualiza is-selected / checkbox sin destruir el DOM de filas. */
+  /** Actualiza iswc-selected / checkbox sin destruir el DOM de filas. */
   #paintSelection(): void {
     if (!this.#api || !this.#body) return;
     const state = this.#api.getState();
@@ -906,13 +906,13 @@ export class IsAgGrid extends ElementBase {
       const id = row.dataset.rowId;
       if (id == null) continue;
       const selected = state.selection.has(id);
-      row.classList.toggle('is-selected', selected);
+      row.classList.toggle('iswc-selected', selected);
       row.setAttribute('aria-selected', selected ? 'true' : 'false');
       const cb = row.querySelector<HTMLElement>('.mim-dg__checkbox');
       if (!cb) continue;
       cb.classList.toggle('mim-dg__checkbox--all', selected);
       cb.classList.toggle('mim-dg__checkbox--none', !selected);
-      const icon = cb.querySelector<HTMLElement>('is-icon');
+      const icon = cb.querySelector<HTMLElement>('iswc-icon');
       if (icon) icon.setAttribute('icon', selected ? 'mdi:checkbox-marked' : 'mdi:checkbox-blank-outline');
     }
   }
@@ -939,7 +939,7 @@ export class IsAgGrid extends ElementBase {
       : checks === HeaderCheckboxState.SOME
         ? 'mdi:minus-box'
         : 'mdi:checkbox-blank-outline';
-    const icon = cell.querySelector<HTMLElement>('is-icon');
+    const icon = cell.querySelector<HTMLElement>('iswc-icon');
     if (icon) icon.setAttribute('icon', iconName);
   }
 
@@ -973,12 +973,12 @@ export class IsAgGrid extends ElementBase {
 
     const html: string[] = [];
     if (showSelected) {
-      html.push(`<div class="mim-dg__head-cell mim-dg__cell--check is-pinned is-pinned-left" role="columnheader" style="width:44px;flex:0 0 44px;position:sticky;left:0;z-index:4;height:${headerH}px">`);
+      html.push(`<div class="mim-dg__head-cell mim-dg__cell--check iswc-pinned iswc-pinned-left" role="columnheader" style="width:44px;flex:0 0 44px;position:sticky;left:0;z-index:4;height:${headerH}px">`);
       if (this.#currentSelectionMode === SelectionMode.MULTIPLE) {
         const icon = checks === HeaderCheckboxState.ALL
           ? 'mdi:checkbox-marked'
           : (checks === HeaderCheckboxState.SOME ? 'mdi:minus-box' : 'mdi:checkbox-blank-outline');
-        html.push(`<button class="mim-dg__checkbox mim-dg__checkbox--${checks}" type="button" aria-label="Seleccionar todo" data-act="toggle-all"><is-icon icon="${icon}"></is-icon></button>`);
+        html.push(`<button class="mim-dg__checkbox mim-dg__checkbox--${checks}" type="button" aria-label="Seleccionar todo" data-act="toggle-all"><iswc-icon icon="${icon}"></iswc-icon></button>`);
       }
       html.push('</div>');
     }
@@ -1007,12 +1007,12 @@ export class IsAgGrid extends ElementBase {
       const isFiltered = state.filterModel[col.colId] != null;
       const isGrouped = state.rowGroupCols.includes(col.colId);
       const pinnedCls = col.pinned === 'left'
-        ? ' is-pinned is-pinned-left'
+        ? ' iswc-pinned iswc-pinned-left'
         : col.pinned === 'right'
-          ? ' is-pinned is-pinned-right'
+          ? ' iswc-pinned iswc-pinned-right'
           : '';
-      const sortCls = col.sortable ? ' is-sortable' : '';
-      const sortedCls = dir ? ' is-sorted' : '';
+      const sortCls = col.sortable ? ' iswc-sortable' : '';
+      const sortedCls = dir ? ' iswc-sorted' : '';
       const stickStyle = col.__stickLeft
         ? `position:sticky;left:${col.__stickLeft};z-index:3;`
         : col.__stickRight
@@ -1021,11 +1021,11 @@ export class IsAgGrid extends ElementBase {
       const icon = dir === 'asc' ? 'mdi:arrow-up' : dir === 'desc' ? 'mdi:arrow-down' : null;
       html.push(`<div class="mim-dg__head-cell mim-dg__cell--${col.align}${sortCls}${sortedCls}${pinnedCls}" role="columnheader" data-col-id="${col.colId}" draggable="${col.sortable !== false ? 'true' : 'false'}" style="width:${col.width}px;height:${headerH}px;${stickStyle}" aria-sort="${dir === 'asc' ? 'ascending' : dir === 'desc' ? 'descending' : 'none'}">
         <span class="mim-dg__head-label">${escapeHtml(col.headerName)}</span>
-        ${isFiltered ? '<is-icon icon="mdi:filter" class="mim-dg__filter-icon"></is-icon>' : ''}
-        ${icon ? `<is-icon icon="${icon}" class="mim-dg__sort-icon"></is-icon>` : ''}
+        ${isFiltered ? '<iswc-icon icon="mdi:filter" class="mim-dg__filter-icon"></iswc-icon>' : ''}
+        ${icon ? `<iswc-icon icon="${icon}" class="mim-dg__sort-icon"></iswc-icon>` : ''}
         ${sortIdx != null && state.sortModel.length > 1 ? `<span class="mim-dg__sort-order">${sortIdx}</span>` : ''}
         <button class="mim-dg__head-menu-btn" type="button" aria-label="Menú de columna" data-act="header-menu" data-col-id="${col.colId}">
-          <is-icon icon="mdi:dots-vertical"></is-icon>
+          <iswc-icon icon="mdi:dots-vertical"></iswc-icon>
         </button>
         ${col.resizable ? `<span class="mim-dg__resizer" role="separator" aria-orientation="vertical" data-col-id="${col.colId}"></span>` : ''}
       </div>`);
@@ -1067,7 +1067,7 @@ export class IsAgGrid extends ElementBase {
         }).join('');
         html.push(`<div class="mim-dg__row mim-dg__group-row" role="row" data-row-id="${escapeHtml(dr.id)}" data-row-kind="group" data-row-index="${absIdx}" aria-rowindex="${absIdx + 2}" aria-level="${dr.level + 1}" aria-expanded="${dr.expanded}" style="height:${rowH}px">
           <div class="mim-dg__group-cell" style="padding-left:${8 + dr.level * 18}px">
-            <is-icon icon="${dr.expanded ? 'mdi:chevron-down' : 'mdi:chevron-right'}" class="mim-dg__group-chevron"></is-icon>
+            <iswc-icon icon="${dr.expanded ? 'mdi:chevron-down' : 'mdi:chevron-right'}" class="mim-dg__group-chevron"></iswc-icon>
             <span class="mim-dg__group-label">${escapeHtml(dr.label)}</span>
             <span class="mim-dg__group-count">(${dr.count.toLocaleString()})</span>
             ${aggFrag}
@@ -1080,7 +1080,7 @@ export class IsAgGrid extends ElementBase {
         const cells: string[] = [];
         if (check) {
           const icon = selected ? 'mdi:checkbox-marked' : 'mdi:checkbox-blank-outline';
-          cells.push(`<div class="mim-dg__cell mim-dg__cell--check is-pinned is-pinned-left" role="gridcell" style="width:44px;flex:0 0 44px;position:sticky;left:0;z-index:2"><span class="mim-dg__checkbox mim-dg__checkbox--${selected ? 'all' : 'none'}"><is-icon icon="${icon}"></is-icon></span></div>`);
+          cells.push(`<div class="mim-dg__cell mim-dg__cell--check iswc-pinned iswc-pinned-left" role="gridcell" style="width:44px;flex:0 0 44px;position:sticky;left:0;z-index:2"><span class="mim-dg__checkbox mim-dg__checkbox--${selected ? 'all' : 'none'}"><iswc-icon icon="${icon}"></iswc-icon></span></div>`);
         }
         let tempLeft = checkWidth;
         let rightX = 0;
@@ -1110,7 +1110,7 @@ export class IsAgGrid extends ElementBase {
           const ariaColindex = (check ? 1 : 0) + withFlex.indexOf(colRaw) + 1;
           cells.push(`<div class="mim-dg__cell ${cls}" role="gridcell" data-col-id="${col.colId}" data-row-id="${escapeHtml(node.id)}" aria-colindex="${ariaColindex}" style="width:${col.width}px;${stickStyle}${style}">${inner}</div>`);
         }
-        const rowCls = `${selected ? 'is-selected' : ''}${focused ? ' is-focused' : ''}${node.index % 2 ? ' is-odd' : ''}`;
+        const rowCls = `${selected ? 'iswc-selected' : ''}${focused ? ' iswc-focused' : ''}${node.index % 2 ? ' iswc-odd' : ''}`;
         html.push(`<div class="mim-dg__row ${rowCls}" role="row" data-row-id="${escapeHtml(node.id)}" data-row-kind="leaf" data-row-index="${absIdx}" aria-rowindex="${absIdx + 2}" style="height:${rowH}px" aria-selected="${selected}">${cells.join('')}</div>`);
       }
     }
@@ -1162,7 +1162,7 @@ export class IsAgGrid extends ElementBase {
     }
     if (t === 'actions') {
       const acts = (col.def as ColumnDefWithActions).actions || [];
-      return acts.map((a) => `<button class="mim-dg__action" type="button" data-action="${escapeHtml(a.value)}" title="${escapeHtml(a.label || a.value)}"><is-icon icon="${escapeHtml(a.icon || 'mdi:dots-horizontal')}"></is-icon></button>`).join('');
+      return acts.map((a) => `<button class="mim-dg__action" type="button" data-action="${escapeHtml(a.value)}" title="${escapeHtml(a.label || a.value)}"><iswc-icon icon="${escapeHtml(a.icon || 'mdi:dots-horizontal')}"></iswc-icon></button>`).join('');
     }
     return escapeHtml(value == null ? '' : String(value));
   }
@@ -1208,7 +1208,7 @@ export class IsAgGrid extends ElementBase {
       <div class="mim-dg__panel-list">
         ${cols.map((c) => `
           <label class="mim-dg__panel-item" data-col-id="${escapeHtml(c.colId)}">
-            <is-checkbox ${c.hide ? '' : 'checked'}></is-checkbox>
+            <iswc-checkbox ${c.hide ? '' : 'checked'}></iswc-checkbox>
             <span>${escapeHtml(c.headerName ?? c.colId)}</span>
           </label>`).join('')}
       </div>`;
@@ -1234,7 +1234,7 @@ export class IsAgGrid extends ElementBase {
 
   #renderDensity(): void {
     this.shadowRoot!.querySelectorAll<HTMLElement>('.mim-dg__density-btn').forEach((btn: HTMLElement) => {
-      btn.classList.toggle('is-active', btn.dataset['density'] === this.#density);
+      btn.classList.toggle('iswc-active', btn.dataset['density'] === this.#density);
     });
     const root = this.shadowRoot!.querySelector<HTMLElement>('.mim-dg');
     if (root) root.dataset['density'] = this.#density;
@@ -1247,7 +1247,7 @@ export class IsAgGrid extends ElementBase {
     const chips = state.rowGroupCols.map((colId) => {
       const col = cols.find((c) => c.colId === colId);
       if (!col) return '';
-      return `<span class="mim-dg__group-chip" data-col-id="${colId}"><is-icon icon="mdi:drag" class="mim-dg__group-chip-grip"></is-icon><span class="mim-dg__group-chip-label">${escapeHtml(col.headerName)}</span><button class="mim-dg__group-chip-x" type="button" data-act="ungroup" data-col-id="${colId}" aria-label="Quitar agrupación"><is-icon icon="mdi:close"></is-icon></button></span>`;
+      return `<span class="mim-dg__group-chip" data-col-id="${colId}"><iswc-icon icon="mdi:drag" class="mim-dg__group-chip-grip"></iswc-icon><span class="mim-dg__group-chip-label">${escapeHtml(col.headerName)}</span><button class="mim-dg__group-chip-x" type="button" data-act="ungroup" data-col-id="${colId}" aria-label="Quitar agrupación"><iswc-icon icon="mdi:close"></iswc-icon></button></span>`;
     });
     const arrows = state.rowGroupCols.map(() => '<span class="mim-dg__group-chip-arrow">›</span>');
     const interleaved: string[] = [];
@@ -1316,7 +1316,7 @@ export class IsAgGrid extends ElementBase {
   }
 
   #menuItem(label: string, icon: string, onClick: () => void): string {
-    return `<button class="mim-dg__menu-item" type="button" role="menuitem" data-act="menu-item" data-cb="${this.#registerMenuCallback(onClick)}"><is-icon icon="${icon}"></is-icon>${escapeHtml(label)}</button>`;
+    return `<button class="mim-dg__menu-item" type="button" role="menuitem" data-act="menu-item" data-cb="${this.#registerMenuCallback(onClick)}"><iswc-icon icon="${icon}"></iswc-icon>${escapeHtml(label)}</button>`;
   }
 
   #menuSep(): string {
@@ -1408,7 +1408,7 @@ export class IsAgGrid extends ElementBase {
           const cb = btn.querySelector<HTMLElement>('[data-set-checkbox]');
           if (!cb) return;
           cb.dataset['checked'] = cb.dataset['checked'] === 'true' ? 'false' : 'true';
-          const icon = cb.querySelector<HTMLElement>('is-icon');
+          const icon = cb.querySelector<HTMLElement>('iswc-icon');
           if (icon) icon.setAttribute('icon', cb.dataset['checked'] === 'true' ? 'mdi:checkbox-marked' : 'mdi:checkbox-blank-outline');
         }
       });
@@ -1420,20 +1420,20 @@ export class IsAgGrid extends ElementBase {
       else this.#api.setFilter(col.colId, null);
       // El detail sólo importa cuando hay filtro; sin él, mandamos nulls tipados.
       if (filter && filter.type === 'text') {
-        emit(this, 'is-filter-change', { column: col.colId, op: filter.op, value: filter.value } satisfies FilterChangeDetail);
+        emit(this, 'iswc-filter-change', { column: col.colId, op: filter.op, value: filter.value } satisfies FilterChangeDetail);
       } else if (filter && filter.type === 'number') {
-        emit(this, 'is-filter-change', { column: col.colId, op: filter.op, value: filter.value } satisfies FilterChangeDetail);
+        emit(this, 'iswc-filter-change', { column: col.colId, op: filter.op, value: filter.value } satisfies FilterChangeDetail);
       } else if (filter && filter.type === 'date') {
-        emit(this, 'is-filter-change', { column: col.colId, op: filter.op, value: filter.value } satisfies FilterChangeDetail);
+        emit(this, 'iswc-filter-change', { column: col.colId, op: filter.op, value: filter.value } satisfies FilterChangeDetail);
       } else {
-        emit(this, 'is-filter-change', { column: col.colId, op: null, value: null } satisfies FilterChangeDetail);
+        emit(this, 'iswc-filter-change', { column: col.colId, op: null, value: null } satisfies FilterChangeDetail);
       }
       this.#closeFilterPopover();
     };
     const clear = (): void => {
       if (!this.#api) return;
       this.#api.setFilter(col.colId, null);
-      emit(this, 'is-filter-change', { column: col.colId, op: null, value: null } satisfies FilterChangeDetail);
+      emit(this, 'iswc-filter-change', { column: col.colId, op: null, value: null } satisfies FilterChangeDetail);
       this.#closeFilterPopover();
     };
     if (applyBtn) applyBtn.addEventListener('click', apply as EventListener);
@@ -1455,7 +1455,7 @@ export class IsAgGrid extends ElementBase {
       const val = existing?.type === 'text' ? existing.value : '';
       return `
         ${opSelectHTML(TEXT_OP_LABELS, op)}
-        <is-input class="mim-dg__filter-field" data-role="val" placeholder="Valor…" value="${escapeHtml(val)}"></is-input>
+        <iswc-input class="mim-dg__filter-field" data-role="val" placeholder="Valor…" value="${escapeHtml(val)}"></iswc-input>
         ${FILTER_ACTIONS_HTML}`;
     }
     if (ft === 'number') {
@@ -1465,8 +1465,8 @@ export class IsAgGrid extends ElementBase {
       const to = nf?.to != null ? String(nf.to) : '';
       return `
         ${opSelectHTML(NUM_OP_LABELS, op)}
-        <is-input class="mim-dg__filter-field" data-role="val" type="number" placeholder="Valor…" value="${escapeHtml(val)}"></is-input>
-        ${op === 'inRange' ? `<is-input class="mim-dg__filter-field" data-role="val-to" type="number" placeholder="Hasta…" value="${escapeHtml(to)}"></is-input>` : ''}
+        <iswc-input class="mim-dg__filter-field" data-role="val" type="number" placeholder="Valor…" value="${escapeHtml(val)}"></iswc-input>
+        ${op === 'inRange' ? `<iswc-input class="mim-dg__filter-field" data-role="val-to" type="number" placeholder="Hasta…" value="${escapeHtml(to)}"></iswc-input>` : ''}
         ${FILTER_ACTIONS_HTML}`;
     }
     if (ft === 'date') {
@@ -1476,8 +1476,8 @@ export class IsAgGrid extends ElementBase {
       const to = df?.to || '';
       return `
         ${opSelectHTML(DATE_OP_LABELS, op)}
-        <is-input class="mim-dg__filter-field" data-role="val" type="date" value="${escapeHtml(val)}"></is-input>
-        ${op === 'inRange' ? `<is-input class="mim-dg__filter-field" data-role="val-to" type="date" value="${escapeHtml(to)}"></is-input>` : ''}
+        <iswc-input class="mim-dg__filter-field" data-role="val" type="date" value="${escapeHtml(val)}"></iswc-input>
+        ${op === 'inRange' ? `<iswc-input class="mim-dg__filter-field" data-role="val-to" type="date" value="${escapeHtml(to)}"></iswc-input>` : ''}
         ${FILTER_ACTIONS_HTML}`;
     }
     if (ft === 'set') {
@@ -1486,13 +1486,13 @@ export class IsAgGrid extends ElementBase {
       const allValues = uniqueValuesSafe(this.#api.getAllRows(), col);
       const selected = sf ? new Set(sf) : new Set(allValues);
       return `
-        <is-input class="mim-dg__filter-field" data-role="set-search" placeholder="Buscar valores…"></is-input>
+        <iswc-input class="mim-dg__filter-field" data-role="set-search" placeholder="Buscar valores…"></iswc-input>
         <div class="mim-dg__filter-actions-row">
-          <is-button class="mim-dg__filter-link" data-set-val="__all__" variant="text">Todo</is-button>
-          <is-button class="mim-dg__filter-link" data-set-val="__none__" variant="text">Nada</is-button>
+          <iswc-button class="mim-dg__filter-link" data-set-val="__all__" variant="text">Todo</iswc-button>
+          <iswc-button class="mim-dg__filter-link" data-set-val="__none__" variant="text">Nada</iswc-button>
         </div>
         <div class="mim-dg__filter-set" data-role="set">
-          ${allValues.map((v) => `<label class="mim-dg__filter-set-item" data-set-val="${escapeHtml(v)}"><is-checkbox data-set-checkbox ${selected.has(v) ? 'checked' : ''}></is-checkbox><span>${escapeHtml(v || '(vacío)')}</span></label>`).join('')}
+          ${allValues.map((v) => `<label class="mim-dg__filter-set-item" data-set-val="${escapeHtml(v)}"><iswc-checkbox data-set-checkbox ${selected.has(v) ? 'checked' : ''}></iswc-checkbox><span>${escapeHtml(v || '(vacío)')}</span></label>`).join('')}
         </div>
         ${FILTER_ACTIONS_HTML}`;
     }
@@ -1556,33 +1556,33 @@ export class IsAgGrid extends ElementBase {
     if (!this.#api) return;
     const others = this.#api.getState().sortModel.filter((s) => s.colId !== colId);
     this.#api.setSortModel(dir ? [...others, { colId, dir }] : others);
-    emit(this, 'is-sort-change', { column: colId, direction: dir } satisfies SortChangeDetail);
+    emit(this, 'iswc-sort-change', { column: colId, direction: dir } satisfies SortChangeDetail);
   }
 
   #clearSort(colId: string): void {
     if (!this.#api) return;
     const others = this.#api.getState().sortModel.filter((s) => s.colId !== colId);
     this.#api.setSortModel(others);
-    emit(this, 'is-sort-change', { column: colId, direction: null } satisfies SortChangeDetail);
+    emit(this, 'iswc-sort-change', { column: colId, direction: null } satisfies SortChangeDetail);
   }
 
   #pinColumn(colId: string, side: PinSideName | null): void {
     if (!this.#api) return;
     this.#api.pinColumn(colId, side);
-    emit(this, 'is-column-pin', { colId, side } satisfies ColumnPinDetail);
+    emit(this, 'iswc-column-pin', { colId, side } satisfies ColumnPinDetail);
   }
 
   #hideColumn(colId: string): void {
     if (!this.#api) return;
     this.#api.hideColumn(colId, true);
-    emit(this, 'is-column-hide', { colId });
+    emit(this, 'iswc-column-hide', { colId });
   }
 
   #goToPage(p: number): void {
     if (!this.#api) return;
     this.#api.setPage(p);
     const st = this.#api.getState();
-    emit(this, 'is-page-change', { page: st.page + 1, pageSize: st.pageSize } satisfies PageChangeDetail);
+    emit(this, 'iswc-page-change', { page: st.page + 1, pageSize: st.pageSize } satisfies PageChangeDetail);
   }
 
   /* ── Event handlers ───────────────────────────────────────────────────── */
@@ -1611,7 +1611,7 @@ export class IsAgGrid extends ElementBase {
       const all = headerCheckboxStateCore(state.selection, state.pageRows);
       const next = all === HeaderCheckboxState.ALL ? clearSelectionCore() : selectAllCore(state.pageRows);
       this.#api.setSelection(next);
-      emit(this, 'is-row-select', { rows: this.api.getSelectedRows() } satisfies RowSelectDetail);
+      emit(this, 'iswc-row-select', { rows: this.api.getSelectedRows() } satisfies RowSelectDetail);
       return;
     }
 
@@ -1624,7 +1624,7 @@ export class IsAgGrid extends ElementBase {
         const additive = (e.ctrlKey || e.metaKey || e.shiftKey) && this.#currentSelectionMode === SelectionMode.MULTIPLE;
         this.#api.toggleSort(colId ?? '', additive);
         const dir = this.#api.getState().sortModel.find((s) => s.colId === colId)?.dir || null;
-        emit(this, 'is-sort-change', { column: colId ?? '', direction: dir } satisfies SortChangeDetail);
+        emit(this, 'iswc-sort-change', { column: colId ?? '', direction: dir } satisfies SortChangeDetail);
       }
       return;
     }
@@ -1651,7 +1651,7 @@ export class IsAgGrid extends ElementBase {
         const cols = this.#api.getColumns();
         const colWithAction = cols.find((c) => (c.def as ColumnDefWithActions).actions?.some((a) => a.value === actionVal));
         const act = colWithAction?.def && (colWithAction.def as ColumnDefWithActions).actions?.find((a) => a.value === actionVal);
-        emit(this, 'is-action', { row: node.data, column: colWithAction, action: act?.value } satisfies ActionEventDetail);
+        emit(this, 'iswc-action', { row: node.data, column: colWithAction, action: act?.value } satisfies ActionEventDetail);
         return;
       }
 
@@ -1671,7 +1671,7 @@ export class IsAgGrid extends ElementBase {
         );
         if (!e.shiftKey) this.#lastRangeFrom = node.id;
         this.#api.setSelection(next);
-        emit(this, 'is-row-select', { rows: this.api.getSelectedRows() } satisfies RowSelectDetail);
+        emit(this, 'iswc-row-select', { rows: this.api.getSelectedRows() } satisfies RowSelectDetail);
       }
 
       // Cell click
@@ -1686,11 +1686,11 @@ export class IsAgGrid extends ElementBase {
           if (newValue != null && String(newValue) !== String(oldValue ?? '')) {
             const parsed = parseMaybeNumber(newValue, col);
             if (colId) node.data[colId] = parsed;
-            emit(this, 'is-cell-edit', { row: node.data, column: col, oldValue, newValue: parsed } satisfies CellEditDetail);
+            emit(this, 'iswc-cell-edit', { row: node.data, column: col, oldValue, newValue: parsed } satisfies CellEditDetail);
             this.#api.setRows([...this.#rawRows]); // notifica al store
           }
         }
-        emit(this, 'is-cell-click', { row: node.data, column: col ?? null, value } satisfies CellClickDetail);
+        emit(this, 'iswc-cell-click', { row: node.data, column: col ?? null, value } satisfies CellClickDetail);
       }
     }
     // Reference allRows to satisfy unused-var lint without altering behavior.
@@ -1730,16 +1730,16 @@ export class IsAgGrid extends ElementBase {
         const orderedIds = leafRows.map((n) => n.id);
         const next = toggleRowSelectionCore(state.selection, dr.node.id, this.#currentSelectionMode, { additive: true, orderedIds });
         this.#api.setSelection(next);
-        emit(this, 'is-row-select', { rows: this.api.getSelectedRows() } satisfies RowSelectDetail);
+        emit(this, 'iswc-row-select', { rows: this.api.getSelectedRows() } satisfies RowSelectDetail);
       }
       e.preventDefault();
     } else if ((e.ctrlKey || e.metaKey) && e.key.toLowerCase() === 'a' && this.#currentSelectionMode === SelectionMode.MULTIPLE) {
       this.#api.setSelection(selectAllCore(leafRows));
-      emit(this, 'is-row-select', { rows: this.api.getSelectedRows() } satisfies RowSelectDetail);
+      emit(this, 'iswc-row-select', { rows: this.api.getSelectedRows() } satisfies RowSelectDetail);
       e.preventDefault();
     } else if (e.key === 'Escape' && state.selection.size) {
       this.#api.setSelection(clearSelectionCore());
-      emit(this, 'is-row-select', { rows: [] } satisfies RowSelectDetail);
+      emit(this, 'iswc-row-select', { rows: [] } satisfies RowSelectDetail);
     }
   };
 
@@ -1879,18 +1879,18 @@ export class IsAgGrid extends ElementBase {
       loadState: (json: string): void => {
         if (!self.#api) return;
         self.#api.loadState(json);
-        emit(self, 'is-state-loaded', self.#api.getState());
+        emit(self, 'iswc-state-loaded', self.#api.getState());
       },
       refresh: (): void => {
         if (!self.#api) return;
         self.#api.setRows([...self.#rawRows]);
       },
       resetPersistedState: (): void => {
-        removeComponentPrefs('is-ag-grid', self.#storageKey || self.#defaultStorageKey());
+        removeComponentPrefs('iswc-ag-grid', self.#storageKey || self.#defaultStorageKey());
         if (!self.#api) return;
         self.#initModel();
         self.#render();
-        emit(self, 'is-state-reset', { key: self.#storageKey || self.#defaultStorageKey() });
+        emit(self, 'iswc-state-reset', { key: self.#storageKey || self.#defaultStorageKey() });
       },
     };
   }
@@ -2010,7 +2010,7 @@ function uniqueValuesSafe(rows: RowNode[], col: ColumnState): string[] {
 }
 
 /** Menú/filtro se montan en document.body (fuera del shadow) — CSS global único. */
-const FLOATING_STYLE_ID = 'is-ag-grid-floating-styles';
+const FLOATING_STYLE_ID = 'iswc-ag-grid-floating-styles';
 const FLOATING_CSS = /* css */ `
 .mim-dg__menu,
 .mim-dg__filter {
@@ -2049,7 +2049,7 @@ const FLOATING_CSS = /* css */ `
   color: var(--iswc-accent, #1e90ff);
   outline: none;
 }
-.mim-dg__menu-item is-icon { flex: 0 0 auto; }
+.mim-dg__menu-item iswc-icon { flex: 0 0 auto; }
 .mim-dg__menu-sep {
   height: 1px;
   margin: 0.3rem 0.35rem;
@@ -2139,4 +2139,4 @@ function ensureFloatingStyles(): void {
   document.head.appendChild(style);
 }
 
-defineElement('is-ag-grid', IsAgGrid, 'IsAgGrid');
+defineElement('iswc-ag-grid', IswcAgGrid, 'IswcAgGrid');

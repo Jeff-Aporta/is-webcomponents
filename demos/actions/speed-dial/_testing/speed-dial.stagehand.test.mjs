@@ -14,8 +14,8 @@ test('stagehand: la página expone data-speed-dial-ready y 2 dials', async () =>
   await page.goto(URL_DEMO, { waitUntil: 'domcontentloaded' });
   await page.waitForSelector('html[data-speed-dial-ready]');
   const info = await page.evaluate(() => ({
-    dials: document.querySelectorAll('is-speed-dial').length,
-    actions: document.querySelectorAll('is-speed-dial-action').length,
+    dials: document.querySelectorAll('iswc-speed-dial').length,
+    actions: document.querySelectorAll('iswc-speed-dial-action').length,
   }));
   assert.equal(info.dials, 2);
   assert.ok(info.actions >= 7, `esperaba >=7 acciones, hay ${info.actions}`);
@@ -25,12 +25,12 @@ test('stagehand: la página expone data-speed-dial-ready y 2 dials', async () =>
 test('stagehand: click en el trigger abre/cierra el dial', async () => {
   const page = await browser.newPage();
   await page.goto(URL_DEMO, { waitUntil: 'domcontentloaded' });
-  await page.waitForSelector('is-speed-dial#sd-up:defined');
-  await page.click('is-speed-dial#sd-up is-check-icon-button');
+  await page.waitForSelector('iswc-speed-dial#sd-up:defined');
+  await page.click('iswc-speed-dial#sd-up iswc-check-icon-button');
   await page.waitForTimeout(80);
   let open = await page.evaluate(() => document.getElementById('sd-up').isOpen);
   assert.equal(open, true);
-  await page.click('is-speed-dial#sd-up is-check-icon-button');
+  await page.click('iswc-speed-dial#sd-up iswc-check-icon-button');
   await page.waitForTimeout(80);
   open = await page.evaluate(() => document.getElementById('sd-up').isOpen);
   assert.equal(open, false);
@@ -40,7 +40,7 @@ test('stagehand: click en el trigger abre/cierra el dial', async () => {
 test('stagehand: click fuera cierra el dial', async () => {
   const page = await browser.newPage();
   await page.goto(URL_DEMO, { waitUntil: 'domcontentloaded' });
-  await page.waitForSelector('is-speed-dial#sd-up:defined');
+  await page.waitForSelector('iswc-speed-dial#sd-up:defined');
   await page.evaluate(() => document.getElementById('sd-up').open());
   await page.waitForTimeout(80);
   // Click en el header (fuera del dial)
@@ -54,17 +54,17 @@ test('stagehand: click fuera cierra el dial', async () => {
 test('stagehand: aria-expanded cambia con el estado del trigger', async () => {
   const page = await browser.newPage();
   await page.goto(URL_DEMO, { waitUntil: 'domcontentloaded' });
-  await page.waitForSelector('is-speed-dial#sd-rad:defined');
+  await page.waitForSelector('iswc-speed-dial#sd-rad:defined');
   await page.evaluate(() => document.getElementById('sd-rad').open());
   await page.waitForTimeout(80);
   const expanded = await page.evaluate(() => {
-    return document.getElementById('sd-rad').shadowRoot.querySelector('is-check-icon-button').getAttribute('aria-expanded');
+    return document.getElementById('sd-rad').shadowRoot.querySelector('iswc-check-icon-button').getAttribute('aria-expanded');
   });
   assert.equal(expanded, 'true');
   await page.evaluate(() => document.getElementById('sd-rad').close());
   await page.waitForTimeout(80);
   const collapsed = await page.evaluate(() => {
-    return document.getElementById('sd-rad').shadowRoot.querySelector('is-check-icon-button').getAttribute('aria-expanded');
+    return document.getElementById('sd-rad').shadowRoot.querySelector('iswc-check-icon-button').getAttribute('aria-expanded');
   });
   assert.equal(collapsed, 'false');
   await page.close();
@@ -73,7 +73,7 @@ test('stagehand: aria-expanded cambia con el estado del trigger', async () => {
 test('stagehand: Escape cierra el dial', async () => {
   const page = await browser.newPage();
   await page.goto(URL_DEMO, { waitUntil: 'domcontentloaded' });
-  await page.waitForSelector('is-speed-dial#sd-up:defined');
+  await page.waitForSelector('iswc-speed-dial#sd-up:defined');
   await page.evaluate(() => document.getElementById('sd-up').open());
   await page.waitForTimeout(80);
   await page.keyboard.press('Escape');
@@ -86,12 +86,12 @@ test('stagehand: Escape cierra el dial', async () => {
 test('stagehand: la primera acción queda visualmente alineada según direction', async () => {
   const page = await browser.newPage();
   await page.goto(URL_DEMO, { waitUntil: 'domcontentloaded' });
-  await page.waitForSelector('is-speed-dial#sd-up:defined');
+  await page.waitForSelector('iswc-speed-dial#sd-up:defined');
   await page.evaluate(() => document.getElementById('sd-up').open());
   await page.waitForTimeout(120);
   const layout = await page.evaluate(() => {
-    const trigger = document.getElementById('sd-up').shadowRoot.querySelector('is-check-icon-button').getBoundingClientRect();
-    const firstAction = document.querySelector('is-speed-dial#sd-up is-speed-dial-action').getBoundingClientRect();
+    const trigger = document.getElementById('sd-up').shadowRoot.querySelector('iswc-check-icon-button').getBoundingClientRect();
+    const firstAction = document.querySelector('iswc-speed-dial#sd-up iswc-speed-dial-action').getBoundingClientRect();
     return {
       trig: trigger.y,
       act: firstAction.y,
@@ -106,7 +106,7 @@ test('stagehand: prefers-reduced-motion no afecta la apertura', async () => {
   const ctx = await browser.newContext({ reducedMotion: 'reduce' });
   const page = await ctx.newPage();
   await page.goto(URL_DEMO, { waitUntil: 'domcontentloaded' });
-  await page.waitForSelector('is-speed-dial:defined');
+  await page.waitForSelector('iswc-speed-dial:defined');
   await page.evaluate(() => document.getElementById('sd-up').open());
   await page.waitForTimeout(80);
   const open = await page.evaluate(() => document.getElementById('sd-up').isOpen);

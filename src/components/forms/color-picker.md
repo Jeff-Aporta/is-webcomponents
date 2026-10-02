@@ -1,20 +1,20 @@
 ---
-tag: is-color-picker
+tag: iswc-color-picker
 tags:
-  - is-color-picker
+  - iswc-color-picker
 category: forms
 status: public
 source: ./color-picker.js
 style: ./color-picker.css
 preview: ./color-picker.json
 ---
-# `<is-color-picker>`
+# `<iswc-color-picker>`
 
 ## Propósito
 
 Trigger con muestra + hex. El panel (input type="color", campo hex y paleta) vive en un <dialog> en el top layer.
 
-Este módulo registra `<is-color-picker>`.
+Este módulo registra `<iswc-color-picker>`.
 
 ## Cuándo usarlo
 
@@ -33,12 +33,12 @@ import './color-picker.js';
 ## Ejemplo mínimo
 
 ```html
-<is-color-picker
+<iswc-color-picker
 label="Color de marca"
 name="brand"
 value="#1971c2"
 swatches="#e03131,#f59f00,#2f9e44"
-></is-color-picker>
+></iswc-color-picker>
 ```
 
 ## API
@@ -82,8 +82,8 @@ swatches="#e03131,#f59f00,#2f9e44"
 
 | Evento | detail | bubbles | composed | cancelable |
 | --- | --- | --- | --- | --- |
-| `is-input` | sí | sí | sí | no |
-| `is-change` | sí | sí | sí | no |
+| `iswc-input` | sí | sí | sí | no |
+| `iswc-change` | sí | sí | sí | no |
 
 ### Métodos y propiedades públicas
 
@@ -153,14 +153,14 @@ Participa mediante ElementInternals/helpers form-associated; respetar name, valu
 
 Documentación de cabecera preservada desde fuente:
 
-> <is-color-picker> — Selector de color form-associated.
+> <iswc-color-picker> — Selector de color form-associated.
 > El panel (color nativo + hex + swatches) vive en un <dialog modal> (top layer)
 > para no perderse por overflow de ancestros.
 > Atributos: name, value (#rrggbb, default #808080), label, hint,
 >            disabled, required, swatches (lista hex separada por comas)
 > Slots: label, hint
 > Parts: base, trigger, swatch, panel, input, hex-input, label, hint
-> Events: is-input { value }, is-change { value }
+> Events: iswc-input { value }, iswc-change { value }
 >
 > EyeDropper: botón `::part(eyedropper)` llama `new EyeDropper().open()` y escribe `sRGBHex`.
 > Si `EyeDropper` no está en `window`, el botón queda `hidden`.
@@ -171,7 +171,7 @@ Documentación de cabecera preservada desde fuente:
 - [`../media/icon.js`](../media/icon.js)
 - [`../_shared/form-associated.js`](../_shared/form-associated.js)
 
-Tags del módulo: `<is-color-picker>`.
+Tags del módulo: `<iswc-color-picker>`.
 
 ## Accesibilidad
 
@@ -180,12 +180,12 @@ Preservar semántica, foco, teclado, labels y ARIA. ARIA detectado: `aria-haspop
 ## Ejemplo avanzado
 
 ```html
-<is-color-picker
+<iswc-color-picker
 label="Color de marca"
 name="brand"
 value="#1971c2"
 swatches="#e03131,#f59f00,#2f9e44"
-></is-color-picker>
+></iswc-color-picker>
 ```
 
 ## Errores comunes

@@ -41,12 +41,12 @@ import '../forms/select.js';
 import '../forms/option.js';
 import '../forms/checkbox.js';
 
-/* (Los tipos que dependen de `IsDataGrid` viven dentro del IIFE para evitar el
+/* (Los tipos que dependen de `IswcDataGrid` viven dentro del IIFE para evitar el
    problema de ordenación de declaraciones: las clases NO son hoisted como
    tipo en closures.) */
 
 /**
- * <is-data-grid> — Tabla de datos con la superficie de MUI X Data Grid.
+ * <iswc-data-grid> — Tabla de datos con la superficie de MUI X Data Grid.
  *
  * Columnas: tipos string/number/date/dateTime/boolean/singleSelect/actions,
  * valueGetter, valueFormatter, renderCell, renderHeader, ancho fijo o flex,
@@ -75,12 +75,12 @@ import '../forms/checkbox.js';
  * undo-redo, aggregation-position, disable-column-menu, disable-column-filter,
  * disable-column-sort, disable-column-resize, disable-column-reorder,
  * disable-multiple-sorting, disable-row-selection-on-click
- * Events: is-sort-change, is-filter-change, is-quick-filter, is-page-change,
- * is-select, is-cell-select, is-cell-click, is-cell-double-click, is-row-click,
- * is-row-double-click, is-edit-start, is-edit-stop, is-row-update,
- * is-column-resize, is-column-reorder, is-column-hide, is-column-pin,
- * is-density, is-detail-toggle, is-group-toggle, is-row-reorder, is-copy,
- * is-paste, is-undo, is-redo, is-rows-scroll-end, is-export
+ * Events: iswc-sort-change, iswc-filter-change, iswc-quick-filter, iswc-page-change,
+ * iswc-select, iswc-cell-select, iswc-cell-click, iswc-cell-double-click, iswc-row-click,
+ * iswc-row-double-click, iswc-edit-start, iswc-edit-stop, iswc-row-update,
+ * iswc-column-resize, iswc-column-reorder, iswc-column-hide, iswc-column-pin,
+ * iswc-density, iswc-detail-toggle, iswc-group-toggle, iswc-row-reorder, iswc-copy,
+ * iswc-paste, iswc-undo, iswc-redo, iswc-rows-scroll-end, iswc-export
  * CSS parts: base, toolbar, toolbar-button, quick-filter, viewport, header,
  * header-row, header-cell, column-groups, header-filters, body, row, cell,
  * pinned-top, pinned-bottom, aggregation-row, detail-panel, overlay, footer,
@@ -153,22 +153,22 @@ import '../forms/checkbox.js';
         <slot name="toolbar-start"></slot>
         <div class="tool-search" hidden>
           <span class="tool-ico" aria-hidden="true">${ICONS.search}</span>
-          <is-input type="search" class="quick" part="quick-filter" aria-label="Buscar"></is-input>
+          <iswc-input type="search" class="quick" part="quick-filter" aria-label="Buscar"></iswc-input>
         </div>
         <span class="tool-gap"></span>
         <slot name="toolbar-end"></slot>
-        <is-button variant="plain" color="neutral" class="tool" data-tool="columns" part="toolbar-button" aria-haspopup="dialog">
+        <iswc-button variant="plain" color="neutral" class="tool" data-tool="columns" part="toolbar-button" aria-haspopup="dialog">
           <span aria-hidden="true">${ICONS.columns}</span><span class="tool-text"></span>
-        </is-button>
-        <is-button variant="plain" color="neutral" class="tool" data-tool="filters" part="toolbar-button" aria-haspopup="dialog">
+        </iswc-button>
+        <iswc-button variant="plain" color="neutral" class="tool" data-tool="filters" part="toolbar-button" aria-haspopup="dialog">
           <span aria-hidden="true">${ICONS.filter}</span><span class="tool-text"></span><span class="badge" hidden></span>
-        </is-button>
-        <is-button variant="plain" color="neutral" class="tool" data-tool="density" part="toolbar-button" aria-haspopup="menu">
+        </iswc-button>
+        <iswc-button variant="plain" color="neutral" class="tool" data-tool="density" part="toolbar-button" aria-haspopup="menu">
           <span aria-hidden="true">${ICONS.density}</span><span class="tool-text"></span>
-        </is-button>
-        <is-button variant="plain" color="neutral" class="tool" data-tool="export" part="toolbar-button" aria-haspopup="menu">
+        </iswc-button>
+        <iswc-button variant="plain" color="neutral" class="tool" data-tool="export" part="toolbar-button" aria-haspopup="menu">
           <span aria-hidden="true">${ICONS.export}</span><span class="tool-text"></span>
-        </is-button>
+        </iswc-button>
       </div>
 
       <div class="viewport" part="viewport" role="grid" tabindex="-1">
@@ -195,14 +195,14 @@ import '../forms/checkbox.js';
         <div class="pager" part="pagination" hidden>
           <label class="page-size">
             <span class="page-size-label"></span>
-            <is-select class="page-size-select"></is-select>
+            <iswc-select class="page-size-select"></iswc-select>
           </label>
           <span class="page-info"></span>
-          <is-button variant="plain" pill class="page-btn" data-page="first" aria-label="Primera página">«</is-button>
-          <is-button variant="plain" pill class="page-btn" data-page="prev" aria-label="Página anterior">‹</is-button>
+          <iswc-button variant="plain" pill class="page-btn" data-page="first" aria-label="Primera página">«</iswc-button>
+          <iswc-button variant="plain" pill class="page-btn" data-page="prev" aria-label="Página anterior">‹</iswc-button>
           <span class="page-numbers" role="list" aria-label="Páginas"></span>
-          <is-button variant="plain" pill class="page-btn" data-page="next" aria-label="Página siguiente">›</is-button>
-          <is-button variant="plain" pill class="page-btn" data-page="last" aria-label="Última página">»</is-button>
+          <iswc-button variant="plain" pill class="page-btn" data-page="next" aria-label="Página siguiente">›</iswc-button>
+          <iswc-button variant="plain" pill class="page-btn" data-page="last" aria-label="Última página">»</iswc-button>
         </div>
       </div>
     </div>
@@ -222,13 +222,13 @@ import '../forms/checkbox.js';
     'aggregation-position', 'selectable', 'filterable',
   ];
 
-  /** Tipos internos: viven aquí para poder usar `IsDataGrid` como tipo. */
+  /** Tipos internos: viven aquí para poder usar `IswcDataGrid` como tipo. */
 
   /** Acción por fila expuesta por `getActions`. */
   type RowAction = {
     label?: string;
     icon?: string;
-    onClick?: (params: { id: CellValue; row: Row; api: IsDataGrid }) => void;
+    onClick?: (params: { id: CellValue; row: Row; api: IswcDataGrid }) => void;
     showInMenu?: boolean;
     disabled?: boolean;
   };
@@ -335,7 +335,7 @@ import '../forms/checkbox.js';
     isRowSelectable?: (params: { row: Row; id: CellValue }) => boolean;
     isCellEditable?: (params: { row: Row; id: CellValue; field: string }) => boolean;
     processRowUpdate?: (row: Row, before: Row) => Promise<Row | void> | Row | void;
-    rowsLoader?: (params: { start: number; api: IsDataGrid }) => Promise<Row[]> | void;
+    rowsLoader?: (params: { start: number; api: IswcDataGrid }) => Promise<Row[]> | void;
   };
 
   /** Hooks aplicados al elemento real: `this.#hooks`. */
@@ -349,13 +349,13 @@ import '../forms/checkbox.js';
     isRowSelectable?: (params: { row: Row; id: CellValue }) => boolean;
     isCellEditable?: (params: { row: Row; id: CellValue; field: string }) => boolean;
     processRowUpdate?: (row: Row, before: Row) => Promise<Row | void> | Row | void;
-    rowsLoader?: (params: { start: number; api: IsDataGrid }) => Promise<Row[]> | void;
+    rowsLoader?: (params: { start: number; api: IswcDataGrid }) => Promise<Row[]> | void;
   };
 
   /** Argumento del `getActions` que acepta el kit (forma más explícita). */
   type ActionParams = { row: Row; id: CellValue; colDef: ColumnDef };
 
-  class IsDataGrid extends withStyleAttrs(HTMLElement) {
+  class IswcDataGrid extends withStyleAttrs(HTMLElement) {
     /** Personalización por atributo (ver `core/attrs.ts`). */
     static styleAttrs = {
       radius: '--iswc-grid-radius',
@@ -511,14 +511,14 @@ import '../forms/checkbox.js';
       this.#rowsEl.addEventListener('dragover', this.#onRowDragOver);
       this.#rowsEl.addEventListener('drop', this.#onRowDrop);
       this.#footer.addEventListener('click', this.#onFooterClick);
-      this.#pageSizeSelect.addEventListener('is-change', this.#onPageSizeChange);
+      this.#pageSizeSelect.addEventListener('iswc-change', this.#onPageSizeChange);
       this.#menu.addEventListener('click', this.#onMenuClick);
       this.#columnsPanel.addEventListener('change', this.#onColumnsPanelChange);
       this.#columnsPanel.addEventListener('input', this.#onColumnsPanelSearch);
       this.#columnsPanel.addEventListener('click', this.#onColumnsPanelClick);
       this.#filterPanel.addEventListener('click', this.#onFilterPanelClick);
       this.#filterPanel.addEventListener('change', this.#onFilterPanelChange);
-      this.#filterPanel.addEventListener('is-change', this.#onFilterPanelChange);
+      this.#filterPanel.addEventListener('iswc-change', this.#onFilterPanelChange);
       this.#filterPanel.addEventListener('input', this.#onFilterPanelInput);
     }
 
@@ -864,7 +864,7 @@ import '../forms/checkbox.js';
 
     /* ── API imperativa ──────────────────────────────────────────────── */
 
-    get api(): IsDataGrid { return this; }
+    get api(): IswcDataGrid { return this; }
 
     refresh(): void { this.#refresh(); }
 
@@ -881,25 +881,25 @@ import '../forms/checkbox.js';
 
     setSortModel(model: SortEntry[]): void {
       this.sortModel = model;
-      emit(this, 'is-sort-change', { sortModel: this.#sortModel });
+      emit(this, 'iswc-sort-change', { sortModel: this.#sortModel });
     }
 
     sortColumn(field: string, dir: string | null): void { this.#applySort(field, dir, false); }
 
     setFilterModel(model: { items?: FilterRule[]; logicOperator?: string }): void {
       this.filterModel = model;
-      emit(this, 'is-filter-change', { filterModel: this.#filterModel });
+      emit(this, 'iswc-filter-change', { filterModel: this.#filterModel });
     }
 
     setQuickFilter(value: string): void {
       this.quickFilterValue = value;
-      emit(this, 'is-quick-filter', { value: this.#quickValue });
+      emit(this, 'iswc-quick-filter', { value: this.#quickValue });
     }
 
     setColumnVisibility(field: string, visible: boolean): void {
       this.#visibility = { ...this.#visibility, [field]: !!visible };
       this.#refresh();
-      emit(this, 'is-column-hide', {
+      emit(this, 'iswc-column-hide', {
         columnVisibilityModel: this.columnVisibilityModel, field, visible: !!visible,
       });
     }
@@ -907,7 +907,7 @@ import '../forms/checkbox.js';
     setColumnWidth(field: string, width: number): void {
       this.#widthOverrides = { ...this.#widthOverrides, [field]: Math.max(40, Number(width) || 0) };
       this.#refresh();
-      emit(this, 'is-column-resize', { field, width: this.#widthOverrides[field] });
+      emit(this, 'iswc-column-resize', { field, width: this.#widthOverrides[field] });
     }
 
     pinColumn(field: string, side: 'left' | 'right' | null): void {
@@ -917,7 +917,7 @@ import '../forms/checkbox.js';
       if (side === 'right') right.unshift(field);
       this.#pinnedCols = { left, right };
       this.#refresh();
-      emit(this, 'is-column-pin', { field, side: side || null, pinnedColumns: this.pinnedColumns });
+      emit(this, 'iswc-column-pin', { field, side: side || null, pinnedColumns: this.pinnedColumns });
     }
 
     autosizeColumns(fields?: string[]): void {
@@ -928,7 +928,7 @@ import '../forms/checkbox.js';
     setDensity(value: string): void {
       if (!DENSITY[value]) return;
       this.setAttribute('density', value);
-      emit(this, 'is-density', { density: value });
+      emit(this, 'iswc-density', { density: value });
     }
 
     selectRow(id: CellValue, selected = true, keepOthers = true): void {
@@ -992,12 +992,12 @@ import '../forms/checkbox.js';
 
     setRowGroupingModel(model: string[]): void {
       this.rowGroupingModel = model;
-      emit(this, 'is-group-model', { rowGroupingModel: this.rowGroupingModel });
+      emit(this, 'iswc-group-model', { rowGroupingModel: this.rowGroupingModel });
     }
 
     setAggregationModel(model: Record<string, string>): void {
       this.aggregationModel = model;
-      emit(this, 'is-aggregation', { aggregationModel: this.aggregationModel });
+      emit(this, 'iswc-aggregation', { aggregationModel: this.aggregationModel });
     }
 
     exportDataAsCsv(opts: {
@@ -1010,7 +1010,7 @@ import '../forms/checkbox.js';
       const matrix = this.#matrix({ allColumns });
       const body = toDelimited(matrix, delimiter);
       download(fileName, utf8WithBom ? `\uFEFF${body}` : body, 'text/csv');
-      emit(this, 'is-export', { format: 'csv', rows: matrix.length - 1 });
+      emit(this, 'iswc-export', { format: 'csv', rows: matrix.length - 1 });
     }
 
     exportDataAsExcel(opts: {
@@ -1021,7 +1021,7 @@ import '../forms/checkbox.js';
       const { fileName = 'datos.xls', allColumns = false, sheetName = 'Datos' } = opts;
       const matrix = this.#matrix({ allColumns, raw: true });
       download(fileName, toSpreadsheetXml(matrix, sheetName), 'application/vnd.ms-excel');
-      emit(this, 'is-export', { format: 'excel', rows: matrix.length - 1 });
+      emit(this, 'iswc-export', { format: 'excel', rows: matrix.length - 1 });
     }
 
     exportDataAsPrint(opts: { fileName?: string; allColumns?: boolean } = {}): void {
@@ -1040,13 +1040,13 @@ import '../forms/checkbox.js';
       });
       document.body.appendChild(frame);
       frame.srcdoc = html;
-      emit(this, 'is-export', { format: 'print', rows: matrix.length - 1 });
+      emit(this, 'iswc-export', { format: 'print', rows: matrix.length - 1 });
     }
 
     copySelectionToClipboard(): string { return this.#copySelection(); }
 
-    undo(): void { this.#applyHistory(this.#undoStack, this.#redoStack, 'is-undo', 'before'); }
-    redo(): void { this.#applyHistory(this.#redoStack, this.#undoStack, 'is-redo', 'after'); }
+    undo(): void { this.#applyHistory(this.#undoStack, this.#redoStack, 'iswc-undo', 'before'); }
+    redo(): void { this.#applyHistory(this.#redoStack, this.#undoStack, 'iswc-redo', 'after'); }
 
     /* ── Núcleo ──────────────────────────────────────────────────────── */
 
@@ -1142,7 +1142,7 @@ import '../forms/checkbox.js';
       return rows.filter((row: Row) => row !== node.row);
     }
 
-    #ctx(): { grid: IsDataGrid; api: IsDataGrid } {
+    #ctx(): { grid: IswcDataGrid; api: IswcDataGrid } {
       return { grid: this, api: this };
     }
 
@@ -1193,7 +1193,7 @@ import '../forms/checkbox.js';
       this.#renderAll(totalRows);
     }
 
-    #groupNodes(rows: Row[], ctx: { grid: IsDataGrid; api: IsDataGrid }): GridNode[] {
+    #groupNodes(rows: Row[], ctx: { grid: IswcDataGrid; api: IswcDataGrid }): GridNode[] {
       const cols = this.#activeCols;
       const paths = this.treeData && this.#hooks.getTreeDataPath
         ? (row: Row) => this.#hooks.getTreeDataPath!(row) || []
@@ -1713,7 +1713,7 @@ import '../forms/checkbox.js';
       return wrap;
     }
 
-    #renderCell(node: GridNode, col: ColumnDef, ctx: { grid: IsDataGrid; api: IsDataGrid }, cols: ColumnDef[], colIndex: number): CellRender {
+    #renderCell(node: GridNode, col: ColumnDef, ctx: { grid: IswcDataGrid; api: IswcDataGrid }, cols: ColumnDef[], colIndex: number): CellRender {
       const row = node.row;
       const el = document.createElement('div');
       el.className = 'cell';
@@ -1879,7 +1879,7 @@ import '../forms/checkbox.js';
       return { el, spanCount };
     }
 
-    #formatAggregate(agg: { fn: string; value: CellValue }, col: ColumnDef, ctx: { grid: IsDataGrid; api: IsDataGrid }): string {
+    #formatAggregate(agg: { fn: string; value: CellValue }, col: ColumnDef, ctx: { grid: IswcDataGrid; api: IswcDataGrid }): string {
       if (agg.value == null || Number.isNaN(agg.value as number)) return '';
       const proxyRow: Row = col?.field ? { [col.field]: agg.value } : {};
       let text = formattedValue(agg.value, proxyRow, col, ctx);
@@ -1925,11 +1925,11 @@ import '../forms/checkbox.js';
       this.#pageInfo.textContent = `${from}–${to} / ${totalRows}`;
 
       const sizeChoices = [...new Set([...this.pageSizeOptions, size])].sort((a: number, b: number) => a - b);
-      const currentOpts = this.#pageSizeSelect.querySelectorAll<HTMLOptionElement>('is-option, option');
+      const currentOpts = this.#pageSizeSelect.querySelectorAll<HTMLOptionElement>('iswc-option, option');
       const current = [...currentOpts].map((o: HTMLOptionElement) => Number(o.value)).join(',');
       if (current !== sizeChoices.join(',')) {
         this.#pageSizeSelect.replaceChildren(...sizeChoices.map((n: number) => {
-          const opt = document.createElement('is-option') as HTMLOptionElement;
+          const opt = document.createElement('iswc-option') as HTMLOptionElement;
           opt.value = String(n);
           opt.textContent = String(n);
           return opt;
@@ -1957,7 +1957,7 @@ import '../forms/checkbox.js';
           b.textContent = String(p + 1);
           if (p === this.#page) {
             b.setAttribute('aria-current', 'page');
-            b.classList.add('is-current');
+            b.classList.add('iswc-current');
           }
           b.addEventListener('click', () => {
             if (p === this.#page) return;
@@ -2025,7 +2025,7 @@ import '../forms/checkbox.js';
         selectedRows: this.selectedRows,
         selectedIndices: this.selectedIndices,
       };
-      emit(this, 'is-select', detail);
+      emit(this, 'iswc-select', detail);
     }
 
     #propagateSelection(id: CellValue, selected: boolean): void {
@@ -2102,7 +2102,7 @@ import '../forms/checkbox.js';
       this.#cellRange = { start, end };
       this.#refresh();
       const detail: CellSelectionDetail = { cellSelectionModel: this.#cellRange };
-      emit(this, 'is-cell-select', detail);
+      emit(this, 'iswc-cell-select', detail);
     }
 
     /* ── Orden ───────────────────────────────────────────────────────── */
@@ -2123,7 +2123,7 @@ import '../forms/checkbox.js';
       this.#sortModel = model;
       this.#page = 0;
       this.#refresh();
-      emit(this, 'is-sort-change', { sortModel: this.#sortModel, field, sort: next });
+      emit(this, 'iswc-sort-change', { sortModel: this.#sortModel, field, sort: next });
     }
 
     /* ── Filtros ─────────────────────────────────────────────────────── */
@@ -2140,7 +2140,7 @@ import '../forms/checkbox.js';
       this.#filterModel = { ...this.#filterModel, items };
       this.#page = 0;
       this.#refresh();
-      emit(this, 'is-filter-change', { filterModel: this.#filterModel });
+      emit(this, 'iswc-filter-change', { filterModel: this.#filterModel });
     }
 
     /* ── Edición ─────────────────────────────────────────────────────── */
@@ -2183,7 +2183,7 @@ import '../forms/checkbox.js';
       );
       input?.focus();
       if (input?.select) input.select();
-      emit(this, 'is-edit-start', { id: node.id, field, row: node.row });
+      emit(this, 'iswc-edit-start', { id: node.id, field, row: node.row });
     }
 
     async #stopEdit(save = true): Promise<void> {
@@ -2193,7 +2193,7 @@ import '../forms/checkbox.js';
       const node = this.#nodeById(edit.id);
       if (!save || !node?.row) {
         this.#refresh();
-        emit(this, 'is-edit-stop', { id: edit.id, field: edit.field, saved: false });
+        emit(this, 'iswc-edit-stop', { id: edit.id, field: edit.field, saved: false });
         return;
       }
 
@@ -2216,15 +2216,15 @@ import '../forms/checkbox.js';
           next = (await this.#hooks.processRowUpdate(after, before)) || after;
         } catch (error) {
           this.#refresh();
-          emit(this, 'is-edit-stop', { id: edit.id, field: edit.field, saved: false, error });
+          emit(this, 'iswc-edit-stop', { id: edit.id, field: edit.field, saved: false, error });
           return;
         }
       }
       Object.assign(node.row, next);
       this.#pushUndo([{ id: edit.id, before, after: { ...node.row } }]);
       this.#refresh();
-      emit(this, 'is-edit-stop', { id: edit.id, field: edit.field, saved: true });
-      emit(this, 'is-row-update', { id: edit.id, row: node.row, before });
+      emit(this, 'iswc-edit-stop', { id: edit.id, field: edit.field, saved: true });
+      emit(this, 'iswc-row-update', { id: edit.id, row: node.row, before });
     }
 
     #buildEditor(col: ColumnDef, value: CellValue, node: GridNode): HTMLElement {
@@ -2358,7 +2358,7 @@ import '../forms/checkbox.js';
       if (!matrix.length) return '';
       const text = toDelimited(matrix, '\t');
       navigator.clipboard?.writeText?.(text).catch(() => { /* sin permisos */ });
-      emit(this, 'is-copy', { text, rows: matrix.length });
+      emit(this, 'iswc-copy', { text, rows: matrix.length });
       return text;
     }
 
@@ -2413,7 +2413,7 @@ import '../forms/checkbox.js';
       if (!patch.length) return;
       this.#pushUndo(patch);
       this.#refresh();
-      emit(this, 'is-paste', { rows: patch.length });
+      emit(this, 'iswc-paste', { rows: patch.length });
     }
 
     /* ── Exportación ─────────────────────────────────────────────────── */
@@ -2525,7 +2525,7 @@ import '../forms/checkbox.js';
       window.removeEventListener('pointermove', this.#onResizeMove);
       window.removeEventListener('pointerup', this.#onResizeEnd);
       window.removeEventListener('pointercancel', this.#onResizeEnd);
-      if (state) emit(this, 'is-column-resize', { field: state.field, width: this.#widths[state.field] });
+      if (state) emit(this, 'iswc-column-resize', { field: state.field, width: this.#widths[state.field] });
     };
 
     #autosize(field: string): void {
@@ -2592,7 +2592,7 @@ import '../forms/checkbox.js';
       order.splice(at < 0 ? order.length : at, 0, from);
       this.#order = order;
       this.#refresh();
-      emit(this, 'is-column-reorder', { field: from, targetField: to, columnOrder: order });
+      emit(this, 'iswc-column-reorder', { field: from, targetField: to, columnOrder: order });
     };
 
     #onColDragEnd = (): void => {
@@ -2669,7 +2669,7 @@ import '../forms/checkbox.js';
 
       if (field && node.row) {
         this.#focusCell(node.id, field);
-        emit(this, 'is-cell-click', { id: node.id, field, row: node.row });
+        emit(this, 'iswc-cell-click', { id: node.id, field, row: node.row });
         if (this.cellSelection) {
           if (e.shiftKey && this.#cellAnchor) {
             this.#setCellRange(this.#cellAnchor, { id: node.id, field });
@@ -2679,7 +2679,7 @@ import '../forms/checkbox.js';
           }
         }
       }
-      emit(this, 'is-row-click', { id: node.id, row: node.row });
+      emit(this, 'iswc-row-click', { id: node.id, row: node.row });
 
       if (node.kind === 'group' && !node.row && !this.checkboxSelection) {
         this.#toggleGroup(node.id);
@@ -2696,8 +2696,8 @@ import '../forms/checkbox.js';
       if (!cellEl || !rowEl) return;
       const node = this.#nodeById(rowEl.dataset.id ?? null);
       if (!node) return;
-      emit(this, 'is-row-double-click', { id: node.id, row: node.row });
-      emit(this, 'is-cell-double-click', { id: node.id, field: cellEl.dataset.field ?? '', row: node.row });
+      emit(this, 'iswc-row-double-click', { id: node.id, row: node.row });
+      emit(this, 'iswc-cell-double-click', { id: node.id, field: cellEl.dataset.field ?? '', row: node.row });
       this.#startEdit(node.id, cellEl.dataset.field ?? '');
     };
 
@@ -2740,7 +2740,7 @@ import '../forms/checkbox.js';
       this.#rows.splice(from, 1);
       this.#rows.splice(to, 0, moved);
       this.#refresh();
-      emit(this, 'is-row-reorder', { id: fromId, from, to });
+      emit(this, 'iswc-row-reorder', { id: fromId, from, to });
     };
 
     #toggleGroup(id: CellValue): void {
@@ -2748,7 +2748,7 @@ import '../forms/checkbox.js';
       if (this.#expanded.has(id)) this.#expanded.delete(id);
       else this.#expanded.add(id);
       this.#refresh();
-      emit(this, 'is-group-toggle', { id, expanded: this.#expanded.has(id) });
+      emit(this, 'iswc-group-toggle', { id, expanded: this.#expanded.has(id) });
     }
 
     #toggleDetail(id: CellValue): void {
@@ -2756,7 +2756,7 @@ import '../forms/checkbox.js';
       if (this.#detailOpen.has(id)) this.#detailOpen.delete(id);
       else this.#detailOpen.add(id);
       this.#refresh();
-      emit(this, 'is-detail-toggle', { id, open: this.#detailOpen.has(id) });
+      emit(this, 'iswc-detail-toggle', { id, open: this.#detailOpen.has(id) });
     }
 
     /* ── Foco y teclado ──────────────────────────────────────────────── */
@@ -2961,7 +2961,7 @@ import '../forms/checkbox.js';
       if (!matrix.length) return;
       e.clipboardData?.setData('text/plain', toDelimited(matrix, '\t'));
       e.preventDefault();
-      emit(this, 'is-copy', { rows: matrix.length });
+      emit(this, 'iswc-copy', { rows: matrix.length });
     };
 
     #onPasteEvent = (e: ClipboardEvent): void => {
@@ -2991,7 +2991,7 @@ import '../forms/checkbox.js';
       }
       if (this.#reachedEnd) return;
       this.#reachedEnd = true;
-      emit(this, 'is-rows-scroll-end', { rows: this.#rows.length });
+      emit(this, 'iswc-rows-scroll-end', { rows: this.#rows.length });
       if (!this.#hooks.rowsLoader || this.loading) return;
       const result = this.#hooks.rowsLoader({ start: this.#rows.length, api: this });
       if (!result?.then) return;
@@ -3017,7 +3017,7 @@ import '../forms/checkbox.js';
       this.#quickValue = (this.#quick as unknown as { value: string }).value;
       this.#page = 0;
       this.#refresh();
-      emit(this, 'is-quick-filter', { value: this.#quickValue });
+      emit(this, 'iswc-quick-filter', { value: this.#quickValue });
     };
 
     #onToolbarClick = (e: PointerEvent): void => {
@@ -3205,7 +3205,7 @@ import '../forms/checkbox.js';
         model[col.field ?? ''] = btn.dataset.action === 'show-all';
       }
       this.columnVisibilityModel = model;
-      emit(this, 'is-column-hide', { columnVisibilityModel: model });
+      emit(this, 'iswc-column-hide', { columnVisibilityModel: model });
       if (this.#popAnchor) this.#showColumnsPanel(this.#popAnchor);
     };
 
@@ -3235,7 +3235,7 @@ import '../forms/checkbox.js';
       }
       this.#page = 0;
       this.#refresh();
-      emit(this, 'is-filter-change', { filterModel: this.#filterModel });
+      emit(this, 'iswc-filter-change', { filterModel: this.#filterModel });
       renderFilterPanel(this.#filterPanel, { columns: this.#activeCols, model: this.#filterPanelModel() });
       if (this.#popAnchor) positionPopover(this.#filterPanel, this.#popAnchor, 'bottom-end');
     };
@@ -3274,7 +3274,7 @@ import '../forms/checkbox.js';
 
       this.#page = 0;
       this.#refresh();
-      emit(this, 'is-filter-change', { filterModel: this.#filterModel });
+      emit(this, 'iswc-filter-change', { filterModel: this.#filterModel });
       if (!rerender) return;
       renderFilterPanel(this.#filterPanel, { columns: this.#activeCols, model: this.#filterPanelModel() });
       if (this.#popAnchor) positionPopover(this.#filterPanel, this.#popAnchor, 'bottom-end');
@@ -3291,12 +3291,12 @@ import '../forms/checkbox.js';
       this.#filterModel = { ...this.#filterModel, items };
       this.#page = 0;
       this.#refresh();
-      emit(this, 'is-filter-change', { filterModel: this.#filterModel });
+      emit(this, 'iswc-filter-change', { filterModel: this.#filterModel });
     };
 
     #emitPagination(): void {
       const detail: PageChangeDetail = this.paginationModel;
-      emit(this, 'is-page-change', detail);
+      emit(this, 'iswc-page-change', detail);
     }
 
     #onFooterClick = (e: PointerEvent): void => {
@@ -3432,5 +3432,5 @@ import '../forms/checkbox.js';
     }
   }
 
-  defineElement('is-data-grid', IsDataGrid, 'IsDataGrid');
+  defineElement('iswc-data-grid', IswcDataGrid, 'IswcDataGrid');
 })();

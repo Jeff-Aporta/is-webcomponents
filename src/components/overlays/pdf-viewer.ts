@@ -3,7 +3,7 @@ import { ElementBase } from '../../core/element-base.js';
 import { setOptionalAttr } from '../_shared/reflect.js';
 
 /**
- * <is-pdf-viewer> — Visor de PDF. Por defecto usa el visor nativo del navegador
+ * <iswc-pdf-viewer> — Visor de PDF. Por defecto usa el visor nativo del navegador
  * (&lt;iframe type="application/pdf"&gt;); si necesitás features avanzadas
  * (search, thumbnails, text-layer), apuntá `engine="pdfjs"` y serví
  * pdf.js desde tu build pipeline.
@@ -18,8 +18,8 @@ import { setOptionalAttr } from '../_shared/reflect.js';
  *   print       boolean — muestra el botón "Imprimir"
  *
  * Eventos
- *   is-load    al finalizar la carga del PDF
- *   is-error   si el PDF no se pudo cargar
+ *   iswc-load    al finalizar la carga del PDF
+ *   iswc-error   si el PDF no se pudo cargar
  *
  * Slot
  *   toolbar — contenido personalizado a la derecha de los botones
@@ -27,7 +27,7 @@ import { setOptionalAttr } from '../_shared/reflect.js';
 (() => {
   const OBSERVED = ['src', 'page', 'zoom', 'engine', 'height', 'download', 'print'];
 
-  class IsPdfViewer extends ElementBase {
+  class IswcPdfViewer extends ElementBase {
     /** Personalización por atributo (ver `core/attrs.ts`). */
     static styleAttrs = {
     shadow: '--iswc-popover-shadow',
@@ -40,8 +40,8 @@ import { setOptionalAttr } from '../_shared/reflect.js';
       super();
       this.attachShadow({ mode: 'open' });
       this.shadowRoot!.innerHTML = /* html */ `
-        <div part="root" class="root is-popover-panel" role="region" aria-label="Visor de PDF">
-          <div part="toolbar" class="toolbar is-surface-bar" role="toolbar" aria-label="Controles del visor">
+        <div part="root" class="root iswc-popover-panel" role="region" aria-label="Visor de PDF">
+          <div part="toolbar" class="toolbar iswc-surface-bar" role="toolbar" aria-label="Controles del visor">
             <span class="title" id="pdf-title"><slot name="title">Documento PDF</slot></span>
             <span class="spacer"></span>
             <button part="download" class="btn" id="dl" hidden
@@ -68,8 +68,8 @@ import { setOptionalAttr } from '../_shared/reflect.js';
 
     onConnected() {
       this.#sync();
-      this.#iframe.addEventListener('load', () => emit(this, 'is-load'));
-      this.#iframe.addEventListener('error', () => emit(this, 'is-error'));
+      this.#iframe.addEventListener('load', () => emit(this, 'iswc-load'));
+      this.#iframe.addEventListener('error', () => emit(this, 'iswc-error'));
       // Vincular el iframe con la cabecera (#pdf-title) para que el lector
       // de pantalla tenga un nombre accesible sincronizado con el titulo.
       this.#iframe.setAttribute('aria-labelledby', 'pdf-title');
@@ -126,5 +126,5 @@ import { setOptionalAttr } from '../_shared/reflect.js';
     #print!: HTMLElement;
   }
 
-  defineElement('is-pdf-viewer', IsPdfViewer);
+  defineElement('iswc-pdf-viewer', IswcPdfViewer);
 })();

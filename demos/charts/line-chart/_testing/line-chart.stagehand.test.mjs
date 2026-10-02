@@ -13,7 +13,7 @@ async function checkDeterministic(page) {
   await page.waitForTimeout(300);
 
   const data = await page.evaluate(() => {
-    const el = document.querySelector('is-line-chart');
+    const el = document.querySelector('iswc-line-chart');
     const svg = el.shadowRoot.querySelector('svg');
     const svgRect = svg.getBoundingClientRect();
     const marks = [...el.shadowRoot.querySelectorAll('.mark')].map((m) => {

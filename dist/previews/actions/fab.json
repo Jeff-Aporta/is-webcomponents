@@ -1,12 +1,12 @@
 {
-  "$schema": "is-preview/v1",
-  "tag": "is-fab",
+  "$schema": "iswc-preview/v1",
+  "tag": "iswc-fab",
   "category": "actions",
-  "title": "<is-fab>",
+  "title": "<iswc-fab>",
   "titleHtml": true,
-  "description": "Documentación y demos de is-fab (Floating Action Button) de InSoft.",
+  "description": "Documentación y demos de iswc-fab (Floating Action Button) de InSoft.",
   "styles": ".fab-stage {\r\n      /* `position: relative` NO contiene hijos `position: fixed` — solo lo\r\n         hacen transform/filter/contain/perspective. Sin esto el FAB del\r\n         ejemplo se ancla al viewport y se sale de la caja del demo. */\r\n      position: relative;\r\n      transform: translateZ(0);\r\n      height: 360px;\r\n      border: 1px dashed var(--iswc-border, #2a2f3a);\r\n      border-radius: 0.5rem;\r\n      background: var(--iswc-bg, #0f1117);\r\n      overflow: hidden;\r\n    }\r\n    /* Los demos se organizan con flex: alineados por linea base, con hueco\r\n       uniforme y envolviendo en pantallas estrechas. */\r\n    .fab-row {\r\n      display: flex;\r\n      flex-wrap: wrap;\r\n      align-items: flex-end;\r\n      gap: 1.5rem;\r\n    }\r\n    .fab-row__item {\r\n      display: inline-flex;\r\n      flex-direction: column;\r\n      align-items: center;\r\n      gap: 0.5rem;\r\n    }",
-  "storageKey": "docs-is-fab",
+  "storageKey": "docs-iswc-fab",
   "sections": [
     {
       "id": "intro",
@@ -15,7 +15,7 @@
       "blocks": [
         {
           "kind": "demo",
-          "html": "<div class=\"fab-stage\">\r\n            <is-fab id=\"fb1\" icon=\"mdi:plus\" position=\"bottom-end\" label=\"Crear\"></is-fab>\r\n          </div>\r\n          <p>Click: <span id=\"fbLog\">0</span></p>",
+          "html": "<div class=\"fab-stage\">\r\n            <iswc-fab id=\"fb1\" icon=\"mdi:plus\" position=\"bottom-end\" label=\"Crear\"></iswc-fab>\r\n          </div>\r\n          <p>Click: <span id=\"fbLog\">0</span></p>",
           "controls": [
               {
                 "control": "select",
@@ -77,11 +77,11 @@
           ],
           "equivNote": "position fija vs inline; pulse es atención opcional.",
           "equivHtml": "<button type=\"button\" aria-label=\"Crear\">+</button>",
-          "equivFlow": "<is-flowchart open-on-click animation=\"flow\">\n  <script type=\"application/json\">\n  {\n    \"flowchart\": {\n      \"title\": \"is-fab: position\",\n      \"direction\": \"TB\",\n      \"nodes\": [\n        {\n          \"id\": \"q\",\n          \"label\": \"position=?\",\n          \"shape\": \"diamond\"\n        },\n        {\n          \"id\": \"a\",\n          \"label\": \"inline → en flujo\",\n          \"shape\": \"stadium\"\n        },\n        {\n          \"id\": \"b\",\n          \"label\": \"esquina fixed\",\n          \"shape\": \"stadium\"\n        },\n        {\n          \"id\": \"c\",\n          \"label\": \"pulse?\",\n          \"shape\": \"diamond\"\n        },\n        {\n          \"id\": \"d\",\n          \"label\": \"anillo de atención\",\n          \"shape\": \"round\"\n        }\n      ],\n      \"edges\": [\n        {\n          \"from\": \"q\",\n          \"to\": \"a\",\n          \"label\": \"inline\"\n        },\n        {\n          \"from\": \"q\",\n          \"to\": \"b\",\n          \"label\": \"corner\"\n        },\n        {\n          \"from\": \"a\",\n          \"to\": \"c\"\n        },\n        {\n          \"from\": \"b\",\n          \"to\": \"c\"\n        },\n        {\n          \"from\": \"c\",\n          \"to\": \"d\",\n          \"label\": \"si\"\n        }\n      ]\n    }\n  }\n  </script>\n</is-flowchart>"
+          "equivFlow": "<iswc-flowchart open-on-click animation=\"flow\">\n  <script type=\"application/json\">\n  {\n    \"flowchart\": {\n      \"title\": \"iswc-fab: position\",\n      \"direction\": \"TB\",\n      \"nodes\": [\n        {\n          \"id\": \"q\",\n          \"label\": \"position=?\",\n          \"shape\": \"diamond\"\n        },\n        {\n          \"id\": \"a\",\n          \"label\": \"inline → en flujo\",\n          \"shape\": \"stadium\"\n        },\n        {\n          \"id\": \"b\",\n          \"label\": \"esquina fixed\",\n          \"shape\": \"stadium\"\n        },\n        {\n          \"id\": \"c\",\n          \"label\": \"pulse?\",\n          \"shape\": \"diamond\"\n        },\n        {\n          \"id\": \"d\",\n          \"label\": \"anillo de atención\",\n          \"shape\": \"round\"\n        }\n      ],\n      \"edges\": [\n        {\n          \"from\": \"q\",\n          \"to\": \"a\",\n          \"label\": \"inline\"\n        },\n        {\n          \"from\": \"q\",\n          \"to\": \"b\",\n          \"label\": \"corner\"\n        },\n        {\n          \"from\": \"a\",\n          \"to\": \"c\"\n        },\n        {\n          \"from\": \"b\",\n          \"to\": \"c\"\n        },\n        {\n          \"from\": \"c\",\n          \"to\": \"d\",\n          \"label\": \"si\"\n        }\n      ]\n    }\n  }\n  </script>\n</iswc-flowchart>"
         },
         {
           "kind": "code",
-          "code": "<is-fab icon=\"mdi:plus\" label=\"Crear\"></is-fab>"
+          "code": "<iswc-fab icon=\"mdi:plus\" label=\"Crear\"></iswc-fab>"
         }
       ]
     },
@@ -92,13 +92,13 @@
       "blocks": [
         {
           "kind": "demo",
-          "html": "<div class=\"fab-row\">\r\n            <span class=\"fab-row__item\">\r\n              <is-fab icon=\"mdi:bell\" style=\"font-size:0.75em\" position=\"inline\" label=\"Notificación\"></is-fab>\r\n              <code class=\"code\">0.75em</code>\r\n            </span>\r\n            <span class=\"fab-row__item\">\r\n              <is-fab icon=\"mdi:bell\" style=\"font-size:1em\" position=\"inline\" label=\"Notificación\"></is-fab>\r\n              <code class=\"code\">1em</code>\r\n            </span>\r\n            <span class=\"fab-row__item\">\r\n              <is-fab icon=\"mdi:bell\" style=\"font-size:1.25em\" position=\"inline\" label=\"Notificación\"></is-fab>\r\n              <code class=\"code\">1.25em</code>\r\n            </span>\r\n          </div>",
+          "html": "<div class=\"fab-row\">\r\n            <span class=\"fab-row__item\">\r\n              <iswc-fab icon=\"mdi:bell\" style=\"font-size:0.75em\" position=\"inline\" label=\"Notificación\"></iswc-fab>\r\n              <code class=\"code\">0.75em</code>\r\n            </span>\r\n            <span class=\"fab-row__item\">\r\n              <iswc-fab icon=\"mdi:bell\" style=\"font-size:1em\" position=\"inline\" label=\"Notificación\"></iswc-fab>\r\n              <code class=\"code\">1em</code>\r\n            </span>\r\n            <span class=\"fab-row__item\">\r\n              <iswc-fab icon=\"mdi:bell\" style=\"font-size:1.25em\" position=\"inline\" label=\"Notificación\"></iswc-fab>\r\n              <code class=\"code\">1.25em</code>\r\n            </span>\r\n          </div>",
           "heading": "El mismo FAB con tres font-size",
           "equivHtml": "<!-- font-size del host escala el FAB -->\n<button type=\"button\" aria-label=\"Crear\" style=\"font-size:0.85rem\">+</button>\n<button type=\"button\" aria-label=\"Crear\" style=\"font-size:1rem\">+</button>\n<button type=\"button\" aria-label=\"Crear\" style=\"font-size:1.25rem\">+</button>"
         },
         {
           "kind": "code",
-          "code": "<is-fab icon=\"mdi:bell\" style=\"font-size: 0.75em\"></is-fab>\n<is-fab icon=\"mdi:bell\" style=\"font-size: 1.25em\"></is-fab>",
+          "code": "<iswc-fab icon=\"mdi:bell\" style=\"font-size: 0.75em\"></iswc-fab>\n<iswc-fab icon=\"mdi:bell\" style=\"font-size: 1.25em\"></iswc-fab>",
           "lang": "html"
         }
       ]
@@ -110,7 +110,7 @@
       "blocks": [
         {
           "kind": "demo",
-          "html": "<is-fab icon=\"mdi:plus\" color=\"brand\" position=\"inline\" label=\"brand\"></is-fab>\r\n          <is-fab icon=\"mdi:pencil\" color=\"neutral\" position=\"inline\" label=\"neutral\"></is-fab>\r\n          <is-fab icon=\"mdi:trash-can\" color=\"danger\" position=\"inline\" label=\"danger\"></is-fab>\r\n          <is-fab icon=\"mdi:check\" color=\"success\" position=\"inline\" label=\"success\"></is-fab>\r\n          <is-fab icon=\"mdi:alert\" color=\"warning\" position=\"inline\" label=\"warning\"></is-fab>",
+          "html": "<iswc-fab icon=\"mdi:plus\" color=\"brand\" position=\"inline\" label=\"brand\"></iswc-fab>\r\n          <iswc-fab icon=\"mdi:pencil\" color=\"neutral\" position=\"inline\" label=\"neutral\"></iswc-fab>\r\n          <iswc-fab icon=\"mdi:trash-can\" color=\"danger\" position=\"inline\" label=\"danger\"></iswc-fab>\r\n          <iswc-fab icon=\"mdi:check\" color=\"success\" position=\"inline\" label=\"success\"></iswc-fab>\r\n          <iswc-fab icon=\"mdi:alert\" color=\"warning\" position=\"inline\" label=\"warning\"></iswc-fab>",
           "equivHtml": "<button type=\"button\" aria-label=\"Crear\">+</button>\n<button type=\"button\" aria-label=\"Crear\">+</button><!-- outlined vía CSS propio -->"
         }
       ]
@@ -122,7 +122,7 @@
       "blocks": [
         {
           "kind": "demo",
-          "html": "<is-fab icon=\"mdi:plus\" extended label=\"Nuevo proyecto\" position=\"inline\"></is-fab>\r\n          <is-fab icon=\"mdi:share\" color=\"neutral\" extended label=\"Compartir\" position=\"inline\"></is-fab>\r\n          <is-fab icon=\"mdi:download\" color=\"success\" extended label=\"Descargar\" position=\"inline\"></is-fab>",
+          "html": "<iswc-fab icon=\"mdi:plus\" extended label=\"Nuevo proyecto\" position=\"inline\"></iswc-fab>\r\n          <iswc-fab icon=\"mdi:share\" color=\"neutral\" extended label=\"Compartir\" position=\"inline\"></iswc-fab>\r\n          <iswc-fab icon=\"mdi:download\" color=\"success\" extended label=\"Descargar\" position=\"inline\"></iswc-fab>",
           "equivNote": "extended = icono + etiqueta visible.",
           "equivHtml": "<button type=\"button\">\n  <span aria-hidden=\"true\">+</span>\n  Crear\n</button>"
         }
@@ -135,7 +135,7 @@
       "blocks": [
         {
           "kind": "demo",
-          "html": "<div class=\"fab-stage\">\r\n            <is-fab icon=\"mdi:plus\" position=\"top-start\" label=\"top-start\"></is-fab>\r\n            <is-fab icon=\"mdi:pencil\" position=\"top-end\" label=\"top-end\"></is-fab>\r\n            <is-fab icon=\"mdi:share\" position=\"bottom-start\" label=\"bottom-start\"></is-fab>\r\n            <is-fab icon=\"mdi:check\" color=\"success\" position=\"bottom-end\" label=\"bottom-end\"></is-fab>\r\n          </div>",
+          "html": "<div class=\"fab-stage\">\r\n            <iswc-fab icon=\"mdi:plus\" position=\"top-start\" label=\"top-start\"></iswc-fab>\r\n            <iswc-fab icon=\"mdi:pencil\" position=\"top-end\" label=\"top-end\"></iswc-fab>\r\n            <iswc-fab icon=\"mdi:share\" position=\"bottom-start\" label=\"bottom-start\"></iswc-fab>\r\n            <iswc-fab icon=\"mdi:check\" color=\"success\" position=\"bottom-end\" label=\"bottom-end\"></iswc-fab>\r\n          </div>",
           "equivHtml": "<button type=\"button\" aria-label=\"Crear\"\n  style=\"position:fixed; inset:auto 1.5rem 1.5rem auto\">+</button>"
         }
       ]
@@ -147,7 +147,7 @@
       "blocks": [
         {
           "kind": "demo",
-          "html": "<is-fab icon=\"mdi:bell\" pulse color=\"warning\" position=\"inline\" label=\"Notificaciones\"></is-fab>\r\n          <is-fab icon=\"mdi:message\" pulse color=\"brand\" position=\"inline\" label=\"Mensajes\"></is-fab>",
+          "html": "<iswc-fab icon=\"mdi:bell\" pulse color=\"warning\" position=\"inline\" label=\"Notificaciones\"></iswc-fab>\r\n          <iswc-fab icon=\"mdi:message\" pulse color=\"brand\" position=\"inline\" label=\"Mensajes\"></iswc-fab>",
           "equivHtml": "<button type=\"button\" aria-label=\"Crear\" class=\"pulse\">+</button>\n<!-- .pulse sería CSS propio; el kit usa el atributo pulse -->"
         }
       ]
@@ -158,7 +158,7 @@
       "blocks": [
         {
           "kind": "html",
-          "html": "<h3><code class=\"code\">&lt;is-fab&gt;</code></h3>"
+          "html": "<h3><code class=\"code\">&lt;iswc-fab&gt;</code></h3>"
         },
         {
           "kind": "table",
@@ -225,7 +225,7 @@
           ],
           "rows": [
             [
-              "<code>is-fab-click</code>",
+              "<code>iswc-fab-click</code>",
               "Click. <code>detail: { originalEvent }</code>."
             ]
           ]

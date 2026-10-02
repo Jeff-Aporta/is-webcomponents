@@ -7,7 +7,7 @@ import './heading.js';
 import { ElementBase } from '../../core/element-base.js';
 
 /**
- * <is-modal-verificacion> — port de `src/lib/base/modal/ModalVerificacion.svelte`.
+ * <iswc-modal-verificacion> — port de `src/lib/base/modal/ModalVerificacion.svelte`.
  *
  * Al abrirse ejecuta `controller.actVerificar(record)` y pinta los mensajes
  * devueltos coloreados por severidad. Al cerrarse vacía la lista (igual que el
@@ -15,9 +15,9 @@ import { ElementBase } from '../../core/element-base.js';
  *
  * NO extiende `ModalBase` directamente: su focus-trap recorre el LIGHT DOM del
  * modal, y aquí el contenido lo genera el componente. La solución es COMPONER
- * un `<is-dialog>` dentro del shadow root y colgar el contenido como light DOM
+ * un `<iswc-dialog>` dentro del shadow root y colgar el contenido como light DOM
  * SUYO — así el trap, el Escape, el restore de foco y las animaciones salen
- * gratis y ya no hay ciclo hand-rolled. Mismo patrón que `<is-confirm-delete>`.
+ * gratis y ya no hay ciclo hand-rolled. Mismo patrón que `<iswc-confirm-delete>`.
  *
  * Propiedades JS (no atributos: llevan funciones/objetos)
  *   controller  objeto tipo `ICtxActionVerificacion`:
@@ -35,18 +35,18 @@ import { ElementBase } from '../../core/element-base.js';
  *   close-label   string  — texto del botón de cierre (default "Cerrar")
  *   light-dismiss boolean — OPT-IN: cerrar al hacer click en el backdrop.
  *                 Antes cerraba siempre; ahora hay que pedirlo, igual que en
- *                 <is-dialog> / <is-drawer>.
+ *                 <iswc-dialog> / <iswc-drawer>.
  *
  * Métodos
  *   show() / hide() / verify()  — `verify()` re-ejecuta la verificación
  *
  * Eventos (bubbles + composed)
- *   is-show / is-after-show / is-hide (cancelable) / is-after-hide
- *                          — ciclo estándar, re-emitidos por el <is-dialog>.
- *   is-verificacion        detail: { mensajes, qinfos, qwarning, qerrores }
- *   is-verificacion-error  detail: { message, error }
- *   is-cancel              detail: {} — evento semántico ADICIONAL, acompaña a
- *                          `is-hide` cuando el cierre lo pide el usuario.
+ *   iswc-show / iswc-after-show / iswc-hide (cancelable) / iswc-after-hide
+ *                          — ciclo estándar, re-emitidos por el <iswc-dialog>.
+ *   iswc-verificacion        detail: { mensajes, qinfos, qwarning, qerrores }
+ *   iswc-verificacion-error  detail: { message, error }
+ *   iswc-cancel              detail: {} — evento semántico ADICIONAL, acompaña a
+ *                          `iswc-hide` cuando el cierre lo pide el usuario.
  *
  * CSS Parts: ::part(backdrop) ::part(base) ::part(heading) ::part(results)
  *            ::part(stats) ::part(actions)
@@ -73,7 +73,7 @@ const MSG_COLOR_MAP = {
   SUCCESS: 'success',
 };
 
-/** @param {unknown} itd @returns {string} color semántico de `<is-text>` */
+/** @param {unknown} itd @returns {string} color semántico de `<iswc-text>` */
 export function getMsgColor(itd: unknown): string {
   const raw = String(itd);
   const key = raw.toLowerCase();
@@ -90,42 +90,42 @@ export function lowerCase(value: string) {
 
 (() => {
   const TEMPLATE = document.createElement('template');
-  // ponytail: `tabindex="0"` en <is-button> NO es decorativo — ver la nota en
+  // ponytail: `tabindex="0"` en <iswc-button> NO es decorativo — ver la nota en
   // confirm-delete.js. `.results` ya lo tenía (lista scrolleable).
   TEMPLATE.innerHTML = /* html */ `
-    <is-dialog class="dlg" exportparts="backdrop, dialog: base">
+    <iswc-dialog class="dlg" exportparts="backdrop, dialog: base">
       <span slot="label" part="heading" class="heading">
-        <is-icon class="title-icon" icon="mdi:check" aria-hidden="true"></is-icon>
+        <iswc-icon class="title-icon" icon="mdi:check" aria-hidden="true"></iswc-icon>
         <span class="heading-text"></span>
       </span>
-      <is-heading level="3" color="neutral" class="results-title">Resultados</is-heading>
+      <iswc-heading level="3" color="neutral" class="results-title">Resultados</iswc-heading>
       <div part="results" class="results" tabindex="0"
            aria-live="polite" aria-relevant="additions text" aria-atomic="false"></div>
       <p class="sr-status" aria-live="polite" aria-atomic="true"></p>
       <footer part="stats" class="stats">
         <div class="stat">
-          <is-icon icon="mdi:information-outline" aria-hidden="true"></is-icon>
-          <is-text color="success" class="q-infos">0</is-text>
+          <iswc-icon icon="mdi:information-outline" aria-hidden="true"></iswc-icon>
+          <iswc-text color="success" class="q-infos">0</iswc-text>
         </div>
         <div class="stat">
-          <is-icon icon="mdi:alert-outline" aria-hidden="true"></is-icon>
-          <is-text color="warning" class="q-warning">0</is-text>
+          <iswc-icon icon="mdi:alert-outline" aria-hidden="true"></iswc-icon>
+          <iswc-text color="warning" class="q-warning">0</iswc-text>
         </div>
         <div class="stat">
-          <is-icon icon="mdi:close-circle-outline" aria-hidden="true"></is-icon>
-          <is-text color="danger" class="q-errores">0</is-text>
+          <iswc-icon icon="mdi:close-circle-outline" aria-hidden="true"></iswc-icon>
+          <iswc-text color="danger" class="q-errores">0</iswc-text>
         </div>
       </footer>
       <div part="actions" class="actions" slot="footer">
-        <is-button class="close" color="neutral" variant="outlined"
-                   data-dialog="close" tabindex="0">Cerrar</is-button>
+        <iswc-button class="close" color="neutral" variant="outlined"
+                   data-dialog="close" tabindex="0">Cerrar</iswc-button>
       </div>
-    </is-dialog>
+    </iswc-dialog>
   `;
 
   const OBSERVED = ['open', 'loading', 'entity', 'icon', 'close-label', 'light-dismiss'];
 
-  class IsModalVerificacion extends ElementBase {
+  class IswcModalVerificacion extends ElementBase {
     /** Personalización por atributo (ver `core/attrs.ts`). */
     static styleAttrs = {
     accent: { prop: '--iswc-modal-verificacion-accent', onlyColorValues: true },
@@ -172,8 +172,8 @@ export function lowerCase(value: string) {
     }
 
     onConnected() {
-      this.#dlg.addEventListener('is-hide', this.#onDialogHide);
-      this.#dlg.addEventListener('is-after-hide', this.#onDialogAfterHide);
+      this.#dlg.addEventListener('iswc-hide', this.#onDialogHide);
+      this.#dlg.addEventListener('iswc-after-hide', this.#onDialogAfterHide);
       this.#syncTexts();
       this.#syncLightDismiss();
       this.#renderMensajes();
@@ -181,8 +181,8 @@ export function lowerCase(value: string) {
     }
 
     onDisconnected() {
-      this.#dlg.removeEventListener('is-hide', this.#onDialogHide);
-      this.#dlg.removeEventListener('is-after-hide', this.#onDialogAfterHide);
+      this.#dlg.removeEventListener('iswc-hide', this.#onDialogHide);
+      this.#dlg.removeEventListener('iswc-after-hide', this.#onDialogAfterHide);
     }
 
     onAttributeChanged(name: string, _oldVal: string | null, _newVal: string | null): void {
@@ -246,7 +246,7 @@ export function lowerCase(value: string) {
           this.#mensajes = Array.isArray(res?.mensajes) ? res.mensajes.slice() : [];
         }
         this.#renderMensajes();
-        emit(this, 'is-verificacion', {
+        emit(this, 'iswc-verificacion', {
           mensajes: this.mensajes,
           qinfos: this.qinfos,
           qwarning: this.qwarning,
@@ -256,7 +256,7 @@ export function lowerCase(value: string) {
         const sAdd = e instanceof Error ? `\r\n${e.message}` : '';
         const msg = 'No se pudo completar la verificación.' + sAdd;
         this.onError?.(msg);
-        emit(this, 'is-verificacion-error', { message: msg, error: e });
+        emit(this, 'iswc-verificacion-error', { message: msg, error: e });
       } finally {
         this.loading = false;
       }
@@ -274,7 +274,7 @@ export function lowerCase(value: string) {
       this.#closeBtn.textContent = this.getAttribute('close-label') || 'Cerrar';
     }
 
-    /** `light-dismiss` es opt-in y se delega tal cual al <is-dialog>. */
+    /** `light-dismiss` es opt-in y se delega tal cual al <iswc-dialog>. */
     #syncLightDismiss(): void {
       this.#dlg.toggleAttribute('light-dismiss', this.lightDismiss);
     }
@@ -293,7 +293,7 @@ export function lowerCase(value: string) {
       for (const m of list) {
         const block = document.createElement('div');
         block.className = 'msg-block';
-        const text = document.createElement('is-text');
+        const text = document.createElement('iswc-text');
         // El bloque vacío del original no pasa `color`: hereda el del contexto.
         if (this.#mensajes.length) text.setAttribute('color', getMsgColor(m.itdmensaje));
         text.textContent = m.mensaje ?? '';
@@ -329,11 +329,11 @@ export function lowerCase(value: string) {
     }
 
     /**
-     * `is-hide` sólo lo emite ModalBase cuando el cierre lo PIDE el usuario
+     * `iswc-hide` sólo lo emite ModalBase cuando el cierre lo PIDE el usuario
      * (Escape, backdrop, botón Cerrar): `hide()` programático no pasa por aquí.
-     * Es justo la semántica que tenía `is-cancel`.
+     * Es justo la semántica que tenía `iswc-cancel`.
      */
-    #onDialogHide = (): void => { emit(this, 'is-cancel', {}); };
+    #onDialogHide = (): void => { emit(this, 'iswc-cancel', {}); };
 
     #onDialogAfterHide = (): void => { this.removeAttribute('open'); };
 
@@ -355,5 +355,5 @@ export function lowerCase(value: string) {
     }
   }
 
-  defineElement('is-modal-verificacion', IsModalVerificacion, 'IsModalVerificacion');
+  defineElement('iswc-modal-verificacion', IswcModalVerificacion, 'IswcModalVerificacion');
 })();

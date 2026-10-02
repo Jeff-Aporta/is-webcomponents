@@ -1,5 +1,5 @@
 /**
- * Demo <is-form> con cuerpo JSON compacto (json2html / html2json).
+ * Demo <iswc-form> con cuerpo JSON compacto (json2html / html2json).
  * @param {import('../../previews/_kit/types.d.ts').PreviewMountContext} ctx
  */
 
@@ -38,13 +38,13 @@ export async function mount(ctx: import('../../previews/_kit/types.d.ts').Previe
         slot: 'content',
         style: 'display:flex;flex-direction:column;gap:0.75rem;padding:0.5rem',
       },
-      ['is-input', {
+      ['iswc-input', {
         name: 'icurso', label: 'Código', required: true, 'full-width': true, 'label-placement': 'float',
       }],
-      ['is-input', {
+      ['iswc-input', {
         name: 'ncurso', label: 'Nombre', 'full-width': true, 'label-placement': 'float',
       }],
-      ['is-switch', { name: 'activo' }, 'Activo'],
+      ['iswc-switch', { name: 'activo' }, 'Activo'],
       ],
     ],
     values: { icurso: 'C001', ncurso: 'Nómina electrónica', activo: true },
@@ -54,12 +54,12 @@ export async function mount(ctx: import('../../previews/_kit/types.d.ts').Previe
   if (demo) {
     demo.fromJSON(schema);
     paint(out, demo.toJSON());
-    demo.addEventListener('is-submit', (e: Event) => {
+    demo.addEventListener('iswc-submit', (e: Event) => {
       const detail = (e as CustomEvent<SubmitDetail>).detail;
       paint(out, detail?.json ?? demo.toJSON());
-      paintLog('is-submit');
+      paintLog('iswc-submit');
     });
-    demo.addEventListener('is-cancel', () => paintLog('is-cancel'));
+    demo.addEventListener('iswc-cancel', () => paintLog('iswc-cancel'));
   }
 
   root.querySelector<HTMLElement>('#fBtnToJson')?.addEventListener('click', () => {

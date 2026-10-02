@@ -11,7 +11,7 @@ const DEMO = {
 async function checkDeterministic(page) {
   await page.waitForTimeout(300);
   const data = await page.evaluate(() => {
-    const el = document.querySelector('is-bubble-chart');
+    const el = document.querySelector('iswc-bubble-chart');
     const svg = el.shadowRoot.querySelector('svg');
     const svgRect = svg.getBoundingClientRect();
     const marks = [...el.shadowRoot.querySelectorAll('.mark')].map((m) => {
@@ -39,7 +39,7 @@ async function checkDeterministic(page) {
   // Las burbujas deben tener tamaños heterogéneos (no todos iguales)
   const radii = new Set();
   await page.evaluate((set) => {
-    document.querySelector('is-bubble-chart').shadowRoot
+    document.querySelector('iswc-bubble-chart').shadowRoot
       .querySelectorAll('.mark.mark-bubble')
       .forEach((m) => set.add(Number(m.getAttribute('r'))));
   }, radii);

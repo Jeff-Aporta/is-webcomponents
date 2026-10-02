@@ -3,7 +3,7 @@
 <head>
 <meta charset="utf-8" />
 <meta name="viewport" content="width=device-width, initial-scale=1" />
-<title>&lt;is-block-layout&gt; · is-webcomponents</title>
+<title>&lt;iswc-block-layout&gt; · is-webcomponents</title>
 <meta name="description" content="Caja de bloque que publica el breakpoint según su propio ancho vía ResizeObserver + json2html/json2json." />
 <style>
   html, body { margin: 0; padding: 0; min-height: 100%; background: #0c1118; color: #e2e8f0; font-family: ui-sans-serif, system-ui, sans-serif; }
@@ -23,15 +23,15 @@
   .label { font: 12px ui-monospace, Menlo, Consolas, monospace; color: #e2e8f0; }
   .log { font: 12px ui-monospace, Menlo, Consolas, monospace; background: rgba(0,0,0,0.3); padding: 8px; border-radius: 4px; min-height: 80px; white-space: pre-wrap; }
   /* Demo de cómo reacciona el CSS al breakpoint del propio bloque */
-  is-block-layout { border: 1px dashed rgba(255,255,255,0.2); border-radius: 6px; padding: 10px; transition: border-color .2s; }
-  is-block-layout[data-szw-lg] { border-color: #38bdf8; }
-  is-block-layout[data-szw-xl] { border-color: #4ade80; }
-  is-block-layout .badge { display: inline-block; padding: 2px 8px; border-radius: 999px; background: rgba(56,189,248,0.15); color: #38bdf8; font: 11px ui-monospace, Menlo, Consolas, monospace; }
-  is-block-layout:not(:defined) { visibility: hidden; }
+  iswc-block-layout { border: 1px dashed rgba(255,255,255,0.2); border-radius: 6px; padding: 10px; transition: border-color .2s; }
+  iswc-block-layout[data-szw-lg] { border-color: #38bdf8; }
+  iswc-block-layout[data-szw-xl] { border-color: #4ade80; }
+  iswc-block-layout .badge { display: inline-block; padding: 2px 8px; border-radius: 999px; background: rgba(56,189,248,0.15); color: #38bdf8; font: 11px ui-monospace, Menlo, Consolas, monospace; }
+  iswc-block-layout:not(:defined) { visibility: hidden; }
 </style>
 <script type="module">
-  await import('../../../dist/cdn/isp/block-layout.min.js?h=3jlgoe');
-  await customElements.whenDefined('is-block-layout');
+  await import('../../../dist/cdn/isp/block-layout.min.js?h=7974jg');
+  await customElements.whenDefined('iswc-block-layout');
 
   // Suscribirse al breakpoint del primer bloque (reflejado).
   const host = document.getElementById('host');
@@ -39,7 +39,7 @@
   const eventLog = document.getElementById('event-log');
   const log = (m) => { eventLog.textContent += new Date().toISOString().slice(11, 19) + ' ' + m + '\n'; };
 
-  host.addEventListener('is-breakpoint', (e) => {
+  host.addEventListener('iswc-breakpoint', (e) => {
     log(`breakpoint: sizew=${e.detail.sizew} w=${e.detail.width}px h=${e.detail.height}px lerpw=${(e.detail.lerpw('sm', 'xl') * 100).toFixed(0)}%`);
   });
 
@@ -49,7 +49,7 @@
   const sync = () => {
     label2.textContent = `${host2.sizew} (w=${host2.getWidth()}px)`;
   };
-  host2.addEventListener('is-breakpoint', sync);
+  host2.addEventListener('iswc-breakpoint', sync);
   sync();
 
   // Forzar JSON round-trip en el demo 3.
@@ -64,7 +64,7 @@
 
   // Etiqueta del primer bloque al cargar.
   label.textContent = `${host.sizew} (w=${host.getWidth()}px)`;
-  host.addEventListener('is-breakpoint', () => {
+  host.addEventListener('iswc-breakpoint', () => {
     label.textContent = `${host.sizew} (w=${host.getWidth()}px)`;
   });
 
@@ -74,11 +74,11 @@
 <body>
 <header>
   <div>
-    <h1>&lt;is-block-layout&gt; — bloque con breakpoint propio</h1>
-    <p>Mide su propio ancho con ResizeObserver y publica <code>data-sizew</code>, <code>--clientw</code>, <code>--lerpw</code> y evento <code>is-breakpoint</code>.</p>
+    <h1>&lt;iswc-block-layout&gt; — bloque con breakpoint propio</h1>
+    <p>Mide su propio ancho con ResizeObserver y publica <code>data-sizew</code>, <code>--clientw</code>, <code>--lerpw</code> y evento <code>iswc-breakpoint</code>.</p>
   </div>
   <div class="spacer"></div>
-  <code>is-block-layout</code>
+  <code>iswc-block-layout</code>
 </header>
 <main>
   <section>
@@ -86,28 +86,28 @@
     <div class="row">
       <div>
         <div class="label">sizew actual: <span id="sizew-label">…</span></div>
-        <is-block-layout id="host" style="width: 60%; min-width: 14rem; resize: horizontal; overflow: auto;">
+        <iswc-block-layout id="host" style="width: 60%; min-width: 14rem; resize: horizontal; overflow: auto;">
           <p>Re-ajusta el ancho con el handle de la esquina inferior derecha.</p>
           <p><span class="badge" id="badge-host">…</span></p>
-        </is-block-layout>
+        </iswc-block-layout>
       </div>
       <div>
         <div class="label">sizew actual: <span id="sizew-label-2">…</span></div>
-        <is-block-layout id="host2" style="width: 30rem;">
+        <iswc-block-layout id="host2" style="width: 30rem;">
           <p>Este segundo bloque tiene un ancho fijo de 30rem.</p>
-        </is-block-layout>
+        </iswc-block-layout>
       </div>
     </div>
   </section>
 
   <section>
     <h2>JSON round-trip (json2html / html2json / fromJSON / toJSON)</h2>
-    <is-block-layout id="host3" inline style="display: block;"></is-block-layout>
+    <iswc-block-layout id="host3" inline style="display: block;"></iswc-block-layout>
     <button id="log-json" type="button" style="margin-top: 8px; padding: 6px 12px; background: #1e293b; color: #e2e8f0; border: 1px solid #334155; border-radius: 4px; cursor: pointer;">Imprimir toJSON() en consola</button>
   </section>
 
   <section>
-    <h2>Eventos <code>is-breakpoint</code></h2>
+    <h2>Eventos <code>iswc-breakpoint</code></h2>
     <pre id="event-log" class="log"></pre>
   </section>
 </main>

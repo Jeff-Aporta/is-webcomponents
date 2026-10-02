@@ -1,6 +1,6 @@
 @import url('../_shared/diagram-kit.css');
 
-/* is-org-chart */
+/* iswc-org-chart */
 :host {
   display: block;
   font: inherit;
@@ -9,11 +9,8 @@
   min-height: 0;
   position: relative;
   box-sizing: border-box;
-}
 
-:host([color="viewer"]) {
-  width: 100%;
-  height: 100%;
+  &[color="viewer"] { width: 100%; height: 100%; }
 }
 
 .root {
@@ -24,36 +21,34 @@
   padding: 1rem;
   box-sizing: border-box;
   position: relative;
+  &.iswc-viewer {
+    min-height: 0;
+    padding: 0;
+  }
 }
-.root.is-viewer {
-  min-height: 0;
-  padding: 0;
-}
+
 .canvas {
-  display: block;
+  display: flex;
   width: 100%;
   height: 100%;
   min-height: 12rem;
   /* Centra el organigrama en el container si sobra altura (la mayoria de
      organigramas son anchos, no altos). Con flex+center evitamos el
      organigrama pegado arriba o abajo del espacio disponible. */
-  display: flex;
   align-items: center;
   justify-content: center;
 }
 
 /* El visor es opt-in: sin `open-on-click` un clic en el fondo no hace nada,
    así que tampoco debe insinuar con el cursor que se puede hacer clic. */
-:host([open-on-click]) .root {
-  cursor: zoom-in;
-}
-:host([open-on-click]) .card {
-  cursor: pointer;
+:host([open-on-click]) {
+  .root { cursor: zoom-in; }
+  .card { cursor: pointer; }
 }
 
 .oc-tooltip {
-  top: 0;
-  left: 0;
+  inset-block-start: 0;
+  inset-inline-start: 0;
 }
 
 .card {
@@ -72,8 +67,9 @@
   box-shadow: 0 1px 0 rgb(255 255 255 / 4%) inset, 0 6px 14px rgba(0,0,0,.18);
   transition: border-color 120ms ease, transform 100ms ease;
   box-sizing: border-box;
+  &:hover { border-color: var(--iswc-accent); }
 }
-.card:hover { border-color: var(--iswc-accent); }
+
 .photo {
   width: 2.5rem; height: 2.5rem;
   border-radius: 50%;
@@ -87,10 +83,13 @@
   overflow: hidden;
   flex: 0 0 auto;
 }
+
 .photo--fallback { background: linear-gradient(135deg, var(--iswc-accent), color-mix(in srgb, var(--iswc-accent) 50%, transparent)); color: var(--iswc-on-accent, #fff); }
 
 .meta { display: flex; flex-direction: column; min-width: 0; }
+
 .name { font-weight: 600; font-size: .85rem; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+
 .title {
   color: var(--iswc-text-soft);
   font-size: .7rem;
@@ -115,17 +114,13 @@
   display: grid; place-items: center;
   font-size: .85rem;
   line-height: 1;
+  &:hover { background: var(--iswc-accent); color: var(--iswc-on-accent, #fff); }
 }
-.toggle:hover { background: var(--iswc-accent); color: var(--iswc-on-accent, #fff); }
 
 .edge { stroke: var(--iswc-text-soft); stroke-width: 1.25; opacity: .55; }
 
 /* Animación al expandir/plegar: los nodos y aristas persisten entre renders
    (se reconcilian por id, ver org-chart.js) así que un cambio de `transform`
    o `d` anima de forma fluida en vez de saltar a la posición nueva. */
-.node {
-  transition: transform 300ms cubic-bezier(.4, 0, .2, 1), opacity 220ms ease;
-}
-.edge {
-  transition: d 280ms cubic-bezier(.4, 0, .2, 1), opacity 220ms ease;
-}
+.node { transition: transform 300ms cubic-bezier(.4, 0, .2, 1), opacity 220ms ease; }
+.edge { transition: d 280ms cubic-bezier(.4, 0, .2, 1), opacity 220ms ease; }

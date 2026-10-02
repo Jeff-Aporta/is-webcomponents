@@ -3,7 +3,7 @@
 <head>
 <meta charset="utf-8" />
 <meta name="viewport" content="width=device-width, initial-scale=1" />
-<title>Demo de <is-split-panel> · is-webcomponents</title>
+<title>Demo de <iswc-split-panel> · is-webcomponents</title>
 <meta name="description" content="Dos paneles con divisor arrastrable. position/position-in-pixels, orientation, primary, collapse, disabled, snap, storage-key. Eventos reposition. Persistencia en localStorage." />
 <style>
   html, body { margin: 0; padding: 0; min-height: 100vh; background: #0c1118; color: #e2e8f0; font-family: ui-sans-serif, system-ui, sans-serif; }
@@ -14,7 +14,7 @@
   main { padding: 20px; display: grid; gap: 14px; }
   section { background: #0f1620; border: 1px solid rgba(255,255,255,0.1); border-radius: 8px; padding: 16px; }
   section h2 { font-size: 11px; text-transform: uppercase; letter-spacing: 0.08em; margin: 0 0 12px 0; color: #94a3b8; }
-  is-split-panel:not(:defined) { visibility: hidden; }
+  iswc-split-panel:not(:defined) { visibility: hidden; }
 
   /* Cada split-panel vive en una rejilla de 400-600px de alto. */
   .sp-host {
@@ -24,7 +24,7 @@
     background: #0a121b;
     overflow: hidden;
   }
-  .sp-host > is-split-panel {
+  .sp-host > iswc-split-panel {
     width: 100%;
     height: 100%;
     display: grid;
@@ -40,11 +40,11 @@
   footer code { background: rgba(255,255,255,0.06); padding: 1px 5px; border-radius: 3px; font: 11px ui-monospace, Menlo, Consolas, monospace; }
 </style>
 <script type="module">
-  await import('../../../dist/cdn/layout/split-panel.min.js?h=2w8j5u');
-  await customElements.whenDefined('is-split-panel');
+  await import('../../../dist/cdn/layout/split-panel.min.js?h=1ejfxk');
+  await customElements.whenDefined('iswc-split-panel');
 
   // (1) Split-panel horizontal básico, posición por defecto (50%).
-  const sp1 = document.createElement('is-split-panel');
+  const sp1 = document.createElement('iswc-split-panel');
   sp1.id = 'sp1';
   sp1.setAttribute('orientation', 'horizontal');
   sp1.innerHTML = `
@@ -54,7 +54,7 @@
   document.getElementById('host-1').appendChild(sp1);
 
   // (2) Split-panel vertical.
-  const sp2 = document.createElement('is-split-panel');
+  const sp2 = document.createElement('iswc-split-panel');
   sp2.id = 'sp2';
   sp2.setAttribute('orientation', 'vertical');
   sp2.innerHTML = `
@@ -67,7 +67,7 @@
   //     en el demo: si lo hiciéramos, el componente perdería sus prefs en cada
   //     recarga y el test de restore no podría validarlo. El test limpia las
   //     prefs explícitamente cuando lo necesita vía clearPrefs().
-  const sp3 = document.createElement('is-split-panel');
+  const sp3 = document.createElement('iswc-split-panel');
   sp3.id = 'sp3';
   sp3.setAttribute('orientation', 'horizontal');
   sp3.setAttribute('storage-key', 'demo-sp-3');
@@ -79,7 +79,7 @@
   document.getElementById('host-3').appendChild(sp3);
 
   // (4) Split-panel con collapse, primary y snap.
-  const sp4 = document.createElement('is-split-panel');
+  const sp4 = document.createElement('iswc-split-panel');
   sp4.id = 'sp4';
   sp4.setAttribute('orientation', 'horizontal');
   sp4.setAttribute('primary', 'end');
@@ -92,7 +92,7 @@
   document.getElementById('host-4').appendChild(sp4);
 
   // (5) Split-panel disabled.
-  const sp5 = document.createElement('is-split-panel');
+  const sp5 = document.createElement('iswc-split-panel');
   sp5.id = 'sp5';
   sp5.setAttribute('orientation', 'horizontal');
   sp5.setAttribute('disabled', '');
@@ -105,7 +105,7 @@
   // (6) Listener de eventos "reposition".
   const log = document.getElementById('log');
   const append = (line) => { log.textContent = line + '\n' + log.textContent; };
-  document.querySelectorAll('is-split-panel').forEach((sp) => {
+  document.querySelectorAll('iswc-split-panel').forEach((sp) => {
     sp.addEventListener('reposition', (e) => {
       append(`reposition ← ${sp.id} detail=${typeof e.detail === 'number' ? e.detail.toFixed(1) : '?'}`);
     });
@@ -131,7 +131,7 @@
   document.getElementById('btn-reset-storage').addEventListener('click', () => {
     try {
       const root = JSON.parse(localStorage.getItem('is-webcomponents') || '{}');
-      if (root['is-split-panel']?.['demo-sp-3']) delete root['is-split-panel']['demo-sp-3'];
+      if (root['iswc-split-panel']?.['demo-sp-3']) delete root['iswc-split-panel']['demo-sp-3'];
       localStorage.setItem('is-webcomponents', JSON.stringify(root));
       append('storage-key=demo-sp-3 prefs borradas');
     } catch {}
@@ -142,7 +142,7 @@
 </head>
 <body>
 <header>
-  <h1>Demo — <code>&lt;is-split-panel&gt;</code></h1>
+  <h1>Demo — <code>&lt;iswc-split-panel&gt;</code></h1>
   <p>Dos paneles separados por un divisor arrastrable. <code>position</code> (%), <code>position-in-pixels</code>, <code>orientation</code>, <code>primary</code>, <code>collapse</code>, <code>disabled</code>, <code>snap</code>, <code>storage-key</code>. Eventos <code>reposition</code>.</p>
 </header>
 <main>
@@ -190,7 +190,7 @@
   </section>
 </main>
 <footer>
-  Estado: <code>customElements.whenDefined('is-split-panel')</code> resuelto.
+  Estado: <code>customElements.whenDefined('iswc-split-panel')</code> resuelto.
 </footer>
 </body>
 </html>

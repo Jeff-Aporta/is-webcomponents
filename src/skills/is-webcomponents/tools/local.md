@@ -87,10 +87,10 @@ async function boot(files) {
       await Promise.all(files.js.map((f) => import(`${base}/${f}`)));
       return base;
     } catch (e) {
-      console.warn("[is-wc] fuente falló", base, e);
+      console.warn("[iswc-wc] fuente falló", base, e);
     }
   }
-  throw new Error("[is-wc] ninguna fuente respondió (local ni CDN)");
+  throw new Error("[iswc-wc] ninguna fuente respondió (local ni CDN)");
 }
 await boot({
   css: ["is-base.min.css", "palettes.min.css"],

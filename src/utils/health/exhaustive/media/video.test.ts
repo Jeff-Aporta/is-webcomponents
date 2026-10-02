@@ -1,7 +1,7 @@
 /**
- * video.test.ts — Tier A (12 aserciones) para `<is-video>`.
+ * video.test.ts — Tier A (12 aserciones) para `<iswc-video>`.
  *
- * (Nombre en la consigna era "video-player"; el componente real es `<is-video>`).
+ * (Nombre en la consigna era "video-player"; el componente real es `<iswc-video>`).
  */
 
 import { test } from 'node:test';
@@ -12,7 +12,7 @@ import { fileURLToPath } from 'node:url';
 
 const HERE = dirname(fileURLToPath(import.meta.url));
 const ROOT = join(HERE, '..', '..', '..', '..', '..');
-const TAG = 'is-video';
+const TAG = 'iswc-video';
 const TS  = join(ROOT, 'src', 'components', 'media', 'video.ts');
 const CSS = join(ROOT, 'src', 'components', 'media', 'video.css');
 const JSON_PATH = join(ROOT, 'src', 'components', 'media', 'video.json');
@@ -25,10 +25,10 @@ test('2. CSS hermano existe', async () => {
   assert.ok(existsSync(CSS));
 });
 
-test('3. JSON existe y respeta is-preview/v1', async () => {
+test('3. JSON existe y respeta iswc-preview/v1', async () => {
   const json = JSON.parse(readFileSync(JSON_PATH, 'utf8'));
   assert.equal(json.tag, TAG);
-  assert.equal(json.$schema, 'is-preview/v1');
+  assert.equal(json.$schema, 'iswc-preview/v1');
 });
 
 test('4. OBSERVED incluye src, poster, muted, loop, autoplay, playsinline', async () => {
@@ -49,9 +49,9 @@ test('5. expone métodos play(), pause(), toggleFullscreen(), togglePictureInPic
   }
 });
 
-test('6. emite is-play, is-pause, is-ended', async () => {
+test('6. emite iswc-play, iswc-pause, iswc-ended', async () => {
   const src = readFileSync(TS, 'utf8');
-  for (const ev of ['is-play', 'is-pause', 'is-ended']) {
+  for (const ev of ['iswc-play', 'iswc-pause', 'iswc-ended']) {
     assert.ok(src.includes(`'${ev}'`) || src.includes(`"${ev}"`), `debe emitir ${ev}`);
   }
 });
@@ -82,8 +82,8 @@ test('10. expone CSS parts para la chrome', async () => {
 
 test('11. custom element registrado', async () => {
   const src = readFileSync(TS, 'utf8');
-  assert.ok(/customElements\.define\s*\(\s*['"]is-video['"]/.test(src) ||
-             /defineElement\s*\(\s*['"]is-video['"]/.test(src));
+  assert.ok(/customElements\.define\s*\(\s*['"]iswc-video['"]/.test(src) ||
+             /defineElement\s*\(\s*['"]iswc-video['"]/.test(src));
 });
 
 test('12. preview.ts existe (componente complejo)', async () => {

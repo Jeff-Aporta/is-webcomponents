@@ -1,4 +1,4 @@
-// heading.test.mjs — tests exhaustivos del demo <is-heading>.
+// heading.test.mjs — tests exhaustivos del demo <iswc-heading>.
 // Cobertura: smoke + funcional (level 1-6 produce h1-h6, color semántico,
 // mix y size custom, current hereda color) + computedMix.
 import assert from 'node:assert/strict';
@@ -14,14 +14,14 @@ tests.push({
     await page.goto(URL, { waitUntil: 'domcontentloaded' });
     await waitReady(page, 'data-heading-ready');
     const info = await page.evaluate(() => {
-      const headings = [...document.querySelectorAll('is-heading')];
+      const headings = [...document.querySelectorAll('iswc-heading')];
       const tags = headings.map((h) => {
         const sr = h.shadowRoot;
         const el = sr?.querySelector('h1, h2, h3, h4, h5, h6');
         return { tag: el?.tagName, level: h.level };
       });
       return {
-        defined: !!customElements.get('is-heading'),
+        defined: !!customElements.get('iswc-heading'),
         count: headings.length,
         tags,
       };
@@ -44,7 +44,7 @@ tests.push({
     await waitReady(page, 'data-heading-ready');
     await page.waitForTimeout(100);
     const result = await page.evaluate(() => {
-      const h = document.createElement('is-heading');
+      const h = document.createElement('iswc-heading');
       h.textContent = 'Dinámico';
       document.body.appendChild(h);
       const tag1 = h.shadowRoot.querySelector('h1')?.tagName;
@@ -68,10 +68,10 @@ tests.push({
     await waitReady(page, 'data-heading-ready');
     await page.waitForTimeout(100);
     const result = await page.evaluate(() => {
-      const h1 = document.createElement('is-heading');
+      const h1 = document.createElement('iswc-heading');
       h1.level = '1';
       document.body.appendChild(h1);
-      const h3 = document.createElement('is-heading');
+      const h3 = document.createElement('iswc-heading');
       h3.level = '3';
       h3.mix = '45%';
       document.body.appendChild(h3);
@@ -96,7 +96,7 @@ tests.push({
     await waitReady(page, 'data-heading-ready');
     await page.waitForTimeout(100);
     const result = await page.evaluate(() => {
-      const h = document.createElement('is-heading');
+      const h = document.createElement('iswc-heading');
       h.size = '2.5rem';
       document.body.appendChild(h);
       const varValue = h.style.getPropertyValue('--iswc-heading-size');
@@ -116,13 +116,13 @@ tests.push({
     await waitReady(page, 'data-heading-ready');
     await page.waitForTimeout(100);
     const result = await page.evaluate(() => {
-      const h1 = document.createElement('is-heading');
+      const h1 = document.createElement('iswc-heading');
       h1.color = 'success';
       document.body.appendChild(h1);
-      const h2 = document.createElement('is-heading');
+      const h2 = document.createElement('iswc-heading');
       h2.color = '#abcdef';
       document.body.appendChild(h2);
-      const h3 = document.createElement('is-heading');
+      const h3 = document.createElement('iswc-heading');
       h3.color = 'current';
       document.body.appendChild(h3);
       const r = {

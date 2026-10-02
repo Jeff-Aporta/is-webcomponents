@@ -1,7 +1,7 @@
 /**
  * popup-dismiss.js — el "mientras está abierto" de un popup.
  *
- * Todo panel flotante del kit (is-dropdown, is-context-menu, y cualquiera que
+ * Todo panel flotante del kit (iswc-dropdown, iswc-context-menu, y cualquiera que
  * venga) necesita exactamente lo mismo mientras está abierto:
  *
  *   · Escape lo cierra.
@@ -16,7 +16,7 @@
  * colgado del documento cada vez que se abre el panel.
  *
  * Este módulo NO decide dónde se coloca el panel ni cómo se abre: el anclaje
- * de is-dropdown (a un trigger) y el de is-context-menu (a las coordenadas
+ * de iswc-dropdown (a un trigger) y el de iswc-context-menu (a las coordenadas
  * del click derecho) son distintos a propósito, y forzarlos al mismo molde
  * complicaría los dos. Aquí solo vive el ciclo de escucha.
  *
@@ -33,8 +33,8 @@
  */
 
 /**
- * Opciones del ciclo de cierre compartido por is-dropdown, is-context-menu,
- * is-palette-selector y cualquier popup que necesite el patrón "abrir →
+ * Opciones del ciclo de cierre compartido por iswc-dropdown, iswc-context-menu,
+ * iswc-palette-selector y cualquier popup que necesite el patrón "abrir →
  * escuchar Escape/fuera/scroll → cerrar y limpiar".
  */
 export interface PopupDismissOpciones {

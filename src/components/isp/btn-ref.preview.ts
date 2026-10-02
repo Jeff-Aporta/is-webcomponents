@@ -1,18 +1,18 @@
 import { createBtnRefController } from './controller-from-config.js';
 
-/** `<is-btn-ref>` con `controller` y eventos `is-selected-record`. */
+/** `<iswc-btn-ref>` con `controller` y eventos `iswc-selected-record`. */
 interface _BtnRefLike extends HTMLElement {
   controller?: unknown;
   multi?: boolean;
 }
 
-/** Detalle de `is-selected-record`. */
+/** Detalle de `iswc-selected-record`. */
 interface _SelectedDetail {
   value?: string;
 }
 
 /**
- * Demo <is-btn-ref> single + multi con controller JSON (sin acciones CRUD).
+ * Demo <iswc-btn-ref> single + multi con controller JSON (sin acciones CRUD).
  * @param {import('../../previews/_kit/types.d.ts').PreviewMountContext} ctx
  */
 export async function mount(ctx: import('../../previews/_kit/types.d.ts').PreviewMountContext): Promise<void> {
@@ -24,7 +24,7 @@ export async function mount(ctx: import('../../previews/_kit/types.d.ts').Previe
     { app: 'PatyIA' },
   ];
 
-  const singleEl = root.querySelector<HTMLElement>('#btnRefDemo') || root.querySelector<HTMLElement>('is-btn-ref:not([multi])');
+  const singleEl = root.querySelector<HTMLElement>('#btnRefDemo') || root.querySelector<HTMLElement>('iswc-btn-ref:not([multi])');
   if (singleEl) {
     const single = singleEl as _BtnRefLike;
     single.controller = createBtnRefController({
@@ -35,7 +35,7 @@ export async function mount(ctx: import('../../previews/_kit/types.d.ts').Previe
       mock: datos,
     });
     const log = root.querySelector<HTMLElement>('#btnRefLog');
-    singleEl.addEventListener('is-selected-record', (e: Event) => {
+    singleEl.addEventListener('iswc-selected-record', (e: Event) => {
       if (!log) return;
       const code = log.querySelector<HTMLElement>('code') || log;
       const detail = (e as CustomEvent<_SelectedDetail>).detail;
@@ -55,7 +55,7 @@ export async function mount(ctx: import('../../previews/_kit/types.d.ts').Previe
       mock: datos,
     });
     const log = root.querySelector<HTMLElement>('#btnRefMultiLog');
-    multiEl.addEventListener('is-selected-record', (e: Event) => {
+    multiEl.addEventListener('iswc-selected-record', (e: Event) => {
       if (!log) return;
       const code = log.querySelector<HTMLElement>('code') || log;
       const detail = (e as CustomEvent<_SelectedDetail>).detail;

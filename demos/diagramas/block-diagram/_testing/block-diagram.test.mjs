@@ -10,22 +10,22 @@ const URL = `${BASE_URL}/demos/diagramas/block-diagram/block-diagram.html`;
 const tests = [];
 
 tests.push({
-  name: 'smoke: <is-block-diagram> monta y renderiza bloques y aristas',
+  name: 'smoke: <iswc-block-diagram> monta y renderiza bloques y aristas',
   run: async (page) => {
     await page.goto(URL, { waitUntil: 'domcontentloaded' });
     await waitReady(page, 'data-block-diagram-ready');
     const info = await page.evaluate(() => {
-      const el = document.querySelector('main is-block-diagram');
+      const el = document.querySelector('main iswc-block-diagram');
       const shadow = el?.shadowRoot;
       return {
-        defined: !!customElements.get('is-block-diagram'),
+        defined: !!customElements.get('iswc-block-diagram'),
         blockCount: shadow?.querySelectorAll('.block-node').length ?? 0,
         edgeCount: shadow?.querySelectorAll('.block-edge').length ?? 0,
         legend: !!shadow?.querySelector('.block-legend'),
         hasSvg: !!shadow?.querySelector('svg.block-svg'),
       };
     });
-    assert.equal(info.defined, true, 'is-block-diagram debe estar definido');
+    assert.equal(info.defined, true, 'iswc-block-diagram debe estar definido');
     assert.ok(info.blockCount >= 6, `esperaba >=6 bloques, hay ${info.blockCount}`);
     assert.ok(info.edgeCount >= 5, `esperaba >=5 aristas, hay ${info.edgeCount}`);
     assert.equal(info.hasSvg, true, 'debe existir el <svg class="block-svg">');
@@ -39,7 +39,7 @@ tests.push({
     await page.goto(URL, { waitUntil: 'domcontentloaded' });
     await waitReady(page, 'data-block-diagram-ready');
     const ids = await page.evaluate(() => {
-      const el = document.querySelector('main is-block-diagram');
+      const el = document.querySelector('main iswc-block-diagram');
       return [...el.shadowRoot.querySelectorAll('.block-node')].map((g) => g.dataset.blockId);
     });
     assert.ok(ids.length >= 6, `esperaba >=6 ids, hay ${ids.length}`);
@@ -55,7 +55,7 @@ tests.push({
     await page.goto(URL, { waitUntil: 'domcontentloaded' });
     await waitReady(page, 'data-block-diagram-ready');
     const edges = await page.evaluate(() => {
-      const el = document.querySelector('main is-block-diagram');
+      const el = document.querySelector('main iswc-block-diagram');
       return [...el.shadowRoot.querySelectorAll('.block-edge path')].map((p) => ({
         d: p.getAttribute('d'),
         stroke: p.getAttribute('stroke') || getComputedStyle(p).stroke,
@@ -75,7 +75,7 @@ tests.push({
     await page.goto(URL, { waitUntil: 'domcontentloaded' });
     await waitReady(page, 'data-block-diagram-ready');
     const positions = await page.evaluate(() => {
-      const el = document.querySelector('main is-block-diagram');
+      const el = document.querySelector('main iswc-block-diagram');
       // block-diagram usa <path> (no <rect>) para la forma del bloque.
       const coords = [...el.shadowRoot.querySelectorAll('.block-node__box')]
         .map((p) => {
@@ -107,16 +107,16 @@ tests.push({
     await page.goto(URL, { waitUntil: 'domcontentloaded' });
     await waitReady(page, 'data-block-diagram-ready');
     const before = await page.evaluate(() => {
-      const el = document.querySelector('main is-block-diagram');
+      const el = document.querySelector('main iswc-block-diagram');
       return el.shadowRoot.querySelector('svg.block-svg').getAttribute('viewBox');
     });
     await page.evaluate(() => {
-      const el = document.querySelector('main is-block-diagram');
+      const el = document.querySelector('main iswc-block-diagram');
       el.payload = el.payload;
     });
     await page.waitForTimeout(150);
     const after = await page.evaluate(() => {
-      const el = document.querySelector('main is-block-diagram');
+      const el = document.querySelector('main iswc-block-diagram');
       return el.shadowRoot.querySelector('svg.block-svg').getAttribute('viewBox');
     });
     assert.equal(before, after, 'viewBox debe ser idéntico tras re-asignar payload');
@@ -129,7 +129,7 @@ tests.push({
     await page.goto(URL, { waitUntil: 'domcontentloaded' });
     await waitReady(page, 'data-block-diagram-ready');
     const aria = await page.evaluate(() => {
-      const el = document.querySelector('main is-block-diagram');
+      const el = document.querySelector('main iswc-block-diagram');
       return el.shadowRoot.querySelector('svg.block-svg').getAttribute('aria-label');
     });
     assert.ok(aria && aria.length > 0, 'el SVG debe llevar aria-label');
@@ -142,7 +142,7 @@ tests.push({
     await page.goto(URL, { waitUntil: 'domcontentloaded' });
     await waitReady(page, 'data-block-diagram-ready');
     const role = await page.evaluate(() => {
-      const el = document.querySelector('main is-block-diagram');
+      const el = document.querySelector('main iswc-block-diagram');
       return el.shadowRoot.querySelector('svg.block-svg').getAttribute('role');
     });
     assert.equal(role, 'img', 'el SVG debe llevar role=img');

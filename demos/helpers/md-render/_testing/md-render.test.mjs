@@ -1,4 +1,4 @@
-// md-render.test.mjs — tests funcionales de <is-md-render>.
+// md-render.test.mjs — tests funcionales de <iswc-md-render>.
 //
 // Notas técnicas:
 //
@@ -7,7 +7,7 @@
 //     navegadores actuales (la suite NO depende de ella — los tests escriben
 //     directamente en el shadow body vía `textContent` para no depender de
 //     APIs deprecadas del navegador). El test "execCommand deprecated" verifica
-//     que existe un fallback (is-input/is-change) cuando execCommand no hace nada.
+//     que existe un fallback (iswc-input/iswc-change) cuando execCommand no hace nada.
 //
 // Cubre:
 //   - smoke: 6 secciones renderizan.
@@ -15,7 +15,7 @@
 //   - chips {{var}}: renderiza como <kbd class="prompt-md-var"> o similar.
 //   - placeholder: cuando value="" muestra el placeholder.
 //   - hidratación: el <script type="text/markdown"> hijo se convierte en value.
-//   - can-edit: contentEditable="true", is-input al escribir.
+//   - can-edit: contentEditable="true", iswc-input al escribir.
 //   - readonly gana: contentEditable="false" con readonly presente.
 import assert from 'node:assert/strict';
 import { BASE_URL, newPage, close, waitReady, screenshot, report } from '../../_testing/lib/harness.mjs';
@@ -30,7 +30,7 @@ tests.push({
     await page.goto(URL, { waitUntil: 'domcontentloaded' });
     await waitReady(page, 'data-md-render-ready');
     const r = await page.evaluate(() => {
-      const all = [...document.querySelectorAll('main is-md-render')];
+      const all = [...document.querySelectorAll('main iswc-md-render')];
       return all.map((el) => {
         const body = el.shadowRoot.querySelector('.body');
         return { count: 1, text: body?.textContent?.trim() ?? '' };
@@ -50,7 +50,7 @@ tests.push({
     await page.goto(URL, { waitUntil: 'domcontentloaded' });
     await waitReady(page, 'data-md-render-ready');
     const r = await page.evaluate(() => {
-      const el = [...document.querySelectorAll('main is-md-render')][0]; // primera sección
+      const el = [...document.querySelectorAll('main iswc-md-render')][0]; // primera sección
       const body = el.shadowRoot.querySelector('.body');
       return {
         text: body?.textContent ?? '',
@@ -71,7 +71,7 @@ tests.push({
     await page.goto(URL, { waitUntil: 'domcontentloaded' });
     await waitReady(page, 'data-md-render-ready');
     const r = await page.evaluate(() => {
-      const el = [...document.querySelectorAll('main is-md-render')][1]; // sección chips
+      const el = [...document.querySelectorAll('main iswc-md-render')][1]; // sección chips
       const body = el.shadowRoot.querySelector('.body');
       return {
         text: body?.textContent ?? '',
@@ -92,7 +92,7 @@ tests.push({
     await page.goto(URL, { waitUntil: 'domcontentloaded' });
     await waitReady(page, 'data-md-render-ready');
     const r = await page.evaluate(() => {
-      const el = [...document.querySelectorAll('main is-md-render')][2];
+      const el = [...document.querySelectorAll('main iswc-md-render')][2];
       const empty = el.shadowRoot.querySelector('.empty');
       return { empty: empty?.textContent ?? '', hidden: empty?.hidden ?? true };
     });
@@ -107,7 +107,7 @@ tests.push({
     await page.goto(URL, { waitUntil: 'domcontentloaded' });
     await waitReady(page, 'data-md-render-ready');
     const r = await page.evaluate(() => {
-      const el = [...document.querySelectorAll('main is-md-render')][3];
+      const el = [...document.querySelectorAll('main iswc-md-render')][3];
       const body = el.shadowRoot.querySelector('.body');
       const list = body?.querySelector('ul');
       return {
@@ -126,7 +126,7 @@ tests.push({
     await page.goto(URL, { waitUntil: 'domcontentloaded' });
     await waitReady(page, 'data-md-render-ready');
     const r = await page.evaluate(() => {
-      const el = [...document.querySelectorAll('main is-md-render')][4];
+      const el = [...document.querySelectorAll('main iswc-md-render')][4];
       const body = el.shadowRoot.querySelector('.body');
       return {
         ce: body?.contentEditable,
@@ -146,7 +146,7 @@ tests.push({
     await page.goto(URL, { waitUntil: 'domcontentloaded' });
     await waitReady(page, 'data-md-render-ready');
     const r = await page.evaluate(() => {
-      const el = [...document.querySelectorAll('main is-md-render')][5];
+      const el = [...document.querySelectorAll('main iswc-md-render')][5];
       const body = el.shadowRoot.querySelector('.body');
       return {
         ce: body?.contentEditable,
@@ -159,26 +159,26 @@ tests.push({
 });
 
 tests.push({
-  name: 'can-edit: edición dispara is-input',
+  name: 'can-edit: edición dispara iswc-input',
   run: async (page) => {
     await page.goto(URL, { waitUntil: 'domcontentloaded' });
     await waitReady(page, 'data-md-render-ready');
     // Adjuntar listener ANTES de escribir
     await page.evaluate(() => {
-      const el = [...document.querySelectorAll('main is-md-render')][4];
+      const el = [...document.querySelectorAll('main iswc-md-render')][4];
       window.__mdInputs = [];
-      el.addEventListener('is-input', (e) => window.__mdInputs.push(e.detail?.value ?? ''));
+      el.addEventListener('iswc-input', (e) => window.__mdInputs.push(e.detail?.value ?? ''));
     });
     // Simular input en el shadow body
     await page.evaluate(() => {
-      const el = [...document.querySelectorAll('main is-md-render')][4];
+      const el = [...document.querySelectorAll('main iswc-md-render')][4];
       const body = el.shadowRoot.querySelector('.body');
       body.textContent = 'Texto nuevo';
       body.dispatchEvent(new InputEvent('input', { bubbles: true }));
     });
     await page.waitForTimeout(150);
     const inputs = await page.evaluate(() => window.__mdInputs);
-    assert.ok(inputs.length >= 1, `esperaba >=1 evento is-input, recibí ${inputs.length}`);
+    assert.ok(inputs.length >= 1, `esperaba >=1 evento iswc-input, recibí ${inputs.length}`);
     assert.ok(inputs[0].includes('Texto nuevo'), `detalle del evento debe contener el texto (era "${inputs[0]}")`);
   },
 });
@@ -191,7 +191,7 @@ tests.push({
     await page.goto(URL, { waitUntil: 'domcontentloaded' });
     await waitReady(page, 'data-md-render-ready');
     const r = await page.evaluate(() => {
-      const el = [...document.querySelectorAll('main is-md-render')][0];
+      const el = [...document.querySelectorAll('main iswc-md-render')][0];
       return {
         hasRefresh: typeof el.refresh === 'function',
         afterRefresh: null,
@@ -200,11 +200,11 @@ tests.push({
     assert.equal(r.hasRefresh, true, 'refresh() debe estar disponible como API moderna');
     // Llamar refresh no debe romper
     await page.evaluate(() => {
-      const el = [...document.querySelectorAll('main is-md-render')][0];
+      const el = [...document.querySelectorAll('main iswc-md-render')][0];
       el.refresh();
     });
     const stillOk = await page.evaluate(() => {
-      const el = [...document.querySelectorAll('main is-md-render')][0];
+      const el = [...document.querySelectorAll('main iswc-md-render')][0];
       const body = el.shadowRoot.querySelector('.body');
       return body?.textContent?.length > 0;
     });

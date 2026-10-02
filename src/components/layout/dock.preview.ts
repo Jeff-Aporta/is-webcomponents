@@ -1,5 +1,5 @@
 /**
- * Behavior migrado desde HTML inline de is-dock.
+ * Behavior migrado desde HTML inline de iswc-dock.
  * Se ejecuta en mount() tras pintar la definition JSON.
  */
 export async function mount(ctx: import('../../previews/_kit/types.d.ts').PreviewMountContext) {
@@ -11,8 +11,8 @@ export async function mount(ctx: import('../../previews/_kit/types.d.ts').Previe
     log!.textContent = line + '\n' + log!.textContent;
     log!.scrollTop = 0;
   }
-  document.querySelectorAll<HTMLElement>('is-dock').forEach((d: HTMLElement) => {
-    d.addEventListener('is-select', (e: Event) => {
+  document.querySelectorAll<HTMLElement>('iswc-dock').forEach((d: HTMLElement) => {
+    d.addEventListener('iswc-select', (e: Event) => {
       const detail = (e as CustomEvent<{ item: HTMLElement }>).detail;
       append(`select: ${detail.item.getAttribute('label')}`);
     });

@@ -4,7 +4,7 @@ import { ElementBase } from '../../core/element-base.js';
 import { setStringAttr } from '../_shared/reflect.js';
 
 /**
- * <is-avatar> — Web Component (vanilla).
+ * <iswc-avatar> — Web Component (vanilla).
  *
  * Atributos
  *   image     string — URL de imagen
@@ -17,7 +17,7 @@ import { setStringAttr } from '../_shared/reflect.js';
  *   icon      fallback cuando no hay image ni initials (default mdi:account)
  *
  * Eventos
- *   is-error  — cuando la imagen falla al cargar (bubbles, composed)
+ *   iswc-error  — cuando la imagen falla al cargar (bubbles, composed)
  *
  * CSS Parts: ::part(image) ::part(initials) ::part(icon)
  * Escala con font-size del contexto (caja = 1em × 1em).
@@ -31,7 +31,7 @@ import { setStringAttr } from '../_shared/reflect.js';
       <span class="initials" part="initials" hidden></span>
       <span class="icon" part="icon" hidden>
         <slot name="icon">
-          <is-icon icon="mdi:account" aria-hidden="true"></is-icon>
+          <iswc-icon icon="mdi:account" aria-hidden="true"></iswc-icon>
         </slot>
       </span>
     </span>
@@ -43,7 +43,7 @@ import { setStringAttr } from '../_shared/reflect.js';
   type Shape = typeof VALID_SHAPE[number];
   type Loading = typeof VALID_LOADING[number];
 
-  class IsAvatar extends ElementBase {
+  class IswcAvatar extends ElementBase {
     static get observedAttributes(): string[] { return OBSERVED; }
 
     #img!: HTMLImageElement;
@@ -105,7 +105,7 @@ import { setStringAttr } from '../_shared/reflect.js';
     #onImgError = () => {
       if (!this.#img.getAttribute('src')) return;
       this.#imgFailed = true;
-      emit(this, 'is-error');
+      emit(this, 'iswc-error');
       this.#syncView();
     };
 
@@ -144,5 +144,5 @@ import { setStringAttr } from '../_shared/reflect.js';
     }
   }
 
-  defineElement('is-avatar', IsAvatar, 'IsAvatar');
+  defineElement('iswc-avatar', IswcAvatar, 'IswcAvatar');
 })();

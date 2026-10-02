@@ -1,8 +1,8 @@
 // tests/preview-ready-hooks.test.ts
 //
 // El docs es UNA página que monta los previews desde JSON, así que el contenido
-// llega después del arranque. Todo lo que decora `<pre>`, `<is-demo>` o el main
-// tiene que reengancharse en `is-preview-ready` (lo emite is-preview-component
+// llega después del arranque. Todo lo que decora `<pre>`, `<iswc-demo>` o el main
+// tiene que reengancharse en `iswc-preview-ready` (lo emite iswc-preview-component
 // al terminar de montar). Los módulos que solo barrían en DOMContentLoaded se
 // quedaban sin nada que decorar: código sin color, `<pre>` sin botón de copiar
 // y el panel «Consumo por CDN» directamente ausente.
@@ -17,7 +17,7 @@ const root = join(dirname(fileURLToPath(import.meta.url)), '..', '..', '..', '..
 const failures = [];
 const leer = (rel) => readFileSync(join(root, rel), 'utf8');
 
-const EVENTO = 'is-preview-ready';
+const EVENTO = 'iswc-preview-ready';
 
 // Quien emite el evento: sin esto no hay nada a lo que engancharse.
 const chrome = leer('src/components/layout/preview-component.ts');
@@ -50,7 +50,7 @@ const panel = leer('scripts/cdn-panel.js');
 if (/location\.pathname/.test(panel)) {
   failures.push('cdn-panel.js: el tag no puede venir de location.pathname (ya no hay una página por componente)');
 }
-if (!/is-cdn-snippet/.test(panel)) failures.push('cdn-panel.js: debe crear el <is-cdn-snippet>');
+if (!/iswc-cdn-snippet/.test(panel)) failures.push('cdn-panel.js: debe crear el <iswc-cdn-snippet>');
 if (!/data-auto-cdn|autoCdn/.test(panel)) {
   failures.push('cdn-panel.js: marca el panel automático para no duplicarlo al remontar');
 }
@@ -58,7 +58,7 @@ if (!/data-auto-cdn|autoCdn/.test(panel)) {
 // preview-chrome.js ya no es el dueño del panel: si vuelve a inyectarlo, se
 // duplica con cdn-panel.js.
 const previewChrome = leer('scripts/preview-chrome.js');
-if (/createElement\(\s*'is-cdn-snippet'/.test(previewChrome)) {
+if (/createElement\(\s*'iswc-cdn-snippet'/.test(previewChrome)) {
   failures.push('preview-chrome.js: el panel CDN vive en cdn-panel.js, no aquí');
 }
 

@@ -4,8 +4,8 @@
   <meta charset="UTF-8" />
   <script src="../../scripts/preview-boot.js"></script>
   <meta name="viewport" content="width=device-width, initial-scale=1" />
-  <title>is-popconfirm · IS Web Components</title>
-  <meta name="description" content="Documentación y demos de is-popconfirm de Insoft." />
+  <title>iswc-popconfirm · IS Web Components</title>
+  <meta name="description" content="Documentación y demos de iswc-popconfirm de Insoft." />
 
   <link rel="stylesheet" href="../../styles/is-base.css" />
   <link rel="stylesheet" href="../../styles/presentation.css" />
@@ -26,33 +26,33 @@
 </head>
 <body>
 
-  <is-split-panel class="page" orientation="horizontal" position-in-pixels="220" primary="end" storage-key="docs-toc">
-    <is-main class="main" slot="start" remember-scroll storage-key="docs-is-popconfirm">
+  <iswc-split-panel class="page" orientation="horizontal" position-in-pixels="220" primary="end" storage-key="docs-toc">
+    <iswc-main class="main" slot="start" remember-scroll storage-key="docs-is-popconfirm">
 
       <section class="section" id="intro">
-        <h2>&lt;is-popconfirm&gt;</h2>
+        <h2>&lt;iswc-popconfirm&gt;</h2>
         <p class="lede">
           Cuadro de confirmación rápido anclado a un botón. Sin modal, sin tapar
           la pantalla. Perfecto para "¿Seguro que quieres borrar?" en línea.
         </p>
 
         <div class="demo">
-          <is-button id="btnDelete" variant="danger">
-            <is-icon slot="start" icon="mdi:trash-can"></is-icon>
+          <iswc-button id="btnDelete" variant="danger">
+            <iswc-icon slot="start" icon="mdi:trash-can"></iswc-icon>
             Borrar elemento
-          </is-button>
-          <is-popconfirm for="btnDelete" message="¿Seguro que quieres borrarlo? Esta acción no se puede deshacer." placement="bottom-end">
-            <is-button slot="confirm" variant="danger">Sí, borrar</is-button>
-            <is-button slot="cancel">Cancelar</is-button>
-          </is-popconfirm>
+          </iswc-button>
+          <iswc-popconfirm for="btnDelete" message="¿Seguro que quieres borrarlo? Esta acción no se puede deshacer." placement="bottom-end">
+            <iswc-button slot="confirm" variant="danger">Sí, borrar</iswc-button>
+            <iswc-button slot="cancel">Cancelar</iswc-button>
+          </iswc-popconfirm>
           <p id="pcLog">Última acción: <code class="code">—</code></p>
         </div>
 
-        <pre class="code"><span class="tag">&lt;is-button</span> <span class="attr">id</span>=<span class="val">"btnDelete"</span><span class="tag">&gt;</span>Borrar<span class="tag">&lt;/is-button&gt;</span>
-<span class="tag">&lt;is-popconfirm</span> <span class="attr">for</span>=<span class="val">"btnDelete"</span> <span class="attr">message</span>=<span class="val">"¿Seguro?"</span><span class="tag">&gt;</span>
-  <span class="tag">&lt;is-button</span> <span class="attr">slot</span>=<span class="val">"confirm"</span> <span class="attr">variant</span>=<span class="val">"danger"</span><span class="tag">&gt;</span>Sí, borrar<span class="tag">&lt;/is-button&gt;</span>
-  <span class="tag">&lt;is-button</span> <span class="attr">slot</span>=<span class="val">"cancel"</span><span class="tag">&gt;</span>Cancelar<span class="tag">&lt;/is-button&gt;</span>
-<span class="tag">&lt;/is-popconfirm&gt;</span></pre>
+        <pre class="code"><span class="tag">&lt;iswc-button</span> <span class="attr">id</span>=<span class="val">"btnDelete"</span><span class="tag">&gt;</span>Borrar<span class="tag">&lt;/iswc-button&gt;</span>
+<span class="tag">&lt;iswc-popconfirm</span> <span class="attr">for</span>=<span class="val">"btnDelete"</span> <span class="attr">message</span>=<span class="val">"¿Seguro?"</span><span class="tag">&gt;</span>
+  <span class="tag">&lt;iswc-button</span> <span class="attr">slot</span>=<span class="val">"confirm"</span> <span class="attr">variant</span>=<span class="val">"danger"</span><span class="tag">&gt;</span>Sí, borrar<span class="tag">&lt;/iswc-button&gt;</span>
+  <span class="tag">&lt;iswc-button</span> <span class="attr">slot</span>=<span class="val">"cancel"</span><span class="tag">&gt;</span>Cancelar<span class="tag">&lt;/iswc-button&gt;</span>
+<span class="tag">&lt;/iswc-popconfirm&gt;</span></pre>
       </section>
 
       <section class="section" id="placements">
@@ -61,29 +61,29 @@
 
         <div class="demo">
           <div style="display:flex;gap:0.5rem;flex-wrap:wrap">
-            <is-button id="pc1">top</is-button>
-            <is-popconfirm for="pc1" message="Top popconfirm" placement="top"></is-popconfirm>
+            <iswc-button id="pc1">top</iswc-button>
+            <iswc-popconfirm for="pc1" message="Top popconfirm" placement="top"></iswc-popconfirm>
 
-            <is-button id="pc2">top-start</is-button>
-            <is-popconfirm for="pc2" placement="top-start" message="Top start"></is-popconfirm>
+            <iswc-button id="pc2">top-start</iswc-button>
+            <iswc-popconfirm for="pc2" placement="top-start" message="Top start"></iswc-popconfirm>
 
-            <is-button id="pc3">top-end</is-button>
-            <is-popconfirm for="pc3" placement="top-end" message="Top end"></is-popconfirm>
+            <iswc-button id="pc3">top-end</iswc-button>
+            <iswc-popconfirm for="pc3" placement="top-end" message="Top end"></iswc-popconfirm>
 
-            <is-button id="pc4">bottom</is-button>
-            <is-popconfirm for="pc4" placement="bottom" message="Bottom"></is-popconfirm>
+            <iswc-button id="pc4">bottom</iswc-button>
+            <iswc-popconfirm for="pc4" placement="bottom" message="Bottom"></iswc-popconfirm>
 
-            <is-button id="pc5">bottom-start</is-button>
-            <is-popconfirm for="pc5" placement="bottom-start" message="Bottom start"></is-popconfirm>
+            <iswc-button id="pc5">bottom-start</iswc-button>
+            <iswc-popconfirm for="pc5" placement="bottom-start" message="Bottom start"></iswc-popconfirm>
 
-            <is-button id="pc6">bottom-end</is-button>
-            <is-popconfirm for="pc6" placement="bottom-end" message="Bottom end"></is-popconfirm>
+            <iswc-button id="pc6">bottom-end</iswc-button>
+            <iswc-popconfirm for="pc6" placement="bottom-end" message="Bottom end"></iswc-popconfirm>
 
-            <is-button id="pc7">start</is-button>
-            <is-popconfirm for="pc7" placement="start" message="Start"></is-popconfirm>
+            <iswc-button id="pc7">start</iswc-button>
+            <iswc-popconfirm for="pc7" placement="start" message="Start"></iswc-popconfirm>
 
-            <is-button id="pc8">end</is-button>
-            <is-popconfirm for="pc8" placement="end" message="End"></is-popconfirm>
+            <iswc-button id="pc8">end</iswc-button>
+            <iswc-popconfirm for="pc8" placement="end" message="End"></iswc-popconfirm>
           </div>
         </div>
       </section>
@@ -93,24 +93,24 @@
         <p class="lede">El contenido del slot <code class="code">message</code> reemplaza el atributo.</p>
 
         <div class="demo">
-          <is-button id="pcMega">Power action</is-button>
-          <is-popconfirm for="pcMega" placement="bottom" hide-arrow>
+          <iswc-button id="pcMega">Power action</iswc-button>
+          <iswc-popconfirm for="pcMega" placement="bottom" hide-arrow>
             <div slot="message">
               <strong>¿Reiniciar el servidor?</strong>
               <p style="margin:0.25rem 0;font-size:0.85em;color:color-mix(in srgb,currentColor 70%,transparent)">
                 Esto detendrá todos los servicios activos.
               </p>
             </div>
-            <is-button slot="cancel">Cancelar</is-button>
-            <is-button slot="confirm" variant="danger">Reiniciar</is-button>
-          </is-popconfirm>
+            <iswc-button slot="cancel">Cancelar</iswc-button>
+            <iswc-button slot="confirm" variant="danger">Reiniciar</iswc-button>
+          </iswc-popconfirm>
         </div>
       </section>
 
       <section class="section" id="reference">
         <h2>Referencia</h2>
 
-        <h3><code class="code">&lt;is-popconfirm&gt;</code></h3>
+        <h3><code class="code">&lt;iswc-popconfirm&gt;</code></h3>
         <table class="ref">
           <thead><tr><th>Atributo</th><th>Tipo</th><th>Default</th><th>Descripción</th></tr></thead>
           <tbody>
@@ -126,34 +126,34 @@
         <table class="ref">
           <thead><tr><th>Evento</th><th>Descripción</th></tr></thead>
           <tbody>
-            <tr><td><code>is-popconfirm-show</code></td><td>Popconfirm visible.</td></tr>
-            <tr><td><code>is-popconfirm-hide</code></td><td>Popconfirm se cierra.</td></tr>
-            <tr><td><code>is-popconfirm-confirm</code></td><td>Click en confirmar.</td></tr>
-            <tr><td><code>is-popconfirm-cancel</code></td><td>Click en cancelar.</td></tr>
+            <tr><td><code>iswc-popconfirm-show</code></td><td>Popconfirm visible.</td></tr>
+            <tr><td><code>iswc-popconfirm-hide</code></td><td>Popconfirm se cierra.</td></tr>
+            <tr><td><code>iswc-popconfirm-confirm</code></td><td>Click en confirmar.</td></tr>
+            <tr><td><code>iswc-popconfirm-cancel</code></td><td>Click en cancelar.</td></tr>
           </tbody>
         </table>
       </section>
 
-    </is-main>
+    </iswc-main>
 
     <aside class="sidebar" slot="end">
-      <h1>is-popconfirm</h1>
-      <is-scrollspy target="is-main">
+      <h1>iswc-popconfirm</h1>
+      <iswc-scrollspy target="iswc-main">
         <a href="#intro">Introducción</a>
         <a href="#placements">Posiciones</a>
         <a href="#custom">Slot message</a>
         <a href="#reference">Referencia</a>
-      </is-scrollspy>
+      </iswc-scrollspy>
     </aside>
-  </is-split-panel>
+  </iswc-split-panel>
 
   <script>
     const del = document.getElementById('btnDelete');
     const log = document.getElementById('pcLog');
-    del.addEventListener('is-popconfirm-confirm', () => {
+    del.addEventListener('iswc-popconfirm-confirm', () => {
       log.innerHTML = 'Última acción: <code class="code">confirm</code>';
     });
-    del.addEventListener('is-popconfirm-cancel', () => {
+    del.addEventListener('iswc-popconfirm-cancel', () => {
       log.innerHTML = 'Última acción: <code class="code">cancel</code>';
     });
   </script>

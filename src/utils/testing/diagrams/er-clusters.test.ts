@@ -1,5 +1,5 @@
 /**
- * Guardián del layout por agrupadores de <is-er-diagram> (er-spec.ts).
+ * Guardián del layout por agrupadores de <iswc-er-diagram> (er-spec.ts).
  *
  * Vigila lo que se rompió al menos una vez y no debe volver a romperse:
  *   1. Un grupo declarado se dibuja como cajón y sus entidades quedan DENTRO.

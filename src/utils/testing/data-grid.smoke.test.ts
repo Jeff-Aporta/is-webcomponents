@@ -1,5 +1,5 @@
 /**
- * data-grid.smoke.test.ts — smoke test del módulo `<is-data-grid>`.
+ * data-grid.smoke.test.ts — smoke test del módulo `<iswc-data-grid>`.
  *
  * No toca DOM (no `document`, no `customElements`). Cubre las piezas puras
  * de los shared que tipamos al mismo tiempo que el componente:

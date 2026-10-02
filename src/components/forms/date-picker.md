@@ -1,20 +1,20 @@
 ---
-tag: is-date-picker
+tag: iswc-date-picker
 tags:
-  - is-date-picker
+  - iswc-date-picker
 category: forms
 status: public
 source: ./date-picker.js
 style: ./date-picker.css
 preview: ./date-picker.json
 ---
-# `<is-date-picker>`
+# `<iswc-date-picker>`
 
 ## Propósito
 
-Calendario inline (DateCalendar de MUI X). Tres vistas (día, mes, año), teclado, números de semana y reglas de deshabilitado. El mes y el año del encabezado abren un is-dropdown.
+Calendario inline (DateCalendar de MUI X). Tres vistas (día, mes, año), teclado, números de semana y reglas de deshabilitado. El mes y el año del encabezado abren un iswc-dropdown.
 
-Este módulo registra `<is-date-picker>`.
+Este módulo registra `<iswc-date-picker>`.
 
 ## Cuándo usarlo
 
@@ -33,7 +33,7 @@ import './date-picker.js';
 ## Ejemplo mínimo
 
 ```html
-<is-date-picker></is-date-picker>
+<iswc-date-picker></iswc-date-picker>
 ```
 
 ## API
@@ -104,10 +104,10 @@ No expone.
 
 | Evento | detail | bubbles | composed | cancelable |
 | --- | --- | --- | --- | --- |
-| `is-view-change` | sí | sí | sí | no |
-| `is-month-change` | sí | sí | sí | no |
-| `is-day-hover` | sí | sí | sí | no |
-| `is-change` | sí | sí | sí | no |
+| `iswc-view-change` | sí | sí | sí | no |
+| `iswc-month-change` | sí | sí | sí | no |
+| `iswc-day-hover` | sí | sí | sí | no |
+| `iswc-change` | sí | sí | sí | no |
 
 ### Métodos y propiedades públicas
 
@@ -171,9 +171,9 @@ No declara integración form-associated propia en este módulo.
 
 Documentación de cabecera preservada desde fuente:
 
-> <is-date-picker> — Calendario inline (equivalente a DateCalendar de MUI X).
+> <iswc-date-picker> — Calendario inline (equivalente a DateCalendar de MUI X).
 > Tres vistas: día, mes y año. El mes y el año del encabezado son triggers de
-> un is-dropdown para saltar sin encadenar clics en las flechas.
+> un iswc-dropdown para saltar sin encadenar clics en las flechas.
 > Atributos:
 >   value            yyyy-mm-dd · rango: `inicio/fin`
 >   mode             single | range
@@ -185,8 +185,8 @@ Documentación de cabecera preservada desde fuente:
 >   show-outside-days, fixed-weeks, show-week-numbers
 >   disable-past, disable-future, disabled-dates="ISO,ISO", disabled-days="0,6"
 >   disabled, readonly
-> Events: is-change { value } | { start, end } · is-view-change { view }
->         is-month-change { month }
+> Events: iswc-change { value } | { start, end } · iswc-view-change { view }
+>         iswc-month-change { month }
 
 ## Dependencias y componentes relacionados
 
@@ -196,7 +196,7 @@ Documentación de cabecera preservada desde fuente:
 - [`./month-calendar.js`](./month-calendar.js)
 - [`./year-calendar.js`](./year-calendar.js)
 
-Tags del módulo: `<is-date-picker>`.
+Tags del módulo: `<iswc-date-picker>`.
 
 ## Accesibilidad
 
@@ -205,7 +205,7 @@ Preservar semántica, foco, teclado, labels y ARIA. ARIA detectado: `aria-label`
 ## Ejemplo avanzado
 
 ```html
-<is-date-picker></is-date-picker>
+<iswc-date-picker></iswc-date-picker>
 ```
 
 ## Errores comunes

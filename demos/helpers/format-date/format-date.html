@@ -3,8 +3,8 @@
 <head>
 <meta charset="utf-8" />
 <meta name="viewport" content="width=device-width, initial-scale=1" />
-<title><is-format-date> · is-webcomponents</title>
-<meta name="description" content="Demo del helper <is-format-date>: formatea fechas con Intl.DateTimeFormat (weekday, year, month, day, hour, etc.)." />
+<title><iswc-format-date> · is-webcomponents</title>
+<meta name="description" content="Demo del helper <iswc-format-date>: formatea fechas con Intl.DateTimeFormat (weekday, year, month, day, hour, etc.)." />
 <style>
   html, body { margin: 0; padding: 0; height: 100%; background: #0c1118; color: #e2e8f0; font-family: ui-sans-serif, system-ui, sans-serif; }
   body { display: grid; grid-template-rows: auto 1fr; }
@@ -18,11 +18,11 @@
   main { padding: 16px 20px; display: grid; gap: 8px; align-content: start; }
   .row { display: grid; grid-template-columns: 320px 1fr; gap: 12px; align-items: baseline; }
   .row code { color: #94a3b8; font-size: 12px; }
-  is-format-date:not(:defined) { visibility: hidden; }
+  iswc-format-date:not(:defined) { visibility: hidden; }
 </style>
 <script type="module">
-  await import('../../../dist/cdn/helpers/format-date.min.js?h=qyuv8j');
-  await customElements.whenDefined('is-format-date');
+  await import('../../../dist/cdn/helpers/format-date.min.js?h=rr4kga');
+  await customElements.whenDefined('iswc-format-date');
 
   const cases = [
     { date: '2026-08-15' },
@@ -43,8 +43,8 @@
     row.className = 'row';
     const label = document.createElement('code');
     const attrs = Object.entries(c).map(([k, v]) => `${k}=${JSON.stringify(v)}`).join(' ');
-    label.textContent = `<is-format-date ${attrs}>`;
-    const el = document.createElement('is-format-date');
+    label.textContent = `<iswc-format-date ${attrs}>`;
+    const el = document.createElement('iswc-format-date');
     for (const [k, v] of Object.entries(c)) el.setAttribute(k, String(v));
     row.append(label, el);
     main.appendChild(row);
@@ -55,7 +55,7 @@
 </head>
 <body>
 <header>
-  <h1><is-format-date> — fechas con Intl.DateTimeFormat</h1>
+  <h1><iswc-format-date> — fechas con Intl.DateTimeFormat</h1>
   <p>Atributos: <code>date</code> <code>weekday</code> <code>era</code> <code>year</code> <code>month</code> <code>day</code> <code>hour</code> <code>minute</code> <code>second</code> <code>hour-format</code> <code>locale</code></p>
 </header>
 <main></main>

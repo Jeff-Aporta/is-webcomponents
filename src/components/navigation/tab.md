@@ -1,15 +1,15 @@
 ---
-tag: is-tab
+tag: iswc-tab
 tags:
-  - is-tab
+  - iswc-tab
 category: navigation
 status: public
 ---
-# `<is-tab>`
+# `<iswc-tab>`
 
 ## Propósito
 
-Pestaña de `<is-tab-group>`. Elige el panel; no sustituye al grupo.
+Pestaña de `<iswc-tab-group>`. Elige el panel; no sustituye al grupo.
 
 ## Cuándo usarlo
 
@@ -22,5 +22,5 @@ No lo reimplementes ni lo uses para sustituir al padre. La guía del padre docum
 ## Ejemplo mínimo
 
 ```html
-<is-tab></is-tab>
+<iswc-tab></iswc-tab>
 ```

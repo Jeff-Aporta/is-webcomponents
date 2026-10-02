@@ -1,3 +1,13 @@
+/*
+ * <iswc-icon> — caja 1em × 1em para SVG inline (currentColor).
+ *
+ * El icono NO se inyecta como <img src>: eso rompe `currentColor` y los iconos
+ * quedan negros sobre fondos claros. El SVG llega inline al shadow y el
+ * `#normalizeInlineSvg()` del JS fuerza `fill: currentColor` /
+ * `stroke: currentColor` para que los SVGs del CDN hereden el color del host.
+ * Por eso esta hoja protege `currentColor` y `fill: currentColor` en todos los
+ * niveles — no toques la cadena.
+ */
 :host {
   /* Caja CUADRADA y explicita de 1em. Sin width/height propios, el host es
      una caja inline que la linea estira hasta el line-height heredado (medido:
@@ -9,8 +19,8 @@
   align-items: center;
   justify-content: center;
   box-sizing: content-box;
-  width: 1em;
-  height: 1em;
+  inline-size: 1em;
+  block-size: 1em;
   font-size: 1em;
   /* line-height: 1 y no 0: con 0 el half-leading es negativo y vuelve a
      desalinear el contenido respecto al centro de la caja. */
@@ -23,8 +33,8 @@
     display: flex;
     align-items: center;
     justify-content: center;
-    width: 100%;
-    height: 100%;
+    inline-size: 100%;
+    block-size: 100%;
     line-height: 1;
 
     .inline {
@@ -35,23 +45,25 @@
       color: inherit;
       fill: currentColor;
       /* sin stroke: los iconos de relleno se contornean y ennegrecen */
-      width: 1em;
-      height: 1em;
-      & > svg { width: 1em; height: 1em; display: block; fill: currentColor; }
+      inline-size: 1em;
+      block-size: 1em;
+
+      & > svg { inline-size: 1em; block-size: 1em; display: block; fill: currentColor; }
+
       /* Iconos con paleta propia (banderas, logos, emoji). El JS marca la
          clase. Sin esto, los paths que NO declaran fill heredarian el
          currentColor del host y el icono saldria a medio pintar; el default
          del SVG (negro) es el que el autor asumio. */
-      &.is-multicolor {
+      &.iswc-multicolor {
         color: initial;
         fill: initial;
+
         & > svg { fill: initial; }
       }
+
       &[hidden] { display: none !important; }
     }
   }
 }
 
-:host([hidden]) {
-  display: none !important;
-}
+:host([hidden]) { display: none !important; }

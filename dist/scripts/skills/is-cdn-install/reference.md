@@ -12,7 +12,7 @@ Fuente de verdad en código: `src/components/_shared/cdn-ref.js` (`MIRRORS`, `re
 ## Resolución de `<ref>`
 
 1. Preferir SHA de `main` (`GET https://api.github.com/repos/Jeff-Aporta/is-webcomponents/commits/main` → header `Accept: application/vnd.github.sha`).
-2. Cachear el SHA en `sessionStorage` (`is-wc:cdn-ref`) por sesión.
+2. Cachear el SHA en `sessionStorage` (`iswc-wc:cdn-ref`) por sesión.
 3. Si la API falla → `@main`.
 4. Pages **ignora** el pin: siempre tip desplegado.
 
@@ -43,18 +43,18 @@ npx skills add Jeff-Aporta/is-webcomponents -s is-webcomponents
 
 O leer directo el `SKILL.md` por raw/CDN (URLs en el SKILL).
 
-## Contrato de `<is-cdn-snippet>`
+## Contrato de `<iswc-cdn-snippet>`
 
 Atributos relevantes:
 
 | Atributo | Rol |
 | --- | --- |
-| `tag` | Tag actual (`is-button`) |
+| `tag` | Tag actual (`iswc-button`) |
 | `category` | Categoría manifest (`actions`) |
 | `base` | Override de CDN (opcional; ignora espejo) |
 | `config` | JSON `{ docs: [{ label, url }] }` |
 
-El panel auto-inyectado (`data-auto-cdn`) lo monta `scripts/cdn-panel.js` en `is-preview-ready`.
+El panel auto-inyectado (`data-auto-cdn`) lo monta `scripts/cdn-panel.js` en `iswc-preview-ready`.
 
 ## Content-Type de MD
 

@@ -1,11 +1,11 @@
 {
-  "$schema": "is-preview/v1",
-  "tag": "is-data-grid",
+  "$schema": "iswc-preview/v1",
+  "tag": "iswc-data-grid",
   "category": "data",
-  "title": "<is-data-grid>",
+  "title": "<iswc-data-grid>",
   "titleHtml": true,
   "styles": ".grid-tall { --iswc-grid-height: 30rem; }\r\n    .grid-short { --iswc-grid-height: 18rem; }\r\n    .demo-bar { display: flex; flex-wrap: wrap; gap: .5rem; margin-bottom: .75rem; }\r\n    .demo-bar button { font: inherit; font-size: .85em; padding: .35em .7em; border: 1px solid var(--iswc-border); border-radius: var(--iswc-radius-sm); background: var(--iswc-control-bg); color: inherit; cursor: pointer; }\r\n    .demo-bar button:hover { background: var(--iswc-control-bg-hover); }\r\n    .out { font-family: var(--iswc-mono); font-size: .8em; opacity: .85; min-height: 1.2em; }\r\n    .tag-cell { display: inline-flex; align-items: center; gap: .3em; padding: .1em .5em; border-radius: 1em; font-size: .8em; }\r\n    .tag-ok { background: rgb(47 158 68 / 18%); color: #51cf66; }\r\n    .tag-no { background: rgb(224 49 49 / 18%); color: #ff8787; }",
-  "storageKey": "docs-is-data-grid",
+  "storageKey": "docs-iswc-data-grid",
   "hasBehavior": true,
   "sections": [
     {
@@ -15,11 +15,11 @@
       "blocks": [
         {
           "kind": "demo",
-          "html": "<is-data-grid id=\"g-full\" class=\"grid-tall\" show-toolbar quick-filter checkbox-selection\r\n            pagination page-size=\"10\" page-size-options=\"10,25,50\" editable undo-redo clipboard\r\n            tab-navigation=\"all\"></is-data-grid>"
+          "html": "<iswc-data-grid id=\"g-full\" class=\"grid-tall\" show-toolbar quick-filter checkbox-selection\r\n            pagination page-size=\"10\" page-size-options=\"10,25,50\" editable undo-redo clipboard\r\n            tab-navigation=\"all\"></iswc-data-grid>"
         },
         {
           "kind": "html",
-          "html": "<p class=\"out\" id=\"out-full\"></p>\r\n        <p class=\"empty-note\">\r\n          El snippet del botón <span class=\"icon-inline\" aria-hidden=\"true\"><is-icon icon=\"mdi:information-outline\"></is-icon></span>\r\n          muestra sólo la etiqueta <code class=\"code\">&lt;is-data-grid&gt;</code>; los datos y columnas se asignan\r\n          por JS justo debajo. Si lo quieres autocontenido, copia este bloque (incluye <code class=\"code\">columns</code>,\r\n          <code class=\"code\">rows</code> y <code class=\"code\">aggregationModel</code> con los mismos 40 registros que\r\n          ves en la tabla):\r\n        </p>"
+          "html": "<p class=\"out\" id=\"out-full\"></p>\r\n        <p class=\"empty-note\">\r\n          El snippet del botón <span class=\"icon-inline\" aria-hidden=\"true\"><iswc-icon icon=\"mdi:information-outline\"></iswc-icon></span>\r\n          muestra sólo la etiqueta <code class=\"code\">&lt;iswc-data-grid&gt;</code>; los datos y columnas se asignan\r\n          por JS justo debajo. Si lo quieres autocontenido, copia este bloque (incluye <code class=\"code\">columns</code>,\r\n          <code class=\"code\">rows</code> y <code class=\"code\">aggregationModel</code> con los mismos 40 registros que\r\n          ves en la tabla):\r\n        </p>"
         },
         {
           "kind": "code",
@@ -35,7 +35,7 @@
       "blocks": [
         {
           "kind": "demo",
-          "html": "<is-data-grid id=\"g-cols\" class=\"grid-short\" header-filters></is-data-grid>"
+          "html": "<iswc-data-grid id=\"g-cols\" class=\"grid-short\" header-filters></iswc-data-grid>"
         },
         {
           "kind": "code",
@@ -55,7 +55,7 @@
         },
         {
           "kind": "demo",
-          "html": "<is-data-grid id=\"g-layout\" class=\"grid-short\"></is-data-grid>"
+          "html": "<iswc-data-grid id=\"g-layout\" class=\"grid-short\"></iswc-data-grid>"
         },
         {
           "kind": "code",
@@ -75,7 +75,7 @@
         },
         {
           "kind": "demo",
-          "html": "<is-data-grid id=\"g-edit\" class=\"grid-short\" editable clipboard undo-redo cell-selection></is-data-grid>"
+          "html": "<iswc-data-grid id=\"g-edit\" class=\"grid-short\" editable clipboard undo-redo cell-selection></iswc-data-grid>"
         },
         {
           "kind": "html",
@@ -94,7 +94,7 @@
         },
         {
           "kind": "demo",
-          "html": "<is-data-grid id=\"g-select\" class=\"grid-short\" checkbox-selection cell-selection></is-data-grid>"
+          "html": "<iswc-data-grid id=\"g-select\" class=\"grid-short\" checkbox-selection cell-selection></iswc-data-grid>"
         },
         {
           "kind": "html",
@@ -113,7 +113,7 @@
         },
         {
           "kind": "demo",
-          "html": "<is-data-grid id=\"g-sort\" class=\"grid-short\" show-toolbar quick-filter header-filters></is-data-grid>"
+          "html": "<iswc-data-grid id=\"g-sort\" class=\"grid-short\" show-toolbar quick-filter header-filters></iswc-data-grid>"
         },
         {
           "kind": "html",
@@ -132,11 +132,11 @@
         },
         {
           "kind": "demo",
-          "html": "<is-data-grid id=\"g-group\" class=\"grid-short\"></is-data-grid>"
+          "html": "<iswc-data-grid id=\"g-group\" class=\"grid-short\"></iswc-data-grid>"
         },
         {
           "kind": "demo",
-          "html": "<is-data-grid id=\"g-tree\" class=\"grid-short\" tree-data></is-data-grid>"
+          "html": "<iswc-data-grid id=\"g-tree\" class=\"grid-short\" tree-data></iswc-data-grid>"
         }
       ]
     },
@@ -147,7 +147,7 @@
       "blocks": [
         {
           "kind": "demo",
-          "html": "<is-data-grid id=\"g-pivot\" class=\"grid-short\"></is-data-grid>"
+          "html": "<iswc-data-grid id=\"g-pivot\" class=\"grid-short\"></iswc-data-grid>"
         },
         {
           "kind": "code",
@@ -163,18 +163,18 @@
       "blocks": [
         {
           "kind": "demo",
-          "html": "<is-data-grid id=\"g-detail\" class=\"grid-short\" row-reorder detail-height=\"120\"></is-data-grid>"
+          "html": "<iswc-data-grid id=\"g-detail\" class=\"grid-short\" row-reorder detail-height=\"120\"></iswc-data-grid>"
         }
       ]
     },
     {
       "id": "virtual",
       "title": "Virtualización y carga incremental",
-      "lede": "50.000 filas en el DOM solo las visibles (más <code>overscan</code>). <code>getRowHeight</code>\r\n          permite alto variable. Al llegar al final se emite <code>is-rows-scroll-end</code> y, si hay\r\n          <code>rowsLoader</code>, se piden más filas (modo servidor / lazy loading).",
+      "lede": "50.000 filas en el DOM solo las visibles (más <code>overscan</code>). <code>getRowHeight</code>\r\n          permite alto variable. Al llegar al final se emite <code>iswc-rows-scroll-end</code> y, si hay\r\n          <code>rowsLoader</code>, se piden más filas (modo servidor / lazy loading).",
       "blocks": [
         {
           "kind": "demo",
-          "html": "<is-data-grid id=\"g-virtual\" class=\"grid-tall\" show-toolbar quick-filter density=\"compact\"></is-data-grid>"
+          "html": "<iswc-data-grid id=\"g-virtual\" class=\"grid-tall\" show-toolbar quick-filter density=\"compact\"></iswc-data-grid>"
         },
         {
           "kind": "html",
@@ -193,7 +193,7 @@
         },
         {
           "kind": "demo",
-          "html": "<is-data-grid id=\"g-density\" class=\"grid-short\"></is-data-grid>"
+          "html": "<iswc-data-grid id=\"g-density\" class=\"grid-short\"></iswc-data-grid>"
         }
       ]
     },
@@ -286,7 +286,7 @@
     {
       "id": "reference",
       "title": "Referencia",
-      "lede": "Eventos: <code>is-sort</code>, <code>is-filter</code>, <code>is-quick-filter</code>,\r\n          <code>is-pagination</code>, <code>is-select</code>, <code>is-cell-select</code>,\r\n          <code>is-cell-click</code>, <code>is-cell-double-click</code>, <code>is-row-click</code>,\r\n          <code>is-row-double-click</code>, <code>is-edit-start</code>, <code>is-edit-stop</code>,\r\n          <code>is-row-update</code>, <code>is-column-resize</code>, <code>is-column-reorder</code>,\r\n          <code>is-column-visibility</code>, <code>is-column-pin</code>, <code>is-density</code>,\r\n          <code>is-detail-toggle</code>, <code>is-group-toggle</code>, <code>is-row-reorder</code>,\r\n          <code>is-copy</code>, <code>is-paste</code>, <code>is-undo</code>, <code>is-redo</code>,\r\n          <code>is-rows-scroll-end</code>, <code>is-export</code>.",
+      "lede": "Eventos: <code>iswc-sort</code>, <code>iswc-filter</code>, <code>iswc-quick-filter</code>,\r\n          <code>iswc-pagination</code>, <code>iswc-select</code>, <code>iswc-cell-select</code>,\r\n          <code>iswc-cell-click</code>, <code>iswc-cell-double-click</code>, <code>iswc-row-click</code>,\r\n          <code>iswc-row-double-click</code>, <code>iswc-edit-start</code>, <code>iswc-edit-stop</code>,\r\n          <code>iswc-row-update</code>, <code>iswc-column-resize</code>, <code>iswc-column-reorder</code>,\r\n          <code>iswc-column-visibility</code>, <code>iswc-column-pin</code>, <code>iswc-density</code>,\r\n          <code>iswc-detail-toggle</code>, <code>iswc-group-toggle</code>, <code>iswc-row-reorder</code>,\r\n          <code>iswc-copy</code>, <code>iswc-paste</code>, <code>iswc-undo</code>, <code>iswc-redo</code>,\r\n          <code>iswc-rows-scroll-end</code>, <code>iswc-export</code>.",
       "blocks": [
         {
           "kind": "table",

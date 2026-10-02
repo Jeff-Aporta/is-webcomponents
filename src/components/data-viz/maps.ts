@@ -3,7 +3,7 @@ import { withStyleAttrs } from '../../core/attrs.js';
 
 import { svgEl } from '../_shared/svg-chart-engine.js';
 
-/** Viewport geográfico (lon/lat) usado por <is-maps>. */
+/** Viewport geográfico (lon/lat) usado por <iswc-maps>. */
 type Viewport = { minLon: number; minLat: number; maxLon: number; maxLat: number };
 
 /** Estado de arrastre del usuario (pan). */
@@ -19,7 +19,7 @@ type TileCfg = {
 };
 
 /**
- * <is-maps> — Visualizador geográfico.
+ * <iswc-maps> — Visualizador geográfico.
  *
  * Modo nativo (default): lienzo SVG que mapea coordenadas (lat, lon) a un
  * viewport interno mediante una proyección equirectangular. Permite
@@ -36,18 +36,18 @@ type TileCfg = {
  *   interactive   boolean — false desactiva pan/zoom (mostrar)
  *
  * Marcadores
- *   <is-map-marker lat="4.6" lon="-74.0" label="Bogotá">
+ *   <iswc-map-marker lat="4.6" lon="-74.0" label="Bogotá">
  *     <span slot="popup">Capital de Colombia</span>
- *   </is-map-marker>
+ *   </iswc-map-marker>
  *
  * Eventos
- *   is-viewport   detail: { minLon, minLat, maxLon, maxLat }
- *   is-marker-click  detail: { marker }
+ *   iswc-viewport   detail: { minLon, minLat, maxLon, maxLat }
+ *   iswc-marker-click  detail: { marker }
  */
 (() => {
   const OBSERVED = ['viewbox', 'zoom', 'engine', 'interactive'];
 
-  class IsMaps extends withStyleAttrs(HTMLElement) {
+  class IswcMaps extends withStyleAttrs(HTMLElement) {
     /** Personalización por atributo (ver `core/attrs.ts`). */
     static styleAttrs = {
     'grid-color': { prop: '--iswc-maps-grid-color', onlyColorValues: true },
@@ -191,14 +191,14 @@ type TileCfg = {
       if (!svg) return;
       const W = +(svg.getAttribute('width') || '0');
       const H = +(svg.getAttribute('height') || '0');
-      const markers = [...this.querySelectorAll<HTMLElement>(':scope > is-map-marker')];
+      const markers = [...this.querySelectorAll<HTMLElement>(':scope > iswc-map-marker')];
       for (const m of markers) {
         const lat = Number(m.getAttribute('lat'));
         const lon = Number(m.getAttribute('lon'));
         if (!Number.isFinite(lat) || !Number.isFinite(lon)) continue;
         const p = this.#project(lat, lon, W, H);
         const c = svgEl('circle', { cx: p.x, cy: p.y, r: 6, class: 'marker' });
-        c.addEventListener('click', () => emit(this, 'is-marker-click', { marker: m }));
+        c.addEventListener('click', () => emit(this, 'iswc-marker-click', { marker: m }));
         svg.appendChild(c);
         const label = m.getAttribute('label');
         if (label) {
@@ -263,18 +263,18 @@ type TileCfg = {
     #drag: DragState | null = null;
 
     #emit(): void {
-      emit(this, 'is-viewport', { ...this.#vp });
+      emit(this, 'iswc-viewport', { ...this.#vp });
     }
 
     #canvas!: HTMLElement;
     #zoomInfo!: HTMLElement;
   }
 
-  defineElement('is-maps', IsMaps);
+  defineElement('iswc-maps', IswcMaps);
 
-  class IsMapMarker extends HTMLElement {
+  class IswcMapMarker extends HTMLElement {
     static get observedAttributes(): string[] { return ['lat', 'lon', 'label']; }
     connectedCallback(): void { /* re-sincroniza el padre cuando entra */ }
   }
-  defineElement('is-map-marker', IsMapMarker);
+  defineElement('iswc-map-marker', IswcMapMarker);
 })();

@@ -206,7 +206,7 @@ export async function texto(page: Page, selector: string): Promise<string> {
   }
 }
 
-const CLICABLES = 'is-button, button, a[role="tab"], [role="tab"]:not(a), is-dropdown-item, [role="switch"], [role="menuitem"]';
+const CLICABLES = 'iswc-button, button, a[role="tab"], [role="tab"]:not(a), iswc-dropdown-item, [role="switch"], [role="menuitem"]';
 
 function escCssAtributo(fragmento: string): string {
   return String(fragmento).replace(/\\/g, '\\\\').replace(/"/g, '\\"');
@@ -387,7 +387,7 @@ export async function evidencia(page: Page, nombre: string): Promise<{ png: stri
 /**
  * ¿La galeria tiene contenido montado para el preview actual? El preview de
  * un componente controlado monta en light DOM dentro de #previewHost
- * (is-split-panel.page > is-main.main > section.section ...). El home monta
+ * (iswc-split-panel.page > iswc-main.main > section.section ...). El home monta
  * su propia pagina (idem). Un host vacio o con solo el placeholder = no listo.
  */
 export async function contenidoCargado(page: Page): Promise<boolean> {
@@ -395,7 +395,7 @@ export async function contenidoCargado(page: Page): Promise<boolean> {
     const r = await page.evaluate(() => {
       const host = document.getElementById('previewHost');
       if (!host || host.hidden) return false;
-      const main = host.querySelector('is-main.main');
+      const main = host.querySelector('iswc-main.main');
       if (!main) return false;
 
       // Contamos las secciones REALMENTE pintadas por render.ts, que itera
@@ -493,5 +493,5 @@ export async function abrirGaleria(
   return conContenido;
 }
 
-/** Tipos utilitarios re-exportados para los tests (evaluate con editor is-code). */
+/** Tipos utilitarios re-exportados para los tests (evaluate con editor iswc-code). */
 export type { EditorIsCode };

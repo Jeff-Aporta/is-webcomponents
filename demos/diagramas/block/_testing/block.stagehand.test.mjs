@@ -11,7 +11,7 @@ tests.push({
     await page.goto(URL, { waitUntil: 'domcontentloaded' });
     await waitReady(page, 'data-block-ready');
     const info = await page.evaluate(() => {
-      const b = document.querySelector('is-block-diagram');
+      const b = document.querySelector('iswc-block-diagram');
       const sr = b?.shadowRoot;
       return {
         blocks: sr?.querySelectorAll('[data-block-id]').length ?? 0,
@@ -32,7 +32,7 @@ tests.push({
     await page.goto(URL, { waitUntil: 'domcontentloaded' });
     await waitReady(page, 'data-block-ready');
     const a11y = await page.evaluate(() => {
-      const svg = document.querySelector('is-block-diagram')?.shadowRoot?.querySelector('svg');
+      const svg = document.querySelector('iswc-block-diagram')?.shadowRoot?.querySelector('svg');
       return { role: svg?.getAttribute('role'), ariaLabel: svg?.getAttribute('aria-label') };
     });
     assert.ok(a11y.role || a11y.ariaLabel);
@@ -45,7 +45,7 @@ tests.push({
     await page.emulateMedia({ reducedMotion: 'reduce' });
     await page.goto(URL, { waitUntil: 'domcontentloaded' });
     await waitReady(page, 'data-block-ready');
-    const blocks = await page.evaluate(() => document.querySelector('is-block-diagram')?.shadowRoot?.querySelectorAll('[data-block-id]').length ?? 0);
+    const blocks = await page.evaluate(() => document.querySelector('iswc-block-diagram')?.shadowRoot?.querySelectorAll('[data-block-id]').length ?? 0);
     assert.equal(blocks, 6);
   },
 });

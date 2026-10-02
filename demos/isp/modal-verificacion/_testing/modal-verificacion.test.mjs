@@ -1,4 +1,4 @@
-// modal-verificacion.test.mjs — tests exhaustivos del demo <is-modal-verificacion>.
+// modal-verificacion.test.mjs — tests exhaustivos del demo <iswc-modal-verificacion>.
 // Cobertura: smoke + funcional (show abre modal, verify ejecuta el controller y
 // popula mensajes, contadores derivados, eventos) + focus-trap.
 import assert from 'node:assert/strict';
@@ -17,8 +17,8 @@ tests.push({
       const m = document.getElementById('verif');
       const sr = m.shadowRoot;
       return {
-        defined: !!customElements.get('is-modal-verificacion'),
-        dlg: !!sr.querySelector('is-dialog.dlg'),
+        defined: !!customElements.get('iswc-modal-verificacion'),
+        dlg: !!sr.querySelector('iswc-dialog.dlg'),
         heading: !!sr.querySelector('[part="heading"]'),
         results: !!sr.querySelector('[part="results"]'),
         stats: !!sr.querySelector('[part="stats"]'),
@@ -71,7 +71,7 @@ tests.push({
 });
 
 tests.push({
-  name: 'eventos: is-verificacion emite con detail { mensajes, qinfos, qwarning, qerrores }',
+  name: 'eventos: iswc-verificacion emite con detail { mensajes, qinfos, qwarning, qerrores }',
   run: async (page) => {
     await page.goto(URL, { waitUntil: 'domcontentloaded' });
     await waitReady(page, 'data-verif-ready');
@@ -79,7 +79,7 @@ tests.push({
     const events = await page.evaluate(async () => {
       const m = document.getElementById('verif');
       const captured = [];
-      m.addEventListener('is-verificacion', (e) => captured.push({
+      m.addEventListener('iswc-verificacion', (e) => captured.push({
         keys: Object.keys(e.detail || {}),
         qinfos: e.detail?.qinfos,
         qwarning: e.detail?.qwarning,
@@ -94,8 +94,8 @@ tests.push({
     const ev = events[0];
     assert.ok(ev.keys.includes('mensajes'), 'detail debe contener "mensajes"');
     assert.ok(ev.keys.includes('qinfos'), 'detail debe contener "qinfos"');
-    assert.ok(ev.bubbles, 'is-verificacion debe burbujear');
-    assert.equal(ev.composed, true, 'is-verificacion debe atravesar shadow DOM');
+    assert.ok(ev.bubbles, 'iswc-verificacion debe burbujear');
+    assert.equal(ev.composed, true, 'iswc-verificacion debe atravesar shadow DOM');
   },
 });
 
@@ -139,7 +139,7 @@ tests.push({
 });
 
 tests.push({
-  name: 'error: actVerificar que lanza emite is-verificacion-error',
+  name: 'error: actVerificar que lanza emite iswc-verificacion-error',
   run: async (page) => {
     await page.goto(URL, { waitUntil: 'domcontentloaded' });
     await waitReady(page, 'data-verif-ready');
@@ -147,7 +147,7 @@ tests.push({
     const result = await page.evaluate(async () => {
       const m = document.getElementById('verif');
       let captured = null;
-      m.addEventListener('is-verificacion-error', (e) => { captured = e.detail; });
+      m.addEventListener('iswc-verificacion-error', (e) => { captured = e.detail; });
       m.onError = () => {}; // silenciar console.error
       m.controller = {
         entrie: 'Test',
@@ -158,7 +158,7 @@ tests.push({
       const result = await m.verify();
       return { captured, resultLen: result.length, loading: m.loading };
     });
-    assert.ok(result.captured, 'debe emitir is-verificacion-error');
+    assert.ok(result.captured, 'debe emitir iswc-verificacion-error');
     assert.match(result.captured.message, /boom|No se pudo/);
     assert.equal(result.loading, false, 'loading debe volver a false en finally');
   },

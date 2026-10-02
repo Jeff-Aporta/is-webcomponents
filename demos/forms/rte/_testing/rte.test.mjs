@@ -9,16 +9,16 @@ const URL = `${BASE_URL}/demos/forms/rte/rte.html`;
 const tests = [];
 
 tests.push({
-  name: 'smoke: <is-rte> queda definido con toolbar y content editable',
+  name: 'smoke: <iswc-rte> queda definido con toolbar y content editable',
   run: async (page) => {
     await page.goto(URL, { waitUntil: 'domcontentloaded' });
     await waitReady(page, 'data-rte-ready');
     const data = await page.evaluate(() => {
-      const rtes = [...document.querySelectorAll('main is-rte')];
+      const rtes = [...document.querySelectorAll('main iswc-rte')];
       const full = rtes[0];
       const shadow = full.shadowRoot;
       return {
-        defined: !!customElements.get('is-rte'),
+        defined: !!customElements.get('iswc-rte'),
         count: rtes.length,
         toolbar: !!shadow.querySelector('[role="toolbar"]'),
         btns: shadow.querySelectorAll('.toolbar .btn').length,
@@ -27,7 +27,7 @@ tests.push({
         initialText: full.text.slice(0, 30),
       };
     });
-    assert.equal(data.defined, true, 'is-rte debe estar definido');
+    assert.equal(data.defined, true, 'iswc-rte debe estar definido');
     assert.ok(data.count >= 3, `esperaba >=3 rtes, hay ${data.count}`);
     assert.equal(data.toolbar, true, 'la toolbar debe tener role=toolbar');
     assert.ok(data.btns >= 5, `esperaba >=5 botones en la toolbar por defecto, hay ${data.btns}`);
@@ -44,7 +44,7 @@ tests.push({
     await page.goto(URL, { waitUntil: 'domcontentloaded' });
     await waitReady(page, 'data-rte-ready');
     const cmds = await page.evaluate(() => {
-      const r = document.querySelector('main is-rte');
+      const r = document.querySelector('main iswc-rte');
       return [...r.shadowRoot.querySelectorAll('.toolbar .btn')].map((b) => b.dataset.cmd);
     });
     for (const required of ['bold', 'italic', 'underline', 'h1', 'h2', 'h3', 'ul', 'ol', 'link', 'blockquote', 'code', 'undo', 'redo', 'clear']) {
@@ -59,7 +59,7 @@ tests.push({
     await page.goto(URL, { waitUntil: 'domcontentloaded' });
     await waitReady(page, 'data-rte-ready');
     const data = await page.evaluate(() => {
-      const r = document.querySelector('main is-rte');
+      const r = document.querySelector('main iswc-rte');
       // Limpia y escribe texto nuevo
       r.clear();
       r.focus();
@@ -85,7 +85,7 @@ tests.push({
     await page.goto(URL, { waitUntil: 'domcontentloaded' });
     await waitReady(page, 'data-rte-ready');
     const data = await page.evaluate(() => {
-      const r = document.querySelector('main is-rte');
+      const r = document.querySelector('main iswc-rte');
       r.clear();
       r.focus();
       r.insertHtml('<i>insertado</i>');
@@ -105,7 +105,7 @@ tests.push({
     await page.goto(URL, { waitUntil: 'domcontentloaded' });
     await waitReady(page, 'data-rte-ready');
     const data = await page.evaluate(() => {
-      const r = document.querySelector('main is-rte');
+      const r = document.querySelector('main iswc-rte');
       const before = {
         contentHidden: r.shadowRoot.querySelector('.content').hidden,
         sourceHidden: r.shadowRoot.querySelector('.source').hidden,
@@ -138,7 +138,7 @@ tests.push({
     await page.goto(URL, { waitUntil: 'domcontentloaded' });
     await waitReady(page, 'data-rte-ready');
     const cmds = await page.evaluate(() => {
-      const rtes = [...document.querySelectorAll('main is-rte')];
+      const rtes = [...document.querySelectorAll('main iswc-rte')];
       const mini = rtes.find((r) => r.getAttribute('name') === 'note');
       return [...mini.shadowRoot.querySelectorAll('.toolbar .btn')].map((b) => b.dataset.cmd);
     });
@@ -153,7 +153,7 @@ tests.push({
     await page.goto(URL, { waitUntil: 'domcontentloaded' });
     await waitReady(page, 'data-rte-ready');
     const a11y = await page.evaluate(() => {
-      const r = document.querySelector('main is-rte');
+      const r = document.querySelector('main iswc-rte');
       const tb = r.shadowRoot.querySelector('.toolbar');
       const buttons = [...r.shadowRoot.querySelectorAll('.toolbar .btn')];
       const allLabelled = buttons.every((b) => b.getAttribute('aria-label'));
@@ -175,7 +175,7 @@ tests.push({
     await page.goto(URL, { waitUntil: 'domcontentloaded' });
     await waitReady(page, 'data-rte-ready');
     const data = await page.evaluate(() => {
-      const r = document.querySelector('main is-rte');
+      const r = document.querySelector('main iswc-rte');
       // Rellena con contenido formateado
       r.clear();
       r.focus();
@@ -197,7 +197,7 @@ tests.push({
     await page.goto(URL, { waitUntil: 'domcontentloaded' });
     await waitReady(page, 'data-rte-ready');
     const data = await page.evaluate(() => {
-      const rtes = [...document.querySelectorAll('main is-rte')];
+      const rtes = [...document.querySelectorAll('main iswc-rte')];
       const ro = rtes.find((r) => r.getAttribute('name') === 'docs');
       const content = ro.shadowRoot.querySelector('.content');
       const source = ro.shadowRoot.querySelector('.source');

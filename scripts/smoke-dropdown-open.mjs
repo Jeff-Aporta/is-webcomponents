@@ -1,4 +1,4 @@
-// scripts/smoke-dropdown-open.mjs — smoke local: is-dropdown.show() abre <dialog>
+// scripts/smoke-dropdown-open.mjs — smoke local: iswc-dropdown.show() abre <dialog>
 import { createServer } from 'node:http';
 import { readFileSync, existsSync } from 'node:fs';
 import { join, extname } from 'node:path';
@@ -10,13 +10,13 @@ const mime = { '.js': 'text/javascript', '.css': 'text/css', '.html': 'text/html
 
 const html = `<!doctype html>
 <html><body>
-<is-dropdown id="dd">
+<iswc-dropdown id="dd">
   <button slot="trigger" type="button">Menú</button>
-  <is-dropdown-item value="out">Cerrar sesión</is-dropdown-item>
-</is-dropdown>
+  <iswc-dropdown-item value="out">Cerrar sesión</iswc-dropdown-item>
+</iswc-dropdown>
 <script type="module">
   await import('/actions/dropdown.min.js');
-  await customElements.whenDefined('is-dropdown');
+  await customElements.whenDefined('iswc-dropdown');
   window.__ready = true;
 </script>
 </body></html>`;
@@ -51,7 +51,7 @@ await page.waitForFunction(() => window.__ready === true, null, { timeout: 15000
 
 const result = await page.evaluate(() => {
   const dd = document.getElementById('dd');
-  const Ctor = customElements.get('is-dropdown');
+  const Ctor = customElements.get('iswc-dropdown');
   const obs = Ctor?.observedAttributes ?? [];
   if (typeof dd.show !== 'function') {
     return { err: 'no show', tag: dd?.localName, ctor: !!Ctor, obs };

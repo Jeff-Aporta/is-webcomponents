@@ -27,10 +27,10 @@ const estados: Record<string, string | null> = {
   home: HOME,
   theming: ESTADO_THEMING,
   ecosystem: ESTADO_ECOSYSTEM,
-  'is-code': estadoDe('is-code'),
-  'is-component-diagram': estadoDe('is-component-diagram'),
-  'is-bar-chart': estadoDe('is-bar-chart'),
-  'is-icon': estadoDe('is-icon'),
+  'iswc-code': estadoDe('iswc-code'),
+  'iswc-component-diagram': estadoDe('iswc-component-diagram'),
+  'iswc-bar-chart': estadoDe('iswc-bar-chart'),
+  'iswc-icon': estadoDe('iswc-icon'),
 };
 
 /** URL de un estado conocido; null si la clave no existe. */

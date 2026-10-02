@@ -1,7 +1,7 @@
 // treemap-spec.stagehand.test.mjs — visual rubric determinista (Playwright puro).
 // Cero LLM, cero API keys — solo geometría y atributos del SVG. treemap-spec
 // es un utility bundle: resolveTreemapSpec + computeTreemapLayout. El demo
-// pinta <is-treemap> en vivo + muestra tres <pre>: exports, spec, layout.
+// pinta <iswc-treemap> en vivo + muestra tres <pre>: exports, spec, layout.
 import assert from 'node:assert/strict';
 import { BASE_URL, newPage, close, waitReady, screenshot, report, maybeStagehand } from '../../_global/lib/harness.mjs';
 
@@ -17,7 +17,7 @@ async function checkDeterministic(page) {
   const data = await page.evaluate(() => {
     const pres = [...document.querySelectorAll('pre')];
     const presText = pres.map((p) => (p.textContent ?? '').trim());
-    const tm = document.querySelector('is-treemap');
+    const tm = document.querySelector('iswc-treemap');
     const svg = tm?.shadowRoot?.querySelector('svg');
     const svgRect = svg?.getBoundingClientRect();
     const groups = [...(tm?.shadowRoot?.querySelectorAll('.tm-node') ?? [])];
@@ -61,7 +61,7 @@ async function checkDeterministic(page) {
     `<pre id="layout"> debe contener width, height y total`);
 
   // (2) El chart vivo debe estar montado y dimensionado.
-  assert.ok(data.svgRect, 'is-treemap debe haber montado SVG');
+  assert.ok(data.svgRect, 'iswc-treemap debe haber montado SVG');
   assert.ok(data.svgRect.w > 200 && data.svgRect.h > 100, `SVG debe dimensionarse (got ${data.svgRect.w}x${data.svgRect.h})`);
 
   // (3) Conteos esperados — el payload del demo declara 4 nodos top-level.

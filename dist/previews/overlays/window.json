@@ -1,11 +1,11 @@
 {
-  "$schema": "is-preview/v1",
-  "tag": "is-window",
+  "$schema": "iswc-preview/v1",
+  "tag": "iswc-window",
   "category": "overlays",
-  "title": "<is-window>",
+  "title": "<iswc-window>",
   "titleHtml": true,
   "styles": ".desk {\r\n      position: relative;\r\n      transform: translateZ(0);\r\n      height: 30rem;\r\n      border: 1px dashed var(--iswc-border);\r\n      border-radius: var(--iswc-radius);\r\n      overflow: hidden;\r\n      background:\r\n        linear-gradient(180deg,\r\n          color-mix(in srgb, var(--iswc-accent) 6%, transparent) 0%,\r\n          transparent 40%),\r\n        repeating-linear-gradient(45deg,\r\n          color-mix(in srgb, var(--iswc-text) 4%, transparent) 0 8px,\r\n          transparent 8px 16px);\r\n    }\r\n    .desk note { position: absolute; pointer-events: none; color: var(--iswc-text-soft); font-size: .85rem; padding: 1rem; }",
-  "storageKey": "docs-is-window",
+  "storageKey": "docs-iswc-window",
   "sections": [
     {
       "id": "intro",
@@ -19,7 +19,7 @@
       "blocks": [
         {
           "kind": "demo",
-          "html": "<div class=\"desk\">\r\n            <note>Arrastra el header · minimizar las deja como pastillas abajo · esquina redimensiona · clic en la pastilla restaura</note>\r\n            <is-window\r\n              title=\"Editor — reporte mensual.txt\"\r\n              x=\"40\" y=\"40\"\r\n              width=\"22rem\" height=\"14rem\"\r\n              minimizable maximizable closable resizable>\r\n              <p>Diseño minimalista del reporte mensual: KPIs arriba, treemap al medio, tabla abajo. Prueba a arrastrarlo y maximizarlo.</p>\r\n            </is-window>\r\n            <is-window\r\n              title=\"Clientes\"\r\n              x=\"360\" y=\"100\"\r\n              width=\"18rem\" height=\"12rem\"\r\n              minimizable maximizable closable>\r\n              <ul style=\"margin:0; padding-left: 1.25rem; font-size:.85rem; color:var(--iswc-text-soft)\">\r\n                <li>InSoft S.A. — contacto@ins.co</li>\r\n                <li>ContaPyme — hola@conta.co</li>\r\n                <li>AgroWin — soporte@agro.co</li>\r\n              </ul>\r\n            </is-window>\r\n          </div>",
+          "html": "<div class=\"desk\">\r\n            <note>Arrastra el header · minimizar las deja como pastillas abajo · esquina redimensiona · clic en la pastilla restaura</note>\r\n            <iswc-window\r\n              title=\"Editor — reporte mensual.txt\"\r\n              x=\"40\" y=\"40\"\r\n              width=\"22rem\" height=\"14rem\"\r\n              minimizable maximizable closable resizable>\r\n              <p>Diseño minimalista del reporte mensual: KPIs arriba, treemap al medio, tabla abajo. Prueba a arrastrarlo y maximizarlo.</p>\r\n            </iswc-window>\r\n            <iswc-window\r\n              title=\"Clientes\"\r\n              x=\"360\" y=\"100\"\r\n              width=\"18rem\" height=\"12rem\"\r\n              minimizable maximizable closable>\r\n              <ul style=\"margin:0; padding-left: 1.25rem; font-size:.85rem; color:var(--iswc-text-soft)\">\r\n                <li>InSoft S.A. — contacto@ins.co</li>\r\n                <li>ContaPyme — hola@conta.co</li>\r\n                <li>AgroWin — soporte@agro.co</li>\r\n              </ul>\r\n            </iswc-window>\r\n          </div>",
           "controls": [
               {
                 "control": "number",
@@ -98,7 +98,7 @@
       "blocks": [
         {
           "kind": "code",
-          "code": "const w = document.querySelector('is-window');\nw.minimize(); w.restore(); w.maximize(); w.unmaximize(); w.close();\n\nw.addEventListener('is-minimize',  () => /* guardó la posición y bajó a la barra de pastillas */);\nw.addEventListener('is-restore',   () => /* volvió a su posición anterior */);\nw.addEventListener('is-maximize',  () => /* ocupa toda la pantalla */);\nw.addEventListener('is-close',     () => /* se eliminó del DOM */);\n\n// Atributos\n// title, x, y, width, height\n// maximizable, minimizable, closable, resizable\n// default    normal | maximized | minimized\n// scope      local (default) | global\n// position   absolute | fixed\n\n// z-index se autoeleva al hacer click (sigue el foco del usuario)"
+          "code": "const w = document.querySelector('iswc-window');\nw.minimize(); w.restore(); w.maximize(); w.unmaximize(); w.close();\n\nw.addEventListener('iswc-minimize',  () => /* guardó la posición y bajó a la barra de pastillas */);\nw.addEventListener('iswc-restore',   () => /* volvió a su posición anterior */);\nw.addEventListener('iswc-maximize',  () => /* ocupa toda la pantalla */);\nw.addEventListener('iswc-close',     () => /* se eliminó del DOM */);\n\n// Atributos\n// title, x, y, width, height\n// maximizable, minimizable, closable, resizable\n// default    normal | maximized | minimized\n// scope      local (default) | global\n// position   absolute | fixed\n\n// z-index se autoeleva al hacer click (sigue el foco del usuario)"
         }
       ]
     }

@@ -1,20 +1,20 @@
 ---
-tag: is-tag
+tag: iswc-tag
 tags:
-  - is-tag
+  - iswc-tag
 category: feedback
 status: public
 source: ./tag.js
 style: ./tag.css
 preview: ./tag.json
 ---
-# `<is-tag>`
+# `<iswc-tag>`
 
 ## Propósito
 
 Etiqueta interactiva con colores y botón de quitar opcional. Escala con font-size del contexto.
 
-Este módulo registra `<is-tag>`.
+Este módulo registra `<iswc-tag>`.
 
 ## Cuándo usarlo
 
@@ -34,7 +34,7 @@ import './tag.js';
 
 ```html
 <span style="font-size:1.25rem">
-<is-tag pill>Grande</is-tag>
+<iswc-tag pill>Grande</iswc-tag>
 </span>
 ```
 
@@ -70,7 +70,7 @@ import './tag.js';
 
 | Evento | detail | bubbles | composed | cancelable |
 | --- | --- | --- | --- | --- |
-| `is-remove` | no | sí | sí | no |
+| `iswc-remove` | no | sí | sí | no |
 
 ### Métodos y propiedades públicas
 
@@ -126,8 +126,8 @@ No declara integración form-associated propia en este módulo.
 
 Documentación de cabecera preservada desde fuente:
 
-> <is-tag> — Web Component (vanilla).
-> Similar a is-badge; default variant filled-outlined, color brand.
+> <iswc-tag> — Web Component (vanilla).
+> Similar a iswc-badge; default variant filled-outlined, color brand.
 > Escala con font-size del contexto (métricas en em).
 > Atributos
 >   color       brand | neutral | info | success | warning | danger (default brand)
@@ -136,14 +136,14 @@ Documentación de cabecera preservada desde fuente:
 >   with-remove   boolean — muestra botón de quitar
 >   remove-label  string — aria-label del botón (default Quitar)
 > Eventos
->   is-remove  — click en botón quitar (bubbles, composed)
+>   iswc-remove  — click en botón quitar (bubbles, composed)
 
 ## Dependencias y componentes relacionados
 
 - [`../_shared/adopt-css.js`](../_shared/adopt-css.js)
 - [`../media/icon.js`](../media/icon.js)
 
-Tags del módulo: `<is-tag>`.
+Tags del módulo: `<iswc-tag>`.
 
 ## Accesibilidad
 
@@ -153,7 +153,7 @@ Preservar semántica, foco, teclado, labels y ARIA. ARIA detectado: `aria-label`
 
 ```html
 <span style="font-size:1.25rem">
-<is-tag pill>Grande</is-tag>
+<iswc-tag pill>Grande</iswc-tag>
 </span>
 ```
 

@@ -14,7 +14,7 @@ import { ElementBase } from '../../core/element-base.js';
 import { setStringAttr } from '../_shared/reflect.js';
 import { computePosition } from '../_shared/position.js';
 /**
- * <is-color-picker> — Selector de color form-associated.
+ * <iswc-color-picker> — Selector de color form-associated.
  *
  * El panel (color nativo + hex + swatches) vive en un <dialog modal> (top layer)
  * para no perderse por overflow de ancestros.
@@ -23,7 +23,7 @@ import { computePosition } from '../_shared/position.js';
  *            disabled, required, swatches (lista hex separada por comas)
  * Slots: label, hint
  * Parts: base, trigger, swatch, panel, input, hex-input, label, hint
- * Events: is-input { value }, is-change { value }
+ * Events: iswc-input { value }, iswc-change { value }
  */
 
 // Declaración local de la API EyeDropper (Chromium ≥95, no está en lib.dom).
@@ -45,10 +45,10 @@ interface WindowWithEyeDropper { EyeDropper?: EyeDropperConstructor }
     <div class="form-control">
       <label part="label" class="label" hidden><slot name="label"><span class="label-text"></span></slot></label>
       <div part="base" class="base">
-        <is-button variant="plain" with-caret part="trigger" class="trigger" aria-haspopup="dialog" aria-expanded="false">
+        <iswc-button variant="plain" with-caret part="trigger" class="trigger" aria-haspopup="dialog" aria-expanded="false">
           <span part="swatch" class="swatch" aria-hidden="true"></span>
           <span class="hex-text"></span>
-        </is-button>
+        </iswc-button>
       </div>
       <div part="hint" class="hint" hidden><slot name="hint"><span class="hint-text"></span></slot></div>
     </div>
@@ -56,12 +56,12 @@ interface WindowWithEyeDropper { EyeDropper?: EyeDropperConstructor }
       <div part="panel" class="panel" role="document">
         <div class="row">
           <input part="input" class="native" type="color" aria-label="Color" />
-          <is-input part="hex-input" class="hex" type="text" spellcheck="false" autocomplete="off"
-            maxlength="7" aria-label="Código hexadecimal"></is-input>
-          <is-button part="eyedropper" class="eyedropper" variant="plain" type="button" hidden
+          <iswc-input part="hex-input" class="hex" type="text" spellcheck="false" autocomplete="off"
+            maxlength="7" aria-label="Código hexadecimal"></iswc-input>
+          <iswc-button part="eyedropper" class="eyedropper" variant="plain" type="button" hidden
             aria-label="Cuentagotas (EyeDropper)" title="Cuentagotas">
-            <is-icon icon="mdi:eyedropper"></is-icon>
-          </is-button>
+            <iswc-icon icon="mdi:eyedropper"></iswc-icon>
+          </iswc-button>
         </div>
         <div class="swatches" role="group" aria-label="Colores predefinidos"></div>
       </div>
@@ -79,7 +79,7 @@ interface WindowWithEyeDropper { EyeDropper?: EyeDropperConstructor }
     return /^[0-9a-f]{6}$/.test(s) ? `#${s}` : '';
   }
 
-  class IsColorPicker extends ElementBase {
+  class IswcColorPicker extends ElementBase {
     /** Personalización por atributo (ver `core/attrs.ts`). */
     static styleAttrs = {
     radius: '--iswc-picker-radius',
@@ -180,11 +180,11 @@ interface WindowWithEyeDropper { EyeDropper?: EyeDropperConstructor }
         // 2026-Q1 fix: emitir también cuando el cambio venga de fuera
         // (programador: el.value = '#…' o setAttribute). Antes solo
         // se emitía desde los handlers internos, así que setear el valor
-        // por JS no disparaba is-input / is-change y los consumidores
+        // por JS no disparaba iswc-input / iswc-change y los consumidores
         // (taller de temas, formularios reactivos) parecían no responder.
         if (norm !== (oldVal ?? '')) {
-          emit(this, 'is-input', { value: norm });
-          emit(this, 'is-change', { value: norm });
+          emit(this, 'iswc-input', { value: norm });
+          emit(this, 'iswc-change', { value: norm });
         }
       } else if (name === 'disabled') this.#syncDisabled();
       else if (name === 'swatches') this.#renderSwatches();
@@ -344,15 +344,15 @@ interface WindowWithEyeDropper { EyeDropper?: EyeDropperConstructor }
       this.#sync();
     }
 
-    /** @param hex Código hex. @param committed dispara también is-change. */
+    /** @param hex Código hex. @param committed dispara también iswc-change. */
     #setValue(hex: string, committed: boolean): void {
       const norm = normalizeHex(hex);
       if (!norm) return;
       const prev = this.value;
       this.#writeValueAttr(norm);
       this.#sync();
-      if (norm !== prev) emit(this, 'is-input', { value: norm });
-      if (committed && norm !== prev) emit(this, 'is-change', { value: norm });
+      if (norm !== prev) emit(this, 'iswc-input', { value: norm });
+      if (committed && norm !== prev) emit(this, 'iswc-change', { value: norm });
     }
 
     #positionPanel(): void {
@@ -458,5 +458,5 @@ interface WindowWithEyeDropper { EyeDropper?: EyeDropperConstructor }
     };
   }
 
-  defineElement('is-color-picker', IsColorPicker, 'IsColorPicker');
+  defineElement('iswc-color-picker', IswcColorPicker, 'IswcColorPicker');
 })();

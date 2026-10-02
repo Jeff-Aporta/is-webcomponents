@@ -7,13 +7,9 @@
   position: relative;
   box-sizing: border-box;
   font-family: var(--iswc-sans, ui-sans-serif, system-ui, sans-serif);
-}
 
-:host([hidden]) { display: none; }
-
-:host([color="viewer"]) {
-  width: 100%;
-  height: 100%;
+  &[hidden] { display: none; }
+  &[color="viewer"] { width: 100%; height: 100%; }
 }
 
 .wrap {
@@ -33,22 +29,22 @@
   min-height: 0;
   display: flex;
   flex-direction: column;
-}
 
-.wrap.is-viewer {
-  width: 100%;
-  height: 100%;
-  border: 0;
-  padding: 0;
-  cursor: default;
-}
+  &.iswc-viewer {
+    width: 100%;
+    height: 100%;
+    border: 0;
+    padding: 0;
+    cursor: default;
+  }
 
-.wrap[data-empty]::after {
-  content: 'Diagrama de casos de uso no disponible (payload inválido).';
-  display: block;
-  padding: 1rem;
-  font-size: 0.875em;
-  color: var(--iswc-text-soft, #a8b0bb);
+  &[data-empty]::after {
+    content: 'Diagrama de casos de uso no disponible (payload inválido).';
+    display: block;
+    padding: 1rem;
+    font-size: 0.875em;
+    color: var(--iswc-text-soft, #a8b0bb);
+  }
 }
 
 .slot-hidden { display: none !important; }
@@ -71,12 +67,7 @@
 .uc-case,
 .uc-link {
   transition: opacity 0.18s ease;
-}
-
-.uc-actor.is-dim,
-.uc-case.is-dim,
-.uc-link.is-dim {
-  opacity: 0.3;
+  &.iswc-dim { opacity: 0.3; }
 }
 
 .uc-case__shape,
@@ -84,17 +75,26 @@
   transition: filter 0.12s ease-out;
 }
 
-.uc-case.is-active .uc-case__shape,
-.uc-actor.is-active .uc-actor__figure {
-  filter: brightness(1.15);
+.uc-case {
+  &.iswc-active {
+    .uc-case__shape { filter: brightness(1.15); }
+  }
 }
 
-.uc-link.is-active .uc-link__path {
-  stroke-width: 1.8;
+.uc-actor {
+  &.iswc-active {
+    .uc-actor__figure { filter: brightness(1.15); }
+  }
+}
+
+.uc-link {
+  &.iswc-active {
+    .uc-link__path { stroke-width: 1.8; }
+  }
 }
 
 /* El visor es opt-in: sin `open-on-click` el componente no abre nada,
    asi que tampoco debe insinuar con el cursor que se puede hacer clic. */
-:host([open-on-click]) .wrap {
-  cursor: zoom-in;
+:host([open-on-click]) {
+  .wrap { cursor: zoom-in; }
 }

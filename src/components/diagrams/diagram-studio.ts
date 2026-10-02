@@ -13,23 +13,23 @@ export interface DiagramKind {
 }
 
 export const DIAGRAM_KINDS: readonly DiagramKind[] = [
-  { kind: 'flowchart', title: 'Flujo', tag: 'is-flowchart', file: 'flowchart', preview: 'flowchart.json' },
-  { kind: 'sequence', title: 'Secuencia', tag: 'is-sequence-diagram', file: 'sequence-diagram', preview: 'sequence-diagram.json' },
-  { kind: 'class', title: 'Clases', tag: 'is-class-diagram', file: 'class-diagram', preview: 'class-diagram.json' },
-  { kind: 'state', title: 'Estados', tag: 'is-state-diagram', file: 'state-diagram', preview: 'state-diagram.json' },
-  { kind: 'er', title: 'Entidad-relación', tag: 'is-er-diagram', file: 'er-diagram', preview: 'er-diagram.json', editor: { tag: 'is-er-editor', file: 'er-editor' } },
-  { kind: 'block', title: 'Bloques', tag: 'is-block-diagram', file: 'block-diagram', preview: 'block-diagram.json' },
-  { kind: 'component', title: 'Componentes', tag: 'is-component-diagram', file: 'component-diagram', preview: 'component-diagram.json' },
-  { kind: 'mindmap', title: 'Mapa mental', tag: 'is-mindmap', file: 'mindmap', preview: 'mindmap.json' },
-  { kind: 'gantt', title: 'Gantt', tag: 'is-gantt', file: 'gantt', preview: 'gantt.json' },
-  { kind: 'timeline', title: 'Línea de tiempo', tag: 'is-timeline', file: 'timeline', preview: 'timeline.json' },
-  { kind: 'org-chart', title: 'Organigrama', tag: 'is-org-chart', file: 'org-chart', preview: 'org-chart.json' },
-  { kind: 'sankey', title: 'Sankey', tag: 'is-sankey-diagram', file: 'sankey-diagram', preview: 'sankey-diagram.json' },
-  { kind: 'quadrant', title: 'Cuadrantes', tag: 'is-quadrant-chart', file: 'quadrant-chart', preview: 'quadrant-chart.json' },
-  { kind: 'venn', title: 'Venn', tag: 'is-venn-diagram', file: 'venn-diagram', preview: 'venn-diagram.json' },
-  { kind: 'usecase', title: 'Casos de uso', tag: 'is-use-case-diagram', file: 'use-case-diagram', preview: 'use-case-diagram.json' },
-  { kind: 'swimlane', title: 'Carriles', tag: 'is-swimlane-diagram', file: 'swimlane-diagram', preview: 'swimlane-diagram.json' },
-  { kind: 'journey', title: 'Recorrido', tag: 'is-journey-map', file: 'journey-map', preview: 'journey-map.json' },
+  { kind: 'flowchart', title: 'Flujo', tag: 'iswc-flowchart', file: 'flowchart', preview: 'flowchart.json' },
+  { kind: 'sequence', title: 'Secuencia', tag: 'iswc-sequence-diagram', file: 'sequence-diagram', preview: 'sequence-diagram.json' },
+  { kind: 'class', title: 'Clases', tag: 'iswc-class-diagram', file: 'class-diagram', preview: 'class-diagram.json' },
+  { kind: 'state', title: 'Estados', tag: 'iswc-state-diagram', file: 'state-diagram', preview: 'state-diagram.json' },
+  { kind: 'er', title: 'Entidad-relación', tag: 'iswc-er-diagram', file: 'er-diagram', preview: 'er-diagram.json', editor: { tag: 'iswc-er-editor', file: 'er-editor' } },
+  { kind: 'block', title: 'Bloques', tag: 'iswc-block-diagram', file: 'block-diagram', preview: 'block-diagram.json' },
+  { kind: 'component', title: 'Componentes', tag: 'iswc-component-diagram', file: 'component-diagram', preview: 'component-diagram.json' },
+  { kind: 'mindmap', title: 'Mapa mental', tag: 'iswc-mindmap', file: 'mindmap', preview: 'mindmap.json' },
+  { kind: 'gantt', title: 'Gantt', tag: 'iswc-gantt', file: 'gantt', preview: 'gantt.json' },
+  { kind: 'timeline', title: 'Línea de tiempo', tag: 'iswc-timeline', file: 'timeline', preview: 'timeline.json' },
+  { kind: 'org-chart', title: 'Organigrama', tag: 'iswc-org-chart', file: 'org-chart', preview: 'org-chart.json' },
+  { kind: 'sankey', title: 'Sankey', tag: 'iswc-sankey-diagram', file: 'sankey-diagram', preview: 'sankey-diagram.json' },
+  { kind: 'quadrant', title: 'Cuadrantes', tag: 'iswc-quadrant-chart', file: 'quadrant-chart', preview: 'quadrant-chart.json' },
+  { kind: 'venn', title: 'Venn', tag: 'iswc-venn-diagram', file: 'venn-diagram', preview: 'venn-diagram.json' },
+  { kind: 'usecase', title: 'Casos de uso', tag: 'iswc-use-case-diagram', file: 'use-case-diagram', preview: 'use-case-diagram.json' },
+  { kind: 'swimlane', title: 'Carriles', tag: 'iswc-swimlane-diagram', file: 'swimlane-diagram', preview: 'swimlane-diagram.json' },
+  { kind: 'journey', title: 'Recorrido', tag: 'iswc-journey-map', file: 'journey-map', preview: 'journey-map.json' },
 ];
 
 export function kindById(kind: string | null | undefined): DiagramKind {
@@ -215,7 +215,7 @@ export async function bootDiagramStudio(mode: 'view' | 'edit'): Promise<void> {
     host = el;
     stage.replaceChildren(el);
     if (useEditor) {
-      el.addEventListener('is-state-change', () => {
+      el.addEventListener('iswc-state-change', () => {
         live = readLive(el, live);
         syncArea();
       });

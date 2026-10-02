@@ -1,5 +1,5 @@
 /**
- * Playground <is-loading-overlay>: show/hide desde los botones del demo.
+ * Playground <iswc-loading-overlay>: show/hide desde los botones del demo.
  */
 import type { PreviewMountContext, ISComponentPreviewLike } from '../../previews/_kit/types.d.ts';
 

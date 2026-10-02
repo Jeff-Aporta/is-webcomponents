@@ -1,5 +1,3 @@
 @import './_inline-host.css';
 
-:host {
-  .date { display: inline; }
-}
+:host .date { display: inline; }

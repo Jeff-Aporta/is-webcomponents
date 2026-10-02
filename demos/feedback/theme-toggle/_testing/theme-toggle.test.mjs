@@ -1,6 +1,6 @@
-// theme-toggle.test.mjs — tests exhaustivos del demo is-theme-toggle.
+// theme-toggle.test.mjs — tests exhaustivos del demo iswc-theme-toggle.
 // Cobertura: smoke + funcional (toggle alterna dark/light, dark attribute
-// reflejado en host, evento is-theme-change con detalle, observación del
+// reflejado en host, evento iswc-theme-change con detalle, observación del
 // container).
 import assert from 'node:assert/strict';
 import { BASE_URL, newPage, close, waitReady, screenshot, report } from './lib/harness.mjs';
@@ -10,21 +10,21 @@ const URL = `${BASE_URL}/demos/feedback/theme-toggle/theme-toggle.html`;
 const tests = [];
 
 tests.push({
-  name: 'smoke: el componente monta con un is-check-icon-button interno',
+  name: 'smoke: el componente monta con un iswc-check-icon-button interno',
   run: async (page) => {
     await page.goto(URL, { waitUntil: 'domcontentloaded' });
     await waitReady(page, 'data-theme-toggle-ready');
     const data = await page.evaluate(() => {
-      const all = document.querySelectorAll('is-theme-toggle');
+      const all = document.querySelectorAll('iswc-theme-toggle');
       return {
-        defined: !!customElements.get('is-theme-toggle'),
+        defined: !!customElements.get('iswc-theme-toggle'),
         count: all.length,
-        eachHasBtn: [...all].every((t) => !!t.shadowRoot.querySelector('is-check-icon-button')),
+        eachHasBtn: [...all].every((t) => !!t.shadowRoot.querySelector('iswc-check-icon-button')),
       };
     });
-    assert.equal(data.defined, true, 'is-theme-toggle debe estar definido');
+    assert.equal(data.defined, true, 'iswc-theme-toggle debe estar definido');
     assert.ok(data.count >= 2, `esperaba >=2 toggles, hay ${data.count}`);
-    assert.equal(data.eachHasBtn, true, 'cada toggle debe contener un is-check-icon-button');
+    assert.equal(data.eachHasBtn, true, 'cada toggle debe contener un iswc-check-icon-button');
     await screenshot(page, 'theme-toggle-smoke');
   },
 });
@@ -36,7 +36,7 @@ tests.push({
     await waitReady(page, 'data-theme-toggle-ready');
     await page.waitForTimeout(100);
     const data = await page.evaluate(() => {
-      const first = document.querySelector('is-theme-toggle');
+      const first = document.querySelector('iswc-theme-toggle');
       const html = document.documentElement;
       return {
         hostDark: first.hasAttribute('dark'),
@@ -51,17 +51,17 @@ tests.push({
 });
 
 tests.push({
-  name: 'eventos: is-theme-change se dispara al alternar',
+  name: 'eventos: iswc-theme-change se dispara al alternar',
   run: async (page) => {
     await page.goto(URL, { waitUntil: 'domcontentloaded' });
     await waitReady(page, 'data-theme-toggle-ready');
     await page.waitForTimeout(100);
     const seen = await page.evaluate(async () => {
       const events = [];
-      document.addEventListener('is-theme-change', (e) => events.push(e.detail));
-      const t = document.querySelector('is-theme-toggle');
-      // Click en el botón interno (is-check-icon-button emite is-change)
-      const btn = t.shadowRoot.querySelector('is-check-icon-button');
+      document.addEventListener('iswc-theme-change', (e) => events.push(e.detail));
+      const t = document.querySelector('iswc-theme-toggle');
+      // Click en el botón interno (iswc-check-icon-button emite iswc-change)
+      const btn = t.shadowRoot.querySelector('iswc-check-icon-button');
       btn.click();
       await new Promise((r) => setTimeout(r, 50));
       btn.click();
@@ -82,8 +82,8 @@ tests.push({
     await waitReady(page, 'data-theme-toggle-ready');
     await page.waitForTimeout(100);
     const after = await page.evaluate(async () => {
-      const t = document.querySelector('is-theme-toggle');
-      const btn = t.shadowRoot.querySelector('is-check-icon-button');
+      const t = document.querySelector('iswc-theme-toggle');
+      const btn = t.shadowRoot.querySelector('iswc-check-icon-button');
       btn.click();
       await new Promise((r) => setTimeout(r, 50));
       return {
@@ -95,8 +95,8 @@ tests.push({
     assert.equal(after.hostDark, false, `toggle.hostDark debe ser false (vimos ${after.hostDark})`);
     // Segundo click → vuelve a dark
     const back = await page.evaluate(async () => {
-      const t = document.querySelector('is-theme-toggle');
-      const btn = t.shadowRoot.querySelector('is-check-icon-button');
+      const t = document.querySelector('iswc-theme-toggle');
+      const btn = t.shadowRoot.querySelector('iswc-check-icon-button');
       btn.click();
       await new Promise((r) => setTimeout(r, 50));
       return document.documentElement.dataset.theme;
@@ -112,7 +112,7 @@ tests.push({
     await waitReady(page, 'data-theme-toggle-ready');
     await page.waitForTimeout(150);
     const after = await page.evaluate(async () => {
-      const t = document.querySelector('is-theme-toggle');
+      const t = document.querySelector('iswc-theme-toggle');
       // readTheme() consulta classList ANTES de data-theme. Para pasar a
       // 'light' hay que tocar AMBAS cosas (que es lo que hace applyTheme).
       document.documentElement.classList.remove('theme-dark');
@@ -134,7 +134,7 @@ tests.push({
     await page.waitForTimeout(150);
     const result = await page.evaluate(async () => {
       const nested = document.getElementById('nested');
-      const btn = nested.shadowRoot.querySelector('is-check-icon-button');
+      const btn = nested.shadowRoot.querySelector('iswc-check-icon-button');
       const htmlThemeBefore = document.documentElement.dataset.theme;
       btn.click();
       await new Promise((r) => setTimeout(r, 50));
@@ -158,8 +158,8 @@ tests.push({
     await waitReady(page, 'data-theme-toggle-ready');
     await page.waitForTimeout(100);
     const labels = await page.evaluate(() => {
-      const t = document.querySelector('is-theme-toggle');
-      const btn = t.shadowRoot.querySelector('is-check-icon-button');
+      const t = document.querySelector('iswc-theme-toggle');
+      const btn = t.shadowRoot.querySelector('iswc-check-icon-button');
       return {
         label: btn.getAttribute('label'),
         checkedLabel: btn.getAttribute('checked-label'),

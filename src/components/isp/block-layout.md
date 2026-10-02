@@ -1,14 +1,14 @@
 ---
-tag: is-block-layout
+tag: iswc-block-layout
 tags:
-  - is-block-layout
+  - iswc-block-layout
 category: isp
 status: public
 source: ./block-layout.js
 style: ./block-layout.css
 preview: ./block-layout.json
 ---
-# `<is-block-layout>`
+# `<iswc-block-layout>`
 
 ## Propósito
 
@@ -16,21 +16,21 @@ Caja de bloque que mide su propio ancho con `ResizeObserver` y publica el
 breakpoint resultante para que el contenido reaccione al ancho del CONTENEDOR,
 no al del viewport. Port de `src/lib/layout/BlockLayout.svelte` de ISP.
 
-Este módulo registra `<is-block-layout>` y exporta la maquinaria de breakpoints
+Este módulo registra `<iswc-block-layout>` y exporta la maquinaria de breakpoints
 (`BreakpointHost`, `sizewFor`, `flagsFor`, `lerpFor`, `BREAKPOINTS`,
 `BREAKPOINT_W`) que reutilizan `flex-layout.js` y `grid-layout.js`.
 
 ## Cuándo usarlo
 
 Cuando un bloque debe adaptarse a su propio ancho (paneles redimensionables,
-celdas de grid, contenido dentro de un `<is-split-panel>`) y una media query de
+celdas de grid, contenido dentro de un `<iswc-split-panel>`) y una media query de
 viewport no sirve.
 
 ## Cuándo no usarlo
 
 No usar como caja decorativa ni como sustituto de un `<div>`: cada instancia
 paga un `ResizeObserver`. Tampoco para layout flex/grid — para eso están
-`<is-flex-layout>` y `<is-grid-layout>`, que ya heredan esta misma medición.
+`<iswc-flex-layout>` y `<iswc-grid-layout>`, que ya heredan esta misma medición.
 
 ## Importación
 
@@ -40,7 +40,7 @@ import './block-layout.js';
 
 ## Cuerpo JSON (json2html / html2json)
 
-Mismo codec compacto que `<is-form>`: `[tag, attrs?, …hijos]`.
+Mismo codec compacto que `<iswc-form>`: `[tag, attrs?, …hijos]`.
 
 ```js
 block.fromJSON({
@@ -56,18 +56,18 @@ block.html2json();
 | --- | --- |
 | `json2html(body)` / `html2json()` | Light DOM ↔ JSON |
 | `toJSON()` / `fromJSON(json)` | `{ inline, cscroll, body }` |
-| `IsBlockLayout.json2html` / `html2json` | Estáticos |
+| `IswcBlockLayout.json2html` / `html2json` | Estáticos |
 
 ## Ejemplo mínimo
 
 ```html
-<is-block-layout>
+<iswc-block-layout>
   <p class="titulo">Crece con el contenedor</p>
-</is-block-layout>
+</iswc-block-layout>
 ```
 
 ```css
-is-block-layout[data-szw-lg] .titulo { font-weight: 700; }
+iswc-block-layout[data-szw-lg] .titulo { font-weight: 700; }
 .titulo { font-size: calc(1rem + var(--lerpw, 0) * 0.75rem); }
 ```
 
@@ -83,7 +83,7 @@ cuatro canales equivalentes:
 | `boolszw` | atributos reflejados `data-szw-xs` … `data-szw-xl` + propiedad JS `boolszw` | acumulativos: presentes si el breakpoint es `<=` al actual |
 | `lerpw(b0, b1)` | método JS `lerpw(b0, b1)` + custom property `--lerpw` (solo el caso por defecto `('sm','xl')`) | CSS no puede llamar funciones, por eso solo se publica la interpolación por defecto |
 | — | custom property `--clientw` | ancho en px, sin unidad; permite calcular otras interpolaciones con `calc()` |
-| — | evento `is-breakpoint` | entrega los tres valores, incluida la función `lerpw` completa |
+| — | evento `iswc-breakpoint` | entrega los tres valores, incluida la función `lerpw` completa |
 
 La prop `sizew` de ISP era además de ENTRADA (podía inicializarse a `"md"`);
 aquí es de salida únicamente, porque siempre se recalcula desde la medición.
@@ -104,7 +104,7 @@ para el `overflow: auto`.
 | `inline` | boolean | `display: inline-block`. |
 | `cscroll` | boolean | `overflow: auto`. |
 | `remember-scroll` | boolean | Opt-in memoria de scroll (requiere `storage-key`). |
-| `storage-key` | string | Clave bajo `is-webcomponents[is-block-layout]`. |
+| `storage-key` | string | Clave bajo `is-webcomponents[iswc-block-layout]`. |
 | `scroll-ttl` | number | ms de validez (default 1h). |
 
 #### Atributos reflejados (salida)
@@ -136,7 +136,7 @@ para el `overflow: auto`.
 
 | Evento | detail | bubbles | composed | cancelable |
 | --- | --- | --- | --- | --- |
-| `is-breakpoint` | `{ width, height, sizew, boolszw, lerpw }` | sí | sí | no |
+| `iswc-breakpoint` | `{ width, height, sizew, boolszw, lerpw }` | sí | sí | no |
 
 ### Métodos y propiedades públicas
 
@@ -185,7 +185,7 @@ El `ResizeObserver` se crea en `connectedCallback` y se destruye en
 - [`../_shared/adopt-css.js`](../_shared/adopt-css.js)
 - [`flex-layout.md`](flex-layout.md), [`grid-layout.md`](grid-layout.md)
 
-Tags del módulo: `<is-block-layout>`.
+Tags del módulo: `<iswc-block-layout>`.
 
 ## Accesibilidad
 
@@ -194,9 +194,9 @@ Contenedor sin semántica propia: no altera el árbol de accesibilidad.
 ## Ejemplo avanzado
 
 ```html
-<is-block-layout id="panel" cscroll style="max-height: 20rem"></is-block-layout>
+<iswc-block-layout id="panel" cscroll style="max-height: 20rem"></iswc-block-layout>
 <script type="module">
-  document.getElementById('panel').addEventListener('is-breakpoint', (e) => {
+  document.getElementById('panel').addEventListener('iswc-breakpoint', (e) => {
     console.log(e.detail.sizew, e.detail.lerpw('md', 'xl'));
   });
 </script>
@@ -205,7 +205,7 @@ Contenedor sin semántica propia: no altera el árbol de accesibilidad.
 ## Errores comunes
 
 - Esperar slot props como en Svelte: aquí se leen `data-sizew` / `--lerpw` / el evento.
-- Estilar con `is-block-layout .foo` DESDE el CSS del componente: eso vive fuera del shadow.
+- Estilar con `iswc-block-layout .foo` DESDE el CSS del componente: eso vive fuera del shadow.
 - Crear un `size` colors; usar font-size contextual y em.
 
 ## Reglas para LLM

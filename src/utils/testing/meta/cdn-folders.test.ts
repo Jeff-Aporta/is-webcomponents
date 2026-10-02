@@ -76,7 +76,7 @@ check(categories.length > 0, 'dist/cdn no tiene carpetas de categoría');
 
 // Cada tag del manifest es alcanzable desde su carpeta de categoría: o bien
 // tiene su propio <tag>.min.js, o lo registra un módulo hermano (los hijos
-// comparten archivo con su padre, p.ej. is-tab vive en tab-group.ts).
+// comparten archivo con su padre, p.ej. iswc-tab vive en tab-group.ts).
 const { default: manifest } = await import(new URL('../../../manifest.js', import.meta.url));
 const bundleSourceByCat = new Map();
 const sourcesOf = (cat) => {
@@ -96,7 +96,7 @@ const sourcesOf = (cat) => {
 const manifestCategories = new Set();
 for (const c of manifest) {
   manifestCategories.add(c.category);
-  const tag = c.tag.replace(/^is-/, '');
+  const tag = c.tag.replace(/^iswc-/, '');
   const own = existsSync(join(dist, `${c.category}/${tag}.min.js`));
   const registered = sourcesOf(c.category).includes(`"${c.tag}"`)
     || sourcesOf(c.category).includes(`'${c.tag}'`);
@@ -126,7 +126,7 @@ for (const cat of categories) {
 // Los bundles por componente NO deben inlinear otros componentes: esbuild
 // duplicaria la clase y el `import.meta.url` del componente inlineado
 // apuntaria al archivo anfitrion, asi que adoptCss cargaria el CSS
-// equivocado (is-icon acabo cargando actions/button.min.css y perdio su
+// equivocado (iswc-icon acabo cargando actions/button.min.css y perdio su
 // tamano). Cada import entre componentes debe quedar como referencia.
 const compRoot = join(root, 'src', 'components');
 const walkSrc = (dir, out = []) => {
@@ -137,7 +137,7 @@ const walkSrc = (dir, out = []) => {
   }
   return out;
 };
-const catByTag = new Map(manifest.map((c) => [c.tag.replace(/^is-/, ''), c.category]));
+const catByTag = new Map(manifest.map((c) => [c.tag.replace(/^iswc-/, ''), c.category]));
 let crossImportsChecked = 0;
 for (const src of walkSrc(compRoot)) {
   const tag = basename(src).replace(/\.js$/, '');

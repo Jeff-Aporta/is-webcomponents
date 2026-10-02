@@ -43,5 +43,5 @@ Flujo: [flujo-sdd.md](flujo-sdd.md).
 
 ## C-6 Previews
 
-- Un preview por tag = JSON `is-preview/v1` + chrome `<is-preview-component>`.
+- Un preview por tag = JSON `iswc-preview/v1` + chrome `<iswc-preview-component>`.
 - Comportamiento en `src/previews/behaviors/<tag>.js`. **No** HTML por tag (salvo `_shell.html`).

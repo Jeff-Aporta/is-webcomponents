@@ -39,16 +39,19 @@ export function docsBanner(lines: string[]): string {
 }
 
 /** Defines que el loader espera. Mismo nombre en todos los proyectos is-*. */
-export function loaderDefines(catalog: unknown, files: Record<string, string>): Record<string, string> {
+export function loaderDefines(catalog: unknown, files: Record<string, string>, sha = 'main'): Record<string, string> {
   return {
     __IS_LOADER_CATALOG__: JSON.stringify(catalog),
     __IS_ASSET_HASHES__: JSON.stringify(files),
+    __IS_BUILD_SHA__: JSON.stringify(sha),
   };
 }
 
 export interface BundleLoaderOptions extends Omit<BundleMinJsOptions, 'define'> {
   catalog: unknown;
   hashes: Record<string, string>;
+  /** SHA de HEAD. Queda en shaDefault del loader. */
+  sha?: string;
 }
 
 export function bundleLoader(opts: BundleLoaderOptions) {
@@ -58,6 +61,6 @@ export function bundleLoader(opts: BundleLoaderOptions) {
     plugins: opts.plugins,
     banner: opts.banner,
     external: opts.external,
-    define: loaderDefines(opts.catalog, opts.hashes),
+    define: loaderDefines(opts.catalog, opts.hashes, opts.sha),
   });
 }

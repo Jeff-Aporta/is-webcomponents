@@ -1,6 +1,6 @@
 // tests/main-scroll.test.ts
 //
-// Contrato del scroll de <is-main>, ejecutado de verdad: el módulo se carga
+// Contrato del scroll de <iswc-main>, ejecutado de verdad: el módulo se carga
 // sobre un DOM mínimo simulado (sin jsdom) para poder afirmar sobre el
 // comportamiento y no sobre el texto del fuente.
 //
@@ -89,7 +89,7 @@ class FakeElement {
   }
 }
 
-/** Carga is-main con el entorno pedido y devuelve un main ya conectado. */
+/** Carga iswc-main con el entorno pedido y devuelve un main ya conectado. */
 async function mountMain({ navType, saved }) {
   globalThis.HTMLElement = FakeElement;
   globalThis.localStorage = fakeStorage();
@@ -97,26 +97,26 @@ async function mountMain({ navType, saved }) {
   globalThis.window = globalThis;
   globalThis.performance.getEntriesByType = (kind) =>
     (kind === 'navigation' ? [{ type: navType }] : []);
-  if (saved) localStorage.setItem(ROOT_KEY, JSON.stringify({ 'is-main': saved }));
+  if (saved) localStorage.setItem(ROOT_KEY, JSON.stringify({ 'iswc-main': saved }));
 
   // cache-buster: cada caso necesita su propia evaluación del IIFE.
   await import(`../../../components/layout/main.ts?case=${navType}-${Math.random()}`);
-  const main = new globalThis.IsMain();
+  const main = new globalThis.IswcMain();
   main.setAttribute('remember-scroll', '');
   main.connectedCallback();
   return main;
 }
 
 const readPrefs = (key) =>
-  JSON.parse(localStorage.getItem(ROOT_KEY) || '{}')['is-main']?.[key] ?? null;
+  JSON.parse(localStorage.getItem(ROOT_KEY) || '{}')['iswc-main']?.[key] ?? null;
 
 test('navegación fresca arranca en top aunque haya lectura guardada', async () => {
   const main = await mountMain({
     navType: 'navigate',
-    saved: { 'docs-is-button': { top: 900, savedAt: Date.now() } },
+    saved: { 'docs-iswc-button': { top: 900, savedAt: Date.now() } },
   });
   main.scrollHeight = 5000;
-  main.setAttribute('storage-key', 'docs-is-button');
+  main.setAttribute('storage-key', 'docs-iswc-button');
   await wait(200);
   assert.equal(main.scrollTop, 0);
 });
@@ -124,24 +124,24 @@ test('navegación fresca arranca en top aunque haya lectura guardada', async () 
 test('F5 restaura la lectura aunque el contenido llegue después', async () => {
   const main = await mountMain({
     navType: 'reload',
-    saved: { 'docs-is-button': { top: 900, savedAt: Date.now() } },
+    saved: { 'docs-iswc-button': { top: 900, savedAt: Date.now() } },
   });
   // storage-key llega antes que el markup: sin altura no se puede restaurar.
-  main.setAttribute('storage-key', 'docs-is-button');
+  main.setAttribute('storage-key', 'docs-iswc-button');
   assert.equal(main.scrollTop, 0, 'sin altura no debe inventar posición');
   main.scrollHeight = 5000;
   await wait(300);
   assert.equal(main.scrollTop, 900);
-  assert.equal(readPrefs('docs-is-button').top, 900, 'reintentar no debe pisar la memoria');
+  assert.equal(readPrefs('docs-iswc-button').top, 900, 'reintentar no debe pisar la memoria');
 });
 
 test('F5 no restaura una lectura vencida por TTL', async () => {
   const main = await mountMain({
     navType: 'reload',
-    saved: { 'docs-is-button': { top: 900, savedAt: Date.now() - 7_200_000 } },
+    saved: { 'docs-iswc-button': { top: 900, savedAt: Date.now() - 7_200_000 } },
   });
   main.scrollHeight = 5000;
-  main.setAttribute('storage-key', 'docs-is-button');
+  main.setAttribute('storage-key', 'docs-iswc-button');
   await wait(300);
   assert.equal(main.scrollTop, 0);
 });
@@ -149,28 +149,28 @@ test('F5 no restaura una lectura vencida por TTL', async () => {
 test('cambiar de componente resetea a top y olvida la lectura de esa vista', async () => {
   const main = await mountMain({
     navType: 'reload',
-    saved: { 'docs-is-button': { top: 900, savedAt: Date.now() } },
+    saved: { 'docs-iswc-button': { top: 900, savedAt: Date.now() } },
   });
   main.scrollHeight = 5000;
-  main.setAttribute('storage-key', 'docs-is-button');
+  main.setAttribute('storage-key', 'docs-iswc-button');
   await wait(300);
   assert.equal(main.scrollTop, 900, 'precondición: venimos de una lectura');
 
-  main.setAttribute('storage-key', 'docs-is-tooltip');
+  main.setAttribute('storage-key', 'docs-iswc-tooltip');
   assert.equal(main.scrollTop, 0, 'otra vista arranca arriba');
-  assert.equal(readPrefs('docs-is-tooltip').top, 0, 'un F5 inmediato debe quedarse arriba');
+  assert.equal(readPrefs('docs-iswc-tooltip').top, 0, 'un F5 inmediato debe quedarse arriba');
 
   main.scrollTop = 400;
   await wait(300);
-  assert.equal(readPrefs('docs-is-tooltip').top, 400, 'la lectura nueva sí se guarda');
+  assert.equal(readPrefs('docs-iswc-tooltip').top, 400, 'la lectura nueva sí se guarda');
 });
 
 test('el gesto del usuario aborta la restauración pendiente', async () => {
   const main = await mountMain({
     navType: 'reload',
-    saved: { 'docs-is-button': { top: 900, savedAt: Date.now() } },
+    saved: { 'docs-iswc-button': { top: 900, savedAt: Date.now() } },
   });
-  main.setAttribute('storage-key', 'docs-is-button');
+  main.setAttribute('storage-key', 'docs-iswc-button');
   main.dispatchEvent({ type: 'wheel' });
   main.scrollHeight = 5000;
   await wait(300);

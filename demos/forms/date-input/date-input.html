@@ -3,7 +3,7 @@
 <head>
 <meta charset="utf-8" />
 <meta name="viewport" content="width=device-width, initial-scale=1" />
-<title>Demo de <is-date-input> · is-webcomponents</title>
+<title>Demo de <iswc-date-input> · is-webcomponents</title>
 <meta name="description" content="Campo de fecha con calendario desplegable en top-layer dialog. Permite editar por secciones o seleccionar desde el calendario." />
 <style>
   html, body { margin: 0; padding: 0; min-height: 100%; background: #0c1118; color: #e2e8f0; font-family: ui-sans-serif, system-ui, sans-serif; }
@@ -20,23 +20,23 @@
   .value-readout code { color: #e2e8f0; }
   code { background: rgba(255,255,255,0.06); padding: 1px 5px; border-radius: 3px; font: 12px ui-monospace, Menlo, Consolas, monospace; }
   .actions { display: flex; gap: 8px; }
-  is-button.how { --iswc-accent: #2563eb; color: #93c5fd; cursor: pointer; font: 12px ui-sans-serif; padding: 6px 10px; border: 1px solid rgba(255,255,255,0.1); border-radius: 6px; background: rgba(255,255,255,0.04); }
-  is-button.how:hover { background: rgba(255,255,255,0.08); }
+  iswc-button.how { --iswc-accent: #2563eb; color: #93c5fd; cursor: pointer; font: 12px ui-sans-serif; padding: 6px 10px; border: 1px solid rgba(255,255,255,0.1); border-radius: 6px; background: rgba(255,255,255,0.04); }
+  iswc-button.how:hover { background: rgba(255,255,255,0.08); }
   /* Anti-FOUC */
-  is-date-input:not(:defined) { visibility: hidden; }
+  iswc-date-input:not(:defined) { visibility: hidden; }
 </style>
 <script type="module">
-  await import('../../../dist/cdn/forms/date-input.min.js?h=hrb4dm');
+  await import('../../../dist/cdn/forms/date-input.min.js?h=qm9qev');
 
-  await customElements.whenDefined('is-date-input');
+  await customElements.whenDefined('iswc-date-input');
 
   const wire = (el, outputId) => {
-    el.addEventListener('is-change', (e) => {
+    el.addEventListener('iswc-change', (e) => {
       const out = document.getElementById(outputId);
       if (out) out.textContent = e.detail?.value ?? '(vacío)';
     });
-    el.addEventListener('is-show', () => console.log('[date-input] panel abierto'));
-    el.addEventListener('is-hide', () => console.log('[date-input] panel cerrado'));
+    el.addEventListener('iswc-show', () => console.log('[date-input] panel abierto'));
+    el.addEventListener('iswc-hide', () => console.log('[date-input] panel cerrado'));
   };
 
   // 1. Básico con label
@@ -77,46 +77,46 @@
 <body>
 <main>
   <header>
-    <h1>&lt;is-date-input&gt; — Campo + calendario en panel top-layer</h1>
-    <p>Compone &lt;is-date-field&gt; (edición por secciones) e &lt;is-date-picker&gt; (calendario mensual) en un &lt;dialog&gt; modal. Pulsa el icono de calendario, Alt+↓ sobre el campo o haz clic en el botón "Abrir" para abrirlo.</p>
+    <h1>&lt;iswc-date-input&gt; — Campo + calendario en panel top-layer</h1>
+    <p>Compone &lt;iswc-date-field&gt; (edición por secciones) e &lt;iswc-date-picker&gt; (calendario mensual) en un &lt;dialog&gt; modal. Pulsa el icono de calendario, Alt+↓ sobre el campo o haz clic en el botón "Abrir" para abrirlo.</p>
   </header>
 
   <section class="card">
     <h2>Básico</h2>
-    <is-date-input id="basic" label="Fecha" name="d"></is-date-input>
+    <iswc-date-input id="basic" label="Fecha" name="d"></iswc-date-input>
     <div class="value-readout">Valor actual: <code id="basic-value">(vacío)</code></div>
   </section>
 
   <section class="card">
     <h2>Con valor inicial</h2>
-    <is-date-input id="with-value" label="Cumpleaños" clearable name="birth"></is-date-input>
+    <iswc-date-input id="with-value" label="Cumpleaños" clearable name="birth"></iswc-date-input>
     <div class="value-readout">Valor actual: <code id="with-value-value">(vacío)</code></div>
   </section>
 
   <section class="card">
     <h2>Requerido</h2>
-    <is-date-input id="required" label="Fecha de firma" hint="Obligatorio" required name="sign"></is-date-input>
+    <iswc-date-input id="required" label="Fecha de firma" hint="Obligatorio" required name="sign"></iswc-date-input>
     <div class="value-readout">Valor actual: <code id="required-value">(vacío)</code></div>
   </section>
 
   <section class="card">
     <h2>Con rango permitido</h2>
-    <is-date-input id="ranged" label="Periodo" hint="Entre el 2025-01-01 y el 2026-12-31" name="range"></is-date-input>
+    <iswc-date-input id="ranged" label="Periodo" hint="Entre el 2025-01-01 y el 2026-12-31" name="range"></iswc-date-input>
     <div class="value-readout">Valor actual: <code id="ranged-value">(vacío)</code></div>
   </section>
 
   <section class="card">
     <h2>Deshabilitado</h2>
-    <is-date-input id="disabled" label="Bloqueado" disabled name="x"></is-date-input>
+    <iswc-date-input id="disabled" label="Bloqueado" disabled name="x"></iswc-date-input>
     <div class="value-readout">Valor actual: <code id="disabled-value">(vacío)</code></div>
   </section>
 
   <section class="card">
     <h2>Apertura programática (show / hide)</h2>
-    <is-date-input id="demo" label="Programable" name="prog"></is-date-input>
+    <iswc-date-input id="demo" label="Programable" name="prog"></iswc-date-input>
     <div class="actions">
-      <is-button id="open-btn" class="how" variant="text">Abrir</is-button>
-      <is-button id="close-btn" class="how" variant="text">Cerrar</is-button>
+      <iswc-button id="open-btn" class="how" variant="text">Abrir</iswc-button>
+      <iswc-button id="close-btn" class="how" variant="text">Cerrar</iswc-button>
     </div>
     <div class="value-readout">Valor actual: <code id="demo-value">(vacío)</code></div>
   </section>

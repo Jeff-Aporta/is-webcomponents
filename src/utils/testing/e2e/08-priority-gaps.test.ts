@@ -2,15 +2,15 @@
 // más críticos descubiertos por F0 (deep-test-proposals).
 //
 // Gaps cubiertos (top-10 priorizados por impacto):
-//   - <is-toast>: color="danger" NO eleva a role="alert" + aria-live="assertive"
-//   - <is-carousel>: Space NO pausa el autoplay (gap WAI-ARIA APG)
-//   - <is-carousel>: Home/End NO salta al primer/último slide
-//   - <is-tree>: aria-level/posinset/setsize NO se setean en treeitems (gap APG)
-//   - <is-tree>: type-ahead (tipear letra salta al item)
-//   - <is-command-palette>: focus NO se restaura al cerrar (gap crítico UX)
-//   - <is-dropdown>: Home/End NO navega al primer/último item (gap vs button-group)
-//   - <is-fab>: sin aria-label ni texto slotted queda mudo para AT
-//   - <is-modal-verificacion>: no preventDefault el cierre durante operación async
+//   - <iswc-toast>: color="danger" NO eleva a role="alert" + aria-live="assertive"
+//   - <iswc-carousel>: Space NO pausa el autoplay (gap WAI-ARIA APG)
+//   - <iswc-carousel>: Home/End NO salta al primer/último slide
+//   - <iswc-tree>: aria-level/posinset/setsize NO se setean en treeitems (gap APG)
+//   - <iswc-tree>: type-ahead (tipear letra salta al item)
+//   - <iswc-command-palette>: focus NO se restaura al cerrar (gap crítico UX)
+//   - <iswc-dropdown>: Home/End NO navega al primer/último item (gap vs button-group)
+//   - <iswc-fab>: sin aria-label ni texto slotted queda mudo para AT
+//   - <iswc-modal-verificacion>: no preventDefault el cierre durante operación async
 //
 // Cada test verifica el comportamiento QUE DEBERÍA tener. Si falla → bug real
 // que el captain decide si fixear o documentar como known limitation.
@@ -46,7 +46,7 @@ function pagina(): Page {
 }
 
 // ──────────────────────────────────────────────────────────────────
-// is-toast: color="danger" → role="alert" + aria-live="assertive"
+// iswc-toast: color="danger" → role="alert" + aria-live="assertive"
 // ──────────────────────────────────────────────────────────────────
 testE2E(
   'toast: color="danger" eleva role="alert" y aria-live="assertive"',
@@ -54,22 +54,22 @@ testE2E(
   async (t) => {
     if (!DISPONIBLE) return t.skip('faltan variables E2E');
     const page = pagina();
-    await abrirGaleria(page, 'is-toast', { ms: 4000 });
+    await abrirGaleria(page, 'iswc-toast', { ms: 4000 });
     // Disparar toast danger via API estática.
     const triggered = await page.evaluate(() => {
-      const w = window as unknown as { IsToast?: { error: (m: string) => unknown; success: (m: string) => unknown } };
-      if (!w.IsToast?.error) return false;
-      w.IsToast.error('Test danger toast');
-      w.IsToast.success('Test info toast (control)');
+      const w = window as unknown as { IswcToast?: { error: (m: string) => unknown; success: (m: string) => unknown } };
+      if (!w.IswcToast?.error) return false;
+      w.IswcToast.error('Test danger toast');
+      w.IswcToast.success('Test info toast (control)');
       return true;
     });
     if (!triggered) {
-      t.diagnostic('IsToast.error no expuesto en window');
+      t.diagnostic('IswcToast.error no expuesto en window');
       return;
     }
     await esperarMs(400);
     const r = await page.evaluate(() => {
-      const items = [...document.querySelectorAll<HTMLElement>('#previewHost is-toast-item, #previewHost is-toast is-toast-item')];
+      const items = [...document.querySelectorAll<HTMLElement>('#previewHost iswc-toast-item, #previewHost iswc-toast iswc-toast-item')];
       const danger = items.find((it) => it.getAttribute('color') === 'danger');
       if (!danger) return { found: false, danger: 0, info: items.length };
       return {
@@ -90,7 +90,7 @@ testE2E(
 );
 
 // ──────────────────────────────────────────────────────────────────
-// is-carousel: Space pauses autoplay (gap WAI-ARIA APG)
+// iswc-carousel: Space pauses autoplay (gap WAI-ARIA APG)
 // ──────────────────────────────────────────────────────────────────
 testE2E(
   'carousel: Space pausa el autoplay',
@@ -98,10 +98,10 @@ testE2E(
   async (t) => {
     if (!DISPONIBLE) return t.skip('faltan variables E2E');
     const page = pagina();
-    await abrirGaleria(page, 'is-carousel', { ms: 4000 });
+    await abrirGaleria(page, 'iswc-carousel', { ms: 4000 });
     // Buscar carousel con autoplay activo.
     const hasAutoplay = await page.evaluate(() => {
-      const c = document.querySelector<HTMLElement>('#previewHost is-carousel[autoplay]');
+      const c = document.querySelector<HTMLElement>('#previewHost iswc-carousel[autoplay]');
       if (!c) return null;
       // Click en el viewport del carousel para enfocarlo.
       const viewport = c.shadowRoot?.querySelector('.viewport') as HTMLElement | null;
@@ -113,13 +113,13 @@ testE2E(
       return;
     }
     const initial = await page.evaluate(() => {
-      const c = document.querySelector<HTMLElement>('#previewHost is-carousel[autoplay]');
+      const c = document.querySelector<HTMLElement>('#previewHost iswc-carousel[autoplay]');
       return c?.getAttribute('active') ?? '';
     });
     await page.keyboard.press('Space');
     await esperarMs(2000); // esperar 2s de autoplay (debe estar pausado)
     const after = await page.evaluate(() => {
-      const c = document.querySelector<HTMLElement>('#previewHost is-carousel[autoplay]');
+      const c = document.querySelector<HTMLElement>('#previewHost iswc-carousel[autoplay]');
       return c?.getAttribute('active') ?? '';
     });
     // Si Space PAUSA, `active` no debe haber avanzado.
@@ -129,7 +129,7 @@ testE2E(
 );
 
 // ──────────────────────────────────────────────────────────────────
-// is-carousel: Home/End saltan al primer/último slide (gap)
+// iswc-carousel: Home/End saltan al primer/último slide (gap)
 // ──────────────────────────────────────────────────────────────────
 testE2E(
   'carousel: Home/End saltan al primer/último slide',
@@ -137,11 +137,11 @@ testE2E(
   async (t) => {
     if (!DISPONIBLE) return t.skip('faltan variables E2E');
     const page = pagina();
-    await abrirGaleria(page, 'is-carousel', { ms: 4000 });
+    await abrirGaleria(page, 'iswc-carousel', { ms: 4000 });
     const total = await page.evaluate(() => {
-      const c = document.querySelector<HTMLElement>('#previewHost is-carousel');
+      const c = document.querySelector<HTMLElement>('#previewHost iswc-carousel');
       if (!c) return 0;
-      return c.querySelectorAll('is-carousel-item').length;
+      return c.querySelectorAll('iswc-carousel-item').length;
     });
     if (total < 2) {
       t.diagnostic('carousel con menos de 2 items, skip');
@@ -149,7 +149,7 @@ testE2E(
     }
     // Focus viewport.
     await page.evaluate(() => {
-      const c = document.querySelector<HTMLElement>('#previewHost is-carousel');
+      const c = document.querySelector<HTMLElement>('#previewHost iswc-carousel');
       c?.shadowRoot?.querySelector<HTMLElement>('.viewport')?.focus();
     });
     await esperarMs(100);
@@ -157,7 +157,7 @@ testE2E(
     await page.keyboard.press('End');
     await esperarMs(300);
     const afterEnd = await page.evaluate(() => {
-      const c = document.querySelector<HTMLElement>('#previewHost is-carousel');
+      const c = document.querySelector<HTMLElement>('#previewHost iswc-carousel');
       return Number(c?.getAttribute('active') ?? -1);
     });
     assert.equal(afterEnd, total - 1, `End debe ir a ${total - 1}, actual=${afterEnd}`);
@@ -165,7 +165,7 @@ testE2E(
     await page.keyboard.press('Home');
     await esperarMs(300);
     const afterHome = await page.evaluate(() => {
-      const c = document.querySelector<HTMLElement>('#previewHost is-carousel');
+      const c = document.querySelector<HTMLElement>('#previewHost iswc-carousel');
       return Number(c?.getAttribute('active') ?? -1);
     });
     assert.equal(afterHome, 0, `Home debe ir a 0, actual=${afterHome}`);
@@ -174,7 +174,7 @@ testE2E(
 );
 
 // ──────────────────────────────────────────────────────────────────
-// is-tree: aria-level/posinset/setsize en treeitems (gap APG)
+// iswc-tree: aria-level/posinset/setsize en treeitems (gap APG)
 // ──────────────────────────────────────────────────────────────────
 testE2E(
   'tree: cada treeitem expone aria-level, aria-posinset, aria-setsize (WAI-ARIA APG)',
@@ -182,9 +182,9 @@ testE2E(
   async (t) => {
     if (!DISPONIBLE) return t.skip('faltan variables E2E');
     const page = pagina();
-    await abrirGaleria(page, 'is-tree', { ms: 4000 });
+    await abrirGaleria(page, 'iswc-tree', { ms: 4000 });
     const r = await page.evaluate(() => {
-      const items = [...document.querySelectorAll<HTMLElement>('#previewHost is-tree-item')];
+      const items = [...document.querySelectorAll<HTMLElement>('#previewHost iswc-tree-item')];
       if (items.length < 2) return { total: items.length, missing: 0, sample: null };
       const missing: string[] = [];
       for (const it of items) {
@@ -207,7 +207,7 @@ testE2E(
 );
 
 // ──────────────────────────────────────────────────────────────────
-// is-tree: type-ahead (tipear letra salta al item)
+// iswc-tree: type-ahead (tipear letra salta al item)
 // ──────────────────────────────────────────────────────────────────
 testE2E(
   'tree: type-ahead — tipear letra salta al item que empieza con esa letra',
@@ -215,10 +215,10 @@ testE2E(
   async (t) => {
     if (!DISPONIBLE) return t.skip('faltan variables E2E');
     const page = pagina();
-    await abrirGaleria(page, 'is-tree', { ms: 4000 });
+    await abrirGaleria(page, 'iswc-tree', { ms: 4000 });
     // Focus el primer treeitem.
     await page.evaluate(() => {
-      const first = document.querySelector<HTMLElement>('#previewHost is-tree-item [role="treeitem"], #previewHost is-tree-item');
+      const first = document.querySelector<HTMLElement>('#previewHost iswc-tree-item [role="treeitem"], #previewHost iswc-tree-item');
       (first as HTMLElement)?.focus?.();
     });
     await esperarMs(100);
@@ -236,7 +236,7 @@ testE2E(
 );
 
 // ──────────────────────────────────────────────────────────────────
-// is-command-palette: focus restoration al cerrar (gap crítico UX)
+// iswc-command-palette: focus restoration al cerrar (gap crítico UX)
 // ──────────────────────────────────────────────────────────────────
 testE2E(
   'command-palette: foco vuelve al opener (trigger) al cerrar con Escape',
@@ -244,10 +244,10 @@ testE2E(
   async (t) => {
     if (!DISPONIBLE) return t.skip('faltan variables E2E');
     const page = pagina();
-    await abrirGaleria(page, 'is-command-palette', { ms: 4000 });
+    await abrirGaleria(page, 'iswc-command-palette', { ms: 4000 });
     // Buscar el trigger button y focusearlo.
     const trigger = await page.evaluate(() => {
-      const c = document.querySelector<HTMLElement>('#previewHost is-command-palette');
+      const c = document.querySelector<HTMLElement>('#previewHost iswc-command-palette');
       if (!c) return null;
       const t = c.shadowRoot?.querySelector<HTMLElement>('button, [role="button"]');
       if (!t) return null;
@@ -264,7 +264,7 @@ testE2E(
     await page.keyboard.press('Control+K');
     await esperarMs(500);
     const opened = await page.evaluate(() => {
-      const c = document.querySelector<HTMLElement>('#previewHost is-command-palette');
+      const c = document.querySelector<HTMLElement>('#previewHost iswc-command-palette');
       return c?.hasAttribute('open') ?? c?.shadowRoot?.querySelector('[open]') !== null;
     });
     if (!opened) {
@@ -284,7 +284,7 @@ testE2E(
 );
 
 // ──────────────────────────────────────────────────────────────────
-// is-dropdown: Home/End navega al primer/último item (gap vs button-group)
+// iswc-dropdown: Home/End navega al primer/último item (gap vs button-group)
 // ──────────────────────────────────────────────────────────────────
 testE2E(
   'dropdown: Home/End salta al primer/último item del listbox',
@@ -292,12 +292,12 @@ testE2E(
   async (t) => {
     if (!DISPONIBLE) return t.skip('faltan variables E2E');
     const page = pagina();
-    await abrirGaleria(page, 'is-dropdown', { ms: 4000 });
+    await abrirGaleria(page, 'iswc-dropdown', { ms: 4000 });
     // Abrir el primer dropdown del demo.
     const opened = await page.evaluate(() => {
-      const d = document.querySelector<HTMLElement>('#previewHost is-dropdown');
+      const d = document.querySelector<HTMLElement>('#previewHost iswc-dropdown');
       if (!d) return false;
-      const trigger = d.querySelector<HTMLElement>('[slot="trigger"], is-button[slot="trigger"], button');
+      const trigger = d.querySelector<HTMLElement>('[slot="trigger"], iswc-button[slot="trigger"], button');
       (trigger as HTMLElement)?.click?.();
       return true;
     });
@@ -310,8 +310,8 @@ testE2E(
     await page.keyboard.press('End');
     await esperarMs(300);
     const lastActive = await page.evaluate(() => {
-      const d = document.querySelector<HTMLElement>('#previewHost is-dropdown');
-      const items = [...(d?.querySelectorAll<HTMLElement>('is-dropdown-item, [role="menuitem"]') ?? [])];
+      const d = document.querySelector<HTMLElement>('#previewHost iswc-dropdown');
+      const items = [...(d?.querySelectorAll<HTMLElement>('iswc-dropdown-item, [role="menuitem"]') ?? [])];
       return items.length ? items[items.length - 1] === document.activeElement : false;
     });
     assert.ok(lastActive, 'End debe enfocar el último item del dropdown');

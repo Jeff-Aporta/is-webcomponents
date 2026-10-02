@@ -22,19 +22,19 @@ import { svgEl } from '../_shared/svg-chart-engine.js';
 import { svgArrowHead } from '../_shared/diagram-arrow.js';
 
 /**
- * <is-state-diagram> — diagrama de estados en SVG, sin Mermaid.
+ * <iswc-state-diagram> — diagrama de estados en SVG, sin Mermaid.
  *
- * Configuración por JSON, igual que <is-flowchart>:
+ * Configuración por JSON, igual que <iswc-flowchart>:
  *
- *   <is-state-diagram>
+ *   <iswc-state-diagram>
  *     <script type="application/json">
  *       { "stateDiagram": { "direction": "TB", "states": [...], "transitions": [...] } }
  *     </script>
- *   </is-state-diagram>
+ *   </iswc-state-diagram>
  *
  * Atributos: color (inline | viewer), open-on-click
  * Propiedades: payload, spec, layout, turtle, hiddenGroups
- * Eventos: is-render, is-turtle-state, is-open-viewer, is-toggle-group
+ * Eventos: iswc-render, iswc-turtle-state, iswc-open-viewer, iswc-toggle-group
  */
 
 /** Estado del callback `onState` del motor de tortuga (path-turtle). */
@@ -72,7 +72,7 @@ function statePath(kind: string, x: number, y: number, w: number, h: number): st
   return `M${x + r},${y} H${x + w - r} Q${x + w},${y} ${x + w},${y + r} V${y + h - r} Q${x + w},${y + h} ${x + w - r},${y + h} H${x + r} Q${x},${y + h} ${x},${y + h - r} V${y + r} Q${x},${y} ${x + r},${y} Z`;
 }
 
-class IsStateDiagram extends DiagramElementBase {
+class IswcStateDiagram extends DiagramElementBase {
   #theme: DiagramTheme | null = null;
   #turtle: PathTurtle | null = null;
   #hiddenGroups: Set<string> = new Set<string>();
@@ -141,7 +141,7 @@ class IsStateDiagram extends DiagramElementBase {
     const layout: StateLayout = computeStateLayout(visible);
     this.layout = layout;
     this.#buildSvg(layout, theme);
-    this.wrap.classList.toggle('is-viewer', this.isViewer);
+    this.wrap.classList.toggle('iswc-viewer', this.isViewer);
   }
 
   #buildSvg(layout: StateLayout, theme: DiagramTheme): void {
@@ -189,10 +189,10 @@ class IsStateDiagram extends DiagramElementBase {
       viewW: W,
       viewH: H,
       autoLoop: this.isViewer,
-      onState: (state: TurtleState) => emit(this, 'is-turtle-state', state),
+      onState: (state: TurtleState) => emit(this, 'iswc-turtle-state', state),
     });
 
-    emit(this, 'is-render', { layout, svg: this.svg });
+    emit(this, 'iswc-render', { layout, svg: this.svg });
   }
 
   #buildLegend(layout: StateLayout, theme: DiagramTheme): void {
@@ -359,14 +359,14 @@ class IsStateDiagram extends DiagramElementBase {
     if (this.isViewer) {
       const item = e.composedPath().find((x: EventTarget | null) => (x as HTMLElement | undefined)?.dataset?.groupId);
       if (item) {
-        emitCancelable(this, 'is-toggle-group', { id: (item as HTMLElement).dataset.groupId });
+        emitCancelable(this, 'iswc-toggle-group', { id: (item as HTMLElement).dataset.groupId });
       }
       return;
     }
     // El visor es opt-in: sin `open-on-click` el clic no hace nada y tampoco
-    // se anuncia `is-open-viewer`, que prometeria una apertura que no ocurre.
+    // se anuncia `iswc-open-viewer`, que prometeria una apertura que no ocurre.
     if (!this.hasAttribute('open-on-click')) return;
-    const ev = new CustomEvent('is-open-viewer', {
+    const ev = new CustomEvent('iswc-open-viewer', {
       bubbles: true, composed: true, cancelable: true, detail: { payload: this.payload },
     });
     this.dispatchEvent(ev);
@@ -398,13 +398,13 @@ class IsStateDiagram extends DiagramElementBase {
     // Resalta el estado y las transiciones que lo tocan; atenúa el resto.
     for (const [nodeId, node] of this.#nodeNodes) {
       const active = nodeId === id;
-      node.g.classList.toggle('is-active', active);
-      node.g.classList.toggle('is-dim', !!id && !active);
+      node.g.classList.toggle('iswc-active', active);
+      node.g.classList.toggle('iswc-dim', !!id && !active);
     }
     for (const [, edge] of this.#edgeNodes) {
       const touches = !!id && (edge.e.from === id || edge.e.to === id);
-      edge.g.classList.toggle('is-active', touches);
-      edge.g.classList.toggle('is-dim', !!id && !touches);
+      edge.g.classList.toggle('iswc-active', touches);
+      edge.g.classList.toggle('iswc-dim', !!id && !touches);
     }
 
     this.#turtle?.setPaused(!!id);
@@ -431,9 +431,9 @@ class IsStateDiagram extends DiagramElementBase {
   }
 }
 
-defineElement('is-state-diagram', IsStateDiagram, 'IsStateDiagram');
+defineElement('iswc-state-diagram', IswcStateDiagram, 'IswcStateDiagram');
 
-registerDiagramKind('state', 'is-state-diagram');
-registerDiagramKind('stateDiagram', 'is-state-diagram');
+registerDiagramKind('state', 'iswc-state-diagram');
+registerDiagramKind('stateDiagram', 'iswc-state-diagram');
 
-export { IsStateDiagram };
+export { IswcStateDiagram };

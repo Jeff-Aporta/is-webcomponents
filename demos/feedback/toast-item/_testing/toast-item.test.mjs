@@ -1,6 +1,6 @@
-// toast-item.test.mjs — tests exhaustivos del demo is-toast-item.
+// toast-item.test.mjs — tests exhaustivos del demo iswc-toast-item.
 // Cobertura: smoke + funcional (show/hide, duración por defecto, role=status,
-// eventos is-after-show/hide, log payload, slot caption, color inválido
+// eventos iswc-after-show/hide, log payload, slot caption, color inválido
 // cae a neutral).
 import assert from 'node:assert/strict';
 import { BASE_URL, newPage, close, waitReady, screenshot, report } from './lib/harness.mjs';
@@ -16,11 +16,11 @@ tests.push({
     await waitReady(page, 'data-toast-item-ready');
     const data = await page.evaluate(() => {
       return {
-        defined: !!customElements.get('is-toast-item'),
+        defined: !!customElements.get('iswc-toast-item'),
         buttons: document.querySelectorAll('button').length,
       };
     });
-    assert.equal(data.defined, true, 'is-toast-item debe estar definido');
+    assert.equal(data.defined, true, 'iswc-toast-item debe estar definido');
     assert.ok(data.buttons >= 4, `esperaba >=4 botones, hay ${data.buttons}`);
     await screenshot(page, 'toast-item-smoke');
   },
@@ -35,7 +35,7 @@ tests.push({
     await page.click('#btn-success');
     await page.waitForTimeout(200);
     const data = await page.evaluate(() => {
-      const items = document.querySelectorAll('#stage-1 is-toast-item');
+      const items = document.querySelectorAll('#stage-1 iswc-toast-item');
       const first = items[items.length - 1];
       const base = first.shadowRoot.querySelector('.base');
       return {
@@ -59,7 +59,7 @@ tests.push({
     await waitReady(page, 'data-toast-item-ready');
     await page.waitForTimeout(150);
     const color = await page.evaluate(() => {
-      const el = document.createElement('is-toast-item');
+      const el = document.createElement('iswc-toast-item');
       document.body.appendChild(el);
       const c = el.getAttribute('color');
       el.remove();
@@ -76,7 +76,7 @@ tests.push({
     await waitReady(page, 'data-toast-item-ready');
     await page.waitForTimeout(150);
     const data = await page.evaluate(() => {
-      const el = document.createElement('is-toast-item');
+      const el = document.createElement('iswc-toast-item');
       document.body.appendChild(el);
       const d = el.duration;
       el.remove();
@@ -87,18 +87,18 @@ tests.push({
 });
 
 tests.push({
-  name: 'funcional: hide() emite is-after-hide y desaparece',
+  name: 'funcional: hide() emite iswc-after-hide y desaparece',
   run: async (page) => {
     await page.goto(URL, { waitUntil: 'domcontentloaded' });
     await waitReady(page, 'data-toast-item-ready');
     await page.waitForTimeout(150);
     const seen = await page.evaluate(async () => {
-      const el = document.createElement('is-toast-item');
+      const el = document.createElement('iswc-toast-item');
       el.setAttribute('duration', '0'); // persistente, así no se autocierra
       document.body.appendChild(el);
       const events = [];
-      el.addEventListener('is-after-show', () => events.push('show'));
-      el.addEventListener('is-after-hide', () => events.push('hide'));
+      el.addEventListener('iswc-after-show', () => events.push('show'));
+      el.addEventListener('iswc-after-hide', () => events.push('hide'));
       el.show();
       await new Promise((r) => requestAnimationFrame(() => r()));
       el.hide();
@@ -106,26 +106,26 @@ tests.push({
       el.remove();
       return events;
     });
-    assert.ok(seen.includes('show'), `esperaba is-after-show, vi ${JSON.stringify(seen)}`);
-    assert.ok(seen.includes('hide'), `esperaba is-after-hide, vi ${JSON.stringify(seen)}`);
+    assert.ok(seen.includes('show'), `esperaba iswc-after-show, vi ${JSON.stringify(seen)}`);
+    assert.ok(seen.includes('hide'), `esperaba iswc-after-hide, vi ${JSON.stringify(seen)}`);
   },
 });
 
 tests.push({
-  name: 'funcional: is-after-show lleva payload con message/color/log',
+  name: 'funcional: iswc-after-show lleva payload con message/color/log',
   run: async (page) => {
     await page.goto(URL, { waitUntil: 'domcontentloaded' });
     await waitReady(page, 'data-toast-item-ready');
     await page.waitForTimeout(150);
     const detail = await page.evaluate(async () => {
-      const el = document.createElement('is-toast-item');
+      const el = document.createElement('iswc-toast-item');
       el.setAttribute('duration', '0');
       el.color = 'success';
       el.textContent = 'Mensaje de prueba';
       el.log = { foo: 1 };
       document.body.appendChild(el);
       let captured = null;
-      el.addEventListener('is-after-show', (e) => { captured = e.detail; });
+      el.addEventListener('iswc-after-show', (e) => { captured = e.detail; });
       el.show();
       await new Promise((r) => requestAnimationFrame(() => r()));
       el.remove();
@@ -147,7 +147,7 @@ tests.push({
     await page.click('#btn-caption');
     await page.waitForTimeout(200);
     const caption = await page.evaluate(() => {
-      const items = document.querySelectorAll('#stage-2 is-toast-item');
+      const items = document.querySelectorAll('#stage-2 iswc-toast-item');
       return items.length > 0;
     });
     assert.ok(caption, 'caption debe haberse agregado');
@@ -160,7 +160,7 @@ tests.push({
     await page.goto(URL, { waitUntil: 'domcontentloaded' });
     await waitReady(page, 'data-toast-item-ready');
     const color = await page.evaluate(() => {
-      const el = document.createElement('is-toast-item');
+      const el = document.createElement('iswc-toast-item');
       el.setAttribute('color', 'no-color');
       document.body.appendChild(el);
       const c = el.color;

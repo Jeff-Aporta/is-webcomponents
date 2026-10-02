@@ -13,13 +13,13 @@ tests.push({
     await waitReady(page, 'data-marks-funnel-ready');
     const info = await page.evaluate(async () => {
       const lib = await import('/dist/cdn/charts/marks-funnel.min.js');
-      const fc = document.querySelector('is-funnel-chart');
+      const fc = document.querySelector('iswc-funnel-chart');
       return {
         exports: Object.keys(lib).sort(),
         hasFunnelBands: typeof lib.funnelBands === 'function',
         hasDrawFunnelMarks: typeof lib.drawFunnelMarks === 'function',
         bands: lib.funnelBands([4200, 1800, 640, 210]),
-        funnelChartDefined: !!customElements.get('is-funnel-chart'),
+        funnelChartDefined: !!customElements.get('iswc-funnel-chart'),
         funnelChartSvg: !!fc?.shadowRoot?.querySelector('svg'),
         funnelChartMarks: fc?.shadowRoot?.querySelectorAll('.mark').length || 0,
       };
@@ -31,7 +31,7 @@ tests.push({
     assert.equal(info.bands[0].ratio, 1, 'primer ratio es 1 (referencia)');
     assert.equal(info.bands[0].dropPct, 100, 'dropPct inicial = 100');
     assert.equal(info.funnelChartDefined, true);
-    assert.ok(info.funnelChartMarks > 0, 'is-funnel-chart debe renderizar marcas');
+    assert.ok(info.funnelChartMarks > 0, 'iswc-funnel-chart debe renderizar marcas');
     await screenshot(page, 'marks-funnel-smoke');
   },
 });

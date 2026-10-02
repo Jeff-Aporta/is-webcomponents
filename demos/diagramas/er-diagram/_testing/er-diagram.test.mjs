@@ -9,21 +9,21 @@ const URL = `${BASE_URL}/demos/diagramas/er-diagram/er-diagram.html`;
 const tests = [];
 
 tests.push({
-  name: 'smoke: <is-er-diagram> monta y renderiza entidades y aristas',
+  name: 'smoke: <iswc-er-diagram> monta y renderiza entidades y aristas',
   run: async (page) => {
     await page.goto(URL, { waitUntil: 'domcontentloaded' });
     await waitReady(page, 'data-er-diagram-ready');
     const info = await page.evaluate(() => {
-      const el = document.querySelector('main is-er-diagram');
+      const el = document.querySelector('main iswc-er-diagram');
       const shadow = el?.shadowRoot;
       return {
-        defined: !!customElements.get('is-er-diagram'),
+        defined: !!customElements.get('iswc-er-diagram'),
         entities: shadow?.querySelectorAll('.er-entity').length ?? 0,
         relations: shadow?.querySelectorAll('.er-rel').length ?? 0,
         hasSvg: !!shadow?.querySelector('svg.er-svg'),
       };
     });
-    assert.equal(info.defined, true, 'is-er-diagram debe estar definido');
+    assert.equal(info.defined, true, 'iswc-er-diagram debe estar definido');
     assert.ok(info.entities >= 3, `esperaba >=3 entidades, hay ${info.entities}`);
     assert.ok(info.relations >= 2, `esperaba >=2 relaciones, hay ${info.relations}`);
     assert.equal(info.hasSvg, true, 'debe existir <svg class="er-svg">');
@@ -37,7 +37,7 @@ tests.push({
     await page.goto(URL, { waitUntil: 'domcontentloaded' });
     await waitReady(page, 'data-er-diagram-ready');
     const ids = await page.evaluate(() => {
-      const el = document.querySelector('main is-er-diagram');
+      const el = document.querySelector('main iswc-er-diagram');
       return [...el.shadowRoot.querySelectorAll('.er-entity')].map((g) => g.dataset.entityId);
     });
     assert.ok(ids.includes('user'), 'debe haber una entidad "user"');
@@ -52,7 +52,7 @@ tests.push({
     await page.goto(URL, { waitUntil: 'domcontentloaded' });
     await waitReady(page, 'data-er-diagram-ready');
     const has = await page.evaluate(() => {
-      const el = document.querySelector('main is-er-diagram');
+      const el = document.querySelector('main iswc-er-diagram');
       const style = el.shadowRoot.querySelector('svg > style[data-iswc-anim]');
       return !!style && /iswc-dash-march/.test(style.textContent);
     });
@@ -66,7 +66,7 @@ tests.push({
     await page.goto(URL, { waitUntil: 'domcontentloaded' });
     await waitReady(page, 'data-er-diagram-ready');
     const has = await page.evaluate(() => {
-      const el = document.querySelector('main is-er-diagram');
+      const el = document.querySelector('main iswc-er-diagram');
       return !!el.shadowRoot.querySelector('.er-rel path.iswc-anim-edge-dashed');
     });
     assert.ok(has, 'debe haber al menos una arista dashed con clase de animación');
@@ -79,16 +79,16 @@ tests.push({
     await page.goto(URL, { waitUntil: 'domcontentloaded' });
     await waitReady(page, 'data-er-diagram-ready');
     const before = await page.evaluate(() => {
-      const el = document.querySelector('main is-er-diagram');
+      const el = document.querySelector('main iswc-er-diagram');
       return el.shadowRoot.querySelector('svg.er-svg').getAttribute('viewBox');
     });
     await page.evaluate(() => {
-      const el = document.querySelector('main is-er-diagram');
+      const el = document.querySelector('main iswc-er-diagram');
       el.payload = el.payload;
     });
     await page.waitForTimeout(150);
     const after = await page.evaluate(() => {
-      const el = document.querySelector('main is-er-diagram');
+      const el = document.querySelector('main iswc-er-diagram');
       return el.shadowRoot.querySelector('svg.er-svg').getAttribute('viewBox');
     });
     assert.equal(before, after, 'viewBox idéntico tras re-asignar payload');
@@ -102,7 +102,7 @@ tests.push({
     await page.goto(URL, { waitUntil: 'domcontentloaded' });
     await waitReady(page, 'data-er-diagram-ready');
     const ok = await page.evaluate(() => {
-      const el = document.querySelector('main is-er-diagram');
+      const el = document.querySelector('main iswc-er-diagram');
       const style = el.shadowRoot.querySelector('svg > style[data-iswc-anim]');
       return style && /animation: none !important/.test(style.textContent);
     });
@@ -116,7 +116,7 @@ tests.push({
     await page.goto(URL, { waitUntil: 'domcontentloaded' });
     await waitReady(page, 'data-er-diagram-ready');
     const meta = await page.evaluate(() => {
-      const el = document.querySelector('main is-er-diagram');
+      const el = document.querySelector('main iswc-er-diagram');
       const svg = el.shadowRoot.querySelector('svg.er-svg');
       return { aria: svg.getAttribute('aria-label'), role: svg.getAttribute('role') };
     });

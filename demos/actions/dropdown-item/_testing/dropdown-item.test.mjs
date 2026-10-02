@@ -9,11 +9,11 @@ let browser;
 test.before(async () => { browser = await chromium.launch(); });
 test.after(async () => { await browser?.close(); });
 
-test('dropdown-item: bundle registra <is-dropdown-item>', async () => {
+test('dropdown-item: bundle registra <iswc-dropdown-item>', async () => {
   const page = await browser.newPage();
   await page.goto(URL_DEMO, { waitUntil: 'domcontentloaded' });
-  await page.waitForSelector('is-dropdown-item:defined');
-  const defined = await page.evaluate(() => !!customElements.get('is-dropdown-item'));
+  await page.waitForSelector('iswc-dropdown-item:defined');
+  const defined = await page.evaluate(() => !!customElements.get('iswc-dropdown-item'));
   assert.equal(defined, true);
   await page.close();
 });
@@ -21,7 +21,7 @@ test('dropdown-item: bundle registra <is-dropdown-item>', async () => {
 test('dropdown-item: type=checkbox pinta el checkmark y pone aria-checked', async () => {
   const page = await browser.newPage();
   await page.goto(URL_DEMO, { waitUntil: 'domcontentloaded' });
-  await page.waitForSelector('is-dropdown-item:defined');
+  await page.waitForSelector('iswc-dropdown-item:defined');
   const info = await page.evaluate(() => {
     const c1 = document.getElementById('c1');
     return {
@@ -43,7 +43,7 @@ test('dropdown-item: type=checkbox pinta el checkmark y pone aria-checked', asyn
 test('dropdown-item: click en checkbox togglea checked', async () => {
   const page = await browser.newPage();
   await page.goto(URL_DEMO, { waitUntil: 'domcontentloaded' });
-  await page.waitForSelector('is-dropdown-item:defined');
+  await page.waitForSelector('iswc-dropdown-item:defined');
   await page.evaluate(() => {
     document.getElementById('c2').click();
   });
@@ -57,13 +57,13 @@ test('dropdown-item: click en checkbox togglea checked', async () => {
   await page.close();
 });
 
-test('dropdown-item: item normal emite is-dropdown-item-select al click', async () => {
+test('dropdown-item: item normal emite iswc-dropdown-item-select al click', async () => {
   const page = await browser.newPage();
   await page.goto(URL_DEMO, { waitUntil: 'domcontentloaded' });
-  await page.waitForSelector('is-dropdown-item:defined');
+  await page.waitForSelector('iswc-dropdown-item:defined');
   await page.evaluate(() => {
     window.__diSel = null;
-    document.getElementById('i1').addEventListener('is-dropdown-item-select', (e) => {
+    document.getElementById('i1').addEventListener('iswc-dropdown-item-select', (e) => {
       window.__diSel = { value: e.detail.item.value };
     });
   });
@@ -77,7 +77,7 @@ test('dropdown-item: item normal emite is-dropdown-item-select al click', async 
 test('dropdown-item: color=danger aplica clase danger al .item', async () => {
   const page = await browser.newPage();
   await page.goto(URL_DEMO, { waitUntil: 'domcontentloaded' });
-  await page.waitForSelector('is-dropdown-item:defined');
+  await page.waitForSelector('iswc-dropdown-item:defined');
   const info = await page.evaluate(() => {
     const it = document.getElementById('i3');
     return { color: it.color, dangerClass: it.shadowRoot.querySelector('.item').classList.contains('danger') };
@@ -90,7 +90,7 @@ test('dropdown-item: color=danger aplica clase danger al .item', async () => {
 test('dropdown-item: item con submenú tiene aria-haspopup=menu', async () => {
   const page = await browser.newPage();
   await page.goto(URL_DEMO, { waitUntil: 'domcontentloaded' });
-  await page.waitForSelector('is-dropdown-item:defined');
+  await page.waitForSelector('iswc-dropdown-item:defined');
   const info = await page.evaluate(() => {
     const it = document.getElementById('sub1');
     return {
@@ -108,7 +108,7 @@ test('dropdown-item: item con submenú tiene aria-haspopup=menu', async () => {
 test('dropdown-item: openSubmenu() muestra el submenú y closeSubmenu() lo oculta', async () => {
   const page = await browser.newPage();
   await page.goto(URL_DEMO, { waitUntil: 'domcontentloaded' });
-  await page.waitForSelector('is-dropdown-item:defined');
+  await page.waitForSelector('iswc-dropdown-item:defined');
   await page.evaluate(() => {
     document.getElementById('sub1').openSubmenu();
   });

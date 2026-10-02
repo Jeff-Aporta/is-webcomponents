@@ -1,5 +1,5 @@
 /**
- * Playground <is-modal-verificacion>: mock controller + botón Verificar.
+ * Playground <iswc-modal-verificacion>: mock controller + botón Verificar.
  */
 import type { PreviewMountContext, ISComponentPreviewLike } from '../../previews/_kit/types.d.ts';
 

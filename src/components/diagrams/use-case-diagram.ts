@@ -20,20 +20,20 @@ import { svgEl } from '../_shared/svg-chart-engine.js';
 import { svgArrowHead } from '../_shared/diagram-arrow.js';
 
 /**
- * <is-use-case-diagram> — diagrama de casos de uso UML en SVG, sin Mermaid.
+ * <iswc-use-case-diagram> — diagrama de casos de uso UML en SVG, sin Mermaid.
  *
- *   <is-use-case-diagram>
+ *   <iswc-use-case-diagram>
  *     <script type="application/json">
  *       { "useCase": { "system": { "name": "Portal" }, "actors": [...], "cases": [...], "links": [...] } }
  *     </script>
- *   </is-use-case-diagram>
+ *   </iswc-use-case-diagram>
  *
- * Mismo esqueleto que <is-flowchart>: shadow DOM, slot JSON + MutationObserver,
+ * Mismo esqueleto que <iswc-flowchart>: shadow DOM, slot JSON + MutationObserver,
  * tema por atributo `data-theme`, `color` (inline | viewer), lightbox propio.
  *
  * Atributos: color (inline | viewer), open-on-click
  * Propiedades: payload, spec, layout, hiddenGroups
- * Eventos: is-render, is-open-viewer, is-toggle-group
+ * Eventos: iswc-render, iswc-open-viewer, iswc-toggle-group
  */
 
 /** Nodo (caso o actor) cacheado en el SVG para aplicar hover sin reconstruir. */
@@ -97,7 +97,7 @@ function generalizationHead(
   });
 }
 
-class IsUseCaseDiagram extends DiagramElementBase {
+class IswcUseCaseDiagram extends DiagramElementBase {
   #hiddenGroups: Set<string> = new Set<string>();
   #nodeNodes: Map<string, NodeNodeEntry> = new Map();
   #linkNodes: Map<string, LinkNodeEntry> = new Map();
@@ -159,7 +159,7 @@ class IsUseCaseDiagram extends DiagramElementBase {
     const layout: UseCaseLayout = computeUseCaseLayout(visible);
     this.layout = layout;
     this.#buildSvg(layout, theme);
-    this.wrap.classList.toggle('is-viewer', this.isViewer);
+    this.wrap.classList.toggle('iswc-viewer', this.isViewer);
   }
 
   #buildSvg(layout: UseCaseLayout, theme: DiagramTheme): void {
@@ -196,7 +196,7 @@ class IsUseCaseDiagram extends DiagramElementBase {
     this.#buildCases(layout, theme);
     this.#buildActors(layout, theme);
 
-    emit(this, 'is-render', { layout, svg: this.svg });
+    emit(this, 'iswc-render', { layout, svg: this.svg });
   }
 
   #buildSystem(layout: UseCaseLayout, _theme: DiagramTheme): void {
@@ -378,13 +378,13 @@ class IsUseCaseDiagram extends DiagramElementBase {
   #onClick = (e: PointerEvent): void => {
     if (this.isViewer) {
       const item = e.composedPath().find((x: EventTarget | null) => (x as HTMLElement | undefined)?.dataset?.groupId);
-      if (item) emitCancelable(this, 'is-toggle-group', { id: (item as HTMLElement).dataset.groupId });
+      if (item) emitCancelable(this, 'iswc-toggle-group', { id: (item as HTMLElement).dataset.groupId });
       return;
     }
     // El visor es opt-in: sin `open-on-click` el clic no hace nada y tampoco
-    // se anuncia `is-open-viewer`, que prometeria una apertura que no ocurre.
+    // se anuncia `iswc-open-viewer`, que prometeria una apertura que no ocurre.
     if (!this.hasAttribute('open-on-click')) return;
-    const ev = new CustomEvent('is-open-viewer', {
+    const ev = new CustomEvent('iswc-open-viewer', {
       bubbles: true, composed: true, cancelable: true, detail: { payload: this.payload },
     });
     this.dispatchEvent(ev);
@@ -415,13 +415,13 @@ class IsUseCaseDiagram extends DiagramElementBase {
 
     for (const [nodeId, node] of this.#nodeNodes) {
       const active = nodeId === id;
-      node.g.classList.toggle('is-active', active);
-      node.g.classList.toggle('is-dim', !!id && !active);
+      node.g.classList.toggle('iswc-active', active);
+      node.g.classList.toggle('iswc-dim', !!id && !active);
     }
     for (const [, link] of this.#linkNodes) {
       const touches = !!id && (link.l.from === id || link.l.to === id);
-      link.g.classList.toggle('is-active', touches);
-      link.g.classList.toggle('is-dim', !!id && !touches);
+      link.g.classList.toggle('iswc-active', touches);
+      link.g.classList.toggle('iswc-dim', !!id && !touches);
     }
 
     if (!entry) {
@@ -444,9 +444,9 @@ class IsUseCaseDiagram extends DiagramElementBase {
   }
 }
 
-defineElement('is-use-case-diagram', IsUseCaseDiagram, 'IsUseCaseDiagram');
+defineElement('iswc-use-case-diagram', IswcUseCaseDiagram, 'IswcUseCaseDiagram');
 
-registerDiagramKind('useCase', 'is-use-case-diagram');
-registerDiagramKind('usecase', 'is-use-case-diagram');
+registerDiagramKind('useCase', 'iswc-use-case-diagram');
+registerDiagramKind('usecase', 'iswc-use-case-diagram');
 
-export { IsUseCaseDiagram };
+export { IswcUseCaseDiagram };

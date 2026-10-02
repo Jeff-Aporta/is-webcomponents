@@ -1,8 +1,8 @@
 @import url('../_shared/popover-panel.css');
 
 :host {
-  /* inline-flex + indent: participa en <is-button-group> joined como un
-     is-button (el trigger hereda --_button-* / --iswc-button-border-radius). */
+  /* inline-flex + indent: participa en <iswc-button-group> joined como un
+     iswc-button (el trigger hereda --_button-* / --iswc-button-border-radius). */
   display: inline-flex;
   vertical-align: middle;
   align-items: center;
@@ -12,10 +12,8 @@
   margin-block-start: var(--_button-vertical-indent, 0px);
   --iswc-dropdown-show-duration: 120ms;
   --iswc-dropdown-hide-duration: 100ms;
-}
 
-:host([hidden]) {
-  display: none !important;
+  &[hidden] { display: none !important; }
 }
 
 .trigger-wrap {
@@ -38,10 +36,8 @@
   background: transparent;
   overflow: visible;
   outline: none;
-}
 
-.popup::backdrop {
-  background: transparent;
+  &::backdrop { background: transparent; }
 }
 
 .menu {
@@ -58,25 +54,20 @@
   border: 1px solid var(--iswc-border, #2a3038);
   box-shadow: var(--iswc-popover-shadow, var(--iswc-shadow, 0 8px 24px rgb(0 0 0 / 30%)));
   box-sizing: border-box;
-}
 
-.menu ::slotted(h1),
-.menu ::slotted(h2),
-.menu ::slotted(h3),
-.menu ::slotted(h4),
-.menu ::slotted(h5),
-.menu ::slotted(h6) {
-  margin: 0.5em 0.75em 0.25em;
-  font-size: 0.75em;
-  font-weight: 650;
-  color: var(--iswc-text-soft, #a8b0bb);
-  text-transform: uppercase;
-  letter-spacing: 0.04em;
-}
+  ::slotted(:is(h1, h2, h3, h4, h5, h6)) {
+    margin: 0.5em 0.75em 0.25em;
+    font-size: 0.75em;
+    font-weight: 650;
+    color: var(--iswc-text-soft, #a8b0bb);
+    text-transform: uppercase;
+    letter-spacing: 0.04em;
+  }
 
-/* is-divider horizontal ya es width:100%, así que un margin lateral lo saca del
- * content box y, con overflow:auto, aparece scroll horizontal. Solo margin-block:
- * el divider queda alineado con el borde de los items. */
-.menu ::slotted(is-divider) {
-  margin: 0.35em 0;
+  /* iswc-divider horizontal ya es width:100%, así que un margin lateral lo saca del
+   * content box y, con overflow:auto, aparece scroll horizontal. Solo margin-block:
+   * el divider queda alineado con el borde de los items. */
+  ::slotted(iswc-divider) {
+    margin: 0.35em 0;
+  }
 }

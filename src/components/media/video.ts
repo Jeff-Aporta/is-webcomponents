@@ -7,7 +7,7 @@ import './icon.js';
 import { setStringAttr } from '../_shared/reflect.js';
 
 /**
- * <is-video> — Web Component (vanilla).
+ * <iswc-video> — Web Component (vanilla).
  *
  * Reproductor con chrome tipo YouTube: barra de progreso propia (con buffer y
  * scrubber) sobre la fila de botones, scrim inferior, overlay de play central,
@@ -23,7 +23,7 @@ import { setStringAttr } from '../_shared/reflect.js';
  *
  * Métodos: play(), pause(), toggleFullscreen(), togglePictureInPicture()
  *
- * Eventos (bubbles, composed): is-play, is-pause, is-ended, is-error { code, message }
+ * Eventos (bubbles, composed): iswc-play, iswc-pause, iswc-ended, iswc-error { code, message }
  * También reenvía play/pause/ended nativos (bubbles, composed)
  *
  * Estados accesibles:
@@ -43,8 +43,8 @@ import { setStringAttr } from '../_shared/reflect.js';
  *            ::part(fullscreen-button) ::part(pip-button) ::part(settings-button)
  */
 
-// Tipo del botón `is-check-icon-button` para acceder a `checked`/`icon`.
-interface IsCheckIconButton extends HTMLElement {
+// Tipo del botón `iswc-check-icon-button` para acceder a `checked`/`icon`.
+interface IswcCheckIconButton extends HTMLElement {
   checked: boolean;
   icon: string;
 }
@@ -56,9 +56,9 @@ interface IsCheckIconButton extends HTMLElement {
       <video part="video" class="video" playsinline></video>
       <slot></slot>
       <div class="scrim" aria-hidden="true"></div>
-      <is-button part="big-play" class="big-play" variant="text" color="neutral" aria-label="Reproducir">
-        <is-icon icon="mdi:play" aria-hidden="true"></is-icon>
-      </is-button>
+      <iswc-button part="big-play" class="big-play" variant="text" color="neutral" aria-label="Reproducir">
+        <iswc-icon icon="mdi:play" aria-hidden="true"></iswc-icon>
+      </iswc-button>
       <div part="controls" class="controls" hidden>
         <div part="progress" class="progress">
           <input part="seek" class="seek" type="range" min="0" max="1000" value="0" step="1" aria-label="Posición" />
@@ -70,7 +70,7 @@ interface IsCheckIconButton extends HTMLElement {
           <span class="tip" aria-hidden="true">0:00</span>
         </div>
         <div class="row">
-          <is-check-icon-button
+          <iswc-check-icon-button
             part="play-button"
             class="ctrl play"
             variant="plain"
@@ -78,9 +78,9 @@ interface IsCheckIconButton extends HTMLElement {
             checked-icon="mdi:pause"
             label="Reproducir"
             checked-label="Pausar"
-          ></is-check-icon-button>
+          ></iswc-check-icon-button>
           <div part="volume" class="vol">
-            <is-check-icon-button
+            <iswc-check-icon-button
               part="mute-button"
               class="ctrl mute"
               variant="plain"
@@ -88,7 +88,7 @@ interface IsCheckIconButton extends HTMLElement {
               checked-icon="mdi:volume-off"
               label="Silenciar"
               checked-label="Activar sonido"
-            ></is-check-icon-button>
+            ></iswc-check-icon-button>
             <input
               part="volume-slider"
               class="volume"
@@ -104,15 +104,15 @@ interface IsCheckIconButton extends HTMLElement {
           </span>
           <span class="spacer"></span>
           <div class="settings">
-            <is-button part="settings-button" class="iconbtn speed" variant="text" color="neutral"
+            <iswc-button part="settings-button" class="iconbtn speed" variant="text" color="neutral"
                     aria-label="Velocidad de reproducción" aria-haspopup="true" aria-expanded="false">
-              <is-icon icon="mdi:cog-outline" aria-hidden="true"></is-icon>
-            </is-button>
+              <iswc-icon icon="mdi:cog-outline" aria-hidden="true"></iswc-icon>
+            </iswc-button>
             <ul class="menu" role="menu" hidden>
               <li class="menu__head" role="presentation">Velocidad</li>
             </ul>
           </div>
-          <is-check-icon-button
+          <iswc-check-icon-button
             part="pip-button"
             class="ctrl pip"
             variant="plain"
@@ -121,8 +121,8 @@ interface IsCheckIconButton extends HTMLElement {
             label="Picture in picture"
             checked-label="Salir de picture in picture"
             hidden
-          ></is-check-icon-button>
-          <is-check-icon-button
+          ></iswc-check-icon-button>
+          <iswc-check-icon-button
             part="fullscreen-button"
             class="ctrl fs"
             variant="plain"
@@ -130,7 +130,7 @@ interface IsCheckIconButton extends HTMLElement {
             checked-icon="mdi:fullscreen-exit"
             label="Pantalla completa"
             checked-label="Salir de pantalla completa"
-          ></is-check-icon-button>
+          ></iswc-check-icon-button>
         </div>
       </div>
     </div>
@@ -149,7 +149,7 @@ interface IsCheckIconButton extends HTMLElement {
     return h > 0 ? `${h}:${pad(m)}:${pad(s)}` : `${m}:${pad(s)}`;
   }
 
-  class IsVideo extends withStyleAttrs(HTMLElement) {
+  class IswcVideo extends withStyleAttrs(HTMLElement) {
     /** Personalización por atributo (ver `core/attrs.ts`). */
     static styleAttrs = {
     accent: { prop: '--iswc-video-accent', onlyColorValues: true },
@@ -159,8 +159,8 @@ interface IsCheckIconButton extends HTMLElement {
 
     #video!: HTMLVideoElement;
     #controls!: HTMLElement;
-    #playBtn!: IsCheckIconButton;
-    #muteBtn!: IsCheckIconButton;
+    #playBtn!: IswcCheckIconButton;
+    #muteBtn!: IswcCheckIconButton;
     #volume!: HTMLInputElement;
     #seek!: HTMLInputElement;
     #time!: HTMLElement;
@@ -170,8 +170,8 @@ interface IsCheckIconButton extends HTMLElement {
     #tip!: HTMLElement;
     #cur!: HTMLElement;
     #dur!: HTMLElement;
-    #fsBtn!: IsCheckIconButton;
-    #pipBtn!: IsCheckIconButton;
+    #fsBtn!: IswcCheckIconButton;
+    #pipBtn!: IswcCheckIconButton;
     #speedBtn!: HTMLElement;
     #menu!: HTMLElement;
     #mounted = false;
@@ -187,8 +187,8 @@ interface IsCheckIconButton extends HTMLElement {
 
       this.#video = shadow.querySelector<HTMLVideoElement>('.video')!;
       this.#controls = shadow.querySelector<HTMLElement>('.controls')!;
-      this.#playBtn = shadow.querySelector<HTMLElement>('.play') as IsCheckIconButton;
-      this.#muteBtn = shadow.querySelector<HTMLElement>('.mute') as IsCheckIconButton;
+      this.#playBtn = shadow.querySelector<HTMLElement>('.play') as IswcCheckIconButton;
+      this.#muteBtn = shadow.querySelector<HTMLElement>('.mute') as IswcCheckIconButton;
       this.#volume = shadow.querySelector<HTMLInputElement>('.volume')!;
       this.#seek = shadow.querySelector<HTMLInputElement>('.seek')!;
       this.#time = shadow.querySelector<HTMLElement>('.time')!;
@@ -198,14 +198,14 @@ interface IsCheckIconButton extends HTMLElement {
       this.#tip = shadow.querySelector<HTMLElement>('.tip')!;
       this.#cur = shadow.querySelector<HTMLElement>('.cur')!;
       this.#dur = shadow.querySelector<HTMLElement>('.dur')!;
-      this.#fsBtn = shadow.querySelector<HTMLElement>('.fs') as IsCheckIconButton;
-      this.#pipBtn = shadow.querySelector<HTMLElement>('.pip') as IsCheckIconButton;
+      this.#fsBtn = shadow.querySelector<HTMLElement>('.fs') as IswcCheckIconButton;
+      this.#pipBtn = shadow.querySelector<HTMLElement>('.pip') as IswcCheckIconButton;
       this.#speedBtn = shadow.querySelector<HTMLElement>('.speed')!;
       this.#menu = shadow.querySelector<HTMLElement>('.menu')!;
 
       this.#buildSpeedMenu();
 
-      this.#playBtn.addEventListener('is-change', (e: Event) => {
+      this.#playBtn.addEventListener('iswc-change', (e: Event) => {
         const ev = e as CustomEvent<{ checked: boolean }>;
         if (ev.detail.checked) {
           const p = this.play();
@@ -216,7 +216,7 @@ interface IsCheckIconButton extends HTMLElement {
           this.pause();
         }
       });
-      this.#muteBtn.addEventListener('is-change', (e: Event) => {
+      this.#muteBtn.addEventListener('iswc-change', (e: Event) => {
         const ev = e as CustomEvent<{ checked: boolean }>;
         if (ev.detail.checked) {
           if (this.#video.volume > 0) this.#lastVolume = this.#video.volume;
@@ -269,8 +269,8 @@ interface IsCheckIconButton extends HTMLElement {
 
       // `checked` es optimista: fullscreenchange / enter-leavepictureinpicture
       // lo corrigen si el navegador rechaza el gesto.
-      this.#fsBtn.addEventListener('is-change', () => this.toggleFullscreen());
-      this.#pipBtn.addEventListener('is-change', () => this.togglePictureInPicture());
+      this.#fsBtn.addEventListener('iswc-change', () => this.toggleFullscreen());
+      this.#pipBtn.addEventListener('iswc-change', () => this.togglePictureInPicture());
       this.#speedBtn.addEventListener('click', () => this.#toggleMenu());
       this.addEventListener('keydown', this.#onKeydown);
 
@@ -293,7 +293,7 @@ interface IsCheckIconButton extends HTMLElement {
       this.#video.addEventListener('enterpictureinpicture', this.#syncPipUi);
       this.#video.addEventListener('leavepictureinpicture', this.#syncPipUi);
       // F0.3 g12 [media/error-state]: surfacing `MediaError` as ARIA-busy +
-      // evento is-error. Antes el fallo era silencioso y el chrome seguía
+      // evento iswc-error. Antes el fallo era silencioso y el chrome seguía
       // mostrando play sobre un vídeo que nunca iba a cargar.
       this.#video.addEventListener('error', this.#onMediaError);
       // [media/loading]: aria-busy mientras no hay metadatos suficientes.
@@ -495,11 +495,11 @@ interface IsCheckIconButton extends HTMLElement {
         btn.setAttribute('aria-checked', String(Number(btn.dataset.rate) === rate));
       }
       // Señal visible de que no va a velocidad normal.
-      this.#speedBtn.querySelector<HTMLElement>('is-icon')
+      this.#speedBtn.querySelector<HTMLElement>('iswc-icon')
         ?.setAttribute('icon', rate === 1 ? 'mdi:cog-outline' : 'mdi:play-speed');
     }
 
-    // is-check-icon-button ya intercambia icono y aria-label según `checked`.
+    // iswc-check-icon-button ya intercambia icono y aria-label según `checked`.
     #syncPipUi = (): void => {
       this.#pipBtn.checked = document.pictureInPictureElement === this.#video;
     };
@@ -593,7 +593,7 @@ interface IsCheckIconButton extends HTMLElement {
       this.setAttribute('data-playing', '');
       this.#wake();
       this.dispatchEvent(new Event('play', { bubbles: true, composed: true }));
-      emit(this, 'is-play');
+      emit(this, 'iswc-play');
     };
 
     #onPause = (): void => {
@@ -603,19 +603,19 @@ interface IsCheckIconButton extends HTMLElement {
       this.removeAttribute('data-idle');
       if (this.#idleTimer !== null) clearTimeout(this.#idleTimer);
       this.dispatchEvent(new Event('pause', { bubbles: true, composed: true }));
-      emit(this, 'is-pause');
+      emit(this, 'iswc-pause');
     };
 
     #onEnded = (): void => {
       this.removeAttribute('data-playing');
       this.removeAttribute('data-idle');
       this.dispatchEvent(new Event('ended', { bubbles: true, composed: true }));
-      emit(this, 'is-ended');
+      emit(this, 'iswc-ended');
     };
 
     /**
      * F0.3 g12 [media/error-state]: un <video> con src inválido o códec no
-     * soportado dispara `error`. Lo exponemos como `is-error` con código y
+     * soportado dispara `error`. Lo exponemos como `iswc-error` con código y
      * marcamos `data-error` para que el CSS muestre un overlay accesible
      * (en lugar del play silencioso sobre un vídeo muerto). `aria-busy=false`
      * para no engañar al lector.
@@ -633,7 +633,7 @@ interface IsCheckIconButton extends HTMLElement {
       this.setAttribute('data-error', msg);
       this.setAttribute('aria-busy', 'false');
       this.removeAttribute('aria-busy');
-      emit(this, 'is-error', { code, message: msg });
+      emit(this, 'iswc-error', { code, message: msg });
     };
 
     /**
@@ -671,5 +671,5 @@ interface IsCheckIconButton extends HTMLElement {
     };
   }
 
-  defineElement('is-video', IsVideo, 'IsVideo');
+  defineElement('iswc-video', IswcVideo, 'IswcVideo');
 })();

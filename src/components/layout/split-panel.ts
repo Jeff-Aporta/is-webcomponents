@@ -5,7 +5,7 @@ import { getComponentPrefs, setComponentPrefs } from '../_shared/prefs.js';
 import { clampTo } from '../_shared/misc-utils.js';
 
 /**
- * <is-split-panel> — Web Component (vanilla, zero dependencies).
+ * <iswc-split-panel> — Web Component (vanilla, zero dependencies).
  *
  * Dos paneles adyacentes
  * separados por un divisor arrastrable. Usa Shadow DOM con CSS propio,
@@ -20,7 +20,7 @@ import { clampTo } from '../_shared/misc-utils.js';
  *                       y su divisor; el otro se queda con todo el espacio. No
  *                       toca la posición persistida: al quitarlo vuelve el
  *                       tamaño anterior. Pensado para layouts responsive que
- *                       mudan ese contenido a un <is-drawer>.
+ *                       mudan ese contenido a un <iswc-drawer>.
  *   disabled            boolean  (reflect)
  *   snap                string  (espacio-sep "100px 50%")
  *   snap-threshold      number  (default 12)  — px ventana de snap
@@ -69,7 +69,7 @@ import { clampTo } from '../_shared/misc-utils.js';
   const VALID_SIDE: string[] = ['start', 'end'];
 
 
-  class IsSplitPanel extends withStyleAttrs(HTMLElement) {
+  class IswcSplitPanel extends withStyleAttrs(HTMLElement) {
     /** Personalización por atributo (ver `core/attrs.ts`). */
     static styleAttrs = {
     'min-size': '--iswc-split-panel-min',
@@ -196,14 +196,14 @@ import { clampTo } from '../_shared/misc-utils.js';
     _restorePrefs(): void {
       const key = this.storageKey;
       if (!key) return;
-      let saved: { positionInPixels?: number; position?: number } | null = getComponentPrefs('is-split-panel', key) as { positionInPixels?: number; position?: number } | null;
+      let saved: { positionInPixels?: number; position?: number } | null = getComponentPrefs('iswc-split-panel', key) as { positionInPixels?: number; position?: number } | null;
       // migra legacy de la galería
       if (!saved && key === 'gallery-nav') {
-        const legacy = localStorage.getItem('is-split-nav-pos');
+        const legacy = localStorage.getItem('iswc-split-nav-pos');
         if (legacy && !Number.isNaN(+legacy)) {
           saved = { positionInPixels: Math.round(+legacy) };
-          setComponentPrefs('is-split-panel', key, saved);
-          try { localStorage.removeItem('is-split-nav-pos'); } catch { /* ignore */ }
+          setComponentPrefs('iswc-split-panel', key, saved);
+          try { localStorage.removeItem('iswc-split-nav-pos'); } catch { /* ignore */ }
         }
       }
       if (!saved) return;
@@ -220,7 +220,7 @@ import { clampTo } from '../_shared/misc-utils.js';
     _persistPrefs(): void {
       const key = this.storageKey;
       if (!key) return;
-      setComponentPrefs('is-split-panel', key, {
+      setComponentPrefs('iswc-split-panel', key, {
         positionInPixels: Math.round(this.positionInPixels),
         position: Math.round(this.position * 10) / 10,
       });
@@ -499,5 +499,5 @@ import { clampTo } from '../_shared/misc-utils.js';
     }
   }
 
-  defineElement('is-split-panel', IsSplitPanel, 'IsSplitPanel');
+  defineElement('iswc-split-panel', IswcSplitPanel, 'IswcSplitPanel');
 })();

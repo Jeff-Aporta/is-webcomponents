@@ -1,23 +1,23 @@
-/* is-masked-input */
+/* iswc-masked-input */
 :host {
   display: inline-block;
   font: inherit;
   color: var(--iswc-text);
+}
 
-  &([variant="underlined"]) {
-    border: 0;
-    border-bottom: 1px solid var(--iswc-control-border, var(--iswc-border));
-    border-radius: 0;
-    background: transparent;
-  }
+:host([variant="underlined"]) {
+  border: 0;
+  border-bottom: 1px solid var(--iswc-control-border, var(--iswc-border));
+  border-radius: 0;
+  background: transparent;
 }
 
 .field {
   position: relative;
   display: flex;
   align-items: center;
-  width: var(--iswc-field-width, 16rem);
-  max-width: 100%;
+  inline-size: var(--iswc-field-width, 16rem);
+  max-inline-size: 100%;
   border: 1px solid var(--iswc-control-border, var(--iswc-border));
   background: var(--iswc-control-bg, var(--iswc-bg-soft));
   border-radius: var(--iswc-control-radius, 6px);
@@ -31,7 +31,7 @@
   }
 
   :host([disabled]) & {
-    opacity: .55;
+    opacity: 0.55;
     pointer-events: none;
   }
 
@@ -49,18 +49,18 @@
   border: 0;
   outline: 0;
   background: transparent;
-  padding: .5rem .65rem;
+  padding: 0.5rem 0.65rem;
   font: inherit;
   color: inherit;
-  letter-spacing: .03em;
-  min-width: 0;
+  letter-spacing: 0.03em;
+  min-inline-size: 0;
 
   /* Los adornos slotted ya aportan su propio aire lateral. */
-  &.with-start { padding-inline-start: .25rem; }
-  &.with-end { padding-inline-end: .25rem; }
+  &.with-start { padding-inline-start: 0.25rem; }
+  &.with-end { padding-inline-end: 0.25rem; }
 
   &::placeholder {
     color: var(--iswc-text-soft);
-    opacity: .7;
+    opacity: 0.7;
   }
 }

@@ -1,13 +1,13 @@
 ---
-tag: is-tree-view
+tag: iswc-tree-view
 tags:
-  - is-tree-view
+  - iswc-tree-view
   - roles
 category: isp
 status: public
 parent: ./tree-view.md
 ---
-# Roles 3D en `<is-tree-view>`
+# Roles 3D en `<iswc-tree-view>`
 
 Guía ilustrativa del modelo de roles del árbol editable. Los roles **no son
 campos sueltos**: son **tres ejes ortogonales** que el adaptador traduce a

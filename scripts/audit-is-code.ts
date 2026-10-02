@@ -1,5 +1,5 @@
 /**
- * Auditoría visual <is-code> en la galería Live Server.
+ * Auditoría visual <iswc-code> en la galería Live Server.
  */
 import { chromium } from 'playwright';
 import { mkdirSync } from 'node:fs';
@@ -8,11 +8,11 @@ import { fileURLToPath } from 'node:url';
 
 const here = dirname(fileURLToPath(import.meta.url));
 const root = dirname(here);
-const outDir = join(root, '.tmp', 'is-code-audit');
+const outDir = join(root, '.tmp', 'iswc-code-audit');
 mkdirSync(outDir, { recursive: true });
 
 const state = Buffer.from(JSON.stringify({
-  component: 'is-code',
+  component: 'iswc-code',
   cdnTab: 'mirrors',
 })).toString('base64');
 const url = `http://127.0.0.1:5505/apps/is-webcomponents/index.html?s=${state}&_=${Date.now()}`;
@@ -35,13 +35,13 @@ try {
   ok(`title: ${title}`);
 
   // Nav / preview
-  const hasCode = await page.locator('is-code').count();
+  const hasCode = await page.locator('iswc-code').count();
   if (hasCode === 0) {
-    // URL antigua is-code-editor?
+    // URL antigua iswc-code-editor?
     const bodyText = await page.locator('body').innerText();
-    bad(`0 <is-code> en DOM. body≈ ${bodyText.slice(0, 200).replace(/\s+/g, ' ')}`);
+    bad(`0 <iswc-code> en DOM. body≈ ${bodyText.slice(0, 200).replace(/\s+/g, ' ')}`);
   } else {
-    ok(`${hasCode} instancias <is-code> en página`);
+    ok(`${hasCode} instancias <iswc-code> en página`);
   }
 
   await page.screenshot({ path: join(outDir, '01-overview.png'), fullPage: true });
@@ -51,10 +51,10 @@ try {
   if (await modesHeading.count()) {
     await modesHeading.scrollIntoViewIfNeeded();
     await page.waitForTimeout(400);
-    const inlineInProse = page.locator('p.prose is-code[mode="inline"]');
+    const inlineInProse = page.locator('p.prose iswc-code[mode="inline"]');
     const n = await inlineInProse.count();
     if (n >= 1) ok(`demo modes: ${n} inline en .prose`);
-    else bad('demo modes: no hay is-code[mode=inline] dentro de .prose');
+    else bad('demo modes: no hay iswc-code[mode=inline] dentro de .prose');
 
     for (let i = 0; i < Math.min(n, 2); i++) {
       const box = await inlineInProse.nth(i).boundingBox();
@@ -86,7 +86,7 @@ try {
       await page.waitForTimeout(600);
       const mode = await pg.getAttribute('mode');
       const display = await pg.evaluate((el) => getComputedStyle(el).display);
-      const inProse = await page.locator('#pgInlineHost is-code#pgCode').count();
+      const inProse = await page.locator('#pgInlineHost iswc-code#pgCode').count();
       if (mode === 'inline') ok('playground mode=inline');
       else bad(`playground mode attr=${mode}`);
       if (display.includes('inline')) ok(`playground display=${display}`);
@@ -154,11 +154,11 @@ try {
   page.on('pageerror', (e) => errors.push(String(e)));
   // already late — also check existing via evaluate
   const cmReady = await page.evaluate(() => {
-    const el = document.querySelector('is-code');
+    const el = document.querySelector('iswc-code');
     return el ? { ready: !!el.ready, tag: el.localName, mode: el.mode } : null;
   });
-  if (cmReady?.ready) ok(`primera is-code ready (mode=${cmReady.mode})`);
-  else if (cmReady) bad(`primera is-code no ready: ${JSON.stringify(cmReady)}`);
+  if (cmReady?.ready) ok(`primera iswc-code ready (mode=${cmReady.mode})`);
+  else if (cmReady) bad(`primera iswc-code no ready: ${JSON.stringify(cmReady)}`);
 
   await page.screenshot({ path: join(outDir, '05-final.png'), fullPage: true });
 } catch (err) {

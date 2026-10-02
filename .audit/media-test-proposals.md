@@ -18,16 +18,16 @@
 
 ---
 
-## 1. `<is-avatar>` — `src/components/media/avatar.ts` (146 LOC)
+## 1. `<iswc-avatar>` — `src/components/media/avatar.ts` (146 LOC)
 
-**Atributos observados:** `image`, `initials`, `label`, `loading`, `shape`. **Slots:** `icon` (fallback). **Eventos:** `is-error` (bubbles, composed). **CSS Parts:** `::part(avatar)`, `::part(image)`, `::part(initials)`, `::part(icon)`. **Estados internos:** `#imgFailed`, sincronización condicional imagen / iniciales / icono. Default: `shape="circle"`, `loading="eager"`. Roles: `role="img"`, `aria-label` derivado.
+**Atributos observados:** `image`, `initials`, `label`, `loading`, `shape`. **Slots:** `icon` (fallback). **Eventos:** `iswc-error` (bubbles, composed). **CSS Parts:** `::part(avatar)`, `::part(image)`, `::part(initials)`, `::part(icon)`. **Estados internos:** `#imgFailed`, sincronización condicional imagen / iniciales / icono. Default: `shape="circle"`, `loading="eager"`. Roles: `role="img"`, `aria-label` derivado.
 
 ### Tests propuestos
 
 1. **Foco del fallback cuando `image` falla** — [categoría: edge-case]
-   - **Setup:** jsdom + `<img>` mockeado para disparar `error` cuando reciba `src="https://broken.example/x.jpg"`. Cargar `<is-avatar image="https://broken.example/x.jpg" label="Ana" initials="AN"></is-avatar>`.
+   - **Setup:** jsdom + `<img>` mockeado para disparar `error` cuando reciba `src="https://broken.example/x.jpg"`. Cargar `<iswc-avatar image="https://broken.example/x.jpg" label="Ana" initials="AN"></iswc-avatar>`.
    - **Acción:** Esperar a `load` del componente y disparar el evento `error` sobre `#img`. Repetir cambio `image → "" → image rota`.
-   - **Assertion:** Tras el error, la sombra muestra `part="image"` con `hidden=true`, `part="initials"` con `hidden=false` y `textContent="AN"`; se emite `is-error` exactamente una vez; `aria-label` se mantiene como `"Ana"`. Un segundo `setAttribute('image', mismoUrl)` reintenta (resetea `#imgFailed`).
+   - **Assertion:** Tras el error, la sombra muestra `part="image"` con `hidden=true`, `part="initials"` con `hidden=false` y `textContent="AN"`; se emite `iswc-error` exactamente una vez; `aria-label` se mantiene como `"Ana"`. Un segundo `setAttribute('image', mismoUrl)` reintenta (resetea `#imgFailed`).
    - **Coverage:** ramas de `#onImgError` (incluye la guarda `if (!src) return` cuando el `src` se vacía).
 
 2. **`image` con esquema `javascript:` se rechaza en SSR** — [categoría: xss]
@@ -37,51 +37,51 @@
    - **Coverage:** sanitización implícita + rama de URL peligrosa.
 
 3. **`initials` se trunca a 2 caracteres en mayúsculas** — [categoría: ui/ux]
-   - **Setup:** `<is-avatar initials="juan">`, `<is-avatar initials="abcd">`, `<is-avatar initials="">`.
+   - **Setup:** `<iswc-avatar initials="juan">`, `<iswc-avatar initials="abcd">`, `<iswc-avatar initials="">`.
    - **Acción:** Conectar al DOM.
    - **Assertion:** `initials.textContent` === `"JU"` para "juan", `"AB"` para "abcd", `hidden=true` para vacío. La rama "icono" se activa al final cuando `initials=""`.
    - **Coverage:** `slice(0,2)` + `toUpperCase` + prioridad sobre icono.
 
 4. **`label` controla `alt` y `aria-label`** — [categoría: a11y]
-   - **Setup:** `<is-avatar image="a.jpg" label="Foto de Bea"></is-avatar>` y `<is-avatar image="a.jpg" initials="BE"></is-avatar>` y `<is-avatar image="a.jpg"></is-avatar>`.
+   - **Setup:** `<iswc-avatar image="a.jpg" label="Foto de Bea"></iswc-avatar>` y `<iswc-avatar image="a.jpg" initials="BE"></iswc-avatar>` y `<iswc-avatar image="a.jpg"></iswc-avatar>`.
    - **Acción:** Observar cambios en `attributeChangedCallback`.
    - **Assertion:** `aria-label` del host y `alt` del `<img>` interno son `"Foto de Bea"` en el primer caso, `"BE"` en el segundo (cuando no hay label) y `"Avatar"` por defecto en el tercero.
    - **Coverage:** orden de prioridad `label || initials || 'Avatar'`.
 
 5. **`shape="invalid"` se normaliza a `circle`** — [categoría: edge-case]
-   - **Setup:** `<is-avatar shape="oval">` y `<is-avatar shape="">`.
+   - **Setup:** `<iswc-avatar shape="oval">` y `<iswc-avatar shape="">`.
    - **Acción:** Asignar y leer `shape` (getter).
    - **Assertion:** `host.shape === 'circle'`; `dataset.shape === 'circle'`; el atributo DOM queda como `oval` (no se reescribe porque está cubierto por getter). Tras `el.shape = 'rounded'`, atributo normalizado.
    - **Coverage:** ramas del getter/setter con `VALID_SHAPE`.
 
 6. **`loading="lazy"` se aplica al `<img>` interno** — [categoría: performance]
-   - **Setup:** `<is-avatar image="a.jpg" loading="lazy">`.
+   - **Setup:** `<iswc-avatar image="a.jpg" loading="lazy">`.
    - **Acción:** Verificar tras `connectedCallback`.
    - **Assertion:** `shadowRoot.querySelector('.image').loading === 'lazy'`.
    - **Coverage:** delegación del atributo.
 
 7. **`slotchange` en `slot[name="icon"]` re-pinta la vista** — [categoría: integration]
-   - **Setup:** `<is-avatar><is-icon slot="icon" icon="mdi:user"></is-icon></is-avatar>` y `image=""`, `initials=""`.
-   - **Acción:** Tras conectar, reemplazar el icono slotted por otro `<is-icon icon="mdi:bell">`.
+   - **Setup:** `<iswc-avatar><iswc-icon slot="icon" icon="mdi:user"></iswc-icon></iswc-avatar>` y `image=""`, `initials=""`.
+   - **Acción:** Tras conectar, reemplazar el icono slotted por otro `<iswc-icon icon="mdi:bell">`.
    - **Assertion:** `#syncView()` se invoca; el slot muestra el nuevo icono; `#icon.hidden === false`.
    - **Coverage:** listener `slotchange`.
 
-8. **Evento `is-error` se emite una sola vez por fallo** — [categoría: edge-case]
-   - **Setup:** `<is-avatar image="a.jpg">` con `img.error` que dispara varias veces.
+8. **Evento `iswc-error` se emite una sola vez por fallo** — [categoría: edge-case]
+   - **Setup:** `<iswc-avatar image="a.jpg">` con `img.error` que dispara varias veces.
    - **Acción:** Disparar `error` 3 veces consecutivas.
-   - **Assertion:** El evento `is-error` sólo se emite una vez (la guarda `if (!this.#img.getAttribute('src')) return` puede proteger; verificar comportamiento real).
+   - **Assertion:** El evento `iswc-error` sólo se emite una vez (la guarda `if (!this.#img.getAttribute('src')) return` puede proteger; verificar comportamiento real).
    - **Coverage:** idempotencia del handler.
 
 9. **Imagen válida con `crossorigin` se acepta** — [categoría: browser-api]
    - **Setup:** jsdom + `<img>` con `src="https://cdn/avatar.png"`.
    - **Acción:** `onload` se dispara.
-   - **Assertion:** `host.image` getter devuelve el mismo URL; no se emite `is-error`; `#img.hidden === false`.
+   - **Assertion:** `host.image` getter devuelve el mismo URL; no se emite `iswc-error`; `#img.hidden === false`.
    - **Coverage:** rama feliz de `#load`.
 
 10. **Renderiza el fallback icon en ausencia total de props** — [categoría: edge-case]
-    - **Setup:** `<is-avatar></is-avatar>`.
+    - **Setup:** `<iswc-avatar></iswc-avatar>`.
     - **Acción:** Conectar al DOM.
-    - **Assertion:** `aria-label === 'Avatar'`; `part="icon"` visible con `<is-icon icon="mdi:account">`; `part="initials"` y `part="image"` ocultos.
+    - **Assertion:** `aria-label === 'Avatar'`; `part="icon"` visible con `<iswc-icon icon="mdi:account">`; `part="initials"` y `part="image"` ocultos.
     - **Coverage:** rama final de `#syncView`.
 
 11. **CSS Parts `image` / `initials` / `icon` son estilizables** — [categoría: ui/ux]
@@ -98,28 +98,28 @@
 
 ---
 
-## 2. `<is-barcode-scanner>` — `src/components/media/barcode-scanner.ts` (115 LOC)
+## 2. `<iswc-barcode-scanner>` — `src/components/media/barcode-scanner.ts` (115 LOC)
 
-**Atributos:** `formats` (CSV), `disabled`. **Métodos:** `start()`, `stop()`, `detect(source)`. **Eventos:** `is-detect { rawValue, format, barcodes }`, `is-error`. **Browser APIs:** `BarcodeDetector`, `navigator.mediaDevices.getUserMedia({ video: { facingMode: 'environment' } })`. **Video preview** interno + `<is-button>` de control.
+**Atributos:** `formats` (CSV), `disabled`. **Métodos:** `start()`, `stop()`, `detect(source)`. **Eventos:** `iswc-detect { rawValue, format, barcodes }`, `iswc-error`. **Browser APIs:** `BarcodeDetector`, `navigator.mediaDevices.getUserMedia({ video: { facingMode: 'environment' } })`. **Video preview** interno + `<iswc-button>` de control.
 
 ### Tests propuestos
 
 1. **Permiso de cámara denegado (`NotAllowedError`)** — [categoría: browser-api]
    - **Setup:** mockear `navigator.mediaDevices.getUserMedia` para que rechace con `Object.assign(new Error('Permission denied'), { name: 'NotAllowedError' })`.
-   - **Acción:** Llamar `start()` en `<is-barcode-scanner>`.
-   - **Assertion:** Se emite `is-error` con `detail.message` que contiene `'Permission denied'`; `#stream` queda `null`; `#go.textContent` permanece en `"Escanear"`; el botón no queda en estado "Detener".
+   - **Acción:** Llamar `start()` en `<iswc-barcode-scanner>`.
+   - **Assertion:** Se emite `iswc-error` con `detail.message` que contiene `'Permission denied'`; `#stream` queda `null`; `#go.textContent` permanece en `"Escanear"`; el botón no queda en estado "Detener".
    - **Coverage:** rama `catch (err)` del bloque getUserMedia.
 
 2. **`BarcodeDetector` no disponible (Safari)** — [categoría: browser-api]
    - **Setup:** borrar `globalThis.BarcodeDetector` antes de cargar el módulo (jsdom).
    - **Acción:** Llamar `start()` y `detect(imgMock)`.
-   - **Assertion:** `detect()` emite `is-error { message: 'BarcodeDetector no disponible' }` y devuelve `[]`; `start()` también emite `is-error` y muestra `"BarcodeDetector no está en este navegador"` en `.hint`.
+   - **Assertion:** `detect()` emite `iswc-error { message: 'BarcodeDetector no disponible' }` y devuelve `[]`; `start()` también emite `iswc-error` y muestra `"BarcodeDetector no está en este navegador"` en `.hint`.
    - **Coverage:** guarda `typeof BarcodeDetector !== 'function'`.
 
 3. **`disabled` desactiva `start()` y re-aplica el atributo al botón** — [categoría: a11y]
-   - **Setup:** `<is-barcode-scanner disabled>`.
+   - **Setup:** `<iswc-barcode-scanner disabled>`.
    - **Acción:** Llamar `start()` manualmente; alternar `removeAttribute('disabled')` luego `setAttribute('disabled', '')`.
-   - **Assertion:** `start()` retorna sin tocar cámara cuando `disabled` está presente; el `<is-button>` interno refleja el atributo (atributo `disabled` propagado).
+   - **Assertion:** `start()` retorna sin tocar cámara cuando `disabled` está presente; el `<iswc-button>` interno refleja el atributo (atributo `disabled` propagado).
    - **Coverage:** `attributeChangedCallback` para `disabled`.
 
 4. **Cambio de `formats` en vivo reinicia el scanner** — [categoría: edge-case]
@@ -128,16 +128,16 @@
    - **Assertion:** Se invoca `stop()` y luego `start()`; el `BarcodeDetector` se reconstruye con la nueva lista.
    - **Coverage:** rama `if (name === 'formats' && this.#stream)` (cubierta por comentario "2026-Q1 fix").
 
-5. **`detect()` con `<img>` válido emite `is-detect` y devuelve barcodes** — [categoría: browser-api]
+5. **`detect()` con `<img>` válido emite `iswc-detect` y devuelve barcodes** — [categoría: browser-api]
    - **Setup:** mockear `BarcodeDetector` para devolver `[{ rawValue: '7701234567897', format: 'ean_13' }]` desde `detect()`.
    - **Acción:** Llamar `detect(blobImg)`.
-   - **Assertion:** se emite `is-detect { rawValue: '7701234567897', format: 'ean_13', barcodes: [...] }`; la promesa resuelve con la lista.
+   - **Assertion:** se emite `iswc-detect { rawValue: '7701234567897', format: 'ean_13', barcodes: [...] }`; la promesa resuelve con la lista.
    - **Coverage:** rama feliz de `#detect`.
 
-6. **`detect()` sin resultados emite promesa vacía sin `is-detect`** — [categoría: edge-case]
+6. **`detect()` sin resultados emite promesa vacía sin `iswc-detect`** — [categoría: edge-case]
    - **Setup:** Mock `BarcodeDetector.detect` → `[]`.
    - **Acción:** Llamar `detect()`.
-   - **Assertion:** devuelve `[]`, no se emite `is-detect`.
+   - **Assertion:** devuelve `[]`, no se emite `iswc-detect`.
    - **Coverage:** guarda `if (barcodes.length)`.
 
 7. **`stop()` libera tracks y limpia `srcObject`** — [categoría: browser-api]
@@ -159,7 +159,7 @@
    - **Coverage:** bucle `#tick`.
 
 10. **`formats` setter acepta array y string** — [categoría: ui/ux]
-    - **Setup:** `<is-barcode-scanner></is-barcode-scanner>`.
+    - **Setup:** `<iswc-barcode-scanner></iswc-barcode-scanner>`.
     - **Acción:** `el.formats = ['qr_code', 'code_128']`; `el.formats = ''`; `el.formats = null`.
     - **Assertion:** el atributo `formats` queda `"qr_code,code_128"`; `null/""` lo elimina.
     - **Coverage:** setter y `setStringAttr`.
@@ -167,39 +167,39 @@
 11. **Sin HTTPS / sin contexto seguro: el navegador bloquea `getUserMedia`** — [categoría: browser-api]
     - **Setup:** jsdom con `window.isSecureContext = false` y mock que rechaza `SecurityError`.
     - **Acción:** Llamar `start()`.
-    - **Assertion:** `is-error` emitido con mensaje; el `video.srcObject` nunca se asigna.
+    - **Assertion:** `iswc-error` emitido con mensaje; el `video.srcObject` nunca se asigna.
     - **Coverage:** requisito de contexto seguro documentado.
 
 12. **Detección con `canvas` (uso programático)** — [categoría: integration]
     - **Setup:** `detect(canvasEl)` con `BarcodeDetector` mock devolviendo resultados.
     - **Acción:** Pasar un `<canvas>` directamente (uso fuera del preview).
-    - **Assertion:** Se emite `is-detect` con el `rawValue`.
+    - **Assertion:** Se emite `iswc-detect` con el `rawValue`.
     - **Coverage:** API pública `detect()`.
 
 13. **Cambio de `disabled` tras mount no dispara `start()`** — [categoría: edge-case]
     - **Setup:** arrancar scanner; luego `setAttribute('disabled', '')`.
-    - **Acción:** Click sobre el `<is-button>` interno.
+    - **Acción:** Click sobre el `<iswc-button>` interno.
     - **Assertion:** `start()` retorna sin invocar getUserMedia.
     - **Coverage:** rama inicial de `start()`.
 
 ---
 
-## 3. `<is-barcode>` — `src/components/media/barcode.ts` (199 LOC)
+## 3. `<iswc-barcode>` — `src/components/media/barcode.ts` (199 LOC)
 
-**Atributos:** `value`, `type` (ean13|code128), `height`, `fg`, `bg`, `show-text`, `quiet`. **Eventos:** `is-render { svg }`. **Algoritmo:** Code128B (tabla de patrones) + EAN-13 con check digit GS1. **Salida:** `<svg>` con `<rect>` por barra + zona quiet. **API:** el detalle incluye el nodo SVG.
+**Atributos:** `value`, `type` (ean13|code128), `height`, `fg`, `bg`, `show-text`, `quiet`. **Eventos:** `iswc-render { svg }`. **Algoritmo:** Code128B (tabla de patrones) + EAN-13 con check digit GS1. **Salida:** `<svg>` con `<rect>` por barra + zona quiet. **API:** el detalle incluye el nodo SVG.
 
 ### Tests propuestos
 
 1. **EAN-13 con 12 dígitos calcula correctamente el check digit** — [categoría: edge-case]
-   - **Setup:** `<is-barcode type="ean13" value="770123456789"></is-barcode>` (Colombia).
-   - **Acción:** Conectar al DOM, esperar `is-render`.
+   - **Setup:** `<iswc-barcode type="ean13" value="770123456789"></iswc-barcode>` (Colombia).
+   - **Acción:** Conectar al DOM, esperar `iswc-render`.
    - **Assertion:** `detail.label` es `"7701234567897"` (verificador 7); el `<text>` interno muestra el dígito 13; el `<svg>` contiene patrón `L/G/R` correcto (95 módulos + quiet).
    - **Coverage:** rama EAN13 + `ean13Check()`.
 
 2. **EAN-13 con menos de 12 dígitos se rechaza** — [categoría: edge-case]
    - **Setup:** `value="12345"`, `type="ean13"`.
    - **Acción:** Render.
-   - **Assertion:** `#text.hidden === true`, `#svg.innerHTML === ''`, no se emite `is-render`.
+   - **Assertion:** `#text.hidden === true`, `#svg.innerHTML === ''`, no se emite `iswc-render`.
    - **Coverage:** `if (digits.length !== 12) return null`.
 
 3. **EAN-13 con caracteres no numéricos los descarta** — [categoría: edge-case]
@@ -215,55 +215,55 @@
    - **Coverage:** guarda `if (code < 32 || code > 127) continue`.
 
 5. **Code128 vacío produce SVG vacío y oculta texto** — [categoría: edge-case]
-   - **Setup:** `<is-barcode value=""></is-barcode>`.
+   - **Setup:** `<iswc-barcode value=""></iswc-barcode>`.
    - **Acción:** Render.
    - **Assertion:** `#svg.innerHTML === ''`, `#text.hidden === true`. La guarda `if (!bits) { ... return }` se activa.
    - **Coverage:** value vacío.
 
 6. **Tipo no soportado (`qr` u otro) muestra mensaje** — [categoría: ui/ux]
-   - **Setup:** `<is-barcode type="qr" value="hola"></is-barcode>`.
+   - **Setup:** `<iswc-barcode type="qr" value="hola"></iswc-barcode>`.
    - **Acción:** Render.
    - **Assertion:** `#text.textContent` contiene `'Tipo "qr" no soportado'`; SVG vacío.
    - **Coverage:** rama `else` del switch de tipos.
 
 7. **Quiet zones de EAN13 (`quiet="9"`) añaden padding** — [categoría: edge-case]
-   - **Setup:** `<is-barcode type="ean13" value="770123456789" quiet="20"></is-barcode>`.
+   - **Setup:** `<iswc-barcode type="ean13" value="770123456789" quiet="20"></iswc-barcode>`.
    - **Acción:** Render.
    - **Assertion:** El `moduleCount` de `<rect>`s visibles equivale a `bits.length` + 40 (20 a cada lado).
    - **Coverage:** `'0'.repeat(quiet) + bits + '0'.repeat(quiet)`.
 
 8. **`fg` y `bg` personalizan colores** — [categoría: ui/ux]
-   - **Setup:** `<is-barcode type="ean13" value="770123456789" fg="#ff0000" bg="#ffff00"></is-barcode>`.
+   - **Setup:** `<iswc-barcode type="ean13" value="770123456789" fg="#ff0000" bg="#ffff00"></iswc-barcode>`.
    - **Acción:** Render.
    - **Assertion:** Primer `<rect>` con `fill="#ffff00"` y altura completa; resto con `fill="#ff0000"`.
    - **Coverage:** ramas condicionales `if (bg !== 'transparent')`.
 
 9. **`show-text="false"` oculta la etiqueta** — [categoría: ui/ux]
-   - **Setup:** `<is-barcode type="ean13" value="770123456789" show-text="false"></is-barcode>`.
+   - **Setup:** `<iswc-barcode type="ean13" value="770123456789" show-text="false"></iswc-barcode>`.
    - **Acción:** Render.
    - **Assertion:** `#text.hidden === true` aunque `type === 'ean13'` (corta la regla por defecto).
    - **Coverage:** short-circuit `showText = hasAttribute('show-text') || type === 'ean13'` (verificar que `false` no se interpreta falsy aquí — el atributo booleano funciona por presencia).
 
 10. **Cambio de atributo re-renderiza el SVG** — [categoría: edge-case]
-    - **Setup:** `<is-barcode type="ean13" value="750103131130"></is-barcode>`; cambiar a `value="400638133393"`.
+    - **Setup:** `<iswc-barcode type="ean13" value="750103131130"></iswc-barcode>`; cambiar a `value="400638133393"`.
     - **Acción:** Modificar atributo.
-    - **Assertion:** Se emite un nuevo `is-render`; el SVG cambia (número de `<rect>`s puede diferir si las barras difieren).
+    - **Assertion:** Se emite un nuevo `iswc-render`; el SVG cambia (número de `<rect>`s puede diferir si las barras difieren).
     - **Coverage:** `attributeChangedCallback` y `#render`.
 
 11. **Code128 largo (200 caracteres) sin bloquear UI** — [categoría: performance]
-    - **Setup:** `<is-barcode type="code128" value="A".repeat(200)></is-barcode>`.
+    - **Setup:** `<iswc-barcode type="code128" value="A".repeat(200)></iswc-barcode>`.
     - **Acción:** Render y medir tiempo.
     - **Assertion:** El bucle se ejecuta en menos de N ms (umbral empírico); no hay `requestAnimationFrame` recursivo.
     - **Coverage:** path lineal del algoritmo.
 
-12. **`is-render` expone el nodo `<svg>` para integración** — [categoría: integration]
-    - **Setup:** escuchar `is-render`.
+12. **`iswc-render` expone el nodo `<svg>` para integración** — [categoría: integration]
+    - **Setup:** escuchar `iswc-render`.
     - **Acción:** Conectar un barcode.
     - **Assertion:** `detail.svg` es el mismo nodo del shadow; se puede `appendChild` fuera sin perderlo.
     - **Coverage:** detalle del evento.
 
 13. **XSS en `value` no rompe el SVG** — [categoría: xss]
-    - **Setup:** `<is-barcode type="code128" value='<script>alert(1)</script>'></is-barcode>`.
+    - **Setup:** `<iswc-barcode type="code128" value='<script>alert(1)</script>'></iswc-barcode>`.
     - **Acción:** Render.
     - **Assertion:** El texto se trata como `textContent` (Code128B sólo mira `charCode`), `<text>` interno muestra la cadena sin inyectar HTML.
     - **Coverage:** no interpretación HTML del input.
@@ -291,7 +291,7 @@
 2. **`renderFamily` con familia inexistente muestra callout de error** — [categoría: edge-case]
    - **Setup:** `location.search='?f=does-not-exist'`; mock `fetch` que rechaza.
    - **Acción:** `mount()`.
-   - **Assertion:** `app.innerHTML` contiene un `<is-callout color="danger">` con el prefijo escapado en `esc(prefix)`.
+   - **Assertion:** `app.innerHTML` contiene un `<iswc-callout color="danger">` con el prefijo escapado en `esc(prefix)`.
    - **Coverage:** `catch` de `renderFamily`.
 
 3. **Búsqueda global con debounce (220 ms en modo "icon")** — [categoría: ui/ux]
@@ -312,7 +312,7 @@
    - **Assertion:** devuelve sólo la familia sin paleta.
    - **Coverage:** ramas `f.palette === 'mono'`.
 
-6. **`sync()` valida tamaño y color, marca `error` en `<is-input>`** — [categoría: a11y]
+6. **`sync()` valida tamaño y color, marca `error` en `<iswc-input>`** — [categoría: a11y]
    - **Setup:** Estado `state.svg` poblado; `sizeVal=5000` (fuera de 4096); `color='not-a-color'`.
    - **Acción:** Llamar `sync()`.
    - **Assertion:** `F.sizeVal.toggleAttribute('error', true)`; `error-text` contiene "Entre 1 y 4096"; `F.code.textContent` muestra el mensaje "Corrige los valores…"; no se genera código.
@@ -368,13 +368,13 @@
 
 15. **`fColorPick` actualiza `color` y dispara `sync`** — [categoría: integration]
     - **Setup:** Spy `sync`.
-    - **Acción:** `F.colorPick.dispatchEvent(new CustomEvent('is-input', { detail: { value: '#abcdef' } }))`.
+    - **Acción:** `F.colorPick.dispatchEvent(new CustomEvent('iswc-input', { detail: { value: '#abcdef' } }))`.
     - **Assertion:** `F.color.value === '#abcdef'`; `sync()` llamado.
     - **Coverage:** listener de picker.
 
 ---
 
-## 5. `<is-icon>` — `src/components/media/icon.ts` (245 LOC)
+## 5. `<iswc-icon>` — `src/components/media/icon.ts` (245 LOC)
 
 **Atributos:** `icon` (Iconify id), `name`, `library`, `label`, `src`. **Browser APIs:** `fetch`, `AbortController`. **Estados:** `data-loading`, `data-missing`. **Slots:** ninguno. **CSS Part:** `::part(icon)`. **Detección multicolor** para respetar paletas propias. **Cache interno:** `rawCache` en `icon-loader.ts` (módulo compartido).
 
@@ -382,7 +382,7 @@
 
 1. **`icon="mdi:home"` resuelve y pinta SVG inline** — [categoría: browser-api]
    - **Setup:** Mock `fetch` que devuelve `<svg xmlns="..." viewBox="0 0 24 24"><path d="..."/></svg>`.
-   - **Acción:** `<is-icon icon="mdi:home">` conectar.
+   - **Acción:** `<iswc-icon icon="mdi:home">` conectar.
    - **Assertion:** `data-loading` removido; `data-missing` ausente; `shadow.querySelector('svg')` presente; `width="1em" height="1em"`; `fill="currentColor"` aplicado.
    - **Coverage:** flujo principal `#render`.
 
@@ -393,7 +393,7 @@
    - **Coverage:** prioridad `src > icon`.
 
 3. **`icon` vacío → `data-missing` ausente, sin pintar** — [categoría: edge-case]
-   - **Setup:** `<is-icon></is-icon>`.
+   - **Setup:** `<iswc-icon></iswc-icon>`.
    - **Acción:** Conectar.
    - **Assertion:** `shadow.querySelector('svg')` es null; sin `data-loading`, sin `data-missing`.
    - **Coverage:** `if (!icon) { #clear; removeAttribute('data-missing'); }`.
@@ -417,7 +417,7 @@
    - **Coverage:** `text.includes('<svg') ? text : null`.
 
 7. **`label=""` aplica `aria-hidden="true"`** — [categoría: aria]
-   - **Setup:** `<is-icon icon="mdi:home">`.
+   - **Setup:** `<iswc-icon icon="mdi:home">`.
    - **Acción:** luego `setAttribute('label', 'Inicio')` y luego `removeAttribute('label')`.
    - **Assertion:** secuencia: `aria-hidden="true"`, luego `role="img" aria-label="Inicio"`, luego de nuevo `aria-hidden="true"` sin `role`.
    - **Coverage:** `#syncA11y()`.
@@ -425,23 +425,23 @@
 8. **Icono multicolor (linearGradient) NO se aplana a `currentColor`** — [categoría: edge-case]
    - **Setup:** `<svg><linearGradient/><path fill="#ff0000"/></svg>`.
    - **Acción:** Pintar.
-   - **Assertion:** `.inline` tiene clase `is-multicolor`; `style.fill` del path NO es `currentColor`.
+   - **Assertion:** `.inline` tiene clase `iswc-multicolor`; `style.fill` del path NO es `currentColor`.
    - **Coverage:** `IsIcon.#isMulticolor()` + bypass.
 
 9. **Icono monocromo se aplana a `currentColor`** — [categoría: edge-case]
    - **Setup:** `<svg><path fill="#000"/></svg>`.
    - **Acción:** Pintar.
-   - **Assertion:** `style.fill === 'currentColor'`; sin clase `is-multicolor`.
+   - **Assertion:** `style.fill === 'currentColor'`; sin clase `iswc-multicolor`.
    - **Coverage:** `#NEUTRAL` set + normalización.
 
 10. **`name="home"` con `library="mdi"` se compone a `mdi:home`** — [categoría: ui/ux]
-    - **Setup:** `<is-icon name="home" library="mdi">`.
+    - **Setup:** `<iswc-icon name="home" library="mdi">`.
     - **Acción:** Conectar.
     - **Assertion:** `host.icon === 'mdi:home'`; fetch se invoca con esa ruta.
     - **Coverage:** getter de `icon`.
 
 11. **`name="mdi:home"` con `:` se respeta literal** — [categoría: ui/ux]
-    - **Setup:** `<is-icon name="mdi:home">` sin `library`.
+    - **Setup:** `<iswc-icon name="mdi:home">` sin `library`.
     - **Acción:** Conectar.
     - **Assertion:** `host.icon === 'mdi:home'`.
     - **Coverage:** rama `if (name.includes(':'))`.
@@ -460,7 +460,7 @@
 
 14. **Cache: segundo `icon` igual no vuelve a fetchear** — [categoría: performance]
     - **Setup:** Mock fetch con contador.
-    - **Acción:** Crear dos `<is-icon icon="mdi:home">`.
+    - **Acción:** Crear dos `<iswc-icon icon="mdi:home">`.
     - **Assertion:** sólo 1 fetch (porque `rawCache` en `icon-loader`).
     - **Coverage:** cache compartido.
 
@@ -472,32 +472,32 @@
 
 ---
 
-## 6. `<is-image-editor>` — `src/components/media/image-editor.ts` (330 LOC)
+## 6. `<iswc-image-editor>` — `src/components/media/image-editor.ts` (330 LOC)
 
-**Atributos:** `src`, `zoom`, `rotation`, `aspect`. **Slot:** `toolbar` con botones `data-action`. **API:** `image`, `crop()`, `cropped()`, `applyZoom()`, `applyRotation()`. **Eventos:** `is-load`, `is-change`, `is-crop`. **Browser APIs:** `<canvas>`, `ResizeObserver`. **Pointer events** sobre `#canvas`.
+**Atributos:** `src`, `zoom`, `rotation`, `aspect`. **Slot:** `toolbar` con botones `data-action`. **API:** `image`, `crop()`, `cropped()`, `applyZoom()`, `applyRotation()`. **Eventos:** `iswc-load`, `iswc-change`, `iswc-crop`. **Browser APIs:** `<canvas>`, `ResizeObserver`. **Pointer events** sobre `#canvas`.
 
 ### Tests propuestos
 
-1. **Carga de imagen y emisión de `is-load`** — [categoría: browser-api]
+1. **Carga de imagen y emisión de `iswc-load`** — [categoría: browser-api]
    - **Setup:** jsdom con mock `Image` que dispara `onload` con `naturalWidth=1600, naturalHeight=1000`.
    - **Acción:** `el.setAttribute('src', 'a.jpg')`.
-   - **Assertion:** `is-load { image }` se emite una vez; `cropRect` inicial = `{x:160, y:100, width:1280, height:800}` (80% centrado).
+   - **Assertion:** `iswc-load { image }` se emite una vez; `cropRect` inicial = `{x:160, y:100, width:1280, height:800}` (80% centrado).
    - **Coverage:** `#load()` + inicialización del crop.
 
 2. **`src` inválido muestra mensaje en `#status`** — [categoría: edge-case]
    - **Setup:** Mock `Image` con `onerror`.
    - **Acción:** `setAttribute('src', 'broken.jpg')`.
-   - **Assertion:** `#status.textContent === 'No se pudo cargar la imagen'`; no se emite `is-load`.
+   - **Assertion:** `#status.textContent === 'No se pudo cargar la imagen'`; no se emite `iswc-load`.
    - **Coverage:** `img.onerror`.
 
 3. **`crop()` devuelve dataURL con dimensiones correctas** — [categoría: browser-api]
    - **Setup:** imagen cargada; crop manual `{x:100, y:50, width:300, height:200}`.
    - **Acción:** `el.cropped()`.
-   - **Assertion:** dataURL empieza con `data:image/png;base64,`; canvas.width===300; `is-crop` con `crop` igual al definido.
+   - **Assertion:** dataURL empieza con `data:image/png;base64,`; canvas.width===300; `iswc-crop` con `crop` igual al definido.
    - **Coverage:** `#cropped()`.
 
 4. **`zoom` setter clamp entre 0.1 y 8** — [categoría: edge-case]
-   - **Setup:** `<is-image-editor src="a.jpg">`.
+   - **Setup:** `<iswc-image-editor src="a.jpg">`.
    - **Acción:** `zoom = 0.05`; `zoom = 100`; `zoom = 2.5`.
    - **Assertion:** atributo refleja `0.1`, `8`, `2.5`.
    - **Coverage:** setter `Math.max(0.1, Math.min(8, v))`.
@@ -515,7 +515,7 @@
    - **Coverage:** rama aspect-lock.
 
 7. **`aspect` inválido (`"foo"`) se evalúa como `null`** — [categoría: edge-case]
-   - **Setup:** `<is-image-editor aspect="foo">`.
+   - **Setup:** `<iswc-image-editor aspect="foo">`.
    - **Acción:** `pointermove`.
    - **Assertion:** no aplica lock de aspecto (proporción libre).
    - **Coverage:** `evalAspect`.
@@ -527,15 +527,15 @@
    - **Coverage:** `#onMove` rama `case 'move'`.
 
 9. **`cropped()` sin imagen cargada devuelve `null`** — [categoría: edge-case]
-   - **Setup:** `<is-image-editor>` sin `src`; sin carga.
+   - **Setup:** `<iswc-image-editor>` sin `src`; sin carga.
    - **Acción:** Llamar `cropped()`.
-   - **Assertion:** `null`; no emite `is-crop`.
+   - **Assertion:** `null`; no emite `iswc-crop`.
    - **Coverage:** `if (!this.#img || !this.#cropRect.width) return null`.
 
-10. **`is-change` se emite en cada `pointermove`** — [categoría: performance]
+10. **`iswc-change` se emite en cada `pointermove`** — [categoría: performance]
     - **Setup:** imagen cargada.
     - **Acción:** simular 5 pointermove consecutivos.
-    - **Assertion:** 5 eventos `is-change` con `crop` consistente.
+    - **Assertion:** 5 eventos `iswc-change` con `crop` consistente.
     - **Coverage:** bucle de drag.
 
 11. **`without-controls` no aplica pero este componente no lo tiene** — [categoría: integration]
@@ -563,29 +563,29 @@
     - **Coverage:** guarda.
 
 15. **`applyRotation(-90)` desde rotation=0 → 270** — [categoría: edge-case]
-    - **Setup:** `<is-image-editor rotation="0">`.
+    - **Setup:** `<iswc-image-editor rotation="0">`.
     - **Acción:** `applyRotation(-90)`.
-    - **Assertion:** atributo `rotation="270"`; `is-change`/`is-crop` no se emite (no emite eventos en `applyRotation`).
+    - **Assertion:** atributo `rotation="270"`; `iswc-change`/`iswc-crop` no se emite (no emite eventos en `applyRotation`).
     - **Coverage:** setter.
 
 ---
 
-## 7. `<is-media-recorder>` — `src/components/media/media-recorder.ts` (137 LOC)
+## 7. `<iswc-media-recorder>` — `src/components/media/media-recorder.ts` (137 LOC)
 
-**Atributos:** `source` (camera|mic|display), `disabled`. **Métodos:** `start()`, `stop()`. **Eventos:** `is-start`, `is-stop { blob, url, type }`, `is-error`. **Browser APIs:** `getUserMedia`, `getDisplayMedia`, `MediaRecorder`. **MimeType negotiation** según soporte.
+**Atributos:** `source` (camera|mic|display), `disabled`. **Métodos:** `start()`, `stop()`. **Eventos:** `iswc-start`, `iswc-stop { blob, url, type }`, `iswc-error`. **Browser APIs:** `getUserMedia`, `getDisplayMedia`, `MediaRecorder`. **MimeType negotiation** según soporte.
 
 ### Tests propuestos
 
 1. **Permiso de micrófono denegado (`NotAllowedError`)** — [categoría: browser-api]
    - **Setup:** mock `getUserMedia` que rechaza con `NotAllowedError`.
    - **Acción:** `start()`.
-   - **Assertion:** `is-error { message }` emitido; `#rec === null`; botón texto sigue "Grabar".
+   - **Assertion:** `iswc-error { message }` emitido; `#rec === null`; botón texto sigue "Grabar".
    - **Coverage:** rama `catch (err)` de start.
 
 2. **`source="mic"` con `MediaRecorder` no soportado** — [categoría: browser-api]
    - **Setup:** Mock getUserMedia OK; borrar `MediaRecorder`.
    - **Acción:** `start()`.
-   - **Assertion:** `is-error { message: 'MediaRecorder no disponible' }`; `#rec === null`.
+   - **Assertion:** `iswc-error { message: 'MediaRecorder no disponible' }`; `#rec === null`.
    - **Coverage:** guarda `typeof MediaRecorder !== 'function'`.
 
 3. **`source="display"` invoca `getDisplayMedia`** — [categoría: browser-api]
@@ -600,26 +600,26 @@
    - **Assertion:** `getUserMedia({ video: true, audio: true })`.
    - **Coverage:** default camera.
 
-5. **`stop()` revoca URL previa y emite `is-stop`** — [categoría: browser-api]
+5. **`stop()` revoca URL previa y emite `iswc-stop`** — [categoría: browser-api]
    - **Setup:** Mock MediaRecorder que dispara `onstop`; mock `URL.revokeObjectURL`.
    - **Acción:** `start()`, esperar a `dataavailable`, `stop()`.
-   - **Assertion:** `dl.href` apunta al nuevo `URL.createObjectURL(blob)`; `URL.revokeObjectURL` se llama sobre el anterior; `is-stop` con `blob` y `url`.
+   - **Assertion:** `dl.href` apunta al nuevo `URL.createObjectURL(blob)`; `URL.revokeObjectURL` se llama sobre el anterior; `iswc-stop` con `blob` y `url`.
    - **Coverage:** `#finish` + `#revoke`.
 
-6. **`is-stop` contiene `blob.type='video/webm;codecs=vp9'` cuando hay soporte** — [categoría: browser-api]
+6. **`iswc-stop` contiene `blob.type='video/webm;codecs=vp9'` cuando hay soporte** — [categoría: browser-api]
    - **Setup:** `MediaRecorder.isTypeSupported('video/webm;codecs=vp9') === true`.
    - **Acción:** `start()` → stop.
    - **Assertion:** `detail.type === 'video/webm;codecs=vp9'`.
    - **Coverage:** branch mime preferida.
 
 7. **`disabled` evita `start()`** — [categoría: a11y]
-   - **Setup:** `<is-media-recorder disabled>`.
+   - **Setup:** `<iswc-media-recorder disabled>`.
    - **Acción:** Click en botón o `start()` manual.
    - **Assertion:** `start()` retorna sin llamar getUserMedia.
    - **Coverage:** guarda inicial.
 
 8. **`source` setter acepta valores no listados (`audio`)** — [categoría: edge-case]
-   - **Setup:** `<is-media-recorder source="audio">`.
+   - **Setup:** `<iswc-media-recorder source="audio">`.
    - **Acción:** Leer getter.
    - **Assertion:** `host.source === 'camera'` (default). El atributo DOM se queda con `audio` pero el getter lo ignora.
    - **Coverage:** `return v === 'mic' || v === 'display' ? v : 'camera'`.
@@ -630,7 +630,7 @@
    - **Assertion:** `stop()` se invoca; `getUserMedia` se llama de nuevo con `audio:true`.
    - **Coverage:** `attributeChangedCallback` para `source`.
 
-10. **`is-stop` payload en modo `mic`** — [categoría: ui/ux]
+10. **`iswc-stop` payload en modo `mic`** — [categoría: ui/ux]
     - **Setup:** source="mic", MIME `audio/webm` soportado.
     - **Acción:** start/stop.
     - **Assertion:** `dl.download === 'audio.webm'`; `blob.type === 'audio/webm'`.
@@ -642,10 +642,10 @@
     - **Assertion:** track.stop llamado; URL.revokeObjectURL invocado; `srcObject` null.
     - **Coverage:** cleanup.
 
-12. **Blob vacío (0 chunks) produce `is-stop` válido** — [categoría: edge-case]
+12. **Blob vacío (0 chunks) produce `iswc-stop` válido** — [categoría: edge-case]
     - **Setup:** MediaRecorder sin `dataavailable`.
     - **Acción:** start/stop inmediato.
-    - **Assertion:** Blob con 0 bytes; sin crash; `is-stop` emitido.
+    - **Assertion:** Blob con 0 bytes; sin crash; `iswc-stop` emitido.
     - **Coverage:** `#chunks = []` antes de empezar.
 
 13. **`MediaRecorder.isTypeSupported` falso → fallback a `video/webm` simple** — [categoría: browser-api]
@@ -662,38 +662,38 @@
 
 ---
 
-## 8. `<is-qrcode>` — `src/components/media/qrcode.ts` (148 LOC)
+## 8. `<iswc-qrcode>` — `src/components/media/qrcode.ts` (148 LOC)
 
-**Atributos:** `value`, `level` (L|M|Q|H), `cell`, `margin`, `fg`, `bg`. **Eventos:** `is-render`. **API:** `svg` (getter), `dataURL()`. **Dependencia externa:** `import('https://esm.sh/qrcode-generator@1.4.4')`. **Niveles EC** (corrección de errores).
+**Atributos:** `value`, `level` (L|M|Q|H), `cell`, `margin`, `fg`, `bg`. **Eventos:** `iswc-render`. **API:** `svg` (getter), `dataURL()`. **Dependencia externa:** `import('https://esm.sh/qrcode-generator@1.4.4')`. **Niveles EC** (corrección de errores).
 
 ### Tests propuestos
 
 1. **`value="hola"` genera QR válido** — [categoría: browser-api]
    - **Setup:** Mock `import` de `qrcode-generator` con spy. O permitir fetch real a esm.sh en CI (skip si offline).
-   - **Acción:** `<is-qrcode value="hola">` conectar.
-   - **Assertion:** `shadow.querySelector('svg')` presente; `<path d="...">` no vacío; `is-render` con `svg`.
+   - **Acción:** `<iswc-qrcode value="hola">` conectar.
+   - **Assertion:** `shadow.querySelector('svg')` presente; `<path d="...">` no vacío; `iswc-render` con `svg`.
    - **Coverage:** rama feliz.
 
 2. **`value` cambia el QR** — [categoría: integration]
-   - **Setup:** `<is-qrcode value="a">`.
+   - **Setup:** `<iswc-qrcode value="a">`.
    - **Acción:** `setAttribute('value', 'bbbbb')`.
-   - **Assertion:** Se emite `is-render` nuevo; path `d` cambia.
+   - **Assertion:** Se emite `iswc-render` nuevo; path `d` cambia.
    - **Coverage:** `attributeChangedCallback`.
 
 3. **`value` vacío no produce SVG** — [categoría: edge-case]
-   - **Setup:** `<is-qrcode></is-qrcode>` (sin value).
+   - **Setup:** `<iswc-qrcode></iswc-qrcode>` (sin value).
    - **Acción:** Conectar.
    - **Assertion:** `#canvas.innerHTML === ''`.
    - **Coverage:** `if (!value) return;`.
 
 4. **`level` inválido (`Z`) cae al default `L`** — [categoría: edge-case]
-   - **Setup:** `<is-qrcode value="x" level="Z">`.
+   - **Setup:** `<iswc-qrcode value="x" level="Z">`.
    - **Acción:** Conectar.
    - **Assertion:** la librería se invoca con `'L'` (default `this.getAttribute('level') || 'L'`); sin error.
    - **Coverage:** fallback `|| 'L'`.
 
 5. **`fg` y `bg` se aplican al path** — [categoría: ui/ux]
-   - **Setup:** `<is-qrcode value="x" fg="#ff0" bg="#000">`.
+   - **Setup:** `<iswc-qrcode value="x" fg="#ff0" bg="#000">`.
    - **Acción:** Render.
    - **Assertion:** `<rect fill="#000">` presente; `<path fill="#ff0">` presente.
    - **Coverage:** ramas condicionales.
@@ -741,7 +741,7 @@
     - **Coverage:** aislamiento QR vs DOM.
 
 13. **`bg="transparent"` omite el `<rect>` de fondo** — [categoría: edge-case]
-    - **Setup:** `<is-qrcode value="x" bg="transparent">`.
+    - **Setup:** `<iswc-qrcode value="x" bg="transparent">`.
     - **Acción:** Render.
     - **Assertion:** sólo 1 `<rect>` (no aplica bg) o 0.
     - **Coverage:** `if (bg !== 'transparent')`.
@@ -754,25 +754,25 @@
 
 ---
 
-## 9. `<is-speech>` — `src/components/media/speech.ts` (145 LOC)
+## 9. `<iswc-speech>` — `src/components/media/speech.ts` (145 LOC)
 
-**Atributos:** `lang`, `text`. **Métodos:** `listen()`, `stop()`, `speak()`, `cancel()`. **Eventos:** `is-result { transcript, isFinal }`, `is-speak-end`, `is-error { message }`. **Browser APIs:** `SpeechRecognition` / `webkitSpeechRecognition`, `SpeechSynthesisUtterance`. **UI:** dos `<is-button>` con `aria-pressed`.
+**Atributos:** `lang`, `text`. **Métodos:** `listen()`, `stop()`, `speak()`, `cancel()`. **Eventos:** `iswc-result { transcript, isFinal }`, `iswc-speak-end`, `iswc-error { message }`. **Browser APIs:** `SpeechRecognition` / `webkitSpeechRecognition`, `SpeechSynthesisUtterance`. **UI:** dos `<iswc-button>` con `aria-pressed`.
 
 ### Tests propuestos
 
 1. **`SpeechRecognition` no disponible (Firefox)** — [categoría: browser-api]
    - **Setup:** borrar `window.SpeechRecognition` y `webkitSpeechRecognition`.
    - **Acción:** `listen()`.
-   - **Assertion:** `is-error { message: 'SpeechRecognition no disponible' }`; `#listening === false`; `aria-pressed="false"`.
+   - **Assertion:** `iswc-error { message: 'SpeechRecognition no disponible' }`; `#listening === false`; `aria-pressed="false"`.
    - **Coverage:** guarda `if (!Ctor)`.
 
-2. **`listen()` emite `is-result` con `transcript` final** — [categoría: browser-api]
+2. **`listen()` emite `iswc-result` con `transcript` final** — [categoría: browser-api]
    - **Setup:** Mock SpeechRecognition; `onresult` con resultados `isFinal=true` ("hola mundo").
    - **Acción:** `listen()` y disparar `onresult`.
-   - **Assertion:** `#out.textContent === 'hola mundo'`; `is-result { transcript: 'hola mundo', isFinal: true }`.
+   - **Assertion:** `#out.textContent === 'hola mundo'`; `iswc-result { transcript: 'hola mundo', isFinal: true }`.
    - **Coverage:** handler `onresult`.
 
-3. **`is-result` distingue final de interim** — [categoría: edge-case]
+3. **`iswc-result` distingue final de interim** — [categoría: edge-case]
    - **Setup:** Mock con `[{ transcript: 'h', isFinal: false }, { transcript: 'o', isFinal: true }]`.
    - **Acción:** `onresult`.
    - **Assertion:** `transcript === 'ho'`; `isFinal === true` (por la presencia de `finals`).
@@ -781,7 +781,7 @@
 4. **Error `no-speech` se ignora silenciosamente** — [categoría: edge-case]
    - **Setup:** Mock onerror con `error='no-speech'`.
    - **Acción:** Disparar.
-   - **Assertion:** NO se emite `is-error`.
+   - **Assertion:** NO se emite `iswc-error`.
    - **Coverage:** guarda `if (ev.error === 'no-speech' || ev.error === 'aborted') return`.
 
 5. **`lang` cambia en sesión activa re-aplica al `rec.lang`** — [categoría: integration]
@@ -799,7 +799,7 @@
 7. **`speak()` con `speechSynthesis` ausente** — [categoría: browser-api]
    - **Setup:** borrar `window.speechSynthesis`.
    - **Acción:** `speak()`.
-   - **Assertion:** `is-error { message: 'speechSynthesis no disponible' }`.
+   - **Assertion:** `iswc-error { message: 'speechSynthesis no disponible' }`.
    - **Coverage:** guarda `if (!window.speechSynthesis)`.
 
 8. **`stop()` limpia sesión y desactiva `aria-pressed`** — [categoría: a11y]
@@ -820,14 +820,14 @@
     - **Assertion:** spy llamado; sin emitir eventos.
     - **Coverage:** `#cancel`.
 
-11. **`speak()` con `is-speak-end`** — [categoría: integration]
+11. **`speak()` con `iswc-speak-end`** — [categoría: integration]
     - **Setup:** Mock SpeechSynthesis con `onend` invocable.
     - **Acción:** `speak()`; disparar onend.
-    - **Assertion:** `is-speak-end` emitido.
+    - **Assertion:** `iswc-speak-end` emitido.
     - **Coverage:** `u.onend`.
 
 12. **`text` getter toma `textContent` si no hay atributo** — [categoría: edge-case]
-    - **Setup:** `<is-speech><slot>Hola slot</slot></is-speech>`.
+    - **Setup:** `<iswc-speech><slot>Hola slot</slot></iswc-speech>`.
     - **Acción:** Leer getter.
     - **Assertion:** `host.text === 'Hola slot'` (trim).
     - **Coverage:** fallback `this.textContent`.
@@ -835,7 +835,7 @@
 13. **Reducción de movimiento: nada que animar (no UI animada)** — [categoría: reduced-motion]
     - **Setup:** N/A
     - **Acción:** N/A
-    - **Assertion:** Documentar explícitamente que `<is-speech>` no tiene animaciones a respetar.
+    - **Assertion:** Documentar explícitamente que `<iswc-speech>` no tiene animaciones a respetar.
     - **Coverage:** confirmar accesibilidad.
 
 14. **XSS vía `text` con HTML** — [categoría: xss]
@@ -846,7 +846,7 @@
 
 ---
 
-## 10. `<is-theme-img>` — `src/components/media/theme-img.ts` (154 LOC)
+## 10. `<iswc-theme-img>` — `src/components/media/theme-img.ts` (154 LOC)
 
 **Atributos:** `src-dark`, `src-light`, `alt`, `shape` (circle|rounded|square), `fit` (contain|cover), `theme` (dark|light forzado), `loading`. **CSS Part:** `::part(image)`. **Watcher de tema** via `theme-scope.js` (`findThemeContainer`, `readTheme`, `watchThemeContainer`).
 
@@ -854,7 +854,7 @@
 
 1. **Cambio de tema del contenedor dispara `data-active-theme`** — [categoría: integration]
    - **Setup:** Mock `findThemeContainer` y `watchThemeContainer` (devolver fake con `dataset.theme='dark'`).
-   - **Acción:** Insertar `<is-theme-img src-dark="d.svg" src-light="l.svg">`; luego cambiar `container.dataset.theme='light'`.
+   - **Acción:** Insertar `<iswc-theme-img src-dark="d.svg" src-light="l.svg">`; luego cambiar `container.dataset.theme='light'`.
    - **Assertion:** `#img.src` cambia a `'l.svg'`; `host.dataset.activeTheme === 'light'`.
    - **Coverage:** `#watch` + `#sync`.
 
@@ -871,13 +871,13 @@
    - **Coverage:** `theme === 'light' ? light || dark : dark || light`.
 
 4. **`alt` se aplica al `<img>` interno** — [categoría: a11y]
-   - **Setup:** `<is-theme-img src-dark="d.svg" alt="Logo">`.
+   - **Setup:** `<iswc-theme-img src-dark="d.svg" alt="Logo">`.
    - **Acción:** Conectar.
    - **Assertion:** `img.alt === 'Logo'`.
    - **Coverage:** `this.#img.alt = this.alt`.
 
 5. **`shape` inválido se ignora** — [categoría: edge-case]
-   - **Setup:** `<is-theme-img shape="oval">`.
+   - **Setup:** `<iswc-theme-img shape="oval">`.
    - **Acción:** Leer getter.
    - **Assertion:** `host.shape === null`; atributo DOM queda vacío (setter).
    - **Coverage:** `VALID_SHAPE.has`.
@@ -907,7 +907,7 @@
    - **Coverage:** `#unwatch?.()` en onDisconnected.
 
 10. **Tema cambia en runtime — sin recarga** — [categoría: integration]
-    - **Setup:** `<is-theme-img src-dark="d.svg" src-light="l.svg">` con watchThemeContainer fake que ejecuta callback.
+    - **Setup:** `<iswc-theme-img src-dark="d.svg" src-light="l.svg">` con watchThemeContainer fake que ejecuta callback.
     - **Acción:** invocar manualmente `callback({ theme: 'light' })`.
     - **Assertion:** `#img.src` actualizado.
     - **Coverage:** rama watch.
@@ -932,22 +932,22 @@
 
 ---
 
-## 11. `<is-video-playlist>` — `src/components/media/video-playlist.ts` (780 LOC)
+## 11. `<iswc-video-playlist>` — `src/components/media/video-playlist.ts` (780 LOC)
 
-**Atributos:** `autoplay-next`, `placement` (left|right|bottom), `channel`, `accordion` (auto|open|closed). **Slots:** default, `tools-left`, `tools-right`, `config`. **CSS Parts:** `playlist`, `playlist-items`, `playlist-item`, `playlist-title`, `playlist-duration`, `channel`, `title`, `header`, `header-actions`, `player-toolbar`, `tools-left`, `tools-right`, `play-button`, `seek`, `time`, `mute-button`, `volume-slider`, `status`, `base`, `playlist-head`, `playlist-toggle`, `playlist-thumbnail`. **Métodos:** `goTo(i)`, `next()`, `previous()`, `play(i)`. **Eventos:** `is-video-change`, `is-change`. **Browser APIs:** `<video>` nativo, `IntersectionObserver` (no), `MediaQueryList` (matchMedia), `MutationObserver`, `canvas.toDataURL` (poster).
+**Atributos:** `autoplay-next`, `placement` (left|right|bottom), `channel`, `accordion` (auto|open|closed). **Slots:** default, `tools-left`, `tools-right`, `config`. **CSS Parts:** `playlist`, `playlist-items`, `playlist-item`, `playlist-title`, `playlist-duration`, `channel`, `title`, `header`, `header-actions`, `player-toolbar`, `tools-left`, `tools-right`, `play-button`, `seek`, `time`, `mute-button`, `volume-slider`, `status`, `base`, `playlist-head`, `playlist-toggle`, `playlist-thumbnail`. **Métodos:** `goTo(i)`, `next()`, `previous()`, `play(i)`. **Eventos:** `iswc-video-change`, `iswc-change`. **Browser APIs:** `<video>` nativo, `IntersectionObserver` (no), `MediaQueryList` (matchMedia), `MutationObserver`, `canvas.toDataURL` (poster).
 
 ### Tests propuestos
 
-1. **Slot con `<is-video>` actualiza la lista al `slotchange`** — [categoría: integration]
-   - **Setup:** `<is-video-playlist><is-video src="a.mp4"></is-video><is-video src="b.mp4"></is-video></is-video-playlist>`.
+1. **Slot con `<iswc-video>` actualiza la lista al `slotchange`** — [categoría: integration]
+   - **Setup:** `<iswc-video-playlist><iswc-video src="a.mp4"></iswc-video><iswc-video src="b.mp4"></iswc-video></iswc-video-playlist>`.
    - **Acción:** Insertar en DOM.
    - **Assertion:** `playlist-items` contiene 2 elementos con `data-index` 0 y 1; primer item `aria-selected="true"`.
    - **Coverage:** `#refresh`.
 
-2. **`goTo(1)` cambia `is-video-change` con `previousIndex=0, currentIndex=1`** — [categoría: integration]
+2. **`goTo(1)` cambia `iswc-video-change` con `previousIndex=0, currentIndex=1`** — [categoría: integration]
    - **Setup:** Playlist con 3 videos; spy de eventos.
    - **Acción:** `el.goTo(1)`.
-   - **Assertion:** `is-video-change { previousIndex: 0, currentIndex: 1, video: videos[1] }`; `is-change { index: 1 }`.
+   - **Assertion:** `iswc-video-change { previousIndex: 0, currentIndex: 1, video: videos[1] }`; `iswc-change { index: 1 }`.
    - **Coverage:** `#activate({ emit: true })`.
 
 3. **`goTo(-1)` se clampa a 0** — [categoría: edge-case]
@@ -962,15 +962,15 @@
    - **Assertion:** `index === 1`.
    - **Coverage:** clamp superior.
 
-5. **`autoplay-next=true` y evento `is-ended` → `next()` automático** — [categoría: integration]
+5. **`autoplay-next=true` y evento `iswc-ended` → `next()` automático** — [categoría: integration]
    - **Setup:** Playlist con 2 videos; `autoplay-next` activo.
-   - **Acción:** Disparar `is-ended` sobre `videos[0]`.
+   - **Acción:** Disparar `iswc-ended` sobre `videos[0]`.
    - **Assertion:** `goTo(1)` llamado; `videos[1]` activo.
    - **Coverage:** `#boundEnded`.
 
-6. **`is-ended` sin `autoplay-next` no avanza** — [categoría: edge-case]
+6. **`iswc-ended` sin `autoplay-next` no avanza** — [categoría: edge-case]
    - **Setup:** Sin atributo.
-   - **Acción:** Disparar `is-ended`.
+   - **Acción:** Disparar `iswc-ended`.
    - **Assertion:** `index` no cambia.
    - **Coverage:** guarda `if (!this.autoplayNext) return`.
 
@@ -1040,10 +1040,10 @@
     - **Assertion:** `media.currentTime === 75`.
     - **Coverage:** `#applySeek`.
 
-18. **`goTo` emite `is-change` y `is-video-change` sólo cuando cambia** — [categoría: edge-case]
+18. **`goTo` emite `iswc-change` y `iswc-video-change` sólo cuando cambia** — [categoría: edge-case]
     - **Setup:** `index=2`.
     - **Acción:** `goTo(2)`.
-    - **Assertion:** NO se emite `is-change` (changed=false). Sólo se emite si `i !== this.#index`.
+    - **Assertion:** NO se emite `iswc-change` (changed=false). Sólo se emite si `i !== this.#index`.
     - **Coverage:** `const changed = i !== this.#index`.
 
 19. **Poster del video activo se muestra en miniatura** — [categoría: integration]
@@ -1077,12 +1077,12 @@
     - **Coverage:** template.
 
 24. **XSS vía `title="<img onerror=alert(1)>"`** — [categoría: xss]
-    - **Setup:** `<is-video title='<img src=x onerror=alert(1)>'>`.
+    - **Setup:** `<iswc-video title='<img src=x onerror=alert(1)>'>`.
     - **Acción:** Insertar en playlist.
     - **Assertion:** El título se asigna vía `textContent` (no innerHTML), no se renderiza la etiqueta.
     - **Coverage:** `videoTitle()` + `textContent`.
 
-25. **`is-video` activo se marca con `data-active`** — [categoría: integration]
+25. **`iswc-video` activo se marca con `data-active`** — [categoría: integration]
     - **Setup:** Playlist con 2 videos.
     - **Acción:** `goTo(1)`.
     - **Assertion:** `videos[1].hasAttribute('data-active')`; `videos[0]` sin él.
@@ -1091,7 +1091,7 @@
 26. **`#unbindVideos` en `disconnectedCallback`** — [categoría: integration]
     - **Setup:** Playlist con 2 videos.
     - **Acción:** `el.remove()`.
-    - **Assertion:** `videos[0]` ya no tiene listener `is-ended`; `attrObs.disconnect()`.
+    - **Assertion:** `videos[0]` ya no tiene listener `iswc-ended`; `attrObs.disconnect()`.
     - **Coverage:** cleanup.
 
 27. **`channel` attribute actualiza la cabecera** — [categoría: ui/ux]
@@ -1102,16 +1102,16 @@
 
 ---
 
-## 12. `<is-video>` — `src/components/media/video.ts` (588 LOC)
+## 12. `<iswc-video>` — `src/components/media/video.ts` (588 LOC)
 
-**Atributos:** `src`, `poster`, `without-controls`, `muted`, `loop`, `autoplay`, `playsinline`. **Slots:** default (sources/tracks). **Eventos:** `is-play`, `is-pause`, `is-ended`, nativos reenviados (bubbles, composed). **CSS Parts:** `base`, `video`, `controls`, `play-button`, `mute-button`, `volume`, `volume-slider`, `time`, `seek`, `progress`, `big-play`, `fullscreen-button`, `pip-button`, `settings-button`. **Métodos:** `play()`, `pause()`, `toggleFullscreen()`, `togglePictureInPicture()`, `toggleMenu()`. **Teclado:** espacio/k, m, f, ←/→ ±5s, j/l ±10s, ↑/↓ ±5%, 0–9 saltos por decenas. **Browser APIs:** `requestFullscreen`, `pictureInPicture`, `MediaQuery`, `document.fullscreenchange`, `enterpictureinpicture`, `leavepictureinpicture`, `<video>` nativo, `IntersectionObserver` no, `MutationObserver` no. **No usa IndexedDB directamente** (sólo mencionado en tags del audit; verificar). **Auto-hide chrome** tras 2600 ms idle.
+**Atributos:** `src`, `poster`, `without-controls`, `muted`, `loop`, `autoplay`, `playsinline`. **Slots:** default (sources/tracks). **Eventos:** `iswc-play`, `iswc-pause`, `iswc-ended`, nativos reenviados (bubbles, composed). **CSS Parts:** `base`, `video`, `controls`, `play-button`, `mute-button`, `volume`, `volume-slider`, `time`, `seek`, `progress`, `big-play`, `fullscreen-button`, `pip-button`, `settings-button`. **Métodos:** `play()`, `pause()`, `toggleFullscreen()`, `togglePictureInPicture()`, `toggleMenu()`. **Teclado:** espacio/k, m, f, ←/→ ±5s, j/l ±10s, ↑/↓ ±5%, 0–9 saltos por decenas. **Browser APIs:** `requestFullscreen`, `pictureInPicture`, `MediaQuery`, `document.fullscreenchange`, `enterpictureinpicture`, `leavepictureinpicture`, `<video>` nativo, `IntersectionObserver` no, `MutationObserver` no. **No usa IndexedDB directamente** (sólo mencionado en tags del audit; verificar). **Auto-hide chrome** tras 2600 ms idle.
 
 > Nota sobre `database` en tags: el componente no usa IndexedDB ni APIs de DB directamente. Probable confusión de tagging en el audit.
 
 ### Tests propuestos
 
 1. **Reproducir / pausar con `space` y `k`** — [categoría: keyboard]
-   - **Setup:** `<is-video src="a.mp4" tabindex="0">` con `controls`; foco en el host.
+   - **Setup:** `<iswc-video src="a.mp4" tabindex="0">` con `controls`; foco en el host.
    - **Acción:** `keydown { key: ' ' }` y luego `keydown { key: 'k' }`.
    - **Assertion:** `media.play()` llamado tras space; `media.pause()` tras k.
    - **Coverage:** `#onKeydown`.
@@ -1171,13 +1171,13 @@
     - **Coverage:** `#wake`.
 
 11. **`#distributeSlot` mueve `<source>` y `<track>` al `<video>` interno** — [categoría: integration]
-    - **Setup:** `<is-video><source src="hd.mp4" type="video/mp4"></is-video>`.
+    - **Setup:** `<iswc-video><source src="hd.mp4" type="video/mp4"></iswc-video>`.
     - **Acción:** Conectar.
     - **Assertion:** el `<video>` interno tiene un `<source data-is-injected>`.
     - **Coverage:** `#distributeSlot`.
 
 12. **Sin `src` y sin slotted sources → `#video.removeAttribute('src')`** — [categoría: edge-case]
-    - **Setup:** `<is-video>` sin src ni slot.
+    - **Setup:** `<iswc-video>` sin src ni slot.
     - **Acción:** Conectar.
     - **Assertion:** `video.src === ''`.
     - **Coverage:** `#syncAttrs`.
@@ -1195,7 +1195,7 @@
     - **Coverage:** guarda en `connectedCallback`.
 
 15. **`ratechange` actualiza menú de velocidad** — [categoría: browser-api]
-    - **Setup:** `<is-video src="a.mp4">`.
+    - **Setup:** `<iswc-video src="a.mp4">`.
     - **Acción:** `media.playbackRate = 1.5`; disparar `ratechange`.
     - **Assertion:** botón 1.5x con `aria-checked="true"`; icono = `mdi:play-speed`.
     - **Coverage:** `#syncMenuUi`.
@@ -1207,7 +1207,7 @@
     - **Coverage:** listener `wrap.pointerdown`.
 
 17. **Click en `#big-play` llama `togglePlay()`** — [categoría: ui/ux]
-    - **Setup:** `<is-video>`.
+    - **Setup:** `<iswc-video>`.
     - **Acción:** click en big-play.
     - **Assertion:** `play()` o `pause()` invocado según estado.
     - **Coverage:** listener.
@@ -1219,7 +1219,7 @@
     - **Coverage:** `dblclick` listener.
 
 19. **`muted` setter actualiza `video.muted`** — [categoría: ui/ux]
-    - **Setup:** `<is-video muted>`.
+    - **Setup:** `<iswc-video muted>`.
     - **Acción:** Conectar.
     - **Assertion:** `video.muted === true`; atributo `muted` presente.
     - **Coverage:** `#syncAttrs`.
@@ -1237,7 +1237,7 @@
     - **Coverage:** `.catch(() => {})`.
 
 22. **`tabindex` se establece en connectedCallback** — [categoría: a11y]
-    - **Setup:** `<is-video>`.
+    - **Setup:** `<iswc-video>`.
     - **Acción:** Conectar.
     - **Assertion:** `host.tabindex === '0'`.
     - **Coverage:** `if (!this.hasAttribute('tabindex'))`.
@@ -1284,20 +1284,20 @@
     - **Assertion:** transitions con `transition-property: none`.
     - **Coverage:** accesibilidad.
 
-30. **`is-play`/`is-pause`/`is-ended` burbujean y composed** — [categoría: integration]
+30. **`iswc-play`/`iswc-pause`/`iswc-ended` burbujean y composed** — [categoría: integration]
     - **Setup:** Listener en `document.body`.
     - **Acción:** Disparar play/pause/ended en `media`.
     - **Assertion:** los 3 eventos llegan al listener fuera del shadow.
     - **Coverage:** `dispatchEvent({ bubbles: true, composed: true })` + `emit()`.
 
 31. **`poster` se aplica al `<video>.poster`** — [categoría: ui/ux]
-    - **Setup:** `<is-video poster="x.jpg">`.
+    - **Setup:** `<iswc-video poster="x.jpg">`.
     - **Acción:** Conectar.
     - **Assertion:** `media.poster === 'x.jpg'`.
     - **Coverage:** `#syncAttrs`.
 
 32. **`src` setter actualiza `video.src`** — [categoría: integration]
-    - **Setup:** `<is-video>`.
+    - **Setup:** `<iswc-video>`.
     - **Acción:** `el.src = 'a.mp4'`.
     - **Assertion:** atributo `src="a.mp4"`; `media.src === 'a.mp4'`.
     - **Coverage:** setter + `#syncAttrs`.
@@ -1308,18 +1308,18 @@
 
 | # | Testable | LOC | Atributos clave | Browser APIs | Eventos | CSS Parts | Tests propuestos | Categorías cubiertas |
 |---|----------|-----|-----------------|--------------|---------|-----------|------------------|----------------------|
-| 1 | `<is-avatar>` | 146 | `image`, `initials`, `label`, `loading`, `shape` | `<img>`, slot, error event | `is-error` | `avatar`, `image`, `initials`, `icon` | 12 | a11y, edge-case, ui/ux, xss, integration |
-| 2 | `<is-barcode-scanner>` | 115 | `formats`, `disabled` | `BarcodeDetector`, `getUserMedia` | `is-detect`, `is-error` | `preview`, `hint` | 13 | browser-api, a11y, edge-case, integration, performance |
-| 3 | `<is-barcode>` | 199 | `value`, `type`, `height`, `fg`, `bg`, `show-text`, `quiet` | `<svg>`, Code128 + EAN13 GS1 | `is-render` | `root`, `canvas`, `text` | 14 | edge-case, ui/ux, performance, integration, xss |
+| 1 | `<iswc-avatar>` | 146 | `image`, `initials`, `label`, `loading`, `shape` | `<img>`, slot, error event | `iswc-error` | `avatar`, `image`, `initials`, `icon` | 12 | a11y, edge-case, ui/ux, xss, integration |
+| 2 | `<iswc-barcode-scanner>` | 115 | `formats`, `disabled` | `BarcodeDetector`, `getUserMedia` | `iswc-detect`, `iswc-error` | `preview`, `hint` | 13 | browser-api, a11y, edge-case, integration, performance |
+| 3 | `<iswc-barcode>` | 199 | `value`, `type`, `height`, `fg`, `bg`, `show-text`, `quiet` | `<svg>`, Code128 + EAN13 GS1 | `iswc-render` | `root`, `canvas`, `text` | 14 | edge-case, ui/ux, performance, integration, xss |
 | 4 | `icon-explorer` (preview) | 614 | (sin atributos propios; consume `index.json`, `collections.json`) | `fetch`, `IntersectionObserver`, `URL.createObjectURL`, `canvas.toBlob` | (no propios) | (no propios) | 15 | integration, edge-case, ui/ux, performance, xss |
-| 5 | `<is-icon>` | 245 | `icon`, `name`, `library`, `label`, `src` | `fetch`, `AbortController`, `resolveIconRaw` | (no propios) | `icon` | 15 | browser-api, integration, a11y, edge-case, performance, reduced-motion |
-| 6 | `<is-image-editor>` | 330 | `src`, `zoom`, `rotation`, `aspect` | `<canvas>`, `ResizeObserver`, `Image` | `is-load`, `is-change`, `is-crop` | `root`, `viewport`, `canvas`, `selection`, `toolbar`, `status` | 15 | browser-api, edge-case, integration, performance, xss, reduced-motion |
-| 7 | `<is-media-recorder>` | 137 | `source`, `disabled` | `getUserMedia`, `getDisplayMedia`, `MediaRecorder` | `is-start`, `is-stop`, `is-error` | `preview`, `download` | 14 | browser-api, a11y, integration, edge-case, reduced-motion |
-| 8 | `<is-qrcode>` | 148 | `value`, `level`, `cell`, `margin`, `fg`, `bg` | `import('https://esm.sh/...')`, `<svg>`, `canvas.toDataURL` | `is-render` | `root`, `canvas`, `status` | 14 | browser-api, integration, edge-case, performance, xss, reduced-motion |
-| 9 | `<is-speech>` | 145 | `lang`, `text` | `SpeechRecognition`, `SpeechSynthesisUtterance` | `is-result`, `is-speak-end`, `is-error` | `bar`, `transcript` | 14 | browser-api, a11y, integration, edge-case, xss, reduced-motion |
-| 10 | `<is-theme-img>` | 154 | `src-dark`, `src-light`, `alt`, `shape`, `fit`, `theme`, `loading` | `<img>`, theme watcher | (no propios) | `image` | 13 | integration, edge-case, a11y, performance, ui/ux, xss, reduced-motion |
-| 11 | `<is-video-playlist>` | 780 | `autoplay-next`, `placement`, `channel`, `accordion` | `<video>` (vía `<is-video>`), `matchMedia`, `MutationObserver`, `canvas.toDataURL` (poster) | `is-video-change`, `is-change` | 14 parts (`playlist*`, `player-*`, `tools-*`, `seek`, `time`, etc.) | 27 | integration, keyboard, ui/ux, edge-case, focus, aria, xss, browser-api |
-| 12 | `<is-video>` | 588 | `src`, `poster`, `without-controls`, `muted`, `loop`, `autoplay`, `playsinline` | `<video>`, `requestFullscreen`, `pictureInPicture`, `MediaQuery`, `document.fullscreenchange`, `enterpictureinpicture`, `leavepictureinpicture` | `is-play`, `is-pause`, `is-ended` + nativos | 13 parts (`base`, `video`, `controls`, `play-button`, `mute-button`, `volume`, `seek`, `progress`, `big-play`, `fullscreen-button`, `pip-button`, `settings-button`, `time`, `volume-slider`) | 32 | keyboard, browser-api, ui/ux, edge-case, integration, a11y, reduced-motion |
+| 5 | `<iswc-icon>` | 245 | `icon`, `name`, `library`, `label`, `src` | `fetch`, `AbortController`, `resolveIconRaw` | (no propios) | `icon` | 15 | browser-api, integration, a11y, edge-case, performance, reduced-motion |
+| 6 | `<iswc-image-editor>` | 330 | `src`, `zoom`, `rotation`, `aspect` | `<canvas>`, `ResizeObserver`, `Image` | `iswc-load`, `iswc-change`, `iswc-crop` | `root`, `viewport`, `canvas`, `selection`, `toolbar`, `status` | 15 | browser-api, edge-case, integration, performance, xss, reduced-motion |
+| 7 | `<iswc-media-recorder>` | 137 | `source`, `disabled` | `getUserMedia`, `getDisplayMedia`, `MediaRecorder` | `iswc-start`, `iswc-stop`, `iswc-error` | `preview`, `download` | 14 | browser-api, a11y, integration, edge-case, reduced-motion |
+| 8 | `<iswc-qrcode>` | 148 | `value`, `level`, `cell`, `margin`, `fg`, `bg` | `import('https://esm.sh/...')`, `<svg>`, `canvas.toDataURL` | `iswc-render` | `root`, `canvas`, `status` | 14 | browser-api, integration, edge-case, performance, xss, reduced-motion |
+| 9 | `<iswc-speech>` | 145 | `lang`, `text` | `SpeechRecognition`, `SpeechSynthesisUtterance` | `iswc-result`, `iswc-speak-end`, `iswc-error` | `bar`, `transcript` | 14 | browser-api, a11y, integration, edge-case, xss, reduced-motion |
+| 10 | `<iswc-theme-img>` | 154 | `src-dark`, `src-light`, `alt`, `shape`, `fit`, `theme`, `loading` | `<img>`, theme watcher | (no propios) | `image` | 13 | integration, edge-case, a11y, performance, ui/ux, xss, reduced-motion |
+| 11 | `<iswc-video-playlist>` | 780 | `autoplay-next`, `placement`, `channel`, `accordion` | `<video>` (vía `<iswc-video>`), `matchMedia`, `MutationObserver`, `canvas.toDataURL` (poster) | `iswc-video-change`, `iswc-change` | 14 parts (`playlist*`, `player-*`, `tools-*`, `seek`, `time`, etc.) | 27 | integration, keyboard, ui/ux, edge-case, focus, aria, xss, browser-api |
+| 12 | `<iswc-video>` | 588 | `src`, `poster`, `without-controls`, `muted`, `loop`, `autoplay`, `playsinline` | `<video>`, `requestFullscreen`, `pictureInPicture`, `MediaQuery`, `document.fullscreenchange`, `enterpictureinpicture`, `leavepictureinpicture` | `iswc-play`, `iswc-pause`, `iswc-ended` + nativos | 13 parts (`base`, `video`, `controls`, `play-button`, `mute-button`, `volume`, `seek`, `progress`, `big-play`, `fullscreen-button`, `pip-button`, `settings-button`, `time`, `volume-slider`) | 32 | keyboard, browser-api, ui/ux, edge-case, integration, a11y, reduced-motion |
 
 **Total propuestas: 196 tests** distribuidos entre los 12 testables.
 
@@ -1328,7 +1328,7 @@
 ## Gaps transversales
 
 1. **Permisos denegados — UX de fallback**
-   - Patrón repetido en `barcode-scanner`, `media-recorder`, `speech`, `image-editor`: cuando el navegador rechaza `getUserMedia` / `SpeechRecognition` / `BarcodeDetector`, ¿hay un fallback visual claro? Las propuestas verifican que el `is-error` se emite, pero **falta validar el mensaje user-facing** (toast, callout, hint visible). Cubierto parcialmente en `barcode-scanner` con `.hint`, **ausente** en `media-recorder` (no hay `<output>` ni `<p class="hint">`), `speech` (sólo emite `is-error`) y `image-editor` (sólo `#status.textContent`).
+   - Patrón repetido en `barcode-scanner`, `media-recorder`, `speech`, `image-editor`: cuando el navegador rechaza `getUserMedia` / `SpeechRecognition` / `BarcodeDetector`, ¿hay un fallback visual claro? Las propuestas verifican que el `iswc-error` se emite, pero **falta validar el mensaje user-facing** (toast, callout, hint visible). Cubierto parcialmente en `barcode-scanner` con `.hint`, **ausente** en `media-recorder` (no hay `<output>` ni `<p class="hint">`), `speech` (sólo emite `iswc-error`) y `image-editor` (sólo `#status.textContent`).
 
 2. **`prefers-reduced-motion`**
    - Sólo mencionado en `avatar.css` y `video.css` (scrim + idle). Propuestas de tests verifican que el cambio de tema, el cambio de `icon` y el autohide no disparen transitions, pero **no hay un test transversal** que confirme cumplimiento sistemático. Recomendación: crear una suite que itere sobre los 12 y verifique `getComputedStyle(...).transitionDuration === '0s'` cuando el media query está activo.
@@ -1346,21 +1346,21 @@
    - `icon.ts` y `video.ts` registran listeners globales (`window.pointermove`, `document.fullscreenchange`) y crean `AbortController`. Las propuestas verifican cleanup individual, pero **falta un test transversal de memory leaks** que cuente listeners después de 50 mount/unmount cycles.
 
 7. **Permisos revocados en runtime**
-   - Si el usuario revoca el permiso de cámara desde el browser después de iniciar, `MediaStreamTrack.stop()` puede dispararse. Cubierto en `disconnectedCallback` pero **no hay test del caso "permission revoked mid-recording"** (evento `track.onended`). Recomendación: añadir mock que dispare `track.dispatchEvent(new Event('ended'))` y verificar que `media-recorder` emite `is-stop` con los chunks acumulados hasta el momento.
+   - Si el usuario revoca el permiso de cámara desde el browser después de iniciar, `MediaStreamTrack.stop()` puede dispararse. Cubierto en `disconnectedCallback` pero **no hay test del caso "permission revoked mid-recording"** (evento `track.onended`). Recomendación: añadir mock que dispare `track.dispatchEvent(new Event('ended'))` y verificar que `media-recorder` emite `iswc-stop` con los chunks acumulados hasta el momento.
 
 8. **CSS Part coverage**
    - `video-playlist` declara 14 parts, `video` declara 13, pero **no hay tests que verifiquen la accesibilidad visual de cada uno** (foco, hover, contraste). Las propuestas verifican estructura DOM pero no estilo.
 
-9. **Reduced-motion vs autohide de `<is-video>`**
-   - El chrome se oculta tras 2.6s. Si el usuario tiene `prefers-reduced-motion: reduce`, ¿debería seguir ocultándose? La propuesta #29 de `<is-video>` verifica transitions CSS, pero no la lógica JS. **Decisión de diseño abierta**: o se respeta el setting (chrome siempre visible) o se ignora (UX YouTube-like).
+9. **Reduced-motion vs autohide de `<iswc-video>`**
+   - El chrome se oculta tras 2.6s. Si el usuario tiene `prefers-reduced-motion: reduce`, ¿debería seguir ocultándose? La propuesta #29 de `<iswc-video>` verifica transitions CSS, pero no la lógica JS. **Decisión de diseño abierta**: o se respeta el setting (chrome siempre visible) o se ignora (UX YouTube-like).
 
 10. **IndexedDB — tagging posiblemente incorrecto**
-    - El audit taggea `<is-video>` con `database`, pero el componente **no usa IndexedDB**. Sugerencia: revisar el audit pipeline o documentar que `<is-video>` no tiene persistencia local. Si se necesita historial de progreso, sería un candidato para IndexedDB (futuro feature).
+    - El audit taggea `<iswc-video>` con `database`, pero el componente **no usa IndexedDB**. Sugerencia: revisar el audit pipeline o documentar que `<iswc-video>` no tiene persistencia local. Si se necesita historial de progreso, sería un candidato para IndexedDB (futuro feature).
 
-11. **Aria-live para `<is-speech>`**
+11. **Aria-live para `<iswc-speech>`**
     - `aria-live="polite"` está bien aplicado. Falta validar que **no se re-emita el mismo transcript** en cada `onresult` con `isFinal` parcial (screen reader bombardment). Las propuestas cubren el evento pero no el ritmo.
 
-12. **Teclado en `<is-video>` vs sliders**
+12. **Teclado en `<iswc-video>` vs sliders**
     - Documentado: `<input type="range">` ya consume flechas. Pero **no se testea el caso de doble handler** cuando el usuario hace focus en `#seek` y luego presiona `m` (mute): debería disparar mute. Las propuestas #23 cubren `ArrowRight` pero no otras teclas fuera de los sliders.
 
 ---
@@ -1368,6 +1368,6 @@
 ### Recomendación final
 
 1. **Cobertura mínima viable**: implementar los **tests de browser-api mocking** (permisos denegados, BarcodeDetector no disponible, SpeechRecognition ausente) — son los más impactantes y los menos cubiertos por los Tier A existentes.
-2. **Prioridad 2**: **keyboard tests de `<is-video>` y `<is-video-playlist>`** — el reproductor es el componente con más superficie de teclado.
+2. **Prioridad 2**: **keyboard tests de `<iswc-video>` y `<iswc-video-playlist>`** — el reproductor es el componente con más superficie de teclado.
 3. **Prioridad 3**: **XSS / sanitization transversal** en atributos `src` / `value`.
 4. **Prioridad 4**: **reduced-motion** transversal (una suite con `emulateMediaFeatures`).

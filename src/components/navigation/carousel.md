@@ -1,22 +1,22 @@
 ---
-tag: is-carousel
+tag: iswc-carousel
 tags:
-  - is-carousel
-  - is-carousel-item
+  - iswc-carousel
+  - iswc-carousel-item
 category: navigation
 status: public
 source: ./carousel.js
 style: ./carousel.css
 preview: ./carousel.json
 ---
-# `<is-carousel>` / `<is-carousel-item>`
+# `<iswc-carousel>` / `<iswc-carousel-item>`
 
 ## Propósito
 
 Carrusel tipo slides con paginación, autoplay, loop, navegación prev/next,
 indicadores, scroll-snap y soporte para swipe en touch.
 
-Este módulo registra `<is-carousel>`, `<is-carousel-item>`.
+Este módulo registra `<iswc-carousel>`, `<iswc-carousel-item>`.
 
 ## Cuándo usarlo
 
@@ -35,11 +35,11 @@ import './carousel.js';
 ## Ejemplo mínimo
 
 ```html
-<is-carousel loop>
-<is-carousel-item>Slide 1</is-carousel-item>
-<is-carousel-item>Slide 2</is-carousel-item>
+<iswc-carousel loop>
+<iswc-carousel-item>Slide 1</iswc-carousel-item>
+<iswc-carousel-item>Slide 2</iswc-carousel-item>
 …
-</is-carousel>
+</iswc-carousel>
 ```
 
 ## API
@@ -82,10 +82,10 @@ import './carousel.js';
 
 | Evento | detail | bubbles | composed | cancelable |
 | --- | --- | --- | --- | --- |
-| `is-carousel-slide-end` | no | sí | sí | no |
-| `is-carousel-change` | sí | sí | sí | no |
-| `is-carousel-play` | sí | sí | sí | no |
-| `is-carousel-pause` | sí | sí | sí | no |
+| `iswc-carousel-slide-end` | no | sí | sí | no |
+| `iswc-carousel-change` | sí | sí | sí | no |
+| `iswc-carousel-play` | sí | sí | sí | no |
+| `iswc-carousel-pause` | sí | sí | sí | no |
 
 ### Métodos y propiedades públicas
 
@@ -135,15 +135,15 @@ No declara integración form-associated propia en este módulo.
 
 Documentación de cabecera preservada desde fuente:
 
-> <is-carousel> + <is-carousel-item> — Web Components (vanilla, zero dependencies).
+> <iswc-carousel> + <iswc-carousel-item> — Web Components (vanilla, zero dependencies).
 > Carrusel tipo slides con paginación, autoplay, loop, navegación prev/next,
 > indicadores y soporte para swipe en touch.
->   <is-carousel autoplay loop>
->     <is-carousel-item>…</is-carousel-item>
->     <is-carousel-item>…</is-carousel-item>
->     <is-carousel-item>…</is-carousel-item>
->   </is-carousel>
-> Atributos <is-carousel>
+>   <iswc-carousel autoplay loop>
+>     <iswc-carousel-item>…</iswc-carousel-item>
+>     <iswc-carousel-item>…</iswc-carousel-item>
+>     <iswc-carousel-item>…</iswc-carousel-item>
+>   </iswc-carousel>
+> Atributos <iswc-carousel>
 >   active             number (0-indexed)
 >   loop               boolean                  (default false)
 >   autoplay           number (ms)              (default 0 — desactivado)
@@ -152,30 +152,30 @@ Documentación de cabecera preservada desde fuente:
 >   vertical           boolean                  (slides verticales)
 >   slides-per-page    number                   (default 1)
 >   aspect-ratio       string                   (CSS, e.g. "16/9")
-> Atributos <is-carousel-item>
+> Atributos <iswc-carousel-item>
 >   label              string (accesibilidad)
 >   disabled           boolean
 > Slots
->   <is-carousel>
+>   <iswc-carousel>
 >     (default)    items.
 >     prev-icon    override del icono prev.
 >     next-icon    override del icono next.
->   <is-carousel-item>
+>   <iswc-carousel-item>
 >     (default)   contenido del slide.
 > Eventos
->   is-carousel-change detail: { from, to, item }
->   is-carousel-pause  detail: { reason: 'user' | 'auto' | 'visibility' }
->   is-carousel-play   detail: {}
->   is-carousel-slide-end (cuando termina swipe)
+>   iswc-carousel-change detail: { from, to, item }
+>   iswc-carousel-pause  detail: { reason: 'user' | 'auto' | 'visibility' }
+>   iswc-carousel-play   detail: {}
+>   iswc-carousel-slide-end (cuando termina swipe)
 > CSS Parts
->   is-carousel: ::part(base) ::part(viewport) ::part(track) ::part(indicators) ::part(controls)
->   is-carousel-item: ::part(base)
+>   iswc-carousel: ::part(base) ::part(viewport) ::part(track) ::part(indicators) ::part(controls)
+>   iswc-carousel-item: ::part(base)
 
 ## Dependencias y componentes relacionados
 
 - [`../_shared/adopt-css.js`](../_shared/adopt-css.js)
 
-Tags del módulo: `<is-carousel>`, `<is-carousel-item>`.
+Tags del módulo: `<iswc-carousel>`, `<iswc-carousel-item>`.
 
 ## Accesibilidad
 
@@ -184,11 +184,11 @@ Preservar semántica, foco, teclado, labels y ARIA. ARIA detectado: `aria-label`
 ## Ejemplo avanzado
 
 ```html
-<is-carousel loop>
-<is-carousel-item>Slide 1</is-carousel-item>
-<is-carousel-item>Slide 2</is-carousel-item>
+<iswc-carousel loop>
+<iswc-carousel-item>Slide 1</iswc-carousel-item>
+<iswc-carousel-item>Slide 2</iswc-carousel-item>
 …
-</is-carousel>
+</iswc-carousel>
 ```
 
 ## Errores comunes

@@ -26,7 +26,8 @@
     font-size: 0.875em;
     font-weight: 500;
     color: var(--iswc-text-soft, inherit);
-    width: fit-content;
+    inline-size: fit-content;
+    &[hidden] { display: none !important; }
   }
 
   .support {
@@ -35,10 +36,14 @@
     gap: 0.75em;
     font-size: 0.8em;
     color: var(--iswc-text-dim, #7a8390);
+    &[hidden] { display: none !important; }
   }
 
   .hint,
-  .error-text { min-width: 0; }
+  .error-text {
+    min-inline-size: 0;
+    &[hidden] { display: none !important; }
+  }
 
   .error-text { color: var(--iswc-input-danger-text); }
 
@@ -46,21 +51,14 @@
     margin-inline-start: auto;
     flex: none;
     font-variant-numeric: tabular-nums;
+    &[hidden] { display: none !important; }
   }
-
-  .label[hidden],
-  .support[hidden],
-  .hint[hidden],
-  .error-text[hidden],
-  .count[hidden],
-  .adorn[hidden],
-  .adorn-text[hidden] { display: none !important; }
 
   .base {
     display: flex;
     align-items: center;
     gap: 0.15em;
-    min-height: 2.5em;
+    min-block-size: 2.5em;
     padding: 0 0.35em 0 0.75em;
     background: var(--iswc-input-bg);
     border: 1px solid var(--_border);
@@ -79,10 +77,11 @@
     color: var(--iswc-text-dim, #7a8390);
     line-height: 0;
     font-size: 1.1em;
-  }
 
-  .adorn:first-child { margin-right: 0.2em; }
-  .adorn:last-child { margin-left: 0.2em; padding-right: 0.15em; }
+    &:first-child { margin-inline-end: 0.2em; }
+    &:last-child { margin-inline-start: 0.2em; padding-inline-end: 0.15em; }
+    &[hidden] { display: none !important; }
+  }
 
   /* Adornos de texto (prefix/suffix): atenuados y no seleccionables */
   .adorn-text {
@@ -91,11 +90,12 @@
     white-space: nowrap;
     user-select: none;
     -webkit-user-select: none;
+    &[hidden] { display: none !important; }
   }
 
   .input {
     flex: 1;
-    min-width: 0;
+    min-inline-size: 0;
     border: 0;
     background: transparent;
     color: inherit;
@@ -104,57 +104,63 @@
     outline: none;
     &::placeholder { color: var(--iswc-text-dim, #7a8390); opacity: 0.9; }
     &:disabled { cursor: not-allowed; }
-  }
 
-  /* Ocultar los controles nativos redundantes (search / number / date) */
-  .input[type="search"] { appearance: none; -webkit-appearance: none; }
-  .input::-webkit-search-cancel-button,
-  .input::-webkit-search-decoration { display: none; -webkit-appearance: none; }
-  .input::-webkit-outer-spin-button,
-  .input::-webkit-inner-spin-button { margin-left: 0.25em; }
-  .input::-webkit-calendar-picker-indicator { cursor: pointer; opacity: 0.65; }
+    /* Ocultar los controles nativos redundantes (search / number / date) */
+    &[type="search"] { appearance: none; -webkit-appearance: none; }
+    &::-webkit-search-cancel-button,
+    &::-webkit-search-decoration { display: none; -webkit-appearance: none; }
+    &::-webkit-outer-spin-button,
+    &::-webkit-inner-spin-button { margin-inline-start: 0.25em; }
+    &::-webkit-calendar-picker-indicator { cursor: pointer; opacity: 0.65; }
+  }
 
   .icon-btn {
     flex: none;
     font-size: 1.05em;
     line-height: 0;
     color: var(--iswc-text-dim, #7a8390);
-  }
 
-  .icon-btn[hidden] { display: none !important; }
+    &[hidden] { display: none !important; }
+  }
 }
 
 /* ---- appearance ------------------------------------------------------ */
 
-:host([variant="filled"]) .base {
-  background: var(--iswc-control-bg-hover, #e9ecef);
-  border-color: transparent;
-  border-bottom-color: var(--_border);
-  border-radius: var(--iswc-input-border-radius) var(--iswc-input-border-radius) 0 0;
+:host([variant="filled"]) {
+  .base {
+    background: var(--iswc-control-bg-hover, #e9ecef);
+    border-color: transparent;
+    border-bottom-color: var(--_border);
+    border-radius: var(--iswc-input-border-radius) var(--iswc-input-border-radius) 0 0;
+  }
 }
 
-:host([variant="underlined"]) .base {
-  background: color-mix(in srgb, var(--iswc-control-bg, transparent) 35%, transparent);
-  border-color: transparent;
-  border-bottom: 2px solid var(--_border);
-  border-radius: 0;
-  padding-left: 0.15em;
+:host([variant="underlined"]) {
+  .base {
+    background: color-mix(in srgb, var(--iswc-control-bg, transparent) 35%, transparent);
+    border-color: transparent;
+    border-bottom: 2px solid var(--_border);
+    border-radius: 0;
+    padding-inline-start: 0.15em;
+  }
 }
 
 /* ---- estado de error -------------------------------------------------- */
 
-/* Reglas separadas: un `:state()` no soportado invalidaría toda la lista. */
+/* Reglas separadas: si `:state()` no se compila, queremos que la rama [error]
+   siga funcionando. `:is()` también funcionaría pero lo dejamos explícito. */
 :host([error]) {
   --_border: var(--iswc-input-danger);
   --_focus: var(--iswc-input-danger);
+
+  :is(.label, .hint) { color: var(--iswc-input-danger-text); }
 }
 :host(:state(invalid)) {
   --_border: var(--iswc-input-danger);
   --_focus: var(--iswc-input-danger);
-}
 
-:host([error]) :is(.label, .hint) { color: var(--iswc-input-danger-text); }
-:host(:state(invalid)) :is(.label, .hint) { color: var(--iswc-input-danger-text); }
+  :is(.label, .hint) { color: var(--iswc-input-danger-text); }
+}
 
 /* ---- ancho ------------------------------------------------------------ */
 
@@ -162,16 +168,18 @@
 
 /* ---- label a la izquierda --------------------------------------------- */
 
-:host([label-placement="start"]) .form-control {
-  display: grid;
-  grid-template-columns: var(--iswc-field-label-width, auto) minmax(0, 1fr);
-  align-items: center;
-  column-gap: 0.75em;
-  row-gap: 0.35em;
+:host([label-placement="start"]) {
+  .form-control {
+    display: grid;
+    grid-template-columns: var(--iswc-field-label-width, auto) minmax(0, 1fr);
+    align-items: center;
+    column-gap: 0.75em;
+    row-gap: 0.35em;
+  }
+  .label { grid-column: 1; grid-row: 1; }
+  .base { grid-column: 2; grid-row: 1; }
+  .support { grid-column: 2; grid-row: 2; }
 }
-:host([label-placement="start"]) .label { grid-column: 1; grid-row: 1; }
-:host([label-placement="start"]) .base { grid-column: 2; grid-row: 1; }
-:host([label-placement="start"]) .support { grid-column: 2; grid-row: 2; }
 
 /* ---- label flotante (paridad con ISP form/_LabelInput.svelte) ----------
    Opt-in con label-placement="float". La etiqueta descansa dentro del campo
@@ -185,12 +193,12 @@
 
   .base {
     align-items: flex-end;
-    min-height: 3.2em;
+    min-block-size: 3.2em;
     background: transparent;
     border-color: transparent;
     border-bottom-color: var(--_border);
     border-radius: 0;
-    padding-inline: 0.35em 0.35em;
+    padding: 0 0.35em;
     padding-inline-start: 0.75em;
   }
 
@@ -226,38 +234,42 @@
 }
 :host([label-placement="float"][readonly]) {
   --_border: var(--iswc-b-readonly, var(--iswc-control-border, #adb5bd));
-}
-:host([label-placement="float"][readonly]) .base {
-  background: var(--iswc-bg-readonly, var(--iswc-control-bg, #f1f3f5));
-  border-style: solid;
+
+  .base {
+    background: var(--iswc-bg-readonly, var(--iswc-control-bg, #f1f3f5));
+    border-style: solid;
+  }
 }
 :host([label-placement="float"][disabled]) {
   --_border: var(--iswc-b-readonly, var(--iswc-control-border, #adb5bd));
 }
 
-/* `:state()` en reglas separadas: si el navegador no lo soporta, invalidaría
-   toda la lista de selectores y la etiqueta nunca subiría. */
-:host([label-placement="float"]:focus-within) .label {
-  transform: translateY(-0.95em);
-  font-size: 0.75em;
-}
-:host([label-placement="float"]:state(focused)) .label {
-  transform: translateY(-0.95em);
-  font-size: 0.75em;
-}
-:host([label-placement="float"]:not(:state(blank))) .label {
-  transform: translateY(-0.95em);
-  font-size: 0.75em;
+/* Etiqueta que sube: `:focus-within` para el caso atributo, `:state(focused)`
+   y `:not(:state(blank))` para los customs. Lista simple: esbuild y los
+   navegadores la parsean aunque algún selector no aplique. */
+:host([label-placement="float"]:focus-within),
+:host([label-placement="float"]:state(focused)),
+:host([label-placement="float"]:not(:state(blank))) {
+  .label {
+    transform: translateY(-0.95em);
+    font-size: 0.75em;
+  }
 }
 
-:host([label-placement="float"][required]:state(focused)) .label {
-  color: color-mix(in srgb, var(--iswc-b-required, var(--iswc-control-border, #adb5bd)) 40%, var(--iswc-text, currentColor));
+:host([label-placement="float"][required]:state(focused)) {
+  .label {
+    color: color-mix(in srgb, var(--iswc-b-required, var(--iswc-control-border, #adb5bd)) 40%, var(--iswc-text, currentColor));
+  }
 }
-:host([label-placement="float"]:not([required]):state(focused)) .label {
-  color: color-mix(in srgb, var(--iswc-b-optional, var(--iswc-control-border, #adb5bd)) 40%, var(--iswc-text, currentColor));
+:host([label-placement="float"]:not([required]):state(focused)) {
+  .label {
+    color: color-mix(in srgb, var(--iswc-b-optional, var(--iswc-control-border, #adb5bd)) 40%, var(--iswc-text, currentColor));
+  }
 }
-:host([label-placement="float"][readonly]) .label {
-  color: color-mix(in srgb, var(--iswc-b-readonly, var(--iswc-control-border, #adb5bd)) 40%, var(--iswc-text, currentColor));
+:host([label-placement="float"][readonly]) {
+  .label {
+    color: color-mix(in srgb, var(--iswc-b-readonly, var(--iswc-control-border, #adb5bd)) 40%, var(--iswc-text, currentColor));
+  }
 }
 
 :host([disabled]) {
@@ -265,7 +277,9 @@
   pointer-events: none;
 }
 
-:host([readonly]) .base {
-  background: transparent;
-  border-style: dashed;
+:host([readonly]) {
+  .base {
+    background: transparent;
+    border-style: dashed;
+  }
 }

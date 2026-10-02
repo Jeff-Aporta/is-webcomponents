@@ -1,4 +1,4 @@
-// block-layout.test.mjs — tests exhaustivos del demo <is-block-layout>.
+// block-layout.test.mjs — tests exhaustivos del demo <iswc-block-layout>.
 // Cobertura: smoke + funcional (resize → sizew + event) + API JSON (round-trip
 // idéntico) + custom properties (--clientw / --lerpw).
 import assert from 'node:assert/strict';
@@ -18,7 +18,7 @@ tests.push({
       const host2 = document.getElementById('host2');
       const host3 = document.getElementById('host3');
       return {
-        defined: !!customElements.get('is-block-layout'),
+        defined: !!customElements.get('iswc-block-layout'),
         hostW: host.getWidth(),
         host2W: host2.getWidth(),
         host3W: host3.getWidth(),
@@ -30,7 +30,7 @@ tests.push({
         lerpwVar: host.style.getPropertyValue('--lerpw'),
       };
     });
-    assert.equal(initial.defined, true, '<is-block-layout> debe estar definido');
+    assert.equal(initial.defined, true, '<iswc-block-layout> debe estar definido');
     assert.ok(initial.hostW > 0, `host debe tener ancho medido > 0, hay ${initial.hostW}`);
     assert.ok(initial.host2W > 0, `host2 debe tener ancho medido > 0, hay ${initial.host2W}`);
     assert.equal(typeof initial.hostSizew, 'string', 'sizew debe ser string');
@@ -44,7 +44,7 @@ tests.push({
 });
 
 tests.push({
-  name: 'funcional: cambiar el ancho re-emite is-breakpoint y actualiza data-sizew',
+  name: 'funcional: cambiar el ancho re-emite iswc-breakpoint y actualiza data-sizew',
   run: async (page) => {
     await page.goto(URL, { waitUntil: 'domcontentloaded' });
     await waitReady(page, 'data-block-ready');
@@ -55,7 +55,7 @@ tests.push({
         const host = document.getElementById('host2');
         const captured = [];
         const onBp = (e) => captured.push({ sizew: e.detail.sizew, width: e.detail.width });
-        host.addEventListener('is-breakpoint', onBp);
+        host.addEventListener('iswc-breakpoint', onBp);
         // Primer resize a 100px → xs (sizew xs porque < 480)
         host.style.width = '100px';
         // Segundo resize a 700px → md (<= 800)
@@ -63,7 +63,7 @@ tests.push({
         // Tercer resize a 1300px → xl
         setTimeout(() => { host.style.width = '1300px'; }, 100);
         setTimeout(() => {
-          host.removeEventListener('is-breakpoint', onBp);
+          host.removeEventListener('iswc-breakpoint', onBp);
           resolve(captured);
         }, 400);
       });
@@ -113,11 +113,11 @@ tests.push({
         ['p', 'Línea 1'],
         ['p', 'Línea 2'],
       ];
-      const el = document.createElement('is-block-layout');
+      const el = document.createElement('iswc-block-layout');
       el.id = 'tmp';
       document.body.appendChild(el);
       // Aquí se usa la API estática expuesta por la clase.
-      const klass = customElements.get('is-block-layout');
+      const klass = customElements.get('iswc-block-layout');
       if (typeof klass.json2html !== 'function') return { staticAvailable: false };
       klass.json2html(el, body);
       const json = klass.html2json(el);

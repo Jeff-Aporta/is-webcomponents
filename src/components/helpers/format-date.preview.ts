@@ -1,5 +1,5 @@
 /**
- * Behavior de is-format-date: locales dinámicos + reloj en vivo (1 s).
+ * Behavior de iswc-format-date: locales dinámicos + reloj en vivo (1 s).
  */
 import type { PreviewMountContext } from '../../previews/_kit/types.d.ts';
 
@@ -9,14 +9,14 @@ let mainRoot: HTMLElement | null = null;
 function tickNow(): void {
   if (!mainRoot) return;
   const now = new Date().toISOString();
-  for (const el of mainRoot.querySelectorAll<HTMLElement>('is-format-date')) {
+  for (const el of mainRoot.querySelectorAll<HTMLElement>('iswc-format-date')) {
     el.setAttribute('date', now);
   }
 }
 
 export async function mount(ctx: PreviewMountContext): Promise<void> {
   mainRoot = ctx.main;
-  await customElements.whenDefined('is-format-date');
+  await customElements.whenDefined('iswc-format-date');
 
   const CANDIDATES: readonly string[] = [
     'es', 'es-CO', 'es-MX', 'es-AR',
@@ -54,12 +54,12 @@ export async function mount(ctx: PreviewMountContext): Promise<void> {
           <span class="demo-locale-card__name"></span>
           <span class="demo-locale-card__code"></span>
         </div>
-        <is-format-date weekday="long" year="numeric" month="long" day="numeric"
-          hour="numeric" minute="numeric" second="numeric"></is-format-date>
+        <iswc-format-date weekday="long" year="numeric" month="long" day="numeric"
+          hour="numeric" minute="numeric" second="numeric"></iswc-format-date>
       `;
       const nameEl = card.querySelector<HTMLElement>('.demo-locale-card__name');
       const codeEl = card.querySelector<HTMLElement>('.demo-locale-card__code');
-      const fmtEl = card.querySelector<HTMLElement>('is-format-date');
+      const fmtEl = card.querySelector<HTMLElement>('iswc-format-date');
       if (nameEl) nameEl.textContent = label;
       if (codeEl) codeEl.textContent = tag;
       fmtEl?.setAttribute('locale', tag);
@@ -88,7 +88,7 @@ export async function mount(ctx: PreviewMountContext): Promise<void> {
     const chip = document.createElement('span');
     chip.className = 'demo-label';
     chip.textContent = names?.of(tag) || tag;
-    const fmt = document.createElement('is-format-date');
+    const fmt = document.createElement('iswc-format-date');
     fmt.setAttribute('locale', tag);
     fmt.setAttribute('weekday', 'long');
     fmt.setAttribute('year', 'numeric');

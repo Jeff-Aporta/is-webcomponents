@@ -8,8 +8,8 @@ import { softFormat, softFormatMode } from '../../../components/_shared/code-tex
 import { formatCode } from '../../../components/_shared/code-format.ts';
 
 test('HTML de demos se infiere como html (no javascript)', () => {
-  const snippet = '<is-button color="success">Aprobado</is-button>\n'
-    + '<is-button color="danger" variant="outlined">Eliminar</is-button>';
+  const snippet = '<iswc-button color="success">Aprobado</iswc-button>\n'
+    + '<iswc-button color="danger" variant="outlined">Eliminar</iswc-button>';
   assert.equal(inferLanguage(snippet), 'html');
 });
 
@@ -29,10 +29,10 @@ test('CSS se infiere como css', () => {
 });
 
 test('softFormat separa tags HTML en líneas', () => {
-  const raw = '<is-button color="success">Aprobado</is-button> <is-button color="danger">X</is-button>';
+  const raw = '<iswc-button color="success">Aprobado</iswc-button> <iswc-button color="danger">X</iswc-button>';
   const out = softFormat(raw, softFormatMode('html'));
   assert.match(out, /\n/);
-  assert.match(out, /is-button/);
+  assert.match(out, /iswc-button/);
 });
 
 test('alias curl resuelve al lenguaje shell', () => {

@@ -4,32 +4,32 @@ import '../media/icon.js';
 import { clearAllComponentPrefs, peekComponentPrefsRoot } from '../_shared/prefs.js';
 
 /**
- * <is-prefs-clear> — borra la memoria persistente de los is-* (localStorage).
+ * <iswc-prefs-clear> — borra la memoria persistente de los is-* (localStorage).
  *
  * Limpia `is-webcomponents` (y el legacy `is-components`): tamaños de
- * is-split-panel, scroll remember, snapshots de grid, etc. Sirve para auditar
+ * iswc-split-panel, scroll remember, snapshots de grid, etc. Sirve para auditar
  * la carga inicial “limpia” de layouts sin arrastrar prefs viejas.
  *
  * Attributes
  *   confirm   boolean — pide window.confirm antes (default true)
  *   reload    boolean — recarga la página tras limpiar (default true)
- *   variant / color / shape — se reenvían al is-button interno
+ *   variant / color / shape — se reenvían al iswc-button interno
  *   Sin hijos en el slot → solo icono (aria-label / title dan el nombre).
  *
  * Events
- *   is-prefs-clear  detail: { tags: string[], reloaded: boolean }
+ *   iswc-prefs-clear  detail: { tags: string[], reloaded: boolean }
  */
 
 (() => {
   const TEMPLATE = document.createElement('template');
   TEMPLATE.innerHTML = /* html */ `
-    <is-button part="button" type="button" color="neutral" variant="plain" aria-label="Limpiar memoria UI">
-      <is-icon slot="start" icon="mdi:broom" aria-hidden="true"></is-icon>
+    <iswc-button part="button" type="button" color="neutral" variant="plain" aria-label="Limpiar memoria UI">
+      <iswc-icon slot="start" icon="mdi:broom" aria-hidden="true"></iswc-icon>
       <slot></slot>
-    </is-button>
+    </iswc-button>
   `;
 
-  class IsPrefsClear extends HTMLElement {
+  class IswcPrefsClear extends HTMLElement {
     static get observedAttributes(): string[] {
       return ['confirm', 'reload', 'variant', 'color', 'shape', 'disabled', 'title', 'aria-label'];
     }
@@ -42,8 +42,8 @@ import { clearAllComponentPrefs, peekComponentPrefsRoot } from '../_shared/prefs
       const shadow = this.attachShadow({ mode: 'open' });
       adoptCss(shadow, import.meta.url);
       shadow.appendChild(TEMPLATE.content.cloneNode(true));
-      this.#btn = shadow.querySelector<HTMLElement>('is-button')!;
-      this.#btn.addEventListener('is-click', this.#onClick as EventListener);
+      this.#btn = shadow.querySelector<HTMLElement>('iswc-button')!;
+      this.#btn.addEventListener('iswc-click', this.#onClick as EventListener);
     }
 
     connectedCallback(): void {
@@ -112,7 +112,7 @@ import { clearAllComponentPrefs, peekComponentPrefsRoot } from '../_shared/prefs
 
       this.#busy = true;
       const result = clearAllComponentPrefs();
-      emit(this, 'is-prefs-clear', { tags: result.tags, reloaded: this.reload });
+      emit(this, 'iswc-prefs-clear', { tags: result.tags, reloaded: this.reload });
 
       if (this.reload) {
         location.reload();
@@ -123,5 +123,5 @@ import { clearAllComponentPrefs, peekComponentPrefsRoot } from '../_shared/prefs
     }
   }
 
-  defineElement('is-prefs-clear', IsPrefsClear, 'IsPrefsClear');
+  defineElement('iswc-prefs-clear', IswcPrefsClear, 'IswcPrefsClear');
 })();

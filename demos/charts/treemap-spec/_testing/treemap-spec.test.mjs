@@ -1,7 +1,7 @@
 // treemap-spec.test.mjs — tests exhaustivos del demo treemap-spec.html.
 // treemap-spec es un utility bundle: exporta resolveTreemapSpec (payload →
 // spec normalizada) y computeTreemapLayout (spec → geometría de rectángulos).
-// El demo además pinta <is-treemap> en vivo para verificar el flujo completo.
+// El demo además pinta <iswc-treemap> en vivo para verificar el flujo completo.
 import assert from 'node:assert/strict';
 import { BASE_URL, newPage, close, waitReady, screenshot, report } from '../../_global/lib/harness.mjs';
 
@@ -19,11 +19,11 @@ tests.push({
       const exports = Object.keys(lib).sort();
       const types = {};
       for (const k of exports) types[k] = typeof lib[k];
-      const tm = document.querySelector('is-treemap');
+      const tm = document.querySelector('iswc-treemap');
       return {
         exports,
         types,
-        tmDefined: !!customElements.get('is-treemap'),
+        tmDefined: !!customElements.get('iswc-treemap'),
         svg: !!tm?.shadowRoot?.querySelector('svg'),
         nodes: tm?.shadowRoot?.querySelectorAll('.tm-node').length || 0,
         exportsPre: document.getElementById('exports')?.textContent?.trim() || '',
@@ -41,7 +41,7 @@ tests.push({
     );
     assert.equal(info.types.resolveTreemapSpec, 'function', 'resolveTreemapSpec debe ser function');
     assert.equal(info.types.computeTreemapLayout, 'function', 'computeTreemapLayout debe ser function');
-    assert.equal(info.tmDefined, true, 'is-treemap debe estar definido');
+    assert.equal(info.tmDefined, true, 'iswc-treemap debe estar definido');
     assert.ok(info.svg, 'debe haber un SVG en el shadow DOM del wrapper');
     assert.ok(info.nodes >= 4, `esperaba >=4 nodos, hay ${info.nodes}`);
     assert.ok(info.exportsPre.includes('resolveTreemapSpec'), '<pre> exports debe mencionar resolveTreemapSpec');
@@ -128,13 +128,13 @@ tests.push({
 });
 
 tests.push({
-  name: 'live: <is-treemap> pinta 4 nodos .tm-node con rects no solapados que cubren el lienzo',
+  name: 'live: <iswc-treemap> pinta 4 nodos .tm-node con rects no solapados que cubren el lienzo',
   run: async (page) => {
     await page.goto(URL, { waitUntil: 'domcontentloaded' });
     await waitReady(page, 'data-treemap-spec-ready');
     await page.waitForTimeout(150);
     const data = await page.evaluate(() => {
-      const el = document.querySelector('is-treemap');
+      const el = document.querySelector('iswc-treemap');
       const groups = [...el.shadowRoot.querySelectorAll('.tm-node')];
       const rects = groups.map((g) => {
         const r = g.querySelector('rect.tm-node__rect');
@@ -169,10 +169,10 @@ tests.push({
     await waitReady(page, 'data-treemap-spec-ready');
     await page.waitForTimeout(150);
     const before = await page.evaluate(() => {
-      return document.querySelector('is-treemap').shadowRoot.querySelectorAll('.tm-node').length;
+      return document.querySelector('iswc-treemap').shadowRoot.querySelectorAll('.tm-node').length;
     });
     await page.evaluate(() => {
-      const el = document.querySelector('is-treemap');
+      const el = document.querySelector('iswc-treemap');
       el.payload = {
         treemap: {
           nodes: [
@@ -185,7 +185,7 @@ tests.push({
     });
     await page.waitForTimeout(200);
     const after = await page.evaluate(() => {
-      const root = document.querySelector('is-treemap').shadowRoot;
+      const root = document.querySelector('iswc-treemap').shadowRoot;
       return {
         nodes: root.querySelectorAll('.tm-node').length,
         ids: [...root.querySelectorAll('.tm-node')].map((g) => g.dataset.nodeId),

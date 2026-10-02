@@ -11,20 +11,20 @@ import { wrapText, buildTspans } from '../_shared/diagram-text-wrap.js';
 import { svgEl } from '../_shared/svg-chart-engine.js';
 
 /**
- * <is-mindmap> — mapa mental en SVG, sin Mermaid.
+ * <iswc-mindmap> — mapa mental en SVG, sin Mermaid.
  *
- *   <is-mindmap>
+ *   <iswc-mindmap>
  *     <script type="application/json">
  *       { "mindmap": { "layout": "radial", "nodes": [...] } }
  *     </script>
- *   </is-mindmap>
+ *   </iswc-mindmap>
  *
- * Mismo esqueleto que <is-flowchart>: shadow DOM, slot JSON + MutationObserver,
+ * Mismo esqueleto que <iswc-flowchart>: shadow DOM, slot JSON + MutationObserver,
  * tema por atributo `data-theme`, `color` (inline | viewer), lightbox propio.
  *
  * Atributos: color (inline | viewer), open-on-click
  * Propiedades: payload, spec, layout
- * Eventos: is-render, is-open-viewer
+ * Eventos: iswc-render, iswc-open-viewer
  */
 
 type MindmapNodeKind = 'root' | 'branch' | 'leaf';
@@ -64,7 +64,7 @@ interface MmLayout {
 interface NodeEntry { n: MmLayoutNode; g: SVGGElement; }
 interface EdgeEntry { e: MmLayoutEdge; path: SVGPathElement; }
 
-class IsMindmap extends DiagramElementBase {
+class IswcMindmap extends DiagramElementBase {
   #nodeNodes = new Map<string, NodeEntry>();
   #edgeNodes = new Map<string, EdgeEntry>();
   #hoverId: string | null = null;
@@ -109,7 +109,7 @@ class IsMindmap extends DiagramElementBase {
     const layout = computeMindmapLayout(spec) as unknown as MmLayout;
     this.layout = layout;
     this.#buildSvg(layout, theme);
-    this.wrap.classList.toggle('is-viewer', this.isViewer);
+    this.wrap.classList.toggle('iswc-viewer', this.isViewer);
   }
 
   #buildSvg(layout: MmLayout, theme: DiagramTheme): void {
@@ -143,7 +143,7 @@ class IsMindmap extends DiagramElementBase {
     this.#buildEdges(layout, theme);
     this.#buildNodes(layout, theme);
 
-    emit(this, 'is-render', { layout, svg: this.svg });
+    emit(this, 'iswc-render', { layout, svg: this.svg });
   }
 
   #buildEdges(layout: MmLayout, theme: DiagramTheme): void {
@@ -260,9 +260,9 @@ class IsMindmap extends DiagramElementBase {
 
   #onClick = () => {
     // El visor es opt-in: sin `open-on-click` el clic no hace nada y tampoco
-    // se anuncia `is-open-viewer`, que prometeria una apertura que no ocurre.
+    // se anuncia `iswc-open-viewer`, que prometeria una apertura que no ocurre.
     if (!this.hasAttribute('open-on-click')) return;
-    const ev = new CustomEvent('is-open-viewer', {
+    const ev = new CustomEvent('iswc-open-viewer', {
       bubbles: true, composed: true, cancelable: true, detail: { payload: this.payload },
     });
     this.dispatchEvent(ev);
@@ -293,13 +293,13 @@ class IsMindmap extends DiagramElementBase {
 
     for (const [nodeId, node] of this.#nodeNodes) {
       const active = nodeId === id;
-      node.g.classList.toggle('is-active', active);
-      node.g.classList.toggle('is-dim', !!id && !active);
+      node.g.classList.toggle('iswc-active', active);
+      node.g.classList.toggle('iswc-dim', !!id && !active);
     }
     for (const [, edge] of this.#edgeNodes) {
       const touches = !!id && (edge.e.from === id || edge.e.to === id);
-      edge.path.classList.toggle('is-active', touches);
-      edge.path.classList.toggle('is-dim', !!id && !touches);
+      edge.path.classList.toggle('iswc-active', touches);
+      edge.path.classList.toggle('iswc-dim', !!id && !touches);
     }
 
     if (!entry) {
@@ -322,8 +322,8 @@ class IsMindmap extends DiagramElementBase {
   }
 }
 
-defineElement('is-mindmap', IsMindmap, 'IsMindmap');
+defineElement('iswc-mindmap', IswcMindmap, 'IswcMindmap');
 
-registerDiagramKind('mindmap', 'is-mindmap');
+registerDiagramKind('mindmap', 'iswc-mindmap');
 
-export { IsMindmap };
+export { IswcMindmap };

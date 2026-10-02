@@ -14,7 +14,7 @@ checks.push({
     await page.goto(URL, { waitUntil: 'domcontentloaded' });
     await waitReady(page, 'data-progress-bar-ready');
     const data = await page.evaluate(() => {
-      return [...document.querySelectorAll('is-progress-bar[value]')].map((p) => {
+      return [...document.querySelectorAll('iswc-progress-bar[value]')].map((p) => {
         const track = p.shadowRoot.querySelector('.track');
         const ind = p.shadowRoot.querySelector('.indicator');
         const t = track.getBoundingClientRect();
@@ -40,7 +40,7 @@ checks.push({
     await page.goto(URL, { waitUntil: 'domcontentloaded' });
     await waitReady(page, 'data-progress-bar-ready');
     const overflow = await page.evaluate(() => {
-      return [...document.querySelectorAll('is-progress-bar')].filter((p) => {
+      return [...document.querySelectorAll('iswc-progress-bar')].filter((p) => {
         const r = p.getBoundingClientRect();
         return r.x + r.width > window.innerWidth + 1;
       }).length;
@@ -61,8 +61,8 @@ checks.push({
     await page.goto(URL, { waitUntil: 'domcontentloaded' });
     await waitReady(page, 'data-progress-bar-ready');
     const info = await page.evaluate(() => {
-      const def = document.querySelector('is-progress-bar[value="0"]');
-      const custom = document.querySelector('is-progress-bar[track-height="14"]');
+      const def = document.querySelector('iswc-progress-bar[value="0"]');
+      const custom = document.querySelector('iswc-progress-bar[track-height="14"]');
       return {
         defAttr: def.getAttribute('track-height'),
         customAttr: custom.getAttribute('track-height'),

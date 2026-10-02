@@ -1,6 +1,6 @@
 // tests/icon-currentcolor.test.ts
 //
-// Verifica que <is-icon> inyecta el SVG **inline** en su Shadow DOM y que
+// Verifica que <iswc-icon> inyecta el SVG **inline** en su Shadow DOM y que
 // `currentColor` se propaga correctamente del host al path. Esto protege
 // contra el bug en el que los iconos se ven negros sobre fondos claros
 // (porque servirlos como <img src> congela el color y rompe currentColor).
@@ -84,11 +84,11 @@ const PORT = process.env.PORT;
 // smoke apunta a la raíz del kit (el _shell.html ya no se sirve por ruta).
 if (PORT && PORT === '8391') {
   try {
-    const res = await fetch(`http://localhost:${PORT}/src/gallery/?tag=is-icon`, {
+    const res = await fetch(`http://localhost:${PORT}/src/gallery/?tag=iswc-icon`, {
       signal: AbortSignal.timeout(2000),
     });
     assert.equal(res.status, 200, 'galería debe responder 200');
-    console.log(`✔ galería is-icon respondio 200 en :${PORT}`);
+    console.log(`✔ galería iswc-icon respondio 200 en :${PORT}`);
   } catch (e) {
     // Servidor no responde — omitir el test runtime (las reglas estáticas
     // arriba ya cubren el contrato).
@@ -96,7 +96,7 @@ if (PORT && PORT === '8391') {
   }
 }
 
-console.log('✔ icon-currentcolor: <is-icon> usa SVG inline + currentColor');
+console.log('✔ icon-currentcolor: <iswc-icon> usa SVG inline + currentColor');
 
 // Sugerencia viva: ejecutar este test junto al resto.
 //   $ PORT=8391 node tests/run-all.mjs

@@ -3,7 +3,7 @@
 <head>
 <meta charset="utf-8" />
 <meta name="viewport" content="width=device-width, initial-scale=1" />
-<title>Demo &lt;is-avatar&gt; · is-webcomponents</title>
+<title>Demo &lt;iswc-avatar&gt; · is-webcomponents</title>
 <meta name="description" content="Avatares con imagen, iniciales o icono fallback. Tres variantes (image/initials/icon), formas (circle/rounded/square) y estados de carga y error." />
 <style>
   html, body { margin: 0; padding: 0; min-height: 100%; background: #0c1118; color: #e2e8f0; font-family: ui-sans-serif, system-ui, sans-serif; }
@@ -19,20 +19,20 @@
   footer { padding: 12px 20px; border-top: 1px solid rgba(255,255,255,0.1); background: #0f1620; font-size: 11px; color: #94a3b8; }
   footer code { background: rgba(255,255,255,0.06); padding: 1px 5px; border-radius: 3px; font: 11px ui-monospace, Menlo, Consolas, monospace; }
   /* Anti-FOUC */
-  is-avatar:not(:defined) { visibility: hidden; }
+  iswc-avatar:not(:defined) { visibility: hidden; }
 </style>
 <script type="module">
   // Cargar solo los tags que necesitamos, desde los bundles pre-construidos
   // en dist/cdn/. Esto hace funcionar los demos con cualquier servidor
   // estático, no solo con el dev server que transpila TS.
-  await import('../../../dist/cdn/media/icon.min.js?h=y6tzub');
-  await import('../../../dist/cdn/media/avatar.min.js?h=xrd8ab');
-  await customElements.whenDefined('is-avatar');
+  await import('../../../dist/cdn/media/icon.min.js?h=sp71yy');
+  await import('../../../dist/cdn/media/avatar.min.js?h=xcvvxf');
+  await customElements.whenDefined('iswc-avatar');
 
-  // Suscribirse a is-error para surfacing en consola (útil para tests)
-  document.querySelectorAll('is-avatar').forEach((el) => {
-    el.addEventListener('is-error', (e) => {
-      console.log('[avatar] is-error', e.detail);
+  // Suscribirse a iswc-error para surfacing en consola (útil para tests)
+  document.querySelectorAll('iswc-avatar').forEach((el) => {
+    el.addEventListener('iswc-error', (e) => {
+      console.log('[avatar] iswc-error', e.detail);
       document.documentElement.dataset.avatarErrorFired = '1';
     });
   });
@@ -42,40 +42,40 @@
 </head>
 <body>
 <header>
-  <h1>Demo — <code>&lt;is-avatar&gt;</code></h1>
+  <h1>Demo — <code>&lt;iswc-avatar&gt;</code></h1>
   <p>Tres estados: imagen, iniciales, icono. Caja = <code>1em × 1em</code> (escala con font-size).</p>
 </header>
 <main>
   <section>
     <h2>Iniciales</h2>
     <div class="row">
-      <is-avatar initials="JD" label="Jane Doe"></is-avatar>
-      <is-avatar initials="AB" shape="rounded" label="AB"></is-avatar>
-      <is-avatar initials="MX" shape="square" label="MX"></is-avatar>
+      <iswc-avatar initials="JD" label="Jane Doe"></iswc-avatar>
+      <iswc-avatar initials="AB" shape="rounded" label="AB"></iswc-avatar>
+      <iswc-avatar initials="MX" shape="square" label="MX"></iswc-avatar>
     </div>
   </section>
   <section>
     <h2>Imagen (URL rota → fallback)</h2>
     <div class="row">
-      <is-avatar image="https://invalid.invalid/missing.png" initials="!!" label="Sin imagen"></is-avatar>
-      <is-avatar label="Sin nada"></is-avatar>
+      <iswc-avatar image="https://invalid.invalid/missing.png" initials="!!" label="Sin imagen"></iswc-avatar>
+      <iswc-avatar label="Sin nada"></iswc-avatar>
     </div>
   </section>
   <section>
     <h2>Slot icon (custom)</h2>
     <div class="row">
-      <is-avatar label="Robot">
-        <is-icon slot="icon" icon="mdi:robot"></is-icon>
-      </is-avatar>
-      <is-avatar shape="rounded" label="Estrella">
-        <is-icon slot="icon" icon="mdi:star"></is-icon>
-      </is-avatar>
+      <iswc-avatar label="Robot">
+        <iswc-icon slot="icon" icon="mdi:robot"></iswc-icon>
+      </iswc-avatar>
+      <iswc-avatar shape="rounded" label="Estrella">
+        <iswc-icon slot="icon" icon="mdi:star"></iswc-icon>
+      </iswc-avatar>
     </div>
   </section>
 </main>
 <footer>
   Atributos: <code>image</code> <code>initials</code> <code>label</code> <code>shape</code> <code>loading</code>.
-  Eventos: <code>is-error</code> cuando la imagen falla.
+  Eventos: <code>iswc-error</code> cuando la imagen falla.
 </footer>
 </body>
 </html>

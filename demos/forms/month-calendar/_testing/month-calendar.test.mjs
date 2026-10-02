@@ -2,7 +2,7 @@
 //
 // Cobertura:
 //   - smoke: custom element definido, shadow DOM con 12 botones month
-//   - funcional: click en un mes emite is-change con detail.value (yyyy-mm);
+//   - funcional: click en un mes emite iswc-change con detail.value (yyyy-mm);
 //     cambiar year re-renderiza; cambiar value por propiedad selecciona mes
 //   - accesibilidad: role=radiogroup, cada botón es radio con aria-checked
 //   - edge cases: min/max desactivan meses fuera del rango; Home/End saltan
@@ -20,11 +20,11 @@ tests.push({
     await page.goto(URL, { waitUntil: 'domcontentloaded' });
     await waitReady(page, 'data-month-calendar-ready');
     const data = await page.evaluate(() => {
-      const cals = [...document.querySelectorAll('is-month-calendar')];
+      const cals = [...document.querySelectorAll('iswc-month-calendar')];
       return cals.map((c) => {
         const sr = c.shadowRoot;
         return {
-          defined: !!customElements.get('is-month-calendar'),
+          defined: !!customElements.get('iswc-month-calendar'),
           hasShadow: !!sr,
           hasBase: !!sr?.querySelector('.base'),
           monthsCount: sr?.querySelectorAll('button.month').length,
@@ -34,7 +34,7 @@ tests.push({
       });
     });
     assert.equal(data.length, 4, 'debe haber 4 month-calendars');
-    assert.equal(data[0].defined, true, 'is-month-calendar definido');
+    assert.equal(data[0].defined, true, 'iswc-month-calendar definido');
     assert.equal(data[0].hasShadow, true, 'shadow root presente');
     assert.equal(data[0].hasBase, true, '.base presente');
     assert.equal(data[0].monthsCount, 12, '12 botones de mes');
@@ -45,14 +45,14 @@ tests.push({
 });
 
 tests.push({
-  name: 'funcional: click en un mes emite is-change con value yyyy-mm',
+  name: 'funcional: click en un mes emite iswc-change con value yyyy-mm',
   run: async (page) => {
     await page.goto(URL, { waitUntil: 'domcontentloaded' });
     await waitReady(page, 'data-month-calendar-ready');
     const result = await page.evaluate(() => {
       return new Promise((resolve) => {
         const c = document.querySelector('#basico');
-        c.addEventListener('is-change', (e) => resolve(e.detail), { once: true });
+        c.addEventListener('iswc-change', (e) => resolve(e.detail), { once: true });
         const mar = c.shadowRoot.querySelector('button.month[data-month="2"]');
         mar.click();
       });
@@ -155,7 +155,7 @@ tests.push({
 });
 
 tests.push({
-  name: 'edge case: click en un mes disabled no emite is-change',
+  name: 'edge case: click en un mes disabled no emite iswc-change',
   run: async (page) => {
     await page.goto(URL, { waitUntil: 'domcontentloaded' });
     await waitReady(page, 'data-month-calendar-ready');
@@ -163,13 +163,13 @@ tests.push({
       return new Promise((resolve) => {
         const c = document.querySelector('#limitado');
         let emitted = false;
-        c.addEventListener('is-change', () => { emitted = true; });
+        c.addEventListener('iswc-change', () => { emitted = true; });
         const ene = c.shadowRoot.querySelector('button.month[data-month="0"]');
         ene.click();
         setTimeout(() => resolve({ emitted, value: c.value }), 50);
       });
     });
-    assert.equal(result.emitted, false, 'is-change no emitido');
+    assert.equal(result.emitted, false, 'iswc-change no emitido');
     assert.equal(result.value, '', 'value sigue vacío');
   },
 });

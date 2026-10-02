@@ -1,5 +1,5 @@
 /**
- * Tests exhaustivos para is-button (acciones) — versión estática.
+ * Tests exhaustivos para iswc-button (acciones) — versión estática.
  *
  * Como no hay jsdom disponible, estos tests verifican estáticamente
  * las 10 dimensiones del contrato del componente:
@@ -8,7 +8,7 @@
  *   3. Eventos emitidos (regex sobre `emit(...)` y dispatchEvent)
  *   4. Slots declarados en la plantilla
  *   5. Shadow DOM y CSS Parts (::part(button) etc.)
- *   6. JSON preview respeta esquema is-preview/v1
+ *   6. JSON preview respeta esquema iswc-preview/v1
  *   7. Accesibilidad (role, aria-*, aria-pressed, focus delegated)
  *   8. Edge cases — atributos vacíos manejados (getAttribute + ?? / ||)
  *   9. Integración — coexistencia con otros WC del kit (imports)
@@ -28,7 +28,7 @@ const __dirname = dirname(__filename);
 // .../src/utils/health/exhaustive/actions/ → raíz del proyecto
 const RAIZ = join(__dirname, '..', '..', '..', '..', '..');
 
-const TAG = 'is-button';
+const TAG = 'iswc-button';
 const RUTA_COMPONENTE = join(RAIZ, 'src/components/actions/button.ts');
 const RUTA_JSON = join(RAIZ, 'src/components/actions/button.json');
 
@@ -40,7 +40,7 @@ function leerJson(): any {
 }
 
 // 1. Render básico
-test('is-button: módulo existe y registra el custom element', () => {
+test('iswc-button: módulo existe y registra el custom element', () => {
   const src = leerFuente();
   assert.ok(src.length > 0, `${RUTA_COMPONENTE} debe existir y no estar vacío`);
   assert.ok(
@@ -50,7 +50,7 @@ test('is-button: módulo existe y registra el custom element', () => {
 });
 
 // 2. Atributos observados
-test('is-button: declares observedAttributes (≥8)', async () => {
+test('iswc-button: declares observedAttributes (≥8)', async () => {
   const meta = await extraerMetaComponente(RUTA_COMPONENTE);
   assert.ok(meta, 'extraerMetaComponente debe devolver meta');
   assert.ok(
@@ -67,9 +67,9 @@ test('is-button: declares observedAttributes (≥8)', async () => {
 });
 
 // 3. Eventos
-test('is-button: emite is-click, is-focus, is-blur, is-invalid', () => {
+test('iswc-button: emite iswc-click, iswc-focus, iswc-blur, iswc-invalid', () => {
   const src = leerFuente();
-  for (const evt of ['is-click', 'is-focus', 'is-blur', 'is-invalid']) {
+  for (const evt of ['iswc-click', 'iswc-focus', 'iswc-blur', 'iswc-invalid']) {
     assert.ok(
       new RegExp(`emit\\s*\\([^,]*,\\s*['"\`]${evt}['"\`]`).test(src),
       `debe emitir ${evt}`,
@@ -78,7 +78,7 @@ test('is-button: emite is-click, is-focus, is-blur, is-invalid', () => {
 });
 
 // 4. Slots
-test('is-button: declara slots default, start, end', () => {
+test('iswc-button: declara slots default, start, end', () => {
   const src = leerFuente();
   assert.ok(/slot\s+name="start"/.test(src), 'debe declarar <slot name="start">');
   assert.ok(/slot\s+name="end"/.test(src), 'debe declarar <slot name="end">');
@@ -87,7 +87,7 @@ test('is-button: declara slots default, start, end', () => {
 });
 
 // 5. Shadow DOM + parts
-test('is-button: usa Shadow DOM con delegatesFocus y CSS parts', () => {
+test('iswc-button: usa Shadow DOM con delegatesFocus y CSS parts', () => {
   const src = leerFuente();
   assert.ok(/attachShadow\s*\(\s*\{[^}]*mode:\s*["']open["']/.test(src), 'attachShadow mode open');
   assert.ok(/delegatesFocus/.test(src), 'delegatesFocus para que el foco aterrice en el <button> interno');
@@ -100,16 +100,16 @@ test('is-button: usa Shadow DOM con delegatesFocus y CSS parts', () => {
 });
 
 // 6. JSON preview
-test('is-button: JSON preview respeta is-preview/v1', () => {
+test('iswc-button: JSON preview respeta iswc-preview/v1', () => {
   const json = leerJson();
   assert.ok(json, `${RUTA_JSON} debe existir`);
-  assert.equal(json['$schema'], 'is-preview/v1', '$schema debe ser is-preview/v1');
+  assert.equal(json['$schema'], 'iswc-preview/v1', '$schema debe ser iswc-preview/v1');
   assert.equal(json.tag, TAG, `tag debe ser ${TAG}`);
   assert.ok(Array.isArray(json.sections) && json.sections.length > 0, 'sections no vacío');
 });
 
 // 7. Accesibilidad
-test('is-button: accesibilidad — role implícito (button interno) y aria-*', () => {
+test('iswc-button: accesibilidad — role implícito (button interno) y aria-*', () => {
   const src = leerFuente();
   // El botón interno provee role=button; el host reenvía aria-*.
   assert.ok(/<button[^>]*type=/.test(src), 'plantilla interna usa <button> nativo');
@@ -120,7 +120,7 @@ test('is-button: accesibilidad — role implícito (button interno) y aria-*', (
 });
 
 // 8. Edge cases
-test('is-button: maneja atributos vacíos (getAttribute + ??/||)', () => {
+test('iswc-button: maneja atributos vacíos (getAttribute + ??/||)', () => {
   const src = leerFuente();
   const usesAttr = /getAttribute\s*\(/.test(src);
   assert.ok(usesAttr, 'debe usar getAttribute en algún punto');
@@ -132,16 +132,16 @@ test('is-button: maneja atributos vacíos (getAttribute + ??/||)', () => {
 });
 
 // 9. Integración — coexistencia con otros WC
-test('is-button: tiene slot para icono', () => {
+test('iswc-button: tiene slot para icono', () => {
   const src = leerFuente();
-  // is-button acepta un slot para el icono (no necesita importar is-icon).
+  // iswc-button acepta un slot para el icono (no necesita importar iswc-icon).
   assert.ok(src.length > 0, 'módulo existe');
   const tieneSlot = /<slot\s+name=["']icon["']/.test(src) || /<slot\s*>/.test(src);
   assert.ok(tieneSlot, 'debe declarar al menos un slot');
 });
 
 // 10. Lifecycle / performance
-test('is-button: implementa lifecycle (connectedCallback / disconnectedCallback)', () => {
+test('iswc-button: implementa lifecycle (connectedCallback / disconnectedCallback)', () => {
   const src = leerFuente();
   assert.ok(/connectedCallback\s*\(/.test(src), 'debe implementar connectedCallback');
   // Cleanup de listeners (al menos un removeEventListener o #wired=false).

@@ -1,8 +1,8 @@
 /**
- * observer.test.ts — Tier A (15 aserciones) para `<is-observer>` (genérico).
+ * observer.test.ts — Tier A (15 aserciones) para `<iswc-observer>` (genérico).
  *
  * Dimensiones: módulo, CSS, JSON, OBSERVED con TODOS los attrs por tipo,
- * factory para los 3 wrappers legacy, eventos is-intersect/is-mutate/is-resize,
+ * factory para los 3 wrappers legacy, eventos iswc-intersect/iswc-mutate/iswc-resize,
  * atributo type con valores intersection|mutation|resize, atributo disabled,
  * once para intersection, slot default, registro, cleanup en disconnected.
  */
@@ -15,7 +15,7 @@ import { fileURLToPath } from 'node:url';
 
 const HERE = dirname(fileURLToPath(import.meta.url));
 const ROOT = join(HERE, '..', '..', '..', '..', '..');
-const TAG = 'is-observer';
+const TAG = 'iswc-observer';
 const TS  = join(ROOT, 'src', 'components', 'helpers', 'observer.ts');
 const CSS = join(ROOT, 'src', 'components', 'helpers', 'observer.css');
 const JSON_PATH = join(ROOT, 'src', 'components', 'helpers', 'observer.json');
@@ -28,10 +28,10 @@ test('2. CSS hermano existe', () => {
   assert.ok(existsSync(CSS));
 });
 
-test('3. JSON existe y respeta is-preview/v1', () => {
+test('3. JSON existe y respeta iswc-preview/v1', () => {
   const json = JSON.parse(readFileSync(JSON_PATH, 'utf8'));
   assert.equal(json.tag, TAG);
-  assert.equal(json.$schema, 'is-preview/v1');
+  assert.equal(json.$schema, 'iswc-preview/v1');
 });
 
 test('4. OBSERVED incluye TODOS los attrs documentados en JSDoc', () => {
@@ -54,9 +54,9 @@ test('6. factory createObserverElement exporta y se usa para los 3 wrappers', ()
   assert.ok(/export\s+function\s+createObserverElement\b/.test(src));
 });
 
-test('7. emite is-intersect / is-mutate / is-resize según type', () => {
+test('7. emite iswc-intersect / iswc-mutate / iswc-resize según type', () => {
   const src = readFileSync(TS, 'utf8');
-  for (const ev of ['is-intersect', 'is-mutate', 'is-resize']) {
+  for (const ev of ['iswc-intersect', 'iswc-mutate', 'iswc-resize']) {
     assert.ok(src.includes(`'${ev}'`) || src.includes(`"${ev}"`), `debe emitir ${ev}`);
   }
 });
@@ -100,5 +100,5 @@ test('14. slot default para los hijos observados', () => {
 
 test('15. custom element registrado con defineElement', () => {
   const src = readFileSync(TS, 'utf8');
-  assert.ok(/defineElement\s*\(\s*['"]is-observer['"]/.test(src));
+  assert.ok(/defineElement\s*\(\s*['"]iswc-observer['"]/.test(src));
 });

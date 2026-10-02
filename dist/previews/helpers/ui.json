@@ -1,23 +1,23 @@
 {
-  "$schema": "is-preview/v1",
-  "tag": "is-ui",
+  "$schema": "iswc-preview/v1",
+  "tag": "iswc-ui",
   "category": "helpers",
-  "title": "IsUi <span class=\"ui-chip-title\">(módulo · no es un tag)</span>",
+  "title": "IswcUi <span class=\"ui-chip-title\">(módulo · no es un tag)</span>",
   "titleHtml": true,
-  "description": "Utilidad IsUi: html, adoptCss y define para apps consumidoras del kit.",
+  "description": "Utilidad IswcUi: html, adoptCss y define para apps consumidoras del kit.",
   "styles": ".ui-stage {\r\n      display: grid;\r\n      gap: 0.75rem;\r\n      padding: 1rem;\r\n      border: 1px dashed var(--iswc-border);\r\n      border-radius: var(--iswc-radius-md, 8px);\r\n      background: color-mix(in srgb, var(--iswc-control-bg) 80%, transparent);\r\n    }\r\n    .ui-stage__meta {\r\n      font-size: 0.85em;\r\n      color: var(--iswc-text-muted, var(--iswc-text));\r\n      opacity: 0.85;\r\n    }\r\n    demo-card {\r\n      display: block;\r\n      padding: 0.85rem 1rem;\r\n      border-radius: 8px;\r\n      border: 1px solid var(--iswc-border);\r\n      background: var(--iswc-bg);\r\n      color: var(--iswc-text);\r\n    }\r\n    demo-card[data-tone=\"brand\"] {\r\n      border-color: color-mix(in srgb, var(--iswc-accent) 55%, var(--iswc-border));\r\n    }\r\n    .ui-chip-title {\r\n      display: inline-block;\r\n      margin-left: 0.5rem;\r\n      padding: 0.15rem 0.6rem;\r\n      border-radius: 999px;\r\n      font-size: 0.55em;\r\n      font-weight: 600;\r\n      letter-spacing: 0.02em;\r\n      color: var(--iswc-text);\r\n      background: color-mix(in srgb, var(--iswc-accent) 22%, transparent);\r\n      border: 1px solid color-mix(in srgb, var(--iswc-accent) 45%, transparent);\r\n      vertical-align: middle;",
-  "storageKey": "docs-is-ui",
+  "storageKey": "docs-iswc-ui",
   "hasBehavior": true,
   "sections": [
     {
       "id": "intro",
       "title": "Módulo de interfaz",
       "titleHtml": true,
-      "lede": "Utilidad de render para apps consumidoras. Tras cargar el CDN queda en\r\n          <code class=\"code\">globalThis.IsUi</code> (alias <code class=\"code\">Ui</code>).\r\n          No reinventes botones ni tablas: monta <code class=\"code\">is-*</code> con\r\n          <code class=\"code\">html</code> + CSS hermano vía <code class=\"code\">adoptCss</code>.",
+      "lede": "Utilidad de render para apps consumidoras. Tras cargar el CDN queda en\r\n          <code class=\"code\">globalThis.IswcUi</code> (alias <code class=\"code\">Ui</code>).\r\n          No reinventes botones ni tablas: monta <code class=\"code\">is-*</code> con\r\n          <code class=\"code\">html</code> + CSS hermano vía <code class=\"code\">adoptCss</code>.",
       "blocks": [
         {
           "kind": "demo",
-          "html": "<span class=\"demo-label\">// Disponible tras all.min.js</span>\r\n          <div class=\"ui-stage\" id=\"introStage\">\r\n            <div class=\"ui-stage__meta\">Cargando IsUi…</div>\r\n          </div>"
+          "html": "<span class=\"demo-label\">// Disponible tras all.min.js</span>\r\n          <div class=\"ui-stage\" id=\"introStage\">\r\n            <div class=\"ui-stage__meta\">Cargando IswcUi…</div>\r\n          </div>"
         }
       ]
     },
@@ -33,7 +33,7 @@
         },
         {
           "kind": "code",
-          "code": "const { html } = IsUi;\nhost.append(html`\n  <is-button color=\"brand\" onclick=${() => IsUi.toast?.() || console.log('ok')}>\n    Guardar\n  </is-button>\n`);",
+          "code": "const { html } = IswcUi;\nhost.append(html`\n  <iswc-button color=\"brand\" onclick=${() => IswcUi.toast?.() || console.log('ok')}>\n    Guardar\n  </iswc-button>\n`);",
           "lang": "javascript"
         }
       ]
@@ -42,7 +42,7 @@
       "id": "define",
       "title": "Definir un componente",
       "titleHtml": true,
-      "lede": "Registra un custom element de dominio. El CSS va en archivo hermano\r\n          (aquí se usa <code class=\"code\">IsUi.css</code> solo para el demo en página).",
+      "lede": "Registra un custom element de dominio. El CSS va en archivo hermano\r\n          (aquí se usa <code class=\"code\">IswcUi.css</code> solo para el demo en página).",
       "blocks": [
         {
           "kind": "demo",
@@ -50,7 +50,7 @@
         },
         {
           "kind": "code",
-          "code": "import { html, adoptCss, define } from '…/helpers/ui.min.js';\n\nclass AppPanel extends HTMLElement {\n  #root = this.attachShadow({ mode: 'open' });\n  connectedCallback() {\n    this.#root.append(html`<is-button color=\"brand\">Acción</is-button>`);\n    adoptCss(this.#root, import.meta.url); // → AppPanel.css hermano\n  }\n}\ndefine('app-panel', AppPanel);",
+          "code": "import { html, adoptCss, define } from '…/helpers/ui.min.js';\n\nclass AppPanel extends HTMLElement {\n  #root = this.attachShadow({ mode: 'open' });\n  connectedCallback() {\n    this.#root.append(html`<iswc-button color=\"brand\">Acción</iswc-button>`);\n    adoptCss(this.#root, import.meta.url); // → AppPanel.css hermano\n  }\n}\ndefine('app-panel', AppPanel);",
           "lang": "javascript"
         }
       ]
@@ -58,7 +58,7 @@
     {
       "id": "cdn",
       "title": "CDN",
-      "lede": "Tag del catálogo: <code class=\"code\">is-ui</code> (módulo). Artefacto:\r\n          <code class=\"code\">dist/cdn/helpers/ui.min.js</code>. También va dentro de\r\n          <code class=\"code\">all.min.js</code>.",
+      "lede": "Tag del catálogo: <code class=\"code\">iswc-ui</code> (módulo). Artefacto:\r\n          <code class=\"code\">dist/cdn/helpers/ui.min.js</code>. También va dentro de\r\n          <code class=\"code\">all.min.js</code>.",
       "blocks": [
         {
           "kind": "code",

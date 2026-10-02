@@ -3,7 +3,7 @@
 <head>
 <meta charset="utf-8" />
 <meta name="viewport" content="width=device-width, initial-scale=1" />
-<title>Editor de código · &lt;is-code&gt; · is-webcomponents</title>
+<title>Editor de código · &lt;iswc-code&gt; · is-webcomponents</title>
 <meta name="description" content="Editor de código nativo (sin CodeMirror) con highlighting, line numbers, marks, format, code2json/json2code, modo readonly/editable, dark/light." />
 <style>
   html, body { margin: 0; padding: 0; height: 100%; background: #0c1118; color: #e2e8f0; font-family: ui-sans-serif, system-ui, sans-serif; }
@@ -43,20 +43,20 @@
   }
   html[data-theme="light"] section h2 { color: #475569; }
   section h2 small { font-weight: 400; opacity: 0.7; text-transform: none; letter-spacing: 0; }
-  is-code { width: 100%; }
+  iswc-code { width: 100%; }
   /* Anti-FOUC */
-  is-code:not(:defined) { visibility: hidden; }
+  iswc-code:not(:defined) { visibility: hidden; }
 </style>
 <script type="module">
   // Cargar el bundle pre-construido. Esto hace funcionar el demo con cualquier
   // servidor estático (incluido VS Code Live Server), no solo con el dev
-  // server que transpila TS. La promesa resuelve cuando is-code está definido.
-  await import('../../../dist/cdn/code/code.min.js?h=r61e18');
-  await customElements.whenDefined('is-code');
+  // server que transpila TS. La promesa resuelve cuando iswc-code está definido.
+  await import('../../../dist/cdn/code/code.min.js?h=1xq1b8');
+  await customElements.whenDefined('iswc-code');
 
   const samples = {
     js: [
-      '// is-code · demo editable',
+      '// iswc-code · demo editable',
       'function greet(name) {',
       '  return `Hello, ${name}!`;',
       '}',
@@ -75,7 +75,7 @@
       '<!doctype html>',
       '<html lang="es">',
       '  <body>',
-      '    <h1>Hola is-code</h1>',
+      '    <h1>Hola iswc-code</h1>',
       '  </body>',
       '</html>',
     ].join('\n'),
@@ -145,9 +145,9 @@
   document.getElementById('btn-theme').addEventListener('click', () => {
     const html = document.documentElement;
     html.dataset.theme = html.dataset.theme === 'dark' ? 'light' : 'dark';
-    // <is-code> escucha `is-theme-change` en document para resincronizar el
+    // <iswc-code> escucha `iswc-theme-change` en document para resincronizar el
     // preset (dark/light) sin tener que tocar cada instancia.
-    document.dispatchEvent(new CustomEvent('is-theme-change'));
+    document.dispatchEvent(new CustomEvent('iswc-theme-change'));
   });
 
   document.getElementById('btn-add-mark').addEventListener('click', () => {
@@ -166,7 +166,7 @@
 
   document.getElementById('btn-export').addEventListener('click', () => {
     const doc = editJs.code2json();
-    console.log('[is-code] code2json →', doc);
+    console.log('[iswc-code] code2json →', doc);
   });
 
   // Listo para los tests.
@@ -176,7 +176,7 @@
 <body>
 <header>
   <div>
-    <h1>Editor de código · &lt;is-code&gt;</h1>
+    <h1>Editor de código · &lt;iswc-code&gt;</h1>
     <p>Highlight nativo · line numbers · marks · format · code2json/json2code · dark/light · readonly</p>
   </div>
   <div class="spacer"></div>
@@ -189,31 +189,31 @@
 <main>
   <section class="full">
     <h2>Editable · JavaScript <small>— syntax highlight, line numbers, tab indent</small></h2>
-    <is-code id="code-js" lang="javascript" tab-size="2"></is-code>
+    <iswc-code id="code-js" lang="javascript" tab-size="2"></iswc-code>
   </section>
   <section>
     <h2>Readonly · JavaScript <small>— solo lectura, mismo highlight</small></h2>
-    <is-code id="code-js-readonly" lang="javascript" readonly></is-code>
+    <iswc-code id="code-js-readonly" lang="javascript" readonly></iswc-code>
   </section>
   <section>
     <h2>Editable · CSS</h2>
-    <is-code id="code-css" lang="css"></is-code>
+    <iswc-code id="code-css" lang="css"></iswc-code>
   </section>
   <section class="full">
     <h2>Editable · HTML</h2>
-    <is-code id="code-html" lang="html"></is-code>
+    <iswc-code id="code-html" lang="html"></iswc-code>
   </section>
   <section>
     <h2>Editable · JSON <small>— botón «format()» reformatea con Prettier-like</small></h2>
-    <is-code id="code-json" lang="json" tab-size="2"></is-code>
+    <iswc-code id="code-json" lang="json" tab-size="2"></iswc-code>
   </section>
   <section>
     <h2>Marks (anotaciones) <small>— readonly con errores/warnings pintados</small></h2>
-    <is-code id="code-marks" lang="javascript" readonly></is-code>
+    <iswc-code id="code-marks" lang="javascript" readonly></iswc-code>
   </section>
   <section class="full">
     <h2>Compact (snippet) <small>— sin chrome, encaja al contenido</small></h2>
-    <is-code id="code-compact" lang="javascript" compact readonly></is-code>
+    <iswc-code id="code-compact" lang="javascript" compact readonly></iswc-code>
   </section>
 </main>
 </body>

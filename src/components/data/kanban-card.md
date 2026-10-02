@@ -1,15 +1,15 @@
 ---
-tag: is-kanban-card
+tag: iswc-kanban-card
 tags:
-  - is-kanban-card
+  - iswc-kanban-card
 category: data
 status: public
 ---
-# `<is-kanban-card>`
+# `<iswc-kanban-card>`
 
 ## Propósito
 
-Tarjeta de `<is-kanban>`. Representa un ítem movible dentro de una columna.
+Tarjeta de `<iswc-kanban>`. Representa un ítem movible dentro de una columna.
 
 ## Cuándo usarlo
 
@@ -22,5 +22,5 @@ No lo reimplementes ni lo uses para sustituir al padre. La guía del padre docum
 ## Ejemplo mínimo
 
 ```html
-<is-kanban-card></is-kanban-card>
+<iswc-kanban-card></iswc-kanban-card>
 ```

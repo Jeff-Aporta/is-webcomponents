@@ -4,7 +4,7 @@
  * Es la pieza que permite migrar más diagramas Mermaid sin tocar el visor: cada
  * componente nuevo se auto-registra al importarse y el lightbox ya sabe montarlo.
  *
- *   registerDiagramKind('flow', 'is-flow-diagram');
+ *   registerDiagramKind('flow', 'iswc-flow-diagram');
  *
  * El componente registrado debe aceptar la propiedad `payload` y el atributo
  * `color="viewer"`.

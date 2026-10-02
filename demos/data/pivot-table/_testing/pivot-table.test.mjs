@@ -9,14 +9,14 @@ const URL = `${BASE_URL}/demos/data/pivot-table/pivot-table.html`;
 const tests = [];
 
 tests.push({
-  name: 'smoke: is-pivot-table está definido y los 4 pivots renderizan tablas',
+  name: 'smoke: iswc-pivot-table está definido y los 4 pivots renderizan tablas',
   run: async (page) => {
     await page.goto(URL, { waitUntil: 'domcontentloaded' });
     await waitReady(page, 'data-pivot-table-ready');
     const initial = await page.evaluate(() => {
-      const pivots = [...document.querySelectorAll('main is-pivot-table')];
+      const pivots = [...document.querySelectorAll('main iswc-pivot-table')];
       return {
-        defined: !!customElements.get('is-pivot-table'),
+        defined: !!customElements.get('iswc-pivot-table'),
         count: pivots.length,
         perPivot: pivots.map((p) => {
           const sr = p.shadowRoot;
@@ -35,7 +35,7 @@ tests.push({
         }),
       };
     });
-    assert.equal(initial.defined, true, 'is-pivot-table debe estar definido');
+    assert.equal(initial.defined, true, 'iswc-pivot-table debe estar definido');
     assert.equal(initial.count, 4, `esperaba 4 pivots, hay ${initial.count}`);
     for (let i = 0; i < initial.perPivot.length; i++) {
       const r = initial.perPivot[i];
@@ -60,7 +60,7 @@ tests.push({
     await waitReady(page, 'data-pivot-table-ready');
     // Recoger el texto de la celda Norte × Q1.
     const cellValue = await page.evaluate(() => {
-      const pivots = [...document.querySelectorAll('main is-pivot-table')];
+      const pivots = [...document.querySelectorAll('main iswc-pivot-table')];
       // El primero es el SUM.
       const sum = pivots[0];
       const sr = sum.shadowRoot;
@@ -91,7 +91,7 @@ tests.push({
     await page.goto(URL, { waitUntil: 'domcontentloaded' });
     await waitReady(page, 'data-pivot-table-ready');
     const cellValue = await page.evaluate(() => {
-      const pivots = [...document.querySelectorAll('main is-pivot-table')];
+      const pivots = [...document.querySelectorAll('main iswc-pivot-table')];
       // El segundo es AVG con decimals=1.
       const avg = pivots[1];
       const tbody = avg.shadowRoot.querySelector('tbody');
@@ -116,7 +116,7 @@ tests.push({
     await page.goto(URL, { waitUntil: 'domcontentloaded' });
     await waitReady(page, 'data-pivot-table-ready');
     const counts = await page.evaluate(() => {
-      const pivots = [...document.querySelectorAll('main is-pivot-table')];
+      const pivots = [...document.querySelectorAll('main iswc-pivot-table')];
       // El tercero es COUNT.
       const cnt = pivots[2];
       const tbody = cnt.shadowRoot.querySelector('tbody');
@@ -135,16 +135,16 @@ tests.push({
 });
 
 tests.push({
-  name: 'funcional: evento is-cell-click emite detail { row, col, value }',
+  name: 'funcional: evento iswc-cell-click emite detail { row, col, value }',
   run: async (page) => {
     await page.goto(URL, { waitUntil: 'domcontentloaded' });
     await waitReady(page, 'data-pivot-table-ready');
     const captured = await page.evaluate(() => {
       return new Promise((resolve) => {
-        const pivots = [...document.querySelectorAll('main is-pivot-table')];
+        const pivots = [...document.querySelectorAll('main iswc-pivot-table')];
         const sum = pivots[0];
         let detail = null;
-        sum.addEventListener('is-cell-click', (e) => { detail = e.detail; });
+        sum.addEventListener('iswc-cell-click', (e) => { detail = e.detail; });
         // Click en la celda Norte × Q2
         const tbody = sum.shadowRoot.querySelector('tbody');
         const rows = [...tbody.querySelectorAll('tr')];
@@ -181,7 +181,7 @@ tests.push({
       // Oeste no tiene datos en Q1.
     ];
     const cellText = await page.evaluate((data) => {
-      const p = document.createElement('is-pivot-table');
+      const p = document.createElement('iswc-pivot-table');
       p.setAttribute('rows', 'region');
       p.setAttribute('cols', 'q');
       p.setAttribute('measure', 'sales');
@@ -214,7 +214,7 @@ tests.push({
         { region: 'A', q: 'Q1', v: 10 },
         { region: 'B', q: 'Q1', v: 20 },
       ];
-      const p = document.createElement('is-pivot-table');
+      const p = document.createElement('iswc-pivot-table');
       p.setAttribute('rows', 'region');
       p.setAttribute('cols', 'q');
       p.setAttribute('measure', 'v');
@@ -244,7 +244,7 @@ tests.push({
     await page.goto(URL, { waitUntil: 'domcontentloaded' });
     await waitReady(page, 'data-pivot-table-ready');
     const msg = await page.evaluate(() => {
-      const p = document.createElement('is-pivot-table');
+      const p = document.createElement('iswc-pivot-table');
       // Sin rows ni cols.
       document.body.appendChild(p);
       const tfoot = p.shadowRoot.querySelector('tfoot');
@@ -262,12 +262,12 @@ tests.push({
     await page.goto(URL, { waitUntil: 'domcontentloaded' });
     await waitReady(page, 'data-pivot-table-ready');
     const a = await page.evaluate(() => {
-      const sum = document.querySelector('main is-pivot-table');
+      const sum = document.querySelector('main iswc-pivot-table');
       return sum.shadowRoot.querySelector('table').textContent.replace(/\s+/g, ' ').trim();
     });
     // Re-asignar el mismo script
     await page.evaluate(() => {
-      const sum = document.querySelector('main is-pivot-table');
+      const sum = document.querySelector('main iswc-pivot-table');
       const script = sum.querySelector('script[type="application/json"]');
       const json = script.textContent;
       sum.removeChild(script);
@@ -278,7 +278,7 @@ tests.push({
     });
     await page.waitForTimeout(50);
     const b = await page.evaluate(() => {
-      const sum = document.querySelector('main is-pivot-table');
+      const sum = document.querySelector('main iswc-pivot-table');
       return sum.shadowRoot.querySelector('table').textContent.replace(/\s+/g, ' ').trim();
     });
     assert.equal(a, b, 'round-trip mismo JSON → mismo textContent de tabla');
@@ -291,7 +291,7 @@ tests.push({
     await page.goto(URL, { waitUntil: 'domcontentloaded' });
     await waitReady(page, 'data-pivot-table-ready');
     const role = await page.evaluate(() => {
-      const sum = document.querySelector('main is-pivot-table');
+      const sum = document.querySelector('main iswc-pivot-table');
       const table = sum.shadowRoot.querySelector('table.pivot');
       return table?.getAttribute('role');
     });

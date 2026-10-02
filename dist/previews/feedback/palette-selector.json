@@ -1,11 +1,11 @@
 {
-  "$schema": "is-preview/v1",
-  "tag": "is-palette-selector",
+  "$schema": "iswc-preview/v1",
+  "tag": "iswc-palette-selector",
   "category": "feedback",
-  "title": "<is-palette-selector>",
+  "title": "<iswc-palette-selector>",
   "titleHtml": true,
-  "styles": ".row { display: flex; flex-wrap: wrap; gap: 1rem; align-items: center; }\r\n    .event-log {\r\n      margin-top: 12px;\r\n      padding: 12px;\r\n      border: 1px solid var(--iswc-border);\r\n      border-radius: 8px;\r\n      background: var(--iswc-bg-soft);\r\n      font-family: var(--iswc-mono);\r\n      font-size: 0.8rem;\r\n      min-height: 2em;\r\n      color: var(--iswc-text);\r\n    }\r\n    .event-log .hint { opacity: 0.6; }\r\n\r\n    /* --- Trigger tipo \"logo\" — el consumer pone SU HTML --- */\r\n    .logo-trigger {\r\n      display: inline-flex;\r\n      align-items: baseline;\r\n      gap: 0;\r\n      padding: 0.45em 0.85em;\r\n      background: var(--iswc-logo-bg, #fff);\r\n      color: var(--iswc-logo-fg, #111);\r\n      border-radius: 0.45em;\r\n      font: inherit;\r\n      font-weight: 800;\r\n      letter-spacing: -0.045em;\r\n      text-transform: lowercase;\r\n      transition: filter 120ms ease, transform 120ms ease;\r\n    }\r\n    .logo-trigger:hover { filter: brightness(1.05); }\r\n    .logo-trigger:active { transform: translateY(1px); }\r\n    .logo-trigger__lead { color: var(--iswc-text, #111); }\r\n    .logo-trigger__accent { color: var(--iswc-accent, dodgerblue); }\r\n    .logo-trigger__caret {\r\n      margin-left: 0.5em;\r\n      font-size: 0.95em;\r\n      opacity: 0.7;\r\n      color: var(--iswc-text, #111);\r\n    }",
-  "storageKey": "docs-is-palette-selector",
+  "styles": ".row { display: flex; flex-wrap: wrap; gap: 1rem; align-items: center; }\r\n    .event-log {\r\n      margin-top: 12px;\r\n      padding: 12px;\r\n      border: 1px solid var(--iswc-border);\r\n      border-radius: 8px;\r\n      background: var(--iswc-bg-soft);\r\n      font-family: var(--iswc-mono);\r\n      font-size: 0.8rem;\r\n      min-height: 2em;\r\n      color: var(--iswc-text);\r\n    }\r\n    .event-log .hint { opacity: 0.6; }\r\n\r\n    /* --- Trigger tipo \"logo\" — el consumer pone SU HTML --- */\r\n    .logo-trigger {\r\n      display: inline-flex;\r\n      align-items: baseline;\r\n      gap: 0;\r\n      padding: 0.45em 0.85em;\r\n      background: var(--iswc-logo-bg, #fff);\r\n      color: var(--iswc-logo-fg, #111);\r\n      border-radius: 0.45em;\r\n      font: inherit;\r\n      font-weight: 800;\r\n      letter-spacing: -0.045em;\r\n      text-transform: lowercase;\r\n      transition: filter 120ms ease, transform 120ms ease;\r\n    }\r\n    .logo-trigger:hover { filter: brightness(1.05); }\r\n    .logo-trigger:active { transform: translateY(1px); }\r\n    .logo-trigger__lead { color: #000; }\r\n    .logo-trigger__accent { color: var(--iswc-accent, dodgerblue); }\r\n    .logo-trigger__caret {\r\n      margin-left: 0.5em;\r\n      font-size: 0.95em;\r\n      opacity: 0.7;\r\n      color: var(--iswc-text, #111);\r\n    }",
+  "storageKey": "docs-iswc-palette-selector",
   "sections": [
     {
       "id": "intro",
@@ -14,173 +14,11 @@
       "blocks": [
         {
           "kind": "demo",
-          "html": "<div class=\"row\">\r\n            <is-palette-selector id=\"defaultPalette\" scope=\"root\"></is-palette-selector>\r\n            <is-theme-toggle id=\"defaultTheme\" scope=\"root\"></is-theme-toggle>\r\n          </div>\r\n          <div data-palette=\"insoft\" data-theme=\"light\" class=\"theme-light\" style=\"margin-top:1rem;padding:1rem;border-radius:0.6em;background:var(--iswc-bg);color:var(--iswc-text)\">\r\n            <is-palette-selector scope=\"closest\"></is-palette-selector>\r\n            <is-theme-toggle scope=\"closest\"></is-theme-toggle>\r\n          </div>",
-          "controls": [
-            {
-              "control": "boolean",
-              "prop": "attr:palettes",
-              "label": "palettes"
-            },
-            {
-              "control": "boolean",
-              "prop": "attr:value",
-              "label": "value"
-            },
-            {
-              "control": "boolean",
-              "prop": "attr:acme",
-              "label": "acme"
-            },
-            {
-              "control": "boolean",
-              "prop": "attr:label",
-              "label": "label"
-            },
-            {
-              "control": "boolean",
-              "prop": "attr:Acme",
-              "label": "Acme"
-            },
-            {
-              "control": "boolean",
-              "prop": "attr:Corp",
-              "label": "Corp"
-            },
-            {
-              "control": "boolean",
-              "prop": "attr:accent",
-              "label": "accent"
-            },
-            {
-              "control": "boolean",
-              "prop": "attr:e03131",
-              "label": "e03131"
-            },
-            {
-              "control": "boolean",
-              "prop": "attr:lead",
-              "label": "lead"
-            },
-            {
-              "control": "boolean",
-              "prop": "attr:ac",
-              "label": "ac"
-            },
-            {
-              "control": "boolean",
-              "prop": "attr:accentLabel",
-              "label": "accentLabel"
-            },
-            {
-              "control": "boolean",
-              "prop": "attr:me",
-              "label": "me"
-            },
-            {
-              "control": "boolean",
-              "prop": "attr:leadColor",
-              "label": "leadColor"
-            },
-            {
-              "control": "boolean",
-              "prop": "attr:accentColor",
-              "label": "accentColor"
-            },
-            {
-              "control": "boolean",
-              "prop": "attr:bg",
-              "label": "bg"
-            },
-            {
-              "control": "boolean",
-              "prop": "attr:fff",
-              "label": "fff"
-            },
-            {
-              "control": "boolean",
-              "prop": "attr:fg",
-              "label": "fg"
-            },
-            {
-              "control": "boolean",
-              "prop": "attr:ocean",
-              "label": "ocean"
-            },
-            {
-              "control": "boolean",
-              "prop": "attr:Ocean",
-              "label": "Ocean"
-            },
-            {
-              "control": "boolean",
-              "prop": "attr:ea5e9",
-              "label": "ea5e9"
-            },
-            {
-              "control": "boolean",
-              "prop": "attr:o",
-              "label": "o"
-            },
-            {
-              "control": "boolean",
-              "prop": "attr:cean",
-              "label": "cean"
-            },
-            {
-              "control": "boolean",
-              "prop": "attr:forest",
-              "label": "forest"
-            },
-            {
-              "control": "boolean",
-              "prop": "attr:Forest",
-              "label": "Forest"
-            },
-            {
-              "control": "boolean",
-              "prop": "attr:c55e",
-              "label": "c55e"
-            },
-            {
-              "control": "boolean",
-              "prop": "attr:f",
-              "label": "f"
-            },
-            {
-              "control": "boolean",
-              "prop": "attr:orest",
-              "label": "orest"
-            },
-            {
-              "control": "boolean",
-              "prop": "attr:dusk",
-              "label": "dusk"
-            },
-            {
-              "control": "boolean",
-              "prop": "attr:Dusk",
-              "label": "Dusk"
-            },
-            {
-              "control": "boolean",
-              "prop": "attr:a855f7",
-              "label": "a855f7"
-            },
-            {
-              "control": "boolean",
-              "prop": "attr:d",
-              "label": "d"
-            },
-            {
-              "control": "boolean",
-              "prop": "attr:usk",
-              "label": "usk"
-            }
-          ]
+          "html": "<div class=\"row\">\r\n            <iswc-palette-selector id=\"defaultPalette\" scope=\"root\"></iswc-palette-selector>\r\n            <iswc-theme-toggle id=\"defaultTheme\" scope=\"root\"></iswc-theme-toggle>\r\n          </div>\r\n          <div data-palette=\"insoft\" data-theme=\"light\" class=\"theme-light\" style=\"margin-top:1rem;padding:1rem;border-radius:0.6em;background:var(--iswc-bg);color:var(--iswc-text)\">\r\n            <iswc-palette-selector scope=\"closest\"></iswc-palette-selector>\r\n            <iswc-theme-toggle scope=\"closest\"></iswc-theme-toggle>\r\n          </div>"
         },
         {
           "kind": "code",
-          "code": "<is-palette-selector></is-palette-selector>"
+          "code": "<iswc-palette-selector></iswc-palette-selector>"
         }
       ]
     },
@@ -191,11 +29,11 @@
       "blocks": [
         {
           "kind": "demo",
-          "html": "<div class=\"row\">\r\n            <is-palette-selector id=\"logoPalette\">\r\n              <button type=\"button\" slot=\"trigger\" class=\"logo-trigger\" aria-label=\"Elegir paleta de marca\">\r\n                <span class=\"logo-trigger__lead\" data-role=\"lead\">in</span><span class=\"logo-trigger__accent\" data-role=\"accent\">soft</span>\r\n                <is-icon class=\"logo-trigger__caret\" icon=\"mdi:chevron-down\" aria-hidden=\"true\"></is-icon>\r\n              </button>\r\n            </is-palette-selector>\r\n          </div>"
+          "html": "<div class=\"row\">\r\n            <iswc-palette-selector id=\"logoPalette\">\r\n              <button type=\"button\" slot=\"trigger\" class=\"logo-trigger\" aria-label=\"Elegir paleta de marca\">\r\n                <span class=\"logo-trigger__lead\" data-role=\"lead\">in</span><span class=\"logo-trigger__accent\" data-role=\"accent\">soft</span>\r\n                <iswc-icon class=\"logo-trigger__caret\" icon=\"mdi:chevron-down\" aria-hidden=\"true\"></iswc-icon>\r\n              </button>\r\n            </iswc-palette-selector>\r\n          </div>"
         },
         {
           "kind": "code",
-          "code": "<is-palette-selector>\n  <button slot=\"trigger\" class=\"logo-trigger\">\n    <span class=\"logo-trigger__lead\">in</span>\n    <span class=\"logo-trigger__accent\">soft</span>\n  </button>\n</is-palette-selector>"
+          "code": "<iswc-palette-selector>\n  <button slot=\"trigger\" class=\"logo-trigger\">\n    <span class=\"logo-trigger__lead\">in</span>\n    <span class=\"logo-trigger__accent\">soft</span>\n  </button>\n</iswc-palette-selector>"
         },
         {
           "kind": "html",
@@ -206,26 +44,39 @@
     {
       "id": "custom",
       "title": "Paletas personalizadas",
-      "lede": "Cada consumidor pasa su propio array JSON en el atributo <code class=\"code\">palettes</code>. Si una paleta incluye <code class=\"code\">css</code>, el componente inyecta la hoja bajo demanda al seleccionarla.",
+      "lede": "Cada paleta trae bg y content. content es json2xml: un objeto { iswc-text: { color, content } } se vuelve el elemento iswc-text. Al cambiar value se repinta el botón.",
       "blocks": [
         {
           "kind": "demo",
-          "html": "<div class=\"row\" data-palette=\"acme\">\r\n            <is-palette-selector id=\"customPalette\" scope=\"closest\" palettes='[\r\n              {\"value\":\"acme\",\"label\":\"Acme Corp\",\"accent\":\"#e03131\",\"lead\":\"ac\",\"accentLabel\":\"me\",\"leadColor\":\"#111\",\"accentColor\":\"#e03131\",\"bg\":\"#fff\",\"fg\":\"#111\"},\r\n              {\"value\":\"ocean\",\"label\":\"Ocean\",\"accent\":\"#0ea5e9\",\"lead\":\"o\",\"accentLabel\":\"cean\",\"leadColor\":\"#111\",\"accentColor\":\"#0ea5e9\",\"bg\":\"#fff\",\"fg\":\"#111\"},\r\n              {\"value\":\"forest\",\"label\":\"Forest\",\"accent\":\"#22c55e\",\"lead\":\"f\",\"accentLabel\":\"orest\",\"leadColor\":\"#111\",\"accentColor\":\"#22c55e\",\"bg\":\"#fff\",\"fg\":\"#111\"},\r\n              {\"value\":\"dusk\",\"label\":\"Dusk\",\"accent\":\"#a855f7\",\"lead\":\"d\",\"accentLabel\":\"usk\",\"leadColor\":\"#111\",\"accentColor\":\"#a855f7\",\"bg\":\"#fff\",\"fg\":\"#111\"}\r\n            ]'>\r\n              <button type=\"button\" slot=\"trigger\" class=\"logo-trigger\" aria-label=\"Elegir paleta\">\r\n                <span class=\"logo-trigger__lead\" data-role=\"lead\">ac</span><span class=\"logo-trigger__accent\" data-role=\"accent\">me</span>\r\n                <is-icon class=\"logo-trigger__caret\" icon=\"mdi:chevron-down\" aria-hidden=\"true\"></is-icon>\r\n              </button>\r\n            </is-palette-selector>\r\n          </div>"
+          "html": "<div class=\"row\" data-palette=\"acme\">\n            <iswc-palette-selector id=\"customPalette\" scope=\"closest\" value=\"acme\" palettes='[{\"value\":\"acme\",\"label\":\"Acme Corp\",\"bg\":\"#fff\",\"fg\":\"#111\",\"content\":[{\"iswc-text\":{\"color\":\"#111\",\"content\":[\"ac\"]}},{\"iswc-text\":{\"color\":\"#e03131\",\"content\":[\"me\"]}}]},{\"value\":\"ocean\",\"label\":\"Ocean\",\"bg\":\"#fff\",\"fg\":\"#111\",\"content\":[{\"iswc-text\":{\"color\":\"#111\",\"content\":[\"o\"]}},{\"iswc-text\":{\"color\":\"#0ea5e9\",\"content\":[\"cean\"]}}]},{\"value\":\"forest\",\"label\":\"Forest\",\"bg\":\"#fff\",\"fg\":\"#111\",\"content\":[{\"iswc-text\":{\"color\":\"#111\",\"content\":[\"f\"]}},{\"iswc-text\":{\"color\":\"#22c55e\",\"content\":[\"orest\"]}}]},{\"value\":\"dusk\",\"label\":\"Dusk\",\"bg\":\"#fff\",\"fg\":\"#111\",\"content\":[{\"iswc-text\":{\"color\":\"#111\",\"content\":[\"d\"]}},{\"iswc-text\":{\"color\":\"#a855f7\",\"content\":[\"usk\"]}}]}]'></iswc-palette-selector>\n          </div>",
+          "controls": [
+            {
+              "control": "select",
+              "prop": "attr:value",
+              "label": "value",
+              "options": [
+                "acme",
+                "ocean",
+                "forest",
+                "dusk"
+              ]
+            }
+          ]
         },
         {
           "kind": "code",
-          "code": "<is-palette-selector palettes='[\n  {\"value\":\"acme\",\"label\":\"Acme Corp\",\"accent\":\"#e03131\",\"lead\":\"ac\",\"accentLabel\":\"me\"},\n  {\"value\":\"ocean\",\"label\":\"Ocean\",\"accent\":\"#0ea5e9\",\"lead\":\"o\",\"accentLabel\":\"cean\"}\n]'>\n  <button slot=\"trigger\" class=\"logo-trigger\">\n    <span data-role=\"lead\">ac</span>\n    <span data-role=\"accent\">me</span>\n  </button>\n</is-palette-selector>"
+          "code": "<iswc-palette-selector value=\"acme\" palettes='[\n  {\n    \"value\": \"acme\",\n    \"label\": \"Acme Corp\",\n    \"bg\": \"#fff\",\n    \"fg\": \"#111\",\n    \"content\": [\n      { \"iswc-text\": { \"color\": \"#111\", \"content\": [\"ac\"] } },\n      { \"iswc-text\": { \"color\": \"#e03131\", \"content\": [\"me\"] } }\n    ]\n  },\n  {\n    \"value\": \"ocean\",\n    \"label\": \"Ocean\",\n    \"bg\": \"#fff\",\n    \"fg\": \"#111\",\n    \"content\": [\n      { \"iswc-text\": { \"color\": \"#111\", \"content\": [\"o\"] } },\n      { \"iswc-text\": { \"color\": \"#0ea5e9\", \"content\": [\"cean\"] } }\n    ]\n  }\n]'>\n</iswc-palette-selector>"
         }
       ]
     },
     {
       "id": "events",
       "title": "Eventos",
-      "lede": "El componente emite <code class=\"code\">is-palette-change</code> cuando el usuario selecciona una paleta. <code class=\"code\">detail.value</code> trae el identificador, <code class=\"code\">detail.palette</code> trae el objeto entero.",
+      "lede": "El componente emite <code class=\"code\">iswc-palette-change</code> cuando el usuario selecciona una paleta. <code class=\"code\">detail.value</code> trae el identificador, <code class=\"code\">detail.palette</code> trae el objeto entero.",
       "blocks": [
         {
           "kind": "demo",
-          "html": "<is-palette-selector id=\"evPalette\"></is-palette-selector>\r\n          <div class=\"event-log\" id=\"evLog\"><div class=\"hint\">Selecciona una paleta para ver el evento.</div></div>"
+          "html": "<iswc-palette-selector id=\"evPalette\"></iswc-palette-selector>\r\n          <div class=\"event-log\" id=\"evLog\"><div class=\"hint\">Selecciona una paleta para ver el evento.</div></div>"
         }
       ]
     },
@@ -254,7 +105,7 @@
             [
               "<code>storage-key</code>",
               "string",
-              "<code>is-palette</code>"
+              "<code>iswc-palette</code>"
             ],
             [
               "<code>aria-label</code>",
@@ -276,7 +127,7 @@
           "rows": [
             [
               "<code>trigger</code>",
-              "Sustituye el botón trigger interno. El consumidor pone SU HTML; el componente aún abre/cierra el menu y emite <code>is-palette-change</code>."
+              "Sustituye el botón trigger interno. El consumidor pone SU HTML; el componente aún abre/cierra el menu y emite <code>iswc-palette-change</code>."
             ]
           ]
         },
@@ -333,7 +184,7 @@
           ],
           "rows": [
             [
-              "<code>is-palette-change</code>",
+              "<code>iswc-palette-change</code>",
               "<code>{ value, palette }</code>"
             ]
           ]
@@ -344,7 +195,7 @@
         },
         {
           "kind": "html",
-          "html": "<ul>\r\n          <li><code>&lt;html data-palette=\"X\"&gt;</code> — aplica la paleta activa</li>\r\n          <li><code>localStorage[\"is-palette\"] = X</code> — persiste la elección</li>\r\n        </ul>"
+          "html": "<ul>\r\n          <li><code>&lt;html data-palette=\"X\"&gt;</code> — aplica la paleta activa</li>\r\n          <li><code>localStorage[\"iswc-palette\"] = X</code> — persiste la elección</li>\r\n        </ul>"
         }
       ]
     }

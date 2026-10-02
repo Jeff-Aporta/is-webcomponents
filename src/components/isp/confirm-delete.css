@@ -1,14 +1,15 @@
-/* El backdrop, la caja, el radio, la sombra y el scroll los pone el
-   <is-dialog> interno (y `_shared/modal-chrome.css` a través de él). Aquí sólo
-   queda lo propio del contenido. */
+/* <iswc-confirm-delete> — confirmación destructiva que se desbloquea sólo
+   cuando el usuario re-escribe la clave del registro. El backdrop, la caja,
+   el radio, la sombra y el scroll los pone el <iswc-dialog> interno (y
+   _shared/modal-chrome.css a través de él). Aquí sólo queda lo propio del
+   contenido. */
+
 :host {
   --iswc-confirm-delete-accent: var(--iswc-color-danger, #fa5252);
   display: contents;
   font-family: var(--iswc-sans, inherit);
 
-  .dlg {
-    --width: 26em;
-  }
+  .dlg { --width: 26em; }
 
   .heading {
     display: flex;
@@ -47,4 +48,6 @@
 }
 
 /* Mientras corre el borrado el diálogo no acepta interacción nueva. */
-:host([loading]) .dlg { cursor: progress; }
+:host([loading]) {
+  .dlg { cursor: progress; }
+}

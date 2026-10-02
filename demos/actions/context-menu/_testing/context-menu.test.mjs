@@ -1,4 +1,4 @@
-// context-menu.test.mjs — Nivel 3: smoke + open/close + is-select + is-open.
+// context-menu.test.mjs — Nivel 3: smoke + open/close + iswc-select + iswc-open.
 import { test } from 'node:test';
 import assert from 'node:assert/strict';
 import { chromium } from 'playwright';
@@ -9,22 +9,22 @@ let browser;
 test.before(async () => { browser = await chromium.launch(); });
 test.after(async () => { await browser?.close(); });
 
-test('context-menu: bundle registra <is-context-menu>', async () => {
+test('context-menu: bundle registra <iswc-context-menu>', async () => {
   const page = await browser.newPage();
   await page.goto(URL_DEMO, { waitUntil: 'domcontentloaded' });
-  await page.waitForSelector('is-context-menu:defined');
-  const defined = await page.evaluate(() => !!customElements.get('is-context-menu'));
+  await page.waitForSelector('iswc-context-menu:defined');
+  const defined = await page.evaluate(() => !!customElements.get('iswc-context-menu'));
   assert.equal(defined, true);
   await page.close();
 });
 
-test('context-menu: openAt() muestra el panel y emite is-open', async () => {
+test('context-menu: openAt() muestra el panel y emite iswc-open', async () => {
   const page = await browser.newPage();
   await page.goto(URL_DEMO, { waitUntil: 'domcontentloaded' });
-  await page.waitForSelector('is-context-menu#cm:defined');
+  await page.waitForSelector('iswc-context-menu#cm:defined');
   await page.evaluate(() => {
     window.__cmEvts = [];
-    document.getElementById('cm').addEventListener('is-open', (e) => {
+    document.getElementById('cm').addEventListener('iswc-open', (e) => {
       window.__cmEvts.push({ type: 'open', detail: e.detail });
     });
     const cm = document.getElementById('cm');
@@ -39,13 +39,13 @@ test('context-menu: openAt() muestra el panel y emite is-open', async () => {
   await page.close();
 });
 
-test('context-menu: close() emite is-close y oculta el panel', async () => {
+test('context-menu: close() emite iswc-close y oculta el panel', async () => {
   const page = await browser.newPage();
   await page.goto(URL_DEMO, { waitUntil: 'domcontentloaded' });
-  await page.waitForSelector('is-context-menu#cm:defined');
+  await page.waitForSelector('iswc-context-menu#cm:defined');
   await page.evaluate(() => {
     window.__cmClose = 0;
-    document.getElementById('cm').addEventListener('is-close', () => { window.__cmClose += 1; });
+    document.getElementById('cm').addEventListener('iswc-close', () => { window.__cmClose += 1; });
     const cm = document.getElementById('cm');
     cm.openAt(120, 120);
     setTimeout(() => cm.close(), 30);
@@ -58,13 +58,13 @@ test('context-menu: close() emite is-close y oculta el panel', async () => {
   await page.close();
 });
 
-test('context-menu: click en un item emite is-select con value del dataset', async () => {
+test('context-menu: click en un item emite iswc-select con value del dataset', async () => {
   const page = await browser.newPage();
   await page.goto(URL_DEMO, { waitUntil: 'domcontentloaded' });
-  await page.waitForSelector('is-context-menu#cm:defined');
+  await page.waitForSelector('iswc-context-menu#cm:defined');
   await page.evaluate(() => {
     window.__cmSel = null;
-    document.getElementById('cm').addEventListener('is-select', (e) => { window.__cmSel = e.detail; });
+    document.getElementById('cm').addEventListener('iswc-select', (e) => { window.__cmSel = e.detail; });
     document.getElementById('cm').openAt(80, 80);
   });
   await page.waitForTimeout(80);
@@ -85,9 +85,9 @@ test('context-menu: click en un item emite is-select con value del dataset', asy
 test('context-menu: atributo for=#target se enlaza al elemento target', async () => {
   const page = await browser.newPage();
   await page.goto(URL_DEMO, { waitUntil: 'domcontentloaded' });
-  await page.waitForSelector('is-context-menu#cm:defined');
+  await page.waitForSelector('iswc-context-menu#cm:defined');
   const forAttr = await page.evaluate(() => {
-    return document.querySelector('is-context-menu').getAttribute('for');
+    return document.querySelector('iswc-context-menu').getAttribute('for');
   });
   assert.equal(forAttr, '#target');
   await page.close();
@@ -96,9 +96,9 @@ test('context-menu: atributo for=#target se enlaza al elemento target', async ()
 test('context-menu: panel es un <dialog> dentro del shadow', async () => {
   const page = await browser.newPage();
   await page.goto(URL_DEMO, { waitUntil: 'domcontentloaded' });
-  await page.waitForSelector('is-context-menu#cm:defined');
+  await page.waitForSelector('iswc-context-menu#cm:defined');
   const hasDialog = await page.evaluate(() => {
-    return !!document.querySelector('is-context-menu#cm').shadowRoot.querySelector('dialog');
+    return !!document.querySelector('iswc-context-menu#cm').shadowRoot.querySelector('dialog');
   });
   assert.equal(hasDialog, true);
   await page.close();

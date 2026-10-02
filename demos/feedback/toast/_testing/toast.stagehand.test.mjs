@@ -15,7 +15,7 @@ checks.push({
     await waitReady(page, 'data-toast-ready');
     await page.waitForTimeout(150);
     const data = await page.evaluate(() => {
-      return [...document.querySelectorAll('is-toast')].map((t) => {
+      return [...document.querySelectorAll('iswc-toast')].map((t) => {
         const stack = t.shadowRoot.querySelector('[part="stack"]');
         const r = stack.getBoundingClientRect();
         const ariaLabel = stack.getAttribute('aria-label');
@@ -36,7 +36,7 @@ checks.push({
     await page.click('#btn-info');
     await page.waitForTimeout(200);
     const size = await page.evaluate(() => {
-      const all = document.querySelectorAll('is-toast-item');
+      const all = document.querySelectorAll('iswc-toast-item');
       const visible = [...all].filter((i) => !i.hidden);
       return visible.map((i) => {
         const r = i.getBoundingClientRect();
@@ -57,10 +57,10 @@ checks.push({
     await page.goto(URL, { waitUntil: 'domcontentloaded' });
     await waitReady(page, 'data-toast-ready');
     await page.waitForTimeout(150);
-    // Limpiar is-toast previos que pueda haber creado IsToast.host() en tests
-    // anteriores (data-default-toaster) y verificar el primer is-toast del DOM.
+    // Limpiar iswc-toast previos que pueda haber creado IsToast.host() en tests
+    // anteriores (data-default-toaster) y verificar el primer iswc-toast del DOM.
     await page.evaluate(() => {
-      document.querySelectorAll('is-toast').forEach((t) => {
+      document.querySelectorAll('iswc-toast').forEach((t) => {
         if (t.parentElement === document.body) t.remove();
       });
     });
@@ -93,7 +93,7 @@ checks.push({
     await page.waitForTimeout(300);
     const data = await page.evaluate(() => {
       const host = IsToast.host();
-      const items = [...host.querySelectorAll('is-toast-item')];
+      const items = [...host.querySelectorAll('iswc-toast-item')];
       const last = items[items.length - 1];
       const progress = last?.shadowRoot?.querySelector('.progress');
       return {

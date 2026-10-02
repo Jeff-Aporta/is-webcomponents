@@ -3,7 +3,7 @@
 <head>
 <meta charset="utf-8" />
 <meta name="viewport" content="width=device-width, initial-scale=1" />
-<title>Demo de <is-divider> · is-webcomponents</title>
+<title>Demo de <iswc-divider> · is-webcomponents</title>
 <meta name="description" content="Separador visual horizontal/vertical con opacity 0-100 y color semántico." />
 <style>
   html, body { margin: 0; padding: 0; min-height: 100%; background: #0c1118; color: #e2e8f0; font-family: ui-sans-serif, system-ui, sans-serif; }
@@ -14,7 +14,7 @@
   main { padding: 20px; display: grid; gap: 18px; }
   section { background: #0f1620; border: 1px solid rgba(255,255,255,0.1); border-radius: 8px; padding: 16px; }
   section h2 { font-size: 11px; text-transform: uppercase; letter-spacing: 0.08em; margin: 0 0 12px 0; color: #94a3b8; }
-  is-divider:not(:defined) { visibility: hidden; }
+  iswc-divider:not(:defined) { visibility: hidden; }
   .horizontal { display: block; }
   .row-v { display: flex; gap: 12px; align-items: stretch; min-height: 100px; }
   .row-v > * { flex: 0 0 auto; align-self: stretch; }
@@ -27,11 +27,11 @@
   footer code { background: rgba(255,255,255,0.06); padding: 1px 5px; border-radius: 3px; font: 11px ui-monospace, Menlo, Consolas, monospace; }
 </style>
 <script type="module">
-  await import('../../../dist/cdn/layout/divider.min.js?h=siycwk');
-  await customElements.whenDefined('is-divider');
+  await import('../../../dist/cdn/layout/divider.min.js?h=cqtdv2');
+  await customElements.whenDefined('iswc-divider');
 
   // (1) Horizontal básico (default).
-  const hd = document.createElement('is-divider');
+  const hd = document.createElement('iswc-divider');
   hd.setAttribute('orientation', 'horizontal');
   hd.id = 'hd';
   document.getElementById('host-1').appendChild(hd);
@@ -46,7 +46,7 @@
     label.style.font = '11px ui-monospace, Menlo, monospace';
     label.style.width = '110px';
     label.style.display = 'inline-block';
-    const d = document.createElement('is-divider');
+    const d = document.createElement('iswc-divider');
     d.setAttribute('color', c);
     d.setAttribute('opacity', '60');
     cHost.appendChild(label);
@@ -66,7 +66,7 @@
     label.style.color = '#94a3b8';
     label.style.font = '11px ui-monospace, Menlo, monospace';
     label.style.width = '80px';
-    const d = document.createElement('is-divider');
+    const d = document.createElement('iswc-divider');
     d.setAttribute('opacity', String(op));
     row.appendChild(label);
     row.appendChild(d);
@@ -78,7 +78,7 @@
   const left = document.createElement('span');
   left.className = 'col';
   left.textContent = 'Lado izquierdo';
-  const vd = document.createElement('is-divider');
+  const vd = document.createElement('iswc-divider');
   vd.setAttribute('orientation', 'vertical');
   vd.id = 'vd';
   const right = document.createElement('span');
@@ -89,7 +89,7 @@
   rowV.appendChild(right);
 
   // (5) Interactivo: cambiar opacity en caliente + color inválido → fallback.
-  const interactive = document.createElement('is-divider');
+  const interactive = document.createElement('iswc-divider');
   interactive.setAttribute('opacity', '30');
   interactive.setAttribute('color', 'brand');
   interactive.id = 'interactive';
@@ -111,7 +111,7 @@
 </head>
 <body>
 <header>
-  <h1>Demo — <code>&lt;is-divider&gt;</code></h1>
+  <h1>Demo — <code>&lt;iswc-divider&gt;</code></h1>
   <p>Separador visual <code>horizontal</code> o <code>vertical</code>. Color semántico y opacity 0-100. Atributos inválidos caen al fallback.</p>
 </header>
 <main>
@@ -144,7 +144,7 @@
   </section>
 </main>
 <footer>
-  Estado: <code>customElements.whenDefined('is-divider')</code> resuelto. Atributos inválidos se resetean a <code>color="text"</code>.
+  Estado: <code>customElements.whenDefined('iswc-divider')</code> resuelto. Atributos inválidos se resetean a <code>color="text"</code>.
 </footer>
 </body>
 </html>

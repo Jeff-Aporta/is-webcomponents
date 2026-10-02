@@ -1,7 +1,7 @@
 import { adoptCss, defineElement, emit } from '../../core/element.js';
 
 /**
- * <is-image-editor> — Editor de imagen con crop, zoom y rotación.
+ * <iswc-image-editor> — Editor de imagen con crop, zoom y rotación.
  *
  * Atributos
  *   src        URL de la imagen a editar (requerido)
@@ -20,9 +20,9 @@ import { adoptCss, defineElement, emit } from '../../core/element.js';
  *   editor.applyZoom(delta)   editor.applyRotation(deg)
  *
  * Eventos
- *   is-load       detail: { image }
- *   is-change     detail: { crop }
- *   is-crop       detail: { dataURL, crop }
+ *   iswc-load       detail: { image }
+ *   iswc-change     detail: { crop }
+ *   iswc-crop       detail: { dataURL, crop }
  */
 
 interface CropRect { x: number; y: number; width: number; height: number; }
@@ -39,7 +39,7 @@ interface DragState {
 (() => {
   const OBSERVED = ['src', 'zoom', 'rotation', 'aspect'];
 
-  class IsImageEditor extends HTMLElement {
+  class IswcImageEditor extends HTMLElement {
     static get observedAttributes(): string[] { return OBSERVED; }
     #mounted = false;
     #img: HTMLImageElement | null = null;
@@ -164,7 +164,7 @@ interface DragState {
         }
       }
       this.#draw();
-      emit(this, 'is-change', { crop: { ...this.#cropRect } });
+      emit(this, 'iswc-change', { crop: { ...this.#cropRect } });
     };
 
     attributeChangedCallback(name: string, oldVal: string | null, newVal: string | null): void {
@@ -198,7 +198,7 @@ interface DragState {
       if (!ctx) return null;
       ctx.drawImage(this.#img, Math.round(r.x), Math.round(r.y), Math.round(r.width), Math.round(r.height), 0, 0, cv.width, cv.height);
       const url = cv.toDataURL('image/png');
-      emit(this, 'is-crop', { dataURL: url, crop: { ...r } });
+      emit(this, 'iswc-crop', { dataURL: url, crop: { ...r } });
       return url;
     }
 
@@ -220,7 +220,7 @@ interface DragState {
         const w = img.width * 0.8;
         const h = img.height * 0.8;
         this.#cropRect = { x: cxp - w / 2, y: cyp - h / 2, width: w, height: h };
-        emit(this, 'is-load', { image: img });
+        emit(this, 'iswc-load', { image: img });
         this.#draw();
       };
       img.onerror = () => {
@@ -228,7 +228,7 @@ interface DragState {
         this.removeAttribute('data-loading');
         this.setAttribute('data-error', '');
         this.#status.textContent = 'No se pudo cargar la imagen';
-        emit(this, 'is-error', { src });
+        emit(this, 'iswc-error', { src });
       };
       img.src = src;
     }
@@ -398,7 +398,7 @@ interface DragState {
 
       this.#cropRect = { x, y, width, height };
       this.#draw();
-      emit(this, 'is-change', { crop: { ...this.#cropRect } });
+      emit(this, 'iswc-change', { crop: { ...this.#cropRect } });
     }
 
     #endDrag(): void {
@@ -418,5 +418,5 @@ interface DragState {
     return a / b;
   }
 
-  defineElement('is-image-editor', IsImageEditor);
+  defineElement('iswc-image-editor', IswcImageEditor);
 })();

@@ -1,13 +1,13 @@
 ---
-tag: is-floating
+tag: iswc-floating
 tags:
-  - is-floating
+  - iswc-floating
 category: helpers
 status: internal
 source: ./floating.js
 style: ./floating.css
 ---
-# `<is-floating>` (interno)
+# `<iswc-floating>` (interno)
 
 ## Propósito
 
@@ -15,18 +15,18 @@ Building block de posicionamiento anclado: coloca un panel respecto de un
 ancla resolviendo `flip`, `shift`, `auto-size`, flecha y hover bridge sobre
 `_shared/position.js`.
 
-**No es API pública.** Existe para consumo interno de `<is-popover>` y
-`<is-tooltip>`.
+**No es API pública.** Existe para consumo interno de `<iswc-popover>` y
+`<iswc-tooltip>`.
 
 ## Cuándo usarlo
 
 Solo al construir un componente de la librería que necesite anclaje flotante y
-no pueda componer `<is-popover>`.
+no pueda componer `<iswc-popover>`.
 
 ## Cuándo no usarlo
 
-En código de aplicación: ahí siempre `<is-popover>` o `<is-tooltip>`. Tampoco
-registrar ni documentar `is-popup`: ese tag fue eliminado.
+En código de aplicación: ahí siempre `<iswc-popover>` o `<iswc-tooltip>`. Tampoco
+registrar ni documentar `iswc-popup`: ese tag fue eliminado.
 
 ## Importación
 
@@ -37,10 +37,10 @@ import './floating.js';
 ## Ejemplo mínimo
 
 ```html
-<is-floating active placement="top" arrow>
-  <is-button slot="anchor">Ancla</is-button>
+<iswc-floating active placement="top" arrow>
+  <iswc-button slot="anchor">Ancla</iswc-button>
   <div>Contenido flotante</div>
-</is-floating>
+</iswc-floating>
 ```
 
 ## API
@@ -88,8 +88,8 @@ import './floating.js';
 
 | Evento | detail | bubbles | composed | cancelable |
 | --- | --- | --- | --- | --- |
-| `is-reposition` | `{ placement, x, y }` | sí | sí | no |
-| `is-hover-bridge` | `{ hovering }` | sí | sí | no |
+| `iswc-reposition` | `{ placement, x, y }` | sí | sí | no |
+| `iswc-hover-bridge` | `{ hovering }` | sí | sí | no |
 
 ### Métodos y propiedades públicas
 
@@ -140,7 +140,7 @@ No declara integración form-associated.
   `parseFloat` directo de `0.375rem` rompía la flecha.
 - `auto-size` publica el espacio disponible en `--auto-size-available-width` /
   `--auto-size-available-height` para que el contenido se limite por CSS.
-- `hover-bridge` emite `is-hover-bridge` al entrar y salir del puente.
+- `hover-bridge` emite `iswc-hover-bridge` al entrar y salir del puente.
 
 ## Dependencias y componentes relacionados
 
@@ -148,34 +148,34 @@ No declara integración form-associated.
 - [`../_shared/adopt-css.js`](../_shared/adopt-css.js)
 - [`../_shared/define.js`](../_shared/define.js)
 - [`../_shared/emit.js`](../_shared/emit.js)
-- Consumidores: `<is-popover>`, `<is-tooltip>`.
+- Consumidores: `<iswc-popover>`, `<iswc-tooltip>`.
 
-Tags del módulo: `<is-floating>`.
+Tags del módulo: `<iswc-floating>`.
 
 ## Accesibilidad
 
 No aporta semántica: el rol, el foco y las relaciones ARIA los define el
-componente que lo compone (`<is-popover>`, `<is-tooltip>`).
+componente que lo compone (`<iswc-popover>`, `<iswc-tooltip>`).
 
 ## Ejemplo avanzado
 
 ```html
-<is-floating id="flotante" placement="bottom-start" strategy="fixed"
+<iswc-floating id="flotante" placement="bottom-start" strategy="fixed"
              flip shift arrow distance="8" hover-bridge>
   <div>Panel anclado a un elemento externo</div>
-</is-floating>
+</iswc-floating>
 
 <script type="module">
   const flotante = document.getElementById('flotante');
   flotante.anchor = document.getElementById('boton-externo');
   flotante.setAttribute('active', '');
-  flotante.addEventListener('is-reposition', (e) => console.log(e.detail.placement));
+  flotante.addEventListener('iswc-reposition', (e) => console.log(e.detail.placement));
 </script>
 ```
 
 ## Errores comunes
 
-- Usarlo en código de aplicación en vez de `<is-popover>` / `<is-tooltip>`.
+- Usarlo en código de aplicación en vez de `<iswc-popover>` / `<iswc-tooltip>`.
 - Asignar `anchor` sin `active`: no se reposiciona hasta activarse.
 - Definir `--arrow-size` sin unidad esperando px: se admite número, `rem` y `em`.
 - Esperar semántica ARIA propia del panel.

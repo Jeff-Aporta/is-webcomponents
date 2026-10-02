@@ -4,14 +4,14 @@ import '../media/icon.js';
 import '../actions/button.js';
 
 /**
- * <is-dropzone> — Zona de drop con preview, cola y progreso por archivo.
+ * <iswc-dropzone> — Zona de drop con preview, cola y progreso por archivo.
  *
  * Atributos
  *   accept       mismo formato que &lt;input type="file"&gt;
  *   multiple     boolean
  *   max-files    tope de archivos simultáneos
  *   max-size     bytes — archivos mayores se rechazan
- *   chunked      boolean — emite is-upload-start / -progress / -end con
+ *   chunked      boolean — emite iswc-upload-start / -progress / -end con
  *               chunks ficticios (server real lo entrega)
  *
  * API
@@ -25,11 +25,11 @@ import '../actions/button.js';
  *   status: 'queued' | 'uploading' | 'done' | 'error'
  *
  * Eventos
- *   is-files-change   detail: { files }
- *   is-upload-start   detail: { id, file }
- *   is-upload-progress detail: { id, file, progress }
- *   is-upload-end     detail: { id, file, ok, error? }
- *   is-error          detail: { id, file, reason }
+ *   iswc-files-change   detail: { files }
+ *   iswc-upload-start   detail: { id, file }
+ *   iswc-upload-progress detail: { id, file, progress }
+ *   iswc-upload-end     detail: { id, file, ok, error? }
+ *   iswc-error          detail: { id, file, reason }
  */
 (() => {
   const OBSERVED: string[] = ['accept', 'multiple', 'max-files', 'max-size', 'chunked'];
@@ -50,7 +50,7 @@ import '../actions/button.js';
     error?: string;
   }
 
-  class IsDropzone extends HTMLElement {
+  class IswcDropzone extends HTMLElement {
     static get observedAttributes(): string[] { return OBSERVED; }
     #files: FileRecord[] = [];
     #counter = 0;
@@ -64,7 +64,7 @@ import '../actions/button.js';
       this.shadowRoot!.innerHTML = /* html */ `
         <div part="root" class="root">
           <div part="zone" class="zone" tabindex="0">
-            <span class="ico"><is-icon icon="mdi:cloud-upload-outline"></is-icon></span>
+            <span class="ico"><iswc-icon icon="mdi:cloud-upload-outline"></iswc-icon></span>
             <strong class="title">Arrastrá archivos acá</strong>
             <small class="sub">o hacé click para elegir</small>
             <input type="file" class="file-input" id="fileInput" hidden />
@@ -79,11 +79,11 @@ import '../actions/button.js';
 
       this.#zone.addEventListener('click', () => this.#input.click());
       this.#zone.addEventListener('keydown', (e: KeyboardEvent) => { if (e.key === 'Enter' || e.key === ' ') { e.preventDefault(); this.#input.click(); } });
-      this.#zone.addEventListener('dragover', (e: DragEvent) => { e.preventDefault(); this.#zone.classList.add('is-over'); });
-      this.#zone.addEventListener('dragleave', () => this.#zone.classList.remove('is-over'));
+      this.#zone.addEventListener('dragover', (e: DragEvent) => { e.preventDefault(); this.#zone.classList.add('iswc-over'); });
+      this.#zone.addEventListener('dragleave', () => this.#zone.classList.remove('iswc-over'));
       this.#zone.addEventListener('drop', (e: DragEvent) => {
         e.preventDefault();
-        this.#zone.classList.remove('is-over');
+        this.#zone.classList.remove('iswc-over');
         if (!e.dataTransfer) return;
         const files = [...e.dataTransfer.files];
         this.addFiles(files);
@@ -114,15 +114,15 @@ import '../actions/button.js';
       const accept = this.getAttribute('accept');
       for (const f of files) {
         if (this.#files.length >= max) {
-          emit(this, 'is-error', { reason: 'max-files', limit: max });
+          emit(this, 'iswc-error', { reason: 'max-files', limit: max });
           break;
         }
         if (f.size > maxSize) {
-          emit(this, 'is-error', { id: null, file: f, reason: 'max-size', limit: maxSize });
+          emit(this, 'iswc-error', { id: null, file: f, reason: 'max-size', limit: maxSize });
           continue;
         }
         if (accept && !matchesAccept(f, accept)) {
-          emit(this, 'is-error', { id: null, file: f, reason: 'accept' });
+          emit(this, 'iswc-error', { id: null, file: f, reason: 'accept' });
           continue;
         }
         const rec: FileRecord = { id: newId(), file: f, name: f.name, size: f.size, type: f.type, status: 'queued', progress: 0, url: '' };
@@ -149,23 +149,23 @@ import '../actions/button.js';
       for (const rec of queue) {
         rec.status = 'uploading';
         this.#patch(rec);
-        emit(this, 'is-upload-start', { id: rec.id, file: rec.file });
+        emit(this, 'iswc-upload-start', { id: rec.id, file: rec.file });
         const steps = 24;
         for (let i = 1; i <= steps; i++) {
           await new Promise<void>((r) => setTimeout(() => r(), 30 + Math.random() * 60));
           rec.progress = Math.round((i / steps) * 100);
           this.#patch(rec);
-          emit(this, 'is-upload-progress', { id: rec.id, file: rec.file, progress: rec.progress });
+          emit(this, 'iswc-upload-progress', { id: rec.id, file: rec.file, progress: rec.progress });
         }
         rec.status = 'done';
         rec.progress = 100;
         this.#patch(rec);
-        emit(this, 'is-upload-end', { id: rec.id, file: rec.file, ok: true });
+        emit(this, 'iswc-upload-end', { id: rec.id, file: rec.file, ok: true });
       }
     }
 
     #emitFiles(): void {
-      emit(this, 'is-files-change', { files: this.#files });
+      emit(this, 'iswc-files-change', { files: this.#files });
     }
 
     #patch(rec: FileRecord): void {
@@ -191,16 +191,16 @@ import '../actions/button.js';
       li.className = `row status-${rec.status}`;
       li.dataset.id = rec.id;
       li.innerHTML = `
-        <span class="thumb">${rec.url ? `<img src="${rec.url}" alt="">` : `<is-icon icon="${iconForType(rec.type)}"></is-icon>`}</span>
+        <span class="thumb">${rec.url ? `<img src="${rec.url}" alt="">` : `<iswc-icon icon="${iconForType(rec.type)}"></iswc-icon>`}</span>
         <div class="meta">
           <b class="name">${escapeHtml(rec.name)}</b>
           <small class="size">${formatSize(rec.size)}</small>
         </div>
         <progress max="100" value="${rec.progress}"></progress>
         <span class="status">${rec.status} ${rec.progress}%</span>
-        <is-button type="button" class="del" variant="text" color="neutral" aria-label="Quitar">
-          <is-icon icon="mdi:close" aria-hidden="true"></is-icon>
-        </is-button>
+        <iswc-button type="button" class="del" variant="text" color="neutral" aria-label="Quitar">
+          <iswc-icon icon="mdi:close" aria-hidden="true"></iswc-icon>
+        </iswc-button>
       `;
       const delEl = li.querySelector<HTMLElement>('.del');
       if (delEl) delEl.addEventListener('click', (e: Event) => { e.stopPropagation(); this.removeFile(rec.id); });
@@ -235,5 +235,5 @@ import '../actions/button.js';
     return `${(n / 1024 / 1024).toFixed(1)} MB`;
   }
 
-  defineElement('is-dropzone', IsDropzone);
+  defineElement('iswc-dropzone', IswcDropzone);
 })();

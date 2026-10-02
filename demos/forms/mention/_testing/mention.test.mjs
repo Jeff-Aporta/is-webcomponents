@@ -4,10 +4,10 @@
 //   - smoke: custom element definido, shadow DOM con input + popup listbox,
 //     sugerencias leídas del script JSON
 //   - funcional: tipear @ muestra popup, filtrado case-insensitive, seleccionar
-//     reemplaza el texto con "<trigger><item> " y emite is-select + is-change,
+//     reemplaza el texto con "<trigger><item> " y emite iswc-select + iswc-change,
 //     max-items limita el popup
 //   - accesibilidad: popup con role=listbox, opciones con role=option, clase
-//     is-active en la opción activa
+//     iswc-active en la opción activa
 //   - keyboard: ArrowDown/Up navega, Enter/Tab confirman, Escape oculta
 //   - edge cases: trigger personalizado (#), valor inicial con @ y #,
 //     disabled no acepta input, popup se oculta al hacer blur fuera
@@ -24,11 +24,11 @@ tests.push({
     await page.goto(URL, { waitUntil: 'domcontentloaded' });
     await waitReady(page, 'data-mention-ready');
     const data = await page.evaluate(() => {
-      const ms = [...document.querySelectorAll('is-mention')];
+      const ms = [...document.querySelectorAll('iswc-mention')];
       return ms.map((m) => {
         const sr = m.shadowRoot;
         return {
-          defined: !!customElements.get('is-mention'),
+          defined: !!customElements.get('iswc-mention'),
           hasShadow: !!sr,
           hasInput: !!sr?.querySelector('input.input'),
           hasPopup: !!sr?.querySelector('.popup'),
@@ -39,7 +39,7 @@ tests.push({
       });
     });
     assert.equal(data.length, 4, 'debe haber 4 mention');
-    assert.equal(data[0].defined, true, 'is-mention definido');
+    assert.equal(data[0].defined, true, 'iswc-mention definido');
     assert.equal(data[0].hasShadow, true, 'shadow root existe');
     assert.equal(data[0].hasInput, true, 'input interno presente');
     assert.equal(data[0].hasPopup, true, 'popup interno presente');
@@ -57,7 +57,7 @@ tests.push({
     await page.goto(URL, { waitUntil: 'domcontentloaded' });
     await waitReady(page, 'data-mention-ready');
     const r = await page.evaluate(() => {
-      const m = document.querySelector('#sec-basico is-mention');
+      const m = document.querySelector('#sec-basico iswc-mention');
       const sr = m.shadowRoot;
       const input = sr.querySelector('input.input');
       input.focus();
@@ -76,18 +76,18 @@ tests.push({
 });
 
 tests.push({
-  name: 'funcional: seleccionar reemplaza el texto y emite is-select',
+  name: 'funcional: seleccionar reemplaza el texto y emite iswc-select',
   run: async (page) => {
     await page.goto(URL, { waitUntil: 'domcontentloaded' });
     await waitReady(page, 'data-mention-ready');
-    // Capturar el evento is-select
+    // Capturar el evento iswc-select
     await page.evaluate(() => {
       window.__mentions = [];
-      const m = document.querySelector('#sec-basico is-mention');
-      m.addEventListener('is-select', (e) => window.__mentions.push(e.detail));
+      const m = document.querySelector('#sec-basico iswc-mention');
+      m.addEventListener('iswc-select', (e) => window.__mentions.push(e.detail));
     });
     const r = await page.evaluate(() => {
-      const m = document.querySelector('#sec-basico is-mention');
+      const m = document.querySelector('#sec-basico iswc-mention');
       const sr = m.shadowRoot;
       const input = sr.querySelector('input.input');
       input.focus();
@@ -108,7 +108,7 @@ tests.push({
     assert.match(r.value, /^@\w+ /, 'value tiene formato @item + espacio');
 
     const events = await page.evaluate(() => window.__mentions);
-    assert.equal(events.length, 1, 'is-select emitido una vez');
+    assert.equal(events.length, 1, 'iswc-select emitido una vez');
     assert.equal(events[0].trigger, '@', 'detail.trigger = @');
     assert.ok(events[0].item, 'detail.item presente');
   },
@@ -120,7 +120,7 @@ tests.push({
     await page.goto(URL, { waitUntil: 'domcontentloaded' });
     await waitReady(page, 'data-mention-ready');
     const r = await page.evaluate(() => {
-      const m = document.querySelector('#sec-basico is-mention');
+      const m = document.querySelector('#sec-basico iswc-mention');
       const sr = m.shadowRoot;
       const input = sr.querySelector('input.input');
       input.focus();
@@ -138,7 +138,7 @@ tests.push({
     await page.goto(URL, { waitUntil: 'domcontentloaded' });
     await waitReady(page, 'data-mention-ready');
     const r = await page.evaluate(() => {
-      const m = document.querySelector('#sec-basico is-mention');
+      const m = document.querySelector('#sec-basico iswc-mention');
       const sr = m.shadowRoot;
       const input = sr.querySelector('input.input');
       input.focus();
@@ -147,7 +147,7 @@ tests.push({
       const opts = [...sr.querySelectorAll('.opt')];
       return {
         allHaveRole: opts.every((o) => o.getAttribute('role') === 'option'),
-        activeCount: opts.filter((o) => o.classList.contains('is-active')).length,
+        activeCount: opts.filter((o) => o.classList.contains('iswc-active')).length,
       };
     });
     assert.equal(r.allHaveRole, true, 'todas las opciones tienen role=option');
@@ -161,7 +161,7 @@ tests.push({
     await page.goto(URL, { waitUntil: 'domcontentloaded' });
     await waitReady(page, 'data-mention-ready');
     await page.evaluate(() => {
-      const m = document.querySelector('#sec-basico is-mention');
+      const m = document.querySelector('#sec-basico iswc-mention');
       const sr = m.shadowRoot;
       const input = sr.querySelector('input.input');
       input.focus();
@@ -170,15 +170,15 @@ tests.push({
     });
     await page.waitForTimeout(50);
     const before = await page.evaluate(() => {
-      const sr = document.querySelector('#sec-basico is-mention').shadowRoot;
-      const active = sr.querySelector('.opt.is-active');
+      const sr = document.querySelector('#sec-basico iswc-mention').shadowRoot;
+      const active = sr.querySelector('.opt.iswc-active');
       return active?.dataset.value;
     });
     await page.keyboard.press('ArrowDown');
     await page.waitForTimeout(50);
     const after = await page.evaluate(() => {
-      const sr = document.querySelector('#sec-basico is-mention').shadowRoot;
-      const active = sr.querySelector('.opt.is-active');
+      const sr = document.querySelector('#sec-basico iswc-mention').shadowRoot;
+      const active = sr.querySelector('.opt.iswc-active');
       return active?.dataset.value;
     });
     assert.notEqual(after, before, 'ArrowDown cambia la opción activa');
@@ -186,7 +186,7 @@ tests.push({
     await page.keyboard.press('Enter');
     await page.waitForTimeout(50);
     const result = await page.evaluate(() => {
-      const m = document.querySelector('#sec-basico is-mention');
+      const m = document.querySelector('#sec-basico iswc-mention');
       return m.value;
     });
     assert.ok(result.length > 0 && result.startsWith('@'), 'Enter confirma y reemplaza');
@@ -199,7 +199,7 @@ tests.push({
     await page.goto(URL, { waitUntil: 'domcontentloaded' });
     await waitReady(page, 'data-mention-ready');
     await page.evaluate(() => {
-      const m = document.querySelector('#sec-basico is-mention');
+      const m = document.querySelector('#sec-basico iswc-mention');
       const sr = m.shadowRoot;
       const input = sr.querySelector('input.input');
       input.focus();
@@ -208,7 +208,7 @@ tests.push({
     });
     await page.waitForTimeout(50);
     const before = await page.evaluate(() => {
-      const sr = document.querySelector('#sec-basico is-mention').shadowRoot;
+      const sr = document.querySelector('#sec-basico iswc-mention').shadowRoot;
       return sr.querySelector('.popup').hidden;
     });
     assert.equal(before, false, 'popup abierto tras @');
@@ -216,7 +216,7 @@ tests.push({
     await page.keyboard.press('Escape');
     await page.waitForTimeout(50);
     const after = await page.evaluate(() => {
-      const sr = document.querySelector('#sec-basico is-mention').shadowRoot;
+      const sr = document.querySelector('#sec-basico iswc-mention').shadowRoot;
       return sr.querySelector('.popup').hidden;
     });
     assert.equal(after, true, 'Escape oculta el popup');
@@ -229,7 +229,7 @@ tests.push({
     await page.goto(URL, { waitUntil: 'domcontentloaded' });
     await waitReady(page, 'data-mention-ready');
     const r = await page.evaluate(() => {
-      const m = document.querySelector('#sec-hashtags is-mention');
+      const m = document.querySelector('#sec-hashtags iswc-mention');
       const sr = m.shadowRoot;
       const input = sr.querySelector('input.input');
       input.focus();
@@ -259,7 +259,7 @@ tests.push({
     await page.goto(URL, { waitUntil: 'domcontentloaded' });
     await waitReady(page, 'data-mention-ready');
     const r = await page.evaluate(() => {
-      const m = document.querySelector('#sec-disabled is-mention');
+      const m = document.querySelector('#sec-disabled iswc-mention');
       const sr = m.shadowRoot;
       const input = sr.querySelector('input.input');
       return {
@@ -282,7 +282,7 @@ tests.push({
     await page.goto(URL, { waitUntil: 'domcontentloaded' });
     await waitReady(page, 'data-mention-ready');
     await page.evaluate(() => {
-      const m = document.querySelector('#sec-basico is-mention');
+      const m = document.querySelector('#sec-basico iswc-mention');
       const sr = m.shadowRoot;
       const input = sr.querySelector('input.input');
       input.focus();
@@ -291,14 +291,14 @@ tests.push({
     });
     await page.waitForTimeout(50);
     await page.evaluate(() => {
-      const m = document.querySelector('#sec-basico is-mention');
+      const m = document.querySelector('#sec-basico iswc-mention');
       const sr = m.shadowRoot;
       const input = sr.querySelector('input.input');
       input.blur();
     });
     await page.waitForTimeout(50);
     const r = await page.evaluate(() => {
-      const sr = document.querySelector('#sec-basico is-mention').shadowRoot;
+      const sr = document.querySelector('#sec-basico iswc-mention').shadowRoot;
       return sr.querySelector('.popup').hidden;
     });
     assert.equal(r, true, 'blur oculta el popup');

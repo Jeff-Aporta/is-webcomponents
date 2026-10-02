@@ -84,16 +84,16 @@ export async function auditarComponente(estado: EstadoMotor, entrada: EntradaCat
   // 0. Componente sin JSON: marcar como faltante.
   if (!entrada.tieneJson || !entrada.rutaJsonAbsoluta) {
     // Páginas (home, theming, ecosystem, etc.) y chrome elements
-    // (is-preview-component, is-preview-controls, is-demo) no siempre
+    // (iswc-preview-component, iswc-preview-controls, iswc-demo) no siempre
     // tienen JSON propio. El catálogo los referencia; el motor los
     // cuenta como "página/chrome" y baja la severidad a info.
     const esPaginaOChrome = entrada.esPagina || [
-      'is-demo', 'is-preview-component', 'is-preview-controls',
+      'iswc-demo', 'iswc-preview-component', 'iswc-preview-controls',
     ].includes(tag);
     hallazgos.push({
       categoria: 'json-schema', severidad: esPaginaOChrome ? 'info' : 'warn', tag,
       mensaje: `No se encontró JSON de preview para <${tag}>.`,
-      sugerencia: 'Creá un archivo de definición siguiendo el esquema is-preview/v1.',
+      sugerencia: 'Creá un archivo de definición siguiendo el esquema iswc-preview/v1.',
     });
     return {
       tag, categoria: entrada.categoria, titulo: entrada.titulo,
@@ -111,7 +111,7 @@ export async function auditarComponente(estado: EstadoMotor, entrada: EntradaCat
       categoria: 'json-schema', severidad: 'fatal', tag,
       ruta: entrada.rutaJsonRelativa ?? undefined,
       mensaje: `JSON inválido o no parseable: ${entrada.rutaJsonRelativa}.`,
-      sugerencia: 'Verificá que sea JSON válido (o JSONC con `//`/`/* */` y `$schema: "is-preview/v1"`).',
+      sugerencia: 'Verificá que sea JSON válido (o JSONC con `//`/`/* */` y `$schema: "iswc-preview/v1"`).',
     });
     return {
       tag, categoria: entrada.categoria, titulo: entrada.titulo,

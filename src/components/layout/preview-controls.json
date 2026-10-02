@@ -1,19 +1,19 @@
 {
-  "$schema": "is-preview/v1",
-  "tag": "is-preview-controls",
+  "$schema": "iswc-preview/v1",
+  "tag": "iswc-preview-controls",
   "category": "preview",
-  "title": "<is-preview-controls>",
+  "title": "<iswc-preview-controls>",
   "titleHtml": false,
-  "description": "Panel de knobs del playground. La galería le pasa spec y escucha is-controls-change.",
+  "description": "Panel de knobs del playground. La galería le pasa spec y escucha iswc-controls-change.",
   "sections": [
     {
       "id": "intro",
       "title": "Uso",
-      "lede": "Panel de knobs del playground. La galería le pasa spec y escucha is-controls-change.",
+      "lede": "Panel de knobs del playground. La galería le pasa spec y escucha iswc-controls-change.",
       "blocks": [
         {
           "kind": "demo",
-          "html": "<is-preview-controls label=\"Controles\"></is-preview-controls>"
+          "html": "<iswc-preview-controls label=\"Controles\"></iswc-preview-controls>"
         }
       ]
     }

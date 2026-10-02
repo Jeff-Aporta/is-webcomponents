@@ -1,18 +1,18 @@
 ---
-tag: is-format
+tag: iswc-format
 tags:
-  - is-format
+  - iswc-format
 category: helpers
 status: public
 source: ./format.js
 style: ./format.css
 preview: ./format.json
 ---
-# `<is-format>`
+# `<iswc-format>`
 
 ## Propósito
 
-Web Component genérico de formateo con `Intl`. Un solo elemento cubre fechas, números, bytes y tiempo relativo vía `type`. Los nombres históricos (`is-format-date`, `is-format-number`, `is-format-bytes`, `is-relative-time`) siguen como alias con `type` prefijado.
+Web Component genérico de formateo con `Intl`. Un solo elemento cubre fechas, números, bytes y tiempo relativo vía `type`. Los nombres históricos (`iswc-format-date`, `iswc-format-number`, `iswc-format-bytes`, `iswc-relative-time`) siguen como alias con `type` prefijado.
 
 ## Cuándo usarlo
 
@@ -31,10 +31,10 @@ import './format.js';
 ## Ejemplo mínimo
 
 ```html
-<is-format type="date" value="2026-08-01"></is-format>
-<is-format type="number" value="1234.5" format="currency" currency="EUR"></is-format>
-<is-format type="bytes" value="2048" display="long"></is-format>
-<is-format type="relative" date="2026-08-01T00:00:00Z"></is-format>
+<iswc-format type="date" value="2026-08-01"></iswc-format>
+<iswc-format type="number" value="1234.5" format="currency" currency="EUR"></iswc-format>
+<iswc-format type="bytes" value="2048" display="long"></iswc-format>
+<iswc-format type="relative" date="2026-08-01T00:00:00Z"></iswc-format>
 ```
 
 ## API
@@ -45,7 +45,7 @@ import './format.js';
 
 | Atributo | Tipo | Notas |
 | --- | --- | --- |
-| `type` | `date` \| `number` \| `bytes` \| `relative` | Obligatorio en `<is-format>` |
+| `type` | `date` \| `number` \| `bytes` \| `relative` | Obligatorio en `<iswc-format>` |
 | `value` | string/number | Dato a formatear |
 | `date` | string/number | Alternativa a `value` en `relative` |
 | `locale` | string | BCP 47; si falta, lang del documento |
@@ -112,17 +112,17 @@ Texto plano en shadow; hereda idioma del documento / `locale`.
 ## Ejemplo avanzado
 
 ```html
-<is-format type="date" value="2026-07-30" weekday="long" month="long" day="numeric" year="numeric" locale="ja"></is-format>
+<iswc-format type="date" value="2026-07-30" weekday="long" month="long" day="numeric" year="numeric" locale="ja"></iswc-format>
 ```
 
 ## Errores comunes
 
-- Olvidar `type` en `<is-format>` (los alias lo prefijan).
+- Olvidar `type` en `<iswc-format>` (los alias lo prefijan).
 - Inventar attrs fuera del contrato Intl documentado.
 
 ## Reglas para LLM
 
-- Preferir este MD + preview `helpers/is-format.html` como contrato unificado.
+- Preferir este MD + preview `helpers/iswc-format.html` como contrato unificado.
 - No inventar tipos fuera de `date|number|bytes|relative`.
 
 ## Fuentes

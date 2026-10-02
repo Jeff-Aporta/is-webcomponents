@@ -1,8 +1,8 @@
 /**
- * Validador de esquema is-preview/v1 (definición de demos).
+ * Validador de esquema iswc-preview/v1 (definición de demos).
  *
  * El motor auditor exige que TODA preview de componente sea declarativa
- * (JSON con $schema: is-preview/v1). Esta clase implementa un validador
+ * (JSON con $schema: iswc-preview/v1). Esta clase implementa un validador
  * mínimo viable: define el esquema completo de la spec, verifica tipos,
  * enumera campos faltantes y reporta hallazgos categorizados.
  *
@@ -11,7 +11,7 @@
  *     install), así que el validador es puro TypeScript.
  *   - Cada campo desconocido o de tipo incorrecto emite UN hallazgo
  *     específico con la ruta JSON (sección/bloque/índice).
- *   - Cobertura total del esquema: si se agrega un campo a is-preview/v1,
+ *   - Cobertura total del esquema: si se agrega un campo a iswc-preview/v1,
  *     hay que agregarlo aquí también. La función `esquemaEsVersionV1()`
  *     detecta specs más nuevas y avisa.
  */
@@ -19,10 +19,10 @@
 import type { Hallazgo } from '../types.js';
 
 // ─────────────────────────────────────────────────────────────────────────────
-// Definición estructural del esquema is-preview/v1 (single source of truth).
+// Definición estructural del esquema iswc-preview/v1 (single source of truth).
 // ─────────────────────────────────────────────────────────────────────────────
 
-/** Tipos de bloque soportados por is-preview/v1. */
+/** Tipos de bloque soportados por iswc-preview/v1. */
 const KIND_BLOQUE = new Set([
   'lede', 'demo', 'callout', 'code', 'html', 'table',
 ]);
@@ -41,7 +41,7 @@ const CONTROL_PROPS = new Set([
   'options', 'min', 'max', 'step', 'placeholder', 'esquema',
 ]);
 
-/** Props de un bloque declaradas en is-preview/v1. */
+/** Props de un bloque declaradas en iswc-preview/v1. */
 const BLOQUE_PROPS = new Set([
   'kind', 'html', 'code', 'lang', 'heading', 'contain', 'noCode',
   'columns', 'rows', 'className', 'captionHtml',
@@ -67,7 +67,7 @@ const RAIZ_PROPS = new Set([
 // Implementación.
 // ─────────────────────────────────────────────────────────────────────────────
 
-/** @returns true si el objeto parece cumplir is-preview/v1 a alto nivel. */
+/** @returns true si el objeto parece cumplir iswc-preview/v1 a alto nivel. */
 export function pareceIsPreviewV1(def: unknown): def is { tag: string; sections: unknown[] } {
   if (!def || typeof def !== 'object') return false;
   const o = def as Record<string, unknown>;
@@ -106,15 +106,15 @@ export function validarEsquema(def: unknown): Hallazgo[] {
       categoria: 'json-schema',
       severidad: 'warn',
       tag: String(ruta),
-      mensaje: 'Falta `$schema: "is-preview/v1"` en la raíz del JSON.',
-      sugerencia: 'Agregá `"$schema": "is-preview/v1"` al inicio del archivo.',
+      mensaje: 'Falta `$schema: "iswc-preview/v1"` en la raíz del JSON.',
+      sugerencia: 'Agregá `"$schema": "iswc-preview/v1"` al inicio del archivo.',
     });
-  } else if (o.$schema !== 'is-preview/v1') {
+  } else if (o.$schema !== 'iswc-preview/v1') {
     hallazgos.push({
       categoria: 'json-schema',
       severidad: 'error',
       tag: String(ruta),
-      mensaje: `$schema desconocido: "${o.$schema}". El motor solo audita is-preview/v1.`,
+      mensaje: `$schema desconocido: "${o.$schema}". El motor solo audita iswc-preview/v1.`,
     });
   }
 
@@ -148,7 +148,7 @@ export function validarEsquema(def: unknown): Hallazgo[] {
         tag: String(ruta),
         mensaje: `Campo raíz no documentado: "${k}".`,
         detalle: { clave: k },
-        sugerencia: 'Si es un campo válido de is-preview/v1, agregalo a RAIZ_PROPS en motor/validators/json-schema.ts.',
+        sugerencia: 'Si es un campo válido de iswc-preview/v1, agregalo a RAIZ_PROPS en motor/validators/json-schema.ts.',
       });
     }
   }

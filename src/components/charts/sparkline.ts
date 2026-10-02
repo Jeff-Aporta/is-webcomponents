@@ -31,7 +31,7 @@ function fmtNum(v: number): string {
 }
 
 (() => {
-  class IsSparkline extends withStyleAttrs(HTMLElement) {
+  class IswcSparkline extends withStyleAttrs(HTMLElement) {
     /** Personalización por atributo (ver `core/attrs.ts`). */
     static styleAttrs = {
       'line-color': { prop: '--line-color', onlyColorValues: true },
@@ -40,7 +40,7 @@ function fmtNum(v: number): string {
 
     static get observedAttributes(): string[] {
       return ['values', 'data', 'type', 'label', 'variant', 'curve', 'trend',
-        ...IsSparkline.styleAttrNames];
+        ...IswcSparkline.styleAttrNames];
     }
 
     #svg!: HTMLElement;
@@ -204,5 +204,5 @@ function fmtNum(v: number): string {
     }
   }
 
-  defineElement('is-sparkline', IsSparkline, 'IsSparkline');
+  defineElement('iswc-sparkline', IswcSparkline, 'IswcSparkline');
 })();

@@ -1,7 +1,7 @@
 /**
  * Kit visual compartido por charts y diagramas.
  *
- * Define el lenguaje que estrenó <is-sequence-diagram>: tooltip de vidrio,
+ * Define el lenguaje que estrenó <iswc-sequence-diagram>: tooltip de vidrio,
  * chip de etiqueta, atenuación de lo no enfocado y tipografía inline. Cada
  * componente lo importa desde su propio .css y encima pone solo su geometría.
  *
@@ -15,8 +15,8 @@
   position: absolute;
   z-index: 30;
   pointer-events: none;
-  max-width: 22rem;
-  max-height: 60vh;
+  max-inline-size: 22rem;
+  max-block-size: 60vh;
   overflow: auto;
   padding: 0.4em 0.65em;
   border-radius: 0.625em;
@@ -29,12 +29,12 @@
   white-space: nowrap;
   font-size: 0.78rem;
   line-height: 1.4;
+
+  &[hidden] { display: none; }
+
+  /* Los diagramas muestran descripciones largas; ahí sí conviene que fluya. */
+  &.iswc-rich { white-space: normal; }
 }
-
-.dg-tooltip[hidden] { display: none; }
-
-/* Los diagramas muestran descripciones largas; ahí sí conviene que fluya. */
-.dg-tooltip.is-rich { white-space: normal; }
 
 .dg-tooltip__title {
   display: block;
@@ -45,25 +45,24 @@
 
 .dg-tooltip__step {
   opacity: 0.7;
-  margin-right: 0.25em;
+  margin-inline-end: 0.25em;
 }
 
 .dg-tooltip__desc {
   display: block;
-  margin-top: 0.35em;
+  margin-block-start: 0.35em;
   line-height: 1.45;
   opacity: 0.92;
   white-space: normal;
+
+  & img {
+    max-inline-size: 100%;
+    block-size: auto;
+    border-radius: 6px;
+    margin: 4px 0;
+  }
 }
 
-.dg-tooltip__desc img {
-  max-width: 100%;
-  height: auto;
-  border-radius: 6px;
-  margin: 4px 0;
-}
-
-/* Fila valor: swatch + nombre + cifra alineada a la derecha. */
 .dg-tooltip__row {
   display: flex;
   align-items: center;
@@ -72,16 +71,16 @@
 }
 
 .dg-tooltip__value {
-  margin-left: auto;
-  padding-left: 0.75em;
+  margin-inline-start: auto;
+  padding-inline-start: 0.75em;
   font-variant-numeric: tabular-nums;
   font-weight: 600;
   opacity: 1;
 }
 
 .dg-swatch {
-  width: 0.6em;
-  height: 0.6em;
+  inline-size: 0.6em;
+  block-size: 0.6em;
   border-radius: 50%;
   flex: none;
 }
@@ -94,7 +93,7 @@
   display: inline-flex;
   align-items: center;
   gap: 6px;
-  max-width: 210px;
+  max-inline-size: 210px;
   padding: 3px 8px 3px 4px;
   border-radius: 7px;
   border: 1px solid currentColor;
@@ -113,8 +112,8 @@
   display: inline-flex;
   align-items: center;
   justify-content: center;
-  width: 16px;
-  height: 16px;
+  inline-size: 16px;
+  block-size: 16px;
   border-radius: 50%;
   font-size: 9px;
   font-weight: 700;
@@ -127,8 +126,10 @@
   transition: opacity 0.18s ease, filter 0.12s ease-out;
 }
 
-.dg-dimmable.is-dim { opacity: 0.35; }
-.dg-dimmable.is-active { filter: brightness(1.06); }
+.dg-dimmable {
+  &.iswc-dim { opacity: 0.35; }
+  &.iswc-active { filter: brightness(1.06); }
+}
 
 /* ── Leyenda ── */
 
@@ -144,17 +145,20 @@
   padding: 0.15em 0.3em;
   font: inherit;
   transition: opacity 120ms ease-out, background-color 120ms ease-out;
+
+  &:hover { background: color-mix(in srgb, currentColor 8%, transparent); }
+
+  &:focus-visible {
+    outline: 2px solid var(--iswc-focus, #4aabff);
+    outline-offset: 1px;
+  }
+
+  &[aria-pressed="false"] {
+    opacity: 0.45;
+
+    .dg-legend-label { text-decoration: line-through; }
+  }
 }
-
-.dg-legend-item:hover { background: color-mix(in srgb, currentColor 8%, transparent); }
-
-.dg-legend-item:focus-visible {
-  outline: 2px solid var(--iswc-focus, #4aabff);
-  outline-offset: 1px;
-}
-
-.dg-legend-item[aria-pressed="false"] { opacity: 0.45; }
-.dg-legend-item[aria-pressed="false"] .dg-legend-label { text-decoration: line-through; }
 
 /* ── Tipografía inline (markdown de las etiquetas) ── */
 
@@ -169,8 +173,8 @@
 .tk-inline-link { color: var(--iswc-brand-text, #74bdff); }
 
 .tk-inline-icon {
-  width: 0.95em;
-  height: 0.95em;
+  inline-size: 0.95em;
+  block-size: 0.95em;
   vertical-align: -0.12em;
   margin: 0 0.22em;
 }
@@ -185,17 +189,19 @@
 
 /* ── Tema claro ── */
 
-[data-theme="light"] .dg-tooltip {
-  background: rgb(255 255 255 / 60%);
-  color: #0b2e4e;
-  border-color: rgb(30 144 255 / 22%);
-  box-shadow:
-    0 0 20px rgb(30 144 255 / 15%),
-    0 8px 24px rgb(15 23 42 / 12%),
-    inset 0 1px 0 rgb(255 255 255 / 50%);
-}
+[data-theme="light"] {
+  .dg-tooltip {
+    background: rgb(255 255 255 / 60%);
+    color: #0b2e4e;
+    border-color: rgb(30 144 255 / 22%);
+    box-shadow:
+      0 0 20px rgb(30 144 255 / 15%),
+      0 8px 24px rgb(15 23 42 / 12%),
+      inset 0 1px 0 rgb(255 255 255 / 50%);
+  }
 
-[data-theme="light"] .dg-chip {
-  background: rgb(255 255 255 / 96%);
-  color: #0b2e4e;
+  .dg-chip {
+    background: rgb(255 255 255 / 96%);
+    color: #0b2e4e;
+  }
 }

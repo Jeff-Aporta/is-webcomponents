@@ -3,7 +3,7 @@
 <head>
 <meta charset="utf-8" />
 <meta name="viewport" content="width=device-width, initial-scale=1" />
-<title>&lt;is-scatter-chart&gt; · demo</title>
+<title>&lt;iswc-scatter-chart&gt; · demo</title>
 <style>
   html, body { margin: 0; padding: 0; min-height: 100%; background: #0c1118; color: #e2e8f0; font-family: ui-sans-serif, system-ui, sans-serif; }
   body { display: grid; grid-template-rows: auto 1fr; }
@@ -11,14 +11,14 @@
   header h1 { font-size: 16px; font-weight: 700; margin: 0; }
   header p { font-size: 12px; color: #94a3b8; margin: 4px 0 0 0; }
   main { display: grid; place-items: center; padding: 20px; min-height: 0; }
-  is-scatter-chart { width: 720px; height: 360px; }
-  is-scatter-chart:not(:defined) { visibility: hidden; }
+  iswc-scatter-chart { width: 720px; height: 360px; }
+  iswc-scatter-chart:not(:defined) { visibility: hidden; }
 </style>
 <script type="module">
-  await import('../../../dist/cdn/data-viz/scatter-chart.min.js?h=jq1y5f');
-  await customElements.whenDefined('is-scatter-chart');
+  await import('../../../dist/cdn/data-viz/scatter-chart.min.js?h=s2ft0h');
+  await customElements.whenDefined('iswc-scatter-chart');
 
-  const chart = document.createElement('is-scatter-chart');
+  const chart = document.createElement('iswc-scatter-chart');
   chart.setAttribute('label', 'Edad vs Ingresos');
   chart.setAttribute('x-label', 'Edad (años)');
   chart.setAttribute('y-label', 'Ingresos (k$)');
@@ -42,8 +42,8 @@
 </head>
 <body>
 <header>
-  <h1>&lt;is-scatter-chart&gt;</h1>
-  <p>Wrapper de <code>&lt;is-chart&gt;</code> con tipo fijo <code>scatter</code>. Datos <code>{x, y}</code>.</p>
+  <h1>&lt;iswc-scatter-chart&gt;</h1>
+  <p>Wrapper de <code>&lt;iswc-chart&gt;</code> con tipo fijo <code>scatter</code>. Datos <code>{x, y}</code>.</p>
 </header>
 <main></main>
 </body>

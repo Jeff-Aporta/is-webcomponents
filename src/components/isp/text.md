@@ -1,21 +1,21 @@
 ---
-tag: is-text
+tag: iswc-text
 tags:
-  - is-text
+  - iswc-text
 category: isp
 status: public
 source: ./text.js
 style: ./text.css
 preview: ./text.json
 ---
-# `<is-text>`
+# `<iswc-text>`
 
 ## Propósito
 
 Texto en línea con color semántico y recorte por número de líneas. Port de
 `src/lib/typography/Text.svelte` de ISP.
 
-Este módulo registra `<is-text>`.
+Este módulo registra `<iswc-text>`.
 
 ## Cuándo usarlo
 
@@ -24,7 +24,7 @@ largo a N líneas con elipsis dentro de una tarjeta o celda.
 
 ## Cuándo no usarlo
 
-No usar para títulos (usa `<is-heading>`) ni para párrafos de contenido donde
+No usar para títulos (usa `<iswc-heading>`) ni para párrafos de contenido donde
 un `<p>` normal ya sirve.
 
 ## Importación
@@ -36,8 +36,8 @@ import './text.js';
 ## Ejemplo mínimo
 
 ```html
-<is-text color="success">Aprobado</is-text>
-<is-text lines="2">Texto largo que se recorta a dos líneas…</is-text>
+<iswc-text color="success">Aprobado</iswc-text>
+<iswc-text lines="2">Texto largo que se recorta a dos líneas…</iswc-text>
 ```
 
 ## Mapeo Svelte → Web Component
@@ -125,7 +125,7 @@ No hay atributo `size`: la escala sale del `font-size` heredado.
 - [`../_shared/adopt-css.js`](../_shared/adopt-css.js)
 - [`heading.md`](heading.md)
 
-Tags del módulo: `<is-text>`.
+Tags del módulo: `<iswc-text>`.
 
 ## Accesibilidad
 
@@ -136,7 +136,7 @@ entero. Si el recorte debe ser también semántico, acortar el contenido.
 
 ```html
 <div style="font-size: 1.25em; max-width: 20rem">
-  <is-text color="danger" lines="3">Mensaje de error largo…</is-text>
+  <iswc-text color="danger" lines="3">Mensaje de error largo…</iswc-text>
 </div>
 ```
 

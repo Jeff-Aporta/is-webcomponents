@@ -16,6 +16,7 @@ import {
   normalizeDocument,
   parseApiConfig,
 } from './md-editor-api.js';
+import { hydrateMdEmbeds } from './md-hydrate.js';
 // Tipos del contrato — declarados aquí localmente (en lugar de re-exportarlos
 // desde md-editor-api.js, que sigue siendo JSDoc-only). El `.d.ts` paralelo
 // sigue siendo la documentación canónica del consumidor externo.
@@ -53,7 +54,7 @@ import '../forms/switch.js';
 import '../media/icon.js';
 
 /**
- * <is-md-editor> — preview MD + diálogo fullscreen (edición / revisión).
+ * <iswc-md-editor> — preview MD + diálogo fullscreen (edición / revisión).
  *
  * Toolbar siempre visible; en readonly/!can-edit los comandos van disabled.
  * Footer: meta (chars, bytes, updatedAt, updatedBy) + Descargar (siempre) +
@@ -65,10 +66,10 @@ import '../media/icon.js';
  * Persistencia (elige una):
  *   - `api` / `src` → HTTP via md-editor-api.js
  *   - `.actions` → callbacks custom (load/persist/delete) sin app URL
- * Tipos: `md-editor-api.d.ts`. Preview inline: preferir `<is-md-render>`.
+ * Tipos: `md-editor-api.d.ts`. Preview inline: preferir `<iswc-md-render>`.
  */
 
-// ── Subset del contrato público de <is-dialog> que este wrapper usa ────────
+// ── Subset del contrato público de <iswc-dialog> que este wrapper usa ────────
 // No usamos `extends HTMLElement` para evitar colisiones con `open`/`matches`
 // que aparecen en distintos mixins del lib.dom; nos basta con el contrato
 // mínimo que este wrapper consume.
@@ -80,17 +81,17 @@ type DialogElement = HTMLElement & {
   hidePopover?: () => void;
 };
 
-// ── Subset del contrato público de <is-switch> ────────────────────────────
+// ── Subset del contrato público de <iswc-switch> ────────────────────────────
 interface SwitchElement extends HTMLElement {
   checked: boolean;
 }
 
-// ── Subset del contrato público de <is-copy-button> ───────────────────────
+// ── Subset del contrato público de <iswc-copy-button> ───────────────────────
 interface CopyButtonElement extends HTMLElement {
   value: string;
 }
 
-// ── Subset del contrato público de <is-textarea> (<textarea> host) ────────
+// ── Subset del contrato público de <iswc-textarea> (<textarea> host) ────────
 interface TextareaElement extends HTMLElement {
   value: string;
 }
@@ -131,10 +132,10 @@ interface EditorHistory {
       }
       // aria-label obligatorio en cada botón (icon-only); title se mantiene
       // como fallback visual al hover.
-      html += `<is-button class="tb-btn" part="toolbar-button" data-cmd="${t.cmd}" variant="text" color="neutral" aria-label="${t.title}" title="${t.title}"><is-icon icon="${t.icon}" aria-hidden="true"></is-icon></is-button>`;
+      html += `<iswc-button class="tb-btn" part="toolbar-button" data-cmd="${t.cmd}" variant="text" color="neutral" aria-label="${t.title}" title="${t.title}"><iswc-icon icon="${t.icon}" aria-hidden="true"></iswc-icon></iswc-button>`;
     }
     html += '<span class="tb-flex"></span>';
-    html += '<is-switch class="tb-plain" part="plain-switch" aria-label="Alternar modo texto plano">Texto plano</is-switch>';
+    html += '<iswc-switch class="tb-plain" part="plain-switch" aria-label="Alternar modo texto plano">Texto plano</iswc-switch>';
     return html;
   }
 
@@ -143,9 +144,9 @@ interface EditorHistory {
     <div class="preview" part="preview" tabindex="0" role="button" aria-label="Vista previa del documento">
       <div class="preview-body prompt-md-preview" part="preview-body"></div>
       <p class="preview-empty" part="preview-empty" hidden></p>
-      <is-copy-button class="copy" part="copy" tooltip="full" copy-label="Copiar" success-label="Copiado"></is-copy-button>
+      <iswc-copy-button class="copy" part="copy" tooltip="full" copy-label="Copiar" success-label="Copiado"></iswc-copy-button>
     </div>
-    <is-dialog class="dlg" part="dialog" light-dismiss backdrop-variant="basic">
+    <iswc-dialog class="dlg" part="dialog" light-dismiss backdrop-variant="basic">
       <div slot="label" class="dlg-label-wrap">
         <span class="dlg-label" part="dialog-label"></span>
         <span class="dlg-filename" part="dialog-filename"></span>
@@ -160,14 +161,14 @@ interface EditorHistory {
       <div slot="footer" class="footer" part="footer">
         <div class="ft-meta" part="footer-meta" aria-live="polite"></div>
         <div class="ft-actions" role="toolbar" aria-label="Acciones del documento">
-          <is-button class="ft-btn" part="footer-download" data-action="download" variant="outlined" color="neutral" aria-label="Descargar documento">
-            <is-icon slot="start" icon="mdi:download" aria-hidden="true"></is-icon>Descargar
-          </is-button>
-          <is-button class="ft-btn" part="footer-discard" data-action="discard" variant="text" color="neutral" aria-label="Descartar cambios">Descartar</is-button>
-          <is-button class="ft-btn" part="footer-save" data-action="save" variant="filled" color="brand" aria-label="Guardar documento">Guardar</is-button>
+          <iswc-button class="ft-btn" part="footer-download" data-action="download" variant="outlined" color="neutral" aria-label="Descargar documento">
+            <iswc-icon slot="start" icon="mdi:download" aria-hidden="true"></iswc-icon>Descargar
+          </iswc-button>
+          <iswc-button class="ft-btn" part="footer-discard" data-action="discard" variant="text" color="neutral" aria-label="Descartar cambios">Descartar</iswc-button>
+          <iswc-button class="ft-btn" part="footer-save" data-action="save" variant="filled" color="brand" aria-label="Guardar documento">Guardar</iswc-button>
         </div>
       </div>
-    </is-dialog>
+    </iswc-dialog>
   `;
 
   const OBSERVED: readonly string[] = [
@@ -246,7 +247,7 @@ interface EditorHistory {
       .replace(/"/g, '&quot;');
   }
 
-  // ── Detalle del evento `is-change` que llega del <is-switch> ───────────
+  // ── Detalle del evento `iswc-change` que llega del <iswc-switch> ───────────
   interface SwitchChangeDetail {
     checked: boolean;
     value?: string;
@@ -258,24 +259,24 @@ interface EditorHistory {
     error: string;
   }
 
-  // ── Detalle del evento `is-load` ──────────────────────────────────────
+  // ── Detalle del evento `iswc-load` ──────────────────────────────────────
   interface LoadDetail {
     document: IsMdEditorDocument;
   }
 
-  // ── Detalle de `is-persist` ───────────────────────────────────────────
+  // ── Detalle de `iswc-persist` ───────────────────────────────────────────
   interface PersistDetail {
     value: string;
     document: IsMdEditorDocument;
   }
 
-  // ── Detalle de `is-download` ──────────────────────────────────────────
+  // ── Detalle de `iswc-download` ──────────────────────────────────────────
   interface DownloadDetail {
     filename: string;
     bytes: number;
   }
 
-  class IsMdEditor extends ElementBase {
+  class IswcMdEditor extends ElementBase {
     /** Personalización por atributo (ver `core/attrs.ts`). */
     static styleAttrs = {
       'preview-max-height': '--iswc-md-editor-preview-max-height',
@@ -311,6 +312,7 @@ interface EditorHistory {
     #document: IsMdEditorDocument = { content: '' };
     #api: IsMdEditorApiConfig | null = null;
     #actions: IsMdEditorActions | null = null;
+    #hydrateGen = 0;
 
     constructor() {
       super();
@@ -346,29 +348,29 @@ interface EditorHistory {
         if (e.key === 'Enter' || e.key === ' ') { e.preventDefault(); this.open(); }
       });
 
-      this.#dlg.addEventListener('is-show', () => this.#buildEditorState());
-      this.#dlg.addEventListener('is-after-show', () => {
+      this.#dlg.addEventListener('iswc-show', () => this.#buildEditorState());
+      this.#dlg.addEventListener('iswc-after-show', () => {
         if (!this.hasAttribute('open')) this.setAttribute('open', '');
-        emit(this, 'is-open', {});
+        emit(this, 'iswc-open', {});
       });
-      this.#dlg.addEventListener('is-hide', () => this.#commitIfEditable());
-      this.#dlg.addEventListener('is-after-hide', () => {
+      this.#dlg.addEventListener('iswc-hide', () => this.#commitIfEditable());
+      this.#dlg.addEventListener('iswc-after-hide', () => {
         if (this.hasAttribute('open')) this.removeAttribute('open');
         this.#leaveTopLayer();
-        emit(this, 'is-close', {});
+        emit(this, 'iswc-close', {});
       });
 
       this.#toolbar.addEventListener('mousedown', (e: MouseEvent) => {
         const target = e.target;
-        if (target instanceof Element && target.closest('is-button[data-cmd]')) e.preventDefault();
+        if (target instanceof Element && target.closest('iswc-button[data-cmd]')) e.preventDefault();
       });
       this.#toolbar.addEventListener('click', (e: MouseEvent) => {
         const target = e.target;
         if (!(target instanceof Element)) return;
-        const btn = target.closest('is-button[data-cmd]');
+        const btn = target.closest('iswc-button[data-cmd]');
         if (btn && !(btn as HTMLElement & { disabled?: boolean }).disabled) this.#runCommand(btn.getAttribute('data-cmd'));
       });
-      this.#plainSwitch.addEventListener('is-change', (e: Event) => {
+      this.#plainSwitch.addEventListener('iswc-change', (e: Event) => {
         if (!this.canEdit) {
           this.#plainSwitch.checked = false;
           return;
@@ -536,7 +538,7 @@ interface EditorHistory {
 
     close(): void {
       if (!this.#dlg.open) return;
-      if (this.canEdit) this.#commitDraft('is-change');
+      if (this.canEdit) this.#commitDraft('iswc-change');
       this.#dlg.hide();
       this.#leaveTopLayer();
     }
@@ -566,25 +568,25 @@ interface EditorHistory {
         if (typeof this.#actions?.load === 'function') {
           const raw = await this.#actions.load();
           this.setDocument(raw);
-          emit<LoadDetail>(this, 'is-load', { document: this.document });
+          emit<LoadDetail>(this, 'iswc-load', { document: this.document });
           return this.document;
         }
         const cfg = this.#resolveApiForGet();
         if (!cfg) return null;
         const doc = await apiRequest(cfg, 'get', { content: '' });
         this.setDocument(doc ?? { content: '' });
-        emit<LoadDetail>(this, 'is-load', { document: this.document });
+        emit<LoadDetail>(this, 'iswc-load', { document: this.document });
         return this.document;
       } catch (err) {
         const message = err instanceof Error ? err.message : String(err);
-        emit<ErrorDetail>(this, 'is-error', { action: 'load', error: message });
+        emit<ErrorDetail>(this, 'iswc-error', { action: 'load', error: message });
         throw err;
       }
     }
 
     /**
      * Persiste: `actions.persist` → PUT/POST de `api.endpoints`.
-     * Sin handler remoto lanza (el guardado local ya emitió `is-persist` en `#save`).
+     * Sin handler remoto lanza (el guardado local ya emitió `iswc-persist` en `#save`).
      */
     async persistRemote(): Promise<IsMdEditorDocument> {
       const doc = this.document;
@@ -595,7 +597,7 @@ interface EditorHistory {
             const normalized = normalizeDocument(saved, this.#api || {});
             this.setDocument({ ...doc, ...normalized, content: normalized.content || doc.content });
           }
-          emit<PersistDetail>(this, 'is-persist', { value: this.value, document: this.document });
+          emit<PersistDetail>(this, 'iswc-persist', { value: this.value, document: this.document });
           return this.document;
         }
         const cfg = this.#api;
@@ -605,11 +607,11 @@ interface EditorHistory {
         const method: 'put' | 'post' = cfg.endpoints.put ? 'put' : 'post';
         const saved = await apiRequest(cfg, method, doc);
         if (saved) this.setDocument({ ...doc, ...saved, content: saved.content ?? doc.content });
-        emit<PersistDetail>(this, 'is-persist', { value: this.value, document: this.document });
+        emit<PersistDetail>(this, 'iswc-persist', { value: this.value, document: this.document });
         return this.document;
       } catch (err) {
         const message = err instanceof Error ? err.message : String(err);
-        emit<ErrorDetail>(this, 'is-error', { action: 'persist', error: message });
+        emit<ErrorDetail>(this, 'iswc-error', { action: 'persist', error: message });
         throw err;
       }
     }
@@ -618,16 +620,16 @@ interface EditorHistory {
       try {
         if (typeof this.#actions?.delete === 'function') {
           await this.#actions.delete(this.document);
-          emit<LoadDetail>(this, 'is-delete', { document: this.document });
+          emit<LoadDetail>(this, 'iswc-delete', { document: this.document });
           return;
         }
         const cfg = this.#api;
         if (!cfg?.endpoints?.delete) throw new Error('Sin actions.delete ni endpoint delete');
         await apiRequest(cfg, 'delete', this.document);
-        emit<LoadDetail>(this, 'is-delete', { document: this.document });
+        emit<LoadDetail>(this, 'iswc-delete', { document: this.document });
       } catch (err) {
         const message = err instanceof Error ? err.message : String(err);
-        emit<ErrorDetail>(this, 'is-error', { action: 'delete', error: message });
+        emit<ErrorDetail>(this, 'iswc-error', { action: 'delete', error: message });
         throw err;
       }
     }
@@ -649,7 +651,7 @@ interface EditorHistory {
       a.download = filename;
       a.click();
       URL.revokeObjectURL(url);
-      emit<DownloadDetail>(this, 'is-download', { filename, bytes: byteLength(text) });
+      emit<DownloadDetail>(this, 'iswc-download', { filename, bytes: byteLength(text) });
     }
 
     // ---- private helpers ----
@@ -677,10 +679,30 @@ interface EditorHistory {
 
     #onPreviewActivate(e: MouseEvent): void {
       const target = e.target;
-      if (target instanceof Element && target.closest('is-copy-button')) return;
+      if (target instanceof Element) {
+        // Embeds hidratados (código, diagramas, botones): no abrir el diálogo.
+        if (target.closest(
+          'iswc-copy-button, iswc-code, iswc-button, a[href], .md-iswc-diagram, '
+          + 'iswc-flowchart, iswc-sequence-diagram, iswc-class-diagram, iswc-state-diagram, '
+          + 'iswc-er-diagram, iswc-block-diagram, iswc-component-diagram, iswc-mindmap, '
+          + 'iswc-gantt, iswc-timeline, iswc-org-chart, iswc-sankey-diagram, iswc-quadrant-chart, '
+          + 'iswc-venn-diagram, iswc-use-case-diagram, iswc-swimlane-diagram, iswc-journey-map',
+        )) return;
+      }
       const sel = window.getSelection();
       if (sel && !sel.isCollapsed && this.#previewBody.contains(sel.anchorNode)) return;
       this.open();
+    }
+
+    /** Lazy-load is-* del preview (mismo pipeline que iswc-md-render). */
+    async #hydrateEmbeds(root: HTMLElement): Promise<void> {
+      const gen = ++this.#hydrateGen;
+      try {
+        await hydrateMdEmbeds(root);
+      } catch (err) {
+        console.warn('[iswc-md-editor] hydrate', err);
+      }
+      if (gen !== this.#hydrateGen) return;
     }
 
     #renderPreview(): void {
@@ -690,8 +712,12 @@ interface EditorHistory {
       const hasContent = !!html;
       this.#previewBody.hidden = !hasContent;
       this.#previewEmpty.hidden = hasContent;
-      if (hasContent) this.#previewBody.innerHTML = html;
-      else this.#previewEmpty.textContent = this.placeholder || 'Sin contenido. Haz clic para editar…';
+      if (hasContent) {
+        this.#previewBody.innerHTML = html;
+        void this.#hydrateEmbeds(this.#previewBody);
+      } else {
+        this.#previewEmpty.textContent = this.placeholder || 'Sin contenido. Haz clic para editar…';
+      }
       this.#preview.title = this.canEdit
         ? 'Clic o doble clic para editar'
         : (this.editBlockReason || 'Clic para revisar');
@@ -764,10 +790,10 @@ interface EditorHistory {
     }
 
     #commitIfEditable(): void {
-      if (this.canEdit) this.#commitDraft('is-change');
+      if (this.canEdit) this.#commitDraft('iswc-change');
     }
 
-    #commitDraft(eventType: 'is-change' | 'is-persist' | string): void {
+    #commitDraft(eventType: 'iswc-change' | 'iswc-persist' | string): void {
       const value = this.#draft;
       this.value = value;
       this.#syncDocumentFromValue();
@@ -780,9 +806,9 @@ interface EditorHistory {
       this.value = value;
       this.#syncDocumentFromValue();
       if (this.#hasRemotePersist()) {
-        try { await this.persistRemote(); } catch { /* is-error ya emitido */ }
+        try { await this.persistRemote(); } catch { /* iswc-error ya emitido */ }
       } else {
-        emit<PersistDetail>(this, 'is-persist', { value, document: this.document });
+        emit<PersistDetail>(this, 'iswc-persist', { value, document: this.document });
       }
       this.#dlg.hide();
     }
@@ -802,7 +828,7 @@ interface EditorHistory {
     #syncCanEditUi(): void {
       const canEdit = this.canEdit;
       this.#toolbar.hidden = false;
-      for (const btn of this.#toolbar.querySelectorAll<HTMLElement>('is-button[data-cmd]')) {
+      for (const btn of this.#toolbar.querySelectorAll<HTMLElement>('iswc-button[data-cmd]')) {
         const cmd = btn.dataset.cmd;
         if (cmd === 'undo' || cmd === 'redo') continue;
         btn.toggleAttribute('disabled', !canEdit);
@@ -854,9 +880,12 @@ interface EditorHistory {
       this.#surface.hidden = false;
       this.#plainTextarea.hidden = true;
       this.#surface.contentEditable = canEdit ? 'true' : 'false';
-      this.#surface.innerHTML = canEdit
-        ? bodyToEditorHtml(this.#draft)
-        : (bodyPreviewHtml(this.#draft) || '<p></p>');
+      if (canEdit) {
+        this.#surface.innerHTML = bodyToEditorHtml(this.#draft);
+      } else {
+        this.#surface.innerHTML = bodyPreviewHtml(this.#draft) || '<p></p>';
+        void this.#hydrateEmbeds(this.#surface);
+      }
     }
 
     #setPlainMode(on: boolean): void {
@@ -1029,5 +1058,5 @@ interface EditorHistory {
     }
   }
 
-  defineElement('is-md-editor', IsMdEditor, 'IsMdEditor');
+  defineElement('iswc-md-editor', IswcMdEditor, 'IswcMdEditor');
 })();

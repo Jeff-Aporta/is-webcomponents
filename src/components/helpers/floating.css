@@ -5,30 +5,20 @@
   --iswc-floating-show-duration: 150ms;
   --iswc-floating-hide-duration: 100ms;
 }
+:host([hidden]) { display: none !important; }
 
-:host([hidden]) {
-  display: none !important;
-}
-
-.base {
-  display: contents;
-}
-
-.anchor-slot {
-  display: contents;
-}
+.base,
+.anchor-slot { display: contents; }
 
 .popup {
   position: absolute;
   z-index: 900;
   box-sizing: border-box;
-  width: max-content;
-  max-width: var(--auto-size-available-width, none);
-  max-height: var(--auto-size-available-height, none);
-}
+  inline-size: max-content;
+  max-inline-size: var(--auto-size-available-width, none);
+  max-block-size: var(--auto-size-available-height, none);
 
-.popup[hidden] {
-  display: none !important;
+  &[hidden] { display: none !important; }
 }
 
 /* ── Flecha ──
@@ -40,17 +30,15 @@
   --iswc-floating-arrow-border-color: var(--iswc-border, #2a3038);
   position: absolute;
   box-sizing: border-box;
-  width: calc(var(--iswc-floating-arrow-size) * 2);
-  height: calc(var(--iswc-floating-arrow-size) * 2);
+  inline-size: calc(var(--iswc-floating-arrow-size) * 2);
+  block-size: calc(var(--iswc-floating-arrow-size) * 2);
   background: var(--iswc-floating-arrow-color);
   border: 1px solid var(--iswc-floating-arrow-border-color);
   transform: rotate(45deg);
   z-index: -1;
   pointer-events: none;
-}
 
-.arrow[hidden] {
-  display: none !important;
+  &[hidden] { display: none !important; }
 }
 
 .hover-bridge {
@@ -58,43 +46,21 @@
   z-index: 899;
   pointer-events: auto;
   background: transparent;
+
+  &[hidden] { display: none !important; }
 }
 
-.hover-bridge[hidden] {
-  display: none !important;
-}
-
-/* Built-in animation classes (apply on ::part(popup)) */
+/* Built-in animation classes (apply on host or on ::part(popup)) */
 :host(.show) .popup,
-.popup.show {
-  animation: is-popup-fade-in var(--iswc-floating-show-duration) ease;
-}
+.popup.show             { animation: iswc-popup-fade-in  var(--iswc-floating-show-duration) ease; }
 :host(.hide) .popup,
-.popup.hide {
-  animation: is-popup-fade-out var(--iswc-floating-hide-duration) ease;
-}
+.popup.hide             { animation: iswc-popup-fade-out var(--iswc-floating-hide-duration) ease; }
 :host(.show-with-scale) .popup,
-.popup.show-with-scale {
-  animation: is-popup-scale-in var(--iswc-floating-show-duration) ease;
-}
+.popup.show-with-scale  { animation: iswc-popup-scale-in  var(--iswc-floating-show-duration) ease; }
 :host(.hide-with-scale) .popup,
-.popup.hide-with-scale {
-  animation: is-popup-scale-out var(--iswc-floating-hide-duration) ease;
-}
+.popup.hide-with-scale  { animation: iswc-popup-scale-out var(--iswc-floating-hide-duration) ease; }
 
-@keyframes is-popup-fade-in {
-  from { opacity: 0; }
-  to { opacity: 1; }
-}
-@keyframes is-popup-fade-out {
-  from { opacity: 1; }
-  to { opacity: 0; }
-}
-@keyframes is-popup-scale-in {
-  from { opacity: 0; transform: scale(0.92); }
-  to { opacity: 1; transform: scale(1); }
-}
-@keyframes is-popup-scale-out {
-  from { opacity: 1; transform: scale(1); }
-  to { opacity: 0; transform: scale(0.92); }
-}
+@keyframes iswc-popup-fade-in  { from { opacity: 0; } to { opacity: 1; } }
+@keyframes iswc-popup-fade-out { from { opacity: 1; } to { opacity: 0; } }
+@keyframes iswc-popup-scale-in  { from { opacity: 0; transform: scale(0.92); } to { opacity: 1; transform: scale(1); } }
+@keyframes iswc-popup-scale-out { from { opacity: 1; transform: scale(1);    } to { opacity: 0; transform: scale(0.92); } }

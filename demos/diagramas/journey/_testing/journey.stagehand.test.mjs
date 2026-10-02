@@ -11,7 +11,7 @@ tests.push({
     await page.goto(URL, { waitUntil: 'domcontentloaded' });
     await waitReady(page, 'data-journey-ready');
     const info = await page.evaluate(() => {
-      const j = document.querySelector('is-journey-map');
+      const j = document.querySelector('iswc-journey-map');
       const sr = j?.shadowRoot;
       return {
         steps: sr?.querySelectorAll('[data-step-id]').length ?? 0,
@@ -32,7 +32,7 @@ tests.push({
     await page.goto(URL, { waitUntil: 'domcontentloaded' });
     await waitReady(page, 'data-journey-ready');
     const a11y = await page.evaluate(() => {
-      const svg = document.querySelector('is-journey-map')?.shadowRoot?.querySelector('svg');
+      const svg = document.querySelector('iswc-journey-map')?.shadowRoot?.querySelector('svg');
       return { role: svg?.getAttribute('role'), ariaLabel: svg?.getAttribute('aria-label') };
     });
     assert.ok(a11y.role || a11y.ariaLabel);
@@ -45,7 +45,7 @@ tests.push({
     await page.emulateMedia({ reducedMotion: 'reduce' });
     await page.goto(URL, { waitUntil: 'domcontentloaded' });
     await waitReady(page, 'data-journey-ready');
-    const steps = await page.evaluate(() => document.querySelector('is-journey-map')?.shadowRoot?.querySelectorAll('[data-step-id]').length ?? 0);
+    const steps = await page.evaluate(() => document.querySelector('iswc-journey-map')?.shadowRoot?.querySelectorAll('[data-step-id]').length ?? 0);
     assert.equal(steps, 6);
   },
 });

@@ -3,7 +3,7 @@
 <head>
 <meta charset="utf-8" />
 <meta name="viewport" content="width=device-width, initial-scale=1" />
-<title>Demo de <is-input> · is-webcomponents</title>
+<title>Demo de <iswc-input> · is-webcomponents</title>
 <meta name="description" content="Campo de texto form-associated con tipos (text, email, password, number), clearable, password-toggle, label, hint y error." />
 <style>
   html, body { margin: 0; padding: 0; min-height: 100%; background: #0c1118; color: #e2e8f0; font-family: ui-sans-serif, system-ui, sans-serif; }
@@ -17,15 +17,15 @@
   code { background: rgba(255,255,255,0.06); padding: 1px 5px; border-radius: 3px; font: 12px ui-monospace, Menlo, Consolas, monospace; }
   output { font: 12px ui-monospace, Menlo, Consolas, monospace; color: #94a3b8; white-space: pre-wrap; }
   /* Anti-FOUC */
-  is-input:not(:defined) { visibility: hidden; }
-  is-button:not(:defined) { visibility: hidden; }
-  is-check-icon-button:not(:defined) { visibility: hidden; }
-  is-icon:not(:defined) { visibility: hidden; }
+  iswc-input:not(:defined) { visibility: hidden; }
+  iswc-button:not(:defined) { visibility: hidden; }
+  iswc-check-icon-button:not(:defined) { visibility: hidden; }
+  iswc-icon:not(:defined) { visibility: hidden; }
 </style>
 <script type="module">
-  await import('../../../dist/cdn/forms/input.min.js?h=kbtjsy');
+  await import('../../../dist/cdn/forms/input.min.js?h=268af7');
 
-  await customElements.whenDefined('is-input');
+  await customElements.whenDefined('iswc-input');
 
   const demo = document.getElementById('demo');
   const out = document.getElementById('out');
@@ -41,8 +41,8 @@
       invalid: demo.matches(':state(invalid)'),
     }, null, 2);
   };
-  demo.addEventListener('is-input', () => render());
-  demo.addEventListener('is-change', () => render());
+  demo.addEventListener('iswc-input', () => render());
+  demo.addEventListener('iswc-change', () => render());
 
   // Seteo programático (util para tests): un valor y luego limpieza.
   document.getElementById('btn-set').addEventListener('click', () => {
@@ -61,13 +61,13 @@
 <body>
 <main>
   <header>
-    <h1>Demo de <code>&lt;is-input&gt;</code></h1>
+    <h1>Demo de <code>&lt;iswc-input&gt;</code></h1>
     <p>Campo de texto form-associated con tipos (text, email, password, number), clearable, password-toggle y validación.</p>
   </header>
 
   <section>
     <h2>Básico (text + clearable)</h2>
-    <is-input id="demo" name="full-name" label="Nombre completo" hint="Como aparece en tu documento" clearable placeholder="Ada Lovelace"></is-input>
+    <iswc-input id="demo" name="full-name" label="Nombre completo" hint="Como aparece en tu documento" clearable placeholder="Ada Lovelace"></iswc-input>
     <div class="grid2">
       <button id="btn-set" type="button">Set "Hola mundo"</button>
       <button id="btn-clear" type="button">Clear</button>
@@ -78,24 +78,24 @@
   <section>
     <h2>Tipos</h2>
     <div class="grid2">
-      <is-input type="email" name="email" label="Email" placeholder="ada@example.com"></is-input>
-      <is-input type="password" name="pwd" label="Contraseña" password-toggle placeholder="••••••"></is-input>
-      <is-input type="number" name="age" label="Edad" min="0" max="120" step="1" placeholder="30"></is-input>
-      <is-input type="tel" name="phone" label="Teléfono" placeholder="+34 600 000 000"></is-input>
-      <is-input type="url" name="web" label="Web" placeholder="https://example.com"></is-input>
-      <is-input type="search" name="q" label="Búsqueda" placeholder="Buscar..."></is-input>
+      <iswc-input type="email" name="email" label="Email" placeholder="ada@example.com"></iswc-input>
+      <iswc-input type="password" name="pwd" label="Contraseña" password-toggle placeholder="••••••"></iswc-input>
+      <iswc-input type="number" name="age" label="Edad" min="0" max="120" step="1" placeholder="30"></iswc-input>
+      <iswc-input type="tel" name="phone" label="Teléfono" placeholder="+34 600 000 000"></iswc-input>
+      <iswc-input type="url" name="web" label="Web" placeholder="https://example.com"></iswc-input>
+      <iswc-input type="search" name="q" label="Búsqueda" placeholder="Buscar..."></iswc-input>
     </div>
   </section>
 
   <section>
     <h2>Estados</h2>
     <div class="grid2">
-      <is-input name="required1" label="Required" required hint="Obligatorio"></is-input>
-      <is-input name="readonly1" label="Readonly" readonly value="sólo lectura"></is-input>
-      <is-input name="errored" label="Con error" error error-text="Formato inválido" value="abc"></is-input>
-      <is-input name="disabled1" label="Disabled" disabled value="deshabilitado"></is-input>
-      <is-input name="prefixed" label="Precio" prefix="$" suffix="USD" placeholder="0.00"></is-input>
-      <is-input name="counted" label="Con contador" maxlength="20" show-count placeholder="máx 20"></is-input>
+      <iswc-input name="required1" label="Required" required hint="Obligatorio"></iswc-input>
+      <iswc-input name="readonly1" label="Readonly" readonly value="sólo lectura"></iswc-input>
+      <iswc-input name="errored" label="Con error" error error-text="Formato inválido" value="abc"></iswc-input>
+      <iswc-input name="disabled1" label="Disabled" disabled value="deshabilitado"></iswc-input>
+      <iswc-input name="prefixed" label="Precio" prefix="$" suffix="USD" placeholder="0.00"></iswc-input>
+      <iswc-input name="counted" label="Con contador" maxlength="20" show-count placeholder="máx 20"></iswc-input>
     </div>
   </section>
 </main>

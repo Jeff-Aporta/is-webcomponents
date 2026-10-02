@@ -3,7 +3,7 @@
 <head>
 <meta charset="utf-8" />
 <meta name="viewport" content="width=device-width, initial-scale=1" />
-<title>&lt;is-loading-overlay&gt; · is-webcomponents</title>
+<title>&lt;iswc-loading-overlay&gt; · is-webcomponents</title>
 <meta name="description" content="Capa de bloqueo a pantalla completa con spinner y mensaje. No dismissable por Escape / backdrop." />
 <style>
   html, body { margin: 0; padding: 0; min-height: 100%; background: #0c1118; color: #e2e8f0; font-family: ui-sans-serif, system-ui, sans-serif; }
@@ -19,17 +19,17 @@
   .toolbar { display: flex; gap: 8px; flex-wrap: wrap; }
   button.btn { padding: 8px 14px; background: #1e293b; color: #e2e8f0; border: 1px solid #334155; border-radius: 4px; cursor: pointer; }
   .log { font: 12px ui-monospace, Menlo, Consolas, monospace; background: rgba(0,0,0,0.3); padding: 8px; border-radius: 4px; min-height: 60px; white-space: pre-wrap; }
-  is-loading-overlay:not(:defined) { visibility: hidden; }
+  iswc-loading-overlay:not(:defined) { visibility: hidden; }
 </style>
 <script type="module">
-  await import('../../../dist/cdn/feedback/spinner.min.js?h=w0n0uc');
-  await import('../../../dist/cdn/isp/loading-overlay.min.js?h=vy6pir');
-  await customElements.whenDefined('is-loading-overlay');
+  await import('../../../dist/cdn/feedback/spinner.min.js?h=waqfqv');
+  await import('../../../dist/cdn/isp/loading-overlay.min.js?h=d6n69t');
+  await customElements.whenDefined('iswc-loading-overlay');
 
   const overlay = document.getElementById('overlay');
   const eventLog = document.getElementById('event-log');
   const log = (m) => { eventLog.textContent += new Date().toISOString().slice(11, 19) + ' ' + m + '\n'; };
-  for (const evt of ['is-show', 'is-hide']) {
+  for (const evt of ['iswc-show', 'iswc-hide']) {
     overlay.addEventListener(evt, () => log(evt));
   }
 
@@ -54,11 +54,11 @@
 <body>
 <header>
   <div>
-    <h1>&lt;is-loading-overlay&gt; — bloqueo no dismissable</h1>
+    <h1>&lt;iswc-loading-overlay&gt; — bloqueo no dismissable</h1>
     <p>Spinner + mensaje a pantalla completa. No cierra con Escape ni backdrop; sólo el código que lo abrió.</p>
   </div>
   <div class="spacer"></div>
-  <code>is-loading-overlay</code>
+  <code>iswc-loading-overlay</code>
 </header>
 <main>
   <div class="toolbar">
@@ -68,7 +68,7 @@
     <button id="btn-cycle" type="button" class="btn">Ciclo 1s</button>
   </div>
 
-  <is-loading-overlay id="overlay" message="Cargando..."></is-loading-overlay>
+  <iswc-loading-overlay id="overlay" message="Cargando..."></iswc-loading-overlay>
 
   <pre id="event-log" class="log"></pre>
 </main>

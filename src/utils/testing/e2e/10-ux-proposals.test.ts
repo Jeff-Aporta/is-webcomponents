@@ -132,7 +132,7 @@ async function inventarioInteractivo(page: Page): Promise<Array<{ tag: string; i
   return await page.evaluate(() => {
     const host = document.getElementById('previewHost');
     if (!host) return [];
-    const sels = 'button,is-button,is-switch,is-copy-button,is-color-picker,is-input,is-textarea,is-select,is-checkbox,is-radio,a[href],[role="button"],[role="switch"],[role="tab"],[tabindex]:not([tabindex="-1"])';
+    const sels = 'button,iswc-button,iswc-switch,iswc-copy-button,iswc-color-picker,iswc-input,iswc-textarea,iswc-select,iswc-checkbox,iswc-radio,a[href],[role="button"],[role="switch"],[role="tab"],[tabindex]:not([tabindex="-1"])';
     const set = new Set<string>();
     const visit = (root: ParentNode) => {
       const els = (root as any).querySelectorAll?.(sels) ?? [];
@@ -142,7 +142,7 @@ async function inventarioInteractivo(page: Page): Promise<Array<{ tag: string; i
         let p: ParentNode | null = e.parentElement;
         let inMain = false;
         for (let i = 0; i < 8 && p; i++) {
-          if ((p as HTMLElement).tagName?.toLowerCase() === 'is-main' || (p as HTMLElement).classList?.contains('main')) { inMain = true; break; }
+          if ((p as HTMLElement).tagName?.toLowerCase() === 'iswc-main' || (p as HTMLElement).classList?.contains('main')) { inMain = true; break; }
           p = (p as HTMLElement).parentElement ?? ((p as any).getRootNode?.().host ?? null);
         }
         if (inMain) set.add(`${e.tagName.toLowerCase()}#${e.id ?? ''}`);
@@ -161,7 +161,7 @@ async function inventarioInteractivo(page: Page): Promise<Array<{ tag: string; i
 /** Click un interactivo via JS (shadow-piercing). Devuelve true si hizo click. */
 async function clickInteractivo(page: Page, sel: { tag: string; id: string }): Promise<boolean> {
   return await page.evaluate((s) => {
-    const m = document.querySelector('is-main.main');
+    const m = document.querySelector('iswc-main.main');
     if (!m) return false;
     const tryFind = (root: ParentNode): boolean => {
       const els = (root as any).querySelectorAll?.(s.tag) ?? [];
@@ -178,10 +178,10 @@ async function clickInteractivo(page: Page, sel: { tag: string; id: string }): P
   }, sel);
 }
 
-/** Primer Tab desde is-main enfoca algo dentro del preview? */
+/** Primer Tab desde iswc-main enfoca algo dentro del preview? */
 async function tabOrdenOk(page: Page): Promise<{ ok: boolean; firstFocus: string }> {
   await page.evaluate(() => {
-    const m = document.querySelector('is-main.main');
+    const m = document.querySelector('iswc-main.main');
     if (m) (m as HTMLElement).focus();
   });
   await page.keyboard.press('Tab');
@@ -191,7 +191,7 @@ async function tabOrdenOk(page: Page): Promise<{ ok: boolean; firstFocus: string
     let p: ParentNode | null = ae;
     let inMain = false;
     for (let i = 0; i < 8 && p; i++) {
-      if ((p as HTMLElement).tagName?.toLowerCase() === 'is-main') { inMain = true; break; }
+      if ((p as HTMLElement).tagName?.toLowerCase() === 'iswc-main') { inMain = true; break; }
       p = (p as HTMLElement).parentElement ?? ((p as any).getRootNode?.().host ?? null);
     }
     return { ok: inMain, firstFocus: `${ae.tagName.toLowerCase()}#${ae.id ?? ''}`.slice(0, 60) };
@@ -201,7 +201,7 @@ async function tabOrdenOk(page: Page): Promise<{ ok: boolean; firstFocus: string
 /** Detecta roles ARIA presentes en el preview. */
 async function ariaRoles(page: Page): Promise<{ hasRole: boolean; roles: string[] }> {
   return await page.evaluate(() => {
-    const m = document.querySelector('is-main.main');
+    const m = document.querySelector('iswc-main.main');
     if (!m) return { hasRole: false, roles: [] };
     const rolesEsperados = ['button', 'switch', 'tab', 'menu', 'listbox', 'option', 'dialog', 'alertdialog', 'region', 'grid', 'combobox', 'link'];
     const encontrados: string[] = [];
@@ -210,7 +210,7 @@ async function ariaRoles(page: Page): Promise<{ hasRole: boolean; roles: string[
     }
     // Roles implicitos via tags.
     if (encontrados.length === 0) {
-      if (m.querySelector('button,a[href],is-switch,is-button,is-copy-button')) encontrados.push('button-implicit');
+      if (m.querySelector('button,a[href],iswc-switch,iswc-button,iswc-copy-button')) encontrados.push('button-implicit');
     }
     return { hasRole: encontrados.length > 0, roles: encontrados };
   });
@@ -228,16 +228,16 @@ async function assertsPorCategoria(page: Page, categoria: string, tag: string): 
   // Forms: validar que inputs cambian el modelo.
   if (categoria === 'forms') {
     const inputs = await page.evaluate(() => {
-      const m = document.querySelector('is-main.main');
+      const m = document.querySelector('iswc-main.main');
       if (!m) return 0;
-      return m.querySelectorAll('is-input,is-textarea,is-select,is-checkbox,is-radio,is-color-picker,is-switch').length;
+      return m.querySelectorAll('iswc-input,iswc-textarea,iswc-select,iswc-checkbox,iswc-radio,iswc-color-picker,iswc-switch').length;
     });
     if (inputs > 0) motivos.push(`forms: ${inputs} inputs renderizados`);
   }
   // Charts/data-viz: si hay canvas o svg, validar dimensiones > 0.
   if (categoria === 'charts' || categoria === 'data-viz' || categoria === 'data') {
     const dims = await page.evaluate(() => {
-      const m = document.querySelector('is-main.main');
+      const m = document.querySelector('iswc-main.main');
       if (!m) return { svg: 0, canvas: 0 };
       const visit = (root: ParentNode) => {
         let svg = 0, canvas = 0;
@@ -260,7 +260,7 @@ async function assertsPorCategoria(page: Page, categoria: string, tag: string): 
   // Diagrams: validar svg.
   if (categoria === 'diagrams') {
     const svgCount = await page.evaluate(() => {
-      const m = document.querySelector('is-main.main');
+      const m = document.querySelector('iswc-main.main');
       if (!m) return 0;
       const visit = (root: ParentNode): number => {
         let n = 0;
@@ -278,7 +278,7 @@ async function assertsPorCategoria(page: Page, categoria: string, tag: string): 
   // Media: validar que videos tienen duracion o imagenes cargadas.
   if (categoria === 'media') {
     const media = await page.evaluate(() => {
-      const m = document.querySelector('is-main.main');
+      const m = document.querySelector('iswc-main.main');
       if (!m) return { video: 0, img: 0 };
       const visit = (root: ParentNode): { video: number; img: number } => {
         let v = 0, i = 0;
@@ -301,9 +301,9 @@ async function assertsPorCategoria(page: Page, categoria: string, tag: string): 
   // Navigation/overlays: validar menus/popovers.
   if (categoria === 'navigation' || categoria === 'overlays') {
     const nav = await page.evaluate(() => {
-      const m = document.querySelector('is-main.main');
+      const m = document.querySelector('iswc-main.main');
       if (!m) return 0;
-      return m.querySelectorAll('is-mega-menu,is-command-palette,is-dropdown,is-menu').length;
+      return m.querySelectorAll('iswc-mega-menu,iswc-command-palette,iswc-dropdown,iswc-menu').length;
     });
     motivos.push(`${categoria}: ${nav} menus renderizados`);
   }
@@ -378,11 +378,11 @@ test('UX/UI proposals: validaciones distribuidas sobre los demos del catálogo (
         const aClicar = interactivos.slice(0, 12); // cap 12 clicks por demo (evita 100+ en forms).
         for (const sel of aClicar) {
           try {
-            const before = await page.evaluate(() => (document.querySelector('is-main.main') as HTMLElement)?.innerHTML.length ?? 0);
+            const before = await page.evaluate(() => (document.querySelector('iswc-main.main') as HTMLElement)?.innerHTML.length ?? 0);
             const ok = await clickInteractivo(page, sel);
             if (!ok) continue;
             await esperarMs(150);
-            const after = await page.evaluate(() => (document.querySelector('is-main.main') as HTMLElement)?.innerHTML.length ?? 0);
+            const after = await page.evaluate(() => (document.querySelector('iswc-main.main') as HTMLElement)?.innerHTML.length ?? 0);
             if (Math.abs(after - before) > 20) r.interaccion.responded++;
           } catch { /* click fallido */ }
         }
@@ -408,10 +408,10 @@ test('UX/UI proposals: validaciones distribuidas sobre los demos del catálogo (
         // textAnchor="middle" en los tspans via buildTspans(). Esta verificacion
         // previene la regresion en todos los diagramas SVG que renderizan
         // labels con tspans.
-        if (categoria === 'diagrams' || tag === 'is-swimlane-diagram') {
+        if (categoria === 'diagrams' || tag === 'iswc-swimlane-diagram') {
           const centered = await page.evaluate((selector) => {
             const host = document.getElementById('previewHost');
-            const main = host?.querySelector('is-main.main');
+            const main = host?.querySelector('iswc-main.main');
             const comp = main?.querySelector(selector);
             const svg = comp?.shadowRoot?.querySelector('svg') || main?.querySelector('svg');
             if (!svg) return { ok: true, maxOffset: 0, reason: 'no svg' };
@@ -443,7 +443,7 @@ test('UX/UI proposals: validaciones distribuidas sobre los demos del catálogo (
               checked++;
             }
             return { ok: checked === 0 || maxOffset <= 1.5, maxOffset, checked };
-          }, `is-${tag.replace(/^is-/, '')}`);
+          }, `iswc-${tag.replace(/^iswc-/, '')}`);
           // Solo marcamos fail si realmente pudimos medir (checked > 0).
           if (centered.checked > 0 && !centered.ok) r.estados.tested = false;
           (r as any).textCenterOffset = centered.maxOffset;
@@ -471,7 +471,7 @@ test('UX/UI proposals: validaciones distribuidas sobre los demos del catálogo (
             }
             return null;
           };
-          const main = document.querySelector('is-main.main');
+          const main = document.querySelector('iswc-main.main');
           if (!main) return { normal: '0s', reduced: '0s', reducedOk: true };
           const normal = visit(main) ?? { dur: '0s', count: 0 };
           return { normal: normal.dur };
@@ -484,11 +484,11 @@ test('UX/UI proposals: validaciones distribuidas sobre los demos del catálogo (
         // El demo debe tener al menos un elemento focuseable con outline
         // visible al tabular. Este check garantiza que focus-visible: aparece.
         const focusVisible = await page.evaluate(() => {
-          const main = document.querySelector('is-main.main');
+          const main = document.querySelector('iswc-main.main');
           if (!main) return false;
           // Buscar primer focuseable.
           const visit = (root: ParentNode): Element | null => {
-            const sels = 'button,is-button,is-switch,a[href],[tabindex]:not([tabindex="-1"])';
+            const sels = 'button,iswc-button,iswc-switch,a[href],[tabindex]:not([tabindex="-1"])';
             const f = root.querySelector(sels);
             if (f) return f;
             for (const el of root.querySelectorAll('*')) {
@@ -516,11 +516,11 @@ test('UX/UI proposals: validaciones distribuidas sobre los demos del catálogo (
         // que los inputs tengan aria-label o label asociado.
         if (categoria === 'forms') {
           const ariaInputs = await page.evaluate(() => {
-            const main = document.querySelector('is-main.main');
+            const main = document.querySelector('iswc-main.main');
             if (!main) return { total: 0, conLabel: 0 };
             const visit = (root: ParentNode): { total: number; conLabel: number } => {
               let total = 0, conLabel = 0;
-              const inputs = root.querySelectorAll('is-input,is-textarea,is-select,is-checkbox,is-radio');
+              const inputs = root.querySelectorAll('iswc-input,iswc-textarea,iswc-select,iswc-checkbox,iswc-radio');
               for (const inp of inputs) {
                 total++;
                 const labelText = inp.getAttribute('aria-label') ||
@@ -550,7 +550,7 @@ test('UX/UI proposals: validaciones distribuidas sobre los demos del catálogo (
         // aria-modal se cierre.
         if (categoria === 'overlays' || categoria === 'navigation' || categoria === 'feedback') {
           const escapeWorks = await page.evaluate(async () => {
-            const main = document.querySelector('is-main.main');
+            const main = document.querySelector('iswc-main.main');
             if (!main) return true;
             // Contar overlays abiertos antes.
             const visit = (root: ParentNode): Element[] => {
@@ -580,11 +580,11 @@ test('UX/UI proposals: validaciones distribuidas sobre los demos del catálogo (
         // cualquier punto (proposal g14 #1). Toca registrar document.keydown
         // en el host, disparar la pulsacion y verificar que el componente
         // queda abierto con `open` y el input enfocado.
-        if (tag === 'is-command-palette') {
+        if (tag === 'iswc-command-palette') {
           const hotkeyOk = await page.evaluate(async () => {
-            const main = document.querySelector('is-main.main');
+            const main = document.querySelector('iswc-main.main');
             if (!main) return { motivo: 'no main', opened: false, focused: false };
-            const cp = main.querySelector<HTMLElement>('is-command-palette');
+            const cp = main.querySelector<HTMLElement>('iswc-command-palette');
             if (!cp?.shadowRoot) return { motivo: 'no cp', opened: false, focused: false };
             document.dispatchEvent(new KeyboardEvent('keydown', {
               key: 'k', ctrlKey: true, bubbles: true, cancelable: true,
@@ -606,10 +606,10 @@ test('UX/UI proposals: validaciones distribuidas sobre los demos del catálogo (
 
         // Categoria 12: command-palette — Escape cierra + aria-expanded=false
         // (proposal g14 #4). Reabrimos y disparamos Escape.
-        if (tag === 'is-command-palette') {
+        if (tag === 'iswc-command-palette') {
           const escapeCmd = await page.evaluate(async () => {
-            const main = document.querySelector('is-main.main');
-            const cp = main?.querySelector<HTMLElement>('is-command-palette');
+            const main = document.querySelector('iswc-main.main');
+            const cp = main?.querySelector<HTMLElement>('iswc-command-palette');
             if (!cp?.shadowRoot) return { motivo: 'no cp', closed: false, ariaExpanded: '' };
             document.dispatchEvent(new KeyboardEvent('keydown', {
               key: 'k', ctrlKey: true, bubbles: true, cancelable: true,
@@ -632,10 +632,10 @@ test('UX/UI proposals: validaciones distribuidas sobre los demos del catálogo (
         // Categoria 13: command-palette — Arrow nav + aria-selected + ciclado
         // (proposal g14 #6). Abrimos, tipeamos, navegamos con flechas y
         // verificamos aria-selected y scrollIntoView.
-        if (tag === 'is-command-palette') {
+        if (tag === 'iswc-command-palette') {
           const arrowOk = await page.evaluate(async () => {
-            const main = document.querySelector('is-main.main');
-            const cp = main?.querySelector<HTMLElement>('is-command-palette');
+            const main = document.querySelector('iswc-main.main');
+            const cp = main?.querySelector<HTMLElement>('iswc-command-palette');
             if (!cp?.shadowRoot) return { motivo: 'no cp', ok: false };
             document.dispatchEvent(new KeyboardEvent('keydown', {
               key: 'k', ctrlKey: true, bubbles: true, cancelable: true,
@@ -693,10 +693,10 @@ test('UX/UI proposals: validaciones distribuidas sobre los demos del catálogo (
         // Categoria 14: command-palette — ARIA combobox/listbox coherente
         // (proposal g14 #11). Verifica roles, aria-controls, aria-expanded,
         // aria-haspopup, aria-autocomplete en estado abierto.
-        if (tag === 'is-command-palette') {
+        if (tag === 'iswc-command-palette') {
           const ariaOk = await page.evaluate(async () => {
-            const main = document.querySelector('is-main.main');
-            const cp = main?.querySelector<HTMLElement>('is-command-palette');
+            const main = document.querySelector('iswc-main.main');
+            const cp = main?.querySelector<HTMLElement>('iswc-command-palette');
             if (!cp?.shadowRoot) return { motivo: 'no cp', ok: false };
             document.dispatchEvent(new KeyboardEvent('keydown', {
               key: 'k', ctrlKey: true, bubbles: true, cancelable: true,
@@ -759,10 +759,10 @@ test('UX/UI proposals: validaciones distribuidas sobre los demos del catálogo (
         // Categoria 15: command-palette — aria-live polite anuncia cambios
         // (proposal g14 #12). Verifica que exista region aria-live y que se
         // actualice al cambiar el filtro.
-        if (tag === 'is-command-palette') {
+        if (tag === 'iswc-command-palette') {
           const liveOk = await page.evaluate(async () => {
-            const main = document.querySelector('is-main.main');
-            const cp = main?.querySelector<HTMLElement>('is-command-palette');
+            const main = document.querySelector('iswc-main.main');
+            const cp = main?.querySelector<HTMLElement>('iswc-command-palette');
             if (!cp?.shadowRoot) return { motivo: 'no cp', ok: false };
             document.dispatchEvent(new KeyboardEvent('keydown', {
               key: 'k', ctrlKey: true, bubbles: true, cancelable: true,
@@ -801,13 +801,13 @@ test('UX/UI proposals: validaciones distribuidas sobre los demos del catálogo (
 
         // Categoria 16: pdf-viewer / window — iframe accesible + region ARIA
         // (proposals g14 transversales: aria-label, role=region).
-        if (tag === 'is-pdf-viewer' || tag === 'is-window') {
+        if (tag === 'iswc-pdf-viewer' || tag === 'iswc-window') {
           let overlayAriaOk: any = { motivo: 'no aplica', ok: false };
-          if (tag === 'is-pdf-viewer') {
+          if (tag === 'iswc-pdf-viewer') {
             overlayAriaOk = await page.evaluate(() => {
-              const main = document.querySelector('is-main.main');
+              const main = document.querySelector('iswc-main.main');
               if (!main) return { motivo: 'no main', ok: false };
-              const pv = main.querySelector<HTMLElement>('is-pdf-viewer');
+              const pv = main.querySelector<HTMLElement>('iswc-pdf-viewer');
               if (!pv?.shadowRoot) return { motivo: 'no pdf-viewer', ok: false };
               const root = pv.shadowRoot.querySelector('[role="region"], .root');
               const iframe = pv.shadowRoot.querySelector('iframe');
@@ -824,13 +824,13 @@ test('UX/UI proposals: validaciones distribuidas sobre los demos del catálogo (
                 toolbarRole: toolbar?.getAttribute('role') ?? '',
               };
             });
-          } else if (tag === 'is-window') {
+          } else if (tag === 'iswc-window') {
             overlayAriaOk = await page.evaluate(async () => {
-              const main = document.querySelector('is-main.main');
+              const main = document.querySelector('iswc-main.main');
               if (!main) return { motivo: 'no main', ok: false };
-              const existing = main.querySelector('is-window');
+              const existing = main.querySelector('iswc-window');
               if (existing) existing.remove();
-              const w = document.createElement('is-window');
+              const w = document.createElement('iswc-window');
               w.setAttribute('title', 'Test');
               main.appendChild(w);
               await new Promise((r) => setTimeout(r, 120));
@@ -862,14 +862,14 @@ test('UX/UI proposals: validaciones distribuidas sobre los demos del catálogo (
         // Verifica que el host expone aria-keyshortcuts y que los botones
         // internos tienen aria-label/aria-pressed coherentes.
         if (categoria === 'media' && (
-          tag === 'is-video' ||
-          tag === 'is-video-playlist' ||
-          tag === 'is-media-recorder' ||
-          tag === 'is-speech' ||
-          tag === 'is-barcode-scanner'
+          tag === 'iswc-video' ||
+          tag === 'iswc-video-playlist' ||
+          tag === 'iswc-media-recorder' ||
+          tag === 'iswc-speech' ||
+          tag === 'iswc-barcode-scanner'
         )) {
           const kbOk = await page.evaluate((tagName: string) => {
-            const m = document.querySelector('is-main.main');
+            const m = document.querySelector('iswc-main.main');
             if (!m) return { motivo: 'no main', ok: false, hostKeyshortcuts: '', interactiveLabels: 0, totalButtons: 0 };
             const host = m.querySelector(tagName) as HTMLElement | null;
             if (!host) return { motivo: 'no host', ok: false, hostKeyshortcuts: '', interactiveLabels: 0, totalButtons: 0 };
@@ -879,7 +879,7 @@ test('UX/UI proposals: validaciones distribuidas sobre los demos del catálogo (
             let labels = 0;
             let total = 0;
             const visit = (root: ParentNode): void => {
-              const btns = root.querySelectorAll('button, is-button, is-check-icon-button, [role="button"]');
+              const btns = root.querySelectorAll('button, iswc-button, iswc-check-icon-button, [role="button"]');
               for (const b of Array.from(btns)) {
                 total++;
                 const lbl = (b.getAttribute('aria-label') || '').trim();
@@ -906,14 +906,14 @@ test('UX/UI proposals: validaciones distribuidas sobre los demos del catálogo (
         // Cat 18: media — aria-pressed / aria-current / role=region en el
         // host (proposals video #2, video-playlist #13, speech #6).
         if (categoria === 'media' && (
-          tag === 'is-video' ||
-          tag === 'is-video-playlist' ||
-          tag === 'is-media-recorder' ||
-          tag === 'is-speech' ||
-          tag === 'is-barcode-scanner'
+          tag === 'iswc-video' ||
+          tag === 'iswc-video-playlist' ||
+          tag === 'iswc-media-recorder' ||
+          tag === 'iswc-speech' ||
+          tag === 'iswc-barcode-scanner'
         )) {
           const stateOk = await page.evaluate((tagName: string) => {
-            const m = document.querySelector('is-main.main');
+            const m = document.querySelector('iswc-main.main');
             if (!m) return { motivo: 'no main', ok: false, role: '', ariaLabel: '', pressedCount: 0, currentCount: 0 };
             const host = m.querySelector(tagName) as HTMLElement | null;
             if (!host) return { motivo: 'no host', ok: false, role: '', ariaLabel: '', pressedCount: 0, currentCount: 0 };
@@ -951,15 +951,15 @@ test('UX/UI proposals: validaciones distribuidas sobre los demos del catálogo (
         // que la chrome contiene un elemento donde aria-busy *podría* vivir
         // (un [aria-live] o un contenedor .status/.hint con role=status).
         if (categoria === 'media' && (
-          tag === 'is-video' ||
-          tag === 'is-video-playlist' ||
-          tag === 'is-image-editor' ||
-          tag === 'is-theme-img' ||
-          tag === 'is-media-recorder' ||
-          tag === 'is-barcode-scanner'
+          tag === 'iswc-video' ||
+          tag === 'iswc-video-playlist' ||
+          tag === 'iswc-image-editor' ||
+          tag === 'iswc-theme-img' ||
+          tag === 'iswc-media-recorder' ||
+          tag === 'iswc-barcode-scanner'
         )) {
           const busyOk = await page.evaluate((tagName: string) => {
-            const m = document.querySelector('is-main.main');
+            const m = document.querySelector('iswc-main.main');
             if (!m) return { motivo: 'no main', ok: false, ariaBusyPresent: false, hasStatusRegion: false };
             const host = m.querySelector(tagName) as HTMLElement | null;
             if (!host) return { motivo: 'no host', ok: false, ariaBusyPresent: false, hasStatusRegion: false };
@@ -984,12 +984,12 @@ test('UX/UI proposals: validaciones distribuidas sobre los demos del catálogo (
         // Aplica `disabled` programáticamente y verifica que el botón de
         // acción refleja el estado. Esto evita regresiones de la Q1 fix.
         if (categoria === 'media' && (
-          tag === 'is-media-recorder' ||
-          tag === 'is-barcode-scanner' ||
-          tag === 'is-speech'
+          tag === 'iswc-media-recorder' ||
+          tag === 'iswc-barcode-scanner' ||
+          tag === 'iswc-speech'
         )) {
           const disOk = await page.evaluate(async (tagName: string) => {
-            const m = document.querySelector('is-main.main');
+            const m = document.querySelector('iswc-main.main');
             if (!m) return { motivo: 'no main', ok: false, beforeDisabled: false, afterAriaDisabled: false, ariaDisabled: '' };
             const host = m.querySelector(tagName) as HTMLElement | null;
             if (!host) return { motivo: 'no host', ok: false, beforeDisabled: false, afterAriaDisabled: false, ariaDisabled: '' };
@@ -999,7 +999,7 @@ test('UX/UI proposals: validaciones distribuidas sobre los demos del catálogo (
             // Buscar el botón de acción y leer aria-disabled.
             let ariaDisabled = '';
             const findBtn = (root: ParentNode): HTMLElement | null => {
-              const btns = root.querySelectorAll('is-button, button, [role="button"]');
+              const btns = root.querySelectorAll('iswc-button, button, [role="button"]');
               for (const b of Array.from(btns)) {
                 const cls = (b as HTMLElement).className || '';
                 if (cls.includes('go') || cls.includes('listen') || cls.includes('speak')) return b as HTMLElement;
@@ -1039,7 +1039,7 @@ test('UX/UI proposals: validaciones distribuidas sobre los demos del catálogo (
         const m = await page.evaluate(() => {
           const host = document.getElementById('previewHost');
           if (!host) return { texto: 0, sections: 0 };
-          const main = host.querySelector('is-main.main');
+          const main = host.querySelector('iswc-main.main');
           return {
             texto: (main?.textContent ?? host.textContent ?? '').trim().length,
             sections: (main ?? host).querySelectorAll('section.section, [data-section]').length,
@@ -1142,7 +1142,7 @@ test('UX/UI proposals: validaciones distribuidas sobre los demos del catálogo (
 //   - scroller: role=region + aria-label configurable.
 //
 // Skip explicito:
-//   - <is-menu> (propuesta menciona menu.{ts,css,md,json} pero NO existe
+//   - <iswc-menu> (propuesta menciona menu.{ts,css,md,json} pero NO existe
 //     en src/components/navigation/ — solo mega-menu). El bloque del 8 al 12
 //     sobre menu simple queda fuera de scope.
 //   - proposals que requieren servicios externos: ninguna identificada.
@@ -1154,17 +1154,17 @@ test('g13 mega-menu: contrato ARIA/teclado/focus (proposals 1–25)', { timeout:
   const page = await nuevoPage();
   activePage = page;
   try {
-    const renderOk = await abrirPreview(page, base, 'is-mega-menu');
+    const renderOk = await abrirPreview(page, base, 'iswc-mega-menu');
     assert.ok(renderOk, 'mega-menu preview no renderizo');
 
     // ──────────── Proposal 1: aria-expanded sincronizado al click ────────────
     const expandedSync = await page.evaluate(() => {
-      const m = document.querySelector<HTMLElement>('is-main.is-mega-menu, is-main.main is-mega-menu')
-        || document.querySelector<HTMLElement>('is-main.main')?.querySelector('is-mega-menu');
+      const m = document.querySelector<HTMLElement>('iswc-main.iswc-mega-menu, iswc-main.main iswc-mega-menu')
+        || document.querySelector<HTMLElement>('iswc-main.main')?.querySelector('iswc-mega-menu');
       if (!m) return { ok: false, motivo: 'no mega-menu' };
-      const trigger = m.shadowRoot?.querySelector<HTMLElement>('is-button.trigger');
+      const trigger = m.shadowRoot?.querySelector<HTMLElement>('iswc-button.trigger');
       if (!trigger) return { ok: false, motivo: 'no trigger' };
-      // El trigger es <is-button>: su shadow expone el <button> interno.
+      // El trigger es <iswc-button>: su shadow expone el <button> interno.
       const before = trigger.getAttribute('aria-expanded');
       const btn = (trigger as unknown as { shadowRoot?: ShadowRoot }).shadowRoot?.querySelector('button') || trigger;
       btn.click();
@@ -1184,9 +1184,9 @@ test('g13 mega-menu: contrato ARIA/teclado/focus (proposals 1–25)', { timeout:
 
     // Preparar: foco sobre el trigger, panel ya abierto.
     await page.evaluate(() => {
-      const m = document.querySelector<HTMLElement>('is-main.main')?.querySelector<HTMLElement>('is-mega-menu');
+      const m = document.querySelector<HTMLElement>('iswc-main.main')?.querySelector<HTMLElement>('iswc-mega-menu');
       if (!m) return;
-      const trigger = m.shadowRoot?.querySelector<HTMLElement>('is-button.trigger');
+      const trigger = m.shadowRoot?.querySelector<HTMLElement>('iswc-button.trigger');
       const btn = (trigger as unknown as { shadowRoot?: ShadowRoot }).shadowRoot?.querySelector('button') || trigger;
       btn?.focus();
     });
@@ -1195,9 +1195,9 @@ test('g13 mega-menu: contrato ARIA/teclado/focus (proposals 1–25)', { timeout:
     await page.keyboard.press('Escape');
     await esperarMs(120);
     const escapeOk = await page.evaluate(() => {
-      const m = document.querySelector<HTMLElement>('is-main.main')?.querySelector<HTMLElement>('is-mega-menu');
+      const m = document.querySelector<HTMLElement>('iswc-main.main')?.querySelector<HTMLElement>('iswc-mega-menu');
       if (!m) return { ok: false, motivo: 'no mega-menu' };
-      const trigger = m.shadowRoot?.querySelector<HTMLElement>('is-button.trigger');
+      const trigger = m.shadowRoot?.querySelector<HTMLElement>('iswc-button.trigger');
       const panel = m.shadowRoot?.querySelector<HTMLDialogElement>('dialog.panel');
       const triggerBtn = (trigger as unknown as { shadowRoot?: ShadowRoot }).shadowRoot?.querySelector('button') || trigger;
       const ae = document.activeElement;
@@ -1217,8 +1217,8 @@ test('g13 mega-menu: contrato ARIA/teclado/focus (proposals 1–25)', { timeout:
     // ──────────── Proposal 4: Click fuera cierra ────────────
     // Reabrir y click fuera.
     await page.evaluate(() => {
-      const m = document.querySelector<HTMLElement>('is-main.main')?.querySelector<HTMLElement>('is-mega-menu');
-      const trigger = m?.shadowRoot?.querySelector<HTMLElement>('is-button.trigger');
+      const m = document.querySelector<HTMLElement>('iswc-main.main')?.querySelector<HTMLElement>('iswc-mega-menu');
+      const trigger = m?.shadowRoot?.querySelector<HTMLElement>('iswc-button.trigger');
       const btn = (trigger as unknown as { shadowRoot?: ShadowRoot }).shadowRoot?.querySelector('button') || trigger;
       btn?.click();
     });
@@ -1231,7 +1231,7 @@ test('g13 mega-menu: contrato ARIA/teclado/focus (proposals 1–25)', { timeout:
     });
     await esperarMs(120);
     const outsideClose = await page.evaluate(() => {
-      const m = document.querySelector<HTMLElement>('is-main.main')?.querySelector<HTMLElement>('is-mega-menu');
+      const m = document.querySelector<HTMLElement>('iswc-main.main')?.querySelector<HTMLElement>('iswc-mega-menu');
       const panel = m?.shadowRoot?.querySelector<HTMLDialogElement>('dialog.panel');
       return { ok: !panel?.open, panelOpen: !!panel?.open };
     });
@@ -1241,14 +1241,14 @@ test('g13 mega-menu: contrato ARIA/teclado/focus (proposals 1–25)', { timeout:
     // ──────────── Proposal 10: role=menu/menuitem, aria-controls ────────────
     // Reabrir y verificar roles.
     await page.evaluate(() => {
-      const m = document.querySelector<HTMLElement>('is-main.main')?.querySelector<HTMLElement>('is-mega-menu');
-      const trigger = m?.shadowRoot?.querySelector<HTMLElement>('is-button.trigger');
+      const m = document.querySelector<HTMLElement>('iswc-main.main')?.querySelector<HTMLElement>('iswc-mega-menu');
+      const trigger = m?.shadowRoot?.querySelector<HTMLElement>('iswc-button.trigger');
       const btn = (trigger as unknown as { shadowRoot?: ShadowRoot }).shadowRoot?.querySelector('button') || trigger;
       btn?.click();
     });
     await esperarMs(150);
     const roles = await page.evaluate(() => {
-      const m = document.querySelector<HTMLElement>('is-main.main')?.querySelector<HTMLElement>('is-mega-menu');
+      const m = document.querySelector<HTMLElement>('iswc-main.main')?.querySelector<HTMLElement>('iswc-mega-menu');
       const panel = m?.shadowRoot?.querySelector<HTMLElement>('dialog.panel');
       const slot = panel?.querySelector<HTMLSlotElement>('slot[name="column"]');
       const cols = slot ? [...slot.assignedElements({ flatten: true })] : [];
@@ -1256,8 +1256,8 @@ test('g13 mega-menu: contrato ARIA/teclado/focus (proposals 1–25)', { timeout:
       cols.forEach((c) => {
         items.push(...c.querySelectorAll('a[href], button, [role="menuitem"]'));
       });
-      const hasPopup = m?.shadowRoot?.querySelector('is-button.trigger')?.getAttribute('aria-haspopup');
-      const controls = m?.shadowRoot?.querySelector('is-button.trigger')?.getAttribute('aria-controls');
+      const hasPopup = m?.shadowRoot?.querySelector('iswc-button.trigger')?.getAttribute('aria-haspopup');
+      const controls = m?.shadowRoot?.querySelector('iswc-button.trigger')?.getAttribute('aria-controls');
       const panelRole = panel?.getAttribute('role');
       const colRoles = cols.map((c) => c.getAttribute('role')).filter(Boolean);
       const itemRoles = items.map((it) => it.getAttribute('role'));
@@ -1271,7 +1271,7 @@ test('g13 mega-menu: contrato ARIA/teclado/focus (proposals 1–25)', { timeout:
 
     // ──────────── Proposal 7+8: Arrow keys navegan con roving tabindex ────────────
     const arrows = await page.evaluate(async () => {
-      const m = document.querySelector<HTMLElement>('is-main.main')?.querySelector<HTMLElement>('is-mega-menu');
+      const m = document.querySelector<HTMLElement>('iswc-main.main')?.querySelector<HTMLElement>('iswc-mega-menu');
       const panel = m?.shadowRoot?.querySelector<HTMLElement>('dialog.panel');
       if (!panel?.open) return { ok: false, motivo: 'panel no abierto' };
       // Items: enumerar los menuitems slotted.
@@ -1308,7 +1308,7 @@ test('g13 mega-menu: contrato ARIA/teclado/focus (proposals 1–25)', { timeout:
 
     // ──────────── Proposal 9: Home/End ────────────
     const homeEnd = await page.evaluate(async () => {
-      const m = document.querySelector<HTMLElement>('is-main.main')?.querySelector<HTMLElement>('is-mega-menu');
+      const m = document.querySelector<HTMLElement>('iswc-main.main')?.querySelector<HTMLElement>('iswc-mega-menu');
       const panel = m?.shadowRoot?.querySelector<HTMLElement>('dialog.panel');
       const slot = panel?.querySelector<HTMLSlotElement>('slot[name="column"]');
       const cols = slot ? [...slot.assignedElements({ flatten: true })] : [];
@@ -1348,9 +1348,9 @@ test('g13 mega-menu: contrato ARIA/teclado/focus (proposals 1–25)', { timeout:
     t.diagnostic(`[g13-9] home/end: ${JSON.stringify(homeEnd)}`);
     assert.ok(homeEnd.ok, `propuesta 9: Home/End no navega (${JSON.stringify(homeEnd)})`);
 
-    // ──────────── Proposal 13: is-select se emite una sola vez ────────────
+    // ──────────── Proposal 13: iswc-select se emite una sola vez ────────────
     const selectOnce = await page.evaluate(async () => {
-      const m = document.querySelector<HTMLElement>('is-main.main')?.querySelector<HTMLElement>('is-mega-menu');
+      const m = document.querySelector<HTMLElement>('iswc-main.main')?.querySelector<HTMLElement>('iswc-mega-menu');
       const panel = m?.shadowRoot?.querySelector<HTMLElement>('dialog.panel');
       const slot = panel?.querySelector<HTMLSlotElement>('slot[name="column"]');
       const cols = slot ? [...slot.assignedElements({ flatten: true })] : [];
@@ -1358,28 +1358,28 @@ test('g13 mega-menu: contrato ARIA/teclado/focus (proposals 1–25)', { timeout:
       if (!firstLink) return { ok: false, motivo: 'no link' };
       let count = 0;
       const handler = () => { count++; };
-      m?.addEventListener('is-select', handler);
+      m?.addEventListener('iswc-select', handler);
       firstLink.click();
       await new Promise((r) => setTimeout(r, 200));
-      m?.removeEventListener('is-select', handler);
+      m?.removeEventListener('iswc-select', handler);
       const panelClosed = !(m?.shadowRoot?.querySelector<HTMLDialogElement>('dialog.panel')?.open);
       return { ok: count === 1 && panelClosed, count, panelClosed };
     });
-    t.diagnostic(`[g13-13] is-select once: ${JSON.stringify(selectOnce)}`);
-    assert.ok(selectOnce.ok, `propuesta 13: is-select emitido ${selectOnce.count} veces, panel cerrado=${selectOnce.panelClosed}`);
+    t.diagnostic(`[g13-13] iswc-select once: ${JSON.stringify(selectOnce)}`);
+    assert.ok(selectOnce.ok, `propuesta 13: iswc-select emitido ${selectOnce.count} veces, panel cerrado=${selectOnce.panelClosed}`);
 
     // ──────────── Proposal 17: prefers-reduced-motion se respeta ────────────
     const reduced = await page.emulateMedia({ reducedMotion: 'reduce' });
     void reduced;
     await page.evaluate(() => {
-      const m = document.querySelector<HTMLElement>('is-main.main')?.querySelector<HTMLElement>('is-mega-menu');
-      const trigger = m?.shadowRoot?.querySelector<HTMLElement>('is-button.trigger');
+      const m = document.querySelector<HTMLElement>('iswc-main.main')?.querySelector<HTMLElement>('iswc-mega-menu');
+      const trigger = m?.shadowRoot?.querySelector<HTMLElement>('iswc-button.trigger');
       const btn = (trigger as unknown as { shadowRoot?: ShadowRoot }).shadowRoot?.querySelector('button') || trigger;
       btn?.click();
     });
     await esperarMs(100);
     const reducedOk = await page.evaluate(() => {
-      const m = document.querySelector<HTMLElement>('is-main.main')?.querySelector<HTMLElement>('is-mega-menu');
+      const m = document.querySelector<HTMLElement>('iswc-main.main')?.querySelector<HTMLElement>('iswc-mega-menu');
       const panel = m?.shadowRoot?.querySelector<HTMLElement>('dialog.panel');
       if (!panel) return { ok: false, motivo: 'no panel' };
       const cs = getComputedStyle(panel);
@@ -1414,17 +1414,17 @@ test('g13 navigation transversales: tab-group, tree, stepper, carousel, breadcru
     const page = await nuevoPage();
     activePage = page;
     try {
-      const renderOk = await abrirPreview(page, base, 'is-tab-group');
+      const renderOk = await abrirPreview(page, base, 'iswc-tab-group');
       assert.ok(renderOk, 'tab-group preview no renderizo');
       const ariaOk = await page.evaluate(() => {
-        const main = document.querySelector<HTMLElement>('is-main.main');
-        const tg = main?.querySelector<HTMLElement>('is-tab-group');
+        const main = document.querySelector<HTMLElement>('iswc-main.main');
+        const tg = main?.querySelector<HTMLElement>('iswc-tab-group');
         if (!tg?.shadowRoot) return { ok: false, motivo: 'no tg' };
         const nav = tg.shadowRoot.querySelector<HTMLElement>('.nav, .tabs, [part="tabs"]');
         const role = nav?.getAttribute('role');
         const orient = nav?.getAttribute('aria-orientation');
-        const tabs = [...main!.querySelectorAll<HTMLElement>('is-tab')];
-        const panels = [...main!.querySelectorAll<HTMLElement>('is-tab-panel')];
+        const tabs = [...main!.querySelectorAll<HTMLElement>('iswc-tab')];
+        const panels = [...main!.querySelectorAll<HTMLElement>('iswc-tab-panel')];
         const tabControls = tabs.map((t) => t.getAttribute('aria-controls'));
         const panelLabelledby = panels.map((p) => p.getAttribute('aria-labelledby'));
         const tabAriaSelected = tabs.map((t) => t.getAttribute('aria-selected'));
@@ -1452,13 +1452,13 @@ test('g13 navigation transversales: tab-group, tree, stepper, carousel, breadcru
     const page = await nuevoPage();
     activePage = page;
     try {
-      const renderOk = await abrirPreview(page, base, 'is-tree');
+      const renderOk = await abrirPreview(page, base, 'iswc-tree');
       assert.ok(renderOk, 'tree preview no renderizo');
       const treeOk = await page.evaluate(() => {
-        const main = document.querySelector<HTMLElement>('is-main.main');
-        const t = main?.querySelector<HTMLElement>('is-tree');
+        const main = document.querySelector<HTMLElement>('iswc-main.main');
+        const t = main?.querySelector<HTMLElement>('iswc-tree');
         if (!t) return { ok: false, motivo: 'no tree' };
-        const items = [...t.querySelectorAll<HTMLElement>('is-tree-item')];
+        const items = [...t.querySelectorAll<HTMLElement>('iswc-tree-item')];
         if (items.length === 0) return { ok: false, motivo: 'sin items' };
         // Cada item debe tener aria-level, aria-setsize, aria-posinset, role.
         const meta = items.map((it) => ({
@@ -1471,7 +1471,7 @@ test('g13 navigation transversales: tab-group, tree, stepper, carousel, breadcru
           m.role === 'treeitem' && !!m.level && !!m.setsize && !!m.posinset,
         );
         // setsize del root debe coincidir con el número de hijos directos.
-        const roots = [...t.querySelectorAll<HTMLElement>(':scope > is-tree-item')];
+        const roots = [...t.querySelectorAll<HTMLElement>(':scope > iswc-tree-item')];
         const rootSetsizeOk = roots.length > 0
           && roots[0].getAttribute('aria-setsize') === String(roots.length);
         return { ok: allOk && rootSetsizeOk, count: items.length, roots: roots.length, meta, rootSetsizeOk };
@@ -1489,13 +1489,13 @@ test('g13 navigation transversales: tab-group, tree, stepper, carousel, breadcru
     const page = await nuevoPage();
     activePage = page;
     try {
-      const renderOk = await abrirPreview(page, base, 'is-stepper');
+      const renderOk = await abrirPreview(page, base, 'iswc-stepper');
       assert.ok(renderOk, 'stepper preview no renderizo');
       const stepOk = await page.evaluate(() => {
-        const main = document.querySelector<HTMLElement>('is-main.main');
-        const s = main?.querySelector<HTMLElement>('is-stepper');
+        const main = document.querySelector<HTMLElement>('iswc-main.main');
+        const s = main?.querySelector<HTMLElement>('iswc-stepper');
         if (!s) return { ok: false, motivo: 'no stepper' };
-        const steps = [...s.querySelectorAll<HTMLElement>('is-stepper-step')];
+        const steps = [...s.querySelectorAll<HTMLElement>('iswc-stepper-step')];
         if (steps.length === 0) return { ok: false, motivo: 'sin steps' };
         const currents = steps.map((st) => st.getAttribute('aria-current'));
         const setsizes = steps.map((st) => st.getAttribute('aria-setsize'));
@@ -1520,11 +1520,11 @@ test('g13 navigation transversales: tab-group, tree, stepper, carousel, breadcru
     const page = await nuevoPage();
     activePage = page;
     try {
-      const renderOk = await abrirPreview(page, base, 'is-carousel');
+      const renderOk = await abrirPreview(page, base, 'iswc-carousel');
       assert.ok(renderOk, 'carousel preview no renderizo');
       const carOk = await page.evaluate(() => {
-        const main = document.querySelector<HTMLElement>('is-main.main');
-        const c = main?.querySelector<HTMLElement>('is-carousel');
+        const main = document.querySelector<HTMLElement>('iswc-main.main');
+        const c = main?.querySelector<HTMLElement>('iswc-carousel');
         if (!c?.shadowRoot) return { ok: false, motivo: 'no carousel' };
         const root = c.shadowRoot.querySelector<HTMLElement>('.carousel');
         const indicators = c.shadowRoot.querySelector<HTMLElement>('.indicators');
@@ -1548,11 +1548,11 @@ test('g13 navigation transversales: tab-group, tree, stepper, carousel, breadcru
     const page = await nuevoPage();
     activePage = page;
     try {
-      const renderOk = await abrirPreview(page, base, 'is-breadcrumb');
+      const renderOk = await abrirPreview(page, base, 'iswc-breadcrumb');
       assert.ok(renderOk, 'breadcrumb preview no renderizo');
       const bcOk = await page.evaluate(() => {
-        const main = document.querySelector<HTMLElement>('is-main.main');
-        const bc = main?.querySelector<HTMLElement>('is-breadcrumb');
+        const main = document.querySelector<HTMLElement>('iswc-main.main');
+        const bc = main?.querySelector<HTMLElement>('iswc-breadcrumb');
         if (!bc?.shadowRoot) return { ok: false, motivo: 'no breadcrumb' };
         const ol = bc.shadowRoot.querySelector<HTMLElement>('ol, .bc-list');
         const olRole = ol?.getAttribute('role');
@@ -1577,11 +1577,11 @@ test('g13 navigation transversales: tab-group, tree, stepper, carousel, breadcru
     const page = await nuevoPage();
     activePage = page;
     try {
-      const renderOk = await abrirPreview(page, base, 'is-scroller');
+      const renderOk = await abrirPreview(page, base, 'iswc-scroller');
       assert.ok(renderOk, 'scroller preview no renderizo');
       const scOk = await page.evaluate(() => {
-        const main = document.querySelector<HTMLElement>('is-main.main');
-        const s = main?.querySelector<HTMLElement>('is-scroller');
+        const main = document.querySelector<HTMLElement>('iswc-main.main');
+        const s = main?.querySelector<HTMLElement>('iswc-scroller');
         if (!s?.shadowRoot) return { ok: false, motivo: 'no scroller' };
         const vp = s.shadowRoot.querySelector<HTMLElement>('.viewport');
         const role = vp?.getAttribute('role');
@@ -1632,12 +1632,12 @@ test('g11 layout ARIA: roles, aria-label/labelledby, aria-orientation (proposals
     const page = await nuevoPage();
     activePage = page;
     try {
-      const renderOk = await abrirPreview(page, base, 'is-grid-layout');
+      const renderOk = await abrirPreview(page, base, 'iswc-grid-layout');
       assert.ok(renderOk, 'grid-layout preview no renderizo');
 
       const ariaOk = await page.evaluate(() => {
-        const main = document.querySelector<HTMLElement>('is-main.main');
-        const grids = [...(main?.querySelectorAll<HTMLElement>('is-grid-layout') ?? [])];
+        const main = document.querySelector<HTMLElement>('iswc-main.main');
+        const grids = [...(main?.querySelectorAll<HTMLElement>('iswc-grid-layout') ?? [])];
         if (grids.length === 0) return { ok: false, motivo: 'sin grid-layout' };
 
         // 1) sin label → NO debe haber role="region" (norma ARIA).
@@ -1649,7 +1649,7 @@ test('g11 layout ARIA: roles, aria-label/labelledby, aria-orientation (proposals
 
         // 3) Creamos un grid con label dinámico y direction=row para verificar
         //    que se aplica role="region" + aria-label + aria-orientation=horizontal.
-        const tagged = document.createElement('is-grid-layout');
+        const tagged = document.createElement('iswc-grid-layout');
         tagged.setAttribute('label', 'galería de prueba');
         tagged.setAttribute('direction', 'row');
         main?.appendChild(tagged);
@@ -1659,7 +1659,7 @@ test('g11 layout ARIA: roles, aria-label/labelledby, aria-orientation (proposals
         tagged.remove();
 
         // 4) Creamos otro con labelledby para verificar aria-labelledby.
-        const byId = document.createElement('is-grid-layout');
+        const byId = document.createElement('iswc-grid-layout');
         byId.setAttribute('labelledby', 'demoTitle');
         main?.appendChild(byId);
         const byIdLabelledby = byId.getAttribute('aria-labelledby');
@@ -1690,24 +1690,24 @@ test('g11 layout ARIA: roles, aria-label/labelledby, aria-orientation (proposals
     const page = await nuevoPage();
     activePage = page;
     try {
-      const renderOk = await abrirPreview(page, base, 'is-block-layout');
+      const renderOk = await abrirPreview(page, base, 'iswc-block-layout');
       assert.ok(renderOk, 'block-layout preview no renderizo');
 
       const ariaOk = await page.evaluate(() => {
-        const main = document.querySelector<HTMLElement>('is-main.main');
-        const blocks = [...(main?.querySelectorAll<HTMLElement>('is-block-layout') ?? [])];
+        const main = document.querySelector<HTMLElement>('iswc-main.main');
+        const blocks = [...(main?.querySelectorAll<HTMLElement>('iswc-block-layout') ?? [])];
         if (blocks.length === 0) return { ok: false, motivo: 'sin block-layout' };
         const unlabeled = blocks.find((b) => !b.hasAttribute('label') && !b.hasAttribute('labelledby'));
         const unlabeledHasRole = unlabeled ? unlabeled.hasAttribute('role') : false;
 
-        const tagged = document.createElement('is-block-layout');
+        const tagged = document.createElement('iswc-block-layout');
         tagged.setAttribute('label', 'panel lateral');
         main?.appendChild(tagged);
         const taggedRole = tagged.getAttribute('role');
         const taggedLabel = tagged.getAttribute('aria-label');
         tagged.remove();
 
-        const byId = document.createElement('is-block-layout');
+        const byId = document.createElement('iswc-block-layout');
         byId.setAttribute('labelledby', 'sectionTitle');
         main?.appendChild(byId);
         const byIdRole = byId.getAttribute('role');
@@ -1737,19 +1737,19 @@ test('g11 layout ARIA: roles, aria-label/labelledby, aria-orientation (proposals
     const page = await nuevoPage();
     activePage = page;
     try {
-      const renderOk = await abrirPreview(page, base, 'is-flex-layout');
+      const renderOk = await abrirPreview(page, base, 'iswc-flex-layout');
       assert.ok(renderOk, 'flex-layout preview no renderizo');
 
       const ariaOk = await page.evaluate(() => {
-        const main = document.querySelector<HTMLElement>('is-main.main');
-        const flexes = [...(main?.querySelectorAll<HTMLElement>('is-flex-layout') ?? [])];
+        const main = document.querySelector<HTMLElement>('iswc-main.main');
+        const flexes = [...(main?.querySelectorAll<HTMLElement>('iswc-flex-layout') ?? [])];
         if (flexes.length === 0) return { ok: false, motivo: 'sin flex-layout' };
         const unlabeled = flexes.find((f) => !f.hasAttribute('label') && !f.hasAttribute('labelledby'));
         const unlabeledHasRole = unlabeled ? unlabeled.hasAttribute('role') : false;
         // Default direction=row → aria-orientation="horizontal".
         const orientDefault = unlabeled?.getAttribute('aria-orientation');
 
-        const tagged = document.createElement('is-flex-layout');
+        const tagged = document.createElement('iswc-flex-layout');
         tagged.setAttribute('label', 'acciones del header');
         tagged.setAttribute('direction', 'column');
         main?.appendChild(tagged);
@@ -1758,7 +1758,7 @@ test('g11 layout ARIA: roles, aria-label/labelledby, aria-orientation (proposals
         const taggedOrient = tagged.getAttribute('aria-orientation');
         tagged.remove();
 
-        const tagged2 = document.createElement('is-flex-layout');
+        const tagged2 = document.createElement('iswc-flex-layout');
         tagged2.setAttribute('direction', 'row');
         main?.appendChild(tagged2);
         const orientRow = tagged2.getAttribute('aria-orientation');
@@ -1788,14 +1788,14 @@ test('g11 flex-options: role=toolbar, aria-orientation, roving tabindex + teclad
   const page = await nuevoPage();
   activePage = page;
   try {
-    const renderOk = await abrirPreview(page, base, 'is-flex-options');
+    const renderOk = await abrirPreview(page, base, 'iswc-flex-options');
     assert.ok(renderOk, 'flex-options preview no renderizo');
 
     // Inyectamos acciones programáticamente para que la toolbar tenga
     // contenido determinístico.
     await page.evaluate(() => {
-      const main = document.querySelector<HTMLElement>('is-main.main');
-      const fo = main?.querySelector<HTMLElement>('is-flex-options');
+      const main = document.querySelector<HTMLElement>('iswc-main.main');
+      const fo = main?.querySelector<HTMLElement>('iswc-flex-options');
       if (!fo) return;
       // forzar 3 botones en el toolbar.
       const actions = [
@@ -1810,8 +1810,8 @@ test('g11 flex-options: role=toolbar, aria-orientation, roving tabindex + teclad
 
     // ──────────── Propuesta: role=toolbar + aria-orientation ────────────
     const toolbarAria = await page.evaluate(() => {
-      const main = document.querySelector<HTMLElement>('is-main.main');
-      const fo = main?.querySelector<HTMLElement>('is-flex-options');
+      const main = document.querySelector<HTMLElement>('iswc-main.main');
+      const fo = main?.querySelector<HTMLElement>('iswc-flex-options');
       if (!fo?.shadowRoot) return { ok: false, motivo: 'no fo' };
       const toolbar = fo.shadowRoot.querySelector<HTMLElement>('.toolbar');
       const role = toolbar?.getAttribute('role');
@@ -1829,14 +1829,14 @@ test('g11 flex-options: role=toolbar, aria-orientation, roving tabindex + teclad
 
     // ──────────── Propuesta: roving tabindex + ArrowLeft/Right ────────────
     const roving = await page.evaluate(async () => {
-      const main = document.querySelector<HTMLElement>('is-main.main');
-      const fo = main?.querySelector<HTMLElement>('is-flex-options');
+      const main = document.querySelector<HTMLElement>('iswc-main.main');
+      const fo = main?.querySelector<HTMLElement>('iswc-flex-options');
       if (!fo?.shadowRoot) return { ok: false, motivo: 'no fo' };
       const toolbar = fo.shadowRoot.querySelector<HTMLElement>('.toolbar');
       if (!toolbar) return { ok: false, motivo: 'no toolbar' };
       // Botones pintados (excluir dropdown).
-      const btns = [...toolbar.querySelectorAll<HTMLElement>(':scope > is-button-group > is-button')]
-        .filter((b) => !b.hasAttribute('disabled') && !b.closest('is-dropdown'));
+      const btns = [...toolbar.querySelectorAll<HTMLElement>(':scope > iswc-button-group > iswc-button')]
+        .filter((b) => !b.hasAttribute('disabled') && !b.closest('iswc-dropdown'));
       if (btns.length < 2) return { ok: false, motivo: `pocos botones (${btns.length})` };
       // 1) El primero debe tener tabindex=0 y los demás -1.
       const t0 = btns.map((b) => b.getAttribute('tabindex'));
@@ -1893,13 +1893,13 @@ test('g11 float-card: role=region, aria-label, Escape cierra el panel', { timeou
   const page = await nuevoPage();
   activePage = page;
   try {
-    const renderOk = await abrirPreview(page, base, 'is-float-card');
+    const renderOk = await abrirPreview(page, base, 'iswc-float-card');
     assert.ok(renderOk, 'float-card preview no renderizo');
 
     // 1) Inyectamos un float-card determinístico con label.
     const ariaOk = await page.evaluate(() => {
-      const main = document.querySelector<HTMLElement>('is-main.main');
-      const fc = document.createElement('is-float-card');
+      const main = document.querySelector<HTMLElement>('iswc-main.main');
+      const fc = document.createElement('iswc-float-card');
       fc.setAttribute('id', 'fc-test');
       fc.setAttribute('label', 'acciones de fila');
       main?.appendChild(fc);
@@ -1908,7 +1908,7 @@ test('g11 float-card: role=region, aria-label, Escape cierra el panel', { timeou
       const noLabel = fc.hasAttribute('aria-label') && !fc.getAttribute('label');
       fc.remove();
 
-      const unlabeled = document.createElement('is-float-card');
+      const unlabeled = document.createElement('iswc-float-card');
       main?.appendChild(unlabeled);
       const unlabeledRole = unlabeled.getAttribute('role');
       unlabeled.remove();
@@ -1924,8 +1924,8 @@ test('g11 float-card: role=region, aria-label, Escape cierra el panel', { timeou
 
     // 2) Escape cierra el panel cuando está abierto.
     const escapeOk = await page.evaluate(async () => {
-      const main = document.querySelector<HTMLElement>('is-main.main');
-      const fc = document.createElement('is-float-card');
+      const main = document.querySelector<HTMLElement>('iswc-main.main');
+      const fc = document.createElement('iswc-float-card');
       fc.setAttribute('id', 'fc-escape');
       fc.setAttribute('label', 'toolbar');
       main?.appendChild(fc);
@@ -1954,7 +1954,7 @@ test('g11 prefers-reduced-motion: transition-duration → 0s bajo reduce', { tim
   if (!DISPONIBLE) return t.skip('faltan variables E2E');
   const base = await ensureServer();
 
-  for (const tag of ['is-grid-layout', 'is-block-layout', 'is-flex-layout', 'is-flex-options', 'is-float-card']) {
+  for (const tag of ['iswc-grid-layout', 'iswc-block-layout', 'iswc-flex-layout', 'iswc-flex-options', 'iswc-float-card']) {
     const page = await nuevoPage();
     activePage = page;
     try {
@@ -1965,7 +1965,7 @@ test('g11 prefers-reduced-motion: transition-duration → 0s bajo reduce', { tim
       // componente deberían forzar transition-duration: 0s !important.
       await page.emulateMedia({ reducedMotion: 'reduce' });
       const reduceOk = await page.evaluate((selector) => {
-        const main = document.querySelector<HTMLElement>('is-main.main');
+        const main = document.querySelector<HTMLElement>('iswc-main.main');
         const comp = main?.querySelector<HTMLElement>(selector);
         if (!comp) return { ok: false, motivo: 'no encontrado' };
         // Recorremos TODOS los elementos del shadow (y light si los hay)
@@ -2004,18 +2004,18 @@ test('g11 prefers-reduced-motion: transition-duration → 0s bajo reduce', { tim
 // Cubre las proposals del .audit/proposals/demo-g10.md que NO fueron tratadas
 // en g12/g13/g14:
 //
-//   - is-button: Enter/Space nativos, aria-busy + aria-live en loading,
+//   - iswc-button: Enter/Space nativos, aria-busy + aria-live en loading,
 //     focus-visible con outline 2px (g10 #5, #7, #4).
-//   - is-button-group: aria-pressed, roving tabindex, Arrow nav + Home/End,
+//   - iswc-button-group: aria-pressed, roving tabindex, Arrow nav + Home/End,
 //     wrap con envoltura (g10 button-group transversales).
-//   - is-dropdown: aria-expanded sincronizado al click, click-outside,
+//   - iswc-dropdown: aria-expanded sincronizado al click, click-outside,
 //     Escape cierra + restaura foco al trigger, roving tabindex dentro del
 //     menú, aria-controls del trigger al panel (g10 #1, #2, #3, #6).
-//   - is-confirm-delete: role=dialog + aria-modal del <is-dialog> interno,
+//   - iswc-confirm-delete: role=dialog + aria-modal del <iswc-dialog> interno,
 //     focus trap (Tab cycling), Escape cierra + restaura foco, aria-invalid
 //     + aria-describedby sobre el input de confirmación al haber mismatch
 //     (g10 confirm-delete #1, #2, #3).
-//   - is-modal-verificacion: role=dialog + aria-modal, focus restoration,
+//   - iswc-modal-verificacion: role=dialog + aria-modal, focus restoration,
 //     Escape cierra, aria-live="polite" en .results + region sr-status con
 //     el resumen agregado (g10 modal-verificacion #1, #2, #3, #8).
 //
@@ -2032,13 +2032,13 @@ test('g10 button: Enter activa, aria-busy, aria-live en loading', { timeout: 60_
   const page = await nuevoPage();
   activePage = page;
   try {
-    const renderOk = await abrirPreview(page, base, 'is-button');
+    const renderOk = await abrirPreview(page, base, 'iswc-button');
     assert.ok(renderOk, 'button preview no renderizo');
 
     // 1) Enter activa el botón (proposal g10 #5).
     const enterOk = await page.evaluate(async () => {
-      const main = document.querySelector<HTMLElement>('is-main.main');
-      const btn = main?.querySelector<HTMLElement>('is-button');
+      const main = document.querySelector<HTMLElement>('iswc-main.main');
+      const btn = main?.querySelector<HTMLElement>('iswc-button');
       if (!btn?.shadowRoot) return { ok: false, motivo: 'no button' };
       const inner = btn.shadowRoot.querySelector<HTMLButtonElement>('button');
       if (!inner) return { ok: false, motivo: 'no inner' };
@@ -2058,8 +2058,8 @@ test('g10 button: Enter activa, aria-busy, aria-live en loading', { timeout: 60_
 
     // 2) Focus-visible con outline 2px (proposal g10 #4).
     const focusOk = await page.evaluate(() => {
-      const main = document.querySelector<HTMLElement>('is-main.main');
-      const btn = main?.querySelector<HTMLElement>('is-button');
+      const main = document.querySelector<HTMLElement>('iswc-main.main');
+      const btn = main?.querySelector<HTMLElement>('iswc-button');
       if (!btn?.shadowRoot) return { ok: false, motivo: 'no button' };
       const inner = btn.shadowRoot.querySelector<HTMLButtonElement>('button');
       if (!inner) return { ok: false, motivo: 'no inner' };
@@ -2074,8 +2074,8 @@ test('g10 button: Enter activa, aria-busy, aria-live en loading', { timeout: 60_
 
     // 3) aria-busy + region aria-live en loading (proposal g10 #7).
     const loadingOk = await page.evaluate(async () => {
-      const main = document.querySelector<HTMLElement>('is-main.main');
-      const btn = main?.querySelector<HTMLElement>('is-button');
+      const main = document.querySelector<HTMLElement>('iswc-main.main');
+      const btn = main?.querySelector<HTMLElement>('iswc-button');
       if (!btn?.shadowRoot) return { ok: false, motivo: 'no button' };
       const inner = btn.shadowRoot.querySelector<HTMLButtonElement>('button');
       const sr = btn.shadowRoot.querySelector<HTMLElement>('.btn__sr-status');
@@ -2118,19 +2118,19 @@ test('g10 button-group: aria-pressed, roving tabindex, Arrow nav + Home/End', { 
   const page = await nuevoPage();
   activePage = page;
   try {
-    const renderOk = await abrirPreview(page, base, 'is-button-group');
+    const renderOk = await abrirPreview(page, base, 'iswc-button-group');
     assert.ok(renderOk, 'button-group preview no renderizo');
 
     // 1) Construimos un grupo determinístico: select=single, 3 botones.
     await page.evaluate(() => {
-      const main = document.querySelector<HTMLElement>('is-main.main');
-      const old = main?.querySelector<HTMLElement>('is-button-group');
+      const main = document.querySelector<HTMLElement>('iswc-main.main');
+      const old = main?.querySelector<HTMLElement>('iswc-button-group');
       if (old) old.remove();
-      const bg = document.createElement('is-button-group');
+      const bg = document.createElement('iswc-button-group');
       bg.setAttribute('select', 'single');
       bg.setAttribute('label', 'g10 demo');
       ['uno', 'dos', 'tres'].forEach((label, i) => {
-        const b = document.createElement('is-button');
+        const b = document.createElement('iswc-button');
         b.setAttribute('value', label);
         b.textContent = label;
         if (i === 1) b.setAttribute('selected', '');
@@ -2142,10 +2142,10 @@ test('g10 button-group: aria-pressed, roving tabindex, Arrow nav + Home/End', { 
 
     // 2) aria-pressed correcto + roving tabindex inicial.
     const initial = await page.evaluate(() => {
-      const main = document.querySelector<HTMLElement>('is-main.main');
-      const bg = main?.querySelector<HTMLElement>('is-button-group');
+      const main = document.querySelector<HTMLElement>('iswc-main.main');
+      const bg = main?.querySelector<HTMLElement>('iswc-button-group');
       if (!bg) return { ok: false, motivo: 'no bg' };
-      const btns = [...bg.querySelectorAll<HTMLElement>('is-button')];
+      const btns = [...bg.querySelectorAll<HTMLElement>('iswc-button')];
       const pressed = btns.map((b) => b.getAttribute('aria-pressed'));
       const tabs = btns.map((b) => b.getAttribute('tabindex'));
       const selectedIdx = btns.findIndex((b) => b.hasAttribute('selected'));
@@ -2163,10 +2163,10 @@ test('g10 button-group: aria-pressed, roving tabindex, Arrow nav + Home/End', { 
 
     // 3) ArrowRight mueve el foco al siguiente (proposal button-group #4).
     const arrowOk = await page.evaluate(async () => {
-      const main = document.querySelector<HTMLElement>('is-main.main');
-      const bg = main?.querySelector<HTMLElement>('is-button-group');
+      const main = document.querySelector<HTMLElement>('iswc-main.main');
+      const bg = main?.querySelector<HTMLElement>('iswc-button-group');
       if (!bg) return { ok: false, motivo: 'no bg' };
-      const btns = [...bg.querySelectorAll<HTMLElement>('is-button')];
+      const btns = [...bg.querySelectorAll<HTMLElement>('iswc-button')];
       const selected = btns.find((b) => b.hasAttribute('selected'))!;
       selected.focus();
       bg.dispatchEvent(new KeyboardEvent('keydown', {
@@ -2189,10 +2189,10 @@ test('g10 button-group: aria-pressed, roving tabindex, Arrow nav + Home/End', { 
 
     // 4) End → último botón como tabindex 0 (proposal #5).
     const endOk = await page.evaluate(async () => {
-      const main = document.querySelector<HTMLElement>('is-main.main');
-      const bg = main?.querySelector<HTMLElement>('is-button-group');
+      const main = document.querySelector<HTMLElement>('iswc-main.main');
+      const bg = main?.querySelector<HTMLElement>('iswc-button-group');
       if (!bg) return { ok: false, motivo: 'no bg' };
-      const btns = [...bg.querySelectorAll<HTMLElement>('is-button')];
+      const btns = [...bg.querySelectorAll<HTMLElement>('iswc-button')];
       btns[0].focus();
       bg.dispatchEvent(new KeyboardEvent('keydown', {
         key: 'End', bubbles: true, cancelable: true,
@@ -2208,10 +2208,10 @@ test('g10 button-group: aria-pressed, roving tabindex, Arrow nav + Home/End', { 
 
     // 5) Home → primer botón como tabindex 0.
     const homeOk = await page.evaluate(async () => {
-      const main = document.querySelector<HTMLElement>('is-main.main');
-      const bg = main?.querySelector<HTMLElement>('is-button-group');
+      const main = document.querySelector<HTMLElement>('iswc-main.main');
+      const bg = main?.querySelector<HTMLElement>('iswc-button-group');
       if (!bg) return { ok: false, motivo: 'no bg' };
-      const btns = [...bg.querySelectorAll<HTMLElement>('is-button')];
+      const btns = [...bg.querySelectorAll<HTMLElement>('iswc-button')];
       btns[btns.length - 1].focus();
       bg.dispatchEvent(new KeyboardEvent('keydown', {
         key: 'Home', bubbles: true, cancelable: true,
@@ -2236,19 +2236,19 @@ test('g10 dropdown: aria-expanded, click-outside, Escape + focus restore, aria-c
   const page = await nuevoPage();
   activePage = page;
   try {
-    const renderOk = await abrirPreview(page, base, 'is-dropdown');
+    const renderOk = await abrirPreview(page, base, 'iswc-dropdown');
     assert.ok(renderOk, 'dropdown preview no renderizo');
 
-    // Localizamos el primer <is-dropdown> dentro del preview.
+    // Localizamos el primer <iswc-dropdown> dentro del preview.
     const located = await page.evaluate(() => {
-      const main = document.querySelector<HTMLElement>('is-main.main');
-      const dd = main?.querySelector<HTMLElement>('is-dropdown');
+      const main = document.querySelector<HTMLElement>('iswc-main.main');
+      const dd = main?.querySelector<HTMLElement>('iswc-dropdown');
       if (!dd?.shadowRoot) return { ok: false, motivo: 'no dropdown' };
       const trigger = dd.shadowRoot.querySelector<HTMLElement>('slot[name="trigger"]');
       const triggers = trigger?.assignedElements({ flatten: true }) ?? [];
       const items = dd.shadowRoot.querySelector<HTMLElement>('slot:not([name])');
       const assigned = items?.assignedElements({ flatten: true })
-        .filter((el) => el.localName === 'is-dropdown-item') ?? [];
+        .filter((el) => el.localName === 'iswc-dropdown-item') ?? [];
       return {
         ok: triggers.length > 0 && assigned.length > 0,
         ddId: dd.id,
@@ -2260,8 +2260,8 @@ test('g10 dropdown: aria-expanded, click-outside, Escape + focus restore, aria-c
 
     // 1) aria-expanded sincronizado al click (proposal g10 #1).
     const expandedOk = await page.evaluate(async () => {
-      const main = document.querySelector<HTMLElement>('is-main.main');
-      const dd = main?.querySelector<HTMLElement>('is-dropdown');
+      const main = document.querySelector<HTMLElement>('iswc-main.main');
+      const dd = main?.querySelector<HTMLElement>('iswc-dropdown');
       if (!dd) return { ok: false, motivo: 'no dd' };
       const trigger = dd.shadowRoot!.querySelector<HTMLSlotElement>('slot[name="trigger"]')!
       .assignedElements({ flatten: true })[0] as HTMLElement;
@@ -2285,10 +2285,10 @@ test('g10 dropdown: aria-expanded, click-outside, Escape + focus restore, aria-c
 
     // 2) Roving tabindex: solo el primer item tiene tabindex=0 (proposal #2).
     const rovingOk = await page.evaluate(() => {
-      const main = document.querySelector<HTMLElement>('is-main.main');
-      const dd = main?.querySelector<HTMLElement>('is-dropdown');
+      const main = document.querySelector<HTMLElement>('iswc-main.main');
+      const dd = main?.querySelector<HTMLElement>('iswc-dropdown');
       if (!dd) return { ok: false, motivo: 'no dd' };
-      const items = [...dd.querySelectorAll<HTMLElement>('is-dropdown-item')]
+      const items = [...dd.querySelectorAll<HTMLElement>('iswc-dropdown-item')]
         .filter((it) => !it.hasAttribute('disabled'));
       const tabs = items.map((it) => it.getAttribute('tabindex'));
       const zeros = tabs.filter((t) => t === '0').length;
@@ -2303,10 +2303,10 @@ test('g10 dropdown: aria-expanded, click-outside, Escape + focus restore, aria-c
 
     // 3) ArrowDown mueve el foco entre items (proposal #3).
     const arrowOk = await page.evaluate(async () => {
-      const main = document.querySelector<HTMLElement>('is-main.main');
-      const dd = main?.querySelector<HTMLElement>('is-dropdown');
+      const main = document.querySelector<HTMLElement>('iswc-main.main');
+      const dd = main?.querySelector<HTMLElement>('iswc-dropdown');
       if (!dd) return { ok: false, motivo: 'no dd' };
-      const items = [...dd.querySelectorAll<HTMLElement>('is-dropdown-item')]
+      const items = [...dd.querySelectorAll<HTMLElement>('iswc-dropdown-item')]
         .filter((it) => !it.hasAttribute('disabled'));
       if (items.length < 2) return { ok: false, motivo: `pocos items (${items.length})` };
       items[0].focus();
@@ -2330,8 +2330,8 @@ test('g10 dropdown: aria-expanded, click-outside, Escape + focus restore, aria-c
 
     // 4) Escape cierra + restaura foco al trigger (proposal #4).
     const escapeOk = await page.evaluate(async () => {
-      const main = document.querySelector<HTMLElement>('is-main.main');
-      const dd = main?.querySelector<HTMLElement>('is-dropdown');
+      const main = document.querySelector<HTMLElement>('iswc-main.main');
+      const dd = main?.querySelector<HTMLElement>('iswc-dropdown');
       if (!dd) return { ok: false, motivo: 'no dd' };
       const trigger = dd.shadowRoot!.querySelector<HTMLSlotElement>('slot[name="trigger"]')!
       .assignedElements({ flatten: true })[0] as HTMLElement;
@@ -2361,13 +2361,13 @@ test('g10 confirm-delete: dialog role/aria-modal, focus trap, Escape, aria-inval
   const page = await nuevoPage();
   activePage = page;
   try {
-    const renderOk = await abrirPreview(page, base, 'is-confirm-delete');
+    const renderOk = await abrirPreview(page, base, 'iswc-confirm-delete');
     assert.ok(renderOk, 'confirm-delete preview no renderizo');
 
-    // 1) role=dialog + aria-modal del <is-dialog> interno (proposal #1).
+    // 1) role=dialog + aria-modal del <iswc-dialog> interno (proposal #1).
     const dialogOk = await page.evaluate(async () => {
-      const main = document.querySelector<HTMLElement>('is-main.main');
-      const cd = main?.querySelector<HTMLElement>('is-confirm-delete');
+      const main = document.querySelector<HTMLElement>('iswc-main.main');
+      const cd = main?.querySelector<HTMLElement>('iswc-confirm-delete');
       if (!cd?.shadowRoot) return { ok: false, motivo: 'no confirm-delete' };
       const dlg = cd.shadowRoot.querySelector<HTMLElement>('dialog');
       if (!dlg) return { ok: false, motivo: 'no dialog' };
@@ -2384,31 +2384,31 @@ test('g10 confirm-delete: dialog role/aria-modal, focus trap, Escape, aria-inval
 
     // 2) aria-invalid + aria-describedby sobre el input de confirmación al haber mismatch.
     const ariaOk = await page.evaluate(async () => {
-      const main = document.querySelector<HTMLElement>('is-main.main');
-      const cd = main?.querySelector<HTMLElement>('is-confirm-delete');
+      const main = document.querySelector<HTMLElement>('iswc-main.main');
+      const cd = main?.querySelector<HTMLElement>('iswc-confirm-delete');
       if (!cd?.shadowRoot) return { ok: false, motivo: 'no confirm-delete' };
       cd.setAttribute('confirm-value', 'EXPECTED-123');
       (cd as unknown as { show(): void }).show();
       await new Promise((r) => setTimeout(r, 200));
-      // Buscamos el input de confirmación (shadow del componente → shadow del <is-input>).
-      const input = cd.shadowRoot.querySelector<HTMLElement>('is-input.confirm');
+      // Buscamos el input de confirmación (shadow del componente → shadow del <iswc-input>).
+      const input = cd.shadowRoot.querySelector<HTMLElement>('iswc-input.confirm');
       if (!input?.shadowRoot) return { ok: false, motivo: 'no input shadow' };
       const inner = input.shadowRoot.querySelector<HTMLInputElement>('input, textarea')
         ?? input.shadowRoot.querySelector<HTMLElement>('[tabindex]');
       if (!inner) return { ok: false, motivo: 'no inner input' };
       // Tipeamos un valor incorrecto.
       const before = inner.getAttribute('aria-invalid');
-      // Disparamos el evento que el componente escucha (is-input).
+      // Disparamos el evento que el componente escucha (iswc-input).
       inner.value = 'otro';
       inner.dispatchEvent(new InputEvent('input', { bubbles: true }));
-      input.dispatchEvent(new CustomEvent('is-input', { bubbles: true, detail: { value: 'otro' } }));
+      input.dispatchEvent(new CustomEvent('iswc-input', { bubbles: true, detail: { value: 'otro' } }));
       await new Promise((r) => setTimeout(r, 80));
       const afterInvalid = inner.getAttribute('aria-invalid');
       const afterDescribed = inner.getAttribute('aria-describedby');
       // Después, tipeamos el correcto.
       inner.value = 'expected-123';
       inner.dispatchEvent(new InputEvent('input', { bubbles: true }));
-      input.dispatchEvent(new CustomEvent('is-input', { bubbles: true, detail: { value: 'expected-123' } }));
+      input.dispatchEvent(new CustomEvent('iswc-input', { bubbles: true, detail: { value: 'expected-123' } }));
       await new Promise((r) => setTimeout(r, 80));
       const okInvalid = inner.getAttribute('aria-invalid');
       const okDescribed = inner.getAttribute('aria-describedby');
@@ -2430,8 +2430,8 @@ test('g10 confirm-delete: dialog role/aria-modal, focus trap, Escape, aria-inval
 
     // 3) Escape cierra el modal (proposal #3).
     const escapeOk = await page.evaluate(async () => {
-      const main = document.querySelector<HTMLElement>('is-main.main');
-      const cd = main?.querySelector<HTMLElement>('is-confirm-delete');
+      const main = document.querySelector<HTMLElement>('iswc-main.main');
+      const cd = main?.querySelector<HTMLElement>('iswc-confirm-delete');
       if (!cd) return { ok: false, motivo: 'no cd' };
       const dlg = cd.shadowRoot?.querySelector<HTMLDialogElement>('dialog');
       if (!dlg) return { ok: false, motivo: 'no dialog' };
@@ -2457,16 +2457,16 @@ test('g10 modal-verificacion: dialog ARIA, focus restoration, aria-live en resul
   const page = await nuevoPage();
   activePage = page;
   try {
-    const renderOk = await abrirPreview(page, base, 'is-modal-verificacion');
+    const renderOk = await abrirPreview(page, base, 'iswc-modal-verificacion');
     assert.ok(renderOk, 'modal-verificacion preview no renderizo');
 
     // 1) Construimos un modal-verificacion determinístico con controller
     //    que devuelve 3 mensajes: 1 info, 1 warning, 1 error.
     await page.evaluate(() => {
-      const main = document.querySelector<HTMLElement>('is-main.main');
-      const old = main?.querySelector<HTMLElement>('is-modal-verificacion');
+      const main = document.querySelector<HTMLElement>('iswc-main.main');
+      const old = main?.querySelector<HTMLElement>('iswc-modal-verificacion');
       if (old) old.remove();
-      const mv = document.createElement('is-modal-verificacion');
+      const mv = document.createElement('iswc-modal-verificacion');
       mv.setAttribute('entity', 'factura');
       (mv as unknown as { controller: unknown }).controller = {
         entrie: 'factura',
@@ -2482,12 +2482,12 @@ test('g10 modal-verificacion: dialog ARIA, focus restoration, aria-live en resul
     });
     await esperarMs(150);
 
-    // 2) role=dialog + aria-modal del <is-dialog> interno.
+    // 2) role=dialog + aria-modal del <iswc-dialog> interno.
     const dialogOk = await page.evaluate(async () => {
-      const main = document.querySelector<HTMLElement>('is-main.main');
-      const mv = main?.querySelector<HTMLElement>('is-modal-verificacion');
+      const main = document.querySelector<HTMLElement>('iswc-main.main');
+      const mv = main?.querySelector<HTMLElement>('iswc-modal-verificacion');
       if (!mv?.shadowRoot) return { ok: false, motivo: 'no mv' };
-      const dlg = mv.shadowRoot.querySelector<HTMLElement>('is-dialog dialog');
+      const dlg = mv.shadowRoot.querySelector<HTMLElement>('iswc-dialog dialog');
       if (!dlg) return { ok: false, motivo: 'no dialog' };
       (mv as unknown as { show(): void }).show();
       await new Promise((r) => setTimeout(r, 350));
@@ -2501,8 +2501,8 @@ test('g10 modal-verificacion: dialog ARIA, focus restoration, aria-live en resul
 
     // 3) aria-live en .results + sr-status con resumen agregado (proposal #8).
     const liveOk = await page.evaluate(async () => {
-      const main = document.querySelector<HTMLElement>('is-main.main');
-      const mv = main?.querySelector<HTMLElement>('is-modal-verificacion');
+      const main = document.querySelector<HTMLElement>('iswc-main.main');
+      const mv = main?.querySelector<HTMLElement>('iswc-modal-verificacion');
       if (!mv?.shadowRoot) return { ok: false, motivo: 'no mv' };
       // Re-disparar verify para forzar renderMensajes (la promesa del controller
       // ya se resolvió al show(); forzamos una segunda pasada).
@@ -2527,10 +2527,10 @@ test('g10 modal-verificacion: dialog ARIA, focus restoration, aria-live en resul
 
     // 4) Escape cierra el modal (proposal #3).
     const escapeOk = await page.evaluate(async () => {
-      const main = document.querySelector<HTMLElement>('is-main.main');
-      const mv = main?.querySelector<HTMLElement>('is-modal-verificacion');
+      const main = document.querySelector<HTMLElement>('iswc-main.main');
+      const mv = main?.querySelector<HTMLElement>('iswc-modal-verificacion');
       if (!mv?.shadowRoot) return { ok: false, motivo: 'no mv' };
-      const dlg = mv.shadowRoot.querySelector<HTMLDialogElement>('is-dialog dialog');
+      const dlg = mv.shadowRoot.querySelector<HTMLDialogElement>('iswc-dialog dialog');
       dlg?.dispatchEvent(new KeyboardEvent('keydown', {
         key: 'Escape', bubbles: true, cancelable: true,
       }));
@@ -2585,12 +2585,12 @@ test('g04 data-grid: role=grid + aria-rowcount/colcount + aria-sort + aria-curre
   const page = await nuevoPage();
   activePage = page;
   try {
-    const renderOk = await abrirPreview(page, base, 'is-data-grid');
+    const renderOk = await abrirPreview(page, base, 'iswc-data-grid');
     assert.ok(renderOk, 'data-grid preview no renderizo');
 
     const ariaOk = await page.evaluate(() => {
-      const main = document.querySelector<HTMLElement>('is-main.main');
-      const dg = main?.querySelector<HTMLElement>('is-data-grid');
+      const main = document.querySelector<HTMLElement>('iswc-main.main');
+      const dg = main?.querySelector<HTMLElement>('iswc-data-grid');
       if (!dg?.shadowRoot) return { ok: false, motivo: 'no data-grid' };
       const vp = dg.shadowRoot.querySelector<HTMLElement>('.viewport');
       if (!vp) return { ok: false, motivo: 'no viewport' };
@@ -2628,10 +2628,10 @@ test('g04 data-grid: role=grid + aria-rowcount/colcount + aria-sort + aria-curre
     assert.ok(ariaOk.ok, `g04 data-grid ARIA incompleto (${JSON.stringify(ariaOk)})`);
 
     const pagerOk = await page.evaluate(async () => {
-      const main = document.querySelector<HTMLElement>('is-main.main');
-      const old = main?.querySelectorAll<HTMLElement>('is-data-grid');
+      const main = document.querySelector<HTMLElement>('iswc-main.main');
+      const old = main?.querySelectorAll<HTMLElement>('iswc-data-grid');
       old?.forEach((o) => o.remove());
-      const dg = document.createElement('is-data-grid') as HTMLElement & { columns?: unknown };
+      const dg = document.createElement('iswc-data-grid') as HTMLElement & { columns?: unknown };
       dg.setAttribute('pagination', '');
       dg.setAttribute('page-size', '10');
       dg.setAttribute('row-count', '55');
@@ -2684,12 +2684,12 @@ test('g04 ag-grid: role=grid + aria-rowcount/colcount/rowindex + aria-busy loadi
   const page = await nuevoPage();
   activePage = page;
   try {
-    const renderOk = await abrirPreview(page, base, 'is-ag-grid');
+    const renderOk = await abrirPreview(page, base, 'iswc-ag-grid');
     assert.ok(renderOk, 'ag-grid preview no renderizo');
 
     const ariaOk = await page.evaluate(() => {
-      const main = document.querySelector<HTMLElement>('is-main.main');
-      const ag = main?.querySelector<HTMLElement>('is-ag-grid');
+      const main = document.querySelector<HTMLElement>('iswc-main.main');
+      const ag = main?.querySelector<HTMLElement>('iswc-ag-grid');
       if (!ag?.shadowRoot) return { ok: false, motivo: 'no ag-grid' };
       const vp = ag.shadowRoot.querySelector<HTMLElement>('.mim-dg__viewport');
       const rows = [...ag.shadowRoot.querySelectorAll<HTMLElement>('.mim-dg__row[role="row"][data-row-kind="leaf"]')];
@@ -2720,8 +2720,8 @@ test('g04 ag-grid: role=grid + aria-rowcount/colcount/rowindex + aria-busy loadi
     assert.ok(ariaOk.ok, `g04 ag-grid ARIA incompleto (${JSON.stringify(ariaOk)})`);
 
     const busyOk = await page.evaluate(async () => {
-      const main = document.querySelector<HTMLElement>('is-main.main');
-      const ag = main?.querySelector<HTMLElement>('is-ag-grid');
+      const main = document.querySelector<HTMLElement>('iswc-main.main');
+      const ag = main?.querySelector<HTMLElement>('iswc-ag-grid');
       if (!ag?.shadowRoot) return { ok: false, motivo: 'no ag-grid' };
       const vp = ag.shadowRoot.querySelector<HTMLElement>('.mim-dg__viewport');
       const before = vp?.getAttribute('aria-busy');
@@ -2750,16 +2750,16 @@ test('g04 kanban: role=list en lane + aria-grabbed durante drag + aria-label boa
   const page = await nuevoPage();
   activePage = page;
   try {
-    const renderOk = await abrirPreview(page, base, 'is-kanban');
+    const renderOk = await abrirPreview(page, base, 'iswc-kanban');
     assert.ok(renderOk, 'kanban preview no renderizo');
 
     const ariaOk = await page.evaluate(() => {
-      const main = document.querySelector<HTMLElement>('is-main.main');
-      const kb = main?.querySelector<HTMLElement>('is-kanban');
+      const main = document.querySelector<HTMLElement>('iswc-main.main');
+      const kb = main?.querySelector<HTMLElement>('iswc-kanban');
       if (!kb) return { ok: false, motivo: 'no kanban' };
       const boardRole = kb.getAttribute('role');
       const boardLabel = kb.getAttribute('aria-label');
-      const cols = [...kb.querySelectorAll<HTMLElement>(':scope > is-kanban-column')];
+      const cols = [...kb.querySelectorAll<HTMLElement>(':scope > iswc-kanban-column')];
       const laneInfo = cols.map((c) => {
         const lane = c.shadowRoot?.querySelector<HTMLElement>('.lane');
         return {
@@ -2769,7 +2769,7 @@ test('g04 kanban: role=list en lane + aria-grabbed durante drag + aria-label boa
       });
       const allLanesList = laneInfo.every((l) => l.role === 'list');
       const allLanesHaveLabel = laneInfo.every((l) => !!l.ariaLabel && l.ariaLabel.length > 0);
-      const cards = [...kb.querySelectorAll<HTMLElement>(':scope > is-kanban-column > is-kanban-card')];
+      const cards = [...kb.querySelectorAll<HTMLElement>(':scope > iswc-kanban-column > iswc-kanban-card')];
       const cardRoles = cards.map((c) => c.getAttribute('role'));
       const allCardsListItem = cardRoles.length > 0 && cardRoles.every((r) => r === 'listitem');
       const cardGrabbed = cards.map((c) => c.getAttribute('aria-grabbed'));
@@ -2788,9 +2788,9 @@ test('g04 kanban: role=list en lane + aria-grabbed durante drag + aria-label boa
     assert.ok(ariaOk.ok, `g04 kanban ARIA incompleto (${JSON.stringify(ariaOk)})`);
 
     const grabbedOk = await page.evaluate(async () => {
-      const main = document.querySelector<HTMLElement>('is-main.main');
-      const kb = main?.querySelector<HTMLElement>('is-kanban');
-      const card = kb?.querySelector<HTMLElement>('is-kanban-card');
+      const main = document.querySelector<HTMLElement>('iswc-main.main');
+      const kb = main?.querySelector<HTMLElement>('iswc-kanban');
+      const card = kb?.querySelector<HTMLElement>('iswc-kanban-card');
       if (!card) return { ok: false, motivo: 'no card' };
       const initial = card.getAttribute('aria-grabbed');
       const evt = new DragEvent('dragstart', { bubbles: true, cancelable: true });
@@ -2817,12 +2817,12 @@ test('g04 spreadsheet: role=grid + aria-label por celda + Arrow keys', { timeout
   const page = await nuevoPage();
   activePage = page;
   try {
-    const renderOk = await abrirPreview(page, base, 'is-spreadsheet');
+    const renderOk = await abrirPreview(page, base, 'iswc-spreadsheet');
     assert.ok(renderOk, 'spreadsheet preview no renderizo');
 
     const ariaOk = await page.evaluate(() => {
-      const main = document.querySelector<HTMLElement>('is-main.main');
-      const ss = main?.querySelector<HTMLElement>('is-spreadsheet');
+      const main = document.querySelector<HTMLElement>('iswc-main.main');
+      const ss = main?.querySelector<HTMLElement>('iswc-spreadsheet');
       if (!ss?.shadowRoot) return { ok: false, motivo: 'no spreadsheet' };
       const table = ss.shadowRoot.querySelector<HTMLElement>('.grid');
       if (!table) return { ok: false, motivo: 'no table' };
@@ -2853,8 +2853,8 @@ test('g04 spreadsheet: role=grid + aria-label por celda + Arrow keys', { timeout
     assert.ok(ariaOk.ok, `g04 spreadsheet ARIA incompleto (${JSON.stringify(ariaOk)})`);
 
     const arrowsOk = await page.evaluate(async () => {
-      const main = document.querySelector<HTMLElement>('is-main.main');
-      const ss = main?.querySelector<HTMLElement>('is-spreadsheet');
+      const main = document.querySelector<HTMLElement>('iswc-main.main');
+      const ss = main?.querySelector<HTMLElement>('iswc-spreadsheet');
       if (!ss?.shadowRoot) return { ok: false, motivo: 'no spreadsheet' };
       const table = ss.shadowRoot.querySelector<HTMLElement>('.grid');
       const cells = [...table!.querySelectorAll<HTMLElement>('td.cell[role="gridcell"]')];
@@ -2886,12 +2886,12 @@ test('g04 pivot-table: role=row/rowgroup + aria-rowcount/colcount + aria-label c
   const page = await nuevoPage();
   activePage = page;
   try {
-    const renderOk = await abrirPreview(page, base, 'is-pivot-table');
+    const renderOk = await abrirPreview(page, base, 'iswc-pivot-table');
     assert.ok(renderOk, 'pivot-table preview no renderizo');
 
     const ariaOk = await page.evaluate(() => {
-      const main = document.querySelector<HTMLElement>('is-main.main');
-      const pt = main?.querySelector<HTMLElement>('is-pivot-table');
+      const main = document.querySelector<HTMLElement>('iswc-main.main');
+      const pt = main?.querySelector<HTMLElement>('iswc-pivot-table');
       if (!pt?.shadowRoot) return { ok: false, motivo: 'no pivot-table' };
       const table = pt.shadowRoot.querySelector<HTMLElement>('.pivot');
       if (!table) return { ok: false, motivo: 'no table' };
@@ -2930,12 +2930,12 @@ test('g04 transfer: aria-live announce + aria-label en listboxes', { timeout: 60
   const page = await nuevoPage();
   activePage = page;
   try {
-    const renderOk = await abrirPreview(page, base, 'is-transfer');
+    const renderOk = await abrirPreview(page, base, 'iswc-transfer');
     assert.ok(renderOk, 'transfer preview no renderizo');
 
     const initialOk = await page.evaluate(() => {
-      const main = document.querySelector<HTMLElement>('is-main.main');
-      const tr = main?.querySelector<HTMLElement>('is-transfer');
+      const main = document.querySelector<HTMLElement>('iswc-main.main');
+      const tr = main?.querySelector<HTMLElement>('iswc-transfer');
       if (!tr?.shadowRoot) return { ok: false, motivo: 'no transfer' };
       const sr = tr.shadowRoot.querySelector<HTMLElement>('.sr-status');
       const liveAttr = sr?.getAttribute('aria-live');
@@ -2952,8 +2952,8 @@ test('g04 transfer: aria-live announce + aria-label en listboxes', { timeout: 60
     assert.ok(initialOk.ok, `g04 transfer aria-live/aria-label falla (${JSON.stringify(initialOk)})`);
 
     const announceOk = await page.evaluate(async () => {
-      const main = document.querySelector<HTMLElement>('is-main.main');
-      const tr = main?.querySelector<HTMLElement>('is-transfer');
+      const main = document.querySelector<HTMLElement>('iswc-main.main');
+      const tr = main?.querySelector<HTMLElement>('iswc-transfer');
       if (!tr?.shadowRoot) return { ok: false, motivo: 'no transfer' };
       const sr = tr.shadowRoot.querySelector<HTMLElement>('.sr-status');
       const beforeText = (sr?.textContent ?? '').trim();
@@ -2980,12 +2980,12 @@ test('g04 gauge: role=meter + aria-valuemin/max/now/text', { timeout: 60_000 }, 
   const page = await nuevoPage();
   activePage = page;
   try {
-    const renderOk = await abrirPreview(page, base, 'is-gauge');
+    const renderOk = await abrirPreview(page, base, 'iswc-gauge');
     assert.ok(renderOk, 'gauge preview no renderizo');
 
     const ariaOk = await page.evaluate(async () => {
-      const main = document.querySelector<HTMLElement>('is-main.main');
-      const g = document.createElement('is-gauge') as HTMLElement & { value?: number };
+      const main = document.querySelector<HTMLElement>('iswc-main.main');
+      const g = document.createElement('iswc-gauge') as HTMLElement & { value?: number };
       g.setAttribute('value', '67');
       g.setAttribute('min', '0');
       g.setAttribute('max', '100');
@@ -3003,7 +3003,7 @@ test('g04 gauge: role=meter + aria-valuemin/max/now/text', { timeout: 60_000 }, 
       const svg = root?.querySelector('svg');
       const svgHidden = svg?.getAttribute('aria-hidden');
       g.remove();
-      const anyGauge = main?.querySelector<HTMLElement>('is-gauge');
+      const anyGauge = main?.querySelector<HTMLElement>('iswc-gauge');
       const anyRoot = anyGauge?.shadowRoot?.querySelector<HTMLElement>('.gauge');
       const anyRole = anyRoot?.getAttribute('role');
       const anyNow = anyRoot?.getAttribute('aria-valuenow');
@@ -3043,7 +3043,7 @@ test('g04 gauge: role=meter + aria-valuemin/max/now/text', { timeout: 60_000 }, 
 //     al cerrar.
 //   - Editor panel keyboard nav (Cat 23): ArrowUp/Down/Home/End mueven
 //     el foco entre options con roving tabindex y emiten
-//     `is-editor-select-node`.
+//     `iswc-editor-select-node`.
 //
 // Skip explicito:
 //   - Conexiones/márgenes entre aristas y labels: ya cubierto en
@@ -3062,23 +3062,23 @@ test('g06 diagrams: centrado vertical de textos en nodos (Cat 21)', { timeout: 1
   if (!DISPONIBLE) return t.skip('faltan variables E2E');
   const base = await ensureServer();
   const diagramTags = [
-    'is-state-diagram',
-    'is-flowchart',
-    'is-class-diagram',
-    'is-swimlane-diagram',
-    'is-journey-map',
-    'is-mindmap',
-    'is-sankey-diagram',
-    'is-venn-diagram',
-    'is-quadrant-chart',
-    'is-sequence-diagram',
-    'is-er-diagram',
-    'is-block-diagram',
-    'is-component-diagram',
-    'is-use-case-diagram',
-    'is-gantt',
-    'is-org-chart',
-    'is-timeline',
+    'iswc-state-diagram',
+    'iswc-flowchart',
+    'iswc-class-diagram',
+    'iswc-swimlane-diagram',
+    'iswc-journey-map',
+    'iswc-mindmap',
+    'iswc-sankey-diagram',
+    'iswc-venn-diagram',
+    'iswc-quadrant-chart',
+    'iswc-sequence-diagram',
+    'iswc-er-diagram',
+    'iswc-block-diagram',
+    'iswc-component-diagram',
+    'iswc-use-case-diagram',
+    'iswc-gantt',
+    'iswc-org-chart',
+    'iswc-timeline',
   ];
 
   for (const tag of diagramTags) {
@@ -3091,7 +3091,7 @@ test('g06 diagrams: centrado vertical de textos en nodos (Cat 21)', { timeout: 1
         continue;
       }
       const centered = await page.evaluate((tagName: string) => {
-        const m = document.querySelector<HTMLElement>('is-main.main');
+        const m = document.querySelector<HTMLElement>('iswc-main.main');
         const comp = m?.querySelector<HTMLElement>(tagName);
         const svg = comp?.shadowRoot?.querySelector('svg') || m?.querySelector('svg');
         if (!svg) return { ok: true, maxOffX: 0, maxOffY: 0, checked: 0, motivo: 'no svg' };
@@ -3154,12 +3154,12 @@ test('g06 diagram-lightbox: ARIA + focus restoration (Cat 22)', { timeout: 60_00
   const page = await nuevoPage();
   activePage = page;
   try {
-    const renderOk = await abrirPreview(page, base, 'is-diagram-lightbox');
+    const renderOk = await abrirPreview(page, base, 'iswc-diagram-lightbox');
     assert.ok(renderOk, 'diagram-lightbox preview no renderizo');
 
     const dialogOk = await page.evaluate(async () => {
-      const m = document.querySelector<HTMLElement>('is-main.main');
-      const lb = m?.querySelector<HTMLElement>('is-diagram-lightbox');
+      const m = document.querySelector<HTMLElement>('iswc-main.main');
+      const lb = m?.querySelector<HTMLElement>('iswc-diagram-lightbox');
       if (!lb?.shadowRoot) return { ok: false, motivo: 'no lightbox' };
       (lb as unknown as { open: boolean }).open = true;
       await new Promise((r) => setTimeout(r, 250));
@@ -3179,8 +3179,8 @@ test('g06 diagram-lightbox: ARIA + focus restoration (Cat 22)', { timeout: 60_00
     assert.ok(!!dialogOk.ariaLabel, `g06 diagram-lightbox sin aria-label (${JSON.stringify(dialogOk)})`);
 
     const toolbarOk = await page.evaluate(() => {
-      const m = document.querySelector<HTMLElement>('is-main.main');
-      const lb = m?.querySelector<HTMLElement>('is-diagram-lightbox');
+      const m = document.querySelector<HTMLElement>('iswc-main.main');
+      const lb = m?.querySelector<HTMLElement>('iswc-diagram-lightbox');
       const bar = lb?.shadowRoot?.querySelector<HTMLElement>('.lb-bar');
       if (!bar) return { ok: false, motivo: 'no bar', btnsWithLabel: 0, btnsTotal: 0 };
       const btns = Array.from(bar.querySelectorAll<HTMLElement>('button'));
@@ -3195,8 +3195,8 @@ test('g06 diagram-lightbox: ARIA + focus restoration (Cat 22)', { timeout: 60_00
     assert.ok(toolbarOk.ok, `g06 diagram-lightbox botones sin aria-label (${JSON.stringify(toolbarOk)})`);
 
     const escapeOk = await page.evaluate(async () => {
-      const m = document.querySelector<HTMLElement>('is-main.main');
-      const lb = m?.querySelector<HTMLElement>('is-diagram-lightbox');
+      const m = document.querySelector<HTMLElement>('iswc-main.main');
+      const lb = m?.querySelector<HTMLElement>('iswc-diagram-lightbox');
       const dlg = lb?.shadowRoot?.querySelector<HTMLDialogElement>('.lb');
       dlg?.dispatchEvent(new KeyboardEvent('keydown', { key: 'Escape', bubbles: true, cancelable: true }));
       await new Promise((r) => setTimeout(r, 200));
@@ -3216,12 +3216,12 @@ test('g06 editor panel: roving tabindex + Arrow/Home/End nav (Cat 23)', { timeou
   const page = await nuevoPage();
   activePage = page;
   try {
-    const renderOk = await abrirPreview(page, base, 'is-er-editor');
+    const renderOk = await abrirPreview(page, base, 'iswc-er-editor');
     assert.ok(renderOk, 'er-editor preview no renderizo');
 
     const locate = await page.evaluate(() => {
-      const m = document.querySelector<HTMLElement>('is-main.main');
-      const editor = m?.querySelector<HTMLElement>('is-er-editor');
+      const m = document.querySelector<HTMLElement>('iswc-main.main');
+      const editor = m?.querySelector<HTMLElement>('iswc-er-editor');
       if (!editor?.shadowRoot) return { ok: false, motivo: 'no editor' };
       const panel = editor.shadowRoot.querySelector<HTMLElement>('aside[data-editor-part="panel"]');
       if (!panel) return { ok: false, motivo: 'no panel' };
@@ -3239,8 +3239,8 @@ test('g06 editor panel: roving tabindex + Arrow/Home/End nav (Cat 23)', { timeou
     assert.ok(!!locate.listLabel, `g06 editor panel listbox sin aria-label (${JSON.stringify(locate)})`);
 
     const arrowOk = await page.evaluate(async () => {
-      const m = document.querySelector<HTMLElement>('is-main.main');
-      const editor = m?.querySelector<HTMLElement>('is-er-editor');
+      const m = document.querySelector<HTMLElement>('iswc-main.main');
+      const editor = m?.querySelector<HTMLElement>('iswc-er-editor');
       const panel = editor?.shadowRoot?.querySelector<HTMLElement>('aside[data-editor-part="panel"]');
       const list = panel?.querySelector<HTMLElement>('ul.node-list');
       const items = [...(list?.querySelectorAll<HTMLElement>('li[role="option"]') ?? [])];
@@ -3261,8 +3261,8 @@ test('g06 editor panel: roving tabindex + Arrow/Home/End nav (Cat 23)', { timeou
     assert.ok(arrowOk.ok, `g06 editor panel ArrowDown no rota (${JSON.stringify(arrowOk)})`);
 
     const endHomeOk = await page.evaluate(async () => {
-      const m = document.querySelector<HTMLElement>('is-main.main');
-      const editor = m?.querySelector<HTMLElement>('is-er-editor');
+      const m = document.querySelector<HTMLElement>('iswc-main.main');
+      const editor = m?.querySelector<HTMLElement>('iswc-er-editor');
       const panel = editor?.shadowRoot?.querySelector<HTMLElement>('aside[data-editor-part="panel"]');
       const list = panel?.querySelector<HTMLElement>('ul.node-list');
       const items = [...(list?.querySelectorAll<HTMLElement>('li[role="option"]') ?? [])];
@@ -3297,12 +3297,12 @@ test('g07 toast: role/status|alert + aria-live polite|assertive segun color + Es
   const page = await nuevoPage();
   activePage = page;
   try {
-    const renderOk = await abrirPreview(page, base, 'is-toast');
+    const renderOk = await abrirPreview(page, base, 'iswc-toast');
     assert.ok(renderOk, 'toast preview no renderizo');
 
     const ariaOk = await page.evaluate(async () => {
-      const main = document.querySelector<HTMLElement>('is-main.main');
-      const toaster = main?.querySelector<HTMLElement>('is-toast');
+      const main = document.querySelector<HTMLElement>('iswc-main.main');
+      const toaster = main?.querySelector<HTMLElement>('iswc-toast');
       if (!toaster) return { ok: false, motivo: 'no toaster' };
       const out: Record<string, { role: string | null; live: string | null }> = {};
       const colors = ['success', 'warning', 'danger', 'info', 'brand', 'neutral'];
@@ -3324,11 +3324,11 @@ test('g07 toast: role/status|alert + aria-live polite|assertive segun color + Es
     assert.ok(ariaOk.ok, 'g07 toast aria role/live falla (' + JSON.stringify(ariaOk) + ')');
 
     const escapeOk = await page.evaluate(async () => {
-      const main = document.querySelector<HTMLElement>('is-main.main');
-      const toaster = main?.querySelector<HTMLElement>('is-toast');
+      const main = document.querySelector<HTMLElement>('iswc-main.main');
+      const toaster = main?.querySelector<HTMLElement>('iswc-toast');
       if (!toaster) return { ok: false, motivo: 'no toaster' };
       const it = await (toaster as unknown as { create: (m: string, o: object) => Promise<HTMLElement>; }).create('escape-test', { color: 'info', duration: 60_000 });
-      const close = it.shadowRoot?.querySelector<HTMLElement>('is-button.close');
+      const close = it.shadowRoot?.querySelector<HTMLElement>('iswc-button.close');
       const closeBtn = close?.shadowRoot?.querySelector<HTMLElement>('button');
       if (closeBtn) closeBtn.focus();
       const base = it.shadowRoot?.querySelector<HTMLElement>('[data-toast-base]');
@@ -3351,12 +3351,12 @@ test('g07 tooltip: role=tooltip + aria-describedby + Escape cierra', { timeout: 
   const page = await nuevoPage();
   activePage = page;
   try {
-    const renderOk = await abrirPreview(page, base, 'is-tooltip');
+    const renderOk = await abrirPreview(page, base, 'iswc-tooltip');
     assert.ok(renderOk, 'tooltip preview no renderizo');
 
     const ariaOk = await page.evaluate(async () => {
-      const main = document.querySelector<HTMLElement>('is-main.main');
-      const tt = main?.querySelector<HTMLElement>('is-tooltip');
+      const main = document.querySelector<HTMLElement>('iswc-main.main');
+      const tt = main?.querySelector<HTMLElement>('iswc-tooltip');
       if (!tt) return { ok: false, motivo: 'no tooltip' };
       const target = document.getElementById(tt.getAttribute('for') || '');
       if (!target) return { ok: false, motivo: 'no target' };
@@ -3369,8 +3369,8 @@ test('g07 tooltip: role=tooltip + aria-describedby + Escape cierra', { timeout: 
     assert.ok(ariaOk.ok, 'g07 tooltip aria falla (' + JSON.stringify(ariaOk) + ')');
 
     const escapeOk = await page.evaluate(async () => {
-      const main = document.querySelector<HTMLElement>('is-main.main');
-      const tt = main?.querySelector<HTMLElement>('is-tooltip');
+      const main = document.querySelector<HTMLElement>('iswc-main.main');
+      const tt = main?.querySelector<HTMLElement>('iswc-tooltip');
       if (!tt) return { ok: false, motivo: 'no tooltip' };
       (tt as unknown as { show(): void; }).show();
       await new Promise((r) => setTimeout(r, 150));
@@ -3394,12 +3394,12 @@ test('g07 popconfirm: role=dialog + aria-modal=false + focus al primer focusable
   const page = await nuevoPage();
   activePage = page;
   try {
-    const renderOk = await abrirPreview(page, base, 'is-popconfirm');
+    const renderOk = await abrirPreview(page, base, 'iswc-popconfirm');
     assert.ok(renderOk, 'popconfirm preview no renderizo');
 
     const ok = await page.evaluate(async () => {
-      const main = document.querySelector<HTMLElement>('is-main.main');
-      const pc = main?.querySelector<HTMLElement>('is-popconfirm');
+      const main = document.querySelector<HTMLElement>('iswc-main.main');
+      const pc = main?.querySelector<HTMLElement>('iswc-popconfirm');
       if (!pc) return { ok: false, motivo: 'no pc' };
       const pop = pc.shadowRoot?.querySelector<HTMLElement>('[role="dialog"]');
       if (!pop) return { ok: false, motivo: 'no pop' };
@@ -3429,12 +3429,12 @@ test('g07 progress-bar: role=progressbar + valuenow/min/max/text + aria-busy en 
   const page = await nuevoPage();
   activePage = page;
   try {
-    const renderOk = await abrirPreview(page, base, 'is-progress-bar');
+    const renderOk = await abrirPreview(page, base, 'iswc-progress-bar');
     assert.ok(renderOk, 'progress-bar preview no renderizo');
 
     const ok = await page.evaluate(async () => {
-      const main = document.querySelector<HTMLElement>('is-main.main');
-      const pb = main?.querySelector<HTMLElement>('is-progress-bar');
+      const main = document.querySelector<HTMLElement>('iswc-main.main');
+      const pb = main?.querySelector<HTMLElement>('iswc-progress-bar');
       if (!pb) return { ok: false, motivo: 'no pb' };
       const track = pb.shadowRoot?.querySelector<HTMLElement>('[role="progressbar"]');
       if (!track) return { ok: false, motivo: 'no track' };
@@ -3478,12 +3478,12 @@ test('g07 progress-ring: role=progressbar + valuenow/min/max + aria-busy en inde
   const page = await nuevoPage();
   activePage = page;
   try {
-    const renderOk = await abrirPreview(page, base, 'is-progress-ring');
+    const renderOk = await abrirPreview(page, base, 'iswc-progress-ring');
     assert.ok(renderOk, 'progress-ring preview no renderizo');
 
     const ok = await page.evaluate(async () => {
-      const main = document.querySelector<HTMLElement>('is-main.main');
-      const pr = main?.querySelector<HTMLElement>('is-progress-ring');
+      const main = document.querySelector<HTMLElement>('iswc-main.main');
+      const pr = main?.querySelector<HTMLElement>('iswc-progress-ring');
       if (!pr) return { ok: false, motivo: 'no pr' };
       const wrap = pr.shadowRoot?.querySelector<HTMLElement>('[role="progressbar"]');
       if (!wrap) return { ok: false, motivo: 'no wrap' };
@@ -3523,12 +3523,12 @@ test('g07 theme-toggle: role=switch + aria-checked + aria-label dinamico', { tim
   const page = await nuevoPage();
   activePage = page;
   try {
-    const renderOk = await abrirPreview(page, base, 'is-theme-toggle');
+    const renderOk = await abrirPreview(page, base, 'iswc-theme-toggle');
     assert.ok(renderOk, 'theme-toggle preview no renderizo');
 
     const ok = await page.evaluate(async () => {
-      const main = document.querySelector<HTMLElement>('is-main.main');
-      const tt = main?.querySelector<HTMLElement>('is-theme-toggle');
+      const main = document.querySelector<HTMLElement>('iswc-main.main');
+      const tt = main?.querySelector<HTMLElement>('iswc-theme-toggle');
       if (!tt) return { ok: false, motivo: 'no tt' };
       await new Promise((r) => setTimeout(r, 80));
       const initial = {
@@ -3536,7 +3536,7 @@ test('g07 theme-toggle: role=switch + aria-checked + aria-label dinamico', { tim
         checked: tt.getAttribute('aria-checked'),
         label: tt.getAttribute('aria-label'),
       };
-      const btn = tt.shadowRoot?.querySelector<HTMLElement>('is-check-icon-button');
+      const btn = tt.shadowRoot?.querySelector<HTMLElement>('iswc-check-icon-button');
       btn?.shadowRoot?.querySelector<HTMLElement>('button')?.click();
       await new Promise((r) => setTimeout(r, 80));
       const after = {
@@ -3567,14 +3567,14 @@ test('g07 tag/badge: aria-label automatico cuando slot vacio (solo icono)', { ti
   const page = await nuevoPage();
   activePage = page;
   try {
-    const renderOkA = await abrirPreview(page, base, 'is-badge');
+    const renderOkA = await abrirPreview(page, base, 'iswc-badge');
     assert.ok(renderOkA, 'badge preview no renderizo');
 
     const okBadge = await page.evaluate(async () => {
-      const main = document.querySelector<HTMLElement>('is-main.main');
-      const host = main?.querySelector<HTMLElement>('is-badge');
+      const main = document.querySelector<HTMLElement>('iswc-main.main');
+      const host = main?.querySelector<HTMLElement>('iswc-badge');
       if (!host) return { ok: false, motivo: 'no badge' };
-      host.innerHTML = '<is-icon slot="start" icon="mdi:star"></is-icon>';
+      host.innerHTML = '<iswc-icon slot="start" icon="mdi:star"></iswc-icon>';
       await new Promise((r) => setTimeout(r, 60));
       const aria = host.getAttribute('aria-label');
       return { ok: !!aria && aria.startsWith('Insignia'), aria };
@@ -3582,13 +3582,13 @@ test('g07 tag/badge: aria-label automatico cuando slot vacio (solo icono)', { ti
     t.diagnostic('[g07-badge] ' + JSON.stringify(okBadge));
     assert.ok(okBadge.ok, 'g07 badge aria-label auto falla (' + JSON.stringify(okBadge) + ')');
 
-    const renderOkB = await abrirPreview(page, base, 'is-tag');
+    const renderOkB = await abrirPreview(page, base, 'iswc-tag');
     assert.ok(renderOkB, 'tag preview no renderizo');
     const okTag = await page.evaluate(async () => {
-      const main = document.querySelector<HTMLElement>('is-main.main');
-      const host = main?.querySelector<HTMLElement>('is-tag');
+      const main = document.querySelector<HTMLElement>('iswc-main.main');
+      const host = main?.querySelector<HTMLElement>('iswc-tag');
       if (!host) return { ok: false, motivo: 'no tag' };
-      host.innerHTML = '<is-icon slot="start" icon="mdi:check"></is-icon>';
+      host.innerHTML = '<iswc-icon slot="start" icon="mdi:check"></iswc-icon>';
       await new Promise((r) => setTimeout(r, 60));
       const aria = host.getAttribute('aria-label');
       return { ok: !!aria && aria.startsWith('Etiqueta'), aria };
@@ -3607,12 +3607,12 @@ test('g07 skeleton: role=status + aria-busy=true + aria-live=polite', { timeout:
   const page = await nuevoPage();
   activePage = page;
   try {
-    const renderOk = await abrirPreview(page, base, 'is-skeleton');
+    const renderOk = await abrirPreview(page, base, 'iswc-skeleton');
     assert.ok(renderOk, 'skeleton preview no renderizo');
 
     const ok = await page.evaluate(async () => {
-      const main = document.querySelector<HTMLElement>('is-main.main');
-      const sk = main?.querySelector<HTMLElement>('is-skeleton');
+      const main = document.querySelector<HTMLElement>('iswc-main.main');
+      const sk = main?.querySelector<HTMLElement>('iswc-skeleton');
       if (!sk) return { ok: false, motivo: 'no sk' };
       const role = sk.getAttribute('role');
       const busy = sk.getAttribute('aria-busy');
@@ -3635,31 +3635,34 @@ test('g07 cdn-snippet: aria-label y aria-labelledby intactos en secciones princi
   const page = await nuevoPage();
   activePage = page;
   try {
-    const renderOk = await abrirPreview(page, base, 'is-cdn-snippet');
+    const renderOk = await abrirPreview(page, base, 'iswc-cdn-snippet');
     assert.ok(renderOk, 'cdn-snippet preview no renderizo');
 
     const ok = await page.evaluate(async () => {
-      const main = document.querySelector<HTMLElement>('is-main.main');
-      const cs = main?.querySelector<HTMLElement>('is-cdn-snippet');
+      const main = document.querySelector<HTMLElement>('iswc-main.main');
+      const cs = main?.querySelector<HTMLElement>('iswc-cdn-snippet');
       if (!cs) return { ok: false, motivo: 'no cs' };
       const root = cs.shadowRoot;
       if (!root) return { ok: false, motivo: 'no shadow' };
       const consumo = root.querySelector<HTMLElement>('section.cdn');
       const agents = root.querySelector<HTMLElement>('section.cdn__agents');
       const copyLoaderBtn = root.querySelector<HTMLElement>('button[data-copy="loader"]');
-      const copyLlmBtn = root.querySelector<HTMLElement>('button[data-copy="llm-prompt"]');
-      const mdEditor = root.querySelector<HTMLElement>('is-md-editor[data-slot="llm-prompt"]');
+      const skills = root.querySelector<HTMLElement>('[data-slot="skills"]');
+      const eye = root.querySelector<HTMLElement>('[data-ver-md]');
+      const mdEditor = root.querySelector<HTMLElement>('iswc-md-editor');
       return {
         ok: consumo?.getAttribute('aria-label') === 'Consumo por CDN'
-          && agents?.getAttribute('aria-label') === 'Documentaci\u00f3n para agentes'
+          && agents?.getAttribute('aria-label') === 'Skill'
           && copyLoaderBtn?.getAttribute('aria-label')?.startsWith('Copiar') === true
-          && copyLlmBtn?.getAttribute('aria-label')?.startsWith('Copiar') === true
-          && !!mdEditor?.getAttribute('aria-label'),
+          && !!skills
+          && !!eye
+          && !mdEditor,
         consumo: consumo?.getAttribute('aria-label'),
         agents: agents?.getAttribute('aria-label'),
         copyLoader: copyLoaderBtn?.getAttribute('aria-label'),
-        copyLlm: copyLlmBtn?.getAttribute('aria-label'),
-        mdEditorLabel: mdEditor?.getAttribute('aria-label'),
+        skills: !!skills,
+        eye: !!eye,
+        mdEditor: !!mdEditor,
       };
     });
     t.diagnostic('[g07-cdn] ' + JSON.stringify(ok));
@@ -3698,13 +3701,13 @@ test('g05 heatmap: aria-label dinámico + aria-busy + sr-status anuncia celda', 
   const page = await nuevoPage();
   activePage = page;
   try {
-    const renderOk = await abrirPreview(page, base, 'is-heatmap');
+    const renderOk = await abrirPreview(page, base, 'iswc-heatmap');
     assert.ok(renderOk, 'heatmap preview no renderizo');
 
     // Cat 25.1 — aria-label dinámico + aria-busy inicial/final + sr-status.
     const initial = await page.evaluate(async () => {
-      const main = document.querySelector<HTMLElement>('is-main.main');
-      const hm = main?.querySelector<HTMLElement>('is-heatmap');
+      const main = document.querySelector<HTMLElement>('iswc-main.main');
+      const hm = main?.querySelector<HTMLElement>('iswc-heatmap');
       if (!hm) return { ok: false, motivo: 'no heatmap' };
 
       // Inyectamos un heatmap determinístico: 3 filas × 4 cols.
@@ -3750,8 +3753,8 @@ test('g05 heatmap: aria-label dinámico + aria-busy + sr-status anuncia celda', 
 
     // Cat 25.2 — sr-status anuncia la celda hovered.
     const hover = await page.evaluate(async () => {
-      const main = document.querySelector<HTMLElement>('is-main.main');
-      const hm = main?.querySelector<HTMLElement>('is-heatmap');
+      const main = document.querySelector<HTMLElement>('iswc-main.main');
+      const hm = main?.querySelector<HTMLElement>('iswc-heatmap');
       if (!hm?.shadowRoot) return { ok: false, motivo: 'no heatmap shadow' };
       const sr = hm.shadowRoot.querySelector<HTMLElement>('.sr-status');
       const svg = hm.shadowRoot.querySelector<HTMLElement>('svg.chart-svg');
@@ -3787,14 +3790,14 @@ test('g05 sparkline: aria-label dinámico con N/min/max/last/tendencia + aria-bu
   const page = await nuevoPage();
   activePage = page;
   try {
-    const renderOk = await abrirPreview(page, base, 'is-sparkline');
+    const renderOk = await abrirPreview(page, base, 'iswc-sparkline');
     assert.ok(renderOk, 'sparkline preview no renderizo');
 
     // Cat 25.3 — aria-label dinámico + aria-busy + sr-status con tendencia.
     const afterRender = await page.evaluate(async () => {
-      const main = document.querySelector<HTMLElement>('is-main.main');
+      const main = document.querySelector<HTMLElement>('iswc-main.main');
       // Inyectamos un sparkline determinístico: 10 valores al alza.
-      const sp = document.createElement('is-sparkline') as HTMLElement & { data: number[] };
+      const sp = document.createElement('iswc-sparkline') as HTMLElement & { data: number[] };
       sp.setAttribute('label', 'Demo g05');
       sp.setAttribute('data', '5 7 9 11 13 15 17 19 21 23');
       main?.appendChild(sp);
@@ -3824,8 +3827,8 @@ test('g05 sparkline: aria-label dinámico con N/min/max/last/tendencia + aria-bu
 
     // Cat 25.3b — cambio de dataset refleja nueva tendencia (baja).
     const trendFlip = await page.evaluate(async () => {
-      const main = document.querySelector<HTMLElement>('is-main.main');
-      const sp = main?.querySelector<HTMLElement>('is-sparkline');
+      const main = document.querySelector<HTMLElement>('iswc-main.main');
+      const sp = main?.querySelector<HTMLElement>('iswc-sparkline');
       if (!sp?.shadowRoot) return { ok: false, motivo: 'no sparkline' };
       sp.setAttribute('data', '20 18 16 14 12 10 8 6 4 2');
       await new Promise((r) => setTimeout(r, 200));
@@ -3844,8 +3847,8 @@ test('g05 sparkline: aria-label dinámico con N/min/max/last/tendencia + aria-bu
 
     // Cat 25.3c — serie estable: misma first/last.
     const trendEstable = await page.evaluate(async () => {
-      const main = document.querySelector<HTMLElement>('is-main.main');
-      const sp = main?.querySelector<HTMLElement>('is-sparkline');
+      const main = document.querySelector<HTMLElement>('iswc-main.main');
+      const sp = main?.querySelector<HTMLElement>('iswc-sparkline');
       if (!sp?.shadowRoot) return { ok: false, motivo: 'no sparkline' };
       sp.setAttribute('data', '7 7 7 7 7');
       await new Promise((r) => setTimeout(r, 200));
@@ -3867,13 +3870,13 @@ test('g05 chart waterfall: aria-label container + aria-busy + sr-status + tabind
   const page = await nuevoPage();
   activePage = page;
   try {
-    const renderOk = await abrirPreview(page, base, 'is-waterfall-chart');
+    const renderOk = await abrirPreview(page, base, 'iswc-waterfall-chart');
     assert.ok(renderOk, 'waterfall-chart preview no renderizo');
 
     // Cat 25.4 — aria-label descriptivo del container + aria-busy + sr-status.
     const container = await page.evaluate(async () => {
-      const main = document.querySelector<HTMLElement>('is-main.main');
-      const wc = main?.querySelector<HTMLElement>('is-waterfall-chart, is-chart');
+      const main = document.querySelector<HTMLElement>('iswc-main.main');
+      const wc = main?.querySelector<HTMLElement>('iswc-waterfall-chart, iswc-chart');
       if (!wc?.shadowRoot) return { ok: false, motivo: 'no waterfall' };
       const svg = wc.shadowRoot.querySelector<HTMLElement>('svg.chart-svg');
       const sr = wc.shadowRoot.querySelector<HTMLElement>('.sr-status');
@@ -3899,8 +3902,8 @@ test('g05 chart waterfall: aria-label container + aria-busy + sr-status + tabind
 
     // Cat 25.5 — cada mark tiene tabindex=0 + aria-label (proposals #11).
     const marks = await page.evaluate(() => {
-      const main = document.querySelector<HTMLElement>('is-main.main');
-      const wc = main?.querySelector<HTMLElement>('is-waterfall-chart, is-chart');
+      const main = document.querySelector<HTMLElement>('iswc-main.main');
+      const wc = main?.querySelector<HTMLElement>('iswc-waterfall-chart, iswc-chart');
       if (!wc?.shadowRoot) return { ok: false, motivo: 'no waterfall' };
       const group = wc.shadowRoot.querySelector<SVGGElement>('g.marks');
       const allMarks = group ? [...group.querySelectorAll<SVGElement>('.mark')] : [];
@@ -3923,8 +3926,8 @@ test('g05 chart waterfall: aria-label container + aria-busy + sr-status + tabind
 
     // Cat 25.6 — Tab navega entre marks (foco se desplaza por tabindex=0).
     const tabNav = await page.evaluate(async () => {
-      const main = document.querySelector<HTMLElement>('is-main.main');
-      const wc = main?.querySelector<HTMLElement>('is-waterfall-chart, is-chart');
+      const main = document.querySelector<HTMLElement>('iswc-main.main');
+      const wc = main?.querySelector<HTMLElement>('iswc-waterfall-chart, iswc-chart');
       if (!wc?.shadowRoot) return { ok: false, motivo: 'no waterfall' };
       const group = wc.shadowRoot.querySelector<SVGGElement>('g.marks');
       const marks = group ? [...group.querySelectorAll<SVGElement>('.mark[tabindex="0"]')] : [];
@@ -3960,7 +3963,7 @@ test('g05 chart waterfall: aria-label container + aria-busy + sr-status + tabind
 // ---------------------------------------------------------------------------
 // g08: forms (Cat 23-28) — proposals UX/UI demo-g08.md
 //
-// Cubre el contrato ARIA/teclado de <is-combobox>:
+// Cubre el contrato ARIA/teclado de <iswc-combobox>:
 //
 //   - Cat 23: input lleva role=combobox + aria-haspopup=listbox + aria-controls.
 //   - Cat 24: cada option tiene id único (${host.id||localName}-opt-${i}) y el
@@ -3981,23 +3984,23 @@ test('g08 combobox: contrato ARIA + teclado (proposals 23-28)', { timeout: 60_00
   const page = await nuevoPage();
   activePage = page;
   try {
-    const renderOk = await abrirPreview(page, base, 'is-combobox');
+    const renderOk = await abrirPreview(page, base, 'iswc-combobox');
     assert.ok(renderOk, 'combobox preview no renderizo');
 
     // Inyectamos un combobox determinístico con label/hint/required/disable
     // para validar los seis contratos ARIA en un solo recorrido.
     await page.evaluate(() => {
-      const main = document.querySelector<HTMLElement>('is-main.main');
+      const main = document.querySelector<HTMLElement>('iswc-main.main');
       // Quitamos cualquier combobox previo en el preview (la página trae uno
       // demo pero queremos uno controlado).
-      main?.querySelectorAll<HTMLElement>('is-combobox').forEach((c) => c.remove());
-      const cb = document.createElement('is-combobox');
+      main?.querySelectorAll<HTMLElement>('iswc-combobox').forEach((c) => c.remove());
+      const cb = document.createElement('iswc-combobox');
       cb.setAttribute('id', 'cb-demo');
       cb.setAttribute('label', 'Ciudad');
       cb.setAttribute('hint', 'Escribe para filtrar');
       cb.setAttribute('placeholder', 'Buscar…');
       ['bog', 'med', 'cal', 'barr', 'buc'].forEach((v, i) => {
-        const o = document.createElement('is-option');
+        const o = document.createElement('iswc-option');
         o.setAttribute('value', v);
         o.textContent = ['Bogotá', 'Medellín', 'Cali', 'Barranquilla', 'Bucaramanga'][i];
         cb.appendChild(o);
@@ -4008,8 +4011,8 @@ test('g08 combobox: contrato ARIA + teclado (proposals 23-28)', { timeout: 60_00
 
     // ──────────── Cat 23: input role=combobox + aria-haspopup=listbox + aria-controls=listbox ────────────
     const cat23 = await page.evaluate(() => {
-      const main = document.querySelector<HTMLElement>('is-main.main');
-      const cb = main?.querySelector<HTMLElement>('is-combobox#cb-demo');
+      const main = document.querySelector<HTMLElement>('iswc-main.main');
+      const cb = main?.querySelector<HTMLElement>('iswc-combobox#cb-demo');
       if (!cb?.shadowRoot) return { ok: false, motivo: 'no cb' };
       const input = cb.shadowRoot.querySelector<HTMLInputElement>('.input');
       if (!input) return { ok: false, motivo: 'no input' };
@@ -4036,8 +4039,8 @@ test('g08 combobox: contrato ARIA + teclado (proposals 23-28)', { timeout: 60_00
 
     // ──────────── Cat 24: ids únicos por option + aria-activedescendant sync ────────────
     const cat24 = await page.evaluate(async () => {
-      const main = document.querySelector<HTMLElement>('is-main.main');
-      const cb = main?.querySelector<HTMLElement>('is-combobox#cb-demo');
+      const main = document.querySelector<HTMLElement>('iswc-main.main');
+      const cb = main?.querySelector<HTMLElement>('iswc-combobox#cb-demo');
       if (!cb?.shadowRoot) return { ok: false, motivo: 'no cb' };
       // 1) Forzar apertura con foco al input.
       const input = cb.shadowRoot.querySelector<HTMLInputElement>('.input');
@@ -4079,8 +4082,8 @@ test('g08 combobox: contrato ARIA + teclado (proposals 23-28)', { timeout: 60_00
 
     // ──────────── Cat 25: Home y End navegan al primero/último ────────────
     const cat25 = await page.evaluate(async () => {
-      const main = document.querySelector<HTMLElement>('is-main.main');
-      const cb = main?.querySelector<HTMLElement>('is-combobox#cb-demo');
+      const main = document.querySelector<HTMLElement>('iswc-main.main');
+      const cb = main?.querySelector<HTMLElement>('iswc-combobox#cb-demo');
       if (!cb?.shadowRoot) return { ok: false, motivo: 'no cb' };
       const input = cb.shadowRoot.querySelector<HTMLInputElement>('.input');
       if (!input) return { ok: false, motivo: 'no input' };
@@ -4114,8 +4117,8 @@ test('g08 combobox: contrato ARIA + teclado (proposals 23-28)', { timeout: 60_00
 
     // ──────────── Cat 26: hint expone id="cb-hint" + aria-describedby ────────────
     const cat26 = await page.evaluate(() => {
-      const main = document.querySelector<HTMLElement>('is-main.main');
-      const cb = main?.querySelector<HTMLElement>('is-combobox#cb-demo');
+      const main = document.querySelector<HTMLElement>('iswc-main.main');
+      const cb = main?.querySelector<HTMLElement>('iswc-combobox#cb-demo');
       if (!cb?.shadowRoot) return { ok: false, motivo: 'no cb' };
       const input = cb.shadowRoot.querySelector<HTMLInputElement>('.input');
       const hint = cb.shadowRoot.querySelector<HTMLElement>('.hint');
@@ -4141,8 +4144,8 @@ test('g08 combobox: contrato ARIA + teclado (proposals 23-28)', { timeout: 60_00
 
     // ──────────── Cat 27: aria-label + aria-required reflejados ────────────
     const cat27 = await page.evaluate(async () => {
-      const main = document.querySelector<HTMLElement>('is-main.main');
-      const cb = main?.querySelector<HTMLElement>('is-combobox#cb-demo');
+      const main = document.querySelector<HTMLElement>('iswc-main.main');
+      const cb = main?.querySelector<HTMLElement>('iswc-combobox#cb-demo');
       if (!cb?.shadowRoot) return { ok: false, motivo: 'no cb' };
       const input = cb.shadowRoot.querySelector<HTMLInputElement>('.input');
       const hostAriaLabel = cb.getAttribute('aria-label');
@@ -4174,8 +4177,8 @@ test('g08 combobox: contrato ARIA + teclado (proposals 23-28)', { timeout: 60_00
 
     // ──────────── Cat 28: aria-disabled se refleja en el input ────────────
     const cat28 = await page.evaluate(async () => {
-      const main = document.querySelector<HTMLElement>('is-main.main');
-      const cb = main?.querySelector<HTMLElement>('is-combobox#cb-demo');
+      const main = document.querySelector<HTMLElement>('iswc-main.main');
+      const cb = main?.querySelector<HTMLElement>('iswc-combobox#cb-demo');
       if (!cb?.shadowRoot) return { ok: false, motivo: 'no cb' };
       const input = cb.shadowRoot.querySelector<HTMLInputElement>('.input');
       const before = input?.getAttribute('aria-disabled');
@@ -4235,7 +4238,7 @@ test('g15 ecosystem: secciones con role=region + ariaLabel + lista accesible', {
 
     // Cat 29 — Cada sección lleva role=region + aria-label descriptivo.
     const regiones = await page.evaluate(() => {
-      const main = document.querySelector<HTMLElement>('is-main.main');
+      const main = document.querySelector<HTMLElement>('iswc-main.main');
       if (!main) return { ok: false, motivo: 'no main', secciones: [] as Array<{ id: string; role: string; ariaLabel: string }> };
       const secciones = [...main.querySelectorAll<HTMLElement>('section.section, aside.section')]
         .filter((s) => !!(s.id && s.getAttribute('aria-label')));
@@ -4261,7 +4264,7 @@ test('g15 ecosystem: secciones con role=region + ariaLabel + lista accesible', {
     // Cat 30 — Filtro de búsqueda con aria-describedby hacia ecoCount,
     // contador con aria-live=polite, lista con aria-busy=false.
     const accesibilidad = await page.evaluate(() => {
-      const main = document.querySelector<HTMLElement>('is-main.main');
+      const main = document.querySelector<HTMLElement>('iswc-main.main');
       if (!main) return { ok: false, motivo: 'no main' };
       const filtro = main.querySelector<HTMLInputElement>('#ecoFilter');
       const contador = main.querySelector<HTMLElement>('#ecoCount');
@@ -4299,7 +4302,7 @@ test('g15 theming: secciones con role=region + paneles dark/light accesibles', {
 
     // Cat 31 — Secciones del taller con role=region + aria-label descriptivo.
     const regiones = await page.evaluate(() => {
-      const main = document.querySelector<HTMLElement>('is-main.main');
+      const main = document.querySelector<HTMLElement>('iswc-main.main');
       if (!main) return { ok: false, motivo: 'no main', secciones: [] as Array<{ id: string; role: string; ariaLabel: string }> };
       const secciones = [...main.querySelectorAll<HTMLElement>('section.section')]
         .filter((s) => !!(s.id && s.getAttribute('aria-label')));
@@ -4324,7 +4327,7 @@ test('g15 theming: secciones con role=region + paneles dark/light accesibles', {
 
     // Cat 32 — Paneles internos dark/light con role=region + ariaLabel.
     const paneles = await page.evaluate(() => {
-      const main = document.querySelector<HTMLElement>('is-main.main');
+      const main = document.querySelector<HTMLElement>('iswc-main.main');
       if (!main) return { ok: false, motivo: 'no main', regiones: [] as Array<{ role: string; ariaLabel: string }> };
       const visit = (root: ParentNode): Element[] => {
         const out: Element[] = [];
@@ -4366,7 +4369,7 @@ test('g15 home: secciones conservan aria-labelledby/aria-label existentes', { ti
     // porque la pieza hero ya trae aria-labelledby hacia h1 con id=homeTitle
     // y showcase idem con homeShowcaseTitle). stage usa aria-label.
     const regiones = await page.evaluate(() => {
-      const main = document.querySelector<HTMLElement>('is-main.main');
+      const main = document.querySelector<HTMLElement>('iswc-main.main');
       if (!main) return { ok: false, motivo: 'no main', secciones: [] as Array<{ id: string; name: string; tag: string }> };
       const secciones = [...main.querySelectorAll<HTMLElement>('section.section, aside.section')]
         .filter((s) => !!s.id);
@@ -4433,15 +4436,15 @@ test('g09 format-date: aria-label sincronizado al formato + locale (proposals 5/
   const page = await nuevoPage();
   activePage = page;
   try {
-    const renderOk = await abrirPreview(page, base, 'is-format-date');
+    const renderOk = await abrirPreview(page, base, 'iswc-format-date');
     assert.ok(renderOk, 'format-date preview no renderizo');
 
     const ok = await page.evaluate(async () => {
-      const main = document.querySelector<HTMLElement>('is-main.main');
+      const main = document.querySelector<HTMLElement>('iswc-main.main');
       if (!main) return { ok: false, motivo: 'no main' };
       // Crear un host con atributos controlados para que el aria-label
       // generado sea determinístico.
-      const el = document.createElement('is-format-date');
+      const el = document.createElement('iswc-format-date');
       el.setAttribute('date', '2025-01-15');
       el.setAttribute('locale', 'en-US');
       el.setAttribute('year', 'numeric');
@@ -4459,7 +4462,7 @@ test('g09 format-date: aria-label sincronizado al formato + locale (proposals 5/
       el.remove();
 
       // 2) `label` explícito gana sobre el resumen automático.
-      const el2 = document.createElement('is-format-date');
+      const el2 = document.createElement('iswc-format-date');
       el2.setAttribute('date', '2025-01-15');
       el2.setAttribute('label', 'Fecha de inicio del proyecto');
       main.appendChild(el2);
@@ -4469,7 +4472,7 @@ test('g09 format-date: aria-label sincronizado al formato + locale (proposals 5/
 
       // 3) locale resuelto del documento si no hay atributo.
       document.documentElement.lang = 'es-CO';
-      const el3 = document.createElement('is-format-date');
+      const el3 = document.createElement('iswc-format-date');
       el3.setAttribute('date', '2025-01-15');
       main.appendChild(el3);
       await new Promise((r) => setTimeout(r, 80));
@@ -4499,13 +4502,13 @@ test('g09 format-date: aria-live polite al cambiar live="polite" (proposal 6)', 
   const page = await nuevoPage();
   activePage = page;
   try {
-    const renderOk = await abrirPreview(page, base, 'is-format-date');
+    const renderOk = await abrirPreview(page, base, 'iswc-format-date');
     assert.ok(renderOk, 'format-date preview no renderizo');
 
     const ok = await page.evaluate(async () => {
-      const main = document.querySelector<HTMLElement>('is-main.main');
+      const main = document.querySelector<HTMLElement>('iswc-main.main');
       if (!main) return { ok: false, motivo: 'no main' };
-      const el = document.createElement('is-format-date');
+      const el = document.createElement('iswc-format-date');
       el.setAttribute('date', '2025-01-15');
       el.setAttribute('locale', 'en-US');
       main.appendChild(el);
@@ -4565,15 +4568,15 @@ test('g09 relative-time: aria-label descriptivo (proposal 11) + aria-live cuando
   const page = await nuevoPage();
   activePage = page;
   try {
-    const renderOk = await abrirPreview(page, base, 'is-relative-time');
+    const renderOk = await abrirPreview(page, base, 'iswc-relative-time');
     assert.ok(renderOk, 'relative-time preview no renderizo');
 
     const ok = await page.evaluate(async () => {
-      const main = document.querySelector<HTMLElement>('is-main.main');
+      const main = document.querySelector<HTMLElement>('iswc-main.main');
       if (!main) return { ok: false, motivo: 'no main' };
 
       // 1) aria-label incluye el texto relativo + timestamp ISO.
-      const el = document.createElement('is-relative-time');
+      const el = document.createElement('iswc-relative-time');
       const fiveMinAgo = new Date(Date.now() - 5 * 60 * 1000).toISOString();
       el.setAttribute('date', fiveMinAgo);
       el.setAttribute('locale', 'es-ES');
@@ -4625,16 +4628,16 @@ test('g09 relative-time: auto-refresh se detiene al disconnectedCallback (propos
   const page = await nuevoPage();
   activePage = page;
   try {
-    const renderOk = await abrirPreview(page, base, 'is-relative-time');
+    const renderOk = await abrirPreview(page, base, 'iswc-relative-time');
     assert.ok(renderOk, 'relative-time preview no renderizo');
 
     // El contrato observable es: con sync activo, aria-live=polite se aplica.
     // Al detach, el timer interno se libera (lifecycle hook) y el aria-live
     // ya no se re-aplica (el componente está desconectado).
     const ok = await page.evaluate(async () => {
-      const main = document.querySelector<HTMLElement>('is-main.main');
+      const main = document.querySelector<HTMLElement>('iswc-main.main');
       if (!main) return { ok: false, motivo: 'no main' };
-      const el = document.createElement('is-relative-time');
+      const el = document.createElement('iswc-relative-time');
       el.setAttribute('date', new Date(Date.now() - 30_000).toISOString());
       el.setAttribute('sync', '');
       main.appendChild(el);
@@ -4665,21 +4668,21 @@ test('g09 observer: role=region + aria-label condicional (proposal 12) + cleanup
   const page = await nuevoPage();
   activePage = page;
   try {
-    const renderOk = await abrirPreview(page, base, 'is-observer');
+    const renderOk = await abrirPreview(page, base, 'iswc-observer');
     assert.ok(renderOk, 'observer preview no renderizo');
 
     const ok = await page.evaluate(async () => {
-      const main = document.querySelector<HTMLElement>('is-main.main');
+      const main = document.querySelector<HTMLElement>('iswc-main.main');
       if (!main) return { ok: false, motivo: 'no main' };
 
       // 1) Sin label → NO role="region" (norma ARIA).
-      const unlabeled = document.createElement('is-observer');
+      const unlabeled = document.createElement('iswc-observer');
       unlabeled.setAttribute('type', 'intersection');
       main.appendChild(unlabeled);
       const unlabeledRole = unlabeled.getAttribute('role');
 
       // 2) Con label → role="region" + aria-label.
-      const labeled = document.createElement('is-observer');
+      const labeled = document.createElement('iswc-observer');
       labeled.setAttribute('type', 'intersection');
       labeled.setAttribute('label', 'Sección observable');
       main.appendChild(labeled);
@@ -4687,7 +4690,7 @@ test('g09 observer: role=region + aria-label condicional (proposal 12) + cleanup
       const labeledAria = labeled.getAttribute('aria-label');
 
       // 3) Con labelledby → role="region" + aria-labelledby (sin aria-label).
-      const labelledBy = document.createElement('is-observer');
+      const labelledBy = document.createElement('iswc-observer');
       labelledBy.setAttribute('type', 'resize');
       labelledBy.setAttribute('labelledby', 'mySectionTitle');
       main.appendChild(labelledBy);
@@ -4728,9 +4731,9 @@ test('g09 observer: role=region + aria-label condicional (proposal 12) + cleanup
     // 6) Cleanup: un observer con IntersectionObserver debe dejar el observer
     // desconectado al detach (proposal 15 — leak prevention).
     const cleanupOk = await page.evaluate(async () => {
-      const main = document.querySelector<HTMLElement>('is-main.main');
+      const main = document.querySelector<HTMLElement>('iswc-main.main');
       if (!main) return { ok: false, motivo: 'no main' };
-      const el = document.createElement('is-observer');
+      const el = document.createElement('iswc-observer');
       el.setAttribute('type', 'intersection');
       main.appendChild(el);
       await new Promise((r) => setTimeout(r, 50));
@@ -4757,26 +4760,26 @@ test('g09 mutation-observer y resize-observer: heredan role=region + aria-label'
   const page = await nuevoPage();
   activePage = page;
   try {
-    // Abrimos is-observer porque su bundle (observer.min.js) no carga los
+    // Abrimos iswc-observer porque su bundle (observer.min.js) no carga los
     // aliases; pero podemos importar los aliases dinámicamente desde el
     // CDN del repo y verificar que aplican el mismo contrato ARIA que su
     // clase padre.
-    const renderOk = await abrirPreview(page, base, 'is-observer');
+    const renderOk = await abrirPreview(page, base, 'iswc-observer');
     assert.ok(renderOk, 'observer preview no renderizo');
 
     // Probamos que los alias de observer (mutation/resize/intersection)
     // heredan el mismo contrato ARIA. Como los alias solo fijan `type` en
     // su constructor y delegan todo lo demás a ObserverElement, basta con
-    // confirmar que `is-observer` con `type` dinámico funciona igual que
+    // confirmar que `iswc-observer` con `type` dinámico funciona igual que
     // los alias: aplicar label + type en cualquier combinación produce
     // role=region + aria-label correctos.
     const ok = await page.evaluate(async () => {
-      const main = document.querySelector<HTMLElement>('is-main.main');
+      const main = document.querySelector<HTMLElement>('iswc-main.main');
       if (!main) return { ok: false, motivo: 'no main' };
-      await customElements.whenDefined('is-observer');
+      await customElements.whenDefined('iswc-observer');
 
       const mk = (type: 'intersection' | 'mutation' | 'resize', label: string) => {
-        const el = document.createElement('is-observer');
+        const el = document.createElement('iswc-observer');
         el.setAttribute('type', type);
         el.setAttribute('label', label);
         main.appendChild(el);
@@ -4821,10 +4824,10 @@ test('g09 ui: helpers region() y dialog() aplican role + aria-* (proposal ui #15
   const page = await nuevoPage();
   activePage = page;
   try {
-    // is-ui no tiene preview bundle (solo es el módulo helpers/ui.ts). El
+    // iswc-ui no tiene preview bundle (solo es el módulo helpers/ui.ts). El
     // demo es la propia landing de ui; como alternativa lo inyectamos desde
     // el CDN de helpers y verificamos los helpers region()/dialog().
-    await page.goto(`${base}/?s=${estadoDe('is-popover')}`, { waitUntil: 'domcontentloaded' });
+    await page.goto(`${base}/?s=${estadoDe('iswc-popover')}`, { waitUntil: 'domcontentloaded' });
     await page.waitForSelector('html[data-kit-shell]', { timeout: 15000 }).catch(() => {});
     await esperarMs(800);
 
@@ -4833,12 +4836,12 @@ test('g09 ui: helpers region() y dialog() aplican role + aria-* (proposal ui #15
       // Lo importamos dinámicamente desde el CDN del propio repo.
       const baseUrl = (window as unknown as { __DSH_BASE__?: string }).__DSH_BASE__
         || new URL('/dist/cdn/helpers/ui.min.js', document.baseURI).toString();
-      // Importar el módulo dinámicamente y exponer IsUi en window.
-      type Mod = { IsUi?: { region: (l: string, c?: unknown) => HTMLElement; dialog: (l: string | object, c?: unknown) => HTMLElement } };
+      // Importar el módulo dinámicamente y exponer IswcUi en window.
+      type Mod = { IswcUi?: { region: (l: string, c?: unknown) => HTMLElement; dialog: (l: string | object, c?: unknown) => HTMLElement } };
       const mod: Mod = await import(/* @vite-ignore */ baseUrl);
-      const ui = mod.IsUi || (window as unknown as { IsUi?: Mod['IsUi'] }).IsUi;
+      const ui = mod.IswcUi || (window as unknown as { IswcUi?: Mod['IswcUi'] }).IswcUi;
       if (!ui || typeof ui.region !== 'function' || typeof ui.dialog !== 'function') {
-        return { ok: false, motivo: 'IsUi.region/dialog no exportados', baseUrl };
+        return { ok: false, motivo: 'IswcUi.region/dialog no exportados', baseUrl };
       }
 
       // region(label, children)
@@ -4881,11 +4884,11 @@ test('g09 floating: role=dialog + aria-modal cuando modal, focus trap + Escape c
   const page = await nuevoPage();
   activePage = page;
   try {
-    const renderOk = await abrirPreview(page, base, 'is-floating');
+    const renderOk = await abrirPreview(page, base, 'iswc-floating');
     assert.ok(renderOk, 'floating preview no renderizo');
 
     const ok = await page.evaluate(async () => {
-      const main = document.querySelector<HTMLElement>('is-main.main');
+      const main = document.querySelector<HTMLElement>('iswc-main.main');
       if (!main) return { ok: false, motivo: 'no main' };
 
       // Crear floating modal con ancla + contenido focuseable.
@@ -4894,7 +4897,7 @@ test('g09 floating: role=dialog + aria-modal cuando modal, focus trap + Escape c
       anchor.textContent = 'abrir';
       main.appendChild(anchor);
 
-      const fl = document.createElement('is-floating');
+      const fl = document.createElement('iswc-floating');
       fl.setAttribute('anchor', 'flAnchor');
       fl.setAttribute('placement', 'bottom');
       fl.setAttribute('modal', '');
@@ -4939,7 +4942,7 @@ test('g09 floating: role=dialog + aria-modal cuando modal, focus trap + Escape c
       })();
 
       // labelledby: aplicar otro floating con labelledby.
-      const fl2 = document.createElement('is-floating');
+      const fl2 = document.createElement('iswc-floating');
       fl2.setAttribute('modal', '');
       fl2.setAttribute('labelledby', 'flTitle');
       main.appendChild(fl2);
@@ -4954,7 +4957,7 @@ test('g09 floating: role=dialog + aria-modal cuando modal, focus trap + Escape c
       fl2.remove();
 
       // Sin modal → role/aria-modal NO se aplican (proposal g09).
-      const fl3 = document.createElement('is-floating');
+      const fl3 = document.createElement('iswc-floating');
       fl3.setAttribute('anchor', 'flAnchor');
       fl3.setAttribute('active', '');
       main.appendChild(fl3);
@@ -4988,14 +4991,14 @@ test('g09 floating: role=dialog + aria-modal cuando modal, focus trap + Escape c
 
     // 2) Escape cierra el modal + focus restoration.
     const trapOk = await page.evaluate(async () => {
-      const main = document.querySelector<HTMLElement>('is-main.main');
+      const main = document.querySelector<HTMLElement>('iswc-main.main');
       if (!main) return { ok: false, motivo: 'no main' };
       const anchor = document.createElement('button');
       anchor.id = 'flAnchor2';
       anchor.textContent = 'open';
       main.appendChild(anchor);
 
-      const fl = document.createElement('is-floating');
+      const fl = document.createElement('iswc-floating');
       fl.setAttribute('anchor', 'flAnchor2');
       fl.setAttribute('modal', '');
       fl.setAttribute('label', 'Trap test');
@@ -5070,7 +5073,7 @@ test('g09 floating: role=dialog + aria-modal cuando modal, focus trap + Escape c
 // Verifica los contratos ARIA + teclado de los demos de la categoría `code`
 // que son testeables sin CodeMirror / red / APIs externas:
 //
-//   - is-code (Cat 27):
+//   - iswc-code (Cat 27):
 //     · role=region + aria-label dinámico (idioma + líneas) en el host
 //     · data-language sincronizado al atributo lang
 //     · role=textbox + aria-multiline=true en el <textarea> editable
@@ -5078,7 +5081,7 @@ test('g09 floating: role=dialog + aria-modal cuando modal, focus trap + Escape c
 //     · readonly pre expone role=code y aria-label del lenguaje
 //     · cambio de lang actualiza data-language + aria-label
 //
-//   - is-md-editor (Cat 28):
+//   - iswc-md-editor (Cat 28):
 //     · role=toolbar + aria-label en toolbar formato + footer acciones
 //     · aria-label en cada botón icon-only de la toolbar (accesible name)
 //     · role=textbox + aria-multiline=true + aria-label en la surface
@@ -5098,15 +5101,15 @@ test('g03 code: role=region + aria-label + data-language + role=textbox editor (
   const page = await nuevoPage();
   activePage = page;
   try {
-    const renderOk = await abrirPreview(page, base, 'is-code');
+    const renderOk = await abrirPreview(page, base, 'iswc-code');
     assert.ok(renderOk, 'code preview no renderizo');
 
     // ─── Cat 27.1: host role=region + aria-label + data-language ───
     const hostAria = await page.evaluate(() => {
-      const main = document.querySelector<HTMLElement>('is-main.main');
-      const codes = [...(main?.querySelectorAll<HTMLElement>('is-code') ?? [])];
-      if (codes.length === 0) return { ok: false, motivo: 'sin is-code', sample: null };
-      // 1) El primer <is-code> sin label del usuario debe tener role=region
+      const main = document.querySelector<HTMLElement>('iswc-main.main');
+      const codes = [...(main?.querySelectorAll<HTMLElement>('iswc-code') ?? [])];
+      if (codes.length === 0) return { ok: false, motivo: 'sin iswc-code', sample: null };
+      // 1) El primer <iswc-code> sin label del usuario debe tener role=region
       //    y un aria-label descriptivo que mencione el lenguaje.
       const first = codes[0];
       const role = first.getAttribute('role');
@@ -5114,7 +5117,7 @@ test('g03 code: role=region + aria-label + data-language + role=textbox editor (
       const dataLang = first.getAttribute('data-language');
       // 2) Creamos uno nuevo con label del usuario y verificamos que
       //    respetamos el label (no pisamos contratos externos).
-      const tagged = document.createElement('is-code');
+      const tagged = document.createElement('iswc-code');
       tagged.setAttribute('lang', 'python');
       tagged.setAttribute('value', 'def f():\n    return 1');
       tagged.setAttribute('label', 'Snippet de Python del cliente');
@@ -5134,15 +5137,15 @@ test('g03 code: role=region + aria-label + data-language + role=textbox editor (
       };
     });
     t.diagnostic(`[g03-code-aria] ${JSON.stringify(hostAria)}`);
-    assert.equal(hostAria.motivo ?? '', '', hostAria.motivo ?? 'no is-code en el demo');
+    assert.equal(hostAria.motivo ?? '', '', hostAria.motivo ?? 'no iswc-code en el demo');
     assert.ok(hostAria.ok, `g03 code aria del host falla (${JSON.stringify(hostAria)})`);
 
     // ─── Cat 27.2: editor textarea con role=textbox + aria-multiline ───
     const editorAria = await page.evaluate(() => {
-      const main = document.querySelector<HTMLElement>('is-main.main');
-      const codes = [...(main?.querySelectorAll<HTMLElement>('is-code') ?? [])];
+      const main = document.querySelector<HTMLElement>('iswc-main.main');
+      const codes = [...(main?.querySelectorAll<HTMLElement>('iswc-code') ?? [])];
       if (codes.length === 0) return { ok: false, motivo: 'sin code', ta: null };
-      // El playground del demo crea <is-code id="pgCode"> en modo editable.
+      // El playground del demo crea <iswc-code id="pgCode"> en modo editable.
       const pgCode = codes.find((c) => c.id === 'pgCode') ?? codes[0];
       // Si tiene un .ic-input dentro (modo editable), verificar role/aria.
       const ta = pgCode.shadowRoot?.querySelector<HTMLTextAreaElement>('.ic-input');
@@ -5174,8 +5177,8 @@ test('g03 code: role=region + aria-label + data-language + role=textbox editor (
 
     // ─── Cat 27.3: cambio de lang actualiza data-language + aria-label ───
     const langChange = await page.evaluate(() => {
-      const main = document.querySelector<HTMLElement>('is-main.main');
-      const host = document.createElement('is-code');
+      const main = document.querySelector<HTMLElement>('iswc-main.main');
+      const host = document.createElement('iswc-code');
       host.setAttribute('lang', 'css');
       host.setAttribute('value', '.card { color: red; }');
       main?.appendChild(host);
@@ -5213,13 +5216,13 @@ test('g03 md-editor: toolbar role+aria-label, role=textbox surface, host region 
   const page = await nuevoPage();
   activePage = page;
   try {
-    const renderOk = await abrirPreview(page, base, 'is-md-editor');
+    const renderOk = await abrirPreview(page, base, 'iswc-md-editor');
     assert.ok(renderOk, 'md-editor preview no renderizo');
 
     // ─── Cat 28.1: host role=region + aria-label descriptivo ───
     const hostAria = await page.evaluate(() => {
-      const main = document.querySelector<HTMLElement>('is-main.main');
-      const host = main?.querySelector<HTMLElement>('is-md-editor');
+      const main = document.querySelector<HTMLElement>('iswc-main.main');
+      const host = main?.querySelector<HTMLElement>('iswc-md-editor');
       if (!host) return { ok: false, motivo: 'no host', role: '', ariaLabel: '' };
       return {
         ok: host.getAttribute('role') === 'region' && !!host.getAttribute('aria-label'),
@@ -5234,8 +5237,8 @@ test('g03 md-editor: toolbar role+aria-label, role=textbox surface, host region 
 
     // ─── Cat 28.2: abrir dialog y verificar toolbar / surface / acciones ───
     const opened = await page.evaluate(async () => {
-      const main = document.querySelector<HTMLElement>('is-main.main');
-      const host = main?.querySelector<HTMLElement & { open(): void }>('is-md-editor');
+      const main = document.querySelector<HTMLElement>('iswc-main.main');
+      const host = main?.querySelector<HTMLElement & { open(): void }>('iswc-md-editor');
       if (!host) return { ok: false, motivo: 'no host' };
       host.open();
       await new Promise((r) => setTimeout(r, 250));
@@ -5250,15 +5253,15 @@ test('g03 md-editor: toolbar role+aria-label, role=textbox surface, host region 
     assert.ok(opened.ok, 'g03 md-editor dialog no abrio');
 
     const ariaToolbar = await page.evaluate(() => {
-      const main = document.querySelector<HTMLElement>('is-main.main');
-      const host = main?.querySelector<HTMLElement>('is-md-editor');
+      const main = document.querySelector<HTMLElement>('iswc-main.main');
+      const host = main?.querySelector<HTMLElement>('iswc-md-editor');
       const tb = host?.shadowRoot?.querySelector<HTMLElement>('.toolbar');
       if (!tb) return { ok: false, motivo: 'no toolbar', role: '', ariaLabel: '', buttons: 0, totalBtns: 0, allWithLabel: false, ftRole: '', ftLabel: '', ftBtns: 0, ftWithLabel: 0 };
-      const buttons = [...tb.querySelectorAll<HTMLElement>('is-button[data-cmd]')];
+      const buttons = [...tb.querySelectorAll<HTMLElement>('iswc-button[data-cmd]')];
       const labels = buttons.map((b) => b.getAttribute('aria-label'));
       const labelsNonEmpty = labels.filter((l) => !!(l && l.trim())).length;
       const ft = host?.shadowRoot?.querySelector<HTMLElement>('.ft-actions');
-      const ftBtns = ft ? [...ft.querySelectorAll<HTMLElement>('is-button')] : [];
+      const ftBtns = ft ? [...ft.querySelectorAll<HTMLElement>('iswc-button')] : [];
       const ftLabels = ftBtns.map((b) => b.getAttribute('aria-label'));
       const ftWithLabel = ftLabels.filter((l) => !!(l && l.trim())).length;
       return {
@@ -5286,8 +5289,8 @@ test('g03 md-editor: toolbar role+aria-label, role=textbox surface, host region 
 
     // ─── Cat 28.3: surface role=textbox + aria-multiline + aria-label ───
     const surfaceAria = await page.evaluate(() => {
-      const main = document.querySelector<HTMLElement>('is-main.main');
-      const host = main?.querySelector<HTMLElement>('is-md-editor');
+      const main = document.querySelector<HTMLElement>('iswc-main.main');
+      const host = main?.querySelector<HTMLElement>('iswc-md-editor');
       const surface = host?.shadowRoot?.querySelector<HTMLElement>('.surface');
       if (!surface) return { ok: false, motivo: 'no surface', role: '', multiline: '', ariaLabel: '' };
       return {
@@ -5315,13 +5318,13 @@ test('g03 md-editor: Tab indents + Escape sale de lista + Shift+Tab outdenta (Ca
   const page = await nuevoPage();
   activePage = page;
   try {
-    const renderOk = await abrirPreview(page, base, 'is-md-editor');
+    const renderOk = await abrirPreview(page, base, 'iswc-md-editor');
     assert.ok(renderOk, 'md-editor preview no renderizo');
 
     // ─── Cat 28.4: Tab en plain mode inserta 2 espacios ───
     const tabPlain = await page.evaluate(async () => {
-      const main = document.querySelector<HTMLElement>('is-main.main');
-      const host = main?.querySelector<HTMLElement & { open(): void; canEdit: boolean }>('is-md-editor');
+      const main = document.querySelector<HTMLElement>('iswc-main.main');
+      const host = main?.querySelector<HTMLElement & { open(): void; canEdit: boolean }>('iswc-md-editor');
       if (!host) return { ok: false, motivo: 'no host' };
       host.open();
       await new Promise((r) => setTimeout(r, 200));
@@ -5329,7 +5332,7 @@ test('g03 md-editor: Tab indents + Escape sale de lista + Shift+Tab outdenta (Ca
       const sw = host.shadowRoot?.querySelector<HTMLElement & { checked: boolean }>('.tb-plain');
       if (sw) {
         sw.checked = true;
-        sw.dispatchEvent(new CustomEvent('is-change', { detail: { checked: true }, bubbles: true }));
+        sw.dispatchEvent(new CustomEvent('iswc-change', { detail: { checked: true }, bubbles: true }));
       }
       await new Promise((r) => setTimeout(r, 120));
       const ta = host.shadowRoot?.querySelector<HTMLTextAreaElement>('.plain');
@@ -5363,8 +5366,8 @@ test('g03 md-editor: Tab indents + Escape sale de lista + Shift+Tab outdenta (Ca
 
     // ─── Cat 28.5: Escape en <li> vacío abandona la lista ───
     const escapeList = await page.evaluate(async () => {
-      const main = document.querySelector<HTMLElement>('is-main.main');
-      const host = main?.querySelector<HTMLElement & { open(): void; canEdit: boolean }>('is-md-editor');
+      const main = document.querySelector<HTMLElement>('iswc-main.main');
+      const host = main?.querySelector<HTMLElement & { open(): void; canEdit: boolean }>('iswc-md-editor');
       if (!host) return { ok: false, motivo: 'no host' };
       host.open();
       await new Promise((r) => setTimeout(r, 200));
@@ -5412,9 +5415,9 @@ test('g03 md-editor: Tab indents + Escape sale de lista + Shift+Tab outdenta (Ca
 // ---------------------------------------------------------------------------
 // g02: charts (Cat 26-28) — proposals UX/UI demo-g02.md
 //
-// Cubre el contrato ARIA + sr-status + a11y del motor <is-chart> y los 5
-// wrappers tipados (<is-bar-chart>, <is-line-chart>, <is-pie-chart>,
-// <is-radar-chart>, <is-scatter-chart>), todos los cuales heredan del motor
+// Cubre el contrato ARIA + sr-status + a11y del motor <iswc-chart> y los 5
+// wrappers tipados (<iswc-bar-chart>, <iswc-line-chart>, <iswc-pie-chart>,
+// <iswc-radar-chart>, <iswc-scatter-chart>), todos los cuales heredan del motor
 // chart.ts vía `defineTypedChart`.
 //
 //   - Cat 26: el <svg> interno lleva role="img" + aria-busy (false al
@@ -5433,7 +5436,7 @@ test('g02 charts: svg role=img + aria-busy + aria-label descriptivo en motor + 5
   if (!DISPONIBLE) return t.skip('faltan variables E2E');
   const base = await ensureServer();
   // Lista de wrappers tipados. Todos heredan del motor chart.ts.
-  const tags = ['is-chart', 'is-bar-chart', 'is-line-chart', 'is-pie-chart', 'is-radar-chart', 'is-scatter-chart'];
+  const tags = ['iswc-chart', 'iswc-bar-chart', 'iswc-line-chart', 'iswc-pie-chart', 'iswc-radar-chart', 'iswc-scatter-chart'];
   for (const tag of tags) {
     const page = await nuevoPage();
     activePage = page;
@@ -5442,7 +5445,7 @@ test('g02 charts: svg role=img + aria-busy + aria-label descriptivo en motor + 5
       assert.ok(renderOk, `${tag} preview no renderizo`);
 
       const aria = await page.evaluate(async (tagName: string) => {
-        const main = document.querySelector<HTMLElement>('is-main.main');
+        const main = document.querySelector<HTMLElement>('iswc-main.main');
         const wc = main?.querySelector<HTMLElement>(tagName);
         if (!wc?.shadowRoot) return { ok: false, motivo: 'no shadow' };
         const svg = wc.shadowRoot.querySelector<HTMLElement>('svg.chart-svg');
@@ -5477,13 +5480,13 @@ test('g02 charts: sr-status con aria-live polite se republica al cambiar dataset
   const page = await nuevoPage();
   activePage = page;
   try {
-    const renderOk = await abrirPreview(page, base, 'is-chart');
-    assert.ok(renderOk, 'is-chart preview no renderizo');
+    const renderOk = await abrirPreview(page, base, 'iswc-chart');
+    assert.ok(renderOk, 'iswc-chart preview no renderizo');
 
     // 1) Verificar presencia + atributos del sr-status tras el primer render.
     const initial = await page.evaluate(async () => {
-      const main = document.querySelector<HTMLElement>('is-main.main');
-      const wc = main?.querySelector<HTMLElement>('is-chart');
+      const main = document.querySelector<HTMLElement>('iswc-main.main');
+      const wc = main?.querySelector<HTMLElement>('iswc-chart');
       if (!wc?.shadowRoot) return { ok: false, motivo: 'no chart' };
       const sr = wc.shadowRoot.querySelector<HTMLElement>('.sr-status');
       if (!sr) return { ok: false, motivo: 'no sr-status' };
@@ -5504,8 +5507,8 @@ test('g02 charts: sr-status con aria-live polite se republica al cambiar dataset
 
     // 2) Cambiar el dataset y verificar que el sr-status republica (firma cambia).
     const after = await page.evaluate(async () => {
-      const main = document.querySelector<HTMLElement>('is-main.main');
-      const wc = main?.querySelector<HTMLElement>('is-chart');
+      const main = document.querySelector<HTMLElement>('iswc-main.main');
+      const wc = main?.querySelector<HTMLElement>('iswc-chart');
       if (!wc?.shadowRoot) return { ok: false, motivo: 'no chart' };
       const before = (wc.shadowRoot.querySelector('.sr-status')?.textContent ?? '').trim();
       // Cambio el tipo + series: nueva firma debe disparar republicación.
@@ -5542,13 +5545,13 @@ test('g02 charts: marks con aria-label + tabindex=0 + tooltip role=status (Cat 2
   const page = await nuevoPage();
   activePage = page;
   try {
-    const renderOk = await abrirPreview(page, base, 'is-bar-chart');
-    assert.ok(renderOk, 'is-bar-chart preview no renderizo');
+    const renderOk = await abrirPreview(page, base, 'iswc-bar-chart');
+    assert.ok(renderOk, 'iswc-bar-chart preview no renderizo');
 
     // 1) Cada mark (<path.mark>) debe llevar aria-label + tabindex=0.
     const marks = await page.evaluate(async () => {
-      const main = document.querySelector<HTMLElement>('is-main.main');
-      const wc = main?.querySelector<HTMLElement>('is-bar-chart');
+      const main = document.querySelector<HTMLElement>('iswc-main.main');
+      const wc = main?.querySelector<HTMLElement>('iswc-bar-chart');
       if (!wc?.shadowRoot) return { ok: false, motivo: 'no shadow' };
       const group = wc.shadowRoot.querySelector<SVGGElement>('g.marks');
       const allMarks = group ? [...group.querySelectorAll<SVGElement>('.mark')] : [];
@@ -5570,8 +5573,8 @@ test('g02 charts: marks con aria-label + tabindex=0 + tooltip role=status (Cat 2
 
     // 2) Tooltip lleva role="status" y aparece (visible) al simular hover.
     const tooltip = await page.evaluate(async () => {
-      const main = document.querySelector<HTMLElement>('is-main.main');
-      const wc = main?.querySelector<HTMLElement>('is-bar-chart');
+      const main = document.querySelector<HTMLElement>('iswc-main.main');
+      const wc = main?.querySelector<HTMLElement>('iswc-bar-chart');
       if (!wc?.shadowRoot) return { ok: false, motivo: 'no shadow' };
       const tip = wc.shadowRoot.querySelector<HTMLElement>('.tooltip');
       if (!tip) return { ok: false, motivo: 'no tooltip' };

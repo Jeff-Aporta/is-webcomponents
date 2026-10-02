@@ -1,6 +1,6 @@
 /**
  * Controladores ISP desde JSON — remake compacto de TControllerCatalogoGen /
- * TCapacitacionBaseClient (ispgen) para `<is-catalogo-gen>` y `<is-btn-ref>`.
+ * TCapacitacionBaseClient (ispgen) para `<iswc-catalogo-gen>` y `<iswc-btn-ref>`.
  *
  * Catálogo (acciones CRUD + verificar/duplicar/recodificar/consolidar):
  *
@@ -314,9 +314,9 @@ async function httpJson(
 /* ──────────────────────────────── factoría ────────────────────────────── */
 
 /**
- * Crea un controller compatible con `<is-catalogo-gen>` y `<is-btn-ref>`.
+ * Crea un controller compatible con `<iswc-catalogo-gen>` y `<iswc-btn-ref>`.
  * @param config Configuración declarativa (mock o HTTP).
- * @returns Controller listo para asignar a `is-catalogo-gen.controller` o `is-btn-ref.controller`.
+ * @returns Controller listo para asignar a `iswc-catalogo-gen.controller` o `iswc-btn-ref.controller`.
  */
 export function createIspController(config: IspControllerConfig = {}): IspController {
   const kind: 'catalog' | 'btnref' = config.kind === 'btnref' ? 'btnref' : 'catalog';

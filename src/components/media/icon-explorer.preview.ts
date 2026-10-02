@@ -20,56 +20,56 @@ export async function mount(ctx: import('../../previews/_kit/types.d.ts').Previe
     return el;
   };
 
-  /** `<is-input>`: input de texto/número/search. */
-  interface IsInput extends HTMLElement {
+  /** `<iswc-input>`: input de texto/número/search. */
+  interface IswcInput extends HTMLElement {
     value: string;
     error: boolean;
   }
 
-  /** `<is-color-picker>`: igual que IsInput pero emite `is-input` con `detail.value`. */
-  interface IsColorPicker extends HTMLElement {
+  /** `<iswc-color-picker>`: igual que IswcInput pero emite `iswc-input` con `detail.value`. */
+  interface IswcColorPicker extends HTMLElement {
     value: string;
   }
 
-  /** `<is-select>`: value como string. */
-  interface IsSelect extends HTMLElement {
+  /** `<iswc-select>`: value como string. */
+  interface IswcSelect extends HTMLElement {
     value: string;
   }
 
-  /** `<is-checkbox>`: checked como boolean. */
-  interface IsCheckbox extends HTMLElement {
+  /** `<iswc-checkbox>`: checked como boolean. */
+  interface IswcCheckbox extends HTMLElement {
     checked: boolean;
   }
 
-  /** `<is-slider>`: value como string. */
-  interface IsSlider extends HTMLElement {
+  /** `<iswc-slider>`: value como string. */
+  interface IswcSlider extends HTMLElement {
     value: string;
   }
 
-  /** `<is-drawer>`: open como boolean. */
-  interface IsDrawer extends HTMLElement {
+  /** `<iswc-drawer>`: open como boolean. */
+  interface IswcDrawer extends HTMLElement {
     open: boolean;
   }
 
-  /** `<is-button>` / `<is-copy-button>`: disabled / value. */
-  interface IsButton extends HTMLElement {
+  /** `<iswc-button>` / `<iswc-copy-button>`: disabled / value. */
+  interface IswcButton extends HTMLElement {
     disabled: boolean;
   }
-  interface IsCopyButton extends HTMLElement {
+  interface IswcCopyButton extends HTMLElement {
     value: string;
   }
 
-  /** `<is-code>`: contenedor de código que admite `textContent` y opcionalmente `value`. */
-  interface IsCode extends HTMLElement {
+  /** `<iswc-code>`: contenedor de código que admite `textContent` y opcionalmente `value`. */
+  interface IswcCode extends HTMLElement {
     value?: string;
   }
 
-  /** `<is-toast>` raíz (toaster): expone `create(message, opts)`. */
-  interface IsToast extends HTMLElement {
+  /** `<iswc-toast>` raíz (toaster): expone `create(message, opts)`. */
+  interface IswcToast extends HTMLElement {
     create(message: string, opts?: { variant?: string }): void;
   }
 
-  /** Detail de los eventos `is-input` / `is-change` que disparan los `<is-*>` con `value`. */
+  /** Detail de los eventos `iswc-input` / `iswc-change` que disparan los `<is-*>` con `value`. */
   interface IsInputDetail {
     value: string;
   }
@@ -175,34 +175,34 @@ export async function mount(ctx: import('../../previews/_kit/types.d.ts').Previe
     return p;
   }
 
-  /* El feedback de "copiado" lo da <is-copy-button> por sí solo; el toaster
+  /* El feedback de "copiado" lo da <iswc-copy-button> por sí solo; el toaster
      queda para lo que no nace de un botón de copia (descargas, errores). */
-  const toaster = $byId<IsToast>('toaster');
+  const toaster = $byId<IswcToast>('toaster');
   const toast = (message: string, variant: 'brand' | 'danger' | 'success' = 'brand'): void => {
     toaster?.create(message, { variant });
   };
 
   /* ══ Personalizador (drawer) ════════════════════════════════════════ */
   const F = {
-    root: $mustId<IsDrawer>('form'),
+    root: $mustId<IswcDrawer>('form'),
     id: $mustId<HTMLElement>('fId'),
     collection: $mustId<HTMLElement>('fCollection'),
     size: $mustId<HTMLElement>('fSize'),
     alt: $mustId<HTMLElement>('fAlt'),
     preview: $mustId<HTMLElement>('fPreview'),
     options: $mustId<HTMLElement>('fOptions'),
-    format: $mustId<IsSelect>('fFormat'),
-    sizeVal: $mustId<IsInput>('fSizeVal'),
-    unit: $mustId<IsSelect>('fUnit'),
-    color: $mustId<IsInput>('fColor'),
-    colorPick: $mustId<IsColorPicker>('fColorPick'),
-    pretty: $mustId<IsCheckbox>('fPretty'),
-    rect: $mustId<IsCheckbox>('fRect'),
-    code: $mustId<IsCode>('fCode'),
+    format: $mustId<IswcSelect>('fFormat'),
+    sizeVal: $mustId<IswcInput>('fSizeVal'),
+    unit: $mustId<IswcSelect>('fUnit'),
+    color: $mustId<IswcInput>('fColor'),
+    colorPick: $mustId<IswcColorPicker>('fColorPick'),
+    pretty: $mustId<IswcCheckbox>('fPretty'),
+    rect: $mustId<IswcCheckbox>('fRect'),
+    code: $mustId<IswcCode>('fCode'),
     codeLabel: $mustId<HTMLElement>('fCodeLabel'),
-    copyId: $mustId<IsCopyButton>('fCopyId'),
-    copyCode: $mustId<IsCopyButton>('fCopyCode'),
-    copyUrl: $mustId<IsCopyButton>('fCopyUrl'),
+    copyId: $mustId<IswcCopyButton>('fCopyId'),
+    copyCode: $mustId<IswcCopyButton>('fCopyCode'),
+    copyUrl: $mustId<IswcCopyButton>('fCopyUrl'),
   };
 
   /** Estado del formulario. Se conserva al cambiar de icono (requisito). */
@@ -311,7 +311,7 @@ export async function mount(ctx: import('../../previews/_kit/types.d.ts').Previe
     return buildSvg();
   }
 
-  /** Marca los campos inválidos usando el estado `error` de <is-input>. */
+  /** Marca los campos inválidos usando el estado `error` de <iswc-input>. */
   function validate(): boolean {
     const okSize = F.unit.value === 'auto' || isValidSize(parseFloat(F.sizeVal.value));
     const okColor = isValidColor(F.color.value);
@@ -336,7 +336,7 @@ export async function mount(ctx: import('../../previews/_kit/types.d.ts').Previe
     const code = currentCode();
     F.code.textContent = code;
     F.codeLabel.textContent = F.format.value === 'css' ? 'CSS generado' : 'SVG generado';
-    // <is-copy-button> copia su propio `value`: no hace falta un handler.
+    // <iswc-copy-button> copia su propio `value`: no hace falta un handler.
     F.copyCode.value = code;
   }
 
@@ -371,8 +371,8 @@ export async function mount(ctx: import('../../previews/_kit/types.d.ts').Previe
       F.preview.innerHTML = '';
       return;
     }
-    const fPrev = $mustId<IsButton>('fPrev');
-    const fNext = $mustId<IsButton>('fNext');
+    const fPrev = $mustId<IswcButton>('fPrev');
+    const fNext = $mustId<IswcButton>('fNext');
     fPrev.disabled = state.pos <= 0;
     fNext.disabled = state.pos < 0 || state.pos >= state.list.length - 1;
     sync();
@@ -387,19 +387,19 @@ export async function mount(ctx: import('../../previews/_kit/types.d.ts').Previe
   }
 
   for (const el of [F.format, F.unit, F.pretty, F.rect, F.sizeVal, F.color]) {
-    el.addEventListener('is-change', sync);
-    el.addEventListener('is-input', sync);
+    el.addEventListener('iswc-change', sync);
+    el.addEventListener('iswc-input', sync);
   }
-  F.colorPick.addEventListener('is-input', (e: Event): void => {
+  F.colorPick.addEventListener('iswc-input', (e: Event): void => {
     const detail = (e as CustomEvent<IsInputDetail>).detail;
     F.color.value = detail.value;
     sync();
   });
-  const fPrevBtn = $mustId<IsButton>('fPrev');
-  const fNextBtn = $mustId<IsButton>('fNext');
+  const fPrevBtn = $mustId<IswcButton>('fPrev');
+  const fNextBtn = $mustId<IswcButton>('fNext');
   fPrevBtn.addEventListener('click', () => step(-1));
   fNextBtn.addEventListener('click', () => step(1));
-  $mustId<IsButton>('fMore').addEventListener('click', (e: Event): void => {
+  $mustId<IswcButton>('fMore').addEventListener('click', (e: Event): void => {
     const open = F.options.hidden;
     F.options.hidden = !open;
     const t = e.currentTarget as HTMLElement | null;
@@ -409,7 +409,7 @@ export async function mount(ctx: import('../../previews/_kit/types.d.ts').Previe
     if (!validate()) toast('Corrige los valores inválidos', 'danger');
   });
 
-  const fDownload = $mustId<IsButton>('fDownload');
+  const fDownload = $mustId<IswcButton>('fDownload');
   fDownload.addEventListener('click', async (): Promise<void> => {
     if (!state.svg || !validate()) {
       toast('Corrige los valores inválidos', 'danger');
@@ -504,10 +504,10 @@ export async function mount(ctx: import('../../previews/_kit/types.d.ts').Previe
   function filtersMarkup(): string {
     const metas: CollectionMeta[] = Object.values(collectionsMeta);
     const sel = (id: string, label: string, vals: string[], todos: string): string => `
-      <is-select id="${id}" label="${label}" value="" clearable>
-        <is-option value="">${todos}</is-option>
-        ${vals.map((v: string): string => `<is-option value="${esc(v)}">${esc(v)}</is-option>`).join('')}
-      </is-select>`;
+      <iswc-select id="${id}" label="${label}" value="" clearable>
+        <iswc-option value="">${todos}</iswc-option>
+        ${vals.map((v: string): string => `<iswc-option value="${esc(v)}">${esc(v)}</iswc-option>`).join('')}
+      </iswc-select>`;
     const grids: string[] = uniqSorted(
       metas.map((m: CollectionMeta): string => (m.height == null ? '' : String(m.height))),
     ).sort((a: string, b: string): number => Number(a) - Number(b));
@@ -516,13 +516,13 @@ export async function mount(ctx: import('../../previews/_kit/types.d.ts').Previe
         ${sel('fltCategory', 'Categoría', uniqSorted(metas.map((m: CollectionMeta): string => m.category ?? '')), 'Todas')}
         ${sel('fltAuthor', 'Autor / tag', uniqSorted(metas.map((m: CollectionMeta): string => m.author ?? '')), 'Todos')}
         ${sel('fltGrid', 'Grid', grids, 'Cualquiera')}
-        <is-select id="fltPalette" label="Paleta" value="">
-          <is-option value="">Cualquiera</is-option>
-          <is-option value="mono">Monocromo</is-option>
-          <is-option value="color">Color</is-option>
-        </is-select>
+        <iswc-select id="fltPalette" label="Paleta" value="">
+          <iswc-option value="">Cualquiera</iswc-option>
+          <iswc-option value="mono">Monocromo</iswc-option>
+          <iswc-option value="color">Color</iswc-option>
+        </iswc-select>
         ${sel('fltLicense', 'Licencia', uniqSorted(metas.map((m: CollectionMeta): string => m.license ?? '')), 'Cualquiera')}
-        <is-button id="fltReset" color="neutral" variant="plain">Limpiar</is-button>
+        <iswc-button id="fltReset" color="neutral" variant="plain">Limpiar</iswc-button>
       </div>`;
   }
 
@@ -539,30 +539,30 @@ export async function mount(ctx: import('../../previews/_kit/types.d.ts').Previe
       </div>
       <div class="xp-bar">
         <div class="xp-bar__search">
-          <is-input id="q" type="search" clearable placeholder="Buscar por palabra clave (mdi, tabler, lucide...)">
-            <is-icon slot="start" icon="mdi:magnify"></is-icon>
-          </is-input>
-          <is-button-group id="scope" select="single" value="fam" label="Ámbito de búsqueda">
-            <is-button value="fam">Familias</is-button>
-            <is-button value="icon">Iconos</is-button>
-          </is-button-group>
+          <iswc-input id="q" type="search" clearable placeholder="Buscar por palabra clave (mdi, tabler, lucide...)">
+            <iswc-icon slot="start" icon="mdi:magnify"></iswc-icon>
+          </iswc-input>
+          <iswc-button-group id="scope" select="single" value="fam" label="Ámbito de búsqueda">
+            <iswc-button value="fam">Familias</iswc-button>
+            <iswc-button value="icon">Iconos</iswc-button>
+          </iswc-button-group>
         </div>
         ${filtersMarkup()}
       </div>
       <div id="results"></div>`;
 
-    const q = $mustId<IsInput>('q');
+    const q = $mustId<IswcInput>('q');
     const results = $mustId<HTMLElement>('results');
     const scopeGroup = $mustId<HTMLElement>('scope');
     let scope: 'fam' | 'icon' = 'fam';
 
     const readFilters = (): FilterValues => ({
       q: String(q.value).trim().toLowerCase(),
-      category: $mustId<IsSelect>('fltCategory').value,
-      author: $mustId<IsSelect>('fltAuthor').value,
-      grid: $mustId<IsSelect>('fltGrid').value,
-      palette: $mustId<IsSelect>('fltPalette').value,
-      license: $mustId<IsSelect>('fltLicense').value,
+      category: $mustId<IswcSelect>('fltCategory').value,
+      author: $mustId<IswcSelect>('fltAuthor').value,
+      grid: $mustId<IswcSelect>('fltGrid').value,
+      palette: $mustId<IswcSelect>('fltPalette').value,
+      license: $mustId<IswcSelect>('fltLicense').value,
     });
 
     /* — familias — */
@@ -572,7 +572,7 @@ export async function mount(ctx: import('../../previews/_kit/types.d.ts').Previe
       io?.disconnect();
       const list = filterFamilies(families, readFilters());
       if (list.length === 0) {
-        results.innerHTML = `<is-callout color="neutral" variant="outlined" icon="mdi:filter-off">Ninguna familia coincide con los filtros.</is-callout>`;
+        results.innerHTML = `<iswc-callout color="neutral" variant="outlined" icon="mdi:filter-off">Ninguna familia coincide con los filtros.</iswc-callout>`;
         return;
       }
       results.innerHTML = `<div class="fam-grid">${list
@@ -580,17 +580,17 @@ export async function mount(ctx: import('../../previews/_kit/types.d.ts').Previe
           const m: CollectionMeta = collectionsMeta[f.prefix] ?? {};
           return `
             <a class="fam" href="?f=${encodeURIComponent(f.prefix)}">
-              <is-card variant="outlined">
+              <iswc-card variant="outlined">
                 <b>${esc(m.name ?? f.prefix)}</b>
                 <small>${esc(f.prefix)} · ${f.count.toLocaleString('es')} iconos</small>
                 <span class="sample" data-prefix="${esc(f.prefix)}"></span>
                 <span class="meta">
-                  ${m.category ? `<is-tag color="neutral" variant="outlined" pill>${esc(m.category)}</is-tag>` : ''}
-                  ${m.height ? `<is-tag color="neutral" variant="outlined" pill>${m.height}px</is-tag>` : ''}
-                  <is-tag color="${m.palette ? 'info' : 'neutral'}" variant="outlined" pill>${m.palette ? 'color' : 'mono'}</is-tag>
-                  ${m.license ? `<is-tag color="neutral" variant="outlined" pill>${esc(m.license)}</is-tag>` : ''}
+                  ${m.category ? `<iswc-tag color="neutral" variant="outlined" pill>${esc(m.category)}</iswc-tag>` : ''}
+                  ${m.height ? `<iswc-tag color="neutral" variant="outlined" pill>${m.height}px</iswc-tag>` : ''}
+                  <iswc-tag color="${m.palette ? 'info' : 'neutral'}" variant="outlined" pill>${m.palette ? 'color' : 'mono'}</iswc-tag>
+                  ${m.license ? `<iswc-tag color="neutral" variant="outlined" pill>${esc(m.license)}</iswc-tag>` : ''}
                 </span>
-              </is-card>
+              </iswc-card>
             </a>`;
         })
         .join('')}</div>`;
@@ -605,7 +605,7 @@ export async function mount(ctx: import('../../previews/_kit/types.d.ts').Previe
             loadJson<IconsJson>(`${prefix}.json`)
               .then((d: IconsJson) => {
                 for (const n of d.icons.slice(0, 4)) {
-                  const ic = document.createElement('is-icon');
+                  const ic = document.createElement('iswc-icon');
                   ic.setAttribute('icon', `${prefix}:${n}`);
                   e.target.appendChild(ic);
                 }
@@ -666,7 +666,7 @@ export async function mount(ctx: import('../../previews/_kit/types.d.ts').Previe
       if (!allIcons) {
         results.innerHTML = `
           <div class="status">
-            <is-progress-bar id="prog" value="0" label="Indexando iconos"></is-progress-bar>
+            <iswc-progress-bar id="prog" value="0" label="Indexando iconos"></iswc-progress-bar>
             <span class="count" id="progTxt">Indexando iconos… 0%</span>
           </div>`;
         const loaded = await ensureIcons((done: number, total: number): void => {
@@ -690,7 +690,7 @@ export async function mount(ctx: import('../../previews/_kit/types.d.ts').Previe
         if (matches.length >= LIMIT) break;
       }
       if (matches.length === 0) {
-        results.innerHTML = `<is-callout color="neutral" variant="outlined" icon="mdi:magnify-close">Ningún icono coincide${term ? ` con “${esc(term)}”` : ''}.</is-callout>`;
+        results.innerHTML = `<iswc-callout color="neutral" variant="outlined" icon="mdi:magnify-close">Ningún icono coincide${term ? ` con “${esc(term)}”` : ''}.</iswc-callout>`;
         return;
       }
       results.innerHTML =
@@ -703,7 +703,7 @@ export async function mount(ctx: import('../../previews/_kit/types.d.ts').Previe
         btn.type = 'button';
         btn.className = 'icon-cell';
         btn.dataset.pos = String(i);
-        const ic = document.createElement('is-icon');
+        const ic = document.createElement('iswc-icon');
         ic.setAttribute('icon', `${it.prefix}:${it.name}`);
         const nm = document.createElement('small');
         nm.textContent = it.name;
@@ -731,24 +731,24 @@ export async function mount(ctx: import('../../previews/_kit/types.d.ts').Previe
       else void paintIcons();
     };
     let debounce: ReturnType<typeof setTimeout> | null = null;
-    q.addEventListener('is-input', () => {
+    q.addEventListener('iswc-input', () => {
       if (debounce !== null) clearTimeout(debounce);
       debounce = setTimeout(paint, scope === 'fam' ? 60 : 220);
     });
     for (const id of FILTER_IDS) {
-      const el = $mustId<IsSelect>(id);
-      el.addEventListener('is-change', paint);
+      const el = $mustId<IswcSelect>(id);
+      el.addEventListener('iswc-change', paint);
     }
-    const fltReset = $mustId<IsButton>('fltReset');
+    const fltReset = $mustId<IswcButton>('fltReset');
     fltReset.addEventListener('click', (): void => {
       for (const id of FILTER_IDS) {
-        const el = $mustId<IsSelect>(id);
+        const el = $mustId<IswcSelect>(id);
         el.value = '';
       }
       q.value = '';
       paint();
     });
-    scopeGroup.addEventListener('is-change', (e: Event): void => {
+    scopeGroup.addEventListener('iswc-change', (e: Event): void => {
       const detail = (e as CustomEvent<IsInputDetail>).detail;
       scope = detail.value === 'icon' ? 'icon' : 'fam';
       q.setAttribute(
@@ -770,7 +770,7 @@ export async function mount(ctx: import('../../previews/_kit/types.d.ts').Previe
       data = await loadJson<IconsJson>(`${prefix}.json`);
     } catch {
       if (app) {
-        app.innerHTML = `<is-callout color="danger" variant="outlined" icon="mdi:alert">No existe la familia <code>${esc(prefix)}</code>. <a href="icon-explorer.html">Volver</a></is-callout>`;
+        app.innerHTML = `<iswc-callout color="danger" variant="outlined" icon="mdi:alert">No existe la familia <code>${esc(prefix)}</code>. <a href="icon-explorer.html">Volver</a></iswc-callout>`;
       }
       return;
     }
@@ -778,35 +778,35 @@ export async function mount(ctx: import('../../previews/_kit/types.d.ts').Previe
     document.title = `${prefix} · Explorador de iconos`;
     if (!app) return;
     app.innerHTML = `
-      <is-breadcrumb style="margin-bottom:6px">
-        <is-breadcrumb-item href="icon-explorer.html">Todas las familias</is-breadcrumb-item>
-        <is-breadcrumb-item>${esc(meta.name ?? prefix)}</is-breadcrumb-item>
-      </is-breadcrumb>
+      <iswc-breadcrumb style="margin-bottom:6px">
+        <iswc-breadcrumb-item href="icon-explorer.html">Todas las familias</iswc-breadcrumb-item>
+        <iswc-breadcrumb-item>${esc(meta.name ?? prefix)}</iswc-breadcrumb-item>
+      </iswc-breadcrumb>
       <div class="xp-head">
         <h1>${esc(meta.name ?? prefix)}</h1>
         <span class="count">${esc(prefix)} · ${data.icons.length.toLocaleString('es')} iconos${meta.height ? ` · grid ${meta.height}px` : ''}${meta.license ? ` · ${esc(meta.license)}` : ''}</span>
       </div>
       <div class="xp-bar">
         <div class="xp-bar__search">
-          <is-input id="q" type="search" clearable placeholder="Buscar en ${esc(prefix)}...">
-            <is-icon slot="start" icon="mdi:magnify"></is-icon>
-          </is-input>
+          <iswc-input id="q" type="search" clearable placeholder="Buscar en ${esc(prefix)}...">
+            <iswc-icon slot="start" icon="mdi:magnify"></iswc-icon>
+          </iswc-input>
         </div>
         <div class="tools">
-          <is-color-picker id="tColor" label="Color" value="#e8eaf1"></is-color-picker>
-          <is-checkbox id="tInherit" checked>Heredar del tema</is-checkbox>
-          <is-slider id="tSize" label="Tamaño" min="16" max="64" value="26" value-label with-tooltip format="{v}px"></is-slider>
+          <iswc-color-picker id="tColor" label="Color" value="#e8eaf1"></iswc-color-picker>
+          <iswc-checkbox id="tInherit" checked>Heredar del tema</iswc-checkbox>
+          <iswc-slider id="tSize" label="Tamaño" min="16" max="64" value="26" value-label with-tooltip format="{v}px"></iswc-slider>
         </div>
       </div>
       <div class="icon-grid" id="grid"></div>
-      <is-button class="more" id="more" color="neutral" variant="outlined">Mostrar más</is-button>`;
+      <iswc-button class="more" id="more" color="neutral" variant="outlined">Mostrar más</iswc-button>`;
 
     const grid = $mustId<HTMLElement>('grid');
-    const q = $mustId<IsInput>('q');
-    const more = $mustId<IsButton>('more');
-    const tColor = $mustId<IsColorPicker>('tColor');
-    const tInherit = $mustId<IsCheckbox>('tInherit');
-    const tSize = $mustId<IsSlider>('tSize');
+    const q = $mustId<IswcInput>('q');
+    const more = $mustId<IswcButton>('more');
+    const tColor = $mustId<IswcColorPicker>('tColor');
+    const tInherit = $mustId<IswcCheckbox>('tInherit');
+    const tSize = $mustId<IswcSlider>('tSize');
     let filtered: string[] = data.icons;
     let shown = 0;
 
@@ -815,13 +815,13 @@ export async function mount(ctx: import('../../previews/_kit/types.d.ts').Previe
       if (tInherit.checked) grid.style.removeProperty('--xp-color');
       else grid.style.setProperty('--xp-color', tColor.value);
     };
-    tColor.addEventListener('is-input', (): void => {
+    tColor.addEventListener('iswc-input', (): void => {
       tInherit.checked = false;
       applyTools();
     });
-    tInherit.addEventListener('is-change', applyTools);
-    tSize.addEventListener('is-input', applyTools);
-    tSize.addEventListener('is-change', applyTools);
+    tInherit.addEventListener('iswc-change', applyTools);
+    tSize.addEventListener('iswc-input', applyTools);
+    tSize.addEventListener('iswc-change', applyTools);
 
     const appendPage = (): void => {
       const frag = document.createDocumentFragment();
@@ -830,7 +830,7 @@ export async function mount(ctx: import('../../previews/_kit/types.d.ts').Previe
         btn.type = 'button';
         btn.className = 'icon-cell';
         btn.dataset.name = name;
-        const ic = document.createElement('is-icon');
+        const ic = document.createElement('iswc-icon');
         ic.setAttribute('icon', `${prefix}:${name}`);
         const nm = document.createElement('small');
         nm.textContent = name;
@@ -847,7 +847,7 @@ export async function mount(ctx: import('../../previews/_kit/types.d.ts').Previe
       appendPage();
     };
     more.addEventListener('click', appendPage);
-    q.addEventListener('is-input', (): void => {
+    q.addEventListener('iswc-input', (): void => {
       const term = String(q.value).trim().toLowerCase();
       filtered = term ? data.icons.filter((n: string): boolean => n.includes(term)) : data.icons;
       repaint();
@@ -878,7 +878,7 @@ export async function mount(ctx: import('../../previews/_kit/types.d.ts').Previe
   } catch (err: unknown) {
     const msg = err instanceof Error ? err.message : String(err);
     if (app) {
-      app.innerHTML = `<is-callout color="danger" variant="outlined" icon="mdi:alert">Error cargando el índice de iconos: ${esc(msg)}</is-callout>`;
+      app.innerHTML = `<iswc-callout color="danger" variant="outlined" icon="mdi:alert">Error cargando el índice de iconos: ${esc(msg)}</iswc-callout>`;
     }
   }
 }

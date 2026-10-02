@@ -2,8 +2,8 @@
 
 .cv {
   display: block;
-  width: 100%;
-  max-width: 100%;
+  inline-size: 100%;
+  max-inline-size: 100%;
   background: var(--iswc-bg-elev, transparent);
   border-radius: var(--iswc-radius, 0.4em);
 }

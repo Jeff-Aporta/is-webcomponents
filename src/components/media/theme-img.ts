@@ -8,12 +8,12 @@ import {
 } from '../_shared/theme-scope.js';
 
 /**
- * <is-theme-img> — una sola imagen que cambia dark ↔ light según el tema.
+ * <iswc-theme-img> — una sola imagen que cambia dark ↔ light según el tema.
  *
  * Evita el anti-patrón de dos <img> con :host-context (ambos visibles a la vez
  * si el CSS de hide falla o el slot del padre los pone en fila).
  *
- * Caja = 1em × 1em (escala con font-size del contexto, como is-avatar / is-icon).
+ * Caja = 1em × 1em (escala con font-size del contexto, como iswc-avatar / iswc-icon).
  *
  * Attributes
  *   src-dark / src-light  URLs (ambas recomendadas; si falta una, usa la otra)
@@ -27,7 +27,7 @@ import {
  *   aria-busy="true" mientras se carga el src activo
  *   data-loading     mientras se carga
  *   data-error       si la imagen falla (404 / CORS / formato)
- *   emite `is-error { src }` en fallo
+ *   emite `iswc-error { src }` en fallo
  *
  * CSS Parts: ::part(image)
  */
@@ -58,7 +58,7 @@ import {
     return v === 'light' || v === 'dark' ? v : null;
   }
 
-  class IsThemeImg extends ElementBase {
+  class IswcThemeImg extends ElementBase {
     static styleAttrs = {
       fit: '--iswc-theme-img-fit',
     };
@@ -76,7 +76,7 @@ import {
       adoptCss(shadow, import.meta.url);
       shadow.appendChild(TEMPLATE.content.cloneNode(true));
       this.#img = shadow.querySelector<HTMLImageElement>('.img')!;
-      // F0.3 g12 [media/loading]: aria-busy durante la carga + is-error al
+      // F0.3 g12 [media/loading]: aria-busy durante la carga + iswc-error al
       // fallar la imagen. Antes el fallo era silencioso y la UI se quedaba
       // con un hueco vacío.
       this.#img.addEventListener('load', () => {
@@ -87,7 +87,7 @@ import {
     }
 
     /**
-     * F0.3 g12 [media/error-state]: emite `is-error` cuando la imagen no
+     * F0.3 g12 [media/error-state]: emite `iswc-error` cuando la imagen no
      * carga (404, CORS, formato no soportado). También añade
      * `data-error` para que el consumidor pueda pintar un fallback CSS
      * si lo desea.
@@ -96,7 +96,7 @@ import {
       this.removeAttribute('aria-busy');
       this.removeAttribute('data-loading');
       this.setAttribute('data-error', '');
-      emit(this, 'is-error', { src: this.#img?.src ?? '' });
+      emit(this, 'iswc-error', { src: this.#img?.src ?? '' });
     };
 
     onConnected() {
@@ -176,5 +176,5 @@ import {
     }
   }
 
-  defineElement('is-theme-img', IsThemeImg, 'IsThemeImg');
+  defineElement('iswc-theme-img', IswcThemeImg, 'IswcThemeImg');
 })();

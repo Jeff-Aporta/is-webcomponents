@@ -23,7 +23,7 @@ for (const demo of DEMOS) {
     const data = await page.evaluate(() => {
       const host = document.getElementById('previewHost');
       if (!host) return null;
-      const main = host.querySelector('is-main.main');
+      const main = host.querySelector('iswc-main.main');
       if (!main) return null;
       // Buscar el custom element que renderiza el diagrama (cualquier is-*svg*).
       const candidates = main.querySelectorAll('*');

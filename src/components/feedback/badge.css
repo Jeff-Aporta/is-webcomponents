@@ -24,20 +24,18 @@
   box-sizing: border-box;
   white-space: nowrap;
 
-  & .prefix:not(:empty),
-  & .suffix:not(:empty) {
+  & :is(.prefix, .suffix):not(:empty) {
     display: inline-flex;
     align-items: center;
   }
 
-  & .prefix:empty,
-  & .suffix:empty {
+  & :is(.prefix, .suffix):empty {
     display: none;
   }
 }
 
-:host([pill]) .badge {
-  border-radius: 999px;
+:host([pill]) {
+  .badge { border-radius: 999px; }
 }
 
 :host([color="brand"]) {
@@ -78,56 +76,48 @@
 /* Apariencias — contrastadas entre sí (dark y light) */
 
 /* accent: fondo soft + barra lateral marcada */
-:host([variant="accent"]) .badge {
-  background: var(--_bg);
-  border-color: transparent;
-  border-left: 0.28em solid var(--_border);
-  color: var(--_text);
-  padding-inline-start: 0.55em;
+:host([variant="accent"]) {
+  .badge {
+    border-color: transparent;
+    border-left: 0.28em solid var(--_border);
+    padding-inline-start: 0.55em;
+  }
 }
 
 /* filled: sólido de marca */
-:host([variant="filled"]) .badge {
-  background: var(--_border);
-  border-color: var(--_border);
-  color: var(--_on);
+:host([variant="filled"]) {
+  .badge {
+    background: var(--_border);
+    color: var(--_on);
+  }
 }
 
 /* outlined: solo borde, sin relleno */
-:host([variant="outlined"]) .badge {
-  background: transparent;
-  border-color: var(--_border);
-  color: var(--_text);
+:host([variant="outlined"]) {
+  .badge { background: transparent; }
 }
 
-/* filled-outlined: soft + borde completo */
-:host([variant="filled-outlined"]) .badge {
-  background: var(--_bg);
-  border-color: var(--_border);
-  color: var(--_text);
+/* filled-outlined: soft + borde completo — coincide con el estilo base; no
+   requiere overrides. Se mantiene el bloque por simetría con el resto. */
+
+:host([attention="pulse"]) {
+  .badge { animation: iswc-badge-pulse 1.5s ease-in-out infinite; }
 }
 
-:host([attention="pulse"]) .badge {
-  animation: is-badge-pulse 1.5s ease-in-out infinite;
+:host([attention="bounce"]) {
+  .badge { animation: iswc-badge-bounce 1s ease infinite; }
 }
 
-:host([attention="bounce"]) .badge {
-  animation: is-badge-bounce 1s ease infinite;
-}
-
-@keyframes is-badge-pulse {
+@keyframes iswc-badge-pulse {
   0%, 100% { box-shadow: 0 0 0 0 color-mix(in srgb, var(--iswc-badge-pulse-color) 45%, transparent); }
   50% { box-shadow: 0 0 0 0.35em color-mix(in srgb, var(--iswc-badge-pulse-color) 0%, transparent); }
 }
 
-@keyframes is-badge-bounce {
+@keyframes iswc-badge-bounce {
   0%, 100% { transform: translateY(0); }
   50% { transform: translateY(-0.2em); }
 }
 
 @media (prefers-reduced-motion: reduce) {
-  :host([attention="pulse"]) .badge,
-  :host([attention="bounce"]) .badge {
-    animation: none;
-  }
+  :host(:is([attention="pulse"], [attention="bounce"])) .badge { animation: none; }
 }

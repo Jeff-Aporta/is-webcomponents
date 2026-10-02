@@ -16,9 +16,11 @@
   gap: var(--iswc-pin-gap);
   position: relative;
 
-  &[data-state="invalid"] .cell {
-    border-color: var(--iswc-pin-danger);
-    animation: pin-shake 0.3s;
+  &[data-state="invalid"] {
+    .cell {
+      border-color: var(--iswc-pin-danger);
+      animation: pin-shake 0.3s;
+    }
   }
 }
 
@@ -26,8 +28,8 @@
   position: absolute;
   opacity: 0;
   pointer-events: none;
-  width: 1px;
-  height: 1px;
+  inline-size: 1px;
+  block-size: 1px;
 }
 
 .cells {
@@ -36,8 +38,8 @@
 }
 
 .cell {
-  width: var(--iswc-pin-cell-size);
-  height: var(--iswc-pin-cell-size);
+  inline-size: var(--iswc-pin-cell-size);
+  block-size: var(--iswc-pin-cell-size);
   text-align: center;
   /* <input> no hereda font del host (UA); sin inherit --iswc-pin-cell-size en em no escala. */
   font: inherit;
@@ -62,9 +64,11 @@
   }
 }
 
-:host([disabled]) .cell {
-  opacity: 0.5;
-  cursor: not-allowed;
+:host([disabled]) {
+  .cell {
+    opacity: 0.5;
+    cursor: not-allowed;
+  }
 }
 
 @keyframes pin-shake {

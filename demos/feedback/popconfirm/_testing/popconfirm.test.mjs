@@ -1,6 +1,6 @@
-// popconfirm.test.mjs — tests exhaustivos del demo is-popconfirm.
+// popconfirm.test.mjs — tests exhaustivos del demo iswc-popconfirm.
 // Cobertura: smoke + funcional (open/close por trigger, eventos
-// is-popconfirm-*, click confirm/cancel, click fuera, Escape, placement).
+// iswc-popconfirm-*, click confirm/cancel, click fuera, Escape, placement).
 import assert from 'node:assert/strict';
 import { BASE_URL, newPage, close, waitReady, screenshot, report } from './lib/harness.mjs';
 
@@ -14,14 +14,14 @@ tests.push({
     await page.goto(URL, { waitUntil: 'domcontentloaded' });
     await waitReady(page, 'data-popconfirm-ready');
     const data = await page.evaluate(() => {
-      const pops = document.querySelectorAll('is-popconfirm');
+      const pops = document.querySelectorAll('iswc-popconfirm');
       return {
-        defined: !!customElements.get('is-popconfirm'),
+        defined: !!customElements.get('iswc-popconfirm'),
         count: pops.length,
         allHidden: [...pops].every((p) => p.popup.style.display === 'none'),
       };
     });
-    assert.equal(data.defined, true, 'is-popconfirm debe estar definido');
+    assert.equal(data.defined, true, 'iswc-popconfirm debe estar definido');
     assert.ok(data.count >= 3, `esperaba >=3 popconfirms, hay ${data.count}`);
     assert.equal(data.allHidden, true, 'todos los popups deben estar ocultos al inicio');
     await screenshot(page, 'popconfirm-smoke');
@@ -38,7 +38,7 @@ tests.push({
       const trig = document.getElementById('trig-1');
       trig.click();
       await new Promise((r) => requestAnimationFrame(() => r()));
-      const p = document.querySelectorAll('is-popconfirm')[0];
+      const p = document.querySelectorAll('iswc-popconfirm')[0];
       return { open: p.hasAttribute('open'), display: p.popup.style.display };
     });
     assert.equal(opened.open, true, 'popconfirm debe abrirse (open=true)');
@@ -54,7 +54,7 @@ tests.push({
     await page.waitForTimeout(150);
     const closed = await page.evaluate(async () => {
       const trig = document.getElementById('trig-1');
-      const p = document.querySelectorAll('is-popconfirm')[0];
+      const p = document.querySelectorAll('iswc-popconfirm')[0];
       trig.click();
       await new Promise((r) => requestAnimationFrame(() => r()));
       trig.click();
@@ -67,34 +67,34 @@ tests.push({
 });
 
 tests.push({
-  name: 'eventos: is-popconfirm-show se dispara al abrir',
+  name: 'eventos: iswc-popconfirm-show se dispara al abrir',
   run: async (page) => {
     await page.goto(URL, { waitUntil: 'domcontentloaded' });
     await waitReady(page, 'data-popconfirm-ready');
     await page.waitForTimeout(150);
     const seen = await page.evaluate(async () => {
-      const p = document.querySelectorAll('is-popconfirm')[0];
+      const p = document.querySelectorAll('iswc-popconfirm')[0];
       const events = [];
-      p.addEventListener('is-popconfirm-show', () => events.push('show'));
+      p.addEventListener('iswc-popconfirm-show', () => events.push('show'));
       p.show();
       await new Promise((r) => requestAnimationFrame(() => r()));
       return events;
     });
-    assert.ok(seen.includes('show'), `esperaba is-popconfirm-show, vi ${JSON.stringify(seen)}`);
+    assert.ok(seen.includes('show'), `esperaba iswc-popconfirm-show, vi ${JSON.stringify(seen)}`);
   },
 });
 
 tests.push({
-  name: 'eventos: is-popconfirm-confirm se dispara al confirmar',
+  name: 'eventos: iswc-popconfirm-confirm se dispara al confirmar',
   run: async (page) => {
     await page.goto(URL, { waitUntil: 'domcontentloaded' });
     await waitReady(page, 'data-popconfirm-ready');
     await page.waitForTimeout(150);
     const seen = await page.evaluate(async () => {
-      const p = document.querySelectorAll('is-popconfirm')[0];
+      const p = document.querySelectorAll('iswc-popconfirm')[0];
       const events = [];
-      p.addEventListener('is-popconfirm-confirm', () => events.push('confirm'));
-      p.addEventListener('is-popconfirm-hide', () => events.push('hide'));
+      p.addEventListener('iswc-popconfirm-confirm', () => events.push('confirm'));
+      p.addEventListener('iswc-popconfirm-hide', () => events.push('hide'));
       p.show();
       await new Promise((r) => requestAnimationFrame(() => r()));
       // popconfirm.ts mueve la .popconfirm (con los buttons) del shadow root
@@ -104,21 +104,21 @@ tests.push({
       await new Promise((r) => requestAnimationFrame(() => r()));
       return events;
     });
-    assert.ok(seen.includes('confirm'), `esperaba is-popconfirm-confirm, vi ${JSON.stringify(seen)}`);
-    assert.ok(seen.includes('hide'), `esperaba is-popconfirm-hide tras confirm, vi ${JSON.stringify(seen)}`);
+    assert.ok(seen.includes('confirm'), `esperaba iswc-popconfirm-confirm, vi ${JSON.stringify(seen)}`);
+    assert.ok(seen.includes('hide'), `esperaba iswc-popconfirm-hide tras confirm, vi ${JSON.stringify(seen)}`);
   },
 });
 
 tests.push({
-  name: 'eventos: is-popconfirm-cancel se dispara al cancelar',
+  name: 'eventos: iswc-popconfirm-cancel se dispara al cancelar',
   run: async (page) => {
     await page.goto(URL, { waitUntil: 'domcontentloaded' });
     await waitReady(page, 'data-popconfirm-ready');
     await page.waitForTimeout(150);
     const seen = await page.evaluate(async () => {
-      const p = document.querySelectorAll('is-popconfirm')[0];
+      const p = document.querySelectorAll('iswc-popconfirm')[0];
       const events = [];
-      p.addEventListener('is-popconfirm-cancel', () => events.push('cancel'));
+      p.addEventListener('iswc-popconfirm-cancel', () => events.push('cancel'));
       p.show();
       await new Promise((r) => requestAnimationFrame(() => r()));
       const btn = p.querySelector('[data-popconfirm-cancel]');
@@ -126,7 +126,7 @@ tests.push({
       await new Promise((r) => requestAnimationFrame(() => r()));
       return events;
     });
-    assert.ok(seen.includes('cancel'), `esperaba is-popconfirm-cancel, vi ${JSON.stringify(seen)}`);
+    assert.ok(seen.includes('cancel'), `esperaba iswc-popconfirm-cancel, vi ${JSON.stringify(seen)}`);
   },
 });
 
@@ -142,7 +142,7 @@ tests.push({
     await waitReady(page, 'data-popconfirm-ready');
     await page.waitForTimeout(150);
     const seen = await page.evaluate(async () => {
-      const p = document.querySelectorAll('is-popconfirm')[0];
+      const p = document.querySelectorAll('iswc-popconfirm')[0];
       p.show();
       await new Promise((r) => requestAnimationFrame(() => r()));
       document.dispatchEvent(new KeyboardEvent('keydown', { key: 'Escape', bubbles: true, composed: true }));
@@ -162,7 +162,7 @@ tests.push({
     await waitReady(page, 'data-popconfirm-ready');
     await page.waitForTimeout(150);
     const result = await page.evaluate(async () => {
-      const p = document.querySelectorAll('is-popconfirm')[0];
+      const p = document.querySelectorAll('iswc-popconfirm')[0];
       const trig = document.getElementById('trig-1');
       p.show();
       await new Promise((r) => requestAnimationFrame(() => r()));
@@ -196,7 +196,7 @@ tests.push({
     await waitReady(page, 'data-popconfirm-ready');
     await page.waitForTimeout(100);
     const placements = await page.evaluate(async () => {
-      const p = document.querySelectorAll('is-popconfirm')[0];
+      const p = document.querySelectorAll('iswc-popconfirm')[0];
       p.show();
       await new Promise((r) => requestAnimationFrame(() => r()));
       // Sin cambio de atributo: dataset.placement queda undefined.

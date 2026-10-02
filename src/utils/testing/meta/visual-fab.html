@@ -1,8 +1,8 @@
 <!doctype html>
 <meta charset="utf-8">
-<title>visual · is-fab</title>
+<title>visual · iswc-fab</title>
 <!--
-  Banco de pruebas visual de <is-fab>. No es un test automatico: es la pagina
+  Banco de pruebas visual de <iswc-fab>. No es un test automatico: es la pagina
   que se fotografia con Chrome headless (--screenshot) antes y despues de un
   refactor para comprobar a ojo que la pinta no cambia.
 
@@ -72,15 +72,15 @@
 <script type="module">
   import '/src/components/actions/fab.js';
 
-  // El vocabulario de `color` de is-fab es INTENT (5 valores), no los 7 de
-  // is-button: info/error no forman parte del contrato del fab.
+  // El vocabulario de `color` de iswc-fab es INTENT (5 valores), no los 7 de
+  // iswc-button: info/error no forman parte del contrato del fab.
   const COLORES = ['brand', 'neutral', 'success', 'warning', 'danger'];
 
-  /** Crea una celda etiquetada con el <is-fab> ya configurado. */
+  /** Crea una celda etiquetada con el <iswc-fab> ya configurado. */
   const celda = (etiqueta, attrs, texto = '') => {
     const box = document.createElement('div');
     box.className = 'cell';
-    const fab = document.createElement('is-fab');
+    const fab = document.createElement('iswc-fab');
     fab.setAttribute('position', 'inline');
     for (const [k, v] of Object.entries(attrs)) fab.setAttribute(k, v);
     if (texto) fab.textContent = texto;
@@ -97,7 +97,7 @@
 
   for (const size of ['0.75em', '1em', '1.25em']) {
     const box = celda(`size ${size}`, { icon: 'mdi:plus' });
-    box.querySelector('is-fab').style.fontSize = size;
+    box.querySelector('iswc-fab').style.fontSize = size;
     varios.append(box);
   }
   varios.append(

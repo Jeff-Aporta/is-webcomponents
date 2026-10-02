@@ -1,11 +1,11 @@
 ---
-tag: is-demo
+tag: iswc-demo
 tags:
-  - is-demo
+  - iswc-demo
 category: layout
 status: public
 ---
-# `<is-demo>`
+# `<iswc-demo>`
 
 ## Propósito
 
@@ -22,5 +22,5 @@ No lo reimplementes ni lo uses para sustituir al padre. La guía del padre docum
 ## Ejemplo mínimo
 
 ```html
-<is-demo></is-demo>
+<iswc-demo></iswc-demo>
 ```

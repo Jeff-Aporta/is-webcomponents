@@ -14,10 +14,10 @@ tests.push({
     await page.goto(URL, { waitUntil: 'domcontentloaded' });
     await waitReady(page, 'data-time-field-ready');
     const info = await page.evaluate(() => {
-      const fields = [...document.querySelectorAll('is-time-field')];
+      const fields = [...document.querySelectorAll('iswc-time-field')];
       return {
         count: fields.length,
-        defined: !!customElements.get('is-time-field'),
+        defined: !!customElements.get('iswc-time-field'),
         sectionsByField: fields.map((f) => f.shadowRoot.querySelectorAll('[role="spinbutton"]').length),
         hasFormAssociated: 'formAssociated' in fields[0],
         sectionsHaveAriaValue: fields.every((f) => {
@@ -26,7 +26,7 @@ tests.push({
         }),
       };
     });
-    assert.equal(info.defined, true, 'is-time-field debe estar definido');
+    assert.equal(info.defined, true, 'iswc-time-field debe estar definido');
     assert.ok(info.count >= 6, `esperaba >=6 campos en la página, hay ${info.count}`);
     // El campo base (24h sin segundos) tiene 2 secciones: h/M.
     // El campo con segundos tiene 3 secciones; el de AM/PM tiene 3 secciones.
@@ -130,20 +130,20 @@ tests.push({
 });
 
 tests.push({
-  name: 'funcional: is-change emite evento al cambiar valor',
+  name: 'funcional: iswc-change emite evento al cambiar valor',
   run: async (page) => {
     await page.goto(URL, { waitUntil: 'domcontentloaded' });
     await waitReady(page, 'data-time-field-ready');
     await page.evaluate(() => {
       window.__changes = [];
-      document.getElementById('basic').addEventListener('is-change', (e) => {
+      document.getElementById('basic').addEventListener('iswc-change', (e) => {
         window.__changes.push(e.detail?.value ?? '');
       });
     });
     await page.evaluate(() => { document.getElementById('basic').value = '10:30'; });
     await page.waitForTimeout(50);
     const changes = await page.evaluate(() => window.__changes);
-    assert.deepEqual(changes, ['10:30'], 'is-change debe emitir el nuevo valor');
+    assert.deepEqual(changes, ['10:30'], 'iswc-change debe emitir el nuevo valor');
   },
 });
 

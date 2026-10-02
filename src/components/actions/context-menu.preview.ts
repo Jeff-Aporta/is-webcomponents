@@ -1,5 +1,5 @@
 /**
- * Behavior migrado desde HTML inline de is-context-menu.
+ * Behavior migrado desde HTML inline de iswc-context-menu.
  * Se ejecuta en mount() tras pintar la definition JSON.
  */
 import type { PreviewMountContext } from '../../previews/_kit/types.d.ts';
@@ -17,8 +17,8 @@ export async function mount(ctx: PreviewMountContext): Promise<void> {
     log.textContent = line + '\n' + (log.textContent ?? '');
     log.scrollTop = 0;
   };
-  document.querySelectorAll<HTMLElement>('is-context-menu').forEach((m: HTMLElement) => {
-    m.addEventListener('is-select', (e: Event) => {
+  document.querySelectorAll<HTMLElement>('iswc-context-menu').forEach((m: HTMLElement) => {
+    m.addEventListener('iswc-select', (e: Event) => {
       const detail = (e as CustomEventWithDetail<{ value?: string }>).detail;
       append(`[${new Date().toLocaleTimeString()}] ${detail?.value ?? ''}`);
     });

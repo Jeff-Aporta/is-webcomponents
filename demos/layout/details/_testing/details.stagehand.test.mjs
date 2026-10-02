@@ -12,7 +12,7 @@ async function checkDeterministic(page, demo) {
   await page.waitForTimeout(200);
 
   const data = await page.evaluate(() => {
-    const details = [...document.querySelectorAll('main is-details')];
+    const details = [...document.querySelectorAll('main iswc-details')];
     return details.map((d, idx) => {
       const sr = d.shadowRoot;
       const base = sr?.querySelector('[part="base"]');
@@ -74,7 +74,7 @@ for (const demo of DEMOS) {
 }
 
 const VISUAL_RUBRIC = `
-Evalúa la calidad visual del <is-details> (collapsible disclosure) en el screenshot.
+Evalúa la calidad visual del <iswc-details> (collapsible disclosure) en el screenshot.
 
 Checklist (todas deben cumplirse; marca cada una PASS o FAIL):
 

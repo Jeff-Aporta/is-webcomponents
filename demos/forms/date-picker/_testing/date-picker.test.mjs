@@ -14,15 +14,15 @@ tests.push({
     await page.goto(URL, { waitUntil: 'domcontentloaded' });
     await waitReady(page, 'data-date-picker-ready');
     const info = await page.evaluate(() => {
-      const pickers = [...document.querySelectorAll('is-date-picker')];
+      const pickers = [...document.querySelectorAll('iswc-date-picker')];
       return {
-        defined: !!customElements.get('is-date-picker'),
+        defined: !!customElements.get('iswc-date-picker'),
         count: pickers.length,
         grids: pickers.map((p) => p.shadowRoot.querySelectorAll('button.day').length),
         weekdays: pickers[0].shadowRoot.querySelectorAll('.weekdays .wd').length,
       };
     });
-    assert.equal(info.defined, true, 'is-date-picker debe estar definido');
+    assert.equal(info.defined, true, 'iswc-date-picker debe estar definido');
     assert.ok(info.count >= 5, `esperaba >=5 calendarios, hay ${info.count}`);
     assert.ok(info.grids.every((n) => n >= 28), `cada rejilla debe tener >=28 días, hay ${JSON.stringify(info.grids)}`);
     assert.equal(info.weekdays, 7, 'la fila de días de la semana debe tener 7 columnas');
@@ -55,13 +55,13 @@ tests.push({
 });
 
 tests.push({
-  name: 'funcional: clic en un día emite is-change con la ISO',
+  name: 'funcional: clic en un día emite iswc-change con la ISO',
   run: async (page) => {
     await page.goto(URL, { waitUntil: 'domcontentloaded' });
     await waitReady(page, 'data-date-picker-ready');
     await page.evaluate(() => {
       window.__changes = [];
-      document.getElementById('basic').addEventListener('is-change', (e) => {
+      document.getElementById('basic').addEventListener('iswc-change', (e) => {
         window.__changes.push(e.detail?.value ?? '');
       });
     });
@@ -74,7 +74,7 @@ tests.push({
     });
     await page.waitForTimeout(50);
     const changes = await page.evaluate(() => window.__changes);
-    assert.equal(changes.length, 1, 'debe emitirse exactamente un is-change');
+    assert.equal(changes.length, 1, 'debe emitirse exactamente un iswc-change');
     assert.match(changes[0], /^\d{4}-\d{2}-10$/, `el valor debe terminar en -10, es ${changes[0]}`);
   },
 });
@@ -221,7 +221,7 @@ tests.push({
     const info = await page.evaluate(() => {
       const el = document.getElementById('basic');
       const nav = el.shadowRoot.querySelector('[part="nav"]');
-      const buttons = nav.querySelectorAll('is-button');
+      const buttons = nav.querySelectorAll('iswc-button');
       return {
         navButtonCount: buttons.length,
         hasPrev: !!nav.querySelector('[data-nav="-1"]'),
@@ -307,14 +307,14 @@ tests.push({
 });
 
 tests.push({
-  name: 'funcional: vista mes renderiza is-month-calendar con 12 meses',
+  name: 'funcional: vista mes renderiza iswc-month-calendar con 12 meses',
   run: async (page) => {
     await page.goto(URL, { waitUntil: 'domcontentloaded' });
     await waitReady(page, 'data-date-picker-ready');
     const info = await page.evaluate(() => {
       const el = document.getElementById('month-view');
       el.setAttribute('view', 'month');
-      const monthView = el.shadowRoot.querySelector('is-month-calendar');
+      const monthView = el.shadowRoot.querySelector('iswc-month-calendar');
       const monthButtons = monthView?.shadowRoot?.querySelectorAll('button').length ?? 0;
       return {
         view: el.view,
@@ -323,7 +323,7 @@ tests.push({
       };
     });
     assert.equal(info.view, 'month');
-    assert.equal(info.monthViewDefined, true, 'debe haber un is-month-calendar');
+    assert.equal(info.monthViewDefined, true, 'debe haber un iswc-month-calendar');
     assert.ok(info.monthButtons >= 12, `esperaba >=12 botones de mes, hay ${info.monthButtons}`);
   },
 });

@@ -14,7 +14,7 @@ checks.push({
     await page.goto(URL, { waitUntil: 'domcontentloaded' });
     await waitReady(page, 'data-skeleton-ready');
     const sizes = await page.evaluate(() => {
-      return [...document.querySelectorAll('is-skeleton')].slice(0, 5).map((s) => {
+      return [...document.querySelectorAll('iswc-skeleton')].slice(0, 5).map((s) => {
         const outer = s.getBoundingClientRect();
         const inner = s.shadowRoot.querySelector('.indicator').getBoundingClientRect();
         return {
@@ -40,7 +40,7 @@ checks.push({
     const bg = await page.evaluate(() => {
       // El connectedCallback setea effect="sheen" si no existe, así que
       // buscamos el primer skeleton con effect explícito (sheen por default).
-      const s = document.querySelector('is-skeleton');
+      const s = document.querySelector('iswc-skeleton');
       const cs = getComputedStyle(s.shadowRoot.querySelector('.indicator'));
       return {
         bgColor: cs.backgroundColor,

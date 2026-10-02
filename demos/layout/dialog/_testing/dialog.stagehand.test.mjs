@@ -1,4 +1,4 @@
-// dialog.stagehand.test.mjs — verificaciones de calidad visual para is-dialog.
+// dialog.stagehand.test.mjs — verificaciones de calidad visual para iswc-dialog.
 import assert from 'node:assert/strict';
 import { BASE_URL, newPage, close, waitReady, screenshot, report, maybeStagehand } from './lib/harness.mjs';
 
@@ -15,7 +15,7 @@ async function checkDeterministic(page, demo) {
   await page.click('#btn-open-1');
   await page.waitForTimeout(400);
   const data = await page.evaluate(() => {
-    const dialog = document.querySelector('body > is-dialog#d1');
+    const dialog = document.querySelector('body > iswc-dialog#d1');
     if (!dialog) return null;
     const sr = dialog.shadowRoot;
     const modal = sr.querySelector('[part="dialog"]');
@@ -25,7 +25,7 @@ async function checkDeterministic(page, demo) {
     const mRect = modal?.getBoundingClientRect();
     const bRect = backdrop?.getBoundingClientRect();
     return {
-      defined: !!customElements.get('is-dialog'),
+      defined: !!customElements.get('iswc-dialog'),
       open: dialog.open,
       state: dialog.dataset.state,
       role: modal?.getAttribute('role'),
@@ -38,7 +38,7 @@ async function checkDeterministic(page, demo) {
     };
   });
   assert.ok(data, `${demo.name}: debe existir d1`);
-  assert.equal(data.defined, true, 'is-dialog debe estar definido');
+  assert.equal(data.defined, true, 'iswc-dialog debe estar definido');
   assert.equal(data.open, true, 'd1 debe estar abierto tras click');
   assert.equal(data.role, 'dialog', 'modal debe tener role="dialog"');
   assert.equal(data.ariaModal, 'true', 'modal debe tener aria-modal="true"');
@@ -70,7 +70,7 @@ for (const demo of DEMOS) {
 }
 
 const VISUAL_RUBRIC = `
-Evalúa la calidad visual del <is-dialog> (modal accesible) en el screenshot.
+Evalúa la calidad visual del <iswc-dialog> (modal accesible) en el screenshot.
 
 Checklist (todas deben cumplirse; marca cada una PASS o FAIL):
 

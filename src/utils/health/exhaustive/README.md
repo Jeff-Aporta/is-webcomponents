@@ -29,7 +29,7 @@ Cada test exhaustivo por componente cubre, **como mínimo, las 10 dimensiones**:
 
 1. **Render básico** — `customElements.define` registrado, `connectedCallback` se invoca sin errores, Shadow DOM presente.
 2. **Atributos observados** — cambiar cada atributo declarado en `observedAttributes` dispara `attributeChangedCallback(name, oldValue, newValue)`.
-3. **Eventos** — los eventos declarados (`is-change`, `is-click`, etc.) se emiten con `detail` correcto.
+3. **Eventos** — los eventos declarados (`iswc-change`, `iswc-click`, etc.) se emiten con `detail` correcto.
 4. **Slots** — slots declarados (`slot="x"`) proyectan children.
 5. **Shadow DOM** — partes (`::part(x)`), pseudo-clases `:host`, CSS custom properties (`--var-name`).
 6. **JSON payload** — `<script type="application/json">` se parsea y se aplica a `host.config`/`host.data`/etc.

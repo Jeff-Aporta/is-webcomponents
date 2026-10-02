@@ -1,20 +1,20 @@
 ---
-tag: is-time-clock
+tag: iswc-time-clock
 tags:
-  - is-time-clock
+  - iswc-time-clock
 category: forms
 status: public
 source: ./time-clock.js
 style: ./time-clock.css
 preview: ./time-clock.json
 ---
-# `<is-time-clock>`
+# `<iswc-time-clock>`
 
 ## Propósito
 
 Reloj analógico (TimeClock de MUI X). Arrastra la manecilla, haz clic o usa el teclado. Al soltar avanza de horas a minutos.
 
-Este módulo registra `<is-time-clock>`.
+Este módulo registra `<iswc-time-clock>`.
 
 ## Cuándo usarlo
 
@@ -33,7 +33,7 @@ import './time-clock.js';
 ## Ejemplo mínimo
 
 ```html
-<is-time-clock></is-time-clock>
+<iswc-time-clock></iswc-time-clock>
 ```
 
 ## API
@@ -78,8 +78,8 @@ No expone.
 
 | Evento | detail | bubbles | composed | cancelable |
 | --- | --- | --- | --- | --- |
-| `is-view-change` | sí | sí | sí | no |
-| `is-change` | sí | sí | sí | no |
+| `iswc-view-change` | sí | sí | sí | no |
+| `iswc-change` | sí | sí | sí | no |
 
 ### Métodos y propiedades públicas
 
@@ -136,20 +136,20 @@ No declara integración form-associated propia en este módulo.
 
 Documentación de cabecera preservada desde fuente:
 
-> <is-time-clock> — Reloj analógico para elegir hora (MUI TimeClock).
+> <iswc-time-clock> — Reloj analógico para elegir hora (MUI TimeClock).
 > Vistas encadenadas: horas → minutos → segundos (si `seconds`). El disco es
 > un slider: se puede arrastrar, hacer clic o usar el teclado.
 > Atributos: value (HH:mm[:ss]), view (hours|minutes|seconds), ampm,
 >            hour24, seconds, minutes-step, min-time, max-time, locale,
 >            disabled, readonly
-> Events: is-change { value } · is-view-change { view }
+> Events: iswc-change { value } · iswc-view-change { view }
 
 ## Dependencias y componentes relacionados
 
 - [`../_shared/adopt-css.js`](../_shared/adopt-css.js)
 - [`../_shared/date-utils.js`](../_shared/date-utils.js)
 
-Tags del módulo: `<is-time-clock>`.
+Tags del módulo: `<iswc-time-clock>`.
 
 ## Accesibilidad
 
@@ -158,7 +158,7 @@ Preservar semántica, foco, teclado, labels y ARIA. ARIA detectado: `aria-label`
 ## Ejemplo avanzado
 
 ```html
-<is-time-clock></is-time-clock>
+<iswc-time-clock></iswc-time-clock>
 ```
 
 ## Errores comunes

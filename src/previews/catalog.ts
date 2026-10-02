@@ -3,541 +3,541 @@
  * tag → { json, behavior?, category }
  */
 export default {
-  "is-code": {
+  "iswc-code": {
     "json": "../../dist/previews/code/code.json",
     "behavior": "../../dist/previews/code/code.preview.min.js",
     "category": "code"
   },
-  "is-button-group": {
+  "iswc-button-group": {
     "json": "../../dist/previews/actions/button-group.json",
     "behavior": "../../dist/previews/actions/button-group.preview.min.js",
     "category": "actions"
   },
-  "is-button": {
+  "iswc-button": {
     "json": "../../dist/previews/actions/button.json",
     "behavior": "../../dist/previews/actions/button.preview.min.js",
     "category": "actions"
   },
-  "is-check-icon-button": {
+  "iswc-check-icon-button": {
     "json": "../../dist/previews/actions/check-icon-button.json",
     "category": "actions"
   },
-  "is-context-menu": {
+  "iswc-context-menu": {
     "json": "../../dist/previews/actions/context-menu.json",
     "behavior": "../../dist/previews/actions/context-menu.preview.min.js",
     "category": "actions"
   },
-  "is-copy-button": {
+  "iswc-copy-button": {
     "json": "../../dist/previews/actions/copy-button.json",
     "category": "actions"
   },
-  "is-share-button": {
+  "iswc-share-button": {
     "json": "../../dist/previews/actions/share-button.json",
     "category": "actions"
   },
-  "is-dropdown-item": {
+  "iswc-dropdown-item": {
     "json": "../../dist/previews/actions/dropdown-item.json",
     "category": "actions"
   },
-  "is-dropdown": {
+  "iswc-dropdown": {
     "json": "../../dist/previews/actions/dropdown.json",
     "behavior": "../../dist/previews/actions/dropdown.preview.min.js",
     "category": "actions"
   },
-  "is-fab": {
+  "iswc-fab": {
     "json": "../../dist/previews/actions/fab.json",
     "category": "actions"
   },
-  "is-speed-dial-action": {
+  "iswc-speed-dial-action": {
     "json": "../../dist/previews/actions/speed-dial-action.json",
     "category": "actions"
   },
-  "is-speed-dial": {
+  "iswc-speed-dial": {
     "json": "../../dist/previews/actions/speed-dial.json",
     "behavior": "../../dist/previews/actions/speed-dial.preview.min.js",
     "category": "actions"
   },
-  "is-ag-grid": {
+  "iswc-ag-grid": {
     "json": "../../dist/previews/data/ag-grid.json",
     "behavior": "../../dist/previews/data/ag-grid.preview.min.js",
     "category": "data"
   },
-  "is-data-grid": {
+  "iswc-data-grid": {
     "json": "../../dist/previews/data/data-grid.json",
     "behavior": "../../dist/previews/data/data-grid.preview.min.js",
     "category": "data"
   },
-  "is-kanban-card": {
+  "iswc-kanban-card": {
     "json": "../../dist/previews/data/kanban-card.json",
     "category": "data"
   },
-  "is-kanban-column": {
+  "iswc-kanban-column": {
     "json": "../../dist/previews/data/kanban-column.json",
     "category": "data"
   },
-  "is-kanban": {
+  "iswc-kanban": {
     "json": "../../dist/previews/data/kanban.json",
     "category": "data"
   },
-  "is-pivot-table": {
+  "iswc-pivot-table": {
     "json": "../../dist/previews/data/pivot-table.json",
     "behavior": "../../dist/previews/data/pivot-table.preview.min.js",
     "category": "data"
   },
-  "is-spreadsheet": {
+  "iswc-spreadsheet": {
     "json": "../../dist/previews/data/spreadsheet.json",
     "category": "data"
   },
-  "is-stat": {
+  "iswc-stat": {
     "json": "../../dist/previews/data/stat.json",
     "category": "data"
   },
-  "is-transfer-item": {
+  "iswc-transfer-item": {
     "json": "../../dist/previews/data/transfer-item.json",
     "category": "data"
   },
-  "is-transfer": {
+  "iswc-transfer": {
     "json": "../../dist/previews/data/transfer.json",
     "category": "data"
   },
-  "is-bar-chart": {
+  "iswc-bar-chart": {
     "json": "../../dist/previews/charts/bar-chart.json",
     "category": "data-viz"
   },
-  "is-bubble-chart": {
+  "iswc-bubble-chart": {
     "json": "../../dist/previews/charts/bubble-chart.json",
     "category": "data-viz"
   },
-  "is-chart": {
+  "iswc-chart": {
     "json": "../../dist/previews/charts/chart.json",
     "behavior": "../../dist/previews/charts/chart.preview.min.js",
     "category": "data-viz"
   },
-  "is-doughnut-chart": {
+  "iswc-doughnut-chart": {
     "json": "../../dist/previews/charts/doughnut-chart.json",
     "category": "data-viz"
   },
-  "is-funnel-chart": {
+  "iswc-funnel-chart": {
     "json": "../../dist/previews/charts/funnel-chart.json",
     "category": "data-viz"
   },
-  "is-gauge": {
+  "iswc-gauge": {
     "json": "../../dist/previews/data/gauge.json",
     "behavior": "../../dist/previews/data/gauge.preview.min.js",
     "category": "data-viz"
   },
-  "is-heatmap": {
+  "iswc-heatmap": {
     "json": "../../dist/previews/data-viz/heatmap.json",
     "behavior": "../../dist/previews/data-viz/heatmap.preview.min.js",
     "category": "data-viz"
   },
-  "is-line-chart": {
+  "iswc-line-chart": {
     "json": "../../dist/previews/charts/line-chart.json",
     "category": "data-viz"
   },
-  "is-map-marker": {
+  "iswc-map-marker": {
     "json": "../../dist/previews/data-viz/map-marker.json",
     "category": "data-viz"
   },
-  "is-maps": {
+  "iswc-maps": {
     "json": "../../dist/previews/data-viz/maps.json",
     "category": "data-viz"
   },
-  "is-pie-chart": {
+  "iswc-pie-chart": {
     "json": "../../dist/previews/charts/pie-chart.json",
     "category": "data-viz"
   },
-  "is-polar-area-chart": {
+  "iswc-polar-area-chart": {
     "json": "../../dist/previews/charts/polar-area-chart.json",
     "category": "data-viz"
   },
-  "is-radar-chart": {
+  "iswc-radar-chart": {
     "json": "../../dist/previews/charts/radar-chart.json",
     "behavior": "../../dist/previews/charts/radar-chart.preview.min.js",
     "category": "data-viz"
   },
-  "is-scatter-chart": {
+  "iswc-scatter-chart": {
     "json": "../../dist/previews/charts/scatter-chart.json",
     "behavior": "../../dist/previews/charts/scatter-chart.preview.min.js",
     "category": "data-viz"
   },
-  "is-sparkline": {
+  "iswc-sparkline": {
     "json": "../../dist/previews/charts/sparkline.json",
     "category": "data-viz"
   },
-  "is-treemap": {
+  "iswc-treemap": {
     "json": "../../dist/previews/charts/treemap.json",
     "category": "data-viz"
   },
-  "is-waterfall-chart": {
+  "iswc-waterfall-chart": {
     "json": "../../dist/previews/charts/waterfall-chart.json",
     "category": "data-viz"
   },
-  "is-block-diagram": {
+  "iswc-block-diagram": {
     "json": "../../dist/previews/diagrams/block-diagram.json",
     "category": "diagrams"
   },
-  "is-class-diagram": {
+  "iswc-class-diagram": {
     "json": "../../dist/previews/diagrams/class-diagram.json",
     "category": "diagrams"
   },
-  "is-diagram-lightbox": {
+  "iswc-diagram-lightbox": {
     "json": "../../dist/previews/diagrams/diagram-lightbox.json",
     "behavior": "../../dist/previews/diagrams/diagram-lightbox.preview.min.js",
     "category": "diagrams"
   },
-  "is-component-diagram": {
+  "iswc-component-diagram": {
     "json": "../../dist/previews/diagrams/component-diagram.json",
     "category": "diagrams"
   },
-  "is-er-diagram": {
+  "iswc-er-diagram": {
     "json": "../../dist/previews/diagrams/er-diagram.json",
     "category": "diagrams"
   },
-  "is-flowchart": {
+  "iswc-flowchart": {
     "json": "../../dist/previews/diagrams/flowchart.json",
     "category": "diagrams"
   },
-  "is-gantt": {
+  "iswc-gantt": {
     "json": "../../dist/previews/diagrams/gantt.json",
     "category": "diagrams"
   },
-  "is-mindmap": {
+  "iswc-mindmap": {
     "json": "../../dist/previews/diagrams/mindmap.json",
     "category": "diagrams"
   },
-  "is-org-chart": {
+  "iswc-org-chart": {
     "json": "../../dist/previews/diagrams/org-chart.json",
     "behavior": "../../dist/previews/diagrams/org-chart.preview.min.js",
     "category": "diagrams"
   },
-  "is-journey-map": {
+  "iswc-journey-map": {
     "json": "../../dist/previews/diagrams/journey-map.json",
     "category": "diagrams"
   },
-  "is-quadrant-chart": {
+  "iswc-quadrant-chart": {
     "json": "../../dist/previews/diagrams/quadrant-chart.json",
     "category": "diagrams"
   },
-  "is-sankey-diagram": {
+  "iswc-sankey-diagram": {
     "json": "../../dist/previews/diagrams/sankey-diagram.json",
     "category": "diagrams"
   },
-  "is-swimlane-diagram": {
+  "iswc-swimlane-diagram": {
     "json": "../../dist/previews/diagrams/swimlane-diagram.json",
     "category": "diagrams"
   },
-  "is-use-case-diagram": {
+  "iswc-use-case-diagram": {
     "json": "../../dist/previews/diagrams/use-case-diagram.json",
     "category": "diagrams"
   },
-  "is-venn-diagram": {
+  "iswc-venn-diagram": {
     "json": "../../dist/previews/diagrams/venn-diagram.json",
     "category": "diagrams"
   },
-  "is-sequence-diagram": {
+  "iswc-sequence-diagram": {
     "json": "../../dist/previews/diagrams/sequence-diagram.json",
     "behavior": "../../dist/previews/diagrams/sequence-diagram.preview.min.js",
     "category": "diagrams"
   },
-  "is-state-diagram": {
+  "iswc-state-diagram": {
     "json": "../../dist/previews/diagrams/state-diagram.json",
     "category": "diagrams"
   },
-  "is-timeline": {
+  "iswc-timeline": {
     "json": "../../dist/previews/diagrams/timeline.json",
     "category": "diagrams"
   },
-  "is-badge": {
+  "iswc-badge": {
     "json": "../../dist/previews/feedback/badge.json",
     "category": "feedback"
   },
-  "is-cdn-snippet": {
+  "iswc-cdn-snippet": {
     "json": "../../dist/previews/feedback/cdn-snippet.json",
     "category": "feedback"
   },
-  "is-confirm-modal": {
+  "iswc-confirm-modal": {
     "json": "../../dist/previews/feedback/confirm-modal.json",
     "category": "feedback"
   },
-  "is-palette-selector": {
+  "iswc-palette-selector": {
     "json": "../../dist/previews/feedback/palette-selector.json",
     "category": "feedback"
   },
-  "is-popconfirm": {
+  "iswc-popconfirm": {
     "json": "../../dist/previews/feedback/popconfirm.json",
     "category": "feedback"
   },
-  "is-progress-bar": {
+  "iswc-progress-bar": {
     "json": "../../dist/previews/feedback/progress-bar.json",
     "behavior": "../../dist/previews/feedback/progress-bar.preview.min.js",
     "category": "feedback"
   },
-  "is-progress-ring": {
+  "iswc-progress-ring": {
     "json": "../../dist/previews/feedback/progress-ring.json",
     "category": "feedback"
   },
-  "is-skeleton": {
+  "iswc-skeleton": {
     "json": "../../dist/previews/feedback/skeleton.json",
     "category": "feedback"
   },
-  "is-spinner": {
+  "iswc-spinner": {
     "json": "../../dist/previews/feedback/spinner.json",
     "category": "feedback"
   },
-  "is-tag": {
+  "iswc-tag": {
     "json": "../../dist/previews/feedback/tag.json",
     "category": "feedback"
   },
-  "is-theme-toggle": {
+  "iswc-theme-toggle": {
     "json": "../../dist/previews/feedback/theme-toggle.json",
     "category": "feedback"
   },
-  "is-prefs-clear": {
+  "iswc-prefs-clear": {
     "json": "../../dist/previews/feedback/prefs-clear.json",
     "category": "feedback"
   },
-  "is-toast-item": {
+  "iswc-toast-item": {
     "json": "../../dist/previews/feedback/toast-item.json",
     "category": "feedback"
   },
-  "is-toast": {
+  "iswc-toast": {
     "json": "../../dist/previews/feedback/toast.json",
     "behavior": "../../dist/previews/feedback/toast.preview.min.js",
     "category": "feedback"
   },
-  "is-tooltip": {
+  "iswc-tooltip": {
     "json": "../../dist/previews/feedback/tooltip.json",
     "behavior": "../../dist/previews/feedback/tooltip.preview.min.js",
     "category": "feedback"
   },
-  "is-checkbox": {
+  "iswc-checkbox": {
     "json": "../../dist/previews/forms/checkbox.json",
     "behavior": "../../dist/previews/forms/checkbox.preview.min.js",
     "category": "forms"
   },
-  "is-color-picker": {
+  "iswc-color-picker": {
     "json": "../../dist/previews/forms/color-picker.json",
     "behavior": "../../dist/previews/forms/color-picker.preview.min.js",
     "category": "forms"
   },
-  "is-combobox": {
+  "iswc-combobox": {
     "json": "../../dist/previews/forms/combobox.json",
     "category": "forms"
   },
-  "is-date-field": {
+  "iswc-date-field": {
     "json": "../../dist/previews/forms/date-field.json",
     "category": "forms"
   },
-  "is-date-input": {
+  "iswc-date-input": {
     "json": "../../dist/previews/forms/date-input.json",
     "category": "forms"
   },
-  "is-date-picker": {
+  "iswc-date-picker": {
     "json": "../../dist/previews/forms/date-picker.json",
     "category": "forms"
   },
-  "is-date-range-input": {
+  "iswc-date-range-input": {
     "json": "../../dist/previews/forms/date-range-input.json",
     "category": "forms"
   },
-  "is-date-range-picker": {
+  "iswc-date-range-picker": {
     "json": "../../dist/previews/forms/date-range-picker.json",
     "category": "forms"
   },
-  "is-date-time-field": {
+  "iswc-date-time-field": {
     "json": "../../dist/previews/forms/date-time-field.json",
     "category": "forms"
   },
-  "is-date-time-input": {
+  "iswc-date-time-input": {
     "json": "../../dist/previews/forms/date-time-input.json",
     "category": "forms"
   },
-  "is-digital-clock": {
+  "iswc-digital-clock": {
     "json": "../../dist/previews/forms/digital-clock.json",
     "category": "forms"
   },
-  "is-doc-editor": {
+  "iswc-doc-editor": {
     "json": "../../dist/previews/forms/doc-editor.json",
     "behavior": "../../dist/previews/forms/doc-editor.preview.min.js",
     "category": "forms"
   },
-  "is-dropzone": {
+  "iswc-dropzone": {
     "json": "../../dist/previews/forms/dropzone.json",
     "behavior": "../../dist/previews/forms/dropzone.preview.min.js",
     "category": "forms"
   },
-  "is-duration-picker": {
+  "iswc-duration-picker": {
     "json": "../../dist/previews/forms/duration-picker.json",
     "behavior": "../../dist/previews/forms/duration-picker.preview.min.js",
     "category": "forms"
   },
-  "is-file-input": {
+  "iswc-file-input": {
     "json": "../../dist/previews/forms/file-input.json",
     "behavior": "../../dist/previews/forms/file-input.preview.min.js",
     "category": "forms"
   },
-  "is-full-calendar": {
+  "iswc-full-calendar": {
     "json": "../../dist/previews/forms/full-calendar.json",
     "behavior": "../../dist/previews/forms/full-calendar.preview.min.js",
     "category": "forms"
   },
-  "is-inline-edit": {
+  "iswc-inline-edit": {
     "json": "../../dist/previews/forms/inline-edit.json",
     "category": "forms"
   },
-  "is-input": {
+  "iswc-input": {
     "json": "../../dist/previews/forms/input.json",
     "behavior": "../../dist/previews/forms/input.preview.min.js",
     "category": "forms"
   },
-  "is-masked-input": {
+  "iswc-masked-input": {
     "json": "../../dist/previews/forms/masked-input.json",
     "category": "forms"
   },
-  "is-mention": {
+  "iswc-mention": {
     "json": "../../dist/previews/forms/mention.json",
     "behavior": "../../dist/previews/forms/mention.preview.min.js",
     "category": "forms"
   },
-  "is-month-calendar": {
+  "iswc-month-calendar": {
     "json": "../../dist/previews/forms/month-calendar.json",
     "category": "forms"
   },
-  "is-option": {
+  "iswc-option": {
     "json": "../../dist/previews/forms/option.json",
     "category": "forms"
   },
-  "is-pin-input": {
+  "iswc-pin-input": {
     "json": "../../dist/previews/forms/pin-input.json",
     "category": "forms"
   },
-  "is-radio-group": {
+  "iswc-radio-group": {
     "json": "../../dist/previews/forms/radio-group.json",
     "category": "forms"
   },
-  "is-radio": {
+  "iswc-radio": {
     "json": "../../dist/previews/forms/radio.json",
     "category": "forms"
   },
-  "is-rating": {
+  "iswc-rating": {
     "json": "../../dist/previews/forms/rating.json",
     "behavior": "../../dist/previews/forms/rating.preview.min.js",
     "category": "forms"
   },
-  "is-rte": {
+  "iswc-rte": {
     "json": "../../dist/previews/forms/rte.json",
     "behavior": "../../dist/previews/forms/rte.preview.min.js",
     "category": "forms"
   },
-  "is-select": {
+  "iswc-select": {
     "json": "../../dist/previews/forms/select.json",
     "behavior": "../../dist/previews/forms/select.preview.min.js",
     "category": "forms"
   },
-  "is-signature": {
+  "iswc-signature": {
     "json": "../../dist/previews/forms/signature.json",
     "behavior": "../../dist/previews/forms/signature.preview.min.js",
     "category": "forms"
   },
-  "is-slider": {
+  "iswc-slider": {
     "json": "../../dist/previews/forms/slider.json",
     "behavior": "../../dist/previews/forms/slider.preview.min.js",
     "category": "forms"
   },
-  "is-switch": {
+  "iswc-switch": {
     "json": "../../dist/previews/forms/switch.json",
     "behavior": "../../dist/previews/forms/switch.preview.min.js",
     "category": "forms"
   },
-  "is-textarea": {
+  "iswc-textarea": {
     "json": "../../dist/previews/forms/textarea.json",
     "behavior": "../../dist/previews/forms/textarea.preview.min.js",
     "category": "forms"
   },
-  "is-time-clock": {
+  "iswc-time-clock": {
     "json": "../../dist/previews/forms/time-clock.json",
     "category": "forms"
   },
-  "is-time-field": {
+  "iswc-time-field": {
     "json": "../../dist/previews/forms/time-field.json",
     "category": "forms"
   },
-  "is-time-input": {
+  "iswc-time-input": {
     "json": "../../dist/previews/forms/time-input.json",
     "category": "forms"
   },
-  "is-year-calendar": {
+  "iswc-year-calendar": {
     "json": "../../dist/previews/forms/year-calendar.json",
     "category": "forms"
   },
-  "is-format-bytes": {
+  "iswc-format-bytes": {
     "json": "../../dist/previews/helpers/format-bytes.json",
     "category": "helpers"
   },
-  "is-format-date": {
+  "iswc-format-date": {
     "json": "../../dist/previews/helpers/format-date.json",
     "behavior": "../../dist/previews/helpers/format-date.preview.min.js",
     "category": "helpers"
   },
-  "is-format-number": {
+  "iswc-format-number": {
     "json": "../../dist/previews/helpers/format-number.json",
     "category": "helpers"
   },
-  "is-format": {
+  "iswc-format": {
     "json": "../../dist/previews/helpers/format.json",
     "category": "helpers"
   },
-  "is-intersection-observer": {
+  "iswc-intersection-observer": {
     "json": "../../dist/previews/helpers/intersection-observer.json",
     "category": "helpers"
   },
-  "is-lightbox": {
+  "iswc-lightbox": {
     "json": "../../dist/previews/diagrams/lightbox.json",
     "behavior": "../../dist/previews/diagrams/lightbox.preview.min.js",
     "category": "helpers"
   },
-  "is-md-editor": {
+  "iswc-md-editor": {
     "json": "../../dist/previews/helpers/md-editor.json",
     "category": "helpers"
   },
-  "is-md-render": {
+  "iswc-md-render": {
     "json": "../../dist/previews/helpers/md-render.json",
     "category": "helpers"
   },
-  "is-mutation-observer": {
+  "iswc-mutation-observer": {
     "json": "../../dist/previews/helpers/mutation-observer.json",
     "behavior": "../../dist/previews/helpers/mutation-observer.preview.min.js",
     "category": "helpers"
   },
-  "is-observer": {
+  "iswc-observer": {
     "json": "../../dist/previews/helpers/observer.json",
     "behavior": "../../dist/previews/helpers/observer.preview.min.js",
     "category": "helpers"
   },
-  "is-wake-lock": {
+  "iswc-wake-lock": {
     "json": "../../dist/previews/helpers/wake-lock.json",
     "category": "helpers"
   },
-  "is-offscreen-canvas": {
+  "iswc-offscreen-canvas": {
     "json": "../../dist/previews/helpers/offscreen-canvas.json",
     "category": "helpers"
   },
-  "is-popover": {
+  "iswc-popover": {
     "json": "../../dist/previews/helpers/popover.json",
     "category": "helpers"
   },
-  "is-relative-time": {
+  "iswc-relative-time": {
     "json": "../../dist/previews/helpers/relative-time.json",
     "behavior": "../../dist/previews/helpers/relative-time.preview.min.js",
     "category": "helpers"
   },
-  "is-resize-observer": {
+  "iswc-resize-observer": {
     "json": "../../dist/previews/helpers/resize-observer.json",
     "behavior": "../../dist/previews/helpers/resize-observer.preview.min.js",
     "category": "helpers"
   },
-  "is-ui": {
+  "iswc-ui": {
     "json": "../../dist/previews/helpers/ui.json",
     "behavior": "../../dist/previews/helpers/ui.preview.min.js",
     "category": "helpers"
@@ -547,240 +547,240 @@ export default {
     "behavior": "../../dist/pages/home.min.js",
     "category": ""
   },
-  "is-accordion-group": {
+  "iswc-accordion-group": {
     "json": "../../dist/previews/isp/accordion-group.json",
     "category": "isp"
   },
-  "is-block-layout": {
+  "iswc-block-layout": {
     "json": "../../dist/previews/isp/block-layout.json",
     "behavior": "../../dist/previews/isp/block-layout.preview.min.js",
     "category": "isp"
   },
-  "is-btn-ref": {
+  "iswc-btn-ref": {
     "json": "../../dist/previews/isp/btn-ref.json",
     "behavior": "../../dist/previews/isp/btn-ref.preview.min.js",
     "category": "isp"
   },
-  "is-catalogo-gen": {
+  "iswc-catalogo-gen": {
     "json": "../../dist/previews/isp/catalogo-gen.json",
     "behavior": "../../dist/previews/isp/catalogo-gen.preview.min.js",
     "category": "isp"
   },
-  "is-confirm-delete": {
+  "iswc-confirm-delete": {
     "json": "../../dist/previews/isp/confirm-delete.json",
     "category": "isp"
   },
-  "is-flex-layout": {
+  "iswc-flex-layout": {
     "json": "../../dist/previews/isp/flex-layout.json",
     "behavior": "../../dist/previews/isp/flex-layout.preview.min.js",
     "category": "isp"
   },
-  "is-flex-options": {
+  "iswc-flex-options": {
     "json": "../../dist/previews/isp/flex-options.json",
     "behavior": "../../dist/previews/isp/flex-options.preview.min.js",
     "category": "isp"
   },
-  "is-float-card": {
+  "iswc-float-card": {
     "json": "../../dist/previews/isp/float-card.json",
     "behavior": "../../dist/previews/isp/float-card.preview.min.js",
     "category": "isp"
   },
-  "is-form": {
+  "iswc-form": {
     "json": "../../dist/previews/isp/form.json",
     "behavior": "../../dist/previews/isp/form.preview.min.js",
     "category": "isp"
   },
-  "is-grid-layout": {
+  "iswc-grid-layout": {
     "json": "../../dist/previews/isp/grid-layout.json",
     "category": "isp"
   },
-  "is-heading": {
+  "iswc-heading": {
     "json": "../../dist/previews/isp/heading.json",
     "behavior": "../../dist/previews/isp/heading.preview.min.js",
     "category": "isp"
   },
-  "is-loading-overlay": {
+  "iswc-loading-overlay": {
     "json": "../../dist/previews/isp/loading-overlay.json",
     "behavior": "../../dist/previews/isp/loading-overlay.preview.min.js",
     "category": "isp"
   },
-  "is-modal-verificacion": {
+  "iswc-modal-verificacion": {
     "json": "../../dist/previews/isp/modal-verificacion.json",
     "behavior": "../../dist/previews/isp/modal-verificacion.preview.min.js",
     "category": "isp"
   },
-  "is-text": {
+  "iswc-text": {
     "json": "../../dist/previews/isp/text.json",
     "behavior": "../../dist/previews/isp/text.preview.min.js",
     "category": "isp"
   },
-  "is-tree-view": {
+  "iswc-tree-view": {
     "json": "../../dist/previews/isp/tree-view.json",
     "behavior": "../../dist/previews/isp/tree-view.preview.min.js",
     "category": "isp"
   },
-  "is-callout": {
+  "iswc-callout": {
     "json": "../../dist/previews/layout/callout.json",
     "category": "layout"
   },
-  "is-card": {
+  "iswc-card": {
     "json": "../../dist/previews/layout/card.json",
     "category": "layout"
   },
-  "is-details": {
+  "iswc-details": {
     "json": "../../dist/previews/layout/details.json",
     "category": "layout"
   },
-  "is-dialog": {
+  "iswc-dialog": {
     "json": "../../dist/previews/layout/dialog.json",
     "category": "layout"
   },
-  "is-divider": {
+  "iswc-divider": {
     "json": "../../dist/previews/layout/divider.json",
     "category": "layout"
   },
-  "is-dock-item": {
+  "iswc-dock-item": {
     "json": "../../dist/previews/layout/dock-item.json",
     "category": "layout"
   },
-  "is-dock": {
+  "iswc-dock": {
     "json": "../../dist/previews/layout/dock.json",
     "behavior": "../../dist/previews/layout/dock.preview.min.js",
     "category": "layout"
   },
-  "is-drawer": {
+  "iswc-drawer": {
     "json": "../../dist/previews/layout/drawer.json",
     "category": "layout"
   },
-  "is-main": {
+  "iswc-main": {
     "json": "../../dist/previews/layout/main.json",
     "behavior": "../../dist/previews/layout/main.preview.min.js",
     "category": "layout"
   },
-  "is-scrollspy": {
+  "iswc-scrollspy": {
     "json": "../../dist/previews/layout/scrollspy.json",
     "category": "layout"
   },
-  "is-split-panel": {
+  "iswc-split-panel": {
     "json": "../../dist/previews/layout/split-panel.json",
     "category": "layout"
   },
-  "is-icon-explorer": {
+  "iswc-icon-explorer": {
     "json": "../../dist/previews/media/icon-explorer.json",
     "behavior": "../../dist/previews/media/icon-explorer.preview.min.js",
     "category": "media"
   },
-  "is-avatar": {
+  "iswc-avatar": {
     "json": "../../dist/previews/media/avatar.json",
     "category": "media"
   },
-  "is-theme-img": {
+  "iswc-theme-img": {
     "json": "../../dist/previews/media/theme-img.json",
     "category": "media"
   },
-  "is-barcode": {
+  "iswc-barcode": {
     "json": "../../dist/previews/media/barcode.json",
     "category": "media"
   },
-  "is-barcode-scanner": {
+  "iswc-barcode-scanner": {
     "json": "../../dist/previews/media/barcode-scanner.json",
     "category": "media"
   },
-  "is-icon": {
+  "iswc-icon": {
     "json": "../../dist/previews/media/icon.json",
     "behavior": "../../dist/previews/media/icon.preview.min.js",
     "category": "media"
   },
-  "is-image-editor": {
+  "iswc-image-editor": {
     "json": "../../dist/previews/media/image-editor.json",
     "behavior": "../../dist/previews/media/image-editor.preview.min.js",
     "category": "media"
   },
-  "is-qrcode": {
+  "iswc-qrcode": {
     "json": "../../dist/previews/media/qrcode.json",
     "category": "media"
   },
-  "is-video-playlist": {
+  "iswc-video-playlist": {
     "json": "../../dist/previews/media/video-playlist.json",
     "behavior": "../../dist/previews/media/video-playlist.preview.min.js",
     "category": "media"
   },
-  "is-video": {
+  "iswc-video": {
     "json": "../../dist/previews/media/video.json",
     "behavior": "../../dist/previews/media/video.preview.min.js",
     "category": "media"
   },
-  "is-speech": {
+  "iswc-speech": {
     "json": "../../dist/previews/media/speech.json",
     "category": "media"
   },
-  "is-media-recorder": {
+  "iswc-media-recorder": {
     "json": "../../dist/previews/media/media-recorder.json",
     "category": "media"
   },
-  "is-breadcrumb-item": {
+  "iswc-breadcrumb-item": {
     "json": "../../dist/previews/navigation/breadcrumb-item.json",
     "category": "navigation"
   },
-  "is-breadcrumb": {
+  "iswc-breadcrumb": {
     "json": "../../dist/previews/navigation/breadcrumb.json",
     "category": "navigation"
   },
-  "is-carousel-item": {
+  "iswc-carousel-item": {
     "json": "../../dist/previews/navigation/carousel-item.json",
     "category": "navigation"
   },
-  "is-carousel": {
+  "iswc-carousel": {
     "json": "../../dist/previews/navigation/carousel.json",
     "category": "navigation"
   },
-  "is-mega-menu": {
+  "iswc-mega-menu": {
     "json": "../../dist/previews/navigation/mega-menu.json",
     "behavior": "../../dist/previews/navigation/mega-menu.preview.min.js",
     "category": "navigation"
   },
-  "is-scroller": {
+  "iswc-scroller": {
     "json": "../../dist/previews/navigation/scroller.json",
     "category": "navigation"
   },
-  "is-stepper-step": {
+  "iswc-stepper-step": {
     "json": "../../dist/previews/navigation/stepper-step.json",
     "category": "navigation"
   },
-  "is-stepper": {
+  "iswc-stepper": {
     "json": "../../dist/previews/navigation/stepper.json",
     "category": "navigation"
   },
-  "is-tab-group": {
+  "iswc-tab-group": {
     "json": "../../dist/previews/navigation/tab-group.json",
     "category": "navigation"
   },
-  "is-tab-panel": {
+  "iswc-tab-panel": {
     "json": "../../dist/previews/navigation/tab-panel.json",
     "category": "navigation"
   },
-  "is-tab": {
+  "iswc-tab": {
     "json": "../../dist/previews/navigation/tab.json",
     "category": "navigation"
   },
-  "is-tree-item": {
+  "iswc-tree-item": {
     "json": "../../dist/previews/navigation/tree-item.json",
     "category": "navigation"
   },
-  "is-tree": {
+  "iswc-tree": {
     "json": "../../dist/previews/navigation/tree.json",
     "category": "navigation"
   },
-  "is-command-palette": {
+  "iswc-command-palette": {
     "json": "../../dist/previews/overlays/command-palette.json",
     "behavior": "../../dist/previews/overlays/command-palette.preview.min.js",
     "category": "overlays"
   },
-  "is-pdf-viewer": {
+  "iswc-pdf-viewer": {
     "json": "../../dist/previews/overlays/pdf-viewer.json",
     "category": "overlays"
   },
-  "is-window": {
+  "iswc-window": {
     "json": "../../dist/previews/overlays/window.json",
     "category": "overlays"
   },
@@ -798,31 +798,31 @@ export default {
     "behavior": "../../dist/pages/ecosystem.min.js",
     "category": ""
   },
-  "is-er-editor": {
+  "iswc-er-editor": {
     "json": "../../dist/previews/diagrams/er-editor.json",
     "category": "diagrams"
   },
-  "is-diagram-view-app": {
+  "iswc-diagram-view-app": {
     "json": "../../dist/previews/diagrams/diagram-view-app.json",
     "category": "diagrams"
   },
-  "is-diagram-edit-app": {
+  "iswc-diagram-edit-app": {
     "json": "../../dist/previews/diagrams/diagram-edit-app.json",
     "category": "diagrams"
   },
-  "is-demo": {
+  "iswc-demo": {
     "json": "../../dist/previews/layout/demo.json",
     "category": "layout"
   },
-  "is-floating": {
+  "iswc-floating": {
     "json": "../../dist/previews/helpers/floating.json",
     "category": "helpers"
   },
-  "is-preview-component": {
+  "iswc-preview-component": {
     "json": "../../dist/previews/layout/preview-component.json",
     "category": "preview"
   },
-  "is-preview-controls": {
+  "iswc-preview-controls": {
     "json": "../../dist/previews/layout/preview-controls.json",
     "category": "preview"
   }

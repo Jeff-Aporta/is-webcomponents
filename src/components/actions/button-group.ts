@@ -4,7 +4,7 @@ import { withStyleAttrs } from '../../core/attrs.js';
 
 
 /**
- * <is-button-group> — Web Component (vanilla, zero dependencies).
+ * <iswc-button-group> — Web Component (vanilla, zero dependencies).
  *
  * Agrupa botones relacionados en una unidad visual y, opcionalmente, gestiona
  * qué botón está seleccionado (control segmentado / toggle group).
@@ -21,17 +21,17 @@ import { withStyleAttrs } from '../../core/attrs.js';
  *   disabled      boolean  bloquea el grupo completo
  *
  * Slots
- *   (default)  uno o más <is-button> (o <button> nativos)
+ *   (default)  uno o más <iswc-button> (o <button> nativos)
  *
  * CSS Parts:  ::part(base)
- * Eventos:    is-change { value, values }
+ * Eventos:    iswc-change { value, values }
  *
  * El valor de cada botón es su atributo `value`; si no lo tiene, se usa su
  * texto y, en último caso, su índice. El botón activo recibe el atributo
  * `selected` y `aria-pressed`, que el CSS del grupo usa para pintarlo.
  *
  * Las variables --_button-*-radius y --_button-*-indent se inyectan en los
- * hijos slotted; <is-button> las consume para fusionar bordes.
+ * hijos slotted; <iswc-button> las consume para fusionar bordes.
  */
 
 (() => {
@@ -66,7 +66,7 @@ import { withStyleAttrs } from '../../core/attrs.js';
   /** Selección: uno en `single`, varios en `multiple`. */
   type Seleccion = string[];
 
-  class IsButtonGroup extends withStyleAttrs(HTMLElement) {
+  class IswcButtonGroup extends withStyleAttrs(HTMLElement) {
     static styleAttrs = STYLE_ATTRS;
 
     static get observedAttributes(): string[] { return OBSERVED; }
@@ -177,7 +177,7 @@ import { withStyleAttrs } from '../../core/attrs.js';
     // ---- privados ---------------------------------------------------------
 
     #items(): HTMLElement[] {
-      // `children` es `Element[]`, pero un `is-button-group` solo agrupa HTML:
+      // `children` es `Element[]`, pero un `iswc-button-group` solo agrupa HTML:
       // acotar aqui evita repetir el cast en los seis sitios que lo consumen.
       return [...this.children].filter(
         (el: Element): el is HTMLElement => el instanceof HTMLElement && !el.hasAttribute('slot'));
@@ -274,7 +274,7 @@ import { withStyleAttrs } from '../../core/attrs.js';
       else this.setAttribute('value', next.join(','));
       this.#syncSelection();
       if (shouldEmit && next.join(',') !== before) {
-        emit(this, 'is-change', { value: this.value, values: this.values });
+        emit(this, 'iswc-change', { value: this.value, values: this.values });
       }
     }
 
@@ -328,5 +328,5 @@ import { withStyleAttrs } from '../../core/attrs.js';
     };
   }
 
-  defineElement('is-button-group', IsButtonGroup, 'IsButtonGroup');
+  defineElement('iswc-button-group', IswcButtonGroup, 'IswcButtonGroup');
 })();

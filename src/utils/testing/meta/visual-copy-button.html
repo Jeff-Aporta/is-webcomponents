@@ -1,8 +1,8 @@
 <!doctype html>
 <meta charset="utf-8">
-<title>visual · is-copy-button</title>
+<title>visual · iswc-copy-button</title>
 <!--
-  Banco visual de <is-copy-button>. Se fotografia con Chrome headless antes y
+  Banco visual de <iswc-copy-button>. Se fotografia con Chrome headless antes y
   despues del refactor para comprobar que el boton no cambia de pinta.
 
   Los tres estados de icono (reposo / exito / error) se fuerzan a mano
@@ -74,19 +74,19 @@
 <section>
   <h2>trigger slotted / fondo claro</h2>
   <div class="row">
-    <is-copy-button value="hola">
+    <iswc-copy-button value="hola">
       <button type="button">Copiar con trigger propio</button>
-    </is-copy-button>
+    </iswc-copy-button>
     <div class="claro">
       <code>npm i is-webcomponents</code>
-      <is-copy-button value="npm i is-webcomponents"></is-copy-button>
+      <iswc-copy-button value="npm i is-webcomponents"></iswc-copy-button>
     </div>
   </div>
 </section>
 
 <script type="module">
   import '/src/components/actions/copy-button.js';
-  await customElements.whenDefined('is-copy-button');
+  await customElements.whenDefined('iswc-copy-button');
 
   const CASOS = [
     ['reposo', {}, 'copy'],
@@ -99,7 +99,7 @@
   for (const [etiqueta, attrs, estado] of CASOS) {
     const box = document.createElement('div');
     box.className = 'cell';
-    const el = document.createElement('is-copy-button');
+    const el = document.createElement('iswc-copy-button');
     el.setAttribute('value', 'texto');
     for (const [k, v] of Object.entries(attrs)) el.setAttribute(k, v);
     const cap = document.createElement('small');

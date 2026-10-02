@@ -2,9 +2,9 @@ import { adoptCss, defineElement } from '../../core/element.js';
 import { ElementBase } from '../../core/element-base.js';
 
 /**
- * <is-breadcrumb> — contenedor de una ruta de migas de pan.
+ * <iswc-breadcrumb> — contenedor de una ruta de migas de pan.
  *
- * Recibe N `<is-breadcrumb-item>` en el slot default y los muestra
+ * Recibe N `<iswc-breadcrumb-item>` en el slot default y los muestra
  * separados por el slot `separator`.
  *
  * Atributos
@@ -25,7 +25,7 @@ import { ElementBase } from '../../core/element-base.js';
     </nav>
   `;
 
-  class IsBreadcrumb extends ElementBase {
+  class IswcBreadcrumb extends ElementBase {
     static get observedAttributes(): string[] { return ['label']; }
 
     #itemObserver: MutationObserver | null = null;
@@ -68,7 +68,7 @@ import { ElementBase } from '../../core/element-base.js';
     }
 
     #syncItemRoles() {
-      // Cada <is-breadcrumb-item> en el slot default lleva role="listitem"
+      // Cada <iswc-breadcrumb-item> en el slot default lleva role="listitem"
       // para una semántica de lista coherente (propuesta g13 breadcrumb).
       const slot = this.shadowRoot!.querySelector<HTMLSlotElement>('slot');
       if (!slot) return;
@@ -80,5 +80,5 @@ import { ElementBase } from '../../core/element-base.js';
     }
   }
 
-  defineElement('is-breadcrumb', IsBreadcrumb, 'IsBreadcrumb');
+  defineElement('iswc-breadcrumb', IswcBreadcrumb, 'IswcBreadcrumb');
 })();

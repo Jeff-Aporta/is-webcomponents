@@ -1,7 +1,7 @@
 // tests/no-iconify.test.ts
 //
 // El proyecto NO depende del web component `<iconify-icon>` ni de scripts o
-// endpoints de Iconify en runtime. La unica API de iconos es <is-icon>, que
+// endpoints de Iconify en runtime. La unica API de iconos es <iswc-icon>, que
 // resuelve el SVG desde el sistema propio (assets/icons -> dist/assets).
 //
 // Falla si aparece:
@@ -67,7 +67,7 @@ for (const file of files) {
   const code = stripComments(src);
 
   if (/<iconify-icon|iconify-icon['"\s.,)>]|customElements\.get\(\s*['"]iconify-icon/.test(code)) {
-    failures.push(`${rel}: usa el web component <iconify-icon> — el kit usa <is-icon>`);
+    failures.push(`${rel}: usa el web component <iconify-icon> — el kit usa <iswc-icon>`);
   }
   if (/code\.iconify\.design/.test(code)) {
     failures.push(`${rel}: carga el script de iconify desde CDN — eliminado del proyecto`);
@@ -80,7 +80,7 @@ for (const file of files) {
 // El loader debe seguir exponiendo la resolucion propia.
 const loader = readFileSync(join(root, 'src/components/_shared/icon-loader.ts'), 'utf8');
 if (!/export async function resolveIconRaw/.test(loader)) {
-  failures.push('icon-loader.ts: falta resolveIconRaw (is-icon depende de él)');
+  failures.push('icon-loader.ts: falta resolveIconRaw (iswc-icon depende de él)');
 }
 if (/export function ensureIconify/.test(loader)) {
   failures.push('icon-loader.ts: ensureIconify debe estar eliminado (cargaba el CDN de iconify)');

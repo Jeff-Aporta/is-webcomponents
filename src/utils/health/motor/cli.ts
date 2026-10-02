@@ -109,7 +109,7 @@ function mostrarAyuda(): void {
   console.log('  deno run -A --no-check src/utils/health/motor/cli.ts --solo-json');
   console.log('');
   console.log('  # Auditoría de un tag puntual con E2E');
-  console.log('  deno run -A --no-check src/utils/health/motor/cli.ts --solo is-button --puerto 8391');
+  console.log('  deno run -A --no-check src/utils/health/motor/cli.ts --solo iswc-button --puerto 8391');
   console.log('');
   console.log('  # Solo la categoría de charts');
   console.log('  deno run -A --no-check src/utils/health/motor/cli.ts --categoria data-viz --solo-json');

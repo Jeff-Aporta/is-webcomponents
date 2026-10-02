@@ -1,20 +1,20 @@
 ---
-tag: is-share-button
+tag: iswc-share-button
 tags:
-  - is-share-button
+  - iswc-share-button
 category: actions
 status: public
 source: ./share-button.js
 style: ./share-button.css
 preview: ./share-button.json
 ---
-# `<is-share-button>`
+# `<iswc-share-button>`
 
 ## Propósito
 
 Comparte título, texto y URL con las apps nativas (Web Share). Si no hay share, copia al portapapeles.
 
-Este módulo registra `<is-share-button>`.
+Este módulo registra `<iswc-share-button>`.
 
 ## Cuándo usarlo
 
@@ -33,7 +33,7 @@ import './share-button.js';
 ## Ejemplo mínimo
 
 ```html
-<is-share-button share-title="PatyIA" text="Mira este reporte" url="https://insoft.com.co"></is-share-button>
+<iswc-share-button share-title="PatyIA" text="Mira este reporte" url="https://insoft.com.co"></iswc-share-button>
 ```
 
 ## API
@@ -68,8 +68,8 @@ import './share-button.js';
 
 | Evento | detail | bubbles | composed | cancelable |
 | --- | --- | --- | --- | --- |
-| `is-share` | sí `{ how, url }` | sí | sí | no |
-| `is-error` | no | sí | sí | no |
+| `iswc-share` | sí `{ how, url }` | sí | sí | no |
+| `iswc-error` | no | sí | sí | no |
 
 ### Métodos y propiedades públicas
 
@@ -102,12 +102,12 @@ No es form-associated.
 
 ## Accesibilidad
 
-El control interno es `is-button`.
+El control interno es `iswc-button`.
 
 ## Ejemplo avanzado
 
 ```html
-<is-share-button share-title="Demo" url="https://jeff-aporta.github.io/is-webcomponents/"></is-share-button>
+<iswc-share-button share-title="Demo" url="https://jeff-aporta.github.io/is-webcomponents/"></iswc-share-button>
 ```
 
 ## Errores comunes

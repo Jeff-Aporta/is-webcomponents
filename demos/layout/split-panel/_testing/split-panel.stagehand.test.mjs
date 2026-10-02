@@ -1,4 +1,4 @@
-// split-panel.stagehand.test.mjs — verificaciones de calidad visual para is-split-panel.
+// split-panel.stagehand.test.mjs — verificaciones de calidad visual para iswc-split-panel.
 import assert from 'node:assert/strict';
 import { BASE_URL, newPage, close, waitReady, screenshot, report, maybeStagehand } from './lib/harness.mjs';
 
@@ -11,7 +11,7 @@ const results = [];
 async function checkDeterministic(page, demo) {
   await page.waitForTimeout(200);
   const data = await page.evaluate(() => {
-    const sps = [...document.querySelectorAll('main is-split-panel')];
+    const sps = [...document.querySelectorAll('main iswc-split-panel')];
     return sps.map((sp, idx) => {
       const div = sp.shadowRoot?.querySelector('[part="divider"]');
       const startSlot = sp.querySelector('[slot="start"]');
@@ -64,7 +64,7 @@ for (const demo of DEMOS) {
 }
 
 const VISUAL_RUBRIC = `
-Evalúa la calidad visual del <is-split-panel> en el screenshot.
+Evalúa la calidad visual del <iswc-split-panel> en el screenshot.
 
 Checklist (todas deben cumplirse; marca cada una PASS o FAIL):
 

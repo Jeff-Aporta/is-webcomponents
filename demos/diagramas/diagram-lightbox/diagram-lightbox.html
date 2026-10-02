@@ -3,8 +3,8 @@
 <head>
 <meta charset="utf-8" />
 <meta name="viewport" content="width=device-width, initial-scale=1" />
-<title>Demo — <is-diagram-lightbox> · is-webcomponents</title>
-<meta name="description" content="Visor a pantalla completa para diagramas (hereda de <is-lightbox> + barra tortuga + share)." />
+<title>Demo — <iswc-diagram-lightbox> · is-webcomponents</title>
+<meta name="description" content="Visor a pantalla completa para diagramas (hereda de <iswc-lightbox> + barra tortuga + share)." />
 <style>
   html, body { margin: 0; padding: 0; min-height: 100%; background: #0c1118; color: #e2e8f0; font-family: ui-sans-serif, system-ui, sans-serif; }
   body { display: grid; grid-template-rows: auto 1fr; }
@@ -17,13 +17,13 @@
   button:hover { background: #334155; }
   .preview { max-width: 560px; padding: 12px; border: 1px solid rgba(255,255,255,0.18); border-radius: 8px; background: #0f1620; }
   .preview h3 { margin: 0 0 8px 0; font-size: 13px; color: #94a3b8; text-transform: uppercase; letter-spacing: 0.06em; }
-  is-diagram-lightbox:not(:defined) { visibility: hidden; }
+  iswc-diagram-lightbox:not(:defined) { visibility: hidden; }
 </style>
 <script type="module">
   // Cargamos la luz base y el diagrama de secuencia para tener payload.
-  await import('../../../dist/cdn/diagrams/diagram-lightbox.min.js?h=lar3x4');
-  await import('../../../dist/cdn/diagrams/sequence-diagram.min.js?h=yetezm');
-  await customElements.whenDefined('is-diagram-lightbox');
+  await import('../../../dist/cdn/diagrams/diagram-lightbox.min.js?h=kd40z0');
+  await import('../../../dist/cdn/diagrams/sequence-diagram.min.js?h=esbe4u');
+  await customElements.whenDefined('iswc-diagram-lightbox');
 
   const samplePayload = {
     sequence: {
@@ -43,7 +43,7 @@
   };
 
   // Crear el lightbox UNA vez, attached al body para que esté fuera del flujo.
-  const lb = document.createElement('is-diagram-lightbox');
+  const lb = document.createElement('iswc-diagram-lightbox');
   lb.setAttribute('kind', 'sequence');
   lb.payload = samplePayload;
   lb.open = false; // empieza cerrado
@@ -61,7 +61,7 @@
 </head>
 <body>
   <header>
-    <h1>Demo — <code>&lt;is-diagram-lightbox&gt;</code></h1>
+    <h1>Demo — <code>&lt;iswc-diagram-lightbox&gt;</code></h1>
     <p>Visor a pantalla completa con barra tortuga (play/pause/stop), share y código JSON.</p>
   </header>
   <main>

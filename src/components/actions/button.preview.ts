@@ -1,5 +1,5 @@
 /**
- * Behavior: playground + log de eventos de `<is-button>`.
+ * Behavior: playground + log de eventos de `<iswc-button>`.
  *
  * El JSON traía controles (pgVariant/pgAppearance) sin `mount` — al cambiar
  * valores no pasaba nada. Además el naming era legacy: “variant” = color y
@@ -46,18 +46,18 @@ function wirePlayground(root: ParentNode): void {
   const hrefEl = root.querySelector<HTMLInputElement>('#pgHref');
   const outEl = root.querySelector<HTMLElement>('#pgOut');
   const makeIcon = (mdi: string, slot: string): HTMLElement => {
-    const icon = document.createElement('is-icon');
+    const icon = document.createElement('iswc-icon');
     icon.setAttribute('slot', slot);
     icon.setAttribute('icon', mdi);
     return icon;
   };
 
   const syncIcons = (): void => {
-    for (const el of [...btn.querySelectorAll<HTMLElement>('is-icon[slot="start"], is-icon[slot="end"]')]) {
+    for (const el of [...btn.querySelectorAll<HTMLElement>('iswc-icon[slot="start"], iswc-icon[slot="end"]')]) {
       el.remove();
     }
-    // Quitar is-icon sin slot (markup viejo en demos).
-    for (const el of [...btn.querySelectorAll<HTMLElement>(':scope > is-icon:not([slot])')]) {
+    // Quitar iswc-icon sin slot (markup viejo en demos).
+    for (const el of [...btn.querySelectorAll<HTMLElement>(':scope > iswc-icon:not([slot])')]) {
       el.remove();
     }
     const startKey = startEl?.value || '';
@@ -70,11 +70,11 @@ function wirePlayground(root: ParentNode): void {
     const text = textEl?.value ?? 'Hola mundo';
     // Conservar solo los iconos; el resto del light DOM es la etiqueta.
     for (const node of [...btn.childNodes]) {
-      if (node.nodeType === Node.ELEMENT_NODE && (node as Element).localName === 'is-icon') continue;
+      if (node.nodeType === Node.ELEMENT_NODE && (node as Element).localName === 'iswc-icon') continue;
       node.remove();
     }
     const label = document.createTextNode(text);
-    const startIcon = btn.querySelector<HTMLElement>('is-icon[slot="start"]');
+    const startIcon = btn.querySelector<HTMLElement>('iswc-icon[slot="start"]');
     if (startIcon) startIcon.after(label);
     else btn.prepend(label);
   };
@@ -83,7 +83,7 @@ function wirePlayground(root: ParentNode): void {
     if (!outEl) return;
     const color = btn.getAttribute('color') || 'brand';
     const variant = btn.getAttribute('variant') || 'filled';
-    const parts: string[] = ['<is-button', ` color="${escapeAttr(color)}"`];
+    const parts: string[] = ['<iswc-button', ` color="${escapeAttr(color)}"`];
     if (variant && variant !== 'filled') parts.push(` variant="${escapeAttr(variant)}"`);
     if (btn.hasAttribute('pill')) parts.push(' pill');
     if (btn.hasAttribute('with-caret')) parts.push(' with-caret');
@@ -92,19 +92,19 @@ function wirePlayground(root: ParentNode): void {
     const href = btn.getAttribute('href');
     if (href) parts.push(` href="${escapeAttr(href)}"`, ' target="_blank"', ' rel="noopener"');
     parts.push('>');
-    const start = btn.querySelector<HTMLElement>('is-icon[slot="start"]');
-    const end = btn.querySelector<HTMLElement>('is-icon[slot="end"]');
+    const start = btn.querySelector<HTMLElement>('iswc-icon[slot="start"]');
+    const end = btn.querySelector<HTMLElement>('iswc-icon[slot="end"]');
     if (start) {
-      parts.push(`\n  <is-icon slot="start" icon="${escapeAttr(start.getAttribute('icon') || '')}"></is-icon>`);
+      parts.push(`\n  <iswc-icon slot="start" icon="${escapeAttr(start.getAttribute('icon') || '')}"></iswc-icon>`);
     }
     const text = (textEl?.value ?? btn.textContent ?? '').trim() || 'Hola mundo';
     parts.push(start || end ? `\n  ${escapeAttr(text)}\n` : escapeAttr(text));
     if (end) {
-      parts.push(`  <is-icon slot="end" icon="${escapeAttr(end.getAttribute('icon') || '')}"></is-icon>\n`);
+      parts.push(`  <iswc-icon slot="end" icon="${escapeAttr(end.getAttribute('icon') || '')}"></iswc-icon>\n`);
     }
-    parts.push('</is-button>');
+    parts.push('</iswc-button>');
     const html = parts.join('');
-    if (outEl.localName === 'is-code') {
+    if (outEl.localName === 'iswc-code') {
       (outEl as HTMLElement & { value: string }).value = html;
       outEl.dataset.cmSource = html;
       delete outEl.dataset.cm;
@@ -166,7 +166,7 @@ function wireEvents(root: ParentNode): void {
   for (const id of ['evtBtn', 'evtBtn2']) {
     const el = root.querySelector<HTMLElement>(`#${id}`);
     if (!el) continue;
-    for (const ev of ['is-click', 'is-focus', 'is-blur', 'is-invalid']) {
+    for (const ev of ['iswc-click', 'iswc-focus', 'iswc-blur', 'iswc-invalid']) {
       el.addEventListener(ev, (e: Event) => stamp(`${id}:${ev}`, (e as CustomEvent).detail ?? null));
     }
   }

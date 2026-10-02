@@ -16,18 +16,18 @@ function flow(title, nodes, edges, note) {
     flowchart: { title, direction: 'TB', nodes, edges },
   };
   const html =
-    `<is-flowchart open-on-click animation="flow">\n` +
+    `<iswc-flowchart open-on-click animation="flow">\n` +
     `  <script type="application/json">\n` +
     `  ${JSON.stringify(payload, null, 2).replace(/\n/g, '\n  ')}\n` +
     `  </script>\n` +
-    `</is-flowchart>`;
+    `</iswc-flowchart>`;
   return { html, note };
 }
 
 /** @type {Record<string, { note: string, html: string }>} */
 const FLOWS = {
-  'forms/is-select.json': flow(
-    'is-select: ramas',
+  'forms/iswc-select.json': flow(
+    'iswc-select: ramas',
     [
       { id: 'q', label: 'multiple?', shape: 'diamond' },
       { id: 's', label: 'single → value string', shape: 'stadium' },
@@ -44,8 +44,8 @@ const FLOWS = {
     'Ramas de selección: multiple cambia FormData y cómo se muestra el valor.',
   ),
 
-  'navigation/is-tree.json': flow(
-    'is-tree: selection',
+  'navigation/iswc-tree.json': flow(
+    'iswc-tree: selection',
     [
       { id: 'q', label: 'selection=?', shape: 'diamond' },
       { id: 'a', label: 'none → solo expand', shape: 'stadium' },
@@ -62,14 +62,14 @@ const FLOWS = {
     'El atributo selection define si el árbol selecciona nodos y cómo.',
   ),
 
-  'actions/is-copy-button.json': flow(
-    'is-copy-button: fuente',
+  'actions/iswc-copy-button.json': flow(
+    'iswc-copy-button: fuente',
     [
       { id: 'q', label: 'tiene from?', shape: 'diamond' },
       { id: 'a', label: 'resolver #id / .value', shape: 'round' },
       { id: 'b', label: 'tiene value?', shape: 'diamond' },
       { id: 'c', label: 'copiar literal', shape: 'stadium' },
-      { id: 'e', label: 'is-error', shape: 'stadium' },
+      { id: 'e', label: 'iswc-error', shape: 'stadium' },
     ],
     [
       { from: 'q', to: 'a', label: 'si' },
@@ -77,11 +77,11 @@ const FLOWS = {
       { from: 'b', to: 'c', label: 'si' },
       { from: 'b', to: 'e', label: 'no' },
     ],
-    'from gana sobre value. Sin fuente válida emite is-error.',
+    'from gana sobre value. Sin fuente válida emite iswc-error.',
   ),
 
-  'navigation/is-breadcrumb-item.json': flow(
-    'is-breadcrumb-item: host',
+  'navigation/iswc-breadcrumb-item.json': flow(
+    'iswc-breadcrumb-item: host',
     [
       { id: 'q', label: 'tiene href?', shape: 'diamond' },
       { id: 'a', label: 'elemento a (enlace)', shape: 'stadium' },
@@ -98,13 +98,13 @@ const FLOWS = {
     'Con href pinta enlace; vacío = current; sin href = span.',
   ),
 
-  'layout/is-dialog.json': flow(
-    'is-dialog: cierre',
+  'layout/iswc-dialog.json': flow(
+    'iswc-dialog: cierre',
     [
       { id: 'q', label: 'light-dismiss?', shape: 'diamond' },
       { id: 'a', label: 'clic fuera → hide', shape: 'round' },
       { id: 'b', label: 'solo X / Escape', shape: 'round' },
-      { id: 'c', label: 'is-hide cancelado?', shape: 'diamond' },
+      { id: 'c', label: 'iswc-hide cancelado?', shape: 'diamond' },
       { id: 'd', label: 'pulse / no cierra', shape: 'stadium' },
       { id: 'e', label: 'cierra', shape: 'stadium' },
     ],
@@ -116,11 +116,11 @@ const FLOWS = {
       { from: 'c', to: 'd', label: 'si' },
       { from: 'c', to: 'e', label: 'no' },
     ],
-    'light-dismiss y cancelación de is-hide controlan el cierre.',
+    'light-dismiss y cancelación de iswc-hide controlan el cierre.',
   ),
 
-  'layout/is-drawer.json': flow(
-    'is-drawer: placement',
+  'layout/iswc-drawer.json': flow(
+    'iswc-drawer: placement',
     [
       { id: 'q', label: 'placement=?', shape: 'diamond' },
       { id: 'a', label: 'start / end → ancho', shape: 'round' },
@@ -140,8 +140,8 @@ const FLOWS = {
     'placement define el eje; light-dismiss el cierre por backdrop.',
   ),
 
-  'layout/is-details.json': flow(
-    'is-details: accordion',
+  'layout/iswc-details.json': flow(
+    'iswc-details: accordion',
     [
       { id: 'q', label: 'mismo name?', shape: 'diamond' },
       { id: 'a', label: 'accordion (uno abierto)', shape: 'stadium' },
@@ -154,8 +154,8 @@ const FLOWS = {
     'Varios details con el mismo name se comportan como accordion.',
   ),
 
-  'navigation/is-tab-group.json': flow(
-    'is-tab-group: activation',
+  'navigation/iswc-tab-group.json': flow(
+    'iswc-tab-group: activation',
     [
       { id: 'q', label: 'activation=?', shape: 'diamond' },
       { id: 'a', label: 'auto → flechas cambian', shape: 'stadium' },
@@ -173,8 +173,8 @@ const FLOWS = {
     'activation define teclado; closable añade cierre de pestaña.',
   ),
 
-  'feedback/is-tooltip.json': flow(
-    'is-tooltip: trigger',
+  'feedback/iswc-tooltip.json': flow(
+    'iswc-tooltip: trigger',
     [
       { id: 'q', label: 'trigger=?', shape: 'diamond' },
       { id: 'a', label: 'hover → show/hide', shape: 'stadium' },
@@ -189,8 +189,8 @@ const FLOWS = {
     'trigger decide cómo se abre; tip con HTML suele ir mejor con click.',
   ),
 
-  'helpers/is-popover.json': flow(
-    'is-popover: trigger',
+  'helpers/iswc-popover.json': flow(
+    'iswc-popover: trigger',
     [
       { id: 'q', label: 'trigger=?', shape: 'diamond' },
       { id: 'a', label: 'click → toggle', shape: 'stadium' },
@@ -206,8 +206,8 @@ const FLOWS = {
     'Base de overlays anclados: click o API; cierre Escape/fuera.',
   ),
 
-  'overlays/is-pdf-viewer.json': flow(
-    'is-pdf-viewer: engine',
+  'overlays/iswc-pdf-viewer.json': flow(
+    'iswc-pdf-viewer: engine',
     [
       { id: 'q', label: 'engine=?', shape: 'diamond' },
       { id: 'a', label: 'native → iframe', shape: 'stadium' },
@@ -223,15 +223,15 @@ const FLOWS = {
     'engine elige motor; flags de toolbar son independientes.',
   ),
 
-  'forms/is-inline-edit.json': flow(
-    'is-inline-edit: blur',
+  'forms/iswc-inline-edit.json': flow(
+    'iswc-inline-edit: blur',
     [
       { id: 'q', label: 'mode=?', shape: 'diamond' },
       { id: 'a', label: 'text → input', shape: 'round' },
       { id: 'b', label: 'textarea', shape: 'round' },
       { id: 'c', label: 'cancel-on-blur?', shape: 'diamond' },
       { id: 'd', label: 'descarta', shape: 'stadium' },
-      { id: 'e', label: 'guarda (is-change)', shape: 'stadium' },
+      { id: 'e', label: 'guarda (iswc-change)', shape: 'stadium' },
     ],
     [
       { from: 'q', to: 'a', label: 'text' },
@@ -244,8 +244,8 @@ const FLOWS = {
     'mode elige control; cancel-on-blur decide si blur guarda o cancela.',
   ),
 
-  'forms/is-input.json': flow(
-    'is-input: type',
+  'forms/iswc-input.json': flow(
+    'iswc-input: type',
     [
       { id: 'q', label: 'type=?', shape: 'diamond' },
       { id: 'a', label: 'password → toggle', shape: 'stadium' },
@@ -262,8 +262,8 @@ const FLOWS = {
     'type especializa chrome (ojo, clear, steppers) sobre el FA base.',
   ),
 
-  'forms/is-checkbox.json': flow(
-    'is-checkbox: estado',
+  'forms/iswc-checkbox.json': flow(
+    'iswc-checkbox: estado',
     [
       { id: 'q', label: 'indeterminate?', shape: 'diamond' },
       { id: 'a', label: 'tri-state UI', shape: 'stadium' },
@@ -284,8 +284,8 @@ const FLOWS = {
     'checked / indeterminate / bloqueo (readonly vs disabled).',
   ),
 
-  'forms/is-switch.json': flow(
-    'is-switch: FormData',
+  'forms/iswc-switch.json': flow(
+    'iswc-switch: FormData',
     [
       { id: 'q', label: 'checked?', shape: 'diamond' },
       { id: 'a', label: 'on → aporta value', shape: 'stadium' },
@@ -301,8 +301,8 @@ const FLOWS = {
     'Como checkbox: solo el estado on aporta al FormData.',
   ),
 
-  'actions/is-dropdown-item.json': flow(
-    'is-dropdown-item: tipo',
+  'actions/iswc-dropdown-item.json': flow(
+    'iswc-dropdown-item: tipo',
     [
       { id: 'q', label: 'type=checkbox?', shape: 'diamond' },
       { id: 'a', label: 'toggle + aria-checked', shape: 'stadium' },
@@ -319,8 +319,8 @@ const FLOWS = {
     'checkbox vs acción; submenu abre popover anidado.',
   ),
 
-  'actions/is-speed-dial.json': flow(
-    'is-speed-dial: layout',
+  'actions/iswc-speed-dial.json': flow(
+    'iswc-speed-dial: layout',
     [
       { id: 'q', label: 'direction=?', shape: 'diamond' },
       { id: 'a', label: 'radial → grid/flex', shape: 'stadium' },
@@ -333,8 +333,8 @@ const FLOWS = {
     'direction lineal vs radial cambia el layout de acciones.',
   ),
 
-  'feedback/is-theme-toggle.json': flow(
-    'is-theme-toggle: contenedor',
+  'feedback/iswc-theme-toggle.json': flow(
+    'iswc-theme-toggle: contenedor',
     [
       { id: 'q', label: 'buscar contenedor', shape: 'diamond' },
       { id: 'a', label: '[container-theme]', shape: 'round' },
@@ -351,8 +351,8 @@ const FLOWS = {
     'Cascada de dónde escribe el tema al conmutar.',
   ),
 
-  'layout/is-split-panel.json': flow(
-    'is-split-panel: primary',
+  'layout/iswc-split-panel.json': flow(
+    'iswc-split-panel: primary',
     [
       { id: 'q', label: 'orientation=?', shape: 'diamond' },
       { id: 'a', label: 'horizontal', shape: 'round' },
@@ -372,8 +372,8 @@ const FLOWS = {
     'orientation + primary definen qué panel absorbe el resize.',
   ),
 
-  'actions/is-context-menu.json': flow(
-    'is-context-menu: scroll',
+  'actions/iswc-context-menu.json': flow(
+    'iswc-context-menu: scroll',
     [
       { id: 'q', label: 'scroll-lock?', shape: 'diamond' },
       { id: 'a', label: 'congela documento', shape: 'stadium' },
@@ -386,8 +386,8 @@ const FLOWS = {
     'Por defecto el scroll cierra el menú; scroll-lock lo evita.',
   ),
 
-  'actions/is-fab.json': flow(
-    'is-fab: position',
+  'actions/iswc-fab.json': flow(
+    'iswc-fab: position',
     [
       { id: 'q', label: 'position=?', shape: 'diamond' },
       { id: 'a', label: 'inline → en flujo', shape: 'stadium' },
@@ -405,8 +405,8 @@ const FLOWS = {
     'position fija vs inline; pulse es atención opcional.',
   ),
 
-  'navigation/is-carousel.json': flow(
-    'is-carousel: autoplay',
+  'navigation/iswc-carousel.json': flow(
+    'iswc-carousel: autoplay',
     [
       { id: 'q', label: 'autoplay?', shape: 'diamond' },
       { id: 'a', label: 'timer (+ pause hover)', shape: 'stadium' },
@@ -424,8 +424,8 @@ const FLOWS = {
     'autoplay y flags de chrome (controls/indicators).',
   ),
 
-  'layout/is-callout.json': flow(
-    'is-callout: icono',
+  'layout/iswc-callout.json': flow(
+    'iswc-callout: icono',
     [
       { id: 'q', label: 'slot icon?', shape: 'diamond' },
       { id: 'a', label: 'override slot', shape: 'stadium' },
@@ -475,8 +475,8 @@ for (const [rel, spec] of Object.entries(FLOWS)) {
     // Refresh animation token if missing
     if (!demo.equivFlow.includes('animation=')) {
       demo.equivFlow = demo.equivFlow.replace(
-        '<is-flowchart open-on-click>',
-        '<is-flowchart open-on-click animation="flow">',
+        '<iswc-flowchart open-on-click>',
+        '<iswc-flowchart open-on-click animation="flow">',
       );
       writeFileSync(path, `${JSON.stringify(data, null, 2)}\n`, 'utf8');
       console.log('PATCH-ANIM', rel);

@@ -9,24 +9,24 @@ const URL = `${BASE_URL}/demos/forms/time-input/time-input.html`;
 const tests = [];
 
 tests.push({
-  name: 'smoke: el input se monta, contiene un is-time-field y un trigger',
+  name: 'smoke: el input se monta, contiene un iswc-time-field y un trigger',
   run: async (page) => {
     await page.goto(URL, { waitUntil: 'domcontentloaded' });
     await waitReady(page, 'data-time-input-ready');
     const info = await page.evaluate(() => {
-      const inputs = [...document.querySelectorAll('is-time-input')];
+      const inputs = [...document.querySelectorAll('iswc-time-input')];
       return {
         count: inputs.length,
-        defined: !!customElements.get('is-time-input'),
-        fieldsByInput: inputs.map((i) => i.shadowRoot.querySelectorAll('is-time-field').length),
+        defined: !!customElements.get('iswc-time-input'),
+        fieldsByInput: inputs.map((i) => i.shadowRoot.querySelectorAll('iswc-time-field').length),
         triggersByInput: inputs.map((i) => i.shadowRoot.querySelectorAll('.trigger').length),
         hasFormAssociated: 'formAssociated' in inputs[0],
       };
     });
-    assert.equal(info.defined, true, 'is-time-input debe estar definido');
+    assert.equal(info.defined, true, 'iswc-time-input debe estar definido');
     assert.ok(info.count >= 6, `esperaba >=6 inputs en la página, hay ${info.count}`);
     assert.ok(info.fieldsByInput.every((n) => n >= 1),
-      `cada input debe contener >=1 is-time-field, hay ${JSON.stringify(info.fieldsByInput)}`);
+      `cada input debe contener >=1 iswc-time-field, hay ${JSON.stringify(info.fieldsByInput)}`);
     assert.ok(info.triggersByInput.every((n) => n >= 1),
       `cada input debe tener >=1 trigger, hay ${JSON.stringify(info.triggersByInput)}`);
     assert.equal(info.hasFormAssociated, true, 'el input debe ser form-associated');
@@ -46,7 +46,7 @@ tests.push({
     await page.waitForTimeout(50);
     const data = await page.evaluate(() => {
       const el = document.getElementById('basic');
-      const field = el.shadowRoot.querySelector('is-time-field');
+      const field = el.shadowRoot.querySelector('iswc-time-field');
       const secs = [...field.shadowRoot.querySelectorAll('[role="spinbutton"]')];
       return {
         attr: el.getAttribute('value'),
@@ -93,12 +93,12 @@ tests.push({
       const dialog = el.shadowRoot.querySelector('dialog.popup');
       return {
         dialogOpen: dialog.open,
-        hasClock: !!el.shadowRoot.querySelector('is-digital-clock'),
-        clockLayout: el.shadowRoot.querySelector('is-digital-clock')?.getAttribute('layout'),
+        hasClock: !!el.shadowRoot.querySelector('iswc-digital-clock'),
+        clockLayout: el.shadowRoot.querySelector('iswc-digital-clock')?.getAttribute('layout'),
       };
     });
     assert.equal(result.dialogOpen, true, 'show() debe abrir el <dialog>');
-    assert.equal(result.hasClock, true, 'el panel debe contener un <is-digital-clock>');
+    assert.equal(result.hasClock, true, 'el panel debe contener un <iswc-digital-clock>');
     assert.equal(result.clockLayout, 'sections', 'panel por defecto debe ser sections');
   },
 });
@@ -112,8 +112,8 @@ tests.push({
       const el = document.getElementById('list');
       el.show();
       await new Promise((r) => setTimeout(r, 100));
-      const clock = el.shadowRoot.querySelector('is-digital-clock');
-      const list = el.shadowRoot.querySelector('is-digital-clock')?.shadowRoot.querySelector('[role="listbox"]');
+      const clock = el.shadowRoot.querySelector('iswc-digital-clock');
+      const list = el.shadowRoot.querySelector('iswc-digital-clock')?.shadowRoot.querySelector('[role="listbox"]');
       return {
         dialogOpen: el.shadowRoot.querySelector('dialog.popup').open,
         clockLayout: clock?.getAttribute('layout'),
@@ -127,7 +127,7 @@ tests.push({
 });
 
 tests.push({
-  name: 'funcional: panel=clock usa un is-time-clock analógico',
+  name: 'funcional: panel=clock usa un iswc-time-clock analógico',
   run: async (page) => {
     await page.goto(URL, { waitUntil: 'domcontentloaded' });
     await waitReady(page, 'data-time-input-ready');
@@ -137,13 +137,13 @@ tests.push({
       await new Promise((r) => setTimeout(r, 100));
       return {
         dialogOpen: el.shadowRoot.querySelector('dialog.popup').open,
-        hasTimeClock: !!el.shadowRoot.querySelector('is-time-clock'),
-        hasDigitalClock: !!el.shadowRoot.querySelector('is-digital-clock'),
+        hasTimeClock: !!el.shadowRoot.querySelector('iswc-time-clock'),
+        hasDigitalClock: !!el.shadowRoot.querySelector('iswc-digital-clock'),
       };
     });
     assert.equal(result.dialogOpen, true, 'show() debe abrir el <dialog>');
-    assert.equal(result.hasTimeClock, true, 'panel=clock debe contener un <is-time-clock>');
-    assert.equal(result.hasDigitalClock, false, 'panel=clock NO debe contener un <is-digital-clock>');
+    assert.equal(result.hasTimeClock, true, 'panel=clock debe contener un <iswc-time-clock>');
+    assert.equal(result.hasDigitalClock, false, 'panel=clock NO debe contener un <iswc-digital-clock>');
     await screenshot(page, 'time-input-clock-panel');
   },
 });
@@ -186,20 +186,20 @@ tests.push({
 });
 
 tests.push({
-  name: 'funcional: is-change emite evento al cambiar el valor',
+  name: 'funcional: iswc-change emite evento al cambiar el valor',
   run: async (page) => {
     await page.goto(URL, { waitUntil: 'domcontentloaded' });
     await waitReady(page, 'data-time-input-ready');
     await page.evaluate(() => {
       window.__changes = [];
-      document.getElementById('basic').addEventListener('is-change', (e) => {
+      document.getElementById('basic').addEventListener('iswc-change', (e) => {
         window.__changes.push(e.detail?.value ?? '');
       });
     });
     await page.evaluate(() => { document.getElementById('basic').value = '10:30'; });
     await page.waitForTimeout(50);
     const changes = await page.evaluate(() => window.__changes);
-    assert.deepEqual(changes, ['10:30'], 'is-change debe emitir el nuevo valor');
+    assert.deepEqual(changes, ['10:30'], 'iswc-change debe emitir el nuevo valor');
   },
 });
 
@@ -245,7 +245,7 @@ tests.push({
     await waitReady(page, 'data-time-input-ready');
     const info = await page.evaluate(() => {
       const el = document.getElementById('basic');
-      const field = el.shadowRoot.querySelector('is-time-field');
+      const field = el.shadowRoot.querySelector('iswc-time-field');
       const secs = [...field.shadowRoot.querySelectorAll('[role="spinbutton"]')];
       return {
         count: secs.length,
@@ -324,7 +324,7 @@ tests.push({
     await waitReady(page, 'data-time-input-ready');
     await page.evaluate(() => {
       const el = document.getElementById('basic');
-      const field = el.shadowRoot.querySelector('is-time-field');
+      const field = el.shadowRoot.querySelector('iswc-time-field');
       field.setAttribute('value', '11:11');
     });
     await page.waitForTimeout(50);

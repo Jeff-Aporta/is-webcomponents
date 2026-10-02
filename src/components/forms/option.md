@@ -1,20 +1,20 @@
 ---
-tag: is-option
+tag: iswc-option
 tags:
-  - is-option
+  - iswc-option
 category: forms
 status: public
 source: ./option.js
 style: ./option.css
 preview: ./option.json
 ---
-# `<is-option>`
+# `<iswc-option>`
 
 ## Propósito
 
-Input + listbox filtrable con teclado y opciones is-option.
+Input + listbox filtrable con teclado y opciones iswc-option.
 
-Este módulo registra `<is-option>`.
+Este módulo registra `<iswc-option>`.
 
 ## Cuándo usarlo
 
@@ -33,10 +33,10 @@ import './option.js';
 ## Ejemplo mínimo
 
 ```html
-<is-combobox label="Ciudad" clearable>
-<is-option value="bog">Bogotá</is-option>
-<is-option value="med">Medellín</is-option>
-</is-combobox>
+<iswc-combobox label="Ciudad" clearable>
+<iswc-option value="bog">Bogotá</iswc-option>
+<iswc-option value="med">Medellín</iswc-option>
+</iswc-combobox>
 ```
 
 ## API
@@ -115,7 +115,7 @@ No declara integración form-associated propia en este módulo.
 
 Documentación de cabecera preservada desde fuente:
 
-> <is-option> — Opción para is-combobox / is-select (listboxes).
+> <iswc-option> — Opción para iswc-combobox / iswc-select (listboxes).
 > Atributos: value, disabled, selected, group
 > Slots: default (etiqueta), start (icono/avatar), description (texto secundario)
 > Parts: base, start, label, description
@@ -124,7 +124,7 @@ Documentación de cabecera preservada desde fuente:
 
 - [`../_shared/adopt-css.js`](../_shared/adopt-css.js)
 
-Tags del módulo: `<is-option>`.
+Tags del módulo: `<iswc-option>`.
 
 ## Accesibilidad
 
@@ -133,10 +133,10 @@ Preservar semántica, foco, teclado, labels y ARIA. ARIA detectado: `aria-select
 ## Ejemplo avanzado
 
 ```html
-<is-combobox label="Ciudad" clearable>
-<is-option value="bog">Bogotá</is-option>
-<is-option value="med">Medellín</is-option>
-</is-combobox>
+<iswc-combobox label="Ciudad" clearable>
+<iswc-option value="bog">Bogotá</iswc-option>
+<iswc-option value="med">Medellín</iswc-option>
+</iswc-combobox>
 ```
 
 ## Errores comunes

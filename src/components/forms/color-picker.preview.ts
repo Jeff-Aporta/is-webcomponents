@@ -1,5 +1,5 @@
 /**
- * Behavior migrado desde HTML inline de is-color-picker.
+ * Behavior migrado desde HTML inline de iswc-color-picker.
  * Se ejecuta en mount() tras pintar la definition JSON.
  * @param {import('../../previews/_kit/types.d.ts').PreviewMountContext} ctx
  */
@@ -10,7 +10,7 @@ export async function mount(ctx: import('../../previews/_kit/types.d.ts').Previe
   const chip = document.getElementById('chip') as HTMLElement | null;
   const log = document.getElementById('log') as HTMLElement | null;
   if (cp && chip && log) {
-    cp.addEventListener('is-input', (e: Event) => {
+    cp.addEventListener('iswc-input', (e: Event) => {
       const detail = (e as CustomEvent<{ value: string }>).detail;
       chip.style.background = detail.value;
       log.textContent = `value: ${detail.value}`;

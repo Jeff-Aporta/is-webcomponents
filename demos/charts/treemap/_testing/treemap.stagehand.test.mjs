@@ -11,7 +11,7 @@ const DEMO = {
 async function checkDeterministic(page) {
   await page.waitForTimeout(300);
   const data = await page.evaluate(() => {
-    const el = document.querySelector('is-treemap');
+    const el = document.querySelector('iswc-treemap');
     const svg = el.shadowRoot.querySelector('svg');
     const svgRect = svg.getBoundingClientRect();
     const nodes = [...el.shadowRoot.querySelectorAll('.tm-node')].map((g) => {

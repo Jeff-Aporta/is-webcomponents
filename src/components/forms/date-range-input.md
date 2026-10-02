@@ -1,20 +1,20 @@
 ---
-tag: is-date-range-input
+tag: iswc-date-range-input
 tags:
-  - is-date-range-input
+  - iswc-date-range-input
 category: forms
 status: public
 source: ./date-range-input.js
 style: ./date-range-input.css
 preview: ./date-range-input.json
 ---
-# `<is-date-range-input>`
+# `<iswc-date-range-input>`
 
 ## Propósito
 
 Campo + calendario en un panel del top layer (DatePicker de MUI X). Edita por secciones o abre el calendario. Alt+↓ abre el panel.
 
-Este módulo registra `<is-date-range-input>`.
+Este módulo registra `<iswc-date-range-input>`.
 
 ## Cuándo usarlo
 
@@ -33,7 +33,7 @@ import './date-range-input.js';
 ## Ejemplo mínimo
 
 ```html
-<is-date-range-input></is-date-range-input>
+<iswc-date-range-input></iswc-date-range-input>
 ```
 
 ## API
@@ -100,12 +100,12 @@ No declara integración form-associated propia en este módulo.
 
 Documentación de cabecera preservada desde fuente:
 
-> <is-date-range-input> — Dos campos (inicio y fin) con el calendario de rango
+> <iswc-date-range-input> — Dos campos (inicio y fin) con el calendario de rango
 > en el panel (MUI DateRangePicker). El valor es `inicio/fin`.
 > Atributos: start-label, end-label, hint, name, value, min, max, required,
 >            disabled, readonly, clearable, locale, calendars, shortcuts,
 >            color, action-bar, placement, close-on-select
-> Events: is-change, is-show, is-hide
+> Events: iswc-change, iswc-show, iswc-hide
 > Methods: show(), hide()
 
 ## Dependencias y componentes relacionados
@@ -114,7 +114,7 @@ Documentación de cabecera preservada desde fuente:
 - [`./date-field.js`](./date-field.js)
 - [`./date-range-picker.js`](./date-range-picker.js)
 
-Tags del módulo: `<is-date-range-input>`.
+Tags del módulo: `<iswc-date-range-input>`.
 
 ## Accesibilidad
 
@@ -123,7 +123,7 @@ Preservar semántica, foco, teclado, labels y ARIA. ARIA detectado: ninguno expl
 ## Ejemplo avanzado
 
 ```html
-<is-date-range-input></is-date-range-input>
+<iswc-date-range-input></iswc-date-range-input>
 ```
 
 ## Errores comunes

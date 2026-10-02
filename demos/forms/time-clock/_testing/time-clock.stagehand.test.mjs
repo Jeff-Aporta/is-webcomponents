@@ -45,7 +45,7 @@ const results = [];
 async function checkDeterministic(page) {
   await page.waitForTimeout(200);
   const data = await page.evaluate(() => {
-    const clocks = [...document.querySelectorAll('is-time-clock')];
+    const clocks = [...document.querySelectorAll('iswc-time-clock')];
     return clocks.map((el, idx) => {
       const r = el.getBoundingClientRect();
       const clock = el.shadowRoot.querySelector('[part="clock"]');

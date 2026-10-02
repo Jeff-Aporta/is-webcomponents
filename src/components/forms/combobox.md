@@ -1,20 +1,20 @@
 ---
-tag: is-combobox
+tag: iswc-combobox
 tags:
-  - is-combobox
+  - iswc-combobox
 category: forms
 status: public
 source: ./combobox.js
 style: ./combobox.css
 preview: ./combobox.json
 ---
-# `<is-combobox>`
+# `<iswc-combobox>`
 
 ## Propósito
 
-Input + listbox filtrable con teclado y opciones is-option.
+Input + listbox filtrable con teclado y opciones iswc-option.
 
-Este módulo registra `<is-combobox>`.
+Este módulo registra `<iswc-combobox>`.
 
 ## Cuándo usarlo
 
@@ -33,10 +33,10 @@ import './combobox.js';
 ## Ejemplo mínimo
 
 ```html
-<is-combobox label="Ciudad" clearable>
-<is-option value="bog">Bogotá</is-option>
-<is-option value="med">Medellín</is-option>
-</is-combobox>
+<iswc-combobox label="Ciudad" clearable>
+<iswc-option value="bog">Bogotá</iswc-option>
+<iswc-option value="med">Medellín</iswc-option>
+</iswc-combobox>
 ```
 
 ## API
@@ -78,10 +78,10 @@ import './combobox.js';
 
 | Evento | detail | bubbles | composed | cancelable |
 | --- | --- | --- | --- | --- |
-| `is-show` | sí | sí | sí | no |
-| `is-hide` | sí | sí | sí | no |
-| `is-input` | sí | sí | sí | no |
-| `is-change` | sí | sí | sí | no |
+| `iswc-show` | sí | sí | sí | no |
+| `iswc-hide` | sí | sí | sí | no |
+| `iswc-input` | sí | sí | sí | no |
+| `iswc-change` | sí | sí | sí | no |
 
 ### Métodos y propiedades públicas
 
@@ -150,19 +150,19 @@ Participa mediante ElementInternals/helpers form-associated; respetar name, valu
 
 Documentación de cabecera preservada desde fuente:
 
-> <is-combobox> — Input + listbox filtrable.
+> <iswc-combobox> — Input + listbox filtrable.
 > El listbox vive en un <dialog modal> (top layer) para no perderse por
 > overflow/visibility de ancestros. Clic en el backdrop del dialog cierra.
 > Atributos: label, hint, name, value, placeholder, disabled, required, open, clearable
-> Slots: default — <is-option> o <option>
-> Events: is-change, is-input, is-show, is-hide
+> Slots: default — <iswc-option> o <option>
+> Events: iswc-change, iswc-input, iswc-show, iswc-hide
 
 ## Dependencias y componentes relacionados
 
 - [`../_shared/adopt-css.js`](../_shared/adopt-css.js)
 - [`./option.js`](./option.js)
 
-Tags del módulo: `<is-combobox>`.
+Tags del módulo: `<iswc-combobox>`.
 
 ## Accesibilidad
 
@@ -171,10 +171,10 @@ Preservar semántica, foco, teclado, labels y ARIA. ARIA detectado: `aria-autoco
 ## Ejemplo avanzado
 
 ```html
-<is-combobox label="Ciudad" clearable>
-<is-option value="bog">Bogotá</is-option>
-<is-option value="med">Medellín</is-option>
-</is-combobox>
+<iswc-combobox label="Ciudad" clearable>
+<iswc-option value="bog">Bogotá</iswc-option>
+<iswc-option value="med">Medellín</iswc-option>
+</iswc-combobox>
 ```
 
 ## Errores comunes

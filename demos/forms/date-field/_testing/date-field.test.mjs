@@ -14,10 +14,10 @@ tests.push({
     await page.goto(URL, { waitUntil: 'domcontentloaded' });
     await waitReady(page, 'data-date-field-ready');
     const info = await page.evaluate(() => {
-      const fields = [...document.querySelectorAll('is-date-field')];
+      const fields = [...document.querySelectorAll('iswc-date-field')];
       return {
         count: fields.length,
-        defined: !!customElements.get('is-date-field'),
+        defined: !!customElements.get('iswc-date-field'),
         sectionsByField: fields.map((f) => f.shadowRoot.querySelectorAll('[role="spinbutton"]').length),
         hasFormAssociated: 'formAssociated' in fields[0],
         sectionsHaveAriaValue: fields.every((f) => {
@@ -26,7 +26,7 @@ tests.push({
         }),
       };
     });
-    assert.equal(info.defined, true, 'is-date-field debe estar definido');
+    assert.equal(info.defined, true, 'iswc-date-field debe estar definido');
     assert.ok(info.count >= 5, `esperaba >=5 campos en la página, hay ${info.count}`);
     assert.ok(info.sectionsByField.every((n) => n >= 3),
       `cada campo debe tener >=3 secciones (y/m/d), hay ${JSON.stringify(info.sectionsByField)}`);
@@ -93,21 +93,21 @@ tests.push({
 });
 
 tests.push({
-  name: 'funcional: is-change emite evento al cambiar valor',
+  name: 'funcional: iswc-change emite evento al cambiar valor',
   run: async (page) => {
     await page.goto(URL, { waitUntil: 'domcontentloaded' });
     await waitReady(page, 'data-date-field-ready');
     // Suscribirse ANTES de cambiar el valor.
     await page.evaluate(() => {
       window.__changes = [];
-      document.getElementById('basic').addEventListener('is-change', (e) => {
+      document.getElementById('basic').addEventListener('iswc-change', (e) => {
         window.__changes.push(e.detail?.value ?? '');
       });
     });
     await page.evaluate(() => { document.getElementById('basic').value = '2026-01-15'; });
     await page.waitForTimeout(50);
     const changes = await page.evaluate(() => window.__changes);
-    assert.deepEqual(changes, ['2026-01-15'], 'is-change debe emitir el nuevo valor');
+    assert.deepEqual(changes, ['2026-01-15'], 'iswc-change debe emitir el nuevo valor');
   },
 });
 

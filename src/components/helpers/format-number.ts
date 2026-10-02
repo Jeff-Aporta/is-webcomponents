@@ -3,7 +3,7 @@ import { ElementBase } from '../../core/element-base.js';
 import { resolveLocale } from '../_shared/resolve-locale.js';
 
 /**
- * <is-format-number> — Web Component (vanilla).
+ * <iswc-format-number> — Web Component (vanilla).
  *
  * Formatea números con Intl.NumberFormat.
  *
@@ -30,7 +30,7 @@ import { resolveLocale } from '../_shared/resolve-locale.js';
   ];
   const VALID_TYPE = ['decimal', 'currency', 'percent', 'unit'];
 
-  class IsFormatNumber extends ElementBase {
+  class IswcFormatNumber extends ElementBase {
     static get observedAttributes(): string[] { return OBSERVED; }
 
     #el!: HTMLElement;
@@ -109,5 +109,5 @@ import { resolveLocale } from '../_shared/resolve-locale.js';
     }
   }
 
-  defineElement('is-format-number', IsFormatNumber, 'IsFormatNumber');
+  defineElement('iswc-format-number', IswcFormatNumber, 'IswcFormatNumber');
 })();

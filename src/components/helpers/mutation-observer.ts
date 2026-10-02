@@ -2,7 +2,7 @@ import { defineElement } from '../../core/element.js';
 import { createObserverElement } from './observer.js';
 
 /**
- * <is-mutation-observer> — alias histórico de <is-observer type="mutation">.
+ * <iswc-mutation-observer> — alias histórico de <iswc-observer type="mutation">.
  *
  * display:contents — observa mutaciones en el host y sus hijos.
  *
@@ -13,11 +13,11 @@ import { createObserverElement } from './observer.js';
  *   character-data   boolean
  *
  * Eventos
- *   is-mutate  detail: { records }
+ *   iswc-mutate  detail: { records }
  */
 
 defineElement(
-  'is-mutation-observer',
+  'iswc-mutation-observer',
   createObserverElement('mutation'),
-  'IsMutationObserver',
+  'IswcMutationObserver',
 );

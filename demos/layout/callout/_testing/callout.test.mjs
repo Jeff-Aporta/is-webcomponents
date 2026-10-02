@@ -9,14 +9,14 @@ const URL = `${BASE_URL}/demos/layout/callout/callout.html`;
 const tests = [];
 
 tests.push({
-  name: 'smoke: is-callout está definido y los 5 colores renderizan',
+  name: 'smoke: iswc-callout está definido y los 5 colores renderizan',
   run: async (page) => {
     await page.goto(URL, { waitUntil: 'domcontentloaded' });
     await waitReady(page, 'data-callout-ready');
     const initial = await page.evaluate(() => {
-      const callouts = [...document.querySelectorAll('#colors is-callout')];
+      const callouts = [...document.querySelectorAll('#colors iswc-callout')];
       return {
-        defined: !!customElements.get('is-callout'),
+        defined: !!customElements.get('iswc-callout'),
         count: callouts.length,
         colors: callouts.map((c) => c.getAttribute('color')),
         rendered: callouts.map((c) => {
@@ -33,7 +33,7 @@ tests.push({
         }),
       };
     });
-    assert.equal(initial.defined, true, 'is-callout debe estar definido');
+    assert.equal(initial.defined, true, 'iswc-callout debe estar definido');
     assert.equal(initial.count, 5, `esperaba 5 callouts (uno por color), hay ${initial.count}`);
     assert.deepEqual(initial.colors, ['brand', 'neutral', 'success', 'warning', 'danger']);
     for (const r of initial.rendered) {
@@ -52,7 +52,7 @@ tests.push({
     await page.goto(URL, { waitUntil: 'domcontentloaded' });
     await waitReady(page, 'data-callout-ready');
     const data = await page.evaluate(() => {
-      const variants = [...document.querySelectorAll('#variants is-callout')];
+      const variants = [...document.querySelectorAll('#variants iswc-callout')];
       return variants.map((v) => ({
         attr: v.getAttribute('variant'),
         valid: ['accent', 'filled', 'outlined', 'filled-outlined', 'plain'].includes(v.variant),
@@ -66,13 +66,13 @@ tests.push({
 });
 
 tests.push({
-  name: 'funcional: el atributo icon="..." se aplica al is-icon interno',
+  name: 'funcional: el atributo icon="..." se aplica al iswc-icon interno',
   run: async (page) => {
     await page.goto(URL, { waitUntil: 'domcontentloaded' });
     await waitReady(page, 'data-callout-ready');
     await page.waitForTimeout(100);
     const iconName = await page.evaluate(() => {
-      const callouts = [...document.querySelectorAll('#icons is-callout')];
+      const callouts = [...document.querySelectorAll('#icons iswc-callout')];
       const withAttr = callouts.find((c) => c.getAttribute('icon') === 'mdi:rocket-launch-outline');
       if (!withAttr) return null;
       const defaultIcon = withAttr.shadowRoot.querySelector('.default-icon');
@@ -80,7 +80,7 @@ tests.push({
       return defaultIcon ? defaultIcon.icon : null;
     });
     assert.equal(iconName, 'mdi:rocket-launch-outline',
-      `el atributo icon debe propagarse al is-icon (.icon property), fue "${iconName}"`);
+      `el atributo icon debe propagarse al iswc-icon (.icon property), fue "${iconName}"`);
   },
 });
 
@@ -90,7 +90,7 @@ tests.push({
     await page.goto(URL, { waitUntil: 'domcontentloaded' });
     await waitReady(page, 'data-callout-ready');
     const slotted = await page.evaluate(() => {
-      const callouts = [...document.querySelectorAll('#icons is-callout')];
+      const callouts = [...document.querySelectorAll('#icons iswc-callout')];
       const slotted = callouts.find((c) => c.querySelector('[slot="icon"]'));
       if (!slotted) return null;
       const sr = slotted.shadowRoot;
@@ -166,20 +166,20 @@ tests.push({
     await waitReady(page, 'data-callout-ready');
     await page.waitForTimeout(100);
     const a = await page.evaluate(() => {
-      return [...document.querySelectorAll('main is-callout')].map((c) => ({
+      return [...document.querySelectorAll('main iswc-callout')].map((c) => ({
         attr: c.getAttribute('color'),
         part: c.shadowRoot.querySelector('[part="base"]')?.getAttribute('class') ?? '',
       }));
     });
     await page.evaluate(() => {
-      document.querySelectorAll('main is-callout').forEach((c) => {
+      document.querySelectorAll('main iswc-callout').forEach((c) => {
         const v = c.getAttribute('color'); if (v) { c.removeAttribute('color'); c.setAttribute('color', v); }
         const x = c.getAttribute('variant'); if (x) { c.removeAttribute('variant'); c.setAttribute('variant', x); }
       });
     });
     await page.waitForTimeout(100);
     const b = await page.evaluate(() => {
-      return [...document.querySelectorAll('main is-callout')].map((c) => ({
+      return [...document.querySelectorAll('main iswc-callout')].map((c) => ({
         attr: c.getAttribute('color'),
         part: c.shadowRoot.querySelector('[part="base"]')?.getAttribute('class') ?? '',
       }));

@@ -1,14 +1,14 @@
 ---
-tag: is-checkbox
+tag: iswc-checkbox
 tags:
-  - is-checkbox
+  - iswc-checkbox
 category: forms
 status: public
 source: ./checkbox.js
 style: ./checkbox.css
 preview: ./checkbox.json
 ---
-# `<is-checkbox>`
+# `<iswc-checkbox>`
 
 ## Propósito
 
@@ -18,7 +18,7 @@ entra en FormData y en la validación nativa del <form>
 sin input oculto, con color por color, posición de etiqueta, iconos propios y
 estado de error.
 
-Este módulo registra `<is-checkbox>`.
+Este módulo registra `<iswc-checkbox>`.
 
 ## Cuándo usarlo
 
@@ -37,7 +37,7 @@ import './checkbox.js';
 ## Ejemplo mínimo
 
 ```html
-<is-checkbox color="success" checked>success</is-checkbox>
+<iswc-checkbox color="success" checked>success</iswc-checkbox>
 ```
 
 ## API
@@ -96,7 +96,7 @@ import './checkbox.js';
 
 | Evento | detail | bubbles | composed | cancelable |
 | --- | --- | --- | --- | --- |
-| `is-change` | sí | sí | sí | no |
+| `iswc-change` | sí | sí | sí | no |
 
 ### Métodos y propiedades públicas
 
@@ -170,19 +170,19 @@ Participa mediante ElementInternals/helpers form-associated; respetar name, valu
 
 Documentación de cabecera preservada desde fuente:
 
-> <is-checkbox> — Casilla form-associated: entra en FormData y en la validación del <form>.
+> <iswc-checkbox> — Casilla form-associated: entra en FormData y en la validación del <form>.
 > Atributos
 >   name, value (default "on"), hint
 >   color             brand (default) | neutral | success | warning | danger
 >   label-placement     end (default) | start | top | bottom
->   icon                nombre de <is-icon> para el estado sin marcar
->   checked-icon        nombre de <is-icon> para el estado marcado (default mdi:check)
->   indeterminate-icon  nombre de <is-icon> para el estado mixto (default mdi:minus)
+>   icon                nombre de <iswc-icon> para el estado sin marcar
+>   checked-icon        nombre de <iswc-icon> para el estado marcado (default mdi:check)
+>   indeterminate-icon  nombre de <iswc-icon> para el estado mixto (default mdi:minus)
 >   checked, indeterminate, disabled, readonly, required, error   (boolean)
 > Slots: default (etiqueta), hint
 > Parts: form-control, base, control, mark, label, hint
 > Custom states: checked, indeterminate, disabled, readonly, error
-> Events: is-change { checked, value }
+> Events: iswc-change { checked, value }
 > Sin atributo `size`: escala con el font-size del contexto.
 
 ## Dependencias y componentes relacionados
@@ -191,7 +191,7 @@ Documentación de cabecera preservada desde fuente:
 - [`../media/icon.js`](../media/icon.js)
 - [`../_shared/form-associated.js`](../_shared/form-associated.js)
 
-Tags del módulo: `<is-checkbox>`.
+Tags del módulo: `<iswc-checkbox>`.
 
 ## Accesibilidad
 
@@ -200,8 +200,8 @@ Preservar semántica, foco, teclado, labels y ARIA. ARIA detectado: `aria-checke
 ## Ejemplo avanzado
 
 ```html
-<is-checkbox label-placement="start" checked>start</is-checkbox>
-<is-checkbox label-placement="top" checked>top</is-checkbox>
+<iswc-checkbox label-placement="start" checked>start</iswc-checkbox>
+<iswc-checkbox label-placement="top" checked>top</iswc-checkbox>
 ```
 
 ## Errores comunes

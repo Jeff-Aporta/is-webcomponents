@@ -14,20 +14,20 @@ tests.push({
     await page.goto(URL, { waitUntil: 'domcontentloaded' });
     await waitReady(page, 'data-er-editor-ready');
     const initial = await page.evaluate(() => {
-      const ed = document.querySelector('main is-er-editor');
-      const diagram = ed.shadowRoot.querySelector('is-er-diagram');
+      const ed = document.querySelector('main iswc-er-editor');
+      const diagram = ed.shadowRoot.querySelector('iswc-er-diagram');
       const entities = diagram.shadowRoot.querySelectorAll('.er-entity');
       const relations = diagram.shadowRoot.querySelectorAll('.er-rel');
       return {
-        editorDefined: !!customElements.get('is-er-editor'),
-        diagramDefined: !!customElements.get('is-er-diagram'),
+        editorDefined: !!customElements.get('iswc-er-editor'),
+        diagramDefined: !!customElements.get('iswc-er-diagram'),
         entities: entities.length,
         relations: relations.length,
         payload: ed.payload,
       };
     });
-    assert.equal(initial.editorDefined, true, 'is-er-editor debe estar definido');
-    assert.equal(initial.diagramDefined, true, 'is-er-diagram debe estar definido');
+    assert.equal(initial.editorDefined, true, 'iswc-er-editor debe estar definido');
+    assert.equal(initial.diagramDefined, true, 'iswc-er-diagram debe estar definido');
     assert.ok(initial.entities >= 3, `esperaba >=3 entidades, hay ${initial.entities}`);
     assert.ok(initial.relations >= 2, `esperaba >=2 relaciones, hay ${initial.relations}`);
     assert.equal(initial.payload.entities[0].id, 'user', 'primer id debe ser "user"');
@@ -42,13 +42,13 @@ tests.push({
     await waitReady(page, 'data-er-editor-ready');
     await page.waitForTimeout(200);
     const initialPos = await page.evaluate(() => {
-      return document.querySelector('main is-er-editor').payload.entities.find((e) => e.id === 'user').pos;
+      return document.querySelector('main iswc-er-editor').payload.entities.find((e) => e.id === 'user').pos;
     });
     // Disparar pointerdown/pointermove/pointerup directamente sobre la entidad
     // (a través de shadow DOM) — más fiable que simular el mouse en headless.
     await page.evaluate(() => {
-      const ed = document.querySelector('main is-er-editor');
-      const diagram = ed.shadowRoot.querySelector('is-er-diagram');
+      const ed = document.querySelector('main iswc-er-editor');
+      const diagram = ed.shadowRoot.querySelector('iswc-er-diagram');
       const entity = diagram.shadowRoot.querySelector('.er-entity[data-entity-id="user"]');
       const b = entity.getBoundingClientRect();
       const cx = b.x + b.width / 2;
@@ -65,7 +65,7 @@ tests.push({
     });
     await page.waitForTimeout(200);
     const newPos = await page.evaluate(() => {
-      return document.querySelector('main is-er-editor').payload.entities.find((e) => e.id === 'user').pos;
+      return document.querySelector('main iswc-er-editor').payload.entities.find((e) => e.id === 'user').pos;
     });
     // Drag de +87px horizontal y +49px vertical. Snap a múltiplos de 8:
     //   87 → 88, 49 → 48
@@ -81,13 +81,13 @@ tests.push({
     await waitReady(page, 'data-er-editor-ready');
     await page.waitForTimeout(200);
     const before = await page.evaluate(() => {
-      const ed = document.querySelector('main is-er-editor');
+      const ed = document.querySelector('main iswc-er-editor');
       return JSON.parse(JSON.stringify(ed.payload.entities));
     });
     // Mover entidad
     await page.evaluate(() => {
-      const ed = document.querySelector('main is-er-editor');
-      const diagram = ed.shadowRoot.querySelector('is-er-diagram');
+      const ed = document.querySelector('main iswc-er-editor');
+      const diagram = ed.shadowRoot.querySelector('iswc-er-diagram');
       const entity = diagram.shadowRoot.querySelector('.er-entity[data-entity-id="user"]');
       const box = entity.getBoundingClientRect();
       const cx = box.x + box.width / 2;
@@ -98,7 +98,7 @@ tests.push({
     });
     await page.waitForTimeout(200);
     const moved = await page.evaluate(() => {
-      const ed = document.querySelector('main is-er-editor');
+      const ed = document.querySelector('main iswc-er-editor');
       return ed.payload.entities.find((e) => e.id === 'user').pos;
     });
     assert.notEqual(moved[0], before.find((e) => e.id === 'user').pos[0], 'el drag debió mover la entidad');
@@ -109,7 +109,7 @@ tests.push({
     await page.keyboard.up('Control');
     await page.waitForTimeout(200);
     const undone = await page.evaluate(() => {
-      const ed = document.querySelector('main is-er-editor');
+      const ed = document.querySelector('main iswc-er-editor');
       return ed.payload.entities.find((e) => e.id === 'user').pos;
     });
     assert.deepEqual(undone, before.find((e) => e.id === 'user').pos, 'undo revirtió la posición');
@@ -122,16 +122,16 @@ tests.push({
     await page.goto(URL, { waitUntil: 'domcontentloaded' });
     await waitReady(page, 'data-er-editor-ready');
     const before = await page.evaluate(() => {
-      return document.querySelector('main is-er-editor').payload.entities.length;
+      return document.querySelector('main iswc-er-editor').payload.entities.length;
     });
     await page.evaluate(() => {
-      const ed = document.querySelector('main is-er-editor');
+      const ed = document.querySelector('main iswc-er-editor');
       const btn = ed.shadowRoot.querySelector('[data-action="add-entity"]');
       btn.click();
     });
     await page.waitForTimeout(200);
     const after = await page.evaluate(() => {
-      return document.querySelector('main is-er-editor').payload.entities.length;
+      return document.querySelector('main iswc-er-editor').payload.entities.length;
     });
     assert.equal(after, before + 1, `add-entity debe incrementar la cuenta de entidades a ${before + 1}`);
   },
@@ -144,23 +144,23 @@ tests.push({
     await waitReady(page, 'data-er-editor-ready');
     await page.waitForTimeout(200);
     const before = await page.evaluate(() => {
-      return document.querySelector('main is-er-editor').payload.entities.length;
+      return document.querySelector('main iswc-er-editor').payload.entities.length;
     });
     await page.evaluate(() => {
-      const ed = document.querySelector('main is-er-editor');
-      const diagram = ed.shadowRoot.querySelector('is-er-diagram');
+      const ed = document.querySelector('main iswc-er-editor');
+      const diagram = ed.shadowRoot.querySelector('iswc-er-diagram');
       diagram.shadowRoot.querySelector('.er-entity[data-entity-id="product"]').dispatchEvent(
         new PointerEvent('pointerdown', { button: 0, bubbles: true }),
       );
     });
     await page.waitForTimeout(50);
     await page.evaluate(() => {
-      const ed = document.querySelector('main is-er-editor');
+      const ed = document.querySelector('main iswc-er-editor');
       ed.shadowRoot.querySelector('[data-action="delete"]').click();
     });
     await page.waitForTimeout(200);
     const after = await page.evaluate(() => {
-      const ed = document.querySelector('main is-er-editor');
+      const ed = document.querySelector('main iswc-er-editor');
       return ed.payload.entities.find((e) => e.id === 'product');
     });
     assert.equal(after, undefined, 'product debe haber sido borrada');
@@ -173,17 +173,17 @@ tests.push({
     await page.goto(URL, { waitUntil: 'domcontentloaded' });
     await waitReady(page, 'data-er-editor-ready');
     await page.waitForTimeout(200);
-    const a = await page.evaluate(() => document.querySelector('main is-er-editor').exportJson());
+    const a = await page.evaluate(() => document.querySelector('main iswc-er-editor').exportJson());
     await page.waitForTimeout(200);
-    const b = await page.evaluate(() => document.querySelector('main is-er-editor').exportJson());
+    const b = await page.evaluate(() => document.querySelector('main iswc-er-editor').exportJson());
     assert.equal(a, b, 'dos llamadas a exportJson() deben dar el mismo string');
     // Round-trip: poner el JSON como payload y re-exportar
     await page.evaluate((j) => {
-      const ed = document.querySelector('main is-er-editor');
+      const ed = document.querySelector('main iswc-er-editor');
       ed.payload = JSON.parse(j);
     }, a);
     await page.waitForTimeout(200);
-    const c = await page.evaluate(() => document.querySelector('main is-er-editor').exportJson());
+    const c = await page.evaluate(() => document.querySelector('main iswc-er-editor').exportJson());
     assert.equal(a, c, 'round-trip JSON → payload → JSON debe ser idéntico');
   },
 });
@@ -194,7 +194,7 @@ tests.push({
     await page.goto(URL, { waitUntil: 'domcontentloaded' });
     await waitReady(page, 'data-er-editor-ready');
     await page.waitForTimeout(200);
-    const svg = await page.evaluate(() => document.querySelector('main is-er-editor').exportSvg());
+    const svg = await page.evaluate(() => document.querySelector('main iswc-er-editor').exportSvg());
     assert.ok(svg.startsWith('<svg'), 'exportSvg() debe empezar con <svg');
     assert.ok(svg.includes('xmlns="http://www.w3.org/2000/svg"'), 'SVG debe llevar xmlns');
     assert.ok(svg.includes('</svg>'), 'SVG debe cerrarse');
@@ -213,7 +213,7 @@ tests.push({
     await page.goto(URL, { waitUntil: 'domcontentloaded' });
     await waitReady(page, 'data-er-editor-ready');
     await page.waitForTimeout(200);
-    const svg = await page.evaluate(() => document.querySelector('main is-er-editor').exportSvg());
+    const svg = await page.evaluate(() => document.querySelector('main iswc-er-editor').exportSvg());
     assert.ok(svg.includes('iswc-dash-march'), 'SVG animado debe incluir keyframe iswc-dash-march');
     assert.ok(svg.includes('prefers-reduced-motion'), 'SVG debe respetar prefers-reduced-motion');
   },
@@ -226,8 +226,8 @@ tests.push({
     await waitReady(page, 'data-er-editor-ready');
     await page.waitForTimeout(200);
     const before = await page.evaluate(() => {
-      const ed = document.querySelector('main is-er-editor');
-      const diagram = ed.shadowRoot.querySelector('is-er-diagram');
+      const ed = document.querySelector('main iswc-er-editor');
+      const diagram = ed.shadowRoot.querySelector('iswc-er-diagram');
       const viewBox = diagram.shadowRoot.querySelector('svg').getAttribute('viewBox');
       const entityCount = diagram.shadowRoot.querySelectorAll('.er-entity').length;
       const relCount = diagram.shadowRoot.querySelectorAll('.er-rel').length;
@@ -235,13 +235,13 @@ tests.push({
     });
     // Re-asignar el mismo payload
     await page.evaluate((j) => {
-      const ed = document.querySelector('main is-er-editor');
+      const ed = document.querySelector('main iswc-er-editor');
       ed.payload = JSON.parse(j);
-    }, await page.evaluate(() => document.querySelector('main is-er-editor').exportJson()));
+    }, await page.evaluate(() => document.querySelector('main iswc-er-editor').exportJson()));
     await page.waitForTimeout(200);
     const after = await page.evaluate(() => {
-      const ed = document.querySelector('main is-er-editor');
-      const diagram = ed.shadowRoot.querySelector('is-er-diagram');
+      const ed = document.querySelector('main iswc-er-editor');
+      const diagram = ed.shadowRoot.querySelector('iswc-er-diagram');
       const viewBox = diagram.shadowRoot.querySelector('svg').getAttribute('viewBox');
       const entityCount = diagram.shadowRoot.querySelectorAll('.er-entity').length;
       const relCount = diagram.shadowRoot.querySelectorAll('.er-rel').length;
@@ -259,7 +259,7 @@ tests.push({
     await page.goto(URL, { waitUntil: 'domcontentloaded' });
     await waitReady(page, 'data-er-editor-ready');
     const ariaLabel = await page.evaluate(() => {
-      const ed = document.querySelector('main is-er-editor');
+      const ed = document.querySelector('main iswc-er-editor');
       return ed.shadowRoot.querySelector('[data-panel]').getAttribute('aria-label');
     });
     assert.ok(ariaLabel, 'el panel debe tener aria-label');
@@ -274,7 +274,7 @@ tests.push({
     await page.goto(URL, { waitUntil: 'domcontentloaded' });
     await waitReady(page, 'data-er-editor-ready');
     await page.waitForTimeout(200);
-    const svg = await page.evaluate(() => document.querySelector('main is-er-editor').exportSvg());
+    const svg = await page.evaluate(() => document.querySelector('main iswc-er-editor').exportSvg());
     assert.ok(svg.includes('prefers-reduced-motion'), 'SVG debe incluir media query prefers-reduced-motion');
     // La regla !important debe estar presente
     assert.ok(svg.includes('animation: none !important'), 'prefers-reduced-motion debe forzar animation: none');

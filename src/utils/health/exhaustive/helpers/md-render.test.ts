@@ -1,5 +1,5 @@
 /**
- * md-render.test.ts — Tier A (12 aserciones) para `<is-md-render>`.
+ * md-render.test.ts — Tier A (12 aserciones) para `<iswc-md-render>`.
  *
  * Dimensiones: módulo, CSS, JSON, OBSERVED, parser interno, XSS, shadow,
  * eventos, custom element, slot para markdown inline, can-edit.
@@ -13,7 +13,7 @@ import { fileURLToPath } from 'node:url';
 
 const HERE = dirname(fileURLToPath(import.meta.url));
 const ROOT = join(HERE, '..', '..', '..', '..', '..');
-const TAG = 'is-md-render';
+const TAG = 'iswc-md-render';
 const TS  = join(ROOT, 'src', 'components', 'helpers', 'md-render.ts');
 const CSS = join(ROOT, 'src', 'components', 'helpers', 'md-render.css');
 const JSON_PATH = join(ROOT, 'src', 'components', 'helpers', 'md-render.json');
@@ -26,10 +26,10 @@ test('2. CSS hermano existe', () => {
   assert.ok(existsSync(CSS));
 });
 
-test('3. JSON existe y respeta is-preview/v1', () => {
+test('3. JSON existe y respeta iswc-preview/v1', () => {
   const json = JSON.parse(readFileSync(JSON_PATH, 'utf8'));
   assert.equal(json.tag, TAG);
-  assert.equal(json.$schema, 'is-preview/v1');
+  assert.equal(json.$schema, 'iswc-preview/v1');
 });
 
 test('4. lee markdown desde <script type="text/markdown"> hijo', () => {
@@ -77,14 +77,14 @@ test('8. shadow DOM tiene parte prose o root', () => {
 test('9. custom element registrado', () => {
   const src = readFileSync(TS, 'utf8');
   assert.ok(
-    /customElements\.define\s*\(\s*['"]is-md-render['"]/.test(src) ||
-    /defineElement\s*\(\s*['"]is-md-render['"]/.test(src),
+    /customElements\.define\s*\(\s*['"]iswc-md-render['"]/.test(src) ||
+    /defineElement\s*\(\s*['"]iswc-md-render['"]/.test(src),
   );
 });
 
-test('10. emite is-md-change o is-change al cambiar contenido (modo edit)', () => {
+test('10. emite iswc-md-change o iswc-change al cambiar contenido (modo edit)', () => {
   const src = readFileSync(TS, 'utf8');
-  assert.ok(/is-md-change/.test(src) || /is-change/.test(src), 'debe emitir is-change');
+  assert.ok(/iswc-md-change/.test(src) || /iswc-change/.test(src), 'debe emitir iswc-change');
 });
 
 test('11. el módulo no depende de marked/remark (vanilla)', () => {

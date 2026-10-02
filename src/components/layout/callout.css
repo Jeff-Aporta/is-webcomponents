@@ -1,4 +1,4 @@
-/* <is-callout> — superficies con borde y fondo suaves.
+/* <iswc-callout> — superficies con borde y fondo suaves.
  *
  * Borde/fondo/radius van en `.callout` (part=base), no en :host: el border
  * del host en shadow DOM pinta esquinas cuadradas encima del radius.
@@ -46,26 +46,29 @@
   color: var(--iswc-callout-accent);
   font-size: var(--_icon-size);
   line-height: 1;
-  padding-top: 0.1em;
+  padding-block-start: 0.1em;
+
+  ::slotted(iswc-icon) {
+    font-size: inherit;
+    color: inherit;
+  }
+
+  .default-icon[hidden] { display: none !important; }
 }
-.icon ::slotted(is-icon) {
-  font-size: inherit;
-  color: inherit;
-}
-.icon .default-icon[hidden] { display: none !important; }
 
 .message {
-  min-width: 0;
+  min-inline-size: 0;
   color: inherit;
-}
-.message ::slotted(*) { margin: 0; }
-.message ::slotted(* + *) { margin-top: 0.4em; }
-.message ::slotted(p:first-child) { margin-top: 0; }
-.message ::slotted(p:last-child) { margin-bottom: 0; }
-.message ::slotted(:is(h1, h2, h3, h4, h5, h6):first-child) {
-  margin: 0 0 0.2em;
-  font-size: 1.05em;
-  font-weight: 650;
+
+  ::slotted(*) { margin: 0; }
+  ::slotted(* + *) { margin-block-start: 0.4em; }
+  ::slotted(p:first-child) { margin-block-start: 0; }
+  ::slotted(p:last-child) { margin-block-end: 0; }
+  ::slotted(:is(h1, h2, h3, h4, h5, h6):first-child) {
+    margin: 0 0 0.2em;
+    font-size: 1.05em;
+    font-weight: 650;
+  }
 }
 
 /* Estados del host a top-level: `&[attr]` anidado dentro de :host no
@@ -108,6 +111,15 @@
   --iswc-callout-text: var(--iswc-danger-text, #ffb4b4);
 }
 
+/* Variantes: filled-outlined (default), filled, outlined, plain, accent.
+   El selector une explícito + default con :is(:not([variant])) para
+   consolidar y mantener especificidad equivalente. */
+:host(:is([variant="filled-outlined"], :not([variant]))) .callout {
+  background: var(--iswc-callout-bg);
+  color: var(--iswc-callout-text);
+  border: 1px solid var(--iswc-callout-border);
+}
+
 :host([variant="filled"]) .callout {
   background: var(--iswc-callout-border);
   color: var(--iswc-on-brand, #fff);
@@ -118,13 +130,6 @@
 
 :host([variant="outlined"]) .callout {
   background: transparent;
-  color: var(--iswc-callout-text);
-  border: 1px solid var(--iswc-callout-border);
-}
-
-:host([variant="filled-outlined"]) .callout,
-:host(:not([variant])) .callout {
-  background: var(--iswc-callout-bg);
   color: var(--iswc-callout-text);
   border: 1px solid var(--iswc-callout-border);
 }
@@ -144,5 +149,7 @@
 
 /* Cuando no hay icono (text-only), saltamos la primera columna. La
    detección real la hace el JS (atributo data-no-icon en :host). */
-:host([data-no-icon]) .icon { display: none; }
-:host([data-no-icon]) .callout { grid-template-columns: 1fr; }
+:host([data-no-icon]) {
+  .icon { display: none; }
+  .callout { grid-template-columns: 1fr; }
+}

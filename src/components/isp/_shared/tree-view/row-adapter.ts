@@ -266,7 +266,7 @@ class TreeRowAdapter extends TRADrag {
     const prev = sp.flatPath;
     clearTimeout(this._hoverLeaveTid);
     this._hoverLeaveTid = setTimeout(() => {
-      const fc = sum.querySelector?.("is-float-card") as (HTMLElement & { locked?: boolean }) | null;
+      const fc = sum.querySelector?.("iswc-float-card") as (HTMLElement & { locked?: boolean }) | null;
       if (fc?.locked) return;
       const cur = ta.hoveredNode ? ta.normalizeFlatPath(ta.hoveredNode.flatPath) : "";
       if (cur !== prev) return;

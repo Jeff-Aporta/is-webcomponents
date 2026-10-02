@@ -1,5 +1,5 @@
 /**
- * tree-view.test.ts — Tier A (15 aserciones) para `<is-tree-view>`.
+ * tree-view.test.ts — Tier A (15 aserciones) para `<iswc-tree-view>`.
  *
  * Componente complejo: árbol editable con drag, drawer, history, custom
  * adapters. Reexporta TreeAdapter, TreeRowAdapter, TreeCustomsBase.
@@ -13,7 +13,7 @@ import { fileURLToPath } from 'node:url';
 
 const HERE = dirname(fileURLToPath(import.meta.url));
 const ROOT = join(HERE, '..', '..', '..', '..', '..');
-const TAG = 'is-tree-view';
+const TAG = 'iswc-tree-view';
 const TS  = join(ROOT, 'src', 'components', 'isp', 'tree-view.ts');
 const CSS = join(ROOT, 'src', 'components', 'isp', 'tree-view.css');
 const JSON_PATH = join(ROOT, 'src', 'components', 'isp', 'tree-view.json');
@@ -26,10 +26,10 @@ test('2. CSS hermano existe', async () => {
   assert.ok(existsSync(CSS));
 });
 
-test('3. JSON existe y respeta is-preview/v1', async () => {
+test('3. JSON existe y respeta iswc-preview/v1', async () => {
   const json = JSON.parse(readFileSync(JSON_PATH, 'utf8'));
   assert.equal(json.tag, TAG);
-  assert.equal(json.$schema, 'is-preview/v1');
+  assert.equal(json.$schema, 'iswc-preview/v1');
 });
 
 test('4. reexporta TreeRowViewAdapter / TreeAdapter / TreeCustomsBase', async () => {
@@ -51,7 +51,7 @@ test('6. importa paintForest para pintar el árbol', async () => {
 
 test('7. custom element registrado', async () => {
   const src = readFileSync(TS, 'utf8');
-  assert.ok(/defineElement\s*\(\s*['"]is-tree-view['"]/.test(src));
+  assert.ok(/defineElement\s*\(\s*['"]iswc-tree-view['"]/.test(src));
 });
 
 test('8. integra con confirm-delete', async () => {
@@ -77,7 +77,7 @@ test('11. el módulo de customs base existe en _shared/tree-view/', async () => 
 
 test('12. emite eventos de cambio / selección', async () => {
   const src = readFileSync(TS, 'utf8');
-  assert.ok(/['"]is-change['"]/.test(src) || /['"]is-select['"]/.test(src) || /['"]is-edit['"]/.test(src));
+  assert.ok(/['"]iswc-change['"]/.test(src) || /['"]iswc-select['"]/.test(src) || /['"]iswc-edit['"]/.test(src));
 });
 
 test('13. CSS tiene reglas para indentación y chevron del árbol', async () => {

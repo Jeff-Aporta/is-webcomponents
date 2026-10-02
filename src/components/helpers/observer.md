@@ -1,18 +1,18 @@
 ---
-tag: is-observer
+tag: iswc-observer
 tags:
-  - is-observer
+  - iswc-observer
 category: helpers
 status: public
 source: ./observer.js
 style: ./observer.css
 preview: ./observer.json
 ---
-# `<is-observer>`
+# `<iswc-observer>`
 
 ## Propósito
 
-Web Component genérico que envuelve `IntersectionObserver`, `MutationObserver` y `ResizeObserver` vía `type`. Los nombres históricos (`is-intersection-observer`, `is-mutation-observer`, `is-resize-observer`) son alias con `type` prefijado.
+Web Component genérico que envuelve `IntersectionObserver`, `MutationObserver` y `ResizeObserver` vía `type`. Los nombres históricos (`iswc-intersection-observer`, `iswc-mutation-observer`, `iswc-resize-observer`) son alias con `type` prefijado.
 
 ## Cuándo usarlo
 
@@ -31,17 +31,17 @@ import './observer.js';
 ## Ejemplo mínimo
 
 ```html
-<is-observer type="intersection" intersect-class="visible">
+<iswc-observer type="intersection" intersect-class="visible">
   <div>…</div>
-</is-observer>
+</iswc-observer>
 
-<is-observer type="mutation" attr="class open" child-list>
+<iswc-observer type="mutation" attr="class open" child-list>
   <div>…</div>
-</is-observer>
+</iswc-observer>
 
-<is-observer type="resize">
+<iswc-observer type="resize">
   <div style="resize:both;overflow:auto">…</div>
-</is-observer>
+</iswc-observer>
 ```
 
 ## API
@@ -52,7 +52,7 @@ import './observer.js';
 
 | Atributo | Tipo | Notas |
 | --- | --- | --- |
-| `type` | `intersection` \| `mutation` \| `resize` | Obligatorio en `<is-observer>` |
+| `type` | `intersection` \| `mutation` \| `resize` | Obligatorio en `<iswc-observer>` |
 | `disabled` | boolean | Desconecta el observer |
 | `intersect-class` | string | Clase a togglear (intersection) |
 | `once` | boolean | Deja de observar tras la primera |
@@ -77,9 +77,9 @@ No expone propiedades de negocio adicionales.
 
 | Evento | `type` | detail |
 | --- | --- | --- |
-| `is-intersect` | intersection | `{ entry }` |
-| `is-mutate` | mutation | `{ records }` |
-| `is-resize` | resize | `{ entries }` |
+| `iswc-intersect` | intersection | `{ entry }` |
+| `iswc-mutate` | mutation | `{ records }` |
+| `iswc-resize` | resize | `{ entries }` |
 
 ### Métodos y propiedades públicas
 
@@ -117,19 +117,19 @@ No altera el árbol accesible (`display: contents`); el contenido observado sigu
 ## Ejemplo avanzado
 
 ```html
-<is-observer type="intersection" once intersect-class="in-view" threshold="0.4">
-  <is-card>Aparece al entrar en viewport</is-card>
-</is-observer>
+<iswc-observer type="intersection" once intersect-class="in-view" threshold="0.4">
+  <iswc-card>Aparece al entrar en viewport</iswc-card>
+</iswc-observer>
 ```
 
 ## Errores comunes
 
-- Olvidar `type` en `<is-observer>`.
-- No escuchar el evento correcto (`is-intersect` / `is-mutate` / `is-resize`).
+- Olvidar `type` en `<iswc-observer>`.
+- No escuchar el evento correcto (`iswc-intersect` / `iswc-mutate` / `iswc-resize`).
 
 ## Reglas para LLM
 
-- Contrato unificado: este MD + preview `helpers/is-observer.html`.
+- Contrato unificado: este MD + preview `helpers/iswc-observer.html`.
 - No inventar tipos fuera de `intersection|mutation|resize`.
 
 ## Fuentes

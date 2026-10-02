@@ -29,7 +29,7 @@ tests.push({
     await waitReady(page, 'data-er-editor-ready');
 
     const result = await page.evaluate(() => {
-      const ed = document.querySelector('is-er-editor');
+      const ed = document.querySelector('iswc-er-editor');
       // Capturar entidades y relaciones no-default antes del round-trip.
       const before = {
         entities: ed.payload.entities.map((e) => ({ id: e.id, name: e.name, attributes: e.attributes.length })),
@@ -50,7 +50,7 @@ tests.push({
 
 // ───────────────────────────────────────────────────────────────────────
 // 2. Editor: campos desconocidos en el payload NO crashean (setter permisivo,
-//    delega la normalización a <is-er-diagram> que descarta extras). Este es
+//    delega la normalización a <iswc-er-diagram> que descarta extras). Este es
 //    el contrato real observado por el usuario; test de regresión para
 //    evitar que un futuro cambio lo rompa silenciosamente.
 // ───────────────────────────────────────────────────────────────────────
@@ -62,7 +62,7 @@ tests.push({
 
     const result = await page.evaluate(async () => {
       try {
-        const ed = document.querySelector('is-er-editor');
+        const ed = document.querySelector('iswc-er-editor');
         ed.payload = {
           entities: [{ id: 'a', name: 'A' }],
           relations: [],
@@ -74,7 +74,7 @@ tests.push({
         return {
           ok: true,
           entities: ed.payload.entities.length,
-          entitiesAfter: ed.shadowRoot.querySelector('is-er-diagram')?.shadowRoot?.querySelectorAll('.er-entity').length ?? 0,
+          entitiesAfter: ed.shadowRoot.querySelector('iswc-er-diagram')?.shadowRoot?.querySelectorAll('.er-entity').length ?? 0,
         };
       } catch (e) {
         return { ok: false, error: e?.message ?? String(e) };
@@ -96,10 +96,10 @@ tests.push({
     await waitReady(page, 'data-er-static-ready');
 
     const ok = await page.evaluate(async () => {
-      // Primer demo del fixture: dos <is-er-diagram>. Inyectar en el primero
+      // Primer demo del fixture: dos <iswc-er-diagram>. Inyectar en el primero
       // un payload con una entidad sin atributos y esperamos al re-render
       // (payload setter dispara queueRender, que es microtask-asíncrono).
-      const host = document.querySelectorAll('is-er-diagram')[0];
+      const host = document.querySelectorAll('iswc-er-diagram')[0];
       host.payload = {
         title: 'Sin atributos',
         direction: 'LR',
@@ -127,7 +127,7 @@ tests.push({
     await waitReady(page, 'data-er-static-ready');
 
     const result = await page.evaluate(async () => {
-      const host = document.querySelectorAll('is-er-diagram')[0];
+      const host = document.querySelectorAll('iswc-er-diagram')[0];
       try {
         host.payload = {
           title: 'Self-loop',
@@ -161,7 +161,7 @@ tests.push({
     // Aislamos el test: capturamos el count inicial (constante), añadimos con
     // el botón (que sí registra history) y disparamos Ctrl+Z por evento nativo.
     const result = await page.evaluate(async () => {
-      const ed = document.querySelector('is-er-editor');
+      const ed = document.querySelector('iswc-er-editor');
       const before = ed.payload.entities.length;
       const addBtn = ed.shadowRoot.querySelector('[data-action="add-entity"]');
       addBtn?.click();
@@ -191,7 +191,7 @@ tests.push({
     await waitReady(page, 'data-er-editor-ready');
 
     const result = await page.evaluate(async () => {
-      const ed = document.querySelector('is-er-editor');
+      const ed = document.querySelector('iswc-er-editor');
       const addBtn = ed.shadowRoot.querySelector('[data-action="add-entity"]');
       addBtn?.click();
       await new Promise((r) => setTimeout(r, 50));
@@ -217,7 +217,7 @@ tests.push({
 
     // Caso A: dos clicks crean relación.
     const okCase = await page.evaluate(async () => {
-      const ed = document.querySelector('is-er-editor');
+      const ed = document.querySelector('iswc-er-editor');
       // Asegurar al menos 2 entidades.
       ed.shadowRoot.querySelector('[data-action="add-entity"]')?.click();
       ed.shadowRoot.querySelector('[data-action="add-entity"]')?.click();
@@ -226,7 +226,7 @@ tests.push({
       // Click en el botón "Conectar" (data-mode="connect")
       ed.shadowRoot.querySelector('[data-mode="connect"]')?.click();
       // Click en dos entidades diferentes.
-      const entities = ed.shadowRoot.querySelector('is-er-diagram').shadowRoot.querySelectorAll('.er-entity');
+      const entities = ed.shadowRoot.querySelector('iswc-er-diagram').shadowRoot.querySelectorAll('.er-entity');
       entities[0]?.dispatchEvent(new MouseEvent('click', { bubbles: true, composed: true }));
       entities[1]?.dispatchEvent(new MouseEvent('click', { bubbles: true, composed: true }));
       await new Promise((r) => setTimeout(r, 50));
@@ -236,9 +236,9 @@ tests.push({
 
     // Caso B: Escape después del primer click cancela el pending.
     const cancelCase = await page.evaluate(async () => {
-      const ed = document.querySelector('is-er-editor');
+      const ed = document.querySelector('iswc-er-editor');
       ed.shadowRoot.querySelector('[data-mode="connect"]')?.click();
-      const entities = ed.shadowRoot.querySelector('is-er-diagram').shadowRoot.querySelectorAll('.er-entity');
+      const entities = ed.shadowRoot.querySelector('iswc-er-diagram').shadowRoot.querySelectorAll('.er-entity');
       entities[0]?.dispatchEvent(new MouseEvent('click', { bubbles: true, composed: true }));
       const relsBeforeEsc = ed.payload.relations.length;
       window.dispatchEvent(new KeyboardEvent('keydown', { key: 'Escape', bubbles: true }));
@@ -261,7 +261,7 @@ tests.push({
     await waitReady(page, 'data-er-editor-ready');
 
     const result = await page.evaluate(async () => {
-      const ed = document.querySelector('is-er-editor');
+      const ed = document.querySelector('iswc-er-editor');
       const before = ed.payload.entities.length;
       const btn = ed.shadowRoot.querySelector('[data-action="add-entity"]');
       btn?.click();
@@ -295,7 +295,7 @@ tests.push({
     await waitReady(page, 'data-er-static-ready');
 
     const result = await page.evaluate(async () => {
-      const host = document.querySelectorAll('is-er-diagram')[0];
+      const host = document.querySelectorAll('iswc-er-diagram')[0];
       try {
         host.payload = {
           title: 'Ciclo',
@@ -330,7 +330,7 @@ tests.push({
     await waitReady(page, 'data-er-static-ready');
 
     const result = await page.evaluate(async () => {
-      const host = document.querySelectorAll('is-er-diagram')[1];
+      const host = document.querySelectorAll('iswc-er-diagram')[1];
       const payload = {
         title: 'Mix',
         direction: 'LR',

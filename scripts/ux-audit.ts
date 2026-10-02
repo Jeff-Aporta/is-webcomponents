@@ -5,7 +5,7 @@
  * Uso:
  *   deno run -A --no-check scripts/serve.mjs 8391          # en otra terminal
  *   deno run -A --no-check scripts/ux-audit.ts            # barrido completo
- *   deno run -A --no-check scripts/ux-audit.ts --only is-button,is-toast
+ *   deno run -A --no-check scripts/ux-audit.ts --only iswc-button,iswc-toast
  *   deno run -A --no-check scripts/ux-audit.ts --limit 10
  *   deno run -A --no-check scripts/ux-audit.ts --port 8391 --out .tmp/ux-audit
  *
@@ -102,18 +102,18 @@ const page = await context.newPage();
 /** @type {Array<{tag:string, ok:boolean, demos:number, interactions:number, consoleErrors:string[], pageErrors:string[], issues:string[], shot?:string}>} */
 const results = [];
 
-/** Controles del demo. `is-demo` lleva class `demo`; el chrome de código
+/** Controles del demo. `iswc-demo` lleva class `demo`; el chrome de código
  *  vive fuera o con clases demo-code-* — no clicarlo. */
 const INTERACT_SELECTORS = [
-  'is-demo is-button:not([disabled])',
-  'is-demo > button:not([disabled]):not(.demo-code-btn):not(.demo-sources-btn):not([data-demo-code])',
-  'is-demo is-switch',
-  'is-demo is-checkbox',
-  'is-demo is-tab[slot="nav"]:not([disabled])',
-  'is-demo is-fab',
-  'is-demo is-check-icon-button',
-  'is-demo is-copy-button',
-  'is-demo [role="button"]:not(.demo-code-pop__btn):not(.demo-code-btn)',
+  'iswc-demo iswc-button:not([disabled])',
+  'iswc-demo > button:not([disabled]):not(.demo-code-btn):not(.demo-sources-btn):not([data-demo-code])',
+  'iswc-demo iswc-switch',
+  'iswc-demo iswc-checkbox',
+  'iswc-demo iswc-tab[slot="nav"]:not([disabled])',
+  'iswc-demo iswc-fab',
+  'iswc-demo iswc-check-icon-button',
+  'iswc-demo iswc-copy-button',
+  'iswc-demo [role="button"]:not(.demo-code-pop__btn):not(.demo-code-btn)',
 ].join(', ');
 
 /** Ruido esperado de demos (CDN externos / URLs intencionalmente rotas). */
@@ -159,8 +159,8 @@ for (let i = 0; i < tags.length; i += 1) {
     await page.goto(url, { waitUntil: 'domcontentloaded', timeout: 30000 });
     // Preview host o iframe legacy
     await page.waitForFunction(() => {
-      const host = document.querySelector('is-preview-component');
-      if (host?.preview || host?.querySelector('is-main .section, is-main is-demo, .main .section')) return true;
+      const host = document.querySelector('iswc-preview-component');
+      if (host?.preview || host?.querySelector('iswc-main .section, iswc-main iswc-demo, .main .section')) return true;
       const frame = document.querySelector('#previewFrame, iframe');
       return !!frame && !frame.hidden;
     }, { timeout: 20000 }).catch(() => {
@@ -170,12 +170,12 @@ for (let i = 0; i < tags.length; i += 1) {
 
     await page.waitForTimeout(350);
 
-    row.sections = await page.locator('is-preview-component is-main .section, is-main.main .section').count();
-    row.demos = await page.locator('is-preview-component is-demo, is-main.main is-demo').count();
+    row.sections = await page.locator('iswc-preview-component iswc-main .section, iswc-main.main .section').count();
+    row.demos = await page.locator('iswc-preview-component iswc-demo, iswc-main.main iswc-demo').count();
 
     if (row.sections === 0 && row.demos === 0) {
-      // home / theming pueden no usar is-demo
-      const mainKids = await page.locator('is-preview-component is-main, is-main.main').count();
+      // home / theming pueden no usar iswc-demo
+      const mainKids = await page.locator('iswc-preview-component iswc-main, iswc-main.main').count();
       if (!mainKids) {
         row.issues.push('sin contenido en main');
         row.ok = false;
@@ -199,8 +199,8 @@ for (let i = 0; i < tags.length; i += 1) {
       }
     }
 
-    // Hover tooltips / first is-button
-    const tip = page.locator('is-demo is-tooltip, is-demo [aria-describedby]').first();
+    // Hover tooltips / first iswc-button
+    const tip = page.locator('iswc-demo iswc-tooltip, iswc-demo [aria-describedby]').first();
     if (await tip.count()) {
       try {
         await tip.hover({ timeout: 1000 });
@@ -212,7 +212,7 @@ for (let i = 0; i < tags.length; i += 1) {
     // Detect demos vacíos / altura 0
     const emptyDemos = await page.evaluate(() => {
       const bad = [];
-      for (const d of document.querySelectorAll('is-demo')) {
+      for (const d of document.querySelectorAll('iswc-demo')) {
         const r = d.getBoundingClientRect();
         if (r.height < 8) bad.push(d.id || d.getAttribute('label') || 'sin-id');
       }
@@ -226,7 +226,7 @@ for (let i = 0; i < tags.length; i += 1) {
     // Shot del main
     const shotName = `${String(i + 1).padStart(3, '0')}-${tag}.png`;
     const shotPath = join(OUT, 'shots', shotName);
-    const main = page.locator('is-preview-component, #previewHost, main.main').first();
+    const main = page.locator('iswc-preview-component, #previewHost, main.main').first();
     if (await main.count()) {
       await main.screenshot({ path: shotPath, animations: 'disabled' }).catch(async () => {
         await page.screenshot({ path: shotPath, fullPage: true, animations: 'disabled' });

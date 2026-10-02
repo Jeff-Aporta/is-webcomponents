@@ -1,19 +1,19 @@
 {
-  "$schema": "is-preview/v1",
-  "tag": "is-combobox",
+  "$schema": "iswc-preview/v1",
+  "tag": "iswc-combobox",
   "category": "forms",
-  "title": "<is-combobox>",
+  "title": "<iswc-combobox>",
   "titleHtml": true,
-  "storageKey": "docs-is-combobox",
+  "storageKey": "docs-iswc-combobox",
   "sections": [
     {
       "id": "intro",
       "title": "Uso",
-      "lede": "Input + listbox filtrable con teclado y opciones <code>is-option</code>.",
+      "lede": "Input + listbox filtrable con teclado y opciones <code>iswc-option</code>.",
       "blocks": [
         {
           "kind": "demo",
-          "html": "<is-combobox label=\"Ciudad\" hint=\"Escribe para filtrar\" placeholder=\"Buscar…\" clearable name=\"city\" style=\"max-width:20rem\">\r\n            <is-option value=\"bog\">Bogotá</is-option>\r\n            <is-option value=\"med\">Medellín</is-option>\r\n            <is-option value=\"cal\">Cali</is-option>\r\n            <is-option value=\"barr\">Barranquilla</is-option>\r\n            <is-option value=\"buc\">Bucaramanga</is-option>\r\n          </is-combobox>",
+          "html": "<iswc-combobox label=\"Ciudad\" hint=\"Escribe para filtrar\" placeholder=\"Buscar…\" clearable name=\"city\" style=\"max-width:20rem\">\r\n            <iswc-option value=\"bog\">Bogotá</iswc-option>\r\n            <iswc-option value=\"med\">Medellín</iswc-option>\r\n            <iswc-option value=\"cal\">Cali</iswc-option>\r\n            <iswc-option value=\"barr\">Barranquilla</iswc-option>\r\n            <iswc-option value=\"buc\">Bucaramanga</iswc-option>\r\n          </iswc-combobox>",
           "controls": [
             {
               "control": "select",
@@ -54,18 +54,18 @@
       "blocks": [
         {
           "kind": "demo",
-          "html": "<is-combobox label=\"País\" value=\"co\" required style=\"max-width:20rem\">\r\n            <option value=\"co\">Colombia</option>\r\n            <option value=\"mx\">México</option>\r\n            <option value=\"es\">España</option>\r\n          </is-combobox>"
+          "html": "<iswc-combobox label=\"País\" value=\"co\" required style=\"max-width:20rem\">\r\n            <option value=\"co\">Colombia</option>\r\n            <option value=\"mx\">México</option>\r\n            <option value=\"es\">España</option>\r\n          </iswc-combobox>"
         },
         {
           "kind": "code",
-          "code": "<is-combobox label=\"Ciudad\" clearable>\n  <is-option value=\"bog\">Bogotá</is-option>\n  <is-option value=\"med\">Medellín</is-option>\n</is-combobox>"
+          "code": "<iswc-combobox label=\"Ciudad\" clearable>\n  <iswc-option value=\"bog\">Bogotá</iswc-option>\n  <iswc-option value=\"med\">Medellín</iswc-option>\n</iswc-combobox>"
         }
       ]
     },
     {
       "id": "reference",
       "title": "Referencia",
-      "lede": "Eventos: <code>is-change</code>, <code>is-input</code>, <code>is-show</code>, <code>is-hide</code>. Teclado: ↑↓ Enter Esc.",
+      "lede": "Eventos: <code>iswc-change</code>, <code>iswc-input</code>, <code>iswc-show</code>, <code>iswc-hide</code>. Teclado: ↑↓ Enter Esc.",
       "blocks": [
         {
           "kind": "table",

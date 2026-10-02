@@ -18,7 +18,7 @@ checks.push({
       const sections = [...document.querySelectorAll('section')];
       const issues = [];
       for (const sec of sections) {
-        const tags = [...sec.querySelectorAll('is-tag')];
+        const tags = [...sec.querySelectorAll('iswc-tag')];
         const rects = tags.map((t) => t.getBoundingClientRect());
         for (let i = 0; i < rects.length; i++) {
           for (let j = i + 1; j < rects.length; j++) {
@@ -43,7 +43,7 @@ checks.push({
     await waitReady(page, 'data-tag-ready');
     const variants = await page.evaluate(() => {
       const sec = [...document.querySelectorAll('section')].find((s) => s.textContent.includes('Variantes'));
-      return [...sec.querySelectorAll('is-tag')].map((t) => {
+      return [...sec.querySelectorAll('iswc-tag')].map((t) => {
         const inner = t.shadowRoot.querySelector('.tag');
         const cs = getComputedStyle(inner);
         return {
@@ -75,7 +75,7 @@ checks.push({
     await page.goto(URL, { waitUntil: 'domcontentloaded' });
     await waitReady(page, 'data-tag-ready');
     const size = await page.evaluate(() => {
-      const t = document.querySelector('is-tag[with-remove]');
+      const t = document.querySelector('iswc-tag[with-remove]');
       const btn = t.shadowRoot.querySelector('.remove');
       const r = btn.getBoundingClientRect();
       return { w: r.width, h: r.height, hidden: btn.hidden };

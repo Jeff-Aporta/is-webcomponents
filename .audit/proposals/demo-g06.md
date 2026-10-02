@@ -13,7 +13,7 @@
 1. **Zoom in/out con botones dedicados** — [zoom]
    - Setup: renderizar la preview con un diagrama de ≥3 niveles de detalle; localizar los botones "+" y "−".
    - Acción: click sucesivo en "+" 4 veces, luego en "−" 2 veces.
-   - Assertion: el `transform: scale()` del contenedor interno incrementa/decrementa en pasos discretos (p. ej. 1.0 → 1.25 → 1.5 → 1.75 → 2.0); se emite un evento `is-diagram-zoom-change` con el factor; el botón "−" queda deshabilitado al alcanzar el `zoomMin`.
+   - Assertion: el `transform: scale()` del contenedor interno incrementa/decrementa en pasos discretos (p. ej. 1.0 → 1.25 → 1.5 → 1.75 → 2.0); se emite un evento `iswc-diagram-zoom-change` con el factor; el botón "−" queda deshabilitado al alcanzar el `zoomMin`.
    - Cobertura: branch `zoomMin` y `zoomMax`, event payload, atributo `aria-valuenow` si hay slider asociado.
 
 2. **Zoom con rueda del mouse centrado en cursor** — [zoom / pan]
@@ -49,13 +49,13 @@
 7. **Drag individual de nodo y persistencia visual** — [drag]
    - Setup: foco/hover sobre nodo draggable.
    - Acción: `mousedown` sobre el nodo → `mousemove` +50, +30 → `mouseup`; repetir sobre nodo no-draggable.
-   - Assertion: el nodo se reposiciona vía `transform: translate(...)`; emite `is-diagram-node-moved` con `{id, x, y}`; nodo con `data-locked="true"` no se mueve y cursor muestra `not-allowed`.
+   - Assertion: el nodo se reposiciona vía `transform: translate(...)`; emite `iswc-diagram-node-moved` con `{id, x, y}`; nodo con `data-locked="true"` no se mueve y cursor muestra `not-allowed`.
    - Cobertura: branch locked, undo/redo si existe, colisión con otros nodos (push-out o overlap permitido).
 
 8. **Export a PNG y SVG** — [export]
    - Setup: lightbox abierta con diagrama visible.
    - Acción: click en "Export" → elegir "PNG" → confirmar; repetir eligiendo "SVG".
-   - Assertion: descarga un blob `image/png` con dimensiones del bounding box (no del viewport) y DPI ≥144; descarga SVG inline (sin estilos externos) auto-contenido; toast `is-toast` con `role="status"` confirma "Exportado".
+   - Assertion: descarga un blob `image/png` con dimensiones del bounding box (no del viewport) y DPI ≥144; descarga SVG inline (sin estilos externos) auto-contenido; toast `iswc-toast` con `role="status"` confirma "Exportado".
    - Cobertura: branch de nodos fuera del viewport, fondo transparente vs con fondo, nombre de archivo derivado del título.
 
 9. **Export a JSON del modelo** — [export]
@@ -207,13 +207,13 @@
 2. **Búsqueda con highlight y navegación al resultado** — [interacción]
    - Setup: chart con ≥50 personas, campo de búsqueda con `aria-label="Buscar persona"`.
    - Acción: teclear "mar"; pulsar `Enter`; pulsar `Enter` otra vez; `Shift+Enter`.
-   - Assertion: los nodos coincidentes muestran `mark` interno o clase `is-highlighted`; el chart hace scroll/zoom para centrar el resultado activo; `aria-activedescendant` apunta al nodo actual; Shift+Enter navega al anterior.
+   - Assertion: los nodos coincidentes muestran `mark` interno o clase `iswc-highlighted`; el chart hace scroll/zoom para centrar el resultado activo; `aria-activedescendant` apunta al nodo actual; Shift+Enter navega al anterior.
     - Cobertura: diacríticos, búsqueda por id, debounce de 150 ms.
 
 3. **Selección con single-click y multi-selección con Ctrl/Meta** — [select]
    - Setup: chart con ≥5 nodos hermanos.
    - Acción: click en A → Ctrl+click en B → Ctrl+Shift+click en C → click en fondo.
-   - Assertion: A queda `aria-selected="true"`; B y C también; click en fondo limpia selección; emitir evento `is-org-selection-change` con lista de ids; nodos no-draggables pueden seleccionarse igual.
+   - Assertion: A queda `aria-selected="true"`; B y C también; click en fondo limpia selección; emitir evento `iswc-org-selection-change` con lista de ids; nodos no-draggables pueden seleccionarse igual.
     - Cobertura: branch meta vs ctrl (Mac vs Win/Linux), shift-range (de A a C连续的).
 
 4. **Drag & drop para reasignar jerarquía** — [drag]
@@ -273,7 +273,7 @@
 13. **Persistencia local (localStorage) y reset** — [estado]
     - Setup: colapsar/expandir varios nodos, mover uno.
     - Acción: recargar; abrir menú "Restablecer".
-    - Assertion: tras recarga, posiciones colapsadas se mantienen; "Restablecer" limpia storage y vuelve al estado inicial con confirmación `is-confirm-dialog`.
+    - Assertion: tras recarga, posiciones colapsadas se mantienen; "Restablecer" limpia storage y vuelve al estado inicial con confirmación `iswc-confirm-dialog`.
      - Cobertura: storage quota, versionado de schema.
 
 14. **Internacionalización y dirección RTL** — [a11y]
@@ -310,7 +310,7 @@
 4. **Selección de mensaje individual y rango Shift+Click** — [select]
    - Setup: ≥10 mensajes en orden.
    - Acción: click en mensaje 3; Shift+click en 7; Ctrl+click en 1 (no contiguo).
-   - Assertion: mensajes seleccionados muestran `aria-selected="true"` con borde; emitir `is-seq-selection-change` con `{ids: []}`; rango Shift respeta orden cronológico; las notas (`note over`) son seleccionables igual.
+   - Assertion: mensajes seleccionados muestran `aria-selected="true"` con borde; emitir `iswc-seq-selection-change` con `{ids: []}`; rango Shift respeta orden cronológico; las notas (`note over`) son seleccionables igual.
    - Cobertura: branch range, branch notes, limpiar selección con Escape.
 
 5. **Drag de mensajes para reordenar (cuando editable)** — [drag]

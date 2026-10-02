@@ -6,7 +6,7 @@
  * - {{mdi:icon-name}} o alias {{thumb-up}}
  * - {{icon: {icon: "mdi:account", hue: 239}}}   (canonica)
  * - {{iconify: {...}}}                          (alias legacy, aun soportado)
- * - {{"is-icon": {icon: "mdi:key", color: "#e11"}}}  (attrs del componente)
+ * - {{"iswc-icon": {icon: "mdi:key", color: "#e11"}}}  (attrs del componente)
  *
  * Se procesa en segmentos de texto plano (tk-rich-text / inlineMd).
  */
@@ -117,7 +117,7 @@ export type ResolvedIconToken = {
   hue?: number;
   size?: number;
   color?: string;
-  /** Atributos tal cual, para <is-icon key="value">. */
+  /** Atributos tal cual, para <iswc-icon key="value">. */
   attrs: Record<string, string>;
 };
 
@@ -136,12 +136,12 @@ function tokenFromAttrs(obj: Record<string, string>): ResolvedIconToken | null {
   return { iconId, hue, size, color, attrs: { ...obj, icon: iconId } };
 }
 
-/** Resuelve contenido interno de {{…}} (id simple, sugar o componente is-icon). */
+/** Resuelve contenido interno de {{…}} (id simple, sugar o componente iswc-icon). */
 export function resolveIconToken(raw: string | null | undefined): ResolvedIconToken | null {
   const token = String(raw ?? '').trim();
   if (!token) return null;
 
-  const comp = /^(?:"is-icon"|'is-icon'|is-icon)\s*:\s*/i.exec(token);
+  const comp = /^(?:"iswc-icon"|'iswc-icon'|iswc-icon)\s*:\s*/i.exec(token);
   if (comp) {
     const obj = parseLooseObject(token.slice(comp[0].length).trim());
     return obj ? tokenFromAttrs(obj) : null;
@@ -160,7 +160,7 @@ export function resolveIconToken(raw: string | null | undefined): ResolvedIconTo
 /** Etiqueta con icono embebido vía sugar JSON (diagramas de secuencia). */
 export function hasIconJsonSugar(raw: string) {
   const text = String(raw ?? '');
-  return text.includes('{{icon:') || text.includes('{{iconify:') || /\{\{\s*["']?is-icon["']?\s*:/i.test(text);
+  return text.includes('{{icon:') || text.includes('{{iconify:') || /\{\{\s*["']?iswc-icon["']?\s*:/i.test(text);
 }
 
 function scanIconTemplateTokens(text: string, onToken: (start: number, end: number, inner: string) => void): void {
@@ -170,7 +170,7 @@ function scanIconTemplateTokens(text: string, onToken: (start: number, end: numb
     if (open === -1) break;
 
     const tail = text.slice(open);
-    const sugarHead = /^\{\{\s*(?:"is-icon"|'is-icon'|is-icon|icon|iconify)\s*:\s*\{/i.exec(tail);
+    const sugarHead = /^\{\{\s*(?:"iswc-icon"|'iswc-icon'|iswc-icon|icon|iconify)\s*:\s*\{/i.exec(tail);
     if (sugarHead) {
       const jsonStart = open + sugarHead[0].length - 1;
       if (text[jsonStart] !== '{') {
@@ -311,9 +311,9 @@ export function iconAttrsHtml(iconId: string, opts: IconInlineOpts = {}): string
     .join(' ');
 }
 
-/** HTML web — `<is-icon key="value">`, la unica API de iconos del kit. */
+/** HTML web — `<iswc-icon key="value">`, la unica API de iconos del kit. */
 export function iconInlineHtmlWeb(iconId: string, opts: IconInlineOpts = {}): IconHtmlRender {
-  return `<is-icon ${iconAttrsHtml(iconId, opts)}></is-icon>`;
+  return `<iswc-icon ${iconAttrsHtml(iconId, opts)}></iswc-icon>`;
 }
 
 /** HTML email-safe — img contra el CDN publico del repo (no api.iconify). */

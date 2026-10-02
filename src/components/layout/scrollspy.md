@@ -1,20 +1,20 @@
 ---
-tag: is-scrollspy
+tag: iswc-scrollspy
 tags:
-  - is-scrollspy
+  - iswc-scrollspy
 category: layout
 status: public
 source: ./scrollspy.js
 style: ./scrollspy.css
 preview: ./scrollspy.json
 ---
-# `<is-scrollspy>`
+# `<iswc-scrollspy>`
 
 ## Propósito
 
-<is-scrollspy> — Web Component (vanilla, zero dependencies).
+<iswc-scrollspy> — Web Component (vanilla, zero dependencies).
 
-Este módulo registra `<is-scrollspy>`.
+Este módulo registra `<iswc-scrollspy>`.
 
 ## Cuándo usarlo
 
@@ -33,7 +33,7 @@ import './scrollspy.js';
 ## Ejemplo mínimo
 
 ```html
-<is-scrollspy></is-scrollspy>
+<iswc-scrollspy></iswc-scrollspy>
 ```
 
 ## API
@@ -66,8 +66,8 @@ import './scrollspy.js';
 
 | Evento | detail | bubbles | composed | cancelable |
 | --- | --- | --- | --- | --- |
-| `is-deactivated` | sí | sí | sí | no |
-| `is-activated` | sí | sí | sí | no |
+| `iswc-deactivated` | sí | sí | sí | no |
+| `iswc-activated` | sí | sí | sí | no |
 
 ### Métodos y propiedades públicas
 
@@ -105,28 +105,28 @@ No declara integración form-associated propia en este módulo.
 
 Documentación de cabecera preservada desde fuente:
 
-> <is-scrollspy> — Web Component (vanilla, zero dependencies).
+> <iswc-scrollspy> — Web Component (vanilla, zero dependencies).
 > Observa la intersección de un conjunto de "triggers" dentro de un contenedor
 > scrollable y va marcando el enlace correspondiente del nav con
->   aria-current="location"   y la clase CSS  is-scrollspy-active
+>   aria-current="location"   y la clase CSS  iswc-scrollspy-active
 > a medida que el usuario hace scroll.
 > Pensado para la navegación lateral de los previews de docs:
->   <is-main slot="start">
+>   <iswc-main slot="start">
 >     <section id="intro">…</section>
 >     <section id="examples">…</section>
 >     <section id="reference">…</section>
->   </is-main>
+>   </iswc-main>
 >   <aside class="sidebar" slot="end">
->     <is-scrollspy target="is-main">
+>     <iswc-scrollspy target="iswc-main">
 >       <a href="#intro">Introducción</a>
 >       <a href="#examples">Ejemplos</a>
 >       <a href="#reference">Referencia</a>
->     </is-scrollspy>
+>     </iswc-scrollspy>
 >   </aside>
 > Atributos
 >   target        CSS selector — contenedor scrollable que se observa.
->                 Si no se da, se resuelve al ancestro: <is-main>, <main>,
->                 [role="main"] o el propio <is-split-panel>.
+>                 Si no se da, se resuelve al ancestro: <iswc-main>, <main>,
+>                 [role="main"] o el propio <iswc-split-panel>.
 >   trigger       CSS selector — qué hijos del target actuan como secciones.
 >                 Por defecto: section[id], article[id].
 >   root-margin   string pasado a IntersectionObserver. Default "-30% 0px -55% 0px"
@@ -135,24 +135,24 @@ Documentación de cabecera preservada desde fuente:
 > Slots
 >   default   enlaces <a href="#id"> que el componente va marcando.
 >             Cada <a> cuyo hash coincida con el id de un trigger activo
->             recibe aria-current="location" e `is-scrollspy-active`.
+>             recibe aria-current="location" e `iswc-scrollspy-active`.
 > API
 >   spy.activate(id)   fuerza la marca del enlace con ese id (sin scroll)
 >   spy.refresh()       re-registra los triggers (si el target cambió)
 >   spy.triggers        array con los triggers observados
 >   spy.active          id del trigger activo (o null)
 > Eventos
->   is-activated  detail: { id, link }  — cada vez que un enlace se marca
->   is-deactivated detail: { id, link } — al perder la marca
+>   iswc-activated  detail: { id, link }  — cada vez que un enlace se marca
+>   iswc-deactivated detail: { id, link } — al perder la marca
 > CSS hooks
->   El nav marcado: `is-scrollspy-nav.is-scrollspy-active` y el enlace
->   `a.is-scrollspy-active` (mismo estilo que `.sidebar nav a.active`).
+>   El nav marcado: `iswc-scrollspy-nav.iswc-scrollspy-active` y el enlace
+>   `a.iswc-scrollspy-active` (mismo estilo que `.sidebar nav a.active`).
 
 ## Dependencias y componentes relacionados
 
 - [`../_shared/adopt-css.js`](../_shared/adopt-css.js)
 
-Tags del módulo: `<is-scrollspy>`.
+Tags del módulo: `<iswc-scrollspy>`.
 
 ## Accesibilidad
 
@@ -161,7 +161,7 @@ Preservar semántica, foco, teclado, labels y ARIA. ARIA detectado: `aria-curren
 ## Ejemplo avanzado
 
 ```html
-<is-scrollspy></is-scrollspy>
+<iswc-scrollspy></iswc-scrollspy>
 ```
 
 ## Errores comunes

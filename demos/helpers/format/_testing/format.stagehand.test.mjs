@@ -11,7 +11,7 @@ try {
   await page.waitForTimeout(200);
 
   const data = await page.evaluate(() => {
-    const items = [...document.querySelectorAll('main is-format')].map((el, idx) => {
+    const items = [...document.querySelectorAll('main iswc-format')].map((el, idx) => {
       const r = el.getBoundingClientRect();
       const span = el.shadowRoot.querySelector('span') ?? el.shadowRoot.querySelector('time');
       const cs = getComputedStyle(span ?? el);

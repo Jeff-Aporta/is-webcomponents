@@ -4,7 +4,7 @@ import { INTENT } from '../_shared/intent.js';
 import { TONE } from '../_shared/tone.js';
 
 /**
- * <is-callout> — Web Component (vanilla, zero dependencies).
+ * <iswc-callout> — Web Component (vanilla, zero dependencies).
  *
  * Mensaje en línea con borde y fondo suaves. Pensado para tips, info, warnings
  * y errores que el usuario no debe pasar por alto.
@@ -41,7 +41,7 @@ import { TONE } from '../_shared/tone.js';
     <div class="callout" part="base">
       <span class="icon" part="icon" aria-hidden="true">
         <slot name="icon">
-          <is-icon class="default-icon" aria-hidden="true"></is-icon>
+          <iswc-icon class="default-icon" aria-hidden="true"></iswc-icon>
         </slot>
       </span>
       <div class="message" part="message">
@@ -63,7 +63,7 @@ import { TONE } from '../_shared/tone.js';
     danger: 'mdi:alert-octagon-outline',
   };
 
-  class IsCallout extends ElementBase {
+  class IswcCallout extends ElementBase {
     /** Personalización por atributo (ver `core/attrs.ts`). */
     static styleAttrs = {
     bg: { prop: '--iswc-callout-bg', onlyColorValues: true },
@@ -91,7 +91,7 @@ import { TONE } from '../_shared/tone.js';
       if (!this.hasAttribute('color')) this.setAttribute('color', 'brand');
       if (!this.hasAttribute('variant')) this.setAttribute('variant', 'filled-outlined');
 
-      // ¿El usuario puso un <is-icon slot="icon"> manualmente?
+      // ¿El usuario puso un <iswc-icon slot="icon"> manualmente?
       const slotted = this.querySelector<HTMLElement>(':scope > [slot="icon"]');
       if (slotted) {
         this.#defaultIcon.hidden = true;
@@ -163,7 +163,7 @@ import { TONE } from '../_shared/tone.js';
       const targetName: string = explicit || ICON_BY_VARIANT[variant as keyof typeof ICON_BY_VARIANT] || ICON_BY_VARIANT.neutral;
       if (targetName === this.#lastIconName) return;
       this.#lastIconName = targetName;
-      // Resolver tras el próximo microtask para asegurar que is-icon está definido.
+      // Resolver tras el próximo microtask para asegurar que iswc-icon está definido.
       queueMicrotask(() => {
         if (!this.#defaultIcon.isConnected) return;
         if (typeof this.#defaultIcon.icon === 'string' || 'icon' in this.#defaultIcon) {
@@ -173,5 +173,5 @@ import { TONE } from '../_shared/tone.js';
     }
   }
 
-  defineElement('is-callout', IsCallout, 'IsCallout');
+  defineElement('iswc-callout', IswcCallout, 'IswcCallout');
 })();

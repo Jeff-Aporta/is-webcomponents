@@ -1,5 +1,5 @@
 /**
- * Behavior del preview <is-resize-observer>.
+ * Behavior del preview <iswc-resize-observer>.
  * @param {import('../../previews/_kit/types.d.ts').PreviewMountContext} ctx
  */
 
@@ -72,11 +72,11 @@ export async function mount(ctx: import('../../previews/_kit/types.d.ts').Previe
     paintSize(roSize, w, h);
   }
 
-  ro?.addEventListener('is-resize', (e: Event) => {
+  ro?.addEventListener('iswc-resize', (e: Event) => {
     const entry = (e as CustomEvent<ResizeDetail>).detail?.entries?.[0];
     const { w, h } = readSize(entry, roBox);
     paintSize(roSize, w, h);
-    if (w != null && h != null) pushLog(roLog, 'type-res', `is-resize → ${w} × ${h} px`);
+    if (w != null && h != null) pushLog(roLog, 'type-res', `iswc-resize → ${w} × ${h} px`);
   });
 
   // ── Demo disabled ─────────────────────────────────────────────────────────
@@ -97,7 +97,7 @@ export async function mount(ctx: import('../../previews/_kit/types.d.ts').Previe
     if (roToggle) roToggle.textContent = off ? 'Activar observer' : 'Desactivar observer';
     if (ro2Status) {
       ro2Status.textContent = off ? 'desactivado' : 'activo';
-      ro2Status.classList.toggle('is-off', !!off);
+      ro2Status.classList.toggle('iswc-off', !!off);
     }
   };
   syncToggleUi();
@@ -114,11 +114,11 @@ export async function mount(ctx: import('../../previews/_kit/types.d.ts').Previe
     );
   });
 
-  ro2?.addEventListener('is-resize', (e: Event) => {
+  ro2?.addEventListener('iswc-resize', (e: Event) => {
     const entry = (e as CustomEvent<ResizeDetail>).detail?.entries?.[0];
     const { w, h } = readSize(entry, roBox2);
     paintSize(roSize2, w, h);
-    if (w != null && h != null) pushLog(roLog2, 'type-res', `is-resize → ${w} × ${h} px`);
+    if (w != null && h != null) pushLog(roLog2, 'type-res', `iswc-resize → ${w} × ${h} px`);
   });
 }
 

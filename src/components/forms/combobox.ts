@@ -6,14 +6,14 @@ import { ElementBase } from '../../core/element-base.js';
 import { setStringAttr } from '../_shared/reflect.js';
 
 /**
- * <is-combobox> — Input + listbox filtrable.
+ * <iswc-combobox> — Input + listbox filtrable.
  *
  * El listbox vive en un <dialog modal> (top layer) para no perderse por
  * overflow/visibility de ancestros. Clic en el backdrop del dialog cierra.
  *
  * Atributos: label, hint, name, value, placeholder, disabled, required, open, clearable
- * Slots: default — <is-option> o <option>
- * Events: is-change, is-input, is-show, is-hide
+ * Slots: default — <iswc-option> o <option>
+ * Events: iswc-change, iswc-input, iswc-show, iswc-hide
  */
 
 (() => {
@@ -25,7 +25,7 @@ import { setStringAttr } from '../_shared/reflect.js';
         <input part="input" class="input" type="text" role="combobox"
           autocomplete="off" aria-autocomplete="list" aria-expanded="false"
           aria-haspopup="listbox" aria-controls="listbox" />
-        <is-button
+        <iswc-button
           type="button"
           part="clear"
           class="clear"
@@ -35,9 +35,9 @@ import { setStringAttr } from '../_shared/reflect.js';
           aria-label="Limpiar"
           hidden
         >
-          <is-icon icon="mdi:close" aria-hidden="true"></is-icon>
-        </is-button>
-        <is-button
+          <iswc-icon icon="mdi:close" aria-hidden="true"></iswc-icon>
+        </iswc-button>
+        <iswc-button
           type="button"
           part="trigger"
           class="trigger"
@@ -46,8 +46,8 @@ import { setStringAttr } from '../_shared/reflect.js';
           tabindex="-1"
           aria-label="Abrir"
         >
-          <is-icon icon="mdi:chevron-down" aria-hidden="true"></is-icon>
-        </is-button>
+          <iswc-icon icon="mdi:chevron-down" aria-hidden="true"></iswc-icon>
+        </iswc-button>
       </div>
       <div part="hint" class="hint" id="cb-hint" hidden></div>
     </div>
@@ -62,7 +62,7 @@ import { setStringAttr } from '../_shared/reflect.js';
     'disabled', 'required', 'open', 'clearable'
   ];
 
-  class IsCombobox extends ElementBase {
+  class IswcCombobox extends ElementBase {
     /** Personalización por atributo (ver `core/attrs.ts`). */
     static styleAttrs = {
     radius: '--iswc-combobox-border-radius',
@@ -266,12 +266,12 @@ import { setStringAttr } from '../_shared/reflect.js';
         queueMicrotask(() => {
           try { this.#dialog.focus({ preventScroll: true }); } catch { /* noop */ }
         });
-        if (!this.#wasOpen) emit(this, 'is-show', {});
+        if (!this.#wasOpen) emit(this, 'iswc-show', {});
       } else {
         this.#activeIndex = -1;
         this.#syncActiveDescendant();
         if (this.#dialog.open) this.#dialog.close();
-        if (this.#wasOpen) emit(this, 'is-hide', {});
+        if (this.#wasOpen) emit(this, 'iswc-hide', {});
       }
       this.#wasOpen = open;
     }
@@ -291,7 +291,7 @@ import { setStringAttr } from '../_shared/reflect.js';
       this.#options = [];
       const push = (el: Element) => {
         const tag = el.tagName.toLowerCase();
-        if (tag !== 'is-option' && tag !== 'option') return;
+        if (tag !== 'iswc-option' && tag !== 'option') return;
         this.#options.push({
           value: el.hasAttribute('value') ? (el.getAttribute('value') ?? '') : (el.textContent || '').trim(),
           label: (el.textContent || '').trim(),
@@ -360,8 +360,8 @@ import { setStringAttr } from '../_shared/reflect.js';
       this.#setFormValue();
       this.#updateValidity();
       this.#syncClear();
-      emit(this, 'is-input', { value });
-      if (prev !== value) emit(this, 'is-change', { value });
+      emit(this, 'iswc-input', { value });
+      if (prev !== value) emit(this, 'iswc-change', { value });
       this.#ignoreFocusOpen = true;
       this.#input.focus();
       queueMicrotask(() => { this.#ignoreFocusOpen = false; });
@@ -394,7 +394,7 @@ import { setStringAttr } from '../_shared/reflect.js';
       this.#activeIndex = 0;
       if (!this.open) this.open = true;
       else this.#renderList();
-      emit(this, 'is-input', { value: this.#input.value });
+      emit(this, 'iswc-input', { value: this.#input.value });
     };
 
     #onKeydown = (e: KeyboardEvent) => {
@@ -408,7 +408,7 @@ import { setStringAttr } from '../_shared/reflect.js';
         this.#activeIndex = 0;
         if (!this.open) this.open = true;
         else this.#renderList();
-        emit(this, 'is-input', { value: this.#input.value });
+        emit(this, 'iswc-input', { value: this.#input.value });
         return;
       }
       if (e.target === this.#dialog && (e.key === 'Backspace' || e.key === 'Delete')) {
@@ -417,7 +417,7 @@ import { setStringAttr } from '../_shared/reflect.js';
         this.#input.value = this.#filter;
         this.#activeIndex = 0;
         this.#renderList();
-        emit(this, 'is-input', { value: this.#input.value });
+        emit(this, 'iswc-input', { value: this.#input.value });
         return;
       }
 
@@ -514,8 +514,8 @@ import { setStringAttr } from '../_shared/reflect.js';
       this.#setFormValue();
       this.#updateValidity();
       this.#syncClear();
-      emit(this, 'is-input', { value: '' });
-      if (prev) emit(this, 'is-change', { value: '' });
+      emit(this, 'iswc-input', { value: '' });
+      if (prev) emit(this, 'iswc-change', { value: '' });
       this.#input.focus();
       this.open = true;
     };
@@ -529,5 +529,5 @@ import { setStringAttr } from '../_shared/reflect.js';
     };
   }
 
-  defineElement('is-combobox', IsCombobox, 'IsCombobox');
+  defineElement('iswc-combobox', IswcCombobox, 'IswcCombobox');
 })();

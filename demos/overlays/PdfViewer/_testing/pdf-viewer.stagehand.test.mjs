@@ -27,7 +27,7 @@ async function checkDeterministic(page, demo) {
   await page.waitForTimeout(200);
 
   const data = await page.evaluate(() => {
-    const viewers = [...document.querySelectorAll('is-pdf-viewer')];
+    const viewers = [...document.querySelectorAll('iswc-pdf-viewer')];
     return viewers.map((v, idx) => {
       const toolbar = v.shadowRoot.querySelector('[part="toolbar"]');
       const iframe = v.shadowRoot.querySelector('iframe[part="frame"]');

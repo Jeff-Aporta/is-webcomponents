@@ -72,13 +72,13 @@
 12. **Activación de un item con Enter y con Space ejecutan la acción del item** — [Teclado]
     - Setup: panel abierto; foco en un `menuitem` con `href` o con handler de click.
     - Acción: pulsar `Enter` sobre el item; repetir el escenario y pulsar `Space`.
-    - Assertion: en ambos casos se dispara la navegación / el handler asociado (verificable por cambio de URL, por emisión de un `CustomEvent` `is-select`, o por invocación del listener de click registrado). El panel se cierra tras la selección, salvo que la doc del componente indique lo contrario.
+    - Assertion: en ambos casos se dispara la navegación / el handler asociado (verificable por cambio de URL, por emisión de un `CustomEvent` `iswc-select`, o por invocación del listener de click registrado). El panel se cierra tras la selección, salvo que la doc del componente indique lo contrario.
     - Cobertura: contrato "Enter y Space activan `menuitem`" del patrón WAI-ARIA.
 
 13. **Click en un item cierra el panel y propaga el evento al consumidor** — [Interacción]
-    - Setup: panel abierto; montar un listener (`addEventListener('is-select', …)`) sobre el host antes de la interacción.
+    - Setup: panel abierto; montar un listener (`addEventListener('iswc-select', …)`) sobre el host antes de la interacción.
     - Acción: click con el puntero sobre un `menuitem` cualquiera del panel.
-    - Assertion: el listener recibe el evento `is-select` exactamente una vez, el `detail` contiene el item seleccionado, y el panel se cierra. Verificar que el evento no se emite dos veces (no reentrancia por doble handler).
+    - Assertion: el listener recibe el evento `iswc-select` exactamente una vez, el `detail` contiene el item seleccionado, y el panel se cierra. Verificar que el evento no se emite dos veces (no reentrancia por doble handler).
     - Cobertura: contrato de emisión de eventos del componente y anti-duplicación.
 
 14. **Hover sobre trigger con panel ya cerrado abre el panel con un delay razonable** — [Interacción]
@@ -138,7 +138,7 @@
 23. **Re-apertura inmediata tras cierre sin carrera de eventos** — [Interacción]
    - Setup: panel cerrado.
    - Acción: ciclo rápido: click abrir → click cerrar → click abrir → Escape → click abrir, sin esperas explícitas.
-   - Assertion: el estado final del panel es abierto; `aria-expanded` queda coherente con el último estado; no hay eventos `is-select` espurios; no quedan listeners duplicados que produzcan dos toggles por click.
+   - Assertion: el estado final del panel es abierto; `aria-expanded` queda coherente con el último estado; no hay eventos `iswc-select` espurios; no quedan listeners duplicados que produzcan dos toggles por click.
    - Cobertura: anti-reentrancia y limpieza de timers pendientes entre aperturas/cierres sucesivos.
 
 24. **Lectura por lector de pantalla del nombre del panel al entrar** — [ARIA / a11y]

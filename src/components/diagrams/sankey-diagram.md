@@ -1,14 +1,14 @@
 ---
-tag: is-sankey-diagram
+tag: iswc-sankey-diagram
 tags:
-  - is-sankey-diagram
+  - iswc-sankey-diagram
 category: diagrams
 status: public
 source: ./sankey-diagram.js
 style: ./sankey-diagram.css
 preview: ./sankey-diagram.json
 ---
-# `<is-sankey-diagram>`
+# `<iswc-sankey-diagram>`
 
 ## Propósito
 
@@ -16,7 +16,7 @@ Diagrama de **Sankey** en SVG, sin Mermaid. Declaras nodos y enlaces con
 valor, y el componente reparte las capas, calcula la altura de cada nodo y
 dibuja cada flujo con un grosor proporcional a su valor.
 
-Este módulo registra `<is-sankey-diagram>`.
+Este módulo registra `<iswc-sankey-diagram>`.
 
 ## Cuándo usarlo
 
@@ -25,7 +25,7 @@ etapa, presupuesto por concepto, tráfico por destino. El grosor es el dato.
 
 ## Cuándo no usarlo
 
-Si solo importa el orden o la estructura y no la magnitud → `<is-flowchart>`.
+Si solo importa el orden o la estructura y no la magnitud → `<iswc-flowchart>`.
 Si los valores son categorías comparadas contra un eje → usa un gráfico de barras.
 
 ## Importación
@@ -37,11 +37,11 @@ import './sankey-diagram.js';
 ## Ejemplo mínimo
 
 ```html
-<is-sankey-diagram>
+<iswc-sankey-diagram>
   <script type="application/json">
     {}
   </script>
-</is-sankey-diagram>
+</iswc-sankey-diagram>
 ```
 
 ## API
@@ -75,9 +75,9 @@ import './sankey-diagram.js';
 
 | Evento | detail | bubbles | composed | cancelable |
 | --- | --- | --- | --- | --- |
-| `is-render` | sí | sí | sí | no |
-| `is-open-viewer` | sí | sí | sí | sí |
-| `is-toggle-group` | sí | sí | sí | no |
+| `iswc-render` | sí | sí | sí | no |
+| `iswc-open-viewer` | sí | sí | sí | sí |
+| `iswc-toggle-group` | sí | sí | sí | no |
 
 ### Métodos y propiedades públicas
 
@@ -117,17 +117,17 @@ Las capas salen del camino más largo desde las fuentes; la altura de un nodo es
 
 Documentación de cabecera preservada desde fuente:
 
-> <is-sankey-diagram> — diagrama de Sankey en SVG, sin Mermaid.
->   <is-sankey-diagram>
+> <iswc-sankey-diagram> — diagrama de Sankey en SVG, sin Mermaid.
+>   <iswc-sankey-diagram>
 >     <script type="application/json">
 >       { "sankey": { "nodes": [...], "links": [{ "from": "a", "to": "b", "value": 40 }] } }
 >     </script>
->   </is-sankey-diagram>
-> Mismo esqueleto que <is-flowchart>: shadow DOM, slot JSON + MutationObserver,
+>   </iswc-sankey-diagram>
+> Mismo esqueleto que <iswc-flowchart>: shadow DOM, slot JSON + MutationObserver,
 > tema por atributo `data-theme`, `color` (inline | viewer), lightbox propio.
 > Atributos: color (inline | viewer), open-on-click, height
 > Propiedades: payload, spec, layout, hiddenGroups
-> Eventos: is-render, is-open-viewer, is-toggle-group
+> Eventos: iswc-render, iswc-open-viewer, iswc-toggle-group
 
 ## Dependencias y componentes relacionados
 
@@ -142,7 +142,7 @@ Documentación de cabecera preservada desde fuente:
 - [`../_shared/emit.js`](../_shared/emit.js)
 - [`../_shared/svg-chart-engine.js`](../_shared/svg-chart-engine.js)
 
-Tags del módulo: `<is-sankey-diagram>`.
+Tags del módulo: `<iswc-sankey-diagram>`.
 
 ## Accesibilidad
 

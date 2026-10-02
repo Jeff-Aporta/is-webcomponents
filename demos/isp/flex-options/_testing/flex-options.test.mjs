@@ -1,4 +1,4 @@
-// flex-options.test.mjs — tests exhaustivos del demo <is-flex-options>.
+// flex-options.test.mjs — tests exhaustivos del demo <iswc-flex-options>.
 // Cobertura: smoke + funcional (pintar botones desde actions, click invoca
 // onClick, setConfig batch, compact) + re-pintado tras reasignar actions.
 import assert from 'node:assert/strict';
@@ -14,14 +14,14 @@ tests.push({
     await page.goto(URL, { waitUntil: 'domcontentloaded' });
     await waitReady(page, 'data-flex-opts-ready');
     const info = await page.evaluate(() => {
-      const opts = [...document.querySelectorAll('is-flex-options')];
+      const opts = [...document.querySelectorAll('iswc-flex-options')];
       return opts.map((o) => {
         const sr = o.shadowRoot;
         return {
           id: o.id,
-          defined: !!customElements.get('is-flex-options'),
+          defined: !!customElements.get('iswc-flex-options'),
           toolbarRole: sr?.querySelector('[role="toolbar"], .toolbar')?.getAttribute('role'),
-          hasButtons: !!sr?.querySelector('is-button, button, [role="button"]'),
+          hasButtons: !!sr?.querySelector('iswc-button, button, [role="button"]'),
           compact: o.compact,
           actionsLen: o.actions.length,
         };
@@ -46,7 +46,7 @@ tests.push({
     // Buscar y clickear un botón del demo 1 (Agregar)
     await page.evaluate(() => {
       const opts1 = document.getElementById('opts1');
-      const btns = [...opts1.shadowRoot.querySelectorAll('is-button')];
+      const btns = [...opts1.shadowRoot.querySelectorAll('iswc-button')];
       // Buscar el botón cuyo title incluya "Agregar"
       const add = btns.find((b) => /Agregar/.test(b.getAttribute('title') || ''));
       add?.click();
@@ -71,7 +71,7 @@ tests.push({
         compact: el.compact,
         actionsLen: el.actions.length,
         // Contar botones en shadow
-        shadowBtns: el.shadowRoot.querySelectorAll('is-button').length,
+        shadowBtns: el.shadowRoot.querySelectorAll('iswc-button').length,
       };
     });
     assert.equal(state.compact, true);
@@ -89,12 +89,12 @@ tests.push({
     const state = await page.evaluate(() => {
       const el = document.getElementById('opts4');
       // Capturar botones antes y después de reasignar.
-      const before = [...el.shadowRoot.querySelectorAll('is-button')].map((b) => b.getAttribute('title') || '');
+      const before = [...el.shadowRoot.querySelectorAll('iswc-button')].map((b) => b.getAttribute('title') || '');
       el.actions = [
         { icon: 'mdi:bell', title: 'Notificación', onClick: () => {} },
         { icon: 'mdi:cog', title: 'Ajustes', onClick: () => {} },
       ];
-      const after = [...el.shadowRoot.querySelectorAll('is-button')].map((b) => b.getAttribute('title') || '');
+      const after = [...el.shadowRoot.querySelectorAll('iswc-button')].map((b) => b.getAttribute('title') || '');
       return { before, after };
     });
     assert.equal(state.before.length, 1, `esperaba 1 botón antes, hay ${state.before.length}`);
@@ -112,11 +112,11 @@ tests.push({
     await page.waitForTimeout(150);
     const state = await page.evaluate(() => {
       const el = document.getElementById('opts2');
-      const before = el.shadowRoot.querySelectorAll('is-dropdown').length;
+      const before = el.shadowRoot.querySelectorAll('iswc-dropdown').length;
       el.more = [
         { icon: 'mdi:refresh', title: 'Refrescar', onClick: () => {} },
       ];
-      const after = el.shadowRoot.querySelectorAll('is-dropdown').length;
+      const after = el.shadowRoot.querySelectorAll('iswc-dropdown').length;
       return { before, after, moreLen: el.more.length };
     });
     assert.ok(state.moreLen >= 1, 'more debe tener al menos 1 item');

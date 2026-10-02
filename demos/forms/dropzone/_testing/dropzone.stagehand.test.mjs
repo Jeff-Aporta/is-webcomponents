@@ -23,13 +23,13 @@ async function checkDeterministic(page) {
 
   // (1): 4 dropzones
   const initial = await page.evaluate(() => {
-    const zones = [...document.querySelectorAll('is-dropzone')];
+    const zones = [...document.querySelectorAll('iswc-dropzone')];
     return zones.map((z) => {
       const sr = z.shadowRoot;
       const zone = sr.querySelector('.zone');
       const r = zone?.getBoundingClientRect();
       return {
-        hasIcon: !!sr.querySelector('is-icon'),
+        hasIcon: !!sr.querySelector('iswc-icon'),
         titleText: zone?.querySelector('.title')?.textContent ?? '',
         subText: zone?.querySelector('.sub')?.textContent ?? '',
         zoneW: r?.width ?? 0,

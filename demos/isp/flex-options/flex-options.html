@@ -3,8 +3,8 @@
 <head>
 <meta charset="utf-8" />
 <meta name="viewport" content="width=device-width, initial-scale=1" />
-<title>&lt;is-flex-options&gt; · is-webcomponents</title>
-<meta name="description" content="Toolbar de acciones a partir de un array tipo ISP FlexOptionsInput[] — pinta is-button, is-check-icon-button y is-dropdown." />
+<title>&lt;iswc-flex-options&gt; · is-webcomponents</title>
+<meta name="description" content="Toolbar de acciones a partir de un array tipo ISP FlexOptionsInput[] — pinta iswc-button, iswc-check-icon-button y iswc-dropdown." />
 <style>
   html, body { margin: 0; padding: 0; min-height: 100%; background: #0c1118; color: #e2e8f0; font-family: ui-sans-serif, system-ui, sans-serif; }
   body { display: grid; grid-template-rows: auto 1fr; min-height: 100vh; }
@@ -18,21 +18,21 @@
   main { display: grid; gap: 24px; padding: 20px; max-width: 1000px; margin: 0 auto; width: 100%; box-sizing: border-box; }
   section h2 { font-size: 14px; font-weight: 600; margin: 0 0 8px; color: #94a3b8; }
   .log { font: 12px ui-monospace, Menlo, Consolas, monospace; background: rgba(0,0,0,0.3); padding: 8px; border-radius: 4px; min-height: 60px; white-space: pre-wrap; }
-  is-flex-options:not(:defined) { visibility: hidden; }
+  iswc-flex-options:not(:defined) { visibility: hidden; }
   /* Forzar visibilidad del toolbar shadow */
-  is-flex-options::part(toolbar) { display: flex; gap: 4px; align-items: center; padding: 8px; background: rgba(255,255,255,0.04); border-radius: 6px; }
+  iswc-flex-options::part(toolbar) { display: flex; gap: 4px; align-items: center; padding: 8px; background: rgba(255,255,255,0.04); border-radius: 6px; }
 </style>
 <script type="module">
   // Dependencias transitivas de flex-options.
-  await import('../../../dist/cdn/actions/button.min.js?h=ki2dk5');
-  await import('../../../dist/cdn/actions/button-group.min.js?h=v2y788');
-  await import('../../../dist/cdn/actions/check-icon-button.min.js?h=01xpv4');
-  await import('../../../dist/cdn/actions/dropdown.min.js?h=vgzyws');
-  await import('../../../dist/cdn/actions/dropdown-item.min.js?h=gwwvkx');
-  await import('../../../dist/cdn/layout/divider.min.js?h=siycwk');
-  await import('../../../dist/cdn/media/icon.min.js?h=y6tzub');
-  await import('../../../dist/cdn/isp/flex-options.min.js?h=wcxjuc');
-  await customElements.whenDefined('is-flex-options');
+  await import('../../../dist/cdn/actions/button.min.js?h=5i9tzt');
+  await import('../../../dist/cdn/actions/button-group.min.js?h=delm48');
+  await import('../../../dist/cdn/actions/check-icon-button.min.js?h=wwi8c3');
+  await import('../../../dist/cdn/actions/dropdown.min.js?h=u9x6om');
+  await import('../../../dist/cdn/actions/dropdown-item.min.js?h=pz46gs');
+  await import('../../../dist/cdn/layout/divider.min.js?h=cqtdv2');
+  await import('../../../dist/cdn/media/icon.min.js?h=sp71yy');
+  await import('../../../dist/cdn/isp/flex-options.min.js?h=tt37p8');
+  await customElements.whenDefined('iswc-flex-options');
 
   const eventLog = document.getElementById('event-log');
   const log = (m) => { eventLog.textContent += new Date().toISOString().slice(11, 19) + ' ' + m + '\n'; };
@@ -77,11 +77,11 @@
     { icon: 'mdi:home', title: 'Inicio', onClick: () => log('Inicio') },
   ];
   // Capturar referencia al primer botón
-  firstChild = opts4.shadowRoot.querySelector('[role="button"], is-button, button');
+  firstChild = opts4.shadowRoot.querySelector('[role="button"], iswc-button, button');
   opts4.actions = [
     { icon: 'mdi:cog', title: 'Ajustes', onClick: () => log('Ajustes') },
   ];
-  const secondChild = opts4.shadowRoot.querySelector('[role="button"], is-button, button');
+  const secondChild = opts4.shadowRoot.querySelector('[role="button"], iswc-button, button');
 
   // Exponer info al test (no al usuario): atributo data-paint-consistent
   setTimeout(() => {
@@ -95,31 +95,31 @@
 <body>
 <header>
   <div>
-    <h1>&lt;is-flex-options&gt; — toolbar de acciones declarativa</h1>
-    <p>Pinta is-button / is-check-icon-button / is-dropdown con un array de specs.</p>
+    <h1>&lt;iswc-flex-options&gt; — toolbar de acciones declarativa</h1>
+    <p>Pinta iswc-button / iswc-check-icon-button / iswc-dropdown con un array de specs.</p>
   </div>
   <div class="spacer"></div>
-  <code>is-flex-options</code>
+  <code>iswc-flex-options</code>
 </header>
 <main>
   <section>
     <h2>Acciones planas</h2>
-    <is-flex-options id="opts1"></is-flex-options>
+    <iswc-flex-options id="opts1"></iswc-flex-options>
   </section>
 
   <section>
     <h2>Grupos + menú "más"</h2>
-    <is-flex-options id="opts2"></is-flex-options>
+    <iswc-flex-options id="opts2"></iswc-flex-options>
   </section>
 
   <section>
     <h2>Compact (iconos sin label)</h2>
-    <is-flex-options id="opts3"></is-flex-options>
+    <iswc-flex-options id="opts3"></iswc-flex-options>
   </section>
 
   <section>
     <h2>Re-asignación re-pinta</h2>
-    <is-flex-options id="opts4"></is-flex-options>
+    <iswc-flex-options id="opts4"></iswc-flex-options>
     <p style="font-size: 12px; color: #94a3b8;">Cambia la spec de acciones y verifica que el DOM se actualiza.</p>
   </section>
 

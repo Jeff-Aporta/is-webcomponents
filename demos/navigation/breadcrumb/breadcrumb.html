@@ -3,7 +3,7 @@
 <head>
 <meta charset="utf-8" />
 <meta name="viewport" content="width=device-width, initial-scale=1" />
-<title>Demo de <is-breadcrumb> · is-webcomponents</title>
+<title>Demo de <iswc-breadcrumb> · is-webcomponents</title>
 <meta name="description" content="Landmark de navegación tipo migas de pan: contenedor con aria-label, separador por slot, items con href / current / icon." />
 <style>
   html, body { margin: 0; padding: 0; min-height: 100%; background: #0c1118; color: #e2e8f0; font-family: ui-sans-serif, system-ui, sans-serif; }
@@ -29,9 +29,9 @@
   }
   section .desc { font-size: 12px; color: #94a3b8; margin: 0 0 14px 0; }
   section code { background: rgba(255,255,255,0.06); padding: 1px 5px; border-radius: 3px; font: 11px ui-monospace, Menlo, Consolas, monospace; }
-  is-breadcrumb { display: block; }
-  is-breadcrumb:not(:defined) { visibility: hidden; }
-  is-breadcrumb-item:not(:defined) { visibility: hidden; }
+  iswc-breadcrumb { display: block; }
+  iswc-breadcrumb:not(:defined) { visibility: hidden; }
+  iswc-breadcrumb-item:not(:defined) { visibility: hidden; }
   footer {
     padding: 12px 20px; border-top: 1px solid rgba(255,255,255,0.1);
     background: #0f1620; font-size: 11px; color: #94a3b8;
@@ -41,14 +41,14 @@
 <script type="module">
   // Carga desde el bundle pre-construido. Funciona con cualquier servidor
   // estático (incluido VS Code Live Server), no solo con dev server.
-  await import('../../../dist/cdn/navigation/breadcrumb.min.js?h=7vfcm9');
-  await import('../../../dist/cdn/navigation/breadcrumb-item.min.js?h=dfw531');
-  await customElements.whenDefined('is-breadcrumb');
-  await customElements.whenDefined('is-breadcrumb-item');
+  await import('../../../dist/cdn/navigation/breadcrumb.min.js?h=t16ety');
+  await import('../../../dist/cdn/navigation/breadcrumb-item.min.js?h=s9avlh');
+  await customElements.whenDefined('iswc-breadcrumb');
+  await customElements.whenDefined('iswc-breadcrumb-item');
 
   // Helper: crea un breadcrumb-item con href/icon opcionales y texto slot default.
   function makeItem(text, { href, icon, target, rel, current } = {}) {
-    const item = document.createElement('is-breadcrumb-item');
+    const item = document.createElement('iswc-breadcrumb-item');
     if (href !== undefined) item.setAttribute('href', href);
     if (icon) item.setAttribute('icon', icon);
     if (target) item.setAttribute('target', target);
@@ -60,7 +60,7 @@
   }
 
   // (1) Básico: ruta Home / Productos / Categoría / Item
-  const basic = document.createElement('is-breadcrumb');
+  const basic = document.createElement('iswc-breadcrumb');
   basic.setAttribute('label', 'Ruta de página');
   basic.appendChild(makeItem('Inicio', { href: '/', icon: 'mdi:home' }));
   basic.appendChild(makeItem('Productos', { href: '/productos' }));
@@ -69,7 +69,7 @@
   document.getElementById('basic').appendChild(basic);
 
   // (2) Label custom en el nav (migas en inglés)
-  const en = document.createElement('is-breadcrumb');
+  const en = document.createElement('iswc-breadcrumb');
   en.setAttribute('label', 'Breadcrumb');
   en.appendChild(makeItem('Home', { href: '/en' }));
   en.appendChild(makeItem('Docs', { href: '/en/docs' }));
@@ -77,7 +77,7 @@
   document.getElementById('en').appendChild(en);
 
   // (3) Items sin href (SPA: el dev maneja el routing por evento click)
-  const spa = document.createElement('is-breadcrumb');
+  const spa = document.createElement('iswc-breadcrumb');
   spa.setAttribute('label', 'Navegación SPA');
   spa.appendChild(makeItem('Panel'));
   spa.appendChild(makeItem('Usuarios'));
@@ -85,7 +85,7 @@
   document.getElementById('spa').appendChild(spa);
 
   // (4) Separator custom (override del chevron por defecto)
-  const sep = document.createElement('is-breadcrumb');
+  const sep = document.createElement('iswc-breadcrumb');
   sep.setAttribute('label', 'Ruta con separador slash');
   const sepOverride = document.createElement('span');
   sepOverride.setAttribute('slot', 'separator');
@@ -98,7 +98,7 @@
   document.getElementById('separator').appendChild(sep);
 
   // (5) target=_blank en un item (link externo)
-  const target = document.createElement('is-breadcrumb');
+  const target = document.createElement('iswc-breadcrumb');
   target.setAttribute('label', 'Ruta con link externo');
   target.appendChild(makeItem('Docs', { href: '/docs' }));
   target.appendChild(makeItem('API externa', { href: 'https://example.com/api', target: '_blank', rel: 'noopener' }));
@@ -107,7 +107,7 @@
 
   // Log de clicks en items (útil para tests).
   window.addEventListener('click', (e) => {
-    const item = e.target.closest('is-breadcrumb-item');
+    const item = e.target.closest('iswc-breadcrumb-item');
     if (item) {
       console.log('[breadcrumb] click', item.getAttribute('href') ?? '(none)');
     }
@@ -118,7 +118,7 @@
 </head>
 <body>
 <header>
-  <h1>Demo — <code>&lt;is-breadcrumb&gt;</code> y <code>&lt;is-breadcrumb-item&gt;</code></h1>
+  <h1>Demo — <code>&lt;iswc-breadcrumb&gt;</code> y <code>&lt;iswc-breadcrumb-item&gt;</code></h1>
   <p>Landmark <code>&lt;nav&gt;</code> con <code>aria-label</code>, separador configurable y soporte para <code>href</code>, <code>target</code>, <code>aria-current="page"</code>.</p>
 </header>
 <main>
@@ -149,7 +149,7 @@
   </section>
 </main>
 <footer>
-  Estado: <code>customElements.whenDefined('is-breadcrumb')</code> resuelto. Landmark con <code>aria-label</code>.
+  Estado: <code>customElements.whenDefined('iswc-breadcrumb')</code> resuelto. Landmark con <code>aria-label</code>.
 </footer>
 </body>
 </html>

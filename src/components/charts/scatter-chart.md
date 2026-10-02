@@ -1,22 +1,22 @@
 ---
-tag: is-scatter-chart
+tag: iswc-scatter-chart
 tags:
-  - is-scatter-chart
+  - iswc-scatter-chart
 category: charts
 status: public
 source: ./scatter-chart.js
 style: ./scatter-chart.css
 preview: ./scatter-chart.json
 ---
-# `<is-scatter-chart>`
+# `<iswc-scatter-chart>`
 
 ## Propósito
 
-Wrapper tipado de `<is-chart>` con `type` fijo en `scatter`. Misma API
+Wrapper tipado de `<iswc-chart>` con `type` fijo en `scatter`. Misma API
 de configuración Chart.js (`config` / `<script type="application/json">`);
 el atributo `type` no se cambia.
 
-Este módulo registra `<is-scatter-chart>`.
+Este módulo registra `<iswc-scatter-chart>`.
 
 ## Cuándo usarlo
 
@@ -25,7 +25,7 @@ de gráfica es siempre scatter chart.
 
 ## Cuándo no usarlo
 
-Si el tipo puede cambiar en runtime, usar `<is-chart type="scatter">`.
+Si el tipo puede cambiar en runtime, usar `<iswc-chart type="scatter">`.
 No crear otro engine: hereda marks/engine de `chart.js`.
 
 ## Importación
@@ -37,7 +37,7 @@ import './scatter-chart.js';
 ## Ejemplo mínimo
 
 ```html
-<is-scatter-chart>
+<iswc-scatter-chart>
   <script type="application/json">
   {
     "data": {
@@ -46,14 +46,14 @@ import './scatter-chart.js';
     }
   }
   </script>
-</is-scatter-chart>
+</iswc-scatter-chart>
 ```
 
 ## API
 
 ### Atributos y propiedades
 
-Hereda de `<is-chart>` (ver [chart.md](./chart.md)). `type` queda fijado
+Hereda de `<iswc-chart>` (ver [chart.md](./chart.md)). `type` queda fijado
 en `scatter` por la clase tipada.
 
 #### Atributos observados
@@ -95,9 +95,9 @@ en `scatter` por la clase tipada.
 
 | Evento | detail | bubbles | composed | cancelable |
 | --- | --- | --- | --- | --- |
-| `is-render` | sí | sí | sí | no |
-| `is-turtle-state` | sí | sí | sí | no |
-| `is-open-viewer` | sí | sí | sí | sí |
+| `iswc-render` | sí | sí | sí | no |
+| `iswc-turtle-state` | sí | sí | sí | no |
+| `iswc-open-viewer` | sí | sí | sí | sí |
 
 ### Métodos y propiedades públicas
 
@@ -122,7 +122,7 @@ No expone.
 
 ### CSS custom properties
 
-Misma familia de tokens que `<is-chart>` (ver [chart.md](./chart.md)).
+Misma familia de tokens que `<iswc-chart>` (ver [chart.md](./chart.md)).
 
 ### Integración con formularios
 
@@ -132,7 +132,7 @@ No declara integración form-associated propia en este módulo.
 
 Documentación de cabecera preservada desde fuente:
 
-> `<is-scatter-chart>` — wrapper tipado vía `defineTypedChart('is-scatter-chart', 'scatter', …)`.
+> `<iswc-scatter-chart>` — wrapper tipado vía `defineTypedChart('iswc-scatter-chart', 'scatter', …)`.
 > Importa `./chart.js` y registra marks del tipo fijo.
 > Consumo compatible con Chart.js: `config` o `<script type="application/json">`
 > hijo con forma `{ data: { labels, datasets }, options }` (`type` lo fija el tag).
@@ -145,16 +145,16 @@ Documentación de cabecera preservada desde fuente:
 - [`../_shared/svg-chart-engine.js`](../_shared/svg-chart-engine.js)
 - [`../_shared/chart-palette.js`](../_shared/chart-palette.js)
 
-Tags del módulo: `<is-scatter-chart>`.
+Tags del módulo: `<iswc-scatter-chart>`.
 
 ## Accesibilidad
 
-Preservar semántica, foco, teclado, labels y ARIA. Hereda contrato de `<is-chart>`.
+Preservar semántica, foco, teclado, labels y ARIA. Hereda contrato de `<iswc-chart>`.
 
 ## Ejemplo avanzado
 
 ```html
-<is-scatter-chart label="Scatter Chart" legend-position="bottom">
+<iswc-scatter-chart label="Scatter Chart" legend-position="bottom">
   <script type="application/json">
   {
     "data": {
@@ -163,7 +163,7 @@ Preservar semántica, foco, teclado, labels y ARIA. Hereda contrato de `<is-char
     }
   }
   </script>
-</is-scatter-chart>
+</iswc-scatter-chart>
 ```
 
 ## Errores comunes

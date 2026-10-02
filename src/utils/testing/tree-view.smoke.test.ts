@@ -16,7 +16,7 @@
  *  - `applyDefaultExpansion` (auto-expande grouper nodes).
  *
  * El exhaustivo de `exhaustive/isp/tree-view.test.ts` cubre el wrapper DOM
- * (`<is-tree-view>`); este smoke garantiza que las firmas tipadas no rompen
+ * (`<iswc-tree-view>`); este smoke garantiza que las firmas tipadas no rompen
  * el contrato de las funciones puras.
  */
 

@@ -3,7 +3,7 @@ import { escapeHtml } from '../_shared/dom-utils.js';
 import { ElementBase } from '../../core/element-base.js';
 
 /**
- * <is-spreadsheet> — Hoja de cálculo mínima con edición por celda y fórmulas.
+ * <iswc-spreadsheet> — Hoja de cálculo mínima con edición por celda y fórmulas.
  *
  * Atributos
  *   rows         número de filas inicial (default 20)
@@ -24,8 +24,8 @@ import { ElementBase } from '../../core/element-base.js';
  *   Esc           cancelar edición
  *
  * Eventos
- *   is-change     detail: { row, col, raw, value }
- *   is-select     detail: { row, col, value }
+ *   iswc-change     detail: { row, col, raw, value }
+ *   iswc-select     detail: { row, col, value }
  */
 (() => {
   const OBSERVED = ['rows', 'cols', 'value', 'read-only'];
@@ -64,7 +64,7 @@ import { ElementBase } from '../../core/element-base.js';
   /** Cache de evaluación de fórmulas (clave `"row,col"` → resultado). */
   type FormulaCache = Map<string, string | number>;
 
-  /** Detalle del evento `is-change` y `is-select`. */
+  /** Detalle del evento `iswc-change` y `iswc-select`. */
   interface CellEventDetail {
     row: number;
     col: number;
@@ -72,7 +72,7 @@ import { ElementBase } from '../../core/element-base.js';
     value: string | number;
   }
 
-  class IsSpreadsheet extends ElementBase {
+  class IswcSpreadsheet extends ElementBase {
     static get observedAttributes(): string[] { return OBSERVED; }
     #data: Data = [];
     #editing: Editing | null = null;
@@ -247,7 +247,7 @@ import { ElementBase } from '../../core/element-base.js';
       this.#recompute();
       this.#render();
       const detail: CellEventDetail = { row: r, col: c, raw, value: cell.computed };
-      emit(this, 'is-change', detail);
+      emit(this, 'iswc-change', detail);
     }
 
     #move(r: number, c: number): void {
@@ -413,5 +413,5 @@ import { ElementBase } from '../../core/element-base.js';
     return n - 1;
   }
 
-  defineElement('is-spreadsheet', IsSpreadsheet);
+  defineElement('iswc-spreadsheet', IswcSpreadsheet);
 })();

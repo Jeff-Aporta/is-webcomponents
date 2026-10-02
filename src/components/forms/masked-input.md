@@ -1,14 +1,14 @@
 ---
-tag: is-masked-input
+tag: iswc-masked-input
 tags:
-  - is-masked-input
+  - iswc-masked-input
 category: forms
 status: public
 source: ./masked-input.js
 style: ./masked-input.css
 preview: ./masked-input.json
 ---
-# `<is-masked-input>`
+# `<iswc-masked-input>`
 
 ## Propósito
 
@@ -16,7 +16,7 @@ Campo de texto con máscara: tokeniza un `pattern` y reformatea el valor en
 cada pulsación (tarjeta, NIT, teléfono, fecha, placa). El formateo lo resuelve
 `masks-tokens.js`.
 
-Este módulo registra `<is-masked-input>`.
+Este módulo registra `<iswc-masked-input>`.
 
 ## Cuándo usarlo
 
@@ -24,9 +24,9 @@ Entrada de texto con formato fijo y verificable carácter a carácter.
 
 ## Cuándo no usarlo
 
-Para texto libre usar `<is-input>`; para OTP/PIN usar `<is-pin-input>`; para
-fecha con calendario usar `<is-date-input>`; para moneda con separadores de
-miles usar el formateo de `<is-input>` y `format.js`.
+Para texto libre usar `<iswc-input>`; para OTP/PIN usar `<iswc-pin-input>`; para
+fecha con calendario usar `<iswc-date-input>`; para moneda con separadores de
+miles usar el formateo de `<iswc-input>` y `format.js`.
 
 ## Importación
 
@@ -37,7 +37,7 @@ import './masked-input.js';
 ## Ejemplo mínimo
 
 ```html
-<is-masked-input pattern="0000 0000 0000 0000"></is-masked-input>
+<iswc-masked-input pattern="0000 0000 0000 0000"></iswc-masked-input>
 ```
 
 ## API
@@ -92,12 +92,12 @@ Tokens de `pattern`:
 
 | Evento | detail | bubbles | composed | cancelable |
 | --- | --- | --- | --- | --- |
-| `is-input` | sin detail | sí | sí | no |
-| `is-change` | `{ value }` | sí | sí | no |
-| `is-complete` | sin detail | sí | sí | no |
+| `iswc-input` | sin detail | sí | sí | no |
+| `iswc-change` | `{ value }` | sí | sí | no |
+| `iswc-complete` | sin detail | sí | sí | no |
 
-`is-input` en cada pulsación; `is-change` al confirmar (`change` del input
-interno, reemitido porque no cruza el shadow root); `is-complete` cada vez que
+`iswc-input` en cada pulsación; `iswc-change` al confirmar (`change` del input
+interno, reemitido porque no cruza el shadow root); `iswc-complete` cada vez que
 el valor pasa a estar completo.
 
 ### Métodos y propiedades públicas
@@ -163,7 +163,7 @@ campo espejo.
 - [`../_shared/form-associated.js`](../_shared/form-associated.js)
 - [`../_shared/reflect.js`](../_shared/reflect.js)
 
-Tags del módulo: `<is-masked-input>`.
+Tags del módulo: `<iswc-masked-input>`.
 
 ## Accesibilidad
 
@@ -175,15 +175,15 @@ asociada al componente.
 ## Ejemplo avanzado
 
 ```html
-<is-masked-input id="tarjeta" pattern="0000 0000 0000 0000"
+<iswc-masked-input id="tarjeta" pattern="0000 0000 0000 0000"
                  name="tarjeta" required variant="filled">
-  <is-icon slot="start" name="mdi:credit-card"></is-icon>
-</is-masked-input>
+  <iswc-icon slot="start" name="mdi:credit-card"></iswc-icon>
+</iswc-masked-input>
 
 <script type="module">
   const campo = document.getElementById('tarjeta');
-  campo.addEventListener('is-complete', () => console.log('crudo:', campo.raw));
-  campo.addEventListener('is-change', (e) => console.log('confirmado:', e.detail.value));
+  campo.addEventListener('iswc-complete', () => console.log('crudo:', campo.raw));
+  campo.addEventListener('iswc-change', (e) => console.log('confirmado:', e.detail.value));
 </script>
 ```
 

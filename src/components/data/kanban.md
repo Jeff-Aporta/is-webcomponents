@@ -1,16 +1,16 @@
 ---
-tag: is-kanban
+tag: iswc-kanban
 tags:
-  - is-kanban
-  - is-kanban-column
-  - is-kanban-card
+  - iswc-kanban
+  - iswc-kanban-column
+  - iswc-kanban-card
 category: data
 status: public
 source: ./kanban.js
 style: ./kanban.css
 preview: ./kanban.json
 ---
-# `<is-kanban>` / `<is-kanban-column>` / `<is-kanban-card>`
+# `<iswc-kanban>` / `<iswc-kanban-column>` / `<iswc-kanban-card>`
 
 ## Propósito
 
@@ -18,7 +18,7 @@ Tablero kanban con columnas y tarjetas. Cada columna tiene un accent
 color, badge automático con el conteo, slots de header-actions y
 cards con cover, heading, meta, tag y footer.
 
-Este módulo registra `<is-kanban>`, `<is-kanban-column>`, `<is-kanban-card>`.
+Este módulo registra `<iswc-kanban>`, `<iswc-kanban-column>`, `<iswc-kanban-card>`.
 
 ## Cuándo usarlo
 
@@ -37,11 +37,11 @@ import './kanban.js';
 ## Ejemplo mínimo
 
 ```html
-<is-kanban>
-<is-kanban-column title="Pending" accent="dodgerblue">
-<is-kanban-card heading="Diseñar landing" tag="Design">…</is-kanban-card>
-</is-kanban-column>
-</is-kanban>
+<iswc-kanban>
+<iswc-kanban-column title="Pending" accent="dodgerblue">
+<iswc-kanban-card heading="Diseñar landing" tag="Design">…</iswc-kanban-card>
+</iswc-kanban-column>
+</iswc-kanban>
 ```
 
 ## API
@@ -79,7 +79,7 @@ No expone.
 
 | Evento | detail | bubbles | composed | cancelable |
 | --- | --- | --- | --- | --- |
-| `is-kanban-card-click` | sí | sí | sí | no |
+| `iswc-kanban-card-click` | sí | sí | sí | no |
 
 ### Métodos y propiedades públicas
 
@@ -141,19 +141,19 @@ No declara integración form-associated propia en este módulo.
 
 Documentación de cabecera preservada desde fuente:
 
-> <is-kanban> + <is-kanban-column> + <is-kanban-card> — Tablero (vanilla, zero dependencies).
->   <is-kanban>
->     <is-kanban-column title="Pendiente">
->       <is-kanban-card heading="Tarea 1">Descripción</is-kanban-card>
->     </is-kanban-column>
->   </is-kanban>
-> Atributos <is-kanban>
+> <iswc-kanban> + <iswc-kanban-column> + <iswc-kanban-card> — Tablero (vanilla, zero dependencies).
+>   <iswc-kanban>
+>     <iswc-kanban-column title="Pendiente">
+>       <iswc-kanban-card heading="Tarea 1">Descripción</iswc-kanban-card>
+>     </iswc-kanban-column>
+>   </iswc-kanban>
+> Atributos <iswc-kanban>
 >   columns        number — nº columnas visibles al estilo "compact".
-> Atributos <is-kanban-column>
+> Atributos <iswc-kanban-column>
 >   title          string
 >   accent         string (color, e.g. dodgerblue, #0bb783)
 >   badge          string — opcional en el header.
-> Atributos <is-kanban-card>
+> Atributos <iswc-kanban-card>
 >   heading        string
 >   meta           string — bajo el heading.
 >   tag            string — texto de la badge lateral.
@@ -161,20 +161,20 @@ Documentación de cabecera preservada desde fuente:
 >   cover          string — URL de imagen de cabecera.
 >   without-shadow boolean
 > Slots
->   <is-kanban-column>
+>   <iswc-kanban-column>
 >     (default)       cards.
 >     header-actions  elementos en la cabecera.
->   <is-kanban-card>
+>   <iswc-kanban-card>
 >     (default)        descripción.
 >     footer           pie de la card.
 > Eventos
->   is-kanban-card-click  detail: { card, column }
+>   iswc-kanban-card-click  detail: { card, column }
 
 ## Dependencias y componentes relacionados
 
 - [`../_shared/adopt-css.js`](../_shared/adopt-css.js)
 
-Tags del módulo: `<is-kanban>`, `<is-kanban-column>`, `<is-kanban-card>`.
+Tags del módulo: `<iswc-kanban>`, `<iswc-kanban-column>`, `<iswc-kanban-card>`.
 
 ## Accesibilidad
 
@@ -183,11 +183,11 @@ Preservar semántica, foco, teclado, labels y ARIA. ARIA detectado: ninguno expl
 ## Ejemplo avanzado
 
 ```html
-<is-kanban>
-<is-kanban-column title="Pending" accent="dodgerblue">
-<is-kanban-card heading="Diseñar landing" tag="Design">…</is-kanban-card>
-</is-kanban-column>
-</is-kanban>
+<iswc-kanban>
+<iswc-kanban-column title="Pending" accent="dodgerblue">
+<iswc-kanban-card heading="Diseñar landing" tag="Design">…</iswc-kanban-card>
+</iswc-kanban-column>
+</iswc-kanban>
 ```
 
 ## Errores comunes

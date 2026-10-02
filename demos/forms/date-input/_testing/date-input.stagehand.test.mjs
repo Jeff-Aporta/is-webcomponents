@@ -49,8 +49,8 @@ async function checkDeterministic(page) {
   const info = await page.evaluate(() => {
     const el = document.getElementById('demo');
     const dialog = el.shadowRoot.querySelector('dialog');
-    const picker = el.shadowRoot.querySelector('is-date-picker');
-    const field = el.shadowRoot.querySelector('is-date-field');
+    const picker = el.shadowRoot.querySelector('iswc-date-picker');
+    const field = el.shadowRoot.querySelector('iswc-date-field');
     const dialogRect = dialog.getBoundingClientRect();
     const pickerRect = picker?.getBoundingClientRect();
     const trigger = el.shadowRoot.querySelector('[part="trigger"]');

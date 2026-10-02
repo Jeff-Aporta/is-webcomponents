@@ -1,14 +1,14 @@
 ---
-tag: is-flex-layout
+tag: iswc-flex-layout
 tags:
-  - is-flex-layout
+  - iswc-flex-layout
 category: isp
 status: public
 source: ./flex-layout.js
 style: ./flex-layout.css
 preview: ./flex-layout.json
 ---
-# `<is-flex-layout>`
+# `<iswc-flex-layout>`
 
 ## Propósito
 
@@ -16,7 +16,7 @@ Contenedor flex declarativo: dirección, gap, justificación, alineación,
 crecimiento y límites de tamaño por atributos. Port de
 `src/lib/layout/FlexLayout.svelte` de ISP.
 
-Este módulo registra `<is-flex-layout>`.
+Este módulo registra `<iswc-flex-layout>`.
 
 ## Cuándo usarlo
 
@@ -27,7 +27,7 @@ propio contenedor.
 ## Cuándo no usarlo
 
 No usar cuando el layout ya está resuelto por el CSS de la página, ni para
-rejillas bidimensionales — para eso está `<is-grid-layout>`.
+rejillas bidimensionales — para eso está `<iswc-grid-layout>`.
 
 ## Importación
 
@@ -38,10 +38,10 @@ import './flex-layout.js';
 ## Ejemplo mínimo
 
 ```html
-<is-flex-layout gap="0.5rem" justify="between" align="center">
+<iswc-flex-layout gap="0.5rem" justify="between" align="center">
   <span>Izquierda</span>
-  <is-button>Acción</is-button>
-</is-flex-layout>
+  <iswc-button>Acción</iswc-button>
+</iswc-flex-layout>
 ```
 
 ## Mapeo Svelte → Web Component
@@ -102,7 +102,7 @@ También refleja `data-sizew` y `data-szw-*` (ver `block-layout.md`).
 
 | Evento | detail | bubbles | composed | cancelable |
 | --- | --- | --- | --- | --- |
-| `is-breakpoint` | `{ width, sizew, boolszw, lerpw }` | sí | sí | no |
+| `iswc-breakpoint` | `{ width, sizew, boolszw, lerpw }` | sí | sí | no |
 
 ### Métodos y propiedades públicas
 
@@ -144,7 +144,7 @@ host y gana sobre esa escalera.
 - [`block-layout.js`](block-layout.js) (`BreakpointHost`)
 - [`../_shared/adopt-css.js`](../_shared/adopt-css.js)
 
-Tags del módulo: `<is-flex-layout>`.
+Tags del módulo: `<iswc-flex-layout>`.
 
 ## Accesibilidad
 
@@ -155,13 +155,13 @@ mientras no se usen `order`/`row-reverse` desde fuera.
 
 ```html
 <div style="font-size: 1.2em">
-  <is-flex-layout direction="column" gap="0.75rem" max-width="30rem" align="stretch">
-    <is-input placeholder="Nombre"></is-input>
-    <is-flex-layout justify="end" gap="0.5rem">
-      <is-button variant="plain">Cancelar</is-button>
-      <is-button>Guardar</is-button>
-    </is-flex-layout>
-  </is-flex-layout>
+  <iswc-flex-layout direction="column" gap="0.75rem" max-width="30rem" align="stretch">
+    <iswc-input placeholder="Nombre"></iswc-input>
+    <iswc-flex-layout justify="end" gap="0.5rem">
+      <iswc-button variant="plain">Cancelar</iswc-button>
+      <iswc-button>Guardar</iswc-button>
+    </iswc-flex-layout>
+  </iswc-flex-layout>
 </div>
 ```
 

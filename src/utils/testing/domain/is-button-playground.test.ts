@@ -1,5 +1,5 @@
 /**
- * is-button-playground.test.ts — el playground debe tener behavior cableado.
+ * iswc-button-playground.test.ts — el playground debe tener behavior cableado.
  */
 import assert from 'node:assert/strict';
 import { readFileSync, existsSync } from 'node:fs';
@@ -10,9 +10,9 @@ import test from 'node:test';
 const root = join(dirname(fileURLToPath(import.meta.url)), '..', '..', '..', '..');
 const read = (rel) => readFileSync(join(root, rel), 'utf8');
 
-test('catalog registra behavior de is-button', () => {
+test('catalog registra behavior de iswc-button', () => {
   const cat = read('src/previews/catalog.ts');
-  assert.match(cat, /"is-button"[\s\S]*?\.\.\/components\/actions\/button\.preview\.js/);
+  assert.match(cat, /"iswc-button"[\s\S]*?\.\.\/components\/actions\/button\.preview\.js/);
   assert.ok(existsSync(join(root, 'src/components/actions/button.preview.ts')));
 });
 

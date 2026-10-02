@@ -12,7 +12,7 @@ try {
   await page.waitForTimeout(150);
 
   const data = await page.evaluate(() => {
-    const items = [...document.querySelectorAll('main is-format-date')].map((el, idx) => {
+    const items = [...document.querySelectorAll('main iswc-format-date')].map((el, idx) => {
       const r = el.getBoundingClientRect();
       const t = el.shadowRoot.querySelector('time');
       const cs = getComputedStyle(t ?? el);

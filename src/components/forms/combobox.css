@@ -61,7 +61,9 @@
     font-size: 1.05em;
   }
 
-  .clear[hidden] { display: none !important; }
+  .clear {
+    &[hidden] { display: none !important; }
+  }
 
   /* Dialog a viewport completo en top layer → no lo clippea overflow */
   .popup {
@@ -77,10 +79,10 @@
     background: transparent;
     overflow: visible;
     outline: none;
-  }
 
-  .popup::backdrop {
-    background: transparent;
+    &::backdrop {
+      background: transparent;
+    }
   }
 
   .listbox {
@@ -106,12 +108,12 @@
     overflow: hidden;
     text-overflow: ellipsis;
     &:hover { background: var(--iswc-control-bg-hover, #e9ecef); }
-  }
 
-  .option[aria-selected="true"],
-  .option[data-active] {
-    background: var(--iswc-accent-bg, rgb(224 49 49 / 12%));
-    color: var(--iswc-brand-text, var(--iswc-color-brand-stronger, #a61e1e));
+    &[aria-selected="true"],
+    &[data-active] {
+      background: var(--iswc-accent-bg, rgb(224 49 49 / 12%));
+      color: var(--iswc-brand-text, var(--iswc-color-brand-stronger, #a61e1e));
+    }
   }
 }
 
@@ -120,13 +122,17 @@
   pointer-events: none;
 }
 
-:host([open]) .base,
-:host(:state(open)) .base {
-  outline: 2px solid var(--iswc-combobox-focus, var(--iswc-focus));
-  outline-offset: 1px;
+:host([open]),
+:host(:state(open)) {
+  .base {
+    outline: 2px solid var(--iswc-combobox-focus, var(--iswc-focus));
+    outline-offset: 1px;
+  }
 }
 
-:host([open]) .trigger svg,
-:host(:state(open)) .trigger svg {
-  transform: rotate(180deg);
+:host([open]),
+:host(:state(open)) {
+  .trigger {
+    svg { transform: rotate(180deg); }
+  }
 }

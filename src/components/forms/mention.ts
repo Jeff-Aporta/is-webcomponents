@@ -1,7 +1,7 @@
 import { adoptCss, defineElement, emit } from '../../core/element.js';
 
 /**
- * <is-mention> — Input con autocompletado al tipear @usuario o #etiqueta.
+ * <iswc-mention> — Input con autocompletado al tipear @usuario o #etiqueta.
  *
  * Atributos
  *   value, name, placeholder, disabled, readonly
@@ -20,15 +20,15 @@ import { adoptCss, defineElement, emit } from '../../core/element.js';
  *   ("@Ana "). Para chips visuales en backend, el `value` siempre es texto.
  *
  * Eventos
- *   is-input, is-change
- *   is-select  detail: { trigger, item, range: [start, end] }
+ *   iswc-input, iswc-change
+ *   iswc-select  detail: { trigger, item, range: [start, end] }
  */
 (() => {
   const OBSERVED: string[] = ['value', 'name', 'placeholder', 'disabled', 'readonly', 'trigger', 'max-items'];
 
   type SuggestionsMap = Record<string, string[]>;
 
-  class IsMention extends HTMLElement {
+  class IswcMention extends HTMLElement {
     static get observedAttributes(): string[] { return OBSERVED; }
 
     #input!: HTMLInputElement;
@@ -114,7 +114,7 @@ import { adoptCss, defineElement, emit } from '../../core/element.js';
 
     #onInput(): void {
       this.setAttribute('value', this.#input.value);
-      emit(this, 'is-input');
+      emit(this, 'iswc-input');
       const triggers = (this.getAttribute('trigger') || '@#').split('');
       const caret = this.#input.selectionStart ?? this.#input.value.length;
       const before = this.#input.value.slice(0, caret);
@@ -149,7 +149,7 @@ import { adoptCss, defineElement, emit } from '../../core/element.js';
       items.forEach((it: string, i: number) => {
         const opt = document.createElement('button');
         opt.type = 'button';
-        opt.className = 'opt' + (i === this.#activeIndex ? ' is-active' : '');
+        opt.className = 'opt' + (i === this.#activeIndex ? ' iswc-active' : '');
         opt.setAttribute('role', 'option');
         opt.dataset.value = it;
         opt.innerHTML = `<span class="t">${triggerChar}</span><span>${String(it).replace(/</g, '&lt;')}</span>`;
@@ -204,10 +204,10 @@ import { adoptCss, defineElement, emit } from '../../core/element.js';
       try { this.#input.setSelectionRange(caret, caret); } catch { /* noop */ }
       this.setAttribute('value', next);
       this.#hidePopup();
-      emit(this, 'is-select', { trigger: this.#lastTriggerChar, item, range: [start, caret] });
-      emit(this, 'is-change', { value: next });
+      emit(this, 'iswc-select', { trigger: this.#lastTriggerChar, item, range: [start, caret] });
+      emit(this, 'iswc-change', { value: next });
     }
   }
 
-  defineElement('is-mention', IsMention);
+  defineElement('iswc-mention', IswcMention);
 })();

@@ -8,8 +8,8 @@ import '../media/icon.js';
 import '../actions/button.js';
 
 /**
- * Fábrica de los campos por secciones: is-date-field, is-time-field e
- * is-date-time-field solo cambian en el `kind`, así que comparten motor,
+ * Fábrica de los campos por secciones: iswc-date-field, iswc-time-field e
+ * iswc-date-time-field solo cambian en el `kind`, así que comparten motor,
  * hoja de estilos y asociación con el formulario.
  */
 
@@ -20,7 +20,7 @@ TEMPLATE.innerHTML = /* html */ `
     <div part="base" class="base">
       <slot name="start"></slot>
       <div part="sections" class="sections" role="group"></div>
-      <is-button
+      <iswc-button
         type="button"
         part="clear"
         class="clear"
@@ -30,8 +30,8 @@ TEMPLATE.innerHTML = /* html */ `
         aria-label="Borrar"
         hidden
       >
-        <is-icon icon="mdi:close" aria-hidden="true"></is-icon>
-      </is-button>
+        <iswc-icon icon="mdi:close" aria-hidden="true"></iswc-icon>
+      </iswc-button>
       <slot name="end"></slot>
     </div>
     <div part="hint" class="hint" hidden></div>
@@ -236,8 +236,8 @@ export function defineDateField({ tag, kind, cssUrl }: DefineDateFieldOpts): typ
       this.#setFormValue();
       this.#updateValidity();
       if (this.#silent) return;
-      emit(this, 'is-input', { value });
-      emit(this, 'is-change', { value });
+      emit(this, 'iswc-input', { value });
+      emit(this, 'iswc-change', { value });
     }
 
     #syncMeta(): void {

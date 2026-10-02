@@ -7,9 +7,14 @@
  *   Fragment = Node | Node[]
  *
  * Ejemplos:
- *   ["is-input", { name: "nit", label: "NIT", required: true }]
+ *   ["iswc-input", { name: "nit", label: "NIT", required: true }]
  *   ["div", { slot: "content" },
- *     ["is-switch", { name: "activo" }, "Activo"]]
+ *     ["iswc-switch", { name: "activo" }, "Activo"]]
+ *
+ * Forma tag-objeto (json2xml), equivalente al elemento:
+ *   { "iswc-text": { "color": "#abcabc", "content": ["Ac"] } }
+ *   → <iswc-text color="#abcabc">Ac</iswc-text>
+ * `content` son los hijos. El resto de claves son atributos.
  *
  * Sin pasar por strings HTML: crea/lee DOM directamente (rápido y seguro).
  */
@@ -60,6 +65,9 @@ export function html2json(node: Node | ParentNode | string | null | undefined, o
 export function json2dom(json: unknown): ParentNode {
   return json2html(json);
 }
+
+/** Mismo codec. La forma `{ tag: { ...attrs, content } }` es la de xml. */
+export const json2xml = json2html;
 
 export type ApplyJsonBodyOpts = { replace?: boolean };
 
@@ -138,12 +146,33 @@ function appendJson(parent: ParentNode, json: unknown): void {
     for (const item of json) appendJson(parent, item);
     return;
   }
-  if (typeof json === 'object' && json && (json as VerboseNode).t) {
-    // Forma verbose opcional: { t, a, c }
-    const v = json as VerboseNode;
-    const tuple: unknown[] = [v.t, v.a || {}, ...(v.c || [])];
-    appendJson(parent, tuple);
+  if (typeof json === 'object' && json) {
+    const tagged = asTagObject(json);
+    if (tagged) {
+      appendJson(parent, tagged);
+      return;
+    }
+    if ((json as VerboseNode).t) {
+      const v = json as VerboseNode;
+      appendJson(parent, [v.t, v.a || {}, ...(v.c || [])]);
+    }
   }
+}
+
+/** `{ "iswc-text": { color, content } }` → tupla del codec. */
+function asTagObject(json: object): unknown[] | null {
+  if ('t' in json && typeof (json as VerboseNode).t === 'string') return null;
+  const keys = Object.keys(json);
+  if (keys.length !== 1 || !/^[A-Za-z][\w:-]*$/.test(keys[0])) return null;
+  const tag = keys[0];
+  const body = (json as Record<string, unknown>)[tag];
+  if (body == null || typeof body === 'string' || typeof body === 'number') return [tag, body];
+  if (typeof body !== 'object' || Array.isArray(body)) return null;
+  const rec = { ...(body as Record<string, unknown>) };
+  const content = rec.content;
+  delete rec.content;
+  const kids = content == null ? [] : Array.isArray(content) ? content : [content];
+  return [tag, rec, ...kids];
 }
 
 function parseElementTuple(tuple: ElementTuple): { tag: string; attrs: JsonAttrs | null; children: unknown[] } {
@@ -252,5 +281,5 @@ function attrsToObject(el: Element): Record<string, string | boolean> | null {
 
 /** CDN / demos */
 if (typeof window !== 'undefined') {
-  Object.assign(window, { json2html, html2json, json2dom, applyJsonBody, hostToJson });
+  Object.assign(window, { json2html, json2xml, html2json, json2dom, applyJsonBody, hostToJson });
 }

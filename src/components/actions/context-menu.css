@@ -1,9 +1,9 @@
-/* is-context-menu */
+/* iswc-context-menu */
 @import url('../_shared/popover-panel.css');
 
 :host { display: contents; }
 
-/* Mismo chrome de superficie flotante que is-dropdown / is-dropdown-item
+/* Mismo chrome de superficie flotante que iswc-dropdown / iswc-dropdown-item
    (ver _shared/popover-panel.css): borde, radio y sombra vía los tokens
    --iswc-popover-radius / --iswc-popover-shadow. */
 .panel {
@@ -36,10 +36,7 @@
   gap: 1px;
 }
 
-::slotted(.item),
-::slotted(button),
-::slotted(a),
-::slotted([role="menuitem"]) {
+::slotted(:is(.item, button, a, [role="menuitem"])) {
   display: flex;
   align-items: center;
   gap: .55rem;
@@ -52,19 +49,18 @@
   width: 100%;
   font: inherit;
   cursor: pointer;
+
+  &:hover {
+    background: color-mix(in srgb, var(--iswc-accent) 18%, transparent);
+    color: var(--iswc-accent);
+  }
 }
-::slotted(.item:hover),
-::slotted(button:hover),
-::slotted(a:hover),
-::slotted([role="menuitem"]:hover) {
-  background: color-mix(in srgb, var(--iswc-accent) 18%, transparent);
-  color: var(--iswc-accent);
-}
-::slotted(.item[disabled]),
-::slotted(button[disabled]) {
+
+::slotted(:is(.item, button)[disabled]) {
   opacity: .5;
   pointer-events: none;
 }
+
 ::slotted(hr) {
   border: 0;
   border-top: 1px solid var(--iswc-border);

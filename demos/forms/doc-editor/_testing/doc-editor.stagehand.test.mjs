@@ -11,7 +11,7 @@ const results = [];
 async function checkDeterministic(page) {
   await page.waitForTimeout(200);
   const data = await page.evaluate(() => {
-    const docs = [...document.querySelectorAll('main is-doc-editor')];
+    const docs = [...document.querySelectorAll('main iswc-doc-editor')];
     return docs.map((d, idx) => {
       const shadow = d.shadowRoot;
       const blocks = [...shadow.querySelectorAll('.block')];
@@ -89,7 +89,7 @@ try {
 // Rama opt-in con Stagehand LLM.
 // ─────────────────────────────────────────────────────────────────────────
 const VISUAL_RUBRIC = `
-Evalúa la calidad visual del editor de documento por bloques (<is-doc-editor>) que aparece en el screenshot.
+Evalúa la calidad visual del editor de documento por bloques (<iswc-doc-editor>) que aparece en el screenshot.
 
 Checklist (todas deben cumplirse; marca cada una PASS o FAIL):
 

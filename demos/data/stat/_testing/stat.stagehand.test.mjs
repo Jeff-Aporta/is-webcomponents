@@ -19,7 +19,7 @@ async function checkDeterministic(page, demo) {
   await page.waitForTimeout(200);
 
   const data = await page.evaluate(() => {
-    const stats = [...document.querySelectorAll('main is-stat')];
+    const stats = [...document.querySelectorAll('main iswc-stat')];
     return stats.map((s, idx) => {
       const sr = s.shadowRoot;
       const rootRect = sr.querySelector('[part="base"]')?.getBoundingClientRect();
@@ -109,7 +109,7 @@ for (const demo of DEMOS) {
 // Rama opt-in con Stagehand LLM. Sólo corre si STAGEHAND=1 + credenciales.
 // ─────────────────────────────────────────────────────────────────────────
 const VISUAL_RUBRIC = `
-Evalúa la calidad visual del bloque <is-stat> (KPI card) que aparece en el screenshot.
+Evalúa la calidad visual del bloque <iswc-stat> (KPI card) que aparece en el screenshot.
 
 Checklist (todas deben cumplirse; marca cada una PASS o FAIL):
 

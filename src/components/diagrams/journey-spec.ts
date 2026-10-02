@@ -6,7 +6,7 @@ import { resolveTkHue } from '../_shared/tk-hue.js';
  *
  * Un journey no es una línea de tiempo: además del orden, lleva una MEDIDA por
  * paso (la satisfacción) y un responsable. Por eso vive aparte de
- * `<is-timeline>`: la curva de puntajes es la mitad del mensaje.
+ * `<iswc-timeline>`: la curva de puntajes es la mitad del mensaje.
  *
  * Escala por defecto 1..5, como en el estándar de journey maps; se puede
  * cambiar con `scale: { min, max }`.

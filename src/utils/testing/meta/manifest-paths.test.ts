@@ -41,7 +41,7 @@ for (const item of manifest) {
     failures.push(`item invalido en manifest: ${JSON.stringify(item)}`);
     continue;
   }
-  if (!item.tag || !item.tag.startsWith('is-')) {
+  if (!item.tag || !item.tag.startsWith('iswc-')) {
     failures.push(`tag invalido: ${item.tag}`);
     continue;
   }

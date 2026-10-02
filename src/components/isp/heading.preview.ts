@@ -1,9 +1,9 @@
 /**
- * Playground <is-heading>: level / color / mix / mix-with / size / texto.
+ * Playground <iswc-heading>: level / color / mix / mix-with / size / texto.
  * @param {import('../../previews/_kit/types.d.ts').PreviewMountContext} ctx
  */
 
-/** `<is-heading>` con `level`, `color`, `mix`, `mixWith`, `size`. */
+/** `<iswc-heading>` con `level`, `color`, `mix`, `mixWith`, `size`. */
 interface _HeadingLike extends HTMLElement {
   level: string;
   color: string | null;
@@ -88,7 +88,7 @@ export async function mount(ctx: import('../../previews/_kit/types.d.ts').Previe
       if (el.mix) attrs.push(`mix="${el.mix}"`);
       if (el.mixWith) attrs.push(`mix-with="${el.mixWith}"`);
       if (el.size) attrs.push(`size="${el.size}"`);
-      snippet.textContent = `<is-heading ${attrs.join(' ')}>${label}</is-heading>`;
+      snippet.textContent = `<iswc-heading ${attrs.join(' ')}>${label}</iswc-heading>`;
     }
   };
 

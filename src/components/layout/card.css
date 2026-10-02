@@ -1,5 +1,8 @@
+/* <iswc-card> — superficies con secciones (media, header, body, footer, actions). */
+
 :host {
   --iswc-card-spacing: var(--iswc-space-l, 1rem);
+
   display: block;
   position: relative;
   overflow: hidden;
@@ -9,96 +12,122 @@
   color: var(--iswc-text, inherit);
   font-family: var(--iswc-sans, inherit);
   box-sizing: border-box;
+}
 
-  .layout {
-    display: flex;
-    align-items: stretch;
-    gap: 0;
-  }
+.layout {
+  display: flex;
+  align-items: stretch;
+  gap: 0;
+}
 
-  .section-media, .section-header, .section-body, .section-footer, .section-actions { padding: 0; }
+:is(.section-media, .section-header, .section-body, .section-footer, .section-actions) {
+  padding: 0;
+}
 
-  .section-header > .row,
-  .section-footer > .row {
-    display: flex;
-    align-items: center;
-    justify-content: space-between;
-    gap: var(--iswc-card-spacing);
-    & > ::slotted([slot="header"]),
-    & > ::slotted([slot="footer"]) { flex: 1 1 auto; min-width: 0; }
-    & > ::slotted([slot="header-actions"]),
-    & > ::slotted([slot="footer-actions"]) { flex: 0 0 auto; }
-  }
+.section-header > .row,
+.section-footer > .row {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: var(--iswc-card-spacing);
 
-  .section {
-    &.is-empty { display: none; }
-    & ::slotted(*) { box-sizing: border-box; max-width: 100%; }
-  }
-  .section-media ::slotted(img),
-  .section-media ::slotted(video),
-  .section-media ::slotted(is-icon) {
+  & > ::slotted([slot="header"]),
+  & > ::slotted([slot="footer"]) { flex: 1 1 auto; min-inline-size: 0; }
+
+  & > ::slotted([slot="header-actions"]),
+  & > ::slotted([slot="footer-actions"]) { flex: 0 0 auto; }
+}
+
+.section {
+  &.iswc-empty { display: none; }
+  & ::slotted(*) { box-sizing: border-box; max-inline-size: 100%; }
+}
+
+.section-media {
+  ::slotted(:is(img, video, iswc-icon)) {
     display: block;
-    max-width: 100%;
-    height: auto;
+    max-inline-size: 100%;
+    block-size: auto;
   }
-  .section-body {
-    & ::slotted(p), & ::slotted(.card-meta) { margin: 0; }
-    & ::slotted(p + *), & ::slotted(* + p) { margin-top: 0.5em; }
-  }
+}
+
+.section-body {
+  & ::slotted(p),
+  & ::slotted(.card-meta) { margin: 0; }
+
+  & ::slotted(:is(p + *, * + p)) { margin-block-start: 0.5em; }
 }
 
 /* Estados del host a top-level: `&[attr]` anidado en :host compila a
    `:host[attr]`, que nunca matchea un shadow host. Usar :host([attr]). */
-:host([variant="outlined"]), :host(:not([variant])) {
-    background: transparent;
-    border: 1px solid var(--iswc-border);
-  }
+:host(:is([variant="outlined"], :not([variant]))) {
+  background: transparent;
+  border: 1px solid var(--iswc-border);
+}
 
 :host([variant="filled"]) {
-    background: var(--iswc-bg-elev);
-    border: 0;
-  }
+  background: var(--iswc-bg-elev);
+  border: 0;
+}
 
 :host([variant="filled-outlined"]) {
-    background: var(--iswc-bg-elev);
-    border: 1px solid var(--iswc-border);
-  }
+  background: var(--iswc-bg-elev);
+  border: 1px solid var(--iswc-border);
+}
 
 :host([variant="plain"]) {
-    background: transparent;
-    border: 0;
-  }
+  background: transparent;
+  border: 0;
+}
 
 :host([variant="accent"]) {
-    background: var(--iswc-accent-bg, rgb(30 144 255 / 12%));
-    border: 0;
-    box-shadow: inset 3px 0 0 var(--iswc-accent, #e03131);
-  }
+  background: var(--iswc-accent-bg, rgb(30 144 255 / 12%));
+  border: 0;
+  box-shadow: inset 3px 0 0 var(--iswc-accent, #e03131);
+}
 
 :host(:not([orientation="horizontal"])) {
-    .layout { flex-direction: column; }
-    .section-actions { display: none; }
-    .section-media {
-      padding: 0;
-      & ::slotted(*) { display: block; width: 100%; }
-    }
-    .section-header { padding: var(--iswc-card-spacing) var(--iswc-card-spacing) 0; }
-    .section-body { padding: var(--iswc-card-spacing); }
-    .section-footer { padding: 0 var(--iswc-card-spacing) var(--iswc-card-spacing); }
-    .section-header:not(.is-empty) ~ .section-body { padding-top: calc(var(--iswc-card-spacing) * 0.65); }
-    .section-media:not(.is-empty) ~ .section-header:not(.is-empty) { padding-top: calc(var(--iswc-card-spacing) * 0.85); }
-    .section-media:not(.is-empty) ~ .section-body { padding-top: calc(var(--iswc-card-spacing) * 0.85); }
-    .section-body:has(~ .section-footer:not(.is-empty)) { padding-bottom: calc(var(--iswc-card-spacing) * 0.65); }
+  .layout { flex-direction: column; }
+  .section-actions { display: none; }
+
+  .section-media {
+    padding: 0;
+
+    & ::slotted(*) { display: block; inline-size: 100%; }
   }
 
-:host([orientation="horizontal"]) {
-    .layout {
-      flex-direction: row;
-      padding: var(--iswc-card-spacing);
-      gap: var(--iswc-card-spacing);
-      align-items: center;
-    }
-    .section-body { flex: 1 1 auto; min-width: 0; }
-    .section-media, .section-actions { flex: 0 0 auto; }
-    .section-header, .section-footer { display: none; }
+  .section-header { padding: var(--iswc-card-spacing) var(--iswc-card-spacing) 0; }
+
+  .section-body {
+    padding: var(--iswc-card-spacing);
+
+    &:has(~ .section-footer:not(.iswc-empty)) { padding-block-end: calc(var(--iswc-card-spacing) * 0.65); }
   }
+
+  .section-footer { padding: 0 var(--iswc-card-spacing) var(--iswc-card-spacing); }
+
+  .section-header:not(.iswc-empty) {
+    ~ .section-body { padding-block-start: calc(var(--iswc-card-spacing) * 0.65); }
+  }
+
+  .section-media:not(.iswc-empty) {
+    ~ .section-header:not(.iswc-empty) { padding-block-start: calc(var(--iswc-card-spacing) * 0.85); }
+    ~ .section-body                 { padding-block-start: calc(var(--iswc-card-spacing) * 0.85); }
+  }
+}
+
+:host([orientation="horizontal"]) {
+  .layout {
+    flex-direction: row;
+    padding: var(--iswc-card-spacing);
+    gap: var(--iswc-card-spacing);
+    align-items: center;
+  }
+
+  .section-body { flex: 1 1 auto; min-inline-size: 0; }
+  .section-media,
+  .section-actions { flex: 0 0 auto; }
+
+  .section-header,
+  .section-footer { display: none; }
+}

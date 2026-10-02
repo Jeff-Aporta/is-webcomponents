@@ -2,7 +2,7 @@ import { adoptCss, defineElement, emit } from '../../core/element.js';
 import { ElementBase } from '../../core/element-base.js';
 
 /**
- * <is-rte> — Editor de texto enriquecido basado en contentEditable.
+ * <iswc-rte> — Editor de texto enriquecido basado en contentEditable.
  *
  * Atributos
  *   value       HTML inicial y actual
@@ -33,7 +33,7 @@ import { ElementBase } from '../../core/element-base.js';
  *   rte.undo() / rte.redo()
  *
  * Eventos
- *   is-input, is-change, is-blur, is-source-change
+ *   iswc-input, iswc-change, iswc-blur, iswc-source-change
  *
  * Tokens CSS
  *   --iswc-rte-toolbar-bg
@@ -43,12 +43,12 @@ import { ElementBase } from '../../core/element-base.js';
  */
 
 /** Registro de comandos de toolbar aportados por OTROS componentes.
- *  Así <is-function-editor> añade sus botones sin que este módulo lo conozca. */
+ *  Así <iswc-function-editor> añade sus botones sin que este módulo lo conozca. */
 interface RteCommandDef { icon?: string; title?: string; run: (rte: HTMLElement) => void }
 const CUSTOM_COMMANDS: Map<string, RteCommandDef> = new Map();
 
 /**
- * Registra un botón extra para la toolbar de <is-rte>.
+ * Registra un botón extra para la toolbar de <iswc-rte>.
  * @param {string} name  identificador usado en el atributo `toolbar`
  * @param {{ icon?: string, title?: string, run: (rte: HTMLElement) => void }} def
  */
@@ -82,7 +82,7 @@ export function registerRteCommand(name: string, def: RteCommandDef): void {
     html: '<svg viewBox="0 0 24 24" width="1em" height="1em" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><polyline points="16 18 22 12 16 6"></polyline><polyline points="8 6 2 12 8 18"></polyline></svg>',
   };
 
-  class IsRte extends ElementBase {
+  class IswcRte extends ElementBase {
     static get observedAttributes(): string[] { return OBSERVED; }
 
     constructor() {
@@ -103,7 +103,7 @@ export function registerRteCommand(name: string, def: RteCommandDef): void {
       this.#placeholder = this.shadowRoot!.querySelector<HTMLElement>('.placeholder')!;
 
       this.#content.addEventListener('input', () => this.#onInput());
-      this.#content.addEventListener('blur', () => emit(this, 'is-blur'));
+      this.#content.addEventListener('blur', () => emit(this, 'iswc-blur'));
       this.#source.addEventListener('input', () => this.#onSourceInput());
     }
 
@@ -242,7 +242,7 @@ export function registerRteCommand(name: string, def: RteCommandDef): void {
       this.#source.hidden = !on;
       this.#syncPlaceholder();
       this.#syncToolbarState();
-      emit(this, 'is-source-change', { source: on });
+      emit(this, 'iswc-source-change', { source: on });
       if (!on) this.#emitChange(this.#content.innerHTML);
     }
 
@@ -265,8 +265,8 @@ export function registerRteCommand(name: string, def: RteCommandDef): void {
     }
 
     #emitChange(html: string): void {
-      emit(this, 'is-input');
-      emit(this, 'is-change', { value: html, text: this.text });
+      emit(this, 'iswc-input');
+      emit(this, 'iswc-change', { value: html, text: this.text });
     }
 
     #syncPlaceholder(): void {
@@ -279,5 +279,5 @@ export function registerRteCommand(name: string, def: RteCommandDef): void {
     #placeholder!: HTMLElement;
   }
 
-  defineElement('is-rte', IsRte);
+  defineElement('iswc-rte', IswcRte);
 })();

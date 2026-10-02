@@ -2,7 +2,7 @@
 // Cero LLM, cero API keys — solo geometría y atributos del SVG. Como el
 // paquete marks-radial es una utility bundle (sin custom element propio),
 // el demo lo invoca indirectamente a través de los wrappers tipados
-// <is-pie-chart>, <is-doughnut-chart>, <is-polar-area-chart> y <is-radar-chart>.
+// <iswc-pie-chart>, <iswc-doughnut-chart>, <iswc-polar-area-chart> y <iswc-radar-chart>.
 import assert from 'node:assert/strict';
 import { BASE_URL, newPage, close, waitReady, screenshot, report, maybeStagehand } from '../../_global/lib/harness.mjs';
 
@@ -16,7 +16,7 @@ async function checkDeterministic(page) {
   await page.waitForTimeout(300);
 
   const data = await page.evaluate(() => {
-    const wrappers = ['is-pie-chart', 'is-doughnut-chart', 'is-polar-area-chart', 'is-radar-chart'];
+    const wrappers = ['iswc-pie-chart', 'iswc-doughnut-chart', 'iswc-polar-area-chart', 'iswc-radar-chart'];
     const wrapInfo = {};
     for (const tag of wrappers) {
       const el = document.querySelector(tag);
@@ -49,7 +49,7 @@ async function checkDeterministic(page) {
   });
 
   // (1) Cada wrapper debe estar presente y haber renderizado marcas.
-  for (const tag of ['is-pie-chart', 'is-doughnut-chart', 'is-polar-area-chart', 'is-radar-chart']) {
+  for (const tag of ['iswc-pie-chart', 'iswc-doughnut-chart', 'iswc-polar-area-chart', 'iswc-radar-chart']) {
     const info = data.wrapInfo[tag];
     assert.equal(info.present, true, `${tag} debe estar presente en el DOM`);
     assert.equal(info.svg, true, `${tag} debe haber montado SVG`);
@@ -61,11 +61,11 @@ async function checkDeterministic(page) {
 
   // (2) Conteos esperados por tipo (reflejan los payloads del demo):
   //     pie 3 categorías, doughnut 4, polar 8, radar 1 polígono + 5 puntos.
-  assert.equal(data.wrapInfo['is-pie-chart'].slices, 3, 'pie debe tener 3 .mark-slice');
-  assert.equal(data.wrapInfo['is-doughnut-chart'].slices, 4, 'doughnut debe tener 4 .mark-slice');
-  assert.equal(data.wrapInfo['is-polar-area-chart'].slices, 8, 'polar-area debe tener 8 .mark-slice');
-  assert.equal(data.wrapInfo['is-radar-chart'].radars, 1, 'radar debe tener 1 polígono .mark-radar');
-  assert.equal(data.wrapInfo['is-radar-chart'].points, 5, 'radar debe tener 5 puntos .mark-point');
+  assert.equal(data.wrapInfo['iswc-pie-chart'].slices, 3, 'pie debe tener 3 .mark-slice');
+  assert.equal(data.wrapInfo['iswc-doughnut-chart'].slices, 4, 'doughnut debe tener 4 .mark-slice');
+  assert.equal(data.wrapInfo['iswc-polar-area-chart'].slices, 8, 'polar-area debe tener 8 .mark-slice');
+  assert.equal(data.wrapInfo['iswc-radar-chart'].radars, 1, 'radar debe tener 1 polígono .mark-radar');
+  assert.equal(data.wrapInfo['iswc-radar-chart'].points, 5, 'radar debe tener 5 puntos .mark-point');
 
   // (3) El <pre id="exports"> debe listar los 4 nombres de draw*.
   for (const name of ['drawPieMarks', 'drawDoughnutMarks', 'drawPolarAreaMarks', 'drawRadarMarks']) {

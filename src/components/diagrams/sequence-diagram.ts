@@ -29,16 +29,16 @@ import { svgEl } from '../_shared/svg-chart-engine.js';
 import type { SequenceMessageSpec } from './sequence-spec.js';
 
 /**
- * <is-sequence-diagram> — diagrama de secuencia en SVG, sin Mermaid.
+ * <iswc-sequence-diagram> — diagrama de secuencia en SVG, sin Mermaid.
  *
  * Configuración por JSON (idéntica a la del proyecto original): un
  * <script type="application/json"> hijo, o la propiedad `payload`.
  *
- *   <is-sequence-diagram>
+ *   <iswc-sequence-diagram>
  *     <script type="application/json">
  *       { "sequence": { "actors": [...], "messages": [...] } }
  *     </script>
- *   </is-sequence-diagram>
+ *   </iswc-sequence-diagram>
  *
  * También acepta `{ "preset": "tk1437191" }`.
  *
@@ -47,9 +47,9 @@ import type { SequenceMessageSpec } from './sequence-spec.js';
  *            y auto-animación de la tortuga.
  *
  * Propiedades: payload, spec, layout, turtle, hiddenGroups
- * Eventos: is-turtle-state (detail: {playing, idx, total, replay}),
- *          is-open-viewer (click en colore inline),
- *          is-toggle-group (detail: {id})
+ * Eventos: iswc-turtle-state (detail: {playing, idx, total, replay}),
+ *          iswc-open-viewer (click en colore inline),
+ *          iswc-toggle-group (detail: {id})
  */
 
 const GUIDE_X = 44;
@@ -100,7 +100,7 @@ function foreignHtml(
   return fo;
 }
 
-class IsSequenceDiagram extends DiagramElementBase {
+class IswcSequenceDiagram extends DiagramElementBase {
   #theme: DiagramTheme | null = null;
   #turtle: PathTurtle | null = null;
   #turtleGroup: SVGGElement | null = null;
@@ -174,7 +174,7 @@ class IsSequenceDiagram extends DiagramElementBase {
     this.layout = layout;
 
     this.#buildSvg(layout, theme);
-    this.wrap.classList.toggle('is-viewer', this.isViewer);
+    this.wrap.classList.toggle('iswc-viewer', this.isViewer);
   }
 
   #buildSvg(layout: SequenceLayout, theme: DiagramTheme): void {
@@ -226,11 +226,11 @@ class IsSequenceDiagram extends DiagramElementBase {
       viewH: H,
       autoLoop: this.isViewer,
       onState: (state: TurtleState) => {
-        emit(this, 'is-turtle-state', state);
+        emit(this, 'iswc-turtle-state', state);
       },
     });
 
-    emit(this, 'is-render', { layout, svg: this.svg });
+    emit(this, 'iswc-render', { layout, svg: this.svg });
   }
 
   #buildLegend(
@@ -261,7 +261,7 @@ class IsSequenceDiagram extends DiagramElementBase {
       const clickable = this.isViewer;
 
       const item = svgEl('g', {
-        class: `seq-legend__item${off ? ' is-off' : ''}`,
+        class: `seq-legend__item${off ? ' iswc-off' : ''}`,
         opacity: off ? 0.4 : 1,
       });
       if (clickable) {
@@ -508,15 +508,15 @@ class IsSequenceDiagram extends DiagramElementBase {
     if (this.isViewer) {
       const item = e.composedPath().find((n: EventTarget | null) => (n as HTMLElement | undefined)?.dataset?.groupId);
       if (item) {
-        emitCancelable(this, 'is-toggle-group', { id: (item as HTMLElement).dataset.groupId });
+        emitCancelable(this, 'iswc-toggle-group', { id: (item as HTMLElement).dataset.groupId });
       }
       return;
     }
     // Preview inline: entrar al visor con 1 clic / 1 tap. Es opt-in: sin
     // `open-on-click` el clic no hace nada y tampoco se anuncia
-    // `is-open-viewer`, que prometeria una apertura que no ocurre.
+    // `iswc-open-viewer`, que prometeria una apertura que no ocurre.
     if (!this.hasAttribute('open-on-click')) return;
-    const ev = new CustomEvent('is-open-viewer', {
+    const ev = new CustomEvent('iswc-open-viewer', {
       bubbles: true, composed: true, cancelable: true, detail: { payload: this.payload },
     });
     this.dispatchEvent(ev);
@@ -545,12 +545,12 @@ class IsSequenceDiagram extends DiagramElementBase {
     if (!theme) return;
     const hiColor = hovered?.groupHue != null ? tkHueToHex(hovered.groupHue) || theme.accent : theme.accent;
 
-    this.wrap.classList.toggle('is-hover-msg', !!id);
+    this.wrap.classList.toggle('iswc-hover-msg', !!id);
 
     for (const [msgId, node] of this.#msgNodes) {
       const active = msgId === id;
-      node.g.classList.toggle('is-active', active);
-      node.g.classList.toggle('is-dim', !!id && !active);
+      node.g.classList.toggle('iswc-active', active);
+      node.g.classList.toggle('iswc-dim', !!id && !active);
       node.path.setAttribute('stroke-width', String(active ? 1.75 : 1.15));
       // La cabeza es un <polygon> relleno (sync y async): no tiene trazo que
       // engrosar, el realce lo lleva la línea.
@@ -571,7 +571,7 @@ class IsSequenceDiagram extends DiagramElementBase {
     for (const { x, g, rect } of this.#actorNodes) {
       const active = !!hovered && (hovered.fromX === x || hovered.toX === x);
       const dim = !!id && !active;
-      g.classList.toggle('is-active', !!active);
+      g.classList.toggle('iswc-active', !!active);
       g.setAttribute('opacity', String(dim ? 0.32 : 1));
       rect.setAttribute('stroke', active ? theme.accent : theme.border);
       rect.setAttribute('stroke-width', String(active ? 1.4 : 1));
@@ -623,9 +623,9 @@ class IsSequenceDiagram extends DiagramElementBase {
   }
 }
 
-defineElement('is-sequence-diagram', IsSequenceDiagram, 'IsSequenceDiagram');
+defineElement('iswc-sequence-diagram', IswcSequenceDiagram, 'IswcSequenceDiagram');
 
-registerDiagramKind('sequence', 'is-sequence-diagram');
-registerDiagramKind('sequence-diagram', 'is-sequence-diagram');
+registerDiagramKind('sequence', 'iswc-sequence-diagram');
+registerDiagramKind('sequence-diagram', 'iswc-sequence-diagram');
 
-export { IsSequenceDiagram };
+export { IswcSequenceDiagram };

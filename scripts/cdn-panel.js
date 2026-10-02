@@ -2,16 +2,16 @@
  * cdn-panel.js — bloque «Consumo por CDN» al final de la página de cada
  * componente.
  *
- * El panel lo pinta `<is-cdn-snippet>`; aquí solo se resuelve QUÉ componente
+ * El panel lo pinta `<iswc-cdn-snippet>`; aquí solo se resuelve QUÉ componente
  * se está viendo y de dónde salen sus enlaces de documentación. Vive en
  * `scripts/` porque necesita el `src/manifest.js` del repo, y un componente del
  * kit no puede importarlo (acabaría dentro del bundle del CDN).
  *
  * Esto era parte de `preview-chrome.js` y sacaba el tag del nombre del archivo
- * (`is-button.html`). Al pasar el docs a una sola página que monta los previews
+ * (`iswc-button.html`). Al pasar el docs a una sola página que monta los previews
  * desde JSON ese nombre desapareció —la galería es `index.html` y el fullscreen
  * `_shell.html`—, así que el panel dejó de aparecer en todos los componentes.
- * Ahora el tag lo trae el propio preview montado, en `is-preview-ready`.
+ * Ahora el tag lo trae el propio preview montado, en `iswc-preview-ready`.
  */
 import '../dist/cdn/feedback/cdn-snippet.min.js';
 import components from '../src/manifest.js';
@@ -70,14 +70,14 @@ function llmDocs(entry) {
  * sueltas, no componentes del catálogo.
  */
 function mountCdnPanel(tag) {
-  const host = document.querySelector('is-main.main, main.main');
+  const host = document.querySelector('iswc-main.main, main.main');
   if (!host) return;
-  if (host.querySelector(':scope > is-cdn-snippet[data-auto-cdn]')) return;
+  if (host.querySelector(':scope > iswc-cdn-snippet[data-auto-cdn]')) return;
 
   const entry = components.find((c) => c.tag === tag);
   if (!entry) return;
 
-  const snippet = document.createElement('is-cdn-snippet');
+  const snippet = document.createElement('iswc-cdn-snippet');
   snippet.dataset.autoCdn = '1';
   snippet.setAttribute('tag', entry.tag);
   snippet.setAttribute('category', entry.category || '');
@@ -88,13 +88,13 @@ function mountCdnPanel(tag) {
   host.append(snippet);
 }
 
-document.addEventListener('is-preview-ready', (e) => {
+document.addEventListener('iswc-preview-ready', (e) => {
   const { tag } = e.detail ?? {};
   if (typeof tag === 'string') mountCdnPanel(tag);
 });
 
 // El preview a veces ya emitio ready antes de que este modulo enganche.
-const ya = document.querySelector('is-preview-component');
+const ya = document.querySelector('iswc-preview-component');
 const tagListo = ya?.preview?.definition?.tag;
 if (typeof tagListo === 'string') mountCdnPanel(tagListo);
 

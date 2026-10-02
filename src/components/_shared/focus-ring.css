@@ -5,17 +5,21 @@
  *   outline-offset: <Npx>;
  * repetido en 20+ hojas de estilo del kit.
  *
- * Uso: agregar `class="is-focus-ring"` (o el selector `:focus-visible`
+ * Uso: agregar `class="iswc-focus-ring"` (o el selector `:focus-visible`
  * correspondiente) al elemento enfocable, y opcionalmente sobrescribir
  * `--iswc-focus-fallback` / `--iswc-focus-offset` por componente si su
  * fallback de color u offset difiere del default.
  */
-:host {
-  --iswc-focus-fallback: var(--iswc-color-brand, dodgerblue);
-  --iswc-focus-offset: 2px;
-}
+@layer iswc.focus {
+  :host {
+    --iswc-focus-fallback: var(--iswc-color-brand, dodgerblue);
+    --iswc-focus-offset: 2px;
+  }
 
-.is-focus-ring:focus-visible {
-  outline: 2px solid var(--iswc-focus, var(--iswc-focus-fallback));
-  outline-offset: var(--iswc-focus-offset);
+  .iswc-focus-ring {
+    &:focus-visible {
+      outline: 2px solid var(--iswc-focus, var(--iswc-focus-fallback));
+      outline-offset: var(--iswc-focus-offset);
+    }
+  }
 }

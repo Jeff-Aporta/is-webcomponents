@@ -22,7 +22,7 @@ async function checkDeterministic(page) {
   await page.waitForTimeout(150);
 
   const initial = await page.evaluate(() => {
-    const clocks = [...document.querySelectorAll('is-digital-clock')];
+    const clocks = [...document.querySelectorAll('iswc-digital-clock')];
     return clocks.map((c) => {
       const sr = c.shadowRoot;
       const base = sr.querySelector('.base');
@@ -72,7 +72,7 @@ async function checkDeterministic(page) {
 
   // Layout: cada .list visible encaja en el viewport
   const layout = await page.evaluate(() => {
-    const lists = [...document.querySelectorAll('is-digital-clock')]
+    const lists = [...document.querySelectorAll('iswc-digital-clock')]
       .map((c) => c.shadowRoot.querySelector('.list'))
       .filter(Boolean);
     return lists.map((l) => {

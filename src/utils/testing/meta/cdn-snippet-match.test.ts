@@ -4,15 +4,15 @@
 // encuentra la entrada del manifest para cada preview folderizado.
 //
 // Reproduce el bug que apareció tras el folderize de previews/: el manifest
-// guardaba `page: 'actions/is-button.html'` mientras que el script comparaba
-// contra el basename `is-button.html` directamente, así que el match fallaba
-// y `<is-cdn-snippet>` nunca se inyectaba en los previews embebidos.
+// guardaba `page: 'actions/iswc-button.html'` mientras que el script comparaba
+// contra el basename `iswc-button.html` directamente, así que el match fallaba
+// y `<iswc-cdn-snippet>` nunca se inyectaba en los previews embebidos.
 //
 // Reglas:
 //   1. Para cada previews/<cat>/is-<name>.html debe existir al menos un item
 //      en el manifest cuyo basename coincida.
 //   2. La lógica de match usada debe ser tolerante a rutas con prefijo de
-//      categoría (`'actions/is-button.html'`) y sin él (`'is-button.html'`).
+//      categoría (`'actions/iswc-button.html'`) y sin él (`'iswc-button.html'`).
 //
 // Uso:  node tests/cdn-snippet-match.test.ts
 
@@ -57,16 +57,16 @@ for (const { cat, file } of previews) {
 
 // Sanity: la lógica debe aceptar también un page sin prefijo de categoría,
 // porque algunos manifest antiguos o entries auxiliares pueden guardarlo así.
-const fakeManifest = [{ tag: 'is-foo', page: 'is-foo.json' }];
+const fakeManifest = [{ tag: 'iswc-foo', page: 'iswc-foo.json' }];
 assert.deepEqual(
-  matchByBasename(fakeManifest, 'is-foo.json').map((c) => c.tag),
-  ['is-foo'],
+  matchByBasename(fakeManifest, 'iswc-foo.json').map((c) => c.tag),
+  ['iswc-foo'],
   'match por basename debe funcionar también con page sin prefijo de categoría'
 );
 
 // Sanity: un componente que NO existe en el manifest no debe matchear.
 assert.deepEqual(
-  matchByBasename(fakeManifest, 'is-bar.json').map((c) => c.tag),
+  matchByBasename(fakeManifest, 'iswc-bar.json').map((c) => c.tag),
   [],
   'un componente ausente no debe matchear'
 );

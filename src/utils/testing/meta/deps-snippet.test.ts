@@ -1,6 +1,6 @@
 // tests/deps-snippet.test.ts
 //
-// Verifica el componente <is-cdn-snippet>:
+// Verifica el componente <iswc-cdn-snippet>:
 //   - Existe el manifest, el script y el preview.
 //   - La plantilla expone la fila plantilla data-kind="dep".
 //   - El componente parsea el slot "deps" con <script type="application/json">.
@@ -40,8 +40,8 @@ const check = (cond, msg) => { if (!cond) failures.push(msg); };
 
 // ─── manifest.js: el componente está registrado ─────────────────────────────
 
-check(/tag:\s*['"]is-cdn-snippet['"]/.test(manifest),
-  'manifest.ts: is-cdn-snippet no está registrado');
+check(/tag:\s*['"]iswc-cdn-snippet['"]/.test(manifest),
+  'manifest.ts: iswc-cdn-snippet no está registrado');
 
 // ─── cdn-snippet.ts: API para dependencies ─────────────────────────────────
 
@@ -86,8 +86,8 @@ check(/(border-inline-start|::before).*(warning|accent)/.test(csCss) ||
 
 // ─── preview: demuestra deps con dayjs (antes CodeMirror) ───────────────────
 
-check(/<is-cdn-snippet/.test(prev),
-  'preview: debe usar <is-cdn-snippet>');
+check(/<iswc-cdn-snippet/.test(prev),
+  'preview: debe usar <iswc-cdn-snippet>');
 
 check(/slot=["']deps["']/.test(prev),
   'preview: debe demostrar el slot="deps" con un <script type="application/json">');
@@ -115,5 +115,5 @@ if (failures.length) {
   process.exit(1);
 }
 
-console.log(`deps-snippet.test.ts: PASS — <is-cdn-snippet> reusable, soporta slot/atributo de deps, CSS con accent distintivo, preview con CodeMirror`);
+console.log(`deps-snippet.test.ts: PASS — <iswc-cdn-snippet> reusable, soporta slot/atributo de deps, CSS con accent distintivo, preview con CodeMirror`);
 process.exit(0);

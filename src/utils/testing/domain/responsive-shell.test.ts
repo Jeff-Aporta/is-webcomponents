@@ -3,7 +3,7 @@
 // El layout de la galería se compacta en dos escalones: en tablet el índice
 // (TOC) se muda a un drawer derecho y en móvil el catálogo a uno izquierdo.
 // Estos invariantes vigilan las piezas que lo hacen posible, incluidas dos
-// regresiones ya vividas en <is-drawer>:
+// regresiones ya vividas en <iswc-drawer>:
 //   1. `:host([placement="top"]),` (coma en vez de descendiente) dejaba al
 //      drawer superior sin tamaño ni posición.
 //   2. El keyframe oculto se calculaba con el signo invertido al cerrar, así
@@ -20,7 +20,7 @@ const read = (...p) => readFileSync(join(__dirname, '..', ...p), 'utf8');
 
 const drawerCss = read('src', 'components', 'layout', 'drawer.css');
 const drawerJs = read('src', 'components', 'layout', 'drawer.ts');
-// `is-drawer` extiende ModalBase: el ciclo de apertura/cierre vive ahí.
+// `iswc-drawer` extiende ModalBase: el ciclo de apertura/cierre vive ahí.
 const modalBaseJs = read('src', 'components', '_shared', 'modal-base.ts');
 const splitJs = read('src', 'components', 'layout', 'split-panel.ts');
 const splitCss = read('src', 'components', 'layout', 'split-panel.css');
@@ -31,7 +31,7 @@ const shellCss = read('src', 'styles', 'shell.css');
 
 const PLACEMENTS = ['start', 'end', 'top', 'bottom'];
 
-test('is-drawer: los cuatro placements dimensionan .drawer, no el host', () => {
+test('iswc-drawer: los cuatro placements dimensionan .drawer, no el host', () => {
   for (const p of PLACEMENTS) {
     const rule = new RegExp(`:host\\(\\[placement="${p}"\\]\\)\\s+\\.drawer`);
     assert.ok(rule.test(drawerCss), `falta la regla de .drawer para placement="${p}"`);
@@ -43,7 +43,7 @@ test('is-drawer: los cuatro placements dimensionan .drawer, no el host', () => {
   }
 });
 
-test('is-drawer: cada placement sale por su propio borde', () => {
+test('iswc-drawer: cada placement sale por su propio borde', () => {
   const esperado = {
     start: 'translateX(-100%)',
     end: 'translateX(100%)',
@@ -60,14 +60,14 @@ test('is-drawer: cada placement sale por su propio borde', () => {
   );
 });
 
-test('is-drawer: cerrar quitando el atributo open sí cierra', () => {
+test('iswc-drawer: cerrar quitando el atributo open sí cierra', () => {
   // Con `if (!this.open) return`, un removeAttribute('open') externo entraba a
   // #doClose cuando el atributo YA no estaba y salía por su propia guarda: el
   // drawer se quedaba pintado. El arreglo vive en ModalBase, no duplicado en
   // cada subclase.
   assert.ok(
     /extends ModalBase/.test(drawerJs),
-    'is-drawer debe extender ModalBase en vez de reimplementar el ciclo del modal',
+    'iswc-drawer debe extender ModalBase en vez de reimplementar el ciclo del modal',
   );
   assert.ok(
     /#doClose\(attrAlreadyRemoved = false\)/.test(modalBaseJs),
@@ -79,7 +79,7 @@ test('is-drawer: cerrar quitando el atributo open sí cierra', () => {
   );
 });
 
-test('is-split-panel: collapse observado, con getter y sin drag', () => {
+test('iswc-split-panel: collapse observado, con getter y sin drag', () => {
   assert.ok(/OBSERVED = \[[^\]]*'collapse'/.test(splitJs), 'collapse debe estar en observedAttributes');
   assert.ok(/get collapse\(\)/.test(splitJs) && /set collapse\(/.test(splitJs), 'falta la propiedad collapse');
   assert.ok(
@@ -99,8 +99,8 @@ test('is-split-panel: collapse observado, con getter y sin drag', () => {
   assert.ok(/:host\(\[collapse="start"\]\) \.divider/.test(splitCss), 'el divisor debe irse con el panel');
 });
 
-test('is-preview-component: el índice se muda a un drawer derecho en compacto', () => {
-  assert.ok(/is-drawer class="toc-drawer"[^>]*placement="end"/.test(previewJs), 'el TOC abre por la derecha');
+test('iswc-preview-component: el índice se muda a un drawer derecho en compacto', () => {
+  assert.ok(/iswc-drawer class="toc-drawer"[^>]*placement="end"/.test(previewJs), 'el TOC abre por la derecha');
   assert.ok(/max-width: 900px/.test(previewJs), 'el escalón tablet vive en el componente');
   assert.ok(
     /aside\.removeAttribute\('slot'\);[\s\S]{0,80}drawer\.append\(aside\)/.test(previewJs),
@@ -112,9 +112,9 @@ test('is-preview-component: el índice se muda a un drawer derecho en compacto',
   );
   assert.ok(/> \.toc-toggle/.test(previewCss), 'la hamburguesa del índice necesita estilo propio');
   assert.ok(
-    /<is-button[^>]*class="toc-toggle"[^>]*color="brand"[^>]*variant="plain"/.test(previewJs)
-      || /<is-button[^>]*class="toc-toggle"[^>]*variant="plain"[^>]*color="brand"/.test(previewJs),
-    'toc-toggle debe ser is-button plain con color brand',
+    /<iswc-button[^>]*class="toc-toggle"[^>]*color="brand"[^>]*variant="plain"/.test(previewJs)
+      || /<iswc-button[^>]*class="toc-toggle"[^>]*variant="plain"[^>]*color="brand"/.test(previewJs),
+    'toc-toggle debe ser iswc-button plain con color brand',
   );
   assert.ok(
     /withoutToc/.test(previewJs) && /sections\?\.length/.test(previewJs) && /dataset\.layout = 'full'/.test(previewJs),
@@ -130,8 +130,8 @@ test('galería: el catálogo se muda a un drawer izquierdo en móvil', () => {
   assert.ok(/id="navDrawer"[\s\S]*?placement="start"/.test(indexHtml), 'el catálogo abre por la izquierda');
   assert.ok(/id="navToggle"/.test(indexHtml), 'falta la hamburguesa del catálogo');
   assert.ok(
-    /<is-button[^>]*id="navToggle"[^>]*variant="plain"/.test(indexHtml),
-    'navToggle debe ser is-button variant=plain',
+    /<iswc-button[^>]*id="navToggle"[^>]*variant="plain"/.test(indexHtml),
+    'navToggle debe ser iswc-button variant=plain',
   );
   assert.ok(/matchMedia\('\(max-width: 640px\)'\)/.test(gallery), 'el escalón móvil es 640px (en gallery/app.ts)');
   assert.ok(

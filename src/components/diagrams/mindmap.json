@@ -1,10 +1,10 @@
 {
-  "$schema": "is-preview/v1",
-  "tag": "is-mindmap",
+  "$schema": "iswc-preview/v1",
+  "tag": "iswc-mindmap",
   "category": "diagrams",
-  "title": "<is-mindmap>",
+  "title": "<iswc-mindmap>",
   "titleHtml": true,
-  "storageKey": "docs-is-mindmap",
+  "storageKey": "docs-iswc-mindmap",
   "sections": [
     {
       "id": "intro",
@@ -17,7 +17,7 @@
         },
         {
           "kind": "demo",
-          "html": "<is-mindmap open-on-click>\r\n            <script type=\"application/json\">\r\n              {\r\n                \"mindmap\": {\r\n                  \"title\": \"ContaPyme\",\r\n                  \"layout\": \"radial\",\r\n                  \"nodes\": [\r\n                    { \"id\": \"root\", \"label\": \"ContaPyme\", \"icon\": \"mdi:star\", \"hue\": 210 },\r\n                    { \"id\": \"a\", \"parent\": \"root\", \"label\": \"Contabilidad\", \"hue\": 239 },\r\n                    { \"id\": \"a1\", \"parent\": \"a\", \"label\": \"Plan de cuentas\" },\r\n                    { \"id\": \"a2\", \"parent\": \"a\", \"label\": \"Comprobantes\" },\r\n                    { \"id\": \"a3\", \"parent\": \"a\", \"label\": \"Estados financieros\" },\r\n                    { \"id\": \"b\", \"parent\": \"root\", \"label\": \"Facturación\", \"hue\": 199 },\r\n                    { \"id\": \"b1\", \"parent\": \"b\", \"label\": \"Electrónica DIAN\" },\r\n                    { \"id\": \"b2\", \"parent\": \"b\", \"label\": \"Recurrente\" },\r\n                    { \"id\": \"c\", \"parent\": \"root\", \"label\": \"Inventario\", \"hue\": 38 },\r\n                    { \"id\": \"c1\", \"parent\": \"c\", \"label\": \"Bodegas\" },\r\n                    { \"id\": \"c2\", \"parent\": \"c\", \"label\": \"Kardex\" },\r\n                    { \"id\": \"d\", \"parent\": \"root\", \"label\": \"Nómina\", \"hue\": 280 },\r\n                    { \"id\": \"d1\", \"parent\": \"d\", \"label\": \"Liquidación\" },\r\n                    { \"id\": \"d2\", \"parent\": \"d\", \"label\": \"Seguridad social\" }\r\n                  ]\r\n                }\r\n              }\r\n            </script>\r\n          </is-mindmap>",
+          "html": "<iswc-mindmap open-on-click>\r\n            <script type=\"application/json\">\r\n              {\r\n                \"mindmap\": {\r\n                  \"title\": \"ContaPyme\",\r\n                  \"layout\": \"radial\",\r\n                  \"nodes\": [\r\n                    { \"id\": \"root\", \"label\": \"ContaPyme\", \"icon\": \"mdi:star\", \"hue\": 210 },\r\n                    { \"id\": \"a\", \"parent\": \"root\", \"label\": \"Contabilidad\", \"hue\": 239 },\r\n                    { \"id\": \"a1\", \"parent\": \"a\", \"label\": \"Plan de cuentas\" },\r\n                    { \"id\": \"a2\", \"parent\": \"a\", \"label\": \"Comprobantes\" },\r\n                    { \"id\": \"a3\", \"parent\": \"a\", \"label\": \"Estados financieros\" },\r\n                    { \"id\": \"b\", \"parent\": \"root\", \"label\": \"Facturación\", \"hue\": 199 },\r\n                    { \"id\": \"b1\", \"parent\": \"b\", \"label\": \"Electrónica DIAN\" },\r\n                    { \"id\": \"b2\", \"parent\": \"b\", \"label\": \"Recurrente\" },\r\n                    { \"id\": \"c\", \"parent\": \"root\", \"label\": \"Inventario\", \"hue\": 38 },\r\n                    { \"id\": \"c1\", \"parent\": \"c\", \"label\": \"Bodegas\" },\r\n                    { \"id\": \"c2\", \"parent\": \"c\", \"label\": \"Kardex\" },\r\n                    { \"id\": \"d\", \"parent\": \"root\", \"label\": \"Nómina\", \"hue\": 280 },\r\n                    { \"id\": \"d1\", \"parent\": \"d\", \"label\": \"Liquidación\" },\r\n                    { \"id\": \"d2\", \"parent\": \"d\", \"label\": \"Seguridad social\" }\r\n                  ]\r\n                }\r\n              }\r\n            </script>\r\n          </iswc-mindmap>",
           "controls": [
             {
               "control": "boolean",
@@ -38,7 +38,7 @@
         },
         {
           "kind": "demo",
-          "html": "<is-mindmap open-on-click>\r\n            <script type=\"application/json\">\r\n              {\r\n                \"mindmap\": {\r\n                  \"layout\": \"tree\",\r\n                  \"nodes\": [\r\n                    { \"id\": \"root\", \"label\": \"Cierre de mes\", \"hue\": 210 },\r\n                    { \"id\": \"a\", \"parent\": \"root\", \"label\": \"Conciliaciones\", \"hue\": 239 },\r\n                    { \"id\": \"a1\", \"parent\": \"a\", \"label\": \"Bancos\" },\r\n                    { \"id\": \"a2\", \"parent\": \"a\", \"label\": \"Cartera\" },\r\n                    { \"id\": \"b\", \"parent\": \"root\", \"label\": \"Impuestos\", \"hue\": 38 },\r\n                    { \"id\": \"b1\", \"parent\": \"b\", \"label\": \"Retenciones\" },\r\n                    { \"id\": \"b2\", \"parent\": \"b\", \"label\": \"IVA\" }\r\n                  ]\r\n                }\r\n              }\r\n            </script>\r\n          </is-mindmap>"
+          "html": "<iswc-mindmap open-on-click>\r\n            <script type=\"application/json\">\r\n              {\r\n                \"mindmap\": {\r\n                  \"layout\": \"tree\",\r\n                  \"nodes\": [\r\n                    { \"id\": \"root\", \"label\": \"Cierre de mes\", \"hue\": 210 },\r\n                    { \"id\": \"a\", \"parent\": \"root\", \"label\": \"Conciliaciones\", \"hue\": 239 },\r\n                    { \"id\": \"a1\", \"parent\": \"a\", \"label\": \"Bancos\" },\r\n                    { \"id\": \"a2\", \"parent\": \"a\", \"label\": \"Cartera\" },\r\n                    { \"id\": \"b\", \"parent\": \"root\", \"label\": \"Impuestos\", \"hue\": 38 },\r\n                    { \"id\": \"b1\", \"parent\": \"b\", \"label\": \"Retenciones\" },\r\n                    { \"id\": \"b2\", \"parent\": \"b\", \"label\": \"IVA\" }\r\n                  ]\r\n                }\r\n              }\r\n            </script>\r\n          </iswc-mindmap>"
         }
       ]
     },
@@ -127,11 +127,11 @@
               "Geometría calculada (solo lectura)."
             ],
             [
-              "<code>is-render</code>",
+              "<code>iswc-render</code>",
               "Evento: el SVG terminó de construirse."
             ],
             [
-              "<code>is-open-viewer</code>",
+              "<code>iswc-open-viewer</code>",
               "Evento: se solicitó abrir el visor a pantalla completa."
             ]
           ]

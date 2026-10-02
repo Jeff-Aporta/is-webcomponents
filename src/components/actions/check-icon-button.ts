@@ -4,7 +4,7 @@ import './button.js';
 import { setStringAttr } from '../_shared/reflect.js';
 
 /**
- * <is-check-icon-button> — botón icon-only con dos estados (unchecked / checked).
+ * <iswc-check-icon-button> — botón icon-only con dos estados (unchecked / checked).
  *
  * Muestra un solo icono a la vez según `checked`. Similar a un toggle/switch visual.
  *
@@ -18,17 +18,17 @@ import { setStringAttr } from '../_shared/reflect.js';
  *   disabled        boolean
  *
  * Events (bubbles, composed)
- *   is-change  { checked: boolean }  — tras cada toggle
+ *   iswc-change  { checked: boolean }  — tras cada toggle
  *
  * CSS Parts: ::part(button) ::part(icon)
  *
- * La superficie que se pinta es un <is-button variant="text">, no un <button>
+ * La superficie que se pinta es un <iswc-button variant="text">, no un <button>
  * suelto: así el hover, el active, el estado disabled y la conversión a
  * enlace salen del botón del kit en vez de reimplementarse aquí.
  *
  * El control accesible SIGUE siendo el host (role=button, tabindex, teclado):
- * es lo que esperan is-video, is-speed-dial y is-theme-toggle, que lo
- * estilizan y lo enfocan como si fuera un botón. Por eso el is-button interno
+ * es lo que esperan iswc-video, iswc-speed-dial y iswc-theme-toggle, que lo
+ * estilizan y lo enfocan como si fuera un botón. Por eso el iswc-button interno
  * va con `tabindex="-1"` y `aria-hidden` — pinta, no participa.
  */
 
@@ -37,7 +37,7 @@ import { setStringAttr } from '../_shared/reflect.js';
   // `exportparts` conserva los nombres de part que ya publicaba el
   // componente: ::part(button) sigue apuntando a la caja que se pinta.
   TEMPLATE.innerHTML = /* html */ `
-    <is-button
+    <iswc-button
       class="btn"
       variant="text"
       color="neutral"
@@ -45,13 +45,13 @@ import { setStringAttr } from '../_shared/reflect.js';
       aria-hidden="true"
       exportparts="button: button"
     >
-      <is-icon part="icon" class="ico" aria-hidden="true"></is-icon>
-    </is-button>
+      <iswc-icon part="icon" class="ico" aria-hidden="true"></iswc-icon>
+    </iswc-button>
   `;
 
   const OBSERVED = ['checked', 'icon', 'checked-icon', 'label', 'checked-label', 'variant', 'disabled'];
 
-  class IsCheckIconButton extends HTMLElement {
+  class IswcCheckIconButton extends HTMLElement {
     static get observedAttributes(): string[] { return OBSERVED; }
 
     #btn!: HTMLElement;
@@ -63,7 +63,7 @@ import { setStringAttr } from '../_shared/reflect.js';
       const shadow = this.attachShadow({ mode: 'open' });
       adoptCss(shadow, import.meta.url);
       shadow.appendChild(TEMPLATE.content.cloneNode(true));
-      this.#btn = shadow.querySelector<HTMLElement>('is-button')!;
+      this.#btn = shadow.querySelector<HTMLElement>('iswc-button')!;
       this.#ico = shadow.querySelector<HTMLElement>('.ico')!;
       // El control accesible es el host, no el <button> interno: escuchar aquí
       // hace que el click del usuario (que burbujea) y `el.click()` coincidan.
@@ -135,7 +135,7 @@ import { setStringAttr } from '../_shared/reflect.js';
     };
 
     #emit() {
-      emit(this, 'is-change', { checked: this.checked });
+      emit(this, 'iswc-change', { checked: this.checked });
     }
 
     #render() {
@@ -156,5 +156,5 @@ import { setStringAttr } from '../_shared/reflect.js';
     }
   }
 
-  defineElement('is-check-icon-button', IsCheckIconButton, 'IsCheckIconButton');
+  defineElement('iswc-check-icon-button', IswcCheckIconButton, 'IswcCheckIconButton');
 })();

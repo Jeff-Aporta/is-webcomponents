@@ -25,7 +25,7 @@
 1. **Atajo global de apertura Ctrl/Cmd+K desde cualquier punto de la página** — [Teclado]
    - Setup: Cargar la página del demo sin foco inicial en ningún control (`document.body`). Capturar `addEventListener('keydown', ...)` antes de la acción.
    - Acción: Pulsar `Control+K` (en macOS `Meta+K`) sobre `document`. Repetir pulsándolo sobre un `<input>` externo y sobre un `<button>` para confirmar captura global.
-   - Assertion: El overlay (`is-command-palette` o equivalente en Shadow DOM) pasa de `hidden`/`aria-hidden="true"` a visible, el `<input>` interno recibe `focus` (verificable con `document.activeElement` atravesando ShadowRoot), y `aria-expanded` del trigger cambia a `true`.
+   - Assertion: El overlay (`iswc-command-palette` o equivalente en Shadow DOM) pasa de `hidden`/`aria-hidden="true"` a visible, el `<input>` interno recibe `focus` (verificable con `document.activeElement` atravesando ShadowRoot), y `aria-expanded` del trigger cambia a `true`.
    - Cobertura: Atajo documentado, captura cross-root, no-interferencia con campos de texto del documento anfitrión.
 
 2. **Atajos alternativos documentados (Ctrl/Cmd+/ y Ctrl/Cmd+P) no rompen el flujo** — [Teclado]
@@ -55,7 +55,7 @@
 6. **Navegación con flechas ↑/↓ entre resultados con highlighting visual y aria-selected** — [Teclado] [ARIA/a11y]
    - Setup: Paleta abierta con ≥5 items visibles. Foco inicial en input (no en lista).
    - Acción: Pulsar `ArrowDown` 3 veces; pulsar `ArrowUp` 1 vez; pulsar `ArrowDown` en el último item (debe ciclar al primero); pulsar `ArrowUp` en el primero (debe ciclar al último o volver al input).
-   - Assertion: Cada item activo recibe una clase visual de selección (clase CSS tipo `.is-selected` o `data-active="true"`) y `aria-selected="true"`; los demás llevan `aria-selected="false"`; el item activo entra en viewport (scrollIntoView si overflow).
+   - Assertion: Cada item activo recibe una clase visual de selección (clase CSS tipo `.iswc-selected` o `data-active="true"`) y `aria-selected="true"`; los demás llevan `aria-selected="false"`; el item activo entra en viewport (scrollIntoView si overflow).
    - Cobertura: Cíclica, ARIA listbox/option, scroll automático.
 
 7. **Activación con Enter ejecuta el comando seleccionado y cierra la paleta** — [Teclado] [Interacción]

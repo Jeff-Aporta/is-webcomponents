@@ -3,7 +3,7 @@
 // Cobertura:
 //   - smoke: custom element definido, shadow DOM con .zone y cola
 //   - funcional: drop con DataTransfer mock añade archivos; removeFile los
-//     quita; max-files dispara is-error; max-size respeta el límite
+//     quita; max-files dispara iswc-error; max-size respeta el límite
 //   - accesibilidad: la zona es focusable (tabindex=0) y emite aria-label
 //   - edge cases: drop vacío (sin files) no rompe; addFile manual funciona
 import assert from 'node:assert/strict';
@@ -19,11 +19,11 @@ tests.push({
     await page.goto(URL, { waitUntil: 'domcontentloaded' });
     await waitReady(page, 'data-dropzone-ready');
     const data = await page.evaluate(() => {
-      const zones = [...document.querySelectorAll('is-dropzone')];
+      const zones = [...document.querySelectorAll('iswc-dropzone')];
       return zones.map((z) => {
         const sr = z.shadowRoot;
         return {
-          defined: !!customElements.get('is-dropzone'),
+          defined: !!customElements.get('iswc-dropzone'),
           hasShadow: !!sr,
           hasZone: !!sr?.querySelector('.zone'),
           hasQueue: !!sr?.querySelector('.queue'),
@@ -33,7 +33,7 @@ tests.push({
       });
     });
     assert.equal(data.length, 4, 'debe haber 4 dropzones (libre, imágenes, pdf, disabled)');
-    assert.equal(data[0].defined, true, 'is-dropzone debe estar definido');
+    assert.equal(data[0].defined, true, 'iswc-dropzone debe estar definido');
     assert.equal(data[0].hasShadow, true, 'shadow root debe existir');
     assert.equal(data[0].hasZone, true, '.zone presente');
     assert.equal(data[0].hasQueue, true, '.queue presente');
@@ -105,14 +105,14 @@ tests.push({
 });
 
 tests.push({
-  name: 'funcional: max-files emite is-error y rechaza el exceso',
+  name: 'funcional: max-files emite iswc-error y rechaza el exceso',
   run: async (page) => {
     await page.goto(URL, { waitUntil: 'domcontentloaded' });
     await waitReady(page, 'data-dropzone-ready');
     const result = await page.evaluate(() => {
       return new Promise((resolve) => {
         const dz = document.querySelector('#imagenes'); // max-files=3
-        dz.addEventListener('is-error', (e) => {
+        dz.addEventListener('iswc-error', (e) => {
           resolve({ filesCount: dz.files.length, error: e.detail });
         }, { once: true });
         // añadir 5 archivos en bloque (todos válidos como image/*)
@@ -124,8 +124,8 @@ tests.push({
       });
     });
     assert.ok(result.filesCount <= 3, `debe haber <=3 archivos (hay ${result.filesCount})`);
-    assert.equal(result.error.reason, 'max-files', 'is-error reason=max-files');
-    assert.equal(result.error.limit, 3, 'is-error.limit=3');
+    assert.equal(result.error.reason, 'max-files', 'iswc-error reason=max-files');
+    assert.equal(result.error.limit, 3, 'iswc-error.limit=3');
   },
 });
 
@@ -137,7 +137,7 @@ tests.push({
     const result = await page.evaluate(() => {
       return new Promise((resolve) => {
         const dz = document.querySelector('#pdf'); // max-size=5MB
-        dz.addEventListener('is-error', (e) => {
+        dz.addEventListener('iswc-error', (e) => {
           resolve({ filesCount: dz.files.length, error: e.detail });
         }, { once: true });
         // crear un archivo > 5 MB
@@ -146,7 +146,7 @@ tests.push({
       });
     });
     assert.equal(result.filesCount, 0, 'archivo rechazado, 0 en cola');
-    assert.equal(result.error.reason, 'max-size', 'is-error reason=max-size');
+    assert.equal(result.error.reason, 'max-size', 'iswc-error reason=max-size');
   },
 });
 
@@ -159,7 +159,7 @@ tests.push({
       return new Promise((resolve) => {
         const dz = document.querySelector('#imagenes');
         const errors = [];
-        dz.addEventListener('is-error', (e) => errors.push(e.detail));
+        dz.addEventListener('iswc-error', (e) => errors.push(e.detail));
         dz.addFile(new File(['x'], 'doc.txt', { type: 'text/plain' })); // no es imagen
         setTimeout(() => {
           resolve({ filesCount: dz.files.length, errors });
@@ -167,7 +167,7 @@ tests.push({
       });
     });
     assert.equal(result.filesCount, 0, 'archivo no-imagen rechazado');
-    assert.equal(result.errors[0].reason, 'accept', 'is-error reason=accept');
+    assert.equal(result.errors[0].reason, 'accept', 'iswc-error reason=accept');
   },
 });
 

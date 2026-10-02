@@ -14,7 +14,7 @@ try {
   await page.waitForTimeout(200);
 
   const data = await page.evaluate(() => {
-    return [...document.querySelectorAll('is-float-card')].map((fc) => {
+    return [...document.querySelectorAll('iswc-float-card')].map((fc) => {
       const sr = fc.shadowRoot;
       const wrap = sr?.querySelector('[part="wrap"]');
       const panel = sr?.querySelector('[part="panel"]');

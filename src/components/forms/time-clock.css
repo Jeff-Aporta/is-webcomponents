@@ -33,22 +33,27 @@
     font-variant-numeric: tabular-nums;
   }
 
-  .unit {
+  /* Estilo base compartido por las unidades (HH/MM/SS) y los meridianos (AM/PM):
+   * mismo hover y misma activación visual. El meridiano además rellena el fondo. */
+  :is(.unit, .mer) {
     border: 0;
     background: transparent;
     color: var(--iswc-text-dim, #7a8390);
     font: inherit;
+    cursor: pointer;
+    &:hover { background: var(--iswc-control-bg-hover, #e9ecef); }
+
+    &[data-active] {
+      color: var(--iswc-accent, #e03131);
+      font-weight: 600;
+    }
+  }
+
+  .unit {
     font-size: 1.6em;
     line-height: 1;
     padding: 0 0.1em;
     border-radius: var(--iswc-radius-sm, 0.375em);
-    cursor: pointer;
-    &:hover { background: var(--iswc-control-bg-hover, #e9ecef); }
-  }
-
-  .unit[data-active] {
-    color: var(--iswc-accent, #e03131);
-    font-weight: 600;
   }
 
   .sep {
@@ -65,21 +70,11 @@
   }
 
   .mer {
-    border: 0;
-    background: transparent;
-    color: var(--iswc-text-dim, #7a8390);
-    font: inherit;
     font-size: 0.7em;
     padding: 0.1em 0.35em;
     border-radius: 999px;
-    cursor: pointer;
-    &:hover { background: var(--iswc-control-bg-hover, #e9ecef); }
-  }
-
-  .mer[data-active] {
-    background: var(--iswc-accent-bg, rgb(224 49 49 / 12%));
-    color: var(--iswc-accent, #e03131);
-    font-weight: 600;
+    /* Fondo activo específico del meridiano (lo unit ya tienen el suyo vía :hover). */
+    &[data-active] { background: var(--iswc-accent-bg, rgb(224 49 49 / 12%)); }
   }
 
   .clock {
@@ -89,23 +84,34 @@
     background: var(--iswc-clock-face);
     touch-action: none;
     cursor: pointer;
+
+    &:focus-visible {
+      outline: 2px solid var(--iswc-focus, var(--iswc-accent, #e03131));
+      outline-offset: 2px;
+    }
   }
 
-  .clock:focus-visible {
-    outline: 2px solid var(--iswc-focus, var(--iswc-accent, #e03131));
-    outline-offset: 2px;
+  /* Anillos (outer/inner) y números rotados: comparten posicionamiento absoluto.
+   * El inset del inner se customiza con --iswc-clock-inset, usado por .lbl. */
+  :is(.ring, .num) {
+    position: absolute;
+    inset: 0;
   }
 
   .ring {
-    position: absolute;
-    inset: 0;
+    &.inner {
+      --iswc-clock-inset: 20%;
+
+      .lbl {
+        font-size: 0.7em;
+        color: var(--iswc-text-dim, #7a8390);
+      }
+    }
   }
 
   /* El envoltorio ocupa el disco y gira; la etiqueta se desgira para quedar
    * recta. Con radios relativos, cambiar --iswc-clock-size escala todo. */
   .num {
-    position: absolute;
-    inset: 0;
     transform: rotate(var(--a, 0deg));
     pointer-events: none;
     user-select: none;
@@ -126,22 +132,19 @@
     transform: rotate(calc(-1 * var(--a, 0deg)));
   }
 
-  .ring.inner {
-    --iswc-clock-inset: 20%;
-  }
+  .num {
+    &[data-selected] {
+      .lbl {
+        color: var(--iswc-on-brand, #fff);
+        font-weight: 600;
+      }
+    }
 
-  .ring.inner .lbl {
-    font-size: 0.7em;
-    color: var(--iswc-text-dim, #7a8390);
-  }
-
-  .num[data-selected] .lbl {
-    color: var(--iswc-on-brand, #fff);
-    font-weight: 600;
-  }
-
-  .num[data-disabled] .lbl {
-    opacity: 0.3;
+    &[data-disabled] {
+      .lbl {
+        opacity: 0.3;
+      }
+    }
   }
 
   .hand {
@@ -154,14 +157,14 @@
     transform-origin: bottom center;
     transform: translateX(-50%) rotate(var(--a, 0deg));
     pointer-events: none;
-  }
 
-  .hand[data-short] {
-    --iswc-hand-length: 26%;
-  }
+    &[data-short] {
+      --iswc-hand-length: 26%;
+    }
 
-  .hand[hidden] {
-    display: none;
+    &[hidden] {
+      display: none;
+    }
   }
 
   .knob {
@@ -187,7 +190,9 @@
   }
 }
 
-:host([disabled]) .base {
-  opacity: 0.6;
-  pointer-events: none;
+:host([disabled]) {
+  .base {
+    opacity: 0.6;
+    pointer-events: none;
+  }
 }

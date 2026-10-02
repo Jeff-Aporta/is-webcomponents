@@ -1,8 +1,8 @@
 /**
- * <is-preview-controls> — panel de controles de demo (playground tipo
+ * <iswc-preview-controls> — panel de controles de demo (playground tipo
  * Storybook), 100% JSON-driven. Recibe por propiedad `spec` el array de
  * controles (ver src/utils/system/controls/controls.schema.json) y emite
- * `is-controls-change` ({def, valor}) para que el sistema los aplique al
+ * `iswc-controls-change` ({def, valor}) para que el sistema los aplique al
  * componente vía JSON -> prop/attr. Dev-only: se usa en la galería.
  *
  * Atributos: label (título del panel). Propiedad: spec.
@@ -80,7 +80,7 @@ function escProp(prop: string): string {
 const TPL = document.createElement('template');
 TPL.innerHTML = `<style>${CSS}</style><details class="panel"><summary></summary><div class="grupos"></div></details>`;
 
-class IsPreviewControls extends HTMLElement {
+class IswcPreviewControls extends HTMLElement {
   #spec: ControlPanel[] = [];
   #grupos = new Map<string, HTMLElement>();
 
@@ -105,7 +105,7 @@ class IsPreviewControls extends HTMLElement {
     return this.#spec.map((s) => ({ ...s }));
   }
 
-  /** Actualiza el valor de un control y dispara is-controls-change. */
+  /** Actualiza el valor de un control y dispara iswc-controls-change. */
   setValor(prop: string, valor: unknown): void {
     const row = this.shadowRoot!.querySelector<HTMLElement>(`[data-control-prop="${escProp(prop)}"]`);
     if (!row) return;
@@ -251,7 +251,7 @@ class IsPreviewControls extends HTMLElement {
   #emitir(c: ControlPanel, valor: unknown): void {
     const def = { control: c.control, prop: c.prop, label: c.label, group: c.group };
     c.value = valor;
-    this.dispatchEvent(new CustomEvent('is-controls-change', {
+    this.dispatchEvent(new CustomEvent('iswc-controls-change', {
       detail: { def, valor },
       bubbles: true,
       composed: true,
@@ -271,17 +271,17 @@ class IsPreviewControls extends HTMLElement {
 }
 
 let definido = false;
-/** Define <is-preview-controls> una sola vez (idempotente). */
+/** Define <iswc-preview-controls> una sola vez (idempotente). */
 export function definePreviewControls(): void {
-  if (definido || customElements.get('is-preview-controls')) {
+  if (definido || customElements.get('iswc-preview-controls')) {
     definido = true;
     return;
   }
-  customElements.define('is-preview-controls', IsPreviewControls);
+  customElements.define('iswc-preview-controls', IswcPreviewControls);
   definido = true;
 }
 
 if (typeof customElements !== 'undefined') definePreviewControls();
 
-export { IsPreviewControls };
-export default IsPreviewControls;
+export { IswcPreviewControls };
+export default IswcPreviewControls;

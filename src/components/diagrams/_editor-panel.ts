@@ -7,11 +7,11 @@
  *   - Export JSON: textarea readonly + botón "Copiar".
  *
  * Eventos que el panel EMITE:
- *   - `is-editor-select-node` (detail: { nodeId: string })
- *   - `is-editor-export` (detail: { kind: 'json' | 'svg' })
+ *   - `iswc-editor-select-node` (detail: { nodeId: string })
+ *   - `iswc-editor-export` (detail: { kind: 'json' | 'svg' })
  *
  * Eventos que el panel ESCUCHA (en el host):
- *   - `is-editor-selection-changed` (detail: { nodeId: string | null })
+ *   - `iswc-editor-selection-changed` (detail: { nodeId: string | null })
  *
  * Temas: hereda de las CSS vars `--iswc-bg-elev`, `--iswc-border`, `--iswc-text`,
  * `--iswc-text-soft`, `--iswc-accent`.
@@ -43,9 +43,9 @@ export interface EditorPanelOptions {
   showExportJson?: boolean;
 }
 
-export const EDITOR_SELECT_NODE_EVENT = 'is-editor-select-node';
-export const EDITOR_EXPORT_EVENT = 'is-editor-export';
-export const EDITOR_SELECTION_CHANGED_EVENT = 'is-editor-selection-changed';
+export const EDITOR_SELECT_NODE_EVENT = 'iswc-editor-select-node';
+export const EDITOR_EXPORT_EVENT = 'iswc-editor-export';
+export const EDITOR_SELECTION_CHANGED_EVENT = 'iswc-editor-selection-changed';
 
 const PANEL_CSS = `
 :host {

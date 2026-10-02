@@ -62,7 +62,7 @@ testE2E('barrido: ninguna vista del catalogo debe producir errores ni peligros',
     const rastro = await rastroCodeMirror(page);
     const arbol = await arbolTexto(page);
     const textoAlerta = /TypeError|ReferenceError|is not defined|Uncaught|Cannot read propert|Failed to fetch|Internal Server Error/i.exec(arbol);
-    const ev = await evidencia(page, `03-${nombre.replace(/^is-/, '')}`);
+    const ev = await evidencia(page, `03-${nombre.replace(/^iswc-/, '')}`);
     t.diagnostic(`vista ${nombre}: ${problemas.length} error(es) de consola, rastro CM ${rastro.total}; captura ${ev.png}`);
     for (const p of problemas) {
       hallazgos.push({ vista: nombre, tipo: p.tipo, texto: p.texto, captura: ev.png });

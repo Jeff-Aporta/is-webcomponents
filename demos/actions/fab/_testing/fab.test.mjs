@@ -1,4 +1,4 @@
-// fab.test.mjs — Nivel 3: smoke + props reactivas + posición + is-fab-click.
+// fab.test.mjs — Nivel 3: smoke + props reactivas + posición + iswc-fab-click.
 import { test } from 'node:test';
 import assert from 'node:assert/strict';
 import { chromium } from 'playwright';
@@ -9,11 +9,11 @@ let browser;
 test.before(async () => { browser = await chromium.launch(); });
 test.after(async () => { await browser?.close(); });
 
-test('fab: bundle registra <is-fab>', async () => {
+test('fab: bundle registra <iswc-fab>', async () => {
   const page = await browser.newPage();
   await page.goto(URL_DEMO, { waitUntil: 'domcontentloaded' });
-  await page.waitForSelector('is-fab:defined');
-  const defined = await page.evaluate(() => !!customElements.get('is-fab'));
+  await page.waitForSelector('iswc-fab:defined');
+  const defined = await page.evaluate(() => !!customElements.get('iswc-fab'));
   assert.equal(defined, true);
   await page.close();
 });
@@ -21,9 +21,9 @@ test('fab: bundle registra <is-fab>', async () => {
 test('fab: atributo position se refleja en dataset.position', async () => {
   const page = await browser.newPage();
   await page.goto(URL_DEMO, { waitUntil: 'domcontentloaded' });
-  await page.waitForSelector('is-fab:defined');
+  await page.waitForSelector('iswc-fab:defined');
   const positions = await page.evaluate(() => {
-    return [...document.querySelectorAll('is-fab')].map((f) => ({
+    return [...document.querySelectorAll('iswc-fab')].map((f) => ({
       attr: f.getAttribute('position'),
       ds: f.dataset.position,
       color: f.color,
@@ -37,13 +37,13 @@ test('fab: atributo position se refleja en dataset.position', async () => {
   await page.close();
 });
 
-test('fab: color="warning" llega al <is-button> interno', async () => {
+test('fab: color="warning" llega al <iswc-button> interno', async () => {
   const page = await browser.newPage();
   await page.goto(URL_DEMO, { waitUntil: 'domcontentloaded' });
-  await page.waitForSelector('is-fab:defined');
+  await page.waitForSelector('iswc-fab:defined');
   const innerColor = await page.evaluate(() => {
     const fab = document.getElementById('fab3');
-    return fab.shadowRoot.querySelector('is-button').getAttribute('color');
+    return fab.shadowRoot.querySelector('iswc-button').getAttribute('color');
   });
   assert.equal(innerColor, 'warning');
   await page.close();
@@ -52,10 +52,10 @@ test('fab: color="warning" llega al <is-button> interno', async () => {
 test('fab: atributo extended → clase .extended en el inner', async () => {
   const page = await browser.newPage();
   await page.goto(URL_DEMO, { waitUntil: 'domcontentloaded' });
-  await page.waitForSelector('is-fab:defined');
+  await page.waitForSelector('iswc-fab:defined');
   const hasExtended = await page.evaluate(() => {
     const fab = document.getElementById('fab4');
-    return fab.shadowRoot.querySelector('is-button').classList.contains('extended');
+    return fab.shadowRoot.querySelector('iswc-button').classList.contains('extended');
   });
   assert.equal(hasExtended, true);
   await page.close();
@@ -64,22 +64,22 @@ test('fab: atributo extended → clase .extended en el inner', async () => {
 test('fab: atributo pulse → clase .pulse en el inner', async () => {
   const page = await browser.newPage();
   await page.goto(URL_DEMO, { waitUntil: 'domcontentloaded' });
-  await page.waitForSelector('is-fab:defined');
+  await page.waitForSelector('iswc-fab:defined');
   const hasPulse = await page.evaluate(() => {
     const fab = document.getElementById('fab3');
-    return fab.shadowRoot.querySelector('is-button').classList.contains('pulse');
+    return fab.shadowRoot.querySelector('iswc-button').classList.contains('pulse');
   });
   assert.equal(hasPulse, true);
   await page.close();
 });
 
-test('fab: click emite is-fab-click', async () => {
+test('fab: click emite iswc-fab-click', async () => {
   const page = await browser.newPage();
   await page.goto(URL_DEMO, { waitUntil: 'domcontentloaded' });
-  await page.waitForSelector('is-fab:defined');
+  await page.waitForSelector('iswc-fab:defined');
   await page.evaluate(() => {
     window.__fabEvts = 0;
-    document.getElementById('fab1').addEventListener('is-fab-click', () => { window.__fabEvts += 1; });
+    document.getElementById('fab1').addEventListener('iswc-fab-click', () => { window.__fabEvts += 1; });
   });
   await page.evaluate(() => document.getElementById('fab1').click());
   await page.waitForTimeout(50);
@@ -91,10 +91,10 @@ test('fab: click emite is-fab-click', async () => {
 test('fab: role=button por defecto; role=link si tiene href', async () => {
   const page = await browser.newPage();
   await page.goto(URL_DEMO, { waitUntil: 'domcontentloaded' });
-  await page.waitForSelector('is-fab:defined');
+  await page.waitForSelector('iswc-fab:defined');
   const roles = await page.evaluate(() => {
     const btn = document.getElementById('fab1').getAttribute('role');
-    const fabWithHref = document.createElement('is-fab');
+    const fabWithHref = document.createElement('iswc-fab');
     fabWithHref.setAttribute('href', '#');
     document.body.appendChild(fabWithHref);
     return { btn, link: fabWithHref.getAttribute('role') };
@@ -104,12 +104,12 @@ test('fab: role=button por defecto; role=link si tiene href', async () => {
   await page.close();
 });
 
-test('fab: aria-label llega al <is-button> interno', async () => {
+test('fab: aria-label llega al <iswc-button> interno', async () => {
   const page = await browser.newPage();
   await page.goto(URL_DEMO, { waitUntil: 'domcontentloaded' });
-  await page.waitForSelector('is-fab:defined');
+  await page.waitForSelector('iswc-fab:defined');
   const aria = await page.evaluate(() => {
-    return document.getElementById('fab3').shadowRoot.querySelector('is-button').getAttribute('aria-label');
+    return document.getElementById('fab3').shadowRoot.querySelector('iswc-button').getAttribute('aria-label');
   });
   assert.equal(aria, 'Notificaciones');
   await page.close();

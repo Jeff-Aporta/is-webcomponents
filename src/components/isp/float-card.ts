@@ -9,15 +9,15 @@ import { adoptCss, defineElement } from '../../core/element.js';
  */
 
 /**
- * <is-float-card> — port de FloatingComponent.svelte (ClientesIS).
+ * <iswc-float-card> — port de FloatingComponent.svelte (ClientesIS).
  *
  * Ancla contenido (slot default) y un panel absoluto (slot="float").
  * El panel se oculta con opacity/visibility: los hijos se quedan montados
- * para no re-upgradear is-button/is-icon en cada hover (FOUC).
+ * para no re-upgradear iswc-button/iswc-icon en cada hover (FOUC).
  *
  * Attrs: open, horizontal, vertical
  * Props: linearTransform { tx, ty, e }
- * Methods: lock() / unlock() — keep-alive si un is-dropdown interno está abierto
+ * Methods: lock() / unlock() — keep-alive si un iswc-dropdown interno está abierto
  */
 
 const TEMPLATE = document.createElement('template');
@@ -49,7 +49,7 @@ interface LinearTransform {
   e?: number;
 }
 
-class IsFloatCard extends ElementBase {
+class IswcFloatCard extends ElementBase {
   static TEMPLATE = TEMPLATE;
   static get observedAttributes(): string[] {
     return ['open', 'horizontal', 'vertical', 'locked', 'label', 'labelledby'];
@@ -69,16 +69,16 @@ class IsFloatCard extends ElementBase {
   }
 
   onConnected() {
-    this.addEventListener('is-show', this.#onChildShow);
-    this.addEventListener('is-hide', this.#onChildHide);
+    this.addEventListener('iswc-show', this.#onChildShow);
+    this.addEventListener('iswc-hide', this.#onChildHide);
     this.addEventListener('keydown', this.#onKeydown);
     this.#place();
     this.#syncAria();
   }
 
   onDisconnected() {
-    this.removeEventListener('is-show', this.#onChildShow);
-    this.removeEventListener('is-hide', this.#onChildHide);
+    this.removeEventListener('iswc-show', this.#onChildShow);
+    this.removeEventListener('iswc-hide', this.#onChildHide);
     this.removeEventListener('keydown', this.#onKeydown);
   }
 
@@ -216,4 +216,4 @@ class IsFloatCard extends ElementBase {
   }
 }
 
-defineElement('is-float-card', IsFloatCard, 'IsFloatCard');
+defineElement('iswc-float-card', IswcFloatCard, 'IswcFloatCard');

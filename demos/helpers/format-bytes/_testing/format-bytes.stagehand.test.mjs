@@ -1,9 +1,9 @@
 // format-bytes.stagehand.test.mjs — checks deterministas de calidad visual
-// para el demo de <is-format-bytes>. Mismo patrón que er-stagehand.test.mjs:
+// para el demo de <iswc-format-bytes>. Mismo patrón que er-stagehand.test.mjs:
 // cero LLM, sin API keys, CI-friendly.
 //
 // Verificaciones:
-//   1. Todos los <is-format-bytes> están en el viewport horizontal.
+//   1. Todos los <iswc-format-bytes> están en el viewport horizontal.
 //   2. Las filas de la tabla no se solapan verticalmente.
 //   3. Los textos son legibles (font-size >= 10px, no vacíos).
 //   4. Las unidades (KB/MB/GB) se muestran en todos los elementos esperados.
@@ -20,7 +20,7 @@ try {
   await page.waitForTimeout(150);
 
   const data = await page.evaluate(() => {
-    const items = [...document.querySelectorAll('main is-format-bytes')].map((el, idx) => {
+    const items = [...document.querySelectorAll('main iswc-format-bytes')].map((el, idx) => {
       const r = el.getBoundingClientRect();
       const text = el.shadowRoot.querySelector('span')?.textContent ?? '';
       const cs = getComputedStyle(el.shadowRoot.querySelector('span'));

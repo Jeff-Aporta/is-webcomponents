@@ -9,17 +9,17 @@ const URL = `${BASE_URL}/demos/forms/signature/signature.html`;
 const tests = [];
 
 tests.push({
-  name: 'smoke: <is-signature> queda definido y expone un <canvas> en shadow DOM',
+  name: 'smoke: <iswc-signature> queda definido y expone un <canvas> en shadow DOM',
   run: async (page) => {
     await page.goto(URL, { waitUntil: 'domcontentloaded' });
     await waitReady(page, 'data-signature-ready');
     const data = await page.evaluate(() => {
-      const pads = [...document.querySelectorAll('main is-signature')];
+      const pads = [...document.querySelectorAll('main iswc-signature')];
       const p1 = pads[0];
       const canvas = p1.shadowRoot.querySelector('canvas');
       const rect = canvas.getBoundingClientRect();
       return {
-        defined: !!customElements.get('is-signature'),
+        defined: !!customElements.get('iswc-signature'),
         count: pads.length,
         hasCanvas: !!canvas,
         tag: canvas?.tagName,
@@ -29,7 +29,7 @@ tests.push({
         cssHeight: rect.height,
       };
     });
-    assert.equal(data.defined, true, 'is-signature debe estar definido');
+    assert.equal(data.defined, true, 'iswc-signature debe estar definido');
     assert.ok(data.count >= 3, `esperaba >=3 pads, hay ${data.count}`);
     assert.equal(data.hasCanvas, true, 'el shadow DOM debe contener un <canvas>');
     assert.equal(data.tag, 'CANVAS', 'el elemento interno debe ser CANVAS');
@@ -45,7 +45,7 @@ tests.push({
     await page.goto(URL, { waitUntil: 'domcontentloaded' });
     await waitReady(page, 'data-signature-ready');
     const data = await page.evaluate(() => {
-      const pads = [...document.querySelectorAll('main is-signature')];
+      const pads = [...document.querySelectorAll('main iswc-signature')];
       return pads.map((p) => {
         const c = p.shadowRoot.querySelector('canvas');
         return {
@@ -80,17 +80,17 @@ tests.push({
 });
 
 tests.push({
-  name: 'funcional: simular trazos con pointer events cambia isEmpty y emite is-change',
+  name: 'funcional: simular trazos con pointer events cambia isEmpty y emite iswc-change',
   run: async (page) => {
     await page.goto(URL, { waitUntil: 'domcontentloaded' });
     await waitReady(page, 'data-signature-ready');
     const data = await page.evaluate(() => {
-      const pad = document.querySelector('main is-signature');
+      const pad = document.querySelector('main iswc-signature');
       const canvas = pad.shadowRoot.querySelector('canvas');
       const rect = canvas.getBoundingClientRect();
-      // Capturar is-change (se emite en pointerup tras un trazo)
+      // Capturar iswc-change (se emite en pointerup tras un trazo)
       const strokesPromise = new Promise((resolve) => {
-        pad.addEventListener('is-change', (e) => resolve(e.detail?.strokes?.length), { once: true });
+        pad.addEventListener('iswc-change', (e) => resolve(e.detail?.strokes?.length), { once: true });
       });
       // Simular un trazo: pointerdown → varios pointermove → pointerup
       canvas.dispatchEvent(new PointerEvent('pointerdown', {
@@ -110,17 +110,17 @@ tests.push({
         strokesEvent: strokesPromise,
       };
     });
-    // Resolver la promesa del is-change (que también fija isEmpty)
+    // Resolver la promesa del iswc-change (que también fija isEmpty)
     const strokesCount = await Promise.race([
       data.strokesEvent,
       new Promise((res) => setTimeout(() => res(-1), 1500)),
     ]);
     const after = await page.evaluate(() => {
-      const pad = document.querySelector('main is-signature');
+      const pad = document.querySelector('main iswc-signature');
       return { isEmpty: pad.isEmpty };
     });
     assert.equal(data.beforeEmpty, true, 'el pad debe empezar vacío');
-    assert.ok(strokesCount >= 0, `debe haberse emitido is-change (strokesCount=${strokesCount})`);
+    assert.ok(strokesCount >= 0, `debe haberse emitido iswc-change (strokesCount=${strokesCount})`);
     // Tras el pointerup el pad tiene al menos un trazo registrado
     // (puede no llegar a 'isEmpty=false' si el test se completa muy rápido, pero isEmpty inicial=true)
     assert.equal(typeof after.isEmpty, 'boolean', 'isEmpty debe devolver un boolean');
@@ -128,12 +128,12 @@ tests.push({
 });
 
 tests.push({
-  name: 'funcional: clear() borra todos los trazos y emite is-change con strokes vacío',
+  name: 'funcional: clear() borra todos los trazos y emite iswc-change con strokes vacío',
   run: async (page) => {
     await page.goto(URL, { waitUntil: 'domcontentloaded' });
     await waitReady(page, 'data-signature-ready');
     const data = await page.evaluate(() => {
-      const pad = document.querySelector('main is-signature');
+      const pad = document.querySelector('main iswc-signature');
       const canvas = pad.shadowRoot.querySelector('canvas');
       const rect = canvas.getBoundingClientRect();
       // Dibujar un trazo manualmente
@@ -142,7 +142,7 @@ tests.push({
       canvas.dispatchEvent(new PointerEvent('pointerup', { clientX: rect.left + 60, clientY: rect.top + 60, button: 0, pointerId: 2, bubbles: true, composed: true }));
 
       const clearPromise = new Promise((resolve) => {
-        pad.addEventListener('is-change', (e) => resolve(e.detail?.strokes?.length), { once: true });
+        pad.addEventListener('iswc-change', (e) => resolve(e.detail?.strokes?.length), { once: true });
       });
       pad.clear();
       return {
@@ -155,7 +155,7 @@ tests.push({
       new Promise((res) => setTimeout(() => res(-1), 1000)),
     ]);
     assert.equal(data.afterEmpty, true, 'clear() debe dejar el pad vacío');
-    assert.equal(strokesAfterClear, 0, `is-change tras clear debe tener strokes=[], obtuve ${strokesAfterClear}`);
+    assert.equal(strokesAfterClear, 0, `iswc-change tras clear debe tener strokes=[], obtuve ${strokesAfterClear}`);
   },
 });
 
@@ -165,7 +165,7 @@ tests.push({
     await page.goto(URL, { waitUntil: 'domcontentloaded' });
     await waitReady(page, 'data-signature-ready');
     const a11y = await page.evaluate(() => {
-      const pad = document.querySelector('main is-signature');
+      const pad = document.querySelector('main iswc-signature');
       const canvas = pad.shadowRoot.querySelector('canvas');
       return {
         ariaLabel: canvas.getAttribute('aria-label'),
@@ -182,7 +182,7 @@ tests.push({
     await page.goto(URL, { waitUntil: 'domcontentloaded' });
     await waitReady(page, 'data-signature-ready');
     const data = await page.evaluate(() => {
-      const pads = [...document.querySelectorAll('main is-signature')];
+      const pads = [...document.querySelectorAll('main iswc-signature')];
       const p = pads.find((x) => x.getAttribute('name') === 'contract');
       const svg = p.toSVG();
       return { svg, w: p.width, h: p.height };
@@ -207,7 +207,7 @@ tests.push({
     await page.goto(URL, { waitUntil: 'domcontentloaded' });
     await waitReady(page, 'data-signature-ready');
     const data = await page.evaluate(() => {
-      const pad = document.querySelector('main is-signature');
+      const pad = document.querySelector('main iswc-signature');
       return {
         png: pad.toDataURL('image/png'),
         svg: pad.toDataURL('image/svg+xml'),
@@ -224,7 +224,7 @@ tests.push({
     await page.goto(URL, { waitUntil: 'domcontentloaded' });
     await waitReady(page, 'data-signature-ready');
     const sizes = await page.evaluate(() => {
-      const pads = [...document.querySelectorAll('main is-signature')];
+      const pads = [...document.querySelectorAll('main iswc-signature')];
       return pads.map((p) => {
         const c = p.shadowRoot.querySelector('canvas');
         const r = c.getBoundingClientRect();

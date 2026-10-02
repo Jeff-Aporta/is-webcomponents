@@ -4,7 +4,7 @@ const http = require('http');
 const endpoints = [
   '/',
   '/index.html',
-  '/components/is-button.js',
+  '/components/iswc-button.js',
   '/styles/presentation.css',
   '/missing.txt'
 ];

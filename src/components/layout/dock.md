@@ -1,22 +1,22 @@
 ---
-tag: is-dock
+tag: iswc-dock
 tags:
-  - is-dock
-  - is-dock-item
+  - iswc-dock
+  - iswc-dock-item
 category: layout
 status: public
 source: ./dock.js
 style: ./dock.css
 preview: ./dock.json
 ---
-# `<is-dock>`
+# `<iswc-dock>`
 
 ## Propósito
 
 Barra de accesos tipo Dock de macOS. Los ítems se magnifican al acercar el
 puntero, con caída suave según la distancia al ítem bajo el cursor.
 
-Este módulo registra `<is-dock>` y `<is-dock-item>`.
+Este módulo registra `<iswc-dock>` y `<iswc-dock-item>`.
 
 ## Cuándo usarlo
 
@@ -26,7 +26,7 @@ acciones) donde la magnificación aporta señal de foco.
 ## Cuándo no usarlo
 
 No sustituye navegación principal ni menús jerárquicos: para eso usar
-`<is-menu>` / `<is-mega-menu>` / `<is-breadcrumb>`.
+`<iswc-menu>` / `<iswc-mega-menu>` / `<iswc-breadcrumb>`.
 
 ## Importación
 
@@ -37,17 +37,17 @@ import './dock.js';
 ## Ejemplo mínimo
 
 ```html
-<is-dock>
-  <is-dock-item label="Inicio" icon="mdi:home"></is-dock-item>
-  <is-dock-item label="Buscar" icon="mdi:magnify"></is-dock-item>
-</is-dock>
+<iswc-dock>
+  <iswc-dock-item label="Inicio" icon="mdi:home"></iswc-dock-item>
+  <iswc-dock-item label="Buscar" icon="mdi:magnify"></iswc-dock-item>
+</iswc-dock>
 ```
 
 ## API
 
 ### Atributos y propiedades
 
-#### Atributos observados — `<is-dock>`
+#### Atributos observados — `<iswc-dock>`
 
 | Atributo | Tipo | Notas |
 | --- | --- | --- |
@@ -55,7 +55,7 @@ import './dock.js';
 | `max-scale` | number | Factor máximo de magnificación, default `1.6`. |
 | `range` | number | Píxeles hasta donde cae la magnificación, default `110`. |
 
-#### Atributos observados — `<is-dock-item>`
+#### Atributos observados — `<iswc-dock-item>`
 
 | Atributo | Tipo | Notas |
 | --- | --- | --- |
@@ -72,15 +72,15 @@ No expone propiedades públicas propias; el estado se lee de los atributos.
 
 | Slot | Uso |
 | --- | --- |
-| (default) de `<is-dock>` | Ítems `<is-dock-item>`. |
+| (default) de `<iswc-dock>` | Ítems `<iswc-dock-item>`. |
 
 ### Eventos
 
 | Evento | detail | bubbles | composed | cancelable |
 | --- | --- | --- | --- | --- |
-| `is-select` | `{ item }` | sí | sí | no |
+| `iswc-select` | `{ item }` | sí | sí | no |
 
-`is-select` se emite sobre el `<is-dock>` contenedor, no sobre el ítem.
+`iswc-select` se emite sobre el `<iswc-dock>` contenedor, no sobre el ítem.
 
 ### Métodos y propiedades públicas
 
@@ -90,8 +90,8 @@ No expone métodos públicos; el componente es declarativo.
 
 | Part | Uso |
 | --- | --- |
-| `root` | Contenedor de la barra (`<is-dock>`). |
-| `item` | Ancla del ítem (`<is-dock-item>`). |
+| `root` | Contenedor de la barra (`<iswc-dock>`). |
+| `item` | Ancla del ítem (`<iswc-dock-item>`). |
 | `label` | Etiqueta del ítem. |
 
 ### Custom states
@@ -131,7 +131,7 @@ No declara integración form-associated.
 - [`../_shared/define.js`](../_shared/define.js)
 - [`../_shared/emit.js`](../_shared/emit.js)
 
-Tags del módulo: `<is-dock>`, `<is-dock-item>`.
+Tags del módulo: `<iswc-dock>`, `<iswc-dock-item>`.
 
 ## Accesibilidad
 
@@ -142,22 +142,22 @@ orden de foco ni contenido anunciado.
 ## Ejemplo avanzado
 
 ```html
-<is-dock position="left" max-scale="2" range="140">
-  <is-dock-item label="Inicio" icon="mdi:home" href="/" active></is-dock-item>
-  <is-dock-item label="Reportes" icon="mdi:chart-bar" href="/reportes"></is-dock-item>
-</is-dock>
+<iswc-dock position="left" max-scale="2" range="140">
+  <iswc-dock-item label="Inicio" icon="mdi:home" href="/" active></iswc-dock-item>
+  <iswc-dock-item label="Reportes" icon="mdi:chart-bar" href="/reportes"></iswc-dock-item>
+</iswc-dock>
 
 <script type="module">
-  document.querySelector('is-dock')
-    .addEventListener('is-select', (e) => console.log(e.detail.item.label));
+  document.querySelector('iswc-dock')
+    .addEventListener('iswc-select', (e) => console.log(e.detail.item.label));
 </script>
 ```
 
 ## Errores comunes
 
-- Escuchar `is-select` en el `<is-dock-item>`: se emite en el contenedor.
+- Escuchar `iswc-select` en el `<iswc-dock-item>`: se emite en el contenedor.
 - Usar tag sin importar módulo primero.
-- Poner elementos que no son `<is-dock-item>` en el slot: no reciben escala.
+- Poner elementos que no son `<iswc-dock-item>` en el slot: no reciben escala.
 - Subir `max-scale` sin subir `range`: la magnificación queda abrupta.
 
 ## Reglas para LLM

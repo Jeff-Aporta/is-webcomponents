@@ -9,22 +9,22 @@ const URL = `${BASE_URL}/demos/diagramas/component-diagram/component-diagram.htm
 const tests = [];
 
 tests.push({
-  name: 'smoke: <is-component-diagram> monta y renderiza componentes',
+  name: 'smoke: <iswc-component-diagram> monta y renderiza componentes',
   run: async (page) => {
     await page.goto(URL, { waitUntil: 'domcontentloaded' });
     await waitReady(page, 'data-component-diagram-ready');
     const info = await page.evaluate(() => {
-      const el = document.querySelector('main is-component-diagram');
+      const el = document.querySelector('main iswc-component-diagram');
       const shadow = el?.shadowRoot;
       return {
-        defined: !!customElements.get('is-component-diagram'),
+        defined: !!customElements.get('iswc-component-diagram'),
         components: shadow?.querySelectorAll('[data-cmp-id]').length ?? 0,
         interfaces: shadow?.querySelectorAll('[data-iface-id]').length ?? 0,
         edges: shadow?.querySelectorAll('.cd-edge').length ?? 0,
         hasSvg: !!shadow?.querySelector('svg.cd-svg'),
       };
     });
-    assert.equal(info.defined, true, 'is-component-diagram debe estar definido');
+    assert.equal(info.defined, true, 'iswc-component-diagram debe estar definido');
     assert.ok(info.components >= 3, `esperaba >=3 componentes, hay ${info.components}`);
     assert.ok(info.interfaces >= 2, `esperaba >=2 interfaces, hay ${info.interfaces}`);
     assert.ok(info.edges >= 2, `esperaba >=2 aristas, hay ${info.edges}`);
@@ -39,7 +39,7 @@ tests.push({
     await page.goto(URL, { waitUntil: 'domcontentloaded' });
     await waitReady(page, 'data-component-diagram-ready');
     const ids = await page.evaluate(() => {
-      const el = document.querySelector('main is-component-diagram');
+      const el = document.querySelector('main iswc-component-diagram');
       return [...el.shadowRoot.querySelectorAll('[data-cmp-id]')].map((g) => g.dataset.cmpId);
     });
     assert.ok(ids.includes('api'), 'debe haber un componente "api"');
@@ -54,7 +54,7 @@ tests.push({
     await page.goto(URL, { waitUntil: 'domcontentloaded' });
     await waitReady(page, 'data-component-diagram-ready');
     const ids = await page.evaluate(() => {
-      const el = document.querySelector('main is-component-diagram');
+      const el = document.querySelector('main iswc-component-diagram');
       return [...el.shadowRoot.querySelectorAll('[data-iface-id]')].map((g) => g.dataset.ifaceId);
     });
     assert.ok(ids.includes('if1'), 'debe haber una interfaz "if1"');
@@ -68,7 +68,7 @@ tests.push({
     await page.goto(URL, { waitUntil: 'domcontentloaded' });
     await waitReady(page, 'data-component-diagram-ready');
     const edges = await page.evaluate(() => {
-      const el = document.querySelector('main is-component-diagram');
+      const el = document.querySelector('main iswc-component-diagram');
       return [...el.shadowRoot.querySelectorAll('.cd-edge path')].map((p) => ({
         d: p.getAttribute('d'),
         stroke: p.getAttribute('stroke') || getComputedStyle(p).stroke,
@@ -88,16 +88,16 @@ tests.push({
     await page.goto(URL, { waitUntil: 'domcontentloaded' });
     await waitReady(page, 'data-component-diagram-ready');
     const before = await page.evaluate(() => {
-      const el = document.querySelector('main is-component-diagram');
+      const el = document.querySelector('main iswc-component-diagram');
       return el.shadowRoot.querySelector('svg.cd-svg').getAttribute('viewBox');
     });
     await page.evaluate(() => {
-      const el = document.querySelector('main is-component-diagram');
+      const el = document.querySelector('main iswc-component-diagram');
       el.payload = el.payload;
     });
     await page.waitForTimeout(150);
     const after = await page.evaluate(() => {
-      const el = document.querySelector('main is-component-diagram');
+      const el = document.querySelector('main iswc-component-diagram');
       return el.shadowRoot.querySelector('svg.cd-svg').getAttribute('viewBox');
     });
     assert.equal(before, after, 'viewBox idéntico tras re-asignar payload');
@@ -110,7 +110,7 @@ tests.push({
     await page.goto(URL, { waitUntil: 'domcontentloaded' });
     await waitReady(page, 'data-component-diagram-ready');
     const meta = await page.evaluate(() => {
-      const el = document.querySelector('main is-component-diagram');
+      const el = document.querySelector('main iswc-component-diagram');
       const svg = el.shadowRoot.querySelector('svg.cd-svg');
       return { aria: svg.getAttribute('aria-label'), role: svg.getAttribute('role') };
     });

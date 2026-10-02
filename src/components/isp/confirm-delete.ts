@@ -13,15 +13,15 @@ interface InputLike extends HTMLElement {
 }
 
 /**
- * <is-confirm-delete> — Confirmación destructiva de tipo "escribe para confirmar".
+ * <iswc-confirm-delete> — Confirmación destructiva de tipo "escribe para confirmar".
  *
  * Port genérico de `src/lib/base/modal/ModalEliminar.svelte` (ISP): el botón de
  * eliminar permanece deshabilitado hasta que el usuario RE-ESCRIBE la clave del
- * registro. `<is-confirm-modal>` y `<is-popconfirm>` confirman con un clic; este
+ * registro. `<iswc-confirm-modal>` y `<iswc-popconfirm>` confirman con un clic; este
  * añade la fricción deliberada para borrados irreversibles.
  *
  * El ciclo de vida del modal (focus-trap, Escape, backdrop, restore de foco,
- * animaciones) NO se implementa aquí: se COMPONE un `<is-dialog>` dentro del
+ * animaciones) NO se implementa aquí: se COMPONE un `<iswc-dialog>` dentro del
  * shadow root y el contenido va como light DOM suyo, que es justo lo que el
  * focus-trap de `ModalBase` recorre. Antes este componente no tenía trap.
  *
@@ -41,18 +41,18 @@ interface InputLike extends HTMLElement {
  *   loading        boolean — bloquea ambos botones mientras corre el borrado
  *   light-dismiss  boolean — OPT-IN: cerrar al hacer click en el backdrop.
  *                  Antes cerraba siempre; ahora hay que pedirlo, igual que en
- *                  <is-dialog> / <is-drawer>.
+ *                  <iswc-dialog> / <iswc-drawer>.
  *
  * Slots
  *   message       contenido rico en lugar del atributo `message`
  *   description   detalle adicional bajo los campos
  *
  * Eventos (bubbles + composed)
- *   is-show / is-after-show / is-hide (cancelable) / is-after-hide
- *                       — ciclo estándar, re-emitidos por el <is-dialog> interno.
- *   is-confirm-delete   detail: { value } — solo se emite si la clave coincide
- *   is-cancel-delete    detail: {} — evento semántico ADICIONAL, acompaña a
- *                       `is-hide` cuando el cierre lo pide el usuario.
+ *   iswc-show / iswc-after-show / iswc-hide (cancelable) / iswc-after-hide
+ *                       — ciclo estándar, re-emitidos por el <iswc-dialog> interno.
+ *   iswc-confirm-delete   detail: { value } — solo se emite si la clave coincide
+ *   iswc-cancel-delete    detail: {} — evento semántico ADICIONAL, acompaña a
+ *                       `iswc-hide` cuando el cierre lo pide el usuario.
  *
  * CSS Parts: ::part(backdrop) ::part(base) ::part(heading) ::part(message)
  *            ::part(fields) ::part(actions)
@@ -62,26 +62,26 @@ interface InputLike extends HTMLElement {
   const TEMPLATE = document.createElement('template');
   // ponytail: `tabindex="0"` en los custom elements NO es decorativo. El
   // focus-trap de ModalBase busca `[tabindex]:not([tabindex="-1"])` y compañía;
-  // <is-button>/<is-input> usan `delegatesFocus`, así que el host no matchea
+  // <iswc-button>/<iswc-input> usan `delegatesFocus`, así que el host no matchea
   // ningún selector focuseable y el trap se quedaría sin anclas (Tab muerto).
   TEMPLATE.innerHTML = /* html */ `
-    <is-dialog class="dlg" exportparts="backdrop, dialog: base">
+    <iswc-dialog class="dlg" exportparts="backdrop, dialog: base">
       <span slot="label" part="heading" class="heading">
-        <is-icon icon="mdi:trash-can-outline" aria-hidden="true"></is-icon>
+        <iswc-icon icon="mdi:trash-can-outline" aria-hidden="true"></iswc-icon>
         <span class="heading-text"></span>
       </span>
       <div part="message" class="message"><span class="message-text"></span><slot name="message"></slot></div>
       <div part="fields" class="fields">
-        <is-input class="current" label-placement="float" readonly tabindex="0"></is-input>
-        <is-input class="confirm" label-placement="float" required autocomplete="off" autofocus tabindex="0"></is-input>
+        <iswc-input class="current" label-placement="float" readonly tabindex="0"></iswc-input>
+        <iswc-input class="confirm" label-placement="float" required autocomplete="off" autofocus tabindex="0"></iswc-input>
         <p class="help"></p>
       </div>
       <slot name="description"></slot>
       <div part="actions" class="actions" slot="footer">
-        <is-button class="cancel" color="neutral" variant="outlined" data-dialog="close" tabindex="0">Cancelar</is-button>
-        <is-button class="delete" color="danger" disabled tabindex="0">Eliminar</is-button>
+        <iswc-button class="cancel" color="neutral" variant="outlined" data-dialog="close" tabindex="0">Cancelar</iswc-button>
+        <iswc-button class="delete" color="danger" disabled tabindex="0">Eliminar</iswc-button>
       </div>
-    </is-dialog>
+    </iswc-dialog>
   `;
 
   const OBSERVED = [
@@ -90,7 +90,7 @@ interface InputLike extends HTMLElement {
     'case-sensitive', 'loading', 'light-dismiss'
   ];
 
-  class IsConfirmDelete extends ElementBase {
+  class IswcConfirmDelete extends ElementBase {
     /** Personalización por atributo (ver `core/attrs.ts`). */
     static styleAttrs = {
     accent: { prop: '--iswc-confirm-delete-accent', onlyColorValues: true },
@@ -129,11 +129,11 @@ interface InputLike extends HTMLElement {
     }
 
     onConnected() {
-      this.#confirmField.addEventListener('is-input', this.#onConfirmInput);
+      this.#confirmField.addEventListener('iswc-input', this.#onConfirmInput);
       this.#deleteBtn.addEventListener('click', this.#onDelete);
       this.#messageSlot.addEventListener('slotchange', this.#syncMessage);
-      this.#dlg.addEventListener('is-hide', this.#onDialogHide);
-      this.#dlg.addEventListener('is-after-hide', this.#onDialogAfterHide);
+      this.#dlg.addEventListener('iswc-hide', this.#onDialogHide);
+      this.#dlg.addEventListener('iswc-after-hide', this.#onDialogAfterHide);
       this.#bindTrigger();
       this.#syncTexts();
       this.#syncMessage();
@@ -143,11 +143,11 @@ interface InputLike extends HTMLElement {
     }
 
     onDisconnected() {
-      this.#confirmField.removeEventListener('is-input', this.#onConfirmInput);
+      this.#confirmField.removeEventListener('iswc-input', this.#onConfirmInput);
       this.#deleteBtn.removeEventListener('click', this.#onDelete);
       this.#messageSlot.removeEventListener('slotchange', this.#syncMessage);
-      this.#dlg.removeEventListener('is-hide', this.#onDialogHide);
-      this.#dlg.removeEventListener('is-after-hide', this.#onDialogAfterHide);
+      this.#dlg.removeEventListener('iswc-hide', this.#onDialogHide);
+      this.#dlg.removeEventListener('iswc-after-hide', this.#onDialogAfterHide);
       this.#unbindTrigger();
     }
 
@@ -248,7 +248,7 @@ interface InputLike extends HTMLElement {
         : (this.getAttribute('message') || '¿Confirma que desea eliminar este registro?');
     };
 
-    /** `light-dismiss` es opt-in y se delega tal cual al <is-dialog>. */
+    /** `light-dismiss` es opt-in y se delega tal cual al <iswc-dialog>. */
     #syncLightDismiss() {
       this.#dlg.toggleAttribute('light-dismiss', this.lightDismiss);
     }
@@ -296,17 +296,17 @@ interface InputLike extends HTMLElement {
     #onDelete = (): void => {
       // Doble comprobación: el botón podría habilitarse desde fuera.
       if (!this.confirmed || this.loading) return;
-      emit(this, 'is-confirm-delete', { value: this.#confirmField.value });
+      emit(this, 'iswc-confirm-delete', { value: this.#confirmField.value });
     };
 
     /**
-     * `is-hide` sólo lo emite ModalBase cuando el cierre lo PIDE el usuario
+     * `iswc-hide` sólo lo emite ModalBase cuando el cierre lo PIDE el usuario
      * (Escape, backdrop, botón Cancelar): `hide()` programático no pasa por
-     * aquí. Es justo la semántica que tenía `is-cancel-delete`.
+     * aquí. Es justo la semántica que tenía `iswc-cancel-delete`.
      */
     #onDialogHide = (e: Event): void => {
       if (this.loading) { e.preventDefault(); return; }
-      emit(this, 'is-cancel-delete', {});
+      emit(this, 'iswc-cancel-delete', {});
     };
 
     #onDialogAfterHide = (): void => { this.removeAttribute('open'); };
@@ -342,5 +342,5 @@ interface InputLike extends HTMLElement {
     }
   }
 
-  defineElement('is-confirm-delete', IsConfirmDelete, 'IsConfirmDelete');
+  defineElement('iswc-confirm-delete', IswcConfirmDelete, 'IswcConfirmDelete');
 })();

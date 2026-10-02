@@ -1,17 +1,17 @@
 ---
-tag: is-ui
+tag: iswc-ui
 tags:
-  - is-ui
+  - iswc-ui
 category: helpers
 status: public
 source: ./ui.js
 preview: ./ui.json
 ---
-# `helpers/ui` · `IsUi`
+# `helpers/ui` · `IswcUi`
 
 ## Propósito
 
-Primitivas de render para **apps consumidoras** del kit. **No es un custom element**: publica `globalThis.IsUi` (alias `Ui`) y exports ESM (`html`, `adoptCss`, `define`, …).
+Primitivas de render para **apps consumidoras** del kit. **No es un custom element**: publica `globalThis.IswcUi` (alias `Ui`) y exports ESM (`html`, `adoptCss`, `define`, …).
 
 ## Cuándo usarlo
 
@@ -25,7 +25,7 @@ No sustituye componentes `is-*`. No reinventar botones, dialogs, tablas, toasts 
 
 ```html
 <script type="module" src="…/dist/cdn/all.min.js"></script>
-<!-- IsUi / Ui ya están en globalThis -->
+<!-- IswcUi / Ui ya están en globalThis -->
 ```
 
 ```js
@@ -41,7 +41,7 @@ class MiVista extends HTMLElement {
   #root = this.attachShadow({ mode: 'open' });
   connectedCallback() {
     this.#root.append(html`
-      <is-button onclick=${() => console.log('ok')}>Hola</is-button>
+      <iswc-button onclick=${() => console.log('ok')}>Hola</iswc-button>
     `);
     adoptCss(this.#root, import.meta.url);
   }
@@ -77,7 +77,7 @@ No aplica.
 
 ### Métodos y propiedades públicas
 
-Ver tabla de API de módulo. Globales: `IsUi`, `Ui`.
+Ver tabla de API de módulo. Globales: `IswcUi`, `Ui`.
 
 ### CSS parts
 
@@ -129,11 +129,11 @@ define('app-files', AppFiles);
 
 - Embeber `const CSS = \`…\`` gigante en el `.ts` en vez de `.css` hermano.
 - Olvidar `adoptCss` después de regenerar el shadow.
-- Usar `IsUi` para pintar UI genérica que ya cubre un `is-*`.
+- Usar `IswcUi` para pintar UI genérica que ya cubre un `is-*`.
 
 ## Reglas para LLM
 
-- Leer este MD y el preview `helpers/is-ui.html` antes de inventar API.
+- Leer este MD y el preview `helpers/iswc-ui.html` antes de inventar API.
 - Consumo CDN: `helpers/ui.min.js` o `all.min.js`.
 - Dominio = traducir datos → `is-*` + CSS hermano.
 

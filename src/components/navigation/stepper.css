@@ -12,22 +12,56 @@
 
 .stepper {
   display: flex;
-  width: 100%;
+  inline-size: 100%;
   gap: 0.5rem;
+
+  &[data-orientation="horizontal"] {
+    flex-direction: row;
+    align-items: flex-start;
+
+    .indicator {
+      flex-direction: column;
+      min-inline-size: 2rem;
+    }
+    .line {
+      flex: 1 1 auto;
+      block-size: 2px;
+      inline-size: auto;
+      min-block-size: 0;
+      margin: 0 0.25rem;
+    }
+    .step {
+      flex: 1 1 0;
+      flex-direction: column;
+      align-items: center;
+      text-align: center;
+    }
+    .meta { margin-block-start: 0.5rem; }
+  }
+
+  &[data-orientation="vertical"] {
+    flex-direction: column;
+
+    .step {
+      flex-direction: row;
+      inline-size: 100%;
+    }
+    .line {
+      inline-size: 2px;
+      min-block-size: 1.5rem;
+      margin: 0.25rem 0;
+    }
+    .indicator {
+      flex-direction: column;
+      align-items: center;
+      min-block-size: 100%;
+    }
+  }
 }
 
-.stepper[data-orientation="horizontal"] {
-  flex-direction: row;
-  align-items: flex-start;
-}
-
-.stepper[data-orientation="vertical"] {
-  flex-direction: column;
-}
-
-::slotted(is-stepper-step) {
+::slotted(iswc-stepper-step) {
   flex: 1 1 0;
-  min-width: 0;
+  min-inline-size: 0;
 }
 
 .step {
@@ -35,11 +69,6 @@
   align-items: flex-start;
   gap: 0.75rem;
   position: relative;
-}
-
-.stepper[data-orientation="vertical"] .step {
-  flex-direction: column;
-  width: 100%;
 }
 
 .indicator {
@@ -51,8 +80,8 @@
 }
 
 .dot {
-  width: 2rem;
-  height: 2rem;
+  inline-size: 2rem;
+  block-size: 2rem;
   border-radius: 50%;
   display: inline-flex;
   align-items: center;
@@ -67,59 +96,19 @@
 }
 
 .line {
-  width: 100%;
+  inline-size: 100%;
   flex: 1 1 auto;
-  min-height: 1.5rem;
+  min-block-size: 1.5rem;
   background: var(--iswc-stepper-border);
   border: 0;
   transition: background 0.2s;
-}
-
-.stepper[data-orientation="vertical"] .line {
-  width: 2px;
-  min-height: 1.5rem;
-  margin: 0.25rem 0;
-}
-
-.stepper[data-orientation="horizontal"] .indicator {
-  flex-direction: column;
-  min-width: 2rem;
-}
-
-.stepper[data-orientation="horizontal"] .line {
-  flex: 1 1 auto;
-  height: 2px;
-  width: auto;
-  min-height: 0;
-  margin: 0 0.25rem;
-}
-
-.stepper[data-orientation="horizontal"] .step {
-  flex: 1 1 0;
-  flex-direction: column;
-  align-items: center;
-  text-align: center;
-}
-
-.stepper[data-orientation="horizontal"] .meta {
-  margin-top: 0.5rem;
-}
-
-.stepper[data-orientation="vertical"] .step {
-  flex-direction: row;
-}
-
-.stepper[data-orientation="vertical"] .indicator {
-  flex-direction: column;
-  align-items: center;
-  min-height: 100%;
 }
 
 .meta {
   display: flex;
   flex-direction: column;
   gap: 0.125rem;
-  min-width: 0;
+  min-inline-size: 0;
 }
 
 .label {
@@ -139,47 +128,42 @@
   color: var(--iswc-stepper-accent-fg);
   border-color: var(--iswc-stepper-success);
 }
-
 :host([data-state="active"]) .dot {
   background: var(--iswc-stepper-accent);
   color: var(--iswc-stepper-accent-fg);
   border-color: var(--iswc-stepper-accent);
   box-shadow: 0 0 0 4px color-mix(in srgb, var(--iswc-stepper-accent) 20%, transparent);
 }
-
 :host([data-state="error"]) .dot {
   background: var(--iswc-stepper-danger);
   color: var(--iswc-stepper-accent-fg);
   border-color: var(--iswc-stepper-danger);
 }
+:host([data-state="disabled"]) .dot { opacity: 0.5; }
 
-:host([data-state="disabled"]) .dot {
-  opacity: 0.5;
-}
-
-:host([data-state="done"]) ~ :host .line {
-  background: var(--iswc-stepper-success);
+:host([data-state="done"]) {
+  ~ :host {
+    .line { background: var(--iswc-stepper-success); }
+  }
 }
 
 /* Variants */
-.stepper[data-color="simple"] .dot {
-  border-width: 1px;
-}
-.stepper[data-color="numbered"] .dot::after {
-  counter-increment: step;
-  content: counter(step);
-}
-.stepper[data-color="numbered"] {
-  counter-reset: step 0;
-}
-.stepper[data-color="numbered"] ::slotted(is-stepper-step) {
-  counter-increment: step;
-}
-.stepper[data-color="numbered"] .dot .num {
-  display: none;
+.stepper {
+  &[data-color="simple"] .dot { border-width: 1px; }
+
+  &[data-color="numbered"] {
+    counter-reset: step 0;
+
+    .dot {
+      &::after {
+        counter-increment: step;
+        content: counter(step);
+      }
+      .num { display: none; }
+    }
+    ::slotted(iswc-stepper-step) { counter-increment: step; }
+  }
 }
 
-/* Hide line */
-:host([without-line]) .line {
-  display: none;
-}
+/* Hide line (atributo, no :state() — ver AGENTS.md §6.6). */
+:host([without-line]) .line { display: none; }

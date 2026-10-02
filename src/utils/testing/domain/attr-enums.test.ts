@@ -3,8 +3,8 @@
 // DETECTOR DE INCONSISTENCIAS entre lo que un componente acepta y lo que las
 // previews le pasan.
 //
-// El error que motiva este test: se escribió `<is-button variant="ghost">` en
-// 4 sitios cuando `is-button` solo aceptaba `filled | outlined | plain`. No
+// El error que motiva este test: se escribió `<iswc-button variant="ghost">` en
+// 4 sitios cuando `iswc-button` solo aceptaba `filled | outlined | plain`. No
 // falla, no avisa, no se ve en consola: el atributo simplemente no casa con
 // ninguna regla CSS y el botón se pinta con los valores por defecto. Un valor
 // de enum inventado es invisible hasta que alguien mira el pixel.
@@ -67,7 +67,7 @@ const registry = new Map();
 for (const file of componentFiles) {
   const src = await readFile(file, 'utf8');
 
-  // Un mismo .js puede registrar varios tags (is-tab-group + is-tab).
+  // Un mismo .js puede registrar varios tags (iswc-tab-group + iswc-tab).
   const tags = [...src.matchAll(/(?:customElements\.define|defineElement)\(\s*['"]([\w-]+)['"]/g)].map((m) => m[1]);
   if (!tags.length) continue;
 
@@ -163,7 +163,7 @@ assert.equal(
     (offenders.length > 25 ? `\n  ...y ${offenders.length - 25} más` : ''),
 );
 
-// Regresión concreta: `ghost` existe de verdad en is-button (CSS + JSDoc).
+// Regresión concreta: `ghost` existe de verdad en iswc-button (CSS + JSDoc).
 // Si alguien lo quita del CSS pero lo deja en el JSDoc, el test de arriba deja
 // de proteger y las previews que lo usan se rompen en silencio.
 const buttonCss = await readFile(join(root, 'src/components/actions/button.css'), 'utf8');

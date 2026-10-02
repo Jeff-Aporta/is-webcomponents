@@ -2,12 +2,12 @@ import { adoptCss, defineElement } from '../../core/element.js';
 import { ElementBase } from '../../core/element-base.js';
 
 /**
- * <is-stat> — Stat / KPI Card (vanilla, zero dependencies).
+ * <iswc-stat> — Stat / KPI Card (vanilla, zero dependencies).
  *
  * Bloque para KPI en dashboards: label, número principal, helper text,
  * cambio/trend opcional e icono.
  *
- *   <is-stat label="Ingresos" value="€ 1.249,00" helper="vs mes anterior" trend="+12.5"></is-stat>
+ *   <iswc-stat label="Ingresos" value="€ 1.249,00" helper="vs mes anterior" trend="+12.5"></iswc-stat>
  *
  * Atributos
  *   label       string
@@ -46,7 +46,7 @@ import { ElementBase } from '../../core/element-base.js';
 
   const OBSERVED = ['label', 'value', 'helper', 'trend', 'trend-direction', 'icon', 'color'];
 
-  class IsStat extends ElementBase {
+  class IswcStat extends ElementBase {
     static get observedAttributes(): string[] { return OBSERVED; }
     #root!: HTMLElement;
     constructor() {
@@ -91,7 +91,7 @@ import { ElementBase } from '../../core/element-base.js';
       if (icon) {
         const slot = this.shadowRoot!.querySelector<HTMLSlotElement>('slot[name="icon"]');
         if (slot && slot.assignedNodes().length === 0) {
-          const ic = document.createElement('is-icon');
+          const ic = document.createElement('iswc-icon');
           ic.setAttribute('icon', icon);
           ic.setAttribute('aria-hidden', 'true');
           slot.replaceWith(ic);
@@ -110,5 +110,5 @@ import { ElementBase } from '../../core/element-base.js';
     }
   }
 
-  defineElement('is-stat', IsStat, 'IsStat');
+  defineElement('iswc-stat', IswcStat, 'IswcStat');
 })();

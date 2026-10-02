@@ -3,9 +3,9 @@
  *
  * Forma:
  * {
- *   "is-split-panel": { "gallery-nav": { "positionInPixels": 200 } },
- *   "is-main": { "docs-is-button": { "top": 420, "savedAt": 1710000000000 } },
- *   "is-ag-grid": { "mi-tabla": { … snapshot del grid … } }
+ *   "iswc-split-panel": { "gallery-nav": { "positionInPixels": 200 } },
+ *   "iswc-main": { "docs-iswc-button": { "top": 420, "savedAt": 1710000000000 } },
+ *   "iswc-ag-grid": { "mi-tabla": { … snapshot del grid … } }
  * }
  *
  * ROOT_KEY = "is-webcomponents". `is-components` es SOLO legacy: se lee una

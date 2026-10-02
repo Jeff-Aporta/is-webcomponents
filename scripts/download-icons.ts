@@ -22,7 +22,7 @@
  *   src/assets/icons/<prefix>.json          indice por coleccion
  *   src/assets/icons/manifest.json          manifest global
  *
- * El `<is-icon>` consume el .json para resolver nombres y el .svg para pintar
+ * El `<iswc-icon>` consume el .json para resolver nombres y el .svg para pintar
  * el icono (via <img src="src/assets/icons/<prefix>/<name>.svg">). Si el icono
  * no esta local, cae a https://api.iconify.design/<prefix>/<name>.svg.
  */

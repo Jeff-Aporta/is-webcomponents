@@ -1,5 +1,5 @@
 /**
- * badge.test.ts — Tier A (10 aserciones) para `<is-badge>`.
+ * badge.test.ts — Tier A (10 aserciones) para `<iswc-badge>`.
  *
  * Etiqueta compacta semántica con color/variant/pill/attention.
  */
@@ -18,7 +18,7 @@ import {
 
 const HERE = dirname(fileURLToPath(import.meta.url));
 const ROOT = join(HERE, '..', '..', '..', '..', '..');
-const TAG = 'is-badge';
+const TAG = 'iswc-badge';
 const TS = 'src/components/feedback/badge.ts';
 const JSON_PATH = join(ROOT, 'src/components/feedback/badge.json');
 const CSS = join(ROOT, 'src/components/feedback/badge.css');
@@ -36,10 +36,10 @@ test('2. CSS hermano existe', () => {
   assert.ok(existsSync(CSS));
 });
 
-test('3. JSON existe y respeta is-preview/v1', () => {
+test('3. JSON existe y respeta iswc-preview/v1', () => {
   const json = JSON.parse(readFileSync(JSON_PATH, 'utf8'));
   assert.equal(json.tag, TAG);
-  assert.equal(json['$schema'], 'is-preview/v1');
+  assert.equal(json['$schema'], 'iswc-preview/v1');
 });
 
 test('4. OBSERVED incluye color, variant, pill, attention', () => {
@@ -86,7 +86,7 @@ test('9. slots default + start + end', () => {
 
 test('10. custom element registrado', () => {
   const src = leerConBase(TS);
-  assert.ok(/defineElement\s*\(\s*['"]is-badge['"]/.test(src));
+  assert.ok(/defineElement\s*\(\s*['"]iswc-badge['"]/.test(src));
 });
 
 test('11. JSDoc de cabecera', () => {

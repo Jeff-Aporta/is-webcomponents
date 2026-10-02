@@ -12,7 +12,7 @@ import { sequenceThemeLight, sequenceThemeDark } from './sequence-spec.js';
  * Los selfchecks de geometría pasaban en verde mientras el render real salía
  * con texto cortado, etiquetas ilegibles y `[object Object]` en pantalla: nada
  * comprobaba que lo dibujado CABE en el lienzo ni que los miembros se
- * componen. Estos cuatro casos vienen de imágenes reales del proyecto is-tkts.
+ * componen. Estos cuatro casos vienen de imágenes reales del proyecto iswc-tkts.
  */
 
 /* ── 1. Miembros de clase: objeto UML, no "[object Object]" ── */

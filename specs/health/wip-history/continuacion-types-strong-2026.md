@@ -3,7 +3,7 @@
 > **Para:** próxima sesión / agente capitán que retome el trabajo.
 > **Desde:** sesión que se corrompió (contexto saturado). Este documento es autocontenido.
 > **Ancla:** `C:\ContaPyme\Personal\apps\is-webcomponents`
-> **WT-ROOT:** `C:\ContaPyme\Personal\apps\WT\is-webcomponents-wt-root-types-strong-2026`
+> **WT-ROOT:** `C:\ContaPyme\Personal\apps\WT\iswc-webcomponents-wt-root-types-strong-2026`
 > **Rama WT-ROOT:** `wt-root-types-strong-2026`
 > **Fecha del handoff:** sesión cerrada con STRICT_NOW=62
 
@@ -69,7 +69,7 @@ Estos son los requisitos que el humano expresó explícitamente durante la sesi�
 
 ```
 C:\ContaPyme\Personal\apps\is-webcomponents                                  [main] 371472559c
-C:\ContaPyme\Personal\apps\WT\is-webcomponents-wt-root-types-strong-2026     [wt-root-types-strong-2026] e682fde1fa
+C:\ContaPyme\Personal\apps\WT\iswc-webcomponents-wt-root-types-strong-2026     [wt-root-types-strong-2026] e682fde1fa
 ```
 
 **Solo 2 worktrees.** Los sub-agentes trabajan **directamente en WT-ROOT** con **file partitioning** (NO se crean worktrees por agente).
@@ -105,7 +105,7 @@ npx tsc -p tsconfig.strict-audit.json --noEmit 2>&1 | `
   ForEach-Object { "{0,6}  {1}" -f $_.Count, $_.Name }
 
 # Gates
-cd C:\ContaPyme\Personal\apps\WT\is-webcomponents-wt-root-types-strong-2026
+cd C:\ContaPyme\Personal\apps\WT\iswc-webcomponents-wt-root-types-strong-2026
 deno task typecheck
 deno task test
 ```
@@ -274,7 +274,7 @@ BR (business rules), SM (state machines), VL (validación), TR (transformaciones
 
 **Contenido:** 16 web components `<is-X-editor>`, 9 WTs, ~290 tests planificados.
 
-**Estrategia decidida:** workstream **secuencial** después de que `types-strong-2026` cierre (STRICT <100 ✅ + T10 cerrado). WT-ROOT nuevo: `is-wc-wt-root-editors-2026` en `C:\ContaPyme\Personal\apps\WT\`. **Preguntar al humano antes de arrancar.**
+**Estrategia decidida:** workstream **secuencial** después de que `types-strong-2026` cierre (STRICT <100 ✅ + T10 cerrado). WT-ROOT nuevo: `iswc-wc-wt-root-editors-2026` en `C:\ContaPyme\Personal\apps\WT\`. **Preguntar al humano antes de arrancar.**
 
 ---
 
@@ -346,7 +346,7 @@ Si `write` falla con "file no longer exists — re-read the file, then retry" pa
 
 ## 11. Archivos clave
 
-### 11.1 WT-ROOT (`C:\ContaPyme\Personal\apps\WT\is-webcomponents-wt-root-types-strong-2026\`)
+### 11.1 WT-ROOT (`C:\ContaPyme\Personal\apps\WT\iswc-webcomponents-wt-root-types-strong-2026\`)
 
 | Archivo | Propósito |
 |---|---|
@@ -389,7 +389,7 @@ Si `write` falla con "file no longer exists — re-read the file, then retry" pa
 ### PASO 1 — Verificar estado (5 min)
 
 ```powershell
-$root = "C:\ContaPyme\Personal\apps\WT\is-webcomponents-wt-root-types-strong-2026"
+$root = "C:\ContaPyme\Personal\apps\WT\iswc-webcomponents-wt-root-types-strong-2026"
 git -C $root log --oneline -5
 git -C $root status --porcelain
 git -C $root worktree list
@@ -487,7 +487,7 @@ git merge --no-ff wt-root-types-strong-2026 -m "merge: types-strong-2026 (8,777 
 
 ### PASO 11 — Workstream editors (M20)
 
-Preguntar al humano antes de arrancar. Nuevo WT-ROOT `is-wc-wt-root-editors-2026`. Ver `editors-handoff-summary.md`.
+Preguntar al humano antes de arrancar. Nuevo WT-ROOT `iswc-wc-wt-root-editors-2026`. Ver `editors-handoff-summary.md`.
 
 ---
 

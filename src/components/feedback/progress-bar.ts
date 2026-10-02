@@ -3,7 +3,7 @@ import { ElementBase } from '../../core/element-base.js';
 import { setStringAttr } from '../_shared/reflect.js';
 
 /**
- * <is-progress-bar> — Web Component (vanilla).
+ * <iswc-progress-bar> — Web Component (vanilla).
  *
  * Atributos
  *   value           number 0–100
@@ -27,7 +27,7 @@ import { setStringAttr } from '../_shared/reflect.js';
 
   const OBSERVED = ['value', 'label', 'indeterminate'];
 
-  class IsProgressBar extends ElementBase {
+  class IswcProgressBar extends ElementBase {
     /** Personalización por atributo (ver `core/attrs.ts`). */
     static styleAttrs = {
     'track-height': '--iswc-progress-bar-track-height',
@@ -88,13 +88,13 @@ import { setStringAttr } from '../_shared/reflect.js';
         this.#track.setAttribute('aria-valuetext', label || 'Loading');
         this.#track.setAttribute('aria-busy', 'true');
         this.#indicator.style.width = '';
-        this.#indicator.classList.add('is-indeterminate');
+        this.#indicator.classList.add('iswc-indeterminate');
       } else {
         this.#track.setAttribute('aria-valuenow', String(val));
         this.#track.setAttribute('aria-valuetext', label || `${val}%`);
         this.#track.setAttribute('aria-busy', 'false');
         this.#indicator.style.width = `${val}%`;
-        this.#indicator.classList.remove('is-indeterminate');
+        this.#indicator.classList.remove('iswc-indeterminate');
       }
 
       if (label) this.#track.setAttribute('aria-label', label);
@@ -102,5 +102,5 @@ import { setStringAttr } from '../_shared/reflect.js';
     }
   }
 
-  defineElement('is-progress-bar', IsProgressBar, 'IsProgressBar');
+  defineElement('iswc-progress-bar', IswcProgressBar, 'IswcProgressBar');
 })();

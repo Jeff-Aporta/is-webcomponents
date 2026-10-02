@@ -1,11 +1,11 @@
 // scripts/probe-swimlane.mjs
-// Verifica el centrado del texto en los nodos de is-swimlane-diagram.
+// Verifica el centrado del texto en los nodos de iswc-swimlane-diagram.
 // Lee el SVG renderizado y mide la posición X de cada <text> dentro de <g.sw-step>
 // contra el centro de la <rect/path> del step.
 import { chromium } from 'playwright';
 
 const BASE = 'http://127.0.0.1:8491';
-const state = Buffer.from(JSON.stringify({ component: 'is-swimlane-diagram' }), 'utf8').toString('base64url');
+const state = Buffer.from(JSON.stringify({ component: 'iswc-swimlane-diagram' }), 'utf8').toString('base64url');
 const URL = `${BASE}/?s=${state}`;
 
 const browser = await chromium.launch({ headless: true });
@@ -13,16 +13,16 @@ const ctx = await browser.newContext({ viewport: { width: 1440, height: 900 } })
 const page = await ctx.newPage();
 
 await page.goto(URL, { waitUntil: 'domcontentloaded', timeout: 20000 });
-await page.waitForSelector('is-main.main', { timeout: 15000 });
+await page.waitForSelector('iswc-main.main', { timeout: 15000 });
 await page.waitForTimeout(2500);
 
 const data = await page.evaluate(() => {
   const host = document.getElementById('previewHost');
   if (!host) return { error: 'no previewHost' };
-  const main = host.querySelector('is-main.main');
-  if (!main) return { error: 'no is-main' };
-  const sw = main.querySelector('is-swimlane-diagram');
-  if (!sw) return { error: 'no is-swimlane-diagram' };
+  const main = host.querySelector('iswc-main.main');
+  if (!main) return { error: 'no iswc-main' };
+  const sw = main.querySelector('iswc-swimlane-diagram');
+  if (!sw) return { error: 'no iswc-swimlane-diagram' };
   const svg = sw.shadowRoot?.querySelector('svg.sw-svg') ?? sw.querySelector('svg');
   if (!svg) return { error: 'no svg' };
   const steps = svg.querySelectorAll('g.sw-step');

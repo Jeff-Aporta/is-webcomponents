@@ -3,7 +3,7 @@
 <head>
 <meta charset="utf-8" />
 <meta name="viewport" content="width=device-width, initial-scale=1" />
-<title>Demo de <is-textarea> · is-webcomponents</title>
+<title>Demo de <iswc-textarea> · is-webcomponents</title>
 <meta name="description" content="Área de texto multi-línea form-associated con autosize, rows, resize, label, hint, error y show-count." />
 <style>
   html, body { margin: 0; padding: 0; min-height: 100%; background: #0c1118; color: #e2e8f0; font-family: ui-sans-serif, system-ui, sans-serif; }
@@ -17,12 +17,12 @@
   code { background: rgba(255,255,255,0.06); padding: 1px 5px; border-radius: 3px; font: 12px ui-monospace, Menlo, Consolas, monospace; }
   output { font: 12px ui-monospace, Menlo, Consolas, monospace; color: #94a3b8; white-space: pre-wrap; }
   /* Anti-FOUC */
-  is-textarea:not(:defined) { visibility: hidden; }
+  iswc-textarea:not(:defined) { visibility: hidden; }
 </style>
 <script type="module">
-  await import('../../../dist/cdn/forms/textarea.min.js?h=gh75it');
+  await import('../../../dist/cdn/forms/textarea.min.js?h=byuzij');
 
-  await customElements.whenDefined('is-textarea');
+  await customElements.whenDefined('iswc-textarea');
 
   const demo = document.getElementById('demo');
   const out = document.getElementById('out');
@@ -39,8 +39,8 @@
       readonly: demo.readonly,
     }, null, 2);
   };
-  demo.addEventListener('is-input', () => render());
-  demo.addEventListener('is-change', () => render());
+  demo.addEventListener('iswc-input', () => render());
+  demo.addEventListener('iswc-change', () => render());
 
   document.getElementById('btn-set').addEventListener('click', () => {
     demo.value = 'Línea 1\nLínea 2\nLínea 3\nLínea 4';
@@ -58,13 +58,13 @@
 <body>
 <main>
   <header>
-    <h1>Demo de <code>&lt;is-textarea&gt;</code></h1>
+    <h1>Demo de <code>&lt;iswc-textarea&gt;</code></h1>
     <p>Área de texto multi-línea form-associated con autosize, rows, resize y validación.</p>
   </header>
 
   <section>
     <h2>Básico (autosize)</h2>
-    <is-textarea id="demo" name="message" label="Mensaje" hint="Cuéntanos algo" autosize placeholder="Escribe aquí..."></is-textarea>
+    <iswc-textarea id="demo" name="message" label="Mensaje" hint="Cuéntanos algo" autosize placeholder="Escribe aquí..."></iswc-textarea>
     <div class="grid2">
       <button id="btn-set" type="button">Set 4 líneas</button>
       <button id="btn-clear" type="button">Clear</button>
@@ -75,21 +75,21 @@
   <section>
     <h2>Variantes</h2>
     <div class="grid2">
-      <is-textarea name="fixed" label="Filas fijas" rows="4" resize="vertical" placeholder="4 filas"></is-textarea>
-      <is-textarea name="neversize" label="Sin resize" rows="3" resize="none" placeholder="no resize"></is-textarea>
-      <is-textarea name="both" label="Resize both" rows="2" resize="both" placeholder="both"></is-textarea>
-      <is-textarea name="auto-bounded" label="Autosize acotado" autosize min-rows="2" max-rows="6" placeholder="2 a 6 filas"></is-textarea>
+      <iswc-textarea name="fixed" label="Filas fijas" rows="4" resize="vertical" placeholder="4 filas"></iswc-textarea>
+      <iswc-textarea name="neversize" label="Sin resize" rows="3" resize="none" placeholder="no resize"></iswc-textarea>
+      <iswc-textarea name="both" label="Resize both" rows="2" resize="both" placeholder="both"></iswc-textarea>
+      <iswc-textarea name="auto-bounded" label="Autosize acotado" autosize min-rows="2" max-rows="6" placeholder="2 a 6 filas"></iswc-textarea>
     </div>
   </section>
 
   <section>
     <h2>Estados</h2>
     <div class="grid2">
-      <is-textarea name="rq" label="Required" required hint="Obligatorio"></is-textarea>
-      <is-textarea name="ro" label="Readonly" readonly value="sólo lectura"></is-textarea>
-      <is-textarea name="count" label="Con contador" maxlength="50" show-count placeholder="máx 50"></is-textarea>
-      <is-textarea name="err" label="Con error" error error-text="Demasiado corto" value="x"></is-textarea>
-      <is-textarea name="dis" label="Disabled" disabled value="deshabilitado"></is-textarea>
+      <iswc-textarea name="rq" label="Required" required hint="Obligatorio"></iswc-textarea>
+      <iswc-textarea name="ro" label="Readonly" readonly value="sólo lectura"></iswc-textarea>
+      <iswc-textarea name="count" label="Con contador" maxlength="50" show-count placeholder="máx 50"></iswc-textarea>
+      <iswc-textarea name="err" label="Con error" error error-text="Demasiado corto" value="x"></iswc-textarea>
+      <iswc-textarea name="dis" label="Disabled" disabled value="deshabilitado"></iswc-textarea>
     </div>
   </section>
 </main>

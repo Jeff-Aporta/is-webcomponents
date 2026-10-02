@@ -1,24 +1,35 @@
-/* <is-text> — texto en línea con color semántico / CSS libre / current + mix.
+/* <iswc-text> — texto en línea con color semántico / CSS libre / current + mix.
    Índice de --vars:
-     --iswc-text-color: color tipográfico resuelto.
-     --iswc-text-mix    : % hacia --iswc-text-mix-with (solo con attr mix).
-     --iswc-text-mix-with: destino del mix (default: texto del tema).
-     --mx-lns         : líneas del clamp (lo escribe el JS). */
+     --iswc-text-color    : color tipográfico resuelto.
+     --iswc-text-mix      : % hacia --iswc-text-mix-with (solo con attr mix).
+     --iswc-text-mix-with : destino del mix (default: texto del tema).
+     --mx-lns             : líneas del clamp (lo escribe el JS). */
+
+@property --iswc-text-color {
+  syntax: "<color>";
+  inherits: true;
+  initial-value: currentColor;
+}
+@property --iswc-text-mix {
+  syntax: "<percentage>";
+  inherits: true;
+  initial-value: 0%;
+}
 
 :host {
   --iswc-text-mix-with: var(--iswc-text, currentColor);
   display: inline;
   color: var(--iswc-text-color, inherit);
   font: inherit;
-  min-width: 0;
-  max-width: 100%;
+  min-inline-size: 0;
+  max-inline-size: 100%;
 }
 
 :host([hidden]) { display: none; }
 
-/* Con mix: atenuar / aclarar / oscurecer vía color-mix. */
-:host([mix]),
-:host([data-has-mix]) {
+/* Con mix: atenuar / aclarar / oscurecer vía color-mix. JS dispara
+   `data-has-mix` cuando aplica el mix programáticamente, además del attr. */
+:host(:is([mix], [data-has-mix])) {
   color: var(--iswc-text-color, currentColor);
   color: color-mix(
     in srgb,
@@ -28,21 +39,18 @@
 }
 
 /* Semánticos → tokens del tema. */
-:host([color="brand"]) {
-  --iswc-text-color: var(--iswc-brand-text, var(--iswc-accent, var(--iswc-color-brand, var(--iswc-text))));
-}
-:host([color="neutral"]) { --iswc-text-color: var(--iswc-text-soft, var(--iswc-text)); }
-:host([color="info"]) { --iswc-text-color: var(--iswc-info-text, var(--iswc-color-info, var(--iswc-text))); }
+:host([color="brand"])   { --iswc-text-color: var(--iswc-brand-text,   var(--iswc-accent,    var(--iswc-color-brand,   var(--iswc-text)))); }
+:host([color="neutral"]) { --iswc-text-color: var(--iswc-text-soft,    var(--iswc-text)); }
+:host([color="info"])    { --iswc-text-color: var(--iswc-info-text,    var(--iswc-color-info,    var(--iswc-text))); }
 :host([color="success"]) { --iswc-text-color: var(--iswc-success-text, var(--iswc-color-success, var(--iswc-text))); }
 :host([color="warning"]) { --iswc-text-color: var(--iswc-warning-text, var(--iswc-color-warning, var(--iswc-text))); }
-:host([color="danger"]) { --iswc-text-color: var(--iswc-danger-text, var(--iswc-color-danger, var(--iswc-text))); }
-
+:host([color="danger"])  { --iswc-text-color: var(--iswc-danger-text,  var(--iswc-color-danger,  var(--iswc-text))); }
 :host([color="current"]) { --iswc-text-color: currentColor; }
 
 :host([lines]) {
   display: -webkit-box;
   box-sizing: border-box;
-  width: 100%;
+  inline-size: 100%;
   overflow: hidden;
   text-overflow: ellipsis;
   line-clamp: var(--mx-lns, 1);

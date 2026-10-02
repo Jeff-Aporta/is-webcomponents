@@ -1,14 +1,14 @@
 ---
-tag: is-spreadsheet
+tag: iswc-spreadsheet
 tags:
-  - is-spreadsheet
+  - iswc-spreadsheet
 category: data
 status: public
 source: ./spreadsheet.js
 style: ./spreadsheet.css
 preview: ./spreadsheet.json
 ---
-# `<is-spreadsheet>`
+# `<iswc-spreadsheet>`
 
 ## Propósito
 
@@ -17,7 +17,7 @@ referencias estilo A1, fórmulas (`=SUM`, `=AVERAGE`, `=MIN`, `=MAX`, `=COUNT`,
 aritmética y paréntesis), navegación con flechas y atajos de Excel para
 confirmar y moverse. Todo en cliente, sin dependencias externas.
 
-Este módulo registra `<is-spreadsheet>`.
+Este módulo registra `<iswc-spreadsheet>`.
 
 ## Cuándo usarlo
 
@@ -30,9 +30,9 @@ Este módulo registra `<is-spreadsheet>`.
 ## Cuándo no usarlo
 
 - Cuando los datos vienen del servidor y solo hay que mostrarlos:
-  [`<is-data-grid>`](./data-grid.md) o [`<is-ag-grid>`](./ag-grid.md).
+  [`<iswc-data-grid>`](./data-grid.md) o [`<iswc-ag-grid>`](./ag-grid.md).
 - Cuando necesitas cruzar dimensiones y totalizar:
-  [`<is-pivot-table>`](./pivot-table.md).
+  [`<iswc-pivot-table>`](./pivot-table.md).
 - Rejillas grandes: cada edición reconstruye el `innerHTML` completo de la
   tabla y recalcula todas las celdas, así que el costo crece con filas × columnas.
 - Más de 26 columnas: la cabecera solo conoce las letras A–Z (ver
@@ -49,11 +49,11 @@ import './spreadsheet.js';
 ## Ejemplo mínimo
 
 ```html
-<is-spreadsheet
+<iswc-spreadsheet
   rows="5"
   cols="4"
   value='[["Producto","Cantidad","Precio","Total"],["Resma",10,18500,"=B2*C2"]]'
-></is-spreadsheet>
+></iswc-spreadsheet>
 ```
 
 ## API
@@ -88,13 +88,13 @@ contenido en light DOM se ignora.
 
 | Evento | detail | bubbles | composed | cancelable |
 | --- | --- | --- | --- | --- |
-| `is-change` | `{ row, col, raw, value }` — índices base 0, `raw` es lo que quedó en la celda (texto o fórmula) y `value` el resultado calculado | sí | sí | no |
+| `iswc-change` | `{ row, col, raw, value }` — índices base 0, `raw` es lo que quedó en la celda (texto o fórmula) y `value` el resultado calculado | sí | sí | no |
 
-`is-change` se emite en cada escritura de celda: al confirmar con `Enter` o
+`iswc-change` se emite en cada escritura de celda: al confirmar con `Enter` o
 `Tab`, al borrar con `Delete`/`Backspace` y también al cancelar con `Esc`
 (en ese caso `raw` es el valor original restaurado).
 
-La cabecera del archivo fuente documenta además un evento `is-select` con
+La cabecera del archivo fuente documenta además un evento `iswc-select` con
 `detail: { row, col, value }`, pero **no se emite en ninguna parte del código**.
 No lo escuches.
 
@@ -139,7 +139,7 @@ heredados de [`_sticky.css`](./_sticky.css)).
 
 No es form-associated. No declara `static formAssociated`, no llama a
 `attachInternals()` y no aporta valor al `FormData`. Para enviar la hoja,
-escucha `is-change`, mantén tu propia matriz y serialízala en un
+escucha `iswc-change`, mantén tu propia matriz y serialízala en un
 `<input type="hidden">` antes del submit.
 
 ## Comportamiento
@@ -215,17 +215,17 @@ escucha `is-change`, mantén tu propia matriz y serialízala en un
 - [`../_shared/define.js`](../_shared/define.js) — registro idempotente del tag.
 - [`../_shared/element-base.js`](../_shared/element-base.js) — ciclo de vida y
   hooks `onConnected` / `onDisconnected` / `onAttributeChanged`.
-- [`../_shared/emit.js`](../_shared/emit.js) — emisión de `is-change`.
+- [`../_shared/emit.js`](../_shared/emit.js) — emisión de `iswc-change`.
 - [`../_shared/dom-utils.js`](../_shared/dom-utils.js) — `escapeHtml` para el
   contenido de las celdas.
 - [`./_sticky.css`](./_sticky.css) — cabeceras pegadas, compartido con
-  [`<is-pivot-table>`](./pivot-table.md).
+  [`<iswc-pivot-table>`](./pivot-table.md).
 
-Relacionados: [`<is-pivot-table>`](./pivot-table.md) para agregar y cruzar,
-[`<is-data-grid>`](./data-grid.md) y [`<is-ag-grid>`](./ag-grid.md) para
-listados de solo lectura, [`<is-stat>`](./stat.md) para el KPI resultante.
+Relacionados: [`<iswc-pivot-table>`](./pivot-table.md) para agregar y cruzar,
+[`<iswc-data-grid>`](./data-grid.md) y [`<iswc-ag-grid>`](./ag-grid.md) para
+listados de solo lectura, [`<iswc-stat>`](./stat.md) para el KPI resultante.
 
-Tags del módulo: `<is-spreadsheet>`.
+Tags del módulo: `<iswc-spreadsheet>`.
 
 ## Accesibilidad
 
@@ -240,12 +240,12 @@ Tags del módulo: `<is-spreadsheet>`.
 - El `input` de edición no tiene etiqueta accesible propia; el contexto lo dan
   las cabeceras de fila y columna, que sí son `<th>`.
 - Tras borrar con `Delete` el foco se pierde por el re-render; si eso afecta a
-  tu flujo, devuélvelo tú desde el manejador de `is-change`.
+  tu flujo, devuélvelo tú desde el manejador de `iswc-change`.
 
 ## Ejemplo avanzado
 
 ```html
-<is-spreadsheet id="presupuesto" rows="6" cols="4"></is-spreadsheet>
+<iswc-spreadsheet id="presupuesto" rows="6" cols="4"></iswc-spreadsheet>
 
 <script type="module">
   import './spreadsheet.js';
@@ -267,7 +267,7 @@ Tags del módulo: `<is-spreadsheet>`.
   // Mantén tu copia sincronizada para poder enviarla.
   const estado = matriz.map((f) => [...f]);
 
-  hoja.addEventListener('is-change', (e) => {
+  hoja.addEventListener('iswc-change', (e) => {
     const { row, col, raw, value } = e.detail;
     estado[row][col] = raw;
     if (value === '#ERR') {
@@ -292,10 +292,10 @@ Tags del módulo: `<is-spreadsheet>`.
 
 - Hacer `el.value = matriz` o leer `el.value` esperando la hoja. No existe esa
   propiedad; usa `setAttribute('value', JSON.stringify(matriz))` y reconstruye
-  el estado desde `is-change`.
+  el estado desde `iswc-change`.
 - Pasar la matriz sin serializar en el HTML. `value` es un atributo de texto y
   debe contener JSON válido; si falla el parseo, la hoja queda vacía sin aviso.
-- Escuchar `is-select`: aparece en la documentación del fuente pero nunca se
+- Escuchar `iswc-select`: aparece en la documentación del fuente pero nunca se
   emite.
 - Usar `readonly` en lugar de `read-only` y esperar que el cambio en caliente
   surta efecto.
@@ -309,15 +309,15 @@ Tags del módulo: `<is-spreadsheet>`.
 - Dar por buenos los decimales: el componente no formatea números; muestra el
   resultado tal cual lo calcula JavaScript. Si necesitas moneda colombiana
   formateada, formatea fuera o presenta el resultado en
-  [`<is-stat>`](./stat.md).
+  [`<iswc-stat>`](./stat.md).
 
 ## Reglas para LLM
 
-- El tag exacto es `<is-spreadsheet>` y se registra al importar `./spreadsheet.js`.
+- El tag exacto es `<iswc-spreadsheet>` y se registra al importar `./spreadsheet.js`.
 - Atributos válidos: `rows`, `cols`, `value`, `read-only`. Nada más. No hay
   `disabled`, `columns`, `data` ni `formulas`.
 - No hay slots, no hay propiedades públicas y el único evento emitido es
-  `is-change`.
+  `iswc-change`.
 - `read-only` es booleano por presencia: se activa con `read-only`, no con
   `read-only="false"`.
 - Cualquier carga o recarga de datos pasa por el atributo `value` con JSON
@@ -327,8 +327,8 @@ Tags del módulo: `<is-spreadsheet>`.
   unidades `em`.
 - Reusa los helpers de `../_shared/` antes de escribir lógica paralela, y lee
   la fuente antes de cambiar la API: el JS y el CSS mandan sobre el preview.
-- Si el requisito es solo mostrar datos o totalizarlos, usa `<is-data-grid>` o
-  `<is-pivot-table>` en vez de este componente.
+- Si el requisito es solo mostrar datos o totalizarlos, usa `<iswc-data-grid>` o
+  `<iswc-pivot-table>` en vez de este componente.
 
 ## Fuentes
 

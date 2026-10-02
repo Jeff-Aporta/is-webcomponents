@@ -3,7 +3,7 @@
 <head>
 <meta charset="utf-8" />
 <meta name="viewport" content="width=device-width, initial-scale=1" />
-<title>Demo — <is-er-diagram> · is-webcomponents</title>
+<title>Demo — <iswc-er-diagram> · is-webcomponents</title>
 <meta name="description" content="Diagrama Entidad-Relación (sin Mermaid) con animación trace opcional." />
 <style>
   html, body { margin: 0; padding: 0; min-height: 100%; background: #0c1118; color: #e2e8f0; font-family: ui-sans-serif, system-ui, sans-serif; }
@@ -12,14 +12,14 @@
   header h1 { font-size: 16px; font-weight: 700; margin: 0; }
   header p { font-size: 12px; color: #94a3b8; margin: 4px 0 0 0; }
   main { display: grid; place-items: stretch; min-height: 0; padding: 12px; }
-  is-er-diagram { width: 100%; height: 100%; min-height: 480px; display: block; }
-  is-er-diagram:not(:defined) { visibility: hidden; }
+  iswc-er-diagram { width: 100%; height: 100%; min-height: 480px; display: block; }
+  iswc-er-diagram:not(:defined) { visibility: hidden; }
 </style>
 <script type="module">
-  await import('../../../dist/cdn/diagrams/er-diagram.min.js?h=69p0bs');
-  await customElements.whenDefined('is-er-diagram');
+  await import('../../../dist/cdn/diagrams/er-diagram.min.js?h=zu2vvd');
+  await customElements.whenDefined('iswc-er-diagram');
 
-  const el = document.createElement('is-er-diagram');
+  const el = document.createElement('iswc-er-diagram');
   el.setAttribute('animation', 'trace');
   el.payload = {
     entities: [
@@ -48,7 +48,7 @@
 </head>
 <body>
   <header>
-    <h1>Demo — <code>&lt;is-er-diagram&gt;</code></h1>
+    <h1>Demo — <code>&lt;iswc-er-diagram&gt;</code></h1>
     <p>Diagrama ER: entidades con atributos PK/UK/FK, relaciones con cardinalidad y aristas dashed animadas (CSS embebido).</p>
   </header>
   <main></main>

@@ -1,20 +1,20 @@
 {
-  "$schema": "is-preview/v1",
-  "tag": "is-toast",
+  "$schema": "iswc-preview/v1",
+  "tag": "iswc-toast",
   "category": "feedback",
-  "title": "<is-toast>",
+  "title": "<iswc-toast>",
   "titleHtml": true,
-  "storageKey": "docs-is-toast",
+  "storageKey": "docs-iswc-toast",
   "hasBehavior": true,
   "sections": [
     {
       "id": "intro",
       "title": "Uso",
-      "lede": "Contenedor fijo de notificaciones. Crea ítems con <code class=\"code\">create()</code> o declara <code class=\"code\">&lt;is-toast-item&gt;</code>.",
+      "lede": "Contenedor fijo de notificaciones. Crea ítems con <code class=\"code\">create()</code> o declara <code class=\"code\">&lt;iswc-toast-item&gt;</code>.",
       "blocks": [
         {
           "kind": "demo",
-          "html": "<div class=\"demo-row\" style=\"flex-wrap:wrap;gap:.5rem\">\r\n            <is-button color=\"brand\" id=\"btn-brand\">brand</is-button>\r\n            <is-button color=\"success\" id=\"btn-success\">success</is-button>\r\n            <is-button color=\"warning\" id=\"btn-warning\">warning</is-button>\r\n            <is-button color=\"danger\" id=\"btn-danger\">danger</is-button>\r\n            <is-button color=\"neutral\" id=\"btn-sticky\">sticky (duration 0)</is-button>\r\n          </div>"
+          "html": "<div class=\"demo-row\" style=\"flex-wrap:wrap;gap:.5rem\">\r\n            <iswc-button color=\"brand\" id=\"btn-brand\">brand</iswc-button>\r\n            <iswc-button color=\"success\" id=\"btn-success\">success</iswc-button>\r\n            <iswc-button color=\"warning\" id=\"btn-warning\">warning</iswc-button>\r\n            <iswc-button color=\"danger\" id=\"btn-danger\">danger</iswc-button>\r\n            <iswc-button color=\"neutral\" id=\"btn-sticky\">sticky (duration 0)</iswc-button>\r\n          </div>"
         },
         {
           "kind": "code",
@@ -30,7 +30,7 @@
       "blocks": [
         {
           "kind": "demo",
-          "html": "<div class=\"demo-row\" style=\"flex-wrap:wrap;gap:.5rem\">\r\n            <is-button data-place=\"top-start\">top-start</is-button>\r\n            <is-button data-place=\"top-center\">top-center</is-button>\r\n            <is-button data-place=\"top-end\">top-end</is-button>\r\n            <is-button data-place=\"bottom-start\">bottom-start</is-button>\r\n            <is-button data-place=\"bottom-center\">bottom-center</is-button>\r\n            <is-button data-place=\"bottom-end\">bottom-end</is-button>\r\n          </div>"
+          "html": "<div class=\"demo-row\" style=\"flex-wrap:wrap;gap:.5rem\">\r\n            <iswc-button data-place=\"top-start\">top-start</iswc-button>\r\n            <iswc-button data-place=\"top-center\">top-center</iswc-button>\r\n            <iswc-button data-place=\"top-end\">top-end</iswc-button>\r\n            <iswc-button data-place=\"bottom-start\">bottom-start</iswc-button>\r\n            <iswc-button data-place=\"bottom-center\">bottom-center</iswc-button>\r\n            <iswc-button data-place=\"bottom-end\">bottom-end</iswc-button>\r\n          </div>"
         },
         {
           "kind": "code",
@@ -46,7 +46,7 @@
       "blocks": [
         {
           "kind": "demo",
-          "html": "<div class=\"demo-row\" style=\"flex-wrap:wrap;gap:.5rem\">\r\n            <is-button id=\"btn-promise-ok\" color=\"success\">Simular éxito</is-button>\r\n            <is-button id=\"btn-promise-err\" color=\"danger\">Simular error</is-button>\r\n            <is-button id=\"btn-promise-dynamic\" color=\"brand\">Mensaje dinámico</is-button>\r\n          </div>"
+          "html": "<div class=\"demo-row\" style=\"flex-wrap:wrap;gap:.5rem\">\r\n            <iswc-button id=\"btn-promise-ok\" color=\"success\">Simular éxito</iswc-button>\r\n            <iswc-button id=\"btn-promise-err\" color=\"danger\">Simular error</iswc-button>\r\n            <iswc-button id=\"btn-promise-dynamic\" color=\"brand\">Mensaje dinámico</iswc-button>\r\n          </div>"
         },
         {
           "kind": "code",
@@ -72,11 +72,11 @@
             ],
             [
               "<code>create(msg, opts)</code>",
-              "variant, icon, duration, allowHtml → Promise&lt;is-toast-item&gt;"
+              "variant, icon, duration, allowHtml → Promise&lt;iswc-toast-item&gt;"
             ],
             [
-              "<code>is-toast-item</code>",
-              "variant, duration, open · show()/hide() · is-after-show/hide"
+              "<code>iswc-toast-item</code>",
+              "variant, duration, open · show()/hide() · iswc-after-show/hide"
             ]
           ]
         }

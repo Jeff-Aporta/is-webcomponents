@@ -1,14 +1,14 @@
 ---
-tag: is-icon
+tag: iswc-icon
 tags:
-  - is-icon
+  - iswc-icon
 category: media
 status: public
 source: ./icon.js
 style: ./icon.css
 preview: ./icon.json
 ---
-# `<is-icon>`
+# `<iswc-icon>`
 
 ## Propósito
 
@@ -16,7 +16,7 @@ API única de iconos del kit. Usa icon="grupo:nombre" (ids Iconify)
 o src para un SVG/imagen. Escala con font-size.
 Iconify se carga solo como dependencia interna.
 
-Este módulo registra `<is-icon>`.
+Este módulo registra `<iswc-icon>`.
 
 ## Cuándo usarlo
 
@@ -35,9 +35,9 @@ import './icon.js';
 ## Ejemplo mínimo
 
 ```html
-<is-icon icon="mdi:home"></is-icon>
-<is-icon icon="mdi:check-circle"></is-icon>
-<is-icon src="/logo.svg" label="Logo"></is-icon>
+<iswc-icon icon="mdi:home"></iswc-icon>
+<iswc-icon icon="mdi:check-circle"></iswc-icon>
+<iswc-icon src="/logo.svg" label="Logo"></iswc-icon>
 ```
 
 ## API
@@ -100,7 +100,7 @@ No declara integración form-associated propia en este módulo.
 
 Documentación de cabecera preservada desde fuente:
 
-> <is-icon> — Web Component (vanilla, zero dependencies).
+> <iswc-icon> — Web Component (vanilla, zero dependencies).
 > UNICA API de iconos del kit. No depende del web component <iconify-icon>
 > ni de ningun script externo: el SVG se trae por fetch del sistema de
 > iconos propio y se inyecta INLINE en el Shadow DOM, para que
@@ -123,7 +123,7 @@ Documentación de cabecera preservada desde fuente:
 - [`../_shared/adopt-css.js`](../_shared/adopt-css.js)
 - [`../_shared/icon-loader.js`](../_shared/icon-loader.js)
 
-Tags del módulo: `<is-icon>`.
+Tags del módulo: `<iswc-icon>`.
 
 ## Accesibilidad
 
@@ -132,9 +132,9 @@ Preservar semántica, foco, teclado, labels y ARIA. ARIA detectado: `aria-hidden
 ## Ejemplo avanzado
 
 ```html
-<is-icon icon="mdi:home"></is-icon>
-<is-icon icon="mdi:check-circle"></is-icon>
-<is-icon src="/logo.svg" label="Logo"></is-icon>
+<iswc-icon icon="mdi:home"></iswc-icon>
+<iswc-icon icon="mdi:check-circle"></iswc-icon>
+<iswc-icon src="/logo.svg" label="Logo"></iswc-icon>
 ```
 
 ## Errores comunes

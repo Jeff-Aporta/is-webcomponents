@@ -1,11 +1,11 @@
 {
-  "$schema": "is-preview/v1",
-  "tag": "is-speech",
+  "$schema": "iswc-preview/v1",
+  "tag": "iswc-speech",
   "category": "media",
-  "title": "<is-speech>",
+  "title": "<iswc-speech>",
   "titleHtml": true,
   "description": "Dictado (`SpeechRecognition`) y lectura (`SpeechSynthesis`) con `lang` del documento.",
-  "storageKey": "docs-is-speech",
+  "storageKey": "docs-iswc-speech",
   "sections": [
     {
       "id": "intro",
@@ -14,7 +14,7 @@
       "blocks": [
         {
           "kind": "demo",
-          "html": "<is-speech lang=\"es-ES\" text=\"Hola, esto es texto a voz.\"></is-speech>",
+          "html": "<iswc-speech lang=\"es-ES\" text=\"Hola, esto es texto a voz.\"></iswc-speech>",
           "controls": [
             {
               "control": "text",
@@ -26,7 +26,7 @@
         {
           "kind": "code",
           "lang": "html",
-          "code": "<is-speech lang=\"es-ES\" text=\"Hola, esto es texto a voz.\"></is-speech>"
+          "code": "<iswc-speech lang=\"es-ES\" text=\"Hola, esto es texto a voz.\"></iswc-speech>"
         },
         {
           "kind": "callout",

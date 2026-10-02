@@ -1,14 +1,14 @@
 ---
-tag: is-fab
+tag: iswc-fab
 tags:
-  - is-fab
+  - iswc-fab
 category: actions
 status: public
 source: ./fab.js
 style: ./fab.css
 preview: ./fab.json
 ---
-# `<is-fab>`
+# `<iswc-fab>`
 
 ## Propósito
 
@@ -16,7 +16,7 @@ Floating Action Button: botón circular principal que se posiciona de
 forma fija en la ventana. Soporta colores, tamaños, etiquetas
 extendidas, pulso de atención y posicionamiento en cualquier esquina.
 
-Este módulo registra `<is-fab>`.
+Este módulo registra `<iswc-fab>`.
 
 ## Cuándo usarlo
 
@@ -35,7 +35,7 @@ import './fab.js';
 ## Ejemplo mínimo
 
 ```html
-<is-fab icon="mdi:plus" label="Crear"></is-fab>
+<iswc-fab icon="mdi:plus" label="Crear"></iswc-fab>
 ```
 
 ## API
@@ -73,7 +73,7 @@ import './fab.js';
 
 | Evento | detail | bubbles | composed | cancelable |
 | --- | --- | --- | --- | --- |
-| `is-fab-click` | sí | sí | sí | no |
+| `iswc-fab-click` | sí | sí | sí | no |
 
 ### Métodos y propiedades públicas
 
@@ -109,11 +109,11 @@ No declara integración form-associated propia en este módulo.
 
 Documentación de cabecera preservada desde fuente:
 
-> <is-fab> — Floating Action Button (vanilla, zero dependencies).
+> <iswc-fab> — Floating Action Button (vanilla, zero dependencies).
 > Botón flotante de acción principal. Material-like.
->   <is-fab icon="mdi:plus" position="bottom-end">Crear</is-fab>
-> Está construido SOBRE <is-button>: el color, el foco y la conversión a <a>
-> cuando hay `href` los pone el botón. is-fab añade solo lo suyo: anclaje fijo
+>   <iswc-fab icon="mdi:plus" position="bottom-end">Crear</iswc-fab>
+> Está construido SOBRE <iswc-button>: el color, el foco y la conversión a <a>
+> cuando hay `href` los pone el botón. iswc-fab añade solo lo suyo: anclaje fijo
 > a una esquina, forma circular, sombra flotante y pulso.
 > Atributos
 >   icon        string  — iconify id del icono principal.
@@ -128,15 +128,15 @@ Documentación de cabecera preservada desde fuente:
 >   (default)    contenido / label (si extended).
 >   icon         override del icono.
 > Eventos
->   is-fab-click  detail: { originalEvent }
+>   iswc-fab-click  detail: { originalEvent }
 
 ## Dependencias y componentes relacionados
 
 - [`../_shared/adopt-css.js`](../_shared/adopt-css.js)
-- [`./button.js`](./button.js) — el fab se apoya en `<is-button>` para la
+- [`./button.js`](./button.js) — el fab se apoya en `<iswc-button>` para la
   apariencia, el color y el modo enlace.
 
-Tags del módulo: `<is-fab>`.
+Tags del módulo: `<iswc-fab>`.
 
 ## Accesibilidad
 
@@ -145,7 +145,7 @@ Preservar semántica, foco, teclado, labels y ARIA. ARIA detectado: `aria-hidden
 ## Ejemplo avanzado
 
 ```html
-<is-fab icon="mdi:plus" label="Crear"></is-fab>
+<iswc-fab icon="mdi:plus" label="Crear"></iswc-fab>
 ```
 
 ## Errores comunes

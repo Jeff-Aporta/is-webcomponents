@@ -3,7 +3,7 @@
 <head>
 <meta charset="utf-8" />
 <meta name="viewport" content="width=device-width, initial-scale=1" />
-<title>Selector de duración &lt;is-duration-picker&gt; · is-webcomponents</title>
+<title>Selector de duración &lt;iswc-duration-picker&gt; · is-webcomponents</title>
 <meta name="description" content="Selector de duración HH:MM:SS con botones +/−, edición por celdas y atajos de teclado." />
 <style>
   html, body { margin: 0; padding: 0; min-height: 100%; background: #0c1118; color: #e2e8f0; font-family: ui-sans-serif, system-ui, sans-serif; }
@@ -14,25 +14,25 @@
   section { background: #131a24; border: 1px solid rgba(255,255,255,0.08); border-radius: 10px; padding: 16px; display: grid; gap: 10px; }
   section h2 { font-size: 13px; margin: 0; font-weight: 600; color: #cbd5e1; }
   section .desc { font-size: 12px; color: #94a3b8; margin: 0; }
-  is-duration-picker { display: inline-block; }
+  iswc-duration-picker { display: inline-block; }
   code { background: rgba(255,255,255,0.06); padding: 1px 5px; border-radius: 3px; font: 12px ui-monospace, Menlo, Consolas, monospace; }
   .row { display: flex; gap: 8px; align-items: center; }
   pre { background: rgba(0,0,0,0.35); color: #94a3b8; padding: 10px; border-radius: 6px; font: 11px ui-monospace, Menlo, Consolas, monospace; white-space: pre-wrap; margin: 0; }
   /* Anti-FOUC */
-  is-duration-picker:not(:defined) { visibility: hidden; }
+  iswc-duration-picker:not(:defined) { visibility: hidden; }
 </style>
 <script type="module">
-  await import('../../../dist/cdn/forms/duration-picker.min.js?h=q4moab');
-  await customElements.whenDefined('is-duration-picker');
+  await import('../../../dist/cdn/forms/duration-picker.min.js?h=2g57tz');
+  await customElements.whenDefined('iswc-duration-picker');
 
   // (1) básico: 1h 30m = 5400 s
-  const basico = document.createElement('is-duration-picker');
+  const basico = document.createElement('iswc-duration-picker');
   basico.setAttribute('name', 'duration');
   basico.value = 5400;
   document.querySelector('#sec-basic').appendChild(basico);
 
   // (2) con límites
-  const limited = document.createElement('is-duration-picker');
+  const limited = document.createElement('iswc-duration-picker');
   limited.setAttribute('name', 'timer');
   limited.setAttribute('min', '0');
   limited.setAttribute('max', '3600'); // máximo 1h
@@ -41,7 +41,7 @@
   document.querySelector('#sec-limited').appendChild(limited);
 
   // (3) usando set() con h/m/s
-  const programmatic = document.createElement('is-duration-picker');
+  const programmatic = document.createElement('iswc-duration-picker');
   programmatic.setAttribute('name', 'programmatic');
   programmatic.setAttribute('value', '0');
   document.querySelector('#sec-programmatic').appendChild(programmatic);
@@ -59,8 +59,8 @@
 
   // Eventos
   [basico, limited, programmatic].forEach((p) => {
-    p.addEventListener('is-input', () => console.log('[duration] input'));
-    p.addEventListener('is-change', (e) => console.log('[duration] change', e.detail?.text));
+    p.addEventListener('iswc-input', () => console.log('[duration] input'));
+    p.addEventListener('iswc-change', (e) => console.log('[duration] change', e.detail?.text));
   });
 
   document.documentElement.dataset.durationPickerReady = '1';
@@ -69,8 +69,8 @@
 <body>
 <main>
   <header>
-    <h1>&lt;is-duration-picker&gt; · Selector de duración HH:MM:SS</h1>
-    <p>Botones +/− por celda · edición directa en horas / minutos / segundos · <code>tick()</code> suma respetando límites · eventos <code>is-input</code> y <code>is-change</code>.</p>
+    <h1>&lt;iswc-duration-picker&gt; · Selector de duración HH:MM:SS</h1>
+    <p>Botones +/− por celda · edición directa en horas / minutos / segundos · <code>tick()</code> suma respetando límites · eventos <code>iswc-input</code> y <code>iswc-change</code>.</p>
   </header>
 
   <section id="sec-basic">

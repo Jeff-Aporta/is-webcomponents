@@ -71,7 +71,7 @@ export function cloneRecord(record: IspRecord | null | undefined): IspRecord {
   return { ...record };
 }
 
-/** Fila plana para la grilla (API de `<is-ag-grid>`): datos + referencia al registro. */
+/** Fila plana para la grilla (API de `<iswc-ag-grid>`): datos + referencia al registro. */
 export type GridRow = {
   id?: string | number;
   __record?: IspRecord;
@@ -79,7 +79,7 @@ export type GridRow = {
 };
 
 /**
- * Fila plana para la grilla (API de `<is-ag-grid>`).
+ * Fila plana para la grilla (API de `<iswc-ag-grid>`).
  * @param record Registro de origen.
  * @param primaryKeys Claves primarias (la última se usa como `id`).
  */
@@ -131,7 +131,7 @@ export type FlatGridColumn = {
 export type IspColumnsMap = Record<string, IspColumnDef>;
 
 /**
- * Aplana `Columns` anidadas de ISP a defs de `<is-ag-grid>`.
+ * Aplana `Columns` anidadas de ISP a defs de `<iswc-ag-grid>`.
  * @param cols Mapa anidado de columnas (puede ser null).
  * @param out Acumulador al que se empujan las columnas planas.
  */

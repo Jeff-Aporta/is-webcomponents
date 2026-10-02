@@ -2,7 +2,7 @@
  * demo-file-meta.js — barra única tras el título del preview:
  * botones de fuente (JS · CSS · MD) + pesos de los `.min.js` / `.min.css` CDN.
  *
- * Una sola instancia (`.file-meta-page`). No se repite en cada paper/`is-demo`
+ * Una sola instancia (`.file-meta-page`). No se repite en cada paper/`iswc-demo`
  * ni bajo cada `h2` de sección.
  */
 import '../src/components/media/icon.js';
@@ -27,7 +27,7 @@ const makePathCode = (path) => {
   return el;
 };
 
-/** Preserva / reajusta el scroll de `is-main` al insertar chrome arriba. */
+/** Preserva / reajusta el scroll de `iswc-main` al insertar chrome arriba. */
 const preserveMainScroll = (host, mutate) => {
   const top = host.scrollTop;
   const height = host.scrollHeight;
@@ -49,7 +49,7 @@ const preserveMainScroll = (host, mutate) => {
  * @param {number|null} bytes
  */
 const makeBytes = (bytes) => {
-  const el = document.createElement('is-format-bytes');
+  const el = document.createElement('iswc-format-bytes');
   el.className = 'file-meta__bytes';
   el.setAttribute('autofit', '');
   el.setAttribute('display', 'short');
@@ -92,18 +92,18 @@ export function buildFileMeta(tag, opts = {}) {
     ['md', 'MD', !!sources.md],
   ];
   for (const [kind, label, ok] of kinds) {
-    const btn = document.createElement('is-button');
+    const btn = document.createElement('iswc-button');
     btn.className = 'file-meta__src-btn';
     btn.setAttribute('color', 'neutral');
     btn.setAttribute('variant', 'outlined');
     btn.setAttribute('type', 'button');
     btn.setAttribute('data-kind', kind);
     if (!ok) btn.setAttribute('disabled', '');
-    btn.innerHTML = `<is-icon slot="start" icon="${
+    btn.innerHTML = `<iswc-icon slot="start" icon="${
       kind === 'js' ? 'mdi:language-javascript'
         : kind === 'css' ? 'mdi:language-css3'
           : 'mdi:language-markdown'
-    }"></is-icon>${label}`;
+    }"></iswc-icon>${label}`;
     btn.title = ok ? `Ver fuente ${label}` : `${label} no disponible`;
     btn.addEventListener('click', (ev) => {
       ev.preventDefault();
@@ -149,19 +149,19 @@ export function buildFileMeta(tag, opts = {}) {
 
 /**
  * Barra única (arriba del preview, tras el título de página): fuentes + pesos.
- * No se repite bajo cada h2 de sección ni dentro de cada paper/`is-demo`.
+ * No se repite bajo cada h2 de sección ni dentro de cada paper/`iswc-demo`.
  * @param {string} tag
  */
 function mountPageMeta(tag) {
-  const host = document.querySelector('is-main.main, main.main');
+  const host = document.querySelector('iswc-main.main, main.main');
   if (!host || !entryFor(tag)) return;
 
   // Legacy + repeticiones: una sola barra de página.
   host.querySelectorAll(':scope > .vs-page-bar').forEach((el) => el.remove());
 
-  const root = document.querySelector('is-preview-component') || host;
+  const root = document.querySelector('iswc-preview-component') || host;
   root.querySelectorAll?.('.file-meta:not(.file-meta-page)').forEach((el) => el.remove());
-  host.querySelectorAll('.section > .file-meta, .demo > .file-meta, is-demo > .file-meta')
+  host.querySelectorAll('.section > .file-meta, .demo > .file-meta, iswc-demo > .file-meta')
     .forEach((el) => el.remove());
 
   let bar = host.querySelector(':scope > .file-meta-page');
@@ -191,7 +191,7 @@ export function mountFileMeta(tag, _scope = document) {
   mountPageMeta(tag);
 }
 
-document.addEventListener('is-preview-ready', (e) => {
+document.addEventListener('iswc-preview-ready', (e) => {
   const { tag } = e.detail ?? {};
   if (typeof tag !== 'string') return;
   mountFileMeta(tag);

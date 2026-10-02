@@ -1,17 +1,17 @@
 {
-  "$schema": "is-preview/v1",
-  "tag": "is-progress-bar",
+  "$schema": "iswc-preview/v1",
+  "tag": "iswc-progress-bar",
   "category": "feedback",
   "title": "Progress Bar",
   "titleHtml": false,
   "styles": ".pb-demo { max-width: 28rem; display: flex; flex-direction: column; gap: 0.85rem; }\r\n    .pb-meta {\r\n      display: flex; justify-content: space-between; align-items: baseline;\r\n      font-size: 0.9rem; color: var(--iswc-text-soft);\r\n    }\r\n    .pb-meta strong { color: var(--iswc-text); font-variant-numeric: tabular-nums; }\r\n    .pb-actions { display: flex; flex-wrap: wrap; gap: 0.5rem; }",
-  "storageKey": "docs-is-progress-bar",
+  "storageKey": "docs-iswc-progress-bar",
   "hasBehavior": true,
   "sections": [
     {
       "id": "intro",
       "title": "Progress Bar",
-      "lede": "<code class=\"code\">&lt;is-progress-bar&gt;</code>",
+      "lede": "<code class=\"code\">&lt;iswc-progress-bar&gt;</code>",
       "blocks": [
         {
           "kind": "html",
@@ -19,7 +19,7 @@
         },
         {
           "kind": "demo",
-          "html": "<div class=\"pb-demo\">\r\n            <is-progress-bar id=\"pb-play\" value=\"65\" label=\"Subiendo archivo\"></is-progress-bar>\r\n          </div>",
+          "html": "<div class=\"pb-demo\">\r\n            <iswc-progress-bar id=\"pb-play\" value=\"65\" label=\"Subiendo archivo\"></iswc-progress-bar>\r\n          </div>",
           "target": "#pb-play",
           "controls": [
             { "control": "range", "prop": "attr:value", "label": "Valor", "min": 0, "max": 100, "step": 5 },
@@ -36,7 +36,7 @@
       "blocks": [
         {
           "kind": "demo",
-          "html": "<div class=\"pb-demo\">\r\n            <div class=\"pb-meta\">\r\n              <span id=\"pbStatus\">Listo para empezar</span>\r\n              <strong><span id=\"pbPct\">0</span>%</strong>\r\n            </div>\r\n            <is-progress-bar id=\"pbLive\" value=\"0\" label=\"Progreso 0%\"></is-progress-bar>\r\n            <div class=\"pb-actions\">\r\n              <is-button id=\"pbPlus\" color=\"brand\">\r\n                <is-icon slot=\"start\" icon=\"mdi:plus\"></is-icon>\r\n                +10\r\n              </is-button>\r\n              <is-button id=\"pbMinus\" variant=\"outlined\">\r\n                <is-icon slot=\"start\" icon=\"mdi:minus\"></is-icon>\r\n                −10\r\n              </is-button>\r\n              <is-button id=\"pbReset\" variant=\"plain\">\r\n                <is-icon slot=\"start\" icon=\"mdi:restart\"></is-icon>\r\n                Reset\r\n              </is-button>\r\n            </div>\r\n          </div>"
+          "html": "<div class=\"pb-demo\">\r\n            <div class=\"pb-meta\">\r\n              <span id=\"pbStatus\">Listo para empezar</span>\r\n              <strong><span id=\"pbPct\">0</span>%</strong>\r\n            </div>\r\n            <iswc-progress-bar id=\"pbLive\" value=\"0\" label=\"Progreso 0%\"></iswc-progress-bar>\r\n            <div class=\"pb-actions\">\r\n              <iswc-button id=\"pbPlus\" color=\"brand\">\r\n                <iswc-icon slot=\"start\" icon=\"mdi:plus\"></iswc-icon>\r\n                +10\r\n              </iswc-button>\r\n              <iswc-button id=\"pbMinus\" variant=\"outlined\">\r\n                <iswc-icon slot=\"start\" icon=\"mdi:minus\"></iswc-icon>\r\n                −10\r\n              </iswc-button>\r\n              <iswc-button id=\"pbReset\" variant=\"plain\">\r\n                <iswc-icon slot=\"start\" icon=\"mdi:restart\"></iswc-icon>\r\n                Reset\r\n              </iswc-button>\r\n            </div>\r\n          </div>"
         },
         {
           "kind": "code",
@@ -51,11 +51,11 @@
       "blocks": [
         {
           "kind": "demo",
-          "html": "<div class=\"pb-demo\">\r\n            <is-progress-bar value=\"30\" label=\"30%\"></is-progress-bar>\r\n            <is-progress-bar value=\"100\" label=\"Completado\"\r\n              style=\"--indicator-color: var(--iswc-color-success)\"></is-progress-bar>\r\n            <is-progress-bar indeterminate label=\"Procesando\"></is-progress-bar>\r\n          </div>"
+          "html": "<div class=\"pb-demo\">\r\n            <iswc-progress-bar value=\"30\" label=\"30%\"></iswc-progress-bar>\r\n            <iswc-progress-bar value=\"100\" label=\"Completado\"\r\n              style=\"--indicator-color: var(--iswc-color-success)\"></iswc-progress-bar>\r\n            <iswc-progress-bar indeterminate label=\"Procesando\"></iswc-progress-bar>\r\n          </div>"
         },
         {
           "kind": "code",
-          "code": "<is-progress-bar value=\"65\" label=\"Carga\"></is-progress-bar>\n<is-progress-bar indeterminate label=\"Procesando\"></is-progress-bar>",
+          "code": "<iswc-progress-bar value=\"65\" label=\"Carga\"></iswc-progress-bar>\n<iswc-progress-bar indeterminate label=\"Procesando\"></iswc-progress-bar>",
           "lang": "html"
         }
       ]

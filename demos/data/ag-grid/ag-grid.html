@@ -3,7 +3,7 @@
 <head>
 <meta charset="utf-8" />
 <meta name="viewport" content="width=device-width, initial-scale=1" />
-<title>Demo — <is-ag-grid> · is-webcomponents</title>
+<title>Demo — <iswc-ag-grid> · is-webcomponents</title>
 <meta name="description" content="Data grid avanzado estilo ag-grid.com: columnas declaradas, multi-sort, filtros, selección, paginación, virtualización, grouping y export CSV." />
 <style>
   html, body { margin: 0; padding: 0; min-height: 100%; background: #0c1118; color: #e2e8f0; font-family: ui-sans-serif, system-ui, sans-serif; }
@@ -14,8 +14,8 @@
   main { padding: 20px; display: grid; gap: 20px; }
   section { background: #0f1620; border: 1px solid rgba(255,255,255,0.1); border-radius: 8px; padding: 16px; }
   section h2 { font-size: 11px; text-transform: uppercase; letter-spacing: 0.08em; margin: 0 0 12px 0; color: #94a3b8; }
-  is-ag-grid:not(:defined) { visibility: hidden; }
-  is-ag-grid { display: block; min-height: 280px; --iswc-grid-height: 280px; }
+  iswc-ag-grid:not(:defined) { visibility: hidden; }
+  iswc-ag-grid { display: block; min-height: 280px; --iswc-grid-height: 280px; }
   .log { font: 11px ui-monospace, Menlo, Consolas, monospace; background: rgba(0,0,0,0.3); padding: 8px; border-radius: 4px; min-height: 40px; max-height: 100px; overflow: auto; color: #94a3b8; margin-top: 8px; }
   footer { padding: 12px 20px; border-top: 1px solid rgba(255,255,255,0.1); background: #0f1620; font-size: 11px; color: #94a3b8; }
   footer code { background: rgba(255,255,255,0.06); padding: 1px 5px; border-radius: 3px; font: 11px ui-monospace, Menlo, Consolas, monospace; }
@@ -28,8 +28,8 @@
   cssLink.href = '../../../dist/cdn/data/ag-grid.min.css';
   document.head.appendChild(cssLink);
 
-  await import('../../../dist/cdn/data/ag-grid.min.js?h=r74jkp');
-  await customElements.whenDefined('is-ag-grid');
+  await import('../../../dist/cdn/data/ag-grid.min.js?h=7rrgq8');
+  await customElements.whenDefined('iswc-ag-grid');
 
   // ── (1) Básico: 6 columnas, 8 filas, paginado.
   const cols1 = [
@@ -50,7 +50,7 @@
     { id: 7, sku: 'D-400', name: 'Cuadro decorativo', category: 'Hogar', price: 25.0, stock: 18, active: false },
     { id: 8, sku: 'D-401', name: 'Lámpara LED', category: 'Hogar', price: 18.9, stock: 45, active: true },
   ];
-  const g1 = document.createElement('is-ag-grid');
+  const g1 = document.createElement('iswc-ag-grid');
   g1.setAttribute('pagination', '');
   g1.setAttribute('page-size', '5');
   g1.setAttribute('selectable', '');
@@ -72,7 +72,7 @@
     { id: 5, k: 'env', v: 'production' },
   ];
   for (const density of ['compact', 'normal', 'comfortable']) {
-    const g = document.createElement('is-ag-grid');
+    const g = document.createElement('iswc-ag-grid');
     g.setAttribute('density', density);
     g.setAttribute('toolbar', 'false');
     g.style.setProperty('--iswc-grid-height', '180px');
@@ -82,16 +82,16 @@
   }
 
   // ── (3) Sin toolbar (sólo grid puro).
-  const g3 = document.createElement('is-ag-grid');
+  const g3 = document.createElement('iswc-ag-grid');
   g3.setAttribute('toolbar', 'false');
   g3.id = 'g3';
   document.getElementById('plain').appendChild(g3);
   g3.api.setColumns(cols1);
   g3.api.setRows(rows1);
 
-  // ── Logging: is-cell-click + is-sort-change + is-page-change.
+  // ── Logging: iswc-cell-click + iswc-sort-change + iswc-page-change.
   function attachLog(el, logEl) {
-    el.addEventListener('is-cell-click', (e) => {
+    el.addEventListener('iswc-cell-click', (e) => {
       const col = e.detail?.column?.field ?? '';
       const val = e.detail?.value ?? '';
       const line = `cell-click ${col}=${val}`;
@@ -99,17 +99,17 @@
       logEl.dataset.lastCol = String(col);
       logEl.dataset.lastValue = String(val);
     });
-    el.addEventListener('is-sort-change', (e) => {
+    el.addEventListener('iswc-sort-change', (e) => {
       const line = `sort ${e.detail?.column} ${e.detail?.direction}`;
       logEl.textContent = `${line}\n${logEl.textContent || ''}`.slice(0, 500);
     });
-    el.addEventListener('is-page-change', (e) => {
+    el.addEventListener('iswc-page-change', (e) => {
       const line = `page ${e.detail?.page}/${e.detail?.pageSize}`;
       logEl.textContent = `${line}\n${logEl.textContent || ''}`.slice(0, 500);
       logEl.dataset.lastPage = String(e.detail?.page ?? '');
       logEl.dataset.lastPageSize = String(e.detail?.pageSize ?? '');
     });
-    el.addEventListener('is-row-select', (e) => {
+    el.addEventListener('iswc-row-select', (e) => {
       const line = `row-select n=${e.detail?.rows?.length ?? 0}`;
       logEl.textContent = `${line}\n${logEl.textContent || ''}`.slice(0, 500);
       logEl.dataset.lastSelected = String(e.detail?.rows?.length ?? 0);
@@ -123,7 +123,7 @@
 </head>
 <body>
 <header>
-  <h1>Demo — <code>&lt;is-ag-grid&gt;</code></h1>
+  <h1>Demo — <code>&lt;iswc-ag-grid&gt;</code></h1>
   <p>Data grid estilo ag-grid.com: columnas declaradas, multi-sort, filtros, selección, paginación, virtualización y export CSV.</p>
 </header>
 <main>

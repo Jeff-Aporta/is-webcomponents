@@ -1,14 +1,14 @@
 ---
-tag: is-mention
+tag: iswc-mention
 tags:
-  - is-mention
+  - iswc-mention
 category: forms
 status: public
 source: ./mention.js
 style: ./mention.css
 preview: ./mention.json
 ---
-# `<is-mention>`
+# `<iswc-mention>`
 
 ## Propósito
 
@@ -16,7 +16,7 @@ Campo de texto con autocompletado disparado por caracteres trigger (`@`
 usuario, `#` etiqueta). Al escribir un trigger se abre un popup filtrado; al
 elegir, el texto se inserta en línea y el `value` sigue siendo texto plano.
 
-Este módulo registra `<is-mention>`.
+Este módulo registra `<iswc-mention>`.
 
 ## Cuándo usarlo
 
@@ -25,8 +25,8 @@ etiqueta contenido.
 
 ## Cuándo no usarlo
 
-Para elegir de un catálogo cerrado usar `<is-combobox>` o `<is-select>`; para
-texto enriquecido con formato usar `<is-rte>`.
+Para elegir de un catálogo cerrado usar `<iswc-combobox>` o `<iswc-select>`; para
+texto enriquecido con formato usar `<iswc-rte>`.
 
 ## Importación
 
@@ -37,11 +37,11 @@ import './mention.js';
 ## Ejemplo mínimo
 
 ```html
-<is-mention placeholder="Escribe @ para mencionar">
+<iswc-mention placeholder="Escribe @ para mencionar">
   <script type="application/json">
     { "@": ["Ana", "Pedro", "Sofía"], "#": ["urgente", "bug"] }
   </script>
-</is-mention>
+</iswc-mention>
 ```
 
 ## API
@@ -78,11 +78,11 @@ import './mention.js';
 
 | Evento | detail | bubbles | composed | cancelable |
 | --- | --- | --- | --- | --- |
-| `is-input` | sin detail | sí | sí | no |
-| `is-select` | `{ trigger, item, range: [start, end] }` | sí | sí | no |
-| `is-change` | `{ value }` | sí | sí | no |
+| `iswc-input` | sin detail | sí | sí | no |
+| `iswc-select` | `{ trigger, item, range: [start, end] }` | sí | sí | no |
+| `iswc-change` | `{ value }` | sí | sí | no |
 
-`is-change` se emite al seleccionar una sugerencia, no en cada pulsación.
+`iswc-change` se emite al seleccionar una sugerencia, no en cada pulsación.
 
 ### Métodos y propiedades públicas
 
@@ -120,7 +120,7 @@ No expone custom states.
 ### Integración con formularios
 
 No es form-associated: `name` es descriptivo y el valor no llega a `FormData`
-por sí solo. Reflejarlo en un campo oculto desde `is-input` si se envía por
+por sí solo. Reflejarlo en un campo oculto desde `iswc-input` si se envía por
 formulario nativo.
 
 ## Comportamiento
@@ -141,7 +141,7 @@ formulario nativo.
 - [`../_shared/define.js`](../_shared/define.js)
 - [`../_shared/emit.js`](../_shared/emit.js)
 
-Tags del módulo: `<is-mention>`.
+Tags del módulo: `<iswc-mention>`.
 
 ## Accesibilidad
 
@@ -152,13 +152,13 @@ el foco fuera del input.
 ## Ejemplo avanzado
 
 ```html
-<is-mention id="comentario" trigger="@" max-items="5"
-            placeholder="Comenta y menciona con @"></is-mention>
+<iswc-mention id="comentario" trigger="@" max-items="5"
+            placeholder="Comenta y menciona con @"></iswc-mention>
 
 <script type="module">
   const campo = document.getElementById('comentario');
   campo.suggestions = { '@': ['ana.gil', 'pedro.ruiz', 'sofia.mesa'] };
-  campo.addEventListener('is-select', (e) => {
+  campo.addEventListener('iswc-select', (e) => {
     console.log(e.detail.trigger, e.detail.item, e.detail.range);
   });
 </script>
@@ -169,7 +169,7 @@ el foco fuera del input.
 - Cambiar el `<script type="application/json">` tras conectar el componente:
   solo se lee al conectar; después usar la propiedad `suggestions`.
 - Esperar chips u objetos: el `value` es siempre texto plano.
-- Esperar `is-change` en cada tecla: ahí se emite `is-input`.
+- Esperar `iswc-change` en cada tecla: ahí se emite `iswc-input`.
 - Definir `trigger` con más de un carácter por token: cada carácter de la
   cadena es un trigger independiente.
 - Usar tag sin importar módulo primero.

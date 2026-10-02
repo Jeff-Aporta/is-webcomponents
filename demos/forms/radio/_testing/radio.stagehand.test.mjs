@@ -1,7 +1,7 @@
 // radio.stagehand.test.mjs — verificaciones visuales deterministas.
 //
 // Checks:
-//   1. COMPONENTE RENDERIZADO: <is-radio> definido, shadow DOM, role=radio.
+//   1. COMPONENTE RENDERIZADO: <iswc-radio> definido, shadow DOM, role=radio.
 //   2. ELEMENTOS VISIBLES: control (círculo) + dot + label + description visibles.
 //   3. TEXTO LEGIBLE: labels y descripciones con font-size >= 8px.
 //   4. SIN OVERLAPS: los radios no se solapan entre sí.
@@ -15,11 +15,11 @@ const DEMOS = [
 async function checkDeterministic(page, demo) {
   await page.waitForTimeout(200);
 
-  const defined = await page.evaluate(() => !!customElements.get('is-radio'));
-  assert.equal(defined, true, 'is-radio debe estar definido');
+  const defined = await page.evaluate(() => !!customElements.get('iswc-radio'));
+  assert.equal(defined, true, 'iswc-radio debe estar definido');
 
   const data = await page.evaluate(() => {
-    const radios = [...document.querySelectorAll('is-radio')];
+    const radios = [...document.querySelectorAll('iswc-radio')];
     return radios.map((r) => {
       const sr = r.shadowRoot;
       const control = sr?.querySelector('.control');
@@ -85,7 +85,7 @@ for (const demo of DEMOS) {
 }
 
 const VISUAL_RUBRIC = `
-Evalúa la calidad visual del demo del componente <is-radio>.
+Evalúa la calidad visual del demo del componente <iswc-radio>.
 
 Checklist (cada una PASS o FAIL):
 

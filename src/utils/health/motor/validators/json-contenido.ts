@@ -2,7 +2,7 @@
  * Validador de CONTENIDO del JSON.
  *
  * El validador de esquema (json-schema.ts) confirma que la estructura
- * cumple is-preview/v1. Este módulo audita el CONTENIDO de cada bloque:
+ * cumple iswc-preview/v1. Este módulo audita el CONTENIDO de cada bloque:
  *
  *   - Bloques `demo` cuyo HTML contiene tags no is-* y muchos slots sin
  *     inicializar (síntoma típico de demo que no se pensó como dato).
@@ -53,7 +53,7 @@ function contarTagsIs(html: string): number {
 /** Devuelve los tags is-* únicos en el HTML. */
 function tagsIsUnicos(html: string): string[] {
   const set = new Set<string>();
-  for (const m of html.matchAll(/<is-([a-z0-9-]+)/g)) set.add(`is-${m[1]}`);
+  for (const m of html.matchAll(/<iswc-([a-z0-9-]+)/g)) set.add(`iswc-${m[1]}`);
   return [...set];
 }
 
@@ -68,23 +68,23 @@ function tagsIsUnicos(html: string): string[] {
  * es estático y no se está aprovechando la API real.
  */
 const COMPONENTES_QUE_REQUIEREN_JSON = new Set([
-  'is-bar-chart', 'is-line-chart', 'is-pie-chart', 'is-doughnut-chart',
-  'is-polar-area-chart', 'is-bubble-chart', 'is-waterfall-chart', 'is-funnel-chart',
-  'is-treemap', 'is-heatmap',
-  'is-flowchart', 'is-sequence-diagram', 'is-class-diagram', 'is-state-diagram',
-  'is-er-diagram', 'is-block-diagram', 'is-component-diagram',
-  'is-mindmap', 'is-gantt', 'is-timeline',
-  'is-sankey-diagram', 'is-quadrant-chart', 'is-venn-diagram',
-  'is-use-case-diagram', 'is-swimlane-diagram', 'is-journey-map', 'is-org-chart',
-  'is-pivot-table',
-  // is-chart, is-radar-chart, is-scatter-chart: tienen factory
+  'iswc-bar-chart', 'iswc-line-chart', 'iswc-pie-chart', 'iswc-doughnut-chart',
+  'iswc-polar-area-chart', 'iswc-bubble-chart', 'iswc-waterfall-chart', 'iswc-funnel-chart',
+  'iswc-treemap', 'iswc-heatmap',
+  'iswc-flowchart', 'iswc-sequence-diagram', 'iswc-class-diagram', 'iswc-state-diagram',
+  'iswc-er-diagram', 'iswc-block-diagram', 'iswc-component-diagram',
+  'iswc-mindmap', 'iswc-gantt', 'iswc-timeline',
+  'iswc-sankey-diagram', 'iswc-quadrant-chart', 'iswc-venn-diagram',
+  'iswc-use-case-diagram', 'iswc-swimlane-diagram', 'iswc-journey-map', 'iswc-org-chart',
+  'iswc-pivot-table',
+  // iswc-chart, iswc-radar-chart, iswc-scatter-chart: tienen factory
   // `window.__isDefineTypedChart` que delega a chart.ts. Sus demos
   // admiten tanto JSON embebido como `chart.config = {...}` por JS.
-  // is-kanban, is-spreadsheet, is-transfer, is-stat, is-gauge: data
+  // iswc-kanban, iswc-spreadsheet, iswc-transfer, iswc-stat, iswc-gauge: data
   // inyectada por behavior (.config / .value). Ver
   // `COMPONENTES_DATA_VIA_BEHAVIOR` para la lista completa.
-  // is-sparkline: acepta `data="…"` por atributo, no JSON embebido.
-  // is-data-grid: la API canónica es `grid.columns/rows = …` vía propiedad
+  // iswc-sparkline: acepta `data="…"` por atributo, no JSON embebido.
+  // iswc-data-grid: la API canónica es `grid.columns/rows = …` vía propiedad
   // (en el behavior). El JSON es la "cáscara" con atributos declarativos
   // (show-toolbar, page-size, etc.) y los datos los inyecta el behavior.
 ]);
@@ -111,7 +111,7 @@ export function ejecutarValidacionContenido(def: Def, rutaJson: string, opciones
           const tags = tagsIsUnicos(html);
 
           // 1. Demo sin is-* en el HTML.
-          //    Módulos (helpers como is-ui) reciben los <is-*> por behavior
+          //    Módulos (helpers como iswc-ui) reciben los <is-*> por behavior
           //    en runtime; no se puede auditar estáticamente.
           if (contarTagsIs(html) === 0 && !esModulo) {
             hallazgos.push({
@@ -253,18 +253,18 @@ export function requiereJsonEmbebido(tag: string): boolean {
 /** Tags que tienen API basada en slots en lugar de JSON. La auditoría
  *  los considera válidos sin requerir script type=application/json. */
 export const COMPONENTES_BASADOS_EN_SLOTS = new Set([
-  'is-tree', 'is-tree-item', 'is-tree-view',
-  'is-date-picker', 'is-month-calendar', 'is-year-calendar', 'is-full-calendar',
+  'iswc-tree', 'iswc-tree-item', 'iswc-tree-view',
+  'iswc-date-picker', 'iswc-month-calendar', 'iswc-year-calendar', 'iswc-full-calendar',
 ]);
 
 /** Tags que reciben su data vía property assignment en un behavior
  *  (no requieren script type=application/json en el host). El JSON
  *  solo declara el shell + atributos. */
 export const COMPONENTES_DATA_VIA_BEHAVIOR = new Set([
-  'is-data-grid', 'is-sparkline',
-  'is-chart', 'is-radar-chart', 'is-scatter-chart',
-  'is-stat', 'is-transfer', 'is-gauge',
-  'is-kanban', 'is-spreadsheet',
+  'iswc-data-grid', 'iswc-sparkline',
+  'iswc-chart', 'iswc-radar-chart', 'iswc-scatter-chart',
+  'iswc-stat', 'iswc-transfer', 'iswc-gauge',
+  'iswc-kanban', 'iswc-spreadsheet',
 ]);
 
 /** Detecta si la sección tiene un bloque `code` con la API JS

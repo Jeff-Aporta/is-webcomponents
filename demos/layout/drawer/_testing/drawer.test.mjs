@@ -10,14 +10,14 @@ const URL = `${BASE_URL}/demos/layout/drawer/drawer.html`;
 const tests = [];
 
 tests.push({
-  name: 'smoke: is-drawer está definido y los 5 drawers están montados',
+  name: 'smoke: iswc-drawer está definido y los 5 drawers están montados',
   run: async (page) => {
     await page.goto(URL, { waitUntil: 'domcontentloaded' });
     await waitReady(page, 'data-drawer-ready');
     const data = await page.evaluate(() => {
-      const drawers = [...document.querySelectorAll('body > is-drawer')];
+      const drawers = [...document.querySelectorAll('body > iswc-drawer')];
       return {
-        defined: !!customElements.get('is-drawer'),
+        defined: !!customElements.get('iswc-drawer'),
         count: drawers.length,
         parts: drawers.map((d) => {
           const sr = d.shadowRoot;
@@ -32,7 +32,7 @@ tests.push({
         }),
       };
     });
-    assert.equal(data.defined, true, 'is-drawer debe estar definido');
+    assert.equal(data.defined, true, 'iswc-drawer debe estar definido');
     assert.equal(data.count, 5, `esperaba 5 drawers, hay ${data.count}`);
     for (const p of data.parts) {
       assert.equal(p.backdrop, true, 'part="backdrop" obligatorio');
@@ -70,7 +70,7 @@ tests.push({
     await page.goto(URL, { waitUntil: 'domcontentloaded' });
     await waitReady(page, 'data-drawer-ready');
     const v = await page.evaluate(() => {
-      const d = document.createElement('is-drawer');
+      const d = document.createElement('iswc-drawer');
       d.setAttribute('placement', 'diagonal');
       document.body.appendChild(d);
       const r = d.placement;
@@ -124,7 +124,7 @@ tests.push({
     await page.waitForTimeout(400);
     const focused = await page.evaluate(() => {
       const ae = document.activeElement;
-      return { tag: ae?.tagName, id: ae?.id, inDrawer: !!ae.closest?.('is-drawer') };
+      return { tag: ae?.tagName, id: ae?.id, inDrawer: !!ae.closest?.('iswc-drawer') };
     });
     assert.equal(focused.id, 'd-end-input', `autofocus debe apuntar a #d-end-input, fue "${focused.id}"`);
     assert.ok(focused.inDrawer, 'foco debe estar dentro del drawer');
@@ -192,7 +192,7 @@ tests.push({
       await page.keyboard.press('Tab');
       const ae = await page.evaluate(() => {
         const a = document.activeElement;
-        return { id: a?.id, tag: a?.tagName, inDrawer: !!a.closest?.('is-drawer') };
+        return { id: a?.id, tag: a?.tagName, inDrawer: !!a.closest?.('iswc-drawer') };
       });
       tags.push(ae);
     }
@@ -223,7 +223,7 @@ tests.push({
 });
 
 tests.push({
-  name: 'eventos: is-show → is-after-show → is-hide → is-after-hide',
+  name: 'eventos: iswc-show → iswc-after-show → iswc-hide → iswc-after-hide',
   run: async (page) => {
     await page.goto(URL, { waitUntil: 'domcontentloaded' });
     await waitReady(page, 'data-drawer-ready');
@@ -233,10 +233,10 @@ tests.push({
     await page.keyboard.press('Escape');
     await page.waitForTimeout(400);
     const log = await page.evaluate(() => document.getElementById('log').textContent || '');
-    assert.match(log, /is-show\s*←\s*d-end/, `debe emitir is-show ← d-end, log:\n${log}`);
-    assert.match(log, /is-after-show\s*←\s*d-end/, `debe emitir is-after-show ← d-end, log:\n${log}`);
-    assert.match(log, /is-hide\s*←\s*d-end/, `debe emitir is-hide ← d-end, log:\n${log}`);
-    assert.match(log, /is-after-hide\s*←\s*d-end/, `debe emitir is-after-hide ← d-end, log:\n${log}`);
+    assert.match(log, /iswc-show\s*←\s*d-end/, `debe emitir iswc-show ← d-end, log:\n${log}`);
+    assert.match(log, /iswc-after-show\s*←\s*d-end/, `debe emitir iswc-after-show ← d-end, log:\n${log}`);
+    assert.match(log, /iswc-hide\s*←\s*d-end/, `debe emitir iswc-hide ← d-end, log:\n${log}`);
+    assert.match(log, /iswc-after-hide\s*←\s*d-end/, `debe emitir iswc-after-hide ← d-end, log:\n${log}`);
   },
 });
 

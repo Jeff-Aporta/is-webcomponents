@@ -17,7 +17,7 @@ try {
   const init = await page.evaluate(() => {
     const el = document.getElementById('ref-app');
     const sr = el.shadowRoot;
-    const inputEl = sr.querySelector('is-input.field');
+    const inputEl = sr.querySelector('iswc-input.field');
     const openBtn = sr.querySelector('button.open');
     return {
       inputRect: inputEl?.getBoundingClientRect(),

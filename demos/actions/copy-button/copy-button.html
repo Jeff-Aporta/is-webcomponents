@@ -3,8 +3,8 @@
 <head>
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1" />
-  <title>Demo: <is-copy-button> · is-webcomponents</title>
-  <meta name="description" content="Demo de <is-copy-button>: copia al portapapeles con feedback visual (éxito/error), tooltip configurable." />
+  <title>Demo: <iswc-copy-button> · is-webcomponents</title>
+  <meta name="description" content="Demo de <iswc-copy-button>: copia al portapapeles con feedback visual (éxito/error), tooltip configurable." />
   <style>
     html, body {
       margin: 0; padding: 24px; min-height: 100%;
@@ -20,20 +20,20 @@
     code.block { background: #0a0f17; padding: 10px; border-radius: 6px; display: inline-block; font: 12px ui-monospace, Menlo, Consolas, monospace; color: #cbd5e1; max-width: 100%; word-break: break-all; }
     pre { background: #0a0f17; padding: 10px; border-radius: 6px; font: 12px ui-monospace, Menlo, Consolas, monospace; color: #cbd5e1; overflow: auto; }
     /* Anti-FOUC */
-    is-copy-button:not(:defined) { visibility: hidden; }
+    iswc-copy-button:not(:defined) { visibility: hidden; }
   </style>
 </head>
 <body>
   <header>
-    <h1>Demo: <code>&lt;is-copy-button&gt;</code></h1>
+    <h1>Demo: <code>&lt;iswc-copy-button&gt;</code></h1>
     <p>Copia al portapapeles con feedback visual (success/error). Atributo <code>value</code> o <code>from</code>. Tooltip configurable.</p>
   </header>
 
   <section>
     <h2>value directo</h2>
     <div class="row">
-      <is-copy-button value="npm install is-webcomponents"></is-copy-button>
-      <is-copy-button value="https://github.com/" copy-label="Copiar URL" success-label="¡Copiado!" error-label="No se pudo copiar"></is-copy-button>
+      <iswc-copy-button value="npm install is-webcomponents"></iswc-copy-button>
+      <iswc-copy-button value="https://github.com/" copy-label="Copiar URL" success-label="¡Copiado!" error-label="No se pudo copiar"></iswc-copy-button>
     </div>
   </section>
 
@@ -41,14 +41,14 @@
     <h2>from (lee texto de otro elemento)</h2>
     <div class="row">
       <code class="block" id="snippet">const is = require('is-webcomponents');</code>
-      <is-copy-button from="snippet"></is-copy-button>
+      <iswc-copy-button from="snippet"></iswc-copy-button>
     </div>
   </section>
 
   <section>
     <h2>Estado disabled</h2>
     <div class="row">
-      <is-copy-button value="nunca se copia" disabled></is-copy-button>
+      <iswc-copy-button value="nunca se copia" disabled></iswc-copy-button>
     </div>
   </section>
 
@@ -58,9 +58,9 @@
   </section>
 
   <script type="module">
-    await import('../../../dist/cdn/actions/copy-button.min.js?h=ynh5bj');
-    await import('../../../dist/cdn/actions/button.min.js?h=ki2dk5');
-    await customElements.whenDefined('is-copy-button');
+    await import('../../../dist/cdn/actions/copy-button.min.js?h=k8jque');
+    await import('../../../dist/cdn/actions/button.min.js?h=5i9tzt');
+    await customElements.whenDefined('iswc-copy-button');
 
     const log = document.getElementById('log');
     const events = [];
@@ -69,9 +69,9 @@
       log.textContent = JSON.stringify(events, null, 2);
     };
 
-    document.querySelectorAll('is-copy-button').forEach((b) => {
-      b.addEventListener('is-copy', (e) => record('is-copy', { value: e.detail.value }));
-      b.addEventListener('is-error', () => record('is-error', {}));
+    document.querySelectorAll('iswc-copy-button').forEach((b) => {
+      b.addEventListener('iswc-copy', (e) => record('iswc-copy', { value: e.detail.value }));
+      b.addEventListener('iswc-error', () => record('iswc-error', {}));
     });
 
     document.documentElement.dataset.copyButtonReady = '1';

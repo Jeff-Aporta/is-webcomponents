@@ -1,21 +1,21 @@
 ---
-tag: is-gauge
+tag: iswc-gauge
 tags:
-  - is-gauge
+  - iswc-gauge
 category: data
 status: public
 source: ./gauge.js
 style: ./gauge.css
 preview: ./gauge.json
 ---
-# `<is-gauge>`
+# `<iswc-gauge>`
 
 ## Propósito
 
 Medidor circular SVG de porcentaje. Soporta colores, semicírculo,
 custom min/max, unidad, formato y tamaño.
 
-Este módulo registra `<is-gauge>`.
+Este módulo registra `<iswc-gauge>`.
 
 ## Cuándo usarlo
 
@@ -34,7 +34,7 @@ import './gauge.js';
 ## Ejemplo mínimo
 
 ```html
-<is-gauge value="67" label="Conversión" unit="%"></is-gauge>
+<iswc-gauge value="67" label="Conversión" unit="%"></iswc-gauge>
 ```
 
 ## API
@@ -68,7 +68,7 @@ No expone.
 
 | Evento | detail | bubbles | composed | cancelable |
 | --- | --- | --- | --- | --- |
-| `is-gauge-change` | según cabecera | según cabecera | según cabecera | según cabecera |
+| `iswc-gauge-change` | según cabecera | según cabecera | según cabecera | según cabecera |
 
 ### Métodos y propiedades públicas
 
@@ -118,9 +118,9 @@ No declara integración form-associated propia en este módulo.
 
 Documentación de cabecera preservada desde fuente:
 
-> <is-gauge> — Medidor circular de porcentaje (vanilla, zero dependencies).
+> <iswc-gauge> — Medidor circular de porcentaje (vanilla, zero dependencies).
 > Medidor semicircular o completo de 0..100 (o arbitrary min/max).
->   <is-gauge value="67" label="Conversión"></is-gauge>
+>   <iswc-gauge value="67" label="Conversión"></iswc-gauge>
 > Atributos
 >   value       number  (0..100)
 >   min         number
@@ -133,13 +133,13 @@ Documentación de cabecera preservada desde fuente:
 >   format      string  — Intl.NumberFormat format string. e.g. "0.0".
 >   show-value  boolean (default true)
 > Eventos
->   is-gauge-change  detail: { value, percent }
+>   iswc-gauge-change  detail: { value, percent }
 
 ## Dependencias y componentes relacionados
 
 - [`../_shared/adopt-css.js`](../_shared/adopt-css.js)
 
-Tags del módulo: `<is-gauge>`.
+Tags del módulo: `<iswc-gauge>`.
 
 ## Accesibilidad
 
@@ -148,7 +148,7 @@ Preservar semántica, foco, teclado, labels y ARIA. ARIA detectado: ninguno expl
 ## Ejemplo avanzado
 
 ```html
-<is-gauge value="67" label="Conversión" unit="%"></is-gauge>
+<iswc-gauge value="67" label="Conversión" unit="%"></iswc-gauge>
 ```
 
 ## Errores comunes

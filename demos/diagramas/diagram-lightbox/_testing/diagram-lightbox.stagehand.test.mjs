@@ -18,7 +18,7 @@ async function checkDeterministic(page) {
 
   // El lightbox está abierto: debe haber un dialog con backdrop visible.
   const info = await page.evaluate(() => {
-    const lb = document.querySelector('is-diagram-lightbox');
+    const lb = document.querySelector('iswc-diagram-lightbox');
     const isOpen = lb?.hasAttribute('open');
     const dialog = lb?.shadowRoot?.querySelector('dialog, [role="dialog"]');
     const dialogRect = dialog?.getBoundingClientRect();

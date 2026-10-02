@@ -9,15 +9,17 @@
  * repetido en context-menu.css, dropdown.css, dropdown-item.css,
  * palette-selector.css, window.css, command-palette.css, pdf-viewer.css.
  *
- * Uso: `class="is-popover-panel"` en el contenedor de la superficie
+ * Uso: `class="iswc-popover-panel"` en el contenedor de la superficie
  * flotante. El radio y la sombra por defecto son los del patrón más común
  * (context-menu/window); sobrescribir `--iswc-popover-radius` /
  * `--iswc-popover-shadow` por componente si necesita otro valor (p. ej.
  * command-palette usa un radio mayor y una sombra más difusa).
  */
-.is-popover-panel {
-  background: var(--iswc-bg-elev);
-  border: 1px solid var(--iswc-border);
-  border-radius: var(--iswc-popover-radius, var(--iswc-radius, 8px));
-  box-shadow: var(--iswc-popover-shadow, var(--iswc-shadow, 0 18px 44px rgba(0, 0, 0, .26)));
+@layer iswc.surface {
+  .iswc-popover-panel {
+    background: var(--iswc-bg-elev);
+    border: 1px solid var(--iswc-border);
+    border-radius: var(--iswc-popover-radius, var(--iswc-radius, 8px));
+    box-shadow: var(--iswc-popover-shadow, var(--iswc-shadow, 0 18px 44px rgba(0, 0, 0, .26)));
+  }
 }

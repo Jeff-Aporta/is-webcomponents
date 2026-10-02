@@ -3,7 +3,7 @@
 <head>
 <meta charset="utf-8" />
 <meta name="viewport" content="width=device-width, initial-scale=1" />
-<title>Ventana flotante de <is-window> · is-webcomponents</title>
+<title>Ventana flotante de <iswc-window> · is-webcomponents</title>
 <meta name="description" content="Window manager estilo escritorio: drag del header, resize por la esquina, minimize, maximize, close. Soporta múltiples ventanas con z-index." />
 <style>
   html, body { margin: 0; padding: 0; height: 100%; background: #0c1118; color: #e2e8f0; font-family: ui-sans-serif, system-ui, sans-serif; overflow: hidden; }
@@ -32,15 +32,15 @@
     font-size: 11px; line-height: 1.6;
   }
   main .desktopicons kbd { background: rgba(255,255,255,0.06); padding: 1px 5px; border-radius: 3px; font: 11px ui-monospace, Menlo, Consolas, monospace; }
-  is-window:not(:defined) { visibility: hidden; }
+  iswc-window:not(:defined) { visibility: hidden; }
 </style>
 <script type="module">
   // Cargar el bundle pre-construido desde dist/cdn/. Funciona con cualquier
   // servidor estático (incluido VS Code Live Server), no solo con dev server.
-  await import('../../../dist/cdn/overlays/window.min.js?h=xjmagn');
-  await customElements.whenDefined('is-window');
+  await import('../../../dist/cdn/overlays/window.min.js?h=0ens58');
+  await customElements.whenDefined('iswc-window');
 
-  // Spawner de ventanas — cada botón crea una <is-window> con la config
+  // Spawner de ventanas — cada botón crea una <iswc-window> con la config
   // pedida. Se trackean para evitar duplicados y para que el contador en el
   // header refleje cuántas hay vivas.
   let count = 0;
@@ -48,7 +48,7 @@
 
   function spawn(kind) {
     count++;
-    const win = document.createElement('is-window');
+    const win = document.createElement('iswc-window');
     // Config común: arrancan en posiciones distintas para no superponerse.
     const baseX = 80 + count * 32;
     const baseY = 100 + count * 32;
@@ -85,12 +85,12 @@
     win.appendChild(titleSlot);
 
     // Eventos para tests
-    win.addEventListener('is-show', () => winCounter.textContent = `windows: ${document.querySelectorAll('is-window').length}`);
-    win.addEventListener('is-hide', () => {
+    win.addEventListener('iswc-show', () => winCounter.textContent = `windows: ${document.querySelectorAll('iswc-window').length}`);
+    win.addEventListener('iswc-hide', () => {
       // El componente hace this.remove() en close(), así que cuando llegue
-      // is-hide aún está en DOM; lo quitamos manualmente en el listener
+      // iswc-hide aún está en DOM; lo quitamos manualmente en el listener
       // para que el counter se mantenga sincronizado.
-      winCounter.textContent = `windows: ${document.querySelectorAll('is-window').length - 1}`;
+      winCounter.textContent = `windows: ${document.querySelectorAll('iswc-window').length - 1}`;
     });
 
     document.getElementById('desktop').appendChild(win);
@@ -109,7 +109,7 @@
 <body>
 <header>
   <div>
-    <h1>Window manager — <code>&lt;is-window&gt;</code></h1>
+    <h1>Window manager — <code>&lt;iswc-window&gt;</code></h1>
     <p>Drag el header · Resize por la esquina inferior derecha · <code>Esc</code> cierra · Múltiples ventanas conviven con z-index</p>
   </div>
   <div class="spacer"></div>

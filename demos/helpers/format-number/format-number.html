@@ -3,8 +3,8 @@
 <head>
 <meta charset="utf-8" />
 <meta name="viewport" content="width=device-width, initial-scale=1" />
-<title><is-format-number> · is-webcomponents</title>
-<meta name="description" content="Demo del helper <is-format-number>: Intl.NumberFormat con decimal/currency/percent/unit + pad-start." />
+<title><iswc-format-number> · is-webcomponents</title>
+<meta name="description" content="Demo del helper <iswc-format-number>: Intl.NumberFormat con decimal/currency/percent/unit + pad-start." />
 <style>
   html, body { margin: 0; padding: 0; height: 100%; background: #0c1118; color: #e2e8f0; font-family: ui-sans-serif, system-ui, sans-serif; }
   body { display: grid; grid-template-rows: auto 1fr; }
@@ -18,11 +18,11 @@
   main { padding: 16px 20px; display: grid; gap: 8px; align-content: start; }
   .row { display: grid; grid-template-columns: 360px 1fr; gap: 12px; align-items: baseline; }
   .row code { color: #94a3b8; font-size: 12px; }
-  is-format-number:not(:defined) { visibility: hidden; }
+  iswc-format-number:not(:defined) { visibility: hidden; }
 </style>
 <script type="module">
-  await import('../../../dist/cdn/helpers/format-number.min.js?h=14p7dl');
-  await customElements.whenDefined('is-format-number');
+  await import('../../../dist/cdn/helpers/format-number.min.js?h=09s766');
+  await customElements.whenDefined('iswc-format-number');
 
   const cases = [
     { value: '1234.5' },
@@ -44,8 +44,8 @@
     row.className = 'row';
     const label = document.createElement('code');
     const attrs = Object.entries(c).map(([k, v]) => `${k}=${JSON.stringify(v)}`).join(' ');
-    label.textContent = `<is-format-number ${attrs}>`;
-    const el = document.createElement('is-format-number');
+    label.textContent = `<iswc-format-number ${attrs}>`;
+    const el = document.createElement('iswc-format-number');
     for (const [k, v] of Object.entries(c)) el.setAttribute(k, String(v));
     row.append(label, el);
     main.appendChild(row);
@@ -56,7 +56,7 @@
 </head>
 <body>
 <header>
-  <h1><is-format-number> — Intl.NumberFormat + presets</h1>
+  <h1><iswc-format-number> — Intl.NumberFormat + presets</h1>
   <p>Atributos: <code>value</code> <code>type</code> <code>currency</code> <code>locale</code> <code>minimum-fraction-digits</code> <code>maximum-fraction-digits</code> <code>pad-start</code> <code>pad-length</code></p>
 </header>
 <main></main>

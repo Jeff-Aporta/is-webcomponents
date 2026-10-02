@@ -1,20 +1,20 @@
 ---
-tag: is-pdf-viewer
+tag: iswc-pdf-viewer
 tags:
-  - is-pdf-viewer
+  - iswc-pdf-viewer
 category: overlays
 status: public
 source: ./pdf-viewer.js
 style: ./pdf-viewer.css
 preview: ./pdf-viewer.json
 ---
-# `<is-pdf-viewer>`
+# `<iswc-pdf-viewer>`
 
 ## Propósito
 
 Visor de PDF. Por defecto usa el visor nativo del navegador; opcionalmente `engine="pdfjs"`.
 
-Este módulo registra `<is-pdf-viewer>`.
+Este módulo registra `<iswc-pdf-viewer>`.
 
 ## Cuándo usarlo
 
@@ -22,7 +22,7 @@ Paleta de comandos, visor de documentos y ventanas flotantes.
 
 ## Cuándo no usarlo
 
-Para diálogos/cajones genéricos usar `<is-dialog>` / `<is-drawer>` en layout.
+Para diálogos/cajones genéricos usar `<iswc-dialog>` / `<iswc-drawer>` en layout.
 No reinventar overlays si este módulo cubre el caso.
 
 ## Importación
@@ -34,7 +34,7 @@ import './pdf-viewer.js';
 ## Ejemplo mínimo
 
 ```html
-<is-pdf-viewer src="/docs/manual.pdf" download print></is-pdf-viewer>
+<iswc-pdf-viewer src="/docs/manual.pdf" download print></iswc-pdf-viewer>
 ```
 
 ## API
@@ -70,8 +70,8 @@ import './pdf-viewer.js';
 
 | Evento | detail | bubbles | composed | cancelable |
 | --- | --- | --- | --- | --- |
-| `is-load` | sí | sí | sí | no |
-| `is-error` | sí | sí | sí | no |
+| `iswc-load` | sí | sí | sí | no |
+| `iswc-error` | sí | sí | sí | no |
 
 ### Métodos y propiedades públicas
 
@@ -107,14 +107,14 @@ No declara integración form-associated propia en este módulo.
 
 Documentación de cabecera preservada desde fuente:
 
-> <is-pdf-viewer> — src/page/zoom/engine/height/download/print. Eventos is-load / is-error. Slots title y toolbar.
+> <iswc-pdf-viewer> — src/page/zoom/engine/height/download/print. Eventos iswc-load / iswc-error. Slots title y toolbar.
 
 ## Dependencias y componentes relacionados
 
 - [`../_shared/adopt-css.js`](../_shared/adopt-css.js)
 - [`../media/icon.js`](../media/icon.js)
 
-Tags del módulo: `<is-pdf-viewer>`.
+Tags del módulo: `<iswc-pdf-viewer>`.
 
 ## Accesibilidad
 
@@ -141,7 +141,7 @@ Preservar semántica, foco, teclado, labels y ARIA. Listeners globales solo en
 ## Ejemplo avanzado
 
 ```html
-<is-pdf-viewer src="/docs/manual.pdf" download print></is-pdf-viewer>
+<iswc-pdf-viewer src="/docs/manual.pdf" download print></iswc-pdf-viewer>
 ```
 
 ## Errores comunes

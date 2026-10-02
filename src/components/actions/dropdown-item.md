@@ -1,22 +1,22 @@
 ---
-tag: is-dropdown-item
+tag: iswc-dropdown-item
 tags:
-  - is-dropdown-item
+  - iswc-dropdown-item
 category: actions
 status: public
 source: ./dropdown-item.js
 style: ./dropdown-item.css
 preview: ./dropdown-item.json
 ---
-# `<is-dropdown-item>`
+# `<iswc-dropdown-item>`
 
 ## Propósito
 
 Menú anclado a un trigger. Panel en <dialog> modal
 (top layer) para no quedar debajo de otras secciones. Items:
-is-dropdown-item, is-divider e iconos.
+iswc-dropdown-item, iswc-divider e iconos.
 
-Este módulo registra `<is-dropdown-item>`.
+Este módulo registra `<iswc-dropdown-item>`.
 
 ## Cuándo usarlo
 
@@ -35,12 +35,12 @@ import './dropdown-item.js';
 ## Ejemplo mínimo
 
 ```html
-<is-dropdown>
-<is-button slot="trigger" with-caret>Options</is-button>
-<is-dropdown-item value="edit">Edit</is-dropdown-item>
-<is-divider></is-divider>
-<is-dropdown-item value="delete" color="danger">Delete</is-dropdown-item>
-</is-dropdown>
+<iswc-dropdown>
+<iswc-button slot="trigger" with-caret>Options</iswc-button>
+<iswc-dropdown-item value="edit">Edit</iswc-dropdown-item>
+<iswc-divider></iswc-divider>
+<iswc-dropdown-item value="delete" color="danger">Delete</iswc-dropdown-item>
+</iswc-dropdown>
 ```
 
 ## API
@@ -83,7 +83,7 @@ import './dropdown-item.js';
 
 | Evento | detail | bubbles | composed | cancelable |
 | --- | --- | --- | --- | --- |
-| `is-dropdown-item-select` | sí | sí | sí | no |
+| `iswc-dropdown-item-select` | sí | sí | sí | no |
 
 ### Métodos y propiedades públicas
 
@@ -133,7 +133,7 @@ No declara integración form-associated propia en este módulo.
 
 Documentación de cabecera preservada desde fuente:
 
-> <is-dropdown-item> — ítem de menú para is-dropdown.
+> <iswc-dropdown-item> — ítem de menú para iswc-dropdown.
 > El submenú va en un popover (top layer) y se posiciona con computePosition: el
 > menú padre scrollea (`overflow: auto`), así que un panel `absolute` quedaría
 > recortado y le abriría scroll horizontal.
@@ -148,7 +148,7 @@ Documentación de cabecera preservada desde fuente:
 - [`../_shared/position.js`](../_shared/position.js)
 - [`../media/icon.js`](../media/icon.js)
 
-Tags del módulo: `<is-dropdown-item>`.
+Tags del módulo: `<iswc-dropdown-item>`.
 
 ## Accesibilidad
 
@@ -157,12 +157,12 @@ Preservar semántica, foco, teclado, labels y ARIA. ARIA detectado: `aria-hidden
 ## Ejemplo avanzado
 
 ```html
-<is-dropdown>
-<is-button slot="trigger" with-caret>Options</is-button>
-<is-dropdown-item value="edit">Edit</is-dropdown-item>
-<is-divider></is-divider>
-<is-dropdown-item value="delete" color="danger">Delete</is-dropdown-item>
-</is-dropdown>
+<iswc-dropdown>
+<iswc-button slot="trigger" with-caret>Options</iswc-button>
+<iswc-dropdown-item value="edit">Edit</iswc-dropdown-item>
+<iswc-divider></iswc-divider>
+<iswc-dropdown-item value="delete" color="danger">Delete</iswc-dropdown-item>
+</iswc-dropdown>
 ```
 
 ## Errores comunes

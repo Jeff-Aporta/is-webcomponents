@@ -3,7 +3,7 @@ import { adoptCss, defineElement, emit } from '../../core/element.js';
 import { ElementBase } from '../../core/element-base.js';
 
 /**
- * <is-duration-picker> — Selector de duración HH:MM:SS.
+ * <iswc-duration-picker> — Selector de duración HH:MM:SS.
  *
  * Atributos
  *   value       segundos totales (default 0)
@@ -22,14 +22,14 @@ import { ElementBase } from '../../core/element-base.js';
  *   dur.tick(delta)  suma delta segundos respetando límites
  *
  * Eventos
- *   is-input, is-change
+ *   iswc-input, iswc-change
  */
 (() => {
   const OBSERVED: string[] = ['value', 'min', 'max', 'step'];
 
   const pad2 = (n: number | string): string => String(n).padStart(2, '0');
 
-  class IsDurationPicker extends ElementBase {
+  class IswcDurationPicker extends ElementBase {
     /** Personalización por atributo (ver `core/attrs.ts`). */
     static styleAttrs = {
     bg: { prop: '--iswc-duration-picker-bg', onlyColorValues: true },
@@ -46,21 +46,21 @@ import { ElementBase } from '../../core/element-base.js';
         <div part="root" class="root">
           <slot name="start"></slot>
           <div class="col">
-            <is-button variant="plain" pill class="up" data-target="h" aria-label="Aumentar horas">+</is-button>
+            <iswc-button variant="plain" pill class="up" data-target="h" aria-label="Aumentar horas">+</iswc-button>
             <input part="hours" class="cell" id="h" inputmode="numeric" maxlength="2" value="0" aria-label="Horas" />
-            <is-button variant="plain" pill class="down" data-target="h" aria-label="Disminuir horas">−</is-button>
+            <iswc-button variant="plain" pill class="down" data-target="h" aria-label="Disminuir horas">−</iswc-button>
           </div>
           <span class="sep" aria-hidden="true">:</span>
           <div class="col">
-            <is-button variant="plain" pill class="up" data-target="m" aria-label="Aumentar minutos">+</is-button>
+            <iswc-button variant="plain" pill class="up" data-target="m" aria-label="Aumentar minutos">+</iswc-button>
             <input part="minutes" class="cell" id="m" inputmode="numeric" maxlength="2" value="00" aria-label="Minutos" />
-            <is-button variant="plain" pill class="down" data-target="m" aria-label="Disminuir minutos">−</is-button>
+            <iswc-button variant="plain" pill class="down" data-target="m" aria-label="Disminuir minutos">−</iswc-button>
           </div>
           <span class="sep" aria-hidden="true">:</span>
           <div class="col">
-            <is-button variant="plain" pill class="up" data-target="s" aria-label="Aumentar segundos">+</is-button>
+            <iswc-button variant="plain" pill class="up" data-target="s" aria-label="Aumentar segundos">+</iswc-button>
             <input part="seconds" class="cell" id="s" inputmode="numeric" maxlength="2" value="00" aria-label="Segundos" />
-            <is-button variant="plain" pill class="down" data-target="s" aria-label="Disminuir segundos">−</is-button>
+            <iswc-button variant="plain" pill class="down" data-target="s" aria-label="Disminuir segundos">−</iswc-button>
           </div>
           <slot name="end"></slot>
         </div>
@@ -77,10 +77,10 @@ import { ElementBase } from '../../core/element-base.js';
         input.addEventListener('keydown', (e: KeyboardEvent) => this.#onKey(e, input));
       });
       this.#root.addEventListener('click', (e: MouseEvent) => {
-        // `is-button` es el host: el click se retarget al custom element, no
+        // `iswc-button` es el host: el click se retarget al custom element, no
         // al <button> interno de su shadow root.
         const target = e.target as Element | null;
-        const btn = target?.closest('is-button[data-target]') as HTMLElement | null;
+        const btn = target?.closest('iswc-button[data-target]') as HTMLElement | null;
         if (!btn) return;
         const tgt = btn.dataset.target;
         const step = Number(this.getAttribute('step')) || 1;
@@ -120,7 +120,7 @@ import { ElementBase } from '../../core/element-base.js';
       if (v === this.value) return;
       this.value = v;
       this.#sync();
-      emit(this, 'is-change', { value: this.value, text: this.text });
+      emit(this, 'iswc-change', { value: this.value, text: this.text });
     }
 
     set(h: number | string, m: number | string, s: number | string): void {
@@ -150,8 +150,8 @@ import { ElementBase } from '../../core/element-base.js';
       const v = h * 3600 + m * 60 + s;
       this.value = v;
       this.#sync();
-      emit(this, 'is-input');
-      emit(this, 'is-change', { value: v, text: this.text });
+      emit(this, 'iswc-input');
+      emit(this, 'iswc-change', { value: v, text: this.text });
     }
 
     #onKey(e: KeyboardEvent, input: HTMLInputElement): void {
@@ -180,5 +180,5 @@ import { ElementBase } from '../../core/element-base.js';
     #root!: HTMLElement;
   }
 
-  defineElement('is-duration-picker', IsDurationPicker);
+  defineElement('iswc-duration-picker', IswcDurationPicker);
 })();

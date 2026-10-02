@@ -1,7 +1,7 @@
 // barcode-scanner.test.mjs — tests exhaustivos del demo barcode-scanner.html.
 // Cobertura: smoke + funcional (registro, atributos formats/disabled, hint
 // de fallback si BarcodeDetector no está disponible) + graceful degradation
-// (no debe tirar excepciones si la API no existe; debe emitir is-error o
+// (no debe tirar excepciones si la API no existe; debe emitir iswc-error o
 // mostrar mensaje de hint) + accesibilidad básica.
 //
 // NOTA: BarcodeDetector puede no existir en Chromium headless por defecto.
@@ -21,17 +21,17 @@ tests.push({
     await waitReady(page, 'data-barcode-scanner-ready');
     await page.waitForTimeout(200);
     const data = await page.evaluate(() => {
-      const list = [...document.querySelectorAll('main is-barcode-scanner')];
+      const list = [...document.querySelectorAll('main iswc-barcode-scanner')];
       return {
-        registered: !!customElements.get('is-barcode-scanner'),
+        registered: !!customElements.get('iswc-barcode-scanner'),
         count: list.length,
         eachHasShadow: list.every((el) => !!el.shadowRoot),
         eachHasVideo: list.every((el) => !!el.shadowRoot.querySelector('video.preview')),
-        eachHasButton: list.every((el) => !!el.shadowRoot.querySelector('button, is-button')),
+        eachHasButton: list.every((el) => !!el.shadowRoot.querySelector('button, iswc-button')),
         eachHasHint: list.every((el) => !!el.shadowRoot.querySelector('.hint')),
       };
     });
-    assert.equal(data.registered, true, 'is-barcode-scanner debe estar registrado');
+    assert.equal(data.registered, true, 'iswc-barcode-scanner debe estar registrado');
     assert.ok(data.count >= 3, `esperaba >=3 scanners, hay ${data.count}`);
     assert.ok(data.eachHasShadow, 'todos los scanners deben tener shadowRoot');
     assert.ok(data.eachHasVideo, 'todos los scanners deben tener un <video.preview>');
@@ -48,9 +48,9 @@ tests.push({
     await waitReady(page, 'data-barcode-scanner-ready');
     await page.waitForTimeout(200);
     const data = await page.evaluate(() => {
-      const a = document.querySelector('is-barcode-scanner[formats^="qr_code"]');
-      const b = document.querySelector('is-barcode-scanner[formats="qr_code"]');
-      const c = document.querySelectorAll('is-barcode-scanner')[2]; // sin formats → default
+      const a = document.querySelector('iswc-barcode-scanner[formats^="qr_code"]');
+      const b = document.querySelector('iswc-barcode-scanner[formats="qr_code"]');
+      const c = document.querySelectorAll('iswc-barcode-scanner')[2]; // sin formats → default
       return {
         aFormats: a.formats,
         bFormats: b.formats,
@@ -71,8 +71,8 @@ tests.push({
     await waitReady(page, 'data-barcode-scanner-ready');
     await page.waitForTimeout(200);
     const data = await page.evaluate(() => {
-      const a = document.querySelector('is-barcode-scanner:not([disabled])');
-      const b = document.querySelector('is-barcode-scanner[disabled]');
+      const a = document.querySelector('iswc-barcode-scanner:not([disabled])');
+      const b = document.querySelector('iswc-barcode-scanner[disabled]');
       return { aDisabled: a.disabled, bDisabled: b.disabled };
     });
     assert.equal(data.aDisabled, false, 'scanner sin disabled → disabled=false');
@@ -81,7 +81,7 @@ tests.push({
 });
 
 tests.push({
-  name: 'funcional: detect() con API ausente no lanza y emite is-error',
+  name: 'funcional: detect() con API ausente no lanza y emite iswc-error',
   run: async (page) => {
     await page.goto(URL, { waitUntil: 'domcontentloaded' });
     await waitReady(page, 'data-barcode-scanner-ready');
@@ -89,7 +89,7 @@ tests.push({
     await page.evaluate(() => { delete document.documentElement.dataset.scannerError; });
     // Llamar detect() con un canvas dummy
     const result = await page.evaluate(async () => {
-      const el = document.querySelector('is-barcode-scanner[formats^="qr_code"]');
+      const el = document.querySelector('iswc-barcode-scanner[formats^="qr_code"]');
       // Canvas vacío como source (no se va a decodificar nada de todos modos)
       const cv = document.createElement('canvas');
       cv.width = 50; cv.height = 50;
@@ -101,7 +101,7 @@ tests.push({
       }
       return { threw: false, barcodes };
     });
-    // Si BarcodeDetector no existe, el componente emite is-error y devuelve [].
+    // Si BarcodeDetector no existe, el componente emite iswc-error y devuelve [].
     // Si existe pero no detecta nada, devuelve []. En ningún caso debe lanzar.
     assert.equal(result.threw, false, `detect() no debe lanzar excepciones, got threw=${result.threw}, error=${result.error}`);
     assert.ok(Array.isArray(result.barcodes), `detect() debe devolver un array, got ${typeof result.barcodes}: ${JSON.stringify(result.barcodes)}`);
@@ -116,7 +116,7 @@ tests.push({
     // Verificar que la página no crashea independientemente de si BarcodeDetector existe o no.
     const ok = await page.evaluate(() => {
       try {
-        const el = document.querySelector('is-barcode-scanner[formats^="qr_code"]');
+        const el = document.querySelector('iswc-barcode-scanner[formats^="qr_code"]');
         // Acceder a propiedades no debe tirar
         const f = el.formats;
         const d = el.disabled;
@@ -139,7 +139,7 @@ tests.push({
     await page.waitForTimeout(200);
     const result = await page.evaluate(() => {
       try {
-        const el = document.querySelector('is-barcode-scanner[formats^="qr_code"]');
+        const el = document.querySelector('iswc-barcode-scanner[formats^="qr_code"]');
         el.stop();
         return { ok: true };
       } catch (e) {
@@ -158,7 +158,7 @@ tests.push({
     await page.waitForTimeout(200);
     // Crear uno nuevo, montarlo, desconectarlo y verificar que stop() se llamó.
     const result = await page.evaluate(async () => {
-      const el = document.createElement('is-barcode-scanner');
+      const el = document.createElement('iswc-barcode-scanner');
       document.body.appendChild(el);
       await new Promise((r) => setTimeout(r, 50));
       // Patch stop() para verificar que se invoca en disconnect.
@@ -174,16 +174,16 @@ tests.push({
 });
 
 tests.push({
-  name: 'accesibilidad: el botón del scanner es accesible por teclado (es <button> o <is-button>)',
+  name: 'accesibilidad: el botón del scanner es accesible por teclado (es <button> o <iswc-button>)',
   run: async (page) => {
     await page.goto(URL, { waitUntil: 'domcontentloaded' });
     await waitReady(page, 'data-barcode-scanner-ready');
     await page.waitForTimeout(200);
     const data = await page.evaluate(() => {
-      const el = document.querySelector('is-barcode-scanner[formats^="qr_code"]');
-      const btn = el.shadowRoot.querySelector('button, is-button');
+      const el = document.querySelector('iswc-barcode-scanner[formats^="qr_code"]');
+      const btn = el.shadowRoot.querySelector('button, iswc-button');
       const tag = btn?.tagName?.toLowerCase();
-      // <is-button> se renderiza internamente como <button>, focusable.
+      // <iswc-button> se renderiza internamente como <button>, focusable.
       const innerBtn = btn?.shadowRoot?.querySelector('button') ?? (tag === 'button' ? btn : null);
       return {
         btnTag: tag,

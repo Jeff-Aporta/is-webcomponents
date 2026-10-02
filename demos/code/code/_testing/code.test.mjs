@@ -1,4 +1,4 @@
-// code.test.mjs — tests exhaustivos del demo code.html para <is-code>.
+// code.test.mjs — tests exhaustivos del demo code.html para <iswc-code>.
 // Cobertura:
 //   smoke + render (tokenización, líneas, line numbers, ready event)
 //   funcional (edición en textarea, tab indent, lang change, setMarks/
@@ -26,7 +26,7 @@ const URL = `${BASE_URL}/demos/code/code/code.html`;
 const tests = [];
 
 tests.push({
-  name: 'smoke: <is-code> monta, emite is-ready y pinta líneas tokenizadas',
+  name: 'smoke: <iswc-code> monta, emite iswc-ready y pinta líneas tokenizadas',
   run: async (page) => {
     await page.goto(URL, { waitUntil: 'domcontentloaded' });
     await waitReady(page, 'data-code-ready');
@@ -39,8 +39,8 @@ tests.push({
       const gutter = shadow.querySelector('.ic-gutter');
       const ln = [...shadow.querySelectorAll('.ic-ln')].map((n) => n.textContent.trim());
       return {
-        defined: !!customElements.get('is-code'),
-        jsDefined: !!customElements.get('is-code'),
+        defined: !!customElements.get('iswc-code'),
+        jsDefined: !!customElements.get('iswc-code'),
         hasShadow: !!shadow,
         hasSeed: !!seed,
         lineCount: lines.length,
@@ -50,7 +50,7 @@ tests.push({
         value: js.value,
       };
     });
-    assert.equal(data.defined, true, 'is-code debe estar definido');
+    assert.equal(data.defined, true, 'iswc-code debe estar definido');
     assert.ok(data.hasShadow, 'debe tener shadow root');
     assert.ok(data.hasSeed, 'debe existir la semilla .seed');
     assert.ok(data.lineCount >= 5, `esperaba >=5 líneas, hay ${data.lineCount}`);
@@ -104,7 +104,7 @@ tests.push({
 });
 
 tests.push({
-  name: 'funcional: editar el textarea actualiza el highlight y dispara is-change',
+  name: 'funcional: editar el textarea actualiza el highlight y dispara iswc-change',
   run: async (page) => {
     await page.goto(URL, { waitUntil: 'domcontentloaded' });
     await waitReady(page, 'data-code-ready');
@@ -113,16 +113,16 @@ tests.push({
       const ta = ed.shadowRoot.querySelector('textarea.ic-input');
       let count = 0;
       const handler = () => { count++; };
-      ed.addEventListener('is-change', handler);
+      ed.addEventListener('iswc-change', handler);
       ta.value = '// hello\nconst x = 42;\nconsole.log(x);';
       ta.dispatchEvent(new Event('input', { bubbles: true }));
       // Esperar un microtask para que los handlers asíncronos encolen
       await new Promise((r) => setTimeout(r, 30));
-      ed.removeEventListener('is-change', handler);
+      ed.removeEventListener('iswc-change', handler);
       const lines = [...ed.shadowRoot.querySelectorAll('.ic-line')].length;
       return { count, lines, value: ed.value };
     });
-    assert.ok(changes.count >= 1, `is-change debió dispararse >=1 vez (fue ${changes.count})`);
+    assert.ok(changes.count >= 1, `iswc-change debió dispararse >=1 vez (fue ${changes.count})`);
     assert.equal(changes.lines, 3, `esperaba 3 líneas repintadas, hay ${changes.lines}`);
     assert.equal(changes.value, '// hello\nconst x = 42;\nconsole.log(x);',
       'el value debe reflejar el contenido del textarea');
@@ -150,7 +150,7 @@ tests.push({
 });
 
 tests.push({
-  name: 'funcional: setMarks pinta <span.is-code-mark> y clearMarks los quita',
+  name: 'funcional: setMarks pinta <span.iswc-code-mark> y clearMarks los quita',
   run: async (page) => {
     await page.goto(URL, { waitUntil: 'domcontentloaded' });
     await waitReady(page, 'data-code-ready');
@@ -163,10 +163,10 @@ tests.push({
           title: 'Función', message: 'Definida más abajo.' },
       ]);
       await new Promise((r) => setTimeout(r, 30));
-      const before = ed.shadowRoot.querySelectorAll('span.is-code-mark').length;
+      const before = ed.shadowRoot.querySelectorAll('span.iswc-code-mark').length;
       ed.clearMarks();
       await new Promise((r) => setTimeout(r, 30));
-      const after = ed.shadowRoot.querySelectorAll('span.is-code-mark').length;
+      const after = ed.shadowRoot.querySelectorAll('span.iswc-code-mark').length;
       return { before, after };
     });
     assert.ok(data.before >= 1, `setMarks debió pintar >=1 marca (fueron ${data.before})`);
@@ -294,11 +294,11 @@ tests.push({
     assert.match(dark.bg, /#1e1e1e|30,30,30/i,
       `--iswc-code-bg debe ser oscuro en dark (fue "${dark.bg}")`);
 
-    // Cambiamos a light. <is-code> escucha `is-theme-change` en document para
+    // Cambiamos a light. <iswc-code> escucha `iswc-theme-change` en document para
     // re-aplicar el preset (no se re-monta en cada cambio de atributo).
     await page.evaluate(() => {
       document.documentElement.dataset.theme = 'light';
-      document.dispatchEvent(new CustomEvent('is-theme-change'));
+      document.dispatchEvent(new CustomEvent('iswc-theme-change'));
     });
     await page.waitForTimeout(80);
     const light = await page.evaluate(() => {
@@ -311,7 +311,7 @@ tests.push({
     // Volvemos a dark para no contaminar otros tests.
     await page.evaluate(() => {
       document.documentElement.dataset.theme = 'dark';
-      document.dispatchEvent(new CustomEvent('is-theme-change'));
+      document.dispatchEvent(new CustomEvent('iswc-theme-change'));
     });
   },
 });
@@ -325,12 +325,12 @@ tests.push({
     const ok = await page.evaluate(() => {
       const ed = document.getElementById('code-js');
       return {
-        defined: !!customElements.get('is-code'),
+        defined: !!customElements.get('iswc-code'),
         hasLines: ed.shadowRoot.querySelectorAll('.ic-line').length > 0,
         hasGutter: !!ed.shadowRoot.querySelector('.ic-gutter'),
       };
     });
-    assert.equal(ok.defined, true, 'is-code debe seguir definido');
+    assert.equal(ok.defined, true, 'iswc-code debe seguir definido');
     assert.ok(ok.hasLines, 'debe seguir pintando líneas bajo colorScheme:dark');
     assert.equal(ok.hasGutter, true, 'el gutter debe seguir presente');
   },
@@ -365,7 +365,7 @@ tests.push({
       };
     });
     assert.ok(data.lineCount > 0, 'debe seguir pintando líneas bajo reducedMotion');
-    // El bundle de is-code no define animaciones: las duraciones deberían
+    // El bundle de iswc-code no define animaciones: las duraciones deberían
     // ser 0s o "none". Comprobamos que ninguna es > 0s en el host visible.
     for (const m of data.motionStates) {
       assert.match(m.animationDuration, /^0s|^none|^0ms|^$/i,

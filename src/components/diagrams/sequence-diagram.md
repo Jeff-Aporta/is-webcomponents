@@ -1,14 +1,14 @@
 ---
-tag: is-sequence-diagram
+tag: iswc-sequence-diagram
 tags:
-  - is-sequence-diagram
+  - iswc-sequence-diagram
 category: diagrams
 status: public
 source: ./sequence-diagram.js
 style: ./sequence-diagram.css
 preview: ./sequence-diagram.json
 ---
-# `<is-sequence-diagram>`
+# `<iswc-sequence-diagram>`
 
 ## Propósito
 
@@ -16,7 +16,7 @@ Diagrama de secuencia en SVG, sin Mermaid. La configuración es un JSON
 con actores, mensajes y grupos; el layout (posiciones, ruteo ortogonal
 de las flechas y colocación de etiquetas) se calcula solo.
 
-Este módulo registra `<is-sequence-diagram>`.
+Este módulo registra `<iswc-sequence-diagram>`.
 
 ## Cuándo usarlo
 
@@ -35,7 +35,7 @@ import './sequence-diagram.js';
 ## Ejemplo mínimo
 
 ```html
-<is-sequence-diagram></is-sequence-diagram>
+<iswc-sequence-diagram></iswc-sequence-diagram>
 ```
 
 ## API
@@ -69,10 +69,10 @@ import './sequence-diagram.js';
 
 | Evento | detail | bubbles | composed | cancelable |
 | --- | --- | --- | --- | --- |
-| `is-turtle-state` | sí | sí | sí | no |
-| `is-render` | sí | sí | sí | no |
-| `is-toggle-group` | sí | sí | sí | sí |
-| `is-open-viewer` | sí | sí | sí | sí |
+| `iswc-turtle-state` | sí | sí | sí | no |
+| `iswc-render` | sí | sí | sí | no |
+| `iswc-toggle-group` | sí | sí | sí | sí |
+| `iswc-open-viewer` | sí | sí | sí | sí |
 
 ### Métodos y propiedades públicas
 
@@ -110,22 +110,22 @@ No declara integración form-associated propia en este módulo.
 
 Documentación de cabecera preservada desde fuente:
 
-> <is-sequence-diagram> — diagrama de secuencia en SVG, sin Mermaid.
+> <iswc-sequence-diagram> — diagrama de secuencia en SVG, sin Mermaid.
 > Configuración por JSON (idéntica a la del proyecto original): un
 > <script type="application/json"> hijo, o la propiedad `payload`.
->   <is-sequence-diagram>
+>   <iswc-sequence-diagram>
 >     <script type="application/json">
 >       { "sequence": { "actors": [...], "messages": [...] } }
 >     </script>
->   </is-sequence-diagram>
+>   </iswc-sequence-diagram>
 > También acepta `{ "preset": "tk1437191" }`.
 > Atributos
 >   color  inline (default) | viewer — viewer activa hover, leyenda clickeable
 >            y auto-animación de la tortuga.
 > Propiedades: payload, spec, layout, turtle, hiddenGroups
-> Eventos: is-turtle-state (detail: {playing, idx, total, replay}),
->          is-open-viewer (click en colore inline),
->          is-toggle-group (detail: {id})
+> Eventos: iswc-turtle-state (detail: {playing, idx, total, replay}),
+>          iswc-open-viewer (click en colore inline),
+>          iswc-toggle-group (detail: {id})
 
 ## Dependencias y componentes relacionados
 
@@ -140,7 +140,7 @@ Documentación de cabecera preservada desde fuente:
 - [`../_shared/icon-loader.js`](../_shared/icon-loader.js)
 - [`./diagram-kinds.js`](./diagram-kinds.js)
 
-Tags del módulo: `<is-sequence-diagram>`.
+Tags del módulo: `<iswc-sequence-diagram>`.
 
 ## Accesibilidad
 
@@ -149,7 +149,7 @@ Preservar semántica, foco, teclado, labels y ARIA. ARIA detectado: `aria-label`
 ## Ejemplo avanzado
 
 ```html
-<is-sequence-diagram></is-sequence-diagram>
+<iswc-sequence-diagram></iswc-sequence-diagram>
 ```
 
 ## Errores comunes

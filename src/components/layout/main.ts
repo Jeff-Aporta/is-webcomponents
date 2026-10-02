@@ -1,5 +1,5 @@
 /**
- * <is-main> — contenedor scrollable tipo <main>.
+ * <iswc-main> — contenedor scrollable tipo <main>.
  *
  * Remember-scroll es OPT-IN estricto: hace falta
  *   remember-scroll  +  storage-key="…"
@@ -7,7 +7,7 @@
  *
  * Attrs
  *   remember-scroll   boolean — activa persistencia (default: off)
- *   storage-key       string  — id único bajo is-webcomponents.is-main
+ *   storage-key       string  — id único bajo is-webcomponents.iswc-main
  *   scroll-ttl        number  — ms de validez (default: 3600000 = 1h)
  *
  * Methods: scrollToTop(), clearRememberedScroll(), saveScroll(), restoreScroll()
@@ -24,9 +24,9 @@ import {
 } from '../_shared/scroll-memory.js';
 
 (() => {
-  const TAG = 'is-main';
+  const TAG = 'iswc-main';
 
-  class IsMain extends HTMLElement {
+  class IswcMain extends HTMLElement {
     static get observedAttributes(): string[] { return [...SCROLL_MEMORY_ATTRS]; }
 
     #memory: ScrollMemory | null = null;
@@ -56,5 +56,5 @@ import {
     }
   }
 
-  defineElement(TAG, IsMain, 'IsMain');
+  defineElement(TAG, IswcMain, 'IswcMain');
 })();

@@ -3,7 +3,7 @@
 import { chromium } from 'playwright';
 import { mkdirSync } from 'node:fs';
 
-const TAG = process.argv[2] || 'is-heatmap';
+const TAG = process.argv[2] || 'iswc-heatmap';
 const OUT = process.argv[3] || `./.shot-${TAG}.png`;
 mkdirSync('./.shots', { recursive: true });
 const state = Buffer.from(JSON.stringify({ component: TAG }), 'utf8').toString('base64url');
@@ -15,8 +15,8 @@ await page.screenshot({ path: OUT });
 // Inspeccionar las posiciones de los texts.
 const positions = await page.evaluate(() => {
   const host = document.getElementById('previewHost');
-  const main = host?.querySelector('is-main.main');
-  const heatmap = main?.querySelector('is-heatmap');
+  const main = host?.querySelector('iswc-main.main');
+  const heatmap = main?.querySelector('iswc-heatmap');
   const svg = heatmap?.shadowRoot?.querySelector('svg');
   if (!svg) return null;
   const texts = Array.from(svg.querySelectorAll('text'));

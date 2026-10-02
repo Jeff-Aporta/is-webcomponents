@@ -3,7 +3,7 @@
 <head>
 <meta charset="utf-8" />
 <meta name="viewport" content="width=device-width, initial-scale=1" />
-<title>Demo de <is-switch> · is-webcomponents</title>
+<title>Demo de <iswc-switch> · is-webcomponents</title>
 <meta name="description" content="Interruptor on/off form-associated con track, thumb, colores y on/off-label." />
 <style>
   html, body { margin: 0; padding: 0; min-height: 100%; background: #0c1118; color: #e2e8f0; font-family: ui-sans-serif, system-ui, sans-serif; }
@@ -18,13 +18,13 @@
   code { background: rgba(255,255,255,0.06); padding: 1px 5px; border-radius: 3px; font: 12px ui-monospace, Menlo, Consolas, monospace; }
   output { font: 12px ui-monospace, Menlo, Consolas, monospace; color: #94a3b8; white-space: pre-wrap; }
   /* Anti-FOUC */
-  is-switch:not(:defined) { visibility: hidden; }
-  is-icon:not(:defined) { visibility: hidden; }
+  iswc-switch:not(:defined) { visibility: hidden; }
+  iswc-icon:not(:defined) { visibility: hidden; }
 </style>
 <script type="module">
-  await import('../../../dist/cdn/forms/switch.min.js?h=kmzeh3');
+  await import('../../../dist/cdn/forms/switch.min.js?h=kuxu6x');
 
-  await customElements.whenDefined('is-switch');
+  await customElements.whenDefined('iswc-switch');
 
   const demo = document.getElementById('demo');
   const out = document.getElementById('out');
@@ -38,10 +38,10 @@
       required: demo.required,
       value: demo.value,
       role: demo.getAttribute('role'),
-      formChecked: form.querySelector('is-switch[name="notify"]').checked,
+      formChecked: form.querySelector('iswc-switch[name="notify"]').checked,
     }, null, 2);
   };
-  demo.addEventListener('is-change', () => render());
+  demo.addEventListener('iswc-change', () => render());
 
   document.getElementById('btn-toggle').addEventListener('click', () => {
     demo.checked = !demo.checked;
@@ -55,16 +55,16 @@
 <body>
 <main>
   <header>
-    <h1>Demo de <code>&lt;is-switch&gt;</code></h1>
+    <h1>Demo de <code>&lt;iswc-switch&gt;</code></h1>
     <p>Interruptor on/off form-associated con <code>checked</code>, <code>required</code>, colores y etiquetas en el track (<code>on-label</code>/<code>off-label</code>). Pulsa o usa Espacio/Enter.</p>
   </header>
 
   <section>
     <h2>Básico</h2>
     <form id="sw-form">
-      <is-switch id="demo" name="notify" value="yes" hint="Recibir notificaciones por email">
+      <iswc-switch id="demo" name="notify" value="yes" hint="Recibir notificaciones por email">
         Notificaciones
-      </is-switch>
+      </iswc-switch>
     </form>
     <div class="row">
       <button id="btn-toggle" type="button">Toggle</button>
@@ -75,30 +75,30 @@
   <section>
     <h2>Estados</h2>
     <div class="row">
-      <is-switch checked>Encendido</is-switch>
-      <is-switch>Apagado</is-switch>
-      <is-switch disabled>Deshabilitado off</is-switch>
-      <is-switch checked disabled>Deshabilitado on</is-switch>
-      <is-switch required error>Requerido con error</is-switch>
+      <iswc-switch checked>Encendido</iswc-switch>
+      <iswc-switch>Apagado</iswc-switch>
+      <iswc-switch disabled>Deshabilitado off</iswc-switch>
+      <iswc-switch checked disabled>Deshabilitado on</iswc-switch>
+      <iswc-switch required error>Requerido con error</iswc-switch>
     </div>
   </section>
 
   <section>
     <h2>Colores</h2>
     <div class="row">
-      <is-switch checked color="brand">Brand</is-switch>
-      <is-switch checked color="success">Success</is-switch>
-      <is-switch checked color="warning">Warning</is-switch>
-      <is-switch checked color="danger">Danger</is-switch>
-      <is-switch checked color="neutral">Neutral</is-switch>
+      <iswc-switch checked color="brand">Brand</iswc-switch>
+      <iswc-switch checked color="success">Success</iswc-switch>
+      <iswc-switch checked color="warning">Warning</iswc-switch>
+      <iswc-switch checked color="danger">Danger</iswc-switch>
+      <iswc-switch checked color="neutral">Neutral</iswc-switch>
     </div>
   </section>
 
   <section>
     <h2>on-label / off-label</h2>
     <div class="row">
-      <is-switch on-label="ON" off-label="OFF" checked>Con etiquetas</is-switch>
-      <is-switch on-label="Sí" off-label="No" checked>Es</is-switch>
+      <iswc-switch on-label="ON" off-label="OFF" checked>Con etiquetas</iswc-switch>
+      <iswc-switch on-label="Sí" off-label="No" checked>Es</iswc-switch>
     </div>
   </section>
 </main>

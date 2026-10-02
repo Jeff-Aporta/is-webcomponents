@@ -3,7 +3,7 @@ import { withStyleAttrs } from '../../core/attrs.js';
 
 
 /**
- * <is-spinner> — Web Component (vanilla).
+ * <iswc-spinner> — Web Component (vanilla).
  *
  * Indicador de carga animado (anillo via border).
  * role=status en el host; respeta prefers-reduced-motion.
@@ -18,7 +18,7 @@ import { withStyleAttrs } from '../../core/attrs.js';
     <span part="spinner" class="spinner" aria-hidden="true"></span>
   `;
 
-  class IsSpinner extends withStyleAttrs(HTMLElement) {
+  class IswcSpinner extends withStyleAttrs(HTMLElement) {
     /** Personalización por atributo (ver `core/attrs.ts`). */
     static styleAttrs = {
       'track-width': '--iswc-spinner-track-width',
@@ -27,7 +27,7 @@ import { withStyleAttrs } from '../../core/attrs.js';
       speed: '--iswc-spinner-speed',
     };
 
-    static get observedAttributes(): string[] { return IsSpinner.styleAttrNames; }
+    static get observedAttributes(): string[] { return IswcSpinner.styleAttrNames; }
 
     constructor() {
       super();
@@ -44,5 +44,5 @@ import { withStyleAttrs } from '../../core/attrs.js';
     }
   }
 
-  defineElement('is-spinner', IsSpinner, 'IsSpinner');
+  defineElement('iswc-spinner', IswcSpinner, 'IswcSpinner');
 })();

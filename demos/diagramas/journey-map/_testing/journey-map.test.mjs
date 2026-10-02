@@ -9,21 +9,21 @@ const URL = `${BASE_URL}/demos/diagramas/journey-map/journey-map.html`;
 const tests = [];
 
 tests.push({
-  name: 'smoke: <is-journey-map> monta y renderiza steps y fases',
+  name: 'smoke: <iswc-journey-map> monta y renderiza steps y fases',
   run: async (page) => {
     await page.goto(URL, { waitUntil: 'domcontentloaded' });
     await waitReady(page, 'data-journey-map-ready');
     const info = await page.evaluate(() => {
-      const el = document.querySelector('main is-journey-map');
+      const el = document.querySelector('main iswc-journey-map');
       const shadow = el?.shadowRoot;
       return {
-        defined: !!customElements.get('is-journey-map'),
+        defined: !!customElements.get('iswc-journey-map'),
         steps: shadow?.querySelectorAll('[data-step-id]').length ?? 0,
         phases: shadow?.querySelectorAll('[data-phase-id]').length ?? 0,
         hasSvg: !!shadow?.querySelector('svg.jn-svg'),
       };
     });
-    assert.equal(info.defined, true, 'is-journey-map debe estar definido');
+    assert.equal(info.defined, true, 'iswc-journey-map debe estar definido');
     assert.ok(info.steps >= 5, `esperaba >=5 pasos, hay ${info.steps}`);
     assert.ok(info.phases >= 3, `esperaba >=3 fases, hay ${info.phases}`);
     assert.equal(info.hasSvg, true, 'debe existir <svg class="jn-svg">');
@@ -37,7 +37,7 @@ tests.push({
     await page.goto(URL, { waitUntil: 'domcontentloaded' });
     await waitReady(page, 'data-journey-map-ready');
     const ids = await page.evaluate(() => {
-      const el = document.querySelector('main is-journey-map');
+      const el = document.querySelector('main iswc-journey-map');
       return [...el.shadowRoot.querySelectorAll('[data-step-id]')].map((g) => g.dataset.stepId);
     });
     assert.ok(ids.includes('s1'), 'debe haber un paso "s1"');
@@ -51,7 +51,7 @@ tests.push({
     await page.goto(URL, { waitUntil: 'domcontentloaded' });
     await waitReady(page, 'data-journey-map-ready');
     const has = await page.evaluate(() => {
-      const el = document.querySelector('main is-journey-map');
+      const el = document.querySelector('main iswc-journey-map');
       // Buscar un path con varios comandos (la curva de satisfacción).
       const paths = [...el.shadowRoot.querySelectorAll('svg path')];
       const long = paths.find((p) => {
@@ -70,7 +70,7 @@ tests.push({
     await page.goto(URL, { waitUntil: 'domcontentloaded' });
     await waitReady(page, 'data-journey-map-ready');
     const phaseIds = await page.evaluate(() => {
-      const el = document.querySelector('main is-journey-map');
+      const el = document.querySelector('main iswc-journey-map');
       return [...el.shadowRoot.querySelectorAll('[data-phase-id]')].map((g) => g.dataset.phaseId);
     });
     assert.ok(phaseIds.includes('awareness'), 'debe existir fase "awareness"');
@@ -85,16 +85,16 @@ tests.push({
     await page.goto(URL, { waitUntil: 'domcontentloaded' });
     await waitReady(page, 'data-journey-map-ready');
     const before = await page.evaluate(() => {
-      const el = document.querySelector('main is-journey-map');
+      const el = document.querySelector('main iswc-journey-map');
       return el.shadowRoot.querySelector('svg.jn-svg').getAttribute('viewBox');
     });
     await page.evaluate(() => {
-      const el = document.querySelector('main is-journey-map');
+      const el = document.querySelector('main iswc-journey-map');
       el.payload = el.payload;
     });
     await page.waitForTimeout(150);
     const after = await page.evaluate(() => {
-      const el = document.querySelector('main is-journey-map');
+      const el = document.querySelector('main iswc-journey-map');
       return el.shadowRoot.querySelector('svg.jn-svg').getAttribute('viewBox');
     });
     assert.equal(before, after, 'viewBox idéntico tras re-asignar payload');
@@ -107,7 +107,7 @@ tests.push({
     await page.goto(URL, { waitUntil: 'domcontentloaded' });
     await waitReady(page, 'data-journey-map-ready');
     const meta = await page.evaluate(() => {
-      const el = document.querySelector('main is-journey-map');
+      const el = document.querySelector('main iswc-journey-map');
       const svg = el.shadowRoot.querySelector('svg.jn-svg');
       return { aria: svg.getAttribute('aria-label'), role: svg.getAttribute('role') };
     });

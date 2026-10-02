@@ -3,7 +3,7 @@
 <head>
 <meta charset="utf-8" />
 <meta name="viewport" content="width=device-width, initial-scale=1" />
-<title>Demo — <is-spreadsheet> · is-webcomponents</title>
+<title>Demo — <iswc-spreadsheet> · is-webcomponents</title>
 <meta name="description" content="Hoja de cálculo mínima con edición por celda y fórmulas =SUM/AVERAGE/MIN/MAX/COUNT." />
 <style>
   html, body { margin: 0; padding: 0; min-height: 100%; background: #0c1118; color: #e2e8f0; font-family: ui-sans-serif, system-ui, sans-serif; }
@@ -14,19 +14,19 @@
   main { padding: 20px; display: grid; gap: 20px; }
   section { background: #0f1620; border: 1px solid rgba(255,255,255,0.1); border-radius: 8px; padding: 16px; }
   section h2 { font-size: 11px; text-transform: uppercase; letter-spacing: 0.08em; margin: 0 0 12px 0; color: #94a3b8; }
-  is-spreadsheet:not(:defined) { visibility: hidden; }
-  is-spreadsheet { display: block; overflow: auto; max-height: 320px; }
+  iswc-spreadsheet:not(:defined) { visibility: hidden; }
+  iswc-spreadsheet { display: block; overflow: auto; max-height: 320px; }
   .log { font: 11px ui-monospace, Menlo, Consolas, monospace; background: rgba(0,0,0,0.3); padding: 8px; border-radius: 4px; min-height: 40px; max-height: 100px; overflow: auto; color: #94a3b8; margin-top: 8px; }
   footer { padding: 12px 20px; border-top: 1px solid rgba(255,255,255,0.1); background: #0f1620; font-size: 11px; color: #94a3b8; }
   footer code { background: rgba(255,255,255,0.06); padding: 1px 5px; border-radius: 3px; font: 11px ui-monospace, Menlo, Consolas, monospace; }
 </style>
 <script type="module">
-  await import('../../../dist/cdn/data/spreadsheet.min.js?h=3ww93o');
-  await customElements.whenDefined('is-spreadsheet');
+  await import('../../../dist/cdn/data/spreadsheet.min.js?h=8wsgqd');
+  await customElements.whenDefined('iswc-spreadsheet');
 
   // Helper para construir un spreadsheet con un value inicial.
   function build({ rows, cols, value, readOnly }) {
-    const s = document.createElement('is-spreadsheet');
+    const s = document.createElement('iswc-spreadsheet');
     s.setAttribute('rows', String(rows));
     s.setAttribute('cols', String(cols));
     if (value) s.setAttribute('value', JSON.stringify(value));
@@ -79,7 +79,7 @@
 
   // ── Logging
   function attachLog(el, logEl) {
-    el.addEventListener('is-change', (e) => {
+    el.addEventListener('iswc-change', (e) => {
       const { row, col, raw, value } = e.detail || {};
       const line = `change: r=${row} c=${col} raw=${JSON.stringify(raw)} value=${JSON.stringify(value)}`;
       logEl.textContent = `${line}\n${logEl.textContent || ''}`.slice(0, 500);
@@ -97,7 +97,7 @@
 </head>
 <body>
 <header>
-  <h1>Demo — <code>&lt;is-spreadsheet&gt;</code></h1>
+  <h1>Demo — <code>&lt;iswc-spreadsheet&gt;</code></h1>
   <p>Hoja mínima con fórmulas: <code>=SUM</code>, <code>=AVERAGE</code>, <code>=MIN</code>, <code>=MAX</code>, <code>=COUNT</code>. Atajos: <kbd>Enter</kbd>, <kbd>Tab</kbd>, <kbd>Esc</kbd>.</p>
 </header>
 <main>

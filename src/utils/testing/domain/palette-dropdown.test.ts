@@ -1,4 +1,4 @@
-// El dropdown de paleta del shell es <is-palette-selector scope="root">.
+// El dropdown de paleta del shell es <iswc-palette-selector scope="root">.
 // El look (pastilla + menu) vive en palette-selector.css:
 //   opacidad en los items no activos, check solo en el activo,
 //   swatch con --iswc-color-brand.
@@ -17,10 +17,10 @@ const src = await readFile(join(root, 'src', 'components', 'feedback', 'palette-
 const failures = [];
 const check = (cond, msg) => { if (!cond) failures.push(msg); };
 
-check(/<is-palette-selector\b[^>]*\bid="brandPalette"[^>]*\bscope="root"/.test(html),
-  'index.html: falta <is-palette-selector id="brandPalette" scope="root">');
-check(/<is-theme-toggle\b[^>]*\bid="themeToggle"[^>]*\bscope="root"/.test(html),
-  'index.html: falta <is-theme-toggle id="themeToggle" scope="root">');
+check(/<iswc-palette-selector\b[^>]*\bid="brandPalette"[^>]*\bscope="root"/.test(html),
+  'index.html: falta <iswc-palette-selector id="brandPalette" scope="root">');
+check(/<iswc-theme-toggle\b[^>]*\bid="themeToggle"[^>]*\bscope="root"/.test(html),
+  'index.html: falta <iswc-theme-toggle id="themeToggle" scope="root">');
 
 check(/scope === 'closest'/.test(src) || /mode === 'closest'/.test(src),
   'palette-selector: scope=closest debe buscar el ancestro');

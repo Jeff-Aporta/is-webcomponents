@@ -1,14 +1,14 @@
 ---
-tag: is-stat
+tag: iswc-stat
 tags:
-  - is-stat
+  - iswc-stat
 category: data
 status: public
 source: ./stat.js
 style: ./stat.css
 preview: ./stat.json
 ---
-# `<is-stat>`
+# `<iswc-stat>`
 
 ## Propósito
 
@@ -16,7 +16,7 @@ Tarjeta KPI para dashboards: label, número principal, helper text,
 trend (subida/bajada) e icono. Detecta automáticamente la dirección
 del trend según el signo del valor.
 
-Este módulo registra `<is-stat>`.
+Este módulo registra `<iswc-stat>`.
 
 ## Cuándo usarlo
 
@@ -35,13 +35,13 @@ import './stat.js';
 ## Ejemplo mínimo
 
 ```html
-<is-stat
+<iswc-stat
 label="Ingresos"
 value="€ 1.249,00"
 helper="vs mes anterior"
 trend="+12.5%"
 icon="mdi:cash-multiple"
-></is-stat>
+></iswc-stat>
 ```
 
 ## API
@@ -129,10 +129,10 @@ No declara integración form-associated propia en este módulo.
 
 Documentación de cabecera preservada desde fuente:
 
-> <is-stat> — Stat / KPI Card (vanilla, zero dependencies).
+> <iswc-stat> — Stat / KPI Card (vanilla, zero dependencies).
 > Bloque para KPI en dashboards: label, número principal, helper text,
 > cambio/trend opcional e icono.
->   <is-stat label="Ingresos" value="€ 1.249,00" helper="vs mes anterior" trend="+12.5"></is-stat>
+>   <iswc-stat label="Ingresos" value="€ 1.249,00" helper="vs mes anterior" trend="+12.5"></iswc-stat>
 > Atributos
 >   label       string
 >   value       string (texto del número principal; admite formato HTML)
@@ -154,7 +154,7 @@ Documentación de cabecera preservada desde fuente:
 
 - [`../_shared/adopt-css.js`](../_shared/adopt-css.js)
 
-Tags del módulo: `<is-stat>`.
+Tags del módulo: `<iswc-stat>`.
 
 ## Accesibilidad
 
@@ -163,13 +163,13 @@ Preservar semántica, foco, teclado, labels y ARIA. ARIA detectado: `aria-hidden
 ## Ejemplo avanzado
 
 ```html
-<is-stat
+<iswc-stat
 label="Ingresos"
 value="€ 1.249,00"
 helper="vs mes anterior"
 trend="+12.5%"
 icon="mdi:cash-multiple"
-></is-stat>
+></iswc-stat>
 ```
 
 ## Errores comunes

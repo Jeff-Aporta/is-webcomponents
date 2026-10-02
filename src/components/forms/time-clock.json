@@ -1,10 +1,10 @@
 {
-  "$schema": "is-preview/v1",
-  "tag": "is-time-clock",
+  "$schema": "iswc-preview/v1",
+  "tag": "iswc-time-clock",
   "category": "forms",
-  "title": "<is-time-clock>",
+  "title": "<iswc-time-clock>",
   "titleHtml": true,
-  "storageKey": "docs-is-time-clock",
+  "storageKey": "docs-iswc-time-clock",
   "sections": [
     {
       "id": "intro",
@@ -13,7 +13,7 @@
       "blocks": [
         {
           "kind": "demo",
-          "html": "<is-time-clock id=\"tc\" value=\"09:30\" ampm locale=\"en-US\"></is-time-clock>\r\n          <is-time-clock value=\"14:15\" hour24 locale=\"es\"></is-time-clock>",
+          "html": "<iswc-time-clock id=\"tc\" value=\"09:30\" ampm locale=\"en-US\"></iswc-time-clock>\r\n          <iswc-time-clock value=\"14:15\" hour24 locale=\"es\"></iswc-time-clock>",
           "controls": [
             {
               "control": "select",
@@ -69,7 +69,7 @@
       "blocks": [
         {
           "kind": "demo",
-          "html": "<div>\r\n            <div class=\"demo-label\">lista · step=30</div>\r\n            <is-digital-clock id=\"dc\" value=\"09:30\" locale=\"es\" step=\"30\"></is-digital-clock>\r\n          </div>\r\n          <div>\r\n            <div class=\"demo-label\">columnas · ampm</div>\r\n            <is-digital-clock layout=\"sections\" value=\"09:30\" ampm locale=\"en-US\"></is-digital-clock>\r\n          </div>\r\n          <div>\r\n            <div class=\"demo-label\">columnas · 24 h + segundos</div>\r\n            <is-digital-clock layout=\"sections\" value=\"14:15:00\" hour24 seconds locale=\"es\"></is-digital-clock>\r\n          </div>"
+          "html": "<div>\r\n            <div class=\"demo-label\">lista · step=30</div>\r\n            <iswc-digital-clock id=\"dc\" value=\"09:30\" locale=\"es\" step=\"30\"></iswc-digital-clock>\r\n          </div>\r\n          <div>\r\n            <div class=\"demo-label\">columnas · ampm</div>\r\n            <iswc-digital-clock layout=\"sections\" value=\"09:30\" ampm locale=\"en-US\"></iswc-digital-clock>\r\n          </div>\r\n          <div>\r\n            <div class=\"demo-label\">columnas · 24 h + segundos</div>\r\n            <iswc-digital-clock layout=\"sections\" value=\"14:15:00\" hour24 seconds locale=\"es\"></iswc-digital-clock>\r\n          </div>"
         }
       ]
     },
@@ -79,14 +79,14 @@
       "blocks": [
         {
           "kind": "demo",
-          "html": "<is-time-clock value=\"10:00\" ampm min-time=\"08:00\" max-time=\"18:00\" locale=\"en-US\"></is-time-clock>\r\n          <is-digital-clock layout=\"sections\" value=\"10:00\" hour24 min-time=\"08:00\" max-time=\"18:00\" skip-disabled locale=\"es\"></is-digital-clock>"
+          "html": "<iswc-time-clock value=\"10:00\" ampm min-time=\"08:00\" max-time=\"18:00\" locale=\"en-US\"></iswc-time-clock>\r\n          <iswc-digital-clock layout=\"sections\" value=\"10:00\" hour24 min-time=\"08:00\" max-time=\"18:00\" skip-disabled locale=\"es\"></iswc-digital-clock>"
         }
       ]
     },
     {
       "id": "reference",
       "title": "Referencia",
-      "lede": "Eventos: <code>is-change { value }</code>, <code>is-view-change</code> (reloj).",
+      "lede": "Eventos: <code>iswc-change { value }</code>, <code>iswc-view-change</code> (reloj).",
       "blocks": [
         {
           "kind": "table",

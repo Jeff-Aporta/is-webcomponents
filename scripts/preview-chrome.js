@@ -3,7 +3,7 @@
  *
  * Standalone: controles + localStorage. La URL (?s=) solo se escribe al pulsar
  * «Guardar» (y se copia al portapapeles).
- * Embebido (s.embed / data-embed): oculta controles; aplica is-context del parent.
+ * Embebido (s.embed / data-embed): oculta controles; aplica iswc-context del parent.
  *
  * El bloque «Consumo por CDN» ya no se inyecta aquí: vive en `cdn-panel.js`,
  * que lo monta con el tag del preview y no con el nombre del archivo. Cada
@@ -46,8 +46,8 @@ const applyPalette = (palette) => {
 
 const persist = () => {
   if (embedded) return;
-  localStorage.setItem('is-theme', root.dataset.theme || 'dark');
-  localStorage.setItem('is-palette', root.dataset.palette || 'contapyme');
+  localStorage.setItem('iswc-theme', root.dataset.theme || 'dark');
+  localStorage.setItem('iswc-palette', root.dataset.palette || 'contapyme');
 };
 
 /** Escribe theme/palette en ?s= y devuelve la URL absoluta resultante. */
@@ -82,7 +82,7 @@ const copyText = async (text) => {
 };
 
 addEventListener('message', ({ data, origin }) => {
-  if (data?.type !== 'is-context') return;
+  if (data?.type !== 'iswc-context') return;
   if (origin && origin !== location.origin) return;
   if (data.theme) applyTheme(data.theme);
   if (data.palette) applyPalette(data.palette);
@@ -105,15 +105,15 @@ function mount() {
         <option value="agrowin">AgroWin</option>
       </select>
     </label>
-    <is-button-group class="preview-chrome__actions" pill aria-label="Acciones de la vista">
-      <is-theme-toggle id="previewTheme"></is-theme-toggle>
-      <is-prefs-clear
+    <iswc-button-group class="preview-chrome__actions" pill aria-label="Acciones de la vista">
+      <iswc-theme-toggle id="previewTheme"></iswc-theme-toggle>
+      <iswc-prefs-clear
         id="previewPrefsClear"
         color="neutral"
         variant="plain"
         title="Limpiar memoria UI (splits, scrolls…)"
-      ></is-prefs-clear>
-      <is-button
+      ></iswc-prefs-clear>
+      <iswc-button
         id="previewSave"
         class="preview-chrome__save"
         color="neutral"
@@ -122,20 +122,20 @@ function mount() {
         aria-label="Guardar enlace con tema y paleta"
         title="Guardar en la URL y copiar al portapapeles"
       >
-        <is-icon slot="start" icon="mdi:content-save-outline"></is-icon>
-      </is-button>
-    </is-button-group>
+        <iswc-icon slot="start" icon="mdi:content-save-outline"></iswc-icon>
+      </iswc-button>
+    </iswc-button-group>
   `;
 
-  const main = document.querySelector('is-main.main, main.main');
+  const main = document.querySelector('iswc-main.main, main.main');
   if (main) main.prepend(bar);
   else document.body.appendChild(bar);
 
   // Montar un preview vacía el main, y la barra se va con él. Volver a
   // ponerla es más simple que sacarla de ahí: su CSS la posiciona respecto
   // al scroller del contenido.
-  document.addEventListener('is-preview-ready', () => {
-    const host = document.querySelector('is-main.main, main.main');
+  document.addEventListener('iswc-preview-ready', () => {
+    const host = document.querySelector('iswc-main.main, main.main');
     if (host && !bar.isConnected) host.prepend(bar);
   });
 
@@ -148,7 +148,7 @@ function mount() {
   applyTheme(root.dataset.theme || 'dark');
   applyPalette(root.dataset.palette || 'contapyme');
 
-  document.getElementById('previewTheme')?.addEventListener('is-theme-change', (e) => {
+  document.getElementById('previewTheme')?.addEventListener('iswc-theme-change', (e) => {
     const theme = e.detail?.theme || (root.dataset.theme === 'dark' ? 'light' : 'dark');
     if (e.detail?.container === root || !e.detail?.container) {
       applyTheme(theme);
@@ -166,7 +166,7 @@ function mount() {
   saveBtn?.addEventListener('click', async () => {
     persist();
     const url = writeShareUrl();
-    const icon = saveBtn.querySelector('is-icon');
+    const icon = saveBtn.querySelector('iswc-icon');
     try {
       await copyText(url);
       saveBtn.setAttribute('aria-label', 'Enlace copiado');
@@ -188,8 +188,8 @@ function mount() {
   });
 }
 
-await customElements.whenDefined('is-theme-toggle');
-await customElements.whenDefined('is-button');
+await customElements.whenDefined('iswc-theme-toggle');
+await customElements.whenDefined('iswc-button');
 if (document.readyState === 'loading') {
   document.addEventListener('DOMContentLoaded', mount, { once: true });
 } else {

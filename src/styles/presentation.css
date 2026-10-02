@@ -11,7 +11,7 @@
 html, body {
   margin: 0;
   padding: 0;
-  height: 100%;
+  block-size: 100%;
   background: var(--iswc-bg);
   color: var(--iswc-text);
   font-family: "Manrope", var(--iswc-sans);
@@ -24,15 +24,19 @@ html, body {
   overflow: hidden;
 }
 
-a { color: var(--iswc-accent); text-decoration: none; }
-a:hover { text-decoration: underline; text-underline-offset: 0.18em; }
+a {
+  color: var(--iswc-accent);
+  text-decoration: none;
+
+  &:hover { text-decoration: underline; text-underline-offset: 0.18em; }
+}
 
 /* --- Layout --------------------------------------------------------- */
 
 .page {
-  width: 100%;
-  height: 100%;
-  min-height: 0;
+  inline-size: 100%;
+  block-size: 100%;
+  min-block-size: 0;
   --min: 160px;
   --max: 280px;
   --divider-width: 5px;
@@ -40,10 +44,11 @@ a:hover { text-decoration: underline; text-underline-offset: 0.18em; }
 
 .sidebar {
   align-self: stretch;
-  height: 100%;
-  min-height: 0;
+  block-size: 100%;
+  min-block-size: 0;
   margin: 0;
-  padding: 22px 12px 28px;
+  padding-block: 22px 28px;
+  padding-inline: 12px;
   background:
     linear-gradient(180deg, color-mix(in srgb, var(--iswc-accent) 6%, transparent) 0%, transparent 120px),
     var(--iswc-bg-soft);
@@ -53,99 +58,107 @@ a:hover { text-decoration: underline; text-underline-offset: 0.18em; }
   overflow-y: auto;
   scrollbar-width: thin;
   scrollbar-color: var(--iswc-scrollbar-thumb) transparent;
-}
 
-/* El preview-chrome está clavado dentro de is-main.main con sticky.
-   No flota sobre el viewport, así que el sidebar no necesita hueco arriba. */
-html:not([data-embed="1"]) .sidebar h1 { top: 0.5rem; }
+  /* Título pegado arriba: el índice puede ser largo y se pierde la referencia. */
+  h1 {
+    position: sticky;
+    inset-block-start: -22px;
+    z-index: 1;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    font-size: 0.7rem;
+    font-weight: 700;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    margin: 0 0 14px;
+    padding-block: 6px 10px;
+    padding-inline: 10px;
+    color: var(--iswc-text-dim);
+    background: linear-gradient(180deg,
+      var(--iswc-bg-soft) 60%,
+      color-mix(in srgb, var(--iswc-bg-soft) 0%, transparent));
 
-/* Título pegado arriba: el índice puede ser largo y se pierde la referencia. */
-.sidebar h1 {
-  position: sticky;
-  top: -22px;
-  z-index: 1;
-  display: flex;
-  align-items: center;
-  gap: 8px;
-  font-size: 0.7rem;
-  font-weight: 700;
-  letter-spacing: 0.1em;
-  text-transform: uppercase;
-  margin: 0 0 14px;
-  padding: 6px 10px 10px;
-  color: var(--iswc-text-dim);
-  background: linear-gradient(180deg,
-    var(--iswc-bg-soft) 60%,
-    color-mix(in srgb, var(--iswc-bg-soft) 0%, transparent));
-}
+    /* El preview-chrome está clavado dentro de iswc-main.main con sticky.
+       No flota sobre el viewport, así que el sidebar no necesita hueco arriba. */
+    html:not([data-embed="1"]) & { inset-block-start: 0.5rem; }
 
-.sidebar h1::after {
-  content: "";
-  flex: 1;
-  height: 1px;
-  background: linear-gradient(90deg, var(--iswc-border), transparent);
-}
+    &::after {
+      content: "";
+      flex: 1;
+      block-size: 1px;
+      background: linear-gradient(90deg, var(--iswc-border), transparent);
+    }
+  }
 
-/* El TOC de las previews vive en <is-scrollspy>, no en <nav>: los <a> son
-   light DOM, así que la regla global de enlaces (color: var(--iswc-accent))
-   los pintaba todos de rojo y el ::slotted del componente no gana el
-   cascade. Ambos selectores comparten estilo. */
-.sidebar nav,
-.sidebar is-scrollspy { display: flex; flex-direction: column; gap: 2px; }
-.sidebar nav a,
-.sidebar is-scrollspy a {
-  position: relative;
-  display: block;
-  padding: 7px 12px 7px 14px;
-  font-size: 0.8125rem;
-  font-weight: 500;
-  line-height: 1.35;
-  color: var(--iswc-text-soft);
-  transition: background 140ms ease, color 140ms ease, translate 140ms ease;
-}
-.sidebar nav a:hover,
-.sidebar is-scrollspy a:hover {
-  background: color-mix(in srgb, var(--iswc-bg-elev) 85%, transparent);
-  color: var(--iswc-text);
-  translate: 3px 0;
-  text-decoration: none;
-}
-.sidebar nav a.active,
-.sidebar nav a.is-scrollspy-active,
-.sidebar is-scrollspy a.is-scrollspy-active {
-  background: var(--iswc-accent-bg);
-  color: var(--iswc-brand-text);
-  font-weight: 650;
-}
-/* Barra de acento como pseudo: convive con el border-radius. */
-.sidebar nav a.active::before,
-.sidebar nav a.is-scrollspy-active::before,
-.sidebar is-scrollspy a.is-scrollspy-active::before {
-  content: "";
-  position: absolute;
-  left: 0;
-  top: 5px;
-  bottom: 5px;
-  width: 3px;
-  border-radius: 999px;
-  background: var(--iswc-accent);
+  /* El TOC de las previews vive en <iswc-scrollspy>, no en <nav>: los <a> son
+     light DOM, así que la regla global de enlaces (color: var(--iswc-accent))
+     los pintaba todos de rojo y el ::slotted del componente no gana el
+     cascade. Ambos selectores comparten estilo. */
+  :is(nav, iswc-scrollspy) {
+    display: flex;
+    flex-direction: column;
+    gap: 2px;
+
+    a {
+      position: relative;
+      display: block;
+      padding-block: 7px;
+      padding-inline-start: 14px;
+      padding-inline-end: 12px;
+      font-size: 0.8125rem;
+      font-weight: 500;
+      line-height: 1.35;
+      color: var(--iswc-text-soft);
+      transition: background 140ms ease, color 140ms ease, translate 140ms ease;
+
+      &:hover {
+        background: color-mix(in srgb, var(--iswc-bg-elev) 85%, transparent);
+        color: var(--iswc-text);
+        translate: 3px 0;
+        text-decoration: none;
+      }
+    }
+  }
+
+  :is(nav a.active, nav a.iswc-scrollspy-active, iswc-scrollspy a.iswc-scrollspy-active) {
+    background: var(--iswc-accent-bg);
+    color: var(--iswc-brand-text);
+    font-weight: 650;
+
+    /* Barra de acento como pseudo: convive con el border-radius. */
+    &::before {
+      content: "";
+      position: absolute;
+      inset-inline-start: 0;
+      inset-block: 5px;
+      inline-size: 3px;
+      border-radius: 999px;
+      background: var(--iswc-accent);
+    }
+  }
+
+  @media (max-width: 900px) {
+    border-left: 0;
+    border-top: 1px solid color-mix(in srgb, var(--iswc-accent) 45%, var(--iswc-border));
+  }
 }
 
 .main,
-is-main.main {
+iswc-main.main {
   display: block;
   box-sizing: border-box;
   position: relative;
-  height: 100%;
-  min-height: 0;
+  block-size: 100%;
+  min-block-size: 0;
   /* Expuestos como variables: el preview-chrome los cancela con margenes
-     negativos para poder anclarse a 10px del borde real de is-main. */
+     negativos para poder anclarse a 10px del borde real de iswc-main. */
   --main-pad-top: 36px;
   --main-pad-x: clamp(24px, 4vw, 48px);
   padding: var(--main-pad-top) var(--main-pad-x) 88px;
-  max-width: none;
+  max-inline-size: none;
   margin: 0;
-  width: 100%;
+  inline-size: 100%;
   overflow-y: auto;
   overflow-x: hidden;
   /* Restore programático (F5): smooth hereda de html y pelea con remember-scroll. */
@@ -161,67 +174,36 @@ is-main.main {
 /* --- Scrollbar consistente en superficies de los demos ----------------
  * El is-base.css ya pone `* { scrollbar-color: ... }`; aquí consolidamos
  * el estilo WebKit (track invisible, thumb con padding-clip, hover con
- * acento) para que cualquier `.section`, `.main`, `.sidebar`, `<is-main>`
+ * acento) para que cualquier `.section`, `.main`, `.sidebar`, `<iswc-main>`
  * o `.demo` con overflow muestre el mismo thumb que el sidebar TOC. */
-.main::-webkit-scrollbar,
-is-main.main::-webkit-scrollbar,
-.sidebar::-webkit-scrollbar,
-.section::-webkit-scrollbar,
-.demo::-webkit-scrollbar,
-html::-webkit-scrollbar,
-body::-webkit-scrollbar {
-  width: var(--iswc-scrollbar-size);
-  height: var(--iswc-scrollbar-size);
-}
-.main::-webkit-scrollbar-track,
-is-main.main::-webkit-scrollbar-track,
-.sidebar::-webkit-scrollbar-track,
-.section::-webkit-scrollbar-track,
-.demo::-webkit-scrollbar-track,
-html::-webkit-scrollbar-track,
-body::-webkit-scrollbar-track {
-  background: var(--iswc-scrollbar-track);
-  border-radius: var(--iswc-scrollbar-radius);
-}
-.main::-webkit-scrollbar-thumb,
-is-main.main::-webkit-scrollbar-thumb,
-.sidebar::-webkit-scrollbar-thumb,
-.section::-webkit-scrollbar-thumb,
-.demo::-webkit-scrollbar-thumb,
-html::-webkit-scrollbar-thumb,
-body::-webkit-scrollbar-thumb {
-  background: var(--iswc-scrollbar-thumb);
-  border-radius: var(--iswc-scrollbar-radius);
-  border: 2px solid transparent;
-  background-clip: padding-box;
-}
-.main:hover::-webkit-scrollbar-thumb,
-is-main.main:hover::-webkit-scrollbar-thumb,
-.sidebar:hover::-webkit-scrollbar-thumb,
-.section:hover::-webkit-scrollbar-thumb,
-.demo:hover::-webkit-scrollbar-thumb,
-html:hover::-webkit-scrollbar-thumb,
-body:hover::-webkit-scrollbar-thumb {
-  background: var(--iswc-scrollbar-thumb-hover);
-  border: 2px solid transparent;
-  background-clip: padding-box;
-}
-.main::-webkit-scrollbar-corner,
-is-main.main::-webkit-scrollbar-corner,
-.sidebar::-webkit-scrollbar-corner,
-.section::-webkit-scrollbar-corner,
-.demo::-webkit-scrollbar-corner,
-html::-webkit-scrollbar-corner,
-body::-webkit-scrollbar-corner {
-  background: transparent;
+:is(.main, iswc-main.main, .sidebar, .section, .demo, html, body) {
+  &::-webkit-scrollbar {
+    inline-size: var(--iswc-scrollbar-size);
+    block-size: var(--iswc-scrollbar-size);
+  }
+  &::-webkit-scrollbar-track {
+    background: var(--iswc-scrollbar-track);
+    border-radius: var(--iswc-scrollbar-radius);
+  }
+  &::-webkit-scrollbar-thumb {
+    background: var(--iswc-scrollbar-thumb);
+    border-radius: var(--iswc-scrollbar-radius);
+    border: 2px solid transparent;
+    background-clip: padding-box;
+
+    &:hover {
+      background: var(--iswc-scrollbar-thumb-hover);
+    }
+  }
+  &::-webkit-scrollbar-corner { background: transparent; }
 }
 
 /* --- Theme toggle --------------------------------------------------- */
 
 .theme-toggle {
   position: fixed;
-  top: 16px;
-  right: 16px;
+  inset-block-start: 16px;
+  inset-inline-end: 16px;
   z-index: 10;
   display: inline-flex;
   align-items: center;
@@ -235,89 +217,92 @@ body::-webkit-scrollbar-corner {
   cursor: pointer;
   font-family: inherit;
   box-shadow: var(--iswc-shadow);
+
+  &:hover { color: var(--iswc-text); }
+  svg { inline-size: 14px; block-size: 14px; }
 }
-.theme-toggle:hover { color: var(--iswc-text); }
-.theme-toggle svg { width: 14px; height: 14px; }
 
 /* --- Sections ------------------------------------------------------- */
-
-.section {
-  padding: 40px 0 12px;
-  border-top: 1px solid color-mix(in srgb, var(--iswc-border) 70%, transparent);
-  /* `backwards` y no `both`: con el fill hacia adelante Chrome deja aplicada
-     una matriz identidad al terminar, la seccion queda como containing block
-     y cualquier overlay `position: fixed` dentro (is-context-menu, is-popup…)
-     aparece desplazado por el offset de la seccion. */
-  animation: section-in 420ms cubic-bezier(0.22, 1, 0.36, 1) backwards;
-}
-.section:first-of-type {
-  border-top: 0;
-  padding-top: 8px;
-}
-.section:nth-of-type(2) { animation-delay: 40ms; }
-.section:nth-of-type(3) { animation-delay: 80ms; }
-.section:nth-of-type(4) { animation-delay: 120ms; }
 
 @keyframes section-in {
   from { opacity: 0; transform: translateY(10px); }
   to { opacity: 1; transform: none; }
 }
 
-@media (prefers-reduced-motion: reduce) {
-  .section { animation: none; }
-}
+.section {
+  padding-block: 40px 12px;
+  border-block-start: 1px solid color-mix(in srgb, var(--iswc-border) 70%, transparent);
+  /* `backwards` y no `both`: con el fill hacia adelante Chrome deja aplicada
+     una matriz identidad al terminar, la seccion queda como containing block
+     y cualquier overlay `position: fixed` dentro (iswc-context-menu, iswc-popup…)
+     aparece desplazado por el offset de la seccion. */
+  animation: section-in 420ms cubic-bezier(0.22, 1, 0.36, 1) backwards;
 
-.section h2 {
-  font-size: clamp(1.55rem, 2.2vw, 1.95rem);
-  font-weight: 800;
-  margin: 0 0 10px;
-  letter-spacing: -0.045em;
-  line-height: 1.15;
-  color: var(--iswc-text);
-}
-.section:first-of-type h2 {
-  font-size: clamp(2rem, 3.4vw, 2.65rem);
-  letter-spacing: -0.055em;
-}
-.section:first-of-type h2::after {
-  content: "";
-  display: block;
-  width: 2.5rem;
-  height: 3px;
-  margin-top: 14px;
-  border-radius: 999px;
-  background: linear-gradient(90deg, var(--iswc-accent), color-mix(in srgb, var(--iswc-accent) 20%, transparent));
-}
+  &:first-of-type {
+    border-block-start: 0;
+    padding-block-start: 8px;
+  }
+  &:where(:nth-of-type(2)) { animation-delay: 40ms; }
+  &:where(:nth-of-type(3)) { animation-delay: 80ms; }
+  &:where(:nth-of-type(4)) { animation-delay: 120ms; }
 
-.section .lede {
-  color: var(--iswc-text-soft);
-  margin: 0 0 28px;
-  max-width: 62ch;
-  font-size: 1.02rem;
-  line-height: 1.65;
-  font-weight: 450;
-}
+  @media (prefers-reduced-motion: reduce) {
+    animation: none;
+  }
 
-.section h3 {
-  font-size: 1.05rem;
-  font-weight: 700;
-  margin: 32px 0 10px;
-  letter-spacing: -0.02em;
-  color: var(--iswc-text);
-}
-.section h4 {
-  font-size: 0.72rem;
-  font-weight: 700;
-  text-transform: uppercase;
-  letter-spacing: 0.1em;
-  color: var(--iswc-text-dim);
-  margin: 26px 0 12px;
-}
+  h2 {
+    font-size: clamp(1.55rem, 2.2vw, 1.95rem);
+    font-weight: 800;
+    margin: 0 0 10px;
+    letter-spacing: -0.045em;
+    line-height: 1.15;
+    color: var(--iswc-text);
+  }
+  &:first-of-type h2 {
+    font-size: clamp(2rem, 3.4vw, 2.65rem);
+    letter-spacing: -0.055em;
 
-.section p {
-  margin: 0 0 12px;
-  color: var(--iswc-text-soft);
-  max-width: 68ch;
+    &::after {
+      content: "";
+      display: block;
+      inline-size: 2.5rem;
+      block-size: 3px;
+      margin-block-start: 14px;
+      border-radius: 999px;
+      background: linear-gradient(90deg, var(--iswc-accent), color-mix(in srgb, var(--iswc-accent) 20%, transparent));
+    }
+  }
+
+  .lede {
+    color: var(--iswc-text-soft);
+    margin: 0 0 28px;
+    max-inline-size: 62ch;
+    font-size: 1.02rem;
+    line-height: 1.65;
+    font-weight: 450;
+  }
+
+  h3 {
+    font-size: 1.05rem;
+    font-weight: 700;
+    margin: 32px 0 10px;
+    letter-spacing: -0.02em;
+    color: var(--iswc-text);
+  }
+  h4 {
+    font-size: 0.72rem;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 0.1em;
+    color: var(--iswc-text-dim);
+    margin: 26px 0 12px;
+  }
+
+  p {
+    margin: 0 0 12px;
+    color: var(--iswc-text-soft);
+    max-inline-size: 68ch;
+  }
 }
 
 /* --- Demo cards ----------------------------------------------------- */
@@ -327,11 +312,11 @@ body::-webkit-scrollbar-corner {
   flex-direction: column;
   gap: 0;
   margin: 0 0 28px;
-}
 
-.demo-block > .demo {
-  margin-bottom: 0;
-  border-radius: calc(var(--iswc-radius) + 2px);
+  > .demo {
+    margin-block-end: 0;
+    border-radius: calc(var(--iswc-radius) + 2px);
+  }
 }
 
 /* Enlace "Abrir editor en nueva pestana": aparece solo en demos de
@@ -344,14 +329,15 @@ body::-webkit-scrollbar-corner {
   font-weight: 600;
   color: var(--iswc-fg-muted, #9aa3b2);
   text-decoration: none;
-  border-bottom: 1px dashed currentColor;
-  padding-bottom: 1px;
-}
-.demo-block__editor-link:hover,
-.demo-block__editor-link:focus-visible {
-  color: var(--iswc-fg, #e7eef8);
-  border-bottom-style: solid;
-  outline: none;
+  border-block-end: 1px dashed currentColor;
+  padding-block-end: 1px;
+
+  &:hover,
+  &:focus-visible {
+    color: var(--iswc-fg, #e7eef8);
+    border-block-end-style: solid;
+    outline: none;
+  }
 }
 
 /* .demo-equiv: retirado de demos (equivHtml queda en JSON solo como dato opcional). */
@@ -365,64 +351,143 @@ body::-webkit-scrollbar-corner {
   border: 1px solid var(--iswc-border);
   border-radius: calc(var(--iswc-radius) + 2px);
   padding: 22px 24px;
-  margin: 12px 0 28px;
+  margin-block: 12px 28px;
   box-shadow:
     inset 0 1px 0 rgb(255 255 255 / 4%),
     var(--iswc-shadow);
   overflow: hidden;
+
+  /* Controles nativos en demos: borde/fondo de control para no fundirse con la card.
+     `--pg-*` no existe en el kit; usar tokens `--iswc-control-*`. */
+  :is(
+    input:not([type="checkbox"]):not([type="radio"]):not([type="range"]):not([type="file"]):not([type="hidden"]):not([type="submit"]):not([type="button"]):not([type="reset"]):not([type="image"]):not([type="color"]),
+    textarea,
+    select
+  ) {
+    box-sizing: border-box;
+    inline-size: 100%;
+    max-inline-size: 100%;
+    padding: 0.5em 0.65em;
+    font: inherit;
+    color: var(--iswc-control-text, var(--iswc-text, inherit));
+    background: var(--iswc-control-bg, #f1f3f5);
+    border: 1px solid var(--iswc-control-border, #adb5bd);
+    border-radius: var(--iswc-radius-sm, 0.375em);
+  }
+
+  :is(input, textarea, select):focus-visible {
+    outline: 2px solid var(--iswc-focus, var(--iswc-accent, #339af0));
+    outline-offset: 1px;
+  }
+
+  textarea.demo-native-field,
+  textarea {
+    resize: vertical;
+    min-block-size: 4.5em;
+  }
+
+  /* iswc-copy-button lleva un iswc-tooltip dentro de su shadow: :has() no lo ve. */
+  &:has(iswc-tooltip, iswc-popover, iswc-dropdown, iswc-popup, iswc-copy-button, iswc-lightbox, iswc-diagram-lightbox, iswc-loading-overlay, iswc-modal-verificacion) {
+    overflow: visible;
+  }
+
+  > * { position: relative; z-index: 1; }
+  > :is(iswc-loading-overlay, iswc-modal-verificacion) {
+    position: static;
+    z-index: auto;
+  }
+
+  /* <iswc-demo> reusa el chrome de .demo; el heading es su label opcional. */
+  iswc-demo& { display: flex; flex-direction: column; }
+
+  /* Overlays: su z-index interno no cruza el stacking del host; subir el host
+     para que no lo tapen siblings posteriores (#log, captions, etc.). */
+  > :is(iswc-dropdown, iswc-popup, iswc-tooltip, iswc-popover, iswc-combobox, iswc-date-picker, iswc-date-input, iswc-lightbox, iswc-diagram-lightbox, iswc-loading-overlay, iswc-modal-verificacion) {
+    z-index: 5;
+  }
+  /* Menu absolute: el recuadro de abajo lo tapa si ambos valen z-index 1. */
+  > *:has(iswc-palette-selector) { z-index: 2; }
+  > *:has(iswc-palette-selector) ~ * { z-index: 1; }
+
+  /* Charts / playlist: llenan la altura del demo (fit height) */
+  &:has(iswc-chart, iswc-bar-chart, iswc-line-chart, iswc-pie-chart, iswc-doughnut-chart,
+    iswc-radar-chart, iswc-polar-area-chart, iswc-scatter-chart, iswc-bubble-chart) {
+    min-block-size: 16rem;
+  }
+  > :is(iswc-chart, iswc-bar-chart, iswc-line-chart, iswc-pie-chart, iswc-doughnut-chart,
+    iswc-radar-chart, iswc-polar-area-chart, iswc-scatter-chart, iswc-bubble-chart) {
+    flex: 1 1 auto;
+    align-self: stretch;
+    inline-size: 100%;
+    min-block-size: 0;
+    block-size: auto;
+  }
+
+  &:has(iswc-video-playlist) { min-block-size: 22rem; }
+  > iswc-video-playlist {
+    flex: 1 1 auto;
+    align-self: stretch;
+    inline-size: 100%;
+    min-block-size: 0;
+    block-size: auto;
+  }
+
+  /* Diagramas / treemap / charts de área: el SVG usa width/height 100% + meet,
+     así que el host DEBE tener altura definida (si queda en auto, el % cae a
+     auto y el dibujo crece hasta que .demo lo recorta). */
+  &:has(
+    iswc-sequence-diagram, iswc-flowchart, iswc-state-diagram, iswc-gantt,
+    iswc-block-diagram, iswc-class-diagram, iswc-er-diagram, iswc-mindmap,
+    iswc-timeline, iswc-org-chart, iswc-treemap, iswc-funnel-chart, iswc-heatmap,
+    iswc-waterfall-chart, iswc-gauge, iswc-sparkline
+  ) {
+    min-block-size: 22rem;
+  }
+  > :is(
+    iswc-sequence-diagram, iswc-flowchart, iswc-state-diagram, iswc-gantt,
+    iswc-block-diagram, iswc-class-diagram, iswc-er-diagram, iswc-mindmap,
+    iswc-timeline, iswc-org-chart, iswc-treemap, iswc-funnel-chart, iswc-heatmap,
+    iswc-waterfall-chart, iswc-gauge, iswc-sparkline
+  ) {
+    flex: 1 1 auto;
+    align-self: stretch;
+    inline-size: 100%;
+    min-block-size: 0;
+    block-size: 20rem;
+    max-block-size: 28rem;
+  }
+
+  /* Como flex item de .demo (columna) el chip se estiraría a todo el ancho */
+  > .demo-label { align-self: flex-start; }
 }
 
 /* Controles nativos en demos: borde/fondo de control para no fundirse con la card.
    `--pg-*` no existe en el kit; usar tokens `--iswc-control-*`. */
-.demo-native-field,
-.demo :is(
-  input:not([type="checkbox"]):not([type="radio"]):not([type="range"]):not([type="file"]):not([type="hidden"]):not([type="submit"]):not([type="button"]):not([type="reset"]):not([type="image"]):not([type="color"]),
-  textarea,
-  select
-) {
+.demo-native-field {
   box-sizing: border-box;
-  width: 100%;
-  max-width: 100%;
+  inline-size: 100%;
+  max-inline-size: 100%;
   padding: 0.5em 0.65em;
   font: inherit;
   color: var(--iswc-control-text, var(--iswc-text, inherit));
   background: var(--iswc-control-bg, #f1f3f5);
   border: 1px solid var(--iswc-control-border, #adb5bd);
   border-radius: var(--iswc-radius-sm, 0.375em);
+
+  &:focus-visible {
+    outline: 2px solid var(--iswc-focus, var(--iswc-accent, #339af0));
+    outline-offset: 1px;
+  }
 }
 
-.demo-native-field:focus-visible,
-.demo :is(input, textarea, select):focus-visible {
-  outline: 2px solid var(--iswc-focus, var(--iswc-accent, #339af0));
-  outline-offset: 1px;
-}
-
-.demo textarea.demo-native-field,
-.demo textarea {
-  resize: vertical;
-  min-height: 4.5em;
-}
-/* is-copy-button lleva un is-tooltip dentro de su shadow: :has() no lo ve. */
-.demo:has(is-tooltip, is-popover, is-dropdown, is-popup, is-copy-button, is-lightbox, is-diagram-lightbox, is-loading-overlay, is-modal-verificacion) {
-  overflow: visible;
-}
-.demo > * { position: relative; z-index: 1; }
-.demo > :is(is-loading-overlay, is-modal-verificacion) {
-  position: static;
-  z-index: auto;
-}
-/* <is-demo> reusa el chrome de .demo; el heading es su label opcional. */
-is-demo.demo { display: flex; flex-direction: column; }
-
-/* Demos de componentes anclados al viewport (is-fab, is-speed-dial, is-toast…).
+/* Demos de componentes anclados al viewport (iswc-fab, iswc-speed-dial, iswc-toast…).
    `transform` crea un containing block, asi que los hijos `position: fixed`
    se anclan a ESTA caja en vez de al viewport y no se escapan del demo.
    Sin esto el FAB del ejemplo se va a la esquina de la pagina. */
-is-demo[contain],
-.demo--contain {
+:is(iswc-demo[contain], .demo--contain) {
   position: relative;
   transform: translateZ(0);
-  min-height: 220px;
+  min-block-size: 220px;
   overflow: hidden;
 }
 .demo__heading {
@@ -433,75 +498,23 @@ is-demo[contain],
   text-transform: uppercase;
   color: var(--iswc-text-soft);
 }
-/* Overlays: su z-index interno no cruza el stacking del host; subir el host
-   para que no lo tapen siblings posteriores (#log, captions, etc.). */
-.demo > :is(is-dropdown, is-popup, is-tooltip, is-popover, is-combobox, is-date-picker, is-date-input, is-lightbox, is-diagram-lightbox, is-loading-overlay, is-modal-verificacion) {
-  z-index: 5;
-}
 
-/* Charts / playlist: llenan la altura del demo (fit height) */
-.demo:has(is-chart, is-bar-chart, is-line-chart, is-pie-chart, is-doughnut-chart,
-  is-radar-chart, is-polar-area-chart, is-scatter-chart, is-bubble-chart) {
-  min-height: 16rem;
-}
-.demo > :is(is-chart, is-bar-chart, is-line-chart, is-pie-chart, is-doughnut-chart,
-  is-radar-chart, is-polar-area-chart, is-scatter-chart, is-bubble-chart) {
-  flex: 1 1 auto;
-  align-self: stretch;
-  width: 100%;
-  min-height: 0;
-  height: auto;
-}
+.demo--with-code {
+  padding-inline-end: 3rem;
 
-.demo:has(is-video-playlist) {
-  min-height: 22rem;
+  &.demo--with-sources { padding-inline-end: 5.5rem; }
 }
-.demo > is-video-playlist {
-  flex: 1 1 auto;
-  align-self: stretch;
-  width: 100%;
-  min-height: 0;
-  height: auto;
-}
-
-/* Diagramas / treemap / charts de área: el SVG usa width/height 100% + meet,
-   así que el host DEBE tener altura definida (si queda en auto, el % cae a
-   auto y el dibujo crece hasta que .demo lo recorta). */
-.demo:has(
-  is-sequence-diagram, is-flowchart, is-state-diagram, is-gantt,
-  is-block-diagram, is-class-diagram, is-er-diagram, is-mindmap,
-  is-timeline, is-org-chart, is-treemap, is-funnel-chart, is-heatmap,
-  is-waterfall-chart, is-gauge, is-sparkline
-) {
-  min-height: 22rem;
-}
-.demo > :is(
-  is-sequence-diagram, is-flowchart, is-state-diagram, is-gantt,
-  is-block-diagram, is-class-diagram, is-er-diagram, is-mindmap,
-  is-timeline, is-org-chart, is-treemap, is-funnel-chart, is-heatmap,
-  is-waterfall-chart, is-gauge, is-sparkline
-) {
-  flex: 1 1 auto;
-  align-self: stretch;
-  width: 100%;
-  min-height: 0;
-  height: 20rem;
-  max-height: 28rem;
-}
-
-.demo--with-code { padding-right: 3rem; }
-.demo--with-sources { padding-right: 3rem; }
-.demo--with-code.demo--with-sources { padding-right: 5.5rem; }
+.demo--with-sources { padding-inline-end: 3rem; }
 
 /* Fuentes del componente (JS/CSS/MD) — a la izquierda del botón «Ver código». */
 .demo-sources-btn {
   position: absolute;
-  top: 0.65rem;
-  right: 0.65rem;
+  inset-block-start: 0.65rem;
+  inset-inline-end: 0.65rem;
   z-index: 3;
   display: inline-grid;
   place-items: center;
-  width: 2.25em;
+  inline-size: 2.25em;
   aspect-ratio: 1;
   margin: 0;
   padding: 0;
@@ -513,19 +526,21 @@ is-demo[contain],
   font: inherit;
   line-height: 0;
   transition: background-color 120ms ease, color 120ms ease;
-}
-.demo--with-code .demo-sources-btn { right: 3.15rem; }
-.demo-sources-btn:hover {
-  background: var(--iswc-control-bg-hover);
-  color: var(--iswc-text);
-}
-.demo-sources-btn:focus-visible {
-  outline: 2px solid var(--iswc-focus);
-  outline-offset: 2px;
-}
-.demo-sources-btn is-icon {
-  width: 1.15em;
-  height: 1.15em;
+
+  .demo--with-code & { inset-inline-end: 3.15rem; }
+
+  &:hover {
+    background: var(--iswc-control-bg-hover);
+    color: var(--iswc-text);
+  }
+  &:focus-visible {
+    outline: 2px solid var(--iswc-focus);
+    outline-offset: 2px;
+  }
+  iswc-icon {
+    inline-size: 1.15em;
+    block-size: 1.15em;
+  }
 }
 
 /* Legacy: la barra con hints ya no se monta (sustituida por .file-meta-page). */
@@ -555,13 +570,19 @@ is-demo[contain],
     0 1px 0 color-mix(in srgb, #fff 6%, transparent) inset,
     0 8px 22px -18px rgb(0 0 0 / 45%);
   font-size: 0.78rem;
+
+  [data-theme="light"] & {
+    box-shadow:
+      0 1px 0 color-mix(in srgb, #fff 70%, transparent) inset,
+      0 10px 24px -18px rgb(0 0 0 / 14%);
+  }
+
+  @media (max-width: 720px) {
+    gap: 0.55rem;
+    padding: 0.5rem 0.6rem;
+  }
 }
-[data-theme="light"] .file-meta {
-  box-shadow:
-    0 1px 0 color-mix(in srgb, #fff 70%, transparent) inset,
-    0 10px 24px -18px rgb(0 0 0 / 14%);
-}
-/* Barra de página: fluye con el scroll del is-main (no sticky). */
+/* Barra de página: fluye con el scroll del iswc-main (no sticky). */
 .file-meta-page {
   position: static;
 }
@@ -584,7 +605,7 @@ is-demo[contain],
   flex-wrap: wrap;
   gap: 0.4rem 0.85rem;
   align-items: center;
-  min-width: 0;
+  min-inline-size: 0;
   flex: 1 1 16rem;
 }
 .file-meta__row {
@@ -592,12 +613,12 @@ is-demo[contain],
   flex-wrap: nowrap;
   align-items: center;
   gap: 0.4rem;
-  min-width: 0;
-  max-width: 100%;
+  min-inline-size: 0;
+  max-inline-size: 100%;
 }
 .file-meta__path {
   display: inline-block;
-  max-width: min(100%, 18rem);
+  max-inline-size: min(100%, 18rem);
   overflow: hidden;
   text-overflow: ellipsis;
   white-space: nowrap;
@@ -611,6 +632,10 @@ is-demo[contain],
   font-weight: 500;
   letter-spacing: -0.02em;
   line-height: 1.35;
+
+  @media (max-width: 720px) {
+    max-inline-size: 12rem;
+  }
 }
 .file-meta__bytes {
   color: var(--iswc-text);
@@ -622,13 +647,17 @@ is-demo[contain],
   display: inline-flex;
   align-items: center;
   gap: 0.4rem;
-  margin-left: auto;
+  margin-inline-start: auto;
   padding: 0.25rem 0.55rem;
   border-radius: 999px;
   border: 1px solid color-mix(in srgb, var(--iswc-accent, var(--iswc-brand)) 28%, var(--iswc-border));
   background: color-mix(in srgb, var(--iswc-accent, var(--iswc-brand)) 10%, transparent);
   color: var(--iswc-text);
   font-weight: 700;
+
+  @media (max-width: 720px) {
+    margin-inline-start: 0;
+  }
 }
 .file-meta__total-label {
   color: var(--iswc-text-soft);
@@ -642,47 +671,35 @@ is-demo[contain],
   font-variant-numeric: tabular-nums;
 }
 
-@media (max-width: 720px) {
-  .file-meta {
-    gap: 0.55rem;
-    padding: 0.5rem 0.6rem;
-  }
-  .file-meta__total {
-    margin-left: 0;
-  }
-  .file-meta__path {
-    max-width: 12rem;
-  }
-}
-
 /* Modal full-page de fuentes */
-is-dialog.is-view-sources {
+iswc-dialog.iswc-view-sources {
   --iswc-dialog-width: 100%;
   --iswc-dialog-spacing: 0px;
   --spacing: 0px;
   --width: 100%;
-}
-is-dialog.is-view-sources::part(dialog) {
-  width: 100%;
-  max-width: none;
-  height: 100%;
-  max-height: none;
-  border-radius: 0;
-  box-shadow: none;
-  align-self: stretch;
-  justify-self: stretch;
-}
-is-dialog.is-view-sources::part(body) {
-  display: flex;
-  flex-direction: column;
-  padding: 0;
-  overflow: hidden;
-  max-height: none;
-  min-height: 0;
-  height: 100%;
-}
-is-dialog.is-view-sources::part(footer) {
-  border-top: 1px solid var(--iswc-border);
+
+  &::part(dialog) {
+    inline-size: 100%;
+    max-inline-size: none;
+    block-size: 100%;
+    max-block-size: none;
+    border-radius: 0;
+    box-shadow: none;
+    align-self: stretch;
+    justify-self: stretch;
+  }
+  &::part(body) {
+    display: flex;
+    flex-direction: column;
+    padding: 0;
+    overflow: hidden;
+    max-block-size: none;
+    min-block-size: 0;
+    block-size: 100%;
+  }
+  &::part(footer) {
+    border-block-start: 1px solid var(--iswc-border);
+  }
 }
 .vs-header-actions {
   display: inline-flex;
@@ -693,15 +710,16 @@ is-dialog.is-view-sources::part(footer) {
   font-size: 0.8rem;
   color: var(--iswc-accent, var(--iswc-brand));
   text-decoration: none;
+
+  &:hover { text-decoration: underline; }
 }
-.vs-open:hover { text-decoration: underline; }
 .vs-body {
   display: flex;
   flex-direction: column;
   gap: 0;
-  min-height: 0;
+  min-block-size: 0;
   flex: 1 1 auto;
-  height: 100%;
+  block-size: 100%;
 }
 .vs-path {
   display: block;
@@ -711,41 +729,43 @@ is-dialog.is-view-sources::part(footer) {
   font-size: 0.72rem;
   color: var(--iswc-accent, var(--iswc-text-soft));
   text-decoration: none;
-  border-bottom: 1px solid var(--iswc-border-soft, var(--iswc-border));
+  border-block-end: 1px solid var(--iswc-border-soft, var(--iswc-border));
   background: var(--iswc-bg-soft);
   word-break: break-all;
+
+  &:hover { text-decoration: underline; }
 }
-.vs-path:hover { text-decoration: underline; }
 .vs-tabs {
   flex: 1 1 auto;
-  min-height: 0;
+  min-block-size: 0;
   display: flex;
   flex-direction: column;
-}
-.vs-tabs::part(tab-group) {
-  display: flex;
-  flex-direction: column;
-  min-height: 0;
-  height: 100%;
-}
-.vs-tabs::part(body) {
-  flex: 1 1 auto;
-  min-height: 0;
-  overflow: hidden;
+
+  &::part(tab-group) {
+    display: flex;
+    flex-direction: column;
+    min-block-size: 0;
+    block-size: 100%;
+  }
+  &::part(body) {
+    flex: 1 1 auto;
+    min-block-size: 0;
+    overflow: hidden;
+  }
 }
 .vs-panel {
   box-sizing: border-box;
-  height: 100%;
-  min-height: 0;
+  block-size: 100%;
+  min-block-size: 0;
   overflow: auto;
   padding: 0.75rem 1rem;
 }
 .vs-pre {
   display: block;
   margin: 0;
-  width: 100%;
-  height: 100%;
-  min-height: 12rem;
+  inline-size: 100%;
+  block-size: 100%;
+  min-block-size: 12rem;
   white-space: pre;
   font-size: 0.8rem;
   line-height: 1.45;
@@ -758,12 +778,12 @@ is-dialog.is-view-sources::part(footer) {
 
 .demo-code-btn {
   position: absolute;
-  top: 0.65rem;
-  right: 0.65rem;
+  inset-block-start: 0.65rem;
+  inset-inline-end: 0.65rem;
   z-index: 3;
   display: inline-grid;
   place-items: center;
-  width: 2.25em;
+  inline-size: 2.25em;
   aspect-ratio: 1;
   margin: 0;
   padding: 0;
@@ -775,41 +795,42 @@ is-dialog.is-view-sources::part(footer) {
   font: inherit;
   line-height: 0;
   transition: background-color 120ms ease, color 120ms ease;
-}
-.demo-code-btn:hover {
-  background: var(--iswc-control-bg-hover);
-  color: var(--iswc-text);
-}
-.demo-code-btn:focus-visible {
-  outline: 2px solid var(--iswc-focus);
-  outline-offset: 2px;
-}
-.demo-code-btn is-icon {
-  width: 1.15em;
-  height: 1.15em;
+
+  &:hover {
+    background: var(--iswc-control-bg-hover);
+    color: var(--iswc-text);
+  }
+  &:focus-visible {
+    outline: 2px solid var(--iswc-focus);
+    outline-offset: 2px;
+  }
+  iswc-icon {
+    inline-size: 1.15em;
+    block-size: 1.15em;
+  }
 }
 
-/* El panel vive dentro de <is-dropdown>: el anclaje y el reposicionado los
+/* El panel vive dentro de <iswc-dropdown>: el anclaje y el reposicionado los
    hace el componente (dialog en top layer), así que aquí sólo va la caja.
    Antes era un popover con top/left calculados a mano que se despegaba. */
 .demo-code-dd {
   position: absolute;
-  top: 0.65rem;
-  right: 0.65rem;
+  inset-block-start: 0.65rem;
+  inset-inline-end: 0.65rem;
   z-index: 3;
-}
 
-.demo-code-dd .demo-code-btn { position: static; top: auto; right: auto; }
+  .demo-code-btn { position: static; inset: auto; }
 
-/* is-dropdown::part(menu) trae max-width:20rem + overflow:auto pensado para
-   menús cortos: aquí abre paso al ancho real del panel de código y le quita
-   su propio scroll, así el único scroll horizontal que queda es el del
-   <pre> (demo-code-pop__pre). Sin esto había dos scrollbars horizontales
-   anidados: el del ::part(menu) y el del <pre>. */
-.demo-code-dd::part(menu) {
-  max-width: min(48rem, calc(100vw - 3rem));
-  overflow: visible;
-  padding: 0;
+  /* iswc-dropdown::part(menu) trae max-width:20rem + overflow:auto pensado para
+     menús cortos: aquí abre paso al ancho real del panel de código y le quita
+     su propio scroll, así el único scroll horizontal que queda es el del
+     <pre> (demo-code-pop__pre). Sin esto había dos scrollbars horizontales
+     anidados: el del ::part(menu) y el del <pre>. */
+  &::part(menu) {
+    max-inline-size: min(48rem, calc(100vw - 3rem));
+    overflow: visible;
+    padding: 0;
+  }
 }
 
 .demo-code-pop {
@@ -817,8 +838,8 @@ is-dialog.is-view-sources::part(footer) {
   box-sizing: border-box;
   display: flex;
   flex-direction: column;
-  width: min(48rem, calc(100vw - 3rem));
-  max-height: min(70vh, 26rem);
+  inline-size: min(48rem, calc(100vw - 3rem));
+  max-block-size: min(70vh, 26rem);
   margin: 0;
   padding: 0;
   overflow: hidden;
@@ -831,8 +852,9 @@ is-dialog.is-view-sources::part(footer) {
   justify-content: space-between;
   flex-wrap: wrap;
   gap: 0.5rem 0.75rem;
-  padding: 0.5rem 3rem 0.5rem 0.75rem;
-  border-bottom: 1px solid var(--iswc-border-soft);
+  padding-block: 0.5rem;
+  padding-inline: 0.75rem 3rem;
+  border-block-end: 1px solid var(--iswc-border-soft);
   background: var(--iswc-bg-soft);
 }
 .demo-code-pop__meta {
@@ -842,19 +864,20 @@ is-dialog.is-view-sources::part(footer) {
   flex-wrap: wrap;
   margin-inline-end: auto;
 }
-/* Switch de nivel de minimalidad: component | category | all, con <is-tab-group>. */
+/* Switch de nivel de minimalidad: component | category | all, con <iswc-tab-group>. */
 .demo-code-pop__level {
   --track-width: 2px;
   font-size: 0.7rem;
 
   &::part(nav) { padding: 0; }
   &::part(tabs) { gap: 0.4rem; }
-  /* Sin <is-tab-panel>: el body vacío solo aportaría un hueco. */
+  /* Sin <iswc-tab-panel>: el body vacío solo aportaría un hueco. */
   &::part(body) { display: none; }
 
-  & is-tab {
+  & iswc-tab {
     &::part(base) {
-      padding: 0.2rem 0.4rem;
+      padding-block: 0.2rem;
+      padding-inline: 0.4rem;
       gap: 0.3em;
       font-weight: 600;
       letter-spacing: 0.02em;
@@ -866,10 +889,10 @@ is-dialog.is-view-sources::part(footer) {
   }
 }
 
-/* Cuántos <script> emite cada nivel. Va en el slot `end` del <is-tab>. */
+/* Cuántos <script> emite cada nivel. Va en el slot `end` del <iswc-tab>. */
 .demo-code-pop__count {
-  min-width: 1.35em;
-  padding: 0 0.3em;
+  min-inline-size: 1.35em;
+  padding-inline: 0.3em;
   border-radius: 999px;
   font-size: 0.85em;
   font-weight: 700;
@@ -879,10 +902,11 @@ is-dialog.is-view-sources::part(footer) {
   background: var(--iswc-bg-elev);
 
   &:empty { display: none; }
-}
-is-tab[aria-selected="true"] .demo-code-pop__count {
-  color: var(--iswc-bg);
-  background: var(--iswc-brand, var(--iswc-accent));
+
+  iswc-tab[aria-selected="true"] & {
+    color: var(--iswc-bg);
+    background: var(--iswc-brand, var(--iswc-accent));
+  }
 }
 .demo-code-pop__size {
   font-size: 0.7rem;
@@ -891,8 +915,8 @@ is-tab[aria-selected="true"] .demo-code-pop__count {
 }
 .demo-code-pop__copy {
   position: absolute;
-  top: 0.5rem;
-  right: 0.6rem;
+  inset-block-start: 0.5rem;
+  inset-inline-end: 0.6rem;
   z-index: 1;
   font-size: 0.9rem;
 }
@@ -900,19 +924,19 @@ is-tab[aria-selected="true"] .demo-code-pop__count {
   margin: 0 !important;
   border: 0 !important;
   border-radius: 0 !important;
-  border-left: 0 !important;
+  border-inline-start: 0 !important;
   box-shadow: none !important;
   flex: 0 1 auto;
-  min-height: 4rem;
-  max-height: min(60vh, 22rem);
+  min-block-size: 4rem;
+  max-block-size: min(60vh, 22rem);
   /* Colchón por si la barra crece a dos líneas (switch + tamaño) y el botón
      de copiar (absolute, anclado al popup) queda más bajo de lo normal. */
-  padding-top: 0.5rem !important;
+  padding-block-start: 0.5rem !important;
   overflow: auto;
   overflow-x: auto;
   white-space: pre;
-  width: 100%;
-  max-width: none;
+  inline-size: 100%;
+  max-inline-size: none;
 }
 
 .demo-label {
@@ -931,11 +955,9 @@ is-tab[aria-selected="true"] .demo-code-pop__count {
   color: var(--iswc-text-soft);
   text-transform: none;
   vertical-align: middle;
-}
-.demo-label::before { content: none; }
 
-/* Como flex item de .demo (columna) el chip se estiraría a todo el ancho */
-.demo > .demo-label { align-self: flex-start; }
+  &::before { content: none; }
+}
 
 .demo-caption {
   display: block;
@@ -957,7 +979,13 @@ is-tab[aria-selected="true"] .demo-code-pop__count {
   border: 1px solid var(--iswc-border-soft);
   border-radius: var(--iswc-radius-sm);
   background: color-mix(in srgb, var(--iswc-bg) 55%, transparent);
-  min-width: 0;
+  min-inline-size: 0;
+
+  iswc-format-date,
+  iswc-relative-time {
+    font-size: 0.92rem;
+    color: var(--iswc-text-soft);
+  }
 }
 .demo-locale-card__meta {
   display: flex;
@@ -979,11 +1007,6 @@ is-tab[aria-selected="true"] .demo-code-pop__count {
   font-size: 0.68rem;
   color: var(--iswc-text-dim);
 }
-.demo-locale-card is-format-date,
-.demo-locale-card is-relative-time {
-  font-size: 0.92rem;
-  color: var(--iswc-text-soft);
-}
 
 /* Grid de filas (etiqueta + valor) para demos de format-bytes/format-number/format-date.
    La primera columna es la firma del ejemplo y la segunda el valor renderizado; en
@@ -994,10 +1017,22 @@ is-tab[aria-selected="true"] .demo-code-pop__count {
   gap: 0.4rem 1.25rem;
   margin: 0;
   font-size: 0.92rem;
+
+  @media (max-width: 38rem) {
+    grid-template-columns: 1fr;
+    gap: 0.25rem 0;
+  }
 }
 
 .format-grid__row {
   display: contents;
+
+  @media (max-width: 38rem) {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.35rem 0.75rem;
+    align-items: baseline;
+  }
 }
 
 .format-grid__tag {
@@ -1021,13 +1056,11 @@ is-tab[aria-selected="true"] .demo-code-pop__count {
   font-size: 1rem;
   color: var(--iswc-text);
   /* Permitir que un valor largo no rompa el grid. */
-  min-width: 0;
-}
+  min-inline-size: 0;
 
-@media (max-width: 38rem) {
-  .format-grid { grid-template-columns: 1fr; gap: 0.25rem 0; }
-  .format-grid__row { display: flex; flex-wrap: wrap; gap: 0.35rem 0.75rem; align-items: baseline; }
-  .format-grid__value { flex: 1 1 auto; }
+  @media (max-width: 38rem) {
+    flex: 1 1 auto;
+  }
 }
 
 /* Variante en cards: cada fila vive en una tarjeta con borde sutil y aire.
@@ -1038,31 +1071,31 @@ is-tab[aria-selected="true"] .demo-code-pop__count {
   display: grid;
   grid-template-columns: repeat(auto-fit, minmax(15rem, 1fr));
   gap: 0.75rem;
-}
 
-.format-grid--cards .format-grid__row {
-  display: grid;
-  grid-template-rows: auto 1fr;
-  align-content: space-between;
-  gap: 0.4rem 0.6rem;
-  padding: 0.85rem 1rem;
-  border: 1px solid var(--iswc-border);
-  border-radius: var(--iswc-radius, 0.5em);
-  background: color-mix(in srgb, var(--iswc-bg-elev, #1c2128) 70%, transparent);
-  min-height: 4.5rem;
-}
+  .format-grid__row {
+    display: grid;
+    grid-template-rows: auto 1fr;
+    align-content: space-between;
+    gap: 0.4rem 0.6rem;
+    padding: 0.85rem 1rem;
+    border: 1px solid var(--iswc-border);
+    border-radius: var(--iswc-radius, 0.5em);
+    background: color-mix(in srgb, var(--iswc-bg-elev, #1c2128) 70%, transparent);
+    min-block-size: 4.5rem;
+  }
 
-.format-grid--cards .format-grid__tag {
-  align-self: start;
-  justify-self: start;
-}
+  .format-grid__tag {
+    align-self: start;
+    justify-self: start;
+  }
 
-.format-grid--cards .format-grid__value {
-  align-self: end;
-  justify-self: end;
-  text-align: right;
-  font-size: 1.1rem;
-  line-height: 1.25;
+  .format-grid__value {
+    align-self: end;
+    justify-self: end;
+    text-align: right;
+    font-size: 1.1rem;
+    line-height: 1.25;
+  }
 }
 
 .demo-row {
@@ -1071,7 +1104,9 @@ is-tab[aria-selected="true"] .demo-code-pop__count {
   gap: 12px;
   align-items: center;
 }
-.demo-stack > * + * { margin-top: 12px; }
+.demo-stack {
+  > * + * { margin-block-start: 12px; }
+}
 .demo-grid {
   display: grid;
   grid-template-columns: repeat(auto-fit, minmax(140px, 1fr));
@@ -1085,30 +1120,31 @@ is-tab[aria-selected="true"] .demo-code-pop__count {
   grid-template-columns: max-content repeat(3, 1fr);
   gap: 10px 14px;
   align-items: center;
-}
-.matrix > .cell-label {
-  font-size: 0.72rem;
-  font-weight: 600;
-  text-transform: uppercase;
-  letter-spacing: 0.06em;
-  color: var(--iswc-text-dim);
-  text-align: center;
-}
-.matrix > .row-label {
-  font-size: 0.82rem;
-  color: var(--iswc-text-soft);
-  font-weight: 600;
-  grid-column: 1;
-}
-.matrix > .demo-cell {
-  display: flex;
-  align-items: center;
-  justify-content: flex-start;
-  min-height: 2.75em;
-  padding: 8px 10px;
-  background: color-mix(in srgb, var(--iswc-bg) 55%, transparent);
-  border: 1px solid var(--iswc-border-soft);
-  border-radius: var(--iswc-radius-sm);
+
+  > .cell-label {
+    font-size: 0.72rem;
+    font-weight: 600;
+    text-transform: uppercase;
+    letter-spacing: 0.06em;
+    color: var(--iswc-text-dim);
+    text-align: center;
+  }
+  > .row-label {
+    font-size: 0.82rem;
+    color: var(--iswc-text-soft);
+    font-weight: 600;
+    grid-column: 1;
+  }
+  > .demo-cell {
+    display: flex;
+    align-items: center;
+    justify-content: flex-start;
+    min-block-size: 2.75em;
+    padding: 8px 10px;
+    background: color-mix(in srgb, var(--iswc-bg) 55%, transparent);
+    border: 1px solid var(--iswc-border-soft);
+    border-radius: var(--iswc-radius-sm);
+  }
 }
 
 /* --- Code blocks ---------------------------------------------------- */
@@ -1123,22 +1159,17 @@ pre.code, code.code {
 }
 pre.code {
   padding: 14px 16px;
-  max-height: 80vh;
+  max-block-size: 80vh;
   overflow-x: auto;
   overflow-y: auto;
-  margin: 10px 0 20px;
+  margin-block: 10px 20px;
   line-height: 1.55;
   tab-size: 2;
   white-space: pre;
-  border-left: 1px solid color-mix(in srgb, var(--iswc-accent) 35%, var(--iswc-border));
+  border-inline-start: 1px solid color-mix(in srgb, var(--iswc-accent) 35%, var(--iswc-border));
   box-shadow: inset 0 1px 0 rgb(255 255 255 / 3%);
 }
 code.code { padding: 0.15em 0.4em; font-size: 0.86em; }
-/* inline code dentro de callout: mismos tokens que pre.code */
-.callout code.code .tag { color: #74c0fc; }
-.callout code.code .attr { color: #ffe066; }
-.callout code.code .val  { color: #b2f2bb; }
-.callout code.code .str  { color: #ffc078; }
 
 .tag { color: #74c0fc; }
 .attr { color: #ffe066; }
@@ -1150,99 +1181,102 @@ code.code { padding: 0.15em 0.4em; font-size: 0.86em; }
 /* --- Tables (referencia) ------------------------------------------- */
 
 table.ref {
-  width: 100%;
+  inline-size: 100%;
   border-collapse: separate;
   border-spacing: 0;
   font-size: 0.85rem;
-  margin: 10px 0 22px;
+  margin-block: 10px 22px;
   overflow: hidden;
   border: 1px solid var(--iswc-border-soft);
   border-radius: var(--iswc-radius);
   background: color-mix(in srgb, var(--iswc-bg-elev) 50%, transparent);
-}
-table.ref th, table.ref td {
-  text-align: left;
-  padding: 10px 12px;
-  border-bottom: 1px solid var(--iswc-border-soft);
-  vertical-align: top;
-}
-table.ref tr:last-child td { border-bottom: 0; }
-table.ref th {
-  font-weight: 700;
-  color: var(--iswc-text-soft);
-  font-size: 0.72rem;
-  text-transform: uppercase;
-  letter-spacing: 0.06em;
-  background: color-mix(in srgb, var(--iswc-bg-soft) 80%, transparent);
-}
-table.ref td code {
-  font-family: "JetBrains Mono", var(--iswc-mono);
-  font-size: 0.76rem;
-  background: var(--iswc-code-bg);
-  padding: 1px 6px;
-  border-radius: 4px;
-  color: var(--iswc-text);
-  border: 1px solid var(--iswc-border-soft);
-}
-table.ref td:first-child { width: 30%; }
-table.ref td:nth-child(2) { width: 16%; color: var(--iswc-text-soft); white-space: nowrap; }
-table.ref td:nth-child(3) { width: auto; }
 
-/* Tablas de tokens (p. ej. Personalización): la columna Tokens debe
-   envolver; el nowrap global de .ref col-2 la aplastaba. */
-.ref-wrap { width: 100%; overflow-x: auto; }
-table.ref.ref--tokens {
-  table-layout: fixed;
-  width: 100%;
-}
-table.ref.ref--tokens th:nth-child(1),
-table.ref.ref--tokens td:nth-child(1) {
-  width: 8.75rem;
-  white-space: normal;
-}
-table.ref.ref--tokens th:nth-child(2),
-table.ref.ref--tokens td:nth-child(2) {
-  width: auto;
-  color: var(--iswc-text);
-  white-space: normal;
-}
-table.ref.ref--tokens th:nth-child(3),
-table.ref.ref--tokens td:nth-child(3) {
-  width: 11rem;
-  color: var(--iswc-text-soft);
-  word-break: break-word;
-}
-table.ref.ref--tokens td:nth-child(2) {
-  line-height: 1.65;
-}
-table.ref.ref--tokens td:nth-child(2) code {
-  display: inline-block;
-  margin: 0.12rem 0.3rem 0.12rem 0;
-  max-width: 100%;
-  word-break: break-all;
-  vertical-align: middle;
+  th, td {
+    text-align: left;
+    padding: 10px 12px;
+    border-block-end: 1px solid var(--iswc-border-soft);
+    vertical-align: top;
+  }
+  tr:last-child td { border-block-end: 0; }
+  th {
+    font-weight: 700;
+    color: var(--iswc-text-soft);
+    font-size: 0.72rem;
+    text-transform: uppercase;
+    letter-spacing: 0.06em;
+    background: color-mix(in srgb, var(--iswc-bg-soft) 80%, transparent);
+  }
+  td code {
+    font-family: "JetBrains Mono", var(--iswc-mono);
+    font-size: 0.76rem;
+    background: var(--iswc-code-bg);
+    padding: 1px 6px;
+    border-radius: 4px;
+    color: var(--iswc-text);
+    border: 1px solid var(--iswc-border-soft);
+  }
+  td:first-child { inline-size: 30%; }
+  td:nth-child(2) { inline-size: 16%; color: var(--iswc-text-soft); white-space: nowrap; }
+  td:nth-child(3) { inline-size: auto; }
+
+  /* Tablas de tokens (p. ej. Personalización): la columna Tokens debe
+     envolver; el nowrap global de .ref col-2 la aplastaba. */
+  &.ref--tokens {
+    table-layout: fixed;
+    inline-size: 100%;
+
+    th:nth-child(1),
+    td:nth-child(1) {
+      inline-size: 8.75rem;
+      white-space: normal;
+    }
+    th:nth-child(2),
+    td:nth-child(2) {
+      inline-size: auto;
+      color: var(--iswc-text);
+      white-space: normal;
+    }
+    th:nth-child(3),
+    td:nth-child(3) {
+      inline-size: 11rem;
+      color: var(--iswc-text-soft);
+      word-break: break-word;
+    }
+    td:nth-child(2) { line-height: 1.65; }
+    td:nth-child(2) code {
+      display: inline-block;
+      margin: 0.12rem 0.3rem 0.12rem 0;
+      max-inline-size: 100%;
+      word-break: break-all;
+      vertical-align: middle;
+    }
+  }
+
+  /* Derivación (2 cols): la 2ª columna es prosa, no un tipo corto. */
+  &.ref--derive {
+    table-layout: fixed;
+    inline-size: 100%;
+
+    td:nth-child(1) {
+      inline-size: 38%;
+      white-space: normal;
+
+      code {
+        display: inline-block;
+        margin: 0.1rem 0.2rem 0.1rem 0;
+        word-break: break-all;
+      }
+    }
+    td:nth-child(2) {
+      inline-size: auto;
+      white-space: normal;
+      color: var(--iswc-text-soft);
+      line-height: 1.45;
+    }
+  }
 }
 
-/* Derivación (2 cols): la 2ª columna es prosa, no un tipo corto. */
-table.ref.ref--derive {
-  table-layout: fixed;
-  width: 100%;
-}
-table.ref.ref--derive td:nth-child(1) {
-  width: 38%;
-  white-space: normal;
-}
-table.ref.ref--derive td:nth-child(2) {
-  width: auto;
-  white-space: normal;
-  color: var(--iswc-text-soft);
-  line-height: 1.45;
-}
-table.ref.ref--derive td:nth-child(1) code {
-  display: inline-block;
-  margin: 0.1rem 0.2rem 0.1rem 0;
-  word-break: break-all;
-}
+.ref-wrap { inline-size: 100%; overflow-x: auto; }
 
 /* --- Anatomy diagram ----------------------------------------------- */
 
@@ -1257,30 +1291,39 @@ table.ref.ref--derive td:nth-child(1) code {
   display: flex;
   align-items: center;
   justify-content: center;
-  margin: 12px 0 24px;
+  margin-block: 12px 24px;
+
+  iswc-button {
+    transform: scale(1.4);
+    transform-origin: center;
+
+    @media (max-width: 900px) {
+      transform: scale(1.1);
+    }
+  }
 }
-.anatomy is-button { transform: scale(1.4); transform-origin: center; }
 .anatomy-calls {
   position: absolute;
   font-size: 0.7rem;
   color: var(--iswc-text-dim);
   font-family: "JetBrains Mono", var(--iswc-mono);
+
+  .call {
+    position: absolute;
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    white-space: nowrap;
+  }
+  .line {
+    display: inline-block;
+    block-size: 1px;
+    background: var(--iswc-text-dim);
+    flex: 1;
+    min-inline-size: 24px;
+  }
+  .lbl { color: var(--iswc-accent); }
 }
-.anatomy-calls .call {
-  position: absolute;
-  display: flex;
-  align-items: center;
-  gap: 6px;
-  white-space: nowrap;
-}
-.anatomy-calls .line {
-  display: inline-block;
-  height: 1px;
-  background: var(--iswc-text-dim);
-  flex: 1;
-  min-width: 24px;
-}
-.anatomy-calls .lbl { color: var(--iswc-accent); }
 
 /* --- Playground ---------------------------------------------------- */
 
@@ -1289,19 +1332,25 @@ table.ref.ref--derive td:nth-child(1) code {
   grid-template-columns: 1fr 320px;
   gap: 20px;
   align-items: start;
+
+  @media (max-width: 900px) {
+    grid-template-columns: 1fr;
+  }
+
+  .stage {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    min-block-size: 220px;
+    padding: 32px;
+    background: var(--iswc-bg-soft);
+    border: 1px solid var(--iswc-border);
+    border-radius: var(--iswc-radius);
+    box-shadow: inset 0 1px 0 rgb(255 255 255 / 3%);
+
+    iswc-button { font-size: 1.1rem; }
+  }
 }
-.playground .stage {
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  min-height: 220px;
-  padding: 32px;
-  background: var(--iswc-bg-soft);
-  border: 1px solid var(--iswc-border);
-  border-radius: var(--iswc-radius);
-  box-shadow: inset 0 1px 0 rgb(255 255 255 / 3%);
-}
-.playground .stage is-button { font-size: 1.1rem; }
 
 .controls {
   background: var(--iswc-bg-elev);
@@ -1310,50 +1359,52 @@ table.ref.ref--derive td:nth-child(1) code {
   padding: 18px;
   font-size: 0.85rem;
   box-shadow: var(--iswc-shadow);
-}
-.controls h4 { margin-top: 0; letter-spacing: -0.02em; }
-.controls .ctl-row {
-  display: grid;
-  grid-template-columns: 110px 1fr;
-  gap: 10px;
-  align-items: center;
-  margin: 8px 0;
-}
-.controls label { color: var(--iswc-text-soft); font-size: 0.8rem; font-weight: 500; }
-.controls select,
-.controls input[type="text"] {
-  width: 100%;
-  padding: 6px 9px;
-  background: var(--iswc-bg);
-  color: var(--iswc-text);
-  border: 1px solid var(--iswc-border);
-  border-radius: 6px;
-  font: inherit;
-  font-size: 0.85rem;
-}
-.controls .checks {
-  display: flex;
-  flex-wrap: wrap;
-  gap: 8px;
-}
-.controls .chip {
-  display: inline-flex;
-  align-items: center;
-  gap: 4px;
-  padding: 4px 9px;
-  background: var(--iswc-bg);
-  border: 1px solid var(--iswc-border);
-  border-radius: 999px;
-  cursor: pointer;
-  font-size: 0.78rem;
-  user-select: none;
-  transition: background 120ms ease, border-color 120ms ease, color 120ms ease;
-}
-.controls .chip input { margin: 0; }
-.controls .chip:has(input:checked) {
-  background: var(--iswc-accent-bg);
-  border-color: var(--iswc-accent);
-  color: var(--iswc-accent);
+
+  h4 { margin-block-start: 0; letter-spacing: -0.02em; }
+  .ctl-row {
+    display: grid;
+    grid-template-columns: 110px 1fr;
+    gap: 10px;
+    align-items: center;
+    margin: 8px 0;
+  }
+  label { color: var(--iswc-text-soft); font-size: 0.8rem; font-weight: 500; }
+  select,
+  input[type="text"] {
+    inline-size: 100%;
+    padding: 6px 9px;
+    background: var(--iswc-bg);
+    color: var(--iswc-text);
+    border: 1px solid var(--iswc-border);
+    border-radius: 6px;
+    font: inherit;
+    font-size: 0.85rem;
+  }
+  .checks {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 8px;
+  }
+  .chip {
+    display: inline-flex;
+    align-items: center;
+    gap: 4px;
+    padding: 4px 9px;
+    background: var(--iswc-bg);
+    border: 1px solid var(--iswc-border);
+    border-radius: 999px;
+    cursor: pointer;
+    font-size: 0.78rem;
+    user-select: none;
+    transition: background 120ms ease, border-color 120ms ease, color 120ms ease;
+
+    input { margin: 0; }
+    &:has(input:checked) {
+      background: var(--iswc-accent-bg);
+      border-color: var(--iswc-accent);
+      color: var(--iswc-accent);
+    }
+  }
 }
 
 /* --- Event log ----------------------------------------------------- */
@@ -1365,19 +1416,18 @@ table.ref.ref--derive td:nth-child(1) code {
   font-size: 0.78rem;
   border-radius: var(--iswc-radius-sm);
   padding: 10px 12px;
-  max-height: 160px;
+  max-block-size: 160px;
   overflow-y: auto;
   border: 1px solid var(--iswc-border-soft);
-  margin-top: 8px;
-  min-height: 2.5em;
+  margin-block-start: 8px;
+  min-block-size: 2.5em;
+
+  &:empty { display: none; }
+  .row { padding: 2px 0; }
+  .t { color: var(--iswc-text-dim); }
+  .e { color: #74c0fc; }
+  .hint { color: var(--iswc-text-dim); font-style: italic; }
 }
-.log:empty {
-  display: none;
-}
-.log .row { padding: 2px 0; }
-.log .t { color: var(--iswc-text-dim); }
-.log .e { color: #74c0fc; }
-.log .hint { color: var(--iswc-text-dim); font-style: italic; }
 
 /* --- Callout -------------------------------------------------------- */
 
@@ -1385,20 +1435,29 @@ table.ref.ref--derive td:nth-child(1) code {
   background: color-mix(in srgb, var(--iswc-accent) 7%, var(--iswc-bg-soft));
   border: 1px solid color-mix(in srgb, var(--iswc-accent) 32%, var(--iswc-border-soft));
   padding: 12px 16px;
-  margin: 14px 0 20px;
+  margin-block: 14px 20px;
   border-radius: var(--iswc-radius-sm);
   font-size: 0.9rem;
   color: var(--iswc-text-soft);
   line-height: 1.5;
+
+  strong { color: var(--iswc-text); font-weight: 700; }
+
+  /* inline code dentro de callout: mismos tokens que pre.code */
+  code.code {
+    .tag { color: #74c0fc; }
+    .attr { color: #ffe066; }
+    .val { color: #b2f2bb; }
+    .str { color: #ffc078; }
+  }
 }
-.callout strong { color: var(--iswc-text); font-weight: 700; }
 
 /* --- Footer --------------------------------------------------------- */
 
 .foot {
-  margin-top: 72px;
-  padding-top: 28px;
-  border-top: 1px solid var(--iswc-border-soft);
+  margin-block-start: 72px;
+  padding-block-start: 28px;
+  border-block-start: 1px solid var(--iswc-border-soft);
   font-size: 0.78rem;
   color: var(--iswc-text-dim);
   display: flex;
@@ -1409,15 +1468,16 @@ table.ref.ref--derive td:nth-child(1) code {
   letter-spacing: 0.02em;
 }
 
-/* --- Card preview helpers (is-card) -------------------------------- */
+/* --- Card preview helpers (iswc-card) -------------------------------- */
 
 .card-grid {
   display: grid;
   grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
   gap: 16px;
-  margin: 14px 0 28px;
+  margin-block: 14px 28px;
+
+  > iswc-card { align-self: stretch; }
 }
-.card-grid > is-card { align-self: stretch; }
 .card-meta {
   font-size: 0.85rem;
   color: var(--iswc-text-soft);
@@ -1426,12 +1486,12 @@ table.ref.ref--derive td:nth-child(1) code {
 }
 .card-row-actions { display: flex; gap: 8px; flex-wrap: wrap; }
 .card-stage-h {
-  height: auto;
-  min-height: 0;
+  block-size: auto;
+  min-block-size: 0;
   border: 1px solid var(--iswc-border);
   border-radius: var(--iswc-radius);
   padding: 20px;
-  margin: 12px 0 28px;
+  margin-block: 12px 28px;
   background: var(--iswc-bg-soft);
   box-shadow: inset 0 1px 0 rgb(255 255 255 / 3%);
   display: flex;
@@ -1439,8 +1499,8 @@ table.ref.ref--derive td:nth-child(1) code {
 }
 .card-demo-img {
   display: block;
-  width: 100%;
-  height: 132px;
+  inline-size: 100%;
+  block-size: 132px;
   object-fit: cover;
   background:
     linear-gradient(135deg,
@@ -1453,20 +1513,21 @@ table.ref.ref--derive td:nth-child(1) code {
 .preview-chrome {
   position: sticky;
   z-index: 20;
-  /* 10px del borde real de is-main. Hay que descontar su padding en los dos
+  /* 10px del borde real de iswc-main. Hay que descontar su padding en los dos
      ejes: el chrome es un hijo dentro de la caja de contenido y, ademas, el
      `top` de sticky se resuelve contra el borde de contenido (ya pasado el
      padding), no contra el borde del scroller. */
-  top: calc(10px - var(--main-pad-top, 36px));
-  margin-top: calc(10px - var(--main-pad-top, 36px));
-  margin-left: auto;
-  margin-right: calc(10px - var(--main-pad-x, 48px));
+  inset-block-start: calc(10px - var(--main-pad-top, 36px));
+  margin-block-start: calc(10px - var(--main-pad-top, 36px));
+  margin-inline-start: auto;
+  margin-inline-end: calc(10px - var(--main-pad-x, 48px));
   display: flex;
   align-items: center;
   gap: 0.5rem;
-  width: max-content;
-  max-width: calc(100% - 2rem);
-  padding: 0.35rem 0.45rem 0.35rem 0.65rem;
+  inline-size: max-content;
+  max-inline-size: calc(100% - 2rem);
+  padding-block: 0.35rem;
+  padding-inline: 0.45rem 0.65rem;
   border-radius: 999px;
   background: color-mix(in srgb, var(--iswc-bg-elev) 92%, transparent);
   border: 1px solid var(--iswc-border);
@@ -1474,21 +1535,32 @@ table.ref.ref--derive td:nth-child(1) code {
   backdrop-filter: blur(10px);
   -webkit-backdrop-filter: blur(10px);
   pointer-events: auto;
+
+  &[hidden] { display: none !important; }
+
+  html[data-embed="1"] & { display: none !important; }
+
+  iswc-theme-toggle { font-size: 1.15rem; }
+
+  /* Hueco para la hamburguesa del índice, que vive en la esquina. */
+  @media (max-width: 900px) {
+    margin-inline-end: calc(56px - var(--main-pad-x, 20px));
+  }
 }
 
 /* El main reserva un poco de aire arriba para que el chrome fixed no tape el
    primer heading al cargar. El valor coincide con la altura aprox. del chrome
-   + su offset. */
-is-main.main {
+   + su offset.
+   Las variables acompañan al padding: el preview-chrome sticky se ancla
+   descontándolas, así que cambiar solo `padding` lo dejaba mal puesto. */
+:is(.main, iswc-main.main) {
   scroll-padding-top: 4rem;
-}
 
-.preview-chrome[hidden] {
-  display: none !important;
-}
-
-html[data-embed="1"] .preview-chrome {
-  display: none !important;
+  @media (max-width: 900px) {
+    --main-pad-top: 24px;
+    --main-pad-x: 20px;
+    padding: var(--main-pad-top) var(--main-pad-x) 60px;
+  }
 }
 
 .preview-chrome__palette {
@@ -1499,6 +1571,29 @@ html[data-embed="1"] .preview-chrome {
   font-size: 0.75rem;
   font-weight: 600;
   color: var(--iswc-text-soft);
+
+  select {
+    appearance: none;
+    margin: 0;
+    padding-block: 0.3rem;
+    padding-inline: 0.55rem 1.6rem;
+    border: 1px solid var(--iswc-border);
+    border-radius: 999px;
+    background:
+      var(--iswc-bg-soft)
+      url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='12' viewBox='0 0 16 16'%3E%3Cpath fill='%237a8390' d='M4.5 6L8 9.5 11.5 6z'/%3E%3C/svg%3E")
+      no-repeat right 0.45rem center;
+    color: var(--iswc-text);
+    font: inherit;
+    font-size: 0.75rem;
+    font-weight: 600;
+    cursor: pointer;
+
+    &:focus-visible {
+      outline: 2px solid var(--iswc-focus, var(--iswc-accent));
+      outline-offset: 2px;
+    }
+  }
 }
 
 
@@ -1506,68 +1601,20 @@ html[data-embed="1"] .preview-chrome {
   display: none;
 }
 
-.preview-chrome__palette select {
-  appearance: none;
-  margin: 0;
-  padding: 0.3rem 1.6rem 0.3rem 0.55rem;
-  border: 1px solid var(--iswc-border);
-  border-radius: 999px;
-  background:
-    var(--iswc-bg-soft)
-    url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='12' viewBox='0 0 16 16'%3E%3Cpath fill='%237a8390' d='M4.5 6L8 9.5 11.5 6z'/%3E%3C/svg%3E")
-    no-repeat right 0.45rem center;
-  color: var(--iswc-text);
-  font: inherit;
-  font-size: 0.75rem;
-  font-weight: 600;
-  cursor: pointer;
-}
-
-.preview-chrome__palette select:focus-visible {
-  outline: 2px solid var(--iswc-focus, var(--iswc-accent));
-  outline-offset: 2px;
-}
-
-.preview-chrome is-theme-toggle {
-  font-size: 1.15rem;
-}
-
 .preview-chrome__save {
-  font-size: 1.15rem; /* a la par del is-theme-toggle vecino */
+  font-size: 1.15rem; /* a la par del iswc-theme-toggle vecino */
   flex-shrink: 0;
 }
 
-/* --- Responsive ----------------------------------------------------- */
-
-@media (max-width: 900px) {
-  .sidebar {
-    border-left: 0;
-    border-top: 1px solid color-mix(in srgb, var(--iswc-accent) 45%, var(--iswc-border));
-  }
-  /* Las variables acompañan al padding: el preview-chrome sticky se ancla
-     descontándolas, así que cambiar solo `padding` lo dejaba mal puesto. */
-  .main,
-  is-main.main {
-    --main-pad-top: 24px;
-    --main-pad-x: 20px;
-    padding: var(--main-pad-top) var(--main-pad-x) 60px;
-  }
-  /* Hueco para la hamburguesa del índice, que vive en la esquina. */
-  .preview-chrome { margin-right: calc(56px - var(--main-pad-x, 20px)); }
-  .playground { grid-template-columns: 1fr; }
-  .anatomy is-button { transform: scale(1.1); }
-}
-
-/* --- is-icon defaults ----------------------------------------------- */
-is-icon {
+/* --- iswc-icon defaults ----------------------------------------------- */
+iswc-icon {
   display: inline-flex;
-  width: 1.1em;
-  height: 1.1em;
+  inline-size: 1.1em;
+  block-size: 1.1em;
   vertical-align: -0.15em;
   flex-shrink: 0;
-}
-is-button is-icon {
-  color: currentColor;
+
+  iswc-button & { color: currentColor; }
 }
 
 /* --- Snippets con botón de copiar (docs-chrome.js) ------------------- */
@@ -1576,38 +1623,38 @@ is-button is-icon {
 .code-block {
   position: relative;
   display: block;
-  margin: 12px 0 18px;
+  margin-block: 12px 18px;
+
+  > pre.code,
+  > iswc-code.code,
+  > iswc-code.iswc-code-view { margin: 0; }
+
+  /* Se revela al acercarse; con foco por teclado siempre visible. */
+  &:hover .code-block__copy,
+  &:focus-within .code-block__copy { opacity: 1; }
 }
 
-.code-block > pre.code,
-.code-block > is-code.code,
-.code-block > is-code.is-code-view { margin: 0; }
-
 /* Vista readonly de snippets (sustituye pre.code coloreado con runMode). */
-is-code.is-code-view,
-is-code.code[readonly] {
+iswc-code.iswc-code-view,
+iswc-code.code[readonly] {
   display: block;
-  width: 100%;
+  inline-size: 100%;
   --iswc-code-min-height: 0;
   --iswc-code-radius: var(--iswc-radius, 8px);
 }
 
 .code-block__copy {
   position: absolute;
-  top: 0.45em;
-  right: 0.45em;
+  inset-block-start: 0.45em;
+  inset-inline-end: 0.45em;
   z-index: 2;
   font-size: 0.85em;
   opacity: 0;
   transition: opacity 140ms ease;
+
+  @media (hover: none) { opacity: 1; }
 }
 
-/* Se revela al acercarse; con foco por teclado siempre visible. */
-.code-block:hover .code-block__copy,
-.code-block:focus-within .code-block__copy { opacity: 1; }
-
-@media (hover: none) {
-  .code-block__copy { opacity: 1; }
+.callout--cdn {
+  .code-block { margin-block: 8px 14px; }
 }
-
-.callout--cdn .code-block { margin: 8px 0 14px; }

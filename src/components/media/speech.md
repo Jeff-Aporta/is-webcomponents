@@ -1,20 +1,20 @@
 ---
-tag: is-speech
+tag: iswc-speech
 tags:
-  - is-speech
+  - iswc-speech
 category: media
 status: public
 source: ./speech.js
 style: ./speech.css
 preview: ./speech.json
 ---
-# `<is-speech>`
+# `<iswc-speech>`
 
 ## Propósito
 
 Dictado (`SpeechRecognition`) y lectura (`SpeechSynthesis`) con `lang` del documento.
 
-Este módulo registra `<is-speech>`.
+Este módulo registra `<iswc-speech>`.
 
 ## Cuándo usarlo
 
@@ -33,7 +33,7 @@ import './speech.js';
 ## Ejemplo mínimo
 
 ```html
-<is-speech lang="es-ES" text="Proceso completado con éxito"></is-speech>
+<iswc-speech lang="es-ES" text="Proceso completado con éxito"></iswc-speech>
 ```
 
 ## API
@@ -64,9 +64,9 @@ import './speech.js';
 
 | Evento | detail | bubbles | composed | cancelable |
 | --- | --- | --- | --- | --- |
-| `is-result` | sí `{ transcript, isFinal }` | sí | sí | no |
-| `is-speak-end` | no | sí | sí | no |
-| `is-error` | sí `{ message }` | sí | sí | no |
+| `iswc-result` | sí `{ transcript, isFinal }` | sí | sí | no |
+| `iswc-speak-end` | no | sí | sí | no |
+| `iswc-error` | sí `{ message }` | sí | sí | no |
 
 ### Métodos y propiedades públicas
 
@@ -104,7 +104,7 @@ Botones con `aria-pressed` en dictado; transcript `aria-live`.
 ## Ejemplo avanzado
 
 ```html
-<is-speech lang="es-CO"></is-speech>
+<iswc-speech lang="es-CO"></iswc-speech>
 ```
 
 ## Errores comunes

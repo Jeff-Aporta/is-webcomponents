@@ -1,16 +1,16 @@
 /**
- * Behavior migrado desde HTML inline de is-chart.
+ * Behavior migrado desde HTML inline de iswc-chart.
  * Se ejecuta en mount() tras pintar la definition JSON.
  */
 import type { PreviewMountContext } from '../../previews/_kit/types.js';
-import type { IsChart } from './chart.js';
+import type { IswcChart } from './chart.js';
 
-type IsChartElement = HTMLElement & IsChart;
+type IsChartElement = HTMLElement & IswcChart;
 
 export async function mount(ctx: PreviewMountContext): Promise<void> {
   const root = ctx.main;
   void root;
-  await customElements.whenDefined('is-chart');
+  await customElements.whenDefined('iswc-chart');
   const el = document.querySelector<HTMLElement>('#jsChart') as IsChartElement | null;
   if (!el) return;
   el.config = {

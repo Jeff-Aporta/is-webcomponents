@@ -3,7 +3,7 @@
 <head>
 <meta charset="utf-8" />
 <meta name="viewport" content="width=device-width, initial-scale=1" />
-<title>Selector de color &lt;is-color-picker&gt; · is-webcomponents</title>
+<title>Selector de color &lt;iswc-color-picker&gt; · is-webcomponents</title>
 <meta name="description" content="Selector de color form-associated (HEX nativo, input de texto, swatches predefinidos) en top-layer dialog." />
 <style>
   html, body { margin: 0; padding: 0; min-height: 100%; background: #0c1118; color: #e2e8f0; font-family: ui-sans-serif, system-ui, sans-serif; }
@@ -14,18 +14,18 @@
   section { background: #131a24; border: 1px solid rgba(255,255,255,0.08); border-radius: 10px; padding: 16px; display: grid; gap: 10px; }
   section h2 { font-size: 13px; margin: 0; font-weight: 600; color: #cbd5e1; }
   section .desc { font-size: 12px; color: #94a3b8; margin: 0; }
-  is-color-picker { width: 100%; }
+  iswc-color-picker { width: 100%; }
   .row { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; }
   code { background: rgba(255,255,255,0.06); padding: 1px 5px; border-radius: 3px; font: 12px ui-monospace, Menlo, Consolas, monospace; }
   /* Anti-FOUC */
-  is-color-picker:not(:defined) { visibility: hidden; }
+  iswc-color-picker:not(:defined) { visibility: hidden; }
 </style>
 <script type="module">
-  await import('../../../dist/cdn/forms/color-picker.min.js?h=h22q4p');
-  await customElements.whenDefined('is-color-picker');
+  await import('../../../dist/cdn/forms/color-picker.min.js?h=qegghq');
+  await customElements.whenDefined('iswc-color-picker');
 
   // (1) básico
-  const basico = document.createElement('is-color-picker');
+  const basico = document.createElement('iswc-color-picker');
   basico.setAttribute('label', 'Color de fondo');
   basico.setAttribute('name', 'bg');
   basico.value = '#2563eb';
@@ -33,7 +33,7 @@
   document.querySelector('#sec-basico').appendChild(basico);
 
   // (2) con swatches personalizados
-  const paletta = document.createElement('is-color-picker');
+  const paletta = document.createElement('iswc-color-picker');
   paletta.setAttribute('label', 'Acento de la marca');
   paletta.setAttribute('name', 'accent');
   paletta.swatches = ['#0ea5e9', '#6366f1', '#a855f7', '#ec4899', '#f43f5e', '#fb923c', '#22c55e', '#14b8a6'];
@@ -42,7 +42,7 @@
   document.querySelector('#sec-swatches').appendChild(paletta);
 
   // (3) deshabilitado
-  const deshabilitado = document.createElement('is-color-picker');
+  const deshabilitado = document.createElement('iswc-color-picker');
   deshabilitado.setAttribute('label', 'Color bloqueado');
   deshabilitado.value = '#475569';
   deshabilitado.disabled = true;
@@ -50,7 +50,7 @@
   document.querySelector('#sec-disabled').appendChild(deshabilitado);
 
   // (4) requerido para validación de formulario
-  const requerido = document.createElement('is-color-picker');
+  const requerido = document.createElement('iswc-color-picker');
   requerido.setAttribute('label', 'Color corporativo *');
   requerido.setAttribute('name', 'corporate');
   requerido.required = true;
@@ -65,8 +65,8 @@
 <body>
 <main>
   <header>
-    <h1>&lt;is-color-picker&gt; · Selector de color form-associated</h1>
-    <p>Panel en top-layer &lt;dialog&gt; con picker nativo, input HEX y swatches · <code>is-input</code>/<code>is-change</code> al confirmar.</p>
+    <h1>&lt;iswc-color-picker&gt; · Selector de color form-associated</h1>
+    <p>Panel en top-layer &lt;dialog&gt; con picker nativo, input HEX y swatches · <code>iswc-input</code>/<code>iswc-change</code> al confirmar.</p>
   </header>
 
   <section id="sec-basico">

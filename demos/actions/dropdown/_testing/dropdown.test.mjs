@@ -1,4 +1,4 @@
-// dropdown.test.mjs — Nivel 3: smoke + open/close + is-select + is-show/hide.
+// dropdown.test.mjs — Nivel 3: smoke + open/close + iswc-select + iswc-show/hide.
 import { test } from 'node:test';
 import assert from 'node:assert/strict';
 import { chromium } from 'playwright';
@@ -9,11 +9,11 @@ let browser;
 test.before(async () => { browser = await chromium.launch(); });
 test.after(async () => { await browser?.close(); });
 
-test('dropdown: bundle registra <is-dropdown>', async () => {
+test('dropdown: bundle registra <iswc-dropdown>', async () => {
   const page = await browser.newPage();
   await page.goto(URL_DEMO, { waitUntil: 'domcontentloaded' });
-  await page.waitForSelector('is-dropdown:defined');
-  const defined = await page.evaluate(() => !!customElements.get('is-dropdown'));
+  await page.waitForSelector('iswc-dropdown:defined');
+  const defined = await page.evaluate(() => !!customElements.get('iswc-dropdown'));
   assert.equal(defined, true);
   await page.close();
 });
@@ -21,9 +21,9 @@ test('dropdown: bundle registra <is-dropdown>', async () => {
 test('dropdown: el trigger interno queda con aria-haspopup=menu', async () => {
   const page = await browser.newPage();
   await page.goto(URL_DEMO, { waitUntil: 'domcontentloaded' });
-  await page.waitForSelector('is-dropdown:defined');
+  await page.waitForSelector('iswc-dropdown:defined');
   const hasPopup = await page.evaluate(() => {
-    return document.querySelector('is-dropdown#d1').querySelector('[slot="trigger"]').getAttribute('aria-haspopup');
+    return document.querySelector('iswc-dropdown#d1').querySelector('[slot="trigger"]').getAttribute('aria-haspopup');
   });
   assert.equal(hasPopup, 'menu');
   await page.close();
@@ -32,11 +32,11 @@ test('dropdown: el trigger interno queda con aria-haspopup=menu', async () => {
 test('dropdown: show()/hide() controlan el atributo open y emiten eventos', async () => {
   const page = await browser.newPage();
   await page.goto(URL_DEMO, { waitUntil: 'domcontentloaded' });
-  await page.waitForSelector('is-dropdown#d1:defined');
+  await page.waitForSelector('iswc-dropdown#d1:defined');
   await page.evaluate(() => {
     window.__dEvents = [];
     const d = document.getElementById('d1');
-    ['is-show', 'is-after-show', 'is-hide', 'is-after-hide'].forEach((ev) => {
+    ['iswc-show', 'iswc-after-show', 'iswc-hide', 'iswc-after-hide'].forEach((ev) => {
       d.addEventListener(ev, (e) => window.__dEvents.push(ev));
     });
     d.show();
@@ -45,26 +45,26 @@ test('dropdown: show()/hide() controlan el atributo open y emiten eventos', asyn
   await page.evaluate(() => document.getElementById('d1').hide());
   await page.waitForTimeout(80);
   const events = await page.evaluate(() => window.__dEvents);
-  assert.ok(events.includes('is-show'), 'debe emitir is-show');
-  assert.ok(events.includes('is-after-show'), 'debe emitir is-after-show');
-  assert.ok(events.includes('is-hide'), 'debe emitir is-hide');
-  assert.ok(events.includes('is-after-hide'), 'debe emitir is-after-hide');
+  assert.ok(events.includes('iswc-show'), 'debe emitir iswc-show');
+  assert.ok(events.includes('iswc-after-show'), 'debe emitir iswc-after-show');
+  assert.ok(events.includes('iswc-hide'), 'debe emitir iswc-hide');
+  assert.ok(events.includes('iswc-after-hide'), 'debe emitir iswc-after-hide');
   const open = await page.evaluate(() => document.getElementById('d1').open);
   assert.equal(open, false);
   await page.close();
 });
 
-test('dropdown: click en un item emite is-select con detail.item y cierra', async () => {
+test('dropdown: click en un item emite iswc-select con detail.item y cierra', async () => {
   const page = await browser.newPage();
   await page.goto(URL_DEMO, { waitUntil: 'domcontentloaded' });
-  await page.waitForSelector('is-dropdown#d1:defined');
+  await page.waitForSelector('iswc-dropdown#d1:defined');
   await page.evaluate(() => {
     document.getElementById('d1').show();
   });
   await page.waitForTimeout(80);
   await page.evaluate(() => {
     window.__dSel = null;
-    document.getElementById('d1').addEventListener('is-select', (e) => {
+    document.getElementById('d1').addEventListener('iswc-select', (e) => {
       window.__dSel = { value: e.detail.item.value };
     });
     const items = document.getElementById('d1').items;
@@ -81,7 +81,7 @@ test('dropdown: click en un item emite is-select con detail.item y cierra', asyn
 test('dropdown: items getter excluye disabled y elementos no-is-dropdown-item', async () => {
   const page = await browser.newPage();
   await page.goto(URL_DEMO, { waitUntil: 'domcontentloaded' });
-  await page.waitForSelector('is-dropdown#d2:defined');
+  await page.waitForSelector('iswc-dropdown#d2:defined');
   const items = await page.evaluate(() => {
     return document.getElementById('d2').items.length;
   });
@@ -89,18 +89,18 @@ test('dropdown: items getter excluye disabled y elementos no-is-dropdown-item', 
   await page.close();
 });
 
-test('dropdown: is-hide cancelable=true → preventDefault() deja el menú abierto', async () => {
+test('dropdown: iswc-hide cancelable=true → preventDefault() deja el menú abierto', async () => {
   const page = await browser.newPage();
   await page.goto(URL_DEMO, { waitUntil: 'domcontentloaded' });
-  await page.waitForSelector('is-dropdown#d1:defined');
+  await page.waitForSelector('iswc-dropdown#d1:defined');
   await page.evaluate(() => {
     document.getElementById('d1').show();
-    document.getElementById('d1').addEventListener('is-hide', (e) => e.preventDefault(), { once: true });
+    document.getElementById('d1').addEventListener('iswc-hide', (e) => e.preventDefault(), { once: true });
   });
   await page.waitForTimeout(80);
   await page.evaluate(() => document.getElementById('d1').hide());
   await page.waitForTimeout(50);
   const open = await page.evaluate(() => document.getElementById('d1').open);
-  assert.equal(open, true, 'preventDefault en is-hide debe mantener el menú abierto');
+  assert.equal(open, true, 'preventDefault en iswc-hide debe mantener el menú abierto');
   await page.close();
 });

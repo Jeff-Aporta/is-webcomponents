@@ -1,12 +1,12 @@
 {
-  "$schema": "is-preview/v1",
-  "tag": "is-stepper",
+  "$schema": "iswc-preview/v1",
+  "tag": "iswc-stepper",
   "category": "navigation",
-  "title": "<is-stepper>",
+  "title": "<iswc-stepper>",
   "titleHtml": true,
-  "description": "Documentación y demos de is-stepper / is-stepper-step de InSoft.",
+  "description": "Documentación y demos de iswc-stepper / iswc-stepper-step de InSoft.",
   "styles": ".wizard-card {\r\n      margin-top: 1rem;\r\n      padding: 1.25rem;\r\n      background: var(--iswc-bg-2, #181b22);\r\n      border: 1px solid var(--iswc-border, #2a2f3a);\r\n      border-radius: 0.5rem;\r\n    }",
-  "storageKey": "docs-is-stepper",
+  "storageKey": "docs-iswc-stepper",
   "sections": [
     {
       "id": "intro",
@@ -15,7 +15,7 @@
       "blocks": [
         {
           "kind": "demo",
-          "html": "<is-stepper id=\"stepper1\" active=\"1\">\r\n            <is-stepper-step label=\"Cuenta\" description=\"email.verificado@ejemplo.com\" icon=\"mdi:account\"></is-stepper-step>\r\n            <is-stepper-step label=\"Perfil\" description=\"Completa tus datos\" icon=\"mdi:card-account-details\"></is-stepper-step>\r\n            <is-stepper-step label=\"Confirmar\" description=\"Revisa y envía\" icon=\"mdi:check-circle\"></is-stepper-step>\r\n          </is-stepper>\r\n\r\n          <div style=\"display:flex;gap:0.5rem;margin-top:1rem;justify-content:flex-end\">\r\n            <is-button id=\"prevBtn\" color=\"neutral\" variant=\"outlined\">Atrás</is-button>\r\n            <is-button id=\"nextBtn\" color=\"brand\">Siguiente</is-button>\r\n          </div>\r\n          <p id=\"stepLog\" class=\"lede\">Active: <code class=\"code\">1</code></p>",
+          "html": "<iswc-stepper id=\"stepper1\" active=\"1\">\r\n            <iswc-stepper-step label=\"Cuenta\" description=\"email.verificado@ejemplo.com\" icon=\"mdi:account\"></iswc-stepper-step>\r\n            <iswc-stepper-step label=\"Perfil\" description=\"Completa tus datos\" icon=\"mdi:card-account-details\"></iswc-stepper-step>\r\n            <iswc-stepper-step label=\"Confirmar\" description=\"Revisa y envía\" icon=\"mdi:check-circle\"></iswc-stepper-step>\r\n          </iswc-stepper>\r\n\r\n          <div style=\"display:flex;gap:0.5rem;margin-top:1rem;justify-content:flex-end\">\r\n            <iswc-button id=\"prevBtn\" color=\"neutral\" variant=\"outlined\">Atrás</iswc-button>\r\n            <iswc-button id=\"nextBtn\" color=\"brand\">Siguiente</iswc-button>\r\n          </div>\r\n          <p id=\"stepLog\" class=\"lede\">Active: <code class=\"code\">1</code></p>",
           "controls": [
             {
               "control": "number",
@@ -64,7 +64,7 @@
         },
         {
           "kind": "code",
-          "code": "<is-stepper active=\"1\">\n  <is-stepper-step label=\"Cuenta\" icon=\"mdi:account\"></is-stepper-step>\n  <is-stepper-step label=\"Perfil\" icon=\"mdi:card-account-details\"></is-stepper-step>\n  <is-stepper-step label=\"Confirmar\" icon=\"mdi:check-circle\"></is-stepper-step>\n</is-stepper>"
+          "code": "<iswc-stepper active=\"1\">\n  <iswc-stepper-step label=\"Cuenta\" icon=\"mdi:account\"></iswc-stepper-step>\n  <iswc-stepper-step label=\"Perfil\" icon=\"mdi:card-account-details\"></iswc-stepper-step>\n  <iswc-stepper-step label=\"Confirmar\" icon=\"mdi:check-circle\"></iswc-stepper-step>\n</iswc-stepper>"
         }
       ]
     },
@@ -75,7 +75,7 @@
       "blocks": [
         {
           "kind": "demo",
-          "html": "<is-stepper id=\"stepper2\" orientation=\"vertical\" active=\"1\">\r\n            <is-stepper-step label=\"Datos personales\" description=\"Nombre, email, fecha de nacimiento\"></is-stepper-step>\r\n            <is-stepper-step label=\"Dirección\" description=\"Calle, ciudad, código postal\"></is-stepper-step>\r\n            <is-stepper-step label=\"Pago\" description=\"Método de pago preferido\"></is-stepper-step>\r\n            <is-stepper-step label=\"Revisar\" description=\"Confirma antes de enviar\"></is-stepper-step>\r\n          </is-stepper>"
+          "html": "<iswc-stepper id=\"stepper2\" orientation=\"vertical\" active=\"1\">\r\n            <iswc-stepper-step label=\"Datos personales\" description=\"Nombre, email, fecha de nacimiento\"></iswc-stepper-step>\r\n            <iswc-stepper-step label=\"Dirección\" description=\"Calle, ciudad, código postal\"></iswc-stepper-step>\r\n            <iswc-stepper-step label=\"Pago\" description=\"Método de pago preferido\"></iswc-stepper-step>\r\n            <iswc-stepper-step label=\"Revisar\" description=\"Confirma antes de enviar\"></iswc-stepper-step>\r\n          </iswc-stepper>"
         }
       ]
     },
@@ -86,7 +86,7 @@
       "blocks": [
         {
           "kind": "demo",
-          "html": "<is-stepper active=\"2\">\r\n            <is-stepper-step label=\"Datos\"></is-stepper-step>\r\n            <is-stepper-step label=\"Validación\" error></is-stepper-step>\r\n            <is-stepper-step label=\"Pago\"></is-stepper-step>\r\n          </is-stepper>"
+          "html": "<iswc-stepper active=\"2\">\r\n            <iswc-stepper-step label=\"Datos\"></iswc-stepper-step>\r\n            <iswc-stepper-step label=\"Validación\" error></iswc-stepper-step>\r\n            <iswc-stepper-step label=\"Pago\"></iswc-stepper-step>\r\n          </iswc-stepper>"
         }
       ]
     },
@@ -97,7 +97,7 @@
       "blocks": [
         {
           "kind": "demo",
-          "html": "<is-stepper active=\"0\">\r\n            <is-stepper-step label=\"Pendiente\"></is-stepper-step>\r\n            <is-stepper-step label=\"Bloqueado\" disabled></is-stepper-step>\r\n            <is-stepper-step label=\"También bloqueado\" disabled></is-stepper-step>\r\n          </is-stepper>"
+          "html": "<iswc-stepper active=\"0\">\r\n            <iswc-stepper-step label=\"Pendiente\"></iswc-stepper-step>\r\n            <iswc-stepper-step label=\"Bloqueado\" disabled></iswc-stepper-step>\r\n            <iswc-stepper-step label=\"También bloqueado\" disabled></iswc-stepper-step>\r\n          </iswc-stepper>"
         }
       ]
     },
@@ -108,7 +108,7 @@
       "blocks": [
         {
           "kind": "demo",
-          "html": "<is-stepper color=\"numbered\" active=\"1\">\r\n            <is-stepper-step label=\"Inicio\"></is-stepper-step>\r\n            <is-stepper-step label=\"Medio\"></is-stepper-step>\r\n            <is-stepper-step label=\"Fin\"></is-stepper-step>\r\n          </is-stepper>"
+          "html": "<iswc-stepper color=\"numbered\" active=\"1\">\r\n            <iswc-stepper-step label=\"Inicio\"></iswc-stepper-step>\r\n            <iswc-stepper-step label=\"Medio\"></iswc-stepper-step>\r\n            <iswc-stepper-step label=\"Fin\"></iswc-stepper-step>\r\n          </iswc-stepper>"
         }
       ]
     },
@@ -119,7 +119,7 @@
       "blocks": [
         {
           "kind": "demo",
-          "html": "<is-stepper id=\"wizard\" active=\"0\">\r\n            <is-stepper-step label=\"Paso 1\"></is-stepper-step>\r\n            <is-stepper-step label=\"Paso 2\"></is-stepper-step>\r\n            <is-stepper-step label=\"Paso 3\"></is-stepper-step>\r\n          </is-stepper>\r\n\r\n          <div class=\"wizard-card\" id=\"wizardBody\">\r\n            <h4>Paso 1: Tu nombre</h4>\r\n            <p>Introduce tu nombre completo.</p>\r\n          </div>"
+          "html": "<iswc-stepper id=\"wizard\" active=\"0\">\r\n            <iswc-stepper-step label=\"Paso 1\"></iswc-stepper-step>\r\n            <iswc-stepper-step label=\"Paso 2\"></iswc-stepper-step>\r\n            <iswc-stepper-step label=\"Paso 3\"></iswc-stepper-step>\r\n          </iswc-stepper>\r\n\r\n          <div class=\"wizard-card\" id=\"wizardBody\">\r\n            <h4>Paso 1: Tu nombre</h4>\r\n            <p>Introduce tu nombre completo.</p>\r\n          </div>"
         }
       ]
     },
@@ -129,7 +129,7 @@
       "blocks": [
         {
           "kind": "html",
-          "html": "<h3><code class=\"code\">&lt;is-stepper&gt;</code></h3>"
+          "html": "<h3><code class=\"code\">&lt;iswc-stepper&gt;</code></h3>"
         },
         {
           "kind": "table",
@@ -168,7 +168,7 @@
         },
         {
           "kind": "html",
-          "html": "<h3><code class=\"code\">&lt;is-stepper-step&gt;</code></h3>"
+          "html": "<h3><code class=\"code\">&lt;iswc-stepper-step&gt;</code></h3>"
         },
         {
           "kind": "table",
@@ -231,11 +231,11 @@
           ],
           "rows": [
             [
-              "<code>is-stepper-change</code>",
+              "<code>iswc-stepper-change</code>",
               "Cambia el paso. <code>detail: { from, to, step }</code>."
             ],
             [
-              "<code>is-stepper-complete</code>",
+              "<code>iswc-stepper-complete</code>",
               "Último paso completado."
             ]
           ]

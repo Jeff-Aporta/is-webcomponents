@@ -1,5 +1,5 @@
 /**
- * split-panel.test.ts — Tier A (15 aserciones) para `<is-split-panel>`.
+ * split-panel.test.ts — Tier A (15 aserciones) para `<iswc-split-panel>`.
  *
  * Componente de layout: dos paneles con divisor arrastrable, persistencia
  * en localStorage, slots start/end/divider, CSS parts, snap points.
@@ -13,7 +13,7 @@ import { fileURLToPath } from 'node:url';
 
 const HERE = dirname(fileURLToPath(import.meta.url));
 const ROOT = join(HERE, '..', '..', '..', '..', '..');
-const TAG = 'is-split-panel';
+const TAG = 'iswc-split-panel';
 const TS  = join(ROOT, 'src', 'components', 'layout', 'split-panel.ts');
 const CSS = join(ROOT, 'src', 'components', 'layout', 'split-panel.css');
 const JSON_PATH = join(ROOT, 'src', 'components', 'layout', 'split-panel.json');
@@ -26,10 +26,10 @@ test('2. CSS hermano existe', () => {
   assert.ok(existsSync(CSS));
 });
 
-test('3. JSON existe y respeta is-preview/v1', () => {
+test('3. JSON existe y respeta iswc-preview/v1', () => {
   const json = JSON.parse(readFileSync(JSON_PATH, 'utf8'));
   assert.equal(json.tag, TAG);
-  assert.equal(json.$schema, 'is-preview/v1');
+  assert.equal(json.$schema, 'iswc-preview/v1');
 });
 
 test('4. OBSERVED incluye atributos principales (position, orientation, primary, collapse, snap)', async () => {
@@ -108,9 +108,9 @@ test('13. tiene snap points para anclar el divisor', () => {
 test('14. custom element registrado', () => {
   const src = readFileSync(TS, 'utf8');
   assert.ok(
-    /defineElement\s*\(\s*['"]is-split-panel['"]/.test(src) ||
-    /customElements\.define\s*\(\s*['"]is-split-panel['"]/.test(src),
-    '<is-split-panel> debe estar registrado',
+    /defineElement\s*\(\s*['"]iswc-split-panel['"]/.test(src) ||
+    /customElements\.define\s*\(\s*['"]iswc-split-panel['"]/.test(src),
+    '<iswc-split-panel> debe estar registrado',
   );
 });
 

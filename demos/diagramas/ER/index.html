@@ -45,7 +45,7 @@
     <a class="card" href="./er-static.html">
       <span class="tag">Lite · read-only</span>
       <h2>Vista estática con animación</h2>
-      <p>Componente <code>&lt;is-er-diagram&gt;</code> en modo lectura. Aristas <code>dashStyle: "dashed"</code> animan via CSS embebido en el SVG. Mix de rutas (<code>straight</code>, <code>orthogonal-h</code>, <code>orthogonal-v</code>) y estilos por arista.</p>
+      <p>Componente <code>&lt;iswc-er-diagram&gt;</code> en modo lectura. Aristas <code>dashStyle: "dashed"</code> animan via CSS embebido en el SVG. Mix de rutas (<code>straight</code>, <code>orthogonal-h</code>, <code>orthogonal-v</code>) y estilos por arista.</p>
     </a>
   </div>
 
@@ -53,8 +53,8 @@
     <p><strong>Arquitectura lite / full con core compartido:</strong></p>
     <ul>
       <li><code>er-archify.ts</code> — funciones puras: spec, layout, route helpers, serialización determinista, CSS embebible.</li>
-      <li><code>&lt;is-er-diagram&gt;</code> — LITE. Renderiza SVG desde el payload. Sin UI de edición.</li>
-      <li><code>&lt;is-er-editor&gt;</code> — FULL. Compone <code>&lt;is-er-diagram&gt;</code> en su shadow DOM y añade: state, drag, click-to-connect, multi-select, undo/redo, panel de estilos, export JSON/SVG.</li>
+      <li><code>&lt;iswc-er-diagram&gt;</code> — LITE. Renderiza SVG desde el payload. Sin UI de edición.</li>
+      <li><code>&lt;iswc-er-editor&gt;</code> — FULL. Compone <code>&lt;iswc-er-diagram&gt;</code> en su shadow DOM y añade: state, drag, click-to-connect, multi-select, undo/redo, panel de estilos, export JSON/SVG.</li>
     </ul>
     <p style="margin-top:14px;">Garantía visual: <strong>mismo payload → mismo SVG</strong> en ambos componentes (comparten spec, layout y SVG builder).</p>
   </div>

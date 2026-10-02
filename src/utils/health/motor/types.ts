@@ -23,7 +23,7 @@ export type Severidad = 'fatal' | 'error' | 'warn' | 'info';
  * agrupar hallazgos en el reporte final.
  */
 export type CategoriaHallazgo =
-  | 'json-schema'         // Definición no cumple con is-preview/v1
+  | 'json-schema'         // Definición no cumple con iswc-preview/v1
   | 'json-contenido'      // HTML dentro del JSON tiene problemas
   | 'json-complejidad'    // Estructuras complejas sin JSON
   | 'consistencia'        // Componente no expone lo que el JSON declara
@@ -42,7 +42,7 @@ export interface Hallazgo {
   categoria: CategoriaHallazgo;
   /** Severidad del hallazgo. */
   severidad: Severidad;
-  /** Tag del componente afectado (ej. "is-button"). null si es global. */
+  /** Tag del componente afectado (ej. "iswc-button"). null si es global. */
   tag: string | null;
   /** Ruta del archivo relativo a la raíz del proyecto (cuando aplique). */
   ruta?: string;
@@ -58,7 +58,7 @@ export interface Hallazgo {
 
 /** Resultado de auditar un único componente del catálogo. */
 export interface ReporteComponente {
-  /** Tag del componente (ej. "is-button"). */
+  /** Tag del componente (ej. "iswc-button"). */
   tag: string;
   /** Categoría manifest del componente (actions, data-viz, …). */
   categoria: string;
@@ -122,7 +122,7 @@ export interface ContextoPrueba {
   titulo: string;
   /** Ruta absoluta del JSON en disco. */
   rutaJsonAbsoluta: string;
-  /** Definición cruda parseada (is-preview/v1). */
+  /** Definición cruda parseada (iswc-preview/v1). */
   definicion: unknown;
   /** Fuente raw del JSON (string). */
   fuenteJson: string;

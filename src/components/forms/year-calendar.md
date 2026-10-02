@@ -1,20 +1,20 @@
 ---
-tag: is-year-calendar
+tag: iswc-year-calendar
 tags:
-  - is-year-calendar
+  - iswc-year-calendar
 category: forms
 status: public
 source: ./year-calendar.js
 style: ./year-calendar.css
 preview: ./year-calendar.json
 ---
-# `<is-year-calendar>`
+# `<iswc-year-calendar>`
 
 ## Propósito
 
-Calendario inline (DateCalendar de MUI X). Tres vistas (día, mes, año), teclado, números de semana y reglas de deshabilitado. El mes y el año del encabezado abren un is-dropdown.
+Calendario inline (DateCalendar de MUI X). Tres vistas (día, mes, año), teclado, números de semana y reglas de deshabilitado. El mes y el año del encabezado abren un iswc-dropdown.
 
-Este módulo registra `<is-year-calendar>`.
+Este módulo registra `<iswc-year-calendar>`.
 
 ## Cuándo usarlo
 
@@ -33,7 +33,7 @@ import './year-calendar.js';
 ## Ejemplo mínimo
 
 ```html
-<is-year-calendar></is-year-calendar>
+<iswc-year-calendar></iswc-year-calendar>
 ```
 
 ## API
@@ -70,7 +70,7 @@ No expone.
 
 | Evento | detail | bubbles | composed | cancelable |
 | --- | --- | --- | --- | --- |
-| `is-change` | sí | sí | sí | no |
+| `iswc-change` | sí | sí | sí | no |
 
 ### Métodos y propiedades públicas
 
@@ -115,15 +115,15 @@ No declara integración form-associated propia en este módulo.
 
 Documentación de cabecera preservada desde fuente:
 
-> <is-year-calendar> — Rejilla de años desplazable (MUI YearCalendar).
+> <iswc-year-calendar> — Rejilla de años desplazable (MUI YearCalendar).
 > Atributos: value (yyyy), min, max (ISO o yyyy), columns, disabled, readonly
-> Events: is-change  detail { value, year }
+> Events: iswc-change  detail { value, year }
 
 ## Dependencias y componentes relacionados
 
 - [`../_shared/adopt-css.js`](../_shared/adopt-css.js)
 
-Tags del módulo: `<is-year-calendar>`.
+Tags del módulo: `<iswc-year-calendar>`.
 
 ## Accesibilidad
 
@@ -132,7 +132,7 @@ Preservar semántica, foco, teclado, labels y ARIA. ARIA detectado: `aria-checke
 ## Ejemplo avanzado
 
 ```html
-<is-year-calendar></is-year-calendar>
+<iswc-year-calendar></iswc-year-calendar>
 ```
 
 ## Errores comunes

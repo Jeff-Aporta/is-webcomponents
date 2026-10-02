@@ -12,20 +12,20 @@ import { svgEl } from '../_shared/svg-chart-engine.js';
 import { svgArrowHead } from '../_shared/diagram-arrow.js';
 
 /**
- * <is-swimlane-diagram> — diagrama de carriles en SVG, sin Mermaid.
+ * <iswc-swimlane-diagram> — diagrama de carriles en SVG, sin Mermaid.
  *
- *   <is-swimlane-diagram>
+ *   <iswc-swimlane-diagram>
  *     <script type="application/json">
  *       { "swimlane": { "lanes": [...], "steps": [...], "links": [...] } }
  *     </script>
- *   </is-swimlane-diagram>
+ *   </iswc-swimlane-diagram>
  *
- * Mismo esqueleto que <is-flowchart>: shadow DOM, slot JSON + MutationObserver,
+ * Mismo esqueleto que <iswc-flowchart>: shadow DOM, slot JSON + MutationObserver,
  * tema por atributo `data-theme`, `color` (inline | viewer), lightbox propio.
  *
  * Atributos: color (inline | viewer), open-on-click
  * Propiedades: payload, spec, layout, hiddenLanes
- * Eventos: is-render, is-open-viewer, is-toggle-lane
+ * Eventos: iswc-render, iswc-open-viewer, iswc-toggle-lane
  */
 
 type StepKind = 'process' | 'decision' | 'start' | 'end';
@@ -92,7 +92,7 @@ function stepPath(kind: StepKind, x: number, y: number, w: number, h: number): s
   return `M${x + r},${y} H${x + w - r} Q${x + w},${y} ${x + w},${y + r} V${y + h - r} Q${x + w},${y + h} ${x + w - r},${y + h} H${x + r} Q${x},${y + h} ${x},${y + h - r} V${y + r} Q${x},${y} ${x + r},${y} Z`;
 }
 
-class IsSwimlaneDiagram extends DiagramElementBase {
+class IswcSwimlaneDiagram extends DiagramElementBase {
   #hiddenLanes = new Set<string>();
   #stepNodes = new Map<string, StepEntry>();
   #linkNodes = new Map<string, LinkEntry>();
@@ -161,7 +161,7 @@ class IsSwimlaneDiagram extends DiagramElementBase {
     const layout = computeSwimlaneLayout(visible) as unknown as SwLayout;
     this.layout = layout;
     this.#buildSvg(layout, theme);
-    this.wrap.classList.toggle('is-viewer', this.isViewer);
+    this.wrap.classList.toggle('iswc-viewer', this.isViewer);
   }
 
   #buildSvg(layout: SwLayout, theme: DiagramTheme): void {
@@ -196,7 +196,7 @@ class IsSwimlaneDiagram extends DiagramElementBase {
     this.#buildLinks(layout, theme);
     this.#buildSteps(layout, theme);
 
-    emit(this, 'is-render', { layout, svg: this.svg });
+    emit(this, 'iswc-render', { layout, svg: this.svg });
   }
 
   #buildLanes(layout: SwLayout, theme: DiagramTheme): void {
@@ -346,13 +346,13 @@ g.appendChild(svgArrowHead({
   #onClick = (e: MouseEvent) => {
     if (this.isViewer) {
       const lane = e.composedPath().find((x): x is HTMLElement => x instanceof HTMLElement && !!x.dataset?.laneId);
-      if (lane) emit(this, 'is-toggle-lane', { id: lane.dataset.laneId });
+      if (lane) emit(this, 'iswc-toggle-lane', { id: lane.dataset.laneId });
       return;
     }
     // El visor es opt-in: sin `open-on-click` el clic no hace nada y tampoco
-    // se anuncia `is-open-viewer`, que prometeria una apertura que no ocurre.
+    // se anuncia `iswc-open-viewer`, que prometeria una apertura que no ocurre.
     if (!this.hasAttribute('open-on-click')) return;
-    const ev = new CustomEvent('is-open-viewer', {
+    const ev = new CustomEvent('iswc-open-viewer', {
       bubbles: true, composed: true, cancelable: true, detail: { payload: this.payload },
     });
     this.dispatchEvent(ev);
@@ -383,13 +383,13 @@ g.appendChild(svgArrowHead({
 
     for (const [stepId, node] of this.#stepNodes) {
       const active = stepId === id;
-      node.g.classList.toggle('is-active', active);
-      node.g.classList.toggle('is-dim', !!id && !active);
+      node.g.classList.toggle('iswc-active', active);
+      node.g.classList.toggle('iswc-dim', !!id && !active);
     }
     for (const [, link] of this.#linkNodes) {
       const touches = !!id && (link.l.from === id || link.l.to === id);
-      link.g.classList.toggle('is-active', touches);
-      link.g.classList.toggle('is-dim', !!id && !touches);
+      link.g.classList.toggle('iswc-active', touches);
+      link.g.classList.toggle('iswc-dim', !!id && !touches);
     }
 
     if (!entry) {
@@ -412,8 +412,8 @@ g.appendChild(svgArrowHead({
   }
 }
 
-defineElement('is-swimlane-diagram', IsSwimlaneDiagram, 'IsSwimlaneDiagram');
+defineElement('iswc-swimlane-diagram', IswcSwimlaneDiagram, 'IswcSwimlaneDiagram');
 
-registerDiagramKind('swimlane', 'is-swimlane-diagram');
+registerDiagramKind('swimlane', 'iswc-swimlane-diagram');
 
-export { IsSwimlaneDiagram };
+export { IswcSwimlaneDiagram };

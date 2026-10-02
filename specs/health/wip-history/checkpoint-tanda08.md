@@ -49,7 +49,7 @@
 ## Decisiones técnicas no triviales
 
 - **`BarcodeDetector` y Web Speech API declaradas como interfaces locales** en barcode-scanner.ts y speech.ts (en lugar de `lib.dom.d.ts` para mantener limpieza).
-- **`IsVideoLike` / `IsCheckIconButton` declarados localmente** en video.ts y video-playlist.ts para no tocar `_shared/`.
+- **`IsVideoLike` / `IswcCheckIconButton` declarados localmente** en video.ts y video-playlist.ts para no tocar `_shared/`.
 - **Renombrado `{emit}` → `{emit: emitEvent}`** en `video-playlist.ts` `#applyActive` para evitar sombrear la función importada.
 - **`as string`** en qrcode.ts URL de dynamic import esm.sh (evita @ts-expect-error).
 

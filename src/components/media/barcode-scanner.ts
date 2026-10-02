@@ -4,11 +4,11 @@ import { adoptCss, defineElement, emit } from '../../core/element.js';
 import { setStringAttr } from '../_shared/reflect.js';
 
 /**
- * <is-barcode-scanner> — BarcodeDetector sobre cámara o <img>/canvas.
+ * <iswc-barcode-scanner> — BarcodeDetector sobre cámara o <img>/canvas.
  *
  * Atributos: formats (csv), disabled
  * Métodos: start(), stop(), detect(source)
- * Eventos: is-detect { rawValue, format, barcodes }, is-error
+ * Eventos: iswc-detect { rawValue, format, barcodes }, iswc-error
  *
  * Estados accesibles (F0.3 g12):
  *   role="region" aria-label aria-keyshortcuts
@@ -49,11 +49,11 @@ function getBarcodeDetector(): BarcodeDetectorCtor | undefined {
   const TEMPLATE = document.createElement('template');
   TEMPLATE.innerHTML = /* html */ `
     <video class="preview" part="preview" playsinline muted aria-hidden="true"></video>
-    <is-button class="go" variant="filled" color="brand" type="button" aria-label="Iniciar escaneo">Escanear</is-button>
+    <iswc-button class="go" variant="filled" color="brand" type="button" aria-label="Iniciar escaneo">Escanear</iswc-button>
     <p class="hint" part="hint" aria-live="polite"></p>
   `;
 
-  class IsBarcodeScanner extends HTMLElement {
+  class IswcBarcodeScanner extends HTMLElement {
     static get observedAttributes(): string[] { return ['formats', 'disabled']; }
 
     /**
@@ -143,12 +143,12 @@ function getBarcodeDetector(): BarcodeDetectorCtor | undefined {
     async detect(source: CanvasImageSource): Promise<DetectedBarcode[]> {
       const Ctor = getBarcodeDetector();
       if (!Ctor) {
-        emit(this, 'is-error', { message: 'BarcodeDetector no disponible' });
+        emit(this, 'iswc-error', { message: 'BarcodeDetector no disponible' });
         return [];
       }
       const det = new Ctor({ formats: this.formats });
       const barcodes = await det.detect(source);
-      if (barcodes.length) emit(this, 'is-detect', { barcodes, rawValue: barcodes[0].rawValue, format: barcodes[0].format });
+      if (barcodes.length) emit(this, 'iswc-detect', { barcodes, rawValue: barcodes[0].rawValue, format: barcodes[0].format });
       return barcodes;
     }
 
@@ -157,7 +157,7 @@ function getBarcodeDetector(): BarcodeDetectorCtor | undefined {
       const Ctor = getBarcodeDetector();
       if (!Ctor) {
         this.#hint.textContent = 'BarcodeDetector no está en este navegador';
-        emit(this, 'is-error', { message: 'BarcodeDetector no disponible' });
+        emit(this, 'iswc-error', { message: 'BarcodeDetector no disponible' });
         return;
       }
       // F0.3 g12 [media/loading]: aria-busy mientras se concede permiso y
@@ -169,7 +169,7 @@ function getBarcodeDetector(): BarcodeDetectorCtor | undefined {
       } catch (err) {
         this.removeAttribute('aria-busy');
         this.#hint.textContent = 'Permiso denegado o cámara no disponible';
-        emit(this, 'is-error', { message: (err as Error)?.message || 'cámara' });
+        emit(this, 'iswc-error', { message: (err as Error)?.message || 'cámara' });
         return;
       }
       this.#video.srcObject = this.#stream;
@@ -200,5 +200,5 @@ function getBarcodeDetector(): BarcodeDetectorCtor | undefined {
     }
   }
 
-  defineElement('is-barcode-scanner', IsBarcodeScanner, 'IsBarcodeScanner');
+  defineElement('iswc-barcode-scanner', IswcBarcodeScanner, 'IswcBarcodeScanner');
 })();

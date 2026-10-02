@@ -25,7 +25,7 @@ async function checkDeterministic(page) {
 
   // (1) + (2): estado inicial de cada picker
   const initial = await page.evaluate(() => {
-    const pickers = [...document.querySelectorAll('is-color-picker')];
+    const pickers = [...document.querySelectorAll('iswc-color-picker')];
     return pickers.map((p) => {
       const sr = p.shadowRoot;
       return {
@@ -49,12 +49,12 @@ async function checkDeterministic(page) {
 
   // (3)-(5): abrir el panel del primer picker y verificar layout
   await page.evaluate(() => {
-    document.querySelector('#sec-basico is-color-picker').show();
+    document.querySelector('#sec-basico iswc-color-picker').show();
   });
   await page.waitForTimeout(120);
 
   const open = await page.evaluate(() => {
-    const p = document.querySelector('#sec-basico is-color-picker');
+    const p = document.querySelector('#sec-basico iswc-color-picker');
     const sr = p.shadowRoot;
     const dialog = sr.querySelector('dialog.popup');
     const panel = sr.querySelector('.panel');
@@ -88,11 +88,11 @@ async function checkDeterministic(page) {
 
   // (6): hide() cierra el dialog
   await page.evaluate(() => {
-    document.querySelector('#sec-basico is-color-picker').hide();
+    document.querySelector('#sec-basico iswc-color-picker').hide();
   });
   await page.waitForTimeout(80);
   const closed = await page.evaluate(() => {
-    const p = document.querySelector('#sec-basico is-color-picker');
+    const p = document.querySelector('#sec-basico iswc-color-picker');
     const sr = p.shadowRoot;
     return {
       dialogOpen: sr.querySelector('dialog.popup').open,
@@ -151,7 +151,7 @@ async function runStagehandRubric() {
   try {
     await page.goto(DEMO.url, { waitUntil: 'domcontentloaded' });
     await waitReady(page, DEMO.readyAttr);
-    await page.evaluate(() => document.querySelector('#sec-basico is-color-picker').show());
+    await page.evaluate(() => document.querySelector('#sec-basico iswc-color-picker').show());
     await page.waitForTimeout(300);
     const shot = await screenshot(page, `stagehand-${DEMO.name}`);
     const result = await sh.act(VISUAL_RUBRIC, { image: shot });

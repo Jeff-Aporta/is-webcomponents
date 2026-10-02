@@ -9,22 +9,22 @@ const URL = `${BASE_URL}/demos/diagramas/use-case-diagram/use-case-diagram.html`
 const tests = [];
 
 tests.push({
-  name: 'smoke: <is-use-case-diagram> monta y renderiza actores y casos',
+  name: 'smoke: <iswc-use-case-diagram> monta y renderiza actores y casos',
   run: async (page) => {
     await page.goto(URL, { waitUntil: 'domcontentloaded' });
     await waitReady(page, 'data-uc-ready');
     const info = await page.evaluate(() => {
-      const el = document.querySelector('main is-use-case-diagram');
+      const el = document.querySelector('main iswc-use-case-diagram');
       const shadow = el?.shadowRoot;
       return {
-        defined: !!customElements.get('is-use-case-diagram'),
+        defined: !!customElements.get('iswc-use-case-diagram'),
         actors: shadow?.querySelectorAll('.uc-actor').length ?? 0,
         cases: shadow?.querySelectorAll('[data-node-id]').length ?? 0,
         links: shadow?.querySelectorAll('[data-link-id]').length ?? 0,
         hasSvg: !!shadow?.querySelector('svg.uc-svg'),
       };
     });
-    assert.equal(info.defined, true, 'is-use-case-diagram debe estar definido');
+    assert.equal(info.defined, true, 'iswc-use-case-diagram debe estar definido');
     assert.ok(info.actors >= 2, `esperaba >=2 actores, hay ${info.actors}`);
     assert.ok(info.cases >= 5, `esperaba >=5 nodos (2 actores + 3 casos), hay ${info.cases}`);
     assert.ok(info.links >= 5, `esperaba >=5 enlaces, hay ${info.links}`);
@@ -39,7 +39,7 @@ tests.push({
     await page.goto(URL, { waitUntil: 'domcontentloaded' });
     await waitReady(page, 'data-uc-ready');
     const ids = await page.evaluate(() => {
-      const el = document.querySelector('main is-use-case-diagram');
+      const el = document.querySelector('main iswc-use-case-diagram');
       return [...el.shadowRoot.querySelectorAll('.uc-actor')].map((g) => g.dataset.nodeId);
     });
     assert.ok(ids.includes('cli'), 'debe existir el actor "cli"');
@@ -53,7 +53,7 @@ tests.push({
     await page.goto(URL, { waitUntil: 'domcontentloaded' });
     await waitReady(page, 'data-uc-ready');
     const texts = await page.evaluate(() => {
-      const el = document.querySelector('main is-use-case-diagram');
+      const el = document.querySelector('main iswc-use-case-diagram');
       return [...el.shadowRoot.querySelectorAll('ellipse')].length;
     });
     assert.ok(texts >= 3, `esperaba >=3 óvalos (Comprar, Pagar, Gestionar catálogo), hay ${texts}`);
@@ -66,7 +66,7 @@ tests.push({
     await page.goto(URL, { waitUntil: 'domcontentloaded' });
     await waitReady(page, 'data-uc-ready');
     const edges = await page.evaluate(() => {
-      const el = document.querySelector('main is-use-case-diagram');
+      const el = document.querySelector('main iswc-use-case-diagram');
       return [...el.shadowRoot.querySelectorAll('[data-link-id] path')].map((p) => p.getAttribute('d'));
     });
     assert.ok(edges.length >= 5, `esperaba >=5 enlaces, hay ${edges.length}`);
@@ -82,7 +82,7 @@ tests.push({
     await page.goto(URL, { waitUntil: 'domcontentloaded' });
     await waitReady(page, 'data-uc-ready');
     const has = await page.evaluate(() => {
-      const el = document.querySelector('main is-use-case-diagram');
+      const el = document.querySelector('main iswc-use-case-diagram');
       const texts = [...el.shadowRoot.querySelectorAll('text')].map((t) => t.textContent.trim());
       return texts.some((t) => /TiendaOnline/.test(t));
     });
@@ -96,16 +96,16 @@ tests.push({
     await page.goto(URL, { waitUntil: 'domcontentloaded' });
     await waitReady(page, 'data-uc-ready');
     const before = await page.evaluate(() => {
-      const el = document.querySelector('main is-use-case-diagram');
+      const el = document.querySelector('main iswc-use-case-diagram');
       return el.shadowRoot.querySelector('svg.uc-svg').getAttribute('viewBox');
     });
     await page.evaluate(() => {
-      const el = document.querySelector('main is-use-case-diagram');
+      const el = document.querySelector('main iswc-use-case-diagram');
       el.payload = el.payload;
     });
     await page.waitForTimeout(150);
     const after = await page.evaluate(() => {
-      const el = document.querySelector('main is-use-case-diagram');
+      const el = document.querySelector('main iswc-use-case-diagram');
       return el.shadowRoot.querySelector('svg.uc-svg').getAttribute('viewBox');
     });
     assert.equal(before, after, 'viewBox idéntico tras re-asignar payload');
@@ -118,7 +118,7 @@ tests.push({
     await page.goto(URL, { waitUntil: 'domcontentloaded' });
     await waitReady(page, 'data-uc-ready');
     const meta = await page.evaluate(() => {
-      const el = document.querySelector('main is-use-case-diagram');
+      const el = document.querySelector('main iswc-use-case-diagram');
       const svg = el.shadowRoot.querySelector('svg.uc-svg');
       return { aria: svg.getAttribute('aria-label'), role: svg.getAttribute('role') };
     });

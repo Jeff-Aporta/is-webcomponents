@@ -35,17 +35,17 @@ function pagina(): Page {
 
 /** [tag, senal extra opcional { svg: true }] */
 const VISTAS: Array<[string, { svg: boolean } | null]> = [
-  ['is-button', null],
-  ['is-input', null],
-  ['is-icon', null],
-  ['is-progress-bar', null],
-  ['is-confirm-modal', null],
-  ['is-cdn-snippet', null],
-  ['is-component-diagram', { svg: true }],
-  ['is-flowchart', { svg: true }],
-  ['is-er-diagram', { svg: true }],
-  ['is-bar-chart', { svg: true }],
-  ['is-split-panel', null],
+  ['iswc-button', null],
+  ['iswc-input', null],
+  ['iswc-icon', null],
+  ['iswc-progress-bar', null],
+  ['iswc-confirm-modal', null],
+  ['iswc-cdn-snippet', null],
+  ['iswc-component-diagram', { svg: true }],
+  ['iswc-flowchart', { svg: true }],
+  ['iswc-er-diagram', { svg: true }],
+  ['iswc-bar-chart', { svg: true }],
+  ['iswc-split-panel', null],
 ];
 export type EstadoVista = { definido: boolean; instancias: number; texto: number; svg: number; canvas: number; demos: number; };
 testE2E('cada vista representativa monta contenido real con su componente definido', { timeout: 600000 }, async (t) => {
@@ -78,7 +78,7 @@ testE2E('cada vista representativa monta contenido real con su componente defini
         texto: (host?.textContent ?? '').trim().length,
         svg: host ? cuentaPercolando(host, 'svg') : 0,
         canvas: host ? cuentaPercolando(host, 'canvas') : 0,
-        demos: host?.querySelectorAll('is-demo').length ?? 0,
+        demos: host?.querySelectorAll('iswc-demo').length ?? 0,
       };
     }, tag)) as EstadoVista;
     if (!r.definido) fallos.push(`${tag}: el custom element no esta definido`);

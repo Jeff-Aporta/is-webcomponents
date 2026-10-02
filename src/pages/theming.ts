@@ -2,7 +2,7 @@
  * Behavior del taller de Personalización.
  *
  * Persistencia:
- *   - localStorage `is-wc-theming-seeds`: nombre + seeds de los inputs (F5 los
+ *   - localStorage `iswc-theming-seeds`: nombre + seeds de los inputs (F5 los
  *     conserva).
  *   - "Aplicar a toda la página" es SOLO de sesión: no se guarda; F5 limpia
  *     los --iswc-* inline del <html> y deja el switch en off.
@@ -38,7 +38,7 @@ interface BuildTokensResult {
   hsb: { h: number; s: string; b: string };
 }
 
-/** Editor de color (is-color-picker o <input type="color">). */
+/** Editor de color (iswc-color-picker o <input type="color">). */
 type ColorPicker = HTMLElement & { value: string };
 
 /** Editor de texto / nombre. */
@@ -52,7 +52,7 @@ export async function mount(ctx: PreviewMountContext, preview: ISComponentPrevie
   const signal = preview.signal;
   const opts = signal ? { signal } : undefined;
 
-  const LS_KEY = 'is-wc-theming-seeds';
+  const LS_KEY = 'iswc-theming-seeds';
 
   const clamp01 = (n: number): number => Math.min(1, Math.max(0, n));
 
@@ -324,7 +324,7 @@ ${block(`.theme-light[data-palette="${safe}"]`, t.light)}
   let lastCss = '';
   let lastJson = '';
 
-  // Catalogo para is-palette-selector y para la semilla CSS (h, s, b).
+  // Catalogo para iswc-palette-selector y para la semilla CSS (h, s, b).
   function paletteJson(name: string, hsb: { h: number; s: string; b: string }, accentHex: string): string {
     const parts = name.split('-').filter(Boolean);
     const cap = (s: string) => (s ? s.charAt(0).toUpperCase() + s.slice(1) : '');
@@ -350,13 +350,13 @@ ${block(`.theme-light[data-palette="${safe}"]`, t.light)}
 
   function buildTutoSelector(pretty: string): string {
     const compact = JSON.stringify(JSON.parse(pretty));
-    return `<is-palette-selector palettes='${compact}'></is-palette-selector>\n`;
+    return `<iswc-palette-selector palettes='${compact}'></iswc-palette-selector>\n`;
   }
 
   function writeOut(el: HTMLElement | null, text: string): void {
     if (!el) return;
-    // is-code guarda la fuente en value. textContent no repinta el editor.
-    if (el.localName === 'is-code') {
+    // iswc-code guarda la fuente en value. textContent no repinta el editor.
+    if (el.localName === 'iswc-code') {
       const ed = el as HTMLElement & { value: string };
       ed.dataset.cmSource = text;
       ed.value = text;
@@ -438,18 +438,18 @@ ${block(`.theme-light[data-palette="${safe}"]`, t.light)}
   applyPersistedToInputs(loadPersisted());
 
   for (const p of pickers) {
-    p.addEventListener('is-input', apply, opts);
-    p.addEventListener('is-change', apply, opts);
+    p.addEventListener('iswc-input', apply, opts);
+    p.addEventListener('iswc-change', apply, opts);
   }
-  nameInput?.addEventListener('is-input', apply, opts);
-  applyRoot?.addEventListener('is-change', () => {
+  nameInput?.addEventListener('iswc-input', apply, opts);
+  applyRoot?.addEventListener('iswc-change', () => {
     if (!applyRoot.checked) clearRootInline();
     apply();
   }, opts);
 
   // Si la página tiene la paleta aplicada y el usuario cambia claro/oscuro,
   // re-pintar los tokens correctos del tema activo.
-  document.addEventListener('is-theme-change', () => {
+  document.addEventListener('iswc-theme-change', () => {
     if (applyRoot?.checked) apply();
   }, opts);
 

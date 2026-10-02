@@ -4,7 +4,7 @@ import { attachFormInternals, setCustomState, setFormValue } from '../_shared/fo
 import { setOptionalAttr } from '../_shared/reflect.js';
 
 /**
- * <is-inline-edit> — "Inplace" / "Inline edit".
+ * <iswc-inline-edit> — "Inplace" / "Inline edit".
  *
  * Muestra `value` como texto plano; clic → input (o textarea) editable;
  * Enter guarda y sale; Esc cancela y revierte; blur guarda por defecto.
@@ -27,9 +27,9 @@ import { setOptionalAttr } from '../_shared/reflect.js';
  *
  * Custom states: idle, editing, saved, cancelled
  * Eventos:
- *   is-edit      al entrar al modo edición
- *   is-save      detalle: { value, previous }
- *   is-cancel    detalle: { value, previous }
+ *   iswc-edit      al entrar al modo edición
+ *   iswc-save      detalle: { value, previous }
+ *   iswc-cancel    detalle: { value, previous }
  *
  * Tokens CSS:
  *   --iswc-inline-edit-min-h   altura mínima del textarea (modo textarea)
@@ -46,7 +46,7 @@ import { setOptionalAttr } from '../_shared/reflect.js';
 
   type InlineState = 'idle' | 'editing' | 'saved' | 'cancelled';
 
-  class IsInlineEdit extends HTMLElement {
+  class IswcInlineEdit extends HTMLElement {
     static get observedAttributes(): string[] { return OBSERVED; }
 
     #internals: ElementInternals | null;
@@ -94,7 +94,7 @@ import { setOptionalAttr } from '../_shared/reflect.js';
     cancel(): void {
       if (this.#state !== 'editing') return;
       if (this.#snapshot !== null) this.value = this.#snapshot;
-      this.#dispatch('is-cancel', { value: this.value, previous: this.#snapshot });
+      this.#dispatch('iswc-cancel', { value: this.value, previous: this.#snapshot });
       this.#setState('cancelled', 280);
       this.#render();
     }
@@ -104,7 +104,7 @@ import { setOptionalAttr } from '../_shared/reflect.js';
       if (this.#state !== 'editing') return;
       const input = this.shadowRoot!.querySelector<HTMLInputElement | HTMLTextAreaElement>('input,textarea');
       if (!input) return;
-      this.#dispatch('is-save', { value: input.value, previous: this.#snapshot });
+      this.#dispatch('iswc-save', { value: input.value, previous: this.#snapshot });
       this.value = input.value;
       this.#setState('saved', 280);
       this.#render();
@@ -123,7 +123,7 @@ import { setOptionalAttr } from '../_shared/reflect.js';
         const len = input.value.length;
         try { input.setSelectionRange(len, len); } catch { /* noop */ }
       }
-      this.#dispatch('is-edit', {});
+      this.#dispatch('iswc-edit', {});
     }
 
     #onClick(_e: MouseEvent): void {
@@ -189,7 +189,7 @@ import { setOptionalAttr } from '../_shared/reflect.js';
         : `<input ${editorAttrs} type="text" value="${escapeHtml(value)}" />`;
 
       this.shadowRoot!.innerHTML = /* html */ `
-        <div part="root" class="root ${editing ? 'is-editing' : 'is-idle'}">
+        <div part="root" class="root ${editing ? 'iswc-editing' : 'iswc-idle'}">
           <div part="display" class="display">
             <slot name="display"></slot>
             <span class="text"></span>
@@ -234,7 +234,7 @@ import { setOptionalAttr } from '../_shared/reflect.js';
 
     #syncStateClass(): void {
       const root = this.shadowRoot!.querySelector<HTMLElement>('.root');
-      if (root) root.className = `root is-${this.#state}`;
+      if (root) root.className = `root iswc-${this.#state}`;
     }
 
     #dispatch(name: string, detail: unknown): void {
@@ -243,5 +243,5 @@ import { setOptionalAttr } from '../_shared/reflect.js';
 
   }
 
-  defineElement('is-inline-edit', IsInlineEdit);
+  defineElement('iswc-inline-edit', IswcInlineEdit);
 })();

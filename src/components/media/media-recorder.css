@@ -1,12 +1,14 @@
+/* <iswc-media-recorder> — preview + fila de acciones. */
+
 :host {
   display: grid;
   gap: 0.5em;
   font: inherit;
-  max-width: 28rem;
+  max-inline-size: 28rem;
 }
 
 .preview {
-  width: 100%;
+  inline-size: 100%;
   aspect-ratio: 16 / 9;
   background: var(--iswc-bg-elev, #111);
   border-radius: var(--iswc-radius, 0.5em);
@@ -24,7 +26,14 @@
    Sin redibujar el botón, basta con atenuarlo para que el lector lo
    perciba como "ocupado". */
 :host([aria-busy="true"]) .go { opacity: 0.7; pointer-events: none; }
+
 :host([disabled]) .go { opacity: 0.5; cursor: not-allowed; }
 
-.status { margin: 0; font-size: 0.78em; color: var(--iswc-text-soft, inherit); min-height: 1em; }
-.status:empty { display: none; }
+.status {
+  margin: 0;
+  font-size: 0.78em;
+  color: var(--iswc-text-soft, inherit);
+  min-block-size: 1em;
+
+  &:empty { display: none; }
+}

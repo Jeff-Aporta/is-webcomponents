@@ -3,11 +3,11 @@ import '../actions/button.js';
 import '../media/icon.js';
 
 /**
- * <is-mega-menu> — Mega-menú para e-commerce/portal masivo. Abre un panel
+ * <iswc-mega-menu> — Mega-menú para e-commerce/portal masivo. Abre un panel
  * ancho con varias columnas, cada una con un encabezado, links y,
  * opcionalmente, un bloque destacado.
  *
- *   <is-mega-menu label="Catálogo" placement="bottom-start">
+ *   <iswc-mega-menu label="Catálogo" placement="bottom-start">
  *     <div slot="column" title="Muebles" icon="mdi:sofa">
  *       <a href="/sillas">Sillas</a>
  *       <a href="/mesas">Mesas</a>
@@ -16,7 +16,7 @@ import '../media/icon.js';
  *     <div slot="feature">
  *       Imagen + título de producto destacado.
  *     </div>
- *   </is-mega-menu>
+ *   </iswc-mega-menu>
  *
  * Accesibilidad (g13 proposals 1–25):
  *   - Trigger: aria-haspopup="menu", aria-expanded sincronizado, aria-controls.
@@ -43,19 +43,19 @@ import '../media/icon.js';
  *   feature   bloque destacado (imagen, CTA, lo que sea)
  *
  * Eventos
- *   is-show / is-after-show   al abrir el panel
- *   is-hide / is-after-hide   al cerrarlo
- *   is-select                 detail: { href, text }
+ *   iswc-show / iswc-after-show   al abrir el panel
+ *   iswc-hide / iswc-after-hide   al cerrarlo
+ *   iswc-select                 detail: { href, text }
  *
  * El panel sigue siendo un <dialog> nativo en modo `show()` (no modal):
- * es un popover anclado al trigger, no un diálogo. Migrarlo a <is-dialog>
+ * es un popover anclado al trigger, no un diálogo. Migrarlo a <iswc-dialog>
  * (ModalBase: focus-trap, backdrop, centrado) cambiaría la semántica y el
  * posicionamiento fijo que calcula #positionPanel, así que se deja como está.
  */
 (() => {
   const OBSERVED = ['label', 'icon', 'placement', 'width', 'hover', 'disabled'];
 
-  class IsMegaMenu extends HTMLElement {
+  class IswcMegaMenu extends HTMLElement {
     static get observedAttributes(): string[] { return OBSERVED; }
     #openTimer: ReturnType<typeof setTimeout> | null = null;
     #closeTimer: ReturnType<typeof setTimeout> | null = null;
@@ -72,11 +72,11 @@ import '../media/icon.js';
       this.attachShadow({ mode: 'open' });
       this.shadowRoot!.innerHTML = /* html */ `
         <div part="root" class="root">
-          <is-button part="trigger" class="trigger" variant="text" color="neutral" with-caret
+          <iswc-button part="trigger" class="trigger" variant="text" color="neutral" with-caret
                      aria-haspopup="menu" aria-expanded="false">
-            <is-icon slot="start" class="trigger-icon" hidden aria-hidden="true"></is-icon>
+            <iswc-icon slot="start" class="trigger-icon" hidden aria-hidden="true"></iswc-icon>
             <span class="trigger-label"></span>
-          </is-button>
+          </iswc-button>
           <dialog part="panel" class="panel" aria-label="Mega menú">
             <slot name="column"></slot>
             <slot name="feature"></slot>
@@ -99,7 +99,7 @@ import '../media/icon.js';
       this.#panel.addEventListener('mouseenter', () => this.#scheduleOpen());
       this.#panel.addEventListener('mouseleave', () => this.hasAttribute('hover') && this.#scheduleClose());
       this.#panel.addEventListener('keydown', (e) => this.#onPanelKeyDown(e));
-      // Capturamos 'click' en capturing para emitir is-select una sola vez.
+      // Capturamos 'click' en capturing para emitir iswc-select una sola vez.
       this.#panel.addEventListener('click', (e: Event) => this.#onPanelClick(e));
     }
 
@@ -144,7 +144,7 @@ import '../media/icon.js';
     open() {
       if (this.hasAttribute('disabled')) return;
       if (this.isOpen()) return;
-      emit(this, 'is-show');
+      emit(this, 'iswc-show');
       this.#clearTimers();
       this.#trigger.setAttribute('aria-expanded', 'true');
       this.#positionPanel();
@@ -164,7 +164,7 @@ import '../media/icon.js';
         requestAnimationFrame(() => first.focus({ preventScroll: false }));
       }
       this.#installOutsideHandler();
-      emit(this, 'is-after-show');
+      emit(this, 'iswc-after-show');
     }
 
     close(returnFocus = true) {
@@ -180,7 +180,7 @@ import '../media/icon.js';
         try { this.#trigger.focus(); } catch { /* */ }
       }
       this.#removeOutsideHandler();
-      emit(this, 'is-after-hide');
+      emit(this, 'iswc-after-hide');
     }
 
     toggle() {
@@ -381,7 +381,7 @@ import '../media/icon.js';
         case ' ': {
           if (active && items.includes(active)) {
             e.preventDefault();
-            // El click ya emite is-select; simularlo.
+            // El click ya emite iswc-select; simularlo.
             active.click();
           }
           break;
@@ -394,12 +394,12 @@ import '../media/icon.js';
       if (!(e.target instanceof Element)) return;
       const a = e.target.closest('a[href], button, [role="menuitem"]');
       if (!a) return;
-      // Es un item interactivo: emitir is-select con su detalle si lo tiene.
+      // Es un item interactivo: emitir iswc-select con su detalle si lo tiene.
       const href = a.getAttribute('href') || null;
       const text = (a.textContent || '').trim();
       if (href) {
         this.#selecting = true;
-        emit(this, 'is-select', { href, text });
+        emit(this, 'iswc-select', { href, text });
         // Cerrar de forma asíncrona para que el consumidor reciba el evento
         // antes del cierre (algunos handlers necesitan leer isOpen).
         queueMicrotask(() => {
@@ -408,7 +408,7 @@ import '../media/icon.js';
         });
       } else if (a.tagName === 'BUTTON') {
         // Botón sin href: emitir evento genérico y dejar al consumidor decidir.
-        emit(this, 'is-select', { href: null, text });
+        emit(this, 'iswc-select', { href: null, text });
         this.close(false);
       }
     }
@@ -482,5 +482,5 @@ import '../media/icon.js';
     #iconEl!: HTMLElement;
   }
 
-  defineElement('is-mega-menu', IsMegaMenu);
+  defineElement('iswc-mega-menu', IswcMegaMenu);
 })();

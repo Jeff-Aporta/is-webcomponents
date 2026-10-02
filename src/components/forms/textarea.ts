@@ -6,7 +6,7 @@ import { ElementBase } from '../../core/element-base.js';
 import { setStringAttr, setOptionalAttr } from '../_shared/reflect.js';
 import { hasSlotted } from '../_shared/dom-utils.js';
 /**
- * <is-textarea> — Área de texto form-associated (vanilla + Shadow DOM).
+ * <iswc-textarea> — Área de texto form-associated (vanilla + Shadow DOM).
  *
  * Atributos
  *   name, value, placeholder, label, hint, maxlength
@@ -22,7 +22,7 @@ import { hasSlotted } from '../_shared/dom-utils.js';
  * Slots: label, hint
  * Parts: form-control, label, base, textarea, support, hint, error-text, count
  * Custom states: blank, disabled, readonly, focused, invalid
- * Eventos: is-input, is-change (bubbles + composed) y los nativos input/change
+ * Eventos: iswc-input, iswc-change (bubbles + composed) y los nativos input/change
  * Tokens: --iswc-field-width, --iswc-field-label-width, --iswc-textarea-*
  */
 
@@ -54,7 +54,7 @@ import { hasSlotted } from '../_shared/dom-utils.js';
 
   const EXTRA_UPGRADE_ATTRS = ['variant', 'label-placement', 'full-width'];
 
-  class IsTextarea extends ElementBase {
+  class IswcTextarea extends ElementBase {
     /** Personalización por atributo (ver `core/attrs.ts`). */
     static styleAttrs = {
     radius: '--iswc-textarea-border-radius',
@@ -391,7 +391,7 @@ import { hasSlotted } from '../_shared/dom-utils.js';
       this.#value = this.#textarea.value;
       this.#update();
       this.dispatchEvent(new Event('input', { bubbles: true, composed: true }));
-      emit(this, 'is-input', { value: this.#value });
+      emit(this, 'iswc-input', { value: this.#value });
     };
 
     #onChange = (): void => {
@@ -399,7 +399,7 @@ import { hasSlotted } from '../_shared/dom-utils.js';
       this.#touched = true;
       this.#update();
       this.dispatchEvent(new Event('change', { bubbles: true, composed: true }));
-      emit(this, 'is-change', { value: this.#value });
+      emit(this, 'iswc-change', { value: this.#value });
     };
 
     #onFocus = (): void => { setCustomState(this.#internals, 'focused', true); };
@@ -411,5 +411,5 @@ import { hasSlotted } from '../_shared/dom-utils.js';
     };
   }
 
-  defineElement('is-textarea', IsTextarea, 'IsTextarea');
+  defineElement('iswc-textarea', IswcTextarea, 'IswcTextarea');
 })();

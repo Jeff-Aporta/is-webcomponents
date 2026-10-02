@@ -66,7 +66,7 @@ export function renderBlock(block: PreviewBlock): HTMLElement {
     case 'demo': {
       const wrap = document.createElement('div');
       wrap.className = 'demo-block';
-      const demo = document.createElement('is-demo');
+      const demo = document.createElement('iswc-demo');
       demo.className = 'demo';
       if (block.heading) demo.setAttribute('heading', block.heading);
       if (block.contain) demo.setAttribute('contain', '');
@@ -79,9 +79,9 @@ export function renderBlock(block: PreviewBlock): HTMLElement {
       // pueda abrir el demo en su propia pestana desde la galeria/home.
       // Esto usa `window.open` con `noopener` para abrir el shell del demo
       // (mismo demo, contexto limpio, sin chrome de galeria).
-      const m = /<is-([a-z0-9-]+)-(diagram|chart)|<is-(flowchart|gantt|mindmap|venn-diagram|sankey-diagram|state-diagram|sequence-diagram|swimlane-diagram|use-case-diagram|class-diagram|er-diagram|block-diagram|component-diagram|org-chart|radar-chart|scatter-chart|sparkline|treemap|waterfall-chart|polar-area-chart|funnel-chart|pie-chart|doughnut-chart|line-chart|bar-chart|quadrant-chart|journey-map|timeline)\b/.exec(block.html);
+      const m = /<iswc-([a-z0-9-]+)-(diagram|chart)|<iswc-(flowchart|gantt|mindmap|venn-diagram|sankey-diagram|state-diagram|sequence-diagram|swimlane-diagram|use-case-diagram|class-diagram|er-diagram|block-diagram|component-diagram|org-chart|radar-chart|scatter-chart|sparkline|treemap|waterfall-chart|polar-area-chart|funnel-chart|pie-chart|doughnut-chart|line-chart|bar-chart|quadrant-chart|journey-map|timeline)\b/.exec(block.html);
       if (m) {
-        const tag = `is-${m[1] ? `${m[1]}-${m[2]}` : m[3]}`;
+        const tag = `iswc-${m[1] ? `${m[1]}-${m[2]}` : m[3]}`;
         const editorLink = document.createElement('a');
         editorLink.className = 'demo-block__editor-link';
         editorLink.href = `?s=${b64urlEncode(JSON.stringify({ component: tag }))}`;
@@ -100,15 +100,15 @@ export function renderBlock(block: PreviewBlock): HTMLElement {
       return el;
     }
     case 'code': {
-      const ed = document.createElement('is-code');
-      ed.className = 'code is-code-view';
+      const ed = document.createElement('iswc-code');
+      ed.className = 'code iswc-code-view';
       ed.setAttribute('readonly', '');
       ed.setAttribute('compact', '');
       ed.setAttribute('wrap', '');
       ed.setAttribute('line-numbers', 'false');
       const raw = block.code ?? '';
       // Sin data-cm: highlight-code.paint infiere lang + softFormat.
-      // Si el JSON trae lang, lo fijamos; si no, is-code infiere al montar.
+      // Si el JSON trae lang, lo fijamos; si no, iswc-code infiere al montar.
       if (block.lang) {
         ed.setAttribute('lang', block.lang);
         ed.dataset.lang = block.lang;
@@ -223,7 +223,7 @@ export function renderDefinition(def: PreviewDefinition, targets: { main: HTMLEl
   aside.replaceChildren();
 
   // Las clases del preview anterior se retiran antes de poner las nuevas: el
-  // `is-main` lo reusa el chrome entre previews, así que una clase de página
+  // `iswc-main` lo reusa el chrome entre previews, así que una clase de página
   // completa se quedaría pegada al siguiente componente.
   const previas = main.dataset.previewMainClass;
   if (previas) main.classList.remove(...previas.split(' '));
@@ -242,7 +242,17 @@ export function renderDefinition(def: PreviewDefinition, targets: { main: HTMLEl
   if (def.prelude) destino.append(fragmentFromHtml(def.prelude));
 
   for (const section of def.sections) {
-    destino.append(renderSection(section));
+    // def.title es el H2 visible del intro (tag del componente). El JSON
+    // suele dejar section.title="Uso" solo para el TOC.
+    const sec =
+      section.id === 'intro' && def.title
+        ? {
+            ...section,
+            title: def.title,
+            titleHtml: def.titleHtml ?? /<[^>]+>/.test(def.title),
+          }
+        : section;
+    destino.append(renderSection(sec));
   }
   if (destino !== main) main.append(destino);
 
@@ -253,12 +263,15 @@ export function renderDefinition(def: PreviewDefinition, targets: { main: HTMLEl
   h1.textContent = def.tag;
   aside.append(h1);
 
-  const spy = document.createElement('is-scrollspy');
-  spy.setAttribute('target', 'is-main');
+  const spy = document.createElement('iswc-scrollspy');
+  spy.setAttribute('target', 'iswc-main');
   for (const section of def.sections) {
     const a = document.createElement('a');
     a.href = `#${section.id}`;
-    a.textContent = etiquetaIndice(section.title, section.id);
+    // TOC: intro con tag HTML → etiqueta "Uso"; resto usa section.title.
+    const tocTitle =
+      section.id === 'intro' && def.title ? def.title : section.title;
+    a.textContent = etiquetaIndice(tocTitle, section.id);
     spy.append(a);
   }
   aside.append(spy);

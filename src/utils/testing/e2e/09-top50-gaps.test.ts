@@ -5,14 +5,14 @@
 // Si falla → bug real del componente (el captain decide si fixear o documentar).
 //
 // Gaps cubiertos:
-//   - is-modal-verificacion (ISP): focus-trap, role=dialog, aria-modal
-//   - is-window: aria-modal, focus-trap, focus restoration
-//   - is-confirm-modal: focus inicial en Cancelar (alertdialog APG)
-//   - is-confirm-delete: focus-trap + foco en Cancelar
-//   - is-dropdown: aria-haspopup, aria-expanded, aria-activedescendant
-//   - is-select: aria-activedescendant cuando navega por teclado
-//   - is-radio-group: role=radiogroup, aria-checked en indicador
-//   - is-tooltip: aria-describedby desde trigger → tooltip
+//   - iswc-modal-verificacion (ISP): focus-trap, role=dialog, aria-modal
+//   - iswc-window: aria-modal, focus-trap, focus restoration
+//   - iswc-confirm-modal: focus inicial en Cancelar (alertdialog APG)
+//   - iswc-confirm-delete: focus-trap + foco en Cancelar
+//   - iswc-dropdown: aria-haspopup, aria-expanded, aria-activedescendant
+//   - iswc-select: aria-activedescendant cuando navega por teclado
+//   - iswc-radio-group: role=radiogroup, aria-checked en indicador
+//   - iswc-tooltip: aria-describedby desde trigger → tooltip
 import { before, after } from 'node:test';
 import assert from 'node:assert/strict';
 import type { Page } from '@browserbasehq/stagehand';
@@ -45,7 +45,7 @@ function pagina(): Page {
 }
 
 // ──────────────────────────────────────────────────────────────────
-// is-modal-verificacion (ISP): role=dialog + aria-modal + focus-trap
+// iswc-modal-verificacion (ISP): role=dialog + aria-modal + focus-trap
 // ──────────────────────────────────────────────────────────────────
 testE2E(
   'modal-verificacion: role="dialog" + aria-modal="true" + focus-trap',
@@ -53,12 +53,12 @@ testE2E(
   async (t) => {
     if (!DISPONIBLE) return t.skip('faltan variables E2E');
     const page = pagina();
-    await abrirGaleria(page, 'is-modal-verificacion', { ms: 4000 });
+    await abrirGaleria(page, 'iswc-modal-verificacion', { ms: 4000 });
     // Abrir el modal.
     const opened = await page.evaluate(() => {
-      const m = document.querySelector<HTMLElement>('#previewHost is-modal-verificacion');
+      const m = document.querySelector<HTMLElement>('#previewHost iswc-modal-verificacion');
       if (!m) return false;
-      const trigger = m.querySelector<HTMLElement>('button[slot="trigger"], is-button');
+      const trigger = m.querySelector<HTMLElement>('button[slot="trigger"], iswc-button');
       (trigger as HTMLElement)?.click?.();
       return true;
     });
@@ -68,7 +68,7 @@ testE2E(
     }
     await esperarMs(400);
     const r = await page.evaluate(() => {
-      const m = document.querySelector<HTMLElement>('#previewHost is-modal-verificacion');
+      const m = document.querySelector<HTMLElement>('#previewHost iswc-modal-verificacion');
       const inner = m?.shadowRoot?.querySelector<HTMLElement>('[role="dialog"], .dialogo');
       return {
         role: inner?.getAttribute('role'),
@@ -83,7 +83,7 @@ testE2E(
 );
 
 // ──────────────────────────────────────────────────────────────────
-// is-window: aria-modal + focus restoration
+// iswc-window: aria-modal + focus restoration
 // ──────────────────────────────────────────────────────────────────
 testE2E(
   'window: foco se restaura al trigger al cerrar con Escape',
@@ -91,9 +91,9 @@ testE2E(
   async (t) => {
     if (!DISPONIBLE) return t.skip('faltan variables E2E');
     const page = pagina();
-    await abrirGaleria(page, 'is-window', { ms: 4000 });
+    await abrirGaleria(page, 'iswc-window', { ms: 4000 });
     const trigger = await page.evaluate(() => {
-      const w = document.querySelector<HTMLElement>('#previewHost is-window');
+      const w = document.querySelector<HTMLElement>('#previewHost iswc-window');
       const t = w?.shadowRoot?.querySelector<HTMLElement>('button, [role="button"]');
       if (!t) return null;
       t.setAttribute('data-test-window-trigger', '1');
@@ -107,7 +107,7 @@ testE2E(
     await esperarMs(100);
     // Abrir con click.
     await page.evaluate(() => {
-      const w = document.querySelector<HTMLElement>('#previewHost is-window');
+      const w = document.querySelector<HTMLElement>('#previewHost iswc-window');
       const trigger = w?.shadowRoot?.querySelector<HTMLElement>('button');
       (trigger as HTMLElement)?.click();
     });
@@ -124,7 +124,7 @@ testE2E(
 );
 
 // ──────────────────────────────────────────────────────────────────
-// is-confirm-modal: foco inicial en Cancelar (WAI-APG alertdialog)
+// iswc-confirm-modal: foco inicial en Cancelar (WAI-APG alertdialog)
 // ──────────────────────────────────────────────────────────────────
 testE2E(
   'confirm-modal: foco inicial va al botón Cancelar (no destructivo)',
@@ -132,15 +132,15 @@ testE2E(
   async (t) => {
     if (!DISPONIBLE) return t.skip('faltan variables E2E');
     const page = pagina();
-    await abrirGaleria(page, 'is-confirm-modal', { ms: 4000 });
+    await abrirGaleria(page, 'iswc-confirm-modal', { ms: 4000 });
     await page.evaluate(() => {
-      const c = document.querySelector<HTMLElement>('#previewHost is-confirm-modal');
-      const trigger = c?.shadowRoot?.querySelector<HTMLElement>('button, is-button[slot="trigger"]');
+      const c = document.querySelector<HTMLElement>('#previewHost iswc-confirm-modal');
+      const trigger = c?.shadowRoot?.querySelector<HTMLElement>('button, iswc-button[slot="trigger"]');
       (trigger as HTMLElement)?.click?.();
     });
     await esperarMs(400);
     const r = await page.evaluate(() => {
-      const c = document.querySelector<HTMLElement>('#previewHost is-confirm-modal');
+      const c = document.querySelector<HTMLElement>('#previewHost iswc-confirm-modal');
       const dialog = c?.shadowRoot?.querySelector<HTMLElement>('[role="alertdialog"], [role="dialog"]');
       const focused = document.activeElement as HTMLElement | null;
       const focusedText = focused?.textContent?.trim().toLowerCase() ?? '';
@@ -156,7 +156,7 @@ testE2E(
 );
 
 // ──────────────────────────────────────────────────────────────────
-// is-dropdown: aria-haspopup + aria-expanded
+// iswc-dropdown: aria-haspopup + aria-expanded
 // ──────────────────────────────────────────────────────────────────
 testE2E(
   'dropdown: trigger expone aria-haspopup="menu" + aria-expanded dinámico',
@@ -164,10 +164,10 @@ testE2E(
   async (t) => {
     if (!DISPONIBLE) return t.skip('faltan variables E2E');
     const page = pagina();
-    await abrirGaleria(page, 'is-dropdown', { ms: 4000 });
+    await abrirGaleria(page, 'iswc-dropdown', { ms: 4000 });
     const before = await page.evaluate(() => {
-      const d = document.querySelector<HTMLElement>('#previewHost is-dropdown');
-      const trigger = d?.shadowRoot?.querySelector<HTMLElement>('[aria-haspopup], button[aria-expanded], is-button[slot="trigger"]');
+      const d = document.querySelector<HTMLElement>('#previewHost iswc-dropdown');
+      const trigger = d?.shadowRoot?.querySelector<HTMLElement>('[aria-haspopup], button[aria-expanded], iswc-button[slot="trigger"]');
       return {
         hasPopup: trigger?.getAttribute('aria-haspopup'),
         expanded: trigger?.getAttribute('aria-expanded'),
@@ -183,13 +183,13 @@ testE2E(
     );
     // Abrir dropdown.
     await page.evaluate(() => {
-      const d = document.querySelector<HTMLElement>('#previewHost is-dropdown');
-      const trigger = d?.shadowRoot?.querySelector<HTMLElement>('button[aria-haspopup], is-button');
+      const d = document.querySelector<HTMLElement>('#previewHost iswc-dropdown');
+      const trigger = d?.shadowRoot?.querySelector<HTMLElement>('button[aria-haspopup], iswc-button');
       (trigger as HTMLElement)?.click();
     });
     await esperarMs(300);
     const after = await page.evaluate(() => {
-      const d = document.querySelector<HTMLElement>('#previewHost is-dropdown');
+      const d = document.querySelector<HTMLElement>('#previewHost iswc-dropdown');
       const trigger = d?.shadowRoot?.querySelector<HTMLElement>('[aria-haspopup], [aria-expanded]');
       return trigger?.getAttribute('aria-expanded');
     });
@@ -199,7 +199,7 @@ testE2E(
 );
 
 // ──────────────────────────────────────────────────────────────────
-// is-radio-group: role=radiogroup + aria-checked
+// iswc-radio-group: role=radiogroup + aria-checked
 // ──────────────────────────────────────────────────────────────────
 testE2E(
   'radio-group: contenedor role="radiogroup" + indicador activo aria-checked="true"',
@@ -207,16 +207,16 @@ testE2E(
   async (t) => {
     if (!DISPONIBLE) return t.skip('faltan variables E2E');
     const page = pagina();
-    await abrirGaleria(page, 'is-radio-group', { ms: 4000 });
+    await abrirGaleria(page, 'iswc-radio-group', { ms: 4000 });
     const r = await page.evaluate(() => {
-      const groups = [...document.querySelectorAll<HTMLElement>('#previewHost is-radio-group')];
+      const groups = [...document.querySelectorAll<HTMLElement>('#previewHost iswc-radio-group')];
       const issues: string[] = [];
       for (const g of groups) {
         const role = g.getAttribute('role');
         if (role !== 'radiogroup') {
           issues.push(`${g.id || 'no-id'}: role=${role}, esperaba "radiogroup"`);
         }
-        const items = [...g.querySelectorAll<HTMLElement>('[role="radio"], is-radio-item')];
+        const items = [...g.querySelectorAll<HTMLElement>('[role="radio"], iswc-radio-item')];
         const checked = items.filter((it) => it.getAttribute('aria-checked') === 'true');
         if (checked.length > 1) {
           issues.push(`${g.id || 'no-id'}: ${checked.length} radios marcados (debe ser 0 o 1)`);
@@ -229,7 +229,7 @@ testE2E(
 );
 
 // ──────────────────────────────────────────────────────────────────
-// is-tooltip: aria-describedby desde trigger → tooltip
+// iswc-tooltip: aria-describedby desde trigger → tooltip
 // ──────────────────────────────────────────────────────────────────
 testE2E(
   'tooltip: trigger expone aria-describedby apuntando al tooltip (cuando se muestra)',
@@ -237,10 +237,10 @@ testE2E(
   async (t) => {
     if (!DISPONIBLE) return t.skip('faltan variables E2E');
     const page = pagina();
-    await abrirGaleria(page, 'is-tooltip', { ms: 4000 });
+    await abrirGaleria(page, 'iswc-tooltip', { ms: 4000 });
     // Buscar tooltip ya visible (el demo suele tenerlos en hover/focus).
     const r = await page.evaluate(() => {
-      const tooltips = [...document.querySelectorAll<HTMLElement>('#previewHost is-tooltip')];
+      const tooltips = [...document.querySelectorAll<HTMLElement>('#previewHost iswc-tooltip')];
       for (const tt of tooltips) {
         const inner = tt.shadowRoot?.querySelector<HTMLElement>('[role="tooltip"], .tooltip');
         if (!inner) continue;

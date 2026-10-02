@@ -3,7 +3,7 @@
 <head>
 <meta charset="utf-8" />
 <meta name="viewport" content="width=device-width, initial-scale=1" />
-<title>Slider &lt;is-slider&gt; · is-webcomponents</title>
+<title>Slider &lt;iswc-slider&gt; · is-webcomponents</title>
 <meta name="description" content="Range slider form-associated con marks, single/range, orientación horizontal/vertical, navegación por teclado." />
 <style>
   html, body { margin: 0; padding: 0; min-height: 100%; background: #0c1118; color: #e2e8f0; font-family: ui-sans-serif, system-ui, sans-serif; }
@@ -14,17 +14,17 @@
   section { background: #131a24; border: 1px solid rgba(255,255,255,0.08); border-radius: 10px; padding: 16px; display: grid; gap: 10px; }
   section h2 { font-size: 13px; margin: 0; font-weight: 600; color: #cbd5e1; }
   section .desc { font-size: 12px; color: #94a3b8; margin: 0; }
-  is-slider { width: 100%; }
+  iswc-slider { width: 100%; }
   code { background: rgba(255,255,255,0.06); padding: 1px 5px; border-radius: 3px; font: 12px ui-monospace, Menlo, Consolas, monospace; }
   /* Anti-FOUC */
-  is-slider:not(:defined) { visibility: hidden; }
+  iswc-slider:not(:defined) { visibility: hidden; }
 </style>
 <script type="module">
-  await import('../../../dist/cdn/forms/slider.min.js?h=w4owko');
-  await customElements.whenDefined('is-slider');
+  await import('../../../dist/cdn/forms/slider.min.js?h=f3r1cg');
+  await customElements.whenDefined('iswc-slider');
 
   // (1) Básico single-value con label de temperatura
-  const volumen = document.createElement('is-slider');
+  const volumen = document.createElement('iswc-slider');
   volumen.setAttribute('label', 'Volumen');
   volumen.setAttribute('name', 'volume');
   volumen.setAttribute('min', '0');
@@ -37,7 +37,7 @@
   document.querySelector('#sec-basico').appendChild(volumen);
 
   // (2) Rango con dos thumbs
-  const precio = document.createElement('is-slider');
+  const precio = document.createElement('iswc-slider');
   precio.setAttribute('label', 'Rango de precio');
   precio.setAttribute('name', 'price');
   precio.setAttribute('range', '');
@@ -51,7 +51,7 @@
   document.querySelector('#sec-rango').appendChild(precio);
 
   // (3) Con marks personalizados
-  const calidad = document.createElement('is-slider');
+  const calidad = document.createElement('iswc-slider');
   calidad.setAttribute('label', 'Calidad');
   calidad.setAttribute('name', 'quality');
   calidad.setAttribute('min', '0');
@@ -64,7 +64,7 @@
   document.querySelector('#sec-marks').appendChild(calidad);
 
   // (4) Requerido
-  const requerido = document.createElement('is-slider');
+  const requerido = document.createElement('iswc-slider');
   requerido.setAttribute('label', 'Aceptación *');
   requerido.setAttribute('name', 'acceptance');
   requerido.setAttribute('min', '0');
@@ -76,7 +76,7 @@
   document.querySelector('#sec-required').appendChild(requerido);
 
   // (5) Deshabilitado
-  const bloqueado = document.createElement('is-slider');
+  const bloqueado = document.createElement('iswc-slider');
   bloqueado.setAttribute('label', 'Bloqueado');
   bloqueado.setAttribute('value', '60');
   bloqueado.setAttribute('disabled', '');
@@ -90,7 +90,7 @@
 <body>
 <main>
   <header>
-    <h1>&lt;is-slider&gt; · Range slider form-associated</h1>
+    <h1>&lt;iswc-slider&gt; · Range slider form-associated</h1>
     <p>Single/range · marks · <code>ArrowLeft/Right</code>, <code>Home/End</code>, <code>PageUp/Down</code>.</p>
   </header>
 

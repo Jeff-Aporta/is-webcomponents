@@ -3,8 +3,8 @@
 <head>
 <meta charset="utf-8" />
 <meta name="viewport" content="width=device-width, initial-scale=1" />
-<title><is-format-bytes> · is-webcomponents</title>
-<meta name="description" content="Demo del helper <is-format-bytes>: formatea tamaños de archivo legibles (B/KB/MB/GB) con Intl.NumberFormat unit." />
+<title><iswc-format-bytes> · is-webcomponents</title>
+<meta name="description" content="Demo del helper <iswc-format-bytes>: formatea tamaños de archivo legibles (B/KB/MB/GB) con Intl.NumberFormat unit." />
 <style>
   html, body { margin: 0; padding: 0; height: 100%; background: #0c1118; color: #e2e8f0; font-family: ui-sans-serif, system-ui, sans-serif; }
   body { display: grid; grid-template-rows: auto 1fr; }
@@ -18,12 +18,12 @@
   main { padding: 16px 20px; display: grid; gap: 10px; align-content: start; }
   .row { display: grid; grid-template-columns: 220px 1fr; gap: 12px; align-items: baseline; }
   .row code { color: #94a3b8; font-size: 12px; }
-  .row is-format-bytes { font-size: 14px; }
-  is-format-bytes:not(:defined) { visibility: hidden; }
+  .row iswc-format-bytes { font-size: 14px; }
+  iswc-format-bytes:not(:defined) { visibility: hidden; }
 </style>
 <script type="module">
-  await import('../../../dist/cdn/helpers/format-bytes.min.js?h=fg8f0k');
-  await customElements.whenDefined('is-format-bytes');
+  await import('../../../dist/cdn/helpers/format-bytes.min.js?h=frkgi7');
+  await customElements.whenDefined('iswc-format-bytes');
 
   const cases = [
     { value: '0', display: 'short' },
@@ -47,8 +47,8 @@
     row.className = 'row';
     const label = document.createElement('code');
     const attrs = Object.entries(c).map(([k, v]) => `${k}=${JSON.stringify(v)}`).join(' ');
-    label.textContent = `<is-format-bytes ${attrs}>`;
-    const el = document.createElement('is-format-bytes');
+    label.textContent = `<iswc-format-bytes ${attrs}>`;
+    const el = document.createElement('iswc-format-bytes');
     for (const [k, v] of Object.entries(c)) el.setAttribute(k, String(v));
     row.append(label, el);
     main.appendChild(row);
@@ -60,7 +60,7 @@
 <body>
 <header>
   <div>
-    <h1><is-format-bytes> — tamaños de archivo legibles</h1>
+    <h1><iswc-format-bytes> — tamaños de archivo legibles</h1>
     <p>Atributos: <code>value</code> <code>unit</code> <code>display</code> <code>locale</code> <code>autofit</code></p>
   </div>
 </header>

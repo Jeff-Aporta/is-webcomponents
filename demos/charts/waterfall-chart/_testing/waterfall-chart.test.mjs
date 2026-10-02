@@ -14,14 +14,14 @@ tests.push({
     await page.goto(URL, { waitUntil: 'domcontentloaded' });
     await waitReady(page, 'data-waterfall-chart-ready');
     const info = await page.evaluate(() => {
-      const el = document.querySelector('is-waterfall-chart');
+      const el = document.querySelector('iswc-waterfall-chart');
       const svg = el.shadowRoot.querySelector('svg');
       const marks = el.shadowRoot.querySelectorAll('.mark');
       const bars = el.shadowRoot.querySelectorAll('.mark-waterfall');
       const connectors = el.shadowRoot.querySelectorAll('.waterfall-connector');
       return {
-        defined: !!customElements.get('is-waterfall-chart'),
-        chartDefined: !!customElements.get('is-chart'),
+        defined: !!customElements.get('iswc-waterfall-chart'),
+        chartDefined: !!customElements.get('iswc-chart'),
         svg: !!svg,
         viewBox: svg?.getAttribute('viewBox'),
         marks: marks.length,
@@ -29,8 +29,8 @@ tests.push({
         connectors: connectors.length,
       };
     });
-    assert.equal(info.defined, true, 'is-waterfall-chart debe estar definido');
-    assert.equal(info.chartDefined, true, 'is-chart también debe estar definido');
+    assert.equal(info.defined, true, 'iswc-waterfall-chart debe estar definido');
+    assert.equal(info.chartDefined, true, 'iswc-chart también debe estar definido');
     assert.ok(info.svg, 'debe haber un SVG en shadow DOM');
     assert.ok(info.marks > 0, `debe haber marcas renderizadas, hay ${info.marks}`);
     assert.ok(info.bars > 0, `debe haber barras de waterfall, hay ${info.bars}`);
@@ -46,10 +46,10 @@ tests.push({
     await waitReady(page, 'data-waterfall-chart-ready');
     await page.waitForTimeout(200);
     const before = await page.evaluate(() => {
-      return document.querySelector('is-waterfall-chart').shadowRoot.querySelectorAll('.mark-waterfall').length;
+      return document.querySelector('iswc-waterfall-chart').shadowRoot.querySelectorAll('.mark-waterfall').length;
     });
     await page.evaluate(() => {
-      const el = document.querySelector('is-waterfall-chart');
+      const el = document.querySelector('iswc-waterfall-chart');
       el.payload = {
         type: 'waterfall',
         data: {
@@ -64,7 +64,7 @@ tests.push({
     });
     await page.waitForTimeout(200);
     const after = await page.evaluate(() => {
-      return document.querySelector('is-waterfall-chart').shadowRoot.querySelectorAll('.mark-waterfall').length;
+      return document.querySelector('iswc-waterfall-chart').shadowRoot.querySelectorAll('.mark-waterfall').length;
     });
     assert.equal(after, 4, `re-asignar payload debe dar 4 barras, hay ${after}`);
     assert.notEqual(after, before, 're-asignar payload debe cambiar el render');
@@ -78,7 +78,7 @@ tests.push({
     await waitReady(page, 'data-waterfall-chart-ready');
     await page.waitForTimeout(200);
     const counts = await page.evaluate(() => {
-      const el = document.querySelector('is-waterfall-chart');
+      const el = document.querySelector('iswc-waterfall-chart');
       const bars = el.shadowRoot.querySelectorAll('.mark-waterfall');
       return {
         bars: bars.length,
@@ -92,7 +92,7 @@ tests.push({
     );
     // Cada barra debe tener un path `d` válido (roundedBarRect: M + L + Z).
     const allValid = await page.evaluate(() => {
-      const el = document.querySelector('is-waterfall-chart');
+      const el = document.querySelector('iswc-waterfall-chart');
       const bars = [...el.shadowRoot.querySelectorAll('.mark-waterfall')];
       return bars.every((b) => {
         const d = b.getAttribute('d') ?? '';
@@ -110,7 +110,7 @@ tests.push({
     await waitReady(page, 'data-waterfall-chart-ready');
     await page.waitForTimeout(200);
     const colors = await page.evaluate(() => {
-      const el = document.querySelector('is-waterfall-chart');
+      const el = document.querySelector('iswc-waterfall-chart');
       const bars = [...el.shadowRoot.querySelectorAll('.mark-waterfall')];
       return bars.map((b) => ({
         fill: b.getAttribute('fill') ?? '',
@@ -141,7 +141,7 @@ tests.push({
     await waitReady(page, 'data-waterfall-chart-ready');
     await page.waitForTimeout(200);
     const counts = await page.evaluate(() => {
-      const el = document.querySelector('is-waterfall-chart');
+      const el = document.querySelector('iswc-waterfall-chart');
       const bars = el.shadowRoot.querySelectorAll('.mark-waterfall').length;
       const connectors = el.shadowRoot.querySelectorAll('.waterfall-connector').length;
       return { bars, connectors };
@@ -160,7 +160,7 @@ tests.push({
     await page.waitForTimeout(200);
     // Verificamos que el dataset declara totales y deltas negativos.
     const info = await page.evaluate(() => {
-      const el = document.querySelector('is-waterfall-chart');
+      const el = document.querySelector('iswc-waterfall-chart');
       const ds = el.payload?.data?.datasets?.[0];
       const data = (ds?.data ?? []).map(Number);
       const totals = (ds?.totals ?? []).map(Number);
@@ -175,16 +175,16 @@ tests.push({
 });
 
 tests.push({
-  name: 'is-render: emite el evento is-render tras montar',
+  name: 'iswc-render: emite el evento iswc-render tras montar',
   run: async (page) => {
     await page.goto(URL, { waitUntil: 'domcontentloaded' });
     await waitReady(page, 'data-waterfall-chart-ready');
     const fired = await page.evaluate(() => {
       return new Promise((resolve) => {
-        const el = document.createElement('is-waterfall-chart');
+        const el = document.createElement('iswc-waterfall-chart');
         document.body.appendChild(el);
         let n = 0;
-        el.addEventListener('is-render', () => n++);
+        el.addEventListener('iswc-render', () => n++);
         el.payload = {
           type: 'waterfall',
           data: {
@@ -195,7 +195,7 @@ tests.push({
         setTimeout(() => { el.remove(); resolve(n); }, 250);
       });
     });
-    assert.ok(fired >= 1, `is-render debió dispararse >=1 vez (fue ${fired})`);
+    assert.ok(fired >= 1, `iswc-render debió dispararse >=1 vez (fue ${fired})`);
   },
 });
 

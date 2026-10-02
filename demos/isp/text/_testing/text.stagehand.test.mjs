@@ -14,7 +14,7 @@ try {
   await page.waitForTimeout(300);
 
   const data = await page.evaluate(() => {
-    return [...document.querySelectorAll('is-text')].map((t) => {
+    return [...document.querySelectorAll('iswc-text')].map((t) => {
       const r = t.getBoundingClientRect();
       const cs = getComputedStyle(t);
       return {

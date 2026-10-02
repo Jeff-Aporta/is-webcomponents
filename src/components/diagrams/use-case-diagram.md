@@ -1,14 +1,14 @@
 ---
-tag: is-use-case-diagram
+tag: iswc-use-case-diagram
 tags:
-  - is-use-case-diagram
+  - iswc-use-case-diagram
 category: diagrams
 status: public
 source: ./use-case-diagram.js
 style: ./use-case-diagram.css
 preview: ./use-case-diagram.json
 ---
-# `<is-use-case-diagram>`
+# `<iswc-use-case-diagram>`
 
 ## Propósito
 
@@ -16,7 +16,7 @@ Diagrama de **casos de uso UML** en SVG, sin Mermaid: actores fuera del
 límite del sistema, casos en elipses dentro, y relaciones con su estereotipo
 (`«include»`, `«extend»`) o su punta hueca de generalización.
 
-Este módulo registra `<is-use-case-diagram>`.
+Este módulo registra `<iswc-use-case-diagram>`.
 
 ## Cuándo usarlo
 
@@ -25,8 +25,8 @@ sistema y qué queda fuera de su alcance.
 
 ## Cuándo no usarlo
 
-Si necesitas el orden temporal de las interacciones → `<is-sequence-diagram>`.
-Si es la arquitectura interna → `<is-component-diagram>`.
+Si necesitas el orden temporal de las interacciones → `<iswc-sequence-diagram>`.
+Si es la arquitectura interna → `<iswc-component-diagram>`.
 
 ## Importación
 
@@ -37,11 +37,11 @@ import './use-case-diagram.js';
 ## Ejemplo mínimo
 
 ```html
-<is-use-case-diagram>
+<iswc-use-case-diagram>
   <script type="application/json">
     {}
   </script>
-</is-use-case-diagram>
+</iswc-use-case-diagram>
 ```
 
 ## API
@@ -74,9 +74,9 @@ import './use-case-diagram.js';
 
 | Evento | detail | bubbles | composed | cancelable |
 | --- | --- | --- | --- | --- |
-| `is-render` | sí | sí | sí | no |
-| `is-open-viewer` | sí | sí | sí | sí |
-| `is-toggle-group` | sí | sí | sí | no |
+| `iswc-render` | sí | sí | sí | no |
+| `iswc-open-viewer` | sí | sí | sí | sí |
+| `iswc-toggle-group` | sí | sí | sí | no |
 
 ### Métodos y propiedades públicas
 
@@ -116,17 +116,17 @@ La asociación se dibuja sin punta, como manda UML; `include` y `extend` van pun
 
 Documentación de cabecera preservada desde fuente:
 
-> <is-use-case-diagram> — diagrama de casos de uso UML en SVG, sin Mermaid.
->   <is-use-case-diagram>
+> <iswc-use-case-diagram> — diagrama de casos de uso UML en SVG, sin Mermaid.
+>   <iswc-use-case-diagram>
 >     <script type="application/json">
 >       { "useCase": { "system": { "name": "Portal" }, "actors": [...], "cases": [...], "links": [...] } }
 >     </script>
->   </is-use-case-diagram>
-> Mismo esqueleto que <is-flowchart>: shadow DOM, slot JSON + MutationObserver,
+>   </iswc-use-case-diagram>
+> Mismo esqueleto que <iswc-flowchart>: shadow DOM, slot JSON + MutationObserver,
 > tema por atributo `data-theme`, `color` (inline | viewer), lightbox propio.
 > Atributos: color (inline | viewer), open-on-click
 > Propiedades: payload, spec, layout, hiddenGroups
-> Eventos: is-render, is-open-viewer, is-toggle-group
+> Eventos: iswc-render, iswc-open-viewer, iswc-toggle-group
 
 ## Dependencias y componentes relacionados
 
@@ -142,7 +142,7 @@ Documentación de cabecera preservada desde fuente:
 - [`../_shared/svg-chart-engine.js`](../_shared/svg-chart-engine.js)
 - [`../_shared/diagram-arrow.js`](../_shared/diagram-arrow.js)
 
-Tags del módulo: `<is-use-case-diagram>`.
+Tags del módulo: `<iswc-use-case-diagram>`.
 
 ## Accesibilidad
 

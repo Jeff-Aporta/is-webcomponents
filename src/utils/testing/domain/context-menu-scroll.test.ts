@@ -21,7 +21,7 @@ test('context-menu: cierra al scroll por defecto', async () => {
   const js = await readFile(src('actions', 'context-menu.ts'), 'utf8');
   // El ciclo de escucha (poner/quitar los listeners globales, congelar el
   // scroll) vive desde ago/2026 en _shared/popup-dismiss.ts, compartido con
-  // is-dropdown. El contrato es el mismo; lo que cambia es dónde se cumple:
+  // iswc-dropdown. El contrato es el mismo; lo que cambia es dónde se cumple:
   // context-menu.ts aporta el QUÉ (su #onScroll y el modo scroll-lock) y el
   // módulo compartido el CÓMO (capture, overflow hidden).
   const dismiss = await readFile(src('_shared', 'popup-dismiss.ts'), 'utf8');

@@ -1,14 +1,14 @@
 ---
-tag: is-palette-selector
+tag: iswc-palette-selector
 tags:
-  - is-palette-selector
+  - iswc-palette-selector
 category: feedback
 status: public
 source: ./palette-selector.js
 style: ./palette-selector.css
 preview: ./palette-selector.json
 ---
-# `<is-palette-selector>`
+# `<iswc-palette-selector>`
 
 ## Propósito
 
@@ -20,7 +20,7 @@ propio en el atributo `palettes`. `scope="root"` escribe `data-palette` en
 paleta trae `css`, inyecta esa hoja bajo demanda. Dos selectores con el mismo
 target y la misma paleta en su lista quedan sincronizados.
 
-Este módulo registra `<is-palette-selector>`.
+Este módulo registra `<iswc-palette-selector>`.
 
 ## Cuándo usarlo
 
@@ -39,7 +39,7 @@ import './palette-selector.js';
 ## Ejemplo mínimo
 
 ```html
-<is-palette-selector></is-palette-selector>
+<iswc-palette-selector></iswc-palette-selector>
 ```
 
 ## API
@@ -52,7 +52,7 @@ import './palette-selector.js';
 | --- | --- | --- |
 | `palettes` | string JSON | Array de `{ value, label, h, s, b, css?, lead?, accentLabel?, leadColor?, accentColor?, bg?, fg?, accent? }`. `h` `s` `b` arman el swatch; `accent` (hex) solo si no hay HSB. |
 | `value` | string/según contrato | Paleta activa; se refleja en `data-palette` de `<html>`. |
-| `storage-key` | string/según contrato | Clave de `localStorage` (default `is-palette`). |
+| `storage-key` | string/según contrato | Clave de `localStorage` (default `iswc-palette`). |
 | `aria-label` | string/según contrato | Etiqueta del trigger (default "Elegir paleta"). |
 
 #### Propiedades públicas
@@ -73,7 +73,7 @@ import './palette-selector.js';
 
 | Evento | detail | bubbles | composed | cancelable |
 | --- | --- | --- | --- | --- |
-| `is-palette-change` | sí | sí | sí | no |
+| `iswc-palette-change` | sí | sí | sí | no |
 
 ### Métodos y propiedades públicas
 
@@ -121,7 +121,7 @@ No declara integración form-associated propia en este módulo.
 
 Documentación de cabecera preservada desde fuente:
 
-> <is-palette-selector> — Web Component (vanilla).
+> <iswc-palette-selector> — Web Component (vanilla).
 > Selector visual de paletas de marca. Por defecto expone las 3 paletas
 > que viven en `styles/palettes.css` (contapyme, insoft, agrowin) pero
 > el consumidor puede pasar un array JSON propio en el atributo
@@ -135,13 +135,13 @@ Documentación de cabecera preservada desde fuente:
 >                                              lead?, leadColor?,
 >                                              accentColor?, bg?, fg? }.
 >   value         string — la paleta activa. Reflect → data-palette en <html>.
->   storage-key   string — clave de localStorage (default 'is-palette')
+>   storage-key   string — clave de localStorage (default 'iswc-palette')
 >   aria-label    string — etiqueta del botón trigger (default "Elegir paleta")
 > Slots
 >   trigger    opcional — sustituye el botón trigger interno.
 >   El menu sale del JSON (palettes.json o el array palettes).
 > Eventos
->   is-palette-change  detail: { value, palette }   bubbles, composed
+>   iswc-palette-change  detail: { value, palette }   bubbles, composed
 > Mutaciones que produce
 >   <html data-palette="X">   — activa la paleta visualmente
 >   localStorage[storageKey]  — persiste la elección
@@ -149,7 +149,7 @@ Documentación de cabecera preservada desde fuente:
 >   el.palettes = [...]      // setter que escribe el atributo JSON
 >   el.value    = 'contapyme' // activa paleta y notifica
 >   el.open() / close() / toggle()
->   el.addEventListener('is-palette-change', e => e.detail)
+>   el.addEventListener('iswc-palette-change', e => e.detail)
 
 La paleta inicial se resuelve en este orden: `data-palette` del target,
 valor guardado en `localStorage` (solo si el target es `<html>`) y, si nada
@@ -165,7 +165,7 @@ aplica, la primera del array. El menu pinta swatch, label y check desde ese JSON
 - [`../_shared/popup-dismiss.js`](../_shared/popup-dismiss.js)
 - [`../media/icon.js`](../media/icon.js)
 
-Tags del módulo: `<is-palette-selector>`.
+Tags del módulo: `<iswc-palette-selector>`.
 
 ## Accesibilidad
 
@@ -176,9 +176,9 @@ Preservar semántica, foco, teclado, labels y ARIA. ARIA detectado:
 ## Ejemplo avanzado
 
 ```html
-<is-palette-selector storage-key="mi-app-paleta"
+<iswc-palette-selector storage-key="mi-app-paleta"
   palettes='[{"value":"azul","label":"Azul","h":210,"s":"100%","b":"56%","css":"/css/azul.css"}]'>
-</is-palette-selector>
+</iswc-palette-selector>
 ```
 
 ## Errores comunes

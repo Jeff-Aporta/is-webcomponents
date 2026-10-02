@@ -14,7 +14,7 @@ checks.push({
     await page.goto(URL, { waitUntil: 'domcontentloaded' });
     await waitReady(page, 'data-prefs-clear-ready');
     const size = await page.evaluate(() => {
-      const btn = document.querySelector('is-prefs-clear').shadowRoot.querySelector('is-button');
+      const btn = document.querySelector('iswc-prefs-clear').shadowRoot.querySelector('iswc-button');
       const r = btn.getBoundingClientRect();
       return { w: r.width, h: r.height };
     });
@@ -29,8 +29,8 @@ checks.push({
     await waitReady(page, 'data-prefs-clear-ready');
     await page.waitForTimeout(150);
     const icon = await page.evaluate(() => {
-      const btn = document.querySelector('is-prefs-clear').shadowRoot.querySelector('is-button');
-      const ic = btn.shadowRoot?.querySelector('is-icon[slot="start"]') || btn.querySelector('is-icon[slot="start"]');
+      const btn = document.querySelector('iswc-prefs-clear').shadowRoot.querySelector('iswc-button');
+      const ic = btn.shadowRoot?.querySelector('iswc-icon[slot="start"]') || btn.querySelector('iswc-icon[slot="start"]');
       return ic?.getAttribute('icon');
     });
     assert.match(icon, /broom|trash|delete/i, `icono debe ser broom o similar (vimos "${icon}")`);

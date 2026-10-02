@@ -1,20 +1,20 @@
 ---
-tag: is-barcode-scanner
+tag: iswc-barcode-scanner
 tags:
-  - is-barcode-scanner
+  - iswc-barcode-scanner
 category: media
 status: public
 source: ./barcode-scanner.js
 style: ./barcode-scanner.css
 preview: ./barcode-scanner.json
 ---
-# `<is-barcode-scanner>`
+# `<iswc-barcode-scanner>`
 
 ## Propósito
 
-Decodifica QR/EAN con `BarcodeDetector` sobre la cámara. No genera códigos: eso es `is-barcode` / `is-qrcode`.
+Decodifica QR/EAN con `BarcodeDetector` sobre la cámara. No genera códigos: eso es `iswc-barcode` / `iswc-qrcode`.
 
-Este módulo registra `<is-barcode-scanner>`.
+Este módulo registra `<iswc-barcode-scanner>`.
 
 ## Cuándo usarlo
 
@@ -22,7 +22,7 @@ Inventario, escanear un QR de producto.
 
 ## Cuándo no usarlo
 
-Para dibujar un código usa `<is-barcode>` o `<is-qrcode>`.
+Para dibujar un código usa `<iswc-barcode>` o `<iswc-qrcode>`.
 
 ## Importación
 
@@ -33,7 +33,7 @@ import './barcode-scanner.js';
 ## Ejemplo mínimo
 
 ```html
-<is-barcode-scanner formats="qr_code,ean_13"></is-barcode-scanner>
+<iswc-barcode-scanner formats="qr_code,ean_13"></iswc-barcode-scanner>
 ```
 
 ## API
@@ -63,8 +63,8 @@ import './barcode-scanner.js';
 
 | Evento | detail | bubbles | composed | cancelable |
 | --- | --- | --- | --- | --- |
-| `is-detect` | sí `{ rawValue, format, barcodes }` | sí | sí | no |
-| `is-error` | sí `{ message }` | sí | sí | no |
+| `iswc-detect` | sí `{ rawValue, format, barcodes }` | sí | sí | no |
+| `iswc-error` | sí `{ message }` | sí | sí | no |
 
 ### Métodos y propiedades públicas
 
@@ -88,7 +88,7 @@ No es form-associated.
 
 ## Comportamiento
 
-`getUserMedia` + `detect` cada 400ms. Sin BarcodeDetector emite `is-error`.
+`getUserMedia` + `detect` cada 400ms. Sin BarcodeDetector emite `iswc-error`.
 
 ## Dependencias y componentes relacionados
 
@@ -102,12 +102,12 @@ Botón escanear/detener.
 ## Ejemplo avanzado
 
 ```html
-<is-barcode-scanner formats="qr_code"></is-barcode-scanner>
+<iswc-barcode-scanner formats="qr_code"></iswc-barcode-scanner>
 ```
 
 ## Errores comunes
 
-- Usar `is-barcode` (generador) para escanear.
+- Usar `iswc-barcode` (generador) para escanear.
 - HTTP inseguro.
 
 ## Reglas para LLM

@@ -2,16 +2,16 @@ import { adoptCss, defineElement, emit } from '../../core/element.js';
 import { ElementBase } from '../../core/element-base.js';
 
 /**
- * <is-transfer> — Doble lista de selección (vanilla, zero dependencies).
+ * <iswc-transfer> — Doble lista de selección (vanilla, zero dependencies).
  *
  * Mueve elementos entre una lista de origen y una lista de destino.
  *
- *   <is-transfer id="t1">
- *     <is-transfer-item value="a">Alpha</is-transfer-item>
- *     <is-transfer-item value="b" selected>Beta</is-transfer-item>
- *   </is-transfer>
+ *   <iswc-transfer id="t1">
+ *     <iswc-transfer-item value="a">Alpha</iswc-transfer-item>
+ *     <iswc-transfer-item value="b" selected>Beta</iswc-transfer-item>
+ *   </iswc-transfer>
  *
- * Atributos <is-transfer>
+ * Atributos <iswc-transfer>
  *   source-title       string
  *   target-title       string
  *   searchable         boolean
@@ -19,16 +19,16 @@ import { ElementBase } from '../../core/element-base.js';
  *   without-headings   boolean
  *   max-target         number   — máximo de items en target.
  *
- * Atributos <is-transfer-item>
+ * Atributos <iswc-transfer-item>
  *   value        string
  *   disabled     boolean
  *
  * Slots
- *   <is-transfer-item>
+ *   <iswc-transfer-item>
  *     (default)   label.
  *
  * Eventos
- *   is-transfer-change  detail: { item, source, target, values }
+ *   iswc-transfer-change  detail: { item, source, target, values }
  */
 (() => {
   const TRANSFER_TEMPLATE = document.createElement('template');
@@ -46,10 +46,10 @@ import { ElementBase } from '../../core/element-base.js';
       </div>
       <div class="controls" part="controls">
         <button type="button" class="ctrl" data-action="to-target" aria-label="Mover a destino">
-          <is-icon icon="mdi:chevron-double-right" aria-hidden="true"></is-icon>
+          <iswc-icon icon="mdi:chevron-double-right" aria-hidden="true"></iswc-icon>
         </button>
         <button type="button" class="ctrl" data-action="to-source" aria-label="Mover a origen">
-          <is-icon icon="mdi:chevron-double-left" aria-hidden="true"></is-icon>
+          <iswc-icon icon="mdi:chevron-double-left" aria-hidden="true"></iswc-icon>
         </button>
       </div>
       <div class="pane target" part="pane">
@@ -75,13 +75,13 @@ import { ElementBase } from '../../core/element-base.js';
 
   const TRANSFER_OBSERVED = ['source-title', 'target-title', 'searchable', 'without-buttons', 'without-headings', 'max-target'];
 
-  class IsTransfer extends ElementBase {
+  class IswcTransfer extends ElementBase {
     /** Personalización por atributo (ver `core/attrs.ts`). */
     static styleAttrs = {
     'row-height': '--iswc-transfer-row-height',
     };
 
-    static get observedAttributes(): string[] { return [...TRANSFER_OBSERVED, ...IsTransfer.styleAttrNames]; }
+    static get observedAttributes(): string[] { return [...TRANSFER_OBSERVED, ...IswcTransfer.styleAttrNames]; }
     #panelSource!: HTMLElement;
     #panelTarget!: HTMLElement;
     #searchSource!: HTMLInputElement;
@@ -126,7 +126,7 @@ import { ElementBase } from '../../core/element-base.js';
     }
 
     get values() {
-      return [...this.querySelectorAll<HTMLElement>(':scope > is-transfer-item[selected]')].map((it: HTMLElement) => it.getAttribute('value'));
+      return [...this.querySelectorAll<HTMLElement>(':scope > iswc-transfer-item[selected]')].map((it: HTMLElement) => it.getAttribute('value'));
     }
 
     #bindControls() {
@@ -165,7 +165,7 @@ import { ElementBase } from '../../core/element-base.js';
     }
 
     #items(): HTMLElement[] {
-      return [...this.querySelectorAll<HTMLElement>(':scope > is-transfer-item')];
+      return [...this.querySelectorAll<HTMLElement>(':scope > iswc-transfer-item')];
     }
 
     #visibleItems(inTarget: boolean): HTMLElement[] {
@@ -232,14 +232,14 @@ import { ElementBase } from '../../core/element-base.js';
         const dest = toTarget ? 'destino' : 'origen';
         this.#announce(`Movidos ${movedLabels.length} elemento${movedLabels.length === 1 ? '' : 's'} a ${dest}: ${movedLabels.slice(0, 3).join(', ')}${movedLabels.length > 3 ? '…' : ''}`);
       }
-      emit(this, 'is-transfer-change', { source: this.values.length, target: this.values.length, values: this.values });
+      emit(this, 'iswc-transfer-change', { source: this.values.length, target: this.values.length, values: this.values });
     }
 
     #emitChange(item: HTMLElement): void {
       const label = (item.textContent || item.getAttribute('value') || '').trim();
       const wasSelected = !item.hasAttribute('selected');
       this.#announce(`${label} ${wasSelected ? 'movido a origen' : 'movido a destino'}`);
-      emit(this, 'is-transfer-change', {
+      emit(this, 'iswc-transfer-change', {
         item,
         source: this.#items().filter((it: HTMLElement) => !it.hasAttribute('selected')).length,
         target: this.values.length,
@@ -248,12 +248,12 @@ import { ElementBase } from '../../core/element-base.js';
     }
   }
 
-  defineElement('is-transfer', IsTransfer, 'IsTransfer');
+  defineElement('iswc-transfer', IswcTransfer, 'IswcTransfer');
 
-  // ============ <is-transfer-item> ============
+  // ============ <iswc-transfer-item> ============
   const ITEM_OBSERVED = ['value', 'selected', 'disabled'];
 
-  class IsTransferItem extends HTMLElement {
+  class IswcTransferItem extends HTMLElement {
     static get observedAttributes(): string[] { return ITEM_OBSERVED; }
 
     connectedCallback(): void {
@@ -263,5 +263,5 @@ import { ElementBase } from '../../core/element-base.js';
     attributeChangedCallback() {}
   }
 
-  defineElement('is-transfer-item', IsTransferItem, 'IsTransferItem');
+  defineElement('iswc-transfer-item', IswcTransferItem, 'IswcTransferItem');
 })();

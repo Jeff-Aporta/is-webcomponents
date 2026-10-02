@@ -3,7 +3,7 @@ import { defineElement } from '../../core/element.js';
 /**
  * helpers/ui.js — primitivas de render para apps consumidoras del kit.
  *
- * NO es un custom element. Expone `IsUi` (y alias `Ui`) en globalThis y
+ * NO es un custom element. Expone `IswcUi` (y alias `Ui`) en globalThis y
  * exporta ESM: plantilla `html`, CSS constructable, `define`,
  * `crearComponente`, etc.
  *
@@ -17,7 +17,7 @@ import { defineElement } from '../../core/element.js';
  *
  * Uso
  *   import { html, css, define } from '…/helpers/ui.min.js';
- *   // o, tras all.min.js:  IsUi.html`…`  /  Ui.html`…`
+ *   // o, tras all.min.js:  IswcUi.html`…`  /  Ui.html`…`
  */
 
 const SHEETS = new Map<string, CSSStyleSheet>();
@@ -56,7 +56,7 @@ export const el = (tag: string, attrs: ElAttrs = {}, children: ElChild | ElChild
   return node;
 };
 
-const CRUDO: unique symbol = Symbol('is-ui-html-crudo');
+const CRUDO: unique symbol = Symbol('iswc-ui-html-crudo');
 type Crudo = { [CRUDO]: string };
 
 /** Marca una cadena como HTML de confianza dentro de `html`. */
@@ -125,7 +125,7 @@ export function region(
  * Crea un `<div role="dialog" aria-modal="true">` (proposal g09 ui.ts).
  * Complementa `region` para secciones interactivas tipo modal. El consumidor
  * sigue siendo responsable del focus trap y de cerrar al Escape (ver
- * `IsFloating` que ya lo trae integrado).
+ * `IswcFloating` que ya lo trae integrado).
  */
 export function dialog(
   labelOrOpts: string | { label?: string; labelledby?: string; modal?: boolean },
@@ -170,7 +170,7 @@ export const html = (strings: TemplateStringsArray, ...values: unknown[]): Docum
       const m = acc.match(/\s+on([a-zA-Z][\w-]*)=\s*$/);
       if (m) {
         acc = acc.slice(0, acc.length - m[0].length);
-        acc += ` data-is-ui-ev="${handlers.length}"`;
+        acc += ` data-iswc-ui-ev="${handlers.length}"`;
         handlers.push({ evento: m[1].toLowerCase(), fn: v as (ev: Event) => void });
         continue;
       }
@@ -185,7 +185,7 @@ export const html = (strings: TemplateStringsArray, ...values: unknown[]): Docum
     for (const item of lista) {
       if (item == null || item === false || item === true) continue;
       if (item instanceof Node) {
-        acc += `<template data-is-ui-nodo="${nodos.length}"></template>`;
+        acc += `<template data-iswc-ui-nodo="${nodos.length}"></template>`;
         nodos.push(item);
       } else if (esCrudo(item)) {
         acc += item[CRUDO];
@@ -199,16 +199,16 @@ export const html = (strings: TemplateStringsArray, ...values: unknown[]): Docum
   plantilla.innerHTML = acc;
   const frag = plantilla.content;
 
-  for (const marca of [...frag.querySelectorAll<HTMLTemplateElement>('template[data-is-ui-nodo]')]) {
+  for (const marca of [...frag.querySelectorAll<HTMLTemplateElement>('template[data-iswc-ui-nodo]')]) {
     const idx = Number(marca.dataset.isUiNodo);
-    marca.replaceWith(nodos[idx] ?? document.createComment('is-ui:nodo'));
+    marca.replaceWith(nodos[idx] ?? document.createComment('iswc-ui:nodo'));
   }
 
-  for (const elx of [...frag.querySelectorAll<HTMLElement>('[data-is-ui-ev]')]) {
+  for (const elx of [...frag.querySelectorAll<HTMLElement>('[data-iswc-ui-ev]')]) {
     const idx = Number(elx.dataset.isUiEv);
     const h = handlers[idx];
     if (h) elx.addEventListener(h.evento, h.fn);
-    elx.removeAttribute('data-is-ui-ev');
+    elx.removeAttribute('data-iswc-ui-ev');
   }
 
   return frag;
@@ -304,14 +304,14 @@ export const crearComponente = <P extends Record<string, unknown>>(
   }
 };
 
-export const IsUi = {
+export const IswcUi = {
   css, adoptCss, el, html, raw, esc, rec, fecha, jsonScript, define, crearComponente,
   region, dialog,
 };
 
 if (typeof globalThis !== 'undefined') {
-  (globalThis as Record<string, unknown>).IsUi = IsUi;
-  if (!(globalThis as Record<string, unknown>).Ui) (globalThis as Record<string, unknown>).Ui = IsUi;
+  (globalThis as Record<string, unknown>).IswcUi = IswcUi;
+  if (!(globalThis as Record<string, unknown>).Ui) (globalThis as Record<string, unknown>).Ui = IswcUi;
 }
 
-export default IsUi;
+export default IswcUi;

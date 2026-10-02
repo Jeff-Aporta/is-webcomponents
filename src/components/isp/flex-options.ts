@@ -23,10 +23,10 @@ export { paintFlexOptions };
 export type { FlexActionEntry };
 
 /**
- * <is-flex-options> — port de FlexOptions.svelte (ClientesIS).
+ * <iswc-flex-options> — port de FlexOptions.svelte (ClientesIS).
  *
  * Toolbar de acciones (grupos + separador + menú "más") pintada con
- * is-button / is-check-icon-button / is-dropdown. No recrea el DOM si la
+ * iswc-button / iswc-check-icon-button / iswc-dropdown. No recrea el DOM si la
  * firma de acciones no cambió.
  *
  * Props: actions, more
@@ -38,7 +38,7 @@ TEMPLATE.innerHTML = /* html */ `
   <div part="toolbar" class="toolbar" role="toolbar"></div>
 `;
 
-class IsFlexOptions extends ElementBase {
+class IswcFlexOptions extends ElementBase {
   static TEMPLATE = TEMPLATE;
   static get observedAttributes(): string[] { return ['compact', 'more-disabled', 'label', 'labelledby']; }
 
@@ -154,16 +154,16 @@ class IsFlexOptions extends ElementBase {
     });
   }
 
-  /** Botones pintados (is-button, is-check-icon-button, trigger del dropdown) no deshabilitados. */
+  /** Botones pintados (iswc-button, iswc-check-icon-button, trigger del dropdown) no deshabilitados. */
   #focusables(): HTMLElement[] {
     if (!this.#root) return [];
     const out: HTMLElement[] = [];
     const visit = (root: ParentNode): void => {
-      const all = root.querySelectorAll('is-button, is-check-icon-button');
+      const all = root.querySelectorAll('iswc-button, iswc-check-icon-button');
       for (const el of Array.from(all)) {
         const node = el as HTMLElement;
-        // Excluir items del dropdown (viven dentro de is-dropdown y se navegan aparte).
-        if (node.closest('is-dropdown') && node.getAttribute('slot') !== 'trigger') continue;
+        // Excluir items del dropdown (viven dentro de iswc-dropdown y se navegan aparte).
+        if (node.closest('iswc-dropdown') && node.getAttribute('slot') !== 'trigger') continue;
         if (node.hasAttribute('disabled') || node.getAttribute('aria-disabled') === 'true') continue;
         out.push(node);
       }
@@ -179,9 +179,9 @@ class IsFlexOptions extends ElementBase {
    * toolbar (incluyendo el trigger).
    *
    * Importante: `composedPath()` se recorre completo para encontrar el botón
-   * focuseable — cuando el `<is-button>` interno tiene `delegatesFocus: true`
+   * focuseable — cuando el `<iswc-button>` interno tiene `delegatesFocus: true`
    * el foco real está en su `<button>` interno, y el path del evento puede
-   * empezar por ese botón (no por el host `<is-button>`).
+   * empezar por ese botón (no por el host `<iswc-button>`).
    */
   #onKeydown = (e: KeyboardEvent): void => {
     let next: number | null = null;
@@ -211,4 +211,4 @@ class IsFlexOptions extends ElementBase {
   };
 }
 
-defineElement('is-flex-options', IsFlexOptions, 'IsFlexOptions');
+defineElement('iswc-flex-options', IswcFlexOptions, 'IswcFlexOptions');

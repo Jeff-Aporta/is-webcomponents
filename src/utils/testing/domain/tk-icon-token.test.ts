@@ -8,17 +8,17 @@ import {
   splitIconRuns,
 } from '../../../components/_shared/tk-icon-inline.ts';
 
-test('{{"is-icon": {attrs}}} resuelve icono, color y el tag', () => {
-  const raw = '{{"is-icon": {icon: mdi:key-variant, color: #e11}}} nombre_de_la_col';
+test('{{"iswc-icon": {attrs}}} resuelve icono, color y el tag', () => {
+  const raw = '{{"iswc-icon": {icon: mdi:key-variant, color: #e11}}} nombre_de_la_col';
   const lead = extractLeadingIconToken(raw);
   assert.equal(lead?.iconId, 'mdi:key-variant');
   assert.equal(lead?.color, '#e11');
   assert.equal(lead?.rest, 'nombre_de_la_col');
   assert.equal(hasIconJsonSugar(raw), true);
-  const tok = resolveIconToken('"is-icon": {icon: mdi:key-variant, color: #e11}');
+  const tok = resolveIconToken('"iswc-icon": {icon: mdi:key-variant, color: #e11}');
   assert.equal(tok?.iconId, 'mdi:key-variant');
   const html = iconInlineHtmlWeb(tok!.iconId, { attrs: tok!.attrs, hue: tok!.hue });
-  assert.match(html, /^<is-icon\b/);
+  assert.match(html, /^<iswc-icon\b/);
   assert.match(html, /icon="mdi:key-variant"/);
   assert.match(html, /color="#e11"/);
   assert.match(html, /style="[^"]*color:#e11/);
@@ -31,7 +31,7 @@ test('el sugar iconify legacy sigue igual', () => {
 });
 
 test('una fila parte icono y texto', () => {
-  const runs = splitIconRuns('{{is-icon: {icon: "mdi:table", size: 14}}} clientes');
+  const runs = splitIconRuns('{{iswc-icon: {icon: "mdi:table", size: 14}}} clientes');
   assert.equal(runs.length, 2);
   assert.equal(runs[0]?.kind, 'icon');
   if (runs[0]?.kind === 'icon') {

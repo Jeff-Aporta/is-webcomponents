@@ -1,14 +1,14 @@
 ---
-tag: is-heatmap
+tag: iswc-heatmap
 tags:
-  - is-heatmap
+  - iswc-heatmap
 category: data-viz
 status: public
 source: ./heatmap.js
 style: ./heatmap.css
 preview: ./heatmap.json
 ---
-# `<is-heatmap>`
+# `<iswc-heatmap>`
 
 ## Propósito
 
@@ -17,7 +17,7 @@ numérico, con etiquetas de eje X/Y y una leyenda de gradiente vertical.
 Dibuja todo a mano (sin librería de gráficas) y se redimensiona solo con
 un `ResizeObserver`.
 
-Este módulo registra `<is-heatmap>`.
+Este módulo registra `<iswc-heatmap>`.
 
 ## Cuándo usarlo
 
@@ -27,10 +27,10 @@ por vendedor, ocupación por día y por hora.
 
 ## Cuándo no usarlo
 
-- Una sola dimensión: usa `<is-bar-chart>` o `<is-sparkline>`.
+- Una sola dimensión: usa `<iswc-bar-chart>` o `<iswc-sparkline>`.
 - Series temporales continuas donde importa la tendencia y no la
-  intensidad: usa `<is-line-chart>`.
-- Pocos datos (3 o 4 números): una tabla o `<is-stat>` se lee mejor.
+  intensidad: usa `<iswc-line-chart>`.
+- Pocos datos (3 o 4 números): una tabla o `<iswc-stat>` se lee mejor.
 
 ## Importación
 
@@ -41,7 +41,7 @@ import './heatmap.js';
 ## Ejemplo mínimo
 
 ```html
-<is-heatmap>
+<iswc-heatmap>
   <script type="application/json">
   {
     "xLabels": ["Ene", "Feb", "Mar"],
@@ -49,7 +49,7 @@ import './heatmap.js';
     "data": [[12, 30, 18], [7, 22, 40]]
   }
   </script>
-</is-heatmap>
+</iswc-heatmap>
 ```
 
 ## API
@@ -98,10 +98,10 @@ lee como dato (y se vigila con `MutationObserver`), no se renderiza.
 
 | Evento | detail | bubbles | composed | cancelable |
 | --- | --- | --- | --- | --- |
-| `is-render` | `{ svg }` — referencia al `<svg>` del shadow root | sí | sí | no |
-| `is-cell-hover` | `{ x, y, value }` — `x`/`y` son las etiquetas (string) e `value` es número | sí | sí | no |
+| `iswc-render` | `{ svg }` — referencia al `<svg>` del shadow root | sí | sí | no |
+| `iswc-cell-hover` | `{ x, y, value }` — `x`/`y` son las etiquetas (string) e `value` es número | sí | sí | no |
 
-`is-cell-hover` se dispara en cada `pointermove` sobre una celda, no solo
+`iswc-cell-hover` se dispara en cada `pointermove` sobre una celda, no solo
 al entrar en ella: si el listener es costoso, conviene un throttle.
 Cuando el puntero sale de las celdas no hay evento de salida, solo se
 limpia el resaltado.
@@ -121,7 +121,7 @@ tabla anterior.
 
 ### Custom states
 
-No expone. El resaltado de celda usa la clase interna `.is-hover`, no
+No expone. El resaltado de celda usa la clase interna `.iswc-hover`, no
 `ElementInternals`.
 
 ### CSS custom properties
@@ -152,7 +152,7 @@ visualización.
   se redondea con `niceTicks(min, max, 5)`. Si todos los valores son
   iguales, todas las celdas usan el color central de la paleta.
 - **Corte temprano.** Si no hay ningún valor finito, `#render` sale antes de
-  dibujar y **no** emite `is-render`; el SVG queda vacío.
+  dibujar y **no** emite `iswc-render`; el SVG queda vacío.
 - **Tamaño mínimo de matriz.** Cada columna reserva al menos 14 px de ancho
   y cada fila 14 px de alto, así que una matriz grande puede desbordar el
   `viewBox` en un host estrecho.
@@ -177,7 +177,7 @@ Notas de la cabecera del módulo que no coinciden con el código:
 - [`../_shared/emit.js`](../_shared/emit.js)
 - Relacionados: [`../charts/bar-chart.md`](../charts/bar-chart.md), [`./maps.md`](./maps.md)
 
-Tags del módulo: `<is-heatmap>`.
+Tags del módulo: `<iswc-heatmap>`.
 
 ## Accesibilidad
 
@@ -185,7 +185,7 @@ El `<svg>` lleva `role="img"` y `aria-label="Mapa de calor"` fijo, así que
 para un lector de pantalla la matriz es una sola imagen sin descripción del
 contenido. Recomendaciones:
 
-- Poner `aria-label` o `aria-labelledby` en el propio `<is-heatmap>` con lo
+- Poner `aria-label` o `aria-labelledby` en el propio `<iswc-heatmap>` con lo
   que representa la matriz.
 - Acompañar el mapa con una tabla equivalente (aunque sea visualmente
   oculta) cuando el dato sea la información principal de la pantalla.
@@ -197,7 +197,7 @@ contenido. Recomendaciones:
 ## Ejemplo avanzado
 
 ```html
-<is-heatmap
+<iswc-heatmap
   id="ocupacion"
   x-label="Hora"
   y-label="Día"
@@ -205,7 +205,7 @@ contenido. Recomendaciones:
   cell-radius="4"
   show-values
   legend-position="bottom"
-></is-heatmap>
+></iswc-heatmap>
 
 <script type="module">
   import './heatmap.js';
@@ -221,7 +221,7 @@ contenido. Recomendaciones:
     ],
   };
 
-  el.addEventListener('is-cell-hover', (e) => {
+  el.addEventListener('iswc-cell-hover', (e) => {
     const { x, y, value } = e.detail;
     console.log(`${y} a las ${x}: ${value}`);
   });
@@ -250,7 +250,7 @@ contenido. Recomendaciones:
 - Mantener nombres exactos de tag, atributos y eventos.
 - `show-values` es booleano por presencia; no usar `show-values="false"`.
 - Los datos se entregan por `config` o por JSON hijo, nunca por atributo.
-- No documentar `is-cell-hover` como evento de entrada/salida: se repite en
+- No documentar `iswc-cell-hover` como evento de entrada/salida: se repite en
   cada `pointermove`.
 - Leer callers y `_shared` antes de cambiar; corregir en la raíz común.
 - No modificar la API basándose solo en el preview.

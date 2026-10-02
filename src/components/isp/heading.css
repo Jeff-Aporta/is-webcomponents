@@ -1,9 +1,21 @@
-/* <is-heading> — títulos h1..h6 con tinte de marca (port de ISP H1..H6).
+/* <iswc-heading> — títulos h1..h6 con tinte de marca (port de ISP H1..H6).
    Índice de --vars:
-     --iswc-heading-color: color base (semántico / currentColor / CSS libre).
-     --iswc-heading-mix: % mezclado hacia --iswc-heading-mix-with (sube al bajar de nivel).
+     --iswc-heading-color   : color base (semántico / currentColor / CSS libre).
+     --iswc-heading-mix     : % mezclado hacia --iswc-heading-mix-with (sube al bajar de nivel).
      --iswc-heading-mix-with: color destino del mix (default: texto del tema).
-     --iswc-heading-size      : tamaño en em del nivel actual. */
+     --iswc-heading-size    : tamaño en em del nivel actual. */
+
+/* Tipos registrados para que transitions/animations operen sobre estas vars. */
+@property --iswc-heading-color {
+  syntax: "<color>";
+  inherits: true;
+  initial-value: currentColor;
+}
+@property --iswc-heading-mix {
+  syntax: "<percentage>";
+  inherits: true;
+  initial-value: 15%;
+}
 
 :host {
   --iswc-heading-color: var(--iswc-accent, var(--iswc-color-brand, var(--iswc-text)));
@@ -11,8 +23,8 @@
   --iswc-heading-mix-with: var(--iswc-text, currentColor);
   --iswc-heading-size: 2em;
   display: block;
-  min-width: 0;
-  max-width: 100%;
+  min-inline-size: 0;
+  max-inline-size: 100%;
 }
 
 :host([hidden]) { display: none; }
@@ -24,13 +36,14 @@
   font-weight: 650;
   line-height: 1.2;
   letter-spacing: -0.01em;
-  min-width: 0;
-  max-width: 100%;
+  min-inline-size: 0;
+  max-inline-size: 100%;
   /* Fallback plano: sin color-mix el título usa el color base. */
   color: var(--iswc-heading-color);
   color: color-mix(in srgb, var(--iswc-heading-color), var(--iswc-heading-mix-with) var(--iswc-heading-mix));
 }
 
+/* Escala ISP: a menor nivel, más mezcla hacia el texto del tema. */
 :host([level="1"]) { --iswc-heading-mix: 15%; --iswc-heading-size: 2em; }
 :host([level="2"]) { --iswc-heading-mix: 30%; --iswc-heading-size: 1.6em; }
 :host([level="3"]) { --iswc-heading-mix: 45%; --iswc-heading-size: 1.35em; }
@@ -39,14 +52,12 @@
 :host([level="6"]) { --iswc-heading-mix: 90%; --iswc-heading-size: 0.9em; }
 
 /* Semánticos → tokens del tema. */
-:host([color="brand"]) {
-  --iswc-heading-color: var(--iswc-brand-text, var(--iswc-accent, var(--iswc-color-brand, var(--iswc-text))));
-}
-:host([color="neutral"]) { --iswc-heading-color: var(--iswc-text-soft, var(--iswc-text)); }
-:host([color="info"]) { --iswc-heading-color: var(--iswc-info-text, var(--iswc-color-info, var(--iswc-text))); }
+:host([color="brand"])   { --iswc-heading-color: var(--iswc-brand-text,   var(--iswc-accent,    var(--iswc-color-brand,   var(--iswc-text)))); }
+:host([color="neutral"]) { --iswc-heading-color: var(--iswc-text-soft,    var(--iswc-text)); }
+:host([color="info"])    { --iswc-heading-color: var(--iswc-info-text,    var(--iswc-color-info,    var(--iswc-text))); }
 :host([color="success"]) { --iswc-heading-color: var(--iswc-success-text, var(--iswc-color-success, var(--iswc-text))); }
 :host([color="warning"]) { --iswc-heading-color: var(--iswc-warning-text, var(--iswc-color-warning, var(--iswc-text))); }
-:host([color="danger"]) { --iswc-heading-color: var(--iswc-danger-text, var(--iswc-color-danger, var(--iswc-text))); }
+:host([color="danger"])  { --iswc-heading-color: var(--iswc-danger-text,  var(--iswc-color-danger,  var(--iswc-text))); }
 
-/* Hereda el color tipográfico del contexto (como em para tamaño). */
+/* Hereda el color tipográfico del contexto. */
 :host([color="current"]) { --iswc-heading-color: currentColor; }

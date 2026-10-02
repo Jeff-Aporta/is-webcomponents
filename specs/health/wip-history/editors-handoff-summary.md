@@ -1,4 +1,4 @@
-# is-editors handoff — Resumen ejecutivo
+# iswc-editors handoff — Resumen ejecutivo
 
 > **Origen**: `C:\Users\JAGUDELOE\handoff-is-editors.md` (59KB, 1341 líneas, versión 1.0 final).
 > **Este doc**: resumen condensado en WT-ROOT para referencia rápida del capitán.
@@ -9,7 +9,7 @@
 | ID | Decisión |
 |---|---|
 | `architecture` | 16 wrappers `<is-X-editor>` (uno por diagrama) |
-| `persistence` | Solo `is-state-change` event (sin auto-storage) |
+| `persistence` | Solo `iswc-state-change` event (sin auto-storage) |
 | `gantt-deps` | `dependsOn: string[]` en spec de Gantt |
 | `org-photo` | `photo` acepta URL o data URL (base64) |
 | `self-loop` | Per-diagrama configurable; default `reject`; override `allow-self-loop="true"` |
@@ -25,7 +25,7 @@
 ## §3 — Árbol de WTs (binario, profundidad ≤4)
 
 ```
-is-wc-wt-root-editors-2026 (root)
+iswc-wc-wt-root-editors-2026 (root)
 ├── WT-0001 (master orchestrator)
 │   ├── WT-0011 (infra — diagram-edit shell, contract)
 │   │   ├── WT-00111 (panel lateral)
@@ -45,7 +45,7 @@ is-wc-wt-root-editors-2026 (root)
 - `<is-X-editor>` extiende `<is-X-diagram>` (lite) y le añade:
   - Toolbar (canvas): botones add/delete/connect/undo/redo/zoom-in-out/fit
   - Panel lateral: lista de nodos + props del nodo seleccionado
-  - Evento `is-state-change` con payload `{ spec: Spec }`
+  - Evento `iswc-state-change` con payload `{ spec: Spec }`
   - Atributo `mode="view" | "edit"` (default "edit")
   - Slot oculto `<slot>` para JSON inicial (igual que el lite)
 - Doble-click en nodo → drill-down (si admite nesting)
@@ -97,7 +97,7 @@ cd C:\ContaPyme\Personal\apps\is-webcomponents
 git status --short  # debe estar limpio
 deno task typecheck    # debe pasar
 deno task test:demos   # 42/42 PASS
-git worktree add C:\ContaPyme\Personal\apps\WT\is-wc-wt-root-editors-2026 -b wt-root-editors-2026 main
+git worktree add C:\ContaPyme\Personal\apps\WT\iswc-wc-wt-root-editors-2026 -b wt-root-editors-2026 main
 ```
 
 ## §15 — Lo que NO está en el plan
@@ -112,9 +112,9 @@ git worktree add C:\ContaPyme\Personal\apps\WT\is-wc-wt-root-editors-2026 -b wt-
 
 **Secuencia propuesta**:
 1. **Terminar types-strong-2026 (T4-T10)** — actual workstream. ~7 tandas × 1 round/tanda = 7 rounds.
-2. **Iniciar is-editors** cuando WT-ROOT de types-strong esté consolidado y limpio. ~10 rounds.
+2. **Iniciar iswc-editors** cuando WT-ROOT de types-strong esté consolidado y limpio. ~10 rounds.
 3. **Total estimado**: 17 rounds de las 40 disponibles.
 
 **Por qué secuencial y no paralelo**: ambos workstreams modifican `src/components/diagrams/*` y podrían colisionar. Secuencial evita refactor-merging hell.
 
-**Trigger para arrancar is-editors**: cuando strict audit baje a <500 y types-strong T10 esté cerrado.
+**Trigger para arrancar iswc-editors**: cuando strict audit baje a <500 y types-strong T10 esté cerrado.

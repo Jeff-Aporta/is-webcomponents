@@ -1,5 +1,5 @@
 /**
- * Behavior migrado desde HTML inline de is-gauge.
+ * Behavior migrado desde HTML inline de iswc-gauge.
  * Se ejecuta en mount() tras pintar la definition JSON.
  * @param {import('../../previews/_kit/types.d.ts').PreviewMountContext} ctx
  */
@@ -9,7 +9,7 @@ export async function mount(ctx: import('../../previews/_kit/types.d.ts').Previe
   const g = document.getElementById('gInteractive');
   const s = document.getElementById('gSlider');
   if (!g || !s) return;
-  s.addEventListener('is-input', (e: Event) => {
+  s.addEventListener('iswc-input', (e: Event) => {
     const detail = (e as CustomEvent<{ value: string }>).detail;
     g.setAttribute('value', detail.value);
   });

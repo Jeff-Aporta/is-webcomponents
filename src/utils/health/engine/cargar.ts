@@ -67,9 +67,9 @@ function limpiarJson(src: string): string {
 /** Busca el primer <tag>.json bajo src/components/. */
 function buscarJsonEnComponentes(raiz: string, tag: string): string {
   // Convención: el archivo se llama <tag-sin-prefijo-is>.json. p.ej.
-  // is-button → button.json. Algunos casos especiales (toast-item) mantienen
+  // iswc-button → button.json. Algunos casos especiales (toast-item) mantienen
   // el sufijo. Probamos ambas formas.
-  const sinPrefijo = tag.replace(/^is-/, '');
+  const sinPrefijo = tag.replace(/^iswc-/, '');
   const candidates = [
     join(raiz, 'src', 'components', 'actions', `${sinPrefijo}.json`),
     join(raiz, 'src', 'components', 'media', `${sinPrefijo}.json`),

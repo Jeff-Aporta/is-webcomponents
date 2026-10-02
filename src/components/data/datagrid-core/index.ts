@@ -1,7 +1,7 @@
 /**
- * datagrid-core/index — API pública del motor agnóstico del <is-ag-grid>.
+ * datagrid-core/index — API pública del motor agnóstico del <iswc-ag-grid>.
  *
- * Punto único de entrada para la capa de render (<is-ag-grid>). Reexporta:
+ * Punto único de entrada para la capa de render (<iswc-ag-grid>). Reexporta:
  *   - tipos y constantes
  *   - column-state (resolveColumns, setColumnWidth, …)
  *   - viewport (rowWindow, columnLayout, colWindow, applyFlex)

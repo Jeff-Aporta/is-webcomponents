@@ -12,21 +12,21 @@ import { ElementBase } from '../../core/element-base.js';
 import { setStringAttr, setOptionalAttr } from '../_shared/reflect.js';
 import { hasSlotted } from '../_shared/dom-utils.js';
 /**
- * <is-checkbox> — Casilla form-associated: entra en FormData y en la validación del <form>.
+ * <iswc-checkbox> — Casilla form-associated: entra en FormData y en la validación del <form>.
  *
  * Atributos
  *   name, value (default "on"), hint
  *   color             brand (default) | neutral | success | warning | danger
  *   label-placement     end (default) | start | top | bottom
- *   icon                nombre de <is-icon> para el estado sin marcar
- *   checked-icon        nombre de <is-icon> para el estado marcado (default mdi:check)
- *   indeterminate-icon  nombre de <is-icon> para el estado mixto (default mdi:minus)
+ *   icon                nombre de <iswc-icon> para el estado sin marcar
+ *   checked-icon        nombre de <iswc-icon> para el estado marcado (default mdi:check)
+ *   indeterminate-icon  nombre de <iswc-icon> para el estado mixto (default mdi:minus)
  *   checked, indeterminate, disabled, readonly, required, error   (boolean)
  *
  * Slots: default (etiqueta), hint
  * Parts: form-control, base, control, mark, label, hint
  * Custom states: checked, indeterminate, disabled, readonly, error
- * Events: is-change { checked, value }
+ * Events: iswc-change { checked, value }
  *
  * Sin atributo `size`: escala con el font-size del contexto.
  */
@@ -37,7 +37,7 @@ import { hasSlotted } from '../_shared/dom-utils.js';
     <div part="form-control" class="form-control">
       <div part="base" class="base">
         <span part="control" class="control">
-          <is-icon part="mark" class="mark" hidden></is-icon>
+          <iswc-icon part="mark" class="mark" hidden></iswc-icon>
         </span>
         <span part="label" class="label" id="label"><slot></slot></span>
       </div>
@@ -56,7 +56,7 @@ import { hasSlotted } from '../_shared/dom-utils.js';
 
   /** Sin flatten: el texto de fallback del slot no cuenta como contenido propio. */
 
-  class IsCheckbox extends ElementBase {
+  class IswcCheckbox extends ElementBase {
     /** Personalización por atributo (ver `core/attrs.ts`). */
     static styleAttrs = {
     size: '--iswc-checkbox-size',
@@ -254,7 +254,7 @@ import { hasSlotted } from '../_shared/dom-utils.js';
       const next = !this.checked;
       if (this.indeterminate) this.indeterminate = false;
       this.checked = next;
-      emit(this, 'is-change', { checked: next, value: this.value });
+      emit(this, 'iswc-change', { checked: next, value: this.value });
     }
 
     #onClick = (e: PointerEvent): void => {
@@ -275,5 +275,5 @@ import { hasSlotted } from '../_shared/dom-utils.js';
     };
   }
 
-  defineElement('is-checkbox', IsCheckbox, 'IsCheckbox');
+  defineElement('iswc-checkbox', IswcCheckbox, 'IswcCheckbox');
 })();

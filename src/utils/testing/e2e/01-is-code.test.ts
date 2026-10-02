@@ -1,11 +1,11 @@
-// 01-is-code.test.ts: ataque en profundidad al docs de <is-code> tras la
+// 01-iswc-code.test.ts: ataque en profundidad al docs de <iswc-code> tras la
 // migracion a motor nativo (sin CodeMirror). Verifica en el navegador real:
 //   - cero rastro de CodeMirror (nodos, global, recursos, tags)
 //   - read-only/editable/inline pintan con el motor nativo (.ic-* / .tok-*)
-//   - escribir en el editor editable emite is-input/is-change/is-cursor y
+//   - escribir en el editor editable emite iswc-input/iswc-change/iswc-cursor y
 //     repinta (valor, lineas, linea activa)
 //   - las marks se pintan nativas y el tooltip se abre por caret
-//   - el tema reacciona a data-theme/is-theme-change sin recargar nada de CM
+//   - el tema reacciona a data-theme/iswc-theme-change sin recargar nada de CM
 import { before, after } from 'node:test';
 import assert from 'node:assert/strict';
 import type { Page } from '@browserbasehq/stagehand';
@@ -23,7 +23,7 @@ import type { CtxE2E, EditorIsCode, ContadoresEventos, FasesMarks, RastroCodeMir
 import { cargarToon, textoDe } from '../../system/toons.ts';
 
 // Textos de test SIEMPRE desde los toons (src/utils/system/toons/*.json).
-const TOON_CODE = cargarToon('is-code');
+const TOON_CODE = cargarToon('iswc-code');
 const TEXTO_ESCRITURA = textoDe(TOON_CODE, 'escribirEnEditor') || '// e2e nativo';
 const TITULO_TOOLTIP = textoDe(TOON_CODE, 'tooltipMarks') || 'add(a, b)';
 
@@ -33,7 +33,7 @@ const testE2E = crearTestE2E(() => (ctx ? ctx.page : null));
 
 before(async () => {
   if (!DISPONIBLE) return;
-  ctx = await arrancar({ etiqueta: '01-is-code' });
+  ctx = await arrancar({ etiqueta: '01-iswc-code' });
 });
 
 after(async () => {
@@ -50,7 +50,7 @@ export type EstadoEscrituraDespues = { evs: ContadoresEventos; valueOk: boolean;
 testE2E('sin CodeMirror: sin nodos .CodeMirror, sin global y sin recursos cm-*', { timeout: 240000 }, async (t) => {
   if (!DISPONIBLE) return t.skip('faltan variables E2E');
   const page = pagina();
-  await abrirGaleria(page, 'is-code', { ms: 6000 });
+  await abrirGaleria(page, 'iswc-code', { ms: 6000 });
   const r = await rastroCodeMirror(page);
   assert.equal(r.nodos, 0, 'no debe haber nodos .CodeMirror ni clases cm-s-*');
   assert.equal(r.global, 'undefined', 'no debe existir el global CodeMirror');
@@ -62,9 +62,9 @@ testE2E('sin CodeMirror: sin nodos .CodeMirror, sin global y sin recursos cm-*',
 testE2E('read-only e inline pintan con el motor nativo (nada vacio)', { timeout: 180000 }, async (t) => {
   if (!DISPONIBLE) return t.skip('faltan variables E2E');
   const page = pagina();
-  await abrirGaleria(page, 'is-code', { ms: 6000 });
+  await abrirGaleria(page, 'iswc-code', { ms: 6000 });
   const r = (await page.evaluate(() => {
-    const hosts = [...document.querySelectorAll<EditorIsCode>('#previewHost is-code')];
+    const hosts = [...document.querySelectorAll<EditorIsCode>('#previewHost iswc-code')];
     const conShadow = hosts.filter((h) => h.shadowRoot);
     const pintados = conShadow.filter((h) => {
       const sr = h.shadowRoot;
@@ -86,29 +86,29 @@ testE2E('read-only e inline pintan con el motor nativo (nada vacio)', { timeout:
       tokens,
     };
   })) as EstadoPintado;
-  assert.ok(r.total > 0, 'el docs debe tener is-code');
-  assert.ok(r.pintados > 0, 'debe haber is-code readonly pintados con .ic-line no vacias');
+  assert.ok(r.total > 0, 'el docs debe tener iswc-code');
+  assert.ok(r.pintados > 0, 'debe haber iswc-code readonly pintados con .ic-line no vacias');
   assert.ok(r.readonly > 0, 'debe haber vistas readonly');
   assert.ok(r.editables > 0, 'debe haber editores nativos (textarea.ic-input)');
   assert.ok(r.tokens > 0, 'el resaltado debe emitir tokens .tok-*');
-  t.diagnostic(`is-code: ${r.total} total, ${r.pintados} pintados, ${r.readonly} readonly, ${r.editables} editable, ${r.inline} inline, ${r.tokens} tokens`);
+  t.diagnostic(`iswc-code: ${r.total} total, ${r.pintados} pintados, ${r.readonly} readonly, ${r.editables} editable, ${r.inline} inline, ${r.tokens} tokens`);
   await evidencia(page, '01b-nativo-pintado');
 });
 
-testE2E('escribir en el editor editable emite is-input/is-change/is-cursor y repinta', { timeout: 180000 }, async (t) => {
+testE2E('escribir en el editor editable emite iswc-input/iswc-change/iswc-cursor y repinta', { timeout: 180000 }, async (t) => {
   if (!DISPONIBLE) return t.skip('faltan variables E2E');
   const page = pagina();
-  await abrirGaleria(page, 'is-code', { ms: 6000 });
+  await abrirGaleria(page, 'iswc-code', { ms: 6000 });
   const antes = (await page.evaluate(() => {
-    const h = [...document.querySelectorAll<EditorIsCode>('#previewHost is-code')].find((c) => (
+    const h = [...document.querySelectorAll<EditorIsCode>('#previewHost iswc-code')].find((c) => (
       c.shadowRoot?.querySelector('textarea.ic-input')
     ));
     if (!h) return null;
     window.__edE2E = h;
     window.__evs = { input: 0, change: 0, cursor: 0 };
-    h.addEventListener('is-input', () => { if (window.__evs) window.__evs.input++; });
-    h.addEventListener('is-change', () => { if (window.__evs) window.__evs.change++; });
-    h.addEventListener('is-cursor', () => { if (window.__evs) window.__evs.cursor++; });
+    h.addEventListener('iswc-input', () => { if (window.__evs) window.__evs.input++; });
+    h.addEventListener('iswc-change', () => { if (window.__evs) window.__evs.change++; });
+    h.addEventListener('iswc-cursor', () => { if (window.__evs) window.__evs.cursor++; });
     const ta = h.shadowRoot.querySelector<HTMLTextAreaElement>('textarea.ic-input');
     const antes = {
       value: ta ? ta.value : '',
@@ -120,7 +120,7 @@ testE2E('escribir en el editor editable emite is-input/is-change/is-cursor y rep
   })) as EstadoEscrituraAntes | null;
   assert.ok(antes, 'debe existir un editor editable en el docs');
   await esperarMs(600);
-  // El textarea vive en el shadow de <is-code> y el proxy de Stagehand no
+  // El textarea vive en el shadow de <iswc-code> y el proxy de Stagehand no
   // expone page.keyboard: se inserta en el caret con setRangeText y se
   // dispara el evento `input` real (el mismo camino que pisa el teclado:
   // el handler nativo lee ta.value y repinta/emite).
@@ -148,8 +148,8 @@ testE2E('escribir en el editor editable emite is-input/is-change/is-cursor y rep
   }, TEXTO_ESCRITURA)) as EstadoEscrituraDespues | null;
   assert.ok(despues, 'el editor debe seguir presente tras escribir');
   assert.ok(despues.valueOk, 'el valor del editor debe contener lo tecleado');
-  assert.ok(despues.evs.input >= 1 && despues.evs.change >= 1, `is-input/is-change disparados (${JSON.stringify(despues.evs)})`);
-  assert.ok(despues.evs.cursor >= 1, 'is-cursor debe dispararse');
+  assert.ok(despues.evs.input >= 1 && despues.evs.change >= 1, `iswc-input/iswc-change disparados (${JSON.stringify(despues.evs)})`);
+  assert.ok(despues.evs.cursor >= 1, 'iswc-cursor debe dispararse');
   assert.ok(despues.lineas >= antes!.lineas, `repintado: lineas ${antes!.lineas} â†’ ${despues.lineas}`);
   assert.ok(despues.activa >= 0, 'linea activa presente');
   t.diagnostic(`editor: ${JSON.stringify(despues.evs)} eventos; ${despues.lineas} lineas; gutter ${despues.gutter}`);
@@ -160,9 +160,9 @@ export type EstadoTip = { open: boolean; texto: string; phases: FasesMarks; };
 testE2E('marks nativas: spans con data-mark-id y tooltip por caret', { timeout: 180000 }, async (t) => {
   if (!DISPONIBLE) return t.skip('faltan variables E2E');
   const page = pagina();
-  await abrirGaleria(page, 'is-code', { ms: 6000 });
+  await abrirGaleria(page, 'iswc-code', { ms: 6000 });
   const spans = (await page.evaluate(() => {
-    const h = [...document.querySelectorAll<EditorIsCode>('#previewHost is-code')].find((c) => (
+    const h = [...document.querySelectorAll<EditorIsCode>('#previewHost iswc-code')].find((c) => (
       c.shadowRoot?.querySelector('.ic-input') && c.shadowRoot.querySelector('span[data-mark-id]')
     ));
     if (!h) return { n: 0, value: '' };
@@ -178,7 +178,7 @@ testE2E('marks nativas: spans con data-mark-id y tooltip por caret', { timeout: 
     const ta = h?.shadowRoot.querySelector<HTMLTextAreaElement>('textarea.ic-input');
     if (!h || !ta) return false;
     const phases: FasesMarks = [];
-    h.addEventListener('is-mark-activate', (e) => phases.push(`${String((e as CustomEvent<{ phase?: string; mark?: { id?: string } }>).detail?.phase)}:${String((e as CustomEvent<{ mark?: { id?: string } }>).detail?.mark?.id ?? '')}`));
+    h.addEventListener('iswc-mark-activate', (e) => phases.push(`${String((e as CustomEvent<{ phase?: string; mark?: { id?: string } }>).detail?.phase)}:${String((e as CustomEvent<{ mark?: { id?: string } }>).detail?.mark?.id ?? '')}`));
     window.__phases = phases;
     const idx = h.value.indexOf('add') + 1;
     ta.focus();
@@ -193,7 +193,7 @@ testE2E('marks nativas: spans con data-mark-id y tooltip por caret', { timeout: 
     const h = window.__edMarks;
     if (!h) return null;
     const sr = h.shadowRoot;
-    const t = sr.querySelector<HTMLElement & { open?: boolean }>('is-tooltip');
+    const t = sr.querySelector<HTMLElement & { open?: boolean }>('iswc-tooltip');
     return {
       open: t?.open ?? false,
       texto: ((t?.textContent ?? '').trim()).slice(0, 50),
@@ -203,25 +203,25 @@ testE2E('marks nativas: spans con data-mark-id y tooltip por caret', { timeout: 
   assert.ok(tip, 'tooltip presente');
   assert.ok(tip.open, 'el tooltip debe abrirse con el caret dentro de la mark');
   assert.ok(tip.texto.startsWith(TITULO_TOOLTIP), `el tooltip muestra el texto del toon "${TITULO_TOOLTIP}" (${tip.texto})`);
-  assert.ok(tip.phases.includes('enter:tip-add'), `is-mark-activate enter:tip-add (${tip.phases.join(',')})`);
+  assert.ok(tip.phases.includes('enter:tip-add'), `iswc-mark-activate enter:tip-add (${tip.phases.join(',')})`);
   await evidencia(page, '01d-marks-tooltip');
 });
 
-testE2E('tema reactivo: data-theme + is-theme-change repinta sin CodeMirror', { timeout: 180000 }, async (t) => {
+testE2E('tema reactivo: data-theme + iswc-theme-change repinta sin CodeMirror', { timeout: 180000 }, async (t) => {
   if (!DISPONIBLE) return t.skip('faltan variables E2E');
   const page = pagina();
-  await abrirGaleria(page, 'is-code', { ms: 5000 });
+  await abrirGaleria(page, 'iswc-code', { ms: 5000 });
   const base = await page.evaluate(() => {
-    const h = document.querySelector('#previewHost is-code');
+    const h = document.querySelector('#previewHost iswc-code');
     return h ? getComputedStyle(h).getPropertyValue('--iswc-code-bg').trim() : '';
   });
   await page.evaluate(() => {
     document.documentElement.dataset.theme = 'light';
-    document.dispatchEvent(new CustomEvent('is-theme-change', { detail: { theme: 'light' } }));
+    document.dispatchEvent(new CustomEvent('iswc-theme-change', { detail: { theme: 'light' } }));
   });
   await esperarMs(1500);
   const luz = await page.evaluate(() => {
-    const h = document.querySelector('#previewHost is-code');
+    const h = document.querySelector('#previewHost iswc-code');
     return h ? getComputedStyle(h).getPropertyValue('--iswc-code-bg').trim() : '';
   });
   assert.ok(base && luz, 'debe existir --iswc-code-bg en el host');
@@ -231,7 +231,7 @@ testE2E('tema reactivo: data-theme + is-theme-change repinta sin CodeMirror', { 
   await evidencia(page, '01e-tema-reactivo');
 });
 
-testE2E('sin errores de consola en la profundidad de is-code', { timeout: 30000 }, async (t) => {
+testE2E('sin errores de consola en la profundidad de iswc-code', { timeout: 30000 }, async (t) => {
   if (!DISPONIBLE) return t.skip('faltan variables E2E');
   const problemas = problemasDeConsola(ctx!.consola);
   const unicos = [...new Set(problemas.map((p) => p.texto))];

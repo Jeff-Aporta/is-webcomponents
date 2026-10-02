@@ -20,24 +20,24 @@ import type {
 import type { TurtleTheme } from '../_shared/path-turtle.js';
 
 /**
- * <is-class-diagram> — diagrama de clases UML en SVG, sin Mermaid.
+ * <iswc-class-diagram> — diagrama de clases UML en SVG, sin Mermaid.
  *
- * Configuración por JSON, igual que <is-flowchart>:
+ * Configuración por JSON, igual que <iswc-flowchart>:
  *
- *   <is-class-diagram>
+ *   <iswc-class-diagram>
  *     <script type="application/json">
  *       { "classDiagram": { "direction": "TB", "classes": [...], "relations": [...] } }
  *     </script>
- *   </is-class-diagram>
+ *   </iswc-class-diagram>
  *
  * Atributos: color (inline | viewer), open-on-click
  * Propiedades: payload, spec, layout, turtle, hiddenGroups
- * Eventos: is-render, is-turtle-state, is-open-viewer, is-toggle-group
+ * Eventos: iswc-render, iswc-turtle-state, iswc-open-viewer, iswc-toggle-group
  */
 
 const SVG_NS = 'http://www.w3.org/2000/svg';
 
-class IsClassDiagram extends DiagramElementBase {
+class IswcClassDiagram extends DiagramElementBase {
   #theme: DiagramTheme | null = null;
   #turtle: SequenceTurtle | null = null;
   #hiddenGroups: Set<string> = new Set();
@@ -106,7 +106,7 @@ class IsClassDiagram extends DiagramElementBase {
     const layout = computeClassLayout(visible);
     this.layout = layout;
     this.#buildSvg(layout, theme);
-    this.wrap.classList.toggle('is-viewer', this.isViewer);
+    this.wrap.classList.toggle('iswc-viewer', this.isViewer);
   }
 
   #buildSvg(layout: ClassLayout, theme: DiagramTheme) {
@@ -154,10 +154,10 @@ class IsClassDiagram extends DiagramElementBase {
       viewW: W,
       viewH: H,
       autoLoop: this.isViewer,
-      onState: (state: unknown) => emit(this, 'is-turtle-state', state),
+      onState: (state: unknown) => emit(this, 'iswc-turtle-state', state),
     });
 
-    emit(this, 'is-render', { layout, svg: this.svg });
+    emit(this, 'iswc-render', { layout, svg: this.svg });
   }
 
   #buildLegend(layout: ClassLayout, theme: DiagramTheme) {
@@ -402,14 +402,14 @@ class IsClassDiagram extends DiagramElementBase {
     if (this.isViewer) {
       const item = e.composedPath().find((x) => (x as HTMLElement | undefined)?.dataset?.groupId);
       if (item) {
-        emitCancelable(this, 'is-toggle-group', { id: (item as HTMLElement).dataset.groupId });
+        emitCancelable(this, 'iswc-toggle-group', { id: (item as HTMLElement).dataset.groupId });
       }
       return;
     }
     // El visor es opt-in: sin `open-on-click` el clic no hace nada y tampoco
-    // se anuncia `is-open-viewer`, que prometeria una apertura que no ocurre.
+    // se anuncia `iswc-open-viewer`, que prometeria una apertura que no ocurre.
     if (!this.hasAttribute('open-on-click')) return;
-    const ev = new CustomEvent('is-open-viewer', {
+    const ev = new CustomEvent('iswc-open-viewer', {
       bubbles: true, composed: true, cancelable: true, detail: { payload: this.payload },
     });
     this.dispatchEvent(ev);
@@ -441,14 +441,14 @@ class IsClassDiagram extends DiagramElementBase {
     // Resalta la clase y las relaciones que la tocan; atenúa el resto.
     for (const [nodeId, node] of this.#nodeNodes) {
       const active = nodeId === id;
-      node.g.classList.toggle('is-active', active);
-      node.g.classList.toggle('is-dim', !!id && !active);
+      node.g.classList.toggle('iswc-active', active);
+      node.g.classList.toggle('iswc-dim', !!id && !active);
       node.box.setAttribute('stroke-width', String(active ? 2.1 : 1.3));
     }
     for (const [, edge] of this.#edgeNodes) {
       const touches = !!id && (edge.e.from === id || edge.e.to === id);
-      edge.g.classList.toggle('is-active', touches);
-      edge.g.classList.toggle('is-dim', !!id && !touches);
+      edge.g.classList.toggle('iswc-active', touches);
+      edge.g.classList.toggle('iswc-dim', !!id && !touches);
     }
 
     this.#turtle?.setPaused(!!id);
@@ -473,9 +473,9 @@ class IsClassDiagram extends DiagramElementBase {
   }
 }
 
-defineElement('is-class-diagram', IsClassDiagram, 'IsClassDiagram');
+defineElement('iswc-class-diagram', IswcClassDiagram, 'IswcClassDiagram');
 
-registerDiagramKind('class', 'is-class-diagram');
-registerDiagramKind('classDiagram', 'is-class-diagram');
+registerDiagramKind('class', 'iswc-class-diagram');
+registerDiagramKind('classDiagram', 'iswc-class-diagram');
 
-export { IsClassDiagram };
+export { IswcClassDiagram };

@@ -1,4 +1,4 @@
-# Plan: Editor visual editable para `<is-er-diagram>` alineado con archify
+# Plan: Editor visual editable para `<iswc-er-diagram>` alineado con archify
 
 > Documento vivo del laboratorio de diagramas editables en `is-webcomponents`.
 > Parte del objetivo mayor: hacer todo lo relacionado a diagramas editable y
@@ -12,7 +12,7 @@ produce SVG determinista. La limitación es que **no son editables desde la UI**
 posiciones, aristas, estilos y textos solo se cambian tocando el JSON.
 
 El objetivo de esta fase es construir un **editor visual completo** para uno de
-esos diagramas (empezamos por `<is-er-diagram>`) que permita:
+esos diagramas (empezamos por `<iswc-er-diagram>`) que permita:
 
 - Arrastrar entidades para reposicionarlas.
 - Crear, borrar y modificar aristas (tipos, extremos, cardinalidad, etiqueta).
@@ -140,7 +140,7 @@ Claves:
 
 ### 2.1 Compatibilidad hacia atrás
 
-ISWC ya tiene un JSON para `<is-er-diagram>`:
+ISWC ya tiene un JSON para `<iswc-er-diagram>`:
 
 ```jsonc
 {
@@ -216,7 +216,7 @@ JSON que el componente consume. Esta es la clave del determinismo:
                          │ payload prop
                          ▼
 ┌─────────────────────────────────────────────────────────────┐
-│       <is-er-diagram payload={payload}>                      │
+│       <iswc-er-diagram payload={payload}>                      │
 │   resolveErSpec → computeErLayout → #buildSvg                │
 └─────────────────────────────────────────────────────────────┘
 ```
@@ -288,7 +288,7 @@ JSON que el componente consume. Esta es la clave del determinismo:
     - Sliders/inputs para colores (fill, stroke), paddings, márgenes, radius.
     - Selector de dashStyle y variant.
     - Botones: nueva entidad, nueva relación, eliminar.
-- API: el editor envuelve al `<is-er-diagram>` y le pasa el payload.
+- API: el editor envuelve al `<iswc-er-diagram>` y le pasa el payload.
 
 ### Fase E — Demos  ✅
 
@@ -335,9 +335,9 @@ is-webcomponents/
 
 ## 6. Próximos pasos (después del ER piloto)
 
-Una vez validado el patrón en `<is-er-diagram>`:
+Una vez validado el patrón en `<iswc-er-diagram>`:
 
-1. Aplicar el mismo editor a `<is-flowchart>` (el más cercano semánticamente).
+1. Aplicar el mismo editor a `<iswc-flowchart>` (el más cercano semánticamente).
 2. Generalizar `er-editor.ts` → `diagram-editor.ts` parametrizable.
 3. Crear el "archify-mirror" para el resto de tipos ISWC.
 4. Cuando todos los tipos soporten `pos`, `route`, `via`, `variant`: ahí se
@@ -350,7 +350,7 @@ Una vez validado el patrón en `<is-er-diagram>`:
 - [x] Fase A — Extender `er-spec.ts` con campos archify-style
 - [x] Fase B — Routing ortogonal/recto (`straight`, `orthogonal-h`, `orthogonal-v`, `auto`)
 - [x] Fase C — Estilos y dashed con animación CSS embebida
-- [x] Fase D — Editor visual `<is-er-editor>` (state, undo/redo, multi-select, drag, click-to-connect, panel, export)
+- [x] Fase D — Editor visual `<iswc-er-editor>` (state, undo/redo, multi-select, drag, click-to-connect, panel, export)
 - [x] Fase E — Demos: `index.html`, `er-editor.html`, `er-static.html`
 - [x] Fase F — Serialización determinista (round-trip idéntico)
 
@@ -364,7 +364,7 @@ accesibilidad) y comparte una suite Stagehand opcional para QA visual.
 | `er-editor.html` | 11 (smoke + drag + undo/redo + add/delete + export JSON/SVG + determinismo + a11y) | sí | 11 |
 | `er-static.html` | 8 (smoke + animation + routes + estilos + a11y) | sí | 8 |
 
-Cobertura efectiva (sobre el feature surface de `<is-er-diagram>`):
+Cobertura efectiva (sobre el feature surface de `<iswc-er-diagram>`):
 
 - **Smoke**: el componente monta, renderiza entidades/aristas, expone API.
 - **Funcional**: drag con snap a 8px, undo/redo, add/delete entities, click-to-connect (en demo interactivo).
@@ -394,7 +394,7 @@ corre todas las suites y baja el servidor. `--only=editor|static` filtra.
                        ▲                       ▲
                        │                       │
             ┌──────────┴────────┐    ┌─────────┴─────────┐
-            │  <is-er-diagram>  │    │   <is-er-editor>   │
+            │  <iswc-er-diagram>  │    │   <iswc-er-editor>   │
             │       (lite)      │    │       (full)       │
             │                   │    │                   │
             │  - read <script>  │    │  - state interno  │
@@ -414,7 +414,7 @@ Garantía de paridad visual: ambos componentes llaman `serializeErPayload()` /
 
 | Decisión | Elección |
 |---|---|
-| Forma del editor | Componente hermano `<is-er-editor>` que compone `<is-er-diagram>` |
+| Forma del editor | Componente hermano `<iswc-er-editor>` que compone `<iswc-er-diagram>` |
 | Undo/redo + multi-select | Sí (v1) |
 | Animación dash | Opt-in via `animation="trace"` o `meta.animation: "trace"` |
 | Validación JSON | Strict: campos desconocidos lanzan error |
@@ -423,5 +423,5 @@ Garantía de paridad visual: ambos componentes llaman `serializeErPayload()` /
 | Tests | Híbrido Playwright + Stagehand |
 | Cobertura | Smoke + funcional + determinismo + accesibilidad |
 | Schema version | Sin bump, nuevos campos son opt-in |
-| State root | Interno en `<is-er-editor>` (encapsulado) |
+| State root | Interno en `<iswc-er-editor>` (encapsulado) |
 | Snap grid | 8px, sin visualización |

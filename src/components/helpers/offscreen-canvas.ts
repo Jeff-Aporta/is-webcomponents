@@ -1,18 +1,18 @@
 import { adoptCss, defineElement, emit } from '../../core/element.js';
 
 /**
- * <is-offscreen-canvas> — transferControlToOffscreen; worker-src opcional.
+ * <iswc-offscreen-canvas> — transferControlToOffscreen; worker-src opcional.
  * Si no hay OffscreenCanvas, getContext('2d') en el hilo principal.
  *
  * Atributos: width, height, worker-src
  * Props: canvas, offscreen (OffscreenCanvas | HTMLCanvasElement)
- * Eventos: is-ready { offscreen, fallback }
+ * Eventos: iswc-ready { offscreen, fallback }
  */
 (() => {
   const TEMPLATE = document.createElement('template');
   TEMPLATE.innerHTML = '<canvas part="canvas" class="cv"></canvas>';
 
-  class IsOffscreenCanvas extends HTMLElement {
+  class IswcOffscreenCanvas extends HTMLElement {
     static get observedAttributes(): string[] { return ['width', 'height', 'worker-src']; }
 
     #cv!: HTMLCanvasElement;
@@ -58,12 +58,12 @@ import { adoptCss, defineElement, emit } from '../../core/element.js';
           this.#worker = worker;
           worker.postMessage({ canvas: off }, [off]);
         }
-        emit(this, 'is-ready', { offscreen: off, fallback: false });
+        emit(this, 'iswc-ready', { offscreen: off, fallback: false });
         return;
       }
-      emit(this, 'is-ready', { offscreen: this.#cv, fallback: true });
+      emit(this, 'iswc-ready', { offscreen: this.#cv, fallback: true });
     }
   }
 
-  defineElement('is-offscreen-canvas', IsOffscreenCanvas, 'IsOffscreenCanvas');
+  defineElement('iswc-offscreen-canvas', IswcOffscreenCanvas, 'IswcOffscreenCanvas');
 })();

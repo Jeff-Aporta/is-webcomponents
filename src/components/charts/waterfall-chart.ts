@@ -2,5 +2,5 @@ import './chart.js';
 import { drawWaterfallMarks } from './marks-waterfall.js';
 
 (() => {
-  window.__isDefineTypedChart?.('is-waterfall-chart', 'waterfall', drawWaterfallMarks);
+  window.__isDefineTypedChart?.('iswc-waterfall-chart', 'waterfall', drawWaterfallMarks);
 })();

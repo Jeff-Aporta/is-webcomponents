@@ -1,4 +1,4 @@
-# File locks — is-editors
+# File locks — iswc-editors
 
 ## Locks permanentes (T1 cerrado)
 
@@ -24,8 +24,8 @@
 
 | Archivo | WT | Notas |
 |---|---|---|
-| `src/components/diagrams/class-editor.ts` (NUEVO) | WT-0012 | extiende `<is-class-diagram>` + base |
-| `src/components/diagrams/state-editor.ts` (NUEVO) | WT-0012 | extiende `<is-state-diagram>` + base |
+| `src/components/diagrams/class-editor.ts` (NUEVO) | WT-0012 | extiende `<iswc-class-diagram>` + base |
+| `src/components/diagrams/state-editor.ts` (NUEVO) | WT-0012 | extiende `<iswc-state-diagram>` + base |
 
 ## Locks de T4 — WT-00122 (jerárquicos)
 

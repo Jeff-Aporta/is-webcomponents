@@ -1,4 +1,4 @@
-// drawer.stagehand.test.mjs — verificaciones de calidad visual para is-drawer.
+// drawer.stagehand.test.mjs — verificaciones de calidad visual para iswc-drawer.
 import assert from 'node:assert/strict';
 import { BASE_URL, newPage, close, waitReady, screenshot, report, maybeStagehand } from './lib/harness.mjs';
 
@@ -77,7 +77,7 @@ for (const demo of DEMOS) {
 }
 
 const VISUAL_RUBRIC = `
-Evalúa la calidad visual del <is-drawer> en el screenshot.
+Evalúa la calidad visual del <iswc-drawer> en el screenshot.
 
 Checklist (todas deben cumplirse; marca cada una PASS o FAIL):
 

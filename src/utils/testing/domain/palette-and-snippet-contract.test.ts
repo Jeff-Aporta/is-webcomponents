@@ -38,8 +38,8 @@ check(
 );
 
 check(
-  /<is-palette-selector\b[^>]*\bid="brandPalette"[^>]*\bscope="root"/.test(indexHtml),
-  'index.html: el shell usa <is-palette-selector id="brandPalette" scope="root">',
+  /<iswc-palette-selector\b[^>]*\bid="brandPalette"[^>]*\bscope="root"/.test(indexHtml),
+  'index.html: el shell usa <iswc-palette-selector id="brandPalette" scope="root">',
 );
 
 check(
@@ -122,8 +122,8 @@ check(
   'demo-code.js: debe sellar clase .theme-dark / .theme-light en la raíz',
 );
 check(
-  /is-theme-change/.test(demoCode) && /is-palette-change/.test(demoCode),
-  'demo-code.js: debe escuchar is-theme-change e is-palette-change',
+  /iswc-theme-change/.test(demoCode) && /iswc-palette-change/.test(demoCode),
+  'demo-code.js: debe escuchar iswc-theme-change e iswc-palette-change',
 );
 check(
   /MutationObserver/.test(demoCode)

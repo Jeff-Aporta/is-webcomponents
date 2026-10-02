@@ -1,33 +1,33 @@
 ---
-tag: is-md-editor
+tag: iswc-md-editor
 tags:
-  - is-md-editor
+  - iswc-md-editor
 category: helpers
 status: public
 source: ./md-editor.js
 style: ./md-editor.css
 preview: ./md-editor.json
 ---
-# `<is-md-editor>`
+# `<iswc-md-editor>`
 
 ## Propósito
 
-Vista previa de solo lectura (markdown + HTML híbrido + chips `{{variable}}`) que al hacer clic, doble clic o Enter abre un `<is-dialog>` a pantalla completa para revisar (solo lectura) o editar (WYSIWYG + texto plano) el contenido. Port de la UX de `PromptBodyEditor` de PatyIA.
+Vista previa de solo lectura (markdown + HTML híbrido + chips `{{variable}}`) que al hacer clic, doble clic o Enter abre un `<iswc-dialog>` a pantalla completa para revisar (solo lectura) o editar (WYSIWYG + texto plano) el contenido. Port de la UX de `PromptBodyEditor` de PatyIA.
 
-Este módulo registra `<is-md-editor>`.
+Este módulo registra `<iswc-md-editor>`.
 
 ## Cuándo usarlo
 
 - Instrucciones/prompts con `{{variables}}` que hay que revisar o editar en un diálogo grande.
-- Snippets generados (p. ej. `is-cdn-snippet`) que solo se revisan y copian, sin edición.
+- Snippets generados (p. ej. `iswc-cdn-snippet`) que solo se revisan y copian, sin edición.
 - Cualquier bloque de texto MD/HTML donde una vista embebida (siempre visible) sería demasiado alta.
 
 ## Cuándo no usarlo
 
-- Solo pintar MD embebido (sin modal/tools): usar `<is-md-render>`.
-- Edición ligera in-place: `<is-md-render can-edit>`.
-- Formularios de texto corto: usar `<is-input>`/`<is-textarea>`.
-- Rich text WYSIWYG de propósito general sin variables ni preview: usar `<is-rte>`.
+- Solo pintar MD embebido (sin modal/tools): usar `<iswc-md-render>`.
+- Edición ligera in-place: `<iswc-md-render can-edit>`.
+- Formularios de texto corto: usar `<iswc-input>`/`<iswc-textarea>`.
+- Rich text WYSIWYG de propósito general sin variables ni preview: usar `<iswc-rte>`.
 
 ## Importación
 
@@ -38,10 +38,10 @@ import './md-editor.js';
 ## Ejemplo mínimo
 
 ```html
-<is-md-editor
+<iswc-md-editor
   label="Prompt del sistema"
   value="# Instrucción&#10;&#10;Eres un asistente que responde en **español**."
-></is-md-editor>
+></iswc-md-editor>
 ```
 
 ## API
@@ -88,13 +88,13 @@ No expone.
 
 | Evento | Detail | Cuándo |
 | --- | --- | --- |
-| `is-change` | `{ value, document? }` | Al cerrar confirmando borrador — solo si `can-edit`. |
-| `is-persist` | `{ value, document? }` | Al pulsar «Guardar» (y tras `actions.persist` / PUT remoto). |
-| `is-load` | `{ document }` | Tras `load()` exitoso. |
-| `is-error` | `{ action, error }` | Fallo en load/persist/delete. |
-| `is-download` | `{ filename, bytes }` | Tras `download()`. |
-| `is-open` | `{}` | Diálogo abierto. |
-| `is-close` | `{}` | Diálogo cerrado. |
+| `iswc-change` | `{ value, document? }` | Al cerrar confirmando borrador — solo si `can-edit`. |
+| `iswc-persist` | `{ value, document? }` | Al pulsar «Guardar» (y tras `actions.persist` / PUT remoto). |
+| `iswc-load` | `{ document }` | Tras `load()` exitoso. |
+| `iswc-error` | `{ action, error }` | Fallo en load/persist/delete. |
+| `iswc-download` | `{ filename, bytes }` | Tras `download()`. |
+| `iswc-open` | `{}` | Diálogo abierto. |
+| `iswc-close` | `{}` | Diálogo cerrado. |
 
 ### Métodos y propiedades públicas
 
@@ -114,8 +114,8 @@ No expone.
 | `preview` | Contenedor de la vista previa (clic para abrir). |
 | `preview-body` | Contenido renderizado (markdown + HTML + chips). |
 | `preview-empty` | Texto de estado vacío. |
-| `copy` | `<is-copy-button>` de la vista previa. |
-| `dialog` | El `<is-dialog>` interno. |
+| `copy` | `<iswc-copy-button>` de la vista previa. |
+| `dialog` | El `<iswc-dialog>` interno. |
 | `dialog-label` | Título del diálogo. |
 | `toolbar` | Barra de formato (solo si `can-edit`). |
 | `toolbar-button` | Cada botón de la toolbar. |
@@ -144,46 +144,50 @@ No es form-associated: es un visor/editor de contenido, no un control de formula
 
 Documentación de cabecera preservada desde fuente:
 
-> `<is-md-editor>` — Web Component (vanilla, zero dependencias).
+> `<iswc-md-editor>` — Web Component (vanilla, zero dependencias).
 > Vista previa de solo lectura (markdown + HTML híbrido + chips `{{var}}`) que
-> al hacer clic/doble clic/Enter abre un `<is-dialog>` a pantalla completa
+> al hacer clic/doble clic/Enter abre un `<iswc-dialog>` a pantalla completa
 > para revisar (modo solo lectura) o editar (modo WYSIWYG + texto plano).
 
 Con `can-edit=false` (default): abrir el diálogo es solo revisión — sin toolbar, contenido no editable, «Guardar» deshabilitado; «Descartar»/«Cerrar» solo cierran. El botón de copiar de la vista previa funciona siempre, con o sin `can-edit`.
 
 Con `can-edit`: el contenido es editable en modo WYSIWYG (contenteditable) con toolbar (deshacer/rehacer, negrita, cursiva, H1/H2, lista) y un switch «Texto plano» para editar el markdown fuente sin renderizar. Escribir `{{nombre}}` completo lo convierte automáticamente en chip de color determinista por nombre.
 
+El **preview** (y la superficie readonly del diálogo) usa el mismo hydrate que `<iswc-md-render>`: fences/`inline` → `iswc-code`, ` ```iswc-* ` → diagramas viewer, HTML `is-*` con `ensure` lazy. Clic en embeds no abre el diálogo.
+
 **Persistencia:** elige una vía.
 
 1. **API HTTP** — `api` / `src` con `IsMdEditorApiConfig.endpoints`.
 2. **Actions custom** — `el.actions = { load, persist, delete }` (prioridad sobre HTTP; útil sin app URL).
-3. **Solo local** — sin `api` ni `actions`: Guardar emite `is-persist` y el host decide.
+3. **Solo local** — sin `api` ni `actions`: Guardar emite `iswc-persist` y el host decide.
 
 ## Dependencias y componentes relacionados
 
-- [`./md-render.md`](./md-render.md) (`<is-md-render>`) — render inline sin tools
-- [`../layout/dialog.js`](../layout/dialog.js) (`<is-dialog>`)
-- [`../actions/button.js`](../actions/button.js) (`<is-button>`)
-- [`../actions/copy-button.js`](../actions/copy-button.js) (`<is-copy-button>`)
-- [`../forms/switch.js`](../forms/switch.js) (`<is-switch>`)
-- [`../media/icon.js`](../media/icon.js) (`<is-icon>`)
+- [`./md-render.md`](./md-render.md) (`<iswc-md-render>`) — render inline sin tools
+- [`./md-hydrate.js`](./md-hydrate.js) — lazy ensure + upgrade iswc-code / diagramas
+- [`./md-iswc-fences.js`](./md-iswc-fences.js) — mapa `iswc-*` → tag
+- [`../layout/dialog.js`](../layout/dialog.js) (`<iswc-dialog>`)
+- [`../actions/button.js`](../actions/button.js) (`<iswc-button>`)
+- [`../actions/copy-button.js`](../actions/copy-button.js) (`<iswc-copy-button>`)
+- [`../forms/switch.js`](../forms/switch.js) (`<iswc-switch>`)
+- [`../media/icon.js`](../media/icon.js) (`<iswc-icon>`)
 - [`./md-lite.js`](./md-lite.js) — `mdToHtml()`, markdown ligero sin dependencias npm.
 - [`./md-editor-api.js`](./md-editor-api.js) + [`./md-editor-api.d.ts`](./md-editor-api.d.ts)
 - [`../_shared/prompt-md.js`](../_shared/prompt-md.js) — variables `{{nombre}}` + render MD/HTML híbrido.
 - [`../_shared/adopt-css.js`](../_shared/adopt-css.js)
 
-Tags del módulo: `<is-md-editor>`.
+Tags del módulo: `<iswc-md-editor>`.
 
 ## Accesibilidad
 
 - La vista previa tiene `role="button"` y `tabindex="0"`; Enter/Espacio abren el diálogo.
-- El diálogo hereda el manejo de foco, Escape y `aria-modal` de `<is-dialog>`.
+- El diálogo hereda el manejo de foco, Escape y `aria-modal` de `<iswc-dialog>`.
 - El surface editable usa `role="textbox"` y `aria-multiline="true"`.
 
 ## Ejemplo avanzado
 
 ```html
-<is-md-editor id="tpl" can-edit label="Plantilla"></is-md-editor>
+<iswc-md-editor id="tpl" can-edit label="Plantilla"></iswc-md-editor>
 <script type="module">
   const el = document.getElementById('tpl');
 
@@ -211,7 +215,7 @@ Tags del módulo: `<is-md-editor>`.
 - Esperar que `Descartar` emita algún evento: no emite nada, solo cierra.
 - Esperar edición con `can-edit` ausente: por defecto es solo lectura.
 - Inventar una propiedad `open` de lectura/escritura: es un atributo reflejado + métodos `open()`/`close()`, no un accessor.
-- Usar este tag solo para pintar MD embebido: preferir `<is-md-render>`.
+- Usar este tag solo para pintar MD embebido: preferir `<iswc-md-render>`.
 - Copiar preview contra fuente actual; JS/CSS prevalecen.
 
 ## Reglas para LLM

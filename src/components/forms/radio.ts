@@ -4,8 +4,8 @@ import { ElementBase } from '../../core/element-base.js';
 import { setOptionalAttr } from '../_shared/reflect.js';
 
 /**
- * <is-radio> — Opción de radio. NO es form-associated a propósito: el valor lo
- * publica <is-radio-group>, que es quien participa en el <form>.
+ * <iswc-radio> — Opción de radio. NO es form-associated a propósito: el valor lo
+ * publica <iswc-radio-group>, que es quien participa en el <form>.
  *
  * Atributos
  *   value, checked, disabled
@@ -16,7 +16,7 @@ import { setOptionalAttr } from '../_shared/reflect.js';
  * Slots: default (etiqueta), description (texto secundario)
  * Parts: base, control, dot, text, label, description
  * Custom states: placement-* readonly error (heredados del grupo)
- * Events: is-radio-select { value } — lo consume el grupo. Sin grupo, se marca solo.
+ * Events: iswc-radio-select { value } — lo consume el grupo. Sin grupo, se marca solo.
  */
 
 (() => {
@@ -37,7 +37,7 @@ import { setOptionalAttr } from '../_shared/reflect.js';
   const VARIANTS: string[] = ['brand', 'neutral', 'success', 'warning', 'danger'];
   const PLACEMENTS: string[] = ['end', 'start', 'top', 'bottom'];
 
-  class IsRadio extends ElementBase {
+  class IswcRadio extends ElementBase {
     /** Personalización por atributo (ver `core/attrs.ts`). */
     static styleAttrs = {
     accent: { prop: '--iswc-radio-accent', onlyColorValues: true },
@@ -111,7 +111,7 @@ import { setOptionalAttr } from '../_shared/reflect.js';
       else this.removeAttribute('label-placement');
     }
 
-    get group(): (HTMLElement & { disabled?: boolean; readonly?: boolean; error?: boolean }) | null { return this.closest('is-radio-group'); }
+    get group(): (HTMLElement & { disabled?: boolean; readonly?: boolean; error?: boolean }) | null { return this.closest('iswc-radio-group'); }
 
     /**
      * Recalcula lo que hereda del grupo. Lo llama el grupo.
@@ -153,7 +153,7 @@ import { setOptionalAttr } from '../_shared/reflect.js';
         return;
       }
       if (group.disabled || group.readonly) return;
-      emit(this, 'is-radio-select', { value: this.value });
+      emit(this, 'iswc-radio-select', { value: this.value });
     }
 
     #onClick = (e: PointerEvent): void => {
@@ -172,5 +172,5 @@ import { setOptionalAttr } from '../_shared/reflect.js';
     };
   }
 
-  defineElement('is-radio', IsRadio, 'IsRadio');
+  defineElement('iswc-radio', IswcRadio, 'IswcRadio');
 })();

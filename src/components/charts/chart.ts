@@ -8,7 +8,7 @@ import { registerDiagramKind } from '../diagrams/diagram-kinds.js';
 import { setStringAttr } from '../_shared/reflect.js';
 
 /**
- * <is-chart> — motor de charts en SVG, sin dependencias.
+ * <iswc-chart> — motor de charts en SVG, sin dependencias.
  *
  * Consumo compatible con Chart.js: `config` (propiedad) o <script type="application/json">
  * hijo, con la forma `{ type, data: { labels, datasets }, options }`.
@@ -18,14 +18,14 @@ import { setStringAttr } from '../_shared/reflect.js';
  * Atributos: type, label, legend-position, index-axis, min, max, grid,
  *            stacked, without-animation, without-legend, without-tooltip, x-label, y-label
  * Propiedades: config, svg, chart (alias de svg)
- * Evento: is-render
+ * Evento: iswc-render
  */
 
 const SVG_NS = 'http://www.w3.org/2000/svg';
 
 /**
  * Forma del factory `defineTypedChart` (se exporta más abajo). Los wrappers
- * <is-bar-chart>, <is-pie-chart>, etc. lo invocan vía `window.__isDefineTypedChart`
+ * <iswc-bar-chart>, <iswc-pie-chart>, etc. lo invocan vía `window.__isDefineTypedChart`
  * como guarda de carga para registrar su tipo fijo y su `drawMarks`.
  */
 export type TypedChartFactory = ((
@@ -33,13 +33,13 @@ export type TypedChartFactory = ((
   fixedType: string,
   drawMarks: (ctx: ChartCtx) => void,
   styleModuleUrl?: string,
-) => typeof IsChart);
+) => typeof IswcChart);
 
 declare global {
   interface Window {
     /**
-     * Factory expuesto por <is-chart> para que los wrappers tipados
-     * (bar, pie, line, …) se autoregistren. Opcional: si <is-chart>
+     * Factory expuesto por <iswc-chart> para que los wrappers tipados
+     * (bar, pie, line, …) se autoregistren. Opcional: si <iswc-chart>
      * aún no cargó, el wrapper sale sin hacer nada.
      */
     __isDefineTypedChart?: TypedChartFactory;
@@ -143,7 +143,7 @@ type ChartCtx = {
   pt?: (c: number, v: number) => { x: number; y: number };
 };
 
-/** drawMarks por tipo — lo llenan los elementos tipados; permite <is-chart type="..."> genérico. */
+/** drawMarks por tipo — lo llenan los elementos tipados; permite <iswc-chart type="..."> genérico. */
 const MARK_REGISTRY: Record<string, (ctx: ChartCtx) => void> = Object.create(null) as Record<string, (ctx: ChartCtx) => void>;
 
 const compactFmt = new Intl.NumberFormat('es-CO', { notation: 'compact', maximumFractionDigits: 1 });
@@ -171,7 +171,7 @@ function isNumericXY(datasets: ChartDataset[]): boolean {
   return !!first && typeof first === 'object' && 'x' in first;
 }
 
-class IsChart extends withStyleAttrs(HTMLElement) {
+class IswcChart extends withStyleAttrs(HTMLElement) {
     /** Personalización por atributo (ver `core/attrs.ts`). */
     static styleAttrs = {
       'text-color': { prop: '--chart-text', onlyColorValues: true },
@@ -190,7 +190,7 @@ class IsChart extends withStyleAttrs(HTMLElement) {
       'title-size': '--chart-title-size',
       'tooltip-size': '--chart-tooltip-size',
       // Slots de paleta: los consumen las variantes radiales (radar,
-      // polar-area) además de las series de is-chart.
+      // polar-area) además de las series de iswc-chart.
       'fill-1': { prop: '--fill-color-1', onlyColorValues: true },
       'fill-2': { prop: '--fill-color-2', onlyColorValues: true },
       'fill-3': { prop: '--fill-color-3', onlyColorValues: true },
@@ -199,7 +199,7 @@ class IsChart extends withStyleAttrs(HTMLElement) {
       'fill-6': { prop: '--fill-color-6', onlyColorValues: true },
     };
 
-  static get observedAttributes(): string[] { return [...OBSERVED, ...IsChart.styleAttrNames]; }
+  static get observedAttributes(): string[] { return [...OBSERVED, ...IswcChart.styleAttrNames]; }
   static fixedType: string | null = null;
   static styleModuleUrl: string | null = null;
   static drawMarks: ((ctx: ChartCtx) => void) | null = null;
@@ -230,7 +230,7 @@ class IsChart extends withStyleAttrs(HTMLElement) {
 
   constructor() {
     super();
-    this.#fixedType = (this.constructor as typeof IsChart).fixedType || null;
+    this.#fixedType = (this.constructor as typeof IswcChart).fixedType || null;
     const shadow = this.attachShadow({ mode: 'open' });
     shadow.innerHTML = /* html */ `
       <div part="base" class="wrap">
@@ -241,7 +241,7 @@ class IsChart extends withStyleAttrs(HTMLElement) {
         <div class="slot-hidden"><slot></slot></div>
       </div>
     `;
-    adoptCss(shadow, (this.constructor as typeof IsChart).styleModuleUrl || import.meta.url);
+    adoptCss(shadow, (this.constructor as typeof IswcChart).styleModuleUrl || import.meta.url);
     this.#wrap = shadow.querySelector<HTMLElement>('.wrap') as HTMLElement;
     this.#svg = shadow.querySelector<HTMLElement>('.chart-svg') as HTMLElement;
     this.#legendEl = shadow.querySelector<HTMLElement>('.legend') as HTMLElement;
@@ -433,7 +433,7 @@ class IsChart extends withStyleAttrs(HTMLElement) {
     this.#wrap.dataset['legend'] = showLegend ? opts.legendPosition : 'none';
     this.#wrap.dataset['theme'] = document.documentElement.classList.contains('theme-light') ? 'light' : 'dark';
     this.#wrap.classList.toggle('animate', opts.animate);
-    this.#wrap.classList.toggle('is-viewer', this.isViewer);
+    this.#wrap.classList.toggle('iswc-viewer', this.isViewer);
     this.#tooltipEnabled = opts.tooltip;
 
     const { colors, fills } = this.#resolveColors(Math.max(isSlice ? labels.length : allDatasets.length, 1));
@@ -483,7 +483,7 @@ class IsChart extends withStyleAttrs(HTMLElement) {
       });
       t.textContent = 'Sin datos';
       this.#svg.appendChild(t);
-      emit(this, 'is-render', { svg: this.#svg });
+      emit(this, 'iswc-render', { svg: this.#svg });
       return;
     }
 
@@ -563,7 +563,7 @@ class IsChart extends withStyleAttrs(HTMLElement) {
 
     // Se resuelve antes de los ejes: un tipo puede declarar su propio dominio
     // (la cascada, por ejemplo, se mide sobre el acumulado, no sobre los deltas).
-    const ctor = this.constructor as typeof IsChart;
+    const ctor = this.constructor as typeof IswcChart;
     const drawMarks: ((ctx: ChartCtx) => void) | null = ctor.drawMarks || MARK_REGISTRY[type] || null;
     ctx.drawMarks = drawMarks;
 
@@ -584,7 +584,7 @@ class IsChart extends withStyleAttrs(HTMLElement) {
     if (opts.animate) this.#primeLineAnimation(group);
     this.#mountTurtle(group, width, height, text);
 
-    emit(this, 'is-render', { svg: this.#svg });
+    emit(this, 'iswc-render', { svg: this.#svg });
   }
 
   /**
@@ -603,7 +603,7 @@ class IsChart extends withStyleAttrs(HTMLElement) {
     this.#turtleGroup?.remove();
     this.#turtleGroup = null;
     if (!lines.length) {
-      emit(this, 'is-turtle-state', { playing: false, idx: 0, total: 0, replay: 0 });
+      emit(this, 'iswc-turtle-state', { playing: false, idx: 0, total: 0, replay: 0 });
       return;
     }
 
@@ -622,14 +622,14 @@ class IsChart extends withStyleAttrs(HTMLElement) {
       viewW: width,
       viewH: height,
       autoLoop: this.isViewer,
-      onState: (state: unknown) => emit(this, 'is-turtle-state', state),
+      onState: (state: unknown) => emit(this, 'iswc-turtle-state', state),
     });
   }
 
   /** Clic en colore inline: abre el visor a pantalla completa. */
   #onHostClick = (): void => {
     if (this.isViewer || !this.hasAttribute('open-on-click')) return;
-    const ev = new CustomEvent('is-open-viewer', {
+    const ev = new CustomEvent('iswc-open-viewer', {
       bubbles: true, composed: true, cancelable: true, detail: { payload: this.#config },
     });
     this.dispatchEvent(ev);
@@ -640,16 +640,16 @@ class IsChart extends withStyleAttrs(HTMLElement) {
     await import('../diagrams/diagram-lightbox.js');
     let lb = this.#ownLightbox;
     if (!lb || !lb.isConnected) {
-      lb = document.createElement('is-diagram-lightbox');
+      lb = document.createElement('iswc-diagram-lightbox');
       lb.setAttribute('kind', this.type);
       if (lb) {
-        lb.addEventListener('is-after-hide', () => lb && lb.remove());
+        lb.addEventListener('iswc-after-hide', () => lb && lb.remove());
       }
       document.body.appendChild(lb);
       this.#ownLightbox = lb;
     }
     if (!lb) return;
-    // El visor monta <is-chart> genérico: el tipo debe viajar en el payload.
+    // El visor monta <iswc-chart> genérico: el tipo debe viajar en el payload.
     (lb as unknown as { payload: ChartConfig }).payload = { ...(this.#config || {}), type: this.type };
     (lb as unknown as { open: boolean }).open = true;
   }
@@ -946,23 +946,23 @@ function defineTypedChart(
   fixedType: string,
   drawMarks: (ctx: ChartCtx) => void,
   styleModuleUrl?: string,
-): typeof IsChart {
+): typeof IswcChart {
   if (typeof drawMarks === 'function') MARK_REGISTRY[fixedType] = drawMarks;
-  class Typed extends IsChart {
+  class Typed extends IswcChart {
     static override fixedType: string = fixedType;
     static override drawMarks: (ctx: ChartCtx) => void = drawMarks;
     static override styleModuleUrl: string | null = styleModuleUrl || null;
   }
-  return defineElement(tag, Typed, true) as unknown as typeof IsChart;
+  return defineElement(tag, Typed, true) as unknown as typeof IswcChart;
 }
 
-defineElement('is-chart', IsChart, 'IsChart');
+defineElement('iswc-chart', IswcChart, 'IswcChart');
 for (const kind of ['chart', 'bar', 'line', 'pie', 'doughnut', 'radar', 'polarArea', 'scatter', 'bubble']) {
-  registerDiagramKind(kind, 'is-chart');
+  registerDiagramKind(kind, 'iswc-chart');
 }
 
 if (typeof window !== 'undefined') {
   window.__isDefineTypedChart = defineTypedChart;
 }
 
-export { IsChart, defineTypedChart, formatValue, type ChartCtx, type ChartConfig, type ChartDataset, type ChartDataPoint, type ResolvedOptions, type HitRecord };
+export { IswcChart, defineTypedChart, formatValue, type ChartCtx, type ChartConfig, type ChartDataset, type ChartDataPoint, type ResolvedOptions, type HitRecord };

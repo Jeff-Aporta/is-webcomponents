@@ -1,5 +1,5 @@
 // code.stagehand.test.mjs — verificaciones visuales deterministas para el
-// editor <is-code>. Mismo enfoque que er-stagehand.test.mjs:
+// editor <iswc-code>. Mismo enfoque que er-stagehand.test.mjs:
 //
 //   - Por defecto corre checks con Playwright + getBoundingClientRect +
 //     atributos/CSS. Cero LLM, cero API keys, CI-friendly.
@@ -22,7 +22,7 @@ import {
 
 const URL = `${BASE_URL}/demos/code/code/code.html`;
 
-// Cada entrada es una <is-code> del demo + selector de shadow host + texto
+// Cada entrada es una <iswc-code> del demo + selector de shadow host + texto
 // esperado en `value`. La verificación "nº de líneas == N" usa expectedLines.
 const SCENES = [
   { id: 'code-js',          expectedLines: 6,  mode: 'editable' },
@@ -37,7 +37,7 @@ const SCENES = [
 const results = [];
 
 /**
- * Checks deterministas por cada <is-code> del demo. Implementa el rubric
+ * Checks deterministas por cada <iswc-code> del demo. Implementa el rubric
  * "visual" como aserciones estructurales:
  *   (1) TOKENS LEGIBLES     — los token spans tienen color/display no vacío.
  *   (2) LINE NUMBERS ORDEN  — gutter 1..N sin huecos, en orden.
@@ -142,11 +142,11 @@ async function checkDeterministic(page) {
   }
 
   // (5b) Cambio de tema — al pasar a "light" la variable de bg cambia. El
-  // componente escucha `is-theme-change` en document para re-aplicar el
+  // componente escucha `iswc-theme-change` en document para re-aplicar el
   // preset (no se re-monta en cada cambio de atributo).
   await page.evaluate(() => {
     document.documentElement.dataset.theme = 'light';
-    document.dispatchEvent(new CustomEvent('is-theme-change'));
+    document.dispatchEvent(new CustomEvent('iswc-theme-change'));
   });
   await page.waitForTimeout(80);
   const light = await page.evaluate((scenes) => {
@@ -167,7 +167,7 @@ async function checkDeterministic(page) {
   // produce regresión visual.
   await page.evaluate(() => {
     document.documentElement.dataset.theme = 'dark';
-    document.dispatchEvent(new CustomEvent('is-theme-change'));
+    document.dispatchEvent(new CustomEvent('iswc-theme-change'));
   });
   await page.waitForTimeout(80);
 }

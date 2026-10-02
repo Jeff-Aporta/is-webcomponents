@@ -13,7 +13,7 @@ test('stagehand: la página expone data-dropdown-item-ready y 7 items', async ()
   const page = await browser.newPage();
   await page.goto(URL_DEMO, { waitUntil: 'domcontentloaded' });
   await page.waitForSelector('html[data-dropdown-item-ready]');
-  const n = await page.evaluate(() => document.querySelectorAll('is-dropdown-item').length);
+  const n = await page.evaluate(() => document.querySelectorAll('iswc-dropdown-item').length);
   // 3 standalone + 3 checkbox + 1 con submenú + 3 submenú = 10
   assert.ok(n >= 7, `esperaba >=7 items, hay ${n}`);
   await page.close();
@@ -22,7 +22,7 @@ test('stagehand: la página expone data-dropdown-item-ready y 7 items', async ()
 test('stagehand: Tab navega por items standalone', async () => {
   const page = await browser.newPage();
   await page.goto(URL_DEMO, { waitUntil: 'domcontentloaded' });
-  await page.waitForSelector('is-dropdown-item:defined');
+  await page.waitForSelector('iswc-dropdown-item:defined');
   await page.focus('#i1');
   const focus1 = await page.evaluate(() => document.activeElement?.id);
   assert.equal(focus1, 'i1');
@@ -32,13 +32,13 @@ test('stagehand: Tab navega por items standalone', async () => {
   await page.close();
 });
 
-test('stagehand: Enter/Space en item normal emite is-dropdown-item-select', async () => {
+test('stagehand: Enter/Space en item normal emite iswc-dropdown-item-select', async () => {
   const page = await browser.newPage();
   await page.goto(URL_DEMO, { waitUntil: 'domcontentloaded' });
-  await page.waitForSelector('is-dropdown-item:defined');
+  await page.waitForSelector('iswc-dropdown-item:defined');
   await page.evaluate(() => {
     window.__diKey = 0;
-    document.getElementById('i1').addEventListener('is-dropdown-item-select', () => {
+    document.getElementById('i1').addEventListener('iswc-dropdown-item-select', () => {
       window.__diKey += 1;
     });
   });
@@ -53,7 +53,7 @@ test('stagehand: Enter/Space en item normal emite is-dropdown-item-select', asyn
 test('stagehand: ArrowRight abre el submenú', async () => {
   const page = await browser.newPage();
   await page.goto(URL_DEMO, { waitUntil: 'domcontentloaded' });
-  await page.waitForSelector('is-dropdown-item#sub1:defined');
+  await page.waitForSelector('iswc-dropdown-item#sub1:defined');
   await page.focus('#sub1');
   await page.keyboard.press('ArrowRight');
   await page.waitForTimeout(50);
@@ -70,9 +70,9 @@ test('stagehand: ArrowRight abre el submenú', async () => {
 test('stagehand: items checkbox tienen checkmark visible en el shadow DOM', async () => {
   const page = await browser.newPage();
   await page.goto(URL_DEMO, { waitUntil: 'domcontentloaded' });
-  await page.waitForSelector('is-dropdown-item:defined');
+  await page.waitForSelector('iswc-dropdown-item:defined');
   const visible = await page.evaluate(() => {
-    return [...document.querySelectorAll('is-dropdown-item[type="checkbox"]')].every((it) => {
+    return [...document.querySelectorAll('iswc-dropdown-item[type="checkbox"]')].every((it) => {
       return !it.shadowRoot.querySelector('.checkmark').hidden;
     });
   });
@@ -84,7 +84,7 @@ test('stagehand: prefers-reduced-motion no afecta al checkbox', async () => {
   const ctx = await browser.newContext({ reducedMotion: 'reduce' });
   const page = await ctx.newPage();
   await page.goto(URL_DEMO, { waitUntil: 'domcontentloaded' });
-  await page.waitForSelector('is-dropdown-item:defined');
+  await page.waitForSelector('iswc-dropdown-item:defined');
   await page.evaluate(() => document.getElementById('c3').click());
   await page.waitForTimeout(30);
   const checked = await page.evaluate(() => document.getElementById('c3').checked);

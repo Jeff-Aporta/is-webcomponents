@@ -1,14 +1,14 @@
 ---
-tag: is-modal-verificacion
+tag: iswc-modal-verificacion
 tags:
-  - is-modal-verificacion
+  - iswc-modal-verificacion
 category: isp
 status: public
 source: ./modal-verificacion.js
 style: ./modal-verificacion.css
 preview: ./modal-verificacion.json
 ---
-# `<is-modal-verificacion>`
+# `<iswc-modal-verificacion>`
 
 ## Propósito
 
@@ -17,12 +17,12 @@ Al abrirse ejecuta `controller.actVerificar(record)` y pinta los mensajes
 devueltos coloreados por severidad. Al cerrarse vacía la lista de mensajes,
 igual que el original reasignaba un `TMensajesVerificacion` nuevo.
 
-Este módulo registra `<is-modal-verificacion>`.
+Este módulo registra `<iswc-modal-verificacion>`.
 
 NO extiende `ModalBase`: el focus-trap de `ModalBase` recorre el LIGHT DOM
 (`this.querySelectorAll`) y aquí todo el contenido vive en el shadow, así que
 el trap dejaría el diálogo sin tabulación. Sigue el mismo patrón que
-`<is-confirm-delete>`, el otro modal ISP portado.
+`<iswc-confirm-delete>`, el otro modal ISP portado.
 
 ## Cuándo usarlo
 
@@ -31,8 +31,8 @@ aprobar), donde el backend devuelve una lista de mensajes por severidad.
 
 ## Cuándo no usarlo
 
-Para confirmar un borrado usar `<is-confirm-delete>`; para un aviso sin
-verificación asíncrona usar `<is-dialog>` o `<is-toast>`.
+Para confirmar un borrado usar `<iswc-confirm-delete>`; para un aviso sin
+verificación asíncrona usar `<iswc-dialog>` o `<iswc-toast>`.
 
 ## Importación
 
@@ -43,8 +43,8 @@ import './modal-verificacion.js';
 ## Ejemplo mínimo
 
 ```html
-<is-button id="verBtn">Verificar</is-button>
-<is-modal-verificacion id="modal" entity="tercero"></is-modal-verificacion>
+<iswc-button id="verBtn">Verificar</iswc-button>
+<iswc-modal-verificacion id="modal" entity="tercero"></iswc-modal-verificacion>
 <script type="module">
   const modal = document.getElementById('modal');
   modal.controller = {
@@ -105,13 +105,13 @@ No expone: todo el contenido del diálogo se construye en el shadow root.
 
 | Evento | detail | bubbles | composed |
 | --- | --- | --- | --- |
-| `is-verificacion` | `{ mensajes, qinfos, qwarning, qerrores }` | sí | sí |
-| `is-verificacion-error` | `{ message, error }` | sí | sí |
-| `is-cancel` | `{}` — cierre pedido por el usuario | sí | sí |
-| `is-show` / `is-after-show` / `is-hide` / `is-after-hide` | ciclo estándar del `<is-dialog>` interno | sí | sí |
+| `iswc-verificacion` | `{ mensajes, qinfos, qwarning, qerrores }` | sí | sí |
+| `iswc-verificacion-error` | `{ message, error }` | sí | sí |
+| `iswc-cancel` | `{}` — cierre pedido por el usuario | sí | sí |
+| `iswc-show` / `iswc-after-show` / `iswc-hide` / `iswc-after-hide` | ciclo estándar del `<iswc-dialog>` interno | sí | sí |
 
-`is-hide` es **cancelable**: es la vía para vetar un cierre. `is-cancel` se
-conserva como evento semántico ADICIONAL y acompaña a `is-hide` cuando el
+`iswc-hide` es **cancelable**: es la vía para vetar un cierre. `iswc-cancel` se
+conserva como evento semántico ADICIONAL y acompaña a `iswc-hide` cuando el
 cierre lo pide el usuario (Escape, backdrop, botón Cerrar); un `hide()`
 programático no emite ninguno de los dos.
 
@@ -146,17 +146,17 @@ campo.
 
 - `getMsgColor(itd)` — mapea severidad (`1..4`, o `'info'|'warning'|'error'|'success'`,
   incluidas variantes en mayúscula, copia exacta de `getMsgColor` del original)
-  a color semántico de `<is-text>`.
+  a color semántico de `<iswc-text>`.
 - `lowerCase(value)` — equivalente a `lowerCase` de ispgen: `null/undefined/''` → `''`.
 
 ## Comportamiento
 
 Al abrirse (`open` pasa a `true`), siembra un mensaje "Verificando..." antes de
 esperar la promesa de `actVerificar`, exactamente como el original. Si
-`actVerificar` lanza, se llama a `onError` y se emite `is-verificacion-error`
-en vez de `is-verificacion`.
+`actVerificar` lanza, se llama a `onError` y se emite `iswc-verificacion-error`
+en vez de `iswc-verificacion`.
 
-El componente NO implementa su propio ciclo de modal: compone un `<is-dialog>`
+El componente NO implementa su propio ciclo de modal: compone un `<iswc-dialog>`
 dentro de su shadow root y cuelga el contenido como light DOM suyo. De ahí
 salen gratis el focus-trap (que antes no existía), el `Escape`, el restore de
 foco y las animaciones.
@@ -170,22 +170,22 @@ foco y las animaciones.
 - [`./heading.js`](./heading.js)
 - [`../layout/dialog.js`](../layout/dialog.js) — provee todo el ciclo del modal.
 
-Tags del módulo: `<is-modal-verificacion>`.
+Tags del módulo: `<iswc-modal-verificacion>`.
 
 ## Accesibilidad
 
-`role="dialog"` + `aria-modal` (los pone el `<is-dialog>` interno); el foco
+`role="dialog"` + `aria-modal` (los pone el `<iswc-dialog>` interno); el foco
 entra en el primer elemento focuseable y vuelve al elemento previamente
 enfocado al cerrar. `Escape` cierra el diálogo. Hay **focus-trap** con `Tab` /
 `Shift+Tab`, que antes faltaba.
 
-Los `<is-button>` llevan `tabindex="0"` a propósito: usan `delegatesFocus`, así
+Los `<iswc-button>` llevan `tabindex="0"` a propósito: usan `delegatesFocus`, así
 que sin él no matchean el selector de focuseables del trap.
 
 ## Ejemplo avanzado
 
 ```html
-<is-modal-verificacion id="modal" entity="comprobante"></is-modal-verificacion>
+<iswc-modal-verificacion id="modal" entity="comprobante"></iswc-modal-verificacion>
 
 <script type="module">
   const modal = document.getElementById('modal');
@@ -197,7 +197,7 @@ que sin él no matchean el selector de focuseables del trap.
     },
   };
   modal.record = { id: 7 };
-  modal.addEventListener('is-after-hide', () => console.log('mensajes vaciados'));
+  modal.addEventListener('iswc-after-hide', () => console.log('mensajes vaciados'));
   modal.show();
 </script>
 ```

@@ -34,15 +34,15 @@ assert.ok(
   '.xp debe ser el contenedor scrollable (presentation.css bloquea el scroll de html/body)',
 );
 assert.ok(
-  /is-main\s*\{[^}]*height:\s*100%/s.test(html) && /is-main\s*\{[^}]*min-height:\s*0/s.test(html),
-  'is-main necesita `height:100%` + `min-height:0` para que el hijo flex pueda scrollear',
+  /iswc-main\s*\{[^}]*height:\s*100%/s.test(html) && /iswc-main\s*\{[^}]*min-height:\s*0/s.test(html),
+  'iswc-main necesita `height:100%` + `min-height:0` para que el hijo flex pueda scrollear',
 );
 
 // --- 2. Busqueda global de iconos y filtros --------------------------------
 
 assert.ok(
-  /<is-button-group id="scope"[\s\S]{0,220}value="icon"/.test(html),
-  'debe existir el ámbito de búsqueda "Iconos" dentro del <is-button-group>',
+  /<iswc-button-group id="scope"[\s\S]{0,220}value="icon"/.test(html),
+  'debe existir el ámbito de búsqueda "Iconos" dentro del <iswc-button-group>',
 );
 assert.ok(
   /function\s+paintIcons|paintIcons\s*=/.test(html),
@@ -86,14 +86,14 @@ for (const id of controls) {
 }
 
 // El aviso de validación NO es un <p> propio: se delega en el estado
-// `error` / `error-text` de <is-input>. Y el cierre lo resuelve el drawer.
+// `error` / `error-text` de <iswc-input>. Y el cierre lo resuelve el drawer.
 assert.ok(
   /error-text/.test(html) && /toggleAttribute\('error'/.test(html),
-  'la validación debe usar el estado error/error-text de <is-input>, no un aviso propio',
+  'la validación debe usar el estado error/error-text de <iswc-input>, no un aviso propio',
 );
 assert.ok(
   /data-drawer=\\?"close\\?"/.test(html) || html.includes('data-drawer'),
-  'cerrar el panel debe delegarse en <is-drawer> vía data-drawer="close"',
+  'cerrar el panel debe delegarse en <iswc-drawer> vía data-drawer="close"',
 );
 
 for (const unit of ['value="auto"', 'value="px"', 'value="em"', 'value="none"']) {
@@ -123,20 +123,20 @@ assert.ok(
 // caso de libro: antes era un <aside> que reinventaba backdrop, foco y cierre.
 
 const USAR = {
-  'is-drawer': 'el panel de personalización debe ser <is-drawer>, no un <aside> propio',
-  'is-select': 'los desplegables deben ser <is-select> + <is-option>',
-  'is-input': 'los campos de texto/número/búsqueda deben ser <is-input>',
-  'is-checkbox': 'las casillas deben ser <is-checkbox>',
-  'is-color-picker': 'el selector de color debe ser <is-color-picker>',
-  'is-slider': 'el control de tamaño debe ser <is-slider>',
-  'is-copy-button': 'copiar al portapapeles ya lo resuelve <is-copy-button>',
-  'is-toast': 'las notificaciones deben usar <is-toast>, no un div .toast propio',
-  'is-tag': 'las etiquetas de metadatos deben ser <is-tag>',
-  'is-card': 'las tarjetas de familia deben ser <is-card>',
-  'is-button-group': 'el conmutador Familias/Iconos debe ser <is-button-group>',
-  'is-callout': 'los estados vacíos y de error deben ser <is-callout>',
-  'is-progress-bar': 'el progreso de indexado debe ser <is-progress-bar>',
-  'is-breadcrumb': 'la vuelta al índice debe ser <is-breadcrumb>',
+  'iswc-drawer': 'el panel de personalización debe ser <iswc-drawer>, no un <aside> propio',
+  'iswc-select': 'los desplegables deben ser <iswc-select> + <iswc-option>',
+  'iswc-input': 'los campos de texto/número/búsqueda deben ser <iswc-input>',
+  'iswc-checkbox': 'las casillas deben ser <iswc-checkbox>',
+  'iswc-color-picker': 'el selector de color debe ser <iswc-color-picker>',
+  'iswc-slider': 'el control de tamaño debe ser <iswc-slider>',
+  'iswc-copy-button': 'copiar al portapapeles ya lo resuelve <iswc-copy-button>',
+  'iswc-toast': 'las notificaciones deben usar <iswc-toast>, no un div .toast propio',
+  'iswc-tag': 'las etiquetas de metadatos deben ser <iswc-tag>',
+  'iswc-card': 'las tarjetas de familia deben ser <iswc-card>',
+  'iswc-button-group': 'el conmutador Familias/Iconos debe ser <iswc-button-group>',
+  'iswc-callout': 'los estados vacíos y de error deben ser <iswc-callout>',
+  'iswc-progress-bar': 'el progreso de indexado debe ser <iswc-progress-bar>',
+  'iswc-breadcrumb': 'la vuelta al índice debe ser <iswc-breadcrumb>',
 };
 for (const [tag, motivo] of Object.entries(USAR)) {
   assert.ok(html.includes(`<${tag}`), motivo);
@@ -144,48 +144,48 @@ for (const [tag, motivo] of Object.entries(USAR)) {
 
 // Controles nativos que ya tienen equivalente propio.
 const NATIVOS = [
-  ['<select', 'is-select'],
-  ['<input type="color"', 'is-color-picker'],
-  ['<input type="range"', 'is-slider'],
-  ['<input type="checkbox"', 'is-checkbox'],
-  ['<input type="search"', 'is-input'],
-  ['<input type="number"', 'is-input'],
-  ['<input type="text"', 'is-input'],
+  ['<select', 'iswc-select'],
+  ['<input type="color"', 'iswc-color-picker'],
+  ['<input type="range"', 'iswc-slider'],
+  ['<input type="checkbox"', 'iswc-checkbox'],
+  ['<input type="search"', 'iswc-input'],
+  ['<input type="number"', 'iswc-input'],
+  ['<input type="text"', 'iswc-input'],
 ];
 for (const [nativo, reemplazo] of NATIVOS) {
   assert.ok(!html.includes(nativo), `\`${nativo}\` debe reemplazarse por <${reemplazo}>`);
 }
 
-// Un `.toast` a mano vuelve a duplicar <is-toast>.
-assert.ok(!/class="toast"/.test(html), 'no reimplementar el toast: usar <is-toast>');
-// Copiar a mano cuando existe <is-copy-button>.
+// Un `.toast` a mano vuelve a duplicar <iswc-toast>.
+assert.ok(!/class="toast"/.test(html), 'no reimplementar el toast: usar <iswc-toast>');
+// Copiar a mano cuando existe <iswc-copy-button>.
 assert.ok(
   !/navigator\.clipboard\.writeText/.test(html),
-  'no llamar a navigator.clipboard directamente: <is-copy-button> ya lo hace con feedback',
+  'no llamar a navigator.clipboard directamente: <iswc-copy-button> ya lo hace con feedback',
 );
 
 // --- 4. Custom elements inyectados por JS ----------------------------------
-// Regla del proyecto (LLM.md): los <is-icon> que se generan en bucle se crean
+// Regla del proyecto (LLM.md): los <iswc-icon> que se generan en bucle se crean
 // con createElement + setAttribute. Markup estatico del template es aceptable
 // (el parser los upgradea porque all.min.js ya registro la definicion); lo que
 // rompe es construir listas grandes concatenando strings de custom elements.
 assert.ok(
-  !/\.map\([^)]*`[^`]*<is-icon/s.test(html),
-  'no construir listas de <is-icon> con .map + template string: usar createElement + setAttribute',
+  !/\.map\([^)]*`[^`]*<iswc-icon/s.test(html),
+  'no construir listas de <iswc-icon> con .map + template string: usar createElement + setAttribute',
 );
 assert.equal(
-  (html.match(/createElement\('is-icon'\)/g) || []).length >= 3,
+  (html.match(/createElement\('iswc-icon'\)/g) || []).length >= 3,
   true,
-  'las celdas y muestras de iconos deben crearse con createElement(\'is-icon\')',
+  'las celdas y muestras de iconos deben crearse con createElement(\'iswc-icon\')',
 );
 
-// --- 5. Embebido al final del demo de is-icon ------------------------------
-// El explorador vive al final del demo de is-icon (components/media/icon.json), EMBEBIDO, no
+// --- 5. Embebido al final del demo de iswc-icon ------------------------------
+// El explorador vive al final del demo de iswc-icon (components/media/icon.json), EMBEBIDO, no
 // copiado: duplicar su markup significaria mantener dos buscadores.
 
 const iconHtml = await readFile(join(root, 'src/components/media/icon.json'), 'utf8');
 
-assert.ok(/id":\s*"explorer"/.test(iconHtml) || /"id": "explorer"/.test(iconHtml), 'is-icon.json debe tener la sección explorer');
+assert.ok(/id":\s*"explorer"/.test(iconHtml) || /"id": "explorer"/.test(iconHtml), 'iswc-icon.json debe tener la sección explorer');
 assert.ok(/xpFrame/.test(iconHtml), 'el explorador debe embeberse por iframe (fuente única)');
 assert.ok(
   /_shell\.html\?tag=icon-explorer|tag=icon-explorer/.test(iconHtml) ||
@@ -195,7 +195,7 @@ assert.ok(
 for (const marca of ['fltCategory', 'id="fFormat"', 'class="icon-grid"']) {
   assert.ok(
     !iconHtml.includes(marca),
-    `is-icon.json contiene "${marca}": el explorador se está duplicando en vez de embeberse`,
+    `iswc-icon.json contiene "${marca}": el explorador se está duplicando en vez de embeberse`,
   );
 }
 assert.ok(
@@ -203,4 +203,4 @@ assert.ok(
   'el contenedor del iframe necesita alto explícito: el explorador scrollea por dentro y con alto auto colapsa a 0',
 );
 
-console.log('OK icon-explorer — scroll, búsqueda global, filtros, formulario y embed en is-icon');
+console.log('OK icon-explorer — scroll, búsqueda global, filtros, formulario y embed en iswc-icon');

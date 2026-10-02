@@ -1,5 +1,5 @@
 /**
- * Cliente CRUD ligero para `<is-md-editor>`.
+ * Cliente CRUD ligero para `<iswc-md-editor>`.
  *
  * Tipos definidos localmente (en lugar de importarlos desde `./md-editor-api.d.ts`,
  * que en modo strict genera import circular con este mismo archivo).

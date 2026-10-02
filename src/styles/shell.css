@@ -39,13 +39,14 @@ body {
   display: flex;
   align-items: center;
   gap: 0.75em;
-  min-height: 3.75em;
-  padding: 0.625em 0.875em;
+  min-block-size: 3.75em;
+  padding-block: 0.625em;
+  padding-inline: 0.875em;
   /* Cristal sobrio: elevación por profundidad, no por color. */
   background: color-mix(in srgb, var(--iswc-bg-elev) 88%, transparent);
   backdrop-filter: blur(14px) saturate(120%);
   -webkit-backdrop-filter: blur(14px) saturate(120%);
-  border-bottom: 1px solid var(--iswc-border);
+  border-block-end: 1px solid var(--iswc-border);
   box-shadow:
     0 1px 0 color-mix(in srgb, #fff 5%, transparent) inset,
     0 6px 20px rgb(0 0 0 / 14%);
@@ -56,7 +57,7 @@ body {
     content: "";
     position: absolute;
     inset: auto 0 -1px;
-    height: 1px;
+    block-size: 1px;
     background: linear-gradient(90deg,
       var(--iswc-accent),
       color-mix(in srgb, var(--iswc-accent) 25%, transparent) 42%,
@@ -76,8 +77,9 @@ body {
     align-items: center;
     justify-content: center;
     min-width: 6.8em;
-    min-height: 0;
-    padding: 0.45em 0.8em;
+    min-block-size: 0;
+    padding-block: 0.45em;
+    padding-inline: 0.8em;
     border: 0;
     border-radius: 0.45em;
     background: var(--iswc-logo-bg);
@@ -101,10 +103,10 @@ body {
 
   & .brand-menu {
     position: absolute;
-    top: calc(100% + 0.4em);
-    left: 0;
+    inset-block-start: calc(100% + 0.4em);
+    inset-inline-start: 0;
     z-index: 20;
-    min-width: 11em;
+    min-inline-size: 11em;
     margin: 0;
     padding: 0.35em;
     list-style: none;
@@ -142,8 +144,8 @@ body {
     & .brand-menu__swatch {
       background: var(--iswc-color-brand);
       flex: 0 0 auto;
-      width: 0.85em;
-      height: 0.85em;
+      inline-size: 0.85em;
+      block-size: 0.85em;
       border-radius: 50%;
       /* ring neutro para que destaque sobre fondos suaves */
       box-shadow: 0 0 0 1px var(--iswc-border);
@@ -151,13 +153,13 @@ body {
 
     & .brand-menu__label {
       flex: 1 1 auto;
-      min-width: 0;
+      min-inline-size: 0;
     }
 
     & .brand-menu__check {
       flex: 0 0 auto;
-      width: 1em;
-      height: 1em;
+      inline-size: 1em;
+      block-size: 1em;
       /* Oculto cuando no es el activo — reserva el ancho para que el
          texto no salte de posición al cambiar la selección. */
       visibility: hidden;
@@ -167,13 +169,13 @@ body {
     }
   }
 
-  & .brand-wrap.is-open .brand {
+  & .brand-wrap.iswc-open .brand {
     outline: 2px solid var(--iswc-focus);
     outline-offset: 2px;
   }
 
   & button {
-    min-height: 2.25em;
+    min-block-size: 2.25em;
     border: 1px solid var(--iswc-control-border);
     border-radius: 0.4em;
     background: var(--iswc-control-bg);
@@ -188,11 +190,17 @@ body {
 
   /* push icon cluster a la derecha; plain+pill viven en el WC */
   & .shell-icon-btn {
-    margin-left: auto;
+    margin-inline-start: auto;
   }
 
-  & is-theme-toggle {
-    margin-left: 0;
+  & iswc-theme-toggle {
+    margin-inline-start: 0;
+  }
+
+  @media (max-width: 640px) {
+    flex-wrap: wrap;
+
+    & .brand { min-width: 5.5em; }
   }
 }
 
@@ -201,36 +209,38 @@ body {
   flex-direction: column;
   gap: 1.1em;
   box-sizing: border-box;
-  height: 100%;
-  min-height: 0;
-  padding: 0.9em 0.55em 1.5em;
+  block-size: 100%;
+  min-block-size: 0;
+  padding-block: 0.9em 1.5em;
+  padding-inline: 0.55em;
   overflow-x: hidden;
   overflow-y: auto;
   /* Tinte de marca mínimo arriba: ubica la columna sin gritar. */
   background:
     linear-gradient(180deg, color-mix(in srgb, var(--iswc-accent) 5%, transparent) 0, transparent 7em),
     var(--iswc-bg-elev);
-  border-right: 1px solid var(--iswc-border);
+  border-inline-end: 1px solid var(--iswc-border);
   scrollbar-width: thin;
   scrollbar-color: color-mix(in srgb, var(--iswc-accent) 35%, var(--iswc-control-border)) transparent;
 
-  &::-webkit-scrollbar { width: 9px; }
+  &::-webkit-scrollbar { inline-size: 9px; }
   &::-webkit-scrollbar-track { background: transparent; }
   &::-webkit-scrollbar-thumb {
     border: 3px solid transparent;
     border-radius: 999px;
     background-clip: content-box;
     background-color: color-mix(in srgb, var(--iswc-control-border) 70%, transparent);
-  }
-  &:hover::-webkit-scrollbar-thumb {
-    background-color: color-mix(in srgb, var(--iswc-accent) 45%, var(--iswc-control-border));
+
+    &:hover {
+      background-color: color-mix(in srgb, var(--iswc-accent) 45%, var(--iswc-control-border));
+    }
   }
 
   & .shell-nav__group {
     display: flex;
     flex-direction: column;
     gap: 0.2em;
-    min-width: 0;
+    min-inline-size: 0;
   }
 
   /* Encabezado de grupo con hilo: separa sin añadir cajas. */
@@ -238,7 +248,8 @@ body {
     display: flex;
     align-items: center;
     gap: 0.6em;
-    padding: 0.2em 0.5em 0.5em;
+    padding-block: 0.2em 0.5em;
+    padding-inline: 0.5em;
     font-size: 0.68em;
     font-weight: 700;
     letter-spacing: 0.11em;
@@ -250,7 +261,7 @@ body {
     &::after {
       content: "";
       flex: 1;
-      height: 1px;
+      block-size: 1px;
       background: linear-gradient(90deg, var(--iswc-border), transparent);
       /* El hilo decorativo no debe robar selección del título. */
       user-select: none;
@@ -267,7 +278,9 @@ body {
     flex-direction: column;
     align-items: flex-start;
     gap: 0.05em;
-    padding: 0.28em 0.5em 0.28em 0.95em;
+    padding-block: 0.28em;
+    padding-inline-start: 0.95em;
+    padding-inline-end: 0.5em;
     margin-inline-start: 0.35em;
     border: 1px solid transparent;
     border-radius: 0.35em;
@@ -300,8 +313,8 @@ body {
     }
     & .shell-nav__isp-dot {
       flex: 0 0 auto;
-      width: 0.35em;
-      height: 0.35em;
+      inline-size: 0.35em;
+      block-size: 0.35em;
       border-radius: 50%;
       background: color-mix(in srgb, var(--iswc-text-dim, #64748b) 70%, transparent);
       box-shadow: 0 0 0 1px color-mix(in srgb, var(--iswc-border, #273040) 50%, transparent);
@@ -325,10 +338,9 @@ body {
       &::before {
         content: "";
         position: absolute;
-        left: 0.28em;
-        top: 0.4em;
-        bottom: 0.4em;
-        width: 3px;
+        inset-inline-start: 0.28em;
+        inset-block: 0.4em;
+        inline-size: 3px;
         border-radius: 999px;
         background: var(--iswc-accent);
       }
@@ -341,42 +353,41 @@ body {
 }
 
 .preview-frame {
-  width: 100%;
-  height: 100%;
+  inline-size: 100%;
+  block-size: 100%;
   border: 0;
   background: var(--iswc-bg);
+
+  &[hidden] { display: none !important; }
 }
 
 .preview-stage {
   position: relative;
-  width: 100%;
-  height: 100%;
-  min-height: 0;
+  inline-size: 100%;
+  block-size: 100%;
+  min-block-size: 0;
   display: grid;
   background: var(--iswc-bg);
-}
 
-.preview-stage > .preview-frame,
-.preview-stage > .preview-host {
-  grid-area: 1 / 1;
-  width: 100%;
-  height: 100%;
-  min-height: 0;
-  border: 0;
+  > .preview-frame,
+  > .preview-host {
+    grid-area: 1 / 1;
+    inline-size: 100%;
+    block-size: 100%;
+    min-block-size: 0;
+    border: 0;
+  }
 }
 
 .preview-host {
   overflow: auto;
   background: var(--iswc-bg);
-}
 
-.preview-host[hidden],
-.preview-frame[hidden] {
-  display: none !important;
+  &[hidden] { display: none !important; }
 }
 
 /* Hamburguesa del catálogo: solo se muestra cuando el nav vive en el drawer
-   (lo controla syncNavLayout con el atributo hidden). Es is-button plain+pill. */
+   (lo controla syncNavLayout con el atributo hidden). Es iswc-button plain+pill. */
 .shell-menu-btn {
   flex: 0 0 auto;
 
@@ -390,18 +401,10 @@ body {
   --spacing: 0.9rem;
 
   & .shell-nav {
-    height: auto;
+    block-size: auto;
     padding: 0;
-    border-right: 0;
+    border-inline-end: 0;
     background: none;
     overflow: visible;
-  }
-}
-
-@media (max-width: 640px) {
-  .shell-bar {
-    flex-wrap: wrap;
-
-    & .brand { min-width: 5.5em; }
   }
 }

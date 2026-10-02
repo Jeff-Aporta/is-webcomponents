@@ -3,10 +3,10 @@
 // Cobertura:
 //   - smoke: custom element definido, shadow DOM con N botones year
 //     según min/max
-//   - funcional: click en un año emite is-change con detail.value/yr; cambiar
+//   - funcional: click en un año emite iswc-change con detail.value/yr; cambiar
 //     value por propiedad selecciona el año
 //   - accesibilidad: role=radiogroup, cada botón es radio con aria-checked
-//   - edge cases: click en un año disabled no emite is-change; min/max
+//   - edge cases: click en un año disabled no emite iswc-change; min/max
 //     delimitan el rango; Home/End saltan a los extremos
 import assert from 'node:assert/strict';
 import { BASE_URL, newPage, close, waitReady, screenshot, report } from './lib/harness.mjs';
@@ -21,11 +21,11 @@ tests.push({
     await page.goto(URL, { waitUntil: 'domcontentloaded' });
     await waitReady(page, 'data-year-calendar-ready');
     const data = await page.evaluate(() => {
-      const cals = [...document.querySelectorAll('is-year-calendar')];
+      const cals = [...document.querySelectorAll('iswc-year-calendar')];
       return cals.map((c) => {
         const sr = c.shadowRoot;
         return {
-          defined: !!customElements.get('is-year-calendar'),
+          defined: !!customElements.get('iswc-year-calendar'),
           hasShadow: !!sr,
           hasBase: !!sr?.querySelector('.base'),
           yearsCount: sr?.querySelectorAll('button.year').length,
@@ -35,7 +35,7 @@ tests.push({
       });
     });
     assert.equal(data.length, 4, 'debe haber 4 year-calendars');
-    assert.equal(data[0].defined, true, 'is-year-calendar definido');
+    assert.equal(data[0].defined, true, 'iswc-year-calendar definido');
     assert.equal(data[0].hasShadow, true, 'shadow root presente');
     assert.equal(data[0].hasBase, true, '.base presente');
     assert.equal(data[0].yearsCount, 13, '#basico 2020–2032 = 13 años');
@@ -48,14 +48,14 @@ tests.push({
 });
 
 tests.push({
-  name: 'funcional: click en un año emite is-change con detail.value',
+  name: 'funcional: click en un año emite iswc-change con detail.value',
   run: async (page) => {
     await page.goto(URL, { waitUntil: 'domcontentloaded' });
     await waitReady(page, 'data-year-calendar-ready');
     const result = await page.evaluate(() => {
       return new Promise((resolve) => {
         const c = document.querySelector('#basico');
-        c.addEventListener('is-change', (e) => resolve(e.detail), { once: true });
+        c.addEventListener('iswc-change', (e) => resolve(e.detail), { once: true });
         const btn = c.shadowRoot.querySelector('button.year[data-year="2030"]');
         btn.click();
       });

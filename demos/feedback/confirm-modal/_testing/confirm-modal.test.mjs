@@ -1,6 +1,6 @@
-// confirm-modal.test.mjs — tests exhaustivos del demo is-confirm-modal.
+// confirm-modal.test.mjs — tests exhaustivos del demo iswc-confirm-modal.
 // Foco: focus management (focus al abrir + restoration al cerrar), aria-modal,
-// eventos is-confirm-* y cierre por backdrop / Escape.
+// eventos iswc-confirm-* y cierre por backdrop / Escape.
 import assert from 'node:assert/strict';
 import { BASE_URL, newPage, close, waitReady, screenshot, report } from './lib/harness.mjs';
 
@@ -14,14 +14,14 @@ tests.push({
     await page.goto(URL, { waitUntil: 'domcontentloaded' });
     await waitReady(page, 'data-confirm-modal-ready');
     const data = await page.evaluate(() => {
-      const modals = document.querySelectorAll('is-confirm-modal');
+      const modals = document.querySelectorAll('iswc-confirm-modal');
       return {
-        defined: !!customElements.get('is-confirm-modal'),
+        defined: !!customElements.get('iswc-confirm-modal'),
         count: modals.length,
         backdropsHidden: [...modals].every((m) => m.shadowRoot.querySelector('.backdrop').hidden),
       };
     });
-    assert.equal(data.defined, true, 'is-confirm-modal debe estar definido');
+    assert.equal(data.defined, true, 'iswc-confirm-modal debe estar definido');
     assert.ok(data.count >= 3, `esperaba >=3 modales, hay ${data.count}`);
     assert.equal(data.backdropsHidden, true, 'backdrops deben estar hidden al inicio');
     await screenshot(page, 'confirm-modal-smoke');
@@ -36,7 +36,7 @@ tests.push({
     await page.waitForTimeout(150);
     const opened = await page.evaluate(() => {
       document.getElementById('btn-open-1').click();
-      const modals = document.querySelectorAll('is-confirm-modal');
+      const modals = document.querySelectorAll('iswc-confirm-modal');
       return [...modals].map((m) => ({
         open: m.hasAttribute('open'),
         visible: !m.shadowRoot.querySelector('.backdrop').hidden,
@@ -59,7 +59,7 @@ tests.push({
     await page.keyboard.press('Enter');
     await page.waitForTimeout(250);
     const focused = await page.evaluate(() => {
-      const m = document.querySelectorAll('is-confirm-modal')[0];
+      const m = document.querySelectorAll('iswc-confirm-modal')[0];
       const a = document.activeElement;
       // ¿Foco dentro del modal (light DOM)? -> slot confirm
       // ¿Foco dentro del shadow root? -> botón confirm default
@@ -97,7 +97,7 @@ tests.push({
     await page.goto(URL, { waitUntil: 'domcontentloaded' });
     await waitReady(page, 'data-confirm-modal-ready');
     const aria = await page.evaluate(() => {
-      const m = document.querySelectorAll('is-confirm-modal')[0];
+      const m = document.querySelectorAll('iswc-confirm-modal')[0];
       const dlg = m.shadowRoot.querySelector('.modal');
       return {
         role: dlg.getAttribute('role'),
@@ -110,29 +110,29 @@ tests.push({
 });
 
 tests.push({
-  name: 'eventos: is-confirm-show y is-confirm-cancel se disparan',
+  name: 'eventos: iswc-confirm-show y iswc-confirm-cancel se disparan',
   run: async (page) => {
     await page.goto(URL, { waitUntil: 'domcontentloaded' });
     await waitReady(page, 'data-confirm-modal-ready');
     await page.waitForTimeout(150);
     const events = await page.evaluate(async () => {
-      const m = document.querySelectorAll('is-confirm-modal')[0];
+      const m = document.querySelectorAll('iswc-confirm-modal')[0];
       const seen = [];
-      for (const ev of ['is-confirm-show', 'is-confirm-cancel', 'is-confirm-confirm', 'is-confirm-hide']) {
+      for (const ev of ['iswc-confirm-show', 'iswc-confirm-cancel', 'iswc-confirm-confirm', 'iswc-confirm-hide']) {
         m.addEventListener(ev, (e) => seen.push(ev));
       }
       m.show();
       await new Promise((r) => requestAnimationFrame(() => r()));
-      // Para disparar is-confirm-cancel hay que clickear el botón cancel
-      // (o el backdrop). hide() solo emite is-confirm-hide.
+      // Para disparar iswc-confirm-cancel hay que clickear el botón cancel
+      // (o el backdrop). hide() solo emite iswc-confirm-hide.
       const cancelBtn = m.shadowRoot.querySelector('[data-confirm-cancel]');
       cancelBtn.click();
       await new Promise((r) => requestAnimationFrame(() => r()));
       return seen;
     });
-    assert.ok(events.includes('is-confirm-show'), `esperaba is-confirm-show, vi ${JSON.stringify(events)}`);
-    assert.ok(events.includes('is-confirm-cancel'), `esperaba is-confirm-cancel, vi ${JSON.stringify(events)}`);
-    assert.ok(events.includes('is-confirm-hide'), `esperaba is-confirm-hide tras cancel, vi ${JSON.stringify(events)}`);
+    assert.ok(events.includes('iswc-confirm-show'), `esperaba iswc-confirm-show, vi ${JSON.stringify(events)}`);
+    assert.ok(events.includes('iswc-confirm-cancel'), `esperaba iswc-confirm-cancel, vi ${JSON.stringify(events)}`);
+    assert.ok(events.includes('iswc-confirm-hide'), `esperaba iswc-confirm-hide tras cancel, vi ${JSON.stringify(events)}`);
   },
 });
 
@@ -148,7 +148,7 @@ tests.push({
     await page.keyboard.press('Escape');
     await page.waitForTimeout(150);
     const open = await page.evaluate(() => {
-      return document.querySelectorAll('is-confirm-modal')[0].hasAttribute('open');
+      return document.querySelectorAll('iswc-confirm-modal')[0].hasAttribute('open');
     });
     assert.equal(open, false, 'modal debe cerrarse con Escape');
   },
@@ -163,7 +163,7 @@ tests.push({
     await page.evaluate(() => document.getElementById('btn-open-2').click());
     await page.waitForTimeout(200);
     const slotInfo = await page.evaluate(() => {
-      const m = document.querySelectorAll('is-confirm-modal')[1];
+      const m = document.querySelectorAll('iswc-confirm-modal')[1];
       const cancel = m.querySelector('[slot="cancel"]');
       const confirm = m.querySelector('[slot="confirm"]');
       return {
@@ -188,12 +188,12 @@ tests.push({
     await page.keyboard.press('Enter');
     await page.waitForTimeout(200);
     await page.evaluate(() => {
-      const m = document.querySelectorAll('is-confirm-modal')[0];
+      const m = document.querySelectorAll('iswc-confirm-modal')[0];
       m.shadowRoot.querySelector('.backdrop').click();
     });
     await page.waitForTimeout(150);
     const open = await page.evaluate(() => {
-      return document.querySelectorAll('is-confirm-modal')[0].hasAttribute('open');
+      return document.querySelectorAll('iswc-confirm-modal')[0].hasAttribute('open');
     });
     assert.equal(open, false, 'modal debe cerrarse al click en backdrop');
   },

@@ -1,5 +1,5 @@
 /**
- * date-time-field.test.ts — Tests exhaustivos de <is-date-time-field>.
+ * date-time-field.test.ts — Tests exhaustivos de <iswc-date-time-field>.
  *
  * Wrapper de `defineDateField` con `kind: "datetime"`.
  */
@@ -15,16 +15,16 @@ import {
 const RAIZ = join(import.meta.dirname, '..', '..', '..', '..');
 const FACTORY = readFileSync(join(RAIZ, 'components', '_shared', 'date-field-element.ts'), 'utf8');
 
-const TAG = 'is-date-time-field';
+const TAG = 'iswc-date-time-field';
 const src = leerComponente(TAG);
 
 test('date-time-field: archivo y registro', () => {
   assert.ok(src.length > 100);
   assert.ok(existeCss(TAG));
   assert.ok(esFactoryWrapper(src));
-  assert.ok(/tag:\s*['"`]is-date-time-field['"`]/.test(src));
+  assert.ok(/tag:\s*['"`]iswc-date-time-field['"`]/.test(src));
   assert.ok(/kind:\s*['"]datetime['"]/.test(src),
-    '<is-date-time-field> debe usar kind: "datetime"');
+    '<iswc-date-time-field> debe usar kind: "datetime"');
 });
 
 test('date-time-field: atributos del factory', () => {
@@ -41,5 +41,5 @@ test('date-time-field: split date/time del factory', () => {
 test('date-time-field: preview JSON', () => {
   const prev = leerPreview(TAG);
   assert.ok(prev);
-  assert.equal(prev!['$schema'], 'is-preview/v1');
+  assert.equal(prev!['$schema'], 'iswc-preview/v1');
 });

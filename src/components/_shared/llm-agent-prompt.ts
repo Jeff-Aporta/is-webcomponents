@@ -39,7 +39,7 @@ export const LLM_PROMPT_FALLBACK: string = [
   'Nunca npm, npx, Bun, pnpm, Yarn, Vite, Webpack ni gestores de paquetes del kit.',
   'Reutiliza tags `is-*`. No inventes API. Lee skills + LLM.md de categoría + MD del módulo.',
   'Herramientas: `/is-webcomponents:build` · `/is-webcomponents:migrate` · `/is-webcomponents:local`.',
-  'Iconos: `<is-icon icon="mdi:…">`. Tema: `data-theme` / `data-palette`.',
+  'Iconos: `<iswc-icon icon="mdi:…">`. Tema: `data-theme` / `data-palette`.',
 ].join('\n');
 
 let cachedPromptMd: string | null = null;

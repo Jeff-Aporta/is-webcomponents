@@ -1,4 +1,4 @@
-// scrollspy.stagehand.test.mjs — verificaciones de calidad visual para is-scrollspy.
+// scrollspy.stagehand.test.mjs — verificaciones de calidad visual para iswc-scrollspy.
 import assert from 'node:assert/strict';
 import { BASE_URL, newPage, close, waitReady, screenshot, report, maybeStagehand } from './lib/harness.mjs';
 
@@ -20,7 +20,7 @@ async function checkDeterministic(page, demo) {
     return {
       linkCount: links?.length ?? 0,
       sectionCount: sections.length,
-      hasActive: !!links?.find((a) => a.classList.contains('is-scrollspy-active')),
+      hasActive: !!links?.find((a) => a.classList.contains('iswc-scrollspy-active')),
     };
   });
   assert.equal(layout1.linkCount, 4, `${demo.name}: spy1 debe tener 4 links`);
@@ -65,7 +65,7 @@ for (const demo of DEMOS) {
 }
 
 const VISUAL_RUBRIC = `
-Evalúa la calidad visual del <is-scrollspy> en el screenshot.
+Evalúa la calidad visual del <iswc-scrollspy> en el screenshot.
 
 Checklist (todas deben cumplirse; marca cada una PASS o FAIL):
 

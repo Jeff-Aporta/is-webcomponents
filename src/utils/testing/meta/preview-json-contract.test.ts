@@ -1,6 +1,6 @@
 // tests/preview-json-contract.test.ts
 //
-// Todos los previews son JSON homogéneos (is-preview/v1) listados en catalog.ts.
+// Todos los previews son JSON homogéneos (iswc-preview/v1) listados en catalog.ts.
 // Guardián anti-regresión: no volver a HTML por componente.
 //
 // Uso: node tests/preview-json-contract.test.ts
@@ -38,7 +38,7 @@ for (const [tag, entry] of Object.entries(catalog)) {
     failures.push(`${tag}: JSON inválido — ${err.message}`);
     continue;
   }
-  if (def.$schema !== 'is-preview/v1') failures.push(`${tag}: $schema != is-preview/v1`);
+  if (def.$schema !== 'iswc-preview/v1') failures.push(`${tag}: $schema != iswc-preview/v1`);
   if (def.tag !== tag) failures.push(`${tag}: def.tag="${def.tag}"`);
   if (!Array.isArray(def.sections)) failures.push(`${tag}: sections[] obligatorio`);
   else {
@@ -67,7 +67,7 @@ for (const m of manifest) {
   if (!catalog[m.tag]) failures.push(`manifest ${m.tag}: no está en catalog.ts`);
   const entry = catalog[m.tag];
   if (entry) {
-    // manifest.page es relativo a catalog (antes ./<cat>/is-x.json). Normalizar ambos.
+    // manifest.page es relativo a catalog (antes ./<cat>/iswc-x.json). Normalizar ambos.
     const norm = (p) => p.replace(/^\.\//, '').replace(/^\.\.\//, '').replace(/^components\//, '').replace(/^previews\//, '').replace(/^pages\//, '');
     const pageNorm = norm(m.page);
     const catNorm = norm(entry.json);

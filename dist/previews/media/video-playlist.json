@@ -1,11 +1,11 @@
 {
-  "$schema": "is-preview/v1",
-  "tag": "is-video-playlist",
+  "$schema": "iswc-preview/v1",
+  "tag": "iswc-video-playlist",
   "category": "media",
-  "title": "<is-video-playlist>",
+  "title": "<iswc-video-playlist>",
   "titleHtml": true,
   "styles": ".cluster { display: flex; flex-wrap: wrap; gap: 0.5rem; align-items: center; }",
-  "storageKey": "docs-is-video-playlist",
+  "storageKey": "docs-iswc-video-playlist",
   "hasBehavior": true,
   "sections": [
     {
@@ -15,7 +15,7 @@
       "blocks": [
         {
           "kind": "demo",
-          "html": "<is-video-playlist id=\"pl\" autoplay-next placement=\"bottom\">\r\n            <is-video\r\n              title=\"Big Buck Bunny\"\r\n              channel=\"Blender Open Movies\"\r\n              poster=\"{assets}playlist/01-big-buck-bunny.jpg\"\r\n              playsinline\r\n              src=\"{assets}playlist/01-big-buck-bunny.mp4\"\r\n            ></is-video>\r\n            <is-video\r\n              title=\"Sintel\"\r\n              channel=\"Blender Open Movies\"\r\n              poster=\"{assets}playlist/02-sintel.jpg\"\r\n              playsinline\r\n              src=\"{assets}playlist/02-sintel.mp4\"\r\n            ></is-video>\r\n            <is-video\r\n              title=\"Elephants Dream\"\r\n              channel=\"Blender Open Movies\"\r\n              poster=\"{assets}playlist/03-elephants-dream.jpg\"\r\n              playsinline\r\n              src=\"{assets}playlist/03-elephants-dream.mp4\"\r\n            ></is-video>\r\n          </is-video-playlist>",
+          "html": "<iswc-video-playlist id=\"pl\" autoplay-next placement=\"bottom\">\r\n            <iswc-video\r\n              title=\"Big Buck Bunny\"\r\n              channel=\"Blender Open Movies\"\r\n              poster=\"{assets}playlist/01-big-buck-bunny.jpg\"\r\n              playsinline\r\n              src=\"{assets}playlist/01-big-buck-bunny.mp4\"\r\n            ></iswc-video>\r\n            <iswc-video\r\n              title=\"Sintel\"\r\n              channel=\"Blender Open Movies\"\r\n              poster=\"{assets}playlist/02-sintel.jpg\"\r\n              playsinline\r\n              src=\"{assets}playlist/02-sintel.mp4\"\r\n            ></iswc-video>\r\n            <iswc-video\r\n              title=\"Elephants Dream\"\r\n              channel=\"Blender Open Movies\"\r\n              poster=\"{assets}playlist/03-elephants-dream.jpg\"\r\n              playsinline\r\n              src=\"{assets}playlist/03-elephants-dream.mp4\"\r\n            ></iswc-video>\r\n          </iswc-video-playlist>",
           "controls": [
             {
               "control": "boolean",
@@ -35,7 +35,7 @@
         },
         {
           "kind": "code",
-          "code": "<is-video-playlist autoplay-next placement=\"bottom\">\n  <is-video title=\"Big Buck Bunny\" channel=\"Blender\" poster=\"…\" src=\"01.mp4\"></is-video>\n  <is-video title=\"Sintel\" poster=\"…\" src=\"02.mp4\"></is-video>\n  <is-video title=\"Elephants Dream\" poster=\"…\" src=\"03.mp4\"></is-video>\n</is-video-playlist>"
+          "code": "<iswc-video-playlist autoplay-next placement=\"bottom\">\n  <iswc-video title=\"Big Buck Bunny\" channel=\"Blender\" poster=\"…\" src=\"01.mp4\"></iswc-video>\n  <iswc-video title=\"Sintel\" poster=\"…\" src=\"02.mp4\"></iswc-video>\n  <iswc-video title=\"Elephants Dream\" poster=\"…\" src=\"03.mp4\"></iswc-video>\n</iswc-video-playlist>"
         }
       ]
     },
@@ -46,11 +46,11 @@
       "blocks": [
         {
           "kind": "demo",
-          "html": "<div class=\"cluster\" style=\"margin-bottom:0.75rem;flex-shrink:0\">\r\n            <is-button id=\"placeLeft\" variant=\"outlined\">left</is-button>\r\n            <is-button id=\"placeRight\" variant=\"outlined\">right</is-button>\r\n            <is-button id=\"placeBottom\" variant=\"filled\">bottom</is-button>\r\n          </div>\r\n          <is-video-playlist id=\"plPlace\" placement=\"bottom\">\r\n            <is-video\r\n              title=\"Big Buck Bunny\"\r\n              channel=\"Blender Open Movies\"\r\n              poster=\"{assets}playlist/01-big-buck-bunny.jpg\"\r\n              playsinline\r\n              src=\"{assets}playlist/01-big-buck-bunny.mp4\"\r\n            ></is-video>\r\n            <is-video\r\n              title=\"Sintel\"\r\n              channel=\"Blender Open Movies\"\r\n              poster=\"{assets}playlist/02-sintel.jpg\"\r\n              playsinline\r\n              src=\"{assets}playlist/02-sintel.mp4\"\r\n            ></is-video>\r\n          </is-video-playlist>"
+          "html": "<div class=\"cluster\" style=\"margin-bottom:0.75rem;flex-shrink:0\">\r\n            <iswc-button id=\"placeLeft\" variant=\"outlined\">left</iswc-button>\r\n            <iswc-button id=\"placeRight\" variant=\"outlined\">right</iswc-button>\r\n            <iswc-button id=\"placeBottom\" variant=\"filled\">bottom</iswc-button>\r\n          </div>\r\n          <iswc-video-playlist id=\"plPlace\" placement=\"bottom\">\r\n            <iswc-video\r\n              title=\"Big Buck Bunny\"\r\n              channel=\"Blender Open Movies\"\r\n              poster=\"{assets}playlist/01-big-buck-bunny.jpg\"\r\n              playsinline\r\n              src=\"{assets}playlist/01-big-buck-bunny.mp4\"\r\n            ></iswc-video>\r\n            <iswc-video\r\n              title=\"Sintel\"\r\n              channel=\"Blender Open Movies\"\r\n              poster=\"{assets}playlist/02-sintel.jpg\"\r\n              playsinline\r\n              src=\"{assets}playlist/02-sintel.mp4\"\r\n            ></iswc-video>\r\n          </iswc-video-playlist>"
         },
         {
           "kind": "code",
-          "code": "<is-video-playlist placement=\"right\">…</is-video-playlist>"
+          "code": "<iswc-video-playlist placement=\"right\">…</iswc-video-playlist>"
         }
       ]
     },
@@ -61,11 +61,11 @@
       "blocks": [
         {
           "kind": "demo",
-          "html": "<is-video-playlist id=\"plTools\" placement=\"bottom\">\r\n            <button slot=\"tools-left\" class=\"vp-tool vp-custom\" aria-label=\"Aleatorio\">\r\n              <is-icon icon=\"mdi:shuffle\"></is-icon>\r\n            </button>\r\n            <button slot=\"tools-left\" class=\"vp-tool vp-custom\" aria-label=\"Bucle\">\r\n              <is-icon icon=\"mdi:repeat\"></is-icon>\r\n            </button>\r\n            <button slot=\"tools-right\" class=\"vp-tool vp-custom\" aria-label=\"Subtítulos\">\r\n              <is-icon icon=\"mdi:closed-caption\"></is-icon>\r\n            </button>\r\n            <button slot=\"tools-right\" class=\"vp-tool vp-custom\" aria-label=\"Pantalla completa\">\r\n              <is-icon icon=\"mdi:fullscreen\"></is-icon>\r\n            </button>\r\n            <is-video\r\n              title=\"Big Buck Bunny\"\r\n              channel=\"Blender Open Movies\"\r\n              poster=\"{assets}playlist/01-big-buck-bunny.jpg\"\r\n              playsinline\r\n              src=\"{assets}playlist/01-big-buck-bunny.mp4\"\r\n            ></is-video>\r\n            <is-video\r\n              title=\"Sintel\"\r\n              channel=\"Blender Open Movies\"\r\n              poster=\"{assets}playlist/02-sintel.jpg\"\r\n              playsinline\r\n              src=\"{assets}playlist/02-sintel.mp4\"\r\n            ></is-video>\r\n          </is-video-playlist>"
+          "html": "<iswc-video-playlist id=\"plTools\" placement=\"bottom\">\r\n            <button slot=\"tools-left\" class=\"vp-tool vp-custom\" aria-label=\"Aleatorio\">\r\n              <iswc-icon icon=\"mdi:shuffle\"></iswc-icon>\r\n            </button>\r\n            <button slot=\"tools-left\" class=\"vp-tool vp-custom\" aria-label=\"Bucle\">\r\n              <iswc-icon icon=\"mdi:repeat\"></iswc-icon>\r\n            </button>\r\n            <button slot=\"tools-right\" class=\"vp-tool vp-custom\" aria-label=\"Subtítulos\">\r\n              <iswc-icon icon=\"mdi:closed-caption\"></iswc-icon>\r\n            </button>\r\n            <button slot=\"tools-right\" class=\"vp-tool vp-custom\" aria-label=\"Pantalla completa\">\r\n              <iswc-icon icon=\"mdi:fullscreen\"></iswc-icon>\r\n            </button>\r\n            <iswc-video\r\n              title=\"Big Buck Bunny\"\r\n              channel=\"Blender Open Movies\"\r\n              poster=\"{assets}playlist/01-big-buck-bunny.jpg\"\r\n              playsinline\r\n              src=\"{assets}playlist/01-big-buck-bunny.mp4\"\r\n            ></iswc-video>\r\n            <iswc-video\r\n              title=\"Sintel\"\r\n              channel=\"Blender Open Movies\"\r\n              poster=\"{assets}playlist/02-sintel.jpg\"\r\n              playsinline\r\n              src=\"{assets}playlist/02-sintel.mp4\"\r\n            ></iswc-video>\r\n          </iswc-video-playlist>"
         },
         {
           "kind": "code",
-          "code": "<is-video-playlist no-default-tools>\n  <button slot=\"tools-left\"><is-icon icon=\"mdi:shuffle\"></is-icon></button>\n  <button slot=\"tools-right\"><is-icon icon=\"mdi:fullscreen\"></is-icon></button>\n  <is-video …></is-video>\n</is-video-playlist>"
+          "code": "<iswc-video-playlist no-default-tools>\n  <button slot=\"tools-left\"><iswc-icon icon=\"mdi:shuffle\"></iswc-icon></button>\n  <button slot=\"tools-right\"><iswc-icon icon=\"mdi:fullscreen\"></iswc-icon></button>\n  <iswc-video …></iswc-video>\n</iswc-video-playlist>"
         }
       ]
     },
@@ -76,7 +76,7 @@
       "blocks": [
         {
           "kind": "demo",
-          "html": "<is-video-playlist id=\"plChannel\" placement=\"bottom\" channel=\"InSoft TV\">\r\n            <is-video\r\n              title=\"Big Buck Bunny\"\r\n              channel=\"Blender Open Movies\"\r\n              poster=\"{assets}playlist/01-big-buck-bunny.jpg\"\r\n              playsinline\r\n              src=\"{assets}playlist/01-big-buck-bunny.mp4\"\r\n            ></is-video>\r\n            <is-video\r\n              title=\"Sintel\"\r\n              channel=\"Blender Open Movies\"\r\n              poster=\"{assets}playlist/02-sintel.jpg\"\r\n              playsinline\r\n              src=\"{assets}playlist/02-sintel.mp4\"\r\n            ></is-video>\r\n          </is-video-playlist>"
+          "html": "<iswc-video-playlist id=\"plChannel\" placement=\"bottom\" channel=\"InSoft TV\">\r\n            <iswc-video\r\n              title=\"Big Buck Bunny\"\r\n              channel=\"Blender Open Movies\"\r\n              poster=\"{assets}playlist/01-big-buck-bunny.jpg\"\r\n              playsinline\r\n              src=\"{assets}playlist/01-big-buck-bunny.mp4\"\r\n            ></iswc-video>\r\n            <iswc-video\r\n              title=\"Sintel\"\r\n              channel=\"Blender Open Movies\"\r\n              poster=\"{assets}playlist/02-sintel.jpg\"\r\n              playsinline\r\n              src=\"{assets}playlist/02-sintel.mp4\"\r\n            ></iswc-video>\r\n          </iswc-video-playlist>"
         }
       ]
     },
@@ -88,7 +88,7 @@
       "blocks": [
         {
           "kind": "demo",
-          "html": "<is-video-playlist id=\"plConfig\" placement=\"bottom\">\r\n            <is-button slot=\"config\" variant=\"plain\" aria-label=\"Ajustes\">\r\n              <is-icon icon=\"mdi:cog\"></is-icon>\r\n            </is-button>\r\n            <is-video\r\n              title=\"Big Buck Bunny\"\r\n              channel=\"Blender Open Movies\"\r\n              poster=\"{assets}playlist/01-big-buck-bunny.jpg\"\r\n              playsinline\r\n              src=\"{assets}playlist/01-big-buck-bunny.mp4\"\r\n            ></is-video>\r\n            <is-video\r\n              title=\"Sintel\"\r\n              channel=\"Blender Open Movies\"\r\n              poster=\"{assets}playlist/02-sintel.jpg\"\r\n              playsinline\r\n              src=\"{assets}playlist/02-sintel.mp4\"\r\n            ></is-video>\r\n          </is-video-playlist>"
+          "html": "<iswc-video-playlist id=\"plConfig\" placement=\"bottom\">\r\n            <iswc-button slot=\"config\" variant=\"plain\" aria-label=\"Ajustes\">\r\n              <iswc-icon icon=\"mdi:cog\"></iswc-icon>\r\n            </iswc-button>\r\n            <iswc-video\r\n              title=\"Big Buck Bunny\"\r\n              channel=\"Blender Open Movies\"\r\n              poster=\"{assets}playlist/01-big-buck-bunny.jpg\"\r\n              playsinline\r\n              src=\"{assets}playlist/01-big-buck-bunny.mp4\"\r\n            ></iswc-video>\r\n            <iswc-video\r\n              title=\"Sintel\"\r\n              channel=\"Blender Open Movies\"\r\n              poster=\"{assets}playlist/02-sintel.jpg\"\r\n              playsinline\r\n              src=\"{assets}playlist/02-sintel.mp4\"\r\n            ></iswc-video>\r\n          </iswc-video-playlist>"
         }
       ]
     },
@@ -99,7 +99,7 @@
       "blocks": [
         {
           "kind": "demo",
-          "html": "<is-video-playlist id=\"eventPl\" placement=\"right\" style=\"max-height:22rem\">\r\n            <is-video\r\n              title=\"Alpha\"\r\n              channel=\"Canal A\"\r\n              poster=\"{assets}playlist/01-big-buck-bunny.jpg\"\r\n              playsinline\r\n              src=\"{assets}playlist/01-big-buck-bunny.mp4\"\r\n            ></is-video>\r\n            <is-video\r\n              title=\"Beta\"\r\n              channel=\"Canal B\"\r\n              poster=\"{assets}playlist/02-sintel.jpg\"\r\n              playsinline\r\n              src=\"{assets}playlist/02-sintel.mp4\"\r\n            ></is-video>\r\n          </is-video-playlist>"
+          "html": "<iswc-video-playlist id=\"eventPl\" placement=\"right\" style=\"max-height:22rem\">\r\n            <iswc-video\r\n              title=\"Alpha\"\r\n              channel=\"Canal A\"\r\n              poster=\"{assets}playlist/01-big-buck-bunny.jpg\"\r\n              playsinline\r\n              src=\"{assets}playlist/01-big-buck-bunny.mp4\"\r\n            ></iswc-video>\r\n            <iswc-video\r\n              title=\"Beta\"\r\n              channel=\"Canal B\"\r\n              poster=\"{assets}playlist/02-sintel.jpg\"\r\n              playsinline\r\n              src=\"{assets}playlist/02-sintel.mp4\"\r\n            ></iswc-video>\r\n          </iswc-video-playlist>"
         }
       ]
     },
@@ -139,7 +139,7 @@
               "navegación (también botones en el player)"
             ],
             [
-              "<code>is-video-change</code>",
+              "<code>iswc-video-change</code>",
               "<code>{ previousIndex, currentIndex, video }</code>"
             ],
             [

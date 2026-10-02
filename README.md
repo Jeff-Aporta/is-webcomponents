@@ -40,7 +40,7 @@ Artefactos en `dist/cdn/` (`{name}.min.js` + `{name}.min.css` + `is-base.min.css
 
 ## Agentes / LLM (CDN)
 
-No hay publicación npm aún: el kit se consume por **CDN jsDelivr**. En cada preview, `<is-cdn-snippet>` muestra los enlaces y un prompt CDN-first.
+No hay publicación npm aún: el kit se consume por **CDN jsDelivr**. En cada preview, `<iswc-cdn-snippet>` muestra los enlaces y un prompt CDN-first.
 
 ```
 Usa el kit IS Web Components solo por CDN (jsDelivr), sin npm ni npx.

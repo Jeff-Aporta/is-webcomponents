@@ -6,16 +6,16 @@ import { clampTo } from '../_shared/misc-utils.js';
 import { createPopupDismiss } from '../_shared/popup-dismiss.js';
 
 /**
- * <is-speed-dial> — FAB que despliega un abanico de acciones.
+ * <iswc-speed-dial> — FAB que despliega un abanico de acciones.
  *
- * Cada acción es un <is-speed-dial-action> hijo con icon + label. El dial
+ * Cada acción es un <iswc-speed-dial-action> hijo con icon + label. El dial
  * hereda del FAB de la marca (radius, shadow, accent) pero evita tener que
  * registrar otro elemento raíz solo para eso.
  *
  * Atributos
  *   icon          icono con el dial CERRADO (default mdi:plus)
  *   open-icon     icono con el dial ABIERTO (default mdi:close). El trigger
- *                 reusa <is-check-icon-button>, que hace el switch entre los
+ *                 reusa <iswc-check-icon-button>, que hace el switch entre los
  *                 dos iconos en vez de rotar uno solo.
  *   label         aria-label del trigger
  *   direction     up (default) | down | left | right | radial
@@ -48,15 +48,15 @@ import { createPopupDismiss } from '../_shared/popup-dismiss.js';
  * desbordarlo.
  *
  * Slots
- *   default    <is-speed-dial-action>…
+ *   default    <iswc-speed-dial-action>…
  *
  * Eventos
- *   is-toggle  detail: { open }
- *   is-select  detail: { action }   — cuando se elige una acción
+ *   iswc-toggle  detail: { open }
+ *   iswc-select  detail: { action }   — cuando se elige una acción
  *
- * Cada <is-speed-dial-action> acepta:
+ * Cada <iswc-speed-dial-action> acepta:
  *   icon, label, color (brand|neutral|success|warning|danger), href, disabled
- *   El clic dispara is-select y, si no está disabled ni tiene href, cierra el dial.
+ *   El clic dispara iswc-select y, si no está disabled ni tiene href, cierra el dial.
  */
 (() => {
   /** Rectangulo libre donde cabe el abanico. */
@@ -78,7 +78,7 @@ import { createPopupDismiss } from '../_shared/popup-dismiss.js';
     radius: '--iswc-speed-dial-radius',
   };
 
-  class IsSpeedDial extends withStyleAttrs(HTMLElement) {
+  class IswcSpeedDial extends withStyleAttrs(HTMLElement) {
     static styleAttrs = STYLE_ATTRS;
 
     static get observedAttributes(): string[] { return [...OBSERVED, ...Object.keys(STYLE_ATTRS)]; }
@@ -95,16 +95,16 @@ import { createPopupDismiss } from '../_shared/popup-dismiss.js';
           <div part="actions" class="actions">
             <slot></slot>
           </div>
-          <is-check-icon-button part="trigger" class="trigger"
+          <iswc-check-icon-button part="trigger" class="trigger"
                                 icon="mdi:plus" checked-icon="mdi:close"
                                 label="Abrir acciones" checked-label="Cerrar acciones">
-          </is-check-icon-button>
+          </iswc-check-icon-button>
         </div>
       `;
       adoptCss(this.shadowRoot!, import.meta.url);
       this.#trigger = this.shadowRoot!.querySelector<HTMLElement>('.trigger')!;
-      // is-check-icon-button ya gestiona el estado visual y emite is-change.
-      this.#trigger?.addEventListener('is-change', (e: Event) => {
+      // iswc-check-icon-button ya gestiona el estado visual y emite iswc-change.
+      this.#trigger?.addEventListener('iswc-change', (e: Event) => {
         const { checked } = (e as CustomEvent<{ checked: boolean }>).detail;
         if (checked === this.isOpen) return; // ya sincronizado
         checked ? this.open() : this.close();
@@ -170,7 +170,7 @@ import { createPopupDismiss } from '../_shared/popup-dismiss.js';
         requestAnimationFrame(() => this.#layoutRadial());
       }
       this.#dismiss.attach();
-      emit(this, 'is-toggle', { open: true });
+      emit(this, 'iswc-toggle', { open: true });
     }
 
     close() {
@@ -181,7 +181,7 @@ import { createPopupDismiss } from '../_shared/popup-dismiss.js';
       if (root) root.hidden = true;
       this.removeAttribute('open');
       this.#dismiss.detach();
-      emit(this, 'is-toggle', { open: false });
+      emit(this, 'iswc-toggle', { open: false });
     }
 
     toggle() { this.isOpen ? this.close() : this.open(); }
@@ -231,7 +231,7 @@ import { createPopupDismiss } from '../_shared/popup-dismiss.js';
         a.__bound = true;
         a.addEventListener('click', (e: Event) => {
           if (a.hasAttribute('disabled')) { e.preventDefault(); return; }
-          emit(this, 'is-select', { action: a });
+          emit(this, 'iswc-select', { action: a });
           if (!a.hasAttribute('href')) this.close();
         });
       }
@@ -567,7 +567,7 @@ import { createPopupDismiss } from '../_shared/popup-dismiss.js';
     #onWinResize!: () => void;
 
     /**
-     * Ciclo "abierto" compartido con is-dropdown / is-context-menu
+     * Ciclo "abierto" compartido con iswc-dropdown / iswc-context-menu
      * (_shared/popup-dismiss.js): pointerdown fuera, Escape y recolocado
      * del abanico radial en scroll/resize, todo solo mientras esta abierto.
      */
@@ -578,10 +578,10 @@ import { createPopupDismiss } from '../_shared/popup-dismiss.js';
     });
   }
 
-  defineElement('is-speed-dial', IsSpeedDial);
+  defineElement('iswc-speed-dial', IswcSpeedDial);
 
   // Acción individual — patrón primario: <button> extendido.
-  class IsSpeedDialAction extends HTMLElement {
+  class IswcSpeedDialAction extends HTMLElement {
     static get observedAttributes(): string[] { return ['icon', 'label', 'color', 'href', 'disabled']; }
     constructor() {
       super();
@@ -589,7 +589,7 @@ import { createPopupDismiss } from '../_shared/popup-dismiss.js';
       this.shadowRoot!.innerHTML = /* html */ `
         <a part="action" class="action" role="menuitem" tabindex="-1">
           <span class="label"><slot></slot></span>
-          <span class="ico"><slot name="icon"><is-icon icon="mdi:star-outline"></is-icon></slot></span>
+          <span class="ico"><slot name="icon"><iswc-icon icon="mdi:star-outline"></iswc-icon></slot></span>
         </a>
       `;
       adoptCss(this.shadowRoot!, import.meta.url);
@@ -606,7 +606,7 @@ import { createPopupDismiss } from '../_shared/popup-dismiss.js';
       link.tabIndex = this.hasAttribute('disabled') ? -1 : 0;
       // Por defecto se cierra el dial al elegir; si tiene href, no intercepta.
       if (href) link.addEventListener('click', (e: Event) => e.stopPropagation());
-      if (this.hasAttribute('disabled')) link.classList.add('is-disabled');
+      if (this.hasAttribute('disabled')) link.classList.add('iswc-disabled');
     }
     attributeChangedCallback(name: string, oldVal: string | null, newVal: string | null): void {
       if (oldVal === newVal) return;
@@ -616,10 +616,10 @@ import { createPopupDismiss } from '../_shared/popup-dismiss.js';
       if (name === 'label') link.setAttribute('aria-label', newVal || '');
       if (name === 'color') link.dataset.color = newVal || 'brand';
       if (name === 'disabled') {
-        link.classList.toggle('is-disabled', !!newVal);
+        link.classList.toggle('iswc-disabled', !!newVal);
         link.tabIndex = newVal ? -1 : 0;
       }
     }
   }
-  defineElement('is-speed-dial-action', IsSpeedDialAction);
+  defineElement('iswc-speed-dial-action', IswcSpeedDialAction);
 })();

@@ -3,15 +3,15 @@ import '../actions/check-icon-button.js';
 import { findThemeContainer } from '../_shared/theme-scope.js';
 
 /**
- * <is-theme-toggle> — Web Component (vanilla).
+ * <iswc-theme-toggle> — Web Component (vanilla).
  *
- * Compone <is-check-icon-button> (noche ↔ sol). Al activarse:
+ * Compone <iswc-check-icon-button> (noche ↔ sol). Al activarse:
  *   1. Busca el contenedor de tema más cercano:
  *        [container-theme] | .container-theme | .theme-dark | .theme-light | [data-theme]
  *      (fallback: document.documentElement)
  *   2. Alterna theme-dark / theme-light + data-theme en ese contenedor
  *   3. Refleja `dark` en el host
- *   4. Emite `is-theme-change` { detail: { theme, dark, container } }
+ *   4. Emite `iswc-theme-change` { detail: { theme, dark, container } }
  *
  * Attributes
  *   dark   boolean (reflected) — tema actual (dark=true → icono de sol / próximo click a light)
@@ -25,14 +25,14 @@ import { findThemeContainer } from '../_shared/theme-scope.js';
 
   const TEMPLATE = document.createElement('template');
   TEMPLATE.innerHTML = /* html */ `
-    <is-check-icon-button
+    <iswc-check-icon-button
       id="btn"
       part="button"
       icon="mdi:weather-night"
       checked-icon="mdi:weather-sunny"
       label="Cambiar a tema oscuro"
       checked-label="Cambiar a tema claro"
-    ></is-check-icon-button>
+    ></iswc-check-icon-button>
   `;
 
   type ThemeName = 'dark' | 'light';
@@ -55,7 +55,7 @@ import { findThemeContainer } from '../_shared/theme-scope.js';
 
   interface IsCheckIconButtonEvent extends CustomEvent<{ checked: boolean }> {}
 
-  class IsThemeToggle extends HTMLElement {
+  class IswcThemeToggle extends HTMLElement {
     static get observedAttributes(): string[] { return ['dark', 'scope']; }
 
     #btn!: HTMLElement;
@@ -69,7 +69,7 @@ import { findThemeContainer } from '../_shared/theme-scope.js';
       adoptCss(shadow, import.meta.url);
       shadow.appendChild(TEMPLATE.content.cloneNode(true));
       this.#btn = shadow.querySelector<HTMLElement>('#btn')!;
-      this.#btn.addEventListener('is-change', this.#onChange as EventListener);
+      this.#btn.addEventListener('iswc-change', this.#onChange as EventListener);
     }
 
     connectedCallback(): void {
@@ -135,13 +135,13 @@ import { findThemeContainer } from '../_shared/theme-scope.js';
       applyTheme(container, next);
       this.#applying = false;
       this.#render();
-      emit(this, 'is-theme-change', { theme: next, dark: next === 'dark', container });
+      emit(this, 'iswc-theme-change', { theme: next, dark: next === 'dark', container });
       if (container === document.documentElement && window.parent !== window) {
-        window.parent.postMessage({ type: 'is-shell-sync', theme: next }, location.origin);
+        window.parent.postMessage({ type: 'iswc-shell-sync', theme: next }, location.origin);
       }
     };
 
-    /** Re-sincroniza el icono desde fuera (p.ej. is-context por postMessage)
+    /** Re-sincroniza el icono desde fuera (p.ej. iswc-context por postMessage)
      *  releyendo el tema real del container. */
     forceSync(): void {
       this.dark = readTheme(this.themeContainer) === 'dark';
@@ -164,7 +164,7 @@ import { findThemeContainer } from '../_shared/theme-scope.js';
       // g07 (Cat 28): exponer el estado como switch accesible. role=switch
       // es el patrón APG para un toggle de dos estados; aria-checked refleja
       // el valor actual y aria-label cambia según el destino del próximo
-      // click (mismo texto que el <is-check-icon-button> interno).
+      // click (mismo texto que el <iswc-check-icon-button> interno).
       this.setAttribute('role', 'switch');
       this.setAttribute('aria-checked', want ? 'true' : 'false');
       this.setAttribute('aria-label', want
@@ -173,5 +173,5 @@ import { findThemeContainer } from '../_shared/theme-scope.js';
     }
   }
 
-  defineElement('is-theme-toggle', IsThemeToggle, 'IsThemeToggle');
+  defineElement('iswc-theme-toggle', IswcThemeToggle, 'IswcThemeToggle');
 })();

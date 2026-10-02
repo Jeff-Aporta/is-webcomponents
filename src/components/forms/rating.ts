@@ -8,7 +8,7 @@ import { setStringAttr, setOptionalAttr } from '../_shared/reflect.js';
 import { hasSlotted } from '../_shared/dom-utils.js';
 import { clampTo, tidyToStep } from '../_shared/misc-utils.js';
 /**
- * <is-rating> — Valoración form-associated (vanilla + Shadow DOM).
+ * <iswc-rating> — Valoración form-associated (vanilla + Shadow DOM).
  *
  * Atributos
  *   name, label, color (brand|neutral|success|warning|danger)
@@ -16,8 +16,8 @@ import { clampTo, tidyToStep } from '../_shared/misc-utils.js';
  *   max          número de iconos (default 5)
  *   precision    granularidad del valor: 1 (default) | 0.5 | 0.25 | 0.1
  *   allow-half   alias de precision="0.5"
- *   icon         nombre is-icon del estado relleno (ej. tabler:heart-filled)
- *   empty-icon   nombre is-icon del estado vacío
+ *   icon         nombre iswc-icon del estado relleno (ej. tabler:heart-filled)
+ *   empty-icon   nombre iswc-icon del estado vacío
  *   highlight-selected-only  resalta solo el icono del valor, no los anteriores
  *   label-format plantilla del texto del valor, ej. "{v} de {max}"
  *   show-label   muestra ese texto junto a los iconos (sigue al hover)
@@ -30,7 +30,7 @@ import { clampTo, tidyToStep } from '../_shared/misc-utils.js';
  * Slots: label
  * Parts: form-control, label, base, star, icon-empty, icon-filled, hover-label
  * Custom states: blank, disabled, readonly
- * Eventos: is-change (valor confirmado), is-hover (previsualización)
+ * Eventos: iswc-change (valor confirmado), iswc-hover (previsualización)
  */
 
 (() => {
@@ -56,8 +56,8 @@ import { clampTo, tidyToStep } from '../_shared/misc-utils.js';
   const STAR_TEMPLATE = document.createElement('template');
   STAR_TEMPLATE.innerHTML = /* html */ `
     <span part="star" class="star">
-      <span part="icon-empty" class="layer layer-empty"><is-icon></is-icon></span>
-      <span part="icon-filled" class="layer layer-fill"><is-icon></is-icon></span>
+      <span part="icon-empty" class="layer layer-empty"><iswc-icon></iswc-icon></span>
+      <span part="icon-filled" class="layer layer-fill"><iswc-icon></iswc-icon></span>
     </span>
   `;
 
@@ -76,7 +76,7 @@ import { clampTo, tidyToStep } from '../_shared/misc-utils.js';
 
   type LabelFn = (value: number) => string;
 
-  class IsRating extends ElementBase {
+  class IswcRating extends ElementBase {
     /** Personalización por atributo (ver `core/attrs.ts`). */
     static styleAttrs = {
     size: '--iswc-rating-size',
@@ -314,8 +314,8 @@ import { clampTo, tidyToStep } from '../_shared/misc-utils.js';
         star.dataset['index'] = String(i + 1);
         this.#base.appendChild(star);
         this.#stars.push(star);
-        const emptyIcon = star.querySelector<HTMLElement>('.layer-empty is-icon');
-        const fullIcon = star.querySelector<HTMLElement>('.layer-fill is-icon');
+        const emptyIcon = star.querySelector<HTMLElement>('.layer-empty iswc-icon');
+        const fullIcon = star.querySelector<HTMLElement>('.layer-fill iswc-icon');
         if (emptyIcon) this.#emptyIcons.push(emptyIcon);
         if (fullIcon) this.#fullIcons.push(fullIcon);
       }
@@ -384,7 +384,7 @@ import { clampTo, tidyToStep } from '../_shared/misc-utils.js';
       this.#value = v;
       this.setAttribute('value', String(v));
       this.#render();
-      emit(this, 'is-change', { value: v, label: this.#labelText(v) });
+      emit(this, 'iswc-change', { value: v, label: this.#labelText(v) });
     }
 
     /** El primer paso dentro de un icono ya cuenta como `precision`, nunca 0. */
@@ -408,14 +408,14 @@ import { clampTo, tidyToStep } from '../_shared/misc-utils.js';
       if (next === this.#hover) return;
       this.#hover = next;
       this.#render();
-      emit(this, 'is-hover', { value: this.#value, phantomValue: next, label: this.#labelText(next) });
+      emit(this, 'iswc-hover', { value: this.#value, phantomValue: next, label: this.#labelText(next) });
     };
 
     #onPointerLeave = (): void => {
       if (this.#hover === null) return;
       this.#hover = null;
       this.#render();
-      emit(this, 'is-hover', { value: this.#value, phantomValue: null, label: this.#labelText(this.#value) });
+      emit(this, 'iswc-hover', { value: this.#value, phantomValue: null, label: this.#labelText(this.#value) });
     };
 
     #onClick = (e: PointerEvent): void => {
@@ -451,5 +451,5 @@ import { clampTo, tidyToStep } from '../_shared/misc-utils.js';
     };
   }
 
-  defineElement('is-rating', IsRating, 'IsRating');
+  defineElement('iswc-rating', IswcRating, 'IswcRating');
 })();

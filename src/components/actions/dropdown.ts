@@ -9,7 +9,7 @@ import { createPopupDismiss } from '../_shared/popup-dismiss.js';
 type Placement = (typeof PLACEMENTS)[number];
 
 /**
- * Forma minima de `<is-dropdown-item>` que este componente consume.
+ * Forma minima de `<iswc-dropdown-item>` que este componente consume.
  *
  * No se importa su clase: crearia una dependencia circular (el item ya importa
  * cosas de aqui) y el bundle los trata como modulos externos. Declarar solo lo
@@ -18,14 +18,14 @@ type Placement = (typeof PLACEMENTS)[number];
 type DropdownItemEl = HTMLElement & { disabled?: boolean; type?: string; closeSubmenu?: () => void; };
 
 /**
- * <is-dropdown> — menú anclado a un trigger.
+ * <iswc-dropdown> — menú anclado a un trigger.
  *
  * El panel usa <dialog showModal()> (top layer) para no quedar debajo de
- * headings/secciones/overflow de ancestros — mismo patrón que is-combobox.
+ * headings/secciones/overflow de ancestros — mismo patrón que iswc-combobox.
  *
  * Slots: trigger | default (items / dividers / headings)
  * Attrs: open, placement (default bottom-start), distance, skidding
- * Events: is-show, is-after-show, is-hide, is-after-hide, is-select { item }
+ * Events: iswc-show, iswc-after-show, iswc-hide, iswc-after-hide, iswc-select { item }
  * Parts: ::part(dialog) ::part(menu)
  */
 
@@ -51,7 +51,7 @@ type DropdownItemEl = HTMLElement & { disabled?: boolean; type?: string; closeSu
     'hide-duration': '--iswc-dropdown-hide-duration',
   };
 
-  class IsDropdown extends withStyleAttrs(HTMLElement) {
+  class IswcDropdown extends withStyleAttrs(HTMLElement) {
     static styleAttrs = STYLE_ATTRS;
 
     static get observedAttributes(): string[] {
@@ -84,7 +84,7 @@ type DropdownItemEl = HTMLElement & { disabled?: boolean; type?: string; closeSu
         // Cuando cambian los items, reaplicar el roving tabindex.
         this.#syncRovingTabindex();
       });
-      this.addEventListener('is-dropdown-item-select', this.#onItemSelect as EventListener);
+      this.addEventListener('iswc-dropdown-item-select', this.#onItemSelect as EventListener);
 
       this.#dialog.addEventListener('click', this.#onDialogClick);
       this.#dialog.addEventListener('cancel', this.#onDialogCancel);
@@ -128,7 +128,7 @@ type DropdownItemEl = HTMLElement & { disabled?: boolean; type?: string; closeSu
     get items() {
       return this.#defaultSlot.assignedElements({ flatten: true })
         .filter((el): el is DropdownItemEl =>
-          el.localName === 'is-dropdown-item' && !(el as DropdownItemEl).disabled);
+          el.localName === 'iswc-dropdown-item' && !(el as DropdownItemEl).disabled);
     }
 
     #bindTrigger() {
@@ -142,7 +142,7 @@ type DropdownItemEl = HTMLElement & { disabled?: boolean; type?: string; closeSu
       // aria-controls: el trigger debe apuntar al panel por su id estable.
       // Sin id propio, generamos uno determinístico basado en la posición del
       // componente o caemos al uid de los elementos asignados.
-      if (!this.id) this.id = `is-dropdown-${this.#uid()}`;
+      if (!this.id) this.id = `iswc-dropdown-${this.#uid()}`;
       this.#dialog.id = `${this.id}-menu`;
       this.#menu.id = `${this.id}-menu`;
       this.#triggerEl.setAttribute('aria-controls', `${this.id}-menu`);
@@ -179,7 +179,7 @@ type DropdownItemEl = HTMLElement & { disabled?: boolean; type?: string; closeSu
 
     #syncCheckboxPad() {
       const has = this.#defaultSlot.assignedElements({ flatten: true }).some(
-        (el) => el.localName === 'is-dropdown-item' && (el as DropdownItemEl).type === 'checkbox',
+        (el) => el.localName === 'iswc-dropdown-item' && (el as DropdownItemEl).type === 'checkbox',
       );
       this.toggleAttribute('data-has-checkbox', has);
     }
@@ -187,7 +187,7 @@ type DropdownItemEl = HTMLElement & { disabled?: boolean; type?: string; closeSu
     #onItemSelect = (e: CustomEvent<{ item?: DropdownItemEl }>) => {
       const item = e.detail?.item;
       if (!item) return;
-      const selectEv = new CustomEvent('is-select', {
+      const selectEv = new CustomEvent('iswc-select', {
         bubbles: true,
         composed: true,
         cancelable: true,
@@ -226,7 +226,7 @@ type DropdownItemEl = HTMLElement & { disabled?: boolean; type?: string; closeSu
      * Escuchas mientras el menú está abierto. El ciclo (poner/quitar los
      * listeners de document y window, agrupar el reposicionado por frame) lo
      * lleva _shared/popup-dismiss.js, que es el mismo que usa
-     * is-context-menu; aquí solo queda QUÉ hacer.
+     * iswc-context-menu; aquí solo queda QUÉ hacer.
      *
      * No declara `onEscape`: el panel es un <dialog showModal()>, así que
      * Escape llega como evento `cancel` y se atiende en #onDialogCancel, que
@@ -307,7 +307,7 @@ type DropdownItemEl = HTMLElement & { disabled?: boolean; type?: string; closeSu
 
     #doShow(silent?: boolean): void {
       if (!silent) {
-        const ev = new CustomEvent('is-show', { bubbles: true, composed: true, cancelable: true });
+        const ev = new CustomEvent('iswc-show', { bubbles: true, composed: true, cancelable: true });
         if (!this.dispatchEvent(ev)) {
           this.removeAttribute('open');
           return;
@@ -327,12 +327,12 @@ type DropdownItemEl = HTMLElement & { disabled?: boolean; type?: string; closeSu
       // está abierto; los demás se navegan con flechas.
       this.#syncRovingTabindex();
       requestAnimationFrame(() => this.items[0]?.focus?.());
-      emit(this, 'is-after-show');
+      emit(this, 'iswc-after-show');
     }
 
     #doHide(silent?: boolean): void {
       if (!silent) {
-        const ev = new CustomEvent('is-hide', { bubbles: true, composed: true, cancelable: true });
+        const ev = new CustomEvent('iswc-hide', { bubbles: true, composed: true, cancelable: true });
         if (!this.dispatchEvent(ev)) {
           this.setAttribute('open', '');
           return;
@@ -340,13 +340,13 @@ type DropdownItemEl = HTMLElement & { disabled?: boolean; type?: string; closeSu
       }
 
       this.#triggerEl?.setAttribute('aria-expanded', 'false');
-      this.querySelectorAll<DropdownItemEl>('is-dropdown-item').forEach((el) => el.closeSubmenu?.());
+      this.querySelectorAll<DropdownItemEl>('iswc-dropdown-item').forEach((el) => el.closeSubmenu?.());
       this.#resetRovingTabindex();
       this.#dismiss.detach();
       if (this.#dialog.open) this.#dialog.close();
-      emit(this, 'is-after-hide');
+      emit(this, 'iswc-after-hide');
     }
   }
 
-  defineElement('is-dropdown', IsDropdown, 'IsDropdown');
+  defineElement('iswc-dropdown', IswcDropdown, 'IswcDropdown');
 })();

@@ -3,8 +3,8 @@
 <head>
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1" />
-  <title>Demo: <is-speed-dial> · is-webcomponents</title>
-  <meta name="description" content="Demo de <is-speed-dial>: FAB que despliega un abanico de acciones. Direcciones: up/down/left/right/radial." />
+  <title>Demo: <iswc-speed-dial> · is-webcomponents</title>
+  <meta name="description" content="Demo de <iswc-speed-dial>: FAB que despliega un abanico de acciones. Direcciones: up/down/left/right/radial." />
   <style>
     html, body {
       margin: 0; padding: 0; min-height: 100%;
@@ -22,33 +22,33 @@
     .inline-trigger { display: inline-block; margin: 16px; }
     pre { background: #0a0f17; padding: 10px; border-radius: 6px; font: 12px ui-monospace, Menlo, Consolas, monospace; color: #cbd5e1; overflow: auto; }
     /* Anti-FOUC */
-    is-speed-dial:not(:defined) { visibility: hidden; }
-    is-speed-dial-action:not(:defined) { visibility: hidden; }
+    iswc-speed-dial:not(:defined) { visibility: hidden; }
+    iswc-speed-dial-action:not(:defined) { visibility: hidden; }
   </style>
 </head>
 <body>
   <header>
-    <h1>Demo: <code>&lt;is-speed-dial&gt;</code></h1>
-    <p>FAB que despliega acciones. El trigger abre/cierra el dial; click en una acción emite <code>is-select</code>.</p>
+    <h1>Demo: <code>&lt;iswc-speed-dial&gt;</code></h1>
+    <p>FAB que despliega acciones. El trigger abre/cierra el dial; click en una acción emite <code>iswc-select</code>.</p>
   </header>
 
   <section>
     <h2>direction="up" (default)</h2>
-    <is-speed-dial id="sd-up" label="Acciones rápidas" direction="up">
-      <is-speed-dial-action icon="mdi:content-copy" label="Copiar"></is-speed-dial-action>
-      <is-speed-dial-action icon="mdi:share-variant" label="Compartir"></is-speed-dial-action>
-      <is-speed-dial-action icon="mdi:link-variant" label="Copiar enlace"></is-speed-dial-action>
-    </is-speed-dial>
+    <iswc-speed-dial id="sd-up" label="Acciones rápidas" direction="up">
+      <iswc-speed-dial-action icon="mdi:content-copy" label="Copiar"></iswc-speed-dial-action>
+      <iswc-speed-dial-action icon="mdi:share-variant" label="Compartir"></iswc-speed-dial-action>
+      <iswc-speed-dial-action icon="mdi:link-variant" label="Copiar enlace"></iswc-speed-dial-action>
+    </iswc-speed-dial>
   </section>
 
   <section>
     <h2>direction="radial"</h2>
-    <is-speed-dial id="sd-rad" label="Más acciones" direction="radial">
-      <is-speed-dial-action icon="mdi:pencil" label="Editar"></is-speed-dial-action>
-      <is-speed-dial-action icon="mdi:eye" label="Ver"></is-speed-dial-action>
-      <is-speed-dial-action icon="mdi:archive" label="Archivar"></is-speed-dial-action>
-      <is-speed-dial-action icon="mdi:trash-can" color="danger" label="Eliminar"></is-speed-dial-action>
-    </is-speed-dial>
+    <iswc-speed-dial id="sd-rad" label="Más acciones" direction="radial">
+      <iswc-speed-dial-action icon="mdi:pencil" label="Editar"></iswc-speed-dial-action>
+      <iswc-speed-dial-action icon="mdi:eye" label="Ver"></iswc-speed-dial-action>
+      <iswc-speed-dial-action icon="mdi:archive" label="Archivar"></iswc-speed-dial-action>
+      <iswc-speed-dial-action icon="mdi:trash-can" color="danger" label="Eliminar"></iswc-speed-dial-action>
+    </iswc-speed-dial>
   </section>
 
   <section>
@@ -57,9 +57,9 @@
   </section>
 
   <script type="module">
-    await import('../../../dist/cdn/actions/speed-dial.min.js?h=0rodv3');
-    await import('../../../dist/cdn/actions/check-icon-button.min.js?h=01xpv4');
-    await customElements.whenDefined('is-speed-dial');
+    await import('../../../dist/cdn/actions/speed-dial.min.js?h=ulkvjx');
+    await import('../../../dist/cdn/actions/check-icon-button.min.js?h=wwi8c3');
+    await customElements.whenDefined('iswc-speed-dial');
 
     const log = document.getElementById('log');
     const events = [];
@@ -68,9 +68,9 @@
       log.textContent = JSON.stringify(events, null, 2);
     };
 
-    document.querySelectorAll('is-speed-dial').forEach((sd) => {
-      sd.addEventListener('is-toggle', (e) => record('toggle', { open: e.detail.open }));
-      sd.addEventListener('is-select', (e) => record('select', { label: e.detail.action.getAttribute('label') }));
+    document.querySelectorAll('iswc-speed-dial').forEach((sd) => {
+      sd.addEventListener('iswc-toggle', (e) => record('toggle', { open: e.detail.open }));
+      sd.addEventListener('iswc-select', (e) => record('select', { label: e.detail.action.getAttribute('label') }));
     });
 
     document.documentElement.dataset.speedDialReady = '1';

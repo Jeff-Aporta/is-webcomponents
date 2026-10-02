@@ -1,20 +1,20 @@
 ---
-tag: is-progress-bar
+tag: iswc-progress-bar
 tags:
-  - is-progress-bar
+  - iswc-progress-bar
 category: feedback
 status: public
 source: ./progress-bar.js
 style: ./progress-bar.css
 preview: ./progress-bar.json
 ---
-# `<is-progress-bar>`
+# `<iswc-progress-bar>`
 
 ## Propósito
 
-<is-progress-bar>
+<iswc-progress-bar>
 
-Este módulo registra `<is-progress-bar>`.
+Este módulo registra `<iswc-progress-bar>`.
 
 ## Cuándo usarlo
 
@@ -33,8 +33,8 @@ import './progress-bar.js';
 ## Ejemplo mínimo
 
 ```html
-<is-progress-bar value="65" label="Carga"></is-progress-bar>
-<is-progress-bar indeterminate label="Procesando"></is-progress-bar>
+<iswc-progress-bar value="65" label="Carga"></iswc-progress-bar>
+<iswc-progress-bar indeterminate label="Procesando"></iswc-progress-bar>
 ```
 
 ## API
@@ -105,7 +105,7 @@ No declara integración form-associated propia en este módulo.
 
 Documentación de cabecera preservada desde fuente:
 
-> <is-progress-bar> — Web Component (vanilla).
+> <iswc-progress-bar> — Web Component (vanilla).
 > Atributos
 >   value           number 0–100
 >   label           string — aria-label
@@ -118,7 +118,7 @@ Documentación de cabecera preservada desde fuente:
 
 - [`../_shared/adopt-css.js`](../_shared/adopt-css.js)
 
-Tags del módulo: `<is-progress-bar>`.
+Tags del módulo: `<iswc-progress-bar>`.
 
 ## Accesibilidad
 
@@ -127,8 +127,8 @@ Preservar semántica, foco, teclado, labels y ARIA. ARIA detectado: `aria-label`
 ## Ejemplo avanzado
 
 ```html
-<is-progress-bar value="65" label="Carga"></is-progress-bar>
-<is-progress-bar indeterminate label="Procesando"></is-progress-bar>
+<iswc-progress-bar value="65" label="Carga"></iswc-progress-bar>
+<iswc-progress-bar indeterminate label="Procesando"></iswc-progress-bar>
 ```
 
 ## Errores comunes

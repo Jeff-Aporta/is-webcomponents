@@ -13,7 +13,7 @@ test('stagehand: la página expone data-fab-ready y 5 fabs', async () => {
   const page = await browser.newPage();
   await page.goto(URL_DEMO, { waitUntil: 'domcontentloaded' });
   await page.waitForSelector('html[data-fab-ready]');
-  const n = await page.evaluate(() => document.querySelectorAll('is-fab').length);
+  const n = await page.evaluate(() => document.querySelectorAll('iswc-fab').length);
   assert.equal(n, 5);
   await page.close();
 });
@@ -21,7 +21,7 @@ test('stagehand: la página expone data-fab-ready y 5 fabs', async () => {
 test('stagehand: cada FAB está en la esquina esperada', async () => {
   const page = await browser.newPage();
   await page.goto(URL_DEMO, { waitUntil: 'domcontentloaded' });
-  await page.waitForSelector('is-fab:defined');
+  await page.waitForSelector('iswc-fab:defined');
   const layout = await page.evaluate(() => {
     const vw = window.innerWidth;
     const vh = window.innerHeight;
@@ -53,7 +53,7 @@ test('stagehand: cada FAB está en la esquina esperada', async () => {
 test('stagehand: click en fab1 incrementa el contador', async () => {
   const page = await browser.newPage();
   await page.goto(URL_DEMO, { waitUntil: 'domcontentloaded' });
-  await page.waitForSelector('is-fab#fab1:defined');
+  await page.waitForSelector('iswc-fab#fab1:defined');
   await page.evaluate(() => document.getElementById('fab1').click());
   await page.waitForTimeout(40);
   await page.evaluate(() => document.getElementById('fab1').click());
@@ -66,10 +66,10 @@ test('stagehand: click en fab1 incrementa el contador', async () => {
 test('stagehand: focus pone el outline visible', async () => {
   const page = await browser.newPage();
   await page.goto(URL_DEMO, { waitUntil: 'domcontentloaded' });
-  await page.waitForSelector('is-fab:defined');
-  await page.focus('is-fab#fab1');
+  await page.waitForSelector('iswc-fab:defined');
+  await page.focus('iswc-fab#fab1');
   const focused = await page.evaluate(() => {
-    const inner = document.querySelector('is-fab#fab1').shadowRoot.querySelector('is-button').shadowRoot.querySelector('.btn');
+    const inner = document.querySelector('iswc-fab#fab1').shadowRoot.querySelector('iswc-button').shadowRoot.querySelector('.btn');
     return inner === document.activeElement || inner.contains(document.activeElement);
   });
   assert.equal(focused, true);
@@ -79,7 +79,7 @@ test('stagehand: focus pone el outline visible', async () => {
 test('stagehand: pulse y extended son visibles visualmente', async () => {
   const page = await browser.newPage();
   await page.goto(URL_DEMO, { waitUntil: 'domcontentloaded' });
-  await page.waitForSelector('is-fab:defined');
+  await page.waitForSelector('iswc-fab:defined');
   const sizes = await page.evaluate(() => {
     const fab = document.getElementById('fab4');
     const r = fab.getBoundingClientRect();
@@ -94,7 +94,7 @@ test('stagehand: prefers-reduced-motion desactiva el pulso pero el FAB sigue vis
   const ctx = await browser.newContext({ reducedMotion: 'reduce' });
   const page = await ctx.newPage();
   await page.goto(URL_DEMO, { waitUntil: 'domcontentloaded' });
-  await page.waitForSelector('is-fab:defined');
+  await page.waitForSelector('iswc-fab:defined');
   const visible = await page.evaluate(() => {
     const fab = document.getElementById('fab3');
     const r = fab.getBoundingClientRect();

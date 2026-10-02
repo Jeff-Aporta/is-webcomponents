@@ -7,7 +7,7 @@ import { setStringAttr, setOptionalAttr } from '../_shared/reflect.js';
 import { hasSlotted } from '../_shared/dom-utils.js';
 import { clampTo, tidyToStep } from '../_shared/misc-utils.js';
 /**
- * <is-slider> — Control de rango form-associated (vanilla + Shadow DOM).
+ * <iswc-slider> — Control de rango form-associated (vanilla + Shadow DOM).
  *
  * Atributos
  *   name, label, hint, color (brand|neutral|success|warning|danger)
@@ -34,7 +34,7 @@ import { clampTo, tidyToStep } from '../_shared/misc-utils.js';
  * Parts: form-control, label, base, rail, track, mark, mark-label, thumb,
  *        value-label, hint
  * Custom states: disabled, readonly, dragging, focused
- * Eventos: is-input (arrastre/tecla), is-change (al confirmar)
+ * Eventos: iswc-input (arrastre/tecla), iswc-change (al confirmar)
  */
 
 (() => {
@@ -93,7 +93,7 @@ import { clampTo, tidyToStep } from '../_shared/misc-utils.js';
       .filter((m): m is { value: number; label: string } => m !== null);
   }
 
-  class IsSlider extends ElementBase {
+  class IswcSlider extends ElementBase {
     /** Personalización por atributo (ver `core/attrs.ts`). */
     static styleAttrs = {
     'track-size': '--iswc-slider-track-size',
@@ -645,10 +645,10 @@ import { clampTo, tidyToStep } from '../_shared/misc-utils.js';
       this.setAttribute('value', sorted.join(','));
       this.#render();
 
-      if (changed) this.#emit('is-input');
+      if (changed) this.#emit('iswc-input');
       if (commitChange) {
         const differs = sorted.some((v, i) => v !== this.#valuesAtStart[i]);
-        if (differs) this.#emit('is-change');
+        if (differs) this.#emit('iswc-change');
       }
       return activeIndex;
     }
@@ -729,7 +729,7 @@ import { clampTo, tidyToStep } from '../_shared/misc-utils.js';
       this.#apply(this.#activeIndex, this.#valueFromPointer(e), false);
       const differs = this.#values.some((v, i) => v !== this.#valuesAtStart[i]);
       this.#endDrag();
-      if (differs) this.#emit('is-change');
+      if (differs) this.#emit('iswc-change');
     };
 
     #endDrag(): void {
@@ -781,5 +781,5 @@ import { clampTo, tidyToStep } from '../_shared/misc-utils.js';
     #onFocusOut = (): void => { setCustomState(this.#internals, 'focused', false); };
   }
 
-  defineElement('is-slider', IsSlider, 'IsSlider');
+  defineElement('iswc-slider', IswcSlider, 'IswcSlider');
 })();

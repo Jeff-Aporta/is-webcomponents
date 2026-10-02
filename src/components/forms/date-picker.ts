@@ -21,10 +21,10 @@ import './month-calendar.js';
 import './year-calendar.js';
 import { ElementBase } from '../../core/element-base.js';
 /**
- * <is-date-picker> — Calendario inline (equivalente a DateCalendar de MUI X).
+ * <iswc-date-picker> — Calendario inline (equivalente a DateCalendar de MUI X).
  *
  * Tres vistas: día, mes y año. El mes y el año del encabezado son triggers de
- * un is-dropdown para saltar sin encadenar clics en las flechas.
+ * un iswc-dropdown para saltar sin encadenar clics en las flechas.
  *
  * Atributos:
  *   value            yyyy-mm-dd · rango: `inicio/fin`
@@ -37,8 +37,8 @@ import { ElementBase } from '../../core/element-base.js';
  *   show-outside-days, fixed-weeks, show-week-numbers
  *   disable-past, disable-future, disabled-dates="ISO,ISO", disabled-days="0,6"
  *   disabled, readonly
- * Events: is-change { value } | { start, end } · is-view-change { view }
- *         is-month-change { month }
+ * Events: iswc-change { value } | { start, end } · iswc-view-change { view }
+ *         iswc-month-change { month }
  */
 
 (() => {
@@ -46,27 +46,27 @@ import { ElementBase } from '../../core/element-base.js';
   TEMPLATE.innerHTML = /* html */ `
     <div part="base" class="base">
       <div class="nav" part="nav">
-        <is-button variant="plain" pill class="nav-btn" data-nav="-1" aria-label="Anterior">‹</is-button>
+        <iswc-button variant="plain" pill class="nav-btn" data-nav="-1" aria-label="Anterior">‹</iswc-button>
         <div class="nav-title" part="month-label">
-          <is-dropdown class="jump" data-jump="month" placement="bottom">
-            <is-button variant="plain" with-caret slot="trigger" class="nav-select" part="month-select">
+          <iswc-dropdown class="jump" data-jump="month" placement="bottom">
+            <iswc-button variant="plain" with-caret slot="trigger" class="nav-select" part="month-select">
               <span class="nav-select-text"></span><span class="caret" aria-hidden="true">▾</span>
-            </is-button>
-          </is-dropdown>
-          <is-dropdown class="jump" data-jump="year" placement="bottom">
-            <is-button variant="plain" with-caret slot="trigger" class="nav-select" part="year-select">
+            </iswc-button>
+          </iswc-dropdown>
+          <iswc-dropdown class="jump" data-jump="year" placement="bottom">
+            <iswc-button variant="plain" with-caret slot="trigger" class="nav-select" part="year-select">
               <span class="nav-select-text"></span><span class="caret" aria-hidden="true">▾</span>
-            </is-button>
-          </is-dropdown>
+            </iswc-button>
+          </iswc-dropdown>
         </div>
-        <is-button variant="plain" pill class="nav-btn" data-nav="1" aria-label="Siguiente">›</is-button>
+        <iswc-button variant="plain" pill class="nav-btn" data-nav="1" aria-label="Siguiente">›</iswc-button>
       </div>
       <div class="day-view">
         <div class="weekdays" part="weekdays"></div>
         <div class="grid" part="grid" role="grid"></div>
       </div>
-      <is-month-calendar class="month-view" part="month-view" hidden></is-month-calendar>
-      <is-year-calendar class="year-view" part="year-view" hidden></is-year-calendar>
+      <iswc-month-calendar class="month-view" part="month-view" hidden></iswc-month-calendar>
+      <iswc-year-calendar class="year-view" part="year-view" hidden></iswc-year-calendar>
     </div>
   `;
 
@@ -83,7 +83,7 @@ import { ElementBase } from '../../core/element-base.js';
     return new Set(String(attr || '').split(/[\s,]+/).filter(Boolean));
   }
 
-  class IsDatePicker extends ElementBase {
+  class IswcDatePicker extends ElementBase {
     /** Personalización por atributo (ver `core/attrs.ts`). */
     static styleAttrs = {
     radius: '--iswc-datepicker-radius',
@@ -138,8 +138,8 @@ import { ElementBase } from '../../core/element-base.js';
       this.#grid.addEventListener('focusin', this.#onDayEnter);
       this.#grid.addEventListener('pointerleave', this.#onDayLeave);
       this.#grid.addEventListener('focusout', this.#onDayLeave);
-      this.#monthView.addEventListener('is-change', this.#onMonthView as EventListener);
-      this.#yearView.addEventListener('is-change', this.#onYearView as EventListener);
+      this.#monthView.addEventListener('iswc-change', this.#onMonthView as EventListener);
+      this.#yearView.addEventListener('iswc-change', this.#onYearView as EventListener);
     }
 
     onConnected(): void {
@@ -153,7 +153,7 @@ import { ElementBase } from '../../core/element-base.js';
 
     onAttributeChanged(name: string, oldVal: string | null, newVal: string | null): void {
       if (name === 'value' || name === 'mode') this.#parseValueAttr();
-      if (name === 'view') emit(this, 'is-view-change', { view: this.view });
+      if (name === 'view') emit(this, 'iswc-view-change', { view: this.view });
       if (name === 'month' && newVal && newVal !== monthKey(this.#view)) {
         const d = parseISO(`${newVal}-01`);
         if (d) this.#view = d;
@@ -204,7 +204,7 @@ import { ElementBase } from '../../core/element-base.js';
     }
 
     /**
-     * Fin tentativo del rango impuesto desde fuera: lo usa is-date-range-picker
+     * Fin tentativo del rango impuesto desde fuera: lo usa iswc-date-range-picker
      * para que el hover en un mes pinte la banda en todos los calendarios.
      */
     get previewTo(): string | null { return this.getAttribute('preview-to') || null; }
@@ -294,7 +294,7 @@ import { ElementBase } from '../../core/element-base.js';
     #setView(date: Date, { silent = false }: { silent?: boolean } = {}): void {
       this.#view = startOfMonth(date);
       this.#render();
-      if (!silent) emit(this, 'is-month-change', { month: monthKey(this.#view) });
+      if (!silent) emit(this, 'iswc-month-change', { month: monthKey(this.#view) });
     }
 
     #parseValueAttr(): void {
@@ -317,7 +317,7 @@ import { ElementBase } from '../../core/element-base.js';
     }
 
     /**
-     * Con atributo `month` el mes lo manda quien nos usa (is-date-range-picker
+     * Con atributo `month` el mes lo manda quien nos usa (iswc-date-range-picker
      * empuja el mismo rango a varios calendarios y cada uno muestra el suyo);
      * sin él, la vista sigue al valor.
      */
@@ -364,46 +364,46 @@ import { ElementBase } from '../../core/element-base.js';
      * se crean 12 + N custom elements en cada repintado del calendario.
      */
     #wireJump(dd: HTMLElement, kind: 'month' | 'year'): void {
-      dd.addEventListener('is-show', () => {
+      dd.addEventListener('iswc-show', () => {
         if (kind === 'month') this.#fillMonths();
         else this.#fillYears();
       });
 
-      dd.addEventListener('is-after-show', () => {
+      dd.addEventListener('iswc-after-show', () => {
         // El propio dropdown enfoca el primer ítem en un rAF; este va después.
         requestAnimationFrame(() => {
-          const active = dd.querySelector<HTMLElement>('is-dropdown-item[checked]');
+          const active = dd.querySelector<HTMLElement>('iswc-dropdown-item[checked]');
           if (!active) return;
           active.focus();
           active.scrollIntoView({ block: 'center' });
         });
       });
 
-      dd.addEventListener('is-select', ((e: CustomEvent<{ item?: { value?: string | number } }>) => {
+      dd.addEventListener('iswc-select', ((e: CustomEvent<{ item?: { value?: string | number } }>) => {
         const raw = e.detail?.item?.value;
         const n = Number(raw);
         if (!Number.isFinite(n)) return;
         this.#view = kind === 'month'
           ? new Date(this.#view.getFullYear(), n, 1)
           : new Date(n, this.#view.getMonth(), 1);
-        emit(this, 'is-month-change', { month: this.month });
+        emit(this, 'iswc-month-change', { month: this.month });
         this.#render();
       }) as EventListener);
 
-      // Los eventos del dropdown interno no son API de is-date-picker.
-      for (const type of ['is-show', 'is-hide', 'is-after-show', 'is-after-hide', 'is-select']) {
+      // Los eventos del dropdown interno no son API de iswc-date-picker.
+      for (const type of ['iswc-show', 'iswc-hide', 'iswc-after-show', 'iswc-after-hide', 'iswc-select']) {
         dd.addEventListener(type, (e: Event) => e.stopPropagation());
       }
     }
 
-    /** Solo los ítems: el trigger también es hijo del is-dropdown. */
+    /** Solo los ítems: el trigger también es hijo del iswc-dropdown. */
     #setJumpItems(dd: HTMLElement, items: HTMLElement[]): void {
-      for (const old of dd.querySelectorAll<HTMLElement>(':scope > is-dropdown-item')) old.remove();
+      for (const old of dd.querySelectorAll<HTMLElement>(':scope > iswc-dropdown-item')) old.remove();
       dd.append(...items);
     }
 
     #jumpItem(value: string | number, label: string, active: boolean, disabled: boolean): HTMLElement {
-      const item = document.createElement('is-dropdown-item') as HTMLElement & {
+      const item = document.createElement('iswc-dropdown-item') as HTMLElement & {
         value?: string | number;
         textContent: string | null;
         type?: string;
@@ -648,7 +648,7 @@ import { ElementBase } from '../../core/element-base.js';
       if (this.#hoverIso === iso) return;
       this.#hoverIso = iso;
       this.#paintPreview();
-      if (this.mode === 'range') emit(this, 'is-day-hover', { iso });
+      if (this.mode === 'range') emit(this, 'iswc-day-hover', { iso });
     }
 
     /* ── Eventos ──────────────────────────────────────────────────────── */
@@ -700,14 +700,14 @@ import { ElementBase } from '../../core/element-base.js';
         }
         this.#writeValue();
         this.#render();
-        emit(this, 'is-change', { start: this.#rangeStart, end: this.#rangeEnd });
+        emit(this, 'iswc-change', { start: this.#rangeStart, end: this.#rangeEnd });
         return;
       }
 
       this.#rangeStart = iso;
       this.#writeValue();
       this.#render();
-      emit(this, 'is-change', { value: iso });
+      emit(this, 'iswc-change', { value: iso });
     }
 
     #onGridKey = (e: KeyboardEvent): void => {
@@ -781,7 +781,7 @@ import { ElementBase } from '../../core/element-base.js';
       const detail = (e as CustomEvent<{ year: number; month: number }>).detail;
       const { year, month } = detail;
       this.#view = new Date(year, month, 1);
-      emit(this, 'is-month-change', { month: this.month });
+      emit(this, 'iswc-month-change', { month: this.month });
       const views = this.views;
       if (views.includes('day')) {
         this.view = 'day';
@@ -808,5 +808,5 @@ import { ElementBase } from '../../core/element-base.js';
     };
   }
 
-  defineElement('is-date-picker', IsDatePicker, 'IsDatePicker');
+  defineElement('iswc-date-picker', IswcDatePicker, 'IswcDatePicker');
 })();

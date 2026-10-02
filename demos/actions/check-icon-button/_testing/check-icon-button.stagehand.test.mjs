@@ -13,7 +13,7 @@ test('stagehand: la página monta 4 botones', async () => {
   const page = await browser.newPage();
   await page.goto(URL_DEMO, { waitUntil: 'domcontentloaded' });
   await page.waitForSelector('html[data-check-icon-button-ready]');
-  const count = await page.evaluate(() => document.querySelectorAll('is-check-icon-button').length);
+  const count = await page.evaluate(() => document.querySelectorAll('iswc-check-icon-button').length);
   assert.equal(count, 4);
   await page.close();
 });
@@ -21,17 +21,17 @@ test('stagehand: la página monta 4 botones', async () => {
 test('stagehand: click toggle cambia aria-pressed y aria-label', async () => {
   const page = await browser.newPage();
   await page.goto(URL_DEMO, { waitUntil: 'domcontentloaded' });
-  await page.waitForSelector('is-check-icon-button#play:defined');
+  await page.waitForSelector('iswc-check-icon-button#play:defined');
   const before = await page.evaluate(() => ({
-    label: document.querySelector('is-check-icon-button#play').getAttribute('aria-label'),
-    pressed: document.querySelector('is-check-icon-button#play').getAttribute('aria-pressed'),
+    label: document.querySelector('iswc-check-icon-button#play').getAttribute('aria-label'),
+    pressed: document.querySelector('iswc-check-icon-button#play').getAttribute('aria-pressed'),
   }));
-  await page.focus('is-check-icon-button#play');
+  await page.focus('iswc-check-icon-button#play');
   await page.keyboard.press('Enter');
   await page.waitForTimeout(50);
   const after = await page.evaluate(() => ({
-    label: document.querySelector('is-check-icon-button#play').getAttribute('aria-label'),
-    pressed: document.querySelector('is-check-icon-button#play').getAttribute('aria-pressed'),
+    label: document.querySelector('iswc-check-icon-button#play').getAttribute('aria-label'),
+    pressed: document.querySelector('iswc-check-icon-button#play').getAttribute('aria-pressed'),
   }));
   assert.equal(before.pressed, 'false');
   assert.equal(after.pressed, 'true');
@@ -39,17 +39,17 @@ test('stagehand: click toggle cambia aria-pressed y aria-label', async () => {
   await page.close();
 });
 
-test('stagehand: Space también dispara is-change', async () => {
+test('stagehand: Space también dispara iswc-change', async () => {
   const page = await browser.newPage();
   await page.goto(URL_DEMO, { waitUntil: 'domcontentloaded' });
-  await page.waitForSelector('is-check-icon-button#mute:defined');
+  await page.waitForSelector('iswc-check-icon-button#mute:defined');
   await page.evaluate(() => {
     window.__ciEvts = 0;
-    document.querySelector('is-check-icon-button#mute').addEventListener('is-change', () => {
+    document.querySelector('iswc-check-icon-button#mute').addEventListener('iswc-change', () => {
       window.__ciEvts += 1;
     });
   });
-  await page.focus('is-check-icon-button#mute');
+  await page.focus('iswc-check-icon-button#mute');
   await page.keyboard.press('Space');
   await page.waitForTimeout(50);
   const n = await page.evaluate(() => window.__ciEvts);
@@ -60,33 +60,33 @@ test('stagehand: Space también dispara is-change', async () => {
 test('stagehand: variante disabled no responde ni a click ni a teclado', async () => {
   const page = await browser.newPage();
   await page.goto(URL_DEMO, { waitUntil: 'domcontentloaded' });
-  await page.waitForSelector('is-check-icon-button[disabled]:defined');
+  await page.waitForSelector('iswc-check-icon-button[disabled]:defined');
   const before = await page.evaluate(() => {
-    return document.querySelector('is-check-icon-button[disabled]').checked;
+    return document.querySelector('iswc-check-icon-button[disabled]').checked;
   });
   await page.evaluate(() => {
-    document.querySelector('is-check-icon-button[disabled]').click();
+    document.querySelector('iswc-check-icon-button[disabled]').click();
   });
   await page.waitForTimeout(50);
   const after = await page.evaluate(() => {
-    return document.querySelector('is-check-icon-button[disabled]').checked;
+    return document.querySelector('iswc-check-icon-button[disabled]').checked;
   });
   assert.equal(before, false);
   assert.equal(after, false, 'click sobre disabled no debe togglear');
   await page.close();
 });
 
-test('stagehand: click en botón "star" emite is-change con checked=true', async () => {
+test('stagehand: click en botón "star" emite iswc-change con checked=true', async () => {
   const page = await browser.newPage();
   await page.goto(URL_DEMO, { waitUntil: 'domcontentloaded' });
-  await page.waitForSelector('is-check-icon-button#star:defined');
+  await page.waitForSelector('iswc-check-icon-button#star:defined');
   await page.evaluate(() => {
     window.__starEvt = null;
-    document.querySelector('is-check-icon-button#star').addEventListener('is-change', (e) => {
+    document.querySelector('iswc-check-icon-button#star').addEventListener('iswc-change', (e) => {
       window.__starEvt = e.detail;
     });
   });
-  await page.evaluate(() => document.querySelector('is-check-icon-button#star').click());
+  await page.evaluate(() => document.querySelector('iswc-check-icon-button#star').click());
   await page.waitForTimeout(50);
   const detail = await page.evaluate(() => window.__starEvt);
   assert.equal(detail?.checked, true);
@@ -97,13 +97,13 @@ test('stagehand: prefers-reduced-motion no rompe el icono', async () => {
   const ctx = await browser.newContext({ reducedMotion: 'reduce' });
   const page = await ctx.newPage();
   await page.goto(URL_DEMO, { waitUntil: 'domcontentloaded' });
-  await page.waitForSelector('is-check-icon-button:defined');
+  await page.waitForSelector('iswc-check-icon-button:defined');
   await page.evaluate(() => {
-    document.querySelector('is-check-icon-button#play').click();
+    document.querySelector('iswc-check-icon-button#play').click();
   });
   await page.waitForTimeout(30);
   const on = await page.evaluate(() => {
-    return document.querySelector('is-check-icon-button#play').checked;
+    return document.querySelector('iswc-check-icon-button#play').checked;
   });
   assert.equal(on, true);
   await ctx.close();

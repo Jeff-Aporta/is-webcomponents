@@ -3,7 +3,7 @@
 <head>
 <meta charset="utf-8" />
 <meta name="viewport" content="width=device-width, initial-scale=1" />
-<title>Editor de documento &lt;is-doc-editor&gt; · is-webcomponents</title>
+<title>Editor de documento &lt;iswc-doc-editor&gt; · is-webcomponents</title>
 <meta name="description" content="Editor de documento basado en bloques (Notion-like) con menú slash para cambiar el tipo de bloque." />
 <style>
   html, body { margin: 0; padding: 0; min-height: 100%; background: #0c1118; color: #e2e8f0; font-family: ui-sans-serif, system-ui, sans-serif; }
@@ -14,14 +14,14 @@
   section { background: #131a24; border: 1px solid rgba(255,255,255,0.08); border-radius: 10px; padding: 16px; display: grid; gap: 10px; }
   section h2 { font-size: 13px; margin: 0; font-weight: 600; color: #cbd5e1; }
   section .desc { font-size: 12px; color: #94a3b8; margin: 0; }
-  is-doc-editor { display: block; min-height: 240px; }
+  iswc-doc-editor { display: block; min-height: 240px; }
   code { background: rgba(255,255,255,0.06); padding: 1px 5px; border-radius: 3px; font: 12px ui-monospace, Menlo, Consolas, monospace; }
   /* Anti-FOUC */
-  is-doc-editor:not(:defined) { visibility: hidden; }
+  iswc-doc-editor:not(:defined) { visibility: hidden; }
 </style>
 <script type="module">
-  await import('../../../dist/cdn/forms/doc-editor.min.js?h=idwzq3');
-  await customElements.whenDefined('is-doc-editor');
+  await import('../../../dist/cdn/forms/doc-editor.min.js?h=8dexbr');
+  await customElements.whenDefined('iswc-doc-editor');
 
   const initial = [
     { id: 'h', type: 'heading-1', text: 'Notas de la reunión' },
@@ -35,19 +35,19 @@
   ];
 
   // (1) doc con bloques iniciales
-  const doc1 = document.createElement('is-doc-editor');
+  const doc1 = document.createElement('iswc-doc-editor');
   doc1.setAttribute('name', 'meeting');
   doc1.value = initial;
   document.querySelector('#sec-blocks').appendChild(doc1);
 
   // (2) doc vacío (placeholder)
-  const doc2 = document.createElement('is-doc-editor');
+  const doc2 = document.createElement('iswc-doc-editor');
   doc2.setAttribute('name', 'scratch');
   doc2.setAttribute('placeholder', 'Empieza a escribir… usa "/" para cambiar el tipo de bloque');
   document.querySelector('#sec-empty').appendChild(doc2);
 
   // (3) doc desde JSON inline (mismo convenio que otros componentes)
-  const doc3 = document.createElement('is-doc-editor');
+  const doc3 = document.createElement('iswc-doc-editor');
   doc3.setAttribute('name', 'inline-json');
   const script = document.createElement('script');
   script.type = 'application/json';
@@ -61,8 +61,8 @@
 
   // Eventos
   [doc1, doc2, doc3].forEach((d) => {
-    d.addEventListener('is-change', (e) => console.log('[doc-editor] change', e.detail?.blocks?.length));
-    d.addEventListener('is-focus', (e) => console.log('[doc-editor] focus', e.detail?.id));
+    d.addEventListener('iswc-change', (e) => console.log('[doc-editor] change', e.detail?.blocks?.length));
+    d.addEventListener('iswc-focus', (e) => console.log('[doc-editor] focus', e.detail?.id));
   });
 
   document.documentElement.dataset.docEditorReady = '1';
@@ -71,13 +71,13 @@
 <body>
 <main>
   <header>
-    <h1>&lt;is-doc-editor&gt; · Editor de documento por bloques</h1>
+    <h1>&lt;iswc-doc-editor&gt; · Editor de documento por bloques</h1>
     <p>Bloques <code>heading</code>, <code>paragraph</code>, <code>todo</code>, <code>bullet-list</code>, <code>numbered-list</code>, <code>quote</code>, <code>code</code>, <code>divider</code> · <code>Enter</code> crea bloque, <code>"/"</code> abre el menú de tipos.</p>
   </header>
 
   <section id="sec-blocks">
     <h2>Documento con bloques iniciales</h2>
-    <p class="desc">Atributo <code>value</code> con array JSON de bloques. Eventos <code>is-change</code> con la lista actualizada.</p>
+    <p class="desc">Atributo <code>value</code> con array JSON de bloques. Eventos <code>iswc-change</code> con la lista actualizada.</p>
   </section>
 
   <section id="sec-empty">

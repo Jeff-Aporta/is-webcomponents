@@ -1,5 +1,5 @@
 /**
- * format-date.test.ts — Tier A (15 aserciones) para `<is-format-date>`.
+ * format-date.test.ts — Tier A (15 aserciones) para `<iswc-format-date>`.
  *
  * Estrategia: análisis estático del .ts. No levantamos DOM porque el módulo
  * toca HTMLElement en element-base.ts y eso requiere jsdom. Las pruebas
@@ -18,7 +18,7 @@ import { fileURLToPath } from 'node:url';
 
 const HERE = dirname(fileURLToPath(import.meta.url));
 const ROOT = join(HERE, '..', '..', '..', '..', '..');
-const TAG = 'is-format-date';
+const TAG = 'iswc-format-date';
 const TS  = join(ROOT, 'src', 'components', 'helpers', 'format-date.ts');
 const CSS = join(ROOT, 'src', 'components', 'helpers', 'format-date.css');
 const JSON_PATH = join(ROOT, 'src', 'components', 'helpers', 'format-date.json');
@@ -33,11 +33,11 @@ test('2. CSS hermano existe (.css)', async () => {
   assert.ok(existsSync(CSS), `debe existir ${CSS}`);
 });
 
-test('3. JSON existe, declara el tag y respeta el esquema is-preview/v1', async () => {
+test('3. JSON existe, declara el tag y respeta el esquema iswc-preview/v1', async () => {
   assert.ok(existsSync(JSON_PATH));
   const json = JSON.parse(readFileSync(JSON_PATH, 'utf8'));
   assert.equal(json.tag, TAG);
-  assert.equal(json.$schema, 'is-preview/v1');
+  assert.equal(json.$schema, 'iswc-preview/v1');
   assert.ok(Array.isArray(json.sections) && json.sections.length > 0, 'sections[] debe estar');
 });
 
@@ -78,8 +78,8 @@ test('7. Shadow DOM contiene <time part="date">', async () => {
 test('8. la clase está registrada con defineElement o customElements.define', async () => {
   const src = readFileSync(TS, 'utf8');
   assert.ok(
-    /customElements\.define\s*\(\s*['"]is-format-date['"]/.test(src) ||
-    /defineElement\s*\(\s*['"]is-format-date['"]/.test(src),
+    /customElements\.define\s*\(\s*['"]iswc-format-date['"]/.test(src) ||
+    /defineElement\s*\(\s*['"]iswc-format-date['"]/.test(src),
     'debe haber registro del custom element',
   );
 });

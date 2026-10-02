@@ -1,15 +1,15 @@
 ---
-tag: is-carousel-item
+tag: iswc-carousel-item
 tags:
-  - is-carousel-item
+  - iswc-carousel-item
 category: navigation
 status: public
 ---
-# `<is-carousel-item>`
+# `<iswc-carousel-item>`
 
 ## Propósito
 
-Lámina de `<is-carousel>`. Un paso del carrusel; el grupo controla el avance.
+Lámina de `<iswc-carousel>`. Un paso del carrusel; el grupo controla el avance.
 
 ## Cuándo usarlo
 
@@ -22,5 +22,5 @@ No lo reimplementes ni lo uses para sustituir al padre. La guía del padre docum
 ## Ejemplo mínimo
 
 ```html
-<is-carousel-item></is-carousel-item>
+<iswc-carousel-item></iswc-carousel-item>
 ```

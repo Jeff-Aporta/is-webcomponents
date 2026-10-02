@@ -12,7 +12,7 @@ import { svgArrowHead } from '../_shared/diagram-arrow.js';
 import type { Caja, Lado, Paquete, Punto } from '../_shared/diagram-tipos.js';
 
 /**
- * <is-component-diagram> — diagrama de componentes UML en SVG, sin Mermaid.
+ * <iswc-component-diagram> — diagrama de componentes UML en SVG, sin Mermaid.
  *
  * Tres primitivas declaradas por el payload:
  *   - packages: carpetas con pestaña (tab) arriba a la izquierda, hueco de 4px
@@ -28,7 +28,7 @@ import type { Caja, Lado, Paquete, Punto } from '../_shared/diagram-tipos.js';
  *
  * Atributos: color (inline | viewer), open-on-click, min-gap
  * Propiedades: payload, spec, layout, isViewer, minGap
- * Eventos: is-render, is-open-viewer
+ * Eventos: iswc-render, iswc-open-viewer
  */
 
 const FONT = 'Tahoma,Arial,sans-serif';
@@ -60,7 +60,7 @@ type LayoutPackage = Paquete & { titleBox?: Caja };
 /** Punto anchor de una arista. */
 type AnchorPoint = Punto;
 
-class IsComponentDiagram extends DiagramElementBase {
+class IswcComponentDiagram extends DiagramElementBase {
   static get observedAttributes(): string[] {
     return [...DiagramElementBase.observedAttributes, 'min-gap'];
   }
@@ -115,7 +115,7 @@ class IsComponentDiagram extends DiagramElementBase {
     const layout: ComponentLayout = computeComponentLayout(spec);
     this.layout = layout;
     this.#buildSvg(layout, this.#theme);
-    this.wrap.classList.toggle('is-viewer', this.isViewer);
+    this.wrap.classList.toggle('iswc-viewer', this.isViewer);
   }
 
   #buildSvg(layout: ComponentLayout, theme: DiagramTheme): void {
@@ -152,7 +152,7 @@ class IsComponentDiagram extends DiagramElementBase {
     this.#buildInterfaces(layout, theme);
     if (this.#etiquetasEdges) this.svg.appendChild(this.#etiquetasEdges);
 
-    emit(this, 'is-render', { layout, svg: this.svg });
+    emit(this, 'iswc-render', { layout, svg: this.svg });
   }
 
   #buildPackages(layout: ComponentLayout, theme: DiagramTheme): void {
@@ -160,7 +160,7 @@ class IsComponentDiagram extends DiagramElementBase {
       const p = rawP as LayoutPackage;
       const g = svgEl('g', { class: 'cd-pkg' });
       const color = (p.hue != null && tkHueToHex(p.hue)) || theme.accent;
-      // Mismo lenguaje que el cajón de grupo del `<is-er-diagram>`: el tono
+      // Mismo lenguaje que el cajón de grupo del `<iswc-er-diagram>`: el tono
       // tiñe apenas el fondo y vive en el borde. El relleno saturado anterior
       // convertía el paquete en un bloque de color que se comía a los
       // componentes de dentro — que son justo lo que hay que leer.
@@ -393,7 +393,7 @@ class IsComponentDiagram extends DiagramElementBase {
 
   #onClick = (_e: MouseEvent): void => {
     if (!this.hasAttribute('open-on-click')) return;
-    const ev = new CustomEvent('is-open-viewer', {
+    const ev = new CustomEvent('iswc-open-viewer', {
       bubbles: true, composed: true, cancelable: true, detail: { payload: this.payload },
     });
     this.dispatchEvent(ev);
@@ -404,8 +404,8 @@ class IsComponentDiagram extends DiagramElementBase {
   #onMouseLeave = (): void => { this.tooltipEl.hidden = true; };
 }
 
-defineElement('is-component-diagram', IsComponentDiagram, 'IsComponentDiagram');
-registerDiagramKind('component', 'is-component-diagram');
-registerDiagramKind('componentDiagram', 'is-component-diagram');
+defineElement('iswc-component-diagram', IswcComponentDiagram, 'IswcComponentDiagram');
+registerDiagramKind('component', 'iswc-component-diagram');
+registerDiagramKind('componentDiagram', 'iswc-component-diagram');
 
-export { IsComponentDiagram };
+export { IswcComponentDiagram };

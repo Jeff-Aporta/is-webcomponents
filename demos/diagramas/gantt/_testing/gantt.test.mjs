@@ -10,21 +10,21 @@ const URL = `${BASE_URL}/demos/diagramas/gantt/gantt.html`;
 const tests = [];
 
 tests.push({
-  name: 'smoke: <is-gantt> monta y renderiza filas y flechas',
+  name: 'smoke: <iswc-gantt> monta y renderiza filas y flechas',
   run: async (page) => {
     await page.goto(URL, { waitUntil: 'domcontentloaded' });
     await waitReady(page, 'data-gantt-ready');
     const info = await page.evaluate(() => {
-      const el = document.querySelector('main is-gantt');
+      const el = document.querySelector('main iswc-gantt');
       const shadow = el?.shadowRoot;
       return {
-        defined: !!customElements.get('is-gantt'),
+        defined: !!customElements.get('iswc-gantt'),
         rows: shadow?.querySelectorAll('[data-row-id]').length ?? 0,
         arrows: shadow?.querySelectorAll('[data-arrow-id]').length ?? 0,
         hasSvg: !!shadow?.querySelector('svg.gantt-svg'),
       };
     });
-    assert.equal(info.defined, true, 'is-gantt debe estar definido');
+    assert.equal(info.defined, true, 'iswc-gantt debe estar definido');
     assert.ok(info.rows >= 5, `esperaba >=5 filas, hay ${info.rows}`);
     assert.ok(info.arrows >= 3, `esperaba >=3 flechas de dependencia, hay ${info.arrows}`);
     assert.equal(info.hasSvg, true, 'debe existir <svg class="gantt-svg">');
@@ -38,7 +38,7 @@ tests.push({
     await page.goto(URL, { waitUntil: 'domcontentloaded' });
     await waitReady(page, 'data-gantt-ready');
     const ids = await page.evaluate(() => {
-      const el = document.querySelector('main is-gantt');
+      const el = document.querySelector('main iswc-gantt');
       return [...el.shadowRoot.querySelectorAll('[data-row-id]')].map((g) => g.dataset.rowId);
     });
     assert.ok(ids.includes('t1'), 'debe haber una fila "t1"');
@@ -52,7 +52,7 @@ tests.push({
     await page.goto(URL, { waitUntil: 'domcontentloaded' });
     await waitReady(page, 'data-gantt-ready');
     const shapes = await page.evaluate(() => {
-      const el = document.querySelector('main is-gantt');
+      const el = document.querySelector('main iswc-gantt');
       const t5 = el.shadowRoot.querySelector('[data-row-id="t5"]');
       const t1 = el.shadowRoot.querySelector('[data-row-id="t1"]');
       return {
@@ -71,7 +71,7 @@ tests.push({
     await page.goto(URL, { waitUntil: 'domcontentloaded' });
     await waitReady(page, 'data-gantt-ready');
     const arrows = await page.evaluate(() => {
-      const el = document.querySelector('main is-gantt');
+      const el = document.querySelector('main iswc-gantt');
       return [...el.shadowRoot.querySelectorAll('[data-arrow-id] path')].map((p) => ({
         d: p.getAttribute('d'),
       }));
@@ -89,7 +89,7 @@ tests.push({
     await page.goto(URL, { waitUntil: 'domcontentloaded' });
     await waitReady(page, 'data-gantt-ready');
     const ticks = await page.evaluate(() => {
-      const el = document.querySelector('main is-gantt');
+      const el = document.querySelector('main iswc-gantt');
       // El gantt dibuja los ticks como <text> directos (no agrupados en .gantt-axis).
       return el.shadowRoot.querySelectorAll('svg text').length;
     });
@@ -103,16 +103,16 @@ tests.push({
     await page.goto(URL, { waitUntil: 'domcontentloaded' });
     await waitReady(page, 'data-gantt-ready');
     const before = await page.evaluate(() => {
-      const el = document.querySelector('main is-gantt');
+      const el = document.querySelector('main iswc-gantt');
       return el.shadowRoot.querySelector('svg.gantt-svg').getAttribute('viewBox');
     });
     await page.evaluate(() => {
-      const el = document.querySelector('main is-gantt');
+      const el = document.querySelector('main iswc-gantt');
       el.payload = el.payload;
     });
     await page.waitForTimeout(150);
     const after = await page.evaluate(() => {
-      const el = document.querySelector('main is-gantt');
+      const el = document.querySelector('main iswc-gantt');
       return el.shadowRoot.querySelector('svg.gantt-svg').getAttribute('viewBox');
     });
     assert.equal(before, after, 'viewBox idéntico tras re-asignar payload');
@@ -125,7 +125,7 @@ tests.push({
     await page.goto(URL, { waitUntil: 'domcontentloaded' });
     await waitReady(page, 'data-gantt-ready');
     const meta = await page.evaluate(() => {
-      const el = document.querySelector('main is-gantt');
+      const el = document.querySelector('main iswc-gantt');
       const svg = el.shadowRoot.querySelector('svg.gantt-svg');
       return { aria: svg.getAttribute('aria-label'), role: svg.getAttribute('role') };
     });

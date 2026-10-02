@@ -35,20 +35,20 @@ import { registerDiagramKind } from './diagram-kinds.js';
 import { svgEl } from '../_shared/svg-chart-engine.js';
 
 /**
- * <is-venn-diagram> — diagrama de Venn (2 o 3 conjuntos) en SVG, sin Mermaid.
+ * <iswc-venn-diagram> — diagrama de Venn (2 o 3 conjuntos) en SVG, sin Mermaid.
  *
- *   <is-venn-diagram>
+ *   <iswc-venn-diagram>
  *     <script type="application/json">
  *       { "venn": { "sets": [...], "regions": [{ "sets": ["a","b"], "label": "Ambos" }] } }
  *     </script>
- *   </is-venn-diagram>
+ *   </iswc-venn-diagram>
  *
- * Mismo esqueleto que <is-flowchart>: shadow DOM, slot JSON + MutationObserver,
+ * Mismo esqueleto que <iswc-flowchart>: shadow DOM, slot JSON + MutationObserver,
  * tema por atributo `data-theme`, `color` (inline | viewer), lightbox propio.
  *
  * Atributos: color (inline | viewer), open-on-click
  * Propiedades: payload, spec, layout
- * Eventos: is-render, is-open-viewer
+ * Eventos: iswc-render, iswc-open-viewer
  */
 
 /** Conjunto cacheado en el SVG para aplicar hover sin reconstruir. */
@@ -63,7 +63,7 @@ interface RegionNodeEntry {
   g: SVGGElement;
 }
 
-class IsVennDiagram extends DiagramElementBase {
+class IswcVennDiagram extends DiagramElementBase {
   #circleNodes: Map<string, CircleNodeEntry> = new Map();
   #regionNodes: Map<string, RegionNodeEntry> = new Map();
   #hoverId: string | null = null;
@@ -102,7 +102,7 @@ class IsVennDiagram extends DiagramElementBase {
     const layout: VennLayout = computeVennLayout(spec);
     this.layout = layout;
     this.#buildSvg(layout, theme);
-    this.wrap.classList.toggle('is-viewer', this.isViewer);
+    this.wrap.classList.toggle('iswc-viewer', this.isViewer);
   }
 
   #buildSvg(layout: VennLayout, theme: DiagramTheme): void {
@@ -136,7 +136,7 @@ class IsVennDiagram extends DiagramElementBase {
     this.#buildCircles(layout, theme);
     this.#buildRegions(layout, theme);
 
-    emit(this, 'is-render', { layout, svg: this.svg });
+    emit(this, 'iswc-render', { layout, svg: this.svg });
   }
 
   #buildCircles(layout: VennLayout, theme: DiagramTheme): void {
@@ -236,9 +236,9 @@ class IsVennDiagram extends DiagramElementBase {
 
   #onClick = (_e: PointerEvent): void => {
     // El visor es opt-in: sin `open-on-click` el clic no hace nada y tampoco
-    // se anuncia `is-open-viewer`, que prometeria una apertura que no ocurre.
+    // se anuncia `iswc-open-viewer`, que prometeria una apertura que no ocurre.
     if (!this.hasAttribute('open-on-click')) return;
-    const ev = new CustomEvent('is-open-viewer', {
+    const ev = new CustomEvent('iswc-open-viewer', {
       bubbles: true, composed: true, cancelable: true, detail: { payload: this.payload },
     });
     this.dispatchEvent(ev);
@@ -269,14 +269,14 @@ class IsVennDiagram extends DiagramElementBase {
 
     for (const [setId, node] of this.#circleNodes) {
       const active = setId === id;
-      node.g.classList.toggle('is-active', active);
-      node.g.classList.toggle('is-dim', !!id && !active);
+      node.g.classList.toggle('iswc-active', active);
+      node.g.classList.toggle('iswc-dim', !!id && !active);
     }
     // Una región se resalta cuando el conjunto activo participa en ella.
     for (const [, region] of this.#regionNodes) {
       const touches = !!id && region.r.sets.includes(id);
-      region.g.classList.toggle('is-active', touches);
-      region.g.classList.toggle('is-dim', !!id && !touches);
+      region.g.classList.toggle('iswc-active', touches);
+      region.g.classList.toggle('iswc-dim', !!id && !touches);
     }
 
     if (!entry) {
@@ -299,8 +299,8 @@ class IsVennDiagram extends DiagramElementBase {
   }
 }
 
-defineElement('is-venn-diagram', IsVennDiagram, 'IsVennDiagram');
+defineElement('iswc-venn-diagram', IswcVennDiagram, 'IswcVennDiagram');
 
-registerDiagramKind('venn', 'is-venn-diagram');
+registerDiagramKind('venn', 'iswc-venn-diagram');
 
-export { IsVennDiagram };
+export { IswcVennDiagram };

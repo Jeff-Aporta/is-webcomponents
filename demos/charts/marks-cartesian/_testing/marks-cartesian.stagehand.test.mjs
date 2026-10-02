@@ -12,8 +12,8 @@ async function checkDeterministic(page) {
   await page.waitForTimeout(400);
   const data = await page.evaluate(() => {
     const pre = document.querySelector('pre#exports');
-    const bar = document.querySelector('is-chart[type="bar"]');
-    const line = document.querySelector('is-chart[type="line"]');
+    const bar = document.querySelector('iswc-chart[type="bar"]');
+    const line = document.querySelector('iswc-chart[type="line"]');
     const barSvg = bar?.shadowRoot?.querySelector('svg');
     const lineSvg = line?.shadowRoot?.querySelector('svg');
     return {
@@ -32,8 +32,8 @@ async function checkDeterministic(page) {
       data.exportsText.includes('drawBubbleMarks'),
     'pre#exports debe listar los 4 exports del bundle',
   );
-  assert.equal(data.barSvgs, true, '<is-chart type=bar> debe renderizar SVG');
-  assert.equal(data.lineSvgs, true, '<is-chart type=line> debe renderizar SVG');
+  assert.equal(data.barSvgs, true, '<iswc-chart type=bar> debe renderizar SVG');
+  assert.equal(data.lineSvgs, true, '<iswc-chart type=line> debe renderizar SVG');
   assert.ok(data.barRect.width > 100 && data.barRect.height > 100, 'SVG de barras debe tener tamaño visible');
   assert.ok(data.lineRect.width > 100 && data.lineRect.height > 100, 'SVG de líneas debe tener tamaño visible');
 }

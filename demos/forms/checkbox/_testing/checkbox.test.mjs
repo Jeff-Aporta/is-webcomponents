@@ -9,18 +9,18 @@ const URL = `${BASE_URL}/demos/forms/checkbox/checkbox.html`;
 const tests = [];
 
 tests.push({
-  name: 'smoke: <is-checkbox> definido, shadow DOM y estado inicial visible',
+  name: 'smoke: <iswc-checkbox> definido, shadow DOM y estado inicial visible',
   run: async (page) => {
     await page.goto(URL, { waitUntil: 'domcontentloaded' });
     await waitReady(page, 'data-checkbox-ready');
     const data = await page.evaluate(() => {
-      const cb = document.querySelector('is-checkbox#demo');
+      const cb = document.querySelector('iswc-checkbox#demo');
       const sr = cb.shadowRoot;
       const control = sr.querySelector('.control');
       const label = sr.querySelector('#label');
       const form = document.querySelector('form#check-form');
       return {
-        defined: !!customElements.get('is-checkbox'),
+        defined: !!customElements.get('iswc-checkbox'),
         hasShadow: !!sr,
         hasControl: !!control,
         hasLabel: !!label,
@@ -32,7 +32,7 @@ tests.push({
           .map((n) => n.textContent || '').join('').trim(),
       };
     });
-    assert.equal(data.defined, true, 'is-checkbox debe estar definido');
+    assert.equal(data.defined, true, 'iswc-checkbox debe estar definido');
     assert.equal(data.hasShadow, true, 'debe tener shadow DOM');
     assert.equal(data.hasControl, true, 'debe tener .control');
     assert.equal(data.hasLabel, true, 'debe tener label');
@@ -45,22 +45,22 @@ tests.push({
 });
 
 tests.push({
-  name: 'funcional: set checked → aria-checked=true y emite is-change',
+  name: 'funcional: set checked → aria-checked=true y emite iswc-change',
   run: async (page) => {
     await page.goto(URL, { waitUntil: 'domcontentloaded' });
     await waitReady(page, 'data-checkbox-ready');
-    // Escuchar el evento is-change disparado por la propiedad checked.
+    // Escuchar el evento iswc-change disparado por la propiedad checked.
     const triggered = await page.evaluate(() => new Promise((resolve) => {
-      const cb = document.querySelector('is-checkbox#demo');
-      cb.addEventListener('is-change', (e) => resolve({ ok: true, detail: e.detail }), { once: true });
+      const cb = document.querySelector('iswc-checkbox#demo');
+      cb.addEventListener('iswc-change', (e) => resolve({ ok: true, detail: e.detail }), { once: true });
       cb.checked = true;
     }));
-    assert.equal(triggered.ok, true, 'is-change debe dispararse');
+    assert.equal(triggered.ok, true, 'iswc-change debe dispararse');
     assert.equal(triggered.detail.checked, true, 'detail.checked debe ser true');
     assert.equal(triggered.detail.value, 'accepted', 'detail.value debe ser el value del componente');
 
     const ariaChecked = await page.evaluate(() =>
-      document.querySelector('is-checkbox#demo').getAttribute('aria-checked'),
+      document.querySelector('iswc-checkbox#demo').getAttribute('aria-checked'),
     );
     assert.equal(ariaChecked, 'true', 'aria-checked debe reflejar checked');
   },
@@ -72,7 +72,7 @@ tests.push({
     await page.goto(URL, { waitUntil: 'domcontentloaded' });
     await waitReady(page, 'data-checkbox-ready');
     const data = await page.evaluate(() => {
-      const cb = document.querySelector('is-checkbox#demo');
+      const cb = document.querySelector('iswc-checkbox#demo');
       cb.indeterminate = true;
       return {
         ariaChecked: cb.getAttribute('aria-checked'),
@@ -90,7 +90,7 @@ tests.push({
     await page.goto(URL, { waitUntil: 'domcontentloaded' });
     await waitReady(page, 'data-checkbox-ready');
     const data = await page.evaluate(() => {
-      const cb = document.querySelector('is-checkbox#demo');
+      const cb = document.querySelector('iswc-checkbox#demo');
       cb.disabled = true;
       const before = cb.checked;
       // Disparar click no debe alternar el estado.
@@ -114,7 +114,7 @@ tests.push({
     await page.goto(URL, { waitUntil: 'domcontentloaded' });
     await waitReady(page, 'data-checkbox-ready');
     const data = await page.evaluate(() => {
-      const cb = document.querySelector('is-checkbox#demo');
+      const cb = document.querySelector('iswc-checkbox#demo');
       cb.required = true;
       cb.checked = false;
       const v = cb.validity;
@@ -135,7 +135,7 @@ tests.push({
     await waitReady(page, 'data-checkbox-ready');
     const data = await page.evaluate(async () => {
       const form = document.querySelector('form#check-form');
-      const cb = form.querySelector('is-checkbox[name="tos"]');
+      const cb = form.querySelector('iswc-checkbox[name="tos"]');
       // Capturar el estado inicial (sin checked).
       const initial = cb.checked;
       // Marcar y resetear.

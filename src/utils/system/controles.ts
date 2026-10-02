@@ -1,9 +1,9 @@
 // controles.ts: sistema de controles de demo (playground tipo Storybook),
 // 100% JSON-driven. Los controles se declaran en el preview JSON del
-// componente (is-preview/v1, bloque demo/html -> `controls` + `target`) y se
+// componente (iswc-preview/v1, bloque demo/html -> `controls` + `target`) y se
 // aplican SIEMPRE vía JSON -> prop/attr del componente. Nunca otro sistema.
 //
-// El panel lo pinta <is-preview-controls> (components/layout); este módulo
+// El panel lo pinta <iswc-preview-controls> (components/layout); este módulo
 // monta los paneles por demo, escucha sus cambios y aplica el valor al host.
 
 /** Tipos de control soportados por el panel. */
@@ -39,7 +39,7 @@ export type ControlesDeDemo = {
 /** Bloque de preview que puede llevar controles (kind demo|html). */
 export type BloqueConControles = { kind: 'demo' | 'html'; html?: string } & ControlesDeDemo;
 
-/** Forma del panel <is-preview-controls> (su setter `spec` vive en preview-controls.ts). */
+/** Forma del panel <iswc-preview-controls> (su setter `spec` vive en preview-controls.ts). */
 type PanelConSpec = { spec: unknown[] };
 
 function esAttr(prop: string): boolean {
@@ -135,7 +135,7 @@ export type PreviewMountCtxShallow = { main?: HTMLElement | null; root?: HTMLEle
 /**
  * Monta los paneles de controles de todos los bloques demo/html con
  * `controls` del definition, dentro de ctx.main (que la dist ya pintó).
- * Cada panel escucha `is-controls-change` y aplica el valor al host.
+ * Cada panel escucha `iswc-controls-change` y aplica el valor al host.
  */
 export async function montarControles(definition: PreviewDefinitionShallow, ctx: PreviewMountCtxShallow): Promise<void> {
   const main = ctx.main ?? ctx.root;
@@ -170,15 +170,15 @@ export async function montarControles(definition: PreviewDefinitionShallow, ctx:
 }
 
 async function montarPanel(contenedor: HTMLElement, _seccion: HTMLElement, defs: ControlDef[], targetSel: string, grupo: string): Promise<void> {
-  const isDemo = contenedor.querySelector<HTMLElement>('is-demo');
+  const isDemo = contenedor.querySelector<HTMLElement>('iswc-demo');
   const raiz = (isDemo ?? contenedor) as ParentNode;
   let host: Element | null = null;
   if (targetSel) host = raiz.querySelector(targetSel);
   else {
-    host = [...raiz.querySelectorAll('*')].find((el) => el.tagName.toLowerCase().startsWith('is-')) ?? null;
+    host = [...raiz.querySelectorAll('*')].find((el) => el.tagName.toLowerCase().startsWith('iswc-')) ?? null;
   }
   if (!host) throw new Error(`no se encontró el host de controles (target: ${targetSel || 'primer is-*'})`);
-  const panel = document.createElement('is-preview-controls');
+  const panel = document.createElement('iswc-preview-controls');
   panel.setAttribute('label', 'Controles');
   const spec = defs.map((def) => {
     const d = { ...def, group: def.group ?? grupo };
@@ -192,7 +192,7 @@ async function montarPanel(contenedor: HTMLElement, _seccion: HTMLElement, defs:
   (panel as unknown as PanelConSpec).spec = spec;
   const ancla = isDemo ?? contenedor;
   ancla.insertAdjacentElement('afterend', panel);
-  panel.addEventListener('is-controls-change', ((e: Event) => {
+  panel.addEventListener('iswc-controls-change', ((e: Event) => {
     const detalle = (e as CustomEvent<{ def: ControlDef; valor: unknown }>).detail;
     if (detalle?.def && host?.isConnected) aplicarValor(host, detalle.def, detalle.valor);
   }) as EventListener);

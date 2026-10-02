@@ -1,11 +1,11 @@
 {
-  "$schema": "is-preview/v1",
-  "tag": "is-image-editor",
+  "$schema": "iswc-preview/v1",
+  "tag": "iswc-image-editor",
   "category": "media",
-  "title": "<is-image-editor>",
+  "title": "<iswc-image-editor>",
   "titleHtml": true,
   "styles": ".crop-out {\r\n      max-width: 100%;\r\n      max-height: 14rem;\r\n      display: block;\r\n      border: 1px solid var(--iswc-border);\r\n      border-radius: var(--iswc-radius);\r\n      margin-top: .55rem;\r\n    }\r\n    pre.log {\r\n      font-family: ui-monospace, monospace; font-size: .8rem;\r\n      background: var(--iswc-bg-elev); border: 1px solid var(--iswc-border);\r\n      border-radius: var(--iswc-radius); padding: .55rem .75rem;\r\n      max-height: 8rem; overflow: auto;\r\n    }",
-  "storageKey": "docs-is-image-editor",
+  "storageKey": "docs-iswc-image-editor",
   "hasBehavior": true,
   "sections": [
     {
@@ -20,7 +20,7 @@
       "blocks": [
         {
           "kind": "demo",
-          "html": "<is-image-editor id=\"editor1\" src=\"https://picsum.photos/id/1015/1600/1000\" aspect=\"16/10\">\r\n            <div slot=\"toolbar\">\r\n              <button data-action=\"zoom-out\">−</button>\r\n              <button data-action=\"zoom-in\">+</button>\r\n              <button data-action=\"rotate-ccw\">↺</button>\r\n              <button data-action=\"rotate\">↻</button>\r\n              <button data-action=\"reset\">Reset</button>\r\n              <button data-action=\"crop\">Recortar</button>\r\n            </div>\r\n          </is-image-editor>\r\n          <img id=\"crop1\" class=\"crop-out\" alt=\"Recorte resultante\" hidden\r\n               src=\"data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='1' height='1'><rect width='1' height='1' fill='transparent'/></svg>\">\r\n          <pre class=\"log\" id=\"log\">— logs aquí —</pre>",
+          "html": "<iswc-image-editor id=\"editor1\" src=\"https://picsum.photos/id/1015/1600/1000\" aspect=\"16/10\">\r\n            <div slot=\"toolbar\">\r\n              <button data-action=\"zoom-out\">−</button>\r\n              <button data-action=\"zoom-in\">+</button>\r\n              <button data-action=\"rotate-ccw\">↺</button>\r\n              <button data-action=\"rotate\">↻</button>\r\n              <button data-action=\"reset\">Reset</button>\r\n              <button data-action=\"crop\">Recortar</button>\r\n            </div>\r\n          </iswc-image-editor>\r\n          <img id=\"crop1\" class=\"crop-out\" alt=\"Recorte resultante\" hidden\r\n               src=\"data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='1' height='1'><rect width='1' height='1' fill='transparent'/></svg>\">\r\n          <pre class=\"log\" id=\"log\">— logs aquí —</pre>",
           "controls": [
             {
               "control": "text",
@@ -37,7 +37,7 @@
       "blocks": [
         {
           "kind": "code",
-          "code": "const e = document.querySelector('is-image-editor');\ne.zoom = 1.2;             // o e.applyZoom(0.1);\ne.rotation = 90;           // grados, sentido horario\ne.applyRotation(-90);\n\nconst out = e.cropped();  // dataURL image/png\ne.image;                  // HTMLImageElement cargada\n\n// Eventos\ne.addEventListener('is-load',   e => ...);\ne.addEventListener('is-change', e => /* crop rectangle cambia */);\ne.addEventListener('is-crop',   e => /* resultado recortado listo */);\n\n// Atributos\n// src, zoom, rotation, aspect (\"1\", \"4/3\", \"16/9\" o \"\")"
+          "code": "const e = document.querySelector('iswc-image-editor');\ne.zoom = 1.2;             // o e.applyZoom(0.1);\ne.rotation = 90;           // grados, sentido horario\ne.applyRotation(-90);\n\nconst out = e.cropped();  // dataURL image/png\ne.image;                  // HTMLImageElement cargada\n\n// Eventos\ne.addEventListener('iswc-load',   e => ...);\ne.addEventListener('iswc-change', e => /* crop rectangle cambia */);\ne.addEventListener('iswc-crop',   e => /* resultado recortado listo */);\n\n// Atributos\n// src, zoom, rotation, aspect (\"1\", \"4/3\", \"16/9\" o \"\")"
         }
       ]
     }

@@ -1,14 +1,14 @@
 ---
-tag: is-treemap
+tag: iswc-treemap
 tags:
-  - is-treemap
+  - iswc-treemap
 category: charts
 status: public
 source: ./treemap.js
 style: ./treemap.css
 preview: ./treemap.json
 ---
-# `<is-treemap>`
+# `<iswc-treemap>`
 
 ## Propósito
 
@@ -16,7 +16,7 @@ Treemap anidado en SVG, con el algoritmo squarified (Bruls/Huizing/
 van Wijk): rectángulos con aspect-ratio cercano a 1, sin huecos ni
 solapes.
 
-Este módulo registra `<is-treemap>`.
+Este módulo registra `<iswc-treemap>`.
 
 ## Cuándo usarlo
 
@@ -35,7 +35,7 @@ import './treemap.js';
 ## Ejemplo mínimo
 
 ```html
-<is-treemap></is-treemap>
+<iswc-treemap></iswc-treemap>
 ```
 
 ## API
@@ -67,8 +67,8 @@ import './treemap.js';
 
 | Evento | detail | bubbles | composed | cancelable |
 | --- | --- | --- | --- | --- |
-| `is-render` | sí | sí | sí | no |
-| `is-open-viewer` | sí | sí | sí | sí |
+| `iswc-render` | sí | sí | sí | no |
+| `iswc-open-viewer` | sí | sí | sí | sí |
 
 ### Métodos y propiedades públicas
 
@@ -108,18 +108,18 @@ No declara integración form-associated propia en este módulo.
 
 Documentación de cabecera preservada desde fuente:
 
-> <is-treemap> — treemap anidado en SVG (algoritmo squarified), sin librerías.
->   <is-treemap>
+> <iswc-treemap> — treemap anidado en SVG (algoritmo squarified), sin librerías.
+>   <iswc-treemap>
 >     <script type="application/json">
 >       { "treemap": { "nodes": [{ "id":"inv", "label":"Inventario", "value":3200 }] } }
 >     </script>
->   </is-treemap>
-> Mismo esqueleto que <is-flowchart> / <is-mindmap>: shadow DOM, slot JSON +
+>   </iswc-treemap>
+> Mismo esqueleto que <iswc-flowchart> / <iswc-mindmap>: shadow DOM, slot JSON +
 > MutationObserver, tema por atributo `data-theme`, `color` (inline | viewer),
 > lightbox propio.
 > Atributos: color (inline | viewer), open-on-click
 > Propiedades: payload, spec, layout
-> Eventos: is-render, is-open-viewer
+> Eventos: iswc-render, iswc-open-viewer
 
 ## Dependencias y componentes relacionados
 
@@ -130,7 +130,7 @@ Documentación de cabecera preservada desde fuente:
 - [`../_shared/tk-inline-md.js`](../_shared/tk-inline-md.js)
 - [`../diagrams/diagram-kinds.js`](../diagrams/diagram-kinds.js)
 
-Tags del módulo: `<is-treemap>`.
+Tags del módulo: `<iswc-treemap>`.
 
 ## Accesibilidad
 
@@ -139,7 +139,7 @@ Preservar semántica, foco, teclado, labels y ARIA. ARIA detectado: `aria-label`
 ## Ejemplo avanzado
 
 ```html
-<is-treemap></is-treemap>
+<iswc-treemap></iswc-treemap>
 ```
 
 ## Errores comunes

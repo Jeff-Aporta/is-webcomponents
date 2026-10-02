@@ -1,21 +1,21 @@
 ---
-tag: is-breadcrumb
+tag: iswc-breadcrumb
 tags:
-  - is-breadcrumb
+  - iswc-breadcrumb
 category: navigation
 status: public
 source: ./breadcrumb.js
 style: ./breadcrumb.css
 preview: ./breadcrumb.json
 ---
-# `<is-breadcrumb>`
+# `<iswc-breadcrumb>`
 
 ## Propósito
 
 Migas de pan accesibles con marcado <nav>,
 ARIA roles y separador automático entre items.
 
-Este módulo registra `<is-breadcrumb>`.
+Este módulo registra `<iswc-breadcrumb>`.
 
 ## Cuándo usarlo
 
@@ -34,12 +34,12 @@ import './breadcrumb.js';
 ## Ejemplo mínimo
 
 ```html
-<is-breadcrumb label="Catálogo">
-<is-breadcrumb-item href="/">Catálogo</is-breadcrumb-item>
-<is-breadcrumb-item href="/ropa">Ropa</is-breadcrumb-item>
-<is-breadcrumb-item href="/ropa/mujer">Mujer</is-breadcrumb-item>
-<is-breadcrumb-item href="">Camisetas</is-breadcrumb-item>
-</is-breadcrumb>
+<iswc-breadcrumb label="Catálogo">
+<iswc-breadcrumb-item href="/">Catálogo</iswc-breadcrumb-item>
+<iswc-breadcrumb-item href="/ropa">Ropa</iswc-breadcrumb-item>
+<iswc-breadcrumb-item href="/ropa/mujer">Mujer</iswc-breadcrumb-item>
+<iswc-breadcrumb-item href="">Camisetas</iswc-breadcrumb-item>
+</iswc-breadcrumb>
 ```
 
 ## API
@@ -99,8 +99,8 @@ No declara integración form-associated propia en este módulo.
 
 Documentación de cabecera preservada desde fuente:
 
-> <is-breadcrumb> — contenedor de una ruta de migas de pan.
-> Recibe N `<is-breadcrumb-item>` en el slot default y los muestra
+> <iswc-breadcrumb> — contenedor de una ruta de migas de pan.
+> Recibe N `<iswc-breadcrumb-item>` en el slot default y los muestra
 > separados por el slot `separator`.
 > Atributos
 >   label    string  — aria-label del nav (anunciado por screen readers).
@@ -113,7 +113,7 @@ Documentación de cabecera preservada desde fuente:
 
 - [`../_shared/adopt-css.js`](../_shared/adopt-css.js)
 
-Tags del módulo: `<is-breadcrumb>`.
+Tags del módulo: `<iswc-breadcrumb>`.
 
 ## Accesibilidad
 
@@ -122,11 +122,11 @@ Preservar semántica, foco, teclado, labels y ARIA. ARIA detectado: `aria-label`
 ## Ejemplo avanzado
 
 ```html
-<is-breadcrumb-item icon="mdi:home">Inicio</is-breadcrumb-item>
-<is-breadcrumb-item>
-<is-icon slot="start" icon="mdi:home"></is-icon>
+<iswc-breadcrumb-item icon="mdi:home">Inicio</iswc-breadcrumb-item>
+<iswc-breadcrumb-item>
+<iswc-icon slot="start" icon="mdi:home"></iswc-icon>
 Inicio
-</is-breadcrumb-item>
+</iswc-breadcrumb-item>
 ```
 
 ## Errores comunes

@@ -1,20 +1,20 @@
 ---
-tag: is-skeleton
+tag: iswc-skeleton
 tags:
-  - is-skeleton
+  - iswc-skeleton
 category: feedback
 status: public
 source: ./skeleton.js
 style: ./skeleton.css
 preview: ./skeleton.json
 ---
-# `<is-skeleton>`
+# `<iswc-skeleton>`
 
 ## Propósito
 
-<is-skeleton>
+<iswc-skeleton>
 
-Este módulo registra `<is-skeleton>`.
+Este módulo registra `<iswc-skeleton>`.
 
 ## Cuándo usarlo
 
@@ -33,8 +33,8 @@ import './skeleton.js';
 ## Ejemplo mínimo
 
 ```html
-<is-skeleton effect="sheen" style="height:1rem"></is-skeleton>
-<is-skeleton effect="pulse" style="height:1rem"></is-skeleton>
+<iswc-skeleton effect="sheen" style="height:1rem"></iswc-skeleton>
+<iswc-skeleton effect="pulse" style="height:1rem"></iswc-skeleton>
 ```
 
 ## API
@@ -92,7 +92,7 @@ No declara integración form-associated propia en este módulo.
 
 Documentación de cabecera preservada desde fuente:
 
-> <is-skeleton> — Web Component (vanilla).
+> <iswc-skeleton> — Web Component (vanilla).
 > Placeholder de carga.
 > Atributos
 >   effect  none | sheen | pulse (default sheen)
@@ -103,7 +103,7 @@ Documentación de cabecera preservada desde fuente:
 
 - [`../_shared/adopt-css.js`](../_shared/adopt-css.js)
 
-Tags del módulo: `<is-skeleton>`.
+Tags del módulo: `<iswc-skeleton>`.
 
 ## Accesibilidad
 
@@ -112,8 +112,8 @@ Preservar semántica, foco, teclado, labels y ARIA. ARIA detectado: `aria-hidden
 ## Ejemplo avanzado
 
 ```html
-<is-skeleton effect="sheen" style="height:1rem"></is-skeleton>
-<is-skeleton effect="pulse" style="height:1rem"></is-skeleton>
+<iswc-skeleton effect="sheen" style="height:1rem"></iswc-skeleton>
+<iswc-skeleton effect="pulse" style="height:1rem"></iswc-skeleton>
 ```
 
 ## Errores comunes

@@ -3,7 +3,7 @@ import { withStyleAttrs } from '../../core/attrs.js';
 
 
 /**
- * <is-skeleton> — Web Component (vanilla).
+ * <iswc-skeleton> — Web Component (vanilla).
  *
  * Placeholder de carga.
  *
@@ -23,7 +23,7 @@ import { withStyleAttrs } from '../../core/attrs.js';
   const OBSERVED = ['effect'];
   const VALID_EFFECT = ['none', 'sheen', 'pulse'];
 
-  class IsSkeleton extends withStyleAttrs(HTMLElement) {
+  class IswcSkeleton extends withStyleAttrs(HTMLElement) {
     /** Personalización por atributo (ver `core/attrs.ts`). */
     static styleAttrs = {
     color: { prop: '--iswc-skeleton-color', onlyColorValues: true },
@@ -66,5 +66,5 @@ import { withStyleAttrs } from '../../core/attrs.js';
     }
   }
 
-  defineElement('is-skeleton', IsSkeleton, 'IsSkeleton');
+  defineElement('iswc-skeleton', IswcSkeleton, 'IswcSkeleton');
 })();

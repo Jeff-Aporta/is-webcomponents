@@ -1,10 +1,10 @@
 {
-  "$schema": "is-preview/v1",
-  "tag": "is-pie-chart",
+  "$schema": "iswc-preview/v1",
+  "tag": "iswc-pie-chart",
   "category": "data-viz",
-  "title": "<is-pie-chart>",
+  "title": "<iswc-pie-chart>",
   "titleHtml": true,
-  "storageKey": "docs-is-pie-chart",
+  "storageKey": "docs-iswc-pie-chart",
   "sections": [
     {
       "id": "intro",
@@ -13,7 +13,7 @@
       "blocks": [
         {
           "kind": "demo",
-          "html": "<is-pie-chart open-on-click>\r\n            <script type=\"application/json\">\r\n              {\"data\":{\"labels\":[\"Alquiler\",\"Comida\",\"Transporte\",\"Ahorro\"],\"datasets\":[{\"label\":\"Presupuesto\",\"data\":[35,25,15,25]}]}}\r\n            </script>\r\n          </is-pie-chart>",
+          "html": "<iswc-pie-chart open-on-click>\r\n            <script type=\"application/json\">\r\n              {\"data\":{\"labels\":[\"Alquiler\",\"Comida\",\"Transporte\",\"Ahorro\"],\"datasets\":[{\"label\":\"Presupuesto\",\"data\":[35,25,15,25]}]}}\r\n            </script>\r\n          </iswc-pie-chart>",
           "controls": [
             {
               "control": "boolean",

@@ -1,5 +1,5 @@
 /**
- * Behavior migrado desde HTML inline de is-main.
+ * Behavior migrado desde HTML inline de iswc-main.
  * Se ejecuta en mount() tras pintar la definition JSON.
  * @param {import('../../previews/_kit/types.d.ts').PreviewMountContext} ctx
  */
@@ -12,7 +12,7 @@ interface MainEl extends HTMLElement {
 
 export async function mount(ctx: import('../../previews/_kit/types.d.ts').PreviewMountContext): Promise<void> {
   void ctx.main;
-  const main = document.querySelector<MainEl>('is-main');
+  const main = document.querySelector<MainEl>('iswc-main');
   const log = document.getElementById('scrollLog');
   if (!main || !log) return;
   const tick = (): void => { log.textContent = `scrollTop = ${Math.round(main.scrollTop)}`; };

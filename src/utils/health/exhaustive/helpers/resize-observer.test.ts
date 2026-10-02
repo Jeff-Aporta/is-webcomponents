@@ -1,5 +1,5 @@
 /**
- * resize-observer.test.ts — Tier A (12 aserciones) para `<is-resize-observer>`.
+ * resize-observer.test.ts — Tier A (12 aserciones) para `<iswc-resize-observer>`.
  *
  * Wrapper legacy que delega en createObserverElement('resize').
  */
@@ -12,7 +12,7 @@ import { fileURLToPath } from 'node:url';
 
 const HERE = dirname(fileURLToPath(import.meta.url));
 const ROOT = join(HERE, '..', '..', '..', '..', '..');
-const TAG = 'is-resize-observer';
+const TAG = 'iswc-resize-observer';
 const TS  = join(ROOT, 'src', 'components', 'helpers', 'resize-observer.ts');
 const CSS = join(ROOT, 'src', 'components', 'helpers', 'resize-observer.css');
 const JSON_PATH = join(ROOT, 'src', 'components', 'helpers', 'resize-observer.json');
@@ -25,10 +25,10 @@ test('2. CSS hermano existe', () => {
   assert.ok(existsSync(CSS));
 });
 
-test('3. JSON existe y respeta is-preview/v1', () => {
+test('3. JSON existe y respeta iswc-preview/v1', () => {
   const json = JSON.parse(readFileSync(JSON_PATH, 'utf8'));
   assert.equal(json.tag, TAG);
-  assert.equal(json.$schema, 'is-preview/v1');
+  assert.equal(json.$schema, 'iswc-preview/v1');
 });
 
 test('4. delega en createObserverElement("resize")', () => {
@@ -43,7 +43,7 @@ test('5. importa desde ./observer.js', () => {
 
 test('6. está registrado con defineElement', () => {
   const src = readFileSync(TS, 'utf8');
-  assert.ok(/defineElement\s*\(\s*['"]is-resize-observer['"]/.test(src));
+  assert.ok(/defineElement\s*\(\s*['"]iswc-resize-observer['"]/.test(src));
 });
 
 test('7. hereda OBSERVED del factory (no redefinir)', () => {
@@ -56,14 +56,14 @@ test('8. JSDoc documenta que `type` es opcional (default "resize")', () => {
   assert.ok(/type/.test(src));
 });
 
-test('9. JSDoc documenta evento is-resize', () => {
+test('9. JSDoc documenta evento iswc-resize', () => {
   const src = readFileSync(TS, 'utf8');
-  assert.ok(/is-resize/.test(src));
+  assert.ok(/iswc-resize/.test(src));
 });
 
 test('10. registrado en catalog.ts', () => {
   const cat = readFileSync(join(ROOT, 'src', 'previews', 'catalog.ts'), 'utf8');
-  assert.ok(cat.includes(`"is-resize-observer"`));
+  assert.ok(cat.includes(`"iswc-resize-observer"`));
 });
 
 test('11. CSS host con display:contents', () => {

@@ -84,13 +84,13 @@ test('css: propiedad, atom y comentario', () => {
 });
 
 test('diff: clase de línea por banda y tokens', () => {
-  assert.equal(diffLineClass('@@ -1,3 +1,4 @@'), 'is-diff-line-hunk');
-  assert.equal(diffLineClass('+hola'), 'is-diff-line-add');
-  assert.equal(diffLineClass('-chau'), 'is-diff-line-del');
-  assert.equal(diffLineClass('diff --git a/x b/x'), 'is-diff-line-file');
+  assert.equal(diffLineClass('@@ -1,3 +1,4 @@'), 'iswc-diff-line-hunk');
+  assert.equal(diffLineClass('+hola'), 'iswc-diff-line-add');
+  assert.equal(diffLineClass('-chau'), 'iswc-diff-line-del');
+  assert.equal(diffLineClass('diff --git a/x b/x'), 'iswc-diff-line-file');
   const { lines } = tokenizeCode('@@ -1 +1 @@\n+agregado\n normal\n', 'diff');
-  assert.equal(lines[0].lineClass, 'is-diff-line-hunk');
-  assert.equal(lines[1].lineClass, 'is-diff-line-add');
+  assert.equal(lines[0].lineClass, 'iswc-diff-line-hunk');
+  assert.equal(lines[1].lineClass, 'iswc-diff-line-add');
   assert.equal(lines[2].lineClass, null);
 });
 
@@ -115,8 +115,8 @@ test('estado vacío no se muta entre llamadas', () => {
 });
 
 test('HTML de demos se infiere como html (no javascript)', () => {
-  const snippet = '<is-button color="success">Aprobado</is-button>\n'
-    + '<is-button color="danger" variant="outlined">Eliminar</is-button>';
+  const snippet = '<iswc-button color="success">Aprobado</iswc-button>\n'
+    + '<iswc-button color="danger" variant="outlined">Eliminar</iswc-button>';
   assert.equal(inferLanguage(snippet), 'html');
 });
 
@@ -136,10 +136,10 @@ test('CSS se infiere como css', () => {
 });
 
 test('softFormat separa tags HTML en líneas', () => {
-  const raw = '<is-button color="success">Aprobado</is-button> <is-button color="danger">X</is-button>';
+  const raw = '<iswc-button color="success">Aprobado</iswc-button> <iswc-button color="danger">X</iswc-button>';
   const out = softFormat(raw, softFormatMode('html'));
   assert.match(out, /\n/);
-  assert.match(out, /is-button/);
+  assert.match(out, /iswc-button/);
 });
 
 test('alias curl resuelve al lenguaje shell', () => {
@@ -205,7 +205,7 @@ test('el highlighter vigila el DOM: nada se queda sin colorear', () => {
   assert.match(boot, /watchDom\(\)/, 'highlight-pre.js debe arrancar el observer');
 });
 
-test('las salidas vivas del docs son pre.code o is-code (paint → editor)', () => {
+test('las salidas vivas del docs son pre.code o iswc-code (paint → editor)', () => {
   const casos = [
     ['src/pages/theming.json', 'cssOut', 'css'],
     ['src/components/forms/rte.json', 'outHTML', 'html'],
@@ -216,16 +216,16 @@ test('las salidas vivas del docs son pre.code o is-code (paint → editor)', () 
     const def = JSON.parse(raw);
     const html = (def.sections ?? []).flatMap((s) => s.blocks ?? [])
       .map((b) => b.html).filter((h) => typeof h === 'string').join('\n');
-    const tag = html.match(new RegExp(`<(?:pre|is-code)\\b[^>]*id="${id}"[^>]*>`))?.[0];
-    assert.ok(tag, `${archivo}: no encontré #${id} (pre o is-code)`);
+    const tag = html.match(new RegExp(`<(?:pre|iswc-code)\\b[^>]*id="${id}"[^>]*>`))?.[0];
+    assert.ok(tag, `${archivo}: no encontré #${id} (pre o iswc-code)`);
     assert.match(tag, /class="[^"]*\bcode\b/, `${archivo}#${id}: sin la clase code no se monta el editor`);
     assert.match(tag, new RegExp(`data-lang="${lang}"`), `${archivo}#${id}: falta data-lang="${lang}"`);
   }
 });
 
-test('el prompt para agentes del CDN no se tokeniza como markup', () => {
+test('el panel CDN no embebe prompt LLM como MD editor', () => {
   const src = readFileSync(join(root, 'src/components/feedback/cdn-snippet.ts'), 'utf8');
-  assert.match(src, /data-slot="llm-prompt"/);
-  assert.match(src, /IS-MD-EDITOR/);
-  assert.doesNotMatch(src, /#adoptCodeMirrorCss/);
+  assert.match(src, /data-slot="skills"/);
+  assert.doesNotMatch(src, /data-slot="llm-prompt"/);
+  assert.doesNotMatch(src, /iswc-md-editor/);
 });

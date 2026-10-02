@@ -1,15 +1,15 @@
 ---
-tag: is-tab-panel
+tag: iswc-tab-panel
 tags:
-  - is-tab-panel
+  - iswc-tab-panel
 category: navigation
 status: public
 ---
-# `<is-tab-panel>`
+# `<iswc-tab-panel>`
 
 ## Propósito
 
-Panel de `<is-tab-group>`. El contenido que se muestra al activar su `<is-tab>`.
+Panel de `<iswc-tab-group>`. El contenido que se muestra al activar su `<iswc-tab>`.
 
 ## Cuándo usarlo
 
@@ -22,5 +22,5 @@ No lo reimplementes ni lo uses para sustituir al padre. La guía del padre docum
 ## Ejemplo mínimo
 
 ```html
-<is-tab-panel></is-tab-panel>
+<iswc-tab-panel></iswc-tab-panel>
 ```

@@ -1,29 +1,29 @@
 import { adoptCss, defineElement, emit } from '../../core/element.js';
 
 /**
- * <is-observer type="…"> — Web Component genérico para envolver
+ * <iswc-observer type="…"> — Web Component genérico para envolver
  * IntersectionObserver / MutationObserver / ResizeObserver.
  *
  * Sustituye a los 3 wrappers individuales que existían antes
- * (is-intersection-observer, is-mutation-observer, is-resize-observer)
+ * (iswc-intersection-observer, iswc-mutation-observer, iswc-resize-observer)
  * con un único elemento cuya rama cambia por `type`. Los 3 nombres
  * históricos quedan registrados como alias que resuelven a la misma
  * clase con `type` prefijado en el constructor.
  *
- *   <is-observer type="intersection" intersect-class="visible">
+ *   <iswc-observer type="intersection" intersect-class="visible">
  *     <div>…</div>
- *   </is-observer>
+ *   </iswc-observer>
  *
- *   <is-observer type="mutation" attr="class open" child-list>
+ *   <iswc-observer type="mutation" attr="class open" child-list>
  *     <div>…</div>
- *   </is-observer>
+ *   </iswc-observer>
  *
- *   <is-observer type="resize">
+ *   <iswc-observer type="resize">
  *     <div>…</div>
- *   </is-observer>
+ *   </iswc-observer>
  *
  * Atributos comunes
- *   type      intersection | mutation | resize     (obligatorio en <is-observer>)
+ *   type      intersection | mutation | resize     (obligatorio en <iswc-observer>)
  *   disabled  boolean — desconecta el observer sin destruir el elemento.
  *
  * Atributos por tipo
@@ -40,9 +40,9 @@ import { adoptCss, defineElement, emit } from '../../core/element.js';
  *   resize         (sin parámetros extra)
  *
  * Eventos
- *   type="intersection"  is-intersect  detail: { entry }
- *   type="mutation"      is-mutate     detail: { records }
- *   type="resize"        is-resize     detail: { entries }
+ *   type="intersection"  iswc-intersect  detail: { entry }
+ *   type="mutation"      iswc-mutate     detail: { records }
+ *   type="resize"        iswc-resize     detail: { entries }
  *
  * Slots: default — los elementos a observar (en intersection/resize) o el
  *        subárbol a vigilar (en mutation).
@@ -209,7 +209,7 @@ class ObserverElement extends HTMLElement {
         if (cls && entry.target instanceof Element) {
           entry.target.classList.toggle(cls, entry.isIntersecting);
         }
-        emit(this, 'is-intersect', { entry });
+        emit(this, 'iswc-intersect', { entry });
         if (once && entry.isIntersecting) {
           io.unobserve(entry.target);
         }
@@ -236,7 +236,7 @@ class ObserverElement extends HTMLElement {
     };
 
     const mo = new MutationObserver((records) => {
-      emit(this, 'is-mutate', { records });
+      emit(this, 'iswc-mutate', { records });
     });
 
     mo.observe(this, opts);
@@ -246,7 +246,7 @@ class ObserverElement extends HTMLElement {
   #setupResize(): void {
     if (typeof ResizeObserver === 'undefined') return;
     const ro = new ResizeObserver((entries) => {
-      emit(this, 'is-resize', { entries });
+      emit(this, 'iswc-resize', { entries });
     });
     for (const child of this.children) ro.observe(child);
     this.#observer = ro;
@@ -264,7 +264,7 @@ class ObserverElement extends HTMLElement {
   }
 }
 
-defineElement('is-observer', ObserverElement, 'IsObserver');
+defineElement('iswc-observer', ObserverElement, 'IswcObserver');
 
 /**
  * Colore con `type` prefijado al construir. Usada por los wrappers

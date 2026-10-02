@@ -1,23 +1,21 @@
-/* <is-theme-img> — logo/asset dark↔light; caja 1em × 1em. */
+/* <iswc-theme-img> — logo/asset dark↔light; caja 1em × 1em. */
 
 :host {
   display: inline-block;
   vertical-align: middle;
-  width: 1em;
-  height: 1em;
+  inline-size: 1em;
+  block-size: 1em;
   line-height: 0;
   box-sizing: border-box;
   flex: none;
 }
 
-:host([hidden]) {
-  display: none !important;
-}
+:host([hidden]) { display: none !important; }
 
 .img {
   display: block;
-  width: 100%;
-  height: 100%;
+  inline-size: 100%;
+  block-size: 100%;
   object-fit: var(--iswc-theme-img-fit, contain);
   object-position: center;
   pointer-events: none;
@@ -25,17 +23,9 @@
   -webkit-user-drag: none;
 }
 
-:host([shape='circle']) .img {
-  border-radius: 50%;
-}
-
-:host([shape='rounded']) .img {
-  border-radius: 0.22em;
-}
-
-:host([shape='square']) .img {
-  border-radius: 0;
-}
+:host([shape='circle'])  .img { border-radius: 50%; }
+:host([shape='rounded']) .img { border-radius: 0.22em; }
+:host([shape='square'])  .img { border-radius: 0; }
 
 /* F0.3 g12 [media/loading]: skeleton accesible mientras aria-busy=true. */
 :host([data-loading]) .img {
@@ -46,14 +36,14 @@
       color-mix(in srgb, var(--iswc-text) 14%, transparent),
       color-mix(in srgb, var(--iswc-text) 8%, transparent));
   background-size: 200% 100%;
-  animation: is-theme-img-shimmer 1.2s linear infinite;
+  animation: iswc-theme-img-shimmer 1.2s linear infinite;
+
+  @media (prefers-reduced-motion: reduce) { animation: none; }
 }
-@keyframes is-theme-img-shimmer {
+
+@keyframes iswc-theme-img-shimmer {
   from { background-position: 0% 0; }
-  to { background-position: -200% 0; }
-}
-@media (prefers-reduced-motion: reduce) {
-  :host([data-loading]) .img { animation: none; }
+  to   { background-position: -200% 0; }
 }
 
 /* F0.3 g12 [media/error-state]: pista visual mínima cuando la imagen falla. */

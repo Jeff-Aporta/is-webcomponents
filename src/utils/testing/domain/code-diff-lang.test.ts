@@ -1,6 +1,6 @@
 // tests/code-diff-lang.test.ts
 //
-// Guardián de `lang="diff"` / `lang="commit"` en <is-code>.
+// Guardián de `lang="diff"` / `lang="commit"` en <iswc-code>.
 //
 // El fallo que motivó el módulo: pintar un diff con un modo de lenguaje real
 // (javascript) lee el `+` de la primera columna como operador y descoloca el
@@ -14,7 +14,7 @@
 //      tokenicen por tramos: el motor nativo banda la línea y `format()` alinea.
 //   5. `format()` deja el bloque `--stat` en rejilla alineada.
 //   6. Cada banda que emite el clasificador tiene su regla CSS nativa
-//      (`.is-diff-line-*`) y su token de tema; NO se registran modos de
+//      (`.iswc-diff-line-*`) y su token de tema; NO se registran modos de
 //      CodeMirror (`defineMode`/`defineDiffMode` desaparecieron).
 //
 // Uso:  node tests/code-diff-lang.test.ts

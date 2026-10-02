@@ -9,18 +9,18 @@ const URL = `${BASE_URL}/demos/forms/textarea/textarea.html`;
 const tests = [];
 
 tests.push({
-  name: 'smoke: <is-textarea> definido, shadow DOM y textarea nativa visible',
+  name: 'smoke: <iswc-textarea> definido, shadow DOM y textarea nativa visible',
   run: async (page) => {
     await page.goto(URL, { waitUntil: 'domcontentloaded' });
     await waitReady(page, 'data-textarea-ready');
     const data = await page.evaluate(() => {
-      const ta = document.querySelector('is-textarea#demo');
+      const ta = document.querySelector('iswc-textarea#demo');
       const sr = ta.shadowRoot;
       const native = sr.querySelector('textarea');
       const label = sr.querySelector('label#label');
       const hint = sr.querySelector('#hint');
       return {
-        defined: !!customElements.get('is-textarea'),
+        defined: !!customElements.get('iswc-textarea'),
         hasShadow: !!sr,
         nativeRows: native?.rows,
         nativeId: native?.id,
@@ -30,7 +30,7 @@ tests.push({
         hintText: hint?.textContent?.trim(),
       };
     });
-    assert.equal(data.defined, true, 'is-textarea debe estar definido');
+    assert.equal(data.defined, true, 'iswc-textarea debe estar definido');
     assert.equal(data.hasShadow, true, 'debe tener shadow DOM');
     assert.equal(data.nativeId, 'textarea', 'el textarea nativo debe tener id=textarea');
     assert.equal(data.hasLabel, true, 'debe tener label');
@@ -41,22 +41,22 @@ tests.push({
 });
 
 tests.push({
-  name: 'funcional: set .value → textarea nativo refleja y emite is-input',
+  name: 'funcional: set .value → textarea nativo refleja y emite iswc-input',
   run: async (page) => {
     await page.goto(URL, { waitUntil: 'domcontentloaded' });
     await waitReady(page, 'data-textarea-ready');
     const triggered = await page.evaluate(() => new Promise((resolve) => {
-      const ta = document.querySelector('is-textarea#demo');
-      ta.addEventListener('is-input', (e) => resolve({ ok: true, value: e.detail.value }), { once: true });
+      const ta = document.querySelector('iswc-textarea#demo');
+      ta.addEventListener('iswc-input', (e) => resolve({ ok: true, value: e.detail.value }), { once: true });
       const native = ta.shadowRoot.getElementById('textarea');
       native.value = 'Línea 1\nLínea 2';
       native.dispatchEvent(new Event('input', { bubbles: true }));
     }));
-    assert.equal(triggered.ok, true, 'is-input debe dispararse');
+    assert.equal(triggered.ok, true, 'iswc-input debe dispararse');
     assert.equal(triggered.value, 'Línea 1\nLínea 2', 'detail.value debe coincidir');
     const mirrored = await page.evaluate(() => ({
-      property: document.querySelector('is-textarea#demo').value,
-      native: document.querySelector('is-textarea#demo').shadowRoot.getElementById('textarea').value,
+      property: document.querySelector('iswc-textarea#demo').value,
+      native: document.querySelector('iswc-textarea#demo').shadowRoot.getElementById('textarea').value,
     }));
     assert.equal(mirrored.property, 'Línea 1\nLínea 2', 'la propiedad value debe reflejar');
     assert.equal(mirrored.native, 'Línea 1\nLínea 2', 'el textarea nativo debe reflejar');
@@ -69,7 +69,7 @@ tests.push({
     await page.goto(URL, { waitUntil: 'domcontentloaded' });
     await waitReady(page, 'data-textarea-ready');
     const data = await page.evaluate(async () => {
-      const ta = document.querySelector('is-textarea#demo');
+      const ta = document.querySelector('iswc-textarea#demo');
       const native = ta.shadowRoot.getElementById('textarea');
       // Esperar al refit inicial.
       await new Promise((r) => setTimeout(r, 100));
@@ -93,7 +93,7 @@ tests.push({
     await page.goto(URL, { waitUntil: 'domcontentloaded' });
     await waitReady(page, 'data-textarea-ready');
     const data = await page.evaluate(() => {
-      const ta = document.querySelector('is-textarea[name="fixed"]');
+      const ta = document.querySelector('iswc-textarea[name="fixed"]');
       const native = ta.shadowRoot.querySelector('textarea');
       return {
         rows: ta.rows,
@@ -115,7 +115,7 @@ tests.push({
     await page.goto(URL, { waitUntil: 'domcontentloaded' });
     await waitReady(page, 'data-textarea-ready');
     const data = await page.evaluate(() => {
-      const ta = document.querySelector('is-textarea[name="err"]');
+      const ta = document.querySelector('iswc-textarea[name="err"]');
       const native = ta.shadowRoot.getElementById('textarea');
       const errEl = ta.shadowRoot.getElementById('error-text');
       return {
@@ -136,7 +136,7 @@ tests.push({
     await page.goto(URL, { waitUntil: 'domcontentloaded' });
     await waitReady(page, 'data-textarea-ready');
     const data = await page.evaluate(() => {
-      const ta = document.querySelector('is-textarea[name="rq"]');
+      const ta = document.querySelector('iswc-textarea[name="rq"]');
       ta.value = '';
       return {
         valueMissing: ta.validity?.valueMissing,
@@ -154,7 +154,7 @@ tests.push({
     await page.goto(URL, { waitUntil: 'domcontentloaded' });
     await waitReady(page, 'data-textarea-ready');
     const data = await page.evaluate(() => {
-      const ta = document.querySelector('is-textarea[name="count"]');
+      const ta = document.querySelector('iswc-textarea[name="count"]');
       const count = ta.shadowRoot.getElementById('count');
       ta.value = 'abcdef';
       // Forzar sync (count se actualiza en #syncSupport que se llama en #update).

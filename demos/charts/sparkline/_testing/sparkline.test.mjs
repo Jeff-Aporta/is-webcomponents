@@ -1,7 +1,7 @@
 // sparkline.test.mjs — tests exhaustivos del demo sparkline.html.
 //
 // Cobertura:
-//   - smoke: tres <is-sparkline> se registran y montan SVG
+//   - smoke: tres <iswc-sparkline> se registran y montan SVG
 //   - data property: cambiar el array de data re-renderiza el path
 //   - atributo values: aceptar string CSV y re-renderizar al cambiar
 //   - atributo type="bar": cambia la forma del mark (paths redondeados)
@@ -16,20 +16,20 @@ const URL = `${BASE_URL}/demos/charts/sparkline/sparkline.html`;
 const tests = [];
 
 tests.push({
-  name: 'smoke: tres <is-sparkline> montan y renderizan SVG con marks',
+  name: 'smoke: tres <iswc-sparkline> montan y renderizan SVG con marks',
   run: async (page) => {
     await page.goto(URL, { waitUntil: 'domcontentloaded' });
     await waitReady(page, 'data-sparkline-ready');
     await page.waitForTimeout(200);
     const info = await page.evaluate(() => {
-      const all = [...document.querySelectorAll('is-sparkline')];
+      const all = [...document.querySelectorAll('iswc-sparkline')];
       return all.map((s, i) => {
         const svg = s.shadowRoot?.querySelector('svg');
         const marks = [...(s.shadowRoot?.querySelectorAll('path, circle') ?? [])];
         return {
           i,
           tag: s.tagName.toLowerCase(),
-          defined: !!customElements.get('is-sparkline'),
+          defined: !!customElements.get('iswc-sparkline'),
           svg: !!svg,
           viewBox: svg?.getAttribute('viewBox'),
           marks: marks.length,
@@ -68,20 +68,20 @@ tests.push({
     await waitReady(page, 'data-sparkline-ready');
     await page.waitForTimeout(200);
     const before = await page.evaluate(() => {
-      const s = document.querySelectorAll('is-sparkline')[1]; // bar demo
+      const s = document.querySelectorAll('iswc-sparkline')[1]; // bar demo
       return {
         marks: s.shadowRoot.querySelectorAll('path').length,
         firstD: s.shadowRoot.querySelector('path')?.getAttribute('d') ?? null,
       };
     });
     await page.evaluate(() => {
-      const s = document.querySelectorAll('is-sparkline')[1];
+      const s = document.querySelectorAll('iswc-sparkline')[1];
       // 4 valores: debe pasar de 7 marks a 4 marks (cada valor → 1 path).
       s.data = [10, 20, 30, 40];
     });
     await page.waitForTimeout(250);
     const after = await page.evaluate(() => {
-      const s = document.querySelectorAll('is-sparkline')[1];
+      const s = document.querySelectorAll('iswc-sparkline')[1];
       return {
         marks: s.shadowRoot.querySelectorAll('path').length,
         firstD: s.shadowRoot.querySelector('path')?.getAttribute('d') ?? null,
@@ -100,7 +100,7 @@ tests.push({
     await waitReady(page, 'data-sparkline-ready');
     await page.waitForTimeout(200);
     const before = await page.evaluate(() => {
-      const s = document.querySelectorAll('is-sparkline')[0]; // line demo
+      const s = document.querySelectorAll('iswc-sparkline')[0]; // line demo
       // Para line hay 1 path principal + 1 circle de "último punto".
       return {
         paths: s.shadowRoot.querySelectorAll('path').length,
@@ -108,12 +108,12 @@ tests.push({
       };
     });
     await page.evaluate(() => {
-      const s = document.querySelectorAll('is-sparkline')[0];
+      const s = document.querySelectorAll('iswc-sparkline')[0];
       s.setAttribute('values', '1,2,3,4,5');
     });
     await page.waitForTimeout(250);
     const after = await page.evaluate(() => {
-      const s = document.querySelectorAll('is-sparkline')[0];
+      const s = document.querySelectorAll('iswc-sparkline')[0];
       // Comprobar que el array de datos se actualizó a 5 valores.
       return {
         dataLen: s.data.length,
@@ -132,7 +132,7 @@ tests.push({
     await waitReady(page, 'data-sparkline-ready');
     await page.waitForTimeout(200);
     const result = await page.evaluate(() => {
-      const s = document.querySelectorAll('is-sparkline')[2]; // gradient demo
+      const s = document.querySelectorAll('iswc-sparkline')[2]; // gradient demo
       const defs = s.shadowRoot.querySelector('defs');
       const grad = defs?.querySelector('linearGradient');
       const paths = [...s.shadowRoot.querySelectorAll('path')];
@@ -159,7 +159,7 @@ tests.push({
     await waitReady(page, 'data-sparkline-ready');
     await page.waitForTimeout(200);
     const result = await page.evaluate(() => {
-      const s = document.querySelectorAll('is-sparkline')[1]; // bar demo
+      const s = document.querySelectorAll('iswc-sparkline')[1]; // bar demo
       const paths = [...s.shadowRoot.querySelectorAll('path')];
       // Cada path de bar debe tener d con M/L/Q/Z (rect redondeado).
       return {
@@ -183,7 +183,7 @@ tests.push({
     await waitReady(page, 'data-sparkline-ready');
     await page.waitForTimeout(200);
     const before = await page.evaluate(() => {
-      const s = document.querySelectorAll('is-sparkline')[0];
+      const s = document.querySelectorAll('iswc-sparkline')[0];
       const rect = s.getBoundingClientRect();
       const vb = s.shadowRoot.querySelector('svg').getAttribute('viewBox');
       return { rectW: Math.round(rect.width), rectH: Math.round(rect.height), vb };
@@ -205,16 +205,16 @@ tests.push({
     await waitReady(page, 'data-sparkline-ready');
     await page.waitForTimeout(200);
     const before = await page.evaluate(() => {
-      const s = document.querySelectorAll('is-sparkline')[1]; // bar
+      const s = document.querySelectorAll('iswc-sparkline')[1]; // bar
       return s.shadowRoot.querySelectorAll('path').length;
     });
     await page.evaluate(() => {
-      const s = document.querySelectorAll('is-sparkline')[1];
+      const s = document.querySelectorAll('iswc-sparkline')[1];
       s.data = [5, 12, 8, 18, 22, 15, 28];
     });
     await page.waitForTimeout(250);
     const after = await page.evaluate(() => {
-      const s = document.querySelectorAll('is-sparkline')[1];
+      const s = document.querySelectorAll('iswc-sparkline')[1];
       return s.shadowRoot.querySelectorAll('path').length;
     });
     assert.equal(before, after, `re-asignar el mismo data debe mantener ${before} marks (hay ${after})`);

@@ -1,14 +1,14 @@
 ---
-tag: is-timeline
+tag: iswc-timeline
 tags:
-  - is-timeline
+  - iswc-timeline
 category: diagrams
 status: public
 source: ./timeline.js
 style: ./timeline.css
 preview: ./timeline.json
 ---
-# `<is-timeline>`
+# `<iswc-timeline>`
 
 ## Propósito
 
@@ -16,7 +16,7 @@ Línea de tiempo de hitos en SVG, sin Mermaid. Declaras eventos con
 fecha; el componente los reparte a lo largo de un eje y separa los
 que caen demasiado cerca en el tiempo para que no se encimen.
 
-Este módulo registra `<is-timeline>`.
+Este módulo registra `<iswc-timeline>`.
 
 ## Cuándo usarlo
 
@@ -35,7 +35,7 @@ import './timeline.js';
 ## Ejemplo mínimo
 
 ```html
-<is-timeline></is-timeline>
+<iswc-timeline></iswc-timeline>
 ```
 
 ## API
@@ -68,9 +68,9 @@ import './timeline.js';
 
 | Evento | detail | bubbles | composed | cancelable |
 | --- | --- | --- | --- | --- |
-| `is-render` | sí | sí | sí | no |
-| `is-toggle-group` | sí | sí | sí | sí |
-| `is-open-viewer` | sí | sí | sí | sí |
+| `iswc-render` | sí | sí | sí | no |
+| `iswc-toggle-group` | sí | sí | sí | sí |
+| `iswc-open-viewer` | sí | sí | sí | sí |
 
 ### Métodos y propiedades públicas
 
@@ -108,18 +108,18 @@ No declara integración form-associated propia en este módulo.
 
 Documentación de cabecera preservada desde fuente:
 
-> <is-timeline> — línea de tiempo de hitos en SVG, sin Mermaid.
->   <is-timeline>
+> <iswc-timeline> — línea de tiempo de hitos en SVG, sin Mermaid.
+>   <iswc-timeline>
 >     <script type="application/json">
 >       { "timeline": { "title": "...", "orientation": "horizontal", "events": [...] } }
 >     </script>
->   </is-timeline>
+>   </iswc-timeline>
 > `orientation: horizontal` (default) alterna los eventos arriba/abajo de un
 > eje central; `vertical` los apila a la derecha de un eje a la izquierda.
 > No hay flechas que rutear (sin turtle): la animación no aplica aquí.
 > Atributos: color (inline | viewer), open-on-click
 > Propiedades: payload, spec, layout, hiddenGroups
-> Eventos: is-render, is-open-viewer, is-toggle-group
+> Eventos: iswc-render, iswc-open-viewer, iswc-toggle-group
 
 ## Dependencias y componentes relacionados
 
@@ -130,7 +130,7 @@ Documentación de cabecera preservada desde fuente:
 - [`../_shared/tk-inline-md.js`](../_shared/tk-inline-md.js)
 - [`./diagram-kinds.js`](./diagram-kinds.js)
 
-Tags del módulo: `<is-timeline>`.
+Tags del módulo: `<iswc-timeline>`.
 
 ## Accesibilidad
 
@@ -139,7 +139,7 @@ Preservar semántica, foco, teclado, labels y ARIA. ARIA detectado: `aria-label`
 ## Ejemplo avanzado
 
 ```html
-<is-timeline></is-timeline>
+<iswc-timeline></iswc-timeline>
 ```
 
 ## Errores comunes

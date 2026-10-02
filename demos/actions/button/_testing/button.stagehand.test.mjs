@@ -16,7 +16,7 @@ test('stagehand: la página expone data-button-ready', async () => {
   const sections = await page.evaluate(() => {
     return {
       sections: document.querySelectorAll('section').length,
-      buttons: document.querySelectorAll('is-button').length,
+      buttons: document.querySelectorAll('iswc-button').length,
     };
   });
   assert.ok(sections.sections >= 4, 'demo debe tener >=4 secciones');
@@ -27,13 +27,13 @@ test('stagehand: la página expone data-button-ready', async () => {
 test('stagehand: click en el contador incrementa el texto', async () => {
   const page = await browser.newPage();
   await page.goto(URL_DEMO, { waitUntil: 'domcontentloaded' });
-  await page.waitForSelector('is-button#counter:defined');
+  await page.waitForSelector('iswc-button#counter:defined');
   for (let i = 1; i <= 3; i++) {
     await page.evaluate(() => {
-      document.querySelector('is-button#counter').click();
+      document.querySelector('iswc-button#counter').click();
     });
     await page.waitForTimeout(20);
-    const txt = await page.evaluate(() => document.querySelector('is-button#counter').textContent);
+    const txt = await page.evaluate(() => document.querySelector('iswc-button#counter').textContent);
     assert.equal(txt, `Clicks: ${i}`);
   }
   await page.close();
@@ -42,10 +42,10 @@ test('stagehand: click en el contador incrementa el texto', async () => {
 test('stagehand: foco en un botón lo marca como :focus visible', async () => {
   const page = await browser.newPage();
   await page.goto(URL_DEMO, { waitUntil: 'domcontentloaded' });
-  await page.waitForSelector('is-button:defined');
-  await page.focus('is-button#counter');
+  await page.waitForSelector('iswc-button:defined');
+  await page.focus('iswc-button#counter');
   const focused = await page.evaluate(() => {
-    const inner = document.querySelector('is-button#counter').shadowRoot.querySelector('.btn');
+    const inner = document.querySelector('iswc-button#counter').shadowRoot.querySelector('.btn');
     return inner === document.activeElement || inner.contains(document.activeElement);
   });
   assert.equal(focused, true, 'tras focus(), el inner debe ser el activeElement');
@@ -55,31 +55,31 @@ test('stagehand: foco en un botón lo marca como :focus visible', async () => {
 test('stagehand: Tab navega entre los botones en orden DOM', async () => {
   const page = await browser.newPage();
   await page.goto(URL_DEMO, { waitUntil: 'domcontentloaded' });
-  await page.waitForSelector('is-button:defined');
-  await page.focus('section:nth-of-type(1) is-button:first-child');
+  await page.waitForSelector('iswc-button:defined');
+  await page.focus('section:nth-of-type(1) iswc-button:first-child');
   await page.keyboard.press('Tab');
   await page.waitForTimeout(20);
   const focused = await page.evaluate(() => {
     const inner = document.activeElement;
-    // inner es el <button> interno del segundo is-button
+    // inner es el <button> interno del segundo iswc-button
     const host = inner?.getRootNode()?.host;
     return host?.tagName ?? null;
   });
-  assert.equal(focused, 'IS-BUTTON', 'el siguiente focus debe estar en otro is-button');
+  assert.equal(focused, 'IS-BUTTON', 'el siguiente focus debe estar en otro iswc-button');
   await page.close();
 });
 
 test('stagehand: with-caret pinta el icono chevron-down al final', async () => {
   const page = await browser.newPage();
   await page.goto(URL_DEMO, { waitUntil: 'domcontentloaded' });
-  await page.waitForSelector('is-button[with-caret]:defined');
+  await page.waitForSelector('iswc-button[with-caret]:defined');
   const hasCaret = await page.evaluate(() => {
-    const btn = document.querySelector('is-button[with-caret]');
+    const btn = document.querySelector('iswc-button[with-caret]');
     const caret = btn.shadowRoot.querySelector('[part="caret"]');
     return {
       exists: !!caret,
       hidden: caret?.hidden ?? true,
-      icon: caret?.querySelector('is-icon')?.getAttribute('icon') ?? null,
+      icon: caret?.querySelector('iswc-icon')?.getAttribute('icon') ?? null,
     };
   });
   assert.equal(hasCaret.exists, true, 'debe existir ::part(caret)');
@@ -92,10 +92,10 @@ test('stagehand: prefers-reduced-motion: el spinner no cambia de tamaño', async
   const ctx = await browser.newContext({ reducedMotion: 'reduce' });
   const page = await ctx.newPage();
   await page.goto(URL_DEMO, { waitUntil: 'domcontentloaded' });
-  await page.waitForSelector('is-button#loading-btn:defined');
+  await page.waitForSelector('iswc-button#loading-btn:defined');
   // El spinner debe seguir mostrándose; solo cambia la duración de la animación.
   const spinnerVisible = await page.evaluate(() => {
-    return document.querySelector('is-button#loading-btn').shadowRoot.querySelector('.btn__spinner').hidden;
+    return document.querySelector('iswc-button#loading-btn').shadowRoot.querySelector('.btn__spinner').hidden;
   });
   assert.equal(spinnerVisible, false, 'spinner sigue visible con reduced-motion');
   await ctx.close();

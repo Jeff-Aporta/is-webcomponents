@@ -9,18 +9,18 @@ const URL = `${BASE_URL}/demos/forms/switch/switch.html`;
 const tests = [];
 
 tests.push({
-  name: 'smoke: <is-switch> definido, shadow DOM y role=switch',
+  name: 'smoke: <iswc-switch> definido, shadow DOM y role=switch',
   run: async (page) => {
     await page.goto(URL, { waitUntil: 'domcontentloaded' });
     await waitReady(page, 'data-switch-ready');
     const data = await page.evaluate(() => {
-      const sw = document.querySelector('is-switch#demo');
+      const sw = document.querySelector('iswc-switch#demo');
       const sr = sw.shadowRoot;
       const control = sr.querySelector('.control');
       const track = sr.querySelector('.thumb')?.parentElement;
       const label = sr.querySelector('#label');
       return {
-        defined: !!customElements.get('is-switch'),
+        defined: !!customElements.get('iswc-switch'),
         hasShadow: !!sr,
         hasControl: !!control,
         hasLabel: !!label,
@@ -32,7 +32,7 @@ tests.push({
           .map((n) => n.textContent || '').join('').trim(),
       };
     });
-    assert.equal(data.defined, true, 'is-switch debe estar definido');
+    assert.equal(data.defined, true, 'iswc-switch debe estar definido');
     assert.equal(data.hasShadow, true, 'debe tener shadow DOM');
     assert.equal(data.hasControl, true, 'debe tener .control');
     assert.equal(data.hasLabel, true, 'debe tener label');
@@ -46,15 +46,15 @@ tests.push({
 });
 
 tests.push({
-  name: 'funcional: click togglea checked y emite is-change',
+  name: 'funcional: click togglea checked y emite iswc-change',
   run: async (page) => {
     await page.goto(URL, { waitUntil: 'domcontentloaded' });
     await waitReady(page, 'data-switch-ready');
     const data = await page.evaluate(async () => {
-      const sw = document.querySelector('is-switch#demo');
+      const sw = document.querySelector('iswc-switch#demo');
       // Esperar al primer click con un listener { once }.
       const evt = await new Promise((resolve) => {
-        sw.addEventListener('is-change', (e) => resolve(e.detail), { once: true });
+        sw.addEventListener('iswc-change', (e) => resolve(e.detail), { once: true });
         sw.click();
       });
       // Esperar a que el estado se asiente.
@@ -67,8 +67,8 @@ tests.push({
     });
     assert.equal(data.checkedAfterClick, true, 'click debe poner checked=true');
     assert.equal(data.ariaChecked, 'true', 'aria-checked debe ser true');
-    assert.equal(data.eventDetail.checked, true, 'is-change.detail.checked debe ser true');
-    assert.equal(data.eventDetail.value, 'yes', 'is-change.detail.value debe ser el value');
+    assert.equal(data.eventDetail.checked, true, 'iswc-change.detail.checked debe ser true');
+    assert.equal(data.eventDetail.value, 'yes', 'iswc-change.detail.value debe ser el value');
   },
 });
 
@@ -78,9 +78,9 @@ tests.push({
     await page.goto(URL, { waitUntil: 'domcontentloaded' });
     await waitReady(page, 'data-switch-ready');
     const data = await page.evaluate(() => {
-      const sw = document.querySelector('is-checkbox, is-switch#demo')?.matches?.('is-switch')
-        ? document.querySelector('is-switch#demo')
-        : document.querySelector('is-switch');
+      const sw = document.querySelector('iswc-checkbox, iswc-switch#demo')?.matches?.('iswc-switch')
+        ? document.querySelector('iswc-switch#demo')
+        : document.querySelector('iswc-switch');
       sw.checked = true;
       const ariaChecked = sw.getAttribute('aria-checked');
       // Estado custom :state(checked) debe estar presente.
@@ -98,7 +98,7 @@ tests.push({
     await page.goto(URL, { waitUntil: 'domcontentloaded' });
     await waitReady(page, 'data-switch-ready');
     const data = await page.evaluate(() => {
-      const sw = document.querySelector('is-switch#demo');
+      const sw = document.querySelector('iswc-switch#demo');
       sw.disabled = true;
       const before = sw.checked;
       sw.click();
@@ -121,7 +121,7 @@ tests.push({
     await page.goto(URL, { waitUntil: 'domcontentloaded' });
     await waitReady(page, 'data-switch-ready');
     const data = await page.evaluate(() => {
-      const sw = document.querySelector('is-switch[required][error]');
+      const sw = document.querySelector('iswc-switch[required][error]');
       sw.checked = false;
       return {
         valueMissing: sw.validity?.valueMissing,
@@ -139,13 +139,13 @@ tests.push({
     await page.goto(URL, { waitUntil: 'domcontentloaded' });
     await waitReady(page, 'data-switch-ready');
     // Focus + Space.
-    await page.focus('is-switch#demo');
+    await page.focus('iswc-switch#demo');
     await page.keyboard.press('Space');
-    let checked = await page.evaluate(() => document.querySelector('is-switch#demo').checked);
+    let checked = await page.evaluate(() => document.querySelector('iswc-switch#demo').checked);
     assert.equal(checked, true, 'Space debe poner checked=true');
     // Enter → vuelve a false.
     await page.keyboard.press('Enter');
-    checked = await page.evaluate(() => document.querySelector('is-switch#demo').checked);
+    checked = await page.evaluate(() => document.querySelector('iswc-switch#demo').checked);
     assert.equal(checked, false, 'Enter debe poner checked=false');
   },
 });
@@ -156,7 +156,7 @@ tests.push({
     await page.goto(URL, { waitUntil: 'domcontentloaded' });
     await waitReady(page, 'data-switch-ready');
     const data = await page.evaluate(() => {
-      const sw = [...document.querySelectorAll('is-switch[on-label]')][0];
+      const sw = [...document.querySelectorAll('iswc-switch[on-label]')][0];
       const sr = sw.shadowRoot;
       const onLabel = sr.getElementById('onLabel');
       const offLabel = sr.getElementById('offLabel');

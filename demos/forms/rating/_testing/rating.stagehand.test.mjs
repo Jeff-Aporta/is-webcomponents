@@ -12,7 +12,7 @@ const results = [];
 async function checkDeterministic(page) {
   await page.waitForTimeout(200);
   const data = await page.evaluate(() => {
-    const ratings = [...document.querySelectorAll('main is-rating')];
+    const ratings = [...document.querySelectorAll('main iswc-rating')];
     return ratings.map((r, idx) => {
       const shadow = r.shadowRoot;
       const slider = shadow.querySelector('[role="slider"]');
@@ -86,7 +86,7 @@ try {
 // Rama opt-in con Stagehand LLM (sólo si STAGEHAND=1 + credenciales).
 // ─────────────────────────────────────────────────────────────────────────
 const VISUAL_RUBRIC = `
-Evalúa la calidad visual del componente de rating (<is-rating>) que aparece en el screenshot.
+Evalúa la calidad visual del componente de rating (<iswc-rating>) que aparece en el screenshot.
 
 Checklist (todas deben cumplirse; marca cada una PASS o FAIL):
 

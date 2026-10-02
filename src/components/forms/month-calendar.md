@@ -1,20 +1,20 @@
 ---
-tag: is-month-calendar
+tag: iswc-month-calendar
 tags:
-  - is-month-calendar
+  - iswc-month-calendar
 category: forms
 status: public
 source: ./month-calendar.js
 style: ./month-calendar.css
 preview: ./month-calendar.json
 ---
-# `<is-month-calendar>`
+# `<iswc-month-calendar>`
 
 ## Propósito
 
-Calendario inline (DateCalendar de MUI X). Tres vistas (día, mes, año), teclado, números de semana y reglas de deshabilitado. El mes y el año del encabezado abren un is-dropdown.
+Calendario inline (DateCalendar de MUI X). Tres vistas (día, mes, año), teclado, números de semana y reglas de deshabilitado. El mes y el año del encabezado abren un iswc-dropdown.
 
-Este módulo registra `<is-month-calendar>`.
+Este módulo registra `<iswc-month-calendar>`.
 
 ## Cuándo usarlo
 
@@ -33,7 +33,7 @@ import './month-calendar.js';
 ## Ejemplo mínimo
 
 ```html
-<is-month-calendar></is-month-calendar>
+<iswc-month-calendar></iswc-month-calendar>
 ```
 
 ## API
@@ -73,7 +73,7 @@ No expone.
 
 | Evento | detail | bubbles | composed | cancelable |
 | --- | --- | --- | --- | --- |
-| `is-change` | sí | sí | sí | no |
+| `iswc-change` | sí | sí | sí | no |
 
 ### Métodos y propiedades públicas
 
@@ -116,17 +116,17 @@ No declara integración form-associated propia en este módulo.
 
 Documentación de cabecera preservada desde fuente:
 
-> <is-month-calendar> — Rejilla de los 12 meses de un año (MUI MonthCalendar).
+> <iswc-month-calendar> — Rejilla de los 12 meses de un año (MUI MonthCalendar).
 > Atributos: value (yyyy-mm), year, min, max (ISO), locale, columns,
 >            month-width (short|long), disabled, readonly
-> Events: is-change  detail { value, year, month }
+> Events: iswc-change  detail { value, year, month }
 
 ## Dependencias y componentes relacionados
 
 - [`../_shared/adopt-css.js`](../_shared/adopt-css.js)
 - [`../_shared/date-utils.js`](../_shared/date-utils.js)
 
-Tags del módulo: `<is-month-calendar>`.
+Tags del módulo: `<iswc-month-calendar>`.
 
 ## Accesibilidad
 
@@ -135,7 +135,7 @@ Preservar semántica, foco, teclado, labels y ARIA. ARIA detectado: `aria-checke
 ## Ejemplo avanzado
 
 ```html
-<is-month-calendar></is-month-calendar>
+<iswc-month-calendar></iswc-month-calendar>
 ```
 
 ## Errores comunes

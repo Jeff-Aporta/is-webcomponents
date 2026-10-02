@@ -9,15 +9,15 @@ const URL = `${BASE_URL}/demos/data/ag-grid/ag-grid.html`;
 const tests = [];
 
 tests.push({
-  name: 'smoke: is-ag-grid está definido y todos los grids renderizan',
+  name: 'smoke: iswc-ag-grid está definido y todos los grids renderizan',
   run: async (page) => {
     await page.goto(URL, { waitUntil: 'domcontentloaded' });
     await waitReady(page, 'data-ag-grid-ready');
     await page.waitForTimeout(300); // el grid puede tardar en pintar
     const initial = await page.evaluate(() => {
-      const grids = [...document.querySelectorAll('main is-ag-grid')];
+      const grids = [...document.querySelectorAll('main iswc-ag-grid')];
       return {
-        defined: !!customElements.get('is-ag-grid'),
+        defined: !!customElements.get('iswc-ag-grid'),
         count: grids.length,
         perGrid: grids.map((g) => {
           const sr = g.shadowRoot;
@@ -32,13 +32,13 @@ tests.push({
         }),
       };
     });
-    assert.equal(initial.defined, true, 'is-ag-grid debe estar definido');
+    assert.equal(initial.defined, true, 'iswc-ag-grid debe estar definido');
     assert.equal(initial.count, 6, `esperaba 6 grids (1 + 3 densities + 2 plain), hay ${initial.count}`);
     // El primer grid (basic) debe tener toolbar; el último (plain) no.
     assert.equal(initial.perGrid[0].hasToolbar, true, 'basic debe tener toolbar');
     // El g3 (sin toolbar) debe tener toolbar=null
     const g3 = await page.evaluate(() => {
-      const all = [...document.querySelectorAll('main is-ag-grid')];
+      const all = [...document.querySelectorAll('main iswc-ag-grid')];
       return all[all.length - 1].shadowRoot.querySelector('.mim-dg__toolbar');
     });
     assert.equal(g3, null, 'plain (toolbar="false") no debe tener toolbar');
@@ -53,7 +53,7 @@ tests.push({
     await waitReady(page, 'data-ag-grid-ready');
     await page.waitForTimeout(300);
     const state = await page.evaluate(() => {
-      const grids = [...document.querySelectorAll('main is-ag-grid')];
+      const grids = [...document.querySelectorAll('main iswc-ag-grid')];
       const g1 = grids[0];
       const sr = g1.shadowRoot;
       // Buscar celdas con valores de la primera fila.
@@ -83,7 +83,7 @@ tests.push({
     await waitReady(page, 'data-ag-grid-ready');
     await page.waitForTimeout(200);
     const densities = await page.evaluate(() => {
-      const grids = [...document.querySelectorAll('main is-ag-grid')];
+      const grids = [...document.querySelectorAll('main iswc-ag-grid')];
       // grids[1]=compact, grids[2]=normal, grids[3]=comfortable
       return grids.slice(1, 4).map((g) => ({
         attr: g.getAttribute('density'),
@@ -106,7 +106,7 @@ tests.push({
     await waitReady(page, 'data-ag-grid-ready');
     await page.waitForTimeout(300);
     const page1 = await page.evaluate(() => {
-      const grids = [...document.querySelectorAll('main is-ag-grid')];
+      const grids = [...document.querySelectorAll('main iswc-ag-grid')];
       const g1 = grids[0];
       const sr = g1.shadowRoot;
       const rows = [...sr.querySelectorAll('.mim-dg__row')];
@@ -121,13 +121,13 @@ tests.push({
     // No debe haber más de 5 filas visibles.
     assert.ok(page1.visibleRows <= 5, `filas visibles debe ser <= 5, hay ${page1.visibleRows}`);
 
-    // Llamar a goToPage(2) y verificar que se dispara is-page-change.
+    // Llamar a goToPage(2) y verificar que se dispara iswc-page-change.
     const captured = await page.evaluate(() => {
       return new Promise((resolve) => {
-        const grids = [...document.querySelectorAll('main is-ag-grid')];
+        const grids = [...document.querySelectorAll('main iswc-ag-grid')];
         const g1 = grids[0];
         let detail = null;
-        g1.addEventListener('is-page-change', (e) => { detail = e.detail; });
+        g1.addEventListener('iswc-page-change', (e) => { detail = e.detail; });
         g1.api.goToPage(2);
         setTimeout(() => {
           resolve({
@@ -145,17 +145,17 @@ tests.push({
 });
 
 tests.push({
-  name: 'funcional: selectAll emite is-row-select con detail.rows.length = 8',
+  name: 'funcional: selectAll emite iswc-row-select con detail.rows.length = 8',
   run: async (page) => {
     await page.goto(URL, { waitUntil: 'domcontentloaded' });
     await waitReady(page, 'data-ag-grid-ready');
     await page.waitForTimeout(300);
     const captured = await page.evaluate(() => {
       return new Promise((resolve) => {
-        const grids = [...document.querySelectorAll('main is-ag-grid')];
+        const grids = [...document.querySelectorAll('main iswc-ag-grid')];
         const g1 = grids[0];
         let detail = null;
-        g1.addEventListener('is-row-select', (e) => { detail = e.detail; });
+        g1.addEventListener('iswc-row-select', (e) => { detail = e.detail; });
         g1.api.selectAll();
         setTimeout(() => {
           resolve({
@@ -180,7 +180,7 @@ tests.push({
     await page.waitForTimeout(300);
     const result = await page.evaluate(() => {
       return new Promise((resolve) => {
-        const grids = [...document.querySelectorAll('main is-ag-grid')];
+        const grids = [...document.querySelectorAll('main iswc-ag-grid')];
         const g3 = grids[grids.length - 1]; // sin paginación
         g3.api.setQuickFilter('HDMI');
         setTimeout(() => {
@@ -199,17 +199,17 @@ tests.push({
 });
 
 tests.push({
-  name: 'funcional: evento is-cell-click emite detail { row, column, value }',
+  name: 'funcional: evento iswc-cell-click emite detail { row, column, value }',
   run: async (page) => {
     await page.goto(URL, { waitUntil: 'domcontentloaded' });
     await waitReady(page, 'data-ag-grid-ready');
     await page.waitForTimeout(300);
     const captured = await page.evaluate(() => {
       return new Promise((resolve) => {
-        const grids = [...document.querySelectorAll('main is-ag-grid')];
+        const grids = [...document.querySelectorAll('main iswc-ag-grid')];
         const g1 = grids[0];
         let detail = null;
-        g1.addEventListener('is-cell-click', (e) => { detail = e.detail; });
+        g1.addEventListener('iswc-cell-click', (e) => { detail = e.detail; });
         // Buscar la primera celda visible y hacer click
         const sr = g1.shadowRoot;
         const cell = sr.querySelector('.mim-dg__row .mim-dg__cell');
@@ -247,7 +247,7 @@ tests.push({
     // Capturar creación de <a download="..."> en el DOM.
     const captured = await page.evaluate(() => {
       return new Promise((resolve) => {
-        const grids = [...document.querySelectorAll('main is-ag-grid')];
+        const grids = [...document.querySelectorAll('main iswc-ag-grid')];
         const g1 = grids[0];
         let downloadName = null;
         const origCreate = document.createElement.bind(document);
@@ -285,18 +285,18 @@ tests.push({
     await waitReady(page, 'data-ag-grid-ready');
     await page.waitForTimeout(300);
     const a = await page.evaluate(() => {
-      const grids = [...document.querySelectorAll('main is-ag-grid')];
+      const grids = [...document.querySelectorAll('main iswc-ag-grid')];
       return JSON.stringify(grids[0].api.getState());
     });
     await page.evaluate(() => {
-      const grids = [...document.querySelectorAll('main is-ag-grid')];
+      const grids = [...document.querySelectorAll('main iswc-ag-grid')];
       const g = grids[0];
       g.api.setColumns(g.columns);
       g.api.setRows(g.rows);
     });
     await page.waitForTimeout(100);
     const b = await page.evaluate(() => {
-      const grids = [...document.querySelectorAll('main is-ag-grid')];
+      const grids = [...document.querySelectorAll('main iswc-ag-grid')];
       return JSON.stringify(grids[0].api.getState());
     });
     assert.equal(a, b, 'round-trip setColumns + setRows debe producir el mismo estado');

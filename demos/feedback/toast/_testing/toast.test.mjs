@@ -1,4 +1,4 @@
-// toast.test.mjs — tests exhaustivos del demo is-toast.
+// toast.test.mjs — tests exhaustivos del demo iswc-toast.
 // Cobertura: smoke + funcional (create, placements, success/error/loading,
 // promise) + gap 18: el modo seguro (allowHtml=false) trata el mensaje como
 // texto plano y NO interpreta HTML; el modo inseguro (allowHtml=true) SÍ lo
@@ -16,14 +16,14 @@ tests.push({
     await page.goto(URL, { waitUntil: 'domcontentloaded' });
     await waitReady(page, 'data-toast-ready');
     const data = await page.evaluate(() => {
-      const all = document.querySelectorAll('is-toast');
+      const all = document.querySelectorAll('iswc-toast');
       return {
-        defined: !!customElements.get('is-toast'),
+        defined: !!customElements.get('iswc-toast'),
         count: all.length,
         placements: [...all].map((t) => t.getAttribute('placement')),
       };
     });
-    assert.equal(data.defined, true, 'is-toast debe estar definido');
+    assert.equal(data.defined, true, 'iswc-toast debe estar definido');
     assert.ok(data.count >= 4, `esperaba >=4 toasts, hay ${data.count}`);
     assert.ok(data.placements.includes('bottom-end'), `placement bottom-end debe estar presente, vi ${JSON.stringify(data.placements)}`);
     await screenshot(page, 'toast-smoke');
@@ -31,17 +31,17 @@ tests.push({
 });
 
 tests.push({
-  name: 'funcional: create() añade un is-toast-item visible',
+  name: 'funcional: create() añade un iswc-toast-item visible',
   run: async (page) => {
     await page.goto(URL, { waitUntil: 'domcontentloaded' });
     await waitReady(page, 'data-toast-ready');
     await page.waitForTimeout(150);
     const data = await page.evaluate(async () => {
-      const t = document.querySelector('is-toast');
-      const initial = t.querySelectorAll('is-toast-item').length;
+      const t = document.querySelector('iswc-toast');
+      const initial = t.querySelectorAll('iswc-toast-item').length;
       const item = await t.create('Hola mundo', { variant: 'brand', duration: 3000 });
       await new Promise((r) => requestAnimationFrame(() => r()));
-      const after = t.querySelectorAll('is-toast-item').length;
+      const after = t.querySelectorAll('iswc-toast-item').length;
       return {
         initial, after,
         itemText: item.textContent.replace(/\s+/g, ' ').trim(),
@@ -62,7 +62,7 @@ tests.push({
       const item = await IsToast.success('¡Bien!');
       await new Promise((r) => requestAnimationFrame(() => r()));
       const t = IsToast.host();
-      const all = [...t.querySelectorAll('is-toast-item')];
+      const all = [...t.querySelectorAll('iswc-toast-item')];
       const success = all.find((i) => i.textContent.includes('¡Bien!'));
       return {
         hostOk: !!t,
@@ -116,7 +116,7 @@ tests.push({
     await waitReady(page, 'data-toast-ready');
     await page.waitForTimeout(150);
     const p = await page.evaluate(() => {
-      const t = document.createElement('is-toast');
+      const t = document.createElement('iswc-toast');
       t.setAttribute('placement', 'invalid-placement');
       document.body.appendChild(t);
       const got = t.placement;
@@ -207,7 +207,7 @@ tests.push({
     await page.waitForTimeout(150);
     const data = await page.evaluate(async () => {
       const t = IsToast.host();
-      const before = t.querySelectorAll('is-toast-item').length;
+      const before = t.querySelectorAll('iswc-toast-item').length;
       await IsToast.promise(
         new Promise((r) => setTimeout(() => r(42), 50)),
         {
@@ -217,7 +217,7 @@ tests.push({
       );
       // Esperar un poco más que la promise para que se actualice.
       await new Promise((r) => setTimeout(r, 200));
-      const items = [...t.querySelectorAll('is-toast-item')];
+      const items = [...t.querySelectorAll('iswc-toast-item')];
       const last = items[items.length - 1];
       const after = items.length;
       const txt = last?.textContent || '';

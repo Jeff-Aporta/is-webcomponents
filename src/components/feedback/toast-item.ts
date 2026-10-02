@@ -4,7 +4,7 @@ import { INTENT, normalizeIntent } from '../_shared/intent.js';
 import '../actions/button.js';
 
 /**
- * <is-toast-item> — Web Component (vanilla).
+ * <iswc-toast-item> — Web Component (vanilla).
  *
  * Ítem individual de toast con countdown y cierre.
  *
@@ -18,8 +18,8 @@ import '../actions/button.js';
  * Métodos: show(), hide()
  *
  * Eventos (bubbles, composed):
- *   is-after-show  detail { color, message, caption, log }
- *   is-after-hide
+ *   iswc-after-show  detail { color, message, caption, log }
+ *   iswc-after-hide
  *
  * CSS Parts: ::part(base) ::part(icon) ::part(message) ::part(title) ::part(caption) ::part(close-button) ::part(progress)
  *
@@ -38,15 +38,15 @@ import '../actions/button.js';
         <div part="title" class="title"><slot></slot></div>
         <div part="caption" class="caption"><slot name="caption"></slot></div>
       </div>
-      <is-button
+      <iswc-button
         class="close"
         variant="text"
         color="neutral"
         label="Cerrar"
         exportparts="button: close-button"
       >
-        <is-icon icon="mdi:close" aria-hidden="true"></is-icon>
-      </is-button>
+        <iswc-icon icon="mdi:close" aria-hidden="true"></iswc-icon>
+      </iswc-button>
       <div part="progress" class="progress" hidden aria-hidden="true">
         <div class="progress-bar"></div>
       </div>
@@ -57,7 +57,7 @@ import '../actions/button.js';
   const VALID_COLOR = INTENT;
   const DEFAULT_DURATION = 5000;
 
-  class IsToastItem extends HTMLElement {
+  class IswcToastItem extends HTMLElement {
     static get observedAttributes(): string[] { return OBSERVED; }
 
     #base!: HTMLElement;
@@ -146,7 +146,7 @@ import '../actions/button.js';
     get open() { return this.hasAttribute('open'); }
     set open(v) { this.toggleAttribute('open', !!v); }
 
-    /** Detalle de consola: no se refleja. Lo rellena `<is-toast>.create({ log })`. */
+    /** Detalle de consola: no se refleja. Lo rellena `<iswc-toast>.create({ log })`. */
     log = undefined;
 
     #copyPayload() {
@@ -173,7 +173,7 @@ import '../actions/button.js';
       this.hidden = false;
       if (!this.hasAttribute('open')) this.setAttribute('open', '');
       this.#restartCountdown();
-      emit(this, 'is-after-show', this.#copyPayload());
+      emit(this, 'iswc-after-show', this.#copyPayload());
       this.#showing = false;
       return this;
     }
@@ -184,7 +184,7 @@ import '../actions/button.js';
       this.#clearTimers();
       if (this.hasAttribute('open')) this.removeAttribute('open');
       this.hidden = true;
-      emit(this, 'is-after-hide');
+      emit(this, 'iswc-after-hide');
       this.#hiding = false;
       return Promise.resolve(this);
     }
@@ -269,5 +269,5 @@ import '../actions/button.js';
     };
   }
 
-  defineElement('is-toast-item', IsToastItem, 'IsToastItem');
+  defineElement('iswc-toast-item', IswcToastItem, 'IswcToastItem');
 })();

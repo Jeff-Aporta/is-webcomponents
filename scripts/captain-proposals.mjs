@@ -69,7 +69,7 @@ for (const demo of g.demos) {
   for (const section of ['interaction', 'keyboard', 'aria', 'states']) {
     for (const p of TEMPLATE[section]) {
       md += `${n}. **${p.title}** — [${p.category}]\n`;
-      md += `   - Setup: navegar a \`?s=\${base64(component=${demo})}\` y esperar \`<is-main class="main">\` con secciones > 0 y texto > 60.\n`;
+      md += `   - Setup: navegar a \`?s=\${base64(component=${demo})}\` y esperar \`<iswc-main class="main">\` con secciones > 0 y texto > 60.\n`;
       md += `   - Acción: ${actionFor(demo, section, p.title)}\n`;
       md += `   - Assertion: ${assertionFor(demo, section, p.title)}\n`;
       md += `   - Cobertura: ${p.title.toLowerCase()}.\n\n`;
@@ -85,13 +85,13 @@ console.log(`[capitán] ${g.id}: ${g.demos.length} demos × ~21 props = ${(g.dem
 
 function actionFor(demo, section, title) {
   if (section === 'interaction') {
-    if (title.includes('Click principal')) return `click en el botón/control principal del demo; medir cambio en DOM (innerHTML de <is-main> o atributo aria-* del control).`;
+    if (title.includes('Click principal')) return `click en el botón/control principal del demo; medir cambio en DOM (innerHTML de <iswc-main> o atributo aria-* del control).`;
     if (title.includes('context menu')) return `click derecho sobre el control; verificar menú contextual aparece y se cierra con Escape o click fuera.`;
     if (title.includes('Hover')) return `mouseover sobre el control; verificar cambio visual (clase :hover, tooltip, outline).`;
     return `ejecutar interacción específica del control; verificar respuesta DOM.`;
   }
   if (section === 'keyboard') {
-    if (title.includes('Tab')) return `presionar Tab desde <is-main>; verificar que el primer focuseable dentro del preview recibe foco. Repetir Tab 5 veces.`;
+    if (title.includes('Tab')) return `presionar Tab desde <iswc-main>; verificar que el primer focuseable dentro del preview recibe foco. Repetir Tab 5 veces.`;
     if (title.includes('Enter')) return `focar el control y presionar Enter; verificar submit/activación.`;
     if (title.includes('Space')) return `focar checkbox/switch y presionar Space; verificar toggle.`;
     if (title.includes('Escape')) return `abrir overlay y presionar Escape; verificar cierre y restauración de foco al trigger.`;

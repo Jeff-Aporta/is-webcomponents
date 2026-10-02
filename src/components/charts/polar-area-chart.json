@@ -1,11 +1,11 @@
 {
-  "$schema": "is-preview/v1",
-  "tag": "is-polar-area-chart",
+  "$schema": "iswc-preview/v1",
+  "tag": "iswc-polar-area-chart",
   "category": "data-viz",
-  "title": "<is-polar-area-chart>",
+  "title": "<iswc-polar-area-chart>",
   "titleHtml": true,
   "styles": ".demo--chart {\r\n      height: 22rem;\r\n      display: flex;\r\n      flex-direction: column;\r\n    }\r\n    .demo--chart-sm { height: 18rem; }\r\n    .polar-theme-demo {\r\n      --fill-color-1: color-mix(in srgb, #38bdf8 72%, transparent);\r\n      --fill-color-2: color-mix(in srgb, #a78bfa 72%, transparent);\r\n      --fill-color-3: color-mix(in srgb, #34d399 72%, transparent);\r\n      --fill-color-4: color-mix(in srgb, #fbbf24 72%, transparent);\r\n      --fill-color-5: color-mix(in srgb, #f472b6 72%, transparent);\r\n      --border-color-1: #38bdf8;\r\n      --border-color-2: #a78bfa;\r\n      --border-color-3: #34d399;\r\n      --border-color-4: #fbbf24;\r\n      --border-color-5: #f472b6;\r\n    }",
-  "storageKey": "docs-is-polar-area-chart",
+  "storageKey": "docs-iswc-polar-area-chart",
   "sections": [
     {
       "id": "intro",
@@ -14,7 +14,7 @@
       "blocks": [
         {
           "kind": "demo",
-          "html": "<is-polar-area-chart open-on-click label=\"Mix energético (GW)\">\r\n            <script type=\"application/json\">\r\n              {\r\n                \"data\": {\r\n                  \"labels\": [\"Solar\", \"Eólica\", \"Hidro\", \"Nuclear\", \"Gas\", \"Carbón\"],\r\n                  \"datasets\": [{ \"label\": \"GW instalados\", \"data\": [85, 72, 110, 95, 58, 40] }]\r\n                }\r\n              }\r\n            </script>\r\n          </is-polar-area-chart>",
+          "html": "<iswc-polar-area-chart open-on-click label=\"Mix energético (GW)\">\r\n            <script type=\"application/json\">\r\n              {\r\n                \"data\": {\r\n                  \"labels\": [\"Solar\", \"Eólica\", \"Hidro\", \"Nuclear\", \"Gas\", \"Carbón\"],\r\n                  \"datasets\": [{ \"label\": \"GW instalados\", \"data\": [85, 72, 110, 95, 58, 40] }]\r\n                }\r\n              }\r\n            </script>\r\n          </iswc-polar-area-chart>",
           "controls": [
             {
               "control": "boolean",
@@ -59,11 +59,11 @@
       "blocks": [
         {
           "kind": "demo",
-          "html": "<is-polar-area-chart open-on-click label=\"Canales de tráfico\">\r\n            <script type=\"application/json\">\r\n              {\r\n                \"data\": {\r\n                  \"labels\": [\"Orgánico\", \"Directo\", \"Social\", \"Email\", \"Paid\"],\r\n                  \"datasets\": [{ \"label\": \"Sesiones\", \"data\": [4200, 3100, 1800, 950, 2400] }]\r\n                }\r\n              }\r\n            </script>\r\n          </is-polar-area-chart>"
+          "html": "<iswc-polar-area-chart open-on-click label=\"Canales de tráfico\">\r\n            <script type=\"application/json\">\r\n              {\r\n                \"data\": {\r\n                  \"labels\": [\"Orgánico\", \"Directo\", \"Social\", \"Email\", \"Paid\"],\r\n                  \"datasets\": [{ \"label\": \"Sesiones\", \"data\": [4200, 3100, 1800, 950, 2400] }]\r\n                }\r\n              }\r\n            </script>\r\n          </iswc-polar-area-chart>"
         },
         {
           "kind": "code",
-          "code": "<is-polar-area-chart label=\"Canales de tráfico\">\n  <script type=\"application/json\">\n    {\n      \"data\": {\n        \"labels\": [\"Orgánico\", \"Directo\", \"Social\", \"Email\", \"Paid\"],\n        \"datasets\": [{ \"label\": \"Sesiones\", \"data\": [4200, 3100, 1800, 950, 2400] }]\n      }\n    }\n  </script>\n</is-polar-area-chart>",
+          "code": "<iswc-polar-area-chart label=\"Canales de tráfico\">\n  <script type=\"application/json\">\n    {\n      \"data\": {\n        \"labels\": [\"Orgánico\", \"Directo\", \"Social\", \"Email\", \"Paid\"],\n        \"datasets\": [{ \"label\": \"Sesiones\", \"data\": [4200, 3100, 1800, 950, 2400] }]\n      }\n    }\n  </script>\n</iswc-polar-area-chart>",
           "lang": "html"
         }
       ]
@@ -71,7 +71,7 @@
     {
       "id": "opciones",
       "title": "Opciones",
-      "lede": "Misma API de presentación que <code class=\"code\">is-chart</code>: leyenda, animación, título.",
+      "lede": "Misma API de presentación que <code class=\"code\">iswc-chart</code>: leyenda, animación, título.",
       "blocks": [
         {
           "kind": "html",
@@ -79,7 +79,7 @@
         },
         {
           "kind": "demo",
-          "html": "<is-polar-area-chart open-on-click label=\"NPS por segmento\" legend-position=\"end\">\r\n            <script type=\"application/json\">\r\n              {\r\n                \"data\": {\r\n                  \"labels\": [\"Promotores\", \"Pasivos\", \"Detractores\"],\r\n                  \"datasets\": [{ \"label\": \"%\", \"data\": [62, 24, 14] }]\r\n                }\r\n              }\r\n            </script>\r\n          </is-polar-area-chart>"
+          "html": "<iswc-polar-area-chart open-on-click label=\"NPS por segmento\" legend-position=\"end\">\r\n            <script type=\"application/json\">\r\n              {\r\n                \"data\": {\r\n                  \"labels\": [\"Promotores\", \"Pasivos\", \"Detractores\"],\r\n                  \"datasets\": [{ \"label\": \"%\", \"data\": [62, 24, 14] }]\r\n                }\r\n              }\r\n            </script>\r\n          </iswc-polar-area-chart>"
         },
         {
           "kind": "html",
@@ -87,7 +87,7 @@
         },
         {
           "kind": "demo",
-          "html": "<is-polar-area-chart open-on-click without-legend>\r\n            <script type=\"application/json\">\r\n              {\r\n                \"data\": {\r\n                  \"labels\": [\"A\", \"B\", \"C\", \"D\"],\r\n                  \"datasets\": [{ \"data\": [40, 55, 30, 70] }]\r\n                }\r\n              }\r\n            </script>\r\n          </is-polar-area-chart>"
+          "html": "<iswc-polar-area-chart open-on-click without-legend>\r\n            <script type=\"application/json\">\r\n              {\r\n                \"data\": {\r\n                  \"labels\": [\"A\", \"B\", \"C\", \"D\"],\r\n                  \"datasets\": [{ \"data\": [40, 55, 30, 70] }]\r\n                }\r\n              }\r\n            </script>\r\n          </iswc-polar-area-chart>"
         },
         {
           "kind": "html",
@@ -95,11 +95,11 @@
         },
         {
           "kind": "demo",
-          "html": "<is-polar-area-chart open-on-click label=\"Sin animación\" without-animation>\r\n            <script type=\"application/json\">\r\n              {\r\n                \"data\": {\r\n                  \"labels\": [\"Q1\", \"Q2\", \"Q3\", \"Q4\"],\r\n                  \"datasets\": [{ \"label\": \"Score\", \"data\": [78, 82, 75, 90] }]\r\n                }\r\n              }\r\n            </script>\r\n          </is-polar-area-chart>"
+          "html": "<iswc-polar-area-chart open-on-click label=\"Sin animación\" without-animation>\r\n            <script type=\"application/json\">\r\n              {\r\n                \"data\": {\r\n                  \"labels\": [\"Q1\", \"Q2\", \"Q3\", \"Q4\"],\r\n                  \"datasets\": [{ \"label\": \"Score\", \"data\": [78, 82, 75, 90] }]\r\n                }\r\n              }\r\n            </script>\r\n          </iswc-polar-area-chart>"
         },
         {
           "kind": "code",
-          "code": "<is-polar-area-chart legend-position=\"end\" label=\"NPS\">…</is-polar-area-chart>\n<is-polar-area-chart without-legend>…</is-polar-area-chart>\n<is-polar-area-chart without-animation>…</is-polar-area-chart>",
+          "code": "<iswc-polar-area-chart legend-position=\"end\" label=\"NPS\">…</iswc-polar-area-chart>\n<iswc-polar-area-chart without-legend>…</iswc-polar-area-chart>\n<iswc-polar-area-chart without-animation>…</iswc-polar-area-chart>",
           "lang": "html"
         }
       ]
@@ -111,11 +111,11 @@
       "blocks": [
         {
           "kind": "demo",
-          "html": "<is-polar-area-chart open-on-click class=\"polar-theme-demo\" label=\"Paleta custom\">\r\n            <script type=\"application/json\">\r\n              {\r\n                \"data\": {\r\n                  \"labels\": [\"Alpha\", \"Beta\", \"Gamma\", \"Delta\", \"Epsilon\"],\r\n                  \"datasets\": [{ \"label\": \"Índice\", \"data\": [65, 88, 42, 70, 55] }]\r\n                }\r\n              }\r\n            </script>\r\n          </is-polar-area-chart>"
+          "html": "<iswc-polar-area-chart open-on-click class=\"polar-theme-demo\" label=\"Paleta custom\">\r\n            <script type=\"application/json\">\r\n              {\r\n                \"data\": {\r\n                  \"labels\": [\"Alpha\", \"Beta\", \"Gamma\", \"Delta\", \"Epsilon\"],\r\n                  \"datasets\": [{ \"label\": \"Índice\", \"data\": [65, 88, 42, 70, 55] }]\r\n                }\r\n              }\r\n            </script>\r\n          </iswc-polar-area-chart>"
         },
         {
           "kind": "code",
-          "code": "is-polar-area-chart.mi-tema {\n  --fill-color-1: color-mix(in srgb, #38bdf8 72%, transparent);\n  --fill-color-2: color-mix(in srgb, #a78bfa 72%, transparent);\n  --border-color-1: #38bdf8;\n  --border-color-2: #a78bfa;\n}",
+          "code": "iswc-polar-area-chart.mi-tema {\n  --fill-color-1: color-mix(in srgb, #38bdf8 72%, transparent);\n  --fill-color-2: color-mix(in srgb, #a78bfa 72%, transparent);\n  --border-color-1: #38bdf8;\n  --border-color-2: #a78bfa;\n}",
           "lang": "css"
         }
       ]
@@ -123,7 +123,7 @@
     {
       "id": "referencia",
       "title": "Referencia",
-      "lede": "Wrapper tipado de <code class=\"code\">is-chart</code>. Hereda atributos, props y tokens.",
+      "lede": "Wrapper tipado de <code class=\"code\">iswc-chart</code>. Hereda atributos, props y tokens.",
       "blocks": [
         {
           "kind": "table",

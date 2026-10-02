@@ -2,11 +2,11 @@ import { adoptCss, defineElement } from '../../core/element.js';
 import { ElementBase } from '../../core/element-base.js';
 
 /**
- * <is-gauge> — Medidor circular de porcentaje (vanilla, zero dependencies).
+ * <iswc-gauge> — Medidor circular de porcentaje (vanilla, zero dependencies).
  *
  * Medidor semicircular o completo de 0..100 (o arbitrary min/max).
  *
- *   <is-gauge value="67" label="Conversión"></is-gauge>
+ *   <iswc-gauge value="67" label="Conversión"></iswc-gauge>
  *
  * Atributos
  *   value       number  (0..100)
@@ -21,7 +21,7 @@ import { ElementBase } from '../../core/element-base.js';
  *   show-value  boolean (default true)
  *
  * Eventos
- *   is-gauge-change  detail: { value, percent }
+ *   iswc-gauge-change  detail: { value, percent }
  */
 (() => {
   const TEMPLATE = document.createElement('template');
@@ -40,7 +40,7 @@ import { ElementBase } from '../../core/element-base.js';
 
   const OBSERVED = ['value', 'min', 'max', 'label', 'unit', 'thickness', 'color', 'half', 'format', 'show-value'];
 
-  class IsGauge extends ElementBase {
+  class IswcGauge extends ElementBase {
     /** Personalización por atributo (ver `core/attrs.ts`). */
     static styleAttrs = {
     'track-color': { prop: '--iswc-gauge-track-color', onlyColorValues: true },
@@ -152,5 +152,5 @@ import { ElementBase } from '../../core/element-base.js';
     }
   }
 
-  defineElement('is-gauge', IsGauge, 'IsGauge');
+  defineElement('iswc-gauge', IswcGauge, 'IswcGauge');
 })();

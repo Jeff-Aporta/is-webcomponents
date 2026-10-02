@@ -2,7 +2,7 @@
  * datagrid-core/grid-model — Store observable del DataGrid.
  *
  * Mantiene el estado interno y corre el pipeline filter→sort→group→paginate.
- * La capa de render (<is-ag-grid>) se suscribe con subscribe(listener) y
+ * La capa de render (<iswc-ag-grid>) se suscribe con subscribe(listener) y
  * re-renderiza al recibir el nuevo GridState.
  *
  * Patrón: useSyncExternalStore-style. La cache del estado computado se

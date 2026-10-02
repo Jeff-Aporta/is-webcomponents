@@ -1,5 +1,5 @@
 /**
- * Cablea el iframe del explorador de iconos dentro del preview is-icon.
+ * Cablea el iframe del explorador de iconos dentro del preview iswc-icon.
  * @param {import('../../previews/_kit/types.d.ts').PreviewMountContext} ctx
  */
 export async function mount(ctx: import('../../previews/_kit/types.d.ts').PreviewMountContext) {
@@ -15,7 +15,7 @@ export async function mount(ctx: import('../../previews/_kit/types.d.ts').Previe
   // copiarlo a dist/ rompe los paths. Para producción, el bundle reemplaza
   // esta ruta por la del CDN (no aplica al tour local).
   const shell = new URL('/src/previews/_shell.html', location.origin);
-  shell.searchParams.set('tag', 'is-icon-explorer');
+  shell.searchParams.set('tag', 'iswc-icon-explorer');
   if (s) shell.searchParams.set('s', s);
   frame.src = shell.pathname + shell.search;
 

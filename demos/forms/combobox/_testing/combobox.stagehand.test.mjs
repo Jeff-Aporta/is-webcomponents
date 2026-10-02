@@ -25,7 +25,7 @@ async function checkDeterministic(page) {
 
   // (1) y (2): layout + roles
   const initial = await page.evaluate(() => {
-    const cbs = [...document.querySelectorAll('is-combobox')];
+    const cbs = [...document.querySelectorAll('iswc-combobox')];
     return cbs.map((c) => {
       const sr = c.shadowRoot;
       const input = sr.querySelector('input.input');
@@ -57,13 +57,13 @@ async function checkDeterministic(page) {
 
   // (3) y (4): abrir el primero y verificar
   await page.evaluate(() => {
-    const c = document.querySelector('#sec-basico is-combobox');
+    const c = document.querySelector('#sec-basico iswc-combobox');
     c.value = '';
     c.shadowRoot.querySelector('input.input').focus();
   });
   await page.waitForTimeout(120);
   const open = await page.evaluate(() => {
-    const c = document.querySelector('#sec-basico is-combobox');
+    const c = document.querySelector('#sec-basico iswc-combobox');
     const sr = c.shadowRoot;
     const dlg = sr.querySelector('dialog.popup');
     const lb = sr.querySelector('[part="listbox"]');
@@ -92,8 +92,8 @@ async function checkDeterministic(page) {
 
   // (5) clear visible con valor, oculto sin valor
   const clearState = await page.evaluate(() => {
-    const withValue = document.querySelector('#sec-clear is-combobox');
-    const noValue = document.querySelector('#sec-basico is-combobox');
+    const withValue = document.querySelector('#sec-clear iswc-combobox');
+    const noValue = document.querySelector('#sec-basico iswc-combobox');
     return {
       withValue: withValue.shadowRoot.querySelector('[part="clear"]').hidden,
       withValueHasValue: !!withValue.value,
@@ -106,7 +106,7 @@ async function checkDeterministic(page) {
 
   // (6) disabled no abre
   const disabled = await page.evaluate(() => {
-    const c = document.querySelector('#sec-disabled is-combobox');
+    const c = document.querySelector('#sec-disabled iswc-combobox');
     const input = c.shadowRoot.querySelector('input.input');
     return { disabled: input.disabled, stateDisabled: c.matches(':state(disabled)') };
   });
@@ -115,7 +115,7 @@ async function checkDeterministic(page) {
 
   // cerrar
   await page.evaluate(() => {
-    document.querySelector('#sec-basico is-combobox').open = false;
+    document.querySelector('#sec-basico iswc-combobox').open = false;
   });
 }
 
@@ -168,7 +168,7 @@ async function runStagehandRubric() {
     await page.goto(DEMO.url, { waitUntil: 'domcontentloaded' });
     await waitReady(page, DEMO.readyAttr);
     await page.evaluate(() => {
-      const c = document.querySelector('#sec-basico is-combobox');
+      const c = document.querySelector('#sec-basico iswc-combobox');
       c.value = '';
       c.shadowRoot.querySelector('input.input').focus();
     });

@@ -83,7 +83,7 @@ export interface ResponseCache {
 }
 
 export function createResponseCache(opts: CreateResponseCacheOpts = {}): ResponseCache {
-  const DB = String(opts.dbName || 'is-response-cache');
+  const DB = String(opts.dbName || 'iswc-response-cache');
   const ALMACEN = String(opts.storeName || 'respuestas');
   const VERSION = 1;
   const VIDA_MS = Number(opts.ttlMs) > 0 ? Number(opts.ttlMs) : VIDA_MS_DEFAULT;

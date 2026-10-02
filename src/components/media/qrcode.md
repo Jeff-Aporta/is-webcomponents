@@ -1,20 +1,20 @@
 ---
-tag: is-qrcode
+tag: iswc-qrcode
 tags:
-  - is-qrcode
+  - iswc-qrcode
 category: media
 status: public
 source: ./qrcode.js
 style: ./qrcode.css
 preview: ./qrcode.json
 ---
-# `<is-qrcode>`
+# `<iswc-qrcode>`
 
 ## Propósito
 
 Generador de códigos QR en SVG.
 
-Este módulo registra `<is-qrcode>`.
+Este módulo registra `<iswc-qrcode>`.
 
 ## Cuándo usarlo
 
@@ -23,7 +23,7 @@ deba leerse con la cámara de un teléfono.
 
 ## Cuándo no usarlo
 
-Para códigos lineales de etiqueta usar `<is-barcode>`. En entornos sin salida
+Para códigos lineales de etiqueta usar `<iswc-barcode>`. En entornos sin salida
 a internet, ver la nota de dependencia externa más abajo.
 
 ## Importación
@@ -35,7 +35,7 @@ import './qrcode.js';
 ## Ejemplo mínimo
 
 ```html
-<is-qrcode value="https://contapyme.com"></is-qrcode>
+<iswc-qrcode value="https://contapyme.com"></iswc-qrcode>
 ```
 
 ## API
@@ -69,7 +69,7 @@ import './qrcode.js';
 
 | Evento | detail | bubbles | composed | cancelable |
 | --- | --- | --- | --- | --- |
-| `is-render` | `{ svg }` | sí | sí | no |
+| `iswc-render` | `{ svg }` | sí | sí | no |
 
 ### Métodos y propiedades públicas
 
@@ -101,7 +101,7 @@ No declara integración form-associated propia en este módulo.
 
 Documentación de cabecera preservada desde fuente:
 
-> `<is-qrcode>` — Generador de QR en SVG. Usa la librería externa
+> `<iswc-qrcode>` — Generador de QR en SVG. Usa la librería externa
 > `qrcode-generator` (Kazuhiko Arase, MIT) cargada dinámicamente desde
 > `esm.sh`. Sin CDN no funciona: es la única dependencia externa del kit, y
 > se mantiene así a propósito para no engordar el bundle.
@@ -114,7 +114,7 @@ Cuando la carga del generador falla, el componente escribe el motivo en
 - [`../_shared/adopt-css.js`](../_shared/adopt-css.js)
 - Externa: `https://esm.sh/qrcode-generator@1.4.4`
 
-Tags del módulo: `<is-qrcode>`.
+Tags del módulo: `<iswc-qrcode>`.
 
 ## Accesibilidad
 
@@ -124,12 +124,12 @@ una live region: el lector de pantalla anuncia el fallo de CDN.
 ## Ejemplo avanzado
 
 ```html
-<is-qrcode
+<iswc-qrcode
   value="https://contapyme.com/soporte"
   level="H"
   cell="6"
   margin="3"
-></is-qrcode>
+></iswc-qrcode>
 ```
 
 ## Errores comunes

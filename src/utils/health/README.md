@@ -25,7 +25,7 @@ deno task audit -- --solo-json
 deno task audit:stagehand
 
 # Solo un tag puntual
-deno task audit:tag -- is-button
+deno task audit:tag -- iswc-button
 
 # Solo la categoría data-viz
 deno task audit:category -- data-viz
@@ -45,7 +45,7 @@ catálogo. Cada hallazgo se categoriza con severidad (`fatal`, `error`,
 
 ### 1. Esquema del JSON (json-schema)
 
-Valida que la definición cumple con `is-preview/v1`. Detecta:
+Valida que la definición cumple con `iswc-preview/v1`. Detecta:
 
 - falta de `$schema`
 - `tag` faltante o no-string
@@ -58,9 +58,9 @@ Valida que la definición cumple con `is-preview/v1`. Detecta:
 
 ### 2. Contenido del JSON (json-contenido, json-complejidad)
 
-- **Complejidad**: cualquier demo de `is-bar-chart`, `is-line-chart`,
-  `is-flowchart`, `is-data-grid`, `is-kanban`, `is-pivot-table`,
-  `is-tree-view` y compañía **debe** pasar su payload por
+- **Complejidad**: cualquier demo de `iswc-bar-chart`, `iswc-line-chart`,
+  `iswc-flowchart`, `iswc-data-grid`, `iswc-kanban`, `iswc-pivot-table`,
+  `iswc-tree-view` y compañía **debe** pasar su payload por
   `<script type="application/json">` dentro del host. Sin él, el demo es
   estático y no se está aprovechando la API real.
 - `<script>` ejecutable dentro de un bloque `demo` → debe ser un behavior.
@@ -103,9 +103,9 @@ motor crea una sesión de **Stagehand** (con fallback a Playwright puro)
 y por cada tag:
 
 - navega a la URL del preview
-- espera que `<is-preview-component>` se monte
+- espera que `<iswc-preview-component>` se monte
 - espera que el custom element del tag se defina
-- cuenta `<is-demo>` y `<is-preview-controls>` renderizados
+- cuenta `<iswc-demo>` y `<iswc-preview-controls>` renderizados
 - captura errores de consola y `pageerror`
 - emite hallazgos si la página no contiene el tag o si faltan demos
 
@@ -119,7 +119,7 @@ src/utils/health/
 │   ├── types.ts          # tipos compartidos
 │   ├── catalog.ts        # enumera manifest + catalog + pages
 │   ├── validators/
-│   │   ├── json-schema.ts      # is-preview/v1 validator
+│   │   ├── json-schema.ts      # iswc-preview/v1 validator
 │   │   ├── json-contenido.ts   # complejidad / HTML inline / etc
 │   │   ├── consistency.ts      # JSON ↔ módulo
 │   │   └── runtime.ts          # listeners, observers, callbacks
@@ -151,7 +151,7 @@ import { aJson, aMarkdown, imprimirConsola } from './src/utils/health/motor/repo
 
 // Modo JSON (sin browser, ~100ms para el catálogo completo)
 const estado = crearEstado('/path/a/is-webcomponents', {
-  solo: ['is-button', 'is-button-group'],
+  solo: ['iswc-button', 'iswc-button-group'],
   soloJson: true,
 });
 const reporte = await auditarCatalogo(estado);
@@ -260,23 +260,23 @@ Esta es la lista de hallazgos reales que el motor produjo en la primera
 corrida. Todos están documentados en el código con un comentario
 `iswc-audit: …` o `2026-Q1 fix: …` y se arreglaron en este PR:
 
-- **is-tree-view** (error): el demo no declaraba
+- **iswc-tree-view** (error): el demo no declaraba
   `<script type="application/json">` con el payload.
-- **is-button** (warn): un bloque `html` con `<style>`; debería ir al
+- **iswc-button** (warn): un bloque `html` con `<style>`; debería ir al
   campo `styles` raíz.
-- **is-check-icon-button** (warn): control `variant` apuntaba a un
+- **iswc-check-icon-button** (warn): control `variant` apuntaba a un
   atributo no declarado como observado.
-- **is-speech**, **is-media-recorder** (error): `observedAttributes`
+- **iswc-speech**, **iswc-media-recorder** (error): `observedAttributes`
   declarado pero sin `attributeChangedCallback` — el playground no era
   reactivo.
-- **is-theme-toggle**, **is-prefs-clear** (warn): atributos `dark` y
+- **iswc-theme-toggle**, **iswc-prefs-clear** (warn): atributos `dark` y
   `reload` no declarados como observados.
-- **is-flex-layout**, **is-grid-layout** (error): mismo problema de
+- **iswc-flex-layout**, **iswc-grid-layout** (error): mismo problema de
   `attributeChangedCallback` ausente.
-- **is-split-panel** (warn): bloque `code` con placeholder sin
+- **iswc-split-panel** (warn): bloque `code` con placeholder sin
   expandir.
-- **is-color-picker** (runtime, fix aplicado): el setter `value` no
-  emitía `is-input`/`is-change`, así que el taller de Personalización
+- **iswc-color-picker** (runtime, fix aplicado): el setter `value` no
+  emitía `iswc-input`/`iswc-change`, así que el taller de Personalización
   no se enteraba de los cambios programáticos. **Este fue el bug que
   reportaba el usuario al decir que "theming no cambia los colores
   de la página"**.
@@ -290,7 +290,7 @@ arriba).
 
 ## Próximos pasos
 
-- [ ] Soporte para `is-ag-grid` (extensión comercial con API distinta).
+- [ ] Soporte para `iswc-ag-grid` (extensión comercial con API distinta).
 - [ ] Comparar dos corridas y reportar diffs (regresiones).
 - [ ] Snapshot del reporte por tag en `.audit/snapshots/<tag>.json`
   para que CI detecte nuevas regresiones.

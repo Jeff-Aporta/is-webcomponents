@@ -9,11 +9,11 @@ let browser;
 test.before(async () => { browser = await chromium.launch(); });
 test.after(async () => { await browser?.close(); });
 
-test('share-button: bundle registra <is-share-button>', async () => {
+test('share-button: bundle registra <iswc-share-button>', async () => {
   const page = await browser.newPage();
   await page.goto(URL_DEMO, { waitUntil: 'domcontentloaded' });
-  await page.waitForSelector('is-share-button:defined');
-  const defined = await page.evaluate(() => !!customElements.get('is-share-button'));
+  await page.waitForSelector('iswc-share-button:defined');
+  const defined = await page.evaluate(() => !!customElements.get('iswc-share-button'));
   assert.equal(defined, true);
   await page.close();
 });
@@ -21,7 +21,7 @@ test('share-button: bundle registra <is-share-button>', async () => {
 test('share-button: atributos reactivos shareTitle, text, url', async () => {
   const page = await browser.newPage();
   await page.goto(URL_DEMO, { waitUntil: 'domcontentloaded' });
-  await page.waitForSelector('is-share-button:defined');
+  await page.waitForSelector('iswc-share-button:defined');
   const props = await page.evaluate(() => {
     const s = document.getElementById('s2');
     return {
@@ -39,12 +39,12 @@ test('share-button: atributos reactivos shareTitle, text, url', async () => {
 test('share-button: atributo disabled bloquea el click', async () => {
   const page = await browser.newPage();
   await page.goto(URL_DEMO, { waitUntil: 'domcontentloaded' });
-  await page.waitForSelector('is-share-button:defined');
+  await page.waitForSelector('iswc-share-button:defined');
   await page.evaluate(() => {
     window.__shareEvts = 0;
     const s = document.getElementById('s3');
-    s.addEventListener('is-share', () => { window.__shareEvts += 1; });
-    s.addEventListener('is-error', () => { window.__shareEvts += 1; });
+    s.addEventListener('iswc-share', () => { window.__shareEvts += 1; });
+    s.addEventListener('iswc-error', () => { window.__shareEvts += 1; });
     s.click();
   });
   await page.waitForTimeout(150);
@@ -53,7 +53,7 @@ test('share-button: atributo disabled bloquea el click', async () => {
   await page.close();
 });
 
-test('share-button: sin Web Share API → copia al clipboard y emite is-share{how:"copied"}', async () => {
+test('share-button: sin Web Share API → copia al clipboard y emite iswc-share{how:"copied"}', async () => {
   // Stub navigator.share a undefined para forzar fallback
   const ctx = await browser.newContext();
   await ctx.grantPermissions(['clipboard-read', 'clipboard-write']);
@@ -63,16 +63,16 @@ test('share-button: sin Web Share API → copia al clipboard y emite is-share{ho
     Object.defineProperty(navigator, 'share', { value: undefined, configurable: true });
   });
   await page.goto(URL_DEMO, { waitUntil: 'domcontentloaded' });
-  await page.waitForSelector('is-share-button:defined');
+  await page.waitForSelector('iswc-share-button:defined');
   await page.evaluate(() => {
     window.__shareDetail = null;
     const s = document.getElementById('s2');
-    s.addEventListener('is-share', (e) => { window.__shareDetail = e.detail; });
+    s.addEventListener('iswc-share', (e) => { window.__shareDetail = e.detail; });
     s.share();
   });
   await page.waitForTimeout(300);
   const detail = await page.evaluate(() => window.__shareDetail);
-  // En headless sin navigator.share, debe caer a clipboard y emitir is-share con how=copied
+  // En headless sin navigator.share, debe caer a clipboard y emitir iswc-share con how=copied
   if (detail) {
     assert.equal(detail.how, 'copied', `esperaba how=copied, fue ${detail.how}`);
     assert.match(detail.title, /Mi artículo/);
@@ -91,20 +91,20 @@ test('share-button: navigator.share presente → cómo=shared o abort', async ()
     });
   });
   await page.goto(URL_DEMO, { waitUntil: 'domcontentloaded' });
-  await page.waitForSelector('is-share-button:defined');
+  await page.waitForSelector('iswc-share-button:defined');
   await page.evaluate(() => {
     window.__shared = null;
-    document.getElementById('s1').addEventListener('is-share', (e) => { window.__shared = e.detail; });
+    document.getElementById('s1').addEventListener('iswc-share', (e) => { window.__shared = e.detail; });
     document.getElementById('s1').share();
   });
   await page.waitForTimeout(150);
   const detail = await page.evaluate(() => window.__shared);
-  assert.ok(detail, 'debe emitirse is-share');
+  assert.ok(detail, 'debe emitirse iswc-share');
   assert.equal(detail.how, 'shared');
   await page.close();
 });
 
-test('share-button: navigator.share rechaza → is-error', async () => {
+test('share-button: navigator.share rechaza → iswc-error', async () => {
   const page = await browser.newPage();
   await page.addInitScript(() => {
     Object.defineProperty(navigator, 'share', {
@@ -113,10 +113,10 @@ test('share-button: navigator.share rechaza → is-error', async () => {
     });
   });
   await page.goto(URL_DEMO, { waitUntil: 'domcontentloaded' });
-  await page.waitForSelector('is-share-button:defined');
+  await page.waitForSelector('iswc-share-button:defined');
   await page.evaluate(() => {
     window.__shareErr = 0;
-    document.getElementById('s1').addEventListener('is-error', () => { window.__shareErr += 1; });
+    document.getElementById('s1').addEventListener('iswc-error', () => { window.__shareErr += 1; });
     document.getElementById('s1').share();
   });
   await page.waitForTimeout(150);
@@ -125,12 +125,12 @@ test('share-button: navigator.share rechaza → is-error', async () => {
   await page.close();
 });
 
-test('share-button: el inner es un <is-button>', async () => {
+test('share-button: el inner es un <iswc-button>', async () => {
   const page = await browser.newPage();
   await page.goto(URL_DEMO, { waitUntil: 'domcontentloaded' });
-  await page.waitForSelector('is-share-button:defined');
+  await page.waitForSelector('iswc-share-button:defined');
   const has = await page.evaluate(() => {
-    return !!document.querySelector('is-share-button').shadowRoot.querySelector('is-button');
+    return !!document.querySelector('iswc-share-button').shadowRoot.querySelector('iswc-button');
   });
   assert.equal(has, true);
   await page.close();

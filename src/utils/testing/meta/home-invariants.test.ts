@@ -129,7 +129,7 @@ test('CSS de .card-demo existe', () => {
   assert.match(block, /top:\s*0\.5rem/, '.card-demo debe estar en top-right');
 });
 
-test('script inyecta botón card-demo con is-icon mdi:open-in-new', () => {
+test('script inyecta botón card-demo con iswc-icon mdi:open-in-new', () => {
   assert.match(
     src,
     /className\s*=\s*['"]card-demo['"]/,
@@ -138,12 +138,12 @@ test('script inyecta botón card-demo con is-icon mdi:open-in-new', () => {
   assert.match(
     src,
     /setAttribute\(\s*['"]icon['"],\s*['"]mdi:open-in-new['"]\s*\)/,
-    'script debe setear icon="mdi:open-in-new" en el is-icon',
+    'script debe setear icon="mdi:open-in-new" en el iswc-icon',
   );
   assert.match(
     src,
-    /parent\.postMessage\(\s*\{\s*type:\s*['"]is-select['"]/,
-    'click handler debe postear is-select al parent (mismo shape que los CTA del hero)',
+    /parent\.postMessage\(\s*\{\s*type:\s*['"]iswc-select['"]/,
+    'click handler debe postear iswc-select al parent (mismo shape que los CTA del hero)',
   );
 });
 
@@ -151,17 +151,17 @@ test('whitelist de tags demoable cubre los componentes is-* usados en home', () 
   const whitelist = src.match(/CON_DEMO\s*=\s*new Set\(\[([^\]]+)\]\)/);
   assert.ok(whitelist, 'debe existir una whitelist CON_DEMO');
   for (const tag of [
-    'is-bar-chart',
-    'is-line-chart',
-    'is-doughnut-chart',
-    'is-pie-chart',
-    'is-radar-chart',
-    'is-polar-area-chart',
-    'is-scatter-chart',
-    'is-bubble-chart',
-    'is-sparkline',
-    'is-flowchart',
-    'is-timeline',
+    'iswc-bar-chart',
+    'iswc-line-chart',
+    'iswc-doughnut-chart',
+    'iswc-pie-chart',
+    'iswc-radar-chart',
+    'iswc-polar-area-chart',
+    'iswc-scatter-chart',
+    'iswc-bubble-chart',
+    'iswc-sparkline',
+    'iswc-flowchart',
+    'iswc-timeline',
   ]) {
     assert.match(
       whitelist[1],
@@ -231,7 +231,7 @@ test('todo texto con background-clip:text tiene override en modo light', () => {
 //
 // El home es una página completa, no la ficha de un componente. Sus custom
 // properties (--hue-a..e, --glass, --shadow-*) se declaran en `.home` y su
-// scroller es `is-main.home-main`. Una migración anterior pasó el HTML a JSON
+// scroller es `iswc-main.home-main`. Una migración anterior pasó el HTML a JSON
 // quedándose SOLO con las <section>: se perdieron los dos envoltorios y con
 // ellos los tokens, así que `linear-gradient(115deg, var(--hue-a), …)` quedó
 // inválido, se descartó, y el titular —que se pinta con ese degradado y tiene
@@ -249,7 +249,7 @@ test('home no reserva el panel TOC a la derecha', () => {
   const previewSrc = readFileSync(join(__dirname, '..', 'src/components/layout/preview-component.ts'), 'utf8');
   assert.ok(/def\.withoutToc/.test(renderSrc), 'renderDefinition debe respetar withoutToc');
   assert.ok(/withoutToc/.test(previewSrc) && /dataset\.layout = 'full'/.test(previewSrc),
-    'is-preview-component debe colapsar el end cuando withoutToc');
+    'iswc-preview-component debe colapsar el end cuando withoutToc');
 });
 
 test('los tokens que usa el titular se declaran en el wrapper', () => {
@@ -315,7 +315,7 @@ test('el behavior compila', () => {
 });
 
 test('el behavior no toca el DOM por document.querySelector', () => {
-  // El chrome reusa su `is-main` entre previews: buscar por `document` acopla
+  // El chrome reusa su `iswc-main` entre previews: buscar por `document` acopla
   // el home a una clase que puede cambiar de dueño. Todo va contra ctx.main.
   assert.doesNotMatch(
     behSrc,

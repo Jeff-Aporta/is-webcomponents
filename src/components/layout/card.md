@@ -1,14 +1,14 @@
 ---
-tag: is-card
+tag: iswc-card
 tags:
-  - is-card
+  - iswc-card
 category: layout
 status: public
 source: ./card.js
 style: ./card.css
 preview: ./card.json
 ---
-# `<is-card>`
+# `<iswc-card>`
 
 ## Propósito
 
@@ -16,7 +16,7 @@ Contenedor flexible con slots para media, header,
 body, footer y actions.
 Cinco apariencias y dos orientaciones. JavaScript nativo, Shadow DOM, sin frameworks.
 
-Este módulo registra `<is-card>`.
+Este módulo registra `<iswc-card>`.
 
 ## Cuándo usarlo
 
@@ -35,7 +35,7 @@ import './card.js';
 ## Ejemplo mínimo
 
 ```html
-<is-card>Hola mundo</is-card>
+<iswc-card>Hola mundo</iswc-card>
 ```
 
 ## API
@@ -116,8 +116,8 @@ No declara integración form-associated propia en este módulo.
 
 Documentación de cabecera preservada desde fuente:
 
-> <is-card> — Web Component (vanilla, zero dependencies).
-> Define el custom element `is-card` automáticamente al importarse.
+> <iswc-card> — Web Component (vanilla, zero dependencies).
+> Define el custom element `iswc-card` automáticamente al importarse.
 > Usa Shadow DOM con CSS propio, sin frameworks.
 > Atributos
 >   variant    accent | filled | outlined | filled-outlined | plain
@@ -143,7 +143,7 @@ Documentación de cabecera preservada desde fuente:
 
 - [`../_shared/adopt-css.js`](../_shared/adopt-css.js)
 
-Tags del módulo: `<is-card>`.
+Tags del módulo: `<iswc-card>`.
 
 ## Accesibilidad
 
@@ -152,8 +152,8 @@ Preservar semántica, foco, teclado, labels y ARIA. ARIA detectado: ninguno expl
 ## Ejemplo avanzado
 
 ```html
-<is-card variant="accent">...</is-card>
-<is-card variant="filled-outlined">...</is-card>
+<iswc-card variant="accent">...</iswc-card>
+<iswc-card variant="filled-outlined">...</iswc-card>
 ```
 
 ## Errores comunes

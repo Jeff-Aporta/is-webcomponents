@@ -3,7 +3,7 @@
 <head>
 <meta charset="utf-8" />
 <meta name="viewport" content="width=device-width, initial-scale=1" />
-<title>Demo de <is-maps> · is-webcomponents</title>
+<title>Demo de <iswc-maps> · is-webcomponents</title>
 <meta name="description" content="Visualizador geográfico: tiles (iframe OpenStreetMap) con attribution, marcadores con lat/lon, viewport interactivo." />
 <style>
   html, body { margin: 0; padding: 0; height: 100%; background: #0c1118; color: #e2e8f0; font-family: ui-sans-serif, system-ui, sans-serif; }
@@ -30,8 +30,8 @@
     margin: 0 0 12px 0; color: #94a3b8;
   }
   .panel .body { flex: 1; display: grid; place-items: stretch; min-height: 320px; }
-  is-maps { width: 100%; height: 100%; display: block; min-height: 320px; }
-  is-maps:not(:defined) { visibility: hidden; }
+  iswc-maps { width: 100%; height: 100%; display: block; min-height: 320px; }
+  iswc-maps:not(:defined) { visibility: hidden; }
   pre#log {
     margin: 0; padding: 12px;
     background: #0c1118; border-radius: 4px;
@@ -42,12 +42,12 @@
 <script type="module">
   // Cargar el bundle pre-construido desde dist/cdn/. Funciona con cualquier
   // servidor estático (incluido VS Code Live Server).
-  await import('../../../dist/cdn/data-viz/maps.min.js?h=xlod5l');
-  await customElements.whenDefined('is-maps');
-  await customElements.whenDefined('is-map-marker');
+  await import('../../../dist/cdn/data-viz/maps.min.js?h=1dgizp');
+  await customElements.whenDefined('iswc-maps');
+  await customElements.whenDefined('iswc-map-marker');
 
   // ── Demo 1: modo SVG nativo con marcadores sobre Colombia ───────────
-  const svg = document.createElement('is-maps');
+  const svg = document.createElement('iswc-maps');
   svg.setAttribute('viewbox', '-85, -5, -65, 15');
   svg.setAttribute('engine', 'svg');
   svg.setAttribute('interactive', '');
@@ -61,7 +61,7 @@
     { lat: 10.5, lon: -66.9, label: 'Caracas' },
   ];
   for (const m of markers) {
-    const mk = document.createElement('is-map-marker');
+    const mk = document.createElement('iswc-map-marker');
     mk.setAttribute('lat', String(m.lat));
     mk.setAttribute('lon', String(m.lon));
     mk.setAttribute('label', m.label);
@@ -73,7 +73,7 @@
   // La attribution pasa por `cfg.attribution` que el componente inyecta con
   // innerHTML en <small class="attribution">. Esto es una superficie XSS:
   // el demo usa SOLO texto plano para fines de prueba.
-  const tile = document.createElement('is-maps');
+  const tile = document.createElement('iswc-maps');
   tile.setAttribute('engine', 'tile');
   tile.style.cssText = 'min-height:320px;';
   const tileScript = document.createElement('script');
@@ -91,11 +91,11 @@
   // ── Log de eventos (útiles para tests visuales) ─────────────────────
   const log = document.getElementById('log');
   const append = (line) => { log.textContent = line + '\n' + log.textContent; };
-  svg.addEventListener('is-viewport', (e) => {
+  svg.addEventListener('iswc-viewport', (e) => {
     const v = e.detail;
     append(`viewport: ${v.minLon.toFixed(2)},${v.minLat.toFixed(2)} → ${v.maxLon.toFixed(2)},${v.maxLat.toFixed(2)}`);
   });
-  svg.addEventListener('is-marker-click', (e) => {
+  svg.addEventListener('iswc-marker-click', (e) => {
     const m = e.detail.marker;
     append(`marker-click: ${m.getAttribute('label')}`);
   });
@@ -106,8 +106,8 @@
 <body>
 <header>
   <div>
-    <h1>Mapas — <code>&lt;is-maps&gt;</code></h1>
-    <p>Modo SVG con marcadores · Modo tile (iframe) con attribution · <code>is-marker-click</code> al pulsar un marcador</p>
+    <h1>Mapas — <code>&lt;iswc-maps&gt;</code></h1>
+    <p>Modo SVG con marcadores · Modo tile (iframe) con attribution · <code>iswc-marker-click</code> al pulsar un marcador</p>
   </div>
   <div class="spacer"></div>
   <code>drag para pan · scroll para zoom</code>

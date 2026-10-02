@@ -21,7 +21,7 @@ const DEMO = {
 async function checkDeterministic(page) {
   await page.waitForTimeout(300);
   const data = await page.evaluate(() => {
-    const el = document.querySelector('is-chart');
+    const el = document.querySelector('iswc-chart');
     const svg = el?.shadowRoot?.querySelector('svg');
     if (!svg) return null;
     const svgRect = svg.getBoundingClientRect();

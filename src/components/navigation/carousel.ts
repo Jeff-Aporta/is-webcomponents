@@ -2,18 +2,18 @@ import { adoptCss, defineElement, emit } from '../../core/element.js';
 import { ElementBase } from '../../core/element-base.js';
 
 /**
- * <is-carousel> + <is-carousel-item> — Web Components (vanilla, zero dependencies).
+ * <iswc-carousel> + <iswc-carousel-item> — Web Components (vanilla, zero dependencies).
  *
  * Carrusel tipo slides con paginación, autoplay, loop, navegación prev/next,
  * indicadores y soporte para swipe en touch.
  *
- *   <is-carousel autoplay loop>
- *     <is-carousel-item>…</is-carousel-item>
- *     <is-carousel-item>…</is-carousel-item>
- *     <is-carousel-item>…</is-carousel-item>
- *   </is-carousel>
+ *   <iswc-carousel autoplay loop>
+ *     <iswc-carousel-item>…</iswc-carousel-item>
+ *     <iswc-carousel-item>…</iswc-carousel-item>
+ *     <iswc-carousel-item>…</iswc-carousel-item>
+ *   </iswc-carousel>
  *
- * Atributos <is-carousel>
+ * Atributos <iswc-carousel>
  *   active             number (0-indexed)
  *   loop               boolean                  (default false)
  *   autoplay           number (ms)              (default 0 — desactivado)
@@ -23,27 +23,27 @@ import { ElementBase } from '../../core/element-base.js';
  *   slides-per-page    number                   (default 1)
  *   aspect-ratio       string                   (CSS, e.g. "16/9")
  *
- * Atributos <is-carousel-item>
+ * Atributos <iswc-carousel-item>
  *   label              string (accesibilidad)
  *   disabled           boolean
  *
  * Slots
- *   <is-carousel>
+ *   <iswc-carousel>
  *     (default)    items.
  *     prev-icon    override del icono prev.
  *     next-icon    override del icono next.
- *   <is-carousel-item>
+ *   <iswc-carousel-item>
  *     (default)   contenido del slide.
  *
  * Eventos
- *   is-carousel-change detail: { from, to, item }
- *   is-carousel-pause  detail: { reason: 'user' | 'auto' | 'visibility' }
- *   is-carousel-play   detail: {}
- *   is-carousel-slide-end (cuando termina swipe)
+ *   iswc-carousel-change detail: { from, to, item }
+ *   iswc-carousel-pause  detail: { reason: 'user' | 'auto' | 'visibility' }
+ *   iswc-carousel-play   detail: {}
+ *   iswc-carousel-slide-end (cuando termina swipe)
  *
  * CSS Parts
- *   is-carousel: ::part(base) ::part(viewport) ::part(track) ::part(indicators) ::part(controls)
- *   is-carousel-item: ::part(base)
+ *   iswc-carousel: ::part(base) ::part(viewport) ::part(track) ::part(indicators) ::part(controls)
+ *   iswc-carousel-item: ::part(base)
  */
 (() => {
   const TG_TEMPLATE = document.createElement('template');
@@ -55,12 +55,12 @@ import { ElementBase } from '../../core/element-base.js';
       <div class="indicators" part="indicators" role="tablist" aria-label="Indicadores"></div>
       <button type="button" class="ctrl prev" part="controls" tabindex="-1" aria-label="Anterior">
         <slot name="prev-icon">
-          <is-icon icon="mdi:chevron-left" aria-hidden="true"></is-icon>
+          <iswc-icon icon="mdi:chevron-left" aria-hidden="true"></iswc-icon>
         </slot>
       </button>
       <button type="button" class="ctrl next" part="controls" tabindex="-1" aria-label="Siguiente">
         <slot name="next-icon">
-          <is-icon icon="mdi:chevron-right" aria-hidden="true"></is-icon>
+          <iswc-icon icon="mdi:chevron-right" aria-hidden="true"></iswc-icon>
         </slot>
       </button>
     </div>
@@ -68,7 +68,7 @@ import { ElementBase } from '../../core/element-base.js';
 
   const TG_OBSERVED = ['active', 'loop', 'autoplay', 'without-controls', 'without-indicators', 'vertical', 'slides-per-page', 'aspect-ratio'];
 
-  class IsCarousel extends ElementBase {
+  class IswcCarousel extends ElementBase {
     /** Personalización por atributo (ver `core/attrs.ts`). */
     static styleAttrs = {
     'control-bg': { prop: '--iswc-carousel-control-bg', onlyColorValues: true },
@@ -78,7 +78,7 @@ import { ElementBase } from '../../core/element-base.js';
     'indicator-active': { prop: '--iswc-carousel-indicator-active', onlyColorValues: true },
     };
 
-    static get observedAttributes(): string[] { return [...TG_OBSERVED, ...IsCarousel.styleAttrNames]; }
+    static get observedAttributes(): string[] { return [...TG_OBSERVED, ...IswcCarousel.styleAttrNames]; }
 
     #scroller!: HTMLElement;
     #track!: HTMLElement;
@@ -134,7 +134,7 @@ import { ElementBase } from '../../core/element-base.js';
           if (dx < -40) this.next();
           else if (dx > 40) this.prev();
         }
-        emit(this, 'is-carousel-slide-end');
+        emit(this, 'iswc-carousel-slide-end');
       });
       // Pause autoplay on hover
       this.addEventListener('mouseenter', () => this.#pause('user'));
@@ -225,7 +225,7 @@ import { ElementBase } from '../../core/element-base.js';
     // ---- private ----
 
     #items() {
-      return [...this.querySelectorAll<HTMLElement>(':scope > is-carousel-item')];
+      return [...this.querySelectorAll<HTMLElement>(':scope > iswc-carousel-item')];
     }
 
     #totalSlides() {
@@ -259,7 +259,7 @@ import { ElementBase } from '../../core/element-base.js';
       // Identificadores estables para cross-ARIA entre indicadores y slides.
       let hostNs = (this.id || '').trim();
       if (!hostNs) {
-        hostNs = `is-carousel-${Math.random().toString(36).slice(2, 10)}`;
+        hostNs = `iswc-carousel-${Math.random().toString(36).slice(2, 10)}`;
         this.id = hostNs;
       }
       items.forEach((item: HTMLElement, i: number) => {
@@ -320,7 +320,7 @@ import { ElementBase } from '../../core/element-base.js';
       this.setAttribute('active', String(clamped));
       this.#updateIndicators();
       if (!silent && from !== clamped) {
-        emit(this, 'is-carousel-change', { from, to: clamped, item });
+        emit(this, 'iswc-carousel-change', { from, to: clamped, item });
       }
     }
 
@@ -337,7 +337,7 @@ import { ElementBase } from '../../core/element-base.js';
       const ms = this.autoplay;
       if (ms > 0) {
         this.#autoplayTimer = setInterval(() => this.next(), ms);
-        emit(this, 'is-carousel-play');
+        emit(this, 'iswc-carousel-play');
       }
     }
 
@@ -345,14 +345,14 @@ import { ElementBase } from '../../core/element-base.js';
       if (this.#autoplayTimer) {
         clearInterval(this.#autoplayTimer);
         this.#autoplayTimer = null;
-        emit(this, 'is-carousel-pause', { reason });
+        emit(this, 'iswc-carousel-pause', { reason });
       }
     }
   }
 
-  defineElement('is-carousel', IsCarousel, 'IsCarousel');
+  defineElement('iswc-carousel', IswcCarousel, 'IswcCarousel');
 
-  // ============ <is-carousel-item> ============
+  // ============ <iswc-carousel-item> ============
   const ITEM_TEMPLATE = document.createElement('template');
   ITEM_TEMPLATE.innerHTML = /* html */ `
     <div class="citem" part="base">
@@ -360,7 +360,7 @@ import { ElementBase } from '../../core/element-base.js';
     </div>
   `;
 
-  class IsCarouselItem extends HTMLElement {
+  class IswcCarouselItem extends HTMLElement {
     static get observedAttributes(): string[] { return ['label']; }
 
     constructor() {
@@ -384,5 +384,5 @@ import { ElementBase } from '../../core/element-base.js';
     }
   }
 
-  defineElement('is-carousel-item', IsCarouselItem, 'IsCarouselItem');
+  defineElement('iswc-carousel-item', IswcCarouselItem, 'IswcCarouselItem');
 })();

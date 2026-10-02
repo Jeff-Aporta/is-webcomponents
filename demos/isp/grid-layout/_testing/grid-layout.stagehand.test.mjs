@@ -14,7 +14,7 @@ try {
   await page.waitForTimeout(300);
 
   const data = await page.evaluate(() => {
-    return [...document.querySelectorAll('is-grid-layout')].map((g, idx) => {
+    return [...document.querySelectorAll('iswc-grid-layout')].map((g, idx) => {
       const cs = getComputedStyle(g);
       const r = g.getBoundingClientRect();
       const items = [...g.children].map((c) => {

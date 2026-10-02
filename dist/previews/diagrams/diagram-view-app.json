@@ -1,6 +1,6 @@
 {
-  "$schema": "is-preview/v1",
-  "tag": "is-diagram-view-app",
+  "$schema": "iswc-preview/v1",
+  "tag": "iswc-diagram-view-app",
   "category": "diagrams",
   "title": "Visor de diagramas (API)",
   "titleHtml": false,

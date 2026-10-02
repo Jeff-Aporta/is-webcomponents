@@ -17,43 +17,54 @@
   scrollbar-width: thin;
   scrollbar-color: var(--iswc-scrollbar-thumb, var(--iswc-scrollbar-thumb-fallback))
                    var(--iswc-scrollbar-track, transparent);
-}
 
-:host,
-:host * {
-  scrollbar-width: thin;
-  scrollbar-color: var(--iswc-scrollbar-thumb, var(--iswc-scrollbar-thumb-fallback))
-                   var(--iswc-scrollbar-track, transparent);
-}
+  &,
+  * {
+    scrollbar-width: thin;
+    scrollbar-color: var(--iswc-scrollbar-thumb, var(--iswc-scrollbar-thumb-fallback))
+                     var(--iswc-scrollbar-track, transparent);
+  }
 
-:host::-webkit-scrollbar,
-:host *::-webkit-scrollbar {
-  width: var(--iswc-scrollbar-size, var(--iswc-scrollbar-size-fallback));
-  height: var(--iswc-scrollbar-size, var(--iswc-scrollbar-size-fallback));
-}
+  &::-webkit-scrollbar,
+  *::-webkit-scrollbar {
+    width: var(--iswc-scrollbar-size, var(--iswc-scrollbar-size-fallback));
+    height: var(--iswc-scrollbar-size, var(--iswc-scrollbar-size-fallback));
+  }
 
-:host::-webkit-scrollbar-track,
-:host *::-webkit-scrollbar-track {
-  background: var(--iswc-scrollbar-track, transparent);
-  border-radius: var(--iswc-scrollbar-radius, 999px);
-}
+  &::-webkit-scrollbar-track,
+  *::-webkit-scrollbar-track {
+    background: var(--iswc-scrollbar-track, transparent);
+    border-radius: var(--iswc-scrollbar-radius, 999px);
+  }
 
-:host::-webkit-scrollbar-thumb,
-:host *::-webkit-scrollbar-thumb {
-  background: var(--iswc-scrollbar-thumb, var(--iswc-scrollbar-thumb-fallback));
-  border-radius: var(--iswc-scrollbar-radius, 999px);
-  border: 2px solid transparent;
-  background-clip: padding-box;
-}
+  &::-webkit-scrollbar-thumb {
+    background: var(--iswc-scrollbar-thumb, var(--iswc-scrollbar-thumb-fallback));
+    border-radius: var(--iswc-scrollbar-radius, 999px);
+    border: 2px solid transparent;
+    background-clip: padding-box;
 
-:host::-webkit-scrollbar-thumb:hover,
-:host *::-webkit-scrollbar-thumb:hover {
-  background: var(--iswc-scrollbar-thumb-hover, var(--iswc-scrollbar-thumb-hover-fallback));
-  border: 2px solid transparent;
-  background-clip: padding-box;
-}
+    &:hover {
+      background: var(--iswc-scrollbar-thumb-hover, var(--iswc-scrollbar-thumb-hover-fallback));
+      border: 2px solid transparent;
+      background-clip: padding-box;
+    }
+  }
 
-:host::-webkit-scrollbar-corner,
-:host *::-webkit-scrollbar-corner {
-  background: transparent;
+  *::-webkit-scrollbar-thumb {
+    background: var(--iswc-scrollbar-thumb, var(--iswc-scrollbar-thumb-fallback));
+    border-radius: var(--iswc-scrollbar-radius, 999px);
+    border: 2px solid transparent;
+    background-clip: padding-box;
+
+    &:hover {
+      background: var(--iswc-scrollbar-thumb-hover, var(--iswc-scrollbar-thumb-hover-fallback));
+      border: 2px solid transparent;
+      background-clip: padding-box;
+    }
+  }
+
+  &::-webkit-scrollbar-corner,
+  *::-webkit-scrollbar-corner {
+    background: transparent;
+  }
 }

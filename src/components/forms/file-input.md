@@ -1,20 +1,20 @@
 ---
-tag: is-file-input
+tag: iswc-file-input
 tags:
-  - is-file-input
+  - iswc-file-input
 category: forms
 status: public
 source: ./file-input.js
 style: ./file-input.css
 preview: ./file-input.json
 ---
-# `<is-file-input>`
+# `<iswc-file-input>`
 
 ## Propósito
 
 Dropzone con input nativo oculto, lista de archivos y estados blank / dragging.
 
-Este módulo registra `<is-file-input>`.
+Este módulo registra `<iswc-file-input>`.
 
 ## Cuándo usarlo
 
@@ -33,12 +33,12 @@ import './file-input.js';
 ## Ejemplo mínimo
 
 ```html
-<is-file-input
+<iswc-file-input
 label="Adjuntos"
 accept="image/*,.pdf"
 multiple
 name="attachments"
-></is-file-input>
+></iswc-file-input>
 ```
 
 ## API
@@ -80,7 +80,7 @@ name="attachments"
 
 | Evento | detail | bubbles | composed | cancelable |
 | --- | --- | --- | --- | --- |
-| `is-change` | sí | sí | sí | no |
+| `iswc-change` | sí | sí | sí | no |
 | `input` | sí | sí | sí | no |
 | `change` | sí | sí | sí | no |
 
@@ -131,7 +131,7 @@ Participa mediante ElementInternals/helpers form-associated; respetar name, valu
 
 Documentación de cabecera preservada desde fuente:
 
-> <is-file-input> — Web Component (vanilla).
+> <iswc-file-input> — Web Component (vanilla).
 > Dropzone + input file nativo oculto. Lista de archivos con quitar.
 > Atributos
 >   label, hint, name, accept, capture
@@ -140,7 +140,7 @@ Documentación de cabecera preservada desde fuente:
 >   files  File[]  get/set — reasignar dispara update
 > Slots: label, hint, dropzone
 > Custom states: blank, dragging  (:state / data-state-*)
-> Eventos: change, input, is-change (bubbles, composed)
+> Eventos: change, input, iswc-change (bubbles, composed)
 > CSS Parts: ::part(base) ::part(label) ::part(hint) ::part(dropzone)
 >            ::part(file-list) ::part(file) ::part(remove-button)
 
@@ -150,7 +150,7 @@ Documentación de cabecera preservada desde fuente:
 - [`../media/icon.js`](../media/icon.js)
 - [`../helpers/format-bytes.js`](../helpers/format-bytes.js)
 
-Tags del módulo: `<is-file-input>`.
+Tags del módulo: `<iswc-file-input>`.
 
 ## Accesibilidad
 
@@ -159,12 +159,12 @@ Preservar semántica, foco, teclado, labels y ARIA. ARIA detectado: `aria-labell
 ## Ejemplo avanzado
 
 ```html
-<is-file-input
+<iswc-file-input
 label="Adjuntos"
 accept="image/*,.pdf"
 multiple
 name="attachments"
-></is-file-input>
+></iswc-file-input>
 ```
 
 ## Errores comunes

@@ -1,15 +1,15 @@
 ---
-tag: is-tree
+tag: iswc-tree
 tags:
-  - is-tree
-  - is-tree-item
+  - iswc-tree
+  - iswc-tree-item
 category: navigation
 status: public
 source: ./tree.js
 style: ./tree.css
 preview: ./tree.json
 ---
-# `<is-tree>` / `<is-tree-item>`
+# `<iswc-tree>` / `<iswc-tree-item>`
 
 ## Propósito
 
@@ -17,7 +17,7 @@ preview: ./tree.json
 (↑/↓/←/→/Home/End/Enter/Space), iconos por slot y selección
 single | leaf | multiple | none.
 
-Este módulo registra `<is-tree>`, `<is-tree-item>`.
+Este módulo registra `<iswc-tree>`, `<iswc-tree-item>`.
 
 ## Cuándo usarlo
 
@@ -36,13 +36,13 @@ import './tree.js';
 ## Ejemplo mínimo
 
 ```html
-<is-tree selection="single" expanded>
-<is-tree-item>
-<is-icon slot="icon" icon="mdi:folder"></is-icon>
+<iswc-tree selection="single" expanded>
+<iswc-tree-item>
+<iswc-icon slot="icon" icon="mdi:folder"></iswc-icon>
 Documentos
-<is-tree-item>facturas-2024.pdf</is-tree-item>
-</is-tree-item>
-</is-tree>
+<iswc-tree-item>facturas-2024.pdf</iswc-tree-item>
+</iswc-tree-item>
+</iswc-tree>
 ```
 
 ## API
@@ -79,9 +79,9 @@ Documentos
 
 | Evento | detail | bubbles | composed | cancelable |
 | --- | --- | --- | --- | --- |
-| `is-tree-toggle` | sí | sí | sí | no |
-| `is-tree-select` | sí | sí | sí | no |
-| `is-tree-expand` | según cabecera | según cabecera | según cabecera | según cabecera |
+| `iswc-tree-toggle` | sí | sí | sí | no |
+| `iswc-tree-select` | sí | sí | sí | no |
+| `iswc-tree-expand` | según cabecera | según cabecera | según cabecera | según cabecera |
 
 ### Métodos y propiedades públicas
 
@@ -129,45 +129,45 @@ No declara integración form-associated propia en este módulo.
 
 Documentación de cabecera preservada desde fuente:
 
-> <is-tree> + <is-tree-item> — Web Components (vanilla, zero dependencies).
+> <iswc-tree> + <iswc-tree-item> — Web Components (vanilla, zero dependencies).
 > Árbol jerárquico con expansión, selección, checkboxes, navegación por teclado
 > (Arrow, Home, End, Enter, Space) e iconos por slot.
->   <is-tree selection="leaf">
->     <is-tree-item expanded>
->       <is-icon slot="icon" icon="mdi:folder"></is-icon>
+>   <iswc-tree selection="leaf">
+>     <iswc-tree-item expanded>
+>       <iswc-icon slot="icon" icon="mdi:folder"></iswc-icon>
 >       Documentos
->       <is-tree-item> … </is-tree-item>
->       <is-tree-item> … </is-tree-item>
->     </is-tree-item>
->   </is-tree>
-> Atributos <is-tree>
+>       <iswc-tree-item> … </iswc-tree-item>
+>       <iswc-tree-item> … </iswc-tree-item>
+>     </iswc-tree-item>
+>   </iswc-tree>
+> Atributos <iswc-tree>
 >   selection  none | single | leaf | multiple (default 'single')
 >   expanded   boolean — todos los nodos empiezan expandidos.
-> Atributos <is-tree-item>
+> Atributos <iswc-tree-item>
 >   expanded         boolean
 >   selected         boolean
 >   disabled         boolean
 >   has-children     boolean (si lo declaras, se ignoran los hijos declarados)
 >   lazy             boolean — carga hijos bajo demanda.
 > Slots
->   <is-tree-item>
+>   <iswc-tree-item>
 >     (default)   label.
 >     icon        icono a la izquierda.
 >     expand-icon override del caret.
 >     checkbox    override del checkbox.
 > Eventos
->   is-tree-select    detail: { item, selected, selectedItems }
->   is-tree-expand    detail: { item, expanded }
->   is-tree-toggle    detail: { item, expanded }
+>   iswc-tree-select    detail: { item, selected, selectedItems }
+>   iswc-tree-expand    detail: { item, expanded }
+>   iswc-tree-toggle    detail: { item, expanded }
 > CSS Parts
->   is-tree: ::part(base) ::part(items)
->   is-tree-item: ::part(item) ::part(item-content) ::part(item-children) ::part(checkbox) ::part(expand-toggle)
+>   iswc-tree: ::part(base) ::part(items)
+>   iswc-tree-item: ::part(item) ::part(item-content) ::part(item-children) ::part(checkbox) ::part(expand-toggle)
 
 ## Dependencias y componentes relacionados
 
 - [`../_shared/adopt-css.js`](../_shared/adopt-css.js)
 
-Tags del módulo: `<is-tree>`, `<is-tree-item>`.
+Tags del módulo: `<iswc-tree>`, `<iswc-tree-item>`.
 
 ## Accesibilidad
 
@@ -176,13 +176,13 @@ Preservar semántica, foco, teclado, labels y ARIA. ARIA detectado: `aria-hidden
 ## Ejemplo avanzado
 
 ```html
-<is-tree selection="single" expanded>
-<is-tree-item>
-<is-icon slot="icon" icon="mdi:folder"></is-icon>
+<iswc-tree selection="single" expanded>
+<iswc-tree-item>
+<iswc-icon slot="icon" icon="mdi:folder"></iswc-icon>
 Documentos
-<is-tree-item>facturas-2024.pdf</is-tree-item>
-</is-tree-item>
-</is-tree>
+<iswc-tree-item>facturas-2024.pdf</iswc-tree-item>
+</iswc-tree-item>
+</iswc-tree>
 ```
 
 ## Errores comunes

@@ -26,7 +26,7 @@ checks.push({
       for (let i = 0; i < 5; i++) {
         await new Promise((r) => requestAnimationFrame(() => r()));
       }
-      const p = document.querySelectorAll('is-popconfirm')[0];
+      const p = document.querySelectorAll('iswc-popconfirm')[0];
       const popupDiv = p.popup;
       const inlineTransform = popupDiv?.style.transform;
       const display = popupDiv?.style.display;
@@ -50,7 +50,7 @@ checks.push({
       for (let i = 0; i < 5; i++) {
         await new Promise((r) => requestAnimationFrame(() => r()));
       }
-      const p = document.querySelectorAll('is-popconfirm')[1];
+      const p = document.querySelectorAll('iswc-popconfirm')[1];
       const popupDiv = p.popup;
       const tr = trig.getBoundingClientRect();
       // Transform debe colocar el popup pegado al borde derecho del trigger
@@ -86,7 +86,7 @@ checks.push({
       for (let i = 0; i < 5; i++) {
         await new Promise((r) => requestAnimationFrame(() => r()));
       }
-      const p = document.querySelectorAll('is-popconfirm')[0];
+      const p = document.querySelectorAll('iswc-popconfirm')[0];
       const pop = p.querySelector('.popconfirm');
       const r = pop.getBoundingClientRect();
       const cs = getComputedStyle(pop);

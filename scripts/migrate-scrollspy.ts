@@ -2,14 +2,14 @@
  * scripts/migrate-scrollspy.ts
  *
  * Reemplaza en cada preview el IntersectionObserver inline por el componente
- * <is-scrollspy>. No toca el resto del <script>.
+ * <iswc-scrollspy>. No toca el resto del <script>.
  *
  * Idempotente: si el archivo ya está migrado (no quedan IntersectionObserver
  * ni <nav> en el sidebar), se salta.
  *
  *  1. Añade el import del componente scrollspy.js si no está.
  *  2. En el <aside class="sidebar">, convierte <nav>...</nav> en
- *     <is-scrollspy target="is-main">...</is-scrollspy>.
+ *     <iswc-scrollspy target="iswc-main">...</iswc-scrollspy>.
  *  3. Borra el primer bloque Active-section-in-sidebar del <script> embebido.
  *
  * Uso:  deno run -A --no-check scripts/migrate-scrollspy.ts
@@ -51,10 +51,10 @@ async function migrate(file) {
     );
   }
 
-  // 2. <nav> → <is-scrollspy target="is-main"> … </is-scrollspy>
+  // 2. <nav> → <iswc-scrollspy target="iswc-main"> … </iswc-scrollspy>
   if (hasNav) {
-    out = out.replace(SIDEBAR_NAV_OPEN, '$1<is-scrollspy target="is-main">$2');
-    out = out.replace(SIDEBAR_NAV_CLOSE, '$1</is-scrollspy>');
+    out = out.replace(SIDEBAR_NAV_OPEN, '$1<iswc-scrollspy target="iswc-main">$2');
+    out = out.replace(SIDEBAR_NAV_CLOSE, '$1</iswc-scrollspy>');
   }
 
   // 3. Eliminar el bloque Active section in sidebar.

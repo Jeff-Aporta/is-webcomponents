@@ -1,5 +1,5 @@
 /**
- * Tipos compartidos del módulo TreeView (port vanilla de `is-tree`).
+ * Tipos compartidos del módulo TreeView (port vanilla de `iswc-tree`).
  *
  * Este archivo NO contiene código de runtime: solo tipos e interfaces para que
  * los archivos del árbol (`00-as-row.ts`, `02-model.ts`, `03-tree-shape.ts`,
@@ -71,7 +71,7 @@ export interface TreeActionSpec {
   colorFalse?: string;
   checked?: boolean;
   disabled?: boolean;
-  /** Marcador de separador (FlexOptions lo trata como `<is-divider>`). */
+  /** Marcador de separador (FlexOptions lo trata como `<iswc-divider>`). */
   separator?: boolean;
   onClick?: () => void;
 }

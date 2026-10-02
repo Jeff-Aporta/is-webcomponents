@@ -24,8 +24,9 @@
     box-shadow: var(--iswc-shadow, none);
   }
 
-  .list,
-  .col {
+  /* Las columnas (HH/MM/SS) y la lista (grupo) comparten scroll vertical y
+   * paddin interno para que el scrollIntoView deje la opción centrada. */
+  :is(.list, .col) {
     display: flex;
     flex-direction: column;
     gap: 0.15em;
@@ -42,11 +43,11 @@
 
   .col {
     min-width: 3.25em;
-  }
 
-  .col + .col {
-    padding-inline-start: 0.25em;
-    border-inline-start: 1px solid var(--iswc-border, #d0d7de);
+    & + .col {
+      padding-inline-start: 0.25em;
+      border-inline-start: 1px solid var(--iswc-border, #d0d7de);
+    }
   }
 
   .opt {
@@ -61,26 +62,28 @@
     text-align: center;
     cursor: pointer;
     &:hover:not(:disabled) { background: var(--iswc-control-bg-hover, #e9ecef); }
-  }
 
-  .opt:focus-visible {
-    outline: 2px solid var(--iswc-focus, var(--iswc-accent, #e03131));
-    outline-offset: -2px;
-  }
+    &:focus-visible {
+      outline: 2px solid var(--iswc-focus, var(--iswc-accent, #e03131));
+      outline-offset: -2px;
+    }
 
-  .opt[data-selected] {
-    background: var(--iswc-color-brand-strong, #c92a2a);
-    color: var(--iswc-on-brand, #fff);
-    font-weight: 600;
-  }
+    &[data-selected] {
+      background: var(--iswc-color-brand-strong, #c92a2a);
+      color: var(--iswc-on-brand, #fff);
+      font-weight: 600;
+    }
 
-  .opt:disabled {
-    opacity: 0.35;
-    cursor: not-allowed;
+    &:disabled {
+      opacity: 0.35;
+      cursor: not-allowed;
+    }
   }
 }
 
-:host([disabled]) .base {
-  opacity: 0.6;
-  pointer-events: none;
+:host([disabled]) {
+  .base {
+    opacity: 0.6;
+    pointer-events: none;
+  }
 }

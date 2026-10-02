@@ -49,7 +49,7 @@ El proyecto no tiene `jsdom` ni polyfills de DOM, y los Web Components solo se p
 
 1. **Módulo existe** y se puede importar.
 2. **`static get observedAttributes()`** declarado (sigue `extends` y factories).
-3. **Eventos `is-*`** se emiten (`emit()`, `dispatchEvent(new CustomEvent('is-x'))`).
+3. **Eventos `is-*`** se emiten (`emit()`, `dispatchEvent(new CustomEvent('iswc-x'))`).
 4. **Slots** declarados en `TEMPLATE.innerHTML` o `shadow.innerHTML`.
 5. **Shadow DOM** con `attachShadow({mode: 'open'})`.
 6. **CSS Parts** (`part="x"` o `setAttribute('part', 'x')`).
@@ -76,21 +76,21 @@ Los siguientes issues fueron encontrados durante la auditoría. NO se arreglaron
 
 ### Componentes inexistentes (catalogados como "no existen en `manifest.ts`")
 
-- `is-icon-button` (actions)
-- `is-split-button` (actions)
-- `is-toggle-group` (actions)
+- `iswc-icon-button` (actions)
+- `iswc-split-button` (actions)
+- `iswc-toggle-group` (actions)
 
 ### Bugs reales detectados
 
-- **`is-gauge`**: la documentación dice "Eventos: `is-gauge-change`" pero el código NO emite ese evento. (Reportado por WT-0003)
-- **`is-color-picker`**: falta emitir `is-input`/`is-change` en `onAttributeChanged`. (Ya arreglado en commit `34812917c9` del WT-ROOT original)
-- **`is-chart` (base)**: no declara `open-on-click` en `OBSERVED` aunque lo lee. (Ya arreglado en commit `34812917c9`)
-- **`is-button`**: atributos `color-hover`/`color-active`/`color-text` van por `styleAttrs`, pero `extraerMetaComponente` ya los resuelve correctamente tras la mejora del motor.
-- **`is-md-editor`**: emite `is-persist`/`is-change`/`is-delete`/`is-load` (no `is-save`/`is-cancel`).
-- **`is-tree-view`**: integra con `confirm-delete`, `flex-options`, `float-card` (no con `menu`/`dropdown` como en la consigna).
-- **`is-rating`**: `OBSERVED` no incluye `hint` (atributo no observado; hint va por slot).
-- **`is-slider`**: `OBSERVED` no incluye `color`.
-- **`is-full-calendar`**: extiende `HTMLElement` directamente (no `ElementBase`), coherente con su diseño self-contained.
+- **`iswc-gauge`**: la documentación dice "Eventos: `iswc-gauge-change`" pero el código NO emite ese evento. (Reportado por WT-0003)
+- **`iswc-color-picker`**: falta emitir `iswc-input`/`iswc-change` en `onAttributeChanged`. (Ya arreglado en commit `34812917c9` del WT-ROOT original)
+- **`iswc-chart` (base)**: no declara `open-on-click` en `OBSERVED` aunque lo lee. (Ya arreglado en commit `34812917c9`)
+- **`iswc-button`**: atributos `color-hover`/`color-active`/`color-text` van por `styleAttrs`, pero `extraerMetaComponente` ya los resuelve correctamente tras la mejora del motor.
+- **`iswc-md-editor`**: emite `iswc-persist`/`iswc-change`/`iswc-delete`/`iswc-load` (no `iswc-save`/`iswc-cancel`).
+- **`iswc-tree-view`**: integra con `confirm-delete`, `flex-options`, `float-card` (no con `menu`/`dropdown` como en la consigna).
+- **`iswc-rating`**: `OBSERVED` no incluye `hint` (atributo no observado; hint va por slot).
+- **`iswc-slider`**: `OBSERVED` no incluye `color`.
+- **`iswc-full-calendar`**: extiende `HTMLElement` directamente (no `ElementBase`), coherente con su diseño self-contained.
 
 ### Limitaciones del análisis estático
 

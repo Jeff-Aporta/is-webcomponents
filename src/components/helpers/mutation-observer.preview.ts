@@ -11,7 +11,7 @@ interface DescribePart {
 }
 
 /**
- * Behavior migrado desde HTML inline de is-mutation-observer.
+ * Behavior migrado desde HTML inline de iswc-mutation-observer.
  * Se ejecuta en mount() tras pintar la definition JSON.
  */
 export async function mount(ctx: import('../../previews/_kit/types.d.ts').PreviewMountContext) {
@@ -27,10 +27,10 @@ export async function mount(ctx: import('../../previews/_kit/types.d.ts').Previe
   let childN = 0;
 
   const paintHtml = (): void => {
-    // `#moHtml` puede haber pasado de <pre> a <is-code> tras el primer paint.
+    // `#moHtml` puede haber pasado de <pre> a <iswc-code> tras el primer paint.
     const el = (root.querySelector<HTMLElement>('#moHtml') || htmlPre);
     const src = prettyHtml(target.outerHTML);
-    if (el.localName === 'is-code') {
+    if (el.localName === 'iswc-code') {
       const codeEl = el as CodeLike;
       codeEl.value = src;
       codeEl.setAttribute('data-lang', 'html');
@@ -101,7 +101,7 @@ export async function mount(ctx: import('../../previews/_kit/types.d.ts').Previe
     }
   });
 
-  mo.addEventListener('is-mutate', (e: Event) => {
+  mo.addEventListener('iswc-mutate', (e: Event) => {
     paintHtml();
     log?.querySelector<HTMLElement>('.hint')?.closest('.row')?.remove();
     const t = new Date().toLocaleTimeString();

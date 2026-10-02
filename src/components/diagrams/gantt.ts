@@ -50,13 +50,13 @@ import { svgEl } from '../_shared/svg-chart-engine.js';
 import { svgArrowHead } from '../_shared/diagram-arrow.js';
 
 /**
- * <is-gantt> — diagrama de Gantt en SVG, sin Mermaid.
+ * <iswc-gantt> — diagrama de Gantt en SVG, sin Mermaid.
  *
- *   <is-gantt>
+ *   <iswc-gantt>
  *     <script type="application/json">
  *       { "gantt": { "title": "...", "groups": [...], "tasks": [...] } }
  *     </script>
- *   </is-gantt>
+ *   </iswc-gantt>
  *
  * Una fila por tarea (orden de declaración, sin empaquetar). Las flechas
  * `after:` se rutean con A* sobre la rejilla de costos, igual que las
@@ -64,7 +64,7 @@ import { svgArrowHead } from '../_shared/diagram-arrow.js';
  *
  * Atributos: color (inline | viewer), open-on-click
  * Propiedades: payload, spec, layout, turtle, hiddenGroups
- * Eventos: is-render, is-turtle-state, is-open-viewer, is-toggle-group
+ * Eventos: iswc-render, iswc-turtle-state, iswc-open-viewer, iswc-toggle-group
  */
 
 const SVG_NS = 'http://www.w3.org/2000/svg';
@@ -89,7 +89,7 @@ interface ArrowNodeEntry {
   g: SVGGElement;
 }
 
-class IsGantt extends DiagramElementBase {
+class IswcGantt extends DiagramElementBase {
   #turtle: PathTurtle | null = null;
   #hiddenGroups: Set<string> = new Set<string>();
   #rowNodes: Map<string, RowNodeEntry> = new Map();
@@ -156,7 +156,7 @@ class IsGantt extends DiagramElementBase {
     const layout: GanttLayout = computeGanttLayout(visible, { now: Date.now() });
     this.layout = layout;
     this.#buildSvg(layout, theme);
-    this.wrap.classList.toggle('is-viewer', this.isViewer);
+    this.wrap.classList.toggle('iswc-viewer', this.isViewer);
   }
 
   #buildSvg(layout: GanttLayout, theme: DiagramTheme): void {
@@ -197,10 +197,10 @@ class IsGantt extends DiagramElementBase {
       viewW: W,
       viewH: H,
       autoLoop: this.isViewer,
-      onState: (state: TurtleState) => emit(this, 'is-turtle-state', state),
+      onState: (state: TurtleState) => emit(this, 'iswc-turtle-state', state),
     });
 
-    emit(this, 'is-render', { layout, svg: this.svg });
+    emit(this, 'iswc-render', { layout, svg: this.svg });
   }
 
   #buildGrid(layout: GanttLayout, theme: DiagramTheme): void {
@@ -386,14 +386,14 @@ class IsGantt extends DiagramElementBase {
     if (this.isViewer) {
       const item = e.composedPath().find((x: EventTarget | null) => (x as HTMLElement | undefined)?.dataset?.groupId);
       if (item) {
-        emitCancelable(this, 'is-toggle-group', { id: (item as HTMLElement).dataset.groupId });
+        emitCancelable(this, 'iswc-toggle-group', { id: (item as HTMLElement).dataset.groupId });
       }
       return;
     }
     // El visor es opt-in: sin `open-on-click` el clic no hace nada y tampoco
-    // se anuncia `is-open-viewer`, que prometeria una apertura que no ocurre.
+    // se anuncia `iswc-open-viewer`, que prometeria una apertura que no ocurre.
     if (!this.hasAttribute('open-on-click')) return;
-    const ev = new CustomEvent('is-open-viewer', {
+    const ev = new CustomEvent('iswc-open-viewer', {
       bubbles: true, composed: true, cancelable: true, detail: { payload: this.payload },
     });
     this.dispatchEvent(ev);
@@ -424,13 +424,13 @@ class IsGantt extends DiagramElementBase {
 
     for (const [rowId, node] of this.#rowNodes) {
       const active = rowId === id;
-      node.g.classList.toggle('is-active', active);
-      node.g.classList.toggle('is-dim', !!id && !active);
+      node.g.classList.toggle('iswc-active', active);
+      node.g.classList.toggle('iswc-dim', !!id && !active);
     }
     for (const [, arrow] of this.#arrowNodes) {
       const touches = !!id && (arrow.a.from === id || arrow.a.to === id);
-      arrow.g.classList.toggle('is-active', touches);
-      arrow.g.classList.toggle('is-dim', !!id && !touches);
+      arrow.g.classList.toggle('iswc-active', touches);
+      arrow.g.classList.toggle('iswc-dim', !!id && !touches);
     }
 
     this.#turtle?.setPaused(!!id);
@@ -461,8 +461,8 @@ class IsGantt extends DiagramElementBase {
   }
 }
 
-defineElement('is-gantt', IsGantt, 'IsGantt');
+defineElement('iswc-gantt', IswcGantt, 'IswcGantt');
 
-registerDiagramKind('gantt', 'is-gantt');
+registerDiagramKind('gantt', 'iswc-gantt');
 
-export { IsGantt };
+export { IswcGantt };

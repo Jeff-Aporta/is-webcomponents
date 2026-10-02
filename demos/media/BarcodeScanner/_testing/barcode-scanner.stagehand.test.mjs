@@ -17,13 +17,13 @@ async function checkDeterministic(page, demo) {
   await page.waitForTimeout(200);
 
   const data = await page.evaluate(() => {
-    const scanners = [...document.querySelectorAll('main is-barcode-scanner')];
+    const scanners = [...document.querySelectorAll('main iswc-barcode-scanner')];
     return scanners.map((el, idx) => {
       const shadow = el.shadowRoot;
       const wrapRect = el.getBoundingClientRect();
       const video = shadow.querySelector('video.preview');
       const hint = shadow.querySelector('.hint');
-      const btn = shadow.querySelector('button, is-button');
+      const btn = shadow.querySelector('button, iswc-button');
       const btnText = btn?.textContent?.trim() || '';
       return {
         idx,

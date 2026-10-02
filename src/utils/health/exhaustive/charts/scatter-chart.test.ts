@@ -1,7 +1,7 @@
 /**
- * scatter-chart.test.ts — verificación exhaustiva de <is-scatter-chart>.
+ * scatter-chart.test.ts — verificación exhaustiva de <iswc-scatter-chart>.
  *
- * Wrapper de <is-chart> con tipo "scatter". Puntos XY en plano cartesiano.
+ * Wrapper de <iswc-chart> con tipo "scatter". Puntos XY en plano cartesiano.
  */
 import assert from 'node:assert/strict';
 import test from 'node:test';
@@ -19,41 +19,41 @@ import {
 const MOD = 'src/components/charts/scatter-chart.ts';
 const WRAPPER = 'src/components/charts/chart.ts';
 
-test('is-scatter-chart: archivo existe', () => {
+test('iswc-scatter-chart: archivo existe', () => {
   assert.ok(exists(MOD));
 });
 
-test('is-scatter-chart: wrapper registra tag is-scatter-chart y tipo scatter', () => {
+test('iswc-scatter-chart: wrapper registra tag iswc-scatter-chart y tipo scatter', () => {
   const src = read(MOD);
-  assert.match(src, /window\.__isDefineTypedChart\s*\?\s*\.?\s*\(\s*['"`]is-scatter-chart['"`]/);
+  assert.match(src, /window\.__isDefineTypedChart\s*\?\s*\.?\s*\(\s*['"`]iswc-scatter-chart['"`]/);
   assert.match(src, /['"`]scatter['"`]/);
 });
 
-test('is-scatter-chart: motor monta shadow DOM con svg', () => {
+test('iswc-scatter-chart: motor monta shadow DOM con svg', () => {
   const src = read(WRAPPER);
   assert.ok(tieneShadow(src));
   assert.match(src, /<svg\b/);
 });
 
-test('is-scatter-chart: observados del motor incluyen type/label', () => {
+test('iswc-scatter-chart: observados del motor incluyen type/label', () => {
   const obs = extraerObservados(read(WRAPPER));
   assert.ok(obs.includes('type'));
   assert.ok(obs.includes('label'));
 });
 
-test('is-scatter-chart: lee JSON embebido', () => {
+test('iswc-scatter-chart: lee JSON embebido', () => {
   assert.ok(leeJsonScript(read(WRAPPER)));
 });
 
-test('is-scatter-chart: usa ResizeObserver', () => {
+test('iswc-scatter-chart: usa ResizeObserver', () => {
   assert.ok(usaResizeObserver(read(WRAPPER)));
 });
 
-test('is-scatter-chart: registrado', () => {
+test('iswc-scatter-chart: registrado', () => {
   const src = read(WRAPPER);
-  assert.ok(estaRegistrado(src, 'is-chart') || estaRegistrado(read(MOD), 'is-scatter-chart'));
+  assert.ok(estaRegistrado(src, 'iswc-chart') || estaRegistrado(read(MOD), 'iswc-scatter-chart'));
 });
 
-test('is-scatter-chart: edge case guards', () => {
+test('iswc-scatter-chart: edge case guards', () => {
   assert.ok(tieneEdgeCaseGuards(read(WRAPPER)));
 });

@@ -1,15 +1,15 @@
 ---
-tag: is-tree-item
+tag: iswc-tree-item
 tags:
-  - is-tree-item
+  - iswc-tree-item
 category: navigation
 status: public
 ---
-# `<is-tree-item>`
+# `<iswc-tree-item>`
 
 ## Propósito
 
-Nodo de `<is-tree>`. Puede tener hijos y se expande dentro del árbol.
+Nodo de `<iswc-tree>`. Puede tener hijos y se expande dentro del árbol.
 
 ## Cuándo usarlo
 
@@ -22,5 +22,5 @@ No lo reimplementes ni lo uses para sustituir al padre. La guía del padre docum
 ## Ejemplo mínimo
 
 ```html
-<is-tree-item></is-tree-item>
+<iswc-tree-item></iswc-tree-item>
 ```

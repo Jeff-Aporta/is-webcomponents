@@ -17,7 +17,7 @@
  * (`html`/`body`): cada app define su `background`. Tampoco fuerza
  * `color-scheme` en `:root` — solo en `.theme-dark` / `.theme-light` (y el
  * `[data-theme]` gemelo), para que cargar el CDN no oscurezca una app clara
- * por defecto. Los tokens también siguen `data-theme`: `<is-theme-toggle>`
+ * por defecto. Los tokens también siguen `data-theme`: `<iswc-theme-toggle>`
  * escribe ambos, pero un consumer que solo mute el atributo debe reaccionar.
  */
 
@@ -124,6 +124,20 @@
   --iswc-scrollbar-track: transparent;
   --iswc-scrollbar-thumb: color-mix(in srgb, var(--iswc-control-border) 65%, transparent);
   --iswc-scrollbar-thumb-hover: color-mix(in srgb, var(--iswc-accent, dodgerblue) 45%, var(--iswc-control-border));
+  /* Estados de campos de formulario — tokens que ISP-SvelteComponents da por
+     sentados y que esta librería no tenía. Se definen aquí como neutros para
+     las 3 paletas; palettes.css solo los pisa donde la marca lo exige.
+       --iswc-b-required   borde del campo obligatorio (gris marcado, NO rojo:
+                         "obligatorio" no es "error"; ISP usa #888 / #e5e7eb).
+       --iswc-b-optional   borde del campo opcional. Verde suave #80c080: es el
+                         código de color de ISP para "puedes dejarlo vacío".
+       --iswc-b-readonly   borde del campo de solo lectura — traslúcido para que
+                         se lea como desactivado (ISP: #8884 / #aaa / #bbb).
+       --iswc-bg-readonly  fondo del campo de solo lectura (ISP: #f9f9f9). */
+  --iswc-b-required: #8a939e;
+  --iswc-b-optional: #80c080;
+  --iswc-b-readonly: #ffffff2e;
+  --iswc-bg-readonly: #1a1f26;
 }
 
 /* color-scheme solo con clase de tema: no oscurece el canvas del browser
@@ -134,6 +148,9 @@
   color-scheme: dark;
 }
 
+/* Light: tokens de superficie/control + field tokens + brand-text pasteles
+   (sin palettes.css quedan como los tokens neutros de fallback definidos en
+   :root/.theme-dark). Un solo bloque porque los tres cambian a la vez. */
 .theme-light,
 :root[data-theme="light"],
 [data-theme="light"] {
@@ -173,73 +190,41 @@
   --iswc-scrollbar-track: color-mix(in srgb, var(--iswc-bg-soft) 70%, transparent);
   --iswc-scrollbar-thumb: color-mix(in srgb, var(--iswc-control-border) 55%, transparent);
   --iswc-scrollbar-thumb-hover: color-mix(in srgb, var(--iswc-accent, dodgerblue) 40%, var(--iswc-control-border));
-}
-
-/* --- Estados de campos de formulario -------------------------------
- *
- * Tokens que ISP-SvelteComponents da por sentados y que esta librería no
- * tenía. Se definen aquí como neutros para las 3 paletas; palettes.css
- * solo los pisa donde la marca lo exige (ContaPyme claro = copia de ISP).
- *
- *   --iswc-b-required   borde del campo obligatorio (gris marcado, NO rojo:
- *                     "obligatorio" no es "error"; ISP usa #888 / #e5e7eb).
- *   --iswc-b-optional   borde del campo opcional. Verde suave #80c080: es el
- *                     código de color de ISP para "puedes dejarlo vacío".
- *   --iswc-b-readonly   borde del campo de solo lectura — traslúcido para que
- *                     se lea como desactivado (ISP: #8884 / #aaa / #bbb).
- *   --iswc-bg-readonly  fondo del campo de solo lectura (ISP: #f9f9f9).
- */
-:root,
-.theme-dark {
-  --iswc-b-required: #8a939e;
-  --iswc-b-optional: #80c080;
-  --iswc-b-readonly: #ffffff2e;
-  --iswc-bg-readonly: #1a1f26;
-}
-
-.theme-light,
-:root[data-theme="light"],
-[data-theme="light"] {
   --iswc-b-required: #888;
   --iswc-b-optional: #80c080;
   --iswc-b-readonly: #8884;
   --iswc-bg-readonly: #f9f9f9;
-}
-
-/* Light: brand-text + brand-soft pasteles (sin palettes.css quedan como
-   los tokens neutros de fallback definidos en :root/.theme-dark). */
-.theme-light,
-:root[data-theme="light"],
-[data-theme="light"] {
   --iswc-brand-text: var(--iswc-color-brand-stronger, #a61e1e);
   --iswc-brand-soft: var(--iswc-color-brand-paler, #fff1f1);
   --iswc-brand-soft-active: var(--iswc-color-brand-pale, #ffd9d9);
 }
 
-/* --- Scrollbars themizados (documento + overflow light DOM) ---------- */
+/* --- Scrollbars themizados (documento + overflow light DOM) ----------
+ * Un solo selector universal + `&` para WebKit. Los pseudos `-webkit-*`
+ * NO se pueden agrupar en `:is()` (no es selector de elementos), así que
+ * los listamos a mano. */
 * {
   scrollbar-width: thin;
   scrollbar-color: var(--iswc-scrollbar-thumb) var(--iswc-scrollbar-track);
-}
-*::-webkit-scrollbar {
-  width: var(--iswc-scrollbar-size);
-  height: var(--iswc-scrollbar-size);
-}
-*::-webkit-scrollbar-track {
-  background: var(--iswc-scrollbar-track);
-  border-radius: var(--iswc-scrollbar-radius);
-}
-*::-webkit-scrollbar-thumb {
-  background: var(--iswc-scrollbar-thumb);
-  border-radius: var(--iswc-scrollbar-radius);
-  border: 2px solid transparent;
-  background-clip: padding-box;
-}
-*::-webkit-scrollbar-thumb:hover {
-  background: var(--iswc-scrollbar-thumb-hover);
-  border: 2px solid transparent;
-  background-clip: padding-box;
-}
-*::-webkit-scrollbar-corner {
-  background: transparent;
+
+  &::-webkit-scrollbar {
+    width: var(--iswc-scrollbar-size);
+    height: var(--iswc-scrollbar-size);
+  }
+  &::-webkit-scrollbar-track {
+    background: var(--iswc-scrollbar-track);
+    border-radius: var(--iswc-scrollbar-radius);
+  }
+  &::-webkit-scrollbar-thumb {
+    background: var(--iswc-scrollbar-thumb);
+    border-radius: var(--iswc-scrollbar-radius);
+    border: 2px solid transparent;
+    background-clip: padding-box;
+  }
+  &:hover::-webkit-scrollbar-thumb {
+    background: var(--iswc-scrollbar-thumb-hover);
+  }
+  &::-webkit-scrollbar-corner {
+    background: transparent;
+  }
 }

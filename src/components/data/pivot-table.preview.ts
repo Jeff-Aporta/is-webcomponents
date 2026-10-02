@@ -1,5 +1,5 @@
 /**
- * Behavior migrado desde HTML inline de is-pivot-table.
+ * Behavior migrado desde HTML inline de iswc-pivot-table.
  * Se ejecuta en mount() tras pintar la definition JSON.
  */
 import type { PreviewMountContext } from '../../previews/_kit/types.d.ts';
@@ -14,8 +14,8 @@ export async function mount(ctx: PreviewMountContext): Promise<void> {
   const root = ctx.main;
   void root;
   const log = document.getElementById('log');
-  document.querySelectorAll<HTMLElement>('is-pivot-table').forEach((p) => {
-    p.addEventListener('is-cell-click', (e: Event) => {
+  document.querySelectorAll<HTMLElement>('iswc-pivot-table').forEach((p) => {
+    p.addEventListener('iswc-cell-click', (e: Event) => {
       const detail = (e as CustomEvent<CellClickDetail>).detail;
       if (!log) return;
       log.textContent = `${detail.row} · ${detail.col} = ${detail.value}\n${log.textContent}`;

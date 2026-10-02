@@ -5,7 +5,7 @@ import '../helpers/format-bytes.js';
 import { ElementBase } from '../../core/element-base.js';
 
 /**
- * <is-file-input> — Web Component (vanilla).
+ * <iswc-file-input> — Web Component (vanilla).
  *
  * Dropzone + input file nativo oculto. Lista de archivos con quitar.
  *
@@ -20,7 +20,7 @@ import { ElementBase } from '../../core/element-base.js';
  *
  * Custom states: blank, dragging  (:state / data-state-*)
  *
- * Eventos: change, input, is-change (bubbles, composed)
+ * Eventos: change, input, iswc-change (bubbles, composed)
  *
  * CSS Parts: ::part(base) ::part(label) ::part(hint) ::part(dropzone)
  *            ::part(file-list) ::part(file) ::part(remove-button)
@@ -46,7 +46,7 @@ import { ElementBase } from '../../core/element-base.js';
       >
         <slot name="dropzone">
           <span class="dropzone-default">
-            <is-icon icon="mdi:cloud-upload" aria-hidden="true"></is-icon>
+            <iswc-icon icon="mdi:cloud-upload" aria-hidden="true"></iswc-icon>
             <span class="dropzone-text">Arrastra archivos aquí o haz clic para seleccionar</span>
           </span>
         </slot>
@@ -58,7 +58,7 @@ import { ElementBase } from '../../core/element-base.js';
 
   const OBSERVED = ['label', 'hint', 'name', 'accept', 'capture', 'multiple', 'disabled', 'required'];
 
-  class IsFileInput extends ElementBase {
+  class IswcFileInput extends ElementBase {
     static formAssociated = true;
     static get observedAttributes(): string[] { return OBSERVED; }
 
@@ -302,18 +302,18 @@ import { ElementBase } from '../../core/element-base.js';
         name.className = 'file-name';
         name.textContent = file.name;
 
-        const size = document.createElement('is-format-bytes');
+        const size = document.createElement('iswc-format-bytes');
         size.setAttribute('value', String(file.size));
         size.className = 'file-size';
 
-        const remove = document.createElement('is-button') as HTMLElement & { type: string };
+        const remove = document.createElement('iswc-button') as HTMLElement & { type: string };
         remove.type = 'button';
         remove.className = 'remove';
         remove.setAttribute('part', 'remove-button');
         remove.setAttribute('variant', 'text');
         remove.setAttribute('color', 'neutral');
         remove.setAttribute('aria-label', `Quitar ${file.name}`);
-        remove.innerHTML = '<is-icon icon="mdi:close" aria-hidden="true"></is-icon>';
+        remove.innerHTML = '<iswc-icon icon="mdi:close" aria-hidden="true"></iswc-icon>';
         remove.addEventListener('click', (e) => {
           e.stopPropagation();
           this.#removeAt(index);
@@ -337,9 +337,9 @@ import { ElementBase } from '../../core/element-base.js';
       const detail = { files: this.files };
       this.dispatchEvent(new Event('input', { bubbles: true, composed: true }));
       this.dispatchEvent(new Event('change', { bubbles: true, composed: true }));
-      emit(this, 'is-change', detail);
+      emit(this, 'iswc-change', detail);
     }
   }
 
-  defineElement('is-file-input', IsFileInput, 'IsFileInput');
+  defineElement('iswc-file-input', IswcFileInput, 'IswcFileInput');
 })();

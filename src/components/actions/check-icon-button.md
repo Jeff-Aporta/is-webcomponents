@@ -1,22 +1,22 @@
 ---
-tag: is-check-icon-button
+tag: iswc-check-icon-button
 tags:
-  - is-check-icon-button
+  - iswc-check-icon-button
 category: actions
 status: public
 source: ./check-icon-button.js
 style: ./check-icon-button.css
 preview: ./check-icon-button.json
 ---
-# `<is-check-icon-button>`
+# `<iswc-check-icon-button>`
 
 ## Propósito
 
 Botón icon-only con dos estados mutuamente excluyentes: muestra un solo icono
-según checked. Lo usan is-video
-(play/pausa, mute) e is-theme-toggle.
+según checked. Lo usan iswc-video
+(play/pausa, mute) e iswc-theme-toggle.
 
-Este módulo registra `<is-check-icon-button>`.
+Este módulo registra `<iswc-check-icon-button>`.
 
 ## Cuándo usarlo
 
@@ -35,12 +35,12 @@ import './check-icon-button.js';
 ## Ejemplo mínimo
 
 ```html
-<is-check-icon-button
+<iswc-check-icon-button
 icon="mdi:play"
 checked-icon="mdi:pause"
 label="Reproducir"
 checked-label="Pausar"
-></is-check-icon-button>
+></iswc-check-icon-button>
 ```
 
 ## API
@@ -77,7 +77,7 @@ No expone.
 
 | Evento | detail | bubbles | composed | cancelable |
 | --- | --- | --- | --- | --- |
-| `is-change` | sí | sí | sí | no |
+| `iswc-change` | sí | sí | sí | no |
 
 ### Métodos y propiedades públicas
 
@@ -116,7 +116,7 @@ No declara integración form-associated propia en este módulo.
 
 Documentación de cabecera preservada desde fuente:
 
-> <is-check-icon-button> — botón icon-only con dos estados (unchecked / checked).
+> <iswc-check-icon-button> — botón icon-only con dos estados (unchecked / checked).
 > Muestra un solo icono a la vez según `checked`. Similar a un toggle/switch visual.
 > Atributos
 >   checked         boolean reflected
@@ -127,17 +127,17 @@ Documentación de cabecera preservada desde fuente:
 >   variant      "plain" → compacto y hereda color (chrome oscura: vídeo)
 >   disabled        boolean
 > Events (bubbles, composed)
->   is-change  { checked: boolean }  — tras cada toggle
+>   iswc-change  { checked: boolean }  — tras cada toggle
 > CSS Parts: ::part(button) ::part(icon)
 
 ## Dependencias y componentes relacionados
 
 - [`../_shared/adopt-css.js`](../_shared/adopt-css.js)
 - [`../media/icon.js`](../media/icon.js)
-- [`./button.js`](./button.js) — la superficie pintada es un `<is-button variant="text">`;
+- [`./button.js`](./button.js) — la superficie pintada es un `<iswc-button variant="text">`;
   el control accesible sigue siendo el host.
 
-Tags del módulo: `<is-check-icon-button>`.
+Tags del módulo: `<iswc-check-icon-button>`.
 
 ## Accesibilidad
 
@@ -146,8 +146,8 @@ Preservar semántica, foco, teclado, labels y ARIA. ARIA detectado: `aria-label`
 ## Ejemplo avanzado
 
 ```html
-<is-check-icon-button variant="plain" icon="mdi:volume-high" checked-icon="mdi:volume-off"
-label="Silenciar" checked-label="Activar sonido"></is-check-icon-button>
+<iswc-check-icon-button variant="plain" icon="mdi:volume-high" checked-icon="mdi:volume-off"
+label="Silenciar" checked-label="Activar sonido"></iswc-check-icon-button>
 ```
 
 ## Errores comunes

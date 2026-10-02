@@ -17,7 +17,7 @@ try {
   const mounted = await page.evaluate(() => {
     const cd = document.getElementById('cd');
     const sr = cd.shadowRoot;
-    const dlg = sr.querySelector('is-dialog.dlg');
+    const dlg = sr.querySelector('iswc-dialog.dlg');
     const dlgSr = dlg?.shadowRoot;
     return {
       hasDialog: !!dlg,
@@ -25,22 +25,22 @@ try {
       headingPart: !!sr.querySelector('[part="heading"]'),
       fieldsPart: !!sr.querySelector('[part="fields"]'),
       actionsPart: !!sr.querySelector('[part="actions"]'),
-      confirmInput: !!sr.querySelector('is-input.confirm'),
-      currentInput: !!sr.querySelector('is-input.current'),
+      confirmInput: !!sr.querySelector('iswc-input.confirm'),
+      currentInput: !!sr.querySelector('iswc-input.current'),
       deleteBtn: !!sr.querySelector('button.delete'),
       cancelBtn: !!sr.querySelector('button.cancel'),
-      hasIconInHeading: !!sr.querySelector('[part="heading"] is-icon'),
+      hasIconInHeading: !!sr.querySelector('[part="heading"] iswc-icon'),
     };
   });
-  assert.equal(mounted.hasDialog, true, 'debe componer un <is-dialog>');
+  assert.equal(mounted.hasDialog, true, 'debe componer un <iswc-dialog>');
   assert.equal(mounted.headingPart, true, '::part(heading) debe existir');
   assert.equal(mounted.fieldsPart, true, '::part(fields) debe existir');
   assert.equal(mounted.actionsPart, true, '::part(actions) debe existir');
-  assert.equal(mounted.confirmInput, true, 'is-input.confirm debe existir');
-  assert.equal(mounted.currentInput, true, 'is-input.current debe existir');
+  assert.equal(mounted.confirmInput, true, 'iswc-input.confirm debe existir');
+  assert.equal(mounted.currentInput, true, 'iswc-input.current debe existir');
   assert.equal(mounted.deleteBtn, true);
   assert.equal(mounted.cancelBtn, true);
-  assert.equal(mounted.hasIconInHeading, true, 'heading debe tener <is-icon>');
+  assert.equal(mounted.hasIconInHeading, true, 'heading debe tener <iswc-icon>');
 
   // (2) Abrir y verificar que el dialog es visible.
   await page.evaluate(async () => {
@@ -50,7 +50,7 @@ try {
   });
   const opened = await page.evaluate(() => {
     const cd = document.getElementById('cd');
-    const dlg = cd.shadowRoot.querySelector('is-dialog.dlg');
+    const dlg = cd.shadowRoot.querySelector('iswc-dialog.dlg');
     const dlgSr = dlg?.shadowRoot;
     const dialogEl = dlgSr?.querySelector('[part="dialog"], .dialog, [part="base"]') || dlg;
     const r = dialogEl?.getBoundingClientRect?.();
@@ -69,16 +69,16 @@ try {
   const focus = await page.evaluate(async () => {
     const cd = document.getElementById('cd');
     // Disparar focus-trap manualmente si existe.
-    const dlg = cd.shadowRoot.querySelector('is-dialog.dlg');
-    // El <is-dialog> ya expone open=true; el trap se ejecuta en su lifecycle.
+    const dlg = cd.shadowRoot.querySelector('iswc-dialog.dlg');
+    // El <iswc-dialog> ya expone open=true; el trap se ejecuta en su lifecycle.
     await new Promise((r) => setTimeout(r, 200));
     const active = document.activeElement;
     return {
       activeTag: active?.localName,
-      activeInShadow: !!active?.closest('is-confirm-delete'),
+      activeInShadow: !!active?.closest('iswc-confirm-delete'),
     };
   });
-  // No verificamos el elemento exacto (depende del trap de is-dialog), pero sí que
+  // No verificamos el elemento exacto (depende del trap de iswc-dialog), pero sí que
   // el foco quedó dentro del modal.
   assert.equal(focus.activeInShadow, true, 'foco debe estar atrapado dentro del modal');
 

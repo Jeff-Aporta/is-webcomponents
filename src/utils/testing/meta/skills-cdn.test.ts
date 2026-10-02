@@ -28,16 +28,14 @@ test('build.mjs copia src/skills → dist/cdn/skills', async () => {
   assert.match(build, /is-cdn-install/);
 });
 
-test('is-cdn-snippet compacta skills + docs en un solo prompt', async () => {
+test('iswc-cdn-snippet pinta Skill simple (enlaces + ver), sin visor MD', async () => {
   const src = await readFile(join(raiz, 'src/components/feedback/cdn-snippet.ts'), 'utf8');
   assert.match(src, /SKILL_DOCS/);
-  assert.match(src, /buildLlmPrompt/);
-  // El armado del prompt vive en `_shared/llm-agent-prompt.ts`: cdn-snippet lo
-  // consume, no lo reimplementa.
+  assert.match(src, /#renderSkills|renderSkills/);
+  assert.match(src, /data-ver-md|mdi:eye-outline/);
+  assert.doesNotMatch(src, /iswc-md-editor|data-slot="llm-prompt"/);
   const prompt = await readFile(join(raiz, 'src/components/_shared/llm-agent-prompt.ts'), 'utf8');
-  assert.match(prompt, /## Referencias de este componente/);
   assert.match(prompt, /skills\/is-cdn-install\/SKILL\.md/);
-  assert.doesNotMatch(src, /cdn__docs-list|#renderDocs/);
 });
 
 test('cdn-panel incluye skill en llmDocs', async () => {

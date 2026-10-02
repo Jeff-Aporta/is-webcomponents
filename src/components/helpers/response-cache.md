@@ -1,5 +1,5 @@
 ---
-tag: is-response-cache
+tag: iswc-response-cache
 tags: []
 category: helpers
 status: public
@@ -24,7 +24,7 @@ import { createResponseCache, IsResponseCache, canonico } from
 
 ```js
 const cache = createResponseCache({
-  dbName: 'mi-app',      // default is-response-cache
+  dbName: 'mi-app',      // default iswc-response-cache
   storeName: 'respuestas',
   ttlMs: 86_400_000,     // default 24 h
   timeoutMs: 1500,       // IndexedDB no responde → memoria

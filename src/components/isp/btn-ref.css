@@ -1,48 +1,53 @@
-/* Estados del host en `:host([attr])` a nivel superior. */
+/* <iswc-btn-ref> — campo de texto + botón filtro que abre un modal con
+   <iswc-catalogo-gen select-mode> para elegir un registro. Muestra la etiqueta
+   resuelta (ColumnsBtnRef) bajo el valor.
+
+   Estados del host en `:host([attr])` a nivel superior — `&[attr]` anidado
+   dentro de `:host {}` compila a `:host[attr]` y no matchea nunca. */
+
 :host {
   display: block;
   position: relative;
-  width: 100%;
+  inline-size: 100%;
   font-family: var(--iswc-sans, inherit);
   color: var(--iswc-text, inherit);
 
   .base {
     position: relative;
-    width: 100%;
+    inline-size: 100%;
   }
 
   .field {
-    width: 100%;
+    inline-size: 100%;
   }
 
   .value-label {
     position: absolute;
     inset-inline-start: 0;
-    padding-right: 4rem;
-    padding-left: 1rem;
-    padding-top: 20px;
+    padding-inline: 1rem 4rem;
+    padding-block-start: 20px;
     font-size: 0.8rem;
     line-height: 1rem;
     color: var(--iswc-color, var(--iswc-text, #222));
-    width: 100%;
+    inline-size: 100%;
     overflow: hidden;
     text-overflow: ellipsis;
     white-space: nowrap;
     box-sizing: border-box;
     pointer-events: auto;
     cursor: text;
-  }
 
-  .value-label .missing {
-    color: var(--iswc-color-danger, crimson);
+    .missing {
+      color: var(--iswc-color-danger, crimson);
+    }
   }
 
   .open {
     all: unset;
     position: absolute;
     inset-inline-end: 0;
-    top: 6px;
-    height: 20px;
+    inset-block-start: 6px;
+    block-size: 20px;
     padding: 0.375rem;
     color: var(--iswc-color, var(--iswc-text, #222));
     background: transparent;
@@ -50,18 +55,17 @@
     line-height: inherit;
     display: inline-flex;
     align-items: center;
-  }
 
-  .open:disabled {
-    color: var(--iswc-b-readonly, #888);
-    cursor: default;
-  }
+    &:disabled {
+      color: var(--iswc-b-readonly, #888);
+      cursor: default;
+    }
 
-  .open:not(:disabled):focus,
-  .open:not(:disabled):hover {
-    outline: 2px solid transparent;
-    outline-offset: 2px;
-    color: var(--iswc-primary, var(--iswc-accent, #3b82f6));
+    &:not(:disabled):is(:focus, :hover) {
+      outline: 2px solid transparent;
+      outline-offset: 2px;
+      color: var(--iswc-primary, var(--iswc-accent, #3b82f6));
+    }
   }
 
   .dlg-footer {
@@ -72,11 +76,15 @@
   }
 }
 
-:host([required]:not([optional])) .open:focus {
-  color: var(--iswc-b-required, var(--iswc-color-danger, crimson));
+/* Color de foco del botón "abrir" según requerido/opcional. */
+:host(:where([required]):not([optional])) {
+  .open:where(:focus) {
+    color: var(--iswc-b-required, var(--iswc-color-danger, crimson));
+  }
 }
 
-:host(:not([required])) .open:focus,
-:host([optional]) .open:focus {
-  color: var(--iswc-b-optional, #80c080);
+:host(:where(:not([required]), [optional])) {
+  .open:where(:focus) {
+    color: var(--iswc-b-optional, #80c080);
+  }
 }

@@ -14,12 +14,12 @@
 ### demo: code
 
 #### Tests existentes (resumen, brevísimo)
-- (No se han identificado tests UX/UI previos sobre `<is-code>`; la cobertura previa —si existe— se limita a smoke rendering de CodeMirror dentro del Shadow DOM.)
+- (No se han identificado tests UX/UI previos sobre `<iswc-code>`; la cobertura previa —si existe— se limita a smoke rendering de CodeMirror dentro del Shadow DOM.)
 
 #### Propuestas nuevas
 
 1. **Selector de lenguaje visible y operable por teclado** — [interacción]
-   - Setup: Cargar la página del demo `code` y esperar a que `<is-code>` esté en `DOMContentLoaded`; localizar el control `<select>` o combobox interno de CodeMirror para elegir lenguaje (HTML, JS, TS, CSS, JSON, Markdown).
+   - Setup: Cargar la página del demo `code` y esperar a que `<iswc-code>` esté en `DOMContentLoaded`; localizar el control `<select>` o combobox interno de CodeMirror para elegir lenguaje (HTML, JS, TS, CSS, JSON, Markdown).
    - Acción: Hacer click en el selector, elegir la opción "JavaScript" en la lista desplegable; luego cerrar con Escape y reabrir con Enter.
    - Assertion: El panel de código se re-sintaxis-tiza (los tokens cambian de color/clase), y el atributo `data-language` (o equivalente interno) refleja `javascript`.
    - Cobertura: Cambio de lenguaje en caliente sin perder el contenido editado.
@@ -67,7 +67,7 @@
    - Cobertura: Cambia el icono/literal del botón a "Copied" durante ~1.5 s y vuelve al original; texto seleccionado se mantiene.
 
 9. **Tab navega por los controles focuseables del Shadow DOM en orden lógico** — [teclado / a11y]
-   - Setup: Poner foco en la raíz del host `<is-code>` con `tabindex=0` o en el editor.
+   - Setup: Poner foco en la raíz del host `<iswc-code>` con `tabindex=0` o en el editor.
    - Acción: Pulsar `Tab` repetidamente; capturar el orden y los elementos focuseables (selector de lenguaje, botón format, botón copy, theme toggle, code mirror).
    - Assertion: El orden sigue la lectura visual (left-to-right, top-to-bottom); cada `Tab`/`Shift+Tab` cicla sin trampas de foco.
    - Cobertura: Foco no se escapa al `<body>` ni queda atrapado en el editor (puede salir con `Shift+Tab`).
@@ -79,7 +79,7 @@
     - Cobertura: Atajos no pisan los nativos del navegador fuera del editor.
 
 11. **Roles ARIA y atributos en el host y sus controles internos** — [a11y]
-    - Setup: Localizar el host `<is-code>` y los slots/controles internos.
+    - Setup: Localizar el host `<iswc-code>` y los slots/controles internos.
     - Acción: Inspeccionar el árbol de accesibilidad con `getByRole`/`getByLabel`; verificar `role="textbox"` o `role="code"` en el editor; `role="combobox"` + `aria-expanded` en el selector de lenguaje; `aria-label` en cada botón de icono.
     - Assertion: Cada control tiene un nombre accesible (`accessibleName` no vacío); el editor expone `aria-multiline="true"` y `aria-label="Code editor"` o equivalente.
     - Cobertura: Lector de pantalla (NVDA/VoiceOver simulado) lee "Code editor, JavaScript, 12 lines".
@@ -93,14 +93,14 @@
 13. **Contenido vacío y muy largo no rompe el layout del host** — [estados / edge]
     - Setup: Cargar editor con `value=""`; después con un string de 50 000 caracteres sin saltos de línea.
     - Acción: Medir altura del host antes y después; capturar overflow visible.
-    - Assertion: Vacío: gutter muestra "1" sin error; el `min-height` del editor se respeta. Muy largo: aparece scroll horizontal interno (no rompe el layout externo); no se desborda el host `<is-code>`.
+    - Assertion: Vacío: gutter muestra "1" sin error; el `min-height` del editor se respeta. Muy largo: aparece scroll horizontal interno (no rompe el layout externo); no se desborda el host `<iswc-code>`.
     - Cobertura: Caracteres CJK y emojis se renderizan con la misma métrica que ASCII (no se colapsa el gutter).
 
 14. **Tema oscuro persistente entre demos / cross-component** — [estados / tema]
     - Setup: Activar `data-theme="dark"` en `<html>`; refrescar.
     - Acción: Navegar desde el demo `code` al demo `editor` (o a otro componente que use tokens `--is-*`) y volver.
     - Assertion: Las variables CSS `--is-code-bg` y `--is-code-fg` se mantienen; sin "flash of unstyled theme" (FOUT); los tokens cambian al alternar el toggle.
-    - Cobertura: El host `<is-code>` no define estilos `!important` que pisen el toggle global.
+    - Cobertura: El host `<iswc-code>` no define estilos `!important` que pisen el toggle global.
 
 15. **Eventos personalizados (`code-change`, `language-change`, `format`) son confiables** — [interacción]
    - Setup: Suscribirse en `page.exposeFunction` o vía `addEventListener` sobre el host.

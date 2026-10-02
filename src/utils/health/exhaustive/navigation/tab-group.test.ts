@@ -1,8 +1,8 @@
 /**
- * tab-group.test.ts — Tier A (12 aserciones) para `<is-tab-group>` y familia.
+ * tab-group.test.ts — Tier A (12 aserciones) para `<iswc-tab-group>` y familia.
  *
- * (La consigna decía "tabs"; el componente es `<is-tab-group>` con hijos
- * `<is-tab>` y `<is-tab-panel>`).
+ * (La consigna decía "tabs"; el componente es `<iswc-tab-group>` con hijos
+ * `<iswc-tab>` y `<iswc-tab-panel>`).
  */
 
 import { test } from 'node:test';
@@ -13,7 +13,7 @@ import { fileURLToPath } from 'node:url';
 
 const HERE = dirname(fileURLToPath(import.meta.url));
 const ROOT = join(HERE, '..', '..', '..', '..', '..');
-const TAG = 'is-tab-group';
+const TAG = 'iswc-tab-group';
 const TS  = join(ROOT, 'src', 'components', 'navigation', 'tab-group.ts');
 const CSS = join(ROOT, 'src', 'components', 'navigation', 'tab-group.css');
 const JSON_PATH = join(ROOT, 'src', 'components', 'navigation', 'tab-group.json');
@@ -26,10 +26,10 @@ test('2. CSS hermano existe', async () => {
   assert.ok(existsSync(CSS));
 });
 
-test('3. JSON existe y respeta is-preview/v1', async () => {
+test('3. JSON existe y respeta iswc-preview/v1', async () => {
   const json = JSON.parse(readFileSync(JSON_PATH, 'utf8'));
   assert.equal(json.tag, TAG);
-  assert.equal(json.$schema, 'is-preview/v1');
+  assert.equal(json.$schema, 'iswc-preview/v1');
 });
 
 test('4. OBSERVED incluye active, placement, activation', async () => {
@@ -60,29 +60,29 @@ test('7. persiste active en URL via url-key (readUrlNav/writeUrlNav)', async () 
   assert.ok(/readUrlNav/.test(src) && /writeUrlNav/.test(src));
 });
 
-test('8. emite is-tab-show / is-tab-close cuando cambia el active', async () => {
+test('8. emite iswc-tab-show / iswc-tab-close cuando cambia el active', async () => {
   const { extraerEventos } = await import('../_helpers.js');
   const evs = extraerEventos(readFileSync(TS, 'utf8'));
-  assert.ok(evs.includes('is-tab-show'), 'debe emitir is-tab-show al activar');
-  assert.ok(evs.includes('is-tab-close'), 'debe emitir is-tab-close al cerrar');
+  assert.ok(evs.includes('iswc-tab-show'), 'debe emitir iswc-tab-show al activar');
+  assert.ok(evs.includes('iswc-tab-close'), 'debe emitir iswc-tab-close al cerrar');
 });
 
-test('9. integra con is-tab e is-tab-panel (slots)', async () => {
+test('9. integra con iswc-tab e iswc-tab-panel (slots)', async () => {
   const src = readFileSync(TS, 'utf8');
-  assert.ok(/<slot[^>]*name\s*=\s*['"]nav['"]/.test(src), 'slot nav para is-tab');
+  assert.ok(/<slot[^>]*name\s*=\s*['"]nav['"]/.test(src), 'slot nav para iswc-tab');
   assert.ok(/<slot[^>]*name\s*=\s*['"]panel['"]/.test(src) || /<slot>/.test(src));
 });
 
-test('10. registra <is-tab> y <is-tab-panel>', async () => {
+test('10. registra <iswc-tab> y <iswc-tab-panel>', async () => {
   const src = readFileSync(TS, 'utf8');
-  assert.ok(/defineElement\s*\(\s*['"]is-tab['"]/.test(src) ||
-             /defineElement\s*\(\s*['"]is-tab-panel['"]/.test(src),
-             'debe registrar is-tab o is-tab-panel');
+  assert.ok(/defineElement\s*\(\s*['"]iswc-tab['"]/.test(src) ||
+             /defineElement\s*\(\s*['"]iswc-tab-panel['"]/.test(src),
+             'debe registrar iswc-tab o iswc-tab-panel');
 });
 
-test('11. custom element is-tab-group registrado', async () => {
+test('11. custom element iswc-tab-group registrado', async () => {
   const src = readFileSync(TS, 'utf8');
-  assert.ok(/defineElement\s*\(\s*['"]is-tab-group['"]/.test(src));
+  assert.ok(/defineElement\s*\(\s*['"]iswc-tab-group['"]/.test(src));
 });
 
 test('12. JSON tiene demo(s) y reference', async () => {

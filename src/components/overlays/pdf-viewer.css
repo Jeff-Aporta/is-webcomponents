@@ -1,7 +1,7 @@
 @import url('../_shared/popover-panel.css');
 @import './_surface-bar.css';
 
-/* is-pdf-viewer */
+/* iswc-pdf-viewer */
 :host {
   /* Embebido en la página, no flota: sin sombra propia. */
   --iswc-popover-shadow: none;
@@ -10,14 +10,14 @@
   color: var(--iswc-text);
 }
 
-/* Borde, radio y fondo vienen de `.is-popover-panel`. */
+/* Borde, radio y fondo vienen de `.iswc-popover-panel`. */
 .root {
   display: flex;
   flex-direction: column;
   overflow: hidden;
 }
 
-/* La fila flex, el padding y el separador vienen de `.is-surface-bar`. */
+/* La fila flex, el padding y el separador vienen de `.iswc-surface-bar`. */
 .toolbar {
   --iswc-surface-bar-gap: .45rem;
 }
@@ -52,7 +52,7 @@
 
 .frame {
   display: block;
-  width: 100%;
+  inline-size: 100%;
   border: 0;
   background: white;
 }

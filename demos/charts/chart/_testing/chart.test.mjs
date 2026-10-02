@@ -1,11 +1,11 @@
 // chart.test.mjs — tests exhaustivos del demo chart.html (motor genérico).
 //
 // Cobertura:
-//   - smoke: <is-chart> con type="bar" monta SVG y dibuja marks
+//   - smoke: <iswc-chart> con type="bar" monta SVG y dibuja marks
 //   - config: cambiar payload.datasets re-renderiza con # de marks coherente
 //   - atributo type: cambiar type a "line" re-renderiza con marcas distintas
 //   - accesibilidad: SVG con role=img
-//   - eventos: is-render emite tras montaje y tras cambio de payload
+//   - eventos: iswc-render emite tras montaje y tras cambio de payload
 //   - determinismo: misma config → mismo # de marks
 //   - re-asignación: la misma instancia puede redibujar sin leaks
 import assert from 'node:assert/strict';
@@ -22,12 +22,12 @@ tests.push({
     await waitReady(page, 'data-chart-ready');
     await page.waitForTimeout(200);
     const info = await page.evaluate(() => {
-      const el = document.querySelector('is-chart');
+      const el = document.querySelector('iswc-chart');
       const svg = el?.shadowRoot?.querySelector('svg');
       const marks = el?.shadowRoot?.querySelectorAll('.mark');
       const labels = [...(el?.shadowRoot?.querySelectorAll('text.tick-label') ?? [])].map((t) => t.textContent?.trim());
       return {
-        defined: !!customElements.get('is-chart'),
+        defined: !!customElements.get('iswc-chart'),
         type: el?.getAttribute('type'),
         svg: !!svg,
         svgRole: svg?.getAttribute('role'),
@@ -37,7 +37,7 @@ tests.push({
         viewBox: svg?.getAttribute('viewBox'),
       };
     });
-    assert.equal(info.defined, true, 'is-chart debe estar definido');
+    assert.equal(info.defined, true, 'iswc-chart debe estar definido');
     assert.equal(info.type, 'bar', `el atributo type debe ser "bar" (era "${info.type}")`);
     assert.ok(info.svg, 'debe haber un SVG en shadow DOM');
     assert.equal(info.svgRole, 'img', 'SVG debe tener role=img');
@@ -59,11 +59,11 @@ tests.push({
     await waitReady(page, 'data-chart-ready');
     await page.waitForTimeout(200);
     const before = await page.evaluate(() => {
-      const el = document.querySelector('is-chart');
+      const el = document.querySelector('iswc-chart');
       return el?.shadowRoot?.querySelectorAll('.mark').length ?? 0;
     });
     await page.evaluate(() => {
-      const el = document.querySelector('is-chart');
+      const el = document.querySelector('iswc-chart');
       // 4 categorías × 2 datasets = 8 marks esperados.
       el.payload = {
         data: {
@@ -77,7 +77,7 @@ tests.push({
     });
     await page.waitForTimeout(250);
     const after = await page.evaluate(() => {
-      const el = document.querySelector('is-chart');
+      const el = document.querySelector('iswc-chart');
       return el?.shadowRoot?.querySelectorAll('.mark').length ?? 0;
     });
     assert.equal(before, 5, 'antes debe haber 5 marks (demo inicial)');
@@ -92,17 +92,17 @@ tests.push({
     await waitReady(page, 'data-chart-ready');
     await page.waitForTimeout(200);
     const before = await page.evaluate(() => {
-      const el = document.querySelector('is-chart');
+      const el = document.querySelector('iswc-chart');
       const marks = [...el.shadowRoot.querySelectorAll('.mark')];
       return marks.map((m) => m.tagName.toLowerCase());
     });
     await page.evaluate(() => {
-      const el = document.querySelector('is-chart');
+      const el = document.querySelector('iswc-chart');
       el.setAttribute('type', 'line');
     });
     await page.waitForTimeout(250);
     const after = await page.evaluate(() => {
-      const el = document.querySelector('is-chart');
+      const el = document.querySelector('iswc-chart');
       const marks = [...el.shadowRoot.querySelectorAll('.mark')];
       return marks.map((m) => ({ tag: m.tagName.toLowerCase(), cls: m.getAttribute('class') }));
     });
@@ -126,7 +126,7 @@ tests.push({
     await waitReady(page, 'data-chart-ready');
     await page.waitForTimeout(200);
     const fills = await page.evaluate(() => {
-      const el = document.querySelector('is-chart');
+      const el = document.querySelector('iswc-chart');
       return [...el.shadowRoot.querySelectorAll('.mark')].map((m) => m.getAttribute('fill'));
     });
     assert.equal(fills.length, 5, 'demo bar debe tener 5 marks');
@@ -138,17 +138,17 @@ tests.push({
 });
 
 tests.push({
-  name: 'is-render: emite el evento is-render tras montar',
+  name: 'iswc-render: emite el evento iswc-render tras montar',
   run: async (page) => {
     await page.goto(URL, { waitUntil: 'domcontentloaded' });
     await waitReady(page, 'data-chart-ready');
     await page.waitForTimeout(150);
     const count = await page.evaluate(() => {
       return new Promise((resolve) => {
-        const el = document.createElement('is-chart');
+        const el = document.createElement('iswc-chart');
         document.body.appendChild(el);
         let n = 0;
-        el.addEventListener('is-render', () => n++);
+        el.addEventListener('iswc-render', () => n++);
         el.setAttribute('type', 'bar');
         el.payload = {
           data: { labels: ['a', 'b'], datasets: [{ label: 's', data: [1, 2] }] },
@@ -156,7 +156,7 @@ tests.push({
         setTimeout(() => { el.remove(); resolve(n); }, 300);
       });
     });
-    assert.ok(count >= 1, `is-render debió dispararse >=1 vez tras asignar payload (fue ${count})`);
+    assert.ok(count >= 1, `iswc-render debió dispararse >=1 vez tras asignar payload (fue ${count})`);
   },
 });
 
@@ -167,11 +167,11 @@ tests.push({
     await waitReady(page, 'data-chart-ready');
     await page.waitForTimeout(200);
     const a = await page.evaluate(() => {
-      const el = document.querySelector('is-chart');
+      const el = document.querySelector('iswc-chart');
       return el.shadowRoot.querySelectorAll('.mark').length;
     });
     const b = await page.evaluate(() => {
-      const el = document.querySelector('is-chart');
+      const el = document.querySelector('iswc-chart');
       return el.shadowRoot.querySelectorAll('.mark').length;
     });
     assert.equal(a, b, `doble lectura debe dar igual # de marks (${a} vs ${b})`);
@@ -186,7 +186,7 @@ tests.push({
     await waitReady(page, 'data-chart-ready');
     await page.waitForTimeout(200);
     const title = await page.evaluate(() => {
-      const el = document.querySelector('is-chart');
+      const el = document.querySelector('iswc-chart');
       const t = el?.shadowRoot?.querySelector('text.chart-title');
       return t?.textContent?.trim() ?? null;
     });

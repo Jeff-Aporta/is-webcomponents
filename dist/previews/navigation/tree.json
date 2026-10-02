@@ -1,11 +1,11 @@
 {
-  "$schema": "is-preview/v1",
-  "tag": "is-tree",
+  "$schema": "iswc-preview/v1",
+  "tag": "iswc-tree",
   "category": "navigation",
-  "title": "<is-tree>",
+  "title": "<iswc-tree>",
   "titleHtml": true,
-  "description": "Documentación y demos de is-tree / is-tree-item de InSoft.",
-  "storageKey": "docs-is-tree",
+  "description": "Documentación y demos de iswc-tree / iswc-tree-item de InSoft.",
+  "storageKey": "docs-iswc-tree",
   "sections": [
     {
       "id": "intro",
@@ -14,7 +14,7 @@
       "blocks": [
         {
           "kind": "demo",
-          "html": "<is-tree id=\"tree1\" selection=\"single\" expanded>\r\n            <is-tree-item>\r\n              <is-icon slot=\"icon\" icon=\"mdi:folder\"></is-icon>\r\n              Documentos\r\n              <is-tree-item>\r\n                <is-icon slot=\"icon\" icon=\"mdi:file-document\"></is-icon>\r\n                facturas-2024.pdf\r\n              </is-tree-item>\r\n              <is-tree-item>\r\n                <is-icon slot=\"icon\" icon=\"mdi:file-document\"></is-icon>\r\n                contratos.odt\r\n              </is-tree-item>\r\n            </is-tree-item>\r\n            <is-tree-item>\r\n              <is-icon slot=\"icon\" icon=\"mdi:folder\"></is-icon>\r\n              Proyectos\r\n              <is-tree-item>\r\n                <is-icon slot=\"icon\" icon=\"mdi:folder\"></is-icon>\r\n                ContaPyme\r\n                <is-tree-item>\r\n                  <is-icon slot=\"icon\" icon=\"mdi:language-typescript\"></is-icon>\r\n                  app.ts\r\n                </is-tree-item>\r\n                <is-tree-item>\r\n                  <is-icon slot=\"icon\" icon=\"mdi:language-css3\"></is-icon>\r\n                  styles.css\r\n                </is-tree-item>\r\n              </is-tree-item>\r\n              <is-tree-item>\r\n                <is-icon slot=\"icon\" icon=\"mdi:folder\"></is-icon>\r\n                InSoft\r\n                <is-tree-item>\r\n                  <is-icon slot=\"icon\" icon=\"mdi:react\"></is-icon>\r\n                  index.jsx\r\n                </is-tree-item>\r\n              </is-tree-item>\r\n            </is-tree-item>\r\n            <is-tree-item>\r\n              <is-icon slot=\"icon\" icon=\"mdi:image\"></is-icon>\r\n              Capturas\r\n            </is-tree-item>\r\n          </is-tree>\r\n          <p id=\"tree1Log\" class=\"lede\">Seleccionado: <code class=\"code\">—</code></p>",
+          "html": "<iswc-tree id=\"tree1\" selection=\"single\" expanded>\r\n            <iswc-tree-item>\r\n              <iswc-icon slot=\"icon\" icon=\"mdi:folder\"></iswc-icon>\r\n              Documentos\r\n              <iswc-tree-item>\r\n                <iswc-icon slot=\"icon\" icon=\"mdi:file-document\"></iswc-icon>\r\n                facturas-2024.pdf\r\n              </iswc-tree-item>\r\n              <iswc-tree-item>\r\n                <iswc-icon slot=\"icon\" icon=\"mdi:file-document\"></iswc-icon>\r\n                contratos.odt\r\n              </iswc-tree-item>\r\n            </iswc-tree-item>\r\n            <iswc-tree-item>\r\n              <iswc-icon slot=\"icon\" icon=\"mdi:folder\"></iswc-icon>\r\n              Proyectos\r\n              <iswc-tree-item>\r\n                <iswc-icon slot=\"icon\" icon=\"mdi:folder\"></iswc-icon>\r\n                ContaPyme\r\n                <iswc-tree-item>\r\n                  <iswc-icon slot=\"icon\" icon=\"mdi:language-typescript\"></iswc-icon>\r\n                  app.ts\r\n                </iswc-tree-item>\r\n                <iswc-tree-item>\r\n                  <iswc-icon slot=\"icon\" icon=\"mdi:language-css3\"></iswc-icon>\r\n                  styles.css\r\n                </iswc-tree-item>\r\n              </iswc-tree-item>\r\n              <iswc-tree-item>\r\n                <iswc-icon slot=\"icon\" icon=\"mdi:folder\"></iswc-icon>\r\n                InSoft\r\n                <iswc-tree-item>\r\n                  <iswc-icon slot=\"icon\" icon=\"mdi:react\"></iswc-icon>\r\n                  index.jsx\r\n                </iswc-tree-item>\r\n              </iswc-tree-item>\r\n            </iswc-tree-item>\r\n            <iswc-tree-item>\r\n              <iswc-icon slot=\"icon\" icon=\"mdi:image\"></iswc-icon>\r\n              Capturas\r\n            </iswc-tree-item>\r\n          </iswc-tree>\r\n          <p id=\"tree1Log\" class=\"lede\">Seleccionado: <code class=\"code\">—</code></p>",
           "controls": [
               {
                 "control": "select",
@@ -40,11 +40,11 @@
           ],
           "equivNote": "El atributo selection define si el árbol selecciona nodos y cómo.",
           "equivHtml": "<!-- ver diagrama de ramas -->",
-          "equivFlow": "<is-flowchart open-on-click animation=\"flow\">\n  <script type=\"application/json\">\n  {\n    \"flowchart\": {\n      \"title\": \"is-tree: selection\",\n      \"direction\": \"TB\",\n      \"nodes\": [\n        {\n          \"id\": \"q\",\n          \"label\": \"selection=?\",\n          \"shape\": \"diamond\"\n        },\n        {\n          \"id\": \"a\",\n          \"label\": \"none → solo expand\",\n          \"shape\": \"stadium\"\n        },\n        {\n          \"id\": \"b\",\n          \"label\": \"single → un nodo\",\n          \"shape\": \"round\"\n        },\n        {\n          \"id\": \"c\",\n          \"label\": \"leaf → solo hojas\",\n          \"shape\": \"round\"\n        },\n        {\n          \"id\": \"d\",\n          \"label\": \"multiple → checks\",\n          \"shape\": \"stadium\"\n        }\n      ],\n      \"edges\": [\n        {\n          \"from\": \"q\",\n          \"to\": \"a\",\n          \"label\": \"none\"\n        },\n        {\n          \"from\": \"q\",\n          \"to\": \"b\",\n          \"label\": \"single\"\n        },\n        {\n          \"from\": \"q\",\n          \"to\": \"c\",\n          \"label\": \"leaf\"\n        },\n        {\n          \"from\": \"q\",\n          \"to\": \"d\",\n          \"label\": \"multiple\"\n        }\n      ]\n    }\n  }\n  </script>\n</is-flowchart>"
+          "equivFlow": "<iswc-flowchart open-on-click animation=\"flow\">\n  <script type=\"application/json\">\n  {\n    \"flowchart\": {\n      \"title\": \"iswc-tree: selection\",\n      \"direction\": \"TB\",\n      \"nodes\": [\n        {\n          \"id\": \"q\",\n          \"label\": \"selection=?\",\n          \"shape\": \"diamond\"\n        },\n        {\n          \"id\": \"a\",\n          \"label\": \"none → solo expand\",\n          \"shape\": \"stadium\"\n        },\n        {\n          \"id\": \"b\",\n          \"label\": \"single → un nodo\",\n          \"shape\": \"round\"\n        },\n        {\n          \"id\": \"c\",\n          \"label\": \"leaf → solo hojas\",\n          \"shape\": \"round\"\n        },\n        {\n          \"id\": \"d\",\n          \"label\": \"multiple → checks\",\n          \"shape\": \"stadium\"\n        }\n      ],\n      \"edges\": [\n        {\n          \"from\": \"q\",\n          \"to\": \"a\",\n          \"label\": \"none\"\n        },\n        {\n          \"from\": \"q\",\n          \"to\": \"b\",\n          \"label\": \"single\"\n        },\n        {\n          \"from\": \"q\",\n          \"to\": \"c\",\n          \"label\": \"leaf\"\n        },\n        {\n          \"from\": \"q\",\n          \"to\": \"d\",\n          \"label\": \"multiple\"\n        }\n      ]\n    }\n  }\n  </script>\n</iswc-flowchart>"
         },
         {
           "kind": "code",
-          "code": "<is-tree selection=\"single\" expanded>\n  <is-tree-item>\n    <is-icon slot=\"icon\" icon=\"mdi:folder\"></is-icon>\n    Documentos\n    <is-tree-item>facturas-2024.pdf</is-tree-item>\n  </is-tree-item>\n</is-tree>"
+          "code": "<iswc-tree selection=\"single\" expanded>\n  <iswc-tree-item>\n    <iswc-icon slot=\"icon\" icon=\"mdi:folder\"></iswc-icon>\n    Documentos\n    <iswc-tree-item>facturas-2024.pdf</iswc-tree-item>\n  </iswc-tree-item>\n</iswc-tree>"
         }
       ]
     },
@@ -55,7 +55,7 @@
       "blocks": [
         {
           "kind": "demo",
-          "html": "<is-tree id=\"tree2\" selection=\"multiple\">\r\n            <is-tree-item>\r\n              <is-icon slot=\"icon\" icon=\"mdi:folder\"></is-icon>\r\n              Backend\r\n              <is-tree-item>Python</is-tree-item>\r\n              <is-tree-item>Node.js</is-tree-item>\r\n              <is-tree-item>Go</is-tree-item>\r\n            </is-tree-item>\r\n            <is-tree-item>\r\n              <is-icon slot=\"icon\" icon=\"mdi:folder\"></is-icon>\r\n              Frontend\r\n              <is-tree-item>React</is-tree-item>\r\n              <is-tree-item>Vue</is-tree-item>\r\n              <is-tree-item>Svelte</is-tree-item>\r\n            </is-tree-item>\r\n          </is-tree>\r\n          <p id=\"tree2Log\" class=\"lede\">Seleccionados: <code class=\"code\">—</code></p>"
+          "html": "<iswc-tree id=\"tree2\" selection=\"multiple\">\r\n            <iswc-tree-item>\r\n              <iswc-icon slot=\"icon\" icon=\"mdi:folder\"></iswc-icon>\r\n              Backend\r\n              <iswc-tree-item>Python</iswc-tree-item>\r\n              <iswc-tree-item>Node.js</iswc-tree-item>\r\n              <iswc-tree-item>Go</iswc-tree-item>\r\n            </iswc-tree-item>\r\n            <iswc-tree-item>\r\n              <iswc-icon slot=\"icon\" icon=\"mdi:folder\"></iswc-icon>\r\n              Frontend\r\n              <iswc-tree-item>React</iswc-tree-item>\r\n              <iswc-tree-item>Vue</iswc-tree-item>\r\n              <iswc-tree-item>Svelte</iswc-tree-item>\r\n            </iswc-tree-item>\r\n          </iswc-tree>\r\n          <p id=\"tree2Log\" class=\"lede\">Seleccionados: <code class=\"code\">—</code></p>"
         }
       ]
     },
@@ -66,7 +66,7 @@
       "blocks": [
         {
           "kind": "demo",
-          "html": "<is-tree id=\"tree3\" selection=\"leaf\">\r\n            <is-tree-item>\r\n              <is-icon slot=\"icon\" icon=\"mdi:folder-account\"></is-icon>\r\n              Usuarios\r\n              <is-tree-item>admin</is-tree-item>\r\n              <is-tree-item>jperez</is-tree-item>\r\n              <is-tree-item>mlopez</is-tree-item>\r\n            </is-tree-item>\r\n            <is-tree-item>\r\n              <is-icon slot=\"icon\" icon=\"mdi:folder-account\"></is-icon>\r\n              Invitados\r\n              <is-tree-item>guest</is-tree-item>\r\n            </is-tree-item>\r\n          </is-tree>"
+          "html": "<iswc-tree id=\"tree3\" selection=\"leaf\">\r\n            <iswc-tree-item>\r\n              <iswc-icon slot=\"icon\" icon=\"mdi:folder-account\"></iswc-icon>\r\n              Usuarios\r\n              <iswc-tree-item>admin</iswc-tree-item>\r\n              <iswc-tree-item>jperez</iswc-tree-item>\r\n              <iswc-tree-item>mlopez</iswc-tree-item>\r\n            </iswc-tree-item>\r\n            <iswc-tree-item>\r\n              <iswc-icon slot=\"icon\" icon=\"mdi:folder-account\"></iswc-icon>\r\n              Invitados\r\n              <iswc-tree-item>guest</iswc-tree-item>\r\n            </iswc-tree-item>\r\n          </iswc-tree>"
         }
       ]
     },
@@ -77,7 +77,7 @@
       "blocks": [
         {
           "kind": "demo",
-          "html": "<is-tree id=\"tree4\" selection=\"none\">\r\n            <is-tree-item>\r\n              <is-icon slot=\"icon\" icon=\"mdi:folder\"></is-icon>\r\n              Sólo expansión\r\n              <is-tree-item>uno</is-tree-item>\r\n              <is-tree-item>dos</is-tree-item>\r\n            </is-tree-item>\r\n          </is-tree>"
+          "html": "<iswc-tree id=\"tree4\" selection=\"none\">\r\n            <iswc-tree-item>\r\n              <iswc-icon slot=\"icon\" icon=\"mdi:folder\"></iswc-icon>\r\n              Sólo expansión\r\n              <iswc-tree-item>uno</iswc-tree-item>\r\n              <iswc-tree-item>dos</iswc-tree-item>\r\n            </iswc-tree-item>\r\n          </iswc-tree>"
         }
       ]
     },
@@ -88,7 +88,7 @@
       "blocks": [
         {
           "kind": "demo",
-          "html": "<is-tree selection=\"single\">\r\n            <is-tree-item>\r\n              <is-icon slot=\"icon\" icon=\"mdi:folder\"></is-icon>\r\n              Producción\r\n              <is-tree-item disabled>db-master</is-tree-item>\r\n              <is-tree-item disabled>db-replica</is-tree-item>\r\n            </is-tree-item>\r\n            <is-tree-item>\r\n              <is-icon slot=\"icon\" icon=\"mdi:folder\"></is-icon>\r\n              Staging\r\n              <is-tree-item>db-1</is-tree-item>\r\n            </is-tree-item>\r\n          </is-tree>"
+          "html": "<iswc-tree selection=\"single\">\r\n            <iswc-tree-item>\r\n              <iswc-icon slot=\"icon\" icon=\"mdi:folder\"></iswc-icon>\r\n              Producción\r\n              <iswc-tree-item disabled>db-master</iswc-tree-item>\r\n              <iswc-tree-item disabled>db-replica</iswc-tree-item>\r\n            </iswc-tree-item>\r\n            <iswc-tree-item>\r\n              <iswc-icon slot=\"icon\" icon=\"mdi:folder\"></iswc-icon>\r\n              Staging\r\n              <iswc-tree-item>db-1</iswc-tree-item>\r\n            </iswc-tree-item>\r\n          </iswc-tree>"
         }
       ]
     },
@@ -98,7 +98,7 @@
       "blocks": [
         {
           "kind": "html",
-          "html": "<h3><code class=\"code\">&lt;is-tree&gt;</code></h3>"
+          "html": "<h3><code class=\"code\">&lt;iswc-tree&gt;</code></h3>"
         },
         {
           "kind": "table",
@@ -125,7 +125,7 @@
         },
         {
           "kind": "html",
-          "html": "<h3><code class=\"code\">&lt;is-tree-item&gt;</code></h3>"
+          "html": "<h3><code class=\"code\">&lt;iswc-tree-item&gt;</code></h3>"
         },
         {
           "kind": "table",
@@ -174,11 +174,11 @@
           ],
           "rows": [
             [
-              "<code>is-tree-select</code>",
+              "<code>iswc-tree-select</code>",
               "Selección. <code>detail: { item, selected, selectedItems }</code>."
             ],
             [
-              "<code>is-tree-toggle</code>",
+              "<code>iswc-tree-toggle</code>",
               "Expande/colapsa. <code>detail: { item, expanded }</code>."
             ]
           ]

@@ -1,5 +1,5 @@
 /**
- * sparkline.test.ts — verificación exhaustiva de <is-sparkline>.
+ * sparkline.test.ts — verificación exhaustiva de <iswc-sparkline>.
  *
  * Mini-gráfico SVG inline (sin axes). Atributo values="1,2,3,4" o
  * propiedad `data = [...]`. Variantes: type=line|bar, variant=gradient|solid.
@@ -20,43 +20,43 @@ import {
 
 const MOD = 'src/components/charts/sparkline.ts';
 
-test('is-sparkline: archivo existe', () => {
+test('iswc-sparkline: archivo existe', () => {
   assert.ok(exists(MOD));
 });
 
-test('is-sparkline: render — shadow con svg', () => {
+test('iswc-sparkline: render — shadow con svg', () => {
   const src = read(MOD);
   assert.ok(tieneShadow(src));
   assert.match(src, /<svg\b/);
 });
 
-test('is-sparkline: observados (values, data, type, label, variant, curve, trend)', () => {
+test('iswc-sparkline: observados (values, data, type, label, variant, curve, trend)', () => {
   const obs = extraerObservados(read(MOD));
   for (const k of ['values', 'data', 'type', 'label', 'variant', 'curve', 'trend']) {
     assert.ok(obs.includes(k), `sparkline declara ${k}`);
   }
 });
 
-test('is-sparkline: edge cases — Array.isArray + Number.isFinite en setter data', () => {
+test('iswc-sparkline: edge cases — Array.isArray + Number.isFinite en setter data', () => {
   const src = read(MOD);
   assert.match(src, /Array\.isArray\s*\(/);
   assert.match(src, /Number\.isFinite/);
 });
 
-test('is-sparkline: usa ResizeObserver para re-render', () => {
+test('iswc-sparkline: usa ResizeObserver para re-render', () => {
   assert.ok(usaResizeObserver(read(MOD)));
 });
 
-test('is-sparkline: cleanup — desconecta ResizeObserver en disconnectedCallback', () => {
+test('iswc-sparkline: cleanup — desconecta ResizeObserver en disconnectedCallback', () => {
   const c = cleanupCompleto(read(MOD));
   assert.ok(c.ro, 'ResizeObserver debe desconectarse');
 });
 
-test('is-sparkline: adopta CSS', () => {
+test('iswc-sparkline: adopta CSS', () => {
   assert.ok(adoptaCss(read(MOD)));
 });
 
-test('is-sparkline: registrado como custom element', () => {
+test('iswc-sparkline: registrado como custom element', () => {
   const src = read(MOD);
-  assert.match(src, /defineElement\s*\(\s*['"`]is-sparkline['"`]/);
+  assert.match(src, /defineElement\s*\(\s*['"`]iswc-sparkline['"`]/);
 });

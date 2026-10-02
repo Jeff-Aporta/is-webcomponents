@@ -23,18 +23,18 @@
   form-fieldset { display: grid; gap: 8px; }
   pre.out { font: 12px ui-monospace, Menlo, Consolas, monospace; background: rgba(0,0,0,0.4); padding: 8px; border-radius: 4px; max-height: 240px; overflow: auto; }
   button.btn { padding: 6px 12px; background: #1e293b; color: #e2e8f0; border: 1px solid #334155; border-radius: 4px; cursor: pointer; margin-right: 6px; }
-  is-input, is-switch, is-select, is-checkbox { min-width: 12rem; }
-  is-input:not(:defined), is-switch:not(:defined), is-select:not(:defined), is-checkbox:not(:defined) { visibility: hidden; }
+  iswc-input, iswc-switch, iswc-select, iswc-checkbox { min-width: 12rem; }
+  iswc-input:not(:defined), iswc-switch:not(:defined), iswc-select:not(:defined), iswc-checkbox:not(:defined) { visibility: hidden; }
 </style>
 <script type="module">
   // Dependencias: los controles que vamos a leer/escribir.
-  await import('../../../dist/cdn/forms/input.min.js?h=kbtjsy');
-  await import('../../../dist/cdn/forms/select.min.js?h=qbyqei');
-  await import('../../../dist/cdn/forms/option.min.js?h=ucrz7w');
-  await import('../../../dist/cdn/forms/checkbox.min.js?h=0hgv3b');
+  await import('../../../dist/cdn/forms/input.min.js?h=268af7');
+  await import('../../../dist/cdn/forms/select.min.js?h=lggml9');
+  await import('../../../dist/cdn/forms/option.min.js?h=00bfco');
+  await import('../../../dist/cdn/forms/checkbox.min.js?h=4leq51');
   await import('../../../dist/cdn/forms/switch.js');
   // Cargar también el form (lo usa como contenedor del helper).
-  await import('../../../dist/cdn/isp/form-json.min.js?h=hui59c');
+  await import('../../../dist/cdn/isp/form-json.min.js?h=cemiy4');
 
   // ── form-json es un módulo helper, NO un custom element ────────────
   // Expone: getValues, setValues, listControls, getControlValue, setControlValue.
@@ -48,7 +48,7 @@
 
   // Helper para invocar los exports del módulo.
   async function loadHelpers() {
-    return await import('../../../dist/cdn/isp/form-json.min.js?h=hui59c');
+    return await import('../../../dist/cdn/isp/form-json.min.js?h=cemiy4');
   }
 
   document.getElementById('btn-get').addEventListener('click', async () => {
@@ -98,16 +98,16 @@
       <div class="panel">
         <h3>Controles</h3>
         <form id="demo-form" style="display: grid; gap: 8px;">
-          <is-input name="cliente" label="Cliente"></is-input>
-          <is-input name="correo" label="Correo" type="email"></is-input>
-          <is-input name="cantidad" label="Cantidad" type="number"></is-input>
-          <is-switch name="activo">Activo</is-switch>
-          <is-select name="tipo" label="Tipo">
-            <is-option value="factura">Factura</is-option>
-            <is-option value="nota">Nota</is-option>
-          </is-select>
-          <is-checkbox name="envio" value="email">Email</is-checkbox>
-          <is-checkbox name="envio" value="sms">SMS</is-checkbox>
+          <iswc-input name="cliente" label="Cliente"></iswc-input>
+          <iswc-input name="correo" label="Correo" type="email"></iswc-input>
+          <iswc-input name="cantidad" label="Cantidad" type="number"></iswc-input>
+          <iswc-switch name="activo">Activo</iswc-switch>
+          <iswc-select name="tipo" label="Tipo">
+            <iswc-option value="factura">Factura</iswc-option>
+            <iswc-option value="nota">Nota</iswc-option>
+          </iswc-select>
+          <iswc-checkbox name="envio" value="email">Email</iswc-checkbox>
+          <iswc-checkbox name="envio" value="sms">SMS</iswc-checkbox>
         </form>
         <div style="margin-top: 12px;">
           <button id="btn-get" type="button" class="btn">getValues()</button>

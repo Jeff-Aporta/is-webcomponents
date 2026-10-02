@@ -3,8 +3,8 @@
 <head>
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1" />
-  <title>Demo: <is-check-icon-button> · is-webcomponents</title>
-  <meta name="description" content="Demo de <is-check-icon-button>: botón icon-only con estado checked, switch entre iconos, keyboard (Enter/Space)." />
+  <title>Demo: <iswc-check-icon-button> · is-webcomponents</title>
+  <meta name="description" content="Demo de <iswc-check-icon-button>: botón icon-only con estado checked, switch entre iconos, keyboard (Enter/Space)." />
   <style>
     html, body {
       margin: 0; padding: 24px; min-height: 100%;
@@ -25,12 +25,12 @@
     .frame span { font-size: 11px; color: #94a3b8; font-family: ui-monospace, Menlo, Consolas, monospace; }
     pre { background: #0a0f17; padding: 10px; border-radius: 6px; font: 12px ui-monospace, Menlo, Consolas, monospace; color: #cbd5e1; overflow: auto; }
     /* Anti-FOUC */
-    is-check-icon-button:not(:defined) { visibility: hidden; }
+    iswc-check-icon-button:not(:defined) { visibility: hidden; }
   </style>
 </head>
 <body>
   <header>
-    <h1>Demo: <code>&lt;is-check-icon-button&gt;</code></h1>
+    <h1>Demo: <code>&lt;iswc-check-icon-button&gt;</code></h1>
     <p>Botón icon-only con dos estados. Toggle via click o Enter/Space. <code>aria-pressed</code> refleja el estado para AT.</p>
   </header>
 
@@ -38,19 +38,19 @@
     <h2>Play / Pause</h2>
     <div class="row">
       <div class="frame">
-        <is-check-icon-button id="play" icon="mdi:play" checked-icon="mdi:pause" label="Reproducir" checked-label="Pausar"></is-check-icon-button>
+        <iswc-check-icon-button id="play" icon="mdi:play" checked-icon="mdi:pause" label="Reproducir" checked-label="Pausar"></iswc-check-icon-button>
         <span>Reproducir / Pausar</span>
       </div>
       <div class="frame">
-        <is-check-icon-button id="mute" icon="mdi:volume-high" checked-icon="mdi:volume-off" label="Silenciar" checked-label="Activar sonido"></is-check-icon-button>
+        <iswc-check-icon-button id="mute" icon="mdi:volume-high" checked-icon="mdi:volume-off" label="Silenciar" checked-label="Activar sonido"></iswc-check-icon-button>
         <span>Sonido</span>
       </div>
       <div class="frame">
-        <is-check-icon-button id="star" icon="mdi:star-outline" checked-icon="mdi:star" color="#fbbf24" label="Marcar favorito" checked-label="Quitar de favoritos"></is-check-icon-button>
+        <iswc-check-icon-button id="star" icon="mdi:star-outline" checked-icon="mdi:star" color="#fbbf24" label="Marcar favorito" checked-label="Quitar de favoritos"></iswc-check-icon-button>
         <span>Favorito (color custom)</span>
       </div>
       <div class="frame">
-        <is-check-icon-button disabled icon="mdi:cursor-default-click-outline" label="Deshabilitado"></is-check-icon-button>
+        <iswc-check-icon-button disabled icon="mdi:cursor-default-click-outline" label="Deshabilitado"></iswc-check-icon-button>
         <span>Disabled</span>
       </div>
     </div>
@@ -62,9 +62,9 @@
   </section>
 
   <script type="module">
-    await import('../../../dist/cdn/actions/check-icon-button.min.js?h=01xpv4');
-    await import('../../../dist/cdn/actions/button.min.js?h=ki2dk5');
-    await customElements.whenDefined('is-check-icon-button');
+    await import('../../../dist/cdn/actions/check-icon-button.min.js?h=wwi8c3');
+    await import('../../../dist/cdn/actions/button.min.js?h=5i9tzt');
+    await customElements.whenDefined('iswc-check-icon-button');
 
     const log = document.getElementById('evlog');
     const events = [];
@@ -78,7 +78,7 @@
       log.textContent = JSON.stringify(events, null, 2);
     };
     for (const id of ['play', 'mute', 'star']) {
-      document.getElementById(id).addEventListener('is-change', record);
+      document.getElementById(id).addEventListener('iswc-change', record);
     }
     document.documentElement.dataset.checkIconButtonReady = '1';
   </script>

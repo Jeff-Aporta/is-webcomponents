@@ -45,7 +45,7 @@ const results = [];
 async function checkDeterministic(page) {
   await page.waitForTimeout(200);
   const data = await page.evaluate(() => {
-    const fields = [...document.querySelectorAll('is-date-field')];
+    const fields = [...document.querySelectorAll('iswc-date-field')];
     return fields.map((f, idx) => {
       const r = f.getBoundingClientRect();
       const secs = [...f.shadowRoot.querySelectorAll('[role="spinbutton"]')];

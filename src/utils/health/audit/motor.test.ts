@@ -3,7 +3,7 @@
  *
  * Verifica:
  *   - el catalog se enumera sin tirar
- *   - el validador de esquema is-preview/v1 detecta los desvíos comunes
+ *   - el validador de esquema iswc-preview/v1 detecta los desvíos comunes
  *   - el validador de consistencia JSON↔componente detecta atributos
  *     faltantes
  *   - el validador de complejidad exige <script type="application/json">
@@ -43,40 +43,40 @@ test('catalog: enumera componentes del manifest + catalog + pages', () => {
   assert.ok(tags.has('home'), 'catálogo debe incluir home');
   assert.ok(tags.has('theming'), 'catálogo debe incluir theming');
   assert.ok(tags.has('ecosystem'), 'catálogo debe incluir ecosystem');
-  assert.ok(tags.has('is-button'), 'catálogo debe incluir is-button');
+  assert.ok(tags.has('iswc-button'), 'catálogo debe incluir iswc-button');
 });
 
 test('catalog: incluye los is-* de cada categoría', () => {
   const cats = enumerarCatalogo(RAIZ);
   const tags = new Set(cats.map((c) => c.tag));
   for (const esperado of [
-    'is-button', 'is-button-group', 'is-bar-chart', 'is-line-chart',
-    'is-flowchart', 'is-tree-view', 'is-format-bytes', 'is-icon',
+    'iswc-button', 'iswc-button-group', 'iswc-bar-chart', 'iswc-line-chart',
+    'iswc-flowchart', 'iswc-tree-view', 'iswc-format-bytes', 'iswc-icon',
   ]) {
     assert.ok(tags.has(esperado), `catálogo debe incluir ${esperado}`);
   }
 });
 
 test('json-schema: detecta falta de $schema', () => {
-  const def = { tag: 'is-foo', sections: [] };
+  const def = { tag: 'iswc-foo', sections: [] };
   const hs = validarEsquema(def);
   assert.ok(hs.some((h) => h.mensaje.includes('$schema')), 'debe avisar de $schema faltante');
 });
 
 test('json-schema: detecta falta de tag', () => {
-  const hs = validarEsquema({ $schema: 'is-preview/v1', sections: [] });
+  const hs = validarEsquema({ $schema: 'iswc-preview/v1', sections: [] });
   assert.ok(hs.some((h) => h.severidad === 'fatal' && h.mensaje.includes('tag')));
 });
 
 test('json-schema: detecta falta de sections', () => {
-  const hs = validarEsquema({ $schema: 'is-preview/v1', tag: 'is-foo' });
+  const hs = validarEsquema({ $schema: 'iswc-preview/v1', tag: 'iswc-foo' });
   assert.ok(hs.some((h) => h.severidad === 'fatal' && h.mensaje.includes('sections')));
 });
 
 test('json-schema: detecta bloque demo sin html', () => {
   const def = {
-    $schema: 'is-preview/v1',
-    tag: 'is-foo',
+    $schema: 'iswc-preview/v1',
+    tag: 'iswc-foo',
     sections: [{ id: 's1', title: 'S1', blocks: [{ kind: 'demo' }] }],
   };
   const hs = validarEsquema(def);
@@ -85,8 +85,8 @@ test('json-schema: detecta bloque demo sin html', () => {
 
 test('json-schema: detecta kind inválido', () => {
   const def = {
-    $schema: 'is-preview/v1',
-    tag: 'is-foo',
+    $schema: 'iswc-preview/v1',
+    tag: 'iswc-foo',
     sections: [{ id: 's1', title: 'S1', blocks: [{ kind: 'inventado' }] }],
   };
   const hs = validarEsquema(def);
@@ -95,13 +95,13 @@ test('json-schema: detecta kind inválido', () => {
 
 test('json-schema: detecta control sin label/prop', () => {
   const def = {
-    $schema: 'is-preview/v1',
-    tag: 'is-foo',
+    $schema: 'iswc-preview/v1',
+    tag: 'iswc-foo',
     sections: [{
       id: 's1', title: 'S1',
       blocks: [{
         kind: 'demo',
-        html: '<is-foo></is-foo>',
+        html: '<iswc-foo></iswc-foo>',
         controls: [{ control: 'select' }], // falta prop y label
       }],
     }],
@@ -113,13 +113,13 @@ test('json-schema: detecta control sin label/prop', () => {
 
 test('json-schema: detecta control=select sin options', () => {
   const def = {
-    $schema: 'is-preview/v1',
-    tag: 'is-foo',
+    $schema: 'iswc-preview/v1',
+    tag: 'iswc-foo',
     sections: [{
       id: 's1', title: 'S1',
       blocks: [{
         kind: 'demo',
-        html: '<is-foo></is-foo>',
+        html: '<iswc-foo></iswc-foo>',
         controls: [{ control: 'select', prop: 'x', label: 'X' }],
       }],
     }],
@@ -130,12 +130,12 @@ test('json-schema: detecta control=select sin options', () => {
 
 test('json-schema: definición válida no produce hallazgos fatales', () => {
   const def = {
-    $schema: 'is-preview/v1',
-    tag: 'is-foo',
+    $schema: 'iswc-preview/v1',
+    tag: 'iswc-foo',
     sections: [{
       id: 's1', title: 'Intro',
       blocks: [
-        { kind: 'demo', html: '<is-foo>x</is-foo>' },
+        { kind: 'demo', html: '<iswc-foo>x</iswc-foo>' },
         { kind: 'code', code: 'const x = 1;' },
       ],
     }],
@@ -147,25 +147,25 @@ test('json-schema: definición válida no produce hallazgos fatales', () => {
 
 test('json-contenido: detecta chart sin JSON embebido', () => {
   const def = {
-    tag: 'is-bar-chart',
+    tag: 'iswc-bar-chart',
     sections: [{
       blocks: [{
         kind: 'demo',
-        html: '<is-bar-chart></is-bar-chart>', // sin <script type="application/json">
+        html: '<iswc-bar-chart></iswc-bar-chart>', // sin <script type="application/json">
       }],
     }],
   };
   const hs = ejecutarValidacionContenido(def, 'fake.json');
-  assert.ok(hs.some((h) => h.categoria === 'json-complejidad' && h.mensaje.includes('is-bar-chart')));
+  assert.ok(hs.some((h) => h.categoria === 'json-complejidad' && h.mensaje.includes('iswc-bar-chart')));
 });
 
 test('json-contenido: chart CON JSON embebido pasa el check', () => {
   const def = {
-    tag: 'is-bar-chart',
+    tag: 'iswc-bar-chart',
     sections: [{
       blocks: [{
         kind: 'demo',
-        html: '<is-bar-chart><script type="application/json">{"data":{}}</script></is-bar-chart>',
+        html: '<iswc-bar-chart><script type="application/json">{"data":{}}</script></iswc-bar-chart>',
       }],
     }],
   };
@@ -186,11 +186,11 @@ test('consistency: meta de archivo inexistente devuelve null', async () => {
 });
 
 test('consistency: detecta control que apunta a atributo no observado', async () => {
-  // Leemos el módulo real de is-button.
+  // Leemos el módulo real de iswc-button.
   const rutaBtn = join(RAIZ, 'src', 'components', 'actions', 'button.ts');
   const meta = await extraerMetaComponente(rutaBtn);
-  assert.ok(meta, 'meta de is-button debe existir');
-  // is-button declara 'color' y 'variant' como observados.
+  assert.ok(meta, 'meta de iswc-button debe existir');
+  // iswc-button declara 'color' y 'variant' como observados.
   assert.ok(meta.atributosObservados.has('color'));
   assert.ok(meta.atributosObservados.has('variant'));
 });
@@ -203,12 +203,12 @@ test('consistency: detecta control que apunta a atributo no observado', async ()
 test('guard: consistency extrae observedAttributes con type annotation TS', async () => {
   const rutaMasked = join(RAIZ, 'src', 'components', 'forms', 'masked-input.ts');
   const meta = await extraerMetaComponente(rutaMasked);
-  assert.ok(meta, 'meta de is-masked-input debe existir');
+  assert.ok(meta, 'meta de iswc-masked-input debe existir');
   // Sanity: estos 5 atributos DEBEN observarse (definidos con TS type annotation)
   for (const attr of ['pattern', 'value', 'placeholder', 'autocomplete', 'required']) {
     assert.ok(
       meta.atributosObservados.has(attr),
-      `is-masked-input debería declarar '${attr}' como observado (TS type annotation regression)`,
+      `iswc-masked-input debería declarar '${attr}' como observado (TS type annotation regression)`,
     );
   }
 });
@@ -216,11 +216,11 @@ test('guard: consistency extrae observedAttributes con type annotation TS', asyn
 test('guard: consistency extrae observedAttributes de inline-edit (TS type)', async () => {
   const ruta = join(RAIZ, 'src', 'components', 'forms', 'inline-edit.ts');
   const meta = await extraerMetaComponente(ruta);
-  assert.ok(meta, 'meta de is-inline-edit debe existir');
+  assert.ok(meta, 'meta de iswc-inline-edit debe existir');
   for (const attr of ['placeholder', 'mode', 'rows']) {
     assert.ok(
       meta.atributosObservados.has(attr),
-      `is-inline-edit debería declarar '${attr}' como observado`,
+      `iswc-inline-edit debería declarar '${attr}' como observado`,
     );
   }
 });
@@ -228,35 +228,35 @@ test('guard: consistency extrae observedAttributes de inline-edit (TS type)', as
 test('guard: consistency extrae observedAttributes de mention (TS type)', async () => {
   const ruta = join(RAIZ, 'src', 'components', 'forms', 'mention.ts');
   const meta = await extraerMetaComponente(ruta);
-  assert.ok(meta, 'meta de is-mention debe existir');
+  assert.ok(meta, 'meta de iswc-mention debe existir');
   assert.ok(
     meta.atributosObservados.has('trigger'),
-    `is-mention debería declarar 'trigger' como observado`,
+    `iswc-mention debería declarar 'trigger' como observado`,
   );
 });
 
-test('consistency: ejecutarValidacionConsistencia contra def de is-button', async () => {
+test('consistency: ejecutarValidacionConsistencia contra def de iswc-button', async () => {
   const rutaBtn = join(RAIZ, 'src', 'components', 'actions', 'button.ts');
   const meta = await extraerMetaComponente(rutaBtn);
   // Cargar el JSON real
   const jsonPath = join(RAIZ, 'src', 'components', 'actions', 'button.json');
   const def = JSON.parse(readFileSync(jsonPath, 'utf8'));
   const hs = ejecutarValidacionConsistencia(def, meta, 'button.json');
-  // No debe haber errores fatales: el JSON de is-button está bien curado.
+  // No debe haber errores fatales: el JSON de iswc-button está bien curado.
   const fatales = hs.filter((h) => h.severidad === 'fatal' || h.severidad === 'error');
   // Permitimos warnings (los que reportan atributos no observados si los hay)
   // pero no errores duros.
   if (fatales.length > 0) {
-    console.warn('Hallazgos duros en is-button:', fatales.map((h) => h.mensaje));
+    console.warn('Hallazgos duros en iswc-button:', fatales.map((h) => h.mensaje));
   }
-  assert.equal(fatales.length, 0, 'is-button no debería tener errores duros');
+  assert.equal(fatales.length, 0, 'iswc-button no debería tener errores duros');
 });
 
-test('runtime: auditar is-button no produce hallazgos de listeners', () => {
+test('runtime: auditar iswc-button no produce hallazgos de listeners', () => {
   const rutaBtn = join(RAIZ, 'src', 'components', 'actions', 'button.ts');
-  const hs = auditarRuntimeComponente(rutaBtn, 'is-button');
+  const hs = auditarRuntimeComponente(rutaBtn, 'iswc-button');
   const fugas = hs.filter((h) => h.categoria === 'runtime' && h.severidad === 'error');
-  assert.equal(fugas.length, 0, `is-button no debería tener fugas: ${JSON.stringify(fugas)}`);
+  assert.equal(fugas.length, 0, `iswc-button no debería tener fugas: ${JSON.stringify(fugas)}`);
 });
 
 test('reporter: aJson produce esquema iswc-audit/v1', () => {
@@ -268,13 +268,13 @@ test('reporter: aJson produce esquema iswc-audit/v1', () => {
     totalComponentes: 1,
     conteo: { fatal: 0, error: 0, warn: 1, info: 0 },
     componentes: [{
-      tag: 'is-test',
+      tag: 'iswc-test',
       titulo: 'Test',
       categoria: 'test',
       rutaJson: 'test.json',
       rutaModulo: 'test.ts',
       hallazgos: [{
-        categoria: 'json-schema', severidad: 'warn', tag: 'is-test',
+        categoria: 'json-schema', severidad: 'warn', tag: 'iswc-test',
         mensaje: 'Test warning',
       }],
       estado: 'warning' as const,
@@ -297,15 +297,15 @@ test('reporter: aMarkdown incluye secciones esperadas', () => {
     conteo: { fatal: 0, error: 1, warn: 0, info: 0 },
     componentes: [
       {
-        tag: 'is-a', titulo: 'A', categoria: 'test', rutaJson: 'a.json',
+        tag: 'iswc-a', titulo: 'A', categoria: 'test', rutaJson: 'a.json',
         hallazgos: [{
-          categoria: 'consistencia', severidad: 'error', tag: 'is-a',
+          categoria: 'consistencia', severidad: 'error', tag: 'iswc-a',
           mensaje: 'Error A',
         }],
         estado: 'fail' as const,
       },
       {
-        tag: 'is-b', titulo: 'B', categoria: 'test', rutaJson: 'b.json',
+        tag: 'iswc-b', titulo: 'B', categoria: 'test', rutaJson: 'b.json',
         hallazgos: [],
         estado: 'ok' as const,
       },
@@ -314,7 +314,7 @@ test('reporter: aMarkdown incluye secciones esperadas', () => {
   };
   const md = aMarkdown(reporte);
   assert.ok(md.includes('# Auditoría del kit iswc'), 'encabezado presente');
-  assert.ok(md.includes('is-a'), 'incluye componente con hallazgo');
+  assert.ok(md.includes('iswc-a'), 'incluye componente con hallazgo');
   assert.ok(md.includes('Error A'), 'incluye mensaje del hallazgo');
   assert.ok(md.includes('iswc-audit/v1') || md.includes('Motor'), 'menciona motor');
 });
@@ -326,11 +326,11 @@ test('motor: MOTOR_VERSION es string semver', () => {
 test('integration: auditar 3 componentes reales no produce crashes', async () => {
   // Import dinámico del orquestador
   const { crearEstado, auditarCatalogo } = await import('../motor/auditor.js');
-  const estado = crearEstado(RAIZ, { solo: ['is-button', 'is-button-group', 'is-accordion-group'], soloJson: true });
+  const estado = crearEstado(RAIZ, { solo: ['iswc-button', 'iswc-button-group', 'iswc-accordion-group'], soloJson: true });
   const reporte = await auditarCatalogo(estado);
   assert.equal(reporte.totalComponentes, 3);
   // Cada componente debe tener al menos su tag.
   for (const c of reporte.componentes) {
-    assert.ok(['is-button', 'is-button-group', 'is-accordion-group'].includes(c.tag));
+    assert.ok(['iswc-button', 'iswc-button-group', 'iswc-accordion-group'].includes(c.tag));
   }
 });

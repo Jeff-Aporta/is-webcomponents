@@ -4,16 +4,16 @@ import { createPopupDismiss } from '../_shared/popup-dismiss.js';
 import '../actions/button.js';
 
 /**
- * <is-confirm-modal> — Web Component (vanilla, zero dependencies).
+ * <iswc-confirm-modal> — Web Component (vanilla, zero dependencies).
  *
  * Confirmación en modal centrado con backdrop. Complemento de
- * <is-popconfirm> (que confirma con popover anclado al trigger).
+ * <iswc-popconfirm> (que confirma con popover anclado al trigger).
  *
- *   <is-button id="del">Borrar</is-button>
- *   <is-confirm-modal for="del" heading="Eliminar registro" message="¿Seguro?">
- *     <is-button slot="confirm" color="danger">Sí, eliminar</is-button>
- *     <is-button slot="cancel">Cancelar</is-button>
- *   </is-confirm-modal>
+ *   <iswc-button id="del">Borrar</iswc-button>
+ *   <iswc-confirm-modal for="del" heading="Eliminar registro" message="¿Seguro?">
+ *     <iswc-button slot="confirm" color="danger">Sí, eliminar</iswc-button>
+ *     <iswc-button slot="cancel">Cancelar</iswc-button>
+ *   </iswc-confirm-modal>
  *
  * Atributos
  *   for       string  — id del trigger element (abre el modal al click).
@@ -27,8 +27,8 @@ import '../actions/button.js';
  *   cancel  — botón de cancelar (default "Cancelar").
  *
  * Eventos
- *   is-confirm-show / is-confirm-hide      detail: { trigger }
- *   is-confirm-confirm / is-confirm-cancel detail: { trigger }
+ *   iswc-confirm-show / iswc-confirm-hide      detail: { trigger }
+ *   iswc-confirm-confirm / iswc-confirm-cancel detail: { trigger }
  */
 (() => {
   const TEMPLATE = document.createElement('template');
@@ -38,8 +38,8 @@ import '../actions/button.js';
         <h2 class="heading" part="heading" hidden></h2>
         <div class="message" part="message"><span class="message-text"></span><slot name="message"></slot></div>
         <div class="actions" part="actions">
-          <span class="cancel-wrap"><slot name="cancel"><is-button variant="text" color="neutral" class="cancel" data-confirm-cancel>Cancelar</is-button></slot></span>
-          <span class="confirm-wrap"><slot name="confirm"><is-button color="brand" class="confirm" data-confirm-confirm>Aceptar</is-button></slot></span>
+          <span class="cancel-wrap"><slot name="cancel"><iswc-button variant="text" color="neutral" class="cancel" data-confirm-cancel>Cancelar</iswc-button></slot></span>
+          <span class="confirm-wrap"><slot name="confirm"><iswc-button color="brand" class="confirm" data-confirm-confirm>Aceptar</iswc-button></slot></span>
         </div>
       </div>
     </div>
@@ -47,7 +47,7 @@ import '../actions/button.js';
 
   const OBSERVED = ['for', 'heading', 'message', 'open'];
 
-  class IsConfirmModal extends ElementBase {
+  class IswcConfirmModal extends ElementBase {
     /** Personalización por atributo (ver `core/attrs.ts`). */
     static styleAttrs = {
     bg: { prop: '--iswc-confirm-modal-bg', onlyColorValues: true },
@@ -125,22 +125,22 @@ import '../actions/button.js';
     show() {
       if (this.hasAttribute('open')) return;
       this.setAttribute('open', '');
-      this.#emit('is-confirm-show');
+      this.#emit('iswc-confirm-show');
     }
 
     hide() {
       if (!this.hasAttribute('open')) return;
       this.removeAttribute('open');
-      this.#emit('is-confirm-hide');
+      this.#emit('iswc-confirm-hide');
     }
 
     #confirm() {
-      this.#emit('is-confirm-confirm');
+      this.#emit('iswc-confirm-confirm');
       this.hide();
     }
 
     #cancel() {
-      this.#emit('is-confirm-cancel');
+      this.#emit('iswc-confirm-cancel');
       this.hide();
     }
 
@@ -200,5 +200,5 @@ import '../actions/button.js';
     }
   }
 
-  defineElement('is-confirm-modal', IsConfirmModal, 'IsConfirmModal');
+  defineElement('iswc-confirm-modal', IswcConfirmModal, 'IswcConfirmModal');
 })();

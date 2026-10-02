@@ -21,43 +21,65 @@ Skill de instalación: [`src/skills/is-cdn-install/SKILL.md`](../skills/is-cdn-i
 import { ISWebComponentsLoader as L } from
   'https://cdn.jsdelivr.net/gh/Jeff-Aporta/is-webcomponents@REF/dist/cdn/core/loader.min.js';
 
-L.configure({
-  mirrors: ['jsdelivr', 'pages'],
-  // host: 'https://raw.githack.com/Jeff-Aporta/is-webcomponents/main/dist/cdn',
-  // v: 2, // → ?v=2 en cada asset (rompe caché de CDN/navegador)
-});
-// L.pin('abcdef…');  // opcional; sin pin → tip SHA de main
+// Sin configure: el loader ya trae quemado el SHA de ESTE build (o el de @REF
+// si la URL venía pinneada). load() pide componentes a jsDelivr@eseSha.
 await L.loadCSSBase();
 await L.loadCSSPalettesDefault();
-await L.load('is-button', 'is-button-group');
+await L.load('iswc-button', 'iswc-button-group');
 // o: L.load('actions') | L.load('all')
 ```
 
-### Host y cache-bust (consumidor)
+### Pin quemado (default)
 
-El consumidor fija de dónde salen los `is-*` y cómo invalidar caché, sin tocar el kit:
+Cada `loader.min.js` lleva `__IS_BUILD_SHA__` (HEAD al publicar). Si el
+`script src` / `import` usa `@<sha>/…/loader.min.js`, ese SHA de la URL gana.
+
+| | |
+| --- | --- |
+| `L.shaDefault` | Pin efectivo de este loader |
+| `L.shaFromUrl` | SHA leído de la URL, o `null` |
+| `L.host` | `https://cdn.jsdelivr.net/gh/…@<sha>/dist/cdn/` (salvo gallery local) |
+
+No hace falta `L.configure({ host: '…@sha…/dist/cdn' })` en apps externas.
+
+### Host y cache-bust (opcional)
+
+Para **otro** commit, otro espejo o bust de caché:
 
 ```js
-const KIT = 'https://raw.githack.com/Jeff-Aporta/is-webcomponents/main/dist/cdn';
-import { ISWebComponentsLoader as L } from `${KIT}/core/loader.min.js`;
+// Otro pin (pisar el quemado)
+L.configure({ sha: 'abcdef0123456789…' });
 
+// Host absoluto (githack, vendor, etc.) — manda sobre sha
+const KIT = 'https://raw.githack.com/Jeff-Aporta/is-webcomponents/main/dist/cdn';
 L.configure({
-  host: KIT,          // raíz dist/cdn/ (manda sobre preferSelf)
-  v: 2,               // atajo → ?v=2 en cada .js/.css del kit
-  // query: 'v=2&t=…' // o { v: '2', t: '…' }
+  host: KIT,
   preferSelf: false,
-  mirrors: ['githack', 'pages'], // githack = tip GitHub con MIME JS
+  v: 2,               // → ?v=2 en cada asset
+  mirrors: ['githack', 'pages'],
 });
 
-await L.load('is-dropdown');
+await L.load('iswc-dropdown');
 ```
 
 | Opción | Efecto |
 | --- | --- |
-| `host` | URL absoluta a `dist/cdn/`. Primera base de carga |
+| `host` | URL absoluta a `dist/cdn/`. Primera base de carga. Gana sobre `sha` |
+| `sha` | Arma `host` con `hostDefault`, sustituyendo `{{sha}}`. Vacío usa `shaDefault` (quemado). **Opcional** — sin esto ya hay pin de arranque |
+| `cdnUrl` | Sustituye `{{cdnUrl}}` de la plantilla. Vacío usa `cdnUrlDefault` |
 | `v` | Escribe `query.v` (p. ej. `2` → `?v=2`) |
 | `query` | Mapa o string de search params en cada asset |
-| `mirrors: ['githack']` | Tip `raw.githack.com` (útil si jsDelivr `@main` está frío) |
+| `mirrors: ['githack']` | Prioriza `raw.githack.com` (la cadena canónica sigue detrás) |
+
+## Fallback de espejos
+
+Cadena fija al cargar JS/CSS del kit (si un espejo cae, el siguiente responde):
+
+1. **jsDelivr** (`cdn.jsdelivr.net/gh/…@<sha>/dist/cdn`) — primario, pin por commit
+2. **raw.githack** (`raw.githack.com/…/<sha>/dist/cdn`) — mismo pin, MIME JS fiable
+3. **GitHub Pages** (`jeff-aporta.github.io/…/dist/cdn`) — último recurso (tip desplegado)
+
+`host` o `preferSelf` van **antes** de esa cadena. El primer espejo que responde bien queda *sticky* en la página: los siguientes `load` no reintentan primero un espejo que ya falló.
 
 ## Hash de contenido (`?h=`)
 
@@ -77,7 +99,7 @@ await L.sheets.warmFromCache();
 await L.sheets.warmFromManifest('./dist/cdn/hojas-manifest.json', {
   base: './dist/cdn/',
 });
-await L.load('is-button');
+await L.load('iswc-button');
 ```
 
 API: `install`, `get`, `warm(hrefs)`, `warmFromCache`, `warmFromManifest(url, { base, key })`.
@@ -95,17 +117,17 @@ L.registerApp(
   { cacheName: 'mi-app-sheets-v1' },
 );
 
-await L.load('is-button', 'paty-shell');
-await L.ensure('is-code'); // lazy: load + whenDefined
+await L.load('iswc-button', 'paty-shell');
+await L.ensure('iswc-code'); // lazy: load + whenDefined
 ```
 
 ## Ensure (lazy)
 
 ```js
-await L.ensure('is-code');           // catálogo del kit
+await L.ensure('iswc-code');           // catálogo del kit
 await L.ensure('mi-widget');         // registerApp
-await L.ensure('is-code', { href }); // href explícito
-L.isReady('is-code');                // sync
+await L.ensure('iswc-code', { href }); // href explícito
+L.isReady('iswc-code');                // sync
 ```
 
 ## Anti-redundancia
@@ -113,13 +135,13 @@ L.isReady('is-code');                // sync
 Registro **persistente** en la página:
 
 1. `load('actions')` marca la categoría y todos sus tags.
-2. Un `load('is-button')` posterior **no** vuelve a pedir red: ya está cubierto.
+2. Un `load('iswc-button')` posterior **no** vuelve a pedir red: ya está cubierto.
 3. `load('all')` cubre todo; cargas siguientes se omiten.
-4. En el mismo `load('actions', 'is-button')`, el tag se salta si la categoría va en el mismo lote.
+4. En el mismo `load('actions', 'iswc-button')`, el tag se salta si la categoría va en el mismo lote.
 
 API:
 
-- `has('is-button' | 'actions' | 'all')` → boolean
+- `has('iswc-button' | 'actions' | 'all')` → boolean
 - `getLoaded()` → `{ all, categories, tags }`
 - `load(...)` → `{ loaded: string[], skipped: string[] }`
 
@@ -129,10 +151,10 @@ API:
 | --- | --- |
 | `pin(ref)` | Fija branch o SHA (jsDelivr `@ref`) |
 | `unpin()` | Tip de `main` vía API GitHub |
-| `configure({ mirrors, preferSelf, ref, host, v, query })` | Espejos / self / host / bust |
+| `configure({ mirrors, preferSelf, ref, host, sha, cdnUrl, v, query })` | Espejos / self / host / bust |
 | `listBases()` / `fallbackBases()` | Bases que se probarán |
 
-Orden por defecto: `host` (si hay) → `self` (si `preferSelf` y no hay host) → mirrors. Un fallo en un espejo prueba el siguiente.
+Orden por defecto: `host` (si hay) → `self` (si `preferSelf` y no hay host) → **jsDelivr → githack → Pages**. Un fallo en un espejo prueba el siguiente; el que funciona queda sticky.
 
 ## CSS
 
@@ -149,6 +171,6 @@ La galería **no** debe esperar CSS del loader para el primer paint (FOUC). Cont
 1. `<link>` estáticos a `src/styles/is-base.css`, `palettes.css`, `shell.css`, `presentation.css` + `preview-component.css`.
 2. `await` solo shell tags + `import('./dist/cdn/preview/preview-component.min.js')`.
 3. `load('all')` y `loadPageModules` en **background** (no bloquean `dataset.kitShell`).
-4. `is-preview-component` **no** está en el catálogo del loader → import dist, nunca `src/` (Pages 404 lucide).
+4. `iswc-preview-component` **no** está en el catálogo del loader → import dist, nunca `src/` (Pages 404 lucide).
 
 Detalle + anti-patrones: `LLM.md` raíz error **#43** · guardián `tests/gallery-boot.test.ts`.

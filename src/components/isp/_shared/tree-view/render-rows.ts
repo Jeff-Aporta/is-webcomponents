@@ -142,7 +142,7 @@ function ensureIcon(
     return null;
   }
   if (!ic) {
-    ic = document.createElement("is-icon");
+    ic = document.createElement("iswc-icon");
     ic.className = sel.slice(1);
     parent.appendChild(ic);
   }
@@ -168,7 +168,7 @@ function paintHandle(row: HTMLElement, rc: RowController): void {
         : "none";
   h.classList.toggle("trvwr-drag-handle--locked", mode === "lock");
   h.classList.toggle("trvwr-drag-handle--frozen", mode === "frozen");
-  if (h.dataset["mode"] === mode && h.querySelector<HTMLElement>("is-icon")) {
+  if (h.dataset["mode"] === mode && h.querySelector<HTMLElement>("iswc-icon")) {
     return;
   }
   h.dataset["mode"] = mode;
@@ -176,7 +176,7 @@ function paintHandle(row: HTMLElement, rc: RowController): void {
   if (mode === "drag") {
     h.title = "Arrastrar para reordenar";
     h.setAttribute("draggable", "true");
-    const ic = document.createElement("is-icon");
+    const ic = document.createElement("iswc-icon");
     ic.setAttribute("icon", "mdi:dots-grid");
     h.appendChild(ic);
     bindOnce(h, "dragstart", (e: Event): void => rc.ondragstart(e), "ds");
@@ -184,13 +184,13 @@ function paintHandle(row: HTMLElement, rc: RowController): void {
   } else if (mode === "lock") {
     h.title = "Protegido";
     h.removeAttribute("draggable");
-    const ic = document.createElement("is-icon");
+    const ic = document.createElement("iswc-icon");
     ic.setAttribute("icon", "mdi:lock-outline");
     h.appendChild(ic);
   } else if (mode === "frozen") {
     h.title = "Posición fija";
     h.removeAttribute("draggable");
-    const ic = document.createElement("is-icon");
+    const ic = document.createElement("iswc-icon");
     ic.setAttribute("icon", "mdi:hand-back-right-off-outline");
     h.appendChild(ic);
   } else {
@@ -247,10 +247,10 @@ function paintRow(
     const helper = document.createElement("small");
     helper.className = "trvwr-itm-helper";
     row.append(handle, symb, lead, content, helper);
-    const fc = document.createElement("is-float-card");
+    const fc = document.createElement("iswc-float-card");
     fc.setAttribute("horizontal", "right");
     fc.setAttribute("vertical", "top+50");
-    const fo = document.createElement("is-flex-options");
+    const fo = document.createElement("iswc-flex-options");
     fo.setAttribute("slot", "float");
     fo.setAttribute("compact", "");
     fc.append(row, fo);
@@ -273,13 +273,13 @@ function paintRow(
 
   const sum = details.querySelector<HTMLElement>(":scope > summary");
   if (!sum) return;
-  if (!sum.querySelector<HTMLElement>(":scope > is-float-card")) {
+  if (!sum.querySelector<HTMLElement>(":scope > iswc-float-card")) {
     const row = sum.querySelector<HTMLElement>(".trvwr-sum-row");
     sum.querySelector<HTMLElement>(".trvwr-float-card")?.remove();
-    const fc0 = document.createElement("is-float-card");
+    const fc0 = document.createElement("iswc-float-card");
     fc0.setAttribute("horizontal", "right");
     fc0.setAttribute("vertical", "top+50");
-    const fo0 = document.createElement("is-flex-options");
+    const fo0 = document.createElement("iswc-flex-options");
     fo0.setAttribute("slot", "float");
     fo0.setAttribute("compact", "");
     if (row) fc0.append(row);
@@ -355,8 +355,8 @@ function paintRow(
     helper.hidden = !ht;
   }
 
-  const fc = sum.querySelector<HTMLElement>("is-float-card");
-  const fo = fc?.querySelector<HTMLElement>("is-flex-options");
+  const fc = sum.querySelector<HTMLElement>("iswc-float-card");
+  const fo = fc?.querySelector<HTMLElement>("iswc-flex-options");
   if (fc) {
     (fc as unknown as { linearTransform: unknown }).linearTransform = rc.floatCard;
     (fc as unknown as { open: boolean }).open = !!(rc.floatVisible && rc.hasRowTools);

@@ -6,6 +6,8 @@ import { join, dirname } from 'node:path';
 import { fileURLToPath } from 'node:url';
 import { test } from 'node:test';
 import assert from 'node:assert/strict';
+import { execSync } from 'node:child_process';
+import { fillHostTemplate } from '../../../components/_shared/cdn-ref.ts';
 
 const root = dirname(dirname(dirname(dirname(dirname(fileURLToPath(import.meta.url))))));
 const src = join(root, 'src', 'cdn', 'loader.ts');
@@ -31,6 +33,11 @@ test('src/cdn/loader.ts expone API pública + mirrors/pin + has/getLoaded', () =
   assert.match(code, /cdn-ref\.js/);
   assert.match(code, /__IS_LOADER_CATALOG__/);
   assert.match(code, /__IS_ASSET_HASHES__/);
+  assert.match(code, /__IS_BUILD_SHA__/);
+  assert.match(code, /hostDefault/);
+  assert.match(code, /shaDefault/);
+  assert.match(code, /shaFromUrl|shaFromImportUrl|BOOT_HOST|hostFromSha/);
+  assert.match(code, /cdnUrlDefault/);
   assert.match(code, /assetUrl/);
   assert.match(code, /syncHashMemory/);
 });
@@ -43,8 +50,20 @@ test('dist/cdn/core/loader.min.js y loader.md existen; banner con docs', () => {
   assert.match(code, /ISWebComponentsLoader/);
   assert.match(code, /loadCSSBase/);
   assert.match(code, /jsdelivr|Jeff-Aporta\/is-webcomponents/);
-  assert.match(code, /"is-button"/);
+  assert.match(code, /"iswc-button"/);
   assert.match(code, /src\/cdn\/loader\.md|loader\.md/);
+  const sha = execSync('git rev-parse HEAD', { cwd: root, encoding: 'utf8' }).trim();
+  assert.match(code, new RegExp(sha), 'shaDefault del bundle es HEAD');
+  assert.match(code, /\{\{cdnUrl\}\}@\{\{sha\}\}\/dist\/cdn/);
+});
+
+test('fillHostTemplate sustituye {{sha}} y {{cdnUrl}}', () => {
+  const host = fillHostTemplate('{{cdnUrl}}@{{sha}}/dist/cdn', {
+    cdnUrl: 'https://cdn.jsdelivr.net/gh/Jeff-Aporta/is-webcomponents',
+    sha: 'abc',
+  });
+  assert.equal(host, 'https://cdn.jsdelivr.net/gh/Jeff-Aporta/is-webcomponents@abc/dist/cdn');
+  assert.equal(fillHostTemplate('{{otro}}', {}), '{{otro}}');
 });
 
 test('min.js de componente lleva banner de docs MD', () => {
@@ -97,4 +116,25 @@ test('configure acepta host + v/query (cache-bust)', () => {
   assert.match(code, /githack/);
   assert.match(code, /state\.host/);
   assert.match(code, /state\.query/);
+});
+
+test('fallback CDN: jsDelivr → githack → Pages + stickyBase', () => {
+  const code = readFileSync(src, 'utf8');
+  const ref = readFileSync(
+    join(root, 'src', 'components', '_shared', 'cdn-ref.ts'),
+    'utf8',
+  );
+  // Orden canónico en MIRRORS
+  const jd = ref.indexOf("id: 'jsdelivr'");
+  const gh = ref.indexOf("id: 'githack'");
+  const pg = ref.indexOf("id: 'pages'");
+  assert.ok(jd >= 0 && gh > jd && pg > gh, 'MIRRORS: jsdelivr → githack → pages');
+  assert.match(ref, /raw\.githack\.com/);
+  assert.match(ref, /jeff-aporta\.github\.io/);
+  // Loader: cadena + sticky para no martillar espejo caído
+  assert.match(code, /stickyBase/);
+  assert.match(code, /rememberBase/);
+  assert.match(code, /orderBases/);
+  assert.match(code, /DEFAULT_MIRRORS/);
+  assert.match(code, /jsDelivr → githack → Pages/);
 });

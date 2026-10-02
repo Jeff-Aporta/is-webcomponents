@@ -20,7 +20,11 @@
   }
 
   @media (prefers-reduced-motion: reduce) {
-    .spinner { animation: none; border-top-color: var(--iswc-spinner-color); opacity: 0.85; }
+    .spinner {
+      animation: none;
+      border-top-color: var(--iswc-spinner-color);
+      opacity: 0.85;
+    }
   }
 }
 

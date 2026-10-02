@@ -11,13 +11,13 @@
  *       rebuildLayout()                 — recalcula layout con overrides
  *
  * El helper `installDiagramEditMode(host, ctx)` se encarga del cableado
- * genérico: drag de nodos con snap, emisión de eventos `is-layout-change`,
+ * genérico: drag de nodos con snap, emisión de eventos `iswc-layout-change`,
  * persistencia opcional en sessionStorage/localStorage y editor inline para
  * label/color. Lo componentes lo invocan desde su `connectedCallback` cuando
  * `mode === "edit"`.
  */
 
-const STORAGE_PREFIX = 'is-diagram:';
+const STORAGE_PREFIX = 'iswc-diagram:';
 
 /** Override parcial por nodo (posición / label / hue). */
 export type NodeOverride = { x?: number; y?: number; label?: string; hue?: number };
@@ -76,7 +76,7 @@ export function clearOverrides(host: HTMLElement, key: string): void {
   }
 }
 
-/** Detalle del evento `is-layout-change`. */
+/** Detalle del evento `iswc-layout-change`. */
 export type LayoutChangeDetail = { nodes?: NodeOverrideMap; edges?: EdgeOverrideMap; [key: string]: unknown };
 
 /**
@@ -86,7 +86,7 @@ export type LayoutChangeDetail = { nodes?: NodeOverrideMap; edges?: EdgeOverride
  */
 export function emitLayoutChange(host: HTMLElement, detail: LayoutChangeDetail): void {
   host.dispatchEvent(
-    new CustomEvent('is-layout-change', {
+    new CustomEvent('iswc-layout-change', {
       detail,
       bubbles: true,
       composed: true,
@@ -182,7 +182,7 @@ export function attachNodeDrag(el: HTMLElement, onMove: NodeDragMove, onEnd?: No
     lastX = evt.clientX;
     lastY = evt.clientY;
     el.setPointerCapture?.(evt.pointerId);
-    el.classList.add('is-dragging');
+    el.classList.add('iswc-dragging');
     evt.stopPropagation();
   }
 
@@ -199,7 +199,7 @@ export function attachNodeDrag(el: HTMLElement, onMove: NodeDragMove, onEnd?: No
     if (!active) return;
     active = false;
     el.releasePointerCapture?.(evt.pointerId);
-    el.classList.remove('is-dragging');
+    el.classList.remove('iswc-dragging');
     onEnd?.();
   }
 
@@ -237,7 +237,7 @@ export type OpenInlineEditorOpts = {
 export function openInlineEditor({ anchor, initial = {}, onSave, onCancel }: OpenInlineEditorOpts): HTMLElement {
   closeInlineEditor();
   const host = document.createElement('div');
-  host.className = 'is-diagram-editor';
+  host.className = 'iswc-diagram-editor';
   host.style.cssText = `
     position: fixed;
     left: ${Math.round(anchor.x)}px;
@@ -321,7 +321,7 @@ export function openInlineEditor({ anchor, initial = {}, onSave, onCancel }: Ope
 }
 
 export function closeInlineEditor(): void {
-  document.querySelectorAll<HTMLElement>('.is-diagram-editor').forEach((el) => el.remove());
+  document.querySelectorAll<HTMLElement>('.iswc-diagram-editor').forEach((el) => el.remove());
 }
 
 function btnStyle(): string {

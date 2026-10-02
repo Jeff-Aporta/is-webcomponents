@@ -1,5 +1,7 @@
-/* Los estados del host van en `:host([attr])` a nivel superior: `&[attr]`
-   anidado dentro de `:host {}` compila a `:host[attr]` y no matchea nunca. */
+/* <iswc-accordion-group> — coordinador de varios <iswc-details>.
+   El disclosure lo pinta <iswc-details>; aquí solo se ajusta su ritmo
+   vertical dentro del grupo. */
+
 :host {
   display: block;
   inline-size: 100%;
@@ -14,9 +16,7 @@
     overflow: hidden;
   }
 
-  /* El disclosure lo pinta <is-details>; aquí solo se ajusta su ritmo
-     vertical dentro del grupo. */
-  ::slotted(is-details) {
+  ::slotted(iswc-details) {
     margin: 0;
   }
 }

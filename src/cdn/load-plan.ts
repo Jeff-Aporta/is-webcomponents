@@ -40,10 +40,10 @@ export function resolveTagId(id: string, catalog: Catalog): TagEntry | null {
   const lower = raw.toLowerCase();
   const direct = catalog.tags[lower];
   if (direct) return direct;
-  const withIs = lower.startsWith('is-') ? lower : `is-${lower}`;
-  const prefixed = catalog.tags[withIs];
+  const withIswc = lower.startsWith('iswc-') ? lower : `iswc-${lower}`;
+  const prefixed = catalog.tags[withIswc];
   if (prefixed) return prefixed;
-  const bare = lower.replace(/^is-/, '');
+  const bare = lower.replace(/^iswc-/, '');
   for (const entry of Object.values(catalog.tags)) {
     if (entry.file === bare) return entry;
   }

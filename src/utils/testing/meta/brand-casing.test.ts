@@ -2,7 +2,7 @@
 //
 // La marca se escribe **InSoft**: la S va en MAYUSCULA (el logo la pinta en el
 // color de marca — "in" + "Soft"). Se escribia "Insoft" en 83 sitios y, peor,
-// <is-palette-selector> componia el wordmark con `accentLabel: 'soft'`, asi que
+// <iswc-palette-selector> componia el wordmark con `accentLabel: 'soft'`, asi que
 // el trigger renderizaba "insoft" en minuscula mientras index.html renderizaba
 // "inSoft". Dos grafias distintas para la misma marca en la misma pagina.
 //

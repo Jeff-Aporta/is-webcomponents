@@ -1,9 +1,9 @@
 /**
- * date-field.test.ts — Tests exhaustivos de <is-date-field>.
+ * date-field.test.ts — Tests exhaustivos de <iswc-date-field>.
  *
  * Wrapper de la fábrica `defineDateField` (en `_shared/date-field-element.ts`).
  * El factory define el comportamiento: secciones (día/mes/año) como spinbutton,
- * eventos is-change/is-input, form-associated, etc.
+ * eventos iswc-change/iswc-input, form-associated, etc.
  */
 
 import test from 'node:test';
@@ -19,16 +19,16 @@ const RAIZ = join(import.meta.dirname, '..', '..', '..', '..');
 const FACTORY = join(RAIZ, 'components', '_shared', 'date-field-element.ts');
 const factorySrc = readFileSync(FACTORY, 'utf8');
 
-const TAG = 'is-date-field';
+const TAG = 'iswc-date-field';
 const src = leerComponente(TAG);
 
 test('date-field: archivo y registro', () => {
   assert.ok(src.length > 100);
   assert.ok(existeCss(TAG) || existsSync(join(RAIZ, 'components', 'forms', 'date-field.css')),
     'date-field debe tener .css hermano');
-  assert.ok(esFactoryWrapper(src), '<is-date-field> debe usar defineDateField');
-  assert.ok(/defineDateField\(\s*\{[\s\S]*?tag:\s*['"`]is-date-field['"`]/.test(src),
-    '<is-date-field> debe pasar tag: "is-date-field"');
+  assert.ok(esFactoryWrapper(src), '<iswc-date-field> debe usar defineDateField');
+  assert.ok(/defineDateField\(\s*\{[\s\S]*?tag:\s*['"`]iswc-date-field['"`]/.test(src),
+    '<iswc-date-field> debe pasar tag: "iswc-date-field"');
 });
 
 test('date-field: atributos vienen del factory (OBSERVED const)', () => {
@@ -42,8 +42,8 @@ test('date-field: atributos vienen del factory (OBSERVED const)', () => {
   }
 });
 
-test('date-field: eventos del factory (is-change, is-input)', () => {
-  for (const e of ['is-change', 'is-input']) {
+test('date-field: eventos del factory (iswc-change, iswc-input)', () => {
+  for (const e of ['iswc-change', 'iswc-input']) {
     assert.ok(new RegExp(`['"\`]${e}['"\`]`).test(factorySrc) &&
               new RegExp(`(#emit|emit)\\s*\\(\\s*(this\\s*,\\s*)?['"\`]${e}['"\`]`).test(factorySrc),
       `factory debe emitir "${e}"`);
@@ -62,11 +62,11 @@ test('date-field: form-associated + ElementBase-ish (HTMLElement + attachInterna
     'factory debe usar ElementInternals (form-associated)');
 });
 
-test('date-field: se compone con is-date-picker para el panel (en date-input)', () => {
-  // El factory define el campo. is-date-input.ts lo compone con is-date-picker.
-  const dateInput = leerComponente('is-date-input');
-  assert.ok(/definePickerInput/.test(dateInput) && /is-date-picker/.test(dateInput),
-    'is-date-input compone field + picker');
+test('date-field: se compone con iswc-date-picker para el panel (en date-input)', () => {
+  // El factory define el campo. iswc-date-input.ts lo compone con iswc-date-picker.
+  const dateInput = leerComponente('iswc-date-input');
+  assert.ok(/definePickerInput/.test(dateInput) && /iswc-date-picker/.test(dateInput),
+    'iswc-date-input compone field + picker');
 });
 
 test('date-field: usa Intl nativo para locale (delegado en date-utils/date-field-core)', () => {
@@ -82,7 +82,7 @@ test('date-field: usa Intl nativo para locale (delegado en date-utils/date-field
 
 test('date-field: kind=date en la invocación', () => {
   assert.ok(/kind:\s*['"]date['"]/.test(src),
-    '<is-date-field> debe invocar defineDateField con kind: "date"');
+    '<iswc-date-field> debe invocar defineDateField con kind: "date"');
 });
 
 test('date-field: slots del factory (start, end)', () => {
@@ -116,6 +116,6 @@ test('date-field: edge case — locale inválido cae al del sistema', () => {
 test('date-field: preview JSON', () => {
   const prev = leerPreview(TAG);
   assert.ok(prev);
-  assert.equal(prev!['$schema'], 'is-preview/v1');
+  assert.equal(prev!['$schema'], 'iswc-preview/v1');
   assert.equal(prev!.tag, TAG);
 });

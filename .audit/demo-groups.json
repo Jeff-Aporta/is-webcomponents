@@ -131,7 +131,7 @@
         {
           "file": "src/components/actions/button-group.ts",
           "language": "ts",
-          "name": "is-button-group",
+          "name": "iswc-button-group",
           "categories": [
             "webcomponent",
             "event",
@@ -163,7 +163,7 @@
         {
           "file": "src/components/actions/button.ts",
           "language": "ts",
-          "name": "is-button",
+          "name": "iswc-button",
           "categories": [
             "webcomponent",
             "event",
@@ -184,7 +184,7 @@
         {
           "file": "src/components/actions/check-icon-button.ts",
           "language": "ts",
-          "name": "is-check-icon-button",
+          "name": "iswc-check-icon-button",
           "categories": [
             "webcomponent",
             "event",
@@ -213,7 +213,7 @@
         {
           "file": "src/components/actions/context-menu.ts",
           "language": "ts",
-          "name": "is-context-menu",
+          "name": "iswc-context-menu",
           "categories": [
             "webcomponent",
             "event"
@@ -233,7 +233,7 @@
         {
           "file": "src/components/actions/copy-button.ts",
           "language": "ts",
-          "name": "is-copy-button",
+          "name": "iswc-copy-button",
           "categories": [
             "webcomponent",
             "worker",
@@ -244,7 +244,7 @@
         {
           "file": "src/components/actions/dropdown-item.ts",
           "language": "ts",
-          "name": "is-dropdown-item",
+          "name": "iswc-dropdown-item",
           "categories": [
             "webcomponent",
             "event"
@@ -272,7 +272,7 @@
         {
           "file": "src/components/actions/dropdown.ts",
           "language": "ts",
-          "name": "is-dropdown",
+          "name": "iswc-dropdown",
           "categories": [
             "webcomponent",
             "event",
@@ -293,7 +293,7 @@
         {
           "file": "src/components/actions/fab.ts",
           "language": "ts",
-          "name": "is-fab",
+          "name": "iswc-fab",
           "categories": [
             "webcomponent",
             "event",
@@ -304,7 +304,7 @@
         {
           "file": "src/components/actions/share-button.ts",
           "language": "ts",
-          "name": "is-share-button",
+          "name": "iswc-share-button",
           "categories": [
             "webcomponent",
             "event"
@@ -333,7 +333,7 @@
         {
           "file": "src/components/actions/speed-dial.ts",
           "language": "ts",
-          "name": "is-speed-dial",
+          "name": "iswc-speed-dial",
           "categories": [
             "webcomponent",
             "event"
@@ -393,7 +393,7 @@
         {
           "file": "src/components/charts/chart.ts",
           "language": "ts",
-          "name": "is-chart",
+          "name": "iswc-chart",
           "categories": [
             "webcomponent",
             "sql-query",
@@ -413,7 +413,7 @@
         {
           "file": "src/components/charts/sparkline.ts",
           "language": "ts",
-          "name": "is-sparkline",
+          "name": "iswc-sparkline",
           "categories": [
             "webcomponent"
           ],
@@ -431,7 +431,7 @@
         {
           "file": "src/components/charts/treemap.ts",
           "language": "ts",
-          "name": "is-treemap",
+          "name": "iswc-treemap",
           "categories": [
             "webcomponent",
             "event"
@@ -469,7 +469,7 @@
         {
           "file": "src/components/code/code.ts",
           "language": "ts",
-          "name": "is-code",
+          "name": "iswc-code",
           "categories": [
             "webcomponent",
             "auth",
@@ -567,7 +567,7 @@
         {
           "file": "src/components/data/ag-grid.ts",
           "language": "ts",
-          "name": "is-ag-grid",
+          "name": "iswc-ag-grid",
           "categories": [
             "webcomponent",
             "auth",
@@ -599,7 +599,7 @@
         {
           "file": "src/components/data/data-grid.ts",
           "language": "ts",
-          "name": "is-data-grid",
+          "name": "iswc-data-grid",
           "categories": [
             "webcomponent",
             "sql-query",
@@ -660,7 +660,7 @@
         {
           "file": "src/components/data/gauge.ts",
           "language": "ts",
-          "name": "is-gauge",
+          "name": "iswc-gauge",
           "categories": [
             "webcomponent"
           ],
@@ -679,7 +679,7 @@
         {
           "file": "src/components/data/kanban.ts",
           "language": "ts",
-          "name": "is-kanban",
+          "name": "iswc-kanban",
           "categories": [
             "webcomponent",
             "event"
@@ -698,7 +698,7 @@
         {
           "file": "src/components/data/pivot-table.ts",
           "language": "ts",
-          "name": "is-pivot-table",
+          "name": "iswc-pivot-table",
           "categories": [
             "webcomponent",
             "event"
@@ -708,7 +708,7 @@
         {
           "file": "src/components/data/spreadsheet.ts",
           "language": "ts",
-          "name": "is-spreadsheet",
+          "name": "iswc-spreadsheet",
           "categories": [
             "webcomponent",
             "sql-query",
@@ -728,7 +728,7 @@
         {
           "file": "src/components/data/stat.ts",
           "language": "ts",
-          "name": "is-stat",
+          "name": "iswc-stat",
           "categories": [
             "webcomponent",
             "css-part"
@@ -747,7 +747,7 @@
         {
           "file": "src/components/data/transfer.ts",
           "language": "ts",
-          "name": "is-transfer",
+          "name": "iswc-transfer",
           "categories": [
             "webcomponent",
             "event"
@@ -821,7 +821,7 @@
         {
           "file": "src/components/data-viz/heatmap.ts",
           "language": "ts",
-          "name": "is-heatmap",
+          "name": "iswc-heatmap",
           "categories": [
             "webcomponent",
             "event"
@@ -831,7 +831,7 @@
         {
           "file": "src/components/data-viz/maps.ts",
           "language": "ts",
-          "name": "is-maps",
+          "name": "iswc-maps",
           "categories": [
             "webcomponent",
             "event",
@@ -855,7 +855,7 @@
         {
           "file": "src/components/diagrams/_editor-base.ts",
           "language": "ts",
-          "name": "is-editorbase",
+          "name": "iswc-editorbase",
           "categories": [
             "webcomponent",
             "migration",
@@ -907,7 +907,7 @@
         {
           "file": "src/components/diagrams/block-diagram.ts",
           "language": "ts",
-          "name": "is-block-diagram",
+          "name": "iswc-block-diagram",
           "categories": [
             "webcomponent",
             "event"
@@ -926,7 +926,7 @@
         {
           "file": "src/components/diagrams/class-diagram.ts",
           "language": "ts",
-          "name": "is-class-diagram",
+          "name": "iswc-class-diagram",
           "categories": [
             "webcomponent",
             "event"
@@ -945,7 +945,7 @@
         {
           "file": "src/components/diagrams/component-diagram.ts",
           "language": "ts",
-          "name": "is-component-diagram",
+          "name": "iswc-component-diagram",
           "categories": [
             "webcomponent",
             "event"
@@ -973,7 +973,7 @@
         {
           "file": "src/components/diagrams/diagram-lightbox.ts",
           "language": "ts",
-          "name": "is-diagram-lightbox",
+          "name": "iswc-diagram-lightbox",
           "categories": [
             "webcomponent",
             "sql-query",
@@ -1003,7 +1003,7 @@
         {
           "file": "src/components/diagrams/er-diagram.ts",
           "language": "ts",
-          "name": "is-er-diagram",
+          "name": "iswc-er-diagram",
           "categories": [
             "webcomponent",
             "event",
@@ -1014,7 +1014,7 @@
         {
           "file": "src/components/diagrams/er-editor.ts",
           "language": "ts",
-          "name": "is-er-editor",
+          "name": "iswc-er-editor",
           "categories": [
             "webcomponent",
             "sql-query",
@@ -1046,7 +1046,7 @@
         {
           "file": "src/components/diagrams/flowchart.ts",
           "language": "ts",
-          "name": "is-flowchart",
+          "name": "iswc-flowchart",
           "categories": [
             "webcomponent",
             "auth",
@@ -1066,7 +1066,7 @@
         {
           "file": "src/components/diagrams/gantt.ts",
           "language": "ts",
-          "name": "is-gantt",
+          "name": "iswc-gantt",
           "categories": [
             "webcomponent",
             "event"
@@ -1085,7 +1085,7 @@
         {
           "file": "src/components/diagrams/journey-map.ts",
           "language": "ts",
-          "name": "is-journey-map",
+          "name": "iswc-journey-map",
           "categories": [
             "webcomponent",
             "event"
@@ -1114,7 +1114,7 @@
         {
           "file": "src/components/diagrams/lightbox.ts",
           "language": "ts",
-          "name": "is-lightbox",
+          "name": "iswc-lightbox",
           "categories": [
             "webcomponent",
             "worker",
@@ -1134,7 +1134,7 @@
         {
           "file": "src/components/diagrams/mindmap.ts",
           "language": "ts",
-          "name": "is-mindmap",
+          "name": "iswc-mindmap",
           "categories": [
             "webcomponent",
             "event"
@@ -1162,7 +1162,7 @@
         {
           "file": "src/components/diagrams/org-chart.ts",
           "language": "ts",
-          "name": "is-org-chart",
+          "name": "iswc-org-chart",
           "categories": [
             "webcomponent",
             "sql-query",
@@ -1185,7 +1185,7 @@
         {
           "file": "src/components/diagrams/quadrant-chart.ts",
           "language": "ts",
-          "name": "is-quadrant-chart",
+          "name": "iswc-quadrant-chart",
           "categories": [
             "webcomponent",
             "event"
@@ -1204,7 +1204,7 @@
         {
           "file": "src/components/diagrams/sankey-diagram.ts",
           "language": "ts",
-          "name": "is-sankey-diagram",
+          "name": "iswc-sankey-diagram",
           "categories": [
             "webcomponent",
             "event"
@@ -1232,7 +1232,7 @@
         {
           "file": "src/components/diagrams/sequence-diagram.ts",
           "language": "ts",
-          "name": "is-sequence-diagram",
+          "name": "iswc-sequence-diagram",
           "categories": [
             "webcomponent",
             "event"
@@ -1251,7 +1251,7 @@
         {
           "file": "src/components/diagrams/state-diagram.ts",
           "language": "ts",
-          "name": "is-state-diagram",
+          "name": "iswc-state-diagram",
           "categories": [
             "webcomponent",
             "event"
@@ -1270,7 +1270,7 @@
         {
           "file": "src/components/diagrams/swimlane-diagram.ts",
           "language": "ts",
-          "name": "is-swimlane-diagram",
+          "name": "iswc-swimlane-diagram",
           "categories": [
             "webcomponent",
             "event"
@@ -1289,7 +1289,7 @@
         {
           "file": "src/components/diagrams/timeline.ts",
           "language": "ts",
-          "name": "is-timeline",
+          "name": "iswc-timeline",
           "categories": [
             "webcomponent",
             "event"
@@ -1308,7 +1308,7 @@
         {
           "file": "src/components/diagrams/use-case-diagram.ts",
           "language": "ts",
-          "name": "is-use-case-diagram",
+          "name": "iswc-use-case-diagram",
           "categories": [
             "webcomponent",
             "event"
@@ -1327,7 +1327,7 @@
         {
           "file": "src/components/diagrams/venn-diagram.ts",
           "language": "ts",
-          "name": "is-venn-diagram",
+          "name": "iswc-venn-diagram",
           "categories": [
             "webcomponent",
             "event"
@@ -1597,7 +1597,7 @@
         {
           "file": "src/components/feedback/badge.ts",
           "language": "ts",
-          "name": "is-badge",
+          "name": "iswc-badge",
           "categories": [
             "webcomponent"
           ],
@@ -1615,7 +1615,7 @@
         {
           "file": "src/components/feedback/cdn-snippet.ts",
           "language": "ts",
-          "name": "is-cdn-snippet",
+          "name": "iswc-cdn-snippet",
           "categories": [
             "webcomponent",
             "worker",
@@ -1635,7 +1635,7 @@
         {
           "file": "src/components/feedback/confirm-modal.ts",
           "language": "ts",
-          "name": "is-confirm-modal",
+          "name": "iswc-confirm-modal",
           "categories": [
             "webcomponent",
             "event"
@@ -1656,7 +1656,7 @@
         {
           "file": "src/components/feedback/palette-selector.ts",
           "language": "ts",
-          "name": "is-palette-selector",
+          "name": "iswc-palette-selector",
           "categories": [
             "webcomponent",
             "auth",
@@ -1677,7 +1677,7 @@
         {
           "file": "src/components/feedback/popconfirm.ts",
           "language": "ts",
-          "name": "is-popconfirm",
+          "name": "iswc-popconfirm",
           "categories": [
             "webcomponent",
             "event"
@@ -1687,7 +1687,7 @@
         {
           "file": "src/components/feedback/prefs-clear.ts",
           "language": "ts",
-          "name": "is-prefs-clear",
+          "name": "iswc-prefs-clear",
           "categories": [
             "webcomponent",
             "storage",
@@ -1716,7 +1716,7 @@
         {
           "file": "src/components/feedback/progress-bar.ts",
           "language": "ts",
-          "name": "is-progress-bar",
+          "name": "iswc-progress-bar",
           "categories": [
             "webcomponent",
             "css-part"
@@ -1735,7 +1735,7 @@
         {
           "file": "src/components/feedback/progress-ring.ts",
           "language": "ts",
-          "name": "is-progress-ring",
+          "name": "iswc-progress-ring",
           "categories": [
             "webcomponent",
             "css-part"
@@ -1754,7 +1754,7 @@
         {
           "file": "src/components/feedback/skeleton.ts",
           "language": "ts",
-          "name": "is-skeleton",
+          "name": "iswc-skeleton",
           "categories": [
             "webcomponent",
             "css-part"
@@ -1773,7 +1773,7 @@
         {
           "file": "src/components/feedback/spinner.ts",
           "language": "ts",
-          "name": "is-spinner",
+          "name": "iswc-spinner",
           "categories": [
             "webcomponent",
             "animation",
@@ -1784,7 +1784,7 @@
         {
           "file": "src/components/feedback/tag.ts",
           "language": "ts",
-          "name": "is-tag",
+          "name": "iswc-tag",
           "categories": [
             "webcomponent",
             "event"
@@ -1794,7 +1794,7 @@
         {
           "file": "src/components/feedback/theme-toggle.ts",
           "language": "ts",
-          "name": "is-theme-toggle",
+          "name": "iswc-theme-toggle",
           "categories": [
             "webcomponent",
             "event"
@@ -1815,7 +1815,7 @@
         {
           "file": "src/components/feedback/toast-item.ts",
           "language": "ts",
-          "name": "is-toast-item",
+          "name": "iswc-toast-item",
           "categories": [
             "webcomponent",
             "migration",
@@ -1847,7 +1847,7 @@
         {
           "file": "src/components/feedback/toast.ts",
           "language": "ts",
-          "name": "is-toast",
+          "name": "iswc-toast",
           "categories": [
             "webcomponent",
             "event",
@@ -1876,7 +1876,7 @@
         {
           "file": "src/components/feedback/tooltip.ts",
           "language": "ts",
-          "name": "is-tooltip",
+          "name": "iswc-tooltip",
           "categories": [
             "webcomponent",
             "migration",
@@ -2538,7 +2538,7 @@
         {
           "file": "src/components/forms/checkbox.ts",
           "language": "ts",
-          "name": "is-checkbox",
+          "name": "iswc-checkbox",
           "categories": [
             "webcomponent",
             "event"
@@ -2567,7 +2567,7 @@
         {
           "file": "src/components/forms/color-picker.ts",
           "language": "ts",
-          "name": "is-color-picker",
+          "name": "iswc-color-picker",
           "categories": [
             "webcomponent",
             "event"
@@ -2577,7 +2577,7 @@
         {
           "file": "src/components/forms/combobox.ts",
           "language": "ts",
-          "name": "is-combobox",
+          "name": "iswc-combobox",
           "categories": [
             "webcomponent",
             "sql-query",
@@ -2597,7 +2597,7 @@
         {
           "file": "src/components/forms/date-picker.ts",
           "language": "ts",
-          "name": "is-date-picker",
+          "name": "iswc-date-picker",
           "categories": [
             "webcomponent",
             "event"
@@ -2607,7 +2607,7 @@
         {
           "file": "src/components/forms/date-range-picker.ts",
           "language": "ts",
-          "name": "is-date-range-picker",
+          "name": "iswc-date-range-picker",
           "categories": [
             "webcomponent",
             "event"
@@ -2617,7 +2617,7 @@
         {
           "file": "src/components/forms/digital-clock.ts",
           "language": "ts",
-          "name": "is-digital-clock",
+          "name": "iswc-digital-clock",
           "categories": [
             "webcomponent",
             "event"
@@ -2645,7 +2645,7 @@
         {
           "file": "src/components/forms/doc-editor.ts",
           "language": "ts",
-          "name": "is-doc-editor",
+          "name": "iswc-doc-editor",
           "categories": [
             "webcomponent",
             "event"
@@ -2673,7 +2673,7 @@
         {
           "file": "src/components/forms/dropzone.ts",
           "language": "ts",
-          "name": "is-dropzone",
+          "name": "iswc-dropzone",
           "categories": [
             "webcomponent",
             "worker",
@@ -2693,7 +2693,7 @@
         {
           "file": "src/components/forms/duration-picker.ts",
           "language": "ts",
-          "name": "is-duration-picker",
+          "name": "iswc-duration-picker",
           "categories": [
             "webcomponent",
             "sql-query",
@@ -2723,7 +2723,7 @@
         {
           "file": "src/components/forms/file-input.ts",
           "language": "ts",
-          "name": "is-file-input",
+          "name": "iswc-file-input",
           "categories": [
             "webcomponent",
             "sql-query",
@@ -2744,7 +2744,7 @@
         {
           "file": "src/components/forms/full-calendar.ts",
           "language": "ts",
-          "name": "is-full-calendar",
+          "name": "iswc-full-calendar",
           "categories": [
             "webcomponent",
             "event"
@@ -2763,7 +2763,7 @@
         {
           "file": "src/components/forms/inline-edit.ts",
           "language": "ts",
-          "name": "is-inline-edit",
+          "name": "iswc-inline-edit",
           "categories": [
             "webcomponent",
             "worker",
@@ -2792,7 +2792,7 @@
         {
           "file": "src/components/forms/input.ts",
           "language": "ts",
-          "name": "is-input",
+          "name": "iswc-input",
           "categories": [
             "webcomponent",
             "worker",
@@ -2812,7 +2812,7 @@
         {
           "file": "src/components/forms/masked-input.ts",
           "language": "ts",
-          "name": "is-masked-input",
+          "name": "iswc-masked-input",
           "categories": [
             "webcomponent",
             "auth",
@@ -2850,7 +2850,7 @@
         {
           "file": "src/components/forms/mention.ts",
           "language": "ts",
-          "name": "is-mention",
+          "name": "iswc-mention",
           "categories": [
             "webcomponent",
             "migration",
@@ -2861,7 +2861,7 @@
         {
           "file": "src/components/forms/month-calendar.ts",
           "language": "ts",
-          "name": "is-month-calendar",
+          "name": "iswc-month-calendar",
           "categories": [
             "webcomponent",
             "event"
@@ -2880,7 +2880,7 @@
         {
           "file": "src/components/forms/option.ts",
           "language": "ts",
-          "name": "is-option",
+          "name": "iswc-option",
           "categories": [
             "webcomponent",
             "migration"
@@ -2899,7 +2899,7 @@
         {
           "file": "src/components/forms/pin-input.ts",
           "language": "ts",
-          "name": "is-pin-input",
+          "name": "iswc-pin-input",
           "categories": [
             "webcomponent",
             "event"
@@ -2909,7 +2909,7 @@
         {
           "file": "src/components/forms/radio-group.ts",
           "language": "ts",
-          "name": "is-radio-group",
+          "name": "iswc-radio-group",
           "categories": [
             "webcomponent",
             "event"
@@ -2928,7 +2928,7 @@
         {
           "file": "src/components/forms/radio.ts",
           "language": "ts",
-          "name": "is-radio",
+          "name": "iswc-radio",
           "categories": [
             "webcomponent",
             "migration",
@@ -2957,7 +2957,7 @@
         {
           "file": "src/components/forms/rating.ts",
           "language": "ts",
-          "name": "is-rating",
+          "name": "iswc-rating",
           "categories": [
             "webcomponent",
             "event"
@@ -2985,7 +2985,7 @@
         {
           "file": "src/components/forms/rte.ts",
           "language": "ts",
-          "name": "is-rte",
+          "name": "iswc-rte",
           "categories": [
             "webcomponent",
             "auth",
@@ -3014,7 +3014,7 @@
         {
           "file": "src/components/forms/select.ts",
           "language": "ts",
-          "name": "is-select",
+          "name": "iswc-select",
           "categories": [
             "webcomponent",
             "worker",
@@ -3034,7 +3034,7 @@
         {
           "file": "src/components/forms/signature.ts",
           "language": "ts",
-          "name": "is-signature",
+          "name": "iswc-signature",
           "categories": [
             "webcomponent",
             "event"
@@ -3062,7 +3062,7 @@
         {
           "file": "src/components/forms/slider.ts",
           "language": "ts",
-          "name": "is-slider",
+          "name": "iswc-slider",
           "categories": [
             "webcomponent",
             "event"
@@ -3090,7 +3090,7 @@
         {
           "file": "src/components/forms/switch.ts",
           "language": "ts",
-          "name": "is-switch",
+          "name": "iswc-switch",
           "categories": [
             "webcomponent",
             "event"
@@ -3109,7 +3109,7 @@
         {
           "file": "src/components/forms/textarea.ts",
           "language": "ts",
-          "name": "is-textarea",
+          "name": "iswc-textarea",
           "categories": [
             "webcomponent",
             "sql-query",
@@ -3120,7 +3120,7 @@
         {
           "file": "src/components/forms/time-clock.ts",
           "language": "ts",
-          "name": "is-time-clock",
+          "name": "iswc-time-clock",
           "categories": [
             "webcomponent",
             "event"
@@ -3130,7 +3130,7 @@
         {
           "file": "src/components/forms/year-calendar.ts",
           "language": "ts",
-          "name": "is-year-calendar",
+          "name": "iswc-year-calendar",
           "categories": [
             "webcomponent",
             "event"
@@ -3140,7 +3140,7 @@
         {
           "file": "src/utils/health/exhaustive/forms/_helpers.ts",
           "language": "ts",
-          "name": "<is-x>",
+          "name": "<iswc-x>",
           "categories": [
             "webcomponent",
             "event"
@@ -3193,7 +3193,7 @@
         {
           "file": "src/components/helpers/floating.ts",
           "language": "ts",
-          "name": "is-floating",
+          "name": "iswc-floating",
           "categories": [
             "webcomponent",
             "migration",
@@ -3205,7 +3205,7 @@
         {
           "file": "src/components/helpers/format-bytes.ts",
           "language": "ts",
-          "name": "is-format-bytes",
+          "name": "iswc-format-bytes",
           "categories": [
             "webcomponent"
           ],
@@ -3224,7 +3224,7 @@
         {
           "file": "src/components/helpers/format-date.ts",
           "language": "ts",
-          "name": "is-format-date",
+          "name": "iswc-format-date",
           "categories": [
             "webcomponent"
           ],
@@ -3233,7 +3233,7 @@
         {
           "file": "src/components/helpers/format-number.ts",
           "language": "ts",
-          "name": "is-format-number",
+          "name": "iswc-format-number",
           "categories": [
             "webcomponent"
           ],
@@ -3242,7 +3242,7 @@
         {
           "file": "src/components/helpers/format.ts",
           "language": "ts",
-          "name": "is-format",
+          "name": "iswc-format",
           "categories": [
             "webcomponent",
             "worker"
@@ -3252,7 +3252,7 @@
         {
           "file": "src/components/helpers/intersection-observer.ts",
           "language": "ts",
-          "name": "is-intersection-observer",
+          "name": "iswc-intersection-observer",
           "categories": [
             "webcomponent"
           ],
@@ -3281,7 +3281,7 @@
         {
           "file": "src/components/helpers/md-editor.ts",
           "language": "ts",
-          "name": "is-md-editor",
+          "name": "iswc-md-editor",
           "categories": [
             "webcomponent",
             "auth",
@@ -3303,7 +3303,7 @@
         {
           "file": "src/components/helpers/md-render.ts",
           "language": "ts",
-          "name": "is-md-render",
+          "name": "iswc-md-render",
           "categories": [
             "webcomponent",
             "event"
@@ -3323,7 +3323,7 @@
         {
           "file": "src/components/helpers/mutation-observer.ts",
           "language": "ts",
-          "name": "is-mutation-observer",
+          "name": "iswc-mutation-observer",
           "categories": [
             "webcomponent"
           ],
@@ -3341,7 +3341,7 @@
         {
           "file": "src/components/helpers/observer.ts",
           "language": "ts",
-          "name": "is-observer",
+          "name": "iswc-observer",
           "categories": [
             "webcomponent",
             "migration",
@@ -3352,7 +3352,7 @@
         {
           "file": "src/components/helpers/offscreen-canvas.ts",
           "language": "ts",
-          "name": "is-offscreen-canvas",
+          "name": "iswc-offscreen-canvas",
           "categories": [
             "webcomponent",
             "worker",
@@ -3363,7 +3363,7 @@
         {
           "file": "src/components/helpers/popover.ts",
           "language": "ts",
-          "name": "is-popover",
+          "name": "iswc-popover",
           "categories": [
             "webcomponent",
             "migration",
@@ -3385,7 +3385,7 @@
         {
           "file": "src/components/helpers/relative-time.ts",
           "language": "ts",
-          "name": "is-relative-time",
+          "name": "iswc-relative-time",
           "categories": [
             "webcomponent",
             "worker"
@@ -3404,7 +3404,7 @@
         {
           "file": "src/components/helpers/resize-observer.ts",
           "language": "ts",
-          "name": "is-resize-observer",
+          "name": "iswc-resize-observer",
           "categories": [
             "webcomponent"
           ],
@@ -3443,7 +3443,7 @@
         {
           "file": "src/components/helpers/wake-lock.ts",
           "language": "ts",
-          "name": "is-wake-lock",
+          "name": "iswc-wake-lock",
           "categories": [
             "webcomponent",
             "event",
@@ -3707,7 +3707,7 @@
         {
           "file": "src/components/isp/accordion-group.ts",
           "language": "ts",
-          "name": "is-accordion-group",
+          "name": "iswc-accordion-group",
           "categories": [
             "webcomponent",
             "event",
@@ -3727,7 +3727,7 @@
         {
           "file": "src/components/isp/block-layout.ts",
           "language": "ts",
-          "name": "is-block-layout",
+          "name": "iswc-block-layout",
           "categories": [
             "webcomponent",
             "database",
@@ -3747,7 +3747,7 @@
         {
           "file": "src/components/isp/btn-ref.ts",
           "language": "ts",
-          "name": "is-btn-ref",
+          "name": "iswc-btn-ref",
           "categories": [
             "webcomponent",
             "worker",
@@ -3770,7 +3770,7 @@
         {
           "file": "src/components/isp/catalogo-gen.ts",
           "language": "ts",
-          "name": "is-catalogo-gen",
+          "name": "iswc-catalogo-gen",
           "categories": [
             "webcomponent",
             "event"
@@ -3780,7 +3780,7 @@
         {
           "file": "src/components/isp/confirm-delete.ts",
           "language": "ts",
-          "name": "is-confirm-delete",
+          "name": "iswc-confirm-delete",
           "categories": [
             "webcomponent",
             "event",
@@ -3810,7 +3810,7 @@
         {
           "file": "src/components/isp/flex-layout.ts",
           "language": "ts",
-          "name": "is-flex-layout",
+          "name": "iswc-flex-layout",
           "categories": [
             "webcomponent"
           ],
@@ -3819,7 +3819,7 @@
         {
           "file": "src/components/isp/flex-options.ts",
           "language": "ts",
-          "name": "is-flex-options",
+          "name": "iswc-flex-options",
           "categories": [
             "webcomponent"
           ],
@@ -3847,7 +3847,7 @@
         {
           "file": "src/components/isp/float-card.ts",
           "language": "ts",
-          "name": "is-float-card",
+          "name": "iswc-float-card",
           "categories": [
             "webcomponent",
             "event"
@@ -3875,7 +3875,7 @@
         {
           "file": "src/components/isp/form.ts",
           "language": "ts",
-          "name": "is-form",
+          "name": "iswc-form",
           "categories": [
             "webcomponent",
             "event"
@@ -3885,7 +3885,7 @@
         {
           "file": "src/components/isp/grid-layout.ts",
           "language": "ts",
-          "name": "is-grid-layout",
+          "name": "iswc-grid-layout",
           "categories": [
             "webcomponent"
           ],
@@ -3903,7 +3903,7 @@
         {
           "file": "src/components/isp/heading.ts",
           "language": "ts",
-          "name": "is-heading",
+          "name": "iswc-heading",
           "categories": [
             "webcomponent"
           ],
@@ -3931,7 +3931,7 @@
         {
           "file": "src/components/isp/loading-overlay.ts",
           "language": "ts",
-          "name": "is-loading-overlay",
+          "name": "iswc-loading-overlay",
           "categories": [
             "webcomponent",
             "event",
@@ -3952,7 +3952,7 @@
         {
           "file": "src/components/isp/modal-verificacion.ts",
           "language": "ts",
-          "name": "is-modal-verificacion",
+          "name": "iswc-modal-verificacion",
           "categories": [
             "webcomponent",
             "event",
@@ -3972,7 +3972,7 @@
         {
           "file": "src/components/isp/text.ts",
           "language": "ts",
-          "name": "is-text",
+          "name": "iswc-text",
           "categories": [
             "webcomponent"
           ],
@@ -3999,7 +3999,7 @@
         {
           "file": "src/components/isp/tree-view.ts",
           "language": "ts",
-          "name": "is-tree-view",
+          "name": "iswc-tree-view",
           "categories": [
             "webcomponent",
             "migration",
@@ -4234,7 +4234,7 @@
         {
           "file": "src/components/layout/callout.ts",
           "language": "ts",
-          "name": "is-callout",
+          "name": "iswc-callout",
           "categories": [
             "webcomponent",
             "css-part"
@@ -4254,7 +4254,7 @@
         {
           "file": "src/components/layout/card.ts",
           "language": "ts",
-          "name": "is-card",
+          "name": "iswc-card",
           "categories": [
             "webcomponent",
             "event",
@@ -4265,7 +4265,7 @@
         {
           "file": "src/components/layout/demo.ts",
           "language": "ts",
-          "name": "is-demo",
+          "name": "iswc-demo",
           "categories": [
             "webcomponent",
             "event"
@@ -4286,7 +4286,7 @@
         {
           "file": "src/components/layout/details.ts",
           "language": "ts",
-          "name": "is-details",
+          "name": "iswc-details",
           "categories": [
             "webcomponent",
             "event",
@@ -4297,7 +4297,7 @@
         {
           "file": "src/components/layout/dialog.ts",
           "language": "ts",
-          "name": "is-dialog",
+          "name": "iswc-dialog",
           "categories": [
             "webcomponent",
             "worker"
@@ -4307,7 +4307,7 @@
         {
           "file": "src/components/layout/divider.ts",
           "language": "ts",
-          "name": "is-divider",
+          "name": "iswc-divider",
           "categories": [
             "webcomponent"
           ],
@@ -4334,7 +4334,7 @@
         {
           "file": "src/components/layout/dock.ts",
           "language": "ts",
-          "name": "is-dock",
+          "name": "iswc-dock",
           "categories": [
             "webcomponent",
             "event"
@@ -4344,7 +4344,7 @@
         {
           "file": "src/components/layout/drawer.ts",
           "language": "ts",
-          "name": "is-drawer",
+          "name": "iswc-drawer",
           "categories": [
             "webcomponent",
             "worker"
@@ -4363,7 +4363,7 @@
         {
           "file": "src/components/layout/main.ts",
           "language": "ts",
-          "name": "is-main",
+          "name": "iswc-main",
           "categories": [
             "webcomponent",
             "database",
@@ -4374,7 +4374,7 @@
         {
           "file": "src/components/layout/preview-component.ts",
           "language": "ts",
-          "name": "is-preview-component",
+          "name": "iswc-preview-component",
           "categories": [
             "webcomponent",
             "migration",
@@ -4385,7 +4385,7 @@
         {
           "file": "src/components/layout/preview-controls.ts",
           "language": "ts",
-          "name": "is-preview-controls",
+          "name": "iswc-preview-controls",
           "categories": [
             "webcomponent",
             "event"
@@ -4405,7 +4405,7 @@
         {
           "file": "src/components/layout/scrollspy.ts",
           "language": "ts",
-          "name": "is-scrollspy",
+          "name": "iswc-scrollspy",
           "categories": [
             "webcomponent",
             "sql-query",
@@ -4427,7 +4427,7 @@
         {
           "file": "src/components/layout/split-panel.ts",
           "language": "ts",
-          "name": "is-split-panel",
+          "name": "iswc-split-panel",
           "categories": [
             "webcomponent",
             "storage",
@@ -4528,7 +4528,7 @@
         {
           "file": "src/components/media/avatar.ts",
           "language": "ts",
-          "name": "is-avatar",
+          "name": "iswc-avatar",
           "categories": [
             "webcomponent",
             "event",
@@ -4539,7 +4539,7 @@
         {
           "file": "src/components/media/barcode-scanner.ts",
           "language": "ts",
-          "name": "is-barcode-scanner",
+          "name": "iswc-barcode-scanner",
           "categories": [
             "webcomponent",
             "worker",
@@ -4551,7 +4551,7 @@
         {
           "file": "src/components/media/barcode.ts",
           "language": "ts",
-          "name": "is-barcode",
+          "name": "iswc-barcode",
           "categories": [
             "webcomponent",
             "event"
@@ -4584,7 +4584,7 @@
         {
           "file": "src/components/media/icon.ts",
           "language": "ts",
-          "name": "is-icon",
+          "name": "iswc-icon",
           "categories": [
             "webcomponent",
             "http-client"
@@ -4612,7 +4612,7 @@
         {
           "file": "src/components/media/image-editor.ts",
           "language": "ts",
-          "name": "is-image-editor",
+          "name": "iswc-image-editor",
           "categories": [
             "webcomponent",
             "event"
@@ -4622,7 +4622,7 @@
         {
           "file": "src/components/media/media-recorder.ts",
           "language": "ts",
-          "name": "is-media-recorder",
+          "name": "iswc-media-recorder",
           "categories": [
             "webcomponent",
             "event",
@@ -4633,7 +4633,7 @@
         {
           "file": "src/components/media/qrcode.ts",
           "language": "ts",
-          "name": "is-qrcode",
+          "name": "iswc-qrcode",
           "categories": [
             "webcomponent",
             "event"
@@ -4643,7 +4643,7 @@
         {
           "file": "src/components/media/speech.ts",
           "language": "ts",
-          "name": "is-speech",
+          "name": "iswc-speech",
           "categories": [
             "webcomponent",
             "event"
@@ -4653,7 +4653,7 @@
         {
           "file": "src/components/media/theme-img.ts",
           "language": "ts",
-          "name": "is-theme-img",
+          "name": "iswc-theme-img",
           "categories": [
             "webcomponent",
             "css-part"
@@ -4681,7 +4681,7 @@
         {
           "file": "src/components/media/video-playlist.ts",
           "language": "ts",
-          "name": "is-video-playlist",
+          "name": "iswc-video-playlist",
           "categories": [
             "webcomponent",
             "event"
@@ -4710,7 +4710,7 @@
         {
           "file": "src/components/media/video.ts",
           "language": "ts",
-          "name": "is-video",
+          "name": "iswc-video",
           "categories": [
             "webcomponent",
             "database",
@@ -4770,7 +4770,7 @@
         {
           "file": "src/components/navigation/breadcrumb-item.ts",
           "language": "ts",
-          "name": "is-breadcrumb-item",
+          "name": "iswc-breadcrumb-item",
           "categories": [
             "webcomponent",
             "css-part"
@@ -4789,7 +4789,7 @@
         {
           "file": "src/components/navigation/breadcrumb.ts",
           "language": "ts",
-          "name": "is-breadcrumb",
+          "name": "iswc-breadcrumb",
           "categories": [
             "webcomponent",
             "css-part"
@@ -4809,7 +4809,7 @@
         {
           "file": "src/components/navigation/carousel.ts",
           "language": "ts",
-          "name": "is-carousel",
+          "name": "iswc-carousel",
           "categories": [
             "webcomponent",
             "worker",
@@ -4840,7 +4840,7 @@
         {
           "file": "src/components/navigation/mega-menu.ts",
           "language": "ts",
-          "name": "is-mega-menu",
+          "name": "iswc-mega-menu",
           "categories": [
             "webcomponent",
             "worker",
@@ -4861,7 +4861,7 @@
         {
           "file": "src/components/navigation/scroller.ts",
           "language": "ts",
-          "name": "is-scroller",
+          "name": "iswc-scroller",
           "categories": [
             "webcomponent",
             "event",
@@ -4882,7 +4882,7 @@
         {
           "file": "src/components/navigation/stepper.ts",
           "language": "ts",
-          "name": "is-stepper",
+          "name": "iswc-stepper",
           "categories": [
             "webcomponent",
             "event",
@@ -4902,7 +4902,7 @@
         {
           "file": "src/components/navigation/tab-group.ts",
           "language": "ts",
-          "name": "is-tab-group",
+          "name": "iswc-tab-group",
           "categories": [
             "webcomponent",
             "event",
@@ -4923,7 +4923,7 @@
         {
           "file": "src/components/navigation/tree.ts",
           "language": "ts",
-          "name": "is-tree",
+          "name": "iswc-tree",
           "categories": [
             "webcomponent",
             "event",
@@ -5017,7 +5017,7 @@
         {
           "file": "src/components/overlays/command-palette.ts",
           "language": "ts",
-          "name": "is-command-palette",
+          "name": "iswc-command-palette",
           "categories": [
             "webcomponent",
             "event"
@@ -5027,7 +5027,7 @@
         {
           "file": "src/components/overlays/pdf-viewer.ts",
           "language": "ts",
-          "name": "is-pdf-viewer",
+          "name": "iswc-pdf-viewer",
           "categories": [
             "webcomponent",
             "event"
@@ -5046,7 +5046,7 @@
         {
           "file": "src/components/overlays/window.ts",
           "language": "ts",
-          "name": "is-window",
+          "name": "iswc-window",
           "categories": [
             "webcomponent",
             "event"

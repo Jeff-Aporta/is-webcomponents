@@ -1,10 +1,10 @@
 {
-  "$schema": "is-preview/v1",
-  "tag": "is-funnel-chart",
+  "$schema": "iswc-preview/v1",
+  "tag": "iswc-funnel-chart",
   "category": "data-viz",
-  "title": "<is-funnel-chart>",
+  "title": "<iswc-funnel-chart>",
   "titleHtml": true,
-  "storageKey": "docs-is-funnel-chart",
+  "storageKey": "docs-iswc-funnel-chart",
   "sections": [
     {
       "id": "intro",
@@ -13,7 +13,7 @@
       "blocks": [
         {
           "kind": "demo",
-          "html": "<is-funnel-chart open-on-click>\r\n            <script type=\"application/json\">\r\n              {\r\n                \"data\": {\r\n                  \"labels\": [\"Visitas\", \"Registros\", \"Cotizaciones\", \"Cierres\"],\r\n                  \"datasets\": [{ \"label\": \"Conversión\", \"data\": [4200, 1800, 640, 210] }]\r\n                }\r\n              }\r\n            </script>\r\n          </is-funnel-chart>",
+          "html": "<iswc-funnel-chart open-on-click>\r\n            <script type=\"application/json\">\r\n              {\r\n                \"data\": {\r\n                  \"labels\": [\"Visitas\", \"Registros\", \"Cotizaciones\", \"Cierres\"],\r\n                  \"datasets\": [{ \"label\": \"Conversión\", \"data\": [4200, 1800, 640, 210] }]\r\n                }\r\n              }\r\n            </script>\r\n          </iswc-funnel-chart>",
           "controls": [
             {
               "control": "boolean",

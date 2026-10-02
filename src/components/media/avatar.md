@@ -1,20 +1,20 @@
 ---
-tag: is-avatar
+tag: iswc-avatar
 tags:
-  - is-avatar
+  - iswc-avatar
 category: media
 status: public
 source: ./avatar.js
 style: ./avatar.css
 preview: ./avatar.json
 ---
-# `<is-avatar>`
+# `<iswc-avatar>`
 
 ## Propósito
 
 Avatar con imagen, iniciales o icono fallback. Caja = 1em × 1em; escala con font-size.
 
-Este módulo registra `<is-avatar>`.
+Este módulo registra `<iswc-avatar>`.
 
 ## Cuándo usarlo
 
@@ -34,7 +34,7 @@ import './avatar.js';
 
 ```html
 <span style="font-size:3rem">
-<is-avatar initials="AB" shape="rounded"></is-avatar>
+<iswc-avatar initials="AB" shape="rounded"></iswc-avatar>
 </span>
 ```
 
@@ -72,7 +72,7 @@ import './avatar.js';
 
 | Evento | detail | bubbles | composed | cancelable |
 | --- | --- | --- | --- | --- |
-| `is-error` | no | sí | sí | no |
+| `iswc-error` | no | sí | sí | no |
 
 ### Métodos y propiedades públicas
 
@@ -111,7 +111,7 @@ No declara integración form-associated propia en este módulo.
 
 Documentación de cabecera preservada desde fuente:
 
-> <is-avatar> — Web Component (vanilla).
+> <iswc-avatar> — Web Component (vanilla).
 > Atributos
 >   image     string — URL de imagen
 >   initials  string — iniciales si no hay imagen (máx. 2)
@@ -121,7 +121,7 @@ Documentación de cabecera preservada desde fuente:
 > Slots
 >   icon      fallback cuando no hay image ni initials (default mdi:account)
 > Eventos
->   is-error  — cuando la imagen falla al cargar (bubbles, composed)
+>   iswc-error  — cuando la imagen falla al cargar (bubbles, composed)
 > CSS Parts: ::part(image) ::part(initials) ::part(icon)
 > Escala con font-size del contexto (caja = 1em × 1em).
 
@@ -130,7 +130,7 @@ Documentación de cabecera preservada desde fuente:
 - [`../_shared/adopt-css.js`](../_shared/adopt-css.js)
 - [`./icon.js`](./icon.js)
 
-Tags del módulo: `<is-avatar>`.
+Tags del módulo: `<iswc-avatar>`.
 
 ## Accesibilidad
 
@@ -140,7 +140,7 @@ Preservar semántica, foco, teclado, labels y ARIA. ARIA detectado: `aria-label`
 
 ```html
 <span style="font-size:3rem">
-<is-avatar initials="AB" shape="rounded"></is-avatar>
+<iswc-avatar initials="AB" shape="rounded"></iswc-avatar>
 </span>
 ```
 

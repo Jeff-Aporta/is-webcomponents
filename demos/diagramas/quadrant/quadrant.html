@@ -3,7 +3,7 @@
 <head>
 <meta charset="utf-8" />
 <meta name="viewport" content="width=device-width, initial-scale=1" />
-<title>Demo — <is-quadrant-chart> impacto vs esfuerzo</title>
+<title>Demo — <iswc-quadrant-chart> impacto vs esfuerzo</title>
 <style>
   html, body { margin: 0; padding: 0; min-height: 100%; background: #0c1118; color: #e2e8f0; font-family: ui-sans-serif, system-ui, sans-serif; }
   body { display: grid; grid-template-rows: auto 1fr auto; }
@@ -11,15 +11,15 @@
   header h1 { font-size: 16px; font-weight: 700; margin: 0; }
   header p { font-size: 12px; color: #94a3b8; margin: 4px 0 0 0; }
   main { padding: 20px; display: grid; place-items: center; }
-  is-quadrant-chart { width: 720px; height: 540px; display: block; }
-  is-quadrant-chart:not(:defined) { visibility: hidden; }
+  iswc-quadrant-chart { width: 720px; height: 540px; display: block; }
+  iswc-quadrant-chart:not(:defined) { visibility: hidden; }
   footer { padding: 12px 20px; border-top: 1px solid rgba(255,255,255,0.1); background: #0f1620; font-size: 11px; color: #94a3b8; }
 </style>
 <script type="module">
   await import('../../../src/components/diagrams/quadrant-chart.ts');
-  await customElements.whenDefined('is-quadrant-chart');
+  await customElements.whenDefined('iswc-quadrant-chart');
 
-  const el = document.createElement('is-quadrant-chart');
+  const el = document.createElement('iswc-quadrant-chart');
   el.payload = {
     title: 'Priorización del roadmap',
     xAxis: { left: 'Bajo esfuerzo', right: 'Alto esfuerzo' },
@@ -50,7 +50,7 @@
 </head>
 <body>
 <header>
-  <h1>Demo funcional — <code>&lt;is-quadrant-chart&gt;</code></h1>
+  <h1>Demo funcional — <code>&lt;iswc-quadrant-chart&gt;</code></h1>
   <p>Matriz 2×2 con 6 puntos y leyenda de grupos.</p>
 </header>
 <main>

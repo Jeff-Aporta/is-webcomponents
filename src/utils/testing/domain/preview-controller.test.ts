@@ -1,6 +1,6 @@
 // tests/preview-controller.test.ts
 //
-// Contrato: previews = JSON is-preview/v1 + <is-preview-component> + behaviors opcionales.
+// Contrato: previews = JSON iswc-preview/v1 + <iswc-preview-component> + behaviors opcionales.
 // Un solo HTML permitido: _shell.html
 //
 // Uso: node tests/preview-controller.test.ts
@@ -52,15 +52,15 @@ if (htmls.length !== 1) {
 }
 
 const types = readFileSync(join(root, 'src/previews/_kit/types.d.ts'), 'utf8');
-if (!/is-preview\/v1/.test(types)) failures.push('types.d.ts debe declarar $schema is-preview/v1');
+if (!/iswc-preview\/v1/.test(types)) failures.push('types.d.ts debe declarar $schema iswc-preview/v1');
 if (!/PreviewDefinition/.test(types)) failures.push('falta PreviewDefinition');
 
 const host = readFileSync(join(root, 'src/components/layout/preview-component.ts'), 'utf8');
-if (/eval\s*\(/.test(host)) failures.push('is-preview-component no debe usar eval');
+if (/eval\s*\(/.test(host)) failures.push('iswc-preview-component no debe usar eval');
 
 const bg = JSON.parse(readFileSync(join(root, 'src/components/actions/button-group.json'), 'utf8'));
-assert.equal(bg.$schema, 'is-preview/v1');
-assert.equal(bg.tag, 'is-button-group');
+assert.equal(bg.$schema, 'iswc-preview/v1');
+assert.equal(bg.tag, 'iswc-button-group');
 assert.ok(Array.isArray(bg.sections) && bg.sections.length > 0);
 
 const index = readFileSync(join(root, 'index.html'), 'utf8');
@@ -69,33 +69,33 @@ const galleryApp = readFileSync(join(root, 'src/gallery/app.ts'), 'utf8');
 // del SPA — la migración del inline JS al bundle cambió dónde están los
 // nombres de las funciones).
 if (!/previewHost/.test(index)) {
-  failures.push('index.html debe montar el host <is-preview-component id="previewHost">');
+  failures.push('index.html debe montar el host <iswc-preview-component id="previewHost">');
 }
 if (!/hasControlledPreview/.test(galleryApp) || !/loadPreview/.test(galleryApp) || !/hasCachedPreview/.test(galleryApp)) {
   failures.push('gallery/app.ts debe usar hasControlledPreview + loadPreview + hasCachedPreview del registry');
 }
 
 const { hasControlledPreview, hasCachedPreview, controlledPreviewTags, loadPreview, clearPreviewCache } = await import('../../../previews/registry.ts');
-assert.equal(hasControlledPreview('is-button-group'), true);
-assert.equal(hasControlledPreview('is-button'), true);
+assert.equal(hasControlledPreview('iswc-button-group'), true);
+assert.equal(hasControlledPreview('iswc-button'), true);
 assert.equal(hasControlledPreview('home'), true);
 assert.ok(controlledPreviewTags().length >= 100);
 
 clearPreviewCache();
-assert.equal(hasCachedPreview('is-button-group'), false);
-const preview = await loadPreview('is-button-group');
+assert.equal(hasCachedPreview('iswc-button-group'), false);
+const preview = await loadPreview('iswc-button-group');
 assert.ok(preview);
-assert.equal(preview.definition.tag, 'is-button-group');
-assert.equal(preview.definition.$schema, 'is-preview/v1');
-assert.equal(hasCachedPreview('is-button-group'), true);
-const again = await loadPreview('is-button-group');
+assert.equal(preview.definition.tag, 'iswc-button-group');
+assert.equal(preview.definition.$schema, 'iswc-preview/v1');
+assert.equal(hasCachedPreview('iswc-button-group'), true);
+const again = await loadPreview('iswc-button-group');
 // `JsonPreview` normaliza la definición al construirse (spread + defaults), así
 // que cada carga devuelve un objeto propio: la identidad no es observable. Lo
 // que sí debe cumplirse es que la definición salga de la caché y sea la misma.
-assert.equal(hasCachedPreview('is-button-group'), true, 'la definición debe seguir cacheada');
+assert.equal(hasCachedPreview('iswc-button-group'), true, 'la definición debe seguir cacheada');
 assert.deepEqual(again.definition, preview.definition, 'segunda carga debe reutilizar la definición en memoria');
 assert.ok(/hasCachedPreview/.test(galleryApp), 'gallery/app.ts debe evitar vaciar el host si el JSON ya está en caché');
-assert.ok(/#paintGen/.test(host) || /paintGen/.test(host), 'is-preview-component debe invalidar mounts en vuelo');
+assert.ok(/#paintGen/.test(host) || /paintGen/.test(host), 'iswc-preview-component debe invalidar mounts en vuelo');
 
 if (failures.length) {
   console.error(`preview-controller.test.ts: FAIL — ${failures.length}\n`);

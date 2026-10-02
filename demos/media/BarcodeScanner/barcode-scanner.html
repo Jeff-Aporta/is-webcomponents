@@ -3,7 +3,7 @@
 <head>
 <meta charset="utf-8" />
 <meta name="viewport" content="width=device-width, initial-scale=1" />
-<title>Demo &lt;is-barcode-scanner&gt; · is-webcomponents</title>
+<title>Demo &lt;iswc-barcode-scanner&gt; · is-webcomponents</title>
 <meta name="description" content="Escáner de códigos de barras sobre cámara o imágenes. Usa la BarcodeDetector API; degrada con mensaje claro si no está disponible." />
 <style>
   html, body { margin: 0; padding: 0; min-height: 100%; background: #0c1118; color: #e2e8f0; font-family: ui-sans-serif, system-ui, sans-serif; }
@@ -14,27 +14,27 @@
   main { display: grid; grid-template-columns: 1fr 1fr; gap: 16px; padding: 20px; align-content: start; }
   section { background: #0f1620; border: 1px solid rgba(255,255,255,0.1); border-radius: 8px; padding: 16px; min-height: 280px; }
   section h2 { font-size: 12px; text-transform: uppercase; letter-spacing: 0.08em; margin: 0 0 12px 0; color: #94a3b8; font-weight: 600; }
-  is-barcode-scanner { display: block; max-width: 480px; height: auto; }
+  iswc-barcode-scanner { display: block; max-width: 480px; height: auto; }
   footer { padding: 12px 20px; border-top: 1px solid rgba(255,255,255,0.1); background: #0f1620; font-size: 11px; color: #94a3b8; }
   footer code { background: rgba(255,255,255,0.06); padding: 1px 5px; border-radius: 3px; font: 11px ui-monospace, Menlo, Consolas, monospace; }
   /* Anti-FOUC */
-  is-barcode-scanner:not(:defined) { visibility: hidden; }
+  iswc-barcode-scanner:not(:defined) { visibility: hidden; }
 </style>
 <script type="module">
   // Cargar solo el bundle + sus deps (button, icon) desde dist/cdn/.
-  await import('../../../dist/cdn/actions/button.min.js?h=ki2dk5');
-  await import('../../../dist/cdn/media/icon.min.js?h=y6tzub');
-  await import('../../../dist/cdn/media/barcode-scanner.min.js?h=w8rko2');
-  await customElements.whenDefined('is-barcode-scanner');
+  await import('../../../dist/cdn/actions/button.min.js?h=5i9tzt');
+  await import('../../../dist/cdn/media/icon.min.js?h=sp71yy');
+  await import('../../../dist/cdn/media/barcode-scanner.min.js?h=wt91n4');
+  await customElements.whenDefined('iswc-barcode-scanner');
 
-  // Suscribirse a is-detect e is-error para logging (útil para tests)
-  document.querySelectorAll('is-barcode-scanner').forEach((el) => {
-    el.addEventListener('is-detect', (e) => {
-      console.log('[scanner] is-detect', e.detail);
+  // Suscribirse a iswc-detect e iswc-error para logging (útil para tests)
+  document.querySelectorAll('iswc-barcode-scanner').forEach((el) => {
+    el.addEventListener('iswc-detect', (e) => {
+      console.log('[scanner] iswc-detect', e.detail);
       document.documentElement.dataset.scannerDetected = '1';
     });
-    el.addEventListener('is-error', (e) => {
-      console.log('[scanner] is-error', e.detail);
+    el.addEventListener('iswc-error', (e) => {
+      console.log('[scanner] iswc-error', e.detail);
       document.documentElement.dataset.scannerError = '1';
     });
   });
@@ -44,26 +44,26 @@
 </head>
 <body>
 <header>
-  <h1>Demo — <code>&lt;is-barcode-scanner&gt;</code></h1>
-  <p>Usa <code>BarcodeDetector</code> sobre la cámara. Si la API no está, muestra un hint y emite <code>is-error</code>.</p>
+  <h1>Demo — <code>&lt;iswc-barcode-scanner&gt;</code></h1>
+  <p>Usa <code>BarcodeDetector</code> sobre la cámara. Si la API no está, muestra un hint y emite <code>iswc-error</code>.</p>
 </header>
 <main>
   <section>
     <h2>QR + EAN-13 (default)</h2>
-    <is-barcode-scanner formats="qr_code,ean_13"></is-barcode-scanner>
+    <iswc-barcode-scanner formats="qr_code,ean_13"></iswc-barcode-scanner>
   </section>
   <section>
     <h2>Solo QR (modo restringido)</h2>
-    <is-barcode-scanner formats="qr_code"></is-barcode-scanner>
+    <iswc-barcode-scanner formats="qr_code"></iswc-barcode-scanner>
   </section>
   <section>
     <h2>Disabled (no inicia)</h2>
-    <is-barcode-scanner disabled></is-barcode-scanner>
+    <iswc-barcode-scanner disabled></iswc-barcode-scanner>
   </section>
 </main>
 <footer>
   Atributos: <code>formats</code> (csv) <code>disabled</code>. Métodos: <code>start()</code> <code>stop()</code> <code>detect(source)</code>.
-  Eventos: <code>is-detect</code>, <code>is-error</code>.
+  Eventos: <code>iswc-detect</code>, <code>iswc-error</code>.
 </footer>
 </body>
 </html>

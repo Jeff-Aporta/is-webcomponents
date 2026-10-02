@@ -1,20 +1,20 @@
 ---
-tag: is-image-editor
+tag: iswc-image-editor
 tags:
-  - is-image-editor
+  - iswc-image-editor
 category: media
 status: public
 source: ./image-editor.js
 style: ./image-editor.css
 preview: ./image-editor.json
 ---
-# `<is-image-editor>`
+# `<iswc-image-editor>`
 
 ## Propósito
 
 Editor de imagen con recorte, zoom y rotación sobre `<canvas>`.
 
-Este módulo registra `<is-image-editor>`.
+Este módulo registra `<iswc-image-editor>`.
 
 ## Cuándo usarlo
 
@@ -23,7 +23,7 @@ subirse: cualquier caso donde el usuario ajusta la imagen en el navegador.
 
 ## Cuándo no usarlo
 
-Para mostrar una imagen sin edición basta un `<img>` o `<is-avatar>`.
+Para mostrar una imagen sin edición basta un `<img>` o `<iswc-avatar>`.
 
 ## Importación
 
@@ -34,7 +34,7 @@ import './image-editor.js';
 ## Ejemplo mínimo
 
 ```html
-<is-image-editor src="/uploads/logo.png" aspect="1"></is-image-editor>
+<iswc-image-editor src="/uploads/logo.png" aspect="1"></iswc-image-editor>
 ```
 
 ## API
@@ -67,9 +67,9 @@ import './image-editor.js';
 
 | Evento | detail | bubbles | composed | cancelable |
 | --- | --- | --- | --- | --- |
-| `is-load` | `{ image }` | sí | sí | no |
-| `is-change` | `{ crop }` | sí | sí | no |
-| `is-crop` | `{ dataURL, crop }` | sí | sí | no |
+| `iswc-load` | `{ image }` | sí | sí | no |
+| `iswc-change` | `{ crop }` | sí | sí | no |
+| `iswc-crop` | `{ dataURL, crop }` | sí | sí | no |
 
 ### Métodos y propiedades públicas
 
@@ -101,14 +101,14 @@ Tokens del tema (`--iswc-*`) según CSS del módulo.
 ### Integración con formularios
 
 No declara integración form-associated propia en este módulo. Para enviar el
-resultado, leer `cropped` (o escuchar `is-crop`) y volcarlo en un campo
+resultado, leer `cropped` (o escuchar `iswc-crop`) y volcarlo en un campo
 oculto o en un `FormData`.
 
 ## Comportamiento
 
 Documentación de cabecera preservada desde fuente:
 
-> `<is-image-editor>` — Editor de imagen con crop, zoom y rotación. El slot
+> `<iswc-image-editor>` — Editor de imagen con crop, zoom y rotación. El slot
 > `toolbar` delega acciones vía `data-action`, de modo que los botones los
 > pone quien lo usa y el editor solo ejecuta.
 
@@ -120,28 +120,28 @@ conserva la relación.
 
 - [`../_shared/adopt-css.js`](../_shared/adopt-css.js)
 
-Tags del módulo: `<is-image-editor>`.
+Tags del módulo: `<iswc-image-editor>`.
 
 ## Accesibilidad
 
 El lienzo lleva `aria-label`. El estado va en un `<output>` (live region).
-Los botones de la toolbar los aporta quien integra: usar `<is-button>` con
+Los botones de la toolbar los aporta quien integra: usar `<iswc-button>` con
 `aria-label` explícito.
 
 ## Ejemplo avanzado
 
 ```html
-<is-image-editor id="ed" src="/uploads/foto.jpg" aspect="1" zoom="1.2">
+<iswc-image-editor id="ed" src="/uploads/foto.jpg" aspect="1" zoom="1.2">
   <div slot="toolbar">
-    <is-button data-action="zoom-out" aria-label="Alejar">−</is-button>
-    <is-button data-action="zoom-in" aria-label="Acercar">+</is-button>
-    <is-button data-action="rotate" aria-label="Rotar">⟳</is-button>
-    <is-button data-action="crop">Recortar</is-button>
+    <iswc-button data-action="zoom-out" aria-label="Alejar">−</iswc-button>
+    <iswc-button data-action="zoom-in" aria-label="Acercar">+</iswc-button>
+    <iswc-button data-action="rotate" aria-label="Rotar">⟳</iswc-button>
+    <iswc-button data-action="crop">Recortar</iswc-button>
   </div>
-</is-image-editor>
+</iswc-image-editor>
 
 <script type="module">
-  document.getElementById('ed').addEventListener('is-crop', (e) => {
+  document.getElementById('ed').addEventListener('iswc-crop', (e) => {
     console.log(e.detail.dataURL);
   });
 </script>
@@ -150,7 +150,7 @@ Los botones de la toolbar los aporta quien integra: usar `<is-button>` con
 ## Errores comunes
 
 - Usar tag sin importar módulo primero.
-- Leer `cropped` antes del evento `is-load`.
+- Leer `cropped` antes del evento `iswc-load`.
 - Servir `src` desde otro origen sin CORS: el `<canvas>` queda contaminado y
   `cropped` lanza.
 - Copiar preview contra fuente actual; JS/CSS prevalecen.

@@ -13,12 +13,12 @@ import {
 } from '../_shared/scroll-memory.js';
 
 /**
- * <is-block-layout> — port de ISP `layout/BlockLayout.svelte`.
+ * <iswc-block-layout> — port de ISP `layout/BlockLayout.svelte`.
  *
- * Cuerpo vía JSON compacto (mismo codec que `<is-form>`):
+ * Cuerpo vía JSON compacto (mismo codec que `<iswc-form>`):
  *   block.json2html(body) / block.html2json() / toJSON() / fromJSON()
  *
- * Breakpoints: data-sizew, data-szw-*, --clientw, --clienth, --lerpw, evento is-breakpoint.
+ * Breakpoints: data-sizew, data-szw-*, --clientw, --clienth, --lerpw, evento iswc-breakpoint.
  * Geometría API: getWidth(), getHeight(), rect() / getRect().
  * Scroll memory (opt-in): remember-scroll + storage-key (+ cscroll para overflow).
  *
@@ -59,7 +59,7 @@ export function lerpFor(width: number, b0: string = 'sm', b1: string = 'xl'): nu
 
 export { SCROLL_MEMORY_ATTRS };
 
-/** Callback que `lerpw` entrega dentro del evento `is-breakpoint`. */
+/** Callback que `lerpw` entrega dentro del evento `iswc-breakpoint`. */
 type LerpwFn = (b0?: string, b1?: string) => number;
 
 /**
@@ -84,7 +84,7 @@ export class BreakpointHost extends ElementBase {
     this.measureSize();
     if (!this.#scroll) {
       const sm = new ScrollMemory(this, {
-        tag: this.localName || 'is-layout',
+        tag: this.localName || 'iswc-layout',
         restorePolicy: 'always',
       });
       this.#scroll = sm;
@@ -164,7 +164,7 @@ export class BreakpointHost extends ElementBase {
     this.style.setProperty('--lerpw', String(Math.round(lerpw * 1e4) / 1e4));
 
     const lerpwFn: LerpwFn = (b0?: string, b1?: string) => lerpFor(width, b0, b1);
-    emit(this, 'is-breakpoint', {
+    emit(this, 'iswc-breakpoint', {
       width, height, sizew, boolszw,
       lerpw: lerpwFn,
     });
@@ -175,7 +175,7 @@ export class BreakpointHost extends ElementBase {
   const TEMPLATE = document.createElement('template');
   TEMPLATE.innerHTML = /* html */ `<slot part="content"></slot>`;
 
-  class IsBlockLayout extends BreakpointHost {
+  class IswcBlockLayout extends BreakpointHost {
     static TEMPLATE = TEMPLATE;
     static get observedAttributes(): string[] {
       return ['inline', 'cscroll', 'label', 'labelledby', ...SCROLL_MEMORY_ATTRS];
@@ -273,10 +273,10 @@ export class BreakpointHost extends ElementBase {
         const json: unknown = JSON.parse(script.textContent || 'null');
         if (json && typeof json === 'object') this.fromJSON(json);
       } catch {
-        console.warn('<is-block-layout> script JSON inválido');
+        console.warn('<iswc-block-layout> script JSON inválido');
       }
     }
   }
 
-  defineElement('is-block-layout', IsBlockLayout, 'IsBlockLayout');
+  defineElement('iswc-block-layout', IswcBlockLayout, 'IswcBlockLayout');
 })();

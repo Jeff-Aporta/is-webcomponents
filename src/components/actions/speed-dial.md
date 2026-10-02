@@ -1,24 +1,24 @@
 ---
-tag: is-speed-dial
+tag: iswc-speed-dial
 tags:
-  - is-speed-dial
-  - is-speed-dial-action
+  - iswc-speed-dial
+  - iswc-speed-dial-action
 category: actions
 status: public
 source: ./speed-dial.js
 style: ./speed-dial.css
 preview: ./speed-dial.json
 ---
-# `<is-speed-dial>`
+# `<iswc-speed-dial>`
 
 ## Propósito
 
 FAB que despliega un abanico de acciones. Cada acción es un
-`<is-speed-dial-action>` hijo con icono y etiqueta. En modo radial reparte
+`<iswc-speed-dial-action>` hijo con icono y etiqueta. En modo radial reparte
 las acciones en anillos concéntricos acotados a un wrapper y, si no caben,
 pasa a un reparto por grid.
 
-Este módulo registra `<is-speed-dial>` y `<is-speed-dial-action>`.
+Este módulo registra `<iswc-speed-dial>` y `<iswc-speed-dial-action>`.
 
 ## Cuándo usarlo
 
@@ -37,10 +37,10 @@ import './speed-dial.js';
 ## Ejemplo mínimo
 
 ```html
-<is-speed-dial label="Acciones">
-  <is-speed-dial-action icon="mdi:plus" label="Crear"></is-speed-dial-action>
-  <is-speed-dial-action icon="mdi:pencil" label="Editar"></is-speed-dial-action>
-</is-speed-dial>
+<iswc-speed-dial label="Acciones">
+  <iswc-speed-dial-action icon="mdi:plus" label="Crear"></iswc-speed-dial-action>
+  <iswc-speed-dial-action icon="mdi:pencil" label="Editar"></iswc-speed-dial-action>
+</iswc-speed-dial>
 ```
 
 ## API
@@ -69,7 +69,7 @@ import './speed-dial.js';
 | `data-arc` | string/según contrato | Fuente define default/restricción. |
 | `data-radius` | string/según contrato | Fuente define default/restricción. |
 
-Atributos observados de `<is-speed-dial-action>`: `icon`, `label`, `color`,
+Atributos observados de `<iswc-speed-dial-action>`: `icon`, `label`, `color`,
 `href`, `disabled`.
 
 #### Propiedades públicas
@@ -82,17 +82,17 @@ Atributos observados de `<is-speed-dial-action>`: `icon`, `label`, `color`,
 
 | Slot | Uso |
 | --- | --- |
-| `default` | Contenido proyectado: `<is-speed-dial-action>`. |
+| `default` | Contenido proyectado: `<iswc-speed-dial-action>`. |
 
-En `<is-speed-dial-action>`: slot `default` (etiqueta) y slot `icon`
+En `<iswc-speed-dial-action>`: slot `default` (etiqueta) y slot `icon`
 (override del icono).
 
 ### Eventos
 
 | Evento | detail | bubbles | composed | cancelable |
 | --- | --- | --- | --- | --- |
-| `is-toggle` | sí | sí | sí | no |
-| `is-select` | sí | sí | sí | no |
+| `iswc-toggle` | sí | sí | sí | no |
+| `iswc-select` | sí | sí | sí | no |
 
 ### Métodos y propiedades públicas
 
@@ -111,7 +111,7 @@ Propiedades públicas aparecen en tabla anterior; APIs heredadas se verifican en
 | `root` | Personalizable con `::part(root)`. |
 | `actions` | Personalizable con `::part(actions)`. |
 | `trigger` | Personalizable con `::part(trigger)`. |
-| `action` | Personalizable con `::part(action)` en `<is-speed-dial-action>`. |
+| `action` | Personalizable con `::part(action)` en `<iswc-speed-dial-action>`. |
 
 ### Custom states
 
@@ -151,11 +151,11 @@ No declara integración form-associated propia en este módulo.
 
 Documentación de cabecera preservada desde fuente:
 
-> <is-speed-dial> — FAB que despliega un abanico de acciones.
+> <iswc-speed-dial> — FAB que despliega un abanico de acciones.
 > Atributos
 >   icon          icono con el dial CERRADO (default mdi:plus)
 >   open-icon     icono con el dial ABIERTO (default mdi:close). El trigger
->                 reusa <is-check-icon-button>, que hace el switch entre los
+>                 reusa <iswc-check-icon-button>, que hace el switch entre los
 >                 dos iconos en vez de rotar uno solo.
 >   label         aria-label del trigger
 >   direction     up (default) | down | left | right | radial
@@ -174,13 +174,13 @@ Documentación de cabecera preservada desde fuente:
 > area radial para todas, el componente marca data-packed y las acciones
 > pasan a un GRID dentro del wrapper.
 > Slots
->   default    <is-speed-dial-action>…
+>   default    <iswc-speed-dial-action>…
 > Eventos
->   is-toggle  detail: { open }
->   is-select  detail: { action }   — cuando se elige una acción
-> Cada <is-speed-dial-action> acepta:
+>   iswc-toggle  detail: { open }
+>   iswc-select  detail: { action }   — cuando se elige una acción
+> Cada <iswc-speed-dial-action> acepta:
 >   icon, label, color (brand|neutral|success|warning|danger), href, disabled
->   El clic dispara is-select y, si no está disabled ni tiene href, cierra el dial.
+>   El clic dispara iswc-select y, si no está disabled ni tiene href, cierra el dial.
 
 El componente escribe `data-rings` en el host como diagnóstico del reparto
 radial (`radio x nº de items @ arco` por anillo) y `data-packed` cuando cae al
@@ -194,9 +194,9 @@ reparto por layout nativo.
 - [`../_shared/misc-utils.js`](../_shared/misc-utils.js)
 - [`../_shared/popup-dismiss.js`](../_shared/popup-dismiss.js)
 - [`./check-icon-button.js`](./check-icon-button.js) — el trigger es un
-  `<is-check-icon-button>` que alterna entre `icon` y `open-icon`.
+  `<iswc-check-icon-button>` que alterna entre `icon` y `open-icon`.
 
-Tags del módulo: `<is-speed-dial>`, `<is-speed-dial-action>`.
+Tags del módulo: `<iswc-speed-dial>`, `<iswc-speed-dial-action>`.
 
 ## Accesibilidad
 
@@ -208,12 +208,12 @@ acción (se rellena desde `label` o el texto del item).
 
 ```html
 <div class="lienzo">
-  <is-speed-dial direction="radial" data-wrapper=".lienzo"
+  <iswc-speed-dial direction="radial" data-wrapper=".lienzo"
                  data-start-angle="-90" data-arc="180" data-radius="90">
-    <is-speed-dial-action icon="mdi:file" label="Nuevo"></is-speed-dial-action>
-    <is-speed-dial-action icon="mdi:share" label="Compartir" color="success"></is-speed-dial-action>
-    <is-speed-dial-action icon="mdi:delete" label="Borrar" color="danger"></is-speed-dial-action>
-  </is-speed-dial>
+    <iswc-speed-dial-action icon="mdi:file" label="Nuevo"></iswc-speed-dial-action>
+    <iswc-speed-dial-action icon="mdi:share" label="Compartir" color="success"></iswc-speed-dial-action>
+    <iswc-speed-dial-action icon="mdi:delete" label="Borrar" color="danger"></iswc-speed-dial-action>
+  </iswc-speed-dial>
 </div>
 ```
 

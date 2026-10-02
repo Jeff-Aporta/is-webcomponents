@@ -6,8 +6,8 @@
   --iswc-picker-focus: var(--iswc-focus, var(--iswc-accent, #339af0));
   display: block;
   position: relative;
-  width: 100%;
-  min-width: 0;
+  inline-size: 100%;
+  min-inline-size: 0;
   font-family: var(--iswc-sans, inherit);
   color: var(--iswc-text, inherit);
   box-sizing: border-box;
@@ -18,7 +18,7 @@
     display: flex;
     flex-direction: column;
     gap: 0.35em;
-    min-width: 0;
+    min-inline-size: 0;
   }
 
   .label {
@@ -34,8 +34,8 @@
 
   .base {
     display: flex;
-    width: 100%;
-    min-width: 0;
+    inline-size: 100%;
+    min-inline-size: 0;
   }
 
   .trigger {
@@ -43,9 +43,9 @@
     align-items: center;
     gap: 0.5em;
     flex: 1 1 auto;
-    width: 100%;
-    min-width: 0;
-    min-height: 2.5em;
+    inline-size: 100%;
+    min-inline-size: 0;
+    min-block-size: 2.5em;
     padding: 0.25em 0.45em 0.25em 0.55em;
     background: var(--iswc-picker-bg);
     border: 1px solid var(--iswc-picker-border);
@@ -63,16 +63,16 @@
 
   .swatch {
     flex: none;
-    width: 1.5em;
-    height: 1.5em;
+    inline-size: 1.5em;
+    block-size: 1.5em;
     border-radius: calc(var(--iswc-picker-radius) - 1px);
     box-shadow: inset 0 0 0 1px rgb(0 0 0 / 22%);
   }
 
   .hex-text {
     flex: 1 1 auto;
-    min-width: 0;
-    text-align: left;
+    min-inline-size: 0;
+    text-align: start;
     font-family: var(--iswc-mono, ui-monospace, monospace);
     font-size: 0.9em;
     text-transform: uppercase;
@@ -90,20 +90,20 @@
   .popup {
     position: fixed;
     inset: 0;
-    width: 100%;
-    height: 100%;
-    max-width: none;
-    max-height: none;
+    inline-size: 100%;
+    block-size: 100%;
+    max-inline-size: none;
+    max-block-size: none;
     margin: 0;
     padding: 0;
     border: none;
     background: transparent;
     overflow: visible;
     outline: none;
-  }
 
-  .popup::backdrop {
-    background: transparent;
+    &::backdrop {
+      background: transparent;
+    }
   }
 
   .panel {
@@ -122,8 +122,8 @@
       var(--iswc-shadow, 0 10px 28px rgb(0 0 0 / 18%));
     color: var(--iswc-text, inherit);
     /* El JS fija width al del trigger; esto evita saltos antes del layout. */
-    min-width: 13rem;
-    max-width: min(18rem, calc(100vw - 1rem));
+    min-inline-size: 13rem;
+    max-inline-size: min(18rem, calc(100vw - 1rem));
   }
 
   .row {
@@ -133,32 +133,34 @@
     gap: 0.5em;
   }
 
-  .eyedropper::part(button) {
-    width: 2.35em;
-    min-height: 2.35em;
-    height: 2.35em;
-    padding: 0;
+  .eyedropper {
+    &::part(button) {
+      inline-size: 2.35em;
+      min-block-size: 2.35em;
+      block-size: 2.35em;
+      padding: 0;
+    }
   }
 
   .native {
     flex: none;
-    width: 2.5em;
-    height: 2.35em;
+    inline-size: 2.5em;
+    block-size: 2.35em;
     padding: 0;
     border: 1px solid var(--iswc-picker-border);
     border-radius: var(--iswc-picker-radius);
     background: transparent;
     cursor: pointer;
     box-sizing: border-box;
+
+    &::-webkit-color-swatch-wrapper { padding: 0.15em; }
+    &::-webkit-color-swatch { border: 0; border-radius: 0.25em; }
+    &::-moz-color-swatch { border: 0; border-radius: 0.25em; }
   }
 
-  .native::-webkit-color-swatch-wrapper { padding: 0.15em; }
-  .native::-webkit-color-swatch { border: 0; border-radius: 0.25em; }
-  .native::-moz-color-swatch { border: 0; border-radius: 0.25em; }
-
   .hex {
-    min-width: 0;
-    width: 100%;
+    min-inline-size: 0;
+    inline-size: 100%;
   }
 
   .swatches {
@@ -169,8 +171,8 @@
 
   .swatch-btn {
     aspect-ratio: 1;
-    width: 100%;
-    min-width: 0;
+    inline-size: 100%;
+    min-inline-size: 0;
     padding: 0;
     border: 0;
     border-radius: var(--iswc-picker-radius);
@@ -182,13 +184,13 @@
       outline: 2px solid var(--iswc-picker-focus);
       outline-offset: 1px;
     }
-  }
 
-  .swatch-btn[data-selected] {
-    box-shadow:
-      inset 0 0 0 1px rgb(0 0 0 / 22%),
-      0 0 0 2px var(--iswc-bg-elev, #fff),
-      0 0 0 4px var(--iswc-accent, #339af0);
+    &[data-selected] {
+      box-shadow:
+        inset 0 0 0 1px rgb(0 0 0 / 22%),
+        0 0 0 2px var(--iswc-bg-elev, #fff),
+        0 0 0 4px var(--iswc-accent, #339af0);
+    }
   }
 }
 
@@ -197,11 +199,11 @@
   pointer-events: none;
 }
 
-:host(:state(open)) .trigger {
-  outline: 2px solid var(--iswc-picker-focus);
-  outline-offset: 1px;
-}
+:host(:state(open)) {
+  .trigger {
+    outline: 2px solid var(--iswc-picker-focus);
+    outline-offset: 1px;
+  }
 
-:host(:state(open)) .caret {
-  transform: rotate(180deg);
+  .caret { transform: rotate(180deg); }
 }

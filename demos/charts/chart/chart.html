@@ -3,7 +3,7 @@
 <head>
 <meta charset="utf-8" />
 <meta name="viewport" content="width=device-width, initial-scale=1" />
-<title>&lt;is-chart&gt; · demo genérico</title>
+<title>&lt;iswc-chart&gt; · demo genérico</title>
 <style>
   html, body { margin: 0; padding: 0; min-height: 100%; background: #0c1118; color: #e2e8f0; font-family: ui-sans-serif, system-ui, sans-serif; }
   body { display: grid; grid-template-rows: auto 1fr; }
@@ -11,16 +11,16 @@
   header h1 { font-size: 16px; font-weight: 700; margin: 0; }
   header p { font-size: 12px; color: #94a3b8; margin: 4px 0 0 0; }
   main { display: grid; place-items: center; padding: 20px; min-height: 0; }
-  is-chart { width: 720px; height: 360px; }
-  is-chart:not(:defined) { visibility: hidden; }
+  iswc-chart { width: 720px; height: 360px; }
+  iswc-chart:not(:defined) { visibility: hidden; }
 </style>
 <script type="module">
-  // The generic <is-chart> accepts a type attribute or type in payload.
+  // The generic <iswc-chart> accepts a type attribute or type in payload.
   // We use the attribute approach here.
-  await import('../../../dist/cdn/data-viz/chart.min.js?h=ke2piz');
-  await customElements.whenDefined('is-chart');
+  await import('../../../dist/cdn/data-viz/chart.min.js?h=xbzc2f');
+  await customElements.whenDefined('iswc-chart');
 
-  const chart = document.createElement('is-chart');
+  const chart = document.createElement('iswc-chart');
   chart.setAttribute('type', 'bar');
   chart.setAttribute('label', 'Multi-tipo: type="bar"');
   chart.payload = {
@@ -39,7 +39,7 @@
 </head>
 <body>
 <header>
-  <h1>&lt;is-chart&gt;</h1>
+  <h1>&lt;iswc-chart&gt;</h1>
   <p>Motor SVG genérico. Acepta <code>type</code> por atributo o en payload. Equivalente a los wrappers tipados.</p>
 </header>
 <main></main>

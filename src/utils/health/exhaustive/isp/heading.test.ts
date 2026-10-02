@@ -1,5 +1,5 @@
 /**
- * heading.test.ts — Tier A (10 aserciones) para `<is-heading>`.
+ * heading.test.ts — Tier A (10 aserciones) para `<iswc-heading>`.
  *
  * Tipografía jerárquica con level (1-6), color semántico, mix y mix-with.
  */
@@ -12,7 +12,7 @@ import { fileURLToPath } from 'node:url';
 
 const HERE = dirname(fileURLToPath(import.meta.url));
 const ROOT = join(HERE, '..', '..', '..', '..', '..');
-const TAG = 'is-heading';
+const TAG = 'iswc-heading';
 const TS  = join(ROOT, 'src', 'components', 'isp', 'heading.ts');
 const CSS = join(ROOT, 'src', 'components', 'isp', 'heading.css');
 const JSON_PATH = join(ROOT, 'src', 'components', 'isp', 'heading.json');
@@ -25,10 +25,10 @@ test('2. CSS hermano existe', async () => {
   assert.ok(existsSync(CSS));
 });
 
-test('3. JSON existe y respeta is-preview/v1', async () => {
+test('3. JSON existe y respeta iswc-preview/v1', async () => {
   const json = JSON.parse(readFileSync(JSON_PATH, 'utf8'));
   assert.equal(json.tag, TAG);
-  assert.equal(json.$schema, 'is-preview/v1');
+  assert.equal(json.$schema, 'iswc-preview/v1');
 });
 
 test('4. OBSERVED incluye level, color, mix, mix-with, size', async () => {
@@ -70,7 +70,7 @@ test('8. extiende ElementBase (cambios de atributo se procesan)', async () => {
 
 test('9. custom element registrado', async () => {
   const src = readFileSync(TS, 'utf8');
-  assert.ok(/defineElement\s*\(\s*['"]is-heading['"]/.test(src));
+  assert.ok(/defineElement\s*\(\s*['"]iswc-heading['"]/.test(src));
 });
 
 test('10. preview.ts existe', async () => {

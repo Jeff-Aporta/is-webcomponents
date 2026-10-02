@@ -14,7 +14,7 @@ try {
   await page.waitForTimeout(300);
 
   const data = await page.evaluate(() => {
-    const layouts = [...document.querySelectorAll('is-flex-layout')];
+    const layouts = [...document.querySelectorAll('iswc-flex-layout')];
     return layouts.map((l) => {
       const cs = getComputedStyle(l);
       const r = l.getBoundingClientRect();

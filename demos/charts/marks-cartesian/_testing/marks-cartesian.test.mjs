@@ -13,15 +13,15 @@ tests.push({
     await waitReady(page, 'data-marks-cartesian-ready');
     const info = await page.evaluate(async () => {
       const lib = await import('/dist/cdn/charts/marks-cartesian.min.js');
-      const bars = document.querySelectorAll('is-chart[type="bar"]');
-      const lines = document.querySelectorAll('is-chart[type="line"]');
+      const bars = document.querySelectorAll('iswc-chart[type="bar"]');
+      const lines = document.querySelectorAll('iswc-chart[type="line"]');
       return {
         exports: Object.keys(lib).sort(),
         hasBar: typeof lib.drawBarMarks === 'function',
         hasLine: typeof lib.drawLineMarks === 'function',
         hasScatter: typeof lib.drawScatterMarks === 'function',
         hasBubble: typeof lib.drawBubbleMarks === 'function',
-        chartDefined: !!customElements.get('is-chart'),
+        chartDefined: !!customElements.get('iswc-chart'),
         barCharts: bars.length,
         lineCharts: lines.length,
       };
@@ -32,8 +32,8 @@ tests.push({
     assert.equal(info.hasScatter, true);
     assert.equal(info.hasBubble, true);
     assert.equal(info.chartDefined, true);
-    assert.equal(info.barCharts, 1, 'debe haber 1 <is-chart type=bar>');
-    assert.equal(info.lineCharts, 1, 'debe haber 1 <is-chart type=line>');
+    assert.equal(info.barCharts, 1, 'debe haber 1 <iswc-chart type=bar>');
+    assert.equal(info.lineCharts, 1, 'debe haber 1 <iswc-chart type=line>');
     await screenshot(page, 'marks-cartesian-smoke');
   },
 });
@@ -45,8 +45,8 @@ tests.push({
     await waitReady(page, 'data-marks-cartesian-ready');
     await page.waitForTimeout(150);
     const data = await page.evaluate(() => {
-      const bar = document.querySelector('is-chart[type="bar"]');
-      const line = document.querySelector('is-chart[type="line"]');
+      const bar = document.querySelector('iswc-chart[type="bar"]');
+      const line = document.querySelector('iswc-chart[type="line"]');
       return {
         barSvg: !!bar?.shadowRoot?.querySelector('svg'),
         barMarks: bar?.shadowRoot?.querySelectorAll('.mark.mark-bar').length || 0,
@@ -54,8 +54,8 @@ tests.push({
         lineMarks: line?.shadowRoot?.querySelectorAll('.mark.mark-line').length || 0,
       };
     });
-    assert.equal(data.barSvg, true, '<is-chart type=bar> debe renderizar SVG');
-    assert.equal(data.lineSvg, true, '<is-chart type=line> debe renderizar SVG');
+    assert.equal(data.barSvg, true, '<iswc-chart type=bar> debe renderizar SVG');
+    assert.equal(data.lineSvg, true, '<iswc-chart type=line> debe renderizar SVG');
     assert.ok(data.barMarks >= 3, `esperaba >=3 barras (3 categorías), hay ${data.barMarks}`);
     assert.ok(data.lineMarks >= 1, `esperaba >=1 línea, hay ${data.lineMarks}`);
   },

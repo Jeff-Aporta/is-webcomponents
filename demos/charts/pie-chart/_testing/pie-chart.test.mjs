@@ -14,13 +14,13 @@ tests.push({
     await page.goto(URL, { waitUntil: 'domcontentloaded' });
     await waitReady(page, 'data-pie-chart-ready');
     const info = await page.evaluate(() => {
-      const el = document.querySelector('is-pie-chart');
+      const el = document.querySelector('iswc-pie-chart');
       const svg = el.shadowRoot.querySelector('svg');
       const marks = el.shadowRoot.querySelectorAll('.mark');
       const rects = svg.getBoundingClientRect();
       return {
-        defined: !!customElements.get('is-pie-chart'),
-        chartDefined: !!customElements.get('is-chart'),
+        defined: !!customElements.get('iswc-pie-chart'),
+        chartDefined: !!customElements.get('iswc-chart'),
         svg: !!svg,
         viewBox: svg?.getAttribute('viewBox'),
         marks: marks.length,
@@ -28,8 +28,8 @@ tests.push({
         height: rects.height,
       };
     });
-    assert.equal(info.defined, true, 'is-pie-chart debe estar definido');
-    assert.equal(info.chartDefined, true, 'is-chart también debe estar definido');
+    assert.equal(info.defined, true, 'iswc-pie-chart debe estar definido');
+    assert.equal(info.chartDefined, true, 'iswc-chart también debe estar definido');
     assert.ok(info.svg, 'debe haber un SVG en shadow DOM');
     assert.ok(info.marks > 0, `debe haber marcas renderizadas, hay ${info.marks}`);
     assert.ok(info.viewBox, 'el SVG debe tener viewBox');
@@ -44,11 +44,11 @@ tests.push({
     await waitReady(page, 'data-pie-chart-ready');
     await page.waitForTimeout(200);
     const before = await page.evaluate(() => {
-      const el = document.querySelector('is-pie-chart');
+      const el = document.querySelector('iswc-pie-chart');
       return el.shadowRoot.querySelectorAll('.mark.mark-slice').length;
     });
     await page.evaluate(() => {
-      const el = document.querySelector('is-pie-chart');
+      const el = document.querySelector('iswc-pie-chart');
       el.payload = {
         type: 'pie',
         data: {
@@ -59,7 +59,7 @@ tests.push({
     });
     await page.waitForTimeout(200);
     const after = await page.evaluate(() => {
-      const el = document.querySelector('is-pie-chart');
+      const el = document.querySelector('iswc-pie-chart');
       return el.shadowRoot.querySelectorAll('.mark.mark-slice').length;
     });
     assert.notEqual(after, before, `re-asignar payload debe cambiar # de slices (${before}→${after})`);
@@ -73,7 +73,7 @@ tests.push({
     await waitReady(page, 'data-pie-chart-ready');
     await page.waitForTimeout(200);
     const info = await page.evaluate(() => {
-      const el = document.querySelector('is-pie-chart');
+      const el = document.querySelector('iswc-pie-chart');
       const slices = [...el.shadowRoot.querySelectorAll('.mark.mark-slice')];
       const labels = el.payload?.data?.labels ?? [];
       return {
@@ -105,7 +105,7 @@ tests.push({
     await waitReady(page, 'data-pie-chart-ready');
     await page.waitForTimeout(200);
     const fills = await page.evaluate(() => {
-      const el = document.querySelector('is-pie-chart');
+      const el = document.querySelector('iswc-pie-chart');
       const slices = [...el.shadowRoot.querySelectorAll('.mark.mark-slice')];
       return slices.map((s) => s.getAttribute('fill') ?? '');
     });
@@ -122,7 +122,7 @@ tests.push({
     await waitReady(page, 'data-pie-chart-ready');
     await page.waitForTimeout(200);
     const legend = await page.evaluate(() => {
-      const el = document.querySelector('is-pie-chart');
+      const el = document.querySelector('iswc-pie-chart');
       const leg = el.shadowRoot.querySelector('.legend');
       if (!leg || leg.hidden) return { hidden: true, items: [] };
       const items = [...leg.querySelectorAll('.legend-item')].map((it) => ({
@@ -152,7 +152,7 @@ tests.push({
     await waitReady(page, 'data-pie-chart-ready');
     await page.waitForTimeout(200);
     const info = await page.evaluate(() => {
-      const el = document.querySelector('is-pie-chart');
+      const el = document.querySelector('iswc-pie-chart');
       const slices = [...el.shadowRoot.querySelectorAll('.mark.mark-slice')];
       const total = el.payload.data.datasets[0].data.reduce((s, v) => s + Number(v), 0);
       // Calculamos el % esperado por slice.
@@ -187,7 +187,7 @@ tests.push({
     await page.waitForTimeout(200);
     const result = await page.evaluate(() => {
       return new Promise((resolve) => {
-        const el = document.querySelector('is-pie-chart');
+        const el = document.querySelector('iswc-pie-chart');
         const slice = el.shadowRoot.querySelector('.mark.mark-slice');
         if (!slice) return resolve({ slice: false });
         const box = slice.getBoundingClientRect();
@@ -210,16 +210,16 @@ tests.push({
 });
 
 tests.push({
-  name: 'is-render: emite el evento is-render tras montar',
+  name: 'iswc-render: emite el evento iswc-render tras montar',
   run: async (page) => {
     await page.goto(URL, { waitUntil: 'domcontentloaded' });
     await waitReady(page, 'data-pie-chart-ready');
     const fired = await page.evaluate(() => {
       return new Promise((resolve) => {
-        const el = document.createElement('is-pie-chart');
+        const el = document.createElement('iswc-pie-chart');
         document.body.appendChild(el);
         let n = 0;
-        el.addEventListener('is-render', () => n++);
+        el.addEventListener('iswc-render', () => n++);
         el.payload = {
           type: 'pie',
           data: { labels: ['a', 'b'], datasets: [{ label: 's', data: [1, 2] }] },
@@ -227,7 +227,7 @@ tests.push({
         setTimeout(() => { el.remove(); resolve(n); }, 250);
       });
     });
-    assert.ok(fired >= 1, `is-render debió dispararse >=1 vez (fue ${fired})`);
+    assert.ok(fired >= 1, `iswc-render debió dispararse >=1 vez (fue ${fired})`);
   },
 });
 

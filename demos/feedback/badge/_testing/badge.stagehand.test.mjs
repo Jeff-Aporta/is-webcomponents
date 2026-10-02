@@ -15,7 +15,7 @@ checks.push({
     await waitReady(page, 'data-badge-ready');
     await page.waitForTimeout(150);
     const sizes = await page.evaluate(() => {
-      return [...document.querySelectorAll('is-badge')].map((b) => {
+      return [...document.querySelectorAll('iswc-badge')].map((b) => {
         const r = b.getBoundingClientRect();
         return { w: r.width, h: r.height };
       });
@@ -35,7 +35,7 @@ checks.push({
       const sections = [...document.querySelectorAll('section')];
       const issues = [];
       for (const sec of sections) {
-        const badges = [...sec.querySelectorAll('is-badge')];
+        const badges = [...sec.querySelectorAll('iswc-badge')];
         const rects = badges.map((b) => b.getBoundingClientRect());
         for (let i = 0; i < rects.length; i++) {
           for (let j = i + 1; j < rects.length; j++) {
@@ -59,7 +59,7 @@ checks.push({
     await waitReady(page, 'data-badge-ready');
     const variants = await page.evaluate(() => {
       const sec = [...document.querySelectorAll('section')].find((s) => s.textContent.includes('Variantes'));
-      return [...sec.querySelectorAll('is-badge')].map((b) => {
+      return [...sec.querySelectorAll('iswc-badge')].map((b) => {
         const inner = b.shadowRoot?.querySelector('.badge');
         const cs = getComputedStyle(inner);
         return {
@@ -99,7 +99,7 @@ checks.push({
     await waitReady(page, 'data-badge-ready');
     const anim = await page.evaluate(() => {
       const sec = [...document.querySelectorAll('section')].find((s) => s.textContent.includes('Atención'));
-      return [...sec.querySelectorAll('is-badge')].map((b) => {
+      return [...sec.querySelectorAll('iswc-badge')].map((b) => {
         const inner = b.shadowRoot?.querySelector('.badge');
         return {
           attention: b.getAttribute('attention'),

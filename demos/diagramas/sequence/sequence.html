@@ -3,8 +3,8 @@
 <head>
 <meta charset="utf-8" />
 <meta name="viewport" content="width=device-width, initial-scale=1" />
-<title>Demo — <is-sequence-diagram></title>
-<meta name="description" content="Demo de is-sequence-diagram con 3 actores y 5 mensajes incl. self-loop." />
+<title>Demo — <iswc-sequence-diagram></title>
+<meta name="description" content="Demo de iswc-sequence-diagram con 3 actores y 5 mensajes incl. self-loop." />
 <style>
   html, body { margin: 0; padding: 0; min-height: 100%; background: #0c1118; color: #e2e8f0; font-family: ui-sans-serif, system-ui, sans-serif; }
   body { display: grid; grid-template-rows: auto 1fr auto; }
@@ -12,16 +12,16 @@
   header h1 { font-size: 16px; font-weight: 700; margin: 0; }
   header p { font-size: 12px; color: #94a3b8; margin: 4px 0 0 0; }
   main { display: grid; padding: 20px; min-height: 420px; }
-  is-sequence-diagram { width: 100%; min-height: 400px; }
-  is-sequence-diagram:not(:defined) { visibility: hidden; }
+  iswc-sequence-diagram { width: 100%; min-height: 400px; }
+  iswc-sequence-diagram:not(:defined) { visibility: hidden; }
   footer { padding: 12px 20px; border-top: 1px solid rgba(255,255,255,0.1); background: #0f1620; font-size: 11px; color: #94a3b8; }
   footer code { background: rgba(255,255,255,0.06); padding: 1px 5px; border-radius: 3px; font: 11px ui-monospace, Menlo, Consolas, monospace; }
 </style>
 <script type="module">
-  await import('../../../dist/cdn/diagrams/sequence-diagram.min.js?h=yetezm');
-  await customElements.whenDefined('is-sequence-diagram');
+  await import('../../../dist/cdn/diagrams/sequence-diagram.min.js?h=esbe4u');
+  await customElements.whenDefined('iswc-sequence-diagram');
 
-  const el = document.createElement('is-sequence-diagram');
+  const el = document.createElement('iswc-sequence-diagram');
   el.payload = {
     sequence: {
       title: 'Demo secuencia',
@@ -47,10 +47,10 @@
 </head>
 <body>
 <header>
-  <h1>Demo <code>&lt;is-sequence-diagram&gt;</code></h1>
+  <h1>Demo <code>&lt;iswc-sequence-diagram&gt;</code></h1>
   <p>Smoke: monta el componente, renderiza el SVG desde la spec JSON.</p>
 </header>
 <main><div id="host"></div></main>
-<footer>Componente: <code>is-sequence-diagram</code> · Spec: <code>sequence-spec</code></footer>
+<footer>Componente: <code>iswc-sequence-diagram</code> · Spec: <code>sequence-spec</code></footer>
 </body>
 </html>

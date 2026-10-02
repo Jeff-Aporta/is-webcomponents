@@ -1,4 +1,4 @@
-// confirm-delete.test.mjs — tests exhaustivos del demo <is-confirm-delete>.
+// confirm-delete.test.mjs — tests exhaustivos del demo <iswc-confirm-delete>.
 // Cobertura: smoke + funcional (show abre el modal, typing habilita botón,
 // eventos, loading bloquea ambos botones) + ciclo show/hide.
 import assert from 'node:assert/strict';
@@ -17,9 +17,9 @@ tests.push({
       const cd = document.getElementById('cd');
       const sr = cd.shadowRoot;
       return {
-        defined: !!customElements.get('is-confirm-delete'),
-        dlgExists: !!sr.querySelector('is-dialog.dlg'),
-        inputsCount: sr.querySelectorAll('is-input').length,
+        defined: !!customElements.get('iswc-confirm-delete'),
+        dlgExists: !!sr.querySelector('iswc-dialog.dlg'),
+        inputsCount: sr.querySelectorAll('iswc-input').length,
         deleteBtnExists: !!sr.querySelector('button.delete'),
         cancelBtnExists: !!sr.querySelector('button.cancel'),
         entity: cd.entity,
@@ -28,8 +28,8 @@ tests.push({
       };
     });
     assert.equal(info.defined, true);
-    assert.equal(info.dlgExists, true, '<is-dialog> debe estar en shadow');
-    assert.equal(info.inputsCount, 2, 'debe haber 2 <is-input> (current + confirm)');
+    assert.equal(info.dlgExists, true, '<iswc-dialog> debe estar en shadow');
+    assert.equal(info.inputsCount, 2, 'debe haber 2 <iswc-input> (current + confirm)');
     assert.equal(info.deleteBtnExists, true);
     assert.equal(info.cancelBtnExists, true);
     assert.equal(info.entity, 'tercero');
@@ -50,7 +50,7 @@ tests.push({
       cd.show();
       await new Promise((r) => setTimeout(r, 200));
       const openAfter = cd.open;
-      const dlg = cd.shadowRoot.querySelector('is-dialog.dlg');
+      const dlg = cd.shadowRoot.querySelector('iswc-dialog.dlg');
       const dialogOpen = !!dlg?.open || dlg?.hasAttribute('open');
       cd.hide();
       await new Promise((r) => setTimeout(r, 200));
@@ -94,9 +94,9 @@ tests.push({
       const cd = document.getElementById('cd');
       cd.show();
       await new Promise((r) => setTimeout(r, 200));
-      const confirmInput = cd.shadowRoot.querySelector('is-input.confirm');
+      const confirmInput = cd.shadowRoot.querySelector('iswc-input.confirm');
       confirmInput.value = '900123456';
-      confirmInput.dispatchEvent(new CustomEvent('is-input', { bubbles: true, composed: true }));
+      confirmInput.dispatchEvent(new CustomEvent('iswc-input', { bubbles: true, composed: true }));
       await new Promise((r) => setTimeout(r, 100));
       const delBtn = cd.shadowRoot.querySelector('button.delete');
       return {
@@ -119,15 +119,15 @@ tests.push({
       const cd = document.getElementById('cd');
       cd.show();
       await new Promise((r) => setTimeout(r, 200));
-      const confirmInput = cd.shadowRoot.querySelector('is-input.confirm');
+      const confirmInput = cd.shadowRoot.querySelector('iswc-input.confirm');
       // minúsculas — debe coincidir porque por defecto no es case-sensitive
       confirmInput.value = '900123456';
-      confirmInput.dispatchEvent(new CustomEvent('is-input', { bubbles: true, composed: true }));
+      confirmInput.dispatchEvent(new CustomEvent('iswc-input', { bubbles: true, composed: true }));
       await new Promise((r) => setTimeout(r, 50));
       const matchedLower = cd.confirmed;
       // Texto incorrecto
       confirmInput.value = 'WRONG';
-      confirmInput.dispatchEvent(new CustomEvent('is-input', { bubbles: true, composed: true }));
+      confirmInput.dispatchEvent(new CustomEvent('iswc-input', { bubbles: true, composed: true }));
       await new Promise((r) => setTimeout(r, 50));
       const matchedWrong = cd.confirmed;
       return { matchedLower, matchedWrong };

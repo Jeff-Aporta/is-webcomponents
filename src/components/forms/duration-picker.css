@@ -1,4 +1,4 @@
-/* is-duration-picker */
+/* iswc-duration-picker */
 :host {
   display: inline-block;
   font: inherit;
@@ -17,46 +17,46 @@
   padding: .25rem .45rem;
 }
 
+/* Botones arriba/abajo de cada columna: comparten estilo base. */
+:is(.col button, .cell) {
+  border: 0;
+  background: transparent;
+  color: inherit;
+  font: inherit;
+  line-height: 1;
+  padding: 0;
+  border-radius: 4px;
+}
+
 .col {
   display: grid;
   grid-template-rows: auto 1fr auto;
   align-items: stretch;
   gap: 1px;
+
+  button {
+    cursor: pointer;
+    color: var(--iswc-text-soft);
+    font-size: .65rem;
+    height: 1rem;
+
+    &:hover {
+      background: color-mix(in srgb, var(--iswc-accent) 18%, transparent);
+      color: var(--iswc-accent);
+    }
+  }
 }
 
 .cell {
   width: 2.4rem;
-  border: 0;
   outline: 0;
-  background: transparent;
-  color: inherit;
-  font: inherit;
   font-size: 1rem;
   text-align: center;
   font-variant-numeric: tabular-nums;
   padding: .25rem 0;
-  border-radius: 4px;
 
   &:focus {
     background: color-mix(in srgb, var(--iswc-accent) 14%, transparent);
-  }
-}
-
-.col button {
-  border: 0;
-  background: transparent;
-  color: var(--iswc-text-soft);
-  cursor: pointer;
-  font: inherit;
-  line-height: 1;
-  padding: 0;
-  font-size: .65rem;
-  height: 1rem;
-  border-radius: 4px;
-
-  &:hover {
-    background: color-mix(in srgb, var(--iswc-accent) 18%, transparent);
-    color: var(--iswc-accent);
   }
 }
 

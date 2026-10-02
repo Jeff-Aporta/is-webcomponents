@@ -1,11 +1,11 @@
 ---
-tag: is-preview-component
+tag: iswc-preview-component
 tags:
-  - is-preview-component
+  - iswc-preview-component
 category: preview
 status: public
 ---
-# `<is-preview-component>`
+# `<iswc-preview-component>`
 
 ## Propósito
 
@@ -22,5 +22,5 @@ No lo reimplementes ni lo uses para sustituir al padre. La guía del padre docum
 ## Ejemplo mínimo
 
 ```html
-<is-preview-component></is-preview-component>
+<iswc-preview-component></iswc-preview-component>
 ```

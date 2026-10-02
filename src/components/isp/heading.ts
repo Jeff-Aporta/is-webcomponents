@@ -7,7 +7,7 @@ import {
 } from '../_shared/isp-color.js';
 
 /**
- * <is-heading> — port de ISP `typography/H1.svelte` … `H6.svelte`.
+ * <iswc-heading> — port de ISP `typography/H1.svelte` … `H6.svelte`.
  *
  * Atributos
  *   level      1 | 2 | 3 | 4 | 5 | 6                       (default 1)
@@ -26,7 +26,7 @@ import {
   const LEVELS = ['1', '2', '3', '4', '5', '6'];
   const DEFAULT_MIX = { 1: '15%', 2: '30%', 3: '45%', 4: '65%', 5: '80%', 6: '90%' };
 
-  class IsHeading extends ElementBase {
+  class IswcHeading extends ElementBase {
     /** Personalización por atributo (ver `core/attrs.ts`). */
     static styleAttrs = {
     // `color` y `mix` los resuelve #syncVars() vía syncIspColor: aquí solo
@@ -143,5 +143,5 @@ import {
     }
   }
 
-  defineElement('is-heading', IsHeading, 'IsHeading');
+  defineElement('iswc-heading', IswcHeading, 'IswcHeading');
 })();

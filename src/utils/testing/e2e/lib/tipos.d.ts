@@ -17,7 +17,7 @@ export type CtxE2E = {
   etiqueta: string;
 };
 
-/** Host <is-code> visto desde el DOM (cast mínimo para los evaluate). */
+/** Host <iswc-code> visto desde el DOM (cast mínimo para los evaluate). */
 export type EditorIsCode = HTMLElement & {
   value: string;
   readonly: boolean;
@@ -28,7 +28,7 @@ export type EditorIsCode = HTMLElement & {
 /** Contadores de eventos is-* usados en el test de escritura. */
 export type ContadoresEventos = { input: number; change: number; cursor: number };
 
-/** Contadores de fases is-mark-activate. */
+/** Contadores de fases iswc-mark-activate. */
 export type FasesMarks = string[];
 
 /** Bags en window para cruzar evaluate() (documento navegador, no Node). */

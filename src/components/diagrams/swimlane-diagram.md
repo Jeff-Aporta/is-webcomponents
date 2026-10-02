@@ -1,21 +1,21 @@
 ---
-tag: is-swimlane-diagram
+tag: iswc-swimlane-diagram
 tags:
-  - is-swimlane-diagram
+  - iswc-swimlane-diagram
 category: diagrams
 status: public
 source: ./swimlane-diagram.js
 style: ./swimlane-diagram.css
 preview: ./swimlane-diagram.json
 ---
-# `<is-swimlane-diagram>`
+# `<iswc-swimlane-diagram>`
 
 ## Propósito
 
 Diagrama de **carriles** (cross-functional flowchart) en SVG, sin Mermaid:
 cada fila es un responsable y cada columna un momento del proceso.
 
-Este módulo registra `<is-swimlane-diagram>`.
+Este módulo registra `<iswc-swimlane-diagram>`.
 
 ## Cuándo usarlo
 
@@ -24,8 +24,8 @@ paso, no solo en qué orden ocurre.
 
 ## Cuándo no usarlo
 
-Si no hay más de un responsable → `<is-flowchart>` dice lo mismo con menos
-tinta. Si lo que importa es el reparto de una magnitud → `<is-sankey-diagram>`.
+Si no hay más de un responsable → `<iswc-flowchart>` dice lo mismo con menos
+tinta. Si lo que importa es el reparto de una magnitud → `<iswc-sankey-diagram>`.
 
 ## Importación
 
@@ -36,11 +36,11 @@ import './swimlane-diagram.js';
 ## Ejemplo mínimo
 
 ```html
-<is-swimlane-diagram>
+<iswc-swimlane-diagram>
   <script type="application/json">
     {}
   </script>
-</is-swimlane-diagram>
+</iswc-swimlane-diagram>
 ```
 
 ## API
@@ -73,9 +73,9 @@ import './swimlane-diagram.js';
 
 | Evento | detail | bubbles | composed | cancelable |
 | --- | --- | --- | --- | --- |
-| `is-render` | sí | sí | sí | no |
-| `is-open-viewer` | sí | sí | sí | sí |
-| `is-toggle-lane` | sí | sí | sí | no |
+| `iswc-render` | sí | sí | sí | no |
+| `iswc-open-viewer` | sí | sí | sí | sí |
+| `iswc-toggle-lane` | sí | sí | sí | no |
 
 ### Métodos y propiedades públicas
 
@@ -115,17 +115,17 @@ La columna de un paso se declara con `column` o se deduce por orden topológico.
 
 Documentación de cabecera preservada desde fuente:
 
-> <is-swimlane-diagram> — diagrama de carriles en SVG, sin Mermaid.
->   <is-swimlane-diagram>
+> <iswc-swimlane-diagram> — diagrama de carriles en SVG, sin Mermaid.
+>   <iswc-swimlane-diagram>
 >     <script type="application/json">
 >       { "swimlane": { "lanes": [...], "steps": [...], "links": [...] } }
 >     </script>
->   </is-swimlane-diagram>
-> Mismo esqueleto que <is-flowchart>: shadow DOM, slot JSON + MutationObserver,
+>   </iswc-swimlane-diagram>
+> Mismo esqueleto que <iswc-flowchart>: shadow DOM, slot JSON + MutationObserver,
 > tema por atributo `data-theme`, `color` (inline | viewer), lightbox propio.
 > Atributos: color (inline | viewer), open-on-click
 > Propiedades: payload, spec, layout, hiddenLanes
-> Eventos: is-render, is-open-viewer, is-toggle-lane
+> Eventos: iswc-render, iswc-open-viewer, iswc-toggle-lane
 
 ## Dependencias y componentes relacionados
 
@@ -141,7 +141,7 @@ Documentación de cabecera preservada desde fuente:
 - [`../_shared/svg-chart-engine.js`](../_shared/svg-chart-engine.js)
 - [`../_shared/diagram-arrow.js`](../_shared/diagram-arrow.js)
 
-Tags del módulo: `<is-swimlane-diagram>`.
+Tags del módulo: `<iswc-swimlane-diagram>`.
 
 ## Accesibilidad
 

@@ -10,10 +10,10 @@ import {
 } from '../_shared/position.js';
 
 /**
- * <is-floating> — building block interno de posicionamiento anclado.
+ * <iswc-floating> — building block interno de posicionamiento anclado.
  *
- * No es API pública: úsalo solo desde `<is-popover>` / `<is-tooltip>`.
- * Para UI de producto usa siempre `<is-popover>`.
+ * No es API pública: úsalo solo desde `<iswc-popover>` / `<iswc-tooltip>`.
+ * Para UI de producto usa siempre `<iswc-popover>`.
  *
  * Slots: anchor | default (contenido)
  * Attrs: active, placement, distance, skidding, strategy, flip, shift,
@@ -23,8 +23,8 @@ import {
  *
  * Props: anchor (Element | string | VirtualElement)
  * Methods: reposition()
- * Events: is-reposition  { placement, x, y }
- *         is-hover-bridge { hovering }
+ * Events: iswc-reposition  { placement, x, y }
+ *         iswc-hover-bridge { hovering }
  * Parts: ::part(popup) ::part(arrow) ::part(hover-bridge) ::part(anchor)
  */
 
@@ -65,7 +65,7 @@ import {
     'modal', 'label', 'labelledby',
   ];
 
-  class IsFloating extends withStyleAttrs(HTMLElement) {
+  class IswcFloating extends withStyleAttrs(HTMLElement) {
     /** Personalización por atributo (ver `core/attrs.ts`). */
     static styleAttrs = {
     'arrow-size': '--iswc-floating-arrow-size',
@@ -330,7 +330,7 @@ import {
       this.#bindBridgeEvents();
 
       if (!sameBox) {
-        emit(this, 'is-reposition', { placement: result.placement, x: result.left, y: result.top });
+        emit(this, 'iswc-reposition', { placement: result.placement, x: result.left, y: result.top });
       }
     }
 
@@ -416,7 +416,7 @@ import {
     /**
      * Captura global de teclas en modo modal (proposal g09 floating).
      * - Tab: cicla dentro del popup.
-     * - Escape: cierra el floating (emitiendo is-close-cancel y desactivando).
+     * - Escape: cierra el floating (emitiendo iswc-close-cancel y desactivando).
      */
     #onModalKeydown = (ev: KeyboardEvent): void => {
       if (!this.modal || !this.active) return;
@@ -588,10 +588,10 @@ import {
       if (this.#bridgeBound) return;
       this.#bridgeBound = true;
       this.#bridge.addEventListener('pointerenter', () => {
-        emit(this, 'is-hover-bridge', { hovering: true });
+        emit(this, 'iswc-hover-bridge', { hovering: true });
       });
       this.#bridge.addEventListener('pointerleave', () => {
-        emit(this, 'is-hover-bridge', { hovering: false });
+        emit(this, 'iswc-hover-bridge', { hovering: false });
       });
     }
 
@@ -659,5 +659,5 @@ import {
     }
   }
 
-  defineElement('is-floating', IsFloating, 'IsFloating');
+  defineElement('iswc-floating', IswcFloating, 'IswcFloating');
 })();

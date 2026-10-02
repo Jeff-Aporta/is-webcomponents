@@ -7,13 +7,11 @@
   font: inherit;
   vertical-align: middle;
   line-height: 0;
+
+  &[hidden] { display: none !important; }
 }
 
-:host([hidden]) {
-  display: none !important;
-}
-
-is-check-icon-button {
+iswc-check-icon-button {
   width: 100%;
   height: 100%;
   color: inherit;

@@ -1,20 +1,20 @@
 ---
-tag: is-format-date
+tag: iswc-format-date
 tags:
-  - is-format-date
+  - iswc-format-date
 category: helpers
 status: public
 source: ./format-date.js
 style: ./format-date.css
 preview: ./format-date.json
 ---
-# `<is-format-date>`
+# `<iswc-format-date>`
 
 ## Propósito
 
 Formatea fechas con Intl.DateTimeFormat. Cualquier locale BCP 47 vía locale (o lang del documento).
 
-Este módulo registra `<is-format-date>`.
+Este módulo registra `<iswc-format-date>`.
 
 ## Cuándo usarlo
 
@@ -36,7 +36,7 @@ import './format-date.js';
 const asked = ['es','en','fr','de','ja','zh-CN','ar','pt-BR'];
 const ok = Intl.DateTimeFormat.supportedLocalesOf(asked);
 // → p.ej. ["es","en","fr","de","ja","zh-CN","ar","pt-BR"]
-<is-format-date locale="ja" date="2026-07-30" weekday="long" month="long" day="numeric" year="numeric"></is-format-date>
+<iswc-format-date locale="ja" date="2026-07-30" weekday="long" month="long" day="numeric" year="numeric"></iswc-format-date>
 ```
 
 ## API
@@ -104,7 +104,7 @@ No declara integración form-associated propia en este módulo.
 
 Documentación de cabecera preservada desde fuente:
 
-> <is-format-date> — Web Component (vanilla).
+> <iswc-format-date> — Web Component (vanilla).
 > Formatea fechas con Intl.DateTimeFormat.
 > Atributos: date, weekday, era, year, month, day, hour, minute, second,
 >            time-zone, time-zone-name, hour-format (auto|12|24),
@@ -114,7 +114,7 @@ Documentación de cabecera preservada desde fuente:
 
 - [`../_shared/adopt-css.js`](../_shared/adopt-css.js)
 
-Tags del módulo: `<is-format-date>`.
+Tags del módulo: `<iswc-format-date>`.
 
 ## Accesibilidad
 
@@ -123,8 +123,8 @@ Preservar semántica, foco, teclado, labels y ARIA. ARIA detectado: ninguno expl
 ## Ejemplo avanzado
 
 ```html
-<is-format-date date="2026-07-30T17:30:00" hour="numeric" minute="numeric" hour-format="24"></is-format-date>
-<is-format-date date="2026-07-30T17:30:00" hour="numeric" minute="numeric" hour-format="12"></is-format-date>
+<iswc-format-date date="2026-07-30T17:30:00" hour="numeric" minute="numeric" hour-format="24"></iswc-format-date>
+<iswc-format-date date="2026-07-30T17:30:00" hour="numeric" minute="numeric" hour-format="12"></iswc-format-date>
 ```
 
 ## Errores comunes

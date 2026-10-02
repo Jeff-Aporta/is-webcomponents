@@ -1,21 +1,21 @@
 ---
-tag: is-split-panel
+tag: iswc-split-panel
 tags:
-  - is-split-panel
+  - iswc-split-panel
 category: layout
 status: public
 source: ./split-panel.js
 style: ./split-panel.css
 preview: ./split-panel.json
 ---
-# `<is-split-panel>`
+# `<iswc-split-panel>`
 
 ## Propósito
 
 Dos paneles adyacentes separados por un divisor arrastrable.
 Componente InSoft accesible, escrito en JavaScript nativo con Shadow DOM, sin frameworks.
 
-Este módulo registra `<is-split-panel>`.
+Este módulo registra `<iswc-split-panel>`.
 
 ## Cuándo usarlo
 
@@ -34,10 +34,10 @@ import './split-panel.js';
 ## Ejemplo mínimo
 
 ```html
-<is-split-panel>
+<iswc-split-panel>
 <div slot="start">Start</div>
 <div slot="end">End</div>
-</is-split-panel>
+</iswc-split-panel>
 ```
 
 ## API
@@ -126,7 +126,7 @@ No declara integración form-associated propia en este módulo.
 
 Documentación de cabecera preservada desde fuente:
 
-> <is-split-panel> — Web Component (vanilla, zero dependencies).
+> <iswc-split-panel> — Web Component (vanilla, zero dependencies).
 > Dos paneles adyacentes
 > separados por un divisor arrastrable. Usa Shadow DOM con CSS propio,
 > sin frameworks. Se define automáticamente al importarse.
@@ -139,7 +139,7 @@ Documentación de cabecera preservada desde fuente:
 >                       y su divisor; el otro se queda con todo el espacio. No
 >                       toca la posición persistida: al quitarlo vuelve el
 >                       tamaño anterior. Pensado para layouts responsive que
->                       mudan ese contenido a un <is-drawer>.
+>                       mudan ese contenido a un <iswc-drawer>.
 >   disabled            boolean  (reflect)
 >   snap                string  (espacio-sep "100px 50%")
 >   snap-threshold      number  (default 12)  — px ventana de snap
@@ -166,7 +166,7 @@ Documentación de cabecera preservada desde fuente:
 - [`../_shared/adopt-css.js`](../_shared/adopt-css.js)
 - [`../_shared/prefs.js`](../_shared/prefs.js)
 
-Tags del módulo: `<is-split-panel>`.
+Tags del módulo: `<iswc-split-panel>`.
 
 ## Accesibilidad
 
@@ -175,9 +175,9 @@ Preservar semántica, foco, teclado, labels y ARIA. ARIA detectado: `aria-valuen
 ## Ejemplo avanzado
 
 ```html
-<is-split-panel orientation="horizontal">
+<iswc-split-panel orientation="horizontal">
 ...
-</is-split-panel>
+</iswc-split-panel>
 ```
 
 ## Errores comunes

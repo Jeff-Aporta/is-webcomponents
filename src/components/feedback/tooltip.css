@@ -3,10 +3,8 @@
   --iswc-tooltip-max-width: 16rem;
   --iswc-tooltip-bg: #212529;
   --iswc-tooltip-fg: #fff;
-}
 
-:host([hidden]) {
-  display: none !important;
+  &[hidden] { display: none !important; }
 }
 
 .popup {
@@ -28,41 +26,30 @@
   pointer-events: none;
 }
 
-:host([trigger~="click"]) .tooltip,
-:host([trigger="manual"]) .tooltip {
-  pointer-events: auto;
+:host([trigger~="click"]),
+:host([trigger="manual"]) {
+  .tooltip { pointer-events: auto; }
 }
 
 .body {
   overflow-wrap: anywhere;
-}
 
-.body ::slotted(p) {
-  margin: 0 0 0.55em;
-}
-
-.body ::slotted(p:last-child) {
-  margin-bottom: 0;
-}
-
-.body ::slotted(ul),
-.body ::slotted(ol) {
-  margin: 0.35em 0 0.55em;
-  padding-inline-start: 1.15em;
-}
-
-.body ::slotted(strong) {
-  font-weight: 700;
-}
-
-.body ::slotted(code) {
-  font-family: var(--iswc-mono, ui-monospace, monospace);
-  font-size: 0.92em;
-  opacity: 0.92;
-}
-
-.body ::slotted(a) {
-  color: inherit;
-  text-decoration: underline;
-  text-underline-offset: 0.12em;
+  & ::slotted(p) { margin: 0 0 0.55em; }
+  & ::slotted(p:last-child) { margin-bottom: 0; }
+  & ::slotted(ul),
+  & ::slotted(ol) {
+    margin: 0.35em 0 0.55em;
+    padding-inline-start: 1.15em;
+  }
+  & ::slotted(strong) { font-weight: 700; }
+  & ::slotted(code) {
+    font-family: var(--iswc-mono, ui-monospace, monospace);
+    font-size: 0.92em;
+    opacity: 0.92;
+  }
+  & ::slotted(a) {
+    color: inherit;
+    text-decoration: underline;
+    text-underline-offset: 0.12em;
+  }
 }

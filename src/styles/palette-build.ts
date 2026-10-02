@@ -74,7 +74,7 @@ export function buildBrandMenu(menu: HTMLElement, list: PaletteConfig[], selecte
     const label = document.createElement('span');
     label.className = 'brand-menu__label';
     label.textContent = p.label;
-    const check = document.createElement('is-icon');
+    const check = document.createElement('iswc-icon');
     check.className = 'brand-menu__check';
     check.setAttribute('icon', 'mdi:check');
     check.setAttribute('aria-hidden', 'true');

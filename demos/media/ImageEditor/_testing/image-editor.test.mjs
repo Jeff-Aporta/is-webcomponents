@@ -15,11 +15,11 @@ const URL = `${BASE_URL}/demos/media/ImageEditor/image-editor.html`;
 const tests = [];
 
 tests.push({
-  name: 'smoke: el componente se registra, monta y carga la imagen (is-load)',
+  name: 'smoke: el componente se registra, monta y carga la imagen (iswc-load)',
   run: async (page) => {
     await page.goto(URL, { waitUntil: 'domcontentloaded' });
     await waitReady(page, 'data-image-editor-ready');
-    // Esperar a que is-load se dispare (la imagen es data: URL, pero el decode
+    // Esperar a que iswc-load se dispare (la imagen es data: URL, pero el decode
     // puede tardar). Timeout prudente.
     await page.waitForFunction(
       () => document.documentElement.dataset.imageEditorLoaded === '1',
@@ -28,7 +28,7 @@ tests.push({
     ).catch(() => { /* cae al assert de abajo */ });
     await page.waitForTimeout(200);
     const data = await page.evaluate(() => {
-      const el = document.querySelector('is-image-editor');
+      const el = document.querySelector('iswc-image-editor');
       const shadow = el.shadowRoot;
       const statusText = shadow.querySelector('.status')?.textContent?.trim() || '';
       // El componente documenta `editor.image` como HTMLImageElement, pero el
@@ -37,7 +37,7 @@ tests.push({
       const canvas = shadow.querySelector('canvas');
       const canvasHasPixels = canvas && canvas.width > 0 && canvas.height > 0;
       return {
-        registered: !!customElements.get('is-image-editor'),
+        registered: !!customElements.get('iswc-image-editor'),
         hasShadow: !!shadow,
         hasCanvas: !!shadow.querySelector('canvas'),
         hasViewport: !!shadow.querySelector('.viewport'),
@@ -48,13 +48,13 @@ tests.push({
         loaded: document.documentElement.dataset.imageEditorLoaded === '1',
       };
     });
-    assert.equal(data.registered, true, 'is-image-editor debe estar registrado');
+    assert.equal(data.registered, true, 'iswc-image-editor debe estar registrado');
     assert.ok(data.hasShadow, 'debe tener shadowRoot');
     assert.ok(data.hasCanvas, 'debe haber un <canvas>');
     assert.ok(data.hasViewport, 'debe haber un .viewport');
     assert.ok(data.hasToolbarSlot, 'debe haber un slot[name=toolbar]');
     assert.ok(data.hasStatus, 'debe haber un .status');
-    assert.equal(data.loaded, true, `is-load debe haberse disparado tras cargar la imagen (status="${data.statusText}")`);
+    assert.equal(data.loaded, true, `iswc-load debe haberse disparado tras cargar la imagen (status="${data.statusText}")`);
     assert.ok(data.canvasHasPixels, `canvas debe tener tamaño positivo tras cargar la imagen (status="${data.statusText}")`);
     await screenshot(page, 'image-editor-smoke');
   },
@@ -67,7 +67,7 @@ tests.push({
     await waitReady(page, 'data-image-editor-ready');
     await page.waitForTimeout(500);
     const data = await page.evaluate(() => {
-      const el = document.querySelector('is-image-editor');
+      const el = document.querySelector('iswc-image-editor');
       el.zoom = 2;
       const z1 = el.zoom;
       el.zoom = 0.01; // debe clamp a 0.1
@@ -89,7 +89,7 @@ tests.push({
     await waitReady(page, 'data-image-editor-ready');
     await page.waitForTimeout(500);
     const data = await page.evaluate(() => {
-      const el = document.querySelector('is-image-editor');
+      const el = document.querySelector('iswc-image-editor');
       el.rotation = 450; // debe ser 90
       const r1 = el.rotation;
       el.rotation = -90; // debe ser 270
@@ -107,14 +107,14 @@ tests.push({
     await page.goto(URL, { waitUntil: 'domcontentloaded' });
     await waitReady(page, 'data-image-editor-ready');
     await page.waitForTimeout(500);
-    const before = await page.evaluate(() => document.querySelector('is-image-editor').zoom);
+    const before = await page.evaluate(() => document.querySelector('iswc-image-editor').zoom);
     await page.evaluate(() => {
-      const el = document.querySelector('is-image-editor');
+      const el = document.querySelector('iswc-image-editor');
       const btn = el.querySelector('[data-action="zoom-in"]');
       btn.click();
     });
     await page.waitForTimeout(150);
-    const after = await page.evaluate(() => document.querySelector('is-image-editor').zoom);
+    const after = await page.evaluate(() => document.querySelector('iswc-image-editor').zoom);
     assert.ok(after > before, `zoom-in debe incrementar zoom (${before} → ${after})`);
     assert.ok(Math.abs(after - (before + 0.1)) < 0.01, `zoom debe subir ~0.1 (got ${after - before})`);
   },
@@ -127,12 +127,12 @@ tests.push({
     await waitReady(page, 'data-image-editor-ready');
     await page.waitForTimeout(500);
     await page.evaluate(() => {
-      const el = document.querySelector('is-image-editor');
+      const el = document.querySelector('iswc-image-editor');
       el.rotation = 0;
       el.querySelector('[data-action="rotate"]').click();
     });
     await page.waitForTimeout(150);
-    const rot = await page.evaluate(() => document.querySelector('is-image-editor').rotation);
+    const rot = await page.evaluate(() => document.querySelector('iswc-image-editor').rotation);
     assert.equal(rot, 90, `rotate debe sumar 90°, got ${rot}`);
   },
 });
@@ -144,14 +144,14 @@ tests.push({
     await waitReady(page, 'data-image-editor-ready');
     await page.waitForTimeout(500);
     await page.evaluate(() => {
-      const el = document.querySelector('is-image-editor');
+      const el = document.querySelector('iswc-image-editor');
       el.zoom = 3;
       el.rotation = 180;
       el.querySelector('[data-action="reset"]').click();
     });
     await page.waitForTimeout(150);
     const data = await page.evaluate(() => {
-      const el = document.querySelector('is-image-editor');
+      const el = document.querySelector('iswc-image-editor');
       return { zoom: el.zoom, rotation: el.rotation };
     });
     assert.equal(data.zoom, 1, `reset debe poner zoom=1, got ${data.zoom}`);
@@ -160,7 +160,7 @@ tests.push({
 });
 
 tests.push({
-  name: 'funcional: data-action="crop" emite is-crop y devuelve dataURL',
+  name: 'funcional: data-action="crop" emite iswc-crop y devuelve dataURL',
   run: async (page) => {
     await page.goto(URL, { waitUntil: 'domcontentloaded' });
     await waitReady(page, 'data-image-editor-ready');
@@ -168,7 +168,7 @@ tests.push({
     // Limpiar flag
     await page.evaluate(() => { delete document.documentElement.dataset.imageEditorCropped; });
     const result = await page.evaluate(async () => {
-      const el = document.querySelector('is-image-editor');
+      const el = document.querySelector('iswc-image-editor');
       let dataURL;
       try {
         dataURL = el.cropped();
@@ -181,7 +181,7 @@ tests.push({
     assert.ok(result.dataURL, 'cropped() debe devolver un dataURL');
     assert.match(result.dataURL, /^data:image\/png/, `cropped() debe devolver un PNG dataURL, got "${result.dataURL.slice(0, 50)}"`);
     const fired = await page.evaluate(() => document.documentElement.dataset.imageEditorCropped === '1');
-    assert.equal(fired, true, 'cropped() debe emitir is-crop');
+    assert.equal(fired, true, 'cropped() debe emitir iswc-crop');
   },
 });
 
@@ -211,7 +211,7 @@ tests.push({
         return origRem(type, fn, opts);
       };
       // Crear un editor nuevo (que añadirá listeners)
-      const el = document.createElement('is-image-editor');
+      const el = document.createElement('iswc-image-editor');
       el.setAttribute('src', 'data:image/svg+xml;utf8,%3Csvg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 100 100%22%3E%3Crect width=%22100%22 height=%22100%22 fill=%22red%22/%3E%3C/svg%3E');
       document.body.appendChild(el);
       // Esperar a que se monte (incluye connectedCallback)
@@ -241,7 +241,7 @@ tests.push({
     await waitReady(page, 'data-image-editor-ready');
     await page.waitForTimeout(800);
     const data = await page.evaluate(() => {
-      const el = document.querySelector('is-image-editor');
+      const el = document.querySelector('iswc-image-editor');
       const canvas = el.shadowRoot.querySelector('canvas');
       const status = el.shadowRoot.querySelector('.status');
       return {

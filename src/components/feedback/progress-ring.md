@@ -1,20 +1,20 @@
 ---
-tag: is-progress-ring
+tag: iswc-progress-ring
 tags:
-  - is-progress-ring
+  - iswc-progress-ring
 category: feedback
 status: public
 source: ./progress-ring.js
 style: ./progress-ring.css
 preview: ./progress-ring.json
 ---
-# `<is-progress-ring>`
+# `<iswc-progress-ring>`
 
 ## Propósito
 
-<is-progress-ring>
+<iswc-progress-ring>
 
-Este módulo registra `<is-progress-ring>`.
+Este módulo registra `<iswc-progress-ring>`.
 
 ## Cuándo usarlo
 
@@ -34,7 +34,7 @@ import './progress-ring.js';
 
 ```html
 <span style="font-size:4rem">
-<is-progress-ring value="75" label="75%"></is-progress-ring>
+<iswc-progress-ring value="75" label="75%"></iswc-progress-ring>
 </span>
 ```
 
@@ -105,7 +105,7 @@ No declara integración form-associated propia en este módulo.
 
 Documentación de cabecera preservada desde fuente:
 
-> <is-progress-ring> — Web Component (vanilla).
+> <iswc-progress-ring> — Web Component (vanilla).
 > Anillo de progreso SVG.
 > Atributos
 >   value   number 0–100
@@ -116,7 +116,7 @@ Documentación de cabecera preservada desde fuente:
 
 - [`../_shared/adopt-css.js`](../_shared/adopt-css.js)
 
-Tags del módulo: `<is-progress-ring>`.
+Tags del módulo: `<iswc-progress-ring>`.
 
 ## Accesibilidad
 
@@ -126,7 +126,7 @@ Preservar semántica, foco, teclado, labels y ARIA. ARIA detectado: `aria-label`
 
 ```html
 <span style="font-size:4rem">
-<is-progress-ring value="75" label="75%"></is-progress-ring>
+<iswc-progress-ring value="75" label="75%"></iswc-progress-ring>
 </span>
 ```
 

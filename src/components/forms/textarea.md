@@ -1,14 +1,14 @@
 ---
-tag: is-textarea
+tag: iswc-textarea
 tags:
-  - is-textarea
+  - iswc-textarea
 category: forms
 status: public
 source: ./textarea.js
 style: ./textarea.css
 preview: ./textarea.json
 ---
-# `<is-textarea>`
+# `<iswc-textarea>`
 
 ## Propósito
 
@@ -19,7 +19,7 @@ TextareaAutosize:
 variants, error, contador y autosize con
 min-rows / max-rows.
 
-Este módulo registra `<is-textarea>`.
+Este módulo registra `<iswc-textarea>`.
 
 ## Cuándo usarlo
 
@@ -38,7 +38,7 @@ import './textarea.js';
 ## Ejemplo mínimo
 
 ```html
-<is-textarea variant="filled" label="filled" rows="2"></is-textarea>
+<iswc-textarea variant="filled" label="filled" rows="2"></iswc-textarea>
 ```
 
 ## API
@@ -110,8 +110,8 @@ import './textarea.js';
 | --- | --- | --- | --- | --- |
 | `input` | no | sí | sí | no |
 | `change` | no | sí | sí | no |
-| `is-input` | sí | sí | sí | no |
-| `is-change` | sí | sí | sí | no |
+| `iswc-input` | sí | sí | sí | no |
+| `iswc-change` | sí | sí | sí | no |
 
 ### Métodos y propiedades públicas
 
@@ -188,7 +188,7 @@ Participa mediante ElementInternals/helpers form-associated; respetar name, valu
 
 Documentación de cabecera preservada desde fuente:
 
-> <is-textarea> — Área de texto form-associated (vanilla + Shadow DOM).
+> <iswc-textarea> — Área de texto form-associated (vanilla + Shadow DOM).
 > Atributos
 >   name, value, placeholder, label, hint, maxlength
 >   rows            número de filas visibles (default 3)
@@ -202,7 +202,7 @@ Documentación de cabecera preservada desde fuente:
 > Slots: label, hint
 > Parts: form-control, label, base, textarea, support, hint, error-text, count
 > Custom states: blank, disabled, readonly, focused, invalid
-> Eventos: is-input, is-change (bubbles + composed) y los nativos input/change
+> Eventos: iswc-input, iswc-change (bubbles + composed) y los nativos input/change
 > Tokens: --iswc-field-width, --iswc-field-label-width, --iswc-textarea-*
 
 ## Dependencias y componentes relacionados
@@ -210,7 +210,7 @@ Documentación de cabecera preservada desde fuente:
 - [`../_shared/adopt-css.js`](../_shared/adopt-css.js)
 - [`../_shared/form-associated.js`](../_shared/form-associated.js)
 
-Tags del módulo: `<is-textarea>`.
+Tags del módulo: `<iswc-textarea>`.
 
 ## Accesibilidad
 
@@ -219,9 +219,9 @@ Preservar semántica, foco, teclado, labels y ARIA. ARIA detectado: `aria-descri
 ## Ejemplo avanzado
 
 ```html
-<is-textarea autosize min-rows="3" max-rows="6" label="Comentario"></is-textarea>
+<iswc-textarea autosize min-rows="3" max-rows="6" label="Comentario"></iswc-textarea>
 <!-- equivalente -->
-<is-textarea resize="auto" min-rows="3" max-rows="6"></is-textarea>
+<iswc-textarea resize="auto" min-rows="3" max-rows="6"></iswc-textarea>
 ```
 
 ## Errores comunes

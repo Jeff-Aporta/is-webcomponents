@@ -9,11 +9,11 @@ let browser;
 test.before(async () => { browser = await chromium.launch(); });
 test.after(async () => { await browser?.close(); });
 
-test('button: bundle registra <is-button>', async () => {
+test('button: bundle registra <iswc-button>', async () => {
   const page = await browser.newPage();
   await page.goto(URL_DEMO, { waitUntil: 'domcontentloaded' });
-  await page.waitForSelector('is-button:defined');
-  const defined = await page.evaluate(() => !!customElements.get('is-button'));
+  await page.waitForSelector('iswc-button:defined');
+  const defined = await page.evaluate(() => !!customElements.get('iswc-button'));
   assert.equal(defined, true);
   await page.close();
 });
@@ -21,9 +21,9 @@ test('button: bundle registra <is-button>', async () => {
 test('button: atributo color se refleja en el atributo host', async () => {
   const page = await browser.newPage();
   await page.goto(URL_DEMO, { waitUntil: 'domcontentloaded' });
-  await page.waitForSelector('is-button:defined');
+  await page.waitForSelector('iswc-button:defined');
   const count = await page.evaluate(() => {
-    return document.querySelectorAll('section:nth-of-type(1) is-button[color]').length;
+    return document.querySelectorAll('section:nth-of-type(1) iswc-button[color]').length;
   });
   // Hay 6 botones con color en la sección "Colors" (incluyendo el default brand).
   assert.ok(count >= 6, `esperaba >=6 botones con [color] en la sección colors, hay ${count}`);
@@ -33,9 +33,9 @@ test('button: atributo color se refleja en el atributo host', async () => {
 test('button: variant="outlined" llega al inner <button>', async () => {
   const page = await browser.newPage();
   await page.goto(URL_DEMO, { waitUntil: 'domcontentloaded' });
-  await page.waitForSelector('is-button:defined');
+  await page.waitForSelector('iswc-button:defined');
   const info = await page.evaluate(() => {
-    const btn = document.querySelector('section:nth-of-type(2) is-button[variant="outlined"]');
+    const btn = document.querySelector('section:nth-of-type(2) iswc-button[variant="outlined"]');
     const inner = btn.shadowRoot.querySelector('.btn');
     return {
       hostVariant: btn.getAttribute('variant'),
@@ -50,9 +50,9 @@ test('button: variant="outlined" llega al inner <button>', async () => {
 test('button: estado loading se refleja como :state(loading) en el host', async () => {
   const page = await browser.newPage();
   await page.goto(URL_DEMO, { waitUntil: 'domcontentloaded' });
-  await page.waitForSelector('is-button#loading-btn:defined');
+  await page.waitForSelector('iswc-button#loading-btn:defined');
   const state = await page.evaluate(() => {
-    const btn = document.querySelector('is-button#loading-btn');
+    const btn = document.querySelector('iswc-button#loading-btn');
     return {
       hasAttr: btn.hasAttribute('loading'),
       hasState: btn.matches(':state(loading)'),
@@ -68,48 +68,48 @@ test('button: estado loading se refleja como :state(loading) en el host', async 
 test('button: disabled bloquea el click (no incrementa el contador)', async () => {
   const page = await browser.newPage();
   await page.goto(URL_DEMO, { waitUntil: 'domcontentloaded' });
-  await page.waitForSelector('is-button:defined');
+  await page.waitForSelector('iswc-button:defined');
   const before = await page.evaluate(() => {
-    return document.querySelector('is-button#counter').textContent;
+    return document.querySelector('iswc-button#counter').textContent;
   });
   await page.evaluate(() => {
-    document.querySelector('section:nth-of-type(4) is-button[disabled]').click();
+    document.querySelector('section:nth-of-type(4) iswc-button[disabled]').click();
   });
   await page.waitForTimeout(50);
   const after = await page.evaluate(() => {
-    return document.querySelector('is-button#counter').textContent;
+    return document.querySelector('iswc-button#counter').textContent;
   });
   assert.equal(before, after, 'el contador no debe cambiar tras click en disabled');
   await page.close();
 });
 
-test('button: click incrementa el contador y emite is-focus/is-blur al enfocar', async () => {
+test('button: click incrementa el contador y emite iswc-focus/iswc-blur al enfocar', async () => {
   const page = await browser.newPage();
   await page.goto(URL_DEMO, { waitUntil: 'domcontentloaded' });
-  await page.waitForSelector('is-button#counter:defined');
-  // Capturamos is-focus desde el host
+  await page.waitForSelector('iswc-button#counter:defined');
+  // Capturamos iswc-focus desde el host
   await page.evaluate(() => {
     window.__btnEvts = [];
-    const c = document.querySelector('is-button#counter');
-    c.addEventListener('is-focus', () => window.__btnEvts.push('focus'));
-    c.addEventListener('is-blur', () => window.__btnEvts.push('blur'));
+    const c = document.querySelector('iswc-button#counter');
+    c.addEventListener('iswc-focus', () => window.__btnEvts.push('focus'));
+    c.addEventListener('iswc-blur', () => window.__btnEvts.push('blur'));
   });
-  await page.focus('is-button#counter');
+  await page.focus('iswc-button#counter');
   await page.waitForTimeout(50);
   await page.keyboard.press('Tab');
   await page.waitForTimeout(50);
   const evts = await page.evaluate(() => window.__btnEvts);
-  assert.ok(evts.includes('focus'), 'debe haberse emitido is-focus');
-  assert.ok(evts.includes('blur'), 'debe haberse emitido is-blur');
+  assert.ok(evts.includes('focus'), 'debe haberse emitido iswc-focus');
+  assert.ok(evts.includes('blur'), 'debe haberse emitido iswc-blur');
   await page.close();
 });
 
 test('button: href convierte el inner en <a>', async () => {
   const page = await browser.newPage();
   await page.goto(URL_DEMO, { waitUntil: 'domcontentloaded' });
-  await page.waitForSelector('is-button:defined');
+  await page.waitForSelector('iswc-button:defined');
   const info = await page.evaluate(() => {
-    const btn = [...document.querySelectorAll('is-button[href]')][0];
+    const btn = [...document.querySelectorAll('iswc-button[href]')][0];
     const inner = btn.shadowRoot.querySelector('a, button');
     return { tag: inner?.tagName, href: inner?.getAttribute('href') };
   });

@@ -1,20 +1,20 @@
 ---
-tag: is-date-range-picker
+tag: iswc-date-range-picker
 tags:
-  - is-date-range-picker
+  - iswc-date-range-picker
 category: forms
 status: public
 source: ./date-range-picker.js
 style: ./date-range-picker.css
 preview: ./date-range-picker.json
 ---
-# `<is-date-range-picker>`
+# `<iswc-date-range-picker>`
 
 ## Propósito
 
 Rango de fechas con varios meses a la vista y panel de atajos (DateRangeCalendar de MUI X). El hover en un mes pinta la banda tentativa en todos.
 
-Este módulo registra `<is-date-range-picker>`.
+Este módulo registra `<iswc-date-range-picker>`.
 
 ## Cuándo usarlo
 
@@ -33,7 +33,7 @@ import './date-range-picker.js';
 ## Ejemplo mínimo
 
 ```html
-<is-date-range-picker></is-date-range-picker>
+<iswc-date-range-picker></iswc-date-range-picker>
 ```
 
 ## API
@@ -86,8 +86,8 @@ import './date-range-picker.js';
 
 | Evento | detail | bubbles | composed | cancelable |
 | --- | --- | --- | --- | --- |
-| `is-change` | sí | sí | sí | no |
-| `is-month-change` | sí | sí | sí | no |
+| `iswc-change` | sí | sí | sí | no |
+| `iswc-month-change` | sí | sí | sí | no |
 
 ### Métodos y propiedades públicas
 
@@ -130,9 +130,9 @@ No declara integración form-associated propia en este módulo.
 
 Documentación de cabecera preservada desde fuente:
 
-> <is-date-range-picker> — Rango de fechas con varios meses a la vista
+> <iswc-date-range-picker> — Rango de fechas con varios meses a la vista
 > (equivalente a DateRangeCalendar de MUI X) y panel de atajos.
-> Compone N <is-date-picker mode="range">: el rango vive aquí y se empuja a
+> Compone N <iswc-date-picker mode="range">: el rango vive aquí y se empuja a
 > todos, así que el segundo clic puede caer en cualquier mes y el rango
 > tentativo se pinta en todos a la vez.
 > Atributos: value ("inicio/fin"), calendars (1-3), month (ancla yyyy-mm),
@@ -141,7 +141,7 @@ Documentación de cabecera preservada desde fuente:
 >            show-week-numbers, disable-past, disable-future, disabled-dates,
 >            disabled-days, disabled, readonly
 > Slots: shortcut (atajos propios con data-range="inicio/fin")
-> Events: is-change { start, end } · is-month-change { month }
+> Events: iswc-change { start, end } · iswc-month-change { month }
 
 ## Dependencias y componentes relacionados
 
@@ -150,7 +150,7 @@ Documentación de cabecera preservada desde fuente:
 - [`../actions/button.js`](../actions/button.js)
 - [`./date-picker.js`](./date-picker.js)
 
-Tags del módulo: `<is-date-range-picker>`.
+Tags del módulo: `<iswc-date-range-picker>`.
 
 ## Accesibilidad
 
@@ -159,7 +159,7 @@ Preservar semántica, foco, teclado, labels y ARIA. ARIA detectado: `aria-label`
 ## Ejemplo avanzado
 
 ```html
-<is-date-range-picker></is-date-range-picker>
+<iswc-date-range-picker></iswc-date-range-picker>
 ```
 
 ## Errores comunes

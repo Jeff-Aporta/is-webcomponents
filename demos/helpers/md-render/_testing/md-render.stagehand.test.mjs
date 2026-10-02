@@ -11,7 +11,7 @@ try {
   await page.waitForTimeout(200);
 
   const data = await page.evaluate(() => {
-    const items = [...document.querySelectorAll('main is-md-render')].map((el, idx) => {
+    const items = [...document.querySelectorAll('main iswc-md-render')].map((el, idx) => {
       const r = el.getBoundingClientRect();
       const body = el.shadowRoot.querySelector('.body');
       const cs = getComputedStyle(body ?? el);

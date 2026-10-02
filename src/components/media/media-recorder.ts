@@ -3,11 +3,11 @@ import { adoptCss, defineElement, emit } from '../../core/element.js';
 import { setStringAttr } from '../_shared/reflect.js';
 
 /**
- * <is-media-recorder> — getUserMedia / getDisplayMedia + MediaRecorder.
+ * <iswc-media-recorder> — getUserMedia / getDisplayMedia + MediaRecorder.
  *
  * Atributos: source camera|mic|display (default camera), disabled
  * Métodos: start(), stop()
- * Eventos: is-start, is-stop { blob, url, type }, is-error
+ * Eventos: iswc-start, iswc-stop { blob, url, type }, iswc-error
  *
  * Estados accesibles (F0.3 g12):
  *   role="region" aria-label="Grabadora de medios" aria-keyshortcuts
@@ -21,14 +21,14 @@ import { setStringAttr } from '../_shared/reflect.js';
   TEMPLATE.innerHTML = /* html */ `
     <video class="preview" part="preview" playsinline muted></video>
     <div class="row">
-      <is-button class="go" variant="filled" color="brand" type="button"
-        aria-label="Iniciar grabación">Grabar</is-button>
+      <iswc-button class="go" variant="filled" color="brand" type="button"
+        aria-label="Iniciar grabación">Grabar</iswc-button>
       <a class="dl" part="download" hidden download="captura.webm">Descargar</a>
     </div>
     <p class="status" part="status" aria-live="polite"></p>
   `;
 
-  class IsMediaRecorder extends HTMLElement {
+  class IswcMediaRecorder extends HTMLElement {
     static get observedAttributes(): string[] { return ['source', 'disabled']; }
 
     /**
@@ -123,7 +123,7 @@ import { setStringAttr } from '../_shared/reflect.js';
       } catch (err) {
         this.removeAttribute('aria-busy');
         this.#status.textContent = 'Permiso denegado o dispositivo no disponible';
-        emit(this, 'is-error', { message: (err as Error)?.message || 'media' });
+        emit(this, 'iswc-error', { message: (err as Error)?.message || 'media' });
         return;
       }
       this.#video.srcObject = this.#stream;
@@ -131,7 +131,7 @@ import { setStringAttr } from '../_shared/reflect.js';
       if (this.source !== 'mic') await this.#video.play().catch(() => { /* autoplay bloqueado */ });
       this.#chunks = [];
       if (typeof MediaRecorder !== 'function') {
-        emit(this, 'is-error', { message: 'MediaRecorder no disponible' });
+        emit(this, 'iswc-error', { message: 'MediaRecorder no disponible' });
         this.stop();
         return;
       }
@@ -147,7 +147,7 @@ import { setStringAttr } from '../_shared/reflect.js';
       this.#go.setAttribute('aria-label', 'Detener grabación');
       this.removeAttribute('aria-busy');
       this.#status.textContent = 'Grabando…';
-      emit(this, 'is-start', { source: this.source });
+      emit(this, 'iswc-start', { source: this.source });
     }
 
     stop(): void {
@@ -188,7 +188,7 @@ import { setStringAttr } from '../_shared/reflect.js';
       this.#dl.href = this.#url;
       this.#dl.download = this.source === 'mic' ? 'audio.webm' : 'captura.webm';
       this.#dl.hidden = false;
-      emit(this, 'is-stop', { blob, url: this.#url, type: blob.type });
+      emit(this, 'iswc-stop', { blob, url: this.#url, type: blob.type });
     }
 
     #revoke(): void {
@@ -197,5 +197,5 @@ import { setStringAttr } from '../_shared/reflect.js';
     }
   }
 
-  defineElement('is-media-recorder', IsMediaRecorder, 'IsMediaRecorder');
+  defineElement('iswc-media-recorder', IswcMediaRecorder, 'IswcMediaRecorder');
 })();

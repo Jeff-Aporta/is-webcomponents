@@ -1,22 +1,22 @@
 ---
-tag: is-funnel-chart
+tag: iswc-funnel-chart
 tags:
-  - is-funnel-chart
+  - iswc-funnel-chart
 category: charts
 status: public
 source: ./funnel-chart.js
 style: ./funnel-chart.css
 preview: ./funnel-chart.json
 ---
-# `<is-funnel-chart>`
+# `<iswc-funnel-chart>`
 
 ## Propósito
 
-Wrapper tipado de `<is-chart>` con `type` fijo en `funnel`. Misma API
+Wrapper tipado de `<iswc-chart>` con `type` fijo en `funnel`. Misma API
 de configuración Chart.js (`config` / `<script type="application/json">`);
 el atributo `type` no se cambia.
 
-Este módulo registra `<is-funnel-chart>`.
+Este módulo registra `<iswc-funnel-chart>`.
 
 ## Cuándo usarlo
 
@@ -25,7 +25,7 @@ de gráfica es siempre funnel chart.
 
 ## Cuándo no usarlo
 
-Si el tipo puede cambiar en runtime, usar `<is-chart type="funnel">`.
+Si el tipo puede cambiar en runtime, usar `<iswc-chart type="funnel">`.
 No crear otro engine: hereda marks/engine de `chart.js`.
 
 ## Importación
@@ -37,7 +37,7 @@ import './funnel-chart.js';
 ## Ejemplo mínimo
 
 ```html
-<is-funnel-chart>
+<iswc-funnel-chart>
   <script type="application/json">
   {
     "data": {
@@ -46,14 +46,14 @@ import './funnel-chart.js';
     }
   }
   </script>
-</is-funnel-chart>
+</iswc-funnel-chart>
 ```
 
 ## API
 
 ### Atributos y propiedades
 
-Hereda de `<is-chart>` (ver [chart.md](./chart.md)). `type` queda fijado
+Hereda de `<iswc-chart>` (ver [chart.md](./chart.md)). `type` queda fijado
 en `funnel` por la clase tipada.
 
 #### Atributos observados
@@ -95,9 +95,9 @@ en `funnel` por la clase tipada.
 
 | Evento | detail | bubbles | composed | cancelable |
 | --- | --- | --- | --- | --- |
-| `is-render` | sí | sí | sí | no |
-| `is-turtle-state` | sí | sí | sí | no |
-| `is-open-viewer` | sí | sí | sí | sí |
+| `iswc-render` | sí | sí | sí | no |
+| `iswc-turtle-state` | sí | sí | sí | no |
+| `iswc-open-viewer` | sí | sí | sí | sí |
 
 ### Métodos y propiedades públicas
 
@@ -122,7 +122,7 @@ No expone.
 
 ### CSS custom properties
 
-Misma familia de tokens que `<is-chart>` (ver [chart.md](./chart.md)).
+Misma familia de tokens que `<iswc-chart>` (ver [chart.md](./chart.md)).
 
 ### Integración con formularios
 
@@ -132,7 +132,7 @@ No declara integración form-associated propia en este módulo.
 
 Documentación de cabecera preservada desde fuente:
 
-> `<is-funnel-chart>` — wrapper tipado vía `defineTypedChart('is-funnel-chart', 'funnel', …)`.
+> `<iswc-funnel-chart>` — wrapper tipado vía `defineTypedChart('iswc-funnel-chart', 'funnel', …)`.
 > Importa `./chart.js` y registra marks del tipo fijo.
 > Consumo compatible con Chart.js: `config` o `<script type="application/json">`
 > hijo con forma `{ data: { labels, datasets }, options }` (`type` lo fija el tag).
@@ -145,16 +145,16 @@ Documentación de cabecera preservada desde fuente:
 - [`../_shared/svg-chart-engine.js`](../_shared/svg-chart-engine.js)
 - [`../_shared/chart-palette.js`](../_shared/chart-palette.js) (transitiva vía `chart.js`)
 
-Tags del módulo: `<is-funnel-chart>`.
+Tags del módulo: `<iswc-funnel-chart>`.
 
 ## Accesibilidad
 
-Preservar semántica, foco, teclado, labels y ARIA. Hereda contrato de `<is-chart>`.
+Preservar semántica, foco, teclado, labels y ARIA. Hereda contrato de `<iswc-chart>`.
 
 ## Ejemplo avanzado
 
 ```html
-<is-funnel-chart label="Funnel Chart" legend-position="bottom">
+<iswc-funnel-chart label="Funnel Chart" legend-position="bottom">
   <script type="application/json">
   {
     "data": {
@@ -163,7 +163,7 @@ Preservar semántica, foco, teclado, labels y ARIA. Hereda contrato de `<is-char
     }
   }
   </script>
-</is-funnel-chart>
+</iswc-funnel-chart>
 ```
 
 ## Errores comunes

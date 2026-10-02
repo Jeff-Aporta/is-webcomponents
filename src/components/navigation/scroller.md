@@ -1,14 +1,14 @@
 ---
-tag: is-scroller
+tag: iswc-scroller
 tags:
-  - is-scroller
+  - iswc-scroller
 category: navigation
 status: public
 source: ./scroller.js
 style: ./scroller.css
 preview: ./scroller.json
 ---
-# `<is-scroller>`
+# `<iswc-scroller>`
 
 ## Propósito
 
@@ -16,7 +16,7 @@ Wrapper que añade scroll horizontal (o vertical) con botones prev/next
 automáticos cuando el contenido del slot desborda. Ideal para
 listas de pills, carruseles de chips, drawers inline, etc.
 
-Este módulo registra `<is-scroller>`.
+Este módulo registra `<iswc-scroller>`.
 
 ## Cuándo usarlo
 
@@ -35,11 +35,11 @@ import './scroller.js';
 ## Ejemplo mínimo
 
 ```html
-<is-scroller>
-<is-button>Pills 1</is-button>
-<is-button>Pills 2</is-button>
+<iswc-scroller>
+<iswc-button>Pills 1</iswc-button>
+<iswc-button>Pills 2</iswc-button>
 …
-</is-scroller>
+</iswc-scroller>
 ```
 
 ## API
@@ -71,10 +71,10 @@ import './scroller.js';
 
 | Evento | detail | bubbles | composed | cancelable |
 | --- | --- | --- | --- | --- |
-| `is-scroll-overflow` | sí | sí | sí | no |
-| `is-scroll-position` | sí | sí | sí | no |
-| `is-scroll-start` | según cabecera | según cabecera | según cabecera | según cabecera |
-| `is-scroll-end` | según cabecera | según cabecera | según cabecera | según cabecera |
+| `iswc-scroll-overflow` | sí | sí | sí | no |
+| `iswc-scroll-position` | sí | sí | sí | no |
+| `iswc-scroll-start` | según cabecera | según cabecera | según cabecera | según cabecera |
+| `iswc-scroll-end` | según cabecera | según cabecera | según cabecera | según cabecera |
 
 ### Métodos y propiedades públicas
 
@@ -118,7 +118,7 @@ No declara integración form-associated propia en este módulo.
 
 Documentación de cabecera preservada desde fuente:
 
-> <is-scroller> — Web Component (vanilla, zero dependencies).
+> <iswc-scroller> — Web Component (vanilla, zero dependencies).
 > Añade scroll horizontal con botones cuando el contenido del slot desborda.
 > Atributos:
 >   orientation            horizontal | vertical | both  (default 'horizontal')
@@ -132,16 +132,16 @@ Documentación de cabecera preservada desde fuente:
 >   ::part(viewport)        viewport real (overflow:auto).
 >   ::part(scroll-button)   botones prev/next.
 > Eventos:
->   is-scroll-start    detail: { direction: -1 }
->   is-scroll-end      detail: { direction: +1 }
->   is-scroll-overflow detail: { overflowing: boolean }
->   is-scroll-position detail: { scrollLeft, scrollTop }
+>   iswc-scroll-start    detail: { direction: -1 }
+>   iswc-scroll-end      detail: { direction: +1 }
+>   iswc-scroll-overflow detail: { overflowing: boolean }
+>   iswc-scroll-position detail: { scrollLeft, scrollTop }
 
 ## Dependencias y componentes relacionados
 
 - [`../_shared/adopt-css.js`](../_shared/adopt-css.js)
 
-Tags del módulo: `<is-scroller>`.
+Tags del módulo: `<iswc-scroller>`.
 
 ## Accesibilidad
 
@@ -150,11 +150,11 @@ Preservar semántica, foco, teclado, labels y ARIA. ARIA detectado: `aria-label`
 ## Ejemplo avanzado
 
 ```html
-<is-scroller>
-<is-button>Pills 1</is-button>
-<is-button>Pills 2</is-button>
+<iswc-scroller>
+<iswc-button>Pills 1</iswc-button>
+<iswc-button>Pills 2</iswc-button>
 …
-</is-scroller>
+</iswc-scroller>
 ```
 
 ## Errores comunes

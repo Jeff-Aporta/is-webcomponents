@@ -29,7 +29,7 @@ export class ISComponentPreview implements ISComponentPreviewLike {
   }
 
   /**
-   * Signal para listeners: this.on(el, 'is-change', handler)
+   * Signal para listeners: this.on(el, 'iswc-change', handler)
    * Se aborta automáticamente en unmount.
    */
   get signal(): AbortSignal {

@@ -1,6 +1,6 @@
 // demo.test.mjs — tests exhaustivos del demo demo.html.
 // Cobertura: smoke (light DOM, clase .demo automática) + funcional
-// (heading se sincroniza, removal, evento is-demo-connected).
+// (heading se sincroniza, removal, evento iswc-demo-connected).
 import assert from 'node:assert/strict';
 import { BASE_URL, newPage, close, waitReady, screenshot, report } from './lib/harness.mjs';
 
@@ -9,33 +9,33 @@ const URL = `${BASE_URL}/demos/layout/demo/demo.html`;
 const tests = [];
 
 tests.push({
-  name: 'smoke: is-demo está definido y los 4 demos están conectados',
+  name: 'smoke: iswc-demo está definido y los 4 demos están conectados',
   run: async (page) => {
     await page.goto(URL, { waitUntil: 'domcontentloaded' });
     await waitReady(page, 'data-demo-ready');
     const data = await page.evaluate(() => {
-      const demos = [...document.querySelectorAll('main is-demo')];
+      const demos = [...document.querySelectorAll('main iswc-demo')];
       return {
-        defined: !!customElements.get('is-demo'),
+        defined: !!customElements.get('iswc-demo'),
         count: demos.length,
         classes: demos.map((d) => [...d.classList]),
         lightDomText: demos.map((d) => (d.textContent ?? '').trim()),
-        // <is-demo> NO usa shadow DOM — el contenido vive en light DOM.
+        // <iswc-demo> NO usa shadow DOM — el contenido vive en light DOM.
         shadowRoot: demos.map((d) => d.shadowRoot !== null),
       };
     });
-    assert.equal(data.defined, true, 'is-demo debe estar definido');
-    assert.equal(data.count, 4, `esperaba 4 is-demo, hay ${data.count}`);
+    assert.equal(data.defined, true, 'iswc-demo debe estar definido');
+    assert.equal(data.count, 4, `esperaba 4 iswc-demo, hay ${data.count}`);
     // Cada uno debe tener la clase "demo" auto-aplicada en connectedCallback.
     for (const cls of data.classes) {
-      assert.ok(cls.includes('demo'), `cada is-demo debe tener la clase "demo", tiene [${cls.join(',')}]`);
+      assert.ok(cls.includes('demo'), `cada iswc-demo debe tener la clase "demo", tiene [${cls.join(',')}]`);
     }
     // El primer demo debe tener además la clase with-heading aplicada por el script.
     assert.ok(data.classes[0].includes('with-heading'),
       `demo[0] debe tener la clase "with-heading" puesta por el usuario`);
-    // <is-demo> es light DOM: shadowRoot debe ser null en todos.
+    // <iswc-demo> es light DOM: shadowRoot debe ser null en todos.
     assert.equal(data.shadowRoot.every((s) => s === false), true,
-      'is-demo debe ser light DOM (shadowRoot=null) para que el extractor de código vea el markup real');
+      'iswc-demo debe ser light DOM (shadowRoot=null) para que el extractor de código vea el markup real');
     await screenshot(page, 'demo-smoke');
   },
 });
@@ -120,12 +120,12 @@ tests.push({
 });
 
 tests.push({
-  name: 'evento: is-demo-connected se emite al conectar (>= 4 emisiones)',
+  name: 'evento: iswc-demo-connected se emite al conectar (>= 4 emisiones)',
   run: async (page) => {
     await page.goto(URL, { waitUntil: 'domcontentloaded' });
     await waitReady(page, 'data-demo-ready');
     const count = await page.evaluate(() => window.__demoConnectedFired ?? 0);
-    assert.ok(count >= 4, `esperaba >=4 emisiones de is-demo-connected (una por demo conectado), hay ${count}`);
+    assert.ok(count >= 4, `esperaba >=4 emisiones de iswc-demo-connected (una por demo conectado), hay ${count}`);
   },
 });
 

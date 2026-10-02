@@ -12,14 +12,14 @@ import { ElementBase } from '../../core/element-base.js';
 import { setStringAttr, setOptionalAttr } from '../_shared/reflect.js';
 import { hasSlotted } from '../_shared/dom-utils.js';
 /**
- * <is-switch> — Interruptor form-associated (track + thumb).
+ * <iswc-switch> — Interruptor form-associated (track + thumb).
  *
  * Atributos
  *   name, value (default "on"), hint
  *   color          brand (default) | neutral | success | warning | danger
  *   label-placement  end (default) | start | top | bottom
- *   icon             nombre de <is-icon> dentro del thumb apagado
- *   checked-icon     nombre de <is-icon> dentro del thumb encendido
+ *   icon             nombre de <iswc-icon> dentro del thumb apagado
+ *   checked-icon     nombre de <iswc-icon> dentro del thumb encendido
  *   on-label         texto corto dentro del track cuando está encendido
  *   off-label        texto corto dentro del track cuando está apagado
  *   checked, disabled, readonly, required, error   (boolean)
@@ -27,7 +27,7 @@ import { hasSlotted } from '../_shared/dom-utils.js';
  * Slots: default (etiqueta), hint
  * Parts: form-control, base, control, track-label, thumb, mark, label, hint
  * Custom states: checked, disabled, readonly, error
- * Events: is-change { checked, value }
+ * Events: iswc-change { checked, value }
  *
  * Sin `color`: el acento es currentColor. Sin `size`: escala con el font-size del contexto.
  */
@@ -41,7 +41,7 @@ import { hasSlotted } from '../_shared/dom-utils.js';
           <span part="track-label" class="track-label on" id="onLabel" hidden></span>
           <span part="track-label" class="track-label off" id="offLabel" hidden></span>
           <span part="thumb" class="thumb">
-            <is-icon part="mark" class="mark" hidden></is-icon>
+            <iswc-icon part="mark" class="mark" hidden></iswc-icon>
           </span>
         </span>
         <span part="label" class="label" id="label"><slot></slot></span>
@@ -61,7 +61,7 @@ import { hasSlotted } from '../_shared/dom-utils.js';
 
   /** Sin flatten: el texto de fallback del slot no cuenta como contenido propio. */
 
-  class IsSwitch extends ElementBase {
+  class IswcSwitch extends ElementBase {
     /** Personalización por atributo (ver `core/attrs.ts`). */
     static styleAttrs = {
     height: '--iswc-switch-height',
@@ -259,7 +259,7 @@ import { hasSlotted } from '../_shared/dom-utils.js';
       if (this.#isDisabled || this.readonly) return;
       const next = !this.checked;
       this.checked = next;
-      emit(this, 'is-change', { checked: next, value: this.value });
+      emit(this, 'iswc-change', { checked: next, value: this.value });
     }
 
     #onClick = (e: PointerEvent): void => {
@@ -280,5 +280,5 @@ import { hasSlotted } from '../_shared/dom-utils.js';
     };
   }
 
-  defineElement('is-switch', IsSwitch, 'IsSwitch');
+  defineElement('iswc-switch', IswcSwitch, 'IswcSwitch');
 })();

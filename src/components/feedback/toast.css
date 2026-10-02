@@ -10,32 +10,39 @@
   font-size: inherit;
 }
 
-:host([placement="top-start"]) {
-  inset-block-start: 0;
-  inset-inline-start: 0;
-}
-:host([placement="top-center"]) {
-  inset-block-start: 0;
-  inset-inline-start: 50%;
-  transform: translateX(-50%);
-}
+/* Las 6 placements + default se agrupan por eje en lugar de una regla por
+   placement. `&[attr]` no funciona dentro de `:host` anidado, así que cada
+   combinación vive en su propio bloque :host([...]) explícito.
+   `:is()` reduce las 7 reglas originales a 4 (block-start, block-end,
+   inline-start, inline-end) + 1 centrada. */
+:host([placement="top-start"]),
+:host([placement="top-center"]),
 :host([placement="top-end"]) {
   inset-block-start: 0;
-  inset-inline-end: 0;
 }
-:host([placement="bottom-start"]) {
-  inset-block-end: 0;
-  inset-inline-start: 0;
-}
-:host([placement="bottom-center"]) {
-  inset-block-end: 0;
-  inset-inline-start: 50%;
-  transform: translateX(-50%);
-}
+
+:host([placement="bottom-start"]),
+:host([placement="bottom-center"]),
 :host([placement="bottom-end"]),
 :host(:not([placement])) {
   inset-block-end: 0;
+}
+
+:host([placement="top-start"]),
+:host([placement="bottom-start"]) {
+  inset-inline-start: 0;
+}
+
+:host([placement="top-end"]),
+:host([placement="bottom-end"]),
+:host(:not([placement])) {
   inset-inline-end: 0;
+}
+
+:host([placement="top-center"]),
+:host([placement="bottom-center"]) {
+  inset-inline-start: 50%;
+  transform: translateX(-50%);
 }
 
 .stack {
@@ -52,6 +59,6 @@
   :host([placement$="start"]) & { margin-inline-end: auto; }
 }
 
-::slotted(is-toast-item) {
+::slotted(iswc-toast-item) {
   pointer-events: auto;
 }

@@ -1,21 +1,21 @@
 ---
-tag: is-button-group
+tag: iswc-button-group
 tags:
-  - is-button-group
+  - iswc-button-group
 category: actions
 status: public
 source: ./button-group.js
 style: ./button-group.css
 preview: ./button-group.json
 ---
-# `<is-button-group>`
+# `<iswc-button-group>`
 
 ## Propósito
 
 Agrupa botones relacionados en una sola unidad visual y, si se lo pides, gestiona
 cuál está activo. Sirve para controles segmentados, toolbars y split buttons.
 
-Este módulo registra `<is-button-group>`.
+Este módulo registra `<iswc-button-group>`.
 
 ## Cuándo usarlo
 
@@ -34,11 +34,11 @@ import './button-group.js';
 ## Ejemplo mínimo
 
 ```html
-<is-button-group label="Vista" variant="segmented" select="single" value="lista">
-<is-button variant="plain" value="lista" hue="210">Lista</is-button>
-<is-button variant="plain" value="tabla" hue="160">Tabla</is-button>
-<is-button variant="plain" value="tarjetas" hue="35">Tarjetas</is-button>
-</is-button-group>
+<iswc-button-group label="Vista" variant="segmented" select="single" value="lista">
+<iswc-button variant="plain" value="lista" hue="210">Lista</iswc-button>
+<iswc-button variant="plain" value="tabla" hue="160">Tabla</iswc-button>
+<iswc-button variant="plain" value="tarjetas" hue="35">Tarjetas</iswc-button>
+</iswc-button-group>
 ```
 
 ## API
@@ -86,7 +86,7 @@ import './button-group.js';
 
 | Evento | detail | bubbles | composed | cancelable |
 | --- | --- | --- | --- | --- |
-| `is-change` | sí | sí | sí | no |
+| `iswc-change` | sí | sí | sí | no |
 
 ### Métodos y propiedades públicas
 
@@ -145,7 +145,7 @@ No declara integración form-associated propia en este módulo.
 
 Documentación de cabecera preservada desde fuente:
 
-> <is-button-group> — Web Component (vanilla, zero dependencies).
+> <iswc-button-group> — Web Component (vanilla, zero dependencies).
 > Agrupa botones relacionados en una unidad visual y, opcionalmente, gestiona
 > qué botón está seleccionado (control segmentado / toggle group).
 > Atributos
@@ -159,20 +159,20 @@ Documentación de cabecera preservada desde fuente:
 >   allow-empty   boolean  en `single`, permite deseleccionar el activo
 >   disabled      boolean  bloquea el grupo completo
 > Slots
->   (default)  uno o más <is-button> (o <button> nativos)
+>   (default)  uno o más <iswc-button> (o <button> nativos)
 > CSS Parts:  ::part(base)
-> Eventos:    is-change { value, values }
+> Eventos:    iswc-change { value, values }
 > El valor de cada botón es su atributo `value`; si no lo tiene, se usa su
 > texto y, en último caso, su índice. El botón activo recibe el atributo
 > `selected` y `aria-pressed`, que el CSS del grupo usa para pintarlo.
 > Las variables --_button-*-radius y --_button-*-indent se inyectan en los
-> hijos slotted; <is-button> las consume para fusionar bordes.
+> hijos slotted; <iswc-button> las consume para fusionar bordes.
 
 ## Dependencias y componentes relacionados
 
 - [`../_shared/adopt-css.js`](../_shared/adopt-css.js)
 
-Tags del módulo: `<is-button-group>`.
+Tags del módulo: `<iswc-button-group>`.
 
 ## Accesibilidad
 
@@ -181,7 +181,7 @@ Preservar semántica, foco, teclado, labels y ARIA. ARIA detectado: `aria-presse
 ## Ejemplo avanzado
 
 ```html
-<is-button-group variant="segmented" select="single">…</is-button-group>
+<iswc-button-group variant="segmented" select="single">…</iswc-button-group>
 ```
 
 ## Errores comunes

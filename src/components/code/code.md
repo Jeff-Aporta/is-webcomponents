@@ -1,14 +1,14 @@
 ---
-tag: is-code
+tag: iswc-code
 tags:
-  - is-code
+  - iswc-code
 category: code
 status: public
 source: ./code.js
 style: ./code.css
 preview: ./code.json
 ---
-# `<is-code>`
+# `<iswc-code>`
 
 ## Propósito
 
@@ -20,7 +20,7 @@ documentación) y API bidireccional texto ↔ JSON (`code2json` / `json2code`).
 Motor: resaltado NATIVO (`_shared/code-highlight.ts`) y editor nativo; sin
 CodeMirror ni CDN.
 
-Este módulo registra `<is-code>`.
+Este módulo registra `<iswc-code>`.
 
 ## Cuándo usarlo
 
@@ -33,7 +33,7 @@ Este módulo registra `<is-code>`.
 
 - Solo colorear un `<pre>` de documentación: usar `highlight-code.js` /
   `scripts/highlight-pre.js`.
-- Markdown / rich text: `<is-md-editor>` / `<is-rte>` / `<is-doc-editor>`.
+- Markdown / rich text: `<iswc-md-editor>` / `<iswc-rte>` / `<iswc-doc-editor>`.
 - Merge de tres vías (resolver conflictos): no cubierto. Ver un diff o un
   resumen de commit sí lo está (`lang="diff"` / `lang="commit"`).
 
@@ -47,8 +47,8 @@ import './code.js';
 ## Ejemplo mínimo
 
 ```html
-<is-code lang="javascript" line-numbers wrap
-  value="const n = 1;&#10;console.log(n);"></is-code>
+<iswc-code lang="javascript" line-numbers wrap
+  value="const n = 1;&#10;console.log(n);"></iswc-code>
 ```
 
 ## API
@@ -61,7 +61,7 @@ import './code.js';
 | --- | --- | --- | --- |
 | `lang` | string | `javascript` | `javascript` · `typescript` · `jsx` · `tsx` · `html` · `css` · `json` · `python` · `diff` · `commit` · `plaintext` (y alias). Extensible con `registerLanguage`. |
 | `value` | string | `""` | Código fuente. |
-| `document` | string (JSON) | — | Documento `is-code-doc/v1`. Si está presente al conectar, manda sobre `value`. |
+| `document` | string (JSON) | — | Documento `iswc-code-doc/v1`. Si está presente al conectar, manda sobre `value`. |
 | `format` | string (JSON) | ver abajo | Opciones tipo Prettier: `tabWidth`, `useTabs`, `printWidth`, `semi`, `singleQuote`, `trailingComma`, `endOfLine`. |
 | `theme-config` | string (JSON) | preset dark/light | Colores por rol (`keyword`, `string`, `gutterForeground`, …). |
 | `line-numbers` | boolean/`false` | on (block) | Ausente = con números en `block`. En `compact` e `inline` ausente = off. `line-numbers="false"` los oculta. |
@@ -102,24 +102,24 @@ No proyecta light DOM (el texto inicial se lee una vez como semilla si no hay
 
 | Evento | Detail | Cuándo |
 | --- | --- | --- |
-| `is-ready` | `{ lang, value }` | Editor listo. |
-| `is-input` | `{ value, change }` | Cada edición. |
-| `is-change` | `{ value, formatted? }` | Edición o `format()`. |
-| `is-cursor` | `{ line, ch, index }` | Movimiento de cursor. |
-| `is-mark-activate` | `{ mark, phase }` | Hover enter/leave sobre un mark. |
-| `is-error` | `{ error }` | Fallo de bootstrap. |
+| `iswc-ready` | `{ lang, value }` | Editor listo. |
+| `iswc-input` | `{ value, change }` | Cada edición. |
+| `iswc-change` | `{ value, formatted? }` | Edición o `format()`. |
+| `iswc-cursor` | `{ line, ch, index }` | Movimiento de cursor. |
+| `iswc-mark-activate` | `{ mark, phase }` | Hover enter/leave sobre un mark. |
+| `iswc-error` | `{ error }` | Fallo de bootstrap. |
 
 ### Métodos y propiedades públicas
 
 | Método | Descripción |
 | --- | --- |
 | `format()` | Reformatea el buffer con `formatConfig` + `lang`. |
-| `getDocument()` / `setDocument(doc)` | Round-trip `is-code-doc/v1`. |
+| `getDocument()` / `setDocument(doc)` | Round-trip `iswc-code-doc/v1`. |
 | `code2json(opts?)` / `json2code(doc)` | Conversores texto ↔ JSON. |
 | `setMarks(list)` / `clearMarks()` | Anotaciones externas. |
 | `focus()` / `refresh()` | Foco y resincronización nativa (`refresh()` no hace scrollIntoView). |
-| `IsCode.registerLanguage(def)` | Plugin de lenguaje. |
-| `IsCode.listLanguages()` | Idiomas registrados. |
+| `IswcCode.registerLanguage(def)` | Plugin de lenguaje. |
+| `IswcCode.listLanguages()` | Idiomas registrados. |
 
 ### CSS parts
 
@@ -127,7 +127,7 @@ No proyecta light DOM (el texto inicial se lee una vez como semilla si no hay
 | --- | --- |
 | `root` | Contenedor. |
 | `editor` | Host del editor (`.editor-host`). |
-| `tooltip` | `<is-tooltip>` de documentación. |
+| `tooltip` | `<iswc-tooltip>` de documentación. |
 | `seed` | `<textarea>` semilla (oculto). |
 
 ### Custom states
@@ -160,7 +160,7 @@ Form-associated (`ElementInternals`). Participa en submit/reset vía `name` +
 ## Diff y resumen de commit
 
 `lang="diff"` (alias `patch`, `udiff`) y `lang="commit"` (alias `git-log`,
-`git-show`, `commit-resume`) comparten el modo `is-diff`, definido dentro del
+`git-show`, `commit-resume`) comparten el modo `iswc-diff`, definido dentro del
 kit. Los bloques colorean igual en todos los lados porque todos usan el mismo
 motor nativo de resaltado.
 
@@ -168,7 +168,7 @@ Por qué un modo propio y no `javascript`: el `+` y el `-` de la primera columna
 no son código, son marcas de línea. Un tokenizador de lenguaje los lee como
 operadores, arrastra el resto de la línea a un estado sintáctico inexistente y
 el bloque acaba coloreado casi al azar, justo donde el lector solo necesita ver
-qué entra y qué sale. `is-diff` clasifica por línea entera y no interpreta el
+qué entra y qué sale. `iswc-diff` clasifica por línea entera y no interpreta el
 lenguaje de dentro.
 
 Reconoce:
@@ -202,8 +202,8 @@ calcula por bloque contiguo, así que dos tablas separadas por prosa no se
 contaminan entre sí, y las líneas que no son `--stat` quedan intactas.
 
 ```html
-<is-code lang="commit" readonly compact wrap="false"
-  value="src/app.js | 12 ++++----&#10;src/lib/parse.ts | 2 +-"></is-code>
+<iswc-code lang="commit" readonly compact wrap="false"
+  value="src/app.js | 12 ++++----&#10;src/lib/parse.ts | 2 +-"></iswc-code>
 ```
 
 ## Comportamiento
@@ -216,11 +216,11 @@ contaminan entre sí, y las líneas que no son `--stat` quedan intactas.
 - Sin `theme-config`, el preset sigue `data-theme` del documento
   (`dark` / `light`).
 
-Documento JSON (`is-code-doc/v1`):
+Documento JSON (`iswc-code-doc/v1`):
 
 ```json
 {
-  "$schema": "is-code-doc/v1",
+  "$schema": "iswc-code-doc/v1",
   "lang": "javascript",
   "value": "function add(a, b) {\n  return a + b;\n}",
   "marks": [
@@ -256,13 +256,13 @@ Documento JSON (`is-code-doc/v1`):
 - [`../_shared/highlight-code.js`](../_shared/highlight-code.js)
 - [`../feedback/tooltip.js`](../feedback/tooltip.js) — tooltips de marks
 
-Tags del módulo: `<is-code>`.
+Tags del módulo: `<iswc-code>`.
 
 Sin dependencias externas: el resaltado y el editor son nativos; no hay que
 cargar CodeMirror ni ningún CSS/JS de CDN.
 
 Los snippets de la galería (`pre.code`, CDN, «Ver código») se montan como
-`<is-code readonly compact>` vía `highlight-code.js` — los colorea el motor
+`<iswc-code readonly compact>` vía `highlight-code.js` — los colorea el motor
 nativo, igual que cualquier otro snippet.
 
 ## Accesibilidad
@@ -276,12 +276,12 @@ Con `readonly` no hay caret ni línea activa; se puede seleccionar y copiar.
 ## Ejemplo avanzado
 
 ```html
-<is-code id="ed" lang="typescript" wrap line-numbers></is-code>
+<iswc-code id="ed" lang="typescript" wrap line-numbers></iswc-code>
 <script type="module">
   const ed = document.getElementById('ed');
-  ed.addEventListener('is-ready', () => {
+  ed.addEventListener('iswc-ready', () => {
     ed.setDocument({
-      $schema: 'is-code-doc/v1',
+      $schema: 'iswc-code-doc/v1',
       lang: 'typescript',
       value: 'const x: number = 1;',
       marks: [

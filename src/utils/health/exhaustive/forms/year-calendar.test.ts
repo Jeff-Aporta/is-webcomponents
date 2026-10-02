@@ -1,5 +1,5 @@
 /**
- * year-calendar.test.ts — Tests exhaustivos de <is-year-calendar>.
+ * year-calendar.test.ts — Tests exhaustivos de <iswc-year-calendar>.
  */
 
 import test from 'node:test';
@@ -10,13 +10,13 @@ import {
   partsDeclaradas, extiendeElementBase,
 } from './_helpers.js';
 
-const TAG = 'is-year-calendar';
+const TAG = 'iswc-year-calendar';
 const src = leerComponente(TAG);
 
 test('year-calendar: archivo y registro', () => {
   assert.ok(src.length > 300);
   assert.ok(existeCss(TAG));
-  assert.ok(/defineElement\s*\(\s*['"`]is-year-calendar['"`]/.test(src));
+  assert.ok(/defineElement\s*\(\s*['"`]iswc-year-calendar['"`]/.test(src));
   assert.ok(extiendeElementBase(src));
 });
 
@@ -27,9 +27,9 @@ test('year-calendar: atributos observados', () => {
   }
 });
 
-test('year-calendar: eventos (is-change)', () => {
+test('year-calendar: eventos (iswc-change)', () => {
   const evs = eventosEmitidos(src);
-  assert.ok(evs.includes('is-change'));
+  assert.ok(evs.includes('iswc-change'));
 });
 
 test('year-calendar: base con role=radiogroup', () => {
@@ -38,7 +38,7 @@ test('year-calendar: base con role=radiogroup', () => {
 
 test('year-calendar: scrollToSelection() en connect', () => {
   assert.ok(/scrollToSelection/.test(src),
-    '<is-year-calendar> debe hacer scroll a la selección');
+    '<iswc-year-calendar> debe hacer scroll a la selección');
 });
 
 test('year-calendar: shadow DOM part=base', () => {
@@ -49,5 +49,5 @@ test('year-calendar: shadow DOM part=base', () => {
 test('year-calendar: preview JSON', () => {
   const prev = leerPreview(TAG);
   assert.ok(prev);
-  assert.equal(prev!['$schema'], 'is-preview/v1');
+  assert.equal(prev!['$schema'], 'iswc-preview/v1');
 });

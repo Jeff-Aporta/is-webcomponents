@@ -11,18 +11,18 @@ const results = [];
 async function checkDeterministic(page) {
   await page.waitForTimeout(200);
   const data = await page.evaluate(() => {
-    const pickers = [...document.querySelectorAll('main is-duration-picker')];
+    const pickers = [...document.querySelectorAll('main iswc-duration-picker')];
     return pickers.map((p, idx) => {
       const shadow = p.shadowRoot;
       const h = shadow.querySelector('#h');
       const m = shadow.querySelector('#m');
       const s = shadow.querySelector('#s');
-      const upH = shadow.querySelector('is-button[data-target="h"].up');
-      const upM = shadow.querySelector('is-button[data-target="m"].up');
-      const upS = shadow.querySelector('is-button[data-target="s"].up');
-      const downH = shadow.querySelector('is-button[data-target="h"].down');
-      const downM = shadow.querySelector('is-button[data-target="m"].down');
-      const downS = shadow.querySelector('is-button[data-target="s"].down');
+      const upH = shadow.querySelector('iswc-button[data-target="h"].up');
+      const upM = shadow.querySelector('iswc-button[data-target="m"].up');
+      const upS = shadow.querySelector('iswc-button[data-target="s"].up');
+      const downH = shadow.querySelector('iswc-button[data-target="h"].down');
+      const downM = shadow.querySelector('iswc-button[data-target="m"].down');
+      const downS = shadow.querySelector('iswc-button[data-target="s"].down');
       const rects = {
         h: h.getBoundingClientRect(),
         m: m.getBoundingClientRect(),
@@ -111,7 +111,7 @@ try {
 // Rama opt-in con Stagehand LLM.
 // ─────────────────────────────────────────────────────────────────────────
 const VISUAL_RUBRIC = `
-Evalúa la calidad visual del selector de duración (<is-duration-picker>) que aparece en el screenshot.
+Evalúa la calidad visual del selector de duración (<iswc-duration-picker>) que aparece en el screenshot.
 
 Checklist (todas deben cumplirse; marca cada una PASS o FAIL):
 

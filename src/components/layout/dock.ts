@@ -3,14 +3,14 @@ import { withStyleAttrs } from '../../core/attrs.js';
 
 
 /**
- * <is-dock> — Barra tipo macOS. Los hijos se redimensionan al pasar el
+ * <iswc-dock> — Barra tipo macOS. Los hijos se redimensionan al pasar el
  * puntero cerca, simulando la lupa del Dock.
  *
- *   <is-dock>
- *     <is-dock-item label="Inicio"     icon="mdi:home"></is-dock-item>
- *     <is-dock-item label="Buscar"     icon="mdi:magnify"></is-dock-item>
+ *   <iswc-dock>
+ *     <iswc-dock-item label="Inicio"     icon="mdi:home"></iswc-dock-item>
+ *     <iswc-dock-item label="Buscar"     icon="mdi:magnify"></iswc-dock-item>
  *     ...
- *   </is-dock>
+ *   </iswc-dock>
  *
  * Atributos
  *   position    bottom (default) | top | left | right
@@ -20,15 +20,15 @@ import { withStyleAttrs } from '../../core/attrs.js';
  *
  * Custom states: hovering
  * Eventos:
- *   is-select   detail: { item }
+ *   iswc-select   detail: { item }
  *
- * is-dock-item acepta:
+ * iswc-dock-item acepta:
  *   icon, label, href, active (booleano, marca el ítem activo)
  */
 (() => {
   const OBSERVED = ['position', 'max-scale', 'range'];
 
-  class IsDock extends withStyleAttrs(HTMLElement) {
+  class IswcDock extends withStyleAttrs(HTMLElement) {
     /** Personalización por atributo (ver `core/attrs.ts`). */
     static styleAttrs = {
     'scale-unit': '--iswc-dock-scale-unit',
@@ -106,24 +106,24 @@ import { withStyleAttrs } from '../../core/attrs.js';
     }
   }
 
-  defineElement('is-dock', IsDock);
+  defineElement('iswc-dock', IswcDock);
 
-  class IsDockItem extends HTMLElement {
+  class IswcDockItem extends HTMLElement {
     static get observedAttributes(): string[] { return ['icon', 'label', 'href', 'active']; }
     constructor() {
       super();
       this.attachShadow({ mode: 'open' });
       this.shadowRoot!.innerHTML = /* html */ `
         <a part="item" class="item" tabindex="0">
-          <span class="ico"><slot name="icon"><is-icon></is-icon></slot></span>
+          <span class="ico"><slot name="icon"><iswc-icon></iswc-icon></slot></span>
           <span class="label" part="label"></span>
         </a>
       `;
       adoptCss(this.shadowRoot!, import.meta.url);
       this.addEventListener('click', (e) => {
         if (this.hasAttribute('disabled')) { e.preventDefault(); return; }
-        const dock = this.closest('is-dock');
-        if (dock) emit(dock, 'is-select', { item: this });
+        const dock = this.closest('iswc-dock');
+        if (dock) emit(dock, 'iswc-select', { item: this });
       });
       this.addEventListener('keydown', (e) => {
         if (e.key === 'Enter' || e.key === ' ') {
@@ -143,8 +143,8 @@ import { withStyleAttrs } from '../../core/attrs.js';
       if (label) link.setAttribute('aria-label', label);
       const icon = this.getAttribute('icon');
       const slot = this.shadowRoot!.querySelector<HTMLSlotElement>('slot[name="icon"]');
-      if (icon && slot) slot.innerHTML = `<is-icon icon="${icon}"></is-icon>`;
-      // tooltip arrow via title (simple); una lib rica usaría is-tooltip
+      if (icon && slot) slot.innerHTML = `<iswc-icon icon="${icon}"></iswc-icon>`;
+      // tooltip arrow via title (simple); una lib rica usaría iswc-tooltip
       if (label) link.setAttribute('title', label);
     }
     attributeChangedCallback(name: string, oldVal: string | null, newVal: string | null): void {
@@ -156,9 +156,9 @@ import { withStyleAttrs } from '../../core/attrs.js';
       if (name === 'active') link.classList.toggle('active', !!newVal);
       if (name === 'icon') {
         const slot = this.shadowRoot!.querySelector<HTMLSlotElement>('slot[name="icon"]');
-        if (slot && newVal) slot.innerHTML = `<is-icon icon="${newVal}"></is-icon>`;
+        if (slot && newVal) slot.innerHTML = `<iswc-icon icon="${newVal}"></iswc-icon>`;
       }
     }
   }
-  defineElement('is-dock-item', IsDockItem);
+  defineElement('iswc-dock-item', IswcDockItem);
 })();

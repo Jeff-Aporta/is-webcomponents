@@ -5,22 +5,24 @@
  * - pin(ref) / unpin() / configure({ ref, mirrors })
  * - sheets.install / warm* — Cache Storage + adoptedStyleSheets (apps)
  * - registerApp / ensure — tags de app + lazy ensure de custom elements
- * - Fallbacks entre espejos (jsDelivr → Pages)
- * - Registro persistente: si ya cargaste `actions`, `load('is-button')` no re-fetch
+ * - Fallbacks entre espejos (jsDelivr → githack → Pages)
+ * - Registro persistente: si ya cargaste `actions`, `load('iswc-button')` no re-fetch
  * - loadPageStyles / loadPageModules para la galería
  * - `?h=` sale del mapa de build: si el archivo cambia, la URL cambia
  *
  * Docs: ./loader.md (también en dist/cdn/core/loader.md)
- * Build sustituye __IS_LOADER_CATALOG__ y __IS_ASSET_HASHES__.
+ * Build sustituye __IS_LOADER_CATALOG__, __IS_ASSET_HASHES__ y __IS_BUILD_SHA__.
  */
 import {
   resolveRef,
   jsdelivrBase,
+  githackBase,
   pagesBase,
   MIRRORS as DEFAULT_MIRRORS,
   mirrorById,
   fallbackBases,
   GH_REPO,
+  fillHostTemplate,
 } from '../components/_shared/cdn-ref.js';
 import {
   createRegistry,
@@ -40,6 +42,34 @@ import { readBody, writeBody, syncHashMemory } from './asset-store.js';
 
 declare const __IS_LOADER_CATALOG__: Catalog;
 declare const __IS_ASSET_HASHES__: Record<string, string>;
+declare const __IS_BUILD_SHA__: string;
+
+/**
+ * SHA del script que se está ejecutando (`@abc…` en jsDelivr) o null.
+ * Si el consumidor pincha el loader en un commit, ese pin manda sobre el
+ * SHA quemado en build (por si alguien sirve un bundle renombrado).
+ */
+function shaFromImportUrl(href: string): string | null {
+  try {
+    const m = String(href).match(/is-webcomponents@([0-9a-f]{7,40})\b/i);
+    return m ? m[1]!.toLowerCase() : null;
+  } catch {
+    return null;
+  }
+}
+
+/** true si el loader corre en gallery/local (no forzar host CDN). */
+function isLocalKitRoot(url: string): boolean {
+  try {
+    const u = new URL(url);
+    return u.protocol === 'file:'
+      || u.hostname === 'localhost'
+      || u.hostname === '127.0.0.1'
+      || u.hostname === '[::1]';
+  } catch {
+    return false;
+  }
+}
 
 export interface Mirror {
   id: string;
@@ -57,6 +87,21 @@ export interface AppComponentEntry {
 const CATALOG: Catalog = __IS_LOADER_CATALOG__;
 const HASHES: Record<string, string> = __IS_ASSET_HASHES__;
 
+/** Plantilla del host. configure({ sha }) sustituye {{cdnUrl}} y {{sha}}. */
+const HOST_DEFAULT = '{{cdnUrl}}@{{sha}}/dist/cdn';
+const CDN_URL_DEFAULT = 'https://cdn.jsdelivr.net/gh/Jeff-Aporta/is-webcomponents';
+/**
+ * Pin por defecto de ESTE loader:
+ * 1) SHA de la URL (`@abc…/loader.min.js`) si viene pinneada
+ * 2) `__IS_BUILD_SHA__` quemado en el build (HEAD al publicar)
+ *
+ * Así `import …@REF/…/loader.min.js` ya arrastra los componentes de ese
+ * commit sin `L.configure({ host })`. El consumidor puede pisar con
+ * `configure({ sha })` / `configure({ host })`.
+ */
+const SHA_FROM_URL = shaFromImportUrl(import.meta.url);
+const SHA_DEFAULT: string = SHA_FROM_URL || __IS_BUILD_SHA__;
+
 const SELF_BASE = new URL('./', import.meta.url).href.replace(/\/?$/, '/');
 
 /** Raíz del CDN (`dist/cdn/`); este módulo vive en `core/`. */
@@ -64,12 +109,34 @@ const CDN_ROOT = /\/core\/$/i.test(SELF_BASE)
   ? new URL('../', SELF_BASE).href.replace(/\/?$/, '/')
   : SELF_BASE;
 
+const slash = (u: string): string => (u.endsWith('/') ? u : `${u}/`);
+
+/** Host CDN armado con el pin de este loader (jsDelivr @sha). */
+function hostFromSha(sha: string, cdnUrl: string = CDN_URL_DEFAULT): string {
+  return slash(fillHostTemplate(HOST_DEFAULT, { cdnUrl, sha }));
+}
+
+/**
+ * Pin + host de arranque.
+ * - Gallery local: sin host (preferSelf → CDN_ROOT localhost).
+ * - Loader servido desde CDN / bundle externo: host = jsDelivr@shaDefault.
+ * El pin (`ref`) evita que los mirrors resuelvan el tip de main por API.
+ */
+const BOOT_PIN = SHA_DEFAULT !== 'main' && SHA_DEFAULT !== '' ? SHA_DEFAULT : null;
+const BOOT_HOST = (!isLocalKitRoot(CDN_ROOT) && BOOT_PIN)
+  ? hostFromSha(BOOT_PIN)
+  : null;
+
 interface LoaderState {
   ref: string | null;
   mirrors: Mirror[];
   preferSelf: boolean;
   /** Raíz `dist/cdn/` forzada por el consumidor (githack, local, SHA…). */
   host: string | null;
+  /** SHA que entra en {{sha}}. null = shaDefault del build. */
+  sha: string | null;
+  /** Origen que entra en {{cdnUrl}}. null = cdnUrlDefault. */
+  cdnUrl: string | null;
   /** Query de cache-bust en cada asset (`?v=2`). */
   query: Record<string, string>;
   /**
@@ -85,10 +152,12 @@ interface LoaderState {
 }
 
 const state: LoaderState = {
-  ref: null,
+  ref: BOOT_PIN,
   mirrors: DEFAULT_MIRRORS.map((m) => ({ ...m })),
   preferSelf: true,
-  host: null,
+  host: BOOT_HOST,
+  sha: BOOT_PIN,
+  cdnUrl: null,
   query: {},
   // Aliases estables para `loadPageModules`. Si cambia una URL, el consumidor
   // no se entera: solo hay que actualizar este mapa en una versión mayor del
@@ -114,6 +183,27 @@ const appComponents = new Map<string, AppComponentEntry>();
 
 const cssDone = new Set<string>();
 const jsDone = new Map<string, Promise<void>>();
+
+/**
+ * Última base CDN que respondió bien en esta página.
+ * Si jsDelivr cae y githack salva el primer `load`, los siguientes no
+ * reintentan el muerto primero (mitiga timeouts de espejos caídos).
+ */
+let stickyBase: string | null = null;
+
+function orderBases(bases: string[]): string[] {
+  if (!stickyBase || !bases.includes(stickyBase)) return bases;
+  // host / preferSelf siguen primero; sticky solo reordena espejos.
+  const preferHead = state.host || state.preferSelf ? 1 : 0;
+  const head = bases.slice(0, preferHead);
+  if (head.includes(stickyBase)) return bases;
+  const rest = bases.slice(preferHead).filter((b) => b !== stickyBase);
+  return [...head, stickyBase, ...rest];
+}
+
+function rememberBase(base: string): void {
+  stickyBase = slash(base);
+}
 
 /**
  * Resuelve un input de `loadPageModules` / `loadPageStyles` a una URL
@@ -155,8 +245,6 @@ function resolvePageModuleHref(input: string): string {
   }
   return found;
 }
-
-const slash = (u: string): string => (u.endsWith('/') ? u : `${u}/`);
 
 function normalizeQuery(input: unknown): Record<string, string> {
   if (input == null || input === '') return {};
@@ -261,13 +349,15 @@ async function coreAssetBases(forcedRef?: string): Promise<string[]> {
   } else {
     push(SELF_BASE);
   }
-  for (const m of state.mirrors) {
+  const pushMirror = (m: { base: (ref?: string) => string }): void => {
     try {
       const root = m.base(ref);
       push(root);
       push(new URL('core/', root).href);
     } catch { /* mirror malo */ }
-  }
+  };
+  for (const m of state.mirrors) pushMirror(m);
+  for (const m of DEFAULT_MIRRORS) pushMirror(m);
   if (out.length <= 1) {
     const root = jsdelivrBase(ref);
     push(root);
@@ -286,8 +376,14 @@ async function cdnBases(forcedRef?: string): Promise<string[]> {
   // host del consumidor manda: evita quedarse en un jsDelivr @main cacheado.
   if (state.host) push(state.host);
   else if (state.preferSelf) push(CDN_ROOT);
+  // Cadena de fallback fija: jsDelivr → githack → Pages (DEFAULT_MIRRORS),
+  // más los que el consumidor haya pasado en configure({ mirrors }).
   for (const m of state.mirrors) {
     try { push(m.base(ref)); } catch { /* mirror malo */ }
+  }
+  // Si el consumidor vació mirrors, igual garantizamos la cadena canónica.
+  for (const m of DEFAULT_MIRRORS) {
+    try { push(m.base(ref)); } catch { /* */ }
   }
   if (!out.length) push(jsdelivrBase(ref));
   return out;
@@ -319,7 +415,7 @@ function injectStylesheet(href: string): Promise<void> {
 }
 
 async function injectCdnStylesheet(rel: string): Promise<string> {
-  const bases = await coreAssetBases();
+  const bases = orderBases(await coreAssetBases());
   const hash = lookupHash(HASHES, rel);
   const key = rel.replace(/^\.\//, '');
   if (hash) {
@@ -340,10 +436,12 @@ async function injectCdnStylesheet(rel: string): Promise<string> {
         if (!cssNeedsLink(text)) {
           await writeBody(key, hash, text);
           injectStyleText(key, text);
+          rememberBase(base);
           return href;
         }
       }
       await injectStylesheet(href);
+      rememberBase(base);
       return href;
     } catch (e: unknown) {
       last = e instanceof Error ? e : new Error(String(e));
@@ -360,7 +458,19 @@ async function injectCdnStylesheet(rel: string): Promise<string> {
 function importOnce(href: string): Promise<void> {
   let p = jsDone.get(href);
   if (p) return p;
-  p = import(/* @vite-ignore */ href).then(() => undefined, (err: unknown) => {
+  p = (async () => {
+    // Cache Storage: el módulo queda listo para la próxima visita.
+    try {
+      if (typeof caches !== 'undefined') {
+        const c = await caches.open('is-wc-modules-v1');
+        if (!(await c.match(href))) {
+          const res = await fetch(href);
+          if (res.ok) await c.put(href, res.clone());
+        }
+      }
+    } catch { /* privado / sin caches */ }
+    await import(/* @vite-ignore */ href);
+  })().then(() => undefined, (err: unknown) => {
     jsDone.delete(href);
     throw err;
   });
@@ -369,12 +479,13 @@ function importOnce(href: string): Promise<void> {
 }
 
 async function importCdn(rel: string): Promise<string> {
-  const bases = await cdnBases();
+  const bases = orderBases(await cdnBases());
   let last: Error | null = null;
   for (const base of bases) {
     const href = assetHref(base, rel);
     try {
       await importOnce(href);
+      rememberBase(base);
       return href;
     } catch (e: unknown) {
       last = e instanceof Error ? e : new Error(String(e));
@@ -406,16 +517,15 @@ function normalizeMirrors(input: string | Mirror | (string | Mirror)[]): Mirror[
     if (typeof item === 'string') {
       if (item === 'jsdelivr') {
         out.push({ id: 'jsdelivr', label: 'jsDelivr', pin: true, base: (ref = 'main') => jsdelivrBase(ref) });
-      } else if (item === 'pages') {
-        out.push({ id: 'pages', label: 'GitHub Pages', pin: false, base: () => pagesBase() });
       } else if (item === 'githack') {
-        // Tip de GitHub con MIME JS (evita caché vieja de jsDelivr @main).
         out.push({
           id: 'githack',
           label: 'raw.githack',
-          pin: false,
-          base: () => `https://raw.githack.com/${GH_REPO}/main/dist/cdn`,
+          pin: true,
+          base: (ref = 'main') => githackBase(ref),
         });
+      } else if (item === 'pages') {
+        out.push({ id: 'pages', label: 'GitHub Pages', pin: false, base: () => pagesBase() });
       } else if (/^https?:\/\//i.test(item)) {
         const base = slash(item);
         out.push({ id: base, label: base, pin: false, base: () => base });
@@ -451,6 +561,10 @@ export interface ConfigureOpts {
   mirrors?: string | Mirror | (string | Mirror)[];
   preferSelf?: boolean;
   host?: string | null;
+  /** Sustituye {{sha}} de hostDefault. Vacío usa shaDefault. */
+  sha?: string | null;
+  /** Sustituye {{cdnUrl}} de hostDefault. Vacío usa cdnUrlDefault. */
+  cdnUrl?: string | null;
   query?: string | Record<string, string> | null;
   v?: string | number | null;
 }
@@ -484,8 +598,13 @@ export const ISWebComponentsLoader = {
   get repo(): string { return GH_REPO; },
   get mirrors(): Mirror[] { return state.mirrors.slice(); },
   get selfBase(): string { return SELF_BASE; },
-  /** Raíz CDN forzada por `configure({ host })`, o null. */
+  /** Raíz CDN: configure({ host }) o host de arranque (jsDelivr@shaDefault). */
   get host(): string | null { return state.host; },
+  hostDefault: HOST_DEFAULT,
+  shaDefault: SHA_DEFAULT,
+  /** SHA leído de la URL del loader (`@abc…`), si venía pinneada. */
+  shaFromUrl: SHA_FROM_URL,
+  cdnUrlDefault: CDN_URL_DEFAULT,
   /** Query de bust activa (`{ v: '2' }` → `?v=2`). */
   get query(): Record<string, string> { return { ...state.query }; },
 
@@ -520,8 +639,20 @@ export const ISWebComponentsLoader = {
     if ('ref' in opts) state.ref = opts.ref == null || opts.ref === '' ? null : String(opts.ref);
     if ('mirrors' in opts && opts.mirrors != null) state.mirrors = normalizeMirrors(opts.mirrors);
     if (typeof opts.preferSelf === 'boolean') state.preferSelf = opts.preferSelf;
+    if ('cdnUrl' in opts) {
+      state.cdnUrl = opts.cdnUrl == null || opts.cdnUrl === '' ? null : String(opts.cdnUrl);
+    }
+    if ('sha' in opts) {
+      state.sha = opts.sha == null || opts.sha === '' ? null : String(opts.sha);
+      if (!('ref' in opts)) state.ref = state.sha ?? SHA_DEFAULT;
+    }
     if ('host' in opts) {
       state.host = opts.host == null || opts.host === '' ? null : slash(String(opts.host));
+    } else if ('sha' in opts || 'cdnUrl' in opts) {
+      const pin = state.sha || SHA_DEFAULT;
+      state.host = pin && pin !== 'main'
+        ? hostFromSha(pin, state.cdnUrl || CDN_URL_DEFAULT)
+        : null;
     }
     if ('query' in opts) {
       state.query = opts.query == null ? {} : normalizeQuery(opts.query);

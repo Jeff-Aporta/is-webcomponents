@@ -1,12 +1,12 @@
 // tests/theme-toggle-icon.test.ts
 //
-// Verifica que el componente <is-theme-toggle> sincroniza correctamente
-// el icono del <is-check-icon-button> interno cuando cambia el tema.
+// Verifica que el componente <iswc-theme-toggle> sincroniza correctamente
+// el icono del <iswc-check-icon-button> interno cuando cambia el tema.
 //
 // Bug original: el icono quedaba "pegado" al estado anterior porque
-//   1. `is-check-icon-button.set checked(...)` usa `toggleAttribute()`,
+//   1. `iswc-check-icon-button.set checked(...)` usa `toggleAttribute()`,
 //      que no dispara `attributeChangedCallback` si el atributo ya
-//      estaba en el mismo valor. El icono del <is-icon> interno nunca
+//      estaba en el mismo valor. El icono del <iswc-icon> interno nunca
 //      se actualizaba.
 //   2. theme-toggle hacia `this.dark = next === 'dark'` en #onChange,
 //      pero el atributo `checked` ya habia sido puesto por el handler
@@ -20,7 +20,7 @@
 //     re-añadiendo el atributo `checked` si ya estaba en el valor
 //     deseado, garantizando que el icono cambie.
 //   - Se expone un metodo publico `forceSync()` para re-sincronizar
-//     desde fuera (p.ej. cuando llega un postMessage `is-context` y
+//     desde fuera (p.ej. cuando llega un postMessage `iswc-context` y
 //     data-theme ya estaba en el mismo valor, sin disparar el observer).
 
 import { test } from 'node:test';
@@ -97,7 +97,7 @@ test('theme-toggle expone forceSync() publico para re-sincronizar desde fuera', 
 });
 
 // El evento ya no se dispara a mano sobre `document`: `emit()` sale con
-// bubbles + composed, así que un solo `is-theme-change` desde el host llega
+// bubbles + composed, así que un solo `iswc-theme-change` desde el host llega
 // igual a los listeners globales. Disparar los dos los invocaba dos veces.
 test('theme-toggle resuelve el contenedor atravesando Shadow DOM', () => {
   assert.ok(
@@ -110,13 +110,13 @@ test('theme-toggle resuelve el contenedor atravesando Shadow DOM', () => {
   );
 });
 
-test('theme-toggle emite `is-theme-change` y llega a document', () => {
+test('theme-toggle emite `iswc-theme-change` y llega a document', () => {
   assert.ok(
-    /emit\(this, ['"]is-theme-change['"]/.test(themeToggleSrc),
-    'el toggle debe emitir is-theme-change',
+    /emit\(this, ['"]iswc-theme-change['"]/.test(themeToggleSrc),
+    'el toggle debe emitir iswc-theme-change',
   );
   assert.ok(
-    !/document\.dispatchEvent\(new CustomEvent\(['"]is-theme-change['"]/.test(themeToggleSrc),
+    !/document\.dispatchEvent\(new CustomEvent\(['"]iswc-theme-change['"]/.test(themeToggleSrc),
     'no debe además dispararlo a mano en document: llegaría duplicado',
   );
 });

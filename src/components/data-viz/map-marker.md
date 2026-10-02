@@ -1,15 +1,15 @@
 ---
-tag: is-map-marker
+tag: iswc-map-marker
 tags:
-  - is-map-marker
+  - iswc-map-marker
 category: data-viz
 status: public
 ---
-# `<is-map-marker>`
+# `<iswc-map-marker>`
 
 ## Propósito
 
-Marcador de `<is-maps>`. Señala un punto; el mapa lo posiciona.
+Marcador de `<iswc-maps>`. Señala un punto; el mapa lo posiciona.
 
 ## Cuándo usarlo
 
@@ -22,5 +22,5 @@ No lo reimplementes ni lo uses para sustituir al padre. La guía del padre docum
 ## Ejemplo mínimo
 
 ```html
-<is-map-marker></is-map-marker>
+<iswc-map-marker></iswc-map-marker>
 ```

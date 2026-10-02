@@ -1,9 +1,10 @@
-/* is-barcode */
+/* iswc-barcode */
 :host {
   display: inline-block;
   font: inherit;
   color: var(--iswc-text);
 }
+
 .root {
   display: flex;
   flex-direction: column;
@@ -12,18 +13,20 @@
   border: 1px solid var(--iswc-border);
   border-radius: var(--iswc-radius);
   background: var(--iswc-bg-elev);
-  max-width: 100%;
+  max-inline-size: 100%;
 }
+
 .svg {
   display: block;
-  width: 100%;
-  height: auto;
+  inline-size: 100%;
+  block-size: auto;
 }
+
 .text {
+  margin-block-start: .25rem;
   text-align: center;
   font-family: ui-monospace, SFMono-Regular, Menlo, Consolas, monospace;
   font-size: .85rem;
   letter-spacing: .12em;
-  margin-top: .25rem;
   color: var(--iswc-text);
 }

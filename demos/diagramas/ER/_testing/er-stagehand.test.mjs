@@ -31,12 +31,12 @@ async function checkDeterministic(page, demo) {
   // Esperar a que el render esté completo y el layout estable.
   await page.waitForTimeout(200);
 
-  // IMPORTANTE: las páginas de demo pueden tener múltiples <is-er-diagram>.
+  // IMPORTANTE: las páginas de demo pueden tener múltiples <iswc-er-diagram>.
   // Para que (1)..(5) operen sobre los datos del MISMO diagrama, los hacemos
   // scoped al shadow root del diagram correspondiente (no global).
   const data = await page.evaluate((demoUrl) => {
-    // Encontrar el is-er-diagram que pertenece a esta URL (puede haber varios).
-    const all = document.querySelectorAll('is-er-diagram');
+    // Encontrar el iswc-er-diagram que pertenece a esta URL (puede haber varios).
+    const all = document.querySelectorAll('iswc-er-diagram');
     // Como cada demo carga sólo 1 diagram (er-editor) o 2 (er-static), usamos
     // heurística: scope = el primero cuyo getAttribute('animation') o posición
     // cuadre. Aquí iteramos todos y devolvemos un set de checks POR cada

@@ -12,7 +12,7 @@ async function checkDeterministic(page) {
   await page.waitForTimeout(300);
   const data = await page.evaluate(() => {
     const pre = document.querySelector('pre#bands');
-    const fc = document.querySelector('is-funnel-chart');
+    const fc = document.querySelector('iswc-funnel-chart');
     const svg = fc?.shadowRoot?.querySelector('svg');
     return {
       bandsText: pre?.textContent ?? '',
@@ -22,7 +22,7 @@ async function checkDeterministic(page) {
     };
   });
   assert.ok(data.bandsText.includes('"ratio"'), 'pre debe contener el JSON de bands');
-  assert.equal(data.funnelSvg, true, '<is-funnel-chart> debe renderizar SVG');
+  assert.equal(data.funnelSvg, true, '<iswc-funnel-chart> debe renderizar SVG');
   assert.ok(data.funnelMarks >= 4, `esperaba >=4 marks (uno por paso), hay ${data.funnelMarks}`);
   assert.ok(data.funnelRects.width > 0 && data.funnelRects.height > 0, 'SVG debe tener tamaño visible');
 }

@@ -3,7 +3,7 @@
 <head>
 <meta charset="utf-8" />
 <meta name="viewport" content="width=device-width, initial-scale=1" />
-<title>Lista desplegable &lt;is-select&gt; · is-webcomponents</title>
+<title>Lista desplegable &lt;iswc-select&gt; · is-webcomponents</title>
 <meta name="description" content="Select form-associated con listbox en top-layer dialog, modo único y múltiple, tags, clearable, typeahead y grupos." />
 <style>
   html, body { margin: 0; padding: 0; min-height: 100%; background: #0c1118; color: #e2e8f0; font-family: ui-sans-serif, system-ui, sans-serif; }
@@ -14,34 +14,34 @@
   section { background: #131a24; border: 1px solid rgba(255,255,255,0.08); border-radius: 10px; padding: 16px; display: grid; gap: 10px; }
   section h2 { font-size: 13px; margin: 0; font-weight: 600; color: #cbd5e1; }
   section .desc { font-size: 12px; color: #94a3b8; margin: 0; }
-  is-select { width: 100%; }
+  iswc-select { width: 100%; }
   code { background: rgba(255,255,255,0.06); padding: 1px 5px; border-radius: 3px; font: 12px ui-monospace, Menlo, Consolas, monospace; }
   /* Anti-FOUC */
-  is-select:not(:defined) { visibility: hidden; }
+  iswc-select:not(:defined) { visibility: hidden; }
 </style>
 <script type="module">
-  await import('../../../dist/cdn/forms/select.min.js?h=qbyqei');
-  await import('../../../dist/cdn/forms/option.min.js?h=ucrz7w');
-  await customElements.whenDefined('is-select');
+  await import('../../../dist/cdn/forms/select.min.js?h=lggml9');
+  await import('../../../dist/cdn/forms/option.min.js?h=00bfco');
+  await customElements.whenDefined('iswc-select');
 
   // (1) Básico single-value
-  const basico = document.createElement('is-select');
+  const basico = document.createElement('iswc-select');
   basico.setAttribute('label', 'Idioma');
   basico.setAttribute('name', 'lang');
   basico.placeholder = 'Selecciona un idioma';
   basico.setAttribute('hint', 'Pulsa ↓ para abrir la lista');
   basico.value = 'es';
   basico.innerHTML = `
-    <is-option value="es">Español</is-option>
-    <is-option value="en">English</is-option>
-    <is-option value="fr">Français</is-option>
-    <is-option value="pt">Português</is-option>
-    <is-option value="de">Deutsch</is-option>
+    <iswc-option value="es">Español</iswc-option>
+    <iswc-option value="en">English</iswc-option>
+    <iswc-option value="fr">Français</iswc-option>
+    <iswc-option value="pt">Português</iswc-option>
+    <iswc-option value="de">Deutsch</iswc-option>
   `;
   document.querySelector('#sec-basico').appendChild(basico);
 
   // (2) Múltiple con tags y clearable
-  const multi = document.createElement('is-select');
+  const multi = document.createElement('iswc-select');
   multi.setAttribute('label', 'Etiquetas');
   multi.setAttribute('name', 'tags');
   multi.multiple = true;
@@ -50,38 +50,38 @@
   multi.setAttribute('hint', 'Multiselección: chips por selección');
   multi.value = 'frontend,design';
   multi.innerHTML = `
-    <is-option value="frontend">Frontend</is-option>
-    <is-option value="backend">Backend</is-option>
-    <is-option value="design">Diseño</is-option>
-    <is-option value="devops">DevOps</is-option>
-    <is-option value="qa">QA</is-option>
-    <is-option value="data">Data</is-option>
+    <iswc-option value="frontend">Frontend</iswc-option>
+    <iswc-option value="backend">Backend</iswc-option>
+    <iswc-option value="design">Diseño</iswc-option>
+    <iswc-option value="devops">DevOps</iswc-option>
+    <iswc-option value="qa">QA</iswc-option>
+    <iswc-option value="data">Data</iswc-option>
   `;
   document.querySelector('#sec-multi').appendChild(multi);
 
   // (3) Con grupos
-  const grupos = document.createElement('is-select');
+  const grupos = document.createElement('iswc-select');
   grupos.setAttribute('label', 'Producto');
   grupos.setAttribute('name', 'product');
   grupos.placeholder = 'Selecciona un producto';
   grupos.setAttribute('hint', 'Opciones agrupadas por categoría');
   grupos.innerHTML = `
-    <is-option value="starter" group="Planes">Starter</is-option>
-    <is-option value="pro" group="Planes">Pro</is-option>
-    <is-option value="enterprise" group="Planes">Enterprise</is-option>
-    <is-option value="training" group="Servicios">Formación</is-option>
-    <is-option value="support" group="Servicios" disabled>Soporte (no disponible)</is-option>
-    <is-option value="audit" group="Servicios">Auditoría</is-option>
+    <iswc-option value="starter" group="Planes">Starter</iswc-option>
+    <iswc-option value="pro" group="Planes">Pro</iswc-option>
+    <iswc-option value="enterprise" group="Planes">Enterprise</iswc-option>
+    <iswc-option value="training" group="Servicios">Formación</iswc-option>
+    <iswc-option value="support" group="Servicios" disabled>Soporte (no disponible)</iswc-option>
+    <iswc-option value="audit" group="Servicios">Auditoría</iswc-option>
   `;
   document.querySelector('#sec-grupos').appendChild(grupos);
 
   // (4) Deshabilitado
-  const deshabilitado = document.createElement('is-select');
+  const deshabilitado = document.createElement('iswc-select');
   deshabilitado.setAttribute('label', 'Categoría (bloqueada)');
   deshabilitado.disabled = true;
   deshabilitado.value = 'legacy';
   deshabilitado.innerHTML = `
-    <is-option value="legacy">Legacy</is-option>
+    <iswc-option value="legacy">Legacy</iswc-option>
   `;
   document.querySelector('#sec-disabled').appendChild(deshabilitado);
 
@@ -91,7 +91,7 @@
 <body>
 <main>
   <header>
-    <h1>&lt;is-select&gt; · Listbox en top-layer dialog</h1>
+    <h1>&lt;iswc-select&gt; · Listbox en top-layer dialog</h1>
     <p>Single/multi · tags · typeahead · grupos · <code>ArrowUp/Down</code>, <code>Home/End</code>, <code>Enter</code>, <code>Escape</code>.</p>
   </header>
 
@@ -107,7 +107,7 @@
 
   <section id="sec-grupos">
     <h2>Opciones agrupadas</h2>
-    <p class="desc">Atributo <code>group</code> en <code>&lt;is-option&gt;</code> crea cabeceras de grupo.</p>
+    <p class="desc">Atributo <code>group</code> en <code>&lt;iswc-option&gt;</code> crea cabeceras de grupo.</p>
   </section>
 
   <section id="sec-disabled">

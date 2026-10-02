@@ -1,5 +1,5 @@
 /**
- * mutation-observer.test.ts — Tier A (12 aserciones) para `<is-mutation-observer>`.
+ * mutation-observer.test.ts — Tier A (12 aserciones) para `<iswc-mutation-observer>`.
  *
  * Wrapper legacy que delega en createObserverElement('mutation').
  */
@@ -12,7 +12,7 @@ import { fileURLToPath } from 'node:url';
 
 const HERE = dirname(fileURLToPath(import.meta.url));
 const ROOT = join(HERE, '..', '..', '..', '..', '..');
-const TAG = 'is-mutation-observer';
+const TAG = 'iswc-mutation-observer';
 const TS  = join(ROOT, 'src', 'components', 'helpers', 'mutation-observer.ts');
 const CSS = join(ROOT, 'src', 'components', 'helpers', 'mutation-observer.css');
 const JSON_PATH = join(ROOT, 'src', 'components', 'helpers', 'mutation-observer.json');
@@ -25,10 +25,10 @@ test('2. CSS hermano existe', () => {
   assert.ok(existsSync(CSS));
 });
 
-test('3. JSON existe y respeta is-preview/v1', () => {
+test('3. JSON existe y respeta iswc-preview/v1', () => {
   const json = JSON.parse(readFileSync(JSON_PATH, 'utf8'));
   assert.equal(json.tag, TAG);
-  assert.equal(json.$schema, 'is-preview/v1');
+  assert.equal(json.$schema, 'iswc-preview/v1');
 });
 
 test('4. delega en createObserverElement("mutation")', () => {
@@ -43,7 +43,7 @@ test('5. importa desde ./observer.js', () => {
 
 test('6. está registrado con defineElement', () => {
   const src = readFileSync(TS, 'utf8');
-  assert.ok(/defineElement\s*\(\s*['"]is-mutation-observer['"]/.test(src));
+  assert.ok(/defineElement\s*\(\s*['"]iswc-mutation-observer['"]/.test(src));
 });
 
 test('7. hereda OBSERVED del factory (no redefinir)', () => {
@@ -58,14 +58,14 @@ test('8. JSDoc documenta atributos de mutation (attr, child-list, character-data
   }
 });
 
-test('9. JSDoc documenta evento is-mutate', () => {
+test('9. JSDoc documenta evento iswc-mutate', () => {
   const src = readFileSync(TS, 'utf8');
-  assert.ok(/is-mutate/.test(src));
+  assert.ok(/iswc-mutate/.test(src));
 });
 
 test('10. registrado en catalog.ts', () => {
   const cat = readFileSync(join(ROOT, 'src', 'previews', 'catalog.ts'), 'utf8');
-  assert.ok(cat.includes(`"is-mutation-observer"`));
+  assert.ok(cat.includes(`"iswc-mutation-observer"`));
 });
 
 test('11. CSS host con display:contents', () => {

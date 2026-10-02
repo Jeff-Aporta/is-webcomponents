@@ -1,10 +1,10 @@
 {
-  "$schema": "is-preview/v1",
-  "tag": "is-date-field",
+  "$schema": "iswc-preview/v1",
+  "tag": "iswc-date-field",
   "category": "forms",
-  "title": "<is-date-field>",
+  "title": "<iswc-date-field>",
   "titleHtml": true,
-  "storageKey": "docs-is-date-field",
+  "storageKey": "docs-iswc-date-field",
   "sections": [
     {
       "id": "intro",
@@ -13,7 +13,7 @@
       "blocks": [
         {
           "kind": "demo",
-          "html": "<is-date-field id=\"df\" label=\"Fecha\" value=\"2026-07-30\" locale=\"es\" clearable></is-date-field>\r\n          <is-date-field label=\"Date\" value=\"2026-07-30\" locale=\"en-US\" clearable></is-date-field>",
+          "html": "<iswc-date-field id=\"df\" label=\"Fecha\" value=\"2026-07-30\" locale=\"es\" clearable></iswc-date-field>\r\n          <iswc-date-field label=\"Date\" value=\"2026-07-30\" locale=\"en-US\" clearable></iswc-date-field>",
           "controls": [
             {
               "control": "select",
@@ -79,7 +79,7 @@
       "blocks": [
         {
           "kind": "demo",
-          "html": "<is-time-field label=\"Hora 24 h\" value=\"14:05\" hour24 locale=\"es\"></is-time-field>\r\n          <is-time-field label=\"Time\" value=\"14:05\" ampm locale=\"en-US\"></is-time-field>\r\n          <is-time-field label=\"Con segundos\" value=\"14:05:30\" hour24 seconds locale=\"es\"></is-time-field>"
+          "html": "<iswc-time-field label=\"Hora 24 h\" value=\"14:05\" hour24 locale=\"es\"></iswc-time-field>\r\n          <iswc-time-field label=\"Time\" value=\"14:05\" ampm locale=\"en-US\"></iswc-time-field>\r\n          <iswc-time-field label=\"Con segundos\" value=\"14:05:30\" hour24 seconds locale=\"es\"></iswc-time-field>"
         }
       ]
     },
@@ -89,7 +89,7 @@
       "blocks": [
         {
           "kind": "demo",
-          "html": "<is-date-time-field id=\"dtf\" label=\"Fecha y hora\" value=\"2026-07-30T09:30\" locale=\"es\" clearable></is-date-time-field>"
+          "html": "<iswc-date-time-field id=\"dtf\" label=\"Fecha y hora\" value=\"2026-07-30T09:30\" locale=\"es\" clearable></iswc-date-time-field>"
         }
       ]
     },
@@ -99,14 +99,14 @@
       "blocks": [
         {
           "kind": "demo",
-          "html": "<is-date-field label=\"Requerido\" required locale=\"es\"></is-date-field>\r\n          <is-date-field label=\"Min 2026-08-01\" value=\"2026-07-15\" min=\"2026-08-01\" locale=\"es\"></is-date-field>\r\n          <is-date-field label=\"Solo lectura\" value=\"2026-07-30\" readonly locale=\"es\"></is-date-field>"
+          "html": "<iswc-date-field label=\"Requerido\" required locale=\"es\"></iswc-date-field>\r\n          <iswc-date-field label=\"Min 2026-08-01\" value=\"2026-07-15\" min=\"2026-08-01\" locale=\"es\"></iswc-date-field>\r\n          <iswc-date-field label=\"Solo lectura\" value=\"2026-07-30\" readonly locale=\"es\"></iswc-date-field>"
         }
       ]
     },
     {
       "id": "reference",
       "title": "Referencia",
-      "lede": "Eventos: <code>is-change</code>, <code>is-input</code>. Slots: <code>start</code>, <code>end</code>. Form-associated.",
+      "lede": "Eventos: <code>iswc-change</code>, <code>iswc-input</code>. Slots: <code>start</code>, <code>end</code>. Form-associated.",
       "blocks": [
         {
           "kind": "table",

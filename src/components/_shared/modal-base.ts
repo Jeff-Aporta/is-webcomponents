@@ -1,5 +1,5 @@
 /**
- * modal-base.js — Mixin/controlador compartido por <is-dialog> y <is-drawer>.
+ * modal-base.js — Mixin/controlador compartido por <iswc-dialog> y <iswc-drawer>.
  *
  * Centraliza TODO el ciclo de vida de un modal accesible que no es nativo:
  *
@@ -9,7 +9,7 @@
  *   - close-button (X) y backdrop (light-dismiss)
  *   - data-attribute de close declarativo en descendientes (data-dialog / data-drawer)
  *   - atributos observados: open, label, without-header, light-dismiss
- *   - eventos: is-show, is-after-show, is-hide (cancelable), is-after-hide
+ *   - eventos: iswc-show, iswc-after-show, iswc-hide (cancelable), iswc-after-hide
  *
  * Cada componente que usa el mixin sólo define:
  *
@@ -26,7 +26,7 @@
  *
  *   import { ModalBase } from '../_shared/modal-base.js';
  *
- *   class IsDialog extends ModalBase {
+ *   class IswcDialog extends ModalBase {
  *     static get observedAttributes(): string[] {
  *       return [...super.observedAttributes, ...EXTRA];
  *     }
@@ -202,7 +202,7 @@ export class ModalBase extends withStyleAttrs(HTMLElement) {
   }
 
   #requestClose(source: Element | null): void {
-    const evt = new CustomEvent('is-hide', {
+    const evt = new CustomEvent('iswc-hide', {
       detail: { source: source ?? null },
       bubbles: true,
       composed: true,
@@ -227,7 +227,7 @@ export class ModalBase extends withStyleAttrs(HTMLElement) {
 
   #setOpen(desired: boolean): Promise<void> {
     if (desired) {
-      emit(this, 'is-show', {});
+      emit(this, 'iswc-show', {});
       this.#lastFocus = document.activeElement as Element | null;
       this.dataset.state = 'opening';
       this.#modal.hidden = false;
@@ -238,7 +238,7 @@ export class ModalBase extends withStyleAttrs(HTMLElement) {
       return this.animateOpen().then(() => {
         this.dataset.state = 'open';
         this.#focusInitial();
-        emit(this, 'is-after-show', {});
+        emit(this, 'iswc-after-show', {});
       });
     }
     return this.#doClose();
@@ -257,7 +257,7 @@ export class ModalBase extends withStyleAttrs(HTMLElement) {
         try { last.focus(); } catch (_e: unknown) { /* ignore */ }
       }
       this.#lastFocus = null;
-      emit(this, 'is-after-hide', {});
+      emit(this, 'iswc-after-hide', {});
     });
   }
 

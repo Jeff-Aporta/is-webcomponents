@@ -1,11 +1,11 @@
 {
-  "$schema": "is-preview/v1",
-  "tag": "is-pin-input",
+  "$schema": "iswc-preview/v1",
+  "tag": "iswc-pin-input",
   "category": "forms",
-  "title": "<is-pin-input>",
+  "title": "<iswc-pin-input>",
   "titleHtml": true,
-  "description": "Documentación y demos de is-pin-input de InSoft.",
-  "storageKey": "docs-is-pin-input",
+  "description": "Documentación y demos de iswc-pin-input de InSoft.",
+  "storageKey": "docs-iswc-pin-input",
   "sections": [
     {
       "id": "intro",
@@ -14,7 +14,7 @@
       "blocks": [
         {
           "kind": "demo",
-          "html": "<is-pin-input id=\"otp1\" length=\"6\"></is-pin-input>\r\n          <p>Valor: <code class=\"code\" id=\"otp1Val\">—</code></p>",
+          "html": "<iswc-pin-input id=\"otp1\" length=\"6\"></iswc-pin-input>\r\n          <p>Valor: <code class=\"code\" id=\"otp1Val\">—</code></p>",
           "controls": [
             {
               "control": "number",
@@ -56,7 +56,7 @@
         },
         {
           "kind": "code",
-          "code": "<is-pin-input length=\"6\"></is-pin-input>"
+          "code": "<iswc-pin-input length=\"6\"></iswc-pin-input>"
         }
       ]
     },
@@ -67,7 +67,7 @@
       "blocks": [
         {
           "kind": "demo",
-          "html": "<div style=\"display:flex;flex-direction:column;gap:0.75rem\">\r\n            <div>\r\n              <small>3 dígitos</small>\r\n              <is-pin-input length=\"3\"></is-pin-input>\r\n            </div>\r\n            <div>\r\n              <small>4 dígitos</small>\r\n              <is-pin-input length=\"4\"></is-pin-input>\r\n            </div>\r\n            <div>\r\n              <small>6 dígitos</small>\r\n              <is-pin-input length=\"6\"></is-pin-input>\r\n            </div>\r\n            <div>\r\n              <small>8 dígitos</small>\r\n              <is-pin-input length=\"8\"></is-pin-input>\r\n            </div>\r\n          </div>"
+          "html": "<div style=\"display:flex;flex-direction:column;gap:0.75rem\">\r\n            <div>\r\n              <small>3 dígitos</small>\r\n              <iswc-pin-input length=\"3\"></iswc-pin-input>\r\n            </div>\r\n            <div>\r\n              <small>4 dígitos</small>\r\n              <iswc-pin-input length=\"4\"></iswc-pin-input>\r\n            </div>\r\n            <div>\r\n              <small>6 dígitos</small>\r\n              <iswc-pin-input length=\"6\"></iswc-pin-input>\r\n            </div>\r\n            <div>\r\n              <small>8 dígitos</small>\r\n              <iswc-pin-input length=\"8\"></iswc-pin-input>\r\n            </div>\r\n          </div>"
         }
       ]
     },
@@ -78,7 +78,7 @@
       "blocks": [
         {
           "kind": "demo",
-          "html": "<div style=\"display:flex;flex-direction:column;gap:0.75rem;align-items:flex-start\">\r\n            <div><small>0.8em</small><is-pin-input style=\"font-size:0.8em\" length=\"6\"></is-pin-input></div>\r\n            <div><small>1em</small><is-pin-input length=\"6\"></is-pin-input></div>\r\n            <div><small>1.25em</small><is-pin-input style=\"font-size:1.25em\" length=\"6\"></is-pin-input></div>\r\n          </div>"
+          "html": "<div style=\"display:flex;flex-direction:column;gap:0.75rem;align-items:flex-start\">\r\n            <div><small>0.8em</small><iswc-pin-input style=\"font-size:0.8em\" length=\"6\"></iswc-pin-input></div>\r\n            <div><small>1em</small><iswc-pin-input length=\"6\"></iswc-pin-input></div>\r\n            <div><small>1.25em</small><iswc-pin-input style=\"font-size:1.25em\" length=\"6\"></iswc-pin-input></div>\r\n          </div>"
         }
       ]
     },
@@ -89,7 +89,7 @@
       "blocks": [
         {
           "kind": "demo",
-          "html": "<is-pin-input length=\"6\" type=\"text\" placeholder=\"·\"></is-pin-input>"
+          "html": "<iswc-pin-input length=\"6\" type=\"text\" placeholder=\"·\"></iswc-pin-input>"
         }
       ]
     },
@@ -100,7 +100,7 @@
       "blocks": [
         {
           "kind": "demo",
-          "html": "<is-pin-input length=\"6\" mask></is-pin-input>"
+          "html": "<iswc-pin-input length=\"6\" mask></iswc-pin-input>"
         }
       ]
     },
@@ -111,7 +111,7 @@
       "blocks": [
         {
           "kind": "demo",
-          "html": "<div style=\"display:flex;flex-direction:column;gap:0.75rem\">\r\n            <div>\r\n              <small>disabled</small>\r\n              <is-pin-input length=\"6\" disabled value=\"123456\"></is-pin-input>\r\n            </div>\r\n            <div>\r\n              <small>invalid</small>\r\n              <is-pin-input id=\"otpErr\" length=\"6\" invalid></is-pin-input>\r\n            </div>\r\n          </div>"
+          "html": "<div style=\"display:flex;flex-direction:column;gap:0.75rem\">\r\n            <div>\r\n              <small>disabled</small>\r\n              <iswc-pin-input length=\"6\" disabled value=\"123456\"></iswc-pin-input>\r\n            </div>\r\n            <div>\r\n              <small>invalid</small>\r\n              <iswc-pin-input id=\"otpErr\" length=\"6\" invalid></iswc-pin-input>\r\n            </div>\r\n          </div>"
         }
       ]
     },
@@ -121,7 +121,7 @@
       "blocks": [
         {
           "kind": "html",
-          "html": "<h3><code class=\"code\">&lt;is-pin-input&gt;</code></h3>"
+          "html": "<h3><code class=\"code\">&lt;iswc-pin-input&gt;</code></h3>"
         },
         {
           "kind": "table",
@@ -188,11 +188,11 @@
           ],
           "rows": [
             [
-              "<code>is-pin-change</code>",
+              "<code>iswc-pin-change</code>",
               "Cambia cualquier dígito. <code>detail: { value, index }</code>."
             ],
             [
-              "<code>is-pin-complete</code>",
+              "<code>iswc-pin-complete</code>",
               "Todos los dígitos completos."
             ]
           ]

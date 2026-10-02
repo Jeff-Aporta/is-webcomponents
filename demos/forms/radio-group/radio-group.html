@@ -3,7 +3,7 @@
 <head>
 <meta charset="utf-8" />
 <meta name="viewport" content="width=device-width, initial-scale=1" />
-<title>Demo de <is-radio-group> · is-webcomponents</title>
+<title>Demo de <iswc-radio-group> · is-webcomponents</title>
 <meta name="description" content="Grupo form-associated de radios con orientación, required, error, label y navegación con flechas." />
 <style>
   html, body { margin: 0; padding: 0; min-height: 100%; background: #0c1118; color: #e2e8f0; font-family: ui-sans-serif, system-ui, sans-serif; }
@@ -17,14 +17,14 @@
   code { background: rgba(255,255,255,0.06); padding: 1px 5px; border-radius: 3px; font: 12px ui-monospace, Menlo, Consolas, monospace; }
   output { font: 12px ui-monospace, Menlo, Consolas, monospace; color: #94a3b8; white-space: pre-wrap; }
   /* Anti-FOUC */
-  is-radio-group:not(:defined) { visibility: hidden; }
-  is-radio:not(:defined) { visibility: hidden; }
+  iswc-radio-group:not(:defined) { visibility: hidden; }
+  iswc-radio:not(:defined) { visibility: hidden; }
 </style>
 <script type="module">
-  // El bundle del grupo importa automáticamente <is-radio>.
-  await import('../../../dist/cdn/forms/radio-group.min.js?h=nwugy4');
+  // El bundle del grupo importa automáticamente <iswc-radio>.
+  await import('../../../dist/cdn/forms/radio-group.min.js?h=pp75xe');
 
-  await customElements.whenDefined('is-radio-group');
+  await customElements.whenDefined('iswc-radio-group');
 
   const group = document.getElementById('group');
   const out = document.getElementById('out');
@@ -44,7 +44,7 @@
       })),
     }, null, 2);
   };
-  group.addEventListener('is-change', (e) => {
+  group.addEventListener('iswc-change', (e) => {
     console.log('[radio-group] change', e.detail);
     render();
   });
@@ -65,18 +65,18 @@
 <body>
 <main>
   <header>
-    <h1>Demo de <code>&lt;is-radio-group&gt;</code></h1>
+    <h1>Demo de <code>&lt;iswc-radio-group&gt;</code></h1>
     <p>Grupo form-associated de radios. Dueño del valor: el grupo. Navega con flechas o Home/End; activa con Espacio.</p>
   </header>
 
   <section>
     <h2>Básico (vertical)</h2>
-    <is-radio-group id="group" name="answer" label="Elige una opción" hint="Usa las flechas para navegar" value="uno" required>
-      <is-radio value="uno">Uno</is-radio>
-      <is-radio value="dos">Dos</is-radio>
-      <is-radio value="tres">Tres</is-radio>
-      <is-radio value="cuatro" disabled>Cuatro (deshabilitado)</is-radio>
-    </is-radio-group>
+    <iswc-radio-group id="group" name="answer" label="Elige una opción" hint="Usa las flechas para navegar" value="uno" required>
+      <iswc-radio value="uno">Uno</iswc-radio>
+      <iswc-radio value="dos">Dos</iswc-radio>
+      <iswc-radio value="tres">Tres</iswc-radio>
+      <iswc-radio value="cuatro" disabled>Cuatro (deshabilitado)</iswc-radio>
+    </iswc-radio-group>
     <div>
       <button id="btn-set" type="button">Set "dos"</button>
       <button id="btn-clear" type="button">Clear</button>
@@ -86,27 +86,27 @@
 
   <section>
     <h2>Horizontal</h2>
-    <is-radio-group id="group-h" name="orientation" label="Orientación" value="h">
-      <is-radio value="v">Vertical</is-radio>
-      <is-radio value="h">Horizontal</is-radio>
-      <is-radio value="b">Both</is-radio>
-    </is-radio-group>
+    <iswc-radio-group id="group-h" name="orientation" label="Orientación" value="h">
+      <iswc-radio value="v">Vertical</iswc-radio>
+      <iswc-radio value="h">Horizontal</iswc-radio>
+      <iswc-radio value="b">Both</iswc-radio>
+    </iswc-radio-group>
   </section>
 
   <section>
     <h2>Con error</h2>
-    <is-radio-group id="group-err" name="confirm" label="¿Confirmas?" error error-text="Debes elegir una opción" required>
-      <is-radio value="yes">Sí</is-radio>
-      <is-radio value="no">No</is-radio>
-    </is-radio-group>
+    <iswc-radio-group id="group-err" name="confirm" label="¿Confirmas?" error error-text="Debes elegir una opción" required>
+      <iswc-radio value="yes">Sí</iswc-radio>
+      <iswc-radio value="no">No</iswc-radio>
+    </iswc-radio-group>
   </section>
 
   <section>
     <h2>Disabled</h2>
-    <is-radio-group id="group-dis" name="disabled" label="Grupo deshabilitado" disabled value="a">
-      <is-radio value="a">A</is-radio>
-      <is-radio value="b">B</is-radio>
-    </is-radio-group>
+    <iswc-radio-group id="group-dis" name="disabled" label="Grupo deshabilitado" disabled value="a">
+      <iswc-radio value="a">A</iswc-radio>
+      <iswc-radio value="b">B</iswc-radio>
+    </iswc-radio-group>
   </section>
 </main>
 </body>

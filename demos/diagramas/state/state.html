@@ -3,8 +3,8 @@
 <head>
 <meta charset="utf-8" />
 <meta name="viewport" content="width=device-width, initial-scale=1" />
-<title>Demo — <is-state-diagram></title>
-<meta name="description" content="Demo de is-state-diagram con start/choice/end y self-loop." />
+<title>Demo — <iswc-state-diagram></title>
+<meta name="description" content="Demo de iswc-state-diagram con start/choice/end y self-loop." />
 <style>
   html, body { margin: 0; padding: 0; min-height: 100%; background: #0c1118; color: #e2e8f0; font-family: ui-sans-serif, system-ui, sans-serif; }
   body { display: grid; grid-template-rows: auto 1fr auto; }
@@ -12,16 +12,16 @@
   header h1 { font-size: 16px; font-weight: 700; margin: 0; }
   header p { font-size: 12px; color: #94a3b8; margin: 4px 0 0 0; }
   main { display: grid; padding: 20px; min-height: 420px; }
-  is-state-diagram { width: 100%; min-height: 400px; }
-  is-state-diagram:not(:defined) { visibility: hidden; }
+  iswc-state-diagram { width: 100%; min-height: 400px; }
+  iswc-state-diagram:not(:defined) { visibility: hidden; }
   footer { padding: 12px 20px; border-top: 1px solid rgba(255,255,255,0.1); background: #0f1620; font-size: 11px; color: #94a3b8; }
   footer code { background: rgba(255,255,255,0.06); padding: 1px 5px; border-radius: 3px; font: 11px ui-monospace, Menlo, Consolas, monospace; }
 </style>
 <script type="module">
-  await import('../../../dist/cdn/diagrams/state-diagram.min.js?h=cssyke');
-  await customElements.whenDefined('is-state-diagram');
+  await import('../../../dist/cdn/diagrams/state-diagram.min.js?h=8dqe5u');
+  await customElements.whenDefined('iswc-state-diagram');
 
-  const el = document.createElement('is-state-diagram');
+  const el = document.createElement('iswc-state-diagram');
   el.payload = {
     stateDiagram: {
       title: 'Ciclo de pedido',
@@ -55,10 +55,10 @@
 </head>
 <body>
 <header>
-  <h1>Demo <code>&lt;is-state-diagram&gt;</code></h1>
+  <h1>Demo <code>&lt;iswc-state-diagram&gt;</code></h1>
   <p>Smoke: monta el componente, renderiza el SVG desde la spec JSON.</p>
 </header>
 <main><div id="host"></div></main>
-<footer>Componente: <code>is-state-diagram</code> · Spec: <code>state-spec</code></footer>
+<footer>Componente: <code>iswc-state-diagram</code> · Spec: <code>state-spec</code></footer>
 </body>
 </html>

@@ -1,5 +1,5 @@
 /**
- * Behavior de is-command-palette: abre la paleta desde el botón del demo y
+ * Behavior de iswc-command-palette: abre la paleta desde el botón del demo y
  * registra el comando elegido.
  */
 import type { PreviewMountContext } from '../../previews/_kit/types.d.ts';
@@ -19,7 +19,7 @@ let abrir: (() => void) | null = null;
 let alElegir: ((e: Event) => void) | null = null;
 
 export async function mount(ctx: PreviewMountContext): Promise<void> {
-  paleta = ctx.main.querySelector<PaletteEl>('is-command-palette');
+  paleta = ctx.main.querySelector<PaletteEl>('iswc-command-palette');
   boton = ctx.main.querySelector<HTMLElement>('#openBtn');
   if (!paleta) return;
 
@@ -27,7 +27,7 @@ export async function mount(ctx: PreviewMountContext): Promise<void> {
     const detail = (e as CustomEvent<SelectDetail>).detail;
     console.log('ejecutar:', detail.command.id);
   };
-  paleta.addEventListener('is-select', alElegir);
+  paleta.addEventListener('iswc-select', alElegir);
 
   if (boton) {
     abrir = (): void => { paleta!.open(); };
@@ -36,7 +36,7 @@ export async function mount(ctx: PreviewMountContext): Promise<void> {
 }
 
 export function unmount(): void {
-  if (paleta && alElegir) paleta.removeEventListener('is-select', alElegir);
+  if (paleta && alElegir) paleta.removeEventListener('iswc-select', alElegir);
   if (boton && abrir) boton.removeEventListener('click', abrir);
   paleta = null;
   boton = null;

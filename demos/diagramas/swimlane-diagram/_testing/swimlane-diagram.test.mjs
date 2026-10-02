@@ -9,22 +9,22 @@ const URL = `${BASE_URL}/demos/diagramas/swimlane-diagram/swimlane-diagram.html`
 const tests = [];
 
 tests.push({
-  name: 'smoke: <is-swimlane-diagram> monta y renderiza lanes, steps y links',
+  name: 'smoke: <iswc-swimlane-diagram> monta y renderiza lanes, steps y links',
   run: async (page) => {
     await page.goto(URL, { waitUntil: 'domcontentloaded' });
     await waitReady(page, 'data-swimlane-ready');
     const info = await page.evaluate(() => {
-      const el = document.querySelector('main is-swimlane-diagram');
+      const el = document.querySelector('main iswc-swimlane-diagram');
       const shadow = el?.shadowRoot;
       return {
-        defined: !!customElements.get('is-swimlane-diagram'),
+        defined: !!customElements.get('iswc-swimlane-diagram'),
         lanes: shadow?.querySelectorAll('[data-lane-id]').length ?? 0,
         steps: shadow?.querySelectorAll('[data-step-id]').length ?? 0,
         links: shadow?.querySelectorAll('[data-link-id]').length ?? 0,
         hasSvg: !!shadow?.querySelector('svg.sw-svg'),
       };
     });
-    assert.equal(info.defined, true, 'is-swimlane-diagram debe estar definido');
+    assert.equal(info.defined, true, 'iswc-swimlane-diagram debe estar definido');
     assert.ok(info.lanes >= 3, `esperaba >=3 carriles, hay ${info.lanes}`);
     assert.ok(info.steps >= 5, `esperaba >=5 pasos, hay ${info.steps}`);
     assert.ok(info.links >= 5, `esperaba >=5 enlaces, hay ${info.links}`);
@@ -39,7 +39,7 @@ tests.push({
     await page.goto(URL, { waitUntil: 'domcontentloaded' });
     await waitReady(page, 'data-swimlane-ready');
     const ids = await page.evaluate(() => {
-      const el = document.querySelector('main is-swimlane-diagram');
+      const el = document.querySelector('main iswc-swimlane-diagram');
       return [...el.shadowRoot.querySelectorAll('[data-lane-id]')].map((g) => g.dataset.laneId);
     });
     assert.ok(ids.includes('cliente'), 'debe existir el carril "cliente"');
@@ -54,7 +54,7 @@ tests.push({
     await page.goto(URL, { waitUntil: 'domcontentloaded' });
     await waitReady(page, 'data-swimlane-ready');
     const ids = await page.evaluate(() => {
-      const el = document.querySelector('main is-swimlane-diagram');
+      const el = document.querySelector('main iswc-swimlane-diagram');
       return [...el.shadowRoot.querySelectorAll('[data-step-id]')].map((g) => g.dataset.stepId);
     });
     assert.ok(ids.includes('s1'), 'debe existir el paso "s1"');
@@ -68,7 +68,7 @@ tests.push({
     await page.goto(URL, { waitUntil: 'domcontentloaded' });
     await waitReady(page, 'data-swimlane-ready');
     const ids = await page.evaluate(() => {
-      const el = document.querySelector('main is-swimlane-diagram');
+      const el = document.querySelector('main iswc-swimlane-diagram');
       return [...el.shadowRoot.querySelectorAll('[data-link-id]')].map((g) => g.dataset.linkId);
     });
     assert.ok(ids.includes('l1'), 'debe existir el enlace "l1"');
@@ -82,7 +82,7 @@ tests.push({
     await page.goto(URL, { waitUntil: 'domcontentloaded' });
     await waitReady(page, 'data-swimlane-ready');
     const edges = await page.evaluate(() => {
-      const el = document.querySelector('main is-swimlane-diagram');
+      const el = document.querySelector('main iswc-swimlane-diagram');
       return [...el.shadowRoot.querySelectorAll('[data-link-id] path')].map((p) => p.getAttribute('d'));
     });
     assert.ok(edges.length >= 5, `esperaba >=5 aristas, hay ${edges.length}`);
@@ -98,16 +98,16 @@ tests.push({
     await page.goto(URL, { waitUntil: 'domcontentloaded' });
     await waitReady(page, 'data-swimlane-ready');
     const before = await page.evaluate(() => {
-      const el = document.querySelector('main is-swimlane-diagram');
+      const el = document.querySelector('main iswc-swimlane-diagram');
       return el.shadowRoot.querySelector('svg.sw-svg').getAttribute('viewBox');
     });
     await page.evaluate(() => {
-      const el = document.querySelector('main is-swimlane-diagram');
+      const el = document.querySelector('main iswc-swimlane-diagram');
       el.payload = el.payload;
     });
     await page.waitForTimeout(150);
     const after = await page.evaluate(() => {
-      const el = document.querySelector('main is-swimlane-diagram');
+      const el = document.querySelector('main iswc-swimlane-diagram');
       return el.shadowRoot.querySelector('svg.sw-svg').getAttribute('viewBox');
     });
     assert.equal(before, after, 'viewBox idéntico tras re-asignar payload');
@@ -120,7 +120,7 @@ tests.push({
     await page.goto(URL, { waitUntil: 'domcontentloaded' });
     await waitReady(page, 'data-swimlane-ready');
     const meta = await page.evaluate(() => {
-      const el = document.querySelector('main is-swimlane-diagram');
+      const el = document.querySelector('main iswc-swimlane-diagram');
       const svg = el.shadowRoot.querySelector('svg.sw-svg');
       return { aria: svg.getAttribute('aria-label'), role: svg.getAttribute('role') };
     });

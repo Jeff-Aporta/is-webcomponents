@@ -2,7 +2,7 @@ import { defineElement } from '../../core/element.js';
 import { createObserverElement } from './observer.js';
 
 /**
- * <is-intersection-observer> — alias histórico de <is-observer type="intersection">.
+ * <iswc-intersection-observer> — alias histórico de <iswc-observer type="intersection">.
  *
  * display:contents — observa hijos directos con IntersectionObserver.
  *
@@ -15,11 +15,11 @@ import { createObserverElement } from './observer.js';
  *   threshold        number 0–1
  *
  * Eventos
- *   is-intersect  detail: { entry }
+ *   iswc-intersect  detail: { entry }
  */
 
 defineElement(
-  'is-intersection-observer',
+  'iswc-intersection-observer',
   createObserverElement('intersection'),
-  'IsIntersectionObserver',
+  'IswcIntersectionObserver',
 );

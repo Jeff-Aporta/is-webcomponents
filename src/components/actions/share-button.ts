@@ -5,24 +5,24 @@ import { setStringAttr } from '../_shared/reflect.js';
 import { sharePayload } from '../_shared/web-share.js';
 
 /**
- * <is-share-button> — Web Share API; si el SO no tiene share, copia al portapapeles.
+ * <iswc-share-button> — Web Share API; si el SO no tiene share, copia al portapapeles.
  * Share Target (recibir) es manifest de PWA, no un tag.
  *
  * Atributos: share-title, text, url, disabled
- * Eventos: is-share { how: shared|copied|fail }, is-error
+ * Eventos: iswc-share { how: shared|copied|fail }, iswc-error
  */
 (() => {
   const TEMPLATE = document.createElement('template');
   TEMPLATE.innerHTML = /* html */ `
-    <is-button class="btn" variant="plain" type="button" part="button">
+    <iswc-button class="btn" variant="plain" type="button" part="button">
       <slot>
-        <is-icon icon="mdi:share-variant-outline"></is-icon>
+        <iswc-icon icon="mdi:share-variant-outline"></iswc-icon>
         <span class="lbl">Compartir</span>
       </slot>
-    </is-button>
+    </iswc-button>
   `;
 
-  class IsShareButton extends HTMLElement {
+  class IswcShareButton extends HTMLElement {
     static get observedAttributes(): string[] { return ['share-title', 'text', 'url', 'disabled']; }
 
     #btn!: HTMLElement;
@@ -59,10 +59,10 @@ import { sharePayload } from '../_shared/web-share.js';
       const how = await sharePayload({ title: this.shareTitle || document.title, text: this.text, url: this.url || location.href });
       this.#busy = false;
       if (how === 'abort') return;
-      if (how === 'fail') emit(this, 'is-error');
-      else emit(this, 'is-share', { how, url: this.url, text: this.text, title: this.shareTitle });
+      if (how === 'fail') emit(this, 'iswc-error');
+      else emit(this, 'iswc-share', { how, url: this.url, text: this.text, title: this.shareTitle });
     }
   }
 
-  defineElement('is-share-button', IsShareButton, 'IsShareButton');
+  defineElement('iswc-share-button', IswcShareButton, 'IswcShareButton');
 })();

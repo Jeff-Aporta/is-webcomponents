@@ -1,4 +1,4 @@
-// grid-layout.test.mjs — tests exhaustivos del demo <is-grid-layout>.
+// grid-layout.test.mjs — tests exhaustivos del demo <iswc-grid-layout>.
 // Cobertura: smoke + funcional (cells=3 → 3 columnas, track list cruda,
 // cells-fit) + custom properties (--cells / --gap) + breakpoint.
 import assert from 'node:assert/strict';
@@ -14,10 +14,10 @@ tests.push({
     await page.goto(URL, { waitUntil: 'domcontentloaded' });
     await waitReady(page, 'data-grid-ready');
     const info = await page.evaluate(() => {
-      const grids = [...document.querySelectorAll('is-grid-layout')];
+      const grids = [...document.querySelectorAll('iswc-grid-layout')];
       return grids.map((g) => ({
         count: grids.length,
-        defined: !!customElements.get('is-grid-layout'),
+        defined: !!customElements.get('iswc-grid-layout'),
         display: getComputedStyle(g).display,
         cells: g.cells,
         gap: g.gap,
@@ -40,7 +40,7 @@ tests.push({
     await waitReady(page, 'data-grid-ready');
     await page.waitForTimeout(200);
     const layout = await page.evaluate(() => {
-      const grids = [...document.querySelectorAll('is-grid-layout')];
+      const grids = [...document.querySelectorAll('iswc-grid-layout')];
       const three = grids.find((g) => g.cells === '3' && !g.cellsFit);
       if (!three) return null;
       const items = [...three.children];
@@ -69,7 +69,7 @@ tests.push({
     await waitReady(page, 'data-grid-ready');
     await page.waitForTimeout(200);
     const widths = await page.evaluate(() => {
-      const grids = [...document.querySelectorAll('is-grid-layout')];
+      const grids = [...document.querySelectorAll('iswc-grid-layout')];
       const raw = grids.find((g) => g.cells === 'auto 1fr auto');
       if (!raw) return null;
       const items = [...raw.children].slice(0, 3);
@@ -90,7 +90,7 @@ tests.push({
     await waitReady(page, 'data-grid-ready');
     await page.waitForTimeout(100);
     const result = await page.evaluate(() => {
-      const grids = [...document.querySelectorAll('is-grid-layout')];
+      const grids = [...document.querySelectorAll('iswc-grid-layout')];
       const fit = grids.find((g) => g.cellsFit);
       if (!fit) return null;
       const cellsVar = fit.style.getPropertyValue('--cells');
@@ -108,7 +108,7 @@ tests.push({
     await waitReady(page, 'data-grid-ready');
     await page.waitForTimeout(100);
     const result = await page.evaluate(() => {
-      const g = document.querySelector('is-grid-layout');
+      const g = document.querySelector('iswc-grid-layout');
       g.gap = '0.75rem';
       return { attr: g.getAttribute('gap'), varValue: g.style.getPropertyValue('--gap') };
     });

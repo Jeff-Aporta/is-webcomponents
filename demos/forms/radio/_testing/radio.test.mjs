@@ -1,5 +1,5 @@
 // radio.test.mjs — tests exhaustivos del demo radio.html.
-// Cobertura: smoke + funcional (click marca el radio, is-radio-select)
+// Cobertura: smoke + funcional (click marca el radio, iswc-radio-select)
 // + accesibilidad (role=radio, aria-checked) + edge case (standalone, disabled).
 import assert from 'node:assert/strict';
 import { BASE_URL, newPage, close, waitReady, screenshot, report } from './lib/harness.mjs';
@@ -9,19 +9,19 @@ const URL = `${BASE_URL}/demos/forms/radio/radio.html`;
 const tests = [];
 
 tests.push({
-  name: 'smoke: <is-radio> definido, shadow DOM y role=radio',
+  name: 'smoke: <iswc-radio> definido, shadow DOM y role=radio',
   run: async (page) => {
     await page.goto(URL, { waitUntil: 'domcontentloaded' });
     await waitReady(page, 'data-radio-ready');
     const data = await page.evaluate(() => {
-      const r = document.querySelector('is-radio#demo');
+      const r = document.querySelector('iswc-radio#demo');
       const sr = r.shadowRoot;
       const control = sr.querySelector('.control');
       const dot = sr.querySelector('.dot');
       const label = sr.querySelector('.label');
       const desc = sr.querySelector('.description');
       return {
-        defined: !!customElements.get('is-radio'),
+        defined: !!customElements.get('iswc-radio'),
         hasShadow: !!sr,
         hasControl: !!control,
         hasDot: !!dot,
@@ -37,7 +37,7 @@ tests.push({
           .map((n) => n.textContent || '').join('').trim(),
       };
     });
-    assert.equal(data.defined, true, 'is-radio debe estar definido');
+    assert.equal(data.defined, true, 'iswc-radio debe estar definido');
     assert.equal(data.hasShadow, true, 'debe tener shadow DOM');
     assert.equal(data.hasControl, true, 'debe tener .control');
     assert.equal(data.hasDot, true, 'debe tener .dot');
@@ -53,14 +53,14 @@ tests.push({
 });
 
 tests.push({
-  name: 'funcional: click standalone → checked=true y emite is-radio-select',
+  name: 'funcional: click standalone → checked=true y emite iswc-radio-select',
   run: async (page) => {
     await page.goto(URL, { waitUntil: 'domcontentloaded' });
     await waitReady(page, 'data-radio-ready');
     const data = await page.evaluate(async () => {
-      const r = document.querySelector('is-radio#demo');
+      const r = document.querySelector('iswc-radio#demo');
       const evt = await new Promise((resolve) => {
-        r.addEventListener('is-radio-select', (e) => resolve(e.detail), { once: true });
+        r.addEventListener('iswc-radio-select', (e) => resolve(e.detail), { once: true });
         r.click();
       });
       return {
@@ -71,7 +71,7 @@ tests.push({
     });
     assert.equal(data.checked, true, 'click standalone debe poner checked=true');
     assert.equal(data.ariaChecked, 'true', 'aria-checked debe ser true');
-    assert.equal(data.eventDetail.value, 'opt-1', 'is-radio-select.detail.value debe ser opt-1');
+    assert.equal(data.eventDetail.value, 'opt-1', 'iswc-radio-select.detail.value debe ser opt-1');
   },
 });
 
@@ -81,7 +81,7 @@ tests.push({
     await page.goto(URL, { waitUntil: 'domcontentloaded' });
     await waitReady(page, 'data-radio-ready');
     const data = await page.evaluate(() => {
-      const r = [...document.querySelectorAll('is-radio[disabled]')][0];
+      const r = [...document.querySelectorAll('iswc-radio[disabled]')][0];
       return {
         ariaDisabled: r.getAttribute('aria-disabled'),
         hasDisabledAttr: r.hasAttribute('disabled'),
@@ -98,8 +98,8 @@ tests.push({
     await page.goto(URL, { waitUntil: 'domcontentloaded' });
     await waitReady(page, 'data-radio-ready');
     const data = await page.evaluate(() => {
-      const r = document.querySelector('is-radio#demo');
-      const inGroup = r.closest('is-radio-group') != null;
+      const r = document.querySelector('iswc-radio#demo');
+      const inGroup = r.closest('iswc-radio-group') != null;
       const before = r.checked;
       r.click();
       const after = r.checked;
@@ -117,7 +117,7 @@ tests.push({
     await page.goto(URL, { waitUntil: 'domcontentloaded' });
     await waitReady(page, 'data-radio-ready');
     const data = await page.evaluate(() => {
-      const r = [...document.querySelectorAll('is-radio[disabled]')][0];
+      const r = [...document.querySelectorAll('iswc-radio[disabled]')][0];
       // Quitar disabled para comparar el toggle de un radio disabled.
       const before = r.checked;
       r.click();
@@ -138,11 +138,11 @@ tests.push({
     await page.goto(URL, { waitUntil: 'domcontentloaded' });
     await waitReady(page, 'data-radio-ready');
     const data = await page.evaluate(() => {
-      const r = document.querySelector('is-radio#demo');
+      const r = document.querySelector('iswc-radio#demo');
       // value explícito desde atributo.
       const fromAttr = r.value;
       // Sin atributo, value se deriva del texto del slot.
-      const derived = [...document.querySelectorAll('is-radio')].find((x) => !x.hasAttribute('value'));
+      const derived = [...document.querySelectorAll('iswc-radio')].find((x) => !x.hasAttribute('value'));
       const derivedValue = derived ? derived.value : null;
       return { fromAttr, derivedValue };
     });

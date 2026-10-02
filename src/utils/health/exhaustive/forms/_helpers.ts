@@ -5,8 +5,8 @@
  * añadirlos solo para tests sería ruido. Lo que sí podemos asegurar de forma
  * fiable con análisis estático + customElements.registry es:
  *
- *   - el archivo existe y define el tag con `defineElement('<is-x>', ...)`
- *     o `defineXxxField({tag:'is-x',...})`
+ *   - el archivo existe y define el tag con `defineElement('<iswc-x>', ...)`
+ *     o `defineXxxField({tag:'iswc-x',...})`
  *   - los atributos observados coinciden con los documentados
  *   - los eventos prometidos en la cabecera JSDoc tienen un `emit(..., '<ev>')`
  *   - los slots y parts prometidos están en el TEMPLATE
@@ -31,8 +31,8 @@ export const FORMS_DIR = join(RAIZ, 'components', 'forms');
 
 /** Lee el .ts fuente de un componente de forms. */
 export function leerComponente(tag: string): string {
-  // tag `is-foo` → archivo `foo.ts`
-  const archivo = `${tag.replace(/^is-/, '')}.ts`;
+  // tag `iswc-foo` → archivo `foo.ts`
+  const archivo = `${tag.replace(/^iswc-/, '')}.ts`;
   const ruta = join(FORMS_DIR, archivo);
   if (!existsSync(ruta)) {
     throw new Error(`No existe el archivo ${archivo} para <${tag}> en ${FORMS_DIR}`);
@@ -42,19 +42,19 @@ export function leerComponente(tag: string): string {
 
 /** Lee el .json de preview si existe. */
 export function leerPreview(tag: string): Record<string, unknown> | null {
-  const ruta = join(FORMS_DIR, `${tag.replace(/^is-/, '')}.json`);
+  const ruta = join(FORMS_DIR, `${tag.replace(/^iswc-/, '')}.json`);
   if (!existsSync(ruta)) return null;
   return JSON.parse(readFileSync(ruta, 'utf8'));
 }
 
 /** Lee el .css del componente si existe. */
 export function existeCss(tag: string): boolean {
-  return existsSync(join(FORMS_DIR, `${tag.replace(/^is-/, '')}.css`));
+  return existsSync(join(FORMS_DIR, `${tag.replace(/^iswc-/, '')}.css`));
 }
 
 /** Lee el .md (documentación) si existe. */
 export function leerDoc(tag: string): string | null {
-  const ruta = join(FORMS_DIR, `${tag.replace(/^is-/, '')}.md`);
+  const ruta = join(FORMS_DIR, `${tag.replace(/^iswc-/, '')}.md`);
   return existsSync(ruta) ? readFileSync(ruta, 'utf8') : null;
 }
 
@@ -94,7 +94,7 @@ export function atributosObservados(src: string): string[] {
   return [...attrs];
 }
 
-/** Tags `<is-foo>` que aparecen como `defineElement('is-foo', ...)`. */
+/** Tags `<iswc-foo>` que aparecen como `defineElement('iswc-foo', ...)`. */
 export function tagsDefinidos(src: string): string[] {
   const tags = new Set<string>();
   for (const m of src.matchAll(/defineElement\s*\(\s*['"`](is-[a-z0-9-]+)['"`]/g)) {
@@ -106,10 +106,10 @@ export function tagsDefinidos(src: string): string[] {
   return [...tags];
 }
 
-/** Nombres de eventos emitidos por el componente (`emit(this, 'is-foo', ...)`). */
+/** Nombres de eventos emitidos por el componente (`emit(this, 'iswc-foo', ...)`). */
 export function eventosEmitidos(src: string): string[] {
   const evs = new Set<string>();
-  // Variantes: emit(this, 'is-foo', ...), #emit('is-foo', ...), dispatchEvent(new Event('is-foo', ...))
+  // Variantes: emit(this, 'iswc-foo', ...), #emit('iswc-foo', ...), dispatchEvent(new Event('iswc-foo', ...))
   for (const m of src.matchAll(/(?:#emit|emit)\s*\(\s*this\s*,\s*['"`](is-[a-z0-9-]+)['"`]/g)) {
     evs.add(m[1]);
   }

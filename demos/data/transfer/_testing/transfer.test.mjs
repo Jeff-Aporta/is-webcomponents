@@ -9,15 +9,15 @@ const URL = `${BASE_URL}/demos/data/transfer/transfer.html`;
 const tests = [];
 
 tests.push({
-  name: 'smoke: is-transfer e is-transfer-item están definidos y los 4 transfers renderizan',
+  name: 'smoke: iswc-transfer e iswc-transfer-item están definidos y los 4 transfers renderizan',
   run: async (page) => {
     await page.goto(URL, { waitUntil: 'domcontentloaded' });
     await waitReady(page, 'data-transfer-ready');
     const initial = await page.evaluate(() => {
-      const transfers = [...document.querySelectorAll('main is-transfer')];
+      const transfers = [...document.querySelectorAll('main iswc-transfer')];
       return {
-        transferDefined: !!customElements.get('is-transfer'),
-        itemDefined: !!customElements.get('is-transfer-item'),
+        transferDefined: !!customElements.get('iswc-transfer'),
+        itemDefined: !!customElements.get('iswc-transfer-item'),
         count: transfers.length,
         perTransfer: transfers.map((t) => {
           const sr = t.shadowRoot;
@@ -25,13 +25,13 @@ tests.push({
             hasBase: !!sr.querySelector('[part="base"]'),
             sourceItems: sr.querySelectorAll('.pane.source .list .item').length,
             targetItems: sr.querySelectorAll('.pane.target .list .item').length,
-            children: t.querySelectorAll(':scope > is-transfer-item').length,
+            children: t.querySelectorAll(':scope > iswc-transfer-item').length,
           };
         }),
       };
     });
-    assert.equal(initial.transferDefined, true, 'is-transfer debe estar definido');
-    assert.equal(initial.itemDefined, true, 'is-transfer-item debe estar definido');
+    assert.equal(initial.transferDefined, true, 'iswc-transfer debe estar definido');
+    assert.equal(initial.itemDefined, true, 'iswc-transfer-item debe estar definido');
     assert.equal(initial.count, 4, `esperaba 4 transfers, hay ${initial.count}`);
     for (const r of initial.perTransfer) {
       assert.equal(r.hasBase, true, 'cada transfer debe tener part="base"');
@@ -48,11 +48,11 @@ tests.push({
     await page.goto(URL, { waitUntil: 'domcontentloaded' });
     await waitReady(page, 'data-transfer-ready');
     const split = await page.evaluate(() => {
-      const basic = document.querySelector('main is-transfer');
+      const basic = document.querySelector('main iswc-transfer');
       const sr = basic.shadowRoot;
       const sourceItems = [...sr.querySelectorAll('.pane.source .list .item')].map((d) => d.dataset.value);
       const targetItems = [...sr.querySelectorAll('.pane.target .list .item')].map((d) => d.dataset.value);
-      const selected = [...basic.querySelectorAll(':scope > is-transfer-item[selected]')].map((it) => it.getAttribute('value'));
+      const selected = [...basic.querySelectorAll(':scope > iswc-transfer-item[selected]')].map((it) => it.getAttribute('value'));
       const values = basic.values;
       return { sourceItems, targetItems, selected, values };
     });
@@ -74,7 +74,7 @@ tests.push({
     // El transfer "limited" tiene 3 items pre-seleccionados y max-target=3.
     // El botón to-target debe estar disabled.
     const state = await page.evaluate(() => {
-      const transfers = [...document.querySelectorAll('main is-transfer')];
+      const transfers = [...document.querySelectorAll('main iswc-transfer')];
       const lim = transfers[1];
       const sr = lim.shadowRoot;
       const btnToTarget = sr.querySelector('[data-action="to-target"]');
@@ -94,13 +94,13 @@ tests.push({
     await page.waitForTimeout(100);
     // basic transfer: clic en "to-target" → 4 source van al target → 6 target, 0 source
     await page.evaluate(() => {
-      const basic = document.querySelector('main is-transfer');
+      const basic = document.querySelector('main iswc-transfer');
       const btn = basic.shadowRoot.querySelector('[data-action="to-target"]');
       btn.click();
     });
     await page.waitForTimeout(100);
     const after = await page.evaluate(() => {
-      const basic = document.querySelector('main is-transfer');
+      const basic = document.querySelector('main iswc-transfer');
       const sr = basic.shadowRoot;
       const sourceItems = sr.querySelectorAll('.pane.source .list .item').length;
       const targetItems = sr.querySelectorAll('.pane.target .list .item').length;
@@ -119,10 +119,10 @@ tests.push({
     await waitReady(page, 'data-transfer-ready');
     await page.waitForTimeout(100);
     const before = await page.evaluate(() => {
-      const transfers = [...document.querySelectorAll('main is-transfer')];
+      const transfers = [...document.querySelectorAll('main iswc-transfer')];
       const dis = transfers[2];
       return {
-        disabledValues: [...dis.querySelectorAll(':scope > is-transfer-item[disabled]')].map((it) => it.getAttribute('value')),
+        disabledValues: [...dis.querySelectorAll(':scope > iswc-transfer-item[disabled]')].map((it) => it.getAttribute('value')),
         values: dis.values,
         sourceCount: dis.shadowRoot.querySelectorAll('.pane.source .list .item').length,
         targetCount: dis.shadowRoot.querySelectorAll('.pane.target .list .item').length,
@@ -132,17 +132,17 @@ tests.push({
     assert.deepEqual(before.disabledValues.sort(), ['admin', 'banned']);
     // Clic en to-target: admin está disabled (sale del target) y banned no se mueve
     await page.evaluate(() => {
-      const transfers = [...document.querySelectorAll('main is-transfer')];
+      const transfers = [...document.querySelectorAll('main iswc-transfer')];
       const dis = transfers[2];
       dis.shadowRoot.querySelector('[data-action="to-target"]').click();
     });
     await page.waitForTimeout(100);
     const after = await page.evaluate(() => {
-      const transfers = [...document.querySelectorAll('main is-transfer')];
+      const transfers = [...document.querySelectorAll('main iswc-transfer')];
       const dis = transfers[2];
       const sr = dis.shadowRoot;
       return {
-        disabledInSource: [...dis.querySelectorAll(':scope > is-transfer-item[disabled]:not([selected])')].map((it) => it.getAttribute('value')),
+        disabledInSource: [...dis.querySelectorAll(':scope > iswc-transfer-item[disabled]:not([selected])')].map((it) => it.getAttribute('value')),
         values: dis.values,
         sourceCount: sr.querySelectorAll('.pane.source .list .item').length,
         targetCount: sr.querySelectorAll('.pane.target .list .item').length,
@@ -158,7 +158,7 @@ tests.push({
 });
 
 tests.push({
-  name: 'funcional: evento is-transfer-change emite con detalle correcto',
+  name: 'funcional: evento iswc-transfer-change emite con detalle correcto',
   run: async (page) => {
     await page.goto(URL, { waitUntil: 'domcontentloaded' });
     await waitReady(page, 'data-transfer-ready');
@@ -166,9 +166,9 @@ tests.push({
     // Suscribirse manualmente y disparar una transferencia.
     const captured = await page.evaluate(() => {
       return new Promise((resolve) => {
-        const basic = document.querySelector('main is-transfer');
+        const basic = document.querySelector('main iswc-transfer');
         let lastDetail = null;
-        basic.addEventListener('is-transfer-change', (e) => { lastDetail = e.detail; });
+        basic.addEventListener('iswc-transfer-change', (e) => { lastDetail = e.detail; });
         const btn = basic.shadowRoot.querySelector('[data-action="to-target"]');
         btn.click();
         // Pequeño delay para asegurar que el listener corrió.
@@ -200,7 +200,7 @@ tests.push({
     await page.waitForTimeout(100);
     // El transfer limited tiene searchable. Buscar "rust".
     await page.evaluate(() => {
-      const transfers = [...document.querySelectorAll('main is-transfer')];
+      const transfers = [...document.querySelectorAll('main iswc-transfer')];
       const lim = transfers[1];
       const input = lim.shadowRoot.querySelector('.pane.source .search input');
       input.value = 'rust';
@@ -208,7 +208,7 @@ tests.push({
     });
     await page.waitForTimeout(80);
     const filtered = await page.evaluate(() => {
-      const transfers = [...document.querySelectorAll('main is-transfer')];
+      const transfers = [...document.querySelectorAll('main iswc-transfer')];
       const lim = transfers[1];
       const sourceItems = [...lim.shadowRoot.querySelectorAll('.pane.source .list .item')].map((d) => d.textContent.trim());
       return { sourceItems, sourceCount: sourceItems.length };
@@ -226,22 +226,22 @@ tests.push({
     await waitReady(page, 'data-transfer-ready');
     await page.waitForTimeout(100);
     const a = await page.evaluate(() => {
-      const basic = document.querySelector('main is-transfer');
+      const basic = document.querySelector('main iswc-transfer');
       return [...basic.values].sort();
     });
     // Mover todos y luego traerlos de vuelta
     await page.evaluate(() => {
-      const basic = document.querySelector('main is-transfer');
+      const basic = document.querySelector('main iswc-transfer');
       basic.shadowRoot.querySelector('[data-action="to-target"]').click();
     });
     await page.waitForTimeout(80);
     await page.evaluate(() => {
-      const basic = document.querySelector('main is-transfer');
+      const basic = document.querySelector('main iswc-transfer');
       basic.shadowRoot.querySelector('[data-action="to-source"]').click();
     });
     await page.waitForTimeout(80);
     const b = await page.evaluate(() => {
-      const basic = document.querySelector('main is-transfer');
+      const basic = document.querySelector('main iswc-transfer');
       return [...basic.values].sort();
     });
     assert.deepEqual(a, b, 'round-trip (mover todos → traer todos) debe dejar los mismos values');
@@ -255,7 +255,7 @@ tests.push({
     await page.goto(URL, { waitUntil: 'domcontentloaded' });
     await waitReady(page, 'data-transfer-ready');
     const aria = await page.evaluate(() => {
-      const basic = document.querySelector('main is-transfer');
+      const basic = document.querySelector('main iswc-transfer');
       const sr = basic.shadowRoot;
       const lists = [...sr.querySelectorAll('.list')];
       return lists.map((l) => ({

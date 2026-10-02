@@ -3,8 +3,8 @@
 <head>
 <meta charset="utf-8" />
 <meta name="viewport" content="width=device-width, initial-scale=1" />
-<title>Demo <is-toast-item> · is-webcomponents</title>
-<meta name="description" content="Demo de <is-toast-item>: ítem individual de toast con countdown, pausa al hover." />
+<title>Demo <iswc-toast-item> · is-webcomponents</title>
+<meta name="description" content="Demo de <iswc-toast-item>: ítem individual de toast con countdown, pausa al hover." />
 <style>
   html, body { margin: 0; padding: 0; background: #0c1118; color: #e2e8f0; font-family: ui-sans-serif, system-ui, sans-serif; }
   body { padding: 24px; display: grid; gap: 24px; }
@@ -16,19 +16,19 @@
   button { background: #1a2532; color: #e2e8f0; border: 1px solid rgba(255,255,255,0.1); border-radius: 6px; padding: 8px 12px; cursor: pointer; font: inherit; }
   button:hover { background: #25303f; }
   .stage { position: relative; min-height: 100px; padding: 12px; background: rgba(0,0,0,0.2); border-radius: 8px; }
-  is-toast-item:not(:defined) { visibility: hidden; }
+  iswc-toast-item:not(:defined) { visibility: hidden; }
 </style>
 <script type="module">
-  await import('../../../dist/cdn/feedback/toast-item.min.js?h=dffzrl');
+  await import('../../../dist/cdn/feedback/toast-item.min.js?h=dfrzbl');
 
-  await customElements.whenDefined('is-toast-item');
+  await customElements.whenDefined('iswc-toast-item');
   document.documentElement.dataset.toastItemReady = '1';
 </script>
 </head>
 <body>
 <header>
-  <h1>is-toast-item</h1>
-  <p>Ítem individual de toast. Atributos: <code>color</code>, <code>duration</code>, <code>open</code>. Métodos: <code>show()</code>, <code>hide()</code>. Eventos: <code>is-after-show</code>, <code>is-after-hide</code>.</p>
+  <h1>iswc-toast-item</h1>
+  <p>Ítem individual de toast. Atributos: <code>color</code>, <code>duration</code>, <code>open</code>. Métodos: <code>show()</code>, <code>hide()</code>. Eventos: <code>iswc-after-show</code>, <code>iswc-after-hide</code>.</p>
 </header>
 
 <section>
@@ -41,7 +41,7 @@
   <div class="stage" id="stage-1"></div>
   <script type="module">
     function makeToast(color, duration, text) {
-      const t = document.createElement('is-toast-item');
+      const t = document.createElement('iswc-toast-item');
       t.setAttribute('color', color);
       if (duration !== null) t.setAttribute('duration', String(duration));
       t.textContent = text;
@@ -61,7 +61,7 @@
   <div class="stage" id="stage-2"></div>
   <script type="module">
     document.getElementById('btn-caption').addEventListener('click', () => {
-      const t = document.createElement('is-toast-item');
+      const t = document.createElement('iswc-toast-item');
       t.setAttribute('color', 'brand');
       t.setAttribute('duration', '5000');
       t.textContent = 'Carga completada';
@@ -82,14 +82,14 @@
   <script type="module">
     document.getElementById('btn-evt').addEventListener('click', () => {
       const log = document.getElementById('event-log');
-      const t = document.createElement('is-toast-item');
+      const t = document.createElement('iswc-toast-item');
       t.setAttribute('color', 'info');
       t.setAttribute('duration', '2000');
       t.textContent = 'Test eventos';
-      t.addEventListener('is-after-show', (e) => {
+      t.addEventListener('iswc-after-show', (e) => {
         log.textContent = `show @ ${new Date().toISOString()}\n` + JSON.stringify(e.detail, null, 2);
       });
-      t.addEventListener('is-after-hide', () => {
+      t.addEventListener('iswc-after-hide', () => {
         log.textContent += `\n\nhide @ ${new Date().toISOString()}`;
       });
       document.body.appendChild(t);

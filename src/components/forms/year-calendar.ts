@@ -2,10 +2,10 @@ import { adoptCss, defineElement, emit } from '../../core/element.js';
 import { ElementBase } from '../../core/element-base.js';
 
 /**
- * <is-year-calendar> — Rejilla de años desplazable (MUI YearCalendar).
+ * <iswc-year-calendar> — Rejilla de años desplazable (MUI YearCalendar).
  *
  * Atributos: value (yyyy), min, max (ISO o yyyy), columns, disabled, readonly
- * Events: is-change  detail { value, year }
+ * Events: iswc-change  detail { value, year }
  */
 
 (() => {
@@ -22,7 +22,7 @@ import { ElementBase } from '../../core/element-base.js';
     return Number.isFinite(n) && n > 0 ? n : fallback;
   }
 
-  class IsYearCalendar extends ElementBase {
+  class IswcYearCalendar extends ElementBase {
     static get observedAttributes(): string[] { return OBSERVED; }
 
     #base!: HTMLElement;
@@ -106,7 +106,7 @@ import { ElementBase } from '../../core/element-base.js';
     #select(year: number): void {
       if (this.disabled || this.readonly) return;
       this.setAttribute('value', String(year));
-      emit(this, 'is-change', { value: String(year), year });
+      emit(this, 'iswc-change', { value: String(year), year });
     }
 
     #onClick = (e: PointerEvent): void => {
@@ -139,5 +139,5 @@ import { ElementBase } from '../../core/element-base.js';
     }
   }
 
-  defineElement('is-year-calendar', IsYearCalendar, 'IsYearCalendar');
+  defineElement('iswc-year-calendar', IswcYearCalendar, 'IswcYearCalendar');
 })();

@@ -21,7 +21,7 @@ test('stagehand: la página expone data-context-menu-ready', async () => {
 test('stagehand: clic derecho sobre el target abre el menú', async () => {
   const page = await browser.newPage();
   await page.goto(URL_DEMO, { waitUntil: 'domcontentloaded' });
-  await page.waitForSelector('is-context-menu:defined');
+  await page.waitForSelector('iswc-context-menu:defined');
   // Simular contextmenu (no click normal)
   await page.click('#target', { button: 'right' });
   await page.waitForTimeout(80);
@@ -33,7 +33,7 @@ test('stagehand: clic derecho sobre el target abre el menú', async () => {
 test('stagehand: Escape cierra el menú (vía listener del demo)', async () => {
   const page = await browser.newPage();
   await page.goto(URL_DEMO, { waitUntil: 'domcontentloaded' });
-  await page.waitForSelector('is-context-menu:defined');
+  await page.waitForSelector('iswc-context-menu:defined');
   await page.evaluate(() => document.getElementById('cm').openAtElement());
   await page.waitForTimeout(50);
   const wasOpen = await page.evaluate(() => document.getElementById('cm').isOpen);
@@ -48,7 +48,7 @@ test('stagehand: Escape cierra el menú (vía listener del demo)', async () => {
 test('stagehand: openAtElement ancla el menú al target', async () => {
   const page = await browser.newPage();
   await page.goto(URL_DEMO, { waitUntil: 'domcontentloaded' });
-  await page.waitForSelector('is-context-menu:defined');
+  await page.waitForSelector('iswc-context-menu:defined');
   await page.evaluate(() => document.getElementById('cm').openAtElement());
   await page.waitForTimeout(80);
   const layout = await page.evaluate(() => {
@@ -66,7 +66,7 @@ test('stagehand: openAtElement ancla el menú al target', async () => {
 test('stagehand: clic fuera cierra el menú (popup-dismiss)', async () => {
   const page = await browser.newPage();
   await page.goto(URL_DEMO, { waitUntil: 'domcontentloaded' });
-  await page.waitForSelector('is-context-menu:defined');
+  await page.waitForSelector('iswc-context-menu:defined');
   await page.evaluate(() => document.getElementById('cm').openAt(200, 200));
   await page.waitForTimeout(50);
   // Click fuera del panel (en el body, lejos del panel)
@@ -81,7 +81,7 @@ test('stagehand: prefers-reduced-motion no afecta la apertura del menú', async 
   const ctx = await browser.newContext({ reducedMotion: 'reduce' });
   const page = await ctx.newPage();
   await page.goto(URL_DEMO, { waitUntil: 'domcontentloaded' });
-  await page.waitForSelector('is-context-menu:defined');
+  await page.waitForSelector('iswc-context-menu:defined');
   await page.evaluate(() => document.getElementById('cm').openAt(150, 150));
   await page.waitForTimeout(50);
   const isOpen = await page.evaluate(() => document.getElementById('cm').isOpen);

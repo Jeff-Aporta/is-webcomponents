@@ -1,11 +1,11 @@
 // radar-chart.test.mjs — tests exhaustivos del demo radar-chart.html.
 //
 // Cobertura:
-//   - smoke: <is-radar-chart> se registra, monta SVG y dibuja polígonos cerrados
+//   - smoke: <iswc-radar-chart> se registra, monta SVG y dibuja polígonos cerrados
 //   - config: cambiar payload.datasets re-renderiza con diferentes marcas
 //   - config: cambiar payload.data.labels actualiza el # de labels en eje
 //   - accesibilidad: SVG con role=img y aria-label legible
-//   - eventos: is-render emite tras montaje y tras cambio de payload
+//   - eventos: iswc-render emite tras montaje y tras cambio de payload
 //   - determinismo: misma config → mismo # de polígonos y vértices
 //   - id re-asignación: la misma instancia puede redibujar sin leaks
 import assert from 'node:assert/strict';
@@ -22,13 +22,13 @@ tests.push({
     await waitReady(page, 'data-radar-chart-ready');
     await page.waitForTimeout(200);
     const info = await page.evaluate(() => {
-      const el = document.querySelector('is-radar-chart');
+      const el = document.querySelector('iswc-radar-chart');
       const svg = el?.shadowRoot?.querySelector('svg');
       const polys = [...(el?.shadowRoot?.querySelectorAll('path.mark.mark-radar') ?? [])];
       const labels = [...(el?.shadowRoot?.querySelectorAll('text.tick-label') ?? [])].map((t) => t.textContent?.trim());
       const points = [...(el?.shadowRoot?.querySelectorAll('circle.mark.mark-point') ?? [])];
       return {
-        defined: !!customElements.get('is-radar-chart'),
+        defined: !!customElements.get('iswc-radar-chart'),
         svg: !!svg,
         svgRole: svg?.getAttribute('role'),
         svgAria: svg?.getAttribute('aria-label'),
@@ -40,7 +40,7 @@ tests.push({
         viewBox: svg?.getAttribute('viewBox'),
       };
     });
-    assert.equal(info.defined, true, 'is-radar-chart debe estar definido');
+    assert.equal(info.defined, true, 'iswc-radar-chart debe estar definido');
     assert.ok(info.svg, 'debe haber un SVG en shadow DOM');
     assert.equal(info.svgRole, 'img', 'SVG debe tener role=img');
     assert.ok(info.svgAria && info.svgAria.length > 0, `SVG debe tener aria-label (era "${info.svgAria}")`);
@@ -63,11 +63,11 @@ tests.push({
     await waitReady(page, 'data-radar-chart-ready');
     await page.waitForTimeout(200);
     const before = await page.evaluate(() => {
-      const el = document.querySelector('is-radar-chart');
+      const el = document.querySelector('iswc-radar-chart');
       return el?.shadowRoot?.querySelectorAll('path.mark.mark-radar').length ?? 0;
     });
     await page.evaluate(() => {
-      const el = document.querySelector('is-radar-chart');
+      const el = document.querySelector('iswc-radar-chart');
       el.payload = {
         type: 'radar',
         data: {
@@ -82,7 +82,7 @@ tests.push({
     });
     await page.waitForTimeout(250);
     const after = await page.evaluate(() => {
-      const el = document.querySelector('is-radar-chart');
+      const el = document.querySelector('iswc-radar-chart');
       return el?.shadowRoot?.querySelectorAll('path.mark.mark-radar').length ?? 0;
     });
     assert.equal(before, 2, 'antes debe haber 2 polígonos (datasets iniciales)');
@@ -97,11 +97,11 @@ tests.push({
     await waitReady(page, 'data-radar-chart-ready');
     await page.waitForTimeout(200);
     const before = await page.evaluate(() => {
-      const el = document.querySelector('is-radar-chart');
+      const el = document.querySelector('iswc-radar-chart');
       return el?.shadowRoot?.querySelectorAll('text.tick-label').length ?? 0;
     });
     await page.evaluate(() => {
-      const el = document.querySelector('is-radar-chart');
+      const el = document.querySelector('iswc-radar-chart');
       el.payload = {
         type: 'radar',
         data: {
@@ -112,7 +112,7 @@ tests.push({
     });
     await page.waitForTimeout(250);
     const after = await page.evaluate(() => {
-      const el = document.querySelector('is-radar-chart');
+      const el = document.querySelector('iswc-radar-chart');
       return el?.shadowRoot?.querySelectorAll('text.tick-label').length ?? 0;
     });
     assert.equal(before, 6, 'demo inicial tiene 6 labels de eje');
@@ -127,7 +127,7 @@ tests.push({
     await waitReady(page, 'data-radar-chart-ready');
     await page.waitForTimeout(200);
     const fills = await page.evaluate(() => {
-      const el = document.querySelector('is-radar-chart');
+      const el = document.querySelector('iswc-radar-chart');
       const polys = [...el.shadowRoot.querySelectorAll('path.mark.mark-radar')];
       return polys.map((p) => ({
         fill: p.getAttribute('fill'),
@@ -145,17 +145,17 @@ tests.push({
 });
 
 tests.push({
-  name: 'is-render: emite el evento is-render tras montar',
+  name: 'iswc-render: emite el evento iswc-render tras montar',
   run: async (page) => {
     await page.goto(URL, { waitUntil: 'domcontentloaded' });
     await waitReady(page, 'data-radar-chart-ready');
     await page.waitForTimeout(150);
     const count = await page.evaluate(() => {
       return new Promise((resolve) => {
-        const el = document.createElement('is-radar-chart');
+        const el = document.createElement('iswc-radar-chart');
         document.body.appendChild(el);
         let n = 0;
-        el.addEventListener('is-render', () => n++);
+        el.addEventListener('iswc-render', () => n++);
         el.payload = {
           type: 'radar',
           data: {
@@ -166,7 +166,7 @@ tests.push({
         setTimeout(() => { el.remove(); resolve(n); }, 300);
       });
     });
-    assert.ok(count >= 1, `is-render debió dispararse >=1 vez tras asignar payload (fue ${count})`);
+    assert.ok(count >= 1, `iswc-render debió dispararse >=1 vez tras asignar payload (fue ${count})`);
   },
 });
 
@@ -177,11 +177,11 @@ tests.push({
     await waitReady(page, 'data-radar-chart-ready');
     await page.waitForTimeout(200);
     const a = await page.evaluate(() => {
-      const el = document.querySelector('is-radar-chart');
+      const el = document.querySelector('iswc-radar-chart');
       return el.shadowRoot.querySelectorAll('path.mark.mark-radar').length;
     });
     const b = await page.evaluate(() => {
-      const el = document.querySelector('is-radar-chart');
+      const el = document.querySelector('iswc-radar-chart');
       // re-leer el mismo payload no debería mutar el render
       return el.shadowRoot.querySelectorAll('path.mark.mark-radar').length;
     });
@@ -197,11 +197,11 @@ tests.push({
     await waitReady(page, 'data-radar-chart-ready');
     await page.waitForTimeout(200);
     const before = await page.evaluate(() => {
-      const el = document.querySelector('is-radar-chart');
+      const el = document.querySelector('iswc-radar-chart');
       return el.shadowRoot.querySelectorAll('path.mark.mark-radar').length;
     });
     await page.evaluate(() => {
-      const el = document.querySelector('is-radar-chart');
+      const el = document.querySelector('iswc-radar-chart');
       // Re-asignar el mismo payload no debe cambiar el render.
       el.payload = {
         type: 'radar',
@@ -216,7 +216,7 @@ tests.push({
     });
     await page.waitForTimeout(250);
     const after = await page.evaluate(() => {
-      const el = document.querySelector('is-radar-chart');
+      const el = document.querySelector('iswc-radar-chart');
       return el.shadowRoot.querySelectorAll('path.mark.mark-radar').length;
     });
     assert.equal(before, after, `re-asignar el mismo payload debe mantener ${before} polígonos (hay ${after})`);

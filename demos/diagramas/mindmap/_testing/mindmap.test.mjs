@@ -10,21 +10,21 @@ const URL = `${BASE_URL}/demos/diagramas/mindmap/mindmap.html`;
 const tests = [];
 
 tests.push({
-  name: 'smoke: <is-mindmap> monta y renderiza nodos y aristas',
+  name: 'smoke: <iswc-mindmap> monta y renderiza nodos y aristas',
   run: async (page) => {
     await page.goto(URL, { waitUntil: 'domcontentloaded' });
     await waitReady(page, 'data-mindmap-ready');
     const info = await page.evaluate(() => {
-      const el = document.querySelector('main is-mindmap');
+      const el = document.querySelector('main iswc-mindmap');
       const shadow = el?.shadowRoot;
       return {
-        defined: !!customElements.get('is-mindmap'),
+        defined: !!customElements.get('iswc-mindmap'),
         nodes: shadow?.querySelectorAll('.mm-node').length ?? 0,
         edges: shadow?.querySelectorAll('.mm-edge').length ?? 0,
         hasSvg: !!shadow?.querySelector('svg.mm-svg'),
       };
     });
-    assert.equal(info.defined, true, 'is-mindmap debe estar definido');
+    assert.equal(info.defined, true, 'iswc-mindmap debe estar definido');
     assert.ok(info.nodes >= 10, `esperaba >=10 nodos, hay ${info.nodes}`);
     assert.ok(info.edges >= 9, `esperaba >=9 aristas, hay ${info.edges}`);
     assert.equal(info.hasSvg, true, 'debe existir <svg class="mm-svg">');
@@ -38,7 +38,7 @@ tests.push({
     await page.goto(URL, { waitUntil: 'domcontentloaded' });
     await waitReady(page, 'data-mindmap-ready');
     const ids = await page.evaluate(() => {
-      const el = document.querySelector('main is-mindmap');
+      const el = document.querySelector('main iswc-mindmap');
       return [...el.shadowRoot.querySelectorAll('.mm-node')].map((g) => g.dataset.nodeId);
     });
     assert.ok(ids.includes('root'), 'debe haber un nodo raíz "root"');
@@ -53,7 +53,7 @@ tests.push({
     await page.goto(URL, { waitUntil: 'domcontentloaded' });
     await waitReady(page, 'data-mindmap-ready');
     const kinds = await page.evaluate(() => {
-      const el = document.querySelector('main is-mindmap');
+      const el = document.querySelector('main iswc-mindmap');
       return {
         root: el.shadowRoot.querySelectorAll('.mm-node--root').length,
         branch: el.shadowRoot.querySelectorAll('.mm-node--branch').length,
@@ -72,7 +72,7 @@ tests.push({
     await page.goto(URL, { waitUntil: 'domcontentloaded' });
     await waitReady(page, 'data-mindmap-ready');
     const edges = await page.evaluate(() => {
-      const el = document.querySelector('main is-mindmap');
+      const el = document.querySelector('main iswc-mindmap');
       return [...el.shadowRoot.querySelectorAll('.mm-edge')].map((p) => ({
         d: p.getAttribute('d'),
         stroke: p.getAttribute('stroke') || getComputedStyle(p).stroke,
@@ -92,16 +92,16 @@ tests.push({
     await page.goto(URL, { waitUntil: 'domcontentloaded' });
     await waitReady(page, 'data-mindmap-ready');
     const before = await page.evaluate(() => {
-      const el = document.querySelector('main is-mindmap');
+      const el = document.querySelector('main iswc-mindmap');
       return el.shadowRoot.querySelector('svg.mm-svg').getAttribute('viewBox');
     });
     await page.evaluate(() => {
-      const el = document.querySelector('main is-mindmap');
+      const el = document.querySelector('main iswc-mindmap');
       el.payload = el.payload;
     });
     await page.waitForTimeout(150);
     const after = await page.evaluate(() => {
-      const el = document.querySelector('main is-mindmap');
+      const el = document.querySelector('main iswc-mindmap');
       return el.shadowRoot.querySelector('svg.mm-svg').getAttribute('viewBox');
     });
     assert.equal(before, after, 'viewBox idéntico tras re-asignar payload');
@@ -114,7 +114,7 @@ tests.push({
     await page.goto(URL, { waitUntil: 'domcontentloaded' });
     await waitReady(page, 'data-mindmap-ready');
     const meta = await page.evaluate(() => {
-      const el = document.querySelector('main is-mindmap');
+      const el = document.querySelector('main iswc-mindmap');
       const svg = el.shadowRoot.querySelector('svg.mm-svg');
       return { aria: svg.getAttribute('aria-label'), role: svg.getAttribute('role') };
     });

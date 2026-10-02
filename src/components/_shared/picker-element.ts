@@ -7,8 +7,8 @@ import { emit } from '../../core/element.js';
 import { resolveLocale } from './resolve-locale.js';
 
 /**
- * Fábrica de los pickers "campo + panel": is-date-input, is-time-input,
- * is-date-time-input e is-date-range-input.
+ * Fábrica de los pickers "campo + panel": iswc-date-input, iswc-time-input,
+ * iswc-date-time-input e iswc-date-range-input.
  *
  * El panel vive en un <dialog> modal (top layer) para no perderse por overflow,
  * y se coloca junto al campo con computePosition. En `color="mobile"` se
@@ -115,7 +115,7 @@ export function definePickerInput({
       this.#triggers = [...shadow.querySelectorAll<HTMLElement & { disabled: boolean }>('.trigger')];
 
       for (const field of this.#fields) {
-        field.addEventListener('is-change', this.#onFieldChange);
+        field.addEventListener('iswc-change', this.#onFieldChange);
         field.addEventListener('keydown', this.#onFieldKey);
       }
       for (const trigger of this.#triggers) {
@@ -195,7 +195,7 @@ export function definePickerInput({
       if (!this.#dialog.open) this.#dialog.showModal();
       this.#reposition();
       queueMicrotask(() => this.#panelEls[0]?.focus?.({ preventScroll: true }));
-      emit(this, 'is-show', {});
+      emit(this, 'iswc-show', {});
     }
 
     hide({ restore = false } = {}): void {
@@ -206,7 +206,7 @@ export function definePickerInput({
       for (const t of this.#triggers) t.setAttribute('aria-expanded', 'false');
       if (this.#dialog.open) this.#dialog.close();
       this.#fields[0]?.focus?.();
-      emit(this, 'is-hide', {});
+      emit(this, 'iswc-hide', {});
     }
 
     checkValidity(): boolean { return this.#fields.every((f) => f.checkValidity?.() !== false); }
@@ -228,7 +228,7 @@ export function definePickerInput({
         field.className = 'field';
         field.setAttribute('part', `field ${which}`);
         field.dataset.which = which;
-        const trigger = document.createElement('is-button') as HTMLElement & { variant?: string };
+        const trigger = document.createElement('iswc-button') as HTMLElement & { variant?: string };
         trigger.variant = 'plain';
         trigger.className = 'trigger';
         trigger.setAttribute('part', 'trigger');
@@ -279,7 +279,7 @@ export function definePickerInput({
       actions.hidden = true;
 
       const mkAct = (act: string, label: string, variant = 'plain', color = 'neutral'): HTMLElement => {
-        const b = document.createElement('is-button') as HTMLElement & { variant?: string; color?: string };
+        const b = document.createElement('iswc-button') as HTMLElement & { variant?: string; color?: string };
         b.variant = variant;
         if (color !== 'neutral') b.color = color;
         b.className = 'act';
@@ -350,7 +350,7 @@ export function definePickerInput({
       if (this.#panelEls.length) return;
       this.#panelEls = panels({ host: this, range });
       for (const el of this.#panelEls) {
-        el.addEventListener('is-change', this.#onPanelChange);
+        el.addEventListener('iswc-change', this.#onPanelChange);
         this.#content.appendChild(el);
       }
     }
@@ -409,7 +409,7 @@ export function definePickerInput({
       else this.removeAttribute('value');
       this.#syncFields();
       if (this.#open) this.#syncPanels();
-      if (prev !== (value || '')) emit(this, 'is-change', { value: value || '', source });
+      if (prev !== (value || '')) emit(this, 'iswc-change', { value: value || '', source });
     }
 
     #reposition = (): void => {

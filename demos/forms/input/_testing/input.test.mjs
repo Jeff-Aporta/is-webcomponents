@@ -9,18 +9,18 @@ const URL = `${BASE_URL}/demos/forms/input/input.html`;
 const tests = [];
 
 tests.push({
-  name: 'smoke: <is-input> definido, shadow DOM e input nativo visible',
+  name: 'smoke: <iswc-input> definido, shadow DOM e input nativo visible',
   run: async (page) => {
     await page.goto(URL, { waitUntil: 'domcontentloaded' });
     await waitReady(page, 'data-input-ready');
     const data = await page.evaluate(() => {
-      const inp = document.querySelector('is-input#demo');
+      const inp = document.querySelector('iswc-input#demo');
       const sr = inp.shadowRoot;
       const native = sr.querySelector('input');
       const label = sr.querySelector('label#label');
       const hint = sr.querySelector('#hint');
       return {
-        defined: !!customElements.get('is-input'),
+        defined: !!customElements.get('iswc-input'),
         hasShadow: !!sr,
         nativeType: native?.getAttribute('type'),
         nativeId: native?.id,
@@ -30,7 +30,7 @@ tests.push({
         hintText: hint?.textContent?.trim(),
       };
     });
-    assert.equal(data.defined, true, 'is-input debe estar definido');
+    assert.equal(data.defined, true, 'iswc-input debe estar definido');
     assert.equal(data.hasShadow, true, 'debe tener shadow DOM');
     assert.equal(data.nativeType, 'text', 'tipo por defecto debe ser text');
     assert.equal(data.nativeId, 'input', 'el input nativo debe tener id=input');
@@ -42,24 +42,24 @@ tests.push({
 });
 
 tests.push({
-  name: 'funcional: set .value → input nativo refleja y emite is-input',
+  name: 'funcional: set .value → input nativo refleja y emite iswc-input',
   run: async (page) => {
     await page.goto(URL, { waitUntil: 'domcontentloaded' });
     await waitReady(page, 'data-input-ready');
     const triggered = await page.evaluate(() => new Promise((resolve) => {
-      const inp = document.querySelector('is-input#demo');
-      inp.addEventListener('is-input', (e) => resolve({ ok: true, value: e.detail.value }), { once: true });
+      const inp = document.querySelector('iswc-input#demo');
+      inp.addEventListener('iswc-input', (e) => resolve({ ok: true, value: e.detail.value }), { once: true });
       // Simular tecleo: escribir vía native input + dispatch.
       const native = inp.shadowRoot.getElementById('input');
       native.value = 'Hola mundo';
       native.dispatchEvent(new Event('input', { bubbles: true }));
     }));
-    assert.equal(triggered.ok, true, 'is-input debe dispararse');
+    assert.equal(triggered.ok, true, 'iswc-input debe dispararse');
     assert.equal(triggered.value, 'Hola mundo', 'detail.value debe coincidir');
 
     const mirrored = await page.evaluate(() => ({
-      property: document.querySelector('is-input#demo').value,
-      native: document.querySelector('is-input#demo').shadowRoot.getElementById('input').value,
+      property: document.querySelector('iswc-input#demo').value,
+      native: document.querySelector('iswc-input#demo').shadowRoot.getElementById('input').value,
     }));
     assert.equal(mirrored.property, 'Hola mundo', 'la propiedad value debe reflejar');
     assert.equal(mirrored.native, 'Hola mundo', 'el input nativo debe reflejar');
@@ -72,7 +72,7 @@ tests.push({
     await page.goto(URL, { waitUntil: 'domcontentloaded' });
     await waitReady(page, 'data-input-ready');
     const data = await page.evaluate(() => {
-      const email = document.querySelector('is-input[type="email"]');
+      const email = document.querySelector('iswc-input[type="email"]');
       const native = email.shadowRoot.getElementById('input');
       return {
         propType: email.type,
@@ -92,7 +92,7 @@ tests.push({
     await page.goto(URL, { waitUntil: 'domcontentloaded' });
     await waitReady(page, 'data-input-ready');
     const data = await page.evaluate(() => {
-      const inp = document.querySelector('is-input#demo');
+      const inp = document.querySelector('iswc-input#demo');
       const clear = inp.shadowRoot.querySelector('#clear');
       // Sin valor → botón oculto.
       const hiddenWhenEmpty = clear.hidden;
@@ -118,14 +118,14 @@ tests.push({
     await page.goto(URL, { waitUntil: 'domcontentloaded' });
     await waitReady(page, 'data-input-ready');
     const data = await page.evaluate(() => {
-      const pwd = document.querySelector('is-input[type="password"]');
+      const pwd = document.querySelector('iswc-input[type="password"]');
       const native = pwd.shadowRoot.getElementById('input');
       const toggle = pwd.shadowRoot.querySelector('#toggle');
       const before = native.getAttribute('type');
-      // Disparar is-change con checked=true (lo que hace el botón toggle).
-      toggle.dispatchEvent(new CustomEvent('is-change', { detail: { checked: true }, bubbles: true, composed: true }));
+      // Disparar iswc-change con checked=true (lo que hace el botón toggle).
+      toggle.dispatchEvent(new CustomEvent('iswc-change', { detail: { checked: true }, bubbles: true, composed: true }));
       const afterOn = native.getAttribute('type');
-      toggle.dispatchEvent(new CustomEvent('is-change', { detail: { checked: false }, bubbles: true, composed: true }));
+      toggle.dispatchEvent(new CustomEvent('iswc-change', { detail: { checked: false }, bubbles: true, composed: true }));
       const afterOff = native.getAttribute('type');
       return { before, afterOn, afterOff };
     });
@@ -141,7 +141,7 @@ tests.push({
     await page.goto(URL, { waitUntil: 'domcontentloaded' });
     await waitReady(page, 'data-input-ready');
     const data = await page.evaluate(() => {
-      const inp = document.querySelector('is-input[name="required1"]');
+      const inp = document.querySelector('iswc-input[name="required1"]');
       inp.value = '';
       const native = inp.shadowRoot.getElementById('input');
       return {
@@ -161,7 +161,7 @@ tests.push({
     await waitReady(page, 'data-input-ready');
     // Crear un form temporal para poder hacer reset.
     const data = await page.evaluate(async () => {
-      const inp = document.querySelector('is-input#demo');
+      const inp = document.querySelector('iswc-input#demo');
       // Seteamos el default vía atributo para que formResetCallback restaure ese valor.
       inp.setAttribute('value', 'POR_DEFECTO');
       inp.value = 'OTRO';

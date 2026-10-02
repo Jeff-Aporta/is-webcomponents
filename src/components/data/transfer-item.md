@@ -1,15 +1,15 @@
 ---
-tag: is-transfer-item
+tag: iswc-transfer-item
 tags:
-  - is-transfer-item
+  - iswc-transfer-item
 category: data
 status: public
 ---
-# `<is-transfer-item>`
+# `<iswc-transfer-item>`
 
 ## Propósito
 
-Ítem de `<is-transfer>`. Es una opción de la lista origen o destino, no un control suelto.
+Ítem de `<iswc-transfer>`. Es una opción de la lista origen o destino, no un control suelto.
 
 ## Cuándo usarlo
 
@@ -22,5 +22,5 @@ No lo reimplementes ni lo uses para sustituir al padre. La guía del padre docum
 ## Ejemplo mínimo
 
 ```html
-<is-transfer-item></is-transfer-item>
+<iswc-transfer-item></iswc-transfer-item>
 ```

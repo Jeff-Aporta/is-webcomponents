@@ -3,11 +3,11 @@ import { daysInMonth, isoOf, monthLabels, pad } from '../_shared/date-utils.js';
 import { ElementBase } from '../../core/element-base.js';
 
 /**
- * <is-month-calendar> — Rejilla de los 12 meses de un año (MUI MonthCalendar).
+ * <iswc-month-calendar> — Rejilla de los 12 meses de un año (MUI MonthCalendar).
  *
  * Atributos: value (yyyy-mm), year, min, max (ISO), locale, columns,
  *            month-width (short|long), disabled, readonly
- * Events: is-change  detail { value, year, month }
+ * Events: iswc-change  detail { value, year, month }
  */
 
 (() => {
@@ -18,7 +18,7 @@ import { ElementBase } from '../../core/element-base.js';
 
   const OBSERVED: string[] = ['value', 'year', 'min', 'max', 'locale', 'columns', 'month-width', 'disabled', 'readonly'];
 
-  class IsMonthCalendar extends ElementBase {
+  class IswcMonthCalendar extends ElementBase {
     static get observedAttributes(): string[] { return OBSERVED; }
 
     #base!: HTMLElement;
@@ -127,7 +127,7 @@ import { ElementBase } from '../../core/element-base.js';
       if (this.disabled || this.readonly) return;
       const value = `${this.year}-${pad(String(month + 1))}`;
       this.setAttribute('value', value);
-      emit(this, 'is-change', { value, year: this.year, month });
+      emit(this, 'iswc-change', { value, year: this.year, month });
       if (focus) this.#base.querySelector<HTMLElement>(`[data-month="${month}"]`)?.focus();
     }
 
@@ -167,5 +167,5 @@ import { ElementBase } from '../../core/element-base.js';
     }
   }
 
-  defineElement('is-month-calendar', IsMonthCalendar, 'IsMonthCalendar');
+  defineElement('iswc-month-calendar', IswcMonthCalendar, 'IswcMonthCalendar');
 })();

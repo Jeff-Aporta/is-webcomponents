@@ -10,15 +10,15 @@ const URL = `${BASE_URL}/demos/layout/scrollspy/scrollspy.html`;
 const tests = [];
 
 tests.push({
-  name: 'smoke: is-scrollspy está definido y los 3 spies están montados',
+  name: 'smoke: iswc-scrollspy está definido y los 3 spies están montados',
   run: async (page) => {
     await page.goto(URL, { waitUntil: 'domcontentloaded' });
     await waitReady(page, 'data-scrollspy-ready');
     await page.waitForTimeout(200);
     const data = await page.evaluate(() => {
-      const spies = [...document.querySelectorAll('main is-scrollspy')];
+      const spies = [...document.querySelectorAll('main iswc-scrollspy')];
       return {
-        defined: !!customElements.get('is-scrollspy'),
+        defined: !!customElements.get('iswc-scrollspy'),
         count: spies.length,
         links: spies.map((s) => {
           const slot = s.shadowRoot?.querySelector('slot');
@@ -26,7 +26,7 @@ tests.push({
         }),
       };
     });
-    assert.equal(data.defined, true, 'is-scrollspy debe estar definido');
+    assert.equal(data.defined, true, 'iswc-scrollspy debe estar definido');
     assert.equal(data.count, 3, `esperaba 3 scrollspies, hay ${data.count}`);
     assert.deepEqual(data.links, [4, 3, 3], `links por spy deben ser 4/3/3, fueron ${data.links.join(',')}`);
     await screenshot(page, 'scrollspy-smoke');
@@ -41,7 +41,7 @@ tests.push({
     await page.waitForTimeout(250);
     const data = await page.evaluate(() => {
       const spy = document.getElementById('spy1');
-      const active = [...spy.querySelectorAll('a')].find((a) => a.classList.contains('is-scrollspy-active'));
+      const active = [...spy.querySelectorAll('a')].find((a) => a.classList.contains('iswc-scrollspy-active'));
       return {
         activeId: spy.active,
         activeHref: active?.getAttribute('href'),
@@ -56,7 +56,7 @@ tests.push({
 });
 
 tests.push({
-  name: 'funcional: spy1.triggers expone las 4 secciones del is-main',
+  name: 'funcional: spy1.triggers expone las 4 secciones del iswc-main',
   run: async (page) => {
     await page.goto(URL, { waitUntil: 'domcontentloaded' });
     await waitReady(page, 'data-scrollspy-ready');
@@ -115,7 +115,7 @@ tests.push({
     await page.waitForTimeout(50);
     const data = await page.evaluate(() => {
       const spy = document.getElementById('spy1');
-      const active = [...spy.querySelectorAll('a')].find((a) => a.classList.contains('is-scrollspy-active'));
+      const active = [...spy.querySelectorAll('a')].find((a) => a.classList.contains('iswc-scrollspy-active'));
       return { activeId: spy.active, href: active?.getAttribute('href') };
     });
     assert.equal(data.activeId, 'api', `active debe ser 'api', fue '${data.activeId}'`);
@@ -171,7 +171,7 @@ tests.push({
 });
 
 tests.push({
-  name: 'eventos: is-activated + is-deactivated al cambiar de sección',
+  name: 'eventos: iswc-activated + iswc-deactivated al cambiar de sección',
   run: async (page) => {
     await page.goto(URL, { waitUntil: 'domcontentloaded' });
     await waitReady(page, 'data-scrollspy-ready');
@@ -179,9 +179,9 @@ tests.push({
     await page.click('#btn-activate-api');
     await page.waitForTimeout(50);
     const log = await page.evaluate(() => document.getElementById('log').textContent || '');
-    assert.match(log, /is-activated\s*←\s*spy1\s*id=api/, `debe emitir is-activated ← spy1 id=api, log:\n${log}`);
+    assert.match(log, /iswc-activated\s*←\s*spy1\s*id=api/, `debe emitir iswc-activated ← spy1 id=api, log:\n${log}`);
     // Tras activar api, el link 'intro' debe haberse desactivado.
-    assert.match(log, /is-deactivated\s*←\s*spy1/, `debe emitir is-deactivated al cambiar de activo, log:\n${log}`);
+    assert.match(log, /iswc-deactivated\s*←\s*spy1/, `debe emitir iswc-deactivated al cambiar de activo, log:\n${log}`);
   },
 });
 

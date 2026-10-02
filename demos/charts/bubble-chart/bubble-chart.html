@@ -3,7 +3,7 @@
 <head>
 <meta charset="utf-8" />
 <meta name="viewport" content="width=device-width, initial-scale=1" />
-<title>&lt;is-bubble-chart&gt; · demo</title>
+<title>&lt;iswc-bubble-chart&gt; · demo</title>
 <style>
   html, body { margin: 0; padding: 0; min-height: 100%; background: #0c1118; color: #e2e8f0; font-family: ui-sans-serif, system-ui, sans-serif; }
   body { display: grid; grid-template-rows: auto 1fr; }
@@ -11,14 +11,14 @@
   header h1 { font-size: 16px; font-weight: 700; margin: 0; }
   header p { font-size: 12px; color: #94a3b8; margin: 4px 0 0 0; }
   main { display: grid; place-items: center; padding: 20px; min-height: 0; }
-  is-bubble-chart { width: 720px; height: 360px; }
-  is-bubble-chart:not(:defined) { visibility: hidden; }
+  iswc-bubble-chart { width: 720px; height: 360px; }
+  iswc-bubble-chart:not(:defined) { visibility: hidden; }
 </style>
 <script type="module">
-  await import('../../../dist/cdn/data-viz/bubble-chart.min.js?h=g0pa19');
-  await customElements.whenDefined('is-bubble-chart');
+  await import('../../../dist/cdn/data-viz/bubble-chart.min.js?h=0d3lgj');
+  await customElements.whenDefined('iswc-bubble-chart');
 
-  const chart = document.createElement('is-bubble-chart');
+  const chart = document.createElement('iswc-bubble-chart');
   chart.setAttribute('label', 'Ciudades');
   chart.setAttribute('x-label', 'Población (M)');
   chart.setAttribute('y-label', 'PIB per cápita (k$)');
@@ -47,8 +47,8 @@
 </head>
 <body>
 <header>
-  <h1>&lt;is-bubble-chart&gt;</h1>
-  <p>Wrapper de <code>&lt;is-chart&gt;</code> con tipo fijo <code>bubble</code>. Datos <code>{x, y, r}</code>.</p>
+  <h1>&lt;iswc-bubble-chart&gt;</h1>
+  <p>Wrapper de <code>&lt;iswc-chart&gt;</code> con tipo fijo <code>bubble</code>. Datos <code>{x, y, r}</code>.</p>
 </header>
 <main></main>
 </body>

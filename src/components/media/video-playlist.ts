@@ -1,7 +1,7 @@
 /**
- * <is-video-playlist> — player + lista tipo YouTube.
+ * <iswc-video-playlist> — player + lista tipo YouTube.
  *
- * Cada clip es un <is-video> dentro del slot default. El componente
+ * Cada clip es un <iswc-video> dentro del slot default. El componente
  * renderiza un reproductor con cabecera (título + canal) y una barra
  * inferior estilo YouTube con controles + herramientas inyectadas
  * (anterior / siguiente / autoplay) mediante slots.
@@ -13,7 +13,7 @@
  *   channel        caption opcional que se muestra bajo el título
  *
  * Slots
- *   default        is-video (uno por clip)
+ *   default        iswc-video (uno por clip)
  *   tools-left     botones / iconos que se muestran a la izquierda del play
  *                  (el playlist inyecta prev/next aquí por defecto)
  *   tools-right    botones / iconos que se muestran a la derecha del vol
@@ -21,7 +21,7 @@
  *   config         botón / menú opcional en la cabecera YouTube
  *
  * Métodos: goTo(index), next(), previous(), play(index)
- * Eventos: is-video-change, is-change
+ * Eventos: iswc-video-change, iswc-change
  *
  * Parts: video-playlist, playlist-head, playlist-toggle, playlist-items,
  *        playlist-item, playlist-title, playlist-duration, channel,
@@ -36,15 +36,15 @@ import '../actions/button.js';
 import './video.js';
 import './icon.js';
 
-// Tipo mínimo del <is-video> hijo. Sólo accedemos a `media`, `play`, `pause`
+// Tipo mínimo del <iswc-video> hijo. Sólo accedemos a `media`, `play`, `pause`
 // y atributos — no hace falta arrastrar todo el componente.
 interface IsVideoLike extends HTMLElement {
   media: HTMLVideoElement;
   play(): Promise<void>;
   pause(): void;
 }
-type IsVideo = IsVideoLike;
-type VideoList = readonly IsVideo[];
+type IswcVideo = IsVideoLike;
+type VideoList = readonly IswcVideo[];
 
 // Handler de MediaQueryList cuando cambia el viewport (acordeón auto).
 interface MediaObsBag {
@@ -76,12 +76,12 @@ interface ApplyActiveOptions { emit?: boolean; previousIndex?: number; }
           <div class="player-toolbar" part="player-toolbar">
             <slot name="tools-left" part="tools-left" class="tools tools-left"></slot>
             <button type="button" class="vp-tool vp-play" part="play-button" aria-label="Reproducir / pausar">
-              <is-icon icon="mdi:play" aria-hidden="true"></is-icon>
+              <iswc-icon icon="mdi:play" aria-hidden="true"></iswc-icon>
             </button>
             <input type="range" class="vp-seek" part="seek" min="0" max="1000" value="0" aria-label="Posición" />
             <span class="vp-time" part="time">0:00 / 0:00</span>
             <button type="button" class="vp-tool vp-mute" part="mute-button" aria-label="Silenciar / activar sonido">
-              <is-icon icon="mdi:volume-high" aria-hidden="true"></is-icon>
+              <iswc-icon icon="mdi:volume-high" aria-hidden="true"></iswc-icon>
             </button>
             <input type="range" class="vp-volume" part="volume-slider" min="0" max="100" value="100" aria-label="Volumen" />
             <slot name="tools-right" part="tools-right" class="tools tools-right"></slot>
@@ -101,7 +101,7 @@ interface ApplyActiveOptions { emit?: boolean; previousIndex?: number; }
             aria-expanded="true"
             title="Mostrar / ocultar lista"
           >
-            <is-icon icon="mdi:chevron-up" aria-hidden="true"></is-icon>
+            <iswc-icon icon="mdi:chevron-up" aria-hidden="true"></iswc-icon>
           </button>
         </header>
         <div
@@ -122,11 +122,11 @@ interface ApplyActiveOptions { emit?: boolean; previousIndex?: number; }
   const ACCORDIONS = new Set(['auto', 'open', 'closed']);
   type Placement = 'left' | 'right' | 'bottom';
   type Accordion = 'auto' | 'open' | 'closed';
-  const posterCache = new WeakMap<IsVideo, string>();
+  const posterCache = new WeakMap<IswcVideo, string>();
 
   /** Botón por defecto de la barra de herramientas (light DOM, proyectado). */
   function makeTool(cls: string, slot: string, label: string, html: string, onClick: () => void): HTMLElement {
-    const btn = document.createElement('is-button') as HTMLElement;
+    const btn = document.createElement('iswc-button') as HTMLElement;
     btn.className = `vp-default ${cls}`;
     btn.setAttribute('slot', slot);
     btn.setAttribute('variant', 'text');
@@ -147,20 +147,20 @@ interface ApplyActiveOptions { emit?: boolean; previousIndex?: number; }
     return h > 0 ? `${h}:${pad(m)}:${pad(s)}` : `${m}:${pad(s)}`;
   }
 
-  function videoTitle(v: IsVideo, i: number): string {
+  function videoTitle(v: IswcVideo, i: number): string {
     const t = (v.getAttribute('title') || v.title || '').trim();
     return t || `Video ${i + 1}`;
   }
 
-  function videoChannel(v: IsVideo): string {
+  function videoChannel(v: IswcVideo): string {
     return (v.getAttribute('channel') || v.getAttribute('data-channel') || '').trim();
   }
 
-  function videoPosterAttr(v: IsVideo): string {
+  function videoPosterAttr(v: IswcVideo): string {
     return (v.getAttribute('poster') || '').trim();
   }
 
-  function capturePoster(v: IsVideo): string {
+  function capturePoster(v: IswcVideo): string {
     const cached = posterCache.get(v);
     if (cached !== undefined) return cached;
     const media = v.media;
@@ -182,11 +182,11 @@ interface ApplyActiveOptions { emit?: boolean; previousIndex?: number; }
     }
   }
 
-  function videoPoster(v: IsVideo): string {
+  function videoPoster(v: IswcVideo): string {
     return videoPosterAttr(v) || capturePoster(v);
   }
 
-  function videoDuration(v: IsVideo): string {
+  function videoDuration(v: IswcVideo): string {
     const media = v.media;
     if (media && Number.isFinite(media.duration) && media.duration > 0) {
       return fmtTime(media.duration);
@@ -195,7 +195,7 @@ interface ApplyActiveOptions { emit?: boolean; previousIndex?: number; }
     return attr ? attr.trim() : '';
   }
 
-  class IsVideoPlaylist extends withStyleAttrs(HTMLElement) {
+  class IswcVideoPlaylist extends withStyleAttrs(HTMLElement) {
     /** Personalización por atributo (ver `core/attrs.ts`). */
     static styleAttrs = {
     radius: '--iswc-video-playlist-radius',
@@ -225,7 +225,7 @@ interface ApplyActiveOptions { emit?: boolean; previousIndex?: number; }
     #index = 0;
     #mounted = false;
     #boundEnded: ((e: Event) => void) | null = null;
-    #metaHandlers = new WeakMap<IsVideo, () => void>();
+    #metaHandlers = new WeakMap<IswcVideo, () => void>();
     #attrObs: MutationObserver | null = null;
     #mediaObs: MediaObsBag | null = null;
     #seeking = false;
@@ -248,8 +248,8 @@ interface ApplyActiveOptions { emit?: boolean; previousIndex?: number; }
       this.#timeEl = shadow.querySelector<HTMLElement>('.vp-time')!;
       this.#muteBtn = shadow.querySelector<HTMLElement>('.vp-mute')!;
       this.#volumeEl = shadow.querySelector<HTMLInputElement>('.vp-volume')!;
-      this.#playIcon = this.#playBtn.querySelector<HTMLElement>('is-icon')!;
-      this.#muteIcon = this.#muteBtn.querySelector<HTMLElement>('is-icon')!;
+      this.#playIcon = this.#playBtn.querySelector<HTMLElement>('iswc-icon')!;
+      this.#muteIcon = this.#muteBtn.querySelector<HTMLElement>('iswc-icon')!;
 
       this.#slot.addEventListener('slotchange', () => this.#refresh());
       this.#listEl.addEventListener('click', this.#onListClick);
@@ -385,13 +385,13 @@ interface ApplyActiveOptions { emit?: boolean; previousIndex?: number; }
 
     get index(): number { return this.#index; }
 
-    get videos(): IsVideo[] {
+    get videos(): IswcVideo[] {
       return this.#slot.assignedElements({ flatten: true }).filter(
-        (el): el is IsVideo => el.localName === 'is-video'
+        (el): el is IswcVideo => el.localName === 'iswc-video'
       );
     }
 
-    get #active(): IsVideo | undefined {
+    get #active(): IswcVideo | undefined {
       const list = this.videos;
       return list[this.#index];
     }
@@ -448,7 +448,7 @@ interface ApplyActiveOptions { emit?: boolean; previousIndex?: number; }
       this.#accordionOpen = open;
       this.#root.dataset.accordion = open ? 'open' : 'closed';
       this.#toggleBtn.setAttribute('aria-expanded', String(open));
-      const icon = this.#toggleBtn.querySelector<HTMLElement>('is-icon');
+      const icon = this.#toggleBtn.querySelector<HTMLElement>('iswc-icon');
       if (icon) icon.setAttribute('icon', open ? 'mdi:chevron-up' : 'mdi:chevron-down');
     }
 
@@ -475,18 +475,18 @@ interface ApplyActiveOptions { emit?: boolean; previousIndex?: number; }
       // Solo añadimos los defaults que falten.
       if (this.#toolLeftChildren().length === 0) {
         this.appendChild(makeTool('vp-first', 'tools-left', 'Primero',
-          '<is-icon icon="mdi:skip-backward" aria-hidden="true"></is-icon>',
+          '<iswc-icon icon="mdi:skip-backward" aria-hidden="true"></iswc-icon>',
           () => this.goTo(0)));
         this.appendChild(makeTool('vp-prev', 'tools-left', 'Anterior',
-          '<is-icon icon="mdi:skip-previous" aria-hidden="true"></is-icon>',
+          '<iswc-icon icon="mdi:skip-previous" aria-hidden="true"></iswc-icon>',
           () => this.previous()));
         this.appendChild(makeTool('vp-next', 'tools-left', 'Siguiente',
-          '<is-icon icon="mdi:skip-next" aria-hidden="true"></is-icon>',
+          '<iswc-icon icon="mdi:skip-next" aria-hidden="true"></iswc-icon>',
           () => this.next()));
       }
       if (this.#toolRightChildren().length === 0) {
         const autoplay = makeTool('vp-autoplay', 'tools-right', 'Autoplay', `
-          <is-icon icon="mdi:playlist-play" aria-hidden="true"></is-icon>
+          <iswc-icon icon="mdi:playlist-play" aria-hidden="true"></iswc-icon>
           <span class="vp-autoplay__label">Autoplay</span>
         `, () => { this.autoplayNext = !this.autoplayNext; });
         // F0.3 g12 [a11y/toggle]: aria-label dinámico para que el reader
@@ -571,12 +571,12 @@ interface ApplyActiveOptions { emit?: boolean; previousIndex?: number; }
       };
       for (const v of list) {
         const active = v;
-        v.addEventListener('is-ended', this.#boundEnded);
-        // F0.3 g12 [media/loading]: propaga el busy/error del <is-video>
+        v.addEventListener('iswc-ended', this.#boundEnded);
+        // F0.3 g12 [media/loading]: propaga el busy/error del <iswc-video>
         // hijo al host para que aria-busy a nivel playlist sea coherente.
-        v.addEventListener('is-error', this.#onChildError as EventListener);
-        v.addEventListener('is-play', this.#onChildMediaEvent);
-        v.addEventListener('is-pause', this.#onChildMediaEvent);
+        v.addEventListener('iswc-error', this.#onChildError as EventListener);
+        v.addEventListener('iswc-play', this.#onChildMediaEvent);
+        v.addEventListener('iswc-pause', this.#onChildMediaEvent);
         const onMeta = (): void => {
           try {
             const media = v.media;
@@ -614,8 +614,8 @@ interface ApplyActiveOptions { emit?: boolean; previousIndex?: number; }
         v.media?.addEventListener('timeupdate', onTime);
         v.media?.addEventListener('loadedmetadata', onTime);
         v.media?.addEventListener('volumechange', onVol);
-        v.addEventListener('is-play', onPlay);
-        v.addEventListener('is-pause', onPlay);
+        v.addEventListener('iswc-play', onPlay);
+        v.addEventListener('iswc-pause', onPlay);
       }
       this.#syncActiveMediaState();
     }
@@ -623,10 +623,10 @@ interface ApplyActiveOptions { emit?: boolean; previousIndex?: number; }
     #unbindVideos(): void {
       if (this.#boundEnded) {
         for (const v of this.videos) {
-          v.removeEventListener('is-ended', this.#boundEnded);
-          v.removeEventListener('is-error', this.#onChildError as EventListener);
-          v.removeEventListener('is-play', this.#onChildMediaEvent);
-          v.removeEventListener('is-pause', this.#onChildMediaEvent);
+          v.removeEventListener('iswc-ended', this.#boundEnded);
+          v.removeEventListener('iswc-error', this.#onChildError as EventListener);
+          v.removeEventListener('iswc-play', this.#onChildMediaEvent);
+          v.removeEventListener('iswc-pause', this.#onChildMediaEvent);
           const onMeta = this.#metaHandlers.get(v);
           if (onMeta) {
             v.media?.removeEventListener('loadedmetadata', onMeta);
@@ -639,18 +639,18 @@ interface ApplyActiveOptions { emit?: boolean; previousIndex?: number; }
     }
 
     /**
-     * F0.3 g12 [media/error-state]: si el <is-video> hijo falla, marcamos
-     * `aria-invalid` en su item de playlist y emitimos `is-error` arriba.
+     * F0.3 g12 [media/error-state]: si el <iswc-video> hijo falla, marcamos
+     * `aria-invalid` en su item de playlist y emitimos `iswc-error` arriba.
      */
     #onChildError = (e: CustomEvent<{ code: number; message: string }>): void => {
-      const video = e.target as IsVideo | null;
+      const video = e.target as IswcVideo | null;
       if (!video) return;
       const i = this.videos.indexOf(video);
       if (i >= 0) {
         const item = this.#listEl.querySelector<HTMLElement>(`[data-index="${i}"]`);
         item?.setAttribute('aria-invalid', 'true');
       }
-      emit(this, 'is-error', { ...(e.detail ?? {}), index: i });
+      emit(this, 'iswc-error', { ...(e.detail ?? {}), index: i });
     };
 
     #onChildMediaEvent = (): void => {
@@ -704,19 +704,19 @@ interface ApplyActiveOptions { emit?: boolean; previousIndex?: number; }
         v.style.opacity = on ? '1' : '0';
         v.style.pointerEvents = on ? 'auto' : 'none';
         v.style.zIndex = on ? '1' : '0';
-        // Desactivamos la barra de controles nativa del <is-video>; el
+        // Desactivamos la barra de controles nativa del <iswc-video>; el
         // playlist muestra su propia barra (player-toolbar) encima.
         v.setAttribute('without-controls', '');
         if (!on) v.pause?.();
       });
       if (emitEvent) {
         const video = list[this.#index];
-        emit(this, 'is-video-change', { previousIndex, currentIndex: this.#index, video });
-        emit(this, 'is-change', { index: this.#index });
+        emit(this, 'iswc-video-change', { previousIndex, currentIndex: this.#index, video });
+        emit(this, 'iswc-change', { index: this.#index });
       }
     }
 
-    /** Sincroniza los controles del player-toolbar con el media del is-video activo. */
+    /** Sincroniza los controles del player-toolbar con el media del iswc-video activo. */
     #syncActiveMediaState(): void {
       const active = this.#active;
       const media = active?.media;
@@ -837,7 +837,7 @@ interface ApplyActiveOptions { emit?: boolean; previousIndex?: number; }
         idx.className = 'playlist-item-index';
         idx.setAttribute('aria-hidden', 'true');
         if (active) {
-          const ico = document.createElement('is-icon');
+          const ico = document.createElement('iswc-icon');
           ico.setAttribute('icon', 'mdi:play');
           idx.appendChild(ico);
         } else {
@@ -905,12 +905,12 @@ interface ApplyActiveOptions { emit?: boolean; previousIndex?: number; }
       ph.className = 'playlist-thumbnail playlist-thumbnail-placeholder';
       ph.setAttribute('part', 'playlist-thumbnail');
       ph.setAttribute('aria-hidden', 'true');
-      const ico = document.createElement('is-icon');
+      const ico = document.createElement('iswc-icon');
       ico.setAttribute('icon', 'mdi:play-circle-outline');
       ph.appendChild(ico);
       return ph;
     }
   }
 
-  defineElement('is-video-playlist', IsVideoPlaylist, 'IsVideoPlaylist');
+  defineElement('iswc-video-playlist', IswcVideoPlaylist, 'IswcVideoPlaylist');
 })();

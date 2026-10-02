@@ -9,10 +9,10 @@
  *   1. El usuario hace doble-click en un nodo del editor → el editor llama
  *      a `openNestingModal(host, childSpec, currentDepth, maxDepth)`.
  *   2. Esta función crea un `<div>` overlay + un editor del mismo tipo (mismo
- *      tag que el host, e.g. `<is-mindmap-editor>` dentro de un
- *      `<is-mindmap-editor>`).
+ *      tag que el host, e.g. `<iswc-mindmap-editor>` dentro de un
+ *      `<iswc-mindmap-editor>`).
  *   3. El editor hijo reusa toda la lógica de la base (toolbar/panel/eventos).
- *   4. Al hacer Escape, click en backdrop, o evento `is-editor-close` del hijo,
+ *   4. Al hacer Escape, click en backdrop, o evento `iswc-editor-close` del hijo,
  *      el modal se desmonta y devuelve control al padre.
  *
  * Profundidad: se mide como `currentDepth + 1` al abrir y se limita a
@@ -24,8 +24,8 @@
  *   - Default: 200ms crossfade + slight scale-in. Sin animaciones de SVG.
  *
  * Eventos del modal:
- *   - `is-editor-nesting-open` (detail: { depth, childTag })
- *   - `is-editor-nesting-close` (detail: { depth, cancelled: boolean })
+ *   - `iswc-editor-nesting-open` (detail: { depth, childTag })
+ *   - `iswc-editor-nesting-close` (detail: { depth, cancelled: boolean })
  *
  * Cleanup:
  *   - Al cerrar: backdrop element removed, child editor disconnected, todos
@@ -38,9 +38,9 @@ import { emit } from '../../core/element.js';
 export const NESTING_DEFAULT_MAX_DEPTH = 5;
 
 /** Eventos emitidos por el sistema de nesting. */
-export const NESTING_OPEN_EVENT = 'is-editor-nesting-open';
-export const NESTING_CLOSE_EVENT = 'is-editor-nesting-close';
-export const NESTING_REMOTE_CLOSE_EVENT = 'is-editor-close';
+export const NESTING_OPEN_EVENT = 'iswc-editor-nesting-open';
+export const NESTING_CLOSE_EVENT = 'iswc-editor-nesting-close';
+export const NESTING_REMOTE_CLOSE_EVENT = 'iswc-editor-close';
 
 export interface NestingOpenDetail {
   depth: number;
@@ -66,7 +66,7 @@ export interface NestingOptions {
 }
 
 const NESTING_CSS = `
-.is-nesting-backdrop {
+.iswc-nesting-backdrop {
   position: fixed;
   inset: 0;
   background: rgba(0,0,0,0.55);
@@ -76,8 +76,8 @@ const NESTING_CSS = `
   /* prefers-reduced-motion disables transition */
   transition: opacity 200ms ease-out;
 }
-.is-nesting-backdrop[data-reduced] { transition: none; }
-.is-nesting-modal {
+.iswc-nesting-backdrop[data-reduced] { transition: none; }
+.iswc-nesting-modal {
   position: relative;
   width: min(90vw, 1100px);
   height: min(85vh, 800px);
@@ -89,13 +89,13 @@ const NESTING_CSS = `
   display: flex;
   flex-direction: column;
 }
-.is-nesting-modal[data-reduced] { transform: none; }
-.is-nesting-modal {
+.iswc-nesting-modal[data-reduced] { transform: none; }
+.iswc-nesting-modal {
   transform: scale(0.96);
   transition: transform 200ms ease-out;
 }
-.is-nesting-modal.is-shown { transform: scale(1); }
-.is-nesting-toolbar {
+.iswc-nesting-modal.iswc-shown { transform: scale(1); }
+.iswc-nesting-toolbar {
   display: flex;
   align-items: center;
   gap: 8px;
@@ -106,11 +106,11 @@ const NESTING_CSS = `
   color: var(--iswc-text, #e2e8f0);
   font-size: 12px;
 }
-.is-nesting-toolbar .crumbs {
+.iswc-nesting-toolbar .crumbs {
   flex: 1;
   font-weight: 600;
 }
-.is-nesting-toolbar button {
+.iswc-nesting-toolbar button {
   appearance: none;
   border: 1px solid var(--iswc-border, rgba(255,255,255,0.18));
   background: transparent;
@@ -120,9 +120,9 @@ const NESTING_CSS = `
   cursor: pointer;
   font: 11px var(--iswc-ui, ui-sans-serif, system-ui, sans-serif);
 }
-.is-nesting-toolbar button:hover { background: rgba(255,255,255,0.06); }
-.is-nesting-toolbar button:focus-visible { outline: 2px solid var(--iswc-accent, #2563eb); outline-offset: 1px; }
-.is-nesting-host { flex: 1; min-height: 0; padding: 8px; box-sizing: border-box; }
+.iswc-nesting-toolbar button:hover { background: rgba(255,255,255,0.06); }
+.iswc-nesting-toolbar button:focus-visible { outline: 2px solid var(--iswc-accent, #2563eb); outline-offset: 1px; }
+.iswc-nesting-host { flex: 1; min-height: 0; padding: 8px; box-sizing: border-box; }
 `;
 
 /** Devuelve true si el editor puede anidar (depth actual + 1 ≤ max). */
@@ -154,7 +154,7 @@ export function openNestingModal(host: HTMLElement, childSpec: unknown, opts: Ne
 
   // Backdrop overlay
   const backdrop = document.createElement('div');
-  backdrop.className = 'is-nesting-backdrop';
+  backdrop.className = 'iswc-nesting-backdrop';
   if (reduced) backdrop.setAttribute('data-reduced', '');
   backdrop.style.opacity = '0';
   backdrop.setAttribute('role', 'dialog');
@@ -162,12 +162,12 @@ export function openNestingModal(host: HTMLElement, childSpec: unknown, opts: Ne
   backdrop.setAttribute('aria-label', `Nivel ${current + 1} de ${max}: ${childTag}`);
 
   const modal = document.createElement('div');
-  modal.className = 'is-nesting-modal';
+  modal.className = 'iswc-nesting-modal';
   if (reduced) modal.setAttribute('data-reduced', '');
   backdrop.appendChild(modal);
 
   const tb = document.createElement('div');
-  tb.className = 'is-nesting-toolbar';
+  tb.className = 'iswc-nesting-toolbar';
   const crumbs = document.createElement('span');
   crumbs.className = 'crumbs';
   crumbs.textContent = `Nivel ${current + 1} / ${max} — ${childTag}`;
@@ -182,13 +182,13 @@ export function openNestingModal(host: HTMLElement, childSpec: unknown, opts: Ne
 
   // Host del editor hijo
   const childHost = document.createElement('div');
-  childHost.className = 'is-nesting-host';
+  childHost.className = 'iswc-nesting-host';
   modal.appendChild(childHost);
 
   // Estilos (los inyectamos una sola vez)
-  if (typeof document !== 'undefined' && !document.getElementById('is-nesting-style')) {
+  if (typeof document !== 'undefined' && !document.getElementById('iswc-nesting-style')) {
     const s = document.createElement('style');
-    s.id = 'is-nesting-style';
+    s.id = 'iswc-nesting-style';
     s.textContent = NESTING_CSS;
     document.head.appendChild(s);
   }
@@ -230,7 +230,7 @@ export function openNestingModal(host: HTMLElement, childSpec: unknown, opts: Ne
     if (ev.target === backdrop) closeModal(backdrop, current, true);
   });
 
-  // Si el editor hijo emite `is-editor-close`, también cerramos.
+  // Si el editor hijo emite `iswc-editor-close`, también cerramos.
   if (childEl) {
     childEl.addEventListener(NESTING_REMOTE_CLOSE_EVENT, () => {
       closeModal(backdrop, current, false);
@@ -242,7 +242,7 @@ export function openNestingModal(host: HTMLElement, childSpec: unknown, opts: Ne
   // Crossfade: forzar reflow antes de pasar a opacity=1.
   void backdrop.offsetWidth;
   backdrop.style.opacity = '1';
-  modal.classList.add('is-shown');
+  modal.classList.add('iswc-shown');
   emit(host, NESTING_OPEN_EVENT, {
     depth: current + 1,
     childTag,

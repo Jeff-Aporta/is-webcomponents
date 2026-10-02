@@ -90,8 +90,8 @@ textarea.demo-native-field {
   font-size: 0.68rem;
   color: var(--iswc-text-dim);
 }
-.demo-locale-card is-format-date,
-.demo-locale-card is-relative-time {
+.demo-locale-card iswc-format-date,
+.demo-locale-card iswc-relative-time {
   font-size: 0.92rem;
   color: var(--iswc-text-soft);
 }
@@ -245,7 +245,7 @@ textarea.demo-native-field {
   gap: 16px;
   margin: 14px 0 28px;
 }
-.card-grid > is-card { align-self: stretch; }
+.card-grid > iswc-card { align-self: stretch; }
 .card-meta {
   font-size: 0.85rem;
   color: var(--iswc-text-soft);

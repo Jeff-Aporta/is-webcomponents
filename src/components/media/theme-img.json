@@ -1,10 +1,10 @@
 {
-  "$schema": "is-preview/v1",
-  "tag": "is-theme-img",
+  "$schema": "iswc-preview/v1",
+  "tag": "iswc-theme-img",
   "category": "media",
-  "title": "<is-theme-img>",
+  "title": "<iswc-theme-img>",
   "titleHtml": true,
-  "storageKey": "docs-is-theme-img",
+  "storageKey": "docs-iswc-theme-img",
   "sections": [
     {
       "id": "intro",
@@ -13,7 +13,7 @@
       "blocks": [
         {
           "kind": "demo",
-          "html": "<div class=\"demo-row\" style=\"align-items:center;gap:1.25rem;flex-wrap:wrap;font-size:3rem\">\n            <is-theme-img\n              src-dark=\"https://cdn.jsdelivr.net/gh/Jeff-Aporta/is-webcomponents@main/docs/favicon.svg\"\n              src-light=\"https://cdn.jsdelivr.net/gh/Jeff-Aporta/is-webcomponents@main/docs/favicon.svg\"\n              alt=\"Demo\"\n              shape=\"circle\"\n            ></is-theme-img>\n            <span style=\"font-size:0.35em;opacity:.7\">cambia el theme-toggle del chrome</span>\n          </div>",
+          "html": "<div class=\"demo-row\" style=\"align-items:center;gap:1.25rem;flex-wrap:wrap;font-size:3rem\">\n            <iswc-theme-img\n              src-dark=\"https://cdn.jsdelivr.net/gh/Jeff-Aporta/is-webcomponents@main/docs/favicon.svg\"\n              src-light=\"https://cdn.jsdelivr.net/gh/Jeff-Aporta/is-webcomponents@main/docs/favicon.svg\"\n              alt=\"Demo\"\n              shape=\"circle\"\n            ></iswc-theme-img>\n            <span style=\"font-size:0.35em;opacity:.7\">cambia el theme-toggle del chrome</span>\n          </div>",
           "controls": [
             {
               "control": "text",
@@ -24,7 +24,7 @@
         },
         {
           "kind": "code",
-          "code": "<span style=\"font-size:2rem\">\n  <is-theme-img\n    src-dark=\"./logo-dark.svg\"\n    src-light=\"./logo-light.svg\"\n    alt=\"Marca\"\n    shape=\"circle\"\n  ></is-theme-img>\n</span>"
+          "code": "<span style=\"font-size:2rem\">\n  <iswc-theme-img\n    src-dark=\"./logo-dark.svg\"\n    src-light=\"./logo-light.svg\"\n    alt=\"Marca\"\n    shape=\"circle\"\n  ></iswc-theme-img>\n</span>"
         }
       ]
     }

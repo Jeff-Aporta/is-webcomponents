@@ -1,6 +1,6 @@
 // tests/toast-promise.test.ts
 //
-// Verifica que <is-toast> expone el patrón Promise estilo react-hot-toast:
+// Verifica que <iswc-toast> expone el patrón Promise estilo react-hot-toast:
 //   toaster.promise(p, { loading, success, error })
 //
 // Cobertura:
@@ -54,7 +54,7 @@ check(/update\(item/.test(toastJs),
 
 // ─── toast-item.css: spinner animation ──────────────────────────────────────
 
-check(/is-toast-spin/.test(toastCss) || /@keyframes.*spin/.test(toastCss),
+check(/iswc-toast-spin/.test(toastCss) || /@keyframes.*spin/.test(toastCss),
   'toast-item.css: debe definir la animación de spinner');
 
 // Respeta prefers-reduced-motion.
@@ -82,8 +82,8 @@ check(/toaster\.promise\(/.test(preview),
 
 check(/slot name="caption"/.test(toastItemJs),
   'toast-item: slot caption bajo el título');
-check(/#copyPayload\(/.test(toastItemJs) && /is-after-show/.test(toastItemJs),
-  'toast-item: is-after-show lleva { color, message, caption, log }');
+check(/#copyPayload\(/.test(toastItemJs) && /iswc-after-show/.test(toastItemJs),
+  'toast-item: iswc-after-show lleva { color, message, caption, log }');
 check(/caption/.test(toastJs) && /item\.log = options\.log/.test(toastJs),
   'toast.create: options.caption y options.log');
 check(/:host\(:has\(\[slot="caption"\]\)\)/.test(toastCss),

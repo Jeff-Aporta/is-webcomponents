@@ -3,7 +3,7 @@
 <head>
 <meta charset="utf-8" />
 <meta name="viewport" content="width=device-width, initial-scale=1" />
-<title>Demo — <is-block-diagram> · is-webcomponents</title>
+<title>Demo — <iswc-block-diagram> · is-webcomponents</title>
 <meta name="description" content="Diagrama de bloques (rejilla + aristas A*) sin Mermaid. Mismo esqueleto que el flowchart pero con layout en columnas." />
 <style>
   html, body { margin: 0; padding: 0; min-height: 100%; background: #0c1118; color: #e2e8f0; font-family: ui-sans-serif, system-ui, sans-serif; }
@@ -12,15 +12,15 @@
   header h1 { font-size: 16px; font-weight: 700; margin: 0; }
   header p { font-size: 12px; color: #94a3b8; margin: 4px 0 0 0; }
   main { display: grid; place-items: stretch; min-height: 0; padding: 12px; }
-  is-block-diagram { width: 100%; height: 100%; min-height: 480px; display: block; }
-  is-block-diagram:not(:defined) { visibility: hidden; }
+  iswc-block-diagram { width: 100%; height: 100%; min-height: 480px; display: block; }
+  iswc-block-diagram:not(:defined) { visibility: hidden; }
 </style>
 <script type="module">
   // Cargar el bundle pre-construido (compatible con cualquier servidor estático).
-  await import('../../../dist/cdn/diagrams/block-diagram.min.js?h=nwbxuu');
-  await customElements.whenDefined('is-block-diagram');
+  await import('../../../dist/cdn/diagrams/block-diagram.min.js?h=v00f20');
+  await customElements.whenDefined('iswc-block-diagram');
 
-  const el = document.createElement('is-block-diagram');
+  const el = document.createElement('iswc-block-diagram');
   el.payload = {
     blockDiagram: {
       title: 'Pipeline de procesamiento',
@@ -50,7 +50,7 @@
 </head>
 <body>
   <header>
-    <h1>Demo — <code>&lt;is-block-diagram&gt;</code></h1>
+    <h1>Demo — <code>&lt;iswc-block-diagram&gt;</code></h1>
     <p>Layout en rejilla explícita (no node-link). Aristas ruteadas con A* sobre rejilla de costos.</p>
   </header>
   <main></main>

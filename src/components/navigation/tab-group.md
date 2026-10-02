@@ -1,16 +1,16 @@
 ---
-tag: is-tab-group
+tag: iswc-tab-group
 tags:
-  - is-tab-group
-  - is-tab
-  - is-tab-panel
+  - iswc-tab-group
+  - iswc-tab
+  - iswc-tab-panel
 category: navigation
 status: public
 source: ./tab-group.js
 style: ./tab-group.css
 preview: ./tab-group.json
 ---
-# `<is-tab-group>` / `<is-tab>` / `<is-tab-panel>`
+# `<iswc-tab-group>` / `<iswc-tab>` / `<iswc-tab-panel>`
 
 ## Propósito
 
@@ -18,7 +18,7 @@ Tabs accesibles con navegación por teclado (←/→), activación automática o
 manual, indicator animado, placements (top/bottom/start/end), scroll horizontal
 automático y soporte para tabs cerrables.
 
-Este módulo registra `<is-tab-group>`, `<is-tab>`, `<is-tab-panel>`.
+Este módulo registra `<iswc-tab-group>`, `<iswc-tab>`, `<iswc-tab-panel>`.
 
 ## Cuándo usarlo
 
@@ -37,11 +37,11 @@ import './tab-group.js';
 ## Ejemplo mínimo
 
 ```html
-<is-tab-group active="general">
-<is-tab slot="nav" panel="general">General</is-tab>
-<is-tab-panel name="general">Contenido del panel.</is-tab-panel>
+<iswc-tab-group active="general">
+<iswc-tab slot="nav" panel="general">General</iswc-tab>
+<iswc-tab-panel name="general">Contenido del panel.</iswc-tab-panel>
 …
-</is-tab-group>
+</iswc-tab-group>
 ```
 
 ## API
@@ -86,9 +86,9 @@ import './tab-group.js';
 
 | Evento | detail | bubbles | composed | cancelable |
 | --- | --- | --- | --- | --- |
-| `is-tab-show` | sí | sí | sí | no |
-| `is-tab-close` | sí | sí | sí | no |
-| `is-tab-hide` | según cabecera | según cabecera | según cabecera | según cabecera |
+| `iswc-tab-show` | sí | sí | sí | no |
+| `iswc-tab-close` | sí | sí | sí | no |
+| `iswc-tab-hide` | según cabecera | según cabecera | según cabecera | según cabecera |
 
 ### Métodos y propiedades públicas
 
@@ -142,51 +142,51 @@ No declara integración form-associated propia en este módulo.
 
 Documentación de cabecera preservada desde fuente:
 
-> <is-tab-group>, <is-tab>, <is-tab-panel> — Web Components (vanilla, zero dependencies).
+> <iswc-tab-group>, <iswc-tab>, <iswc-tab-panel> — Web Components (vanilla, zero dependencies).
 > Tres componentes cohabitantes:
->   <is-tab-group active="general" placement="top" activation="auto">
->     <is-tab slot="nav" panel="general">General</is-tab>
->     <is-tab slot="nav" panel="custom" disabled>Custom</is-tab>
->     <is-tab-panel name="general">…</is-tab-panel>
->     <is-tab-panel name="custom">…</is-tab-panel>
->   </is-tab-group>
-> Atributos <is-tab-group>
+>   <iswc-tab-group active="general" placement="top" activation="auto">
+>     <iswc-tab slot="nav" panel="general">General</iswc-tab>
+>     <iswc-tab slot="nav" panel="custom" disabled>Custom</iswc-tab>
+>     <iswc-tab-panel name="general">…</iswc-tab-panel>
+>     <iswc-tab-panel name="custom">…</iswc-tab-panel>
+>   </iswc-tab-group>
+> Atributos <iswc-tab-group>
 >   active        string   — nombre del panel activo.
 >   placement     top | bottom | start | end  (default 'top')
 >   activation    auto | manual (default 'auto')
 >   without-scroll-controls  boolean (default false)
 >   url-key       string   — opt-in: tab activo en ?s= como { [url-key]: panel }
-> Atributos <is-tab>
+> Atributos <iswc-tab>
 >   panel         string   — nombre del panel al que apunta (required).
 >   disabled      boolean
 >   closable      boolean  — muestra un botón de cerrar (slot close-button).
-> Atributos <is-tab-panel>
+> Atributos <iswc-tab-panel>
 >   name          string   — id único dentro del tab-group (required).
 > Slots
->   <is-tab-group>
+>   <iswc-tab-group>
 >     nav        — tabs (se proyectan automáticamente).
 >     (default)  — paneles.
->   <is-tab>
+>   <iswc-tab>
 >     (default)   label del tab.
 >     start       icono al inicio.
 >     end         icono al final.
 >     close-button  botón de cerrar (cuando closable).
->   <is-tab-panel>
+>   <iswc-tab-panel>
 >     (default)  contenido del panel.
 > Eventos
->   is-tab-show   detail: { name, panel, tab } — al activar un panel.
->   is-tab-hide   detail: { name, panel, tab } — al ocultar un panel.
->   is-tab-close  detail: { tab, name }  — cuando se hace click en el close-btn de un is-tab closable.
+>   iswc-tab-show   detail: { name, panel, tab } — al activar un panel.
+>   iswc-tab-hide   detail: { name, panel, tab } — al ocultar un panel.
+>   iswc-tab-close  detail: { tab, name }  — cuando se hace click en el close-btn de un iswc-tab closable.
 > CSS Parts
->   is-tab-group: ::part(tab-group) ::part(nav) ::part(body) ::part(tabs)
->   is-tab: ::part(base) ::part(active-indicator)
->   is-tab-panel: ::part(base)
+>   iswc-tab-group: ::part(tab-group) ::part(nav) ::part(body) ::part(tabs)
+>   iswc-tab: ::part(base) ::part(active-indicator)
+>   iswc-tab-panel: ::part(base)
 
 ## Dependencias y componentes relacionados
 
 - [`../_shared/adopt-css.js`](../_shared/adopt-css.js)
 
-Tags del módulo: `<is-tab-group>`, `<is-tab>`, `<is-tab-panel>`.
+Tags del módulo: `<iswc-tab-group>`, `<iswc-tab>`, `<iswc-tab-panel>`.
 
 ## Accesibilidad
 
@@ -195,7 +195,7 @@ Preservar semántica, foco, teclado, labels y ARIA. ARIA detectado: `aria-label`
 ## Ejemplo avanzado
 
 ```html
-<is-tab-group activation="manual">…</is-tab-group>
+<iswc-tab-group activation="manual">…</iswc-tab-group>
 ```
 
 ## Errores comunes

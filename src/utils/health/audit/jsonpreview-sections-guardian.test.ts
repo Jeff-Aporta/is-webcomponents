@@ -1,7 +1,7 @@
 // jsonpreview-sections-guardian.test.ts — Guardian del bug §3.A del handoff.
 //
 // Síntoma: el sitio renderiza vacío en casi todos los demos (salvo los que tienen
-// un behavior que pinte algo por su cuenta, como is-button).
+// un behavior que pinte algo por su cuenta, como iswc-button).
 //
 // Causa raíz confirmada: JsonPreview.constructor sobreescribía `sections: []`
 // literal, pisando las sections que registry.ts había cargado del JSON.
@@ -27,8 +27,8 @@ const RAIZ = join(__filename, '..', '..', '..', '..', '..');
 
 test('JsonPreview preserva las sections del definition (runtime)', () => {
   const definition = {
-    tag: 'is-fake-test',
-    $schema: 'is-preview/v1',
+    tag: 'iswc-fake-test',
+    $schema: 'iswc-preview/v1',
     category: 'test',
     sections: [
       { id: 'intro', blocks: [] },
@@ -52,8 +52,8 @@ test('JsonPreview preserva las sections del definition (runtime)', () => {
 
 test('JsonPreview conserva prelude, mainClass, styles del definition', () => {
   const definition = {
-    tag: 'is-fake-test-2',
-    $schema: 'is-preview/v1',
+    tag: 'iswc-fake-test-2',
+    $schema: 'iswc-preview/v1',
     category: 'test',
     prelude: '<style>:root { --x: red; }</style>',
     mainClass: 'preview-main demo-page',

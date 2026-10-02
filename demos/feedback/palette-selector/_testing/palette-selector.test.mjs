@@ -1,6 +1,6 @@
-// palette-selector.test.mjs — tests exhaustivos del demo is-palette-selector.
+// palette-selector.test.mjs — tests exhaustivos del demo iswc-palette-selector.
 // Cobertura: smoke + funcional (default palettes, custom palettes via JSON,
-// persistencia localStorage, evento is-palette-change) + focus mgmt +
+// persistencia localStorage, evento iswc-palette-change) + focus mgmt +
 // accesibilidad básica.
 import assert from 'node:assert/strict';
 import { BASE_URL, newPage, close, waitReady, screenshot, report } from './lib/harness.mjs';
@@ -15,17 +15,17 @@ tests.push({
     await page.goto(URL, { waitUntil: 'domcontentloaded' });
     await waitReady(page, 'data-palette-selector-ready');
     const data = await page.evaluate(() => {
-      const sel = document.querySelector('is-palette-selector');
+      const sel = document.querySelector('iswc-palette-selector');
       const root = sel.shadowRoot;
       const opts = root.querySelectorAll('[role="option"]');
       return {
-        defined: !!customElements.get('is-palette-selector'),
+        defined: !!customElements.get('iswc-palette-selector'),
         palettes: sel.palettes,
         optionCount: opts.length,
         values: [...opts].map((o) => o.dataset.palette),
       };
     });
-    assert.equal(data.defined, true, 'is-palette-selector debe estar definido');
+    assert.equal(data.defined, true, 'iswc-palette-selector debe estar definido');
     assert.equal(data.optionCount, 3, `esperaba 3 paletas por defecto, hay ${data.optionCount}`);
     for (const v of ['contapyme', 'insoft', 'agrowin']) {
       assert.ok(data.values.includes(v), `paleta por defecto "${v}" debe estar presente, vi ${JSON.stringify(data.values)}`);
@@ -45,23 +45,23 @@ tests.push({
 });
 
 tests.push({
-  name: 'funcional: cambiar paleta emite is-palette-change y actualiza <html>',
+  name: 'funcional: cambiar paleta emite iswc-palette-change y actualiza <html>',
   run: async (page) => {
     await page.goto(URL, { waitUntil: 'domcontentloaded' });
     await waitReady(page, 'data-palette-selector-ready');
     await page.waitForTimeout(100);
     // Limpia localStorage previo para empezar limpio.
-    await page.evaluate(() => localStorage.removeItem('is-palette'));
+    await page.evaluate(() => localStorage.removeItem('iswc-palette'));
     const after = await page.evaluate(async () => {
-      const sel = document.querySelector('is-palette-selector');
+      const sel = document.querySelector('iswc-palette-selector');
       let captured = null;
-      sel.addEventListener('is-palette-change', (e) => { captured = e.detail; });
+      sel.addEventListener('iswc-palette-change', (e) => { captured = e.detail; });
       sel.value = 'insoft';
       await new Promise((r) => setTimeout(r, 50));
       return {
         captured,
         htmlAttr: document.documentElement.dataset.palette,
-        stored: localStorage.getItem('is-palette'),
+        stored: localStorage.getItem('iswc-palette'),
       };
     });
     assert.equal(after.captured?.value, 'insoft', `evento debe llevar value=insoft (vimos "${after.captured?.value}")`);
@@ -97,7 +97,7 @@ tests.push({
     await page.goto(URL, { waitUntil: 'domcontentloaded' });
     await waitReady(page, 'data-palette-selector-ready');
     const data = await page.evaluate(() => {
-      const sel = document.querySelector('is-palette-selector');
+      const sel = document.querySelector('iswc-palette-selector');
       const opts = sel.shadowRoot.querySelectorAll('[role="option"]');
       return [...opts].map((o) => ({ value: o.dataset.palette, sel: o.getAttribute('aria-selected') }));
     });
@@ -113,7 +113,7 @@ tests.push({
     await waitReady(page, 'data-palette-selector-ready');
     await page.waitForTimeout(100);
     const restored = await page.evaluate(async () => {
-      const sel = document.querySelector('is-palette-selector');
+      const sel = document.querySelector('iswc-palette-selector');
       const trigger = sel.shadowRoot.querySelector('.trigger');
       trigger.focus();
       trigger.click();
@@ -142,7 +142,7 @@ tests.push({
     await waitReady(page, 'data-palette-selector-ready');
     await page.waitForTimeout(100);
     const result = await page.evaluate(async () => {
-      const sel = document.querySelector('is-palette-selector');
+      const sel = document.querySelector('iswc-palette-selector');
       const trigger = sel.shadowRoot.querySelector('.trigger');
       trigger.click();
       await new Promise((r) => requestAnimationFrame(() => r()));
@@ -162,7 +162,7 @@ tests.push({
   name: 'persistencia: tras reload el primer selector sigue con la última paleta',
   run: async (page) => {
     // El demo tiene 2 palette-selectors (default + custom). El segundo usa
-    // storage-key="is-palette-custom" para no pisar al primero. Verificamos
+    // storage-key="iswc-palette-custom" para no pisar al primero. Verificamos
     // que el PRIMER selector (el que recibe 'agrowin') lo mantiene tras
     // reload. El segundo selector (paleta custom) usa su propio storage-key
     // y no debe interferir.
@@ -170,7 +170,7 @@ tests.push({
     await waitReady(page, 'data-palette-selector-ready');
     await page.waitForTimeout(100);
     await page.evaluate(() => {
-      const sel = document.querySelector('is-palette-selector');
+      const sel = document.querySelector('iswc-palette-selector');
       sel.value = 'agrowin';
     });
     await page.waitForTimeout(100);
@@ -178,10 +178,10 @@ tests.push({
     await waitReady(page, 'data-palette-selector-ready');
     await page.waitForTimeout(150);
     const after = await page.evaluate(() => {
-      const sel = document.querySelector('is-palette-selector');
+      const sel = document.querySelector('iswc-palette-selector');
       return {
         selectorValue: sel.value,
-        stored: localStorage.getItem('is-palette'),
+        stored: localStorage.getItem('iswc-palette'),
       };
     });
     assert.equal(after.selectorValue, 'agrowin', `selector.value debe persistir agrowin (vimos "${after.selectorValue}")`);
@@ -195,7 +195,7 @@ tests.push({
     await page.goto(URL, { waitUntil: 'domcontentloaded' });
     await waitReady(page, 'data-palette-selector-ready');
     const aria = await page.evaluate(() => {
-      const sel = document.querySelector('is-palette-selector');
+      const sel = document.querySelector('iswc-palette-selector');
       const t = sel.shadowRoot.querySelector('.trigger');
       return {
         haspopup: t.getAttribute('aria-haspopup'),

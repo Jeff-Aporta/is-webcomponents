@@ -1,14 +1,15 @@
-/* is-signature */
+/* iswc-signature */
 :host {
   display: inline-block;
   font: inherit;
   --_w: 320px;
   --_h: 140px;
 }
+
 .root {
   position: relative;
-  width: var(--_w);
-  height: var(--_h);
+  inline-size: var(--_w);
+  block-size: var(--_h);
   border: 1px dashed var(--iswc-border);
   border-radius: var(--iswc-radius);
   background:
@@ -19,18 +20,20 @@
   touch-action: none;
   overflow: hidden;
 }
+
 .canvas {
   display: block;
   cursor: crosshair;
 }
+
 .hint {
   position: absolute;
   inset: 0;
   display: grid;
   place-items: center;
   color: var(--iswc-text-dim);
-  font-size: .85rem;
-  letter-spacing: .12em;
+  font-size: 0.85rem;
+  letter-spacing: 0.12em;
   pointer-events: none;
   text-transform: uppercase;
 }

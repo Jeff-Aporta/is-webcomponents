@@ -63,37 +63,37 @@ testE2E('la galeria sin estado monta el catalogo (categorias) y el home', { time
   await evidencia(page, '00a-home');
 });
 
-testE2E('deep link ?s={component:is-code} abre el docs del componente', { timeout: 180000 }, async (t) => {
+testE2E('deep link ?s={component:iswc-code} abre el docs del componente', { timeout: 180000 }, async (t) => {
   if (!DISPONIBLE) return t.skip('faltan variables E2E');
   const page = pagina();
-  await abrirGaleria(page, 'is-code', { ms: 5000 });
+  await abrirGaleria(page, 'iswc-code', { ms: 5000 });
   const r = (await page.evaluate(() => {
     const host = document.getElementById('previewHost');
     const current = document.querySelector('#shellNav .shell-nav__item[aria-current="true"]');
     return {
       current: current?.getAttribute('data-tag') ?? '',
-      isCodeDefined: !!customElements.get('is-code'),
-      isCodeEnHost: !!host?.querySelector('is-code'),
-      demos: host?.querySelectorAll('is-demo').length ?? 0,
+      isCodeDefined: !!customElements.get('iswc-code'),
+      isCodeEnHost: !!host?.querySelector('iswc-code'),
+      demos: host?.querySelectorAll('iswc-demo').length ?? 0,
       texto: (host?.textContent ?? '').trim().length,
     };
   })) as EstadoDocs;
-  assert.equal(r.current, 'is-code', 'el nav debe marcar is-code como activo');
-  assert.ok(r.isCodeDefined, 'is-code debe estar definido');
-  assert.ok(r.isCodeEnHost, 'el preview debe montar instancias de is-code');
-  assert.ok(r.demos > 0, 'debe haber demos (is-demo)');
+  assert.equal(r.current, 'iswc-code', 'el nav debe marcar iswc-code como activo');
+  assert.ok(r.isCodeDefined, 'iswc-code debe estar definido');
+  assert.ok(r.isCodeEnHost, 'el preview debe montar instancias de iswc-code');
+  assert.ok(r.demos > 0, 'debe haber demos (iswc-demo)');
   assert.ok(r.texto > 500, `docs con contenido (${r.texto} chars)`);
   const arbol = await arbolTexto(page);
-  assert.match(arbol, /is-code/i, 'el arbol menciona is-code');
-  await evidencia(page, '00b-deep-link-is-code');
+  assert.match(arbol, /iswc-code/i, 'el arbol menciona iswc-code');
+  await evidencia(page, '00b-deep-link-iswc-code');
 });
 
-testE2E('navegar por el nav (is-code â†’ is-component-diagram) cambia el preview', { timeout: 200000 }, async (t) => {
+testE2E('navegar por el nav (iswc-code â†’ iswc-component-diagram) cambia el preview', { timeout: 200000 }, async (t) => {
   if (!DISPONIBLE) return t.skip('faltan variables E2E');
   const page = pagina();
-  await abrirGaleria(page, 'is-code', { ms: 4000 });
-  const ok = await clicTagNav(page, 'is-component-diagram');
-  assert.ok(ok, 'item del nav is-component-diagram');
+  await abrirGaleria(page, 'iswc-code', { ms: 4000 });
+  const ok = await clicTagNav(page, 'iswc-component-diagram');
+  assert.ok(ok, 'item del nav iswc-component-diagram');
   await esperarContenido(page, { ms: 60000 });
   await esperarMs(3500);
   const r = (await page.evaluate(() => {
@@ -105,7 +105,7 @@ testE2E('navegar por el nav (is-code â†’ is-component-diagram) cambia el pr
       svg: host?.querySelectorAll('svg, canvas').length ?? 0,
     };
   })) as EstadoNav;
-  assert.equal(r.current, 'is-component-diagram', 'el nav activo debe cambiar');
+  assert.equal(r.current, 'iswc-component-diagram', 'el nav activo debe cambiar');
   assert.ok(r.texto > 200, `el nuevo preview debe montar contenido (${r.texto})`);
   await evidencia(page, '00c-nav-a-diagrama');
 });

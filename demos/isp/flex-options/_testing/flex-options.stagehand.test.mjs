@@ -14,12 +14,12 @@ try {
   await page.waitForTimeout(200);
 
   const data = await page.evaluate(() => {
-    return [...document.querySelectorAll('is-flex-options')].map((el) => {
+    return [...document.querySelectorAll('iswc-flex-options')].map((el) => {
       const r = el.getBoundingClientRect();
       const sr = el.shadowRoot;
       const tb = sr?.querySelector('[part="toolbar"], .toolbar');
       const tbRect = tb?.getBoundingClientRect();
-      const btns = [...(sr?.querySelectorAll('is-button') || [])];
+      const btns = [...(sr?.querySelectorAll('iswc-button') || [])];
       return {
         id: el.id,
         compact: el.compact,

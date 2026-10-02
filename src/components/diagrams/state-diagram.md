@@ -1,14 +1,14 @@
 ---
-tag: is-state-diagram
+tag: iswc-state-diagram
 tags:
-  - is-state-diagram
+  - iswc-state-diagram
 category: diagrams
 status: public
 source: ./state-diagram.js
 style: ./state-diagram.css
 preview: ./state-diagram.json
 ---
-# `<is-state-diagram>`
+# `<iswc-state-diagram>`
 
 ## Propósito
 
@@ -16,7 +16,7 @@ Diagrama de estados en SVG, sin Mermaid. Tú declaras estados y
 transiciones; el componente decide las capas, reduce los cruces y
 rutea las flechas rodeando los estados.
 
-Este módulo registra `<is-state-diagram>`.
+Este módulo registra `<iswc-state-diagram>`.
 
 ## Cuándo usarlo
 
@@ -35,7 +35,7 @@ import './state-diagram.js';
 ## Ejemplo mínimo
 
 ```html
-<is-state-diagram></is-state-diagram>
+<iswc-state-diagram></iswc-state-diagram>
 ```
 
 ## API
@@ -69,10 +69,10 @@ import './state-diagram.js';
 
 | Evento | detail | bubbles | composed | cancelable |
 | --- | --- | --- | --- | --- |
-| `is-turtle-state` | sí | sí | sí | no |
-| `is-render` | sí | sí | sí | no |
-| `is-toggle-group` | sí | sí | sí | sí |
-| `is-open-viewer` | sí | sí | sí | sí |
+| `iswc-turtle-state` | sí | sí | sí | no |
+| `iswc-render` | sí | sí | sí | no |
+| `iswc-toggle-group` | sí | sí | sí | sí |
+| `iswc-open-viewer` | sí | sí | sí | sí |
 
 ### Métodos y propiedades públicas
 
@@ -110,16 +110,16 @@ No declara integración form-associated propia en este módulo.
 
 Documentación de cabecera preservada desde fuente:
 
-> <is-state-diagram> — diagrama de estados en SVG, sin Mermaid.
-> Configuración por JSON, igual que <is-flowchart>:
->   <is-state-diagram>
+> <iswc-state-diagram> — diagrama de estados en SVG, sin Mermaid.
+> Configuración por JSON, igual que <iswc-flowchart>:
+>   <iswc-state-diagram>
 >     <script type="application/json">
 >       { "stateDiagram": { "direction": "TB", "states": [...], "transitions": [...] } }
 >     </script>
->   </is-state-diagram>
+>   </iswc-state-diagram>
 > Atributos: color (inline | viewer), open-on-click
 > Propiedades: payload, spec, layout, turtle, hiddenGroups
-> Eventos: is-render, is-turtle-state, is-open-viewer, is-toggle-group
+> Eventos: iswc-render, iswc-turtle-state, iswc-open-viewer, iswc-toggle-group
 
 ## Dependencias y componentes relacionados
 
@@ -131,7 +131,7 @@ Documentación de cabecera preservada desde fuente:
 - [`../_shared/tk-inline-md.js`](../_shared/tk-inline-md.js)
 - [`./diagram-kinds.js`](./diagram-kinds.js)
 
-Tags del módulo: `<is-state-diagram>`.
+Tags del módulo: `<iswc-state-diagram>`.
 
 ## Accesibilidad
 
@@ -140,7 +140,7 @@ Preservar semántica, foco, teclado, labels y ARIA. ARIA detectado: `aria-label`
 ## Ejemplo avanzado
 
 ```html
-<is-state-diagram></is-state-diagram>
+<iswc-state-diagram></iswc-state-diagram>
 ```
 
 ## Errores comunes

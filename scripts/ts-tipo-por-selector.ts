@@ -15,7 +15,7 @@
  * por lo que corresponde, que además es lo que el autor habría escrito a mano.
  *
  * CUÁNDO SE ABSTIENE. Si el selector no empieza por una etiqueta conocida
- * —`'.mark'`, `'#label'`, `'is-dropdown'`— no hay nada que deducir: una clase
+ * —`'.mark'`, `'#label'`, `'iswc-dropdown'`— no hay nada que deducir: una clase
  * puede estar en cualquier elemento y un componente propio necesita su propia
  * interfaz, que no se puede inventar desde aquí. Se deja `HTMLElement` y se
  * decide a mano.

@@ -11,7 +11,7 @@
   --iswc-button-font-family: var(--iswc-font-family, system-ui, -apple-system, "Segoe UI", Roboto, sans-serif);
   --iswc-button-font-weight: 500;
   /* No fijar --iswc-button-border-radius aquí: si no, pisa el 999px de
-     <is-button-group pill> vía ::slotted (el :host gana al padre). El
+     <iswc-button-group pill> vía ::slotted (el :host gana al padre). El
      default 6px vive como fallback en .btn y en shape/pill. */
   --iswc-button-border-width: 1px;
   --iswc-button-transition-duration: 120ms;
@@ -84,10 +84,10 @@
       align-items: center;
       justify-content: center;
       color: currentColor;
-      is-icon {
+      iswc-icon {
         width: 1.1em;
         height: 1.1em;
-        animation: is-button-spin 720ms linear infinite;
+        animation: iswc-button-spin 720ms linear infinite;
       }
     }
     .btn__caret {
@@ -95,7 +95,7 @@
       color: currentColor;
       margin-left: 0.15em;
       line-height: 0;
-      is-icon { width: 0.85em; height: 0.85em; }
+      iswc-icon { width: 0.85em; height: 0.85em; }
     }
     .btn__prefix, .btn__suffix {
       display: inline-flex;
@@ -191,7 +191,7 @@
   --_tone-pale: var(--iswc-color-error-pale, #ffe3e3);
   --_tone-text: var(--iswc-error-text, var(--_tone-stronger));
   --_tone-soft: var(--iswc-error-soft, var(--_tone-paler));
-  --_tone-soft-active: var(--iswc-error-soft-active, var(--_tone-pale));
+  --_tone-soft-active: var(--iswc-color-error-soft-active, var(--_tone-pale));
   --_tone-on: var(--iswc-on-brand, #fff);
 }
 /* neutral: controles del tema, no una familia semántica. */
@@ -210,9 +210,7 @@
 
 /* ── 2. Appearance → consume roles (no conoce nombres de color) ─────────
    filled = default (sin variant) o variant="filled". */
-:host([color]:not([variant])),
-:host([color][variant=""]),
-:host([color][variant="filled"]) {
+:host(:is([color]:not([variant]), [color][variant=""], [color][variant="filled"])) {
   --_bg: var(--_tone-strong);
   --_bg-hover: var(--_tone-stronger);
   --_bg-active: var(--_tone-strongest, var(--_tone-stronger));
@@ -295,8 +293,11 @@
   --_border-hover: transparent;
   --_text: var(--iswc-control-text, #212529);
   --_text-hover: var(--iswc-control-text, #212529);
+
+  .btn {
+    &:hover { text-decoration: underline; }
+  }
 }
-:host([variant="text"]) .btn:hover { text-decoration: underline; }
 :host([color][variant="text"]) {
   --_text: var(--_tone-text);
   --_text-hover: var(--_tone-strong);
@@ -314,42 +315,52 @@
   margin-block-start: var(--_button-vertical-indent-outlined, var(--_button-vertical-indent, 0px));
 }
 
-:host(:state(icon-button)) .btn {
-  padding: 0;
-  width: var(--_height);
-  aspect-ratio: 1 / 1;
-  gap: 0;
+/* icon-only: el JS lo detecta vía setCustomState('icon-button') pero como
+   no expone data-atributo de fallback, conservamos :state(). Para evitar
+   un selector dentro de nesting, lo dejamos al top-level (esbuild OK). */
+:host(:state(icon-button)) {
+  .btn {
+    padding: 0;
+    width: var(--_height);
+    aspect-ratio: 1 / 1;
+    gap: 0;
+  }
 }
 
-:host(:state(loading)) .btn,
-:host([data-state-loading]) .btn {
-  cursor: progress;
-  pointer-events: none;
-}
-:host(:state(loading)) .btn__label,
-:host(:state(loading)) .btn__prefix,
-:host(:state(loading)) .btn__suffix,
-:host(:state(loading)) .btn__caret,
-:host([data-state-loading]) .btn__label,
-:host([data-state-loading]) .btn__prefix,
-:host([data-state-loading]) .btn__suffix,
-:host([data-state-loading]) .btn__caret {
-  visibility: hidden;
-  opacity: 0;
-}
-:host(:state(loading)) .btn__spinner,
-:host([data-state-loading]) .btn__spinner {
-  display: inline-flex;
+/* loading: el JS ya expone `data-state-loading`; usamos solo el fallback. */
+:host([data-state-loading]) {
+  .btn {
+    cursor: progress;
+    pointer-events: none;
+  }
+  .btn__label,
+  .btn__prefix,
+  .btn__suffix,
+  .btn__caret {
+    visibility: hidden;
+    opacity: 0;
+  }
+  .btn__spinner { display: inline-flex; }
 }
 
-:host(:state(disabled)) {
+/* disabled: el host lleva `disabled` atributo (sincronizado por el JS),
+   así que :host([disabled]) matchea lo mismo que :state(disabled). */
+:host([disabled]) {
   opacity: 0.5;
   cursor: not-allowed;
   .btn { pointer-events: none; }
 }
 
-:host([with-caret]) .btn__caret { display: inline-flex; align-items: center; }
-:host(:state(link)) .btn { text-decoration: none; }
+:host([with-caret]) {
+  .btn__caret { display: inline-flex; align-items: center; }
+}
+
+/* link: el JS pone `:state(link)` cuando hay `href`. Como no expone
+   data-atributo y `:host([href])` matchea el mismo subconjunto, preferimos
+   ese selector CSS-puro. */
+:host([href]) {
+  .btn { text-decoration: none; }
+}
 
 /* Region aria-live para anunciar cambios de estado (loading → ready).
    Patrón "sr-only": visualmente oculto pero accesible para AT. */
@@ -365,6 +376,6 @@
   border: 0;
 }
 
-@keyframes is-button-spin {
+@keyframes iswc-button-spin {
   to { transform: rotate(360deg); }
 }

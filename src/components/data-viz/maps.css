@@ -1,4 +1,4 @@
-/* is-maps */
+/* iswc-maps */
 :host {
   display: block;
   font: inherit;
@@ -16,8 +16,10 @@
 }
 .zoom-info {
   position: absolute;
-  bottom: .5rem; right: .5rem;
-  font-size: .65rem; color: var(--iswc-text-soft);
+  inset-block-end: .5rem;
+  inset-inline-end: .5rem;
+  font-size: .65rem;
+  color: var(--iswc-text-soft);
   background: color-mix(in srgb, var(--iswc-bg-elev) 80%, transparent);
   padding: .15rem .5rem;
   border-radius: 4px;
@@ -26,16 +28,21 @@
 }
 .canvas {
   position: relative;
-  width: 100%;
-  height: 28rem;
+  inline-size: 100%;
+  block-size: 28rem;
   cursor: grab;
   overflow: hidden;
 }
 .tile-iframe {
-  width: 100%; height: 100%; border: 0; display: block;
+  inline-size: 100%;
+  block-size: 100%;
+  border: 0;
+  display: block;
 }
 .attribution {
-  position: absolute; bottom: 1.75rem; right: .5rem;
+  position: absolute;
+  inset-block-end: 1.75rem;
+  inset-inline-end: .5rem;
   font-size: .65rem;
   color: var(--iswc-text-soft);
   background: color-mix(in srgb, var(--iswc-bg-elev) 80%, transparent);
@@ -45,20 +52,24 @@
 }
 svg.map {
   display: block;
-  width: 100%; height: 100%;
-  background:
-    radial-gradient(circle at 50% 50%,
-      color-mix(in srgb, var(--iswc-accent) 6%, transparent) 0%,
-      transparent 70%);
+  inline-size: 100%;
+  block-size: 100%;
+  background: radial-gradient(circle at 50% 50%,
+    color-mix(in srgb, var(--iswc-accent) 6%, transparent) 0%,
+    transparent 70%);
+  .grid     { stroke: var(--iswc-maps-grid-color); stroke-width: 0.5; stroke-dasharray: 2 3; }
+  .meridian { stroke: var(--iswc-maps-meridian-color); stroke-width: 0.5; }
+  .tick     { fill: var(--iswc-text-soft); font-size: 8px; font-family: ui-monospace, Menlo, monospace; }
+  .vp-text  { fill: var(--iswc-text-soft); font-size: 9px; font-family: ui-monospace, Menlo, monospace; }
+  .marker {
+    fill: var(--iswc-accent);
+    stroke: var(--iswc-bg-elev);
+    stroke-width: 2;
+    &:hover { fill: var(--iswc-danger, #dc2626); cursor: pointer; }
+  }
+  .marker-label {
+    fill: var(--iswc-text);
+    font-size: 10px;
+    pointer-events: none;
+  }
 }
-svg.map .grid { stroke: var(--iswc-maps-grid-color); stroke-width: 0.5; stroke-dasharray: 2 3; }
-svg.map .meridian { stroke: var(--iswc-maps-meridian-color); stroke-width: 0.5; }
-svg.map .tick { fill: var(--iswc-text-soft); font-size: 8px; font-family: ui-monospace, Menlo, monospace; }
-svg.map .vp-text { fill: var(--iswc-text-soft); font-size: 9px; font-family: ui-monospace, Menlo, monospace; }
-svg.map .marker {
-  fill: var(--iswc-accent);
-  stroke: var(--iswc-bg-elev);
-  stroke-width: 2;
-}
-svg.map .marker:hover { fill: var(--iswc-danger, #dc2626); cursor: pointer; }
-svg.map .marker-label { fill: var(--iswc-text); font-size: 10px; pointer-events: none; }

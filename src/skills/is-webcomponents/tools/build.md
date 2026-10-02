@@ -25,7 +25,7 @@ CDN (o por copia local si la app ya corrió [`/is-webcomponents:local`](local.md
      <script type="module" src="https://cdn.jsdelivr.net/gh/Jeff-Aporta/is-webcomponents@main/dist/cdn/all.min.js"></script>
    </head>
    <body>
-     <is-toast placement="bottom-end"></is-toast>
+     <iswc-toast placement="bottom-end"></iswc-toast>
    </body>
    </html>
    ```
@@ -45,9 +45,9 @@ CDN (o por copia local si la app ya corrió [`/is-webcomponents:local`](local.md
 
    Solo crear un componente de dominio si el catálogo no tiene el tag exacto
    y el componente encapsula lógica de negocio (mapear JSON — varios `is-*`).
-5. **Feedback global:** un único `<is-toast placement="bottom-end">` en el shell.
+5. **Feedback global:** un único `<iswc-toast placement="bottom-end">` en el shell.
 6. **CSS de dominio** igual que el kit: archivo hermano (`app-files.css`) +
-   `IsUi.adoptCss(shadow, import.meta.url)` en runtime. Nunca `const CSS = \`—\`` embebido en el JS.
+   `IswcUi.adoptCss(shadow, import.meta.url)` en runtime. Nunca `const CSS = \`—\`` embebido en el JS.
 7. **Tema:** `data-theme` / `data-palette` en `<html>`; tokens `--iswc-text`,
    `--iswc-bg`, `--iswc-border`, `--iswc-accent`, etc. en el CSS propio.
 
@@ -55,10 +55,10 @@ CDN (o por copia local si la app ya corrió [`/is-webcomponents:local`](local.md
 
 - [ ] Cada control visual mapea a un `is-*` existente (o justificación explícita).
 - [ ] Docs del módulo leídas; props/eventos según el MD, no inventados.
-- [ ] Iconos vía `<is-icon icon="mdi:…">`.
+- [ ] Iconos vía `<iswc-icon icon="mdi:…">`.
 - [ ] `data-theme` + `data-palette` presentes.
 - [ ] Wrappers de dominio (`tk-*`/`app-*`) solo traducen datos — kit.
-- [ ] Sin `is-popup` (usar `is-popover`/`is-tooltip`).
+- [ ] Sin `iswc-popup` (usar `iswc-popover`/`iswc-tooltip`).
 - [ ] CDN: pin `@<sha>` o `@main` justificado (o local-first si aplica).
 - [ ] CSS de dominio en archivo hermano + `adoptCss`, no string embebido.
 

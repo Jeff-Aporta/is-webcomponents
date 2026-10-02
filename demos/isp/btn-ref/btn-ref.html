@@ -3,8 +3,8 @@
 <head>
 <meta charset="utf-8" />
 <meta name="viewport" content="width=device-width, initial-scale=1" />
-<title>&lt;is-btn-ref&gt; · is-webcomponents</title>
-<meta name="description" content="Input + botón filtro que abre un <is-catalogo-gen> en modo selección para FKs de catálogo." />
+<title>&lt;iswc-btn-ref&gt; · is-webcomponents</title>
+<meta name="description" content="Input + botón filtro que abre un <iswc-catalogo-gen> en modo selección para FKs de catálogo." />
 <style>
   html, body { margin: 0; padding: 0; min-height: 100%; background: #0c1118; color: #e2e8f0; font-family: ui-sans-serif, system-ui, sans-serif; }
   body { display: grid; grid-template-rows: auto 1fr; min-height: 100vh; }
@@ -19,18 +19,18 @@
   section h2 { font-size: 14px; font-weight: 600; margin: 0 0 8px; color: #94a3b8; }
   .row { display: flex; gap: 12px; align-items: end; flex-wrap: wrap; }
   .log { font: 12px ui-monospace, Menlo, Consolas, monospace; background: rgba(0,0,0,0.3); padding: 8px; border-radius: 4px; min-height: 100px; white-space: pre-wrap; }
-  is-btn-ref { width: 22rem; max-width: 100%; }
-  is-btn-ref:not(:defined) { visibility: hidden; }
+  iswc-btn-ref { width: 22rem; max-width: 100%; }
+  iswc-btn-ref:not(:defined) { visibility: hidden; }
 </style>
 <script type="module">
-  // Cargar bundles necesarios para <is-btn-ref> y sus dependencias transitivas.
-  await import('../../../dist/cdn/forms/input.min.js?h=kbtjsy');
-  await import('../../../dist/cdn/actions/button.min.js?h=ki2dk5');
-  await import('../../../dist/cdn/media/icon.min.js?h=y6tzub');
-  await import('../../../dist/cdn/layout/dialog.min.js?h=fvgmyx');
-  await import('../../../dist/cdn/isp/catalogo-gen.min.js?h=f0zf9d');
-  await import('../../../dist/cdn/isp/btn-ref.min.js?h=r21q8u');
-  await customElements.whenDefined('is-btn-ref');
+  // Cargar bundles necesarios para <iswc-btn-ref> y sus dependencias transitivas.
+  await import('../../../dist/cdn/forms/input.min.js?h=268af7');
+  await import('../../../dist/cdn/actions/button.min.js?h=5i9tzt');
+  await import('../../../dist/cdn/media/icon.min.js?h=sp71yy');
+  await import('../../../dist/cdn/layout/dialog.min.js?h=6ocp5e');
+  await import('../../../dist/cdn/isp/catalogo-gen.min.js?h=ol07ry');
+  await import('../../../dist/cdn/isp/btn-ref.min.js?h=s23pbn');
+  await customElements.whenDefined('iswc-btn-ref');
 
   // ── Controller con datos fake ────────────────────────────────────────
   const PRODUCTOS = [
@@ -61,9 +61,9 @@
   const eventLog = document.getElementById('event-log');
   const log = (m) => { eventLog.textContent += new Date().toISOString().slice(11, 19) + ' ' + m + '\n'; };
 
-  ref.addEventListener('is-change', (e) => log(`is-change: value="${e.detail.value}"`));
-  ref.addEventListener('is-input', (e) => log(`is-input: value="${e.detail.value}"`));
-  ref.addEventListener('is-selected-record', (e) => log(`is-selected-record: value="${e.detail.value}" label="${e.detail.label}"`));
+  ref.addEventListener('iswc-change', (e) => log(`iswc-change: value="${e.detail.value}"`));
+  ref.addEventListener('iswc-input', (e) => log(`iswc-input: value="${e.detail.value}"`));
+  ref.addEventListener('iswc-selected-record', (e) => log(`iswc-selected-record: value="${e.detail.value}" label="${e.detail.label}"`));
 
   // ── Botón para abrir el modal manualmente ────────────────────────────
   document.getElementById('open-modal').addEventListener('click', () => {
@@ -81,17 +81,17 @@
 <body>
 <header>
   <div>
-    <h1>&lt;is-btn-ref&gt; — selector de FK con modal</h1>
+    <h1>&lt;iswc-btn-ref&gt; — selector de FK con modal</h1>
     <p>Escribe la clave a mano o pulsa el botón filtro para abrir el catálogo.</p>
   </div>
   <div class="spacer"></div>
-  <code>is-btn-ref</code>
+  <code>iswc-btn-ref</code>
 </header>
 <main>
   <section>
     <h2>Ejemplo</h2>
     <div class="row">
-      <is-btn-ref id="ref-app" label="Aplicación" name="aplicacion" required maxlength="6"></is-btn-ref>
+      <iswc-btn-ref id="ref-app" label="Aplicación" name="aplicacion" required maxlength="6"></iswc-btn-ref>
       <button id="open-modal" type="button" style="padding: 8px 14px; background: #1e293b; color: #e2e8f0; border: 1px solid #334155; border-radius: 4px; cursor: pointer;">Abrir catálogo</button>
       <button id="set-value" type="button" style="padding: 8px 14px; background: #1e293b; color: #e2e8f0; border: 1px solid #334155; border-radius: 4px; cursor: pointer;">Set value = NS</button>
     </div>

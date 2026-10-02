@@ -17,7 +17,7 @@ import {
 import { getValues, setValues } from './form-json.js';
 
 /**
- * <is-form> — Ficha con header / content / footer (Aceptar · Cancelar).
+ * <iswc-form> — Ficha con header / content / footer (Aceptar · Cancelar).
  *
  * Definición del cuerpo: siempre JSON compacto (html2json / json2html).
  * Los valores de controles con `name` van aparte (`getValues` / `setValues`).
@@ -28,7 +28,7 @@ import { getValues, setValues } from './form-json.js';
  *   form.fromJSON(json)        // chrome + body + values
  *
  * Atributos: mode, submit-label, cancel-label, loading
- * Eventos: is-submit / is-cancel → detail { form, values, json }
+ * Eventos: iswc-submit / iswc-cancel → detail { form, values, json }
  */
 
 (() => {
@@ -40,8 +40,8 @@ import { getValues, setValues } from './form-json.js';
       <footer part="footer" class="footer">
         <slot name="pre-buttons"></slot>
         <div part="buttons" class="buttons">
-          <is-button class="submit" type="submit" color="brand">Aceptar</is-button>
-          <is-button class="cancel" type="button" color="neutral" variant="outlined">Cancelar</is-button>
+          <iswc-button class="submit" type="submit" color="brand">Aceptar</iswc-button>
+          <iswc-button class="cancel" type="button" color="neutral" variant="outlined">Cancelar</iswc-button>
         </div>
         <slot name="post-buttons"></slot>
       </footer>
@@ -51,7 +51,7 @@ import { getValues, setValues } from './form-json.js';
   const VALID_MODE = ['edit', 'view'];
   const OBSERVED = ['mode', 'submit-label', 'cancel-label', 'loading'];
 
-  class IsForm extends ElementBase {
+  class IswcForm extends ElementBase {
     static get observedAttributes(): string[] { return OBSERVED; }
 
     static json2html = json2html;
@@ -209,7 +209,7 @@ import { getValues, setValues } from './form-json.js';
         const json = JSON.parse(script.textContent || 'null');
         if (json && typeof json === 'object') this.fromJSON(json);
       } catch {
-        console.warn('<is-form> script JSON inválido');
+        console.warn('<iswc-form> script JSON inválido');
       }
     }
 
@@ -225,7 +225,7 @@ import { getValues, setValues } from './form-json.js';
     #onSubmit = (e: Event) => {
       e.preventDefault();
       if (this.mode === 'view' || this.loading) return;
-      this.#emit('is-submit');
+      this.#emit('iswc-submit');
     };
 
     #onSubmitClick = () => {
@@ -233,7 +233,7 @@ import { getValues, setValues } from './form-json.js';
       this.#form.requestSubmit();
     };
 
-    #onCancel = () => { this.#emit('is-cancel'); };
+    #onCancel = () => { this.#emit('iswc-cancel'); };
 
     #syncMode() { this.#submitBtn.hidden = this.mode === 'view'; }
 
@@ -245,5 +245,5 @@ import { getValues, setValues } from './form-json.js';
     #syncLoading() { this.#submitBtn.toggleAttribute('loading', this.loading); }
   }
 
-  defineElement('is-form', IsForm, 'IsForm');
+  defineElement('iswc-form', IswcForm, 'IswcForm');
 })();

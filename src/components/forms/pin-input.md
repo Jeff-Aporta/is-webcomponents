@@ -1,14 +1,14 @@
 ---
-tag: is-pin-input
+tag: iswc-pin-input
 tags:
-  - is-pin-input
+  - iswc-pin-input
 category: forms
 status: public
 source: ./pin-input.js
 style: ./pin-input.css
 preview: ./pin-input.json
 ---
-# `<is-pin-input>`
+# `<iswc-pin-input>`
 
 ## Propósito
 
@@ -16,7 +16,7 @@ Casillas para OTP / PIN de 3 a 8 dígitos. Auto-avance al escribir,
 Backspace retrocede, pegar reparte todos los dígitos, navegación con
 flechas y soporte para enmascarar el contenido.
 
-Este módulo registra `<is-pin-input>`.
+Este módulo registra `<iswc-pin-input>`.
 
 ## Cuándo usarlo
 
@@ -35,7 +35,7 @@ import './pin-input.js';
 ## Ejemplo mínimo
 
 ```html
-<is-pin-input length="6"></is-pin-input>
+<iswc-pin-input length="6"></iswc-pin-input>
 ```
 
 ## API
@@ -69,10 +69,10 @@ No expone.
 
 | Evento | detail | bubbles | composed | cancelable |
 | --- | --- | --- | --- | --- |
-| `is-pin-change` | sí | sí | sí | no |
-| `is-pin-complete` | sí | sí | sí | no |
-| `is-pin-invalid` | según cabecera | según cabecera | según cabecera | según cabecera |
-| `is-otp` | `{ code }` | sí | sí | no |
+| `iswc-pin-change` | sí | sí | sí | no |
+| `iswc-pin-complete` | sí | sí | sí | no |
+| `iswc-pin-invalid` | según cabecera | según cabecera | según cabecera | según cabecera |
+| `iswc-otp` | `{ code }` | sí | sí | no |
 
 ### Métodos y propiedades públicas
 
@@ -119,10 +119,10 @@ No declara integración form-associated propia en este módulo.
 
 Documentación de cabecera preservada desde fuente:
 
-> <is-pin-input> — Web Component (vanilla, zero dependencies).
+> <iswc-pin-input> — Web Component (vanilla, zero dependencies).
 > Casillas para OTP / PIN de 4 a 6 dígitos. Auto-avance al escribir, Backspace
 > retrocede, pegar distribuye todos los dígitos, focus automático.
->   <is-pin-input length="6" required></is-pin-input>
+>   <iswc-pin-input length="6" required></iswc-pin-input>
 > Atributos
 >   length       number  (3-8, default 6)
 >   type         number | text   (default 'number')
@@ -134,22 +134,22 @@ Documentación de cabecera preservada desde fuente:
 > Slots
 >   (default)  — hijos ignorados (este componente es self-contained).
 > Eventos
->   is-pin-change  detail: { value, index }
->   is-pin-complete detail: { value }
->   is-pin-invalid detail: { value }
+>   iswc-pin-change  detail: { value, index }
+>   iswc-pin-complete detail: { value }
+>   iswc-pin-invalid detail: { value }
 > API
 >   .value         string
 >   .reset()       void
 >   .focus()       void
 >
-> Web OTP: con `autocomplete` `one-time-code` (default) rellena las casillas y emite `is-otp`.
+> Web OTP: con `autocomplete` `one-time-code` (default) rellena las casillas y emite `iswc-otp`.
 
 ## Dependencias y componentes relacionados
 
 - [`../_shared/adopt-css.js`](../_shared/adopt-css.js)
 - [`../_shared/web-otp.js`](../_shared/web-otp.js)
 
-Tags del módulo: `<is-pin-input>`.
+Tags del módulo: `<iswc-pin-input>`.
 
 ## Accesibilidad
 
@@ -158,7 +158,7 @@ Preservar semántica, foco, teclado, labels y ARIA. ARIA detectado: `aria-hidden
 ## Ejemplo avanzado
 
 ```html
-<is-pin-input length="6"></is-pin-input>
+<iswc-pin-input length="6"></iswc-pin-input>
 ```
 
 ## Errores comunes

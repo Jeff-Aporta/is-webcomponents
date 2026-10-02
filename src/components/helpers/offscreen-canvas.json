@@ -1,11 +1,11 @@
 {
-  "$schema": "is-preview/v1",
-  "tag": "is-offscreen-canvas",
+  "$schema": "iswc-preview/v1",
+  "tag": "iswc-offscreen-canvas",
   "category": "helpers",
-  "title": "<is-offscreen-canvas>",
+  "title": "<iswc-offscreen-canvas>",
   "titleHtml": true,
   "description": "Lienzo que transfiere el control a OffscreenCanvas (y opcionalmente a un Worker).",
-  "storageKey": "docs-is-offscreen-canvas",
+  "storageKey": "docs-iswc-offscreen-canvas",
   "sections": [
     {
       "id": "intro",
@@ -14,7 +14,7 @@
       "blocks": [
         {
           "kind": "demo",
-          "html": "<is-offscreen-canvas width=\"320\" height=\"120\"></is-offscreen-canvas>",
+          "html": "<iswc-offscreen-canvas width=\"320\" height=\"120\"></iswc-offscreen-canvas>",
           "controls": [
             {
               "control": "number",
@@ -37,7 +37,7 @@
         {
           "kind": "code",
           "lang": "html",
-          "code": "<is-offscreen-canvas width=\"320\" height=\"120\"></is-offscreen-canvas>"
+          "code": "<iswc-offscreen-canvas width=\"320\" height=\"120\"></iswc-offscreen-canvas>"
         },
         {
           "kind": "callout",

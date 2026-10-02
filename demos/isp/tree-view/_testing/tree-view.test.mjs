@@ -1,6 +1,6 @@
-// tree-view.test.mjs — tests exhaustivos del demo <is-tree-view>.
+// tree-view.test.mjs — tests exhaustivos del demo <iswc-tree-view>.
 // Cobertura: smoke + funcional (render del árbol, expand, selección con
-// keyboard, eventos is-select) + customs API (addRoot, historyUndo) + drawer
+// keyboard, eventos iswc-select) + customs API (addRoot, historyUndo) + drawer
 // + confirm-delete anidado.
 import assert from 'node:assert/strict';
 import { BASE_URL, newPage, close, waitReady, screenshot, report } from './lib/harness.mjs';
@@ -18,12 +18,12 @@ tests.push({
       const tv = document.getElementById('tree');
       const sr = tv.shadowRoot;
       return {
-        defined: !!customElements.get('is-tree-view'),
+        defined: !!customElements.get('iswc-tree-view'),
         toolbarPart: !!sr.querySelector('[part="toolbar"], .isp-tree-toolbar'),
         bodyPart: !!sr.querySelector('[part="body"], .isp-tree-body'),
-        drawer: !!sr.querySelector('is-drawer.drawer, is-drawer'),
-        modalDelete: !!sr.querySelector('is-confirm-delete'),
-        protectDlg: !!sr.querySelector('is-dialog'),
+        drawer: !!sr.querySelector('iswc-drawer.drawer, iswc-drawer'),
+        modalDelete: !!sr.querySelector('iswc-confirm-delete'),
+        protectDlg: !!sr.querySelector('iswc-dialog'),
         roleTree: sr.querySelector('[role="tree"], .isp-tree-body')?.getAttribute('role'),
         customsPresent: !!tv.customs,
         bAllowedPresent: !!tv.bAllowed,
@@ -33,9 +33,9 @@ tests.push({
     assert.equal(info.defined, true);
     assert.equal(info.toolbarPart, true, 'toolbar debe existir en shadow');
     assert.equal(info.bodyPart, true, 'body debe existir en shadow');
-    assert.equal(info.drawer, true, '<is-drawer> debe estar en shadow');
-    assert.equal(info.modalDelete, true, '<is-confirm-delete> debe estar en shadow');
-    assert.equal(info.protectDlg, true, '<is-dialog> (protect) debe estar en shadow');
+    assert.equal(info.drawer, true, '<iswc-drawer> debe estar en shadow');
+    assert.equal(info.modalDelete, true, '<iswc-confirm-delete> debe estar en shadow');
+    assert.equal(info.protectDlg, true, '<iswc-dialog> (protect) debe estar en shadow');
     assert.equal(info.roleTree, 'tree', 'body debe tener role="tree"');
     assert.ok(info.customsPresent, 'customs debe estar asignado');
     assert.ok(info.bAllowedPresent, 'bAllowed debe estar asignado');
@@ -92,7 +92,7 @@ tests.push({
 });
 
 tests.push({
-  name: 'eventos: is-select emite al seleccionar una fila',
+  name: 'eventos: iswc-select emite al seleccionar una fila',
   run: async (page) => {
     await page.goto(URL, { waitUntil: 'domcontentloaded' });
     await waitReady(page, 'data-tree-view-ready');
@@ -100,7 +100,7 @@ tests.push({
     const events = await page.evaluate(async () => {
       const tv = document.getElementById('tree');
       const captured = [];
-      tv.addEventListener('is-select', (e) => {
+      tv.addEventListener('iswc-select', (e) => {
         captured.push({
           flatPath: e.detail?.flatPath,
           nodeTitle: e.detail?.node?.titulo,
@@ -119,8 +119,8 @@ tests.push({
     for (const e of events) {
       if (e.flatPath) {
         assert.ok(typeof e.flatPath === 'string', 'flatPath debe ser string');
-        assert.equal(e.bubbles, true, 'is-select debe burbujear');
-        assert.equal(e.composed, true, 'is-select debe atravesar shadow DOM');
+        assert.equal(e.bubbles, true, 'iswc-select debe burbujear');
+        assert.equal(e.composed, true, 'iswc-select debe atravesar shadow DOM');
         break;
       }
     }
@@ -138,7 +138,7 @@ tests.push({
     await page.waitForTimeout(300);
     const state = await page.evaluate(() => {
       const tv = document.getElementById('tree');
-      const cd = tv.shadowRoot.querySelector('is-confirm-delete.modal-delete');
+      const cd = tv.shadowRoot.querySelector('iswc-confirm-delete.modal-delete');
       return {
         cdOpen: cd?.open ?? cd?.hasAttribute('open'),
         hasConfirmValue: !!cd?.getAttribute('confirm-value'),

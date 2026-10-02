@@ -1,14 +1,14 @@
 ---
-tag: is-data-grid
+tag: iswc-data-grid
 tags:
-  - is-data-grid
+  - iswc-data-grid
 category: data
 status: public
 source: ./data-grid.js
 style: ./data-grid.css
 preview: ./data-grid.json
 ---
-# `<is-data-grid>`
+# `<iswc-data-grid>`
 
 ## Propósito
 
@@ -16,7 +16,7 @@ Tabla de datos con la superficie de MUI X Data Grid: columnas tipadas, multi-ord
 quick filter, paginación, selección de filas y de rangos de celdas, edición por celda o por fila,
 agrupación con agregación, tree data, pivot, virtualización y exportación.
 
-Este módulo registra `<is-data-grid>`.
+Este módulo registra `<iswc-data-grid>`.
 
 ## Cuándo usarlo
 
@@ -35,7 +35,7 @@ import './data-grid.js';
 ## Ejemplo mínimo
 
 ```html
-<is-data-grid></is-data-grid>
+<iswc-data-grid></iswc-data-grid>
 ```
 
 ## API
@@ -154,33 +154,33 @@ import './data-grid.js';
 
 | Evento | detail | bubbles | composed | cancelable |
 | --- | --- | --- | --- | --- |
-| `is-sort-change` | sí | sí | sí | no |
-| `is-filter-change` | sí | sí | sí | no |
-| `is-quick-filter` | sí | sí | sí | no |
-| `is-column-hide` | sí | sí | sí | no |
-| `is-column-resize` | sí | sí | sí | no |
-| `is-column-pin` | sí | sí | sí | no |
-| `is-density` | sí | sí | sí | no |
-| `is-group-model` | sí | sí | sí | no |
-| `is-aggregation` | sí | sí | sí | no |
-| `is-export` | sí | sí | sí | no |
-| `is-select` | sí | sí | sí | no |
-| `is-cell-select` | sí | sí | sí | no |
-| `is-edit-start` | sí | sí | sí | no |
-| `is-edit-stop` | sí | sí | sí | no |
-| `is-row-update` | sí | sí | sí | no |
-| `is-copy` | sí | sí | sí | no |
-| `is-paste` | sí | sí | sí | no |
-| `is-column-reorder` | sí | sí | sí | no |
-| `is-cell-click` | sí | sí | sí | no |
-| `is-row-click` | sí | sí | sí | no |
-| `is-row-double-click` | sí | sí | sí | no |
-| `is-cell-double-click` | sí | sí | sí | no |
-| `is-row-reorder` | sí | sí | sí | no |
-| `is-group-toggle` | sí | sí | sí | no |
-| `is-detail-toggle` | sí | sí | sí | no |
-| `is-rows-scroll-end` | sí | sí | sí | no |
-| `is-page-change` | sí | sí | sí | no |
+| `iswc-sort-change` | sí | sí | sí | no |
+| `iswc-filter-change` | sí | sí | sí | no |
+| `iswc-quick-filter` | sí | sí | sí | no |
+| `iswc-column-hide` | sí | sí | sí | no |
+| `iswc-column-resize` | sí | sí | sí | no |
+| `iswc-column-pin` | sí | sí | sí | no |
+| `iswc-density` | sí | sí | sí | no |
+| `iswc-group-model` | sí | sí | sí | no |
+| `iswc-aggregation` | sí | sí | sí | no |
+| `iswc-export` | sí | sí | sí | no |
+| `iswc-select` | sí | sí | sí | no |
+| `iswc-cell-select` | sí | sí | sí | no |
+| `iswc-edit-start` | sí | sí | sí | no |
+| `iswc-edit-stop` | sí | sí | sí | no |
+| `iswc-row-update` | sí | sí | sí | no |
+| `iswc-copy` | sí | sí | sí | no |
+| `iswc-paste` | sí | sí | sí | no |
+| `iswc-column-reorder` | sí | sí | sí | no |
+| `iswc-cell-click` | sí | sí | sí | no |
+| `iswc-row-click` | sí | sí | sí | no |
+| `iswc-row-double-click` | sí | sí | sí | no |
+| `iswc-cell-double-click` | sí | sí | sí | no |
+| `iswc-row-reorder` | sí | sí | sí | no |
+| `iswc-group-toggle` | sí | sí | sí | no |
+| `iswc-detail-toggle` | sí | sí | sí | no |
+| `iswc-rows-scroll-end` | sí | sí | sí | no |
+| `iswc-page-change` | sí | sí | sí | no |
 
 ### Métodos y propiedades públicas
 
@@ -287,7 +287,7 @@ No declara integración form-associated propia en este módulo.
 
 Documentación de cabecera preservada desde fuente:
 
-> <is-data-grid> — Tabla de datos con la superficie de MUI X Data Grid.
+> <iswc-data-grid> — Tabla de datos con la superficie de MUI X Data Grid.
 > Columnas: tipos string/number/date/dateTime/boolean/singleSelect/actions,
 > valueGetter, valueFormatter, renderCell, renderHeader, ancho fijo o flex,
 > resize, autosize, reorden por arrastre, visibilidad, anclaje izquierda y
@@ -314,12 +314,12 @@ Documentación de cabecera preservada desde fuente:
 > undo-redo, aggregation-position, disable-column-menu, disable-column-filter,
 > disable-column-sort, disable-column-resize, disable-column-reorder,
 > disable-multiple-sorting, disable-row-selection-on-click
-> Events: is-sort-change, is-filter-change, is-quick-filter, is-page-change,
-> is-select, is-cell-select, is-cell-click, is-cell-double-click, is-row-click,
-> is-row-double-click, is-edit-start, is-edit-stop, is-row-update,
-> is-column-resize, is-column-reorder, is-column-hide, is-column-pin,
-> is-density, is-detail-toggle, is-group-toggle, is-row-reorder, is-copy,
-> is-paste, is-undo, is-redo, is-rows-scroll-end, is-export
+> Events: iswc-sort-change, iswc-filter-change, iswc-quick-filter, iswc-page-change,
+> iswc-select, iswc-cell-select, iswc-cell-click, iswc-cell-double-click, iswc-row-click,
+> iswc-row-double-click, iswc-edit-start, iswc-edit-stop, iswc-row-update,
+> iswc-column-resize, iswc-column-reorder, iswc-column-hide, iswc-column-pin,
+> iswc-density, iswc-detail-toggle, iswc-group-toggle, iswc-row-reorder, iswc-copy,
+> iswc-paste, iswc-undo, iswc-redo, iswc-rows-scroll-end, iswc-export
 > CSS parts: base, toolbar, toolbar-button, quick-filter, viewport, header,
 > header-row, header-cell, column-groups, header-filters, body, row, cell,
 > pinned-top, pinned-bottom, aggregation-row, detail-panel, overlay, footer,
@@ -332,7 +332,7 @@ Documentación de cabecera preservada desde fuente:
 - [`../_shared/grid-data.js`](../_shared/grid-data.js)
 - [`../_shared/grid-ui.js`](../_shared/grid-ui.js)
 
-Tags del módulo: `<is-data-grid>`.
+Tags del módulo: `<iswc-data-grid>`.
 
 ## Accesibilidad
 
@@ -341,7 +341,7 @@ Preservar semántica, foco, teclado, labels y ARIA. ARIA detectado: `aria-hidden
 ## Ejemplo avanzado
 
 ```html
-<is-data-grid></is-data-grid>
+<iswc-data-grid></iswc-data-grid>
 ```
 
 ## Errores comunes

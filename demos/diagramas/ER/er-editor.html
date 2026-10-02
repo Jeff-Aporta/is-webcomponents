@@ -3,7 +3,7 @@
 <head>
 <meta charset="utf-8" />
 <meta name="viewport" content="width=device-width, initial-scale=1" />
-<title>Editor visual de <is-er-diagram> · is-webcomponents</title>
+<title>Editor visual de <iswc-er-diagram> · is-webcomponents</title>
 <meta name="description" content="Editor visual completo (drag, click-to-connect, multi-select, undo/redo, panel de estilos, export JSON/SVG) para diagramas entidad-relación." />
 <style>
   html, body { margin: 0; padding: 0; height: 100%; background: #0c1118; color: #e2e8f0; font-family: ui-sans-serif, system-ui, sans-serif; }
@@ -17,17 +17,17 @@
   header .spacer { flex: 1; }
   header code { background: rgba(255,255,255,0.06); padding: 2px 6px; border-radius: 4px; font: 12px ui-monospace, Menlo, Consolas, monospace; }
   main { display: grid; place-items: stretch; min-height: 0; padding: 12px; }
-  is-er-editor { width: 100%; height: 100%; }
+  iswc-er-editor { width: 100%; height: 100%; }
   /* Anti-FOUC */
-  is-er-editor:not(:defined) { visibility: hidden; }
-  is-er-diagram:not(:defined) { visibility: hidden; }
+  iswc-er-editor:not(:defined) { visibility: hidden; }
+  iswc-er-diagram:not(:defined) { visibility: hidden; }
 </style>
 <script type="module">
   // Cargar solo los tags que necesitamos, desde los bundles pre-construidos en
   // dist/cdn/. Esto hace funcionar los demos con cualquier servidor estático
   // (incluido VS Code Live Server), no solo con el dev server que transpila TS.
-  await import('../../../dist/cdn/diagrams/er-diagram.min.js?h=69p0bs');
-  await import('../../../dist/cdn/diagrams/er-editor.min.js?h=200oar');
+  await import('../../../dist/cdn/diagrams/er-diagram.min.js?h=zu2vvd');
+  await import('../../../dist/cdn/diagrams/er-editor.min.js?h=nxeep7');
 
   // Definir un payload inicial para que el editor tenga algo que mostrar.
   const initial = {
@@ -55,15 +55,15 @@
   };
 
   // Esperar a que el custom element se defina
-  await customElements.whenDefined('is-er-editor');
+  await customElements.whenDefined('iswc-er-editor');
 
   // Crear el editor y asignar payload
-  const editor = document.createElement('is-er-editor');
+  const editor = document.createElement('iswc-er-editor');
   editor.setAttribute('animation', 'trace');
   editor.payload = initial;
 
   // Escuchar cambios de estado para logging (útil en tests)
-  editor.addEventListener('is-state-change', (e) => {
+  editor.addEventListener('iswc-state-change', (e) => {
     console.log('[er-editor] state changed', e.detail);
   });
 

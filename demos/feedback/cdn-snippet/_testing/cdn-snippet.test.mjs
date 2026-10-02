@@ -1,4 +1,4 @@
-// cdn-snippet.test.mjs — tests del demo is-cdn-snippet.
+// cdn-snippet.test.mjs — tests del demo iswc-cdn-snippet.
 // Cobertura: smoke + el snippet carga solo el tag + deps + a11y.
 import assert from 'node:assert/strict';
 import { BASE_URL, newPage, close, waitReady, screenshot, report } from './lib/harness.mjs';
@@ -14,17 +14,17 @@ tests.push({
     await waitReady(page, 'data-cdn-snippet-ready');
     await page.waitForTimeout(300);
     const data = await page.evaluate(() => {
-      const el = document.querySelector('is-cdn-snippet');
+      const el = document.querySelector('iswc-cdn-snippet');
       const root = el.shadowRoot;
-      const loaderCode = root.querySelector('is-code[data-slot="loader"]');
+      const loaderCode = root.querySelector('iswc-code[data-slot="loader"]');
       return {
-        defined: !!customElements.get('is-cdn-snippet'),
+        defined: !!customElements.get('iswc-cdn-snippet'),
         hasLoader: !!loaderCode,
         loaderText: (loaderCode?.value || loaderCode?.textContent || '').trim(),
       };
     });
-    assert.equal(data.defined, true, 'is-cdn-snippet debe estar definido');
-    assert.ok(data.hasLoader, 'debe haber un is-code[data-slot=loader]');
+    assert.equal(data.defined, true, 'iswc-cdn-snippet debe estar definido');
+    assert.ok(data.hasLoader, 'debe haber un iswc-code[data-slot=loader]');
     assert.ok(/loader\.min\.js/.test(data.loaderText), `snippet debe mencionar loader.min.js (vimos: "${data.loaderText.slice(0, 80)}…")`);
     assert.ok(/loadCSSBase|loadCSSPalettes|load\(/.test(data.loaderText), `snippet debe incluir líneas de loadCSS o load()`);
     await screenshot(page, 'cdn-snippet-smoke');
@@ -38,16 +38,16 @@ tests.push({
     await waitReady(page, 'data-cdn-snippet-ready');
     await page.waitForTimeout(200);
     const data = await page.evaluate(() => {
-      const el = document.querySelector('is-cdn-snippet');
+      const el = document.querySelector('iswc-cdn-snippet');
       const root = el.shadowRoot;
-      const loaderCode = root.querySelector('is-code[data-slot="loader"]');
+      const loaderCode = root.querySelector('iswc-code[data-slot="loader"]');
       return {
         scope: !!root.querySelector('[data-slot="scope"], input[name="cdn-scope"]'),
         loader: (loaderCode?.value || loaderCode?.textContent || '').trim(),
       };
     });
     assert.equal(data.scope, false, 'el panel no debe mostrar alcance de la carga');
-    assert.ok(/load\(\s*"is-cdn-snippet-demo"\s*\)/.test(data.loader), `snippet debe contener load del tag (vimos: ${data.loader.slice(0, 200)}…)`);
+    assert.ok(/load\(\s*"iswc-cdn-snippet-demo"\s*\)/.test(data.loader), `snippet debe contener load del tag (vimos: ${data.loader.slice(0, 200)}…)`);
     assert.ok(!/load\(\s*"(?:feedback|all)"\s*\)/.test(data.loader), 'el snippet no carga categoria ni all');
   },
 });
@@ -59,14 +59,14 @@ tests.push({
     await waitReady(page, 'data-cdn-snippet-ready');
     await page.waitForTimeout(300);
     const deps = await page.evaluate(() => {
-      const el = document.querySelector('is-cdn-snippet');
+      const el = document.querySelector('iswc-cdn-snippet');
       const root = el.shadowRoot;
       const rows = root.querySelectorAll('[data-kind="dep"]:not([hidden])');
       return [...rows].map((r) => r.querySelector('[data-slot="dep-name"]')?.textContent?.trim());
     });
     assert.ok(deps.length >= 2, `esperaba >=2 deps renderizadas, hay ${deps.length}`);
-    assert.ok(deps.some((d) => d?.includes('is-code')), `deps deben incluir is-code, se vio ${JSON.stringify(deps)}`);
-    assert.ok(deps.some((d) => d?.includes('is-button')), `deps deben incluir is-button, se vio ${JSON.stringify(deps)}`);
+    assert.ok(deps.some((d) => d?.includes('iswc-code')), `deps deben incluir iswc-code, se vio ${JSON.stringify(deps)}`);
+    assert.ok(deps.some((d) => d?.includes('iswc-button')), `deps deben incluir iswc-button, se vio ${JSON.stringify(deps)}`);
   },
 });
 
@@ -76,7 +76,7 @@ tests.push({
     await page.goto(URL, { waitUntil: 'domcontentloaded' });
     await waitReady(page, 'data-cdn-snippet-ready');
     const data = await page.evaluate(() => {
-      const el = document.querySelector('is-cdn-snippet');
+      const el = document.querySelector('iswc-cdn-snippet');
       const root = el.shadowRoot;
       const section = root.querySelector('section.cdn');
       return {

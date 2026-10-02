@@ -1,6 +1,6 @@
-// loading-overlay.test.mjs — tests exhaustivos del demo <is-loading-overlay>.
+// loading-overlay.test.mjs — tests exhaustivos del demo <iswc-loading-overlay>.
 // Cobertura: smoke + funcional (show/hide/toggle, message visible, scroll-lock,
-// is-show/is-hide events) + no dismissable (Escape y backdrop no cierran).
+// iswc-show/iswc-hide events) + no dismissable (Escape y backdrop no cierran).
 import assert from 'node:assert/strict';
 import { BASE_URL, newPage, close, waitReady, screenshot, report } from './lib/harness.mjs';
 
@@ -17,12 +17,12 @@ tests.push({
       const el = document.getElementById('overlay');
       const sr = el.shadowRoot;
       return {
-        defined: !!customElements.get('is-loading-overlay'),
+        defined: !!customElements.get('iswc-loading-overlay'),
         backdropPart: !!sr.querySelector('[part="backdrop"]'),
         panelPart: !!sr.querySelector('[part="panel"]'),
         indicatorPart: !!sr.querySelector('[part="indicator"]'),
         messagePart: !!sr.querySelector('[part="message"]'),
-        spinner: !!sr.querySelector('is-spinner'),
+        spinner: !!sr.querySelector('iswc-spinner'),
         backdropHidden: sr.querySelector('[part="backdrop"]')?.hidden,
         ariaModal: sr.querySelector('[part="backdrop"]')?.getAttribute('aria-modal'),
       };
@@ -32,7 +32,7 @@ tests.push({
     assert.equal(info.panelPart, true, '::part(panel) debe existir');
     assert.equal(info.indicatorPart, true, '::part(indicator) debe existir');
     assert.equal(info.messagePart, true, '::part(message) debe existir');
-    assert.equal(info.spinner, true, 'debe haber un <is-spinner> por defecto');
+    assert.equal(info.spinner, true, 'debe haber un <iswc-spinner> por defecto');
     assert.equal(info.backdropHidden, true, 'backdrop debe estar oculto inicialmente');
     assert.equal(info.ariaModal, 'true', 'backdrop debe tener aria-modal="true"');
     await screenshot(page, 'loading-overlay-smoke');
@@ -40,7 +40,7 @@ tests.push({
 });
 
 tests.push({
-  name: 'funcional: show() muestra el backdrop y emite is-show',
+  name: 'funcional: show() muestra el backdrop y emite iswc-show',
   run: async (page) => {
     await page.goto(URL, { waitUntil: 'domcontentloaded' });
     await waitReady(page, 'data-loading-ready');
@@ -48,8 +48,8 @@ tests.push({
     const events = await page.evaluate(async () => {
       const el = document.getElementById('overlay');
       const captured = [];
-      el.addEventListener('is-show', (e) => captured.push({ type: 'show', bubbles: e.bubbles, composed: e.composed }));
-      el.addEventListener('is-hide', (e) => captured.push({ type: 'hide' }));
+      el.addEventListener('iswc-show', (e) => captured.push({ type: 'show', bubbles: e.bubbles, composed: e.composed }));
+      el.addEventListener('iswc-hide', (e) => captured.push({ type: 'hide' }));
       el.show();
       await new Promise((r) => setTimeout(r, 100));
       const after = {
@@ -74,10 +74,10 @@ tests.push({
     // Eventos
     const showEvents = events.captured.filter((e) => e.type === 'show');
     const hideEvents = events.captured.filter((e) => e.type === 'hide');
-    assert.ok(showEvents.length >= 1, 'debe emitir is-show al menos una vez');
-    assert.ok(hideEvents.length >= 1, 'debe emitir is-hide al menos una vez');
-    assert.equal(showEvents[0].bubbles, true, 'is-show debe burbujear');
-    assert.equal(showEvents[0].composed, true, 'is-show debe atravesar shadow DOM');
+    assert.ok(showEvents.length >= 1, 'debe emitir iswc-show al menos una vez');
+    assert.ok(hideEvents.length >= 1, 'debe emitir iswc-hide al menos una vez');
+    assert.equal(showEvents[0].bubbles, true, 'iswc-show debe burbujear');
+    assert.equal(showEvents[0].composed, true, 'iswc-show debe atravesar shadow DOM');
   },
 });
 

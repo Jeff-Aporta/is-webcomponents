@@ -1,11 +1,11 @@
 {
-  "$schema": "is-preview/v1",
-  "tag": "is-breadcrumb",
+  "$schema": "iswc-preview/v1",
+  "tag": "iswc-breadcrumb",
   "category": "navigation",
-  "title": "<is-breadcrumb>",
+  "title": "<iswc-breadcrumb>",
   "titleHtml": true,
-  "description": "Documentación y demos de is-breadcrumb e is-breadcrumb-item de InSoft.",
-  "storageKey": "docs-is-breadcrumb",
+  "description": "Documentación y demos de iswc-breadcrumb e iswc-breadcrumb-item de InSoft.",
+  "storageKey": "docs-iswc-breadcrumb",
   "sections": [
     {
       "id": "intro",
@@ -14,7 +14,7 @@
       "blocks": [
         {
           "kind": "demo",
-          "html": "<is-breadcrumb label=\"Catálogo\">\r\n            <is-breadcrumb-item href=\"/\">Catálogo</is-breadcrumb-item>\r\n            <is-breadcrumb-item href=\"/ropa\">Ropa</is-breadcrumb-item>\r\n            <is-breadcrumb-item href=\"/ropa/mujer\">Mujer</is-breadcrumb-item>\r\n            <is-breadcrumb-item href=\"\">Camisetas</is-breadcrumb-item>\r\n          </is-breadcrumb>",
+          "html": "<iswc-breadcrumb label=\"Catálogo\">\r\n            <iswc-breadcrumb-item href=\"/\">Catálogo</iswc-breadcrumb-item>\r\n            <iswc-breadcrumb-item href=\"/ropa\">Ropa</iswc-breadcrumb-item>\r\n            <iswc-breadcrumb-item href=\"/ropa/mujer\">Mujer</iswc-breadcrumb-item>\r\n            <iswc-breadcrumb-item href=\"\">Camisetas</iswc-breadcrumb-item>\r\n          </iswc-breadcrumb>",
           "controls": [
             {
               "control": "select",
@@ -48,7 +48,7 @@
         },
         {
           "kind": "code",
-          "code": "<is-breadcrumb label=\"Catálogo\">\n  <is-breadcrumb-item href=\"/\">Catálogo</is-breadcrumb-item>\n  <is-breadcrumb-item href=\"/ropa\">Ropa</is-breadcrumb-item>\n  <is-breadcrumb-item href=\"/ropa/mujer\">Mujer</is-breadcrumb-item>\n  <is-breadcrumb-item href=\"\">Camisetas</is-breadcrumb-item>\n</is-breadcrumb>"
+          "code": "<iswc-breadcrumb label=\"Catálogo\">\n  <iswc-breadcrumb-item href=\"/\">Catálogo</iswc-breadcrumb-item>\n  <iswc-breadcrumb-item href=\"/ropa\">Ropa</iswc-breadcrumb-item>\n  <iswc-breadcrumb-item href=\"/ropa/mujer\">Mujer</iswc-breadcrumb-item>\n  <iswc-breadcrumb-item href=\"\">Camisetas</iswc-breadcrumb-item>\n</iswc-breadcrumb>"
         }
       ]
     },
@@ -59,11 +59,11 @@
       "blocks": [
         {
           "kind": "demo",
-          "html": "<is-breadcrumb id=\"bcSpa\" label=\"Navegación SPA\">\r\n            <is-breadcrumb-item>Inicio</is-breadcrumb-item>\r\n            <is-breadcrumb-item>Productos</is-breadcrumb-item>\r\n            <is-breadcrumb-item>Detalle</is-breadcrumb-item>\r\n          </is-breadcrumb>\r\n          <p id=\"bcLog\">Última navegación: ninguna</p>"
+          "html": "<iswc-breadcrumb id=\"bcSpa\" label=\"Navegación SPA\">\r\n            <iswc-breadcrumb-item>Inicio</iswc-breadcrumb-item>\r\n            <iswc-breadcrumb-item>Productos</iswc-breadcrumb-item>\r\n            <iswc-breadcrumb-item>Detalle</iswc-breadcrumb-item>\r\n          </iswc-breadcrumb>\r\n          <p id=\"bcLog\">Última navegación: ninguna</p>"
         },
         {
           "kind": "code",
-          "code": "bc.addEventListener('click', (e) => {\n  const item = e.target.closest('is-breadcrumb-item');\n  if (item) console.log('item click', item.textContent.trim());\n});"
+          "code": "bc.addEventListener('click', (e) => {\n  const item = e.target.closest('iswc-breadcrumb-item');\n  if (item) console.log('item click', item.textContent.trim());\n});"
         }
       ]
     },
@@ -74,11 +74,11 @@
       "blocks": [
         {
           "kind": "html",
-          "html": "<div class=\"demo-stack\">\r\n          <is-breadcrumb label=\"Inicio\">\r\n            <is-breadcrumb-item href=\"/\" icon=\"mdi:home\">Inicio</is-breadcrumb-item>\r\n            <is-breadcrumb-item href=\"/articulos\" icon=\"mdi:newspaper-variant\">Artículos</is-breadcrumb-item>\r\n            <is-breadcrumb-item href=\"\" icon=\"mdi:airplane\">Viajes</is-breadcrumb-item>\r\n          </is-breadcrumb>\r\n\r\n          <is-breadcrumb label=\"App\">\r\n            <is-breadcrumb-item href=\"/dashboard\">\r\n              <is-icon slot=\"start\" icon=\"mdi:view-dashboard\" aria-hidden=\"true\"></is-icon>\r\n              Dashboard\r\n            </is-breadcrumb-item>\r\n            <is-breadcrumb-item href=\"/users\">\r\n              <is-icon slot=\"start\" icon=\"mdi:account-group\" aria-hidden=\"true\"></is-icon>\r\n              Usuarios\r\n            </is-breadcrumb-item>\r\n            <is-breadcrumb-item href=\"\">\r\n              <is-icon slot=\"start\" icon=\"mdi:account\" aria-hidden=\"true\"></is-icon>\r\n              Perfil\r\n            </is-breadcrumb-item>\r\n          </is-breadcrumb>\r\n        </div>"
+          "html": "<div class=\"demo-stack\">\r\n          <iswc-breadcrumb label=\"Inicio\">\r\n            <iswc-breadcrumb-item href=\"/\" icon=\"mdi:home\">Inicio</iswc-breadcrumb-item>\r\n            <iswc-breadcrumb-item href=\"/articulos\" icon=\"mdi:newspaper-variant\">Artículos</iswc-breadcrumb-item>\r\n            <iswc-breadcrumb-item href=\"\" icon=\"mdi:airplane\">Viajes</iswc-breadcrumb-item>\r\n          </iswc-breadcrumb>\r\n\r\n          <iswc-breadcrumb label=\"App\">\r\n            <iswc-breadcrumb-item href=\"/dashboard\">\r\n              <iswc-icon slot=\"start\" icon=\"mdi:view-dashboard\" aria-hidden=\"true\"></iswc-icon>\r\n              Dashboard\r\n            </iswc-breadcrumb-item>\r\n            <iswc-breadcrumb-item href=\"/users\">\r\n              <iswc-icon slot=\"start\" icon=\"mdi:account-group\" aria-hidden=\"true\"></iswc-icon>\r\n              Usuarios\r\n            </iswc-breadcrumb-item>\r\n            <iswc-breadcrumb-item href=\"\">\r\n              <iswc-icon slot=\"start\" icon=\"mdi:account\" aria-hidden=\"true\"></iswc-icon>\r\n              Perfil\r\n            </iswc-breadcrumb-item>\r\n          </iswc-breadcrumb>\r\n        </div>"
         },
         {
           "kind": "code",
-          "code": "<is-breadcrumb-item icon=\"mdi:home\">Inicio</is-breadcrumb-item>\n<is-breadcrumb-item>\n  <is-icon slot=\"start\" icon=\"mdi:home\"></is-icon>\n  Inicio\n</is-breadcrumb-item>"
+          "code": "<iswc-breadcrumb-item icon=\"mdi:home\">Inicio</iswc-breadcrumb-item>\n<iswc-breadcrumb-item>\n  <iswc-icon slot=\"start\" icon=\"mdi:home\"></iswc-icon>\n  Inicio\n</iswc-breadcrumb-item>"
         }
       ]
     },
@@ -89,11 +89,11 @@
       "blocks": [
         {
           "kind": "demo",
-          "html": "<is-breadcrumb label=\"Slash\">\r\n            <is-breadcrumb-item href=\"/home\">\r\n              <span slot=\"separator\">/</span>\r\n              Inicio\r\n            </is-breadcrumb-item>\r\n            <is-breadcrumb-item href=\"/docs\">\r\n              <span slot=\"separator\">/</span>\r\n              Docs\r\n            </is-breadcrumb-item>\r\n            <is-breadcrumb-item href=\"\">\r\n              <span slot=\"separator\">/</span>\r\n              Guía\r\n            </is-breadcrumb-item>\r\n          </is-breadcrumb>"
+          "html": "<iswc-breadcrumb label=\"Slash\">\r\n            <iswc-breadcrumb-item href=\"/home\">\r\n              <span slot=\"separator\">/</span>\r\n              Inicio\r\n            </iswc-breadcrumb-item>\r\n            <iswc-breadcrumb-item href=\"/docs\">\r\n              <span slot=\"separator\">/</span>\r\n              Docs\r\n            </iswc-breadcrumb-item>\r\n            <iswc-breadcrumb-item href=\"\">\r\n              <span slot=\"separator\">/</span>\r\n              Guía\r\n            </iswc-breadcrumb-item>\r\n          </iswc-breadcrumb>"
         },
         {
           "kind": "code",
-          "code": "<is-breadcrumb-item href=\"/home\">\n  <span slot=\"separator\">/</span>\n  Inicio\n</is-breadcrumb-item>"
+          "code": "<iswc-breadcrumb-item href=\"/home\">\n  <span slot=\"separator\">/</span>\n  Inicio\n</iswc-breadcrumb-item>"
         }
       ]
     },
@@ -163,7 +163,7 @@
         },
         {
           "kind": "html",
-          "html": "<h2>Referencia completa — <code class=\"code\">&lt;is-breadcrumb-item&gt;</code></h2>"
+          "html": "<h2>Referencia completa — <code class=\"code\">&lt;iswc-breadcrumb-item&gt;</code></h2>"
         },
         {
           "kind": "html",

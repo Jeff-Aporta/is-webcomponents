@@ -3,7 +3,7 @@ import { withStyleAttrs } from '../../core/attrs.js';
 
 
 /**
- * <is-divider> — Web Component (vanilla).
+ * <iswc-divider> — Web Component (vanilla).
  *
  * Separador visual horizontal o vertical.
  *
@@ -25,7 +25,7 @@ import { withStyleAttrs } from '../../core/attrs.js';
     'brand', 'accent', 'success', 'warning', 'danger',
   ];
 
-  class IsDivider extends withStyleAttrs(HTMLElement) {
+  class IswcDivider extends withStyleAttrs(HTMLElement) {
     /** Personalización por atributo (ver `core/attrs.ts`). */
     static styleAttrs = {
     color: { prop: '--iswc-divider-color', onlyColorValues: true },
@@ -101,5 +101,5 @@ import { withStyleAttrs } from '../../core/attrs.js';
     }
   }
 
-  defineElement('is-divider', IsDivider, 'IsDivider');
+  defineElement('iswc-divider', IswcDivider, 'IswcDivider');
 })();

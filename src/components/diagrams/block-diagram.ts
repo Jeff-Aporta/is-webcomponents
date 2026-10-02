@@ -66,22 +66,22 @@ import { svgEl } from '../_shared/svg-chart-engine.js';
 import { svgArrowHead } from '../_shared/diagram-arrow.js';
 
 /**
- * <is-block-diagram> — diagrama de bloques en SVG, sin Mermaid.
+ * <iswc-block-diagram> — diagrama de bloques en SVG, sin Mermaid.
  *
- * Configuración por JSON, igual que <is-flowchart>:
+ * Configuración por JSON, igual que <iswc-flowchart>:
  *
- *   <is-block-diagram>
+ *   <iswc-block-diagram>
  *     <script type="application/json">
  *       { "blockDiagram": { "columns": 3, "blocks": [...], "edges": [...] } }
  *     </script>
- *   </is-block-diagram>
+ *   </iswc-block-diagram>
  *
  * A diferencia del flujo, aquí los bloques se ubican en una rejilla explícita
  * (columnas fijas + `span`), no en capas node-link.
  *
  * Atributos: color (inline | viewer), open-on-click
  * Propiedades: payload, spec, layout, turtle, hiddenGroups
- * Eventos: is-render, is-turtle-state, is-open-viewer, is-toggle-group
+ * Eventos: iswc-render, iswc-turtle-state, iswc-open-viewer, iswc-toggle-group
  */
 
 const SVG_NS = 'http://www.w3.org/2000/svg';
@@ -108,7 +108,7 @@ interface EdgeNodeEntry {
   path: SVGPathElement;
 }
 
-class IsBlockDiagram extends DiagramElementBase {
+class IswcBlockDiagram extends DiagramElementBase {
   #theme: DiagramTheme | null = null;
   #turtle: PathTurtle | null = null;
   #hiddenGroups: Set<string> = new Set<string>();
@@ -177,7 +177,7 @@ class IsBlockDiagram extends DiagramElementBase {
     const layout: BlockLayout = computeBlockLayout(visible);
     this.layout = layout;
     this.#buildSvg(layout, theme);
-    this.wrap.classList.toggle('is-viewer', this.isViewer);
+    this.wrap.classList.toggle('iswc-viewer', this.isViewer);
   }
 
   #buildSvg(layout: BlockLayout, theme: DiagramTheme): void {
@@ -247,10 +247,10 @@ class IsBlockDiagram extends DiagramElementBase {
       viewW: W,
       viewH: H,
       autoLoop: this.isViewer,
-      onState: (state: TurtleState) => emit(this, 'is-turtle-state', state),
+      onState: (state: TurtleState) => emit(this, 'iswc-turtle-state', state),
     });
 
-    emit(this, 'is-render', { layout, svg: this.svg });
+    emit(this, 'iswc-render', { layout, svg: this.svg });
   }
 
   #buildLegend(layout: BlockLayout, theme: DiagramTheme): void {
@@ -470,14 +470,14 @@ class IsBlockDiagram extends DiagramElementBase {
     if (this.isViewer) {
       const item = e.composedPath().find((x: EventTarget | null) => (x as HTMLElement | undefined)?.dataset?.groupId);
       if (item) {
-        emitCancelable(this, 'is-toggle-group', { id: (item as HTMLElement).dataset.groupId });
+        emitCancelable(this, 'iswc-toggle-group', { id: (item as HTMLElement).dataset.groupId });
       }
       return;
     }
     // El visor es opt-in: sin `open-on-click` el clic no hace nada y tampoco
-    // se anuncia `is-open-viewer`, que prometeria una apertura que no ocurre.
+    // se anuncia `iswc-open-viewer`, que prometeria una apertura que no ocurre.
     if (!this.hasAttribute('open-on-click')) return;
-    const ev = new CustomEvent('is-open-viewer', {
+    const ev = new CustomEvent('iswc-open-viewer', {
       bubbles: true, composed: true, cancelable: true, detail: { payload: this.payload },
     });
     this.dispatchEvent(ev);
@@ -508,14 +508,14 @@ class IsBlockDiagram extends DiagramElementBase {
 
     for (const [blockId, node] of this.#blockNodes) {
       const active = blockId === id;
-      node.g.classList.toggle('is-active', active);
-      node.g.classList.toggle('is-dim', !!id && !active);
+      node.g.classList.toggle('iswc-active', active);
+      node.g.classList.toggle('iswc-dim', !!id && !active);
       node.box.setAttribute('stroke-width', String(active ? 2.4 : 1.6));
     }
     for (const [, edge] of this.#edgeNodes) {
       const touches = !!id && (edge.e.from === id || edge.e.to === id);
-      edge.g.classList.toggle('is-active', touches);
-      edge.g.classList.toggle('is-dim', !!id && !touches);
+      edge.g.classList.toggle('iswc-active', touches);
+      edge.g.classList.toggle('iswc-dim', !!id && !touches);
     }
 
     this.#turtle?.setPaused(!!id);
@@ -534,9 +534,9 @@ class IsBlockDiagram extends DiagramElementBase {
   }
 }
 
-defineElement('is-block-diagram', IsBlockDiagram, 'IsBlockDiagram');
+defineElement('iswc-block-diagram', IswcBlockDiagram, 'IswcBlockDiagram');
 
-registerDiagramKind('block', 'is-block-diagram');
-registerDiagramKind('blockDiagram', 'is-block-diagram');
+registerDiagramKind('block', 'iswc-block-diagram');
+registerDiagramKind('blockDiagram', 'iswc-block-diagram');
 
-export { IsBlockDiagram };
+export { IswcBlockDiagram };

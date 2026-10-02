@@ -1,7 +1,7 @@
 import { adoptCss, defineElement, emit } from '../../core/element.js';
 
 /**
- * <is-qrcode> — Generador de QR en SVG.
+ * <iswc-qrcode> — Generador de QR en SVG.
  *
  * Usa la librería externa `qrcode-generator` (Kazuhiko Arase, MIT) cargada
  * dinámicamente desde esm.sh. Sin CDN no funciona — la mantenemos como
@@ -15,7 +15,7 @@ import { adoptCss, defineElement, emit } from '../../core/element.js';
  *   fg, bg     color de módulos y fondo (default currentColor / transparent)
  *
  * Eventos
- *   is-render   detail: { svg }
+ *   iswc-render   detail: { svg }
  *
  * API
  *   qr.svg       mismo nodo SVG
@@ -157,9 +157,9 @@ type QRLib = (typeNumber: number, errorCorrectionLevel: string) => QRInstance;
       svg.appendChild(fgPath);
       this.#canvas.innerHTML = '';
       this.#canvas.appendChild(svg);
-      emit(this, 'is-render', { svg });
+      emit(this, 'iswc-render', { svg });
     }
   }
 
-  defineElement('is-qrcode', IsQrCode);
+  defineElement('iswc-qrcode', IsQrCode);
 })();

@@ -21,7 +21,7 @@ const DEMOS = [
 async function checkDeterministic(page, demo) {
   await page.waitForTimeout(200);
   const data = await page.evaluate(() => {
-    return [...document.querySelectorAll('is-heatmap')].map((h, idx) => {
+    return [...document.querySelectorAll('iswc-heatmap')].map((h, idx) => {
       const shadow = h.shadowRoot;
       const svg = shadow.querySelector('svg[part="canvas"]');
       const svgRect = svg.getBoundingClientRect();

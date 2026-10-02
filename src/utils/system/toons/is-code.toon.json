@@ -1,6 +1,6 @@
 {
   "$schema": "toon/v1",
-  "tag": "is-code",
+  "tag": "iswc-code",
   "textos": {
     "escribirEnEditor": {
       "texto": "// e2e nativo",

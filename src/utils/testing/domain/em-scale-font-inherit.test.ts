@@ -1,7 +1,7 @@
 /**
  * em-scale-font-inherit.test.ts — la escala por font-size no puede mentir.
  *
- * ago/2026: is-fab documentaba escala en em (0.75 / 1 / 1.25) pero los tres
+ * ago/2026: iswc-fab documentaba escala en em (0.75 / 1 / 1.25) pero los tres
  * demos salían idénticos. Causa: el <button> interno no hereda font-size
  * (stylesheet UA) y `--size: 3.5em` se resolvía contra ~16px fijo.
  *
@@ -24,7 +24,7 @@ const read = (...p) => readFile(join(comps, ...p), 'utf8');
 /** Controles nativos que el UA no escala con el font del host. */
 const NATIVE_CONTROL = /\b(button|input|select|textarea)\b/i;
 
-test('is-fab: host + .fab heredan font-size (escala em)', async () => {
+test('iswc-fab: host + .fab heredan font-size (escala em)', async () => {
   const css = await read('actions', 'fab.css');
   const js = await read('actions', 'fab.ts');
 
@@ -62,7 +62,7 @@ test('is-fab: host + .fab heredan font-size (escala em)', async () => {
   );
 });
 
-test('is-fab preview: demo de escala con tres font-size distintos', async () => {
+test('iswc-fab preview: demo de escala con tres font-size distintos', async () => {
   const json = await readFile(
     join(raiz, 'src', 'components', 'actions', 'fab.json'),
     'utf8',
@@ -83,17 +83,17 @@ test('controles nativos en CSS con métricas em llevan font inherit', async () =
     ['actions/check-icon-button.css', /\.btn\s*\{/],
   ];
 
-  // El cierre del toast dejó de ser un <button> propio: ahora es <is-button>,
+  // El cierre del toast dejó de ser un <button> propio: ahora es <iswc-button>,
   // que ya hereda font-size desde su :host. Comprobar el CSS del consumidor
   // aquí buscaría una regla que no debe existir.
   const toastJs = await read('feedback', 'toast-item.ts');
-  assert.match(toastJs, /<is-button[^>]*class="close"/s,
-    'feedback/toast-item.ts: el cierre debe ser <is-button>, no un control nativo');
+  assert.match(toastJs, /<iswc-button[^>]*class="close"/s,
+    'feedback/toast-item.ts: el cierre debe ser <iswc-button>, no un control nativo');
 
-  // Igual el botón de quitar de is-tag.
+  // Igual el botón de quitar de iswc-tag.
   const tagJs = await read('feedback', 'tag.ts');
-  assert.match(tagJs, /<is-button[^>]*class="remove"/s,
-    'feedback/tag.ts: el botón de quitar debe ser <is-button>');
+  assert.match(tagJs, /<iswc-button[^>]*class="remove"/s,
+    'feedback/tag.ts: el botón de quitar debe ser <iswc-button>');
 
   for (const [rel, bloque] of criticos) {
     const css = await read(...rel.split('/'));

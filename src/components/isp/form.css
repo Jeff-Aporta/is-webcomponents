@@ -1,21 +1,22 @@
-/* Shadow DOM: los estados del host van SIEMPRE en `:host([attr])` a nivel
-   superior; `&[attr]` anidado dentro de `:host {}` compila a `:host[attr]` y
-   nunca matchea. */
+/* <iswc-form> — ficha con header / content / footer (Aceptar · Cancelar).
+   El breakpoint es el ancho PROPIO del formulario, no el de la ventana. */
+
 :host {
   display: block;
-  block-size: 100%;
   inline-size: 100%;
+  block-size: 100%;
   box-sizing: border-box;
   font-family: var(--iswc-sans, inherit);
   color: var(--iswc-text, inherit);
-  /* El breakpoint es el ancho PROPIO del formulario, no el de la ventana. */
+  /* Contenedor nombrado para queries explícitos en este componente. */
+  container-name: iswc-form;
   container-type: inline-size;
 
   .form {
     display: flex;
     flex-direction: column;
-    block-size: 100%;
     inline-size: 100%;
+    block-size: 100%;
     box-sizing: border-box;
   }
 
@@ -40,7 +41,8 @@
     justify-content: space-between;
     gap: 0.5em;
     margin-block-start: 0.5em;
-    padding: 0.5em;
+    padding-block: 0.5em;
+    padding-inline: 0.5em;
 
     .buttons {
       display: flex;
@@ -52,7 +54,7 @@
 }
 
 /* Bajo 600px el pie se apila: los botones a ancho completo, Aceptar arriba. */
-@container (max-width: 600px) {
+@container iswc-form (max-width: 600px) {
   .footer {
     flex-direction: column;
     align-items: stretch;
@@ -64,4 +66,6 @@
   }
 }
 
-:host([mode="view"]) .buttons { flex-direction: row; }
+:host([mode="view"]) {
+  .buttons { flex-direction: row; }
+}

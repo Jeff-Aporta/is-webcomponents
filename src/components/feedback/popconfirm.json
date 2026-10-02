@@ -1,11 +1,11 @@
 {
-  "$schema": "is-preview/v1",
-  "tag": "is-popconfirm",
+  "$schema": "iswc-preview/v1",
+  "tag": "iswc-popconfirm",
   "category": "feedback",
-  "title": "<is-popconfirm>",
+  "title": "<iswc-popconfirm>",
   "titleHtml": true,
-  "description": "Documentación y demos de is-popconfirm de InSoft.",
-  "storageKey": "docs-is-popconfirm",
+  "description": "Documentación y demos de iswc-popconfirm de InSoft.",
+  "storageKey": "docs-iswc-popconfirm",
   "sections": [
     {
       "id": "intro",
@@ -14,7 +14,7 @@
       "blocks": [
         {
           "kind": "demo",
-          "html": "<is-button id=\"btnDelete\" color=\"danger\">\r\n            <is-icon slot=\"start\" icon=\"mdi:trash-can\"></is-icon>\r\n            Borrar elemento\r\n          </is-button>\r\n          <is-popconfirm for=\"btnDelete\" message=\"¿Seguro que quieres borrarlo? Esta acción no se puede deshacer.\" placement=\"bottom-end\">\r\n            <is-button slot=\"confirm\" color=\"danger\">Sí, borrar</is-button>\r\n            <is-button slot=\"cancel\">Cancelar</is-button>\r\n          </is-popconfirm>\r\n          <p id=\"pcLog\">Última acción: <code class=\"code\">—</code></p>",
+          "html": "<iswc-button id=\"btnDelete\" color=\"danger\">\r\n            <iswc-icon slot=\"start\" icon=\"mdi:trash-can\"></iswc-icon>\r\n            Borrar elemento\r\n          </iswc-button>\r\n          <iswc-popconfirm for=\"btnDelete\" message=\"¿Seguro que quieres borrarlo? Esta acción no se puede deshacer.\" placement=\"bottom-end\">\r\n            <iswc-button slot=\"confirm\" color=\"danger\">Sí, borrar</iswc-button>\r\n            <iswc-button slot=\"cancel\">Cancelar</iswc-button>\r\n          </iswc-popconfirm>\r\n          <p id=\"pcLog\">Última acción: <code class=\"code\">—</code></p>",
           "controls": [
             {
               "control": "select",
@@ -40,7 +40,7 @@
         },
         {
           "kind": "code",
-          "code": "<is-button id=\"btnDelete\">Borrar</is-button>\n<is-popconfirm for=\"btnDelete\" message=\"¿Seguro?\">\n  <is-button slot=\"confirm\" color=\"danger\">Sí, borrar</is-button>\n  <is-button slot=\"cancel\">Cancelar</is-button>\n</is-popconfirm>"
+          "code": "<iswc-button id=\"btnDelete\">Borrar</iswc-button>\n<iswc-popconfirm for=\"btnDelete\" message=\"¿Seguro?\">\n  <iswc-button slot=\"confirm\" color=\"danger\">Sí, borrar</iswc-button>\n  <iswc-button slot=\"cancel\">Cancelar</iswc-button>\n</iswc-popconfirm>"
         }
       ]
     },
@@ -51,7 +51,7 @@
       "blocks": [
         {
           "kind": "demo",
-          "html": "<div style=\"display:flex;gap:0.5rem;flex-wrap:wrap\">\r\n            <is-button id=\"pc1\">top</is-button>\r\n            <is-popconfirm for=\"pc1\" message=\"Top popconfirm\" placement=\"top\"></is-popconfirm>\r\n\r\n            <is-button id=\"pc2\">top-start</is-button>\r\n            <is-popconfirm for=\"pc2\" placement=\"top-start\" message=\"Top start\"></is-popconfirm>\r\n\r\n            <is-button id=\"pc3\">top-end</is-button>\r\n            <is-popconfirm for=\"pc3\" placement=\"top-end\" message=\"Top end\"></is-popconfirm>\r\n\r\n            <is-button id=\"pc4\">bottom</is-button>\r\n            <is-popconfirm for=\"pc4\" placement=\"bottom\" message=\"Bottom\"></is-popconfirm>\r\n\r\n            <is-button id=\"pc5\">bottom-start</is-button>\r\n            <is-popconfirm for=\"pc5\" placement=\"bottom-start\" message=\"Bottom start\"></is-popconfirm>\r\n\r\n            <is-button id=\"pc6\">bottom-end</is-button>\r\n            <is-popconfirm for=\"pc6\" placement=\"bottom-end\" message=\"Bottom end\"></is-popconfirm>\r\n\r\n            <is-button id=\"pc7\">start</is-button>\r\n            <is-popconfirm for=\"pc7\" placement=\"start\" message=\"Start\"></is-popconfirm>\r\n\r\n            <is-button id=\"pc8\">end</is-button>\r\n            <is-popconfirm for=\"pc8\" placement=\"end\" message=\"End\"></is-popconfirm>\r\n          </div>"
+          "html": "<div style=\"display:flex;gap:0.5rem;flex-wrap:wrap\">\r\n            <iswc-button id=\"pc1\">top</iswc-button>\r\n            <iswc-popconfirm for=\"pc1\" message=\"Top popconfirm\" placement=\"top\"></iswc-popconfirm>\r\n\r\n            <iswc-button id=\"pc2\">top-start</iswc-button>\r\n            <iswc-popconfirm for=\"pc2\" placement=\"top-start\" message=\"Top start\"></iswc-popconfirm>\r\n\r\n            <iswc-button id=\"pc3\">top-end</iswc-button>\r\n            <iswc-popconfirm for=\"pc3\" placement=\"top-end\" message=\"Top end\"></iswc-popconfirm>\r\n\r\n            <iswc-button id=\"pc4\">bottom</iswc-button>\r\n            <iswc-popconfirm for=\"pc4\" placement=\"bottom\" message=\"Bottom\"></iswc-popconfirm>\r\n\r\n            <iswc-button id=\"pc5\">bottom-start</iswc-button>\r\n            <iswc-popconfirm for=\"pc5\" placement=\"bottom-start\" message=\"Bottom start\"></iswc-popconfirm>\r\n\r\n            <iswc-button id=\"pc6\">bottom-end</iswc-button>\r\n            <iswc-popconfirm for=\"pc6\" placement=\"bottom-end\" message=\"Bottom end\"></iswc-popconfirm>\r\n\r\n            <iswc-button id=\"pc7\">start</iswc-button>\r\n            <iswc-popconfirm for=\"pc7\" placement=\"start\" message=\"Start\"></iswc-popconfirm>\r\n\r\n            <iswc-button id=\"pc8\">end</iswc-button>\r\n            <iswc-popconfirm for=\"pc8\" placement=\"end\" message=\"End\"></iswc-popconfirm>\r\n          </div>"
         }
       ]
     },
@@ -62,7 +62,7 @@
       "blocks": [
         {
           "kind": "demo",
-          "html": "<is-button id=\"pcMega\">Power action</is-button>\r\n          <is-popconfirm for=\"pcMega\" placement=\"bottom\" hide-arrow>\r\n            <div slot=\"message\">\r\n              <strong>¿Reiniciar el servidor?</strong>\r\n              <p style=\"margin:0.25rem 0;font-size:0.85em;color:color-mix(in srgb,currentColor 70%,transparent)\">\r\n                Esto detendrá todos los servicios activos.\r\n              </p>\r\n            </div>\r\n            <is-button slot=\"cancel\">Cancelar</is-button>\r\n            <is-button slot=\"confirm\" color=\"danger\">Reiniciar</is-button>\r\n          </is-popconfirm>"
+          "html": "<iswc-button id=\"pcMega\">Power action</iswc-button>\r\n          <iswc-popconfirm for=\"pcMega\" placement=\"bottom\" hide-arrow>\r\n            <div slot=\"message\">\r\n              <strong>¿Reiniciar el servidor?</strong>\r\n              <p style=\"margin:0.25rem 0;font-size:0.85em;color:color-mix(in srgb,currentColor 70%,transparent)\">\r\n                Esto detendrá todos los servicios activos.\r\n              </p>\r\n            </div>\r\n            <iswc-button slot=\"cancel\">Cancelar</iswc-button>\r\n            <iswc-button slot=\"confirm\" color=\"danger\">Reiniciar</iswc-button>\r\n          </iswc-popconfirm>"
         }
       ]
     },
@@ -72,7 +72,7 @@
       "blocks": [
         {
           "kind": "html",
-          "html": "<h3><code class=\"code\">&lt;is-popconfirm&gt;</code></h3>"
+          "html": "<h3><code class=\"code\">&lt;iswc-popconfirm&gt;</code></h3>"
         },
         {
           "kind": "table",
@@ -127,19 +127,19 @@
           ],
           "rows": [
             [
-              "<code>is-popconfirm-show</code>",
+              "<code>iswc-popconfirm-show</code>",
               "Popconfirm visible."
             ],
             [
-              "<code>is-popconfirm-hide</code>",
+              "<code>iswc-popconfirm-hide</code>",
               "Popconfirm se cierra."
             ],
             [
-              "<code>is-popconfirm-confirm</code>",
+              "<code>iswc-popconfirm-confirm</code>",
               "Click en confirmar."
             ],
             [
-              "<code>is-popconfirm-cancel</code>",
+              "<code>iswc-popconfirm-cancel</code>",
               "Click en cancelar."
             ]
           ]

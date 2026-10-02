@@ -10,16 +10,16 @@ const URL = `${BASE_URL}/demos/forms/inline-edit/inline-edit.html`;
 const tests = [];
 
 tests.push({
-  name: 'smoke: <is-inline-edit> queda definido y muestra el valor inicial',
+  name: 'smoke: <iswc-inline-edit> queda definido y muestra el valor inicial',
   run: async (page) => {
     await page.goto(URL, { waitUntil: 'domcontentloaded' });
     await waitReady(page, 'data-inline-edit-ready');
     const data = await page.evaluate(() => {
-      const items = [...document.querySelectorAll('main is-inline-edit')];
+      const items = [...document.querySelectorAll('main iswc-inline-edit')];
       const task = items.find((i) => i.getAttribute('name') === 'task');
       const shadow = task.shadowRoot;
       return {
-        defined: !!customElements.get('is-inline-edit'),
+        defined: !!customElements.get('iswc-inline-edit'),
         count: items.length,
         value: task.value,
         textContent: shadow.querySelector('[part="display"] .text')?.textContent,
@@ -28,7 +28,7 @@ tests.push({
         mode: task.getAttribute('mode'),
       };
     });
-    assert.equal(data.defined, true, 'is-inline-edit debe estar definido');
+    assert.equal(data.defined, true, 'iswc-inline-edit debe estar definido');
     assert.ok(data.count >= 5, `esperaba >=5 inline-edits, hay ${data.count}`);
     assert.equal(data.value, 'Comprar pan', 'el value inicial debe ser "Comprar pan"');
     assert.equal(data.textContent, 'Comprar pan', 'el texto visible debe coincidir con el value');
@@ -45,11 +45,11 @@ tests.push({
     await page.goto(URL, { waitUntil: 'domcontentloaded' });
     await waitReady(page, 'data-inline-edit-ready');
     const data = await page.evaluate(async () => {
-      const task = document.querySelector('is-inline-edit[name="task"]');
+      const task = document.querySelector('iswc-inline-edit[name="task"]');
       const editPromise = new Promise((resolve) => {
-        task.addEventListener('is-edit', () => resolve(true), { once: true });
+        task.addEventListener('iswc-edit', () => resolve(true), { once: true });
       });
-      // Antes del clic no debe haber <input> visible (el root está en is-idle)
+      // Antes del clic no debe haber <input> visible (el root está en iswc-idle)
       const before = {
         editing: task.editing,
         rootClass: task.shadowRoot.querySelector('.root').className,
@@ -67,23 +67,23 @@ tests.push({
       return { before, after, editEmitted };
     });
     assert.equal(data.before.editing, false, 'inicialmente NO debe estar en modo edición');
-    assert.match(data.before.rootClass, /is-idle/, 'inicialmente debe tener clase is-idle');
+    assert.match(data.before.rootClass, /iswc-idle/, 'inicialmente debe tener clase iswc-idle');
     assert.equal(data.after.editing, true, 'tras clic debe estar en modo edición');
-    assert.match(data.after.rootClass, /is-editing/, 'tras clic debe tener clase is-editing');
+    assert.match(data.after.rootClass, /iswc-editing/, 'tras clic debe tener clase iswc-editing');
     assert.equal(data.after.hasInput, true, 'tras clic debe existir el input editable');
-    assert.equal(data.editEmitted, true, 'debe haberse emitido is-edit');
+    assert.equal(data.editEmitted, true, 'debe haberse emitido iswc-edit');
   },
 });
 
 tests.push({
-  name: 'funcional: Enter guarda el nuevo valor y emite is-save',
+  name: 'funcional: Enter guarda el nuevo valor y emite iswc-save',
   run: async (page) => {
     await page.goto(URL, { waitUntil: 'domcontentloaded' });
     await waitReady(page, 'data-inline-edit-ready');
     const data = await page.evaluate(async () => {
-      const task = document.querySelector('is-inline-edit[name="task"]');
+      const task = document.querySelector('iswc-inline-edit[name="task"]');
       const savePromise = new Promise((resolve) => {
-        task.addEventListener('is-save', (e) => resolve(e.detail), { once: true });
+        task.addEventListener('iswc-save', (e) => resolve(e.detail), { once: true });
       });
       task.click();
       const input = task.shadowRoot.querySelector('input');
@@ -103,9 +103,9 @@ tests.push({
     });
     assert.equal(data.value, 'Comprar leche', `value debe ser "Comprar leche", obtuve "${data.value}"`);
     assert.equal(data.displayedText, 'Comprar leche', 'el display debe reflejar el nuevo valor');
-    assert.ok(data.saveDetail, 'debe haberse emitido is-save');
-    assert.equal(data.saveDetail.value, 'Comprar leche', 'is-save.detail.value debe ser el nuevo valor');
-    assert.equal(data.saveDetail.previous, 'Comprar pan', 'is-save.detail.previous debe ser el valor anterior');
+    assert.ok(data.saveDetail, 'debe haberse emitido iswc-save');
+    assert.equal(data.saveDetail.value, 'Comprar leche', 'iswc-save.detail.value debe ser el nuevo valor');
+    assert.equal(data.saveDetail.previous, 'Comprar pan', 'iswc-save.detail.previous debe ser el valor anterior');
   },
 });
 
@@ -115,9 +115,9 @@ tests.push({
     await page.goto(URL, { waitUntil: 'domcontentloaded' });
     await waitReady(page, 'data-inline-edit-ready');
     const data = await page.evaluate(async () => {
-      const task = document.querySelector('is-inline-edit[name="task"]');
+      const task = document.querySelector('iswc-inline-edit[name="task"]');
       const cancelPromise = new Promise((resolve) => {
-        task.addEventListener('is-cancel', (e) => resolve(e.detail), { once: true });
+        task.addEventListener('iswc-cancel', (e) => resolve(e.detail), { once: true });
       });
       const before = task.value;
       task.click();
@@ -138,7 +138,7 @@ tests.push({
     });
     assert.equal(data.before, 'Comprar pan', 'valor inicial');
     assert.equal(data.after, 'Comprar pan', 'tras Esc el value debe volver al inicial');
-    assert.ok(data.cancelDetail, 'debe haberse emitido is-cancel');
+    assert.ok(data.cancelDetail, 'debe haberse emitido iswc-cancel');
     assert.equal(data.cancelDetail.value, 'Comprar pan', 'cancel.detail.value debe ser el revertido');
   },
 });
@@ -149,9 +149,9 @@ tests.push({
     await page.goto(URL, { waitUntil: 'domcontentloaded' });
     await waitReady(page, 'data-inline-edit-ready');
     const data = await page.evaluate(async () => {
-      const task = document.querySelector('is-inline-edit[name="task"]');
+      const task = document.querySelector('iswc-inline-edit[name="task"]');
       const savePromise = new Promise((resolve) => {
-        task.addEventListener('is-save', (e) => resolve(e.detail?.value), { once: true });
+        task.addEventListener('iswc-save', (e) => resolve(e.detail?.value), { once: true });
       });
       task.click();
       const input = task.shadowRoot.querySelector('input');
@@ -166,7 +166,7 @@ tests.push({
       return { value: task.value, saved };
     });
     assert.equal(data.value, 'Nuevo', `blur debe guardar, obtuve "${data.value}"`);
-    assert.equal(data.saved, 'Nuevo', 'is-save debe dispararse con el nuevo valor');
+    assert.equal(data.saved, 'Nuevo', 'iswc-save debe dispararse con el nuevo valor');
   },
 });
 
@@ -176,9 +176,9 @@ tests.push({
     await page.goto(URL, { waitUntil: 'domcontentloaded' });
     await waitReady(page, 'data-inline-edit-ready');
     const data = await page.evaluate(async () => {
-      const nick = document.querySelector('is-inline-edit[name="nickname"]');
+      const nick = document.querySelector('iswc-inline-edit[name="nickname"]');
       const cancelPromise = new Promise((resolve) => {
-        nick.addEventListener('is-cancel', (e) => resolve(e.detail?.value), { once: true });
+        nick.addEventListener('iswc-cancel', (e) => resolve(e.detail?.value), { once: true });
       });
       const before = nick.value;
       nick.click();
@@ -194,7 +194,7 @@ tests.push({
     });
     assert.equal(data.before, 'usuario123', 'valor inicial');
     assert.equal(data.after, 'usuario123', 'cancel-on-blur debe revertir, no guardar "temporal"');
-    assert.equal(data.cancelled, 'usuario123', 'is-cancel debe dispararse con el valor revertido');
+    assert.equal(data.cancelled, 'usuario123', 'iswc-cancel debe dispararse con el valor revertido');
   },
 });
 
@@ -204,7 +204,7 @@ tests.push({
     await page.goto(URL, { waitUntil: 'domcontentloaded' });
     await waitReady(page, 'data-inline-edit-ready');
     const data = await page.evaluate(() => {
-      const desc = document.querySelector('is-inline-edit[name="description"]');
+      const desc = document.querySelector('iswc-inline-edit[name="description"]');
       const shadow = desc.shadowRoot;
       const ta = shadow.querySelector('textarea');
       const inp = shadow.querySelector('input');
@@ -230,7 +230,7 @@ tests.push({
     await page.goto(URL, { waitUntil: 'domcontentloaded' });
     await waitReady(page, 'data-inline-edit-ready');
     const data = await page.evaluate(() => {
-      const locked = document.querySelector('is-inline-edit[name="locked"]');
+      const locked = document.querySelector('iswc-inline-edit[name="locked"]');
       const before = locked.editing;
       locked.click();
       const after = locked.editing;
@@ -255,7 +255,7 @@ tests.push({
     await page.goto(URL, { waitUntil: 'domcontentloaded' });
     await waitReady(page, 'data-inline-edit-ready');
     const data = await page.evaluate(() => {
-      const title = document.querySelector('is-inline-edit[name="title"]');
+      const title = document.querySelector('iswc-inline-edit[name="title"]');
       return {
         required: title.hasAttribute('required'),
         value: title.value,
@@ -280,7 +280,7 @@ tests.push({
     const data = await page.evaluate(() => {
       // Construimos un form con un inline-edit dentro y leemos FormData
       const form = document.createElement('form');
-      const ie = document.createElement('is-inline-edit');
+      const ie = document.createElement('iswc-inline-edit');
       ie.setAttribute('name', 'sample');
       ie.setAttribute('value', 'mi-valor');
       form.appendChild(ie);

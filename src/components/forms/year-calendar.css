@@ -33,24 +33,24 @@
     font-variant-numeric: tabular-nums;
     cursor: pointer;
     &:hover:not(:disabled) { background: var(--iswc-control-bg-hover, #e9ecef); }
-  }
 
-  .year:focus-visible {
-    outline: 2px solid var(--iswc-focus, var(--iswc-accent, #e03131));
-    outline-offset: 1px;
-  }
+    &:focus-visible {
+      outline: 2px solid var(--iswc-focus, var(--iswc-accent, #e03131));
+      outline-offset: 1px;
+    }
 
-  .year[data-current] {
-    box-shadow: inset 0 0 0 1px var(--iswc-color-brand, #e03131);
-  }
+    &[data-current] {
+      box-shadow: inset 0 0 0 1px var(--iswc-color-brand, #e03131);
+    }
 
-  .year[data-selected] {
-    background: var(--iswc-color-brand-strong, #c92a2a);
-    color: var(--iswc-on-brand, #fff);
-  }
+    &[data-selected] {
+      background: var(--iswc-color-brand-strong, #c92a2a);
+      color: var(--iswc-on-brand, #fff);
+    }
 
-  .year:disabled {
-    opacity: 0.35;
-    cursor: not-allowed;
+    &:disabled {
+      opacity: 0.35;
+      cursor: not-allowed;
+    }
   }
 }

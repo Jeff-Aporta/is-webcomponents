@@ -1,4 +1,4 @@
-/* is-dropzone */
+/* iswc-dropzone */
 :host {
   display: block;
   font: inherit;
@@ -25,15 +25,17 @@
   outline: 0;
   transition: border-color 150ms ease, background-color 150ms ease;
 
-  &:focus-visible, &.is-over {
+  /* Estado "encima" se aplica desde JS con la clase .iswc-over (drag/drop),
+   * :focus-visible lo aplica el navegador. Misma pinta para los dos. */
+  &:focus-visible,
+  &.iswc-over {
     border-color: var(--iswc-accent);
-    background:
-      color-mix(in srgb, var(--iswc-accent) 10%, transparent);
+    background: color-mix(in srgb, var(--iswc-accent) 10%, transparent);
   }
 
-  & .ico { font-size: 2rem; color: var(--iswc-accent); }
-  & .title { font-size: 1rem; }
-  & .sub { color: var(--iswc-text-soft); font-size: .85rem; }
+  .ico { font-size: 2rem; color: var(--iswc-accent); }
+  .title { font-size: 1rem; }
+  .sub { color: var(--iswc-text-soft); font-size: .85rem; }
 }
 
 .queue {
@@ -95,9 +97,10 @@ progress {
   font-variant-numeric: tabular-nums;
   white-space: nowrap;
 }
-.status-done .status { color: var(--iswc-success, #16a34a); }
+/* Color del status según el estado del upload (JS pone la clase en la fila). */
+.status-done    .status { color: var(--iswc-success, #16a34a); }
 .status-uploading .status { color: var(--iswc-accent); }
-.status-error .status { color: var(--iswc-danger, #dc2626); }
+.status-error   .status { color: var(--iswc-danger, #dc2626); }
 
 .del {
   flex: none;

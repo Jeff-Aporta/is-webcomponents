@@ -10,20 +10,20 @@ import { registerDiagramKind } from './diagram-kinds.js';
 import { svgEl } from '../_shared/svg-chart-engine.js';
 
 /**
- * <is-journey-map> — mapa de recorrido (user journey) en SVG, sin Mermaid.
+ * <iswc-journey-map> — mapa de recorrido (user journey) en SVG, sin Mermaid.
  *
- *   <is-journey-map>
+ *   <iswc-journey-map>
  *     <script type="application/json">
  *       { "journey": { "phases": [...], "steps": [{ "label": "...", "score": 4 }] } }
  *     </script>
- *   </is-journey-map>
+ *   </iswc-journey-map>
  *
- * Mismo esqueleto que <is-flowchart>: shadow DOM, slot JSON + MutationObserver,
+ * Mismo esqueleto que <iswc-flowchart>: shadow DOM, slot JSON + MutationObserver,
  * tema por atributo `data-theme`, `color` (inline | viewer), lightbox propio.
  *
  * Atributos: color (inline | viewer), open-on-click
  * Propiedades: payload, spec, layout, hiddenPhases
- * Eventos: is-render, is-open-viewer, is-toggle-phase
+ * Eventos: iswc-render, iswc-open-viewer, iswc-toggle-phase
  */
 
 interface JnLayoutStep {
@@ -73,7 +73,7 @@ interface JnLayout {
 }
 interface StepEntry { s: JnLayoutStep; g: SVGGElement; }
 
-class IsJourneyMap extends DiagramElementBase {
+class IswcJourneyMap extends DiagramElementBase {
   #hiddenPhases = new Set<string>();
   #stepNodes = new Map<string, StepEntry>();
   #hoverId: string | null = null;
@@ -130,7 +130,7 @@ class IsJourneyMap extends DiagramElementBase {
     const layout = computeJourneyLayout(visible) as unknown as JnLayout;
     this.layout = layout;
     this.#buildSvg(layout, theme);
-    this.wrap.classList.toggle('is-viewer', this.isViewer);
+    this.wrap.classList.toggle('iswc-viewer', this.isViewer);
   }
 
   #buildSvg(layout: JnLayout, theme: DiagramTheme): void {
@@ -165,7 +165,7 @@ class IsJourneyMap extends DiagramElementBase {
     this.#buildLine(layout, theme);
     this.#buildSteps(layout, theme);
 
-    emit(this, 'is-render', { layout, svg: this.svg });
+    emit(this, 'iswc-render', { layout, svg: this.svg });
   }
 
   #buildGrid(layout: JnLayout, theme: DiagramTheme): void {
@@ -287,13 +287,13 @@ class IsJourneyMap extends DiagramElementBase {
   #onClick = (e: MouseEvent) => {
     if (this.isViewer) {
       const phase = e.composedPath().find((x): x is HTMLElement => x instanceof HTMLElement && !!x.dataset?.phaseId);
-      if (phase) emit(this, 'is-toggle-phase', { id: phase.dataset.phaseId });
+      if (phase) emit(this, 'iswc-toggle-phase', { id: phase.dataset.phaseId });
       return;
     }
     // El visor es opt-in: sin `open-on-click` el clic no hace nada y tampoco
-    // se anuncia `is-open-viewer`, que prometeria una apertura que no ocurre.
+    // se anuncia `iswc-open-viewer`, que prometeria una apertura que no ocurre.
     if (!this.hasAttribute('open-on-click')) return;
-    const ev = new CustomEvent('is-open-viewer', {
+    const ev = new CustomEvent('iswc-open-viewer', {
       bubbles: true, composed: true, cancelable: true, detail: { payload: this.payload },
     });
     this.dispatchEvent(ev);
@@ -324,8 +324,8 @@ class IsJourneyMap extends DiagramElementBase {
 
     for (const [stepId, node] of this.#stepNodes) {
       const active = stepId === id;
-      node.g.classList.toggle('is-active', active);
-      node.g.classList.toggle('is-dim', !!id && !active);
+      node.g.classList.toggle('iswc-active', active);
+      node.g.classList.toggle('iswc-dim', !!id && !active);
     }
 
     if (!entry) {
@@ -352,8 +352,8 @@ class IsJourneyMap extends DiagramElementBase {
   }
 }
 
-defineElement('is-journey-map', IsJourneyMap, 'IsJourneyMap');
+defineElement('iswc-journey-map', IswcJourneyMap, 'IswcJourneyMap');
 
-registerDiagramKind('journey', 'is-journey-map');
+registerDiagramKind('journey', 'iswc-journey-map');
 
-export { IsJourneyMap };
+export { IswcJourneyMap };

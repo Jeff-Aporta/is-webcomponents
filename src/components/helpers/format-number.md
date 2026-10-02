@@ -1,20 +1,20 @@
 ---
-tag: is-format-number
+tag: iswc-format-number
 tags:
-  - is-format-number
+  - iswc-format-number
 category: helpers
 status: public
 source: ./format-number.js
 style: ./format-number.css
 preview: ./format-number.json
 ---
-# `<is-format-number>`
+# `<iswc-format-number>`
 
 ## Propósito
 
 Números con Intl.NumberFormat. Locale = lang del documento.
 
-Este módulo registra `<is-format-number>`.
+Este módulo registra `<iswc-format-number>`.
 
 ## Cuándo usarlo
 
@@ -33,8 +33,8 @@ import './format-number.js';
 ## Ejemplo mínimo
 
 ```html
-<is-format-number value="0.875" type="percent"></is-format-number>
-<is-format-number value="99.9" type="currency" currency="USD"></is-format-number>
+<iswc-format-number value="0.875" type="percent"></iswc-format-number>
+<iswc-format-number value="99.9" type="currency" currency="USD"></iswc-format-number>
 ```
 
 ## API
@@ -93,7 +93,7 @@ No declara integración form-associated propia en este módulo.
 
 Documentación de cabecera preservada desde fuente:
 
-> <is-format-number> — Web Component (vanilla).
+> <iswc-format-number> — Web Component (vanilla).
 > Formatea números con Intl.NumberFormat.
 > Atributos
 >   value                    number
@@ -107,7 +107,7 @@ Documentación de cabecera preservada desde fuente:
 
 - [`../_shared/adopt-css.js`](../_shared/adopt-css.js)
 
-Tags del módulo: `<is-format-number>`.
+Tags del módulo: `<iswc-format-number>`.
 
 ## Accesibilidad
 
@@ -116,8 +116,8 @@ Preservar semántica, foco, teclado, labels y ARIA. ARIA detectado: ninguno expl
 ## Ejemplo avanzado
 
 ```html
-<is-format-number value="1234.5" minimum-fraction-digits="2"></is-format-number>
-<is-format-number value="1234.56" maximum-fraction-digits="0"></is-format-number>
+<iswc-format-number value="1234.5" minimum-fraction-digits="2"></iswc-format-number>
+<iswc-format-number value="1234.56" maximum-fraction-digits="0"></iswc-format-number>
 ```
 
 ## Errores comunes

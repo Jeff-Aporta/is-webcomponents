@@ -1,15 +1,15 @@
 ---
-tag: is-maps
+tag: iswc-maps
 tags:
-  - is-maps
-  - is-map-marker
+  - iswc-maps
+  - iswc-map-marker
 category: data-viz
 status: public
 source: ./maps.js
 style: ./maps.css
 preview: ./maps.json
 ---
-# `<is-maps>`
+# `<iswc-maps>`
 
 ## Propósito
 
@@ -19,7 +19,7 @@ equirectangular y coloca marcadores por latitud/longitud, con pan y zoom
 opcionales. En modo `tile` incrusta un mapa de terceros (OpenStreetMap u
 otro) dentro de un `<iframe>`.
 
-Este módulo registra `<is-maps>` y `<is-map-marker>`.
+Este módulo registra `<iswc-maps>` y `<iswc-map-marker>`.
 
 ## Cuándo usarlo
 
@@ -45,17 +45,17 @@ import './maps.js';
 ## Ejemplo mínimo
 
 ```html
-<is-maps viewbox="-80,-5,-66,13">
-  <is-map-marker lat="4.71" lon="-74.07" label="Bogotá"></is-map-marker>
-  <is-map-marker lat="6.25" lon="-75.56" label="Medellín"></is-map-marker>
-</is-maps>
+<iswc-maps viewbox="-80,-5,-66,13">
+  <iswc-map-marker lat="4.71" lon="-74.07" label="Bogotá"></iswc-map-marker>
+  <iswc-map-marker lat="6.25" lon="-75.56" label="Medellín"></iswc-map-marker>
+</iswc-maps>
 ```
 
 ## API
 
 ### Atributos y propiedades
 
-#### Atributos observados de `<is-maps>`
+#### Atributos observados de `<iswc-maps>`
 
 | Atributo | Tipo | Default | Notas |
 | --- | --- | --- | --- |
@@ -64,7 +64,7 @@ import './maps.js';
 | `engine` | `svg` \| `tile` | `svg` | Cualquier valor distinto de `tile` se trata como `svg`. |
 | `interactive` | booleano (presencia) | ausente | **Debe estar presente para habilitar pan y zoom**; sin él, rueda y arrastre no hacen nada (la cabecera del módulo dice lo contrario). |
 
-#### Atributos observados de `<is-map-marker>`
+#### Atributos observados de `<iswc-map-marker>`
 
 | Atributo | Tipo | Default | Notas |
 | --- | --- | --- | --- |
@@ -72,7 +72,7 @@ import './maps.js';
 | `lon` | número (grados) | ninguno | Obligatorio; un valor no finito descarta el marcador. |
 | `label` | string | sin etiqueta | Texto dibujado a la derecha del punto. |
 
-`<is-map-marker>` declara esos atributos como observados pero no
+`<iswc-map-marker>` declara esos atributos como observados pero no
 implementa `attributeChangedCallback`: cambiarlos en caliente no repinta
 nada hasta que el mapa vuelve a renderizar (pan, zoom o cambio de atributo
 en el padre).
@@ -85,7 +85,7 @@ configuración va por atributos y, en modo `tile`, por el JSON hijo.
 Forma del JSON de modo `tile`:
 
 ```html
-<is-maps engine="tile">
+<iswc-maps engine="tile">
   <script type="application/json">
   { "tileUrl": "https://www.openstreetmap.org/export/embed.html",
     "bbox": "-74.2,4.5,-73.9,4.8",
@@ -93,14 +93,14 @@ Forma del JSON de modo `tile`:
     "center": "4.65,-74.05",
     "attribution": "© OpenStreetMap" }
   </script>
-</is-maps>
+</iswc-maps>
 ```
 
 ### Slots
 
-No expone. Ni `<is-maps>` ni `<is-map-marker>` colocan un `<slot>` en su
-shadow root (de hecho `<is-map-marker>` no crea shadow root). Los
-`<is-map-marker>` hijos se leen como datos, no se proyectan, y el
+No expone. Ni `<iswc-maps>` ni `<iswc-map-marker>` colocan un `<slot>` en su
+shadow root (de hecho `<iswc-map-marker>` no crea shadow root). Los
+`<iswc-map-marker>` hijos se leen como datos, no se proyectan, y el
 `<span slot="popup">` que aparece en la cabecera del módulo no está
 implementado.
 
@@ -108,12 +108,12 @@ implementado.
 
 | Evento | detail | bubbles | composed | cancelable |
 | --- | --- | --- | --- | --- |
-| `is-viewport` | `{ minLon, minLat, maxLon, maxLat }` — copia del viewport actual | sí | sí | no |
-| `is-marker-click` | `{ marker }` — el elemento `<is-map-marker>` del light DOM | sí | sí | no |
+| `iswc-viewport` | `{ minLon, minLat, maxLon, maxLat }` — copia del viewport actual | sí | sí | no |
+| `iswc-marker-click` | `{ marker }` — el elemento `<iswc-map-marker>` del light DOM | sí | sí | no |
 
-`is-viewport` se emite al final de cada render en modo `svg`, es decir en
+`iswc-viewport` se emite al final de cada render en modo `svg`, es decir en
 cada paso de arrastre y en cada tick de rueda; en modo `tile` no se emite
-nunca. `is-marker-click` viene del `click` en el círculo del marcador.
+nunca. `iswc-marker-click` viene del `click` en el círculo del marcador.
 
 ### Métodos y propiedades públicas
 
@@ -153,7 +153,7 @@ No expone. No se usa `ElementInternals` ni `CustomStateSet`.
 Ninguno de los dos elementos es form-associated: no declaran
 `formAssociated`, no exponen `value`/`name` y no participan en el envío de
 un `<form>`. Para enviar una coordenada seleccionada hay que escucharla en
-`is-marker-click` y escribirla en un input propio.
+`iswc-marker-click` y escribirla en un input propio.
 
 ## Comportamiento
 
@@ -183,8 +183,8 @@ un `<form>`. Para enviar una coordenada seleccionada hay que escucharla en
 - **Caja `.zoom-info`.** Existe en el shadow DOM y tiene estilos, pero nunca
   recibe texto: hoy es un contenedor vacío. La información del viewport se
   dibuja dentro del SVG (`.vp-text`).
-- Solo se leen los `<is-map-marker>` que son hijos directos
-  (`:scope > is-map-marker`); anidarlos dentro de otro elemento los
+- Solo se leen los `<iswc-map-marker>` que son hijos directos
+  (`:scope > iswc-map-marker`); anidarlos dentro de otro elemento los
   invisibiliza.
 
 ## Dependencias y componentes relacionados
@@ -195,12 +195,12 @@ un `<form>`. Para enviar una coordenada seleccionada hay que escucharla en
 - [`../_shared/svg-chart-engine.js`](../_shared/svg-chart-engine.js) (solo `svgEl`)
 - Relacionados: [`./heatmap.md`](./heatmap.md), [`../charts/bubble-chart.md`](../charts/bubble-chart.md)
 
-Tags del módulo: `<is-maps>`, `<is-map-marker>`.
+Tags del módulo: `<iswc-maps>`, `<iswc-map-marker>`.
 
 ## Accesibilidad
 
 - El `<svg>` del modo nativo no lleva `role` ni `aria-label`: conviene poner
-  `role="img"` y una descripción en el propio `<is-maps>`, o marcarlo como
+  `role="img"` y una descripción en el propio `<iswc-maps>`, o marcarlo como
   decorativo si el dato ya está en una lista o tabla vecina.
 - Los marcadores son `<circle>` con `click` pero sin `tabindex`, `role` ni
   manejo de teclado: no se alcanzan con Tab ni con Enter. Si el clic es una
@@ -217,26 +217,26 @@ Tags del módulo: `<is-maps>`, `<is-map-marker>`.
 ## Ejemplo avanzado
 
 ```html
-<is-maps id="sucursales" viewbox="-80,-5,-66,13" interactive>
-  <is-map-marker lat="4.71"  lon="-74.07" label="Bogotá"></is-map-marker>
-  <is-map-marker lat="6.25"  lon="-75.56" label="Medellín"></is-map-marker>
-  <is-map-marker lat="3.42"  lon="-76.52" label="Cali"></is-map-marker>
-  <is-map-marker lat="10.96" lon="-74.80" label="Barranquilla"></is-map-marker>
-</is-maps>
+<iswc-maps id="sucursales" viewbox="-80,-5,-66,13" interactive>
+  <iswc-map-marker lat="4.71"  lon="-74.07" label="Bogotá"></iswc-map-marker>
+  <iswc-map-marker lat="6.25"  lon="-75.56" label="Medellín"></iswc-map-marker>
+  <iswc-map-marker lat="3.42"  lon="-76.52" label="Cali"></iswc-map-marker>
+  <iswc-map-marker lat="10.96" lon="-74.80" label="Barranquilla"></iswc-map-marker>
+</iswc-maps>
 
 <script type="module">
   import './maps.js';
 
   const mapa = document.getElementById('sucursales');
 
-  mapa.addEventListener('is-marker-click', (e) => {
+  mapa.addEventListener('iswc-marker-click', (e) => {
     const m = e.detail.marker;
     console.log('Sucursal', m.getAttribute('label'), m.getAttribute('lat'), m.getAttribute('lon'));
   });
 
-  // is-viewport llega en cada paso de arrastre: conviene amortiguarlo.
+  // iswc-viewport llega en cada paso de arrastre: conviene amortiguarlo.
   let t;
-  mapa.addEventListener('is-viewport', (e) => {
+  mapa.addEventListener('iswc-viewport', (e) => {
     clearTimeout(t);
     const vp = e.detail;
     t = setTimeout(() => console.log('viewport', vp), 200);
@@ -260,7 +260,7 @@ Tags del módulo: `<is-maps>`, `<is-map-marker>`.
   usa `viewbox` (o `zoom` dentro del JSON, que solo aplica al modo `tile`).
 - Escribir `viewbox` como `"lat,lon,..."`: el orden es
   `minLon,minLat,maxLon,maxLat`.
-- Envolver los `<is-map-marker>` en un `<div>`: solo cuentan los hijos
+- Envolver los `<iswc-map-marker>` en un `<div>`: solo cuentan los hijos
   directos.
 - Cambiar `lat`/`lon` de un marcador y esperar que se mueva solo.
 - Meter HTML de terceros en `attribution`: se inserta con `innerHTML`.
@@ -270,7 +270,7 @@ Tags del módulo: `<is-maps>`, `<is-map-marker>`.
 ## Reglas para LLM
 
 - Reusar el componente antes de traer una librería de mapas.
-- Mantener nombres exactos de tags (`is-maps`, `is-map-marker`), atributos
+- Mantener nombres exactos de tags (`iswc-maps`, `iswc-map-marker`), atributos
   y eventos.
 - `interactive` es booleano por presencia; no usar `interactive="false"`.
 - No inventar métodos (`fitBounds`, `panTo`, `setZoom`): la vista se cambia
@@ -285,4 +285,4 @@ Tags del módulo: `<is-maps>`, `<is-map-marker>`.
 - [CSS](./maps.css)
 - [Índice de categoría](./LLM.md)
 - [Preview](./maps.json)
-- [Preview `<is-map-marker>`](./map-marker.json)
+- [Preview `<iswc-map-marker>`](./map-marker.json)

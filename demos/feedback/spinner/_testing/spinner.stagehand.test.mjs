@@ -16,7 +16,7 @@ checks.push({
     const sizes = await page.evaluate(() => {
       // Mide el HOST (no la inner .spinner, que puede tener border/padding).
       // Verifica que el inline style width/height se aplica al host.
-      return [...document.querySelectorAll('is-spinner[style*="width"]')].map((s) => {
+      return [...document.querySelectorAll('iswc-spinner[style*="width"]')].map((s) => {
         const r = s.getBoundingClientRect();
         const inlineW = s.style.width;
         const inlineH = s.style.height;
@@ -51,7 +51,7 @@ checks.push({
     await page.goto(URL, { waitUntil: 'domcontentloaded' });
     await waitReady(page, 'data-spinner-ready');
     const data = await page.evaluate(() => {
-      const s = document.querySelectorAll('is-spinner')[0];
+      const s = document.querySelectorAll('iswc-spinner')[0];
       const cs = getComputedStyle(s.shadowRoot.querySelector('.spinner'));
       return {
         borderTopWidth: cs.borderTopWidth,

@@ -7,13 +7,9 @@
   position: relative;
   box-sizing: border-box;
   font-family: var(--iswc-sans, ui-sans-serif, system-ui, sans-serif);
-}
 
-:host([hidden]) { display: none; }
-
-:host([color="viewer"]) {
-  width: 100%;
-  height: 100%;
+  &[hidden] { display: none; }
+  &[color="viewer"] { width: 100%; height: 100%; }
 }
 
 .wrap {
@@ -35,22 +31,22 @@
   min-height: 0;
   display: flex;
   flex-direction: column;
-}
 
-.wrap.is-viewer {
-  width: 100%;
-  height: 100%;
-  border: 0;
-  padding: 0;
-  cursor: default;
-}
+  &.iswc-viewer {
+    width: 100%;
+    height: 100%;
+    border: 0;
+    padding: 0;
+    cursor: default;
+  }
 
-.wrap[data-empty]::after {
-  content: 'Diagrama de flujo no disponible (payload inválido).';
-  display: block;
-  padding: 1rem;
-  font-size: 0.875em;
-  color: var(--iswc-text-soft, #a8b0bb);
+  &[data-empty]::after {
+    content: 'Diagrama de flujo no disponible (payload inválido).';
+    display: block;
+    padding: 1rem;
+    font-size: 0.875em;
+    color: var(--iswc-text-soft, #a8b0bb);
+  }
 }
 
 .slot-hidden { display: none !important; }
@@ -72,19 +68,17 @@
 .flow-node,
 .flow-edge {
   transition: opacity 0.18s ease;
-}
-
-.flow-node.is-dim,
-.flow-edge.is-dim {
-  opacity: 0.32;
+  &.iswc-dim { opacity: 0.32; }
 }
 
 .flow-node__box {
   transition: stroke-width 0.12s ease-out;
 }
 
-.flow-edge.is-active .flow-edge__path {
-  stroke-width: 2.2;
+.flow-edge {
+  &.iswc-active {
+    .flow-edge__path { stroke-width: 2.2; }
+  }
 }
 
 /* animation="flow": trazo dashed detrás de la arista continua.
@@ -92,53 +86,49 @@
    que el TS setea con el mismo `edgeStrokeHex(hue, theme.accent)` de la
    arista principal. Antes el dash usaba `var(--iswc-color-brand)` fijo,
    lo que no coincidian con el color de la arista cuando `hue` != brand. */
-.flow-edge {
-  color: currentColor; /* default; TS lo sobrescribe con edgeStrokeHex(...) */
-}
+.flow-edge { color: currentColor; /* default; TS lo sobrescribe con edgeStrokeHex(...) */ }
+
 .flow-edge__flow {
   stroke: currentColor;
   stroke-opacity: 0.55;
   stroke-dasharray: 7 11;
   stroke-dashoffset: 0;
   pointer-events: none;
-}
-
-@supports (stroke: color-mix(in oklab, red 40%, transparent)) {
-  .flow-edge__flow {
+  @supports (stroke: color-mix(in oklab, red 40%, transparent)) {
     stroke: color-mix(in oklab, currentColor 55%, transparent);
     stroke-opacity: 1;
   }
 }
 
-:host([animation~="flow"]) .flow-edge__flow {
-  animation: is-flowchart-flow-dash 0.85s linear infinite;
-}
-
-@keyframes is-flowchart-flow-dash {
-  to { stroke-dashoffset: -18; }
-}
-
-@media (prefers-reduced-motion: reduce) {
-  :host([animation~="flow"]) .flow-edge__flow {
-    animation: none;
-    opacity: 0.55;
+:host([animation~="flow"]) {
+  .flow-edge__flow {
+    animation: iswc-flowchart-flow-dash 0.85s linear infinite;
+    @media (prefers-reduced-motion: reduce) {
+      animation: none;
+      opacity: 0.55;
+    }
   }
+}
+
+@keyframes iswc-flowchart-flow-dash {
+  to { stroke-dashoffset: -18; }
 }
 
 .flow-legend__item {
   transition: opacity 0.18s ease;
 }
 
-.flow-node-label .tk-inline-icon,
-.flow-node-label is-icon.tk-inline-icon {
-  width: 1em;
-  height: 1em;
-  vertical-align: -0.14em;
-  margin: 0 0.2em;
+.flow-node-label {
+  :is(.tk-inline-icon, iswc-icon.tk-inline-icon) {
+    width: 1em;
+    height: 1em;
+    vertical-align: -0.14em;
+    margin: 0 0.2em;
+  }
 }
 
 /* El visor es opt-in: sin `open-on-click` el componente no abre nada,
    asi que tampoco debe insinuar con el cursor que se puede hacer clic. */
-:host([open-on-click]) .wrap {
-  cursor: zoom-in;
+:host([open-on-click]) {
+  .wrap { cursor: zoom-in; }
 }

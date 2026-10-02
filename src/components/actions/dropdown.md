@@ -1,22 +1,22 @@
 ---
-tag: is-dropdown
+tag: iswc-dropdown
 tags:
-  - is-dropdown
+  - iswc-dropdown
 category: actions
 status: public
 source: ./dropdown.js
 style: ./dropdown.css
 preview: ./dropdown.json
 ---
-# `<is-dropdown>`
+# `<iswc-dropdown>`
 
 ## Propósito
 
 Menú anclado a un trigger. Panel en <dialog> modal
 (top layer) para no quedar debajo de otras secciones. Items:
-is-dropdown-item, is-divider e iconos.
+iswc-dropdown-item, iswc-divider e iconos.
 
-Este módulo registra `<is-dropdown>`.
+Este módulo registra `<iswc-dropdown>`.
 
 ## Cuándo usarlo
 
@@ -35,12 +35,12 @@ import './dropdown.js';
 ## Ejemplo mínimo
 
 ```html
-<is-dropdown>
-<is-button slot="trigger" with-caret>Options</is-button>
-<is-dropdown-item value="edit">Edit</is-dropdown-item>
-<is-divider></is-divider>
-<is-dropdown-item value="delete" color="danger">Delete</is-dropdown-item>
-</is-dropdown>
+<iswc-dropdown>
+<iswc-button slot="trigger" with-caret>Options</iswc-button>
+<iswc-dropdown-item value="edit">Edit</iswc-dropdown-item>
+<iswc-divider></iswc-divider>
+<iswc-dropdown-item value="delete" color="danger">Delete</iswc-dropdown-item>
+</iswc-dropdown>
 ```
 
 ## API
@@ -77,11 +77,11 @@ import './dropdown.js';
 
 | Evento | detail | bubbles | composed | cancelable |
 | --- | --- | --- | --- | --- |
-| `is-select` | sí | sí | sí | sí |
-| `is-show` | no | sí | sí | sí |
-| `is-after-show` | no | sí | sí | sí |
-| `is-hide` | no | sí | sí | sí |
-| `is-after-hide` | no | sí | sí | no |
+| `iswc-select` | sí | sí | sí | sí |
+| `iswc-show` | no | sí | sí | sí |
+| `iswc-after-show` | no | sí | sí | sí |
+| `iswc-hide` | no | sí | sí | sí |
+| `iswc-after-hide` | no | sí | sí | no |
 
 ### Métodos y propiedades públicas
 
@@ -127,12 +127,12 @@ No declara integración form-associated propia en este módulo.
 
 Documentación de cabecera preservada desde fuente:
 
-> <is-dropdown> — menú anclado a un trigger.
+> <iswc-dropdown> — menú anclado a un trigger.
 > El panel usa <dialog showModal()> (top layer) para no quedar debajo de
-> headings/secciones/overflow de ancestros — mismo patrón que is-combobox.
+> headings/secciones/overflow de ancestros — mismo patrón que iswc-combobox.
 > Slots: trigger | default (items / dividers / headings)
 > Attrs: open, placement (default bottom-start), distance, skidding
-> Events: is-show, is-after-show, is-hide, is-after-hide, is-select { item }
+> Events: iswc-show, iswc-after-show, iswc-hide, iswc-after-hide, iswc-select { item }
 > Parts: ::part(dialog) ::part(menu)
 
 ## Dependencias y componentes relacionados
@@ -142,9 +142,9 @@ Documentación de cabecera preservada desde fuente:
 - [`./dropdown-item.js`](./dropdown-item.js)
 - [`../layout/divider.js`](../layout/divider.js)
 - [`../_shared/popup-dismiss.js`](../_shared/popup-dismiss.js) — ciclo de escucha
-  mientras el panel esta abierto (teclado, scroll), compartido con `is-context-menu`.
+  mientras el panel esta abierto (teclado, scroll), compartido con `iswc-context-menu`.
 
-Tags del módulo: `<is-dropdown>`.
+Tags del módulo: `<iswc-dropdown>`.
 
 ## Accesibilidad
 
@@ -153,12 +153,12 @@ Preservar semántica, foco, teclado, labels y ARIA. ARIA detectado: `aria-haspop
 ## Ejemplo avanzado
 
 ```html
-<is-dropdown>
-<is-button slot="trigger" with-caret>Options</is-button>
-<is-dropdown-item value="edit">Edit</is-dropdown-item>
-<is-divider></is-divider>
-<is-dropdown-item value="delete" color="danger">Delete</is-dropdown-item>
-</is-dropdown>
+<iswc-dropdown>
+<iswc-button slot="trigger" with-caret>Options</iswc-button>
+<iswc-dropdown-item value="edit">Edit</iswc-dropdown-item>
+<iswc-divider></iswc-divider>
+<iswc-dropdown-item value="delete" color="danger">Delete</iswc-dropdown-item>
+</iswc-dropdown>
 ```
 
 ## Errores comunes

@@ -1,6 +1,6 @@
-// button-events.test.ts — los 4 eventos propios de <is-button> existen de verdad.
+// button-events.test.ts — los 4 eventos propios de <iswc-button> existen de verdad.
 //
-// Nace de un fallo concreto: `is-invalid` estaba documentado en la cabecera de
+// Nace de un fallo concreto: `iswc-invalid` estaba documentado en la cabecera de
 // button.ts, en button.md y en el video del componente, pero NADIE lo emitia —
 // #emit solo se llamaba para focus, blur y click. Un evento prometido y ausente no
 // falla en ningun sitio: el consumidor pone su listener y no salta nunca.
@@ -20,7 +20,7 @@ import assert from 'node:assert';
 const root = join(dirname(fileURLToPath(import.meta.url)), '..', '..', '..', '..');
 const src = readFileSync(join(root, 'src', 'components', 'actions', 'button.ts'), 'utf8');
 
-const EVENTOS = ['is-focus', 'is-blur', 'is-click', 'is-invalid'];
+const EVENTOS = ['iswc-focus', 'iswc-blur', 'iswc-click', 'iswc-invalid'];
 
 test('cada evento documentado se emite de verdad', () => {
   for (const ev of EVENTOS) {
@@ -33,7 +33,7 @@ test('cada evento documentado se emite de verdad', () => {
   }
 });
 
-test('is-invalid se engancha al evento nativo, no a checkValidity()', () => {
+test('iswc-invalid se engancha al evento nativo, no a checkValidity()', () => {
   // ElementInternals dispara `invalid` tanto en la llamada explicita como al enviar
   // el <form>. Envolver solo los metodos dejaria el submit sin avisar.
   assert.ok(

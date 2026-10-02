@@ -4,9 +4,9 @@ import { withStyleAttrs } from '../../core/attrs.js';
 import { TONE } from '../_shared/tone.js';
 
 /**
- * <is-card> — Web Component (vanilla, zero dependencies).
+ * <iswc-card> — Web Component (vanilla, zero dependencies).
  *
- * Define el custom element `is-card` automáticamente al importarse.
+ * Define el custom element `iswc-card` automáticamente al importarse.
  * Usa Shadow DOM con CSS propio, sin frameworks.
  *
  * Atributos
@@ -68,7 +68,7 @@ import { TONE } from '../_shared/tone.js';
   const VALID_VARIANT = TONE;
   const VALID_ORIENTATION = ['horizontal', 'vertical'];
 
-  class IsCard extends withStyleAttrs(HTMLElement) {
+  class IswcCard extends withStyleAttrs(HTMLElement) {
     /** Personalización por atributo (ver `core/attrs.ts`). */
     static styleAttrs = {
     spacing: '--iswc-card-spacing',
@@ -163,10 +163,10 @@ import { TONE } from '../_shared/tone.js';
             .filter((n: Node) => n.nodeType === 3 && (n.textContent ?? '').trim());
           if (text.length) empty = false;
         }
-        section.classList.toggle('is-empty', empty);
+        section.classList.toggle('iswc-empty', empty);
       }
     }
   }
 
-  defineElement('is-card', IsCard, 'IsCard');
+  defineElement('iswc-card', IswcCard, 'IswcCard');
 })();

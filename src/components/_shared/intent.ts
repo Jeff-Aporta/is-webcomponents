@@ -7,9 +7,9 @@
  *
  * Default: 'brand' (no 'neutral'). Convención 2026-08 — ver LLM.md §6.16.
  *
- * Compartido por: is-button, is-tag, is-badge, is-callout, is-toast,
- * is-toast-item, is-stat, is-fab, is-checkbox, is-radio, is-radio-group,
- * is-rating, is-switch.
+ * Compartido por: iswc-button, iswc-tag, iswc-badge, iswc-callout, iswc-toast,
+ * iswc-toast-item, iswc-stat, iswc-fab, iswc-checkbox, iswc-radio, iswc-radio-group,
+ * iswc-rating, iswc-switch.
  */
 
 export const INTENT = Object.freeze([

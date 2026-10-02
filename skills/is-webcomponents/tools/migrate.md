@@ -7,11 +7,11 @@ a vanilla JS + `is-webcomponents`, eliminando la dependencia del framework.
 
 - El usuario pide "quitar MUI/React/Svelte de esta app y usar is-*".
 - Hay que portar una app a un stack sin build step / sin npm en runtime.
-- El usuario menciona migraciones previas del mismo tipo (p. ej. is-swagger → is-swagger2).
+- El usuario menciona migraciones previas del mismo tipo (p. ej. iswc-swagger → iswc-swagger2).
 
 ## Patrón de referencia
 
-`Personal/apps/is-swagger` (React + MUI) → `is-swagger2` (vanilla +
+`Personal/apps/iswc-swagger` (React + MUI) → `iswc-swagger2` (vanilla +
 `is-webcomponents`, sin dependencias de framework en runtime). Usar esa
 migración como plantilla de alcance y de decisiones (qué componentes MUI
 mapean a qué tag `is-*`, cómo quedó el bootstrap, qué se eliminó del
@@ -51,7 +51,7 @@ mapean a qué tag `is-*`, cómo quedó el bootstrap, qué se eliminó del
 - [ ] `package.json` de la app consumidora sin dependencias de framework/bundler no usadas.
 - [ ] Bootstrap por CDN (o local) funcionando, sin `deno task dev`/`vite`/`webpack` para servir el kit.
 - [ ] Wrappers de dominio (`tk-*`/`app-*`) solo traducen datos, no pintan UI genérica.
-- [ ] Comparado contra el patrón `is-swagger` → `is-swagger2` para detectar casos no cubiertos.
+- [ ] Comparado contra el patrón `iswc-swagger` → `iswc-swagger2` para detectar casos no cubiertos.
 
 ## Ver también
 

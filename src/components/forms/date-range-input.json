@@ -1,11 +1,11 @@
 {
-  "$schema": "is-preview/v1",
-  "tag": "is-date-range-input",
+  "$schema": "iswc-preview/v1",
+  "tag": "iswc-date-range-input",
   "category": "forms",
-  "title": "<is-date-range-input>",
+  "title": "<iswc-date-range-input>",
   "titleHtml": true,
-  "description": "Documentación y demos de is-date-range-input de InSoft.",
-  "storageKey": "docs-is-date-range-input",
+  "description": "Documentación y demos de iswc-date-range-input de InSoft.",
+  "storageKey": "docs-iswc-date-range-input",
   "sections": [
     {
       "id": "intro",
@@ -14,7 +14,7 @@
       "blocks": [
         {
           "kind": "demo",
-          "html": "<is-date-range-input label=\"Periodo\" start=\"2026-08-01\" end=\"2026-08-31\" style=\"max-width:360px\"></is-date-range-input>",
+          "html": "<iswc-date-range-input label=\"Periodo\" start=\"2026-08-01\" end=\"2026-08-31\" style=\"max-width:360px\"></iswc-date-range-input>",
           "controls": [
             {
               "control": "text",
@@ -35,7 +35,7 @@
         },
         {
           "kind": "code",
-          "code": "<is-date-range-input label=\"Periodo\" start=\"2026-08-01\" end=\"2026-08-31\" style=\"max-width:360px\"></is-date-range-input>",
+          "code": "<iswc-date-range-input label=\"Periodo\" start=\"2026-08-01\" end=\"2026-08-31\" style=\"max-width:360px\"></iswc-date-range-input>",
           "lang": "html"
         }
       ]
@@ -43,7 +43,7 @@
     {
       "id": "reference",
       "title": "Referencia",
-      "lede": "&lt;is-date-range-input&gt; — Dos campos (inicio y fin) con el calendario de rango en el panel (MUI DateRangePicker). El valor es `inicio/fin`. Atributos: start-label, end-label, hint, name, value, min, max, required, disabled, readonly, clearable, locale, calendars, shortcuts, color, action-bar, placement, close-on-select Events: is-change, is-show, is-hide Methods: show(), hide()",
+      "lede": "&lt;iswc-date-range-input&gt; — Dos campos (inicio y fin) con el calendario de rango en el panel (MUI DateRangePicker). El valor es `inicio/fin`. Atributos: start-label, end-label, hint, name, value, min, max, required, disabled, readonly, clearable, locale, calendars, shortcuts, color, action-bar, placement, close-on-select Events: iswc-change, iswc-show, iswc-hide Methods: show(), hide()",
       "blocks": [
         {
           "kind": "html",

@@ -13,7 +13,7 @@ test('stagehand: la página expone data-dropdown-ready y 2 dropdowns', async () 
   const page = await browser.newPage();
   await page.goto(URL_DEMO, { waitUntil: 'domcontentloaded' });
   await page.waitForSelector('html[data-dropdown-ready]');
-  const n = await page.evaluate(() => document.querySelectorAll('is-dropdown').length);
+  const n = await page.evaluate(() => document.querySelectorAll('iswc-dropdown').length);
   assert.equal(n, 2);
   await page.close();
 });
@@ -21,14 +21,14 @@ test('stagehand: la página expone data-dropdown-ready y 2 dropdowns', async () 
 test('stagehand: click en el trigger abre el menú', async () => {
   const page = await browser.newPage();
   await page.goto(URL_DEMO, { waitUntil: 'domcontentloaded' });
-  await page.waitForSelector('is-dropdown#d1:defined');
-  await page.click('is-dropdown#d1 [slot="trigger"]');
+  await page.waitForSelector('iswc-dropdown#d1:defined');
+  await page.click('iswc-dropdown#d1 [slot="trigger"]');
   await page.waitForTimeout(80);
   const open = await page.evaluate(() => document.getElementById('d1').open);
   assert.equal(open, true);
   // aria-expanded=true en el trigger
   const aria = await page.evaluate(() => {
-    return document.querySelector('is-dropdown#d1 [slot="trigger"]').getAttribute('aria-expanded');
+    return document.querySelector('iswc-dropdown#d1 [slot="trigger"]').getAttribute('aria-expanded');
   });
   assert.equal(aria, 'true');
   await page.close();
@@ -37,7 +37,7 @@ test('stagehand: click en el trigger abre el menú', async () => {
 test('stagehand: Escape cierra el menú', async () => {
   const page = await browser.newPage();
   await page.goto(URL_DEMO, { waitUntil: 'domcontentloaded' });
-  await page.waitForSelector('is-dropdown#d1:defined');
+  await page.waitForSelector('iswc-dropdown#d1:defined');
   await page.evaluate(() => document.getElementById('d1').show());
   await page.waitForTimeout(80);
   await page.keyboard.press('Escape');
@@ -50,8 +50,8 @@ test('stagehand: Escape cierra el menú', async () => {
 test('stagehand: ArrowDown enfoca el primer item cuando el menú abre', async () => {
   const page = await browser.newPage();
   await page.goto(URL_DEMO, { waitUntil: 'domcontentloaded' });
-  await page.waitForSelector('is-dropdown#d1:defined');
-  await page.click('is-dropdown#d1 [slot="trigger"]');
+  await page.waitForSelector('iswc-dropdown#d1:defined');
+  await page.click('iswc-dropdown#d1 [slot="trigger"]');
   await page.waitForTimeout(120);
   // Tras show() el componente hace focus en items[0].
   const firstFocused = await page.evaluate(() => {
@@ -69,14 +69,14 @@ test('stagehand: ArrowDown enfoca el primer item cuando el menú abre', async ()
   await page.close();
 });
 
-test('stagehand: click en item peligroso emite is-select y cierra', async () => {
+test('stagehand: click en item peligroso emite iswc-select y cierra', async () => {
   const page = await browser.newPage();
   await page.goto(URL_DEMO, { waitUntil: 'domcontentloaded' });
-  await page.waitForSelector('is-dropdown#d1:defined');
+  await page.waitForSelector('iswc-dropdown#d1:defined');
   await page.evaluate(() => {
     document.getElementById('d1').show();
     window.__dEvtSel = null;
-    document.getElementById('d1').addEventListener('is-select', (e) => {
+    document.getElementById('d1').addEventListener('iswc-select', (e) => {
       window.__dEvtSel = { value: e.detail.item.value };
     });
   });
@@ -97,7 +97,7 @@ test('stagehand: click en item peligroso emite is-select y cierra', async () => 
 test('stagehand: checkbox items mantienen su estado entre aperturas', async () => {
   const page = await browser.newPage();
   await page.goto(URL_DEMO, { waitUntil: 'domcontentloaded' });
-  await page.waitForSelector('is-dropdown#d2:defined');
+  await page.waitForSelector('iswc-dropdown#d2:defined');
   // toggle el segundo checkbox (sidebar, inicialmente false)
   await page.evaluate(() => document.getElementById('d2').items[1].click());
   // close
@@ -115,7 +115,7 @@ test('stagehand: prefers-reduced-motion no afecta la apertura', async () => {
   const ctx = await browser.newContext({ reducedMotion: 'reduce' });
   const page = await ctx.newPage();
   await page.goto(URL_DEMO, { waitUntil: 'domcontentloaded' });
-  await page.waitForSelector('is-dropdown#d1:defined');
+  await page.waitForSelector('iswc-dropdown#d1:defined');
   await page.evaluate(() => document.getElementById('d1').show());
   await page.waitForTimeout(80);
   const open = await page.evaluate(() => document.getElementById('d1').open);

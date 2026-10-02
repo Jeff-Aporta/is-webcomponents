@@ -22,7 +22,7 @@ async function checkDeterministic(page) {
 
   // (1): 5 masked-inputs
   const initial = await page.evaluate(() => {
-    const inputs = [...document.querySelectorAll('is-masked-input')];
+    const inputs = [...document.querySelectorAll('iswc-masked-input')];
     return inputs.map((i) => {
       const sr = i.shadowRoot;
       const inner = sr?.querySelector('input.input');

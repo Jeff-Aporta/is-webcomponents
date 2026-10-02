@@ -1,22 +1,22 @@
 ---
-tag: is-org-chart
+tag: iswc-org-chart
 tags:
-  - is-org-chart
+  - iswc-org-chart
 category: diagrams
 status: public
 source: ./org-chart.js
 style: ./org-chart.css
 preview: ./org-chart.json
 ---
-# `<is-org-chart>`
+# `<iswc-org-chart>`
 
 ## Propósito
 
 Organigrama jerárquico dibujado en SVG a partir de una lista plana de nodos
 con `parent`. Soporta colapsar ramas, tarjetas con foto y detalle, y apertura
-en `<is-diagram-lightbox>`.
+en `<iswc-diagram-lightbox>`.
 
-Este módulo registra `<is-org-chart>` y lo inscribe en el registro de
+Este módulo registra `<iswc-org-chart>` y lo inscribe en el registro de
 diagramas (`diagram-kinds.js`).
 
 ## Cuándo usarlo
@@ -26,9 +26,9 @@ Estructuras de mando o pertenencia: áreas de la empresa, jerarquía de cuentas,
 
 ## Cuándo no usarlo
 
-Para relaciones no jerárquicas usar `<is-block-diagram>` o `<is-flowchart>`;
-para ideas radiales usar `<is-mindmap>`; para dependencia temporal usar
-`<is-gantt>`.
+Para relaciones no jerárquicas usar `<iswc-block-diagram>` o `<iswc-flowchart>`;
+para ideas radiales usar `<iswc-mindmap>`; para dependencia temporal usar
+`<iswc-gantt>`.
 
 ## Importación
 
@@ -39,14 +39,14 @@ import './org-chart.js';
 ## Ejemplo mínimo
 
 ```html
-<is-org-chart>
+<iswc-org-chart>
   <script type="application/json">
     [
       { "id": "ceo", "title": "CEO", "name": "Carolina Méndez", "parent": null },
       { "id": "cto", "title": "CTO", "name": "Pedro Castaño", "parent": "ceo" }
     ]
   </script>
-</is-org-chart>
+</iswc-org-chart>
 ```
 
 ## API
@@ -83,11 +83,11 @@ Campos de un nodo: `id`, `title`, `name`, `parent`, y opcionalmente `photo`,
 
 | Evento | detail | bubbles | composed | cancelable |
 | --- | --- | --- | --- | --- |
-| `is-select` | `{ id, node }` | sí | sí | no |
-| `is-toggle` | `{ id, collapsed }` | sí | sí | no |
-| `is-open-viewer` | `{ payload }` | sí | sí | sí |
+| `iswc-select` | `{ id, node }` | sí | sí | no |
+| `iswc-toggle` | `{ id, collapsed }` | sí | sí | no |
+| `iswc-open-viewer` | `{ payload }` | sí | sí | sí |
 
-`is-open-viewer` solo se emite con `open-on-click` y fuera del visor.
+`iswc-open-viewer` solo se emite con `open-on-click` y fuera del visor.
 Cancelarlo (`preventDefault()`) evita que se abra el lightbox propio y permite
 abrir un visor propio.
 
@@ -137,8 +137,8 @@ No declara integración form-associated.
   posiciones anteriores se conservan para animar el movimiento (`MOVE_MS`).
 - Al pasar el cursor por una tarjeta con `detail` (o `tooltip`) se muestra el
   panel de detalle.
-- Con `open-on-click`, un clic fuera de las tarjetas emite `is-open-viewer` y,
-  si nadie lo cancela, abre `<is-diagram-lightbox>` con el mismo `payload`.
+- Con `open-on-click`, un clic fuera de las tarjetas emite `iswc-open-viewer` y,
+  si nadie lo cancela, abre `<iswc-diagram-lightbox>` con el mismo `payload`.
 - En modo visor (`color="viewer"`) el clic de apertura queda inhibido.
 
 ## Dependencias y componentes relacionados
@@ -151,7 +151,7 @@ No declara integración form-associated.
 - [`../_shared/emit.js`](../_shared/emit.js)
 - [`../_shared/dom-utils.js`](../_shared/dom-utils.js)
 
-Tags del módulo: `<is-org-chart>`.
+Tags del módulo: `<iswc-org-chart>`.
 
 ## Accesibilidad
 
@@ -162,8 +162,8 @@ usar `photo`, acompañarla siempre de `name` para que la tarjeta tenga texto.
 ## Ejemplo avanzado
 
 ```html
-<is-org-chart id="org" direction="right" node-width="220" node-height="72"
-              gap="32" open-on-click></is-org-chart>
+<iswc-org-chart id="org" direction="right" node-width="220" node-height="72"
+              gap="32" open-on-click></iswc-org-chart>
 
 <script type="module">
   const org = document.getElementById('org');
@@ -173,8 +173,8 @@ usar `photo`, acompañarla siempre de `name` para que la tarjeta tenga texto.
     { id: 'cto', title: 'CTO', name: 'Pedro Castaño', parent: 'ceo' },
   ];
   org.collapse('cto');
-  org.addEventListener('is-select', (e) => console.log(e.detail.node.name));
-  org.addEventListener('is-open-viewer', (e) => {
+  org.addEventListener('iswc-select', (e) => console.log(e.detail.node.name));
+  org.addEventListener('iswc-open-viewer', (e) => {
     e.preventDefault();          // abrir un visor propio en vez del lightbox
   });
 </script>

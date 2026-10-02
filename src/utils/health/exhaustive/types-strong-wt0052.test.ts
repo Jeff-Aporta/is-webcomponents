@@ -7,7 +7,7 @@
  * tras la migración a tipos explícitos.
  *
  * Estrategia: análisis estático (regex sobre el código fuente). No levanta
- * DOM porque las dependencias (ElementBase, is-floating, is-dialog) requieren
+ * DOM porque las dependencias (ElementBase, iswc-floating, iswc-dialog) requieren
  * jsdom y eso queda fuera del smoke test.
  *
  * Cómo correr:
@@ -107,11 +107,11 @@ test('WT-0052 / row-adapter-drag: NO usa `any` en firmas', () => {
 
 // ── md-editor.ts ──────────────────────────────────────────────────────────
 
-test('WT-0052 / md-editor: archivo existe y registra is-md-editor', () => {
+test('WT-0052 / md-editor: archivo existe y registra iswc-md-editor', () => {
   assert.ok(existsSync(MD_EDITOR), `${MD_EDITOR} debe existir`);
   const src = readFileSync(MD_EDITOR, 'utf8');
-  assert.match(src, /class\s+IsMdEditor\b/, 'declara IsMdEditor');
-  assert.match(src, /defineElement\s*\(\s*['"]is-md-editor['"]/, 'registra is-md-editor');
+  assert.match(src, /class\s+IswcMdEditor\b/, 'declara IswcMdEditor');
+  assert.match(src, /defineElement\s*\(\s*['"]iswc-md-editor['"]/, 'registra iswc-md-editor');
   assert.match(src, /extends\s+ElementBase\b/, 'extiende ElementBase');
 });
 
@@ -157,11 +157,11 @@ test('WT-0052 / md-editor: NO usa `any` en firmas', () => {
 
 // ── popover.ts ────────────────────────────────────────────────────────────
 
-test('WT-0052 / popover: archivo existe y registra is-popover', () => {
+test('WT-0052 / popover: archivo existe y registra iswc-popover', () => {
   assert.ok(existsSync(POPOVER), `${POPOVER} debe existir`);
   const src = readFileSync(POPOVER, 'utf8');
-  assert.match(src, /class\s+IsPopover\b/, 'declara IsPopover');
-  assert.match(src, /defineElement\s*\(\s*['"]is-popover['"]/, 'registra is-popover');
+  assert.match(src, /class\s+IswcPopover\b/, 'declara IswcPopover');
+  assert.match(src, /defineElement\s*\(\s*['"]iswc-popover['"]/, 'registra iswc-popover');
 });
 
 test('WT-0052 / popover: define interface FloatingElement', () => {
@@ -173,9 +173,9 @@ test('WT-0052 / popover: define interface FloatingElement', () => {
   assert.match(src, /reposition\s*\(\s*\)\s*:\s*void/, 'reposition(): void');
 });
 
-test('WT-0052 / popover: openPopover tipado como IsPopover | null', () => {
+test('WT-0052 / popover: openPopover tipado como IswcPopover | null', () => {
   const src = readFileSync(POPOVER, 'utf8');
-  assert.match(src, /let\s+openPopover\s*:\s*IsPopover\s*\|\s*null\b/, 'openPopover: IsPopover | null');
+  assert.match(src, /let\s+openPopover\s*:\s*IswcPopover\s*\|\s*null\b/, 'openPopover: IswcPopover | null');
 });
 
 test('WT-0052 / popover: #anchor tipado como HTMLElement | null', () => {
@@ -207,12 +207,12 @@ test('WT-0052 / popover: NO usa `any` en firmas', () => {
 
 // ── format.ts ─────────────────────────────────────────────────────────────
 
-test('WT-0052 / format: archivo existe y registra is-format', () => {
+test('WT-0052 / format: archivo existe y registra iswc-format', () => {
   assert.ok(existsSync(FORMAT), `${FORMAT} debe existir`);
   const src = readFileSync(FORMAT, 'utf8');
   assert.match(src, /class\s+FormatElement\b/, 'declara FormatElement');
   assert.match(src, /extends\s+ElementBase\b/, 'extiende ElementBase');
-  assert.match(src, /defineElement\s*\(\s*['"]is-format['"]/, 'registra is-format');
+  assert.match(src, /defineElement\s*\(\s*['"]iswc-format['"]/, 'registra iswc-format');
 });
 
 test('WT-0052 / format: discriminated union ExcelPreset', () => {

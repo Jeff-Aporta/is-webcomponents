@@ -1,7 +1,7 @@
 import { defineElement, emit } from '../../core/element.js';
 
 /**
- * <is-demo> — sección de demo de documentación (light DOM, zero dependencies).
+ * <iswc-demo> — sección de demo de documentación (light DOM, zero dependencies).
  *
  * Componente reutilizable para las cajas de demo de los previews. Reusa el
  * chrome incumbente (fondo con retícula, borde, sombra de presentation.css)
@@ -10,10 +10,10 @@ import { defineElement, emit } from '../../core/element.js';
  *   - "Ver fuentes" (`view-sources.js`) — JS/CSS/MD del módulo sin minificar
  *   - Meta de archivos (`demo-file-meta.js`) — botones JS/CSS/MD + pesos `.min` CDN
  *
- *   <is-demo heading="Apariencias">
- *     <is-button variant="filled">Filled</is-button>
- *     <is-button variant="outlined">Outlined</is-button>
- *   </is-demo>
+ *   <iswc-demo heading="Apariencias">
+ *     <iswc-button variant="filled">Filled</iswc-button>
+ *     <iswc-button variant="outlined">Outlined</iswc-button>
+ *   </iswc-demo>
  *
  * Atributos
  *   heading         string  — título pequeño sobre el contenido (opcional).
@@ -26,17 +26,17 @@ import { defineElement, emit } from '../../core/element.js';
  * extractor de código del demo ven el markup real del ejemplo.
  */
 (() => {
-  class IsDemo extends HTMLElement {
+  class IswcDemo extends HTMLElement {
     #headingEl: HTMLElement | null = null;
 
     connectedCallback(): void {
       this.classList.add('demo');
       this.#syncHeading();
       // Un componente no puede importar de `scripts/`, así que el aviso va por
-      // evento: `demo-code.js` escucha `is-demo-connected` en `document` y
-      // añade el botón "Ver código" a los <is-demo> conectados tarde. Si
+      // evento: `demo-code.js` escucha `iswc-demo-connected` en `document` y
+      // añade el botón "Ver código" a los <iswc-demo> conectados tarde. Si
       // demo-code.js aún no cargó, su barrido inicial nos recogerá igual.
-      emit(this, 'is-demo-connected');
+      emit(this, 'iswc-demo-connected');
     }
 
     static get observedAttributes(): string[] { return ['heading']; }
@@ -62,5 +62,5 @@ import { defineElement, emit } from '../../core/element.js';
     }
   }
 
-  defineElement('is-demo', IsDemo, 'IsDemo');
+  defineElement('iswc-demo', IswcDemo, 'IswcDemo');
 })();

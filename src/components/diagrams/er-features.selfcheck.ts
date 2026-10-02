@@ -1,6 +1,6 @@
 /**
  * er-features.selfcheck.ts — verificación de las 3 mejoras de ISWC sobre
- * <is-er-diagram>:
+ * <iswc-er-diagram>:
  *
  *   1. Iconos PK/FK en vez de texto monoespaciado.
  *   2. Bordes de cluster como obstáculos del ruteo A* (no se cruzan).

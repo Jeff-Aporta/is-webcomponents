@@ -1,7 +1,7 @@
 // radio-group.stagehand.test.mjs — verificaciones visuales deterministas.
 //
 // Checks:
-//   1. COMPONENTE RENDERIZADO: <is-radio-group> definido, role=radiogroup.
+//   1. COMPONENTE RENDERIZADO: <iswc-radio-group> definido, role=radiogroup.
 //   2. ELEMENTOS VISIBLES: cada radio del grupo (control + dot + label) visible.
 //   3. TEXTO LEGIBLE: labels del grupo con font-size >= 8px.
 //   4. SIN OVERLAPS: los radios de cada grupo no se solapan entre sí.
@@ -15,12 +15,12 @@ const DEMOS = [
 async function checkDeterministic(page, demo) {
   await page.waitForTimeout(200);
 
-  const defined = await page.evaluate(() => !!customElements.get('is-radio-group'));
-  assert.equal(defined, true, 'is-radio-group debe estar definido');
+  const defined = await page.evaluate(() => !!customElements.get('iswc-radio-group'));
+  assert.equal(defined, true, 'iswc-radio-group debe estar definido');
 
   // Inspeccionar cada radio-group del demo, sus radios y el label/hint/error del grupo.
   const data = await page.evaluate(() => {
-    const groups = [...document.querySelectorAll('is-radio-group')];
+    const groups = [...document.querySelectorAll('iswc-radio-group')];
     return groups.map((g) => {
       const sr = g.shadowRoot;
       const base = sr?.querySelector('.base');
@@ -28,7 +28,7 @@ async function checkDeterministic(page, demo) {
       const hintEl = sr?.querySelector('#hint');
       const errEl = sr?.querySelector('#error');
       const gRect = g.getBoundingClientRect();
-      const radios = [...g.querySelectorAll('is-radio')].map((r) => {
+      const radios = [...g.querySelectorAll('iswc-radio')].map((r) => {
         const rRect = r.getBoundingClientRect();
         const rsr = r.shadowRoot;
         const ctrl = rsr?.querySelector('.control');
@@ -92,7 +92,7 @@ for (const demo of DEMOS) {
 }
 
 const VISUAL_RUBRIC = `
-Evalúa la calidad visual del demo del componente <is-radio-group>.
+Evalúa la calidad visual del demo del componente <iswc-radio-group>.
 
 Checklist (cada una PASS o FAIL):
 

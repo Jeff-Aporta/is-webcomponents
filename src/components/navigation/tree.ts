@@ -2,25 +2,25 @@ import { adoptCss, defineElement, emit } from '../../core/element.js';
 import { ElementBase } from '../../core/element-base.js';
 
 /**
- * <is-tree> + <is-tree-item> — Web Components (vanilla, zero dependencies).
+ * <iswc-tree> + <iswc-tree-item> — Web Components (vanilla, zero dependencies).
  *
  * Árbol jerárquico con expansión, selección, checkboxes, navegación por teclado
  * (Arrow, Home, End, Enter, Space) e iconos por slot.
  *
- *   <is-tree selection="leaf">
- *     <is-tree-item expanded>
- *       <is-icon slot="icon" icon="mdi:folder"></is-icon>
+ *   <iswc-tree selection="leaf">
+ *     <iswc-tree-item expanded>
+ *       <iswc-icon slot="icon" icon="mdi:folder"></iswc-icon>
  *       Documentos
- *       <is-tree-item> … </is-tree-item>
- *       <is-tree-item> … </is-tree-item>
- *     </is-tree-item>
- *   </is-tree>
+ *       <iswc-tree-item> … </iswc-tree-item>
+ *       <iswc-tree-item> … </iswc-tree-item>
+ *     </iswc-tree-item>
+ *   </iswc-tree>
  *
- * Atributos <is-tree>
+ * Atributos <iswc-tree>
  *   selection  none | single | leaf | multiple (default 'single')
  *   expanded   boolean — todos los nodos empiezan expandidos.
  *
- * Atributos <is-tree-item>
+ * Atributos <iswc-tree-item>
  *   expanded         boolean
  *   selected         boolean
  *   disabled         boolean
@@ -28,20 +28,20 @@ import { ElementBase } from '../../core/element-base.js';
  *   lazy             boolean — carga hijos bajo demanda.
  *
  * Slots
- *   <is-tree-item>
+ *   <iswc-tree-item>
  *     (default)   label.
  *     icon        icono a la izquierda.
  *     expand-icon override del caret.
  *     checkbox    override del checkbox.
  *
  * Eventos
- *   is-tree-select    detail: { item, selected, selectedItems }
- *   is-tree-expand    detail: { item, expanded }
- *   is-tree-toggle    detail: { item, expanded }
+ *   iswc-tree-select    detail: { item, selected, selectedItems }
+ *   iswc-tree-expand    detail: { item, expanded }
+ *   iswc-tree-toggle    detail: { item, expanded }
  *
  * CSS Parts
- *   is-tree: ::part(base) ::part(items)
- *   is-tree-item: ::part(item) ::part(item-content) ::part(item-children) ::part(checkbox) ::part(expand-toggle)
+ *   iswc-tree: ::part(base) ::part(items)
+ *   iswc-tree-item: ::part(item) ::part(item-content) ::part(item-children) ::part(checkbox) ::part(expand-toggle)
  */
 (() => {
   const TREE_TEMPLATE = document.createElement('template');
@@ -55,7 +55,7 @@ import { ElementBase } from '../../core/element-base.js';
 
   const VALID_SELECTION = ['none', 'single', 'leaf', 'multiple'];
 
-  class IsTree extends ElementBase {
+  class IswcTree extends ElementBase {
     /** Personalización por atributo (ver `core/attrs.ts`). */
     static styleAttrs = {
     indent: '--iswc-tree-indent',
@@ -65,7 +65,7 @@ import { ElementBase } from '../../core/element-base.js';
     'row-selected-bg': { prop: '--iswc-tree-row-selected-bg', onlyColorValues: true },
     };
 
-    static get observedAttributes(): string[] { return [...TREE_OBSERVED, ...IsTree.styleAttrNames]; }
+    static get observedAttributes(): string[] { return [...TREE_OBSERVED, ...IswcTree.styleAttrNames]; }
 
     #syncObserver: MutationObserver | null = null;
 
@@ -114,7 +114,7 @@ import { ElementBase } from '../../core/element-base.js';
     // ---- private ----
 
     #syncRoots() {
-      const items = [...this.querySelectorAll<HTMLElement>(':scope > is-tree-item')];
+      const items = [...this.querySelectorAll<HTMLElement>(':scope > iswc-tree-item')];
       items.forEach((it: HTMLElement) => {
         it.setAttribute('role', 'treeitem');
         if (it.parentElement === this) it.setAttribute('data-root', '');
@@ -125,7 +125,7 @@ import { ElementBase } from '../../core/element-base.js';
       const all = this.#allItems();
       all.forEach((it, idx) => {
         const siblings = [...((it.parentElement as HTMLElement | null)?.children ?? [])]
-          .filter((c: Element) => c.tagName?.toLowerCase() === 'is-tree-item');
+          .filter((c: Element) => c.tagName?.toLowerCase() === 'iswc-tree-item');
         it.setAttribute('aria-setsize', String(siblings.length));
         it.setAttribute('aria-posinset', String(siblings.indexOf(it) + 1));
         it.setAttribute('aria-level', String(this.#depthOf(it)));
@@ -133,7 +133,7 @@ import { ElementBase } from '../../core/element-base.js';
         if (it.hasAttribute('selected')) it.setAttribute('aria-selected', 'true');
         else it.removeAttribute('aria-selected');
         // expanded: aria-expanded refleja el atributo expanded (para nodos con hijos).
-        const hasKids = it.hasAttribute('has-children') || it.querySelectorAll(':scope > is-tree-item').length > 0;
+        const hasKids = it.hasAttribute('has-children') || it.querySelectorAll(':scope > iswc-tree-item').length > 0;
         if (hasKids) {
           it.setAttribute('aria-expanded', it.hasAttribute('expanded') ? 'true' : 'false');
         } else {
@@ -147,14 +147,14 @@ import { ElementBase } from '../../core/element-base.js';
       let depth = 1;
       let p: HTMLElement | null = item.parentElement;
       while (p && p !== this) {
-        if (p.tagName?.toLowerCase() === 'is-tree-item') depth++;
+        if (p.tagName?.toLowerCase() === 'iswc-tree-item') depth++;
         p = p.parentElement;
       }
       return depth;
     }
 
     #syncExpansion() {
-      const all = [...this.querySelectorAll<HTMLElement>('is-tree-item')];
+      const all = [...this.querySelectorAll<HTMLElement>('iswc-tree-item')];
       const expanded = this.hasAttribute('expanded');
       all.forEach((it: HTMLElement) => {
         if (expanded && !it.hasAttribute('expanded') && !it.hasAttribute('disabled')) it.setAttribute('expanded', '');
@@ -163,10 +163,10 @@ import { ElementBase } from '../../core/element-base.js';
     }
 
     #allItems(): HTMLElement[] {
-      // BFS de todos los is-tree-item descendientes.
+      // BFS de todos los iswc-tree-item descendientes.
       const all: HTMLElement[] = [];
       const walk = (root: Element) => {
-        const items = [...root.children].filter((c: Element) => c.tagName && c.tagName.toLowerCase() === 'is-tree-item') as HTMLElement[];
+        const items = [...root.children].filter((c: Element) => c.tagName && c.tagName.toLowerCase() === 'iswc-tree-item') as HTMLElement[];
         items.forEach((it: HTMLElement) => { all.push(it); walk(it); });
       };
       walk(this);
@@ -181,22 +181,22 @@ import { ElementBase } from '../../core/element-base.js';
       if (!(e.target instanceof Element)) return;
       const toggle = e.target.closest('[data-tree-toggle]');
       if (toggle) {
-        const item = toggle.closest('is-tree-item');
+        const item = toggle.closest('iswc-tree-item');
         if (item instanceof HTMLElement) {
           item.toggleAttribute('expanded');
-          emit(this, 'is-tree-toggle', { item, expanded: item.hasAttribute('expanded') });
+          emit(this, 'iswc-tree-toggle', { item, expanded: item.hasAttribute('expanded') });
         }
         e.stopPropagation();
         return;
       }
-      const item = e.target.closest('is-tree-item');
+      const item = e.target.closest('iswc-tree-item');
       if (!(item instanceof HTMLElement) || item.hasAttribute('disabled')) return;
       this.#select(item);
     };
 
     #onKeyDown = (e: KeyboardEvent) => {
       if (!(e.target instanceof Element)) return;
-      const item = e.target.closest('is-tree-item');
+      const item = e.target.closest('iswc-tree-item');
       if (!(item instanceof HTMLElement)) return;
       if (!item) return;
       const visible = this.#visibleItems();
@@ -211,16 +211,16 @@ import { ElementBase } from '../../core/element-base.js';
             next = Math.min(idx + 1, visible.length - 1);
           } else {
             item.setAttribute('expanded', '');
-            emit(this, 'is-tree-toggle', { item, expanded: true });
+            emit(this, 'iswc-tree-toggle', { item, expanded: true });
           }
           e.preventDefault();
           break;
         case 'ArrowLeft':
           if (item.hasAttribute('expanded')) {
             item.removeAttribute('expanded');
-            emit(this, 'is-tree-toggle', { item, expanded: false });
+            emit(this, 'iswc-tree-toggle', { item, expanded: false });
           } else {
-            const parent = item.parentElement && item.parentElement.closest('is-tree-item');
+            const parent = item.parentElement && item.parentElement.closest('iswc-tree-item');
             if (parent instanceof HTMLElement) next = visible.indexOf(parent);
           }
           e.preventDefault();
@@ -239,7 +239,7 @@ import { ElementBase } from '../../core/element-base.js';
     #visibleItems(): HTMLElement[] {
       const out: HTMLElement[] = [];
       const walk = (root: Element) => {
-        const items = [...root.children].filter((c: Element) => c.tagName && c.tagName.toLowerCase() === 'is-tree-item') as HTMLElement[];
+        const items = [...root.children].filter((c: Element) => c.tagName && c.tagName.toLowerCase() === 'iswc-tree-item') as HTMLElement[];
         items.forEach((it: HTMLElement) => {
           out.push(it);
           if (it.hasAttribute('expanded')) walk(it);
@@ -252,7 +252,7 @@ import { ElementBase } from '../../core/element-base.js';
     #select(item: HTMLElement) {
       const sel = this.selection;
       if (sel === 'none') return;
-      const isLeaf = item.querySelectorAll<HTMLElement>(':scope > is-tree-item').length === 0;
+      const isLeaf = item.querySelectorAll<HTMLElement>(':scope > iswc-tree-item').length === 0;
       if (sel === 'leaf' && !isLeaf) return;
       const willSelect = !item.hasAttribute('selected');
       if (sel === 'single' || sel === 'leaf') {
@@ -260,7 +260,7 @@ import { ElementBase } from '../../core/element-base.js';
       }
       if (willSelect) item.setAttribute('selected', '');
       else item.removeAttribute('selected');
-      emit(this, 'is-tree-select', {
+      emit(this, 'iswc-tree-select', {
           item,
           selected: willSelect,
           selectedItems: this.#selectedItems(),
@@ -268,20 +268,20 @@ import { ElementBase } from '../../core/element-base.js';
     }
   }
 
-  defineElement('is-tree', IsTree, 'IsTree');
+  defineElement('iswc-tree', IswcTree, 'IswcTree');
 
-  // ============ <is-tree-item> ============
+  // ============ <iswc-tree-item> ============
   const ITEM_TEMPLATE = document.createElement('template');
   ITEM_TEMPLATE.innerHTML = /* html */ `
     <div class="row" part="item">
       <button type="button" class="expand-toggle" part="expand-toggle" tabindex="-1" data-tree-toggle aria-hidden="true">
         <slot name="expand-icon">
-          <is-icon icon="mdi:chevron-right" aria-hidden="true"></is-icon>
+          <iswc-icon icon="mdi:chevron-right" aria-hidden="true"></iswc-icon>
         </slot>
       </button>
       <span class="checkbox" part="checkbox" data-tree-toggle="select">
         <slot name="checkbox">
-          <is-checkbox aria-hidden="true"></is-checkbox>
+          <iswc-checkbox aria-hidden="true"></iswc-checkbox>
         </slot>
       </span>
       <span class="icon" part="icon"><slot name="icon"></slot></span>
@@ -294,7 +294,7 @@ import { ElementBase } from '../../core/element-base.js';
 
   const ITEM_OBSERVED = ['expanded', 'selected', 'disabled', 'has-children', 'lazy'];
 
-  class IsTreeItem extends ElementBase {
+  class IswcTreeItem extends ElementBase {
     static get observedAttributes(): string[] { return ITEM_OBSERVED; }
 
 
@@ -307,8 +307,8 @@ import { ElementBase } from '../../core/element-base.js';
     }
 
     onConnected() {
-      // ESCUCHAR eventos del is-checkbox interno para sincronizar.
-      const cb = this.shadowRoot!.querySelector<HTMLElement>('is-checkbox');
+      // ESCUCHAR eventos del iswc-checkbox interno para sincronizar.
+      const cb = this.shadowRoot!.querySelector<HTMLElement>('iswc-checkbox');
       if (cb) {
         cb.addEventListener('input', (e: Event) => {
           const detail = (e as CustomEvent<{ checked: boolean }>).detail;
@@ -324,7 +324,7 @@ import { ElementBase } from '../../core/element-base.js';
     }
 
     #sync() {
-      const children = this.querySelectorAll<HTMLElement>(':scope > is-tree-item');
+      const children = this.querySelectorAll<HTMLElement>(':scope > iswc-tree-item');
       const hasKids = this.hasAttribute('has-children') || children.length > 0;
       const toggle = this.shadowRoot!.querySelector<HTMLElement>('.expand-toggle');
       const childrenPane = this.shadowRoot!.querySelector<HTMLElement>('.children');
@@ -343,7 +343,7 @@ import { ElementBase } from '../../core/element-base.js';
           if (childrenPane) childrenPane.hidden = true;
         }
       }
-      const cb = this.shadowRoot!.querySelector<HTMLElement>('is-checkbox');
+      const cb = this.shadowRoot!.querySelector<HTMLElement>('iswc-checkbox');
       if (cb) (cb as unknown as { checked: boolean }).checked = this.hasAttribute('selected');
     }
 
@@ -353,5 +353,5 @@ import { ElementBase } from '../../core/element-base.js';
     }
   }
 
-  defineElement('is-tree-item', IsTreeItem, 'IsTreeItem');
+  defineElement('iswc-tree-item', IswcTreeItem, 'IswcTreeItem');
 })();

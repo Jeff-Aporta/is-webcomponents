@@ -9,24 +9,24 @@ const URL = `${BASE_URL}/demos/forms/date-time-input/date-time-input.html`;
 const tests = [];
 
 tests.push({
-  name: 'smoke: el input se monta, contiene un is-date-time-field y un trigger',
+  name: 'smoke: el input se monta, contiene un iswc-date-time-field y un trigger',
   run: async (page) => {
     await page.goto(URL, { waitUntil: 'domcontentloaded' });
     await waitReady(page, 'data-date-time-input-ready');
     const info = await page.evaluate(() => {
-      const inputs = [...document.querySelectorAll('is-date-time-input')];
+      const inputs = [...document.querySelectorAll('iswc-date-time-input')];
       return {
         count: inputs.length,
-        defined: !!customElements.get('is-date-time-input'),
-        fieldsByInput: inputs.map((i) => i.shadowRoot.querySelectorAll('is-date-time-field').length),
+        defined: !!customElements.get('iswc-date-time-input'),
+        fieldsByInput: inputs.map((i) => i.shadowRoot.querySelectorAll('iswc-date-time-field').length),
         triggersByInput: inputs.map((i) => i.shadowRoot.querySelectorAll('.trigger').length),
         hasFormAssociated: 'formAssociated' in inputs[0],
       };
     });
-    assert.equal(info.defined, true, 'is-date-time-input debe estar definido');
+    assert.equal(info.defined, true, 'iswc-date-time-input debe estar definido');
     assert.ok(info.count >= 4, `esperaba >=4 inputs en la página, hay ${info.count}`);
     assert.ok(info.fieldsByInput.every((n) => n >= 1),
-      `cada input debe contener >=1 is-date-time-field, hay ${JSON.stringify(info.fieldsByInput)}`);
+      `cada input debe contener >=1 iswc-date-time-field, hay ${JSON.stringify(info.fieldsByInput)}`);
     assert.ok(info.triggersByInput.every((n) => n >= 1),
       `cada input debe tener >=1 trigger, hay ${JSON.stringify(info.triggersByInput)}`);
     assert.equal(info.hasFormAssociated, true, 'el input debe ser form-associated');
@@ -46,7 +46,7 @@ tests.push({
     await page.waitForTimeout(50);
     const data = await page.evaluate(() => {
       const el = document.getElementById('basic');
-      const field = el.shadowRoot.querySelector('is-date-time-field');
+      const field = el.shadowRoot.querySelector('iswc-date-time-field');
       const secs = [...field.shadowRoot.querySelectorAll('[role="spinbutton"]')];
       return {
         attr: el.getAttribute('value'),
@@ -93,13 +93,13 @@ tests.push({
       const dialog = el.shadowRoot.querySelector('dialog.popup');
       return {
         dialogOpen: dialog.open,
-        hasDatePicker: !!el.shadowRoot.querySelector('is-date-picker'),
-        hasClock: !!el.shadowRoot.querySelector('is-digital-clock'),
+        hasDatePicker: !!el.shadowRoot.querySelector('iswc-date-picker'),
+        hasClock: !!el.shadowRoot.querySelector('iswc-digital-clock'),
       };
     });
     assert.equal(result.dialogOpen, true, 'show() debe abrir el <dialog>');
-    assert.equal(result.hasDatePicker, true, 'el panel debe contener un <is-date-picker>');
-    assert.equal(result.hasClock, true, 'el panel debe contener un <is-digital-clock>');
+    assert.equal(result.hasDatePicker, true, 'el panel debe contener un <iswc-date-picker>');
+    assert.equal(result.hasClock, true, 'el panel debe contener un <iswc-digital-clock>');
     await screenshot(page, 'date-time-input-open');
   },
 });
@@ -142,20 +142,20 @@ tests.push({
 });
 
 tests.push({
-  name: 'funcional: is-change emite evento al cambiar el valor',
+  name: 'funcional: iswc-change emite evento al cambiar el valor',
   run: async (page) => {
     await page.goto(URL, { waitUntil: 'domcontentloaded' });
     await waitReady(page, 'data-date-time-input-ready');
     await page.evaluate(() => {
       window.__changes = [];
-      document.getElementById('basic').addEventListener('is-change', (e) => {
+      document.getElementById('basic').addEventListener('iswc-change', (e) => {
         window.__changes.push(e.detail?.value ?? '');
       });
     });
     await page.evaluate(() => { document.getElementById('basic').value = '2026-01-15T10:30'; });
     await page.waitForTimeout(50);
     const changes = await page.evaluate(() => window.__changes);
-    assert.deepEqual(changes, ['2026-01-15T10:30'], 'is-change debe emitir el nuevo valor');
+    assert.deepEqual(changes, ['2026-01-15T10:30'], 'iswc-change debe emitir el nuevo valor');
   },
 });
 
@@ -201,7 +201,7 @@ tests.push({
     await waitReady(page, 'data-date-time-input-ready');
     const info = await page.evaluate(() => {
       const el = document.getElementById('basic');
-      const field = el.shadowRoot.querySelector('is-date-time-field');
+      const field = el.shadowRoot.querySelector('iswc-date-time-field');
       const secs = [...field.shadowRoot.querySelectorAll('[role="spinbutton"]')];
       return {
         count: secs.length,
@@ -281,7 +281,7 @@ tests.push({
     await waitReady(page, 'data-date-time-input-ready');
     await page.evaluate(() => {
       const el = document.getElementById('basic');
-      const field = el.shadowRoot.querySelector('is-date-time-field');
+      const field = el.shadowRoot.querySelector('iswc-date-time-field');
       field.setAttribute('value', '2026-11-11T11:11');
     });
     await page.waitForTimeout(50);

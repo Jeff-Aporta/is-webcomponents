@@ -1,5 +1,5 @@
 /**
- * Contenedor de tema del kit — misma cascada que is-theme-toggle.
+ * Contenedor de tema del kit — misma cascada que iswc-theme-toggle.
  * Atraviesa Shadow DOM (Element.closest se corta en el shadow root).
  */
 
@@ -42,7 +42,7 @@ export function readTheme(el: Element | null | undefined) {
 }
 
 /**
- * Observa class/data-theme del contenedor + `is-theme-change` (composed).
+ * Observa class/data-theme del contenedor + `iswc-theme-change` (composed).
  * @param {Element} container
  * @param {() => void} onChange
  * @returns {() => void}
@@ -50,9 +50,9 @@ export function readTheme(el: Element | null | undefined) {
 export function watchThemeContainer(container: Element, onChange: () => void) {
   const obs = new MutationObserver(onChange);
   obs.observe(container, { attributes: true, attributeFilter: ['class', 'data-theme'] });
-  document.addEventListener('is-theme-change', onChange);
+  document.addEventListener('iswc-theme-change', onChange);
   return () => {
     obs.disconnect();
-    document.removeEventListener('is-theme-change', onChange);
+    document.removeEventListener('iswc-theme-change', onChange);
   };
 }

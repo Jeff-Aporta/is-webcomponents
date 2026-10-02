@@ -4,7 +4,7 @@ import { setStringAttr } from '../_shared/reflect.js';
 import { resolveLocale } from '../_shared/resolve-locale.js';
 
 /**
- * <is-format-date> — Web Component (vanilla).
+ * <iswc-format-date> — Web Component (vanilla).
  *
  * Formatea fechas con Intl.DateTimeFormat.
  *
@@ -15,7 +15,7 @@ import { resolveLocale } from '../_shared/resolve-locale.js';
 
 /**
  * Parseo laxo de fecha compartido por los helpers de formato
- * (is-format-date, is-relative-time, is-format).
+ * (iswc-format-date, iswc-relative-time, iswc-format).
  * Acepta timestamp numérico, `YYYY-MM-DD` (interpretado en hora local) o
  * cualquier cosa que `new Date()` entienda. Devuelve null si no es válida.
  * @param {string|number|null|undefined} raw
@@ -60,7 +60,7 @@ export function parseLooseDate(raw: string|number|null|undefined) {
     'time-zone-name': 'timeZoneName'
   };
 
-  class IsFormatDate extends ElementBase {
+  class IswcFormatDate extends ElementBase {
     static get observedAttributes(): string[] { return OBSERVED; }
 
     #el!: HTMLElement;
@@ -189,5 +189,5 @@ export function parseLooseDate(raw: string|number|null|undefined) {
     }
   }
 
-  defineElement('is-format-date', IsFormatDate, 'IsFormatDate');
+  defineElement('iswc-format-date', IswcFormatDate, 'IswcFormatDate');
 })();

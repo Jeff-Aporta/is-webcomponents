@@ -28,15 +28,15 @@
 #### Propuestas nuevas
 
 1. **Doble-click no dispara dos eventos** — [interacción]
-   - Setup: cargar el demo y enfocar el primer `<is-button>` primario visible.
-   - Acción: ejecutar dos `click` consecutivos sobre el mismo botón en menos de 250 ms (dblclick nativo) y capturar los eventos `is-button-click` emitidos.
+   - Setup: cargar el demo y enfocar el primer `<iswc-button>` primario visible.
+   - Acción: ejecutar dos `click` consecutivos sobre el mismo botón en menos de 250 ms (dblclick nativo) y capturar los eventos `iswc-button-click` emitidos.
    - Assertion: el contador/handler asociado solo se incrementa **una vez** (o emite dos veces pero con flag `detail: 2`), y la emisión es idempotente para handlers que no esperan `dblclick`.
    - Cobertura: edge case de doble-click accidental del usuario.
 
 2. **Click derecho no activa el botón** — [interacción]
    - Setup: cargar el demo y preparar un listener para `click` y `contextmenu`.
    - Acción: simular `mousedown` con `button: 2` (right) sobre el botón.
-   - Assertion: NO se emite `is-button-click`, SÍ se emite `contextmenu` (o el menú nativo del browser aparece), y el estado visual del botón no cambia.
+   - Assertion: NO se emite `iswc-button-click`, SÍ se emite `contextmenu` (o el menú nativo del browser aparece), y el estado visual del botón no cambia.
    - Cobertura: branch de filtrado de botones de mouse.
 
 3. **Hover muestra cambio visual y posible tooltip** — [interacción]
@@ -60,7 +60,7 @@
 6. **Enter y Space disparan el click** — [teclado]
    - Setup: enfocar un botón primario.
    - Acción: enviar `Enter` y luego `Space` por separado; capturar los eventos `click` resultantes.
-   - Assertion: ambos disparan exactamente un `is-button-click`; `preventDefault` no bloquea la activación.
+   - Assertion: ambos disparan exactamente un `iswc-button-click`; `preventDefault` no bloquea la activación.
    - Cobertura: equivalencia teclado/mouse (WCAG 2.1.1).
 
 7. **Shift+Tab regresa al control previo** — [teclado]
@@ -70,7 +70,7 @@
    - Cobertura: navegación bidireccional.
 
 8. **aria-label correcto en botones de icono** — [a11y]
-   - Setup: cargar el demo; identificar botones cuyo slot solo contiene un SVG/`<is-icon>` sin texto.
+   - Setup: cargar el demo; identificar botones cuyo slot solo contiene un SVG/`<iswc-icon>` sin texto.
    - Acción: leer `aria-label`, `aria-labelledby` o `title` en cada uno; ejecutar la página con lector simulado (axe-core o snapshot Playwright `accessibility`).
    - Assertion: todo botón de icono tiene nombre accesible no vacío; axe no reporta `button-name`.
    - Cobertura: lectores de pantalla.
@@ -108,7 +108,7 @@
 14. **Long-press (>500 ms) no dispara evento extra** — [interacción]
     - Setup: cargar el demo; preparar listener para `mousedown`/`mouseup`.
     - Acción: mantener pulsado el botón 800 ms sin soltar; luego soltar.
-    - Assertion: solo se emite un `is-button-click` en `mouseup`; no hay comportamiento long-press custom (no se abre menú contextual ni repite).
+    - Assertion: solo se emite un `iswc-button-click` en `mouseup`; no hay comportamiento long-press custom (no se abre menú contextual ni repite).
     - Cobertura: branch de mouse hold.
 
 ---
@@ -122,7 +122,7 @@
 1. **Click en cada botón del grupo activa ese y desactiva los demás** — [interacción]
    - Setup: cargar el demo; capturar el atributo `selected`/`aria-pressed`/`aria-selected` inicial de cada botón.
    - Acción: hacer click secuencial en botón 1, botón 3, botón 2.
-   - Assertion: tras cada click, exactamente **un** botón tiene `aria-selected="true"` (o `pressed`); el resto queda `false`; se emite evento `is-button-group-change` con `{ index, value }`.
+   - Assertion: tras cada click, exactamente **un** botón tiene `aria-selected="true"` (o `pressed`); el resto queda `false`; se emite evento `iswc-button-group-change` con `{ index, value }`.
    - Cobertura: exclusividad tipo radio vs multi-select.
 
 2. **Doble-click en el mismo botón no genera toggle-off no deseado** — [interacción]
@@ -152,12 +152,12 @@
 6. **Enter y Space seleccionan el botón enfocado** — [teclado]
    - Setup: enfocar el botón 3 con flechas.
    - Acción: presionar `Enter`; luego enfocar el botón 1 y presionar `Space`.
-   - Assertion: ambos disparan selección (no `click` implícito en el DOM nativo sino el evento `is-button-group-select`); el `aria-selected` se actualiza.
+   - Assertion: ambos disparan selección (no `click` implícito en el DOM nativo sino el evento `iswc-button-group-select`); el `aria-selected` se actualiza.
    - Cobertura: equivalencia teclado.
 
 7. **role="group" o role="radiogroup" según configuración** — [a11y]
    - Setup: cargar el demo en sus dos configuraciones (single vs multi).
-   - Acción: leer el `role` del contenedor `is-button-group` y de cada botón hijo.
+   - Acción: leer el `role` del contenedor `iswc-button-group` y de cada botón hijo.
    - Assertion: single-select usa `role="radiogroup"` con `role="radio"` en hijos; multi-select usa `role="group"` con `role="button"` + `aria-pressed` en hijos.
    - Cobertura: patrón ARIA correcto.
 
@@ -174,7 +174,7 @@
    - Cobertura: skip de elementos deshabilitados.
 
 10. **Grupo vacío renderiza sin error y queda marcado** — [edge case]
-    - Setup: pasar 0 hijos al `is-button-group` (slot vacío).
+    - Setup: pasar 0 hijos al `iswc-button-group` (slot vacío).
     - Acción: renderizar y leer `offsetHeight`, `role`, `aria-label`.
     - Assertion: el contenedor se renderiza con altura 0 o placeholder, no lanza excepción; axe no reporta `empty-group` si el rol lo requiere.
     - Cobertura: robustez con 0 hijos.
@@ -194,7 +194,7 @@
 13. **Group readonly vs disabled** — [estado]
     - Setup: aplicar el atributo `readonly` al grupo (no a cada botón).
     - Acción: hacer click en un botón, tabular dentro, leer `aria-readonly`.
-    - Assertion: el grupo expone `aria-readonly="true"`, los botones hijos no emiten `is-button-group-select` en click, pero siguen siendo focuseables para inspección.
+    - Assertion: el grupo expone `aria-readonly="true"`, los botones hijos no emiten `iswc-button-group-select` en click, pero siguen siendo focuseables para inspección.
     - Cobertura: distinción readonly vs disabled.
 
 14. **Anuncio de cambio con aria-live en multi-select** — [a11y]
@@ -214,25 +214,25 @@
 1. **Click derecho sobre el target abre el menú posicionado en el cursor** — [interacción]
    - Setup: cargar el demo; preparar un listener para `contextmenu`.
    - Acción: simular `mousedown` botón derecho en coordenadas `(x=120, y=80)` sobre el target.
-   - Assertion: el `<is-context-menu>` aparece con `top`/`left` próximos a (120, 80) ± tolerance; `is-open="true"`; el menú nativo del browser está suprimido (no aparece menú del SO).
+   - Assertion: el `<iswc-context-menu>` aparece con `top`/`left` próximos a (120, 80) ± tolerance; `iswc-open="true"`; el menú nativo del browser está suprimido (no aparece menú del SO).
    - Cobertura: posicionamiento dinámico.
 
 2. **Click izquierdo sobre el target NO abre el menú** — [interacción]
    - Setup: cargar el demo; resetear estado.
    - Acción: `mousedown` botón izquierdo sobre el target.
-   - Assertion: el menú permanece cerrado; `is-open` sigue `false`; no se emite `is-context-menu-open`.
+   - Assertion: el menú permanece cerrado; `iswc-open` sigue `false`; no se emite `iswc-context-menu-open`.
    - Cobertura: filtro de botón de mouse.
 
 3. **Click fuera del menú lo cierra** — [interacción]
    - Setup: abrir el menú (right-click sobre target).
    - Acción: hacer click en un punto neutro de la página fuera del menú y del target.
-   - Assertion: el menú se cierra (`is-open="false"`), el foco vuelve al target o al `body` según spec, se emite `is-context-menu-close`.
+   - Assertion: el menú se cierra (`iswc-open="false"`), el foco vuelve al target o al `body` según spec, se emite `iswc-context-menu-close`.
    - Cobertura: dismiss por outside-click.
 
 4. **Press Escape cierra el menú y restaura foco al target** — [teclado / a11y]
    - Setup: abrir el menú por click derecho.
    - Acción: presionar `Escape`.
-   - Assertion: menú se cierra; `document.activeElement` es el target original; `is-open="false"`.
+   - Assertion: menú se cierra; `document.activeElement` es el target original; `iswc-open="false"`.
    - Cobertura: dismiss accesible.
 
 5. **Arrow Up/Down navegan entre items** — [teclado]
@@ -244,7 +244,7 @@
 6. **Enter y Space activan el item enfocado** — [teclado]
    - Setup: navegar con flechas hasta el item "Eliminar".
    - Acción: presionar `Enter`; luego abrir de nuevo y usar `Space` sobre otro item.
-   - Assertion: cada activación emite `is-context-menu-select` con `{ value, label }`; el menú se cierra tras seleccionar.
+   - Assertion: cada activación emite `iswc-context-menu-select` con `{ value, label }`; el menú se cierra tras seleccionar.
    - Cobertura: activación por teclado.
 
 7. **role="menu" y role="menuitem" correctos** — [a11y]
@@ -318,7 +318,7 @@
 2. **Click en una opción la selecciona y cierra el panel** — [interacción]
    - Setup: abrir el panel.
    - Acción: click en la opción "Opción 3".
-   - Assertion: el `value` del componente cambia a "3", el label del toggle muestra "Opción 3", el panel se cierra, `aria-expanded="false"`, se emite `is-dropdown-change`.
+   - Assertion: el `value` del componente cambia a "3", el label del toggle muestra "Opción 3", el panel se cierra, `aria-expanded="false"`, se emite `iswc-dropdown-change`.
    - Cobertura: flujo principal de selección.
 
 3. **Click fuera del dropdown lo cierra** — [interacción]
@@ -410,13 +410,13 @@
 1. **Click en el FAB expande las acciones satélite** — [interacción]
    - Setup: cargar el demo; capturar `aria-expanded` del FAB y visibilidad de cada acción.
    - Acción: click en el FAB.
-   - Assertion: `aria-expanded="true"`, las acciones se vuelven visibles (transform/opacity), aparece tooltip o label de cada una, se emite `is-speed-dial-open`.
+   - Assertion: `aria-expanded="true"`, las acciones se vuelven visibles (transform/opacity), aparece tooltip o label de cada una, se emite `iswc-speed-dial-open`.
    - Cobertura: estado expandido.
 
 2. **Click en una acción dispara su handler y cierra el dial** — [interacción]
    - Setup: expandir el FAB.
    - Acción: click en la acción "Compartir".
-   - Assertion: se emite `is-speed-dial-action` con `{ id: "share" }`; el dial se cierra; `aria-expanded="false"`.
+   - Assertion: se emite `iswc-speed-dial-action` con `{ id: "share" }`; el dial se cierra; `aria-expanded="false"`.
    - Cobertura: flujo principal de selección.
 
 3. **Click fuera del dial lo cierra** — [interacción]

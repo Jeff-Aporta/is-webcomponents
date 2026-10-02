@@ -1,14 +1,14 @@
 ---
-tag: is-duration-picker
+tag: iswc-duration-picker
 tags:
-  - is-duration-picker
+  - iswc-duration-picker
 category: forms
 status: public
 source: ./duration-picker.js
 style: ./duration-picker.css
 preview: ./duration-picker.json
 ---
-# `<is-duration-picker>`
+# `<iswc-duration-picker>`
 
 ## Propósito
 
@@ -16,7 +16,7 @@ Selector de duración `HH:MM:SS` en tres casillas numéricas, cada una con
 botones de incremento/decremento y soporte de flechas del teclado. El valor
 público son segundos totales.
 
-Este módulo registra `<is-duration-picker>`.
+Este módulo registra `<iswc-duration-picker>`.
 
 ## Cuándo usarlo
 
@@ -25,8 +25,8 @@ un instante del día.
 
 ## Cuándo no usarlo
 
-Para una hora del día usar `<is-time-input>`; para fecha + hora,
-`<is-date-time-input>`. No duplicar formateo: `text` ya entrega el string.
+Para una hora del día usar `<iswc-time-input>`; para fecha + hora,
+`<iswc-date-time-input>`. No duplicar formateo: `text` ya entrega el string.
 
 ## Importación
 
@@ -37,7 +37,7 @@ import './duration-picker.js';
 ## Ejemplo mínimo
 
 ```html
-<is-duration-picker value="90"></is-duration-picker>
+<iswc-duration-picker value="90"></iswc-duration-picker>
 ```
 
 ## API
@@ -74,11 +74,11 @@ import './duration-picker.js';
 
 | Evento | detail | bubbles | composed | cancelable |
 | --- | --- | --- | --- | --- |
-| `is-input` | sin detail | sí | sí | no |
-| `is-change` | `{ value, text }` | sí | sí | no |
+| `iswc-input` | sin detail | sí | sí | no |
+| `iswc-change` | `{ value, text }` | sí | sí | no |
 
-`tick()` emite solo `is-change`. La edición directa de casillas emite
-`is-input` y luego `is-change`.
+`tick()` emite solo `iswc-change`. La edición directa de casillas emite
+`iswc-input` y luego `iswc-change`.
 
 ### Métodos y propiedades públicas
 
@@ -86,7 +86,7 @@ import './duration-picker.js';
 | --- | --- |
 | `setSeconds(n)` | Fija el valor en segundos y repinta. No emite eventos. |
 | `set(h, m, s)` | Fija el valor por componentes. No emite eventos. |
-| `tick(delta)` | Suma `delta` segundos respetando `min`/`max`; emite `is-change` si cambió. |
+| `tick(delta)` | Suma `delta` segundos respetando `min`/`max`; emite `iswc-change` si cambió. |
 
 ### CSS parts
 
@@ -117,7 +117,7 @@ No expone custom states.
 ### Integración con formularios
 
 No es form-associated: no participa en `FormData` por sí solo. Para enviarlo
-en un formulario, reflejar `value` en un campo oculto desde `is-change`.
+en un formulario, reflejar `value` en un campo oculto desde `iswc-change`.
 
 ## Comportamiento
 
@@ -128,7 +128,7 @@ en un formulario, reflejar `value` en un campo oculto desde `is-change`.
 - `:` o `;` avanzan a la casilla siguiente; en segundos hacen `blur`.
 - `ArrowUp` / `ArrowDown` suman o restan `step` en la unidad de la casilla
   enfocada, respetando `min`/`max`.
-- Los botones `+` / `−` son `<is-button variant="plain" pill>` y operan sobre
+- Los botones `+` / `−` son `<iswc-button variant="plain" pill>` y operan sobre
   la unidad de su columna.
 
 ## Dependencias y componentes relacionados
@@ -139,7 +139,7 @@ en un formulario, reflejar `value` en un campo oculto desde `is-change`.
 - [`../_shared/emit.js`](../_shared/emit.js)
 - [`../_shared/element-base.js`](../_shared/element-base.js)
 
-Tags del módulo: `<is-duration-picker>`.
+Tags del módulo: `<iswc-duration-picker>`.
 
 ## Accesibilidad
 
@@ -150,15 +150,15 @@ separadores `:` son `aria-hidden`.
 ## Ejemplo avanzado
 
 ```html
-<is-duration-picker id="dur" value="3600" min="0" max="86400" step="15">
+<iswc-duration-picker id="dur" value="3600" min="0" max="86400" step="15">
   <span slot="start">Duración</span>
-</is-duration-picker>
+</iswc-duration-picker>
 
 <script type="module">
   const dur = document.getElementById('dur');
-  dur.addEventListener('is-change', (e) => console.log(e.detail.text));
+  dur.addEventListener('iswc-change', (e) => console.log(e.detail.text));
   dur.set(2, 30, 0);   // no emite; sincroniza la vista
-  dur.tick(-15);       // emite is-change
+  dur.tick(-15);       // emite iswc-change
 </script>
 ```
 

@@ -3,7 +3,7 @@
 <head>
 <meta charset="utf-8" />
 <meta name="viewport" content="width=device-width, initial-scale=1" />
-<title>Demo — <is-quadrant-chart> · is-webcomponents</title>
+<title>Demo — <iswc-quadrant-chart> · is-webcomponents</title>
 <meta name="description" content="Matriz de cuadrantes con ejes X/Y, leyenda de grupos y puntos con tooltip." />
 <style>
   html, body { margin: 0; padding: 0; min-height: 100%; background: #0c1118; color: #e2e8f0; font-family: ui-sans-serif, system-ui, sans-serif; }
@@ -12,14 +12,14 @@
   header h1 { font-size: 16px; font-weight: 700; margin: 0; }
   header p { font-size: 12px; color: #94a3b8; margin: 4px 0 0 0; }
   main { display: grid; place-items: stretch; min-height: 0; padding: 12px; }
-  is-quadrant-chart { width: 100%; height: 100%; min-height: 480px; display: block; }
-  is-quadrant-chart:not(:defined) { visibility: hidden; }
+  iswc-quadrant-chart { width: 100%; height: 100%; min-height: 480px; display: block; }
+  iswc-quadrant-chart:not(:defined) { visibility: hidden; }
 </style>
 <script type="module">
-  await import('../../../dist/cdn/diagrams/quadrant-chart.min.js?h=b8ce7j');
-  await customElements.whenDefined('is-quadrant-chart');
+  await import('../../../dist/cdn/diagrams/quadrant-chart.min.js?h=vfxb3n');
+  await customElements.whenDefined('iswc-quadrant-chart');
 
-  const el = document.createElement('is-quadrant-chart');
+  const el = document.createElement('iswc-quadrant-chart');
   el.payload = {
     quadrant: {
       title: 'Análisis de iniciativas',
@@ -53,7 +53,7 @@
 </head>
 <body>
   <header>
-    <h1>Demo — <code>&lt;is-quadrant-chart&gt;</code></h1>
+    <h1>Demo — <code>&lt;iswc-quadrant-chart&gt;</code></h1>
     <p>Matriz 2x2 con puntos (x,y) clasificados por cuadrante y agrupados por color.</p>
   </header>
   <main></main>

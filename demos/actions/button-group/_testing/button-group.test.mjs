@@ -16,21 +16,21 @@ test.after(async () => {
   await browser?.close();
 });
 
-test('button-group: bundle registra <is-button-group>', async () => {
+test('button-group: bundle registra <iswc-button-group>', async () => {
   const page = await browser.newPage();
   await page.goto(URL_DEMO, { waitUntil: 'domcontentloaded' });
-  await page.waitForSelector('is-button-group:defined');
-  const defined = await page.evaluate(() => !!customElements.get('is-button-group'));
-  assert.equal(defined, true, '<is-button-group> debe estar definido tras importar el bundle');
+  await page.waitForSelector('iswc-button-group:defined');
+  const defined = await page.evaluate(() => !!customElements.get('iswc-button-group'));
+  assert.equal(defined, true, '<iswc-button-group> debe estar definido tras importar el bundle');
   await page.close();
 });
 
 test('button-group: atributo select=single aplica value inicial del HTML', async () => {
   const page = await browser.newPage();
   await page.goto(URL_DEMO, { waitUntil: 'domcontentloaded' });
-  await page.waitForSelector('is-button-group#g-single:defined');
+  await page.waitForSelector('iswc-button-group#g-single:defined');
   const value = await page.evaluate(() => {
-    const g = document.querySelector('is-button-group#g-single');
+    const g = document.querySelector('iswc-button-group#g-single');
     return { value: g.value, values: g.values };
   });
   assert.equal(value.value, 'md', 'value inicial debe ser "md" (atributo value del HTML)');
@@ -38,14 +38,14 @@ test('button-group: atributo select=single aplica value inicial del HTML', async
   await page.close();
 });
 
-test('button-group: click en botón cambia value y emite is-change', async () => {
+test('button-group: click en botón cambia value y emite iswc-change', async () => {
   const page = await browser.newPage();
   await page.goto(URL_DEMO, { waitUntil: 'domcontentloaded' });
-  await page.waitForSelector('is-button-group#g-single:defined');
+  await page.waitForSelector('iswc-button-group#g-single:defined');
   const events = [];
   await page.evaluate(() => {
-    const g = document.querySelector('is-button-group#g-single');
-    g.addEventListener('is-change', (e) => {
+    const g = document.querySelector('iswc-button-group#g-single');
+    g.addEventListener('iswc-change', (e) => {
       window.__bgEvents = window.__bgEvents || [];
       window.__bgEvents.push(e.detail);
     });
@@ -53,32 +53,32 @@ test('button-group: click en botón cambia value y emite is-change', async () =>
 
   // Click en el botón "lg" dentro del shadow DOM del host
   await page.evaluate(() => {
-    const g = document.querySelector('is-button-group#g-single');
-    const btns = g.querySelectorAll('is-button');
+    const g = document.querySelector('iswc-button-group#g-single');
+    const btns = g.querySelectorAll('iswc-button');
     btns[2].click();
   });
   await page.waitForTimeout(50);
 
   const detail = await page.evaluate(() => window.__bgEvents);
-  assert.ok(Array.isArray(detail) && detail.length === 1, 'debe haberse emitido un is-change');
-  assert.equal(detail[0].value, 'lg', 'is-change.detail.value debe ser "lg"');
-  assert.deepEqual(detail[0].values, ['lg'], 'is-change.detail.values debe ser ["lg"]');
+  assert.ok(Array.isArray(detail) && detail.length === 1, 'debe haberse emitido un iswc-change');
+  assert.equal(detail[0].value, 'lg', 'iswc-change.detail.value debe ser "lg"');
+  assert.deepEqual(detail[0].values, ['lg'], 'iswc-change.detail.values debe ser ["lg"]');
   await page.close();
 });
 
 test('button-group: select=multiple soporta toggle y devuelve array en value', async () => {
   const page = await browser.newPage();
   await page.goto(URL_DEMO, { waitUntil: 'domcontentloaded' });
-  await page.waitForSelector('is-button-group#g-multi:defined');
+  await page.waitForSelector('iswc-button-group#g-multi:defined');
   await page.evaluate(() => {
-    const g = document.querySelector('is-button-group#g-multi');
-    const btns = g.querySelectorAll('is-button');
+    const g = document.querySelector('iswc-button-group#g-multi');
+    const btns = g.querySelectorAll('iswc-button');
     btns[0].click(); // UX
     btns[2].click(); // perf
   });
   await page.waitForTimeout(50);
   const value = await page.evaluate(() => {
-    const g = document.querySelector('is-button-group#g-multi');
+    const g = document.querySelector('iswc-button-group#g-multi');
     return { value: g.value, values: g.values };
   });
   assert.deepEqual(value.values.sort(), ['perf', 'ux'], 'values debe contener UX y perf');
@@ -88,9 +88,9 @@ test('button-group: select=multiple soporta toggle y devuelve array en value', a
 test('button-group: variant="segmented" queda reflejado en atributo', async () => {
   const page = await browser.newPage();
   await page.goto(URL_DEMO, { waitUntil: 'domcontentloaded' });
-  await page.waitForSelector('is-button-group#g-seg:defined');
+  await page.waitForSelector('iswc-button-group#g-seg:defined');
   const variant = await page.evaluate(() => {
-    return document.querySelector('is-button-group#g-seg').getAttribute('variant');
+    return document.querySelector('iswc-button-group#g-seg').getAttribute('variant');
   });
   assert.equal(variant, 'segmented', 'el atributo variant debe ser "segmented"');
   await page.close();
@@ -99,9 +99,9 @@ test('button-group: variant="segmented" queda reflejado en atributo', async () =
 test('button-group: aria-orientation y role=group llegan al slot interno', async () => {
   const page = await browser.newPage();
   await page.goto(URL_DEMO, { waitUntil: 'domcontentloaded' });
-  await page.waitForSelector('is-button-group#g-seg:defined');
+  await page.waitForSelector('iswc-button-group#g-seg:defined');
   const a11y = await page.evaluate(() => {
-    const g = document.querySelector('is-button-group#g-seg');
+    const g = document.querySelector('iswc-button-group#g-seg');
     const slot = g.shadowRoot.querySelector('slot');
     return {
       slotAriaOrientation: slot.getAttribute('aria-orientation'),
@@ -117,18 +117,18 @@ test('button-group: aria-orientation y role=group llegan al slot interno', async
 test('button-group: navegar con ArrowDown en vertical mueve el foco (envoltura)', async () => {
   const page = await browser.newPage();
   await page.goto(URL_DEMO, { waitUntil: 'domcontentloaded' });
-  await page.waitForSelector('is-button-group#g-seg:defined');
+  await page.waitForSelector('iswc-button-group#g-seg:defined');
   // Foco en el primer botón
   await page.evaluate(() => {
-    const g = document.querySelector('is-button-group#g-seg');
-    g.querySelectorAll('is-button')[0].focus();
+    const g = document.querySelector('iswc-button-group#g-seg');
+    g.querySelectorAll('iswc-button')[0].focus();
   });
   // En vertical, ArrowDown debe mover al siguiente y envolver al final
   await page.keyboard.press('ArrowDown');
   await page.waitForTimeout(20);
   const idx1 = await page.evaluate(() => {
-    const g = document.querySelector('is-button-group#g-seg');
-    const btns = [...g.querySelectorAll('is-button')];
+    const g = document.querySelector('iswc-button-group#g-seg');
+    const btns = [...g.querySelectorAll('iswc-button')];
     return btns.indexOf(btns.find((b) => b.shadowRoot?.activeElement === document.activeElement || b === document.activeElement));
   });
   // Aceptamos 1 ó -1 según cómo mide activeElement; comprobamos solo que NO es 0.

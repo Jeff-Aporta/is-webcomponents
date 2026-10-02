@@ -19,7 +19,7 @@
    - Cobertura: cold cache vs warm cache; race condition si el usuario cambia de icono antes de que termine el fetch inicial.
 
 2. **Fallback cuando el nombre de icono no existe en el set** — [media/error-state]
-   - Setup: pasar `<is-icon name="does-not-exist">` mediante un input del demo.
+   - Setup: pasar `<iswc-icon name="does-not-exist">` mediante un input del demo.
    - Acción: teclear un nombre inválido y tabular fuera.
    - Assertion: el componente renderiza un fallback visual (cuadrado vacío, `?`, o `aria-hidden` icon genérico) y emite un warning `console.warn`; `aria-label` se actualiza a "Icon unavailable" o equivalente.
    - Cobertura: branch de error, mensaje a usuario, accesibilidad del fallback.
@@ -115,7 +115,7 @@
 4. **Copiar nombre del icono al portapapeles con feedback** — [interaction/feedback]
    - Setup: click en el botón "Copy" de un icono en su preview.
    - Acción: pegar en otro input.
-   - Assertion: el portapapeles recibe el string del nombre (`is-icon--name`); aparece un toast `aria-live="polite"` "Copied!" durante 2 s y luego desaparece; si el navegador no soporta `navigator.clipboard`, se usa un `<textarea>` legacy.
+   - Assertion: el portapapeles recibe el string del nombre (`iswc-icon--name`); aparece un toast `aria-live="polite"` "Copied!" durante 2 s y luego desaparece; si el navegador no soporta `navigator.clipboard`, se usa un `<textarea>` legacy.
    - Cobertura: Clipboard API, fallback, accesibilidad del toast.
 
 5. **Paginación o virtual scroll para miles de iconos** — [performance]

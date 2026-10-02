@@ -1,20 +1,20 @@
 ---
-tag: is-resize-observer
+tag: iswc-resize-observer
 tags:
-  - is-resize-observer
+  - iswc-resize-observer
 category: helpers
 status: public
 source: ./resize-observer.js
 style: ./resize-observer.css
 preview: ./resize-observer.json
 ---
-# `<is-resize-observer>`
+# `<iswc-resize-observer>`
 
 ## Propósito
 
-Observa hijos directos y emite is-resize con entries.
+Observa hijos directos y emite iswc-resize con entries.
 
-Este módulo registra `<is-resize-observer>`.
+Este módulo registra `<iswc-resize-observer>`.
 
 ## Cuándo usarlo
 
@@ -33,7 +33,7 @@ import './resize-observer.js';
 ## Ejemplo mínimo
 
 ```html
-<is-resize-observer></is-resize-observer>
+<iswc-resize-observer></iswc-resize-observer>
 ```
 
 ## API
@@ -60,7 +60,7 @@ No expone.
 
 | Evento | detail | bubbles | composed | cancelable |
 | --- | --- | --- | --- | --- |
-| `is-resize` | sí | sí | sí | no |
+| `iswc-resize` | sí | sí | sí | no |
 
 ### Métodos y propiedades públicas
 
@@ -88,18 +88,18 @@ No declara integración form-associated propia en este módulo.
 
 Documentación de cabecera preservada desde fuente:
 
-> <is-resize-observer> — Web Component (vanilla).
+> <iswc-resize-observer> — Web Component (vanilla).
 > display:contents — observa hijos directos con ResizeObserver.
 > Atributos
 >   disabled  boolean
 > Eventos
->   is-resize  detail: { entries }
+>   iswc-resize  detail: { entries }
 
 ## Dependencias y componentes relacionados
 
 - [`../_shared/adopt-css.js`](../_shared/adopt-css.js)
 
-Tags del módulo: `<is-resize-observer>`.
+Tags del módulo: `<iswc-resize-observer>`.
 
 ## Accesibilidad
 
@@ -108,7 +108,7 @@ Preservar semántica, foco, teclado, labels y ARIA. ARIA detectado: ninguno expl
 ## Ejemplo avanzado
 
 ```html
-<is-resize-observer></is-resize-observer>
+<iswc-resize-observer></iswc-resize-observer>
 ```
 
 ## Errores comunes

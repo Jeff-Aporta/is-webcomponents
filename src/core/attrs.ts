@@ -205,7 +205,7 @@ export function atributosDeclarados(Clase: object): string[] {
  *
  * El browser congela `observedAttributes` en el `define`. Si el REGISTRO está
  * vacío en ese instante, congela `[]` y attrs como `open` nunca disparan
- * `attributeChangedCallback` (is-dropdown marcaba `open` sin abrir el panel).
+ * `attributeChangedCallback` (iswc-dropdown marcaba `open` sin abrir el panel).
  *
  * No se puede hacer `new Clase()` aquí: antes del define el browser lanza
  * `Illegal constructor` y un try/catch dejaba el REGISTRO vacío igual.

@@ -3,7 +3,7 @@
 <head>
 <meta charset="utf-8" />
 <meta name="viewport" content="width=device-width, initial-scale=1" />
-<title>Calendario mensual &lt;is-month-calendar&gt; · is-webcomponents</title>
+<title>Calendario mensual &lt;iswc-month-calendar&gt; · is-webcomponents</title>
 <meta name="description" content="Rejilla de los 12 meses del año con teclado y navegación entre celdas." />
 <style>
   html, body { margin: 0; padding: 0; min-height: 100%; background: #0c1118; color: #e2e8f0; font-family: ui-sans-serif, system-ui, sans-serif; }
@@ -14,30 +14,30 @@
   section { background: #131a24; border: 1px solid rgba(255,255,255,0.08); border-radius: 10px; padding: 16px; display: grid; gap: 10px; }
   section h2 { font-size: 13px; margin: 0; font-weight: 600; color: #cbd5e1; }
   section .desc { font-size: 12px; color: #94a3b8; margin: 0; }
-  is-month-calendar { width: 100%; }
-  is-month-calendar + div { margin-top: 8px; font: 12px ui-monospace, Menlo, Consolas, monospace; color: #94a3b8; }
+  iswc-month-calendar { width: 100%; }
+  iswc-month-calendar + div { margin-top: 8px; font: 12px ui-monospace, Menlo, Consolas, monospace; color: #94a3b8; }
   .row { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; }
   code { background: rgba(255,255,255,0.06); padding: 1px 5px; border-radius: 3px; font: 12px ui-monospace, Menlo, Consolas, monospace; }
   /* Anti-FOUC */
-  is-month-calendar:not(:defined) { visibility: hidden; }
+  iswc-month-calendar:not(:defined) { visibility: hidden; }
 </style>
 <script type="module">
-  await import('../../../dist/cdn/forms/month-calendar.min.js?h=wpwd1u');
-  await customElements.whenDefined('is-month-calendar');
+  await import('../../../dist/cdn/forms/month-calendar.min.js?h=q3xzb1');
+  await customElements.whenDefined('iswc-month-calendar');
 
   // (1) básico, año actual, sin selección
-  const basico = document.createElement('is-month-calendar');
+  const basico = document.createElement('iswc-month-calendar');
   basico.id = 'basico';
   basico.year = 2026;
   basico.label = 'Mes de inicio del proyecto';
   basico.hint = 'Click en un mes o navega con flechas';
-  basico.addEventListener('is-change', (e) => {
+  basico.addEventListener('iswc-change', (e) => {
     document.getElementById('basico-out').textContent = `value=${e.detail.value} (mes ${e.detail.month + 1}/${e.detail.year})`;
   });
   document.querySelector('#sec-basico').appendChild(basico);
 
   // (2) con valor inicial
-  const conValor = document.createElement('is-month-calendar');
+  const conValor = document.createElement('iswc-month-calendar');
   conValor.id = 'conValor';
   conValor.value = '2026-07';
   conValor.label = 'Mes de pago';
@@ -45,7 +45,7 @@
   document.querySelector('#sec-valor').appendChild(conValor);
 
   // (3) con límites (rango Abril–Octubre 2026)
-  const limitado = document.createElement('is-month-calendar');
+  const limitado = document.createElement('iswc-month-calendar');
   limitado.id = 'limitado';
   limitado.year = 2026;
   limitado.min = '2026-04-01';
@@ -55,7 +55,7 @@
   document.querySelector('#sec-limitado').appendChild(limitado);
 
   // (4) nombres largos, 4 columnas
-  const ancho = document.createElement('is-month-calendar');
+  const ancho = document.createElement('iswc-month-calendar');
   ancho.id = 'ancho';
   ancho.year = 2025;
   ancho.monthWidth = 'long';
@@ -70,8 +70,8 @@
 <body>
 <main>
   <header>
-    <h1>&lt;is-month-calendar&gt; · Rejilla de 12 meses</h1>
-    <p>Basado en el <code>MonthCalendar</code> de MUI. Atributos <code>year</code>, <code>value</code> (<code>yyyy-mm</code>), <code>min</code>, <code>max</code>, <code>columns</code>, <code>month-width</code>. Click o <code>ArrowLeft/Right/Up/Down</code> para mover el foco. Emite <code>is-change</code>.</p>
+    <h1>&lt;iswc-month-calendar&gt; · Rejilla de 12 meses</h1>
+    <p>Basado en el <code>MonthCalendar</code> de MUI. Atributos <code>year</code>, <code>value</code> (<code>yyyy-mm</code>), <code>min</code>, <code>max</code>, <code>columns</code>, <code>month-width</code>. Click o <code>ArrowLeft/Right/Up/Down</code> para mover el foco. Emite <code>iswc-change</code>.</p>
   </header>
 
   <section id="sec-basico">

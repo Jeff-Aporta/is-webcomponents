@@ -11,7 +11,7 @@ import { resolveTkHue } from '../_shared/tk-hue.js';
  * Es el diagrama de actividad con carriles: cada fila es un responsable y cada
  * columna un momento del proceso. Responde una pregunta que el flowchart normal
  * no responde — **quién** hace cada paso — y por eso vive aparte y no como un
- * modo de `<is-flowchart>`.
+ * modo de `<iswc-flowchart>`.
  *
  * La columna de un paso se puede declarar (`column`) o se deduce por orden
  * topológico: un paso va siempre a la derecha de todos los que lo alimentan.

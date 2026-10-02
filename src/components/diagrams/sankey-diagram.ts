@@ -10,20 +10,20 @@ import { registerDiagramKind } from './diagram-kinds.js';
 import { svgEl } from '../_shared/svg-chart-engine.js';
 
 /**
- * <is-sankey-diagram> — diagrama de Sankey en SVG, sin Mermaid.
+ * <iswc-sankey-diagram> — diagrama de Sankey en SVG, sin Mermaid.
  *
- *   <is-sankey-diagram>
+ *   <iswc-sankey-diagram>
  *     <script type="application/json">
  *       { "sankey": { "nodes": [...], "links": [{ "from": "a", "to": "b", "value": 40 }] } }
  *     </script>
- *   </is-sankey-diagram>
+ *   </iswc-sankey-diagram>
  *
- * Mismo esqueleto que <is-flowchart>: shadow DOM, slot JSON + MutationObserver,
+ * Mismo esqueleto que <iswc-flowchart>: shadow DOM, slot JSON + MutationObserver,
  * tema por atributo `data-theme`, `color` (inline | viewer), lightbox propio.
  *
  * Atributos: color (inline | viewer), open-on-click, height
  * Propiedades: payload, spec, layout, hiddenGroups
- * Eventos: is-render, is-open-viewer, is-toggle-group
+ * Eventos: iswc-render, iswc-open-viewer, iswc-toggle-group
  */
 
 const DEFAULT_HEIGHT = 320;
@@ -73,7 +73,7 @@ interface SkLayout {
 interface NodeEntry { n: SkLayoutNode; g: SVGGElement; }
 interface LinkEntry { l: SkLayoutLink; g: SVGGElement; }
 
-class IsSankeyDiagram extends DiagramElementBase {
+class IswcSankeyDiagram extends DiagramElementBase {
   static get observedAttributes(): string[] {
     return [...DiagramElementBase.observedAttributes, 'height'];
   }
@@ -140,7 +140,7 @@ class IsSankeyDiagram extends DiagramElementBase {
     const layout = computeSankeyLayout(visible, { height }) as unknown as SkLayout;
     this.layout = layout;
     this.#buildSvg(layout, theme);
-    this.wrap.classList.toggle('is-viewer', this.isViewer);
+    this.wrap.classList.toggle('iswc-viewer', this.isViewer);
   }
 
   #buildSvg(layout: SkLayout, theme: DiagramTheme): void {
@@ -175,7 +175,7 @@ class IsSankeyDiagram extends DiagramElementBase {
     this.#buildLinks(layout, theme);
     this.#buildNodes(layout, theme);
 
-    emit(this, 'is-render', { layout, svg: this.svg });
+    emit(this, 'iswc-render', { layout, svg: this.svg });
   }
 
   #buildLegend(layout: SkLayout, theme: DiagramTheme): void {
@@ -298,13 +298,13 @@ class IsSankeyDiagram extends DiagramElementBase {
   #onClick = (e: MouseEvent) => {
     if (this.isViewer) {
       const item = e.composedPath().find((x): x is HTMLElement => x instanceof HTMLElement && !!x.dataset?.groupId);
-      if (item) emitCancelable(this, 'is-toggle-group', { id: item.dataset.groupId });
+      if (item) emitCancelable(this, 'iswc-toggle-group', { id: item.dataset.groupId });
       return;
     }
     // El visor es opt-in: sin `open-on-click` el clic no hace nada y tampoco
-    // se anuncia `is-open-viewer`, que prometeria una apertura que no ocurre.
+    // se anuncia `iswc-open-viewer`, que prometeria una apertura que no ocurre.
     if (!this.hasAttribute('open-on-click')) return;
-    const ev = new CustomEvent('is-open-viewer', {
+    const ev = new CustomEvent('iswc-open-viewer', {
       bubbles: true, composed: true, cancelable: true, detail: { payload: this.payload },
     });
     this.dispatchEvent(ev);
@@ -336,13 +336,13 @@ class IsSankeyDiagram extends DiagramElementBase {
     // Resalta el nodo y las bandas que entran o salen de él; atenúa el resto.
     for (const [nodeId, node] of this.#nodeNodes) {
       const active = nodeId === id;
-      node.g.classList.toggle('is-active', active);
-      node.g.classList.toggle('is-dim', !!id && !active);
+      node.g.classList.toggle('iswc-active', active);
+      node.g.classList.toggle('iswc-dim', !!id && !active);
     }
     for (const [, link] of this.#linkNodes) {
       const touches = !!id && (link.l.from === id || link.l.to === id);
-      link.g.classList.toggle('is-active', touches);
-      link.g.classList.toggle('is-dim', !!id && !touches);
+      link.g.classList.toggle('iswc-active', touches);
+      link.g.classList.toggle('iswc-dim', !!id && !touches);
     }
 
     if (!entry) {
@@ -366,8 +366,8 @@ class IsSankeyDiagram extends DiagramElementBase {
   }
 }
 
-defineElement('is-sankey-diagram', IsSankeyDiagram, 'IsSankeyDiagram');
+defineElement('iswc-sankey-diagram', IswcSankeyDiagram, 'IswcSankeyDiagram');
 
-registerDiagramKind('sankey', 'is-sankey-diagram');
+registerDiagramKind('sankey', 'iswc-sankey-diagram');
 
-export { IsSankeyDiagram };
+export { IswcSankeyDiagram };

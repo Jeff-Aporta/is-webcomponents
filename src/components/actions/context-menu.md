@@ -1,14 +1,14 @@
 ---
-tag: is-context-menu
+tag: iswc-context-menu
 tags:
-  - is-context-menu
+  - iswc-context-menu
 category: actions
 status: public
 source: ./context-menu.js
 style: ./context-menu.css
 preview: ./context-menu.json
 ---
-# `<is-context-menu>`
+# `<iswc-context-menu>`
 
 ## Propósito
 
@@ -17,7 +17,7 @@ Menú emergente anclado al clic derecho del ratón sobre un elemento
 panel en el punto del cursor, lo voltea si no cabe y lo pega al borde como
 último recurso.
 
-Este módulo registra `<is-context-menu>`.
+Este módulo registra `<iswc-context-menu>`.
 
 ## Cuándo usarlo
 
@@ -37,10 +37,10 @@ import './context-menu.js';
 
 ```html
 <div id="zona">Clic derecho aquí</div>
-<is-context-menu for="#zona">
+<iswc-context-menu for="#zona">
   <button class="item" data-value="editar">Editar</button>
   <button class="item" data-value="borrar">Borrar</button>
-</is-context-menu>
+</iswc-context-menu>
 ```
 
 ## API
@@ -74,9 +74,9 @@ import './context-menu.js';
 
 | Evento | detail | bubbles | composed | cancelable |
 | --- | --- | --- | --- | --- |
-| `is-open` | sí | sí | sí | no |
-| `is-close` | no | sí | sí | no |
-| `is-select` | sí | sí | sí | no |
+| `iswc-open` | sí | sí | sí | no |
+| `iswc-close` | no | sí | sí | no |
+| `iswc-select` | sí | sí | sí | no |
 
 ### Métodos y propiedades públicas
 
@@ -120,7 +120,7 @@ No declara integración form-associated propia en este módulo.
 
 Documentación de cabecera preservada desde fuente:
 
-> <is-context-menu> — Menú emergente anclado al clic derecho del ratón sobre
+> <iswc-context-menu> — Menú emergente anclado al clic derecho del ratón sobre
 > un `target` externo (o sobre el propio host si no se da `for`).
 > Atributos
 >   for                CSS selector — selector del elemento que recibe el
@@ -136,14 +136,14 @@ Documentación de cabecera preservada desde fuente:
 > Slots
 >   default — hijos renderizados dentro del panel; usar <button class="item">
 >             o <a class="item"> para tener acciones. Cada item emite
->             `is-select` y se cierra el menú.
+>             `iswc-select` y se cierra el menú.
 > Eventos
->   is-select       detalle: { item, value }  — al elegir un item
->   is-open, is-close
+>   iswc-select       detalle: { item, value }  — al elegir un item
+>   iswc-open, iswc-close
 > Custom states: open, closed
 
 El atributo `open` se refleja en el host mientras el menú está abierto. El
-valor de `is-select` sale de `data-value` del item y, si falta, del texto del
+valor de `iswc-select` sale de `data-value` del item y, si falta, del texto del
 item.
 
 ## Dependencias y componentes relacionados
@@ -152,9 +152,9 @@ item.
 - [`../_shared/define.js`](../_shared/define.js)
 - [`../_shared/emit.js`](../_shared/emit.js)
 - [`../_shared/popup-dismiss.js`](../_shared/popup-dismiss.js) — mismo ciclo
-  de cierre (Escape, click fuera, scroll) que usa `<is-dropdown>`.
+  de cierre (Escape, click fuera, scroll) que usa `<iswc-dropdown>`.
 
-Tags del módulo: `<is-context-menu>`.
+Tags del módulo: `<iswc-context-menu>`.
 
 ## Accesibilidad
 
@@ -165,13 +165,13 @@ mostrado con `show()`; los items se detectan por `[role="menuitem"]`, `.item`,
 ## Ejemplo avanzado
 
 ```html
-<is-context-menu for="#tabla" scroll-lock>
+<iswc-context-menu for="#tabla" scroll-lock>
   <button class="item" data-value="copiar">Copiar fila</button>
   <a class="item" href="/detalle">Ver detalle</a>
-</is-context-menu>
+</iswc-context-menu>
 <script>
-  document.querySelector('is-context-menu')
-    .addEventListener('is-select', (e) => console.log(e.detail.value));
+  document.querySelector('iswc-context-menu')
+    .addEventListener('iswc-select', (e) => console.log(e.detail.value));
 </script>
 ```
 

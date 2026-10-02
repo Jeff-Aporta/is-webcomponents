@@ -67,7 +67,7 @@ checks.push({
     await waitReady(page, 'data-tooltip-ready');
     await page.waitForTimeout(150);
     const data = await page.evaluate(async () => {
-      const tt = document.querySelectorAll('is-tooltip')[1]; // t2 (without-arrow)
+      const tt = document.querySelectorAll('iswc-tooltip')[1]; // t2 (without-arrow)
       tt.show();
       await new Promise((r) => requestAnimationFrame(() => r()));
       const arrow = tt.shadowRoot.querySelector('[part="base__arrow"]');
@@ -75,10 +75,10 @@ checks.push({
     }).catch(() => ({ hasArrow: null }));
     // Fallback por si el closure tuvo el error de sintaxis original
     const data2 = data.hasArrow === null ? await page.evaluate(async () => {
-      const tt = document.querySelectorAll('is-tooltip')[1];
+      const tt = document.querySelectorAll('iswc-tooltip')[1];
       tt.show();
       await new Promise((r) => requestAnimationFrame(() => r()));
-      const floating = tt.shadowRoot.querySelector('is-floating');
+      const floating = tt.shadowRoot.querySelector('iswc-floating');
       const arrow = floating?.shadowRoot?.querySelector('[part="arrow"]') || tt.shadowRoot.querySelector('[part="base__arrow"]');
       return { hasArrow: !!arrow };
     }) : data;

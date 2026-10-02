@@ -1,22 +1,22 @@
 ---
-tag: is-accordion-group
+tag: iswc-accordion-group
 tags:
-  - is-accordion-group
+  - iswc-accordion-group
 category: isp
 status: public
 source: ./accordion-group.js
 style: ./accordion-group.css
 preview: ./accordion-group.json
 ---
-# `<is-accordion-group>`
+# `<iswc-accordion-group>`
 
 ## Propósito
 
-Coordinador de varios `<is-details>`. Port de
+Coordinador de varios `<iswc-details>`. Port de
 `src/lib/navigation/accordion/Accordion.svelte` (ISP-SvelteComponents), donde el
 contenedor mantenía la lista de abiertos y el item solo la consultaba.
 
-Este módulo registra `<is-accordion-group>`.
+Este módulo registra `<iswc-accordion-group>`.
 
 ## Cuándo usarlo
 
@@ -25,8 +25,8 @@ vez, o varios con `multiple`.
 
 ## Cuándo no usarlo
 
-No usar para un único disclosure: para eso está `<is-details>` a secas. Tampoco
-para pestañas — eso es `<is-tab-group>`.
+No usar para un único disclosure: para eso está `<iswc-details>` a secas. Tampoco
+para pestañas — eso es `<iswc-tab-group>`.
 
 ## Importación
 
@@ -37,10 +37,10 @@ import './accordion-group.js';
 ## Ejemplo mínimo
 
 ```html
-<is-accordion-group>
-  <is-details summary="Datos básicos" open>…</is-details>
-  <is-details summary="Contacto">…</is-details>
-</is-accordion-group>
+<iswc-accordion-group>
+  <iswc-details summary="Datos básicos" open>…</iswc-details>
+  <iswc-details summary="Contacto">…</iswc-details>
+</iswc-accordion-group>
 ```
 
 ## API
@@ -58,20 +58,20 @@ import './accordion-group.js';
 | Propiedad | Acceso | Notas |
 | --- | --- | --- |
 | `multiple` | lectura/escritura | Refleja el atributo. |
-| `items` | solo lectura | `<is-details>` proyectados, en orden. |
+| `items` | solo lectura | `<iswc-details>` proyectados, en orden. |
 | `openItems` | solo lectura | Subconjunto abierto. |
 
 ### Slots
 
 | Slot | Uso |
 | --- | --- |
-| `default` | Uno o más `<is-details>`. |
+| `default` | Uno o más `<iswc-details>`. |
 
 ### Eventos
 
 | Evento | detail | bubbles | composed | cancelable |
 | --- | --- | --- | --- | --- |
-| `is-accordion-change` | `{ open, opened, closed }` | sí | sí | no |
+| `iswc-accordion-change` | `{ open, opened, closed }` | sí | sí | no |
 
 ### Métodos y propiedades públicas
 
@@ -102,8 +102,8 @@ No expone custom states.
 No declara integración form-associated.
 ## Comportamiento
 
-El grupo NO reimplementa el disclosure: escucha los `is-show` / `is-hide`
-(composed) de sus `<is-details>` hijos y cierra los demás cuando toca. Si el
+El grupo NO reimplementa el disclosure: escucha los `iswc-show` / `iswc-hide`
+(composed) de sus `<iswc-details>` hijos y cierra los demás cuando toca. Si el
 markup llega con varios `open` y no hay `multiple`, sobrevive el primero.
 
 ## Dependencias y componentes relacionados
@@ -111,23 +111,23 @@ markup llega con varios `open` y no hay `multiple`, sobrevive el primero.
 - [`../_shared/adopt-css.js`](../_shared/adopt-css.js)
 - [`../layout/details.js`](../layout/details.js)
 
-Tags del módulo: `<is-accordion-group>`.
+Tags del módulo: `<iswc-accordion-group>`.
 
 ## Accesibilidad
 
-Cada panel conserva el `aria-expanded` y el botón de `<is-details>`.
+Cada panel conserva el `aria-expanded` y el botón de `<iswc-details>`.
 
 ## Ejemplo avanzado
 
 ```html
-<is-accordion-group id="faq" multiple>
-  <is-details summary="Facturación">Contenido</is-details>
-  <is-details summary="Nómina">Contenido</is-details>
-</is-accordion-group>
+<iswc-accordion-group id="faq" multiple>
+  <iswc-details summary="Facturación">Contenido</iswc-details>
+  <iswc-details summary="Nómina">Contenido</iswc-details>
+</iswc-accordion-group>
 
 <script type="module">
   const faq = document.getElementById('faq');
-  faq.addEventListener('is-accordion-change', (e) => {
+  faq.addEventListener('iswc-accordion-change', (e) => {
     console.log(e.detail.opened, e.detail.closed);
   });
   faq.showAll();
@@ -136,8 +136,8 @@ Cada panel conserva el `aria-expanded` y el botón de `<is-details>`.
 
 ## Errores comunes
 
-- Anidar los `<is-details>` dentro de un wrapper: deben ser hijos directos.
-- Usar el atributo `name` de `<is-details>` a la vez que el grupo (doble coordinación).
+- Anidar los `<iswc-details>` dentro de un wrapper: deben ser hijos directos.
+- Usar el atributo `name` de `<iswc-details>` a la vez que el grupo (doble coordinación).
 
 ## Reglas para LLM
 

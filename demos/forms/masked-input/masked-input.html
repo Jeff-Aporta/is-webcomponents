@@ -3,7 +3,7 @@
 <head>
 <meta charset="utf-8" />
 <meta name="viewport" content="width=device-width, initial-scale=1" />
-<title>Input con máscara &lt;is-masked-input&gt; · is-webcomponents</title>
+<title>Input con máscara &lt;iswc-masked-input&gt; · is-webcomponents</title>
 <meta name="description" content="Input con patrón de tokens (0 dígito requerido, 9 opcional, A/a letra, * alfanumérico) y literales." />
 <style>
   html, body { margin: 0; padding: 0; min-height: 100%; background: #0c1118; color: #e2e8f0; font-family: ui-sans-serif, system-ui, sans-serif; }
@@ -14,34 +14,34 @@
   section { background: #131a24; border: 1px solid rgba(255,255,255,0.08); border-radius: 10px; padding: 16px; display: grid; gap: 10px; }
   section h2 { font-size: 13px; margin: 0; font-weight: 600; color: #cbd5e1; }
   section .desc { font-size: 12px; color: #94a3b8; margin: 0; }
-  is-masked-input { width: 100%; }
-  is-masked-input + div { margin-top: 8px; font: 12px ui-monospace, Menlo, Consolas, monospace; color: #94a3b8; }
+  iswc-masked-input { width: 100%; }
+  iswc-masked-input + div { margin-top: 8px; font: 12px ui-monospace, Menlo, Consolas, monospace; color: #94a3b8; }
   .row { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; }
   code { background: rgba(255,255,255,0.06); padding: 1px 5px; border-radius: 3px; font: 12px ui-monospace, Menlo, Consolas, monospace; }
   /* Anti-FOUC */
-  is-masked-input:not(:defined) { visibility: hidden; }
+  iswc-masked-input:not(:defined) { visibility: hidden; }
 </style>
 <script type="module">
-  await import('../../../dist/cdn/forms/masked-input.min.js?h=2ow8eh');
-  await customElements.whenDefined('is-masked-input');
+  await import('../../../dist/cdn/forms/masked-input.min.js?h=vmhl56');
+  await customElements.whenDefined('iswc-masked-input');
 
   // (1) Teléfono AR: +54 9 11 5555 5555
-  const tel = document.createElement('is-masked-input');
+  const tel = document.createElement('iswc-masked-input');
   tel.id = 'tel';
   tel.pattern = '+54 9 0000 0000 0000';
   tel.label = 'Teléfono';
   tel.placeholder = '+54 9 ____ ____ ____';
   tel.hint = 'Sólo dígitos, 14 visibles (incluyendo el "+54 9 ")';
-  tel.addEventListener('is-complete', () => {
+  tel.addEventListener('iswc-complete', () => {
     document.getElementById('tel-status').textContent = '✓ completo';
   });
   document.querySelector('#sec-tel').appendChild(tel);
-  tel.addEventListener('is-input', () => {
+  tel.addEventListener('iswc-input', () => {
     document.getElementById('tel-raw').textContent = `raw: "${tel.raw}"`;
   });
 
   // (2) Tarjeta de crédito: 9999 9999 9999 9999 (16 dígitos, 9=opcional)
-  const card = document.createElement('is-masked-input');
+  const card = document.createElement('iswc-masked-input');
   card.id = 'card';
   card.pattern = '9999 9999 9999 9999';
   card.label = 'Tarjeta de crédito';
@@ -50,7 +50,7 @@
   document.querySelector('#sec-card').appendChild(card);
 
   // (3) Fecha DD/MM/AAAA
-  const fecha = document.createElement('is-masked-input');
+  const fecha = document.createElement('iswc-masked-input');
   fecha.id = 'fecha';
   fecha.pattern = '00/00/0000';
   fecha.label = 'Fecha (DD/MM/AAAA)';
@@ -59,7 +59,7 @@
   document.querySelector('#sec-fecha').appendChild(fecha);
 
   // (4) Placa AAAA 000 (letras + números)
-  const placa = document.createElement('is-masked-input');
+  const placa = document.createElement('iswc-masked-input');
   placa.id = 'placa';
   placa.pattern = 'AAAA 000';
   placa.label = 'Placa';
@@ -68,7 +68,7 @@
   document.querySelector('#sec-placa').appendChild(placa);
 
   // (5) requerido
-  const req = document.createElement('is-masked-input');
+  const req = document.createElement('iswc-masked-input');
   req.id = 'req';
   req.pattern = '0000-0000';
   req.label = 'Código requerido *';
@@ -82,8 +82,8 @@
 <body>
 <main>
   <header>
-    <h1>&lt;is-masked-input&gt; · Input con tokens y literales</h1>
-    <p>Tokens: <code>0</code> dígito requerido, <code>9</code> opcional, <code>A</code> letra mayúscula, <code>a</code> minúscula, <code>*</code> alfanumérico. Cualquier otro carácter cuenta como literal. Emite <code>is-input</code>, <code>is-change</code> y <code>is-complete</code>.</p>
+    <h1>&lt;iswc-masked-input&gt; · Input con tokens y literales</h1>
+    <p>Tokens: <code>0</code> dígito requerido, <code>9</code> opcional, <code>A</code> letra mayúscula, <code>a</code> minúscula, <code>*</code> alfanumérico. Cualquier otro carácter cuenta como literal. Emite <code>iswc-input</code>, <code>iswc-change</code> y <code>iswc-complete</code>.</p>
   </header>
 
   <section id="sec-tel">

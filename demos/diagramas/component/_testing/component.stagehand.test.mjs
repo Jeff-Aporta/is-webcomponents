@@ -11,7 +11,7 @@ tests.push({
     await page.goto(URL, { waitUntil: 'domcontentloaded' });
     await waitReady(page, 'data-component-ready');
     const info = await page.evaluate(() => {
-      const c = document.querySelector('is-component-diagram');
+      const c = document.querySelector('iswc-component-diagram');
       const sr = c?.shadowRoot;
       return {
         components: sr?.querySelectorAll('[data-component-id]').length ?? 0,
@@ -34,7 +34,7 @@ tests.push({
     await page.goto(URL, { waitUntil: 'domcontentloaded' });
     await waitReady(page, 'data-component-ready');
     const a11y = await page.evaluate(() => {
-      const svg = document.querySelector('is-component-diagram')?.shadowRoot?.querySelector('svg');
+      const svg = document.querySelector('iswc-component-diagram')?.shadowRoot?.querySelector('svg');
       return { role: svg?.getAttribute('role'), ariaLabel: svg?.getAttribute('aria-label') };
     });
     assert.ok(a11y.role || a11y.ariaLabel);
@@ -47,7 +47,7 @@ tests.push({
     await page.emulateMedia({ reducedMotion: 'reduce' });
     await page.goto(URL, { waitUntil: 'domcontentloaded' });
     await waitReady(page, 'data-component-ready');
-    const comps = await page.evaluate(() => document.querySelector('is-component-diagram')?.shadowRoot?.querySelectorAll('[data-component-id]').length ?? 0);
+    const comps = await page.evaluate(() => document.querySelector('iswc-component-diagram')?.shadowRoot?.querySelectorAll('[data-component-id]').length ?? 0);
     assert.ok(comps >= 5);
   },
 });

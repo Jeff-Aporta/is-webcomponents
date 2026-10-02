@@ -2,14 +2,14 @@
  * highlight-pre.js — arranca el highlighter de `<pre class="code">` en el docs.
  *
  * La lógica vive en `components/_shared/highlight-code.js` para que
- * `<is-cdn-snippet>` (un componente, que NO puede importar de `scripts/`)
+ * `<iswc-cdn-snippet>` (un componente, que NO puede importar de `scripts/`)
  * pueda usarla con un import estático. Aquí solo queda el arranque de la
- * página: pintar (montando `<is-code readonly compact>`) y re-pintar cuando
+ * página: pintar (montando `<iswc-code readonly compact>`) y re-pintar cuando
  * llega un preview.
  *
- * No se carga CodeMirror (ni aquí ni en <is-code>): el resaltado y el tema
- * los resuelve el propio `<is-code>` con su motor nativo (code-highlight) y
- * las custom properties --iswc-code-* (reacciona a is-theme-change).
+ * No se carga CodeMirror (ni aquí ni en <iswc-code>): el resaltado y el tema
+ * los resuelve el propio `<iswc-code>` con su motor nativo (code-highlight) y
+ * las custom properties --iswc-code-* (reacciona a iswc-theme-change).
  *
  * Ya no hay puentes en `window`: quien necesite pintar importa `paint`.
  */
@@ -23,7 +23,7 @@ import {
 export { paint, repaint, softFormat };
 
 /**
- * El docs ya no es HTML estático: `<is-preview-component>` monta cada preview
+ * El docs ya no es HTML estático: `<iswc-preview-component>` monta cada preview
  * cuando su JSON termina de bajar, así que el barrido del arranque solo
  * alcanza a los `<pre>` que existieran en ese instante.
  *
@@ -33,9 +33,9 @@ export { paint, repaint, softFormat };
  */
 const repintar = () => paint();
 
-document.addEventListener('is-preview-ready', repintar);
+document.addEventListener('iswc-preview-ready', repintar);
 
-// El observer se engancha desde el arranque: los `<pre>`/`<is-code>` que
+// El observer se engancha desde el arranque: los `<pre>`/`<iswc-code>` que
 // aparezcan después quedan encolados y ninguno se pierde.
 watchDom();
 

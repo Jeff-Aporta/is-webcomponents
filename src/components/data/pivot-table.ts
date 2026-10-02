@@ -2,7 +2,7 @@ import { adoptCss, defineElement, emit } from '../../core/element.js';
 import { ElementBase } from '../../core/element-base.js';
 
 /**
- * <is-pivot-table> — Pivot table: agrupar una colección por `rows` × `cols`,
+ * <iswc-pivot-table> — Pivot table: agrupar una colección por `rows` × `cols`,
  * agregar `measure` con `agg`. Sin recarga, todo en cliente.
  *
  * Atributos
@@ -17,7 +17,7 @@ import { ElementBase } from '../../core/element-base.js';
  *   <script type="application/json">[{...}, ...]</script>
  *
  * Eventos
- *   is-cell-click    detail: { row, col, value }
+ *   iswc-cell-click    detail: { row, col, value }
  */
 (() => {
   const OBSERVED = ['rows', 'cols', 'measure', 'agg', 'format', 'decimals'];
@@ -36,7 +36,7 @@ import { ElementBase } from '../../core/element-base.js';
 
   type Row = Record<string, unknown>;
 
-  class IsPivotTable extends ElementBase {
+  class IswcPivotTable extends ElementBase {
     static get observedAttributes(): string[] { return OBSERVED; }
 
     constructor() {
@@ -194,7 +194,7 @@ import { ElementBase } from '../../core/element-base.js';
       td.textContent = value == null ? '—' : fmt.format(value);
       if (value != null) td.setAttribute('aria-label', `${row}, ${col}: ${fmt.format(value)}`);
       td.addEventListener('click', () => {
-        emit(this, 'is-cell-click', { row, col, value });
+        emit(this, 'iswc-cell-click', { row, col, value });
       });
       return td;
     }
@@ -214,5 +214,5 @@ import { ElementBase } from '../../core/element-base.js';
     return t;
   }
 
-  defineElement('is-pivot-table', IsPivotTable);
+  defineElement('iswc-pivot-table', IswcPivotTable);
 })();

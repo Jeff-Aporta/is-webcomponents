@@ -4,7 +4,7 @@ import { registerDiagramKind } from './diagram-kinds.js';
 import { svgEl } from '../_shared/svg-chart-engine.js';
 
 /**
- * <is-org-chart> — Organigrama. Layout jerárquico top-down, a partir de un árbol.
+ * <iswc-org-chart> — Organigrama. Layout jerárquico top-down, a partir de un árbol.
  *
  * Datos
  *   <script type="application/json">
@@ -24,7 +24,7 @@ import { svgEl } from '../_shared/svg-chart-engine.js';
  *   node-width, node-height  (default 200x78)
  *   gap         espacio entre nodos (default 28)
  *   color       inline (default) | viewer — lo fija el visor, no a mano
- *   open-on-click  clic en el fondo (fuera de una tarjeta) abre <is-diagram-lightbox>
+ *   open-on-click  clic en el fondo (fuera de una tarjeta) abre <iswc-diagram-lightbox>
  *
  * Propiedades
  *   payload     array de nodos (alternativa al <script> hijo) u objeto { nodes: [...] }
@@ -33,9 +33,9 @@ import { svgEl } from '../_shared/svg-chart-engine.js';
  *   org.expand(id)  / .collapse(id)  / .toggle(id)
  *
  * Eventos
- *   is-select       detail: { id, node }
- *   is-toggle       detail: { id, collapsed }
- *   is-open-viewer  detail: { payload } — cancelable; clic en el fondo con open-on-click
+ *   iswc-select       detail: { id, node }
+ *   iswc-toggle       detail: { id, collapsed }
+ *   iswc-open-viewer  detail: { payload } — cancelable; clic en el fondo con open-on-click
  */
 (() => {
   const OBSERVED = ['direction', 'node-width', 'node-height', 'gap', 'color', 'open-on-click'];
@@ -82,7 +82,7 @@ import { svgEl } from '../_shared/svg-chart-engine.js';
     return ini || '?';
   }
 
-  class IsOrgChart extends HTMLElement {
+  class IswcOrgChart extends HTMLElement {
     static get observedAttributes(): string[] { return OBSERVED; }
     #mounted = false;
     #nodes: Map<string, OrgNode> = new Map();
@@ -106,7 +106,7 @@ import { svgEl } from '../_shared/svg-chart-engine.js';
       this.shadowRoot!.innerHTML = /* html */ `
         <div part="root" class="root">
           <svg part="canvas" class="canvas" role="tree"></svg>
-          <div part="tooltip" class="oc-tooltip dg-tooltip is-rich" hidden></div>
+          <div part="tooltip" class="oc-tooltip dg-tooltip iswc-rich" hidden></div>
         </div>
       `;
       adoptCss(this.shadowRoot!, import.meta.url);
@@ -186,7 +186,7 @@ import { svgEl } from '../_shared/svg-chart-engine.js';
       this.#svg.style.cssText = 'width:100%;height:100%;max-width:none;display:block';
       this.#svg.removeAttribute('width');
       this.#svg.removeAttribute('height');
-      this.#rootEl.classList.toggle('is-viewer', this.isViewer);
+      this.#rootEl.classList.toggle('iswc-viewer', this.isViewer);
 
       // Recolectar subárboles visibles (post-collapse)
       const visible = new Set<string>(this.#root ? [this.#root] : []);
@@ -408,18 +408,18 @@ import { svgEl } from '../_shared/svg-chart-engine.js';
       if (toggleBtn && nodeG) {
         const id = nodeG.dataset.id!;
         this.toggle(id);
-        emit(this, 'is-toggle', { id, collapsed: this.#collapsed.has(id) });
+        emit(this, 'iswc-toggle', { id, collapsed: this.#collapsed.has(id) });
         return;
       }
       if (nodeG) {
         const id = nodeG.dataset.id!;
-        emit(this, 'is-select', { id, node: this.#nodes.get(id) });
+        emit(this, 'iswc-select', { id, node: this.#nodes.get(id) });
         return;
       }
       // Clic en el fondo (fuera de cualquier tarjeta): el visor es opt-in, sin
-      // `open-on-click` no hace nada y tampoco anuncia `is-open-viewer`.
+      // `open-on-click` no hace nada y tampoco anuncia `iswc-open-viewer`.
       if (this.isViewer || !this.hasAttribute('open-on-click')) return;
-      const ev = new CustomEvent('is-open-viewer', {
+      const ev = new CustomEvent('iswc-open-viewer', {
         bubbles: true, composed: true, cancelable: true, detail: { payload: this.#rawData },
       });
       this.dispatchEvent(ev);
@@ -430,9 +430,9 @@ import { svgEl } from '../_shared/svg-chart-engine.js';
       await import('./diagram-lightbox.js');
       let lb = this.#ownLightbox;
       if (!lb || !lb.isConnected) {
-        lb = document.createElement('is-diagram-lightbox') as HTMLElement & { payload: unknown; open: boolean };
+        lb = document.createElement('iswc-diagram-lightbox') as HTMLElement & { payload: unknown; open: boolean };
         lb.setAttribute('kind', 'org-chart');
-        lb.addEventListener('is-after-hide', () => lb!.remove());
+        lb.addEventListener('iswc-after-hide', () => lb!.remove());
         document.body.appendChild(lb);
         this.#ownLightbox = lb;
       }
@@ -477,7 +477,7 @@ import { svgEl } from '../_shared/svg-chart-engine.js';
     }
   }
 
-  defineElement('is-org-chart', IsOrgChart, 'IsOrgChart');
+  defineElement('iswc-org-chart', IswcOrgChart, 'IswcOrgChart');
 
-  registerDiagramKind('org-chart', 'is-org-chart');
+  registerDiagramKind('org-chart', 'iswc-org-chart');
 })();

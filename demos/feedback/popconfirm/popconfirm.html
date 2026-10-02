@@ -3,8 +3,8 @@
 <head>
 <meta charset="utf-8" />
 <meta name="viewport" content="width=device-width, initial-scale=1" />
-<title>Demo <is-popconfirm> · is-webcomponents</title>
-<meta name="description" content="Demo de <is-popconfirm>: confirmación emergente anclada, sin backdrop modal." />
+<title>Demo <iswc-popconfirm> · is-webcomponents</title>
+<meta name="description" content="Demo de <iswc-popconfirm>: confirmación emergente anclada, sin backdrop modal." />
 <style>
   html, body { margin: 0; padding: 0; background: #0c1118; color: #e2e8f0; font-family: ui-sans-serif, system-ui, sans-serif; }
   body { padding: 24px; display: grid; gap: 24px; }
@@ -14,42 +14,42 @@
   section h2 { font-size: 14px; margin: 0; color: #94a3b8; font-weight: 600; text-transform: uppercase; letter-spacing: 0.05em; }
   button { background: #1a2532; color: #e2e8f0; border: 1px solid rgba(255,255,255,0.1); border-radius: 6px; padding: 8px 12px; cursor: pointer; font: inherit; }
   button:hover { background: #25303f; }
-  is-popconfirm:not(:defined) { visibility: hidden; }
+  iswc-popconfirm:not(:defined) { visibility: hidden; }
 </style>
 <script type="module">
-  await import('../../../dist/cdn/feedback/popconfirm.min.js?h=ld1jct');
+  await import('../../../dist/cdn/feedback/popconfirm.min.js?h=1nlx4z');
 
-  await customElements.whenDefined('is-popconfirm');
+  await customElements.whenDefined('iswc-popconfirm');
   document.documentElement.dataset.popconfirmReady = '1';
 </script>
 </head>
 <body>
 <header>
-  <h1>is-popconfirm</h1>
+  <h1>iswc-popconfirm</h1>
   <p>Confirmación emergente anclada a un disparador. Sin modal de fondo. Cierre por Escape, click fuera (excluyendo el trigger), o botón cancel/confirm.</p>
 </header>
 
 <section>
   <h2>Popconfirm básico</h2>
   <button id="trig-1" type="button">Borrar</button>
-  <is-popconfirm for="trig-1" message="¿Seguro que quieres borrar este elemento?"></is-popconfirm>
+  <iswc-popconfirm for="trig-1" message="¿Seguro que quieres borrar este elemento?"></iswc-popconfirm>
 </section>
 
 <section>
   <h2>Placement top-end + slots custom</h2>
   <button id="trig-2" type="button">Publicar</button>
-  <is-popconfirm for="trig-2" placement="top-end" message="Confirmar publicación">
+  <iswc-popconfirm for="trig-2" placement="top-end" message="Confirmar publicación">
     <button slot="cancel" type="button">Atrás</button>
     <button slot="confirm" type="button">Confirmar</button>
-  </is-popconfirm>
+  </iswc-popconfirm>
 </section>
 
 <section>
   <h2>Apertura programática (<code>el.show()</code>)</h2>
   <button id="trig-3" type="button">Lanzar</button>
-  <is-popconfirm id="pop-3" placement="bottom-end" message="Modal programático" hide-arrow>
+  <iswc-popconfirm id="pop-3" placement="bottom-end" message="Modal programático" hide-arrow>
     <span slot="confirm" role="button" tabindex="0">OK</span>
-  </is-popconfirm>
+  </iswc-popconfirm>
   <script type="module">
     document.getElementById('trig-3').addEventListener('click', () => {
       document.getElementById('pop-3').show();

@@ -3,7 +3,7 @@
 <head>
 <meta charset="utf-8" />
 <meta name="viewport" content="width=device-width, initial-scale=1" />
-<title>Demo — <is-pivot-table> · is-webcomponents</title>
+<title>Demo — <iswc-pivot-table> · is-webcomponents</title>
 <meta name="description" content="Pivot table: agrupa datos por filas × columnas y aplica una función de agregación." />
 <style>
   html, body { margin: 0; padding: 0; min-height: 100%; background: #0c1118; color: #e2e8f0; font-family: ui-sans-serif, system-ui, sans-serif; }
@@ -14,15 +14,15 @@
   main { padding: 20px; display: grid; grid-template-columns: repeat(auto-fit, minmax(420px, 1fr)); gap: 20px; }
   section { background: #0f1620; border: 1px solid rgba(255,255,255,0.1); border-radius: 8px; padding: 16px; }
   section h2 { font-size: 11px; text-transform: uppercase; letter-spacing: 0.08em; margin: 0 0 12px 0; color: #94a3b8; }
-  is-pivot-table:not(:defined) { visibility: hidden; }
-  is-pivot-table { display: block; }
+  iswc-pivot-table:not(:defined) { visibility: hidden; }
+  iswc-pivot-table { display: block; }
   .log { font: 11px ui-monospace, Menlo, Consolas, monospace; background: rgba(0,0,0,0.3); padding: 8px; border-radius: 4px; min-height: 40px; max-height: 80px; overflow: auto; color: #94a3b8; margin-top: 8px; }
   footer { padding: 12px 20px; border-top: 1px solid rgba(255,255,255,0.1); background: #0f1620; font-size: 11px; color: #94a3b8; }
   footer code { background: rgba(255,255,255,0.06); padding: 1px 5px; border-radius: 3px; font: 11px ui-monospace, Menlo, Consolas, monospace; }
 </style>
 <script type="module">
-  await import('../../../dist/cdn/data/pivot-table.min.js?h=kzki8w');
-  await customElements.whenDefined('is-pivot-table');
+  await import('../../../dist/cdn/data/pivot-table.min.js?h=efwji0');
+  await customElements.whenDefined('iswc-pivot-table');
 
   // ── (1) Sum básico: ventas por región × trimestre
   const salesData = [
@@ -39,7 +39,7 @@
     { region: 'Oeste', q: 'Q2', sales: 75 },
     { region: 'Oeste', q: 'Q3', sales: 130 },
   ];
-  const p1 = document.createElement('is-pivot-table');
+  const p1 = document.createElement('iswc-pivot-table');
   p1.setAttribute('rows', 'region');
   p1.setAttribute('cols', 'q');
   p1.setAttribute('measure', 'sales');
@@ -51,7 +51,7 @@
   document.getElementById('sum').appendChild(p1);
 
   // ── (2) Avg + decimals: promedio con 1 decimal
-  const p2 = document.createElement('is-pivot-table');
+  const p2 = document.createElement('iswc-pivot-table');
   p2.setAttribute('rows', 'region');
   p2.setAttribute('cols', 'q');
   p2.setAttribute('measure', 'sales');
@@ -64,7 +64,7 @@
   document.getElementById('avg').appendChild(p2);
 
   // ── (3) Count: nº de registros por (region, q)
-  const p3 = document.createElement('is-pivot-table');
+  const p3 = document.createElement('iswc-pivot-table');
   p3.setAttribute('rows', 'region');
   p3.setAttribute('cols', 'q');
   p3.setAttribute('agg', 'count');
@@ -75,7 +75,7 @@
   document.getElementById('count').appendChild(p3);
 
   // ── (4) Max
-  const p4 = document.createElement('is-pivot-table');
+  const p4 = document.createElement('iswc-pivot-table');
   p4.setAttribute('rows', 'region');
   p4.setAttribute('cols', 'q');
   p4.setAttribute('measure', 'sales');
@@ -88,7 +88,7 @@
 
   // ── Event logging: click en celda
   function attachLog(el, logEl) {
-    el.addEventListener('is-cell-click', (e) => {
+    el.addEventListener('iswc-cell-click', (e) => {
       const { row, col, value } = e.detail || {};
       const line = `click: row="${row}" col="${col}" value=${JSON.stringify(value)}`;
       logEl.textContent = `${line}\n${logEl.textContent || ''}`.slice(0, 500);
@@ -107,7 +107,7 @@
 </head>
 <body>
 <header>
-  <h1>Demo — <code>&lt;is-pivot-table&gt;</code></h1>
+  <h1>Demo — <code>&lt;iswc-pivot-table&gt;</code></h1>
   <p>Pivot table: agrupa por <code>rows</code> × <code>cols</code> con función <code>agg</code> (sum/avg/count/min/max).</p>
 </header>
 <main>
@@ -133,7 +133,7 @@
   </section>
 </main>
 <footer>
-  Datos via <code>&lt;script type="application/json"&gt;</code>. Evento <code>is-cell-click</code> en cada celda.
+  Datos via <code>&lt;script type="application/json"&gt;</code>. Evento <code>iswc-cell-click</code> en cada celda.
 </footer>
 </body>
 </html>

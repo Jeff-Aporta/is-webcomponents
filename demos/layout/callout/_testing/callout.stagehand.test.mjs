@@ -14,7 +14,7 @@ async function checkDeterministic(page, demo) {
   await page.waitForTimeout(200);
 
   const data = await page.evaluate(() => {
-    const callouts = [...document.querySelectorAll('main is-callout')];
+    const callouts = [...document.querySelectorAll('main iswc-callout')];
     return callouts.map((c, idx) => {
       const sr = c.shadowRoot;
       const base = sr?.querySelector('[part="base"]');
@@ -92,7 +92,7 @@ for (const demo of DEMOS) {
 }
 
 const VISUAL_RUBRIC = `
-Evalúa la calidad visual del <is-callout> (mensaje en línea) que aparece en el screenshot.
+Evalúa la calidad visual del <iswc-callout> (mensaje en línea) que aparece en el screenshot.
 
 Checklist (todas deben cumplirse; marca cada una PASS o FAIL):
 

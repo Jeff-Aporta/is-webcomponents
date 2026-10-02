@@ -4,9 +4,9 @@ import { ElementBase } from '../../core/element-base.js';
 import { normalizeIntent } from '../_shared/intent.js';
 
 /**
- * <is-toast> — Web Component (vanilla).
+ * <iswc-toast> — Web Component (vanilla).
  *
- * Contenedor fijo de toasts. Los ítems son <is-toast-item> en light DOM
+ * Contenedor fijo de toasts. Los ítems son <iswc-toast-item> en light DOM
  * (proyección al stack) o creados vía create().
  *
  * Atributos
@@ -14,24 +14,24 @@ import { normalizeIntent } from '../_shared/intent.js';
  *              bottom-start | bottom-center | bottom-end  (default bottom-end)
  *
  * Métodos
- *   create(message, options?) → Promise<is-toast-item>
+ *   create(message, options?) → Promise<iswc-toast-item>
  *     options: { color, icon, duration, allowHtml, caption, log } — sin size
  *     color: brand | success | warning | danger | neutral
  *     caption: texto menor bajo el título (slot caption)
- *     log: payload de consola; viaja en is-after-show, no se pinta
+ *     log: payload de consola; viaja en iswc-after-show, no se pinta
  *     duration default 5000; 0 = hasta dismiss
  *
  * Estáticos (paridad con ISP `overlays/Toaster.svelte`)
- *   IsToast.host()                    → el <is-toast> singleton del documento
- *   IsToast.error(msg, duration?)     → toast danger   (default 5000 ms)
- *   IsToast.success(msg, duration?)   → toast success  (default 3000 ms)
- *   IsToast.loading(msg)              → toast persistente con spinner
- *   IsToast.remove(item)              → quita un toast devuelto por los anteriores
- *   IsToast.promise(p, callbacks)     → atajo de host().promise(...)
+ *   IswcToast.host()                    → el <iswc-toast> singleton del documento
+ *   IswcToast.error(msg, duration?)     → toast danger   (default 5000 ms)
+ *   IswcToast.success(msg, duration?)   → toast success  (default 3000 ms)
+ *   IswcToast.loading(msg)              → toast persistente con spinner
+ *   IswcToast.remove(item)              → quita un toast devuelto por los anteriores
+ *   IswcToast.promise(p, callbacks)     → atajo de host().promise(...)
  *
  * CSS Parts: ::part(stack)
  *
- * Escucha is-after-hide de los ítems y los elimina del DOM.
+ * Escucha iswc-after-hide de los ítems y los elimina del DOM.
  */
 
 (() => {
@@ -92,7 +92,7 @@ import { normalizeIntent } from '../_shared/intent.js';
     restartTimer?(): void;
   }
 
-  class IsToast extends ElementBase {
+  class IswcToast extends ElementBase {
     static get observedAttributes(): string[] { return OBSERVED; }
 
 
@@ -101,7 +101,7 @@ import { normalizeIntent } from '../_shared/intent.js';
       const shadow = this.attachShadow({ mode: 'open' });
       adoptCss(shadow, import.meta.url);
       shadow.appendChild(TEMPLATE.content.cloneNode(true));
-      this.addEventListener('is-after-hide', this.#onItemHide);
+      this.addEventListener('iswc-after-hide', this.#onItemHide);
     }
 
     onConnected(): void {
@@ -123,8 +123,8 @@ import { normalizeIntent } from '../_shared/intent.js';
     }
 
     async create(message: string, options: ToastCreateOptions = {}): Promise<IsToastItemEl> {
-      await customElements.whenDefined('is-toast-item');
-      const item = document.createElement('is-toast-item') as IsToastItemEl;
+      await customElements.whenDefined('iswc-toast-item');
+      const item = document.createElement('iswc-toast-item') as IsToastItemEl;
       const color = normalizeIntent(options.color ?? options.variant, 'neutral') as ToastColor;
       item.color = color;
 
@@ -134,7 +134,7 @@ import { normalizeIntent } from '../_shared/intent.js';
 
       const iconOpt = options.icon;
       if (iconOpt !== false && iconOpt !== null) {
-        const iconEl = document.createElement('is-icon');
+        const iconEl = document.createElement('iswc-icon');
         iconEl.setAttribute('slot', 'icon');
         iconEl.setAttribute('aria-hidden', 'true');
         const iconName = typeof iconOpt === 'string' && iconOpt
@@ -170,7 +170,7 @@ import { normalizeIntent } from '../_shared/intent.js';
         duration: 0,
         ...loading.options,
       });
-      item.querySelector<HTMLElement>('is-icon[slot="icon"]')?.setAttribute('data-loading', '');
+      item.querySelector<HTMLElement>('iswc-icon[slot="icon"]')?.setAttribute('data-loading', '');
       try {
         const data = await p;
         const ok = this.#normalizePromiseMsg(callbacks.success, data, 'Listo');
@@ -221,7 +221,7 @@ import { normalizeIntent } from '../_shared/intent.js';
       ) as ToastColor;
       item.color = color;
       this.#writeCopy(item, message, options);
-      const iconEl = item.querySelector<HTMLElement>('is-icon[slot="icon"]');
+      const iconEl = item.querySelector<HTMLElement>('iswc-icon[slot="icon"]');
       if (iconEl) {
         iconEl.removeAttribute('data-loading');
         if (options.icon) iconEl.setAttribute('icon', String(options.icon));
@@ -234,15 +234,15 @@ import { normalizeIntent } from '../_shared/intent.js';
     // ---- API imperativa (paridad con overlays/Toaster.svelte de ISP) -----
     // ISP expone funciones sueltas (toastError/Success/Loading/Promise/Remove).
     // Aquí viven como estáticas para no ensuciar el scope global: resuelven
-    // (o crean) un único <is-toast> en el documento.
+    // (o crean) un único <iswc-toast> en el documento.
 
     /** Toaster singleton del documento; lo crea si aún no existe. */
-    static host(): IsToast {
-      let el = document.querySelector<HTMLElement>('is-toast[data-default-toaster]') as IsToast | null;
+    static host(): IswcToast {
+      let el = document.querySelector<HTMLElement>('iswc-toast[data-default-toaster]') as IswcToast | null;
       if (!el) {
-        el = document.querySelector<HTMLElement>('is-toast') as IsToast | null;
+        el = document.querySelector<HTMLElement>('iswc-toast') as IswcToast | null;
         if (!el) {
-          el = document.createElement('is-toast') as IsToast;
+          el = document.createElement('iswc-toast') as IswcToast;
           el.setAttribute('data-default-toaster', '');
           document.body.appendChild(el);
         }
@@ -252,32 +252,32 @@ import { normalizeIntent } from '../_shared/intent.js';
 
     static error(message: string, duration: number | ToastCreateOptions = 5000): Promise<IsToastItemEl> {
       const extra = duration && typeof duration === 'object' ? duration : { duration };
-      return IsToast.host().create(message, { variant: 'danger', ...extra });
+      return IswcToast.host().create(message, { variant: 'danger', ...extra });
     }
 
     static success(message: string, duration: number = 3000): Promise<IsToastItemEl> {
-      return IsToast.host().create(message, { variant: 'success', duration });
+      return IswcToast.host().create(message, { variant: 'success', duration });
     }
 
-    /** Sin duración: se cierra con IsToast.remove(item). */
+    /** Sin duración: se cierra con IswcToast.remove(item). */
     static loading(message: string): Promise<IsToastItemEl> {
-      return IsToast.host().create(message, { variant: 'neutral', icon: 'mdi:loading', duration: 0 });
+      return IswcToast.host().create(message, { variant: 'neutral', icon: 'mdi:loading', duration: 0 });
     }
 
     static remove(item: IsToastItemEl | HTMLElement | null | undefined): void {
       (item as { remove?: () => void } | null)?.remove?.();
     }
 
-    /** @see IsToast.prototype.promise */
+    /** @see IswcToast.prototype.promise */
     static promise<T>(p: Promise<T>, callbacks: ToastPromiseCallbacks = {}): Promise<T> {
-      return IsToast.host().promise(p, callbacks);
+      return IswcToast.host().promise(p, callbacks);
     }
 
     #onItemHide = (e: Event): void => {
       const item = e.target;
-      if (!(item instanceof HTMLElement) || item.localName !== 'is-toast-item') return;
+      if (!(item instanceof HTMLElement) || item.localName !== 'iswc-toast-item') return;
       if (item.parentNode === this) {
-        // Defer removal so listeners of is-after-hide still see the node
+        // Defer removal so listeners of iswc-after-hide still see the node
         queueMicrotask(() => {
           if (item.parentNode === this) item.remove();
         });
@@ -285,5 +285,5 @@ import { normalizeIntent } from '../_shared/intent.js';
     };
   }
 
-  defineElement('is-toast', IsToast, 'IsToast');
+  defineElement('iswc-toast', IswcToast, 'IswcToast');
 })();

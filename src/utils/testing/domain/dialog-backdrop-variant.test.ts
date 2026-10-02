@@ -9,7 +9,7 @@ const ROOT = join(dirname(fileURLToPath(import.meta.url)), '..', '..', '..', '..
 const js = readFileSync(join(ROOT, 'src/components/layout/dialog.ts'), 'utf8');
 const css = readFileSync(join(ROOT, 'src/components/layout/dialog.css'), 'utf8');
 
-test('is-dialog observa backdrop-variant', () => {
+test('iswc-dialog observa backdrop-variant', () => {
   assert.match(js, /backdrop-variant/);
   assert.match(js, /backdropVariant/);
   assert.match(js, /fromJSON/);

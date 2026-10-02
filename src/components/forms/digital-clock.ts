@@ -3,13 +3,13 @@ import { formatTime, from12Hour, pad, parseTime, to12Hour, toTime, uses12Hour } 
 import { ElementBase } from '../../core/element-base.js';
 
 /**
- * <is-digital-clock> — Selector de hora en lista (MUI DigitalClock) o en
+ * <iswc-digital-clock> — Selector de hora en lista (MUI DigitalClock) o en
  * columnas de horas / minutos / segundos / AM-PM (MultiSectionDigitalClock).
  *
  * Atributos: value (HH:mm[:ss]), layout (list|sections), step (minutos en
  *            lista), minutes-step, seconds, ampm, hour24, min-time, max-time,
  *            skip-disabled, locale, disabled, readonly
- * Events: is-change { value }
+ * Events: iswc-change { value }
  */
 
 (() => {
@@ -26,7 +26,7 @@ import { ElementBase } from '../../core/element-base.js';
   interface TimeParts { h: number; m: number; s: number; }
   interface OptionInput { label: string; raw: string | number; selected: boolean; disabled: boolean; }
 
-  class IsDigitalClock extends ElementBase {
+  class IswcDigitalClock extends ElementBase {
     /** Personalización por atributo (ver `core/attrs.ts`). */
     static styleAttrs = {
     'clock-height': '--iswc-clock-height',
@@ -133,7 +133,7 @@ import { ElementBase } from '../../core/element-base.js';
       const next = toTime(time, this.seconds);
       if (next === this.value) return;
       this.setAttribute('value', next);
-      emit(this, 'is-change', { value: next });
+      emit(this, 'iswc-change', { value: next });
     }
 
     #option(label: string, { section, raw, selected, disabled }: OptionInput & { section: string }): HTMLButtonElement {
@@ -300,5 +300,5 @@ import { ElementBase } from '../../core/element-base.js';
     };
   }
 
-  defineElement('is-digital-clock', IsDigitalClock, 'IsDigitalClock');
+  defineElement('iswc-digital-clock', IswcDigitalClock, 'IswcDigitalClock');
 })();

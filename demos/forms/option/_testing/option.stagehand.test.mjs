@@ -1,7 +1,7 @@
 // option.stagehand.test.mjs — verificaciones visuales deterministas.
 //
 // Checks:
-//   1. COMPONENTE RENDERIZADO: <is-option> definido, shadow DOM con role=option.
+//   1. COMPONENTE RENDERIZADO: <iswc-option> definido, shadow DOM con role=option.
 //   2. ELEMENTOS VISIBLES: label + description visibles por cada option.
 //   3. TEXTO LEGIBLE: labels y descriptions con font-size >= 8px.
 //   4. SIN OVERLAPS: las opciones de cada listbox no se solapan entre sí.
@@ -17,11 +17,11 @@ const DEMOS = [
 async function checkDeterministic(page, demo) {
   await page.waitForTimeout(200);
 
-  const defined = await page.evaluate(() => !!customElements.get('is-option'));
-  assert.equal(defined, true, 'is-option debe estar definido');
+  const defined = await page.evaluate(() => !!customElements.get('iswc-option'));
+  assert.equal(defined, true, 'iswc-option debe estar definido');
 
   const data = await page.evaluate(() => {
-    const opts = [...document.querySelectorAll('is-option')];
+    const opts = [...document.querySelectorAll('iswc-option')];
     return opts.map((o) => {
       const sr = o.shadowRoot;
       const root = sr?.querySelector('[role="option"]');
@@ -88,7 +88,7 @@ for (const demo of DEMOS) {
 }
 
 const VISUAL_RUBRIC = `
-Evalúa la calidad visual del demo del componente <is-option>.
+Evalúa la calidad visual del demo del componente <iswc-option>.
 
 Checklist (cada una PASS o FAIL):
 

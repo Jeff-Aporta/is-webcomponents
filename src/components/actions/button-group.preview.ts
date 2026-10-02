@@ -1,5 +1,5 @@
 /**
- * Behavior adapter: reusa mount() de la clase legacy is-button-group.preview.js
+ * Behavior adapter: reusa mount() de la clase legacy iswc-button-group.preview.js
  */
 import type { PreviewMountContext, ISComponentPreviewLike } from '../../previews/_kit/types.d.ts';
 import PreviewClass from './button-group.preview.controller.js';

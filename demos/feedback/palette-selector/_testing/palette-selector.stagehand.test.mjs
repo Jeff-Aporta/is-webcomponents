@@ -14,7 +14,7 @@ checks.push({
     await page.goto(URL, { waitUntil: 'domcontentloaded' });
     await waitReady(page, 'data-palette-selector-ready');
     const size = await page.evaluate(() => {
-      const sel = document.querySelector('is-palette-selector');
+      const sel = document.querySelector('iswc-palette-selector');
       const t = sel.shadowRoot.querySelector('.trigger');
       const r = t.getBoundingClientRect();
       return { w: r.width, h: r.height };
@@ -30,7 +30,7 @@ checks.push({
     await waitReady(page, 'data-palette-selector-ready');
     await page.waitForTimeout(100);
     const overlaps = await page.evaluate(async () => {
-      const sel = document.querySelector('is-palette-selector');
+      const sel = document.querySelector('iswc-palette-selector');
       const t = sel.shadowRoot.querySelector('.trigger');
       t.click();
       await new Promise((r) => requestAnimationFrame(() => r()));
@@ -59,7 +59,7 @@ checks.push({
     await waitReady(page, 'data-palette-selector-ready');
     await page.waitForTimeout(100);
     const colors = await page.evaluate(async () => {
-      const sel = document.querySelector('is-palette-selector');
+      const sel = document.querySelector('iswc-palette-selector');
       sel.value = 'insoft';
       await new Promise((r) => setTimeout(r, 50));
       // El trigger tiene .trigger__label (con accentLabel='Soft') y su color

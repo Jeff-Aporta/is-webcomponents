@@ -3,12 +3,12 @@ import { isOtpAutocomplete, listenWebOtp } from '../_shared/web-otp.js';
 import { ElementBase } from '../../core/element-base.js';
 
 /**
- * <is-pin-input> — Web Component (vanilla, zero dependencies).
+ * <iswc-pin-input> — Web Component (vanilla, zero dependencies).
  *
  * Casillas para OTP / PIN de 4 a 6 dígitos. Auto-avance al escribir, Backspace
  * retrocede, pegar distribuye todos los dígitos, focus automático.
  *
- *   <is-pin-input length="6" required></is-pin-input>
+ *   <iswc-pin-input length="6" required></iswc-pin-input>
  *
  * Atributos
  *   length       number  (3-8, default 6)
@@ -23,9 +23,9 @@ import { ElementBase } from '../../core/element-base.js';
  *   (default)  — hijos ignorados (este componente es self-contained).
  *
  * Eventos
- *   is-pin-change  detail: { value, index }
- *   is-pin-complete detail: { value }
- *   is-pin-invalid detail: { value }
+ *   iswc-pin-change  detail: { value, index }
+ *   iswc-pin-complete detail: { value }
+ *   iswc-pin-invalid detail: { value }
  *
  * API
  *   .value         string
@@ -43,7 +43,7 @@ import { ElementBase } from '../../core/element-base.js';
 
   const OBSERVED: string[] = ['length', 'type', 'mask', 'disabled', 'invalid', 'placeholder', 'value', 'autocomplete'];
 
-  class IsPinInput extends ElementBase {
+  class IswcPinInput extends ElementBase {
     /** Personalización por atributo (ver `core/attrs.ts`). */
     static styleAttrs = {
     'cell-size': '--iswc-pin-cell-size',
@@ -124,7 +124,7 @@ import { ElementBase } from '../../core/element-base.js';
     reset(): void {
       this.#values = this.#lengthArray().map(() => '');
       this.#render();
-      emit(this, 'is-pin-change', { value: '', index: -1 });
+      emit(this, 'iswc-pin-change', { value: '', index: -1 });
     }
 
     focus(): void {
@@ -142,7 +142,7 @@ import { ElementBase } from '../../core/element-base.js';
       listenWebOtp(this.#otpAbort.signal, (code: string): void => {
         this.#setValue(code);
         this.#afterChange(this.#length() - 1);
-        emit(this, 'is-otp', { code });
+        emit(this, 'iswc-otp', { code });
       });
     }
 
@@ -268,12 +268,12 @@ import { ElementBase } from '../../core/element-base.js';
       }
       const value = this.value;
       const completed = value.length === this.#length() && !this.#values.includes('');
-      emit(this, 'is-pin-change', { value, index: idx });
+      emit(this, 'iswc-pin-change', { value, index: idx });
       if (completed) {
-        emit(this, 'is-pin-complete', { value });
+        emit(this, 'iswc-pin-complete', { value });
       }
     }
   }
 
-  defineElement('is-pin-input', IsPinInput, 'IsPinInput');
+  defineElement('iswc-pin-input', IswcPinInput, 'IswcPinInput');
 })();

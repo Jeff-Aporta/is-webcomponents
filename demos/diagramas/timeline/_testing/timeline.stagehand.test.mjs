@@ -12,7 +12,7 @@ const DEMO = {
 async function checkDeterministic(page) {
   await page.waitForTimeout(200);
   const data = await page.evaluate(() => {
-    const el = document.querySelector('main is-timeline');
+    const el = document.querySelector('main iswc-timeline');
     const shadow = el.shadowRoot;
     const svg = shadow.querySelector('svg.tl-svg');
     const svgRect = svg.getBoundingClientRect();

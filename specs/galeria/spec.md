@@ -10,14 +10,14 @@ La galería (`index.html` + `src/previews/`) es el laboratorio visual del kit. C
 
 ## S-G1 Previews JSON
 
-- Archivo: `src/previews/<categoria>/<tag>.json` con `$schema: "is-preview/v1"`.
+- Archivo: `src/previews/<categoria>/<tag>.json` con `$schema: "iswc-preview/v1"`.
 - `manifest.js` → `page` apunta al `.json`, no a HTML por tag.
 - Único HTML bajo previews: `src/previews/_shell.html` (fullscreen).
 - Comportamiento dinámico: `src/previews/behaviors/<tag>.js` (`mount` / `unmount`). **Prohibido** `eval` o listeners en strings del JSON.
 
 ## S-G2 Chrome
 
-- Componente: `<is-preview-component>` (`src/components/layout/preview-component.js`).
+- Componente: `<iswc-preview-component>` (`src/components/layout/preview-component.js`).
 - Catálogo: `src/previews/catalog.ts` + `registry.loadPreview(tag)`.
 - Utilerías públicas en `helpers/`: tab en nav + JSON + MD (`src/utils/health/meta/helpers-homogeneity.test.ts`).
 
@@ -38,7 +38,7 @@ La galería (`index.html` + `src/previews/`) es el laboratorio visual del kit. C
 | Pieza | Contrato |
 |---|---|
 | Manifest | `page: "<cat>/<tag>.json"` |
-| Schema | `$schema: "is-preview/v1"` |
+| Schema | `$schema: "iswc-preview/v1"` |
 | URL | `?s=` único; sin params sueltos |
 | Servidor dev | `scripts/serve.mjs` :8391 |
 

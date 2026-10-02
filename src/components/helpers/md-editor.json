@@ -1,20 +1,20 @@
 {
-  "$schema": "is-preview/v1",
-  "tag": "is-md-editor",
+  "$schema": "iswc-preview/v1",
+  "tag": "iswc-md-editor",
   "category": "helpers",
-  "title": "<is-md-editor>",
+  "title": "<iswc-md-editor>",
   "titleHtml": true,
-  "storageKey": "docs-is-md-editor",
-  "styles": "is-md-editor { display: block; width: 100%; max-width: 40rem; }",
+  "storageKey": "docs-iswc-md-editor",
+  "styles": "iswc-md-editor { display: block; width: 100%; max-width: 48rem; --iswc-md-editor-preview-max-height: 36em; }",
   "sections": [
     {
       "id": "intro",
       "title": "Uso",
-      "lede": "Vista previa MD/HTML + chips <code class=\"code\">{{variable}}</code>. Clic abre diálogo fullscreen.\n          Toolbar completa (disabled en solo lectura). Footer: meta + Descargar (siempre).",
+      "lede": "Preview con el mismo hydrate que iswc-md-render (código, iswc, HTML). Clic abre diálogo.",
       "blocks": [
         {
           "kind": "demo",
-          "html": "<is-md-editor label=\"Prompt del sistema\" placeholder=\"Sin contenido. Haz clic para editar…\">\n  <script type=\"text/markdown\">\n# Instrucción\n\nEres un asistente que responde en **español** con tono profesional.\n\n- Usa `{{tono}}` como guía de estilo\n- Cita fuentes cuando aplique\n\n> Nunca inventes datos financieros.\n  </script>\n</is-md-editor>",
+          "html": "<iswc-md-editor can-edit label=\"Documento MD\" filename=\"demo-kit.md\" preview-max-height=\"36em\">\n  <script type=\"text/markdown\">\n# Kit MD: render e hydratación\n\nTítulos con **color de marca**. Inline mono, bloques con theme, fences iswc-* y HTML is-*.\n\n## 1. Código\n\nInline sin fondo: `ensure`, `loader.has`, `brand-mono`. Chip {{tono}}.\n\n### JavaScript\n\n```js\nconst L = globalThis.ISWebComponentsLoader;\nawait L.loadCSSBase();\nawait L.load(\"iswc-md-render\");\nconst saludo = (nombre) => `Hola ${nombre}`;\n```\n\n### TypeScript\n\n```ts\ntype SkillDoc = { label: string; url: string };\nexport function collect(docs: SkillDoc[]): string[] {\n  return docs.map((d) => d.url).filter(Boolean);\n}\n```\n\n### HTML / CSS\n\n```html\n<iswc-button color=\"brand\" size=\"sm\">Acción</iswc-button>\n```\n\n```css\n:host {\n  --_brand: var(--iswc-color-brand, #339af0);\n  color: color-mix(in srgb, var(--_brand) 72%, var(--iswc-text));\n}\n```\n\n## 2. Diagramas (fences iswc)\n\n### Flowchart\n\n```iswc-flowchart\n{\n  \"flowchart\": {\n    \"title\": \"Alta rápida\",\n    \"direction\": \"LR\",\n    \"nodes\": [\n      {\n        \"id\": \"a\",\n        \"label\": \"Inicio\",\n        \"shape\": \"stadium\"\n      },\n      {\n        \"id\": \"b\",\n        \"label\": \"Validar\"\n      },\n      {\n        \"id\": \"c\",\n        \"label\": \"¿Ok?\",\n        \"shape\": \"diamond\"\n      },\n      {\n        \"id\": \"d\",\n        \"label\": \"Fin\",\n        \"shape\": \"stadium\"\n      }\n    ],\n    \"edges\": [\n      {\n        \"from\": \"a\",\n        \"to\": \"b\"\n      },\n      {\n        \"from\": \"b\",\n        \"to\": \"c\"\n      },\n      {\n        \"from\": \"c\",\n        \"to\": \"d\",\n        \"label\": \"sí\"\n      }\n    ]\n  }\n}\n```\n\n### Sequence\n\n```iswc-sequence\n{\n  \"sequence\": {\n    \"title\": \"Auth\",\n    \"actors\": [\n      {\n        \"id\": \"U\",\n        \"label\": \"User\",\n        \"kind\": \"actor\"\n      },\n      {\n        \"id\": \"A\",\n        \"label\": \"API\",\n        \"kind\": \"participant\"\n      }\n    ],\n    \"messages\": [\n      {\n        \"from\": \"U\",\n        \"to\": \"A\",\n        \"label\": \"POST /auth\"\n      },\n      {\n        \"from\": \"A\",\n        \"to\": \"U\",\n        \"label\": \"JWT\",\n        \"kind\": \"return\"\n      }\n    ]\n  }\n}\n```\n\n### Mindmap\n\n```iswc-mindmap\n{\n  \"mindmap\": {\n    \"title\": \"MD kit\",\n    \"layout\": \"tree\",\n    \"nodes\": [\n      {\n        \"id\": \"root\",\n        \"label\": \"iswc-md-*\",\n        \"hue\": 210\n      },\n      {\n        \"id\": \"a\",\n        \"parent\": \"root\",\n        \"label\": \"render\",\n        \"hue\": 199\n      },\n      {\n        \"id\": \"b\",\n        \"parent\": \"root\",\n        \"label\": \"editor\",\n        \"hue\": 160\n      },\n      {\n        \"id\": \"c\",\n        \"parent\": \"root\",\n        \"label\": \"hydrate\",\n        \"hue\": 38\n      }\n    ]\n  }\n}\n```\n\n## 3. HTML del kit\n\n<iswc-button color=\"brand\" size=\"sm\">Guardar</iswc-button>\n<iswc-button color=\"neutral\" variant=\"soft\" size=\"sm\">Cancelar</iswc-button>\n\n<iswc-tag color=\"brand\" size=\"sm\">lazy</iswc-tag>\n<iswc-tag color=\"success\" size=\"sm\">hydrate</iswc-tag>\n\n## 4. Tabla + lista + cita\n\n| Contenido | Qué pasa |\n| --- | --- |\n| `x` inline | iswc-code brand-mono, sin fondo |\n| fence js/ts/html/css | iswc-code theme dark/light |\n| fence iswc-flowchart | iswc-flowchart readonly |\n| iswc-button HTML | ensure iswc-button |\n\n1. md-lite marca fences / inline\n2. `ensure` solo tags necesarios\n3. Upgrade a iswc-code / diagramas\n\n> Solo hechos verificables. El loader no duplica módulos.\n\n---\n\nEnlace: [skills CDN](https://github.com/Jeff-Aporta/is-webcomponents).\n  </script>\n</iswc-md-editor>",
           "controls": [
             {
               "control": "select",
@@ -46,12 +46,12 @@
     },
     {
       "id": "readonly-cdn",
-      "title": "Solo lectura",
-      "lede": "Toolbar visible pero disabled. Footer con caracteres/bytes y <strong>Descargar</strong>. Cerrar = X del header.",
+      "title": "Solo lectura (preview rico)",
+      "lede": "Toolbar disabled. El preview hidrata iswc-code, diagramas e iswc-button igual que el visor.",
       "blocks": [
         {
           "kind": "demo",
-          "html": "<is-md-editor label=\"Snippet CDN\" filename=\"cdn-snippet.md\" edit-block-reason=\"Generado; no editable\">\n  <textarea hidden data-md-source>\n```html\n<script type=\"module\" src=\"https://cdn.jsdelivr.net/gh/user/repo/dist/cdn/all.min.js\"></script>\n```\n\nPégalo antes de cerrar `</body>`.\n  </textarea>\n</is-md-editor>"
+          "html": "<iswc-md-editor edit-block-reason=\"Demo de solo lectura\" label=\"Documento MD\" filename=\"demo-kit.md\" preview-max-height=\"36em\">\n  <script type=\"text/markdown\">\n# Kit MD: render e hydratación\n\nTítulos con **color de marca**. Inline mono, bloques con theme, fences iswc-* y HTML is-*.\n\n## 1. Código\n\nInline sin fondo: `ensure`, `loader.has`, `brand-mono`. Chip {{tono}}.\n\n### JavaScript\n\n```js\nconst L = globalThis.ISWebComponentsLoader;\nawait L.loadCSSBase();\nawait L.load(\"iswc-md-render\");\nconst saludo = (nombre) => `Hola ${nombre}`;\n```\n\n### TypeScript\n\n```ts\ntype SkillDoc = { label: string; url: string };\nexport function collect(docs: SkillDoc[]): string[] {\n  return docs.map((d) => d.url).filter(Boolean);\n}\n```\n\n### HTML / CSS\n\n```html\n<iswc-button color=\"brand\" size=\"sm\">Acción</iswc-button>\n```\n\n```css\n:host {\n  --_brand: var(--iswc-color-brand, #339af0);\n  color: color-mix(in srgb, var(--_brand) 72%, var(--iswc-text));\n}\n```\n\n## 2. Diagramas (fences iswc)\n\n### Flowchart\n\n```iswc-flowchart\n{\n  \"flowchart\": {\n    \"title\": \"Alta rápida\",\n    \"direction\": \"LR\",\n    \"nodes\": [\n      {\n        \"id\": \"a\",\n        \"label\": \"Inicio\",\n        \"shape\": \"stadium\"\n      },\n      {\n        \"id\": \"b\",\n        \"label\": \"Validar\"\n      },\n      {\n        \"id\": \"c\",\n        \"label\": \"¿Ok?\",\n        \"shape\": \"diamond\"\n      },\n      {\n        \"id\": \"d\",\n        \"label\": \"Fin\",\n        \"shape\": \"stadium\"\n      }\n    ],\n    \"edges\": [\n      {\n        \"from\": \"a\",\n        \"to\": \"b\"\n      },\n      {\n        \"from\": \"b\",\n        \"to\": \"c\"\n      },\n      {\n        \"from\": \"c\",\n        \"to\": \"d\",\n        \"label\": \"sí\"\n      }\n    ]\n  }\n}\n```\n\n### Sequence\n\n```iswc-sequence\n{\n  \"sequence\": {\n    \"title\": \"Auth\",\n    \"actors\": [\n      {\n        \"id\": \"U\",\n        \"label\": \"User\",\n        \"kind\": \"actor\"\n      },\n      {\n        \"id\": \"A\",\n        \"label\": \"API\",\n        \"kind\": \"participant\"\n      }\n    ],\n    \"messages\": [\n      {\n        \"from\": \"U\",\n        \"to\": \"A\",\n        \"label\": \"POST /auth\"\n      },\n      {\n        \"from\": \"A\",\n        \"to\": \"U\",\n        \"label\": \"JWT\",\n        \"kind\": \"return\"\n      }\n    ]\n  }\n}\n```\n\n### Mindmap\n\n```iswc-mindmap\n{\n  \"mindmap\": {\n    \"title\": \"MD kit\",\n    \"layout\": \"tree\",\n    \"nodes\": [\n      {\n        \"id\": \"root\",\n        \"label\": \"iswc-md-*\",\n        \"hue\": 210\n      },\n      {\n        \"id\": \"a\",\n        \"parent\": \"root\",\n        \"label\": \"render\",\n        \"hue\": 199\n      },\n      {\n        \"id\": \"b\",\n        \"parent\": \"root\",\n        \"label\": \"editor\",\n        \"hue\": 160\n      },\n      {\n        \"id\": \"c\",\n        \"parent\": \"root\",\n        \"label\": \"hydrate\",\n        \"hue\": 38\n      }\n    ]\n  }\n}\n```\n\n## 3. HTML del kit\n\n<iswc-button color=\"brand\" size=\"sm\">Guardar</iswc-button>\n<iswc-button color=\"neutral\" variant=\"soft\" size=\"sm\">Cancelar</iswc-button>\n\n<iswc-tag color=\"brand\" size=\"sm\">lazy</iswc-tag>\n<iswc-tag color=\"success\" size=\"sm\">hydrate</iswc-tag>\n\n## 4. Tabla + lista + cita\n\n| Contenido | Qué pasa |\n| --- | --- |\n| `x` inline | iswc-code brand-mono, sin fondo |\n| fence js/ts/html/css | iswc-code theme dark/light |\n| fence iswc-flowchart | iswc-flowchart readonly |\n| iswc-button HTML | ensure iswc-button |\n\n1. md-lite marca fences / inline\n2. `ensure` solo tags necesarios\n3. Upgrade a iswc-code / diagramas\n\n> Solo hechos verificables. El loader no duplica módulos.\n\n---\n\nEnlace: [skills CDN](https://github.com/Jeff-Aporta/is-webcomponents).\n  </script>\n</iswc-md-editor>"
         }
       ]
     },
@@ -62,7 +62,7 @@
       "blocks": [
         {
           "kind": "demo",
-          "html": "<is-md-editor can-edit label=\"Plantilla de correo\" filename=\"plantilla.md\">\n  <script type=\"text/markdown\">\nHola {{nombre_cliente}},\n\nGracias por confiar en {{empresa}}. Tu próxima cita es el {{fecha_cita}}.\n\nUn saludo,\n{{firma}}\n  </script>\n</is-md-editor>"
+          "html": "<iswc-md-editor can-edit label=\"Plantilla de correo\" filename=\"plantilla.md\">\n  <script type=\"text/markdown\">\nHola {{nombre_cliente}},\n\nGracias por confiar en {{empresa}}. Tu próxima cita es el {{fecha_cita}}.\n\nUn saludo,\n{{firma}}\n  </script>\n</iswc-md-editor>"
         }
       ]
     },
@@ -73,7 +73,7 @@
       "blocks": [
         {
           "kind": "code",
-          "code": "// A) Custom actions (sin app URL)\nel.actions = {\n  load: async () => ({ content: await store.get('doc'), filename: 'doc.md' }),\n  persist: async (doc) => { await store.put(doc); return doc; },\n};\nawait el.load();\n\n// B) Endpoints HTTP\nel.api = {\n  baseUrl: 'https://api.ejemplo.com',\n  endpoints: { get: '/docs/1', put: '/docs/1' },\n  token: () => localStorage.getItem('token'),\n};\nawait el.load();\n\n// Atajo GET:\n// <is-md-editor src=\"/api/docs/1\" can-edit></is-md-editor>",
+          "code": "// A) Custom actions (sin app URL)\nel.actions = {\n  load: async () => ({ content: await store.get('doc'), filename: 'doc.md' }),\n  persist: async (doc) => { await store.put(doc); return doc; },\n};\nawait el.load();\n\n// B) Endpoints HTTP\nel.api = {\n  baseUrl: 'https://api.ejemplo.com',\n  endpoints: { get: '/docs/1', put: '/docs/1' },\n  token: () => localStorage.getItem('token'),\n};\nawait el.load();\n\n// Atajo GET:\n// <iswc-md-editor src=\"/api/docs/1\" can-edit></iswc-md-editor>",
           "lang": "js"
         }
       ]
@@ -90,12 +90,12 @@
           ],
           "rows": [
             [
-              "Pintar MD embebido / edición ligera",
-              "<code>is-md-render</code>"
+              "Pintar MD / edición ligera",
+              "<code>iswc-md-render</code>"
             ],
             [
-              "Toolbar, diálogo, CRUD",
-              "<code>is-md-editor</code>"
+              "Toolbar, diálogo, CRUD + hydrate",
+              "<code>iswc-md-editor</code>"
             ]
           ]
         }
@@ -133,7 +133,7 @@
               "siempre habilitado"
             ],
             [
-              "<code>is-persist</code>",
+              "<code>iswc-persist</code>",
               "<code>{ value, document }</code>"
             ]
           ]

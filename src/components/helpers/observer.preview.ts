@@ -1,5 +1,5 @@
 /**
- * Behavior del preview <is-observer>.
+ * Behavior del preview <iswc-observer>.
  * @param {import('../../previews/_kit/types.d.ts').PreviewMountContext} ctx
  */
 export async function mount(ctx: import('../../previews/_kit/types.d.ts').PreviewMountContext) {
@@ -24,7 +24,7 @@ export async function mount(ctx: import('../../previews/_kit/types.d.ts').Previe
   // ── intersection ──────────────────────────────────────────────────────────
   const io = root.querySelector<HTMLElement>('#io');
   const ioLog = root.querySelector<HTMLElement>('#ioLog');
-  io?.addEventListener('is-intersect', (e: Event) => {
+  io?.addEventListener('iswc-intersect', (e: Event) => {
     const detail = (e as CustomEvent<{ entry?: IntersectionObserverEntry }>).detail;
     const entry = detail?.entry;
     const el = entry?.target;
@@ -79,7 +79,7 @@ export async function mount(ctx: import('../../previews/_kit/types.d.ts').Previe
     }
   });
 
-  mo?.addEventListener('is-mutate', (e: Event) => {
+  mo?.addEventListener('iswc-mutate', (e: Event) => {
     const records = (e as CustomEvent<{ records?: MutationRecord[] }>).detail?.records || [];
     for (const r of records) {
       if (r.type === 'childList') {
@@ -126,7 +126,7 @@ export async function mount(ctx: import('../../previews/_kit/types.d.ts').Previe
     paintSize({ contentRect: roBox.getBoundingClientRect() });
   }
 
-  ro?.addEventListener('is-resize', (e: Event) => {
+  ro?.addEventListener('iswc-resize', (e: Event) => {
     const entry = (e as CustomEvent<{ entries?: ResizeObserverEntry[] }>).detail?.entries?.[0];
     const { w, h } = paintSize(entry);
     if (w != null && h != null) pushLog(roLog, 'type-res', `resize → ${w} × ${h} px`);

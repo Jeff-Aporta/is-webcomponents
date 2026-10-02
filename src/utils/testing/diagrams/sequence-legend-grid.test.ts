@@ -1,6 +1,6 @@
 // tests/sequence-legend-grid.test.ts
 //
-// Guardian del fix de leyenda de <is-sequence-diagram>.
+// Guardian del fix de leyenda de <iswc-sequence-diagram>.
 //
 // Antes la leyenda era una columna única apilada y solapaba el último
 // actor del diagrama cuando había 5+ grupos. El fix la puso en grid de

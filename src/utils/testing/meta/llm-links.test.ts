@@ -7,7 +7,7 @@
 //   4. `scripts/cdn-panel.js` no enlazaba `../LLM.md` (previews/LLM.md).
 //   5. `dist/cdn/llm/` no existía (sin duplicados).
 //   6. La base del panel era raw.githubusercontent.
-//   7. <is-cdn-snippet> tenía el contrato de prompt único.
+//   7. <iswc-cdn-snippet> tenía el contrato de prompt único.
 //
 // Consolidación 2026-09-07: las LLM.md per-categoría y la raíz se eliminaron.
 // El contenido vive ahora en specs/componentes.md (índice global consolidado),
@@ -90,19 +90,19 @@ if (/pages\.dev/.test(panel)) {
   failures.push('cdn-panel.js aún apunta a Cloudflare Pages; el proyecto se desvinculó');
 }
 
-// 7) <is-cdn-snippet> contrato: prompt único (sin lista de filas con Copiar).
+// 7) <iswc-cdn-snippet> contrato: Skill simple (enlaces + ver), sin visor MD.
 if (!/setAttribute\('config'/.test(panel)) {
-  failures.push('cdn-panel.js no pasa los enlaces al <is-cdn-snippet> por `config`');
+  failures.push('cdn-panel.js no pasa los enlaces al <iswc-cdn-snippet> por `config`');
 }
 const snippet = readFileSync(join(root, 'src', 'components', 'feedback', 'cdn-snippet.ts'), 'utf8');
-if (!/buildLlmPrompt/.test(snippet)) {
-  failures.push('cdn-snippet.ts debe construir un prompt único con buildLlmPrompt');
+if (!/SKILL_DOCS/.test(snippet) || !/#renderSkills/.test(snippet)) {
+  failures.push('cdn-snippet.ts debe pintar lista Skill simple (#renderSkills + SKILL_DOCS)');
 }
-if (/cdn__docs-list|#renderDocs/.test(snippet)) {
-  failures.push('cdn-snippet.ts no debe pintar lista de referencias con Copiar por fila');
+if (/iswc-md-editor|data-slot="llm-prompt"|data-copy="llm-prompt"/.test(snippet)) {
+  failures.push('cdn-snippet.ts no debe embeber visor MD / prompt LLM (usar Skill simple)');
 }
-if (!/data-copy="llm-prompt"/.test(snippet)) {
-  failures.push('cdn-snippet.ts debe tener un único botón Copiar del prompt LLM');
+if (!/data-ver-md|mdi:eye-outline/.test(snippet)) {
+  failures.push('cdn-snippet.ts debe ofrecer botón ver (ojo) por skill');
 }
 
 if (failures.length) {

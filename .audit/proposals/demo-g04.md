@@ -71,7 +71,7 @@
 9. **Acciones de fila contextuales (botones en cada fila)** — [Interacción]
    - Setup: columna de acciones con botones "Ver", "Editar", "Eliminar" por fila.
    - Acción: click en "Editar" de fila 3; verificar emisión de evento `row-edit`.
-   - Assertion: `event.detail` contiene `rowId` y `columnId`. Fila recibe clase `is-editing` durante edición inline (si existe). Botón "Eliminar" abre confirm modal accesible.
+   - Assertion: `event.detail` contiene `rowId` y `columnId`. Fila recibe clase `iswc-editing` durante edición inline (si existe). Botón "Eliminar" abre confirm modal accesible.
    - Cobertura: branch de eventos custom + inline editing.
 
 10. **Export a CSV / Excel** — [Interacción]
@@ -165,7 +165,7 @@
 5. **Paginación numérica (page buttons + prev/next)** — [Interacción]
    - Setup: dataset con 300 filas, page size = 25.
    - Acción: click en página 3, página 7, next, prev, primera, última.
-   - Assertion: rango de filas mostradas correcto. Botón "Previous" disabled en página 1. Botón "Next" disabled en última página. Página activa tiene `aria-current="page"` y clase `is-active`.
+   - Assertion: rango de filas mostradas correcto. Botón "Previous" disabled en página 1. Botón "Next" disabled en última página. Página activa tiene `aria-current="page"` y clase `iswc-active`.
    - Cobertura: branch de paginación completa + disabled states.
 
 6. **Selección de fila (click + Ctrl+click + Shift+click)** — [Interacción]

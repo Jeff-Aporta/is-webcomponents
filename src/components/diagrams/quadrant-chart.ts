@@ -10,20 +10,20 @@ import { registerDiagramKind } from './diagram-kinds.js';
 import { svgEl } from '../_shared/svg-chart-engine.js';
 
 /**
- * <is-quadrant-chart> — matriz 2×2 en SVG, sin Mermaid.
+ * <iswc-quadrant-chart> — matriz 2×2 en SVG, sin Mermaid.
  *
- *   <is-quadrant-chart>
+ *   <iswc-quadrant-chart>
  *     <script type="application/json">
  *       { "quadrant": { "xAxis": { "left": "Bajo", "right": "Alto" }, "points": [...] } }
  *     </script>
- *   </is-quadrant-chart>
+ *   </iswc-quadrant-chart>
  *
- * Mismo esqueleto que <is-flowchart>: shadow DOM, slot JSON + MutationObserver,
+ * Mismo esqueleto que <iswc-flowchart>: shadow DOM, slot JSON + MutationObserver,
  * tema por atributo `data-theme`, `color` (inline | viewer), lightbox propio.
  *
  * Atributos: color (inline | viewer), open-on-click
  * Propiedades: payload, spec, layout, hiddenGroups
- * Eventos: is-render, is-open-viewer, is-toggle-group
+ * Eventos: iswc-render, iswc-open-viewer, iswc-toggle-group
  */
 
 interface QdGroup { id: string; name: string; hue?: number; }
@@ -72,7 +72,7 @@ interface QdLayout {
 }
 interface PointEntry { pt: QdLayoutPoint; g: SVGGElement; }
 
-class IsQuadrantChart extends DiagramElementBase {
+class IswcQuadrantChart extends DiagramElementBase {
   #hiddenGroups = new Set<string>();
   #pointNodes = new Map<string, PointEntry>();
   #hoverId: string | null = null;
@@ -131,7 +131,7 @@ class IsQuadrantChart extends DiagramElementBase {
     const layout = computeQuadrantLayout(visible) as unknown as QdLayout;
     this.layout = layout;
     this.#buildSvg(layout, theme);
-    this.wrap.classList.toggle('is-viewer', this.isViewer);
+    this.wrap.classList.toggle('iswc-viewer', this.isViewer);
   }
 
   #buildSvg(layout: QdLayout, theme: DiagramTheme): void {
@@ -165,7 +165,7 @@ class IsQuadrantChart extends DiagramElementBase {
     if (layout.groups?.length) this.#buildLegend(layout, theme);
     this.#buildPoints(layout, theme);
 
-    emit(this, 'is-render', { layout, svg: this.svg });
+    emit(this, 'iswc-render', { layout, svg: this.svg });
   }
 
   #buildFrame(layout: QdLayout, theme: DiagramTheme): void {
@@ -283,13 +283,13 @@ class IsQuadrantChart extends DiagramElementBase {
   #onClick = (e: MouseEvent) => {
     if (this.isViewer) {
       const item = e.composedPath().find((x): x is HTMLElement => x instanceof HTMLElement && !!x.dataset?.groupId);
-      if (item) emitCancelable(this, 'is-toggle-group', { id: item.dataset.groupId });
+      if (item) emitCancelable(this, 'iswc-toggle-group', { id: item.dataset.groupId });
       return;
     }
     // El visor es opt-in: sin `open-on-click` el clic no hace nada y tampoco
-    // se anuncia `is-open-viewer`, que prometeria una apertura que no ocurre.
+    // se anuncia `iswc-open-viewer`, que prometeria una apertura que no ocurre.
     if (!this.hasAttribute('open-on-click')) return;
-    const ev = new CustomEvent('is-open-viewer', {
+    const ev = new CustomEvent('iswc-open-viewer', {
       bubbles: true, composed: true, cancelable: true, detail: { payload: this.payload },
     });
     this.dispatchEvent(ev);
@@ -320,8 +320,8 @@ class IsQuadrantChart extends DiagramElementBase {
 
     for (const [pointId, node] of this.#pointNodes) {
       const active = pointId === id;
-      node.g.classList.toggle('is-active', active);
-      node.g.classList.toggle('is-dim', !!id && !active);
+      node.g.classList.toggle('iswc-active', active);
+      node.g.classList.toggle('iswc-dim', !!id && !active);
     }
 
     if (!entry) {
@@ -343,8 +343,8 @@ class IsQuadrantChart extends DiagramElementBase {
   }
 }
 
-defineElement('is-quadrant-chart', IsQuadrantChart, 'IsQuadrantChart');
+defineElement('iswc-quadrant-chart', IswcQuadrantChart, 'IswcQuadrantChart');
 
-registerDiagramKind('quadrant', 'is-quadrant-chart');
+registerDiagramKind('quadrant', 'iswc-quadrant-chart');
 
-export { IsQuadrantChart };
+export { IswcQuadrantChart };

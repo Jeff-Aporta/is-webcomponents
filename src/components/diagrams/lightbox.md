@@ -1,14 +1,14 @@
 ---
-tag: is-lightbox
+tag: iswc-lightbox
 tags:
-  - is-lightbox
+  - iswc-lightbox
 category: diagrams
 status: public
 source: ./lightbox.js
 style: ./lightbox.css
 preview: ./lightbox.json
 ---
-# `<is-lightbox>`
+# `<iswc-lightbox>`
 
 ## Propósito
 
@@ -18,7 +18,7 @@ con zoom anclado al cursor y pan. La barra por defecto trae cerrar,
 reset de zoom y compartir enlace; usa el slot toolbar
 para añadir tus propios controles sin tocar el componente.
 
-Este módulo registra `<is-lightbox>`.
+Este módulo registra `<iswc-lightbox>`.
 
 ## Cuándo usarlo
 
@@ -38,9 +38,9 @@ import './lightbox.js';
 
 ```html
 <button onclick="lb.show()">Abrir</button>
-<is-lightbox id="lb">
+<iswc-lightbox id="lb">
 <svg viewBox="0 0 320 200">…</svg>
-</is-lightbox>
+</iswc-lightbox>
 ```
 
 ## API
@@ -81,10 +81,10 @@ import './lightbox.js';
 
 | Evento | detail | bubbles | composed | cancelable |
 | --- | --- | --- | --- | --- |
-| `is-after-show` | no | sí | sí | no |
-| `is-after-hide` | no | sí | sí | no |
-| `is-share` | sí | sí | sí | no |
-| `is-reposition` | sí | sí | sí | no |
+| `iswc-after-show` | no | sí | sí | no |
+| `iswc-after-hide` | no | sí | sí | no |
+| `iswc-share` | sí | sí | sí | no |
+| `iswc-reposition` | sí | sí | sí | no |
 
 ### Métodos y propiedades públicas
 
@@ -141,7 +141,7 @@ No declara integración form-associated propia en este módulo.
 
 Documentación de cabecera preservada desde fuente:
 
-> <is-lightbox> — visor a pantalla completa para cualquier contenido.
+> <iswc-lightbox> — visor a pantalla completa para cualquier contenido.
 > Es el building block que ya usaba el visor de diagramas, pero ahora
 > pensado como componente genérico: lo que metas en el slot default se
 > muestra dentro de un <dialog> top-layer, con zoom + pan anclado al
@@ -171,9 +171,9 @@ Documentación de cabecera preservada desde fuente:
 >   zoomOut(factor=1.2)  Zoom −
 >   resetView()          scale=1, x=0, y=0
 > Eventos:
->   is-after-show   dialog abierto
->   is-after-hide   dialog cerrado
->   is-reposition detail: { scale, x, y }
+>   iswc-after-show   dialog abierto
+>   iswc-after-hide   dialog cerrado
+>   iswc-reposition detail: { scale, x, y }
 > CSS parts: dialog, toolbar, toolbar__lead, toolbar__trail, stage,
 >            host, code-panel, code-panel__area, code-panel__actions,
 >            toast
@@ -185,7 +185,7 @@ Documentación de cabecera preservada desde fuente:
 - [`../_shared/adopt-css.js`](../_shared/adopt-css.js)
 - [`../media/icon.js`](../media/icon.js)
 
-Tags del módulo: `<is-lightbox>`.
+Tags del módulo: `<iswc-lightbox>`.
 
 ## Accesibilidad
 
@@ -194,13 +194,13 @@ Preservar semántica, foco, teclado, labels y ARIA. ARIA detectado: `aria-label`
 ## Ejemplo avanzado
 
 ```html
-<is-lightbox>
+<iswc-lightbox>
 <div slot="toolbar">
 <button>Rotar</button>
 <button>Descargar</button>
 </div>
 <svg>…</svg>
-</is-lightbox>
+</iswc-lightbox>
 ```
 
 ## Errores comunes

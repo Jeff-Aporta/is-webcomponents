@@ -9,14 +9,14 @@ const URL = `${BASE_URL}/demos/data/stat/stat.html`;
 const tests = [];
 
 tests.push({
-  name: 'smoke: el componente is-stat está definido y los 6 stats renderizan',
+  name: 'smoke: el componente iswc-stat está definido y los 6 stats renderizan',
   run: async (page) => {
     await page.goto(URL, { waitUntil: 'domcontentloaded' });
     await waitReady(page, 'data-stat-ready');
     const initial = await page.evaluate(() => {
-      const stats = [...document.querySelectorAll('main is-stat')];
+      const stats = [...document.querySelectorAll('main iswc-stat')];
       return {
-        defined: !!customElements.get('is-stat'),
+        defined: !!customElements.get('iswc-stat'),
         count: stats.length,
         rendered: stats.map((s) => {
           const sr = s.shadowRoot;
@@ -26,7 +26,7 @@ tests.push({
         }),
       };
     });
-    assert.equal(initial.defined, true, 'is-stat debe estar definido');
+    assert.equal(initial.defined, true, 'iswc-stat debe estar definido');
     assert.equal(initial.count, 6, `esperaba 6 stats, hay ${initial.count}`);
     // Cada uno debe tener al menos label y value no vacíos
     for (const r of initial.rendered) {
@@ -45,7 +45,7 @@ tests.push({
     const trend = await page.evaluate(() => {
       // segundo <section> = trend-up
       const sections = [...document.querySelectorAll('main section')];
-      const stat = sections[1].querySelector('is-stat');
+      const stat = sections[1].querySelector('iswc-stat');
       const root = stat.shadowRoot.querySelector('[part="base"]');
       const trendEl = root.querySelector('[part="trend"]');
       return {
@@ -70,7 +70,7 @@ tests.push({
     await waitReady(page, 'data-stat-ready');
     const trend = await page.evaluate(() => {
       const sections = [...document.querySelectorAll('main section')];
-      const stat = sections[2].querySelector('is-stat');
+      const stat = sections[2].querySelector('iswc-stat');
       const root = stat.shadowRoot.querySelector('[part="base"]');
       return {
         attrTrend: stat.getAttribute('trend'),
@@ -91,7 +91,7 @@ tests.push({
     await waitReady(page, 'data-stat-ready');
     const flat = await page.evaluate(() => {
       const sections = [...document.querySelectorAll('main section')];
-      const stat = sections[3].querySelector('is-stat');
+      const stat = sections[3].querySelector('iswc-stat');
       const root = stat.shadowRoot.querySelector('[part="base"]');
       return {
         attrTrendDirection: stat.getAttribute('trend-direction'),
@@ -110,20 +110,20 @@ tests.push({
     await waitReady(page, 'data-stat-ready');
     const before = await page.evaluate(() => {
       const sections = [...document.querySelectorAll('main section')];
-      const stat = sections[1].querySelector('is-stat'); // trend-up
+      const stat = sections[1].querySelector('iswc-stat'); // trend-up
       return stat.shadowRoot.querySelector('[part="base"]').dataset.trend;
     });
     assert.equal(before, 'up', 'precondición: trend="+12.5%" marca up');
     // Cambiamos trend a "-7%" → debería re-detectar a down
     await page.evaluate(() => {
       const sections = [...document.querySelectorAll('main section')];
-      const stat = sections[1].querySelector('is-stat');
+      const stat = sections[1].querySelector('iswc-stat');
       stat.setAttribute('trend', '-7%');
     });
     await page.waitForTimeout(50);
     const after = await page.evaluate(() => {
       const sections = [...document.querySelectorAll('main section')];
-      const stat = sections[1].querySelector('is-stat');
+      const stat = sections[1].querySelector('iswc-stat');
       return stat.shadowRoot.querySelector('[part="base"]').dataset.trend;
     });
     assert.equal(after, 'down', `tras cambiar trend a "-7%", data-trend debe ser "down", fue "${after}"`);
@@ -137,7 +137,7 @@ tests.push({
     await waitReady(page, 'data-stat-ready');
     const slot = await page.evaluate(() => {
       const sections = [...document.querySelectorAll('main section')];
-      const stat = sections[5].querySelector('is-stat'); // section de slot override
+      const stat = sections[5].querySelector('iswc-stat'); // section de slot override
       const valueEl = stat.shadowRoot.querySelector('[part="value"]');
       return {
         attrValue: stat.getAttribute('value'),
@@ -157,7 +157,7 @@ tests.push({
     await page.goto(URL, { waitUntil: 'domcontentloaded' });
     await waitReady(page, 'data-stat-ready');
     const parts = await page.evaluate(() => {
-      const stat = document.querySelector('main is-stat');
+      const stat = document.querySelector('main iswc-stat');
       const sr = stat.shadowRoot;
       return {
         base: !!sr.querySelector('[part="base"]'),
@@ -185,14 +185,14 @@ tests.push({
     const a = await page.evaluate(() => {
       const sections = [...document.querySelectorAll('main section')];
       return sections.map((s) => {
-        const stat = s.querySelector('is-stat');
+        const stat = s.querySelector('iswc-stat');
         const root = stat.shadowRoot.querySelector('[part="base"]');
         return { trend: root.dataset.trend, color: root.dataset.color };
       });
     });
     // Tocar todos los stats con un remove+set del mismo atributo
     await page.evaluate(() => {
-      document.querySelectorAll('main is-stat').forEach((s) => {
+      document.querySelectorAll('main iswc-stat').forEach((s) => {
         const t = s.getAttribute('trend'); if (t) { s.removeAttribute('trend'); s.setAttribute('trend', t); }
         const c = s.getAttribute('color'); if (c) { s.removeAttribute('color'); s.setAttribute('color', c); }
       });
@@ -201,7 +201,7 @@ tests.push({
     const b = await page.evaluate(() => {
       const sections = [...document.querySelectorAll('main section')];
       return sections.map((s) => {
-        const stat = s.querySelector('is-stat');
+        const stat = s.querySelector('iswc-stat');
         const root = stat.shadowRoot.querySelector('[part="base"]');
         return { trend: root.dataset.trend, color: root.dataset.color };
       });
@@ -216,7 +216,7 @@ tests.push({
     await page.goto(URL, { waitUntil: 'domcontentloaded' });
     await waitReady(page, 'data-stat-ready');
     const helpers = await page.evaluate(() => {
-      return [...document.querySelectorAll('main is-stat')].map((s) => {
+      return [...document.querySelectorAll('main iswc-stat')].map((s) => {
         const helper = s.shadowRoot.querySelector('[part="helper"]');
         return helper ? helper.textContent.trim() : null;
       });

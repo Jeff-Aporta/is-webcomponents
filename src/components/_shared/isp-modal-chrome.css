@@ -13,7 +13,7 @@
     justify-content: center;
     padding: 1em;
     background: color-mix(in srgb, var(--iswc-bg, #101418) 68%, transparent);
-  }
 
-  .backdrop[hidden] { display: none; }
+    &[hidden] { display: none; }
+  }
 }

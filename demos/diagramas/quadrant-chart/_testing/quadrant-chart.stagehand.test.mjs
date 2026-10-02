@@ -12,7 +12,7 @@ const DEMO = {
 async function checkDeterministic(page) {
   await page.waitForTimeout(200);
   const data = await page.evaluate(() => {
-    const el = document.querySelector('main is-quadrant-chart');
+    const el = document.querySelector('main iswc-quadrant-chart');
     const shadow = el.shadowRoot;
     const svg = shadow.querySelector('svg.qd-svg');
     const svgRect = svg.getBoundingClientRect();

@@ -9,7 +9,7 @@ import { BreakpointHost } from './block-layout.js';
  */
 
 /**
- * <is-flex-layout> — port de ISP `layout/FlexLayout.svelte`.
+ * <iswc-flex-layout> — port de ISP `layout/FlexLayout.svelte`.
  *
  * ISP construía un `style=""` gigante en el div interno. Aquí las dimensiones
  * enumeradas (direction/justify/align/wrap/grow/inline) son ATRIBUTOS que
@@ -34,7 +34,7 @@ import { BreakpointHost } from './block-layout.js';
  *   remember-scroll, storage-key, scroll-ttl  → memoria de scroll (BreakpointHost)
  *   width, height, min-width, min-height, max-width, max-height   string CSS
  *
- * Eventos: `is-breakpoint` (ver block-layout.js).
+ * Eventos: `iswc-breakpoint` (ver block-layout.js).
  * Geometría: getWidth(), getHeight(), rect() / getRect().
  */
 
@@ -60,7 +60,7 @@ import { BreakpointHost } from './block-layout.js';
     ...BreakpointHost.scrollMemoryAttrs,
   ];
 
-  class IsFlexLayout extends BreakpointHost {
+  class IswcFlexLayout extends BreakpointHost {
     static TEMPLATE = TEMPLATE;
     static get observedAttributes(): string[] { return OBSERVED; }
     // El attributeChangedCallback lo aporta ElementBase (vía BreakpointHost);
@@ -134,5 +134,5 @@ import { BreakpointHost } from './block-layout.js';
     set labelledby(v) { v == null || v === '' ? this.removeAttribute('labelledby') : this.setAttribute('labelledby', String(v)); }
   }
 
-  defineElement('is-flex-layout', IsFlexLayout, 'IsFlexLayout');
+  defineElement('iswc-flex-layout', IswcFlexLayout, 'IswcFlexLayout');
 })();

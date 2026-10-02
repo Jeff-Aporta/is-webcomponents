@@ -1,4 +1,4 @@
-// format-date.test.mjs — tests funcionales de <is-format-date>.
+// format-date.test.mjs — tests funcionales de <iswc-format-date>.
 //
 // Cubre:
 //   - smoke: renderiza todas las fechas del demo.
@@ -23,7 +23,7 @@ tests.push({
     await page.goto(URL, { waitUntil: 'domcontentloaded' });
     await waitReady(page, 'data-format-date-ready');
     const r = await page.evaluate(() => {
-      const all = [...document.querySelectorAll('main is-format-date')];
+      const all = [...document.querySelectorAll('main iswc-format-date')];
       return all.map((el, i) => {
         const t = el.shadowRoot.querySelector('time');
         return { i, date: el.getAttribute('date'), text: t?.textContent ?? '', dt: t?.getAttribute('datetime') ?? '' };
@@ -45,7 +45,7 @@ tests.push({
     await page.goto(URL, { waitUntil: 'domcontentloaded' });
     await waitReady(page, 'data-format-date-ready');
     const r = await page.evaluate(() => {
-      const el = [...document.querySelectorAll('main is-format-date')].find((e) => e.getAttribute('weekday') === 'long');
+      const el = [...document.querySelectorAll('main iswc-format-date')].find((e) => e.getAttribute('weekday') === 'long');
       return el?.shadowRoot.querySelector('time')?.textContent ?? '';
     });
     // Espera un día de la semana en minúscula (lunes, martes…) o formato largo
@@ -59,7 +59,7 @@ tests.push({
     await page.goto(URL, { waitUntil: 'domcontentloaded' });
     await waitReady(page, 'data-format-date-ready');
     const r = await page.evaluate(() => {
-      const el = [...document.querySelectorAll('main is-format-date')].find((e) => e.getAttribute('hour-format') === '24');
+      const el = [...document.querySelectorAll('main iswc-format-date')].find((e) => e.getAttribute('hour-format') === '24');
       return el?.shadowRoot.querySelector('time')?.textContent ?? '';
     });
     assert.ok(!/(AM|PM|am|pm)/.test(r), `hour-format=24 NO debe contener AM/PM (era "${r}")`);
@@ -73,7 +73,7 @@ tests.push({
     await page.goto(URL, { waitUntil: 'domcontentloaded' });
     await waitReady(page, 'data-format-date-ready');
     const r = await page.evaluate(() => {
-      const el = [...document.querySelectorAll('main is-format-date')].find((e) => e.getAttribute('hour-format') === '12');
+      const el = [...document.querySelectorAll('main iswc-format-date')].find((e) => e.getAttribute('hour-format') === '12');
       return el?.shadowRoot.querySelector('time')?.textContent ?? '';
     });
     assert.match(r, /(AM|PM|am|pm|a\.\s*m\.|p\.\s*m\.)/, `hour-format=12 debe contener AM/PM (era "${r}")`);
@@ -86,7 +86,7 @@ tests.push({
     await page.goto(URL, { waitUntil: 'domcontentloaded' });
     await waitReady(page, 'data-format-date-ready');
     const r = await page.evaluate(() => {
-      const all = [...document.querySelectorAll('main is-format-date')];
+      const all = [...document.querySelectorAll('main iswc-format-date')];
       const co = all.find((e) => e.getAttribute('locale') === 'es-CO' && e.getAttribute('date') === '2026-08-15');
       const us = all.find((e) => e.getAttribute('locale') === 'en-US' && e.getAttribute('date') === '2026-08-15');
       return {
@@ -105,7 +105,7 @@ tests.push({
     await page.goto(URL, { waitUntil: 'domcontentloaded' });
     await waitReady(page, 'data-format-date-ready');
     const r = await page.evaluate(() => {
-      const el = [...document.querySelectorAll('main is-format-date')].find((e) => e.getAttribute('date') === '1752864000000');
+      const el = [...document.querySelectorAll('main iswc-format-date')].find((e) => e.getAttribute('date') === '1752864000000');
       const t = el?.shadowRoot.querySelector('time');
       return { text: t?.textContent ?? '', dt: t?.getAttribute('datetime') ?? '' };
     });
@@ -120,7 +120,7 @@ tests.push({
     await page.goto(URL, { waitUntil: 'domcontentloaded' });
     await waitReady(page, 'data-format-date-ready');
     const r = await page.evaluate(() => {
-      const el = [...document.querySelectorAll('main is-format-date')].find((e) => e.getAttribute('date') === 'no-válida');
+      const el = [...document.querySelectorAll('main iswc-format-date')].find((e) => e.getAttribute('date') === 'no-válida');
       const t = el?.shadowRoot.querySelector('time');
       return { text: t?.textContent ?? '', dt: t?.getAttribute('datetime') };
     });
@@ -135,7 +135,7 @@ tests.push({
     await page.goto(URL, { waitUntil: 'domcontentloaded' });
     await waitReady(page, 'data-format-date-ready');
     const r = await page.evaluate(() => {
-      const el = [...document.querySelectorAll('main is-format-date')].find((e) => e.getAttribute('date') === '2026-08-15');
+      const el = [...document.querySelectorAll('main iswc-format-date')].find((e) => e.getAttribute('date') === '2026-08-15');
       const t = el?.shadowRoot.querySelector('time');
       return t?.getAttribute('datetime') ?? '';
     });

@@ -526,7 +526,7 @@
 1. **Clic en cada botón del demo ejecuta su acción documentada** — [interacción]
    - Setup: inventario de botones visibles.
    - Acción: clic uno a uno.
-   - Assertion: cada botón cambia el DOM (abre modal, lanza toast, togglea clase) y emite el evento esperado (p. ej. `is-click`).
+   - Assertion: cada botón cambia el DOM (abre modal, lanza toast, togglea clase) y emite el evento esperado (p. ej. `iswc-click`).
     - Cobertura: cada handler wired.
 
 2. **Toast aparece con animación y desaparece tras `duration` ms** — [interacción]
@@ -580,7 +580,7 @@
 10. **Skeletons aparecen mientras carga contenido async** — [estado/edge]
     - Setup: sección "Lista" con fetch simulado de 1s.
     - Acción: forzar reload.
-    - Assertion: aparecen placeholders animados (`<is-skeleton>` o similar) y se reemplazan al recibir datos.
+    - Assertion: aparecen placeholders animados (`<iswc-skeleton>` o similar) y se reemplazan al recibir datos.
     - Cobertura: loading UX.
 
 11. **Lista con 10 000 items virtualizada (solo renderiza visibles)** — [performance]
@@ -596,7 +596,7 @@
     - Cobertura: keyboard grid.
 
 13. **Tooltip aparece al hacer hover y se mantiene al hacer focus** — [interacción]
-    - Setup: botón con `title` o `<is-tooltip>`.
+    - Setup: botón con `title` o `<iswc-tooltip>`.
     - Acción: hover; tabular al botón.
     - Assertion: tooltip aparece en hover; también aparece en focus; desaparece tras 200ms de blur o mouseleave.
     - Cobertura: dual trigger.
@@ -622,7 +622,7 @@
 17. **Drag & drop de un item de lista reordena el array interno** — [interacción]
     - Setup: lista de 5 items.
     - Acción: arrastrar item 1 al slot del item 4; soltar.
-    - Assertion: el DOM se reordena visualmente; se emite `is-reorder` con índices old/new; foco se mantiene accesible.
+    - Assertion: el DOM se reordena visualmente; se emite `iswc-reorder` con índices old/new; foco se mantiene accesible.
     - Cobertura: drag & drop con a11y.
 
 18. **Componente sin datos (lista vacía) muestra estado vacío** — [estado/edge]

@@ -14,7 +14,7 @@ checks.push({
     await waitReady(page, 'data-cdn-snippet-ready');
     await page.waitForTimeout(300);
     const info = await page.evaluate(() => {
-      const el = document.querySelector('is-cdn-snippet');
+      const el = document.querySelector('iswc-cdn-snippet');
       const root = el.shadowRoot;
       const section = root.querySelector('section.cdn');
       const secRect = section?.getBoundingClientRect();
@@ -35,19 +35,19 @@ checks.push({
 checks.push({
   name: 'layout: los bloques principales (loader + LLM) tienen altura > 30px',
   run: async (page) => {
-    // Hay 4 is-code blocks en el demo: loader, llm-prompt, y 2 deps. Las deps
+    // Hay 4 iswc-code blocks en el demo: loader, llm-prompt, y 2 deps. Las deps
     // pueden tener altura muy pequeña si el snippet es muy corto. Verificamos
     // los bloques principales (loader + LLM prompt) que SIEMPRE están.
     await page.goto(URL, { waitUntil: 'domcontentloaded' });
     await waitReady(page, 'data-cdn-snippet-ready');
     await page.waitForTimeout(500);
     const data = await page.evaluate(() => {
-      const el = document.querySelector('is-cdn-snippet');
+      const el = document.querySelector('iswc-cdn-snippet');
       const root = el.shadowRoot;
-      const loader = root.querySelector('is-code[data-slot="loader"]');
-      const llm = root.querySelector('is-md-editor[data-slot="llm-prompt"]');
-      // Cuántos is-code.cdn__pre hay con altura > 0
-      const allCodes = [...root.querySelectorAll('is-code.cdn__pre')];
+      const loader = root.querySelector('iswc-code[data-slot="loader"]');
+      const llm = root.querySelector('iswc-md-editor[data-slot="llm-prompt"]');
+      // Cuántos iswc-code.cdn__pre hay con altura > 0
+      const allCodes = [...root.querySelectorAll('iswc-code.cdn__pre')];
       const visibleCodes = allCodes.filter((c) => !c.hidden && c.getBoundingClientRect().height > 30);
       return {
         loaderH: loader?.getBoundingClientRect().height,
@@ -60,7 +60,7 @@ checks.push({
     assert.ok(data.llmH >= 30, `LLM prompt editor debe medir >=30px (vimos ${data.llmH})`);
     // Al menos loader + LLM (2 bloques principales con altura > 30).
     assert.ok(data.visibleCodesCount >= 2,
-      `esperaba >=2 is-code blocks con altura > 30, hay ${data.visibleCodesCount}`);
+      `esperaba >=2 iswc-code blocks con altura > 30, hay ${data.visibleCodesCount}`);
   },
 });
 
@@ -73,13 +73,13 @@ checks.push({
     await waitReady(page, 'data-cdn-snippet-ready');
     await page.waitForTimeout(300);
     await page.evaluate(() => {
-      const el = document.querySelector('is-cdn-snippet');
+      const el = document.querySelector('iswc-cdn-snippet');
       const btn = el.shadowRoot.querySelector('.cdn__copy[data-copy="loader"]');
       btn.click();
     });
     await page.waitForTimeout(200);
     const txt = await page.evaluate(() => {
-      const el = document.querySelector('is-cdn-snippet');
+      const el = document.querySelector('iswc-cdn-snippet');
       const btn = el.shadowRoot.querySelector('.cdn__copy[data-copy="loader"]');
       return btn.textContent.trim();
     });

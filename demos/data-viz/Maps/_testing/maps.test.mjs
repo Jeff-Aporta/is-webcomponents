@@ -5,7 +5,7 @@
 //            iframe + attribution visible
 //   - tiles: el iframe tiene src correcto (tileUrl + bbox/zoom/center/layer)
 //   - attribution: <small class="attribution"> existe y muestra el texto
-//   - markers: cada <is-map-marker> produce un <circle class="marker">
+//   - markers: cada <iswc-map-marker> produce un <circle class="marker">
 //              + un <text class="marker-label"> con el label
 //   - XSS escape: la attribution se inyecta vía innerHTML (hallazgo conocido).
 //                 El test caracteriza el comportamiento actual: probe con
@@ -22,14 +22,14 @@ const URL = `${BASE_URL}/demos/data-viz/Maps/maps.html`;
 const tests = [];
 
 tests.push({
-  name: 'smoke: <is-maps> y <is-map-marker> están definidos; SVG y tile renderean',
+  name: 'smoke: <iswc-maps> y <iswc-map-marker> están definidos; SVG y tile renderean',
   run: async (page) => {
     await page.goto(URL, { waitUntil: 'domcontentloaded' });
     await waitReady(page, 'data-maps-ready');
     await page.waitForTimeout(200);
     const info = await page.evaluate(() => {
-      const all = document.querySelectorAll('is-maps');
-      const tiles = document.querySelectorAll('is-map-marker');
+      const all = document.querySelectorAll('iswc-maps');
+      const tiles = document.querySelectorAll('iswc-map-marker');
       const out = [...all].map((m) => {
         const iframe = m.shadowRoot.querySelector('iframe.tile-iframe');
         const svg = m.shadowRoot.querySelector('svg.map');
@@ -48,28 +48,28 @@ tests.push({
       });
       return { maps: out, totalMarkers: tiles.length };
     });
-    assert.equal(info.maps.length, 2, `demo debe tener 2 <is-maps> (hay ${info.maps.length})`);
+    assert.equal(info.maps.length, 2, `demo debe tener 2 <iswc-maps> (hay ${info.maps.length})`);
     // Demo 1: modo SVG
     const svgMap = info.maps.find((m) => m.engine === 'svg');
-    assert.ok(svgMap, 'debe existir un <is-maps engine="svg">');
+    assert.ok(svgMap, 'debe existir un <iswc-maps engine="svg">');
     assert.equal(svgMap.hasSvg, true, 'modo svg debe contener svg.map');
     assert.equal(svgMap.hasIframe, false, 'modo svg NO debe tener iframe');
     // HALLAZGO: connectedCallback en maps.ts llama a #syncMarkers() dos veces
     // (una vía #render→#renderSvg, otra directa tras #render), así que cada
-    // <is-map-marker> aparece como DOS <circle.marker>. Reportamos ese conteo
+    // <iswc-map-marker> aparece como DOS <circle.marker>. Reportamos ese conteo
     // duplicado en lugar de ocultarlo: si se arregla el source, este assert
     // pasa con 6 y el comentario se puede quitar.
     assert.equal(svgMap.markerCount, 12, `modo svg debe pintar 6 markers * 2 render calls = 12 círculos (hay ${svgMap.markerCount})`);
     assert.equal(svgMap.labelCount, 12, `cada circle debe llevar su label (hay ${svgMap.labelCount} labels; deberían ser 12)`);
     // Demo 2: modo tile
     const tileMap = info.maps.find((m) => m.engine === 'tile');
-    assert.ok(tileMap, 'debe existir un <is-maps engine="tile">');
+    assert.ok(tileMap, 'debe existir un <iswc-maps engine="tile">');
     assert.equal(tileMap.hasIframe, true, 'modo tile debe contener iframe.tile-iframe');
     assert.equal(tileMap.hasSvg, false, 'modo tile NO debe contener svg.map');
     assert.ok(tileMap.iframeSrc, 'iframe debe llevar src');
     assert.match(tileMap.iframeSrc, /^https?:\/\//, `iframe.src debe ser absoluta: ${tileMap.iframeSrc}`);
     assert.ok(tileMap.attributionText && tileMap.attributionText.includes('OpenStreetMap'), `attribution debe mencionar OpenStreetMap (got "${tileMap.attributionText}")`);
-    assert.equal(info.totalMarkers, 6, `deben haber 6 <is-map-marker> en el DOM (hay ${info.totalMarkers})`);
+    assert.equal(info.totalMarkers, 6, `deben haber 6 <iswc-map-marker> en el DOM (hay ${info.totalMarkers})`);
     await screenshot(page, 'maps-smoke');
   },
 });
@@ -81,7 +81,7 @@ tests.push({
     await waitReady(page, 'data-maps-ready');
     await page.waitForTimeout(200);
     const src = await page.evaluate(() => {
-      const m = [...document.querySelectorAll('is-maps')].find((x) => x.getAttribute('engine') === 'tile');
+      const m = [...document.querySelectorAll('iswc-maps')].find((x) => x.getAttribute('engine') === 'tile');
       return m.shadowRoot.querySelector('iframe.tile-iframe').getAttribute('src');
     });
     assert.ok(src.includes('bbox='), `src debe llevar bbox= (${src})`);
@@ -92,13 +92,13 @@ tests.push({
     assert.match(src, /openstreetmap\.org/, `src debe apuntar a OSM (${src})`);
     // Lazy loading
     const loading = await page.evaluate(() => {
-      const m = [...document.querySelectorAll('is-maps')].find((x) => x.getAttribute('engine') === 'tile');
+      const m = [...document.querySelectorAll('iswc-maps')].find((x) => x.getAttribute('engine') === 'tile');
       return m.shadowRoot.querySelector('iframe.tile-iframe').getAttribute('loading');
     });
     assert.equal(loading, 'lazy', 'iframe debe tener loading="lazy"');
     // title para accesibilidad
     const title = await page.evaluate(() => {
-      const m = [...document.querySelectorAll('is-maps')].find((x) => x.getAttribute('engine') === 'tile');
+      const m = [...document.querySelectorAll('iswc-maps')].find((x) => x.getAttribute('engine') === 'tile');
       return m.shadowRoot.querySelector('iframe.tile-iframe').getAttribute('title');
     });
     assert.ok(title && title.length > 0, `iframe debe llevar title (got "${title}")`);
@@ -112,7 +112,7 @@ tests.push({
     await waitReady(page, 'data-maps-ready');
     await page.waitForTimeout(200);
     const attr = await page.evaluate(() => {
-      const m = [...document.querySelectorAll('is-maps')].find((x) => x.getAttribute('engine') === 'tile');
+      const m = [...document.querySelectorAll('iswc-maps')].find((x) => x.getAttribute('engine') === 'tile');
       const el = m.shadowRoot.querySelector('.attribution');
       return {
         tag: el?.tagName ?? null,
@@ -128,13 +128,13 @@ tests.push({
 });
 
 tests.push({
-  name: 'markers: cada <is-map-marker> produce <circle> + <text> con cx,cy y label correctos',
+  name: 'markers: cada <iswc-map-marker> produce <circle> + <text> con cx,cy y label correctos',
   run: async (page) => {
     await page.goto(URL, { waitUntil: 'domcontentloaded' });
     await waitReady(page, 'data-maps-ready');
     await page.waitForTimeout(200);
     const items = await page.evaluate(() => {
-      const m = document.querySelector('is-maps[engine="svg"]');
+      const m = document.querySelector('iswc-maps[engine="svg"]');
       const circles = [...m.shadowRoot.querySelectorAll('circle.marker')];
       const labels = [...m.shadowRoot.querySelectorAll('text.marker-label')];
       return circles.map((c, i) => ({
@@ -178,7 +178,7 @@ tests.push({
     await page.goto(URL, { waitUntil: 'domcontentloaded' });
     await page.waitForTimeout(100);
     const result = await page.evaluate(() => {
-      const m = document.createElement('is-maps');
+      const m = document.createElement('iswc-maps');
       m.setAttribute('engine', 'tile');
       m.style.cssText = 'position:absolute;left:-9999px;top:-9999px;width:400px;height:240px;display:block;';
       const script = document.createElement('script');
@@ -227,7 +227,7 @@ tests.push({
     await waitReady(page, 'data-maps-ready');
     await page.waitForTimeout(200);
     const vp = await page.evaluate(() => {
-      const m = document.querySelector('is-maps[engine="svg"]');
+      const m = document.querySelector('iswc-maps[engine="svg"]');
       const text = m.shadowRoot.querySelector('text.vp-text');
       return text?.textContent ?? '';
     });
@@ -245,12 +245,12 @@ tests.push({
     await waitReady(page, 'data-maps-ready');
     await page.waitForTimeout(200);
     await page.evaluate(() => {
-      const m = document.querySelector('is-maps[engine="svg"]');
+      const m = document.querySelector('iswc-maps[engine="svg"]');
       m.setAttribute('viewbox', '-180,-85,180,85'); // mundo entero
     });
     await page.waitForTimeout(200);
     const vp = await page.evaluate(() => {
-      const m = document.querySelector('is-maps[engine="svg"]');
+      const m = document.querySelector('iswc-maps[engine="svg"]');
       return m.shadowRoot.querySelector('text.vp-text').textContent;
     });
     assert.match(vp, /-180\.00,-85\.00\s*→\s*180\.00,85\.00/, `vp-text debe actualizarse tras cambio de viewbox: "${vp}"`);
@@ -258,15 +258,15 @@ tests.push({
 });
 
 tests.push({
-  name: 'eventos: pointerdown dispara is-viewport con detalle completo',
+  name: 'eventos: pointerdown dispara iswc-viewport con detalle completo',
   run: async (page) => {
     await page.goto(URL, { waitUntil: 'domcontentloaded' });
     await waitReady(page, 'data-maps-ready');
     await page.waitForTimeout(200);
     const received = await page.evaluate(() => {
-      const m = document.querySelector('is-maps[engine="svg"]');
+      const m = document.querySelector('iswc-maps[engine="svg"]');
       return new Promise((resolve) => {
-        m.addEventListener('is-viewport', (e) => resolve(e.detail), { once: true });
+        m.addEventListener('iswc-viewport', (e) => resolve(e.detail), { once: true });
         // Esperar: los events de viewport se emiten en #render() tras el
         // connectCallback. El listener debe estar puesto antes del connect,
         // pero como ya estamos en ready, forzamos un re-render cambiando
@@ -275,7 +275,7 @@ tests.push({
         setTimeout(() => resolve(null), 500);
       });
     });
-    assert.ok(received, 'is-viewport debió dispararse');
+    assert.ok(received, 'iswc-viewport debió dispararse');
     assert.ok('minLon' in received && 'maxLon' in received && 'minLat' in received && 'maxLat' in received,
       `detail debe tener {minLon, minLat, maxLon, maxLat}: ${JSON.stringify(received)}`);
     assert.equal(typeof received.minLon, 'number');
@@ -285,7 +285,7 @@ tests.push({
 });
 
 tests.push({
-  name: 'eventos: click sobre marcador emite is-marker-click',
+  name: 'eventos: click sobre marcador emite iswc-marker-click',
   run: async (page) => {
     await page.goto(URL, { waitUntil: 'domcontentloaded' });
     await waitReady(page, 'data-maps-ready');
@@ -293,9 +293,9 @@ tests.push({
     // Importante: extraemos los datos del marker a valores planos antes de
     // cruzar la frontera CDP — Playwright no puede serializar Element.
     const info = await page.evaluate(() => {
-      const m = document.querySelector('is-maps[engine="svg"]');
+      const m = document.querySelector('iswc-maps[engine="svg"]');
       return new Promise((resolve) => {
-        m.addEventListener('is-marker-click', (e) => {
+        m.addEventListener('iswc-marker-click', (e) => {
           const marker = e.detail.marker;
           resolve({
             hasMarker: !!marker,
@@ -310,9 +310,9 @@ tests.push({
         setTimeout(() => resolve(null), 300);
       });
     });
-    assert.ok(info, 'is-marker-click debió dispararse');
+    assert.ok(info, 'iswc-marker-click debió dispararse');
     assert.equal(info.hasMarker, true, 'detail debe incluir el elemento marker');
-    assert.equal(info.tagName, 'IS-MAP-MARKER', `marker debe ser <is-map-marker> (got ${info.tagName})`);
+    assert.equal(info.tagName, 'IS-MAP-MARKER', `marker debe ser <iswc-map-marker> (got ${info.tagName})`);
     assert.equal(info.label, 'Bogotá', `label del primer marker debe ser Bogotá (got ${info.label})`);
   },
 });
@@ -325,17 +325,17 @@ tests.push({
     await page.waitForTimeout(200);
     // Quitamos interactive del SVG demo.
     await page.evaluate(() => {
-      const m = document.querySelector('is-maps[engine="svg"]');
+      const m = document.querySelector('iswc-maps[engine="svg"]');
       m.removeAttribute('interactive');
     });
     await page.waitForTimeout(100);
     const before = await page.evaluate(() => {
-      const m = document.querySelector('is-maps[engine="svg"]');
+      const m = document.querySelector('iswc-maps[engine="svg"]');
       return m.shadowRoot.querySelector('text.vp-text').textContent;
     });
     // Disparamos pointerdown/pointermove/pointerup sobre el canvas.
     await page.evaluate(() => {
-      const m = document.querySelector('is-maps[engine="svg"]');
+      const m = document.querySelector('iswc-maps[engine="svg"]');
       const canvas = m.shadowRoot.querySelector('.canvas');
       const r = canvas.getBoundingClientRect();
       canvas.dispatchEvent(new PointerEvent('pointerdown', {
@@ -350,7 +350,7 @@ tests.push({
     });
     await page.waitForTimeout(100);
     const after = await page.evaluate(() => {
-      const m = document.querySelector('is-maps[engine="svg"]');
+      const m = document.querySelector('iswc-maps[engine="svg"]');
       return m.shadowRoot.querySelector('text.vp-text').textContent;
     });
     assert.equal(before, after, `sin interactive el viewport NO debe cambiar (before="${before}", after="${after}")`);

@@ -1,7 +1,7 @@
 @import url('../_shared/popover-panel.css');
 @import './_surface-bar.css';
 
-/* is-window */
+/* iswc-window */
 :host {
   --_w: 380px;
   --_h: 260px;
@@ -10,32 +10,58 @@
     0 0 0 1px color-mix(in srgb, var(--iswc-text) 4%, transparent) inset,
     0 26px 60px rgba(0, 0, 0, .36);
   position: absolute;
-  left: 50%; top: 12%;
+  inset-inline-start: 50%;
+  inset-block-start: 12%;
   transform: translate(-50%, 0);
   display: block;
-  width: var(--_w);
-  height: var(--_h);
+  inline-size: var(--_w);
+  block-size: var(--_h);
   z-index: var(--z, 100);
   font: inherit;
   color: var(--iswc-text);
 }
 
-/* Global usa el viewport. position explicito gana sobre el default del scope. */
+/* Global usa el viewport. position explícito gana sobre el default del scope. */
 :host([scope="global"]) { position: fixed; }
 :host([position="absolute"]) { position: absolute; }
 :host([position="fixed"]) { position: fixed; }
 
 /* Pastilla: max 100px, abajo del contexto. Global se pega al viewport. */
 :host([data-state="minimized"]) {
-  width: max-content;
-  max-width: 100px;
-  height: auto;
-  min-width: 0;
+  inline-size: max-content;
+  max-inline-size: 100px;
+  block-size: auto;
+  min-inline-size: 0;
   cursor: pointer;
+
+  .root {
+    position: relative;
+    inset: auto;
+    inline-size: auto;
+    max-inline-size: 100px;
+    block-size: auto;
+    border-radius: 999px;
+  }
+
+  .header {
+    border-block-end: 0;
+    padding: .28rem .65rem;
+    cursor: pointer;
+  }
+
+  .title,
+  .title-wrap {
+    font-size: .78rem;
+    max-inline-size: 100px;
+  }
+
+  .body,
+  .resizer,
+  .controls { display: none; }
 }
 :host([data-state="minimized"][scope="global"]) { position: fixed; }
 
-/* Borde, radio, fondo y sombra vienen de `.is-popover-panel`. */
+/* Borde, radio, fondo y sombra vienen de `.iswc-popover-panel`. */
 .root {
   position: absolute;
   inset: 0;
@@ -44,7 +70,7 @@
   overflow: hidden;
 }
 
-/* La fila flex, el padding y el separador vienen de `.is-surface-bar`. */
+/* La fila flex, el padding y el separador vienen de `.iswc-surface-bar`. */
 .header {
   --iswc-surface-bar-gap: .35rem;
   --iswc-surface-bar-padding: .45rem .65rem;
@@ -63,7 +89,7 @@
   align-items: center;
   gap: .35rem;
   flex: 1 1 auto;
-  min-width: 0;
+  min-inline-size: 0;
 }
 
 .title {
@@ -76,18 +102,18 @@
 
 .controls { display: inline-flex; gap: 2px; }
 
-/* La caja pintada es el <button> interno de <is-button>, alcanzable por
-   ::part(button). Las reglas propias de is-button son del tipo
+/* La caja pintada es el <button> interno de <iswc-button>, alcanzable por
+   ::part(button). Las reglas propias de iswc-button son del tipo
    `:host([variant=…]) .btn` (0,2,0), así que hace falta llegar a esa
-   especificidad: `is-button.ctrl::part(button)` es (0,2,1) y gana. */
-is-button.ctrl {
+   especificidad: `iswc-button.ctrl::part(button)` es (0,2,1) y gana. */
+iswc-button.ctrl {
   --iswc-button-border-radius: 6px;
   font-size: .8rem;
 
   &::part(button) {
-    width: 1.85rem;
-    min-width: 1.85rem;
-    height: 1.65rem;
+    inline-size: 1.85rem;
+    min-inline-size: 1.85rem;
+    block-size: 1.65rem;
     padding: 0;
   }
 }
@@ -102,7 +128,10 @@ is-button.ctrl {
 
 .resizer {
   position: absolute;
-  right: 0; bottom: 0; width: 14px; height: 14px;
+  inset-inline-end: 0;
+  inset-block-end: 0;
+  inline-size: 14px;
+  block-size: 14px;
   cursor: nwse-resize;
   background:
     linear-gradient(135deg,
@@ -115,28 +144,3 @@ is-button.ctrl {
       color-mix(in srgb, var(--iswc-text) 25%, transparent) 85%,
       transparent 85%);
 }
-
-:host([data-state="minimized"]) .root {
-  position: relative;
-  inset: auto;
-  width: auto;
-  max-width: 100px;
-  height: auto;
-  border-radius: 999px;
-}
-
-:host([data-state="minimized"]) .header {
-  border-bottom: 0;
-  padding: .28rem .65rem;
-  cursor: pointer;
-}
-
-:host([data-state="minimized"]) .title,
-:host([data-state="minimized"]) .title-wrap {
-  font-size: .78rem;
-  max-width: 100px;
-}
-
-:host([data-state="minimized"]) .body,
-:host([data-state="minimized"]) .resizer,
-:host([data-state="minimized"]) .controls { display: none; }

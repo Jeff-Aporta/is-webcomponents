@@ -4,11 +4,11 @@ import { adoptCss, defineElement, emit } from '../../core/element.js';
 import { setStringAttr } from '../_shared/reflect.js';
 
 /**
- * <is-speech> — SpeechRecognition (dictado) + SpeechSynthesis (lectura).
+ * <iswc-speech> — SpeechRecognition (dictado) + SpeechSynthesis (lectura).
  *
  * Atributos: lang, text
  * Métodos: listen(), stop(), speak(text?), cancel()
- * Eventos: is-result { transcript, isFinal }, is-speak-end, is-error { message }
+ * Eventos: iswc-result { transcript, isFinal }, iswc-speak-end, iswc-error { message }
  *
  * Estados accesibles (F0.3 g12):
  *   role="region" aria-label aria-keyshortcuts
@@ -69,12 +69,12 @@ declare global {
   const TEMPLATE = document.createElement('template');
   TEMPLATE.innerHTML = /* html */ `
     <div class="bar" part="bar">
-      <is-button class="listen" variant="plain" type="button" aria-pressed="false" aria-label="Iniciar escucha" disabled>
-        <is-icon icon="mdi:microphone-outline"></is-icon>
-      </is-button>
-      <is-button class="speak" variant="plain" type="button" aria-label="Leer texto en voz alta" disabled>
-        <is-icon icon="mdi:volume-high"></is-icon>
-      </is-button>
+      <iswc-button class="listen" variant="plain" type="button" aria-pressed="false" aria-label="Iniciar escucha" disabled>
+        <iswc-icon icon="mdi:microphone-outline"></iswc-icon>
+      </iswc-button>
+      <iswc-button class="speak" variant="plain" type="button" aria-label="Leer texto en voz alta" disabled>
+        <iswc-icon icon="mdi:volume-high"></iswc-icon>
+      </iswc-button>
     </div>
     <p class="out" part="transcript" aria-live="polite"></p>
     <slot></slot>
@@ -85,7 +85,7 @@ declare global {
     return w.SpeechRecognition || w.webkitSpeechRecognition || null;
   }
 
-  class IsSpeech extends HTMLElement {
+  class IswcSpeech extends HTMLElement {
     static get observedAttributes(): string[] { return ['lang', 'text']; }
 
     /**
@@ -146,13 +146,13 @@ declare global {
 
     /**
      * F0.3 g12 [a11y/support]: si la Web Speech API no está disponible,
-     * marcamos los botones como `aria-disabled` y emitimos is-error al
+     * marcamos los botones como `aria-disabled` y emitimos iswc-error al
      * pulsar. Antes el click era silencioso.
      */
     #syncSupport(): void {
       const hasRec = !!recCtor();
       const hasSpeak = !!window.speechSynthesis;
-      // is-button no tiene disabled nativo, así que usamos aria-disabled.
+      // iswc-button no tiene disabled nativo, así que usamos aria-disabled.
       this.#listenBtn.setAttribute('aria-disabled', String(!hasRec));
       this.#speakBtn.setAttribute('aria-disabled', String(!hasSpeak));
       this.#listenBtn.setAttribute('title', hasRec ? 'Dictado (micrófono)' : 'Dictado no soportado en este navegador');
@@ -180,7 +180,7 @@ declare global {
     listen(): void {
       const Ctor = recCtor();
       if (!Ctor) {
-        emit(this, 'is-error', { message: 'SpeechRecognition no disponible' });
+        emit(this, 'iswc-error', { message: 'SpeechRecognition no disponible' });
         return;
       }
       this.stop();
@@ -200,11 +200,11 @@ declare global {
         }
         const transcript = `${finals}${inter}`.trim();
         this.#out.textContent = transcript;
-        emit(this, 'is-result', { transcript, isFinal: Boolean(finals) });
+        emit(this, 'iswc-result', { transcript, isFinal: Boolean(finals) });
       };
       rec.onerror = (ev: SpeechRecognitionErrorEvent) => {
         if (ev.error === 'no-speech' || ev.error === 'aborted') return;
-        emit(this, 'is-error', { message: ev.error || 'speech' });
+        emit(this, 'iswc-error', { message: ev.error || 'speech' });
       };
       rec.onend = () => {
         if (this.#listening) {
@@ -229,7 +229,7 @@ declare global {
     speak(raw?: string): void {
       const t = String(raw ?? this.text ?? this.#out.textContent ?? '').trim();
       if (!t || !window.speechSynthesis) {
-        if (!window.speechSynthesis) emit(this, 'is-error', { message: 'speechSynthesis no disponible' });
+        if (!window.speechSynthesis) emit(this, 'iswc-error', { message: 'speechSynthesis no disponible' });
         return;
       }
       window.speechSynthesis.cancel();
@@ -239,7 +239,7 @@ declare global {
       u.lang = this.lang;
       u.onend = () => {
         this.removeAttribute('aria-busy');
-        emit(this, 'is-speak-end');
+        emit(this, 'iswc-speak-end');
       };
       u.onerror = () => {
         this.removeAttribute('aria-busy');
@@ -259,5 +259,5 @@ declare global {
     }
   }
 
-  defineElement('is-speech', IsSpeech, 'IsSpeech');
+  defineElement('iswc-speech', IswcSpeech, 'IswcSpeech');
 })();

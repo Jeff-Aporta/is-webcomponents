@@ -1,5 +1,5 @@
 /**
- * dialog.test.ts — Tier A (12 aserciones) para `<is-dialog>`.
+ * dialog.test.ts — Tier A (12 aserciones) para `<iswc-dialog>`.
  *
  * Modal accesible con focus-trap, Escape, light-dismiss, restore de foco.
  * Delega ciclo de vida en ModalBase.
@@ -14,7 +14,7 @@ import { leerConBase } from '../_helpers.js';
 
 const HERE = dirname(fileURLToPath(import.meta.url));
 const ROOT = join(HERE, '..', '..', '..', '..', '..');
-const TAG = 'is-dialog';
+const TAG = 'iswc-dialog';
 const TS  = join(ROOT, 'src', 'components', 'layout', 'dialog.ts');
 const CSS = join(ROOT, 'src', 'components', 'layout', 'dialog.css');
 const JSON_PATH = join(ROOT, 'src', 'components', 'layout', 'dialog.json');
@@ -27,10 +27,10 @@ test('2. CSS hermano existe', async () => {
   assert.ok(existsSync(CSS));
 });
 
-test('3. JSON existe y respeta is-preview/v1', async () => {
+test('3. JSON existe y respeta iswc-preview/v1', async () => {
   const json = JSON.parse(readFileSync(JSON_PATH, 'utf8'));
   assert.equal(json.tag, TAG);
-  assert.equal(json.$schema, 'is-preview/v1');
+  assert.equal(json.$schema, 'iswc-preview/v1');
 });
 
 test('4. delega en ModalBase (focus-trap, Escape, restore)', async () => {
@@ -54,11 +54,11 @@ test('5. OBSERVED incluye open, label, without-header, light-dismiss, backdrop-v
   }
 });
 
-test('6. emite is-show, is-after-show, is-hide, is-after-hide', async () => {
+test('6. emite iswc-show, iswc-after-show, iswc-hide, iswc-after-hide', async () => {
   // Los eventos se emiten desde ModalBase; leerConBase los concatena.
   const { leerConBase } = await import('../_helpers.js');
   const src = leerConBase('src/components/layout/dialog.ts');
-  for (const ev of ['is-show', 'is-after-show', 'is-hide', 'is-after-hide']) {
+  for (const ev of ['iswc-show', 'iswc-after-show', 'iswc-hide', 'iswc-after-hide']) {
     assert.ok(src.includes(`'${ev}'`) || src.includes(`"${ev}"`), `debe emitir ${ev}`);
   }
 });
@@ -75,7 +75,7 @@ test('8. backdrop-variant acepta "none" | "basic"', async () => {
   assert.ok(/['"]none['"]/.test(src) && /['"]basic['"]/.test(src));
 });
 
-test('9. integra con is-icon e is-button (chrome)', async () => {
+test('9. integra con iswc-icon e iswc-button (chrome)', async () => {
   const src = readFileSync(TS, 'utf8');
   // Side-effect imports `import '../media/icon.js'` y `import '../actions/button.js'`.
   assert.ok(/media[\\/]+icon/.test(src), 'importa icon');
@@ -101,5 +101,5 @@ test('11. atributo open es reflected (getter/setter + toggleAttribute)', async (
 
 test('12. custom element registrado', async () => {
   const src = readFileSync(TS, 'utf8');
-  assert.ok(/defineElement\s*\(\s*['"]is-dialog['"]/.test(src));
+  assert.ok(/defineElement\s*\(\s*['"]iswc-dialog['"]/.test(src));
 });

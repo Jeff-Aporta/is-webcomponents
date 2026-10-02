@@ -4,7 +4,7 @@ import { apply, isComplete } from './masks-tokens.js';
 import { setStringAttr } from '../_shared/reflect.js';
 
 /**
- * <is-masked-input> — Input con formato aplicado (tarjeta de crédito, fecha,
+ * <iswc-masked-input> — Input con formato aplicado (tarjeta de crédito, fecha,
  * teléfono, etc.). Tokeniza un patrón y aplica `apply()` al valor crudo en cada
  * cambio del campo.
  *
@@ -26,7 +26,7 @@ import { setStringAttr } from '../_shared/reflect.js';
  *   start, end      adornos
  *
  * Eventos
- *   is-input, is-change, is-complete (bubbles + composed)
+ *   iswc-input, iswc-change, iswc-complete (bubbles + composed)
  *
  * Token CSS: --iswc-field-width
  */
@@ -37,7 +37,7 @@ import { setStringAttr } from '../_shared/reflect.js';
     'variant', 'invalid',
   ];
 
-  class IsMaskedInput extends HTMLElement {
+  class IswcMaskedInput extends HTMLElement {
     static get observedAttributes(): string[] { return OBSERVED; }
 
     #internals: ElementInternals | null;
@@ -62,7 +62,7 @@ import { setStringAttr } from '../_shared/reflect.js';
       this.#input.addEventListener('blur', () => this.#syncValidity());
       // El input interno vive en shadow: su `change` no cruza el límite, hay
       // que reemitirlo con el vocabulario de la librería.
-      this.#input.addEventListener('change', () => emit(this, 'is-change', { value: this.value }));
+      this.#input.addEventListener('change', () => emit(this, 'iswc-change', { value: this.value }));
       this.addEventListener('slotchange', () => this.#syncSlots());
     }
 
@@ -104,7 +104,7 @@ import { setStringAttr } from '../_shared/reflect.js';
       this.#suppress = false;
       this.#syncComplete();
       if (this.#mounted) {
-        emit(this, 'is-input');
+        emit(this, 'iswc-input');
         setFormValue(this.#internals, next);
       }
     }
@@ -134,7 +134,7 @@ import { setStringAttr } from '../_shared/reflect.js';
       const newCaret = Math.min(next.length, caret + (next.length - before.length));
       try { this.#input.setSelectionRange(newCaret, newCaret); } catch { /* noop */ }
       this.#syncComplete();
-      emit(this, 'is-input');
+      emit(this, 'iswc-input');
       setFormValue(this.#internals, next);
     }
 
@@ -168,7 +168,7 @@ import { setStringAttr } from '../_shared/reflect.js';
     #syncComplete(): void {
       const complete = this.complete;
       setCustomState(this.#internals, 'complete', complete);
-      if (complete) emit(this, 'is-complete');
+      if (complete) emit(this, 'iswc-complete');
     }
 
     #syncValidity(): void {
@@ -180,5 +180,5 @@ import { setStringAttr } from '../_shared/reflect.js';
     }
   }
 
-  defineElement('is-masked-input', IsMaskedInput);
+  defineElement('iswc-masked-input', IswcMaskedInput);
 })();

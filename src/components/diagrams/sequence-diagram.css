@@ -7,14 +7,9 @@
   position: relative;
   box-sizing: border-box;
   font-family: var(--iswc-sans, ui-sans-serif, system-ui, sans-serif);
-}
 
-:host([hidden]) { display: none; }
-
-/* La variante viewer llena el contenedor del lightbox. */
-:host([color="viewer"]) {
-  width: 100%;
-  height: 100%;
+  &[hidden] { display: none; }
+  &[color="viewer"] { width: 100%; height: 100%; }
 }
 
 .wrap {
@@ -36,25 +31,27 @@
   min-height: 0;
   display: flex;
   flex-direction: column;
-}
 
-.wrap.is-viewer {
-  width: 100%;
-  height: 100%;
-  display: flex;
-  flex-direction: column;
-  border: 0;
-  padding: 0;
-  /* El visor pone el cursor de arrastre en su escenario; no taparlo. */
-  cursor: inherit;
-}
+  &.iswc-viewer {
+    width: 100%;
+    height: 100%;
+    display: flex;
+    flex-direction: column;
+    border: 0;
+    padding: 0;
+    /* El visor pone el cursor de arrastre en su escenario; no taparlo. */
+    cursor: inherit;
+  }
 
-.wrap[data-empty]::after {
-  content: 'Diagrama de secuencia no disponible (payload inválido).';
-  display: block;
-  padding: 1rem;
-  font-size: 0.875em;
-  color: var(--iswc-text-soft, #a8b0bb);
+  &[data-empty]::after {
+    content: 'Diagrama de secuencia no disponible (payload inválido).';
+    display: block;
+    padding: 1rem;
+    font-size: 0.875em;
+    color: var(--iswc-text-soft, #a8b0bb);
+  }
+
+  &.iswc-hover-msg .seq-lifeline { opacity: 0.85; }
 }
 
 .slot-hidden { display: none !important; }
@@ -69,31 +66,23 @@
   max-height: 100%;
   margin: auto;
   overflow: hidden;
-}
-
-/* En el visor manda el contenedor: preserveAspectRatio centra y deja franjas. */
-.wrap.is-viewer .seq-svg {
-  height: 100%;
-  max-width: none;
-  width: 100%;
+  /* En el visor manda el contenedor: preserveAspectRatio centra y deja franjas. */
+  .wrap.iswc-viewer & {
+    height: 100%;
+    max-width: none;
+    width: 100%;
+  }
 }
 
 /* ── Mensajes: atenuar los no enfocados al hacer hover ── */
 
 .seq-msg {
   transition: opacity 0.18s ease;
-}
-
-.seq-msg.is-dim {
-  opacity: 0.42;
+  &.iswc-dim { opacity: 0.42; }
 }
 
 .seq-actor {
   transition: opacity 0.18s ease;
-}
-
-.wrap.is-hover-msg .seq-lifeline {
-  opacity: 0.85;
 }
 
 .seq-legend__item {
@@ -101,24 +90,26 @@
 }
 
 /* Iconos inline dentro de las etiquetas de mensaje/actor. */
-.seq-label .tk-inline-icon,
-.seq-label is-icon.tk-inline-icon {
-  width: 0.95em;
-  height: 0.95em;
-  vertical-align: -0.12em;
-  margin: 0 0.22em;
+.seq-label {
+  :is(.tk-inline-icon, iswc-icon.tk-inline-icon) {
+    width: 0.95em;
+    height: 0.95em;
+    vertical-align: -0.12em;
+    margin: 0 0.22em;
+  }
 }
 
-.seq-actor-label .tk-inline-icon,
-.seq-actor-label is-icon.tk-inline-icon {
-  width: 1em;
-  height: 1em;
-  vertical-align: -0.14em;
-  margin-right: 0.3em;
+.seq-actor-label {
+  :is(.tk-inline-icon, iswc-icon.tk-inline-icon) {
+    width: 1em;
+    height: 1em;
+    vertical-align: -0.14em;
+    margin-inline-end: 0.3em;
+  }
 }
 
 /* El visor es opt-in: sin `open-on-click` el componente no abre nada,
    asi que tampoco debe insinuar con el cursor que se puede hacer clic. */
-:host([open-on-click]) .wrap {
-  cursor: zoom-in;
+:host([open-on-click]) {
+  .wrap { cursor: zoom-in; }
 }

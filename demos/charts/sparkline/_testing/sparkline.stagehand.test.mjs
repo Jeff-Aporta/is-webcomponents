@@ -23,7 +23,7 @@ const DEMO = {
 async function checkDeterministic(page) {
   await page.waitForTimeout(300);
   const data = await page.evaluate(() => {
-    return [...document.querySelectorAll('is-sparkline')].map((s, idx) => {
+    return [...document.querySelectorAll('iswc-sparkline')].map((s, idx) => {
       const svg = s.shadowRoot?.querySelector('svg');
       const svgRect = svg?.getBoundingClientRect();
       const marks = [...s.shadowRoot.querySelectorAll('path, circle')].map((m) => {

@@ -1,19 +1,19 @@
 {
-  "$schema": "is-preview/v1",
-  "tag": "is-date-picker",
+  "$schema": "iswc-preview/v1",
+  "tag": "iswc-date-picker",
   "category": "forms",
-  "title": "<is-date-picker>",
+  "title": "<iswc-date-picker>",
   "titleHtml": true,
-  "storageKey": "docs-is-date-picker",
+  "storageKey": "docs-iswc-date-picker",
   "sections": [
     {
       "id": "intro",
       "title": "Uso",
-      "lede": "Calendario inline (DateCalendar de <a href=\"https://mui.com/x/react-date-pickers/\" target=\"_blank\" rel=\"noopener\">MUI X</a>). Tres vistas (día, mes, año), teclado, números de semana y reglas de deshabilitado. El mes y el año del encabezado abren un <code>is-dropdown</code>.",
+      "lede": "Calendario inline (DateCalendar de <a href=\"https://mui.com/x/react-date-pickers/\" target=\"_blank\" rel=\"noopener\">MUI X</a>). Tres vistas (día, mes, año), teclado, números de semana y reglas de deshabilitado. El mes y el año del encabezado abren un <code>iswc-dropdown</code>.",
       "blocks": [
         {
           "kind": "demo",
-          "html": "<is-date-picker id=\"dp\" value=\"2026-07-30\" locale=\"es\"></is-date-picker>",
+          "html": "<iswc-date-picker id=\"dp\" value=\"2026-07-30\" locale=\"es\"></iswc-date-picker>",
           "controls": [
             {
               "control": "select",
@@ -97,7 +97,7 @@
       "blocks": [
         {
           "kind": "demo",
-          "html": "<is-date-picker mode=\"range\" min=\"2026-01-01\" max=\"2026-12-31\" locale=\"es\"></is-date-picker>"
+          "html": "<iswc-date-picker mode=\"range\" min=\"2026-01-01\" max=\"2026-12-31\" locale=\"es\"></iswc-date-picker>"
         }
       ]
     },
@@ -108,7 +108,7 @@
       "blocks": [
         {
           "kind": "demo",
-          "html": "<div>\r\n            <div class=\"demo-label\">open-to=\"year\"</div>\r\n            <is-date-picker locale=\"es\" open-to=\"year\" value=\"2026-07-30\"></is-date-picker>\r\n          </div>\r\n          <div>\r\n            <div class=\"demo-label\">views=\"month year\"</div>\r\n            <is-date-picker locale=\"es\" views=\"month year\" view=\"month\" value=\"2026-07-01\"></is-date-picker>\r\n          </div>"
+          "html": "<div>\r\n            <div class=\"demo-label\">open-to=\"year\"</div>\r\n            <iswc-date-picker locale=\"es\" open-to=\"year\" value=\"2026-07-30\"></iswc-date-picker>\r\n          </div>\r\n          <div>\r\n            <div class=\"demo-label\">views=\"month year\"</div>\r\n            <iswc-date-picker locale=\"es\" views=\"month year\" view=\"month\" value=\"2026-07-01\"></iswc-date-picker>\r\n          </div>"
         }
       ]
     },
@@ -119,7 +119,7 @@
       "blocks": [
         {
           "kind": "demo",
-          "html": "<div>\r\n            <div class=\"demo-label\">domingo + outside + week numbers</div>\r\n            <is-date-picker locale=\"en-US\" first-day-of-week=\"0\" show-outside-days fixed-weeks show-week-numbers value=\"2026-07-15\"></is-date-picker>\r\n          </div>\r\n          <div>\r\n            <div class=\"demo-label\">fines de semana off</div>\r\n            <is-date-picker locale=\"es\" disabled-days=\"0 6\" value=\"2026-07-15\"></is-date-picker>\r\n          </div>"
+          "html": "<div>\r\n            <div class=\"demo-label\">domingo + outside + week numbers</div>\r\n            <iswc-date-picker locale=\"en-US\" first-day-of-week=\"0\" show-outside-days fixed-weeks show-week-numbers value=\"2026-07-15\"></iswc-date-picker>\r\n          </div>\r\n          <div>\r\n            <div class=\"demo-label\">fines de semana off</div>\r\n            <iswc-date-picker locale=\"es\" disabled-days=\"0 6\" value=\"2026-07-15\"></iswc-date-picker>\r\n          </div>"
         }
       ]
     },
@@ -129,25 +129,25 @@
       "blocks": [
         {
           "kind": "demo",
-          "html": "<div>\r\n            <div class=\"demo-label\">disable-past</div>\r\n            <is-date-picker locale=\"es\" disable-past></is-date-picker>\r\n          </div>\r\n          <div>\r\n            <div class=\"demo-label\">disabled-dates</div>\r\n            <is-date-picker locale=\"es\" value=\"2026-07-01\" disabled-dates=\"2026-07-04 2026-07-05 2026-07-20\"></is-date-picker>\r\n          </div>"
+          "html": "<div>\r\n            <div class=\"demo-label\">disable-past</div>\r\n            <iswc-date-picker locale=\"es\" disable-past></iswc-date-picker>\r\n          </div>\r\n          <div>\r\n            <div class=\"demo-label\">disabled-dates</div>\r\n            <iswc-date-picker locale=\"es\" value=\"2026-07-01\" disabled-dates=\"2026-07-04 2026-07-05 2026-07-20\"></iswc-date-picker>\r\n          </div>"
         }
       ]
     },
     {
       "id": "standalone",
       "title": "Mes y año sueltos",
-      "lede": "<code>is-month-calendar</code> e <code>is-year-calendar</code> también se usan solos.",
+      "lede": "<code>iswc-month-calendar</code> e <code>iswc-year-calendar</code> también se usan solos.",
       "blocks": [
         {
           "kind": "demo",
-          "html": "<is-month-calendar year=\"2026\" value=\"2026-07\" locale=\"es\" style=\"width:16em\"></is-month-calendar>\r\n          <is-year-calendar value=\"2026\" min=\"2010\" max=\"2035\" style=\"width:16em\"></is-year-calendar>"
+          "html": "<iswc-month-calendar year=\"2026\" value=\"2026-07\" locale=\"es\" style=\"width:16em\"></iswc-month-calendar>\r\n          <iswc-year-calendar value=\"2026\" min=\"2010\" max=\"2035\" style=\"width:16em\"></iswc-year-calendar>"
         }
       ]
     },
     {
       "id": "reference",
       "title": "Referencia",
-      "lede": "Eventos: <code>is-change</code>, <code>is-view-change</code>, <code>is-month-change</code>, <code>is-day-hover</code>. Métodos: <code>navigate(n)</code>, <code>focusDate(iso)</code>, <code>clear()</code>.",
+      "lede": "Eventos: <code>iswc-change</code>, <code>iswc-view-change</code>, <code>iswc-month-change</code>, <code>iswc-day-hover</code>. Métodos: <code>navigate(n)</code>, <code>focusDate(iso)</code>, <code>clear()</code>.",
       "blocks": [
         {
           "kind": "table",

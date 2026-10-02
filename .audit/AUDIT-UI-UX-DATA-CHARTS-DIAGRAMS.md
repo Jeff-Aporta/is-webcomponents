@@ -3,7 +3,7 @@
 > Componentes auditados: 10 data + 13 charts + 16 diagrams = **39** elementos.
 > Tests existentes: solo hacen **análisis estático del source** (`tieneShadow`, `extraerObservados`, `extraerEventos`, `extraerSlots`, `extraerParts`, `usaResizeObserver`, `usaMutationObserver`, `tieneEdgeCaseGuards`, `adoptaCss`, `cleanupCompleto`, `tieneAccesibilidad`, `leeJsonScript`, `parseaJson`, `estaRegistrado`, `tieneJsDoc`, `tieneSvg`).
 >
-> Motor común que cubre la mayoría de los diagramas: `src/components/_shared/diagram-element-base.ts` (scaffold, MO/RO, theme sync, lightbox), y todos los charts usan el motor `src/components/charts/chart.ts` (clase base `<is-chart>` con atributos `type, label, legend-position, index-axis, min, max, grid, stacked, without-animation, without-legend, without-tooltip, x-label, y-label, color, open-on-click`; eventos `is-render`, `is-turtle-state`, `is-open-viewer`; parts `base`, `canvas`, `legend`, `tooltip`; tooltip con `dg-tooltip__title/row/value` y `role="status"`; leyenda con `<button>` + `aria-pressed`; clamp de tooltip en bordes via `transform: translate(...)`; `open-on-click` abre `<is-diagram-lightbox>` con `kind`).
+> Motor común que cubre la mayoría de los diagramas: `src/components/_shared/diagram-element-base.ts` (scaffold, MO/RO, theme sync, lightbox), y todos los charts usan el motor `src/components/charts/chart.ts` (clase base `<iswc-chart>` con atributos `type, label, legend-position, index-axis, min, max, grid, stacked, without-animation, without-legend, without-tooltip, x-label, y-label, color, open-on-click`; eventos `iswc-render`, `iswc-turtle-state`, `iswc-open-viewer`; parts `base`, `canvas`, `legend`, `tooltip`; tooltip con `dg-tooltip__title/row/value` y `role="status"`; leyenda con `<button>` + `aria-pressed`; clamp de tooltip en bordes via `transform: translate(...)`; `open-on-click` abre `<iswc-diagram-lightbox>` con `kind`).
 >
 > **Por eso, casi nada de las propuestas siguientes está cubierto por los tests existentes.** Los actuales verifican que el código DECLARA capacidades (sombra, observados, eventos, slots, parts, MO/RO, JSON). Las siguientes verifican que el usuario puede efectivamente INTERACTUAR con esas capacidades: clicks, drags, teclas, focus, scroll, hover, gestos, etc.
 
@@ -11,76 +11,76 @@
 
 ## DATA · 10 componentes
 
-### `<is-ag-grid>`
+### `<iswc-ag-grid>`
 
-Archivo: `src/components/data/ag-grid.ts` (~82 KB). Wrapper de AG Grid Community con la mayor superficie de interacción de toda la librería. Atributos observados cubren decenas de casos (column-set, theme, row-selection, row-height, density, pagination, pagination-page-size, sort-mode, filter-mode, suppress-row-click-selection, suppress-column-move, suppress-column-resize, suppress-menu, animate-rows, row-group-panel, side-bar, status-bar, suppress-row-hover-highlight, etc.). Eventos: `is-grid-ready`, `is-cell-clicked`, `is-cell-double-clicked`, `is-cell-focused`, `is-cell-value-changed`, `is-column-moved`, `is-column-pinned`, `is-column-resized`, `is-column-visible`, `is-filter-changed`, `is-grid-size-changed`, `is-model-updated`, `is-pagination-changed`, `is-row-clicked`, `is-row-data-changed`, `is-row-data-updated`, `is-row-double-clicked`, `is-row-group-opened`, `is-row-selected`, `is-selection-changed`, `is-sort-changed`, `is-tool-panel-visible-changed`.
+Archivo: `src/components/data/ag-grid.ts` (~82 KB). Wrapper de AG Grid Community con la mayor superficie de interacción de toda la librería. Atributos observados cubren decenas de casos (column-set, theme, row-selection, row-height, density, pagination, pagination-page-size, sort-mode, filter-mode, suppress-row-click-selection, suppress-column-move, suppress-column-resize, suppress-menu, animate-rows, row-group-panel, side-bar, status-bar, suppress-row-hover-highlight, etc.). Eventos: `iswc-grid-ready`, `iswc-cell-clicked`, `iswc-cell-double-clicked`, `iswc-cell-focused`, `iswc-cell-value-changed`, `iswc-column-moved`, `iswc-column-pinned`, `iswc-column-resized`, `iswc-column-visible`, `iswc-filter-changed`, `iswc-grid-size-changed`, `iswc-model-updated`, `iswc-pagination-changed`, `iswc-row-clicked`, `iswc-row-data-changed`, `iswc-row-data-updated`, `iswc-row-double-clicked`, `iswc-row-group-opened`, `iswc-row-selected`, `iswc-selection-changed`, `iswc-sort-changed`, `iswc-tool-panel-visible-changed`.
 
 #### Tests existentes
-- Solo cobertura estructural: shadow DOM, observados mínimos, eventos mínimos, parts `toolbar/viewport/header/body/row/cell/footer`, edge cases, adopta CSS, integración con `is-button/is-input/is-select/is-option/is-checkbox`, setters `columns`/`rows`, registrado, cleanup.
+- Solo cobertura estructural: shadow DOM, observados mínimos, eventos mínimos, parts `toolbar/viewport/header/body/row/cell/footer`, edge cases, adopta CSS, integración con `iswc-button/iswc-input/iswc-select/iswc-option/iswc-checkbox`, setters `columns`/`rows`, registrado, cleanup.
 
 #### Propuestas UI/UX nuevas
-1. **Click en header ordena una columna por la primera vez** — click sobre `<div class="ag-header-cell-text">` muestra el triángulo `ag-sort-indicator-container` apuntando arriba, dispara `sort: 'asc'`, emite `is-sort-changed` con `{column, direction}`, y la columna aparece con clase `ag-header-cell-sorted-asc`.
+1. **Click en header ordena una columna por la primera vez** — click sobre `<div class="ag-header-cell-text">` muestra el triángulo `ag-sort-indicator-container` apuntando arriba, dispara `sort: 'asc'`, emite `iswc-sort-changed` con `{column, direction}`, y la columna aparece con clase `ag-header-cell-sorted-asc`.
 2. **Segundo click en la misma columna invierte a `desc`, tercer click la limpia (`none`)** — repetir 3 veces y verificar las 3 transiciones de icono (`asc → desc → none`).
-3. **Shift-click en segundo header hace multi-orden (sort priority 2)** — debe aparecer un número `1`, `2`, `3` al lado de cada indicador según el orden; emitir `is-sort-changed` con array de varios criterios; verificar que el body reorganiza respetando `sortIndex`.
+3. **Shift-click en segundo header hace multi-orden (sort priority 2)** — debe aparecer un número `1`, `2`, `3` al lado de cada indicador según el orden; emitir `iswc-sort-changed` con array de varios criterios; verificar que el body reorganiza respetando `sortIndex`.
 4. **Click derecho en header abre el menú de columna con `Set Filter`, `Pin`, `Auto-size`, `Group` …** — verificar submenús anidados (Pin Left/Right/None) y `Apply/Reset` en el filter modal.
-5. **Arrastrar el separador entre dos columnas redimensiona** — mousedown en `.ag-header-cell-resize` + drag + mouseup; verificar `is-column-resized` con `{column, newWidth}` y `col.getActualWidth()` cambia; doble-click adyacente ejecuta `autoSizeColumn`.
-6. **Drag de un header sobre la zona `row-group-panel` agrupa la columna** — soltar muestra el chip "Grouped by …" arriba; expandir/colapsar el grupo con click alterna `is-row-group-opened`.
-7. **Selección simple: click fila → row selected, emite `is-row-clicked`; clic en otra fila la cambia** — verificar `gridApi.getSelectedNodes().length === 1`.
+5. **Arrastrar el separador entre dos columnas redimensiona** — mousedown en `.ag-header-cell-resize` + drag + mouseup; verificar `iswc-column-resized` con `{column, newWidth}` y `col.getActualWidth()` cambia; doble-click adyacente ejecuta `autoSizeColumn`.
+6. **Drag de un header sobre la zona `row-group-panel` agrupa la columna** — soltar muestra el chip "Grouped by …" arriba; expandir/colapsar el grupo con click alterna `iswc-row-group-opened`.
+7. **Selección simple: click fila → row selected, emite `iswc-row-clicked`; clic en otra fila la cambia** — verificar `gridApi.getSelectedNodes().length === 1`.
 8. **Selección múltiple: Ctrl+click añade filas sin desmarcar las anteriores** — `selectionChanged` fired con N filas; Shift+click extiende el rango desde el último ancla (`lastClickedRow`).
 9. **Selección total con Ctrl+A y deselección con Ctrl+Shift+A** — `gridApi.selectAllFiltered()` versus `deselectAll()`; checkbox del header refleja estado `indeterminate` cuando hay selección parcial.
-10. **Fila de filtros: teclear en un input de columna filtra en vivo (mode: `quickFilter`)** — escribe "abc", verifica `is-filter-changed` y las filas visibles. Click en la `x` del input limpia el filtro.
+10. **Fila de filtros: teclear en un input de columna filtra en vivo (mode: `quickFilter`)** — escribe "abc", verifica `iswc-filter-changed` y las filas visibles. Click en la `x` del input limpia el filtro.
 11. **Paginación: click en página 3 +100 filas** — input "current page" acepta el número, Enter navega; ellipsis `…` cuando hay >7 páginas; `Last/First` con un solo click salta al final/inicio.
 12. **Fila virtual: scroll de la rueda del ratón (wheel) por 10 000 filas sin lag perceptible** — el viewport debe mantener el FPS (requestAnimationFrame budget); tras scroll, la fila visible debe traer sus datos, no quedarse en blanco; el atributo `aria-rowindex` refleja el índice lógico (no el viewport index).
-13. **Doble-click en celda editable abre el editor** — `<input class="ag-input-field-input">` recibe foco, `is-edit-start` emitido; Escape revierte; Enter o Tab commitea y emite `is-row-update`; click fuera también commitea con `commit=true`.
-14. **Pegar `Ctrl+V` desde el portapapeles en una celda o rango** — pegado de TSV pega por filas/columnas si el rango está seleccionado; emite `is-cell-value-changed` por cada celda.
-15. **`suppressRowClickSelection=true` cambia comportamiento: solo el checkbox selecciona** — click en el cuerpo NO emite `is-selection-changed`.
-16. **`rowSelection='multiple'` con `enableRangeSelection` permite drag-rectangle para selección masiva** — emite `is-range-selection-changed` con `start/end row indices`.
-17. **Side panel: toggle de "Columns"/"Filters" en toolbar** — emite `is-tool-panel-visible-changed`; al cerrarse, la barra lateral colapsa con animación; el botón cambia `aria-pressed`.
-18. **Status bar con conteo de selección** — seleccionar 5 filas actualiza el contador "5 of 1,234 selected" y aparece el botón "Clear" que llama `deselectAll()` y emite `is-selection-changed` con array vacío.
+13. **Doble-click en celda editable abre el editor** — `<input class="ag-input-field-input">` recibe foco, `iswc-edit-start` emitido; Escape revierte; Enter o Tab commitea y emite `iswc-row-update`; click fuera también commitea con `commit=true`.
+14. **Pegar `Ctrl+V` desde el portapapeles en una celda o rango** — pegado de TSV pega por filas/columnas si el rango está seleccionado; emite `iswc-cell-value-changed` por cada celda.
+15. **`suppressRowClickSelection=true` cambia comportamiento: solo el checkbox selecciona** — click en el cuerpo NO emite `iswc-selection-changed`.
+16. **`rowSelection='multiple'` con `enableRangeSelection` permite drag-rectangle para selección masiva** — emite `iswc-range-selection-changed` con `start/end row indices`.
+17. **Side panel: toggle de "Columns"/"Filters" en toolbar** — emite `iswc-tool-panel-visible-changed`; al cerrarse, la barra lateral colapsa con animación; el botón cambia `aria-pressed`.
+18. **Status bar con conteo de selección** — seleccionar 5 filas actualiza el contador "5 of 1,234 selected" y aparece el botón "Clear" que llama `deselectAll()` y emite `iswc-selection-changed` con array vacío.
 
 ---
 
-### `<is-data-grid>`
+### `<iswc-data-grid>`
 
-Archivo: `src/components/data/data-grid.ts` (~130 KB). Wrapper estilo MUI X Data Grid: propiedades `columns`/`rows`, atributos `density, pagination, page-size, page-size-options, editable, show-toolbar, quick-filter, header-filters, hide-footer, list-view, tree-data, virtualize, column-resize, column-reorder, column-hide, multi-sort, etc. Eventos: `is-sort-change`, `is-filter-change`, `is-page-change`, `is-select`, `is-row-click`, `is-edit-start`, `is-edit-stop`, `is-row-update`. Parts: `toolbar, viewport, header, body, row, cell, footer`.
+Archivo: `src/components/data/data-grid.ts` (~130 KB). Wrapper estilo MUI X Data Grid: propiedades `columns`/`rows`, atributos `density, pagination, page-size, page-size-options, editable, show-toolbar, quick-filter, header-filters, hide-footer, list-view, tree-data, virtualize, column-resize, column-reorder, column-hide, multi-sort, etc. Eventos: `iswc-sort-change`, `iswc-filter-change`, `iswc-page-change`, `iswc-select`, `iswc-row-click`, `iswc-edit-start`, `iswc-edit-stop`, `iswc-row-update`. Parts: `toolbar, viewport, header, body, row, cell, footer`.
 
 #### Tests existentes
 - Ya listados arriba en ag-grid. Mismo patrón estático.
 
 #### Propuestas UI/UX nuevas
 1. **Toolbar con `quick-filter`: al teclear 3 caracteres en <input>, se filtran las filas en <16 ms para 1 000 filas** — verificar DOM estable (mismas instancias de celda, no re-mounts); el contador del footer "Showing X of Y" se actualiza.
-2. **Click en el icono de filtro (`filter`) de una columna abre un popover con 3 modos (contains / equals / starts-with) + valor + Apply/Clear** — emite `is-filter-change` con `{column, operator, value}`; el icono cambia de gris a color de acento cuando hay filtro activo en esa columna.
-3. **Header resizable: drag del separador con pointer-capture** — modificar `width`, persiste en el resize, emitir `is-column-resize`; doble-click adyacente hace `autoSize`; el cursor `col-resize` aparece solo sobre el handle.
-4. **Column reorder: arrastrar `<th>` y soltar entre dos columnas** — animación FLIP/transition visible; `is-column-move` con `{from, to}`; la fila de filtros sigue a la columna cuando el orden cambia.
+2. **Click en el icono de filtro (`filter`) de una columna abre un popover con 3 modos (contains / equals / starts-with) + valor + Apply/Clear** — emite `iswc-filter-change` con `{column, operator, value}`; el icono cambia de gris a color de acento cuando hay filtro activo en esa columna.
+3. **Header resizable: drag del separador con pointer-capture** — modificar `width`, persiste en el resize, emitir `iswc-column-resize`; doble-click adyacente hace `autoSize`; el cursor `col-resize` aparece solo sobre el handle.
+4. **Column reorder: arrastrar `<th>` y soltar entre dos columnas** — animación FLIP/transition visible; `iswc-column-move` con `{from, to}`; la fila de filtros sigue a la columna cuando el orden cambia.
 5. **Column hide/show: click derecho abre menú contextual "Hide/Hide others/Show all"** — desaparece/recupera la columna; si todas las columnas quedan ocultas, el body muestra `<empty-state>Dragn a column here</empty-state>` (drag-n-drop de Columns panel).
-6. **Page change: click en `Next` avanza `pageSize` filas; input "Page X of Y" acepta valores y al Enter hace goto con clamp** — emite `is-page-change` con `{page, pageSize}`; `First/Last` saltan a 1/N.
-7. **Multi-sort con Shift+click apila criterios** — indicadores numerados `1, 2` aparecen en los headers ordenados; `is-sort-change` con array.
-8. **Selección single/multi con checkbox en la primera columna + click en la fila** — emitir `is-select`; `aria-selected="true"` y visualmente la fila gana fondo `--row-selected`.
+6. **Page change: click en `Next` avanza `pageSize` filas; input "Page X of Y" acepta valores y al Enter hace goto con clamp** — emite `iswc-page-change` con `{page, pageSize}`; `First/Last` saltan a 1/N.
+7. **Multi-sort con Shift+click apila criterios** — indicadores numerados `1, 2` aparecen en los headers ordenados; `iswc-sort-change` con array.
+8. **Selección single/multi con checkbox en la primera columna + click en la fila** — emitir `iswc-select`; `aria-selected="true"` y visualmente la fila gana fondo `--row-selected`.
 9. **Pagination ellipsis cuando totalPages > 7** — renderizar 1 … 4 5 6 … 12; click en `…` salta ±5.
 10. **Virtual scroll: scroll con la rueda por 100 000 filas** — mantener el scrollTop en el viewport (no perder posición al recargar); las filas mostradas se reciclan (DOM estable); el header sticky debe permanecer arriba.
-11. **Edición inline: doble-click en una celda `editable=true` abre el `<input>` enfocado; Enter confirma, Escape revierte** — emite `is-edit-start`/`is-row-update`; tab navega a la siguiente celda con `commit`.
-12. **Tree data: click en la flecha de la fila expande/colapsa hijos** — animación altura; emite `is-row-toggle`; aria-expanded del chevron cambia; persistencia del estado al refrescar.
+11. **Edición inline: doble-click en una celda `editable=true` abre el `<input>` enfocado; Enter confirma, Escape revierte** — emite `iswc-edit-start`/`iswc-row-update`; tab navega a la siguiente celda con `commit`.
+12. **Tree data: click en la flecha de la fila expande/colapsa hijos** — animación altura; emite `iswc-row-toggle`; aria-expanded del chevron cambia; persistencia del estado al refrescar.
 13. **Density `compact/comfortable/spacious` cambia `line-height` y `padding`** — verificar métricas CSS; al cambiar, altura del row pasa por CSS variable.
-14. **Footer: contador "X selected" + botón "Clear" sólo visible cuando hay selección** — al limpiar emite `is-select` con array vacío.
+14. **Footer: contador "X selected" + botón "Clear" sólo visible cuando hay selección** — al limpiar emite `iswc-select` con array vacío.
 15. **Columna con `renderCell`: mostrar contenido custom (chip, avatar, link)** — DOM del cell se reemplaza; click en el link no selecciona la fila (stopPropagation).
 16. **Foco accesible: Tab entra al grid, F2 enfoca la primera celda, flechas mueven el focus** — `aria-rowindex` / `aria-colindex` reflejan la posición lógica.
 
 ---
 
-### `<is-kanban>` (3 CE: board, column, card)
+### `<iswc-kanban>` (3 CE: board, column, card)
 
-Archivo: `src/components/data/kanban.ts`. Eventos: `is-kanban-card-click`, `is-kanban-move`. Slots: default (board), header-actions (column). Atributos: `columns`, `orientation`.
+Archivo: `src/components/data/kanban.ts`. Eventos: `iswc-kanban-card-click`, `iswc-kanban-move`. Slots: default (board), header-actions (column). Atributos: `columns`, `orientation`.
 
 #### Tests existentes
 - Estructural: 2 attachShadow, observados columns/orientation, eventos detectados, slots `(default)`/`header-actions`, parts `base/column/col-head/title/badge/actions`, edge case `let dragCard = null`, registra 3 CE, usa addEventListener.
 
 #### Propuestas UI/UX nuevas
-1. **Drag de card HTML5 entre columnas** — pointerdown sobre `is-kanban-card` → dragstart → dragenter en otra columna → drop → emite `is-kanban-move` con `{card, from, to}`; la card sale del origen y aparece en el destino en el orden correcto.
+1. **Drag de card HTML5 entre columnas** — pointerdown sobre `iswc-kanban-card` → dragstart → dragenter en otra columna → drop → emite `iswc-kanban-move` con `{card, from, to}`; la card sale del origen y aparece en el destino en el orden correcto.
 2. **Touch drag simulado** — `touchstart` + `touchmove` debe funcionar en el simulador (Pointer Events) y disparar el mismo ciclo.
-3. **Keyboard drag: Tab a una card, Space para "pick up"** — la card gana `aria-grabbed="true"`, flechas ←/→ cambian de columna, ↑/↓ cambian de posición; Space otra vez suelta y emite `is-kanban-move`.
+3. **Keyboard drag: Tab a una card, Space para "pick up"** — la card gana `aria-grabbed="true"`, flechas ←/→ cambian de columna, ↑/↓ cambian de posición; Space otra vez suelta y emite `iswc-kanban-move`.
 4. **Drop indicator visual** — al arrastrar sobre la columna destino aparece una sombra de inserción (`insert-before` o `append`) según la posición del cursor; el drop cancela con Escape.
-5. **Click en card abre el detalle** — emite `is-kanban-card-click` con `{card, column}`; aria-label "Open card: heading".
-6. **WIP limit en columna** — si se supera el `wip-limit` configurado, la columna gana borde rojo y la card recién dropeada rebota a su origen (`is-kanban-move-cancel` o `is-kanban-move` con rollback).
+5. **Click en card abre el detalle** — emite `iswc-kanban-card-click` con `{card, column}`; aria-label "Open card: heading".
+6. **WIP limit en columna** — si se supera el `wip-limit` configurado, la columna gana borde rojo y la card recién dropeada rebota a su origen (`iswc-kanban-move-cancel` o `iswc-kanban-move` con rollback).
 7. **Búsqueda `attribute=searchable` filtra cards por heading/meta** — input dentro del column con debounce de 100 ms; las cards que no matchean se ocultan con animación fade; "Clear" en el input muestra todas.
 8. **Empty state en una columna** — si está vacía, muestra `Add card +` que abre un editor inline.
 9. **Columna con "header-actions" slot** — botones Render/Archive en el header; click no inicia drag (stop propagation).
@@ -93,7 +93,7 @@ Archivo: `src/components/data/kanban.ts`. Eventos: `is-kanban-card-click`, `is-k
 
 ---
 
-### `<is-pivot-table>`
+### `<iswc-pivot-table>`
 
 Archivo: `src/components/data/pivot-table.ts` (~6 KB). Configura `rows`, `columns`, `measures`, `aggregations` (sum/avg/count/min/max).
 
@@ -101,12 +101,12 @@ Archivo: `src/components/data/pivot-table.ts` (~6 KB). Configura `rows`, `column
 - Estructural: archivo existe, shadow DOM, registrado, adopta CSS, edge cases, shadow DOM attachShadow.
 
 #### Propuestas UI/UX nuevas
-1. **Drag & drop de una dimensión entre los buckets "Rows", "Columns", "Filters"** — la tabla pivote re-renderiza con el nuevo layout; emitir `is-pivot-change` con el spec resultante.
+1. **Drag & drop de una dimensión entre los buckets "Rows", "Columns", "Filters"** — la tabla pivote re-renderiza con el nuevo layout; emitir `iswc-pivot-change` con el spec resultante.
 2. **Click en la celda de totales expande/colapsa los totales** — anima altura; sólo en `aggregations=['sum']` mostrar fila "Grand Total".
 3. **Sort por columna medida: click en header cambia `asc/desc` con flecha** — reordena respetando dimensiones fila × columna.
 4. **Drag del separador de fila/columna redimensiona el ancho/alto** — la primera fila/columna fija se mantiene.
 5. **Filtro por valor (range slider) en cada dimensión** — input range con dos thumbs; cambia el dataset visible sin recargar la spec.
-6. **Click en una celda de valor navega al detalle** — emite `is-pivot-cell-click` con `{row, column, value}`.
+6. **Click en una celda de valor navega al detalle** — emite `iswc-pivot-cell-click` con `{row, column, value}`.
 7. **Formato por medida: `format: currency/percentage/integer`** — el valor renderizado cambia ($1,234.56 vs 1.234,56 € vs 12.34%).
 8. **Aggregaciones múltiples en una misma columna**: `aggregations: ['sum','avg']` añade una segunda fila de agregación.
 9. **Estado vacío cuando no hay medidas** — mensaje "Add a measure to start".
@@ -119,7 +119,7 @@ Archivo: `src/components/data/pivot-table.ts` (~6 KB). Configura `rows`, `column
 
 ---
 
-### `<is-spreadsheet>`
+### `<iswc-spreadsheet>`
 
 Archivo: `src/components/data/spreadsheet.ts` (~12 KB). Hoja de cálculo con celdas editables (input nativo). Datos vía propiedad `cells`.
 
@@ -127,27 +127,27 @@ Archivo: `src/components/data/spreadsheet.ts` (~12 KB). Hoja de cálculo con cel
 - Estructural: archivo existe, shadow, registrado, adopta CSS, edge cases, `createElement('input')` para edición, usa `<table>/<tbody>/<th>/<td>`.
 
 #### Propuestas UI/UX nuevas
-1. **Click en celda selecciona, doble-click entra en edición, Enter confirma, Escape revierte** — input dentro de la celda recibe foco; `cell.dataset.editing=""`; emitir `is-cell-change` con `{row, col, value, prev}`.
+1. **Click en celda selecciona, doble-click entra en edición, Enter confirma, Escape revierte** — input dentro de la celda recibe foco; `cell.dataset.editing=""`; emitir `iswc-cell-change` con `{row, col, value, prev}`.
 2. **Navegación con flechas ↑↓←→ entre celdas, Tab/Shift-Tab salta columnas** — focus visible con `outline: 2px solid var(--focus)`.
 3. **Selección de rango: mousedown + drag + mouseup** — selección rectangular rellena con `--cell-selected`; Ctrl+C copia al portapapeles con TSV; Ctrl+V pega.
-4. **Selección discontinua: Ctrl+click añade celdas** — emitir `is-range-select` con `cells: [{row,col}]`.
-5. **Fórmulas: empezar la celda con `=` entra en modo fórmula; al confirmar evalúa (suma, average, …)** — emitir `is-formula-eval` con `{expr, result, errors}`.
-6. **Pegado masivo: rango A1:C3 pegado en E1 rellena 9 celdas** — `is-cell-change` se emite por celda.
+4. **Selección discontinua: Ctrl+click añade celdas** — emitir `iswc-range-select` con `cells: [{row,col}]`.
+5. **Fórmulas: empezar la celda con `=` entra en modo fórmula; al confirmar evalúa (suma, average, …)** — emitir `iswc-formula-eval` con `{expr, result, errors}`.
+6. **Pegado masivo: rango A1:C3 pegado en E1 rellena 9 celdas** — `iswc-cell-change` se emite por celda.
 7. **Autoextensión del rango**: escribe "A1:A3" en A1 y selecciona A1:A3 con relleno automático.
-8. **Ordenar columna: click en header ordena por esa columna** — `is-sort` con `{column, direction}`; números y fechas se ordenan semánticamente, no lexicográficamente.
+8. **Ordenar columna: click en header ordena por esa columna** — `iswc-sort` con `{column, direction}`; números y fechas se ordenan semánticamente, no lexicográficamente.
 9. **Filtro por columna: header-filters + tecleo** — muestra sólo filas que matchean.
 10. **Multi-range Ctrl+Shift+Flechas** — expande selección en dirección de la flecha hasta el borde con datos.
 11. **Resize de columnas drag del separador** — persistencia al refrescar.
 12. **Auto-save**: tras `blur`, persiste en `localStorage` con `storage-key`.
 13. **Importar CSV pegado/pegar en el navegador** — `paste` event parsea TSV/CSV y rellena.
-14. **Undo/Redo con Ctrl+Z / Ctrl+Shift+Z** — historial con `is-history-change`; verifica que un `redo` regenera el mismo estado.
+14. **Undo/Redo con Ctrl+Z / Ctrl+Shift+Z** — historial con `iswc-history-change`; verifica que un `redo` regenera el mismo estado.
 15. **Read-only mode**: `readonly=true` desactiva edición pero permite selección/copia; `aria-readonly` aplicado.
 16. **Accesibilidad**: cada celda con `role="gridcell"`, `aria-selected`; headers `role="columnheader"` con `aria-sort`.
 17. **Cell reference highlight**: click en una fórmula `=A1+B1` ilumina las celdas referenciadas.
 
 ---
 
-### `<is-stat>`
+### `<iswc-stat>`
 
 Archivo: `src/components/data/stat.ts` (~4 KB). KPI card. Atributos: `label, value, helper, trend, trend-direction, icon, color`. Sin eventos. Slots: `label, value, helper, trend, icon`.
 
@@ -173,34 +173,34 @@ Archivo: `src/components/data/stat.ts` (~4 KB). KPI card. Atributos: `label, val
 
 ---
 
-### `<is-transfer>`
+### `<iswc-transfer>`
 
-Archivo: `src/components/data/transfer.ts` (~10 KB). Doble lista (source → target). Atributos: `source-title, target-title, searchable, without-buttons, without-headings, max-target`. Eventos: `is-transfer-change`. Sub-elemento `<is-transfer-item>`.
+Archivo: `src/components/data/transfer.ts` (~10 KB). Doble lista (source → target). Atributos: `source-title, target-title, searchable, without-buttons, without-headings, max-target`. Eventos: `iswc-transfer-change`. Sub-elemento `<iswc-transfer-item>`.
 
 #### Tests existentes
-- Estructural: shadow, observados source-title/target-title/searchable, evento is-transfer-change, parts base/pane/pane-head/title/count/list/controls, accesibilidad role=listbox + aria-multiselectable, edge cases, registrado.
+- Estructural: shadow, observados source-title/target-title/searchable, evento iswc-transfer-change, parts base/pane/pane-head/title/count/list/controls, accesibilidad role=listbox + aria-multiselectable, edge cases, registrado.
 
 #### Propuestas UI/UX nuevas
-1. **Click en `<is-transfer-item>` lo marca (checkbox on) y activa el botón `>`** — emitir `is-transfer-change` con `{items: [ids]}`; el item gana `aria-selected="true"` y color de acento.
-2. **Click en `>` mueve los items seleccionados al target** — emit `is-transfer-change` con `{moved: [ids], side: 'forward'}`; los items desaparecen del source con animación fade/slide.
+1. **Click en `<iswc-transfer-item>` lo marca (checkbox on) y activa el botón `>`** — emitir `iswc-transfer-change` con `{items: [ids]}`; el item gana `aria-selected="true"` y color de acento.
+2. **Click en `>` mueve los items seleccionados al target** — emit `iswc-transfer-change` con `{moved: [ids], side: 'forward'}`; los items desaparecen del source con animación fade/slide.
 3. **Click en `<` devuelve del target al source** — simétrico.
 4. **Click en `>>` mueve todas las visibles del source** — el botón se deshabilita cuando source vacío.
-5. **`max-target` rechaza el exceso** — al intentar mover a `target` con N items ya en target y max=3, no añade, emite `is-transfer-rejected` y muestra toast/sub-banner.
+5. **`max-target` rechaza el exceso** — al intentar mover a `target` con N items ya en target y max=3, no añade, emite `iswc-transfer-rejected` y muestra toast/sub-banner.
 6. **Búsqueda con `searchable`**: tecleo filtra el panel source; las llaves no visibles NO se mueven con `>`.
 7. **Navegación de teclado**: Tab entre source/target/controles, flechas ↑↓ mueven el highlight, Space toggle selección.
 8. **Shift+click para selección por rango** dentro de un panel; Ctrl+click para multi.
-9. **Drag & drop: arrastrar items directamente al panel opuesto** — emite `is-transfer-change`; al soltar en el sitio equivocado el item rebota.
+9. **Drag & drop: arrastrar items directamente al panel opuesto** — emite `iswc-transfer-change`; al soltar en el sitio equivocado el item rebota.
 10. **Header count dinámico**: "3 selected", "5 of 12", "12 of 12".
-11. **Doble-click en un item lo mueve directo** (sin selección) — emit igualmente `is-transfer-change`.
+11. **Doble-click en un item lo mueve directo** (sin selección) — emit igualmente `iswc-transfer-change`.
 12. **`without-buttons` oculta las flechas**; sólo drag & drop o doble-click funcionan.
 13. **Responsive en pantallas estrechas**: source y target en columna en vez de fila.
 14. **Ordenación por header column** — si las items son objetos con campos.
-15. **`is-transfer-item` disabled** se renderiza con opacity 0.5 y `aria-disabled="true"`; no es movible.
+15. **`iswc-transfer-item` disabled** se renderiza con opacity 0.5 y `aria-disabled="true"`; no es movible.
 16. **Búsqueda con debounce 150 ms** — para evitar renders en cada keystroke.
 
 ---
 
-### `<is-gauge>` (data category)
+### `<iswc-gauge>` (data category)
 
 Archivo: `src/components/data/gauge.ts`. Medidor radial/lineal. Data: `value, min, max, target, unit, label`.
 
@@ -209,7 +209,7 @@ Archivo: `src/components/data/gauge.ts`. Medidor radial/lineal. Data: `value, mi
 
 #### Propuestas UI/UX nuevas
 1. **Animación de aguja**: el arco/aguja viaja de min a value en 800 ms con easing — easing `cubic-bezier(.2,.8,.2,1)`; el valor numérico cuenta en sincronía.
-2. **Click sobre la aguja o el arco abre un editor inline (entrada numérica)** — emite `is-gauge-edit`.
+2. **Click sobre la aguja o el arco abre un editor inline (entrada numérica)** — emite `iswc-gauge-edit`.
 3. **Target line: marca `--target` dentro del arco** — el segmento por encima de target cambia a verde, por debajo a rojo; verificar color.
 4. **Hover sobre el gauge muestra tooltip con `value, min, max, percentage`** — seguir al cursor.
 5. **Gradient del arco según el valor**: `<linearGradient>` con stops `--gauge-low` → `--gauge-mid` → `--gauge-high`.
@@ -226,19 +226,19 @@ Archivo: `src/components/data/gauge.ts`. Medidor radial/lineal. Data: `value, mi
 
 ---
 
-### `<is-heatmap>` (data-viz category — ubicación: `src/components/data/heatmap.ts` si existe, o en charts)
+### `<iswc-heatmap>` (data-viz category — ubicación: `src/components/data/heatmap.ts` si existe, o en charts)
 
-No existe archivo propio de `<is-heatmap>` en `charts/`. Los charts tienen `polar-area-chart.ts` y demás. El test existe pero marca como opcional.
+No existe archivo propio de `<iswc-heatmap>` en `charts/`. Los charts tienen `polar-area-chart.ts` y demás. El test existe pero marca como opcional.
 
-#### Propuestas UI/UX nuevas (suponiendo `<is-heatmap>` en `data/`)
+#### Propuestas UI/UX nuevas (suponiendo `<iswc-heatmap>` en `data/`)
 1. **Click en celda muestra tooltip con valor exacto + fila + columna** — tooltip flotante, `role="status"`.
 2. **Hover resalta fila y columna (con `<rect>` overlay)** — el resto se atenúa a opacity 0.4.
-3. **Drag para seleccionar rango rectangular** — emite `is-heatmap-select` con `{rows, cols, value}`.
+3. **Drag para seleccionar rango rectangular** — emite `iswc-heatmap-select` con `{rows, cols, value}`.
 4. **Escala de color logarítmica vs lineal** — control via `scale` attribute; verifica leyenda.
 5. **Leyenda de color continua** — gradient debajo con ticks; click en tick fija la escala.
-6. **Cell click abre el detalle (drill-down)** — emite `is-heatmap-cell-click`.
+6. **Cell click abre el detalle (drill-down)** — emite `iswc-heatmap-cell-click`.
 7. **Empty cells marcados con `--cell-empty`** — borde punteado + tooltip "no data".
-8. **Heatmap con datos temporales (x=t)**: zoom con la rueda del ratón (mouse wheel) — `is-heatmap-zoom` con `{from, to}`.
+8. **Heatmap con datos temporales (x=t)**: zoom con la rueda del ratón (mouse wheel) — `iswc-heatmap-zoom` con `{from, to}`.
 9. **Brush + zoom**: drag horizontal selecciona un rango temporal y zoom in se aplica al área.
 10. **Heatmap con labels rotados** cuando hay >12 columnas — `transform: rotate(-45 deg)` en los `text`.
 11. **Cambio de paleta (`data-palette`)**: las celdas cambian de color sin re-render completo.
@@ -249,19 +249,19 @@ No existe archivo propio de `<is-heatmap>` en `charts/`. Los charts tienen `pola
 
 ---
 
-## CHARTS · 13 componentes (todos comparten motor `<is-chart>`)
+## CHARTS · 13 componentes (todos comparten motor `<iswc-chart>`)
 
-### `<is-bar-chart>`
+### `<iswc-bar-chart>`
 
-Wrapper tipado de `<is-chart type="bar">` (`src/components/charts/bar-chart.ts`). Atributos relevantes: `stacked`, `open-on-click`, `index-axis="x|y"`, `legend-position`, `min`, `max`, `grid`, `without-animation`, `without-legend`, `without-tooltip`, `x-label`, `y-label`, `color`. Sin eventos propios. CSS parts: `base, canvas, legend, tooltip`.
+Wrapper tipado de `<iswc-chart type="bar">` (`src/components/charts/bar-chart.ts`). Atributos relevantes: `stacked`, `open-on-click`, `index-axis="x|y"`, `legend-position`, `min`, `max`, `grid`, `without-animation`, `without-legend`, `without-tooltip`, `x-label`, `y-label`, `color`. Sin eventos propios. CSS parts: `base, canvas, legend, tooltip`.
 
 #### Tests existentes
-- Estructural: archivo existe, wrapper invoca `window.__isDefineTypedChart('is-bar-chart', 'bar', drawBarMarks)`, motor `<is-chart>` con shadow open, observados `type/label`, JSON slot, ResizeObserver, registro, edge cases.
+- Estructural: archivo existe, wrapper invoca `window.__isDefineTypedChart('iswc-bar-chart', 'bar', drawBarMarks)`, motor `<iswc-chart>` con shadow open, observados `type/label`, JSON slot, ResizeObserver, registro, edge cases.
 
 #### Propuestas UI/UX nuevas
 1. **Click en barra muestra tooltip con valor exacto** — el tooltip HTML (`#tooltipEl` en shadow) se posiciona cerca del cursor con `transform: translate(...)`; muestra `label` + `value` + swatch de color.
 2. **Hover sobre una barra la marca `data-active=""` y aplica overlay dim a las demás** — el `marksGroup` gana `dataset.hover=""`; las demás barras tienen `opacity` reducida.
-3. **Doble click sobre una barra dispara `is-open-viewer`** con `kind="chart"`/payload (cuando `open-on-click`); abre `<is-diagram-lightbox>` en pantalla completa.
+3. **Doble click sobre una barra dispara `iswc-open-viewer`** con `kind="chart"`/payload (cuando `open-on-click`); abre `<iswc-diagram-lightbox>` en pantalla completa.
 4. **Click en un item de la leyenda toggla visibilidad** — el botón `<button class="legend-item">` cambia `aria-pressed`, el dataset entra/sale de `hiddenSeries`; el botón recibe un outline de foco visible.
 5. **Re-hover tras toggle restaura la opacidad de las visibles** — al desmarcar la serie, su ray vuelve a opacity 1.
 6. **Eje Y escala logarítmica vs lineal** — `scales.y.type = 'logarithmic'` (forma Chart.js dentro del JSON) cambia la cuadricula visiblemente.
@@ -273,13 +273,13 @@ Wrapper tipado de `<is-chart type="bar">` (`src/components/charts/bar-chart.ts`)
 12. **ResizeObserver: al cambiar el ancho del contenedor (`window.resize` simulado), el SVG recalcula viewBox y la tipografía se reajusta (formula `13 * (min(w,h)/220)**0.55`)** — verificar que el chart se rehace y los textos no quedan diminutos.
 13. **Pointermove crosshair en líneas del grid cuando hay overlay** — overlay `<line class="crosshair">` aparece en el eje perpendicular; desaparece al salir.
 14. **Set vacío `datasets: []`** muestra el texto `Sin datos` centrado, sin barras fantasma.
-15. **`open-on-click` con `preventDefault()` sobre `is-open-viewer`** — el consumidor cancela el lightbox y el componente no hace fallback propio.
+15. **`open-on-click` con `preventDefault()` sobre `iswc-open-viewer`** — el consumidor cancela el lightbox y el componente no hace fallback propio.
 16. **Accesibilidad: cada barra tiene `role="img"` con `aria-label="Serie A: 45"`**, teclado tab navega por las legend buttons.
 17. **Color override por dataset**: `--border-color-1` redefine la serie 1; verificar swatch y la barra.
 
 ---
 
-### `<is-line-chart>`
+### `<iswc-line-chart>`
 
 Igual motor; marcas `drawLineMarks`. Atributos mismos + `tension`, `fill`, `stepped`.
 
@@ -294,18 +294,18 @@ Igual motor; marcas `drawLineMarks`. Atributos mismos + `tension`, `fill`, `step
 5. **`fill="start"` rellena el área entre la línea y 0** — verificar path cerrado correctamente.
 6. **Líneas múltiples: hover de una serie opacita el resto** (vía filtro de `visibleDatasets` en render).
 7. **`stepped`** con `"step-before"/"after"/"middle"` cambia la conexión — verificable en `d` del path.
-8. **Animación turtle** (path progressive draw) al cargar — `dasharray = getTotalLength`, `--dash` CSS animation. `is-turtle-state` con `{playing, idx, total, replay}`.
-9. **Wheel sobre el eje Y aumenta zoom en Y** (emular pinch-zoom) — `is-zoom` con `{from, to}`.
+8. **Animación turtle** (path progressive draw) al cargar — `dasharray = getTotalLength`, `--dash` CSS animation. `iswc-turtle-state` con `{playing, idx, total, replay}`.
+9. **Wheel sobre el eje Y aumenta zoom en Y** (emular pinch-zoom) — `iswc-zoom` con `{from, to}`.
 10. **`NaN` en data**: se renderiza como un hueco (gap) en la línea sin romper el cálculo de dominio.
 11. **`null/undefined` en la serie**: salta el punto sin romper la línea.
 12. **Time series con `type="time"`** (en options): eje X adapta el dominio a fechas reales, no a strings.
 13. **Annotations**: `plugins.annotation` con líneas horizontales en `--threshold`; overlay dedicado.
-14. **Drag-select en eje X**: drag con click para zoom al rango seleccionado — emite `is-zoom`.
+14. **Drag-select en eje X**: drag con click para zoom al rango seleccionado — emite `iswc-zoom`.
 15. **Click en leyenda toggle con animación al ocultar** — la serie desliza a opacity 0; verificar `aria-pressed`.
 
 ---
 
-### `<is-pie-chart>`
+### `<iswc-pie-chart>`
 
 Marcas `drawPieMarks` en `marks-radial.ts`. Rebanadas con ángulos por valor proporcional.
 
@@ -331,7 +331,7 @@ Marcas `drawPieMarks` en `marks-radial.ts`. Rebanadas con ángulos por valor pro
 
 ---
 
-### `<is-doughnut-chart>` (donut)
+### `<iswc-doughnut-chart>` (donut)
 
 Igual al pie pero con `cutout` (hueco central). Attributes: `doughnut-ratio` (CSS var) controla `cutout` porcentaje.
 
@@ -357,7 +357,7 @@ Igual al pie pero con `cutout` (hueco central). Attributes: `doughnut-ratio` (CS
 
 ---
 
-### `<is-area-chart>`
+### `<iswc-area-chart>`
 
 (`src/components/charts/area-chart.ts` si existe — no aparece, pero existe implícito en `marks-cartesian.ts`). Verifico si existe; sino, no es objeto.
 
@@ -365,7 +365,7 @@ Igual al pie pero con `cutout` (hueco central). Attributes: `doughnut-ratio` (CS
 
 ---
 
-### `<is-radar-chart>`
+### `<iswc-radar-chart>`
 
 Marcas `drawRadarMarks` en `marks-radial.ts`. Malla radial con N ejes (variables) y polígonos para cada dataset. Atributos: `min`, `max`, `grid`.
 
@@ -384,14 +384,14 @@ Marcas `drawRadarMarks` en `marks-radial.ts`. Malla radial con N ejes (variables
 9. **Resize con RO** — el viewBox se actualiza y los textos se reajustan.
 10. **Hover sobre el área del polígono** (no solo vértices) detecta proximidad — radio overlay o hit radius para que el hover sea "tolerante".
 11. **`angleLines` color custom** via `--chart-axis-color`.
-12. **Drag para rotar la rueda polar**: cambiar el ángulo del primer eje — emite `is-radar-rotate`.
+12. **Drag para rotar la rueda polar**: cambiar el ángulo del primer eje — emite `iswc-radar-rotate`.
 13. **`pointLabelFontSize`** escala con `min(w,h)/220` mismo criterio.
 14. **Empty data**: muestra `Sin datos` centrado.
 15. **Leyenda en `legend-position="chartArea"`** que aparece en la esquina dentro del SVG.
 
 ---
 
-### `<is-polar-area-chart>`
+### `<iswc-polar-area-chart>`
 
 Similar a pie pero con radio proporcional al valor (no ángulo fijo). Etiqueta auto-rotada.
 
@@ -407,17 +407,17 @@ Similar a pie pero con radio proporcional al valor (no ángulo fijo). Etiqueta a
 6. **`rotation` configurable** — primera tajada inicia a 0° o 90°.
 7. **`gridlines radiales` dibujadas** desde el centro con `niceTicks`.
 8. **`responsive` mantiene aspect ratio hasta cierto breakpoint**.
-9. **Click en una tajada despacha `is-segment-click`** con `{label, value, percentage, index}`.
+9. **Click en una tajada despacha `iswc-segment-click`** con `{label, value, percentage, index}`.
 10. **Aria-press en cada legend item**.
 11. **Hover sobre una tajada aumenta su `stroke-width`** y reduce las demás.
 12. **Animación: animar `r` desde 0 hasta el valor**.
-13. **Wheel para zoom** (zoom radial) — `is-zoom` con factor.
+13. **Wheel para zoom** (zoom radial) — `iswc-zoom` con factor.
 14. **`title` position**: top/bottom/center.
 15. **Drag de centro a esquina: pan** si hay zoom.
 
 ---
 
-### `<is-scatter-chart>`
+### `<iswc-scatter-chart>`
 
 Marcas `drawScatterMarks`. Axes numéricos (no categoriales). Atributos: `point-radius`, `tension` 0.
 
@@ -425,8 +425,8 @@ Marcas `drawScatterMarks`. Axes numéricos (no categoriales). Atributos: `point-
 - Estructural.
 
 #### Propuestas UI/UX nuevas
-1. **Wheel scroll/pinch zoom sobre el plot** — `is-zoom` con `{xMin, xMax, yMin, yMax}`.
-2. **Doble-click en un punto lo fija como "selected"** — atributo `selected=true` en el `circle`; emite `is-point-select`.
+1. **Wheel scroll/pinch zoom sobre el plot** — `iswc-zoom` con `{xMin, xMax, yMin, yMax}`.
+2. **Doble-click en un punto lo fija como "selected"** — atributo `selected=true` en el `circle`; emite `iswc-point-select`.
 3. **Hover muestra tooltip con (x, y) formateado** — `dg-tooltip__title` con la serie.
 4. **`pointRadius` configurable via `attr=point-radius` o `--chart-point-radius`**.
 5. **Linea de regresión: `options.plugins.trendlineLinear`** añade una `path` por encima.
@@ -436,14 +436,14 @@ Marcas `drawScatterMarks`. Axes numéricos (no categoriales). Atributos: `point-
 9. **Crosshair ortogonal** durante pointermove.
 10. **`maxTicksLimit`** en eje Y limita el grid a 5-7.
 11. **`responsive`+`maintainAspectRatio=False`** + `aspectRatio`.
-12. **Pan cuando hay zoom activo**: drag con la mano activa `is-pan` event.
+12. **Pan cuando hay zoom activo**: drag con la mano activa `iswc-pan` event.
 13. **Densidad alta: 50 000 puntos sin lag** (optimización `circle`) — verificable con dataset grande.
 14. **`showLine=true`** dibuja una polilínea; `false` solo puntos.
 15. **Pin eje con doble-click en label**: `dataset.lockedAxis=true` para mantener dominio.
 
 ---
 
-### `<is-bubble-chart>`
+### `<iswc-bubble-chart>`
 
 Extiende scatter con tamaño proporcional a `r` (3er valor). Atributos: `point-radius` actúa por defecto; `datasets` con `data: [{x, y, r}]`.
 
@@ -458,27 +458,27 @@ Extiende scatter con tamaño proporcional a `r` (3er valor). Atributos: `point-r
 5. **`backgroundColor` por burbuja individual** — color dinámico basado en `r`.
 6. **Click fija "selected bubble"**; click fuera la deselecciona.
 7. **Click en una burbuja + Shift** extiende selección a un grupo cercano.
-8. **Pan & zoom con el mouse (drag con click + wheel)** — emite `is-zoom`/`is-pan`.
+8. **Pan & zoom con el mouse (drag con click + wheel)** — emite `iswc-zoom`/`iswc-pan`.
 9. **Animación al cargar**: cada burbuja crece de r=0 a r final con stagger de 30 ms.
 10. **`responsive` con `maintainAspectRatio`**.
 11. **Formato del radio**: tooltip `display="R: $1.2M, x: 12, y: 0.4"` con `Intl.NumberFormat`.
-12. **Drag de una burbuja la reposiciona** (interactivo, no leído) — emite `is-bubble-drag`.
+12. **Drag de una burbuja la reposiciona** (interactivo, no leído) — emite `iswc-bubble-drag`.
 13. **`pointStyle`**: `'circle' | 'cross' | 'rect' | 'triangle'` para burbujas custom.
 14. **`color-by dimension`**: gradiente basado en `r` o `x`/`y` según config.
 15. **Zoom-out con doble-click** — resetea los dominios a los iniciales.
 
 ---
 
-### `<is-treemap>` (charts)
+### `<iswc-treemap>` (charts)
 
 Archivo: `src/components/charts/treemap.ts` (~12 KB). Treemap con algoritmo squarified, anidado. Atributos: `color`, `open-on-click`, `mode`, `persist`, `animation` (via diagram base).
 
 #### Tests existentes
-- Estructural: shadow+svg, `tm-svg` class, observados `color/open-on-click`, eventos `is-render/is-open-viewer`, parts `base/canvas/tooltip`, lee JSON, MO, RO, edge cases, cleanup, adopta CSS, registrado.
+- Estructural: shadow+svg, `tm-svg` class, observados `color/open-on-click`, eventos `iswc-render/iswc-open-viewer`, parts `base/canvas/tooltip`, lee JSON, MO, RO, edge cases, cleanup, adopta CSS, registrado.
 
 #### Propuestas UI/UX nuevas
 1. **Hover sobre rectángulo aumenta saturación** y muestra tooltip con (label, value, percentage). El resto gana opacity 0.4.
-2. **Click en rectángulo lo expande/colapsa** (modo `mode="drill"`); emite `is-toggle-group` con `{path}`.
+2. **Click en rectángulo lo expande/colapsa** (modo `mode="drill"`); emite `iswc-toggle-group` con `{path}`.
 3. **Wheel scroll hace zoom en el cuadro**: zoom al siguiente nivel; doble-click vuelve.
 4. **Layout squarified**: rectángulos con aspect ratio cerca de 1; click en uno desciende al nivel hijo.
 5. **Path/breadcrumb en la parte superior**: Home > Asia > Japón, click navega a ese nivel.
@@ -487,7 +487,7 @@ Archivo: `src/components/charts/treemap.ts` (~12 KB). Treemap con algoritmo squa
 8. **Leyenda lateral con los N top categorías**; click fija el rango.
 9. **`persist=true` + `storage-key="my-treemap"`**: guarda los nodos colapsados en localStorage y restaura.
 10. **`animation` (de la base diagramas)**: las celdas se posicionan con transición (FLIP) al cambiar payload.
-11. **`open-on-click` sobre el treemap**: doble-click abre `<is-diagram-lightbox>` (fullscreen) con drilldown propio.
+11. **`open-on-click` sobre el treemap**: doble-click abre `<iswc-diagram-lightbox>` (fullscreen) con drilldown propio.
 12. **Accesibilidad**: cada `<rect>` con `role="treeitem"`, `aria-level`, `aria-expanded`.
 13. **Click derecho muestra menú contextual "Drill down / Filter / Copy node"**.
 14. **Resize: la rejilla recalcula el layout en función del nuevo aspect ratio.
@@ -495,7 +495,7 @@ Archivo: `src/components/charts/treemap.ts` (~12 KB). Treemap con algoritmo squa
 
 ---
 
-### `<is-sparkline>` (charts)
+### `<iswc-sparkline>` (charts)
 
 Archivo: `src/components/charts/sparkline.ts` (~6 KB). Mini chart sin axes para KPI cards. Atributos: `data`, `color`, `width`, `height`, `line-width`, `fill`, etc.
 
@@ -521,7 +521,7 @@ Archivo: `src/components/charts/sparkline.ts` (~6 KB). Mini chart sin axes para 
 
 ---
 
-### `<is-waterfall-chart>`
+### `<iswc-waterfall-chart>`
 
 Archivo: `src/components/charts/waterfall-chart.ts` + `marks-waterfall.ts`. Barras acumulativas (verde positivo / rojo negativo / azul final). Atributos específicos: `connector-lines`.
 
@@ -547,7 +547,7 @@ Archivo: `src/components/charts/waterfall-chart.ts` + `marks-waterfall.ts`. Barr
 
 ---
 
-### `<is-funnel-chart>`
+### `<iswc-funnel-chart>`
 
 Archivo: `src/components/charts/funnel-chart.ts` + `marks-funnel.ts`. Embudo de conversión. Atributos: `sort`, `reverse`.
 
@@ -573,7 +573,7 @@ Archivo: `src/components/charts/funnel-chart.ts` + `marks-funnel.ts`. Embudo de 
 
 ---
 
-### `<is-gauge-chart>` (charts)
+### `<iswc-gauge-chart>` (charts)
 
 Archivo: `src/components/charts/gauge-chart.ts`. Indicador radial con aguja. Atributos: `min, max, value, target, unit, label`.
 
@@ -592,7 +592,7 @@ Archivo: `src/components/charts/gauge-chart.ts`. Indicador radial con aguja. Atr
 9. **Animación al pasar el target**: breve highlight verde de la aguja.
 10. **Wheel sobre la zona central aumenta zoom** y muestra tick labels adicionales.
 11. **`responsive`** mantiene proporciones hasta cierto mínimo.
-12. **Click sobre la aguja abre un editor inline** — emite `is-gauge-edit`.
+12. **Click sobre la aguja abre un editor inline** — emite `iswc-gauge-edit`.
 13. **Aria-valuemin / valuemax / valuenow** actualizados.
 14. **`vertical` orientation** invierte el arco para un gauge de barras horizontal.
 15. **Click en `max` cambia el valor a max** (debug helper).
@@ -601,26 +601,26 @@ Archivo: `src/components/charts/gauge-chart.ts`. Indicador radial con aguja. Atr
 
 ## DIAGRAMS · 16 componentes (todos extienden `DiagramElementBase`)
 
-> Tests existentes en `src/utils/health/exhaustive/diagrams/`: solo `flowchart`, `sequence-diagram`, `class-diagram`, `er-diagram`, `state-diagram`. Los 11 restantes no tienen test. Todos heredan del base: `initDiagramShadow(svgClass, tooltipClass)` con `<svg part="canvas">` + `<div part="tooltip" class="dg-tooltip is-rich">`, `readJsonSlot` con MO sobre `<script type="application/json">`, MutationObserver de tema sobre `<html class="data-theme data-palette>`, `isViewer`, `payload/spec/layout`, `openOwnViewer(kind)` que abre `<is-diagram-lightbox>` con el payload. Atributos heredados: `color`. Eventos: `is-open-viewer`, `is-toggle-group`.
+> Tests existentes en `src/utils/health/exhaustive/diagrams/`: solo `flowchart`, `sequence-diagram`, `class-diagram`, `er-diagram`, `state-diagram`. Los 11 restantes no tienen test. Todos heredan del base: `initDiagramShadow(svgClass, tooltipClass)` con `<svg part="canvas">` + `<div part="tooltip" class="dg-tooltip iswc-rich">`, `readJsonSlot` con MO sobre `<script type="application/json">`, MutationObserver de tema sobre `<html class="data-theme data-palette>`, `isViewer`, `payload/spec/layout`, `openOwnViewer(kind)` que abre `<iswc-diagram-lightbox>` con el payload. Atributos heredados: `color`. Eventos: `iswc-open-viewer`, `iswc-toggle-group`.
 
-### `<is-flowchart>`
+### `<iswc-flowchart>`
 
 Archivo: `src/components/diagrams/flowchart.ts`. Diagrama de flujo en SVG. Atributos: `direction` (TB/LR/RL/BT), `mode` (compact/full).
 
 #### Tests existentes
-- Estructural: archivo existe, registra `is-flowchart` con kind `flowchart`, shadow + svg, observados (color, open-on-click), lee JSON, MO, RO opcional, parts base/canvas, edge cases, adopta CSS, registrado, cleanup, JSDoc.
+- Estructural: archivo existe, registra `iswc-flowchart` con kind `flowchart`, shadow + svg, observados (color, open-on-click), lee JSON, MO, RO opcional, parts base/canvas, edge cases, adopta CSS, registrado, cleanup, JSDoc.
 
 #### Propuestas UI/UX nuevas
-1. **Click en nodo lo selecciona** (data-selected) y emite `is-flowchart-node-click` con `{id, label}`. Doble click expande/collapse sus hijos (group).
-2. **Drag de un nodo reposiciona** libre — emite `is-flowchart-node-drag` con `{id, dx, dy}`; las aristas se redibujan en consecuencia.
+1. **Click en nodo lo selecciona** (data-selected) y emite `iswc-flowchart-node-click` con `{id, label}`. Doble click expande/collapse sus hijos (group).
+2. **Drag de un nodo reposiciona** libre — emite `iswc-flowchart-node-drag` con `{id, dx, dy}`; las aristas se redibujan en consecuencia.
 3. **Hover sobre arista la resalta** y muestra el label si lo tiene; el resto gana opacity 0.4.
 4. **Wheel zoom** sobre el SVG; pan con drag-con-click.
-5. **Click en un subgrupo colapsa** los nodos hijos con FLIP transition (`is-toggle-group`).
+5. **Click en un subgrupo colapsa** los nodos hijos con FLIP transition (`iswc-toggle-group`).
 6. **Doble-click en fondo resetea zoom/pan**.
 7. **Drag-select rectángulo** para multi-selección.
 8. **Click derecho sobre nodo** abre menú contextual "Edit/Delete/Disconnect".
 9. **`direction=LR`** rota todo el layout horizontal; el usuario sigue navegando.
-10. **Drag de un nodo sobre otro distinto crea una nueva arista** — emite `is-flowchart-edge-create`.
+10. **Drag de un nodo sobre otro distinto crea una nueva arista** — emite `iswc-flowchart-edge-create`.
 11. **Box selection (Shift+drag)** multi-select.
 12. **`isViewer=true` abre a pantalla completa con lightbox** (vía base `openOwnViewer('flowchart')`).
 13. **Mini-map en una esquina** con `--diagram-minimap-color`.
@@ -629,7 +629,7 @@ Archivo: `src/components/diagrams/flowchart.ts`. Diagrama de flujo en SVG. Atrib
 
 ---
 
-### `<is-class-diagram>`
+### `<iswc-class-diagram>`
 
 Archivo: `src/components/diagrams/class-diagram.ts`. UML class. Atributos: `layout` (default/compact), `mode`.
 
@@ -637,12 +637,12 @@ Archivo: `src/components/diagrams/class-diagram.ts`. UML class. Atributos: `layo
 - Estructural: archivo, shadow+svg, registrado, observados, MO, RO, parts, JSON, adopta CSS, cleanup, registrado.
 
 #### Propuestas UI/UX nuevas
-1. **Click en clase muestra tooltip con miembros y métodos** (`dg-tooltip is-rich` puede tener tabla).
+1. **Click en clase muestra tooltip con miembros y métodos** (`dg-tooltip iswc-rich` puede tener tabla).
 2. **Doble-click expande/colapsa los miembros** (visibilidad `public/private/protected`).
 3. **Hover sobre arista de herencia/composición la resalta**.
 4. **Drag-de-clase reposiciona**; las aristas siguen a la clase.
 5. **Wheel zoom** y pan con drag.
-6. **Click en un miembro lo copia al clipboard** — emite `is-class-member-copy`.
+6. **Click en un miembro lo copia al clipboard** — emite `iswc-class-member-copy`.
 7. **Click en "abstract" badge** expande detalles.
 8. **Filtro `attribute=show-only="public"`** oculta miembros privados.
 9. **Animación de carga**: las clases aparecen en orden topológico.
@@ -655,7 +655,7 @@ Archivo: `src/components/diagrams/class-diagram.ts`. UML class. Atributos: `layo
 
 ---
 
-### `<is-er-diagram>`
+### `<iswc-er-diagram>`
 
 Archivo: `src/components/diagrams/er-diagram.ts`. Modelo entidad-relación.
 
@@ -671,7 +671,7 @@ Archivo: `src/components/diagrams/er-diagram.ts`. Modelo entidad-relación.
 6. **Click derecho añade atributo** con menú contextual.
 7. **Modo "schema-only" / "data-only"** con `mode` attribute; re-render.
 8. **Filtro por tipo (entidad / relación / atributo)** con `legend`.
-9. **`is-toggle-group`** para colapsar clusters.
+9. **`iswc-toggle-group`** para colapsar clusters.
 10. **Drag-select multi-entidad** y aplicar cambios en bloque.
 11. **Mini-map** (heredada de base si tienen `minimap` flag).
 12. **Aria-keyboard nav**.
@@ -681,7 +681,7 @@ Archivo: `src/components/diagrams/er-diagram.ts`. Modelo entidad-relación.
 
 ---
 
-### `<is-sequence-diagram>`
+### `<iswc-sequence-diagram>`
 
 Archivo: `src/components/diagrams/sequence-diagram.ts`. Diagrama de secuencia UML: lifeline, mensajes, activaciones.
 
@@ -689,7 +689,7 @@ Archivo: `src/components/diagrams/sequence-diagram.ts`. Diagrama de secuencia UM
 - Estructural: registrado, parts, observados, MO, RO, JSON, edge cases, cleanup.
 
 #### Propuestas UI/UX nuevas
-1. **Click en un lifeline la fija como "selected"** y emite `is-sequence-actor-click`.
+1. **Click en un lifeline la fija como "selected"** y emite `iswc-sequence-actor-click`.
 2. **Click en un mensaje abre tooltip con la llamada completa** (`name(args): returnType`).
 3. **Drag-vertical para mover mensajes** arriba/abajo en el tiempo.
 4. **Wheel scroll para avanzar tiempo** (cuando hay muchos mensajes).
@@ -697,7 +697,7 @@ Archivo: `src/components/diagrams/sequence-diagram.ts`. Diagrama de secuencia UM
 6. **`mode="formal"`** cambia notación a UML estricto.
 7. **`alt/par/loop`** bloques se expanden/colapsan con click.
 8. **Drag-select para seleccionar varios mensajes**.
-9. **`is-toggle-group`** para colapsar `alt` blocks (FLIP anim).
+9. **`iswc-toggle-group`** para colapsar `alt` blocks (FLIP anim).
 10. **Animación turtle** sobre las flechas de mensajes.
 11. **Click en "self call"** la abre en tooltip con detalle.
 12. **Aria-keyboard nav** (Tab → actor → mensaje → activación).
@@ -707,7 +707,7 @@ Archivo: `src/components/diagrams/sequence-diagram.ts`. Diagrama de secuencia UM
 
 ---
 
-### `<is-state-diagram>`
+### `<iswc-state-diagram>`
 
 Archivo: `src/components/diagrams/state-diagram.ts`. State machine (estados + transiciones + initial/final).
 
@@ -715,7 +715,7 @@ Archivo: `src/components/diagrams/state-diagram.ts`. State machine (estados + tr
 - Estructural.
 
 #### Propuestas UI/UX nuevas
-1. **Click en un estado lo marca como "current"** — emite `is-state-transition-suggestion`.
+1. **Click en un estado lo marca como "current"** — emite `iswc-state-transition-suggestion`.
 2. **Click en una transición la traza** (animate `path` desde inicio a fin).
 3. **Hover sobre estado muestra transiciones permitidas**.
 4. **Drag-estado reposiciona**.
@@ -725,7 +725,7 @@ Archivo: `src/components/diagrams/state-diagram.ts`. State machine (estados + tr
 8. **`mode="mermaid-like"`** vs UML estricto.
 9. **Drag de una transición a otro estado re-cablea**.
 10. **Click derecho "Add transition"**.
-11. **`is-toggle-group`** para colapsar máquinas anidadas.
+11. **`iswc-toggle-group`** para colapsar máquinas anidadas.
 12. **`history` state** se renderiza con un símbolo H.
 13. **Aria-keyboard nav** entre estados.
 14. **`open-on-click` doble-click abre lightbox**.
@@ -733,7 +733,7 @@ Archivo: `src/components/diagrams/state-diagram.ts`. State machine (estados + tr
 
 ---
 
-### `<is-gantt>`
+### `<iswc-gantt>`
 
 Archivo: `src/components/diagrams/gantt.ts`. Diagrama Gantt (tareas, dependencias, milestones).
 
@@ -742,7 +742,7 @@ Archivo: `src/components/diagrams/gantt.ts`. Diagrama Gantt (tareas, dependencia
 
 #### Propuestas UI/UX nuevas
 1. **Click en tarea la selecciona** y muestra panel lateral con detalles (resource, dates, progress).
-2. **Drag-horizontal de una tarea la desplaza en el tiempo** — emite `is-gantt-task-move`.
+2. **Drag-horizontal de una tarea la desplaza en el tiempo** — emite `iswc-gantt-task-move`.
 3. **Drag del borde derecho cambia duración**.
 4. **Click en barra de progreso cambia el %** (numeric input).
 5. **Wheel zoom en el eje tiempo** (`%Y/%M/%d/%h`).
@@ -759,7 +759,7 @@ Archivo: `src/components/diagrams/gantt.ts`. Diagrama Gantt (tareas, dependencia
 
 ---
 
-### `<is-component-diagram>`
+### `<iswc-component-diagram>`
 
 Archivo: `src/components/diagrams/component-diagram.ts`. UML component (componentes + provided/required interfaces).
 
@@ -776,7 +776,7 @@ Archivo: `src/components/diagrams/component-diagram.ts`. UML component (componen
 7. **Click derecho "Add port"**.
 8. **Aria-keyboard nav**.
 9. **Modo "compact"** vs "expanded" con `mode`.
-10. **`is-toggle-group`** colapsa grupos.
+10. **`iswc-toggle-group`** colapsa grupos.
 11. **Animation turtle** sobre cables.
 12. **Mini-map**.
 13. **Aria-keyboard nav**.
@@ -785,7 +785,7 @@ Archivo: `src/components/diagrams/component-diagram.ts`. UML component (componen
 
 ---
 
-### `<is-journey-map>`
+### `<iswc-journey-map>`
 
 Archivo: `src/components/diagrams/journey-map.ts`. User journey / customer journey (fases + emociones + touchpoints).
 
@@ -801,7 +801,7 @@ Archivo: `src/components/diagrams/journey-map.ts`. User journey / customer journ
 6. **`mode="swimline"`** muestra swimlanes.
 7. **Aria-keyboard nav**.
 8. **Animación turtle en flechas entre fases**.
-9. **`is-toggle-group`** colapsa sub-fases.
+9. **`iswc-toggle-group`** colapsa sub-fases.
 10. **`open-on-click` doble-click**.
 11. **Mini-map**.
 12. **Export a PNG/SVG**.
@@ -811,7 +811,7 @@ Archivo: `src/components/diagrams/journey-map.ts`. User journey / customer journ
 
 ---
 
-### `<is-mindmap>`
+### `<iswc-mindmap>`
 
 Archivo: `src/components/diagrams/mindmap.ts`. Mindmap con nodo raíz y ramas recursivas.
 
@@ -819,7 +819,7 @@ Archivo: `src/components/diagrams/mindmap.ts`. Mindmap con nodo raíz y ramas re
 - Estructural.
 
 #### Propuestas UI/UX nuevas
-1. **Click en nodo lo expande/colapsa** — emite `is-toggle-group`.
+1. **Click en nodo lo expande/colapsa** — emite `iswc-toggle-group`.
 2. **Drag-nodo reposiciona**.
 3. **Wheel zoom + pan**.
 4. **Doble-click en nodo abre editor inline** (label).
@@ -837,7 +837,7 @@ Archivo: `src/components/diagrams/mindmap.ts`. Mindmap con nodo raíz y ramas re
 
 ---
 
-### `<is-quadrant-chart>`
+### `<iswc-quadrant-chart>`
 
 Archivo: `src/components/diagrams/quadrant-chart.ts`. Matriz 2x2 (cuadrantes) con bubble plot.
 
@@ -846,7 +846,7 @@ Archivo: `src/components/diagrams/quadrant-chart.ts`. Matriz 2x2 (cuadrantes) co
 
 #### Propuestas UI/UX nuevas
 1. **Click en un punto lo resalta** y muestra tooltip con (label, x, y).
-2. **Drag-punto reposiciona (en modo editable)** — emite `is-quadrant-move`.
+2. **Drag-punto reposiciona (en modo editable)** — emite `iswc-quadrant-move`.
 3. **Wheel zoom + pan**.
 4. **Doble-click abre editor (label + x/y)**.
 5. **Asigna automáticamente al cuadrante** (Q1/Q2/Q3/Q4) por x,y.
@@ -854,7 +854,7 @@ Archivo: `src/components/diagrams/quadrant-chart.ts`. Matriz 2x2 (cuadrantes) co
 7. **Hover sobre eje muestra unidades** (cambio de cursor y label).
 8. **`mode="snap"`** con snap a cuadrante.
 9. **Click derecho "Add point"**.
-10. **`is-toggle-group`** para colapsar clusters.
+10. **`iswc-toggle-group`** para colapsar clusters.
 11. **Aria-keyboard nav**.
 12. **Animation turtle** sobre las paths.
 13. **Mini-map**.
@@ -863,7 +863,7 @@ Archivo: `src/components/diagrams/quadrant-chart.ts`. Matriz 2x2 (cuadrantes) co
 
 ---
 
-### `<is-sankey-diagram>` (diagrams)
+### `<iswc-sankey-diagram>` (diagrams)
 
 Archivo: `src/components/diagrams/sankey-diagram.ts`. Sankey (flujos entre nodos con grosor proporcional). Ver `src/components/charts/sankey.ts` (en charts) también — verificar si son duplicados.
 
@@ -880,7 +880,7 @@ Archivo: `src/components/diagrams/sankey-diagram.ts`. Sankey (flujos entre nodos
 7. **Pan con drag en el fondo**.
 8. **Click en link fija "highlight"** — útil para análisis.
 9. **`mode="horizontal"` vs `vertical`**.
-10. **`is-toggle-group`** para colapsar grupos.
+10. **`iswc-toggle-group`** para colapsar grupos.
 11. **Mini-map**.
 12. **Color por "depth"** (origen vs destino vs intermedio).
 13. **Aria-keyboard nav**.
@@ -889,7 +889,7 @@ Archivo: `src/components/diagrams/sankey-diagram.ts`. Sankey (flujos entre nodos
 
 ---
 
-### `<is-swimlane-diagram>`
+### `<iswc-swimlane-diagram>`
 
 Archivo: `src/components/diagrams/swimlane-diagram.ts`. Swimlanes (pool/lane + tasks + arrows).
 
@@ -908,14 +908,14 @@ Archivo: `src/components/diagrams/swimlane-diagram.ts`. Swimlanes (pool/lane + t
 9. **Filtro por responsable (lane)**.
 10. **Aria-keyboard nav** entre lanes y tasks.
 11. **Color por estado (todo/done/in-progress)**.
-12. **`is-toggle-group`** para colapsar lanes vacías.
+12. **`iswc-toggle-group`** para colapsar lanes vacías.
 13. **Mini-map**.
 14. **Animation turtle**.
 15. **`open-on-click` doble-click**.
 
 ---
 
-### `<is-timeline>`
+### `<iswc-timeline>`
 
 Archivo: `src/components/diagrams/timeline.ts`. Línea de tiempo horizontal (eventos + intervalos).
 
@@ -931,7 +931,7 @@ Archivo: `src/components/diagrams/timeline.ts`. Línea de tiempo horizontal (eve
 6. **Hover muestra detalles** del evento.
 7. **Drag-select multi-evento**.
 8. **`mode="horizontal"` vs `vertical`**.
-9. **`is-toggle-group`** colapsa grupos (épocas).
+9. **`iswc-toggle-group`** colapsa grupos (épocas).
 10. **Color por categoría**.
 11. **Aria-keyboard nav**.
 12. **Mini-map**.
@@ -941,7 +941,7 @@ Archivo: `src/components/diagrams/timeline.ts`. Línea de tiempo horizontal (eve
 
 ---
 
-### `<is-venn-diagram>`
+### `<iswc-venn-diagram>`
 
 Archivo: `src/components/diagrams/venn-diagram.ts`. Diagrama de Venn (2-4 conjuntos).
 
@@ -961,13 +961,13 @@ Archivo: `src/components/diagrams/venn-diagram.ts`. Diagrama de Venn (2-4 conjun
 10. **Color por set** con alpha.
 11. **Aria-keyboard nav**.
 12. **Leyenda**.
-13. **`is-toggle-group`** colapsa grupos.
+13. **`iswc-toggle-group`** colapsa grupos.
 14. **`open-on-click` doble-click**.
 15. **Mini-map**.
 
 ---
 
-### `<is-use-case-diagram>`
+### `<iswc-use-case-diagram>`
 
 Archivo: `src/components/diagrams/use-case-diagram.ts`. Casos de uso UML (actors + use cases + relationships).
 
@@ -982,7 +982,7 @@ Archivo: `src/components/diagrams/use-case-diagram.ts`. Casos de uso UML (actors
 5. **Doble-click abre editor del use case**.
 6. **Click derecho "Add actor/Add use case"**.
 7. **`mode="extend"|"include"`** para tipos de flechas.
-8. **`is-toggle-group`** colapsa sub-system.
+8. **`iswc-toggle-group`** colapsa sub-system.
 9. **Aria-keyboard nav**.
 10. **Animation turtle** sobre las flechas.
 11. **Mini-map**.
@@ -993,7 +993,7 @@ Archivo: `src/components/diagrams/use-case-diagram.ts`. Casos de uso UML (actors
 
 ---
 
-### `<is-block-diagram>`
+### `<iswc-block-diagram>`
 
 Archivo: `src/components/diagrams/block-diagram.ts`. Diagramas de bloques (rectángulos + flechas).
 
@@ -1009,7 +1009,7 @@ Archivo: `src/components/diagrams/block-diagram.ts`. Diagramas de bloques (rect�
 6. **Drag de output de A a input de B crea una conexión**.
 7. **Doble-click abre editor (label + tamaño)**.
 8. **Click derecho "Add block / Connect / Delete"**.
-9. **`is-toggle-group`** colapsa clusters.
+9. **`iswc-toggle-group`** colapsa clusters.
 10. **Aria-keyboard nav**.
 11. **Animation turtle** sobre las flechas.
 12. **Color por tipo (input/output/process/storage)**.
@@ -1043,13 +1043,13 @@ Archivo: `src/components/diagrams/block-diagram.ts`. Diagramas de bloques (rect�
 - `transition-property` con CSS vars (no inline).
 
 ### Responsive
-- Mobile (`<480px`): labels se ocultan, sólo value+icon en `is-stat`.
+- Mobile (`<480px`): labels se ocultan, sólo value+icon en `iswc-stat`.
 - `ResizeObserver` recalcula layout.
 - Scroll horizontal cuando hay >N categorías.
 - `tooltip.followCursor` en mobile (vs `tap` para abrir).
 
 ### Export
-- `is-export-png`, `is-export-svg`, `is-export-csv` (events).
+- `iswc-export-png`, `iswc-export-svg`, `iswc-export-csv` (events).
 - Copy-to-clipboard.
 - Print stylesheet (`@media print { … }`).
 

@@ -1,14 +1,14 @@
 ---
-tag: is-heading
+tag: iswc-heading
 tags:
-  - is-heading
+  - iswc-heading
 category: isp
 status: public
 source: ./heading.js
 style: ./heading.css
 preview: ./heading.json
 ---
-# `<is-heading>`
+# `<iswc-heading>`
 
 ## Propósito
 
@@ -16,7 +16,7 @@ Título de nivel 1 a 6 con tinte de marca. Port de
 `src/lib/typography/H1.svelte` … `H6.svelte` de ISP, unificados en un solo
 módulo multi-nivel.
 
-Este módulo registra `<is-heading>`.
+Este módulo registra `<iswc-heading>`.
 
 ## Cuándo usarlo
 
@@ -26,7 +26,7 @@ paleta activa y una escala en `em` coherente con el resto del kit.
 ## Cuándo no usarlo
 
 No usar por su tamaño: el nivel es semántico. Para texto grande sin jerarquía,
-usa `<is-text>` dentro de un contexto con `font-size` mayor.
+usa `<iswc-text>` dentro de un contexto con `font-size` mayor.
 
 ## Importación
 
@@ -37,9 +37,9 @@ import './heading.js';
 ## Ejemplo mínimo
 
 ```html
-<is-heading level="1">Título de página</is-heading>
-<is-heading level="3" color="success">Sección aprobada</is-heading>
-<is-heading level="2" mix="0%">Solo acento</is-heading>
+<iswc-heading level="1">Título de página</iswc-heading>
+<iswc-heading level="3" color="success">Sección aprobada</iswc-heading>
+<iswc-heading level="2" mix="0%">Solo acento</iswc-heading>
 ```
 
 ## Mapeo Svelte → Web Component
@@ -132,7 +132,7 @@ Cambiar `level` reemplaza únicamente el `<hN>` dentro del shadow root; los
 - [`../_shared/adopt-css.js`](../_shared/adopt-css.js)
 - [`text.md`](text.md)
 
-Tags del módulo: `<is-heading>`.
+Tags del módulo: `<iswc-heading>`.
 
 ## Accesibilidad
 
@@ -144,14 +144,14 @@ tamaño.
 
 ```html
 <div style="font-size: 1.25em">
-  <is-heading level="2" style="--h-mix: 0%">Solo acento</is-heading>
+  <iswc-heading level="2" style="--h-mix: 0%">Solo acento</iswc-heading>
 </div>
 ```
 
 ## Errores comunes
 
 - Elegir el `level` por tamaño y romper la jerarquía del documento.
-- Esperar seis tags (`<is-h1>`…): el módulo registra un único `<is-heading>`.
+- Esperar seis tags (`<iswc-h1>`…): el módulo registra un único `<iswc-heading>`.
 - Crear size colors; usar font-size contextual y em.
 
 ## Reglas para LLM

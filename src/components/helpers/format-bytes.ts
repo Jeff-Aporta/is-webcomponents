@@ -3,7 +3,7 @@ import { ElementBase } from '../../core/element-base.js';
 import { resolveLocale } from '../_shared/resolve-locale.js';
 
 /**
- * <is-format-bytes> — Web Component (vanilla).
+ * <iswc-format-bytes> — Web Component (vanilla).
  *
  * Formatea tamaños de archivo legibles.
  *
@@ -17,7 +17,7 @@ import { resolveLocale } from '../_shared/resolve-locale.js';
  *            escalado clásico con más decimales.
  */
 
-/** Unidades y multiplicadores compartidos por is-format-bytes e is-format. */
+/** Unidades y multiplicadores compartidos por iswc-format-bytes e iswc-format. */
 export const BYTE_UNITS = ['byte', 'kilobyte', 'megabyte', 'gigabyte', 'terabyte', 'petabyte'] as const;
 export type ByteUnit = (typeof BYTE_UNITS)[number];
 export const BYTE_MULT: Record<ByteUnit, number> = {
@@ -81,7 +81,7 @@ export function formatBytes(bytes: number, { locale, display = 'short', autofit 
 
   const OBSERVED = ['value', 'unit', 'display', 'locale', 'autofit'];
 
-  class IsFormatBytes extends ElementBase {
+  class IswcFormatBytes extends ElementBase {
     static get observedAttributes(): string[] { return OBSERVED; }
 
     #el!: HTMLElement;
@@ -127,5 +127,5 @@ export function formatBytes(bytes: number, { locale, display = 'short', autofit 
     }
   }
 
-  defineElement('is-format-bytes', IsFormatBytes, 'IsFormatBytes');
+  defineElement('iswc-format-bytes', IswcFormatBytes, 'IswcFormatBytes');
 })();

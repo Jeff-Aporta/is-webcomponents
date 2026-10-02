@@ -1,14 +1,14 @@
 ---
-tag: is-main
+tag: iswc-main
 tags:
-  - is-main
+  - iswc-main
 category: layout
 status: public
 source: ./main.js
 style: ./main.css
 preview: ./main.json
 ---
-# `<is-main>`
+# `<iswc-main>`
 
 ## Propósito
 
@@ -16,7 +16,7 @@ Contenedor scrollable equivalente a <main>.
 La persistencia de scroll es opt-in estricta: requiere
 remember-scroll y storage-key.
 
-Este módulo registra `<is-main>`.
+Este módulo registra `<iswc-main>`.
 
 ## Cuándo usarlo
 
@@ -35,9 +35,9 @@ import './main.js';
 ## Ejemplo mínimo
 
 ```html
-<is-main class="main" remember-scroll storage-key="docs-mi-vista">
+<iswc-main class="main" remember-scroll storage-key="docs-mi-vista">
 …
-</is-main>
+</iswc-main>
 ```
 
 ## API
@@ -98,13 +98,13 @@ No declara integración form-associated propia en este módulo.
 
 Documentación de cabecera preservada desde fuente:
 
-> <is-main> — contenedor scrollable tipo <main>.
+> <iswc-main> — contenedor scrollable tipo <main>.
 > Remember-scroll es OPT-IN estricto: hace falta
 >   remember-scroll  +  storage-key="…"
 > Sin ambos → no lee ni escribe localStorage.
 > Attrs
 >   remember-scroll   boolean — activa persistencia (default: off)
->   storage-key       string  — id único bajo is-components.is-main
+>   storage-key       string  — id único bajo is-components.iswc-main
 >   scroll-ttl        number  — ms de validez (default: 3600000 = 1h)
 > Methods: scrollToTop(), clearRememberedScroll(), saveScroll(), restoreScroll()
 > Restore solo en reload / back_forward. Navegación fresca (p. ej. cambio
@@ -124,7 +124,7 @@ Detalle de la restauración:
 
 - [`../_shared/prefs.js`](../_shared/prefs.js)
 
-Tags del módulo: `<is-main>`.
+Tags del módulo: `<iswc-main>`.
 
 ## Accesibilidad
 
@@ -133,9 +133,9 @@ Preservar semántica, foco, teclado, labels y ARIA. ARIA detectado: ninguno expl
 ## Ejemplo avanzado
 
 ```html
-<is-main class="main" remember-scroll storage-key="docs-mi-vista">
+<iswc-main class="main" remember-scroll storage-key="docs-mi-vista">
 …
-</is-main>
+</iswc-main>
 ```
 
 ## Errores comunes

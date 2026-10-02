@@ -3,8 +3,8 @@
 <head>
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1" />
-  <title>Demo: <is-share-button> · is-webcomponents</title>
-  <meta name="description" content="Demo de <is-share-button>: usa Web Share API y cae a clipboard si no está disponible." />
+  <title>Demo: <iswc-share-button> · is-webcomponents</title>
+  <meta name="description" content="Demo de <iswc-share-button>: usa Web Share API y cae a clipboard si no está disponible." />
   <style>
     html, body {
       margin: 0; padding: 24px; min-height: 100%;
@@ -18,28 +18,28 @@
     section h2 { margin: 0 0 12px 0; font-size: 13px; color: #94a3b8; text-transform: uppercase; letter-spacing: 0.06em; }
     pre { background: #0a0f17; padding: 10px; border-radius: 6px; font: 12px ui-monospace, Menlo, Consolas, monospace; color: #cbd5e1; overflow: auto; }
     /* Anti-FOUC */
-    is-share-button:not(:defined) { visibility: hidden; }
+    iswc-share-button:not(:defined) { visibility: hidden; }
   </style>
 </head>
 <body>
   <header>
-    <h1>Demo: <code>&lt;is-share-button&gt;</code></h1>
-    <p>Invoca la Web Share API. Si el navegador no la soporta, copia al portapapeles. Emite <code>is-share</code> con <code>{ how: 'shared' | 'copied' }</code>.</p>
+    <h1>Demo: <code>&lt;iswc-share-button&gt;</code></h1>
+    <p>Invoca la Web Share API. Si el navegador no la soporta, copia al portapapeles. Emite <code>iswc-share</code> con <code>{ how: 'shared' | 'copied' }</code>.</p>
   </header>
 
   <section>
     <h2>Por defecto (title + url de la página)</h2>
-    <is-share-button id="s1"></is-share-button>
+    <iswc-share-button id="s1"></iswc-share-button>
   </section>
 
   <section>
     <h2>Con datos custom</h2>
-    <is-share-button id="s2" share-title="Mi artículo" text="Te recomiendo este post" url="https://example.com/post/123"></is-share-button>
+    <iswc-share-button id="s2" share-title="Mi artículo" text="Te recomiendo este post" url="https://example.com/post/123"></iswc-share-button>
   </section>
 
   <section>
     <h2>Disabled</h2>
-    <is-share-button id="s3" disabled></is-share-button>
+    <iswc-share-button id="s3" disabled></iswc-share-button>
   </section>
 
   <section>
@@ -48,9 +48,9 @@
   </section>
 
   <script type="module">
-    await import('../../../dist/cdn/actions/share-button.min.js?h=zwutgw');
-    await import('../../../dist/cdn/actions/button.min.js?h=ki2dk5');
-    await customElements.whenDefined('is-share-button');
+    await import('../../../dist/cdn/actions/share-button.min.js?h=8ymgbz');
+    await import('../../../dist/cdn/actions/button.min.js?h=5i9tzt');
+    await customElements.whenDefined('iswc-share-button');
 
     const log = document.getElementById('log');
     const events = [];
@@ -59,9 +59,9 @@
       log.textContent = JSON.stringify(events, null, 2);
     };
 
-    document.querySelectorAll('is-share-button').forEach((s) => {
-      s.addEventListener('is-share', (e) => record('share', e.detail));
-      s.addEventListener('is-error', () => record('error', {}));
+    document.querySelectorAll('iswc-share-button').forEach((s) => {
+      s.addEventListener('iswc-share', (e) => record('share', e.detail));
+      s.addEventListener('iswc-error', () => record('error', {}));
     });
 
     document.documentElement.dataset.shareButtonReady = '1';

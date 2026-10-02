@@ -1,7 +1,7 @@
-// tooltip.test.mjs — tests exhaustivos del demo is-tooltip.
+// tooltip.test.mjs — tests exhaustivos del demo iswc-tooltip.
 // Cobertura: smoke + funcional (hover, focus, click, manual triggers,
 // show/hide, Escape/click-fuera en modos interactivos) + aria-describedby
-// se aplica al target + eventos is-show/is-hide.
+// se aplica al target + eventos iswc-show/iswc-hide.
 import assert from 'node:assert/strict';
 import { BASE_URL, newPage, close, waitReady, screenshot, report } from './lib/harness.mjs';
 
@@ -15,14 +15,14 @@ tests.push({
     await page.goto(URL, { waitUntil: 'domcontentloaded' });
     await waitReady(page, 'data-tooltip-ready');
     const data = await page.evaluate(() => {
-      const all = document.querySelectorAll('is-tooltip');
+      const all = document.querySelectorAll('iswc-tooltip');
       return {
-        defined: !!customElements.get('is-tooltip'),
+        defined: !!customElements.get('iswc-tooltip'),
         count: all.length,
         allClosed: [...all].every((t) => !t.hasAttribute('open')),
       };
     });
-    assert.equal(data.defined, true, 'is-tooltip debe estar definido');
+    assert.equal(data.defined, true, 'iswc-tooltip debe estar definido');
     assert.ok(data.count >= 5, `esperaba >=5 tooltips, hay ${data.count}`);
     assert.equal(data.allClosed, true, 'todos los tooltips deben iniciar cerrados');
     await screenshot(page, 'tooltip-smoke');
@@ -37,7 +37,7 @@ tests.push({
     await page.waitForTimeout(150);
     const opened = await page.evaluate(async () => {
       const t = document.getElementById('t1');
-      const tip = document.querySelectorAll('is-tooltip')[0];
+      const tip = document.querySelectorAll('iswc-tooltip')[0];
       t.dispatchEvent(new PointerEvent('pointerenter', { bubbles: true, composed: true }));
       // showDelay default 150ms
       await new Promise((r) => setTimeout(r, 250));
@@ -56,7 +56,7 @@ tests.push({
     await page.evaluate(() => document.getElementById('t3').focus());
     await page.waitForTimeout(200);
     const opened = await page.evaluate(() => {
-      const tip = document.querySelectorAll('is-tooltip')[2]; // t3
+      const tip = document.querySelectorAll('iswc-tooltip')[2]; // t3
       return tip.hasAttribute('open');
     });
     assert.equal(opened, true, 'focus debe abrir el tooltip (trigger=focus)');
@@ -72,13 +72,13 @@ tests.push({
     await page.evaluate(() => document.getElementById('t3').focus());
     await page.waitForTimeout(200);
     const opened = await page.evaluate(() => {
-      return document.querySelectorAll('is-tooltip')[2].hasAttribute('open');
+      return document.querySelectorAll('iswc-tooltip')[2].hasAttribute('open');
     });
     assert.equal(opened, true, 'precondición: focus debe abrir');
     await page.evaluate(() => document.getElementById('t3').blur());
     await page.waitForTimeout(150);
     const closed = await page.evaluate(() => {
-      return document.querySelectorAll('is-tooltip')[2].hasAttribute('open');
+      return document.querySelectorAll('iswc-tooltip')[2].hasAttribute('open');
     });
     assert.equal(closed, false, 'blur debe cerrar el tooltip');
   },
@@ -92,7 +92,7 @@ tests.push({
     await page.waitForTimeout(150);
     const states = await page.evaluate(async () => {
       const t = document.getElementById('t4');
-      const tip = document.querySelectorAll('is-tooltip')[3];
+      const tip = document.querySelectorAll('iswc-tooltip')[3];
       const get = () => tip.hasAttribute('open');
       t.click();
       await new Promise((r) => requestAnimationFrame(() => r()));
@@ -137,17 +137,17 @@ tests.push({
 });
 
 tests.push({
-  name: 'eventos: is-show / is-after-show se disparan al abrir',
+  name: 'eventos: iswc-show / iswc-after-show se disparan al abrir',
   run: async (page) => {
     await page.goto(URL, { waitUntil: 'domcontentloaded' });
     await waitReady(page, 'data-tooltip-ready');
     await page.waitForTimeout(150);
     const seen = await page.evaluate(async () => {
-      // Los eventos is-show/is-after-show son bubbles: false (ver tooltip.ts).
+      // Los eventos iswc-show/iswc-after-show son bubbles: false (ver tooltip.ts).
       // Hay que escuchar DIRECTAMENTE en el elemento, no en document.
       const tt = document.getElementById('tt5');
       const events = [];
-      for (const ev of ['is-show', 'is-after-show', 'is-hide', 'is-after-hide']) {
+      for (const ev of ['iswc-show', 'iswc-after-show', 'iswc-hide', 'iswc-after-hide']) {
         tt.addEventListener(ev, () => events.push(ev));
       }
       tt.show();
@@ -156,10 +156,10 @@ tests.push({
       await new Promise((r) => requestAnimationFrame(() => r()));
       return events;
     });
-    assert.ok(seen.includes('is-show'), `esperaba is-show, vi ${JSON.stringify(seen)}`);
-    assert.ok(seen.includes('is-after-show'), `esperaba is-after-show, vi ${JSON.stringify(seen)}`);
-    assert.ok(seen.includes('is-hide'), `esperaba is-hide, vi ${JSON.stringify(seen)}`);
-    assert.ok(seen.includes('is-after-hide'), `esperaba is-after-hide, vi ${JSON.stringify(seen)}`);
+    assert.ok(seen.includes('iswc-show'), `esperaba iswc-show, vi ${JSON.stringify(seen)}`);
+    assert.ok(seen.includes('iswc-after-show'), `esperaba iswc-after-show, vi ${JSON.stringify(seen)}`);
+    assert.ok(seen.includes('iswc-hide'), `esperaba iswc-hide, vi ${JSON.stringify(seen)}`);
+    assert.ok(seen.includes('iswc-after-hide'), `esperaba iswc-after-hide, vi ${JSON.stringify(seen)}`);
   },
 });
 
@@ -170,7 +170,7 @@ tests.push({
     await waitReady(page, 'data-tooltip-ready');
     await page.waitForTimeout(150);
     const info = await page.evaluate(() => {
-      const tip = document.querySelectorAll('is-tooltip')[0];
+      const tip = document.querySelectorAll('iswc-tooltip')[0];
       const t = document.getElementById('t1');
       return {
         tipId: tip.id || tip.shadowRoot?.querySelector('.tooltip')?.id,

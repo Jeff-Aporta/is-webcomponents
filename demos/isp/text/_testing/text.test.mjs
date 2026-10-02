@@ -1,4 +1,4 @@
-// text.test.mjs — tests exhaustivos del demo <is-text>.
+// text.test.mjs — tests exhaustivos del demo <iswc-text>.
 // Cobertura: smoke + funcional (color semántico/CSS/current, mix, lines)
 // + clamp real en el browser + colorKind.
 import assert from 'node:assert/strict';
@@ -14,20 +14,20 @@ tests.push({
     await page.goto(URL, { waitUntil: 'domcontentloaded' });
     await waitReady(page, 'data-text-ready');
     const info = await page.evaluate(() => {
-      const texts = [...document.querySelectorAll('is-text')];
+      const texts = [...document.querySelectorAll('iswc-text')];
       const hasPart = texts.every((t) => {
         const sr = t.shadowRoot;
         return !!sr?.querySelector('slot[part="content"]');
       });
       return {
-        defined: !!customElements.get('is-text'),
+        defined: !!customElements.get('iswc-text'),
         count: texts.length,
         allHaveContentSlot: hasPart,
       };
     });
     assert.equal(info.defined, true);
     assert.ok(info.count >= 15, `esperaba >=15 textos, hay ${info.count}`);
-    assert.equal(info.allHaveContentSlot, true, 'cada <is-text> debe tener slot[part=content]');
+    assert.equal(info.allHaveContentSlot, true, 'cada <iswc-text> debe tener slot[part=content]');
     await screenshot(page, 'text-smoke');
   },
 });
@@ -39,13 +39,13 @@ tests.push({
     await waitReady(page, 'data-text-ready');
     await page.waitForTimeout(100);
     const result = await page.evaluate(() => {
-      const t1 = document.createElement('is-text');
+      const t1 = document.createElement('iswc-text');
       t1.color = 'success';
       document.body.appendChild(t1);
-      const t2 = document.createElement('is-text');
+      const t2 = document.createElement('iswc-text');
       t2.color = '#abcdef';
       document.body.appendChild(t2);
-      const t3 = document.createElement('is-text');
+      const t3 = document.createElement('iswc-text');
       t3.color = 'current';
       document.body.appendChild(t3);
       const r = {
@@ -69,7 +69,7 @@ tests.push({
     await waitReady(page, 'data-text-ready');
     await page.waitForTimeout(100);
     const result = await page.evaluate(() => {
-      const t = document.createElement('is-text');
+      const t = document.createElement('iswc-text');
       t.color = 'brand';
       t.mix = '30%';
       document.body.appendChild(t);
@@ -103,10 +103,10 @@ tests.push({
     await waitReady(page, 'data-text-ready');
     await page.waitForTimeout(100);
     const result = await page.evaluate(async () => {
-      // Crear un contenedor con ancho fijo y un is-text con lines=2.
+      // Crear un contenedor con ancho fijo y un iswc-text con lines=2.
       const wrap = document.createElement('div');
       wrap.style.cssText = 'width: 12rem; padding: 0; background: rgba(255,255,255,0.04);';
-      const t = document.createElement('is-text');
+      const t = document.createElement('iswc-text');
       t.textContent = 'Lorem ipsum dolor sit amet consectetur adipiscing elit sed do eiusmod tempor incididunt ut labore et dolore magna aliqua ut enim ad minim veniam.';
       t.lines = 2;
       wrap.appendChild(t);
@@ -139,7 +139,7 @@ tests.push({
     await waitReady(page, 'data-text-ready');
     await page.waitForTimeout(100);
     const result = await page.evaluate(() => {
-      const t = document.createElement('is-text');
+      const t = document.createElement('iswc-text');
       t.lines = 3;
       document.body.appendChild(t);
       const hasMx = t.style.getPropertyValue('--mx-lns');

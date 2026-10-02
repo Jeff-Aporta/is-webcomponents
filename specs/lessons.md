@@ -38,7 +38,7 @@ Lecciones pagadas, agrupadas por tema. Cada fila: síntoma → regla/fix → gua
 | Lección | Regla | Guardián |
 |---|---|---|
 | `variant="ghost"` inventado → se pinta con el default, sin síntoma | Verificar el enum (`VALID_*`/JSDoc) antes de usarlo; no inventar por analogía | `attr-enums` |
-| Evento documentado que nadie emite (`is-invalid`) → listener que nunca salta | Escuchar el `invalid` nativo y reemitir; no envolver `checkValidity` | `button-events` |
+| Evento documentado que nadie emite (`iswc-invalid`) → listener que nunca salta | Escuchar el `invalid` nativo y reemitir; no envolver `checkValidity` | `button-events` |
 | Preview enseñaba menos de lo que el componente acepta (`5 de 7 colores`) | Lo que falta no da error; mantener preview = fuente | `attr-enums` |
 | `hasAttribute` no prueba tipo booleano | Marcar boolean solo con setter toggle o contrato explícito | — |
 
@@ -57,7 +57,7 @@ Lecciones pagadas, agrupadas por tema. Cada fila: síntoma → regla/fix → gua
 
 | Lección | Regla | Guardián |
 |---|---|---|
-| Escala em que no escala (`is-fab`: 0.75/1/1.25em salen iguales) | `:host { font-size: inherit }` + control nativo `font: inherit`; tono con `this.color` (no `this.variant`) | `em-scale-font-inherit` |
+| Escala em que no escala (`iswc-fab`: 0.75/1/1.25em salen iguales) | `:host { font-size: inherit }` + control nativo `font: inherit`; tono con `this.color` (no `this.variant`) | `em-scale-font-inherit` |
 | `this.variant` usado para el tono semántico tras rename a `color` | `color` = familia; `variant` = apariencia | `em-scale-font-inherit` |
 
 ## Persistencia
@@ -71,15 +71,15 @@ Lecciones pagadas, agrupadas por tema. Cada fila: síntoma → regla/fix → gua
 
 | Lección | Regla | Guardián |
 |---|---|---|
-| HTML gordo + lógica mezclada por tag (400+ líneas) | JSON `is-preview/v1` + `<is-preview-component>` + `behaviors/`; solo `_shell.html` | `preview-json-contract`, `preview-controller` |
+| HTML gordo + lógica mezclada por tag (400+ líneas) | JSON `iswc-preview/v1` + `<iswc-preview-component>` + `behaviors/`; solo `_shell.html` | `preview-json-contract`, `preview-controller` |
 | Migración HTML→JSON que pierde el body (sin secciones → JSON vacío) | Sin sections → un bloque `html` con el body; verificar tamaños/contenido clave | `preview-json-contract` |
-| Utilería sin tab (`IsUi` en CDN/MD pero no en nav) | `helpers/` público = manifest + JSON + MD | `helpers-homogeneity` |
+| Utilería sin tab (`IswcUi` en CDN/MD pero no en nav) | `helpers/` público = manifest + JSON + MD | `helpers-homogeneity` |
 | `demo-code.js` snippet sin `data-theme`/`data-palette` → al pegarlo no hereda contexto | `withSnippetContext`/`stampContext` sella la raíz | `palette-and-snippet-contract` |
 | Bloque «HTML puro equivalente» bajo demos → ruido | No llamar `renderDemoEquiv`; `equivHtml` opcional en JSON, no se pinta | `demo-equiv` |
 | Lógica de preview en strings/`eval` → rompe tipado/debug/seguridad | Solo markup/CSS/código en el JSON; listeners en `behaviors/` | — |
 | `#toaster`/`#grid` ausentes en el JSON → `TypeError` silencioso al montar | El `mount` crea el host o falla el UX; `ISComponentPreview.on(null,…)` no-op | `ux-gallery-invariants` |
-| F5 al final del docs por `scrollIntoView` de CM | Paths `.min` en `<code>` (no `<is-code>`); editor nativo sin scrollIntoView | `gallery-sources-meta` |
-| Visor de fuentes "vacío" con texto en el atributo | `dlg.show()` antes de `loadKind`; `refreshEditor` en `is-after-show`/`is-tab-show`; `paintOne` siempre `el.value=text`; chrome con `is-tab-group` | `gallery-sources-meta` |
+| F5 al final del docs por `scrollIntoView` de CM | Paths `.min` en `<code>` (no `<iswc-code>`); editor nativo sin scrollIntoView | `gallery-sources-meta` |
+| Visor de fuentes "vacío" con texto en el atributo | `dlg.show()` antes de `loadKind`; `refreshEditor` en `iswc-after-show`/`iswc-tab-show`; `paintOne` siempre `el.value=text`; chrome con `iswc-tab-group` | `gallery-sources-meta` |
 | Modal de fuentes no full-page (`min(96vw)`/`70vh`) | `width="100vw"` `spacing="0"` + `::part(dialog)` stretch | `gallery-sources-meta` |
 
 ## Boot (galería)
@@ -95,7 +95,7 @@ Lecciones pagadas, agrupadas por tema. Cada fila: síntoma → regla/fix → gua
 
 | Lección | Regla | Guardián |
 |---|---|---|
-| `load('actions')` + luego `load('is-button')` → doble fetch | Anti-redundancia: `has`/`skipped`; preferir categoría/tags | `load-plan` |
+| `load('actions')` + luego `load('iswc-button')` → doble fetch | Anti-redundancia: `has`/`skipped`; preferir categoría/tags | `load-plan` |
 | `all.min.js` suelto en head → bundle enorme | Sin `all.min.js`/`category.*.min.js`; `load('all')` = jobs por tag | `cdn-folders` |
 | Minificado sin rutas MD → LLM sin contexto | Banner `/*! … docs (LLM) */` + copiar `loader.md` al dist | `cdn-loader` |
 | Carga categoría sin jobs (`planLoads(['actions'])` = []) | Marcar `coveredTag` después de empujar jobs del lote | `load-plan` |
@@ -112,7 +112,7 @@ Lecciones pagadas, agrupadas por tema. Cada fila: síntoma → regla/fix → gua
 | Self-loop delegado al A* → colapsa a 1 celda (línea vertical con banderín) | Trazar a mano 4 esquinas (`M→out→up→back`) | `sequence-self-loop` |
 | Leyenda medida sobre el centro del último actor → solapa | `baseW + boxW[n-1]/2 + 16`; grid máx 3 filas | `sequence-legend-grid` |
 | `ifaceById` poblado antes de geometría → aristas a `(0,0)` | Rellenar el mapa auxiliar DESPUÉS del map de geometría | `component-diagram-ifaces` |
-| Headless/PNG ilegible con geometry checks verdes | La cabecera cuenta para el ancho; etiquetas fuera de la figura entran al lienzo; `is-org-chart` (foreignObject) no vale para imagen exportada | `render-legibilidad` |
+| Headless/PNG ilegible con geometry checks verdes | La cabecera cuenta para el ancho; etiquetas fuera de la figura entran al lienzo; `iswc-org-chart` (foreignObject) no vale para imagen exportada | `render-legibilidad` |
 | `DiagramTheme` no asignable a `TurtleTheme` (index signature) | `theme as unknown as TurtleTheme` en el call-site de `setData` | `theme-cast` |
 | `Array<LayoutEdge>` no asignable a `readonly EdgeWithHue[]` | `as unknown as readonly EdgeWithHue[]` en `assignEdgeHues` | `readonly-array-cast` |
 | `MindmapNode[]` vs `readonly RawNode[]` (id y parent con tipos diferentes) | `spec.nodes as unknown as readonly RawNode[]` antes de `buildTree` | `raw-node-cast` |

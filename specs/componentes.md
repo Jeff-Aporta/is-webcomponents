@@ -13,7 +13,7 @@ Cada tag es un Custom Element con Shadow DOM. El inventario y rutas de build sal
 
 - Prefijo obligatorio: `is-`.
 - Categorías del manifest: `actions`, `feedback`, `forms`, `data`, `charts`, `diagrams`, `layout`, `navigation`, `helpers`, `media`, `isp`, `code`, …
-- Sub-tags (p. ej. `is-tab-panel`) comparten `page` con el padre en nav; no son tabs propios.
+- Sub-tags (p. ej. `iswc-tab-panel`) comparten `page` con el padre en nav; no son tabs propios.
 - La categoría **lógica** puede diferir de la carpeta: seguir el `script` de `manifest.js`, no el nombre de la categoría. `data-viz` es el caso típico (la mayoría de gráficas vive en `charts/`).
 
 ## S-K2 Shadow DOM y estilos
@@ -40,7 +40,7 @@ Cada tag es un Custom Element con Shadow DOM. El inventario y rutas de build sal
 ## S-K5 Diagramas e ISP
 
 - Diagramas: payload declarativo + kind registry; no registrar `specs/` internos como CE. Reusar `node-link-layout.js`, `tree-layout.js`, `path-turtle.js`, `diagram-kinds.js`, `diagram-grid.js`, `tk-*.js`.
-- `isp/`: ports de ISP-SvelteComponents (`is-tree-view`, `is-form`, layouts…). Medición por contenedor vía `BreakpointHost` (`block-layout.js`).
+- `isp/`: ports de ISP-SvelteComponents (`iswc-tree-view`, `iswc-form`, layouts…). Medición por contenedor vía `BreakpointHost` (`block-layout.js`).
 
 ## Convenciones por grupo
 
@@ -50,9 +50,9 @@ Cada tag es un Custom Element con Shadow DOM. El inventario y rutas de build sal
 
 - **`color` × `variant` son dimensiones ortogonales.** `color` → roles `--_tone-*` (tokens relativos de `is-base`/`palettes`); `variant` → consume `--_tone-*`. Añadir un color = una regla de enlace `:host([color="nuevo"])`; añadir una apariencia = una regla de variant genérica. **No** reabrir la matriz N×M `:host([color=X][variant=Y])`. **No** pedir `--iswc-color-*-600/-500` (el tema ya no los define → filled/outlined transparentes sin error). Fallback `var(--iswc-color-X-strong, #hex)` en el sitio de uso, **nunca** un bloque `--iswc-color-X-600:` en `:host` (marca invisible al desajustar con el tema).
 - **Escala em real.** Controles nativos (`<button>`/`<input>`) dentro del shadow DEBEN `font: inherit`/`font-size: inherit`; el host debe `font-size: inherit`. Sin eso la escala `em` miente (UA fija ~16px). Tono en JS → `this.color`, **no** `this.variant`.
-- **Context menu + scroll:** no reposicionar el panel en cada scroll; cerrar al `scroll` (capture en `window`) salvo scroll interno; `scroll-lock` → `documentElement.overflow = hidden` mientras está abierto (patrón de `is-loading-overlay`). **No** bloquear scroll por defecto.
-- **Submit de forms:** un `<is-button type="submit">` dentro de un form light-DOM **no** envía el form por sí solo (el `<button>` real está en shadow). Usar `requestSubmit`/`reset` cableados en `button.js`, o `onclick` que dispare el submit.
-- **Reusar:** `<is-copy-button>` (feedback de éxito/error), `<is-share-button>` (Web Share nativo, fallback copiar), `<is-tooltip>`/`<is-popover>`. **No** reimplementar clipboard ni overlays.
+- **Context menu + scroll:** no reposicionar el panel en cada scroll; cerrar al `scroll` (capture en `window`) salvo scroll interno; `scroll-lock` → `documentElement.overflow = hidden` mientras está abierto (patrón de `iswc-loading-overlay`). **No** bloquear scroll por defecto.
+- **Submit de forms:** un `<iswc-button type="submit">` dentro de un form light-DOM **no** envía el form por sí solo (el `<button>` real está en shadow). Usar `requestSubmit`/`reset` cableados en `button.js`, o `onclick` que dispare el submit.
+- **Reusar:** `<iswc-copy-button>` (feedback de éxito/error), `<iswc-share-button>` (Web Share nativo, fallback copiar), `<iswc-tooltip>`/`<iswc-popover>`. **No** reimplementar clipboard ni overlays.
 
 ### S-K7 charts
 
@@ -64,35 +64,35 @@ Cada tag es un Custom Element con Shadow DOM. El inventario y rutas de build sal
 
 ### S-K8 code
 
-- **Tag canónico `is-code`.** **No existe** `is-code-editor` (rename histórico). URLs/bookmarks viejos con `component:'is-code-editor'` abren preview vacío. Preview en `?s={"component":"is-code"}`.
-- **Motor de resaltado NATIVO** (`_shared/code-highlight.ts` → tokens `.tok-*` ↔ `--iswc-code-*`, tema `code-theme.js`). **No** CodeMirror (ni 5 ni 6), **no** themes `cm-s-*`, **no** CSS CDN. `highlight-code.js` pinta `<pre class="code">` → `<is-code readonly compact>` (marcador `data-cm` = ya montado).
+- **Tag canónico `iswc-code`.** **No existe** `iswc-code-editor` (rename histórico). URLs/bookmarks viejos con `component:'iswc-code-editor'` abren preview vacío. Preview en `?s={"component":"iswc-code"}`.
+- **Motor de resaltado NATIVO** (`_shared/code-highlight.ts` → tokens `.tok-*` ↔ `--iswc-code-*`, tema `code-theme.js`). **No** CodeMirror (ni 5 ni 6), **no** themes `cm-s-*`, **no** CSS CDN. `highlight-code.js` pinta `<pre class="code">` → `<iswc-code readonly compact>` (marcador `data-cm` = ya montado).
 - **Snippets de demos HTML:** `lang="html"` explícito **o** dejar que `inferLanguage` corra. **No** marcar `data-cm="1"` prematuro: sin `lang` el default es `javascript` y `<` se pinta como operador (cian). Snippets docs: `readonly` + `compact` + `softFormat`.
 - **Galería — fuentes (`view-sources.js`, `demo-file-meta.js`, `component-sources.js`):**
-  - Barra `.file-meta-page` **una sola vez** tras el título del preview (botones JS/CSS/MD + chips path `.min` + `<is-format-bytes autofit>`). **No** repetir bajo cada `h2`/`is-demo`; **no** `.vs-page-bar` con hints; **no** `position: sticky` (fluye con el scroll).
-  - Paths CDN en `.file-meta`: `<code class="file-meta__path">` (no `<is-code>` — con CM movía `is-main`; el editor nativo no hace scrollIntoView).
+  - Barra `.file-meta-page` **una sola vez** tras el título del preview (botones JS/CSS/MD + chips path `.min` + `<iswc-format-bytes autofit>`). **No** repetir bajo cada `h2`/`iswc-demo`; **no** `.vs-page-bar` con hints; **no** `position: sticky` (fluye con el scroll).
+  - Paths CDN en `.file-meta`: `<code class="file-meta__path">` (no `<iswc-code>` — con CM movía `iswc-main`; el editor nativo no hace scrollIntoView).
   - `#vsPath` = **URL absoluta con host** (`<a class="vs-path">`), no el `repoPath` relativo.
   - Modal de fuentes = **full page** (`width="100vw"` `spacing="0"` + `::part(dialog)` stretch). **No** `min(96vw)` / `70vh`.
-  - `refreshEditor` en `is-after-show` / `is-tab-show`; `paintOne` siempre `el.value = text`; si CM listo y `getValue()` vacío, `setValue(seed)`; chrome incluye `is-tab-group` (`GALLERY_CHROME_TAGS`). **No** fiarse de `value` lleno (= lienzo CM vacío).
+  - `refreshEditor` en `iswc-after-show` / `iswc-tab-show`; `paintOne` siempre `el.value = text`; si CM listo y `getValue()` vacío, `setValue(seed)`; chrome incluye `iswc-tab-group` (`GALLERY_CHROME_TAGS`). **No** fiarse de `value` lleno (= lienzo CM vacío).
 - **Lenguajes nuevos:** `registerLanguage` (campo `heavy` + `load`), no un segundo editor.
-- **Roadmap LaTeX (aún no existe):** `<is-latex>` (ecuaciones) y `<is-latex-doc>` (IDE `.tex`: TOC, BibTeX `\cite`, `\label`/`\ref`, autocomplete, auto-`\end{}`). **Reutilizar** `<is-code>` + `registerLanguage('latex')` + `is-dialog`/`layout`; motor math por CDN (KaTeX preferido). No implementar sin diseño aprobado; no "todo de una vez".
+- **Roadmap LaTeX (aún no existe):** `<iswc-latex>` (ecuaciones) y `<iswc-latex-doc>` (IDE `.tex`: TOC, BibTeX `\cite`, `\label`/`\ref`, autocomplete, auto-`\end{}`). **Reutilizar** `<iswc-code>` + `registerLanguage('latex')` + `iswc-dialog`/`layout`; motor math por CDN (KaTeX preferido). No implementar sin diseño aprobado; no "todo de una vez".
 - **`all.min.js` importa módulos en orden:** un fallo de evaluación en un entry anterior impide registrar los posteriores. **Nunca** dejar un `import` dentro de un bloque de comentario JSDoc.
 - Guardianes: `tests/code-infer-lang.test.ts`, `tests/code-theme-native.test.ts`, `tests/gallery-sources-meta.test.ts`.
 
 ### S-K9 data
 
-- **`is-data-grid` toolbar:** `toolbar-tools` (bool) oculta Columnas/Filtros/Densidad/Exportar; `quick-filter` solo la búsqueda; `show-toolbar` fuerza la barra. Sin search y sin tools → la toolbar no se pinta. Para tablas de solo lectura (documentos embebidos, matrices, previews estáticas) pasar `toolbar-tools="false"` y **no** activar `quick-filter`/`show-toolbar`.
+- **`iswc-data-grid` toolbar:** `toolbar-tools` (bool) oculta Columnas/Filtros/Densidad/Exportar; `quick-filter` solo la búsqueda; `show-toolbar` fuerza la barra. Sin search y sin tools → la toolbar no se pinta. Para tablas de solo lectura (documentos embebidos, matrices, previews estáticas) pasar `toolbar-tools="false"` y **no** activar `quick-filter`/`show-toolbar`.
   - Prop JS: `el.toolbarTools = false` ↔ attr `toolbar-tools="false"`.
   - **No** ocultar con CSS del host (el shadow no es contrato estable). **No** inventar un segundo flag (`hide-tools`, `chrome=false`) — canónico `toolbar-tools`. `disable-column-menu` solo afecta al menú de columna.
-- **`is-ag-grid`:** núcleo `datagrid-core/` (port de mimicus-react) separado del render; `createGridModel({rows,columns})` ⇒ `GridApi` (store observable). Atributos: `get-row-id`, `density`, `group-by`, `remember-state`, `storage-key`, `toolbar`. Columnas: `flex`, `rowGroup`, `enableRowGroup`, `aggFunc`, `filterType`, `minWidth`, `maxWidth`, pinned. Eventos: `is-state-loaded`, `is-column-reorder/resize/pin/hide`.
+- **`iswc-ag-grid`:** núcleo `datagrid-core/` (port de mimicus-react) separado del render; `createGridModel({rows,columns})` ⇒ `GridApi` (store observable). Atributos: `get-row-id`, `density`, `group-by`, `remember-state`, `storage-key`, `toolbar`. Columnas: `flex`, `rowGroup`, `enableRowGroup`, `aggFunc`, `filterType`, `minWidth`, `maxWidth`, pinned. Eventos: `iswc-state-loaded`, `iswc-column-reorder/resize/pin/hide`.
   - `#readData()` auto-corrige cols/rows (primer `<script type="application/json">` = columnas; segundo = filas; si el primero es claramente rows, se corrige). **No** usar `getAttribute('rows')` directo. **No** hardcodear `DENSITY_ROW_HEIGHT` (usar `#rowHeight()` que respeta `--iswc-grid-row-h`). **No** overrides `--iswc-*` de scrollbar dentro del shadow.
 - **Persistencia:** un solo `localStorage['is-webcomponents'][tag][storage-key]` vía `_shared/prefs.js`. Opt-in (`remember-state`/`remember-scroll`). **No** keys planas / `sessionStorage`.
 - Guardianes: `prefs-contract`, `data-grid-toolbar`.
 
 ### S-K10 data-viz
 
-- La categoría lógica `data-viz` del manifest se reparte en **dos carpetas**: la mayoría de las gráficas vive en `charts/`; aquí solo `is-heatmap` y `is-maps`/`is-map-marker`. Al buscar la doc de un tag, seguir su `script` en `manifest.js`, **no** el nombre de la categoría.
+- La categoría lógica `data-viz` del manifest se reparte en **dos carpetas**: la mayoría de las gráficas vive en `charts/`; aquí solo `iswc-heatmap` y `iswc-maps`/`iswc-map-marker`. Al buscar la doc de un tag, seguir su `script` en `manifest.js`, **no** el nombre de la categoría.
 - **Rampa de intensidad de heatmap** = valores de dato, no de tema: no sustituir por tokens `--iswc-*`.
-- `<is-map-marker>` solo tiene sentido dentro de `<is-maps>`: el padre proyecta los marcadores y los posiciona. `maps.js` registra ambos tags (un módulo, un doc).
+- `<iswc-map-marker>` solo tiene sentido dentro de `<iswc-maps>`: el padre proyecta los marcadores y los posiciona. `maps.js` registra ambos tags (un módulo, un doc).
 
 ### S-K11 diagrams
 
@@ -106,19 +106,19 @@ Cada tag es un Custom Element con Shadow DOM. El inventario y rutas de build sal
   - El diagrama **ocupa el ancho que tiene** (Sankey repartía la separación con una constante y dejaba media lámina vacía: ahora reparte el ancho objetivo entre capas).
 - **Agrupadores (ER) — `er-spec.js`:** un grupo = un sub-diagrama (`layoutNodeLink` solo con sus aristas internas, cajón con título). `ratio` (default 1.4) **guía, no restringe**: empaquetado que prueba cada nº de columnas y elige el reparto de score `|log(ratio/guía)|` mínimo. Escala **logarítmica** para comparar ratios (la lineal sesga a tiras). Nodos aislados aparte (rejilla con mismo ratio). Rutear de la arista más corta a la más larga con peaje (`applyRectCost(..., add=true)`) sobre el corredor usado y el interior de cajones ajenos. Confinar la etiqueta al lienzo (`labelX/labelY` con `clamp`).
   - **No** dejar que el motor de capas vea aristas entre grupos (arrastra entidades y solapa cajones). **No** bloquear (`blockRect`) el interior de un cajón (las aristas internas se quedan sin ruta). **No** confiar en "todos los nodos tienen aristas" (14 sueltas → pila vertical ilegible). **No** dar buena una captura sin mirarla.
-- **Sequence:** `<is-sequence-diagram>` pinta el SVG en su shadow (selector `shadowRoot.querySelector('svg')`, no `#d svg`). Leyenda en grid **máx 3 filas × N cols** (`legendMaxRows:3`), arranca **pasada la caja del último actor** (`baseW + boxW[n-1]/2 + 16`), no en `W - legendW - 8`. **Self-loop a mano** 4 esquinas (`M→out→up→back`); **no** delegar al A* con waypoints (`collapseJogs`/`collapseColinear` colapsan el 3er segmento a 1 celda → línea vertical con banderín).
+- **Sequence:** `<iswc-sequence-diagram>` pinta el SVG en su shadow (selector `shadowRoot.querySelector('svg')`, no `#d svg`). Leyenda en grid **máx 3 filas × N cols** (`legendMaxRows:3`), arranca **pasada la caja del último actor** (`baseW + boxW[n-1]/2 + 16`), no en `W - legendW - 8`. **Self-loop a mano** 4 esquinas (`M→out→up→back`); **no** delegar al A* con waypoints (`collapseJogs`/`collapseColinear` colapsan el 3er segmento a 1 celda → línea vertical con banderín).
 - **Component-diagram:** 3 primitivas — `packages` (folder con pestaña), `components` (rect con estereotipo `«name»`), `interfaces` (lollipop, `provided` = círculo lleno, `required` = semicírculo). Posiciones **explícitas** en el payload. Aristas: `dependency` dashed, `realization` con flecha hueca. `layout.mode` = `pack` | `triptych` | `manual`; attrs `minGap`, `ungroup`, `sources`, `sourceSides`, `sourceGap`, `colGutter`, `pkgCorridor`, `rowGap`. **`ifaceById` se rellena DESPUÉS** de calcular `cx`/`cy` (si no, aristas caen a `(0,0)` sin error). Sin `edges`/`links` sale solo con cajas.
-- **`is-org-chart` es el outlier:** no extiende `DiagramElementBase`, su slot JSON es el arreglo de nodos, usa `name`/`title` (no `label`) y pinta en `foreignObject` (no sobrevive a screenshot headless). **No** usarlo cuando el entregable sea una imagen exportada; `is-mindmap` con `layout:"tree"` cubre el caso.
+- **`iswc-org-chart` es el outlier:** no extiende `DiagramElementBase`, su slot JSON es el arreglo de nodos, usa `name`/`title` (no `label`) y pinta en `foreignObject` (no sobrevive a screenshot headless). **No** usarlo cuando el entregable sea una imagen exportada; `iswc-mindmap` con `layout:"tree"` cubre el caso.
 - Guardianes: `tests/er-clusters.test.ts`, `tests/sequence-legend-grid.test.ts`, `tests/sequence-self-loop.test.ts`, `tests/component-diagram-ifaces.test.ts`.
 
 ### S-K12 feedback
 
-- **Snippets CDN (`is-cdn-snippet`) ≠ snippets de demo (`demo-code.js`).** El primero es **loader copy-paste** (`script src` + `load(tag|cat|all)`); el segundo serializa el ejemplo y **debe** incluir tema/paleta activos (`withSnippetContext`/`stampContext`).
+- **Snippets CDN (`iswc-cdn-snippet`) ≠ snippets de demo (`demo-code.js`).** El primero es **loader copy-paste** (`script src` + `load(tag|cat|all)`); el segundo serializa el ejemplo y **debe** incluir tema/paleta activos (`withSnippetContext`/`stampContext`).
 - **Galería `cdn-panel.js`:** importar `dist/cdn/feedback/cdn-snippet.min.js`, **no** `src/.../cdn-snippet.js` (arrastra `md-editor` y cuelga el boot). Ver error #43.
 - **Reusar:** `_shared/prefs.js`, `helpers/floating.js`. **No** duplicar overlays/position; no emitir señales redundantes.
 - Tema/paleta: default `contapyme`; snippet de demo sella `data-theme`+`data-palette`. **No** `color-scheme` en `:root`; **no** background de página en `is-base`/`palettes`.
-- **`<is-tooltip>` `is-hide` no burbujea** (`bubbles:false`, `composed:true`): un tooltip en un `is-dialog` no debe cerrar al ancestro; escuchar en el propio tooltip, no en `document`.
-- El bloque "Consumo por CDN" lo pinta **solo** `<is-cdn-snippet>` (auto-inyectado por `preview-chrome.js`); nunca duplicar un callout CDN a mano.
+- **`<iswc-tooltip>` `iswc-hide` no burbujea** (`bubbles:false`, `composed:true`): un tooltip en un `iswc-dialog` no debe cerrar al ancestro; escuchar en el propio tooltip, no en `document`.
+- El bloque "Consumo por CDN" lo pinta **solo** `<iswc-cdn-snippet>` (auto-inyectado por `preview-chrome.js`); nunca duplicar un callout CDN a mano.
 
 ### S-K13 forms
 
@@ -130,16 +130,16 @@ Cada tag es un Custom Element con Shadow DOM. El inventario y rutas de build sal
 
 ### S-K14 helpers
 
-- **`is-floating`** = building block interno de posicionamiento; **no es API pública** (usar `<is-popover>` / `<is-tooltip>`).
+- **`iswc-floating`** = building block interno de posicionamiento; **no es API pública** (usar `<iswc-popover>` / `<iswc-tooltip>`).
 - **`response-cache`** — IndexedDB SWR (`createResponseCache`).
-- **Markdown:** `helpers/md-lite.js` (`mdToHtml()`) — markdown ligero sin deps npm (usar antes de `marked`/otra lib). `_shared/prompt-md.js` — variables `{{nombre}}` + render MD/HTML híbrido con chips de tono determinista (usado por `is-md-render`/`is-md-editor`).
-- **`IsUi.adoptCss`** en apps (mismo contrato que `_shared/adopt-css.js`, sin embeber CSS en el JS).
-- **No** crear wrappers nuevos sobre `Intl`/`Observer`/`position`: elegir el helper existente. `is-observer` unifica intersection/mutation/resize.
-- **Formatting de bytes:** `is-format-bytes autofit` — unidad más alta con valor ≥ 1 (`204800` → `200 KB`, no `0.2 MB`).
+- **Markdown:** `helpers/md-lite.js` (`mdToHtml()`) — markdown ligero sin deps npm (usar antes de `marked`/otra lib). `_shared/prompt-md.js` — variables `{{nombre}}` + render MD/HTML híbrido con chips de tono determinista (usado por `iswc-md-render`/`iswc-md-editor`).
+- **`IswcUi.adoptCss`** en apps (mismo contrato que `_shared/adopt-css.js`, sin embeber CSS en el JS).
+- **No** crear wrappers nuevos sobre `Intl`/`Observer`/`position`: elegir el helper existente. `iswc-observer` unifica intersection/mutation/resize.
+- **Formatting de bytes:** `iswc-format-bytes autofit` — unidad más alta con valor ≥ 1 (`204800` → `200 KB`, no `0.2 MB`).
 
 ### S-K15 isp
 
-- **Ports de ISP-SvelteComponents (ContaPyme).** `block-layout.js` exporta `BreakpointHost` + helpers (`sizewFor`, `flagsFor`, `lerpFor`, `BREAKPOINTS`, `BREAKPOINT_W`). Los tres layouts heredan de ahí: reflejan `data-sizew`/`data-szw-*`, escriben `--clientw`/`--lerpw` y emiten `is-breakpoint`.
+- **Ports de ISP-SvelteComponents (ContaPyme).** `block-layout.js` exporta `BreakpointHost` + helpers (`sizewFor`, `flagsFor`, `lerpFor`, `BREAKPOINTS`, `BREAKPOINT_W`). Los tres layouts heredan de ahí: reflejan `data-sizew`/`data-szw-*`, escriben `--clientw`/`--lerpw` y emiten `iswc-breakpoint`.
 - **Slot props de Svelte** (`sizew`, `boolszw`, `lerpw`) **no existen** en Web Components: su equivalente exacto está documentado en `block-layout.md`.
 - **Fallbacks de custom properties SIEMPRE a tokens del tema** (`--iswc-text`, `--iswc-accent`, …), **nunca** a un color literal. Verificar contra ISP con `data-palette="contapyme"`.
 - **ISP no define tokens** (no tiene `app.css`/`:root`, ni tipografía, ni tema oscuro). Al portar, la fuente de verdad son los **fallbacks dentro de los `var()`** de cada `.svelte`, no un archivo de tema.
@@ -147,17 +147,17 @@ Cada tag es un Custom Element con Shadow DOM. El inventario y rutas de build sal
 
 ### S-K16 layout
 
-- **`<is-preview-component>`** es chrome del sistema de preview; se publica en `dist/cdn/preview/preview-component.min.js`. **No está en el catálogo del loader** (`L.load('is-preview-component')` no resuelve; no figura en `categories.layout`). Importar desde `dist/` (nunca desde `src/`: Pages 404 lucide). Ver errores #42–#43.
-- **Full-page dialog:** `width="100vw"` + `spacing="0"`; en light DOM `::part(dialog) { width/height:100%; align-self/justify-self: stretch; border-radius:0; box-shadow:none }`. Ver `presentation.css` + clase `.is-view-sources`.
-- **Style-attrs de `<is-dialog>`:** `width → --iswc-dialog-width`, `spacing → --iswc-dialog-spacing`; padding del host = `var(--iswc-dialog-spacing)`.
-- **No** `is-split-panel` con % alto como sidebar fijo (deja hueco enorme): grid CSS con ancho fijo (`14.5rem`) o `position-in-pixels`.
-- **ModalBase** centraliza ciclo de vida de `is-dialog`/`is-drawer` (focus trap, Escape, light-dismiss, `is-show`/`is-hide`/`is-after-show`/`is-after-hide`). Subclase define `__TEMPLATE`, `modalClass`, `closeAttr`, `animateOpen/Close`, hooks; refs vía `$modal`/`$backdrop`.
+- **`<iswc-preview-component>`** es chrome del sistema de preview; se publica en `dist/cdn/preview/preview-component.min.js`. **No está en el catálogo del loader** (`L.load('iswc-preview-component')` no resuelve; no figura en `categories.layout`). Importar desde `dist/` (nunca desde `src/`: Pages 404 lucide). Ver errores #42–#43.
+- **Full-page dialog:** `width="100vw"` + `spacing="0"`; en light DOM `::part(dialog) { width/height:100%; align-self/justify-self: stretch; border-radius:0; box-shadow:none }`. Ver `presentation.css` + clase `.iswc-view-sources`.
+- **Style-attrs de `<iswc-dialog>`:** `width → --iswc-dialog-width`, `spacing → --iswc-dialog-spacing`; padding del host = `var(--iswc-dialog-spacing)`.
+- **No** `iswc-split-panel` con % alto como sidebar fijo (deja hueco enorme): grid CSS con ancho fijo (`14.5rem`) o `position-in-pixels`.
+- **ModalBase** centraliza ciclo de vida de `iswc-dialog`/`iswc-drawer` (focus trap, Escape, light-dismiss, `iswc-show`/`iswc-hide`/`iswc-after-show`/`iswc-after-hide`). Subclase define `__TEMPLATE`, `modalClass`, `closeAttr`, `animateOpen/Close`, hooks; refs vía `$modal`/`$backdrop`.
 - **No** dejar un dialog "casi fullscreen" cuando el requisito es full page (padding del host + `max-height` del panel lo dejan a medias).
 
 ### S-K17 media
 
-- **Iconos:** `<is-icon icon="prefix:name">`; sistema propio (231 familias / ~317k SVG en `assets/icons/`, publicados en `dist/assets/icons/`). `is-icon` inyecta el SVG **inline** (no `<img>`) para que `currentColor` funcione.
-- **Host de `is-icon`** es caja cuadrada 1em con `line-height:1`. Sin tamaño explícito la línea lo estira. `#normalizeInlineSvg()` fuerza `fill`/`stroke: currentColor` en hijos.
+- **Iconos:** `<iswc-icon icon="prefix:name">`; sistema propio (231 familias / ~317k SVG en `assets/icons/`, publicados en `dist/assets/icons/`). `iswc-icon` inyecta el SVG **inline** (no `<img>`) para que `currentColor` funcione.
+- **Host de `iswc-icon`** es caja cuadrada 1em con `line-height:1`. Sin tamaño explícito la línea lo estira. `#normalizeInlineSvg()` fuerza `fill`/`stroke: currentColor` en hijos.
 - **Iconos con paleta propia** (banderas, logos, emoji) **no** se normalizan a `currentColor` (paths sin `fill` heredarían el color del host → a medio pintar). Detección **por icono, no por colección** (`logos` es mixta).
 - **Grid por colección:** el grid nativo no siempre es 24. `collections.json` guarda el `height` real por prefijo (academicons 32, fa 512); un SVG local debe declarar `viewBox` con esas dimensiones. **No** normalizar todos a `24`.
 - **No** forzar `stroke: currentColor` a nivel `<svg>` en iconos de relleno (se contornean/engrosan). Solo pisar `stroke` en elementos que ya lo traen.
@@ -166,14 +166,14 @@ Cada tag es un Custom Element con Shadow DOM. El inventario y rutas de build sal
 
 ### S-K18 navigation
 
-- **Tag children** (`is-tab-panel`, `is-carousel-item`, `is-tree-item`, `is-stepper-step`, `is-breadcrumb-item`) comparten `page` con el padre; no son tabs propios. Mantener parent-child; **no** separar tags children ni crear MD por child multi-tag.
+- **Tag children** (`iswc-tab-panel`, `iswc-carousel-item`, `iswc-tree-item`, `iswc-stepper-step`, `iswc-breadcrumb-item`) comparten `page` con el padre; no son tabs propios. Mantener parent-child; **no** separar tags children ni crear MD por child multi-tag.
 - **Preservar teclado/ARIA** en tab-group, tree, carousel, stepper. Eventos `is-*` (no nativos `input`/`change`).
-- En el CSS del módulo, no estilar `is-tab`/`is-tree-item` desde el padre con `mi-tag .algo`/`::slotted` mal usado (ver S-K4): dejar el estilo en el shadow del propio elemento.
+- En el CSS del módulo, no estilar `iswc-tab`/`iswc-tree-item` desde el padre con `mi-tag .algo`/`::slotted` mal usado (ver S-K4): dejar el estilo en el shadow del propio elemento.
 
 ### S-K19 overlays
 
 - **Listeners de `document`/`window`** en `connectedCallback`/`disconnectedCallback` (handler guardado en campo privado); **nunca** en el constructor (fuga, bug en 11 componentes). Un overlay que monta/desmonta seguido es donde más se notan.
-- **No** `will-change: transform` en superficies con zoom por `scale()`: el navegador rasteriza a escala 1 y el contenido SVG se ve borroso (`is-lightbox`).
+- **No** `will-change: transform` en superficies con zoom por `scale()`: el navegador rasteriza a escala 1 y el contenido SVG se ve borroso (`iswc-lightbox`).
 - **No** animar propiedades de layout (padding/width/height) en transiciones; usar `transform`/`translate`.
 - **No** `animation: both` en overlays (deja matriz identidad aplicada → el elemento se vuelve containing block y un `position: fixed` interno se desplaza). Usar `backwards`.
 - Overlay colocado por JS con `left`/`top`/`transform`: **debe** ser `position: absolute|fixed` en su CSS (si no, ocupa espacio y desplaza el layout).

@@ -4,7 +4,7 @@
 //   - smoke: dos heatmaps montan, renderizan celdas y leyenda
 //   - funcional: show-values escribe número dentro de celda, atributo
 //                color="red-blue" aplica paleta divergente, legend-position
-//                mueve/oculta la leyenda, pointermove emite is-cell-hover
+//                mueve/oculta la leyenda, pointermove emite iswc-cell-hover
 //   - determinismo: misma config → mismo # de celdas; misma fill por valor
 //   - accesibilidad básica: roles / aria-label del SVG
 import assert from 'node:assert/strict';
@@ -15,13 +15,13 @@ const URL = `${BASE_URL}/demos/data-viz/Heatmap/heatmap.html`;
 const tests = [];
 
 tests.push({
-  name: 'smoke: dos <is-heatmap> montan y renderizan celdas',
+  name: 'smoke: dos <iswc-heatmap> montan y renderizan celdas',
   run: async (page) => {
     await page.goto(URL, { waitUntil: 'domcontentloaded' });
     await waitReady(page, 'data-heatmap-ready');
     await page.waitForTimeout(200);
     const info = await page.evaluate(() => {
-      const all = document.querySelectorAll('is-heatmap');
+      const all = document.querySelectorAll('iswc-heatmap');
       return [...all].map((h) => {
         const svg = h.shadowRoot.querySelector('svg[part="canvas"]');
         const cells = h.shadowRoot.querySelectorAll('rect.cell');
@@ -71,7 +71,7 @@ tests.push({
     await waitReady(page, 'data-heatmap-ready');
     await page.waitForTimeout(200);
     const fills = await page.evaluate(() => {
-      const h = document.querySelector('is-heatmap');
+      const h = document.querySelector('iswc-heatmap');
       const cells = [...h.shadowRoot.querySelectorAll('rect.cell')];
       // Devolver {x, v, fill} del PRIMER row (y=0) — 7 valores deberían mapear
       // a 5 colores distintos como mínimo (la paleta tiene 5 escalones).
@@ -104,7 +104,7 @@ tests.push({
     await waitReady(page, 'data-heatmap-ready');
     await page.waitForTimeout(200);
     const fills = await page.evaluate(() => {
-      const all = [...document.querySelectorAll('is-heatmap')];
+      const all = [...document.querySelectorAll('iswc-heatmap')];
       return all.map((h) => {
         const cells = [...h.shadowRoot.querySelectorAll('rect.cell')];
         const set = new Set(cells.map((c) => c.getAttribute('fill')));
@@ -130,7 +130,7 @@ tests.push({
     await waitReady(page, 'data-heatmap-ready');
     await page.waitForTimeout(200);
     const mismatches = await page.evaluate(() => {
-      const h = document.querySelector('is-heatmap'); // brand con show-values
+      const h = document.querySelector('iswc-heatmap'); // brand con show-values
       const cells = [...h.shadowRoot.querySelectorAll('rect.cell')];
       const values = [...h.shadowRoot.querySelectorAll('text.cell-val')];
       // Emparejar por índice (mismo orden de inserción).
@@ -149,7 +149,7 @@ tests.push({
 });
 
 tests.push({
-  name: 'hover: pointermove sobre una celda emite is-cell-hover con {x, y, value}',
+  name: 'hover: pointermove sobre una celda emite iswc-cell-hover con {x, y, value}',
   run: async (page) => {
     await page.goto(URL, { waitUntil: 'domcontentloaded' });
     await waitReady(page, 'data-heatmap-ready');
@@ -159,12 +159,12 @@ tests.push({
     // defecto, usamos dispatchEvent directo dentro del shadow.
     const detail = await page.evaluate(() => {
       return new Promise((resolve) => {
-        const h = document.querySelectorAll('is-heatmap')[0];
+        const h = document.querySelectorAll('iswc-heatmap')[0];
         const cell = h.shadowRoot.querySelector('rect.cell'); // primera celda (Lun / 00)
         const box = cell.getBoundingClientRect();
         const cx = box.x + box.width / 2;
         const cy = box.y + box.height / 2;
-        h.addEventListener('is-cell-hover', (e) => resolve(e.detail), { once: true });
+        h.addEventListener('iswc-cell-hover', (e) => resolve(e.detail), { once: true });
         cell.dispatchEvent(new PointerEvent('pointermove', {
           clientX: cx, clientY: cy, bubbles: true, composed: true,
         }));
@@ -172,7 +172,7 @@ tests.push({
         setTimeout(() => resolve(null), 500);
       });
     });
-    assert.ok(detail, 'is-cell-hover debió dispararse y entregar detail');
+    assert.ok(detail, 'iswc-cell-hover debió dispararse y entregar detail');
     assert.ok('x' in detail && 'y' in detail && 'value' in detail, `detail debe tener {x, y, value}: ${JSON.stringify(detail)}`);
     assert.equal(typeof detail.value, 'number', 'value debe ser number');
     assert.equal(detail.x, 'Lun', `x de la primera celda debe ser "Lun", obtuve "${detail.x}"`);
@@ -181,13 +181,13 @@ tests.push({
 });
 
 tests.push({
-  name: 'hover: pointerleave limpia la clase is-hover',
+  name: 'hover: pointerleave limpia la clase iswc-hover',
   run: async (page) => {
     await page.goto(URL, { waitUntil: 'domcontentloaded' });
     await waitReady(page, 'data-heatmap-ready');
     await page.waitForTimeout(200);
     await page.evaluate(() => {
-      const h = document.querySelectorAll('is-heatmap')[0];
+      const h = document.querySelectorAll('iswc-heatmap')[0];
       const cell = h.shadowRoot.querySelector('rect.cell');
       const box = cell.getBoundingClientRect();
       cell.dispatchEvent(new PointerEvent('pointermove', {
@@ -196,23 +196,23 @@ tests.push({
     });
     await page.waitForTimeout(50);
     const hovered = await page.evaluate(() => {
-      const h = document.querySelectorAll('is-heatmap')[0];
-      return h.shadowRoot.querySelectorAll('rect.cell.is-hover').length;
+      const h = document.querySelectorAll('iswc-heatmap')[0];
+      return h.shadowRoot.querySelectorAll('rect.cell.iswc-hover').length;
     });
-    assert.equal(hovered, 1, 'debe haber exactamente 1 celda con is-hover');
+    assert.equal(hovered, 1, 'debe haber exactamente 1 celda con iswc-hover');
 
     // pointerleave sobre el SVG
     await page.evaluate(() => {
-      const h = document.querySelectorAll('is-heatmap')[0];
+      const h = document.querySelectorAll('iswc-heatmap')[0];
       const svg = h.shadowRoot.querySelector('svg[part="canvas"]');
       svg.dispatchEvent(new PointerEvent('pointerleave', { bubbles: true }));
     });
     await page.waitForTimeout(50);
     const after = await page.evaluate(() => {
-      const h = document.querySelectorAll('is-heatmap')[0];
-      return h.shadowRoot.querySelectorAll('rect.cell.is-hover').length;
+      const h = document.querySelectorAll('iswc-heatmap')[0];
+      return h.shadowRoot.querySelectorAll('rect.cell.iswc-hover').length;
     });
-    assert.equal(after, 0, 'pointerleave debe limpiar is-hover');
+    assert.equal(after, 0, 'pointerleave debe limpiar iswc-hover');
   },
 });
 
@@ -225,12 +225,12 @@ tests.push({
     // Mutamos el primer heatmap en runtime para verificar que el atributo
     // legend-position="none" reacciona (attributeChangedCallback → render).
     await page.evaluate(() => {
-      const h = document.querySelectorAll('is-heatmap')[0];
+      const h = document.querySelectorAll('iswc-heatmap')[0];
       h.setAttribute('legend-position', 'none');
     });
     await page.waitForTimeout(200);
     const hidden = await page.evaluate(() => {
-      const h = document.querySelectorAll('is-heatmap')[0];
+      const h = document.querySelectorAll('iswc-heatmap')[0];
       const legend = h.shadowRoot.querySelector('.legend[part="legend"]');
       return { hidden: legend.hasAttribute('hidden'), grad: !!h.shadowRoot.querySelector('.legend-grad') };
     });
@@ -246,17 +246,17 @@ tests.push({
     await waitReady(page, 'data-heatmap-ready');
     await page.waitForTimeout(200);
     const before = await page.evaluate(() => {
-      const h = document.querySelectorAll('is-heatmap')[0];
+      const h = document.querySelectorAll('iswc-heatmap')[0];
       const cells = [...h.shadowRoot.querySelectorAll('rect.cell')];
       return cells.map((c) => c.getAttribute('fill'));
     });
     await page.evaluate(() => {
-      const h = document.querySelectorAll('is-heatmap')[0];
+      const h = document.querySelectorAll('iswc-heatmap')[0];
       h.config = h.config; // re-asignar el mismo objeto
     });
     await page.waitForTimeout(200);
     const after = await page.evaluate(() => {
-      const h = document.querySelectorAll('is-heatmap')[0];
+      const h = document.querySelectorAll('iswc-heatmap')[0];
       const cells = [...h.shadowRoot.querySelectorAll('rect.cell')];
       return cells.map((c) => c.getAttribute('fill'));
     });
@@ -275,7 +275,7 @@ tests.push({
     // son aceptados y producen el MISMO resultado para la misma matriz.
     const matrixViaData = await page.evaluate(() => {
       // Crear un heatmap temporal con data[][] y contar celdas.
-      const h = document.createElement('is-heatmap');
+      const h = document.createElement('iswc-heatmap');
       h.style.cssText = 'position:absolute;left:-9999px;top:-9999px;width:300px;height:200px;display:block;';
       document.body.appendChild(h);
       h.config = {
@@ -295,7 +295,7 @@ tests.push({
 });
 
 tests.push({
-  name: 'is-render: emite el evento is-render tras montar',
+  name: 'iswc-render: emite el evento iswc-render tras montar',
   run: async (page) => {
     await page.goto(URL, { waitUntil: 'domcontentloaded' });
     await waitReady(page, 'data-heatmap-ready');
@@ -304,15 +304,15 @@ tests.push({
     const count = await page.evaluate(() => {
       // Re-instanciar listener en runtime (los originales ya pasaron).
       let n = 0;
-      const h = document.createElement('is-heatmap');
+      const h = document.createElement('iswc-heatmap');
       document.body.appendChild(h);
-      h.addEventListener('is-render', () => n++);
+      h.addEventListener('iswc-render', () => n++);
       h.config = { xLabels: ['a', 'b'], yLabels: ['x'], data: [[1, 2]] };
       return new Promise((r) => {
         setTimeout(() => { h.remove(); r(n); }, 250);
       });
     });
-    assert.ok(count >= 1, `is-render debió dispararse >=1 vez (fue ${count})`);
+    assert.ok(count >= 1, `iswc-render debió dispararse >=1 vez (fue ${count})`);
   },
 });
 

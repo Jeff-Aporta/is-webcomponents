@@ -53,7 +53,7 @@ Cada demo: ≥12 propuestas. Categorías marcadas entre corchetes: `[Interacció
    - Assertion: padding computado es 16px (fallback), no `0` ni `undefined`.
 
 9. **Block como wrapper de un `<dialog>` abierto preserva a11y tree** — [ARIA/a11y]
-   - Setup: demo con `<is-block>` envolviendo `<dialog open>`.
+   - Setup: demo con `<iswc-block>` envolviendo `<dialog open>`.
    - Acción: snapshot.
    - Assertion: el `<dialog>` sigue siendo el landmark top-layer; block-layout no añade roles espurios.
 
@@ -67,18 +67,18 @@ Cada demo: ≥12 propuestas. Categorías marcadas entre corchetes: `[Interacció
     - Acción: recargar el bloque 5 veces en sesión.
     - Assertion: número de listeners crece linealmente con instancias activas, no exponencialmente; cleanup en `disconnectedCallback`.
 
-12. **Anidación de 5 niveles de `is-block` mantiene orden de pintado** — [Deep nesting]
+12. **Anidación de 5 niveles de `iswc-block` mantiene orden de pintado** — [Deep nesting]
     - Setup: 5 niveles anidados con bordes distintos.
     - Acción: hover sobre el nivel más interno.
     - Assertion: `:hover` se propaga correctamente hasta el root; `elementsFromPoint(x,y)` devuelve orden ancestro→descendiente.
 
 13. **Bloque con `min-height: 0` permite colapso correcto en grid** — [Layout shift]
-    - Setup: `is-block` dentro de `display: grid; grid-template-rows: auto 1fr`.
+    - Setup: `iswc-block` dentro de `display: grid; grid-template-rows: auto 1fr`.
     - Acción: añadir contenido largo al bloque.
     - Assertion: el bloque respeta `min-height: 0` interno; el área 1fr no se expande; scroll interno del bloque se activa.
 
-14. **Dispatch de evento `is-block-layout-change` con detalle `oldSize/newSize`** — [Domain event]
-    - Setup: suscribirse con `addEventListener('is-block-layout-change', ...)`.
+14. **Dispatch de evento `iswc-block-layout-change` con detalle `oldSize/newSize`** — [Domain event]
+    - Setup: suscribirse con `addEventListener('iswc-block-layout-change', ...)`.
     - Acción: forzar cambio de layout (resize/toggle).
     - Assertion: evento disparado una vez por cambio (no múltiples); `detail` contiene `{ width, height, prevWidth, prevHeight }`; `composed: true` para cruzar Shadow DOM.
 
@@ -89,8 +89,8 @@ Cada demo: ≥12 propuestas. Categorías marcadas entre corchetes: `[Interacció
 - Render del botón con texto/icono; emite `click`.
 #### Propuestas nuevas
 
-1. **Doble click no dispara dos eventos `is-btn-activate` consecutivos** — [Interacción]
-   - Setup: botón con `is-btn-activate` listener.
+1. **Doble click no dispara dos eventos `iswc-btn-activate` consecutivos** — [Interacción]
+   - Setup: botón con `iswc-btn-activate` listener.
    - Acción: doble click rápido (`{ clickCount: 2 }`).
    - Assertion: un único evento por gesto simple; el segundo click solo si fue intencionado (300ms+ gap).
 
@@ -125,7 +125,7 @@ Cada demo: ≥12 propuestas. Categorías marcadas entre corchetes: `[Interacció
    - Assertion: spinner visible; label oculto (`visibility: hidden` mantiene ancho); `aria-busy="true"`; `aria-live="polite"` anuncia "Cargando".
 
 8. **Texto del botón extremadamente largo (200+ chars) no rompe layout** — [Estado visual / Edge case]
-   - Setup: `<is-btn-ref label="Lorem ipsum..." length=300>`.
+   - Setup: `<iswc-btn-ref label="Lorem ipsum..." length=300>`.
    - Acción: medir.
    - Assertion: botón hace wrap a 2 líneas con `min-height` preservado; sin overflow horizontal del contenedor.
 
@@ -135,7 +135,7 @@ Cada demo: ≥12 propuestas. Categorías marcadas entre corchetes: `[Interacció
    - Assertion: `animation: none` o `transition-duration: 0s`.
 
 10. **Botón con icono-only debe tener `aria-label` accesible** — [ARIA/a11y]
-    - Setup: `<is-btn-ref icon="trash">` sin label visible.
+    - Setup: `<iswc-btn-ref icon="trash">` sin label visible.
     - Acción: snapshot a11y.
     - Assertion: `accessibleName` no está vacío; warning si solo tiene `title` sin `aria-label`.
 
@@ -144,7 +144,7 @@ Cada demo: ≥12 propuestas. Categorías marcadas entre corchetes: `[Interacció
     - Acción: abrir modal y cerrarlo con Escape.
     - Assertion: `document.activeElement === btnRefOriginal`.
 
-12. **`is-btn-activate` es `composed: true` y cruza Shadow DOM boundary** — [Domain event]
+12. **`iswc-btn-activate` es `composed: true` y cruza Shadow DOM boundary** — [Domain event]
     - Setup: listener en `document` externo al componente.
     - Acción: click.
     - Assertion: evento capturado fuera del Shadow Root; `event.composed === true`; `event.detail` contiene `{ source: 'btn-ref', action, timestamp }`.
@@ -157,7 +157,7 @@ Cada demo: ≥12 propuestas. Categorías marcadas entre corchetes: `[Interacció
 14. **Variantes `primary`/`secondary`/`ghost` exponen clase CSS hook estable** — [Estado visual / Edge case]
     - Setup: 3 botones con cada variante.
     - Acción: leer `classList`.
-    - Assertion: cada uno tiene una clase específica (`is-btn--primary`, etc.); tests pueden targeting sin selectores por color.
+    - Assertion: cada uno tiene una clase específica (`iswc-btn--primary`, etc.); tests pueden targeting sin selectores por color.
 
 ---
 
@@ -196,7 +196,7 @@ Cada demo: ≥12 propuestas. Categorías marcadas entre corchetes: `[Interacció
    - Acción: scroll rápido al final.
    - Assertion: FPS ≥ 30 durante scroll; memoria DOM estable (≤ 200 nodos visibles a la vez si usa virtualización).
 
-7. **`is-catalogo-filter` event lleva payload completo** — [Domain event]
+7. **`iswc-catalogo-filter` event lleva payload completo** — [Domain event]
    - Setup: listener en `document`.
    - Acción: aplicar filtro.
    - Assertion: evento emitido con `detail: { query, matchedCount, totalCount, appliedFilters }`; `composed: true`.
@@ -204,12 +204,12 @@ Cada demo: ≥12 propuestas. Categorías marcadas entre corchetes: `[Interacció
 8. **Selección múltiple con Shift+Click selecciona rango continuo** — [Interacción]
    - Setup: lista con checkboxes.
    - Acción: click en item 1, Shift+Click en item 5.
-   - Assertion: items 1-5 marcados; `aria-selected="true"` en cada uno; `is-catalogo-select` event con `{ range: [1,5] }`.
+   - Assertion: items 1-5 marcados; `aria-selected="true"` en cada uno; `iswc-catalogo-select` event con `{ range: [1,5] }`.
 
 9. **Filtro por facetas (categoría, precio) combina con búsqueda textual** — [Interacción]
    - Setup: facetas visibles.
    - Acción: seleccionar categoría "Electrónica" + escribir "laptop".
-   - Assertion: resultado = intersección; URL/hash refleja ambos filtros; `is-catalogo-filter` con ambos.
+   - Assertion: resultado = intersección; URL/hash refleja ambos filtros; `iswc-catalogo-filter` con ambos.
 
 10. **Modo oscuro del catálogo hereda tokens `--is-*` correctamente** — [Estado visual / Edge case]
     - Setup: toggle dark mode.
@@ -219,12 +219,12 @@ Cada demo: ≥12 propuestas. Categorías marcadas entre corchetes: `[Interacció
 11. **Tecla Escape limpia búsqueda y restaura lista completa** — [Teclado]
     - Setup: filtro activo.
     - Acción: focus en input + Escape.
-    - Assertion: input vacío; lista = todos los items; `is-catalogo-clear` event emitido.
+    - Assertion: input vacío; lista = todos los items; `iswc-catalogo-clear` event emitido.
 
 12. **Drag & drop para reordenar items actualiza índice interno** — [Interacción]
     - Setup: lista draggable.
     - Acción: drag item 3 a posición 1.
-    - Assertion: DOM reordenado; `is-catalogo-reorder` event con `{ from, to, itemId }`; foco sigue al item movido.
+    - Assertion: DOM reordenado; `iswc-catalogo-reorder` event con `{ from, to, itemId }`; foco sigue al item movido.
 
 13. **Empty state de facetas (0 categorías) no rompe layout** — [Estado visual / Edge case]
     - Setup: catálogo sin facetas.
@@ -288,7 +288,7 @@ Cada demo: ≥12 propuestas. Categorías marcadas entre corchetes: `[Interacció
    - Acción: hover y focus traverse.
    - Assertion: cada nivel respeta su dirección; `elementsFromPoint` en hijo profundo devuelve toda la cadena; sin overflows ocultos.
 
-10. **`is-flex-layout-resize` event al cambiar tamaño interno** — [Domain event]
+10. **`iswc-flex-layout-resize` event al cambiar tamaño interno** — [Domain event]
     - Setup: listener en document.
     - Acción: insertar/eliminar hijo.
     - Assertion: evento emitido con `{ newSize, itemCount }`; throttled a 1 por frame (16ms).
@@ -309,7 +309,7 @@ Cada demo: ≥12 propuestas. Categorías marcadas entre corchetes: `[Interacció
     - Assertion: items alineados a la izquierda sin espacio extra; `align-content` no aplica con una sola línea.
 
 14. **Flex layout como slotted child mantiene distribución correcta** — [Deep nesting]
-    - Setup: `<is-flex-layout>` dentro de slot de otro componente.
+    - Setup: `<iswc-flex-layout>` dentro de slot de otro componente.
     - Acción: medir distribución.
     - Assertion: ancho y dirección respetan contenedor slotted, no viewport.
 
@@ -348,7 +348,7 @@ Cada demo: ≥12 propuestas. Categorías marcadas entre corchetes: `[Interacció
 6. **Click fuera del panel cierra y confirma selección** — [Dismiss]
    - Setup: panel abierto.
    - Acción: click en zona neutra.
-   - Assertion: panel cierra; `is-flex-options-change` con valor actual; sin confirm modal.
+   - Assertion: panel cierra; `iswc-flex-options-change` con valor actual; sin confirm modal.
 
 7. **Desplazamiento con scroll interno preserva posición relativa** — [Scroll lock]
    - Setup: 50 opciones, viewport pequeño.
@@ -365,7 +365,7 @@ Cada demo: ≥12 propuestas. Categorías marcadas entre corchetes: `[Interacció
    - Acción: snapshot.
    - Assertion: cada `<ul role="group">` con `aria-labelledby="group-N-title"`; items dentro heredan navegación.
 
-10. **`is-flex-options-change` event incluye `value`, `label`, `index`** — [Domain event]
+10. **`iswc-flex-options-change` event incluye `value`, `label`, `index`** — [Domain event]
     - Setup: listener.
     - Acción: seleccionar opción.
     - Assertion: `detail: { value, label, index, previousValue }` con `composed: true` y `bubbles: true`.
@@ -383,7 +383,7 @@ Cada demo: ≥12 propuestas. Categorías marcadas entre corchetes: `[Interacció
 13. **Cambio de opciones vía API programática emite evento** — [Domain event]
     - Setup: `el.value = 'new'` vía JS.
     - Acción: leer logs.
-    - Assertion: `is-flex-options-change` emitido; diferencia vs `change` event nativo clarificada.
+    - Assertion: `iswc-flex-options-change` emitido; diferencia vs `change` event nativo clarificada.
 
 14. **Panel con 0 opciones muestra estado vacío accesible** — [Estado visual / Edge case]
     - Setup: pasar array vacío.
@@ -397,7 +397,7 @@ Cada demo: ≥12 propuestas. Categorías marcadas entre corchetes: `[Interacció
 - Render de tarjeta flotante, posición, sombra, dismiss.
 #### Propuestas nuevas
 
-1. **Click fuera del card cierra y emite `is-float-card-dismiss`** — [Dismiss]
+1. **Click fuera del card cierra y emite `iswc-float-card-dismiss`** — [Dismiss]
    - Setup: card visible con `dismissOnOutsideClick`.
    - Acción: click en backdrop.
    - Assertion: card oculto; evento emitido con `{ reason: 'outside-click' }`; focus restaura al trigger.
@@ -420,7 +420,7 @@ Cada demo: ≥12 propuestas. Categorías marcadas entre corchetes: `[Interacció
 5. **Resize del card via handle东南sw respeta min/max** — [Interacción]
    - Setup: card con min 200×150, max 800×600.
    - Acción: drag handle a posición extrema.
-   - Assertion: tamaño clampeado; `is-float-card-resize` con `{ width, height }` final.
+   - Assertion: tamaño clampeado; `iswc-float-card-resize` con `{ width, height }` final.
 
 6. **Focus trap interno funciona con Tab cycling** — [Focus trap]
    - Setup: card con 3 botones internos.
@@ -438,7 +438,7 @@ Cada demo: ≥12 propuestas. Categorías marcadas entre corchetes: `[Interacció
    - Assertion: `role="dialog"`, `aria-modal="true"`, `aria-labelledby`指向 title del card.
 
 9. **Card con contenido lazy-loaded muestra skeleton** — [Estado visual / Edge case]
-   - Setup: card con `<is-skeleton>` interno mientras carga.
+   - Setup: card con `<iswc-skeleton>` interno mientras carga.
    - Acción: observar.
    - Assertion: skeleton visible 200-500ms; `aria-busy="true"` mientras carga.
 
@@ -462,7 +462,7 @@ Cada demo: ≥12 propuestas. Categorías marcadas entre corchetes: `[Interacció
     - Acción: focus traverse.
     - Assertion: iframe focusable solo si tiene `tabindex` explícito; `composedPath()` correcto al click.
 
-14. **Dispatch de `is-float-card-position-change` durante drag** — [Domain event]
+14. **Dispatch de `iswc-float-card-position-change` durante drag** — [Domain event]
     - Setup: listener.
     - Acción: drag completo.
     - Assertion: múltiples eventos durante drag (throttled); final con `{ x, y, source: 'user' | 'programmatic' }`.
@@ -474,7 +474,7 @@ Cada demo: ≥12 propuestas. Categorías marcadas entre corchetes: `[Interacció
 - Render de form con inputs, validación básica, submit.
 #### Propuestas nuevas
 
-1. **Submit con Enter desde input dispara validación y `is-form-submit`** — [Teclado]
+1. **Submit con Enter desde input dispara validación y `iswc-form-submit`** — [Teclado]
    - Setup: form con 3 inputs requeridos.
    - Acción: completar y Enter en el último input.
    - Assertion: `submit` event emitido; si falta un campo, NO se emite; primer campo inválido recibe focus.
@@ -504,7 +504,7 @@ Cada demo: ≥12 propuestas. Categorías marcadas entre corchetes: `[Interacció
    - Acción: doble click rápido.
    - Assertion: un solo submit; segundo click ignorado; `aria-busy="true"` en form durante request.
 
-7. **Reset limpia todos los campos y emite `is-form-reset`** — [Interacción]
+7. **Reset limpia todos los campos y emite `iswc-form-reset`** — [Interacción]
    - Setup: form con valores.
    - Acción: click en reset button.
    - Assertion: campos vuelven a default; evento emitido; foco se mantiene en reset button.
@@ -524,7 +524,7 @@ Cada demo: ≥12 propuestas. Categorías marcadas entre corchetes: `[Interacció
     - Acción: submit.
     - Assertion: mensaje "Ha ocurrido un error. Intenta nuevamente." sin stack trace; log interno sí captura detalle.
 
-11. **`is-form-field-change` event por cada input** — [Domain event]
+11. **`iswc-form-field-change` event por cada input** — [Domain event]
     - Setup: listener.
     - Acción: escribir en input.
     - Assertion: evento emitido con `{ name, value, valid }`; `composed: true`; debounced opcional a 100ms.
@@ -542,7 +542,7 @@ Cada demo: ≥12 propuestas. Categorías marcadas entre corchetes: `[Interacció
 14. **Submit programático via `el.requestSubmit()` valida antes de emitir** — [Interacción]
     - Setup: form con campo required vacío.
     - Acción: `form.requestSubmit()` desde JS.
-    - Assertion: submit bloqueado por validación; mismo flujo que Enter; `is-form-submit` NO emitido.
+    - Assertion: submit bloqueado por validación; mismo flujo que Enter; `iswc-form-submit` NO emitido.
 
 ---
 
@@ -562,12 +562,12 @@ Cada demo: ≥12 propuestas. Categorías marcadas entre corchetes: `[Interacció
     - Assertion: focus salta al heading o al main; `tabindex="-1"` aplicado temporalmente al target.
 
 3. **Heading con `subheading` prop renderiza `<hgroup>` o `<p>` con clase** — [Estado visual / Edge case]
-   - Setup: `<is-heading level="2" subheading="Texto adicional">`.
+   - Setup: `<iswc-heading level="2" subheading="Texto adicional">`.
    - Acción: snapshot.
    - Assertion: estructura semántica correcta (hgroup o heading + p); estilos diferenciados.
 
 4. **Outline de focus respeta contraste WCAG en heading focuseable** — [Teclado]
-   - Setup: `<is-heading tabindex="0">`.
+   - Setup: `<iswc-heading tabindex="0">`.
    - Acción: focus.
    - Assertion: outline 2px visible; contraste ≥ 3:1; no rompe diseño tipográfico.
 
@@ -582,11 +582,11 @@ Cada demo: ≥12 propuestas. Categorías marcadas entre corchetes: `[Interacció
    - Assertion: color = `var(--is-text-heading)` con fallback; contraste ≥ 4.5:1 en ambos temas.
 
 7. **Heading con anchor link genera `#id` navegable** — [Interacción]
-   - Setup: `<is-heading id="section-1">`.
+   - Setup: `<iswc-heading id="section-1">`.
    - Acción: navegar a `#section-1`.
    - Assertion: scroll suave al heading; `id` único en documento; sin colisión si se duplica.
 
-8. **`is-heading-mount` event para tracking analytics** — [Domain event]
+8. **`iswc-heading-mount` event para tracking analytics** — [Domain event]
     - Setup: listener en document.
     - Acción: render.
     - Assertion: evento emitido con `{ level, text }`; throttled si headings se generan en loop.
@@ -616,7 +616,7 @@ Cada demo: ≥12 propuestas. Categorías marcadas entre corchetes: `[Interacció
     - Acción: medir TTI.
     - Assertion: render < 100ms; memoria estable; sin reflows en cascada.
 
-14. **Heading recibe `is-heading-click` event solo si `clickable` prop** — [Interacción]
+14. **Heading recibe `iswc-heading-click` event solo si `clickable` prop** — [Interacción]
     - Setup: heading sin prop.
     - Acción: click.
     - Assertion: sin cursor pointer; sin evento; con `clickable`, cursor pointer + evento emitido.
@@ -629,7 +629,7 @@ Cada demo: ≥12 propuestas. Categorías marcadas entre corchetes: `[Interacció
 #### Propuestas nuevas
 
 1. **Overlay abre con `aria-busy="true"` y `role="alert"` para anuncio inmediato** — [ARIA/a11y]
-   - Setup: `is-loading-overlay` con `assertive`.
+   - Setup: `iswc-loading-overlay` con `assertive`.
    - Acción: mostrar.
    - Assertion: `role="alert"` o `aria-live="assertive"`; screen reader anuncia "Cargando".
 
@@ -676,7 +676,7 @@ Cada demo: ≥12 propuestas. Categorías marcadas entre corchetes: `[Interacció
 10. **Overlay programático via `el.show()` / `el.hide()` emite eventos** — [Domain event]
     - Setup: listener.
     - Acción: show() / hide().
-    - Assertion: `is-loading-overlay-show` y `is-loading-overlay-hide` con `composed: true`.
+    - Assertion: `iswc-loading-overlay-show` y `iswc-loading-overlay-hide` con `composed: true`.
 
 11. **Spinner color hereda `currentColor` para theming** — [Estado visual / Edge case]
     - Setup: overlay dentro de `<div style="color: red">`.
@@ -691,7 +691,7 @@ Cada demo: ≥12 propuestas. Categorías marcadas entre corchetes: `[Interacció
 13. **Cancelación por Escape requiere confirmación para evitar cierre accidental** — [Dismiss]
     - Setup: overlay con `cancelable`.
     - Acción: Escape.
-    - Assertion: prompt de confirmación o cierre directo según prop; `is-loading-overlay-cancel` emitido.
+    - Assertion: prompt de confirmación o cierre directo según prop; `iswc-loading-overlay-cancel` emitido.
 
 14. **Overlay no debe atrapar foco si no tiene controles interactivos** — [Focus trap]
     - Setup: overlay puro spinner sin botones.
@@ -720,7 +720,7 @@ Cada demo: ≥12 propuestas. Categorías marcadas entre corchetes: `[Interacció
    - Acción: Escape.
    - Assertion: `document.activeElement === btnTrigger`; modal removido del DOM o `hidden`.
 
-4. **Cierre con click en backdrop (no en contenido) emite `is-modal-verificacion-close` con reason** — [Dismiss]
+4. **Cierre con click en backdrop (no en contenido) emite `iswc-modal-verificacion-close` con reason** — [Dismiss]
    - Setup: backdrop clickeable.
    - Acción: click fuera del modal-content.
    - Assertion: modal cierra; evento con `{ reason: 'backdrop-click' }`; sin cerrar si click en contenido.
@@ -735,7 +735,7 @@ Cada demo: ≥12 propuestas. Categorías marcadas entre corchetes: `[Interacció
    - Acción: tabular.
    - Assertion: foco solo en modal top; modal padre con `aria-hidden="true"` o `inert`.
 
-7. **Confirmación emite `is-modal-verificacion-confirm` con payload del formulario** — [Domain event]
+7. **Confirmación emite `iswc-modal-verificacion-confirm` con payload del formulario** — [Domain event]
    - Setup: modal con inputs.
    - Acción: completar y confirmar.
    - Assertion: evento con `{ data: { ... }, timestamp }`; `composed: true`; modal cierra tras éxito.
@@ -798,7 +798,7 @@ Cada demo: ≥12 propuestas. Categorías marcadas entre corchetes: `[Interacció
    - Assertion: `overflow-wrap: break-word` o `word-break: break-word` aplicado según `lang`; sin overflow horizontal.
 
 4. **Texto con `selectable="false"` previene selección** — [Interacción]
-   - Setup: `<is-text selectable="false">`.
+   - Setup: `<iswc-text selectable="false">`.
    - Acción: intentar seleccionar.
    - Assertion: `user-select: none` aplicado; copy-paste no incluye ese fragmento; sin texto fantasma en selección.
 
@@ -807,17 +807,17 @@ Cada demo: ≥12 propuestas. Categorías marcadas entre corchetes: `[Interacció
    - Acción: medir color.
    - Assertion: contraste ≥ 4.5:1 con fondo; `var(--is-text-1)` aplicado.
 
-6. **Render de 1000 instancias de `<is-text>` no degrada performance** — [Estado visual / Edge case]
+6. **Render de 1000 instancias de `<iswc-text>` no degrada performance** — [Estado visual / Edge case]
    - Setup: página con 1000 textos.
    - Acción: medir TTI.
    - Assertion: render < 200ms; sin memory leaks en reconnect.
 
 7. **Texto con `mark` (highlighted) usa color accesible** — [Estado visual / Edge case]
-   - Setup: `<is-text mark>destacado</is-text>`.
+   - Setup: `<iswc-text mark>destacado</iswc-text>`.
    - Acción: medir color fondo vs texto.
    - Assertion: contraste ≥ 4.5:1; sin color idéntico a link.
 
-8. **`is-text-link` (hipervínculo interno) tiene `aria-current` cuando activo** — [ARIA/a11y]
+8. **`iswc-text-link` (hipervínculo interno) tiene `aria-current` cuando activo** — [ARIA/a11y]
    - Setup: link a página actual.
    - Acción: render.
    - Assertion: `aria-current="page"` aplicado; estilo diferenciado.
@@ -827,15 +827,15 @@ Cada demo: ≥12 propuestas. Categorías marcadas entre corchetes: `[Interacció
    - Acción: medir dirección.
    - Assertion: `dir="auto"` o configuración correcta; emoji no rompe baseline.
 
-10. **`is-text-click` event emitido solo si `clickable` prop** — [Interacción]
+10. **`iswc-text-click` event emitido solo si `clickable` prop** — [Interacción]
     - Setup: text con clickable.
     - Acción: click.
     - Assertion: evento emitido; cursor pointer; sin evento si `clickable="false"`.
 
 11. **Texto editable (`contenteditable`) mantiene semántica de párrafo** — [Deep nesting]
-    - Setup: `<is-text editable>`.
+    - Setup: `<iswc-text editable>`.
     - Acción: editar y tabular fuera.
-    - Assertion: estructura DOM correcta; Enter genera `<br>` o nuevo `<p>` según config; `is-text-edit` con `{ oldValue, newValue }`.
+    - Assertion: estructura DOM correcta; Enter genera `<br>` o nuevo `<p>` según config; `iswc-text-edit` con `{ oldValue, newValue }`.
 
 12. **Cambio de `lang` aplica tipografía apropiada** — [Estado visual / Edge case]
     - Setup: texto en japonés con `lang="ja"`.
@@ -902,14 +902,14 @@ Cada demo: ≥12 propuestas. Categorías marcadas entre corchetes: `[Interacció
 9. **Drag & drop para reordenar/mover nodos actualiza jerarquía** — [Interacción]
    - Setup: tree draggable.
    - Acción: drag nodo 3 al nodo 7 como hijo.
-   - Assertion: DOM reordenado; `is-tree-reorder` con `{ sourceId, targetId, position: 'before'|'after'|'inside' }`.
+   - Assertion: DOM reordenado; `iswc-tree-reorder` con `{ sourceId, targetId, position: 'before'|'after'|'inside' }`.
 
 10. **Virtualización para árboles > 1000 nodos mantiene scroll fluido** — [Estado visual / Edge case]
     - Setup: tree con 1000 nodos.
     - Acción: scroll rápido.
     - Assertion: FPS ≥ 30; solo nodos visibles en DOM (virtualización); sin memory leak.
 
-11. **`is-tree-select` event con `{ nodeId, path, isSelected }`** — [Domain event]
+11. **`iswc-tree-select` event con `{ nodeId, path, isSelected }`** — [Domain event]
     - Setup: listener.
     - Acción: seleccionar nodo.
     - Assertion: evento con path completo desde root; `composed: true`; throttled si aplica.
@@ -922,12 +922,12 @@ Cada demo: ≥12 propuestas. Categorías marcadas entre corchetes: `[Interacció
 13. **Checkbox por nodo con tri-state (checked/unchecked/indeterminate)** — [ARIA/a11y]
     - Setup: tree con checkboxes.
     - Acción: marcar 2 de 3 hijos.
-    - Assertion: padre en `aria-checked="mixed"`; propagar a hijos según config; `is-tree-check` con `{ nodeId, checked }`.
+    - Assertion: padre en `aria-checked="mixed"`; propagar a hijos según config; `iswc-tree-check` con `{ nodeId, checked }`.
 
 14. **Carga lazy de hijos muestra skeleton + spinner en nodo padre** — [Estado visual / Edge case]
     - Setup: nodo con `lazyLoad`.
     - Acción: expandir.
-    - Assertion: skeleton visible mientras carga; `aria-busy="true"` en nodo; fallo emite `is-tree-load-error` con retry.
+    - Assertion: skeleton visible mientras carga; `aria-busy="true"` en nodo; fallo emite `iswc-tree-load-error` con retry.
 
 15. **Click en label vs click en disclosure triangle son independientes** — [Interacción]
     - Setup: tree estándar.

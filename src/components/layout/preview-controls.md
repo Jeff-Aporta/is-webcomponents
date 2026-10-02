@@ -1,11 +1,11 @@
 ---
-tag: is-preview-controls
+tag: iswc-preview-controls
 tags:
-  - is-preview-controls
+  - iswc-preview-controls
 category: preview
 status: public
 ---
-# `<is-preview-controls>`
+# `<iswc-preview-controls>`
 
 ## Propósito
 
@@ -22,5 +22,5 @@ No lo reimplementes ni lo uses para sustituir al padre. La guía del padre docum
 ## Ejemplo mínimo
 
 ```html
-<is-preview-controls></is-preview-controls>
+<iswc-preview-controls></iswc-preview-controls>
 ```

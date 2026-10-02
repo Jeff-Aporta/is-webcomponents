@@ -1,7 +1,7 @@
 import { adoptCss, defineElement, emit } from '../../core/element.js';
 
 /**
- * <is-signature> — Pad de firma manuscrita (touch + mouse). Exporta a PNG/SVG.
+ * <iswc-signature> — Pad de firma manuscrita (touch + mouse). Exporta a PNG/SVG.
  *
  * Atributos
  *   width, height   dimensiones del canvas en píxeles (default 320 × 140)
@@ -17,8 +17,8 @@ import { adoptCss, defineElement, emit } from '../../core/element.js';
  *   pad.isEmpty   boolean
  *
  * Eventos
- *   is-stroke-end   detail: { dataURL }
- *   is-change       detail: { strokes }
+ *   iswc-stroke-end   detail: { dataURL }
+ *   iswc-change       detail: { strokes }
  */
 (() => {
   const DEFAULT_HINT = 'Firma aquí';
@@ -31,7 +31,7 @@ import { adoptCss, defineElement, emit } from '../../core/element.js';
   }
   type Stroke = Point[];
 
-  class IsSignature extends HTMLElement {
+  class IswcSignature extends HTMLElement {
     static get observedAttributes(): string[] { return OBSERVED; }
 
     #mounted = false;
@@ -86,7 +86,7 @@ import { adoptCss, defineElement, emit } from '../../core/element.js';
       this.#strokes = [];
       this.#paint();
       this.#syncHint();
-      emit(this, 'is-change', { strokes: this.#strokes });
+      emit(this, 'iswc-change', { strokes: this.#strokes });
     }
 
     toDataURL(type = 'image/png'): string {
@@ -184,8 +184,8 @@ import { adoptCss, defineElement, emit } from '../../core/element.js';
     #onUp(_e: PointerEvent): void {
       if (!this.#current) return;
       this.#current = null;
-      emit(this, 'is-stroke-end', { dataURL: this.toDataURL() });
-      emit(this, 'is-change', { strokes: this.#strokes });
+      emit(this, 'iswc-stroke-end', { dataURL: this.toDataURL() });
+      emit(this, 'iswc-change', { strokes: this.#strokes });
     }
 
     #localPoint(e: PointerEvent): Point {
@@ -203,5 +203,5 @@ import { adoptCss, defineElement, emit } from '../../core/element.js';
     #hint!: HTMLElement;
   }
 
-  defineElement('is-signature', IsSignature);
+  defineElement('iswc-signature', IswcSignature);
 })();

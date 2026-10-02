@@ -1,4 +1,4 @@
-// flex-layout.test.mjs — tests exhaustivos del demo <is-flex-layout>.
+// flex-layout.test.mjs — tests exhaustivos del demo <iswc-flex-layout>.
 // Cobertura: smoke + funcional (atributos direction/gap/justify/align) + API JS
 // + custom properties (--gap / --width) + responsive sizew.
 import assert from 'node:assert/strict';
@@ -15,10 +15,10 @@ tests.push({
     await waitReady(page, 'data-flex-ready');
     await page.waitForTimeout(200);
     const info = await page.evaluate(() => {
-      const layouts = [...document.querySelectorAll('is-flex-layout')];
+      const layouts = [...document.querySelectorAll('iswc-flex-layout')];
       const first = layouts[0];
       return {
-        defined: !!customElements.get('is-flex-layout'),
+        defined: !!customElements.get('iswc-flex-layout'),
         count: layouts.length,
         firstDirection: first.direction,
         firstGap: first.gap,
@@ -76,7 +76,7 @@ tests.push({
     await waitReady(page, 'data-flex-ready');
     await page.waitForTimeout(100);
     const result = await page.evaluate(() => {
-      const el = document.querySelector('is-flex-layout');
+      const el = document.querySelector('iswc-flex-layout');
       el.gap = '1.5rem';
       const gapVar = el.style.getPropertyValue('--gap');
       return { attr: el.getAttribute('gap'), gapVar };
@@ -93,7 +93,7 @@ tests.push({
     await waitReady(page, 'data-flex-ready');
     await page.waitForTimeout(200);
     const layout = await page.evaluate(() => {
-      const el = document.querySelector('is-flex-layout');
+      const el = document.querySelector('iswc-flex-layout');
       const items = [...el.children];
       const hostRect = el.getBoundingClientRect();
       const firstRect = items[0].getBoundingClientRect();

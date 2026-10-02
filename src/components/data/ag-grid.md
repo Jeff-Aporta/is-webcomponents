@@ -1,14 +1,14 @@
 ---
-tag: is-ag-grid
+tag: iswc-ag-grid
 tags:
-  - is-ag-grid
+  - iswc-ag-grid
 category: data
 status: public
 source: ./ag-grid.js
 style: ./ag-grid.css
 preview: ./ag-grid.json
 ---
-# `<is-ag-grid>`
+# `<iswc-ag-grid>`
 
 ## Propósito
 
@@ -16,7 +16,7 @@ Data grid estilo ag-grid.com (vanilla WC): columnas tipadas, multi-sort, filtros
 quick filter, selección, paginación, virtual scroll, grouping/agregación, density, export CSV,
 panel lateral de columnas (show/hide) y persistencia opt-in de personalización.
 
-Este módulo registra `<is-ag-grid>`. El motor vive en `./datagrid-core/` (`createGridModel`).
+Este módulo registra `<iswc-ag-grid>`. El motor vive en `./datagrid-core/` (`createGridModel`).
 
 ## Cuándo usarlo
 
@@ -25,7 +25,7 @@ persistible por `storage-key`. Preferir este tag cuando el consumidor pide UX ti
 
 ## Cuándo no usarlo
 
-- No sustituye a `<is-data-grid>` (superficie MUI X: pivot, tree, cell selection, edit modes).
+- No sustituye a `<iswc-data-grid>` (superficie MUI X: pivot, tree, cell selection, edit modes).
 - No usar para tablas estáticas simples: HTML semántico basta.
 
 ## Importación
@@ -38,7 +38,7 @@ import './ag-grid.js';
 ## Ejemplo mínimo
 
 ```html
-<is-ag-grid selectable remember-state storage-key="mi-tabla" style="height: 26rem">
+<iswc-ag-grid selectable remember-state storage-key="mi-tabla" style="height: 26rem">
   <script type="application/json">
     [
       { "field": "name", "header": "Producto", "filter": true, "sortable": true },
@@ -51,7 +51,7 @@ import './ag-grid.js';
       { "id": 2, "name": "Silla", "stock": 6 }
     ]
   </script>
-</is-ag-grid>
+</iswc-ag-grid>
 ```
 
 ## Persistencia (OBLIGATORIO respetar)
@@ -62,11 +62,11 @@ Todo va a **un solo JSON** en localStorage:
 
 ```text
 localStorage['is-webcomponents'] = {
-  "is-ag-grid": {
+  "iswc-ag-grid": {
     "<storage-key>": { columns, sortModel, filterModel, quickFilter, page, pageSize, rowGroupCols, … }
   },
-  "is-split-panel": { … },
-  "is-main": { … }
+  "iswc-split-panel": { … },
+  "iswc-main": { … }
 }
 ```
 
@@ -80,7 +80,7 @@ API compartida: [`_shared/prefs.js`](../_shared/prefs.js)
 | `removeComponentPrefs(tag, key)` | Borrar keyid (botón Reiniciar) |
 | `getPrefsRootKey()` | Siempre `'is-webcomponents'` |
 
-Tag del bucket = nombre del custom element (`is-ag-grid`). Keyid = valor de `storage-key`.
+Tag del bucket = nombre del custom element (`iswc-ag-grid`). Keyid = valor de `storage-key`.
 
 ### Qué se persiste
 
@@ -112,7 +112,7 @@ Orden, visibilidad (`hide`), anchos, pin, `sortModel`, `filterModel`, quick filt
 | `page-size` / `page-size-options` / `pagination` | pager |
 | `quick-filter` / `group-by` | texto / CSV colIds |
 | `remember-state` | boolean opt-in persistencia |
-| `storage-key` | keyid bajo `is-webcomponents.is-ag-grid` |
+| `storage-key` | keyid bajo `is-webcomponents.iswc-ag-grid` |
 | `toolbar` | `false` oculta toolbar |
 
 #### Propiedades públicas
@@ -143,20 +143,20 @@ Orden, visibilidad (`hide`), anchos, pin, `sortModel`, `filterModel`, quick filt
 
 | Evento | detail | bubbles | composed | cancelable |
 | --- | --- | --- | --- | --- |
-| `is-sort-change` | modelo de orden | sí | sí | no |
-| `is-filter-change` | modelo de filtros | sí | sí | no |
-| `is-column-hide` | `{ colId, hidden }` | sí | sí | no |
-| `is-column-reorder` | `{ colId, from, to }` | sí | sí | no |
-| `is-column-resize` | `{ colId, width }` | sí | sí | no |
-| `is-column-pin` | `{ colId, pinned }` | sí | sí | no |
-| `is-state-saved` | snapshot guardado | sí | sí | no |
-| `is-state-loaded` | snapshot aplicado | sí | sí | no |
-| `is-state-reset` | sin detail | sí | sí | no |
+| `iswc-sort-change` | modelo de orden | sí | sí | no |
+| `iswc-filter-change` | modelo de filtros | sí | sí | no |
+| `iswc-column-hide` | `{ colId, hidden }` | sí | sí | no |
+| `iswc-column-reorder` | `{ colId, from, to }` | sí | sí | no |
+| `iswc-column-resize` | `{ colId, width }` | sí | sí | no |
+| `iswc-column-pin` | `{ colId, pinned }` | sí | sí | no |
+| `iswc-state-saved` | snapshot guardado | sí | sí | no |
+| `iswc-state-loaded` | snapshot aplicado | sí | sí | no |
+| `iswc-state-reset` | sin detail | sí | sí | no |
 
 Nombres completos emitidos por el módulo:
 
-`is-sort-change`, `is-filter-change`, `is-column-hide`, `is-column-reorder`, `is-column-resize`,
-`is-column-pin`, `is-state-saved`, `is-state-loaded`, `is-state-reset`, …
+`iswc-sort-change`, `iswc-filter-change`, `iswc-column-hide`, `iswc-column-reorder`, `iswc-column-resize`,
+`iswc-column-pin`, `iswc-state-saved`, `iswc-state-loaded`, `iswc-state-reset`, …
 
 ### CSS parts
 
@@ -202,7 +202,7 @@ su propio valor y lo devuelven al modelo del core.
 - Las columnas y filas se leen de los `<script type="application/json">` hijos
   o de los atributos correspondientes.
 - Con `remember-state` y `storage-key`, el snapshot se guarda mediante
-  `_shared/prefs.js` bajo `localStorage['is-webcomponents']['is-ag-grid'][keyid]`.
+  `_shared/prefs.js` bajo `localStorage['is-webcomponents']['iswc-ag-grid'][keyid]`.
 - El panel lateral de columnas se abre con `api.openColumnsPanel()` y refleja
   la visibilidad del modelo.
 
@@ -224,7 +224,7 @@ su propio valor y lo devuelven al modelo del core.
 - **No** inventar un segundo store de prefs por componente.
 - **No** dejar el sidebar `hidden` sin cablear: el markup vacío fue el bug original.
 - **No** regenerar todos los beats/overlays de otros kits: aquí no aplica; no mezclar con video-editor.
-- **No** confundir con `<is-data-grid>` (otro contrato, otro archivo).
+- **No** confundir con `<iswc-data-grid>` (otro contrato, otro archivo).
 
 ## Errores conocidos (no repetir)
 
@@ -253,10 +253,10 @@ para poder restaurarlas por teclado.
 ## Ejemplo avanzado
 
 ```html
-<is-ag-grid id="grid" selectable row-selection="multiple"
+<iswc-ag-grid id="grid" selectable row-selection="multiple"
             remember-state storage-key="inventario"
             density="compact" page-size="50" style="height: 30rem">
-</is-ag-grid>
+</iswc-ag-grid>
 
 <script type="module">
   const grid = document.getElementById('grid');
@@ -266,7 +266,7 @@ para poder restaurarlas por teclado.
   ];
   grid.rows = await (await fetch('/api/inventario')).json();
 
-  grid.addEventListener('is-sort-change', (e) => console.log(e.detail));
+  grid.addEventListener('iswc-sort-change', (e) => console.log(e.detail));
   grid.api.openColumnsPanel();
   const snapshot = grid.api.serializeState();
   grid.api.resetPersistedState();      // borra keyid y vuelve a defaults
@@ -277,9 +277,9 @@ para poder restaurarlas por teclado.
 
 - Persistir con `remember-state` pero sin `storage-key`: la persistencia es
   opt-in estricto y necesita ambos.
-- Escuchar `is-sort` / `is-filter`: el vocabulario es `-change`.
+- Escuchar `iswc-sort` / `iswc-filter`: el vocabulario es `-change`.
 - Escribir el estado a mano en `localStorage` en vez de usar `prefs.js`.
-- Confundirlo con `<is-data-grid>`: otro contrato y otro archivo.
+- Confundirlo con `<iswc-data-grid>`: otro contrato y otro archivo.
 - Usar tag sin importar módulo primero.
 
 ## Reglas para LLM

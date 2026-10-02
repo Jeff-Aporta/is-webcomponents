@@ -29,7 +29,7 @@ function patchFile(rel, bySection, { fillRest } = {}) {
   console.log(`OK ${rel}: ${n} demos`);
 }
 
-patchFile('src/previews/actions/is-button-group.json', {
+patchFile('src/previews/actions/iswc-button-group.json', {
   toolbar: {
     equivNote: 'Toolbar de iconos: role=toolbar + botones con aria-label.',
     equivHtml: `<div role="toolbar" aria-label="Historial">
@@ -46,7 +46,7 @@ patchFile('src/previews/actions/is-button-group.json', {
   },
 });
 
-patchFile('src/previews/actions/is-fab.json', {
+patchFile('src/previews/actions/iswc-fab.json', {
   intro: {
     equivNote: 'FAB ≈ botón circular; el kit aporta elevación, posiciones y pulse.',
     equivHtml: '<button type="button" aria-label="Crear">+</button>',
@@ -78,11 +78,11 @@ patchFile('src/previews/actions/is-fab.json', {
   },
 });
 
-const buttonFlow = `<is-flowchart open-on-click>
+const buttonFlow = `<iswc-flowchart open-on-click>
   <script type="application/json">
   {
     "flowchart": {
-      "title": "Que pinta is-button",
+      "title": "Que pinta iswc-button",
       "direction": "TB",
       "nodes": [
         { "id": "q", "label": "tiene href?", "shape": "diamond" },
@@ -100,10 +100,10 @@ const buttonFlow = `<is-flowchart open-on-click>
     }
   }
   </script>
-</is-flowchart>`;
+</iswc-flowchart>`;
 
 patchFile(
-  'src/previews/actions/is-button.json',
+  'src/previews/actions/iswc-button.json',
   {
     intro: {
       equivNote:
@@ -126,7 +126,7 @@ patchFile(
 <button type="button">Danger</button>`,
     },
     href: {
-      equivNote: 'Con href, is-button usa un ancla en el shadow (no un button).',
+      equivNote: 'Con href, iswc-button usa un ancla en el shadow (no un button).',
       equivHtml: '<a href="https://example.com">Ir al sitio</a>',
     },
     disabled: {
@@ -147,7 +147,7 @@ patchFile(
   {
     fillRest: () => ({
       equivNote:
-        'Equivalente nativo generico de is-button: button type=button (o a si hay href).',
+        'Equivalente nativo generico de iswc-button: button type=button (o a si hay href).',
       equivHtml: '<button type="button">…</button>',
     }),
   },

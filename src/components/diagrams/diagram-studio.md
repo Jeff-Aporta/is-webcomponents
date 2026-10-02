@@ -1,8 +1,8 @@
 ---
-tag: is-diagram-studio
+tag: iswc-diagram-studio
 tags:
-  - is-diagram-view-app
-  - is-diagram-edit-app
+  - iswc-diagram-view-app
+  - iswc-diagram-edit-app
 category: diagrams
 status: public
 source: ./diagram-studio.ts
@@ -19,7 +19,7 @@ Cuando otra app, un agente o la galería necesitan mostrar o editar un diagrama 
 
 ## Cuándo no usarlo
 
-No sustituye al tag del diagrama dentro de una pantalla de producto. Ahí se usa `<is-flowchart>`, `<is-er-diagram>` y el resto, con su JSON en un `<script type="application/json">`.
+No sustituye al tag del diagrama dentro de una pantalla de producto. Ahí se usa `<iswc-flowchart>`, `<iswc-er-diagram>` y el resto, con su JSON en un `<script type="application/json">`.
 
 ## Páginas
 
@@ -40,7 +40,7 @@ No sustituye al tag del diagrama dentro de una pantalla de producto. Ahí se usa
 - **Recuperar JSON** muestra y copia el documento vivo.
 - **Aplicar JSON** (solo edición) pinta el texto del panel. Tampoco toca la dirección.
 
-El editor visual de entidad-relación es `<is-er-editor>` cuando `kind=er`. Los demás `kind` se editan con el panel JSON sobre el visor de ese diagrama.
+El editor visual de entidad-relación es `<iswc-er-editor>` cuando `kind=er`. Los demás `kind` se editan con el panel JSON sobre el visor de ese diagrama.
 
 ## Ejemplo
 

@@ -10,7 +10,7 @@ check(
 );
 
 const files = resolveSourceFiles({
-  tag: 'is-button',
+  tag: 'iswc-button',
   script: '../../components/actions/button.js',
   style: '../../components/actions/button.css',
 });
@@ -20,7 +20,7 @@ check(files.css?.repoPath === 'src/components/actions/button.css', `css path: ${
 check(files.md?.repoPath === 'src/components/actions/button.md', `md path: ${files.md?.repoPath}`);
 
 const noStyle = resolveSourceFiles({
-  tag: 'is-x',
+  tag: 'iswc-x',
   script: '../../components/isp/heading.js',
 });
 check(noStyle.css?.repoPath === 'src/components/isp/heading.css', 'css inferido desde script');

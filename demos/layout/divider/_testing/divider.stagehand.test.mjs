@@ -11,7 +11,7 @@ const results = [];
 async function checkDeterministic(page, demo) {
   await page.waitForTimeout(200);
   const data = await page.evaluate(() => {
-    const dividers = [...document.querySelectorAll('main is-divider')];
+    const dividers = [...document.querySelectorAll('main iswc-divider')];
     return dividers.map((d, idx) => {
       const sr = d.shadowRoot;
       const part = sr?.querySelector('[part="divider"]');
@@ -64,7 +64,7 @@ for (const demo of DEMOS) {
 }
 
 const VISUAL_RUBRIC = `
-Evalúa la calidad visual del <is-divider> en el screenshot.
+Evalúa la calidad visual del <iswc-divider> en el screenshot.
 
 Checklist (todas deben cumplirse; marca cada una PASS o FAIL):
 

@@ -5,7 +5,7 @@
  * Prefs: localStorage['is-webcomponents'][tag][storage-key] = { top, savedAt }.
  *
  * restorePolicy:
- *   - 'reload'  → solo F5 / atrás (is-main / galería)
+ *   - 'reload'  → solo F5 / atrás (iswc-main / galería)
  *   - 'always'  → cada connect con lectura vigente (listas en layouts)
  */
 

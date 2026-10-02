@@ -1,4 +1,4 @@
-// form.test.mjs — tests exhaustivos del demo <is-form>.
+// form.test.mjs — tests exhaustivos del demo <iswc-form>.
 // Cobertura: smoke + funcional (fromJSON monta body, submit emite evento con
 // values, mode view oculta submit, toJSON round-trip, inline JSON script).
 import assert from 'node:assert/strict';
@@ -23,7 +23,7 @@ tests.push({
         const contentSlot = sr?.querySelector('slot[name="content"]');
         return {
           id,
-          defined: !!customElements.get('is-form'),
+          defined: !!customElements.get('iswc-form'),
           submitExists: !!submit,
           cancelExists: !!cancel,
           submitHidden: submit?.hidden,
@@ -35,7 +35,7 @@ tests.push({
       return forms;
     });
     for (const f of info) {
-      assert.equal(f.defined, true, `${f.id}: <is-form> debe estar definido`);
+      assert.equal(f.defined, true, `${f.id}: <iswc-form> debe estar definido`);
       assert.equal(f.submitExists, true, `${f.id}: botón submit debe existir`);
       assert.equal(f.cancelExists, true, `${f.id}: botón cancel debe existir`);
       assert.equal(f.hasHeaderSlot, true, `${f.id}: slot header debe existir`);
@@ -61,7 +61,7 @@ tests.push({
       const contentSlot = sr.querySelector('slot[name="content"]');
       const headerAssigned = headerSlot?.assignedElements({ flatten: true });
       const contentAssigned = contentSlot?.assignedElements({ flatten: true });
-      const inputs = contentAssigned?.[0]?.querySelectorAll('is-input') || [];
+      const inputs = contentAssigned?.[0]?.querySelectorAll('iswc-input') || [];
       const values = f.getValues();
       return {
         headerAssignedCount: headerAssigned?.length || 0,
@@ -72,7 +72,7 @@ tests.push({
       };
     });
     assert.ok(info.headerAssignedCount >= 1, `form-b header debe tener contenido asignado (${info.headerAssignedCount})`);
-    assert.ok(info.inputCount >= 2, `form-b debe tener >=2 is-input en content (${info.inputCount})`);
+    assert.ok(info.inputCount >= 2, `form-b debe tener >=2 iswc-input en content (${info.inputCount})`);
     assert.equal(info.submitLabel, 'Guardar', `submit-label debe ser 'Guardar'`);
     assert.equal(info.values.nit, '900123456', `values.nit debe estar prellenado`);
     assert.equal(info.values.activo, true, `values.activo debe ser true`);
@@ -80,7 +80,7 @@ tests.push({
 });
 
 tests.push({
-  name: 'funcional: submit emite is-submit con detail.values y detail.json',
+  name: 'funcional: submit emite iswc-submit con detail.values y detail.json',
   run: async (page) => {
     await page.goto(URL, { waitUntil: 'domcontentloaded' });
     await waitReady(page, 'data-form-ready');
@@ -97,7 +97,7 @@ tests.push({
 
       return new Promise((resolve) => {
         const handler = (e) => {
-          f.removeEventListener('is-submit', handler);
+          f.removeEventListener('iswc-submit', handler);
           resolve({
             hasValues: !!e.detail.values,
             values: e.detail.values,
@@ -107,15 +107,15 @@ tests.push({
             composed: e.composed,
           });
         };
-        f.addEventListener('is-submit', handler);
+        f.addEventListener('iswc-submit', handler);
         f.requestSubmit();
       });
     });
     assert.equal(eventDetail.hasValues, true, 'detail.values debe existir');
     assert.equal(eventDetail.hasJson, true, 'detail.json debe existir');
     assert.equal(eventDetail.jsonMode, 'edit');
-    assert.equal(eventDetail.bubbles, true, 'is-submit debe burbujear');
-    assert.equal(eventDetail.composed, true, 'is-submit debe atravesar shadow DOM');
+    assert.equal(eventDetail.bubbles, true, 'iswc-submit debe burbujear');
+    assert.equal(eventDetail.composed, true, 'iswc-submit debe atravesar shadow DOM');
   },
 });
 
@@ -149,8 +149,8 @@ tests.push({
       const f = document.getElementById('form-b');
       const a = f.toJSON();
       // Construir un segundo form idéntico
-      const Ctor = customElements.get('is-form');
-      const f2 = document.createElement('is-form');
+      const Ctor = customElements.get('iswc-form');
+      const f2 = document.createElement('iswc-form');
       f2.id = 'form-rt';
       document.body.appendChild(f2);
       f2.fromJSON(JSON.parse(JSON.stringify(a)));

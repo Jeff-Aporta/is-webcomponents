@@ -1,4 +1,4 @@
-// prefs-clear.test.mjs — tests exhaustivos del demo is-prefs-clear.
+// prefs-clear.test.mjs — tests exhaustivos del demo iswc-prefs-clear.
 // Cobertura: smoke + funcional (peek, clear sin reload emite evento,
 // confirm/reload flags, atributos forwarded al button interno).
 import assert from 'node:assert/strict';
@@ -14,16 +14,16 @@ tests.push({
     await page.goto(URL, { waitUntil: 'domcontentloaded' });
     await waitReady(page, 'data-prefs-clear-ready');
     const data = await page.evaluate(() => {
-      const all = document.querySelectorAll('is-prefs-clear');
+      const all = document.querySelectorAll('iswc-prefs-clear');
       return {
-        defined: !!customElements.get('is-prefs-clear'),
+        defined: !!customElements.get('iswc-prefs-clear'),
         count: all.length,
-        eachHasButton: [...all].every((p) => !!p.shadowRoot?.querySelector('is-button')),
+        eachHasButton: [...all].every((p) => !!p.shadowRoot?.querySelector('iswc-button')),
       };
     });
-    assert.equal(data.defined, true, 'is-prefs-clear debe estar definido');
+    assert.equal(data.defined, true, 'iswc-prefs-clear debe estar definido');
     assert.ok(data.count >= 2, `esperaba >=2 prefs-clear, hay ${data.count}`);
-    assert.equal(data.eachHasButton, true, 'cada prefs-clear debe contener un is-button en su shadow');
+    assert.equal(data.eachHasButton, true, 'cada prefs-clear debe contener un iswc-button en su shadow');
     await screenshot(page, 'prefs-clear-smoke');
   },
 });
@@ -48,7 +48,7 @@ tests.push({
 });
 
 tests.push({
-  name: 'funcional: clear() con reload=false NO recarga y emite is-prefs-clear',
+  name: 'funcional: clear() con reload=false NO recarga y emite iswc-prefs-clear',
   run: async (page) => {
     await page.goto(URL, { waitUntil: 'domcontentloaded' });
     await waitReady(page, 'data-prefs-clear-ready');
@@ -58,8 +58,8 @@ tests.push({
     // solo borra ROOT_KEY (no otros prefijos).
     await page.evaluate(() => {
       localStorage.setItem('is-webcomponents', JSON.stringify({
-        'is-split-panel:size': { v: 200 },
-        'is-grid:scroll': { v: 100 },
+        'iswc-split-panel:size': { v: 200 },
+        'iswc-grid:scroll': { v: 100 },
       }));
     });
     const before = await page.evaluate(() => {
@@ -71,7 +71,7 @@ tests.push({
     const result = await page.evaluate(async () => {
       const silent = document.getElementById('silent');
       const events = [];
-      silent.addEventListener('is-prefs-clear', (e) => events.push(e.detail));
+      silent.addEventListener('iswc-prefs-clear', (e) => events.push(e.detail));
       const out = await silent.clear();
       await new Promise((r) => setTimeout(r, 100));
       return { events, out };
@@ -79,7 +79,7 @@ tests.push({
     await page.waitForTimeout(200);
     const urlAfter = page.url();
     assert.equal(urlBefore, urlAfter, `reload=false NO debe recargar (url antes=${urlBefore}, después=${urlAfter})`);
-    assert.ok(result.events.length >= 1, `esperaba evento is-prefs-clear, vi ${result.events.length}`);
+    assert.ok(result.events.length >= 1, `esperaba evento iswc-prefs-clear, vi ${result.events.length}`);
     assert.ok(Array.isArray(result.events[0].tags), `evento debe llevar detail.tags array (vimos ${JSON.stringify(result.events[0].tags)})`);
     assert.ok(result.events[0].tags.length >= 2,
       `evento.tags debe listar los tags limpiados (esperaba >=2, vi ${JSON.stringify(result.events[0].tags)})`);
@@ -117,7 +117,7 @@ tests.push({
     const result = await page.evaluate(async () => {
       let called = 0;
       window.confirm = () => { called++; return false; };
-      const asking = document.querySelectorAll('is-prefs-clear')[0]; // confirm default true
+      const asking = document.querySelectorAll('iswc-prefs-clear')[0]; // confirm default true
       await asking.clear();
       return { called };
     });
@@ -132,14 +132,14 @@ tests.push({
     await waitReady(page, 'data-prefs-clear-ready');
     await page.waitForTimeout(150);
     const forwarded = await page.evaluate(async () => {
-      const el = document.createElement('is-prefs-clear');
+      const el = document.createElement('iswc-prefs-clear');
       el.setAttribute('variant', 'filled');
       el.setAttribute('color', 'danger');
       el.setAttribute('shape', 'pill');
       el.setAttribute('aria-label', 'Reset memoria');
       document.body.appendChild(el);
       await new Promise((r) => requestAnimationFrame(() => r()));
-      const btn = el.shadowRoot.querySelector('is-button');
+      const btn = el.shadowRoot.querySelector('iswc-button');
       const got = {
         variant: btn.getAttribute('variant'),
         color: btn.getAttribute('color'),
@@ -162,7 +162,7 @@ tests.push({
     await page.goto(URL, { waitUntil: 'domcontentloaded' });
     await waitReady(page, 'data-prefs-clear-ready');
     const info = await page.evaluate(() => {
-      const btn = document.querySelector('is-prefs-clear').shadowRoot.querySelector('is-button');
+      const btn = document.querySelector('iswc-prefs-clear').shadowRoot.querySelector('iswc-button');
       return {
         aria: btn.getAttribute('aria-label'),
         title: btn.getAttribute('title'),

@@ -18,7 +18,7 @@
 | 8 | g39 | `server.ts` (src/utils/testing/e2e/lib/server.ts — 480 LOC) | Database: pool de conexiones | 12 |
 | 9 | g39 | `server.ts` (src/utils/testing/e2e/lib/server.ts — 480 LOC) | Database: timeout en query lenta | 12 |
 | 10 | g39 | `server.ts` (src/utils/testing/e2e/lib/server.ts — 480 LOC) | Cleanup: shutdown cierra conexiones DB | 12 |
-| 11 | g42 | `src/components/helpers/format-bytes.ts` (121 LOC — `<is-format-bytes>` + `formatBytes`/`toBytes`) | Petabytes: `formatBytes(1125899906842624)` → `1... | 12 |
+| 11 | g42 | `src/components/helpers/format-bytes.ts` (121 LOC — `<iswc-format-bytes>` + `formatBytes`/`toBytes`) | Petabytes: `formatBytes(1125899906842624)` → `1... | 12 |
 | 12 | g44 | `src/components/layout/main.ts` (webcomponent,database,storage) | Migración concurrente detectada y rechazada (lock) | 12 |
 | 13 | g44 | `src/components/layout/main.ts` (webcomponent,database,storage) | Race: `connectedCallback` llamado antes de migr... | 12 |
 | 14 | g17 | `src/components/_shared/diagram-edit.ts` (~319 LOC) | openInlineEditor Escape llama onCancel y remuev... | 10 |
@@ -92,7 +92,7 @@
 - **Descripción**: [edge-case, database]
 
 ### 11. Petabytes: `formatBytes(1125899906842624)` → `1 PB`
-- **Testable**: ``src/components/helpers/format-bytes.ts` (121 LOC — `<is-format-bytes>` + `formatBytes`/`toBytes`)`
+- **Testable**: ``src/components/helpers/format-bytes.ts` (121 LOC — `<iswc-format-bytes>` + `formatBytes`/`toBytes`)`
 - **Grupo**: g42 · **Impacto**: 12
 - **Descripción**: [categoria: PF/edge-case]
 

@@ -3,7 +3,7 @@
 //
 // Cada hijo es un componente publico del manifest y el index debe poder
 // abrir SU demo, no el del padre. El demo se muestra en el contexto minimo
-// del padre (un <is-tab-panel> solo tiene sentido dentro de <is-tab-group>),
+// del padre (un <iswc-tab-panel> solo tiene sentido dentro de <iswc-tab-group>),
 // pero la pagina documenta la API DEL HIJO.
 //
 // La documentacion de atributos NO se inventa: se extrae del bloque de
@@ -27,226 +27,226 @@ const esc = (s) => String(s)
  * funcionando, y los modulos extra que la pagina necesita cargar.
  */
 const CHILDREN = {
-  'is-dropdown-item': {
+  'iswc-dropdown-item': {
     modules: ['actions/dropdown.js', 'actions/dropdown-item.js', 'actions/button.js'],
-    lede: 'Item de un <code class="code">&lt;is-dropdown&gt;</code>. Aporta el estado (activo, deshabilitado), el slot de icono y el valor que viaja en el evento de selección.',
-    demo: `<is-dropdown placement="bottom-start">
-  <is-button slot="trigger" color="brand">Acciones</is-button>
-  <is-dropdown-item value="edit"><is-icon slot="start" icon="mdi:pencil"></is-icon>Editar</is-dropdown-item>
-  <is-dropdown-item value="dup"><is-icon slot="start" icon="mdi:content-copy"></is-icon>Duplicar</is-dropdown-item>
-  <is-dropdown-item value="del" color="danger"><is-icon slot="start" icon="mdi:trash-can"></is-icon>Eliminar</is-dropdown-item>
-  <is-dropdown-item value="off" disabled>No disponible</is-dropdown-item>
-</is-dropdown>`,
+    lede: 'Item de un <code class="code">&lt;iswc-dropdown&gt;</code>. Aporta el estado (activo, deshabilitado), el slot de icono y el valor que viaja en el evento de selección.',
+    demo: `<iswc-dropdown placement="bottom-start">
+  <iswc-button slot="trigger" color="brand">Acciones</iswc-button>
+  <iswc-dropdown-item value="edit"><iswc-icon slot="start" icon="mdi:pencil"></iswc-icon>Editar</iswc-dropdown-item>
+  <iswc-dropdown-item value="dup"><iswc-icon slot="start" icon="mdi:content-copy"></iswc-icon>Duplicar</iswc-dropdown-item>
+  <iswc-dropdown-item value="del" color="danger"><iswc-icon slot="start" icon="mdi:trash-can"></iswc-icon>Eliminar</iswc-dropdown-item>
+  <iswc-dropdown-item value="off" disabled>No disponible</iswc-dropdown-item>
+</iswc-dropdown>`,
   },
-  'is-toast-item': {
+  'iswc-toast-item': {
     modules: ['feedback/toast.js', 'actions/button.js'],
     lede: 'Ítem individual de notificación. Se crea normalmente con <code class="code">toaster.create()</code>, pero también se puede declarar suelto para controlar su ciclo de vida a mano.',
-    demo: `<is-toast-item color="success" open duration="0">
-  <is-icon slot="icon" icon="mdi:check-circle"></is-icon>
+    demo: `<iswc-toast-item color="success" open duration="0">
+  <iswc-icon slot="icon" icon="mdi:check-circle"></iswc-icon>
   Guardado correctamente
-</is-toast-item>
-<is-toast-item color="danger" open duration="0">
-  <is-icon slot="icon" icon="mdi:alert-circle"></is-icon>
+</iswc-toast-item>
+<iswc-toast-item color="danger" open duration="0">
+  <iswc-icon slot="icon" icon="mdi:alert-circle"></iswc-icon>
   No se pudo guardar
-</is-toast-item>`,
+</iswc-toast-item>`,
   },
-  'is-breadcrumb-item': {
+  'iswc-breadcrumb-item': {
     modules: ['navigation/breadcrumb.js', 'navigation/breadcrumb-item.js'],
-    lede: 'Cada eslabón de un <code class="code">&lt;is-breadcrumb&gt;</code>. Puede ser enlace (<code class="code">href</code>) o texto plano cuando es la página actual.',
-    demo: `<is-breadcrumb>
-  <is-breadcrumb-item href="#"><is-icon slot="start" icon="mdi:home"></is-icon>Inicio</is-breadcrumb-item>
-  <is-breadcrumb-item href="#">Contabilidad</is-breadcrumb-item>
-  <is-breadcrumb-item href="#">Comprobantes</is-breadcrumb-item>
-  <is-breadcrumb-item>Detalle</is-breadcrumb-item>
-</is-breadcrumb>`,
+    lede: 'Cada eslabón de un <code class="code">&lt;iswc-breadcrumb&gt;</code>. Puede ser enlace (<code class="code">href</code>) o texto plano cuando es la página actual.',
+    demo: `<iswc-breadcrumb>
+  <iswc-breadcrumb-item href="#"><iswc-icon slot="start" icon="mdi:home"></iswc-icon>Inicio</iswc-breadcrumb-item>
+  <iswc-breadcrumb-item href="#">Contabilidad</iswc-breadcrumb-item>
+  <iswc-breadcrumb-item href="#">Comprobantes</iswc-breadcrumb-item>
+  <iswc-breadcrumb-item>Detalle</iswc-breadcrumb-item>
+</iswc-breadcrumb>`,
   },
-  'is-tab': {
+  'iswc-tab': {
     modules: ['navigation/tab-group.js'],
-    lede: 'Pestaña de un <code class="code">&lt;is-tab-group&gt;</code>. El atributo <code class="code">panel</code> la enlaza con su <code class="code">&lt;is-tab-panel&gt;</code>.',
-    demo: `<is-tab-group>
-  <is-tab slot="nav" panel="a"><is-icon slot="start" icon="mdi:chart-line"></is-icon>Resumen</is-tab>
-  <is-tab slot="nav" panel="b">Movimientos</is-tab>
-  <is-tab slot="nav" panel="c" disabled>Cierre</is-tab>
-  <is-tab-panel name="a">Panel de resumen.</is-tab-panel>
-  <is-tab-panel name="b">Panel de movimientos.</is-tab-panel>
-  <is-tab-panel name="c">Panel de cierre.</is-tab-panel>
-</is-tab-group>`,
+    lede: 'Pestaña de un <code class="code">&lt;iswc-tab-group&gt;</code>. El atributo <code class="code">panel</code> la enlaza con su <code class="code">&lt;iswc-tab-panel&gt;</code>.',
+    demo: `<iswc-tab-group>
+  <iswc-tab slot="nav" panel="a"><iswc-icon slot="start" icon="mdi:chart-line"></iswc-icon>Resumen</iswc-tab>
+  <iswc-tab slot="nav" panel="b">Movimientos</iswc-tab>
+  <iswc-tab slot="nav" panel="c" disabled>Cierre</iswc-tab>
+  <iswc-tab-panel name="a">Panel de resumen.</iswc-tab-panel>
+  <iswc-tab-panel name="b">Panel de movimientos.</iswc-tab-panel>
+  <iswc-tab-panel name="c">Panel de cierre.</iswc-tab-panel>
+</iswc-tab-group>`,
   },
-  'is-tab-panel': {
+  'iswc-tab-panel': {
     modules: ['navigation/tab-group.js'],
-    lede: 'Contenido asociado a una <code class="code">&lt;is-tab&gt;</code>. Solo se muestra el panel cuyo <code class="code">name</code> coincide con el <code class="code">panel</code> de la pestaña activa.',
-    demo: `<is-tab-group>
-  <is-tab slot="nav" panel="uno">Uno</is-tab>
-  <is-tab slot="nav" panel="dos">Dos</is-tab>
-  <is-tab-panel name="uno">
+    lede: 'Contenido asociado a una <code class="code">&lt;iswc-tab&gt;</code>. Solo se muestra el panel cuyo <code class="code">name</code> coincide con el <code class="code">panel</code> de la pestaña activa.',
+    demo: `<iswc-tab-group>
+  <iswc-tab slot="nav" panel="uno">Uno</iswc-tab>
+  <iswc-tab slot="nav" panel="dos">Dos</iswc-tab>
+  <iswc-tab-panel name="uno">
     <p>El panel es un contenedor normal: acepta cualquier contenido.</p>
-    <is-tag color="brand">Contenido rico</is-tag>
-  </is-tab-panel>
-  <is-tab-panel name="dos">Segundo panel.</is-tab-panel>
-</is-tab-group>`,
+    <iswc-tag color="brand">Contenido rico</iswc-tag>
+  </iswc-tab-panel>
+  <iswc-tab-panel name="dos">Segundo panel.</iswc-tab-panel>
+</iswc-tab-group>`,
     extra: ['feedback/tag.js'],
   },
-  'is-carousel-item': {
+  'iswc-carousel-item': {
     modules: ['navigation/carousel.js'],
-    lede: 'Cada diapositiva de un <code class="code">&lt;is-carousel&gt;</code>.',
-    demo: `<is-carousel style="max-width:520px">
-  <is-carousel-item><div class="slide">Diapositiva 1</div></is-carousel-item>
-  <is-carousel-item><div class="slide">Diapositiva 2</div></is-carousel-item>
-  <is-carousel-item><div class="slide">Diapositiva 3</div></is-carousel-item>
-</is-carousel>`,
+    lede: 'Cada diapositiva de un <code class="code">&lt;iswc-carousel&gt;</code>.',
+    demo: `<iswc-carousel style="max-width:520px">
+  <iswc-carousel-item><div class="slide">Diapositiva 1</div></iswc-carousel-item>
+  <iswc-carousel-item><div class="slide">Diapositiva 2</div></iswc-carousel-item>
+  <iswc-carousel-item><div class="slide">Diapositiva 3</div></iswc-carousel-item>
+</iswc-carousel>`,
     styles: `.slide { display:grid; place-items:center; height:180px; border-radius:.6rem;
       background: color-mix(in srgb, var(--iswc-accent) 14%, var(--iswc-bg-elev)); font-weight:600; }`,
   },
-  'is-tree-item': {
+  'iswc-tree-item': {
     modules: ['navigation/tree.js'],
-    lede: 'Nodo de un <code class="code">&lt;is-tree&gt;</code>. Anidando items se construye la jerarquía; <code class="code">expanded</code> controla el pliegue.',
-    demo: `<is-tree>
-  <is-tree-item expanded><is-icon slot="start" icon="mdi:folder"></is-icon>Contabilidad
-    <is-tree-item><is-icon slot="start" icon="mdi:file-document"></is-icon>Balance</is-tree-item>
-    <is-tree-item><is-icon slot="start" icon="mdi:file-document"></is-icon>Estado de resultados</is-tree-item>
-  </is-tree-item>
-  <is-tree-item><is-icon slot="start" icon="mdi:folder"></is-icon>Inventario</is-tree-item>
-</is-tree>`,
+    lede: 'Nodo de un <code class="code">&lt;iswc-tree&gt;</code>. Anidando items se construye la jerarquía; <code class="code">expanded</code> controla el pliegue.',
+    demo: `<iswc-tree>
+  <iswc-tree-item expanded><iswc-icon slot="start" icon="mdi:folder"></iswc-icon>Contabilidad
+    <iswc-tree-item><iswc-icon slot="start" icon="mdi:file-document"></iswc-icon>Balance</iswc-tree-item>
+    <iswc-tree-item><iswc-icon slot="start" icon="mdi:file-document"></iswc-icon>Estado de resultados</iswc-tree-item>
+  </iswc-tree-item>
+  <iswc-tree-item><iswc-icon slot="start" icon="mdi:folder"></iswc-icon>Inventario</iswc-tree-item>
+</iswc-tree>`,
   },
-  'is-stepper-step': {
+  'iswc-stepper-step': {
     modules: ['navigation/stepper.js'],
-    lede: 'Paso de un <code class="code">&lt;is-stepper&gt;</code>, con su título, descripción y estado.',
-    demo: `<is-stepper current="1">
-  <is-stepper-step title="Datos" description="Identificación"></is-stepper-step>
-  <is-stepper-step title="Detalle" description="Líneas del comprobante"></is-stepper-step>
-  <is-stepper-step title="Revisión" description="Confirmar y guardar"></is-stepper-step>
-</is-stepper>`,
+    lede: 'Paso de un <code class="code">&lt;iswc-stepper&gt;</code>, con su título, descripción y estado.',
+    demo: `<iswc-stepper current="1">
+  <iswc-stepper-step title="Datos" description="Identificación"></iswc-stepper-step>
+  <iswc-stepper-step title="Detalle" description="Líneas del comprobante"></iswc-stepper-step>
+  <iswc-stepper-step title="Revisión" description="Confirmar y guardar"></iswc-stepper-step>
+</iswc-stepper>`,
   },
-  'is-option': {
+  'iswc-option': {
     modules: ['forms/combobox.js', 'forms/option.js'],
-    lede: 'Opción de un <code class="code">&lt;is-combobox&gt;</code> o <code class="code">&lt;is-select&gt;</code>. El <code class="code">value</code> es lo que expone el control; el contenido es lo que ve el usuario.',
-    demo: `<is-combobox label="Ciudad" placeholder="Elige una" style="max-width:320px">
-  <is-option value="bog">Bogotá</is-option>
-  <is-option value="mde">Medellín</is-option>
-  <is-option value="cal">Cali</is-option>
-  <is-option value="brr" disabled>Barranquilla (sin cobertura)</is-option>
-</is-combobox>`,
+    lede: 'Opción de un <code class="code">&lt;iswc-combobox&gt;</code> o <code class="code">&lt;iswc-select&gt;</code>. El <code class="code">value</code> es lo que expone el control; el contenido es lo que ve el usuario.',
+    demo: `<iswc-combobox label="Ciudad" placeholder="Elige una" style="max-width:320px">
+  <iswc-option value="bog">Bogotá</iswc-option>
+  <iswc-option value="mde">Medellín</iswc-option>
+  <iswc-option value="cal">Cali</iswc-option>
+  <iswc-option value="brr" disabled>Barranquilla (sin cobertura)</iswc-option>
+</iswc-combobox>`,
   },
-  'is-radio-group': {
+  'iswc-radio-group': {
     modules: ['forms/radio-group.js', 'forms/radio.js'],
-    lede: 'Agrupa varios <code class="code">&lt;is-radio&gt;</code> bajo un mismo nombre y expone el valor seleccionado como un único control de formulario.',
-    demo: `<is-radio-group label="Forma de pago" value="credito" name="pago">
-  <is-radio value="contado">Contado</is-radio>
-  <is-radio value="credito">Crédito</is-radio>
-  <is-radio value="mixto">Mixto</is-radio>
-</is-radio-group>`,
+    lede: 'Agrupa varios <code class="code">&lt;iswc-radio&gt;</code> bajo un mismo nombre y expone el valor seleccionado como un único control de formulario.',
+    demo: `<iswc-radio-group label="Forma de pago" value="credito" name="pago">
+  <iswc-radio value="contado">Contado</iswc-radio>
+  <iswc-radio value="credito">Crédito</iswc-radio>
+  <iswc-radio value="mixto">Mixto</iswc-radio>
+</iswc-radio-group>`,
   },
-  'is-month-calendar': {
+  'iswc-month-calendar': {
     modules: ['forms/month-calendar.js'],
-    lede: 'Calendario de un mes, suelto. Es la pieza que <code class="code">&lt;is-date-picker&gt;</code> usa por dentro, y sirve por sí sola para vistas de agenda.',
-    demo: `<is-month-calendar value="2026-08-12"></is-month-calendar>`,
+    lede: 'Calendario de un mes, suelto. Es la pieza que <code class="code">&lt;iswc-date-picker&gt;</code> usa por dentro, y sirve por sí sola para vistas de agenda.',
+    demo: `<iswc-month-calendar value="2026-08-12"></iswc-month-calendar>`,
   },
-  'is-year-calendar': {
+  'iswc-year-calendar': {
     modules: ['forms/year-calendar.js'],
     lede: 'Vista de los 12 meses de un año para saltar rápido de periodo.',
-    demo: `<is-year-calendar value="2026-08"></is-year-calendar>`,
+    demo: `<iswc-year-calendar value="2026-08"></iswc-year-calendar>`,
   },
-  'is-digital-clock': {
+  'iswc-digital-clock': {
     modules: ['forms/digital-clock.js'],
     lede: 'Reloj digital: muestra la hora en formato numérico y admite selección por teclado.',
-    demo: `<is-digital-clock value="14:30"></is-digital-clock>`,
+    demo: `<iswc-digital-clock value="14:30"></iswc-digital-clock>`,
   },
-  'is-time-field': {
+  'iswc-time-field': {
     modules: ['forms/time-field.js'],
     lede: 'Campo de hora con máscara y validación, asociable a formularios.',
-    demo: `<is-time-field label="Hora de ingreso" value="08:30" style="max-width:280px"></is-time-field>`,
+    demo: `<iswc-time-field label="Hora de ingreso" value="08:30" style="max-width:280px"></iswc-time-field>`,
   },
-  'is-date-time-field': {
+  'iswc-date-time-field': {
     modules: ['forms/date-time-field.js'],
     lede: 'Campo combinado de fecha y hora en un solo control.',
-    demo: `<is-date-time-field label="Inicio del turno" value="2026-08-01T08:30" style="max-width:320px"></is-date-time-field>`,
+    demo: `<iswc-date-time-field label="Inicio del turno" value="2026-08-01T08:30" style="max-width:320px"></iswc-date-time-field>`,
   },
-  'is-time-input': {
+  'iswc-time-input': {
     modules: ['forms/time-input.js'],
     lede: 'Entrada de hora con selector desplegable.',
-    demo: `<is-time-input label="Hora" value="09:15" style="max-width:280px"></is-time-input>`,
+    demo: `<iswc-time-input label="Hora" value="09:15" style="max-width:280px"></iswc-time-input>`,
   },
-  'is-date-time-input': {
+  'iswc-date-time-input': {
     modules: ['forms/date-time-input.js'],
     lede: 'Entrada de fecha y hora con calendario y reloj en el mismo desplegable.',
-    demo: `<is-date-time-input label="Vencimiento" value="2026-08-15T17:00" style="max-width:340px"></is-date-time-input>`,
+    demo: `<iswc-date-time-input label="Vencimiento" value="2026-08-15T17:00" style="max-width:340px"></iswc-date-time-input>`,
   },
-  'is-date-range-input': {
+  'iswc-date-range-input': {
     modules: ['forms/date-range-input.js'],
     lede: 'Entrada de rango de fechas: una sola caja para inicio y fin.',
-    demo: `<is-date-range-input label="Periodo" start="2026-08-01" end="2026-08-31" style="max-width:360px"></is-date-range-input>`,
+    demo: `<iswc-date-range-input label="Periodo" start="2026-08-01" end="2026-08-31" style="max-width:360px"></iswc-date-range-input>`,
   },
-  'is-transfer-item': {
+  'iswc-transfer-item': {
     modules: ['data/transfer.js'],
-    lede: 'Elemento movible entre las dos listas de un <code class="code">&lt;is-transfer&gt;</code>.',
-    demo: `<is-transfer>
-  <is-transfer-item value="a">Cuentas por cobrar</is-transfer-item>
-  <is-transfer-item value="b" selected>Cuentas por pagar</is-transfer-item>
-  <is-transfer-item value="c">Inventario</is-transfer-item>
-</is-transfer>`,
+    lede: 'Elemento movible entre las dos listas de un <code class="code">&lt;iswc-transfer&gt;</code>.',
+    demo: `<iswc-transfer>
+  <iswc-transfer-item value="a">Cuentas por cobrar</iswc-transfer-item>
+  <iswc-transfer-item value="b" selected>Cuentas por pagar</iswc-transfer-item>
+  <iswc-transfer-item value="c">Inventario</iswc-transfer-item>
+</iswc-transfer>`,
   },
-  'is-kanban-column': {
+  'iswc-kanban-column': {
     modules: ['data/kanban.js'],
-    lede: 'Columna de un tablero <code class="code">&lt;is-kanban&gt;</code>: título, acento de color y contador de tarjetas.',
-    demo: `<is-kanban>
-  <is-kanban-column title="Pendiente" accent="#f59f00">
-    <is-kanban-card heading="Conciliar banco"></is-kanban-card>
-  </is-kanban-column>
-  <is-kanban-column title="En curso" accent="#228be6">
-    <is-kanban-card heading="Cierre de mes"></is-kanban-card>
-  </is-kanban-column>
-  <is-kanban-column title="Listo" accent="#40c057"></is-kanban-column>
-</is-kanban>`,
+    lede: 'Columna de un tablero <code class="code">&lt;iswc-kanban&gt;</code>: título, acento de color y contador de tarjetas.',
+    demo: `<iswc-kanban>
+  <iswc-kanban-column title="Pendiente" accent="#f59f00">
+    <iswc-kanban-card heading="Conciliar banco"></iswc-kanban-card>
+  </iswc-kanban-column>
+  <iswc-kanban-column title="En curso" accent="#228be6">
+    <iswc-kanban-card heading="Cierre de mes"></iswc-kanban-card>
+  </iswc-kanban-column>
+  <iswc-kanban-column title="Listo" accent="#40c057"></iswc-kanban-column>
+</iswc-kanban>`,
   },
-  'is-kanban-card': {
+  'iswc-kanban-card': {
     modules: ['data/kanban.js'],
     lede: 'Tarjeta de un tablero. Es arrastrable entre columnas y admite encabezado, meta, etiqueta y pie.',
-    demo: `<is-kanban>
-  <is-kanban-column title="Tareas">
-    <is-kanban-card heading="Conciliar banco" meta="Vence hoy" tag="Urgente" tag-variant="danger">
+    demo: `<iswc-kanban>
+  <iswc-kanban-column title="Tareas">
+    <iswc-kanban-card heading="Conciliar banco" meta="Vence hoy" tag="Urgente" tag-variant="danger">
       Revisar extracto de agosto.
-    </is-kanban-card>
-    <is-kanban-card heading="Cierre de mes" meta="3 días" tag="Normal">
+    </iswc-kanban-card>
+    <iswc-kanban-card heading="Cierre de mes" meta="3 días" tag="Normal">
       Cuadrar cuentas de resultado.
-    </is-kanban-card>
-  </is-kanban-column>
-  <is-kanban-column title="Hechas"></is-kanban-column>
-</is-kanban>`,
+    </iswc-kanban-card>
+  </iswc-kanban-column>
+  <iswc-kanban-column title="Hechas"></iswc-kanban-column>
+</iswc-kanban>`,
   },
-  'is-speed-dial-action': {
+  'iswc-speed-dial-action': {
     modules: ['actions/speed-dial.js', 'actions/fab.js'],
-    lede: 'Cada acción que despliega un <code class="code">&lt;is-speed-dial&gt;</code>, con su icono y su etiqueta.',
+    lede: 'Cada acción que despliega un <code class="code">&lt;iswc-speed-dial&gt;</code>, con su icono y su etiqueta.',
     demo: `<div class="sd-stage">
-  <is-speed-dial direction="up" open>
-    <is-speed-dial-action icon="mdi:file-document" label="Documento"></is-speed-dial-action>
-    <is-speed-dial-action icon="mdi:image" label="Imagen"></is-speed-dial-action>
-    <is-speed-dial-action icon="mdi:link" label="Enlace"></is-speed-dial-action>
-  </is-speed-dial>
+  <iswc-speed-dial direction="up" open>
+    <iswc-speed-dial-action icon="mdi:file-document" label="Documento"></iswc-speed-dial-action>
+    <iswc-speed-dial-action icon="mdi:image" label="Imagen"></iswc-speed-dial-action>
+    <iswc-speed-dial-action icon="mdi:link" label="Enlace"></iswc-speed-dial-action>
+  </iswc-speed-dial>
 </div>`,
     styles: `.sd-stage { position:relative; transform:translateZ(0); height:320px;
       border:1px dashed var(--iswc-border); border-radius:.6rem; }`,
   },
-  'is-dock-item': {
+  'iswc-dock-item': {
     modules: ['layout/dock.js'],
-    lede: 'Icono de un <code class="code">&lt;is-dock&gt;</code>, con su etiqueta y estado activo.',
+    lede: 'Icono de un <code class="code">&lt;iswc-dock&gt;</code>, con su etiqueta y estado activo.',
     demo: `<div class="dock-stage">
-  <is-dock>
-    <is-dock-item icon="mdi:home" label="Inicio" active></is-dock-item>
-    <is-dock-item icon="mdi:chart-box" label="Reportes"></is-dock-item>
-    <is-dock-item icon="mdi:cog" label="Ajustes"></is-dock-item>
-  </is-dock>
+  <iswc-dock>
+    <iswc-dock-item icon="mdi:home" label="Inicio" active></iswc-dock-item>
+    <iswc-dock-item icon="mdi:chart-box" label="Reportes"></iswc-dock-item>
+    <iswc-dock-item icon="mdi:cog" label="Ajustes"></iswc-dock-item>
+  </iswc-dock>
 </div>`,
     styles: `.dock-stage { position:relative; transform:translateZ(0); height:200px;
       border:1px dashed var(--iswc-border); border-radius:.6rem; }`,
   },
-  'is-map-marker': {
+  'iswc-map-marker': {
     modules: ['data-viz/maps.js'],
-    lede: 'Marcador posicionado por longitud y latitud dentro de un <code class="code">&lt;is-maps&gt;</code>.',
-    demo: `<is-maps viewbox="-80,-5,-66,13" style="height:320px">
-  <is-map-marker lon="-74.07" lat="4.71" label="Bogotá"></is-map-marker>
-  <is-map-marker lon="-75.56" lat="6.25" label="Medellín"></is-map-marker>
-  <is-map-marker lon="-76.53" lat="3.45" label="Cali"></is-map-marker>
-</is-maps>`,
+    lede: 'Marcador posicionado por longitud y latitud dentro de un <code class="code">&lt;iswc-maps&gt;</code>.',
+    demo: `<iswc-maps viewbox="-80,-5,-66,13" style="height:320px">
+  <iswc-map-marker lon="-74.07" lat="4.71" label="Bogotá"></iswc-map-marker>
+  <iswc-map-marker lon="-75.56" lat="6.25" label="Medellín"></iswc-map-marker>
+  <iswc-map-marker lon="-76.53" lat="3.45" label="Cali"></iswc-map-marker>
+</iswc-maps>`,
   },
 };
 
@@ -330,7 +330,7 @@ for (const [tag, cfg] of Object.entries(CHILDREN)) {
   const entry = manifest.find((c) => c.tag === tag);
   if (!entry) { console.log(`[skip] ${tag}: no está en el manifest`); continue; }
 
-  const short = tag.replace(/^is-/, '');
+  const short = tag.replace(/^iswc-/, '');
   const page = `${entry.category}/${tag}.html`;
   const out = join(root, 'src', 'previews', page);
 
@@ -372,16 +372,16 @@ ${moduleTags}
 </head>
 <body>
 
-  <is-split-panel class="page" orientation="horizontal" position-in-pixels="220" primary="end" storage-key="docs-toc">
-    <is-main class="main" slot="start" remember-scroll storage-key="docs-${tag}">
+  <iswc-split-panel class="page" orientation="horizontal" position-in-pixels="220" primary="end" storage-key="docs-toc">
+    <iswc-main class="main" slot="start" remember-scroll storage-key="docs-${tag}">
 
       <section class="section" id="intro">
         <h2>&lt;${tag}&gt;</h2>
         <p class="lede">${cfg.lede}</p>
 
-        <is-demo class="demo">
+        <iswc-demo class="demo">
 ${cfg.demo.split('\n').map((l) => '          ' + l).join('\n')}
-        </is-demo>
+        </iswc-demo>
 
         <pre class="code" data-lang="html">${esc(cfg.demo)}</pre>
       </section>
@@ -396,16 +396,16 @@ ${tables}
         </p>
       </section>
 
-    </is-main>
+    </iswc-main>
 
     <aside class="sidebar" slot="end">
       <h1>${tag}</h1>
-      <is-scrollspy target="is-main">
+      <iswc-scrollspy target="iswc-main">
         <a href="#intro">Introducción</a>
         <a href="#reference">Referencia</a>
-      </is-scrollspy>
+      </iswc-scrollspy>
     </aside>
-  </is-split-panel>
+  </iswc-split-panel>
 </body>
 </html>
 `;

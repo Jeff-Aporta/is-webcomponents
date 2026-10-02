@@ -2,10 +2,10 @@
  * scripts/download-iconify.ts
  *
  * Escanea un proyecto consumidor de IS Web Components, detecta ids Iconify
- * (`colección:nombre`) en `<is-icon icon="…">` / literales, y descarga cada SVG
+ * (`colección:nombre`) en `<iswc-icon icon="…">` / literales, y descarga cada SVG
  * a `outputDir/<colección>/<nombre>.svg`.
  *
- * Cascada por icono (igual que `<is-icon>` en runtime):
+ * Cascada por icono (igual que `<iswc-icon>` en runtime):
  *   1. CDN propio del kit (GitHub Pages + jsDelivr)
  *   2. API pública de Iconify
  *
@@ -16,14 +16,14 @@
  * También exporta `downloadIconifyIcons(options)` para invocarlo desde otro script.
  *
  * Port adaptado de ISP-SvelteComponents `src/lib/tools/download-iconify.js`
- * (allí escaneaba `<Iconify icon=…>`; aquí escanea `<is-icon …>`).
+ * (allí escaneaba `<Iconify icon=…>`; aquí escanea `<iswc-icon …>`).
  */
 import fs from 'node:fs';
 import https from 'node:https';
 import path from 'node:path';
 import { fileURLToPath } from 'node:url';
 
-const rgxIsIconTag = /<is-icon\s+([^>]+)\/?>/gi;
+const rgxIsIconTag = /<iswc-icon\s+([^>]+)\/?>/gi;
 const rgxStringIcon = /(['"])([a-z0-9-]+:[a-z0-9-]+)\1/g;
 const supportedSourceExtensions = new Set([
   '.html', '.js', '.mjs', '.cjs', '.ts', '.tsx', '.jsx', '.svelte', '.vue', '.md',

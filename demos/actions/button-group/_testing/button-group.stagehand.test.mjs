@@ -17,12 +17,12 @@ test('stagehand: la página monta los 3 grupos y expone data-ready', async () =>
   await page.goto(URL_DEMO, { waitUntil: 'domcontentloaded' });
   await page.waitForSelector('html[data-button-group-ready]');
   const groups = await page.evaluate(() => ({
-    total: document.querySelectorAll('is-button-group').length,
-    single: !!customElements.get('is-button-group'),
-    firstValue: document.querySelector('is-button-group#g-single').getAttribute('value'),
+    total: document.querySelectorAll('iswc-button-group').length,
+    single: !!customElements.get('iswc-button-group'),
+    firstValue: document.querySelector('iswc-button-group#g-single').getAttribute('value'),
   }));
   assert.equal(groups.total, 3, 'demo debe tener 3 grupos');
-  assert.equal(groups.single, true, '<is-button-group> debe estar definido');
+  assert.equal(groups.single, true, '<iswc-button-group> debe estar definido');
   assert.equal(groups.firstValue, 'md', 'primer grupo debe tener value="md"');
   await page.close();
 });
@@ -30,12 +30,12 @@ test('stagehand: la página monta los 3 grupos y expone data-ready', async () =>
 test('stagehand: click en un botón del grupo single actualiza el valor en pantalla', async () => {
   const page = await browser.newPage();
   await page.goto(URL_DEMO, { waitUntil: 'domcontentloaded' });
-  await page.waitForSelector('is-button-group#g-single:defined');
+  await page.waitForSelector('iswc-button-group#g-single:defined');
   // Click en "Grande" (índice 2) por medio del shadow DOM (más estable que
   // simular el mouse).
   await page.evaluate(() => {
-    const g = document.querySelector('is-button-group#g-single');
-    g.querySelectorAll('is-button')[2].click();
+    const g = document.querySelector('iswc-button-group#g-single');
+    g.querySelectorAll('iswc-button')[2].click();
   });
   await page.waitForTimeout(80);
   const text = await page.evaluate(() => {
@@ -48,19 +48,19 @@ test('stagehand: click en un botón del grupo single actualiza el valor en panta
 test('stagehand: navigation con flechas mueve foco en grupo horizontal', async () => {
   const page = await browser.newPage();
   await page.goto(URL_DEMO, { waitUntil: 'domcontentloaded' });
-  await page.waitForSelector('is-button-group#g-single:defined');
+  await page.waitForSelector('iswc-button-group#g-single:defined');
   // Foco en el primer botón (Pequeño).
   await page.evaluate(() => {
-    document.querySelector('is-button-group#g-single').querySelectorAll('is-button')[0].focus();
+    document.querySelector('iswc-button-group#g-single').querySelectorAll('iswc-button')[0].focus();
   });
   await page.keyboard.press('ArrowRight');
   await page.waitForTimeout(20);
   const focused = await page.evaluate(() => {
-    const g = document.querySelector('is-button-group#g-single');
-    const btns = [...g.querySelectorAll('is-button')];
+    const g = document.querySelector('iswc-button-group#g-single');
+    const btns = [...g.querySelectorAll('iswc-button')];
     return btns.findIndex((b) => b.matches(':focus') || b.shadowRoot?.querySelector('.btn') === document.activeElement);
   });
-  // is-button tiene delegatesFocus: el foco real puede estar en el <button>
+  // iswc-button tiene delegatesFocus: el foco real puede estar en el <button>
   // interno. Verificamos solo que NO es el primero.
   assert.notEqual(focused, 0, 'ArrowRight debe haber movido el foco');
   await page.close();
@@ -70,9 +70,9 @@ test('stagehand: prefers-reduced-motion no rompe el render', async () => {
   const ctx = await browser.newContext({ reducedMotion: 'reduce' });
   const page = await ctx.newPage();
   await page.goto(URL_DEMO, { waitUntil: 'domcontentloaded' });
-  await page.waitForSelector('is-button-group#g-multi:defined');
+  await page.waitForSelector('iswc-button-group#g-multi:defined');
   const rendered = await page.evaluate(() => {
-    return document.querySelector('is-button-group#g-multi').querySelectorAll('is-button').length;
+    return document.querySelector('iswc-button-group#g-multi').querySelectorAll('iswc-button').length;
   });
   assert.ok(rendered >= 4, 'el grupo multiple debe seguir teniendo sus 4 botones con reduced-motion');
   await ctx.close();
@@ -81,10 +81,10 @@ test('stagehand: prefers-reduced-motion no rompe el render', async () => {
 test('stagehand: orientación vertical de g-seg renderiza 3 botones apilados', async () => {
   const page = await browser.newPage();
   await page.goto(URL_DEMO, { waitUntil: 'domcontentloaded' });
-  await page.waitForSelector('is-button-group#g-seg:defined');
+  await page.waitForSelector('iswc-button-group#g-seg:defined');
   const layout = await page.evaluate(() => {
-    const g = document.querySelector('is-button-group#g-seg');
-    const btns = [...g.querySelectorAll('is-button')];
+    const g = document.querySelector('iswc-button-group#g-seg');
+    const btns = [...g.querySelectorAll('iswc-button')];
     const rects = btns.map((b) => b.getBoundingClientRect());
     // Vertical = primer botón más arriba que el segundo, no en la misma línea.
     return {

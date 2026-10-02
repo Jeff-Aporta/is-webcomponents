@@ -1,22 +1,22 @@
 ---
-tag: is-tree-view
+tag: iswc-tree-view
 tags:
-  - is-tree-view
+  - iswc-tree-view
 category: isp
 status: public
 source: ./tree-view.js
 style: ./tree-view.css
 preview: ./tree-view.json
 ---
-# `<is-tree-view>`
+# `<iswc-tree-view>`
 
 ## Propósito
 
 Árbol jerárquico editable portado de `TreeRowView.svelte` (ClientesIS / cursos):
 expansión, drag & drop, historial undo/redo, modo protegido, drawer de ficha
-y confirmación de borrado. Distinto de `<is-tree>` (navegación, sin mutaciones).
+y confirmación de borrado. Distinto de `<iswc-tree>` (navegación, sin mutaciones).
 
-Este módulo registra `<is-tree-view>`.
+Este módulo registra `<iswc-tree-view>`.
 
 ## Cuándo usarlo
 
@@ -25,8 +25,8 @@ tipo `"1.2.3"` que el consumidor mapea vía `customs`.
 
 ## Cuándo no usarlo
 
-Navegación de archivos o menú jerárquico de solo lectura → `<is-tree>`.
-CRUD tabular sin jerarquía → `<is-catalogo-gen>`.
+Navegación de archivos o menú jerárquico de solo lectura → `<iswc-tree>`.
+CRUD tabular sin jerarquía → `<iswc-catalogo-gen>`.
 
 ## Importación
 
@@ -37,7 +37,7 @@ import './tree-view.js';
 ## Ejemplo mínimo
 
 ```html
-<is-tree-view id="tv" label-field="titulo" style="height: 24rem;"></is-tree-view>
+<iswc-tree-view id="tv" label-field="titulo" style="height: 24rem;"></iswc-tree-view>
 <script type="module">
   const tv = document.getElementById('tv');
   tv.list = [
@@ -94,10 +94,10 @@ import './tree-view.js';
 
 | Evento | detail | bubbles | composed | cancelable |
 | --- | --- | --- | --- | --- |
-| `is-select` | `{ node, flatPath }` | sí | sí | no |
-| `is-frm-open` | `{ record, itdForm, ancestors, isNew }` | sí | sí | no |
-| `is-frm-close` | `{}` | sí | sí | no |
-| `is-error` | `{ message }` | sí | sí | no |
+| `iswc-select` | `{ node, flatPath }` | sí | sí | no |
+| `iswc-frm-open` | `{ record, itdForm, ancestors, isNew }` | sí | sí | no |
+| `iswc-frm-close` | `{}` | sí | sí | no |
+| `iswc-error` | `{ message }` | sí | sí | no |
 
 ### Métodos y propiedades públicas
 
@@ -156,9 +156,9 @@ No es form-associated. El formulario de ficha vive en el slot `frm`.
 - [`../layout/drawer.js`](../layout/drawer.js), [`../layout/dialog.js`](../layout/dialog.js)
 - [`./confirm-delete.js`](./confirm-delete.js)
 - [`../actions/button.js`](../actions/button.js), [`../actions/dropdown.js`](../actions/dropdown.js)
-- No confundir con [`../navigation/tree.md`](../navigation/tree.md) (`<is-tree>`).
+- No confundir con [`../navigation/tree.md`](../navigation/tree.md) (`<iswc-tree>`).
 
-Tags del módulo: `<is-tree-view>`.
+Tags del módulo: `<iswc-tree-view>`.
 
 ## Accesibilidad
 
@@ -171,11 +171,11 @@ Ver también **[Roles 3D](./tree-view-roles.md)** para cuándo usar `atom`,
 `hermetic`, `prison`, `freezer`, etc.
 
 ```html
-<is-tree-view id="plan" label-field="titulo" style="height: 28rem;">
+<iswc-tree-view id="plan" label-field="titulo" style="height: 28rem;">
   <form slot="frm">
-    <is-input name="titulo" label="Título"></is-input>
+    <iswc-input name="titulo" label="Título"></iswc-input>
   </form>
-</is-tree-view>
+</iswc-tree-view>
 <script type="module">
   import { TreeCustomsBase } from './isp/tree-view.min.js';
   class PlanCustoms extends TreeCustomsBase {
@@ -204,10 +204,10 @@ Ver también **[Roles 3D](./tree-view-roles.md)** para cuándo usar `atom`,
 
 ## Errores comunes
 
-- Usar `<is-tree>` pensando que trae drag/historial: ese tag es solo navegación.
+- Usar `<iswc-tree>` pensando que trae drag/historial: ese tag es solo navegación.
 - Olvidar `getFlatPath` / `setFlatPath`: los moves no llegan al dominio al guardar.
 - Llamar `commitFlatPaths()` a mano: el punto de entrada es `runCustomsPreSubmit()`.
-- Inventar `variant="ghost"` en botones del consumidor sin mirar `VALID_*` de `is-button`.
+- Inventar `variant="ghost"` en botones del consumidor sin mirar `VALID_*` de `iswc-button`.
 - Usar tag sin importar módulo primero.
 
 ## Reglas para LLM
@@ -219,7 +219,7 @@ Ver también **[Roles 3D](./tree-view-roles.md)** para cuándo usar `atom`,
   asignar `topology` / `containment` / `mobility` en `updateNode`, nunca getters.
 - Leer callers/shared antes de cambiar; corregir raíz común.
 - No modificar API basándose solo en preview.
-- No portar ObjJConfig: drawer + slot `frm` + `is-confirm-delete`.
+- No portar ObjJConfig: drawer + slot `frm` + `iswc-confirm-delete`.
 
 ## Fuentes
 
@@ -233,5 +233,5 @@ Ver también **[Roles 3D](./tree-view-roles.md)** para cuándo usar `atom`,
 
 Fuente: `ISW-ClientesIS/.../cursos/TreeView/TreeRowView.svelte` + cascada
 `_treeAdapter/` + `_asRow/`. UI Svelte traducida a tags `is-*`:
-`FlexOptions` → `<is-flex-options>`, `FloatingComponent` → `<is-float-card>`.
-ObjJConfig no se porta: drawer + slot `frm` + `is-confirm-delete`.
+`FlexOptions` → `<iswc-flex-options>`, `FloatingComponent` → `<iswc-float-card>`.
+ObjJConfig no se porta: drawer + slot `frm` + `iswc-confirm-delete`.

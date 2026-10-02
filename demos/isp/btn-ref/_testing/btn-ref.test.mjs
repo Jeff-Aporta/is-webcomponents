@@ -1,5 +1,5 @@
-// btn-ref.test.mjs — tests exhaustivos del demo <is-btn-ref>.
-// Cobertura: smoke + funcional (open modal, setValue, is-selected-record,
+// btn-ref.test.mjs — tests exhaustivos del demo <iswc-btn-ref>.
+// Cobertura: smoke + funcional (open modal, setValue, iswc-selected-record,
 // typing) + form-associated (name + FormData) + validacion required.
 import assert from 'node:assert/strict';
 import { BASE_URL, newPage, close, waitReady, screenshot, report } from './lib/harness.mjs';
@@ -17,8 +17,8 @@ tests.push({
       const el = document.getElementById('ref-app');
       const sr = el.shadowRoot;
       return {
-        defined: !!customElements.get('is-btn-ref'),
-        inputExists: !!sr.querySelector('is-input.field'),
+        defined: !!customElements.get('iswc-btn-ref'),
+        inputExists: !!sr.querySelector('iswc-input.field'),
         openBtnExists: !!sr.querySelector('button.open'),
         label: el.label,
         value: el.value,
@@ -28,7 +28,7 @@ tests.push({
       };
     });
     assert.equal(info.defined, true);
-    assert.equal(info.inputExists, true, 'debe haber un <is-input class="field">');
+    assert.equal(info.inputExists, true, 'debe haber un <iswc-input class="field">');
     assert.equal(info.openBtnExists, true, 'debe haber un <button class="open">');
     assert.equal(info.label, 'Aplicación');
     assert.equal(info.value, '');
@@ -40,7 +40,7 @@ tests.push({
 });
 
 tests.push({
-  name: 'funcional: open() muestra el modal con <is-catalogo-gen>',
+  name: 'funcional: open() muestra el modal con <iswc-catalogo-gen>',
   run: async (page) => {
     await page.goto(URL, { waitUntil: 'domcontentloaded' });
     await waitReady(page, 'data-btn-ref-ready');
@@ -50,15 +50,15 @@ tests.push({
       const el = document.getElementById('ref-app');
       el.open();
       await new Promise((r) => setTimeout(r, 200));
-      const dlg = el.shadowRoot.querySelector('is-dialog.dlg');
-      const cat = el.shadowRoot.querySelector('is-catalogo-gen.cat');
+      const dlg = el.shadowRoot.querySelector('iswc-dialog.dlg');
+      const cat = el.shadowRoot.querySelector('iswc-catalogo-gen.cat');
       return {
         catExists: !!cat,
         catSelectMode: cat?.hasAttribute('select-mode'),
         dlgOpen: !!(dlg?.open ?? dlg?.hasAttribute('open')),
       };
     });
-    assert.equal(dialogInfo.catExists, true, '<is-catalogo-gen> debe existir dentro del shadow');
+    assert.equal(dialogInfo.catExists, true, '<iswc-catalogo-gen> debe existir dentro del shadow');
   },
 });
 
@@ -93,7 +93,7 @@ tests.push({
 });
 
 tests.push({
-  name: 'funcional: typing emite is-input y al detenerse resuelve label',
+  name: 'funcional: typing emite iswc-input y al detenerse resuelve label',
   run: async (page) => {
     await page.goto(URL, { waitUntil: 'domcontentloaded' });
     await waitReady(page, 'data-btn-ref-ready');
@@ -101,20 +101,20 @@ tests.push({
     const events = await page.evaluate(async () => {
       const el = document.getElementById('ref-app');
       const captured = [];
-      el.addEventListener('is-input', (e) => captured.push({ type: 'input', value: e.detail.value }));
-      el.addEventListener('is-typing-end', (e) => captured.push({ type: 'typing-end', value: e.detail.value }));
-      el.addEventListener('is-change', (e) => captured.push({ type: 'change', value: e.detail.value }));
+      el.addEventListener('iswc-input', (e) => captured.push({ type: 'input', value: e.detail.value }));
+      el.addEventListener('iswc-typing-end', (e) => captured.push({ type: 'typing-end', value: e.detail.value }));
+      el.addEventListener('iswc-change', (e) => captured.push({ type: 'change', value: e.detail.value }));
       // Simular typing a mano vía setter (los tests no pueden teclear en shadow input).
-      // Forzar input event dispatchado en el <is-input>.
-      const inputEl = el.shadowRoot.querySelector('is-input.field');
+      // Forzar input event dispatchado en el <iswc-input>.
+      const inputEl = el.shadowRoot.querySelector('iswc-input.field');
       inputEl.value = 'CP';
-      inputEl.dispatchEvent(new CustomEvent('is-input', { detail: { value: 'CP' }, bubbles: true, composed: true }));
-      inputEl.dispatchEvent(new CustomEvent('is-typing-end', { detail: { value: 'CP' }, bubbles: true, composed: true }));
+      inputEl.dispatchEvent(new CustomEvent('iswc-input', { detail: { value: 'CP' }, bubbles: true, composed: true }));
+      inputEl.dispatchEvent(new CustomEvent('iswc-typing-end', { detail: { value: 'CP' }, bubbles: true, composed: true }));
       return captured;
     });
-    assert.ok(events.some((e) => e.type === 'input'), 'debe emitir is-input');
-    assert.ok(events.some((e) => e.type === 'typing-end'), 'debe emitir is-typing-end');
-    assert.ok(events.some((e) => e.type === 'change'), 'debe emitir is-change');
+    assert.ok(events.some((e) => e.type === 'input'), 'debe emitir iswc-input');
+    assert.ok(events.some((e) => e.type === 'typing-end'), 'debe emitir iswc-typing-end');
+    assert.ok(events.some((e) => e.type === 'change'), 'debe emitir iswc-change');
   },
 });
 
@@ -137,7 +137,7 @@ tests.push({
       form.remove();
       return { entries: out, formAssociated: !!el.constructor.formAssociated };
     });
-    assert.equal(info.formAssociated, true, '<is-btn-ref> debe ser form-associated');
+    assert.equal(info.formAssociated, true, '<iswc-btn-ref> debe ser form-associated');
     const found = info.entries.find(([k, v]) => k === 'aplicacion');
     assert.ok(found, `FormData debe contener name="aplicacion", entries=${JSON.stringify(info.entries)}`);
     assert.equal(found[1], 'AW', `valor en FormData debe ser 'AW', es '${found[1]}'`);

@@ -1,22 +1,22 @@
 ---
-tag: is-bubble-chart
+tag: iswc-bubble-chart
 tags:
-  - is-bubble-chart
+  - iswc-bubble-chart
 category: charts
 status: public
 source: ./bubble-chart.js
 style: ./bubble-chart.css
 preview: ./bubble-chart.json
 ---
-# `<is-bubble-chart>`
+# `<iswc-bubble-chart>`
 
 ## Propósito
 
-Wrapper tipado de `<is-chart>` con `type` fijo en `bubble`. Misma API
+Wrapper tipado de `<iswc-chart>` con `type` fijo en `bubble`. Misma API
 de configuración Chart.js (`config` / `<script type="application/json">`);
 el atributo `type` no se cambia.
 
-Este módulo registra `<is-bubble-chart>`.
+Este módulo registra `<iswc-bubble-chart>`.
 
 ## Cuándo usarlo
 
@@ -25,7 +25,7 @@ de gráfica es siempre bubble chart.
 
 ## Cuándo no usarlo
 
-Si el tipo puede cambiar en runtime, usar `<is-chart type="bubble">`.
+Si el tipo puede cambiar en runtime, usar `<iswc-chart type="bubble">`.
 No crear otro engine: hereda marks/engine de `chart.js`.
 
 ## Importación
@@ -37,7 +37,7 @@ import './bubble-chart.js';
 ## Ejemplo mínimo
 
 ```html
-<is-bubble-chart>
+<iswc-bubble-chart>
   <script type="application/json">
   {
     "data": {
@@ -46,14 +46,14 @@ import './bubble-chart.js';
     }
   }
   </script>
-</is-bubble-chart>
+</iswc-bubble-chart>
 ```
 
 ## API
 
 ### Atributos y propiedades
 
-Hereda de `<is-chart>` (ver [chart.md](./chart.md)). `type` queda fijado
+Hereda de `<iswc-chart>` (ver [chart.md](./chart.md)). `type` queda fijado
 en `bubble` por la clase tipada.
 
 #### Atributos observados
@@ -95,9 +95,9 @@ en `bubble` por la clase tipada.
 
 | Evento | detail | bubbles | composed | cancelable |
 | --- | --- | --- | --- | --- |
-| `is-render` | sí | sí | sí | no |
-| `is-turtle-state` | sí | sí | sí | no |
-| `is-open-viewer` | sí | sí | sí | sí |
+| `iswc-render` | sí | sí | sí | no |
+| `iswc-turtle-state` | sí | sí | sí | no |
+| `iswc-open-viewer` | sí | sí | sí | sí |
 
 ### Métodos y propiedades públicas
 
@@ -122,7 +122,7 @@ No expone.
 
 ### CSS custom properties
 
-Misma familia de tokens que `<is-chart>` (ver [chart.md](./chart.md)).
+Misma familia de tokens que `<iswc-chart>` (ver [chart.md](./chart.md)).
 
 ### Integración con formularios
 
@@ -132,7 +132,7 @@ No declara integración form-associated propia en este módulo.
 
 Documentación de cabecera preservada desde fuente:
 
-> `<is-bubble-chart>` — wrapper tipado vía `defineTypedChart('is-bubble-chart', 'bubble', …)`.
+> `<iswc-bubble-chart>` — wrapper tipado vía `defineTypedChart('iswc-bubble-chart', 'bubble', …)`.
 > Importa `./chart.js` y registra marks del tipo fijo.
 > Consumo compatible con Chart.js: `config` o `<script type="application/json">`
 > hijo con forma `{ data: { labels, datasets }, options }` (`type` lo fija el tag).
@@ -145,16 +145,16 @@ Documentación de cabecera preservada desde fuente:
 - [`../_shared/svg-chart-engine.js`](../_shared/svg-chart-engine.js)
 - [`../_shared/chart-palette.js`](../_shared/chart-palette.js)
 
-Tags del módulo: `<is-bubble-chart>`.
+Tags del módulo: `<iswc-bubble-chart>`.
 
 ## Accesibilidad
 
-Preservar semántica, foco, teclado, labels y ARIA. Hereda contrato de `<is-chart>`.
+Preservar semántica, foco, teclado, labels y ARIA. Hereda contrato de `<iswc-chart>`.
 
 ## Ejemplo avanzado
 
 ```html
-<is-bubble-chart label="Bubble Chart" legend-position="bottom">
+<iswc-bubble-chart label="Bubble Chart" legend-position="bottom">
   <script type="application/json">
   {
     "data": {
@@ -163,7 +163,7 @@ Preservar semántica, foco, teclado, labels y ARIA. Hereda contrato de `<is-char
     }
   }
   </script>
-</is-bubble-chart>
+</iswc-bubble-chart>
 ```
 
 ## Errores comunes

@@ -29,13 +29,13 @@ test('bloques code no marcan data-cm prematuro (deja paint/inferir lang)', async
   const src = await readFile(join(raiz, 'src/previews/_kit/render.ts'), 'utf8');
   const codeCase = src.slice(src.indexOf("case 'code':"), src.indexOf("case 'html':"));
   assert.doesNotMatch(codeCase, /dataset\.cm\s*=/);
-  assert.match(codeCase, /is-code/);
+  assert.match(codeCase, /iswc-code/);
 });
 
-test('demo-code monta is-code solo al abrir, con snippet ya cargado', async () => {
+test('demo-code monta iswc-code solo al abrir, con snippet ya cargado', async () => {
   const src = await readFile(join(raiz, 'scripts/demo-code.js'), 'utf8');
-  assert.doesNotMatch(src, /<is-code class="code demo-code-pop__pre/,
-    'no crear is-code vacío en el innerHTML del popover');
+  assert.doesNotMatch(src, /<iswc-code class="code demo-code-pop__pre/,
+    'no crear iswc-code vacío en el innerHTML del popover');
   assert.match(src, /mountCodeEl/);
   assert.match(src, /dataset\.src/);
 });

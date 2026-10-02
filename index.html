@@ -41,24 +41,24 @@
     html.theme-light, html.theme-light body { background: #f4f7fb; color: #142033; }
   </style>
   <!-- Kit: siempre dist/cdn (transpilado). Shell de galería: CSS local. -->
-  <link rel="stylesheet" href="dist/cdn/is-base.min.css?h=uhnlmd">
-  <link rel="stylesheet" href="dist/cdn/palettes.min.css?h=gqt8j7">
+  <link rel="stylesheet" href="dist/cdn/is-base.min.css?h=gbf6d8">
+  <link rel="stylesheet" href="dist/cdn/palettes.min.css?h=q5fu5e">
   <link rel="stylesheet" href="src/styles/shell.css">
   <link rel="stylesheet" href="src/styles/presentation.css">
-  <link rel="stylesheet" href="dist/cdn/preview/preview-component.min.css?h=h0ofkx">
+  <link rel="stylesheet" href="dist/cdn/preview/preview-component.min.css?h=8ema4c">
   <style>
     /* Chrome del shell: no mostrar tags crudos mientras upgradan. */
-    .shell-bar is-button:not(:defined),
-    .shell-bar is-icon:not(:defined),
-    .shell-bar is-theme-toggle:not(:defined),
-    .shell-bar is-palette-selector:not(:defined) {
+    .shell-bar iswc-button:not(:defined),
+    .shell-bar iswc-icon:not(:defined),
+    .shell-bar iswc-theme-toggle:not(:defined),
+    .shell-bar iswc-palette-selector:not(:defined) {
       visibility: hidden;
     }
   </style>
   <link rel="icon" href="dist/assets/favicon.svg" type="image/svg+xml">
   <script src="scripts/preview-boot.js"></script>
   <script type="module">
-    import { ISWebComponentsLoader as L } from './dist/cdn/core/loader.min.js?h=6ibfwp';
+    import { ISWebComponentsLoader as L } from './dist/cdn/core/loader.min.js?h=umjnkm';
     // Galería local: self (dist/cdn) primero; espejos CDN como fallback.
     L.configure({ preferSelf: true, mirrors: ['jsdelivr', 'pages'] });
 
@@ -70,21 +70,21 @@
     try {
       await Promise.all([
         L.load(
-          'is-split-panel',
-          'is-main',
-          'is-drawer',
-          'is-demo',
-          'is-scrollspy',
-          'is-button',
-          'is-icon',
-          'is-theme-toggle',
-          'is-palette-selector',
-          'is-code',
+          'iswc-split-panel',
+          'iswc-main',
+          'iswc-drawer',
+          'iswc-demo',
+          'iswc-scrollspy',
+          'iswc-button',
+          'iswc-icon',
+          'iswc-theme-toggle',
+          'iswc-palette-selector',
+          'iswc-code',
         ),
-        import('./dist/cdn/preview/preview-component.min.js?h=q7u4i1'),
+        import('./dist/cdn/preview/preview-component.min.js?h=h1uuun'),
       ]);
       document.documentElement.dataset.kitShell = '1';
-      window.dispatchEvent(new Event('is-gallery-shell-ready'));
+      window.dispatchEvent(new Event('iswc-gallery-shell-ready'));
     } catch (err) {
       console.error('[gallery] shell boot', err);
     }
@@ -106,34 +106,34 @@
 </head>
 <body>
   <header class="shell-bar">
-    <is-button class="shell-menu-btn" id="navToggle" color="neutral" variant="plain" pill type="button"
+    <iswc-button class="shell-menu-btn" id="navToggle" color="neutral" variant="plain" pill type="button"
             aria-expanded="false" aria-controls="navDrawer"
             aria-label="Abrir el catálogo de componentes" title="Catálogo de componentes" hidden>
-      <is-icon slot="start" icon="mdi:menu"></is-icon>
-    </is-button>
+      <iswc-icon slot="start" icon="mdi:menu"></iswc-icon>
+    </iswc-button>
 
-    <is-palette-selector id="brandPalette" scope="root" storage-key="is-palette" aria-label="Elegir paleta"></is-palette-selector>
+    <iswc-palette-selector id="brandPalette" scope="root" storage-key="iswc-palette" aria-label="Elegir paleta"></iswc-palette-selector>
 
-    <is-button class="shell-icon-btn" id="fullscreenBtn" color="neutral" variant="plain" pill type="button" aria-label="Abrir preview en pantalla completa" title="Abrir preview en pantalla completa">
-      <is-icon slot="start" icon="mdi:open-in-new"></is-icon>
-    </is-button>
+    <iswc-button class="shell-icon-btn" id="fullscreenBtn" color="neutral" variant="plain" pill type="button" aria-label="Abrir preview en pantalla completa" title="Abrir preview en pantalla completa">
+      <iswc-icon slot="start" icon="mdi:open-in-new"></iswc-icon>
+    </iswc-button>
 
-    <is-theme-toggle id="themeToggle" scope="root" dark="true"></is-theme-toggle>
+    <iswc-theme-toggle id="themeToggle" scope="root" dark="true"></iswc-theme-toggle>
   </header>
 
-  <is-split-panel id="mainSplit" class="main-split" orientation="horizontal" position-in-pixels="200" primary="start" storage-key="gallery-nav">
+  <iswc-split-panel id="mainSplit" class="main-split" orientation="horizontal" position-in-pixels="200" primary="start" storage-key="gallery-nav">
     <nav class="shell-nav" slot="start" id="shellNav" aria-label="Componentes"></nav>
     <div class="preview-stage" slot="end">
-      <is-preview-component class="preview-host" id="previewHost" hidden></is-preview-component>
+      <iswc-preview-component class="preview-host" id="previewHost" hidden></iswc-preview-component>
       <iframe class="preview-frame" id="previewFrame" title="Vista del componente"></iframe>
     </div>
-  </is-split-panel>
+  </iswc-split-panel>
 
   <!-- En pantallas pequeñas el nav se muda aquí (ver syncNavLayout). -->
-  <is-drawer id="navDrawer" class="shell-nav-drawer" placement="start" light-dismiss
-             label="Componentes"></is-drawer>
+  <iswc-drawer id="navDrawer" class="shell-nav-drawer" placement="start" light-dismiss
+             label="Componentes"></iswc-drawer>
 
   <!-- Gallery SPA: dist/gallery-app.min.js (from src/gallery/app.ts). -->
-  <script type="module" src="./dist/gallery-app.min.js?h=jnbsh0"></script>
+  <script type="module" src="./dist/gallery-app.min.js?h=gnwpq1"></script>
 </body>
 </html>

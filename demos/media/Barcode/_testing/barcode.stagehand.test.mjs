@@ -13,7 +13,7 @@ async function checkDeterministic(page, demo) {
   await page.waitForTimeout(200);
 
   const data = await page.evaluate(() => {
-    const barcodes = [...document.querySelectorAll('main is-barcode')];
+    const barcodes = [...document.querySelectorAll('main iswc-barcode')];
     return barcodes.map((el, idx) => {
       const shadow = el.shadowRoot;
       const svg = shadow.querySelector('svg');

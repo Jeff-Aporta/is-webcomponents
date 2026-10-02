@@ -1,17 +1,17 @@
 /**
- * highlight-code.js — monta `<is-code readonly compact>` sobre los
+ * highlight-code.js — monta `<iswc-code readonly compact>` sobre los
  * `<pre class="code">` de la documentación (antes se coloreaban con
  * CodeMirror.runMode; hoy el resaltado lo hace el motor nativo del propio
- * `<is-code>`).
+ * `<iswc-code>`).
  *
- * Vive en `_shared/` (no en `scripts/`): `<is-cdn-snippet>` y el docs lo
+ * Vive en `_shared/` (no en `scripts/`): `<iswc-cdn-snippet>` y el docs lo
  * importan. No carga CodeMirror ni ningún CDN.
  *
  * API pública estable:
  * - softFormat / dedent / prettyHtml / unwrapHandHighlight
  * - paint / repaint / watchDom
  *
- * No importa `code.js` en estático (ciclo con el bootstrap de <is-code>). Se
+ * No importa `code.js` en estático (ciclo con el bootstrap de <iswc-code>). Se
  * carga bajo demanda en `paint`.
  */
 
@@ -34,7 +34,7 @@ export const resolveMode = (el: HTMLElement, text: string): string => {
   return softFormatMode(inferLanguage(text));
 };
 
-/** Mode legacy → lang de `<is-code>`. */
+/** Mode legacy → lang de `<iswc-code>`. */
 export const modeToLang = (mode: string | null | undefined): string => {
   const m = String(mode || '').toLowerCase();
   if (m === 'htmlmixed' || m === 'htm' || m === 'xml' || m === 'svg') return 'html';
@@ -45,17 +45,17 @@ export const modeToLang = (mode: string | null | undefined): string => {
 };
 
 const isMountedEditor = (el: Element): boolean => el instanceof HTMLElement
-  && el.localName === 'is-code'
+  && el.localName === 'iswc-code'
   && el.dataset.cm === '1';
 
 let editorImport: Promise<unknown> | null = null;
 const ensureEditorDefined = (): Promise<unknown> => {
-  if (customElements.get('is-code')) return Promise.resolve();
+  if (customElements.get('iswc-code')) return Promise.resolve();
   editorImport ??= import('../code/code.js');
   return editorImport;
 };
 
-/** Editor `<is-code>` ya montado (con atributos de configuración). */
+/** Editor `<iswc-code>` ya montado (con atributos de configuración). */
 type CodeEditor = HTMLElement & {
   value: string;
   lang: string;
@@ -63,13 +63,13 @@ type CodeEditor = HTMLElement & {
 };
 
 /**
- * Crea o actualiza un `<is-code readonly compact>` a partir de un
+ * Crea o actualiza un `<iswc-code readonly compact>` a partir de un
  * `<pre class="code">` o de un editor ya montado.
  */
 const paintOne = async (el: HTMLElement): Promise<void> => {
   if (!(el instanceof HTMLElement)) return;
   if (el.classList.contains('demo-code-pop__pre')
-    && !(el.localName === 'is-code' ? (el as CodeEditor).value : el.textContent ?? '').trim()
+    && !(el.localName === 'iswc-code' ? (el as CodeEditor).value : el.textContent ?? '').trim()
     && !el.dataset.forceCm) return;
 
   await ensureEditorDefined();
@@ -85,7 +85,7 @@ const paintOne = async (el: HTMLElement): Promise<void> => {
   if (!text.trim() && (el.dataset.src || el.dataset.cmSource)) return;
   const lang = modeToLang(mode);
 
-  if (isMountedEditor(el) || el.localName === 'is-code') {
+  if (isMountedEditor(el) || el.localName === 'iswc-code') {
     const ed = el as CodeEditor;
     ed.toggleAttribute('readonly', true);
     // Opt-out: `data-no-compact` permite al consumidor mantener el scroll vertical
@@ -96,7 +96,7 @@ const paintOne = async (el: HTMLElement): Promise<void> => {
     if (!ed.hasAttribute('wrap')) ed.setAttribute('wrap', '');
     if (!ed.hasAttribute('line-numbers')) ed.setAttribute('line-numbers', 'false');
     ed.lang = lang;
-    // Siempre asignar: el getter de is-code puede devolver el seed aunque la
+    // Siempre asignar: el getter de iswc-code puede devolver el seed aunque la
     // vista aún no esté montada.
     ed.value = text;
     ed.dataset.cm = '1';
@@ -108,8 +108,8 @@ const paintOne = async (el: HTMLElement): Promise<void> => {
 
   if (el.localName !== 'pre' && !el.classList.contains('code')) return;
 
-  const ed = document.createElement('is-code') as unknown as CodeEditor;
-  ed.className = `${el.className} is-code-view`.replace(/\s+/g, ' ').trim();
+  const ed = document.createElement('iswc-code') as unknown as CodeEditor;
+  ed.className = `${el.className} iswc-code-view`.replace(/\s+/g, ' ').trim();
   ed.setAttribute('readonly', '');
   // Opt-out: `data-no-compact` permite al consumidor mantener el scroll vertical
   // cuando el contenedor tiene max-height. Por defecto `compact` desactiva el
@@ -134,7 +134,7 @@ const paintOne = async (el: HTMLElement): Promise<void> => {
  */
 export const paint = (root: ParentNode | Element = document): Promise<unknown[]> => {
   let targets: HTMLElement[];
-  if (root instanceof Element && (root.matches?.('pre.code') || root.localName === 'is-code')) {
+  if (root instanceof Element && (root.matches?.('pre.code') || root.localName === 'iswc-code')) {
     targets = [root as HTMLElement];
   } else {
     const scope: ParentNode = root instanceof Element || root instanceof DocumentFragment || root instanceof ShadowRoot
@@ -142,7 +142,7 @@ export const paint = (root: ParentNode | Element = document): Promise<unknown[]>
       : document;
     const list = [
       ...scope.querySelectorAll<HTMLElement>('pre.code:not([data-cm])'),
-      ...scope.querySelectorAll<HTMLElement>('is-code.code:not([data-cm]), is-code.is-code-view:not([data-cm])'),
+      ...scope.querySelectorAll<HTMLElement>('iswc-code.code:not([data-cm]), iswc-code.iswc-code-view:not([data-cm])'),
     ];
     targets = [...new Set(list)];
   }
@@ -153,7 +153,7 @@ export const paint = (root: ParentNode | Element = document): Promise<unknown[]>
 export const repaint = (el: HTMLElement | null | undefined): Promise<void> => {
   if (!(el instanceof Element)) return Promise.resolve();
   delete el.dataset.cm;
-  if (el.localName === 'is-code') {
+  if (el.localName === 'iswc-code') {
     return paintOne(el as HTMLElement);
   }
   delete el.dataset.cmSource;
@@ -174,7 +174,7 @@ const procesarPendientes = (): void => {
     try {
       for (const el of lote) {
         if (!el.isConnected) continue;
-        if (el.localName === 'is-code') {
+        if (el.localName === 'iswc-code') {
           const ed = el as CodeEditor;
           if (ed.dataset.cmSource !== undefined && ed.value !== ed.dataset.cmSource) {
             repaint(el);
@@ -187,7 +187,7 @@ const procesarPendientes = (): void => {
       pintando = false;
     }
   };
-  // Sin puertas ni CDN: <is-code> pinta con su motor nativo (read-only y
+  // Sin puertas ni CDN: <iswc-code> pinta con su motor nativo (read-only y
   // editable) y se re-pinta solo cuando su fuente cambia.
   pintar();
 };
@@ -207,8 +207,8 @@ export const watchDom = (root: Element | Document = document.documentElement): v
       if (m.type !== 'childList') continue;
       for (const node of m.addedNodes) {
         if (!(node instanceof Element)) continue;
-        if (node.matches?.('pre.code') || node.localName === 'is-code') encolar(node as HTMLElement);
-        const nested = node.querySelectorAll?.('pre.code, is-code.code, is-code.is-code-view') ?? [];
+        if (node.matches?.('pre.code') || node.localName === 'iswc-code') encolar(node as HTMLElement);
+        const nested = node.querySelectorAll?.('pre.code, iswc-code.code, iswc-code.iswc-code-view') ?? [];
         for (const pre of Array.from(nested)) encolar(pre as HTMLElement);
       }
     }

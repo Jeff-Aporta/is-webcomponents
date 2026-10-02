@@ -6,7 +6,7 @@
 //   1. Keys planas: localStorage.setItem('demo-density', …)
 //   2. sessionStorage como almacén canónico del grid
 //   3. Root legacy `is-components` tratado como canónico (ahora solo migración)
-//   4. Sidebar de columnas en el template de is-ag-grid pero siempre hidden
+//   4. Sidebar de columnas en el template de iswc-ag-grid pero siempre hidden
 //      y sin handlers — el consumidor pedía checks show/hide y no había UI
 //
 // Reglas:
@@ -128,11 +128,11 @@ check(/Qué no hacer|no hacer/i.test(md), 'ag-grid.md: debe tener sección de an
 
 // Consolidación 2026-09-07: data/LLM.md y components/LLM.md ya no existen.
 // El catálogo de componentes vive ahora en specs/componentes.md (índice
-// global). Verificamos allí que is-ag-grid esté documentado.
+// global). Verificamos allí que iswc-ag-grid esté documentado.
 const componentesSrc = existsSync(componentesSpec) ? readFileSync(componentesSpec, 'utf8') : '';
 check(
-  componentesSrc.includes('is-ag-grid') || componentesSrc.includes('ag-grid.md'),
-  'specs/componentes.md: debe listar is-ag-grid',
+  componentesSrc.includes('iswc-ag-grid') || componentesSrc.includes('ag-grid.md'),
+  'specs/componentes.md: debe listar iswc-ag-grid',
 );
 check(
   componentesSrc.includes('is-webcomponents'),
@@ -144,7 +144,7 @@ check(
 const docsToScan = [
   join(root, 'specs', 'componentes.md'),
   join(root, 'src', 'components', 'data', 'ag-grid.md'),
-  join(root, 'src', 'previews', 'data', 'is-ag-grid.json'),
+  join(root, 'src', 'previews', 'data', 'iswc-ag-grid.json'),
 ].filter(existsSync);
 
 for (const f of docsToScan) {

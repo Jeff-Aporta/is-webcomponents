@@ -1,20 +1,20 @@
 ---
-tag: is-barcode
+tag: iswc-barcode
 tags:
-  - is-barcode
+  - iswc-barcode
 category: media
 status: public
 source: ./barcode.js
 style: ./barcode.css
 preview: ./barcode.json
 ---
-# `<is-barcode>`
+# `<iswc-barcode>`
 
 ## Propósito
 
 Generador de códigos de barras en SVG, sin dependencias externas.
 
-Este módulo registra `<is-barcode>`.
+Este módulo registra `<iswc-barcode>`.
 
 ## Cuándo usarlo
 
@@ -23,7 +23,7 @@ código lineal legible por lector láser.
 
 ## Cuándo no usarlo
 
-Para códigos bidimensionales usar `<is-qrcode>`. Para una imagen ya generada
+Para códigos bidimensionales usar `<iswc-qrcode>`. Para una imagen ya generada
 en servidor basta un `<img>`.
 
 ## Importación
@@ -35,7 +35,7 @@ import './barcode.js';
 ## Ejemplo mínimo
 
 ```html
-<is-barcode value="7701234567890" type="ean13"></is-barcode>
+<iswc-barcode value="7701234567890" type="ean13"></iswc-barcode>
 ```
 
 ## API
@@ -70,7 +70,7 @@ import './barcode.js';
 
 | Evento | detail | bubbles | composed | cancelable |
 | --- | --- | --- | --- | --- |
-| `is-render` | sí | sí | sí | no |
+| `iswc-render` | sí | sí | sí | no |
 
 ### Métodos y propiedades públicas
 
@@ -102,7 +102,7 @@ No declara integración form-associated propia en este módulo.
 
 Documentación de cabecera preservada desde fuente:
 
-> `<is-barcode>` — Generador de códigos de barras en SVG. `type` elige entre
+> `<iswc-barcode>` — Generador de códigos de barras en SVG. `type` elige entre
 > EAN13 y Code128; el SVG se rehace en cada cambio de atributo observado.
 
 En `ean13` el `value` debe tener 12 o 13 dígitos; el dígito de control se
@@ -113,7 +113,7 @@ calcula si falta.
 - [`../_shared/adopt-css.js`](../_shared/adopt-css.js)
 - [`../_shared/svg-chart-engine.js`](../_shared/svg-chart-engine.js)
 
-Tags del módulo: `<is-barcode>`.
+Tags del módulo: `<iswc-barcode>`.
 
 ## Accesibilidad
 
@@ -123,12 +123,12 @@ teclado, labels y ARIA.
 ## Ejemplo avanzado
 
 ```html
-<is-barcode
+<iswc-barcode
   value="ABC-00219"
   type="code128"
   height="80"
   show-text
-></is-barcode>
+></iswc-barcode>
 ```
 
 ## Errores comunes

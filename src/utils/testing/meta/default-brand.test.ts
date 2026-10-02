@@ -53,13 +53,13 @@ test('Todos los componentes con color tienen default="brand" (no "neutral")', ()
   }
 });
 
-test('is-badge sigue declarando default="brand"', () => {
+test('iswc-badge sigue declarando default="brand"', () => {
   // Sanity check: el badge ya era brand antes de la migración, no debe
   // haberse "neutralizado" por error.
   const src = readFileSync(join(root, 'src/components/feedback/badge.ts'), 'utf8');
   assert.ok(
     /setAttribute\(\s*['"]color['"]\s*,\s*['"]brand['"]/.test(src),
-    'is-badge debe mantener default color="brand"',
+    'iswc-badge debe mantener default color="brand"',
   );
 });
 

@@ -5,7 +5,7 @@
 //   - funcional: open()/close()/toggle() manipulan el atributo open
 //   - funcional: Ctrl+K (hotkey) abre y Escape cierra
 //   - funcional: filtrado difuso por query (substring + prefix + keywords)
-//   - funcional: ArrowDown/ArrowUp mueven el activo, Enter ejecuta is-select
+//   - funcional: ArrowDown/ArrowUp mueven el activo, Enter ejecuta iswc-select
 //   - funcional: max-results limita los resultados
 //   - funcional: empty-text aparece cuando no hay coincidencias
 //   - determinismo: re-asignar comandos idénticos produce mismo results
@@ -23,13 +23,13 @@ tests.push({
     await page.goto(URL, { waitUntil: 'domcontentloaded' });
     await waitReady(page, 'data-command-palette-ready');
     const info = await page.evaluate(() => {
-      const palette = document.querySelector('main is-command-palette');
+      const palette = document.querySelector('main iswc-command-palette');
       const dialog = palette.shadowRoot.querySelector('dialog[part="dialog"]');
       const panel = palette.shadowRoot.querySelector('.panel[part="panel"]');
       const input = palette.shadowRoot.querySelector('input[part="input"]');
       const results = palette.shadowRoot.querySelector('ol[part="results"]');
       return {
-        defined: !!customElements.get('is-command-palette'),
+        defined: !!customElements.get('iswc-command-palette'),
         hasDialog: !!dialog,
         hasPanel: !!panel,
         hasInput: !!input,
@@ -39,7 +39,7 @@ tests.push({
         hasFooter: !!palette.querySelector('[slot="footer"]'),
       };
     });
-    assert.equal(info.defined, true, 'is-command-palette debe estar definido');
+    assert.equal(info.defined, true, 'iswc-command-palette debe estar definido');
     assert.ok(info.hasDialog, 'dialog[part="dialog"] debe existir');
     assert.ok(info.hasPanel, '.panel[part="panel"] debe existir');
     assert.ok(info.hasInput, 'input[part="input"] debe existir');
@@ -57,7 +57,7 @@ tests.push({
     await waitReady(page, 'data-command-palette-ready');
     await page.waitForTimeout(100);
     const opened = await page.evaluate(async () => {
-      const palette = document.querySelector('main is-command-palette');
+      const palette = document.querySelector('main iswc-command-palette');
       palette.open();
       // showModal() tarda un microtask
       await new Promise((r) => requestAnimationFrame(r));
@@ -74,17 +74,17 @@ tests.push({
 });
 
 tests.push({
-  name: 'funcional: close() cierra el dialog y emite is-after-hide',
+  name: 'funcional: close() cierra el dialog y emite iswc-after-hide',
   run: async (page) => {
     await page.goto(URL, { waitUntil: 'domcontentloaded' });
     await waitReady(page, 'data-command-palette-ready');
     await page.waitForTimeout(100);
     const after = await page.evaluate(async () => {
-      const palette = document.querySelector('main is-command-palette');
+      const palette = document.querySelector('main iswc-command-palette');
       let hideFired = false;
       let afterHideFired = false;
-      palette.addEventListener('is-hide', () => { hideFired = true; });
-      palette.addEventListener('is-after-hide', () => { afterHideFired = true; });
+      palette.addEventListener('iswc-hide', () => { hideFired = true; });
+      palette.addEventListener('iswc-after-hide', () => { afterHideFired = true; });
       palette.open();
       await new Promise((r) => requestAnimationFrame(r));
       palette.close();
@@ -95,8 +95,8 @@ tests.push({
         dialogOpen: palette.shadowRoot.querySelector('dialog').open,
       };
     });
-    assert.equal(after.hideFired, true, 'close() debe emitir is-hide');
-    assert.equal(after.afterHideFired, true, 'close() debe emitir is-after-hide');
+    assert.equal(after.hideFired, true, 'close() debe emitir iswc-hide');
+    assert.equal(after.afterHideFired, true, 'close() debe emitir iswc-after-hide');
     assert.equal(after.openAttr, false, 'close() debe remover el atributo open');
     assert.equal(after.dialogOpen, false, 'el <dialog> debe estar cerrado');
   },
@@ -110,7 +110,7 @@ tests.push({
     await page.waitForTimeout(100);
     // Asegurar que está cerrado al inicio
     const beforeOpen = await page.evaluate(() => {
-      const p = document.querySelector('main is-command-palette');
+      const p = document.querySelector('main iswc-command-palette');
       return p.shadowRoot.querySelector('dialog').open;
     });
     assert.equal(beforeOpen, false, 'dialog debe iniciar cerrado');
@@ -120,7 +120,7 @@ tests.push({
     await page.keyboard.up('Control');
     await page.waitForTimeout(100);
     const afterOpen = await page.evaluate(() => {
-      const p = document.querySelector('main is-command-palette');
+      const p = document.querySelector('main iswc-command-palette');
       return {
         openAttr: p.hasAttribute('open'),
         dialogOpen: p.shadowRoot.querySelector('dialog').open,
@@ -138,14 +138,14 @@ tests.push({
     await waitReady(page, 'data-command-palette-ready');
     await page.waitForTimeout(100);
     await page.evaluate(async () => {
-      const p = document.querySelector('main is-command-palette');
+      const p = document.querySelector('main iswc-command-palette');
       p.open();
       await new Promise((r) => requestAnimationFrame(r));
     });
     await page.keyboard.press('Escape');
     await page.waitForTimeout(100);
     const after = await page.evaluate(() => {
-      const p = document.querySelector('main is-command-palette');
+      const p = document.querySelector('main iswc-command-palette');
       return {
         openAttr: p.hasAttribute('open'),
         dialogOpen: p.shadowRoot.querySelector('dialog').open,
@@ -163,7 +163,7 @@ tests.push({
     await waitReady(page, 'data-command-palette-ready');
     await page.waitForTimeout(100);
     const result = await page.evaluate(async () => {
-      const p = document.querySelector('main is-command-palette');
+      const p = document.querySelector('main iswc-command-palette');
       p.open();
       await new Promise((r) => requestAnimationFrame(r));
       const input = p.shadowRoot.querySelector('input');
@@ -192,7 +192,7 @@ tests.push({
     // El demo fija max-results="8" pero los 11 comandos caben en el orden
     // sin query. Verificamos que con max-results=3 hay exactamente 3.
     const result = await page.evaluate(async () => {
-      const p = document.querySelector('main is-command-palette');
+      const p = document.querySelector('main iswc-command-palette');
       p.setAttribute('max-results', '3');
       p.open();
       await new Promise((r) => requestAnimationFrame(r));
@@ -218,7 +218,7 @@ tests.push({
     // fallback posible.
     const result = await page.evaluate(async () => {
       const main = document.querySelector('main');
-      const p = document.createElement('is-command-palette');
+      const p = document.createElement('iswc-command-palette');
       p.setAttribute('empty-text', 'Sin coincidencias');
       const script = document.createElement('script');
       script.type = 'application/json';
@@ -249,20 +249,20 @@ tests.push({
 });
 
 tests.push({
-  name: 'funcional: ArrowDown mueve el item activo y Enter ejecuta is-select',
+  name: 'funcional: ArrowDown mueve el item activo y Enter ejecuta iswc-select',
   run: async (page) => {
     await page.goto(URL, { waitUntil: 'domcontentloaded' });
     await waitReady(page, 'data-command-palette-ready');
     await page.waitForTimeout(100);
     const result = await page.evaluate(async () => {
-      const p = document.querySelector('main is-command-palette');
+      const p = document.querySelector('main iswc-command-palette');
       p.open();
       await new Promise((r) => requestAnimationFrame(r));
       // Esperar foco en el input (open() llama input.focus())
       await new Promise((r) => setTimeout(r, 50));
-      // Capturar el evento is-select con su detail
+      // Capturar el evento iswc-select con su detail
       let selected = null;
-      p.addEventListener('is-select', (e) => { selected = e.detail; });
+      p.addEventListener('iswc-select', (e) => { selected = e.detail; });
       // ArrowDown x1 → mueve de idx=0 a idx=1
       p.shadowRoot.querySelector('input').dispatchEvent(new KeyboardEvent('keydown', {
         key: 'ArrowDown', bubbles: true,
@@ -274,7 +274,7 @@ tests.push({
       await new Promise((r) => requestAnimationFrame(r));
       return { selected };
     });
-    assert.ok(result.selected, 'Enter debe emitir is-select con detail');
+    assert.ok(result.selected, 'Enter debe emitir iswc-select con detail');
     assert.ok(result.selected.id, 'detail debe tener id del comando');
   },
 });
@@ -286,7 +286,7 @@ tests.push({
     await waitReady(page, 'data-command-palette-ready');
     await page.waitForTimeout(100);
     const result = await page.evaluate(async () => {
-      const p = document.querySelector('main is-command-palette');
+      const p = document.querySelector('main iswc-command-palette');
       p.open();
       await new Promise((r) => requestAnimationFrame(r));
       // El primer resultado debería ser "Nuevo documento" (idx=0, sort estable)
@@ -310,11 +310,11 @@ tests.push({
     await waitReady(page, 'data-command-palette-ready');
     await page.waitForTimeout(100);
     const result = await page.evaluate(async () => {
-      const p = document.querySelector('main is-command-palette');
+      const p = document.querySelector('main iswc-command-palette');
       p.open();
       await new Promise((r) => requestAnimationFrame(r));
       let selectedId = null;
-      p.addEventListener('is-select', (e) => { selectedId = e.detail.id; });
+      p.addEventListener('iswc-select', (e) => { selectedId = e.detail.id; });
       // Click sobre el segundo <li role="option">
       const opts = [...p.shadowRoot.querySelectorAll('[role="option"]')];
       opts[1].dispatchEvent(new MouseEvent('click', { bubbles: true, composed: true }));
@@ -336,7 +336,7 @@ tests.push({
     await waitReady(page, 'data-command-palette-ready');
     await page.waitForTimeout(100);
     const result = await page.evaluate(async () => {
-      const p = document.querySelector('main is-command-palette');
+      const p = document.querySelector('main iswc-command-palette');
       p.open();
       await new Promise((r) => requestAnimationFrame(r));
       const input = p.shadowRoot.querySelector('input');
@@ -363,7 +363,7 @@ tests.push({
     await waitReady(page, 'data-command-palette-ready');
     await page.waitForTimeout(100);
     const result = await page.evaluate(async () => {
-      const p = document.querySelector('main is-command-palette');
+      const p = document.querySelector('main iswc-command-palette');
       // Captura 1
       p.open();
       await new Promise((r) => requestAnimationFrame(r));

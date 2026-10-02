@@ -1,11 +1,11 @@
 {
-  "$schema": "is-preview/v1",
-  "tag": "is-icon",
+  "$schema": "iswc-preview/v1",
+  "tag": "iswc-icon",
   "category": "media",
-  "title": "<is-icon>",
+  "title": "<iswc-icon>",
   "titleHtml": true,
   "styles": ".xp-embed {\r\n      border: 1px solid var(--iswc-border);\r\n      border-radius: 0.6rem;\r\n      overflow: hidden;\r\n      background: var(--iswc-bg);\r\n      /* Alto fijo: el explorador scrollea internamente (su .xp), así que un\r\n         alto en auto lo colapsaría a 0. */\r\n      height: min(72vh, 720px);\r\n    }\r\n    .xp-embed iframe { display: block; width: 100%; height: 100%; border: 0; }",
-  "storageKey": "docs-is-icon",
+  "storageKey": "docs-iswc-icon",
   "sections": [
     {
       "id": "intro",
@@ -14,7 +14,7 @@
       "blocks": [
         {
           "kind": "demo",
-          "html": "<div class=\"demo-row\" style=\"font-size:1.5rem; gap:1rem; align-items:center;\">\r\n            <is-icon icon=\"mdi:home\"></is-icon>\r\n            <is-icon icon=\"mdi:check-circle\" style=\"color:var(--iswc-accent)\"></is-icon>\r\n            <is-icon icon=\"mdi:star\" label=\"Favorito\"></is-icon>\r\n            <is-icon icon=\"mdi:cog-outline\"></is-icon>\r\n          </div>",
+          "html": "<div class=\"demo-row\" style=\"font-size:1.5rem; gap:1rem; align-items:center;\">\r\n            <iswc-icon icon=\"mdi:home\"></iswc-icon>\r\n            <iswc-icon icon=\"mdi:check-circle\" style=\"color:var(--iswc-accent)\"></iswc-icon>\r\n            <iswc-icon icon=\"mdi:star\" label=\"Favorito\"></iswc-icon>\r\n            <iswc-icon icon=\"mdi:cog-outline\"></iswc-icon>\r\n          </div>",
           "controls": [
             {
               "control": "select",
@@ -40,11 +40,11 @@
       "blocks": [
         {
           "kind": "demo",
-          "html": "<span class=\"demo-label\">src personalizado</span>\r\n          <is-icon src=\"{assets}icons/mdi/heart.svg\" label=\"Corazón\" style=\"font-size:1.5rem;color:var(--iswc-accent)\"></is-icon>"
+          "html": "<span class=\"demo-label\">src personalizado</span>\r\n          <iswc-icon src=\"{assets}icons/mdi/heart.svg\" label=\"Corazón\" style=\"font-size:1.5rem;color:var(--iswc-accent)\"></iswc-icon>"
         },
         {
           "kind": "code",
-          "code": "<is-icon icon=\"mdi:home\"></is-icon>\n<is-icon icon=\"mdi:check-circle\"></is-icon>\n<is-icon src=\"./logo.svg\" label=\"Logo\"></is-icon>"
+          "code": "<iswc-icon icon=\"mdi:home\"></iswc-icon>\n<iswc-icon icon=\"mdi:check-circle\"></iswc-icon>\n<iswc-icon src=\"./logo.svg\" label=\"Logo\"></iswc-icon>"
         }
       ]
     },
@@ -86,7 +86,7 @@
       "blocks": [
         {
           "kind": "html",
-          "html": "<div class=\"xp-embed\">\r\n          <iframe id=\"xpFrame\" title=\"Explorador de iconos\" loading=\"lazy\"></iframe>\r\n        </div>\r\n        <p>\r\n          <is-button id=\"xpOpen\" color=\"neutral\" variant=\"outlined\" href=\"../_shell.html?tag=icon-explorer\" target=\"_blank\" rel=\"noopener\">\r\n            <is-icon icon=\"mdi:open-in-new\"></is-icon>\r\n            Abrir en una pestaña\r\n          </is-button>\r\n        </p>"
+          "html": "<div class=\"xp-embed\">\r\n          <iframe id=\"xpFrame\" title=\"Explorador de iconos\" loading=\"lazy\"></iframe>\r\n        </div>\r\n        <p>\r\n          <iswc-button id=\"xpOpen\" color=\"neutral\" variant=\"outlined\" href=\"../_shell.html?tag=icon-explorer\" target=\"_blank\" rel=\"noopener\">\r\n            <iswc-icon icon=\"mdi:open-in-new\"></iswc-icon>\r\n            Abrir en una pestaña\r\n          </iswc-button>\r\n        </p>"
         }
       ]
     }

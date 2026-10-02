@@ -1,11 +1,9 @@
-/* <is-prefs-clear> — botón de auditoría: limpia prefs persistentes del kit. */
+/* <iswc-prefs-clear> — botón de auditoría: limpia prefs persistentes del kit. */
 
 :host {
   display: inline-flex;
   vertical-align: middle;
   font-size: inherit;
-}
 
-:host([hidden]) {
-  display: none;
+  &[hidden] { display: none; }
 }

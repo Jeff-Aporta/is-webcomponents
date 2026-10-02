@@ -24,7 +24,7 @@ async function checkDeterministic(page) {
 
   // (1) y (2): layout + roles
   const initial = await page.evaluate(() => {
-    const sels = [...document.querySelectorAll('is-select')];
+    const sels = [...document.querySelectorAll('iswc-select')];
     return sels.map((s) => {
       const sr = s.shadowRoot;
       const rect = s.getBoundingClientRect();
@@ -33,7 +33,7 @@ async function checkDeterministic(page) {
         triggerRole: sr.querySelector('.trigger')?.getAttribute('role'),
         listboxRole: sr.querySelector('[part="listbox"]')?.getAttribute('role'),
         ariaExpanded: sr.querySelector('.trigger')?.getAttribute('aria-expanded'),
-        optionCount: s.querySelectorAll('is-option').length,
+        optionCount: s.querySelectorAll('iswc-option').length,
       };
     });
   });
@@ -55,10 +55,10 @@ async function checkDeterministic(page) {
   }
 
   // (3)-(5): abrir el primer select y verificar el listbox en el top-layer
-  await page.evaluate(() => document.querySelector('#sec-basico is-select').show());
+  await page.evaluate(() => document.querySelector('#sec-basico iswc-select').show());
   await page.waitForTimeout(120);
   const open = await page.evaluate(() => {
-    const s = document.querySelector('#sec-basico is-select');
+    const s = document.querySelector('#sec-basico iswc-select');
     const sr = s.shadowRoot;
     const dlg = sr.querySelector('dialog.popup');
     const lb = sr.querySelector('[part="listbox"]');
@@ -95,10 +95,10 @@ async function checkDeterministic(page) {
 
   // (6) cerrar y revisar tags del multi
   await page.evaluate(() => {
-    document.querySelector('#sec-basico is-select').hide();
+    document.querySelector('#sec-basico iswc-select').hide();
   });
   const tags = await page.evaluate(() => {
-    const s = document.querySelector('#sec-multi is-select');
+    const s = document.querySelector('#sec-multi iswc-select');
     const sr = s.shadowRoot;
     return {
       tagsCount: sr.querySelectorAll('[part="tag"]').length,
@@ -157,7 +157,7 @@ async function runStagehandRubric() {
   try {
     await page.goto(DEMO.url, { waitUntil: 'domcontentloaded' });
     await waitReady(page, DEMO.readyAttr);
-    await page.evaluate(() => document.querySelector('#sec-basico is-select').show());
+    await page.evaluate(() => document.querySelector('#sec-basico iswc-select').show());
     await page.waitForTimeout(300);
     const shot = await screenshot(page, `stagehand-${DEMO.name}`);
     const result = await sh.act(VISUAL_RUBRIC, { image: shot });

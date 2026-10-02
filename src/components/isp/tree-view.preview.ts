@@ -52,12 +52,12 @@ class DemoCustoms extends TreeCustomsBase {
 }
 
 /**
- * Demo <is-tree-view> con lista plana iplan + TreeCustomsBase.
+ * Demo <iswc-tree-view> con lista plana iplan + TreeCustomsBase.
  * @param {import('../../previews/_kit/types.d.ts').PreviewMountContext} ctx
  */
 export async function mount(ctx: import('../../previews/_kit/types.d.ts').PreviewMountContext): Promise<void> {
   const root = ctx.main;
-  const tv = (root.querySelector<HTMLElement>('#tvDemo') || root.querySelector<HTMLElement>('is-tree-view')) as IsTreeViewEl | null;
+  const tv = (root.querySelector<HTMLElement>('#tvDemo') || root.querySelector<HTMLElement>('iswc-tree-view')) as IsTreeViewEl | null;
   if (!tv) return;
 
   tv.customs = new DemoCustoms();
@@ -76,15 +76,15 @@ export async function mount(ctx: import('../../previews/_kit/types.d.ts').Previe
     const code = log.querySelector<HTMLElement>('code') || log;
     code.textContent = msg;
   };
-  tv.addEventListener('is-select', (e: Event) => {
+  tv.addEventListener('iswc-select', (e: Event) => {
     const detail = (e as CustomEvent<{ node?: DemoNode; flatPath?: string }>).detail;
     paint(detail?.node?.titulo || detail?.flatPath || '—');
   });
-  tv.addEventListener('is-frm-open', (e: Event) => {
+  tv.addEventListener('iswc-frm-open', (e: Event) => {
     const detail = (e as CustomEvent<{ itdForm?: string; record?: DemoNode }>).detail;
     paint(`ficha ${detail?.itdForm || ''} · ${detail?.record?.titulo || ''}`);
   });
-  tv.addEventListener('is-error', (e: Event) => {
+  tv.addEventListener('iswc-error', (e: Event) => {
     const detail = (e as CustomEvent<{ message?: string }>).detail;
     paint(detail?.message || 'error');
   });

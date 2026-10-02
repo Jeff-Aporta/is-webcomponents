@@ -1,14 +1,14 @@
 ---
-tag: is-prefs-clear
+tag: iswc-prefs-clear
 tags:
-  - is-prefs-clear
+  - iswc-prefs-clear
 category: feedback
 status: public
 source: ./prefs-clear.js
 style: ./prefs-clear.css
 preview: ./prefs-clear.json
 ---
-# `<is-prefs-clear>`
+# `<iswc-prefs-clear>`
 
 ## Propósito
 
@@ -16,7 +16,7 @@ Borra la memoria persistente de los componentes del kit
 (`localStorage['is-webcomponents']`: splits, scrolls, grids…).
 Útil para auditar la carga inicial sin prefs viejas que deformen el layout.
 
-Este módulo registra `<is-prefs-clear>`.
+Este módulo registra `<iswc-prefs-clear>`.
 
 ## Cuándo usarlo
 
@@ -36,8 +36,8 @@ import './prefs-clear.js';
 ## Ejemplo mínimo
 
 ```html
-<is-prefs-clear></is-prefs-clear>
-<!-- Solo icono. Con etiqueta: <is-prefs-clear>Limpiar memoria UI</is-prefs-clear> -->
+<iswc-prefs-clear></iswc-prefs-clear>
+<!-- Solo icono. Con etiqueta: <iswc-prefs-clear>Limpiar memoria UI</iswc-prefs-clear> -->
 ```
 
 ## Atributos
@@ -46,14 +46,14 @@ import './prefs-clear.js';
 | --- | --- | --- |
 | `confirm` | boolean | `false` = no pide confirmación (default true) |
 | `reload` | boolean | `false` = no recarga tras limpiar (default true) |
-| `variant` / `color` / `shape` | string | Se reenvían al `is-button` interno |
+| `variant` / `color` / `shape` | string | Se reenvían al `iswc-button` interno |
 | `title` / `aria-label` | string | Tooltip y nombre accesible (default “Limpiar memoria UI”) |
 
 ## Eventos
 
 | Evento | Detail |
 | --- | --- |
-| `is-prefs-clear` | `{ tags: string[], reloaded: boolean }` |
+| `iswc-prefs-clear` | `{ tags: string[], reloaded: boolean }` |
 
 ## API
 

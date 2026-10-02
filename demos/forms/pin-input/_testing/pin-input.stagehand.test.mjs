@@ -23,7 +23,7 @@ async function checkDeterministic(page) {
 
   // (1)-(2): 5 pin-inputs y sus celdas
   const initial = await page.evaluate(() => {
-    const pins = [...document.querySelectorAll('is-pin-input')];
+    const pins = [...document.querySelectorAll('iswc-pin-input')];
     return pins.map((p) => {
       const sr = p.shadowRoot;
       const cells = [...sr.querySelectorAll('input.cell')];

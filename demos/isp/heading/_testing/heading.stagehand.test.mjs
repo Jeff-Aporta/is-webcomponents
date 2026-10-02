@@ -15,7 +15,7 @@ try {
   await page.waitForTimeout(200);
 
   const data = await page.evaluate(() => {
-    return [...document.querySelectorAll('is-heading')].map((h, idx) => {
+    return [...document.querySelectorAll('iswc-heading')].map((h, idx) => {
       const sr = h.shadowRoot;
       const inner = sr.querySelector('h1, h2, h3, h4, h5, h6');
       const cs = inner ? getComputedStyle(inner) : getComputedStyle(h);

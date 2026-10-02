@@ -5,10 +5,10 @@ import './date-picker.js';
 import { ElementBase } from '../../core/element-base.js';
 
 /**
- * <is-date-range-picker> — Rango de fechas con varios meses a la vista
+ * <iswc-date-range-picker> — Rango de fechas con varios meses a la vista
  * (equivalente a DateRangeCalendar de MUI X) y panel de atajos.
  *
- * Compone N <is-date-picker mode="range">: el rango vive aquí y se empuja a
+ * Compone N <iswc-date-picker mode="range">: el rango vive aquí y se empuja a
  * todos, así que el segundo clic puede caer en cualquier mes y el rango
  * tentativo se pinta en todos a la vez.
  *
@@ -18,7 +18,7 @@ import { ElementBase } from '../../core/element-base.js';
  *            show-week-numbers, disable-past, disable-future, disabled-dates,
  *            disabled-days, disabled, readonly
  * Slots: shortcut (atajos propios con data-range="inicio/fin")
- * Events: is-change { start, end } · is-month-change { month }
+ * Events: iswc-change { start, end } · iswc-month-change { month }
  */
 
 (() => {
@@ -111,7 +111,7 @@ import { ElementBase } from '../../core/element-base.js';
     }
   }
 
-  class IsDateRangePicker extends ElementBase {
+  class IswcDateRangePicker extends ElementBase {
     /** Personalización por atributo (ver `core/attrs.ts`). */
     static styleAttrs = {
     bg: { prop: '--iswc-daterange-bg', onlyColorValues: true },
@@ -184,7 +184,7 @@ import { ElementBase } from '../../core/element-base.js';
 
     clear(): void {
       this.removeAttribute('value');
-      emit(this, 'is-change', { start: null, end: null });
+      emit(this, 'iswc-change', { start: null, end: null });
     }
 
     /* ── Interno ──────────────────────────────────────────────────────── */
@@ -210,15 +210,15 @@ import { ElementBase } from '../../core/element-base.js';
         last?.remove();
       }
       while (this.#pickers.length < want) {
-        const picker = document.createElement('is-date-picker');
+        const picker = document.createElement('iswc-date-picker');
         picker.setAttribute('mode', 'range');
         picker.setAttribute('frameless', '');
         picker.setAttribute('views', 'day month year');
-        picker.addEventListener('is-change', this.#onPickerChange);
-        picker.addEventListener('is-day-hover', this.#onPickerHover);
-        picker.addEventListener('is-month-change', this.#onPickerMonth);
-        // Los eventos de los hijos no son API de is-date-range-picker.
-        for (const type of ['is-view-change', 'is-day-hover']) {
+        picker.addEventListener('iswc-change', this.#onPickerChange);
+        picker.addEventListener('iswc-day-hover', this.#onPickerHover);
+        picker.addEventListener('iswc-month-change', this.#onPickerMonth);
+        // Los eventos de los hijos no son API de iswc-date-range-picker.
+        for (const type of ['iswc-view-change', 'iswc-day-hover']) {
           picker.addEventListener(type, (e: Event) => e.stopPropagation());
         }
         this.#pickers.push(picker);
@@ -256,7 +256,7 @@ import { ElementBase } from '../../core/element-base.js';
       const dict = LABELS[lang] || LABELS.es;
 
       this.#presets.replaceChildren(...keys.map((key: string) => {
-        const btn = document.createElement('is-button');
+        const btn = document.createElement('iswc-button');
         btn.setAttribute('variant', 'outlined');
         btn.setAttribute('color', key === 'reset' ? 'neutral' : 'brand');
         btn.setAttribute('pill', '');
@@ -287,7 +287,7 @@ import { ElementBase } from '../../core/element-base.js';
       else this.setAttribute('value', end ? `${start}/${end}` : start);
       this.#anchor = this.#anchorFromState();
       this.#sync();
-      emit(this, 'is-change', { start: start || null, end: end || null, source });
+      emit(this, 'iswc-change', { start: start || null, end: end || null, source });
     }
 
     #onPickerChange = (e: Event): void => {
@@ -300,7 +300,7 @@ import { ElementBase } from '../../core/element-base.js';
       else this.setAttribute('value', end ? `${start}/${end}` : start);
       this.#anchor = keep;
       this.#sync();
-      emit(this, 'is-change', { start: start || null, end: end || null, source: 'calendar' });
+      emit(this, 'iswc-change', { start: start || null, end: end || null, source: 'calendar' });
     };
 
     #onPickerHover = (e: Event): void => {
@@ -324,7 +324,7 @@ import { ElementBase } from '../../core/element-base.js';
       if (monthKey(anchor) === monthKey(this.#anchor)) return;
       this.#anchor = anchor;
       this.#sync();
-      emit(this, 'is-month-change', { month: this.month });
+      emit(this, 'iswc-month-change', { month: this.month });
     };
 
     #onShortcut = (e: Event): void => {
@@ -346,5 +346,5 @@ import { ElementBase } from '../../core/element-base.js';
     };
   }
 
-  defineElement('is-date-range-picker', IsDateRangePicker, 'IsDateRangePicker');
+  defineElement('iswc-date-range-picker', IswcDateRangePicker, 'IswcDateRangePicker');
 })();

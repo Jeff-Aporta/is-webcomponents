@@ -1,7 +1,7 @@
 // dialog.test.mjs — tests exhaustivos del demo dialog.html.
 // Cobertura: smoke + funcional (open/close, focus trap, Escape,
 // light-dismiss, restore de foco, data-dialog="close", without-header,
-// backdrop-variant, preventDefault en is-hide) + determinismo + CSS Parts.
+// backdrop-variant, preventDefault en iswc-hide) + determinismo + CSS Parts.
 import assert from 'node:assert/strict';
 import { BASE_URL, newPage, close, waitReady, screenshot, report } from './lib/harness.mjs';
 
@@ -10,14 +10,14 @@ const URL = `${BASE_URL}/demos/layout/dialog/dialog.html`;
 const tests = [];
 
 tests.push({
-  name: 'smoke: is-dialog está definido y los 5 dialogs están montados',
+  name: 'smoke: iswc-dialog está definido y los 5 dialogs están montados',
   run: async (page) => {
     await page.goto(URL, { waitUntil: 'domcontentloaded' });
     await waitReady(page, 'data-dialog-ready');
     const data = await page.evaluate(() => {
-      const dialogs = [...document.querySelectorAll('body > is-dialog')];
+      const dialogs = [...document.querySelectorAll('body > iswc-dialog')];
       return {
-        defined: !!customElements.get('is-dialog'),
+        defined: !!customElements.get('iswc-dialog'),
         count: dialogs.length,
         parts: dialogs.map((d) => {
           const sr = d.shadowRoot;
@@ -33,7 +33,7 @@ tests.push({
         }),
       };
     });
-    assert.equal(data.defined, true, 'is-dialog debe estar definido');
+    assert.equal(data.defined, true, 'iswc-dialog debe estar definido');
     assert.equal(data.count, 5, `esperaba 5 dialogs, hay ${data.count}`);
     for (const p of data.parts) {
       assert.equal(p.backdrop, true, 'part="backdrop" obligatorio');
@@ -112,10 +112,10 @@ tests.push({
     // d1 no tiene autofocus → debería enfocar el modal (tabindex=-1) o el primer focuseable.
     const active1 = await page.evaluate(() => {
       const ae = document.activeElement;
-      return ae ? { tag: ae.tagName, id: ae.id, inDialog: !!ae.closest?.('is-dialog') } : null;
+      return ae ? { tag: ae.tagName, id: ae.id, inDialog: !!ae.closest?.('iswc-dialog') } : null;
     });
     assert.ok(active1, 'document.activeElement debe estar definido');
-    assert.ok(active1.inDialog, 'el foco debe estar dentro del <is-dialog>');
+    assert.ok(active1.inDialog, 'el foco debe estar dentro del <iswc-dialog>');
   },
 });
 
@@ -154,7 +154,7 @@ tests.push({
       await page.keyboard.press('Tab');
       const ae = await page.evaluate(() => {
         const a = document.activeElement;
-        return a ? { id: a.id, tag: a.tagName, inDialog: !!a.closest?.('is-dialog') } : null;
+        return a ? { id: a.id, tag: a.tagName, inDialog: !!a.closest?.('iswc-dialog') } : null;
       });
       tags.push(ae);
     }
@@ -264,7 +264,7 @@ tests.push({
     await page.goto(URL, { waitUntil: 'domcontentloaded' });
     await waitReady(page, 'data-dialog-ready');
     const v = await page.evaluate(() => {
-      const d = document.createElement('is-dialog');
+      const d = document.createElement('iswc-dialog');
       d.setAttribute('backdrop-variant', 'extreme');
       document.body.appendChild(d);
       const r = d.backdropVariant;
@@ -276,27 +276,27 @@ tests.push({
 });
 
 tests.push({
-  name: 'eventos: is-show → is-after-show → is-hide → is-after-hide',
+  name: 'eventos: iswc-show → iswc-after-show → iswc-hide → iswc-after-hide',
   run: async (page) => {
     await page.goto(URL, { waitUntil: 'domcontentloaded' });
     await waitReady(page, 'data-dialog-ready');
     // Limpia log
     await page.evaluate(() => { document.getElementById('log').textContent = ''; });
-    // d5: abrimos con el botón, luego cerramos con Escape (emite is-hide cancelable).
+    // d5: abrimos con el botón, luego cerramos con Escape (emite iswc-hide cancelable).
     await page.click('#btn-open-5');
     await page.waitForTimeout(350);
     await page.keyboard.press('Escape');
     await page.waitForTimeout(350);
     const log = await page.evaluate(() => document.getElementById('log').textContent || '');
-    assert.match(log, /is-show\s*←\s*d5/, `debe emitir is-show ← d5, log:\n${log}`);
-    assert.match(log, /is-after-show\s*←\s*d5/, `debe emitir is-after-show ← d5, log:\n${log}`);
-    assert.match(log, /is-hide\s*←\s*d5/, `debe emitir is-hide ← d5, log:\n${log}`);
-    assert.match(log, /is-after-hide\s*←\s*d5/, `debe emitir is-after-hide ← d5, log:\n${log}`);
+    assert.match(log, /iswc-show\s*←\s*d5/, `debe emitir iswc-show ← d5, log:\n${log}`);
+    assert.match(log, /iswc-after-show\s*←\s*d5/, `debe emitir iswc-after-show ← d5, log:\n${log}`);
+    assert.match(log, /iswc-hide\s*←\s*d5/, `debe emitir iswc-hide ← d5, log:\n${log}`);
+    assert.match(log, /iswc-after-hide\s*←\s*d5/, `debe emitir iswc-after-hide ← d5, log:\n${log}`);
   },
 });
 
 tests.push({
-  name: 'eventos: preventDefault en is-hide cancela el cierre (shake)',
+  name: 'eventos: preventDefault en iswc-hide cancela el cierre (shake)',
   run: async (page) => {
     await page.goto(URL, { waitUntil: 'domcontentloaded' });
     await waitReady(page, 'data-dialog-ready');
@@ -308,7 +308,7 @@ tests.push({
     await page.evaluate(() => document.getElementById('d5-cancel-shake').click());
     await page.waitForTimeout(350);
     const after = await page.evaluate(() => document.getElementById('d5').open);
-    assert.equal(after, true, 'preventDefault en is-hide debe cancelar el cierre');
+    assert.equal(after, true, 'preventDefault en iswc-hide debe cancelar el cierre');
   },
 });
 
@@ -320,7 +320,7 @@ tests.push({
     const result = await page.evaluate(() => {
       const d = document.getElementById('d4');
       const j = d.toJSON();
-      const d2 = document.createElement('is-dialog');
+      const d2 = document.createElement('iswc-dialog');
       d2.fromJSON(j);
       return {
         to: j,

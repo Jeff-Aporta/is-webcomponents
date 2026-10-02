@@ -22,20 +22,22 @@
 }
 
 /* sheen (default): barrido ghost sobre el color base */
-:host([effect="sheen"]) .indicator,
-:host(:not([effect])) .indicator {
-  background-image: linear-gradient(
-    105deg,
-    transparent 0%,
-    transparent 42%,
-    var(--iswc-skeleton-sheen) 50%,
-    transparent 58%,
-    transparent 100%
-  );
-  background-color: var(--iswc-skeleton-color);
-  background-size: 220% 100%;
-  background-repeat: no-repeat;
-  animation: is-skeleton-sheen 1.85s ease-in-out infinite;
+:host([effect="sheen"]),
+:host(:not([effect])) {
+  .indicator {
+    background-image: linear-gradient(
+      105deg,
+      transparent 0%,
+      transparent 42%,
+      var(--iswc-skeleton-sheen) 50%,
+      transparent 58%,
+      transparent 100%
+    );
+    background-color: var(--iswc-skeleton-color);
+    background-size: 220% 100%;
+    background-repeat: no-repeat;
+    animation: iswc-skeleton-sheen 1.85s ease-in-out infinite;
+  }
 }
 
 /* pulse: late y vuelve (visible gracias al host transparente).
@@ -43,31 +45,33 @@
    espejo exacto de la de vuelta y el latido aparece y desaparece igual de
    rápido. Con tres keyframes el ease-in-out se aplicaba por tramo y el pulso
    se notaba a tirones. */
-:host([effect="pulse"]) .indicator {
-  background: var(--iswc-skeleton-color);
-  animation: is-skeleton-pulse 0.9s ease-in-out infinite alternate;
+:host([effect="pulse"]) {
+  .indicator {
+    background: var(--iswc-skeleton-color);
+    animation: iswc-skeleton-pulse 0.9s ease-in-out infinite alternate;
+  }
 }
 
-:host([effect="none"]) .indicator {
-  background: var(--iswc-skeleton-color);
-  background-image: none;
-  animation: none;
-}
-
-@media (prefers-reduced-motion: reduce) {
-  :host([effect="sheen"]) .indicator,
-  :host(:not([effect])) .indicator,
-  :host([effect="pulse"]) .indicator {
+:host([effect="none"]) {
+  .indicator {
+    background: var(--iswc-skeleton-color);
+    background-image: none;
     animation: none;
   }
 }
 
-@keyframes is-skeleton-sheen {
+@media (prefers-reduced-motion: reduce) {
+  :host(:is([effect="sheen"], :not([effect]), [effect="pulse"])) .indicator {
+    animation: none;
+  }
+}
+
+@keyframes iswc-skeleton-sheen {
   0% { background-position: 120% 0; }
   100% { background-position: -120% 0; }
 }
 
-@keyframes is-skeleton-pulse {
+@keyframes iswc-skeleton-pulse {
   from { opacity: 1; }
   to { opacity: 0.32; }
 }

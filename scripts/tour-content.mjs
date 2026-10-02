@@ -13,10 +13,10 @@
 //     "[registry] behavior missing …" que el tour viejo ignoraba).
 //   - pageerror, unhandledrejection: vacios.
 //   - requestfailed: SOLO se tolera net::ERR_ABORTED (churn de re-render de
-//     <is-icon>, evidenciado en probe-icons.mjs: 0 fallos reales, todos los
+//     <iswc-icon>, evidenciado en probe-icons.mjs: 0 fallos reales, todos los
 //     iconos terminan con status=200). Cualquier OTRO motivo (DNS, ERR_*, etc.)
 //     falla.
-//   - Render: <is-preview-component id="previewHost"> presente, con
+//   - Render: <iswc-preview-component id="previewHost"> presente, con
 //     `host.preview.definition.sections.length > 0` (el campo bugueado, NO un
 //     umbral de texto que el chrome puede satisfacer) Y al menos un
 //     `section.section` en el DOM Y mainText > 200.
@@ -48,17 +48,17 @@ const BASE = (() => {
 const B64 = (s) => Buffer.from(s, 'utf8').toString('base64').replaceAll('+', '-').replaceAll('/', '_').replaceAll('=', '');
 const urlFor = (tag) => `${BASE}/?s=${B64(JSON.stringify({ component: tag }))}`;
 
-const PAGES = ['home', 'theming', 'ecosystem', 'is-icon-explorer', 'is-ui'];
+const PAGES = ['home', 'theming', 'ecosystem', 'iswc-icon-explorer', 'iswc-ui'];
 const PAGE_MARKERS = {
   home: [/IS Web Components|Componentes|kit/i, /cat(?:egorías|egory)|sección|hero/i],
   theming: [/theming|palette|theme|tema|paleta|color/i],
   ecosystem: [/ecosistema|ecosystem|componentes|categor/i],
-  // is-icon-explorer: meta-página, no es un custom element. Sin customElements
+  // iswc-icon-explorer: meta-página, no es un custom element. Sin customElements
   // registrado, se valida por marcadores de contenido en su lugar.
-  'is-icon-explorer': [/explorador|iconos?|familia/i],
-  // is-ui: módulo de utilidades (NO es un custom element). Su title declara
+  'iswc-icon-explorer': [/explorador|iconos?|familia/i],
+  // iswc-ui: módulo de utilidades (NO es un custom element). Su title declara
   // "módulo · no es un tag". Se valida por marcadores de contenido.
-  'is-ui': [/IsUi|módulo|adoptCss|defineElement|utilidad/i],
+  'iswc-ui': [/IswcUi|módulo|adoptCss|defineElement|utilidad/i],
 };
 
 function allTags() {
@@ -106,7 +106,7 @@ async function esperarContenido(timeoutMs = 15000) {
     const ok = await page.evaluate(() => {
       const host = document.getElementById('previewHost');
       if (!host || host.hidden) return false;
-      const main = host.querySelector('is-main.main');
+      const main = host.querySelector('iswc-main.main');
       if (!main) return false;
       const secciones = main.querySelectorAll('section.section, [data-section]').length;
       const texto = (main.textContent ?? '').trim().length;
@@ -154,7 +154,7 @@ async function visitar(tag, { via = 'url' } = {}) {
         // apunte a la causa real (p.ej. definition.sections=0 = bug §3.A).
         checks.metrics = await page.evaluate(() => {
           const host = document.getElementById('previewHost');
-          const main = host?.querySelector('is-main.main');
+          const main = host?.querySelector('iswc-main.main');
           const def = host?.preview?.definition;
           return {
             hostPresent: !!host,
@@ -177,7 +177,7 @@ async function visitar(tag, { via = 'url' } = {}) {
     if (!checks.failure) {
       checks.metrics = await page.evaluate(() => {
         const host = document.getElementById('previewHost');
-        const main = host?.querySelector('is-main.main');
+        const main = host?.querySelector('iswc-main.main');
         const def = host?.preview?.definition;
         return {
           hostPresent: !!host,

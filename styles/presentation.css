@@ -53,7 +53,7 @@ a:hover { text-decoration: underline; text-underline-offset: 0.18em; }
   scrollbar-color: var(--iswc-scrollbar-thumb) transparent;
 }
 
-/* El preview-chrome está clavado dentro de is-main.main con sticky.
+/* El preview-chrome está clavado dentro de iswc-main.main con sticky.
    No flota sobre el viewport, así que el sidebar no necesita hueco arriba. */
 html:not([data-embed="1"]) .sidebar h1 { top: 0.5rem; }
 
@@ -84,14 +84,14 @@ html:not([data-embed="1"]) .sidebar h1 { top: 0.5rem; }
   background: linear-gradient(90deg, var(--iswc-border), transparent);
 }
 
-/* El TOC de las previews vive en <is-scrollspy>, no en <nav>: los <a> son
+/* El TOC de las previews vive en <iswc-scrollspy>, no en <nav>: los <a> son
    light DOM, así que la regla global de enlaces (color: var(--iswc-accent))
    los pintaba todos de rojo y el ::slotted del componente no gana el
    cascade. Ambos selectores comparten estilo. */
 .sidebar nav,
-.sidebar is-scrollspy { display: flex; flex-direction: column; gap: 2px; }
+.sidebar iswc-scrollspy { display: flex; flex-direction: column; gap: 2px; }
 .sidebar nav a,
-.sidebar is-scrollspy a {
+.sidebar iswc-scrollspy a {
   position: relative;
   display: block;
   padding: 7px 12px 7px 14px;
@@ -103,23 +103,23 @@ html:not([data-embed="1"]) .sidebar h1 { top: 0.5rem; }
   transition: background 140ms ease, color 140ms ease, padding-left 140ms ease;
 }
 .sidebar nav a:hover,
-.sidebar is-scrollspy a:hover {
+.sidebar iswc-scrollspy a:hover {
   background: color-mix(in srgb, var(--iswc-bg-elev) 85%, transparent);
   color: var(--iswc-text);
   padding-left: 17px;
   text-decoration: none;
 }
 .sidebar nav a.active,
-.sidebar nav a.is-scrollspy-active,
-.sidebar is-scrollspy a.is-scrollspy-active {
+.sidebar nav a.iswc-scrollspy-active,
+.sidebar iswc-scrollspy a.iswc-scrollspy-active {
   background: var(--iswc-accent-bg);
   color: var(--iswc-brand-text);
   font-weight: 650;
 }
 /* Barra de acento como pseudo: convive con el border-radius. */
 .sidebar nav a.active::before,
-.sidebar nav a.is-scrollspy-active::before,
-.sidebar is-scrollspy a.is-scrollspy-active::before {
+.sidebar nav a.iswc-scrollspy-active::before,
+.sidebar iswc-scrollspy a.iswc-scrollspy-active::before {
   content: "";
   position: absolute;
   left: 0;
@@ -131,7 +131,7 @@ html:not([data-embed="1"]) .sidebar h1 { top: 0.5rem; }
 }
 
 .main,
-is-main.main {
+iswc-main.main {
   display: block;
   box-sizing: border-box;
   position: relative;
@@ -154,10 +154,10 @@ is-main.main {
 /* --- Scrollbar consistente en superficies de los demos ---------------
  * El is-base.css ya pone `* { scrollbar-color: ... }`; aquí consolidamos
  * el estilo WebKit (track invisible, thumb con padding-clip, hover con
- * acento) para que cualquier `.section`, `.main`, `.sidebar`, `<is-main>`
+ * acento) para que cualquier `.section`, `.main`, `.sidebar`, `<iswc-main>`
  * o `.demo` con overflow muestre el mismo thumb que el sidebar. */
 .main::-webkit-scrollbar,
-is-main.main::-webkit-scrollbar,
+iswc-main.main::-webkit-scrollbar,
 .sidebar::-webkit-scrollbar,
 .section::-webkit-scrollbar,
 .demo::-webkit-scrollbar,
@@ -167,7 +167,7 @@ body::-webkit-scrollbar {
   height: var(--iswc-scrollbar-size);
 }
 .main::-webkit-scrollbar-track,
-is-main.main::-webkit-scrollbar-track,
+iswc-main.main::-webkit-scrollbar-track,
 .sidebar::-webkit-scrollbar-track,
 .section::-webkit-scrollbar-track,
 .demo::-webkit-scrollbar-track,
@@ -177,7 +177,7 @@ body::-webkit-scrollbar-track {
   border-radius: var(--iswc-scrollbar-radius);
 }
 .main::-webkit-scrollbar-thumb,
-is-main.main::-webkit-scrollbar-thumb,
+iswc-main.main::-webkit-scrollbar-thumb,
 .sidebar::-webkit-scrollbar-thumb,
 .section::-webkit-scrollbar-thumb,
 .demo::-webkit-scrollbar-thumb,
@@ -189,7 +189,7 @@ body::-webkit-scrollbar-thumb {
   background-clip: padding-box;
 }
 .main:hover::-webkit-scrollbar-thumb,
-is-main.main:hover::-webkit-scrollbar-thumb,
+iswc-main.main:hover::-webkit-scrollbar-thumb,
 .sidebar:hover::-webkit-scrollbar-thumb,
 .section:hover::-webkit-scrollbar-thumb,
 .demo:hover::-webkit-scrollbar-thumb,
@@ -200,7 +200,7 @@ body:hover::-webkit-scrollbar-thumb {
   background-clip: padding-box;
 }
 .main::-webkit-scrollbar-corner,
-is-main.main::-webkit-scrollbar-corner,
+iswc-main.main::-webkit-scrollbar-corner,
 .sidebar::-webkit-scrollbar-corner,
 .section::-webkit-scrollbar-corner,
 .demo::-webkit-scrollbar-corner,
@@ -326,8 +326,8 @@ body::-webkit-scrollbar-corner {
     var(--iswc-shadow);
   overflow: hidden;
 }
-/* is-copy-button lleva un is-tooltip dentro de su shadow: :has() no lo ve. */
-.demo:has(is-tooltip, is-popover, is-dropdown, is-popup, is-copy-button, is-lightbox, is-diagram-lightbox) {
+/* iswc-copy-button lleva un iswc-tooltip dentro de su shadow: :has() no lo ve. */
+.demo:has(iswc-tooltip, iswc-popover, iswc-dropdown, iswc-popup, iswc-copy-button, iswc-lightbox, iswc-diagram-lightbox) {
   overflow: visible;
 }
 .demo::before {
@@ -345,17 +345,17 @@ body::-webkit-scrollbar-corner {
 .demo > * { position: relative; z-index: 1; }
 /* Overlays: su z-index interno no cruza el stacking del host; subir el host
    para que no lo tapen siblings posteriores (#log, captions, etc.). */
-.demo > :is(is-dropdown, is-popup, is-tooltip, is-popover, is-combobox, is-date-picker, is-date-input, is-lightbox, is-diagram-lightbox) {
+.demo > :is(iswc-dropdown, iswc-popup, iswc-tooltip, iswc-popover, iswc-combobox, iswc-date-picker, iswc-date-input, iswc-lightbox, iswc-diagram-lightbox) {
   z-index: 5;
 }
 
 /* Charts / playlist: llenan la altura del demo (fit height) */
-.demo:has(is-chart, is-bar-chart, is-line-chart, is-pie-chart, is-doughnut-chart,
-  is-radar-chart, is-polar-area-chart, is-scatter-chart, is-bubble-chart) {
+.demo:has(iswc-chart, iswc-bar-chart, iswc-line-chart, iswc-pie-chart, iswc-doughnut-chart,
+  iswc-radar-chart, iswc-polar-area-chart, iswc-scatter-chart, iswc-bubble-chart) {
   min-height: 16rem;
 }
-.demo > :is(is-chart, is-bar-chart, is-line-chart, is-pie-chart, is-doughnut-chart,
-  is-radar-chart, is-polar-area-chart, is-scatter-chart, is-bubble-chart) {
+.demo > :is(iswc-chart, iswc-bar-chart, iswc-line-chart, iswc-pie-chart, iswc-doughnut-chart,
+  iswc-radar-chart, iswc-polar-area-chart, iswc-scatter-chart, iswc-bubble-chart) {
   flex: 1 1 auto;
   align-self: stretch;
   width: 100%;
@@ -363,10 +363,10 @@ body::-webkit-scrollbar-corner {
   height: auto;
 }
 
-.demo:has(is-video-playlist) {
+.demo:has(iswc-video-playlist) {
   min-height: 22rem;
 }
-.demo > is-video-playlist {
+.demo > iswc-video-playlist {
   flex: 1 1 auto;
   align-self: stretch;
   width: 100%;
@@ -374,10 +374,10 @@ body::-webkit-scrollbar-corner {
   height: auto;
 }
 
-.demo:has(is-sequence-diagram) {
+.demo:has(iswc-sequence-diagram) {
   min-height: 18rem;
 }
-.demo > is-sequence-diagram {
+.demo > iswc-sequence-diagram {
   flex: 1 1 auto;
   align-self: stretch;
   width: 100%;
@@ -415,12 +415,12 @@ body::-webkit-scrollbar-corner {
   outline: 2px solid var(--iswc-focus);
   outline-offset: 2px;
 }
-.demo-code-btn is-icon {
+.demo-code-btn iswc-icon {
   width: 1.15em;
   height: 1.15em;
 }
 
-/* El panel vive dentro de <is-dropdown>: el anclaje y el reposicionado los
+/* El panel vive dentro de <iswc-dropdown>: el anclaje y el reposicionado los
    hace el componente (dialog en top layer), así que aquí sólo va la caja.
    Antes era un popover con top/left calculados a mano que se despegaba. */
 .demo-code-dd {
@@ -537,7 +537,7 @@ body::-webkit-scrollbar-corner {
   font-size: 0.68rem;
   color: var(--iswc-text-dim);
 }
-.demo-locale-card is-format-date {
+.demo-locale-card iswc-format-date {
   font-size: 0.92rem;
   color: var(--iswc-text-soft);
 }
@@ -779,7 +779,7 @@ table.ref td:first-child { width: 36%; }
   justify-content: center;
   margin: 12px 0 24px;
 }
-.anatomy is-button { transform: scale(1.4); transform-origin: center; }
+.anatomy iswc-button { transform: scale(1.4); transform-origin: center; }
 .anatomy-calls {
   position: absolute;
   font-size: 0.7rem;
@@ -825,7 +825,7 @@ table.ref td:first-child { width: 36%; }
   border-radius: var(--iswc-radius);
   box-shadow: inset 0 1px 0 rgb(255 255 255 / 3%);
 }
-.playground .stage is-button { font-size: 1.1rem; }
+.playground .stage iswc-button { font-size: 1.1rem; }
 
 .controls {
   background: var(--iswc-bg-elev);
@@ -934,7 +934,7 @@ table.ref td:first-child { width: 36%; }
   letter-spacing: 0.02em;
 }
 
-/* --- Card preview helpers (is-card) -------------------------------- */
+/* --- Card preview helpers (iswc-card) -------------------------------- */
 
 .card-grid {
   display: grid;
@@ -942,7 +942,7 @@ table.ref td:first-child { width: 36%; }
   gap: 16px;
   margin: 14px 0 28px;
 }
-.card-grid > is-card { align-self: stretch; }
+.card-grid > iswc-card { align-self: stretch; }
 .card-meta {
   font-size: 0.85rem;
   color: var(--iswc-text-soft);
@@ -1003,7 +1003,7 @@ table.ref td:first-child { width: 36%; }
 /* El main reserva un poco de aire arriba para que el chrome fixed no tape el
    primer heading al cargar. El valor coincide con la altura aprox. del chrome
    + su offset. */
-is-main.main {
+iswc-main.main {
   scroll-padding-top: 4rem;
 }
 
@@ -1051,12 +1051,12 @@ html[data-embed="1"] .preview-chrome {
   outline-offset: 2px;
 }
 
-.preview-chrome is-theme-toggle {
+.preview-chrome iswc-theme-toggle {
   font-size: 1.15rem;
 }
 
 .preview-chrome__save {
-  font-size: 1.15rem; /* a la par del is-theme-toggle vecino */
+  font-size: 1.15rem; /* a la par del iswc-theme-toggle vecino */
   flex-shrink: 0;
 }
 
@@ -1069,18 +1069,18 @@ html[data-embed="1"] .preview-chrome {
   }
   .main { padding: 24px 20px 60px; }
   .playground { grid-template-columns: 1fr; }
-  .anatomy is-button { transform: scale(1.1); }
+  .anatomy iswc-button { transform: scale(1.1); }
 }
 
-/* --- is-icon defaults ----------------------------------------------- */
-is-icon {
+/* --- iswc-icon defaults ----------------------------------------------- */
+iswc-icon {
   display: inline-flex;
   width: 1.1em;
   height: 1.1em;
   vertical-align: -0.15em;
   flex-shrink: 0;
 }
-is-button is-icon {
+iswc-button iswc-icon {
   color: currentColor;
 }
 

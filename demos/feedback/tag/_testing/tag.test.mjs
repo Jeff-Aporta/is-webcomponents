@@ -1,6 +1,6 @@
-// tag.test.mjs — tests exhaustivos del demo is-tag.
+// tag.test.mjs — tests exhaustivos del demo iswc-tag.
 // Cobertura: smoke + funcional (color/variant/pill, with-remove emite
-// is-remove, remove-label, slots start/end, valores inválidos caen a default).
+// iswc-remove, remove-label, slots start/end, valores inválidos caen a default).
 import assert from 'node:assert/strict';
 import { BASE_URL, newPage, close, waitReady, screenshot, report } from './lib/harness.mjs';
 
@@ -14,16 +14,16 @@ tests.push({
     await page.goto(URL, { waitUntil: 'domcontentloaded' });
     await waitReady(page, 'data-tag-ready');
     const data = await page.evaluate(() => {
-      const all = document.querySelectorAll('is-tag');
+      const all = document.querySelectorAll('iswc-tag');
       const picks = all[0];
       return {
-        defined: !!customElements.get('is-tag'),
+        defined: !!customElements.get('iswc-tag'),
         count: all.length,
         color: picks.getAttribute('color'),
         variant: picks.getAttribute('variant'),
       };
     });
-    assert.equal(data.defined, true, 'is-tag debe estar definido');
+    assert.equal(data.defined, true, 'iswc-tag debe estar definido');
     assert.ok(data.count >= 10, `esperaba >=10 tags, hay ${data.count}`);
     assert.equal(data.color, 'brand', `default color debe ser brand (vimos "${data.color}")`);
     assert.equal(data.variant, 'filled-outlined', `default variant debe ser filled-outlined (vimos "${data.variant}")`);
@@ -38,7 +38,7 @@ tests.push({
     await waitReady(page, 'data-tag-ready');
     const colors = await page.evaluate(() => {
       const sec = [...document.querySelectorAll('section')].find((s) => s.textContent.includes('Colores'));
-      return [...sec.querySelectorAll('is-tag')].map((t) => t.getAttribute('color'));
+      return [...sec.querySelectorAll('iswc-tag')].map((t) => t.getAttribute('color'));
     });
     for (const expected of ['brand', 'neutral', 'info', 'success', 'warning', 'danger']) {
       assert.ok(colors.includes(expected), `esperaba ver color=${expected} (vi ${JSON.stringify(colors)})`);
@@ -52,7 +52,7 @@ tests.push({
     await page.goto(URL, { waitUntil: 'domcontentloaded' });
     await waitReady(page, 'data-tag-ready');
     const got = await page.evaluate(async () => {
-      const el = document.createElement('is-tag');
+      const el = document.createElement('iswc-tag');
       // Hay que conectar ANTES de setear el atributo inválido: la clase base
       // (ElementBase) silencia attributeChangedCallback hasta que mounted=true.
       // mounted se setea en connectedCallback.
@@ -73,7 +73,7 @@ tests.push({
     await page.goto(URL, { waitUntil: 'domcontentloaded' });
     await waitReady(page, 'data-tag-ready');
     const got = await page.evaluate(async () => {
-      const el = document.createElement('is-tag');
+      const el = document.createElement('iswc-tag');
       document.body.appendChild(el);
       el.setAttribute('color', 'no-color');
       await new Promise((r) => requestAnimationFrame(() => r()));
@@ -92,7 +92,7 @@ tests.push({
     await waitReady(page, 'data-tag-ready');
     const data = await page.evaluate(() => {
       const sec = [...document.querySelectorAll('section')].find((s) => s.textContent.includes('with-remove'));
-      const tags = [...sec.querySelectorAll('is-tag[with-remove]')];
+      const tags = [...sec.querySelectorAll('iswc-tag[with-remove]')];
       return tags.map((t) => {
         const remove = t.shadowRoot.querySelector('.remove');
         return {
@@ -109,22 +109,22 @@ tests.push({
 });
 
 tests.push({
-  name: 'eventos: is-remove se dispara al click en el botón de quitar',
+  name: 'eventos: iswc-remove se dispara al click en el botón de quitar',
   run: async (page) => {
     await page.goto(URL, { waitUntil: 'domcontentloaded' });
     await waitReady(page, 'data-tag-ready');
     await page.waitForTimeout(150);
     const seen = await page.evaluate(async () => {
       const sec = [...document.querySelectorAll('section')].find((s) => s.textContent.includes('with-remove'));
-      const t = sec.querySelector('is-tag[with-remove]');
+      const t = sec.querySelector('iswc-tag[with-remove]');
       const events = [];
-      t.addEventListener('is-remove', () => events.push('is-remove'));
+      t.addEventListener('iswc-remove', () => events.push('iswc-remove'));
       const btn = t.shadowRoot.querySelector('.remove');
       btn.click();
       await new Promise((r) => requestAnimationFrame(() => r()));
       return events;
     });
-    assert.ok(seen.includes('is-remove'), `esperaba is-remove, vi ${JSON.stringify(seen)}`);
+    assert.ok(seen.includes('iswc-remove'), `esperaba iswc-remove, vi ${JSON.stringify(seen)}`);
   },
 });
 
@@ -134,7 +134,7 @@ tests.push({
     await page.goto(URL, { waitUntil: 'domcontentloaded' });
     await waitReady(page, 'data-tag-ready');
     const label = await page.evaluate(() => {
-      const el = document.createElement('is-tag');
+      const el = document.createElement('iswc-tag');
       el.setAttribute('with-remove', '');
       el.setAttribute('remove-label', 'Borrar este tag');
       document.body.appendChild(el);
@@ -153,7 +153,7 @@ tests.push({
     await waitReady(page, 'data-tag-ready');
     const slotCount = await page.evaluate(() => {
       const sec = [...document.querySelectorAll('section')].find((s) => s.textContent.includes('Slots'));
-      const t = sec.querySelector('is-tag');
+      const t = sec.querySelector('iswc-tag');
       return {
         start: t.querySelectorAll('[slot="start"]').length,
         end: t.querySelectorAll('[slot="end"]').length,

@@ -7,8 +7,8 @@
  * (Antes emitía un HTML entero con head, body y un bloque de alternativas
  * comentado: demasiado ruido para copiar y pegar.)
  *
- * El panel va dentro de un <is-dropdown>, así queda anclado al trigger y se
- * reposiciona al hacer scroll; copiar usa <is-copy-button>.
+ * El panel va dentro de un <iswc-dropdown>, así queda anclado al trigger y se
+ * reposiciona al hacer scroll; copiar usa <iswc-copy-button>.
  *
  * Override opcional: data-code="..." | data-no-code
  *
@@ -95,13 +95,13 @@ import { buildDemoSnippetStyles } from '../src/previews/_kit/demo-snippet-styles
         ? NodeFilter.FILTER_REJECT
         : NodeFilter.FILTER_ACCEPT),
     });
-    if (root.nodeType === 1 && root.tagName.toLowerCase().startsWith('is-')) {
+    if (root.nodeType === 1 && root.tagName.toLowerCase().startsWith('iswc-')) {
       tags.add(root.tagName.toLowerCase().slice(3));
     }
     let n;
     while ((n = walker.nextNode())) {
       const tag = n.tagName.toLowerCase();
-      if (tag.startsWith('is-')) tags.add(tag.slice(3));
+      if (tag.startsWith('iswc-')) tags.add(tag.slice(3));
     }
     return [...tags].sort();
   };
@@ -229,7 +229,7 @@ import { buildDemoSnippetStyles } from '../src/previews/_kit/demo-snippet-styles
     if (args) lines.push(`  await L.load(${args});`);
     lines.push('<\/script>');
 
-    const previewStyles = demo.closest('is-preview-component')?.preview?.definition?.styles ?? '';
+    const previewStyles = demo.closest('iswc-preview-component')?.preview?.definition?.styles ?? '';
     const styleCss = buildDemoSnippetStyles(inner, previewStyles);
 
     if (lines.length) lines.push('');
@@ -259,9 +259,9 @@ import { buildDemoSnippetStyles } from '../src/previews/_kit/demo-snippet-styles
     demo.dataset.codeReady = '1';
     demo.classList.add('demo--with-code');
 
-    // is-dropdown ancla el panel al trigger y lo reposiciona en scroll/resize.
+    // iswc-dropdown ancla el panel al trigger y lo reposiciona en scroll/resize.
     // Antes era un popover con coordenadas calculadas a mano que se despegaba.
-    const dd = document.createElement('is-dropdown');
+    const dd = document.createElement('iswc-dropdown');
     dd.className = 'demo-code-dd';
     dd.setAttribute('placement', 'bottom-end');
     dd.setAttribute('distance', '8');
@@ -272,7 +272,7 @@ import { buildDemoSnippetStyles } from '../src/previews/_kit/demo-snippet-styles
     btn.className = 'demo-code-btn';
     btn.setAttribute('aria-label', 'Ver código del ejemplo');
     btn.title = 'Ver código';
-    btn.innerHTML = '<is-icon icon="mdi:code-tags"></is-icon>';
+    btn.innerHTML = '<iswc-icon icon="mdi:code-tags"></iswc-icon>';
 
     const pop = document.createElement('div');
     pop.className = 'demo-code-pop';
@@ -281,8 +281,8 @@ import { buildDemoSnippetStyles } from '../src/previews/_kit/demo-snippet-styles
         <div class="demo-code-pop__meta">
           <span class="demo-code-pop__hint">loader.min.js</span>
         </div>
-        <is-copy-button class="demo-code-pop__copy" copy-label="Copiar" success-label="Copiado"
-                        tooltip-placement="left"></is-copy-button>
+        <iswc-copy-button class="demo-code-pop__copy" copy-label="Copiar" success-label="Copiado"
+                        tooltip-placement="left"></iswc-copy-button>
       </div>
     `;
 
@@ -290,8 +290,8 @@ import { buildDemoSnippetStyles } from '../src/previews/_kit/demo-snippet-styles
     let pre = null;
     const mountCodeEl = (snippet) => {
       if (pre?.isConnected) return pre;
-      pre = document.createElement('is-code');
-      pre.className = 'code demo-code-pop__pre is-code-view';
+      pre = document.createElement('iswc-code');
+      pre.className = 'code demo-code-pop__pre iswc-code-view';
       pre.setAttribute('readonly', '');
       pre.setAttribute('compact', '');
       pre.setAttribute('wrap', '');
@@ -305,13 +305,13 @@ import { buildDemoSnippetStyles } from '../src/previews/_kit/demo-snippet-styles
       return pre;
     };
 
-    const copyBtn = pop.querySelector('is-copy-button');
+    const copyBtn = pop.querySelector('iswc-copy-button');
     let panelOpen = false;
 
     const renderSnippet = async () => {
       const { snippet } = await buildSnippet(demo);
       copyBtn.setAttribute('value', snippet);
-      await customElements.whenDefined('is-code');
+      await customElements.whenDefined('iswc-code');
       const codeEl = pre?.isConnected ? pre : mountCodeEl(snippet);
       const contentOk = () => (codeEl.value || codeEl.dataset.cmSource || codeEl.dataset.src || '').trim();
       if (!(codeEl.dataset.filled === '1' && codeEl.dataset.src === snippet && contentOk())) {
@@ -340,14 +340,14 @@ import { buildDemoSnippetStyles } from '../src/previews/_kit/demo-snippet-styles
     };
 
     // El snippet se calcula al abrir: el demo puede haber cambiado por JS.
-    dd.addEventListener('is-show', () => {
+    dd.addEventListener('iswc-show', () => {
       panelOpen = true;
       renderSnippet().catch(console.error);
     });
-    dd.addEventListener('is-hide', () => { panelOpen = false; });
+    dd.addEventListener('iswc-hide', () => { panelOpen = false; });
 
-    document.addEventListener('is-theme-change', onContextChange);
-    document.addEventListener('is-palette-change', onContextChange);
+    document.addEventListener('iswc-theme-change', onContextChange);
+    document.addEventListener('iswc-palette-change', onContextChange);
     const ctxObs = new MutationObserver(onContextChange);
     ctxObs.observe(document.documentElement, {
       attributes: true,
@@ -358,18 +358,18 @@ import { buildDemoSnippetStyles } from '../src/previews/_kit/demo-snippet-styles
     demo.append(dd);
   };
 
-  // <is-demo> es un componente y no puede importar de `scripts/`, así que el
-  // acople va por evento: al conectarse emite `is-demo-connected` (bubbles +
+  // <iswc-demo> es un componente y no puede importar de `scripts/`, así que el
+  // acople va por evento: al conectarse emite `iswc-demo-connected` (bubbles +
   // composed) y aquí lo recogemos. Se registra YA, antes del barrido inicial,
   // para no perder los que se conecten mientras tanto; `enhance()` es
   // idempotente (`data-code-ready`), así que un doble paso no molesta.
-  document.addEventListener('is-demo-connected', (e) => {
+  document.addEventListener('iswc-demo-connected', (e) => {
     const el = e.target;
     if (el instanceof Element) enhance(el);
   });
 
   const boot = () => {
-    document.querySelectorAll('.demo, is-demo').forEach(enhance);
+    document.querySelectorAll('.demo, iswc-demo').forEach(enhance);
   };
 
   if (document.readyState === 'loading') {

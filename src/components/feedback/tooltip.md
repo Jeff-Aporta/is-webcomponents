@@ -1,20 +1,20 @@
 ---
-tag: is-tooltip
+tag: iswc-tooltip
 tags:
-  - is-tooltip
+  - iswc-tooltip
 category: feedback
 status: public
 source: ./tooltip.js
 style: ./tooltip.css
 preview: ./tooltip.json
 ---
-# `<is-tooltip>`
+# `<iswc-tooltip>`
 
 ## Propósito
 
-Tip breve anclado con for. Depende de is-popover.
+Tip breve anclado con for. Depende de iswc-popover.
 
-Este módulo registra `<is-tooltip>`.
+Este módulo registra `<iswc-tooltip>`.
 
 ## Cuándo usarlo
 
@@ -33,8 +33,8 @@ import './tooltip.js';
 ## Ejemplo mínimo
 
 ```html
-<is-button id="tip-target">Hover Me</is-button>
-<is-tooltip for="tip-target">This is a tooltip</is-tooltip>
+<iswc-button id="tip-target">Hover Me</iswc-button>
+<iswc-tooltip for="tip-target">This is a tooltip</iswc-tooltip>
 ```
 
 ## API
@@ -81,10 +81,10 @@ import './tooltip.js';
 
 | Evento | detail | bubbles | composed | cancelable |
 | --- | --- | --- | --- | --- |
-| `is-show` | no | sí | sí | sí |
-| `is-after-show` | no | sí | sí | sí |
-| `is-hide` | no | sí | sí | sí |
-| `is-after-hide` | no | sí | sí | no |
+| `iswc-show` | no | sí | sí | sí |
+| `iswc-after-show` | no | sí | sí | sí |
+| `iswc-hide` | no | sí | sí | sí |
+| `iswc-after-hide` | no | sí | sí | no |
 
 ### Métodos y propiedades públicas
 
@@ -132,14 +132,14 @@ No declara integración form-associated propia en este módulo.
 
 Documentación de cabecera preservada desde fuente:
 
-> <is-tooltip> — tip contextual anclado vía `for`.
+> <iswc-tooltip> — tip contextual anclado vía `for`.
 > Attrs: for, open, placement, trigger, distance, skidding,
 >        show-delay, hide-delay, disabled, without-arrow
 > trigger (default "hover focus"): combina hover | focus | click. Además
 >   manual → solo show()/hide(), y se cierra con click fuera o Escape
 >   none   → solo show()/hide(), sin cierre automático (lo controla el dueño)
 > Methods: show(), hide()
-> Events: is-show, is-after-show, is-hide, is-after-hide
+> Events: iswc-show, iswc-after-show, iswc-hide, iswc-after-hide
 > Parts: ::part(tooltip) ::part(body) ::part(base__popup) ::part(base__arrow)
 > CSS: --max-width
 
@@ -148,7 +148,7 @@ Documentación de cabecera preservada desde fuente:
 - [`../_shared/adopt-css.js`](../_shared/adopt-css.js)
 - [`../helpers/floating.js`](../helpers/floating.js)
 
-Tags del módulo: `<is-tooltip>`.
+Tags del módulo: `<iswc-tooltip>`.
 
 ## Accesibilidad
 
@@ -157,10 +157,10 @@ Preservar semántica, foco, teclado, labels y ARIA. ARIA detectado: `aria-descri
 ## Ejemplo avanzado
 
 ```html
-<is-tooltip for="t-html" trigger="click" style="--max-width:22rem">
+<iswc-tooltip for="t-html" trigger="click" style="--max-width:22rem">
 <p><strong>Resumen</strong></p>
 <ul><li>…</li></ul>
-</is-tooltip>
+</iswc-tooltip>
 ```
 
 ## Errores comunes

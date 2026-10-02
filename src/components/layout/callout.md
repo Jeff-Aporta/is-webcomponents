@@ -1,14 +1,14 @@
 ---
-tag: is-callout
+tag: iswc-callout
 tags:
-  - is-callout
+  - iswc-callout
 category: layout
 status: public
 source: ./callout.js
 style: ./callout.css
 preview: ./callout.json
 ---
-# `<is-callout>`
+# `<iswc-callout>`
 
 ## Propósito
 
@@ -17,7 +17,7 @@ errores que el usuario no debe pasar por alto. Cinco colores y cinco apariencias
 con icono automático según la colore (sobrescribible vía icon
 o slot icon).
 
-Este módulo registra `<is-callout>`.
+Este módulo registra `<iswc-callout>`.
 
 ## Cuándo usarlo
 
@@ -36,7 +36,7 @@ import './callout.js';
 ## Ejemplo mínimo
 
 ```html
-<is-callout>Esto es un callout estándar.</is-callout>
+<iswc-callout>Esto es un callout estándar.</iswc-callout>
 ```
 
 ## API
@@ -133,7 +133,7 @@ No declara integración form-associated propia en este módulo.
 
 Documentación de cabecera preservada desde fuente:
 
-> <is-callout> — Web Component (vanilla, zero dependencies).
+> <iswc-callout> — Web Component (vanilla, zero dependencies).
 > Mensaje en línea con borde y fondo suaves. Pensado para tips, info, warnings
 > y errores que el usuario no debe pasar por alto.
 > Modelo equivalente a wa-callout (Web Awesome) / v-alert.
@@ -160,7 +160,7 @@ Documentación de cabecera preservada desde fuente:
 
 - [`../_shared/adopt-css.js`](../_shared/adopt-css.js)
 
-Tags del módulo: `<is-callout>`.
+Tags del módulo: `<iswc-callout>`.
 
 ## Accesibilidad
 
@@ -169,8 +169,8 @@ Preservar semántica, foco, teclado, labels y ARIA. ARIA detectado: `aria-hidden
 ## Ejemplo avanzado
 
 ```html
-<is-callout color="success">…</is-callout>
-<is-callout color="danger">…</is-callout>
+<iswc-callout color="success">…</iswc-callout>
+<iswc-callout color="danger">…</iswc-callout>
 ```
 
 ## Errores comunes

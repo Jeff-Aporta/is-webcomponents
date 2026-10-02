@@ -19,7 +19,7 @@ async function checkDeterministic(page, demo) {
   await page.waitForTimeout(200);
 
   const data = await page.evaluate(() => {
-    const pivots = [...document.querySelectorAll('main is-pivot-table')];
+    const pivots = [...document.querySelectorAll('main iswc-pivot-table')];
     return pivots.map((p, idx) => {
       const sr = p.shadowRoot;
       const table = sr.querySelector('table.pivot');

@@ -3,9 +3,9 @@
 :host {
   display: block;
   position: relative;
-  width: 100%;
-  height: 100%;
-  min-height: 12em;
+  inline-size: 100%;
+  block-size: 100%;
+  min-block-size: 12em;
   box-sizing: border-box;
 
   /* Tipografía: todo en em, escala con el font-size del contexto. */
@@ -60,20 +60,21 @@
   display: flex;
   flex-direction: column;
   gap: 0.5em;
-  min-width: 0;
-  min-height: 0;
+  min-inline-size: 0;
+  min-block-size: 0;
+  &[data-legend="bottom"] { flex-direction: column-reverse; }
+  &[data-legend="start"]  { flex-direction: row; }
+  &[data-legend="end"]    { flex-direction: row-reverse; }
+  /* `iswc-viewer` lo aplica el JS en el modo visor. */
+  &.iswc-viewer { cursor: default; }
 }
-
-.wrap[data-legend="bottom"] { flex-direction: column-reverse; }
-.wrap[data-legend="start"] { flex-direction: row; }
-.wrap[data-legend="end"] { flex-direction: row-reverse; }
 
 .chart-svg {
   display: block;
   flex: 1 1 auto;
-  min-width: 0;
-  min-height: 0;
-  width: 100%;
+  min-inline-size: 0;
+  min-block-size: 0;
+  inline-size: 100%;
   overflow: visible;
 }
 
@@ -85,11 +86,10 @@
   stroke: var(--iswc-chart-grid-color);
   stroke-width: 1;
   shape-rendering: crispEdges;
-}
-
-.grid-line[data-zero="true"] {
-  stroke: var(--chart-axis-color);
-  stroke-width: 1.5;
+  &[data-zero="true"] {
+    stroke: var(--chart-axis-color);
+    stroke-width: 1.5;
+  }
 }
 
 .axis-line {
@@ -140,8 +140,12 @@
 }
 
 /* Atenúa el resto al pasar el mouse sobre una mark */
-.marks[data-hover] .mark:not([data-active]) { opacity: 0.35; }
-.marks[data-hover] .mark[data-active] { filter: brightness(1.08); }
+.marks[data-hover] .mark {
+  /* `:where()` mantiene la especificidad en 0 para que las reglas de
+     cada mark puedan override sin necesidad de !important. */
+  &:not([data-active]) { opacity: 0.35; }
+  &[data-active]       { filter: brightness(1.08); }
+}
 
 .slice-value {
   font-size: var(--chart-tick-size);
@@ -163,27 +167,23 @@
 
 /* ---- Entrada animada ---- */
 
-@keyframes is-chart-rise {
+@keyframes iswc-chart-rise {
   from { opacity: 0; transform: translateY(8px); }
-  to { opacity: 1; transform: none; }
+  to   { opacity: 1; transform: none; }
 }
 
-@keyframes is-chart-draw {
+@keyframes iswc-chart-draw {
   from { stroke-dashoffset: var(--dash, 0); }
-  to { stroke-dashoffset: 0; }
+  to   { stroke-dashoffset: 0; }
 }
 
-.animate .marks {
-  animation: is-chart-rise 420ms cubic-bezier(0.22, 0.61, 0.36, 1) both;
-}
-
-.animate .mark-line {
-  animation: is-chart-draw 620ms cubic-bezier(0.22, 0.61, 0.36, 1) both;
-}
-
-@media (prefers-reduced-motion: reduce) {
-  .animate .marks,
-  .animate .mark-line { animation: none; }
+.animate {
+  .marks { animation: iswc-chart-rise 420ms cubic-bezier(0.22, 0.61, 0.36, 1) both; }
+  .mark-line { animation: iswc-chart-draw 620ms cubic-bezier(0.22, 0.61, 0.36, 1) both; }
+  @media (prefers-reduced-motion: reduce) {
+    .marks,
+    .mark-line { animation: none; }
+  }
 }
 
 /* ---- Leyenda ---- */
@@ -198,12 +198,13 @@
   font-size: var(--chart-legend-size);
   line-height: 1.4;
 
+  /* Las leyendas en columna viven en los laterales del wrap. */
   .wrap[data-legend="start"] &,
   .wrap[data-legend="end"] & {
     flex-direction: column;
     flex-wrap: nowrap;
     justify-content: center;
-    max-width: 40%;
+    max-inline-size: 40%;
     overflow: auto;
   }
 }
@@ -220,24 +221,20 @@
   padding: 0.15em 0.3em;
   font: inherit;
   transition: opacity 120ms ease-out, background-color 120ms ease-out;
+  &:hover { background: color-mix(in srgb, var(--chart-text) 8%, transparent); }
+  &:focus-visible {
+    outline: 2px solid var(--iswc-focus, #4aabff);
+    outline-offset: 1px;
+  }
+  &[aria-pressed="false"] {
+    opacity: 0.45;
+    .legend-label { text-decoration: line-through; }
+  }
 }
-
-.legend-item:hover { background: color-mix(in srgb, var(--chart-text) 8%, transparent); }
-
-.legend-item:focus-visible {
-  outline: 2px solid var(--iswc-focus, #4aabff);
-  outline-offset: 1px;
-}
-
-.legend-item[aria-pressed="false"] {
-  opacity: 0.45;
-}
-
-.legend-item[aria-pressed="false"] .legend-label { text-decoration: line-through; }
 
 .legend-swatch {
-  width: 0.7em;
-  height: 0.7em;
+  inline-size: 0.7em;
+  block-size: 0.7em;
   border-radius: 0.2em;
   flex: none;
 }
@@ -261,11 +258,9 @@
 /* ── Variante viewer: el chart llena el escenario del visor ── */
 
 :host([color="viewer"]) {
-  width: 100%;
-  height: 100%;
+  inline-size: 100%;
+  block-size: 100%;
 }
-
-.wrap.is-viewer { cursor: default; }
 
 /* Inline: el clic abre el visor, igual que en los diagramas. */
 :host([open-on-click]:not([color="viewer"])) .wrap { cursor: zoom-in; }
@@ -279,11 +274,11 @@
    data-grid y su CSS nunca se incluyo aqui. */
 .tooltip {
   position: absolute;
-  top: 0;
-  left: 0;
+  inset-block-start: 0;
+  inset-inline-start: 0;
   z-index: 3;
   pointer-events: none;
-  max-width: 16em;
+  max-inline-size: 16em;
   padding: 0.45em 0.6em;
   border: 1px solid var(--iswc-border, #2a3038);
   border-radius: 0.4em;
@@ -294,13 +289,12 @@
   box-shadow: 0 6px 18px rgb(0 0 0 / 28%);
   backdrop-filter: blur(6px);
   -webkit-backdrop-filter: blur(6px);
+  &[hidden] { display: none !important; }
 }
-
-.tooltip[hidden] { display: none !important; }
 
 .dg-tooltip__title {
   font-weight: 650;
-  margin-bottom: 0.25em;
+  margin-block-end: 0.25em;
 }
 
 .dg-tooltip__row {
@@ -317,8 +311,8 @@
 }
 
 .dg-swatch {
-  width: 0.65em;
-  height: 0.65em;
+  inline-size: 0.65em;
+  block-size: 0.65em;
   border-radius: 0.15em;
   flex: none;
 }
@@ -326,8 +320,8 @@
 /* Screen-reader status (aria-live polite) — visible a SR, oculto visual. */
 .sr-status {
   position: absolute;
-  width: 1px;
-  height: 1px;
+  inline-size: 1px;
+  block-size: 1px;
   padding: 0;
   margin: -1px;
   overflow: hidden;

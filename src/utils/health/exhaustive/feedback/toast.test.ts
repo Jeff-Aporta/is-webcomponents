@@ -1,5 +1,5 @@
 /**
- * toast.test.ts — Tier A (10 aserciones) para `<is-toast>`.
+ * toast.test.ts — Tier A (10 aserciones) para `<iswc-toast>`.
  *
  * Notificaciones apilables con placement, helpers estáticos,
  * atajo .promise(), singleton host(), normalizeIntent.
@@ -29,22 +29,22 @@ test('1. módulo existe', () => {
   assert.ok(exists(TS));
 });
 
-test('2. JSON existe y respeta is-preview/v1', () => {
+test('2. JSON existe y respeta iswc-preview/v1', () => {
   const json = JSON.parse(readFileSync(JSON_PATH, 'utf8'));
-  assert.equal(json.tag, 'is-toast');
-  assert.equal(json['$schema'], 'is-preview/v1');
+  assert.equal(json.tag, 'iswc-toast');
+  assert.equal(json['$schema'], 'iswc-preview/v1');
 });
 
 test('3. CSS hermano existe', () => {
   assert.ok(existsSync(join(ROOT, 'src/components/feedback/toast.css')));
 });
 
-test('4. integra con is-toast-item (light DOM o shadow)', () => {
+test('4. integra con iswc-toast-item (light DOM o shadow)', () => {
   const src = leerConBase(TS);
-  // Importa o usa <is-toast-item>.
+  // Importa o usa <iswc-toast-item>.
   assert.ok(
-    /toast-item/.test(src) || /['"]is-toast-item['"]/.test(src),
-    'debe integrar con is-toast-item',
+    /toast-item/.test(src) || /['"]iswc-toast-item['"]/.test(src),
+    'debe integrar con iswc-toast-item',
   );
 });
 
@@ -72,7 +72,7 @@ test('8. helpers estáticos: error / success / loading', () => {
   }
 });
 
-test('9. atajo de promesa (IsToast.promise)', () => {
+test('9. atajo de promesa (IswcToast.promise)', () => {
   const src = leerConBase(TS);
   assert.ok(/promise\s*\(/.test(src));
 });
@@ -89,7 +89,7 @@ test('11. usa normalizeIntent para mapear colores', () => {
 
 test('12. custom element registrado y preview.ts existe', () => {
   const src = leerConBase(TS);
-  assert.ok(/defineElement\s*\(\s*['"]is-toast['"]/.test(src));
+  assert.ok(/defineElement\s*\(\s*['"]iswc-toast['"]/.test(src));
   assert.ok(existsSync(join(ROOT, 'src/components/feedback/toast.preview.ts')));
 });
 

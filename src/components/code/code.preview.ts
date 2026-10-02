@@ -1,5 +1,5 @@
 /**
- * Behavior preview: <is-code>
+ * Behavior preview: <iswc-code>
  */
 import type { PreviewMountContext } from '../../previews/_kit/types.d.ts';
 
@@ -137,7 +137,7 @@ export function mount(preview: PreviewMountContext): void {
   };
   if (marksEd) {
     if (marksEd.ready) applyMarksDemo();
-    else marksEd.addEventListener('is-ready', applyMarksDemo, { once: true });
+    else marksEd.addEventListener('iswc-ready', applyMarksDemo, { once: true });
   }
 
   const jsonEd = root.querySelector<IsCodeEl>('#demo-json');
@@ -199,7 +199,7 @@ function mountPlayground(root: ParentNode, samples: Record<string, string>): voi
 
   const placeEditor = (): void => {
     const inline = modeSel?.value === 'inline';
-    stage?.classList.toggle('is-inline', inline);
+    stage?.classList.toggle('iswc-inline', inline);
     if (prose) prose.hidden = !inline;
     if (inline && inlineHost && ed.parentElement !== inlineHost) {
       inlineHost.append(ed);
@@ -245,11 +245,11 @@ function mountPlayground(root: ParentNode, samples: Record<string, string>): voi
     });
   }
 
-  ed.addEventListener('is-input', () => {
+  ed.addEventListener('iswc-input', () => {
     if (valueTa && valueTa !== document.activeElement) valueTa.value = ed.value;
     syncMeta();
   });
-  ed.addEventListener('is-ready', () => {
+  ed.addEventListener('iswc-ready', () => {
     if (valueTa) valueTa.value = ed.value;
     syncMeta();
   });

@@ -21,7 +21,7 @@ const checks = [
   ['media/barcode-scanner.ts', ['BarcodeDetector', 'getUserMedia']],
   ['media/media-recorder.ts', ['getDisplayMedia', 'MediaRecorder', 'getUserMedia']],
   ['_shared/web-otp.ts', ['OTPCredential', "transport: ['sms']"]],
-  ['forms/input.ts', ['listenWebOtp', 'is-otp']],
+  ['forms/input.ts', ['listenWebOtp', 'iswc-otp']],
   ['forms/pin-input.ts', ['listenWebOtp', 'one-time-code']],
   ['helpers/wake-lock.ts', ["wakeLock.request('screen')", 'visibilitychange']],
   ['helpers/offscreen-canvas.ts', ['transferControlToOffscreen', 'new Worker']],

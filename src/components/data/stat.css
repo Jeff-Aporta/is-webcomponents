@@ -19,6 +19,16 @@
     border-color: color-mix(in srgb, var(--brand) 40%, var(--border));
     transform: translateY(-1px);
   }
+
+  /* Variantes de color semántico: escritas en bloque para no repetir la
+     propiedad "color" y el "background" del .icon tres veces. */
+  &[data-color="success"] .icon { background: color-mix(in srgb, var(--success) 15%, transparent); color: var(--success); }
+  &[data-color="danger"]  .icon { background: color-mix(in srgb, var(--danger) 15%, transparent);  color: var(--danger); }
+  &[data-color="warning"] .icon { background: color-mix(in srgb, var(--warning) 15%, transparent); color: var(--warning); }
+
+  /* Variantes de tendencia: idem para .trend. */
+  &[data-trend="up"]   .trend { background: color-mix(in srgb, var(--success) 18%, transparent); color: var(--success); }
+  &[data-trend="down"] .trend { background: color-mix(in srgb, var(--danger) 18%, transparent);  color: var(--danger); }
 }
 
 
@@ -42,20 +52,14 @@
   display: inline-flex;
   align-items: center;
   justify-content: center;
-  width: 2em;
-  height: 2em;
+  inline-size: 2em;
+  block-size: 2em;
   border-radius: 0.5em;
   background: color-mix(in srgb, var(--brand) 15%, transparent);
   color: var(--brand);
   font-size: 1.1em;
 }
 
-
-.stat {
-  &[data-color="success"] .icon { background: color-mix(in srgb, var(--success) 15%, transparent); color: var(--success); }
-  &[data-color="danger"] .icon { background: color-mix(in srgb, var(--danger) 15%, transparent); color: var(--danger); }
-  &[data-color="warning"] .icon { background: color-mix(in srgb, var(--warning) 15%, transparent); color: var(--warning); }
-}
 
 .value {
   font-size: 1.75em;
@@ -81,11 +85,6 @@
   font-weight: 500;
   background: color-mix(in srgb, var(--fg) 8%, transparent);
   color: var(--muted);
-}
-
-.stat {
-  &[data-trend="up"] .trend { background: color-mix(in srgb, var(--success) 18%, transparent); color: var(--success); }
-  &[data-trend="down"] .trend { background: color-mix(in srgb, var(--danger) 18%, transparent); color: var(--danger); }
 }
 
 .helper {

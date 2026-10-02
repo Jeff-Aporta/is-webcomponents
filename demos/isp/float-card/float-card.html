@@ -3,7 +3,7 @@
 <head>
 <meta charset="utf-8" />
 <meta name="viewport" content="width=device-width, initial-scale=1" />
-<title>&lt;is-float-card&gt; · is-webcomponents</title>
+<title>&lt;iswc-float-card&gt; · is-webcomponents</title>
 <meta name="description" content="Caja con un panel absoluto anclado al contenido (slot=float). Se muestra con open; opacity/visibility, no display:none." />
 <style>
   html, body { margin: 0; padding: 0; min-height: 100%; background: #0c1118; color: #e2e8f0; font-family: ui-sans-serif, system-ui, sans-serif; }
@@ -19,21 +19,21 @@
   section h2 { font-size: 14px; font-weight: 600; margin: 0 0 8px; color: #94a3b8; }
   .row { display: flex; gap: 32px; flex-wrap: wrap; align-items: start; }
   .anchor { background: rgba(255,255,255,0.06); border: 1px dashed rgba(255,255,255,0.2); padding: 12px 18px; border-radius: 4px; cursor: default; }
-  is-float-card:not(:defined) { visibility: hidden; }
+  iswc-float-card:not(:defined) { visibility: hidden; }
   /* Forzar estilos visibles en el panel flotante */
-  is-float-card::part(panel) { background: #1e293b; border: 1px solid #334155; border-radius: 6px; padding: 8px; box-shadow: 0 4px 12px rgba(0,0,0,0.4); min-width: 10rem; }
-  is-float-card::part(wrap) { position: relative; display: inline-block; }
+  iswc-float-card::part(panel) { background: #1e293b; border: 1px solid #334155; border-radius: 6px; padding: 8px; box-shadow: 0 4px 12px rgba(0,0,0,0.4); min-width: 10rem; }
+  iswc-float-card::part(wrap) { position: relative; display: inline-block; }
 </style>
 <script type="module">
-  await import('../../../dist/cdn/actions/button.min.js?h=ki2dk5');
-  await import('../../../dist/cdn/actions/button-group.min.js?h=v2y788');
-  await import('../../../dist/cdn/actions/dropdown.min.js?h=vgzyws');
-  await import('../../../dist/cdn/actions/dropdown-item.min.js?h=gwwvkx');
-  await import('../../../dist/cdn/media/icon.min.js?h=y6tzub');
-  await import('../../../dist/cdn/layout/divider.min.js?h=siycwk');
-  await import('../../../dist/cdn/isp/flex-options.min.js?h=wcxjuc');
-  await import('../../../dist/cdn/isp/float-card.min.js?h=c336hq');
-  await customElements.whenDefined('is-float-card');
+  await import('../../../dist/cdn/actions/button.min.js?h=5i9tzt');
+  await import('../../../dist/cdn/actions/button-group.min.js?h=delm48');
+  await import('../../../dist/cdn/actions/dropdown.min.js?h=u9x6om');
+  await import('../../../dist/cdn/actions/dropdown-item.min.js?h=pz46gs');
+  await import('../../../dist/cdn/media/icon.min.js?h=sp71yy');
+  await import('../../../dist/cdn/layout/divider.min.js?h=cqtdv2');
+  await import('../../../dist/cdn/isp/flex-options.min.js?h=tt37p8');
+  await import('../../../dist/cdn/isp/float-card.min.js?h=ljuq63');
+  await customElements.whenDefined('iswc-float-card');
 
   // Demo 1: anclado a la derecha, vertical centro.
   const fc1 = document.getElementById('fc1');
@@ -68,42 +68,42 @@
 <body>
 <header>
   <div>
-    <h1>&lt;is-float-card&gt; — panel anclado (hover / programmatic)</h1>
+    <h1>&lt;iswc-float-card&gt; — panel anclado (hover / programmatic)</h1>
     <p>Slot default = ancla, slot="float" = panel absoluto. Se muestra con open; los hijos no se desmontan.</p>
   </div>
   <div class="spacer"></div>
-  <code>is-float-card</code>
+  <code>iswc-float-card</code>
 </header>
 <main>
   <section>
     <h2>Hover reveal (right · center)</h2>
     <div class="row">
-      <is-float-card id="fc1" horizontal="right" vertical="center">
+      <iswc-float-card id="fc1" horizontal="right" vertical="center">
         <span class="anchor">Pasa el mouse aquí</span>
-        <is-flex-options id="fc1-btns" slot="float" compact></is-flex-options>
-      </is-float-card>
+        <iswc-flex-options id="fc1-btns" slot="float" compact></iswc-flex-options>
+      </iswc-float-card>
     </div>
   </section>
 
   <section>
     <h2>Always open · center · top+50</h2>
     <div class="row">
-      <is-float-card id="fc2" horizontal="center" vertical="top+50" open>
+      <iswc-float-card id="fc2" horizontal="center" vertical="top+50" open>
         <span class="anchor">Fila</span>
-        <is-flex-options id="fc2-btns" slot="float" compact></is-flex-options>
-      </is-float-card>
+        <iswc-flex-options id="fc2-btns" slot="float" compact></iswc-flex-options>
+      </iswc-float-card>
     </div>
   </section>
 
   <section>
     <h2>linearTransform (translate + scale)</h2>
     <div class="row">
-      <is-float-card id="fc3" horizontal="right" vertical="bottom" open>
+      <iswc-float-card id="fc3" horizontal="right" vertical="bottom" open>
         <span class="anchor">Chip</span>
         <div slot="float" style="background: #1e293b; border: 1px solid #334155; border-radius: 6px; padding: 8px 12px;">
-          <is-icon icon="mdi:information-outline"></is-icon> Detalle
+          <iswc-icon icon="mdi:information-outline"></iswc-icon> Detalle
         </div>
-      </is-float-card>
+      </iswc-float-card>
     </div>
   </section>
 </main>

@@ -102,7 +102,7 @@ type ElementCtor = new (...args: any[]) => HTMLElement;
  * form-control. La subclase llama a `super()` primero y luego usa
  * `#initFormControl()` desde su constructor y `onConnected()`.
  *
- *   class IsInput extends MixinFormControl(HTMLElement) {
+ *   class IswcInput extends MixinFormControl(HTMLElement) {
  *     constructor() {
  *       super();
  *       this.initShadow();

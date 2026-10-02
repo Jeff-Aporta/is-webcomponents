@@ -11,7 +11,7 @@ import { setStringAttr } from '../_shared/reflect.js';
  */
 
 /**
- * <is-grid-layout> — port de ISP `layout/GridLayout.svelte`.
+ * <iswc-grid-layout> — port de ISP `layout/GridLayout.svelte`.
  *
  * `cells` acepta lo mismo que en ISP:
  *   - un número (`cells="3"`)   → repeat(3, minmax(0, 1fr)), o
@@ -32,7 +32,7 @@ import { setStringAttr } from '../_shared/reflect.js';
  *   cscroll      boolean  → overflow: auto
  *   remember-scroll, storage-key, scroll-ttl  → memoria de scroll (BreakpointHost)
  *
- * Eventos: `is-breakpoint` (ver block-layout.js).
+ * Eventos: `iswc-breakpoint` (ver block-layout.js).
  * Geometría: getWidth(), getHeight(), rect() / getRect().
  */
 
@@ -48,7 +48,7 @@ import { setStringAttr } from '../_shared/reflect.js';
 
   const IS_NUMBER = /^\d+(\.\d+)?$/;
 
-  class IsGridLayout extends BreakpointHost {
+  class IswcGridLayout extends BreakpointHost {
     static TEMPLATE = TEMPLATE;
     static get observedAttributes(): string[] { return OBSERVED; }
     // El attributeChangedCallback lo aporta ElementBase (vía BreakpointHost);
@@ -129,5 +129,5 @@ import { setStringAttr } from '../_shared/reflect.js';
     set labelledby(v) { setStringAttr(this, 'labelledby', v); }
   }
 
-  defineElement('is-grid-layout', IsGridLayout, 'IsGridLayout');
+  defineElement('iswc-grid-layout', IswcGridLayout, 'IswcGridLayout');
 })();

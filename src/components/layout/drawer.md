@@ -1,21 +1,21 @@
 ---
-tag: is-drawer
+tag: iswc-drawer
 tags:
-  - is-drawer
+  - iswc-drawer
 category: layout
 status: public
 source: ./drawer.js
 style: ./drawer.css
 preview: ./drawer.json
 ---
-# `<is-drawer>`
+# `<iswc-drawer>`
 
 ## Propósito
 
 Panel que se desliza desde un borde del viewport (derecha, izquierda, arriba o abajo).
 Ideal para menús, filtros y contenido secundario.
 
-Este módulo registra `<is-drawer>`.
+Este módulo registra `<iswc-drawer>`.
 
 ## Cuándo usarlo
 
@@ -34,12 +34,12 @@ import './drawer.js';
 ## Ejemplo mínimo
 
 ```html
-<is-drawer label="Drawer estándar">
+<iswc-drawer label="Drawer estándar">
 Contenido.
 <div slot="footer">
-<is-button data-drawer="close">Cancelar</is-button>
+<iswc-button data-drawer="close">Cancelar</iswc-button>
 </div>
-</is-drawer>
+</iswc-drawer>
 ```
 
 ## API
@@ -79,10 +79,10 @@ Contenido.
 
 | Evento | detail | bubbles | composed | cancelable |
 | --- | --- | --- | --- | --- |
-| `is-hide` | sí | sí | sí | sí |
-| `is-show` | sí | sí | sí | no |
-| `is-after-show` | sí | sí | sí | no |
-| `is-after-hide` | sí | sí | sí | no |
+| `iswc-hide` | sí | sí | sí | sí |
+| `iswc-show` | sí | sí | sí | no |
+| `iswc-after-show` | sí | sí | sí | no |
+| `iswc-after-hide` | sí | sí | sí | no |
 
 ### Métodos y propiedades públicas
 
@@ -141,10 +141,10 @@ No declara integración form-associated propia en este módulo.
 
 Documentación de cabecera preservada desde fuente:
 
-> <is-drawer> — Web Component (vanilla, zero dependencies).
+> <iswc-drawer> — Web Component (vanilla, zero dependencies).
 > Panel que se desliza desde un borde del viewport. Ideal para menús, filtros
 > y contenido secundario. Equivalente accesible a wa-drawer (Web Awesome).
-> Modelo: hereda conceptualmente de is-dialog (mismo shadow DOM) con la
+> Modelo: hereda conceptualmente de iswc-dialog (mismo shadow DOM) con la
 > diferencia de placement (start/end/top/bottom) y --size en lugar de --width.
 > Atributos
 >   open              boolean — si está abierto (reflected).
@@ -158,7 +158,7 @@ Documentación de cabecera preservada desde fuente:
 >   header-actions   acciones adicionales en el header.
 >   footer           pie del drawer.
 > Métodos: show() / hide() / toggle()
-> Eventos: is-show, is-after-show, is-hide (cancelable, detail.source), is-after-hide
+> Eventos: iswc-show, iswc-after-show, iswc-hide (cancelable, detail.source), iswc-after-hide
 > CSS Parts: drawer, header, title, close-button, header-actions, body, footer
 > CSS custom properties
 >   --size            tamaño preferido (ancho o alto según placement)
@@ -173,7 +173,7 @@ Documentación de cabecera preservada desde fuente:
   completo del modal (focus-trap, `Escape`, backdrop light-dismiss, restore de foco,
   `data-*="close"`, eventos). Aquí sólo queda el chrome y las animaciones.
 
-Tags del módulo: `<is-drawer>`.
+Tags del módulo: `<iswc-drawer>`.
 
 ## Accesibilidad
 
@@ -182,9 +182,9 @@ Preservar semántica, foco, teclado, labels y ARIA. ARIA detectado: `aria-modal`
 ## Ejemplo avanzado
 
 ```html
-<is-drawer placement="start">…</is-drawer>
-<is-drawer placement="top">…</is-drawer>
-<is-drawer placement="bottom">…</is-drawer>
+<iswc-drawer placement="start">…</iswc-drawer>
+<iswc-drawer placement="top">…</iswc-drawer>
+<iswc-drawer placement="bottom">…</iswc-drawer>
 ```
 
 ## Errores comunes

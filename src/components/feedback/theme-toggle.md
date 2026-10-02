@@ -1,14 +1,14 @@
 ---
-tag: is-theme-toggle
+tag: iswc-theme-toggle
 tags:
-  - is-theme-toggle
+  - iswc-theme-toggle
 category: feedback
 status: public
 source: ./theme-toggle.js
 style: ./theme-toggle.css
 preview: ./theme-toggle.json
 ---
-# `<is-theme-toggle>`
+# `<iswc-theme-toggle>`
 
 ## Propósito
 
@@ -18,11 +18,11 @@ Alterna el tema del contenedor.
 ([container-theme] / .container-theme
 / .theme-dark|.theme-light / [data-theme];
 si no hay, <html>).
-Compone is-check-icon-button (noche ↔ sol).
-Emite is-theme-change con detail.theme y
+Compone iswc-check-icon-button (noche ↔ sol).
+Emite iswc-theme-change con detail.theme y
 detail.container.
 
-Este módulo registra `<is-theme-toggle>`.
+Este módulo registra `<iswc-theme-toggle>`.
 
 ## Cuándo usarlo
 
@@ -42,11 +42,11 @@ import './theme-toggle.js';
 
 ```html
 <div class="container-theme theme-dark" data-theme="dark">
-<is-theme-toggle dark></is-theme-toggle>
+<iswc-theme-toggle dark></iswc-theme-toggle>
 …
 </div>
 <div class="container-theme theme-light" data-theme="light">
-<is-theme-toggle></is-theme-toggle>
+<iswc-theme-toggle></iswc-theme-toggle>
 </div>
 ```
 
@@ -75,7 +75,7 @@ No expone.
 
 | Evento | detail | bubbles | composed | cancelable |
 | --- | --- | --- | --- | --- |
-| `is-theme-change` | sí | sí | sí | no |
+| `iswc-theme-change` | sí | sí | sí | no |
 
 `detail`: `{ theme: 'light' \| 'dark', dark: boolean, container: Element }`.
 Al ser `composed` + `bubbles`, también se puede escuchar en `document`.
@@ -110,14 +110,14 @@ No declara integración form-associated propia en este módulo.
 
 Documentación de cabecera preservada desde fuente:
 
-> <is-theme-toggle> — Web Component (vanilla).
-> Compone <is-check-icon-button> (noche ↔ sol). Al activarse:
+> <iswc-theme-toggle> — Web Component (vanilla).
+> Compone <iswc-check-icon-button> (noche ↔ sol). Al activarse:
 >   1. Busca el contenedor de tema más cercano:
 >        [container-theme] | .container-theme | .theme-dark | .theme-light | [data-theme]
 >      (fallback: document.documentElement)
 >   2. Alterna theme-dark / theme-light + data-theme en ese contenedor
 >   3. Refleja `dark` en el host
->   4. Emite `is-theme-change` { detail: { theme, dark, container } }
+>   4. Emite `iswc-theme-change` { detail: { theme, dark, container } }
 > Attributes
 >   dark  boolean (reflected) — tema actual (dark=true → icono de sol / próximo click a light)
 
@@ -126,7 +126,7 @@ Documentación de cabecera preservada desde fuente:
 - [`../_shared/adopt-css.js`](../_shared/adopt-css.js)
 - [`../actions/check-icon-button.js`](../actions/check-icon-button.js)
 
-Tags del módulo: `<is-theme-toggle>`.
+Tags del módulo: `<iswc-theme-toggle>`.
 
 ## Accesibilidad
 
@@ -136,11 +136,11 @@ Preservar semántica, foco, teclado, labels y ARIA. ARIA detectado: ninguno expl
 
 ```html
 <div class="container-theme theme-dark" data-theme="dark">
-<is-theme-toggle dark></is-theme-toggle>
+<iswc-theme-toggle dark></iswc-theme-toggle>
 …
 </div>
 <div class="container-theme theme-light" data-theme="light">
-<is-theme-toggle></is-theme-toggle>
+<iswc-theme-toggle></iswc-theme-toggle>
 </div>
 ```
 

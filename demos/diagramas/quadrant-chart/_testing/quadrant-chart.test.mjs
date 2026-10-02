@@ -9,21 +9,21 @@ const URL = `${BASE_URL}/demos/diagramas/quadrant-chart/quadrant-chart.html`;
 const tests = [];
 
 tests.push({
-  name: 'smoke: <is-quadrant-chart> monta y renderiza puntos',
+  name: 'smoke: <iswc-quadrant-chart> monta y renderiza puntos',
   run: async (page) => {
     await page.goto(URL, { waitUntil: 'domcontentloaded' });
     await waitReady(page, 'data-quadrant-ready');
     const info = await page.evaluate(() => {
-      const el = document.querySelector('main is-quadrant-chart');
+      const el = document.querySelector('main iswc-quadrant-chart');
       const shadow = el?.shadowRoot;
       return {
-        defined: !!customElements.get('is-quadrant-chart'),
+        defined: !!customElements.get('iswc-quadrant-chart'),
         points: shadow?.querySelectorAll('[data-point-id]').length ?? 0,
         legend: !!shadow?.querySelector('.qd-legend'),
         hasSvg: !!shadow?.querySelector('svg.qd-svg'),
       };
     });
-    assert.equal(info.defined, true, 'is-quadrant-chart debe estar definido');
+    assert.equal(info.defined, true, 'iswc-quadrant-chart debe estar definido');
     assert.ok(info.points >= 5, `esperaba >=5 puntos, hay ${info.points}`);
     assert.equal(info.legend, true, 'debe existir la leyenda');
     assert.equal(info.hasSvg, true, 'debe existir <svg class="qd-svg">');
@@ -37,7 +37,7 @@ tests.push({
     await page.goto(URL, { waitUntil: 'domcontentloaded' });
     await waitReady(page, 'data-quadrant-ready');
     const ids = await page.evaluate(() => {
-      const el = document.querySelector('main is-quadrant-chart');
+      const el = document.querySelector('main iswc-quadrant-chart');
       return [...el.shadowRoot.querySelectorAll('[data-point-id]')].map((g) => g.dataset.pointId);
     });
     assert.ok(ids.includes('p1'), 'debe existir punto "p1"');
@@ -51,7 +51,7 @@ tests.push({
     await page.goto(URL, { waitUntil: 'domcontentloaded' });
     await waitReady(page, 'data-quadrant-ready');
     const has = await page.evaluate(() => {
-      const el = document.querySelector('main is-quadrant-chart');
+      const el = document.querySelector('main iswc-quadrant-chart');
       const texts = [...el.shadowRoot.querySelectorAll('text')].map((t) => t.textContent.trim());
       return {
         x: texts.some((t) => /esfuerzo/i.test(t)),
@@ -69,7 +69,7 @@ tests.push({
     await page.goto(URL, { waitUntil: 'domcontentloaded' });
     await waitReady(page, 'data-quadrant-ready');
     const labels = await page.evaluate(() => {
-      const el = document.querySelector('main is-quadrant-chart');
+      const el = document.querySelector('main iswc-quadrant-chart');
       const texts = [...el.shadowRoot.querySelectorAll('text')].map((t) => t.textContent.trim());
       // El renderer pone el nombre en mayúsculas (`.toUpperCase()`).
       return texts.filter((t) => /QUICK WINS|PROYECTOS|RELLENO|THANKLESS/.test(t));
@@ -84,16 +84,16 @@ tests.push({
     await page.goto(URL, { waitUntil: 'domcontentloaded' });
     await waitReady(page, 'data-quadrant-ready');
     const before = await page.evaluate(() => {
-      const el = document.querySelector('main is-quadrant-chart');
+      const el = document.querySelector('main iswc-quadrant-chart');
       return el.shadowRoot.querySelector('svg.qd-svg').getAttribute('viewBox');
     });
     await page.evaluate(() => {
-      const el = document.querySelector('main is-quadrant-chart');
+      const el = document.querySelector('main iswc-quadrant-chart');
       el.payload = el.payload;
     });
     await page.waitForTimeout(150);
     const after = await page.evaluate(() => {
-      const el = document.querySelector('main is-quadrant-chart');
+      const el = document.querySelector('main iswc-quadrant-chart');
       return el.shadowRoot.querySelector('svg.qd-svg').getAttribute('viewBox');
     });
     assert.equal(before, after, 'viewBox idéntico tras re-asignar payload');
@@ -106,7 +106,7 @@ tests.push({
     await page.goto(URL, { waitUntil: 'domcontentloaded' });
     await waitReady(page, 'data-quadrant-ready');
     const meta = await page.evaluate(() => {
-      const el = document.querySelector('main is-quadrant-chart');
+      const el = document.querySelector('main iswc-quadrant-chart');
       const svg = el.shadowRoot.querySelector('svg.qd-svg');
       return { aria: svg.getAttribute('aria-label'), role: svg.getAttribute('role') };
     });

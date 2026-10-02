@@ -1,5 +1,5 @@
 /**
- * time-field.test.ts — Tests exhaustivos de <is-time-field>.
+ * time-field.test.ts — Tests exhaustivos de <iswc-time-field>.
  *
  * Wrapper de `defineDateField` con `kind: "time"`.
  */
@@ -15,16 +15,16 @@ import {
 const RAIZ = join(import.meta.dirname, '..', '..', '..', '..');
 const FACTORY = readFileSync(join(RAIZ, 'components', '_shared', 'date-field-element.ts'), 'utf8');
 
-const TAG = 'is-time-field';
+const TAG = 'iswc-time-field';
 const src = leerComponente(TAG);
 
 test('time-field: archivo y registro', () => {
   assert.ok(src.length > 100);
   assert.ok(existeCss(TAG));
   assert.ok(esFactoryWrapper(src));
-  assert.ok(/tag:\s*['"`]is-time-field['"`]/.test(src));
+  assert.ok(/tag:\s*['"`]iswc-time-field['"`]/.test(src));
   assert.ok(/kind:\s*['"]time['"]/.test(src),
-    '<is-time-field> debe usar kind: "time"');
+    '<iswc-time-field> debe usar kind: "time"');
 });
 
 test('time-field: atributos del factory (ampm, hour24, seconds)', () => {
@@ -34,8 +34,8 @@ test('time-field: atributos del factory (ampm, hour24, seconds)', () => {
   }
 });
 
-test('time-field: eventos (is-change, is-input)', () => {
-  for (const e of ['is-change', 'is-input']) {
+test('time-field: eventos (iswc-change, iswc-input)', () => {
+  for (const e of ['iswc-change', 'iswc-input']) {
     assert.ok(new RegExp(`[#]?emit\\s*\\(\\s*(this\\s*,\\s*)?['"\`]${e}['"\`]`).test(FACTORY),
       `factory debe emitir "${e}"`);
   }
@@ -49,5 +49,5 @@ test('time-field: usa 12h/24h según locale/am-pm', () => {
 test('time-field: preview JSON', () => {
   const prev = leerPreview(TAG);
   assert.ok(prev);
-  assert.equal(prev!['$schema'], 'is-preview/v1');
+  assert.equal(prev!['$schema'], 'iswc-preview/v1');
 });

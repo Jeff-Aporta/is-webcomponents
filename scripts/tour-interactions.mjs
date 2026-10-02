@@ -20,7 +20,7 @@ const BASE = (() => {
 })();
 const B64 = (s) => Buffer.from(s, 'utf8').toString('base64').replaceAll('+', '-').replaceAll('/', '_').replaceAll('=', '');
 const urlFor = (tag) => `${BASE}/?s=${B64(JSON.stringify({ component: tag }))}`;
-const PAGES = ['home', 'theming', 'ecosystem', 'is-icon-explorer', 'is-ui'];
+const PAGES = ['home', 'theming', 'ecosystem', 'iswc-icon-explorer', 'iswc-ui'];
 
 function allTags() {
   const out = [];
@@ -65,7 +65,7 @@ async function esperarContenido(page, timeoutMs = 12000) {
     const ok = await page.evaluate(() => {
       const host = document.getElementById('previewHost');
       if (!host || host.hidden) return false;
-      const main = host.querySelector('is-main.main');
+      const main = host.querySelector('iswc-main.main');
       if (!main) return false;
       const sec = main.querySelectorAll('section.section, [data-section]').length;
       const txt = (main.textContent ?? '').trim().length;
@@ -99,7 +99,7 @@ async function demoRun(tag) {
     checks.buttonsFound = await page.evaluate(() => {
       const host = document.getElementById('previewHost');
       if (!host) return 0;
-      const sels = 'button,is-button,is-switch,is-copy-button,is-color-picker,is-input,is-textarea,is-select,is-checkbox,is-radio,a[href],[role="button"],[role="switch"],[role="tab"],[tabindex]:not([tabindex="-1"])';
+      const sels = 'button,iswc-button,iswc-switch,iswc-copy-button,iswc-color-picker,iswc-input,iswc-textarea,iswc-select,iswc-checkbox,iswc-radio,a[href],[role="button"],[role="switch"],[role="tab"],[tabindex]:not([tabindex="-1"])';
       const found = new Set();
       const visit = (root) => {
         const els = root.querySelectorAll ? root.querySelectorAll(sels) : [];
@@ -108,7 +108,7 @@ async function demoRun(tag) {
           let p = el;
           let inMain = false;
           for (let i = 0; i < 8 && p; i++) {
-            if (p.tagName?.toLowerCase() === 'is-main' || p.classList?.contains('main')) { inMain = true; break; }
+            if (p.tagName?.toLowerCase() === 'iswc-main' || p.classList?.contains('main')) { inMain = true; break; }
             p = p.parentElement || (p.getRootNode && p.getRootNode().host);
           }
           if (inMain) found.add(`${el.tagName.toLowerCase()}#${el.id || ''}`);
@@ -121,7 +121,7 @@ async function demoRun(tag) {
 
     // 2) Tab order (primer focus).
     await page.evaluate(() => {
-      const main = document.querySelector('is-main.main');
+      const main = document.querySelector('iswc-main.main');
       if (main) main.focus();
     });
     await page.keyboard.press('Tab');
@@ -130,7 +130,7 @@ async function demoRun(tag) {
       if (!ae) return false;
       let p = ae;
       for (let i = 0; i < 8 && p; i++) {
-        if (p.tagName?.toLowerCase() === 'is-main') return true;
+        if (p.tagName?.toLowerCase() === 'iswc-main') return true;
         p = p.parentElement || (p.getRootNode && p.getRootNode().host);
       }
       return false;
@@ -138,11 +138,11 @@ async function demoRun(tag) {
 
     // 3) ARIA roles presentes.
     checks.hasAria = await page.evaluate(() => {
-      const main = document.querySelector('is-main.main');
+      const main = document.querySelector('iswc-main.main');
       if (!main) return false;
       const roles = ['button', 'switch', 'tab', 'menu', 'listbox', 'option', 'dialog', 'alertdialog', 'region', 'grid', 'combobox', 'link'];
       for (const r of roles) if (main.querySelector(`[role="${r}"]`)) return true;
-      if (main.querySelector('button,a[href],is-switch,is-button,is-copy-button')) return true;
+      if (main.querySelector('button,a[href],iswc-switch,iswc-button,iswc-copy-button')) return true;
       return false;
     });
 
@@ -150,7 +150,7 @@ async function demoRun(tag) {
     const interactivos = await page.evaluate(() => {
       const host = document.getElementById('previewHost');
       if (!host) return [];
-      const sels = 'button,is-button,is-switch,is-copy-button,is-color-picker,is-input,is-textarea,is-select,is-checkbox,is-radio,a[href],[role="button"],[role="switch"]';
+      const sels = 'button,iswc-button,iswc-switch,iswc-copy-button,iswc-color-picker,iswc-input,iswc-textarea,iswc-select,iswc-checkbox,iswc-radio,a[href],[role="button"],[role="switch"]';
       const list = [];
       const visit = (root) => {
         const els = root.querySelectorAll ? root.querySelectorAll(sels) : [];
@@ -159,7 +159,7 @@ async function demoRun(tag) {
           let p = el;
           let inMain = false;
           for (let i = 0; i < 8 && p; i++) {
-            if (p.tagName?.toLowerCase() === 'is-main' || p.classList?.contains('main')) { inMain = true; break; }
+            if (p.tagName?.toLowerCase() === 'iswc-main' || p.classList?.contains('main')) { inMain = true; break; }
             p = p.parentElement || (p.getRootNode && p.getRootNode().host);
           }
           if (inMain) list.push({ tag: el.tagName.toLowerCase(), id: el.id || '' });
@@ -171,7 +171,7 @@ async function demoRun(tag) {
       const seen = new Set();
       return list.filter((x) => {
         const k = `${x.tag}#${x.id}`;
-        if (seen.has(k) || k === 'button#' || k === 'is-button#') return false;
+        if (seen.has(k) || k === 'button#' || k === 'iswc-button#') return false;
         seen.add(k);
         return true;
       }).slice(0, 12);
@@ -180,12 +180,12 @@ async function demoRun(tag) {
     for (const btn of interactivos) {
       try {
         const beforeLen = await page.evaluate(() => {
-          const m = document.querySelector('is-main.main');
+          const m = document.querySelector('iswc-main.main');
           return m ? m.innerHTML.length : 0;
         });
         // Click con estrategia: primero por id, luego por tag+shadow piercing.
         const clicked = await page.evaluate((sel) => {
-          const m = document.querySelector('is-main.main');
+          const m = document.querySelector('iswc-main.main');
           if (!m) return false;
           const tryFind = (root) => {
             const els = root.querySelectorAll ? root.querySelectorAll(sel.tag) : [];
@@ -203,7 +203,7 @@ async function demoRun(tag) {
         checks.buttonsClicked++;
         await page.waitForTimeout(150);
         const afterLen = await page.evaluate(() => {
-          const m = document.querySelector('is-main.main');
+          const m = document.querySelector('iswc-main.main');
           return m ? m.innerHTML.length : 0;
         });
         if (Math.abs(afterLen - beforeLen) > 20) checks.buttonsResponded++;

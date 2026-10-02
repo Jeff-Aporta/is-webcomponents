@@ -1,20 +1,20 @@
 ---
-tag: is-toast
+tag: iswc-toast
 tags:
-  - is-toast
+  - iswc-toast
 category: feedback
 status: public
 source: ./toast.js
 style: ./toast.css
 preview: ./toast.json
 ---
-# `<is-toast>`
+# `<iswc-toast>`
 
 ## Propósito
 
-Contenedor fijo de notificaciones. Crea ítems con create() o declara <is-toast-item>.
+Contenedor fijo de notificaciones. Crea ítems con create() o declara <iswc-toast-item>.
 
-Este módulo registra `<is-toast>`.
+Este módulo registra `<iswc-toast>`.
 
 ## Cuándo usarlo
 
@@ -33,7 +33,7 @@ import './toast.js';
 ## Ejemplo mínimo
 
 ```html
-<is-toast></is-toast>
+<iswc-toast></iswc-toast>
 ```
 
 ## API
@@ -66,14 +66,14 @@ No expone.
 
 | Método | Uso |
 | --- | --- |
-| `create(message, options?)` | Crea y muestra un `<is-toast-item>`. |
+| `create(message, options?)` | Crea y muestra un `<iswc-toast-item>`. |
 | `promise(p, callbacks?)` | Reusa un solo toast para loading / success / error. |
-| `IsToast.host()` | Estático: `<is-toast>` singleton del documento (lo crea si falta). |
-| `IsToast.error(msg, duration?)` | Estático. Paridad con `toastError` de ISP. |
-| `IsToast.success(msg, duration?)` | Estático. Paridad con `toastSuccess`. |
-| `IsToast.loading(msg)` | Estático. Paridad con `toastLoading`. |
-| `IsToast.remove(item)` | Estático. Paridad con `toastRemove`. |
-| `IsToast.promise(p, callbacks?)` | Estático. Paridad con `toastPromise`. |
+| `IswcToast.host()` | Estático: `<iswc-toast>` singleton del documento (lo crea si falta). |
+| `IswcToast.error(msg, duration?)` | Estático. Paridad con `toastError` de ISP. |
+| `IswcToast.success(msg, duration?)` | Estático. Paridad con `toastSuccess`. |
+| `IswcToast.loading(msg)` | Estático. Paridad con `toastLoading`. |
+| `IswcToast.remove(item)` | Estático. Paridad con `toastRemove`. |
+| `IswcToast.promise(p, callbacks?)` | Estático. Paridad con `toastPromise`. |
 
 Propiedades públicas aparecen en tabla anterior; APIs heredadas se verifican en dependencia base.
 
@@ -101,27 +101,27 @@ No declara integración form-associated propia en este módulo.
 
 Documentación de cabecera preservada desde fuente:
 
-> <is-toast> — Web Component (vanilla).
-> Contenedor fijo de toasts. Los ítems son <is-toast-item> en light DOM
+> <iswc-toast> — Web Component (vanilla).
+> Contenedor fijo de toasts. Los ítems son <iswc-toast-item> en light DOM
 > (proyección al stack) o creados vía create().
 > Atributos
 >   placement  top-start | top-center | top-end |
 >              bottom-start | bottom-center | bottom-end  (default bottom-end)
 > Métodos
->   create(message, options?) → Promise<is-toast-item>
+>   create(message, options?) → Promise<iswc-toast-item>
 >     options: { color, icon, duration, allowHtml, caption, log } — sin size
 >     color: brand | success | warning | danger | neutral
 >     duration default 5000; 0 = hasta dismiss
->     caption: detalle bajo el título; log: payload de is-after-show (consola)
+>     caption: detalle bajo el título; log: payload de iswc-after-show (consola)
 > CSS Parts: ::part(stack)
-> Escucha is-after-hide de los ítems y los elimina del DOM.
+> Escucha iswc-after-hide de los ítems y los elimina del DOM.
 
 ## Dependencias y componentes relacionados
 
 - [`../_shared/adopt-css.js`](../_shared/adopt-css.js)
 - [`./toast-item.js`](./toast-item.js)
 
-Tags del módulo: `<is-toast>`.
+Tags del módulo: `<iswc-toast>`.
 
 ## Accesibilidad
 
@@ -130,7 +130,7 @@ Preservar semántica, foco, teclado, labels y ARIA. ARIA detectado: `aria-label`
 ## Ejemplo avanzado
 
 ```html
-<is-toast></is-toast>
+<iswc-toast></iswc-toast>
 ```
 
 ## Errores comunes

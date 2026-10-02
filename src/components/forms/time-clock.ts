@@ -3,7 +3,7 @@ import { formatTime, from12Hour, pad, parseTime, to12Hour, toTime, uses12Hour } 
 import { ElementBase } from '../../core/element-base.js';
 
 /**
- * <is-time-clock> — Reloj analógico para elegir hora (MUI TimeClock).
+ * <iswc-time-clock> — Reloj analógico para elegir hora (MUI TimeClock).
  *
  * Vistas encadenadas: horas → minutos → segundos (si `seconds`). El disco es
  * un slider: se puede arrastrar, hacer clic o usar el teclado.
@@ -11,7 +11,7 @@ import { ElementBase } from '../../core/element-base.js';
  * Atributos: value (HH:mm[:ss]), view (hours|minutes|seconds), ampm,
  *            hour24, seconds, minutes-step, min-time, max-time, locale,
  *            disabled, readonly
- * Events: is-change { value } · is-view-change { view }
+ * Events: iswc-change { value } · iswc-view-change { view }
  */
 
 interface ParsedTime { h: number; m: number; s: number }
@@ -52,7 +52,7 @@ interface PickOpts { advance?: boolean }
 
   const VIEWS: readonly View[] = ['hours', 'minutes', 'seconds'];
 
-  class IsTimeClock extends ElementBase {
+  class IswcTimeClock extends ElementBase {
     /** Personalización por atributo (ver `core/attrs.ts`). */
     static styleAttrs = {
     size: '--iswc-clock-size',
@@ -97,7 +97,7 @@ interface PickOpts { advance?: boolean }
     }
 
     onAttributeChanged(name: string, _oldVal: string | null, _newVal: string | null): void {
-      if (name === 'view') emit(this, 'is-view-change', { view: this.view });
+      if (name === 'view') emit(this, 'iswc-view-change', { view: this.view });
       this.#render();
     }
 
@@ -181,7 +181,7 @@ interface PickOpts { advance?: boolean }
       const next = toTime(time, this.seconds);
       if (next !== this.value) {
         this.setAttribute('value', next);
-        emit(this, 'is-change', { value: next });
+        emit(this, 'iswc-change', { value: next });
       } else {
         this.#render();
       }
@@ -408,5 +408,5 @@ interface PickOpts { advance?: boolean }
     };
   }
 
-  defineElement('is-time-clock', IsTimeClock, 'IsTimeClock');
+  defineElement('iswc-time-clock', IswcTimeClock, 'IswcTimeClock');
 })();

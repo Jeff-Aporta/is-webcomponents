@@ -1,20 +1,20 @@
 ---
-tag: is-date-field
+tag: iswc-date-field
 tags:
-  - is-date-field
+  - iswc-date-field
 category: forms
 status: public
 source: ./date-field.js
 style: ./date-field.css
 preview: ./date-field.json
 ---
-# `<is-date-field>`
+# `<iswc-date-field>`
 
 ## Propósito
 
 Campo editable por secciones (DateField de MUI X). Cada sección es un spinbutton: flechas, dígitos, izquierda/derecha, Retroceso. El orden lo decide el locale.
 
-Este módulo registra `<is-date-field>`.
+Este módulo registra `<iswc-date-field>`.
 
 ## Cuándo usarlo
 
@@ -33,7 +33,7 @@ import './date-field.js';
 ## Ejemplo mínimo
 
 ```html
-<is-date-field></is-date-field>
+<iswc-date-field></iswc-date-field>
 ```
 
 ## API
@@ -95,20 +95,20 @@ No declara integración form-associated propia en este módulo.
 
 Documentación de cabecera preservada desde fuente:
 
-> <is-date-field> — Campo de fecha editable por secciones (MUI DateField).
+> <iswc-date-field> — Campo de fecha editable por secciones (MUI DateField).
 > Cada sección (día, mes, año, en el orden del locale) es un spinbutton:
 > flechas para subir/bajar, dígitos para teclear, izquierda/derecha para
 > saltar, Retroceso para vaciar. No usa <input type=date>.
 > Atributos: label, hint, name, value (yyyy-mm-dd), min, max, required,
 >            disabled, readonly, clearable, locale, invalid
 > Slots: start, end
-> Events: is-change, is-input
+> Events: iswc-change, iswc-input
 
 ## Dependencias y componentes relacionados
 
 - [`../_shared/date-field-element.js`](../_shared/date-field-element.js)
 
-Tags del módulo: `<is-date-field>`.
+Tags del módulo: `<iswc-date-field>`.
 
 ## Accesibilidad
 
@@ -117,7 +117,7 @@ Preservar semántica, foco, teclado, labels y ARIA. ARIA detectado: ninguno expl
 ## Ejemplo avanzado
 
 ```html
-<is-date-field></is-date-field>
+<iswc-date-field></iswc-date-field>
 ```
 
 ## Errores comunes

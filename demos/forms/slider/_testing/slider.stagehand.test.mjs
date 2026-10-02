@@ -24,7 +24,7 @@ async function checkDeterministic(page) {
 
   // (1): layout
   const rects = await page.evaluate(() => {
-    const sl = [...document.querySelectorAll('is-slider')];
+    const sl = [...document.querySelectorAll('iswc-slider')];
     return sl.map((s) => {
       const r = s.getBoundingClientRect();
       return { x: r.x, y: r.y, w: r.width, h: r.height };
@@ -41,7 +41,7 @@ async function checkDeterministic(page) {
 
   // (2) y (3): thumbs dentro del rail y no solapados en range
   const thumbData = await page.evaluate(() => {
-    const sl = [...document.querySelectorAll('is-slider')];
+    const sl = [...document.querySelectorAll('iswc-slider')];
     return sl.map((s, idx) => {
       const sr = s.shadowRoot;
       const rail = sr.querySelector('[part="rail"]');
@@ -83,7 +83,7 @@ async function checkDeterministic(page) {
 
   // (4): marks con labels
   const marks = await page.evaluate(() => {
-    const s = document.querySelector('#sec-marks is-slider');
+    const s = document.querySelector('#sec-marks iswc-slider');
     const sr = s.shadowRoot;
     const labels = [...sr.querySelectorAll('[part="mark-label"]')];
     return labels.map((l) => ({
@@ -99,7 +99,7 @@ async function checkDeterministic(page) {
 
   // (5): disabled
   const dis = await page.evaluate(() => {
-    const s = document.querySelector('#sec-disabled is-slider');
+    const s = document.querySelector('#sec-disabled iswc-slider');
     return {
       stateDisabled: s.matches(':state(disabled)'),
       thumbTabindex: s.shadowRoot.querySelector('[role="slider"]').tabIndex,
@@ -110,13 +110,13 @@ async function checkDeterministic(page) {
 
   // (6): interacción con teclado reposiciona el thumb sin salirse del rail
   await page.evaluate(() => {
-    const s = document.querySelector('#sec-basico is-slider');
+    const s = document.querySelector('#sec-basico iswc-slider');
     s.shadowRoot.querySelector('[role="slider"]').focus();
   });
   await page.keyboard.press('End');
   await page.waitForTimeout(80);
   const afterEnd = await page.evaluate(() => {
-    const s = document.querySelector('#sec-basico is-slider');
+    const s = document.querySelector('#sec-basico iswc-slider');
     const sr = s.shadowRoot;
     const rail = sr.querySelector('[part="rail"]');
     const thumb = sr.querySelector('[role="slider"]');
@@ -183,7 +183,7 @@ async function runStagehandRubric() {
     await page.goto(DEMO.url, { waitUntil: 'domcontentloaded' });
     await waitReady(page, DEMO.readyAttr);
     await page.evaluate(() => {
-      const s = document.querySelector('#sec-basico is-slider');
+      const s = document.querySelector('#sec-basico iswc-slider');
       s.shadowRoot.querySelector('[role="slider"]').focus();
     });
     await page.keyboard.press('End');

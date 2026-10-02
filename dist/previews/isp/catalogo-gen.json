@@ -1,11 +1,11 @@
 {
-  "$schema": "is-preview/v1",
-  "tag": "is-catalogo-gen",
+  "$schema": "iswc-preview/v1",
+  "tag": "iswc-catalogo-gen",
   "category": "isp",
-  "title": "<is-catalogo-gen>",
+  "title": "<iswc-catalogo-gen>",
   "titleHtml": true,
   "description": "Catálogo CRUD genérico ISP con controller JSON.",
-  "storageKey": "docs-is-catalogo-gen",
+  "storageKey": "docs-iswc-catalogo-gen",
   "hasBehavior": true,
   "sections": [
     {
@@ -19,7 +19,7 @@
         },
         {
           "kind": "demo",
-          "html": "<is-catalogo-gen id=\"catDemo\" style=\"height: 30rem;\"></is-catalogo-gen>\n          <p id=\"catLog\">Última acción: <code class=\"code\">—</code></p>"
+          "html": "<iswc-catalogo-gen id=\"catDemo\" style=\"height: 30rem;\"></iswc-catalogo-gen>\n          <p id=\"catLog\">Última acción: <code class=\"code\">—</code></p>"
         },
         {
           "kind": "code",

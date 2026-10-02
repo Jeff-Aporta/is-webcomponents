@@ -3,32 +3,32 @@ import { readFileSync, writeFileSync } from 'node:fs';
 const FILE = 'src/components/isp/modal-verificacion.json';
 let s = readFileSync(FILE, 'utf8');
 // El archivo tiene los strings JSON-escaped. Pattern a reemplazar:
-// "<is-button id=\"mvBtn\" color=\"brand\">\r\n            <is-icon slot=\"start\" icon=\"mdi:check\"></is-icon>\r\n            Verificar tercero\r\n          </is-button>\r\n          <is-modal-verificacion id=\"mvDemo\" entity=\"tercero\"></is-modal-verificacion>",
+// "<iswc-button id=\"mvBtn\" color=\"brand\">\r\n            <iswc-icon slot=\"start\" icon=\"mdi:check\"></iswc-icon>\r\n            Verificar tercero\r\n          </iswc-button>\r\n          <iswc-modal-verificacion id=\"mvDemo\" entity=\"tercero\"></iswc-modal-verificacion>",
 // → version mejorada con 3 botones (ok/warn/err) y 3 modals con datos realistas.
 const old =
-  '<is-button id=\\"mvBtn\\" color=\\"brand\\">\\r\\n' +
-  '            <is-icon slot=\\"start\\" icon=\\"mdi:check\\"></is-icon>\\r\\n' +
+  '<iswc-button id=\\"mvBtn\\" color=\\"brand\\">\\r\\n' +
+  '            <iswc-icon slot=\\"start\\" icon=\\"mdi:check\\"></iswc-icon>\\r\\n' +
   '            Verificar tercero\\r\\n' +
-  '          </is-button>\\r\\n' +
-  '          <is-modal-verificacion id=\\"mvDemo\\" entity=\\"tercero\\"></is-modal-verificacion>';
+  '          </iswc-button>\\r\\n' +
+  '          <iswc-modal-verificacion id=\\"mvDemo\\" entity=\\"tercero\\"></iswc-modal-verificacion>';
 const replacement =
   '<div style=\\"display:flex;gap:.5rem;flex-wrap:wrap\\">\\r\\n' +
-  '            <is-button id=\\"mvBtnOk\\" color=\\"brand\\">\\r\\n' +
-  '              <is-icon slot=\\"start\\" icon=\\"mdi:check\\"></is-icon>\\r\\n' +
+  '            <iswc-button id=\\"mvBtnOk\\" color=\\"brand\\">\\r\\n' +
+  '              <iswc-icon slot=\\"start\\" icon=\\"mdi:check\\"></iswc-icon>\\r\\n' +
   '              Verificar tercero (caso OK)\\r\\n' +
-  '            </is-button>\\r\\n' +
-  '            <is-button id=\\"mvBtnWarn\\" color=\\"warning\\">\\r\\n' +
-  '              <is-icon slot=\\"start\\" icon=\\"mdi:alert\\"></is-icon>\\r\\n' +
+  '            </iswc-button>\\r\\n' +
+  '            <iswc-button id=\\"mvBtnWarn\\" color=\\"warning\\">\\r\\n' +
+  '              <iswc-icon slot=\\"start\\" icon=\\"mdi:alert\\"></iswc-icon>\\r\\n' +
   '              Verificar con warnings\\r\\n' +
-  '            </is-button>\\r\\n' +
-  '            <is-button id=\\"mvBtnErr\\" color=\\"danger\\">\\r\\n' +
-  '              <is-icon slot=\\"start\\" icon=\\"mdi:close-circle\\"></is-icon>\\r\\n' +
+  '            </iswc-button>\\r\\n' +
+  '            <iswc-button id=\\"mvBtnErr\\" color=\\"danger\\">\\r\\n' +
+  '              <iswc-icon slot=\\"start\\" icon=\\"mdi:close-circle\\"></iswc-icon>\\r\\n' +
   '              Verificar con errores\\r\\n' +
-  '            </is-button>\\r\\n' +
+  '            </iswc-button>\\r\\n' +
   '          </div>\\r\\n' +
-  '          <is-modal-verificacion id=\\"mvDemoOk\\" entity=\\"tercero\\"></is-modal-verificacion>\\r\\n' +
-  '          <is-modal-verificacion id=\\"mvDemoWarn\\" entity=\\"tercero\\"></is-modal-verificacion>\\r\\n' +
-  '          <is-modal-verificacion id=\\"mvDemoErr\\" entity=\\"tercero\\"></is-modal-verificacion>\\r\\n' +
+  '          <iswc-modal-verificacion id=\\"mvDemoOk\\" entity=\\"tercero\\"></iswc-modal-verificacion>\\r\\n' +
+  '          <iswc-modal-verificacion id=\\"mvDemoWarn\\" entity=\\"tercero\\"></iswc-modal-verificacion>\\r\\n' +
+  '          <iswc-modal-verificacion id=\\"mvDemoErr\\" entity=\\"tercero\\"></iswc-modal-verificacion>\\r\\n' +
   '          <script type=\\"application/json\\" data-mv-scenarios>{\\r\\n' +
   '            \\"ok\\": {\\r\\n' +
   '              \\"entrie\\": \\"tercero\\",\\r\\n' +

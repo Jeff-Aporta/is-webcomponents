@@ -1,5 +1,5 @@
 /**
- * code-highlight.js — motor de resaltado NATIVO de <is-code> (sin CodeMirror).
+ * code-highlight.js — motor de resaltado NATIVO de <iswc-code> (sin CodeMirror).
  *
  * Sustituye a CM5 (runMode / fromTextArea): tokeniza con un escáner por
  * estados —determinista, sin CDN, nunca lanza— y emite tokens semánticos por
@@ -10,9 +10,8 @@
  * Lenguajes: html (html + <script>/<style> mixtos), javascript (js/ts/jsx/
  * tsx/json), css, diff/commit (clase de línea + tokens), shell, plaintext.
  *
- * Estado entre líneas (comentarios /* * /, regiones script/style, cadenas y
- * template literals multilínea) viaja en `state` para no re-escanear el
- * documento al repintar.
+ * Estado entre líneas (comentarios /* * /, regiones script/style, cadenas,
+ * template literals y atributos HTML con comilla abierta) viaja en `state`.
  *
  * El color lo pone el CSS del componente mapeando `.tok-*` a las custom
  * properties --iswc-code-* (code-theme.js), el mismo rol que jugaban los .cm-*
@@ -31,13 +30,19 @@ export type Token = { type: TokenType; text: string };
 /** Línea tokenizada que devuelve `tokenizeCode`. */
 export type HighlightLine = { tokens: Token[]; lineClass: string | null; raw: string };
 
-/** Estado entre líneas (multilínea: comentarios, regiones script/style, quotes, templates). */
+/** Estado entre líneas (multilínea: comentarios, regiones script/style, quotes, templates, atributo HTML). */
 export type HighlightState = {
   inComment: boolean;
   inHtmlComment: boolean;
   region: 'script' | 'style' | null;
   quote: '"' | "'" | null;
   template: boolean;
+  /** Comilla de un atributo HTML que no cerró en la línea. */
+  htmlAttr: '"' | "'" | null;
+  /** json si el valor parece JSON; text si es prosa; null hasta el primer trozo. */
+  htmlAttrMode: 'json' | 'text' | null;
+  /** Seguimos dentro del tag, después de la comilla, hasta el '>'. */
+  inHtmlTag: boolean;
 };
 
 /** Resultado de tokenizar un documento completo. */
@@ -97,6 +102,9 @@ export function emptyState(): HighlightState {
     region: null,        // 'script' | 'style' | null
     quote: null,         // '"' | "'"
     template: false,
+    htmlAttr: null,
+    htmlAttrMode: null,
+    inHtmlTag: false,
   };
 }
 
@@ -282,6 +290,73 @@ function scanCssLine(line: string, st: HighlightState, out: Token[]): void {
 
 const TAG_OPEN_RE = /^<\/?([a-zA-Z][\w:-]*)/;
 
+function looksLikeJson(text: string): boolean {
+  const t = text.trimStart();
+  return t.startsWith('{') || t.startsWith('[');
+}
+
+/** Valor de atributo: JSON se pinta como código; el resto, string. */
+function paintAttrInterior(text: string, st: HighlightState, out: Token[]): void {
+  if (st.htmlAttrMode == null && text.trim()) st.htmlAttrMode = looksLikeJson(text) ? 'json' : 'text';
+  if (!text) return;
+  if (st.htmlAttrMode === 'json') scanJsLine(text, emptyState(), out);
+  else add(out, 'string', text);
+}
+
+type TagInner = { pos: number; selfClose: boolean };
+
+/** Interior del tag. Comilla sin cierre: htmlAttr y se sigue en la línea siguiente. */
+function scanHtmlTagInner(line: string, from: number, st: HighlightState, out: Token[], continuing: boolean): TagInner {
+  const len = line.length;
+  let p = from;
+  let selfClose = false;
+  let closed = false;
+  while (p < len) {
+    const ch = line[p]!;
+    if (ch === '>') { add(out, 'tagPunct', '>'); p += 1; closed = true; break; }
+    if (ch === '/' && line[p + 1] === '>') { add(out, 'tagPunct', '/>'); p += 2; selfClose = true; closed = true; break; }
+    if (ch === ' ' || ch === '\t') { add(out, 'plain', ch); p += 1; continue; }
+    if (isIdentStart(ch) || ch === '@' || ch === ':') {
+      let j = p + 1;
+      while (j < len && /[A-Za-z0-9_$@:.-]/.test(line[j] ?? '')) j += 1;
+      add(out, 'attribute', line.slice(p, j));
+      p = j;
+      let s = p;
+      while (s < len && (line[s] === ' ' || line[s] === '\t')) s += 1;
+      if (line[s] === '=') {
+        add(out, 'operator', '=');
+        p = s + 1;
+        let v = p;
+        while (v < len && (line[v] === ' ' || line[v] === '\t')) v += 1;
+        const q = line[v];
+        if (q === '"' || q === "'") {
+          let e = v + 1;
+          while (e < len && line[e] !== q) e += line[e] === '\\' ? 2 : 1;
+          if (e >= len) {
+            add(out, 'string', q);
+            paintAttrInterior(line.slice(v + 1), st, out);
+            st.htmlAttr = q;
+            st.inHtmlTag = true;
+            return { pos: len, selfClose };
+          }
+          add(out, 'string', line.slice(v, e + 1));
+          p = e + 1;
+        } else {
+          let e = v;
+          while (e < len && !/[\s>]/.test(line[e] ?? '')) e += 1;
+          add(out, 'plain', line.slice(v, e));
+          p = e;
+        }
+      }
+      continue;
+    }
+    add(out, 'plain', ch);
+    p += 1;
+  }
+  st.inHtmlTag = closed ? false : (st.htmlAttr != null || continuing);
+  return { pos: p, selfClose };
+}
+
 /** < / > van en tagPunct; el nombre del tag se queda en tag. */
 function emitHtmlCloser(out: Token[], chunk: string): void {
   const m = /^<(\/?)([A-Za-z][\w:-]*)?(>)?/.exec(chunk);
@@ -298,6 +373,25 @@ function emitHtmlCloser(out: Token[], chunk: string): void {
 function scanHtmlLine(line: string, st: HighlightState, out: Token[]): void {
   let i = 0;
   const len = line.length;
+
+  if (st.htmlAttr && !st.region) {
+    const q = st.htmlAttr;
+    let e = 0;
+    while (e < len && line[e] !== q) e += line[e] === '\\' ? 2 : 1;
+    paintAttrInterior(line.slice(0, Math.min(e, len)), st, out);
+    if (e >= len) return;
+    add(out, 'string', q);
+    st.htmlAttr = null;
+    st.htmlAttrMode = null;
+    i = e + 1;
+  }
+
+  if (st.inHtmlTag && !st.region) {
+    const inner = scanHtmlTagInner(line, i, st, out, true);
+    i = inner.pos;
+    if (st.htmlAttr || st.inHtmlTag) return;
+  }
+
   while (i < len) {
     const c = line[i]!;
     const next = line[i + 1];
@@ -350,51 +444,14 @@ function scanHtmlLine(line: string, st: HighlightState, out: Token[]): void {
         const m0 = /^<(\/?)([a-zA-Z][\w:-]*)/.exec(line.slice(i))!;
         const isClose = m0[1] === '/';
         const tagName = m0[2]!.toLowerCase();
-        let p = i + m0[0]!.length;
-        let selfClose = false;
         add(out, 'tagPunct', '<');
         if (isClose) add(out, 'tagPunct', '/');
         add(out, 'tag', m0[2]!);
-        // dentro del tag: atributos (name="value") + '>'
-        while (p < len) {
-          const ch = line[p]!;
-          if (ch === '>') { add(out, 'tagPunct', '>'); p += 1; break; }
-          if (ch === '/' && line[p + 1] === '>') { add(out, 'tagPunct', '/>'); p += 2; selfClose = true; break; }
-          if (ch === ' ' || ch === '\t') { add(out, 'plain', ch); p += 1; continue; }
-          if (isIdentStart(ch) || ch === '@' || ch === ':') {
-            let j = p + 1;
-            while (j < len && /[A-Za-z0-9_$@:.-]/.test(line[j] ?? '')) j += 1;
-            add(out, 'attribute', line.slice(p, j));
-            p = j;
-            let s = p;
-            while (s < len && (line[s] === ' ' || line[s] === '\t')) s += 1;
-            if (line[s] === '=') {
-              add(out, 'operator', '=');
-              p = s + 1;
-              let v = p;
-              while (v < len && (line[v] === ' ' || line[v] === '\t')) v += 1;
-              const q = line[v];
-              if (q === '"' || q === "'") {
-                let e = v + 1;
-                while (e < len && line[e] !== q) e += line[e] === '\\' ? 2 : 1;
-                add(out, 'string', line.slice(v, Math.min(e + 1, len)));
-                p = Math.min(e + 1, len);
-              } else {
-                let e = v;
-                while (e < len && !/[\s>]/.test(line[e] ?? '')) e += 1;
-                add(out, 'plain', line.slice(v, e));
-                p = e;
-              }
-            }
-            continue;
-          }
-          add(out, 'plain', ch);
-          p += 1;
-        }
-        if (!isClose && (tagName === 'script' || tagName === 'style') && !selfClose) {
+        const inner = scanHtmlTagInner(line, i + m0[0]!.length, st, out, false);
+        if (!st.htmlAttr && !isClose && (tagName === 'script' || tagName === 'style') && !inner.selfClose) {
           st.region = tagName;
         }
-        i = p;
+        i = inner.pos;
         continue;
       }
       add(out, 'plain', c);
@@ -460,12 +517,12 @@ function scanShellLine(line: string, _st: HighlightState, out: Token[]): void {
 /** Clase de banda por línea de diff (la usa el renderer para el fondo). */
 export function diffLineClass(line: string | null | undefined): string | null {
   const t = String(line ?? '');
-  if (/^(?:diff --git|Index: |new file|deleted file|rename |similarity )/.test(t)) return 'is-diff-line-file';
-  if (/^@@ /.test(t)) return 'is-diff-line-hunk';
-  if (/^(?:commit [0-9a-f]{7,40}|Author:|Date:|Merge:)/.test(t)) return 'is-diff-line-commit';
-  if (/^\+\+\+ /.test(t) || /^--- /.test(t)) return 'is-diff-line-file';
-  if (/^\+[^+]/.test(t)) return 'is-diff-line-add';
-  if (/^-[^-]/.test(t)) return 'is-diff-line-del';
+  if (/^(?:diff --git|Index: |new file|deleted file|rename |similarity )/.test(t)) return 'iswc-diff-line-file';
+  if (/^@@ /.test(t)) return 'iswc-diff-line-hunk';
+  if (/^(?:commit [0-9a-f]{7,40}|Author:|Date:|Merge:)/.test(t)) return 'iswc-diff-line-commit';
+  if (/^\+\+\+ /.test(t) || /^--- /.test(t)) return 'iswc-diff-line-file';
+  if (/^\+[^+]/.test(t)) return 'iswc-diff-line-add';
+  if (/^-[^-]/.test(t)) return 'iswc-diff-line-del';
   return null;
 }
 
@@ -473,10 +530,10 @@ function scanDiffLine(line: string, lineClass: string | null): Token[] {
   const out: Token[] = [];
   const cls = lineClass ?? diffLineClass(line);
   let type: TokenType = 'plain';
-  if (cls === 'is-diff-line-add') type = 'string';
-  else if (cls === 'is-diff-line-del') type = 'comment';
-  else if (cls === 'is-diff-line-file') type = 'meta';
-  else if (cls === 'is-diff-line-hunk' || cls === 'is-diff-line-commit') type = 'keyword';
+  if (cls === 'iswc-diff-line-add') type = 'string';
+  else if (cls === 'iswc-diff-line-del') type = 'comment';
+  else if (cls === 'iswc-diff-line-file') type = 'meta';
+  else if (cls === 'iswc-diff-line-hunk' || cls === 'iswc-diff-line-commit') type = 'keyword';
   add(out, type, line);
   return out;
 }

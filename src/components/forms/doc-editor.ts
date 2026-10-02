@@ -1,7 +1,7 @@
 import { adoptCss, defineElement, emit } from '../../core/element.js';
 
 /**
- * <is-doc-editor> — Editor de documento basado en bloques (Notion-like).
+ * <iswc-doc-editor> — Editor de documento basado en bloques (Notion-like).
  *
  * Cada bloque es uno de:
  *   paragraph | heading-1 | heading-2 | heading-3 | bullet-list | todo |
@@ -27,8 +27,8 @@ import { adoptCss, defineElement, emit } from '../../core/element.js';
  *   doc.updateBlock(id, { text, checked })
  *
  * Eventos
- *   is-change   detail: { blocks }
- *   is-focus    detail: { id }
+ *   iswc-change   detail: { blocks }
+ *   iswc-focus    detail: { id }
  *
  * Atajos
  *   Enter        crear nuevo bloque (mismo tipo)
@@ -56,7 +56,7 @@ import { adoptCss, defineElement, emit } from '../../core/element.js';
     'divider':     { tag: 'hr' },
   };
 
-  class IsDocEditor extends HTMLElement {
+  class IswcDocEditor extends HTMLElement {
     static get observedAttributes(): string[] { return OBSERVED; }
     #mounted = false;
     #blocks: Block[] = [];
@@ -152,7 +152,7 @@ import { adoptCss, defineElement, emit } from '../../core/element.js';
         check.type = 'checkbox';
         check.className = 'check';
         check.checked = !!block.checked;
-        check.addEventListener('change', () => { block.checked = check.checked; ed.classList.toggle('is-checked', block.checked); this.#emit(); });
+        check.addEventListener('change', () => { block.checked = check.checked; ed.classList.toggle('iswc-checked', block.checked); this.#emit(); });
         ed.contentEditable = 'true';
         ed.dataset.placeholder = def.placeholder ?? '';
         ed.textContent = block.text;
@@ -184,7 +184,7 @@ import { adoptCss, defineElement, emit } from '../../core/element.js';
     #bindEditable(el: HTMLElement, block: Block): void {
       const onInput = (): void => { block.text = el.textContent ?? ''; this.#emit(); };
       el.addEventListener('input', onInput);
-      el.addEventListener('focus', () => emit(this, 'is-focus', { id: block.id }));
+      el.addEventListener('focus', () => emit(this, 'iswc-focus', { id: block.id }));
       el.addEventListener('keydown', (e: KeyboardEvent) => this.#onKey(e, el, block));
     }
 
@@ -251,7 +251,7 @@ import { adoptCss, defineElement, emit } from '../../core/element.js';
     #syncDirty(): void { /* placeholder for any deferred sync */ }
 
     #emit(): void {
-      emit(this, 'is-change', { blocks: structuredClone(this.#blocks) });
+      emit(this, 'iswc-change', { blocks: structuredClone(this.#blocks) });
     }
 
     #blocksEl!: HTMLElement;
@@ -259,5 +259,5 @@ import { adoptCss, defineElement, emit } from '../../core/element.js';
     #onDocPointerDown!: (e: PointerEvent) => void;
   }
 
-  defineElement('is-doc-editor', IsDocEditor);
+  defineElement('iswc-doc-editor', IswcDocEditor);
 })();

@@ -19,13 +19,13 @@ async function checkDeterministic(page, demo) {
   await page.waitForTimeout(200);
 
   const data = await page.evaluate(() => {
-    const boards = [...document.querySelectorAll('main is-kanban')];
+    const boards = [...document.querySelectorAll('main iswc-kanban')];
     return boards.map((b, bIdx) => {
-      const cols = [...b.querySelectorAll(':scope > is-kanban-column')];
+      const cols = [...b.querySelectorAll(':scope > iswc-kanban-column')];
       return {
         bIdx,
         columnCount: cols.length,
-        cardCount: cols.reduce((s, c) => s + c.querySelectorAll(':scope > is-kanban-card').length, 0),
+        cardCount: cols.reduce((s, c) => s + c.querySelectorAll(':scope > iswc-kanban-card').length, 0),
         columns: cols.map((c, cIdx) => {
           const sr = c.shadowRoot;
           const rootRect = sr.querySelector('[part="column"]')?.getBoundingClientRect();
@@ -35,7 +35,7 @@ async function checkDeterministic(page, demo) {
           const badgeEl = sr.querySelector('[part="badge"]');
           const badgeHidden = badgeEl?.hidden ?? true;
           const badgeText = badgeEl?.textContent?.trim() || '';
-          const cards = [...c.querySelectorAll(':scope > is-kanban-card')];
+          const cards = [...c.querySelectorAll(':scope > iswc-kanban-card')];
           return {
             cIdx,
             titleText,

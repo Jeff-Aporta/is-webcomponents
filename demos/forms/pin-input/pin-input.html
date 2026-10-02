@@ -3,7 +3,7 @@
 <head>
 <meta charset="utf-8" />
 <meta name="viewport" content="width=device-width, initial-scale=1" />
-<title>Input de PIN &lt;is-pin-input&gt; · is-webcomponents</title>
+<title>Input de PIN &lt;iswc-pin-input&gt; · is-webcomponents</title>
 <meta name="description" content="Casillas individuales para OTP/PIN con auto-avance, Backspace y paste." />
 <style>
   html, body { margin: 0; padding: 0; min-height: 100%; background: #0c1118; color: #e2e8f0; font-family: ui-sans-serif, system-ui, sans-serif; }
@@ -14,33 +14,33 @@
   section { background: #131a24; border: 1px solid rgba(255,255,255,0.08); border-radius: 10px; padding: 16px; display: grid; gap: 10px; }
   section h2 { font-size: 13px; margin: 0; font-weight: 600; color: #cbd5e1; }
   section .desc { font-size: 12px; color: #94a3b8; margin: 0; }
-  is-pin-input { width: 100%; }
-  is-pin-input + div { margin-top: 8px; font: 12px ui-monospace, Menlo, Consolas, monospace; color: #94a3b8; }
+  iswc-pin-input { width: 100%; }
+  iswc-pin-input + div { margin-top: 8px; font: 12px ui-monospace, Menlo, Consolas, monospace; color: #94a3b8; }
   .row { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; }
   code { background: rgba(255,255,255,0.06); padding: 1px 5px; border-radius: 3px; font: 12px ui-monospace, Menlo, Consolas, monospace; }
   /* Anti-FOUC */
-  is-pin-input:not(:defined) { visibility: hidden; }
+  iswc-pin-input:not(:defined) { visibility: hidden; }
 </style>
 <script type="module">
-  await import('../../../dist/cdn/forms/pin-input.min.js?h=b6oiyz');
-  await customElements.whenDefined('is-pin-input');
+  await import('../../../dist/cdn/forms/pin-input.min.js?h=xgfb3m');
+  await customElements.whenDefined('iswc-pin-input');
 
   // (1) OTP 6 dígitos
-  const otp = document.createElement('is-pin-input');
+  const otp = document.createElement('iswc-pin-input');
   otp.id = 'otp';
   otp.length = 6;
   otp.label = 'Código OTP';
   otp.hint = 'Auto-avance al escribir. Backspace retrocede.';
-  otp.addEventListener('is-pin-change', (e) => {
+  otp.addEventListener('iswc-pin-change', (e) => {
     document.getElementById('otp-out').textContent = `value="${e.detail.value}" (idx=${e.detail.index})`;
   });
-  otp.addEventListener('is-pin-complete', (e) => {
+  otp.addEventListener('iswc-pin-complete', (e) => {
     document.getElementById('otp-status').textContent = `✓ completo: "${e.detail.value}"`;
   });
   document.querySelector('#sec-otp').appendChild(otp);
 
   // (2) PIN 4 dígitos, enmascarado
-  const pin = document.createElement('is-pin-input');
+  const pin = document.createElement('iswc-pin-input');
   pin.id = 'pin';
   pin.length = 4;
   pin.mask = true;
@@ -49,7 +49,7 @@
   document.querySelector('#sec-pin').appendChild(pin);
 
   // (3) OTP 4 dígitos con placeholder
-  const corto = document.createElement('is-pin-input');
+  const corto = document.createElement('iswc-pin-input');
   corto.id = 'corto';
   corto.length = 4;
   corto.placeholder = '•';
@@ -58,7 +58,7 @@
   document.querySelector('#sec-corto').appendChild(corto);
 
   // (4) tipo texto (letras + números)
-  const texto = document.createElement('is-pin-input');
+  const texto = document.createElement('iswc-pin-input');
   texto.id = 'texto';
   texto.length = 6;
   texto.type = 'text';
@@ -67,7 +67,7 @@
   document.querySelector('#sec-texto').appendChild(texto);
 
   // (5) deshabilitado
-  const bloqueado = document.createElement('is-pin-input');
+  const bloqueado = document.createElement('iswc-pin-input');
   bloqueado.id = 'bloqueado';
   bloqueado.length = 6;
   bloqueado.disabled = true;
@@ -82,8 +82,8 @@
 <body>
 <main>
   <header>
-    <h1>&lt;is-pin-input&gt; · Casillas para OTP / PIN</h1>
-    <p>Atributos <code>length</code> (3–8), <code>type</code> (number|text), <code>mask</code>, <code>disabled</code>, <code>placeholder</code>. Emite <code>is-pin-change</code>, <code>is-pin-complete</code>.</p>
+    <h1>&lt;iswc-pin-input&gt; · Casillas para OTP / PIN</h1>
+    <p>Atributos <code>length</code> (3–8), <code>type</code> (number|text), <code>mask</code>, <code>disabled</code>, <code>placeholder</code>. Emite <code>iswc-pin-change</code>, <code>iswc-pin-complete</code>.</p>
   </header>
 
   <section id="sec-otp">

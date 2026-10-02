@@ -56,7 +56,7 @@ console.log('NETWORK FAILURES:', networkFailures.length === 0 ? 'none' : network
 console.log('KEY RESPONSES:', allResponses.length === 0 ? 'none' : allResponses.join('\n'));
 
 // Esperar a que la página se hidrate (preview montada en <main>).
-await page.waitForSelector('main.is-main, is-main', { timeout: 20000 });
+await page.waitForSelector('main.iswc-main, iswc-main', { timeout: 20000 });
 // Esperar adicional a que el bundle de theming inyecte #cssOut.
 await page.waitForSelector('#cssOut', { timeout: 15000 });
 // Y a que tenga contenido significativo en el shadow root.

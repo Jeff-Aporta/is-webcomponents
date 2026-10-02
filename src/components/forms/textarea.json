@@ -1,11 +1,11 @@
 {
-  "$schema": "is-preview/v1",
-  "tag": "is-textarea",
+  "$schema": "iswc-preview/v1",
+  "tag": "iswc-textarea",
   "category": "forms",
-  "title": "<is-textarea>",
+  "title": "<iswc-textarea>",
   "titleHtml": true,
   "styles": ".stack { display: grid; gap: 1.25rem; max-width: 30rem; }\r\n    .actions { display: flex; gap: 0.5rem; margin-top: 1rem; }",
-  "storageKey": "docs-is-textarea",
+  "storageKey": "docs-iswc-textarea",
   "hasBehavior": true,
   "sections": [
     {
@@ -15,7 +15,7 @@
       "blocks": [
         {
           "kind": "demo",
-          "html": "<is-textarea id=\"demo\" label=\"Descripción\" hint=\"Máximo 200 caracteres\" maxlength=\"200\" show-count rows=\"4\" placeholder=\"Cuéntanos…\" name=\"descripcion\"></is-textarea>",
+          "html": "<iswc-textarea id=\"demo\" label=\"Descripción\" hint=\"Máximo 200 caracteres\" maxlength=\"200\" show-count rows=\"4\" placeholder=\"Cuéntanos…\" name=\"descripcion\"></iswc-textarea>",
           "controls": [
             {
               "control": "number",
@@ -129,15 +129,15 @@
     {
       "id": "appearance",
       "title": "Appearance",
-      "lede": "Mismas variantes que <code class=\"code\">is-input</code>:\r\n          <code class=\"code\">outlined</code> (default) · <code class=\"code\">filled</code> ·\r\n          <code class=\"code\">underlined</code>.",
+      "lede": "Mismas variantes que <code class=\"code\">iswc-input</code>:\r\n          <code class=\"code\">outlined</code> (default) · <code class=\"code\">filled</code> ·\r\n          <code class=\"code\">underlined</code>.",
       "blocks": [
         {
           "kind": "demo",
-          "html": "<div class=\"stack\">\r\n            <is-textarea label=\"outlined (default)\" rows=\"2\" placeholder=\"Caja con borde completo\"></is-textarea>\r\n            <is-textarea variant=\"filled\" label=\"filled\" rows=\"2\" placeholder=\"Superficie + línea inferior\"></is-textarea>\r\n            <is-textarea variant=\"underlined\" label=\"underlined\" rows=\"2\" placeholder=\"Solo línea inferior\"></is-textarea>\r\n          </div>"
+          "html": "<div class=\"stack\">\r\n            <iswc-textarea label=\"outlined (default)\" rows=\"2\" placeholder=\"Caja con borde completo\"></iswc-textarea>\r\n            <iswc-textarea variant=\"filled\" label=\"filled\" rows=\"2\" placeholder=\"Superficie + línea inferior\"></iswc-textarea>\r\n            <iswc-textarea variant=\"underlined\" label=\"underlined\" rows=\"2\" placeholder=\"Solo línea inferior\"></iswc-textarea>\r\n          </div>"
         },
         {
           "kind": "code",
-          "code": "<is-textarea variant=\"filled\" label=\"filled\" rows=\"2\"></is-textarea>"
+          "code": "<iswc-textarea variant=\"filled\" label=\"filled\" rows=\"2\"></iswc-textarea>"
         }
       ]
     },
@@ -148,11 +148,11 @@
       "blocks": [
         {
           "kind": "demo",
-          "html": "<div class=\"stack\">\r\n            <is-textarea autosize min-rows=\"2\" label=\"min-rows 2 · sin techo\" placeholder=\"Escribe varias líneas y mira cómo crece…\"></is-textarea>\r\n            <is-textarea autosize min-rows=\"3\" max-rows=\"6\" label=\"min-rows 3 · max-rows 6\"\r\n              hint=\"A partir de 6 líneas hace scroll\"\r\n              value=\"Uno&#10;Dos&#10;Tres&#10;Cuatro\"></is-textarea>\r\n            <is-textarea resize=\"auto\" min-rows=\"1\" max-rows=\"4\" label='resize=\"auto\" (alias de autosize)' placeholder=\"Empieza en una línea\"></is-textarea>\r\n          </div>"
+          "html": "<div class=\"stack\">\r\n            <iswc-textarea autosize min-rows=\"2\" label=\"min-rows 2 · sin techo\" placeholder=\"Escribe varias líneas y mira cómo crece…\"></iswc-textarea>\r\n            <iswc-textarea autosize min-rows=\"3\" max-rows=\"6\" label=\"min-rows 3 · max-rows 6\"\r\n              hint=\"A partir de 6 líneas hace scroll\"\r\n              value=\"Uno&#10;Dos&#10;Tres&#10;Cuatro\"></iswc-textarea>\r\n            <iswc-textarea resize=\"auto\" min-rows=\"1\" max-rows=\"4\" label='resize=\"auto\" (alias de autosize)' placeholder=\"Empieza en una línea\"></iswc-textarea>\r\n          </div>"
         },
         {
           "kind": "code",
-          "code": "<is-textarea autosize min-rows=\"3\" max-rows=\"6\" label=\"Comentario\"></is-textarea>\n\n<!-- equivalente -->\n<is-textarea resize=\"auto\" min-rows=\"3\" max-rows=\"6\"></is-textarea>"
+          "code": "<iswc-textarea autosize min-rows=\"3\" max-rows=\"6\" label=\"Comentario\"></iswc-textarea>\n\n<!-- equivalente -->\n<iswc-textarea resize=\"auto\" min-rows=\"3\" max-rows=\"6\"></iswc-textarea>"
         }
       ]
     },
@@ -163,11 +163,11 @@
       "blocks": [
         {
           "kind": "demo",
-          "html": "<div class=\"stack\">\r\n            <is-textarea label=\"none\" resize=\"none\" rows=\"3\" value=\"El usuario no puede redimensionar.\"></is-textarea>\r\n            <is-textarea label=\"vertical (default)\" rows=\"3\" placeholder=\"Arrastra el borde inferior\"></is-textarea>\r\n            <is-textarea label=\"both\" resize=\"both\" rows=\"3\" placeholder=\"Arrastra la esquina\"></is-textarea>\r\n          </div>"
+          "html": "<div class=\"stack\">\r\n            <iswc-textarea label=\"none\" resize=\"none\" rows=\"3\" value=\"El usuario no puede redimensionar.\"></iswc-textarea>\r\n            <iswc-textarea label=\"vertical (default)\" rows=\"3\" placeholder=\"Arrastra el borde inferior\"></iswc-textarea>\r\n            <iswc-textarea label=\"both\" resize=\"both\" rows=\"3\" placeholder=\"Arrastra la esquina\"></iswc-textarea>\r\n          </div>"
         },
         {
           "kind": "code",
-          "code": "<is-textarea resize=\"none\" rows=\"3\"></is-textarea>\n<is-textarea resize=\"both\" rows=\"3\"></is-textarea>"
+          "code": "<iswc-textarea resize=\"none\" rows=\"3\"></iswc-textarea>\n<iswc-textarea resize=\"both\" rows=\"3\"></iswc-textarea>"
         }
       ]
     },
@@ -178,11 +178,11 @@
       "blocks": [
         {
           "kind": "demo",
-          "html": "<div class=\"stack\">\r\n            <is-textarea label=\"Reseña\" maxlength=\"120\" show-count rows=\"3\" hint=\"Cuenta tu experiencia\" value=\"Muy buena atención.\"></is-textarea>\r\n            <is-textarea label=\"Sin límite\" show-count rows=\"2\" placeholder=\"Escribe algo…\"></is-textarea>\r\n          </div>"
+          "html": "<div class=\"stack\">\r\n            <iswc-textarea label=\"Reseña\" maxlength=\"120\" show-count rows=\"3\" hint=\"Cuenta tu experiencia\" value=\"Muy buena atención.\"></iswc-textarea>\r\n            <iswc-textarea label=\"Sin límite\" show-count rows=\"2\" placeholder=\"Escribe algo…\"></iswc-textarea>\r\n          </div>"
         },
         {
           "kind": "code",
-          "code": "<is-textarea label=\"Reseña\" maxlength=\"120\" show-count rows=\"3\"></is-textarea>"
+          "code": "<iswc-textarea label=\"Reseña\" maxlength=\"120\" show-count rows=\"3\"></iswc-textarea>"
         }
       ]
     },
@@ -193,26 +193,26 @@
       "blocks": [
         {
           "kind": "demo",
-          "html": "<div class=\"stack\">\r\n            <is-textarea label=\"Error forzado\" error error-text=\"El comentario contiene términos no permitidos\"\r\n              rows=\"2\" value=\"Texto rechazado por el backend\"></is-textarea>\r\n            <is-textarea label=\"Error sin error-text\" error hint=\"El hint se pinta en rojo\" rows=\"2\"></is-textarea>\r\n            <is-textarea id=\"autoErr\" label=\"Obligatorio (sal del campo)\" required rows=\"2\"\r\n              hint=\"Se valida al perder el foco\" error-text=\"Este comentario es obligatorio\"></is-textarea>\r\n          </div>\r\n          <div class=\"actions\">\r\n            <button type=\"button\" id=\"btnReport\">Validar</button>\r\n          </div>"
+          "html": "<div class=\"stack\">\r\n            <iswc-textarea label=\"Error forzado\" error error-text=\"El comentario contiene términos no permitidos\"\r\n              rows=\"2\" value=\"Texto rechazado por el backend\"></iswc-textarea>\r\n            <iswc-textarea label=\"Error sin error-text\" error hint=\"El hint se pinta en rojo\" rows=\"2\"></iswc-textarea>\r\n            <iswc-textarea id=\"autoErr\" label=\"Obligatorio (sal del campo)\" required rows=\"2\"\r\n              hint=\"Se valida al perder el foco\" error-text=\"Este comentario es obligatorio\"></iswc-textarea>\r\n          </div>\r\n          <div class=\"actions\">\r\n            <button type=\"button\" id=\"btnReport\">Validar</button>\r\n          </div>"
         },
         {
           "kind": "code",
-          "code": "<is-textarea error error-text=\"El comentario contiene términos no permitidos\"></is-textarea>\n\ntextarea.reportValidity();   // marca el campo como tocado y pinta el error"
+          "code": "<iswc-textarea error error-text=\"El comentario contiene términos no permitidos\"></iswc-textarea>\n\ntextarea.reportValidity();   // marca el campo como tocado y pinta el error"
         }
       ]
     },
     {
       "id": "width",
       "title": "Ancho",
-      "lede": "Mismo token que <code class=\"code\">is-input</code>: <code class=\"code\">--iswc-field-width</code>\r\n          (heredable) y <code class=\"code\">full-width</code> para ocupar todo el ancho disponible.",
+      "lede": "Mismo token que <code class=\"code\">iswc-input</code>: <code class=\"code\">--iswc-field-width</code>\r\n          (heredable) y <code class=\"code\">full-width</code> para ocupar todo el ancho disponible.",
       "blocks": [
         {
           "kind": "demo",
-          "html": "<div style=\"display:grid; gap:1.25rem; --iswc-field-width:18rem;\">\r\n            <is-textarea label=\"--iswc-field-width: 18rem\" rows=\"2\" placeholder=\"Heredado del contenedor\"></is-textarea>\r\n            <is-textarea label=\"full-width\" full-width rows=\"2\" placeholder=\"Ignora el token\"></is-textarea>\r\n          </div>"
+          "html": "<div style=\"display:grid; gap:1.25rem; --iswc-field-width:18rem;\">\r\n            <iswc-textarea label=\"--iswc-field-width: 18rem\" rows=\"2\" placeholder=\"Heredado del contenedor\"></iswc-textarea>\r\n            <iswc-textarea label=\"full-width\" full-width rows=\"2\" placeholder=\"Ignora el token\"></iswc-textarea>\r\n          </div>"
         },
         {
           "kind": "code",
-          "code": "<div style=\"--iswc-field-width: 18rem\">\n  <is-textarea label=\"Estrecho\" rows=\"2\"></is-textarea>\n  <is-textarea label=\"Ancho completo\" full-width rows=\"2\"></is-textarea>\n</div>"
+          "code": "<div style=\"--iswc-field-width: 18rem\">\n  <iswc-textarea label=\"Estrecho\" rows=\"2\"></iswc-textarea>\n  <iswc-textarea label=\"Ancho completo\" full-width rows=\"2\"></iswc-textarea>\n</div>"
         }
       ]
     },
@@ -223,11 +223,11 @@
       "blocks": [
         {
           "kind": "demo",
-          "html": "<div style=\"display:grid; gap:0.75rem; --iswc-field-label-width:7rem; max-width:34rem;\">\r\n            <is-textarea label-placement=\"start\" label=\"Asunto\" full-width rows=\"1\"></is-textarea>\r\n            <is-textarea label-placement=\"start\" label=\"Mensaje\" full-width autosize min-rows=\"3\" max-rows=\"8\"\r\n              hint=\"Crece con el texto\" show-count maxlength=\"500\"></is-textarea>\r\n          </div>"
+          "html": "<div style=\"display:grid; gap:0.75rem; --iswc-field-label-width:7rem; max-width:34rem;\">\r\n            <iswc-textarea label-placement=\"start\" label=\"Asunto\" full-width rows=\"1\"></iswc-textarea>\r\n            <iswc-textarea label-placement=\"start\" label=\"Mensaje\" full-width autosize min-rows=\"3\" max-rows=\"8\"\r\n              hint=\"Crece con el texto\" show-count maxlength=\"500\"></iswc-textarea>\r\n          </div>"
         },
         {
           "kind": "code",
-          "code": "<div style=\"--iswc-field-label-width: 7rem\">\n  <is-textarea label-placement=\"start\" label=\"Mensaje\" full-width autosize min-rows=\"3\"></is-textarea>\n</div>"
+          "code": "<div style=\"--iswc-field-label-width: 7rem\">\n  <iswc-textarea label-placement=\"start\" label=\"Mensaje\" full-width autosize min-rows=\"3\"></iswc-textarea>\n</div>"
         }
       ]
     },
@@ -237,7 +237,7 @@
       "blocks": [
         {
           "kind": "demo",
-          "html": "<div class=\"stack\">\r\n            <is-textarea label=\"Solo lectura\" readonly rows=\"2\" value=\"Contenido fijo\"></is-textarea>\r\n            <is-textarea label=\"Deshabilitado\" disabled rows=\"2\" value=\"Sin acceso\"></is-textarea>\r\n            <is-textarea variant=\"filled\" label=\"filled · readonly\" readonly rows=\"2\" value=\"Contenido fijo\"></is-textarea>\r\n          </div>"
+          "html": "<div class=\"stack\">\r\n            <iswc-textarea label=\"Solo lectura\" readonly rows=\"2\" value=\"Contenido fijo\"></iswc-textarea>\r\n            <iswc-textarea label=\"Deshabilitado\" disabled rows=\"2\" value=\"Sin acceso\"></iswc-textarea>\r\n            <iswc-textarea variant=\"filled\" label=\"filled · readonly\" readonly rows=\"2\" value=\"Contenido fijo\"></iswc-textarea>\r\n          </div>"
         }
       ]
     },
@@ -248,7 +248,7 @@
       "blocks": [
         {
           "kind": "demo",
-          "html": "<form id=\"f\" style=\"display:grid; gap:0.75rem; max-width:30rem;\">\r\n            <is-textarea name=\"comentario\" label=\"Comentario\" required autosize min-rows=\"3\" max-rows=\"8\"\r\n              maxlength=\"300\" show-count error-text=\"El comentario es obligatorio\"></is-textarea>\r\n            <div class=\"actions\">\r\n              <button type=\"submit\">Enviar</button>\r\n              <button type=\"reset\">Reset</button>\r\n            </div>\r\n          </form>"
+          "html": "<form id=\"f\" style=\"display:grid; gap:0.75rem; max-width:30rem;\">\r\n            <iswc-textarea name=\"comentario\" label=\"Comentario\" required autosize min-rows=\"3\" max-rows=\"8\"\r\n              maxlength=\"300\" show-count error-text=\"El comentario es obligatorio\"></iswc-textarea>\r\n            <div class=\"actions\">\r\n              <button type=\"submit\">Enviar</button>\r\n              <button type=\"reset\">Reset</button>\r\n            </div>\r\n          </form>"
         }
       ]
     },
@@ -395,7 +395,7 @@
             ],
             [
               "events",
-              "<code>is-input</code> <code>is-change</code> (<code>detail.value</code>) + nativos <code>input</code> / <code>change</code>"
+              "<code>iswc-input</code> <code>iswc-change</code> (<code>detail.value</code>) + nativos <code>input</code> / <code>change</code>"
             ]
           ]
         },

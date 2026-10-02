@@ -1,7 +1,7 @@
-// format-bytes.test.mjs — tests funcionales de <is-format-bytes>.
+// format-bytes.test.mjs — tests funcionales de <iswc-format-bytes>.
 //
 // Cubre:
-//   - smoke: todos los <is-format-bytes> del demo renderizan texto no vacío.
+//   - smoke: todos los <iswc-format-bytes> del demo renderizan texto no vacío.
 //   - escalado: 0 B, 512 B, 1 KB, 1 MB, 1 GB con sufijo correcto.
 //   - autofit: 200 KB en vez de "0.2 MB", y 1.5 MB sin .0.
 //   - long vs short: 'short' → "1 MB" / 'long' → "1 megabyte".
@@ -16,12 +16,12 @@ const URL = `${BASE_URL}/demos/helpers/format-bytes/format-bytes.html`;
 const tests = [];
 
 tests.push({
-  name: 'smoke: todos los <is-format-bytes> del demo renderizan',
+  name: 'smoke: todos los <iswc-format-bytes> del demo renderizan',
   run: async (page) => {
     await page.goto(URL, { waitUntil: 'domcontentloaded' });
     await waitReady(page, 'data-format-bytes-ready');
     const r = await page.evaluate(() => {
-      const all = [...document.querySelectorAll('main is-format-bytes')];
+      const all = [...document.querySelectorAll('main iswc-format-bytes')];
       return all.map((el) => {
         const span = el.shadowRoot.querySelector('span');
         return { text: span?.textContent ?? '', empty: span?.textContent === '' };
@@ -40,7 +40,7 @@ tests.push({
     await waitReady(page, 'data-format-bytes-ready');
     const r = await page.evaluate(() => {
       const get = (val, extra = '') => {
-        const el = [...document.querySelectorAll('main is-format-bytes')].find((e) => e.getAttribute('value') === String(val) && (!extra || e.getAttribute(extra.split('=')[0]) === extra.split('=')[1].replace(/"/g, '')));
+        const el = [...document.querySelectorAll('main iswc-format-bytes')].find((e) => e.getAttribute('value') === String(val) && (!extra || e.getAttribute(extra.split('=')[0]) === extra.split('=')[1].replace(/"/g, '')));
         return el?.shadowRoot.querySelector('span')?.textContent ?? '';
       };
       return {
@@ -75,7 +75,7 @@ tests.push({
     await page.goto(URL, { waitUntil: 'domcontentloaded' });
     await waitReady(page, 'data-format-bytes-ready');
     const r = await page.evaluate(() => {
-      const all = [...document.querySelectorAll('main is-format-bytes')];
+      const all = [...document.querySelectorAll('main iswc-format-bytes')];
       const byAttrs = (display) => all.find((e) => e.getAttribute('value') === '1048576' && e.getAttribute('display') === display);
       return {
         short: byAttrs('short')?.shadowRoot.querySelector('span')?.textContent ?? '',
@@ -93,7 +93,7 @@ tests.push({
     await page.goto(URL, { waitUntil: 'domcontentloaded' });
     await waitReady(page, 'data-format-bytes-ready');
     const r = await page.evaluate(() => {
-      const all = [...document.querySelectorAll('main is-format-bytes')];
+      const all = [...document.querySelectorAll('main iswc-format-bytes')];
       const el = all.find((e) => e.getAttribute('value') === '200000' && e.hasAttribute('autofit'));
       return el?.shadowRoot.querySelector('span')?.textContent ?? '';
     });
@@ -108,7 +108,7 @@ tests.push({
     await page.goto(URL, { waitUntil: 'domcontentloaded' });
     await waitReady(page, 'data-format-bytes-ready');
     const r = await page.evaluate(() => {
-      const all = [...document.querySelectorAll('main is-format-bytes')];
+      const all = [...document.querySelectorAll('main iswc-format-bytes')];
       const el = all.find((e) => e.getAttribute('value') === '1500000' && e.hasAttribute('autofit'));
       return el?.shadowRoot.querySelector('span')?.textContent ?? '';
     });
@@ -123,7 +123,7 @@ tests.push({
     await page.goto(URL, { waitUntil: 'domcontentloaded' });
     await waitReady(page, 'data-format-bytes-ready');
     const r = await page.evaluate(() => {
-      const all = [...document.querySelectorAll('main is-format-bytes')];
+      const all = [...document.querySelectorAll('main iswc-format-bytes')];
       const el = all.find((e) => e.getAttribute('value') === '-2048');
       return el?.shadowRoot.querySelector('span')?.textContent ?? '';
     });
@@ -138,7 +138,7 @@ tests.push({
     await page.goto(URL, { waitUntil: 'domcontentloaded' });
     await waitReady(page, 'data-format-bytes-ready');
     const r = await page.evaluate(() => {
-      const all = [...document.querySelectorAll('main is-format-bytes')];
+      const all = [...document.querySelectorAll('main iswc-format-bytes')];
       const co = all.find((e) => e.getAttribute('value') === '4096' && e.getAttribute('locale') === 'es-CO');
       const us = all.find((e) => e.getAttribute('value') === '4096' && e.getAttribute('locale') === 'en-US');
       return {
@@ -160,7 +160,7 @@ tests.push({
     await page.goto(URL, { waitUntil: 'domcontentloaded' });
     await waitReady(page, 'data-format-bytes-ready');
     const r = await page.evaluate(() => {
-      const el = [...document.querySelectorAll('main is-format-bytes')].find((e) => e.getAttribute('value') === '1048576' && e.getAttribute('display') === 'short');
+      const el = [...document.querySelectorAll('main iswc-format-bytes')].find((e) => e.getAttribute('value') === '1048576' && e.getAttribute('display') === 'short');
       const s = el.shadowRoot.querySelector('span');
       return { a: s.textContent, b: s.textContent };
     });

@@ -1,20 +1,20 @@
 ---
-tag: is-media-recorder
+tag: iswc-media-recorder
 tags:
-  - is-media-recorder
+  - iswc-media-recorder
 category: media
 status: public
 source: ./media-recorder.js
 style: ./media-recorder.css
 preview: ./media-recorder.json
 ---
-# `<is-media-recorder>`
+# `<iswc-media-recorder>`
 
 ## Propósito
 
 Graba cámara, micrófono o pantalla (`getDisplayMedia`) con `MediaRecorder` y entrega un Blob.
 
-Este módulo registra `<is-media-recorder>`.
+Este módulo registra `<iswc-media-recorder>`.
 
 ## Cuándo usarlo
 
@@ -22,7 +22,7 @@ Notas de voz, captura de pantalla, clip de webcam.
 
 ## Cuándo no usarlo
 
-Para solo reproducir usa `<is-video>`. Dictado a texto es `<is-speech>`.
+Para solo reproducir usa `<iswc-video>`. Dictado a texto es `<iswc-speech>`.
 
 ## Importación
 
@@ -33,7 +33,7 @@ import './media-recorder.js';
 ## Ejemplo mínimo
 
 ```html
-<is-media-recorder source="camera"></is-media-recorder>
+<iswc-media-recorder source="camera"></iswc-media-recorder>
 ```
 
 ## API
@@ -63,9 +63,9 @@ import './media-recorder.js';
 
 | Evento | detail | bubbles | composed | cancelable |
 | --- | --- | --- | --- | --- |
-| `is-start` | sí `{ source }` | sí | sí | no |
-| `is-stop` | sí `{ blob, url, type }` | sí | sí | no |
-| `is-error` | sí `{ message }` | sí | sí | no |
+| `iswc-start` | sí `{ source }` | sí | sí | no |
+| `iswc-stop` | sí `{ blob, url, type }` | sí | sí | no |
+| `iswc-error` | sí `{ message }` | sí | sí | no |
 
 ### Métodos y propiedades públicas
 
@@ -103,7 +103,7 @@ Botón grabar/detener.
 ## Ejemplo avanzado
 
 ```html
-<is-media-recorder source="display"></is-media-recorder>
+<iswc-media-recorder source="display"></iswc-media-recorder>
 ```
 
 ## Errores comunes

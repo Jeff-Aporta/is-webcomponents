@@ -1,11 +1,11 @@
 {
-  "$schema": "is-preview/v1",
-  "tag": "is-year-calendar",
+  "$schema": "iswc-preview/v1",
+  "tag": "iswc-year-calendar",
   "category": "forms",
-  "title": "<is-year-calendar>",
+  "title": "<iswc-year-calendar>",
   "titleHtml": true,
-  "description": "Documentación y demos de is-year-calendar de InSoft.",
-  "storageKey": "docs-is-year-calendar",
+  "description": "Documentación y demos de iswc-year-calendar de InSoft.",
+  "storageKey": "docs-iswc-year-calendar",
   "sections": [
     {
       "id": "intro",
@@ -14,7 +14,7 @@
       "blocks": [
         {
           "kind": "demo",
-          "html": "<is-year-calendar value=\"2026-08\"></is-year-calendar>",
+          "html": "<iswc-year-calendar value=\"2026-08\"></iswc-year-calendar>",
           "controls": [
             {
               "control": "text",
@@ -25,7 +25,7 @@
         },
         {
           "kind": "code",
-          "code": "<is-year-calendar value=\"2026-08\"></is-year-calendar>",
+          "code": "<iswc-year-calendar value=\"2026-08\"></iswc-year-calendar>",
           "lang": "html"
         }
       ]
@@ -33,7 +33,7 @@
     {
       "id": "reference",
       "title": "Referencia",
-      "lede": "&lt;is-year-calendar&gt; — Rejilla de años desplazable (MUI YearCalendar). Atributos: value (yyyy), min, max (ISO o yyyy), columns, disabled, readonly Events: is-change  detail { value, year }",
+      "lede": "&lt;iswc-year-calendar&gt; — Rejilla de años desplazable (MUI YearCalendar). Atributos: value (yyyy), min, max (ISO o yyyy), columns, disabled, readonly Events: iswc-change  detail { value, year }",
       "blocks": [
         {
           "kind": "html",

@@ -3,7 +3,7 @@
 <head>
 <meta charset="utf-8" />
 <meta name="viewport" content="width=device-width, initial-scale=1" />
-<title>Demo de <is-callout> · is-webcomponents</title>
+<title>Demo de <iswc-callout> · is-webcomponents</title>
 <meta name="description" content="Mensaje en línea con borde y fondo suaves. Variantes de color (brand/neutral/success/warning/danger) y de variant (accent/filled/outlined/filled-outlined/plain)." />
 <style>
   html, body { margin: 0; padding: 0; min-height: 100%; background: #0c1118; color: #e2e8f0; font-family: ui-sans-serif, system-ui, sans-serif; }
@@ -16,19 +16,19 @@
   section h2 { font-size: 11px; text-transform: uppercase; letter-spacing: 0.08em; margin: 0 0 12px 0; color: #94a3b8; }
   .grid-colors { display: grid; gap: 10px; grid-template-columns: repeat(auto-fit, minmax(220px, 1fr)); }
   .row { display: flex; gap: 12px; flex-wrap: wrap; align-items: center; }
-  is-callout { display: block; }
-  is-callout:not(:defined) { visibility: hidden; }
+  iswc-callout { display: block; }
+  iswc-callout:not(:defined) { visibility: hidden; }
   .interactive-actions { display: flex; gap: 8px; margin-top: 8px; flex-wrap: wrap; }
   footer { padding: 12px 20px; border-top: 1px solid rgba(255,255,255,0.1); background: #0f1620; font-size: 11px; color: #94a3b8; }
   footer code { background: rgba(255,255,255,0.06); padding: 1px 5px; border-radius: 3px; font: 11px ui-monospace, Menlo, Consolas, monospace; }
 </style>
 <script type="module">
-  await import('../../../dist/cdn/layout/callout.min.js?h=bzdj2h');
-  // El default-icon interno es <is-icon>; necesita estar definido para que el
+  await import('../../../dist/cdn/layout/callout.min.js?h=d5vpr6');
+  // El default-icon interno es <iswc-icon>; necesita estar definido para que el
   // atributo icon del callout se propague.
-  await import('../../../dist/cdn/media/icon.min.js?h=y6tzub');
-  await customElements.whenDefined('is-callout');
-  await customElements.whenDefined('is-icon');
+  await import('../../../dist/cdn/media/icon.min.js?h=sp71yy');
+  await customElements.whenDefined('iswc-callout');
+  await customElements.whenDefined('iswc-icon');
 
   // (1) Colores: brand / neutral / success / warning / danger.
   const colors = [
@@ -40,7 +40,7 @@
   ];
   const colorsHost = document.getElementById('colors');
   for (const [c, msg] of colors) {
-    const el = document.createElement('is-callout');
+    const el = document.createElement('iswc-callout');
     el.setAttribute('color', c);
     el.textContent = msg;
     colorsHost.appendChild(el);
@@ -50,7 +50,7 @@
   const variants = ['accent', 'filled', 'outlined', 'filled-outlined', 'plain'];
   const variantsHost = document.getElementById('variants');
   for (const v of variants) {
-    const el = document.createElement('is-callout');
+    const el = document.createElement('iswc-callout');
     el.setAttribute('color', 'brand');
     el.setAttribute('variant', v);
     el.textContent = `Variant="${v}" sobre fondo brand.`;
@@ -59,18 +59,18 @@
 
   // (3) Icono explícito vs default por color.
   const iconHost = document.getElementById('icons');
-  const defaultIcon = document.createElement('is-callout');
+  const defaultIcon = document.createElement('iswc-callout');
   defaultIcon.setAttribute('color', 'warning');
   defaultIcon.textContent = 'Icono por defecto (mdi:alert-outline).';
   iconHost.appendChild(defaultIcon);
 
-  const explicit = document.createElement('is-callout');
+  const explicit = document.createElement('iswc-callout');
   explicit.setAttribute('color', 'success');
   explicit.setAttribute('icon', 'mdi:rocket-launch-outline');
   explicit.textContent = 'Icono explícito: rocket-launch-outline.';
   iconHost.appendChild(explicit);
 
-  const slotted = document.createElement('is-callout');
+  const slotted = document.createElement('iswc-callout');
   slotted.setAttribute('color', 'brand');
   const customIcon = document.createElement('span');
   customIcon.setAttribute('slot', 'icon');
@@ -83,7 +83,7 @@
 
   // (4) Interactivo: cambiar color/variant en caliente para verificar
   // que las invalid values caen al fallback (neutral/filled-outlined).
-  const interactive = document.createElement('is-callout');
+  const interactive = document.createElement('iswc-callout');
   interactive.setAttribute('color', 'warning');
   interactive.setAttribute('variant', 'outlined');
   interactive.id = 'interactive';
@@ -115,7 +115,7 @@
 </head>
 <body>
 <header>
-  <h1>Demo — <code>&lt;is-callout&gt;</code></h1>
+  <h1>Demo — <code>&lt;iswc-callout&gt;</code></h1>
   <p>Mensajes en línea con borde y fondo suaves. Color + variant + icono por slot o atributo. Atributos inválidos caen al fallback.</p>
 </header>
 <main>
@@ -143,7 +143,7 @@
   </section>
 </main>
 <footer>
-  Estado: <code>customElements.whenDefined('is-callout')</code> resuelto. Atributos inválidos se resetean a <code>color="neutral"</code> / <code>variant="filled-outlined"</code>.
+  Estado: <code>customElements.whenDefined('iswc-callout')</code> resuelto. Atributos inválidos se resetean a <code>color="neutral"</code> / <code>variant="filled-outlined"</code>.
 </footer>
 </body>
 </html>

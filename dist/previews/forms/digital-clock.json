@@ -1,11 +1,11 @@
 {
-  "$schema": "is-preview/v1",
-  "tag": "is-digital-clock",
+  "$schema": "iswc-preview/v1",
+  "tag": "iswc-digital-clock",
   "category": "forms",
-  "title": "<is-digital-clock>",
+  "title": "<iswc-digital-clock>",
   "titleHtml": true,
-  "description": "Documentación y demos de is-digital-clock de InSoft.",
-  "storageKey": "docs-is-digital-clock",
+  "description": "Documentación y demos de iswc-digital-clock de InSoft.",
+  "storageKey": "docs-iswc-digital-clock",
   "sections": [
     {
       "id": "intro",
@@ -14,7 +14,7 @@
       "blocks": [
         {
           "kind": "demo",
-          "html": "<is-digital-clock value=\"14:30\"></is-digital-clock>",
+          "html": "<iswc-digital-clock value=\"14:30\"></iswc-digital-clock>",
           "controls": [
             {
               "control": "text",
@@ -25,7 +25,7 @@
         },
         {
           "kind": "code",
-          "code": "<is-digital-clock value=\"14:30\"></is-digital-clock>",
+          "code": "<iswc-digital-clock value=\"14:30\"></iswc-digital-clock>",
           "lang": "html"
         }
       ]
@@ -33,7 +33,7 @@
     {
       "id": "reference",
       "title": "Referencia",
-      "lede": "&lt;is-digital-clock&gt; — Selector de hora en lista (MUI DigitalClock) o en columnas de horas / minutos / segundos / AM-PM (MultiSectionDigitalClock). Atributos: value (HH:mm[:ss]), layout (list|sections), step (minutos en lista), minutes-step, seconds, ampm, hour24, min-time, max-time, skip-disabled, locale, disabled, readonly Events: is-change { value }",
+      "lede": "&lt;iswc-digital-clock&gt; — Selector de hora en lista (MUI DigitalClock) o en columnas de horas / minutos / segundos / AM-PM (MultiSectionDigitalClock). Atributos: value (HH:mm[:ss]), layout (list|sections), step (minutos en lista), minutes-step, seconds, ampm, hour24, min-time, max-time, skip-disabled, locale, disabled, readonly Events: iswc-change { value }",
       "blocks": [
         {
           "kind": "html",

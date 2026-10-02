@@ -4,12 +4,12 @@ import '../actions/button.js';
 import { ModalBase } from '../_shared/modal-base.js';
 
 /**
- * <is-drawer> — Web Component (vanilla, zero dependencies).
+ * <iswc-drawer> — Web Component (vanilla, zero dependencies).
  *
  * Panel que se desliza desde un borde del viewport. Ideal para menús, filtros
  * y contenido secundario. Equivalente accesible a wa-drawer (Web Awesome).
  *
- * Comparte con <is-dialog> TODO el ciclo de vida (focus-trap, Escape, backdrop
+ * Comparte con <iswc-dialog> TODO el ciclo de vida (focus-trap, Escape, backdrop
  * light-dismiss, restore de foco, `data-drawer="close"`, eventos) vía
  * `_shared/modal-base.js`. Aquí sólo queda el chrome propio, el `placement` y
  * las animaciones de deslizamiento.
@@ -29,7 +29,7 @@ import { ModalBase } from '../_shared/modal-base.js';
  *
  * Métodos: show() / hide() / toggle()
  *
- * Eventos: is-show, is-after-show, is-hide (cancelable, detail.source), is-after-hide
+ * Eventos: iswc-show, iswc-after-show, iswc-hide (cancelable, detail.source), iswc-after-hide
  *
  * CSS Parts: drawer, header, title, close-button, header-actions, body, footer
  *
@@ -51,7 +51,7 @@ import { ModalBase } from '../_shared/modal-base.js';
         </h2>
         <div class="header-actions" part="header-actions">
           <slot name="header-actions"></slot>
-          <is-button
+          <iswc-button
             type="button"
             class="close-btn"
             part="close-button"
@@ -59,8 +59,8 @@ import { ModalBase } from '../_shared/modal-base.js';
             color="neutral"
             aria-label="Cerrar"
           >
-            <is-icon icon="mdi:close" aria-hidden="true"></is-icon>
-          </is-button>
+            <iswc-icon icon="mdi:close" aria-hidden="true"></iswc-icon>
+          </iswc-button>
         </div>
       </header>
       <div class="body" part="body">
@@ -80,7 +80,7 @@ import { ModalBase } from '../_shared/modal-base.js';
     bottom: { transform: 'translateY(100%)' },
   };
 
-  class IsDrawer extends ModalBase {
+  class IswcDrawer extends ModalBase {
     /** Personalización por atributo (ver `core/attrs.ts`). */
     static styleAttrs = {
       size: '--iswc-drawer-size',
@@ -93,7 +93,7 @@ import { ModalBase } from '../_shared/modal-base.js';
     static __TEMPLATE = TEMPLATE;
 
     static get observedAttributes(): string[] {
-      return [...super.observedAttributes, 'placement', ...IsDrawer.styleAttrNames];
+      return [...super.observedAttributes, 'placement', ...IswcDrawer.styleAttrNames];
     }
 
     get modalClass() { return '.drawer'; }
@@ -164,5 +164,5 @@ import { ModalBase } from '../_shared/modal-base.js';
     }
   }
 
-  defineElement('is-drawer', IsDrawer, 'IsDrawer');
+  defineElement('iswc-drawer', IswcDrawer, 'IswcDrawer');
 })();

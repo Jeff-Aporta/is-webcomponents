@@ -2,5 +2,5 @@ import './chart.js';
 import { drawLineMarks } from './marks-cartesian.js';
 
 (() => {
-  window.__isDefineTypedChart?.('is-line-chart', 'line', drawLineMarks);
+  window.__isDefineTypedChart?.('iswc-line-chart', 'line', drawLineMarks);
 })();

@@ -49,9 +49,9 @@ del catálogo ISWC, cargados por la galería vía dynamic import.
 
 | # | Archivo | Naturaleza | Registro en `catalog.ts` |
 |---|---|---|---|
-| H5 | `src/components/data-viz/heatmap.preview.ts` | preview de `is-heatmap` | L131 `behavior: ../components/data-viz/heatmap.preview.js` |
-| H6 | `src/components/navigation/mega-menu.preview.ts` | preview de `is-mega-menu` | L739 `behavior: ../components/navigation/mega-menu.preview.js` |
-| H7 | `src/components/overlays/command-palette.preview.ts` | preview de `is-command-palette` | L776 `behavior: ../components/overlays/command-palette.preview.js` |
+| H5 | `src/components/data-viz/heatmap.preview.ts` | preview de `iswc-heatmap` | L131 `behavior: ../components/data-viz/heatmap.preview.js` |
+| H6 | `src/components/navigation/mega-menu.preview.ts` | preview de `iswc-mega-menu` | L739 `behavior: ../components/navigation/mega-menu.preview.js` |
+| H7 | `src/components/overlays/command-palette.preview.ts` | preview de `iswc-command-palette` | L776 `behavior: ../components/overlays/command-palette.preview.js` |
 | H8 | `src/pages/ecosystem.ts` | entry point de página | L798 `behavior: ../pages/ecosystem.js` |
 | H9 | `src/pages/home.ts` | entry point de página | L547 `behavior: ../pages/home.js` |
 | H10 | `src/pages/theming.ts` | entry point de página | L793 `behavior: ../pages/theming.js` |

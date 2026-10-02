@@ -1,4 +1,4 @@
-// spinner.test.mjs — tests exhaustivos del demo is-spinner.
+// spinner.test.mjs — tests exhaustivos del demo iswc-spinner.
 // Cobertura: smoke + funcional (role=status, aria-live, aria-label por
 // defecto, color custom) + gap 1: prefers-reduced-motion neutraliza la
 // animación de rotación del spinner.
@@ -15,16 +15,16 @@ tests.push({
     await page.goto(URL, { waitUntil: 'domcontentloaded' });
     await waitReady(page, 'data-spinner-ready');
     const data = await page.evaluate(() => {
-      const all = document.querySelectorAll('is-spinner');
+      const all = document.querySelectorAll('iswc-spinner');
       return {
-        defined: !!customElements.get('is-spinner'),
+        defined: !!customElements.get('iswc-spinner'),
         count: all.length,
         allRole: [...all].every((s) => s.getAttribute('role') === 'status'),
         allLive: [...all].every((s) => s.getAttribute('aria-live') === 'polite'),
         allLabel: [...all].every((s) => (s.getAttribute('aria-label') || '').length > 0),
       };
     });
-    assert.equal(data.defined, true, 'is-spinner debe estar definido');
+    assert.equal(data.defined, true, 'iswc-spinner debe estar definido');
     assert.ok(data.count >= 9, `esperaba >=9 spinners, hay ${data.count}`);
     assert.equal(data.allRole, true, 'todos deben tener role=status');
     assert.equal(data.allLive, true, 'todos deben tener aria-live=polite');
@@ -43,7 +43,7 @@ tests.push({
       // El connectedCallback setea aria-label="Cargando" si no existe.
       // El HTML del demo no pone aria-label en ninguno, así que TODOS lo
       // reciben como "Cargando" tras upgrade. Filtramos por ese valor.
-      const s = document.querySelector('is-spinner[aria-label="Cargando"]');
+      const s = document.querySelector('iswc-spinner[aria-label="Cargando"]');
       return s?.getAttribute('aria-label');
     });
     assert.match(label, /cargando/i, `aria-label default debe ser "Cargando" (vimos "${label}")`);
@@ -56,7 +56,7 @@ tests.push({
     await page.goto(URL, { waitUntil: 'domcontentloaded' });
     await waitReady(page, 'data-spinner-ready');
     const label = await page.evaluate(() => {
-      const s = document.createElement('is-spinner');
+      const s = document.createElement('iswc-spinner');
       s.setAttribute('aria-label', 'Cargando perfil');
       document.body.appendChild(s);
       const got = s.getAttribute('aria-label');
@@ -73,7 +73,7 @@ tests.push({
     await page.goto(URL, { waitUntil: 'domcontentloaded' });
     await waitReady(page, 'data-spinner-ready');
     const data = await page.evaluate(() => {
-      const s = document.querySelector('is-spinner[color="#7c3aed"]');
+      const s = document.querySelector('iswc-spinner[color="#7c3aed"]');
       const ind = s.shadowRoot.querySelector('.spinner');
       return {
         varColor: s.style.getPropertyValue('--iswc-spinner-color'),
@@ -94,8 +94,8 @@ tests.push({
     await page.goto(URL, { waitUntil: 'domcontentloaded' });
     await waitReady(page, 'data-spinner-ready');
     const data = await page.evaluate(() => {
-      const slow = document.querySelector('is-spinner[speed="3s"]');
-      const def = document.querySelector('is-spinner:not([speed])');
+      const slow = document.querySelector('iswc-spinner[speed="3s"]');
+      const def = document.querySelector('iswc-spinner:not([speed])');
       return {
         slowVar: slow.style.getPropertyValue('--iswc-spinner-speed'),
         slowDur: getComputedStyle(slow.shadowRoot.querySelector('.spinner')).animationDuration,
@@ -115,7 +115,7 @@ tests.push({
     await page.goto(URL, { waitUntil: 'domcontentloaded' });
     await waitReady(page, 'data-spinner-ready');
     const data = await page.evaluate(() => {
-      const s = document.querySelector('is-spinner:not([speed])');
+      const s = document.querySelector('iswc-spinner:not([speed])');
       const ind = s.shadowRoot.querySelector('.spinner');
       const cs = getComputedStyle(ind);
       return {
@@ -139,7 +139,7 @@ tests.push({
     await page.goto(URL, { waitUntil: 'domcontentloaded' });
     await waitReady(page, 'data-spinner-ready');
     const data = await page.evaluate(() => {
-      const s = document.querySelector('is-spinner:not([speed])');
+      const s = document.querySelector('iswc-spinner:not([speed])');
       const cs = getComputedStyle(s.shadowRoot.querySelector('.spinner'));
       return { animName: cs.animationName, animDuration: cs.animationDuration };
     });

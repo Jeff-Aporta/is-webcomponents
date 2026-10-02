@@ -9,11 +9,11 @@ let browser;
 test.before(async () => { browser = await chromium.launch(); });
 test.after(async () => { await browser?.close(); });
 
-test('check-icon-button: bundle registra <is-check-icon-button>', async () => {
+test('check-icon-button: bundle registra <iswc-check-icon-button>', async () => {
   const page = await browser.newPage();
   await page.goto(URL_DEMO, { waitUntil: 'domcontentloaded' });
-  await page.waitForSelector('is-check-icon-button:defined');
-  const defined = await page.evaluate(() => !!customElements.get('is-check-icon-button'));
+  await page.waitForSelector('iswc-check-icon-button:defined');
+  const defined = await page.evaluate(() => !!customElements.get('iswc-check-icon-button'));
   assert.equal(defined, true);
   await page.close();
 });
@@ -21,9 +21,9 @@ test('check-icon-button: bundle registra <is-check-icon-button>', async () => {
 test('check-icon-button: atributo role=button se aplica al host', async () => {
   const page = await browser.newPage();
   await page.goto(URL_DEMO, { waitUntil: 'domcontentloaded' });
-  await page.waitForSelector('is-check-icon-button:defined');
+  await page.waitForSelector('iswc-check-icon-button:defined');
   const role = await page.evaluate(() => {
-    return document.querySelector('is-check-icon-button#play').getAttribute('role');
+    return document.querySelector('iswc-check-icon-button#play').getAttribute('role');
   });
   assert.equal(role, 'button');
   await page.close();
@@ -32,13 +32,13 @@ test('check-icon-button: atributo role=button se aplica al host', async () => {
 test('check-icon-button: aria-label cambia con checked', async () => {
   const page = await browser.newPage();
   await page.goto(URL_DEMO, { waitUntil: 'domcontentloaded' });
-  await page.waitForSelector('is-check-icon-button:defined');
+  await page.waitForSelector('iswc-check-icon-button:defined');
   await page.evaluate(() => {
-    document.querySelector('is-check-icon-button#play').click();
+    document.querySelector('iswc-check-icon-button#play').click();
   });
   await page.waitForTimeout(50);
   const info = await page.evaluate(() => {
-    const b = document.querySelector('is-check-icon-button#play');
+    const b = document.querySelector('iswc-check-icon-button#play');
     return {
       ariaLabel: b.getAttribute('aria-label'),
       ariaPressed: b.getAttribute('aria-pressed'),
@@ -49,17 +49,17 @@ test('check-icon-button: aria-label cambia con checked', async () => {
   await page.close();
 });
 
-test('check-icon-button: click emite is-change con detail.checked', async () => {
+test('check-icon-button: click emite iswc-change con detail.checked', async () => {
   const page = await browser.newPage();
   await page.goto(URL_DEMO, { waitUntil: 'domcontentloaded' });
-  await page.waitForSelector('is-check-icon-button:defined');
+  await page.waitForSelector('iswc-check-icon-button:defined');
   await page.evaluate(() => {
     window.__ciEvents = [];
-    document.querySelector('is-check-icon-button#mute').addEventListener('is-change', (e) => {
+    document.querySelector('iswc-check-icon-button#mute').addEventListener('iswc-change', (e) => {
       window.__ciEvents.push(e.detail);
     });
   });
-  await page.evaluate(() => document.querySelector('is-check-icon-button#mute').click());
+  await page.evaluate(() => document.querySelector('iswc-check-icon-button#mute').click());
   await page.waitForTimeout(50);
   const detail = await page.evaluate(() => window.__ciEvents);
   assert.equal(detail.length, 1);
@@ -70,12 +70,12 @@ test('check-icon-button: click emite is-change con detail.checked', async () => 
 test('check-icon-button: icono cambia entre icon y checked-icon', async () => {
   const page = await browser.newPage();
   await page.goto(URL_DEMO, { waitUntil: 'domcontentloaded' });
-  await page.waitForSelector('is-check-icon-button:defined');
+  await page.waitForSelector('iswc-check-icon-button:defined');
   const icons = await page.evaluate(() => {
-    const b = document.querySelector('is-check-icon-button#play');
-    const off = b.shadowRoot.querySelector('is-icon').getAttribute('icon');
+    const b = document.querySelector('iswc-check-icon-button#play');
+    const off = b.shadowRoot.querySelector('iswc-icon').getAttribute('icon');
     b.click();
-    const on = b.shadowRoot.querySelector('is-icon').getAttribute('icon');
+    const on = b.shadowRoot.querySelector('iswc-icon').getAttribute('icon');
     return { off, on };
   });
   assert.match(icons.off, /play/, `icon unchecked debe incluir "play", fue ${icons.off}`);
@@ -86,10 +86,10 @@ test('check-icon-button: icono cambia entre icon y checked-icon', async () => {
 test('check-icon-button: tabindex 0 por defecto; -1 cuando disabled', async () => {
   const page = await browser.newPage();
   await page.goto(URL_DEMO, { waitUntil: 'domcontentloaded' });
-  await page.waitForSelector('is-check-icon-button:defined');
+  await page.waitForSelector('iswc-check-icon-button:defined');
   const tabindex = await page.evaluate(() => {
-    const play = document.querySelector('is-check-icon-button#play');
-    const dis = document.querySelector('is-check-icon-button[disabled]');
+    const play = document.querySelector('iswc-check-icon-button#play');
+    const dis = document.querySelector('iswc-check-icon-button[disabled]');
     return {
       play: play.getAttribute('tabindex'),
       dis: dis.getAttribute('tabindex'),
@@ -100,17 +100,17 @@ test('check-icon-button: tabindex 0 por defecto; -1 cuando disabled', async () =
   await page.close();
 });
 
-test('check-icon-button: Enter dispara is-change', async () => {
+test('check-icon-button: Enter dispara iswc-change', async () => {
   const page = await browser.newPage();
   await page.goto(URL_DEMO, { waitUntil: 'domcontentloaded' });
-  await page.waitForSelector('is-check-icon-button:defined');
+  await page.waitForSelector('iswc-check-icon-button:defined');
   await page.evaluate(() => {
     window.__ciKey = [];
-    document.querySelector('is-check-icon-button#play').addEventListener('is-change', (e) => {
+    document.querySelector('iswc-check-icon-button#play').addEventListener('iswc-change', (e) => {
       window.__ciKey.push(e.detail.checked);
     });
   });
-  await page.focus('is-check-icon-button#play');
+  await page.focus('iswc-check-icon-button#play');
   await page.keyboard.press('Enter');
   await page.waitForTimeout(50);
   const key = await page.evaluate(() => window.__ciKey);

@@ -115,7 +115,7 @@ tests.push({
     const info = await page.evaluate(async () => {
       const form = document.getElementById('demo-form');
       // Añadir un control sin name (no debe listarse).
-      const noName = document.createElement('is-input');
+      const noName = document.createElement('iswc-input');
       form.appendChild(noName);
       const mod = await import('../../../dist/cdn/isp/form-json.min.js');
       const controls = mod.listControls(form);

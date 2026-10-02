@@ -15,7 +15,7 @@
       },
       "teclado": {
         "tabOk": true,
-        "firstFocus": "is-code#ecoGetStarted"
+        "firstFocus": "iswc-code#ecoGetStarted"
       },
       "aria": {
         "hasRole": true,
@@ -56,7 +56,7 @@
       },
       "teclado": {
         "tabOk": true,
-        "firstFocus": "is-button#"
+        "firstFocus": "iswc-button#"
       },
       "aria": {
         "hasRole": true,
@@ -91,7 +91,7 @@
       ]
     },
     {
-      "tag": "is-ag-grid",
+      "tag": "iswc-ag-grid",
       "categoria": "data",
       "ok": false,
       "interaccion": {
@@ -101,7 +101,7 @@
       },
       "teclado": {
         "tabOk": true,
-        "firstFocus": "is-button#"
+        "firstFocus": "iswc-button#"
       },
       "aria": {
         "hasRole": true,
@@ -136,7 +136,7 @@
       ]
     },
     {
-      "tag": "is-block-layout",
+      "tag": "iswc-block-layout",
       "categoria": "isp",
       "ok": true,
       "interaccion": {
@@ -173,7 +173,7 @@
       "erroresText": []
     },
     {
-      "tag": "is-btn-ref",
+      "tag": "iswc-btn-ref",
       "categoria": "isp",
       "ok": false,
       "interaccion": {
@@ -183,7 +183,7 @@
       },
       "teclado": {
         "tabOk": true,
-        "firstFocus": "is-button#"
+        "firstFocus": "iswc-button#"
       },
       "aria": {
         "hasRole": true,
@@ -218,7 +218,7 @@
       ]
     },
     {
-      "tag": "is-button",
+      "tag": "iswc-button",
       "categoria": "actions",
       "ok": false,
       "interaccion": {
@@ -228,7 +228,7 @@
       },
       "teclado": {
         "tabOk": true,
-        "firstFocus": "is-button#"
+        "firstFocus": "iswc-button#"
       },
       "aria": {
         "hasRole": true,
@@ -263,7 +263,7 @@
       ]
     },
     {
-      "tag": "is-button-group",
+      "tag": "iswc-button-group",
       "categoria": "actions",
       "ok": false,
       "interaccion": {
@@ -273,7 +273,7 @@
       },
       "teclado": {
         "tabOk": true,
-        "firstFocus": "is-button#"
+        "firstFocus": "iswc-button#"
       },
       "aria": {
         "hasRole": true,
@@ -300,7 +300,7 @@
       "erroresText": []
     },
     {
-      "tag": "is-catalogo-gen",
+      "tag": "iswc-catalogo-gen",
       "categoria": "isp",
       "ok": false,
       "interaccion": {
@@ -310,7 +310,7 @@
       },
       "teclado": {
         "tabOk": true,
-        "firstFocus": "is-button#"
+        "firstFocus": "iswc-button#"
       },
       "aria": {
         "hasRole": true,
@@ -345,7 +345,7 @@
       ]
     },
     {
-      "tag": "is-chart",
+      "tag": "iswc-chart",
       "categoria": "data-viz",
       "ok": false,
       "interaccion": {
@@ -355,7 +355,7 @@
       },
       "teclado": {
         "tabOk": false,
-        "firstFocus": "is-diagram-lightbox#"
+        "firstFocus": "iswc-diagram-lightbox#"
       },
       "aria": {
         "hasRole": true,
@@ -382,7 +382,7 @@
       "erroresText": []
     },
     {
-      "tag": "is-checkbox",
+      "tag": "iswc-checkbox",
       "categoria": "forms",
       "ok": false,
       "interaccion": {
@@ -423,7 +423,7 @@
       "erroresText": []
     },
     {
-      "tag": "is-code",
+      "tag": "iswc-code",
       "categoria": "code",
       "ok": true,
       "interaccion": {
@@ -433,7 +433,7 @@
       },
       "teclado": {
         "tabOk": true,
-        "firstFocus": "is-code#demo-basic"
+        "firstFocus": "iswc-code#demo-basic"
       },
       "aria": {
         "hasRole": true,
@@ -460,7 +460,7 @@
       "erroresText": []
     },
     {
-      "tag": "is-color-picker",
+      "tag": "iswc-color-picker",
       "categoria": "forms",
       "ok": false,
       "interaccion": {
@@ -511,7 +511,7 @@
       ]
     },
     {
-      "tag": "is-command-palette",
+      "tag": "iswc-command-palette",
       "categoria": "overlays",
       "ok": false,
       "interaccion": {
@@ -521,7 +521,7 @@
       },
       "teclado": {
         "tabOk": true,
-        "firstFocus": "is-command-palette#cmd"
+        "firstFocus": "iswc-command-palette#cmd"
       },
       "aria": {
         "hasRole": true,
@@ -594,7 +594,7 @@
       "erroresText": []
     },
     {
-      "tag": "is-context-menu",
+      "tag": "iswc-context-menu",
       "categoria": "actions",
       "ok": false,
       "interaccion": {
@@ -631,7 +631,7 @@
       "erroresText": []
     },
     {
-      "tag": "is-data-grid",
+      "tag": "iswc-data-grid",
       "categoria": "data",
       "ok": false,
       "interaccion": {
@@ -641,7 +641,7 @@
       },
       "teclado": {
         "tabOk": true,
-        "firstFocus": "is-button#"
+        "firstFocus": "iswc-button#"
       },
       "aria": {
         "hasRole": true,
@@ -676,7 +676,7 @@
       ]
     },
     {
-      "tag": "is-diagram-lightbox",
+      "tag": "iswc-diagram-lightbox",
       "categoria": "diagrams",
       "ok": false,
       "interaccion": {
@@ -714,7 +714,7 @@
       "erroresText": []
     },
     {
-      "tag": "is-doc-editor",
+      "tag": "iswc-doc-editor",
       "categoria": "forms",
       "ok": true,
       "interaccion": {
@@ -724,7 +724,7 @@
       },
       "teclado": {
         "tabOk": true,
-        "firstFocus": "is-doc-editor#doc"
+        "firstFocus": "iswc-doc-editor#doc"
       },
       "aria": {
         "hasRole": true,
@@ -755,7 +755,7 @@
       "erroresText": []
     },
     {
-      "tag": "is-dock",
+      "tag": "iswc-dock",
       "categoria": "layout",
       "ok": true,
       "interaccion": {
@@ -765,7 +765,7 @@
       },
       "teclado": {
         "tabOk": true,
-        "firstFocus": "is-dock-item#"
+        "firstFocus": "iswc-dock-item#"
       },
       "aria": {
         "hasRole": true,
@@ -792,7 +792,7 @@
       "erroresText": []
     },
     {
-      "tag": "is-dropdown",
+      "tag": "iswc-dropdown",
       "categoria": "actions",
       "ok": false,
       "interaccion": {
@@ -829,7 +829,7 @@
       "erroresText": []
     },
     {
-      "tag": "is-dropzone",
+      "tag": "iswc-dropzone",
       "categoria": "forms",
       "ok": true,
       "interaccion": {
@@ -839,7 +839,7 @@
       },
       "teclado": {
         "tabOk": true,
-        "firstFocus": "is-dropzone#dz"
+        "firstFocus": "iswc-dropzone#dz"
       },
       "aria": {
         "hasRole": true,
@@ -870,7 +870,7 @@
       "erroresText": []
     },
     {
-      "tag": "is-duration-picker",
+      "tag": "iswc-duration-picker",
       "categoria": "forms",
       "ok": false,
       "interaccion": {
@@ -880,7 +880,7 @@
       },
       "teclado": {
         "tabOk": true,
-        "firstFocus": "is-duration-picker#dur"
+        "firstFocus": "iswc-duration-picker#dur"
       },
       "aria": {
         "hasRole": true,
@@ -915,7 +915,7 @@
       ]
     },
     {
-      "tag": "is-file-input",
+      "tag": "iswc-file-input",
       "categoria": "forms",
       "ok": true,
       "interaccion": {
@@ -925,7 +925,7 @@
       },
       "teclado": {
         "tabOk": true,
-        "firstFocus": "is-file-input#fi"
+        "firstFocus": "iswc-file-input#fi"
       },
       "aria": {
         "hasRole": true,
@@ -956,7 +956,7 @@
       "erroresText": []
     },
     {
-      "tag": "is-flex-layout",
+      "tag": "iswc-flex-layout",
       "categoria": "isp",
       "ok": false,
       "interaccion": {
@@ -994,7 +994,7 @@
       "erroresText": []
     },
     {
-      "tag": "is-flex-options",
+      "tag": "iswc-flex-options",
       "categoria": "isp",
       "ok": true,
       "interaccion": {
@@ -1004,7 +1004,7 @@
       },
       "teclado": {
         "tabOk": true,
-        "firstFocus": "is-flex-options#foDemo"
+        "firstFocus": "iswc-flex-options#foDemo"
       },
       "aria": {
         "hasRole": true,
@@ -1031,7 +1031,7 @@
       "erroresText": []
     },
     {
-      "tag": "is-float-card",
+      "tag": "iswc-float-card",
       "categoria": "isp",
       "ok": false,
       "interaccion": {
@@ -1041,7 +1041,7 @@
       },
       "teclado": {
         "tabOk": true,
-        "firstFocus": "is-button#"
+        "firstFocus": "iswc-button#"
       },
       "aria": {
         "hasRole": true,
@@ -1076,7 +1076,7 @@
       ]
     },
     {
-      "tag": "is-form",
+      "tag": "iswc-form",
       "categoria": "isp",
       "ok": false,
       "interaccion": {
@@ -1086,7 +1086,7 @@
       },
       "teclado": {
         "tabOk": true,
-        "firstFocus": "is-button#"
+        "firstFocus": "iswc-button#"
       },
       "aria": {
         "hasRole": true,
@@ -1122,7 +1122,7 @@
       ]
     },
     {
-      "tag": "is-format-date",
+      "tag": "iswc-format-date",
       "categoria": "helpers",
       "ok": true,
       "interaccion": {
@@ -1159,7 +1159,7 @@
       "erroresText": []
     },
     {
-      "tag": "is-full-calendar",
+      "tag": "iswc-full-calendar",
       "categoria": "forms",
       "ok": false,
       "interaccion": {
@@ -1169,7 +1169,7 @@
       },
       "teclado": {
         "tabOk": true,
-        "firstFocus": "is-button#"
+        "firstFocus": "iswc-button#"
       },
       "aria": {
         "hasRole": true,
@@ -1208,7 +1208,7 @@
       ]
     },
     {
-      "tag": "is-gauge",
+      "tag": "iswc-gauge",
       "categoria": "data-viz",
       "ok": true,
       "interaccion": {
@@ -1245,7 +1245,7 @@
       "erroresText": []
     },
     {
-      "tag": "is-heading",
+      "tag": "iswc-heading",
       "categoria": "isp",
       "ok": true,
       "interaccion": {
@@ -1282,7 +1282,7 @@
       "erroresText": []
     },
     {
-      "tag": "is-heatmap",
+      "tag": "iswc-heatmap",
       "categoria": "data-viz",
       "ok": false,
       "interaccion": {
@@ -1292,7 +1292,7 @@
       },
       "teclado": {
         "tabOk": true,
-        "firstFocus": "is-button#"
+        "firstFocus": "iswc-button#"
       },
       "aria": {
         "hasRole": true,
@@ -1327,7 +1327,7 @@
       ]
     },
     {
-      "tag": "is-icon",
+      "tag": "iswc-icon",
       "categoria": "media",
       "ok": true,
       "interaccion": {
@@ -1364,7 +1364,7 @@
       "erroresText": []
     },
     {
-      "tag": "is-icon-explorer",
+      "tag": "iswc-icon-explorer",
       "categoria": "media",
       "ok": false,
       "interaccion": {
@@ -1374,7 +1374,7 @@
       },
       "teclado": {
         "tabOk": true,
-        "firstFocus": "is-button#ctaExplore"
+        "firstFocus": "iswc-button#ctaExplore"
       },
       "aria": {
         "hasRole": true,
@@ -1403,7 +1403,7 @@
       "erroresText": []
     },
     {
-      "tag": "is-image-editor",
+      "tag": "iswc-image-editor",
       "categoria": "media",
       "ok": false,
       "interaccion": {
@@ -1413,7 +1413,7 @@
       },
       "teclado": {
         "tabOk": true,
-        "firstFocus": "is-button#"
+        "firstFocus": "iswc-button#"
       },
       "aria": {
         "hasRole": true,
@@ -1454,7 +1454,7 @@
       ]
     },
     {
-      "tag": "is-input",
+      "tag": "iswc-input",
       "categoria": "forms",
       "ok": true,
       "interaccion": {
@@ -1495,7 +1495,7 @@
       "erroresText": []
     },
     {
-      "tag": "is-lightbox",
+      "tag": "iswc-lightbox",
       "categoria": "helpers",
       "ok": false,
       "interaccion": {
@@ -1505,7 +1505,7 @@
       },
       "teclado": {
         "tabOk": true,
-        "firstFocus": "is-lightbox#lb-vid"
+        "firstFocus": "iswc-lightbox#lb-vid"
       },
       "aria": {
         "hasRole": true,
@@ -1532,7 +1532,7 @@
       "erroresText": []
     },
     {
-      "tag": "is-loading-overlay",
+      "tag": "iswc-loading-overlay",
       "categoria": "isp",
       "ok": false,
       "interaccion": {
@@ -1542,7 +1542,7 @@
       },
       "teclado": {
         "tabOk": true,
-        "firstFocus": "is-button#"
+        "firstFocus": "iswc-button#"
       },
       "aria": {
         "hasRole": true,
@@ -1577,7 +1577,7 @@
       ]
     },
     {
-      "tag": "is-main",
+      "tag": "iswc-main",
       "categoria": "layout",
       "ok": false,
       "interaccion": {
@@ -1587,7 +1587,7 @@
       },
       "teclado": {
         "tabOk": true,
-        "firstFocus": "is-button#"
+        "firstFocus": "iswc-button#"
       },
       "aria": {
         "hasRole": true,
@@ -1622,7 +1622,7 @@
       ]
     },
     {
-      "tag": "is-mega-menu",
+      "tag": "iswc-mega-menu",
       "categoria": "navigation",
       "ok": true,
       "interaccion": {
@@ -1632,7 +1632,7 @@
       },
       "teclado": {
         "tabOk": true,
-        "firstFocus": "is-mega-menu#"
+        "firstFocus": "iswc-mega-menu#"
       },
       "aria": {
         "hasRole": true,
@@ -1660,7 +1660,7 @@
       "erroresText": []
     },
     {
-      "tag": "is-mention",
+      "tag": "iswc-mention",
       "categoria": "forms",
       "ok": true,
       "interaccion": {
@@ -1670,7 +1670,7 @@
       },
       "teclado": {
         "tabOk": true,
-        "firstFocus": "is-mention#cmt"
+        "firstFocus": "iswc-mention#cmt"
       },
       "aria": {
         "hasRole": true,
@@ -1701,7 +1701,7 @@
       "erroresText": []
     },
     {
-      "tag": "is-modal-verificacion",
+      "tag": "iswc-modal-verificacion",
       "categoria": "isp",
       "ok": false,
       "interaccion": {
@@ -1711,7 +1711,7 @@
       },
       "teclado": {
         "tabOk": true,
-        "firstFocus": "is-button#mvBtnOk"
+        "firstFocus": "iswc-button#mvBtnOk"
       },
       "aria": {
         "hasRole": true,
@@ -1742,7 +1742,7 @@
       ]
     },
     {
-      "tag": "is-mutation-observer",
+      "tag": "iswc-mutation-observer",
       "categoria": "helpers",
       "ok": false,
       "interaccion": {
@@ -1752,7 +1752,7 @@
       },
       "teclado": {
         "tabOk": true,
-        "firstFocus": "is-button#"
+        "firstFocus": "iswc-button#"
       },
       "aria": {
         "hasRole": true,
@@ -1787,7 +1787,7 @@
       ]
     },
     {
-      "tag": "is-observer",
+      "tag": "iswc-observer",
       "categoria": "helpers",
       "ok": true,
       "interaccion": {
@@ -1824,7 +1824,7 @@
       "erroresText": []
     },
     {
-      "tag": "is-org-chart",
+      "tag": "iswc-org-chart",
       "categoria": "diagrams",
       "ok": false,
       "interaccion": {
@@ -1834,7 +1834,7 @@
       },
       "teclado": {
         "tabOk": false,
-        "firstFocus": "is-diagram-lightbox#"
+        "firstFocus": "iswc-diagram-lightbox#"
       },
       "aria": {
         "hasRole": true,
@@ -1870,7 +1870,7 @@
       ]
     },
     {
-      "tag": "is-pivot-table",
+      "tag": "iswc-pivot-table",
       "categoria": "data",
       "ok": false,
       "interaccion": {
@@ -1880,7 +1880,7 @@
       },
       "teclado": {
         "tabOk": true,
-        "firstFocus": "is-button#"
+        "firstFocus": "iswc-button#"
       },
       "aria": {
         "hasRole": true,
@@ -1915,7 +1915,7 @@
       ]
     },
     {
-      "tag": "is-progress-bar",
+      "tag": "iswc-progress-bar",
       "categoria": "feedback",
       "ok": true,
       "interaccion": {
@@ -1953,7 +1953,7 @@
       "erroresText": []
     },
     {
-      "tag": "is-radar-chart",
+      "tag": "iswc-radar-chart",
       "categoria": "data-viz",
       "ok": false,
       "interaccion": {
@@ -1963,7 +1963,7 @@
       },
       "teclado": {
         "tabOk": false,
-        "firstFocus": "is-diagram-lightbox#"
+        "firstFocus": "iswc-diagram-lightbox#"
       },
       "aria": {
         "hasRole": true,
@@ -1998,7 +1998,7 @@
       ]
     },
     {
-      "tag": "is-rating",
+      "tag": "iswc-rating",
       "categoria": "forms",
       "ok": true,
       "interaccion": {
@@ -2039,7 +2039,7 @@
       "erroresText": []
     },
     {
-      "tag": "is-relative-time",
+      "tag": "iswc-relative-time",
       "categoria": "helpers",
       "ok": false,
       "interaccion": {
@@ -2049,7 +2049,7 @@
       },
       "teclado": {
         "tabOk": true,
-        "firstFocus": "is-button#"
+        "firstFocus": "iswc-button#"
       },
       "aria": {
         "hasRole": true,
@@ -2084,7 +2084,7 @@
       ]
     },
     {
-      "tag": "is-resize-observer",
+      "tag": "iswc-resize-observer",
       "categoria": "helpers",
       "ok": false,
       "interaccion": {
@@ -2094,7 +2094,7 @@
       },
       "teclado": {
         "tabOk": true,
-        "firstFocus": "is-button#"
+        "firstFocus": "iswc-button#"
       },
       "aria": {
         "hasRole": true,
@@ -2129,7 +2129,7 @@
       ]
     },
     {
-      "tag": "is-rte",
+      "tag": "iswc-rte",
       "categoria": "forms",
       "ok": true,
       "interaccion": {
@@ -2139,7 +2139,7 @@
       },
       "teclado": {
         "tabOk": true,
-        "firstFocus": "is-rte#rte"
+        "firstFocus": "iswc-rte#rte"
       },
       "aria": {
         "hasRole": true,
@@ -2170,7 +2170,7 @@
       "erroresText": []
     },
     {
-      "tag": "is-scatter-chart",
+      "tag": "iswc-scatter-chart",
       "categoria": "data-viz",
       "ok": false,
       "interaccion": {
@@ -2180,7 +2180,7 @@
       },
       "teclado": {
         "tabOk": false,
-        "firstFocus": "is-diagram-lightbox#"
+        "firstFocus": "iswc-diagram-lightbox#"
       },
       "aria": {
         "hasRole": true,
@@ -2207,7 +2207,7 @@
       "erroresText": []
     },
     {
-      "tag": "is-select",
+      "tag": "iswc-select",
       "categoria": "forms",
       "ok": true,
       "interaccion": {
@@ -2248,7 +2248,7 @@
       "erroresText": []
     },
     {
-      "tag": "is-sequence-diagram",
+      "tag": "iswc-sequence-diagram",
       "categoria": "diagrams",
       "ok": false,
       "interaccion": {
@@ -2286,7 +2286,7 @@
       "erroresText": []
     },
     {
-      "tag": "is-signature",
+      "tag": "iswc-signature",
       "categoria": "forms",
       "ok": true,
       "interaccion": {
@@ -2327,7 +2327,7 @@
       "erroresText": []
     },
     {
-      "tag": "is-slider",
+      "tag": "iswc-slider",
       "categoria": "forms",
       "ok": false,
       "interaccion": {
@@ -2368,7 +2368,7 @@
       "erroresText": []
     },
     {
-      "tag": "is-speed-dial",
+      "tag": "iswc-speed-dial",
       "categoria": "actions",
       "ok": true,
       "interaccion": {
@@ -2378,7 +2378,7 @@
       },
       "teclado": {
         "tabOk": true,
-        "firstFocus": "is-speed-dial-action#"
+        "firstFocus": "iswc-speed-dial-action#"
       },
       "aria": {
         "hasRole": true,
@@ -2405,7 +2405,7 @@
       "erroresText": []
     },
     {
-      "tag": "is-switch",
+      "tag": "iswc-switch",
       "categoria": "forms",
       "ok": true,
       "interaccion": {
@@ -2447,7 +2447,7 @@
       "erroresText": []
     },
     {
-      "tag": "is-text",
+      "tag": "iswc-text",
       "categoria": "isp",
       "ok": true,
       "interaccion": {
@@ -2484,7 +2484,7 @@
       "erroresText": []
     },
     {
-      "tag": "is-textarea",
+      "tag": "iswc-textarea",
       "categoria": "forms",
       "ok": true,
       "interaccion": {
@@ -2525,7 +2525,7 @@
       "erroresText": []
     },
     {
-      "tag": "is-toast",
+      "tag": "iswc-toast",
       "categoria": "feedback",
       "ok": false,
       "interaccion": {
@@ -2535,7 +2535,7 @@
       },
       "teclado": {
         "tabOk": true,
-        "firstFocus": "is-button#btn-brand"
+        "firstFocus": "iswc-button#btn-brand"
       },
       "aria": {
         "hasRole": true,
@@ -2567,7 +2567,7 @@
       ]
     },
     {
-      "tag": "is-tooltip",
+      "tag": "iswc-tooltip",
       "categoria": "feedback",
       "ok": false,
       "interaccion": {
@@ -2577,7 +2577,7 @@
       },
       "teclado": {
         "tabOk": true,
-        "firstFocus": "is-button#tip-target"
+        "firstFocus": "iswc-button#tip-target"
       },
       "aria": {
         "hasRole": true,
@@ -2605,7 +2605,7 @@
       "erroresText": []
     },
     {
-      "tag": "is-tree-view",
+      "tag": "iswc-tree-view",
       "categoria": "isp",
       "ok": false,
       "interaccion": {
@@ -2615,7 +2615,7 @@
       },
       "teclado": {
         "tabOk": true,
-        "firstFocus": "is-button#"
+        "firstFocus": "iswc-button#"
       },
       "aria": {
         "hasRole": true,
@@ -2650,7 +2650,7 @@
       ]
     },
     {
-      "tag": "is-ui",
+      "tag": "iswc-ui",
       "categoria": "helpers",
       "ok": false,
       "interaccion": {
@@ -2660,7 +2660,7 @@
       },
       "teclado": {
         "tabOk": true,
-        "firstFocus": "is-button#"
+        "firstFocus": "iswc-button#"
       },
       "aria": {
         "hasRole": true,
@@ -2696,7 +2696,7 @@
       ]
     },
     {
-      "tag": "is-video",
+      "tag": "iswc-video",
       "categoria": "media",
       "ok": false,
       "interaccion": {
@@ -2706,7 +2706,7 @@
       },
       "teclado": {
         "tabOk": true,
-        "firstFocus": "is-video#v1"
+        "firstFocus": "iswc-video#v1"
       },
       "aria": {
         "hasRole": true,
@@ -2754,7 +2754,7 @@
       "erroresText": []
     },
     {
-      "tag": "is-video-playlist",
+      "tag": "iswc-video-playlist",
       "categoria": "media",
       "ok": false,
       "interaccion": {
@@ -2764,7 +2764,7 @@
       },
       "teclado": {
         "tabOk": true,
-        "firstFocus": "is-video#"
+        "firstFocus": "iswc-video#"
       },
       "aria": {
         "hasRole": true,
@@ -2822,7 +2822,7 @@
       },
       "teclado": {
         "tabOk": true,
-        "firstFocus": "is-code#"
+        "firstFocus": "iswc-code#"
       },
       "aria": {
         "hasRole": true,

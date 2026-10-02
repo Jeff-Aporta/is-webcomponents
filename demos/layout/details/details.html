@@ -3,8 +3,8 @@
 <head>
 <meta charset="utf-8" />
 <meta name="viewport" content="width=device-width, initial-scale=1" />
-<title>Demo de <is-details> · is-webcomponents</title>
-<meta name="description" content="Disclosure colapsable con summary + contenido. show()/hide()/toggle(), atributo open, name para accordion, eventos is-show/is-after-show/is-hide/is-after-hide." />
+<title>Demo de <iswc-details> · is-webcomponents</title>
+<meta name="description" content="Disclosure colapsable con summary + contenido. show()/hide()/toggle(), atributo open, name para accordion, eventos iswc-show/iswc-after-show/iswc-hide/iswc-after-hide." />
 <style>
   html, body { margin: 0; padding: 0; min-height: 100%; background: #0c1118; color: #e2e8f0; font-family: ui-sans-serif, system-ui, sans-serif; }
   body { display: grid; grid-template-rows: auto 1fr auto; }
@@ -14,26 +14,26 @@
   main { padding: 20px; display: grid; gap: 18px; }
   section { background: #0f1620; border: 1px solid rgba(255,255,255,0.1); border-radius: 8px; padding: 16px; }
   section h2 { font-size: 11px; text-transform: uppercase; letter-spacing: 0.08em; margin: 0 0 12px 0; color: #94a3b8; }
-  is-details { display: block; margin: 6px 0; }
-  is-details:not(:defined) { visibility: hidden; }
+  iswc-details { display: block; margin: 6px 0; }
+  iswc-details:not(:defined) { visibility: hidden; }
   .actions { display: flex; gap: 8px; flex-wrap: wrap; margin-top: 8px; }
   pre.log { margin: 8px 0 0 0; font: 11px ui-monospace, Menlo, Consolas, monospace; color: #94a3b8; white-space: pre-wrap; max-height: 160px; overflow: auto; }
   footer { padding: 12px 20px; border-top: 1px solid rgba(255,255,255,0.1); background: #0f1620; font-size: 11px; color: #94a3b8; }
   footer code { background: rgba(255,255,255,0.06); padding: 1px 5px; border-radius: 3px; font: 11px ui-monospace, Menlo, Consolas, monospace; }
 </style>
 <script type="module">
-  await import('../../../dist/cdn/layout/details.min.js?h=oh3shr');
-  await customElements.whenDefined('is-details');
+  await import('../../../dist/cdn/layout/details.min.js?h=wuhbly');
+  await customElements.whenDefined('iswc-details');
 
   // (1) Details básico: atributo summary + slot content.
-  const d1 = document.createElement('is-details');
+  const d1 = document.createElement('iswc-details');
   d1.setAttribute('summary', '¿Qué es is-webcomponents?');
   d1.id = 'd1';
   d1.innerHTML = '<p>Una librería de Web Components vanilla sin dependencias, con shell de demo y galería.</p>';
   document.getElementById('host-1').appendChild(d1);
 
   // (2) Details con summary slot propio (texto richer).
-  const d2 = document.createElement('is-details');
+  const d2 = document.createElement('iswc-details');
   d2.id = 'd2';
   d2.setAttribute('open', '');
   const summaryEl = document.createElement('span');
@@ -46,7 +46,7 @@
   // (3) Accordion: 3 details con mismo `name` → abrir uno cierra los otros.
   const labels = ['Sección A', 'Sección B', 'Sección C'];
   for (let i = 0; i < labels.length; i++) {
-    const d = document.createElement('is-details');
+    const d = document.createElement('iswc-details');
     d.setAttribute('summary', labels[i]);
     d.setAttribute('name', 'acc1');
     d.id = `acc${i}`;
@@ -55,7 +55,7 @@
   }
 
   // (4) Disabled.
-  const d4 = document.createElement('is-details');
+  const d4 = document.createElement('iswc-details');
   d4.setAttribute('summary', 'Disabled');
   d4.setAttribute('disabled', '');
   d4.id = 'd4';
@@ -66,7 +66,7 @@
   const variants = ['filled', 'outlined', 'filled-outlined', 'plain'];
   const vHost = document.getElementById('variants');
   for (const v of variants) {
-    const d = document.createElement('is-details');
+    const d = document.createElement('iswc-details');
     d.setAttribute('summary', `variant="${v}"`);
     d.setAttribute('variant', v);
     d.textContent = 'Cuerpo del details.';
@@ -74,24 +74,24 @@
   }
 
   // (6) icon-placement start/end.
-  const ds = document.createElement('is-details');
+  const ds = document.createElement('iswc-details');
   ds.setAttribute('summary', 'icon-placement="start"');
   ds.setAttribute('icon-placement', 'start');
   ds.id = 'ds';
   ds.textContent = 'Chevron a la izquierda del summary.';
   document.getElementById('host-icon-start').appendChild(ds);
-  const de = document.createElement('is-details');
+  const de = document.createElement('iswc-details');
   de.setAttribute('summary', 'icon-placement="end" (default)');
   de.setAttribute('icon-placement', 'end');
   de.id = 'de';
   de.textContent = 'Chevron a la derecha del summary.';
   document.getElementById('host-icon-end').appendChild(de);
 
-  // (7) Listener global de eventos para verificar is-show / is-hide / is-after-show / is-after-hide.
+  // (7) Listener global de eventos para verificar iswc-show / iswc-hide / iswc-after-show / iswc-after-hide.
   const logEl = document.getElementById('event-log');
   const write = (line) => { logEl.textContent = line + '\n' + logEl.textContent; };
-  document.querySelectorAll('main is-details').forEach((d) => {
-    ['is-show', 'is-after-show', 'is-hide', 'is-after-hide'].forEach((evt) => {
+  document.querySelectorAll('main iswc-details').forEach((d) => {
+    ['iswc-show', 'iswc-after-show', 'iswc-hide', 'iswc-after-hide'].forEach((evt) => {
       d.addEventListener(evt, (e) => {
         const tag = d.id || d.getAttribute('summary') || '(?)';
         write(`${evt} ← ${tag}`);
@@ -121,8 +121,8 @@
 </head>
 <body>
 <header>
-  <h1>Demo — <code>&lt;is-details&gt;</code></h1>
-  <p>Disclosure colapsable. Atributos <code>summary</code>, <code>open</code>, <code>name</code> (accordion), <code>disabled</code>, <code>variant</code>, <code>icon-placement</code>. Métodos <code>show()</code> / <code>hide()</code> / <code>toggle()</code>. Eventos <code>is-show</code> / <code>is-after-show</code> / <code>is-hide</code> / <code>is-after-hide</code>.</p>
+  <h1>Demo — <code>&lt;iswc-details&gt;</code></h1>
+  <p>Disclosure colapsable. Atributos <code>summary</code>, <code>open</code>, <code>name</code> (accordion), <code>disabled</code>, <code>variant</code>, <code>icon-placement</code>. Métodos <code>show()</code> / <code>hide()</code> / <code>toggle()</code>. Eventos <code>iswc-show</code> / <code>iswc-after-show</code> / <code>iswc-hide</code> / <code>iswc-after-hide</code>.</p>
 </header>
 <main>
   <section>
@@ -168,7 +168,7 @@
   </section>
 </main>
 <footer>
-  Estado: <code>customElements.whenDefined('is-details')</code> resuelto.
+  Estado: <code>customElements.whenDefined('iswc-details')</code> resuelto.
 </footer>
 </body>
 </html>

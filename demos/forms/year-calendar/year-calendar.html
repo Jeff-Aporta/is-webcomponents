@@ -3,7 +3,7 @@
 <head>
 <meta charset="utf-8" />
 <meta name="viewport" content="width=device-width, initial-scale=1" />
-<title>Calendario anual &lt;is-year-calendar&gt; · is-webcomponents</title>
+<title>Calendario anual &lt;iswc-year-calendar&gt; · is-webcomponents</title>
 <meta name="description" content="Rejilla de años desplazable con teclado y navegación entre celdas." />
 <style>
   html, body { margin: 0; padding: 0; min-height: 100%; background: #0c1118; color: #e2e8f0; font-family: ui-sans-serif, system-ui, sans-serif; }
@@ -14,32 +14,32 @@
   section { background: #131a24; border: 1px solid rgba(255,255,255,0.08); border-radius: 10px; padding: 16px; display: grid; gap: 10px; }
   section h2 { font-size: 13px; margin: 0; font-weight: 600; color: #cbd5e1; }
   section .desc { font-size: 12px; color: #94a3b8; margin: 0; }
-  is-year-calendar { width: 100%; max-height: 280px; overflow: auto; display: block; }
-  is-year-calendar + div { margin-top: 8px; font: 12px ui-monospace, Menlo, Consolas, monospace; color: #94a3b8; }
+  iswc-year-calendar { width: 100%; max-height: 280px; overflow: auto; display: block; }
+  iswc-year-calendar + div { margin-top: 8px; font: 12px ui-monospace, Menlo, Consolas, monospace; color: #94a3b8; }
   .row { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; }
   code { background: rgba(255,255,255,0.06); padding: 1px 5px; border-radius: 3px; font: 12px ui-monospace, Menlo, Consolas, monospace; }
   /* Anti-FOUC */
-  is-year-calendar:not(:defined) { visibility: hidden; }
+  iswc-year-calendar:not(:defined) { visibility: hidden; }
 </style>
 <script type="module">
-  await import('../../../dist/cdn/forms/year-calendar.min.js?h=my3jur');
-  await customElements.whenDefined('is-year-calendar');
+  await import('../../../dist/cdn/forms/year-calendar.min.js?h=cmblg1');
+  await customElements.whenDefined('iswc-year-calendar');
 
   // (1) básico, año actual seleccionado
-  const basico = document.createElement('is-year-calendar');
+  const basico = document.createElement('iswc-year-calendar');
   basico.id = 'basico';
   basico.value = '2026';
   basico.min = '2020';
   basico.max = '2032';
   basico.label = 'Año del evento';
   basico.hint = 'Click o flechas para navegar; Home/End saltan a los extremos';
-  basico.addEventListener('is-change', (e) => {
+  basico.addEventListener('iswc-change', (e) => {
     document.getElementById('basico-out').textContent = `value=${e.detail.value} (year=${e.detail.year})`;
   });
   document.querySelector('#sec-basico').appendChild(basico);
 
   // (2) rango histórico
-  const historico = document.createElement('is-year-calendar');
+  const historico = document.createElement('iswc-year-calendar');
   historico.id = 'historico';
   historico.min = '1990';
   historico.max = '2010';
@@ -49,7 +49,7 @@
   document.querySelector('#sec-historico').appendChild(historico);
 
   // (3) sólo lectura
-  const readonly = document.createElement('is-year-calendar');
+  const readonly = document.createElement('iswc-year-calendar');
   readonly.id = 'readonly';
   readonly.value = '2025';
   readonly.readonly = true;
@@ -58,7 +58,7 @@
   document.querySelector('#sec-readonly').appendChild(readonly);
 
   // (4) deshabilitado
-  const bloqueado = document.createElement('is-year-calendar');
+  const bloqueado = document.createElement('iswc-year-calendar');
   bloqueado.id = 'bloqueado';
   bloqueado.value = '2030';
   bloqueado.disabled = true;
@@ -72,8 +72,8 @@
 <body>
 <main>
   <header>
-    <h1>&lt;is-year-calendar&gt; · Rejilla de años</h1>
-    <p>Basado en <code>YearCalendar</code> de MUI. Atributos <code>value</code> (yyyy), <code>min</code>, <code>max</code>, <code>columns</code>. Emite <code>is-change</code> con detail.value y detail.year. Click o <code>ArrowLeft/Right/Up/Down</code>.</p>
+    <h1>&lt;iswc-year-calendar&gt; · Rejilla de años</h1>
+    <p>Basado en <code>YearCalendar</code> de MUI. Atributos <code>value</code> (yyyy), <code>min</code>, <code>max</code>, <code>columns</code>. Emite <code>iswc-change</code> con detail.value y detail.year. Click o <code>ArrowLeft/Right/Up/Down</code>.</p>
   </header>
 
   <section id="sec-basico">

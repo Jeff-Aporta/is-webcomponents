@@ -1,5 +1,5 @@
 /**
- * Behavior de is-relative-time: fechas relativas al now + grid de locales.
+ * Behavior de iswc-relative-time: fechas relativas al now + grid de locales.
  */
 import type { PreviewMountContext } from '../../previews/_kit/types.d.ts';
 
@@ -19,7 +19,7 @@ function applyOffsets(root: HTMLElement): void {
 
 export async function mount(ctx: PreviewMountContext): Promise<void> {
   const root = ctx.main;
-  await customElements.whenDefined('is-relative-time');
+  await customElements.whenDefined('iswc-relative-time');
 
   applyOffsets(root);
 
@@ -66,11 +66,11 @@ export async function mount(ctx: PreviewMountContext): Promise<void> {
           <span class="demo-locale-card__name"></span>
           <span class="demo-locale-card__code"></span>
         </div>
-        <is-relative-time format="long"></is-relative-time>
+        <iswc-relative-time format="long"></iswc-relative-time>
       `;
       const nameEl = card.querySelector<HTMLElement>('.demo-locale-card__name');
       const codeEl = card.querySelector<HTMLElement>('.demo-locale-card__code');
-      const rt = card.querySelector<HTMLElement>('is-relative-time');
+      const rt = card.querySelector<HTMLElement>('iswc-relative-time');
       if (nameEl) nameEl.textContent = label;
       if (codeEl) codeEl.textContent = tag;
       if (rt) {
@@ -105,7 +105,7 @@ export async function mount(ctx: PreviewMountContext): Promise<void> {
     const chip = document.createElement('span');
     chip.className = 'demo-label';
     chip.textContent = names?.of(tag) || tag;
-    const fmt = document.createElement('is-relative-time');
+    const fmt = document.createElement('iswc-relative-time');
     fmt.setAttribute('locale', tag);
     fmt.setAttribute('date', sampleIso);
     fmt.setAttribute('format', 'long');

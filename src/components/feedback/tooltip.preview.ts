@@ -1,5 +1,5 @@
 /**
- * Behavior migrado desde HTML inline de is-tooltip.
+ * Behavior migrado desde HTML inline de iswc-tooltip.
  * Se ejecuta en mount() tras pintar la definition JSON.
  */
 export async function mount(ctx: import('../../previews/_kit/types.d.ts').PreviewMountContext) {

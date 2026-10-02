@@ -1,4 +1,4 @@
-// float-card.test.mjs — tests exhaustivos del demo <is-float-card>.
+// float-card.test.mjs — tests exhaustivos del demo <iswc-float-card>.
 // Cobertura: smoke + funcional (open toggle, lock/unlock, linearTransform,
 // horizontal/vertical axis) + DOM persistente (no display:none).
 import assert from 'node:assert/strict';
@@ -14,12 +14,12 @@ tests.push({
     await page.goto(URL, { waitUntil: 'domcontentloaded' });
     await waitReady(page, 'data-float-card-ready');
     const info = await page.evaluate(() => {
-      const cards = [...document.querySelectorAll('is-float-card')];
+      const cards = [...document.querySelectorAll('iswc-float-card')];
       return cards.map((c) => {
         const sr = c.shadowRoot;
         return {
           id: c.id,
-          defined: !!customElements.get('is-float-card'),
+          defined: !!customElements.get('iswc-float-card'),
           hasWrap: !!sr?.querySelector('[part="wrap"]'),
           hasPanel: !!sr?.querySelector('[part="panel"]'),
           defaultSlot: !!sr?.querySelector('slot:not([name])'),

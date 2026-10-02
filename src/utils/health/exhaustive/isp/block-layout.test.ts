@@ -1,5 +1,5 @@
 /**
- * block-layout.test.ts — Tier A (15 aserciones) para `<is-block-layout>`.
+ * block-layout.test.ts — Tier A (15 aserciones) para `<iswc-block-layout>`.
  *
  * Componente de layout con breakpoints (xs/sm/md/lg/xl), body JSON,
  * geometría API y scroll memory.
@@ -13,7 +13,7 @@ import { fileURLToPath } from 'node:url';
 
 const HERE = dirname(fileURLToPath(import.meta.url));
 const ROOT = join(HERE, '..', '..', '..', '..', '..');
-const TAG = 'is-block-layout';
+const TAG = 'iswc-block-layout';
 const TS  = join(ROOT, 'src', 'components', 'isp', 'block-layout.ts');
 const CSS = join(ROOT, 'src', 'components', 'isp', 'block-layout.css');
 const JSON_PATH = join(ROOT, 'src', 'components', 'isp', 'block-layout.json');
@@ -26,10 +26,10 @@ test('2. CSS hermano existe', async () => {
   assert.ok(existsSync(CSS));
 });
 
-test('3. JSON existe y respeta is-preview/v1', async () => {
+test('3. JSON existe y respeta iswc-preview/v1', async () => {
   const json = JSON.parse(readFileSync(JSON_PATH, 'utf8'));
   assert.equal(json.tag, TAG);
-  assert.equal(json.$schema, 'is-preview/v1');
+  assert.equal(json.$schema, 'iswc-preview/v1');
 });
 
 test('4. exporta constantes BREAKPOINTS = [xs, sm, md, lg, xl]', async () => {
@@ -49,9 +49,9 @@ test('6. exporta sizewFor(width) para resolver breakpoint desde ancho', async ()
   assert.ok(/export\s+function\s+sizewFor\b/.test(src));
 });
 
-test('7. emite is-breakpoint cuando cambia el sizew', async () => {
+test('7. emite iswc-breakpoint cuando cambia el sizew', async () => {
   const src = readFileSync(TS, 'utf8');
-  assert.ok(/['"]is-breakpoint['"]/.test(src), 'debe emitir is-breakpoint');
+  assert.ok(/['"]iswc-breakpoint['"]/.test(src), 'debe emitir iswc-breakpoint');
 });
 
 test('8. tiene API de geometría (getWidth/getHeight/rect)', async () => {
@@ -82,7 +82,7 @@ test('11. OBSERVED incluye atributos principales', async () => {
 
 test('12. custom element registrado', async () => {
   const src = readFileSync(TS, 'utf8');
-  assert.ok(/defineElement\s*\(\s*['"]is-block-layout['"]/.test(src));
+  assert.ok(/defineElement\s*\(\s*['"]iswc-block-layout['"]/.test(src));
 });
 
 test('13. CSS hermano tiene reglas para grid/flex (es un layout)', async () => {

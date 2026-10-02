@@ -1,6 +1,6 @@
 /**
  * Preview respaldado solo por PreviewDefinition (JSON) + behavior opcional.
- * Sin HTML por componente: el chrome lo pinta <is-preview-component>.
+ * Sin HTML por componente: el chrome lo pinta <iswc-preview-component>.
  * Tipado estructural local (el _kit usa JSDoc; aqui TS estricto y limpio).
  */
 import { ISComponentPreview } from './ISComponentPreview.js';
@@ -8,7 +8,7 @@ import { montarControles } from '../../utils/system/controles.js';
 
 import type { PreviewDefinition, PreviewMountContext } from './types.d.ts';
 
-/** Forma mínima de la definición (is-preview/v1). */
+/** Forma mínima de la definición (iswc-preview/v1). */
 type DefinicionPreview = { tag: string; category?: string; $schema?: string; sections?: Array<{ id?: string; blocks?: Array<Record<string, unknown>> }>; };
 
 /** Contexto de montaje (main/root pintados por el chrome). */
@@ -27,16 +27,13 @@ export class JsonPreview extends ISComponentPreview {
     const normalized: PreviewDefinition = {
       ...definition,
       category: definition.category ?? '',
-      $schema: (definition.$schema || 'is-preview/v1') as 'is-preview/v1',
-      title: definition.tag,
-      // Las sections vienen del JSON (registry.ts las carga con loadDefinitionJson).
-      // NO poner `sections: []` aqui: pisa el array del JSON, y como el chrome
-      // (render.ts) itera `definition.sections` para pintar, el resultado es un
-      // preview vacio. Guardian: jsonpreview-sections-guardian.test.ts.
+      $schema: (definition.$schema || 'iswc-preview/v1') as 'iswc-preview/v1',
+      // Conservar title del JSON (`<iswc-tag>`); no pisar con el tag crudo.
+      title: (definition as PreviewDefinition).title || definition.tag,
       sections: definition.sections ?? [],
     };
-    if (normalized.$schema !== 'is-preview/v1') {
-      throw new Error(`JsonPreview(${normalized.tag}): $schema debe ser "is-preview/v1"`);
+    if (normalized.$schema !== 'iswc-preview/v1') {
+      throw new Error(`JsonPreview(${normalized.tag}): $schema debe ser "iswc-preview/v1"`);
     }
     super(normalized);
     this.#behavior = behavior;

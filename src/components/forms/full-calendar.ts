@@ -3,7 +3,7 @@ import { adoptCss, defineElement, emit } from '../../core/element.js';
 import { escapeHtml } from '../_shared/dom-utils.js';
 
 /**
- * <is-full-calendar> — Vista día/semana/mes con eventos.
+ * <iswc-full-calendar> — Vista día/semana/mes con eventos.
  *
  * Atributos
  *   view         month | week | day  (default month)
@@ -22,9 +22,9 @@ import { escapeHtml } from '../_shared/dom-utils.js';
  *   cal.events         array vivo (read-only)
  *
  * Eventos
- *   is-day-click       detail: { date }
- *   is-event-click     detail: { event, date }
- *   is-view-change     detail: { view, date }
+ *   iswc-day-click       detail: { date }
+ *   iswc-event-click     detail: { event, date }
+ *   iswc-view-change     detail: { view, date }
  */
 
 interface CalEvent {
@@ -41,7 +41,7 @@ type View = 'month' | 'week' | 'day';
 (() => {
   const OBSERVED = ['view', 'date', 'first-day', 'locale', 'hours-start', 'hours-end'];
 
-  class IsFullCalendar extends HTMLElement {
+  class IswcFullCalendar extends HTMLElement {
     static get observedAttributes(): string[] { return OBSERVED; }
     #mounted = false;
     #events: CalEvent[] = [];
@@ -55,14 +55,14 @@ type View = 'month' | 'week' | 'day';
       this.shadowRoot!.innerHTML = /* html */ `
         <div part="root" class="root">
           <header part="toolbar" class="toolbar">
-            <is-button variant="outlined" class="ctrl" data-act="prev" aria-label="Anterior">‹</is-button>
-            <is-button variant="outlined" class="ctrl today" data-act="today">Hoy</is-button>
-            <is-button variant="outlined" class="ctrl" data-act="next" aria-label="Siguiente">›</is-button>
+            <iswc-button variant="outlined" class="ctrl" data-act="prev" aria-label="Anterior">‹</iswc-button>
+            <iswc-button variant="outlined" class="ctrl today" data-act="today">Hoy</iswc-button>
+            <iswc-button variant="outlined" class="ctrl" data-act="next" aria-label="Siguiente">›</iswc-button>
             <span class="title" id="ttl"></span>
             <span class="spacer"></span>
-            <is-button variant="filled" color="brand" class="view-btn is-active" data-view="month">Mes</is-button>
-            <is-button variant="outlined" class="view-btn" data-view="week">Semana</is-button>
-            <is-button variant="outlined" class="view-btn" data-view="day">Día</is-button>
+            <iswc-button variant="filled" color="brand" class="view-btn iswc-active" data-view="month">Mes</iswc-button>
+            <iswc-button variant="outlined" class="view-btn" data-view="week">Semana</iswc-button>
+            <iswc-button variant="outlined" class="view-btn" data-view="day">Día</iswc-button>
           </header>
           <div part="grid" class="grid" id="grid"></div>
         </div>
@@ -111,7 +111,7 @@ type View = 'month' | 'week' | 'day';
     }
 
     #onToolbar(e: Event): void {
-      // `is-button` es el host: el click no llega como <button>.
+      // `iswc-button` es el host: el click no llega como <button>.
       const target = e.target as HTMLElement | null;
       const btn = target?.closest('[data-act],[data-view]');
       if (!btn) return;
@@ -124,16 +124,16 @@ type View = 'month' | 'week' | 'day';
       else if (v) {
         this.setView(v);
         this.#syncViewButtons(v);
-        emit(this, 'is-view-change', { view: v, date: this.#cursor.toISOString() });
+        emit(this, 'iswc-view-change', { view: v, date: this.#cursor.toISOString() });
       }
     }
 
-    /** El botón activo se marca con la variante de `is-button`, no repintando
+    /** El botón activo se marca con la variante de `iswc-button`, no repintando
      *  fondo desde este CSS: eso caería en el host y no en su <button>. */
     #syncViewButtons(view: string): void {
       this.shadowRoot!.querySelectorAll<HTMLElement>('.view-btn').forEach((b: HTMLElement) => {
         const active = b.dataset['view'] === view;
-        b.classList.toggle('is-active', active);
+        b.classList.toggle('iswc-active', active);
         b.setAttribute('variant', active ? 'filled' : 'outlined');
         if (active) b.setAttribute('color', 'brand');
         else b.removeAttribute('color');
@@ -145,12 +145,12 @@ type View = 'month' | 'week' | 'day';
       const cell = target?.closest('[data-iso]');
       if (!cell) return;
       const iso = (cell as HTMLElement).dataset['iso'] ?? '';
-      emit(this, 'is-day-click', { date: iso });
+      emit(this, 'iswc-day-click', { date: iso });
       const ev = target?.closest('[data-evid]');
       if (ev) {
         const evId = (ev as HTMLElement).dataset['evid'] ?? '';
         const evt = this.#events.find((x) => x.id === evId);
-        emit(this, 'is-event-click', { event: evt, date: iso });
+        emit(this, 'iswc-event-click', { event: evt, date: iso });
       }
     }
 
@@ -272,5 +272,5 @@ type View = 'month' | 'week' | 'day';
   function sameDay(a: Date, b: Date): boolean {
     return a.getFullYear() === b.getFullYear() && a.getMonth() === b.getMonth() && a.getDate() === b.getDate();
   }
-  defineElement('is-full-calendar', IsFullCalendar);
+  defineElement('iswc-full-calendar', IswcFullCalendar);
 })();

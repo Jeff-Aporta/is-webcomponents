@@ -1,5 +1,5 @@
 /**
- * Behavior migrado desde HTML inline de is-slider.
+ * Behavior migrado desde HTML inline de iswc-slider.
  * Se ejecuta en mount() tras pintar la definition JSON.
  * @param {import('../../previews/_kit/types.d.ts').PreviewMountContext} ctx
  */
@@ -10,13 +10,13 @@ export async function mount(ctx: import('../../previews/_kit/types.d.ts').Previe
   const log = document.getElementById('log') as HTMLElement | null;
   if (demo && log) {
     const paint = (v: unknown): void => { log.innerHTML = `value: <code class="code">${String(v)}</code>`; };
-    demo.addEventListener('is-input', (e: Event) => paint((e as CustomEvent<{ value: unknown }>).detail.value));
+    demo.addEventListener('iswc-input', (e: Event) => paint((e as CustomEvent<{ value: unknown }>).detail.value));
   }
 
   const rangeDemo = document.getElementById('rangeDemo') as HTMLElement | null;
   const rangeLog = document.getElementById('rangeLog') as HTMLElement | null;
   if (rangeDemo && rangeLog) {
-    rangeDemo.addEventListener('is-input', (e: Event) => {
+    rangeDemo.addEventListener('iswc-input', (e: Event) => {
       const detail = (e as CustomEvent<{ values: [number, number] }>).detail;
       const [a, b] = detail.values;
       rangeLog.innerHTML = `rango: <code class="code">${a} – ${b}</code>`;
@@ -27,11 +27,11 @@ export async function mount(ctx: import('../../previews/_kit/types.d.ts').Previe
   const linkedSlider = document.getElementById('linkedSlider') as (HTMLElement & { value?: number }) | null;
   const linkedInput = document.getElementById('linkedInput') as (HTMLElement & { value?: string | number }) | null;
   if (linkedSlider && linkedInput) {
-    linkedSlider.addEventListener('is-input', (e: Event) => {
+    linkedSlider.addEventListener('iswc-input', (e: Event) => {
       const detail = (e as CustomEvent<{ value: unknown }>).detail;
       linkedInput.value = String(detail.value);
     });
-    linkedInput.addEventListener('is-input', (e: Event) => {
+    linkedInput.addEventListener('iswc-input', (e: Event) => {
       const detail = (e as CustomEvent<{ value?: unknown }>).detail;
       const n = Number(detail?.value ?? linkedInput.value);
       if (Number.isFinite(n)) linkedSlider.value = n;
@@ -54,7 +54,7 @@ export async function mount(ctx: import('../../previews/_kit/types.d.ts').Previe
     const paintScale = (): void => {
       scaleLabel.innerHTML = `Almacenamiento: <code class="code">${formatBytes(2 ** (scaleDemo.value ?? 0))}</code>`;
     };
-    scaleDemo.addEventListener('is-input', paintScale);
+    scaleDemo.addEventListener('iswc-input', paintScale);
     paintScale();
   }
 }

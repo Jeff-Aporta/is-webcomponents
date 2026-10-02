@@ -47,7 +47,7 @@
 4. **Legend toggle doble: clic dos veces restaura la serie en su posición original** — [legend toggle]
    - Setup: tras ocultar serie B en la propuesta 3.
    - Acción: clic otra vez en el mismo item de leyenda.
-   - Assertion: serie B reaparece; los colores coinciden con el orden original (no se reordenan series activas); se emite evento custom `is-chart-legend-change` con detalle `{ series: "B", visible: true }`.
+   - Assertion: serie B reaparece; los colores coinciden con el orden original (no se reordenan series activas); se emite evento custom `iswc-chart-legend-change` con detalle `{ series: "B", visible: true }`.
    - Cobertura: idempotencia, reordenamiento.
 
 5. **Hover sobre eje X muestra línea guía vertical y resalta puntos en la intersección** — [axis interaction]
@@ -101,7 +101,7 @@
 13. **Doble click en una barra abre detalle (drill-down) si el handler está conectado** — [interaction]
     - Setup: dataset con handler `onItemDoubleClick` que registra en consola.
     - Acción: doble click en barra central.
-    - Assertion: evento custom `is-chart-item-dblclick` emitido con detalle `{ series, category, value }`; el handler de demo lo loguea; el chart no se reinicia ni pierde el estado de la leyenda.
+    - Assertion: evento custom `iswc-chart-item-dblclick` emitido con detalle `{ series, category, value }`; el handler de demo lo loguea; el chart no se reinicia ni pierde el estado de la leyenda.
     - Cobertura: eventos compuestos, doble click.
 
 14. **Error de carga de datos (JSON inválido) muestra estado de error y no rompe la página** — [edge case]
@@ -148,7 +148,7 @@
 5. **Reordenamiento de ejes por drag: arrastrar etiqueta "Coste" de la posición 2 a la posición 5** — [drag & drop]
    - Setup: radar con 6 ejes en orden A,B,C,D,E,F; atributo `reorderable="true"`.
    - Acción: `mouse.down()` sobre label "Coste" en slot 2; `mouse.move()` al slot 5; `mouse.up()`.
-   - Assertion: el orden de los puntos del polígono cambia correspondientemente; se emite evento `is-radar-axis-reorder` con `{ from: 2, to: 5, axis: "Coste" }`; el grid no se reordena (solo etiquetas y mapeo de datos).
+   - Assertion: el orden de los puntos del polígono cambia correspondientemente; se emite evento `iswc-radar-axis-reorder` con `{ from: 2, to: 5, axis: "Coste" }`; el grid no se reordena (solo etiquetas y mapeo de datos).
    - Cobertura: drag & drop accesible.
 
 6. **Animación de transición al cambiar dataset: el polígono interpola del viejo al nuevo** — [animation]
@@ -178,13 +178,13 @@
 10. **Hover sobre label de eje (no sobre polígono) muestra tooltip con descripción del eje** — [hover/tooltip]
     - Setup: ejes con `aria-describedby` apuntando a descripciones largas.
     - Acción: pasar mouse sobre el texto "Rendimiento" (no sobre el polígono).
-    - Assertion: aparece tooltip con texto "Rendimiento: throughput del sistema en ops/seg"; no se resalta ningún vértice; el evento `is-radar-axis-hover` se emite con `{ axis: "Rendimiento" }`.
+    - Assertion: aparece tooltip con texto "Rendimiento: throughput del sistema en ops/seg"; no se resalta ningún vértice; el evento `iswc-radar-axis-hover` se emite con `{ axis: "Rendimiento" }`.
     - Cobertura: hover en chrome (no solo data).
 
 11. **Teclado: flechas ↑↓ ajustan el valor del eje actualmente enfocado** — [keyboard]
     - Setup: foco en vértice de la serie A del eje 3.
     - Acción: presionar `ArrowUp` 3 veces, luego `ArrowDown` 1 vez.
-    - Assertion: el valor del vértice aumenta en pasos discretos (ej. +0.05 por pulsación, tope 1.0); el polígono se redibuja con nuevos puntos; se emite evento `is-radar-value-change` por cada paso; el foco permanece en el mismo vértice.
+    - Assertion: el valor del vértice aumenta en pasos discretos (ej. +0.05 por pulsación, tope 1.0); el polígono se redibuja con nuevos puntos; se emite evento `iswc-radar-value-change` por cada paso; el foco permanece en el mismo vértice.
     - Cobertura: edición inline.
 
 12. **ARIA: el grupo de polígonos tiene `role="img"` con `aria-label` que resume el chart** — [ARIA / a11y]
@@ -225,7 +225,7 @@
 2. **Brush selection: arrastrar sobre un área rectangular selecciona un subset de puntos** — [axis interaction]
    - Setup: scatter con `selection-enabled="true"`; 100 puntos.
    - Acción: `mouse.down()` en (200,200), `mouse.move()` a (400,350), `mouse.up()`.
-   - Assertion: aparece un `<rect>` con `fill="rgba(...)"` semitransparente; los puntos dentro del rectángulo cambian de `fill` a color de selección; el contador "12 seleccionados" aparece en un panel inferior; se emite evento `is-scatter-selection` con array de IDs.
+   - Assertion: aparece un `<rect>` con `fill="rgba(...)"` semitransparente; los puntos dentro del rectángulo cambian de `fill` a color de selección; el contador "12 seleccionados" aparece en un panel inferior; se emite evento `iswc-scatter-selection` con array de IDs.
    - Cobertura: brush interactivo.
 
 3. **Legend toggle por cluster: clic en "Cluster B" oculta solo los puntos de ese cluster** — [legend toggle]
@@ -237,7 +237,7 @@
 4. **Zoom con rueda del mouse (wheel) sobre el plot hace zoom in/out centrado en el cursor** — [axis interaction]
    - Setup: scatter con `zoom-enabled="true"`; dataset amplio (rango 0–100 en ambos ejes).
    - Acción: posicionar cursor en (250, 250) del plot; `wheel` con `deltaY: -120`.
-   - Assertion: el dominio del eje X cambia de [0,100] a aprox [20, 60] centrado en x=50; el punto bajo el cursor permanece visualmente en la misma posición relativa; se emite evento `is-scatter-zoom` con `{ centerX, centerY, scaleX, scaleY }`.
+   - Assertion: el dominio del eje X cambia de [0,100] a aprox [20, 60] centrado en x=50; el punto bajo el cursor permanece visualmente en la misma posición relativa; se emite evento `iswc-scatter-zoom` con `{ centerX, centerY, scaleX, scaleY }`.
    - Cobertura: zoom semántico.
 
 5. **Pan con click+drag mueve la vista sin perder el dominio completo** — [axis interaction]
@@ -279,7 +279,7 @@
 11. **Teclado: `Tab` enfoca cada punto individualmente si `keyboard-nav="true"`** — [keyboard]
     - Setup: scatter con navegación por teclado habilitada y 5 puntos focuseables.
     - Acción: presionar `Tab` desde el inicio.
-    - Assertion: foco se mueve secuencialmente a cada `<circle tabindex="0">`; el punto focused tiene outline visible y `aria-current="true"`; `Arrow keys` mueven entre puntos en orden de índice; `Enter` emite `is-scatter-point-select` con el ID del punto.
+    - Assertion: foco se mueve secuencialmente a cada `<circle tabindex="0">`; el punto focused tiene outline visible y `aria-current="true"`; `Arrow keys` mueven entre puntos en orden de índice; `Enter` emite `iswc-scatter-point-select` con el ID del punto.
     - Cobertura: navegación por teclado punto a punto.
 
 12. **ARIA: cada punto focuseable tiene `aria-label` con sus coordenadas y metadatos** — [ARIA / a11y]

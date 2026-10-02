@@ -3,7 +3,7 @@
 <head>
 <meta charset="utf-8" />
 <meta name="viewport" content="width=device-width, initial-scale=1" />
-<title>Paleta de comandos de <is-command-palette> · is-webcomponents</title>
+<title>Paleta de comandos de <iswc-command-palette> · is-webcomponents</title>
 <meta name="description" content="Paleta modal al estilo Cmd+K / Ctrl+K con búsqueda difusa, atajos de teclado y cierre por Escape." />
 <style>
   html, body { margin: 0; padding: 0; height: 100%; background: #0c1118; color: #e2e8f0; font-family: ui-sans-serif, system-ui, sans-serif; }
@@ -37,18 +37,18 @@
   }
   .trigger-btn:hover { border-color: var(--iswc-accent, #38bdf8); color: var(--iswc-accent, #38bdf8); }
   /* Anti-FOUC */
-  is-command-palette:not(:defined) { visibility: hidden; }
+  iswc-command-palette:not(:defined) { visibility: hidden; }
 </style>
 <script type="module">
   // Cargar solo los tags que necesitamos, desde los bundles pre-construidos en
   // dist/cdn/. Esto hace funcionar los demos con cualquier servidor estático
   // (incluido VS Code Live Server), no solo con el dev server que transpila TS.
-  await import('../../../dist/cdn/overlays/command-palette.min.js?h=046yvn');
-  await customElements.whenDefined('is-command-palette');
+  await import('../../../dist/cdn/overlays/command-palette.min.js?h=0pkliz');
+  await customElements.whenDefined('iswc-command-palette');
 
   // Comandos declarados como JSON hijo (script[ type="application/json" ]).
   // El componente los parsea al montarse y los expone como `palette.commands`.
-  const palette = document.createElement('is-command-palette');
+  const palette = document.createElement('iswc-command-palette');
   palette.setAttribute('placeholder', 'Buscar comando…');
   palette.setAttribute('empty-text', 'Sin coincidencias');
   palette.setAttribute('max-results', '8');
@@ -81,11 +81,11 @@
   // Logging de eventos (útil en tests para verificar select/show/hide).
   const log = document.getElementById('log');
   const append = (line) => { log.textContent = line + '\n' + log.textContent; };
-  palette.addEventListener('is-show', () => append('[is-show]'));
-  palette.addEventListener('is-after-show', () => append('[is-after-show]'));
-  palette.addEventListener('is-hide', () => append('[is-hide]'));
-  palette.addEventListener('is-after-hide', () => append('[is-after-hide]'));
-  palette.addEventListener('is-select', (e) => append(`[is-select] id=${e.detail.id}`));
+  palette.addEventListener('iswc-show', () => append('[iswc-show]'));
+  palette.addEventListener('iswc-after-show', () => append('[iswc-after-show]'));
+  palette.addEventListener('iswc-hide', () => append('[iswc-hide]'));
+  palette.addEventListener('iswc-after-hide', () => append('[iswc-after-hide]'));
+  palette.addEventListener('iswc-select', (e) => append(`[iswc-select] id=${e.detail.id}`));
 
   document.querySelector('main .hero').appendChild(palette);
   document.documentElement.dataset.commandPaletteReady = '1';
@@ -94,7 +94,7 @@
 <body>
 <header>
   <div>
-    <h1>Paleta de comandos — <code>&lt;is-command-palette&gt;</code></h1>
+    <h1>Paleta de comandos — <code>&lt;iswc-command-palette&gt;</code></h1>
     <p>Pulsa <code>Ctrl</code>+<code>K</code> (o <code>⌘</code>+<code>K</code>) para abrir · <code>↑</code>/<code>↓</code> navega · <code>↵</code> ejecuta · <code>Esc</code> cierra</p>
   </div>
   <div class="spacer"></div>

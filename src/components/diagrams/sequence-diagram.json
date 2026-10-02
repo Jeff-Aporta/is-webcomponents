@@ -1,10 +1,10 @@
 {
-  "$schema": "is-preview/v1",
-  "tag": "is-sequence-diagram",
+  "$schema": "iswc-preview/v1",
+  "tag": "iswc-sequence-diagram",
   "category": "diagrams",
-  "title": "<is-sequence-diagram>",
+  "title": "<iswc-sequence-diagram>",
   "titleHtml": true,
-  "storageKey": "docs-is-sequence-diagram",
+  "storageKey": "docs-iswc-sequence-diagram",
   "hasBehavior": true,
   "sections": [
     {
@@ -18,7 +18,7 @@
         },
         {
           "kind": "demo",
-          "html": "<is-sequence-diagram open-on-click>\r\n            <script type=\"application/json\">\r\n              { \"preset\": \"tk1437191\" }\r\n            </script>\r\n          </is-sequence-diagram>",
+          "html": "<iswc-sequence-diagram open-on-click>\r\n            <script type=\"application/json\">\r\n              { \"preset\": \"tk1437191\" }\r\n            </script>\r\n          </iswc-sequence-diagram>",
           "controls": [
             {
               "control": "boolean",
@@ -43,7 +43,7 @@
         },
         {
           "kind": "demo",
-          "html": "<is-sequence-diagram open-on-click>\r\n            <script type=\"application/json\">\r\n              {\r\n                \"sequence\": {\r\n                  \"title\": \"Facturación electrónica\",\r\n                  \"subtitle\": \"emisión · validación DIAN · acuse\",\r\n                  \"groups\": [\r\n                    { \"id\": \"g-emision\", \"name\": \"Emisión\", \"hue\": 239 },\r\n                    { \"id\": \"g-dian\", \"name\": \"Validación DIAN\", \"hue\": 199 },\r\n                    { \"id\": \"g-acuse\", \"name\": \"Acuse\", \"hue\": 38 }\r\n                  ],\r\n                  \"actors\": [\r\n                    { \"id\": \"E\", \"label\": \"{{iconify: {icon: \\\"mdi:store\\\", hue: 239}}} Empresa\", \"kind\": \"actor\" },\r\n                    { \"id\": \"C\", \"label\": \"{{iconify: {icon: \\\"mdi:file-document-outline\\\", hue: 199}}} ContaPyme\", \"kind\": \"participant\" },\r\n                    { \"id\": \"D\", \"label\": \"{{iconify: {icon: \\\"mdi:bank-outline\\\", hue: 38}}} DIAN\", \"kind\": \"participant\" }\r\n                  ],\r\n                  \"messages\": [\r\n                    { \"id\": \"s1\", \"group\": \"g-emision\", \"from\": \"E\", \"to\": \"C\", \"label\": \"Registra la venta\", \"step\": 1,\r\n                      \"log\": \"La empresa registra la venta\", \"desc\": \"El documento se arma con los datos del tercero y los ítems facturados.\" },\r\n                    { \"id\": \"s2\", \"group\": \"g-emision\", \"from\": \"C\", \"to\": \"C\", \"kind\": \"self\", \"label\": \"Genera XML · firma\", \"step\": 2,\r\n                      \"log\": \"Genera el XML y lo firma\", \"desc\": \"Se construye el **XML UBL** y se aplica la **firma digital** del emisor.\" },\r\n                    { \"id\": \"s3\", \"group\": \"g-dian\", \"from\": \"C\", \"to\": \"D\", \"label\": \"Envía documento\", \"step\": 3,\r\n                      \"log\": \"Envía el documento a la DIAN\" },\r\n                    { \"id\": \"s4\", \"group\": \"g-dian\", \"from\": \"D\", \"to\": \"C\", \"kind\": \"async\", \"label\": \"CUFE · estado\", \"step\": 4,\r\n                      \"log\": \"La DIAN responde con CUFE y estado\" },\r\n                    { \"id\": \"s5\", \"group\": \"g-acuse\", \"from\": \"C\", \"to\": \"E\", \"kind\": \"async\", \"label\": \"Factura validada\", \"step\": 5,\r\n                      \"log\": \"La factura queda validada\" }\r\n                  ]\r\n                }\r\n              }\r\n            </script>\r\n          </is-sequence-diagram>"
+          "html": "<iswc-sequence-diagram open-on-click>\r\n            <script type=\"application/json\">\r\n              {\r\n                \"sequence\": {\r\n                  \"title\": \"Facturación electrónica\",\r\n                  \"subtitle\": \"emisión · validación DIAN · acuse\",\r\n                  \"groups\": [\r\n                    { \"id\": \"g-emision\", \"name\": \"Emisión\", \"hue\": 239 },\r\n                    { \"id\": \"g-dian\", \"name\": \"Validación DIAN\", \"hue\": 199 },\r\n                    { \"id\": \"g-acuse\", \"name\": \"Acuse\", \"hue\": 38 }\r\n                  ],\r\n                  \"actors\": [\r\n                    { \"id\": \"E\", \"label\": \"{{iconify: {icon: \\\"mdi:store\\\", hue: 239}}} Empresa\", \"kind\": \"actor\" },\r\n                    { \"id\": \"C\", \"label\": \"{{iconify: {icon: \\\"mdi:file-document-outline\\\", hue: 199}}} ContaPyme\", \"kind\": \"participant\" },\r\n                    { \"id\": \"D\", \"label\": \"{{iconify: {icon: \\\"mdi:bank-outline\\\", hue: 38}}} DIAN\", \"kind\": \"participant\" }\r\n                  ],\r\n                  \"messages\": [\r\n                    { \"id\": \"s1\", \"group\": \"g-emision\", \"from\": \"E\", \"to\": \"C\", \"label\": \"Registra la venta\", \"step\": 1,\r\n                      \"log\": \"La empresa registra la venta\", \"desc\": \"El documento se arma con los datos del tercero y los ítems facturados.\" },\r\n                    { \"id\": \"s2\", \"group\": \"g-emision\", \"from\": \"C\", \"to\": \"C\", \"kind\": \"self\", \"label\": \"Genera XML · firma\", \"step\": 2,\r\n                      \"log\": \"Genera el XML y lo firma\", \"desc\": \"Se construye el **XML UBL** y se aplica la **firma digital** del emisor.\" },\r\n                    { \"id\": \"s3\", \"group\": \"g-dian\", \"from\": \"C\", \"to\": \"D\", \"label\": \"Envía documento\", \"step\": 3,\r\n                      \"log\": \"Envía el documento a la DIAN\" },\r\n                    { \"id\": \"s4\", \"group\": \"g-dian\", \"from\": \"D\", \"to\": \"C\", \"kind\": \"async\", \"label\": \"CUFE · estado\", \"step\": 4,\r\n                      \"log\": \"La DIAN responde con CUFE y estado\" },\r\n                    { \"id\": \"s5\", \"group\": \"g-acuse\", \"from\": \"C\", \"to\": \"E\", \"kind\": \"async\", \"label\": \"Factura validada\", \"step\": 5,\r\n                      \"log\": \"La factura queda validada\" }\r\n                  ]\r\n                }\r\n              }\r\n            </script>\r\n          </iswc-sequence-diagram>"
         }
       ]
     },
@@ -61,7 +61,7 @@
         },
         {
           "kind": "demo",
-          "html": "<is-sequence-diagram open-on-click>\r\n            <script type=\"application/json\">\r\n              {\r\n                \"sequence\": {\r\n                  \"title\": \"Resolución del modelo por turno\",\r\n                  \"subtitle\": \"Clasificación operativa → MODELO en BD → respuesta final\",\r\n                  \"groups\": [\r\n                    { \"id\": \"g-clasif\", \"name\": \"Clasificación\", \"hue\": 215 },\r\n                    { \"id\": \"g-modelo\", \"name\": \"Resolución de modelo\", \"hue\": 210 },\r\n                    { \"id\": \"g-branch1\", \"name\": \"MODELO en fila\", \"hue\": 160 },\r\n                    { \"id\": \"g-branch2\", \"name\": \"Fallback\", \"hue\": 38 },\r\n                    { \"id\": \"g-epilogo\", \"name\": \"Registro\", \"hue\": 280 }\r\n                  ],\r\n                  \"actors\": [\r\n                    { \"id\": \"U\", \"label\": \"Usuario\", \"kind\": \"actor\", \"icon\": \"mdi:account\", \"hue\": 215 },\r\n                    { \"id\": \"P\", \"label\": \"PatyIA\", \"kind\": \"participant\", \"icon\": \"mdi:robot-outline\", \"hue\": 210 },\r\n                    { \"id\": \"O\", \"label\": \"OpenAI\", \"kind\": \"participant\", \"icon\": \"simple-icons:openai\", \"hue\": 160 }\r\n                  ],\r\n                  \"preamble\": [\r\n                    { \"id\": \"m1\", \"from\": \"U\", \"to\": \"P\", \"label\": \"Mensaje del usuario\", \"step\": 1, \"group\": \"g-clasif\" },\r\n                    { \"id\": \"m2\", \"from\": \"P\", \"to\": \"O\", \"label\": \"clasificar · PR_TIPO_CONSULTAS · gpt-4.1-nano\", \"step\": 2, \"group\": \"g-clasif\" },\r\n                    { \"id\": \"m3\", \"from\": \"O\", \"to\": \"P\", \"label\": \"tipo_consulta (JSON)\", \"kind\": \"async\", \"step\": 3, \"group\": \"g-clasif\" },\r\n                    { \"id\": \"m4\", \"from\": \"P\", \"to\": \"P\", \"label\": \"resolverPorTipo · MODELO en BD\", \"kind\": \"self\", \"step\": 4, \"group\": \"g-modelo\" }\r\n                  ],\r\n                  \"alt\": {\r\n                    \"branches\": [\r\n                      { \"condition\": \"MODELO en fila\",\r\n                        \"messages\": [{ \"id\": \"m5\", \"from\": \"P\", \"to\": \"O\", \"label\": \"responses.create(MODELO)\", \"step\": 5, \"group\": \"g-branch1\" }] },\r\n                      { \"condition\": \"fallback system-prompts\",\r\n                        \"messages\": [{ \"id\": \"m6\", \"from\": \"P\", \"to\": \"O\", \"label\": \"responses.create(modeloConversacion)\", \"step\": 6, \"group\": \"g-branch2\" }] }\r\n                    ]\r\n                  },\r\n                  \"epilogue\": [\r\n                    { \"id\": \"m7\", \"from\": \"O\", \"to\": \"P\", \"label\": \"respuesta\", \"kind\": \"async\", \"step\": 7, \"group\": \"g-epilogo\" },\r\n                    { \"id\": \"m8\", \"from\": \"P\", \"to\": \"P\", \"label\": \"log turno · modelo + tokens + costo\", \"kind\": \"self\", \"step\": 8, \"group\": \"g-epilogo\" }\r\n                  ]\r\n                }\r\n              }\r\n            </script>\r\n          </is-sequence-diagram>"
+          "html": "<iswc-sequence-diagram open-on-click>\r\n            <script type=\"application/json\">\r\n              {\r\n                \"sequence\": {\r\n                  \"title\": \"Resolución del modelo por turno\",\r\n                  \"subtitle\": \"Clasificación operativa → MODELO en BD → respuesta final\",\r\n                  \"groups\": [\r\n                    { \"id\": \"g-clasif\", \"name\": \"Clasificación\", \"hue\": 215 },\r\n                    { \"id\": \"g-modelo\", \"name\": \"Resolución de modelo\", \"hue\": 210 },\r\n                    { \"id\": \"g-branch1\", \"name\": \"MODELO en fila\", \"hue\": 160 },\r\n                    { \"id\": \"g-branch2\", \"name\": \"Fallback\", \"hue\": 38 },\r\n                    { \"id\": \"g-epilogo\", \"name\": \"Registro\", \"hue\": 280 }\r\n                  ],\r\n                  \"actors\": [\r\n                    { \"id\": \"U\", \"label\": \"Usuario\", \"kind\": \"actor\", \"icon\": \"mdi:account\", \"hue\": 215 },\r\n                    { \"id\": \"P\", \"label\": \"PatyIA\", \"kind\": \"participant\", \"icon\": \"mdi:robot-outline\", \"hue\": 210 },\r\n                    { \"id\": \"O\", \"label\": \"OpenAI\", \"kind\": \"participant\", \"icon\": \"simple-icons:openai\", \"hue\": 160 }\r\n                  ],\r\n                  \"preamble\": [\r\n                    { \"id\": \"m1\", \"from\": \"U\", \"to\": \"P\", \"label\": \"Mensaje del usuario\", \"step\": 1, \"group\": \"g-clasif\" },\r\n                    { \"id\": \"m2\", \"from\": \"P\", \"to\": \"O\", \"label\": \"clasificar · PR_TIPO_CONSULTAS · gpt-4.1-nano\", \"step\": 2, \"group\": \"g-clasif\" },\r\n                    { \"id\": \"m3\", \"from\": \"O\", \"to\": \"P\", \"label\": \"tipo_consulta (JSON)\", \"kind\": \"async\", \"step\": 3, \"group\": \"g-clasif\" },\r\n                    { \"id\": \"m4\", \"from\": \"P\", \"to\": \"P\", \"label\": \"resolverPorTipo · MODELO en BD\", \"kind\": \"self\", \"step\": 4, \"group\": \"g-modelo\" }\r\n                  ],\r\n                  \"alt\": {\r\n                    \"branches\": [\r\n                      { \"condition\": \"MODELO en fila\",\r\n                        \"messages\": [{ \"id\": \"m5\", \"from\": \"P\", \"to\": \"O\", \"label\": \"responses.create(MODELO)\", \"step\": 5, \"group\": \"g-branch1\" }] },\r\n                      { \"condition\": \"fallback system-prompts\",\r\n                        \"messages\": [{ \"id\": \"m6\", \"from\": \"P\", \"to\": \"O\", \"label\": \"responses.create(modeloConversacion)\", \"step\": 6, \"group\": \"g-branch2\" }] }\r\n                    ]\r\n                  },\r\n                  \"epilogue\": [\r\n                    { \"id\": \"m7\", \"from\": \"O\", \"to\": \"P\", \"label\": \"respuesta\", \"kind\": \"async\", \"step\": 7, \"group\": \"g-epilogo\" },\r\n                    { \"id\": \"m8\", \"from\": \"P\", \"to\": \"P\", \"label\": \"log turno · modelo + tokens + costo\", \"kind\": \"self\", \"step\": 8, \"group\": \"g-epilogo\" }\r\n                  ]\r\n                }\r\n              }\r\n            </script>\r\n          </iswc-sequence-diagram>"
         }
       ]
     },
@@ -75,7 +75,7 @@
         },
         {
           "kind": "html",
-          "html": "<p>\r\n          El visor se abre solo al hacer clic. También puedes montarlo tú mismo\r\n          con <code class=\"code\">&lt;is-diagram-lightbox&gt;</code> y controlarlo por\r\n          propiedades.\r\n        </p>\r\n        <p>\r\n          <button type=\"button\" id=\"openViewer\" class=\"demo-btn\">Abrir el visor</button>\r\n        </p>\r\n        <is-diagram-lightbox id=\"lb\" kind=\"sequence\"></is-diagram-lightbox>"
+          "html": "<p>\r\n          El visor se abre solo al hacer clic. También puedes montarlo tú mismo\r\n          con <code class=\"code\">&lt;iswc-diagram-lightbox&gt;</code> y controlarlo por\r\n          propiedades.\r\n        </p>\r\n        <p>\r\n          <button type=\"button\" id=\"openViewer\" class=\"demo-btn\">Abrir el visor</button>\r\n        </p>\r\n        <iswc-diagram-lightbox id=\"lb\" kind=\"sequence\"></iswc-diagram-lightbox>"
         }
       ]
     },
@@ -163,22 +163,22 @@
           ],
           "rows": [
             [
-              "<code class=\"code\">is-turtle-state</code>",
+              "<code class=\"code\">iswc-turtle-state</code>",
               "<code class=\"code\">{playing, idx, total, replay}</code>",
               "Estado de la animación en cada avance."
             ],
             [
-              "<code class=\"code\">is-open-viewer</code>",
+              "<code class=\"code\">iswc-open-viewer</code>",
               "<code class=\"code\">{payload}</code>",
               "Clic en la variante inline. <code class=\"code\">preventDefault()</code> evita que abra su propio visor."
             ],
             [
-              "<code class=\"code\">is-toggle-group</code>",
+              "<code class=\"code\">iswc-toggle-group</code>",
               "<code class=\"code\">{id}</code>",
               "Clic en un grupo de la leyenda (solo en viewer)."
             ],
             [
-              "<code class=\"code\">is-render</code>",
+              "<code class=\"code\">iswc-render</code>",
               "<code class=\"code\">{layout, svg}</code>",
               "El SVG terminó de construirse."
             ]

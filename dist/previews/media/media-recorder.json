@@ -1,11 +1,11 @@
 {
-  "$schema": "is-preview/v1",
-  "tag": "is-media-recorder",
+  "$schema": "iswc-preview/v1",
+  "tag": "iswc-media-recorder",
   "category": "media",
-  "title": "<is-media-recorder>",
+  "title": "<iswc-media-recorder>",
   "titleHtml": true,
   "description": "Graba cámara, micrófono o pantalla (`getDisplayMedia`) con `MediaRecorder` y entrega un Blob.",
-  "storageKey": "docs-is-media-recorder",
+  "storageKey": "docs-iswc-media-recorder",
   "sections": [
     {
       "id": "intro",
@@ -14,7 +14,7 @@
       "blocks": [
         {
           "kind": "demo",
-          "html": "<is-media-recorder source=\"mic\"></is-media-recorder>",
+          "html": "<iswc-media-recorder source=\"mic\"></iswc-media-recorder>",
           "controls": [
             {
               "control": "text",
@@ -26,7 +26,7 @@
         {
           "kind": "code",
           "lang": "html",
-          "code": "<is-media-recorder source=\"mic\"></is-media-recorder>"
+          "code": "<iswc-media-recorder source=\"mic\"></iswc-media-recorder>"
         },
         {
           "kind": "callout",

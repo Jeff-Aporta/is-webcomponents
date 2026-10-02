@@ -3,7 +3,7 @@
 <head>
 <meta charset="utf-8" />
 <meta name="viewport" content="width=device-width, initial-scale=1" />
-<title>Dropzone &lt;is-dropzone&gt; · is-webcomponents</title>
+<title>Dropzone &lt;iswc-dropzone&gt; · is-webcomponents</title>
 <meta name="description" content="Zona de drop con cola, progreso por archivo y validación de tipo/tamaño." />
 <style>
   html, body { margin: 0; padding: 0; min-height: 100%; background: #0c1118; color: #e2e8f0; font-family: ui-sans-serif, system-ui, sans-serif; }
@@ -14,33 +14,33 @@
   section { background: #131a24; border: 1px solid rgba(255,255,255,0.08); border-radius: 10px; padding: 16px; display: grid; gap: 10px; }
   section h2 { font-size: 13px; margin: 0; font-weight: 600; color: #cbd5e1; }
   section .desc { font-size: 12px; color: #94a3b8; margin: 0; }
-  is-dropzone { width: 100%; min-height: 200px; }
-  is-dropzone + div { margin-top: 8px; font: 12px ui-monospace, Menlo, Consolas, monospace; color: #94a3b8; }
+  iswc-dropzone { width: 100%; min-height: 200px; }
+  iswc-dropzone + div { margin-top: 8px; font: 12px ui-monospace, Menlo, Consolas, monospace; color: #94a3b8; }
   .row { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; }
   code { background: rgba(255,255,255,0.06); padding: 1px 5px; border-radius: 3px; font: 12px ui-monospace, Menlo, Consolas, monospace; }
   /* Anti-FOUC */
-  is-dropzone:not(:defined) { visibility: hidden; }
+  iswc-dropzone:not(:defined) { visibility: hidden; }
 </style>
 <script type="module">
-  // El dropzone importa is-icon y is-button (también viven en dist/cdn/).
-  await import('../../../dist/cdn/actions/button.min.js?h=ki2dk5');
-  await import('../../../dist/cdn/media/icon.min.js?h=y6tzub');
-  await import('../../../dist/cdn/forms/dropzone.min.js?h=upj3nb');
-  await customElements.whenDefined('is-dropzone');
+  // El dropzone importa iswc-icon y iswc-button (también viven en dist/cdn/).
+  await import('../../../dist/cdn/actions/button.min.js?h=5i9tzt');
+  await import('../../../dist/cdn/media/icon.min.js?h=sp71yy');
+  await import('../../../dist/cdn/forms/dropzone.min.js?h=se8rfv');
+  await customElements.whenDefined('iswc-dropzone');
 
   // (1) dropzone libre (cualquier archivo)
-  const libre = document.createElement('is-dropzone');
+  const libre = document.createElement('iswc-dropzone');
   libre.label = 'Subir archivos';
   libre.hint = 'Acepta cualquier archivo';
   libre.id = 'libre';
   document.querySelector('#sec-libre').appendChild(libre);
-  libre.addEventListener('is-files-change', (e) => {
+  libre.addEventListener('iswc-files-change', (e) => {
     document.getElementById('libre-count').textContent =
       `${e.detail.files.length} archivo(s) en cola`;
   });
 
   // (2) sólo imágenes, máximo 3
-  const imagenes = document.createElement('is-dropzone');
+  const imagenes = document.createElement('iswc-dropzone');
   imagenes.accept = 'image/*';
   imagenes.multiple = true;
   imagenes.maxFiles = 3;
@@ -48,13 +48,13 @@
   imagenes.hint = 'Hasta 3 imágenes (cualquier tamaño)';
   imagenes.id = 'imagenes';
   document.querySelector('#sec-imagenes').appendChild(imagenes);
-  imagenes.addEventListener('is-files-change', (e) => {
+  imagenes.addEventListener('iswc-files-change', (e) => {
     document.getElementById('imgs-count').textContent =
       `${e.detail.files.length} archivo(s) en cola`;
   });
 
   // (3) sólo PDF, máximo 1 archivo de 5 MB
-  const pdf = document.createElement('is-dropzone');
+  const pdf = document.createElement('iswc-dropzone');
   pdf.accept = '.pdf,application/pdf';
   pdf.maxFiles = 1;
   pdf.maxSize = 5 * 1024 * 1024;
@@ -64,7 +64,7 @@
   document.querySelector('#sec-pdf').appendChild(pdf);
 
   // (4) deshabilitado
-  const bloqueado = document.createElement('is-dropzone');
+  const bloqueado = document.createElement('iswc-dropzone');
   bloqueado.disabled = true;
   bloqueado.label = 'Subida deshabilitada';
   bloqueado.hint = 'No se aceptan archivos';
@@ -77,8 +77,8 @@
 <body>
 <main>
   <header>
-    <h1>&lt;is-dropzone&gt; · Zona de drop con cola y progreso</h1>
-    <p>Acepta archivos vía drag &amp; drop, click en la zona, o <code>paste</code>. Emite <code>is-files-change</code>, <code>is-upload-start/progress/end</code> y <code>is-error</code>.</p>
+    <h1>&lt;iswc-dropzone&gt; · Zona de drop con cola y progreso</h1>
+    <p>Acepta archivos vía drag &amp; drop, click en la zona, o <code>paste</code>. Emite <code>iswc-files-change</code>, <code>iswc-upload-start/progress/end</code> y <code>iswc-error</code>.</p>
   </header>
 
   <section id="sec-libre">

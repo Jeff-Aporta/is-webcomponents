@@ -18,10 +18,10 @@ import test from 'node:test';
 const root = join(dirname(fileURLToPath(import.meta.url)), '..', '..', '..', '..');
 const read = (rel) => readFileSync(join(root, rel), 'utf8');
 
-test('is-toast behavior crea #toaster si falta (no create-on-null)', () => {
+test('iswc-toast behavior crea #toaster si falta (no create-on-null)', () => {
   const src = read('src/components/feedback/toast.preview.ts');
   assert.match(src, /getElementById\(['"]toaster['"]\)/);
-  assert.match(src, /createElement\(['"]is-toast['"]\)/);
+  assert.match(src, /createElement\(['"]iswc-toast['"]\)/);
   assert.match(src, /id\s*=\s*['"]toaster['"]|setAttribute\(['"]id['"],\s*['"]toaster['"]\)/);
   // No debe asumir toaster no-null sin crear/fallback
   assert.doesNotMatch(
@@ -71,10 +71,10 @@ test('ux-audit harness existe y no se confunde con .test.ts', () => {
   assert.match(src, /screenshot/);
 });
 
-test('is-btn-ref / is-catalogo-gen behaviors asignan controller', () => {
-  for (const tag of ['is-btn-ref', 'is-catalogo-gen']) {
-    assert.ok(existsSync(join(root, `src/components/isp/${tag.replace(/^is-/, '')}.preview.ts`)), `${tag} behavior`);
-    const src = read(`src/components/isp/${tag.replace(/^is-/, '')}.preview.ts`);
+test('iswc-btn-ref / iswc-catalogo-gen behaviors asignan controller', () => {
+  for (const tag of ['iswc-btn-ref', 'iswc-catalogo-gen']) {
+    assert.ok(existsSync(join(root, `src/components/isp/${tag.replace(/^iswc-/, '')}.preview.ts`)), `${tag} behavior`);
+    const src = read(`src/components/isp/${tag.replace(/^iswc-/, '')}.preview.ts`);
     assert.match(src, /\.controller\s*=/);
     // El `Lista` puede venir inline o del factory compartido
     // `controller-from-config.ts`, que ya lo implementa una sola vez.
@@ -84,27 +84,27 @@ test('is-btn-ref / is-catalogo-gen behaviors asignan controller', () => {
     );
   }
   const catalog = read('src/previews/catalog.ts');
-  assert.match(catalog, /is-btn-ref[\s\S]*?\.\.\/components\/isp\/btn-ref\.preview\.js/);
-  assert.match(catalog, /is-catalogo-gen[\s\S]*?\.\.\/components\/isp\/catalogo-gen\.preview\.js/);
+  assert.match(catalog, /iswc-btn-ref[\s\S]*?\.\.\/components\/isp\/btn-ref\.preview\.js/);
+  assert.match(catalog, /iswc-catalogo-gen[\s\S]*?\.\.\/components\/isp\/catalogo-gen\.preview\.js/);
 });
 
-test('is-ag-grid api facade no asume #api listo (getState/setRows)', () => {
+test('iswc-ag-grid api facade no asume #api listo (getState/setRows)', () => {
   const src = read('src/components/data/ag-grid.ts');
   assert.match(src, /getState:\s*\(\)\s*=>\s*self\.#api\?\.getState/);
   assert.match(src, /#externalData/);
   assert.match(src, /if\s*\(!self\.#api\)\s*return/);
 });
 
-test('is-data-grid page-size no usa .options nativo de is-select', () => {
+test('iswc-data-grid page-size no usa .options nativo de iswc-select', () => {
   const src = read('src/components/data/data-grid.ts');
   assert.doesNotMatch(src, /#pageSizeSelect\.options/);
-  assert.match(src, /querySelectorAll(?:<[^>]+>)?\(['"]is-option, option['"]\)/);
+  assert.match(src, /querySelectorAll(?:<[^>]+>)?\(['"]iswc-option, option['"]\)/);
   const ui = read('src/components/_shared/grid-ui.ts');
-  assert.doesNotMatch(ui, /is-select-option/);
-  assert.match(ui, /createElement\(['"]is-option['"]\)/);
+  assert.doesNotMatch(ui, /iswc-select-option/);
+  assert.match(ui, /createElement\(['"]iswc-option['"]\)/);
 });
 
-test('is-speed-dial behavior garantiza #logTable o no querySelector-on-null', () => {
+test('iswc-speed-dial behavior garantiza #logTable o no querySelector-on-null', () => {
   const src = read('src/components/actions/speed-dial.preview.ts');
   assert.match(src, /logTable/);
   assert.match(src, /if\s*\(!logBody\)|!logBody\)\s*return/);

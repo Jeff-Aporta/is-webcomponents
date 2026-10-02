@@ -2,7 +2,7 @@ import { adoptCss, defineElement } from '../../core/element.js';
 import { ElementBase } from '../../core/element-base.js';
 
 /**
- * <is-breadcrumb-item> — un paso individual dentro de un <is-breadcrumb>.
+ * <iswc-breadcrumb-item> — un paso individual dentro de un <iswc-breadcrumb>.
  *
  * Si tiene `href` (incluido `href=""`), el item se renderiza como <a href>.
  * Con `href=""` se marca como current page (aria-current="page", CSS [current]).
@@ -28,7 +28,7 @@ import { ElementBase } from '../../core/element-base.js';
   TEMPLATE.innerHTML = /* html */ `
     <span class="separator" part="separator" aria-hidden="true">
       <slot name="separator">
-        <is-icon icon="mdi:chevron-right" aria-hidden="true"></is-icon>
+        <iswc-icon icon="mdi:chevron-right" aria-hidden="true"></iswc-icon>
       </slot>
     </span>
     <span class="start" part="start" aria-hidden="true">
@@ -44,7 +44,7 @@ import { ElementBase } from '../../core/element-base.js';
 
   const OBSERVED = ['href', 'icon', 'target', 'rel'];
 
-  class IsBreadcrumbItem extends ElementBase {
+  class IswcBreadcrumbItem extends ElementBase {
     static get observedAttributes(): string[] { return OBSERVED; }
 
     #anchor: HTMLAnchorElement | null = null;
@@ -156,7 +156,7 @@ import { ElementBase } from '../../core/element-base.js';
       const start = this.shadowRoot!.querySelector<HTMLElement>('.start');
       if (!start) return;
       start.innerHTML = '';
-      const icon = document.createElement('is-icon');
+      const icon = document.createElement('iswc-icon');
       icon.setAttribute('aria-hidden', 'true');
       const target = this.getAttribute('icon');
       if (target) icon.setAttribute('icon', target);
@@ -164,5 +164,5 @@ import { ElementBase } from '../../core/element-base.js';
     }
   }
 
-  defineElement('is-breadcrumb-item', IsBreadcrumbItem, 'IsBreadcrumbItem');
+  defineElement('iswc-breadcrumb-item', IswcBreadcrumbItem, 'IswcBreadcrumbItem');
 })();

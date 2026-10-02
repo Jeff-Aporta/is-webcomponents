@@ -1,10 +1,10 @@
 {
-  "$schema": "is-preview/v1",
-  "tag": "is-prefs-clear",
+  "$schema": "iswc-preview/v1",
+  "tag": "iswc-prefs-clear",
   "category": "feedback",
-  "title": "<is-prefs-clear>",
+  "title": "<iswc-prefs-clear>",
   "titleHtml": true,
-  "storageKey": "docs-is-prefs-clear",
+  "storageKey": "docs-iswc-prefs-clear",
   "sections": [
     {
       "id": "intro",
@@ -13,7 +13,7 @@
       "blocks": [
         {
           "kind": "demo",
-          "html": "<is-prefs-clear reload=\"false\"></is-prefs-clear>\n<span class=\"demo-label\" style=\"margin-left:.75rem\">en el preview no recarga la página</span>",
+          "html": "<iswc-prefs-clear reload=\"false\"></iswc-prefs-clear>\n<span class=\"demo-label\" style=\"margin-left:.75rem\">en el preview no recarga la página</span>",
           "controls": [
             {
               "control": "text",

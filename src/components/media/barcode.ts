@@ -2,7 +2,7 @@ import { adoptCss, defineElement, emit } from '../../core/element.js';
 import { svgEl } from '../_shared/svg-chart-engine.js';
 
 /**
- * <is-barcode> — Generador de códigos de barras en SVG.
+ * <iswc-barcode> — Generador de códigos de barras en SVG.
  *
  * Atributos
  *   value     texto a codificar (requerido)
@@ -14,7 +14,7 @@ import { svgEl } from '../_shared/svg-chart-engine.js';
  *   quiet     zonas de silencio en módulos EAN13 (default 9)
  *
  * Eventos
- *   is-render
+ *   iswc-render
  *
  * Nota: QR no entra todavía; se sugiere emparejar con lib externa (qrcode / qrcode-svg).
  */
@@ -104,7 +104,7 @@ import { svgEl } from '../_shared/svg-chart-engine.js';
   }
 
   // ── Componente ───────────────────────────────────────────────────────
-  class IsBarcode extends HTMLElement {
+  class IswcBarcode extends HTMLElement {
     static get observedAttributes(): string[] { return OBSERVED; }
     #mounted = false;
 
@@ -188,12 +188,12 @@ import { svgEl } from '../_shared/svg-chart-engine.js';
         this.#text.hidden = true;
       }
 
-      emit(this, 'is-render', { svg: this.#svg });
+      emit(this, 'iswc-render', { svg: this.#svg });
     }
 
     #svg!: HTMLElement;
     #text!: HTMLElement;
   }
 
-  defineElement('is-barcode', IsBarcode, 'IsBarcode');
+  defineElement('iswc-barcode', IswcBarcode, 'IswcBarcode');
 })();

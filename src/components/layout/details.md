@@ -1,14 +1,14 @@
 ---
-tag: is-details
+tag: iswc-details
 tags:
-  - is-details
+  - iswc-details
 category: layout
 status: public
 source: ./details.js
 style: ./details.css
 preview: ./details.json
 ---
-# `<is-details>`
+# `<iswc-details>`
 
 ## Propósito
 
@@ -16,7 +16,7 @@ Disclosure colapsable: muestra un resumen y, al expandir, el contenido. Equivale
 accesible al <details> nativo, con apariencias,
 iconos, animaciones y comportamiento de accordion opcional.
 
-Este módulo registra `<is-details>`.
+Este módulo registra `<iswc-details>`.
 
 ## Cuándo usarlo
 
@@ -35,9 +35,9 @@ import './details.js';
 ## Ejemplo mínimo
 
 ```html
-<is-details summary="¿Qué es InSoft?">
+<iswc-details summary="¿Qué es InSoft?">
 InSoft es un ERP modular…
-</is-details>
+</iswc-details>
 ```
 
 ## API
@@ -78,10 +78,10 @@ InSoft es un ERP modular…
 
 | Evento | detail | bubbles | composed | cancelable |
 | --- | --- | --- | --- | --- |
-| `is-show` | según cabecera | según cabecera | según cabecera | según cabecera |
-| `is-after-show` | según cabecera | según cabecera | según cabecera | según cabecera |
-| `is-hide` | según cabecera | según cabecera | según cabecera | según cabecera |
-| `is-after-hide` | según cabecera | según cabecera | según cabecera | según cabecera |
+| `iswc-show` | según cabecera | según cabecera | según cabecera | según cabecera |
+| `iswc-after-show` | según cabecera | según cabecera | según cabecera | según cabecera |
+| `iswc-hide` | según cabecera | según cabecera | según cabecera | según cabecera |
+| `iswc-after-hide` | según cabecera | según cabecera | según cabecera | según cabecera |
 
 ### Métodos y propiedades públicas
 
@@ -136,13 +136,13 @@ No declara integración form-associated propia en este módulo.
 
 Documentación de cabecera preservada desde fuente:
 
-> <is-details> — Web Component (vanilla, zero dependencies).
+> <iswc-details> — Web Component (vanilla, zero dependencies).
 > Disclosure colapsable: muestra un resumen y, al expandir, el contenido.
 > Equivalente a wa-details / <details>.
 > Atributos
 >   open             boolean — si está expandido (reflected)
 >   summary          string  — texto del summary si no se usa el slot
->   name             string  — grupo accordion: si dos <is-details> comparten
+>   name             string  — grupo accordion: si dos <iswc-details> comparten
 >                             `name`, abrir uno cierra el resto
 >   disabled         boolean
 >   variant       filled | outlined | filled-outlined | plain
@@ -157,10 +157,10 @@ Documentación de cabecera preservada desde fuente:
 > Métodos
 >   show() / hide() / toggle()
 > Eventos
->   is-show       detail: {} — antes de abrir (cancelable)
->   is-after-show detail: {} — tras la animación de apertura
->   is-hide       detail: {} — antes de cerrar (cancelable)
->   is-after-hide detail: {} — tras la animación de cierre
+>   iswc-show       detail: {} — antes de abrir (cancelable)
+>   iswc-after-show detail: {} — tras la animación de apertura
+>   iswc-hide       detail: {} — antes de cerrar (cancelable)
+>   iswc-after-hide detail: {} — tras la animación de cierre
 > CSS Parts: ::part(base) ::part(header) ::part(summary) ::part(icon) ::part(content)
 > CSS custom properties
 >   --spacing          espacio del header/contenido
@@ -171,7 +171,7 @@ Documentación de cabecera preservada desde fuente:
 
 - [`../_shared/adopt-css.js`](../_shared/adopt-css.js)
 
-Tags del módulo: `<is-details>`.
+Tags del módulo: `<iswc-details>`.
 
 ## Accesibilidad
 
@@ -180,7 +180,7 @@ Preservar semántica, foco, teclado, labels y ARIA. ARIA detectado: `aria-expand
 ## Ejemplo avanzado
 
 ```html
-<is-details variant="filled" summary="…">…</is-details>
+<iswc-details variant="filled" summary="…">…</iswc-details>
 ```
 
 ## Errores comunes

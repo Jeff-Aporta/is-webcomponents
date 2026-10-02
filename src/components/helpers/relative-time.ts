@@ -5,7 +5,7 @@ import { resolveLocale } from '../_shared/resolve-locale.js';
 import { parseLooseDate } from './format-date.js';
 
 /**
- * <is-relative-time> — Web Component (vanilla).
+ * <iswc-relative-time> — Web Component (vanilla).
  *
  * Formatea fechas relativas con Intl.RelativeTimeFormat (nativo, multi-locale).
  *
@@ -36,7 +36,7 @@ import { parseLooseDate } from './format-date.js';
     ['second', 1],
   ];
 
-  class IsRelativeTime extends ElementBase {
+  class IswcRelativeTime extends ElementBase {
     static get observedAttributes(): string[] { return OBSERVED; }
 
     #el!: HTMLTimeElement;
@@ -188,5 +188,5 @@ import { parseLooseDate } from './format-date.js';
     }
   }
 
-  defineElement('is-relative-time', IsRelativeTime, 'IsRelativeTime');
+  defineElement('iswc-relative-time', IswcRelativeTime, 'IswcRelativeTime');
 })();

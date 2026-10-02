@@ -45,10 +45,10 @@ async function checkDeterministic(page) {
   await page.waitForTimeout(200);
 
   const data = await page.evaluate(() => {
-    const ranges = [...document.querySelectorAll('is-date-range-picker')];
+    const ranges = [...document.querySelectorAll('iswc-date-range-picker')];
     return ranges.map((r, idx) => {
       const rect = r.getBoundingClientRect();
-      const pickers = [...r.shadowRoot.querySelectorAll('is-date-picker')];
+      const pickers = [...r.shadowRoot.querySelectorAll('iswc-date-picker')];
       const pickerRects = pickers.map((p) => {
         const pr = p.getBoundingClientRect();
         return { x: pr.x, y: pr.y, w: pr.width, h: pr.height };

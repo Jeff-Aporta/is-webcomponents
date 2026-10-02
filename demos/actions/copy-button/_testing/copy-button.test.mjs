@@ -9,11 +9,11 @@ let browser;
 test.before(async () => { browser = await chromium.launch(); await browser.contexts()[0]?.grantPermissions?.(['clipboard-read', 'clipboard-write']); });
 test.after(async () => { await browser?.close(); });
 
-test('copy-button: bundle registra <is-copy-button>', async () => {
+test('copy-button: bundle registra <iswc-copy-button>', async () => {
   const page = await browser.newPage();
   await page.goto(URL_DEMO, { waitUntil: 'domcontentloaded' });
-  await page.waitForSelector('is-copy-button:defined');
-  const defined = await page.evaluate(() => !!customElements.get('is-copy-button'));
+  await page.waitForSelector('iswc-copy-button:defined');
+  const defined = await page.evaluate(() => !!customElements.get('iswc-copy-button'));
   assert.equal(defined, true);
   await page.close();
 });
@@ -21,34 +21,34 @@ test('copy-button: bundle registra <is-copy-button>', async () => {
 test('copy-button: atributo value queda en la propiedad', async () => {
   const page = await browser.newPage();
   await page.goto(URL_DEMO, { waitUntil: 'domcontentloaded' });
-  await page.waitForSelector('is-copy-button:defined');
+  await page.waitForSelector('iswc-copy-button:defined');
   const val = await page.evaluate(() => {
-    return document.querySelector('is-copy-button[value]').value;
+    return document.querySelector('iswc-copy-button[value]').value;
   });
   assert.match(val, /npm install/);
   await page.close();
 });
 
-test('copy-button: click en el botón dispara la copia y emite is-copy', async () => {
+test('copy-button: click en el botón dispara la copia y emite iswc-copy', async () => {
   const ctx = await browser.newContext();
   await ctx.grantPermissions(['clipboard-read', 'clipboard-write']);
   const page = await ctx.newPage();
   await page.goto(URL_DEMO, { waitUntil: 'domcontentloaded' });
-  await page.waitForSelector('is-copy-button:defined');
+  await page.waitForSelector('iswc-copy-button:defined');
   await page.evaluate(() => {
     window.__cpEvt = null;
-    document.querySelector('is-copy-button').addEventListener('is-copy', (e) => {
+    document.querySelector('iswc-copy-button').addEventListener('iswc-copy', (e) => {
       window.__cpEvt = e.detail;
     });
   });
-  // Click en el <is-button> interno (trigger)
+  // Click en el <iswc-button> interno (trigger)
   await page.evaluate(() => {
-    const cb = document.querySelector('is-copy-button');
-    cb.shadowRoot.querySelector('is-button').click();
+    const cb = document.querySelector('iswc-copy-button');
+    cb.shadowRoot.querySelector('iswc-button').click();
   });
   await page.waitForTimeout(150);
   const detail = await page.evaluate(() => window.__cpEvt);
-  assert.ok(detail, 'is-copy debe haberse emitido');
+  assert.ok(detail, 'iswc-copy debe haberse emitido');
   assert.match(detail.value, /npm install/);
   // Clipboard contiene lo mismo
   const clip = await page.evaluate(() => navigator.clipboard.readText());
@@ -61,10 +61,10 @@ test('copy-button: from="snippet" copia el texto del elemento referenciado', asy
   await ctx.grantPermissions(['clipboard-read', 'clipboard-write']);
   const page = await ctx.newPage();
   await page.goto(URL_DEMO, { waitUntil: 'domcontentloaded' });
-  await page.waitForSelector('is-copy-button:defined');
+  await page.waitForSelector('iswc-copy-button:defined');
   await page.evaluate(() => {
-    const cb = document.querySelector('is-copy-button[from]');
-    cb.shadowRoot.querySelector('is-button').click();
+    const cb = document.querySelector('iswc-copy-button[from]');
+    cb.shadowRoot.querySelector('iswc-button').click();
   });
   await page.waitForTimeout(150);
   const clip = await page.evaluate(() => navigator.clipboard.readText());
@@ -77,20 +77,20 @@ test('copy-button: atributo disabled bloquea la copia', async () => {
   await ctx.grantPermissions(['clipboard-read', 'clipboard-write']);
   const page = await ctx.newPage();
   await page.goto(URL_DEMO, { waitUntil: 'domcontentloaded' });
-  await page.waitForSelector('is-copy-button[disabled]:defined');
+  await page.waitForSelector('iswc-copy-button[disabled]:defined');
   await page.evaluate(() => {
     window.__cpDisabled = 0;
-    document.querySelector('is-copy-button[disabled]').addEventListener('is-copy', () => {
+    document.querySelector('iswc-copy-button[disabled]').addEventListener('iswc-copy', () => {
       window.__cpDisabled += 1;
     });
   });
   await page.evaluate(() => {
-    const cb = document.querySelector('is-copy-button[disabled]');
-    cb.shadowRoot.querySelector('is-button').click();
+    const cb = document.querySelector('iswc-copy-button[disabled]');
+    cb.shadowRoot.querySelector('iswc-button').click();
   });
   await page.waitForTimeout(150);
   const n = await page.evaluate(() => window.__cpDisabled);
-  assert.equal(n, 0, 'click sobre disabled no debe disparar is-copy');
+  assert.equal(n, 0, 'click sobre disabled no debe disparar iswc-copy');
   await ctx.close();
 });
 
@@ -99,13 +99,13 @@ test('copy-button: feedback state visible tras copiar', async () => {
   await ctx.grantPermissions(['clipboard-read', 'clipboard-write']);
   const page = await ctx.newPage();
   await page.goto(URL_DEMO, { waitUntil: 'domcontentloaded' });
-  await page.waitForSelector('is-copy-button:defined');
+  await page.waitForSelector('iswc-copy-button:defined');
   await page.evaluate(() => {
-    document.querySelector('is-copy-button').shadowRoot.querySelector('is-button').click();
+    document.querySelector('iswc-copy-button').shadowRoot.querySelector('iswc-button').click();
   });
   await page.waitForTimeout(80);
   const state = await page.evaluate(() => {
-    const cb = document.querySelector('is-copy-button');
+    const cb = document.querySelector('iswc-copy-button');
     const successIcon = cb.shadowRoot.querySelector('[data-state="success"]');
     const copyIcon = cb.shadowRoot.querySelector('[data-state="copy"]');
     return {

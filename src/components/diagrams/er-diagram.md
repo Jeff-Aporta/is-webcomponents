@@ -1,14 +1,14 @@
 ---
-tag: is-er-diagram
+tag: iswc-er-diagram
 tags:
-  - is-er-diagram
+  - iswc-er-diagram
 category: diagrams
 status: public
 source: ./er-diagram.js
 style: ./er-diagram.css
 preview: ./er-diagram.json
 ---
-# `<is-er-diagram>`
+# `<iswc-er-diagram>`
 
 ## Propósito
 
@@ -16,7 +16,7 @@ Diagrama entidad-relación en SVG, sin Mermaid. Declaras entidades con sus
 atributos y las relaciones entre ellas; el componente ubica las cajas,
 rutea las líneas con A* y dibuja la notación de pata de gallo en cada extremo.
 
-Este módulo registra `<is-er-diagram>`.
+Este módulo registra `<iswc-er-diagram>`.
 
 ## Cuándo usarlo
 
@@ -35,7 +35,7 @@ import './er-diagram.js';
 ## Ejemplo mínimo
 
 ```html
-<is-er-diagram></is-er-diagram>
+<iswc-er-diagram></iswc-er-diagram>
 ```
 
 ## API
@@ -69,10 +69,10 @@ import './er-diagram.js';
 
 | Evento | detail | bubbles | composed | cancelable |
 | --- | --- | --- | --- | --- |
-| `is-turtle-state` | sí | sí | sí | no |
-| `is-render` | sí | sí | sí | no |
-| `is-toggle-group` | sí | sí | sí | sí |
-| `is-open-viewer` | sí | sí | sí | sí |
+| `iswc-turtle-state` | sí | sí | sí | no |
+| `iswc-render` | sí | sí | sí | no |
+| `iswc-toggle-group` | sí | sí | sí | sí |
+| `iswc-open-viewer` | sí | sí | sí | sí |
 
 ### Métodos y propiedades públicas
 
@@ -141,16 +141,16 @@ ya usados, de modo que dos aristas prefieren separarse antes que solaparse.
 
 Documentación de cabecera preservada desde fuente:
 
-> <is-er-diagram> — diagrama entidad-relación en SVG, sin Mermaid.
-> Configuración por JSON, igual que <is-flowchart>:
->   <is-er-diagram>
+> <iswc-er-diagram> — diagrama entidad-relación en SVG, sin Mermaid.
+> Configuración por JSON, igual que <iswc-flowchart>:
+>   <iswc-er-diagram>
 >     <script type="application/json">
 >       { "erDiagram": { "entities": [...], "relations": [...] } }
 >     </script>
->   </is-er-diagram>
+>   </iswc-er-diagram>
 > Atributos: color (inline | viewer), open-on-click
 > Propiedades: payload, spec, layout, turtle, hiddenGroups
-> Eventos: is-render, is-turtle-state, is-open-viewer, is-toggle-group
+> Eventos: iswc-render, iswc-turtle-state, iswc-open-viewer, iswc-toggle-group
 
 Las aristas paralelas se separan unos píxeles; el trazo es un HSL oscuro del
 grupo (no negro). Las etiquetas se colocan al 50% del path y no pisan cajas.
@@ -165,7 +165,7 @@ grupo (no negro). Las etiquetas se colocan al 50% del path y no pisan cajas.
 - [`../_shared/tk-inline-md.js`](../_shared/tk-inline-md.js)
 - [`./diagram-kinds.js`](./diagram-kinds.js)
 
-Tags del módulo: `<is-er-diagram>`.
+Tags del módulo: `<iswc-er-diagram>`.
 
 ## Accesibilidad
 
@@ -174,7 +174,7 @@ Preservar semántica, foco, teclado, labels y ARIA. ARIA detectado: `aria-label`
 ## Ejemplo avanzado
 
 ```html
-<is-er-diagram></is-er-diagram>
+<iswc-er-diagram></iswc-er-diagram>
 ```
 
 ## Errores comunes

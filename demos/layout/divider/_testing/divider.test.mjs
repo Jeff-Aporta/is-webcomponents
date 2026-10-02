@@ -9,14 +9,14 @@ const URL = `${BASE_URL}/demos/layout/divider/divider.html`;
 const tests = [];
 
 tests.push({
-  name: 'smoke: is-divider está definido y los dividers horizontales/verticales renderizan',
+  name: 'smoke: iswc-divider está definido y los dividers horizontales/verticales renderizan',
   run: async (page) => {
     await page.goto(URL, { waitUntil: 'domcontentloaded' });
     await waitReady(page, 'data-divider-ready');
     const data = await page.evaluate(() => {
-      const all = [...document.querySelectorAll('main is-divider')];
+      const all = [...document.querySelectorAll('main iswc-divider')];
       return {
-        defined: !!customElements.get('is-divider'),
+        defined: !!customElements.get('iswc-divider'),
         count: all.length,
         // role + aria-orientation siempre en host.
         a11y: all.map((d) => ({
@@ -29,7 +29,7 @@ tests.push({
         })),
       };
     });
-    assert.equal(data.defined, true, 'is-divider debe estar definido');
+    assert.equal(data.defined, true, 'iswc-divider debe estar definido');
     assert.ok(data.count >= 17, `esperaba >=17 dividers en el demo, hay ${data.count}`);
     for (const a of data.a11y) {
       assert.equal(a.role, 'separator', 'cada divider debe tener role="separator"');
@@ -65,7 +65,7 @@ tests.push({
     await waitReady(page, 'data-divider-ready');
     const opacities = await page.evaluate(() => {
       const set = new Set();
-      [...document.querySelectorAll('#host-3 is-divider')].forEach((d) => {
+      [...document.querySelectorAll('#host-3 iswc-divider')].forEach((d) => {
         const val = d.style.getPropertyValue('--opacity');
         set.add(val);
       });
@@ -101,12 +101,12 @@ tests.push({
     await waitReady(page, 'data-divider-ready');
     const data = await page.evaluate(() => {
       // Crear uno con opacity fuera de rango y leer la propiedad.
-      const d1 = document.createElement('is-divider');
+      const d1 = document.createElement('iswc-divider');
       d1.setAttribute('opacity', '500');
       document.body.appendChild(d1);
       const high = d1.opacity;
 
-      const d2 = document.createElement('is-divider');
+      const d2 = document.createElement('iswc-divider');
       d2.setAttribute('opacity', '-30');
       document.body.appendChild(d2);
       const low = d2.opacity;
@@ -139,7 +139,7 @@ tests.push({
     await page.goto(URL, { waitUntil: 'domcontentloaded' });
     await waitReady(page, 'data-divider-ready');
     const o = await page.evaluate(() => {
-      const d = document.createElement('is-divider');
+      const d = document.createElement('iswc-divider');
       d.setAttribute('orientation', 'diagonal');
       document.body.appendChild(d);
       const v = d.orientation;
@@ -158,14 +158,14 @@ tests.push({
     await page.goto(URL, { waitUntil: 'domcontentloaded' });
     await waitReady(page, 'data-divider-ready');
     const a = await page.evaluate(() => {
-      return [...document.querySelectorAll('main is-divider')].map((d) => ({
+      return [...document.querySelectorAll('main iswc-divider')].map((d) => ({
         opacity: d.style.getPropertyValue('--opacity'),
         color: d.getAttribute('color'),
         aria: d.getAttribute('aria-orientation'),
       }));
     });
     await page.evaluate(() => {
-      document.querySelectorAll('main is-divider').forEach((d) => {
+      document.querySelectorAll('main iswc-divider').forEach((d) => {
         const op = d.getAttribute('opacity'); if (op) { d.removeAttribute('opacity'); d.setAttribute('opacity', op); }
         const c = d.getAttribute('color'); if (c) { d.removeAttribute('color'); d.setAttribute('color', c); }
         const o = d.getAttribute('orientation'); if (o) { d.removeAttribute('orientation'); d.setAttribute('orientation', o); }
@@ -173,7 +173,7 @@ tests.push({
     });
     await page.waitForTimeout(80);
     const b = await page.evaluate(() => {
-      return [...document.querySelectorAll('main is-divider')].map((d) => ({
+      return [...document.querySelectorAll('main iswc-divider')].map((d) => ({
         opacity: d.style.getPropertyValue('--opacity'),
         color: d.getAttribute('color'),
         aria: d.getAttribute('aria-orientation'),

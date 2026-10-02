@@ -1,15 +1,15 @@
 {
-  "$schema": "is-preview/v1",
-  "tag": "is-skeleton",
+  "$schema": "iswc-preview/v1",
+  "tag": "iswc-skeleton",
   "category": "feedback",
   "title": "Skeleton",
   "titleHtml": false,
-  "storageKey": "docs-is-skeleton",
+  "storageKey": "docs-iswc-skeleton",
   "sections": [
     {
       "id": "intro",
       "title": "Skeleton",
-      "lede": "<code class=\"code\">&lt;is-skeleton&gt;</code>",
+      "lede": "<code class=\"code\">&lt;iswc-skeleton&gt;</code>",
       "blocks": [
         {
           "kind": "html",
@@ -17,7 +17,7 @@
         },
         {
           "kind": "demo",
-          "html": "<is-skeleton style=\"height:.875rem;margin-bottom:.5rem\"></is-skeleton>\r\n          <is-skeleton style=\"height:.875rem;width:80%;margin-bottom:.5rem\"></is-skeleton>\r\n          <is-skeleton style=\"height:4rem;border-radius:8px\"></is-skeleton>",
+          "html": "<iswc-skeleton style=\"height:.875rem;margin-bottom:.5rem\"></iswc-skeleton>\r\n          <iswc-skeleton style=\"height:.875rem;width:80%;margin-bottom:.5rem\"></iswc-skeleton>\r\n          <iswc-skeleton style=\"height:4rem;border-radius:8px\"></iswc-skeleton>",
           "controls": [
             {
               "control": "select",
@@ -39,11 +39,11 @@
       "blocks": [
         {
           "kind": "demo",
-          "html": "<div>\r\n            <span class=\"demo-label\">sheen</span>\r\n            <is-skeleton effect=\"sheen\" style=\"height:1rem\"></is-skeleton>\r\n          </div>\r\n          <div>\r\n            <span class=\"demo-label\">pulse</span>\r\n            <is-skeleton effect=\"pulse\" style=\"height:1rem\"></is-skeleton>\r\n          </div>\r\n          <div>\r\n            <span class=\"demo-label\">none</span>\r\n            <is-skeleton effect=\"none\" style=\"height:1rem\"></is-skeleton>\r\n          </div>"
+          "html": "<div>\r\n            <span class=\"demo-label\">sheen</span>\r\n            <iswc-skeleton effect=\"sheen\" style=\"height:1rem\"></iswc-skeleton>\r\n          </div>\r\n          <div>\r\n            <span class=\"demo-label\">pulse</span>\r\n            <iswc-skeleton effect=\"pulse\" style=\"height:1rem\"></iswc-skeleton>\r\n          </div>\r\n          <div>\r\n            <span class=\"demo-label\">none</span>\r\n            <iswc-skeleton effect=\"none\" style=\"height:1rem\"></iswc-skeleton>\r\n          </div>"
         },
         {
           "kind": "code",
-          "code": "<is-skeleton effect=\"sheen\" style=\"height:1rem\"></is-skeleton>\n<is-skeleton effect=\"pulse\" style=\"height:1rem\"></is-skeleton>"
+          "code": "<iswc-skeleton effect=\"sheen\" style=\"height:1rem\"></iswc-skeleton>\n<iswc-skeleton effect=\"pulse\" style=\"height:1rem\"></iswc-skeleton>"
         }
       ]
     },

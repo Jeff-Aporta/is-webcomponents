@@ -1,7 +1,7 @@
 // tests/icon-render.test.ts
 //
 // Los dos motivos por los que un icono existente se ve MAL en la rejilla pero
-// bien al abrirlo en el formulario (que inyecta el SVG crudo, sin <is-icon>).
+// bien al abrirlo en el formulario (que inyecta el SVG crudo, sin <iswc-icon>).
 //
 // BUG 1 — "academicons no muestra iconos, solo los nombres".
 //   icon-loader.ts pedia los SVG con `cache: 'force-cache'`, que sirve la
@@ -81,13 +81,13 @@ assert.ok(
   'si el icono es multicolor, #normalizeInlineSvg debe salir ANTES de aplastar los fills',
 );
 assert.ok(
-  /is-multicolor/.test(iconCss),
-  'icon.css debe neutralizar el `fill: currentColor` heredado para .is-multicolor',
+  /iswc-multicolor/.test(iconCss),
+  'icon.css debe neutralizar el `fill: currentColor` heredado para .iswc-multicolor',
 );
 // El viewBox nativo no se toca: reescribirlo es el bug de los iconos vacios.
 assert.ok(
   !/svg\.setAttribute\('viewBox'/.test(iconJs),
-  'is-icon no debe reescribir el viewBox: cada colección tiene su grid nativo',
+  'iswc-icon no debe reescribir el viewBox: cada colección tiene su grid nativo',
 );
 
 // --- Premisa de la heurística sobre los assets reales ----------------------

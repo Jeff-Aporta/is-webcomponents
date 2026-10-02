@@ -1,12 +1,12 @@
 /**
- * <is-code> — Editor de código con motor NATIVO (code-highlight, sin
+ * <iswc-code> — Editor de código con motor NATIVO (code-highlight, sin
  * CodeMirror): langs, temas JSON, formateo estilo Prettier, marks y API
  * code2json/json2code.
  *
  * Atributos
  *   lang              javascript | typescript | jsx | tsx | html | css | json | python | shell | curl | plaintext
  *   value             texto fuente
- *   document          JSON is-code-doc/v1 (alternativa a value; gana si ambos)
+ *   document          JSON iswc-code-doc/v1 (alternativa a value; gana si ambos)
  *   format            JSON opciones tipo Prettier
  *   theme-config      JSON colores del editor
  *   line-numbers      boolean (default true)
@@ -21,7 +21,7 @@
  * Props JS: value, lang, mode, formatConfig, themeConfig, document, marks
  * Métodos: format(), getDocument(), setDocument(), code2json(), json2code(doc),
  *          setMarks(), clearMarks(), focus(), refresh(), registerLanguage (módulo)
- * Eventos: is-ready, is-input, is-change, is-cursor, is-mark-activate
+ * Eventos: iswc-ready, iswc-input, iswc-change, iswc-cursor, iswc-mark-activate
  * Parts: root, editor, tooltip
  */
 
@@ -35,7 +35,7 @@ import {
   listLanguages, registerLanguage, resolveLanguage, inferLanguage,
 } from '../_shared/code-langs.js';
 import { formatCode, normalizeFormatConfig, DEFAULT_FORMAT } from '../_shared/code-format.js';
-import { applyThemeConfig, parseThemeConfig } from '../_shared/code-theme.js';
+import { applyThemeConfig, brandMonoTheme, parseThemeConfig } from '../_shared/code-theme.js';
 import type { CodeThemeConfig } from '../_shared/code-theme.js';
 import { softFormat, softFormatMode } from '../_shared/code-text.js';
 import {
@@ -61,7 +61,7 @@ type CodeLangDef = {
   lineClass?: (line: string) => string | null;
 };
 
-// Wrapper tipado para el custom element <is-tooltip>.
+// Wrapper tipado para el custom element <iswc-tooltip>.
 type IsTooltipEl = HTMLElement & { open: boolean };
 
 const TEMPLATE = document.createElement('template');
@@ -69,7 +69,7 @@ TEMPLATE.innerHTML = /* html */ `
   <div part="root" class="root">
     <textarea class="seed" part="seed" aria-hidden="true"></textarea>
     <div class="editor-host" part="editor"></div>
-    <is-tooltip part="tooltip" class="doc-tip" trigger="none" placement="top" distance="8"></is-tooltip>
+    <iswc-tooltip part="tooltip" class="doc-tip" trigger="none" placement="top" distance="8"></iswc-tooltip>
   </div>
 `;
 
@@ -79,7 +79,7 @@ TEMPLATE.innerHTML = /* html */ `
 const DEFAULT_HOST_LABEL = 'Editor de código';
 
 const OBSERVED = [
-  'lang', 'value', 'document', 'format', 'theme-config',
+  'lang', 'value', 'document', 'format', 'theme', 'theme-config',
   'line-numbers', 'wrap', 'readonly', 'disabled', 'autofocus', 'compact',
   'mode', 'tab-size', 'name', 'placeholder', 'min-height',
 ];
@@ -107,7 +107,7 @@ function editRange(oldText: string, newText: string): [number, number, number] {
   return [from, o, n - from];
 }
 
-class IsCode extends ElementBase {
+class IswcCode extends ElementBase {
   static styleAttrs = {
     radius: '--iswc-code-radius',
     'border-color': { prop: '--iswc-code-border', onlyColorValues: true },
@@ -118,7 +118,7 @@ class IsCode extends ElementBase {
 
   static formAssociated = true;
   static get observedAttributes(): string[] {
-    return [...OBSERVED, ...IsCode.styleAttrNames];
+    return [...OBSERVED, ...IswcCode.styleAttrNames];
   }
 
   #internals: ElementInternals | null = null;
@@ -149,7 +149,7 @@ class IsCode extends ElementBase {
     shadow.appendChild(TEMPLATE.content.cloneNode(true));
     this.#textarea = shadow.querySelector<HTMLTextAreaElement>('.seed');
     this.#host = shadow.querySelector<HTMLElement>('.editor-host');
-    this.#tooltip = shadow.querySelector<HTMLElement>('is-tooltip') as IsTooltipEl | null;
+    this.#tooltip = shadow.querySelector<HTMLElement>('iswc-tooltip') as IsTooltipEl | null;
     this.#internals = attachFormInternals(this);
   }
 
@@ -159,12 +159,12 @@ class IsCode extends ElementBase {
     this.#syncLayoutDom();
     this.#syncAriaOnHost();
     if (this.#themeConfig) applyThemeConfig(this, this.#themeConfig, this.#pageTheme());
-    document.addEventListener('is-theme-change', this.#onThemeChange);
+    document.addEventListener('iswc-theme-change', this.#onThemeChange);
     if (!this.#booting) void this.#bootstrap();
   }
 
   override onDisconnected(): void {
-    document.removeEventListener('is-theme-change', this.#onThemeChange);
+    document.removeEventListener('iswc-theme-change', this.#onThemeChange);
     clearTimeout(this.#hideTipTimer);
     if (this.#tooltip) this.#tooltip.open = false;
     // Conservar instancia al mover en el DOM; destruir solo si el documento
@@ -192,6 +192,9 @@ class IsCode extends ElementBase {
       case 'theme-config':
         this.#themeConfig = parseThemeConfig(value);
         applyThemeConfig(this, this.#themeConfig, this.#pageTheme());
+        break;
+      case 'theme':
+        this.#applyNamedTheme(value);
         break;
       case 'line-numbers':
       case 'wrap':
@@ -363,7 +366,7 @@ class IsCode extends ElementBase {
     const lang = resolveLanguage(this.lang)?.id || this.lang;
     const next = formatCode(this.value, lang, this.#formatConfig);
     this.#setValue(next, true);
-    emit(this, 'is-change', { value: next, formatted: true });
+    emit(this, 'iswc-change', { value: next, formatted: true });
     return next;
   }
 
@@ -389,7 +392,20 @@ class IsCode extends ElementBase {
       applyThemeConfig(this, this.#themeConfig, this.#pageTheme());
       return;
     }
+    if (this.#applyNamedTheme(this.getAttribute('theme'))) return;
     applyThemeConfig(this, null, this.#pageTheme());
+  }
+
+  /** Presets cortos (`brand-mono`) sin volcar JSON en el DOM. */
+  #applyNamedTheme(name: string | null): boolean {
+    if (this.hasAttribute('theme-config')) return false;
+    const id = String(name || '').trim().toLowerCase();
+    if (id === 'brand-mono') {
+      this.#themeConfig = brandMonoTheme();
+      applyThemeConfig(this, this.#themeConfig, this.#pageTheme());
+      return true;
+    }
+    return false;
   }
 
   #parseJsonAttr(value: string | null): unknown {
@@ -441,6 +457,8 @@ class IsCode extends ElementBase {
       if (themeAttr) {
         this.#themeConfig = themeAttr;
         applyThemeConfig(this, themeAttr, this.#pageTheme());
+      } else {
+        this.#applyNamedTheme(this.getAttribute('theme'));
       }
 
       // Snippets de demos suelen omitir lang → HTML se pintaba como JS.
@@ -471,8 +489,8 @@ class IsCode extends ElementBase {
       return;
     } catch (err) {
       const message = (err as Error)?.message ?? String(err);
-      console.error('[is-code] bootstrap', err);
-      emit(this, 'is-error', { error: message });
+      console.error('[iswc-code] bootstrap', err);
+      emit(this, 'iswc-error', { error: message });
     } finally {
       this.#booting = false;
     }
@@ -493,7 +511,7 @@ class IsCode extends ElementBase {
     this.#ready = true;
     setFormValue(this.#internals, this.#nativeText, null);
     setCustomState(this.#internals, 'blank', !this.#nativeText);
-    emit(this, 'is-ready', { lang: this.lang, value: this.value });
+    emit(this, 'iswc-ready', { lang: this.lang, value: this.value });
   }
 
   /** Pinta `text` (tokenizado + marcas) dentro de un <pre> y devuelve las líneas. */
@@ -559,9 +577,9 @@ class IsCode extends ElementBase {
   /** Envuelve un tramo pintado con la clase/attrs de la marca. */
   #markWrap(mark: CodeMark, inner: string): string {
     const cls = [
-      'is-code-mark',
-      `is-code-mark--${mark.kind}`,
-      `is-code-mark--${mark.tone || 'neutral'}`,
+      'iswc-code-mark',
+      `iswc-code-mark--${mark.kind}`,
+      `iswc-code-mark--${mark.tone || 'neutral'}`,
       mark.className || '',
     ].filter(Boolean).join(' ');
     const title = mark.message || mark.title || '';
@@ -636,8 +654,8 @@ class IsCode extends ElementBase {
     setFormValue(this.#internals, v, null);
     setCustomState(this.#internals, 'blank', !v);
     this.#paintEdit();
-    emit(this, 'is-input', { value: v });
-    emit(this, 'is-change', { value: v });
+    emit(this, 'iswc-input', { value: v });
+    emit(this, 'iswc-change', { value: v });
     this.#emitCursor();
   };
 
@@ -667,7 +685,7 @@ class IsCode extends ElementBase {
     const before = ta.value.slice(0, ta.selectionStart);
     const line = before.split('\n').length - 1;
     const lineStart = before.lastIndexOf('\n') + 1;
-    emit(this, 'is-cursor', { line, ch: before.length - lineStart, index: ta.selectionStart });
+    emit(this, 'iswc-cursor', { line, ch: before.length - lineStart, index: ta.selectionStart });
     this.#paintActiveLine(line);
     // En el editor el <pre> vive bajo el textarea (sin hover): el tooltip de
     // las marcas se abre cuando el caret está dentro de su rango.
@@ -780,7 +798,7 @@ class IsCode extends ElementBase {
     setCustomState(this.#internals, 'blank', !this.#nativeText);
     if (this.autofocus) ta.focus();
     requestAnimationFrame(() => this.#paintActiveLine(0));
-    emit(this, 'is-ready', { lang: this.lang, value: this.value });
+    emit(this, 'iswc-ready', { lang: this.lang, value: this.value });
   }
 
   #setValue(text: string, reflect: boolean): void {
@@ -897,7 +915,7 @@ class IsCode extends ElementBase {
       const base = `${DEFAULT_HOST_LABEL} en ${lang}, ${lines} ${lines === 1 ? 'línea' : 'líneas'}${tail}`;
       this.setAttribute('aria-label', base);
     }
-    // role=region solo si el usuario no fija uno propio (un <is-window> u
+    // role=region solo si el usuario no fija uno propio (un <iswc-window> u
     // otro consumidor podría querer region vs group vs application).
     if (!this.hasAttribute('role')) {
       this.setAttribute('role', 'region');
@@ -931,7 +949,7 @@ class IsCode extends ElementBase {
   }
 
   /**
-   * Abre el tooltip de una marca y emite is-mark-activate (enter) la primera
+   * Abre el tooltip de una marca y emite iswc-mark-activate (enter) la primera
    * vez que esa marca queda activa. `targetEl` llega del hover (readonly);
    * en editable el ancla es el span de la marca dentro del <pre> (el hover no
    * existe: el textarea tapa el pre), así que el tooltip se abre por caret.
@@ -958,12 +976,12 @@ class IsCode extends ElementBase {
       ?? this.#nativeRoot?.querySelector<HTMLElement>(`[data-mark-id="${escId}"]`)
       ?? this.#host;
     if (!anchor) return;
-    if (!anchor.id) anchor.id = `is-code-mark-${mark.id}`;
+    if (!anchor.id) anchor.id = `iswc-code-mark-${mark.id}`;
     this.#tooltip.setAttribute('for', anchor.id);
     this.#tooltip.open = true;
     if (this.#currentTip !== mark.id) {
       this.#currentTip = mark.id;
-      emit(this, 'is-mark-activate', { mark: { ...mark }, phase: 'enter' });
+      emit(this, 'iswc-mark-activate', { mark: { ...mark }, phase: 'enter' });
     }
   }
 
@@ -974,7 +992,7 @@ class IsCode extends ElementBase {
       if (this.#tooltip) this.#tooltip.open = false;
       if (this.#currentTip) {
         const mark = this.#marks.find((m) => m.id === this.#currentTip);
-        if (mark) emit(this, 'is-mark-activate', { mark: { ...mark }, phase: 'leave' });
+        if (mark) emit(this, 'iswc-mark-activate', { mark: { ...mark }, phase: 'leave' });
       }
       this.#currentTip = null;
     }, 120);
@@ -997,10 +1015,10 @@ class IsCode extends ElementBase {
   }
 }
 
-defineElement('is-code', IsCode, 'IsCode');
+defineElement('iswc-code', IswcCode, 'IswcCode');
 
 export {
-  IsCode,
+  IswcCode,
   registerLanguage,
   listLanguages,
   inferLanguage,
@@ -1010,4 +1028,4 @@ export {
   normalizeFormatConfig,
   applyThemeConfig,
 };
-export default IsCode;
+export default IswcCode;

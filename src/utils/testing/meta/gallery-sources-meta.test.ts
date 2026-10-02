@@ -4,8 +4,8 @@
  * Caza regresiones del chrome de galería (ago/2026):
  *  - barra = `.file-meta*` (sin hints / `.vs-page-bar` montado)
  *  - modal fuentes full-page + `#vsPath` como `<a>` con URL absoluta
- *  - tag canónico `is-code` (no `is-code-editor`)
- *  - pesos vía `resolveCdnMinPaths` + `is-format-bytes`
+ *  - tag canónico `iswc-code` (no `iswc-code-editor`)
+ *  - pesos vía `resolveCdnMinPaths` + `iswc-format-bytes`
  *
  * Extensión: *.test.mjs (no .ts). La carpeta tests/ se commitea;
  * solo se ignoran *.tmp / coverage / .cache.
@@ -23,10 +23,10 @@ const stripComments = (s) => s
   .replace(/\/\*[\s\S]*?\*\//g, '')
   .replace(/^\s*\/\/.*$/gm, '');
 
-test('manifest usa is-code (no is-code-editor)', () => {
+test('manifest usa iswc-code (no iswc-code-editor)', () => {
   const src = read('src/manifest.ts');
-  assert.match(src, /tag:\s*['"]is-code['"]/);
-  assert.doesNotMatch(src, /is-code-editor/);
+  assert.match(src, /tag:\s*['"]iswc-code['"]/);
+  assert.doesNotMatch(src, /iswc-code-editor/);
   assert.ok(existsSync(join(root, 'src/components/code/code.json')));
   assert.ok(existsSync(join(root, 'src/components/code/code.preview.ts')));
   assert.ok(!existsSync(join(root, 'src/components/code/code-editor.json')));
@@ -53,10 +53,10 @@ test('view-sources: path absoluto, full-page, sin vs-page-bar con hints', () => 
 
   assert.match(src, /setAttribute\(\s*['"]width['"]\s*,\s*['"]100vw['"]\s*\)/);
   assert.match(src, /setAttribute\(\s*['"]spacing['"]\s*,\s*['"]0['"]\s*\)/);
-  assert.match(src, /is-view-sources/);
-  assert.match(src, /is-after-show/);
+  assert.match(src, /iswc-view-sources/);
+  assert.match(src, /iswc-after-show/);
   assert.match(src, /function refreshEditor/);
-  assert.match(src, /whenDefined\(['"]is-code['"]\)/);
+  assert.match(src, /whenDefined\(['"]iswc-code['"]\)/);
 
   // mountPageButton solo limpia legacy; no recrea hints en UI.
   assert.match(src, /querySelectorAll(?:<[^>]+>)?\(['"]\.vs-page-bar['"]\)/);
@@ -65,10 +65,10 @@ test('view-sources: path absoluto, full-page, sin vs-page-bar con hints', () => 
   assert.doesNotMatch(code, /['"]vs-page-hint['"]/);
 });
 
-test('view-sources: chrome de galería incluye is-tab-group', () => {
-  const src = read('src/cdn/collect-is-tags.ts');
+test('view-sources: chrome de galería incluye iswc-tab-group', () => {
+  const src = read('src/cdn/collect-iswc-tags.ts');
   assert.match(src, /GALLERY_CHROME_TAGS/);
-  assert.match(src, /is-tab-group/);
+  assert.match(src, /iswc-tab-group/);
 });
 
 test('highlight-code: paintOne asigna value siempre (no fiarse del getter)', () => {
@@ -77,42 +77,42 @@ test('highlight-code: paintOne asigna value siempre (no fiarse del getter)', () 
   assert.doesNotMatch(src, /if \(el\.value !== text\) el\.value = text/);
 });
 
-test('demo-file-meta: una sola barra de página (no h2 / no demos / sin is-code en paths)', () => {
+test('demo-file-meta: una sola barra de página (no h2 / no demos / sin iswc-code en paths)', () => {
   const src = read('scripts/demo-file-meta.js');
   assert.match(src, /file-meta-page/);
   assert.match(src, /vs-page-bar/);
-  assert.match(src, /is-format-bytes/);
+  assert.match(src, /iswc-format-bytes/);
   assert.match(src, /resolveCdnMinPaths/);
   assert.match(src, /openViewSources/);
   assert.match(src, /preserveMainScroll/);
   assert.match(src, /createElement\(['"]code['"]\)/);
-  assert.doesNotMatch(src, /createElement\(['"]is-code['"]\)/);
+  assert.doesNotMatch(src, /createElement\(['"]iswc-code['"]\)/);
   assert.doesNotMatch(src, /sin minificar|auditoría\s*\/\s*GH Pages/);
   assert.doesNotMatch(src, /function mountUnderSectionTitles|function mountInDemo/);
-  assert.doesNotMatch(src, /is-demo-connected/);
+  assert.doesNotMatch(src, /iswc-demo-connected/);
 });
 
-test('is-code preserva scroll del is-main (evita F5 al final)', () => {
+test('iswc-code preserva scroll del iswc-main (evita F5 al final)', () => {
   const src = read('src/components/code/code.ts');
-  // Motor nativo: ningún path llama scrollIntoView (el que movía el is-main al
+  // Motor nativo: ningún path llama scrollIntoView (el que movía el iswc-main al
   // final en F5) y el scroll de edición queda local (textarea .ic-input con
-  // translate del <pre>), nunca sobre el ancestro is-main/.main.
+  // translate del <pre>), nunca sobre el ancestro iswc-main/.main.
   assert.match(src, /#onEditScroll/);
   assert.match(src, /translate\(\$?\{?-ta\.scrollLeft/);
   assert.doesNotMatch(src, /\.scrollIntoView\(/);
 });
 
-test('is-main: restore window amplio + scroll-behavior auto en CSS', () => {
+test('iswc-main: restore window amplio + scroll-behavior auto en CSS', () => {
   // RESTORE_WINDOW vive en _shared/scroll-memory.ts (refactor desde main.ts).
   const memory = read('src/components/_shared/scroll-memory.ts');
   assert.match(memory, /RESTORE_WINDOW\s*=\s*4_?500/);
   const css = read('src/styles/presentation.css');
-  assert.match(css, /is-main\.main\s*\{[\s\S]*?scroll-behavior:\s*auto/);
+  assert.match(css, /iswc-main\.main\s*\{[\s\S]*?scroll-behavior:\s*auto/);
 });
 
 test('presentation.css: full-page view-sources + vs-page-bar oculto', () => {
   const css = read('src/styles/presentation.css');
-  assert.match(css, /is-dialog\.is-view-sources/);
+  assert.match(css, /iswc-dialog\.iswc-view-sources/);
   assert.match(css, /::part\(dialog\)/);
   assert.match(css, /align-self:\s*stretch/);
   assert.match(css, /justify-self:\s*stretch/);

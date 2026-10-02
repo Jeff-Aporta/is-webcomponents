@@ -10,7 +10,7 @@ import { ElementBase } from '../../core/element-base.js';
 import { setStringAttr, setOptionalAttr } from '../_shared/reflect.js';
 import { hasSlotted } from '../_shared/dom-utils.js';
 /**
- * <is-input> — Campo de texto form-associated (vanilla + Shadow DOM).
+ * <iswc-input> — Campo de texto form-associated (vanilla + Shadow DOM).
  *
  * Atributos
  *   type            text | email | password | number | search | tel | url | date  (default text)
@@ -22,7 +22,7 @@ import { hasSlotted } from '../_shared/dom-utils.js';
  *                   tener valor. Colorea el borde con --iswc-b-required /
  *                   --iswc-b-optional / --iswc-b-readonly / --iswc-bg-readonly.
  *   data-typing-delay  número (ms, default 600) — debounce del evento
- *                   `is-typing-end`. `0` lo emite en el siguiente tick.
+ *                   `iswc-typing-end`. `0` lo emite en el siguiente tick.
  *   error-text      mensaje mostrado en lugar del hint cuando hay error
  *   prefix, suffix  adornos de texto corto ("$", "kg") sin usar slot
  *   min, max, step, maxlength     (pasan al input nativo interno)
@@ -33,7 +33,7 @@ import { hasSlotted } from '../_shared/dom-utils.js';
  * Parts: form-control, label, base, start, prefix, input, clear, toggle, suffix, end,
  *        support, hint, error-text, count
  * Custom states: blank, disabled, readonly, focused, invalid, password-visible
- * Eventos: is-input, is-change, is-typing-end, is-enter (bubbles + composed) y los
+ * Eventos: iswc-input, iswc-change, iswc-typing-end, iswc-enter (bubbles + composed) y los
  *          nativos input/change
  * Tokens: --iswc-field-width, --iswc-field-label-width, --iswc-input-*
  */
@@ -49,7 +49,7 @@ import { hasSlotted } from '../_shared/dom-utils.js';
           <slot name="start"></slot>
         </span>
         <input part="input" class="input" id="input" type="text" aria-describedby="hint error-text" />
-        <is-button
+        <iswc-button
           type="button"
           part="clear"
           class="icon-btn"
@@ -60,9 +60,9 @@ import { hasSlotted } from '../_shared/dom-utils.js';
           aria-label="Limpiar"
           hidden
         >
-          <is-icon icon="mdi:close-circle" aria-hidden="true"></is-icon>
-        </is-button>
-        <is-check-icon-button
+          <iswc-icon icon="mdi:close-circle" aria-hidden="true"></iswc-icon>
+        </iswc-button>
+        <iswc-check-icon-button
           part="toggle"
           class="icon-btn"
           id="toggle"
@@ -72,7 +72,7 @@ import { hasSlotted } from '../_shared/dom-utils.js';
           checked-label="Ocultar contraseña"
           tabindex="-1"
           hidden
-        ></is-check-icon-button>
+        ></iswc-check-icon-button>
         <span part="end" class="adorn" id="end" hidden>
           <slot name="end"></slot>
           <span part="suffix" class="adorn-text" id="suffix" hidden></span>
@@ -90,7 +90,7 @@ import { hasSlotted } from '../_shared/dom-utils.js';
   const APPEARANCES = ['outlined', 'filled', 'underlined'];
   const PLACEMENTS = ['top', 'start', 'float'];
 
-  /** Debounce por defecto del evento `is-typing-end` (ms) — mismo valor que ISP. */
+  /** Debounce por defecto del evento `iswc-typing-end` (ms) — mismo valor que ISP. */
   const DEFAULT_TYPING_DELAY = 600;
 
   const OBSERVED = [
@@ -111,7 +111,7 @@ import { hasSlotted } from '../_shared/dom-utils.js';
   ];
 
 
-  class IsInput extends ElementBase {
+  class IswcInput extends ElementBase {
     /** Personalización por atributo (ver `core/attrs.ts`). */
     static styleAttrs = {
     radius: '--iswc-input-border-radius',
@@ -180,7 +180,7 @@ import { hasSlotted } from '../_shared/dom-utils.js';
       this.#input.addEventListener('focus', this.#onFocus);
       this.#input.addEventListener('blur', this.#onBlur);
       this.#clearBtn.addEventListener('click', this.#onClear);
-      this.#toggleBtn.addEventListener('is-change', this.#onTogglePassword as EventListener);
+      this.#toggleBtn.addEventListener('iswc-change', this.#onTogglePassword as EventListener);
       for (const slot of shadow.querySelectorAll<HTMLSlotElement>('slot')) {
         slot.addEventListener('slotchange', this.#syncSlots);
       }
@@ -205,7 +205,7 @@ import { hasSlotted } from '../_shared/dom-utils.js';
     }
 
     onDisconnected(): void {
-      // El debounce de `is-typing-end` no debe sobrevivir al desmontaje.
+      // El debounce de `iswc-typing-end` no debe sobrevivir al desmontaje.
       if (this.#typingTimer != null) {
         clearTimeout(this.#typingTimer);
         this.#typingTimer = null;
@@ -244,7 +244,7 @@ import { hasSlotted } from '../_shared/dom-utils.js';
       this.#otpAbort = ctrl;
       listenWebOtp(ctrl.signal, (code) => {
         this.value = code;
-        emit(this, 'is-otp', { code });
+        emit(this, 'iswc-otp', { code });
       });
     }
 
@@ -287,7 +287,7 @@ import { hasSlotted } from '../_shared/dom-utils.js';
     }
 
     /**
-     * Debounce (ms) del evento `is-typing-end`. Config declarativa por `data-*`
+     * Debounce (ms) del evento `iswc-typing-end`. Config declarativa por `data-*`
      * según la convención del repo: `data-typing-delay="300"`.
      */
     get typingDelay(): number {
@@ -519,7 +519,7 @@ import { hasSlotted } from '../_shared/dom-utils.js';
       this.#value = this.#input.value;
       this.#update();
       this.dispatchEvent(new Event('input', { bubbles: true, composed: true }));
-      emit(this, 'is-input', { value: this.#value });
+      emit(this, 'iswc-input', { value: this.#value });
       this.#scheduleTypingEnd();
     };
 
@@ -528,7 +528,7 @@ import { hasSlotted } from '../_shared/dom-utils.js';
       if (this.#typingTimer != null) clearTimeout(this.#typingTimer);
       this.#typingTimer = setTimeout(() => {
         this.#typingTimer = null;
-        emit(this, 'is-typing-end', { value: this.#value });
+        emit(this, 'iswc-typing-end', { value: this.#value });
       }, this.typingDelay);
     }
 
@@ -537,13 +537,13 @@ import { hasSlotted } from '../_shared/dom-utils.js';
       this.#touched = true;
       this.#update();
       this.dispatchEvent(new Event('change', { bubbles: true, composed: true }));
-      emit(this, 'is-change', { value: this.#value });
+      emit(this, 'iswc-change', { value: this.#value });
     };
 
     #onKeydown = (e: KeyboardEvent): void => {
       if (e.key !== 'Enter') return;
       this.#value = this.#input.value;
-      emit(this, 'is-enter', { value: this.#value });
+      emit(this, 'iswc-enter', { value: this.#value });
     };
 
     #onFocus = (): void => { setCustomState(this.#internals, 'focused', true); };
@@ -564,8 +564,8 @@ import { hasSlotted } from '../_shared/dom-utils.js';
       this.#input.focus();
       this.dispatchEvent(new Event('input', { bubbles: true, composed: true }));
       this.dispatchEvent(new Event('change', { bubbles: true, composed: true }));
-      emit(this, 'is-input', { value: '' });
-      emit(this, 'is-change', { value: '' });
+      emit(this, 'iswc-input', { value: '' });
+      emit(this, 'iswc-change', { value: '' });
       this.#scheduleTypingEnd();
     };
 
@@ -577,5 +577,5 @@ import { hasSlotted } from '../_shared/dom-utils.js';
     };
   }
 
-  defineElement('is-input', IsInput, 'IsInput');
+  defineElement('iswc-input', IswcInput, 'IswcInput');
 })();

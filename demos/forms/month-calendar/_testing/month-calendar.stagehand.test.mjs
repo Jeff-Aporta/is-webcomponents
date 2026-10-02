@@ -5,7 +5,7 @@
 //  (2) Cada uno tiene 12 botones month visibles
 //  (3) monthWidth=long muestra nombres largos; columns=4 los agrupa en 4 columnas
 //  (4) El calendario "limitado" tiene 5 meses disabled (fuera de Abr–Oct)
-//  (5) Click en un mes del #basico emite is-change y refleja en el atributo value
+//  (5) Click en un mes del #basico emite iswc-change y refleja en el atributo value
 //
 // Opt-in LLM con STAGEHAND=1 al final.
 import assert from 'node:assert/strict';
@@ -22,7 +22,7 @@ async function checkDeterministic(page) {
 
   // (1)-(2): 4 calendars, 12 botones cada uno
   const initial = await page.evaluate(() => {
-    const cals = [...document.querySelectorAll('is-month-calendar')];
+    const cals = [...document.querySelectorAll('iswc-month-calendar')];
     return cals.map((c) => {
       const sr = c.shadowRoot;
       const buttons = [...sr.querySelectorAll('button.month')];
@@ -61,7 +61,7 @@ async function checkDeterministic(page) {
   const changed = await page.evaluate(() => {
     return new Promise((resolve) => {
       const c = document.querySelector('#basico');
-      c.addEventListener('is-change', (e) => resolve(e.detail), { once: true });
+      c.addEventListener('iswc-change', (e) => resolve(e.detail), { once: true });
       const jun = c.shadowRoot.querySelector('button.month[data-month="5"]');
       jun.click();
     });

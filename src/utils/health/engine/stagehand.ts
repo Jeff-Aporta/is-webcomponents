@@ -147,7 +147,7 @@ export async function crearSesion(baseUrl: string, raiz: string, opts: { verbose
       try {
         await page.goto(url, { waitUntil: 'networkidle', timeout: 30_000 });
         // Esperar que el shell cargue.
-        await page.waitForSelector('is-preview-component', { timeout: 10_000 });
+        await page.waitForSelector('iswc-preview-component', { timeout: 10_000 });
         // Esperar que el componente objetivo esté definido.
         await page.waitForFunction(
           (t: string) => customElements.whenDefined(t).then(() => true),
@@ -174,11 +174,11 @@ export async function crearSesion(baseUrl: string, raiz: string, opts: { verbose
       // Métricas vía page.evaluate.
       const metricas = await page.evaluate((t: string) => {
         const sel = (s: string) => document.querySelectorAll(s);
-        const demos = document.querySelectorAll('is-demo').length;
-        const panels = document.querySelectorAll('is-preview-controls').length;
+        const demos = document.querySelectorAll('iswc-demo').length;
+        const panels = document.querySelectorAll('iswc-preview-controls').length;
         const tags = [...new Set([...document.querySelectorAll('*')]
           .map((e: Element) => e.tagName.toLowerCase())
-          .filter((n: string) => n.startsWith('is-')))] as string[];
+          .filter((n: string) => n.startsWith('iswc-')))] as string[];
         return { demos, panels, tags, tieneTarget: !!document.querySelector(t) };
       }, tag);
 
@@ -199,7 +199,7 @@ export async function crearSesion(baseUrl: string, raiz: string, opts: { verbose
           categoria: 'demo-html',
           severidad: 'warn',
           tag,
-          mensaje: `Renderizó ${metricas.demos} <is-demo>, pero el JSON declara ${demosEsperados}.`,
+          mensaje: `Renderizó ${metricas.demos} <iswc-demo>, pero el JSON declara ${demosEsperados}.`,
           detalle: { demos: metricas.demos, esperados: demosEsperados },
         });
       }
@@ -208,7 +208,7 @@ export async function crearSesion(baseUrl: string, raiz: string, opts: { verbose
           categoria: 'playground',
           severidad: 'warn',
           tag,
-          mensaje: `Renderizó ${metricas.panels} <is-preview-controls>, pero el JSON declara ${controlesEsperados} bloques con controls.`,
+          mensaje: `Renderizó ${metricas.panels} <iswc-preview-controls>, pero el JSON declara ${controlesEsperados} bloques con controls.`,
           detalle: { panels: metricas.panels, esperados: controlesEsperados },
         });
       }
@@ -297,15 +297,15 @@ export async function inspeccionarSinBrowser(
           detalle: { url },
         });
       }
-      // Conteo estático de <is-demo> y <is-preview-controls>.
-      const demos = (html.match(/<is-demo[\s>]/g) ?? []).length;
-      const panels = (html.match(/<is-preview-controls[\s>]/g) ?? []).length;
+      // Conteo estático de <iswc-demo> y <iswc-preview-controls>.
+      const demos = (html.match(/<iswc-demo[\s>]/g) ?? []).length;
+      const panels = (html.match(/<iswc-preview-controls[\s>]/g) ?? []).length;
       const demosEsperados = contarDemosEsperados(e.tag, process.cwd());
       const controlesEsperados = contarControlesEsperados(e.tag, process.cwd());
       if (demos < demosEsperados) {
         hallazgos.push({
           categoria: 'demo-html', severidad: 'info', tag: e.tag,
-          mensaje: `Render estático: ${demos} <is-demo> vs ${demosEsperados} declarados en JSON.`,
+          mensaje: `Render estático: ${demos} <iswc-demo> vs ${demosEsperados} declarados en JSON.`,
         });
       }
       reportes.push({

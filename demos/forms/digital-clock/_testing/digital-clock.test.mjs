@@ -2,7 +2,7 @@
 //
 // Cobertura:
 //   - smoke: custom element definido, shadow DOM con .base, layout default=list
-//   - funcional: cambiar value por propiedad → reflecte en opciones y emite is-change
+//   - funcional: cambiar value por propiedad → reflecte en opciones y emite iswc-change
 //   - accesibilidad: role=listbox, aria-label, aria-selected en opción activa,
 //     tabindex móvil sobre la opción seleccionada
 //   - edge cases: value vacío no rompe el render; layout=sections produce
@@ -20,11 +20,11 @@ tests.push({
     await page.goto(URL, { waitUntil: 'domcontentloaded' });
     await waitReady(page, 'data-digital-clock-ready');
     const data = await page.evaluate(() => {
-      const clocks = [...document.querySelectorAll('is-digital-clock')];
+      const clocks = [...document.querySelectorAll('iswc-digital-clock')];
       return clocks.map((c) => {
         const sr = c.shadowRoot;
         return {
-          defined: !!customElements.get('is-digital-clock'),
+          defined: !!customElements.get('iswc-digital-clock'),
           hasShadow: !!sr,
           hasBase: !!sr?.querySelector('.base'),
           hasList: !!sr?.querySelector('.list'),
@@ -34,7 +34,7 @@ tests.push({
       });
     });
     assert.equal(data.length, 4, 'debe haber 4 clocks (lista, sections, 24h, disabled)');
-    assert.equal(data[0].defined, true, 'is-digital-clock debe estar definido');
+    assert.equal(data[0].defined, true, 'iswc-digital-clock debe estar definido');
     assert.equal(data[0].hasShadow, true, 'shadow root debe existir');
     assert.equal(data[0].hasBase, true, '.base debe existir');
     assert.equal(data[0].hasList, true, 'layout=list debe generar .list');
@@ -45,7 +45,7 @@ tests.push({
 });
 
 tests.push({
-  name: 'funcional: cambiar value por propiedad refleja y emite is-change',
+  name: 'funcional: cambiar value por propiedad refleja y emite iswc-change',
   run: async (page) => {
     await page.goto(URL, { waitUntil: 'domcontentloaded' });
     await waitReady(page, 'data-digital-clock-ready');
@@ -54,12 +54,12 @@ tests.push({
         // attach listener ANTES de mutar value
         await page.evaluate(() => {
           window.__ev = null;
-          const clk = document.querySelector('#sec-lista is-digital-clock');
-          clk.addEventListener('is-change', (e) => { window.__ev = e.detail; }, { once: true });
+          const clk = document.querySelector('#sec-lista iswc-digital-clock');
+          clk.addEventListener('iswc-change', (e) => { window.__ev = e.detail; }, { once: true });
         });
         // click en una opción visible (la 20:00 está entre las generadas con step=30)
         await page.evaluate(() => {
-          const clk = document.querySelector('#sec-lista is-digital-clock');
+          const clk = document.querySelector('#sec-lista iswc-digital-clock');
           const opts = [...clk.shadowRoot.querySelectorAll('button.opt')];
           // buscar el botón cuyo dataset.raw coincide con 20:00
           const target = opts.find((o) => o.dataset.raw === '20:00');
@@ -67,7 +67,7 @@ tests.push({
         });
         await page.waitForTimeout(80);
         const result = await page.evaluate(() => {
-          const clk = document.querySelector('#sec-lista is-digital-clock');
+          const clk = document.querySelector('#sec-lista iswc-digital-clock');
           const selected = clk.shadowRoot.querySelector('button.opt[data-selected]');
           return {
             value: clk.value,
@@ -82,7 +82,7 @@ tests.push({
     assert.equal(got.value, '20:00', 'value debe quedar en 20:00');
     assert.equal(got.attrValue, '20:00', 'atributo value actualizado');
     assert.equal(got.raw, '20:00', 'opción seleccionada 20:00');
-    assert.ok(got.ev && got.ev.value === '20:00', 'evento is-change emitido con value=20:00');
+    assert.ok(got.ev && got.ev.value === '20:00', 'evento iswc-change emitido con value=20:00');
   },
 });
 
@@ -93,13 +93,13 @@ tests.push({
     await waitReady(page, 'data-digital-clock-ready');
     // Capturamos la opción seleccionada, esperamos >1s, capturamos de nuevo.
     const t1 = await page.evaluate(() => {
-      const clk = document.querySelector('#sec-lista is-digital-clock');
+      const clk = document.querySelector('#sec-lista iswc-digital-clock');
       const sel = clk.shadowRoot.querySelector('button.opt[data-selected]');
       return { raw: sel?.dataset?.raw ?? null, attrValue: clk.value };
     });
     await page.waitForTimeout(1200);
     const t2 = await page.evaluate(() => {
-      const clk = document.querySelector('#sec-lista is-digital-clock');
+      const clk = document.querySelector('#sec-lista iswc-digital-clock');
       const sel = clk.shadowRoot.querySelector('button.opt[data-selected]');
       return { raw: sel?.dataset?.raw ?? null, attrValue: clk.value };
     });
@@ -121,7 +121,7 @@ tests.push({
     await page.goto(URL, { waitUntil: 'domcontentloaded' });
     await waitReady(page, 'data-digital-clock-ready');
     const a11y = await page.evaluate(() => {
-      const clk = document.querySelector('#sec-lista is-digital-clock');
+      const clk = document.querySelector('#sec-lista iswc-digital-clock');
       const list = clk.shadowRoot.querySelector('.list');
       const selected = list.querySelector('button.opt[aria-selected="true"]');
       return {
@@ -145,7 +145,7 @@ tests.push({
     await page.goto(URL, { waitUntil: 'domcontentloaded' });
     await waitReady(page, 'data-digital-clock-ready');
     const result = await page.evaluate(() => {
-      const c = document.createElement('is-digital-clock');
+      const c = document.createElement('iswc-digital-clock');
       document.body.appendChild(c);
       const selected = c.shadowRoot.querySelector('button.opt[data-selected]');
       const totalOpts = c.shadowRoot.querySelectorAll('button.opt').length;
@@ -165,7 +165,7 @@ tests.push({
     await page.goto(URL, { waitUntil: 'domcontentloaded' });
     await waitReady(page, 'data-digital-clock-ready');
     const sections = await page.evaluate(() => {
-      const clk = document.querySelector('#sec-sections is-digital-clock');
+      const clk = document.querySelector('#sec-sections iswc-digital-clock');
       const cols = [...clk.shadowRoot.querySelectorAll('.col')];
       const sections = cols.map((c) => c.dataset.section);
       return {
@@ -189,7 +189,7 @@ tests.push({
     await page.goto(URL, { waitUntil: 'domcontentloaded' });
     await waitReady(page, 'data-digital-clock-ready');
     const info = await page.evaluate(() => {
-      const clk = document.querySelector('#sec-24h is-digital-clock');
+      const clk = document.querySelector('#sec-24h iswc-digital-clock');
       const opts = [...clk.shadowRoot.querySelectorAll('button.opt')];
       // el primer opt suele ser 00:00; el 8º debe ser 02:00 si step=15? No: con step=15
       // hay 24*4 = 96 entradas. Verificamos que las horas 0..23 aparezcan.
@@ -212,7 +212,7 @@ tests.push({
     await page.goto(URL, { waitUntil: 'domcontentloaded' });
     await waitReady(page, 'data-digital-clock-ready');
     const state = await page.evaluate(() => {
-      const clk = document.querySelector('#sec-disabled is-digital-clock');
+      const clk = document.querySelector('#sec-disabled iswc-digital-clock');
       const before = clk.value;
       const opt = clk.shadowRoot.querySelector('button.opt[data-selected]');
       opt.click();

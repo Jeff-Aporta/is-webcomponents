@@ -1,14 +1,14 @@
 ---
-tag: is-rating
+tag: iswc-rating
 tags:
-  - is-rating
+  - iswc-rating
 category: forms
 status: public
 source: ./rating.js
 style: ./rating.css
 preview: ./rating.json
 ---
-# `<is-rating>`
+# `<iswc-rating>`
 
 ## Propósito
 
@@ -16,7 +16,7 @@ Valoración form-associated con paridad funcional con el
 Rating de MUI:
 precisión arbitraria, iconos propios, textos de hover, colores de color y reset.
 
-Este módulo registra `<is-rating>`.
+Este módulo registra `<iswc-rating>`.
 
 ## Cuándo usarlo
 
@@ -35,7 +35,7 @@ import './rating.js';
 ## Ejemplo mínimo
 
 ```html
-<is-rating label="Satisfacción" value="3" name="rating"></is-rating>
+<iswc-rating label="Satisfacción" value="3" name="rating"></iswc-rating>
 ```
 
 ## API
@@ -99,8 +99,8 @@ import './rating.js';
 
 | Evento | detail | bubbles | composed | cancelable |
 | --- | --- | --- | --- | --- |
-| `is-change` | sí | sí | sí | no |
-| `is-hover` | sí | sí | sí | no |
+| `iswc-change` | sí | sí | sí | no |
+| `iswc-hover` | sí | sí | sí | no |
 
 ### Métodos y propiedades públicas
 
@@ -165,15 +165,15 @@ Participa mediante ElementInternals/helpers form-associated; respetar name, valu
 
 Documentación de cabecera preservada desde fuente:
 
-> <is-rating> — Valoración form-associated (vanilla + Shadow DOM).
+> <iswc-rating> — Valoración form-associated (vanilla + Shadow DOM).
 > Atributos
 >   name, label, color (brand|neutral|success|warning|danger)
 >   value        0..max (default 0)
 >   max          número de iconos (default 5)
 >   precision    granularidad del valor: 1 (default) | 0.5 | 0.25 | 0.1
 >   allow-half   alias de precision="0.5"
->   icon         nombre is-icon del estado relleno (ej. tabler:heart-filled)
->   empty-icon   nombre is-icon del estado vacío
+>   icon         nombre iswc-icon del estado relleno (ej. tabler:heart-filled)
+>   empty-icon   nombre iswc-icon del estado vacío
 >   highlight-selected-only  resalta solo el icono del valor, no los anteriores
 >   label-format plantilla del texto del valor, ej. "{v} de {max}"
 >   show-label   muestra ese texto junto a los iconos (sigue al hover)
@@ -184,7 +184,7 @@ Documentación de cabecera preservada desde fuente:
 > Slots: label
 > Parts: form-control, label, base, star, icon-empty, icon-filled, hover-label
 > Custom states: blank, disabled, readonly
-> Eventos: is-change (valor confirmado), is-hover (previsualización)
+> Eventos: iswc-change (valor confirmado), iswc-hover (previsualización)
 
 ## Dependencias y componentes relacionados
 
@@ -192,7 +192,7 @@ Documentación de cabecera preservada desde fuente:
 - [`../_shared/form-associated.js`](../_shared/form-associated.js)
 - [`../media/icon.js`](../media/icon.js)
 
-Tags del módulo: `<is-rating>`.
+Tags del módulo: `<iswc-rating>`.
 
 ## Accesibilidad
 
@@ -201,8 +201,8 @@ Preservar semántica, foco, teclado, labels y ARIA. ARIA detectado: `aria-labell
 ## Ejemplo avanzado
 
 ```html
-<is-rating label="10 iconos" max="10" value="7"></is-rating>
-<is-rating value="3" style="font-size:1.5rem"></is-rating>
+<iswc-rating label="10 iconos" max="10" value="7"></iswc-rating>
+<iswc-rating value="3" style="font-size:1.5rem"></iswc-rating>
 ```
 
 ## Errores comunes

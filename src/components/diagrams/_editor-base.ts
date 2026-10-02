@@ -5,7 +5,7 @@
  *   - `<is-X-editor>` extiende `<is-X-diagram>` (lite) y esta base.
  *   - Atributos observados: mode, allow-self-loop, max-depth (default 5).
  *   - Atributo `mode="view" | "edit"` (default "edit").
- *   - Emite `is-state-change` con payload `{ spec: Spec }` cuando el usuario
+ *   - Emite `iswc-state-change` con payload `{ spec: Spec }` cuando el usuario
  *     modifica el spec. NO autosave.
  *   - Doble-click en nodo → `onNodeDoubleClick(nodeId)` (la subclase decide si
  *     abrir nesting modal o no, según `allowNesting`).
@@ -53,10 +53,10 @@ export interface EditorSpecLike {
   readonly edges?: readonly unknown[];
 }
 
-/** Detalle del evento `is-state-change` emitido por todos los editores. */
+/** Detalle del evento `iswc-state-change` emitido por todos los editores. */
 export interface IsStateChangeDetail<Spec extends EditorSpecLike> {
   spec: Spec;
-  /** Tag del editor que emitió (e.g. 'is-er-editor'). Útil para multi-edit. */
+  /** Tag del editor que emitió (e.g. 'iswc-er-editor'). Útil para multi-edit. */
   tag?: string;
 }
 
@@ -169,14 +169,14 @@ export abstract class IsEditorBase<Spec extends EditorSpecLike> extends DiagramE
     // default: no-op (las subclases con nesting overridean)
   }
 
-  /** Emite el evento `is-state-change` con el spec actual. La subclase lo llama
+  /** Emite el evento `iswc-state-change` con el spec actual. La subclase lo llama
    *  tras CADA mutación lógica (add/delete/connect/undo/redo). */
   protected emitStateChange(spec: Spec): void {
     const detail: IsStateChangeDetail<Spec> = {
       spec,
       tag: (this.constructor as unknown as { tag?: string }).tag,
     };
-    emit(this, 'is-state-change', detail);
+    emit(this, 'iswc-state-change', detail);
   }
 
   /** Lifecycle: connectedCallback puede quedar en la subclase; aquí dejamos un

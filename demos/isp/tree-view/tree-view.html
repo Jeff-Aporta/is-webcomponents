@@ -3,7 +3,7 @@
 <head>
 <meta charset="utf-8" />
 <meta name="viewport" content="width=device-width, initial-scale=1" />
-<title>&lt;is-tree-view&gt; · is-webcomponents</title>
+<title>&lt;iswc-tree-view&gt; · is-webcomponents</title>
 <meta name="description" content="Árbol jerárquico editable con drag, historial undo/redo, drawer de ficha y confirm-delete." />
 <style>
   html, body { margin: 0; padding: 0; min-height: 100%; background: #0c1118; color: #e2e8f0; font-family: ui-sans-serif, system-ui, sans-serif; }
@@ -17,27 +17,27 @@
   header .spacer { flex: 1; }
   main { display: grid; grid-template-columns: 1fr 320px; gap: 18px; padding: 20px; max-width: 1200px; margin: 0 auto; width: 100%; box-sizing: border-box; min-height: 0; }
   .log { font: 12px ui-monospace, Menlo, Consolas, monospace; background: rgba(0,0,0,0.3); padding: 8px; border-radius: 4px; min-height: 80px; white-space: pre-wrap; }
-  is-tree-view { display: block; height: 70vh; border: 1px solid rgba(255,255,255,0.1); border-radius: 6px; overflow: hidden; }
-  is-tree-view:not(:defined) { visibility: hidden; }
+  iswc-tree-view { display: block; height: 70vh; border: 1px solid rgba(255,255,255,0.1); border-radius: 6px; overflow: hidden; }
+  iswc-tree-view:not(:defined) { visibility: hidden; }
 </style>
 <script type="module">
   // Cargar todas las dependencias transitivas de tree-view.
-  await import('../../../dist/cdn/actions/button.min.js?h=ki2dk5');
-  await import('../../../dist/cdn/actions/button-group.min.js?h=v2y788');
-  await import('../../../dist/cdn/actions/check-icon-button.min.js?h=01xpv4');
-  await import('../../../dist/cdn/actions/dropdown.min.js?h=vgzyws');
-  await import('../../../dist/cdn/actions/dropdown-item.min.js?h=gwwvkx');
-  await import('../../../dist/cdn/media/icon.min.js?h=y6tzub');
-  await import('../../../dist/cdn/layout/drawer.min.js?h=e60ru2');
-  await import('../../../dist/cdn/layout/dialog.min.js?h=fvgmyx');
-  await import('../../../dist/cdn/layout/divider.min.js?h=siycwk');
-  await import('../../../dist/cdn/isp/confirm-delete.min.js?h=b5imiq');
-  await import('../../../dist/cdn/isp/flex-options.min.js?h=wcxjuc');
-  await import('../../../dist/cdn/isp/float-card.min.js?h=c336hq');
-  await import('../../../dist/cdn/isp/tree-view.min.js?h=wrl5ul');
+  await import('../../../dist/cdn/actions/button.min.js?h=5i9tzt');
+  await import('../../../dist/cdn/actions/button-group.min.js?h=delm48');
+  await import('../../../dist/cdn/actions/check-icon-button.min.js?h=wwi8c3');
+  await import('../../../dist/cdn/actions/dropdown.min.js?h=u9x6om');
+  await import('../../../dist/cdn/actions/dropdown-item.min.js?h=pz46gs');
+  await import('../../../dist/cdn/media/icon.min.js?h=sp71yy');
+  await import('../../../dist/cdn/layout/drawer.min.js?h=bycvbv');
+  await import('../../../dist/cdn/layout/dialog.min.js?h=6ocp5e');
+  await import('../../../dist/cdn/layout/divider.min.js?h=cqtdv2');
+  await import('../../../dist/cdn/isp/confirm-delete.min.js?h=tiji0m');
+  await import('../../../dist/cdn/isp/flex-options.min.js?h=tt37p8');
+  await import('../../../dist/cdn/isp/float-card.min.js?h=ljuq63');
+  await import('../../../dist/cdn/isp/tree-view.min.js?h=j9e8wu');
 
-  await customElements.whenDefined('is-tree-view');
-  const { TreeCustomsBase } = await import('../../../dist/cdn/isp/tree-view.min.js?h=wrl5ul');
+  await customElements.whenDefined('iswc-tree-view');
+  const { TreeCustomsBase } = await import('../../../dist/cdn/isp/tree-view.min.js?h=j9e8wu');
 
   // ── Customs para un plan de estudios ─────────────────────────────────
   class PlanCustoms extends TreeCustomsBase {
@@ -82,7 +82,7 @@
   const eventLog = document.getElementById('event-log');
   const log = (m) => { eventLog.textContent += new Date().toISOString().slice(11, 19) + ' ' + m + '\n'; };
 
-  for (const evt of ['is-select', 'is-frm-open', 'is-frm-close', 'is-error']) {
+  for (const evt of ['iswc-select', 'iswc-frm-open', 'iswc-frm-close', 'iswc-error']) {
     tv.addEventListener(evt, (e) => {
       const detail = JSON.stringify(e.detail || {}).slice(0, 200);
       log(`${evt}: ${detail}`);
@@ -101,15 +101,15 @@
 <body>
 <header>
   <div>
-    <h1>&lt;is-tree-view&gt; — árbol jerárquico editable</h1>
+    <h1>&lt;iswc-tree-view&gt; — árbol jerárquico editable</h1>
     <p>Drag &amp; drop, historial undo/redo, drawer de ficha, confirm-delete por re-escritura.</p>
   </div>
   <div class="spacer"></div>
-  <code>is-tree-view</code>
+  <code>iswc-tree-view</code>
 </header>
 <main>
   <div style="display: grid; gap: 12px; min-height: 0;">
-    <is-tree-view id="tree" label-field="titulo" style="height: 100%;"></is-tree-view>
+    <iswc-tree-view id="tree" label-field="titulo" style="height: 100%;"></iswc-tree-view>
     <button id="btn-show-delete" type="button" style="padding: 8px 14px; background: #1e293b; color: #e2e8f0; border: 1px solid #334155; border-radius: 4px; cursor: pointer;">Abrir confirm-delete del nodo actual</button>
   </div>
   <div style="display: grid; gap: 12px;">

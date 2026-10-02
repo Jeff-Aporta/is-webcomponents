@@ -2,23 +2,23 @@ import { adoptCss, defineElement, emit } from '../../core/element.js';
 import { ElementBase } from '../../core/element-base.js';
 
 /**
- * <is-stepper> + <is-stepper-step> — Web Components (vanilla, zero dependencies).
+ * <iswc-stepper> + <iswc-stepper-step> — Web Components (vanilla, zero dependencies).
  *
  * Indicador de flujo por pasos. Ideal para wizards y formularios multipaso.
  *
- *   <is-stepper active="1">
- *     <is-stepper-step label="Cuenta">…</is-stepper-step>
- *     <is-stepper-step label="Perfil">…</is-stepper-step>
- *     <is-stepper-step label="Confirmar">…</is-stepper-step>
- *   </is-stepper>
+ *   <iswc-stepper active="1">
+ *     <iswc-stepper-step label="Cuenta">…</iswc-stepper-step>
+ *     <iswc-stepper-step label="Perfil">…</iswc-stepper-step>
+ *     <iswc-stepper-step label="Confirmar">…</iswc-stepper-step>
+ *   </iswc-stepper>
  *
- * Atributos <is-stepper>
+ * Atributos <iswc-stepper>
  *   active       number  — paso activo (0-indexed).
  *   orientation  horizontal | vertical    (default horizontal)
  *   without-line boolean  — oculta la línea conectora.
  *   color      default | simple | numbered | glass (default 'default')
  *
- * Atributos <is-stepper-step>
+ * Atributos <iswc-stepper-step>
  *   label       string
  *   description string
  *   icon        string (iconify id)
@@ -26,21 +26,21 @@ import { ElementBase } from '../../core/element-base.js';
  *   error       boolean
  *
  * Slots
- *   <is-stepper>
+ *   <iswc-stepper>
  *     (default)  steps.
- *   <is-stepper-step>
+ *   <iswc-stepper-step>
  *     (default)  contenido del paso (si el padre lo pinta dentro de un wizard).
  *     icon       override del icono del step.
  *     label      override del label.
  *     description override del description.
  *
  * Eventos
- *   is-stepper-change  detail: { from, to, step }
- *   is-stepper-complete detail: { step } — cuando active >= total.
+ *   iswc-stepper-change  detail: { from, to, step }
+ *   iswc-stepper-complete detail: { step } — cuando active >= total.
  *
  * CSS Parts
- *   is-stepper: ::part(base) ::part(steps)
- *   is-stepper-step: ::part(base) ::part(indicator) ::part(label) ::part(line)
+ *   iswc-stepper: ::part(base) ::part(steps)
+ *   iswc-stepper-step: ::part(base) ::part(indicator) ::part(label) ::part(line)
  */
 (() => {
   const TG_TEMPLATE = document.createElement('template');
@@ -52,7 +52,7 @@ import { ElementBase } from '../../core/element-base.js';
 
   const TG_OBSERVED = ['active', 'orientation', 'without-line', 'color'];
 
-  class IsStepper extends ElementBase {
+  class IswcStepper extends ElementBase {
     /** Personalización por atributo (ver `core/attrs.ts`). */
     static styleAttrs = {
     accent: { prop: '--iswc-stepper-accent', onlyColorValues: true },
@@ -61,7 +61,7 @@ import { ElementBase } from '../../core/element-base.js';
     'border-color': { prop: '--iswc-stepper-border', onlyColorValues: true },
     };
 
-    static get observedAttributes(): string[] { return [...TG_OBSERVED, ...IsStepper.styleAttrNames]; }
+    static get observedAttributes(): string[] { return [...TG_OBSERVED, ...IswcStepper.styleAttrNames]; }
 
 
     constructor() {
@@ -94,7 +94,7 @@ import { ElementBase } from '../../core/element-base.js';
       const nextIdx = a + 1;
       if (nextIdx < steps.length) this.#goTo(nextIdx);
       else {
-        emit(this, 'is-stepper-complete');
+        emit(this, 'iswc-stepper-complete');
       }
     }
     prev() {
@@ -104,7 +104,7 @@ import { ElementBase } from '../../core/element-base.js';
     goTo(idx: number) { this.#goTo(idx); }
 
     #steps() {
-      return [...this.querySelectorAll<HTMLElement>(':scope > is-stepper-step')];
+      return [...this.querySelectorAll<HTMLElement>(':scope > iswc-stepper-step')];
     }
 
     #sync() {
@@ -140,13 +140,13 @@ import { ElementBase } from '../../core/element-base.js';
       if (idx < 0 || idx >= steps.length) return;
       const from = this.active;
       this.setAttribute('active', String(idx));
-      emit(this, 'is-stepper-change', { from, to: idx, step: steps[idx] });
+      emit(this, 'iswc-stepper-change', { from, to: idx, step: steps[idx] });
     }
   }
 
-  defineElement('is-stepper', IsStepper, 'IsStepper');
+  defineElement('iswc-stepper', IswcStepper, 'IswcStepper');
 
-  // ============ <is-stepper-step> ============
+  // ============ <iswc-stepper-step> ============
   const STEP_TEMPLATE = document.createElement('template');
   STEP_TEMPLATE.innerHTML = /* html */ `
     <div class="step" part="base">
@@ -163,7 +163,7 @@ import { ElementBase } from '../../core/element-base.js';
 
   const STEP_OBSERVED = ['label', 'description', 'icon', 'disabled', 'error'];
 
-  class IsStepperStep extends ElementBase {
+  class IswcStepperStep extends ElementBase {
     static get observedAttributes(): string[] { return STEP_OBSERVED; }
 
 
@@ -209,7 +209,7 @@ import { ElementBase } from '../../core/element-base.js';
         if (!dot) return;
         const slot = dot.querySelector<HTMLSlotElement>('slot[name="icon"]');
         if (slot && !slot.assignedNodes().length) {
-          const ic = document.createElement('is-icon');
+          const ic = document.createElement('iswc-icon');
           ic.setAttribute('icon', icon);
           ic.setAttribute('aria-hidden', 'true');
           slot.replaceWith(ic);
@@ -218,5 +218,5 @@ import { ElementBase } from '../../core/element-base.js';
     }
   }
 
-  defineElement('is-stepper-step', IsStepperStep, 'IsStepperStep');
+  defineElement('iswc-stepper-step', IswcStepperStep, 'IswcStepperStep');
 })();

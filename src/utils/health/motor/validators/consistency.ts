@@ -196,7 +196,7 @@ export async function extraerMetaComponente(rutaModulo: string | null): Promise<
       ];
       for (const { factory, file } of factoryImports) {
         // Patrón de invocación: `defineDateField({...})`, `definePickerInput({...})`
-        // o `window.__isDefineTypedChart?.('is-x-chart', ...)` para charts.
+        // o `window.__isDefineTypedChart?.('iswc-x-chart', ...)` para charts.
         const invokesFactory = factory === 'window.__isDefineTypedChart'
           ? new RegExp(`window\\.\\s*__isDefineTypedChart\\s*\\?\\s*\\.\\s*\\(\\s*['"\`]is-[a-z0-9-]+['"\`]\\s*,`).test(src)
           : new RegExp(`\\b${factory}\\s*\\(`).test(src);
@@ -351,7 +351,7 @@ export function ejecutarValidacionConsistencia(def: Def, meta: MetaComponente | 
   }
 
   // 1. El módulo tiene que registrar el custom element con el tag.
-  // Módulos (helpers como is-ui): el "tag" no se registra como
+  // Módulos (helpers como iswc-ui): el "tag" no se registra como
   // custom element. La app consumidora lo decide. Salteamos ambos checks.
   if (!esModulo && !meta.defineCustomElement) {
     hallazgos.push({

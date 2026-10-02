@@ -1,4 +1,4 @@
-// skeleton.test.mjs — tests exhaustivos del demo is-skeleton.
+// skeleton.test.mjs — tests exhaustivos del demo iswc-skeleton.
 // Cobertura: smoke + funcional (effect default = sheen, effect=none sin
 // animación, effect=pulse con respiración) + gap 1: prefers-reduced-motion
 // neutraliza el sheen y el pulse.
@@ -15,15 +15,15 @@ tests.push({
     await page.goto(URL, { waitUntil: 'domcontentloaded' });
     await waitReady(page, 'data-skeleton-ready');
     const data = await page.evaluate(() => {
-      const all = document.querySelectorAll('is-skeleton');
+      const all = document.querySelectorAll('iswc-skeleton');
       return {
-        defined: !!customElements.get('is-skeleton'),
+        defined: !!customElements.get('iswc-skeleton'),
         count: all.length,
         defaults: [...all].filter((s) => s.getAttribute('effect') === 'sheen').length,
         ariaHidden: [...all].every((s) => s.getAttribute('aria-hidden') === 'true'),
       };
     });
-    assert.equal(data.defined, true, 'is-skeleton debe estar definido');
+    assert.equal(data.defined, true, 'iswc-skeleton debe estar definido');
     assert.ok(data.count >= 6, `esperaba >=6 skeletons, hay ${data.count}`);
     assert.ok(data.defaults >= 3, `al menos 3 deben tener effect=sheen por default (hay ${data.defaults})`);
     assert.equal(data.ariaHidden, true, 'todos los skeletons deben ser aria-hidden=true');
@@ -37,7 +37,7 @@ tests.push({
     await page.goto(URL, { waitUntil: 'domcontentloaded' });
     await waitReady(page, 'data-skeleton-ready');
     const data = await page.evaluate(() => {
-      const el = document.createElement('is-skeleton');
+      const el = document.createElement('iswc-skeleton');
       el.setAttribute('effect', 'no-existe');
       document.body.appendChild(el);
       const got = el.getAttribute('effect');
@@ -54,7 +54,7 @@ tests.push({
     await page.goto(URL, { waitUntil: 'domcontentloaded' });
     await waitReady(page, 'data-skeleton-ready');
     const data = await page.evaluate(() => {
-      const el = document.querySelector('is-skeleton[effect="none"]');
+      const el = document.querySelector('iswc-skeleton[effect="none"]');
       const ind = el.shadowRoot.querySelector('.indicator');
       const cs = getComputedStyle(ind);
       return {
@@ -73,7 +73,7 @@ tests.push({
     await page.goto(URL, { waitUntil: 'domcontentloaded' });
     await waitReady(page, 'data-skeleton-ready');
     const data = await page.evaluate(() => {
-      const el = document.querySelector('is-skeleton[effect="pulse"]');
+      const el = document.querySelector('iswc-skeleton[effect="pulse"]');
       const ind = el.shadowRoot.querySelector('.indicator');
       const cs = getComputedStyle(ind);
       return {
@@ -95,7 +95,7 @@ tests.push({
     const data = await page.evaluate(() => {
       // El connectedCallback setea effect="sheen" si no existe. Filtramos
       // por el valor explícito tras upgrade.
-      const el = document.querySelector('is-skeleton[effect="sheen"]');
+      const el = document.querySelector('iswc-skeleton[effect="sheen"]');
       const ind = el.shadowRoot.querySelector('.indicator');
       const cs = getComputedStyle(ind);
       return {
@@ -119,7 +119,7 @@ tests.push({
     await page.goto(URL, { waitUntil: 'domcontentloaded' });
     await waitReady(page, 'data-skeleton-ready');
     const data = await page.evaluate(() => {
-      const el = document.querySelector('is-skeleton[effect="pulse"]');
+      const el = document.querySelector('iswc-skeleton[effect="pulse"]');
       const ind = el.shadowRoot.querySelector('.indicator');
       const cs = getComputedStyle(ind);
       return {
@@ -142,7 +142,7 @@ tests.push({
     await page.goto(URL, { waitUntil: 'domcontentloaded' });
     await waitReady(page, 'data-skeleton-ready');
     const all = await page.evaluate(() => {
-      return [...document.querySelectorAll('is-skeleton')].map((s) => s.getAttribute('aria-hidden'));
+      return [...document.querySelectorAll('iswc-skeleton')].map((s) => s.getAttribute('aria-hidden'));
     });
     assert.ok(all.length >= 5, `esperaba >=5 skeletons (hay ${all.length})`);
     assert.ok(all.every((v) => v === 'true'), `todos deben ser aria-hidden=true, vi ${JSON.stringify(all)}`);

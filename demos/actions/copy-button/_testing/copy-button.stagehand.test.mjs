@@ -13,7 +13,7 @@ test('stagehand: la página expone data-copy-button-ready y 4 botones', async ()
   const page = await browser.newPage();
   await page.goto(URL_DEMO, { waitUntil: 'domcontentloaded' });
   await page.waitForSelector('html[data-copy-button-ready]');
-  const n = await page.evaluate(() => document.querySelectorAll('is-copy-button').length);
+  const n = await page.evaluate(() => document.querySelectorAll('iswc-copy-button').length);
   assert.equal(n, 4);
   await page.close();
 });
@@ -23,14 +23,14 @@ test('stagehand: click copia el texto y el feedback aparece ~1s', async () => {
   await ctx.grantPermissions(['clipboard-read', 'clipboard-write']);
   const page = await ctx.newPage();
   await page.goto(URL_DEMO, { waitUntil: 'domcontentloaded' });
-  await page.waitForSelector('is-copy-button:defined');
+  await page.waitForSelector('iswc-copy-button:defined');
   await page.evaluate(() => {
-    document.querySelector('is-copy-button').shadowRoot.querySelector('is-button').click();
+    document.querySelector('iswc-copy-button').shadowRoot.querySelector('iswc-button').click();
   });
   await page.waitForTimeout(80);
   // Feedback presente
   const feedback = await page.evaluate(() => {
-    const cb = document.querySelector('is-copy-button');
+    const cb = document.querySelector('iswc-copy-button');
     const success = cb.shadowRoot.querySelector('[data-state="success"]');
     const r = success.getBoundingClientRect();
     return { w: r.width, h: r.height };
@@ -39,20 +39,20 @@ test('stagehand: click copia el texto y el feedback aparece ~1s', async () => {
   // Tras 1.2s el feedback desaparece (default feedback-duration=1000)
   await page.waitForTimeout(1200);
   const after = await page.evaluate(() => {
-    const cb = document.querySelector('is-copy-button');
+    const cb = document.querySelector('iswc-copy-button');
     return cb.matches(':state(success)');
   });
   assert.equal(after, false, 'tras feedback-duration el :state(success) debe quitarse');
   await ctx.close();
 });
 
-test('stagehand: Tab navega hasta el botón y Enter dispara is-copy', async () => {
+test('stagehand: Tab navega hasta el botón y Enter dispara iswc-copy', async () => {
   const ctx = await browser.newContext();
   await ctx.grantPermissions(['clipboard-read', 'clipboard-write']);
   const page = await ctx.newPage();
   await page.goto(URL_DEMO, { waitUntil: 'domcontentloaded' });
-  await page.waitForSelector('is-copy-button:defined');
-  await page.focus('is-copy-button:not([disabled]) is-button');
+  await page.waitForSelector('iswc-copy-button:defined');
+  await page.focus('iswc-copy-button:not([disabled]) iswc-button');
   await page.keyboard.press('Enter');
   await page.waitForTimeout(80);
   const copied = await page.evaluate(() => navigator.clipboard.readText());
@@ -65,26 +65,26 @@ test('stagehand: feedback-duration="500" cambia el tiempo', async () => {
   await ctx.grantPermissions(['clipboard-read', 'clipboard-write']);
   const page = await ctx.newPage();
   await page.goto(URL_DEMO, { waitUntil: 'domcontentloaded' });
-  await page.waitForSelector('is-copy-button:defined');
+  await page.waitForSelector('iswc-copy-button:defined');
   // Crear un botón ad-hoc con feedback corto (no en el HTML del demo)
   await page.evaluate(() => {
-    const cb = document.createElement('is-copy-button');
+    const cb = document.createElement('iswc-copy-button');
     cb.setAttribute('value', 'short feedback');
     cb.setAttribute('feedback-duration', '300');
     document.body.appendChild(cb);
   });
   await page.waitForTimeout(50);
   await page.evaluate(() => {
-    document.querySelector('is-copy-button[feedback-duration]').shadowRoot.querySelector('is-button').click();
+    document.querySelector('iswc-copy-button[feedback-duration]').shadowRoot.querySelector('iswc-button').click();
   });
   await page.waitForTimeout(80);
   const stillOn = await page.evaluate(() => {
-    return document.querySelector('is-copy-button[feedback-duration]').matches(':state(success)');
+    return document.querySelector('iswc-copy-button[feedback-duration]').matches(':state(success)');
   });
   assert.equal(stillOn, true);
   await page.waitForTimeout(500);
   const gone = await page.evaluate(() => {
-    return document.querySelector('is-copy-button[feedback-duration]').matches(':state(success)');
+    return document.querySelector('iswc-copy-button[feedback-duration]').matches(':state(success)');
   });
   assert.equal(gone, false);
   await ctx.close();
@@ -95,13 +95,13 @@ test('stagehand: prefers-reduced-motion no rompe el feedback', async () => {
   await ctx.grantPermissions(['clipboard-read', 'clipboard-write']);
   const page = await ctx.newPage();
   await page.goto(URL_DEMO, { waitUntil: 'domcontentloaded' });
-  await page.waitForSelector('is-copy-button:defined');
+  await page.waitForSelector('iswc-copy-button:defined');
   await page.evaluate(() => {
-    document.querySelector('is-copy-button').shadowRoot.querySelector('is-button').click();
+    document.querySelector('iswc-copy-button').shadowRoot.querySelector('iswc-button').click();
   });
   await page.waitForTimeout(80);
   const on = await page.evaluate(() => {
-    return document.querySelector('is-copy-button').matches(':state(success)');
+    return document.querySelector('iswc-copy-button').matches(':state(success)');
   });
   assert.equal(on, true);
   await ctx.close();

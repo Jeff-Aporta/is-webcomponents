@@ -49,7 +49,7 @@ test('head no hace await loadCSS* / loadPageStyles en el boot', () => {
 test('await critico del head = shell tags + preview dist (no all, no pageModules)', () => {
   const boot = headBootModule(indexHtml);
   assert.match(boot, /await\s+Promise\.all\s*\(/);
-  assert.match(boot, /L\.load\s*\([\s\S]*is-split-panel[\s\S]*is-button/);
+  assert.match(boot, /L\.load\s*\([\s\S]*iswc-split-panel[\s\S]*iswc-button/);
   assert.match(
     boot,
     /import\s*\(\s*['"]\.\/dist\/cdn\/preview\/preview-component\.min\.js\?h=[0-9a-z]{6}['"]\s*\)/,
@@ -81,7 +81,7 @@ test('no reimportar preview-component ni icon-loader desde src/', () => {
 test('SPA de galeria se consume desde dist/gallery-app.min.js (no src/*.ts)', () => {
   assert.match(indexHtml, /src=["']\.\/dist\/gallery-app\.min\.js\?h=[0-9a-z]{6}["']/);
   assert.doesNotMatch(indexHtml, /from\s+['"]\.\/src\/previews\/registry\.ts['"]/);
-  assert.doesNotMatch(indexHtml, /from\s+['"]\.\/src\/cdn\/collect-is-tags\.ts['"]/);
+  assert.doesNotMatch(indexHtml, /from\s+['"]\.\/src\/cdn\/collect-iswc-tags\.ts['"]/);
   assert.ok(
     existsSync(join(root, 'src', 'gallery', 'app.ts')),
     'fuente: src/gallery/app.ts',
@@ -97,7 +97,7 @@ test('fuente gallery app usa setHostPreview + whenDefined', () => {
   assert.match(body, /function\s+setHostPreview\s*\(/);
   assert.match(body, /hasOwnProperty\.call\(\s*previewHost\s*,\s*['"]preview['"]\s*\)/);
   assert.match(body, /delete\s+previewHost\.preview/);
-  assert.match(body, /customElements\.whenDefined\(\s*['"]is-preview-component['"]\s*\)/);
+  assert.match(body, /customElements\.whenDefined\(\s*['"]iswc-preview-component['"]\s*\)/);
 });
 
 test('cdn-panel importa cdn-snippet desde dist/cdn (no src/)', () => {

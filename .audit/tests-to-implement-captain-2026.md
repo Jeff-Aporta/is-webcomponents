@@ -20,8 +20,8 @@
 | 10 | g-captain-2026 | `tree-node-unified` (single-file: `mindmap-spec.ts`) | `mindmap-spec.ts`: `import TreeNode as Imported... | 0 |
 | 11 | g-captain-2026 | `tree-node-unified` (single-file: `mindmap-spec.ts`) | Cast `as unknown as ImportedTreeNode` en `layou... | 0 |
 | 12 | g-captain-2026 | `prefs-quota-error` (single-file: `src/components/_shared/prefs.ts`) | `prefs.ts`: log warning al tragar `QuotaExceede... | 0 |
-| 13 | g-navigation | is-carousel | Autoplay pausa al hacer hover | 0 |
-| 14 | g-navigation | is-breadcrumb | JSON-LD BreadcrumbList | 0 |
+| 13 | g-navigation | iswc-carousel | Autoplay pausa al hacer hover | 0 |
+| 14 | g-navigation | iswc-breadcrumb | JSON-LD BreadcrumbList | 0 |
 | 15 | g16 | masks-tokens (input masking tokens) | Máscara teléfono MX `(##) ####-####` | 0 |
 | 16 | g16 | masks-tokens (input masking tokens) | Máscara RFC `AAAA######XXX` | 0 |
 | 17 | g8 | date-utils (parseISO / formatTime / firstDayOfWeek / uses12Hour / isoWeek) | firstDayOfWeek('en-US') === 0 (domingo), 'es-CO... | 0 |
@@ -90,12 +90,12 @@
 - **Descripción**: [error-handling, regression] — HALLAZGO prefs-quota-error
 
 ### 13. Autoplay pausa al hacer hover
-- **Testable**: `is-carousel`
+- **Testable**: `iswc-carousel`
 - **Grupo**: g-navigation · **Impacto**: 0
 - **Descripción**: mouseenter congela, mouseleave reanuda con remaining.
 
 ### 14. JSON-LD BreadcrumbList
-- **Testable**: `is-breadcrumb`
+- **Testable**: `iswc-breadcrumb`
 - **Grupo**: g-navigation · **Impacto**: 0
 - **Descripción**: *(gap SEO)*.
 

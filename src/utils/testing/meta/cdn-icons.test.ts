@@ -1,8 +1,8 @@
 // tests/cdn-icons.test.ts
 //
-// Verifica que <is-icon> resuelve iconos a SVG local (no cae al fallback
+// Verifica que <iswc-icon> resuelve iconos a SVG local (no cae al fallback
 // <iconify-icon>) en un preview cualquiera. Esto protege contra:
-//   - <is-icon icon="X:Y"> sin descargar localmente (cae a CDN, ok pero lento).
+//   - <iswc-icon icon="X:Y"> sin descargar localmente (cae a CDN, ok pero lento).
 //   - Bug en icon-loader.ts que rompe la cadena local.
 //   - assets/icons/{prefix}/ vacio aunque el .json diga que existe.
 //
@@ -20,14 +20,14 @@ const root = dirname(dirname(dirname(dirname(here))));
 // ejecute, hay que pasar PORT=8391 explícito o levantar `scripts/serve.mjs 8391`.
 const PORT = process.env.CDN_PORT || 8391;
 const BASE = `http://localhost:${PORT}`;
-const ICON_RE = /<is-icon\b[^>]*\bicon\s*=\s*["']([a-z0-9-]+):([a-z0-9-]+)["']/gi;
+const ICON_RE = /<iswc-icon\b[^>]*\bicon\s*=\s*["']([a-z0-9-]+):([a-z0-9-]+)["']/gi;
 
 async function walk(dir) {
   const out = [];
   for (const e of await readdir(dir, { withFileTypes: true })) {
     const p = join(dir, e.name);
     if (e.isDirectory()) out.push(...await walk(p));
-    // Previews JSON (is-preview/v1): el markup de los demos viaja en strings
+    // Previews JSON (iswc-preview/v1): el markup de los demos viaja en strings
     // HTML dentro del JSON (desde el folderize no hay .html por tag).
     else if (e.isFile() && e.name.endsWith('.json')) out.push(p);
   }

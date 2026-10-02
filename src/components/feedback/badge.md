@@ -1,20 +1,20 @@
 ---
-tag: is-badge
+tag: iswc-badge
 tags:
-  - is-badge
+  - iswc-badge
 category: feedback
 status: public
 source: ./badge.js
 style: ./badge.css
 preview: ./badge.json
 ---
-# `<is-badge>`
+# `<iswc-badge>`
 
 ## Propósito
 
 Etiqueta compacta con colores semánticas y apariencias.
 
-Este módulo registra `<is-badge>`.
+Este módulo registra `<iswc-badge>`.
 
 ## Cuándo usarlo
 
@@ -33,8 +33,8 @@ import './badge.js';
 ## Ejemplo mínimo
 
 ```html
-<is-badge color="success" variant="filled">OK</is-badge>
-<is-badge pill attention="pulse">Live</is-badge>
+<iswc-badge color="success" variant="filled">OK</iswc-badge>
+<iswc-badge pill attention="pulse">Live</iswc-badge>
 ```
 
 ## API
@@ -121,7 +121,7 @@ No declara integración form-associated propia en este módulo.
 
 Documentación de cabecera preservada desde fuente:
 
-> <is-badge> — Web Component (vanilla).
+> <iswc-badge> — Web Component (vanilla).
 > Etiqueta compacta con colores semánticas.
 > Atributos
 >   color      brand | neutral | success | warning | danger (default brand)
@@ -134,7 +134,7 @@ Documentación de cabecera preservada desde fuente:
 
 - [`../_shared/adopt-css.js`](../_shared/adopt-css.js)
 
-Tags del módulo: `<is-badge>`.
+Tags del módulo: `<iswc-badge>`.
 
 ## Accesibilidad
 
@@ -143,8 +143,8 @@ Preservar semántica, foco, teclado, labels y ARIA. ARIA detectado: ninguno expl
 ## Ejemplo avanzado
 
 ```html
-<is-badge color="success" variant="filled">OK</is-badge>
-<is-badge pill attention="pulse">Live</is-badge>
+<iswc-badge color="success" variant="filled">OK</iswc-badge>
+<iswc-badge pill attention="pulse">Live</iswc-badge>
 ```
 
 ## Errores comunes

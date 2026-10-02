@@ -1,4 +1,4 @@
-// dock.stagehand.test.mjs — verificaciones de calidad visual para is-dock.
+// dock.stagehand.test.mjs — verificaciones de calidad visual para iswc-dock.
 import assert from 'node:assert/strict';
 import { BASE_URL, newPage, close, waitReady, screenshot, report, maybeStagehand } from './lib/harness.mjs';
 
@@ -11,8 +11,8 @@ const results = [];
 async function checkDeterministic(page, demo) {
   await page.waitForTimeout(200);
   const data = await page.evaluate(() => {
-    const docks = [...document.querySelectorAll('main is-dock')];
-    const items = [...document.querySelectorAll('main is-dock-item')];
+    const docks = [...document.querySelectorAll('main iswc-dock')];
+    const items = [...document.querySelectorAll('main iswc-dock-item')];
     return {
       docks: docks.length,
       items: items.length,
@@ -21,8 +21,8 @@ async function checkDeterministic(page, demo) {
         const a = i.shadowRoot?.querySelector('a');
         return a?.getAttribute('aria-label');
       }).length,
-      // Cada item debe tener un <is-icon> renderizado dentro del slot icon.
-      itemsWithIcon: items.filter((i) => i.shadowRoot?.querySelector('a is-icon, a [is-icon], a span.ico')).length,
+      // Cada item debe tener un <iswc-icon> renderizado dentro del slot icon.
+      itemsWithIcon: items.filter((i) => i.shadowRoot?.querySelector('a iswc-icon, a [iswc-icon], a span.ico')).length,
       // Cada item debe tener layout (ancho > 0).
       itemsWithLayout: items.filter((i) => i.getBoundingClientRect().width > 10).length,
     };
@@ -51,7 +51,7 @@ for (const demo of DEMOS) {
 }
 
 const VISUAL_RUBRIC = `
-Evalúa la calidad visual del <is-dock> en el screenshot.
+Evalúa la calidad visual del <iswc-dock> en el screenshot.
 
 Checklist (todas deben cumplirse; marca cada una PASS o FAIL):
 

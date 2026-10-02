@@ -1,20 +1,20 @@
 ---
-tag: is-copy-button
+tag: iswc-copy-button
 tags:
-  - is-copy-button
+  - iswc-copy-button
 category: actions
 status: public
 source: ./copy-button.js
 style: ./copy-button.css
 preview: ./copy-button.json
 ---
-# `<is-copy-button>`
+# `<iswc-copy-button>`
 
 ## Propósito
 
 Copia texto al portapapeles con feedback de éxito/error.
 
-Este módulo registra `<is-copy-button>`.
+Este módulo registra `<iswc-copy-button>`.
 
 ## Cuándo usarlo
 
@@ -33,7 +33,7 @@ import './copy-button.js';
 ## Ejemplo mínimo
 
 ```html
-<is-copy-button value="https://insoft.com.co"></is-copy-button>
+<iswc-copy-button value="https://insoft.com.co"></iswc-copy-button>
 ```
 
 ## API
@@ -81,8 +81,8 @@ import './copy-button.js';
 
 | Evento | detail | bubbles | composed | cancelable |
 | --- | --- | --- | --- | --- |
-| `is-error` | no | sí | sí | no |
-| `is-copy` | sí | sí | sí | no |
+| `iswc-error` | no | sí | sí | no |
+| `iswc-copy` | sí | sí | sí | no |
 
 ### Métodos y propiedades públicas
 
@@ -131,10 +131,10 @@ Participa mediante ElementInternals/helpers form-associated; respetar name, valu
 
 Documentación de cabecera preservada desde fuente:
 
-> <is-copy-button> — Web Component (vanilla).
+> <iswc-copy-button> — Web Component (vanilla).
 > Copia texto al portapapeles con feedback visual (éxito / error).
 > Requiere contexto seguro (HTTPS o localhost) para clipboard.writeText().
-> Compone <is-tooltip> (posicionamiento, flip, flecha) e <is-icon>. El tooltip
+> Compone <iswc-tooltip> (posicionamiento, flip, flecha) e <iswc-icon>. El tooltip
 > va en `trigger="none"`: quién lo abre y con qué texto lo decide el estado de
 > la copia (reposo / éxito / error), no el hover del propio tooltip.
 > Atributos
@@ -145,7 +145,7 @@ Documentación de cabecera preservada desde fuente:
 >   error-label         tooltip si falla
 >   feedback-duration   ms de feedback (default 1000)
 >   tooltip             full | copy | none  (default full)
->   tooltip-placement   cualquier placement de is-popover: top | top-start |
+>   tooltip-placement   cualquier placement de iswc-popover: top | top-start |
 >                       top-end | bottom* | left* | right*  (default top)
 >   disabled            boolean
 > Slots
@@ -153,7 +153,7 @@ Documentación de cabecera preservada desde fuente:
 >   copy-icon       icono en reposo
 >   success-icon    icono de éxito
 >   error-icon      icono de error
-> Events (bubbles + composed): is-copy { value }, is-error
+> Events (bubbles + composed): iswc-copy { value }, iswc-error
 > Custom states: :state(success) :state(error)
 > CSS Parts: button, copy-icon, success-icon, error-icon,
 >            feedback (burbuja del tooltip), feedback-body
@@ -163,9 +163,9 @@ Documentación de cabecera preservada desde fuente:
 - [`../_shared/adopt-css.js`](../_shared/adopt-css.js)
 - [`../media/icon.js`](../media/icon.js)
 - [`../feedback/tooltip.js`](../feedback/tooltip.js)
-- [`./button.js`](./button.js) — la superficie clicable es un `<is-button variant="text">`.
+- [`./button.js`](./button.js) — la superficie clicable es un `<iswc-button variant="text">`.
 
-Tags del módulo: `<is-copy-button>`.
+Tags del módulo: `<iswc-copy-button>`.
 
 ## Accesibilidad
 
@@ -175,9 +175,9 @@ Preservar semántica, foco, teclado, labels y ARIA. ARIA detectado: `aria-live`,
 
 ```html
 <span id="my-phone">+57 300 123 4567</span>
-<is-copy-button from="my-phone"></is-copy-button>
-<is-copy-button from="my-input.value"></is-copy-button>
-<is-copy-button from="my-link[href]"></is-copy-button>
+<iswc-copy-button from="my-phone"></iswc-copy-button>
+<iswc-copy-button from="my-input.value"></iswc-copy-button>
+<iswc-copy-button from="my-link[href]"></iswc-copy-button>
 ```
 
 ## Errores comunes

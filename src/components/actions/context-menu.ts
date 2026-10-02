@@ -2,7 +2,7 @@ import { adoptCss, defineElement, emit } from '../../core/element.js';
 import { createPopupDismiss } from '../_shared/popup-dismiss.js';
 
 /**
- * <is-context-menu> — Menú emergente anclado al clic derecho del ratón sobre
+ * <iswc-context-menu> — Menú emergente anclado al clic derecho del ratón sobre
  * un `target` externo (o sobre el propio host si no se da `for`).
  *
  * Atributos
@@ -20,18 +20,18 @@ import { createPopupDismiss } from '../_shared/popup-dismiss.js';
  * Slots
  *   default — hijos renderizados dentro del panel; usar <button class="item">
  *             o <a class="item"> para tener acciones. Cada item emite
- *             `is-select` y se cierra el menú.
+ *             `iswc-select` y se cierra el menú.
  *
  * Eventos
- *   is-select       detalle: { item, value }  — al elegir un item
- *   is-open, is-close
+ *   iswc-select       detalle: { item, value }  — al elegir un item
+ *   iswc-open, iswc-close
  *
  * Custom states: open, closed
  */
 (() => {
   const OBSERVED = ['for', 'placement', 'distance', 'disabled', 'scroll-lock'];
 
-  class IsContextMenu extends HTMLElement {
+  class IswcContextMenu extends HTMLElement {
     static get observedAttributes(): string[] { return OBSERVED; }
 
     #host: HTMLElement = this;
@@ -131,7 +131,7 @@ import { createPopupDismiss } from '../_shared/popup-dismiss.js';
 
       this.setAttribute('open', '');
       this.#setupScrollBehavior();
-      emit(this, 'is-open', { x, y });
+      emit(this, 'iswc-open', { x, y });
     }
 
     /** Abre el menú anclado a un elemento (esquina inferior izquierda). */
@@ -148,7 +148,7 @@ import { createPopupDismiss } from '../_shared/popup-dismiss.js';
       if (this.#panel.open) this.#panel.close();
       this.removeAttribute('open');
       this.#teardownScrollBehavior();
-      emit(this, 'is-close');
+      emit(this, 'iswc-close');
     }
 
     #onPanelClick(e: Event): void {
@@ -156,7 +156,7 @@ import { createPopupDismiss } from '../_shared/popup-dismiss.js';
       if (!item) return;
       e.preventDefault();
       e.stopPropagation();
-      emit(this, 'is-select', { item, value: item.dataset.value ?? item.textContent.trim() });
+      emit(this, 'iswc-select', { item, value: item.dataset.value ?? item.textContent.trim() });
       this.close();
     }
 
@@ -193,7 +193,7 @@ import { createPopupDismiss } from '../_shared/popup-dismiss.js';
      * Engancha el ciclo de "menú abierto": Escape, click fuera y, según el
      * modo, cerrar al hacer scroll (default) o congelar el documento
      * (`scroll-lock`). Todo eso vive en _shared/popup-dismiss.js, que es lo
-     * mismo que necesita is-dropdown.
+     * mismo que necesita iswc-dropdown.
      *
      * Se crea en cada apertura porque `scroll-lock` puede cambiar entre una y
      * otra, y el modo se decide al enganchar.
@@ -215,5 +215,5 @@ import { createPopupDismiss } from '../_shared/popup-dismiss.js';
     }
   }
 
-  defineElement('is-context-menu', IsContextMenu);
+  defineElement('iswc-context-menu', IswcContextMenu);
 })();

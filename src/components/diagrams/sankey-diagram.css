@@ -7,13 +7,9 @@
   position: relative;
   box-sizing: border-box;
   font-family: var(--iswc-sans, ui-sans-serif, system-ui, sans-serif);
-}
 
-:host([hidden]) { display: none; }
-
-:host([color="viewer"]) {
-  width: 100%;
-  height: 100%;
+  &[hidden] { display: none; }
+  &[color="viewer"] { width: 100%; height: 100%; }
 }
 
 .wrap {
@@ -33,22 +29,22 @@
   min-height: 0;
   display: flex;
   flex-direction: column;
-}
 
-.wrap.is-viewer {
-  width: 100%;
-  height: 100%;
-  border: 0;
-  padding: 0;
-  cursor: default;
-}
+  &.iswc-viewer {
+    width: 100%;
+    height: 100%;
+    border: 0;
+    padding: 0;
+    cursor: default;
+  }
 
-.wrap[data-empty]::after {
-  content: 'Diagrama de Sankey no disponible (payload inválido).';
-  display: block;
-  padding: 1rem;
-  font-size: 0.875em;
-  color: var(--iswc-text-soft, #a8b0bb);
+  &[data-empty]::after {
+    content: 'Diagrama de Sankey no disponible (payload inválido).';
+    display: block;
+    padding: 1rem;
+    font-size: 0.875em;
+    color: var(--iswc-text-soft, #a8b0bb);
+  }
 }
 
 .slot-hidden { display: none !important; }
@@ -70,31 +66,31 @@
 .sk-node,
 .sk-link {
   transition: opacity 0.18s ease;
-}
-
-.sk-node.is-dim,
-.sk-link.is-dim {
-  opacity: 0.28;
+  &.iswc-dim { opacity: 0.28; }
 }
 
 .sk-link__band {
   transition: fill-opacity 0.14s ease-out;
 }
 
-.sk-link.is-active .sk-link__band {
-  fill-opacity: 0.62;
+.sk-link {
+  &.iswc-active {
+    .sk-link__band { fill-opacity: 0.62; }
+  }
 }
 
 .sk-node__bar {
   transition: filter 0.12s ease-out;
 }
 
-.sk-node.is-active .sk-node__bar {
-  filter: brightness(1.14);
+.sk-node {
+  &.iswc-active {
+    .sk-node__bar { filter: brightness(1.14); }
+  }
 }
 
 /* El visor es opt-in: sin `open-on-click` el componente no abre nada,
    asi que tampoco debe insinuar con el cursor que se puede hacer clic. */
-:host([open-on-click]) .wrap {
-  cursor: zoom-in;
+:host([open-on-click]) {
+  .wrap { cursor: zoom-in; }
 }

@@ -1,5 +1,5 @@
 /**
- * class-diagram.test.ts — verificación exhaustiva de <is-class-diagram>.
+ * class-diagram.test.ts — verificación exhaustiva de <iswc-class-diagram>.
  *
  * Diagrama de clases UML en SVG. Config por JSON con nodes/edges.
  */
@@ -26,50 +26,50 @@ import {
 } from '../_helpers.js';
 const MOD = 'src/components/diagrams/class-diagram.ts';
 
-test('is-class-diagram: archivo existe', () => {
+test('iswc-class-diagram: archivo existe', () => {
   assert.ok(exists(MOD));
 });
 
-test('is-class-diagram: shadow DOM con svg', () => {
+test('iswc-class-diagram: shadow DOM con svg', () => {
   const src = leerConBase(MOD);
   assert.ok(tieneShadow(src));
   assert.match(src, /<svg\b/);
 });
 
-test('is-class-diagram: observados (color)', () => {
+test('iswc-class-diagram: observados (color)', () => {
   const obs = extraerObservados(leerConBase(MOD));
   assert.ok(obs.includes('color'));
 });
 
-test('is-class-diagram: eventos', () => {
+test('iswc-class-diagram: eventos', () => {
   const evts = extraerEventos(leerConBase(MOD));
   assert.ok(evts.length >= 1, `class-diagram eventos: ${evts.join(',')}`);
 });
 
-test('is-class-diagram: shadow DOM parts', () => {
+test('iswc-class-diagram: shadow DOM parts', () => {
   const parts = extraerParts(leerConBase(MOD));
   assert.ok(parts.length >= 1, `class-diagram parts: ${parts.join(',')}`);
 });
 
-test('is-class-diagram: JSON payload', () => {
+test('iswc-class-diagram: JSON payload', () => {
   const src = leerConBase(MOD);
   assert.ok(leeJsonScript(src));
   assert.ok(parseaJson(src));
 });
 
-test('is-class-diagram: usa MutationObserver', () => {
+test('iswc-class-diagram: usa MutationObserver', () => {
   assert.ok(usaMutationObserver(leerConBase(MOD)));
 });
 
-test('is-class-diagram: edge cases', () => {
+test('iswc-class-diagram: edge cases', () => {
   assert.ok(tieneEdgeCaseGuards(leerConBase(MOD)));
 });
 
-test('is-class-diagram: adopta CSS', () => {
+test('iswc-class-diagram: adopta CSS', () => {
   assert.ok(adoptaCss(leerConBase(MOD)));
 });
 
-test('is-class-diagram: registrado', () => {
+test('iswc-class-diagram: registrado', () => {
   const src = leerConBase(MOD);
-  assert.match(src, /defineElement\s*\(\s*['"`]is-class-diagram['"`]/);
+  assert.match(src, /defineElement\s*\(\s*['"`]iswc-class-diagram['"`]/);
 });

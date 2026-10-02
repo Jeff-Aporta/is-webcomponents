@@ -1,17 +1,17 @@
 import { defineElement, emit, siblingCssHref } from '../../core/element.js';
-import { IsLightbox } from './lightbox.js';
+import { IswcLightbox } from './lightbox.js';
 import { getDiagramTag } from './diagram-kinds.js';
 import { expandSequencePayloadForJson } from './sequence-spec.js';
 import '../media/icon.js';
 import { sharePayload } from '../_shared/web-share.js';
 
 /**
- * <is-diagram-lightbox> — colore del lightbox para diagramas.
+ * <iswc-diagram-lightbox> — colore del lightbox para diagramas.
  *
- * Es un <is-lightbox> con la barra específica de la animación tortuga
+ * Es un <iswc-lightbox> con la barra específica de la animación tortuga
  * (<< ▶/⏸ ■ >>), el anillo de cuenta regresiva del auto-replay, el botón
  * de código JSON y el botón de compartir enlace. El resto del visor
- * (zoom, pan, dialog, slots) lo hereda de is-lightbox.
+ * (zoom, pan, dialog, slots) lo hereda de iswc-lightbox.
  *
  * Conceptualmente, un diagrama es "un nodo que tiene un payload JSON y
  * expone una API turtle {play,pause,stop,next,prev}". El visor hace de
@@ -21,12 +21,12 @@ import { sharePayload } from '../_shared/web-share.js';
  *
  * Atributos: kind (default "sequence"), animation (passthrough al diagrama),
  *             open
- *             + todos los de <is-lightbox>
+ *             + todos los de <iswc-lightbox>
  * Propiedades: payload, kind, animation, open
- *              + todas las de <is-lightbox>
- * Eventos: is-close, is-share, is-reposition
- *          + is-turtle-state { playing, idx, total, replay }
- *          + is-toggle-group { id }
+ *              + todas las de <iswc-lightbox>
+ * Eventos: iswc-close, iswc-share, iswc-reposition
+ *          + iswc-turtle-state { playing, idx, total, replay }
+ *          + iswc-toggle-group { id }
  */
 
 const ICON = {
@@ -44,7 +44,7 @@ const ICON = {
 const RING_R = 9;
 const RING_C = 2 * Math.PI * RING_R;
 
-/** Estado del motor tortuga publicado por los diagramas en `is-turtle-state`. */
+/** Estado del motor tortuga publicado por los diagramas en `iswc-turtle-state`. */
 interface TurtleStateDetail {
   playing: boolean;
   replay: number;
@@ -52,7 +52,7 @@ interface TurtleStateDetail {
   total: number;
 }
 
-/** `is-toggle-group` detail: el grupo que el usuario alterna en la leyenda. */
+/** `iswc-toggle-group` detail: el grupo que el usuario alterna en la leyenda. */
 interface ToggleGroupDetail { id: string; }
 
 /** API `turtle` opcional expuesta por los diagramas con animación segmentada. */
@@ -76,9 +76,9 @@ function isActionable(n: EventTarget | null): n is HTMLElement {
   return n instanceof HTMLElement && !!n.dataset.act;
 }
 
-/** Botón de la barra con un `is-icon` dentro. */
+/** Botón de la barra con un `iswc-icon` dentro. */
 function findPlayIcon(btn: HTMLElement): HTMLElement | null {
-  return btn.querySelector<HTMLElement>('is-icon');
+  return btn.querySelector<HTMLElement>('iswc-icon');
 }
 
 function isSequenceKind(kind: string | null | undefined): boolean {
@@ -103,7 +103,7 @@ function buildViewerUrl(kind: string, payload: unknown): string {
   return url.toString();
 }
 
-class IsDiagramLightbox extends IsLightbox {
+class IswcDiagramLightbox extends IswcLightbox {
   static get observedAttributes(): string[] {
     return [...super.observedAttributes, 'kind', 'animation', 'min-gap'];
   }
@@ -195,16 +195,16 @@ class IsDiagramLightbox extends IsLightbox {
     nav.className = 'lb-nav';
     nav.innerHTML = /* html */ `
       <button type="button" class="lb-btn" data-act="prev" title="Tramo anterior" aria-label="Tramo anterior">
-        <is-icon icon="${ICON.prev}"></is-icon>
+        <iswc-icon icon="${ICON.prev}"></iswc-icon>
       </button>
       <button type="button" class="lb-btn" data-act="play" title="Reproducir" aria-label="Reproducir">
-        <is-icon icon="${ICON.play}"></is-icon>
+        <iswc-icon icon="${ICON.play}"></iswc-icon>
       </button>
       <button type="button" class="lb-btn" data-act="stop" title="Detener" aria-label="Detener" hidden>
-        <is-icon icon="${ICON.stop}"></is-icon>
+        <iswc-icon icon="${ICON.stop}"></iswc-icon>
       </button>
       <button type="button" class="lb-btn" data-act="next" title="Tramo siguiente" aria-label="Tramo siguiente">
-        <is-icon icon="${ICON.next}"></is-icon>
+        <iswc-icon icon="${ICON.next}"></iswc-icon>
       </button>
       <span class="lb-ring" title="Cuenta regresiva del auto-replay">
         <svg viewBox="0 0 22 22" aria-hidden="true">
@@ -212,7 +212,7 @@ class IsDiagramLightbox extends IsLightbox {
           <circle class="lb-ring__fill" cx="11" cy="11" r="${RING_R}"
                   stroke-dasharray="${RING_C}" stroke-dashoffset="${RING_C}"></circle>
         </svg>
-        <is-icon icon="${ICON.turtle}" class="lb-ring__icon"></is-icon>
+        <iswc-icon icon="${ICON.turtle}" class="lb-ring__icon"></iswc-icon>
       </span>
       <span class="lb-step" aria-live="polite"></span>
     `;
@@ -226,7 +226,7 @@ class IsDiagramLightbox extends IsLightbox {
       codeBtn.dataset.act = 'code';
       codeBtn.title = 'Ver / editar código';
       codeBtn.setAttribute('aria-label', 'Ver o editar código');
-      codeBtn.innerHTML = `<is-icon icon="${ICON.code}"></is-icon>`;
+      codeBtn.innerHTML = `<iswc-icon icon="${ICON.code}"></iswc-icon>`;
       const zoomReset = trail.querySelector<HTMLElement>('[data-act="zoom-reset"]');
       if (zoomReset) trail.insertBefore(codeBtn, zoomReset);
       else trail.appendChild(codeBtn);
@@ -252,7 +252,7 @@ class IsDiagramLightbox extends IsLightbox {
         <p class="lb-code__err" hidden></p>
         <div class="lb-code__actions">
           <button type="button" class="lb-text-btn" data-act="code-cancel">Descartar</button>
-          <button type="button" class="lb-text-btn is-primary" data-act="code-save">Guardar</button>
+          <button type="button" class="lb-text-btn iswc-primary" data-act="code-save">Guardar</button>
         </div>
       `;
     }
@@ -313,18 +313,18 @@ class IsDiagramLightbox extends IsLightbox {
     if (minGap) el.setAttribute('min-gap', minGap);
     el.payload = this.#basePayload;
     el.hiddenGroups = this.#hiddenGroups;
-    el.addEventListener('is-turtle-state', (e: Event) => {
+    el.addEventListener('iswc-turtle-state', (e: Event) => {
       const detail = (e as CustomEvent<TurtleStateDetail>).detail;
       this.#onTurtleState(detail);
     });
-    el.addEventListener('is-toggle-group', (e: Event) => {
+    el.addEventListener('iswc-toggle-group', (e: Event) => {
       const detail = (e as CustomEvent<ToggleGroupDetail>).detail;
       this.#onToggleGroup(detail.id);
     });
     host.appendChild(el);
     this.#diagramEl = el;
     // Diagramas sin API turtle (org-chart, mindmap, timeline…) nunca emiten
-    // `is-turtle-state`: ocultamos la barra ya mismo en vez de esperar un
+    // `iswc-turtle-state`: ocultamos la barra ya mismo en vez de esperar un
     // evento que no va a llegar. Los que sí tienen turtle corrigen este
     // estado apenas termina su primer render (ver #onTurtleState arriba).
     if (!el.turtle) this.#onTurtleState({ playing: false, replay: 0, idx: 0, total: 0 });
@@ -412,10 +412,10 @@ class IsDiagramLightbox extends IsLightbox {
       t.hidden = false;
       setTimeout(() => { t.hidden = true; }, 1800);
     }
-    emit(this, 'is-share', { url, how });
+    emit(this, 'iswc-share', { url, how });
   }
 }
 
-defineElement('is-diagram-lightbox', IsDiagramLightbox, 'IsDiagramLightbox');
+defineElement('iswc-diagram-lightbox', IswcDiagramLightbox, 'IswcDiagramLightbox');
 
-export { IsDiagramLightbox };
+export { IswcDiagramLightbox };

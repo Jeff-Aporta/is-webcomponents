@@ -1,4 +1,4 @@
-/* is-heatmap */
+/* iswc-heatmap */
 :host {
   display: block;
   font: inherit;
@@ -12,24 +12,42 @@
   gap: .5rem;
   height: 100%;
   min-height: 16rem;
+  /* Layout por posición de leyenda; escrito como variantes explícitas
+     (más legible que colapsar con :is()). */
+  &[data-legend="none"]   { grid-template-columns: 1fr; }
+  &[data-legend="top"]    { grid-template-columns: 1fr; grid-template-rows: auto 1fr; }
+  &[data-legend="bottom"] { grid-template-columns: 1fr; grid-template-rows: 1fr auto; }
+  &[data-legend="start"]  { grid-template-columns: auto 1fr; }
+  &[data-legend="end"]    { grid-template-columns: 1fr auto; }
 }
-.root[data-legend="none"] { grid-template-columns: 1fr; }
-.root[data-legend="top"]  { grid-template-columns: 1fr; grid-template-rows: auto 1fr; }
-.root[data-legend="bottom"] { grid-template-columns: 1fr; grid-template-rows: 1fr auto; }
-.root[data-legend="start"] { grid-template-columns: auto 1fr; }
-.root[data-legend="end"] { grid-template-columns: 1fr auto; }
 .chart-svg { width: 100%; height: 100%; min-height: 16rem; }
 .cell {
   transition: opacity 120ms ease, transform 100ms ease;
+  /* Estado hover via clase (`iswc-hover`) que aplica el JS, además del hover
+     nativo del puntero — mismo render que antes. */
+  &:hover,
+  &.iswc-hover {
+    opacity: .85;
+    stroke: var(--iswc-text);
+    stroke-width: 1;
+  }
 }
-.cell:hover, .cell.is-hover { opacity: .85; stroke: var(--iswc-text); stroke-width: 1; }
 .tick-label { font-size: .65rem; }
 .axis-title { font-size: .7rem; font-weight: 600; }
-.cell-val { font-size: .65rem; font-variant-numeric: tabular-nums; }
-.legend { display: grid; align-items: stretch; padding-left: .5rem; }
+.cell-val {
+  font-size: .65rem;
+  font-variant-numeric: tabular-nums;
+}
+.legend {
+  display: grid;
+  align-items: stretch;
+  padding-inline-start: .5rem;
+}
 .legend-wrap {
-  display: flex; flex-direction: column; gap: .25rem;
-  width: 60px;
+  display: flex;
+  flex-direction: column;
+  gap: .25rem;
+  inline-size: 60px;
 }
 .legend-grad {
   flex: 1 1 auto;
@@ -46,8 +64,8 @@
    pero oculto visualmente para no romper el layout del heatmap. */
 .sr-status {
   position: absolute;
-  width: 1px;
-  height: 1px;
+  inline-size: 1px;
+  block-size: 1px;
   padding: 0;
   margin: -1px;
   overflow: hidden;

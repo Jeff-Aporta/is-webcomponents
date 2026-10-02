@@ -3,7 +3,7 @@
 <head>
 <meta charset="utf-8" />
 <meta name="viewport" content="width=device-width, initial-scale=1" />
-<title>&lt;is-confirm-delete&gt; · is-webcomponents</title>
+<title>&lt;iswc-confirm-delete&gt; · is-webcomponents</title>
 <meta name="description" content="Modal de confirmación destructiva que requiere re-escribir la clave del registro antes de habilitar el botón Eliminar." />
 <style>
   html, body { margin: 0; padding: 0; min-height: 100%; background: #0c1118; color: #e2e8f0; font-family: ui-sans-serif, system-ui, sans-serif; }
@@ -18,21 +18,21 @@
   main { display: grid; place-items: center; gap: 20px; padding: 20px; }
   .toolbar { display: flex; gap: 12px; }
   .log { font: 12px ui-monospace, Menlo, Consolas, monospace; background: rgba(0,0,0,0.3); padding: 8px; border-radius: 4px; min-height: 60px; white-space: pre-wrap; }
-  is-confirm-delete:not(:defined) { visibility: hidden; }
+  iswc-confirm-delete:not(:defined) { visibility: hidden; }
 </style>
 <script type="module">
-  // Dependencias de <is-confirm-delete>.
-  await import('../../../dist/cdn/actions/button.min.js?h=ki2dk5');
-  await import('../../../dist/cdn/forms/input.min.js?h=kbtjsy');
-  await import('../../../dist/cdn/media/icon.min.js?h=y6tzub');
-  await import('../../../dist/cdn/layout/dialog.min.js?h=fvgmyx');
-  await import('../../../dist/cdn/isp/confirm-delete.min.js?h=b5imiq');
-  await customElements.whenDefined('is-confirm-delete');
+  // Dependencias de <iswc-confirm-delete>.
+  await import('../../../dist/cdn/actions/button.min.js?h=5i9tzt');
+  await import('../../../dist/cdn/forms/input.min.js?h=268af7');
+  await import('../../../dist/cdn/media/icon.min.js?h=sp71yy');
+  await import('../../../dist/cdn/layout/dialog.min.js?h=6ocp5e');
+  await import('../../../dist/cdn/isp/confirm-delete.min.js?h=tiji0m');
+  await customElements.whenDefined('iswc-confirm-delete');
 
   const cd = document.getElementById('cd');
   const eventLog = document.getElementById('event-log');
   const log = (m) => { eventLog.textContent += new Date().toISOString().slice(11, 19) + ' ' + m + '\n'; };
-  for (const evt of ['is-show', 'is-after-show', 'is-hide', 'is-after-hide', 'is-confirm-delete', 'is-cancel-delete']) {
+  for (const evt of ['iswc-show', 'iswc-after-show', 'iswc-hide', 'iswc-after-hide', 'iswc-confirm-delete', 'iswc-cancel-delete']) {
     cd.addEventListener(evt, (e) => log(`${evt}: ${JSON.stringify(e.detail || {}).slice(0, 120)}`));
   }
 
@@ -56,18 +56,18 @@
 <body>
 <header>
   <div>
-    <h1>&lt;is-confirm-delete&gt; — "escribe para confirmar"</h1>
+    <h1>&lt;iswc-confirm-delete&gt; — "escribe para confirmar"</h1>
     <p>El botón Eliminar se habilita sólo cuando lo escrito coincide con <code>confirm-value</code>.</p>
   </div>
   <div class="spacer"></div>
-  <code>is-confirm-delete</code>
+  <code>iswc-confirm-delete</code>
 </header>
 <main>
   <div class="toolbar">
-    <is-button id="btn-delete" color="danger">Eliminar tercero</is-button>
-    <is-button id="btn-loading" variant="outlined">Simular loading</is-button>
+    <iswc-button id="btn-delete" color="danger">Eliminar tercero</iswc-button>
+    <iswc-button id="btn-loading" variant="outlined">Simular loading</iswc-button>
   </div>
-  <is-confirm-delete id="cd" entity="tercero" pk-label="NIT" confirm-value="900123456"></is-confirm-delete>
+  <iswc-confirm-delete id="cd" entity="tercero" pk-label="NIT" confirm-value="900123456"></iswc-confirm-delete>
   <pre id="event-log" class="log"></pre>
 </main>
 </body>

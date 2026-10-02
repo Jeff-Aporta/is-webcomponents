@@ -16,22 +16,22 @@ async function clearStorage(page) {
 const tests = [];
 
 tests.push({
-  name: 'smoke: is-main está definido y los 4 están montados con role="main"',
+  name: 'smoke: iswc-main está definido y los 4 están montados con role="main"',
   run: async (page) => {
     await page.goto(URL, { waitUntil: 'domcontentloaded' });
     await waitReady(page, 'data-main-ready');
     const data = await page.evaluate(() => {
-      const mains = [...document.querySelectorAll('main is-main')];
+      const mains = [...document.querySelectorAll('main iswc-main')];
       return {
-        defined: !!customElements.get('is-main'),
+        defined: !!customElements.get('iswc-main'),
         count: mains.length,
         roles: mains.map((m) => m.getAttribute('role')),
       };
     });
-    assert.equal(data.defined, true, 'is-main debe estar definido');
-    assert.equal(data.count, 4, `esperaba 4 is-main, hay ${data.count}`);
+    assert.equal(data.defined, true, 'iswc-main debe estar definido');
+    assert.equal(data.count, 4, `esperaba 4 iswc-main, hay ${data.count}`);
     for (const r of data.roles) {
-      assert.equal(r, 'main', `cada is-main debe tener role="main", fue "${r}"`);
+      assert.equal(r, 'main', `cada iswc-main debe tener role="main", fue "${r}"`);
     }
     await screenshot(page, 'main-smoke');
   },
@@ -70,7 +70,7 @@ tests.push({
     await page.waitForTimeout(500);
     const lsAfterScroll = await page.evaluate(() => {
       const raw = localStorage.getItem('is-webcomponents');
-      return raw ? JSON.parse(raw)['is-main']?.['demo-main-2'] : null;
+      return raw ? JSON.parse(raw)['iswc-main']?.['demo-main-2'] : null;
     });
     assert.ok(lsAfterScroll, 'm2 debe haber escrito en localStorage tras scroll');
     assert.ok(lsAfterScroll.top > 0, `top guardado debe ser > 0, fue ${lsAfterScroll.top}`);
@@ -95,8 +95,8 @@ tests.push({
     // Sobreescribir manualmente con savedAt muy viejo (más allá del TTL).
     await page.evaluate(() => {
       const root = JSON.parse(localStorage.getItem('is-webcomponents') || '{}');
-      root['is-main'] = root['is-main'] || {};
-      root['is-main']['demo-main-3'] = { top: 500, savedAt: Date.now() - 120000 }; // 120s > TTL=60s
+      root['iswc-main'] = root['iswc-main'] || {};
+      root['iswc-main']['demo-main-3'] = { top: 500, savedAt: Date.now() - 120000 }; // 120s > TTL=60s
       localStorage.setItem('is-webcomponents', JSON.stringify(root));
     });
     await page.reload({ waitUntil: 'domcontentloaded' });
@@ -136,7 +136,7 @@ tests.push({
     await page.waitForTimeout(100);
     const ls = await page.evaluate(() => {
       const root = JSON.parse(localStorage.getItem('is-webcomponents') || '{}');
-      return root['is-main']?.['demo-main-interactive'] ?? null;
+      return root['iswc-main']?.['demo-main-interactive'] ?? null;
     });
     assert.ok(ls, 'saveScroll() debe escribir prefs');
     assert.ok(ls.top >= 0 && ls.top <= 500, `top debe estar cerca del scrollTop, fue ${ls.top}`);
@@ -158,7 +158,7 @@ tests.push({
     await page.waitForTimeout(100);
     const ls = await page.evaluate(() => {
       const root = JSON.parse(localStorage.getItem('is-webcomponents') || '{}');
-      return root['is-main']?.['demo-main-interactive'] ?? null;
+      return root['iswc-main']?.['demo-main-interactive'] ?? null;
     });
     assert.ok(ls, 'clearRememberedScroll() debe dejar la entrada (con top=0)');
     assert.equal(ls.top, 0, `top debe ser 0 tras clear, fue ${ls.top}`);
@@ -198,7 +198,7 @@ tests.push({
     await page.waitForTimeout(500);
     const before = await page.evaluate(() => {
       const root = JSON.parse(localStorage.getItem('is-webcomponents') || '{}');
-      return root['is-main']?.['demo-main-2'] ?? null;
+      return root['iswc-main']?.['demo-main-2'] ?? null;
     });
     assert.ok(before, `debe haber prefs antes del cambio de key, fue ${JSON.stringify(before)}`);
     // Cambiar el storage-key → debe borrar la entrada y resetear scrollTop.
@@ -207,8 +207,8 @@ tests.push({
     const after = await page.evaluate(() => {
       const root = JSON.parse(localStorage.getItem('is-webcomponents') || '{}');
       return {
-        oldKey: root['is-main']?.['demo-main-2'] ?? null,
-        newKey: root['is-main']?.['demo-main-2-new'] ?? null,
+        oldKey: root['iswc-main']?.['demo-main-2'] ?? null,
+        newKey: root['iswc-main']?.['demo-main-2-new'] ?? null,
       };
     });
     // El componente hace clearRememberedScroll() que escribe en el NUEVO storage-key
