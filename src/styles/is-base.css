@@ -200,9 +200,10 @@
 }
 
 /* --- Scrollbars themizados (documento + overflow light DOM) ----------
- * Un solo selector universal + `&` para WebKit. Los pseudos `-webkit-*`
- * NO se pueden agrupar en `:is()` (no es selector de elementos), así que
- * los listamos a mano. */
+ * Un selector universal cubre el documento entero y los light DOMs anidados.
+ * Las pseudos `::-webkit-*` se mantienen en su propio bloque (no son
+ * combinables en `:is()` cuando el padre son varios pseudos distintos, pero
+ * con un único `*` ancestral el `&` resuelve limpio). */
 * {
   scrollbar-width: thin;
   scrollbar-color: var(--iswc-scrollbar-thumb) var(--iswc-scrollbar-track);
