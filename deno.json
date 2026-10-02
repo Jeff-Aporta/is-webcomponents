@@ -37,6 +37,9 @@
     "tour:interactions": "deno run -A --no-check scripts/tour-interactions.mjs --local",
     "tour:interactions:remote": "deno run -A --no-check scripts/tour-interactions.mjs --remote",
     "prepush": "deno task tour:local",
-    "postpush": "deno task tour:remote"
+    "postpush": "deno task tour:remote",
+    "sync:pins": "deno run -A scripts/sync-pins.mjs",
+    "sync:pins:remote": "deno run -A scripts/sync-pins.mjs --remote",
+    "sync:pins:hook": "deno run -A scripts/sync-pins.mjs --install-hook"
   }
 }

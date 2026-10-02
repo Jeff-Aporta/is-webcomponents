@@ -1,0 +1,11 @@
+# Destinos que deben llevar el SHA del kit tras cada commit.
+# Formato: <modo><TAB><ruta relativa al repo del kit>
+# modos:
+#   kit_pin  — export const KIT_PIN = '…'
+#   cdn_url  — …/is-webcomponents@<sha>/…
+# Líneas # y vacías se ignoran. Si el archivo no existe, se salta.
+
+cdn_url	../../../PatyIA/_experimental/ISW-TestPatyIA/src/js/iswc.ts
+cdn_url	../../../PatyIA/_entregable/ISS-AyudasCPIA/src/consts/api.ts
+cdn_url	../../../PatyIA/_experimental/ISS-AyudasCPIA/src/consts/api.ts
+cdn_url	../../../PatyIA/_experimental/ISW-TestPatyIA/specs/iswc-norm.md
