@@ -1,0 +1,21 @@
+{
+  "$schema": "is-preview/v1",
+  "tag": "is-preview-controls",
+  "category": "preview",
+  "title": "<is-preview-controls>",
+  "titleHtml": false,
+  "description": "Panel de knobs del playground. La galería le pasa spec y escucha is-controls-change.",
+  "sections": [
+    {
+      "id": "intro",
+      "title": "<is-preview-controls>",
+      "lede": "Panel de knobs del playground. La galería le pasa spec y escucha is-controls-change.",
+      "blocks": [
+        {
+          "kind": "demo",
+          "html": "<is-preview-controls label=\"Controles\"></is-preview-controls>"
+        }
+      ]
+    }
+  ]
+}

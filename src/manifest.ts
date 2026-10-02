@@ -86,7 +86,7 @@ const manifest: ComponentManifestItem[] = [
   { tag: 'is-drawer', title: 'Drawer', category: 'layout', script: 'components/layout/drawer.js', style: 'components/layout/drawer.css', page: 'components/layout/drawer.json' },
   { tag: 'is-divider', title: 'Divider', category: 'layout', script: 'components/layout/divider.js', style: 'components/layout/divider.css', page: 'components/layout/divider.json' },
   { tag: 'is-scrollspy', title: 'Scrollspy', category: 'layout', script: 'components/layout/scrollspy.js', style: 'components/layout/scrollspy.css', page: 'components/layout/scrollspy.json' },
-  { tag: 'is-demo', title: 'Demo', category: 'layout', script: 'components/layout/demo.js' },
+  { tag: 'is-demo', title: 'Demo', category: 'layout', script: 'components/layout/demo.js', page: 'components/layout/demo.json' },
   { tag: 'is-popover', title: 'Popover', category: 'helpers', script: 'components/helpers/popover.js', style: 'components/helpers/popover.css', page: 'components/helpers/popover.json' },
   { tag: 'is-ui', title: 'IsUi', category: 'helpers', script: 'components/helpers/ui.js', page: 'components/helpers/ui.json', module: true },
   { tag: 'is-breadcrumb', title: 'Breadcrumb', category: 'navigation', script: 'components/navigation/breadcrumb.js', style: 'components/navigation/breadcrumb.css', page: 'components/navigation/breadcrumb.json' },
@@ -156,11 +156,15 @@ const manifest: ComponentManifestItem[] = [
   { tag: 'is-resize-observer', title: 'Resize Observer', category: 'helpers', script: 'components/helpers/resize-observer.js', style: 'components/helpers/resize-observer.css', page: 'components/helpers/resize-observer.json' },
   { tag: 'is-md-render', title: 'Render Markdown', category: 'helpers', script: 'components/helpers/md-render.js', style: 'components/helpers/md-render.css', page: 'components/helpers/md-render.json' },
   { tag: 'is-md-editor', title: 'Editor Markdown', category: 'helpers', script: 'components/helpers/md-editor.js', style: 'components/helpers/md-editor.css', page: 'components/helpers/md-editor.json' },
+  { tag: 'is-floating', title: 'Floating (interno)', category: 'helpers', script: 'components/helpers/floating.js', style: 'components/helpers/floating.css', page: 'components/helpers/floating.json' },
   { tag: 'is-waterfall-chart', title: 'Waterfall Chart', category: 'data-viz', script: 'components/charts/waterfall-chart.js', style: 'components/charts/waterfall-chart.css', page: 'components/charts/waterfall-chart.json' },
   { tag: 'is-funnel-chart', title: 'Funnel Chart', category: 'data-viz', script: 'components/charts/funnel-chart.js', style: 'components/charts/funnel-chart.css', page: 'components/charts/funnel-chart.json' },
   { tag: 'is-class-diagram', title: 'Diagrama de clases', category: 'diagrams', script: 'components/diagrams/class-diagram.js', style: 'components/diagrams/class-diagram.css', page: 'components/diagrams/class-diagram.json' },
   { tag: 'is-state-diagram', title: 'Diagrama de estados', category: 'diagrams', script: 'components/diagrams/state-diagram.js', style: 'components/diagrams/state-diagram.css', page: 'components/diagrams/state-diagram.json' },
   { tag: 'is-er-diagram', title: 'Diagrama entidad-relación', category: 'diagrams', script: 'components/diagrams/er-diagram.js', style: 'components/diagrams/er-diagram.css', page: 'components/diagrams/er-diagram.json' },
+  { tag: 'is-er-editor', title: 'Editor entidad-relación', category: 'diagrams', script: 'components/diagrams/er-editor.js', page: 'components/diagrams/er-editor.json' },
+  { tag: 'is-diagram-view-app', title: 'Visor de diagramas (API)', category: 'diagrams', script: 'components/diagrams/diagram-studio.js', page: 'components/diagrams/diagram-view-app.json' },
+  { tag: 'is-diagram-edit-app', title: 'Editor de diagramas (API)', category: 'diagrams', script: 'components/diagrams/diagram-studio.js', page: 'components/diagrams/diagram-edit-app.json' },
   { tag: 'is-block-diagram', title: 'Diagrama de bloques', category: 'diagrams', script: 'components/diagrams/block-diagram.js', style: 'components/diagrams/block-diagram.css', page: 'components/diagrams/block-diagram.json' },
   { tag: 'is-component-diagram', title: 'Diagrama de componentes', category: 'diagrams', script: 'components/diagrams/component-diagram.js', style: 'components/diagrams/component-diagram.css', page: 'components/diagrams/component-diagram.json' },
   { tag: 'is-treemap', title: 'Treemap', category: 'data-viz', script: 'components/charts/treemap.js', style: 'components/charts/treemap.css', page: 'components/charts/treemap.json' },
@@ -222,8 +226,8 @@ const manifest: ComponentManifestItem[] = [
   { tag: 'is-window', title: 'Window', category: 'overlays', script: 'components/overlays/window.js', style: 'components/overlays/window.css', page: 'components/overlays/window.json' },
   // Preview/demo system: chrome de la galería expuesto por CDN (loader) para
   // que cualquier app iswc pueda montar previews JSON de sus propios componentes.
-  { tag: 'is-preview-component', title: 'Preview Component', category: 'preview', script: 'components/layout/preview-component.js', style: 'components/layout/preview-component.css' },
-  { tag: 'is-preview-controls', title: 'Preview Controls', category: 'preview', script: 'components/layout/preview-controls.js' },
+  { tag: 'is-preview-component', title: 'Preview Component', category: 'preview', script: 'components/layout/preview-component.js', style: 'components/layout/preview-component.css', page: 'components/layout/preview-component.json' },
+  { tag: 'is-preview-controls', title: 'Preview Controls', category: 'preview', script: 'components/layout/preview-controls.js', page: 'components/layout/preview-controls.json' },
 ];
 
 export default manifest;

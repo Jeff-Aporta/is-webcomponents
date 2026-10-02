@@ -363,8 +363,15 @@ class IsErEditor extends HTMLElement {
   connectedCallback() {
     this.#ensureDiagram();
     this.#installHotkeys();
-    if (!this.#state) this.#state = cloneState({ entities: [], relations: [] });
+    if (!this.#state) this.#state = this.#readJsonSlot() ?? cloneState({ entities: [], relations: [] });
     this.#render();
+  }
+
+  /** JSON declarativo del light DOM, el mismo contrato que el visor. */
+  #readJsonSlot(): ErEditorState | null {
+    const script = [...this.children].find((c) => c.tagName === 'SCRIPT' && /json/i.test((c as HTMLScriptElement).type || ''));
+    if (!script?.textContent?.trim()) return null;
+    try { return cloneState(JSON.parse(script.textContent)); } catch { return null; }
   }
   disconnectedCallback() {
     this.#uninstallHotkeys();

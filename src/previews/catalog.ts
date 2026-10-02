@@ -797,5 +797,33 @@ export default {
     "json": "../../dist/pages/ecosystem.json",
     "behavior": "../../dist/pages/ecosystem.min.js",
     "category": ""
+  },
+  "is-er-editor": {
+    "json": "../../dist/previews/diagrams/er-editor.json",
+    "category": "diagrams"
+  },
+  "is-diagram-view-app": {
+    "json": "../../dist/previews/diagrams/diagram-view-app.json",
+    "category": "diagrams"
+  },
+  "is-diagram-edit-app": {
+    "json": "../../dist/previews/diagrams/diagram-edit-app.json",
+    "category": "diagrams"
+  },
+  "is-demo": {
+    "json": "../../dist/previews/layout/demo.json",
+    "category": "layout"
+  },
+  "is-floating": {
+    "json": "../../dist/previews/helpers/floating.json",
+    "category": "helpers"
+  },
+  "is-preview-component": {
+    "json": "../../dist/previews/layout/preview-component.json",
+    "category": "preview"
+  },
+  "is-preview-controls": {
+    "json": "../../dist/previews/layout/preview-controls.json",
+    "category": "preview"
   }
 };

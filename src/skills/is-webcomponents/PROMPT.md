@@ -1,6 +1,6 @@
 # IS Web Components (Instrucciones para LLM)
 
-Utiliza **IS Web Components** exclusivamente mediante **CDN** (o copia local vía `/is-webcomponents:local`).
+Utiliza **IS Web Components** exclusivamente mediante **CDN** (o copia local vÃ­a `/is-webcomponents:local`).
 
 **Nunca** utilices:
 
@@ -13,10 +13,10 @@ Utiliza **IS Web Components** exclusivamente mediante **CDN** (o copia local vía
 - Webpack
 - Rollup
 - gestores de paquetes
-- instalaciones locales del kit vía registry
+- instalaciones locales del kit vÃ­a registry
 - copias parciales de componentes
 
-El objetivo es consumir la librería exactamente como se publica en
+El objetivo es consumir la librerÃ­a exactamente como se publica en
 `dist/cdn/`.
 
 ---
@@ -25,18 +25,18 @@ El objetivo es consumir la librería exactamente como se publica en
 
 - Reutiliza siempre componentes existentes con prefijo `is-*`.
 - No implementes componentes que ya existan.
-- No reinventes componentes, atributos, propiedades, métodos, eventos, slots, variables CSS ni Custom Properties.
-- Toda API utilizada debe existir en la documentación oficial.
-- Antes de escribir código, verifica si la librería ya ofrece un componente adecuado.
-- Si existen varios componentes similares, utiliza el más específico.
-- Si un componente depende de otros componentes, reutiliza la composición existente; no la reimplementes.
+- No reinventes componentes, atributos, propiedades, mÃ©todos, eventos, slots, variables CSS ni Custom Properties.
+- Toda API utilizada debe existir en la documentaciÃ³n oficial.
+- Antes de escribir cÃ³digo, verifica si la librerÃ­a ya ofrece un componente adecuado.
+- Si existen varios componentes similares, utiliza el mÃ¡s especÃ­fico.
+- Si un componente depende de otros componentes, reutiliza la composiciÃ³n existente; no la reimplementes.
 - Utiliza siempre el sistema de iconos propio mediante `<is-icon icon="prefix:name">`.
-- No utilices Iconify, FontAwesome, Material Icons ni otras librerías externas de iconos, salvo que el usuario lo solicite explícitamente.
+- No utilices Iconify, FontAwesome, Material Icons ni otras librerÃ­as externas de iconos, salvo que el usuario lo solicite explÃ­citamente.
 - Configura el tema mediante `data-theme`.
 - Configura la paleta mediante `data-palette`.
-- La configuración declarativa debe realizarse mediante atributos `data-*` cuando el componente lo soporte.
-- No mezcles mirrors CDN dentro de una misma página.
-- Mantén la accesibilidad y el comportamiento documentado por cada componente.
+- La configuraciÃ³n declarativa debe realizarse mediante atributos `data-*` cuando el componente lo soporte.
+- No mezcles mirrors CDN dentro de una misma pÃ¡gina.
+- MantÃ©n la accesibilidad y el comportamiento documentado por cada componente.
 
 ---
 
@@ -47,10 +47,10 @@ Cuando el usuario pida una de estas intenciones, sigue la skill de la herramient
 | Comando | Skill | Uso |
 | --- | --- | --- |
 | `/is-webcomponents:build` | [tools/build.md](https://github.com/Jeff-Aporta/is-webcomponents/blob/main/src/skills/is-webcomponents/tools/build.md) | Fundar o extender apps con `is-*` |
-| `/is-webcomponents:migrate` | [tools/migrate.md](https://github.com/Jeff-Aporta/is-webcomponents/blob/main/src/skills/is-webcomponents/tools/migrate.md) | Migrar un front (React/MUI/Svelte/…) a vanilla + `is-*` |
+| `/is-webcomponents:migrate` | [tools/migrate.md](https://github.com/Jeff-Aporta/is-webcomponents/blob/main/src/skills/is-webcomponents/tools/migrate.md) | Migrar un front (React/MUI/Svelte/â€¦) a vanilla + `is-*` |
 | `/is-webcomponents:local` | [tools/local.md](https://github.com/Jeff-Aporta/is-webcomponents/blob/main/src/skills/is-webcomponents/tools/local.md) | Vendorizar JS/CSS locales (preferido) y actualizar SHA |
 
-Instalación de skills (preferir repo GitHub):
+InstalaciÃ³n de skills (preferir repo GitHub):
 
 ```
 npx skills add Jeff-Aporta/is-webcomponents -s is-webcomponents
@@ -59,50 +59,50 @@ npx skills add Jeff-Aporta/is-webcomponents -s is-cdn-install
 
 ---
 
-# Flujo obligatorio antes de generar código
+# Flujo obligatorio antes de generar cÃ³digo
 
 Antes de utilizar cualquier componente debes seguir este flujo:
 
-1. Leer la documentación de instalación.
-2. Leer la guía general de IS Web Components.
-3. Consultar el índice global (`LLM.md`).
-4. Identificar la categoría adecuada.
-5. Abrir el `LLM.md` de esa categoría.
-6. Abrir la documentación del módulo correspondiente.
+1. Leer la documentaciÃ³n de instalaciÃ³n.
+2. Leer la guÃ­a general de IS Web Components.
+3. Consultar el Ã­ndice global (`LLM.md`).
+4. Identificar la categorÃ­a adecuada.
+5. Abrir el `LLM.md` de esa categorÃ­a.
+6. Abrir la documentaciÃ³n del mÃ³dulo correspondiente.
 7. Confirmar la API del componente.
-8. Solo entonces generar el código.
+8. Solo entonces generar el cÃ³digo.
 
-Nunca deduzcas la API únicamente por el nombre del componente.
+Nunca deduzcas la API Ãºnicamente por el nombre del componente.
 
-Si una propiedad, atributo, evento, método o slot no aparece documentado, asume que no existe.
+Si una propiedad, atributo, evento, mÃ©todo o slot no aparece documentado, asume que no existe.
 
 ---
 
-# Selección de componentes
+# SelecciÃ³n de componentes
 
-Antes de implementar cualquier solución:
+Antes de implementar cualquier soluciÃ³n:
 
 1. Busca un componente existente.
 2. Busca un helper reutilizable.
 3. Busca una utilidad compartida.
 4. Busca un componente similar.
-5. Solo si la documentación confirma que no existe una solución adecuada, implementa una nueva.
+5. Solo si la documentaciÃ³n confirma que no existe una soluciÃ³n adecuada, implementa una nueva.
 
-La librería contiene más de un centenar de componentes organizados por categorías.
+La librerÃ­a contiene mÃ¡s de un centenar de componentes organizados por categorÃ­as.
 
-Nunca asumas que un componente pertenece a una categoría únicamente por su nombre; consulta siempre el índice oficial.
+Nunca asumas que un componente pertenece a una categorÃ­a Ãºnicamente por su nombre; consulta siempre el Ã­ndice oficial.
 
 ---
 
-# Reutilización
+# ReutilizaciÃ³n
 
-Antes de escribir cualquier implementación verifica si ya existe:
+Antes de escribir cualquier implementaciÃ³n verifica si ya existe:
 
 - un componente
 - un helper
-- un módulo compartido
+- un mÃ³dulo compartido
 - una utilidad
-- un motor de gráficos
+- un motor de grÃ¡ficos
 - un helper para formularios
 - un helper para overlays
 - un helper de iconos
@@ -130,7 +130,7 @@ Sustituye `{{SHA}}` por el tip de `main` (referencia: `ca31ad04be5bba79c8ef4652b
 </script>
 ```
 
-Utiliza un único origen CDN durante toda la aplicación.
+Utiliza un Ãºnico origen CDN durante toda la aplicaciÃ³n.
 
 Si la app usa copia local, ver `/is-webcomponents:local` (local primero en el fallback).
 
@@ -170,10 +170,10 @@ for(const base of MIRRORS){
 </script>
 ```
 
-Los snippets CDN únicamente deben usar `loader.min.js` + `L.load(tags…)`.
+Los snippets CDN Ãºnicamente deben usar `loader.min.js` + `L.load(tagsâ€¦)`.
 No hay `all.min.js` ni `category.*.min.js` publicados.
 
-No cargues manualmente los CSS individuales de cada componente; estos se resuelven automáticamente mediante `import.meta.url`.
+No cargues manualmente los CSS individuales de cada componente; estos se resuelven automÃ¡ticamente mediante `import.meta.url`.
 
 ---
 
@@ -183,8 +183,8 @@ https://github.com/Jeff-Aporta/is-webcomponents
 
 El repositorio contiene:
 
-- código fuente
-- documentación
+- cÃ³digo fuente
+- documentaciÃ³n
 - inventario de componentes
 - manifiesto
 - previews
@@ -197,15 +197,15 @@ Cuando exista una discrepancia entre una respuesta del LLM y el repositorio, pre
 
 ---
 
-# Documentación (leer en este orden)
+# DocumentaciÃ³n (leer en este orden)
 
-Preferir enlaces **GitHub** (mejor instalación de skills). Raw como secundario (`text/plain`).
+Preferir enlaces **GitHub** (mejor instalaciÃ³n de skills). Raw como secundario (`text/plain`).
 
-## 1. Instalación CDN
+## 1. InstalaciÃ³n CDN
 
 https://github.com/Jeff-Aporta/is-webcomponents/blob/main/src/skills/is-cdn-install/SKILL.md
 
-## 2. Guía general
+## 2. GuÃ­a general
 
 https://github.com/Jeff-Aporta/is-webcomponents/blob/main/src/skills/is-webcomponents/SKILL.md
 
@@ -213,19 +213,19 @@ https://github.com/Jeff-Aporta/is-webcomponents/blob/main/src/skills/is-webcompo
 
 https://github.com/Jeff-Aporta/is-webcomponents/blob/main/src/skills/is-webcomponents/PROMPT.md
 
-## 4. Guía CDN publicada (jsDelivr)
+## 4. GuÃ­a CDN publicada (jsDelivr)
 
 https://cdn.jsdelivr.net/gh/Jeff-Aporta/is-webcomponents@main/dist/cdn/skills/is-cdn-install/SKILL.md
 
-## 5. Índice global
+## 5. Ã­ndice global
 
 https://raw.githubusercontent.com/Jeff-Aporta/is-webcomponents/main/specs/componentes.md
 
-## 6. LLM.md de la categoría correspondiente
+## 6. LLM.md de la categorÃ­a correspondiente
 
-Consultar el índice global para localizar la categoría correcta.
+Consultar el Ã­ndice global para localizar la categorÃ­a correcta.
 
-## 7. Documentación específica del componente
+## 7. DocumentaciÃ³n especÃ­fica del componente
 
 Leer siempre el archivo `.md` del componente antes de utilizarlo.
 
@@ -235,9 +235,9 @@ Leer siempre el archivo `.md` del componente antes de utilizarlo.
 
 ---
 
-# Qué hacer
+# QuÃ© hacer
 
-- Buscar un componente existente antes de escribir código.
+- Buscar un componente existente antes de escribir cÃ³digo.
 - Buscar helpers reutilizables.
 - Buscar utilidades compartidas.
 - Mantener compatibilidad con Shadow DOM.
@@ -246,17 +246,17 @@ Leer siempre el archivo `.md` del componente antes de utilizarlo.
 - Reutilizar componentes existentes.
 - Reutilizar motores internos.
 - Reutilizar helpers internos.
-- Mantener la estructura pública de cada componente.
+- Mantener la estructura pÃºblica de cada componente.
 - Utilizar `connectedCallback()` y `disconnectedCallback()` correctamente para listeners y observers.
 - Mantener separados los conceptos `color` y `variant`.
 - Escalar componentes mediante `font-size`; no implementar un atributo `size`.
-- Utilizar únicamente `<is-icon>` para iconografía.
-- Corregir la causa raíz de un problema en lugar de crear soluciones duplicadas.
+- Utilizar Ãºnicamente `<is-icon>` para iconografÃ­a.
+- Corregir la causa raÃ­z de un problema en lugar de crear soluciones duplicadas.
 - Si modificas un componente compartido, revisa primero sus consumidores.
 
 ---
 
-# Qué no hacer
+# QuÃ© no hacer
 
 Nunca:
 
@@ -264,18 +264,18 @@ Nunca:
 - inventar atributos;
 - inventar propiedades;
 - inventar eventos;
-- inventar métodos;
+- inventar mÃ©todos;
 - inventar slots;
 - inventar variables CSS;
 - inventar Custom Properties;
 - duplicar componentes existentes;
 - duplicar helpers;
-- duplicar lógica ya implementada;
+- duplicar lÃ³gica ya implementada;
 - duplicar iconos;
 - utilizar Iconify;
 - utilizar `<iconify-icon>`;
 - utilizar APIs externas de iconos;
-- asumir la ubicación de un componente;
+- asumir la ubicaciÃ³n de un componente;
 - asumir rutas CDN;
 - crear variantes no documentadas;
 - modificar el comportamiento documentado;
@@ -286,29 +286,29 @@ Nunca:
 
 ---
 
-# Principios de generación
+# Principios de generaciÃ³n
 
 Cuando el usuario solicite una interfaz:
 
 1. Identifica los componentes necesarios.
-2. Consulta su documentación.
-3. Reutiliza únicamente APIs documentadas.
-4. Genera código utilizando componentes `is-*`.
+2. Consulta su documentaciÃ³n.
+3. Reutiliza Ãºnicamente APIs documentadas.
+4. Genera cÃ³digo utilizando componentes `is-*`.
 5. No sustituyas componentes existentes por HTML nativo salvo que el usuario lo solicite.
-6. Si la documentación ofrece una solución, úsala.
-7. Si la documentación no documenta una API, no la inventes.
-8. Si existe una duda, indica explícitamente que la documentación no proporciona esa información en lugar de asumirla.
+6. Si la documentaciÃ³n ofrece una soluciÃ³n, Ãºsala.
+7. Si la documentaciÃ³n no documenta una API, no la inventes.
+8. Si existe una duda, indica explÃ­citamente que la documentaciÃ³n no proporciona esa informaciÃ³n en lugar de asumirla.
 
 ---
 
 # Regla de oro
 
-La documentación oficial es la única fuente de verdad.
+La documentaciÃ³n oficial es la Ãºnica fuente de verdad.
 
-Si la documentación contradice una inferencia, prevalece la documentación.
+Si la documentaciÃ³n contradice una inferencia, prevalece la documentaciÃ³n.
 
 Si una API no aparece documentada, no debe utilizarse.
 
 Si existe un componente que resuelve el problema, debe reutilizarse.
 
-Nunca generes una implementación alternativa sin haber confirmado previamente que la librería no ofrece una solución equivalente.
+Nunca generes una implementaciÃ³n alternativa sin haber confirmado previamente que la librerÃ­a no ofrece una soluciÃ³n equivalente.

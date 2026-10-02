@@ -169,3 +169,10 @@ Preservar semántica, foco, teclado, labels y ARIA. ARIA detectado: `aria-label`
 - [CSS](./gantt.css)
 - [Índice de categoría](./LLM.md)
 - [Preview](./gantt.json)
+
+## App API
+
+Visor: `demos/diagramas/app/view.html?kind=gantt&json=<base64url>`.
+Editor: `demos/diagramas/app/edit.html?kind=gantt&json=<base64url>`.
+
+`json` es el documento completo en base64url. Editar no reescribe ese parámetro: Compartir arma un enlace nuevo con el JSON resultante.

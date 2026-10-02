@@ -175,3 +175,10 @@ Ver el preview de la galería, que trae el payload completo con grupos y estilos
 - [Spec y layout](./swimlane-spec.js)
 - [Índice de categoría](./LLM.md)
 - [Preview](./swimlane-diagram.json)
+
+## App API
+
+Visor: `demos/diagramas/app/view.html?kind=swimlane&json=<base64url>`.
+Editor: `demos/diagramas/app/edit.html?kind=swimlane&json=<base64url>`.
+
+`json` es el documento completo en base64url. Editar no reescribe ese parámetro: Compartir arma un enlace nuevo con el JSON resultante.

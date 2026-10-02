@@ -83,6 +83,7 @@ const defineCss = async (cssFile) => {
 const GH_RAW = 'https://raw.githubusercontent.com/Jeff-Aporta/is-webcomponents/main';
 const GH_BLOB = 'https://github.com/Jeff-Aporta/is-webcomponents/blob/main';
 const CDN_SKILL = `${GH_RAW}/src/skills/is-cdn-install/SKILL.md`;
+const KIT_SKILL = `${GH_RAW}/src/skills/is-webcomponents/SKILL.md`;
 // Consolidación 2026-09-07: src/components/LLM.md y src/cdn/LLM.md eliminados.
 // El catálogo global vive en specs/componentes.md; el doc del loader en
 // src/cdn/loader.md (sin cambio).
@@ -94,22 +95,28 @@ const docsBanner = (lines) =>
   ['/*!', ' * IS Web Components - docs (LLM)', ...lines.map((l) => ` * ${l}`), ' */'].join('\n');
 
 const componentDocsBanner = (folder, tag) => {
+  const skillFile = join(compRoot, folder, `${tag}.md`);
+  const componentSkill = existsSync(skillFile)
+    ? `${GH_RAW}/src/components/${folder}/${tag}.md`
+    : `(sin ${tag}.md) → ${KIT_SKILL}`;
   const lines = [
-    `component: ${GH_RAW}/src/components/${folder}/${tag}.md`,
-    // Consolidación 2026-09-07: la "category" ya no es por-componente (las
-    // LLM.md per-carpeta se eliminaron). El catálogo consolidado está en
-    // specs/componentes.md.
+    `component-skill: ${componentSkill}`,
+    `kit-skill: ${KIT_SKILL}`,
+    `component: ${componentSkill}`,
     `category: ${CDN_COMP_INDEX}`,
     `kit: ${CDN_COMP_INDEX}`,
     `loader: ${CDN_LOADER_MD}`,
     `cdn-install: ${CDN_SKILL}`,
     `blob: ${GH_BLOB}/src/components/${folder}/${tag}.js`,
   ];
-  if (!existsSync(join(compRoot, folder, `${tag}.md`))) {
-    lines[0] = `component: (sin ${tag}.md) → ver specs/componentes.md`;
-  }
   return docsBanner(lines);
 };
+
+const kitDocsBanner = (extra = []) => docsBanner([
+  `kit-skill: ${KIT_SKILL}`,
+  `cdn-install: ${CDN_SKILL}`,
+  ...extra,
+]);
 
 const bundleCss = (entry, outfile) =>
   build({ entryPoints: [entry], outfile, minify: true, bundle: true });
@@ -244,7 +251,7 @@ for (const name of sharedImports) {
   const tmpScroll = join(dist, '_shared', '_tmp-scrollbars.css');
   await bundleCss(join(compRoot, '_shared', 'host-base.css'), tmpBase);
   await bundleCss(join(compRoot, '_shared', 'scrollbars.css'), tmpScroll);
-  await bundleJs(join(coreRoot, 'base-sheets.ts'), outBase, [], '', {
+  await bundleJs(join(coreRoot, 'base-sheets.ts'), outBase, [], kitDocsBanner(), {
     __IS_HOST_BASE_CSS__: JSON.stringify(await readFile(tmpBase, 'utf8')),
     __IS_SCROLLBARS_CSS__: JSON.stringify(await readFile(tmpScroll, 'utf8')),
   });
@@ -272,7 +279,9 @@ for (const raw of localPartials) {
     await mkdir(outCore, { recursive: true });
     for (const f of await readdir(coreRoot)) {
       if (!f.endsWith('.ts')) continue;
-      await bundleJs(join(coreRoot, f), join(outCore, f.replace(/\.ts$/, '.min.js')));
+      await bundleJs(join(coreRoot, f), join(outCore, f.replace(/\.ts$/, '.min.js')), [], kitDocsBanner([
+        `source: ${GH_BLOB}/src/core/${f}`,
+      ]));
       await copyFile(join(coreRoot, f), join(outCore, f));
     }
     // `adoptCss` resuelve `./host-base.css` y `./scrollbars.css` contra la URL
@@ -405,9 +414,8 @@ for (const [category, items] of byCategory) {
 const loaderSrc = join(root, 'src', 'cdn', 'loader.ts');
 const loaderOut = join(coreDist, 'loader.min.js');
 const loaderBanner = docsBanner([
+  `kit-skill: ${KIT_SKILL}`,
   `md: ${CDN_LOADER_MD}`,
-  // Consolidación 2026-09-07: dist/cdn/LLM.md y src/cdn/LLM.md eliminados.
-  // El banner del loader ahora apunta al catálogo global consolidado.
   `specs: ${CDN_COMP_INDEX}`,
   `cdn-copy: dist/cdn/core/loader.md`,
   `kit: ${CDN_COMP_INDEX}`,

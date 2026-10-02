@@ -202,3 +202,10 @@ usar `photo`, acompañarla siempre de `name` para que la tarjeta tenga texto.
 - [CSS](./org-chart.css)
 - [Índice de categoría](./LLM.md)
 - [Preview](./org-chart.json)
+
+## App API
+
+Visor: `demos/diagramas/app/view.html?kind=org-chart&json=<base64url>`.
+Editor: `demos/diagramas/app/edit.html?kind=org-chart&json=<base64url>`.
+
+`json` es el documento completo en base64url. Editar no reescribe ese parámetro: Compartir arma un enlace nuevo con el JSON resultante.

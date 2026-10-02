@@ -241,3 +241,10 @@ provided/required:
 - [Spec y layout](./component-spec.js)
 - [Índice de categoría](./LLM.md)
 - [Preview](./component-diagram.json)
+
+## App API
+
+Visor: `demos/diagramas/app/view.html?kind=component&json=<base64url>`.
+Editor: `demos/diagramas/app/edit.html?kind=component&json=<base64url>`.
+
+`json` es el documento completo en base64url. Editar no reescribe ese parámetro: Compartir arma un enlace nuevo con el JSON resultante.

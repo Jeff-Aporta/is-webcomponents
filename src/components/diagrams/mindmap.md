@@ -163,3 +163,10 @@ Preservar semántica, foco, teclado, labels y ARIA. ARIA detectado: `aria-label`
 - [CSS](./mindmap.css)
 - [Índice de categoría](./LLM.md)
 - [Preview](./mindmap.json)
+
+## App API
+
+Visor: `demos/diagramas/app/view.html?kind=mindmap&json=<base64url>`.
+Editor: `demos/diagramas/app/edit.html?kind=mindmap&json=<base64url>`.
+
+`json` es el documento completo en base64url. Editar no reescribe ese parámetro: Compartir arma un enlace nuevo con el JSON resultante.

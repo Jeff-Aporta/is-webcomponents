@@ -1,0 +1,21 @@
+{
+  "$schema": "is-preview/v1",
+  "tag": "is-preview-component",
+  "category": "preview",
+  "title": "<is-preview-component>",
+  "titleHtml": false,
+  "description": "Shell que monta una definición JSON de la galería. La propia galería es el ejemplo vivo.",
+  "sections": [
+    {
+      "id": "intro",
+      "title": "<is-preview-component>",
+      "lede": "Shell que monta una definición JSON de la galería. La propia galería es el ejemplo vivo.",
+      "blocks": [
+        {
+          "kind": "demo",
+          "html": "<p>La galería asigna la propiedad <code>preview</code> y este tag pinta el documento, el índice y los demos. No evalúa código de comportamiento.</p>"
+        }
+      ]
+    }
+  ]
+}

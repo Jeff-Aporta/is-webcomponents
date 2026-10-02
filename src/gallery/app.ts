@@ -177,6 +177,7 @@ const categoryMeta: Record<string, CategoryMeta> = {
   'data-viz': { id: 'data-viz', label: 'Gráficos' },
   diagrams: { id: 'diagrams', label: 'Diagramas' },
   overlays: { id: 'overlays', label: 'Overlays' },
+  preview: { id: 'preview', label: 'Preview' },
   helpers: { id: 'helpers', label: 'Utilerías' },
   isp: { id: 'isp', label: 'ISP-SvelteComponents' },
 };

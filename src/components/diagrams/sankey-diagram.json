@@ -27,6 +27,17 @@
           ]
         }
       ]
+    },
+    {
+      "id": "app-api",
+      "title": "App API",
+      "lede": "El mismo documento se abre en el visor o en el editor. El parámetro json no se reescribe al modificar el diagrama.",
+      "blocks": [
+        {
+          "kind": "html",
+          "html": "<p><a href=\"demos/diagramas/app/view.html?kind=sankey\" target=\"_blank\" rel=\"noopener\">Abrir visor</a> · <a href=\"demos/diagramas/app/edit.html?kind=sankey\" target=\"_blank\" rel=\"noopener\">Abrir editor</a></p>"
+        }
+      ]
     }
   ]
 }

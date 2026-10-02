@@ -1,0 +1,21 @@
+{
+  "$schema": "is-preview/v1",
+  "tag": "is-floating",
+  "category": "helpers",
+  "title": "<is-floating> (interno)",
+  "titleHtml": false,
+  "description": "Building block interno. En producto usa is-popover o is-tooltip.",
+  "sections": [
+    {
+      "id": "intro",
+      "title": "<is-floating> (interno)",
+      "lede": "Building block interno. En producto usa is-popover o is-tooltip.",
+      "blocks": [
+        {
+          "kind": "demo",
+          "html": "<is-floating placement=\"bottom\" active><button slot=\"anchor\" type=\"button\">Ancla</button><div>Contenido anclado. No usar este tag en apps.</div></is-floating>"
+        }
+      ]
+    }
+  ]
+}

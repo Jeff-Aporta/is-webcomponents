@@ -174,3 +174,10 @@ Ver el preview de la galería, que trae el payload completo con grupos y estilos
 - [Spec y layout](./quadrant-spec.js)
 - [Índice de categoría](./LLM.md)
 - [Preview](./quadrant-chart.json)
+
+## App API
+
+Visor: `demos/diagramas/app/view.html?kind=quadrant&json=<base64url>`.
+Editor: `demos/diagramas/app/edit.html?kind=quadrant&json=<base64url>`.
+
+`json` es el documento completo en base64url. Editar no reescribe ese parámetro: Compartir arma un enlace nuevo con el JSON resultante.

@@ -164,3 +164,10 @@ Preservar semántica, foco, teclado, labels y ARIA. ARIA detectado: `aria-label`
 - [CSS](./timeline.css)
 - [Índice de categoría](./LLM.md)
 - [Preview](./timeline.json)
+
+## App API
+
+Visor: `demos/diagramas/app/view.html?kind=timeline&json=<base64url>`.
+Editor: `demos/diagramas/app/edit.html?kind=timeline&json=<base64url>`.
+
+`json` es el documento completo en base64url. Editar no reescribe ese parámetro: Compartir arma un enlace nuevo con el JSON resultante.

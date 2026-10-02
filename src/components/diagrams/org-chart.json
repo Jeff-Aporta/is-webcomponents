@@ -69,6 +69,17 @@
           "code": "// Datos (script hijo o propiedad `payload`)\n// [\n//   { id, title, name, parent, photo?, detail?|tooltip? },\n//   ...\n// ]\n\nconst org = document.querySelector('is-org-chart');\norg.collapse(id); // o .expand(id) / .toggle(id)\norg.payload = [...]; // alternativa al <script type=\"application/json\">\n\norg.addEventListener('is-select', e => console.log(e.detail.id, e.detail.node));\norg.addEventListener('is-toggle', e => console.log('toggle', e.detail.id, 'collapsed=', e.detail.collapsed));\norg.addEventListener('is-open-viewer', e => console.log('abrir visor', e.detail.payload));\n\n// Atributos\n// direction       down (default) | up | right\n// node-width      default 200\n// node-height     default 78\n// gap             default 28\n// open-on-click   clic en el fondo abre <is-diagram-lightbox kind=\"org-chart\">\n// detail / tooltip (por nodo)   texto que aparece al pasar el cursor sobre la tarjeta"
         }
       ]
+    },
+    {
+      "id": "app-api",
+      "title": "App API",
+      "lede": "El mismo documento se abre en el visor o en el editor. El parámetro json no se reescribe al modificar el diagrama.",
+      "blocks": [
+        {
+          "kind": "html",
+          "html": "<p><a href=\"demos/diagramas/app/view.html?kind=org-chart\" target=\"_blank\" rel=\"noopener\">Abrir visor</a> · <a href=\"demos/diagramas/app/edit.html?kind=org-chart\" target=\"_blank\" rel=\"noopener\">Abrir editor</a></p>"
+        }
+      ]
     }
   ]
 }

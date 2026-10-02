@@ -1,0 +1,21 @@
+{
+  "$schema": "is-preview/v1",
+  "tag": "is-demo",
+  "category": "layout",
+  "title": "<is-demo>",
+  "titleHtml": false,
+  "description": "Caja de los ejemplos de la galería.",
+  "sections": [
+    {
+      "id": "intro",
+      "title": "<is-demo>",
+      "lede": "Caja de los ejemplos de la galería.",
+      "blocks": [
+        {
+          "kind": "demo",
+          "html": "<is-demo heading=\"Ejemplo\"><p>El contenido del ejemplo va en light DOM.</p></is-demo>"
+        }
+      ]
+    }
+  ]
+}
