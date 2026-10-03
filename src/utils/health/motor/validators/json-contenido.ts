@@ -20,9 +20,7 @@
  */
 
 import type { Hallazgo } from '../types.js';
-
-/** Forma mínima del JSON que necesitamos. */
-type Def = { tag: string; sections?: Array<{ blocks?: any[] }> };
+import { DefSchema, BloqueSchema, type Def, type Bloque } from "./json-contenido.schema.js";
 
 /** Opciones del validador de contenido. */
 export interface OpcionesContenido {
@@ -31,9 +29,6 @@ export interface OpcionesContenido {
    *  los tags dinámicamente. */
   esModulo?: boolean;
 }
-
-/** Bloque normalizado. */
-type Bloque = Record<string, any>;
 
 /**
  * Detecta si un bloque `demo` contiene un <script type="application/json">
