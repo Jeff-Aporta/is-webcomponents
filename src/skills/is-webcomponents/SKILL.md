@@ -34,6 +34,24 @@ Comandos tipo slash, uno por archivo en [`tools/`](tools/):
 | [`/is-webcomponents:local`](tools/local.md) | Vendorizar el kit y bootear local-first, con CDN como fallback. |
 | [`/is-webcomponents:runtime`](tools/runtime.md) | APIs **sin** tag: loader, IswcUi, md-lite/hydrate/fences, response-cache, sync-pins. |
 
+## Cómo documentar un componente
+
+Cada guía de módulo (`src/components/<carpeta>/<modulo>.md`) sigue la
+misma plantilla para que el catálogo y los agentes la lean igual. La
+skill [`../document-component/SKILL.md`](../document-component/SKILL.md)
+detalla la estructura obligatoria (anatomía, atributos observados,
+props, custom states, eventos, slots, CSS parts, ejemplos), las
+convenciones de tono, el formato de tablas y los enlaces cruzados que
+cada ficha debe llevar.
+
+| Recurso | Ruta |
+| --- | --- |
+| Skill | [`../document-component/SKILL.md`](../document-component/SKILL.md) |
+| Anatomía y frontmatter | [`../document-component/references/anatomy-section.md`](../document-component/references/anatomy-section.md) |
+| Custom states | [`../document-component/references/custom-states.md`](../document-component/references/custom-states.md) |
+| Bloques de código | [`../document-component/references/code-blocks.md`](../document-component/references/code-blocks.md) |
+| Estilo visual | [`../document-component/references/visual-style.md`](../document-component/references/visual-style.md) |
+
 ## Enlaces (GitHub primero, raw como secundario)
 
 Los agentes instalan y siguen mejor skills desde URLs de **repo de GitHub**.
