@@ -5,7 +5,9 @@
     "esbuild": "npm:esbuild@^0.25.0",
     "playwright": "npm:playwright@^1.62.1",
     "@browserbasehq/stagehand": "npm:@browserbasehq/stagehand@^4.0.2",
-    "typescript": "npm:typescript@^5.9.0"
+    "typescript": "npm:typescript@^5.9.0",
+    "zod": "npm:zod@^4.4.3",
+    "zod/mini": "npm:zod@^4.4.3/mini"
   },
   "tasks": {
     "build": "deno run -A --no-check scripts/build.mjs",
@@ -13,7 +15,7 @@
     "dev:demos": "deno run -A --no-check scripts/serve-demos.mjs",
     "icons:download": "deno run -A --no-check scripts/download-icons.ts",
     "typecheck": "deno run -A --no-check npm:typescript@5.9.3/lib/tsc.js -p tsconfig.json",
-    "test": "deno test -A --no-check src/utils/health/meta/ src/utils/health/diagrams/ src/utils/health/audit/",
+    "test": "deno test -A --no-check src/utils/health/meta/ src/utils/health/diagrams/ src/utils/health/audit/ src/utils/testing/domain/load-plan.test.ts",
     "test:e2e": "deno run -A --no-check src/utils/testing/e2e/run.ts",
     "test:demos": "deno run -A --no-check demos/diagramas/ER/_testing/run.mjs",
     "audit": "deno run -A --no-check src/utils/health/motor/cli.ts --solo-json",
