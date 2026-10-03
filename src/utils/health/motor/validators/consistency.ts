@@ -25,11 +25,7 @@
 import { readFileSync, existsSync } from 'node:fs';
 import { basename } from 'node:path';
 import type { Hallazgo } from '../types.js';
-
-type Def = {
-  tag: string;
-  sections?: Array<{ blocks?: any[] }>;
-};
+import { DefSchema, type Def } from "./consistency.schema.js";
 
 /**
  * Lee el módulo del componente y devuelve un mapa de metadata útil:
