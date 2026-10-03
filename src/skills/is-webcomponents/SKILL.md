@@ -236,6 +236,26 @@ Detalle operativo: [`tools/runtime.md`](tools/runtime.md).
 
 <!-- apis:fin -->
 
+## Cómo construir un componente
+
+Esta skill cubre cómo **consumir** el kit desde apps externas. Si lo que
+necesitas es **crear o refactorizar un componente** del propio kit
+(añadir un `<iswc-foo>` nuevo, o revisar uno existente para que cumpla
+el contrato), sigue la skill paralela:
+
+| Skill | Cuándo |
+| --- | --- |
+| [`build-component/SKILL.md`](../build-component/SKILL.md) | Anatomía obligatoria del `.md`, custom states (`StateMachine`), CSS parts y slots, atributos observados vs propiedades, tokens `--iswc-*`, accesibilidad, tests con `node:test` + `assert/strict`, demo en `demos/<cat>/<comp>/<comp>.html`. |
+
+Sub-guías de la skill:
+
+- [`references/lifecycle.md`](../build-component/references/lifecycle.md) — Hooks de `ElementBase`, shadow, upgrade de propiedades, form-associated, cleanup.
+- [`references/states.md`](../build-component/references/states.md) — Custom states, `setCustomState`, fallback `data-state-*`.
+- [`references/parts-slots.md`](../build-component/references/parts-slots.md) — `part="..."`, slots semánticos, `:slotted(...)`.
+- [`references/props-events.md`](../build-component/references/props-events.md) — Atributos observados, propiedades, eventos `iswc-*` con `composed: true`.
+- [`references/css-tokens.md`](../build-component/references/css-tokens.md) — Tokens `--iswc-*`, temas, paletas, `static styleAttrs`.
+- [`references/accessibility.md`](../build-component/references/accessibility.md) — Semántica, foco, teclado, ARIA, focus management, modales.
+
 ## Catálogo de componentes
 
 Índice para agentes. Cada fila es un tag que ya existe: abre la guía y reutilízalo. No reimplementes la fila. Los módulos sin tag están arriba en **Módulos API**.
