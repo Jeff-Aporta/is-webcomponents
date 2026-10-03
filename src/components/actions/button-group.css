@@ -22,14 +22,14 @@
   border-radius: var(--iswc-button-group-radius);
 
   /* El foco y la selección se dibujan por encima de los bordes vecinos */
-  ::slotted(:is(:focus, :focus-within, [selected], [aria-checked='true'], [checked])) {
+  & ::slotted(:is(:focus, :focus-within, [selected], [aria-checked='true'], [checked])) {
     z-index: 2 !important;
   }
   @media (hover: hover) {
-    ::slotted(:hover) { z-index: 1; }
+    & ::slotted(:hover) { z-index: 1; }
   }
   @media (prefers-reduced-motion: reduce) {
-    ::slotted(*) { transition: none; }
+    & ::slotted(*) { transition: none; }
   }
 }
 

@@ -4,42 +4,43 @@
   box-sizing: border-box;
   color: inherit;
   font-family: var(--iswc-sans, system-ui, sans-serif);
-}
-.root { display: flex; flex-direction: column; gap: 0.85em; }
-.head { display: flex; flex-direction: column; gap: 0.25em; }
-.title {
-  margin: 0;
-  font-size: 1.55em;
-  font-weight: 700;
-  letter-spacing: -0.02em;
-}
-.lede {
-  margin: 0;
-  font-size: 0.95em;
-  color: var(--iswc-text-soft, color-mix(in srgb, currentColor 70%, transparent));
-}
-.body {
-  display: grid;
-  gap: 1em;
-  align-items: stretch;
-}
-:host([layout="split"]) .body {
-  grid-template-columns: minmax(0, 1.4fr) minmax(16em, 0.9fr);
-}
-:host([layout="panel"]) .stage-wrap { display: none; }
-:host([layout="panel"]) .body { grid-template-columns: 1fr; }
-.stage-wrap {
-  border: 0.0625em solid var(--iswc-border, color-mix(in srgb, currentColor 16%, transparent));
-  border-radius: var(--iswc-radius, 0.75em);
-  background: var(--iswc-bg-elev, color-mix(in srgb, currentColor 4%, transparent));
-  min-block-size: 12em;
-  display: grid;
-  place-items: center;
-  padding: 1.5em;
-  box-sizing: border-box;
-}
-.stage { display: grid; place-items: center; }
-.config { min-width: 0; }
-@media (max-width: 52em) {
-  :host([layout="split"]) .body { grid-template-columns: 1fr; }
+
+  .root { display: flex; flex-direction: column; gap: 0.85em; }
+  .head { display: flex; flex-direction: column; gap: 0.25em; }
+  .title {
+    margin: 0;
+    font-size: 1.55em;
+    font-weight: 700;
+    letter-spacing: -0.02em;
+  }
+  .lede {
+    margin: 0;
+    font-size: 0.95em;
+    color: var(--iswc-text-soft, color-mix(in srgb, currentColor 70%, transparent));
+  }
+  .body {
+    display: grid;
+    gap: 1em;
+    align-items: stretch;
+  }
+  &[layout="split"] .body {
+    grid-template-columns: minmax(0, 1.4fr) minmax(16em, 0.9fr);
+  }
+  &[layout="panel"] .stage-wrap { display: none; }
+  &[layout="panel"] .body { grid-template-columns: 1fr; }
+  .stage-wrap {
+    border: 0.0625em solid var(--iswc-border, color-mix(in srgb, currentColor 16%, transparent));
+    border-radius: var(--iswc-radius, 0.75em);
+    background: var(--iswc-bg-elev, color-mix(in srgb, currentColor 4%, transparent));
+    min-block-size: 12em;
+    display: grid;
+    place-items: center;
+    padding: 1.5em;
+    box-sizing: border-box;
+  }
+  .stage { display: grid; place-items: center; }
+  .config { min-width: 0; }
+  @media (max-width: 52em) {
+    &[layout="split"] .body { grid-template-columns: 1fr; }
+  }
 }
