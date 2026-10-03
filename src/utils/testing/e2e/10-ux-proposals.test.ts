@@ -3651,7 +3651,7 @@ test('g07 cdn-snippet: aria-label y aria-labelledby intactos en secciones princi
       const eye = root.querySelector<HTMLElement>('[data-ver-md]');
       const mdEditor = root.querySelector<HTMLElement>('iswc-md-editor');
       return {
-        ok: consumo?.getAttribute('aria-label') === 'Consumo por CDN'
+        ok: consumo?.getAttribute('aria-label') === 'snippet'
           && agents?.getAttribute('aria-label') === 'Skill'
           && copyLoaderBtn?.getAttribute('aria-label')?.startsWith('Copiar') === true
           && !!skills

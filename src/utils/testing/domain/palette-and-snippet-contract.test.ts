@@ -135,8 +135,8 @@ check(
   'demo-code.js: fallback de paleta en snippet = contapyme',
 );
 check(
-  /buildDemoSnippetStyles/.test(demoCode),
-  'demo-code.js: debe inyectar CSS de layout en snippets pegables',
+  !/buildDemoSnippetStyles/.test(demoCode),
+  'demo-code.js: NO debe inyectar CSS de layout en snippets pegables (Phase E: minimal)',
 );
 
 // ─── report ─────────────────────────────────────────────────────────────────

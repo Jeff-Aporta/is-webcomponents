@@ -65,9 +65,18 @@ test('demo-snippet-styles incluye styles del preview cuando aplica', async () =>
   assert.match(css, /\.panel-demo--alt/);
 });
 
-test('demo-code inyecta bloque style en el snippet', async () => {
-  const src = await readFile(join(raiz, 'scripts/demo-code.js'), 'utf8');
-  assert.match(src, /buildDemoSnippetStyles/);
-  assert.match(src, /<style>/);
-  assert.match(src, /preview\?\.definition\?\.styles/);
+test('demo-code NO inyecta bloque style en el snippet (Phase E: minimal)', async () => {
+  // Phase E: el snippet debe ser minimalista, sin bloques <style> con utility
+  // classes. El markup se pega con los estilos por default de los componentes.
+  // Strip comentarios JSDoc antes de mirar — el comentario documenta el
+  // contrato usando la cadena `<style>`.
+  const raw = await readFile(join(raiz, 'scripts/demo-code.js'), 'utf8');
+  const src = raw
+    .replace(/\/\*[\s\S]*?\*\//g, '')
+    .replace(/^\s*\/\/.*$/gm, '');
+  assert.doesNotMatch(src, /buildDemoSnippetStyles/);
+  assert.doesNotMatch(src, /<style>/);
+  assert.doesNotMatch(src, /preview\?\.definition\?\.styles/);
+  // El título del popover debe decir "snippet" (no "loader.min.js")
+  assert.match(raw, /demo-code-pop__hint">snippet</);
 });

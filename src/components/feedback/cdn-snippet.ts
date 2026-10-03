@@ -15,7 +15,7 @@ import '../actions/button.js';
 import '../code/code.js';
 
 /**
- * <iswc-cdn-snippet> — panel CDN copy-paste vía loader.min.js (sin npm/npx).
+ * <iswc-cdn-snippet> — panel copy-paste del snippet mínimo de uso.
  *
  * Un solo bloque:
  *   <script type="module" src="…/loader.min.js"></script>
@@ -33,15 +33,14 @@ import '../code/code.js';
 (() => {
   const TEMPLATE = document.createElement('template');
   TEMPLATE.innerHTML = /* html */ `
-    <section class="cdn" aria-label="Consumo por CDN">
+    <section class="cdn" aria-label="snippet">
       <header class="cdn__head">
-        <h3 class="cdn__title">Consumo por CDN</h3>
+        <h3 class="cdn__title">snippet</h3>
         <p class="cdn__hint">
-          Estrategia única: <code>loader.min.js</code>. Pegá el bloque en el
-          <code>&lt;head&gt;</code> (o al final del <code>&lt;body&gt;</code>).
-          Primero el loader del kit; si hay deps (p. ej. <code>patyLoader</code>),
-          van en el mismo snippet justo después; luego el boot
-          (<code>loadCSS*</code> + <code>load(tag)</code>).
+          Pegá el bloque en el <code>&lt;head&gt;</code> (o al final del
+          <code>&lt;body&gt;</code>). Primero el loader del kit; si hay deps
+          (p. ej. <code>patyLoader</code>), van en el mismo snippet justo
+          después; luego el boot (<code>loadCSS*</code> + <code>load(tag)</code>).
         </p>
       </header>
 
