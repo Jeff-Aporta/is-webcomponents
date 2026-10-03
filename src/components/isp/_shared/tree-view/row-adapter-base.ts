@@ -6,6 +6,7 @@ import type {
   TNode,
   TreeActionEntry,
 } from "./_types.js";
+import { TRAContextSchema, type TRAContext } from "./row-adapter-base.schema.js";
 
 /**
  * Subset de la API del TreeAdapter (TARowBase + mixins) que TRABase consume.
@@ -68,7 +69,6 @@ interface TreeAdapterLike {
 }
 
 /** Bridge que `paintRow` pasa a `TreeRowAdapter` (alias local tipado). */
-type TRAContext = RowAdapterBridge & { forceRefresh?: () => void };
 
 export class TRABase {
   context!: Record<string, unknown>;
