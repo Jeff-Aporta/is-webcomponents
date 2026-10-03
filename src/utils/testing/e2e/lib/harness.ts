@@ -19,6 +19,7 @@ import type { EstadoE2E } from './e2e-config.ts';
 import type {
   CtxE2E, RegistroConsola, RastroCodeMirror, EditorIsCode,
 } from './tipos.d.ts';
+import { OpcionesEsperaSchema, type OpcionesEspera } from './harness.schema.ts';
 
 export { ENV, e2eDir, faltanRequisitos, titulo, marcar, tituloDe, lineaDe, EMOJIS };
 export type { Page, Locator, EstadoE2E };
@@ -150,8 +151,6 @@ export function urlDeTag(tag: string | null): string {
 export async function esperarMs(ms: number): Promise<void> {
   await new Promise((r) => setTimeout(r, ms));
 }
-
-type OpcionesEspera = { ms?: number };
 
 /** Espera a que un selector exista y sea visible. Devuelve false al agotar. */
 export async function esperarVisible(
