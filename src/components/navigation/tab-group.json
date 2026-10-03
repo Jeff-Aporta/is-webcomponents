@@ -2,8 +2,8 @@
   "$schema": "iswc-preview/v1",
   "tag": "iswc-tab-group",
   "category": "navigation",
-  "title": "<iswc-tab-group>",
-  "titleHtml": true,
+  "title": "&lt;iswc-tab-group&gt;",
+  "titleHtml": false,
   "description": "Documentación y demos de iswc-tab-group / iswc-tab / iswc-tab-panel de InSoft.",
   "storageKey": "docs-iswc-tab-group",
   "sections": [
@@ -36,6 +36,7 @@
               "prop": "attr:placement",
               "label": "placement",
               "options": [
+                "top",
                 "bottom",
                 "start",
                 "end"

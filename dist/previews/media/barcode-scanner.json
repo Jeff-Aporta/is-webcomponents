@@ -2,8 +2,8 @@
   "$schema": "iswc-preview/v1",
   "tag": "iswc-barcode-scanner",
   "category": "media",
-  "title": "<iswc-barcode-scanner>",
-  "titleHtml": true,
+  "title": "&lt;iswc-barcode-scanner&gt;",
+  "titleHtml": false,
   "description": "Decodifica QR/EAN con `BarcodeDetector` sobre la cámara. No genera códigos: eso es `iswc-barcode` / `iswc-qrcode`.",
   "storageKey": "docs-iswc-barcode-scanner",
   "sections": [

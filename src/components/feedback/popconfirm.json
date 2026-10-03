@@ -2,8 +2,8 @@
   "$schema": "iswc-preview/v1",
   "tag": "iswc-popconfirm",
   "category": "feedback",
-  "title": "<iswc-popconfirm>",
-  "titleHtml": true,
+  "title": "&lt;iswc-popconfirm&gt;",
+  "titleHtml": false,
   "description": "Documentación y demos de iswc-popconfirm de InSoft.",
   "storageKey": "docs-iswc-popconfirm",
   "sections": [
@@ -21,14 +21,14 @@
               "prop": "attr:placement",
               "label": "placement",
               "options": [
-                "bottom-end",
                 "top",
+                "bottom",
+                "start",
+                "end",
                 "top-start",
                 "top-end",
-                "bottom",
                 "bottom-start",
-                "start",
-                "end"
+                "bottom-end"
               ]
             },
             {

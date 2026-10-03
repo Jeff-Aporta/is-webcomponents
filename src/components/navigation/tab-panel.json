@@ -2,8 +2,8 @@
   "$schema": "iswc-preview/v1",
   "tag": "iswc-tab-panel",
   "category": "navigation",
-  "title": "<iswc-tab-panel>",
-  "titleHtml": true,
+  "title": "&lt;iswc-tab-panel&gt;",
+  "titleHtml": false,
   "description": "Documentación y demos de iswc-tab-panel de InSoft.",
   "storageKey": "docs-iswc-tab-panel",
   "sections": [

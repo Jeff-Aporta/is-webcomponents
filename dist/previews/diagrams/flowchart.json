@@ -2,8 +2,8 @@
   "$schema": "iswc-preview/v1",
   "tag": "iswc-flowchart",
   "category": "diagrams",
-  "title": "<iswc-flowchart>",
-  "titleHtml": true,
+  "title": "&lt;iswc-flowchart&gt;",
+  "titleHtml": false,
   "storageKey": "docs-iswc-flowchart",
   "sections": [
     {

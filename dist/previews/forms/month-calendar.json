@@ -2,8 +2,8 @@
   "$schema": "iswc-preview/v1",
   "tag": "iswc-month-calendar",
   "category": "forms",
-  "title": "<iswc-month-calendar>",
-  "titleHtml": true,
+  "title": "&lt;iswc-month-calendar&gt;",
+  "titleHtml": false,
   "description": "Documentación y demos de iswc-month-calendar de InSoft.",
   "storageKey": "docs-iswc-month-calendar",
   "sections": [

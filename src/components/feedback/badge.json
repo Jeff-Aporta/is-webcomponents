@@ -2,8 +2,8 @@
   "$schema": "iswc-preview/v1",
   "tag": "iswc-badge",
   "category": "feedback",
-  "title": "<iswc-badge>",
-  "titleHtml": true,
+  "title": "&lt;iswc-badge&gt;",
+  "titleHtml": false,
   "storageKey": "docs-iswc-badge",
   "sections": [
     {
@@ -16,10 +16,44 @@
           "html": "<div class=\"demo-row\">\r\n            <iswc-badge id=\"badge-play\">Nuevo</iswc-badge>\r\n            <iswc-badge color=\"success\">Activo</iswc-badge>\r\n            <iswc-badge color=\"warning\" attention=\"pulse\">Pendiente</iswc-badge>\r\n          </div>",
           "target": "#badge-play",
           "controls": [
-            { "control": "select", "prop": "attr:color", "label": "Color", "options": ["brand", "success", "warning", "danger", "neutral"] },
-            { "control": "select", "prop": "attr:variant", "label": "Variante", "options": ["accent", "filled", "outlined", "filled-outlined"] },
-            { "control": "select", "prop": "attr:attention", "label": "Atención", "options": ["none", "pulse", "bounce"] },
-            { "control": "boolean", "prop": "attr:pill", "label": "Píldora" }
+            {
+              "control": "select",
+              "prop": "attr:color",
+              "label": "Color",
+              "options": [
+                "brand",
+                "neutral",
+                "success",
+                "warning",
+                "danger"
+              ]
+            },
+            {
+              "control": "select",
+              "prop": "attr:variant",
+              "label": "Variante",
+              "options": [
+                "accent",
+                "filled",
+                "outlined",
+                "filled-outlined"
+              ]
+            },
+            {
+              "control": "select",
+              "prop": "attr:attention",
+              "label": "Atención",
+              "options": [
+                "none",
+                "pulse",
+                "bounce"
+              ]
+            },
+            {
+              "control": "boolean",
+              "prop": "attr:pill",
+              "label": "Píldora"
+            }
           ]
         }
       ]

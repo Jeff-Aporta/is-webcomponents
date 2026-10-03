@@ -2,8 +2,8 @@
   "$schema": "iswc-preview/v1",
   "tag": "iswc-mindmap",
   "category": "diagrams",
-  "title": "<iswc-mindmap>",
-  "titleHtml": true,
+  "title": "&lt;iswc-mindmap&gt;",
+  "titleHtml": false,
   "storageKey": "docs-iswc-mindmap",
   "sections": [
     {

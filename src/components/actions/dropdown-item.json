@@ -2,8 +2,8 @@
   "$schema": "iswc-preview/v1",
   "tag": "iswc-dropdown-item",
   "category": "actions",
-  "title": "<iswc-dropdown-item>",
-  "titleHtml": true,
+  "title": "&lt;iswc-dropdown-item&gt;",
+  "titleHtml": false,
   "description": "Documentación y demos de iswc-dropdown-item de InSoft.",
   "storageKey": "docs-iswc-dropdown-item",
   "sections": [

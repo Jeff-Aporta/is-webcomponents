@@ -2,8 +2,8 @@
   "$schema": "iswc-preview/v1",
   "tag": "iswc-date-range-input",
   "category": "forms",
-  "title": "<iswc-date-range-input>",
-  "titleHtml": true,
+  "title": "&lt;iswc-date-range-input&gt;",
+  "titleHtml": false,
   "description": "Documentación y demos de iswc-date-range-input de InSoft.",
   "storageKey": "docs-iswc-date-range-input",
   "sections": [

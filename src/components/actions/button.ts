@@ -4,6 +4,12 @@ import { ElementBase } from '../../core/element-base.js';
 import { applyToneRamp, isCssColorValue, syncPresentStyleAttrs } from '../../core/attrs.js';
 
 import { setCustomState } from '../_shared/form-associated.js';
+import {
+  BUTTON_SHAPE,
+  DEFAULT_BUTTON_SHAPE,
+  normalizeButtonShape,
+} from '../_shared/button-shape.js';
+import { DEFAULT_INTENT, ensureDefaultColor } from '../_shared/intent.js';
 
 /**
  * <iswc-button> — Web Component (vanilla).
@@ -15,9 +21,10 @@ import { setCustomState } from '../_shared/form-associated.js';
  * Atributos
  *  color      brand | neutral | success | warning | danger | info | error   (default: brand)
  *  variant   filled | outlined | plain | ghost | soft | text  (default: filled)
- *  shape        round | rect | pill                          (default: round)
- *                             `round` = radio del tema, `rect` = esquinas vivas,
- *                             `pill` = cápsula (equivalente al booleano `pill`).
+ *  shape        none | round | square | rect | pill | hexagon | arrow-left | arrow-right  (default: round)
+ *                             `none` = sin conversión de forma; `round` = radio tema;
+ *                             `square`/`rect` = esquinas vivas; `pill` = cápsula;
+ *                             `hexagon`/`arrow-*` = corner-shape CSS.
  *  hue          number (0-360)  color propio para el highlight cuando está
  *                             [selected] dentro de <iswc-button-group>. Si no
  *                             se define, el grupo usa su --iswc-accent.
@@ -109,7 +116,11 @@ import { setCustomState } from '../_shared/form-associated.js';
 
   // --- 2. Custom element ----------------------------------------------
 
-  const VALID_SHAPE = ["round", "rect", "pill"];
+  // Literal para audit-preview-controls; fuente canónica = BUTTON_SHAPE.
+  const VALID_SHAPE = [
+    "none", "round", "square", "rect", "pill", "hexagon", "arrow-left", "arrow-right",
+  ];
+  void BUTTON_SHAPE;
 
   const OBSERVED = [
     "color", "variant", "shape", "hue",
@@ -207,7 +218,7 @@ import { setCustomState } from '../_shared/form-associated.js';
       // El upgrade de propiedades (el.variant = 'x' antes de connect) ya lo
       // hace ElementBase.connectedCallback() vía upgradeProperties(); no hay
       // que repetirlo aquí.
-      if (!this.hasAttribute('color')) this.setAttribute('color', 'brand');
+      ensureDefaultColor(this, DEFAULT_INTENT);
       this.#syncToneColor();
       this.#syncTag();       // <button> o <a> según href
       this.#syncAttrs();     // propaga atributos al inner
@@ -234,7 +245,9 @@ import { setCustomState } from '../_shared/form-associated.js';
         this.#syncToneColor();
       } else if (name === "shape") {
         // Red de seguridad: un valor fuera de la enum vuelve al default.
-        if (newVal && !VALID_SHAPE.includes(newVal)) this.setAttribute("shape", "round");
+        if (newVal && !VALID_SHAPE.includes(newVal)) {
+          this.setAttribute("shape", DEFAULT_BUTTON_SHAPE);
+        }
       } else {
         this.#syncAttrs();
       }
@@ -284,12 +297,11 @@ import { setCustomState } from '../_shared/form-associated.js';
 
     /** Forma del contorno. Ortogonal a `color` y a `variant`. */
     get shape(): string {
-      const v = this.getAttribute("shape");
-      return v != null && VALID_SHAPE.includes(v) ? v : "round";
+      return normalizeButtonShape(this.getAttribute("shape"), DEFAULT_BUTTON_SHAPE);
     }
     set shape(v: string | null | undefined) {
       if (v == null || String(v) === "") this.removeAttribute("shape");
-      else if (VALID_SHAPE.includes(String(v))) this.setAttribute("shape", String(v));
+      else this.setAttribute("shape", normalizeButtonShape(v, DEFAULT_BUTTON_SHAPE));
     }
 
     setFocus(options?: FocusOptions): void { this.#btn.focus(options); }

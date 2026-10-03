@@ -2,8 +2,8 @@
   "$schema": "iswc-preview/v1",
   "tag": "iswc-kanban-column",
   "category": "data",
-  "title": "<iswc-kanban-column>",
-  "titleHtml": true,
+  "title": "&lt;iswc-kanban-column&gt;",
+  "titleHtml": false,
   "description": "Documentación y demos de iswc-kanban-column de InSoft.",
   "storageKey": "docs-iswc-kanban-column",
   "sections": [

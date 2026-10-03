@@ -2,8 +2,8 @@
   "$schema": "iswc-preview/v1",
   "tag": "iswc-radio",
   "category": "forms",
-  "title": "<iswc-radio> + <iswc-radio-group>",
-  "titleHtml": true,
+  "title": "&lt;iswc-radio&gt; + &lt;iswc-radio-group&gt;",
+  "titleHtml": false,
   "styles": ".stack { display: grid; gap: 1.5rem; max-width: 32rem; }\r\n    .spread { display: flex; flex-wrap: wrap; gap: 2.5rem; align-items: flex-start; }",
   "storageKey": "docs-iswc-radio",
   "sections": [

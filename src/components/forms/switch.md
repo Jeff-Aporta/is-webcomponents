@@ -172,7 +172,7 @@ Documentación de cabecera preservada desde fuente:
 > <iswc-switch> — Interruptor form-associated (track + thumb).
 > Atributos
 >   name, value (default "on"), hint
->   color          brand (default) | neutral | success | warning | danger
+>   color          brand (default) | neutral | success | warning | danger | info | error
 >   label-placement  end (default) | start | top | bottom
 >   icon             nombre de <iswc-icon> dentro del thumb apagado
 >   checked-icon     nombre de <iswc-icon> dentro del thumb encendido

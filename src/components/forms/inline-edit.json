@@ -2,8 +2,8 @@
   "$schema": "iswc-preview/v1",
   "tag": "iswc-inline-edit",
   "category": "forms",
-  "title": "<iswc-inline-edit>",
-  "titleHtml": true,
+  "title": "&lt;iswc-inline-edit&gt;",
+  "titleHtml": false,
   "styles": ".ie-row { padding: .55rem 0; display: flex; gap: 1.25rem; align-items: baseline; flex-wrap: wrap; }\r\n    .ie-row > span.label { font-size: .82rem; color: var(--iswc-text-soft); width: 7rem; flex: 0 0 auto; }\r\n    .ie-row p { margin: 0; font-size: .82rem; color: var(--iswc-text-dim); }",
   "storageKey": "docs-iswc-inline-edit",
   "sections": [

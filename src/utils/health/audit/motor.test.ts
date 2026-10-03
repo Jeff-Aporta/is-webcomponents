@@ -174,6 +174,31 @@ test('json-contenido: chart CON JSON embebido pasa el check', () => {
   assert.equal(erroresChart.length, 0, 'chart con JSON embebido no debe tener errores de complejidad');
 });
 
+test('json-contenido: reconoce tags iswc-* (no exige prefijo legacy is-)', () => {
+  const def = {
+    tag: 'iswc-button',
+    sections: [{
+      blocks: [{ kind: 'demo', html: '<iswc-button color="brand">ok</iswc-button>' }],
+    }],
+  };
+  const hs = ejecutarValidacionContenido(def, 'fake.json');
+  assert.ok(
+    !hs.some((h) => h.mensaje.includes('no contiene ningún')),
+    'demo con <iswc-*> no debe WARN de tag ausente',
+  );
+});
+
+test('json-contenido: WARN si demo vacío sin iswc-*', () => {
+  const def = {
+    tag: 'iswc-button',
+    sections: [{
+      blocks: [{ kind: 'demo', html: '<div>solo html</div>' }],
+    }],
+  };
+  const hs = ejecutarValidacionContenido(def, 'fake.json');
+  assert.ok(hs.some((h) => h.mensaje.includes('no contiene ningún <iswc-*>')));
+});
+
 test('consistency: detecta módulo sin customElements.define', async () => {
   // Simulamos un módulo que NO define su custom element.
   const meta = await extraerMetaComponente(null);

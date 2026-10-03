@@ -43,6 +43,8 @@
   --iswc-control-bg-active: #3d444d;
   --iswc-control-border: #59636e;
   --iswc-control-text: #f0f3f6;
+  /* Alto único de controles (btn/input/select/switch). Escala con font-size. */
+  --iswc-control-height: 2.5em;
   --iswc-on-brand: #fff;
   /* Cada familia semantica define UN SOLO tono base, sin sufijo; el resto son
      modificadores RELATIVOS a ese base, no una escala numerica:
@@ -171,6 +173,7 @@
   --iswc-control-bg-active: #dee2e6;
   --iswc-control-border: #adb5bd;
   --iswc-control-text: #212529;
+  --iswc-control-height: 2.5em;
   --iswc-on-brand: #fff;
   --iswc-success-text: var(--iswc-color-success-stronger);
   --iswc-success-soft: var(--iswc-color-success-paler);

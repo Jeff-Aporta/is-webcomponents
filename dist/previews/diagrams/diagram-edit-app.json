@@ -8,7 +8,7 @@
   "sections": [
     {
       "id": "intro",
-      "title": "Editor de diagramas",
+      "title": "Editor de diagramas (API)",
       "lede": "Edita el diagrama y comparte un enlace nuevo. El ?json= con el que se abrió la página se queda igual.",
       "blocks": [
         {

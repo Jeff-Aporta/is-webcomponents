@@ -2,8 +2,8 @@
   "$schema": "iswc-preview/v1",
   "tag": "iswc-doughnut-chart",
   "category": "data-viz",
-  "title": "<iswc-doughnut-chart>",
-  "titleHtml": true,
+  "title": "&lt;iswc-doughnut-chart&gt;",
+  "titleHtml": false,
   "storageKey": "docs-iswc-doughnut-chart",
   "sections": [
     {

@@ -1,6 +1,9 @@
 :host {
+  /* Caja visual compacta; el host ocupa el alto de control (em). */
   --iswc-checkbox-size: 1.15em;
   --iswc-checkbox-radius: var(--iswc-radius-sm, 0.375em);
+  min-block-size: var(--iswc-control-height, 2.5em);
+  align-items: center;
   --iswc-checkbox-bg: var(--iswc-control-bg, #f1f3f5);
   --iswc-checkbox-bg-hover: var(--iswc-control-bg-hover, #e9ecef);
   --iswc-checkbox-border: var(--iswc-control-border, #adb5bd);

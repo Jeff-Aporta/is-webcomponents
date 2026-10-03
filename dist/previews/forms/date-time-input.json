@@ -2,8 +2,8 @@
   "$schema": "iswc-preview/v1",
   "tag": "iswc-date-time-input",
   "category": "forms",
-  "title": "<iswc-date-time-input>",
-  "titleHtml": true,
+  "title": "&lt;iswc-date-time-input&gt;",
+  "titleHtml": false,
   "description": "Documentación y demos de iswc-date-time-input de InSoft.",
   "storageKey": "docs-iswc-date-time-input",
   "sections": [

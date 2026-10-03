@@ -8,6 +8,9 @@
  * el mismo color. Si las vars no están definidas en el árbol (p. ej. el
  * componente se monta fuera de is-base.css), los fallbacks de :host
  * garantizan que el scrollbar siga siendo visible.
+ *
+ * Firefox consume `scrollbar-color/width` desde :host; WebKit necesita las
+ * pseudos en CADA nivel (host + descendientes) porque no hereda el color.
  */
 :host {
   --iswc-scrollbar-size-fallback: 0.5rem;
@@ -18,8 +21,7 @@
   scrollbar-color: var(--iswc-scrollbar-thumb, var(--iswc-scrollbar-thumb-fallback))
                    var(--iswc-scrollbar-track, transparent);
 
-  &,
-  * {
+  & * {
     scrollbar-width: thin;
     scrollbar-color: var(--iswc-scrollbar-thumb, var(--iswc-scrollbar-thumb-fallback))
                      var(--iswc-scrollbar-track, transparent);
@@ -37,19 +39,7 @@
     border-radius: var(--iswc-scrollbar-radius, 999px);
   }
 
-  &::-webkit-scrollbar-thumb {
-    background: var(--iswc-scrollbar-thumb, var(--iswc-scrollbar-thumb-fallback));
-    border-radius: var(--iswc-scrollbar-radius, 999px);
-    border: 2px solid transparent;
-    background-clip: padding-box;
-
-    &:hover {
-      background: var(--iswc-scrollbar-thumb-hover, var(--iswc-scrollbar-thumb-hover-fallback));
-      border: 2px solid transparent;
-      background-clip: padding-box;
-    }
-  }
-
+  &::-webkit-scrollbar-thumb,
   *::-webkit-scrollbar-thumb {
     background: var(--iswc-scrollbar-thumb, var(--iswc-scrollbar-thumb-fallback));
     border-radius: var(--iswc-scrollbar-radius, 999px);
@@ -58,8 +48,6 @@
 
     &:hover {
       background: var(--iswc-scrollbar-thumb-hover, var(--iswc-scrollbar-thumb-hover-fallback));
-      border: 2px solid transparent;
-      background-clip: padding-box;
     }
   }
 

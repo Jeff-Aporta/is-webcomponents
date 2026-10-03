@@ -1,4 +1,17 @@
 import { defineElement } from '../../core/element.js';
+import {
+  DEFAULT_INTENT,
+  INTENT,
+  ensureDefaultColor,
+  normalizeIntent,
+  setEnumAttr,
+} from '../_shared/intent.js';
+import {
+  DEFAULT_TONE,
+  TONE,
+  normalizeTone,
+  setEnumToneAttr,
+} from '../_shared/tone.js';
 
 /**
  * helpers/ui.js — primitivas de render para apps consumidoras del kit.
@@ -304,9 +317,17 @@ export const crearComponente = <P extends Record<string, unknown>>(
   }
 };
 
+export {
+  INTENT, DEFAULT_INTENT, normalizeIntent, setEnumAttr, ensureDefaultColor,
+  TONE, DEFAULT_TONE, normalizeTone, setEnumToneAttr,
+};
+
 export const IswcUi = {
   css, adoptCss, el, html, raw, esc, rec, fecha, jsonScript, define, crearComponente,
   region, dialog,
+  // Semántica compartida (color/variant) — homogeneidad entre apps CDN
+  INTENT, DEFAULT_INTENT, normalizeIntent, setEnumAttr, ensureDefaultColor,
+  TONE, DEFAULT_TONE, normalizeTone, setEnumToneAttr,
 };
 
 if (typeof globalThis !== 'undefined') {

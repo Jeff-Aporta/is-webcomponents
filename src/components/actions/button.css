@@ -25,7 +25,7 @@
   --_text-hover: var(--_text);
   --_border-hover: var(--_border);
   --_focus: var(--iswc-focus, var(--iswc-color-brand, dodgerblue));
-  --_height: 2.5em;
+  --_height: var(--iswc-control-height, 2.5em);
   --_hpad: 1em;
   display: inline-flex;
   vertical-align: middle;
@@ -303,12 +303,65 @@
   --_text-hover: var(--_tone-strong);
 }
 
-/* ── shape: ortogonal a color y variant ─────────────────────────────────── */
+/* ── shape: ortogonal a color y variant (corner-shape donde aplica) ──────── */
 :host([shape="round"]) { --iswc-button-border-radius: var(--iswc-radius-sm, 6px); }
+:host([shape="square"]),
 :host([shape="rect"]) { --iswc-button-border-radius: 0; }
 :host([shape="pill"]) { --iswc-button-border-radius: 999px; }
 
-:host([pill]) { --iswc-button-border-radius: 999px; }
+:host([shape="square"]) .btn { corner-shape: square; }
+
+/* none: no fuerza radio ni corner-shape (deja CSS externo / inicial). */
+:host([shape="none"]) .btn {
+  border-start-start-radius: unset;
+  border-start-end-radius: unset;
+  border-end-start-radius: unset;
+  border-end-end-radius: unset;
+  corner-shape: unset;
+}
+
+/* Hexágono horizontal vía bevel (css-tip / MDN corner-shape). */
+:host([shape="hexagon"]) .btn {
+  border-radius: 50% / 35%;
+  corner-shape: bevel;
+}
+
+/* Flechas: cabeza bevel + cola redondeada (propiedades lógicas). */
+:host([shape="arrow-right"]) .btn {
+  border-start-start-radius: 0.4em;
+  border-end-start-radius: 0.4em;
+  border-start-end-radius: 50%;
+  border-end-end-radius: 50%;
+  corner-start-start-shape: round;
+  corner-end-start-shape: round;
+  corner-start-end-shape: bevel;
+  corner-end-end-shape: bevel;
+}
+:host([shape="arrow-left"]) .btn {
+  border-start-start-radius: 50%;
+  border-end-start-radius: 50%;
+  border-start-end-radius: 0.4em;
+  border-end-end-radius: 0.4em;
+  corner-start-start-shape: bevel;
+  corner-end-start-shape: bevel;
+  corner-start-end-shape: round;
+  corner-end-end-shape: round;
+}
+
+@supports not (corner-shape: bevel) {
+  :host([shape="hexagon"]) .btn {
+    clip-path: polygon(12% 0%, 88% 0%, 100% 50%, 88% 100%, 12% 100%, 0% 50%);
+  }
+  :host([shape="arrow-right"]) .btn {
+    clip-path: polygon(0% 0%, 72% 0%, 100% 50%, 72% 100%, 0% 100%);
+  }
+  :host([shape="arrow-left"]) .btn {
+    clip-path: polygon(28% 0%, 100% 0%, 100% 100%, 28% 100%, 0% 50%);
+  }
+}
+
+/* Alias legado: solo si no hay `shape` (shape gana siempre). */
+:host([pill]:not([shape])) { --iswc-button-border-radius: 999px; }
 :host([variant="outlined"]),
 :host([variant="ghost"]) {
   margin-inline-start: var(--_button-horizontal-indent-outlined, var(--_button-horizontal-indent, 0px));

@@ -1,88 +1,261 @@
 /**
- * <iswc-preview-controls> — panel de controles de demo (playground tipo
- * Storybook), 100% JSON-driven. Recibe por propiedad `spec` el array de
- * controles (ver src/utils/system/controls/controls.schema.json) y emite
- * `iswc-controls-change` ({def, valor}) para que el sistema los aplique al
- * componente vía JSON -> prop/attr. Dev-only: se usa en la galería.
+ * <iswc-preview-controls> — panel de knobs del playground (galería).
+ * Card + grid responsive (auto-fit ≥18.75em), label encima, widgets iswc-*.
+ * Alturas en em vía font-size del :host → --iswc-control-height del kit.
  *
- * Atributos: label (título del panel). Propiedad: spec.
- * Métodos: getSpec() / setValor(prop, valor).
+ * Spec JSON → `spec`. Emite `iswc-controls-change` ({ def, valor }).
  */
 const CSS = `
 :host {
   display: block;
-  margin: 0.65rem 0 1.1rem;
+  width: 100%;
+  box-sizing: border-box;
+  margin: 0.75em 0 1.25em;
   font-family: var(--iswc-sans, system-ui, sans-serif);
-  font-size: 0.82rem;
+  /* Contexto: todo el panel (y --iswc-control-height) escala con este em. */
+  font-size: 0.875em;
   line-height: 1.45;
   color: inherit;
-  --c-border: color-mix(in srgb, currentColor 16%, transparent);
-  --c-border-soft: color-mix(in srgb, currentColor 9%, transparent);
-  --c-bg: color-mix(in srgb, currentColor 5%, transparent);
 }
 .panel {
-  border: 1px solid var(--c-border);
-  border-radius: 0.7rem;
-  background: var(--c-bg);
-  padding: 0.5rem 0.7rem;
+  width: 100%;
+  box-sizing: border-box;
+  padding: 0.85em 1em;
+  border: 0.0625em solid var(--iswc-border, color-mix(in srgb, currentColor 16%, transparent));
+  border-radius: var(--iswc-radius, 0.5em);
+  background: var(--iswc-bg-elev, color-mix(in srgb, currentColor 5%, transparent));
 }
-.panel > summary {
-  cursor: pointer;
-  user-select: none;
+.titulo {
+  margin: 0 0 0.75em;
   font-weight: 700;
-  font-size: 0.7rem;
+  font-size: 0.8em;
   letter-spacing: 0.07em;
   text-transform: uppercase;
   opacity: 0.85;
-  padding: 0.2rem 0;
 }
-.panel > summary::marker { color: color-mix(in srgb, currentColor 45%, transparent); }
-.grupo { margin-top: 0.4rem; }
-.grupo summary { cursor: pointer; font-weight: 650; font-size: 0.78rem; padding: 0.15rem 0; opacity: 0.9; }
-.fila {
+.grupos {
   display: grid;
-  grid-template-columns: minmax(8rem, 1fr) minmax(9rem, 1.6fr);
-  gap: 0.5rem;
-  align-items: center;
-  padding: 0.28rem 0;
-  border-top: 1px dashed var(--c-border-soft);
+  grid-template-columns: repeat(auto-fit, minmax(min(100%, 18.75em), 1fr));
+  gap: 0.85em 1.1em;
+  align-items: start;
 }
-.fila:first-of-type { border-top: 0; }
-.fila label { font-size: 0.78rem; opacity: 0.92; }
-.fila input[type="text"],
-.fila input[type="number"],
+.grupo-titulo {
+  grid-column: 1 / -1;
+  margin: 0.35em 0 0;
+  font-weight: 650;
+  font-size: 0.9em;
+  opacity: 0.9;
+}
+.grupo-titulo:first-child { margin-top: 0; }
+.fila {
+  display: flex;
+  flex-direction: column;
+  align-items: stretch;
+  justify-content: flex-start;
+  gap: 0.35em;
+  min-width: 0;
+}
+.fila > .etiqueta {
+  font-size: 0.9em;
+  color: var(--iswc-text-dim, inherit);
+}
+/* Mismo font-size → mismo alto (--iswc-control-height) en todos los widgets. */
+.fila iswc-input,
+.fila iswc-select,
+.fila iswc-switch,
+.fila iswc-button,
+.fila iswc-checkbox {
+  width: 100%;
+  max-width: 100%;
+  font-size: 1em;
+}
+.fila iswc-switch,
+.fila iswc-checkbox {
+  width: auto;
+  align-self: flex-start;
+}
+.fila iswc-checkbox {
+  --iswc-control-height: 2.5em;
+}
+/* Alto en el part(base); el host no clippea el borde inferior. */
+.fila iswc-input,
+.fila iswc-select {
+  overflow: visible;
+  block-size: auto;
+  min-block-size: var(--iswc-control-height, 2.5em);
+}
+.fila iswc-input::part(base),
+.fila iswc-select::part(base) {
+  box-sizing: border-box;
+  block-size: var(--iswc-control-height, 2.5em);
+  min-block-size: var(--iswc-control-height, 2.5em);
+  max-block-size: none;
+  padding-block: 0;
+}
+.fila iswc-select::part(trigger) {
+  padding-block: 0;
+}
 .fila input[type="color"],
-.fila select,
+.fila input[type="range"],
 .fila textarea {
   width: 100%;
   box-sizing: border-box;
   font: inherit;
-  padding: 0.2rem 0.35rem;
-  border: 1px solid var(--c-border);
-  border-radius: 0.4rem;
+  font-size: 1em;
+  padding: 0 0.5em;
+  border: 0.0625em solid var(--iswc-border, color-mix(in srgb, currentColor 16%, transparent));
+  border-radius: 0.4em;
   background: transparent;
   color: inherit;
 }
-.fila input[type="color"] { height: 1.6rem; padding: 0.1rem; }
-.fila textarea { min-height: 4.2rem; resize: vertical; font-family: var(--iswc-mono, ui-monospace, monospace); font-size: 0.74rem; }
-.boolean { display: flex; align-items: center; gap: 0.5rem; }
-.boolean input { accent-color: currentColor; }
+.fila input[type="color"] {
+  block-size: var(--iswc-control-height, 2.5em);
+  min-block-size: var(--iswc-control-height, 2.5em);
+  padding: 0.2em;
+}
+.fila input[type="range"] {
+  block-size: var(--iswc-control-height, 2.5em);
+}
+.fila textarea {
+  min-block-size: 4.2em;
+  resize: vertical;
+  font-family: var(--iswc-mono, ui-monospace, monospace);
+  font-size: 0.9em;
+  padding: 0.5em;
+}
 `;
 
-export type OpcionPanel = { value: unknown; label: string; };
+export type OpcionPanel = {
+  value: unknown;
+  label: string;
+  icon?: string;
+  html?: string;
+  description?: string;
+};
 
-export type ControlPanel = { control: string; prop: string; label: string; group?: string; options?: Array<{ value: unknown; label: string }>; min?: number; max?: number; step?: number; placeholder?: string; default?: unknown; value?: unknown; };
+export type ControlPanel = {
+  control: string;
+  prop: string;
+  label: string;
+  group?: string;
+  options?: OpcionPanel[];
+  min?: number;
+  max?: number;
+  step?: number;
+  placeholder?: string;
+  default?: unknown;
+  value?: unknown;
+};
 
 function escProp(prop: string): string {
   return String(prop).replace(/[\\"]/g, '\\$&');
 }
 
+function attrDeProp(prop: string): string {
+  if (prop.startsWith('attr:')) return prop.slice(5);
+  if (prop.startsWith('prop:')) return prop.slice(5);
+  return prop;
+}
+
+/** Iconos por valor (mapa local: el espejo Paty no tiene utils/ del kit). */
+const SELECT_ICONS: Record<string, string> = {
+  brand: 'mdi:palette', neutral: 'mdi:circle-outline',
+  success: 'mdi:check-circle-outline', warning: 'mdi:alert-outline',
+  danger: 'mdi:alert-circle-outline', info: 'mdi:information-outline',
+  error: 'mdi:close-circle-outline',
+  filled: 'mdi:square', outlined: 'mdi:square-outline', plain: 'mdi:format-text',
+  ghost: 'mdi:ghost-outline', soft: 'mdi:blur', text: 'mdi:format-letter-case',
+  accent: 'mdi:flare', 'filled-outlined': 'mdi:checkbox-blank-badge-outline',
+  none: 'mdi:cancel', round: 'mdi:rounded-corner', square: 'mdi:square-outline',
+  rect: 'mdi:rectangle-outline', pill: 'mdi:capsule', hexagon: 'mdi:hexagon-outline',
+  'arrow-left': 'mdi:arrow-left-bold-outline', 'arrow-right': 'mdi:arrow-right-bold-outline',
+  circle: 'mdi:circle-outline', rounded: 'mdi:rounded-corner',
+  top: 'mdi:arrow-collapse-up', bottom: 'mdi:arrow-collapse-down',
+  start: 'mdi:arrow-collapse-left', end: 'mdi:arrow-collapse-right',
+  left: 'mdi:arrow-left', right: 'mdi:arrow-right',
+  'top-start': 'mdi:arrow-top-left', 'top-end': 'mdi:arrow-top-right',
+  'bottom-start': 'mdi:arrow-bottom-left', 'bottom-end': 'mdi:arrow-bottom-right',
+  center: 'mdi:image-filter-center-focus',
+  horizontal: 'mdi:arrow-left-right', vertical: 'mdi:arrow-up-down',
+  button: 'mdi:button-cursor', submit: 'mdi:send', reset: 'mdi:backup-restore',
+  auto: 'mdi:auto-fix', manual: 'mdi:hand-back-right-outline',
+  single: 'mdi:numeric-1-circle-outline', multiple: 'mdi:checkbox-multiple-marked-outline',
+  lazy: 'mdi:timer-sand', eager: 'mdi:lightning-bolt',
+  contain: 'mdi:fit-to-page-outline', cover: 'mdi:overscan',
+  dark: 'mdi:weather-night', light: 'mdi:white-balance-sunny',
+  underlined: 'mdi:format-underline', tags: 'mdi:tag-multiple-outline', count: 'mdi:counter',
+  line: 'mdi:chart-line', bar: 'mdi:chart-bar', pie: 'mdi:chart-pie',
+  doughnut: 'mdi:chart-donut', area: 'mdi:chart-areaspline', scatter: 'mdi:chart-scatter-plot',
+  radar: 'mdi:radar', small: 'mdi:size-s', medium: 'mdi:size-m', large: 'mdi:size-l',
+  pulse: 'mdi:pulse', wave: 'mdi:wave',
+  number: 'mdi:numeric', date: 'mdi:calendar', time: 'mdi:clock-outline',
+  datetime: 'mdi:calendar-clock', email: 'mdi:email-outline', password: 'mdi:lock-outline',
+  search: 'mdi:magnify', tel: 'mdi:phone-outline', url: 'mdi:link-variant', file: 'mdi:file-outline',
+  inline: 'mdi:format-horizontal-align-center', fixed: 'mdi:pin',
+  'top-left': 'mdi:arrow-top-left', 'top-right': 'mdi:arrow-top-right',
+  'bottom-left': 'mdi:arrow-bottom-left', 'bottom-right': 'mdi:arrow-bottom-right',
+};
+
+function iconForOption(_attr: string, value: unknown): string | undefined {
+  return SELECT_ICONS[String(value ?? '')] || undefined;
+}
+
+/** Defaults kit cuando el JSON/CE no traen `default` (espejo del mapa de controles). */
+const DEFAULT_BY_ATTR: Record<string, string> = {
+  color: 'brand',
+  variant: 'filled',
+  shape: 'round',
+  type: 'button',
+  placement: 'top',
+  orientation: 'horizontal',
+  position: 'bottom-right',
+  loading: 'eager',
+  fit: 'contain',
+};
+
+/** Completa iconos + default de opciones select si el JSON no los trae. */
+function enriquecerControl(c: ControlPanel): ControlPanel {
+  const copy: ControlPanel = { ...c };
+  if (c.control !== 'select' || !Array.isArray(c.options)) return copy;
+  const attr = attrDeProp(c.prop);
+  copy.options = c.options.map((op) => {
+    if (op.icon) return { ...op };
+    const icon = iconForOption(attr, op.value);
+    return icon ? { ...op, icon } : { ...op };
+  });
+  if (copy.default === undefined || copy.default === null || copy.default === '') {
+    const vals = copy.options.map((o) => String(o.value));
+    // Avatar/media: circle; botón: round (si está en la lista).
+    if (attr === 'shape') {
+      if (vals.includes('circle')) copy.default = 'circle';
+      else if (vals.includes('round')) copy.default = 'round';
+    } else {
+      const known = DEFAULT_BY_ATTR[attr];
+      if (known && vals.includes(known)) copy.default = known;
+    }
+  }
+  return copy;
+}
+
 const TPL = document.createElement('template');
-TPL.innerHTML = `<style>${CSS}</style><details class="panel"><summary></summary><div class="grupos"></div></details>`;
+TPL.innerHTML = `<style>${CSS}</style><div class="panel"><div class="titulo"></div><div class="grupos"></div></div>`;
+
+/** Carga switch/select/input del kit si el loader está en la página. */
+async function asegurarWidgets(): Promise<void> {
+  const L = (globalThis as {
+    ISWebComponentsLoader?: { ensure?: (tag: string) => Promise<boolean> };
+  }).ISWebComponentsLoader;
+  if (!L?.ensure) return;
+  await Promise.all(
+    ['iswc-switch', 'iswc-select', 'iswc-option', 'iswc-input', 'iswc-icon'].map((t) =>
+      L.ensure!(t).catch(() => false),
+    ),
+  );
+}
 
 class IswcPreviewControls extends HTMLElement {
   #spec: ControlPanel[] = [];
-  #grupos = new Map<string, HTMLElement>();
+  #listo = false;
 
   static get observedAttributes(): string[] {
     return ['label'];
@@ -92,35 +265,74 @@ class IswcPreviewControls extends HTMLElement {
     if (!this.shadowRoot) {
       this.attachShadow({ mode: 'open' });
       this.shadowRoot!.appendChild(TPL.content.cloneNode(true));
-      this.#pintar();
     }
+    void this.#arrancar();
   }
 
   attributeChangedCallback(): void {
-    if (this.shadowRoot) this.#pintar();
+    if (this.shadowRoot && this.#listo) this.#pintar();
   }
 
-  /** Spec actual del panel (con valores). */
   getSpec(): ControlPanel[] {
     return this.#spec.map((s) => ({ ...s }));
   }
 
-  /** Actualiza el valor de un control y dispara iswc-controls-change. */
   setValor(prop: string, valor: unknown): void {
-    const row = this.shadowRoot!.querySelector<HTMLElement>(`[data-control-prop="${escProp(prop)}"]`);
+    const row = this.shadowRoot?.querySelector<HTMLElement>(`[data-control-prop="${escProp(prop)}"]`);
     if (!row) return;
-    const entrada = row.querySelector<HTMLInputElement | HTMLSelectElement | HTMLTextAreaElement>('input, select, textarea');
-    if (!entrada) return;
-    this.#aplicarEntrada(entrada, String(valor ?? ''), true);
+    const c = this.#spec.find((s) => s.prop === prop);
+    if (!c) return;
+    if (c.control === 'boolean') {
+      const sw = row.querySelector('iswc-switch');
+      if (sw) {
+        sw.toggleAttribute('checked', Boolean(valor));
+        this.#emitir(c, Boolean(valor));
+      }
+      return;
+    }
+    if (c.control === 'select') {
+      const sel = row.querySelector('iswc-select') as (HTMLElement & { value?: string }) | null;
+      if (sel) {
+        sel.setAttribute('value', String(valor ?? ''));
+        (sel as { value?: string }).value = String(valor ?? '');
+        this.#emitir(c, valor);
+      }
+      return;
+    }
+    const input = row.querySelector('iswc-input') as (HTMLElement & { value?: string }) | null;
+    if (input) {
+      const txt = String(valor ?? '');
+      input.setAttribute('value', txt);
+      input.value = txt;
+      this.#emitir(c, valor);
+      return;
+    }
+    const native = row.querySelector<HTMLInputElement | HTMLSelectElement | HTMLTextAreaElement>(
+      'input, select, textarea',
+    );
+    if (!native) return;
+    if (native instanceof HTMLInputElement && native.type === 'checkbox') {
+      native.checked = Boolean(valor);
+    } else {
+      native.value = c.control === 'json' ? JSON.stringify(valor) : String(valor ?? '');
+    }
+    this.#emitir(c, valor);
   }
 
   set spec(lista: ControlPanel[]) {
-    this.#spec = Array.isArray(lista) ? lista.map((s) => ({ ...s })) : [];
-    if (this.shadowRoot) this.#pintar();
+    this.#spec = Array.isArray(lista) ? lista.map((s) => enriquecerControl(s)) : [];
+    if (this.shadowRoot && this.#listo) this.#pintar();
+    else if (this.shadowRoot) void this.#arrancar();
   }
 
   get spec(): ControlPanel[] {
     return this.#spec;
+  }
+
+  async #arrancar(): Promise<void> {
+    await asegurarWidgets();
+    this.#listo = true;
+    this.#pintar();
   }
 
   #titulo(): string {
@@ -130,25 +342,24 @@ class IswcPreviewControls extends HTMLElement {
   #pintar(): void {
     const sr = this.shadowRoot;
     if (!sr) return;
-    sr.querySelector('summary')!.textContent = this.#titulo();
+    sr.querySelector('.titulo')!.textContent = this.#titulo();
     const grupos = sr.querySelector<HTMLElement>('.grupos')!;
     grupos.textContent = '';
-    this.#grupos.clear();
     const porGrupo = new Map<string, ControlPanel[]>();
     for (const c of this.#spec) {
       const g = c.group || 'General';
       if (!porGrupo.has(g)) porGrupo.set(g, []);
       porGrupo.get(g)!.push(c);
     }
+    const multi = porGrupo.size > 1;
     for (const [nombre, lista] of porGrupo) {
-      const det = document.createElement('details');
-      det.className = 'grupo';
-      det.open = true;
-      const resumen = document.createElement('summary');
-      resumen.textContent = nombre;
-      det.appendChild(resumen);
-      for (const control of lista) det.appendChild(this.#fila(control));
-      grupos.appendChild(det);
+      if (multi) {
+        const h = document.createElement('div');
+        h.className = 'grupo-titulo';
+        h.textContent = nombre;
+        grupos.appendChild(h);
+      }
+      for (const control of lista) grupos.appendChild(this.#fila(control));
     }
   }
 
@@ -156,10 +367,10 @@ class IswcPreviewControls extends HTMLElement {
     const fila = document.createElement('div');
     fila.className = 'fila';
     fila.dataset.controlProp = c.prop;
-    const label = document.createElement('label');
-    label.textContent = c.label;
-    label.setAttribute('for', `ctl-${c.prop}`);
-    fila.appendChild(label);
+    const etiqueta = document.createElement('span');
+    etiqueta.className = 'etiqueta';
+    etiqueta.textContent = c.label;
+    fila.appendChild(etiqueta);
     fila.appendChild(this.#entrada(c));
     return fila;
   }
@@ -168,35 +379,67 @@ class IswcPreviewControls extends HTMLElement {
     const v = c.value !== undefined && c.value !== null ? c.value : c.default;
     switch (c.control) {
       case 'boolean': {
-        const env = document.createElement('label');
-        env.className = 'boolean';
-        const cb = document.createElement('input');
-        cb.type = 'checkbox';
-        cb.checked = Boolean(v);
-        cb.addEventListener('change', () => this.#emitir(c, cb.checked));
-        env.appendChild(cb);
-        return env;
+        const sw = document.createElement('iswc-switch');
+        sw.setAttribute('color', 'brand');
+        if (v) sw.setAttribute('checked', '');
+        sw.addEventListener('iswc-change', ((ev: Event) => {
+          const checked = Boolean((ev as CustomEvent<{ checked?: boolean }>).detail?.checked);
+          this.#emitir(c, checked);
+        }) as EventListener);
+        return sw;
       }
       case 'color': {
-        const env = document.createElement('span');
         const input = document.createElement('input');
         input.type = 'color';
         input.value = typeof v === 'string' && /^#/.test(v) ? v : '#7c4dff';
         input.addEventListener('input', () => this.#emitir(c, input.value));
-        env.appendChild(input);
-        return env;
+        return input;
       }
       case 'select': {
-        const sel = document.createElement('select');
-        sel.id = `ctl-${c.prop}`;
+        const sel = document.createElement('iswc-select');
+        const inicial = v ?? c.default ?? '';
+        sel.setAttribute('value', String(inicial));
         for (const op of c.options ?? []) {
-          const opEl = document.createElement('option');
-          opEl.value = String(op.value);
-          opEl.textContent = op.label;
-          if (String(op.value) === String(v ?? '')) opEl.selected = true;
-          sel.appendChild(opEl);
+          const o = document.createElement('iswc-option');
+          o.setAttribute('value', String(op.value));
+          if (op.icon) {
+            const icon = document.createElement('iswc-icon');
+            icon.setAttribute('slot', 'start');
+            icon.setAttribute('icon', op.icon);
+            icon.setAttribute('aria-hidden', 'true');
+            o.appendChild(icon);
+          }
+          if (op.html) {
+            const wrap = document.createElement('span');
+            wrap.innerHTML = op.html;
+            while (wrap.firstChild) o.appendChild(wrap.firstChild);
+          } else {
+            o.appendChild(document.createTextNode(op.label));
+          }
+          const isDefault = c.default !== undefined && c.default !== null
+            && String(op.value) === String(c.default);
+          // (default) vive en el item, no en el label del control.
+          if (isDefault) {
+            const mark = document.createElement('span');
+            mark.className = 'opt-default';
+            mark.textContent = ' (default)';
+            o.appendChild(mark);
+            o.setAttribute('selected', '');
+          }
+          if (op.description) {
+            const desc = document.createElement('span');
+            desc.setAttribute('slot', 'description');
+            desc.textContent = op.description;
+            o.appendChild(desc);
+          }
+          sel.appendChild(o);
         }
-        sel.addEventListener('change', () => this.#emitir(c, sel.value));
+        sel.addEventListener('iswc-change', ((ev: Event) => {
+          const valor = (ev as CustomEvent<{ value?: string }>).detail?.value
+            ?? (sel as HTMLElement & { value?: string }).value
+            ?? '';
+          this.#emitir(c, valor);
+        }) as EventListener);
         return sel;
       }
       case 'json': {
@@ -206,17 +449,12 @@ class IswcPreviewControls extends HTMLElement {
         ta.addEventListener('input', () => {
           const txt = ta.value;
           let val: unknown = txt;
-          try {
-            val = JSON.parse(txt);
-          } catch {
-            /* valor libre mientras se edita */
-          }
+          try { val = JSON.parse(txt); } catch { /* edición libre */ }
           this.#emitir(c, val);
         });
         return ta;
       }
       case 'range': {
-        const env = document.createElement('span');
         const input = document.createElement('input');
         input.type = 'range';
         input.min = String(c.min ?? 0);
@@ -224,25 +462,33 @@ class IswcPreviewControls extends HTMLElement {
         input.step = String(c.step ?? 1);
         input.value = String(v ?? c.min ?? 0);
         input.addEventListener('input', () => this.#emitir(c, Number(input.value)));
-        env.appendChild(input);
-        return env;
+        return input;
       }
       case 'number': {
-        const input = document.createElement('input');
-        input.type = 'number';
-        if (c.min !== undefined) input.min = String(c.min);
-        if (c.max !== undefined) input.max = String(c.max);
-        if (c.step !== undefined) input.step = String(c.step);
-        input.value = String(v ?? '');
-        input.addEventListener('input', () => this.#emitir(c, input.value === '' ? '' : Number(input.value)));
+        const input = document.createElement('iswc-input');
+        input.setAttribute('type', 'number');
+        if (c.min !== undefined) input.setAttribute('min', String(c.min));
+        if (c.max !== undefined) input.setAttribute('max', String(c.max));
+        if (c.step !== undefined) input.setAttribute('step', String(c.step));
+        input.setAttribute('value', String(v ?? ''));
+        const leer = () => {
+          const raw = (input as HTMLElement & { value?: string }).value ?? '';
+          this.#emitir(c, raw === '' ? '' : Number(raw));
+        };
+        input.addEventListener('iswc-input', leer);
+        input.addEventListener('change', leer);
         return input;
       }
       default: {
-        const input = document.createElement('input');
-        input.type = 'text';
-        input.placeholder = c.placeholder ?? '';
-        input.value = String(v ?? '');
-        input.addEventListener('input', () => this.#emitir(c, input.value));
+        const input = document.createElement('iswc-input');
+        input.setAttribute('type', 'text');
+        if (c.placeholder) input.setAttribute('placeholder', c.placeholder);
+        input.setAttribute('value', String(v ?? ''));
+        const leer = () => {
+          this.#emitir(c, (input as HTMLElement & { value?: string }).value ?? '');
+        };
+        input.addEventListener('iswc-input', leer);
+        input.addEventListener('change', leer);
         return input;
       }
     }
@@ -256,17 +502,6 @@ class IswcPreviewControls extends HTMLElement {
       bubbles: true,
       composed: true,
     }));
-  }
-
-  #aplicarEntrada(entrada: HTMLElement, valorTexto: string, disparar: boolean): void {
-    const fila = entrada.closest<HTMLElement>('.fila');
-    const prop = fila?.dataset.controlProp ?? '';
-    const c = this.#spec.find((s) => s.prop === prop);
-    if (!c) return;
-    const esCheck = entrada instanceof HTMLInputElement && entrada.type === 'checkbox';
-    const valor = esCheck ? (entrada as HTMLInputElement).checked : valorTexto;
-    c.value = valor;
-    if (disparar) this.#emitir(c, valor);
   }
 }
 

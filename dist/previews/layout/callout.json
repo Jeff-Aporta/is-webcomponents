@@ -2,8 +2,8 @@
   "$schema": "iswc-preview/v1",
   "tag": "iswc-callout",
   "category": "layout",
-  "title": "<iswc-callout>",
-  "titleHtml": true,
+  "title": "&lt;iswc-callout&gt;",
+  "titleHtml": false,
   "description": "Documentación y demos del componente iswc-callout de InSoft.",
   "storageKey": "docs-iswc-callout",
   "sections": [
@@ -16,30 +16,30 @@
           "kind": "demo",
           "html": "<span class=\"demo-label\">caso mínimo</span>\r\n          <iswc-callout>Esto es un callout estándar. Puedes personalizar su contenido e icono.</iswc-callout>",
           "controls": [
-              {
-                "control": "select",
-                "prop": "attr:color",
-                "label": "color",
-                "options": [
-                  "brand",
-                  "neutral",
-                  "success",
-                  "warning",
-                  "danger"
-                ]
-              },
-              {
-                "control": "select",
-                "prop": "attr:variant",
-                "label": "variant",
-                "options": [
-                  "accent",
-                  "filled-outlined",
-                  "filled",
-                  "outlined",
-                  "plain"
-                ]
-              }
+            {
+              "control": "select",
+              "prop": "attr:color",
+              "label": "color",
+              "options": [
+                "brand",
+                "neutral",
+                "success",
+                "warning",
+                "danger"
+              ]
+            },
+            {
+              "control": "select",
+              "prop": "attr:variant",
+              "label": "variant",
+              "options": [
+                "accent",
+                "filled",
+                "outlined",
+                "filled-outlined",
+                "plain"
+              ]
+            }
           ],
           "equivNote": "color sugiere icono; slot o icon vacío lo anulan.",
           "equivHtml": "<!-- ver diagrama de ramas -->",

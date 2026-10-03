@@ -2,8 +2,8 @@
   "$schema": "iswc-preview/v1",
   "tag": "iswc-window",
   "category": "overlays",
-  "title": "<iswc-window>",
-  "titleHtml": true,
+  "title": "&lt;iswc-window&gt;",
+  "titleHtml": false,
   "styles": ".desk {\r\n      position: relative;\r\n      transform: translateZ(0);\r\n      height: 30rem;\r\n      border: 1px dashed var(--iswc-border);\r\n      border-radius: var(--iswc-radius);\r\n      overflow: hidden;\r\n      background:\r\n        linear-gradient(180deg,\r\n          color-mix(in srgb, var(--iswc-accent) 6%, transparent) 0%,\r\n          transparent 40%),\r\n        repeating-linear-gradient(45deg,\r\n          color-mix(in srgb, var(--iswc-text) 4%, transparent) 0 8px,\r\n          transparent 8px 16px);\r\n    }\r\n    .desk note { position: absolute; pointer-events: none; color: var(--iswc-text-soft); font-size: .85rem; padding: 1rem; }",
   "storageKey": "docs-iswc-window",
   "sections": [

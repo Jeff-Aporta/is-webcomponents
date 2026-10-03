@@ -2,8 +2,8 @@
   "$schema": "iswc-preview/v1",
   "tag": "iswc-confirm-modal",
   "category": "feedback",
-  "title": "<iswc-confirm-modal>",
-  "titleHtml": true,
+  "title": "&lt;iswc-confirm-modal&gt;",
+  "titleHtml": false,
   "description": "Documentación y demos de iswc-confirm-modal de InSoft.",
   "storageKey": "docs-iswc-confirm-modal",
   "sections": [

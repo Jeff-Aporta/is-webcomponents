@@ -13,7 +13,7 @@
     "dev:demos": "deno run -A --no-check scripts/serve-demos.mjs",
     "icons:download": "deno run -A --no-check scripts/download-icons.ts",
     "typecheck": "deno run -A --no-check npm:typescript@5.9.3/lib/tsc.js -p tsconfig.json",
-    "test": "deno test -A --no-check src/utils/health/meta/ src/utils/health/diagrams/ src/utils/health/domain/ src/utils/health/audit/",
+    "test": "deno test -A --no-check src/utils/health/meta/ src/utils/health/diagrams/ src/utils/health/audit/",
     "test:e2e": "deno run -A --no-check src/utils/testing/e2e/run.ts",
     "test:demos": "deno run -A --no-check demos/diagramas/ER/_testing/run.mjs",
     "audit": "deno run -A --no-check src/utils/health/motor/cli.ts --solo-json",

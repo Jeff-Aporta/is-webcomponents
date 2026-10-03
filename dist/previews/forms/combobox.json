@@ -2,8 +2,8 @@
   "$schema": "iswc-preview/v1",
   "tag": "iswc-combobox",
   "category": "forms",
-  "title": "<iswc-combobox>",
-  "titleHtml": true,
+  "title": "&lt;iswc-combobox&gt;",
+  "titleHtml": false,
   "storageKey": "docs-iswc-combobox",
   "sections": [
     {

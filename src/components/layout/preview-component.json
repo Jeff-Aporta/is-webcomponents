@@ -2,13 +2,13 @@
   "$schema": "iswc-preview/v1",
   "tag": "iswc-preview-component",
   "category": "preview",
-  "title": "<iswc-preview-component>",
+  "title": "&lt;iswc-preview-component&gt;",
   "titleHtml": false,
   "description": "Shell que monta una definición JSON de la galería. La propia galería es el ejemplo vivo.",
   "sections": [
     {
       "id": "intro",
-      "title": "Uso",
+      "title": "&lt;iswc-preview-component&gt;",
       "lede": "Shell que monta una definición JSON de la galería. La propia galería es el ejemplo vivo.",
       "blocks": [
         {

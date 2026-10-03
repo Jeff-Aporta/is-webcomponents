@@ -2,8 +2,8 @@
   "$schema": "iswc-preview/v1",
   "tag": "iswc-map-marker",
   "category": "data-viz",
-  "title": "<iswc-map-marker>",
-  "titleHtml": true,
+  "title": "&lt;iswc-map-marker&gt;",
+  "titleHtml": false,
   "description": "Documentación y demos de iswc-map-marker de InSoft.",
   "storageKey": "docs-iswc-map-marker",
   "sections": [

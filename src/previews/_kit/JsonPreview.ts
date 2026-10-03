@@ -28,8 +28,8 @@ export class JsonPreview extends ISComponentPreview {
       ...definition,
       category: definition.category ?? '',
       $schema: (definition.$schema || 'iswc-preview/v1') as 'iswc-preview/v1',
-      // Conservar title del JSON (`<iswc-tag>`); no pisar con el tag crudo.
-      title: (definition as PreviewDefinition).title || definition.tag,
+      // Conservar title del JSON; si falta, el H2 muestra `<tag>` (texto, no CE).
+      title: (definition as PreviewDefinition).title || `<${definition.tag}>`,
       sections: definition.sections ?? [],
     };
     if (normalized.$schema !== 'iswc-preview/v1') {

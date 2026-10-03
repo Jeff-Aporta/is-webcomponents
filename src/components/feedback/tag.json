@@ -2,8 +2,8 @@
   "$schema": "iswc-preview/v1",
   "tag": "iswc-tag",
   "category": "feedback",
-  "title": "<iswc-tag>",
-  "titleHtml": true,
+  "title": "&lt;iswc-tag&gt;",
+  "titleHtml": false,
   "storageKey": "docs-iswc-tag",
   "sections": [
     {
@@ -22,10 +22,10 @@
               "options": [
                 "brand",
                 "neutral",
-                "info",
                 "success",
                 "warning",
-                "danger"
+                "danger",
+                "info"
               ]
             },
             {

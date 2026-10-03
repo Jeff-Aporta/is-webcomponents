@@ -1,11 +1,11 @@
 ---
 name: is-webcomponents
 description: >-
-  Obliga a reusar el kit is-* (Jeff-Aporta/is-webcomponents) al fundar o extender
+  Obliga a reusar el kit iswc-* (Jeff-Aporta/is-webcomponents) al fundar o extender
   apps de web components sin framework. Usar cuando hay CDN loader.min.js / is-base /
-  palettes, tags iswc-button iswc-dialog iswc-data-grid iswc-chart iswc-icon, apps tipo
-  frontend-webcomponents / tk-*, migraciones desde React/MUI/Svelte, o cuando se
-  pueda reinventar UI que ya existe en el catálogo de este archivo.
+  palettes, tags iswc-button iswc-dialog iswc-data-grid iswc-chart iswc-icon, APIs
+  IswcUi / md-hydrate / response-cache, apps tipo frontend-webcomponents / tk-*,
+  migraciones desde React/MUI/Svelte, o cuando se pueda reinventar UI del catálogo.
 ---
 
 # IS Web Components — stack obligatorio
@@ -29,9 +29,10 @@ Comandos tipo slash, uno por archivo en [`tools/`](tools/):
 
 | Comando | Uso |
 | --- | --- |
-| [`/is-webcomponents:build`](tools/build.md) | Fundar o extender una app con `is-*` por CDN (o local). |
-| [`/is-webcomponents:migrate`](tools/migrate.md) | Convertir un frontend con framework (React/MUI/Svelte/…) a vanilla + `is-*`. |
+| [`/is-webcomponents:build`](tools/build.md) | Fundar o extender una app con `iswc-*` por CDN (o local). |
+| [`/is-webcomponents:migrate`](tools/migrate.md) | Convertir un frontend con framework (React/MUI/Svelte/…) a vanilla + `iswc-*`. |
 | [`/is-webcomponents:local`](tools/local.md) | Vendorizar el kit y bootear local-first, con CDN como fallback. |
+| [`/is-webcomponents:runtime`](tools/runtime.md) | APIs **sin** tag: loader, IswcUi, md-lite/hydrate/fences, response-cache, sync-pins. |
 
 ## Enlaces (GitHub primero, raw como secundario)
 
@@ -50,8 +51,8 @@ Local: `dist/cdn/skills/<name>/SKILL.md` vía jsDelivr o Pages una vez la app ya
 
 Cada `.min.js` del CDN abre con un comentario que enlaza **la guía de ese componente** y **esta skill**.
 
-Inventario de intención: [catalog.md](catalog.md) · Mapa intención a componente: [reference.md](reference.md).
-App de referencia: apps consumidoras vanilla (`tk-*` sobre `is-*`), por ejemplo jagudeloe/frontend-webcomponents.
+Inventario completo (tags + APIs): [catalog.md](catalog.md) · Mapa intención→componente: [reference.md](reference.md) · Runtime sin tag: [tools/runtime.md](tools/runtime.md).
+App de referencia: apps consumidoras vanilla (`tk-*` sobre `iswc-*`), por ejemplo jagudeloe/frontend-webcomponents.
 
 ## Regla de reuso
 
@@ -61,7 +62,7 @@ propio para botones, formularios, tablas, charts, toasts, diálogos, iconos, lay
 1. Clasificar la intención (categoría).
 2. Buscar el tag en el catálogo de esta skill.
 3. Abrir la guía del módulo y confirmar la API. No inventar props ni eventos.
-4. Usar el tag `is-*`. Solo crear componentes de dominio (`tk-*`, `app-*`) que **traduzcan datos** al kit.
+4. Usar el tag `iswc-*` (o el módulo API de [runtime](tools/runtime.md) si no hay tag). Solo crear dominio (`tk-*`, `app-*`) que **traduzca datos** al kit.
 
 Si no hay tag exacto, usar el más cercano. Solo entonces un primitivo nativo o un wrapper mínimo.
 
@@ -113,8 +114,8 @@ Excepción: apps que declaran seguimiento continuo (por ejemplo `jagudeloe/front
 
 | Capa | Prefijo | Responsabilidad |
 | --- | --- | --- |
-| Kit | `is-*` | UI genérica del CDN |
-| Dominio | `tk-*` / `app-*` | Traducir payload a `is-*` |
+| Kit | `iswc-*` | UI genérica del CDN |
+| Dominio | `tk-*` / `app-*` | Traducir payload a `iswc-*` |
 | Shell | `*-app`, `*-nav`, `*-view` | Orquestación, routing, datos |
 
 ### CSS de dominio (igual que el kit)
@@ -197,9 +198,29 @@ Antes de cambiar el repo del kit, leer [`specs/lessons.md`](https://github.com/J
 
 Resumen de fundación: HTML con bootstrap CDN, `data-theme` y `data-palette`, shell mínimo (`iswc-main`, `iswc-split-panel` o `iswc-drawer`), `<iswc-toast>` global, y capas de dominio que solo mapean datos a tags del kit. Un componente de dominio por concepto de negocio, y cero UI genérica duplicada.
 
+## Módulos API (sin custom element)
+
+<!-- apis:inicio -->
+
+APIs y módulos **sin** tag `iswc-*`. Misma obligación de reuso que el catálogo de componentes.
+Detalle operativo: [`tools/runtime.md`](tools/runtime.md).
+
+| API / módulo | CDN o ruta | Resumen | Guía |
+| --- | --- | --- | --- |
+| `ISWebComponentsLoader` | `core/loader.min.js` | Entry CDN: loadCSS*, load/ensure/has, pin, configure, espejos jsDelivr -> githack -> Pages, sheets, registerApp, SHA quemado. | [docs](https://github.com/Jeff-Aporta/is-webcomponents/blob/main/src/cdn/loader.md) |
+| `IswcUi / Ui` | `helpers/ui.min.js` | html, adoptCss, define, css, el: primitivas de apps dominio. No es CE. | [docs](https://github.com/Jeff-Aporta/is-webcomponents/blob/main/src/components/helpers/ui.md) |
+| `mdToHtml` | `helpers/md-lite.min.js` | Markdown -> HTML sin npm; fences codigo e iswc-* (diagramas). | [docs](https://github.com/Jeff-Aporta/is-webcomponents/blob/main/src/components/helpers/md-lite.md) |
+| `resolveIswcFenceTag` | `helpers/md-iswc-fences.min.js` | Lang fence iswc-* -> tag de diagrama (flowchart, er, sequence, ...). | [docs](https://github.com/Jeff-Aporta/is-webcomponents/blob/main/src/components/helpers/md-iswc-fences.md) |
+| `hydrateMdEmbeds` | `helpers/md-hydrate.min.js` | L.ensure de tags presentes + upgrade .md-iswc-code -> iswc-code. | [docs](https://github.com/Jeff-Aporta/is-webcomponents/blob/main/src/components/helpers/md-hydrate.md) |
+| `md-editor-api` | `helpers/md-editor-api.min.js` | CRUD/normalizacion para iswc-md-editor (endpoints, fieldMap, token). | [docs](https://github.com/Jeff-Aporta/is-webcomponents/blob/main/src/components/helpers/md-editor-api.md) |
+| `IsResponseCache` | `helpers/response-cache.min.js` | SWR IndexedDB: vivo/leer/guardar/invalidar; no bloquea el pintado. | [docs](https://github.com/Jeff-Aporta/is-webcomponents/blob/main/src/components/helpers/response-cache.md) |
+| `sync-pins` | `scripts/sync-pins.mjs (repo)` | Tras commit del kit: propaga SHA a kit-pin / ISS / PIN (deno task sync:pins). | [docs](https://github.com/Jeff-Aporta/is-webcomponents/blob/main/scripts/sync-pins.mjs) |
+
+<!-- apis:fin -->
+
 ## Catálogo de componentes
 
-índice para agentes. Cada fila es un tag que ya existe: abre la guía y reutilízalo. No reimplementes la fila.
+Índice para agentes. Cada fila es un tag que ya existe: abre la guía y reutilízalo. No reimplementes la fila. Los módulos sin tag están arriba en **Módulos API**.
 
 <!-- catalogo:inicio -->
 

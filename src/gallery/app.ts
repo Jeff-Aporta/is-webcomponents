@@ -3,6 +3,11 @@ import { PALETTES, type PaletteConfig } from '../styles/palette-build.js';
 import type { ComponentManifestItem } from '../manifest.js';
 import { hasControlledPreview, hasCachedPreview, loadPreview } from '../previews/registry.js';
 import { collectIsTags, GALLERY_CHROME_TAGS } from '../cdn/collect-iswc-tags.js';
+import {
+  getComponentPrefs,
+  removeComponentPrefs,
+  setComponentPrefs,
+} from '../components/_shared/prefs.js';
 
 /* ──────────────────────────── Tipos locales ───────────────────────────── */
 
@@ -157,6 +162,7 @@ const categoryMeta: Record<string, CategoryMeta> = {
   data: { id: 'data', label: 'Datos' },
   'data-viz': { id: 'data-viz', label: 'Gráficos' },
   diagrams: { id: 'diagrams', label: 'Diagramas' },
+  files: { id: 'files', label: 'Archivos' },
   overlays: { id: 'overlays', label: 'Overlays' },
   preview: { id: 'preview', label: 'Preview' },
   helpers: { id: 'helpers', label: 'Utilerías' },
@@ -551,14 +557,74 @@ if (typeof ResizeObserver !== 'undefined') {
   }).observe(shellNav);
 }
 
-// --- mobile: el catálogo se muda a un drawer izquierdo ---
+// --- paneles laterales: prefs con TTL 1h (mismo contrato que scroll-memory) ---
+const PANELS_TTL_MS = 3_600_000;
+const SHELL_PREFS_TAG = 'iswc-gallery';
+const SHELL_PREFS_KEY = 'shell';
+const ICON_COMPACT = 'mdi:arrow-collapse-horizontal';
+const ICON_EXPAND = 'mdi:arrow-expand-horizontal';
+
+const panelsCompactBtn = document.getElementById('panelsCompactBtn') as HTMLElement | null;
+
+/** Lee preferencia; si venció (>1h) se ignora y se borra. */
+function readPanelsCompactPref(): boolean {
+  const saved = getComponentPrefs(SHELL_PREFS_TAG, SHELL_PREFS_KEY);
+  if (!saved) return false;
+  const savedAt = Number((saved as { savedAt?: unknown }).savedAt);
+  if (!Number.isFinite(savedAt) || savedAt <= 0 || Date.now() - savedAt > PANELS_TTL_MS) {
+    removeComponentPrefs(SHELL_PREFS_TAG, SHELL_PREFS_KEY);
+    return false;
+  }
+  return (saved as { panelsCompact?: unknown }).panelsCompact === true;
+}
+
+function writePanelsCompactPref(compact: boolean): void {
+  setComponentPrefs(SHELL_PREFS_TAG, SHELL_PREFS_KEY, {
+    panelsCompact: compact,
+    savedAt: Date.now(),
+  });
+}
+
+let panelsCompactUser = readPanelsCompactPref();
+
+function syncPanelsCompactBtn(): void {
+  if (!panelsCompactBtn) return;
+  panelsCompactBtn.setAttribute('aria-pressed', panelsCompactUser ? 'true' : 'false');
+  panelsCompactBtn.setAttribute(
+    'aria-label',
+    panelsCompactUser ? 'Expandir paneles laterales' : 'Compactar paneles laterales',
+  );
+  panelsCompactBtn.setAttribute(
+    'title',
+    panelsCompactUser ? 'Expandir paneles laterales' : 'Compactar paneles laterales',
+  );
+  const icon = panelsCompactBtn.querySelector('iswc-icon');
+  if (icon) icon.setAttribute('icon', panelsCompactUser ? ICON_EXPAND : ICON_COMPACT);
+}
+
+function applyPanelsCompactDataset(): void {
+  if (panelsCompactUser) document.body.dataset.panelsCompact = '1';
+  else delete document.body.dataset.panelsCompact;
+  document.dispatchEvent(new Event('iswc-panels-compact-change'));
+}
+
+function setPanelsCompactUser(next: boolean): void {
+  panelsCompactUser = next;
+  writePanelsCompactPref(next);
+  syncPanelsCompactBtn();
+  applyPanelsCompactDataset();
+  syncNavLayout();
+}
+
+// --- mobile / compact: el catálogo se muda a un drawer izquierdo ---
 const navDrawer = document.getElementById('navDrawer') as DrawerElement | null;
 const navToggle = document.getElementById('navToggle') as HTMLElement | null;
 const compactNav = window.matchMedia('(max-width: 640px)');
 
 const syncNavLayout = (): void => {
   if (!mainSplit || !navDrawer || !navToggle) return;
-  const compact = compactNav.matches;
+  // Móvil o preferencia de usuario (btn del header).
+  const compact = compactNav.matches || panelsCompactUser;
   navToggle.hidden = !compact;
   document.body.dataset.navLayout = compact ? 'drawer' : 'split';
 
@@ -591,4 +657,9 @@ navDrawer?.addEventListener('iswc-after-show', () => scrollNavToCurrent());
 navDrawer?.addEventListener('iswc-after-hide', () => {
   navToggle?.setAttribute('aria-expanded', 'false');
 });
+panelsCompactBtn?.addEventListener('click', () => {
+  setPanelsCompactUser(!panelsCompactUser);
+});
+syncPanelsCompactBtn();
+applyPanelsCompactDataset();
 syncNavLayout();

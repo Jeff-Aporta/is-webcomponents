@@ -1,7 +1,21 @@
 {
-  "generatedAt": "2026-10-02T21:36:44.187Z",
-  "count": 61,
+  "generatedAt": "2026-10-03T16:54:40.506Z",
+  "count": 63,
   "modules": [
+    {
+      "file": "button-shape.ts",
+      "id": "button-shape",
+      "path": "src/components/_shared/button-shape.ts",
+      "summary": "button-shape — Compartido por: iswc-button (y quien reenvía `shape` al botón, p. ej. prefs-clear).",
+      "bytes": 1556,
+      "exports": [
+        "BUTTON_SHAPE",
+        "DEFAULT_BUTTON_SHAPE",
+        "BUTTON_SHAPE_ICON",
+        "normalizeButtonShape",
+        "buttonShapeSelectOptions"
+      ]
+    },
     {
       "file": "cdn-ref.ts",
       "id": "cdn-ref",
@@ -550,13 +564,27 @@
       "id": "llm-agent-prompt",
       "path": "src/components/_shared/llm-agent-prompt.ts",
       "summary": "Prompt canónico para agentes + helpers de ensamblaje. — Fuente de verdad en prosa: `src/skills/is-webcomponents/PROMPT.md`",
-      "bytes": 4577,
+      "bytes": 3925,
       "exports": [
         "SKILL_DOCS",
         "LLM_PROMPT_FALLBACK",
         "promptMdCandidates",
         "loadAgentPromptMd",
         "buildLlmPrompt"
+      ]
+    },
+    {
+      "file": "media-shape.ts",
+      "id": "media-shape",
+      "path": "src/components/_shared/media-shape.ts",
+      "summary": "media-shape — Compartido por: iswc-avatar, iswc-theme-img.",
+      "bytes": 1086,
+      "exports": [
+        "MEDIA_SHAPE",
+        "DEFAULT_MEDIA_SHAPE",
+        "MEDIA_SHAPE_ICON",
+        "normalizeMediaShape",
+        "mediaShapeSelectOptions"
       ]
     },
     {

@@ -1,14 +1,7 @@
 // tests/deps-snippet.test.ts
 //
-// Verifica el componente <iswc-cdn-snippet>:
-//   - Existe el manifest, el script y el preview.
-//   - La plantilla expone la fila plantilla data-kind="dep".
-//   - El componente parsea el slot "deps" con <script type="application/json">.
-//   - El componente parsea el atributo "dependencies" (JSON string).
-//   - El componente pinta N filas dep en el orden dado.
-//   - El preview demuestra dayjs como dependencia externa de ejemplo (el caso
-//     de uso real que antes ilustraba CodeMirror, ya sin CM en el kit).
-//   - El CSS marca las filas dep con un accent distinguible.
+// <iswc-cdn-snippet>: deps van EN EL MISMO snippet (tras el loader), no en
+// filas "Dependencia · …" sueltas.
 //
 // Uso:  node tests/deps-snippet.test.ts
 
@@ -19,14 +12,10 @@ import { fileURLToPath } from 'node:url';
 const here = dirname(fileURLToPath(import.meta.url));
 const root = dirname(dirname(dirname(dirname(here))));
 
-const csJs   = await readFile(join(root, 'src', 'components', 'feedback', 'cdn-snippet.ts'), 'utf8');
-const csCss  = await readFile(join(root, 'src', 'components', 'feedback', 'cdn-snippet.css'), 'utf8');
+const csJs = await readFile(join(root, 'src', 'components', 'feedback', 'cdn-snippet.ts'), 'utf8');
 const prevJson = await readFile(join(root, 'src', 'components', 'feedback', 'cdn-snippet.json'), 'utf8');
 const manifest = await readFile(join(root, 'src', 'manifest.ts'), 'utf8');
 
-// El preview es JSON: en el archivo el markup viaja escapado (`slot=\"deps\"`),
-// así que se buscan los patrones sobre los textos ya parseados y no sobre el
-// archivo en crudo.
 const textos = [];
 (function recorre(v) {
   if (typeof v === 'string') textos.push(v);
@@ -38,12 +27,8 @@ const prev = textos.join('\n');
 const failures = [];
 const check = (cond, msg) => { if (!cond) failures.push(msg); };
 
-// ─── manifest.js: el componente está registrado ─────────────────────────────
-
 check(/tag:\s*['"]iswc-cdn-snippet['"]/.test(manifest),
   'manifest.ts: iswc-cdn-snippet no está registrado');
-
-// ─── cdn-snippet.ts: API para dependencies ─────────────────────────────────
 
 check(/observedAttributes[\s\S]*?dependencies/.test(csJs),
   'cdn-snippet.ts: dependencies debe estar en observedAttributes');
@@ -51,63 +36,39 @@ check(/observedAttributes[\s\S]*?dependencies/.test(csJs),
 check(/#parseDeps|#deps/.test(csJs),
   'cdn-snippet.ts: debe tener un parser/almacén de deps');
 
-// Parsea el slot "deps" con <script type="application/json">.
 check(/script\[type=["']application\/json["']\]\[slot=["']deps["']\]/.test(csJs) ||
-      /querySelector(?:<[^>]+>)?\(['"]script\[type=.application\/json.\]\[slot=.deps.\]['"]\)/.test(csJs) ||
       /slot=["']deps["']/.test(csJs),
-  'cdn-snippet.ts: debe leer el slot "deps" con un <script type="application/json">');
+  'cdn-snippet.ts: debe leer el slot "deps"');
 
-// Parsea el atributo dependencies (JSON).
 check(/getAttribute\(['"]dependencies['"]\)/.test(csJs),
   'cdn-snippet.ts: debe leer el atributo dependencies');
 
-// Constructor del snippet de una dep con css+js.
-check(/#buildDepSnippet/.test(csJs) ||
-      /<link rel="stylesheet"/.test(csJs),
-  'cdn-snippet.ts: debe construir un snippet con <link> + <script>');
+check(/#buildDepLines/.test(csJs) && /#buildLoaderSnippet/.test(csJs),
+  'cdn-snippet.ts: deps se construyen con #buildDepLines');
 
-// El componente pinta N filas dep (clona para deps adicionales).
-check(/cloneNode|appendChild\(clone\)/.test(csJs),
-  'cdn-snippet.ts: debe clonar la fila dep template para deps adicionales');
+check(/\.\.\.depLines/.test(csJs) || /depLines/.test(csJs),
+  'cdn-snippet.ts: deps deben intercalarse en #buildLoaderSnippet');
 
-// Botón "Copiar" para la fila dep.
-check(/data-copy="dep"/.test(csJs) || /dataset\.copy/.test(csJs),
-  'cdn-snippet.ts: la fila dep debe tener su propio botón Copiar');
+check(/data-slot="deps-note"/.test(csJs),
+  'cdn-snippet.ts: notas de deps bajo el snippet único');
 
-// ─── cdn-snippet.css: estilo distinguible para dep rows ─────────────────────
+check(!/data-kind="dep"/.test(csJs) && !/data-copy="dep"/.test(csJs),
+  'cdn-snippet.ts: no debe haber filas Dependencia sueltas');
 
-check(/\.cdn__row--dep/.test(csCss),
-  'cdn-snippet.css: debe definir .cdn__row--dep con estilo distinguible');
-
-// Borde o label con accent (no hereda el del componente).
-check(/(border-inline-start|::before).*(warning|accent)/.test(csCss) ||
-      /cdn__dep-name::before/.test(csCss),
-  'cdn-snippet.css: la fila dep debe tener borde/accent visualmente distinto');
-
-// ─── preview: demuestra deps con dayjs (antes CodeMirror) ───────────────────
+check(/patyLoader/i.test(csJs),
+  'cdn-snippet.ts: patyLoader se detecta como ES module');
 
 check(/<iswc-cdn-snippet/.test(prev),
   'preview: debe usar <iswc-cdn-snippet>');
 
 check(/slot=["']deps["']/.test(prev),
-  'preview: debe demostrar el slot="deps" con un <script type="application/json">');
+  'preview: debe demostrar el slot="deps"');
 
 check(/dayjs/.test(prev),
   'preview: debe demostrar una dependencia externa real (dayjs)');
 
-check(/"name"\s*:\s*"dayjs"/.test(prev),
-  'preview: el array de deps debe incluir dayjs como name');
-
-check(/"version"/.test(prev),
-  'preview: el array de deps debe incluir un campo version');
-
-// El kit ya no depende de CodeMirror: el preview no debe sugerirlo como dep.
 check(!/CodeMirror|material-darker|jsdelivr\.net\/npm\/codemirror/.test(prev),
-  'preview: no debe mostrar CodeMirror (ni sus themes) como dependencia');
-
-// Demuestra N deps (múltiples filas: dayjs + su plugin).
-check(/"name"\s*:\s*"(?:dayjs|dayjs\/[a-z-]+)"/.test(prev),
-  'preview: debe demostrar el caso de múltiples dependencias (dayjs + plugin)');
+  'preview: no debe mostrar CodeMirror como dependencia');
 
 if (failures.length) {
   console.log('FAIL:');
@@ -115,5 +76,5 @@ if (failures.length) {
   process.exit(1);
 }
 
-console.log(`deps-snippet.test.ts: PASS — <iswc-cdn-snippet> reusable, soporta slot/atributo de deps, CSS con accent distintivo, preview con CodeMirror`);
+console.log('deps-snippet.test.ts: PASS — deps embebidas en el snippet loader');
 process.exit(0);

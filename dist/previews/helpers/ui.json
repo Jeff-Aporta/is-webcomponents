@@ -12,7 +12,7 @@
     {
       "id": "intro",
       "title": "Módulo de interfaz",
-      "titleHtml": true,
+      "titleHtml": false,
       "lede": "Utilidad de render para apps consumidoras. Tras cargar el CDN queda en\r\n          <code class=\"code\">globalThis.IswcUi</code> (alias <code class=\"code\">Ui</code>).\r\n          No reinventes botones ni tablas: monta <code class=\"code\">is-*</code> con\r\n          <code class=\"code\">html</code> + CSS hermano vía <code class=\"code\">adoptCss</code>.",
       "blocks": [
         {
@@ -24,7 +24,7 @@
     {
       "id": "html",
       "title": "Plantillas",
-      "titleHtml": true,
+      "titleHtml": false,
       "lede": "Plantilla etiquetada → <code class=\"code\">DocumentFragment</code>. Soporta valores, eventos y nodos hijos.",
       "blocks": [
         {
@@ -41,7 +41,7 @@
     {
       "id": "define",
       "title": "Definir un componente",
-      "titleHtml": true,
+      "titleHtml": false,
       "lede": "Registra un custom element de dominio. El CSS va en archivo hermano\r\n          (aquí se usa <code class=\"code\">IswcUi.css</code> solo para el demo en página).",
       "blocks": [
         {

@@ -2,8 +2,8 @@
   "$schema": "iswc-preview/v1",
   "tag": "iswc-video",
   "category": "media",
-  "title": "<iswc-video>",
-  "titleHtml": true,
+  "title": "&lt;iswc-video&gt;",
+  "titleHtml": false,
   "storageKey": "docs-iswc-video",
   "hasBehavior": true,
   "sections": [

@@ -2,8 +2,8 @@
   "$schema": "iswc-preview/v1",
   "tag": "iswc-textarea",
   "category": "forms",
-  "title": "<iswc-textarea>",
-  "titleHtml": true,
+  "title": "&lt;iswc-textarea&gt;",
+  "titleHtml": false,
   "styles": ".stack { display: grid; gap: 1.25rem; max-width: 30rem; }\r\n    .actions { display: flex; gap: 0.5rem; margin-top: 1rem; }",
   "storageKey": "docs-iswc-textarea",
   "hasBehavior": true,
@@ -73,9 +73,10 @@
               "prop": "attr:resize",
               "label": "resize",
               "options": [
-                "auto",
                 "none",
-                "both"
+                "vertical",
+                "both",
+                "auto"
               ]
             },
             {

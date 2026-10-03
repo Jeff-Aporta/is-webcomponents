@@ -46,7 +46,19 @@
                 "required": ["value", "label"],
                 "properties": {
                   "value": {},
-                  "label": { "type": "string" }
+                  "label": { "type": "string" },
+                  "icon": {
+                    "type": "string",
+                    "description": "Nombre de icono iswc-icon (slot start)."
+                  },
+                  "html": {
+                    "type": "string",
+                    "description": "HTML rico para la etiqueta (alternativa a label plano)."
+                  },
+                  "description": {
+                    "type": "string",
+                    "description": "Texto secundario bajo la etiqueta (slot description)."
+                  }
                 }
               }
             ]

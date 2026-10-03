@@ -2,8 +2,8 @@
   "$schema": "iswc-preview/v1",
   "tag": "iswc-format-date",
   "category": "helpers",
-  "title": "<iswc-format-date>",
-  "titleHtml": true,
+  "title": "&lt;iswc-format-date&gt;",
+  "titleHtml": false,
   "storageKey": "docs-iswc-format-date",
   "hasBehavior": true,
   "sections": [
@@ -103,7 +103,7 @@
     {
       "id": "inputs",
       "title": "Valores de fecha",
-      "titleHtml": true,
+      "titleHtml": false,
       "lede": "El behavior escribe el instante actual en <code class=\"code\">date</code> (ISO). Aquí se ve el mismo now con distintos atributos de formato.",
       "blocks": [
         {

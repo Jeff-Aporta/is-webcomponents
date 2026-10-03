@@ -5,7 +5,8 @@
  * la hoja del UA tiene menos prioridad que una regla de autor. El resultado
  * es que `<iswc-button hidden>` seguía visible. `:host([hidden])` es (0,2,0)
  * y gana a `:host` (0,1,0), así que basta declararlo una vez aquí en vez de
- * repetirlo en cada componente. */
+ * repetirlo en cada componente.
+ */
 :host([hidden]) {
   display: none;
 }

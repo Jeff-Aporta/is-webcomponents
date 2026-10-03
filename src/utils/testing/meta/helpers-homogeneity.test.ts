@@ -19,9 +19,11 @@ const failures = [];
 
 const INTERNAL_TS = new Set([
   'floating.ts', // building block interno
-  'md-lite.ts', // util compartida (no tag)
-  'md-editor-api.ts', // cliente CRUD del editor (no tag)
-  'response-cache.ts', // util interna (no tag)
+  'md-lite.ts', // util compartida (no tag) — docs: md-lite.md
+  'md-hydrate.ts', // ensure + upgrade MD (no tag) — docs: md-hydrate.md
+  'md-iswc-fences.ts', // fences iswc-* (no tag) — docs: md-iswc-fences.md
+  'md-editor-api.ts', // cliente CRUD del editor (no tag) — docs: md-editor-api.md
+  'response-cache.ts', // util interna (no tag) — docs: response-cache.md
 ]);
 
 // Consolidación 2026-09-07: helpers/ fuente es .ts; el manifest script apunta

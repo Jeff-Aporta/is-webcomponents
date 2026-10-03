@@ -2,8 +2,8 @@
   "$schema": "iswc-preview/v1",
   "tag": "iswc-kanban-card",
   "category": "data",
-  "title": "<iswc-kanban-card>",
-  "titleHtml": true,
+  "title": "&lt;iswc-kanban-card&gt;",
+  "titleHtml": false,
   "description": "Documentación y demos de iswc-kanban-card de InSoft.",
   "storageKey": "docs-iswc-kanban-card",
   "sections": [

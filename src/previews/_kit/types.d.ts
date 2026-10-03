@@ -73,7 +73,11 @@ export type PreviewBlock =
 export interface PreviewSection {
   id: string;
   title: string;
-  /** Si true, title se inserta como HTML (p. ej. con <code>). Default: texto. */
+  /**
+   * Si true, title se inserta como HTML (p. ej. `<code>` / `<span>`).
+   * Tags CE (`<iswc-*>`, `<paty-*>`) y el resto se escapan a `&lt;…&gt;`.
+   * Default: texto (`textContent`).
+   */
   titleHtml?: boolean;
   /**
    * No pintar el <h2> del chrome: el markup de la sección ya trae su propio
@@ -109,7 +113,10 @@ export interface PreviewDefinition {
   tag: string;
   /** Categoría (carpeta bajo previews/) */
   category: string;
-  /** Título visible del H2 intro (texto o HTML si titleHtml) */
+  /**
+   * Título visible del H2 intro. Con titleHtml: markup seguro (`code`/`span`);
+   * tags CE se escapan a `&lt;…&gt;`. Sin titleHtml: textContent.
+   */
   title: string;
   titleHtml?: boolean;
   description?: string;

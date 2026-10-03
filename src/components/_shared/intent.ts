@@ -10,6 +10,8 @@
  * Compartido por: iswc-button, iswc-tag, iswc-badge, iswc-callout, iswc-toast,
  * iswc-toast-item, iswc-stat, iswc-fab, iswc-checkbox, iswc-radio, iswc-radio-group,
  * iswc-rating, iswc-switch.
+ *
+ * CDN: reexportado en `helpers/ui.min.js` (`IswcUi.INTENT`, `ensureDefaultColor`, …).
  */
 
 export const INTENT = Object.freeze([
@@ -18,6 +20,8 @@ export const INTENT = Object.freeze([
   'success',   // verde — confirmación / validación OK
   'warning',   // amarillo — atención, no crítico
   'danger',    // rojo — error / acción destructiva
+  'info',      // azul informativo
+  'error',     // rojo de error (alias semántico de danger en varios CE)
 ]);
 
 export const DEFAULT_INTENT = 'brand';
@@ -43,4 +47,22 @@ export function normalizeIntent(value: unknown, fallback: Intent = DEFAULT_INTEN
 export function setEnumAttr(el: Element, attr: string, normalized: string | null | undefined): void {
   if (normalized == null || normalized === '') el.removeAttribute(attr);
   else el.setAttribute(attr, normalized);
+}
+
+/**
+ * Garantiza `color` con default de kit (`brand`) si el consumer no lo puso.
+ * Misma regla que button/switch: sin atributo → brand; con valor → se respeta
+ * (tras normalizar). Apps CDN: `IswcUi.ensureDefaultColor(el)`.
+ */
+export function ensureDefaultColor(
+  el: Element,
+  fallback: Intent = DEFAULT_INTENT,
+): Intent {
+  if (!el.hasAttribute('color')) {
+    el.setAttribute('color', fallback);
+    return fallback;
+  }
+  const next = normalizeIntent(el.getAttribute('color'), fallback);
+  if (el.getAttribute('color') !== next) el.setAttribute('color', next);
+  return next;
 }

@@ -2,8 +2,8 @@
   "$schema": "iswc-preview/v1",
   "tag": "iswc-tree",
   "category": "navigation",
-  "title": "<iswc-tree>",
-  "titleHtml": true,
+  "title": "&lt;iswc-tree&gt;",
+  "titleHtml": false,
   "description": "Documentación y demos de iswc-tree / iswc-tree-item de InSoft.",
   "storageKey": "docs-iswc-tree",
   "sections": [
@@ -16,27 +16,27 @@
           "kind": "demo",
           "html": "<iswc-tree id=\"tree1\" selection=\"single\" expanded>\r\n            <iswc-tree-item>\r\n              <iswc-icon slot=\"icon\" icon=\"mdi:folder\"></iswc-icon>\r\n              Documentos\r\n              <iswc-tree-item>\r\n                <iswc-icon slot=\"icon\" icon=\"mdi:file-document\"></iswc-icon>\r\n                facturas-2024.pdf\r\n              </iswc-tree-item>\r\n              <iswc-tree-item>\r\n                <iswc-icon slot=\"icon\" icon=\"mdi:file-document\"></iswc-icon>\r\n                contratos.odt\r\n              </iswc-tree-item>\r\n            </iswc-tree-item>\r\n            <iswc-tree-item>\r\n              <iswc-icon slot=\"icon\" icon=\"mdi:folder\"></iswc-icon>\r\n              Proyectos\r\n              <iswc-tree-item>\r\n                <iswc-icon slot=\"icon\" icon=\"mdi:folder\"></iswc-icon>\r\n                ContaPyme\r\n                <iswc-tree-item>\r\n                  <iswc-icon slot=\"icon\" icon=\"mdi:language-typescript\"></iswc-icon>\r\n                  app.ts\r\n                </iswc-tree-item>\r\n                <iswc-tree-item>\r\n                  <iswc-icon slot=\"icon\" icon=\"mdi:language-css3\"></iswc-icon>\r\n                  styles.css\r\n                </iswc-tree-item>\r\n              </iswc-tree-item>\r\n              <iswc-tree-item>\r\n                <iswc-icon slot=\"icon\" icon=\"mdi:folder\"></iswc-icon>\r\n                InSoft\r\n                <iswc-tree-item>\r\n                  <iswc-icon slot=\"icon\" icon=\"mdi:react\"></iswc-icon>\r\n                  index.jsx\r\n                </iswc-tree-item>\r\n              </iswc-tree-item>\r\n            </iswc-tree-item>\r\n            <iswc-tree-item>\r\n              <iswc-icon slot=\"icon\" icon=\"mdi:image\"></iswc-icon>\r\n              Capturas\r\n            </iswc-tree-item>\r\n          </iswc-tree>\r\n          <p id=\"tree1Log\" class=\"lede\">Seleccionado: <code class=\"code\">—</code></p>",
           "controls": [
-              {
-                "control": "select",
-                "prop": "attr:selection",
-                "label": "selection",
-                "options": [
-                  "single",
-                  "multiple",
-                  "leaf",
-                  "none"
-                ]
-              },
-              {
-                "control": "boolean",
-                "prop": "attr:expanded",
-                "label": "expanded"
-              },
-              {
-                "control": "boolean",
-                "prop": "attr:disabled",
-                "label": "disabled"
-              }
+            {
+              "control": "select",
+              "prop": "attr:selection",
+              "label": "selection",
+              "options": [
+                "none",
+                "single",
+                "leaf",
+                "multiple"
+              ]
+            },
+            {
+              "control": "boolean",
+              "prop": "attr:expanded",
+              "label": "expanded"
+            },
+            {
+              "control": "boolean",
+              "prop": "attr:disabled",
+              "label": "disabled"
+            }
           ],
           "equivNote": "El atributo selection define si el árbol selecciona nodos y cómo.",
           "equivHtml": "<!-- ver diagrama de ramas -->",

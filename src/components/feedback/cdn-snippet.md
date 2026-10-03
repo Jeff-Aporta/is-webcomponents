@@ -14,14 +14,15 @@ preview: ./cdn-snippet.json
 
 Panel de **consumo por CDN** con una sola estrategia: `loader.min.js`.
 
-Muestra un bloque copy-paste de dos tags:
+Muestra **un solo** bloque copy-paste:
 
-1. `<script type="module" src="…/loader.min.js">` — carga el loader.
-2. `<script type="module">` — `loadCSSBase` + `loadCSSPalettesDefault` + `load(…)`.
+1. `<script type="module" src="…/loader.min.js">` — loader del kit.
+2. (opcional) deps — p. ej. `patyLoader.min.js` — **en el mismo snippet**, justo después.
+3. `<script type="module">` — `loadCSSBase` + `loadCSSPalettesDefault` + `load(…)`.
 
-El snippet siempre hace `load('iswc-foo')`: un componente por llamada. El loader ya carga cada tag por separado, así que el panel no ofrece radio de alcance.
+El snippet siempre hace `load('iswc-foo')` / `load('paty-…')`: un componente por llamada. No hay filas «Dependencia · …» sueltas: las deps se embeben.
 
-Sin tab de mirrors. Sin filas sueltas de `all.min.js` / categoría / tag. Docs para agentes vía `<iswc-md-editor>`. Dependencias externas opcionales (slot `deps` / atributo `dependencies`).
+Sin tab de mirrors. Sin filas sueltas de `all.min.js` / categoría / tag. Skill: módulo + kit (general).
 
 ## Cuándo usarlo
 
@@ -59,6 +60,7 @@ import './cdn-snippet.js';
 
 ```html
 <script type="module" src="https://cdn.jsdelivr.net/gh/Jeff-Aporta/is-webcomponents@REF/dist/cdn/core/loader.min.js"></script>
+<!-- si hay deps (p. ej. patyLoader), van aquí en el mismo bloque -->
 <script type="module">
   const L = globalThis.ISWebComponentsLoader;
   await L.loadCSSBase();

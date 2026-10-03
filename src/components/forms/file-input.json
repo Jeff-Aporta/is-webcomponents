@@ -2,8 +2,8 @@
   "$schema": "iswc-preview/v1",
   "tag": "iswc-file-input",
   "category": "forms",
-  "title": "<iswc-file-input>",
-  "titleHtml": true,
+  "title": "&lt;iswc-file-input&gt;",
+  "titleHtml": false,
   "storageKey": "docs-iswc-file-input",
   "hasBehavior": true,
   "sections": [

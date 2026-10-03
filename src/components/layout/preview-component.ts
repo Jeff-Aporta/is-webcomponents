@@ -61,6 +61,11 @@ class IswcPreviewComponent extends withStyleAttrs(HTMLElement) {
   #compactMql: MediaQueryList | null = null;
   #onCompactChange = (): void => { this.#syncLayout(); };
 
+  /** Galería / host fuerza TOC en drawer (btn compactar paneles). */
+  #isForceCompact(): boolean {
+    return document.body?.dataset?.panelsCompact === '1';
+  }
+
   static get observedAttributes(): string[] {
     return ['storage-key', ...IswcPreviewComponent.styleAttrNames];
   }
@@ -98,6 +103,7 @@ class IswcPreviewComponent extends withStyleAttrs(HTMLElement) {
   disconnectedCallback(): void {
     this.#teardown();
     this.#compactMql?.removeEventListener('change', this.#onCompactChange);
+    document.removeEventListener('iswc-panels-compact-change', this.#onCompactChange);
     this.#compactMql = null;
     this.#mounted = false;
   }
@@ -156,6 +162,7 @@ class IswcPreviewComponent extends withStyleAttrs(HTMLElement) {
       });
       this.#compactMql = window.matchMedia(COMPACT_QUERY);
       this.#compactMql.addEventListener('change', this.#onCompactChange);
+      document.addEventListener('iswc-panels-compact-change', this.#onCompactChange);
     }
     this.#syncLayout();
   }
@@ -186,7 +193,7 @@ class IswcPreviewComponent extends withStyleAttrs(HTMLElement) {
       return;
     }
 
-    const compact = !!this.#compactMql?.matches;
+    const compact = this.#isForceCompact() || !!this.#compactMql?.matches;
     this.dataset.layout = compact ? 'compact' : 'wide';
     toggle.hidden = !compact;
 

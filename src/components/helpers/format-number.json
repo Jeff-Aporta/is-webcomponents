@@ -2,8 +2,8 @@
   "$schema": "iswc-preview/v1",
   "tag": "iswc-format-number",
   "category": "helpers",
-  "title": "<iswc-format-number>",
-  "titleHtml": true,
+  "title": "&lt;iswc-format-number&gt;",
+  "titleHtml": false,
   "storageKey": "docs-iswc-format-number",
   "sections": [
     {
@@ -42,9 +42,10 @@
               "prop": "attr:type",
               "label": "type",
               "options": [
-                "currency",
                 "decimal",
-                "percent"
+                "currency",
+                "percent",
+                "unit"
               ]
             },
             {
@@ -106,7 +107,7 @@
     {
       "id": "types",
       "title": "Tipos de número",
-      "titleHtml": true,
+      "titleHtml": false,
       "blocks": [
         {
           "kind": "demo",

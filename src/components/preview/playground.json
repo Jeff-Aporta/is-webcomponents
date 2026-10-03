@@ -1,0 +1,21 @@
+{
+  "$schema": "iswc-preview/v1",
+  "tag": "iswc-playground",
+  "category": "preview",
+  "title": "<iswc-playground>",
+  "titleHtml": false,
+  "storageKey": "docs-iswc-playground",
+  "sections": [
+    {
+      "id": "intro",
+      "title": "Uso",
+      "lede": "Stage + knobs homogeneos. Contrato de controls igual que los demos JSON. Layouts: split | panel.",
+      "blocks": [
+        {
+          "kind": "demo",
+          "html": "<iswc-playground layout=\"split\" title=\"Playground\" target=\"iswc-button\">\n  <iswc-button slot=\"stage\" color=\"brand\">Hola mundo</iswc-button>\n  <script type=\"application/json\" slot=\"spec\">{\n    \"controls\": [\n      { \"control\": \"select\", \"prop\": \"attr:color\", \"label\": \"color\", \"options\": [\"brand\", \"neutral\", \"success\", \"danger\"] },\n      { \"control\": \"select\", \"prop\": \"attr:variant\", \"label\": \"variant\", \"options\": [\"filled\", \"outlined\", \"plain\"] },\n      { \"control\": \"boolean\", \"prop\": \"attr:disabled\", \"label\": \"disabled\", \"group\": \"flags\" }\n    ]\n  }</script>\n</iswc-playground>"
+        }
+      ]
+    }
+  ]
+}

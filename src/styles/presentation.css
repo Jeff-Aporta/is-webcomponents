@@ -273,6 +273,12 @@ iswc-main.main {
     }
   }
 
+  /* Título = tag del CE (`<iswc-button>`). */
+  h2.section__tag-title {
+    font-family: "JetBrains Mono", var(--iswc-mono, ui-monospace, monospace);
+    font-weight: 700;
+  }
+
   .lede {
     color: var(--iswc-text-soft);
     margin: 0 0 28px;
@@ -543,132 +549,12 @@ iswc-main.main {
   }
 }
 
-/* Legacy: la barra con hints ya no se monta (sustituida por .file-meta-page). */
+/* Legacy: barras de fuentes/meta retiradas de los demos. */
 .vs-page-bar,
-.vs-page-hint {
-  display: none !important;
-}
-
-/* Barra única de fuentes + pesos CDN (tras el título del preview) */
-.file-meta {
-  display: flex;
-  flex-wrap: wrap;
-  align-items: center;
-  gap: 0.65rem 1rem;
-  margin: 0 0 1.25rem;
-  padding: 0.55rem 0.75rem;
-  border: 1px solid color-mix(in srgb, var(--iswc-border) 80%, transparent);
-  border-radius: calc(var(--iswc-radius, 10px) + 2px);
-  background:
-    linear-gradient(
-      135deg,
-      color-mix(in srgb, var(--iswc-accent, var(--iswc-brand)) 7%, transparent),
-      transparent 42%
-    ),
-    color-mix(in srgb, var(--iswc-bg-elev, var(--iswc-bg-soft, var(--iswc-bg))) 92%, transparent);
-  box-shadow:
-    0 1px 0 color-mix(in srgb, #fff 6%, transparent) inset,
-    0 8px 22px -18px rgb(0 0 0 / 45%);
-  font-size: 0.78rem;
-
-  [data-theme="light"] & {
-    box-shadow:
-      0 1px 0 color-mix(in srgb, #fff 70%, transparent) inset,
-      0 10px 24px -18px rgb(0 0 0 / 14%);
-  }
-
-  @media (max-width: 720px) {
-    gap: 0.55rem;
-    padding: 0.5rem 0.6rem;
-  }
-}
-/* Barra de página: fluye con el scroll del iswc-main (no sticky). */
+.vs-page-hint,
+.file-meta,
 .file-meta-page {
-  position: static;
-}
-.file-meta__srcs {
-  display: inline-flex;
-  flex-wrap: wrap;
-  gap: 0.3rem;
-  align-items: center;
-  padding: 0.15rem;
-  border-radius: 999px;
-  background: color-mix(in srgb, var(--iswc-bg) 55%, transparent);
-  border: 1px solid color-mix(in srgb, var(--iswc-border) 70%, transparent);
-}
-.file-meta__src-btn {
-  font-size: 0.72rem;
-  --iswc-button-radius: 999px;
-}
-.file-meta__mins {
-  display: inline-flex;
-  flex-wrap: wrap;
-  gap: 0.4rem 0.85rem;
-  align-items: center;
-  min-inline-size: 0;
-  flex: 1 1 16rem;
-}
-.file-meta__row {
-  display: inline-flex;
-  flex-wrap: nowrap;
-  align-items: center;
-  gap: 0.4rem;
-  min-inline-size: 0;
-  max-inline-size: 100%;
-}
-.file-meta__path {
-  display: inline-block;
-  max-inline-size: min(100%, 18rem);
-  overflow: hidden;
-  text-overflow: ellipsis;
-  white-space: nowrap;
-  padding: 0.2rem 0.5rem;
-  border-radius: 0.4rem;
-  border: 1px solid color-mix(in srgb, var(--iswc-border) 75%, transparent);
-  background: color-mix(in srgb, var(--iswc-bg) 70%, transparent);
-  color: var(--iswc-text-soft);
-  font-family: "JetBrains Mono", ui-monospace, SFMono-Regular, Menlo, Consolas, monospace;
-  font-size: 0.68rem;
-  font-weight: 500;
-  letter-spacing: -0.02em;
-  line-height: 1.35;
-
-  @media (max-width: 720px) {
-    max-inline-size: 12rem;
-  }
-}
-.file-meta__bytes {
-  color: var(--iswc-text);
-  font-variant-numeric: tabular-nums;
-  font-weight: 650;
-  font-size: 0.75rem;
-}
-.file-meta__total {
-  display: inline-flex;
-  align-items: center;
-  gap: 0.4rem;
-  margin-inline-start: auto;
-  padding: 0.25rem 0.55rem;
-  border-radius: 999px;
-  border: 1px solid color-mix(in srgb, var(--iswc-accent, var(--iswc-brand)) 28%, var(--iswc-border));
-  background: color-mix(in srgb, var(--iswc-accent, var(--iswc-brand)) 10%, transparent);
-  color: var(--iswc-text);
-  font-weight: 700;
-
-  @media (max-width: 720px) {
-    margin-inline-start: 0;
-  }
-}
-.file-meta__total-label {
-  color: var(--iswc-text-soft);
-  font-weight: 650;
-  letter-spacing: 0.06em;
-  text-transform: uppercase;
-  font-size: 0.62rem;
-}
-.file-meta__total-bytes {
-  color: var(--iswc-accent, var(--iswc-brand));
-  font-variant-numeric: tabular-nums;
+  display: none !important;
 }
 
 /* Modal full-page de fuentes */

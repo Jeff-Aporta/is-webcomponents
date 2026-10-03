@@ -2,8 +2,8 @@
   "$schema": "iswc-preview/v1",
   "tag": "iswc-scroller",
   "category": "navigation",
-  "title": "<iswc-scroller>",
-  "titleHtml": true,
+  "title": "&lt;iswc-scroller&gt;",
+  "titleHtml": false,
   "description": "Documentación y demos de iswc-scroller de InSoft.",
   "storageKey": "docs-iswc-scroller",
   "sections": [

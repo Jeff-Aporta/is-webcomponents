@@ -2,8 +2,8 @@
   "$schema": "iswc-preview/v1",
   "tag": "iswc-format",
   "category": "helpers",
-  "title": "<iswc-format>",
-  "titleHtml": true,
+  "title": "&lt;iswc-format&gt;",
+  "titleHtml": false,
   "storageKey": "docs-iswc-format",
   "sections": [
     {
@@ -20,11 +20,11 @@
               "prop": "attr:type",
               "label": "type",
               "options": [
-                "number",
                 "date",
-                "text",
+                "number",
                 "bytes",
-                "relative"
+                "relative",
+                "text"
               ]
             },
             {

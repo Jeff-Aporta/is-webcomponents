@@ -18,33 +18,40 @@
   .form-control {
     display: flex;
     flex-direction: column;
-    gap: 0.35em;
+    /* Sin gap fijo: label/hint “vacíos” no inflan el alto del control. */
+    gap: 0;
   }
 
   .label {
     font-size: 0.875em;
     font-weight: 500;
     color: var(--iswc-text-soft, inherit);
+    &:not([hidden]) { margin-block-end: 0.35em; }
   }
 
   .hint {
     font-size: 0.8em;
     color: var(--iswc-text-dim, #7a8390);
+    &:not([hidden]) { margin-block-start: 0.35em; }
   }
 
   .error-text {
     font-size: 0.8em;
     color: var(--iswc-select-danger-text);
+    &:not([hidden]) { margin-block-start: 0.35em; }
   }
 
   .base {
     display: flex;
     align-items: center;
     gap: 0.15em;
-    min-block-size: 2.5em;
-    padding: 0.2em 0.35em 0.2em 0.75em;
+    box-sizing: border-box;
+    block-size: var(--iswc-control-height, 2.5em);
+    min-block-size: var(--iswc-control-height, 2.5em);
+    padding-block: 0;
+    padding-inline: 0.75em 0.35em;
     background: var(--iswc-select-bg);
-    border: 1px solid var(--iswc-select-border);
+    border: 0.0625em solid var(--iswc-select-border);
     border-radius: var(--iswc-select-border-radius);
     color: var(--iswc-select-text);
     cursor: pointer;
@@ -60,7 +67,8 @@
     gap: 0.4em;
     flex: 1;
     min-inline-size: 0;
-    padding: 0.25em 0;
+    min-block-size: 0;
+    padding: 0;
     outline: none;
   }
 
@@ -76,7 +84,11 @@
   }
 
   .display {
-    display: block;
+    display: inline-flex;
+    align-items: center;
+    gap: 0.4em;
+    min-inline-size: 0;
+    max-inline-size: 100%;
     white-space: nowrap;
     overflow: hidden;
     text-overflow: ellipsis;
@@ -84,6 +96,20 @@
 
     &.iswc-placeholder {
       color: var(--iswc-text-dim, #7a8390);
+    }
+
+    .display-start {
+      display: inline-flex;
+      flex: none;
+      align-items: center;
+      font-size: 1.1em;
+      line-height: 0;
+    }
+
+    .display-label {
+      min-inline-size: 0;
+      overflow: hidden;
+      text-overflow: ellipsis;
     }
   }
 
@@ -202,6 +228,11 @@
     white-space: nowrap;
     overflow: hidden;
     text-overflow: ellipsis;
+
+    .opt-default {
+      color: var(--iswc-text-soft, #8b949e);
+      font-weight: 400;
+    }
   }
 
   .option-desc {

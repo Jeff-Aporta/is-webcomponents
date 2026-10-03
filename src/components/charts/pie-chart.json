@@ -2,8 +2,8 @@
   "$schema": "iswc-preview/v1",
   "tag": "iswc-pie-chart",
   "category": "data-viz",
-  "title": "<iswc-pie-chart>",
-  "titleHtml": true,
+  "title": "&lt;iswc-pie-chart&gt;",
+  "titleHtml": false,
   "storageKey": "docs-iswc-pie-chart",
   "sections": [
     {

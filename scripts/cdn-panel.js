@@ -38,6 +38,7 @@ import components from '../src/manifest.js';
 const LLM_BASE = 'https://raw.githubusercontent.com/Jeff-Aporta/is-webcomponents/main/src';
 
 function llmDocs(entry) {
+  // Solo el MD del módulo. La skill general vive en SKILL_DOCS (cdn-snippet).
   // script → ruta fuente relativa al repo (p. ej. components/actions/button.js)
   const scriptPath = (entry.script || '')
     .replace(/^\.\.\/\.\.\//, '')
@@ -47,17 +48,6 @@ function llmDocs(entry) {
   if (moduleMd && moduleMd !== scriptPath) {
     docs.push({ label: 'Módulo', url: `${LLM_BASE}/${moduleMd}` });
   }
-  // Consolidación 2026-09-07: las LLM.md per-carpeta se eliminaron.
-  // El catálogo consolidado vive en specs/componentes.md. El enlace de
-  // "Categoría" apunta ahora al índice global.
-  docs.push({
-    label: 'Índice global',
-    url: `${LLM_BASE}/specs/componentes.md`,
-  });
-  docs.push({
-    label: 'Skill · instalación CDN',
-    url: `${LLM_BASE}/skills/is-cdn-install/SKILL.md`,
-  });
   return docs;
 }
 

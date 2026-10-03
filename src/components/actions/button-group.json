@@ -2,8 +2,8 @@
   "$schema": "iswc-preview/v1",
   "tag": "iswc-button-group",
   "category": "actions",
-  "title": "<iswc-button-group>",
-  "titleHtml": true,
+  "title": "&lt;iswc-button-group&gt;",
+  "titleHtml": false,
   "description": "Documentación y demos del componente iswc-button-group de InSoft.",
   "styles": "\n  .bar { display: flex; flex-wrap: wrap; align-items: center; gap: 0.75rem; }\n  .stack { display: flex; flex-direction: column; align-items: flex-start; gap: 1rem; }\n  .field { display: grid; gap: 0.4rem; justify-items: start; }\n  .field > .cap {\n    font-family: \"JetBrains Mono\", var(--iswc-mono);\n    font-size: 0.7rem;\n    color: var(--iswc-text-dim);\n  }\n  .native-demo {\n    font: inherit;\n    padding: 0.55em 1em;\n    border: 1px solid var(--iswc-border);\n    background: var(--iswc-control-bg);\n    color: var(--iswc-text);\n    cursor: pointer;\n  }\n",
   "storageKey": "docs-iswc-button-group",
@@ -11,85 +11,86 @@
     {
       "id": "intro",
       "title": "Uso",
-      "titleHtml": true,
+      "titleHtml": false,
       "lede": "Agrupa botones relacionados en una sola unidad visual y, si se lo pides, gestiona cuál está activo. Sirve para controles segmentados, toolbars y split buttons.",
       "blocks": [
         {
           "kind": "demo",
           "html": "\n                <div class=\"stack\">\n                  <div class=\"field\">\n                    <span class=\"cap\">appearance=\"segmented\" · select=\"single\" · <code class=\"code\">hue</code> por botón</span>\n                    <iswc-button-group label=\"Vista\" variant=\"segmented\" select=\"single\" value=\"lista\">\n                      <iswc-button variant=\"plain\" value=\"lista\" hue=\"210\">\n                        <iswc-icon slot=\"start\" icon=\"mdi:format-list-bulleted\"></iswc-icon>\n                        Lista\n                      </iswc-button>\n                      <iswc-button variant=\"plain\" value=\"tabla\" hue=\"160\">\n                        <iswc-icon slot=\"start\" icon=\"mdi:table\"></iswc-icon>\n                        Tabla\n                      </iswc-button>\n                      <iswc-button variant=\"plain\" value=\"tarjetas\" hue=\"35\">\n                        <iswc-icon slot=\"start\" icon=\"mdi:view-grid-outline\"></iswc-icon>\n                        Tarjetas\n                      </iswc-button>\n                    </iswc-button-group>\n                  </div>\n                  <p class=\"lede\" id=\"introLog\">vista: <code class=\"code\">lista</code></p>\n                </div>",
           "controls": [
-              {
-                "control": "select",
-                "prop": "attr:label",
-                "label": "label",
-                "options": [
-                  "Vista",
-                  "Alineación",
-                  "Opciones",
-                  "Periodo",
-                  "Formato",
-                  "Prioridad",
-                  "Plan",
-                  "Guardar",
-                  "Exportar",
-                  "Historial",
-                  "Demo"
-                ]
-              },
-              {
-                "control": "select",
-                "prop": "attr:variant",
-                "label": "variant",
-                "options": [
-                  "segmented",
-                  "separated",
-                  "joined"
-                ]
-              },
-              {
-                "control": "select",
-                "prop": "attr:select",
-                "label": "select",
-                "options": [
-                  "single",
-                  "multiple"
-                ]
-              },
-              {
-                "control": "select",
-                "prop": "attr:value",
-                "label": "value",
-                "options": [
-                  "lista",
-                  "Centro",
-                  "Medio",
-                  "mes",
-                  "bold",
-                  "pro",
-                  "left",
-                  "B"
-                ]
-              },
-              {
-                "control": "text",
-                "prop": "attr:orientation",
-                "label": "orientation"
-              },
-              {
-                "control": "boolean",
-                "prop": "attr:allow-empty",
-                "label": "allow-empty"
-              },
-              {
-                "control": "boolean",
-                "prop": "attr:pill",
-                "label": "pill"
-              },
-              {
-                "control": "boolean",
-                "prop": "attr:stretch",
-                "label": "stretch"
-              }
+            {
+              "control": "select",
+              "prop": "attr:label",
+              "label": "label",
+              "options": [
+                "Vista",
+                "Alineación",
+                "Opciones",
+                "Periodo",
+                "Formato",
+                "Prioridad",
+                "Plan",
+                "Guardar",
+                "Exportar",
+                "Historial",
+                "Demo"
+              ]
+            },
+            {
+              "control": "select",
+              "prop": "attr:variant",
+              "label": "variant",
+              "options": [
+                "joined",
+                "segmented",
+                "separated"
+              ]
+            },
+            {
+              "control": "select",
+              "prop": "attr:select",
+              "label": "select",
+              "options": [
+                "none",
+                "single",
+                "multiple"
+              ]
+            },
+            {
+              "control": "select",
+              "prop": "attr:value",
+              "label": "value",
+              "options": [
+                "lista",
+                "Centro",
+                "Medio",
+                "mes",
+                "bold",
+                "pro",
+                "left",
+                "B"
+              ]
+            },
+            {
+              "control": "text",
+              "prop": "attr:orientation",
+              "label": "orientation"
+            },
+            {
+              "control": "boolean",
+              "prop": "attr:allow-empty",
+              "label": "allow-empty"
+            },
+            {
+              "control": "boolean",
+              "prop": "attr:pill",
+              "label": "pill"
+            },
+            {
+              "control": "boolean",
+              "prop": "attr:stretch",
+              "label": "stretch"
+            }
           ],
           "equivNote": "El kit aporta selección, hue y estilos. En HTML puro el análogo más cercano es un <code class=\"code\">radiogroup</code> con botones.",
           "equivHtml": "<div role=\"radiogroup\" aria-label=\"Vista\">\n  <button type=\"button\" role=\"radio\" aria-checked=\"true\">Lista</button>\n  <button type=\"button\" role=\"radio\" aria-checked=\"false\">Tabla</button>\n  <button type=\"button\" role=\"radio\" aria-checked=\"false\">Tarjetas</button>\n</div>"

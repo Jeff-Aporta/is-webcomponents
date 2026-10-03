@@ -2,8 +2,8 @@
   "$schema": "iswc-preview/v1",
   "tag": "iswc-card",
   "category": "layout",
-  "title": "<iswc-card>",
-  "titleHtml": true,
+  "title": "&lt;iswc-card&gt;",
+  "titleHtml": false,
   "description": "Documentación y demos del componente iswc-card de InSoft.",
   "storageKey": "docs-iswc-card",
   "sections": [
@@ -21,11 +21,11 @@
               "prop": "attr:variant",
               "label": "variant",
               "options": [
-                "outlined",
+                "accent",
                 "filled",
+                "outlined",
                 "filled-outlined",
-                "plain",
-                "accent"
+                "plain"
               ]
             }
           ]

@@ -2,8 +2,8 @@
   "$schema": "iswc-preview/v1",
   "tag": "iswc-button",
   "category": "actions",
-  "title": "<iswc-button>",
-  "titleHtml": true,
+  "title": "&lt;iswc-button&gt;",
+  "titleHtml": false,
   "description": "Documentación y playground del componente iswc-button de InSoft.",
   "styles": "#customSpinnerBtn::part(spinner) svg {\r\n            stroke: #ff6b6b;\r\n            stroke-width: 3;\r\n          }\r\n          #customSpinnerBtn::part(spinner) svg circle {\r\n            stroke-dasharray: 12 6;\r\n          }",
   "storageKey": "docs-iswc-button",
@@ -17,116 +17,162 @@
           "kind": "demo",
           "html": "<span class=\"demo-label\">// El caso más simple</span>\r\n          <div class=\"demo-row\">\r\n            <iswc-button>Hola mundo</iswc-button>\r\n            <iswc-button color=\"brand\">Guardar</iswc-button>\r\n            <iswc-button color=\"success\" variant=\"outlined\">\r\n              <iswc-icon slot=\"start\" icon=\"mdi:check\"></iswc-icon>\r\n              Aprobado\r\n            </iswc-button>\r\n          </div>",
           "controls": [
-              {
-                "control": "select",
-                "prop": "attr:color",
-                "label": "color",
-                "options": [
-                  "brand",
-                  "success",
-                  "neutral",
-                  "warning",
-                  "danger",
-                  "info",
-                  "error",
-                  "#ae3ec9",
-                  "#0ca678",
-                  "#d9480f"
-                ]
-              },
-              {
-                "control": "select",
-                "prop": "attr:variant",
-                "label": "variant",
-                "options": [
-                  "outlined",
-                  "plain",
-                  "filled",
-                  "ghost"
-                ]
-              },
-              {
-                "control": "boolean",
-                "prop": "attr:pill",
-                "label": "pill"
-              },
-              {
-                "control": "boolean",
-                "prop": "attr:with-caret",
-                "label": "with-caret"
-              },
-              {
-                "control": "boolean",
-                "prop": "attr:loading",
-                "label": "loading"
-              },
-              {
-                "control": "boolean",
-                "prop": "attr:disabled",
-                "label": "disabled"
-              },
-              {
-                "control": "text",
-                "prop": "attr:target",
-                "label": "target"
-              },
-              {
-                "control": "text",
-                "prop": "attr:rel",
-                "label": "rel"
-              },
-              {
-                "control": "text",
-                "prop": "attr:download",
-                "label": "download"
-              },
-              {
-                "control": "select",
-                "prop": "attr:type",
-                "label": "type",
-                "options": [
-                  "submit",
-                  "reset"
-                ]
-              },
-              {
-                "control": "select",
-                "prop": "attr:value",
-                "label": "value",
-                "options": [
-                  "save",
-                  "publish"
-                ]
-              },
-              {
-                "control": "select",
-                "prop": "attr:color-hover",
-                "label": "color-hover",
-                "options": [
-                  "#862e9c",
-                  "#087f5b",
-                  "#a03406"
-                ]
-              },
-              {
-                "control": "text",
-                "prop": "attr:color-active",
-                "label": "color-active"
-              },
-              {
-                "control": "select",
-                "prop": "attr:radius",
-                "label": "radius",
-                "options": [
-                  "0",
-                  "18px"
-                ]
-              },
-              {
-                "control": "text",
-                "prop": "attr:border-width",
-                "label": "border-width"
-              }
+            {
+              "control": "select",
+              "prop": "attr:color",
+              "label": "color",
+              "options": [
+                "brand",
+                "success",
+                "neutral",
+                "warning",
+                "danger",
+                "info",
+                "error",
+                "#ae3ec9",
+                "#0ca678",
+                "#d9480f"
+              ]
+            },
+            {
+              "control": "select",
+              "prop": "attr:variant",
+              "label": "variant",
+              "options": [
+                "filled",
+                "outlined",
+                "plain",
+                "ghost",
+                "soft",
+                "text"
+              ]
+            },
+            {
+              "control": "select",
+              "prop": "attr:shape",
+              "label": "shape",
+              "options": [
+                {
+                  "value": "none",
+                  "label": "none",
+                  "icon": "mdi:cancel"
+                },
+                {
+                  "value": "round",
+                  "label": "round",
+                  "icon": "mdi:rounded-corner"
+                },
+                {
+                  "value": "square",
+                  "label": "square",
+                  "icon": "mdi:square-outline"
+                },
+                {
+                  "value": "rect",
+                  "label": "rect",
+                  "icon": "mdi:rectangle-outline"
+                },
+                {
+                  "value": "pill",
+                  "label": "pill",
+                  "icon": "mdi:capsule"
+                },
+                {
+                  "value": "hexagon",
+                  "label": "hexagon",
+                  "icon": "mdi:hexagon-outline"
+                },
+                {
+                  "value": "arrow-left",
+                  "label": "arrow-left",
+                  "icon": "mdi:arrow-left-bold-outline"
+                },
+                {
+                  "value": "arrow-right",
+                  "label": "arrow-right",
+                  "icon": "mdi:arrow-right-bold-outline"
+                }
+              ],
+              "default": "round"
+            },
+            {
+              "control": "boolean",
+              "prop": "attr:with-caret",
+              "label": "with-caret"
+            },
+            {
+              "control": "boolean",
+              "prop": "attr:loading",
+              "label": "loading"
+            },
+            {
+              "control": "boolean",
+              "prop": "attr:disabled",
+              "label": "disabled"
+            },
+            {
+              "control": "text",
+              "prop": "attr:target",
+              "label": "target"
+            },
+            {
+              "control": "text",
+              "prop": "attr:rel",
+              "label": "rel"
+            },
+            {
+              "control": "text",
+              "prop": "attr:download",
+              "label": "download"
+            },
+            {
+              "control": "select",
+              "prop": "attr:type",
+              "label": "type",
+              "options": [
+                "button",
+                "submit",
+                "reset"
+              ]
+            },
+            {
+              "control": "select",
+              "prop": "attr:value",
+              "label": "value",
+              "options": [
+                "save",
+                "publish"
+              ]
+            },
+            {
+              "control": "select",
+              "prop": "attr:color-hover",
+              "label": "color-hover",
+              "options": [
+                "#862e9c",
+                "#087f5b",
+                "#a03406"
+              ]
+            },
+            {
+              "control": "text",
+              "prop": "attr:color-active",
+              "label": "color-active"
+            },
+            {
+              "control": "select",
+              "prop": "attr:radius",
+              "label": "radius",
+              "options": [
+                "0",
+                "18px"
+              ]
+            },
+            {
+              "control": "text",
+              "prop": "attr:border-width",
+              "label": "border-width"
+            }
           ],
           "equivNote": "Segun attrs, el host se comporta como button o como enlace. El diagrama resume las ramas — clic para abrir el lightbox.",
           "equivHtml": "<button type=\"button\">Accion</button>",
@@ -168,9 +214,89 @@
           "html": "<div class=\"demo-row\">\r\n            <iswc-button id=\"btn-play\" color=\"brand\" variant=\"filled\">Primario</iswc-button>\r\n            <iswc-button color=\"success\" variant=\"filled\">Confirmar</iswc-button>\r\n            <iswc-button color=\"warning\" variant=\"filled\">Atención</iswc-button>\r\n            <iswc-button color=\"danger\"  variant=\"filled\">Eliminar</iswc-button>\r\n            <iswc-button color=\"info\"    variant=\"filled\">Detalles</iswc-button>\r\n            <iswc-button color=\"error\"   variant=\"filled\">Reintentar</iswc-button>\r\n            <iswc-button color=\"neutral\" variant=\"filled\">Secundario</iswc-button>\r\n          </div>",
           "target": "#btn-play",
           "controls": [
-            { "control": "select", "prop": "variant", "label": "Variante", "group": "Apariencia", "options": ["filled", "outlined", "plain", "ghost"] },
-            { "control": "select", "prop": "color", "label": "Color", "group": "Apariencia", "options": ["brand", "success", "warning", "danger", "info", "error", "neutral"] },
-            { "control": "boolean", "prop": "attr:disabled", "label": "Deshabilitado", "group": "Estado" }
+            {
+              "control": "select",
+              "prop": "variant",
+              "label": "Variante",
+              "group": "Apariencia",
+              "options": [
+                "filled",
+                "outlined",
+                "plain",
+                "ghost",
+                "soft",
+                "text"
+              ]
+            },
+            {
+              "control": "select",
+              "prop": "attr:shape",
+              "label": "shape",
+              "options": [
+                {
+                  "value": "none",
+                  "label": "none",
+                  "icon": "mdi:cancel"
+                },
+                {
+                  "value": "round",
+                  "label": "round",
+                  "icon": "mdi:rounded-corner"
+                },
+                {
+                  "value": "square",
+                  "label": "square",
+                  "icon": "mdi:square-outline"
+                },
+                {
+                  "value": "rect",
+                  "label": "rect",
+                  "icon": "mdi:rectangle-outline"
+                },
+                {
+                  "value": "pill",
+                  "label": "pill",
+                  "icon": "mdi:capsule"
+                },
+                {
+                  "value": "hexagon",
+                  "label": "hexagon",
+                  "icon": "mdi:hexagon-outline"
+                },
+                {
+                  "value": "arrow-left",
+                  "label": "arrow-left",
+                  "icon": "mdi:arrow-left-bold-outline"
+                },
+                {
+                  "value": "arrow-right",
+                  "label": "arrow-right",
+                  "icon": "mdi:arrow-right-bold-outline"
+                }
+              ],
+              "default": "round"
+            },
+            {
+              "control": "select",
+              "prop": "color",
+              "label": "Color",
+              "group": "Apariencia",
+              "options": [
+                "brand",
+                "success",
+                "warning",
+                "danger",
+                "info",
+                "error",
+                "neutral"
+              ]
+            },
+            {
+              "control": "boolean",
+              "prop": "attr:disabled",
+              "label": "Deshabilitado",
+              "group": "Estado"
+            }
           ],
           "equivNote": "Equivalente nativo generico de iswc-button: button type=button (o a si hay href).",
           "equivHtml": "<button type=\"button\">…</button>"

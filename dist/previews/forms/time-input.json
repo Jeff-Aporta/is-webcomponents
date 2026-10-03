@@ -2,8 +2,8 @@
   "$schema": "iswc-preview/v1",
   "tag": "iswc-time-input",
   "category": "forms",
-  "title": "<iswc-time-input>",
-  "titleHtml": true,
+  "title": "&lt;iswc-time-input&gt;",
+  "titleHtml": false,
   "description": "Documentación y demos de iswc-time-input de InSoft.",
   "storageKey": "docs-iswc-time-input",
   "sections": [

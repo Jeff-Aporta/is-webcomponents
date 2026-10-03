@@ -2,8 +2,8 @@
   "$schema": "iswc-preview/v1",
   "tag": "iswc-spinner",
   "category": "feedback",
-  "title": "<iswc-spinner>",
-  "titleHtml": true,
+  "title": "&lt;iswc-spinner&gt;",
+  "titleHtml": false,
   "styles": ".speed-demo {\r\n      display: flex;\r\n      flex-direction: column;\r\n      gap: 1rem;\r\n      max-width: 28rem;\r\n    }\r\n    .speed-demo__row {\r\n      display: flex;\r\n      align-items: center;\r\n      gap: 1.25rem;\r\n    }\r\n    .speed-demo__control {\r\n      display: flex;\r\n      flex-direction: column;\r\n      gap: 0.35rem;\r\n      flex: 1;\r\n      min-width: 0;\r\n    }\r\n    .speed-demo__meta {\r\n      display: flex;\r\n      justify-content: space-between;\r\n      font-size: 0.8rem;\r\n      color: var(--iswc-text-dim);\r\n      font-variant-numeric: tabular-nums;\r\n    }\r\n    .speed-demo__meta strong { color: var(--iswc-text-soft); }\r\n    .speed-demo input[type=\"range\"] {\r\n      width: 100%;\r\n      accent-color: var(--iswc-accent, var(--iswc-color-brand));\r\n      cursor: pointer;\r\n    }",
   "storageKey": "docs-iswc-spinner",
   "sections": [

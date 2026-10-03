@@ -2,8 +2,8 @@
   "$schema": "iswc-preview/v1",
   "tag": "iswc-transfer",
   "category": "data",
-  "title": "<iswc-transfer>",
-  "titleHtml": true,
+  "title": "&lt;iswc-transfer&gt;",
+  "titleHtml": false,
   "description": "Documentación y demos de iswc-transfer / iswc-transfer-item de InSoft.",
   "storageKey": "docs-iswc-transfer",
   "sections": [

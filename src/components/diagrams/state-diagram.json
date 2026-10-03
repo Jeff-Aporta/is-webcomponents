@@ -2,8 +2,8 @@
   "$schema": "iswc-preview/v1",
   "tag": "iswc-state-diagram",
   "category": "diagrams",
-  "title": "<iswc-state-diagram>",
-  "titleHtml": true,
+  "title": "&lt;iswc-state-diagram&gt;",
+  "titleHtml": false,
   "storageKey": "docs-iswc-state-diagram",
   "sections": [
     {

@@ -168,9 +168,67 @@ export function renderBlock(block: PreviewBlock): HTMLElement {
 
 /** Indice: texto plano. Un titulo que es solo un tag no cae en el id. */
 function etiquetaIndice(title: string, id: string): string {
-  const plano = title.replace(/<[^>]+>/g, ' ').replace(/\s+/g, ' ').trim();
+  const decoded = title
+    .replace(/&lt;/gi, '<')
+    .replace(/&gt;/gi, '>')
+    .replace(/&quot;/gi, '"')
+    .replace(/&amp;/gi, '&');
+  const plano = decoded.replace(/<[^>]+>/g, ' ').replace(/\s+/g, ' ').trim();
   if (plano) return plano;
   return id === 'intro' ? 'Uso' : id;
+}
+
+/** Escapa &, <, > y " para meter texto en HTML. */
+function escapeHtml(s: string): string {
+  return s
+    .replace(/&/g, '&amp;')
+    .replace(/</g, '&lt;')
+    .replace(/>/g, '&gt;')
+    .replace(/"/g, '&quot;');
+}
+
+/**
+ * titleHtml solo vale si hay markup de verdad (code/span/…). Un título que es
+ * el tag del CE (`<iswc-button>` o `&lt;iswc-button&gt;`) SIEMPRE va por
+ * textContent: con innerHTML el navegador monta el custom element y el H2
+ * queda vacío.
+ */
+const TITLE_HTML_OK = new Set([
+  'code', 'span', 'strong', 'em', 'b', 'i', 'small', 'br', 'kbd', 'samp',
+]);
+
+function titleHtmlSeguro(html: string): string {
+  return html.replace(/<\/?([a-zA-Z][\w:-]*)\b[^>]*>/g, (m, name: string) => {
+    if (TITLE_HTML_OK.has(name.toLowerCase())) return m;
+    return escapeHtml(m);
+  });
+}
+
+/** `&lt;iswc-x&gt;` → `<iswc-x>` para pintar como texto. */
+function textoTitulo(title: string): string {
+  return title
+    .replace(/&lt;/gi, '<')
+    .replace(/&gt;/gi, '>')
+    .replace(/&quot;/gi, '"')
+    .replace(/&amp;/gi, '&');
+}
+
+function tituloConMarkupSeguro(title: string): boolean {
+  return /<\/?(?:code|span|strong|em|b|i|small|br|kbd|samp)\b/i.test(title);
+}
+
+/** H2: texto por defecto. HTML solo con markup seguro explícito. */
+function pintarTitulo(h2: HTMLElement, title: string, asHtml?: boolean): void {
+  if (asHtml && tituloConMarkupSeguro(title)) {
+    h2.innerHTML = titleHtmlSeguro(title);
+    return;
+  }
+  const plano = textoTitulo(title);
+  h2.textContent = plano;
+  // `<iswc-x>` / `<paty-x>` → tipografía mono de tag.
+  if (/^<[\w-]+>(?:\s|$)/.test(plano) || /^<[\w-]+>\s*\+/.test(plano)) {
+    h2.classList.add('section__tag-title');
+  }
 }
 
 /** Contenedores permitidos para una sección: nunca un tag arbitrario del JSON. */
@@ -195,8 +253,7 @@ export function renderSection(section: PreviewSection): HTMLElement {
   // el <h2> del chrome encima duplicaría el título de la página.
   if (!section.hideTitle) {
     const h2 = document.createElement('h2');
-    if (section.titleHtml) h2.innerHTML = section.title;
-    else h2.textContent = section.title;
+    pintarTitulo(h2, section.title, section.titleHtml === true);
     el.append(h2);
   }
 
@@ -244,12 +301,14 @@ export function renderDefinition(def: PreviewDefinition, targets: { main: HTMLEl
   for (const section of def.sections) {
     // def.title es el H2 visible del intro (tag del componente). El JSON
     // suele dejar section.title="Uso" solo para el TOC.
+    // Nunca inferir titleHtml por `/<…>/`: eso montaba el CE en el H2.
     const sec =
       section.id === 'intro' && def.title
         ? {
             ...section,
             title: def.title,
-            titleHtml: def.titleHtml ?? /<[^>]+>/.test(def.title),
+            // Solo HTML si el def lo pide Y trae markup seguro (span/code…).
+            titleHtml: def.titleHtml === true && tituloConMarkupSeguro(def.title),
           }
         : section;
     destino.append(renderSection(sec));

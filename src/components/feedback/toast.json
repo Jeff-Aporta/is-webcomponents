@@ -2,8 +2,8 @@
   "$schema": "iswc-preview/v1",
   "tag": "iswc-toast",
   "category": "feedback",
-  "title": "<iswc-toast>",
-  "titleHtml": true,
+  "title": "&lt;iswc-toast&gt;",
+  "titleHtml": false,
   "storageKey": "docs-iswc-toast",
   "hasBehavior": true,
   "sections": [

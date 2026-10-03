@@ -31,7 +31,9 @@
     display: flex;
     align-items: center;
     gap: 0.15em;
-    min-height: 2.5em;
+    box-sizing: border-box;
+    block-size: var(--iswc-control-height, 2.5em);
+    min-block-size: var(--iswc-control-height, 2.5em);
     padding: 0 0.35em 0 0.75em;
     background: var(--iswc-combobox-bg);
     border: 1px solid var(--iswc-combobox-border);

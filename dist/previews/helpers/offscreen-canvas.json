@@ -2,8 +2,8 @@
   "$schema": "iswc-preview/v1",
   "tag": "iswc-offscreen-canvas",
   "category": "helpers",
-  "title": "<iswc-offscreen-canvas>",
-  "titleHtml": true,
+  "title": "&lt;iswc-offscreen-canvas&gt;",
+  "titleHtml": false,
   "description": "Lienzo que transfiere el control a OffscreenCanvas (y opcionalmente a un Worker).",
   "storageKey": "docs-iswc-offscreen-canvas",
   "sections": [

@@ -2,8 +2,8 @@
   "$schema": "iswc-preview/v1",
   "tag": "iswc-confirm-delete",
   "category": "isp",
-  "title": "<iswc-confirm-delete>",
-  "titleHtml": true,
+  "title": "&lt;iswc-confirm-delete&gt;",
+  "titleHtml": false,
   "description": "Documentación y demos de iswc-confirm-delete de InSoft.",
   "storageKey": "docs-iswc-confirm-delete",
   "sections": [

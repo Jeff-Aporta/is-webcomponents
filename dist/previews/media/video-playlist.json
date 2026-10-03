@@ -2,8 +2,8 @@
   "$schema": "iswc-preview/v1",
   "tag": "iswc-video-playlist",
   "category": "media",
-  "title": "<iswc-video-playlist>",
-  "titleHtml": true,
+  "title": "&lt;iswc-video-playlist&gt;",
+  "titleHtml": false,
   "styles": ".cluster { display: flex; flex-wrap: wrap; gap: 0.5rem; align-items: center; }",
   "storageKey": "docs-iswc-video-playlist",
   "hasBehavior": true,
@@ -27,8 +27,9 @@
               "prop": "attr:placement",
               "label": "placement",
               "options": [
-                "bottom",
-                "right"
+                "left",
+                "right",
+                "bottom"
               ]
             }
           ]
@@ -83,7 +84,7 @@
     {
       "id": "config",
       "title": "Configuración",
-      "titleHtml": true,
+      "titleHtml": false,
       "lede": "La esquina superior derecha de la cabecera acepta un slot\r\n          <code class=\"code\">config</code> para colgar un botón / menú opcional.\r\n          Si no se usa, esa zona queda vacía.",
       "blocks": [
         {

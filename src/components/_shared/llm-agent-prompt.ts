@@ -7,27 +7,11 @@
 /** Doc individual de skill/prompt referenciada por el prompt canónico. */
 export type SkillDoc = { label: string; url: string };
 
-/** Docs fijas del kit (preferir GitHub; raw solo lectura text/plain). */
+/** Doc general del kit. El MD del módulo lo aporta el panel (config.docs). Solo dos. */
 export const SKILL_DOCS: readonly SkillDoc[] = [
   {
-    label: 'Skill · instalación CDN',
-    url: 'https://github.com/Jeff-Aporta/is-webcomponents/blob/main/src/skills/is-cdn-install/SKILL.md',
-  },
-  {
-    label: 'Skill · kit (reuso is-*)',
+    label: 'Skill · kit (general)',
     url: 'https://github.com/Jeff-Aporta/is-webcomponents/blob/main/src/skills/is-webcomponents/SKILL.md',
-  },
-  {
-    label: 'Prompt · instrucciones LLM',
-    url: 'https://github.com/Jeff-Aporta/is-webcomponents/blob/main/src/skills/is-webcomponents/PROMPT.md',
-  },
-  {
-    label: 'Tools · build / migrate / local',
-    url: 'https://github.com/Jeff-Aporta/is-webcomponents/tree/main/src/skills/is-webcomponents/tools',
-  },
-  {
-    label: 'Skill CDN · is-cdn-install (jsDelivr)',
-    url: 'https://cdn.jsdelivr.net/gh/Jeff-Aporta/is-webcomponents@main/dist/cdn/skills/is-cdn-install/SKILL.md',
   },
 ];
 

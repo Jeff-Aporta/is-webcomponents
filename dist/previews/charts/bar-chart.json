@@ -2,8 +2,8 @@
   "$schema": "iswc-preview/v1",
   "tag": "iswc-bar-chart",
   "category": "data-viz",
-  "title": "<iswc-bar-chart>",
-  "titleHtml": true,
+  "title": "&lt;iswc-bar-chart&gt;",
+  "titleHtml": false,
   "storageKey": "docs-iswc-bar-chart",
   "sections": [
     {

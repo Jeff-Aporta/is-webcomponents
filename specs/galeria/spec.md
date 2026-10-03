@@ -20,6 +20,9 @@ La galería (`index.html` + `src/previews/`) es el laboratorio visual del kit. C
 - Componente: `<iswc-preview-component>` (`src/components/layout/preview-component.js`).
 - Catálogo: `src/previews/catalog.ts` + `registry.loadPreview(tag)`.
 - Utilerías públicas en `helpers/`: tab en nav + JSON + MD (`src/utils/health/meta/helpers-homogeneity.test.ts`).
+- Playground de producto: `<iswc-playground>` ([`playground/spec.md`](../playground/spec.md)).
+  Si el JSON trae seccion playground, va **primera**. Knobs = contrato `controls`;
+  no HTML nativo de formularios en el chrome.
 
 ## S-G3 Estado en URL
 

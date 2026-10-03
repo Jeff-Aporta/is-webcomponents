@@ -2,8 +2,8 @@
   "$schema": "iswc-preview/v1",
   "tag": "iswc-details",
   "category": "layout",
-  "title": "<iswc-details>",
-  "titleHtml": true,
+  "title": "&lt;iswc-details&gt;",
+  "titleHtml": false,
   "description": "Documentación y demos del componente iswc-details de InSoft.",
   "storageKey": "docs-iswc-details",
   "sections": [
@@ -16,36 +16,36 @@
           "kind": "demo",
           "html": "<span class=\"demo-label\">caso mínimo</span>\r\n          <iswc-details summary=\"¿Qué es InSoft?\">\r\n            InSoft es un ERP modular para empresas medianas que necesitan integrar\r\n            contabilidad, inventario, facturación y CRM en una sola plataforma.\r\n          </iswc-details>",
           "controls": [
-              {
-                "control": "select",
-                "prop": "attr:variant",
-                "label": "variant",
-                "options": [
-                  "outlined",
-                  "filled",
-                  "filled-outlined",
-                  "plain"
-                ]
-              },
-              {
-                "control": "select",
-                "prop": "attr:icon-placement",
-                "label": "icon-placement",
-                "options": [
-                  "end",
-                  "start"
-                ]
-              },
-              {
-                "control": "boolean",
-                "prop": "attr:open",
-                "label": "open"
-              },
-              {
-                "control": "boolean",
-                "prop": "attr:disabled",
-                "label": "disabled"
-              }
+            {
+              "control": "select",
+              "prop": "attr:variant",
+              "label": "variant",
+              "options": [
+                "filled",
+                "outlined",
+                "filled-outlined",
+                "plain"
+              ]
+            },
+            {
+              "control": "select",
+              "prop": "attr:icon-placement",
+              "label": "icon-placement",
+              "options": [
+                "start",
+                "end"
+              ]
+            },
+            {
+              "control": "boolean",
+              "prop": "attr:open",
+              "label": "open"
+            },
+            {
+              "control": "boolean",
+              "prop": "attr:disabled",
+              "label": "disabled"
+            }
           ],
           "equivNote": "Varios details con el mismo name se comportan como accordion.",
           "equivHtml": "<!-- ver diagrama de ramas -->",
@@ -120,7 +120,7 @@
     {
       "id": "accordion",
       "title": "Acordeón",
-      "titleHtml": true,
+      "titleHtml": false,
       "lede": "Cuando varios <code class=\"code\">iswc-details</code> comparten el atributo\r\n          <code class=\"code\">name</code>, abrir uno cierra los demás.",
       "blocks": [
         {

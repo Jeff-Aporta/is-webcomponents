@@ -2,8 +2,8 @@
   "$schema": "iswc-preview/v1",
   "tag": "iswc-color-picker",
   "category": "forms",
-  "title": "<iswc-color-picker>",
-  "titleHtml": true,
+  "title": "&lt;iswc-color-picker&gt;",
+  "titleHtml": false,
   "storageKey": "docs-iswc-color-picker",
   "hasBehavior": true,
   "sections": [

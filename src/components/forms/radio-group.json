@@ -2,8 +2,8 @@
   "$schema": "iswc-preview/v1",
   "tag": "iswc-radio-group",
   "category": "forms",
-  "title": "<iswc-radio-group>",
-  "titleHtml": true,
+  "title": "&lt;iswc-radio-group&gt;",
+  "titleHtml": false,
   "description": "Documentación y demos de iswc-radio-group de InSoft.",
   "storageKey": "docs-iswc-radio-group",
   "sections": [

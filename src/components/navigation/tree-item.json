@@ -2,8 +2,8 @@
   "$schema": "iswc-preview/v1",
   "tag": "iswc-tree-item",
   "category": "navigation",
-  "title": "<iswc-tree-item>",
-  "titleHtml": true,
+  "title": "&lt;iswc-tree-item&gt;",
+  "titleHtml": false,
   "description": "Documentación y demos de iswc-tree-item de InSoft.",
   "storageKey": "docs-iswc-tree-item",
   "sections": [

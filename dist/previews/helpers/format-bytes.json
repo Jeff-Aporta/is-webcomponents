@@ -2,8 +2,8 @@
   "$schema": "iswc-preview/v1",
   "tag": "iswc-format-bytes",
   "category": "helpers",
-  "title": "<iswc-format-bytes>",
-  "titleHtml": true,
+  "title": "&lt;iswc-format-bytes&gt;",
+  "titleHtml": false,
   "storageKey": "docs-iswc-format-bytes",
   "sections": [
     {
@@ -79,7 +79,7 @@
     {
       "id": "units",
       "title": "Unidades de entrada",
-      "titleHtml": true,
+      "titleHtml": false,
       "lede": "El mismo tamaño conceptual con distinta unidad de entrada.",
       "blocks": [
         {

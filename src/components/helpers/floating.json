@@ -2,13 +2,13 @@
   "$schema": "iswc-preview/v1",
   "tag": "iswc-floating",
   "category": "helpers",
-  "title": "<iswc-floating> (interno)",
+  "title": "&lt;iswc-floating&gt; (interno)",
   "titleHtml": false,
   "description": "Building block interno. En producto usa iswc-popover o iswc-tooltip.",
   "sections": [
     {
       "id": "intro",
-      "title": "Uso interno",
+      "title": "&lt;iswc-floating&gt; (interno)",
       "lede": "Building block interno. En producto usa iswc-popover o iswc-tooltip.",
       "blocks": [
         {

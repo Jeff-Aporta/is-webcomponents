@@ -2,8 +2,8 @@
   "$schema": "iswc-preview/v1",
   "tag": "iswc-masked-input",
   "category": "forms",
-  "title": "<iswc-masked-input>",
-  "titleHtml": true,
+  "title": "&lt;iswc-masked-input&gt;",
+  "titleHtml": false,
   "styles": ".mask-row { display: grid; grid-template-columns: 12rem 1fr; gap: 1rem; align-items: center; padding: .35rem 0; }\r\n    .mask-row label { font-size: .82rem; color: var(--iswc-text-soft); }",
   "storageKey": "docs-iswc-masked-input",
   "sections": [

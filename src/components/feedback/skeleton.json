@@ -24,9 +24,9 @@
               "prop": "attr:effect",
               "label": "effect",
               "options": [
+                "none",
                 "sheen",
-                "pulse",
-                "none"
+                "pulse"
               ]
             }
           ]

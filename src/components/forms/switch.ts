@@ -11,12 +11,13 @@ import {
 import { ElementBase } from '../../core/element-base.js';
 import { setStringAttr, setOptionalAttr } from '../_shared/reflect.js';
 import { hasSlotted } from '../_shared/dom-utils.js';
+import { DEFAULT_INTENT, ensureDefaultColor } from '../_shared/intent.js';
 /**
  * <iswc-switch> — Interruptor form-associated (track + thumb).
  *
  * Atributos
  *   name, value (default "on"), hint
- *   color          brand (default) | neutral | success | warning | danger
+ *   color          brand (default) | neutral | success | warning | danger | info | error
  *   label-placement  end (default) | start | top | bottom
  *   icon             nombre de <iswc-icon> dentro del thumb apagado
  *   checked-icon     nombre de <iswc-icon> dentro del thumb encendido
@@ -29,7 +30,7 @@ import { hasSlotted } from '../_shared/dom-utils.js';
  * Custom states: checked, disabled, readonly, error
  * Events: iswc-change { checked, value }
  *
- * Sin `color`: el acento es currentColor. Sin `size`: escala con el font-size del contexto.
+ * Sin `color`: brand (mismo contrato que button). Escala con font-size del contexto.
  */
 
 (() => {
@@ -56,7 +57,10 @@ import { hasSlotted } from '../_shared/dom-utils.js';
     'icon', 'checked-icon', 'on-label', 'off-label',
   ];
 
-  const VARIANTS: string[] = ['brand', 'neutral', 'success', 'warning', 'danger'];
+  // Literal para audit/exhaustivos; alineado a INTENT (+ info/error).
+  const VARIANTS: readonly string[] = [
+    'brand', 'neutral', 'success', 'warning', 'danger', 'info', 'error',
+  ];
   const PLACEMENTS: string[] = ['end', 'start', 'top', 'bottom'];
 
   /** Sin flatten: el texto de fallback del slot no cuenta como contenido propio. */
@@ -116,6 +120,7 @@ import { hasSlotted } from '../_shared/dom-utils.js';
         this.#defaultsRead = true;
         this.#defaultChecked = this.checked;
       }
+      ensureDefaultColor(this, DEFAULT_INTENT);
       if (!this.hasAttribute('role')) this.setAttribute('role', 'switch');
       this.#syncSlots();
       this.#sync();
@@ -154,10 +159,13 @@ import { hasSlotted } from '../_shared/dom-utils.js';
     set hint(v: string | null) { setOptionalAttr(this, 'hint', v); }
 
     get color(): string {
-      const v = this.getAttribute('color');
-      return VARIANTS.includes(v ?? '') ? (v ?? '') : 'brand';
+      const v = this.getAttribute('color') ?? '';
+      return VARIANTS.includes(v) ? v : DEFAULT_INTENT;
     }
-    set color(v: string) { this.setAttribute('color', VARIANTS.includes(v) ? v : 'brand'); }
+    set color(v: string) {
+      if (v == null || v === '') this.setAttribute('color', DEFAULT_INTENT);
+      else this.setAttribute('color', VARIANTS.includes(v) ? v : DEFAULT_INTENT);
+    }
 
     get labelPlacement(): string {
       const v = this.getAttribute('label-placement');

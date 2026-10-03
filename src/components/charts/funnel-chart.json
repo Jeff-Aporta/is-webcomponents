@@ -2,8 +2,8 @@
   "$schema": "iswc-preview/v1",
   "tag": "iswc-funnel-chart",
   "category": "data-viz",
-  "title": "<iswc-funnel-chart>",
-  "titleHtml": true,
+  "title": "&lt;iswc-funnel-chart&gt;",
+  "titleHtml": false,
   "storageKey": "docs-iswc-funnel-chart",
   "sections": [
     {

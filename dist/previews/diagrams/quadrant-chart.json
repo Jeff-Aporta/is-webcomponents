@@ -2,8 +2,8 @@
   "$schema": "iswc-preview/v1",
   "tag": "iswc-quadrant-chart",
   "category": "diagrams",
-  "title": "<iswc-quadrant-chart>",
-  "titleHtml": true,
+  "title": "&lt;iswc-quadrant-chart&gt;",
+  "titleHtml": false,
   "storageKey": "docs-iswc-quadrant-chart",
   "sections": [
     {

@@ -2,8 +2,8 @@
   "$schema": "iswc-preview/v1",
   "tag": "iswc-drawer",
   "category": "layout",
-  "title": "<iswc-drawer>",
-  "titleHtml": true,
+  "title": "&lt;iswc-drawer&gt;",
+  "titleHtml": false,
   "description": "Documentación y demos del componente iswc-drawer de InSoft.",
   "storageKey": "docs-iswc-drawer",
   "sections": [

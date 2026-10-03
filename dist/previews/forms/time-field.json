@@ -2,8 +2,8 @@
   "$schema": "iswc-preview/v1",
   "tag": "iswc-time-field",
   "category": "forms",
-  "title": "<iswc-time-field>",
-  "titleHtml": true,
+  "title": "&lt;iswc-time-field&gt;",
+  "titleHtml": false,
   "description": "Documentación y demos de iswc-time-field de InSoft.",
   "storageKey": "docs-iswc-time-field",
   "sections": [

@@ -2,8 +2,8 @@
   "$schema": "iswc-preview/v1",
   "tag": "iswc-treemap",
   "category": "data-viz",
-  "title": "<iswc-treemap>",
-  "titleHtml": true,
+  "title": "&lt;iswc-treemap&gt;",
+  "titleHtml": false,
   "storageKey": "docs-iswc-treemap",
   "sections": [
     {

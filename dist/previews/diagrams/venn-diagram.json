@@ -2,8 +2,8 @@
   "$schema": "iswc-preview/v1",
   "tag": "iswc-venn-diagram",
   "category": "diagrams",
-  "title": "<iswc-venn-diagram>",
-  "titleHtml": true,
+  "title": "&lt;iswc-venn-diagram&gt;",
+  "titleHtml": false,
   "storageKey": "docs-iswc-venn-diagram",
   "sections": [
     {

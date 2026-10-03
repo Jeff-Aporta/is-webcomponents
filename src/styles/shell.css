@@ -35,7 +35,8 @@ body {
 
 .shell-bar {
   grid-area: header;
-  position: relative;
+  position: sticky;
+  inset-block-start: 0;
   display: flex;
   align-items: center;
   gap: 0.75em;
@@ -50,7 +51,8 @@ body {
   box-shadow:
     0 1px 0 color-mix(in srgb, #fff 5%, transparent) inset,
     0 6px 20px rgb(0 0 0 / 14%);
-  z-index: 1;
+  /* Encima del split/preview: herramientas siempre alcanzables. */
+  z-index: 40;
 
   /* Hilo de marca al pie de la barra: firma discreta, no decoración. */
   &::after {
@@ -188,13 +190,25 @@ body {
     }
   }
 
-  /* push icon cluster a la derecha; plain+pill viven en el WC */
-  & .shell-icon-btn {
+  /* Empuja el cluster de herramientas + iconos a la derecha. */
+  & .shell-tools {
     margin-inline-start: auto;
+    display: inline-flex;
+    align-items: center;
+    gap: 0.35em;
+  }
+
+  & .shell-icon-btn {
+    margin-inline-start: 0;
   }
 
   & iswc-theme-toggle {
     margin-inline-start: 0;
+  }
+
+  /* Activo = paneles compactados (pressed). */
+  & .shell-tool-btn[aria-pressed="true"] {
+    color: var(--iswc-accent);
   }
 
   @media (max-width: 640px) {

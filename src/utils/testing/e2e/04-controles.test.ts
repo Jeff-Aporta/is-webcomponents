@@ -164,17 +164,23 @@ async function manipularYVerificar(
     const panel = paneles[idx] as HTMLElement | undefined;
     if (!panel?.shadowRoot) return null;
     const fila = panel.shadowRoot.querySelector<HTMLElement>(`[data-control-prop="${esc(prop)}"]`);
-    const entrada = fila?.querySelector<HTMLInputElement | HTMLSelectElement | HTMLTextAreaElement>('input, select, textarea');
-    if (!entrada) return { ok: false, actual: '(sin input en el panel)' };
+    if (!fila) return { ok: false, actual: '(sin fila en el panel)' };
 
-    // 1) manipular el control (camino UI-equivalente: valor + evento real)
-    if (control === 'boolean') {
-      (entrada as HTMLInputElement).checked = Boolean(vRaw);
-      entrada.dispatchEvent(new Event('change', { bubbles: true }));
+    // 1) manipular el control (widgets iswc-* o nativos color/range/json)
+    const panelApi = panel as unknown as { setValor?: (p: string, v: unknown) => void };
+    if (typeof panelApi.setValor === 'function') {
+      panelApi.setValor(prop, vRaw);
     } else {
-      entrada.value = control === 'json' ? JSON.stringify(vRaw) : String(vRaw ?? '');
-      const evento = entrada instanceof HTMLSelectElement ? 'change' : 'input';
-      entrada.dispatchEvent(new Event(evento, { bubbles: true }));
+      const entrada = fila.querySelector<HTMLInputElement | HTMLSelectElement | HTMLTextAreaElement>('input, select, textarea');
+      if (!entrada) return { ok: false, actual: '(sin input en el panel)' };
+      if (control === 'boolean') {
+        (entrada as HTMLInputElement).checked = Boolean(vRaw);
+        entrada.dispatchEvent(new Event('change', { bubbles: true }));
+      } else {
+        entrada.value = control === 'json' ? JSON.stringify(vRaw) : String(vRaw ?? '');
+        const evento = entrada instanceof HTMLSelectElement ? 'change' : 'input';
+        entrada.dispatchEvent(new Event(evento, { bubbles: true }));
+      }
     }
 
     // 2) resolver el host (misma lógica que system/controles)

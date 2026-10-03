@@ -41,11 +41,11 @@
     html.theme-light, html.theme-light body { background: #f4f7fb; color: #142033; }
   </style>
   <!-- Kit: siempre dist/cdn (transpilado). Shell de galería: CSS local. -->
-  <link rel="stylesheet" href="dist/cdn/is-base.min.css?h=gbf6d8">
+  <link rel="stylesheet" href="dist/cdn/is-base.min.css?h=p4b472">
   <link rel="stylesheet" href="dist/cdn/palettes.min.css?h=q5fu5e">
   <link rel="stylesheet" href="src/styles/shell.css">
   <link rel="stylesheet" href="src/styles/presentation.css">
-  <link rel="stylesheet" href="dist/cdn/preview/preview-component.min.css?h=8ema4c">
+  <link rel="stylesheet" href="dist/cdn/preview/preview-component.min.css?h=gok8j9">
   <style>
     /* Chrome del shell: no mostrar tags crudos mientras upgradan. */
     .shell-bar iswc-button:not(:defined),
@@ -58,7 +58,7 @@
   <link rel="icon" href="dist/assets/favicon.svg" type="image/svg+xml">
   <script src="scripts/preview-boot.js"></script>
   <script type="module">
-    import { ISWebComponentsLoader as L } from './dist/cdn/core/loader.min.js?h=umjnkm';
+    import { ISWebComponentsLoader as L } from './dist/cdn/core/loader.min.js?h=7bj37l';
     // Galería local: self (dist/cdn) primero; espejos CDN como fallback.
     L.configure({ preferSelf: true, mirrors: ['jsdelivr', 'pages'] });
 
@@ -81,7 +81,7 @@
           'iswc-palette-selector',
           'iswc-code',
         ),
-        import('./dist/cdn/preview/preview-component.min.js?h=h1uuun'),
+        import('./dist/cdn/preview/preview-component.min.js?h=cb73xm'),
       ]);
       document.documentElement.dataset.kitShell = '1';
       window.dispatchEvent(new Event('iswc-gallery-shell-ready'));
@@ -105,7 +105,7 @@
   </script>
 </head>
 <body>
-  <header class="shell-bar">
+  <header class="shell-bar" id="shellBar">
     <iswc-button class="shell-menu-btn" id="navToggle" color="neutral" variant="plain" pill type="button"
             aria-expanded="false" aria-controls="navDrawer"
             aria-label="Abrir el catálogo de componentes" title="Catálogo de componentes" hidden>
@@ -113,6 +113,14 @@
     </iswc-button>
 
     <iswc-palette-selector id="brandPalette" scope="root" storage-key="iswc-palette" aria-label="Elegir paleta"></iswc-palette-selector>
+
+    <div class="shell-tools" role="toolbar" aria-label="Herramientas de la galería">
+      <iswc-button class="shell-icon-btn shell-tool-btn" id="panelsCompactBtn" color="neutral" variant="plain" pill type="button"
+              aria-pressed="false"
+              aria-label="Compactar paneles laterales" title="Compactar paneles laterales">
+        <iswc-icon slot="start" icon="mdi:arrow-collapse-horizontal"></iswc-icon>
+      </iswc-button>
+    </div>
 
     <iswc-button class="shell-icon-btn" id="fullscreenBtn" color="neutral" variant="plain" pill type="button" aria-label="Abrir preview en pantalla completa" title="Abrir preview en pantalla completa">
       <iswc-icon slot="start" icon="mdi:open-in-new"></iswc-icon>
@@ -134,6 +142,6 @@
              label="Componentes"></iswc-drawer>
 
   <!-- Gallery SPA: dist/gallery-app.min.js (from src/gallery/app.ts). -->
-  <script type="module" src="./dist/gallery-app.min.js?h=gnwpq1"></script>
+  <script type="module" src="./dist/gallery-app.min.js?h=8tnad1"></script>
 </body>
 </html>

@@ -2,8 +2,8 @@
   "$schema": "iswc-preview/v1",
   "tag": "iswc-dialog",
   "category": "layout",
-  "title": "<iswc-dialog>",
-  "titleHtml": true,
+  "title": "&lt;iswc-dialog&gt;",
+  "titleHtml": false,
   "description": "Documentación y demos del componente iswc-dialog de InSoft.",
   "storageKey": "docs-iswc-dialog",
   "sections": [

@@ -2,8 +2,8 @@
   "$schema": "iswc-preview/v1",
   "tag": "iswc-option",
   "category": "forms",
-  "title": "<iswc-option>",
-  "titleHtml": true,
+  "title": "&lt;iswc-option&gt;",
+  "titleHtml": false,
   "description": "Documentación y demos de iswc-option de InSoft.",
   "storageKey": "docs-iswc-option",
   "sections": [

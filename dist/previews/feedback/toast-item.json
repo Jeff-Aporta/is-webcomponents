@@ -2,8 +2,8 @@
   "$schema": "iswc-preview/v1",
   "tag": "iswc-toast-item",
   "category": "feedback",
-  "title": "<iswc-toast-item>",
-  "titleHtml": true,
+  "title": "&lt;iswc-toast-item&gt;",
+  "titleHtml": false,
   "description": "Documentación y demos de iswc-toast-item de InSoft.",
   "storageKey": "docs-iswc-toast-item",
   "sections": [
@@ -21,7 +21,10 @@
               "prop": "attr:color",
               "label": "color",
               "options": [
+                "brand",
+                "neutral",
                 "success",
+                "warning",
                 "danger"
               ]
             },

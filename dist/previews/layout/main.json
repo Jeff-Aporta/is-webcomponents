@@ -2,8 +2,8 @@
   "$schema": "iswc-preview/v1",
   "tag": "iswc-main",
   "category": "layout",
-  "title": "<iswc-main>",
-  "titleHtml": true,
+  "title": "&lt;iswc-main&gt;",
+  "titleHtml": false,
   "storageKey": "docs-iswc-main",
   "hasBehavior": true,
   "sections": [

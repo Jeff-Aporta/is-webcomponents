@@ -148,3 +148,25 @@ test('galería: el catálogo se muda a un drawer izquierdo en móvil', () => {
   );
   assert.ok(/\.shell-menu-btn/.test(shellCss), 'la hamburguesa del shell necesita estilo propio');
 });
+
+test('galería: header sticky con herramienta para compactar paneles (TTL 1h)', () => {
+  const gallery = read('src', 'gallery', 'app.ts');
+  assert.ok(/id="panelsCompactBtn"/.test(indexHtml), 'falta el btn de compactar paneles');
+  assert.ok(/class="shell-tools"/.test(indexHtml), 'falta el cluster shell-tools en el header');
+  assert.ok(/position:\s*sticky/.test(shellCss), 'shell-bar debe ser sticky');
+  assert.ok(/PANELS_TTL_MS\s*=\s*3_600_000/.test(gallery), 'TTL de paneles debe ser 1h');
+  assert.ok(/panelsCompact/.test(gallery) && /savedAt/.test(gallery), 'prefs de paneles con savedAt');
+  assert.ok(
+    /getComponentPrefs/.test(gallery) && /setComponentPrefs/.test(gallery),
+    'galería debe persistir vía prefs compartidas (no setItem suelto)',
+  );
+  assert.ok(
+    /dataset\.panelsCompact/.test(gallery) && /iswc-panels-compact-change/.test(gallery),
+    'debe notificar al preview-component el modo compacto forzado',
+  );
+  const preview = read('src', 'components', 'layout', 'preview-component.ts');
+  assert.ok(
+    /#isForceCompact|dataset\?\.panelsCompact/.test(preview),
+    'preview-component debe respetar body.dataset.panelsCompact',
+  );
+});

@@ -2,8 +2,8 @@
   "$schema": "iswc-preview/v1",
   "tag": "iswc-theme-img",
   "category": "media",
-  "title": "<iswc-theme-img>",
-  "titleHtml": true,
+  "title": "&lt;iswc-theme-img&gt;",
+  "titleHtml": false,
   "storageKey": "docs-iswc-theme-img",
   "sections": [
     {

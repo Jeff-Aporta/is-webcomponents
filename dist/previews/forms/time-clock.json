@@ -2,8 +2,8 @@
   "$schema": "iswc-preview/v1",
   "tag": "iswc-time-clock",
   "category": "forms",
-  "title": "<iswc-time-clock>",
-  "titleHtml": true,
+  "title": "&lt;iswc-time-clock&gt;",
+  "titleHtml": false,
   "storageKey": "docs-iswc-time-clock",
   "sections": [
     {

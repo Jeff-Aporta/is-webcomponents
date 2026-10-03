@@ -2,8 +2,8 @@
   "$schema": "iswc-preview/v1",
   "tag": "iswc-theme-toggle",
   "category": "feedback",
-  "title": "<iswc-theme-toggle>",
-  "titleHtml": true,
+  "title": "&lt;iswc-theme-toggle&gt;",
+  "titleHtml": false,
   "styles": ".theme-boxes {\r\n      display: grid;\r\n      grid-template-columns: repeat(auto-fit, minmax(14rem, 1fr));\r\n      gap: 1rem;\r\n    }\r\n    .container-theme {\r\n      display: flex;\r\n      flex-direction: column;\r\n      gap: 0.75rem;\r\n      padding: 1rem 1.1rem;\r\n      border: 1px solid var(--iswc-border);\r\n      border-radius: var(--iswc-radius);\r\n      background: var(--iswc-bg);\r\n      color: var(--iswc-text);\r\n      box-shadow: var(--iswc-shadow);\r\n      min-height: 8rem;\r\n    }\r\n    .container-theme__head {\r\n      display: flex;\r\n      align-items: center;\r\n      justify-content: space-between;\r\n      gap: 0.75rem;\r\n    }\r\n    .container-theme__title {\r\n      font-weight: 650;\r\n      font-size: 0.95rem;\r\n    }\r\n    .container-theme__hint {\r\n      margin: 0;\r\n      font-size: 0.85rem;\r\n      color: var(--iswc-text-soft);\r\n    }\r\n    .container-theme__chip {\r\n      display: inline-flex;\r\n      align-items: center;\r\n      gap: 0.35em;\r\n      padding: 0.35em 0.65em;\r\n      border-radius: var(--iswc-radius-sm);\r\n      background: var(--iswc-control-bg);\r\n      color: var(--iswc-control-text);\r\n      font-size: 0.8rem;\r\n      border: 1px solid var(--iswc-control-border);\r\n    }",
   "storageKey": "docs-iswc-theme-toggle",
   "sections": [

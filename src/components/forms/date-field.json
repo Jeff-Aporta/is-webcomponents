@@ -2,8 +2,8 @@
   "$schema": "iswc-preview/v1",
   "tag": "iswc-date-field",
   "category": "forms",
-  "title": "<iswc-date-field>",
-  "titleHtml": true,
+  "title": "&lt;iswc-date-field&gt;",
+  "titleHtml": false,
   "storageKey": "docs-iswc-date-field",
   "sections": [
     {

@@ -2,13 +2,13 @@
   "$schema": "iswc-preview/v1",
   "tag": "iswc-demo",
   "category": "layout",
-  "title": "<iswc-demo>",
+  "title": "&lt;iswc-demo&gt;",
   "titleHtml": false,
   "description": "Caja de los ejemplos de la galería.",
   "sections": [
     {
       "id": "intro",
-      "title": "Uso",
+      "title": "&lt;iswc-demo&gt;",
       "lede": "Caja de los ejemplos de la galería.",
       "blocks": [
         {

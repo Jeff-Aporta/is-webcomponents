@@ -66,6 +66,10 @@ No aplica (no es custom element). API de módulo:
 | `crearComponente` | Fábrica shadow + `props` → render |
 | `jsonScript` | `<script type="application/json">` para config `is-*` |
 | `fecha` / `rec` | Formato fecha es-CO / coerce a record |
+| `INTENT` / `DEFAULT_INTENT` | Lista + default (`brand`) del atributo `color` |
+| `normalizeIntent` / `ensureDefaultColor` | Normaliza / aplica default brand en un host |
+| `setEnumAttr` | Refleja enum a atributo |
+| `TONE` / `DEFAULT_TONE` / `normalizeTone` / `setEnumToneAttr` | Mismo contrato para `variant` (peso visual) |
 
 ### Slots
 

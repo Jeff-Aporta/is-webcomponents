@@ -2,8 +2,8 @@
   "$schema": "iswc-preview/v1",
   "tag": "iswc-year-calendar",
   "category": "forms",
-  "title": "<iswc-year-calendar>",
-  "titleHtml": true,
+  "title": "&lt;iswc-year-calendar&gt;",
+  "titleHtml": false,
   "description": "Documentación y demos de iswc-year-calendar de InSoft.",
   "storageKey": "docs-iswc-year-calendar",
   "sections": [

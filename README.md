@@ -1,6 +1,6 @@
 # IS Web Components
 
-Galería de [Web Components](https://developer.mozilla.org/en-US/docs/Web/API/Web_components) vanilla de InSoft (`is-*`).
+Galería de [Web Components](https://developer.mozilla.org/en-US/docs/Web/API/Web_components) vanilla de InSoft (`iswc-*`).
 
 ## Demo (GitHub Pages)
 
@@ -45,7 +45,7 @@ No hay publicación npm aún: el kit se consume por **CDN jsDelivr**. En cada pr
 ```
 Usa el kit IS Web Components solo por CDN (jsDelivr), sin npm ni npx.
 Bootstrap: `loader.min.js` + `L.load(tags de la vista)`. Sin `all.min.js` ni bundles de categoría.
-Reutiliza tags is-* existentes; no reinventes botones, dialogs, tablas, charts, toasts ni iconos.
+Reutiliza tags iswc-* existentes; no reinventes botones, dialogs, tablas, charts, toasts ni iconos.
 Antes de inventar API: lee [`specs/componentes.md`](https://github.com/Jeff-Aporta/is-webcomponents/blob/main/specs/componentes.md) (índice global) y el `.md` del módulo.
 ```
 

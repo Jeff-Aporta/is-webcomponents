@@ -2,8 +2,8 @@
   "$schema": "iswc-preview/v1",
   "tag": "iswc-divider",
   "category": "layout",
-  "title": "<iswc-divider>",
-  "titleHtml": true,
+  "title": "&lt;iswc-divider&gt;",
+  "titleHtml": false,
   "storageKey": "docs-iswc-divider",
   "sections": [
     {
@@ -29,11 +29,15 @@
               "label": "color",
               "options": [
                 "text",
+                "text-soft",
+                "text-dim",
+                "border",
+                "control",
                 "brand",
+                "accent",
                 "success",
                 "warning",
-                "danger",
-                "border"
+                "danger"
               ]
             }
           ]

@@ -2,8 +2,8 @@
   "$schema": "iswc-preview/v1",
   "tag": "iswc-waterfall-chart",
   "category": "data-viz",
-  "title": "<iswc-waterfall-chart>",
-  "titleHtml": true,
+  "title": "&lt;iswc-waterfall-chart&gt;",
+  "titleHtml": false,
   "storageKey": "docs-iswc-waterfall-chart",
   "sections": [
     {

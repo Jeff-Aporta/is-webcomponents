@@ -2,8 +2,8 @@
   "$schema": "iswc-preview/v1",
   "tag": "iswc-grid-layout",
   "category": "isp",
-  "title": "<iswc-grid-layout>",
-  "titleHtml": true,
+  "title": "&lt;iswc-grid-layout&gt;",
+  "titleHtml": false,
   "storageKey": "docs-iswc-grid-layout",
   "sections": [
     {

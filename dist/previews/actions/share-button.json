@@ -2,8 +2,8 @@
   "$schema": "iswc-preview/v1",
   "tag": "iswc-share-button",
   "category": "actions",
-  "title": "<iswc-share-button>",
-  "titleHtml": true,
+  "title": "&lt;iswc-share-button&gt;",
+  "titleHtml": false,
   "description": "Comparte título, texto y URL con las apps nativas (Web Share). Si no hay share, copia al portapapeles.",
   "storageKey": "docs-iswc-share-button",
   "sections": [

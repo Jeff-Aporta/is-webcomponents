@@ -2,8 +2,8 @@
   "$schema": "iswc-preview/v1",
   "tag": "iswc-stepper-step",
   "category": "navigation",
-  "title": "<iswc-stepper-step>",
-  "titleHtml": true,
+  "title": "&lt;iswc-stepper-step&gt;",
+  "titleHtml": false,
   "description": "Documentación y demos de iswc-stepper-step de InSoft.",
   "storageKey": "docs-iswc-stepper-step",
   "sections": [

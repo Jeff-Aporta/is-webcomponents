@@ -2,8 +2,8 @@
   "$schema": "iswc-preview/v1",
   "tag": "iswc-digital-clock",
   "category": "forms",
-  "title": "<iswc-digital-clock>",
-  "titleHtml": true,
+  "title": "&lt;iswc-digital-clock&gt;",
+  "titleHtml": false,
   "description": "Documentación y demos de iswc-digital-clock de InSoft.",
   "storageKey": "docs-iswc-digital-clock",
   "sections": [

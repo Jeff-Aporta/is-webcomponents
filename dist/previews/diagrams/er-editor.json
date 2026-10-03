@@ -2,13 +2,13 @@
   "$schema": "iswc-preview/v1",
   "tag": "iswc-er-editor",
   "category": "diagrams",
-  "title": "<iswc-er-editor>",
+  "title": "&lt;iswc-er-editor&gt;",
   "titleHtml": false,
   "description": "Editor visual de entidad-relación. Compartir el resultado se hace con la app de edición, sin reescribir el enlace de entrada.",
   "sections": [
     {
       "id": "intro",
-      "title": "Uso",
+      "title": "&lt;iswc-er-editor&gt;",
       "lede": "Editor visual de entidad-relación. Compartir el resultado se hace con la app de edición, sin reescribir el enlace de entrada.",
       "blocks": [
         {

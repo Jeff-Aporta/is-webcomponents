@@ -2,8 +2,8 @@
   "$schema": "iswc-preview/v1",
   "tag": "iswc-breadcrumb",
   "category": "navigation",
-  "title": "<iswc-breadcrumb>",
-  "titleHtml": true,
+  "title": "&lt;iswc-breadcrumb&gt;",
+  "titleHtml": false,
   "description": "Documentación y demos de iswc-breadcrumb e iswc-breadcrumb-item de InSoft.",
   "storageKey": "docs-iswc-breadcrumb",
   "sections": [
@@ -100,7 +100,7 @@
     {
       "id": "reference",
       "title": "Referencia",
-      "titleHtml": true,
+      "titleHtml": false,
       "blocks": [
         {
           "kind": "html",

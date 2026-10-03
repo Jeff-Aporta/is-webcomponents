@@ -2,8 +2,8 @@
   "$schema": "iswc-preview/v1",
   "tag": "iswc-relative-time",
   "category": "helpers",
-  "title": "<iswc-relative-time>",
-  "titleHtml": true,
+  "title": "&lt;iswc-relative-time&gt;",
+  "titleHtml": false,
   "storageKey": "docs-iswc-relative-time",
   "hasBehavior": true,
   "sections": [

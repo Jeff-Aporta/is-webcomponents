@@ -2,8 +2,8 @@
   "$schema": "iswc-preview/v1",
   "tag": "iswc-gantt",
   "category": "diagrams",
-  "title": "<iswc-gantt>",
-  "titleHtml": true,
+  "title": "&lt;iswc-gantt&gt;",
+  "titleHtml": false,
   "storageKey": "docs-iswc-gantt",
   "sections": [
     {

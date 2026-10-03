@@ -2,8 +2,8 @@
   "$schema": "iswc-preview/v1",
   "tag": "iswc-prefs-clear",
   "category": "feedback",
-  "title": "<iswc-prefs-clear>",
-  "titleHtml": true,
+  "title": "&lt;iswc-prefs-clear&gt;",
+  "titleHtml": false,
   "storageKey": "docs-iswc-prefs-clear",
   "sections": [
     {

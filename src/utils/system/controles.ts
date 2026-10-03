@@ -6,11 +6,23 @@
 // El panel lo pinta <iswc-preview-controls> (components/layout); este módulo
 // monta los paneles por demo, escucha sus cambios y aplica el valor al host.
 
+import { iconForSelectOption } from './control-select-icons.js';
+import { DEFAULT_BUTTON_SHAPE } from '../../components/_shared/button-shape.js';
+import { DEFAULT_MEDIA_SHAPE } from '../../components/_shared/media-shape.js';
+import { DEFAULT_INTENT } from '../../components/_shared/intent.js';
+import { DEFAULT_TONE } from '../../components/_shared/tone.js';
+
 /** Tipos de control soportados por el panel. */
 export type TipoControl = 'text' | 'color' | 'number' | 'select' | 'boolean' | 'range' | 'json';
 
-/** Opción de un select: valor plano o {value,label}. */
-export type OpcionSelect = string | { value: string | number | boolean; label: string };
+/** Opción de un select: valor plano o {value,label[,icon|html]}. */
+export type OpcionSelect = string | {
+  value: string | number | boolean;
+  label: string;
+  icon?: string;
+  html?: string;
+  description?: string;
+};
 
 /** Definición JSON de un control (espejo de controls.schema.json). */
 export type ControlDef = {
@@ -51,10 +63,35 @@ export function nombreAtributo(prop: string): string | null {
   return esAttr(prop) ? prop.slice(5) : null;
 }
 
-function opcionesDe(def: ControlDef): Array<{ value: unknown; label: string }> {
-  return (def.options ?? []).map((o) => (
-    typeof o === 'string' ? { value: o, label: o } : { value: o.value, label: o.label }
-  ));
+function opcionesDe(def: ControlDef): Array<{
+  value: unknown;
+  label: string;
+  icon?: string;
+  html?: string;
+  description?: string;
+}> {
+  const attr = nombreAtributo(def.prop) ?? def.prop.replace(/^prop:/, '');
+  return (def.options ?? []).map((o) => {
+    const base = typeof o === 'string'
+      ? { value: o, label: o }
+      : {
+        value: o.value,
+        label: o.label,
+        icon: o.icon,
+        html: o.html,
+        description: o.description,
+      };
+    // Completa icono si el JSON no lo trae (todos los selects del panel).
+    if (!base.icon) {
+      const icon = iconForSelectOption(attr, base.value);
+      if (icon) base.icon = icon;
+    }
+    return base;
+  });
+}
+
+function camelAttr(attr: string): string {
+  return attr.replace(/-([a-z])/g, (_, c: string) => c.toUpperCase());
 }
 
 /**
@@ -68,7 +105,15 @@ export function leerValor(el: Element, def: ControlDef): unknown {
     const attrV = el.getAttribute(attr);
     // Atributos booleanos: el estado es presencia (no el string vacío).
     if (def.control === 'boolean') return attrV !== null;
-    return attrV ?? def.default ?? null;
+    if (attrV !== null) return attrV;
+    // Getter del CE (p. ej. shape → "round" aunque no haya atributo).
+    const host = el as unknown as Record<string, unknown>;
+    const camel = camelAttr(attr);
+    if (camel in host || typeof host[camel] !== 'undefined') {
+      const propV = host[camel];
+      if (propV !== undefined && propV !== null && propV !== '') return propV;
+    }
+    return def.default ?? null;
   }
   const prop = def.prop.replace(/^prop:/, '');
   const host = el as unknown as Record<string, unknown>;
@@ -118,14 +163,66 @@ export function aplicarValor(el: Element, def: ControlDef, valor: unknown): void
 }
 
 /** Resuelve las opciones para el panel (select). */
-export function opcionesSelect(def: ControlDef): Array<{ value: unknown; label: string }> {
+export function opcionesSelect(def: ControlDef): Array<{
+  value: unknown;
+  label: string;
+  icon?: string;
+  html?: string;
+  description?: string;
+}> {
   return opcionesDe(def);
 }
 
-/** Control inicial "default" resuelto (def.default ?? valor actual). */
+/** Control inicial "default" resuelto (valor actual del CE o def.default). */
 export function valorInicial(el: Element, def: ControlDef): unknown {
   const actual = leerValor(el, def);
   return actual ?? def.default ?? null;
+}
+
+/** Defaults de kit cuando el CE no expone getter (color/variant vía attrs). */
+const DEFAULT_BY_ATTR: Record<string, string> = {
+  color: DEFAULT_INTENT,
+  variant: 'filled',
+  type: 'button',
+  placement: 'top',
+  orientation: 'horizontal',
+  position: 'bottom-right',
+  loading: 'eager',
+  fit: 'contain',
+  'selection-display': 'text',
+  checkmarks: 'end',
+};
+
+function opcionesValores(def: ControlDef): string[] {
+  return (def.options ?? []).map((o) => String(typeof o === 'string' ? o : o.value));
+}
+
+/** Default canónico del control (JSON → getter CE → mapa kit). */
+export function valorDefault(el: Element, def: ControlDef): unknown {
+  if (def.default !== undefined && def.default !== null && def.default !== '') return def.default;
+  const attr = nombreAtributo(def.prop) ?? def.prop.replace(/^prop:/, '');
+  const host = el as unknown as Record<string, unknown>;
+  const camel = camelAttr(attr);
+  const propV = host[camel];
+  if (propV !== undefined && propV !== null && propV !== '') return propV;
+
+  const vals = opcionesValores(def);
+  const tag = el.localName;
+  if (attr === 'shape') {
+    const shapeDef = (tag === 'iswc-avatar' || tag === 'iswc-theme-img')
+      ? DEFAULT_MEDIA_SHAPE
+      : DEFAULT_BUTTON_SHAPE;
+    if (!vals.length || vals.includes(shapeDef)) return shapeDef;
+  }
+  if (attr === 'variant') {
+    // Feedback (tag/badge) usa TONE; button usa filled/outlined/…
+    const toneDef = DEFAULT_TONE;
+    if (vals.includes(toneDef)) return toneDef;
+    if (vals.includes('filled')) return 'filled';
+  }
+  const known = DEFAULT_BY_ATTR[attr];
+  if (known && (!vals.length || vals.includes(known))) return known;
+  return null;
 }
 
 /** Formas estructurales mínimas del definition/context (sin acoplar _kit). */
@@ -182,11 +279,13 @@ async function montarPanel(contenedor: HTMLElement, _seccion: HTMLElement, defs:
   panel.setAttribute('label', 'Controles');
   const spec = defs.map((def) => {
     const d = { ...def, group: def.group ?? grupo };
+    const defVal = valorDefault(host as HTMLElement, d);
     return {
       ...d,
-      // El panel espera opciones {value,label} y el valor inicial resuelto.
+      // El panel espera opciones {value,label[,icon]} y el valor inicial resuelto.
       options: d.control === 'select' ? opcionesSelect(d) : undefined,
-      value: valorInicial(host as HTMLElement, d),
+      default: defVal ?? d.default,
+      value: valorInicial(host as HTMLElement, d) ?? defVal,
     };
   });
   (panel as unknown as PanelConSpec).spec = spec;

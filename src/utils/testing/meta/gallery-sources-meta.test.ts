@@ -77,17 +77,15 @@ test('highlight-code: paintOne asigna value siempre (no fiarse del getter)', () 
   assert.doesNotMatch(src, /if \(el\.value !== text\) el\.value = text/);
 });
 
-test('demo-file-meta: una sola barra de página (no h2 / no demos / sin iswc-code en paths)', () => {
+test('demo-file-meta: ya no monta barra; solo limpia restos', () => {
   const src = read('scripts/demo-file-meta.js');
-  assert.match(src, /file-meta-page/);
-  assert.match(src, /vs-page-bar/);
-  assert.match(src, /iswc-format-bytes/);
-  assert.match(src, /resolveCdnMinPaths/);
-  assert.match(src, /openViewSources/);
-  assert.match(src, /preserveMainScroll/);
-  assert.match(src, /createElement\(['"]code['"]\)/);
-  assert.doesNotMatch(src, /createElement\(['"]iswc-code['"]\)/);
-  assert.doesNotMatch(src, /sin minificar|auditoría\s*\/\s*GH Pages/);
+  assert.match(src, /quitarBarrasMeta|file-meta/);
+  assert.match(src, /iswc-preview-ready/);
+  assert.match(src, /buildFileMeta/);
+  assert.match(src, /return null/);
+  assert.doesNotMatch(src, /iswc-format-bytes/);
+  assert.doesNotMatch(src, /resolveCdnMinPaths/);
+  assert.doesNotMatch(src, /openViewSources/);
   assert.doesNotMatch(src, /function mountUnderSectionTitles|function mountInDemo/);
   assert.doesNotMatch(src, /iswc-demo-connected/);
 });
@@ -110,17 +108,16 @@ test('iswc-main: restore window amplio + scroll-behavior auto en CSS', () => {
   assert.match(css, /iswc-main\.main\s*\{[\s\S]*?scroll-behavior:\s*auto/);
 });
 
-test('presentation.css: full-page view-sources + vs-page-bar oculto', () => {
+test('presentation.css: full-page view-sources + file-meta oculto', () => {
   const css = read('src/styles/presentation.css');
   assert.match(css, /iswc-dialog\.iswc-view-sources/);
   assert.match(css, /::part\(dialog\)/);
   assert.match(css, /align-self:\s*stretch/);
   assert.match(css, /justify-self:\s*stretch/);
-  assert.match(css, /\.vs-page-bar[\s\S]{0,120}display:\s*none/);
+  assert.match(css, /\.vs-page-bar[\s\S]{0,200}display:\s*none/);
+  assert.match(css, /\.file-meta[\s\S]{0,120}display:\s*none/);
   assert.doesNotMatch(css, /--width:\s*min\(\s*96vw/);
   assert.doesNotMatch(css, /\.vs-panel\s*\{[\s\S]{0,80}height:\s*min\(\s*70vh/);
-  // `.file-meta-page` debe scrollear con el contenido (no pegajosa).
-  assert.doesNotMatch(css, /\.file-meta-page\s*\{[^}]*position:\s*sticky/);
 });
 
 test('index + shell cargan view-sources y demo-file-meta', () => {

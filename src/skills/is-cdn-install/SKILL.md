@@ -156,6 +156,6 @@ No inventar props/eventos que no están en el MD.
 ## Más detalle
 
 - Prompt LLM completo: [`../is-webcomponents/PROMPT.md`](https://github.com/Jeff-Aporta/is-webcomponents/blob/main/src/skills/is-webcomponents/PROMPT.md)
-- Herramientas `/is-webcomponents:build|migrate|local`: [`../is-webcomponents/tools/`](https://github.com/Jeff-Aporta/is-webcomponents/tree/main/src/skills/is-webcomponents/tools)
+- Herramientas `/is-webcomponents:build|migrate|local|runtime`: [`../is-webcomponents/tools/`](https://github.com/Jeff-Aporta/is-webcomponents/tree/main/src/skills/is-webcomponents/tools) (runtime = loader, IswcUi, MD, cache)
 - Espejos y resolución de ref: [reference.md](reference.md)
 - Skill de reuso de tags: `../is-webcomponents/SKILL.md`

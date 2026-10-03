@@ -2,8 +2,8 @@
   "$schema": "iswc-preview/v1",
   "tag": "iswc-code",
   "category": "code",
-  "title": "<iswc-code>",
-  "titleHtml": true,
+  "title": "&lt;iswc-code&gt;",
+  "titleHtml": false,
   "styles": ".stack { display: grid; gap: 1rem; }\n.ed { min-height: 14rem; }\n.row { display: flex; flex-wrap: wrap; gap: 0.5rem; align-items: center; }\n.out { font-family: var(--iswc-mono, monospace); font-size: 0.75rem; white-space: pre-wrap; background: var(--iswc-bg-soft); border: 1px solid var(--iswc-border); border-radius: 8px; padding: 0.75rem; max-height: 12rem; overflow: auto; }\n.prose { line-height: 1.7; font-size: 1rem; max-width: 42rem; }\n.prose iswc-code { margin-inline: 0.2em; }\n.playground .stage { align-items: stretch; justify-content: stretch; display: grid; gap: 1rem; }\n.playground .stage.iswc-inline { align-items: center; }\n.playground .stage .pg-prose { margin: 0; line-height: 1.75; }\n.playground #pgCode[mode=\"block\"] { min-height: 12rem; width: 100%; }",
   "storageKey": "docs-iswc-code",
   "hasBehavior": true,
@@ -18,10 +18,46 @@
           "html": "<iswc-code class=\"ed\" id=\"demo-basic\" lang=\"javascript\" wrap line-numbers min-height=\"14rem\" value=\"function greet(name) {&#10;  return `Hola, ${name}`;&#10;}&#10;&#10;console.log(greet('IS'));\"></iswc-code>",
           "target": "#demo-basic",
           "controls": [
-            { "control": "select", "prop": "attr:lang", "label": "Lenguaje", "group": "Motor", "options": ["javascript", "typescript", "html", "css", "json", "python", "shell", "plaintext"] },
-            { "control": "boolean", "prop": "attr:wrap", "label": "Wrap", "group": "Editor" },
-            { "control": "boolean", "prop": "attr:readonly", "label": "Solo lectura", "group": "Editor" },
-            { "control": "number", "prop": "attr:tab-size", "label": "Tab (espacios)", "group": "Editor", "min": 1, "max": 8, "step": 1 }
+            {
+              "control": "select",
+              "prop": "attr:lang",
+              "label": "Lenguaje",
+              "group": "Motor",
+              "options": [
+                "javascript",
+                "typescript",
+                "jsx",
+                "tsx",
+                "html",
+                "css",
+                "json",
+                "python",
+                "shell",
+                "curl",
+                "plaintext"
+              ]
+            },
+            {
+              "control": "boolean",
+              "prop": "attr:wrap",
+              "label": "Wrap",
+              "group": "Editor"
+            },
+            {
+              "control": "boolean",
+              "prop": "attr:readonly",
+              "label": "Solo lectura",
+              "group": "Editor"
+            },
+            {
+              "control": "number",
+              "prop": "attr:tab-size",
+              "label": "Tab (espacios)",
+              "group": "Editor",
+              "min": 1,
+              "max": 8,
+              "step": 1
+            }
           ]
         },
         {

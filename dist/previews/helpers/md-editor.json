@@ -2,8 +2,8 @@
   "$schema": "iswc-preview/v1",
   "tag": "iswc-md-editor",
   "category": "helpers",
-  "title": "<iswc-md-editor>",
-  "titleHtml": true,
+  "title": "&lt;iswc-md-editor&gt;",
+  "titleHtml": false,
   "storageKey": "docs-iswc-md-editor",
   "styles": "iswc-md-editor { display: block; width: 100%; max-width: 48rem; --iswc-md-editor-preview-max-height: 36em; }",
   "sections": [

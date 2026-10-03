@@ -2,8 +2,8 @@
   "$schema": "iswc-preview/v1",
   "tag": "iswc-palette-selector",
   "category": "feedback",
-  "title": "<iswc-palette-selector>",
-  "titleHtml": true,
+  "title": "&lt;iswc-palette-selector&gt;",
+  "titleHtml": false,
   "styles": ".row { display: flex; flex-wrap: wrap; gap: 1rem; align-items: center; }\r\n    .event-log {\r\n      margin-top: 12px;\r\n      padding: 12px;\r\n      border: 1px solid var(--iswc-border);\r\n      border-radius: 8px;\r\n      background: var(--iswc-bg-soft);\r\n      font-family: var(--iswc-mono);\r\n      font-size: 0.8rem;\r\n      min-height: 2em;\r\n      color: var(--iswc-text);\r\n    }\r\n    .event-log .hint { opacity: 0.6; }\r\n\r\n    /* --- Trigger tipo \"logo\" — el consumer pone SU HTML --- */\r\n    .logo-trigger {\r\n      display: inline-flex;\r\n      align-items: baseline;\r\n      gap: 0;\r\n      padding: 0.45em 0.85em;\r\n      background: var(--iswc-logo-bg, #fff);\r\n      color: var(--iswc-logo-fg, #111);\r\n      border-radius: 0.45em;\r\n      font: inherit;\r\n      font-weight: 800;\r\n      letter-spacing: -0.045em;\r\n      text-transform: lowercase;\r\n      transition: filter 120ms ease, transform 120ms ease;\r\n    }\r\n    .logo-trigger:hover { filter: brightness(1.05); }\r\n    .logo-trigger:active { transform: translateY(1px); }\r\n    .logo-trigger__lead { color: #000; }\r\n    .logo-trigger__accent { color: var(--iswc-accent, dodgerblue); }\r\n    .logo-trigger__caret {\r\n      margin-left: 0.5em;\r\n      font-size: 0.95em;\r\n      opacity: 0.7;\r\n      color: var(--iswc-text, #111);\r\n    }",
   "storageKey": "docs-iswc-palette-selector",
   "sections": [

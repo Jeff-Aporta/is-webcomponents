@@ -8,7 +8,7 @@
   "sections": [
     {
       "id": "intro",
-      "title": "Visor de diagramas",
+      "title": "Visor de diagramas (API)",
       "lede": "Abre cualquier diagrama con ?kind= y ?json= en base64url. La dirección no cambia al mirar el documento.",
       "blocks": [
         {

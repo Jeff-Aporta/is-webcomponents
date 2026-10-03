@@ -2,8 +2,8 @@
   "$schema": "iswc-preview/v1",
   "tag": "iswc-accordion-group",
   "category": "isp",
-  "title": "<iswc-accordion-group>",
-  "titleHtml": true,
+  "title": "&lt;iswc-accordion-group&gt;",
+  "titleHtml": false,
   "description": "Documentación y demos de iswc-accordion-group de InSoft.",
   "storageKey": "docs-iswc-accordion-group",
   "sections": [
