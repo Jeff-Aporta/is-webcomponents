@@ -10,21 +10,7 @@ import { daysInMonth, pad, parseISO, splitDateTime } from './date-utils.js';
 
 /* ──────────────────────────── Tipos locales ───────────────────────────── */
 
-/** Tipos de sección que conoce el motor. */
-type SectionType =
-  | 'year'
-  | 'month'
-  | 'day'
-  | 'hour'
-  | 'hour12'
-  | 'minute'
-  | 'second'
-  | 'meridiem';
-
-/** Item del layout devuelto por `Intl.DateTimeFormat.formatToParts`. */
-type LayoutItem =
-  | { kind: 'section'; type: SectionType }
-  | { kind: 'literal'; text: string };
+import { SectionTypeSchema, LayoutItemSchema, type SectionType, type LayoutItem } from "./date-field-core.schema.js";
 
 /** Metadatos por sección (dígitos que caben, rango, etiqueta accesible). */
 interface SectionMeta {
