@@ -21,7 +21,7 @@ interface _CatalogLike {
 }
 
 /** Columna y datos arbitrarios que devuelve el controller. */
-type _RecordLike = Record<string, unknown>;
+import { _RecordLikeSchema, type _RecordLike } from "./btn-ref.schema.js";
 
 /** Input field con attrs custom (label/name/value/etc.). */
 interface _FieldLike extends HTMLElement {
