@@ -1,9 +1,11 @@
-:host { display: block; }
-
-.cv {
+:host {
   display: block;
-  inline-size: 100%;
-  max-inline-size: 100%;
-  background: var(--iswc-bg-elev, transparent);
-  border-radius: var(--iswc-radius, 0.4em);
+
+  .cv {
+    display: block;
+    inline-size: 100%;
+    max-inline-size: 100%;
+    background: var(--iswc-bg-elev, transparent);
+    border-radius: var(--iswc-radius, 0.4em);
+  }
 }

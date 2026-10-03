@@ -1,6 +1,8 @@
 @import './_inline-host.css';
 
-:host .bytes {
-  display: inline;
-  font-variant-numeric: tabular-nums;
+:host {
+  .bytes {
+    display: inline;
+    font-variant-numeric: tabular-nums;
+  }
 }
