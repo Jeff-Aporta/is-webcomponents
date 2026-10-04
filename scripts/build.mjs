@@ -546,4 +546,16 @@ if (indexNext !== indexPrev) await writeFile(indexPath, indexNext);
 const htmlTouched = await rewriteHtmlTree(join(root, 'demos'), hashes) + (indexNext !== indexPrev ? 1 : 0);
 console.log(`  html                 ${htmlTouched} con ?h=`);
 
+// Pin de auto-reload: el snippet embebido en cada HTML hace polling de este
+// endpoint y recarga el browser al cambiar. Lo escribimos también al build
+// (valor estable basado en HEAD) para que producción / `deno task dev` sin
+// watcher no devuelvan 404. El watcher (`scripts/watch.mjs`) lo sobreescribe
+// con un timestamp al detectar cambios.
+await writeFile(
+  join(dist, 'reload-pin'),
+  `build:${shaDelBuild().slice(0, 12)}\n`,
+  'utf8',
+);
+console.log(`  reload-pin           build:<sha>`);
+
 console.log(`OK dist/cdn  ${entries.length} components + is-base + loader + gallery-app`);
