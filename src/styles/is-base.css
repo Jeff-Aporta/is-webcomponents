@@ -101,6 +101,25 @@
   --iswc-color-error-pale: color-mix(in srgb, var(--iswc-color-error) 18%, white);
   --iswc-color-error-strong: color-mix(in srgb, var(--iswc-color-error) 86%, black);
   --iswc-color-error-stronger: color-mix(in srgb, var(--iswc-color-error) 66%, black);
+
+  /* neutral: gris central del espacio RGB (#888 = 136/255 ≈ 53% en cada
+     canal). Es el color que mejor se aproxima al "centro" del espacio y
+     por tanto tiene la relacion de contraste mas pareja contra el resto
+     de la paleta (~4.5:1 contra negro puro, ~3.5:1 contra blanco puro,
+     y degradado lineal contra cualquier tono intermedio). Se usa para
+     "controles del tema" (botones neutrales, bordes suaves, divisores)
+     y se mantiene en :root/.theme-dark como un unico canon, sin pisarlo
+     por tema, porque su valor es geometrico y no cromatico.
+     Las 5 variantes siguen el patron tonal de las demas familias
+     semanticas (paler/pale mas claros, strong/stronger/strongest mas
+     oscuros) y se derivan con color-mix() del base, igual que
+     success/warning/danger/info/error. */
+  --iswc-color-neutral: #888;
+  --iswc-color-neutral-paler: color-mix(in srgb, var(--iswc-color-neutral) 12%, white);
+  --iswc-color-neutral-pale: color-mix(in srgb, var(--iswc-color-neutral) 28%, white);
+  --iswc-color-neutral-strong: color-mix(in srgb, var(--iswc-color-neutral) 82%, black);
+  --iswc-color-neutral-stronger: color-mix(in srgb, var(--iswc-color-neutral) 62%, black);
+  --iswc-color-neutral-strongest: color-mix(in srgb, var(--iswc-color-neutral) 45%, black);
   /* outlined/plain: texto + soft hover adaptados a dark. `text` se aclara mezclando
      con blanco (mejor contraste sobre fondo oscuro que el tono base crudo); `soft`/
      `soft-active` transparentan ese mismo base en dos pasos, en vez de un rgb()
