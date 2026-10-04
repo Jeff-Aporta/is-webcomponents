@@ -48,7 +48,7 @@
     block-size: var(--iswc-switch-height);
     box-sizing: border-box;
     background: var(--iswc-switch-bg);
-    border: 1px solid var(--iswc-switch-border);
+    border: 0.0625em solid var(--iswc-switch-border);
     border-radius: 999px;
     transition: background-color 140ms ease, border-color 140ms ease;
 
@@ -224,8 +224,8 @@
     box-shadow: 0 0 0 var(--iswc-switch-halo) color-mix(in srgb, var(--iswc-switch-focus) 30%, transparent);
   }
   .control {
-    outline: 2px solid var(--iswc-switch-focus);
-    outline-offset: 2px;
+    outline: 0.125em solid var(--iswc-switch-focus);
+    outline-offset: 0.125em;
   }
 }
 
