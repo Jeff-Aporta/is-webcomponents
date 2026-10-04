@@ -16,27 +16,27 @@
           "kind": "demo",
           "html": "<iswc-dropdown placement=\"bottom-start\">\r\n            <iswc-button slot=\"trigger\" color=\"brand\">Acciones</iswc-button>\r\n            <iswc-dropdown-item value=\"edit\"><iswc-icon slot=\"start\" icon=\"mdi:pencil\"></iswc-icon>Editar</iswc-dropdown-item>\r\n            <iswc-dropdown-item value=\"dup\"><iswc-icon slot=\"start\" icon=\"mdi:content-copy\"></iswc-icon>Duplicar</iswc-dropdown-item>\r\n            <iswc-dropdown-item value=\"del\" color=\"danger\"><iswc-icon slot=\"start\" icon=\"mdi:trash-can\"></iswc-icon>Eliminar</iswc-dropdown-item>\r\n            <iswc-dropdown-item value=\"off\" disabled>No disponible</iswc-dropdown-item>\r\n          </iswc-dropdown>",
           "controls": [
-              {
-                "control": "select",
-                "prop": "attr:value",
-                "label": "value",
-                "options": [
-                  "edit",
-                  "dup",
-                  "del",
-                  "off"
-                ]
-              },
-              {
-                "control": "text",
-                "prop": "attr:color",
-                "label": "color"
-              },
-              {
-                "control": "boolean",
-                "prop": "attr:disabled",
-                "label": "disabled"
-              }
+            {
+              "control": "select",
+              "prop": "attr:value",
+              "label": "value",
+              "options": [
+                "edit",
+                "dup",
+                "del",
+                "off"
+              ]
+            },
+            {
+              "control": "text",
+              "prop": "attr:color",
+              "label": "color"
+            },
+            {
+              "control": "boolean",
+              "prop": "attr:disabled",
+              "label": "disabled"
+            }
           ],
           "equivNote": "checkbox vs acción; submenu abre popover anidado.",
           "equivHtml": "<!-- ver diagrama de ramas -->",
@@ -60,5 +60,24 @@
         }
       ]
     }
-  ]
+  ],
+  "ficha": {
+    "sections": {
+      "anatomia": {
+        "content": "Item de un <code class=\"code\">&lt;iswc-dropdown&gt;</code>. Aporta el estado (activo, deshabilitado), el slot de icono y el valor que viaja en el evento de selección."
+      },
+      "ejemplos": {
+        "content": "```html\n<iswc-dropdown placement=\"bottom-start\">\n  <iswc-button slot=\"trigger\" color=\"brand\">Acciones</iswc-button>\n  <iswc-dropdown-item value=\"edit\"><iswc-icon slot=\"start\" icon=\"mdi:pencil\"></iswc-icon>Editar</iswc-dropdown-item>\n  <iswc-dropdown-item value=\"dup\"><iswc-icon slot=\"start\" icon=\"mdi:content-copy\"></iswc-icon>Duplicar</iswc-dropdown-item>\n  <iswc-dropdown-item value=\"del\" color=\"danger\"><iswc-icon slot=\"start\" icon=\"mdi:trash-can\"></iswc-icon>Eliminar</iswc-dropdown-item>\n  <iswc-dropdown-item value=\"off\" disabled>No disponible</iswc-dropdown-item>\n</iswc-dropdown>\n```"
+      }
+    },
+    "exclude": [
+      "apiJs",
+      "atributos",
+      "eventos",
+      "parts",
+      "props",
+      "slots",
+      "states"
+    ]
+  }
 }

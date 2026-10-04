@@ -371,5 +371,112 @@
       ]
     }
   ],
-  "hasBehavior": true
+  "hasBehavior": true,
+  "ficha": {
+    "sections": {
+      "anatomia": {
+        "content": "Agrupa botones relacionados en una sola unidad visual y, si se lo pides, gestiona cuál está activo. Sirve para controles segmentados, toolbars y split buttons."
+      },
+      "atributos": {
+        "table": [
+          {
+            "name": "<code>label</code>",
+            "type": "string",
+            "default": "''",
+            "desc": "Nombre accesible del grupo"
+          },
+          {
+            "name": "<code>orientation</code>",
+            "type": "horizontal | vertical",
+            "default": "horizontal",
+            "desc": "Reflejado"
+          },
+          {
+            "name": "<code>appearance</code>",
+            "type": "joined | segmented | separated",
+            "default": "joined",
+            "desc": "Reflejado"
+          },
+          {
+            "name": "<code>select</code>",
+            "type": "none | single | multiple",
+            "default": "none",
+            "desc": "Activa la gestión de selección"
+          },
+          {
+            "name": "<code>value</code>",
+            "type": "string",
+            "default": "—",
+            "desc": "En <code>multiple</code>, valores separados por coma"
+          },
+          {
+            "name": "<code>pill</code>",
+            "type": "boolean",
+            "default": "false",
+            "desc": "Extremos redondeados en todo el grupo"
+          },
+          {
+            "name": "<code>stretch</code>",
+            "type": "boolean",
+            "default": "false",
+            "desc": "Los botones reparten el ancho"
+          },
+          {
+            "name": "<code>allow-empty</code>",
+            "type": "boolean",
+            "default": "false",
+            "desc": "En <code>single</code>, permite deseleccionar"
+          },
+          {
+            "name": "<code>disabled</code>",
+            "type": "boolean",
+            "default": "false",
+            "desc": "Bloquea el grupo completo"
+          }
+        ]
+      },
+      "apiJs": {
+        "table": [
+          {
+            "metodo": "propiedades",
+            "desc": "<code>value</code> · <code>values</code> · <code>items</code> · <code>selectedItems</code>"
+          },
+          {
+            "metodo": "eventos",
+            "desc": "<code>iswc-change</code> con <code>{ value, values }</code>"
+          },
+          {
+            "metodo": "slot",
+            "desc": "default: uno o más <code class=\"code\">iswc-button</code> o <code class=\"code\">button</code>"
+          },
+          {
+            "metodo": "part",
+            "desc": "<code>base</code>"
+          },
+          {
+            "metodo": "en los hijos",
+            "desc": "el grupo escribe <code>selected</code> y <code>aria-pressed</code>"
+          },
+          {
+            "metodo": "valor de un hijo",
+            "desc": "atributo <code>value</code>; si falta, texto; si vacío, índice"
+          },
+          {
+            "metodo": "tokens",
+            "desc": "<code>--iswc-button-group-radius</code> <code>--iswc-button-group-gap</code> <code>--iswc-button-group-pad</code> <code>--iswc-button-group-accent</code>"
+          }
+        ]
+      },
+      "ejemplos": {
+        "content": "```html\n<iswc-button-group label=\"Vista\" variant=\"segmented\" select=\"single\" value=\"lista\">\n  <iswc-button variant=\"plain\" value=\"lista\" hue=\"210\">Lista</iswc-button>\n  <iswc-button variant=\"plain\" value=\"tabla\" hue=\"160\">Tabla</iswc-button>\n  <iswc-button variant=\"plain\" value=\"tarjetas\" hue=\"35\">Tarjetas</iswc-button>\n</iswc-button-group>\n```"
+      }
+    },
+    "exclude": [
+      "eventos",
+      "parts",
+      "props",
+      "slots",
+      "states"
+    ]
+  }
 }

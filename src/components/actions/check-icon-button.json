@@ -236,5 +236,92 @@
         }
       ]
     }
-  ]
+  ],
+  "ficha": {
+    "sections": {
+      "anatomia": {
+        "content": "Botón icon-only con dos estados mutuamente excluyentes: muestra un solo icono\r\n          según <code class=\"code\">checked</code>. Lo usan <code class=\"code\">iswc-video</code>\r\n          (play/pausa, mute) e <code class=\"code\">iswc-theme-toggle</code>."
+      },
+      "atributos": {
+        "table": [
+          {
+            "name": "<code>checked</code>",
+            "type": "boolean",
+            "default": "false",
+            "desc": "Reflejado"
+          },
+          {
+            "name": "<code>icon</code>",
+            "type": "string",
+            "default": "''",
+            "desc": "Iconify id cuando unchecked"
+          },
+          {
+            "name": "<code>checked-icon</code>",
+            "type": "string",
+            "default": "''",
+            "desc": "Iconify id cuando checked"
+          },
+          {
+            "name": "<code>label</code>",
+            "type": "string",
+            "default": "''",
+            "desc": "<code>aria-label</code> cuando unchecked"
+          },
+          {
+            "name": "<code>checked-label</code>",
+            "type": "string",
+            "default": "''",
+            "desc": "<code>aria-label</code> cuando checked (fallback: <code>label</code>)"
+          },
+          {
+            "name": "<code>appearance</code>",
+            "type": "plain",
+            "default": "—",
+            "desc": "Compacto y hereda color, para chrome oscura"
+          },
+          {
+            "name": "<code>disabled</code>",
+            "type": "boolean",
+            "default": "false",
+            "desc": "Bloquea puntero y teclado"
+          }
+        ]
+      },
+      "apiJs": {
+        "table": [
+          {
+            "metodo": "propiedades",
+            "desc": "<code>checked</code> · <code>disabled</code> · <code>icon</code> · <code>checkedIcon</code> · <code>label</code> · <code>checkedLabel</code>"
+          },
+          {
+            "metodo": "métodos",
+            "desc": "<code>toggle(force?)</code> — sin argumento invierte; con booleano fija el estado"
+          },
+          {
+            "metodo": "eventos",
+            "desc": "<code>iswc-change</code> con <code>{ checked }</code> (bubbles, composed)"
+          },
+          {
+            "metodo": "parts",
+            "desc": "<code>button</code> · <code>icon</code>"
+          },
+          {
+            "metodo": "a11y",
+            "desc": "El host es el control: <code>role=\"button\"</code>, <code>aria-pressed</code> y <code>aria-label</code> por estado"
+          }
+        ]
+      },
+      "ejemplos": {
+        "content": "```html\n<iswc-check-icon-button\n  icon=\"mdi:play\"\n  checked-icon=\"mdi:pause\"\n  label=\"Reproducir\"\n  checked-label=\"Pausar\"\n></iswc-check-icon-button>\n```"
+      }
+    },
+    "exclude": [
+      "eventos",
+      "parts",
+      "props",
+      "slots",
+      "states"
+    ]
+  }
 }

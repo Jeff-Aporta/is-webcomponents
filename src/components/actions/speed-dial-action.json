@@ -47,5 +47,24 @@
         }
       ]
     }
-  ]
+  ],
+  "ficha": {
+    "sections": {
+      "anatomia": {
+        "content": "Cada acción que despliega un <code class=\"code\">&lt;iswc-speed-dial&gt;</code>, con su icono y su etiqueta."
+      },
+      "ejemplos": {
+        "content": "```html\n<div class=\"sd-stage\">\n  <iswc-speed-dial direction=\"up\" open>\n    <iswc-speed-dial-action icon=\"mdi:file-document\" label=\"Documento\"></iswc-speed-dial-action>\n    <iswc-speed-dial-action icon=\"mdi:image\" label=\"Imagen\"></iswc-speed-dial-action>\n    <iswc-speed-dial-action icon=\"mdi:link\" label=\"Enlace\"></iswc-speed-dial-action>\n  </iswc-speed-dial>\n</div>\n```"
+      }
+    },
+    "exclude": [
+      "apiJs",
+      "atributos",
+      "eventos",
+      "parts",
+      "props",
+      "slots",
+      "states"
+    ]
+  }
 }

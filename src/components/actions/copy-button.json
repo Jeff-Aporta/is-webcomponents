@@ -17,128 +17,128 @@
           "kind": "demo",
           "html": "<div class=\"copy-showcase\">\r\n            <div class=\"copy-field\">\r\n              <span class=\"copy-field__label\">Endpoint de la API</span>\r\n              <div class=\"copy-field__row\">\r\n                <code class=\"copy-field__value\" id=\"cbValue\">https://api.insoft.com.co/v1</code>\r\n                <iswc-copy-button from=\"cbValue\" copy-label=\"Copiar\" success-label=\"¡Copiado!\"></iswc-copy-button>\r\n              </div>\r\n            </div>\r\n\r\n            <div class=\"copy-proof\">\r\n              <label class=\"copy-proof__label\" for=\"cbPaste\">Pega aquí para comprobarlo</label>\r\n              <input id=\"cbPaste\" class=\"from-input\" type=\"text\" placeholder=\"Ctrl+V / Cmd+V\">\r\n            </div>\r\n          </div>",
           "controls": [
-              {
-                "control": "select",
-                "prop": "attr:from",
-                "label": "from",
-                "options": [
-                  "cbValue",
-                  "my-phone",
-                  "my-input.value",
-                  "my-link[href]"
-                ]
-              },
-              {
-                "control": "select",
-                "prop": "attr:copy-label",
-                "label": "copy-label",
-                "options": [
-                  "Copiar",
-                  "Clic para copiar",
-                  "250ms",
-                  "3s",
-                  "full",
-                  "copy (solo feedback)",
-                  "none",
-                  "top",
-                  "top-start",
-                  "top-end",
-                  "right",
-                  "right-start",
-                  "right-end",
-                  "bottom",
-                  "bottom-start",
-                  "bottom-end",
-                  "left",
-                  "left-start",
-                  "left-end"
-                ]
-              },
-              {
-                "control": "select",
-                "prop": "attr:success-label",
-                "label": "success-label",
-                "options": [
-                  "¡Copiado!",
-                  "¡Listo!"
-                ]
-              },
-              {
-                "control": "select",
-                "prop": "attr:value",
-                "label": "value",
-                "options": [
-                  "Labels custom",
-                  "Iconos custom",
-                  "Desde un botón custom",
-                  "No se puede copiar",
-                  "Rápido",
-                  "Lento",
-                  "full",
-                  "copy",
-                  "none",
-                  "top",
-                  "top-start",
-                  "top-end",
-                  "right",
-                  "right-start",
-                  "right-end",
-                  "bottom",
-                  "bottom-start",
-                  "bottom-end",
-                  "left",
-                  "left-start",
-                  "left-end",
-                  "hola-iswc-copy"
-                ]
-              },
-              {
-                "control": "text",
-                "prop": "attr:error-label",
-                "label": "error-label"
-              },
-              {
-                "control": "boolean",
-                "prop": "attr:disabled",
-                "label": "disabled"
-              },
-              {
-                "control": "number",
-                "prop": "attr:feedback-duration",
-                "label": "feedback-duration",
-                "min": 0,
-                "max": 3000,
-                "step": 1
-              },
-              {
-                "control": "select",
-                "prop": "attr:tooltip",
-                "label": "tooltip",
-                "options": [
-                  "full",
-                  "copy",
-                  "none"
-                ]
-              },
-              {
-                "control": "select",
-                "prop": "attr:tooltip-placement",
-                "label": "tooltip-placement",
-                "options": [
-                  "top",
-                  "top-start",
-                  "top-end",
-                  "right",
-                  "right-start",
-                  "right-end",
-                  "bottom",
-                  "bottom-start",
-                  "bottom-end",
-                  "left",
-                  "left-start",
-                  "left-end"
-                ]
-              }
+            {
+              "control": "select",
+              "prop": "attr:from",
+              "label": "from",
+              "options": [
+                "cbValue",
+                "my-phone",
+                "my-input.value",
+                "my-link[href]"
+              ]
+            },
+            {
+              "control": "select",
+              "prop": "attr:copy-label",
+              "label": "copy-label",
+              "options": [
+                "Copiar",
+                "Clic para copiar",
+                "250ms",
+                "3s",
+                "full",
+                "copy (solo feedback)",
+                "none",
+                "top",
+                "top-start",
+                "top-end",
+                "right",
+                "right-start",
+                "right-end",
+                "bottom",
+                "bottom-start",
+                "bottom-end",
+                "left",
+                "left-start",
+                "left-end"
+              ]
+            },
+            {
+              "control": "select",
+              "prop": "attr:success-label",
+              "label": "success-label",
+              "options": [
+                "¡Copiado!",
+                "¡Listo!"
+              ]
+            },
+            {
+              "control": "select",
+              "prop": "attr:value",
+              "label": "value",
+              "options": [
+                "Labels custom",
+                "Iconos custom",
+                "Desde un botón custom",
+                "No se puede copiar",
+                "Rápido",
+                "Lento",
+                "full",
+                "copy",
+                "none",
+                "top",
+                "top-start",
+                "top-end",
+                "right",
+                "right-start",
+                "right-end",
+                "bottom",
+                "bottom-start",
+                "bottom-end",
+                "left",
+                "left-start",
+                "left-end",
+                "hola-iswc-copy"
+              ]
+            },
+            {
+              "control": "text",
+              "prop": "attr:error-label",
+              "label": "error-label"
+            },
+            {
+              "control": "boolean",
+              "prop": "attr:disabled",
+              "label": "disabled"
+            },
+            {
+              "control": "number",
+              "prop": "attr:feedback-duration",
+              "label": "feedback-duration",
+              "min": 0,
+              "max": 3000,
+              "step": 1
+            },
+            {
+              "control": "select",
+              "prop": "attr:tooltip",
+              "label": "tooltip",
+              "options": [
+                "full",
+                "copy",
+                "none"
+              ]
+            },
+            {
+              "control": "select",
+              "prop": "attr:tooltip-placement",
+              "label": "tooltip-placement",
+              "options": [
+                "top",
+                "top-start",
+                "top-end",
+                "right",
+                "right-start",
+                "right-end",
+                "bottom",
+                "bottom-start",
+                "bottom-end",
+                "left",
+                "left-start",
+                "left-end"
+              ]
+            }
           ],
           "equivNote": "from gana sobre value. Sin fuente válida emite iswc-error.",
           "equivHtml": "<!-- ver diagrama de ramas -->",
@@ -361,5 +361,95 @@
         }
       ]
     }
-  ]
+  ],
+  "ficha": {
+    "sections": {
+      "anatomia": {
+        "content": "Copia texto al portapapeles con feedback de éxito/error."
+      },
+      "atributos": {
+        "table": [
+          {
+            "name": "<code>value</code>",
+            "type": "string",
+            "default": "''"
+          },
+          {
+            "name": "<code>from</code>",
+            "type": "string",
+            "default": "''"
+          },
+          {
+            "name": "<code>copy-label</code>",
+            "type": "string",
+            "default": "'' → Copiar"
+          },
+          {
+            "name": "<code>success-label</code>",
+            "type": "string",
+            "default": "'' → Copiado"
+          },
+          {
+            "name": "<code>error-label</code>",
+            "type": "string",
+            "default": "'' → Error"
+          },
+          {
+            "name": "<code>feedback-duration</code>",
+            "type": "number",
+            "default": "1000"
+          },
+          {
+            "name": "<code>tooltip</code>",
+            "type": "full | copy | none",
+            "default": "full"
+          },
+          {
+            "name": "<code>tooltip-placement</code>",
+            "type": "los 12 de <code>iswc-popover</code>: top | top-start | top-end | bottom* | left* | right*",
+            "default": "top"
+          },
+          {
+            "name": "<code>disabled</code>",
+            "type": "boolean",
+            "default": "false"
+          }
+        ]
+      },
+      "apiJs": {
+        "table": [
+          {
+            "metodo": "eventos",
+            "desc": "<code>iswc-copy</code> con <code>{ value }</code> · <code>iswc-error</code>"
+          },
+          {
+            "metodo": "states",
+            "desc": "<code>:state(success)</code> · <code>:state(error)</code> · <code>:state(disabled)</code>"
+          },
+          {
+            "metodo": "parts",
+            "desc": "<code>button</code> · <code>copy-icon</code> · <code>success-icon</code> · <code>error-icon</code> · <code>feedback</code> (burbuja) · <code>feedback-body</code>"
+          },
+          {
+            "metodo": "compone",
+            "desc": "<code class=\"code\">iswc-tooltip</code> (posición, flip, flecha) e <code class=\"code\">iswc-icon</code>"
+          },
+          {
+            "metodo": "tokens",
+            "desc": "<code>--iswc-tooltip-bg</code> y <code>--iswc-tooltip-fg</code> mandan en la burbuja; éxito y error la tiñen solos"
+          }
+        ]
+      },
+      "ejemplos": {
+        "content": "```html\n<code id=\"cbValue\">https://api.insoft.com.co/v1</code>\n<iswc-copy-button from=\"cbValue\" copy-label=\"Copiar\" success-label=\"¡Copiado!\"></iswc-copy-button>\n```"
+      }
+    },
+    "exclude": [
+      "eventos",
+      "parts",
+      "props",
+      "slots",
+      "states"
+    ]
+  }
 }
