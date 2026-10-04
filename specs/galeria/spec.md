@@ -1,4 +1,4 @@
-# Spec — Galería y previews
+﻿# Spec — Galería y previews
 
 Shell de demostración, estado en URL y previews controlados por JSON.
 
@@ -11,7 +11,7 @@ La galería (`index.html` + `src/previews/`) es el laboratorio visual del kit. C
 ## S-G1 Previews JSON
 
 - Archivo: `src/previews/<categoria>/<tag>.json` con `$schema: "iswc-preview/v1"`.
-- `manifest.js` → `page` apunta al `.json`, no a HTML por tag.
+- `src/manifest.ts` → `page` apunta al `.json`, no a HTML por tag.
 - Único HTML bajo previews: `src/previews/_shell.html` (fullscreen).
 - Comportamiento dinámico: `src/previews/behaviors/<tag>.js` (`mount` / `unmount`). **Prohibido** `eval` o listeners en strings del JSON.
 
