@@ -70,6 +70,11 @@ const CSS = `
   font-size: 1em;
   max-inline-size: 100%;
 }
+/* Inputs y selects: full-width en la celda del grid (Phase W9). */
+.fila iswc-input,
+.fila iswc-select {
+  width: 100%;
+}
 .fila iswc-checkbox {
   --iswc-control-height: 2.5em;
 }
@@ -83,8 +88,8 @@ const CSS = `
   inline-size: fit-content;
 }
 .fila .control-wrap iswc-switch {
-  --iswc-switch-height: 0.7em;
-  --iswc-switch-width: calc(0.7em * 1.75);
+  --iswc-switch-height: 0.9em;
+  --iswc-switch-width: calc(0.9em * 1.75);
   min-inline-size: 14px;
   min-block-size: 14px;
 }
