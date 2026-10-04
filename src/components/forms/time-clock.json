@@ -13,7 +13,7 @@
       "blocks": [
         {
           "kind": "demo",
-          "html": "<iswc-time-clock id=\"tc\" value=\"09:30\" ampm locale=\"en-US\"></iswc-time-clock>\r\n          <iswc-time-clock value=\"14:15\" hour24 locale=\"es\"></iswc-time-clock>",
+          "html": "<iswc-time-clock id=\"tc\" value=\"09:30\" ampm locale=\"en-US\"></iswc-time-clock>",
           "controls": [
             {
               "control": "select",

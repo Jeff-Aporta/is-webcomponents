@@ -15,7 +15,7 @@
       "blocks": [
         {
           "kind": "demo",
-          "html": "<div class=\"stack\">\r\n            <iswc-switch name=\"notificaciones\" checked>Notificaciones</iswc-switch>\r\n            <iswc-switch name=\"beta\">Funciones beta</iswc-switch>\r\n            <iswc-switch name=\"bloqueado\" checked disabled>Bloqueado por política</iswc-switch>\r\n          </div>",
+          "html": "<iswc-switch id=\"swDemo\" name=\"notificaciones\" checked>Notificaciones</iswc-switch>",
           "controls": [
             {
               "control": "boolean",

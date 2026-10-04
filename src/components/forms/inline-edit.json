@@ -19,7 +19,7 @@
       "blocks": [
         {
           "kind": "demo",
-          "html": "<div class=\"ie-row\">\r\n            <span class=\"label\">Nombre</span>\r\n            <iswc-inline-edit id=\"ie1\" value=\"Carolina Méndez\" placeholder=\"Sin nombre\"></iswc-inline-edit>\r\n          </div>\r\n          <div class=\"ie-row\">\r\n            <span class=\"label\">Email</span>\r\n            <iswc-inline-edit id=\"ie2\" value=\"caro@empresa.co\"></iswc-inline-edit>\r\n          </div>\r\n          <div class=\"ie-row\">\r\n            <span class=\"label\">Vacío</span>\r\n            <iswc-inline-edit placeholder=\"Clic para escribir\"></iswc-inline-edit>\r\n          </div>",
+          "html": "<div class=\"ie-row\">\r\n            <span class=\"label\">Nombre</span>\r\n            <iswc-inline-edit id=\"ie1\" value=\"Carolina Méndez\" placeholder=\"Sin nombre\"></iswc-inline-edit>\r\n          </div>",
           "controls": [
             {
               "control": "select",

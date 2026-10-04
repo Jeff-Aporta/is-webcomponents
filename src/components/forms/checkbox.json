@@ -15,7 +15,7 @@
       "blocks": [
         {
           "kind": "demo",
-          "html": "<div class=\"inline\">\r\n            <iswc-checkbox name=\"a\" checked>Marcada</iswc-checkbox>\r\n            <iswc-checkbox name=\"b\">Sin marcar</iswc-checkbox>\r\n            <iswc-checkbox name=\"c\" indeterminate>Indeterminada</iswc-checkbox>\r\n            <iswc-checkbox name=\"d\" checked disabled>Deshabilitada</iswc-checkbox>\r\n          </div>",
+          "html": "<iswc-checkbox id=\"ckDemo\" name=\"a\" checked>Marcada</iswc-checkbox>",
           "controls": [
             {
               "control": "boolean",
