@@ -13,7 +13,8 @@
       "blocks": [
         {
           "kind": "demo",
-          "html": "<div class=\"demo-row\" style=\"flex-wrap:wrap;gap:.5rem\">\r\n            <iswc-tag>General</iswc-tag>\r\n            <iswc-tag color=\"brand\">InSoft</iswc-tag>\r\n            <iswc-tag color=\"neutral\">Neutral</iswc-tag>\r\n            <iswc-tag color=\"info\">Info</iswc-tag>\r\n            <iswc-tag color=\"success\">Success</iswc-tag>\r\n            <iswc-tag color=\"warning\">Warning</iswc-tag>\r\n            <iswc-tag color=\"danger\">Danger</iswc-tag>\r\n            <iswc-tag with-remove id=\"rmTag\">Removible</iswc-tag>\r\n          </div>",
+          "html": "<iswc-tag id=\"tagPlay\">General</iswc-tag>",
+          "target": "#tagPlay",
           "controls": [
             {
               "control": "select",
@@ -22,10 +23,10 @@
               "options": [
                 "brand",
                 "neutral",
+                "info",
                 "success",
                 "warning",
-                "danger",
-                "info"
+                "danger"
               ]
             },
             {
@@ -44,6 +45,20 @@
     },
     {
       "id": "examples",
+      "title": "Colores y apariencias",
+      "blocks": [
+        {
+          "kind": "demo",
+          "html": "<div class=\"demo-row\" style=\"flex-wrap:wrap;gap:.5rem\">\r\n            <iswc-tag>General</iswc-tag>\r\n            <iswc-tag color=\"brand\">InSoft</iswc-tag>\r\n            <iswc-tag color=\"neutral\">Neutral</iswc-tag>\r\n            <iswc-tag color=\"info\">Info</iswc-tag>\r\n            <iswc-tag color=\"success\">Success</iswc-tag>\r\n            <iswc-tag color=\"warning\">Warning</iswc-tag>\r\n            <iswc-tag color=\"danger\">Danger</iswc-tag>\r\n            <iswc-tag with-remove id=\"rmTag\">Removible</iswc-tag>\r\n          </div>"
+        },
+        {
+          "kind": "html",
+          "html": "<div class=\"log\" id=\"tagLog\" aria-live=\"polite\" style=\"margin-top:12px\"><div class=\"row hint\">Quita el tag removible para ver el evento.</div></div>"
+        }
+      ]
+    },
+    {
+      "id": "scale",
       "title": "Escala por contexto",
       "blocks": [
         {
@@ -53,10 +68,6 @@
         {
           "kind": "code",
           "code": "<span style=\"font-size:1.25rem\">\n  <iswc-tag pill>Grande</iswc-tag>\n</span>"
-        },
-        {
-          "kind": "html",
-          "html": "<div class=\"log\" id=\"tagLog\" aria-live=\"polite\" style=\"margin-top:12px\"><div class=\"row hint\">Quita el tag removible para ver el evento.</div></div>"
         }
       ]
     },
@@ -119,7 +130,7 @@
         ]
       },
       "ejemplos": {
-        "content": "```html\n<div class=\"demo-row\" style=\"flex-wrap:wrap;gap:.5rem\">\r\n            <iswc-tag>General</iswc-tag>\r\n            <iswc-tag color=\"brand\">InSoft</iswc-tag>\r\n            <iswc-tag color=\"neutral\">Neutral</iswc-tag>\r\n            <iswc-tag color=\"info\">Info</iswc-tag>\r\n            <iswc-tag color=\"success\">Success</iswc-tag>\r\n            <iswc-tag color=\"warning\">Warning</iswc-tag>\r\n            <iswc-tag color=\"danger\">Danger</iswc-tag>\r\n            <iswc-tag with-remove id=\"rmTag\">Removible</iswc-tag>\r\n          </div>\n```"
+        "content": "```html\n<iswc-tag id=\"tagPlay\">General</iswc-tag>\n```"
       }
     },
     "exclude": [

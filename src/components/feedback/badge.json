@@ -13,7 +13,7 @@
       "blocks": [
         {
           "kind": "demo",
-          "html": "<div class=\"demo-row\">\r\n            <iswc-badge id=\"badge-play\">Nuevo</iswc-badge>\r\n            <iswc-badge color=\"success\">Activo</iswc-badge>\r\n            <iswc-badge color=\"warning\" attention=\"pulse\">Pendiente</iswc-badge>\r\n          </div>",
+          "html": "<iswc-badge id=\"badge-play\">Nuevo</iswc-badge>",
           "target": "#badge-play",
           "controls": [
             {
@@ -131,7 +131,7 @@
         ]
       },
       "ejemplos": {
-        "content": "```html\n<div class=\"demo-row\">\r\n            <iswc-badge id=\"badge-play\">Nuevo</iswc-badge>\r\n            <iswc-badge color=\"success\">Activo</iswc-badge>\r\n            <iswc-badge color=\"warning\" attention=\"pulse\">Pendiente</iswc-badge>\r\n          </div>\n```"
+        "content": "```html\n<iswc-badge id=\"badge-play\">Nuevo</iswc-badge>\n```"
       }
     },
     "exclude": [

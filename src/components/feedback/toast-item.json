@@ -14,7 +14,8 @@
       "blocks": [
         {
           "kind": "demo",
-          "html": "<iswc-toast-item color=\"success\" open duration=\"0\">\r\n            <iswc-icon slot=\"icon\" icon=\"mdi:check-circle\"></iswc-icon>\r\n            Guardado correctamente\r\n          </iswc-toast-item>\r\n          <iswc-toast-item color=\"danger\" open duration=\"0\">\r\n            <iswc-icon slot=\"icon\" icon=\"mdi:alert-circle\"></iswc-icon>\r\n            No se pudo guardar\r\n          </iswc-toast-item>",
+          "html": "<iswc-toast-item id=\"tiPlay\" color=\"success\" open duration=\"0\">\r\n            <iswc-icon slot=\"icon\" icon=\"mdi:check-circle\"></iswc-icon>\r\n            Guardado correctamente\r\n          </iswc-toast-item>",
+          "target": "#tiPlay",
           "controls": [
             {
               "control": "select",
@@ -45,7 +46,7 @@
         },
         {
           "kind": "code",
-          "code": "<iswc-toast-item color=\"success\" open duration=\"0\">\n  <iswc-icon slot=\"icon\" icon=\"mdi:check-circle\"></iswc-icon>\n  Guardado correctamente\n</iswc-toast-item>\n<iswc-toast-item color=\"danger\" open duration=\"0\">\n  <iswc-icon slot=\"icon\" icon=\"mdi:alert-circle\"></iswc-icon>\n  No se pudo guardar\n</iswc-toast-item>",
+          "code": "<iswc-toast-item color=\"success\" open duration=\"0\">\n  <iswc-icon slot=\"icon\" icon=\"mdi:check-circle\"></iswc-icon>\n  Guardado correctamente\n</iswc-toast-item>",
           "lang": "html"
         }
       ]
@@ -68,7 +69,7 @@
         "content": "Ítem individual de notificación. Se crea normalmente con <code class=\"code\">toaster.create()</code>, pero también se puede declarar suelto para controlar su ciclo de vida a mano."
       },
       "ejemplos": {
-        "content": "```html\n<iswc-toast-item color=\"success\" open duration=\"0\">\n  <iswc-icon slot=\"icon\" icon=\"mdi:check-circle\"></iswc-icon>\n  Guardado correctamente\n</iswc-toast-item>\n<iswc-toast-item color=\"danger\" open duration=\"0\">\n  <iswc-icon slot=\"icon\" icon=\"mdi:alert-circle\"></iswc-icon>\n  No se pudo guardar\n</iswc-toast-item>\n```"
+        "content": "```html\n<iswc-toast-item color=\"success\" open duration=\"0\">\n  <iswc-icon slot=\"icon\" icon=\"mdi:check-circle\"></iswc-icon>\n  Guardado correctamente\n</iswc-toast-item>\n```"
       }
     },
     "exclude": [

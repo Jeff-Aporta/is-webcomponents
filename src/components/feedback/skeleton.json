@@ -17,7 +17,8 @@
         },
         {
           "kind": "demo",
-          "html": "<iswc-skeleton style=\"height:.875rem;margin-bottom:.5rem\"></iswc-skeleton>\r\n          <iswc-skeleton style=\"height:.875rem;width:80%;margin-bottom:.5rem\"></iswc-skeleton>\r\n          <iswc-skeleton style=\"height:4rem;border-radius:8px\"></iswc-skeleton>",
+          "html": "<iswc-skeleton id=\"skPlay\" style=\"height:1rem;width:60%\"></iswc-skeleton>",
+          "target": "#skPlay",
           "controls": [
             {
               "control": "select",
@@ -97,7 +98,7 @@
         ]
       },
       "ejemplos": {
-        "content": "```html\n<iswc-skeleton style=\"height:.875rem;margin-bottom:.5rem\"></iswc-skeleton>\r\n          <iswc-skeleton style=\"height:.875rem;width:80%;margin-bottom:.5rem\"></iswc-skeleton>\r\n          <iswc-skeleton style=\"height:4rem;border-radius:8px\"></iswc-skeleton>\n```"
+        "content": "```html\n<iswc-skeleton id=\"skPlay\" style=\"height:1rem;width:60%\"></iswc-skeleton>\n```"
       }
     },
     "exclude": [
