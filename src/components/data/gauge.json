@@ -217,5 +217,81 @@
         }
       ]
     }
-  ]
+  ],
+  "ficha": {
+    "sections": {
+      "anatomia": {
+        "content": "Medidor circular SVG de porcentaje. Soporta variantes, semicírculo,\r\n          custom min/max, unidad, formato y tamaño."
+      },
+      "atributos": {
+        "table": [
+          {
+            "name": "<code>value</code>",
+            "type": "number",
+            "default": "0",
+            "desc": "Valor actual."
+          },
+          {
+            "name": "<code>min</code>",
+            "type": "number",
+            "default": "0",
+            "desc": "Mínimo."
+          },
+          {
+            "name": "<code>max</code>",
+            "type": "number",
+            "default": "100",
+            "desc": "Máximo."
+          },
+          {
+            "name": "<code>label</code>",
+            "type": "string",
+            "default": "—",
+            "desc": "Etiqueta."
+          },
+          {
+            "name": "<code>unit</code>",
+            "type": "string",
+            "default": "—",
+            "desc": "Unidad (e.g. \"%\")."
+          },
+          {
+            "name": "<code>format</code>",
+            "type": "string",
+            "default": "0",
+            "desc": "Intl format."
+          },
+          {
+            "name": "<code>thickness</code>",
+            "type": "number",
+            "default": "8",
+            "desc": "Ancho del trazo."
+          },
+          {
+            "name": "<code>variant</code>",
+            "type": "brand | success | warning | danger",
+            "default": "brand",
+            "desc": "Color."
+          },
+          {
+            "name": "<code>half</code>",
+            "type": "boolean",
+            "default": "false",
+            "desc": "Semicírculo."
+          }
+        ]
+      },
+      "ejemplos": {
+        "content": "```html\n<iswc-gauge value=\"67\" label=\"Conversión\" unit=\"%\"></iswc-gauge>\n```"
+      }
+    },
+    "exclude": [
+      "apiJs",
+      "eventos",
+      "parts",
+      "props",
+      "slots",
+      "states"
+    ]
+  }
 }

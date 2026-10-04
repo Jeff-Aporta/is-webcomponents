@@ -34,5 +34,24 @@
         }
       ]
     }
-  ]
+  ],
+  "ficha": {
+    "sections": {
+      "anatomia": {
+        "content": "Columna de un tablero <code class=\"code\">&lt;iswc-kanban&gt;</code>: título, acento de color y contador de tarjetas."
+      },
+      "ejemplos": {
+        "content": "```html\n<iswc-kanban>\n  <iswc-kanban-column title=\"Pendiente\" accent=\"#f59f00\">\n    <iswc-kanban-card heading=\"Conciliar banco\"></iswc-kanban-card>\n  </iswc-kanban-column>\n  <iswc-kanban-column title=\"En curso\" accent=\"#228be6\">\n    <iswc-kanban-card heading=\"Cierre de mes\"></iswc-kanban-card>\n  </iswc-kanban-column>\n  <iswc-kanban-column title=\"Listo\" accent=\"#40c057\"></iswc-kanban-column>\n</iswc-kanban>\n```"
+      }
+    },
+    "exclude": [
+      "apiJs",
+      "atributos",
+      "eventos",
+      "parts",
+      "props",
+      "slots",
+      "states"
+    ]
+  }
 }

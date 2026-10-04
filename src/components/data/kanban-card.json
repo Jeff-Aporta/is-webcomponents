@@ -34,5 +34,24 @@
         }
       ]
     }
-  ]
+  ],
+  "ficha": {
+    "sections": {
+      "anatomia": {
+        "content": "Tarjeta de un tablero. Es arrastrable entre columnas y admite encabezado, meta, etiqueta y pie."
+      },
+      "ejemplos": {
+        "content": "```html\n<iswc-kanban>\n  <iswc-kanban-column title=\"Tareas\">\n    <iswc-kanban-card heading=\"Conciliar banco\" meta=\"Vence hoy\" tag=\"Urgente\" tag-color=\"danger\">\n      Revisar extracto de agosto.\n    </iswc-kanban-card>\n    <iswc-kanban-card heading=\"Cierre de mes\" meta=\"3 días\" tag=\"Normal\">\n      Cuadrar cuentas de resultado.\n    </iswc-kanban-card>\n  </iswc-kanban-column>\n  <iswc-kanban-column title=\"Hechas\"></iswc-kanban-column>\n</iswc-kanban>\n```"
+      }
+    },
+    "exclude": [
+      "apiJs",
+      "atributos",
+      "eventos",
+      "parts",
+      "props",
+      "slots",
+      "states"
+    ]
+  }
 }

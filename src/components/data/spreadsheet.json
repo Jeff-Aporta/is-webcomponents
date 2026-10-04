@@ -38,5 +38,22 @@
         }
       ]
     }
-  ]
+  ],
+  "ficha": {
+    "sections": {
+      "anatomia": {
+        "content": "Hoja de cálculo con edición por celda, fórmulas <code class=\"ic\">=SUM(A1:A5)</code> y navegación con flechas + Tab."
+      }
+    },
+    "exclude": [
+      "apiJs",
+      "atributos",
+      "ejemplos",
+      "eventos",
+      "parts",
+      "props",
+      "slots",
+      "states"
+    ]
+  }
 }
