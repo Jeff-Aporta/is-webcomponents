@@ -1,0 +1,4639 @@
+﻿[
+  {
+    "component": "iswc-button-group",
+    "file": "src/components/actions/button-group.ts",
+    "declared": [
+      "base"
+    ],
+    "exported": [],
+    "exposed": [
+      "base"
+    ],
+    "documented": [
+      "base"
+    ],
+    "documentedDescriptions": {
+      "base": "Personalizable con `::part(base)`."
+    },
+    "missing": [],
+    "undocumented": [],
+    "hasCssPartsSection": true
+  },
+  {
+    "component": "iswc-button",
+    "file": "src/components/actions/button.ts",
+    "declared": [
+      "button",
+      "caret",
+      "end",
+      "label",
+      "spinner",
+      "sr-status",
+      "start"
+    ],
+    "exported": [],
+    "exposed": [
+      "button",
+      "caret",
+      "end",
+      "label",
+      "spinner",
+      "sr-status",
+      "start"
+    ],
+    "documented": [
+      "button",
+      "caret",
+      "end",
+      "label",
+      "spinner",
+      "start"
+    ],
+    "documentedDescriptions": {
+      "button": "Personalizable con `::part(button)`.",
+      "start": "Personalizable con `::part(start)`.",
+      "label": "Personalizable con `::part(label)`.",
+      "end": "Personalizable con `::part(end)`.",
+      "caret": "Personalizable con `::part(caret)`.",
+      "spinner": "Personalizable con `::part(spinner)`."
+    },
+    "missing": [
+      "sr-status"
+    ],
+    "undocumented": [],
+    "hasCssPartsSection": true
+  },
+  {
+    "component": "iswc-check-icon-button",
+    "file": "src/components/actions/check-icon-button.ts",
+    "declared": [
+      "icon"
+    ],
+    "exported": [
+      "button"
+    ],
+    "exposed": [
+      "button",
+      "icon"
+    ],
+    "documented": [
+      "button",
+      "icon"
+    ],
+    "documentedDescriptions": {
+      "button": "Personalizable con `::part(button)`.",
+      "icon": "Personalizable con `::part(icon)`."
+    },
+    "missing": [],
+    "undocumented": [],
+    "hasCssPartsSection": true
+  },
+  {
+    "component": "iswc-context-menu",
+    "file": "src/components/actions/context-menu.ts",
+    "declared": [
+      "items",
+      "panel"
+    ],
+    "exported": [],
+    "exposed": [
+      "items",
+      "panel"
+    ],
+    "documented": [
+      "items",
+      "panel"
+    ],
+    "documentedDescriptions": {
+      "panel": "Personalizable con `::part(panel)`.",
+      "items": "Personalizable con `::part(items)`."
+    },
+    "missing": [],
+    "undocumented": [],
+    "hasCssPartsSection": true
+  },
+  {
+    "component": "iswc-copy-button",
+    "file": "src/components/actions/copy-button.ts",
+    "declared": [
+      "copy-icon",
+      "error-icon",
+      "success-icon"
+    ],
+    "exported": [
+      "button",
+      "feedback",
+      "feedback-body"
+    ],
+    "exposed": [
+      "button",
+      "copy-icon",
+      "error-icon",
+      "feedback",
+      "feedback-body",
+      "success-icon"
+    ],
+    "documented": [
+      "button",
+      "copy-icon",
+      "error-icon",
+      "success-icon"
+    ],
+    "documentedDescriptions": {
+      "button": "Personalizable con `::part(button)`.",
+      "copy-icon": "Personalizable con `::part(copy-icon)`.",
+      "success-icon": "Personalizable con `::part(success-icon)`.",
+      "error-icon": "Personalizable con `::part(error-icon)`."
+    },
+    "missing": [
+      "feedback",
+      "feedback-body"
+    ],
+    "undocumented": [],
+    "hasCssPartsSection": true
+  },
+  {
+    "component": "iswc-dropdown-item",
+    "file": "src/components/actions/dropdown-item.ts",
+    "declared": [
+      "base",
+      "checkmark",
+      "details",
+      "icon",
+      "label",
+      "submenu",
+      "submenu-icon"
+    ],
+    "exported": [],
+    "exposed": [
+      "base",
+      "checkmark",
+      "details",
+      "icon",
+      "label",
+      "submenu",
+      "submenu-icon"
+    ],
+    "documented": [
+      "base",
+      "checkmark",
+      "details",
+      "icon",
+      "label",
+      "submenu",
+      "submenu-icon"
+    ],
+    "documentedDescriptions": {
+      "base": "Personalizable con `::part(base)`.",
+      "checkmark": "Personalizable con `::part(checkmark)`.",
+      "icon": "Personalizable con `::part(icon)`.",
+      "label": "Personalizable con `::part(label)`.",
+      "details": "Personalizable con `::part(details)`.",
+      "submenu-icon": "Personalizable con `::part(submenu-icon)`.",
+      "submenu": "Personalizable con `::part(submenu)`."
+    },
+    "missing": [],
+    "undocumented": [],
+    "hasCssPartsSection": true
+  },
+  {
+    "component": "iswc-dropdown",
+    "file": "src/components/actions/dropdown.ts",
+    "declared": [
+      "dialog",
+      "menu",
+      "trigger-wrap"
+    ],
+    "exported": [],
+    "exposed": [
+      "dialog",
+      "menu",
+      "trigger-wrap"
+    ],
+    "documented": [
+      "dialog",
+      "menu",
+      "trigger-wrap"
+    ],
+    "documentedDescriptions": {
+      "trigger-wrap": "Personalizable con `::part(trigger-wrap)`.",
+      "dialog": "Personalizable con `::part(dialog)`.",
+      "menu": "Personalizable con `::part(menu)`."
+    },
+    "missing": [],
+    "undocumented": [],
+    "hasCssPartsSection": true
+  },
+  {
+    "component": "iswc-fab",
+    "file": "src/components/actions/fab.ts",
+    "declared": [],
+    "exported": [
+      "base",
+      "icon",
+      "label"
+    ],
+    "exposed": [
+      "base",
+      "icon",
+      "label"
+    ],
+    "documented": [
+      "base",
+      "icon",
+      "label"
+    ],
+    "documentedDescriptions": {
+      "base": "Personalizable con `::part(base)`.",
+      "icon": "Personalizable con `::part(icon)`.",
+      "label": "Personalizable con `::part(label)`."
+    },
+    "missing": [],
+    "undocumented": [],
+    "hasCssPartsSection": true
+  },
+  {
+    "component": "iswc-share-button",
+    "file": "src/components/actions/share-button.ts",
+    "declared": [
+      "button"
+    ],
+    "exported": [],
+    "exposed": [
+      "button"
+    ],
+    "documented": [],
+    "documentedDescriptions": {},
+    "missing": [
+      "button"
+    ],
+    "undocumented": [],
+    "hasCssPartsSection": false
+  },
+  {
+    "component": "iswc-speed-dial",
+    "file": "src/components/actions/speed-dial.ts",
+    "declared": [
+      "action",
+      "actions",
+      "root",
+      "trigger"
+    ],
+    "exported": [],
+    "exposed": [
+      "action",
+      "actions",
+      "root",
+      "trigger"
+    ],
+    "documented": [
+      "action",
+      "actions",
+      "root",
+      "trigger"
+    ],
+    "documentedDescriptions": {
+      "root": "Personalizable con `::part(root)`.",
+      "actions": "Personalizable con `::part(actions)`.",
+      "trigger": "Personalizable con `::part(trigger)`.",
+      "action": "Personalizable con `::part(action)` en `<iswc-speed-dial-action>`."
+    },
+    "missing": [],
+    "undocumented": [],
+    "hasCssPartsSection": true
+  },
+  {
+    "component": "iswc-chart",
+    "file": "src/components/charts/chart.ts",
+    "declared": [
+      "base",
+      "canvas",
+      "legend",
+      "sr-status",
+      "tooltip"
+    ],
+    "exported": [],
+    "exposed": [
+      "base",
+      "canvas",
+      "legend",
+      "sr-status",
+      "tooltip"
+    ],
+    "documented": [
+      "base",
+      "canvas",
+      "legend",
+      "tooltip"
+    ],
+    "documentedDescriptions": {
+      "base": "Personalizable con `::part(base)`.",
+      "canvas": "Personalizable con `::part(canvas)`.",
+      "legend": "Personalizable con `::part(legend)`.",
+      "tooltip": "Personalizable con `::part(tooltip)`."
+    },
+    "missing": [
+      "sr-status"
+    ],
+    "undocumented": [],
+    "hasCssPartsSection": true
+  },
+  {
+    "component": "iswc-sparkline",
+    "file": "src/components/charts/sparkline.ts",
+    "declared": [
+      "canvas",
+      "sparkline",
+      "sr-status"
+    ],
+    "exported": [],
+    "exposed": [
+      "canvas",
+      "sparkline",
+      "sr-status"
+    ],
+    "documented": [
+      "canvas",
+      "sparkline"
+    ],
+    "documentedDescriptions": {
+      "sparkline": "Personalizable con `::part(sparkline)`.",
+      "canvas": "Personalizable con `::part(canvas)`."
+    },
+    "missing": [
+      "sr-status"
+    ],
+    "undocumented": [],
+    "hasCssPartsSection": true
+  },
+  {
+    "component": "iswc-treemap",
+    "file": "src/components/charts/treemap.ts",
+    "declared": [
+      "base",
+      "canvas",
+      "tooltip"
+    ],
+    "exported": [],
+    "exposed": [
+      "base",
+      "canvas",
+      "tooltip"
+    ],
+    "documented": [
+      "base",
+      "canvas",
+      "tooltip"
+    ],
+    "documentedDescriptions": {
+      "base": "Personalizable con `::part(base)`.",
+      "canvas": "Personalizable con `::part(canvas)`.",
+      "tooltip": "Personalizable con `::part(tooltip)`."
+    },
+    "missing": [],
+    "undocumented": [],
+    "hasCssPartsSection": true
+  },
+  {
+    "component": "iswc-code",
+    "file": "src/components/code/code.ts",
+    "declared": [
+      "editor",
+      "root",
+      "seed",
+      "tooltip"
+    ],
+    "exported": [],
+    "exposed": [
+      "editor",
+      "root",
+      "seed",
+      "tooltip"
+    ],
+    "documented": [
+      "editor",
+      "root",
+      "seed",
+      "tooltip"
+    ],
+    "documentedDescriptions": {
+      "root": "Contenedor.",
+      "editor": "Host del editor (`.editor-host`).",
+      "tooltip": "`<iswc-tooltip>` de documentación.",
+      "seed": "`<textarea>` semilla (oculto)."
+    },
+    "missing": [],
+    "undocumented": [],
+    "hasCssPartsSection": true
+  },
+  {
+    "component": "iswc-heatmap",
+    "file": "src/components/data-viz/heatmap.ts",
+    "declared": [
+      "canvas",
+      "legend",
+      "root",
+      "sr-status"
+    ],
+    "exported": [],
+    "exposed": [
+      "canvas",
+      "legend",
+      "root",
+      "sr-status"
+    ],
+    "documented": [
+      "canvas",
+      "legend",
+      "root"
+    ],
+    "documentedDescriptions": {
+      "root": "Contenedor grid que reparte lienzo y leyenda.",
+      "canvas": "El `<svg>` donde se dibuja la matriz (`role=\"img\"`).",
+      "legend": "Caja de la leyenda; queda con `hidden` cuando no hay espacio o `legend-position=\"none\"`."
+    },
+    "missing": [
+      "sr-status"
+    ],
+    "undocumented": [],
+    "hasCssPartsSection": true
+  },
+  {
+    "component": "iswc-maps",
+    "file": "src/components/data-viz/maps.ts",
+    "declared": [
+      "canvas",
+      "root"
+    ],
+    "exported": [],
+    "exposed": [
+      "canvas",
+      "root"
+    ],
+    "documented": [
+      "canvas",
+      "root"
+    ],
+    "documentedDescriptions": {
+      "root": "Caja exterior con borde, radio y fondo elevado.",
+      "canvas": "Área del mapa (28rem de alto) que contiene el `<svg>` o el `<iframe>`."
+    },
+    "missing": [],
+    "undocumented": [],
+    "hasCssPartsSection": true
+  },
+  {
+    "component": "iswc-ag-grid",
+    "file": "src/components/data/ag-grid.ts",
+    "declared": [
+      "body",
+      "count",
+      "footer",
+      "group-header",
+      "group-panel",
+      "header",
+      "root",
+      "sidebar",
+      "tool-panel",
+      "toolbar",
+      "viewport"
+    ],
+    "exported": [],
+    "exposed": [
+      "body",
+      "count",
+      "footer",
+      "group-header",
+      "group-panel",
+      "header",
+      "root",
+      "sidebar",
+      "tool-panel",
+      "toolbar",
+      "viewport"
+    ],
+    "documented": [
+      "body",
+      "count",
+      "footer",
+      "group-header",
+      "group-panel",
+      "header",
+      "root",
+      "sidebar",
+      "tool-panel",
+      "toolbar",
+      "viewport"
+    ],
+    "documentedDescriptions": {
+      "root": "Contenedor; lleva `data-density`.",
+      "toolbar": "Barra superior (`role=\"toolbar\"`).",
+      "group-panel": "Zona de agrupación por columnas.",
+      "viewport": "Área desplazable (`role=\"grid\"`).",
+      "group-header": "Cabecera de grupos.",
+      "header": "Fila de encabezados.",
+      "body": "Cuerpo de filas.",
+      "sidebar": "Panel lateral.",
+      "tool-panel": "Contenido del panel lateral.",
+      "footer": "Pie del grid.",
+      "count": "Contador de filas del pie."
+    },
+    "missing": [],
+    "undocumented": [],
+    "hasCssPartsSection": true
+  },
+  {
+    "component": "iswc-data-grid",
+    "file": "src/components/data/data-grid.ts",
+    "declared": [
+      "aggregation-row",
+      "base",
+      "body",
+      "cell",
+      "column-groups",
+      "detail-panel",
+      "footer",
+      "header",
+      "header-cell",
+      "header-filters",
+      "header-row",
+      "overlay",
+      "pagination",
+      "pinned-bottom",
+      "pinned-top",
+      "quick-filter",
+      "row",
+      "toolbar",
+      "toolbar-button",
+      "viewport"
+    ],
+    "exported": [],
+    "exposed": [
+      "aggregation-row",
+      "base",
+      "body",
+      "cell",
+      "column-groups",
+      "detail-panel",
+      "footer",
+      "header",
+      "header-cell",
+      "header-filters",
+      "header-row",
+      "overlay",
+      "pagination",
+      "pinned-bottom",
+      "pinned-top",
+      "quick-filter",
+      "row",
+      "toolbar",
+      "toolbar-button",
+      "viewport"
+    ],
+    "documented": [
+      "aggregation-row",
+      "base",
+      "body",
+      "column-groups",
+      "footer",
+      "header",
+      "header-filters",
+      "header-row",
+      "overlay",
+      "pagination",
+      "pinned-bottom",
+      "pinned-top",
+      "quick-filter",
+      "toolbar",
+      "toolbar-button",
+      "viewport"
+    ],
+    "documentedDescriptions": {
+      "base": "Personalizable con `::part(base)`.",
+      "toolbar": "Personalizable con `::part(toolbar)`.",
+      "quick-filter": "Personalizable con `::part(quick-filter)`.",
+      "toolbar-button": "Personalizable con `::part(toolbar-button)`.",
+      "viewport": "Personalizable con `::part(viewport)`.",
+      "header": "Personalizable con `::part(header)`.",
+      "column-groups": "Personalizable con `::part(column-groups)`.",
+      "header-row": "Personalizable con `::part(header-row)`.",
+      "header-filters": "Personalizable con `::part(header-filters)`.",
+      "pinned-top": "Personalizable con `::part(pinned-top)`.",
+      "body": "Personalizable con `::part(body)`.",
+      "pinned-bottom": "Personalizable con `::part(pinned-bottom)`.",
+      "aggregation-row": "Personalizable con `::part(aggregation-row)`.",
+      "overlay": "Personalizable con `::part(overlay)`.",
+      "footer": "Personalizable con `::part(footer)`.",
+      "pagination": "Personalizable con `::part(pagination)`."
+    },
+    "missing": [
+      "cell",
+      "detail-panel",
+      "header-cell",
+      "row"
+    ],
+    "undocumented": [],
+    "hasCssPartsSection": true
+  },
+  {
+    "component": "iswc-gauge",
+    "file": "src/components/data/gauge.ts",
+    "declared": [
+      "base",
+      "content",
+      "fill",
+      "label",
+      "svg",
+      "track",
+      "value"
+    ],
+    "exported": [],
+    "exposed": [
+      "base",
+      "content",
+      "fill",
+      "label",
+      "svg",
+      "track",
+      "value"
+    ],
+    "documented": [
+      "base",
+      "content",
+      "fill",
+      "label",
+      "svg",
+      "track",
+      "value"
+    ],
+    "documentedDescriptions": {
+      "base": "Personalizable con `::part(base)`.",
+      "svg": "Personalizable con `::part(svg)`.",
+      "track": "Personalizable con `::part(track)`.",
+      "fill": "Personalizable con `::part(fill)`.",
+      "content": "Personalizable con `::part(content)`.",
+      "value": "Personalizable con `::part(value)`.",
+      "label": "Personalizable con `::part(label)`."
+    },
+    "missing": [],
+    "undocumented": [],
+    "hasCssPartsSection": true
+  },
+  {
+    "component": "iswc-kanban",
+    "file": "src/components/data/kanban.ts",
+    "declared": [
+      "actions",
+      "badge",
+      "base",
+      "card",
+      "col-foot",
+      "col-head",
+      "column",
+      "cover",
+      "footer",
+      "head",
+      "heading",
+      "lane",
+      "meta",
+      "tag",
+      "title"
+    ],
+    "exported": [],
+    "exposed": [
+      "actions",
+      "badge",
+      "base",
+      "card",
+      "col-foot",
+      "col-head",
+      "column",
+      "cover",
+      "footer",
+      "head",
+      "heading",
+      "lane",
+      "meta",
+      "tag",
+      "title"
+    ],
+    "documented": [
+      "actions",
+      "badge",
+      "base",
+      "card",
+      "col-foot",
+      "col-head",
+      "column",
+      "cover",
+      "footer",
+      "head",
+      "heading",
+      "lane",
+      "meta",
+      "tag",
+      "title"
+    ],
+    "documentedDescriptions": {
+      "base": "Personalizable con `::part(base)`.",
+      "column": "Personalizable con `::part(column)`.",
+      "col-head": "Personalizable con `::part(col-head)`.",
+      "title": "Personalizable con `::part(title)`.",
+      "badge": "Personalizable con `::part(badge)`.",
+      "actions": "Personalizable con `::part(actions)`.",
+      "lane": "Personalizable con `::part(lane)`.",
+      "col-foot": "Personalizable con `::part(col-foot)`.",
+      "card": "Personalizable con `::part(card)`.",
+      "cover": "Personalizable con `::part(cover)`.",
+      "head": "Personalizable con `::part(head)`.",
+      "heading": "Personalizable con `::part(heading)`.",
+      "tag": "Personalizable con `::part(tag)`.",
+      "meta": "Personalizable con `::part(meta)`.",
+      "footer": "Personalizable con `::part(footer)`."
+    },
+    "missing": [],
+    "undocumented": [],
+    "hasCssPartsSection": true
+  },
+  {
+    "component": "iswc-pivot-table",
+    "file": "src/components/data/pivot-table.ts",
+    "declared": [
+      "root",
+      "table"
+    ],
+    "exported": [],
+    "exposed": [
+      "root",
+      "table"
+    ],
+    "documented": [
+      "root",
+      "table"
+    ],
+    "documentedDescriptions": {
+      "root": "Contenedor con scroll, borde, radio y `max-height: 60vh`. Ajusta aquí la altura o quita el borde.",
+      "table": "El `<table>` de la pivote. Útil para cambiar `font-size` o `border-collapse`."
+    },
+    "missing": [],
+    "undocumented": [],
+    "hasCssPartsSection": true
+  },
+  {
+    "component": "iswc-spreadsheet",
+    "file": "src/components/data/spreadsheet.ts",
+    "declared": [
+      "grid",
+      "root"
+    ],
+    "exported": [],
+    "exposed": [
+      "grid",
+      "root"
+    ],
+    "documented": [
+      "grid",
+      "root"
+    ],
+    "documentedDescriptions": {
+      "root": "Contenedor con scroll, borde, radio y `max-height: 70vh`. Ajusta aquí el alto visible.",
+      "grid": "El `<table>` de la rejilla. Sirve para cambiar `font-size` o `table-layout`."
+    },
+    "missing": [],
+    "undocumented": [],
+    "hasCssPartsSection": true
+  },
+  {
+    "component": "iswc-stat",
+    "file": "src/components/data/stat.ts",
+    "declared": [
+      "base",
+      "foot",
+      "head",
+      "helper",
+      "icon",
+      "label",
+      "trend",
+      "value"
+    ],
+    "exported": [],
+    "exposed": [
+      "base",
+      "foot",
+      "head",
+      "helper",
+      "icon",
+      "label",
+      "trend",
+      "value"
+    ],
+    "documented": [
+      "base",
+      "foot",
+      "head",
+      "helper",
+      "icon",
+      "label",
+      "trend",
+      "value"
+    ],
+    "documentedDescriptions": {
+      "base": "Personalizable con `::part(base)`.",
+      "head": "Personalizable con `::part(head)`.",
+      "label": "Personalizable con `::part(label)`.",
+      "icon": "Personalizable con `::part(icon)`.",
+      "value": "Personalizable con `::part(value)`.",
+      "foot": "Personalizable con `::part(foot)`.",
+      "trend": "Personalizable con `::part(trend)`.",
+      "helper": "Personalizable con `::part(helper)`."
+    },
+    "missing": [],
+    "undocumented": [],
+    "hasCssPartsSection": true
+  },
+  {
+    "component": "iswc-transfer",
+    "file": "src/components/data/transfer.ts",
+    "declared": [
+      "base",
+      "controls",
+      "count",
+      "item",
+      "list",
+      "pane",
+      "pane-head",
+      "search",
+      "sr-status",
+      "title"
+    ],
+    "exported": [],
+    "exposed": [
+      "base",
+      "controls",
+      "count",
+      "item",
+      "list",
+      "pane",
+      "pane-head",
+      "search",
+      "sr-status",
+      "title"
+    ],
+    "documented": [
+      "base",
+      "controls",
+      "count",
+      "item",
+      "list",
+      "pane",
+      "pane-head",
+      "search",
+      "title"
+    ],
+    "documentedDescriptions": {
+      "base": "Personalizable con `::part(base)`.",
+      "pane": "Personalizable con `::part(pane)`.",
+      "pane-head": "Personalizable con `::part(pane-head)`.",
+      "title": "Personalizable con `::part(title)`.",
+      "count": "Personalizable con `::part(count)`.",
+      "search": "Personalizable con `::part(search)`.",
+      "list": "Personalizable con `::part(list)`.",
+      "controls": "Personalizable con `::part(controls)`.",
+      "item": "Personalizable con `::part(item)`."
+    },
+    "missing": [
+      "sr-status"
+    ],
+    "undocumented": [],
+    "hasCssPartsSection": true
+  },
+  {
+    "component": "iswc-lightbox",
+    "file": "src/components/diagrams/lightbox.ts",
+    "declared": [
+      "code-panel",
+      "dialog",
+      "host",
+      "stage",
+      "toast",
+      "toolbar",
+      "toolbar__lead",
+      "toolbar__trail"
+    ],
+    "exported": [],
+    "exposed": [
+      "code-panel",
+      "dialog",
+      "host",
+      "stage",
+      "toast",
+      "toolbar",
+      "toolbar__lead",
+      "toolbar__trail"
+    ],
+    "documented": [
+      "code-panel",
+      "dialog",
+      "host",
+      "stage",
+      "toast",
+      "toolbar",
+      "toolbar__lead",
+      "toolbar__trail"
+    ],
+    "documentedDescriptions": {
+      "dialog": "Personalizable con `::part(dialog)`.",
+      "toolbar": "Personalizable con `::part(toolbar)`.",
+      "toolbar__lead": "Personalizable con `::part(toolbar__lead)`.",
+      "toolbar__trail": "Personalizable con `::part(toolbar__trail)`.",
+      "stage": "Personalizable con `::part(stage)`.",
+      "host": "Personalizable con `::part(host)`.",
+      "code-panel": "Personalizable con `::part(code-panel)`.",
+      "toast": "Personalizable con `::part(toast)`."
+    },
+    "missing": [],
+    "undocumented": [],
+    "hasCssPartsSection": true
+  },
+  {
+    "component": "iswc-org-chart",
+    "file": "src/components/diagrams/org-chart.ts",
+    "declared": [
+      "canvas",
+      "root",
+      "tooltip"
+    ],
+    "exported": [],
+    "exposed": [
+      "canvas",
+      "root",
+      "tooltip"
+    ],
+    "documented": [
+      "canvas",
+      "root",
+      "tooltip"
+    ],
+    "documentedDescriptions": {
+      "root": "Contenedor.",
+      "canvas": "SVG del diagrama.",
+      "tooltip": "Panel de detalle del nodo."
+    },
+    "missing": [],
+    "undocumented": [],
+    "hasCssPartsSection": true
+  },
+  {
+    "component": "iswc-badge",
+    "file": "src/components/feedback/badge.ts",
+    "declared": [
+      "badge",
+      "end",
+      "label",
+      "start"
+    ],
+    "exported": [],
+    "exposed": [
+      "badge",
+      "end",
+      "label",
+      "start"
+    ],
+    "documented": [
+      "badge",
+      "end",
+      "label",
+      "start"
+    ],
+    "documentedDescriptions": {
+      "badge": "Personalizable con `::part(badge)`.",
+      "start": "Personalizable con `::part(start)`.",
+      "label": "Personalizable con `::part(label)`.",
+      "end": "Personalizable con `::part(end)`."
+    },
+    "missing": [],
+    "undocumented": [],
+    "hasCssPartsSection": true
+  },
+  {
+    "component": "iswc-confirm-modal",
+    "file": "src/components/feedback/confirm-modal.ts",
+    "declared": [
+      "actions",
+      "backdrop",
+      "base",
+      "heading",
+      "message"
+    ],
+    "exported": [],
+    "exposed": [
+      "actions",
+      "backdrop",
+      "base",
+      "heading",
+      "message"
+    ],
+    "documented": [
+      "actions",
+      "backdrop",
+      "base",
+      "heading",
+      "message"
+    ],
+    "documentedDescriptions": {
+      "backdrop": "El fondo oscurecido a pantalla completa.",
+      "base": "La caja del modal.",
+      "heading": "El título.",
+      "message": "El bloque de texto.",
+      "actions": "La fila de botones."
+    },
+    "missing": [],
+    "undocumented": [],
+    "hasCssPartsSection": true
+  },
+  {
+    "component": "iswc-palette-selector",
+    "file": "src/components/feedback/palette-selector.ts",
+    "declared": [
+      "mark",
+      "menu",
+      "option",
+      "trigger"
+    ],
+    "exported": [],
+    "exposed": [
+      "mark",
+      "menu",
+      "option",
+      "trigger"
+    ],
+    "documented": [
+      "caret",
+      "label",
+      "lead",
+      "menu",
+      "option",
+      "trigger"
+    ],
+    "documentedDescriptions": {
+      "trigger": "Personalizable con `::part(trigger)`.",
+      "lead": "Personalizable con `::part(lead)`.",
+      "label": "Personalizable con `::part(label)`.",
+      "caret": "Personalizable con `::part(caret)`.",
+      "menu": "Personalizable con `::part(menu)`.",
+      "option": "Personalizable con `::part(option)`."
+    },
+    "missing": [
+      "mark"
+    ],
+    "undocumented": [
+      "caret",
+      "label",
+      "lead"
+    ],
+    "hasCssPartsSection": true
+  },
+  {
+    "component": "iswc-popconfirm",
+    "file": "src/components/feedback/popconfirm.ts",
+    "declared": [
+      "actions",
+      "arrow",
+      "base",
+      "message"
+    ],
+    "exported": [],
+    "exposed": [
+      "actions",
+      "arrow",
+      "base",
+      "message"
+    ],
+    "documented": [
+      "actions",
+      "arrow",
+      "base",
+      "message"
+    ],
+    "documentedDescriptions": {
+      "base": "Personalizable con `::part(base)`.",
+      "arrow": "Personalizable con `::part(arrow)`.",
+      "message": "Personalizable con `::part(message)`.",
+      "actions": "Personalizable con `::part(actions)`."
+    },
+    "missing": [],
+    "undocumented": [],
+    "hasCssPartsSection": true
+  },
+  {
+    "component": "iswc-prefs-clear",
+    "file": "src/components/feedback/prefs-clear.ts",
+    "declared": [
+      "button"
+    ],
+    "exported": [],
+    "exposed": [
+      "button"
+    ],
+    "documented": [],
+    "documentedDescriptions": {},
+    "missing": [
+      "button"
+    ],
+    "undocumented": [],
+    "hasCssPartsSection": false
+  },
+  {
+    "component": "iswc-progress-bar",
+    "file": "src/components/feedback/progress-bar.ts",
+    "declared": [
+      "indicator",
+      "label",
+      "progress-bar"
+    ],
+    "exported": [],
+    "exposed": [
+      "indicator",
+      "label",
+      "progress-bar"
+    ],
+    "documented": [
+      "indicator",
+      "label",
+      "progress-bar"
+    ],
+    "documentedDescriptions": {
+      "progress-bar": "Personalizable con `::part(progress-bar)`.",
+      "indicator": "Personalizable con `::part(indicator)`.",
+      "label": "Personalizable con `::part(label)`."
+    },
+    "missing": [],
+    "undocumented": [],
+    "hasCssPartsSection": true
+  },
+  {
+    "component": "iswc-progress-ring",
+    "file": "src/components/feedback/progress-ring.ts",
+    "declared": [
+      "indicator",
+      "label",
+      "progress-ring",
+      "track"
+    ],
+    "exported": [],
+    "exposed": [
+      "indicator",
+      "label",
+      "progress-ring",
+      "track"
+    ],
+    "documented": [
+      "indicator",
+      "label",
+      "progress-ring",
+      "track"
+    ],
+    "documentedDescriptions": {
+      "progress-ring": "Personalizable con `::part(progress-ring)`.",
+      "track": "Personalizable con `::part(track)`.",
+      "indicator": "Personalizable con `::part(indicator)`.",
+      "label": "Personalizable con `::part(label)`."
+    },
+    "missing": [],
+    "undocumented": [],
+    "hasCssPartsSection": true
+  },
+  {
+    "component": "iswc-skeleton",
+    "file": "src/components/feedback/skeleton.ts",
+    "declared": [
+      "indicator"
+    ],
+    "exported": [],
+    "exposed": [
+      "indicator"
+    ],
+    "documented": [
+      "indicator"
+    ],
+    "documentedDescriptions": {
+      "indicator": "Personalizable con `::part(indicator)`."
+    },
+    "missing": [],
+    "undocumented": [],
+    "hasCssPartsSection": true
+  },
+  {
+    "component": "iswc-spinner",
+    "file": "src/components/feedback/spinner.ts",
+    "declared": [
+      "spinner"
+    ],
+    "exported": [],
+    "exposed": [
+      "spinner"
+    ],
+    "documented": [
+      "spinner"
+    ],
+    "documentedDescriptions": {
+      "spinner": "Personalizable con `::part(spinner)`."
+    },
+    "missing": [],
+    "undocumented": [],
+    "hasCssPartsSection": true
+  },
+  {
+    "component": "iswc-tag",
+    "file": "src/components/feedback/tag.ts",
+    "declared": [
+      "end",
+      "label",
+      "remove-button",
+      "start",
+      "tag"
+    ],
+    "exported": [],
+    "exposed": [
+      "end",
+      "label",
+      "remove-button",
+      "start",
+      "tag"
+    ],
+    "documented": [
+      "end",
+      "label",
+      "remove-button",
+      "start",
+      "tag"
+    ],
+    "documentedDescriptions": {
+      "tag": "Personalizable con `::part(tag)`.",
+      "start": "Personalizable con `::part(start)`.",
+      "label": "Personalizable con `::part(label)`.",
+      "end": "Personalizable con `::part(end)`.",
+      "remove-button": "Personalizable con `::part(remove-button)`."
+    },
+    "missing": [],
+    "undocumented": [],
+    "hasCssPartsSection": true
+  },
+  {
+    "component": "iswc-theme-toggle",
+    "file": "src/components/feedback/theme-toggle.ts",
+    "declared": [
+      "button"
+    ],
+    "exported": [],
+    "exposed": [
+      "button"
+    ],
+    "documented": [
+      "button"
+    ],
+    "documentedDescriptions": {
+      "button": "Personalizable con `::part(button)`."
+    },
+    "missing": [],
+    "undocumented": [],
+    "hasCssPartsSection": true
+  },
+  {
+    "component": "iswc-toast-item",
+    "file": "src/components/feedback/toast-item.ts",
+    "declared": [
+      "base",
+      "caption",
+      "icon",
+      "message",
+      "progress",
+      "title"
+    ],
+    "exported": [
+      "close-button"
+    ],
+    "exposed": [
+      "base",
+      "caption",
+      "close-button",
+      "icon",
+      "message",
+      "progress",
+      "title"
+    ],
+    "documented": [
+      "base",
+      "caption",
+      "close-button",
+      "icon",
+      "message",
+      "progress",
+      "title"
+    ],
+    "documentedDescriptions": {
+      "base": "Personalizable con `::part(base)`.",
+      "icon": "Personalizable con `::part(icon)`.",
+      "message": "Personalizable con `::part(message)`.",
+      "title": "Personalizable con `::part(title)`.",
+      "caption": "Personalizable con `::part(caption)`.",
+      "close-button": "Personalizable con `::part(close-button)`.",
+      "progress": "Personalizable con `::part(progress)`."
+    },
+    "missing": [],
+    "undocumented": [],
+    "hasCssPartsSection": true
+  },
+  {
+    "component": "iswc-toast",
+    "file": "src/components/feedback/toast.ts",
+    "declared": [
+      "stack"
+    ],
+    "exported": [],
+    "exposed": [
+      "stack"
+    ],
+    "documented": [
+      "stack"
+    ],
+    "documentedDescriptions": {
+      "stack": "Personalizable con `::part(stack)`."
+    },
+    "missing": [],
+    "undocumented": [],
+    "hasCssPartsSection": true
+  },
+  {
+    "component": "iswc-tooltip",
+    "file": "src/components/feedback/tooltip.ts",
+    "declared": [
+      "base",
+      "body",
+      "tooltip"
+    ],
+    "exported": [
+      "base__arrow",
+      "base__popup"
+    ],
+    "exposed": [
+      "base",
+      "base__arrow",
+      "base__popup",
+      "body",
+      "tooltip"
+    ],
+    "documented": [
+      "base",
+      "body",
+      "tooltip"
+    ],
+    "documentedDescriptions": {
+      "base": "Personalizable con `::part(base)`.",
+      "tooltip": "Personalizable con `::part(tooltip)`.",
+      "body": "Personalizable con `::part(body)`."
+    },
+    "missing": [
+      "base__arrow",
+      "base__popup"
+    ],
+    "undocumented": [],
+    "hasCssPartsSection": true
+  },
+  {
+    "component": "iswc-csv-edit",
+    "file": "src/components/files/csv-edit.ts",
+    "declared": [
+      "add-row",
+      "export",
+      "root",
+      "stage",
+      "table",
+      "toolbar"
+    ],
+    "exported": [],
+    "exposed": [
+      "add-row",
+      "export",
+      "root",
+      "stage",
+      "table",
+      "toolbar"
+    ],
+    "documented": [],
+    "documentedDescriptions": {},
+    "missing": [
+      "add-row",
+      "export",
+      "root",
+      "stage",
+      "table",
+      "toolbar"
+    ],
+    "undocumented": [],
+    "hasCssPartsSection": false
+  },
+  {
+    "component": "iswc-csv-view",
+    "file": "src/components/files/csv-view.ts",
+    "declared": [
+      "empty",
+      "root",
+      "stage",
+      "table"
+    ],
+    "exported": [],
+    "exposed": [
+      "empty",
+      "root",
+      "stage",
+      "table"
+    ],
+    "documented": [],
+    "documentedDescriptions": {},
+    "missing": [
+      "empty",
+      "root",
+      "stage",
+      "table"
+    ],
+    "undocumented": [],
+    "hasCssPartsSection": false
+  },
+  {
+    "component": "iswc-docx-view",
+    "file": "src/components/files/docx-view.ts",
+    "declared": [
+      "body",
+      "root"
+    ],
+    "exported": [],
+    "exposed": [
+      "body",
+      "root"
+    ],
+    "documented": [],
+    "documentedDescriptions": {},
+    "missing": [
+      "body",
+      "root"
+    ],
+    "undocumented": [],
+    "hasCssPartsSection": false
+  },
+  {
+    "component": "iswc-file-edit",
+    "file": "src/components/files/file-edit.ts",
+    "declared": [
+      "error",
+      "root",
+      "stage"
+    ],
+    "exported": [],
+    "exposed": [
+      "error",
+      "root",
+      "stage"
+    ],
+    "documented": [],
+    "documentedDescriptions": {},
+    "missing": [
+      "error",
+      "root",
+      "stage"
+    ],
+    "undocumented": [],
+    "hasCssPartsSection": false
+  },
+  {
+    "component": "iswc-file-view",
+    "file": "src/components/files/file-view.ts",
+    "declared": [
+      "error",
+      "root",
+      "stage"
+    ],
+    "exported": [],
+    "exposed": [
+      "error",
+      "root",
+      "stage"
+    ],
+    "documented": [],
+    "documentedDescriptions": {},
+    "missing": [
+      "error",
+      "root",
+      "stage"
+    ],
+    "undocumented": [],
+    "hasCssPartsSection": false
+  },
+  {
+    "component": "iswc-pptx-view",
+    "file": "src/components/files/pptx-view.ts",
+    "declared": [
+      "root",
+      "slide",
+      "stage"
+    ],
+    "exported": [],
+    "exposed": [
+      "root",
+      "slide",
+      "stage"
+    ],
+    "documented": [],
+    "documentedDescriptions": {},
+    "missing": [
+      "root",
+      "slide",
+      "stage"
+    ],
+    "undocumented": [],
+    "hasCssPartsSection": false
+  },
+  {
+    "component": "iswc-txt-edit",
+    "file": "src/components/files/txt-edit.ts",
+    "declared": [
+      "editor",
+      "root"
+    ],
+    "exported": [],
+    "exposed": [
+      "editor",
+      "root"
+    ],
+    "documented": [],
+    "documentedDescriptions": {},
+    "missing": [
+      "editor",
+      "root"
+    ],
+    "undocumented": [],
+    "hasCssPartsSection": false
+  },
+  {
+    "component": "iswc-txt-view",
+    "file": "src/components/files/txt-view.ts",
+    "declared": [
+      "body",
+      "empty",
+      "root"
+    ],
+    "exported": [],
+    "exposed": [
+      "body",
+      "empty",
+      "root"
+    ],
+    "documented": [],
+    "documentedDescriptions": {},
+    "missing": [
+      "body",
+      "empty",
+      "root"
+    ],
+    "undocumented": [],
+    "hasCssPartsSection": false
+  },
+  {
+    "component": "iswc-checkbox",
+    "file": "src/components/forms/checkbox.ts",
+    "declared": [
+      "base",
+      "control",
+      "form-control",
+      "hint",
+      "label",
+      "mark"
+    ],
+    "exported": [],
+    "exposed": [
+      "base",
+      "control",
+      "form-control",
+      "hint",
+      "label",
+      "mark"
+    ],
+    "documented": [
+      "base",
+      "control",
+      "form-control",
+      "hint",
+      "label",
+      "mark"
+    ],
+    "documentedDescriptions": {
+      "form-control": "Personalizable con `::part(form-control)`.",
+      "base": "Personalizable con `::part(base)`.",
+      "control": "Personalizable con `::part(control)`.",
+      "mark": "Personalizable con `::part(mark)`.",
+      "label": "Personalizable con `::part(label)`.",
+      "hint": "Personalizable con `::part(hint)`."
+    },
+    "missing": [],
+    "undocumented": [],
+    "hasCssPartsSection": true
+  },
+  {
+    "component": "iswc-color-picker",
+    "file": "src/components/forms/color-picker.ts",
+    "declared": [
+      "base",
+      "dialog",
+      "eyedropper",
+      "hex-input",
+      "hint",
+      "input",
+      "label",
+      "panel",
+      "swatch",
+      "trigger"
+    ],
+    "exported": [],
+    "exposed": [
+      "base",
+      "dialog",
+      "eyedropper",
+      "hex-input",
+      "hint",
+      "input",
+      "label",
+      "panel",
+      "swatch",
+      "trigger"
+    ],
+    "documented": [
+      "base",
+      "dialog",
+      "eyedropper",
+      "hex-input",
+      "hint",
+      "input",
+      "label",
+      "panel",
+      "swatch",
+      "trigger"
+    ],
+    "documentedDescriptions": {
+      "label": "Personalizable con `::part(label)`.",
+      "base": "Personalizable con `::part(base)`.",
+      "trigger": "Personalizable con `::part(trigger)`.",
+      "swatch": "Personalizable con `::part(swatch)`.",
+      "hint": "Personalizable con `::part(hint)`.",
+      "dialog": "Personalizable con `::part(dialog)`.",
+      "panel": "Personalizable con `::part(panel)`.",
+      "input": "Personalizable con `::part(input)`.",
+      "hex-input": "Personalizable con `::part(hex-input)`.",
+      "eyedropper": "Botón EyeDropper (oculto si la API no existe)."
+    },
+    "missing": [],
+    "undocumented": [],
+    "hasCssPartsSection": true
+  },
+  {
+    "component": "iswc-combobox",
+    "file": "src/components/forms/combobox.ts",
+    "declared": [
+      "base",
+      "clear",
+      "dialog",
+      "form-control",
+      "hint",
+      "input",
+      "label",
+      "listbox",
+      "option",
+      "trigger"
+    ],
+    "exported": [],
+    "exposed": [
+      "base",
+      "clear",
+      "dialog",
+      "form-control",
+      "hint",
+      "input",
+      "label",
+      "listbox",
+      "option",
+      "trigger"
+    ],
+    "documented": [
+      "base",
+      "clear",
+      "dialog",
+      "form-control",
+      "hint",
+      "input",
+      "label",
+      "listbox",
+      "trigger"
+    ],
+    "documentedDescriptions": {
+      "form-control": "Personalizable con `::part(form-control)`.",
+      "label": "Personalizable con `::part(label)`.",
+      "base": "Personalizable con `::part(base)`.",
+      "input": "Personalizable con `::part(input)`.",
+      "clear": "Personalizable con `::part(clear)`.",
+      "trigger": "Personalizable con `::part(trigger)`.",
+      "hint": "Personalizable con `::part(hint)`.",
+      "dialog": "Personalizable con `::part(dialog)`.",
+      "listbox": "Personalizable con `::part(listbox)`."
+    },
+    "missing": [
+      "option"
+    ],
+    "undocumented": [],
+    "hasCssPartsSection": true
+  },
+  {
+    "component": "iswc-date-picker",
+    "file": "src/components/forms/date-picker.ts",
+    "declared": [
+      "base",
+      "day",
+      "grid",
+      "month-label",
+      "month-select",
+      "month-view",
+      "nav",
+      "week-number",
+      "weekdays",
+      "year-select",
+      "year-view"
+    ],
+    "exported": [],
+    "exposed": [
+      "base",
+      "day",
+      "grid",
+      "month-label",
+      "month-select",
+      "month-view",
+      "nav",
+      "week-number",
+      "weekdays",
+      "year-select",
+      "year-view"
+    ],
+    "documented": [
+      "base",
+      "grid",
+      "month-label",
+      "month-select",
+      "month-view",
+      "nav",
+      "weekdays",
+      "year-select",
+      "year-view"
+    ],
+    "documentedDescriptions": {
+      "base": "Personalizable con `::part(base)`.",
+      "nav": "Personalizable con `::part(nav)`.",
+      "month-label": "Personalizable con `::part(month-label)`.",
+      "month-select": "Personalizable con `::part(month-select)`.",
+      "year-select": "Personalizable con `::part(year-select)`.",
+      "weekdays": "Personalizable con `::part(weekdays)`.",
+      "grid": "Personalizable con `::part(grid)`.",
+      "month-view": "Personalizable con `::part(month-view)`.",
+      "year-view": "Personalizable con `::part(year-view)`."
+    },
+    "missing": [
+      "day",
+      "week-number"
+    ],
+    "undocumented": [],
+    "hasCssPartsSection": true
+  },
+  {
+    "component": "iswc-date-range-picker",
+    "file": "src/components/forms/date-range-picker.ts",
+    "declared": [
+      "base",
+      "calendars",
+      "shortcuts"
+    ],
+    "exported": [],
+    "exposed": [
+      "base",
+      "calendars",
+      "shortcuts"
+    ],
+    "documented": [
+      "base",
+      "calendars",
+      "shortcuts"
+    ],
+    "documentedDescriptions": {
+      "base": "Personalizable con `::part(base)`.",
+      "shortcuts": "Personalizable con `::part(shortcuts)`.",
+      "calendars": "Personalizable con `::part(calendars)`."
+    },
+    "missing": [],
+    "undocumented": [],
+    "hasCssPartsSection": true
+  },
+  {
+    "component": "iswc-digital-clock",
+    "file": "src/components/forms/digital-clock.ts",
+    "declared": [
+      "base",
+      "option"
+    ],
+    "exported": [],
+    "exposed": [
+      "base",
+      "option"
+    ],
+    "documented": [
+      "base"
+    ],
+    "documentedDescriptions": {
+      "base": "Personalizable con `::part(base)`."
+    },
+    "missing": [
+      "option"
+    ],
+    "undocumented": [],
+    "hasCssPartsSection": true
+  },
+  {
+    "component": "iswc-doc-editor",
+    "file": "src/components/forms/doc-editor.ts",
+    "declared": [
+      "blocks",
+      "menu",
+      "root"
+    ],
+    "exported": [],
+    "exposed": [
+      "blocks",
+      "menu",
+      "root"
+    ],
+    "documented": [
+      "blocks",
+      "menu",
+      "root"
+    ],
+    "documentedDescriptions": {
+      "root": "Contenedor externo con borde, fondo y `min-height: 14rem`.",
+      "blocks": "Columna flex que contiene todos los bloques.",
+      "menu": "Popover del menú de tipos que abre `/`."
+    },
+    "missing": [],
+    "undocumented": [],
+    "hasCssPartsSection": true
+  },
+  {
+    "component": "iswc-dropzone",
+    "file": "src/components/forms/dropzone.ts",
+    "declared": [
+      "queue",
+      "root",
+      "zone"
+    ],
+    "exported": [],
+    "exposed": [
+      "queue",
+      "root",
+      "zone"
+    ],
+    "documented": [
+      "queue",
+      "root",
+      "zone"
+    ],
+    "documentedDescriptions": {
+      "root": "Contenedor flex vertical con la zona y la cola.",
+      "zone": "Área punteada de drop (`tabindex=\"0\"`, foco visible).",
+      "queue": "`<ol>` con las filas de archivos."
+    },
+    "missing": [],
+    "undocumented": [],
+    "hasCssPartsSection": true
+  },
+  {
+    "component": "iswc-duration-picker",
+    "file": "src/components/forms/duration-picker.ts",
+    "declared": [
+      "hours",
+      "minutes",
+      "root",
+      "seconds"
+    ],
+    "exported": [],
+    "exposed": [
+      "hours",
+      "minutes",
+      "root",
+      "seconds"
+    ],
+    "documented": [
+      "hours",
+      "minutes",
+      "root",
+      "seconds"
+    ],
+    "documentedDescriptions": {
+      "root": "Contenedor del control.",
+      "hours": "Casilla de horas.",
+      "minutes": "Casilla de minutos.",
+      "seconds": "Casilla de segundos."
+    },
+    "missing": [],
+    "undocumented": [],
+    "hasCssPartsSection": true
+  },
+  {
+    "component": "iswc-file-input",
+    "file": "src/components/forms/file-input.ts",
+    "declared": [
+      "base",
+      "dropzone",
+      "file",
+      "file-list",
+      "hint",
+      "input",
+      "label",
+      "remove-button"
+    ],
+    "exported": [],
+    "exposed": [
+      "base",
+      "dropzone",
+      "file",
+      "file-list",
+      "hint",
+      "input",
+      "label",
+      "remove-button"
+    ],
+    "documented": [
+      "base",
+      "dropzone",
+      "file-list",
+      "hint",
+      "input",
+      "label"
+    ],
+    "documentedDescriptions": {
+      "base": "Personalizable con `::part(base)`.",
+      "label": "Personalizable con `::part(label)`.",
+      "hint": "Personalizable con `::part(hint)`.",
+      "dropzone": "Personalizable con `::part(dropzone)`.",
+      "input": "Personalizable con `::part(input)`.",
+      "file-list": "Personalizable con `::part(file-list)`."
+    },
+    "missing": [
+      "file",
+      "remove-button"
+    ],
+    "undocumented": [],
+    "hasCssPartsSection": true
+  },
+  {
+    "component": "iswc-full-calendar",
+    "file": "src/components/forms/full-calendar.ts",
+    "declared": [
+      "grid",
+      "root",
+      "toolbar"
+    ],
+    "exported": [],
+    "exposed": [
+      "grid",
+      "root",
+      "toolbar"
+    ],
+    "documented": [
+      "grid",
+      "root",
+      "toolbar"
+    ],
+    "documentedDescriptions": {
+      "root": "Contenedor.",
+      "toolbar": "Barra de navegación y selector de vista.",
+      "grid": "Rejilla de la vista activa."
+    },
+    "missing": [],
+    "undocumented": [],
+    "hasCssPartsSection": true
+  },
+  {
+    "component": "iswc-inline-edit",
+    "file": "src/components/forms/inline-edit.ts",
+    "declared": [
+      "display",
+      "editor",
+      "editor-wrap",
+      "root"
+    ],
+    "exported": [],
+    "exposed": [
+      "display",
+      "editor",
+      "editor-wrap",
+      "root"
+    ],
+    "documented": [
+      "display",
+      "editor",
+      "editor-wrap",
+      "root"
+    ],
+    "documentedDescriptions": {
+      "root": "Contenedor.",
+      "display": "Bloque de lectura.",
+      "editor-wrap": "Contenedor del editor.",
+      "editor": "`input` o `textarea` interno."
+    },
+    "missing": [],
+    "undocumented": [],
+    "hasCssPartsSection": true
+  },
+  {
+    "component": "iswc-input",
+    "file": "src/components/forms/input.ts",
+    "declared": [
+      "base",
+      "clear",
+      "count",
+      "end",
+      "error-text",
+      "form-control",
+      "hint",
+      "input",
+      "label",
+      "prefix",
+      "start",
+      "suffix",
+      "support",
+      "toggle"
+    ],
+    "exported": [],
+    "exposed": [
+      "base",
+      "clear",
+      "count",
+      "end",
+      "error-text",
+      "form-control",
+      "hint",
+      "input",
+      "label",
+      "prefix",
+      "start",
+      "suffix",
+      "support",
+      "toggle"
+    ],
+    "documented": [
+      "base",
+      "clear",
+      "count",
+      "end",
+      "error-text",
+      "form-control",
+      "hint",
+      "input",
+      "label",
+      "prefix",
+      "start",
+      "suffix",
+      "support",
+      "toggle"
+    ],
+    "documentedDescriptions": {
+      "form-control": "Personalizable con `::part(form-control)`.",
+      "label": "Personalizable con `::part(label)`.",
+      "base": "Personalizable con `::part(base)`.",
+      "start": "Personalizable con `::part(start)`.",
+      "prefix": "Personalizable con `::part(prefix)`.",
+      "input": "Personalizable con `::part(input)`.",
+      "clear": "Personalizable con `::part(clear)`.",
+      "toggle": "Personalizable con `::part(toggle)`.",
+      "end": "Personalizable con `::part(end)`.",
+      "suffix": "Personalizable con `::part(suffix)`.",
+      "support": "Personalizable con `::part(support)`.",
+      "hint": "Personalizable con `::part(hint)`.",
+      "error-text": "Personalizable con `::part(error-text)`.",
+      "count": "Personalizable con `::part(count)`."
+    },
+    "missing": [],
+    "undocumented": [],
+    "hasCssPartsSection": true
+  },
+  {
+    "component": "iswc-masked-input",
+    "file": "src/components/forms/masked-input.ts",
+    "declared": [
+      "field",
+      "input"
+    ],
+    "exported": [],
+    "exposed": [
+      "field",
+      "input"
+    ],
+    "documented": [
+      "field",
+      "input"
+    ],
+    "documentedDescriptions": {
+      "field": "Contenedor del campo.",
+      "input": "Input interno."
+    },
+    "missing": [],
+    "undocumented": [],
+    "hasCssPartsSection": true
+  },
+  {
+    "component": "iswc-mention",
+    "file": "src/components/forms/mention.ts",
+    "declared": [
+      "input",
+      "popup",
+      "root"
+    ],
+    "exported": [],
+    "exposed": [
+      "input",
+      "popup",
+      "root"
+    ],
+    "documented": [
+      "input",
+      "popup",
+      "root"
+    ],
+    "documentedDescriptions": {
+      "root": "Contenedor.",
+      "input": "Input interno.",
+      "popup": "Panel de sugerencias."
+    },
+    "missing": [],
+    "undocumented": [],
+    "hasCssPartsSection": true
+  },
+  {
+    "component": "iswc-month-calendar",
+    "file": "src/components/forms/month-calendar.ts",
+    "declared": [
+      "base",
+      "month"
+    ],
+    "exported": [],
+    "exposed": [
+      "base",
+      "month"
+    ],
+    "documented": [
+      "base"
+    ],
+    "documentedDescriptions": {
+      "base": "Personalizable con `::part(base)`."
+    },
+    "missing": [
+      "month"
+    ],
+    "undocumented": [],
+    "hasCssPartsSection": true
+  },
+  {
+    "component": "iswc-option",
+    "file": "src/components/forms/option.ts",
+    "declared": [
+      "base",
+      "description",
+      "label",
+      "start"
+    ],
+    "exported": [],
+    "exposed": [
+      "base",
+      "description",
+      "label",
+      "start"
+    ],
+    "documented": [
+      "base",
+      "description",
+      "label",
+      "start"
+    ],
+    "documentedDescriptions": {
+      "base": "Personalizable con `::part(base)`.",
+      "start": "Personalizable con `::part(start)`.",
+      "label": "Personalizable con `::part(label)`.",
+      "description": "Personalizable con `::part(description)`."
+    },
+    "missing": [],
+    "undocumented": [],
+    "hasCssPartsSection": true
+  },
+  {
+    "component": "iswc-pin-input",
+    "file": "src/components/forms/pin-input.ts",
+    "declared": [
+      "base",
+      "cells"
+    ],
+    "exported": [],
+    "exposed": [
+      "base",
+      "cells"
+    ],
+    "documented": [
+      "base",
+      "cells"
+    ],
+    "documentedDescriptions": {
+      "base": "Personalizable con `::part(base)`.",
+      "cells": "Personalizable con `::part(cells)`."
+    },
+    "missing": [],
+    "undocumented": [],
+    "hasCssPartsSection": true
+  },
+  {
+    "component": "iswc-radio-group",
+    "file": "src/components/forms/radio-group.ts",
+    "declared": [
+      "base",
+      "error-text",
+      "form-control",
+      "hint",
+      "label"
+    ],
+    "exported": [],
+    "exposed": [
+      "base",
+      "error-text",
+      "form-control",
+      "hint",
+      "label"
+    ],
+    "documented": [
+      "base",
+      "error-text",
+      "form-control",
+      "hint",
+      "label"
+    ],
+    "documentedDescriptions": {
+      "form-control": "Personalizable con `::part(form-control)`.",
+      "label": "Personalizable con `::part(label)`.",
+      "base": "Personalizable con `::part(base)`.",
+      "hint": "Personalizable con `::part(hint)`.",
+      "error-text": "Personalizable con `::part(error-text)`."
+    },
+    "missing": [],
+    "undocumented": [],
+    "hasCssPartsSection": true
+  },
+  {
+    "component": "iswc-radio",
+    "file": "src/components/forms/radio.ts",
+    "declared": [
+      "base",
+      "control",
+      "description",
+      "dot",
+      "label",
+      "text"
+    ],
+    "exported": [],
+    "exposed": [
+      "base",
+      "control",
+      "description",
+      "dot",
+      "label",
+      "text"
+    ],
+    "documented": [
+      "base",
+      "control",
+      "description",
+      "dot",
+      "label",
+      "text"
+    ],
+    "documentedDescriptions": {
+      "base": "Personalizable con `::part(base)`.",
+      "control": "Personalizable con `::part(control)`.",
+      "dot": "Personalizable con `::part(dot)`.",
+      "text": "Personalizable con `::part(text)`.",
+      "label": "Personalizable con `::part(label)`.",
+      "description": "Personalizable con `::part(description)`."
+    },
+    "missing": [],
+    "undocumented": [],
+    "hasCssPartsSection": true
+  },
+  {
+    "component": "iswc-rating",
+    "file": "src/components/forms/rating.ts",
+    "declared": [
+      "base",
+      "form-control",
+      "hover-label",
+      "icon-empty",
+      "icon-filled",
+      "label",
+      "star"
+    ],
+    "exported": [],
+    "exposed": [
+      "base",
+      "form-control",
+      "hover-label",
+      "icon-empty",
+      "icon-filled",
+      "label",
+      "star"
+    ],
+    "documented": [
+      "base",
+      "form-control",
+      "hover-label",
+      "icon-empty",
+      "icon-filled",
+      "label",
+      "star"
+    ],
+    "documentedDescriptions": {
+      "form-control": "Personalizable con `::part(form-control)`.",
+      "label": "Personalizable con `::part(label)`.",
+      "base": "Personalizable con `::part(base)`.",
+      "hover-label": "Personalizable con `::part(hover-label)`.",
+      "star": "Personalizable con `::part(star)`.",
+      "icon-empty": "Personalizable con `::part(icon-empty)`.",
+      "icon-filled": "Personalizable con `::part(icon-filled)`."
+    },
+    "missing": [],
+    "undocumented": [],
+    "hasCssPartsSection": true
+  },
+  {
+    "component": "iswc-rte",
+    "file": "src/components/forms/rte.ts",
+    "declared": [
+      "content",
+      "placeholder",
+      "root",
+      "source",
+      "toolbar"
+    ],
+    "exported": [],
+    "exposed": [
+      "content",
+      "placeholder",
+      "root",
+      "source",
+      "toolbar"
+    ],
+    "documented": [
+      "content",
+      "placeholder",
+      "root",
+      "source",
+      "toolbar"
+    ],
+    "documentedDescriptions": {
+      "root": "Contenedor.",
+      "toolbar": "Barra de botones.",
+      "content": "Área editable WYSIWYG.",
+      "source": "`textarea` del modo código fuente.",
+      "placeholder": "Texto de ayuda."
+    },
+    "missing": [],
+    "undocumented": [],
+    "hasCssPartsSection": true
+  },
+  {
+    "component": "iswc-select",
+    "file": "src/components/forms/select.ts",
+    "declared": [
+      "base",
+      "check",
+      "clear",
+      "dialog",
+      "error-text",
+      "group",
+      "group-label",
+      "hint",
+      "label",
+      "listbox",
+      "option",
+      "option-description",
+      "option-start",
+      "tag",
+      "tag-more",
+      "trigger"
+    ],
+    "exported": [],
+    "exposed": [
+      "base",
+      "check",
+      "clear",
+      "dialog",
+      "error-text",
+      "group",
+      "group-label",
+      "hint",
+      "label",
+      "listbox",
+      "option",
+      "option-description",
+      "option-start",
+      "tag",
+      "tag-more",
+      "trigger"
+    ],
+    "documented": [
+      "base",
+      "clear",
+      "dialog",
+      "error-text",
+      "hint",
+      "label",
+      "listbox",
+      "trigger"
+    ],
+    "documentedDescriptions": {
+      "label": "Personalizable con `::part(label)`.",
+      "base": "Personalizable con `::part(base)`.",
+      "trigger": "Personalizable con `::part(trigger)`.",
+      "clear": "Personalizable con `::part(clear)`.",
+      "hint": "Personalizable con `::part(hint)`.",
+      "error-text": "Personalizable con `::part(error-text)`.",
+      "dialog": "Personalizable con `::part(dialog)`.",
+      "listbox": "Personalizable con `::part(listbox)`."
+    },
+    "missing": [
+      "check",
+      "group",
+      "group-label",
+      "option",
+      "option-description",
+      "option-start",
+      "tag",
+      "tag-more"
+    ],
+    "undocumented": [],
+    "hasCssPartsSection": true
+  },
+  {
+    "component": "iswc-signature",
+    "file": "src/components/forms/signature.ts",
+    "declared": [
+      "canvas",
+      "hint",
+      "root"
+    ],
+    "exported": [],
+    "exposed": [
+      "canvas",
+      "hint",
+      "root"
+    ],
+    "documented": [
+      "canvas",
+      "hint",
+      "root"
+    ],
+    "documentedDescriptions": {
+      "root": "Contenedor.",
+      "canvas": "Canvas de dibujo.",
+      "hint": "Texto de ayuda mientras está vacío."
+    },
+    "missing": [],
+    "undocumented": [],
+    "hasCssPartsSection": true
+  },
+  {
+    "component": "iswc-slider",
+    "file": "src/components/forms/slider.ts",
+    "declared": [
+      "base",
+      "form-control",
+      "hint",
+      "label",
+      "mark",
+      "mark-label",
+      "rail",
+      "thumb",
+      "track",
+      "value-label"
+    ],
+    "exported": [],
+    "exposed": [
+      "base",
+      "form-control",
+      "hint",
+      "label",
+      "mark",
+      "mark-label",
+      "rail",
+      "thumb",
+      "track",
+      "value-label"
+    ],
+    "documented": [
+      "base",
+      "form-control",
+      "hint",
+      "label",
+      "rail",
+      "thumb",
+      "track",
+      "value-label"
+    ],
+    "documentedDescriptions": {
+      "form-control": "Personalizable con `::part(form-control)`.",
+      "label": "Personalizable con `::part(label)`.",
+      "base": "Personalizable con `::part(base)`.",
+      "rail": "Personalizable con `::part(rail)`.",
+      "track": "Personalizable con `::part(track)`.",
+      "hint": "Personalizable con `::part(hint)`.",
+      "thumb": "Personalizable con `::part(thumb)`.",
+      "value-label": "Personalizable con `::part(value-label)`."
+    },
+    "missing": [
+      "mark",
+      "mark-label"
+    ],
+    "undocumented": [],
+    "hasCssPartsSection": true
+  },
+  {
+    "component": "iswc-switch",
+    "file": "src/components/forms/switch.ts",
+    "declared": [
+      "base",
+      "control",
+      "form-control",
+      "hint",
+      "label",
+      "mark",
+      "thumb",
+      "track-label"
+    ],
+    "exported": [],
+    "exposed": [
+      "base",
+      "control",
+      "form-control",
+      "hint",
+      "label",
+      "mark",
+      "thumb",
+      "track-label"
+    ],
+    "documented": [
+      "base",
+      "control",
+      "form-control",
+      "hint",
+      "label",
+      "mark",
+      "thumb",
+      "track-label"
+    ],
+    "documentedDescriptions": {
+      "form-control": "Personalizable con `::part(form-control)`.",
+      "base": "Personalizable con `::part(base)`.",
+      "control": "Personalizable con `::part(control)`.",
+      "track-label": "Personalizable con `::part(track-label)`.",
+      "thumb": "Personalizable con `::part(thumb)`.",
+      "mark": "Personalizable con `::part(mark)`.",
+      "label": "Personalizable con `::part(label)`.",
+      "hint": "Personalizable con `::part(hint)`."
+    },
+    "missing": [],
+    "undocumented": [],
+    "hasCssPartsSection": true
+  },
+  {
+    "component": "iswc-textarea",
+    "file": "src/components/forms/textarea.ts",
+    "declared": [
+      "base",
+      "count",
+      "error-text",
+      "form-control",
+      "hint",
+      "label",
+      "support",
+      "textarea"
+    ],
+    "exported": [],
+    "exposed": [
+      "base",
+      "count",
+      "error-text",
+      "form-control",
+      "hint",
+      "label",
+      "support",
+      "textarea"
+    ],
+    "documented": [
+      "base",
+      "count",
+      "error-text",
+      "form-control",
+      "hint",
+      "label",
+      "support",
+      "textarea"
+    ],
+    "documentedDescriptions": {
+      "form-control": "Personalizable con `::part(form-control)`.",
+      "label": "Personalizable con `::part(label)`.",
+      "base": "Personalizable con `::part(base)`.",
+      "textarea": "Personalizable con `::part(textarea)`.",
+      "support": "Personalizable con `::part(support)`.",
+      "hint": "Personalizable con `::part(hint)`.",
+      "error-text": "Personalizable con `::part(error-text)`.",
+      "count": "Personalizable con `::part(count)`."
+    },
+    "missing": [],
+    "undocumented": [],
+    "hasCssPartsSection": true
+  },
+  {
+    "component": "iswc-time-clock",
+    "file": "src/components/forms/time-clock.ts",
+    "declared": [
+      "base",
+      "clock",
+      "hand",
+      "header",
+      "hours",
+      "minutes",
+      "number",
+      "seconds"
+    ],
+    "exported": [],
+    "exposed": [
+      "base",
+      "clock",
+      "hand",
+      "header",
+      "hours",
+      "minutes",
+      "number",
+      "seconds"
+    ],
+    "documented": [
+      "base",
+      "clock",
+      "hand",
+      "header",
+      "hours",
+      "minutes",
+      "seconds"
+    ],
+    "documentedDescriptions": {
+      "base": "Personalizable con `::part(base)`.",
+      "header": "Personalizable con `::part(header)`.",
+      "hours": "Personalizable con `::part(hours)`.",
+      "minutes": "Personalizable con `::part(minutes)`.",
+      "seconds": "Personalizable con `::part(seconds)`.",
+      "clock": "Personalizable con `::part(clock)`.",
+      "hand": "Personalizable con `::part(hand)`."
+    },
+    "missing": [
+      "number"
+    ],
+    "undocumented": [],
+    "hasCssPartsSection": true
+  },
+  {
+    "component": "iswc-year-calendar",
+    "file": "src/components/forms/year-calendar.ts",
+    "declared": [
+      "base",
+      "year"
+    ],
+    "exported": [],
+    "exposed": [
+      "base",
+      "year"
+    ],
+    "documented": [
+      "base"
+    ],
+    "documentedDescriptions": {
+      "base": "Personalizable con `::part(base)`."
+    },
+    "missing": [
+      "year"
+    ],
+    "undocumented": [],
+    "hasCssPartsSection": true
+  },
+  {
+    "component": "iswc-floating",
+    "file": "src/components/helpers/floating.ts",
+    "declared": [
+      "anchor",
+      "arrow",
+      "base",
+      "hover-bridge",
+      "popup"
+    ],
+    "exported": [],
+    "exposed": [
+      "anchor",
+      "arrow",
+      "base",
+      "hover-bridge",
+      "popup"
+    ],
+    "documented": [
+      "anchor",
+      "arrow",
+      "base",
+      "hover-bridge",
+      "popup"
+    ],
+    "documentedDescriptions": {
+      "base": "Contenedor.",
+      "anchor": "Slot del ancla.",
+      "popup": "Panel flotante.",
+      "arrow": "Flecha.",
+      "hover-bridge": "Puente de hover."
+    },
+    "missing": [],
+    "undocumented": [],
+    "hasCssPartsSection": true
+  },
+  {
+    "component": "iswc-format-bytes",
+    "file": "src/components/helpers/format-bytes.ts",
+    "declared": [
+      "bytes"
+    ],
+    "exported": [],
+    "exposed": [
+      "bytes"
+    ],
+    "documented": [
+      "bytes"
+    ],
+    "documentedDescriptions": {
+      "bytes": "Personalizable con `::part(bytes)`."
+    },
+    "missing": [],
+    "undocumented": [],
+    "hasCssPartsSection": true
+  },
+  {
+    "component": "iswc-format-date",
+    "file": "src/components/helpers/format-date.ts",
+    "declared": [
+      "date"
+    ],
+    "exported": [],
+    "exposed": [
+      "date"
+    ],
+    "documented": [
+      "date"
+    ],
+    "documentedDescriptions": {
+      "date": "Personalizable con `::part(date)`."
+    },
+    "missing": [],
+    "undocumented": [],
+    "hasCssPartsSection": true
+  },
+  {
+    "component": "iswc-format-number",
+    "file": "src/components/helpers/format-number.ts",
+    "declared": [
+      "number"
+    ],
+    "exported": [],
+    "exposed": [
+      "number"
+    ],
+    "documented": [
+      "number"
+    ],
+    "documentedDescriptions": {
+      "number": "Personalizable con `::part(number)`."
+    },
+    "missing": [],
+    "undocumented": [],
+    "hasCssPartsSection": true
+  },
+  {
+    "component": "iswc-format",
+    "file": "src/components/helpers/format.ts",
+    "declared": [
+      "value"
+    ],
+    "exported": [],
+    "exposed": [
+      "value"
+    ],
+    "documented": [],
+    "documentedDescriptions": {},
+    "missing": [
+      "value"
+    ],
+    "undocumented": [],
+    "hasCssPartsSection": false
+  },
+  {
+    "component": "iswc-md-editor",
+    "file": "src/components/helpers/md-editor.ts",
+    "declared": [
+      "copy",
+      "dialog",
+      "dialog-filename",
+      "dialog-label",
+      "footer",
+      "footer-discard",
+      "footer-download",
+      "footer-meta",
+      "footer-save",
+      "plain",
+      "plain-switch",
+      "preview",
+      "preview-body",
+      "preview-empty",
+      "surface",
+      "toolbar",
+      "toolbar-button",
+      "vars",
+      "vars-label",
+      "vars-list"
+    ],
+    "exported": [],
+    "exposed": [
+      "copy",
+      "dialog",
+      "dialog-filename",
+      "dialog-label",
+      "footer",
+      "footer-discard",
+      "footer-download",
+      "footer-meta",
+      "footer-save",
+      "plain",
+      "plain-switch",
+      "preview",
+      "preview-body",
+      "preview-empty",
+      "surface",
+      "toolbar",
+      "toolbar-button",
+      "vars",
+      "vars-label",
+      "vars-list"
+    ],
+    "documented": [
+      "copy",
+      "dialog",
+      "dialog-label",
+      "plain",
+      "plain-switch",
+      "preview",
+      "preview-body",
+      "preview-empty",
+      "surface",
+      "toolbar",
+      "toolbar-button"
+    ],
+    "documentedDescriptions": {
+      "preview": "Contenedor de la vista previa (clic para abrir).",
+      "preview-body": "Contenido renderizado (markdown + HTML + chips).",
+      "preview-empty": "Texto de estado vacío.",
+      "copy": "`<iswc-copy-button>` de la vista previa.",
+      "dialog": "El `<iswc-dialog>` interno.",
+      "dialog-label": "Título del diálogo.",
+      "toolbar": "Barra de formato (solo si `can-edit`).",
+      "toolbar-button": "Cada botón de la toolbar.",
+      "plain-switch": "Switch «Texto plano».",
+      "surface": "Superficie editable/preview dentro del diálogo.",
+      "plain": "`<textarea>` del modo texto plano."
+    },
+    "missing": [
+      "dialog-filename",
+      "footer",
+      "footer-discard",
+      "footer-download",
+      "footer-meta",
+      "footer-save",
+      "vars",
+      "vars-label",
+      "vars-list"
+    ],
+    "undocumented": [],
+    "hasCssPartsSection": true
+  },
+  {
+    "component": "iswc-md-render",
+    "file": "src/components/helpers/md-render.ts",
+    "declared": [
+      "body",
+      "empty"
+    ],
+    "exported": [],
+    "exposed": [
+      "body",
+      "empty"
+    ],
+    "documented": [
+      "body",
+      "empty"
+    ],
+    "documentedDescriptions": {
+      "body": "Contenedor renderizado / editable.",
+      "empty": "Placeholder vacío."
+    },
+    "missing": [],
+    "undocumented": [],
+    "hasCssPartsSection": true
+  },
+  {
+    "component": "iswc-observer",
+    "file": "src/components/helpers/observer.ts",
+    "declared": [
+      "base"
+    ],
+    "exported": [],
+    "exposed": [
+      "base"
+    ],
+    "documented": [],
+    "documentedDescriptions": {},
+    "missing": [
+      "base"
+    ],
+    "undocumented": [],
+    "hasCssPartsSection": false
+  },
+  {
+    "component": "iswc-offscreen-canvas",
+    "file": "src/components/helpers/offscreen-canvas.ts",
+    "declared": [
+      "canvas"
+    ],
+    "exported": [],
+    "exposed": [
+      "canvas"
+    ],
+    "documented": [],
+    "documentedDescriptions": {},
+    "missing": [
+      "canvas"
+    ],
+    "undocumented": [],
+    "hasCssPartsSection": false
+  },
+  {
+    "component": "iswc-popover",
+    "file": "src/components/helpers/popover.ts",
+    "declared": [
+      "body",
+      "dialog",
+      "popup"
+    ],
+    "exported": [
+      "popup__arrow",
+      "popup__hover-bridge",
+      "popup__popup"
+    ],
+    "exposed": [
+      "body",
+      "dialog",
+      "popup",
+      "popup__arrow",
+      "popup__hover-bridge",
+      "popup__popup"
+    ],
+    "documented": [
+      "body",
+      "dialog",
+      "popup"
+    ],
+    "documentedDescriptions": {
+      "popup": "Personalizable con `::part(popup)`.",
+      "dialog": "Personalizable con `::part(dialog)`.",
+      "body": "Personalizable con `::part(body)`."
+    },
+    "missing": [
+      "popup__arrow",
+      "popup__hover-bridge",
+      "popup__popup"
+    ],
+    "undocumented": [],
+    "hasCssPartsSection": true
+  },
+  {
+    "component": "iswc-relative-time",
+    "file": "src/components/helpers/relative-time.ts",
+    "declared": [
+      "time"
+    ],
+    "exported": [],
+    "exposed": [
+      "time"
+    ],
+    "documented": [
+      "time"
+    ],
+    "documentedDescriptions": {
+      "time": "Personalizable con `::part(time)`."
+    },
+    "missing": [],
+    "undocumented": [],
+    "hasCssPartsSection": true
+  },
+  {
+    "component": "iswc-accordion-group",
+    "file": "src/components/isp/accordion-group.ts",
+    "declared": [
+      "base"
+    ],
+    "exported": [],
+    "exposed": [
+      "base"
+    ],
+    "documented": [
+      "base"
+    ],
+    "documentedDescriptions": {
+      "base": "Personalizable con `::part(base)`."
+    },
+    "missing": [],
+    "undocumented": [],
+    "hasCssPartsSection": true
+  },
+  {
+    "component": "iswc-block-layout",
+    "file": "src/components/isp/block-layout.ts",
+    "declared": [
+      "content"
+    ],
+    "exported": [],
+    "exposed": [
+      "content"
+    ],
+    "documented": [
+      "content"
+    ],
+    "documentedDescriptions": {
+      "content": "El `<slot>` del contenido."
+    },
+    "missing": [],
+    "undocumented": [],
+    "hasCssPartsSection": true
+  },
+  {
+    "component": "iswc-btn-ref",
+    "file": "src/components/isp/btn-ref.ts",
+    "declared": [
+      "base",
+      "label-text",
+      "open"
+    ],
+    "exported": [],
+    "exposed": [
+      "base",
+      "label-text",
+      "open"
+    ],
+    "documented": [
+      "base",
+      "label-text",
+      "open"
+    ],
+    "documentedDescriptions": {
+      "base": "Contenedor del campo.",
+      "label-text": "Etiqueta resuelta bajo el valor.",
+      "open": "Botón filtro que abre el modal."
+    },
+    "missing": [],
+    "undocumented": [],
+    "hasCssPartsSection": true
+  },
+  {
+    "component": "iswc-catalogo-gen",
+    "file": "src/components/isp/catalogo-gen.ts",
+    "declared": [
+      "drawer",
+      "grid-wrap",
+      "root",
+      "toolbar"
+    ],
+    "exported": [
+      "pk-backdrop",
+      "pk-modal"
+    ],
+    "exposed": [
+      "drawer",
+      "grid-wrap",
+      "pk-backdrop",
+      "pk-modal",
+      "root",
+      "toolbar"
+    ],
+    "documented": [
+      "drawer",
+      "grid-wrap",
+      "root",
+      "toolbar"
+    ],
+    "documentedDescriptions": {
+      "root": "Contenedor.",
+      "toolbar": "Barra de acciones.",
+      "grid-wrap": "Contenedor de la grilla.",
+      "drawer": "Drawer de ficha."
+    },
+    "missing": [
+      "pk-backdrop",
+      "pk-modal"
+    ],
+    "undocumented": [],
+    "hasCssPartsSection": true
+  },
+  {
+    "component": "iswc-confirm-delete",
+    "file": "src/components/isp/confirm-delete.ts",
+    "declared": [
+      "actions",
+      "fields",
+      "heading",
+      "message"
+    ],
+    "exported": [
+      "backdrop",
+      "base"
+    ],
+    "exposed": [
+      "actions",
+      "backdrop",
+      "base",
+      "fields",
+      "heading",
+      "message"
+    ],
+    "documented": [
+      "actions",
+      "backdrop",
+      "base",
+      "fields",
+      "heading",
+      "message"
+    ],
+    "documentedDescriptions": {
+      "backdrop": "Personalizable con `::part(backdrop)`.",
+      "base": "Personalizable con `::part(base)`.",
+      "heading": "Personalizable con `::part(heading)`.",
+      "message": "Personalizable con `::part(message)`.",
+      "fields": "Personalizable con `::part(fields)`.",
+      "actions": "Personalizable con `::part(actions)`."
+    },
+    "missing": [],
+    "undocumented": [],
+    "hasCssPartsSection": true
+  },
+  {
+    "component": "iswc-flex-layout",
+    "file": "src/components/isp/flex-layout.ts",
+    "declared": [
+      "content"
+    ],
+    "exported": [],
+    "exposed": [
+      "content"
+    ],
+    "documented": [
+      "content"
+    ],
+    "documentedDescriptions": {
+      "content": "El `<slot>` de los ítems."
+    },
+    "missing": [],
+    "undocumented": [],
+    "hasCssPartsSection": true
+  },
+  {
+    "component": "iswc-flex-options",
+    "file": "src/components/isp/flex-options.ts",
+    "declared": [
+      "toolbar"
+    ],
+    "exported": [],
+    "exposed": [
+      "toolbar"
+    ],
+    "documented": [
+      "toolbar"
+    ],
+    "documentedDescriptions": {
+      "toolbar": "Fila de acciones."
+    },
+    "missing": [],
+    "undocumented": [],
+    "hasCssPartsSection": true
+  },
+  {
+    "component": "iswc-float-card",
+    "file": "src/components/isp/float-card.ts",
+    "declared": [
+      "panel",
+      "wrap"
+    ],
+    "exported": [],
+    "exposed": [
+      "panel",
+      "wrap"
+    ],
+    "documented": [
+      "panel",
+      "wrap"
+    ],
+    "documentedDescriptions": {
+      "wrap": "Contenedor relativo.",
+      "panel": "Caja absoluta del slot `float`."
+    },
+    "missing": [],
+    "undocumented": [],
+    "hasCssPartsSection": true
+  },
+  {
+    "component": "iswc-form",
+    "file": "src/components/isp/form.ts",
+    "declared": [
+      "buttons",
+      "content",
+      "footer",
+      "form",
+      "header"
+    ],
+    "exported": [],
+    "exposed": [
+      "buttons",
+      "content",
+      "footer",
+      "form",
+      "header"
+    ],
+    "documented": [
+      "buttons",
+      "content",
+      "footer",
+      "form",
+      "header"
+    ],
+    "documentedDescriptions": {
+      "form": "Elemento `<form>` interno (`novalidate`).",
+      "header": "Cabecera.",
+      "content": "Cuerpo.",
+      "footer": "Pie.",
+      "buttons": "Contenedor de los botones de acción."
+    },
+    "missing": [],
+    "undocumented": [],
+    "hasCssPartsSection": true
+  },
+  {
+    "component": "iswc-grid-layout",
+    "file": "src/components/isp/grid-layout.ts",
+    "declared": [
+      "content"
+    ],
+    "exported": [],
+    "exposed": [
+      "content"
+    ],
+    "documented": [
+      "content"
+    ],
+    "documentedDescriptions": {
+      "content": "El `<slot>` de las celdas."
+    },
+    "missing": [],
+    "undocumented": [],
+    "hasCssPartsSection": true
+  },
+  {
+    "component": "iswc-heading",
+    "file": "src/components/isp/heading.ts",
+    "declared": [
+      "heading"
+    ],
+    "exported": [],
+    "exposed": [
+      "heading"
+    ],
+    "documented": [
+      "heading"
+    ],
+    "documentedDescriptions": {
+      "heading": "El elemento `<hN>`; personalizable con `::part(heading)`."
+    },
+    "missing": [],
+    "undocumented": [],
+    "hasCssPartsSection": true
+  },
+  {
+    "component": "iswc-loading-overlay",
+    "file": "src/components/isp/loading-overlay.ts",
+    "declared": [
+      "backdrop",
+      "indicator",
+      "message",
+      "panel"
+    ],
+    "exported": [],
+    "exposed": [
+      "backdrop",
+      "indicator",
+      "message",
+      "panel"
+    ],
+    "documented": [
+      "backdrop",
+      "indicator",
+      "message",
+      "panel"
+    ],
+    "documentedDescriptions": {
+      "backdrop": "Personalizable con `::part(backdrop)`.",
+      "panel": "Personalizable con `::part(panel)`.",
+      "indicator": "Personalizable con `::part(indicator)`.",
+      "message": "Personalizable con `::part(message)`."
+    },
+    "missing": [],
+    "undocumented": [],
+    "hasCssPartsSection": true
+  },
+  {
+    "component": "iswc-modal-verificacion",
+    "file": "src/components/isp/modal-verificacion.ts",
+    "declared": [
+      "actions",
+      "heading",
+      "results",
+      "stats"
+    ],
+    "exported": [
+      "backdrop",
+      "base"
+    ],
+    "exposed": [
+      "actions",
+      "backdrop",
+      "base",
+      "heading",
+      "results",
+      "stats"
+    ],
+    "documented": [
+      "actions",
+      "backdrop",
+      "base",
+      "heading",
+      "results",
+      "stats"
+    ],
+    "documentedDescriptions": {
+      "backdrop": "Personalizable con `::part(backdrop)`.",
+      "base": "Personalizable con `::part(base)`.",
+      "heading": "Personalizable con `::part(heading)`.",
+      "results": "Personalizable con `::part(results)`.",
+      "stats": "Personalizable con `::part(stats)`.",
+      "actions": "Personalizable con `::part(actions)`."
+    },
+    "missing": [],
+    "undocumented": [],
+    "hasCssPartsSection": true
+  },
+  {
+    "component": "iswc-text",
+    "file": "src/components/isp/text.ts",
+    "declared": [
+      "content"
+    ],
+    "exported": [],
+    "exposed": [
+      "content"
+    ],
+    "documented": [
+      "content"
+    ],
+    "documentedDescriptions": {
+      "content": "El `<slot>` del texto."
+    },
+    "missing": [],
+    "undocumented": [],
+    "hasCssPartsSection": true
+  },
+  {
+    "component": "iswc-tree-view",
+    "file": "src/components/isp/tree-view.ts",
+    "declared": [
+      "body",
+      "drawer",
+      "root",
+      "toolbar"
+    ],
+    "exported": [],
+    "exposed": [
+      "body",
+      "drawer",
+      "root",
+      "toolbar"
+    ],
+    "documented": [
+      "body",
+      "drawer",
+      "root",
+      "toolbar"
+    ],
+    "documentedDescriptions": {
+      "root": "Host interno `.isp-tree`.",
+      "toolbar": "Barra superior.",
+      "body": "Lista scrollable.",
+      "drawer": "Ficha lateral."
+    },
+    "missing": [],
+    "undocumented": [],
+    "hasCssPartsSection": true
+  },
+  {
+    "component": "iswc-callout",
+    "file": "src/components/layout/callout.ts",
+    "declared": [
+      "base",
+      "icon",
+      "message"
+    ],
+    "exported": [],
+    "exposed": [
+      "base",
+      "icon",
+      "message"
+    ],
+    "documented": [
+      "base",
+      "icon",
+      "message"
+    ],
+    "documentedDescriptions": {
+      "base": "Personalizable con `::part(base)`.",
+      "icon": "Personalizable con `::part(icon)`.",
+      "message": "Personalizable con `::part(message)`."
+    },
+    "missing": [],
+    "undocumented": [],
+    "hasCssPartsSection": true
+  },
+  {
+    "component": "iswc-card",
+    "file": "src/components/layout/card.ts",
+    "declared": [
+      "actions",
+      "body",
+      "footer",
+      "header",
+      "media"
+    ],
+    "exported": [],
+    "exposed": [
+      "actions",
+      "body",
+      "footer",
+      "header",
+      "media"
+    ],
+    "documented": [
+      "actions",
+      "body",
+      "footer",
+      "header",
+      "media"
+    ],
+    "documentedDescriptions": {
+      "media": "Personalizable con `::part(media)`.",
+      "header": "Personalizable con `::part(header)`.",
+      "body": "Personalizable con `::part(body)`.",
+      "footer": "Personalizable con `::part(footer)`.",
+      "actions": "Personalizable con `::part(actions)`."
+    },
+    "missing": [],
+    "undocumented": [],
+    "hasCssPartsSection": true
+  },
+  {
+    "component": "iswc-details",
+    "file": "src/components/layout/details.ts",
+    "declared": [
+      "base",
+      "content",
+      "header",
+      "icon",
+      "summary"
+    ],
+    "exported": [],
+    "exposed": [
+      "base",
+      "content",
+      "header",
+      "icon",
+      "summary"
+    ],
+    "documented": [
+      "base",
+      "content",
+      "header",
+      "icon",
+      "summary"
+    ],
+    "documentedDescriptions": {
+      "base": "Personalizable con `::part(base)`.",
+      "header": "Personalizable con `::part(header)`.",
+      "summary": "Personalizable con `::part(summary)`.",
+      "icon": "Personalizable con `::part(icon)`.",
+      "content": "Personalizable con `::part(content)`."
+    },
+    "missing": [],
+    "undocumented": [],
+    "hasCssPartsSection": true
+  },
+  {
+    "component": "iswc-dialog",
+    "file": "src/components/layout/dialog.ts",
+    "declared": [
+      "backdrop",
+      "body",
+      "close-button",
+      "dialog",
+      "footer",
+      "header",
+      "header-actions",
+      "title"
+    ],
+    "exported": [],
+    "exposed": [
+      "backdrop",
+      "body",
+      "close-button",
+      "dialog",
+      "footer",
+      "header",
+      "header-actions",
+      "title"
+    ],
+    "documented": [
+      "backdrop",
+      "body",
+      "close-button",
+      "dialog",
+      "footer",
+      "header",
+      "header-actions",
+      "title"
+    ],
+    "documentedDescriptions": {
+      "backdrop": "Personalizable con `::part(backdrop)`.",
+      "dialog": "Personalizable con `::part(dialog)`.",
+      "header": "Personalizable con `::part(header)`.",
+      "title": "Personalizable con `::part(title)`.",
+      "header-actions": "Personalizable con `::part(header-actions)`.",
+      "close-button": "Personalizable con `::part(close-button)`.",
+      "body": "Personalizable con `::part(body)`.",
+      "footer": "Personalizable con `::part(footer)`."
+    },
+    "missing": [],
+    "undocumented": [],
+    "hasCssPartsSection": true
+  },
+  {
+    "component": "iswc-divider",
+    "file": "src/components/layout/divider.ts",
+    "declared": [
+      "divider"
+    ],
+    "exported": [],
+    "exposed": [
+      "divider"
+    ],
+    "documented": [
+      "divider"
+    ],
+    "documentedDescriptions": {
+      "divider": "Personalizable con `::part(divider)`."
+    },
+    "missing": [],
+    "undocumented": [],
+    "hasCssPartsSection": true
+  },
+  {
+    "component": "iswc-dock",
+    "file": "src/components/layout/dock.ts",
+    "declared": [
+      "item",
+      "label",
+      "root"
+    ],
+    "exported": [],
+    "exposed": [
+      "item",
+      "label",
+      "root"
+    ],
+    "documented": [
+      "item",
+      "label",
+      "root"
+    ],
+    "documentedDescriptions": {
+      "root": "Contenedor de la barra (`<iswc-dock>`).",
+      "item": "Ancla del ítem (`<iswc-dock-item>`).",
+      "label": "Etiqueta del ítem."
+    },
+    "missing": [],
+    "undocumented": [],
+    "hasCssPartsSection": true
+  },
+  {
+    "component": "iswc-drawer",
+    "file": "src/components/layout/drawer.ts",
+    "declared": [
+      "backdrop",
+      "body",
+      "close-button",
+      "drawer",
+      "footer",
+      "header",
+      "header-actions",
+      "title"
+    ],
+    "exported": [],
+    "exposed": [
+      "backdrop",
+      "body",
+      "close-button",
+      "drawer",
+      "footer",
+      "header",
+      "header-actions",
+      "title"
+    ],
+    "documented": [
+      "backdrop",
+      "body",
+      "close-button",
+      "drawer",
+      "footer",
+      "header",
+      "header-actions",
+      "title"
+    ],
+    "documentedDescriptions": {
+      "backdrop": "Personalizable con `::part(backdrop)`.",
+      "drawer": "Personalizable con `::part(drawer)`.",
+      "header": "Personalizable con `::part(header)`.",
+      "title": "Personalizable con `::part(title)`.",
+      "header-actions": "Personalizable con `::part(header-actions)`.",
+      "close-button": "Personalizable con `::part(close-button)`.",
+      "body": "Personalizable con `::part(body)`.",
+      "footer": "Personalizable con `::part(footer)`."
+    },
+    "missing": [],
+    "undocumented": [],
+    "hasCssPartsSection": true
+  },
+  {
+    "component": "iswc-preview-component",
+    "file": "src/components/layout/preview-component.ts",
+    "declared": [
+      "aside",
+      "main",
+      "page",
+      "toc-drawer",
+      "toc-toggle"
+    ],
+    "exported": [],
+    "exposed": [
+      "aside",
+      "main",
+      "page",
+      "toc-drawer",
+      "toc-toggle"
+    ],
+    "documented": [],
+    "documentedDescriptions": {},
+    "missing": [
+      "aside",
+      "main",
+      "page",
+      "toc-drawer",
+      "toc-toggle"
+    ],
+    "undocumented": [],
+    "hasCssPartsSection": false
+  },
+  {
+    "component": "iswc-split-panel",
+    "file": "src/components/layout/split-panel.ts",
+    "declared": [
+      "divider",
+      "end",
+      "panel",
+      "start"
+    ],
+    "exported": [],
+    "exposed": [
+      "divider",
+      "end",
+      "panel",
+      "start"
+    ],
+    "documented": [
+      "divider",
+      "end",
+      "panel",
+      "start"
+    ],
+    "documentedDescriptions": {
+      "panel": "Personalizable con `::part(panel)`.",
+      "start": "Personalizable con `::part(start)`.",
+      "divider": "Personalizable con `::part(divider)`.",
+      "end": "Personalizable con `::part(end)`."
+    },
+    "missing": [],
+    "undocumented": [],
+    "hasCssPartsSection": true
+  },
+  {
+    "component": "iswc-avatar",
+    "file": "src/components/media/avatar.ts",
+    "declared": [
+      "avatar",
+      "icon",
+      "image",
+      "initials"
+    ],
+    "exported": [],
+    "exposed": [
+      "avatar",
+      "icon",
+      "image",
+      "initials"
+    ],
+    "documented": [
+      "avatar",
+      "icon",
+      "image",
+      "initials"
+    ],
+    "documentedDescriptions": {
+      "avatar": "Personalizable con `::part(avatar)`.",
+      "image": "Personalizable con `::part(image)`.",
+      "initials": "Personalizable con `::part(initials)`.",
+      "icon": "Personalizable con `::part(icon)`."
+    },
+    "missing": [],
+    "undocumented": [],
+    "hasCssPartsSection": true
+  },
+  {
+    "component": "iswc-barcode-scanner",
+    "file": "src/components/media/barcode-scanner.ts",
+    "declared": [
+      "hint",
+      "preview"
+    ],
+    "exported": [],
+    "exposed": [
+      "hint",
+      "preview"
+    ],
+    "documented": [],
+    "documentedDescriptions": {},
+    "missing": [
+      "hint",
+      "preview"
+    ],
+    "undocumented": [],
+    "hasCssPartsSection": false
+  },
+  {
+    "component": "iswc-barcode",
+    "file": "src/components/media/barcode.ts",
+    "declared": [
+      "canvas",
+      "root",
+      "text"
+    ],
+    "exported": [],
+    "exposed": [
+      "canvas",
+      "root",
+      "text"
+    ],
+    "documented": [
+      "canvas",
+      "root",
+      "text"
+    ],
+    "documentedDescriptions": {
+      "root": "Personalizable con `::part(root)`.",
+      "canvas": "El `<svg>` generado.",
+      "text": "Línea de texto bajo el código."
+    },
+    "missing": [],
+    "undocumented": [],
+    "hasCssPartsSection": true
+  },
+  {
+    "component": "iswc-icon",
+    "file": "src/components/media/icon.ts",
+    "declared": [
+      "icon"
+    ],
+    "exported": [],
+    "exposed": [
+      "icon"
+    ],
+    "documented": [
+      "icon"
+    ],
+    "documentedDescriptions": {
+      "icon": "Personalizable con `::part(icon)`."
+    },
+    "missing": [],
+    "undocumented": [],
+    "hasCssPartsSection": true
+  },
+  {
+    "component": "iswc-image-editor",
+    "file": "src/components/media/image-editor.ts",
+    "declared": [
+      "canvas",
+      "root",
+      "selection",
+      "status",
+      "toolbar",
+      "viewport"
+    ],
+    "exported": [],
+    "exposed": [
+      "canvas",
+      "root",
+      "selection",
+      "status",
+      "toolbar",
+      "viewport"
+    ],
+    "documented": [
+      "canvas",
+      "root",
+      "selection",
+      "status",
+      "toolbar",
+      "viewport"
+    ],
+    "documentedDescriptions": {
+      "root": "Personalizable con `::part(root)`.",
+      "viewport": "Área visible sobre la que se arrastra el recorte.",
+      "canvas": "Lienzo del editor.",
+      "selection": "Rectángulo de recorte con sus manejadores.",
+      "toolbar": "Barra que aloja el slot `toolbar`.",
+      "status": "`<output>` con el estado actual."
+    },
+    "missing": [],
+    "undocumented": [],
+    "hasCssPartsSection": true
+  },
+  {
+    "component": "iswc-media-recorder",
+    "file": "src/components/media/media-recorder.ts",
+    "declared": [
+      "download",
+      "preview",
+      "status"
+    ],
+    "exported": [],
+    "exposed": [
+      "download",
+      "preview",
+      "status"
+    ],
+    "documented": [],
+    "documentedDescriptions": {},
+    "missing": [
+      "download",
+      "preview",
+      "status"
+    ],
+    "undocumented": [],
+    "hasCssPartsSection": false
+  },
+  {
+    "component": "iswc-qrcode",
+    "file": "src/components/media/qrcode.ts",
+    "declared": [
+      "canvas",
+      "root",
+      "status"
+    ],
+    "exported": [],
+    "exposed": [
+      "canvas",
+      "root",
+      "status"
+    ],
+    "documented": [
+      "canvas",
+      "root",
+      "status"
+    ],
+    "documentedDescriptions": {
+      "root": "Personalizable con `::part(root)`.",
+      "canvas": "Contenedor del `<svg>`.",
+      "status": "`<output>` con el estado de carga o el error."
+    },
+    "missing": [],
+    "undocumented": [],
+    "hasCssPartsSection": true
+  },
+  {
+    "component": "iswc-speech",
+    "file": "src/components/media/speech.ts",
+    "declared": [
+      "bar",
+      "transcript"
+    ],
+    "exported": [],
+    "exposed": [
+      "bar",
+      "transcript"
+    ],
+    "documented": [],
+    "documentedDescriptions": {},
+    "missing": [
+      "bar",
+      "transcript"
+    ],
+    "undocumented": [],
+    "hasCssPartsSection": false
+  },
+  {
+    "component": "iswc-theme-img",
+    "file": "src/components/media/theme-img.ts",
+    "declared": [
+      "image"
+    ],
+    "exported": [],
+    "exposed": [
+      "image"
+    ],
+    "documented": [],
+    "documentedDescriptions": {},
+    "missing": [
+      "image"
+    ],
+    "undocumented": [],
+    "hasCssPartsSection": false
+  },
+  {
+    "component": "iswc-video-playlist",
+    "file": "src/components/media/video-playlist.ts",
+    "declared": [
+      "base",
+      "channel",
+      "header",
+      "header-actions",
+      "mute-button",
+      "play-button",
+      "player-toolbar",
+      "playlist",
+      "playlist-duration",
+      "playlist-item",
+      "playlist-items",
+      "playlist-thumbnail",
+      "playlist-title",
+      "playlist-toggle",
+      "seek",
+      "status",
+      "time",
+      "title",
+      "tools-left",
+      "tools-right",
+      "video-playlist",
+      "volume-slider"
+    ],
+    "exported": [],
+    "exposed": [
+      "base",
+      "channel",
+      "header",
+      "header-actions",
+      "mute-button",
+      "play-button",
+      "player-toolbar",
+      "playlist",
+      "playlist-duration",
+      "playlist-item",
+      "playlist-items",
+      "playlist-thumbnail",
+      "playlist-title",
+      "playlist-toggle",
+      "seek",
+      "status",
+      "time",
+      "title",
+      "tools-left",
+      "tools-right",
+      "video-playlist",
+      "volume-slider"
+    ],
+    "documented": [
+      "base",
+      "channel",
+      "header",
+      "header-actions",
+      "mute-button",
+      "play-button",
+      "player-toolbar",
+      "playlist",
+      "playlist-items",
+      "playlist-toggle",
+      "seek",
+      "status",
+      "time",
+      "title",
+      "tools-left",
+      "tools-right",
+      "video-playlist",
+      "volume-slider"
+    ],
+    "documentedDescriptions": {
+      "base": "Personalizable con `::part(base)`.",
+      "video-playlist": "Personalizable con `::part(video-playlist)`.",
+      "header": "Personalizable con `::part(header)`.",
+      "title": "Personalizable con `::part(title)`.",
+      "channel": "Personalizable con `::part(channel)`.",
+      "header-actions": "Personalizable con `::part(header-actions)`.",
+      "player-toolbar": "Personalizable con `::part(player-toolbar)`.",
+      "tools-left": "Personalizable con `::part(tools-left)`.",
+      "play-button": "Personalizable con `::part(play-button)`.",
+      "seek": "Personalizable con `::part(seek)`.",
+      "time": "Personalizable con `::part(time)`.",
+      "mute-button": "Personalizable con `::part(mute-button)`.",
+      "volume-slider": "Personalizable con `::part(volume-slider)`.",
+      "tools-right": "Personalizable con `::part(tools-right)`.",
+      "playlist": "Personalizable con `::part(playlist)`.",
+      "status": "Personalizable con `::part(status)`.",
+      "playlist-toggle": "Personalizable con `::part(playlist-toggle)`.",
+      "playlist-items": "Personalizable con `::part(playlist-items)`."
+    },
+    "missing": [
+      "playlist-duration",
+      "playlist-item",
+      "playlist-thumbnail",
+      "playlist-title"
+    ],
+    "undocumented": [],
+    "hasCssPartsSection": true
+  },
+  {
+    "component": "iswc-video",
+    "file": "src/components/media/video.ts",
+    "declared": [
+      "base",
+      "big-play",
+      "controls",
+      "fullscreen-button",
+      "mute-button",
+      "pip-button",
+      "play-button",
+      "progress",
+      "seek",
+      "settings-button",
+      "time",
+      "video",
+      "volume",
+      "volume-slider"
+    ],
+    "exported": [],
+    "exposed": [
+      "base",
+      "big-play",
+      "controls",
+      "fullscreen-button",
+      "mute-button",
+      "pip-button",
+      "play-button",
+      "progress",
+      "seek",
+      "settings-button",
+      "time",
+      "video",
+      "volume",
+      "volume-slider"
+    ],
+    "documented": [
+      "base",
+      "big-play",
+      "controls",
+      "fullscreen-button",
+      "mute-button",
+      "pip-button",
+      "play-button",
+      "progress",
+      "seek",
+      "settings-button",
+      "time",
+      "video",
+      "volume",
+      "volume-slider"
+    ],
+    "documentedDescriptions": {
+      "base": "Personalizable con `::part(base)`.",
+      "video": "Personalizable con `::part(video)`.",
+      "big-play": "Personalizable con `::part(big-play)`.",
+      "controls": "Personalizable con `::part(controls)`.",
+      "progress": "Personalizable con `::part(progress)`.",
+      "seek": "Personalizable con `::part(seek)`.",
+      "play-button": "Personalizable con `::part(play-button)`.",
+      "volume": "Personalizable con `::part(volume)`.",
+      "mute-button": "Personalizable con `::part(mute-button)`.",
+      "volume-slider": "Personalizable con `::part(volume-slider)`.",
+      "time": "Personalizable con `::part(time)`.",
+      "settings-button": "Personalizable con `::part(settings-button)`.",
+      "pip-button": "Personalizable con `::part(pip-button)`.",
+      "fullscreen-button": "Personalizable con `::part(fullscreen-button)`."
+    },
+    "missing": [],
+    "undocumented": [],
+    "hasCssPartsSection": true
+  },
+  {
+    "component": "iswc-breadcrumb-item",
+    "file": "src/components/navigation/breadcrumb-item.ts",
+    "declared": [
+      "end",
+      "label",
+      "separator",
+      "start"
+    ],
+    "exported": [],
+    "exposed": [
+      "end",
+      "label",
+      "separator",
+      "start"
+    ],
+    "documented": [
+      "end",
+      "label",
+      "separator",
+      "start"
+    ],
+    "documentedDescriptions": {
+      "separator": "Personalizable con `::part(separator)`.",
+      "start": "Personalizable con `::part(start)`.",
+      "label": "Personalizable con `::part(label)`.",
+      "end": "Personalizable con `::part(end)`."
+    },
+    "missing": [],
+    "undocumented": [],
+    "hasCssPartsSection": true
+  },
+  {
+    "component": "iswc-breadcrumb",
+    "file": "src/components/navigation/breadcrumb.ts",
+    "declared": [
+      "breadcrumb"
+    ],
+    "exported": [],
+    "exposed": [
+      "breadcrumb"
+    ],
+    "documented": [
+      "breadcrumb"
+    ],
+    "documentedDescriptions": {
+      "breadcrumb": "Personalizable con `::part(breadcrumb)`."
+    },
+    "missing": [],
+    "undocumented": [],
+    "hasCssPartsSection": true
+  },
+  {
+    "component": "iswc-carousel",
+    "file": "src/components/navigation/carousel.ts",
+    "declared": [
+      "base",
+      "controls",
+      "indicators",
+      "track",
+      "viewport"
+    ],
+    "exported": [],
+    "exposed": [
+      "base",
+      "controls",
+      "indicators",
+      "track",
+      "viewport"
+    ],
+    "documented": [
+      "base",
+      "controls",
+      "indicators",
+      "track",
+      "viewport"
+    ],
+    "documentedDescriptions": {
+      "base": "Personalizable con `::part(base)`.",
+      "viewport": "Personalizable con `::part(viewport)`.",
+      "track": "Personalizable con `::part(track)`.",
+      "indicators": "Personalizable con `::part(indicators)`.",
+      "controls": "Personalizable con `::part(controls)`."
+    },
+    "missing": [],
+    "undocumented": [],
+    "hasCssPartsSection": true
+  },
+  {
+    "component": "iswc-mega-menu",
+    "file": "src/components/navigation/mega-menu.ts",
+    "declared": [
+      "panel",
+      "root",
+      "trigger"
+    ],
+    "exported": [],
+    "exposed": [
+      "panel",
+      "root",
+      "trigger"
+    ],
+    "documented": [
+      "panel",
+      "root",
+      "trigger"
+    ],
+    "documentedDescriptions": {
+      "root": "Contenedor relativo del trigger y el panel.",
+      "trigger": "El `<iswc-button>` que abre el menú.",
+      "panel": "El `<dialog>` con las columnas."
+    },
+    "missing": [],
+    "undocumented": [],
+    "hasCssPartsSection": true
+  },
+  {
+    "component": "iswc-scroller",
+    "file": "src/components/navigation/scroller.ts",
+    "declared": [
+      "base",
+      "scroll-button",
+      "viewport"
+    ],
+    "exported": [],
+    "exposed": [
+      "base",
+      "scroll-button",
+      "viewport"
+    ],
+    "documented": [
+      "base",
+      "scroll-button",
+      "viewport"
+    ],
+    "documentedDescriptions": {
+      "base": "Personalizable con `::part(base)`.",
+      "scroll-button": "Personalizable con `::part(scroll-button)`.",
+      "viewport": "Personalizable con `::part(viewport)`."
+    },
+    "missing": [],
+    "undocumented": [],
+    "hasCssPartsSection": true
+  },
+  {
+    "component": "iswc-stepper",
+    "file": "src/components/navigation/stepper.ts",
+    "declared": [
+      "base",
+      "description",
+      "indicator",
+      "label",
+      "line"
+    ],
+    "exported": [],
+    "exposed": [
+      "base",
+      "description",
+      "indicator",
+      "label",
+      "line"
+    ],
+    "documented": [
+      "base",
+      "description",
+      "indicator",
+      "label",
+      "line"
+    ],
+    "documentedDescriptions": {
+      "base": "Personalizable con `::part(base)`.",
+      "indicator": "Personalizable con `::part(indicator)`.",
+      "line": "Personalizable con `::part(line)`.",
+      "label": "Personalizable con `::part(label)`.",
+      "description": "Personalizable con `::part(description)`."
+    },
+    "missing": [],
+    "undocumented": [],
+    "hasCssPartsSection": true
+  },
+  {
+    "component": "iswc-tab-group",
+    "file": "src/components/navigation/tab-group.ts",
+    "declared": [
+      "active-indicator",
+      "base",
+      "body",
+      "close-button",
+      "end",
+      "nav",
+      "scroll-button",
+      "scroll-button-end",
+      "scroll-button-start",
+      "start",
+      "tab-group",
+      "tabs"
+    ],
+    "exported": [],
+    "exposed": [
+      "active-indicator",
+      "base",
+      "body",
+      "close-button",
+      "end",
+      "nav",
+      "scroll-button",
+      "scroll-button-end",
+      "scroll-button-start",
+      "start",
+      "tab-group",
+      "tabs"
+    ],
+    "documented": [
+      "active-indicator",
+      "base",
+      "body",
+      "close-button",
+      "end",
+      "nav",
+      "scroll-button",
+      "scroll-button-end",
+      "scroll-button-start",
+      "start",
+      "tab-group",
+      "tabs"
+    ],
+    "documentedDescriptions": {
+      "tab-group": "Personalizable con `::part(tab-group)`.",
+      "nav": "Personalizable con `::part(nav)`.",
+      "scroll-button": "Personalizable con `::part(scroll-button)`.",
+      "scroll-button-start": "Personalizable con `::part(scroll-button-start)`.",
+      "tabs": "Personalizable con `::part(tabs)`.",
+      "scroll-button-end": "Personalizable con `::part(scroll-button-end)`.",
+      "body": "Personalizable con `::part(body)`.",
+      "base": "Personalizable con `::part(base)`.",
+      "start": "Personalizable con `::part(start)`.",
+      "end": "Personalizable con `::part(end)`.",
+      "close-button": "Personalizable con `::part(close-button)`.",
+      "active-indicator": "Personalizable con `::part(active-indicator)`."
+    },
+    "missing": [],
+    "undocumented": [],
+    "hasCssPartsSection": true
+  },
+  {
+    "component": "iswc-tree",
+    "file": "src/components/navigation/tree.ts",
+    "declared": [
+      "base",
+      "checkbox",
+      "expand-toggle",
+      "icon",
+      "item",
+      "item-children",
+      "item-content",
+      "items"
+    ],
+    "exported": [],
+    "exposed": [
+      "base",
+      "checkbox",
+      "expand-toggle",
+      "icon",
+      "item",
+      "item-children",
+      "item-content",
+      "items"
+    ],
+    "documented": [
+      "base",
+      "checkbox",
+      "expand-toggle",
+      "icon",
+      "item",
+      "item-children",
+      "item-content",
+      "items"
+    ],
+    "documentedDescriptions": {
+      "base": "Personalizable con `::part(base)`.",
+      "items": "Personalizable con `::part(items)`.",
+      "item": "Personalizable con `::part(item)`.",
+      "expand-toggle": "Personalizable con `::part(expand-toggle)`.",
+      "checkbox": "Personalizable con `::part(checkbox)`.",
+      "icon": "Personalizable con `::part(icon)`.",
+      "item-content": "Personalizable con `::part(item-content)`.",
+      "item-children": "Personalizable con `::part(item-children)`."
+    },
+    "missing": [],
+    "undocumented": [],
+    "hasCssPartsSection": true
+  },
+  {
+    "component": "iswc-command-palette",
+    "file": "src/components/overlays/command-palette.ts",
+    "declared": [
+      "dialog",
+      "empty",
+      "footer",
+      "input",
+      "keys",
+      "panel",
+      "results",
+      "sr-status"
+    ],
+    "exported": [],
+    "exposed": [
+      "dialog",
+      "empty",
+      "footer",
+      "input",
+      "keys",
+      "panel",
+      "results",
+      "sr-status"
+    ],
+    "documented": [
+      "dialog",
+      "empty",
+      "footer",
+      "input",
+      "panel",
+      "results",
+      "sr-status"
+    ],
+    "documentedDescriptions": {
+      "dialog": "Personalizable con `::part(dialog)`.",
+      "panel": "Personalizable con `::part(panel)`.",
+      "input": "Personalizable con `::part(input)`.",
+      "results": "Personalizable con `::part(results)`.",
+      "empty": "Personalizable con `::part(empty)`.",
+      "footer": "Personalizable con `::part(footer)`.",
+      "sr-status": "Region aria-live polite oculta visualmente."
+    },
+    "missing": [
+      "keys"
+    ],
+    "undocumented": [],
+    "hasCssPartsSection": true
+  },
+  {
+    "component": "iswc-pdf-viewer",
+    "file": "src/components/overlays/pdf-viewer.ts",
+    "declared": [
+      "download",
+      "frame",
+      "print",
+      "root",
+      "toolbar"
+    ],
+    "exported": [],
+    "exposed": [
+      "download",
+      "frame",
+      "print",
+      "root",
+      "toolbar"
+    ],
+    "documented": [
+      "download",
+      "frame",
+      "print",
+      "root",
+      "toolbar"
+    ],
+    "documentedDescriptions": {
+      "root": "Personalizable con `::part(root)`.",
+      "toolbar": "Personalizable con `::part(toolbar)`.",
+      "download": "Personalizable con `::part(download)`.",
+      "print": "Personalizable con `::part(print)`.",
+      "frame": "Personalizable con `::part(frame)`."
+    },
+    "missing": [],
+    "undocumented": [],
+    "hasCssPartsSection": true
+  },
+  {
+    "component": "iswc-window",
+    "file": "src/components/overlays/window.ts",
+    "declared": [
+      "body",
+      "header",
+      "resizer",
+      "root"
+    ],
+    "exported": [],
+    "exposed": [
+      "body",
+      "header",
+      "resizer",
+      "root"
+    ],
+    "documented": [
+      "body",
+      "header",
+      "root"
+    ],
+    "documentedDescriptions": {
+      "root": "Personalizable con `::part(root)`.",
+      "header": "Personalizable con `::part(header)`.",
+      "body": "Personalizable con `::part(body)`."
+    },
+    "missing": [
+      "resizer"
+    ],
+    "undocumented": [],
+    "hasCssPartsSection": true
+  },
+  {
+    "component": "iswc-playground",
+    "file": "src/components/preview/playground.ts",
+    "declared": [
+      "body",
+      "config",
+      "controls",
+      "head",
+      "lede",
+      "root",
+      "stage",
+      "stage-wrap",
+      "title"
+    ],
+    "exported": [],
+    "exposed": [
+      "body",
+      "config",
+      "controls",
+      "head",
+      "lede",
+      "root",
+      "stage",
+      "stage-wrap",
+      "title"
+    ],
+    "documented": [],
+    "documentedDescriptions": {},
+    "missing": [
+      "body",
+      "config",
+      "controls",
+      "head",
+      "lede",
+      "root",
+      "stage",
+      "stage-wrap",
+      "title"
+    ],
+    "undocumented": [],
+    "hasCssPartsSection": false
+  }
+]

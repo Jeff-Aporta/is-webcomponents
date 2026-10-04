@@ -26,7 +26,11 @@
  */
 
 import { upgradeProperties } from './element.js';
-import { syncStyleAttrs, styleAttrNames } from './attrs.js';
+// Phase V5: el volcado automático del mapa `styleAttrs` quedó deshabilitado
+// (ver nota en `connectedCallback`). Las funciones siguen disponibles en
+// `attrs.ts` por si alguna subclase las necesita explícitamente.
+// import { syncStyleAttrs, styleAttrNames } from './attrs.js';
+import { styleAttrNames } from './attrs.js';
 import type { StyleAttrMap } from './attrs.js';
 
 /** Lo que la subclase puede declarar como estático. */
@@ -107,7 +111,12 @@ export class ElementBase extends HTMLElement {
     }
     this.#mounted = true;
     // Antes del hook: la subclase puede leer ya las custom properties puestas.
-    syncStyleAttrs(this, ctor.styleAttrs ?? {});
+    // Phase V5: el volcado automático del mapa `styleAttrs` quedó deshabilitado
+    // por regla del usuario — el componente NO debe setear `--iswc-*-X` desde
+    // props. El consumer define los tokens vía CSS class, inline style o las
+    // props semánticas del componente. El campo `static styleAttrs` se conserva
+    // en las subclases como documentación histórica del contrato anterior.
+    // syncStyleAttrs(this, ctor.styleAttrs ?? {});
     this.onConnected();
   }
 
@@ -117,8 +126,10 @@ export class ElementBase extends HTMLElement {
 
   attributeChangedCallback(name: string, oldVal: string | null, newVal: string | null): void {
     if (!this.#mounted || oldVal === newVal) return;
-    const styleAttrs = (this.constructor as unknown as ElementBaseConstructor).styleAttrs;
-    if (styleAttrs && name in styleAttrs) syncStyleAttrs(this, { [name]: styleAttrs[name]! });
+    // Phase V5: deshabilitado el sync automático por cambio de atributo.
+    // Ver nota en `connectedCallback`.
+    // const styleAttrs = (this.constructor as unknown as ElementBaseConstructor).styleAttrs;
+    // if (styleAttrs && name in styleAttrs) syncStyleAttrs(this, { [name]: styleAttrs[name]! });
     this.onAttributeChanged(name, oldVal, newVal);
   }
 

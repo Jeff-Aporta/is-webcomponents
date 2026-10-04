@@ -1,4 +1,4 @@
-# `ISWebComponentsLoader` (`loader.min.js`)
+﻿# `ISWebComponentsLoader` (`loader.min.js`)
 
 Entry CDN liviano del kit. Carga solo lo pedido, con pin, mirrors y anti-redundancia.
 
@@ -111,7 +111,11 @@ Registra tags propios (fuera del catálogo del kit). `load` / `ensure` los trata
 ```js
 L.registerApp(
   {
-    'paty-shell': './dist/cdn/all.min.js',
+    // ⚠️ NO uses `./dist/cdn/all.min.js`: es una *lista de imports* (~250 B),
+    // no un bundle importable. Para apps, registra cada tag o cada
+    // `<category>/<tag>.min.js` por separado. Ver `specs/cdn.md` §CDN y
+    // §Anti-patrones.
+    'paty-shell': './dist/cdn/<category>/paty-shell.min.js',
     'mi-widget': { href: './widgets/mi-widget.js', css: './widgets/mi-widget.css' },
   },
   { cacheName: 'mi-app-sheets-v1' },

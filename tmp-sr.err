@@ -1,0 +1,5 @@
+scrollspy-restore.test.mjs: FAIL — 4 issues (7/10 checks OK):
+  - iswc-button [restore]: tras F5, #events dista 868px del top del main (scrollTop=10582). Esperado delta ∈ [-20, 20].
+  - iswc-card [restore]: pref no contiene activeId="appearances" (got null)
+  - iswc-card [restore]: tras F5, #appearances dista 542px del top del main (scrollTop=0). Esperado delta ∈ [-20, 20].
+  - iswc-card [clear-on-top]: pref no se sembró (got null)

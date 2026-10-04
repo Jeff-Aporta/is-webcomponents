@@ -1,5 +1,5 @@
 {
-  "generatedAt": "2026-10-04T14:08:06.854Z",
+  "generatedAt": "2026-10-04T16:47:03.276Z",
   "count": 66,
   "modules": [
     {
@@ -596,7 +596,7 @@
       "id": "llm-agent-prompt",
       "path": "src/components/_shared/llm-agent-prompt.ts",
       "summary": "Prompt canónico para agentes + helpers de ensamblaje. — Fuente de verdad en prosa: `src/skills/is-webcomponents/PROMPT.md`",
-      "bytes": 3925,
+      "bytes": 3899,
       "exports": [
         "SKILL_DOCS",
         "LLM_PROMPT_FALLBACK",
@@ -673,7 +673,7 @@
       "id": "picker-element",
       "path": "src/components/_shared/picker-element.ts",
       "summary": "Módulo compartido `picker-element.ts`.",
-      "bytes": 22392,
+      "bytes": 22435,
       "exports": [
         "definePickerInput"
       ]

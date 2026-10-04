@@ -1,0 +1,370 @@
+/**
+ * <iswc-examples-carousel> — Helper W15: carrusel de ejemplos predefinidos.
+ *
+ * Estandar W15 (2026-10-03-zod-migration): el playground de cada componente
+ * incluye un carrusel de ejemplos predefinidos. Cada card contiene una
+ * instancia REAL del componente target escalada via CSS para caber en la
+ * card. Al hacer click, todos los props del ejemplo se aplican al host
+ * target (CSS selector) en la misma pagina.
+ *
+ * Uso (data-driven, recomendado en JSON):
+ *
+ *   <iswc-examples-carousel
+ *     tag="iswc-button"
+ *     target="#btn-play"
+ *     label="Ejemplos predefinidos"
+ *     examples='[
+ *       { "label": "Primario",   "props": { "color": "brand",  "variant": "filled"   } },
+ *       { "label": "Peligro",    "props": { "color": "danger", "variant": "outlined" } },
+ *       { "label": "Discreto",   "props": { "color": "neutral","variant": "plain"   } }
+ *     ]'>
+ *   </iswc-examples-carousel>
+ *
+ * Atributos
+ *   tag            string  — el target component (e.g. "iswc-button"). Required.
+ *   target         string  — selector CSS del host en la misma pagina al que
+ *                            aplicar los props. Si falta, no se aplica nada
+ *                            (solo el carrusel visual).
+ *   label          string  — titulo visible del header (default: "Ejemplos").
+ *   lede           string  — subtitulo opcional del header.
+ *   default-index  number  — indice del ejemplo a marcar como activo al inicio.
+ *
+ * Propiedades
+ *   examples       ExampleSpec[]   — array de { label, props, text?, slot? }.
+ *
+ * Slots light DOM
+ *   (default)      — opcional. Cada hijo con `data-label="..."` se considera
+ *                    un ejemplo inline. Si hay hijos, se usan en lugar de
+ *                    la propiedad `examples` JSON.
+ *
+ * Eventos
+ *   iswc-examples-pick   detail: { example, index, applied }
+ *                                  Se emite al hacer click en una card.
+ *                                  `applied` indica si se pudo aplicar al
+ *                                  target (true/false).
+ */
+import { adoptCss, emit } from '../../core/element.js';
+import { ElementBase } from '../../core/element-base.js';
+import { setStringAttr } from '../_shared/reflect.js';
+
+type ExampleSpec = {
+  /** Texto visible en la card. */
+  label: string;
+  /** Props/atributos a aplicar al host target. */
+  props?: Record<string, unknown>;
+  /** Texto del slot default del target (string). */
+  text?: string;
+  /** HTML del slot default del target (string). */
+  html?: string;
+  /** Icono para la card (mdi:foo). */
+  icon?: string;
+  /** Color de fondo distintivo de la card. */
+  swatch?: string;
+  /** Descripcion accesible (title). */
+  description?: string;
+};
+
+const OBSERVED = ['tag', 'target', 'label', 'lede', 'default-index'];
+
+class IswcExamplesCarousel extends ElementBase {
+  static get observedAttributes(): string[] { return OBSERVED; }
+
+  #titleEl!: HTMLElement;
+  #ledeEl!: HTMLElement;
+  #trackEl!: HTMLElement;
+  #examples: ExampleSpec[] = [];
+  #activeIndex = -1;
+
+  constructor() {
+    super();
+    const shadow = this.attachShadow({ mode: 'open' });
+    adoptCss(shadow, import.meta.url);
+    shadow.innerHTML = `
+      <div class="root" part="root">
+        <header class="head" part="head">
+          <h3 class="title" part="title"></h3>
+          <p class="lede" part="lede" hidden></p>
+        </header>
+        <div class="viewport" part="viewport">
+          <button type="button" class="nav nav--prev" part="nav-prev"
+                  aria-label="Ejemplos anteriores">
+            <slot name="prev-icon"><iswc-icon icon="mdi:chevron-left" aria-hidden="true"></iswc-icon></slot>
+          </button>
+          <div class="track" part="track" role="list" aria-label="Ejemplos predefinidos"></div>
+          <button type="button" class="nav nav--next" part="nav-next"
+                  aria-label="Ejemplos siguientes">
+            <slot name="next-icon"><iswc-icon icon="mdi:chevron-right" aria-hidden="true"></iswc-icon></slot>
+          </button>
+        </div>
+      </div>
+    `;
+    this.#titleEl = shadow.querySelector<HTMLElement>('.title')!;
+    this.#ledeEl = shadow.querySelector<HTMLElement>('.lede')!;
+    this.#trackEl = shadow.querySelector<HTMLElement>('.track')!;
+    shadow.querySelector<HTMLButtonElement>('.nav--prev')!
+      .addEventListener('click', () => this.scrollBy(-1));
+    shadow.querySelector<HTMLButtonElement>('.nav--next')!
+      .addEventListener('click', () => this.scrollBy(1));
+  }
+
+  onConnected(): void {
+    this.#readInlineExamples();
+    this.#syncChrome();
+    this.#render();
+    if (this.defaultIndex >= 0) this.setActive(this.defaultIndex);
+  }
+
+  onAttributeChanged(): void {
+    if (!this.isConnected) return;
+    this.#syncChrome();
+    if (this.hasAttribute('examples')) {
+      try {
+        const v = JSON.parse(this.getAttribute('examples') || '[]');
+        if (Array.isArray(v)) this.#examples = v;
+      } catch { /* noop */ }
+    }
+    this.#render();
+  }
+
+  get tag(): string { return this.getAttribute('tag') ?? ''; }
+  set tag(v: string) { setStringAttr(this, 'tag', v); }
+
+  get target(): string { return this.getAttribute('target') ?? ''; }
+  set target(v: string) { setStringAttr(this, 'target', v); }
+
+  get label(): string { return this.getAttribute('label') ?? ''; }
+  set label(v: string) { setStringAttr(this, 'label', v); }
+
+  get lede(): string { return this.getAttribute('lede') ?? ''; }
+  set lede(v: string) { setStringAttr(this, 'lede', v); }
+
+  get defaultIndex(): number {
+    const n = Number(this.getAttribute('default-index') || '-1');
+    return Number.isFinite(n) ? n : -1;
+  }
+  set defaultIndex(v: number) {
+    if (v == null) this.removeAttribute('default-index');
+    else this.setAttribute('default-index', String(v));
+  }
+
+  get examples(): ExampleSpec[] { return this.#examples.slice(); }
+  set examples(v: ExampleSpec[]) {
+    this.#examples = Array.isArray(v) ? v.slice() : [];
+    if (this.isConnected) this.#render();
+  }
+
+  /** Marca un ejemplo como activo (sin aplicar al target). */
+  setActive(index: number): void {
+    if (!this.#examples.length) return;
+    const i = Math.max(0, Math.min(index, this.#examples.length - 1));
+    this.#activeIndex = i;
+    for (const card of this.#trackEl.querySelectorAll<HTMLElement>('.card')) {
+      const idx = Number(card.dataset.index ?? '-1');
+      const active = idx === i;
+      card.toggleAttribute('active', active);
+      card.setAttribute('aria-pressed', String(active));
+    }
+    const card = this.#trackEl.querySelector<HTMLElement>(`.card[data-index="${i}"]`);
+    card?.scrollIntoView({ inline: 'center', block: 'nearest' });
+  }
+
+  /** Aplica un ejemplo al target externo. Devuelve true si se aplico. */
+  applyExample(index: number): boolean {
+    if (index < 0 || index >= this.#examples.length) return false;
+    const example = this.#examples[index];
+    const host = this.#resolveTarget();
+    if (!host) return false;
+    this.#applyProps(host, example);
+    this.setActive(index);
+    emit(this, 'iswc-examples-pick', { example, index, applied: true });
+    return true;
+  }
+
+  #syncChrome(): void {
+    this.#titleEl.textContent = this.label || 'Ejemplos predefinidos';
+    const lede = this.lede;
+    if (lede) {
+      this.#ledeEl.textContent = lede;
+      this.#ledeEl.hidden = false;
+    } else {
+      this.#ledeEl.hidden = true;
+    }
+  }
+
+  /**
+   * Lee ejemplos inline: cada hijo con `data-label` es un ejemplo. Los props
+   * se toman de `data-props` (JSON). Si hay hijos, pisan `examples`.
+   */
+  #readInlineExamples(): void {
+    const children = [...this.children].filter(
+      (n): n is HTMLElement => n.nodeType === Node.ELEMENT_NODE,
+    );
+    if (!children.length) {
+      // Si el atributo examples esta como string, parsearlo.
+      const attr = this.getAttribute('examples');
+      if (attr) {
+        try {
+          const v = JSON.parse(attr);
+          if (Array.isArray(v)) this.#examples = v;
+        } catch { /* noop */ }
+      }
+      return;
+    }
+    this.#examples = children.map((child) => {
+      const ds = child.dataset;
+      let props: Record<string, unknown> = {};
+      if (ds.props) {
+        try {
+          const v = JSON.parse(ds.props);
+          if (v && typeof v === 'object') props = v as Record<string, unknown>;
+        } catch { /* noop */ }
+      }
+      return {
+        label: ds.label || child.textContent?.trim() || 'Ejemplo',
+        props,
+        text: ds.text,
+        html: ds.html,
+        icon: ds.icon,
+        swatch: ds.swatch,
+        description: ds.description,
+      };
+    });
+  }
+
+  #render(): void {
+    this.#trackEl.replaceChildren();
+    if (!this.#examples.length) {
+      const empty = document.createElement('p');
+      empty.className = 'empty';
+      empty.textContent = 'No hay ejemplos predefinidos.';
+      this.#trackEl.append(empty);
+      return;
+    }
+    this.#examples.forEach((ex, i) => {
+      const card = document.createElement('button');
+      card.type = 'button';
+      card.className = 'card';
+      card.dataset.index = String(i);
+      card.setAttribute('role', 'listitem');
+      card.setAttribute('aria-label', ex.label);
+      if (ex.description) card.title = ex.description;
+      card.style.setProperty('--card-swatch', ex.swatch || 'transparent');
+
+      const stage = document.createElement('div');
+      stage.className = 'card__stage';
+      const preview = this.#buildPreview(ex);
+      if (preview) stage.append(preview);
+
+      const meta = document.createElement('div');
+      meta.className = 'card__meta';
+      if (ex.icon) {
+        const icon = document.createElement('iswc-icon');
+        icon.className = 'card__icon';
+        icon.setAttribute('icon', ex.icon);
+        icon.setAttribute('aria-hidden', 'true');
+        meta.append(icon);
+      }
+      const label = document.createElement('span');
+      label.className = 'card__label';
+      label.textContent = ex.label;
+      meta.append(label);
+
+      card.append(stage, meta);
+      card.addEventListener('click', () => this.applyExample(i));
+      this.#trackEl.append(card);
+    });
+  }
+
+  /**
+   * Construye un nodo que muestra el ejemplo. Estrategia: crear un
+   * <iswc-target> con los props aplicados + el texto/html del slot. Esto
+   * requiere que `tag` este registrado (el playground ya lo hace).
+   */
+  #buildPreview(ex: ExampleSpec): HTMLElement | null {
+    const tag = this.tag;
+    if (!tag) return null;
+    const el = document.createElement(tag);
+    for (const [k, v] of Object.entries(ex.props ?? {})) {
+      this.#writeProp(el, k, v);
+    }
+    if (ex.html) {
+      const tpl = document.createElement('template');
+      tpl.innerHTML = ex.html.trim();
+      el.append(tpl.content.cloneNode(true));
+    } else if (ex.text != null) {
+      el.textContent = ex.text;
+    }
+    return el;
+  }
+
+  /** Escribe un prop/attr al target, con la misma convencion que controles.ts. */
+  #writeProp(host: HTMLElement, name: string, value: unknown): void {
+    if (name.startsWith('attr:')) {
+      const attr = name.slice(5);
+      if (typeof value === 'boolean') {
+        if (value) host.setAttribute(attr, '');
+        else host.removeAttribute(attr);
+      } else if (value == null || value === '') {
+        host.removeAttribute(attr);
+      } else {
+        host.setAttribute(attr, String(value));
+      }
+      return;
+    }
+    const prop = name.replace(/^prop:/, '');
+    try {
+      (host as unknown as Record<string, unknown>)[prop] = value as never;
+    } catch {
+      // Fallback a atributo.
+      if (typeof value === 'boolean') {
+        if (value) host.setAttribute(prop, '');
+        else host.removeAttribute(prop);
+      } else {
+        host.setAttribute(prop, String(value));
+      }
+    }
+  }
+
+  #resolveTarget(): HTMLElement | null {
+    const sel = this.target;
+    if (!sel) return null;
+    // Buscar en la pagina, no en el shadow.
+    const root = this.getRootNode() as Document | ShadowRoot;
+    return (root as Document).querySelector<HTMLElement>(sel);
+  }
+
+  #applyProps(host: HTMLElement, ex: ExampleSpec): void {
+    for (const [k, v] of Object.entries(ex.props ?? {})) {
+      this.#writeProp(host, k, v);
+    }
+    if (ex.html != null) {
+      host.innerHTML = ex.html;
+    } else if (ex.text != null) {
+      host.textContent = ex.text;
+    }
+  }
+
+  #scrollBy(dir: -1 | 1): void {
+    const card = dir > 0
+      ? this.#trackEl.querySelector<HTMLElement>('.card[active] + .card')
+      : this.#trackEl.querySelector<HTMLElement>('.card:has(+ .card[active])');
+    const target = card ?? this.#trackEl.querySelector<HTMLElement>('.card');
+    target?.scrollIntoView({ inline: 'center', block: 'nearest', behavior: 'smooth' });
+  }
+}
+
+let _defined = false;
+/** Define <iswc-examples-carousel> una sola vez (idempotente). */
+export function defineExamplesCarousel(): void {
+  if (_defined || customElements.get('iswc-examples-carousel')) {
+    _defined = true;
+    return;
+  }
+  customElements.define('iswc-examples-carousel', IswcExamplesCarousel);
+  _defined = true;
+}
+
+if (typeof customElements !== 'undefined') defineExamplesCarousel();
+
+export { IswcExamplesCarousel, type ExampleSpec };
+export default IswcExamplesCarousel;

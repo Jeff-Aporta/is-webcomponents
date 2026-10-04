@@ -30,6 +30,21 @@ import '../code/code.js';
  *
  * La carga es siempre el tag: un componente por L.load. No hay radio de alcance.
  */
+
+/**
+ * Normaliza el tag que va al `L.load("…")` del snippet para que SIEMPRE use
+ * el prefijo canónico `iswc-`. Si llega con el legacy `is-` (ej. `is-button`)
+ * se reescribe a `iswc-button`; si ya viene con `iswc-` se pasa tal cual;
+ * cualquier otro valor (categoría, `all`, vacío) no se toca.
+ */
+const normalizeIswcTag = (tag: string): string => {
+  const t = String(tag || '').trim();
+  if (!t) return '';
+  if (t.startsWith('iswc-')) return t;
+  if (t.startsWith('is-')) return `iswc-${t.slice(3)}`;
+  return t;
+};
+
 (() => {
   const TEMPLATE = document.createElement('template');
   TEMPLATE.innerHTML = /* html */ `
@@ -118,7 +133,7 @@ import '../code/code.js';
 
     #loadArg() {
       const tag = (this.getAttribute('tag') || '').trim();
-      return tag;
+      return normalizeIswcTag(tag);
     }
 
     /** Huella estable del doc (ignora blob/raw/host). */

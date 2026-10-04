@@ -1,0 +1,70 @@
+{
+  "$schema": "iswc-preview/v1",
+  "tag": "iswc-examples-carousel",
+  "category": "preview",
+  "title": "&lt;iswc-examples-carousel&gt;",
+  "titleHtml": false,
+  "description": "Helper W15: carrusel de ejemplos predefinidos para playgrounds. Cada card contiene una instancia real del componente target escalada. Al hacer click, los props del ejemplo se aplican al host target.",
+  "storageKey": "docs-iswc-examples-carousel",
+  "sections": [
+    {
+      "id": "intro",
+      "title": "Uso",
+      "lede": "Data-driven: pasa los ejemplos como propiedad `examples` o como atributo. Cada card tiene una instancia real del target. Click aplica los props al host.",
+      "blocks": [
+        {
+          "kind": "demo",
+          "html": "<div style=\"display:flex;flex-direction:column;gap:1em\">\n  <div id=\"ec-target\" style=\"display:flex;align-items:center;justify-content:center;padding:1.5em;border:0.0625em solid var(--iswc-border, color-mix(in srgb, currentColor 16%, transparent));border-radius:0.6em;min-height:4em\">\n    <iswc-button color=\"brand\" variant=\"filled\">Demo</iswc-button>\n  </div>\n  <iswc-examples-carousel\n    tag=\"iswc-button\"\n    target=\"#ec-target iswc-button\"\n    label=\"Ejemplos predefinidos\"\n    examples='[{\"label\":\"Primario\",\"props\":{\"color\":\"brand\",\"variant\":\"filled\"},\"text\":\"Primario\",\"icon\":\"mdi:star\",\"swatch\":\"#4f46e5\"},{\"label\":\"Secundario\",\"props\":{\"color\":\"success\",\"variant\":\"outlined\"},\"text\":\"Secundario\",\"icon\":\"mdi:check-circle\",\"swatch\":\"#16a34a\"},{\"label\":\"Peligro\",\"props\":{\"color\":\"danger\",\"variant\":\"filled\"},\"text\":\"Peligro\",\"icon\":\"mdi:alert-circle\",\"swatch\":\"#dc2626\"},{\"label\":\"Discreto\",\"props\":{\"color\":\"neutral\",\"variant\":\"plain\"},\"text\":\"Discreto\",\"icon\":\"mdi:dots-horizontal\",\"swatch\":\"#6b7280\"}]'>\n  </iswc-examples-carousel>\n</div>"
+        },
+        {
+          "kind": "code",
+          "lang": "html",
+          "code": "<iswc-examples-carousel\n  tag=\"iswc-button\"\n  target=\"#playground-btn\"\n  label=\"Ejemplos predefinidos\"\n  examples='[\n    { \"label\": \"Primario\",   \"props\": { \"color\": \"brand\",   \"variant\": \"filled\"   } },\n    { \"label\": \"Secundario\", \"props\": { \"color\": \"success\", \"variant\": \"outlined\" } },\n    { \"label\": \"Peligro\",    \"props\": { \"color\": \"danger\",  \"variant\": \"filled\"   } }\n  ]'>\n</iswc-examples-carousel>"
+        }
+      ]
+    },
+    {
+      "id": "inline",
+      "title": "Modo inline (hijos)",
+      "lede": "Alternativa: cada hijo con `data-label` es un ejemplo. Los props se leen de `data-props` (JSON). Si hay hijos, ganan sobre el atributo `examples`.",
+      "blocks": [
+        {
+          "kind": "demo",
+          "html": "<div style=\"display:flex;flex-direction:column;gap:1em\">\n  <div id=\"ec-target-2\" style=\"display:flex;align-items:center;justify-content:center;padding:1.5em;border:0.0625em solid var(--iswc-border, color-mix(in srgb, currentColor 16%, transparent));border-radius:0.6em;min-height:4em\">\n    <iswc-button color=\"brand\" variant=\"filled\">Demo</iswc-button>\n  </div>\n  <iswc-examples-carousel tag=\"iswc-button\" target=\"#ec-target-2 iswc-button\" label=\"Inline\">\n    <span data-label=\"Primario\" data-props='{\"color\":\"brand\",\"variant\":\"filled\"}' data-text=\"Primario\"></span>\n    <span data-label=\"Secundario\" data-props='{\"color\":\"neutral\",\"variant\":\"outlined\"}' data-text=\"Secundario\"></span>\n    <span data-label=\"Peligro\" data-props='{\"color\":\"danger\",\"variant\":\"plain\"}' data-text=\"Peligro\"></span>\n  </iswc-examples-carousel>\n</div>"
+        }
+      ]
+    },
+    {
+      "id": "reference",
+      "title": "Referencia",
+      "blocks": [
+        {
+          "kind": "table",
+          "columns": ["Atributo", "Tipo", "Default", "Descripcion"],
+          "rows": [
+            ["<code>tag</code>", "string", "—", "Tag del componente target (e.g. <code>iswc-button</code>). Required."],
+            ["<code>target</code>", "string", "—", "Selector CSS del host en la misma pagina al que aplicar los props. Si falta, solo se ve el carrusel."],
+            ["<code>label</code>", "string", "Ejemplos predefinidos", "Titulo del header."],
+            ["<code>lede</code>", "string", "—", "Subtitulo opcional del header."],
+            ["<code>default-index</code>", "number", "<code>-1</code>", "Indice del ejemplo a marcar como activo al inicio."]
+          ]
+        },
+        {
+          "kind": "table",
+          "columns": ["Prop", "Tipo", "Descripcion"],
+          "rows": [
+            ["<code>examples</code>", "<code>ExampleSpec[]</code>", "Lista de <code>{ label, props, text?, html?, icon?, swatch? }</code>. Tambien se acepta el atributo HTML <code>examples</code> como JSON."],
+            ["<code>tag</code>, <code>target</code>, <code>label</code>, <code>lede</code>, <code>defaultIndex</code>", "string/number", "Reflejan los atributos HTML."]
+          ]
+        },
+        {
+          "kind": "table",
+          "columns": ["Evento", "Detalle", "Cuando"],
+          "rows": [
+            ["<code>iswc-examples-pick</code>", "<code>{ example, index, applied }</code>", "Click en una card. <code>applied=true</code> si se pudo aplicar al target."]
+          ]
+        }
+      ]
+    }
+  ]
+}
