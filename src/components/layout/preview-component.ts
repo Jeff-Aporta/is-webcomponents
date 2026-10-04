@@ -45,12 +45,7 @@ interface DrawerEl extends HTMLElement {
   hide?(): void;
 }
 
-class IswcPreviewComponent extends withStyleAttrs(HTMLElement) {
-    /** Personalización por atributo (ver `core/attrs.ts`). */
-    static styleAttrs = {
-    size: '--iswc-preview-size',
-    spacing: '--iswc-preview-spacing',
-    };
+class IswcPreviewComponent extends withStyleAttrs(HTMLElement) {
 
   #preview: ISComponentPreviewLike | null = null;
   #ctx: PreviewMountContext | null = null;
@@ -67,7 +62,7 @@ class IswcPreviewComponent extends withStyleAttrs(HTMLElement) {
   }
 
   static get observedAttributes(): string[] {
-    return ['storage-key', ...IswcPreviewComponent.styleAttrNames];
+    return ['storage-key'];
   }
 
   constructor() {

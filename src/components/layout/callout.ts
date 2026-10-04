@@ -63,15 +63,7 @@ import { TONE } from '../_shared/tone.js';
     danger: 'mdi:alert-octagon-outline',
   };
 
-  class IswcCallout extends ElementBase {
-    /** Personalización por atributo (ver `core/attrs.ts`). */
-    static styleAttrs = {
-    bg: { prop: '--iswc-callout-bg', onlyColorValues: true },
-    'border-color': { prop: '--iswc-callout-border', onlyColorValues: true },
-    'text-color': { prop: '--iswc-callout-text', onlyColorValues: true },
-    accent: { prop: '--iswc-callout-accent', onlyColorValues: true },
-    spacing: '--iswc-callout-spacing',
-    };
+  class IswcCallout extends ElementBase {
 
     static get observedAttributes(): string[] { return [...OBSERVED, 'bg', 'border-color', 'text-color', 'accent', 'spacing']; }
 

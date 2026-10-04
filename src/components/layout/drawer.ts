@@ -80,20 +80,12 @@ import { ModalBase } from '../_shared/modal-base.js';
     bottom: { transform: 'translateY(100%)' },
   };
 
-  class IswcDrawer extends ModalBase {
-    /** Personalización por atributo (ver `core/attrs.ts`). */
-    static styleAttrs = {
-      size: '--iswc-drawer-size',
-      spacing: '--iswc-drawer-spacing',
-      'backdrop-color': { prop: '--iswc-drawer-backdrop-color', onlyColorValues: true },
-      'show-duration': '--iswc-drawer-show-duration',
-      'hide-duration': '--iswc-drawer-hide-duration',
-    };
+  class IswcDrawer extends ModalBase {
 
     static __TEMPLATE = TEMPLATE;
 
     static get observedAttributes(): string[] {
-      return [...super.observedAttributes, 'placement', ...IswcDrawer.styleAttrNames];
+      return [...super.observedAttributes, 'placement'];
     }
 
     get modalClass() { return '.drawer'; }

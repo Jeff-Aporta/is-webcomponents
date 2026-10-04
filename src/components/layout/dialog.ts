@@ -85,18 +85,10 @@ import { ModalBase } from '../_shared/modal-base.js';
   /** Valores oficiales del componente. Cualquier otro → se trata como none. */
   const BACKDROP_VARIANTS = new Set(['none', 'basic']);
 
-  class IswcDialog extends ModalBase {
-    /** Personalización por atributo (ver `core/attrs.ts`). */
-    static styleAttrs = {
-      spacing: '--iswc-dialog-spacing',
-      width: '--iswc-dialog-width',
-      'backdrop-color': { prop: '--iswc-dialog-backdrop-color', onlyColorValues: true },
-      'show-duration': '--iswc-dialog-show-duration',
-      'hide-duration': '--iswc-dialog-hide-duration',
-    };
+  class IswcDialog extends ModalBase {
 
     static get observedAttributes(): string[] {
-      return [...super.observedAttributes, 'backdrop-variant', ...IswcDialog.styleAttrNames];
+      return [...super.observedAttributes, 'backdrop-variant'];
     }
 
     static __TEMPLATE = TEMPLATE;

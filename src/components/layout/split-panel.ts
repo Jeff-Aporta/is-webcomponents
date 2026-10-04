@@ -69,12 +69,7 @@ import { clampTo } from '../_shared/misc-utils.js';
   const VALID_SIDE: string[] = ['start', 'end'];
 
 
-  class IswcSplitPanel extends withStyleAttrs(HTMLElement) {
-    /** Personalización por atributo (ver `core/attrs.ts`). */
-    static styleAttrs = {
-    'min-size': '--iswc-split-panel-min',
-    'max-size': '--iswc-split-panel-max',
-    };
+  class IswcSplitPanel extends withStyleAttrs(HTMLElement) {
 
     static get observedAttributes(): string[] { return [...OBSERVED, 'min-size', 'max-size']; }
 
