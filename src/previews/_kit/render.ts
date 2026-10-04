@@ -166,16 +166,84 @@ export function renderBlock(block: PreviewBlock): HTMLElement {
   }
 }
 
-/** Indice: texto plano. Un titulo que es solo un tag no cae en el id. */
-function etiquetaIndice(title: string, id: string): string {
-  const decoded = title
-    .replace(/&lt;/gi, '<')
-    .replace(/&gt;/gi, '>')
-    .replace(/&quot;/gi, '"')
-    .replace(/&amp;/gi, '&');
-  const plano = decoded.replace(/<[^>]+>/g, ' ').replace(/\s+/g, ' ').trim();
-  if (plano) return plano;
-  return id === 'intro' ? 'Uso' : id;
+/* --------------------------------------------------------------------------
+ * TOC estándar: las 7 secciones de "Referencia completa" del doc de un
+ * componente (Phase O). Anatomía y Ejemplos se quedan en el main content.
+ *
+ * El detector mira primero el `id` (forma normalizada, sin separadores) y
+ * luego el `title` (case-insensitive, normalizado). Si una sección empareja
+ * con uno de los 7 ids, va al TOC con la etiqueta canónica (no la del .md).
+ *
+ * El orden del array es el orden estricto del estándar del usuario. Aunque
+ * el orden del `.md` manda dentro del main, en el TOC fijamos este orden
+ * para que siempre sea: Atributos → Custom states → Eventos → Slots → CSS
+ * Parts → API JavaScript → Métodos. Esto evita que un componente que pone
+ * "API" antes que "Estados" rompa la coherencia entre docs.
+ * ------------------------------------------------------------------------*/
+export interface StandardTocEntry {
+  /** Etiqueta canónica del TOC. */
+  readonly label: string;
+  /** Ids equivalentes (normalizados a `[a-z0-9]`). */
+  readonly ids: readonly string[];
+  /** Títulos equivalentes (case-insensitive). */
+  readonly titles: readonly string[];
+}
+
+/** 7 secciones estándar del TOC. Exportado para tests. */
+export const STANDARD_TOC: readonly StandardTocEntry[] = [
+  { label: 'Atributos / propiedades', ids: ['atributos', 'attributes', 'attrs', 'props', 'propiedades'], titles: ['atributos', 'atributo', 'attributes', 'attrs', 'props', 'propiedades', 'propiedad'] },
+  { label: 'Custom states',           ids: ['states', 'customstates', 'estados'],               titles: ['custom states', 'states', 'estados'] },
+  { label: 'Eventos',                 ids: ['eventos', 'events'],                                                 titles: ['eventos', 'events'] },
+  { label: 'Slots',                   ids: ['slots'],                                                              titles: ['slots'] },
+  { label: 'CSS Parts',               ids: ['parts', 'partes', 'cssparts'],                                       titles: ['css parts', 'parts', 'partes'] },
+  { label: 'API JavaScript',          ids: ['apijs', 'api', 'apijavascript', 'jsapi', 'javascriptapi'],           titles: ['api javascript', 'api', 'javascript api', 'js api'] },
+  { label: 'Métodos',                 ids: ['methods', 'metodos'],                                                titles: ['métodos', 'methods', 'metodos'] },
+];
+
+/** Ids / títulos que viven en main content y NO entran al TOC. */
+export const EXCLUDED_FROM_TOC: ReadonlySet<string> = new Set([
+  'anatomy', 'anatomia', 'anatomía',
+  'examples', 'ejemplos', 'example',
+  'intro', // el intro es bienvenida, no referencia
+]);
+
+function normId(id: string): string {
+  return id.toLowerCase().replace(/[^a-z0-9]/g, '');
+}
+
+function normTitle(title: string): string {
+  return title.toLowerCase().trim();
+}
+
+/**
+ * Devuelve la entrada estándar del TOC si la sección empareja. `null` en
+ * otro caso (no es sección de referencia o va en el main content).
+ */
+export function matchStandardToc(section: PreviewSection): StandardTocEntry | null {
+  if (!section || !section.id) return null;
+  if (EXCLUDED_FROM_TOC.has(normId(section.id))) return null;
+  const idN = normId(section.id);
+  const titleN = normTitle(section.title || '');
+  for (const entry of STANDARD_TOC) {
+    if (entry.ids.includes(idN)) return entry;
+  }
+  if (titleN) {
+    for (const entry of STANDARD_TOC) {
+      if (entry.titles.includes(titleN)) return entry;
+    }
+  }
+  return null;
+}
+
+/** Filtra las secciones de referencia (las 7 estándar, sin anatomía/ejemplos). */
+export function standardTocSections(def: PreviewDefinition): { section: PreviewSection; label: string }[] {
+  if (!def || !Array.isArray(def.sections)) return [];
+  const out: { section: PreviewSection; label: string }[] = [];
+  for (const section of def.sections) {
+    const match = matchStandardToc(section);
+    if (match) out.push({ section, label: match.label });
+  }
+  return out;
 }
 
 /** Escapa &, <, > y " para meter texto en HTML. */
@@ -318,19 +386,33 @@ export function renderDefinition(def: PreviewDefinition, targets: { main: HTMLEl
   // Una sola seccion no tiene indice: el panel derecho quedaria vacio.
   if (def.withoutToc || def.sections.length < 2) return;
 
+  // Phase O: el TOC de la derecha sólo lista las 7 secciones de "Referencia
+  // completa" (Atributos, Custom states, Eventos, Slots, CSS Parts, API
+  // JavaScript, Métodos). Anatomía y Ejemplos van en el main y no aparecen
+  // aquí. Mantenemos el orden canónico del estándar aunque el `.md` los
+  // ponga en otro orden — así el índice es coherente entre componentes.
+  const toc = standardTocSections(def);
+  if (toc.length < 2) return;
+
   const h1 = document.createElement('h1');
   h1.textContent = def.tag;
   aside.append(h1);
 
+  // El scroll-spy ya da feedback de "estoy en esta sección" vía
+  // `aria-current="location"` + clase iswc-scrollspy-active. El sidebar
+  // padre tiene `overflow-y: auto` y el h1 es sticky (presentation.css), así
+  // que la posición se mantiene visible al hacer scroll del main.
   const spy = document.createElement('iswc-scrollspy');
   spy.setAttribute('target', 'iswc-main');
-  for (const section of def.sections) {
+  spy.classList.add('docs-toc');
+  for (const { section, label } of toc) {
     const a = document.createElement('a');
     a.href = `#${section.id}`;
-    // TOC: intro con tag HTML → etiqueta "Uso"; resto usa section.title.
-    const tocTitle =
-      section.id === 'intro' && def.title ? def.title : section.title;
-    a.textContent = etiquetaIndice(tocTitle, section.id);
+    // Etiqueta canónica (no la del .md) para que el TOC sea coherente
+    // aunque el componente declare un id/título no estándar (ej. "Estados"
+    // → "Custom states").
+    a.textContent = label;
+    a.dataset.tocKey = label;
     spy.append(a);
   }
   aside.append(spy);

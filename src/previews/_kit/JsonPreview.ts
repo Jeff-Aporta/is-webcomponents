@@ -2,14 +2,38 @@
  * Preview respaldado solo por PreviewDefinition (JSON) + behavior opcional.
  * Sin HTML por componente: el chrome lo pinta <iswc-preview-component>.
  * Tipado estructural local (el _kit usa JSDoc; aqui TS estricto y limpio).
+ *
+ * Soporta dos shapes de JSON de entrada (Phase N — zod-migration):
+ *   - `iswc-preview/v1` (legacy): `sections: [{ id, title, blocks[] }]`.
+ *   - `iswc-ficha/v1` o sub-objeto `ficha:` (ver `ficha-bridge.ts`):
+ *     Zod validation + `console.warn` para secciones ausentes (respetando
+ *     `exclude`). El bridge convierte a PreviewDefinition o prepende el
+ *     `playground` HTML a la primera sección del preview, según el modo.
+ *
+ * Tradeoff de tamaño: la ficha-bridge importa zod (≈330 KB minificado) y se
+ * bundlea dentro del SPA. Por ahora lo aceptamos para no añadir un external
+ * dependency a la build (zod no está publicado en el CDN del kit). Si en
+ * el futuro el bundle se vuelve problema, mover el bridge a un chunk aparte
+ * con `external: ['zod']` en la build de gallery-app.
  */
 import { ISComponentPreview } from './ISComponentPreview.js';
 import { montarControles } from '../../utils/system/controles.js';
+import { loadFichaLikeDefinition } from './ficha-bridge.ts';
 
 import type { PreviewDefinition, PreviewMountContext } from './types.d.ts';
 
-/** Forma mínima de la definición (iswc-preview/v1). */
-type DefinicionPreview = { tag: string; category?: string; $schema?: string; sections?: Array<{ id?: string; blocks?: Array<Record<string, unknown>> }>; };
+/** Forma mínima de la definición (iswc-preview/v1 o ficha via sub-objeto). */
+type DefinicionPreview = {
+  tag: string;
+  category?: string;
+  $schema?: string;
+  // iswc-preview/v1: array de secciones. El bridge también acepta `sections`
+  // como objeto (modo A) — el tipo se deja flexible y el bridge hace el
+  // narrowing.
+  sections?: Array<{ id?: string; blocks?: Array<Record<string, unknown>> }> | Record<string, unknown>;
+  // Sub-objeto `ficha:` o `exclude:` los lee el bridge; el resto se preserva.
+  [key: string]: unknown;
+};
 
 /** Contexto de montaje (main/root pintados por el chrome). */
 type CtxMontaje = { main?: HTMLElement | null; root?: HTMLElement | null; aside?: HTMLElement | null; };
@@ -18,22 +42,28 @@ type CtxMontaje = { main?: HTMLElement | null; root?: HTMLElement | null; aside?
 type ModuloBehavior = { mount?(ctx: CtxMontaje, preview: unknown): unknown; unmount?(ctx: CtxMontaje, preview: unknown): void; };
 
 /** Vista del preview con su definición (la base la expone congelada). */
-type ConDefinicion = { definition: DefinicionPreview };
+type ConDefinicion = { definition: PreviewDefinition };
 
 export class JsonPreview extends ISComponentPreview {
   #behavior: ModuloBehavior | null = null;
 
   constructor(definition: DefinicionPreview, behavior: ModuloBehavior | null = null) {
+    // Si la definición viene en formato ficha (sub-objeto `ficha:` o
+    // `$schema: iswc-ficha/v1` o `sections` objeto), el bridge la convierte
+    // a PreviewDefinition y emite los warnings de secciones ausentes. Para
+    // iswc-preview/v1 puro, el bridge es un no-op.
+    const converted = loadFichaLikeDefinition(definition as Record<string, unknown>);
+
     const normalized: PreviewDefinition = {
-      ...definition,
-      category: definition.category ?? '',
-      $schema: (definition.$schema || 'iswc-preview/v1') as 'iswc-preview/v1',
+      ...converted,
+      category: converted.category ?? '',
+      $schema: (converted.$schema || 'iswc-preview/v1') as 'iswc-preview/v1',
       // Conservar title del JSON; si falta, el H2 muestra `<tag>` (texto, no CE).
-      title: (definition as PreviewDefinition).title || `<${definition.tag}>`,
-      sections: definition.sections ?? [],
+      title: converted.title || `<${definition.tag}>`,
+      sections: converted.sections ?? [],
     };
     if (normalized.$schema !== 'iswc-preview/v1') {
-      throw new Error(`JsonPreview(${normalized.tag}): $schema debe ser "iswc-preview/v1"`);
+      throw new Error(`JsonPreview(${normalized.tag}): $schema debe ser "iswc-preview/v1" (post-bridge)`);
     }
     super(normalized);
     this.#behavior = behavior;
