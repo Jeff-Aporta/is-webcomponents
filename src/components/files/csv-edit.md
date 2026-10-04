@@ -45,3 +45,15 @@ el.addEventListener('click', (e) => {
 ```
 
 </details>
+
+
+### CSS parts
+
+| Part | Uso |
+| --- | --- |
+| `add-row` | Personalizable con `::part(add-row)`. |
+| `export` | Personalizable con `::part(export)`. |
+| `root` | Personalizable con `::part(root)`. |
+| `stage` | Escenario donde se renderiza el contenido. |
+| `table` | Personalizable con `::part(table)`. |
+| `toolbar` | Personalizable con `::part(toolbar)`. |

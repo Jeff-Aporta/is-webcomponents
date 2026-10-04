@@ -96,7 +96,9 @@ el.addEventListener('iswc-share', (e) => {
 
 ### CSS parts
 
-`button`
+| Part | Uso |
+| --- | --- |
+| `button` | Personalizable con `::part(button)`. |
 
 ### Custom states
 

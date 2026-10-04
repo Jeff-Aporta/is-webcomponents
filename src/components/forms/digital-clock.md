@@ -115,6 +115,7 @@ Propiedades públicas aparecen en tabla anterior; APIs heredadas se verifican en
 | Part | Uso |
 | --- | --- |
 | `base` | Personalizable con `::part(base)`. |
+| `option` | Cada opción del listado. |
 
 ### Custom states
 

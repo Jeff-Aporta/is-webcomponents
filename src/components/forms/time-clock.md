@@ -117,6 +117,7 @@ Propiedades públicas aparecen en tabla anterior; APIs heredadas se verifican en
 | `seconds` | Personalizable con `::part(seconds)`. |
 | `clock` | Personalizable con `::part(clock)`. |
 | `hand` | Personalizable con `::part(hand)`. |
+| `number` | Cada dígito numérico mostrado en el reloj. |
 
 ### Custom states
 

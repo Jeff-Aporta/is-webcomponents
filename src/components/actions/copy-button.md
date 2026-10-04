@@ -117,6 +117,8 @@ Propiedades públicas aparecen en tabla anterior; APIs heredadas se verifican en
 | `copy-icon` | Personalizable con `::part(copy-icon)`. |
 | `success-icon` | Personalizable con `::part(success-icon)`. |
 | `error-icon` | Personalizable con `::part(error-icon)`. |
+| `feedback` | Panel flotante que muestra el resultado del copy (success/error). |
+| `feedback-body` | Cuerpo del panel `feedback` (mensaje + icono). |
 
 ### Custom states
 

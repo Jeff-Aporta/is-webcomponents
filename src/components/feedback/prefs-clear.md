@@ -77,3 +77,10 @@ el.addEventListener('iswc-prefs-clear', (e) => {
 
 - `clear()` — ejecuta la limpieza
 - `peek()` — lee el root de prefs sin borrar
+
+
+### CSS parts
+
+| Part | Uso |
+| --- | --- |
+| `button` | Personalizable con `::part(button)`. |

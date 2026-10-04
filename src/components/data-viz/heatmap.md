@@ -137,6 +137,7 @@ tabla anterior.
 | `root` | Contenedor grid que reparte lienzo y leyenda. |
 | `canvas` | El `<svg>` donde se dibuja la matriz (`role="img"`). |
 | `legend` | Caja de la leyenda; queda con `hidden` cuando no hay espacio o `legend-position="none"`. |
+| `sr-status` | Region `aria-live` para anuncios a lectores de pantalla (oculta visualmente). |
 
 ### Custom states
 

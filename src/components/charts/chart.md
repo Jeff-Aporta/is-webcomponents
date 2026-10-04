@@ -123,6 +123,7 @@ Propiedades públicas aparecen en tabla anterior; APIs heredadas se verifican en
 | `canvas` | Personalizable con `::part(canvas)`. |
 | `legend` | Personalizable con `::part(legend)`. |
 | `tooltip` | Personalizable con `::part(tooltip)`. |
+| `sr-status` | Region `aria-live` para anuncios a lectores de pantalla (oculta visualmente). |
 
 ### Custom states
 

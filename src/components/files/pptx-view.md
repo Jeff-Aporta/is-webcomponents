@@ -45,3 +45,12 @@ el.addEventListener('click', (e) => {
 ```
 
 </details>
+
+
+### CSS parts
+
+| Part | Uso |
+| --- | --- |
+| `root` | Personalizable con `::part(root)`. |
+| `slide` | Personalizable con `::part(slide)`. |
+| `stage` | Escenario donde se renderiza el contenido. |

@@ -154,6 +154,8 @@ Propiedades públicas aparecen en tabla anterior; APIs heredadas se verifican en
 | `grid` | Personalizable con `::part(grid)`. |
 | `month-view` | Personalizable con `::part(month-view)`. |
 | `year-view` | Personalizable con `::part(year-view)`. |
+| `day` | Cada celda de día en la grilla. |
+| `week-number` | Columna de número de semana. |
 
 ### Custom states
 

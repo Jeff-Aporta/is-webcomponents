@@ -75,3 +75,10 @@ el.addEventListener('click', (e) => {
 ```
 
 </details>
+
+
+### CSS parts
+
+| Part | Uso |
+| --- | --- |
+| `image` | El `<img>` interno. |

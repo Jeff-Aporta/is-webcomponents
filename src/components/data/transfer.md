@@ -117,6 +117,7 @@ Propiedades públicas aparecen en tabla anterior; APIs heredadas se verifican en
 | `list` | Personalizable con `::part(list)`. |
 | `controls` | Personalizable con `::part(controls)`. |
 | `item` | Personalizable con `::part(item)`. |
+| `sr-status` | Region `aria-live` para anuncios a lectores de pantalla (oculta visualmente). |
 
 ### Custom states
 

@@ -127,6 +127,7 @@ Propiedades públicas aparecen en tabla anterior; APIs heredadas se verifican en
 | `hint` | Personalizable con `::part(hint)`. |
 | `dialog` | Personalizable con `::part(dialog)`. |
 | `listbox` | Personalizable con `::part(listbox)`. |
+| `option` | Cada opción del listado. |
 
 ### Custom states
 

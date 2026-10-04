@@ -158,6 +158,8 @@ Propiedades públicas aparecen en tabla anterior; APIs heredadas se verifican en
 | `hint` | Personalizable con `::part(hint)`. |
 | `thumb` | Personalizable con `::part(thumb)`. |
 | `value-label` | Personalizable con `::part(value-label)`. |
+| `mark` | Pastilla con el color de la paleta activa. |
+| `mark-label` | Etiqueta de la marca bajo el thumb. |
 
 ### Custom states
 

@@ -138,6 +138,7 @@ Propiedades públicas aparecen en tabla anterior; APIs heredadas se verifican en
 | `end` | Personalizable con `::part(end)`. |
 | `caret` | Personalizable con `::part(caret)`. |
 | `spinner` | Personalizable con `::part(spinner)`. |
+| `sr-status` | Region `aria-live` para anuncios a lectores de pantalla (oculta visualmente). |
 
 ### Custom states
 

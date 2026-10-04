@@ -136,6 +136,10 @@ Propiedades públicas aparecen en tabla anterior; APIs heredadas se verifican en
 | `status` | Personalizable con `::part(status)`. |
 | `playlist-toggle` | Personalizable con `::part(playlist-toggle)`. |
 | `playlist-items` | Personalizable con `::part(playlist-items)`. |
+| `playlist-duration` | Duración de cada vídeo en la lista. |
+| `playlist-item` | Cada fila individual del listado. |
+| `playlist-thumbnail` | Miniatura de cada vídeo. |
+| `playlist-title` | Título de cada vídeo. |
 
 ### Custom states
 

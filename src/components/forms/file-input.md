@@ -120,6 +120,8 @@ Propiedades públicas aparecen en tabla anterior; APIs heredadas se verifican en
 | `dropzone` | Personalizable con `::part(dropzone)`. |
 | `input` | Personalizable con `::part(input)`. |
 | `file-list` | Personalizable con `::part(file-list)`. |
+| `file` | Cada fila de la lista de archivos. |
+| `remove-button` | Botón para quitar un archivo de la lista. |
 
 ### Custom states
 

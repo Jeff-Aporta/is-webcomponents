@@ -100,6 +100,7 @@ No expone APIs adicionales relevantes.
 | Part | Uso |
 | --- | --- |
 | `date` / `number` / `bytes` / `time` | Según `type` |
+| `value` | El `<output>` con el valor formateado. |
 
 ### Custom states
 

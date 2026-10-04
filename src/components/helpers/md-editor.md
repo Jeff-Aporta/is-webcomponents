@@ -148,6 +148,15 @@ el.addEventListener('iswc-change', (e) => {
 | `surface` | Superficie editable/preview dentro del diálogo. |
 | `plain` | `<textarea>` del modo texto plano. |
 | `footer` / `footer-close` / `footer-discard` / `footer-save` | Pie del diálogo. |
+| `dialog-filename` | Subtítulo del diálogo con el nombre del archivo. |
+| `footer` | Pie del diálogo. |
+| `footer-discard` | Botón «Descartar» del pie. |
+| `footer-download` | Botón «Descargar» del pie. |
+| `footer-meta` | Metadatos del archivo en el pie (tamaño, fecha, etc.). |
+| `footer-save` | Botón «Guardar» del pie. |
+| `vars` | Sección de variables detectadas en el markdown. |
+| `vars-label` | Título de la sección de variables. |
+| `vars-list` | Lista de variables detectadas. |
 
 ### Custom states
 

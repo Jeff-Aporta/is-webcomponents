@@ -281,6 +281,10 @@ Propiedades públicas aparecen en tabla anterior; APIs heredadas se verifican en
 | `overlay` | Personalizable con `::part(overlay)`. |
 | `footer` | Personalizable con `::part(footer)`. |
 | `pagination` | Personalizable con `::part(pagination)`. |
+| `cell` | Personalizable con `::part(cell)`. |
+| `detail-panel` | Panel desplegable de detalle por fila. |
+| `header-cell` | Cada celda de la fila de encabezados. |
+| `row` | Personalizable con `::part(row)`. |
 
 ### Custom states
 

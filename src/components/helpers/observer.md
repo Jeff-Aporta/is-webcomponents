@@ -107,7 +107,9 @@ No expone.
 
 ### CSS parts
 
-No expone. Host con `display: contents`.
+| Part | Uso |
+| --- | --- |
+| `base` | Personalizable con `::part(base)`. |
 
 ### Custom states
 

@@ -130,6 +130,9 @@ Propiedades públicas aparecen en tabla anterior; APIs heredadas se verifican en
 | `popup` | Personalizable con `::part(popup)`. |
 | `dialog` | Personalizable con `::part(dialog)`. |
 | `body` | Personalizable con `::part(body)`. |
+| `popup__arrow` | Flecha del popover. |
+| `popup__hover-bridge` | Puente invisible que mantiene el hover entre trigger y popup. |
+| `popup__popup` | Panel flotante interno del popover. |
 
 ### Custom states
 

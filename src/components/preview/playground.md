@@ -52,3 +52,18 @@ el.addEventListener('iswc-controls-change', (e) => {
 ```
 
 </details>
+
+
+### CSS parts
+
+| Part | Uso |
+| --- | --- |
+| `body` | Cuerpo del componente. |
+| `config` | Panel de configuración. |
+| `controls` | Fila de controles. |
+| `head` | Cabecera. |
+| `lede` | Párrafo introductorio bajo el título. |
+| `root` | Personalizable con `::part(root)`. |
+| `stage` | Escenario donde se renderiza el contenido. |
+| `stage-wrap` | Contenedor del escenario. |
+| `title` | Título del playground. |

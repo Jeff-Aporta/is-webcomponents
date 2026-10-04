@@ -45,3 +45,14 @@ el.addEventListener('click', (e) => {
 ```
 
 </details>
+
+
+### CSS parts
+
+| Part | Uso |
+| --- | --- |
+| `aside` | Barra lateral complementaria (TOC). |
+| `main` | Área principal del contenido. |
+| `page` | Página completa (aside + main). |
+| `toc-drawer` | Drawer que contiene el TOC en móvil. |
+| `toc-toggle` | Botón para abrir/cerrar el TOC. |

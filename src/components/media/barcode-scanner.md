@@ -91,7 +91,10 @@ el.addEventListener('iswc-detect', (e) => {
 
 ### CSS parts
 
-`preview`, `hint`
+| Part | Uso |
+| --- | --- |
+| `hint` | Texto de ayuda o instrucción. |
+| `preview` | Previsualización capturada. |
 
 ### Custom states
 

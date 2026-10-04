@@ -96,6 +96,7 @@ Propiedades públicas aparecen en tabla anterior; APIs heredadas se verifican en
 | --- | --- |
 | `sparkline` | Personalizable con `::part(sparkline)`. |
 | `canvas` | Personalizable con `::part(canvas)`. |
+| `sr-status` | Region `aria-live` para anuncios a lectores de pantalla (oculta visualmente). |
 
 ### Custom states
 

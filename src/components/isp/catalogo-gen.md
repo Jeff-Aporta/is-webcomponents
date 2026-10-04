@@ -150,6 +150,8 @@ el.addEventListener('iswc-selection-change', (e) => {
 | `toolbar` | Barra de acciones. |
 | `grid-wrap` | Contenedor de la grilla. |
 | `drawer` | Drawer de ficha. |
+| `pk-backdrop` | Backdrop del modal de clave primaria. |
+| `pk-modal` | Modal que pide el PK antes de una acción. |
 
 ### Custom states
 

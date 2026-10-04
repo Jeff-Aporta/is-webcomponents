@@ -159,6 +159,14 @@ Propiedades públicas aparecen en tabla anterior; APIs heredadas se verifican en
 | `error-text` | Personalizable con `::part(error-text)`. |
 | `dialog` | Personalizable con `::part(dialog)`. |
 | `listbox` | Personalizable con `::part(listbox)`. |
+| `check` | Icono check que marca la opción seleccionada. |
+| `group` | `<optgroup>` del listado. |
+| `group-label` | Etiqueta del `<optgroup>`. |
+| `option` | Cada opción del listado. |
+| `option-description` | Texto secundario bajo la etiqueta de la opción. |
+| `option-start` | Slot/icono a la izquierda de la opción. |
+| `tag` | Cada chip del modo multi-selección. |
+| `tag-more` | Chip `+N` que indica cuántas opciones más hay. |
 
 ### Custom states
 

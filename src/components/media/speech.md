@@ -94,7 +94,10 @@ el.addEventListener('iswc-result', (e) => {
 
 ### CSS parts
 
-`bar`, `transcript`
+| Part | Uso |
+| --- | --- |
+| `bar` | Barra de nivel/vu-meter. |
+| `transcript` | Texto transcrito del audio. |
 
 ### Custom states
 

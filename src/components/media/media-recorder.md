@@ -93,7 +93,11 @@ el.addEventListener('iswc-start', (e) => {
 
 ### CSS parts
 
-`preview`, `download`
+| Part | Uso |
+| --- | --- |
+| `download` | Botón/enlace de descarga. |
+| `preview` | Previsualización capturada. |
+| `status` | `<output>` con el estado del componente. |
 
 ### Custom states
 

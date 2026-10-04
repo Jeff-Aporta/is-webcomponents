@@ -131,6 +131,7 @@ Propiedades públicas aparecen en tabla anterior; APIs heredadas se verifican en
 | `empty` | Personalizable con `::part(empty)`. |
 | `footer` | Personalizable con `::part(footer)`. |
 | `sr-status` | Region aria-live polite oculta visualmente. |
+| `keys` | Fila con los atajos de teclado mostrados. |
 
 ### Custom states
 

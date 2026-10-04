@@ -91,7 +91,9 @@ No expone.
 
 ### CSS parts
 
-`canvas`
+| Part | Uso |
+| --- | --- |
+| `canvas` | Personalizable con `::part(canvas)`. |
 
 ### Custom states
 

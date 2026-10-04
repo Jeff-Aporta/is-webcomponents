@@ -123,6 +123,8 @@ Propiedades públicas aparecen en tabla anterior; APIs heredadas se verifican en
 | `base` | Personalizable con `::part(base)`. |
 | `tooltip` | Personalizable con `::part(tooltip)`. |
 | `body` | Personalizable con `::part(body)`. |
+| `base__arrow` | Flecha del tooltip. |
+| `base__popup` | Panel flotante interno del tooltip. |
 
 ### Custom states
 

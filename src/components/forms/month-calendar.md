@@ -106,6 +106,7 @@ Propiedades públicas aparecen en tabla anterior; APIs heredadas se verifican en
 | Part | Uso |
 | --- | --- |
 | `base` | Personalizable con `::part(base)`. |
+| `month` | Cada celda de mes en la grilla anual. |
 
 ### Custom states
 

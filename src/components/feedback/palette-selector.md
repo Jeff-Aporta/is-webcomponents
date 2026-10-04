@@ -108,11 +108,9 @@ Propiedades públicas aparecen en tabla anterior; APIs heredadas se verifican en
 | Part | Uso |
 | --- | --- |
 | `trigger` | Personalizable con `::part(trigger)`. |
-| `lead` | Personalizable con `::part(lead)`. |
-| `label` | Personalizable con `::part(label)`. |
-| `caret` | Personalizable con `::part(caret)`. |
 | `menu` | Personalizable con `::part(menu)`. |
 | `option` | Personalizable con `::part(option)`. |
+| `mark` | Pastilla con el color de la paleta activa. |
 
 ### Custom states
 

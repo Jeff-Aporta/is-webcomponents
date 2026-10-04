@@ -134,6 +134,7 @@ Propiedades públicas aparecen en tabla anterior; APIs heredadas se verifican en
 | `root` | Personalizable con `::part(root)`. |
 | `header` | Personalizable con `::part(header)`. |
 | `body` | Personalizable con `::part(body)`. |
+| `resizer` | Asidero de redimensionado de la ventana. |
 
 ### Custom states
 
