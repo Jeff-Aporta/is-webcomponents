@@ -160,7 +160,7 @@ Preservar semántica, foco, teclado, labels y ARIA. ARIA detectado: ninguno expl
 
 ## Fuentes
 
-- [JavaScript](./date-field.js)
+- [JavaScript](./date-field.ts)
 - [CSS](./date-field.css)
-- [Índice de categoría](./LLM.md)
+- [Índice de categoría](../../specs/componentes.md)
 - [Preview](./date-field.json)
