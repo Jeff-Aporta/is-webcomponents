@@ -24,14 +24,14 @@
 </style>
 <script type="module">
   // Dependencias transitivas de flex-options.
-  await import('../../../dist/cdn/actions/button.min.js?h=948opm');
-  await import('../../../dist/cdn/actions/button-group.min.js?h=uq3m5f');
-  await import('../../../dist/cdn/actions/check-icon-button.min.js?h=n0v40m');
-  await import('../../../dist/cdn/actions/dropdown.min.js?h=47vf4e');
-  await import('../../../dist/cdn/actions/dropdown-item.min.js?h=hg9mt7');
-  await import('../../../dist/cdn/layout/divider.min.js?h=whbrd3');
-  await import('../../../dist/cdn/media/icon.min.js?h=mw2zs9');
-  await import('../../../dist/cdn/isp/flex-options.min.js?h=wv9v1p');
+  await import('../../../dist/cdn/actions/button.min.js?h=gi9oba');
+  await import('../../../dist/cdn/actions/button-group.min.js?h=hwbhkv');
+  await import('../../../dist/cdn/actions/check-icon-button.min.js?h=agsxb0');
+  await import('../../../dist/cdn/actions/dropdown.min.js?h=5hikoq');
+  await import('../../../dist/cdn/actions/dropdown-item.min.js?h=w6tqlu');
+  await import('../../../dist/cdn/layout/divider.min.js?h=6jfyqi');
+  await import('../../../dist/cdn/media/icon.min.js?h=sljpx6');
+  await import('../../../dist/cdn/isp/flex-options.min.js?h=le7l25');
   await customElements.whenDefined('iswc-flex-options');
 
   const eventLog = document.getElementById('event-log');
@@ -128,5 +128,41 @@
     <pre id="event-log" class="log"></pre>
   </section>
 </main>
+<script>
+/* iswc-auto-reload: do not remove — polling client agnóstico del static server */
+(function () {
+  var tries = [
+    'dist/cdn/reload-pin',
+    '../dist/cdn/reload-pin',
+    '../../dist/cdn/reload-pin',
+    '../../../dist/cdn/reload-pin',
+    '../../../../dist/cdn/reload-pin'
+  ];
+  var pinUrl = null;
+  var last = null;
+  function poll() {
+    if (!pinUrl) return;
+    fetch(pinUrl, { cache: 'no-store' })
+      .then(function (r) { return r.text(); })
+      .then(function (h) {
+        h = h.trim();
+        if (last !== null && last !== h) location.reload();
+        last = h;
+      })
+      .catch(function () {});
+  }
+  function probe(i) {
+    if (i >= tries.length) return; // sin dev-server activo, no hacer nada
+    fetch(tries[i], { cache: 'no-store' })
+      .then(function (res) {
+        if (!res.ok) throw 0;
+        pinUrl = tries[i];
+        setInterval(poll, 1500);
+      })
+      .catch(function () { probe(i + 1); });
+  }
+  probe(0);
+})();
+</script>
 </body>
 </html>

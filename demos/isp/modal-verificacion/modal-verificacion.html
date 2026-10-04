@@ -23,12 +23,12 @@
 </style>
 <script type="module">
   // Dependencias.
-  await import('../../../dist/cdn/actions/button.min.js?h=948opm');
-  await import('../../../dist/cdn/media/icon.min.js?h=mw2zs9');
-  await import('../../../dist/cdn/layout/dialog.min.js?h=mo9y61');
-  await import('../../../dist/cdn/isp/text.min.js?h=ok0flx');
-  await import('../../../dist/cdn/isp/heading.min.js?h=31m20k');
-  await import('../../../dist/cdn/isp/modal-verificacion.min.js?h=l7mi4e');
+  await import('../../../dist/cdn/actions/button.min.js?h=gi9oba');
+  await import('../../../dist/cdn/media/icon.min.js?h=sljpx6');
+  await import('../../../dist/cdn/layout/dialog.min.js?h=8y6y2z');
+  await import('../../../dist/cdn/isp/text.min.js?h=keqkyy');
+  await import('../../../dist/cdn/isp/heading.min.js?h=qi02fh');
+  await import('../../../dist/cdn/isp/modal-verificacion.min.js?h=t5mksa');
   await customElements.whenDefined('iswc-modal-verificacion');
 
   const modal = document.getElementById('verif');
@@ -92,5 +92,41 @@
 
   <pre id="event-log" class="log"></pre>
 </main>
+<script>
+/* iswc-auto-reload: do not remove — polling client agnóstico del static server */
+(function () {
+  var tries = [
+    'dist/cdn/reload-pin',
+    '../dist/cdn/reload-pin',
+    '../../dist/cdn/reload-pin',
+    '../../../dist/cdn/reload-pin',
+    '../../../../dist/cdn/reload-pin'
+  ];
+  var pinUrl = null;
+  var last = null;
+  function poll() {
+    if (!pinUrl) return;
+    fetch(pinUrl, { cache: 'no-store' })
+      .then(function (r) { return r.text(); })
+      .then(function (h) {
+        h = h.trim();
+        if (last !== null && last !== h) location.reload();
+        last = h;
+      })
+      .catch(function () {});
+  }
+  function probe(i) {
+    if (i >= tries.length) return; // sin dev-server activo, no hacer nada
+    fetch(tries[i], { cache: 'no-store' })
+      .then(function (res) {
+        if (!res.ok) throw 0;
+        pinUrl = tries[i];
+        setInterval(poll, 1500);
+      })
+      .catch(function () { probe(i + 1); });
+  }
+  probe(0);
+})();
+</script>
 </body>
 </html>

@@ -16,7 +16,7 @@
   iswc-mindmap:not(:defined) { visibility: hidden; }
 </style>
 <script type="module">
-  await import('../../../dist/cdn/diagrams/mindmap.min.js?h=1jfhxy');
+  await import('../../../dist/cdn/diagrams/mindmap.min.js?h=z15psv');
   await customElements.whenDefined('iswc-mindmap');
 
   const el = document.createElement('iswc-mindmap');
@@ -50,5 +50,41 @@
     <p>Layout radial: raíz central con ramas (pill) y hojas (subrayado). Hover resalta el subárbol.</p>
   </header>
   <main></main>
+<script>
+/* iswc-auto-reload: do not remove — polling client agnóstico del static server */
+(function () {
+  var tries = [
+    'dist/cdn/reload-pin',
+    '../dist/cdn/reload-pin',
+    '../../dist/cdn/reload-pin',
+    '../../../dist/cdn/reload-pin',
+    '../../../../dist/cdn/reload-pin'
+  ];
+  var pinUrl = null;
+  var last = null;
+  function poll() {
+    if (!pinUrl) return;
+    fetch(pinUrl, { cache: 'no-store' })
+      .then(function (r) { return r.text(); })
+      .then(function (h) {
+        h = h.trim();
+        if (last !== null && last !== h) location.reload();
+        last = h;
+      })
+      .catch(function () {});
+  }
+  function probe(i) {
+    if (i >= tries.length) return; // sin dev-server activo, no hacer nada
+    fetch(tries[i], { cache: 'no-store' })
+      .then(function (res) {
+        if (!res.ok) throw 0;
+        pinUrl = tries[i];
+        setInterval(poll, 1500);
+      })
+      .catch(function () { probe(i + 1); });
+  }
+  probe(0);
+})();
+</script>
 </body>
 </html>

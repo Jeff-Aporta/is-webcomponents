@@ -23,9 +23,9 @@
 </style>
 <script type="module">
   // El dropzone importa iswc-icon y iswc-button (también viven en dist/cdn/).
-  await import('../../../dist/cdn/actions/button.min.js?h=948opm');
-  await import('../../../dist/cdn/media/icon.min.js?h=mw2zs9');
-  await import('../../../dist/cdn/forms/dropzone.min.js?h=jgseo9');
+  await import('../../../dist/cdn/actions/button.min.js?h=gi9oba');
+  await import('../../../dist/cdn/media/icon.min.js?h=sljpx6');
+  await import('../../../dist/cdn/forms/dropzone.min.js?h=hxdm7x');
   await customElements.whenDefined('iswc-dropzone');
 
   // (1) dropzone libre (cualquier archivo)
@@ -104,5 +104,41 @@
     </section>
   </div>
 </main>
+<script>
+/* iswc-auto-reload: do not remove — polling client agnóstico del static server */
+(function () {
+  var tries = [
+    'dist/cdn/reload-pin',
+    '../dist/cdn/reload-pin',
+    '../../dist/cdn/reload-pin',
+    '../../../dist/cdn/reload-pin',
+    '../../../../dist/cdn/reload-pin'
+  ];
+  var pinUrl = null;
+  var last = null;
+  function poll() {
+    if (!pinUrl) return;
+    fetch(pinUrl, { cache: 'no-store' })
+      .then(function (r) { return r.text(); })
+      .then(function (h) {
+        h = h.trim();
+        if (last !== null && last !== h) location.reload();
+        last = h;
+      })
+      .catch(function () {});
+  }
+  function probe(i) {
+    if (i >= tries.length) return; // sin dev-server activo, no hacer nada
+    fetch(tries[i], { cache: 'no-store' })
+      .then(function (res) {
+        if (!res.ok) throw 0;
+        pinUrl = tries[i];
+        setInterval(poll, 1500);
+      })
+      .catch(function () { probe(i + 1); });
+  }
+  probe(0);
+})();
+</script>
 </body>
 </html>

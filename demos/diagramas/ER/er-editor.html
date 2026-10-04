@@ -26,8 +26,8 @@
   // Cargar solo los tags que necesitamos, desde los bundles pre-construidos en
   // dist/cdn/. Esto hace funcionar los demos con cualquier servidor estático
   // (incluido VS Code Live Server), no solo con el dev server que transpila TS.
-  await import('../../../dist/cdn/diagrams/er-diagram.min.js?h=qnw02c');
-  await import('../../../dist/cdn/diagrams/er-editor.min.js?h=k1eysa');
+  await import('../../../dist/cdn/diagrams/er-diagram.min.js?h=kpd5f4');
+  await import('../../../dist/cdn/diagrams/er-editor.min.js?h=45vqur');
 
   // Definir un payload inicial para que el editor tenga algo que mostrar.
   const initial = {
@@ -81,5 +81,41 @@
   <code data-action="download-svg" id="dl-svg">SVG</code>
 </header>
 <main></main>
+<script>
+/* iswc-auto-reload: do not remove — polling client agnóstico del static server */
+(function () {
+  var tries = [
+    'dist/cdn/reload-pin',
+    '../dist/cdn/reload-pin',
+    '../../dist/cdn/reload-pin',
+    '../../../dist/cdn/reload-pin',
+    '../../../../dist/cdn/reload-pin'
+  ];
+  var pinUrl = null;
+  var last = null;
+  function poll() {
+    if (!pinUrl) return;
+    fetch(pinUrl, { cache: 'no-store' })
+      .then(function (r) { return r.text(); })
+      .then(function (h) {
+        h = h.trim();
+        if (last !== null && last !== h) location.reload();
+        last = h;
+      })
+      .catch(function () {});
+  }
+  function probe(i) {
+    if (i >= tries.length) return; // sin dev-server activo, no hacer nada
+    fetch(tries[i], { cache: 'no-store' })
+      .then(function (res) {
+        if (!res.ok) throw 0;
+        pinUrl = tries[i];
+        setInterval(poll, 1500);
+      })
+      .catch(function () { probe(i + 1); });
+  }
+  probe(0);
+})();
+</script>
 </body>
 </html>

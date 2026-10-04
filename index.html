@@ -58,7 +58,7 @@
   <link rel="icon" href="dist/assets/favicon.svg" type="image/svg+xml">
   <script src="scripts/preview-boot.js"></script>
   <script type="module">
-    import { ISWebComponentsLoader as L } from './dist/cdn/core/loader.min.js?h=tlpbsa';
+    import { ISWebComponentsLoader as L } from './dist/cdn/core/loader.min.js?h=i15fsy';
     // Galería local: self (dist/cdn) primero; espejos CDN como fallback.
     L.configure({ preferSelf: true, mirrors: ['jsdelivr', 'pages'] });
 
@@ -106,6 +106,11 @@
 </head>
 <body>
   <header class="shell-bar" id="shellBar">
+    <a class="shell-brand" id="shellBrand" href="./" aria-label="Inicio (Home)">
+      <iswc-icon class="shell-brand__icon" icon="mdi:apps-box" aria-hidden="true"></iswc-icon>
+      <span class="shell-brand__text">ISWC</span>
+    </a>
+
     <iswc-button class="shell-menu-btn" id="navToggle" color="neutral" variant="plain" pill type="button"
             aria-expanded="false" aria-controls="navDrawer"
             aria-label="Abrir el catálogo de componentes" title="Catálogo de componentes" hidden>
@@ -142,6 +147,42 @@
              label="Componentes"></iswc-drawer>
 
   <!-- Gallery SPA: dist/gallery-app.min.js (from src/gallery/app.ts). -->
-  <script type="module" src="./dist/gallery-app.min.js?h=h90g4e"></script>
+  <script type="module" src="./dist/gallery-app.min.js?h=esikps"></script>
+<script>
+/* iswc-auto-reload: do not remove — polling client agnóstico del static server */
+(function () {
+  var tries = [
+    'dist/cdn/reload-pin',
+    '../dist/cdn/reload-pin',
+    '../../dist/cdn/reload-pin',
+    '../../../dist/cdn/reload-pin',
+    '../../../../dist/cdn/reload-pin'
+  ];
+  var pinUrl = null;
+  var last = null;
+  function poll() {
+    if (!pinUrl) return;
+    fetch(pinUrl, { cache: 'no-store' })
+      .then(function (r) { return r.text(); })
+      .then(function (h) {
+        h = h.trim();
+        if (last !== null && last !== h) location.reload();
+        last = h;
+      })
+      .catch(function () {});
+  }
+  function probe(i) {
+    if (i >= tries.length) return; // sin dev-server activo, no hacer nada
+    fetch(tries[i], { cache: 'no-store' })
+      .then(function (res) {
+        if (!res.ok) throw 0;
+        pinUrl = tries[i];
+        setInterval(poll, 1500);
+      })
+      .catch(function () { probe(i + 1); });
+  }
+  probe(0);
+})();
+</script>
 </body>
 </html>

@@ -17,7 +17,7 @@
 <script type="module">
   // Carga el bundle pre-compilado. funnel-chart.min.js importa transitivamente
   // chart.min.js + marks-funnel.min.js.
-  await import('../../../dist/cdn/data-viz/funnel-chart.min.js?h=h2sgu3');
+  await import('../../../dist/cdn/data-viz/funnel-chart.min.js?h=c1fnki');
   await customElements.whenDefined('iswc-funnel-chart');
 
   const chart = document.createElement('iswc-funnel-chart');
@@ -43,5 +43,41 @@
   <p>Wrapper de <code>&lt;iswc-chart&gt;</code> con tipo fijo <code>funnel</code>. <code>dropPct</code> entre pasos.</p>
 </header>
 <main></main>
+<script>
+/* iswc-auto-reload: do not remove — polling client agnóstico del static server */
+(function () {
+  var tries = [
+    'dist/cdn/reload-pin',
+    '../dist/cdn/reload-pin',
+    '../../dist/cdn/reload-pin',
+    '../../../dist/cdn/reload-pin',
+    '../../../../dist/cdn/reload-pin'
+  ];
+  var pinUrl = null;
+  var last = null;
+  function poll() {
+    if (!pinUrl) return;
+    fetch(pinUrl, { cache: 'no-store' })
+      .then(function (r) { return r.text(); })
+      .then(function (h) {
+        h = h.trim();
+        if (last !== null && last !== h) location.reload();
+        last = h;
+      })
+      .catch(function () {});
+  }
+  function probe(i) {
+    if (i >= tries.length) return; // sin dev-server activo, no hacer nada
+    fetch(tries[i], { cache: 'no-store' })
+      .then(function (res) {
+        if (!res.ok) throw 0;
+        pinUrl = tries[i];
+        setInterval(poll, 1500);
+      })
+      .catch(function () { probe(i + 1); });
+  }
+  probe(0);
+})();
+</script>
 </body>
 </html>

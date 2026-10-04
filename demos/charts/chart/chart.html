@@ -17,7 +17,7 @@
 <script type="module">
   // The generic <iswc-chart> accepts a type attribute or type in payload.
   // We use the attribute approach here.
-  await import('../../../dist/cdn/data-viz/chart.min.js?h=z0flml');
+  await import('../../../dist/cdn/data-viz/chart.min.js?h=85pq1h');
   await customElements.whenDefined('iswc-chart');
 
   const chart = document.createElement('iswc-chart');
@@ -43,5 +43,41 @@
   <p>Motor SVG genérico. Acepta <code>type</code> por atributo o en payload. Equivalente a los wrappers tipados.</p>
 </header>
 <main></main>
+<script>
+/* iswc-auto-reload: do not remove — polling client agnóstico del static server */
+(function () {
+  var tries = [
+    'dist/cdn/reload-pin',
+    '../dist/cdn/reload-pin',
+    '../../dist/cdn/reload-pin',
+    '../../../dist/cdn/reload-pin',
+    '../../../../dist/cdn/reload-pin'
+  ];
+  var pinUrl = null;
+  var last = null;
+  function poll() {
+    if (!pinUrl) return;
+    fetch(pinUrl, { cache: 'no-store' })
+      .then(function (r) { return r.text(); })
+      .then(function (h) {
+        h = h.trim();
+        if (last !== null && last !== h) location.reload();
+        last = h;
+      })
+      .catch(function () {});
+  }
+  function probe(i) {
+    if (i >= tries.length) return; // sin dev-server activo, no hacer nada
+    fetch(tries[i], { cache: 'no-store' })
+      .then(function (res) {
+        if (!res.ok) throw 0;
+        pinUrl = tries[i];
+        setInterval(poll, 1500);
+      })
+      .catch(function () { probe(i + 1); });
+  }
+  probe(0);
+})();
+</script>
 </body>
 </html>

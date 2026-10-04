@@ -16,7 +16,7 @@
   iswc-palette-selector:not(:defined) { visibility: hidden; }
 </style>
 <script type="module">
-  await import('../../../dist/cdn/feedback/palette-selector.min.js?h=ip3il2');
+  await import('../../../dist/cdn/feedback/palette-selector.min.js?h=nvfpjs');
 
   await customElements.whenDefined('iswc-palette-selector');
   document.documentElement.dataset.paletteSelectorReady = '1';
@@ -44,5 +44,41 @@
     palettes='[{"value":"midnight","label":"Midnight","accent":"#7c3aed","bg":"#0f0f1e","fg":"#fff"},{"value":"sand","label":"Sand","accent":"#d97706","bg":"#fdf6e3","fg":"#3a2a1a"}]'
   ></iswc-palette-selector>
 </section>
+<script>
+/* iswc-auto-reload: do not remove — polling client agnóstico del static server */
+(function () {
+  var tries = [
+    'dist/cdn/reload-pin',
+    '../dist/cdn/reload-pin',
+    '../../dist/cdn/reload-pin',
+    '../../../dist/cdn/reload-pin',
+    '../../../../dist/cdn/reload-pin'
+  ];
+  var pinUrl = null;
+  var last = null;
+  function poll() {
+    if (!pinUrl) return;
+    fetch(pinUrl, { cache: 'no-store' })
+      .then(function (r) { return r.text(); })
+      .then(function (h) {
+        h = h.trim();
+        if (last !== null && last !== h) location.reload();
+        last = h;
+      })
+      .catch(function () {});
+  }
+  function probe(i) {
+    if (i >= tries.length) return; // sin dev-server activo, no hacer nada
+    fetch(tries[i], { cache: 'no-store' })
+      .then(function (res) {
+        if (!res.ok) throw 0;
+        pinUrl = tries[i];
+        setInterval(poll, 1500);
+      })
+      .catch(function () { probe(i + 1); });
+  }
+  probe(0);
+})();
+</script>
 </body>
 </html>

@@ -39,7 +39,7 @@
 <script type="module">
   // Cargar el bundle pre-construido desde dist/cdn/. Funciona con cualquier
   // servidor estático (incluido VS Code Live Server), no solo con dev server.
-  await import('../../../dist/cdn/overlays/pdf-viewer.min.js?h=f1rso9');
+  await import('../../../dist/cdn/overlays/pdf-viewer.min.js?h=1bypmv');
   await customElements.whenDefined('iswc-pdf-viewer');
 
   // El visor usa <iframe type="application/pdf"> por defecto; los browsers
@@ -115,5 +115,41 @@
   Estado: <code>customElements.whenDefined('iswc-pdf-viewer')</code> resuelto. Atributos <code>download</code> / <code>print</code> booleanos (presencia, no valor).
   <pre id="log" hidden></pre>
 </footer>
+<script>
+/* iswc-auto-reload: do not remove — polling client agnóstico del static server */
+(function () {
+  var tries = [
+    'dist/cdn/reload-pin',
+    '../dist/cdn/reload-pin',
+    '../../dist/cdn/reload-pin',
+    '../../../dist/cdn/reload-pin',
+    '../../../../dist/cdn/reload-pin'
+  ];
+  var pinUrl = null;
+  var last = null;
+  function poll() {
+    if (!pinUrl) return;
+    fetch(pinUrl, { cache: 'no-store' })
+      .then(function (r) { return r.text(); })
+      .then(function (h) {
+        h = h.trim();
+        if (last !== null && last !== h) location.reload();
+        last = h;
+      })
+      .catch(function () {});
+  }
+  function probe(i) {
+    if (i >= tries.length) return; // sin dev-server activo, no hacer nada
+    fetch(tries[i], { cache: 'no-store' })
+      .then(function (res) {
+        if (!res.ok) throw 0;
+        pinUrl = tries[i];
+        setInterval(poll, 1500);
+      })
+      .catch(function () { probe(i + 1); });
+  }
+  probe(0);
+})();
+</script>
 </body>
 </html>

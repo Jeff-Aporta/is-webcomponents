@@ -30,7 +30,7 @@
   iswc-block-layout:not(:defined) { visibility: hidden; }
 </style>
 <script type="module">
-  await import('../../../dist/cdn/isp/block-layout.min.js?h=vqz531');
+  await import('../../../dist/cdn/isp/block-layout.min.js?h=e7nwdn');
   await customElements.whenDefined('iswc-block-layout');
 
   // Suscribirse al breakpoint del primer bloque (reflejado).
@@ -116,6 +116,42 @@
   document.getElementById('log-json')?.addEventListener('click', () => {
     console.log('toJSON:', JSON.stringify(document.getElementById('host3').toJSON(), null, 2));
   });
+</script>
+<script>
+/* iswc-auto-reload: do not remove — polling client agnóstico del static server */
+(function () {
+  var tries = [
+    'dist/cdn/reload-pin',
+    '../dist/cdn/reload-pin',
+    '../../dist/cdn/reload-pin',
+    '../../../dist/cdn/reload-pin',
+    '../../../../dist/cdn/reload-pin'
+  ];
+  var pinUrl = null;
+  var last = null;
+  function poll() {
+    if (!pinUrl) return;
+    fetch(pinUrl, { cache: 'no-store' })
+      .then(function (r) { return r.text(); })
+      .then(function (h) {
+        h = h.trim();
+        if (last !== null && last !== h) location.reload();
+        last = h;
+      })
+      .catch(function () {});
+  }
+  function probe(i) {
+    if (i >= tries.length) return; // sin dev-server activo, no hacer nada
+    fetch(tries[i], { cache: 'no-store' })
+      .then(function (res) {
+        if (!res.ok) throw 0;
+        pinUrl = tries[i];
+        setInterval(poll, 1500);
+      })
+      .catch(function () { probe(i + 1); });
+  }
+  probe(0);
+})();
 </script>
 </body>
 </html>

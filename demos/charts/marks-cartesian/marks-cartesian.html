@@ -19,11 +19,11 @@
 <script type="module">
   // marks-cartesian exports drawBarMarks, drawLineMarks, drawScatterMarks, drawBubbleMarks.
   // No hay custom element: las funciones reciben un `ctx` con plot, scales, colors, etc.
-  const lib = await import('../../../dist/cdn/charts/marks-cartesian.min.js?h=gi8xts');
+  const lib = await import('../../../dist/cdn/charts/marks-cartesian.min.js?h=bx8opi');
   const { drawBarMarks, drawLineMarks } = lib;
 
   // Construir un ctx mínimo: usamos <iswc-chart> como host para tener ejes/escala reales.
-  await import('../../../dist/cdn/data-viz/chart.min.js?h=z0flml');
+  await import('../../../dist/cdn/data-viz/chart.min.js?h=85pq1h');
   await customElements.whenDefined('iswc-chart');
 
   // Demo 1: Bar via chart (real ctx)
@@ -61,5 +61,41 @@
   <section><h2>drawBarMarks</h2><div id="bar-host" style="height:280px"></div></section>
   <section><h2>drawLineMarks</h2><div id="line-host" style="height:280px"></div></section>
 </main>
+<script>
+/* iswc-auto-reload: do not remove — polling client agnóstico del static server */
+(function () {
+  var tries = [
+    'dist/cdn/reload-pin',
+    '../dist/cdn/reload-pin',
+    '../../dist/cdn/reload-pin',
+    '../../../dist/cdn/reload-pin',
+    '../../../../dist/cdn/reload-pin'
+  ];
+  var pinUrl = null;
+  var last = null;
+  function poll() {
+    if (!pinUrl) return;
+    fetch(pinUrl, { cache: 'no-store' })
+      .then(function (r) { return r.text(); })
+      .then(function (h) {
+        h = h.trim();
+        if (last !== null && last !== h) location.reload();
+        last = h;
+      })
+      .catch(function () {});
+  }
+  function probe(i) {
+    if (i >= tries.length) return; // sin dev-server activo, no hacer nada
+    fetch(tries[i], { cache: 'no-store' })
+      .then(function (res) {
+        if (!res.ok) throw 0;
+        pinUrl = tries[i];
+        setInterval(poll, 1500);
+      })
+      .catch(function () { probe(i + 1); });
+  }
+  probe(0);
+})();
+</script>
 </body>
 </html>

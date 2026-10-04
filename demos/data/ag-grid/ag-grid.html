@@ -28,7 +28,7 @@
   cssLink.href = '../../../dist/cdn/data/ag-grid.min.css';
   document.head.appendChild(cssLink);
 
-  await import('../../../dist/cdn/data/ag-grid.min.js?h=unvxvy');
+  await import('../../../dist/cdn/data/ag-grid.min.js?h=e48wwt');
   await customElements.whenDefined('iswc-ag-grid');
 
   // ── (1) Básico: 6 columnas, 8 filas, paginado.
@@ -153,5 +153,41 @@
 <footer>
   API: <code>grid.api.setRows([...])</code>, <code>grid.api.setColumns([...])</code>, <code>grid.api.selectAll()</code>, <code>grid.api.exportCSV()</code>.
 </footer>
+<script>
+/* iswc-auto-reload: do not remove — polling client agnóstico del static server */
+(function () {
+  var tries = [
+    'dist/cdn/reload-pin',
+    '../dist/cdn/reload-pin',
+    '../../dist/cdn/reload-pin',
+    '../../../dist/cdn/reload-pin',
+    '../../../../dist/cdn/reload-pin'
+  ];
+  var pinUrl = null;
+  var last = null;
+  function poll() {
+    if (!pinUrl) return;
+    fetch(pinUrl, { cache: 'no-store' })
+      .then(function (r) { return r.text(); })
+      .then(function (h) {
+        h = h.trim();
+        if (last !== null && last !== h) location.reload();
+        last = h;
+      })
+      .catch(function () {});
+  }
+  function probe(i) {
+    if (i >= tries.length) return; // sin dev-server activo, no hacer nada
+    fetch(tries[i], { cache: 'no-store' })
+      .then(function (res) {
+        if (!res.ok) throw 0;
+        pinUrl = tries[i];
+        setInterval(poll, 1500);
+      })
+      .catch(function () { probe(i + 1); });
+  }
+  probe(0);
+})();
+</script>
 </body>
 </html>

@@ -25,7 +25,7 @@
 <script type="module">
   // Cargar solo el bundle de icon desde dist/cdn/. El icono se trae por
   // fetch desde el sistema de iconos propio (assets/icons → dist/assets/icons).
-  await import('../../../dist/cdn/media/icon.min.js?h=mw2zs9');
+  await import('../../../dist/cdn/media/icon.min.js?h=sljpx6');
   await customElements.whenDefined('iswc-icon');
 
   // Esperar a que se resuelvan algunos iconos (puede ser async)
@@ -79,5 +79,41 @@
 <footer>
   Atributos: <code>icon</code> ("grupo:nombre"), <code>name</code>+<code>library</code>, <code>label</code> (a11y), <code>src</code> (SVG custom).
 </footer>
+<script>
+/* iswc-auto-reload: do not remove — polling client agnóstico del static server */
+(function () {
+  var tries = [
+    'dist/cdn/reload-pin',
+    '../dist/cdn/reload-pin',
+    '../../dist/cdn/reload-pin',
+    '../../../dist/cdn/reload-pin',
+    '../../../../dist/cdn/reload-pin'
+  ];
+  var pinUrl = null;
+  var last = null;
+  function poll() {
+    if (!pinUrl) return;
+    fetch(pinUrl, { cache: 'no-store' })
+      .then(function (r) { return r.text(); })
+      .then(function (h) {
+        h = h.trim();
+        if (last !== null && last !== h) location.reload();
+        last = h;
+      })
+      .catch(function () {});
+  }
+  function probe(i) {
+    if (i >= tries.length) return; // sin dev-server activo, no hacer nada
+    fetch(tries[i], { cache: 'no-store' })
+      .then(function (res) {
+        if (!res.ok) throw 0;
+        pinUrl = tries[i];
+        setInterval(poll, 1500);
+      })
+      .catch(function () { probe(i + 1); });
+  }
+  probe(0);
+})();
+</script>
 </body>
 </html>
