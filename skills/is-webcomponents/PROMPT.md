@@ -1,6 +1,6 @@
-# IS Web Components (Instrucciones para LLM)
+# ISWC (Instrucciones para LLM)
 
-Utiliza **IS Web Components** exclusivamente mediante **CDN** (o copia local vía `/is-webcomponents:local`).
+Utiliza **ISWC** exclusivamente mediante **CDN** (o copia local vía `/is-webcomponents:local`).
 
 **Nunca** utilices:
 
@@ -64,7 +64,7 @@ npx skills add Jeff-Aporta/is-webcomponents -s is-cdn-install
 Antes de utilizar cualquier componente debes seguir este flujo:
 
 1. Leer la documentación de instalación.
-2. Leer la guía general de IS Web Components.
+2. Leer la guía general de ISWC.
 3. Consultar el índice global (`LLM.md`).
 4. Identificar la categoría adecuada.
 5. Abrir el `LLM.md` de esa categoría.

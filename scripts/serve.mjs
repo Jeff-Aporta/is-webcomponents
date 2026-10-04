@@ -98,5 +98,5 @@ ${e?.message ?? e}`);
   });
   createReadStream(file).pipe(res);
 }).listen(PORT, () => {
-  console.log(`IS Web Components en http://localhost:${PORT}/ (sin caché, raíz ${ROOT})`);
+  console.log(`ISWC en http://localhost:${PORT}/ (sin caché, raíz ${ROOT})`);
 });

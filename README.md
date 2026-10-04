@@ -1,4 +1,4 @@
-# IS Web Components
+# ISWC
 
 Galería de [Web Components](https://developer.mozilla.org/en-US/docs/Web/API/Web_components) vanilla de InSoft (`iswc-*`).
 
@@ -43,7 +43,7 @@ Artefactos en `dist/cdn/` (`{name}.min.js` + `{name}.min.css` + `is-base.min.css
 No hay publicación npm aún: el kit se consume por **CDN jsDelivr**. En cada preview, `<iswc-cdn-snippet>` muestra los enlaces y un prompt CDN-first.
 
 ```
-Usa el kit IS Web Components solo por CDN (jsDelivr), sin npm ni npx.
+Usa el kit ISWC solo por CDN (jsDelivr), sin npm ni npx.
 Bootstrap: `loader.min.js` + `L.load(tags de la vista)`. Sin `all.min.js` ni bundles de categoría.
 Reutiliza tags iswc-* existentes; no reinventes botones, dialogs, tablas, charts, toasts ni iconos.
 Antes de inventar API: lee [`specs/componentes.md`](https://github.com/Jeff-Aporta/is-webcomponents/blob/main/specs/componentes.md) (índice global) y el `.md` del módulo.

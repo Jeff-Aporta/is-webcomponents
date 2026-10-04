@@ -354,7 +354,7 @@ for (const [tag, cfg] of Object.entries(CHILDREN)) {
   <script src="../../scripts/preview-boot.js"></script>
   <script type="module" src="../../components/layout/demo.js"></script>
   <meta name="viewport" content="width=device-width, initial-scale=1" />
-  <title>${tag} · IS Web Components</title>
+  <title>${tag} · ISWC</title>
   <meta name="description" content="Documentación y demos de ${tag} de InSoft." />
 
   <link rel="stylesheet" href="../../src/styles/is-base.css" />

@@ -17,9 +17,9 @@ export const SKILL_DOCS: readonly SkillDoc[] = [
 
 /** Fallback corto si no se puede fetch de PROMPT.md. */
 export const LLM_PROMPT_FALLBACK: string = [
-  '# IS Web Components (Instrucciones para LLM)',
+  '# ISWC (Instrucciones para LLM)',
   '',
-  'Utiliza **IS Web Components** exclusivamente mediante **CDN** (o `/is-webcomponents:local`).',
+  'Utiliza **ISWC** exclusivamente mediante **CDN** (o `/is-webcomponents:local`).',
   'Nunca npm, npx, Bun, pnpm, Yarn, Vite, Webpack ni gestores de paquetes del kit.',
   'Reutiliza tags `is-*`. No inventes API. Lee skills + LLM.md de categoría + MD del módulo.',
   'Herramientas: `/is-webcomponents:build` · `/is-webcomponents:migrate` · `/is-webcomponents:local`.',

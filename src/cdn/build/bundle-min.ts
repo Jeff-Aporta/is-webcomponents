@@ -35,7 +35,7 @@ export function bundleMinCss(entry: string, outfile: string) {
 }
 
 export function docsBanner(lines: string[]): string {
-  return ['/*!', ' * IS Web Components - docs (LLM)', ...lines.map((l) => ` * ${l}`), ' */'].join('\n');
+  return ['/*!', ' * ISWC - docs (LLM)', ...lines.map((l) => ` * ${l}`), ' */'].join('\n');
 }
 
 /** Defines que el loader espera. Mismo nombre en todos los proyectos is-*. */

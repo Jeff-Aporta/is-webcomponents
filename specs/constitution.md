@@ -1,4 +1,4 @@
-﻿# Constitution — IS Web Components
+# Constitution — ISWC
 
 Invariantes del kit. Un cambio aquí es decisión de producto, no de una sesión.
 

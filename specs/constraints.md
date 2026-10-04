@@ -1,4 +1,4 @@
-﻿# Constraints — IS Web Components
+# Constraints — ISWC
 
 Prohibiciones y reglas transversales ya pagadas. Detalle por dominio: [`componentes.md`](componentes.md), [`cdn.md`](cdn.md), [`iconos.md`](iconos.md). Historia de cada error: [`lessons.md`](lessons.md).
 

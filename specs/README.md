@@ -1,4 +1,4 @@
-# Specs IS Web Components (SDD)
+# Specs ISWC (SDD)
 
 Contrato vigente del kit. **No sustituye** [`constraints.md`](constraints.md) / [`lessons.md`](lessons.md): el spec dice qué debe pasar; el diario dice qué pasó y por qué.
 

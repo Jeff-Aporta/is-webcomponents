@@ -83,7 +83,7 @@ const buildDemoHtml = (variant: string): string => {
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1" />
-  <title>IS Web Components · demo CDN</title>
+  <title>ISWC · demo CDN</title>
   <link rel="stylesheet" href="${CDN}/core/is-base.min.css">
   <style>
     :root { color-scheme: dark; }
@@ -146,7 +146,7 @@ const buildDemoHtml = (variant: string): string => {
 </head>
 <body>
   <header>
-    <h1>IS Web Components — demo por CDN</h1>
+    <h1>ISWC — demo por CDN</h1>
     <small>Variante: ${variant === 'bundle' ? 'import map' : 'JS + CSS por componente'}</small>
   </header>
 

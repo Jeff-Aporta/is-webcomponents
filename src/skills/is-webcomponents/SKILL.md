@@ -8,7 +8,7 @@ description: >-
   migraciones desde React/MUI/Svelte, o cuando se pueda reinventar UI del catálogo.
 ---
 
-# IS Web Components — stack obligatorio
+# ISWC — stack obligatorio
 
 ## Regla absoluta (léela primero)
 

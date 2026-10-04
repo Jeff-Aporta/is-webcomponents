@@ -1,7 +1,7 @@
-# iswc-audit · motor auditor del kit is-webcomponents
+# iswc-audit · motor auditor del kit ISWC
 
 Plugin auditor disciplinado, especializado en testear y probar las
-**kit is-webcomponents** (galería de Web Components basada en JSON). Recorre
+**kit ISWC** (galería de Web Components basada en JSON). Recorre
 **todos** los componentes del catálogo, ejecuta pruebas de
 **consistencia JSON ↔ componente**, valida **estructuras complejas** y
 verifica con **Stagehand** que cada demo se monta y reacciona en un

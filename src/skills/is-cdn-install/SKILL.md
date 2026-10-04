@@ -1,14 +1,14 @@
 ---
 name: is-cdn-install
 description: >-
-  Instala y consume el kit IS Web Components solo por CDN (jsDelivr / GitHub Pages),
+  Instala y consume el kit ISWC solo por CDN (jsDelivr / GitHub Pages),
   sin npm ni npx. Cubre bootstrap (is-base + palettes + .min.js), espejos, pin por
   SHA, boot con fallback, y lectura de docs vía iswc-cdn-snippet. Usar cuando el
   usuario pida instalar is-*, enlaces CDN, loader.min.js, L.load,
   mirrors, o copiar el panel Consumo por CDN.
 ---
 
-# IS Web Components — instalación por CDN
+# ISWC — instalación por CDN
 
 ## Regla absoluta
 

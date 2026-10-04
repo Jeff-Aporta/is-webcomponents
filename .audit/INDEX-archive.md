@@ -1,4 +1,4 @@
-# Índice de IS Web Components
+# Índice de ISWC
 
 Mapa de toda la documentación del repositorio. Punto de entrada único para agentes y humanos que quieren entender cómo funciona el kit.
 

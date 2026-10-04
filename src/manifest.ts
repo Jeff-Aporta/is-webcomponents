@@ -1,5 +1,5 @@
 /**
- * Manifest del kit is-webcomponents.
+ * Manifest del kit ISWC.
  *
  * Cada entrada describe un Web Component publicado: su `tag`, su categoría
  * (usada para folderizar el nav y el bundle CDN) y los recursos opcionales
