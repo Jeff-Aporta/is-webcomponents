@@ -372,15 +372,7 @@ function asHTMLElement(target: EventTarget | null): HTMLElement | null {
   return target instanceof HTMLElement ? target : null;
 }
 
-export class IswcAgGrid extends ElementBase {
-    /** Personalización por atributo (ver `core/attrs.ts`). */
-    static styleAttrs = {
-    'header-height': '--iswc-grid-header-h',
-    'header-bg': { prop: '--iswc-grid-header-bg', onlyColorValues: true },
-    'stripe-color': { prop: '--iswc-grid-stripe', onlyColorValues: true },
-    'row-hover': { prop: '--iswc-grid-row-hover', onlyColorValues: true },
-    'selected-color': { prop: '--iswc-grid-selected', onlyColorValues: true },
-    };
+export class IswcAgGrid extends ElementBase {
 
   static TEMPLATE = TEMPLATE;
   static get observedAttributes(): string[] {
@@ -391,7 +383,6 @@ export class IswcAgGrid extends ElementBase {
       'quick-filter', 'group-by',
       'remember-state', 'storage-key',
       'toolbar', 'theme',
-      ...IswcAgGrid.styleAttrNames,
     ];
   }
 

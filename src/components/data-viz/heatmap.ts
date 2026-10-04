@@ -48,12 +48,7 @@ type HeatmapCfg = {
     return [0.18, 0.36, 0.55, 0.75, 0.95].map((a: number) => `color-mix(in srgb, ${hex} ${Math.round(a * 100)}%, var(--iswc-bg-elev))`);
   }
 
-  class IswcHeatmap extends withStyleAttrs(HTMLElement) {
-    /** Personalización por atributo (ver `core/attrs.ts`). */
-    static styleAttrs = {
-    'text-color': { prop: '--iswc-heatmap-text', onlyColorValues: true },
-    'grid-color': { prop: '--iswc-heatmap-grid-color', onlyColorValues: true },
-    };
+  class IswcHeatmap extends withStyleAttrs(HTMLElement) {
 
     static get observedAttributes(): string[] { return [...OBSERVED, 'text-color', 'grid-color']; }
 

@@ -47,12 +47,7 @@ type TileCfg = {
 (() => {
   const OBSERVED = ['viewbox', 'zoom', 'engine', 'interactive'];
 
-  class IswcMaps extends withStyleAttrs(HTMLElement) {
-    /** Personalización por atributo (ver `core/attrs.ts`). */
-    static styleAttrs = {
-    'grid-color': { prop: '--iswc-maps-grid-color', onlyColorValues: true },
-    'meridian-color': { prop: '--iswc-maps-meridian-color', onlyColorValues: true },
-    };
+  class IswcMaps extends withStyleAttrs(HTMLElement) {
 
     static get observedAttributes(): string[] { return [...OBSERVED, 'grid-color', 'meridian-color']; }
     #mounted = false;

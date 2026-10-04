@@ -40,11 +40,7 @@ import { ElementBase } from '../../core/element-base.js';
 
   const OBSERVED = ['value', 'min', 'max', 'label', 'unit', 'thickness', 'color', 'half', 'format', 'show-value'];
 
-  class IswcGauge extends ElementBase {
-    /** Personalización por atributo (ver `core/attrs.ts`). */
-    static styleAttrs = {
-    'track-color': { prop: '--iswc-gauge-track-color', onlyColorValues: true },
-    };
+  class IswcGauge extends ElementBase {
 
     static get observedAttributes(): string[] { return [...OBSERVED, 'track-color']; }
     #svg!: HTMLElement;

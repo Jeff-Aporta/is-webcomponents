@@ -355,16 +355,7 @@ import '../forms/checkbox.js';
   /** Argumento del `getActions` que acepta el kit (forma más explícita). */
   type ActionParams = { row: Row; id: CellValue; colDef: ColumnDef };
 
-  class IswcDataGrid extends withStyleAttrs(HTMLElement) {
-    /** Personalización por atributo (ver `core/attrs.ts`). */
-    static styleAttrs = {
-      radius: '--iswc-grid-radius',
-      accent: { prop: '--iswc-grid-accent', onlyColorValues: true },
-      'header-bg': { prop: '--iswc-grid-header-bg', onlyColorValues: true },
-      'row-hover': { prop: '--iswc-grid-row-hover', onlyColorValues: true },
-      height: '--iswc-grid-height',
-      padding: '--iswc-grid-pad',
-    };
+  class IswcDataGrid extends withStyleAttrs(HTMLElement) {
 
     static get observedAttributes(): string[] {
       return [...OBSERVED, 'radius', 'accent', 'header-bg', 'row-hover', 'height', 'padding'];

@@ -85,19 +85,10 @@ function isActionable(n: EventTarget | null): n is HTMLElement {
   return n instanceof HTMLElement && !!n.dataset.act;
 }
 
-class IswcLightbox extends withStyleAttrs(HTMLElement) {
-    /** Personalización por atributo (ver `core/attrs.ts`). */
-    static styleAttrs = {
-    bg: { prop: '--iswc-lightbox-bg', onlyColorValues: true },
-    'text-color': { prop: '--iswc-lightbox-text', onlyColorValues: true },
-    'border-color': { prop: '--iswc-lightbox-border', onlyColorValues: true },
-    'backdrop-color': { prop: '--iswc-lightbox-backdrop', onlyColorValues: true },
-    'backdrop-blur': '--iswc-lightbox-backdrop-blur',
-    };
+class IswcLightbox extends withStyleAttrs(HTMLElement) {
 
   static get observedAttributes(): string[] {
-    return ['open', 'variant', 'zoomable', 'close-on-backdrop', 'toolbar', 'no-default-actions',
-      ...IswcLightbox.styleAttrNames];
+    return ['open', 'variant', 'zoomable', 'close-on-backdrop', 'toolbar', 'no-default-actions'];
   }
 
   #dialog!: HTMLDialogElement;
