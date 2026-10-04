@@ -155,5 +155,63 @@
         }
       ]
     }
-  ]
+  ],
+  "ficha": {
+    "sections": {
+      "anatomia": {
+        "content": "Reproductor de playlist con look YouTube: cabecera con título y canal,\r\n          barra inferior overlay con play / seek / vol, lista colapsable debajo.\r\n          Las herramientas adicionales (prev / next / autoplay) se proyectan\r\n          automáticamente en los slots <code class=\"code\">tools-left</code>\r\n          y <code class=\"code\">tools-right</code> del reproductor."
+      },
+      "apiJs": {
+        "table": [
+          {
+            "metodo": "<code>placement</code>",
+            "desc": "<code>left</code> | <code>right</code> | <code>bottom</code> (default); <code>top</code> queda como <code>bottom</code>."
+          },
+          {
+            "metodo": "<code>autoplay-next</code>",
+            "desc": "boolean — al terminar, reproduce el siguiente (en el último se detiene)"
+          },
+          {
+            "metodo": "<code>accordion</code>",
+            "desc": "<code>auto</code> (default) | <code>open</code> | <code>closed</code>"
+          },
+          {
+            "metodo": "<code>channel</code>",
+            "desc": "caption global (estilo canal YouTube) bajo el título del clip activo"
+          },
+          {
+            "metodo": "<code>no-default-tools</code>",
+            "desc": "desactiva los botones prev / next / autoplay por defecto"
+          },
+          {
+            "metodo": "<code>goTo(i)</code> <code>next()</code> <code>previous()</code>",
+            "desc": "navegación (también botones en el player)"
+          },
+          {
+            "metodo": "<code>iswc-video-change</code>",
+            "desc": "<code>{ previousIndex, currentIndex, video }</code>"
+          },
+          {
+            "metodo": "slots",
+            "desc": "<code>tools-left</code>, <code>tools-right</code> (botones en la barra del reproductor) · <code>config</code> (esquina sup. derecha de la cabecera)"
+          },
+          {
+            "metodo": "parts",
+            "desc": "<code>video-playlist</code> <code>header</code> <code>title</code> <code>channel</code> <code>player-toolbar</code> <code>tools-left</code> <code>tools-right</code> <code>playlist</code> <code>playlist-item</code> <code>playlist-thumbnail</code>"
+          }
+        ]
+      },
+      "ejemplos": {
+        "content": "```html\n<iswc-video-playlist autoplay-next placement=\"bottom\">\n  <iswc-video title=\"Big Buck Bunny\" channel=\"Blender\" poster=\"…\" src=\"01.mp4\"></iswc-video>\n  <iswc-video title=\"Sintel\" poster=\"…\" src=\"02.mp4\"></iswc-video>\n  <iswc-video title=\"Elephants Dream\" poster=\"…\" src=\"03.mp4\"></iswc-video>\n</iswc-video-playlist>\n```"
+      }
+    },
+    "exclude": [
+      "atributos",
+      "eventos",
+      "parts",
+      "props",
+      "slots",
+      "states"
+    ]
+  }
 }

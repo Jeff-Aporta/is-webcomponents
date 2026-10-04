@@ -34,5 +34,24 @@
         }
       ]
     }
-  ]
+  ],
+  "ficha": {
+    "sections": {
+      "anatomia": {
+        "content": "Dictado (`SpeechRecognition`) y lectura (`SpeechSynthesis`) con `lang` del documento."
+      },
+      "ejemplos": {
+        "content": "```html\n<iswc-speech lang=\"es-ES\" text=\"Hola, esto es texto a voz.\"></iswc-speech>\n```"
+      }
+    },
+    "exclude": [
+      "apiJs",
+      "atributos",
+      "eventos",
+      "parts",
+      "props",
+      "slots",
+      "states"
+    ]
+  }
 }
