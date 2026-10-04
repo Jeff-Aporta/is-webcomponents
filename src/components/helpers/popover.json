@@ -16,42 +16,42 @@
           "kind": "demo",
           "html": "<iswc-button id=\"pop1\">Show popover</iswc-button>\r\n          <iswc-popover for=\"pop1\">\r\n            <div class=\"stack\">\r\n              <p style=\"margin:0\">This popover contains interactive content.</p>\r\n              <iswc-button color=\"brand\" data-popover=\"close\">Take Action</iswc-button>\r\n            </div>\r\n          </iswc-popover>",
           "controls": [
-              {
-                "control": "select",
-                "prop": "attr:placement",
-                "label": "placement",
-                "options": [
-                  "top",
-                  "bottom",
-                  "left",
-                  "right",
-                  "bottom-end"
-                ]
-              },
-              {
-                "control": "boolean",
-                "prop": "attr:flip",
-                "label": "flip"
-              },
-              {
-                "control": "boolean",
-                "prop": "attr:shift",
-                "label": "shift"
-              },
-              {
-                "control": "text",
-                "prop": "attr:boundary",
-                "label": "boundary"
-              },
-              {
-                "control": "select",
-                "prop": "attr:auto-size",
-                "label": "auto-size",
-                "options": [
-                  "both",
-                  "vertical"
-                ]
-              }
+            {
+              "control": "select",
+              "prop": "attr:placement",
+              "label": "placement",
+              "options": [
+                "top",
+                "bottom",
+                "left",
+                "right",
+                "bottom-end"
+              ]
+            },
+            {
+              "control": "boolean",
+              "prop": "attr:flip",
+              "label": "flip"
+            },
+            {
+              "control": "boolean",
+              "prop": "attr:shift",
+              "label": "shift"
+            },
+            {
+              "control": "text",
+              "prop": "attr:boundary",
+              "label": "boundary"
+            },
+            {
+              "control": "select",
+              "prop": "attr:auto-size",
+              "label": "auto-size",
+              "options": [
+                "both",
+                "vertical"
+              ]
+            }
           ],
           "equivNote": "Base de overlays anclados: click o API; cierre Escape/fuera.",
           "equivHtml": "<!-- ver diagrama de ramas -->",
@@ -228,5 +228,59 @@
         }
       ]
     }
-  ]
+  ],
+  "ficha": {
+    "sections": {
+      "anatomia": {
+        "content": "Panel flotante con contenido interactivo. Ancla con <code class=\"code\">for</code>.\r\n          Cierra con Escape, click fuera o <code class=\"code\">data-popover=\"close\"</code>.\r\n          El posicionamiento (flip, shift, auto-size, arrow) lo hace un\r\n          <code class=\"code\">&lt;iswc-floating&gt;</code> interno — el wrapper sólo\r\n          aporta ancla declarativa, ciclo de vida y accesibilidad."
+      },
+      "apiJs": {
+        "table": [
+          {
+            "metodo": "<code>for</code> <code>open</code> <code>anchor</code>",
+            "desc": "ancla + estado (anchor acepta Element, string id o VirtualElement)"
+          },
+          {
+            "metodo": "<code>placement</code> <code>distance</code> <code>skidding</code>",
+            "desc": "posicionamiento"
+          },
+          {
+            "metodo": "<code>flip</code> <code>shift</code> <code>arrow</code>",
+            "desc": "boolean — modifican el cálculo de coordenadas"
+          },
+          {
+            "metodo": "<code>strategy</code> <code>boundary</code>",
+            "desc": "<code>absolute|fixed</code> · <code>viewport|scroll</code>"
+          },
+          {
+            "metodo": "<code>auto-size</code> <code>*-padding</code> <code>flip-fallback-*</code>",
+            "desc": "recorte y fallbacks"
+          },
+          {
+            "metodo": "<code>without-arrow</code>",
+            "desc": "oculta la flecha"
+          },
+          {
+            "metodo": "<code>show()</code> <code>hide()</code> <code>reposition()</code>",
+            "desc": "métodos imperativos"
+          },
+          {
+            "metodo": "events",
+            "desc": "iswc-show / iswc-hide (cancelables) + after-* · iswc-reposition { placement, x, y }"
+          }
+        ]
+      },
+      "ejemplos": {
+        "content": "```html\n<iswc-button id=\"pop1\">Show popover</iswc-button>\n<iswc-popover for=\"pop1\">\n  …contenido…\n  <iswc-button data-popover=\"close\">Dismiss</iswc-button>\n</iswc-popover>\n```"
+      }
+    },
+    "exclude": [
+      "atributos",
+      "eventos",
+      "parts",
+      "props",
+      "slots",
+      "states"
+    ]
+  }
 }

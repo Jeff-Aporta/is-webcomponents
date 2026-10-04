@@ -186,5 +186,47 @@
         }
       ]
     }
-  ]
+  ],
+  "ficha": {
+    "sections": {
+      "anatomia": {
+        "content": "Tamaños de archivo legibles. <code class=\"code\">value</code> se interpreta según <code class=\"code\">unit</code> (default byte)."
+      },
+      "atributos": {
+        "table": [
+          {
+            "name": "<code>value</code>",
+            "default": "—",
+            "desc": "número (bytes o según <code>unit</code>)"
+          },
+          {
+            "name": "<code>unit</code>",
+            "default": "byte",
+            "desc": "byte · kilobyte · megabyte · gigabyte · terabyte · petabyte"
+          },
+          {
+            "name": "<code>display</code>",
+            "default": "short",
+            "desc": "short · long"
+          },
+          {
+            "name": "<code>locale</code>",
+            "default": "lang del documento",
+            "desc": "BCP 47 — cambia separador decimal y nombre de unidad (p. ej. en <code>1.5 MB</code> vs es <code>1,5 MB</code> vs fr <code>1,5 Mo</code>)"
+          }
+        ]
+      },
+      "ejemplos": {
+        "content": "```html\n<p>Demo: <iswc-format-bytes value=\"1536000\"></iswc-format-bytes></p>\n```"
+      }
+    },
+    "exclude": [
+      "apiJs",
+      "eventos",
+      "parts",
+      "props",
+      "slots",
+      "states"
+    ]
+  }
 }

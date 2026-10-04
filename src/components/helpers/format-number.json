@@ -208,5 +208,59 @@
         }
       ]
     }
-  ]
+  ],
+  "ficha": {
+    "sections": {
+      "anatomia": {
+        "content": "Números con <code class=\"code\">Intl.NumberFormat</code>. Locale = <code class=\"code\">lang</code> del documento."
+      },
+      "atributos": {
+        "table": [
+          {
+            "name": "<code>value</code>",
+            "desc": "número"
+          },
+          {
+            "name": "<code>type</code>",
+            "desc": "decimal · currency · percent · unit"
+          },
+          {
+            "name": "<code>currency</code>",
+            "desc": "ISO 4217 (útil con type=currency)"
+          },
+          {
+            "name": "<code>minimum-fraction-digits</code>",
+            "desc": "mínimo de decimales"
+          },
+          {
+            "name": "<code>maximum-fraction-digits</code>",
+            "desc": "máximo de decimales"
+          },
+          {
+            "name": "<code>minimum-integer-digits</code>",
+            "desc": "ceros a la izquierda vía Intl (1–21)"
+          },
+          {
+            "name": "<code>pad-start</code>",
+            "desc": "carácter de relleno (default <code>0</code> si hay pad-length)"
+          },
+          {
+            "name": "<code>pad-length</code>",
+            "desc": "longitud mínima del texto formateado (String.padStart)"
+          }
+        ]
+      },
+      "ejemplos": {
+        "content": "```html\n<p>Precio: <iswc-format-number value=\"1234567.89\" type=\"currency\" currency=\"COP\"></iswc-format-number></p>\n```"
+      }
+    },
+    "exclude": [
+      "apiJs",
+      "eventos",
+      "parts",
+      "props",
+      "slots",
+      "states"
+    ]
+  }
 }

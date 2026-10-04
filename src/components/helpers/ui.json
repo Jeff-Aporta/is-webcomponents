@@ -114,5 +114,59 @@
         }
       ]
     }
-  ]
+  ],
+  "ficha": {
+    "sections": {
+      "anatomia": {
+        "content": "Utilidad de render para apps consumidoras. Tras cargar el CDN queda en\r\n          <code class=\"code\">globalThis.IswcUi</code> (alias <code class=\"code\">Ui</code>).\r\n          No reinventes botones ni tablas: monta <code class=\"code\">is-*</code> con\r\n          <code class=\"code\">html</code> + CSS hermano vía <code class=\"code\">adoptCss</code>."
+      },
+      "apiJs": {
+        "table": [
+          {
+            "metodo": "<code>html</code>",
+            "desc": "Plantilla → fragment"
+          },
+          {
+            "metodo": "<code>adoptCss</code>",
+            "desc": "CSS hermano en ShadowRoot (preferido)"
+          },
+          {
+            "metodo": "<code>css</code>",
+            "desc": "CSS constructable (prototipos)"
+          },
+          {
+            "metodo": "<code>define</code>",
+            "desc": "customElements.define idempotente"
+          },
+          {
+            "metodo": "<code>el</code> / <code>esc</code> / <code>raw</code>",
+            "desc": "createElement / escape / HTML crudo"
+          },
+          {
+            "metodo": "<code>crearComponente</code>",
+            "desc": "Fábrica shadow + props → render"
+          },
+          {
+            "metodo": "<code>jsonScript</code>",
+            "desc": "Config JSON para is-*"
+          },
+          {
+            "metodo": "<code>fecha</code> / <code>rec</code>",
+            "desc": "Fecha es-CO / coerce record"
+          }
+        ]
+      },
+      "ejemplos": {
+        "content": "```html\n<span class=\"demo-label\">// Disponible tras all.min.js</span>\r\n          <div class=\"ui-stage\" id=\"introStage\">\r\n            <div class=\"ui-stage__meta\">Cargando IswcUi…</div>\r\n          </div>\n```"
+      }
+    },
+    "exclude": [
+      "atributos",
+      "eventos",
+      "parts",
+      "props",
+      "slots",
+      "states"
+    ]
+  }
 }

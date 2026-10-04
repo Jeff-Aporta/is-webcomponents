@@ -149,5 +149,24 @@
         }
       ]
     }
-  ]
+  ],
+  "ficha": {
+    "sections": {
+      "anatomia": {
+        "content": "MD + HTML + is-*. Inline brand-mono sin fondo. Bloques theme completo. Fences iswc-*. Lazy ensure."
+      },
+      "ejemplos": {
+        "content": "```markdown\n```iswc-flowchart\n{ \"flowchart\": { \"nodes\": [...], \"edges\": [...] } }\n```\n\n```js\nconst x = 1;\n```\n-> theme completo\n\n`inline` -> brand-mono sin fondo\n```"
+      }
+    },
+    "exclude": [
+      "apiJs",
+      "atributos",
+      "eventos",
+      "parts",
+      "props",
+      "slots",
+      "states"
+    ]
+  }
 }

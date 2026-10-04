@@ -45,5 +45,24 @@
         }
       ]
     }
-  ]
+  ],
+  "ficha": {
+    "sections": {
+      "anatomia": {
+        "content": "Lienzo que transfiere el control a OffscreenCanvas (y opcionalmente a un Worker)."
+      },
+      "ejemplos": {
+        "content": "```html\n<iswc-offscreen-canvas width=\"320\" height=\"120\"></iswc-offscreen-canvas>\n```"
+      }
+    },
+    "exclude": [
+      "apiJs",
+      "atributos",
+      "eventos",
+      "parts",
+      "props",
+      "slots",
+      "states"
+    ]
+  }
 }

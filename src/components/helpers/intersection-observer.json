@@ -121,5 +121,53 @@
         }
       ]
     }
-  ]
+  ],
+  "ficha": {
+    "sections": {
+      "anatomia": {
+        "content": "Responde a una pregunta simple: <strong>¿este elemento está (parcialmente) visible\r\n          dentro de un contenedor?</strong> Si sí, aplica una clase y/o dispara el evento\r\n          <code class=\"code\">iswc-intersect</code>."
+      },
+      "atributos": {
+        "table": [
+          {
+            "name": "<code>root</code>",
+            "que hace": "Selector del contenedor con scroll. Sin él → viewport de la página."
+          },
+          {
+            "name": "<code>root-margin</code>",
+            "que hace": "Expande/encoge el área (ej. <code>0px 0px -20% 0px</code>)."
+          },
+          {
+            "name": "<code>threshold</code>",
+            "que hace": "Fracción visible 0–1 para considerar “intersecta”."
+          },
+          {
+            "name": "<code>intersect-class</code>",
+            "que hace": "Clase CSS que se pone/quita en el hijo."
+          },
+          {
+            "name": "<code>once</code>",
+            "que hace": "Tras la 1ª entrada, deja de observar ese hijo."
+          },
+          {
+            "name": "<code>disabled</code>",
+            "que hace": "Apaga el observer."
+          },
+          {
+            "name": "<code>iswc-intersect</code>",
+            "que hace": "Evento. <code>detail.entry</code> es el <code>IntersectionObserverEntry</code>."
+          }
+        ]
+      }
+    },
+    "exclude": [
+      "apiJs",
+      "ejemplos",
+      "eventos",
+      "parts",
+      "props",
+      "slots",
+      "states"
+    ]
+  }
 }

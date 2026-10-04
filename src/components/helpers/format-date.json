@@ -205,5 +205,51 @@
         }
       ]
     }
-  ]
+  ],
+  "ficha": {
+    "sections": {
+      "anatomia": {
+        "content": "Formatea fechas con <code class=\"code\">Intl.DateTimeFormat</code>. En esta página todos los ejemplos usan la <strong>hora actual</strong> y se actualizan cada 1&nbsp;s."
+      },
+      "atributos": {
+        "table": [
+          {
+            "name": "<code>date</code>",
+            "default": "ISO, <code>YYYY-MM-DD</code> o timestamp ms — en este preview se reescribe cada 1&nbsp;s"
+          },
+          {
+            "name": "<code>locale</code>",
+            "default": "BCP 47 · fallback <code>document.documentElement.lang</code>"
+          },
+          {
+            "name": "<code>hour-format</code>",
+            "default": "auto · 12 · 24"
+          },
+          {
+            "name": "<code>weekday</code> / <code>era</code> / <code>year</code> / <code>month</code> / <code>day</code>",
+            "default": "valores Intl"
+          },
+          {
+            "name": "<code>hour</code> / <code>minute</code> / <code>second</code>",
+            "default": "valores Intl"
+          },
+          {
+            "name": "<code>time-zone</code> / <code>time-zone-name</code>",
+            "default": "IANA + estilo de nombre"
+          }
+        ]
+      },
+      "ejemplos": {
+        "content": "```html\n<span class=\"demo-label\">ahora · en vivo</span>\n          <p style=\"margin:0;font-size:1.25rem;font-weight:600\">\n            <iswc-format-date hour=\"numeric\" minute=\"numeric\" second=\"numeric\" year=\"numeric\" month=\"short\" day=\"numeric\"></iswc-format-date>\n          </p>\n```"
+      }
+    },
+    "exclude": [
+      "apiJs",
+      "eventos",
+      "parts",
+      "props",
+      "slots",
+      "states"
+    ]
+  }
 }

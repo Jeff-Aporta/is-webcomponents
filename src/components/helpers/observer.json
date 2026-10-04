@@ -180,5 +180,22 @@
         }
       ]
     }
-  ]
+  ],
+  "ficha": {
+    "sections": {
+      "anatomia": {
+        "content": "Un solo componente para <code class=\"code\">IntersectionObserver</code>,\n          <code class=\"code\">MutationObserver</code> y <code class=\"code\">ResizeObserver</code>\n          vía <code class=\"code\">type</code>. Los alias históricos\n          (<code class=\"code\">&lt;iswc-intersection-observer&gt;</code>, etc.) siguen válidos."
+      }
+    },
+    "exclude": [
+      "apiJs",
+      "atributos",
+      "ejemplos",
+      "eventos",
+      "parts",
+      "props",
+      "slots",
+      "states"
+    ]
+  }
 }
