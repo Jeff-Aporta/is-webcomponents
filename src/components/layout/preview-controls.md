@@ -46,6 +46,35 @@ los tags `iswc-*` directamente.
 - Grid: `repeat(auto-fit, minmax(min(100%, 300px), 1fr))`, gap `0.85rem 1.1rem`.
 - Cada fila: columna (etiqueta + control).
 
+## Pestañas (Phase W20)
+
+El panel tiene 2 pestañas:
+
+1. **Attrs** (default): la grilla de inputs/selects/switches del `spec`.
+2. **Code**: la **anatomía** del componente target (Shadow DOM template),
+   read-only, renderizada en un `<pre class="code">` que `scripts/highlight-pre.js`
+   pinta con CodeMirror.
+
+### Detección automática de la anatomía
+
+Cuando el panel recibe `tag="<iswc-x>"` (lo hace el `<iswc-playground>` o
+`montarPanel` automáticamente), intenta:
+
+1. Leer el `__TEMPLATE` estático del CE (lo exponen `<iswc-dialog>`,
+   `<iswc-drawer>` y los modales en general).
+2. Si no, instancia un `<iswc-x>` hidden (`position: absolute; left: -99999px`)
+   y serializa su `shadowRoot.innerHTML`.
+
+El resultado es la **estructura interna del Shadow DOM** del componente target
+(markup con `::part` incluidos), útil para entender cómo está construido sin
+abrir DevTools.
+
+### Atributo `tag`
+
+| Atributo | Tipo | Notas |
+| --- | --- | --- |
+| `tag` | string | Tag del componente target (`iswc-button`, `iswc-card`, …). Activa la pestaña Code. Lo inyecta el playground o `montarPanel` automáticamente; rara vez lo escribirás a mano. |
+
 
 ## Eventos
 

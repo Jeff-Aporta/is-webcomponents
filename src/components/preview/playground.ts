@@ -133,6 +133,12 @@ import { definePreviewControls } from '../layout/preview-controls.js';
     #mountPanel(): void {
       this.#panel.spec = this.#spec.map((c) => ({ ...c }));
       this.#panel.setAttribute('label', this.layout === 'split' ? 'Configuracion' : 'Controles');
+      // Phase W20: propaga el `tag` del host (o de la primera instancia is-*)
+      // al panel para que la pestaña Code pueda introspectar el Shadow DOM.
+      const host = this.#host();
+      const tag = host?.localName;
+      if (tag) this.#panel.setAttribute('tag', tag);
+      else this.#panel.removeAttribute('tag');
     }
 
     #host(): Element | null {

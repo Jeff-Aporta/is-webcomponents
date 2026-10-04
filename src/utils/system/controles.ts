@@ -277,6 +277,9 @@ async function montarPanel(contenedor: HTMLElement, _seccion: HTMLElement, defs:
   if (!host) throw new Error(`no se encontró el host de controles (target: ${targetSel || 'primer is-*'})`);
   const panel = document.createElement('iswc-preview-controls');
   panel.setAttribute('label', 'Controles');
+  // Phase W20: propaga el `tag` del host para que la pestaña Code del panel
+  // pueda introspectar el Shadow DOM del componente target.
+  if (host.localName) panel.setAttribute('tag', host.localName);
   const spec = defs.map((def) => {
     const d = { ...def, group: def.group ?? grupo };
     const defVal = valorDefault(host as HTMLElement, d);

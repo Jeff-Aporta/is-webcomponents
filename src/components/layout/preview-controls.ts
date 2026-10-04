@@ -4,6 +4,21 @@
  * Alturas en em vía font-size del :host → --iswc-control-height del kit.
  *
  * Spec JSON → `spec`. Emite `iswc-controls-change` ({ def, valor }).
+ *
+ * Phase W20 (2026-10-03-zod-migration): el panel tiene 2 tabs:
+ *   - "Attrs" (default): la grilla actual de inputs/selects/switches.
+ *   - "Code"           : la anatomía (Shadow DOM template) del componente
+ *                        target, read-only, renderizada en <pre class="code">
+ *                        para que `scripts/highlight-pre.js` la pinte.
+ *                        La detección del shadow es automática:
+ *                          1) `ctor.__TEMPLATE` si el CE lo expone (dialog, drawer, …).
+ *                          2) si no, instancia un hidden <{tag}> y lee su
+ *                             `shadowRoot.innerHTML`.
+ *
+ * Atributos:
+ *   label   string             — header del panel (default: "Controles").
+ *   tag     string             — tag del componente target (ej. "iswc-button").
+ *                                Activa la pestaña Code.
  */
 const CSS = `
 :host {
@@ -33,6 +48,39 @@ const CSS = `
   text-transform: uppercase;
   opacity: 0.85;
 }
+/* Tabs (Phase W20): nav con 2 pestañas (Attrs/Code) */
+.tabs {
+  display: flex;
+  gap: 0.25em;
+  margin: 0 0 0.85em;
+  border-bottom: 0.0625em solid var(--iswc-border, color-mix(in srgb, currentColor 16%, transparent));
+}
+.tab {
+  appearance: none;
+  -webkit-appearance: none;
+  background: transparent;
+  border: 0;
+  border-bottom: 0.125em solid transparent;
+  font: inherit;
+  color: inherit;
+  padding: 0.45em 0.85em;
+  cursor: pointer;
+  opacity: 0.6;
+  margin-bottom: calc(-0.0625em - 0.0625em);
+  transition: opacity 120ms ease, border-color 120ms ease;
+  display: inline-flex;
+  align-items: center;
+  gap: 0.4em;
+}
+.tab:hover { opacity: 0.9; }
+.tab[aria-selected="true"] {
+  opacity: 1;
+  border-bottom-color: var(--iswc-color-brand-500, currentColor);
+  font-weight: 600;
+}
+.tab__icon { font-size: 1.1em; line-height: 1; }
+/* Body panels (mutuamente excluyentes via [hidden]) */
+.body { display: block; }
 .grupos {
   display: grid;
   grid-template-columns: repeat(auto-fit, minmax(min(100%, 18.75em), 1fr));
@@ -47,6 +95,46 @@ const CSS = `
   opacity: 0.9;
 }
 .grupo-titulo:first-child { margin-top: 0; }
+/* Code tab */
+.code-head {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin: 0 0 0.5em;
+}
+.code-head h4 {
+  margin: 0;
+  font-size: 0.85em;
+  font-weight: 650;
+  opacity: 0.9;
+}
+.code-head .code-hint {
+  font-size: 0.75em;
+  opacity: 0.55;
+  text-transform: uppercase;
+  letter-spacing: 0.06em;
+}
+.code {
+  margin: 0;
+  padding: 0.7em 0.85em;
+  border: 0.0625em solid var(--iswc-border, color-mix(in srgb, currentColor 16%, transparent));
+  border-radius: 0.4em;
+  background: var(--iswc-bg, color-mix(in srgb, currentColor 3%, transparent));
+  color: var(--iswc-text, inherit);
+  font-family: var(--iswc-mono, ui-monospace, monospace);
+  font-size: 0.82em;
+  line-height: 1.5;
+  overflow: auto;
+  max-block-size: 28em;
+  white-space: pre;
+  /* readonly visual: nada de resize ni user-select:all */
+  resize: none;
+  user-select: text;
+}
+.code--empty {
+  opacity: 0.6;
+  font-style: italic;
+}
 .fila {
   display: flex;
   flex-direction: column;
@@ -254,7 +342,38 @@ function enriquecerControl(c: ControlPanel): ControlPanel {
 }
 
 const TPL = document.createElement('template');
-TPL.innerHTML = `<style>${CSS}</style><div class="panel"><div class="titulo"></div><div class="grupos"></div></div>`;
+TPL.innerHTML = `<style>${CSS}</style><div class="panel">
+  <div class="titulo"></div>
+  <nav class="tabs" part="tabs" role="tablist" aria-label="Pestañas del panel de controles">
+    <button type="button" class="tab tab--attrs" part="tab tab--attrs"
+            role="tab" data-tab="attrs" aria-selected="true"
+            aria-controls="pcAttrsPanel">
+      <span class="tab__icon" aria-hidden="true">⚙</span>
+      <span class="tab__label">Attrs</span>
+    </button>
+    <button type="button" class="tab tab--code" part="tab tab--code"
+            role="tab" data-tab="code" aria-selected="false"
+            aria-controls="pcCodePanel">
+      <span class="tab__icon" aria-hidden="true">‹/›</span>
+      <span class="tab__label">Code</span>
+    </button>
+  </nav>
+  <div class="body" part="body">
+    <section id="pcAttrsPanel" class="panel-attrs" part="panel-attrs"
+             role="tabpanel" data-panel="attrs">
+      <div class="grupos" part="grupos"></div>
+    </section>
+    <section id="pcCodePanel" class="panel-code" part="panel-code"
+             role="tabpanel" data-panel="code" hidden>
+      <header class="code-head" part="code-head">
+        <h4 class="code-title" part="code-title">Anatomía (Shadow DOM)</h4>
+        <span class="code-hint" part="code-hint">read-only</span>
+      </header>
+      <pre class="code code--anatomy" part="code" data-role="anatomy" spellcheck="false"
+           aria-label="Anatomía del Shadow DOM del componente target"></pre>
+    </section>
+  </div>
+</div>`;
 
 /** Carga switch/select/input del kit si el loader está en la página. */
 async function asegurarWidgets(): Promise<void> {
@@ -272,9 +391,12 @@ async function asegurarWidgets(): Promise<void> {
 class IswcPreviewControls extends HTMLElement {
   #spec: ControlPanel[] = [];
   #listo = false;
+  #anatomy = '';
+  #anatomyReady = false;
+  #anatomyPromise: Promise<string> | null = null;
 
   static get observedAttributes(): string[] {
-    return ['label'];
+    return ['label', 'tag'];
   }
 
   connectedCallback(): void {
@@ -282,11 +404,14 @@ class IswcPreviewControls extends HTMLElement {
       this.attachShadow({ mode: 'open' });
       this.shadowRoot!.appendChild(TPL.content.cloneNode(true));
     }
+    this.#wireTabs();
     void this.#arrancar();
   }
 
-  attributeChangedCallback(): void {
-    if (this.shadowRoot && this.#listo) this.#pintar();
+  attributeChangedCallback(name: string): void {
+    if (!this.shadowRoot) return;
+    if (name === 'label' && this.#listo) this.#pintar();
+    if (name === 'tag') this.#refreshAnatomy();
   }
 
   getSpec(): ControlPanel[] {
@@ -345,10 +470,28 @@ class IswcPreviewControls extends HTMLElement {
     return this.#spec;
   }
 
+  /**
+   * Tag del componente target (p.ej. "iswc-button"). Si está presente, el
+   * panel activa la pestaña Code e introspecciona su Shadow DOM.
+   */
+  get tag(): string {
+    return this.getAttribute('tag') ?? '';
+  }
+  set tag(v: string) {
+    if (v == null || v === '') this.removeAttribute('tag');
+    else this.setAttribute('tag', String(v));
+  }
+
+  /** Anatomía detectada (Shadow DOM serializado). Útil para tests. */
+  get anatomy(): string {
+    return this.#anatomy;
+  }
+
   async #arrancar(): Promise<void> {
     await asegurarWidgets();
     this.#listo = true;
     this.#pintar();
+    this.#refreshAnatomy();
   }
 
   #titulo(): string {
@@ -377,6 +520,106 @@ class IswcPreviewControls extends HTMLElement {
       }
       for (const control of lista) grupos.appendChild(this.#fila(control));
     }
+  }
+
+  /** Cablea los listeners de click en las dos pestañas. */
+  #wireTabs(): void {
+    const sr = this.shadowRoot;
+    if (!sr) return;
+    const tabAttrs = sr.querySelector<HTMLElement>('.tab--attrs');
+    const tabCode = sr.querySelector<HTMLElement>('.tab--code');
+    if (tabAttrs) tabAttrs.addEventListener('click', () => this.#showTab('attrs'));
+    if (tabCode) tabCode.addEventListener('click', () => this.#showTab('code'));
+  }
+
+  /** Activa una de las dos pestañas y desactiva la otra. */
+  #showTab(which: 'attrs' | 'code'): void {
+    const sr = this.shadowRoot;
+    if (!sr) return;
+    const isAttrs = which === 'attrs';
+    const tabAttrs = sr.querySelector<HTMLElement>('.tab--attrs');
+    const tabCode = sr.querySelector<HTMLElement>('.tab--code');
+    const panelAttrs = sr.querySelector<HTMLElement>('[data-panel="attrs"]');
+    const panelCode = sr.querySelector<HTMLElement>('[data-panel="code"]');
+    if (tabAttrs) tabAttrs.setAttribute('aria-selected', String(isAttrs));
+    if (tabCode) tabCode.setAttribute('aria-selected', String(!isAttrs));
+    if (panelAttrs) panelAttrs.toggleAttribute('hidden', !isAttrs);
+    if (panelCode) panelCode.toggleAttribute('hidden', isAttrs);
+    this.dataset.activeTab = which;
+  }
+
+  /**
+   * Lanza la detección de anatomía cuando hay `tag`. Re-renderiza el bloque
+   * Code tan pronto como resuelve (sync o async). Idempotente: si ya hay
+   * una detección en vuelo, no arranca otra.
+   */
+  #refreshAnatomy(): void {
+    const sr = this.shadowRoot;
+    if (!sr) return;
+    const tag = this.tag.trim();
+    const pre = sr.querySelector<HTMLElement>('[data-role="anatomy"]');
+    if (!pre) return;
+    if (!tag) {
+      this.#anatomy = '';
+      this.#anatomyReady = false;
+      this.#anatomyPromise = null;
+      pre.textContent = '(sin tag: define `tag="iswc-…"` para ver la anatomía)';
+      pre.classList.add('code--empty');
+      return;
+    }
+    pre.classList.remove('code--empty');
+    if (this.#anatomyPromise) return;
+    this.#anatomyPromise = this.#detectAnatomy(tag).then((html) => {
+      this.#anatomy = html;
+      this.#anatomyReady = true;
+      const live = this.shadowRoot?.querySelector<HTMLElement>('[data-role="anatomy"]');
+      if (live) live.textContent = html;
+      return html;
+    }).catch((err) => {
+      const msg = `<!-- no se pudo detectar la anatomía de <${tag}>: ${String(err)} -->`;
+      this.#anatomy = msg;
+      this.#anatomyReady = true;
+      const live = this.shadowRoot?.querySelector<HTMLElement>('[data-role="anatomy"]');
+      if (live) {
+        live.textContent = msg;
+        live.classList.add('code--empty');
+      }
+      return msg;
+    });
+  }
+
+  /**
+   * Detecta la anatomía del componente target:
+   *   1) `ctor.__TEMPLATE` si el CE lo expone (dialog, drawer, …).
+   *   2) Si no, instancia un hidden <{tag}> y lee `shadowRoot.innerHTML`.
+   * Devuelve siempre un string (vacío si no se pudo).
+   */
+  async #detectAnatomy(tag: string): Promise<string> {
+    if (typeof customElements === 'undefined') return '';
+    const ctor = customElements.get(tag);
+    if (ctor) {
+      const tpl = (ctor as unknown as { __TEMPLATE?: HTMLTemplateElement }).__TEMPLATE;
+      if (tpl && tpl.innerHTML) return tpl.innerHTML.trim();
+    }
+    if (typeof document === 'undefined') return '';
+    return this.#introspectInstance(tag);
+  }
+
+  /** Crea un hidden instance y devuelve su shadowRoot serializado. */
+  async #introspectInstance(tag: string): Promise<string> {
+    const probe = document.createElement(tag);
+    probe.style.position = 'absolute';
+    probe.style.left = '-99999px';
+    probe.style.top = '-99999px';
+    probe.style.pointerEvents = 'none';
+    probe.setAttribute('aria-hidden', 'true');
+    document.body.appendChild(probe);
+    // Esperar a que el shadow se monte (connectedCallback + initShadow).
+    await new Promise<void>((resolve) => requestAnimationFrame(() => resolve()));
+    const root = probe.shadowRoot;
+    const html = root ? root.innerHTML.trim() : '';
+    probe.remove();
+    return html;
   }
 
   #fila(c: ControlPanel): HTMLElement {
