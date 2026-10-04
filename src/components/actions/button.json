@@ -15,7 +15,7 @@
       "blocks": [
         {
           "kind": "demo",
-          "html": "<span class=\"demo-label\">// El caso más simple</span>\r\n          <div class=\"demo-row\">\r\n            <iswc-button>Hola mundo</iswc-button>\r\n            <iswc-button color=\"brand\">Guardar</iswc-button>\r\n            <iswc-button color=\"success\" variant=\"outlined\">\r\n              <iswc-icon slot=\"start\" icon=\"mdi:check\"></iswc-icon>\r\n              Aprobado\r\n            </iswc-button>\r\n          </div>",
+          "html": "<div class=\"demo-row\">\r\n            <iswc-button>Hola mundo</iswc-button>\r\n          </div>",
           "controls": [
             {
               "control": "select",
@@ -211,7 +211,7 @@
         },
         {
           "kind": "demo",
-          "html": "<div class=\"demo-row\">\r\n            <iswc-button id=\"btn-play\" color=\"brand\" variant=\"filled\">Primario</iswc-button>\r\n            <iswc-button color=\"success\" variant=\"filled\">Confirmar</iswc-button>\r\n            <iswc-button color=\"warning\" variant=\"filled\">Atención</iswc-button>\r\n            <iswc-button color=\"danger\"  variant=\"filled\">Eliminar</iswc-button>\r\n            <iswc-button color=\"info\"    variant=\"filled\">Detalles</iswc-button>\r\n            <iswc-button color=\"error\"   variant=\"filled\">Reintentar</iswc-button>\r\n            <iswc-button color=\"neutral\" variant=\"filled\">Secundario</iswc-button>\r\n          </div>",
+          "html": "<div class=\"demo-row\">\r\n            <iswc-button id=\"btn-play\" color=\"brand\" variant=\"filled\">Primario</iswc-button>\r\n          </div>",
           "target": "#btn-play",
           "controls": [
             {
@@ -1278,7 +1278,7 @@
         ]
       },
       "ejemplos": {
-        "content": "```html\n<span class=\"demo-label\">// El caso más simple</span>\r\n          <div class=\"demo-row\">\r\n            <iswc-button>Hola mundo</iswc-button>\r\n            <iswc-button color=\"brand\">Guardar</iswc-button>\r\n            <iswc-button color=\"success\" variant=\"outlined\">\r\n              <iswc-icon slot=\"start\" icon=\"mdi:check\"></iswc-icon>\r\n              Aprobado\r\n            </iswc-button>\r\n          </div>\n```"
+        "content": "```html\n<div class=\"demo-row\">\r\n            <iswc-button>Hola mundo</iswc-button>\r\n          </div>\n```"
       }
     },
     "exclude": [
