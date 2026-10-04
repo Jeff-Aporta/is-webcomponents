@@ -50,7 +50,7 @@ const CSS = `
 .fila {
   display: flex;
   flex-direction: column;
-  align-items: stretch;
+  align-items: flex-start;
   justify-content: flex-start;
   gap: 0.35em;
   min-width: 0;
@@ -59,23 +59,34 @@ const CSS = `
   font-size: 0.9em;
   color: var(--iswc-text-dim, inherit);
 }
-/* Mismo font-size → mismo alto (--iswc-control-height) en todos los widgets. */
+/* Inline by default: cada control toma su ancho natural.
+   El consumer decide block/full-width con [full] o width:100%.
+   Mismo font-size → mismo alto (--iswc-control-height) en todos los widgets. */
 .fila iswc-input,
 .fila iswc-select,
 .fila iswc-switch,
 .fila iswc-button,
 .fila iswc-checkbox {
-  width: 100%;
-  max-width: 100%;
   font-size: 1em;
-}
-.fila iswc-switch,
-.fila iswc-checkbox {
-  width: auto;
-  align-self: flex-start;
+  max-inline-size: 100%;
 }
 .fila iswc-checkbox {
   --iswc-control-height: 2.5em;
+}
+/* Wrap del switch: misma altura que input/select, ancho fit-content,
+   switch centrado vertical y horizontalmente. */
+.fila .control-wrap {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  min-block-size: var(--iswc-control-height, 2.5em);
+  inline-size: fit-content;
+}
+.fila .control-wrap iswc-switch {
+  --iswc-switch-height: 0.7em;
+  --iswc-switch-width: calc(0.7em * 1.75);
+  min-inline-size: 14px;
+  min-block-size: 14px;
 }
 /* Alto en el part(base); el host no clippea el borde inferior. */
 .fila iswc-input,
@@ -98,7 +109,6 @@ const CSS = `
 .fila input[type="color"],
 .fila input[type="range"],
 .fila textarea {
-  width: 100%;
   box-sizing: border-box;
   font: inherit;
   font-size: 1em;
@@ -107,6 +117,7 @@ const CSS = `
   border-radius: 0.4em;
   background: transparent;
   color: inherit;
+  max-inline-size: 100%;
 }
 .fila input[type="color"] {
   block-size: var(--iswc-control-height, 2.5em);
@@ -379,6 +390,8 @@ class IswcPreviewControls extends HTMLElement {
     const v = c.value !== undefined && c.value !== null ? c.value : c.default;
     switch (c.control) {
       case 'boolean': {
+        const wrap = document.createElement('div');
+        wrap.className = 'control-wrap';
         const sw = document.createElement('iswc-switch');
         sw.setAttribute('color', 'brand');
         if (v) sw.setAttribute('checked', '');
@@ -386,7 +399,8 @@ class IswcPreviewControls extends HTMLElement {
           const checked = Boolean((ev as CustomEvent<{ checked?: boolean }>).detail?.checked);
           this.#emitir(c, checked);
         }) as EventListener);
-        return sw;
+        wrap.appendChild(sw);
+        return wrap;
       }
       case 'color': {
         const input = document.createElement('input');
