@@ -29,12 +29,7 @@ import { ElementBase } from '../../core/element-base.js';
 
   const pad2 = (n: number | string): string => String(n).padStart(2, '0');
 
-  class IswcDurationPicker extends ElementBase {
-    /** Personalización por atributo (ver `core/attrs.ts`). */
-    static styleAttrs = {
-    bg: { prop: '--iswc-duration-picker-bg', onlyColorValues: true },
-    'border-color': { prop: '--iswc-duration-picker-border', onlyColorValues: true },
-    };
+  class IswcDurationPicker extends ElementBase {
 
     static get observedAttributes(): string[] { return [...OBSERVED, 'bg', 'border-color']; }
     #active: HTMLInputElement | null = null;

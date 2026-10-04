@@ -111,16 +111,7 @@ import { hasSlotted } from '../_shared/dom-utils.js';
   ];
 
 
-  class IswcInput extends ElementBase {
-    /** Personalización por atributo (ver `core/attrs.ts`). */
-    static styleAttrs = {
-    radius: '--iswc-input-border-radius',
-    'border-color': { prop: '--iswc-input-border', onlyColorValues: true },
-    bg: { prop: '--iswc-input-bg', onlyColorValues: true },
-    'text-color': { prop: '--iswc-input-text', onlyColorValues: true },
-    'focus-color': { prop: '--iswc-input-focus', onlyColorValues: true },
-    'danger-color': { prop: '--iswc-input-danger', onlyColorValues: true },
-    };
+  class IswcInput extends ElementBase {
 
     static formAssociated = true;
     static get observedAttributes(): string[] { return [...OBSERVED, 'radius', 'border-color', 'bg', 'text-color', 'focus-color', 'danger-color']; }

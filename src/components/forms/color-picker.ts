@@ -79,15 +79,7 @@ interface WindowWithEyeDropper { EyeDropper?: EyeDropperConstructor }
     return /^[0-9a-f]{6}$/.test(s) ? `#${s}` : '';
   }
 
-  class IswcColorPicker extends ElementBase {
-    /** Personalización por atributo (ver `core/attrs.ts`). */
-    static styleAttrs = {
-    radius: '--iswc-picker-radius',
-    'border-color': { prop: '--iswc-picker-border', onlyColorValues: true },
-    bg: { prop: '--iswc-picker-bg', onlyColorValues: true },
-    'text-color': { prop: '--iswc-picker-text', onlyColorValues: true },
-    'focus-color': { prop: '--iswc-picker-focus', onlyColorValues: true },
-    };
+  class IswcColorPicker extends ElementBase {
 
     static formAssociated = true;
     static get observedAttributes(): string[] { return [...OBSERVED, 'radius', 'border-color', 'bg', 'text-color', 'focus-color']; }

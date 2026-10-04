@@ -57,11 +57,7 @@ interface IsRadioElement extends HTMLElement {
   const NEXT_KEYS = ['ArrowDown', 'ArrowRight'];
   const PREV_KEYS = ['ArrowUp', 'ArrowLeft'];
 
-  class IswcRadioGroup extends ElementBase {
-    /** Personalización por atributo (ver `core/attrs.ts`). */
-    static styleAttrs = {
-    accent: { prop: '--iswc-radio-accent', onlyColorValues: true },
-    };
+  class IswcRadioGroup extends ElementBase {
 
     static formAssociated = true;
     static get observedAttributes(): string[] { return [...OBSERVED, 'accent']; }

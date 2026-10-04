@@ -52,12 +52,7 @@ interface PickOpts { advance?: boolean }
 
   const VIEWS: readonly View[] = ['hours', 'minutes', 'seconds'];
 
-  class IswcTimeClock extends ElementBase {
-    /** Personalización por atributo (ver `core/attrs.ts`). */
-    static styleAttrs = {
-    size: '--iswc-clock-size',
-    'face-color': { prop: '--iswc-clock-face', onlyColorValues: true },
-    };
+  class IswcTimeClock extends ElementBase {
 
     static get observedAttributes(): string[] { return [...OBSERVED, 'size', 'face-color']; }
 

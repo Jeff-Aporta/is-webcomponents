@@ -93,17 +93,7 @@ import { clampTo, tidyToStep } from '../_shared/misc-utils.js';
       .filter((m): m is { value: number; label: string } => m !== null);
   }
 
-  class IswcSlider extends ElementBase {
-    /** Personalización por atributo (ver `core/attrs.ts`). */
-    static styleAttrs = {
-    'track-size': '--iswc-slider-track-size',
-    'thumb-size': '--iswc-slider-thumb-size',
-    length: '--iswc-slider-length',
-    'rail-color': { prop: '--iswc-slider-rail', onlyColorValues: true },
-    'fill-color': { prop: '--iswc-slider-fill', onlyColorValues: true },
-    'thumb-color': { prop: '--iswc-slider-thumb-bg', onlyColorValues: true },
-    'focus-color': { prop: '--iswc-slider-focus', onlyColorValues: true },
-    };
+  class IswcSlider extends ElementBase {
 
     static formAssociated = true;
     static get observedAttributes(): string[] { return [...OBSERVED, 'track-size', 'thumb-size', 'length', 'rail-color', 'fill-color', 'thumb-color', 'focus-color']; }

@@ -76,15 +76,7 @@ import { clampTo, tidyToStep } from '../_shared/misc-utils.js';
 
   type LabelFn = (value: number) => string;
 
-  class IswcRating extends ElementBase {
-    /** Personalización por atributo (ver `core/attrs.ts`). */
-    static styleAttrs = {
-    size: '--iswc-rating-size',
-    gap: '--iswc-rating-gap',
-    color: { prop: '--iswc-rating-color', onlyColorValues: true },
-    'empty-color': { prop: '--iswc-rating-empty', onlyColorValues: true },
-    'focus-color': { prop: '--iswc-rating-focus', onlyColorValues: true },
-    };
+  class IswcRating extends ElementBase {
 
     static formAssociated = true;
     static get observedAttributes(): string[] { return [...OBSERVED, 'size', 'gap', 'color', 'empty-color', 'focus-color']; }

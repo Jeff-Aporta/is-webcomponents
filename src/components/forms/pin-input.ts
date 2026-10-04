@@ -43,17 +43,7 @@ import { ElementBase } from '../../core/element-base.js';
 
   const OBSERVED: string[] = ['length', 'type', 'mask', 'disabled', 'invalid', 'placeholder', 'value', 'autocomplete'];
 
-  class IswcPinInput extends ElementBase {
-    /** Personalización por atributo (ver `core/attrs.ts`). */
-    static styleAttrs = {
-    'cell-size': '--iswc-pin-cell-size',
-    gap: '--iswc-pin-gap',
-    bg: { prop: '--iswc-pin-bg', onlyColorValues: true },
-    'text-color': { prop: '--iswc-pin-text', onlyColorValues: true },
-    'border-color': { prop: '--iswc-pin-border', onlyColorValues: true },
-    'focus-color': { prop: '--iswc-pin-focus', onlyColorValues: true },
-    'danger-color': { prop: '--iswc-pin-danger', onlyColorValues: true },
-    };
+  class IswcPinInput extends ElementBase {
 
     static get observedAttributes(): string[] { return [...OBSERVED, 'cell-size', 'gap', 'bg', 'text-color', 'border-color', 'focus-color', 'danger-color']; }
 

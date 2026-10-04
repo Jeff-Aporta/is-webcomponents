@@ -111,12 +111,7 @@ import { ElementBase } from '../../core/element-base.js';
     }
   }
 
-  class IswcDateRangePicker extends ElementBase {
-    /** Personalización por atributo (ver `core/attrs.ts`). */
-    static styleAttrs = {
-    bg: { prop: '--iswc-daterange-bg', onlyColorValues: true },
-    'border-color': { prop: '--iswc-daterange-border', onlyColorValues: true },
-    };
+  class IswcDateRangePicker extends ElementBase {
 
     static get observedAttributes(): string[] { return [...OBSERVED, 'bg', 'border-color']; }
 

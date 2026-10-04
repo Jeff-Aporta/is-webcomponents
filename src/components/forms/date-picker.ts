@@ -83,13 +83,7 @@ import { ElementBase } from '../../core/element-base.js';
     return new Set(String(attr || '').split(/[\s,]+/).filter(Boolean));
   }
 
-  class IswcDatePicker extends ElementBase {
-    /** Personalización por atributo (ver `core/attrs.ts`). */
-    static styleAttrs = {
-    radius: '--iswc-datepicker-radius',
-    'border-color': { prop: '--iswc-datepicker-border', onlyColorValues: true },
-    bg: { prop: '--iswc-datepicker-bg', onlyColorValues: true },
-    };
+  class IswcDatePicker extends ElementBase {
 
     static get observedAttributes(): string[] { return [...OBSERVED, 'radius', 'border-color', 'bg']; }
 

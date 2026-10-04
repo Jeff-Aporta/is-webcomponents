@@ -56,19 +56,7 @@ import { hasSlotted } from '../_shared/dom-utils.js';
 
   /** Sin flatten: el texto de fallback del slot no cuenta como contenido propio. */
 
-  class IswcCheckbox extends ElementBase {
-    /** Personalización por atributo (ver `core/attrs.ts`). */
-    static styleAttrs = {
-    size: '--iswc-checkbox-size',
-    radius: '--iswc-checkbox-radius',
-    bg: { prop: '--iswc-checkbox-bg', onlyColorValues: true },
-    'bg-hover': { prop: '--iswc-checkbox-bg-hover', onlyColorValues: true },
-    'border-color': { prop: '--iswc-checkbox-border', onlyColorValues: true },
-    accent: { prop: '--iswc-checkbox-accent', onlyColorValues: true },
-    'focus-color': { prop: '--iswc-checkbox-focus', onlyColorValues: true },
-    'mark-color': { prop: '--iswc-checkbox-mark', onlyColorValues: true },
-    halo: '--iswc-checkbox-halo',
-    };
+  class IswcCheckbox extends ElementBase {
 
     static formAssociated = true;
     static get observedAttributes(): string[] { return [...OBSERVED, 'size', 'radius', 'bg', 'bg-hover', 'border-color', 'accent', 'focus-color', 'mark-color', 'halo']; }

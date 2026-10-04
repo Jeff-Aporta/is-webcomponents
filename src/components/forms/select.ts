@@ -116,16 +116,7 @@ import { setStringAttr } from '../_shared/reflect.js';
 
   let uidSeq = 0;
 
-  class IswcSelect extends ElementBase {
-    /** Personalización por atributo (ver `core/attrs.ts`). */
-    static styleAttrs = {
-    radius: '--iswc-select-border-radius',
-    'border-color': { prop: '--iswc-select-border', onlyColorValues: true },
-    bg: { prop: '--iswc-select-bg', onlyColorValues: true },
-    'text-color': { prop: '--iswc-select-text', onlyColorValues: true },
-    'focus-color': { prop: '--iswc-select-focus', onlyColorValues: true },
-    'danger-color': { prop: '--iswc-select-danger', onlyColorValues: true },
-    };
+  class IswcSelect extends ElementBase {
 
     static formAssociated = true;
     static get observedAttributes(): string[] { return [...OBSERVED, 'radius', 'border-color', 'bg', 'text-color', 'focus-color', 'danger-color']; }

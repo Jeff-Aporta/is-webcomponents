@@ -37,11 +37,7 @@ import { setOptionalAttr } from '../_shared/reflect.js';
   const VARIANTS: string[] = ['brand', 'neutral', 'success', 'warning', 'danger'];
   const PLACEMENTS: string[] = ['end', 'start', 'top', 'bottom'];
 
-  class IswcRadio extends ElementBase {
-    /** Personalización por atributo (ver `core/attrs.ts`). */
-    static styleAttrs = {
-    accent: { prop: '--iswc-radio-accent', onlyColorValues: true },
-    };
+  class IswcRadio extends ElementBase {
 
     static get observedAttributes(): string[] { return [...OBSERVED, 'accent']; }
 

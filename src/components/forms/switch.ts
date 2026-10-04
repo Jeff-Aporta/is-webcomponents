@@ -65,17 +65,7 @@ import { DEFAULT_INTENT, ensureDefaultColor } from '../_shared/intent.js';
 
   /** Sin flatten: el texto de fallback del slot no cuenta como contenido propio. */
 
-  class IswcSwitch extends ElementBase {
-    /** Personalización por atributo (ver `core/attrs.ts`). */
-    static styleAttrs = {
-    height: '--iswc-switch-height',
-    width: '--iswc-switch-width',
-    bg: { prop: '--iswc-switch-bg', onlyColorValues: true },
-    accent: { prop: '--iswc-switch-accent', onlyColorValues: true },
-    'thumb-color': { prop: '--iswc-switch-thumb', onlyColorValues: true },
-    'focus-color': { prop: '--iswc-switch-focus', onlyColorValues: true },
-    halo: '--iswc-switch-halo',
-    };
+  class IswcSwitch extends ElementBase {
 
     static formAssociated = true;
     static get observedAttributes(): string[] { return [...OBSERVED, 'height', 'width', 'bg', 'accent', 'thumb-color', 'focus-color', 'halo']; }
