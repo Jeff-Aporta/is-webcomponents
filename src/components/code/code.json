@@ -248,5 +248,24 @@
         }
       ]
     }
-  ]
+  ],
+  "ficha": {
+    "sections": {
+      "anatomia": {
+        "content": "Editor de código con motor NATIVO de resaltado y editor integrado (sin CodeMirror): lenguajes, temas JSON, formateo estilo Prettier, números de línea, word-wrap y anotaciones externas (highlight / tooltips). API texto ↔ JSON <code class=\"code\">iswc-code-doc/v1</code>."
+      },
+      "ejemplos": {
+        "content": "```html\n<iswc-code lang=\"javascript\" wrap line-numbers\n  value=\"function greet(name) {\\n  return `Hola, ${name}`;\\n}\"></iswc-code>\n```"
+      }
+    },
+    "exclude": [
+      "apiJs",
+      "atributos",
+      "eventos",
+      "parts",
+      "props",
+      "slots",
+      "states"
+    ]
+  }
 }
