@@ -508,22 +508,6 @@
       ]
     },
     {
-      "id": "anatomy",
-      "title": "Anatomía",
-      "lede": "El shadow DOM expone CSS parts para que puedas estilizar piezas individuales sin re-implementar el componente.",
-      "blocks": [
-        {
-          "kind": "html",
-          "html": "<div class=\"anatomy\">\r\n          <iswc-button id=\"anatomyBtn\" color=\"brand\" pill>\r\n            <iswc-icon icon=\"mdi:content-save-outline\"></iswc-icon>\r\n            Guardar cambios\r\n            <iswc-icon icon=\"mdi:arrow-right\"></iswc-icon>\r\n          </iswc-button>\r\n        </div>\r\n\r\n        <h4>Estructura interna del Shadow DOM</h4>"
-        },
-        {
-          "kind": "code",
-          "lang": "html",
-          "code": "<button part=\"button\" class=\"btn\">\n  <span part=\"start\" class=\"btn__prefix\">\n    <slot name=\"start\"></slot>\n  </span>\n  <span part=\"label\" class=\"btn__label\">\n    <slot></slot>\n  </span>\n  <span part=\"end\" class=\"btn__suffix\">\n    <slot name=\"end\"></slot>\n  </span>\n  <span part=\"caret\" class=\"btn__caret\">...</span>\n  <span part=\"spinner\" class=\"btn__spinner\">...</span>\n</button>"
-        }
-      ]
-    },
-    {
       "id": "states",
       "title": "Custom States",
       "lede": "El componente expone cuatro <a href=\"https://developer.mozilla.org/en-US/docs/Web/API/CSS_Custom_State_API\" target=\"_blank\" rel=\"noopener\">custom states</a>\r\n          para CSS condicional desde fuera del shadow.",
@@ -779,6 +763,32 @@
         {
           "kind": "callout",
           "html": "Los controles escriben atributos reales: <code>color</code> (familia) y <code>variant</code> (apariencia). Iconos vía <code>&lt;iswc-icon slot=\"start|end\"&gt;</code>."
+        }
+      ]
+    },
+    {
+      "id": "slots-pg",
+      "title": "Slots Playground",
+      "lede": "Estandar W11: dos tabs. Simple = instancia viva. Slots = segundo ejemplar editable con shadow template y un editor por cada slot.",
+      "blocks": [
+        {
+          "kind": "demo",
+          "html": "<iswc-slots-pg tag=\"iswc-button\">\n  <iswc-button>Texto del boton</iswc-button>\n  <iswc-icon slot=\"start\" icon=\"mdi:content-save-outline\"></iswc-icon>\n  <iswc-icon slot=\"end\" icon=\"mdi:arrow-right\"></iswc-icon>\n</iswc-slots-pg>"
+        },
+        {
+          "kind": "callout",
+          "html": "Pulsar <strong>Restart</strong> en el tab Slots devuelve el codigo al estado inicial. Editar cualquier textarea del tab Slots actualiza la instancia en vivo."
+        }
+      ]
+    },
+    {
+      "id": "slots-pg",
+      "title": "Slots Playground",
+      "lede": "Estandar W11: dos tabs (Simple + Slots). El tab Slots muestra shadow template, codigo editable y un editor por cada slot detectado del componente.",
+      "blocks": [
+        {
+          "kind": "demo",
+          "html": "<iswc-slots-pg tag=\" iswc-button\\>\\n"
         }
       ]
     },
