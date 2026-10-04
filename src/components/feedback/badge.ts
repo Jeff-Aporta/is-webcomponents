@@ -33,11 +33,7 @@ import { TONE } from '../_shared/tone.js';
   const VALID_VARIANT = TONE.filter((t) => t !== 'plain');
   const VALID_ATTENTION = ['none', 'pulse', 'bounce'];
 
-  class IswcBadge extends withStyleAttrs(HTMLElement) {
-    /** Personalización por atributo (ver `core/attrs.ts`). */
-    static styleAttrs = {
-    'pulse-color': { prop: '--iswc-badge-pulse-color', onlyColorValues: true },
-    };
+  class IswcBadge extends withStyleAttrs(HTMLElement) {
 
     static get observedAttributes(): string[] { return [...OBSERVED, 'pulse-color']; }
 

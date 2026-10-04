@@ -53,15 +53,7 @@ import '../actions/button.js';
     'top-start', 'top-end', 'bottom-start', 'bottom-end',
   ];
 
-  class IswcPopconfirm extends ElementBase {
-    /** Personalización por atributo (ver `core/attrs.ts`). */
-    static styleAttrs = {
-    bg: { prop: '--iswc-popconfirm-bg', onlyColorValues: true },
-    'text-color': { prop: '--iswc-popconfirm-text', onlyColorValues: true },
-    'border-color': { prop: '--iswc-popconfirm-border', onlyColorValues: true },
-    accent: { prop: '--iswc-popconfirm-accent', onlyColorValues: true },
-    'danger-color': { prop: '--iswc-popconfirm-danger', onlyColorValues: true },
-    };
+  class IswcPopconfirm extends ElementBase {
 
     static get observedAttributes(): string[] { return [...OBSERVED, 'bg', 'text-color', 'border-color', 'accent', 'danger-color']; }
 

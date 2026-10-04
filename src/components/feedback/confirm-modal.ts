@@ -47,14 +47,7 @@ import '../actions/button.js';
 
   const OBSERVED = ['for', 'heading', 'message', 'open'];
 
-  class IswcConfirmModal extends ElementBase {
-    /** Personalización por atributo (ver `core/attrs.ts`). */
-    static styleAttrs = {
-    bg: { prop: '--iswc-confirm-modal-bg', onlyColorValues: true },
-    'text-color': { prop: '--iswc-confirm-modal-text', onlyColorValues: true },
-    'border-color': { prop: '--iswc-confirm-modal-border', onlyColorValues: true },
-    accent: { prop: '--iswc-confirm-modal-accent', onlyColorValues: true },
-    };
+  class IswcConfirmModal extends ElementBase {
 
     static get observedAttributes(): string[] { return [...OBSERVED, 'bg', 'text-color', 'border-color', 'accent']; }
 

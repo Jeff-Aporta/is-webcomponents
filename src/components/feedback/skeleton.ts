@@ -23,12 +23,7 @@ import { withStyleAttrs } from '../../core/attrs.js';
   const OBSERVED = ['effect'];
   const VALID_EFFECT = ['none', 'sheen', 'pulse'];
 
-  class IswcSkeleton extends withStyleAttrs(HTMLElement) {
-    /** Personalización por atributo (ver `core/attrs.ts`). */
-    static styleAttrs = {
-    color: { prop: '--iswc-skeleton-color', onlyColorValues: true },
-    'sheen-color': { prop: '--iswc-skeleton-sheen', onlyColorValues: true },
-    };
+  class IswcSkeleton extends withStyleAttrs(HTMLElement) {
 
     static get observedAttributes(): string[] { return [...OBSERVED, 'color', 'sheen-color']; }
 

@@ -62,14 +62,10 @@ import '../code/code.js';
   `;
 
   class IswcCdnSnippet extends withStyleAttrs(HTMLElement) {
-    static styleAttrs = {
-      radius: '--iswc-cdn-snippet-radius',
-      'border-color': '--iswc-cdn-snippet-border',
-      'pre-bg': '--iswc-cdn-snippet-pre-bg',
-    };
+    
 
     static get observedAttributes(): string[] {
-      return ['tag', 'category', 'base', 'title', 'dependencies', 'config', ...IswcCdnSnippet.styleAttrNames];
+      return ['tag', 'category', 'base', 'title', 'dependencies', 'config'];
     }
 
     #mounted = false;
