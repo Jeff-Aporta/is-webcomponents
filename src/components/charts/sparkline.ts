@@ -31,16 +31,10 @@ function fmtNum(v: number): string {
 }
 
 (() => {
-  class IswcSparkline extends withStyleAttrs(HTMLElement) {
-    /** Personalización por atributo (ver `core/attrs.ts`). */
-    static styleAttrs = {
-      'line-color': { prop: '--line-color', onlyColorValues: true },
-      'line-width': '--line-width',
-    };
+  class IswcSparkline extends withStyleAttrs(HTMLElement) {
 
     static get observedAttributes(): string[] {
-      return ['values', 'data', 'type', 'label', 'variant', 'curve', 'trend',
-        ...IswcSparkline.styleAttrNames];
+      return ['values', 'data', 'type', 'label', 'variant', 'curve', 'trend'];
     }
 
     #svg!: HTMLElement;

@@ -23,6 +23,7 @@
  *          setMarks(), clearMarks(), focus(), refresh(), registerLanguage (módulo)
  * Eventos: iswc-ready, iswc-input, iswc-change, iswc-cursor, iswc-mark-activate
  * Parts: root, editor, tooltip
+ * Custom states: :state(blank) :state(inline) :state(disabled) :state(readonly)
  */
 
 import { adoptCss, defineElement, emit, upgradeProperties } from '../../core/element.js';
@@ -108,17 +109,11 @@ function editRange(oldText: string, newText: string): [number, number, number] {
 }
 
 class IswcCode extends ElementBase {
-  static styleAttrs = {
-    radius: '--iswc-code-radius',
-    'border-color': { prop: '--iswc-code-border', onlyColorValues: true },
-    bg: { prop: '--iswc-code-bg', onlyColorValues: true },
-    'text-color': { prop: '--iswc-code-fg', onlyColorValues: true },
-    'min-height': '--iswc-code-min-height',
-  };
+  
 
   static formAssociated = true;
   static get observedAttributes(): string[] {
-    return [...OBSERVED, ...IswcCode.styleAttrNames];
+    return [...OBSERVED];
   }
 
   #internals: ElementInternals | null = null;
