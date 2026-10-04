@@ -60,5 +60,22 @@
         }
       ]
     }
-  ]
+  ],
+  "ficha": {
+    "sections": {
+      "anatomia": {
+        "content": "Modo nativo (default): lienzo SVG con proyección equirectangular, sin dependencias externas. Modo <code class=\"ic\">engine=\"tile\"</code>: iframe al proveedor de tiles (OpenStreetMap, etc.)."
+      }
+    },
+    "exclude": [
+      "apiJs",
+      "atributos",
+      "ejemplos",
+      "eventos",
+      "parts",
+      "props",
+      "slots",
+      "states"
+    ]
+  }
 }
