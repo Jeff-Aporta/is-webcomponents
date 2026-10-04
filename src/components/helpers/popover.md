@@ -4,7 +4,7 @@ tags:
   - iswc-popover
 category: helpers
 status: public
-source: ./popover.js
+source: ./popover.ts
 style: ./popover.css
 preview: ./popover.json
 ---
@@ -226,7 +226,7 @@ Preservar semántica, foco, teclado, labels y ARIA. ARIA detectado: `aria-haspop
 
 ## Fuentes
 
-- [JavaScript](./popover.js)
+- [JavaScript](./popover.ts)
 - [CSS](./popover.css)
-- [Índice de categoría](./LLM.md)
+- [Índice de categoría](../../specs/componentes.md)
 - [Preview](./popover.json)

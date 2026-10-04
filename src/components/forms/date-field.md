@@ -4,7 +4,7 @@ tags:
   - iswc-date-field
 category: forms
 status: public
-source: ./date-field.js
+source: ./date-field.ts
 style: ./date-field.css
 preview: ./date-field.json
 ---
