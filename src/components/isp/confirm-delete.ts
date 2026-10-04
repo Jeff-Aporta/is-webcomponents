@@ -90,11 +90,7 @@ interface InputLike extends HTMLElement {
     'case-sensitive', 'loading', 'light-dismiss'
   ];
 
-  class IswcConfirmDelete extends ElementBase {
-    /** Personalización por atributo (ver `core/attrs.ts`). */
-    static styleAttrs = {
-    accent: { prop: '--iswc-confirm-delete-accent', onlyColorValues: true },
-    };
+  class IswcConfirmDelete extends ElementBase {
 
     static get observedAttributes(): string[] { return [...OBSERVED, 'accent']; }
 

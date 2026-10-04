@@ -125,11 +125,7 @@ export function lowerCase(value: string) {
 
   const OBSERVED = ['open', 'loading', 'entity', 'icon', 'close-label', 'light-dismiss'];
 
-  class IswcModalVerificacion extends ElementBase {
-    /** Personalización por atributo (ver `core/attrs.ts`). */
-    static styleAttrs = {
-    accent: { prop: '--iswc-modal-verificacion-accent', onlyColorValues: true },
-    };
+  class IswcModalVerificacion extends ElementBase {
 
     static get observedAttributes(): string[] { return [...OBSERVED, 'accent']; }
 

@@ -26,13 +26,7 @@ import {
   const LEVELS = ['1', '2', '3', '4', '5', '6'];
   const DEFAULT_MIX = { 1: '15%', 2: '30%', 3: '45%', 4: '65%', 5: '80%', 6: '90%' };
 
-  class IswcHeading extends ElementBase {
-    /** Personalización por atributo (ver `core/attrs.ts`). */
-    static styleAttrs = {
-    // `color` y `mix` los resuelve #syncVars() vía syncIspColor: aquí solo
-    // se expone el destino de la mezcla, que no tenía forma de tocarse.
-    'mix-with': { prop: '--iswc-heading-mix-with', onlyColorValues: true },
-    };
+  class IswcHeading extends ElementBase {
 
     static get observedAttributes(): string[] {
       return ['level', 'color', 'mix', 'mix-with', 'size'];

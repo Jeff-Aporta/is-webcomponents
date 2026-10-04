@@ -26,11 +26,7 @@ import {
   const TEMPLATE = document.createElement('template');
   TEMPLATE.innerHTML = /* html */ `<slot part="content"></slot>`;
 
-  class IswcText extends ElementBase {
-    /** Personalización por atributo (ver `core/attrs.ts`). */
-    static styleAttrs = {
-    'mix-with': { prop: '--iswc-text-mix-with', onlyColorValues: true },
-    };
+  class IswcText extends ElementBase {
 
     static TEMPLATE = TEMPLATE;
     static get observedAttributes(): string[] {
