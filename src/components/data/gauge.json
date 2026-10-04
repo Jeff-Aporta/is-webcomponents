@@ -16,7 +16,7 @@
       "blocks": [
         {
           "kind": "demo",
-          "html": "<div class=\"gauge-grid\">\r\n            <div class=\"gauge-cell\">\r\n              <iswc-gauge id=\"g1\" value=\"67\" label=\"Conversión\" unit=\"%\"></iswc-gauge>\r\n            </div>\r\n            <div class=\"gauge-cell\">\r\n              <iswc-gauge value=\"42\" label=\"CPU\" unit=\"%\" color=\"warning\"></iswc-gauge>\r\n            </div>\r\n            <div class=\"gauge-cell\">\r\n              <iswc-gauge value=\"92\" label=\"RAM\" unit=\"%\" color=\"success\"></iswc-gauge>\r\n            </div>\r\n            <div class=\"gauge-cell\">\r\n              <iswc-gauge value=\"15\" label=\"Errores\" unit=\"%\" color=\"danger\"></iswc-gauge>\r\n            </div>\r\n          </div>",
+          "html": "<iswc-gauge id=\"g1\" value=\"67\" label=\"Conversión\" unit=\"%\"></iswc-gauge>",
           "controls": [
             {
               "control": "select",
