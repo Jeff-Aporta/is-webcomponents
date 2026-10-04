@@ -24,5 +24,24 @@
         }
       ]
     }
-  ]
+  ],
+  "ficha": {
+    "sections": {
+      "anatomia": {
+        "content": "Tercera dimensión por tamaño."
+      },
+      "ejemplos": {
+        "content": "```html\n<iswc-bubble-chart open-on-click>\r\n            <script type=\"application/json\">\r\n              {\"data\":{\"datasets\":[{\"label\":\"Canales\",\"data\":[{\"x\":0.4,\"y\":8.5,\"r\":10},{\"x\":1.8,\"y\":6.9,\"r\":13},{\"x\":2.8,\"y\":5.2,\"r\":20}]}]}}\r\n            </script>\r\n          </iswc-bubble-chart>\n```"
+      }
+    },
+    "exclude": [
+      "apiJs",
+      "atributos",
+      "eventos",
+      "parts",
+      "props",
+      "slots",
+      "states"
+    ]
+  }
 }

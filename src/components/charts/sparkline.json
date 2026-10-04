@@ -191,5 +191,55 @@
         }
       ]
     }
-  ]
+  ],
+  "ficha": {
+    "sections": {
+      "anatomia": {
+        "content": "<code class=\"code\">&lt;iswc-sparkline&gt;</code>"
+      },
+      "atributos": {
+        "table": [
+          {
+            "name": "<code>data</code> / <code>values</code>",
+            "desc": "Números separados por espacio/coma"
+          },
+          {
+            "name": "<code>type</code>",
+            "desc": "line (default) · bar"
+          },
+          {
+            "name": "<code>appearance</code>",
+            "desc": "solid · gradient · line"
+          },
+          {
+            "name": "<code>curve</code>",
+            "desc": "linear · natural · step"
+          },
+          {
+            "name": "<code>trend</code>",
+            "desc": "positive · negative · neutral"
+          },
+          {
+            "name": "<code>label</code>",
+            "desc": "a11y (obligatorio en demos)"
+          },
+          {
+            "name": "<code>--fill-color-1</code> / <code>--line-color</code> / <code>--line-width</code>",
+            "desc": "CSS"
+          }
+        ]
+      },
+      "ejemplos": {
+        "content": "```html\n<p class=\"spark-metric\" style=\"margin:0;font-size:1.05rem\">\r\n            Daily Wordle guesses\r\n            <iswc-sparkline data=\"12 15 11 14 9 10 8 7 9 6\" label=\"Wordle guesses trend\"></iswc-sparkline>\r\n            are trending down.\r\n          </p>\n```"
+      }
+    },
+    "exclude": [
+      "apiJs",
+      "eventos",
+      "parts",
+      "props",
+      "slots",
+      "states"
+    ]
+  }
 }

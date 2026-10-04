@@ -168,5 +168,24 @@
         }
       ]
     }
-  ]
+  ],
+  "ficha": {
+    "sections": {
+      "anatomia": {
+        "content": "Chart.js <code class=\"code\">polarArea</code> themed. Ángulos iguales por categoría;\r\n          el <strong>radio</strong> refleja la magnitud (a diferencia de un pie, donde el tamaño\r\n          es el ángulo). Ideal para comparar escalas en el mismo “reloj”."
+      },
+      "ejemplos": {
+        "content": "```html\n<iswc-polar-area-chart open-on-click label=\"Mix energético (GW)\">\r\n            <script type=\"application/json\">\r\n              {\r\n                \"data\": {\r\n                  \"labels\": [\"Solar\", \"Eólica\", \"Hidro\", \"Nuclear\", \"Gas\", \"Carbón\"],\r\n                  \"datasets\": [{ \"label\": \"GW instalados\", \"data\": [85, 72, 110, 95, 58, 40] }]\r\n                }\r\n              }\r\n            </script>\r\n          </iswc-polar-area-chart>\n```"
+      }
+    },
+    "exclude": [
+      "apiJs",
+      "atributos",
+      "eventos",
+      "parts",
+      "props",
+      "slots",
+      "states"
+    ]
+  }
 }
