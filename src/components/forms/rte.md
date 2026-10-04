@@ -71,12 +71,33 @@ No expone.
 
 ### Eventos
 
+
+| Evento | Descripción |
+| --- | --- |
+| `iswc-input` | Emitido en cada cambio del valor (escribe como `input` nativo). |
+| `iswc-change` | Emitido al confirmar el cambio de valor (escribe como `change` nativo). |
+| `iswc-blur` | Emitido cuando el componente pierde foco. |
+| `iswc-source-change` | Evento personalizado del componente (source change). |
+
 | Evento | detail | bubbles | composed | cancelable |
 | --- | --- | --- | --- | --- |
 | `iswc-input` | sin detail | sí | sí | no |
 | `iswc-change` | `{ value, text }` | sí | sí | no |
 | `iswc-blur` | sin detail | sí | sí | no |
 | `iswc-source-change` | `{ source }` | sí | sí | no |
+
+
+<details>
+<summary>Ejemplo en vivo</summary>
+
+```js
+const el = document.querySelector('iswc-rte');
+el.addEventListener('iswc-input', (e) => {
+  console.log('iswc-input', e.detail);
+});
+```
+
+</details>
 
 ### Métodos y propiedades públicas
 

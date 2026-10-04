@@ -94,9 +94,27 @@ import './checkbox.js';
 
 ### Eventos
 
+
+| Evento | Descripción |
+| --- | --- |
+| `iswc-change` | Emitido al confirmar el cambio de valor (escribe como `change` nativo). |
+
 | Evento | detail | bubbles | composed | cancelable |
 | --- | --- | --- | --- | --- |
 | `iswc-change` | sí | sí | sí | no |
+
+
+<details>
+<summary>Ejemplo en vivo</summary>
+
+```js
+const el = document.querySelector('iswc-checkbox');
+el.addEventListener('iswc-change', (e) => {
+  console.log('iswc-change', e.detail);
+});
+```
+
+</details>
 
 ### Métodos y propiedades públicas
 

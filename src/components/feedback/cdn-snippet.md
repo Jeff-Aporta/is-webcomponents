@@ -69,6 +69,27 @@ import './cdn-snippet.js';
 </script>
 ```
 
+
+## Eventos
+
+| Evento | Descripción |
+| --- | --- |
+| _(ninguno)_ | Este componente no emite eventos personalizados. |
+
+<details>
+<summary>Ejemplo en vivo</summary>
+
+```js
+const el = document.querySelector('iswc-cdn-snippet');
+// El componente no emite eventos personalizados.
+// Escucha los nativos si los necesitas:
+el.addEventListener('click', (e) => {
+  console.log('click', e);
+});
+```
+
+</details>
+
 ## Qué hacer
 
 - Preferir siempre `loader.min.js` + `load(tag)`.

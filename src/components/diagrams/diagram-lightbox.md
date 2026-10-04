@@ -72,9 +72,27 @@ No expone.
 
 ### Eventos
 
+
+| Evento | Descripción |
+| --- | --- |
+| `iswc-share` | Evento personalizado del componente (share). |
+
 | Evento | detail | bubbles | composed | cancelable |
 | --- | --- | --- | --- | --- |
 | `iswc-share` | sí | sí | sí | no |
+
+
+<details>
+<summary>Ejemplo en vivo</summary>
+
+```js
+const el = document.querySelector('iswc-diagram-lightbox');
+el.addEventListener('iswc-share', (e) => {
+  console.log('iswc-share', e.detail);
+});
+```
+
+</details>
 
 ### Métodos y propiedades públicas
 

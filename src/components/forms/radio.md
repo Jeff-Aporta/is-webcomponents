@@ -79,9 +79,27 @@ import './radio.js';
 
 ### Eventos
 
+
+| Evento | Descripción |
+| --- | --- |
+| `iswc-radio-select` | Evento personalizado del componente (radio select). |
+
 | Evento | detail | bubbles | composed | cancelable |
 | --- | --- | --- | --- | --- |
 | `iswc-radio-select` | sí | sí | sí | no |
+
+
+<details>
+<summary>Ejemplo en vivo</summary>
+
+```js
+const el = document.querySelector('iswc-radio');
+el.addEventListener('iswc-radio-select', (e) => {
+  console.log('iswc-radio-select', e.detail);
+});
+```
+
+</details>
 
 ### Métodos y propiedades públicas
 

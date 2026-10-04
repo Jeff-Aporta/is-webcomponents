@@ -74,6 +74,13 @@ Forma de un evento: `{ id, title, date: 'YYYY-MM-DD', start: 'HH:MM', end?: 'HH:
 
 ### Eventos
 
+
+| Evento | Descripción |
+| --- | --- |
+| `iswc-day-click` | Evento personalizado del componente (day click). |
+| `iswc-event-click` | Evento personalizado del componente (event click). |
+| `iswc-view-change` | Evento personalizado del componente (view change). |
+
 | Evento | detail | bubbles | composed | cancelable |
 | --- | --- | --- | --- | --- |
 | `iswc-day-click` | `{ date }` | sí | sí | no |
@@ -82,6 +89,19 @@ Forma de un evento: `{ id, title, date: 'YYYY-MM-DD', start: 'HH:MM', end?: 'HH:
 
 `iswc-view-change` se emite al usar los botones de vista de la toolbar, no al
 cambiar el atributo `view` por código.
+
+
+<details>
+<summary>Ejemplo en vivo</summary>
+
+```js
+const el = document.querySelector('iswc-full-calendar');
+el.addEventListener('iswc-day-click', (e) => {
+  console.log('iswc-day-click', e.detail);
+});
+```
+
+</details>
 
 ### Métodos y propiedades públicas
 

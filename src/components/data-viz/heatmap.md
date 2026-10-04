@@ -96,6 +96,12 @@ lee como dato (y se vigila con `MutationObserver`), no se renderiza.
 
 ### Eventos
 
+
+| Evento | Descripción |
+| --- | --- |
+| `iswc-render` | Emitido al renderizar o redibujar el componente. |
+| `iswc-cell-hover` | Evento personalizado del componente (cell hover). |
+
 | Evento | detail | bubbles | composed | cancelable |
 | --- | --- | --- | --- | --- |
 | `iswc-render` | `{ svg }` — referencia al `<svg>` del shadow root | sí | sí | no |
@@ -105,6 +111,19 @@ lee como dato (y se vigila con `MutationObserver`), no se renderiza.
 al entrar en ella: si el listener es costoso, conviene un throttle.
 Cuando el puntero sale de las celdas no hay evento de salida, solo se
 limpia el resaltado.
+
+
+<details>
+<summary>Ejemplo en vivo</summary>
+
+```js
+const el = document.querySelector('iswc-heatmap');
+el.addEventListener('iswc-render', (e) => {
+  console.log('iswc-render', e.detail);
+});
+```
+
+</details>
 
 ### Métodos y propiedades públicas
 

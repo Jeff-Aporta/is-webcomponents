@@ -90,6 +90,15 @@ reemplazar desde el light DOM.
 
 ### Eventos
 
+
+| Evento | Descripción |
+| --- | --- |
+| `iswc-files-change` | Evento personalizado del componente (files change). |
+| `iswc-upload-start` | Evento personalizado del componente (upload start). |
+| `iswc-upload-progress` | Evento personalizado del componente (upload progress). |
+| `iswc-upload-end` | Evento personalizado del componente (upload end). |
+| `iswc-error` | Emitido cuando se produce un error. |
+
 | Evento | detail | bubbles | composed | cancelable |
 | --- | --- | --- | --- | --- |
 | `iswc-files-change` | `{ files }` — referencia al array vivo de la cola | sí | sí | no |
@@ -113,6 +122,19 @@ La cabecera del `.js` documenta `iswc-upload-end` con un campo `error?` y un
 `iswc-error` uniforme con `{ id, file, reason }`. En el código no hay ninguna
 ruta que produzca error de subida, así que `error` nunca aparece y `id`/`file`
 faltan en el caso `max-files`.
+
+
+<details>
+<summary>Ejemplo en vivo</summary>
+
+```js
+const el = document.querySelector('iswc-dropzone');
+el.addEventListener('iswc-files-change', (e) => {
+  console.log('iswc-files-change', e.detail);
+});
+```
+
+</details>
 
 ### Métodos y propiedades públicas
 

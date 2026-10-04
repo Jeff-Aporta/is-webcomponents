@@ -24,3 +24,23 @@ No lo reimplementes ni lo uses para sustituir al padre. La guía del padre docum
 ```html
 <iswc-carousel-item></iswc-carousel-item>
 ```
+
+
+## Eventos
+
+| Evento | Descripción |
+| --- | --- |
+| _(ninguno)_ | Este sub-componente no emite eventos propios; los eventos del componente padre (<iswc-carousel>) se documentan en la ficha del padre. |
+
+<details>
+<summary>Ejemplo en vivo</summary>
+
+```js
+// Los eventos se escuchan sobre el componente padre.
+const parent = document.querySelector('iswc-carousel');
+parent.addEventListener('iswc-event', (e) => {
+  console.log('evento del padre', e.detail);
+});
+```
+
+</details>

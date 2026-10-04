@@ -76,9 +76,27 @@ import './transfer.js';
 
 ### Eventos
 
+
+| Evento | Descripción |
+| --- | --- |
+| `iswc-transfer-change` | Evento personalizado del componente (transfer change). |
+
 | Evento | detail | bubbles | composed | cancelable |
 | --- | --- | --- | --- | --- |
 | `iswc-transfer-change` | sí | sí | sí | no |
+
+
+<details>
+<summary>Ejemplo en vivo</summary>
+
+```js
+const el = document.querySelector('iswc-transfer');
+el.addEventListener('iswc-transfer-change', (e) => {
+  console.log('iswc-transfer-change', e.detail);
+});
+```
+
+</details>
 
 ### Métodos y propiedades públicas
 

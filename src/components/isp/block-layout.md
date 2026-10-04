@@ -134,9 +134,27 @@ para el `overflow: auto`.
 
 ### Eventos
 
+
+| Evento | Descripción |
+| --- | --- |
+| `iswc-breakpoint` | Evento personalizado del componente (breakpoint). |
+
 | Evento | detail | bubbles | composed | cancelable |
 | --- | --- | --- | --- | --- |
 | `iswc-breakpoint` | `{ width, height, sizew, boolszw, lerpw }` | sí | sí | no |
+
+
+<details>
+<summary>Ejemplo en vivo</summary>
+
+```js
+const el = document.querySelector('iswc-block-layout');
+el.addEventListener('iswc-breakpoint', (e) => {
+  console.log('iswc-breakpoint', e.detail);
+});
+```
+
+</details>
 
 ### Métodos y propiedades públicas
 

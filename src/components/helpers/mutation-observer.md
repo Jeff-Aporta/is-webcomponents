@@ -63,9 +63,27 @@ No expone.
 
 ### Eventos
 
+
+| Evento | Descripción |
+| --- | --- |
+| `iswc-mutate` | Emitido al detectarse una mutación en el árbol observado. |
+
 | Evento | detail | bubbles | composed | cancelable |
 | --- | --- | --- | --- | --- |
 | `iswc-mutate` | sí | sí | sí | no |
+
+
+<details>
+<summary>Ejemplo en vivo</summary>
+
+```js
+const el = document.querySelector('iswc-mutation-observer');
+el.addEventListener('iswc-mutate', (e) => {
+  console.log('iswc-mutate', e.detail);
+});
+```
+
+</details>
 
 ### Métodos y propiedades públicas
 

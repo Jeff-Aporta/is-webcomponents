@@ -32,3 +32,24 @@ Requiere `globalThis.ISWebComponentsLoader` con `ensure` / `has` (el loader CDN)
 | `hydrateMdEmbeds(root)` | `ensureNeededTags` + `upgradeCodeMarkers`. |
 
 Usado por `<iswc-md-render>` y el preview de `<iswc-md-editor>`. No lo reimplementes.
+
+
+## Eventos
+
+| Evento | Descripción |
+| --- | --- |
+| _(ninguno)_ | Este componente no emite eventos personalizados. |
+
+<details>
+<summary>Ejemplo en vivo</summary>
+
+```js
+const el = document.querySelector('iswc-component');
+// El componente no emite eventos personalizados.
+// Escucha los nativos si los necesitas:
+el.addEventListener('click', (e) => {
+  console.log('click', e);
+});
+```
+
+</details>

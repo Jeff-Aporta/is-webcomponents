@@ -69,6 +69,14 @@ No declara propiedades reflejadas propias; se opera por atributos y métodos.
 
 ### Eventos
 
+
+| Evento | Descripción |
+| --- | --- |
+| `iswc-confirm-show` | Evento personalizado del componente (confirm show). |
+| `iswc-confirm-hide` | Evento personalizado del componente (confirm hide). |
+| `iswc-confirm-confirm` | Evento personalizado del componente (confirm confirm). |
+| `iswc-confirm-cancel` | Evento personalizado del componente (confirm cancel). |
+
 | Evento | detail | bubbles | composed | cancelable |
 | --- | --- | --- | --- | --- |
 | `iswc-confirm-show` | sí | sí | sí | no |
@@ -78,6 +86,19 @@ No declara propiedades reflejadas propias; se opera por atributos y métodos.
 
 `detail` en los cuatro: `{ trigger }` — el elemento referenciado por `for`,
 o `null` si no hay.
+
+
+<details>
+<summary>Ejemplo en vivo</summary>
+
+```js
+const el = document.querySelector('iswc-confirm-modal');
+el.addEventListener('iswc-confirm-show', (e) => {
+  console.log('iswc-confirm-show', e.detail);
+});
+```
+
+</details>
 
 ### Métodos y propiedades públicas
 

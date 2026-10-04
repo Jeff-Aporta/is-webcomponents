@@ -67,12 +67,33 @@ import './state-diagram.js';
 
 ### Eventos
 
+
+| Evento | Descripción |
+| --- | --- |
+| `iswc-turtle-state` | Emitido al actualizarse el estado del módulo turtle (resize, datos, etc.). |
+| `iswc-render` | Emitido al renderizar o redibujar el componente. |
+| `iswc-toggle-group` | Evento personalizado del componente (toggle group). |
+| `iswc-open-viewer` | Emitido al abrir el visor ampliado (cancelable). |
+
 | Evento | detail | bubbles | composed | cancelable |
 | --- | --- | --- | --- | --- |
 | `iswc-turtle-state` | sí | sí | sí | no |
 | `iswc-render` | sí | sí | sí | no |
 | `iswc-toggle-group` | sí | sí | sí | sí |
 | `iswc-open-viewer` | sí | sí | sí | sí |
+
+
+<details>
+<summary>Ejemplo en vivo</summary>
+
+```js
+const el = document.querySelector('iswc-state-diagram');
+el.addEventListener('iswc-turtle-state', (e) => {
+  console.log('iswc-turtle-state', e.detail);
+});
+```
+
+</details>
 
 ### Métodos y propiedades públicas
 

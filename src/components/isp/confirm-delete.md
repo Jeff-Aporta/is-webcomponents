@@ -86,6 +86,16 @@ import './confirm-delete.js';
 
 ### Eventos
 
+
+| Evento | Descripción |
+| --- | --- |
+| `iswc-show` | Emitido justo antes de mostrarse (cancelable). |
+| `iswc-after-show` | Emitido tras finalizar la animación de apertura. |
+| `iswc-hide` | Emitido justo antes de ocultarse (cancelable). |
+| `iswc-after-hide` | Emitido tras finalizar la animación de cierre. |
+| `iswc-confirm-delete` | Evento personalizado del componente (confirm delete). |
+| `iswc-cancel-delete` | Evento personalizado del componente (cancel delete). |
+
 | Evento | detail | bubbles | composed | cancelable |
 | --- | --- | --- | --- | --- |
 | `iswc-show` | `{}` | sí | sí | no |
@@ -101,6 +111,19 @@ El ciclo `iswc-show` / `iswc-hide` / … lo emite el `<iswc-dialog>` interno
 como evento semántico ADICIONAL y acompaña a `iswc-hide` cuando el cierre lo pide
 el usuario (Escape, backdrop, botón Cancelar); un `hide()` programático no
 emite ninguno de los dos.
+
+
+<details>
+<summary>Ejemplo en vivo</summary>
+
+```js
+const el = document.querySelector('iswc-confirm-delete');
+el.addEventListener('iswc-show', (e) => {
+  console.log('iswc-show', e.detail);
+});
+```
+
+</details>
 
 ### Métodos y propiedades públicas
 

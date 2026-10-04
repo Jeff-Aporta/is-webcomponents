@@ -66,9 +66,27 @@ No expone.
 
 ### Eventos
 
+
+| Evento | Descripción |
+| --- | --- |
+| `iswc-gauge-change` | Evento personalizado del componente (gauge change). |
+
 | Evento | detail | bubbles | composed | cancelable |
 | --- | --- | --- | --- | --- |
 | `iswc-gauge-change` | según cabecera | según cabecera | según cabecera | según cabecera |
+
+
+<details>
+<summary>Ejemplo en vivo</summary>
+
+```js
+const el = document.querySelector('iswc-gauge');
+el.addEventListener('iswc-gauge-change', (e) => {
+  console.log('iswc-gauge-change', e.detail);
+});
+```
+
+</details>
 
 ### Métodos y propiedades públicas
 

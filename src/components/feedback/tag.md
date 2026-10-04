@@ -68,9 +68,27 @@ import './tag.js';
 
 ### Eventos
 
+
+| Evento | Descripción |
+| --- | --- |
+| `iswc-remove` | Emitido al eliminar un elemento. |
+
 | Evento | detail | bubbles | composed | cancelable |
 | --- | --- | --- | --- | --- |
 | `iswc-remove` | no | sí | sí | no |
+
+
+<details>
+<summary>Ejemplo en vivo</summary>
+
+```js
+const el = document.querySelector('iswc-tag');
+el.addEventListener('iswc-remove', (e) => {
+  console.log('iswc-remove', e.detail);
+});
+```
+
+</details>
 
 ### Métodos y propiedades públicas
 

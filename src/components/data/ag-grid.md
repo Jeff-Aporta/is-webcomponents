@@ -141,6 +141,19 @@ Orden, visibilidad (`hide`), anchos, pin, `sortModel`, `filterModel`, quick filt
 
 ### Eventos
 
+
+| Evento | Descripción |
+| --- | --- |
+| `iswc-sort-change` | Evento personalizado del componente (sort change). |
+| `iswc-filter-change` | Evento personalizado del componente (filter change). |
+| `iswc-column-hide` | Evento personalizado del componente (column hide). |
+| `iswc-column-reorder` | Evento personalizado del componente (column reorder). |
+| `iswc-column-resize` | Evento personalizado del componente (column resize). |
+| `iswc-column-pin` | Evento personalizado del componente (column pin). |
+| `iswc-state-saved` | Evento personalizado del componente (state saved). |
+| `iswc-state-loaded` | Evento personalizado del componente (state loaded). |
+| `iswc-state-reset` | Evento personalizado del componente (state reset). |
+
 | Evento | detail | bubbles | composed | cancelable |
 | --- | --- | --- | --- | --- |
 | `iswc-sort-change` | modelo de orden | sí | sí | no |
@@ -157,6 +170,19 @@ Nombres completos emitidos por el módulo:
 
 `iswc-sort-change`, `iswc-filter-change`, `iswc-column-hide`, `iswc-column-reorder`, `iswc-column-resize`,
 `iswc-column-pin`, `iswc-state-saved`, `iswc-state-loaded`, `iswc-state-reset`, …
+
+
+<details>
+<summary>Ejemplo en vivo</summary>
+
+```js
+const el = document.querySelector('iswc-ag-grid');
+el.addEventListener('iswc-sort-change', (e) => {
+  console.log('iswc-sort-change', e.detail);
+});
+```
+
+</details>
 
 ### CSS parts
 

@@ -86,10 +86,29 @@ import './floating.js';
 
 ### Eventos
 
+
+| Evento | Descripción |
+| --- | --- |
+| `iswc-reposition` | Evento personalizado del componente (reposition). |
+| `iswc-hover-bridge` | Evento personalizado del componente (hover bridge). |
+
 | Evento | detail | bubbles | composed | cancelable |
 | --- | --- | --- | --- | --- |
 | `iswc-reposition` | `{ placement, x, y }` | sí | sí | no |
 | `iswc-hover-bridge` | `{ hovering }` | sí | sí | no |
+
+
+<details>
+<summary>Ejemplo en vivo</summary>
+
+```js
+const el = document.querySelector('iswc-floating');
+el.addEventListener('iswc-reposition', (e) => {
+  console.log('iswc-reposition', e.detail);
+});
+```
+
+</details>
 
 ### Métodos y propiedades públicas
 

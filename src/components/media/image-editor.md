@@ -65,11 +65,31 @@ import './image-editor.js';
 
 ### Eventos
 
+
+| Evento | Descripción |
+| --- | --- |
+| `iswc-load` | Emitido cuando el recurso se ha cargado. |
+| `iswc-change` | Emitido al confirmar el cambio de valor (escribe como `change` nativo). |
+| `iswc-crop` | Evento personalizado del componente (crop). |
+
 | Evento | detail | bubbles | composed | cancelable |
 | --- | --- | --- | --- | --- |
 | `iswc-load` | `{ image }` | sí | sí | no |
 | `iswc-change` | `{ crop }` | sí | sí | no |
 | `iswc-crop` | `{ dataURL, crop }` | sí | sí | no |
+
+
+<details>
+<summary>Ejemplo en vivo</summary>
+
+```js
+const el = document.querySelector('iswc-image-editor');
+el.addEventListener('iswc-load', (e) => {
+  console.log('iswc-load', e.detail);
+});
+```
+
+</details>
 
 ### Métodos y propiedades públicas
 

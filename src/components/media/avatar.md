@@ -70,9 +70,27 @@ import './avatar.js';
 
 ### Eventos
 
+
+| Evento | Descripción |
+| --- | --- |
+| `iswc-error` | Emitido cuando se produce un error. |
+
 | Evento | detail | bubbles | composed | cancelable |
 | --- | --- | --- | --- | --- |
 | `iswc-error` | no | sí | sí | no |
+
+
+<details>
+<summary>Ejemplo en vivo</summary>
+
+```js
+const el = document.querySelector('iswc-avatar');
+el.addEventListener('iswc-error', (e) => {
+  console.log('iswc-error', e.detail);
+});
+```
+
+</details>
 
 ### Métodos y propiedades públicas
 

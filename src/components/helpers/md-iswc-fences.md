@@ -35,3 +35,24 @@ gantt, timeline, org-chart, sankey, quadrant, venn, usecase, swimlane, journey
 (+ alias con sufijo `-diagram` / `-map` / `-chart`).
 
 Consumido por `md-lite`. No inventar otro mapa de fences en la app.
+
+
+## Eventos
+
+| Evento | Descripción |
+| --- | --- |
+| _(ninguno)_ | Este componente no emite eventos personalizados. |
+
+<details>
+<summary>Ejemplo en vivo</summary>
+
+```js
+const el = document.querySelector('iswc-component');
+// El componente no emite eventos personalizados.
+// Escucha los nativos si los necesitas:
+el.addEventListener('click', (e) => {
+  console.log('click', e);
+});
+```
+
+</details>

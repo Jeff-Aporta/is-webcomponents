@@ -64,10 +64,29 @@ import './scrollspy.js';
 
 ### Eventos
 
+
+| Evento | Descripción |
+| --- | --- |
+| `iswc-deactivated` | Evento personalizado del componente (deactivated). |
+| `iswc-activated` | Evento personalizado del componente (activated). |
+
 | Evento | detail | bubbles | composed | cancelable |
 | --- | --- | --- | --- | --- |
 | `iswc-deactivated` | sí | sí | sí | no |
 | `iswc-activated` | sí | sí | sí | no |
+
+
+<details>
+<summary>Ejemplo en vivo</summary>
+
+```js
+const el = document.querySelector('iswc-scrollspy');
+el.addEventListener('iswc-deactivated', (e) => {
+  console.log('iswc-deactivated', e.detail);
+});
+```
+
+</details>
 
 ### Métodos y propiedades públicas
 

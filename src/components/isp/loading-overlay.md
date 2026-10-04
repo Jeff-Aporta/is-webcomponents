@@ -69,10 +69,29 @@ import './loading-overlay.js';
 
 ### Eventos
 
+
+| Evento | Descripción |
+| --- | --- |
+| `iswc-show` | Emitido justo antes de mostrarse (cancelable). |
+| `iswc-hide` | Emitido justo antes de ocultarse (cancelable). |
+
 | Evento | detail | bubbles | composed | cancelable |
 | --- | --- | --- | --- | --- |
 | `iswc-show` | `{}` | sí | sí | no |
 | `iswc-hide` | `{}` | sí | sí | no |
+
+
+<details>
+<summary>Ejemplo en vivo</summary>
+
+```js
+const el = document.querySelector('iswc-loading-overlay');
+el.addEventListener('iswc-show', (e) => {
+  console.log('iswc-show', e.detail);
+});
+```
+
+</details>
 
 ### Métodos y propiedades públicas
 

@@ -71,11 +71,31 @@ import './journey-map.js';
 
 ### Eventos
 
+
+| Evento | Descripción |
+| --- | --- |
+| `iswc-render` | Emitido al renderizar o redibujar el componente. |
+| `iswc-open-viewer` | Emitido al abrir el visor ampliado (cancelable). |
+| `iswc-toggle-phase` | Evento personalizado del componente (toggle phase). |
+
 | Evento | detail | bubbles | composed | cancelable |
 | --- | --- | --- | --- | --- |
 | `iswc-render` | sí | sí | sí | no |
 | `iswc-open-viewer` | sí | sí | sí | sí |
 | `iswc-toggle-phase` | sí | sí | sí | no |
+
+
+<details>
+<summary>Ejemplo en vivo</summary>
+
+```js
+const el = document.querySelector('iswc-journey-map');
+el.addEventListener('iswc-render', (e) => {
+  console.log('iswc-render', e.detail);
+});
+```
+
+</details>
 
 ### Métodos y propiedades públicas
 

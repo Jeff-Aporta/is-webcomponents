@@ -76,11 +76,29 @@ No expone propiedades públicas propias; el estado se lee de los atributos.
 
 ### Eventos
 
+
+| Evento | Descripción |
+| --- | --- |
+| `iswc-select` | Emitido al seleccionar un elemento. |
+
 | Evento | detail | bubbles | composed | cancelable |
 | --- | --- | --- | --- | --- |
 | `iswc-select` | `{ item }` | sí | sí | no |
 
 `iswc-select` se emite sobre el `<iswc-dock>` contenedor, no sobre el ítem.
+
+
+<details>
+<summary>Ejemplo en vivo</summary>
+
+```js
+const el = document.querySelector('iswc-dock');
+el.addEventListener('iswc-select', (e) => {
+  console.log('iswc-select', e.detail);
+});
+```
+
+</details>
 
 ### Métodos y propiedades públicas
 

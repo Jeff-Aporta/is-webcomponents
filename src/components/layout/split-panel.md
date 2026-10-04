@@ -80,9 +80,27 @@ import './split-panel.js';
 
 ### Eventos
 
+
+| Evento | Descripción |
+| --- | --- |
+| `reposition` | Evento `reposition`. |
+
 | Evento | detail | bubbles | composed | cancelable |
 | --- | --- | --- | --- | --- |
 | `reposition` | sí | sí | sí | no |
+
+
+<details>
+<summary>Ejemplo en vivo</summary>
+
+```js
+const el = document.querySelector('iswc-split-panel');
+el.addEventListener('reposition', (e) => {
+  console.log('reposition', e.detail);
+});
+```
+
+</details>
 
 ### Métodos y propiedades públicas
 

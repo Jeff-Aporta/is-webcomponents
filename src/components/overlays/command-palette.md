@@ -77,6 +77,15 @@ import './command-palette.js';
 
 ### Eventos
 
+
+| Evento | Descripción |
+| --- | --- |
+| `iswc-show` | Emitido justo antes de mostrarse (cancelable). |
+| `iswc-after-show` | Emitido tras finalizar la animación de apertura. |
+| `iswc-hide` | Emitido justo antes de ocultarse (cancelable). |
+| `iswc-after-hide` | Emitido tras finalizar la animación de cierre. |
+| `iswc-select` | Emitido al seleccionar un elemento. |
+
 | Evento | detail | bubbles | composed | cancelable |
 | --- | --- | --- | --- | --- |
 | `iswc-show` | no | sí | sí | no |
@@ -87,6 +96,19 @@ import './command-palette.js';
 
 Vocabulario unificado con `ModalBase`. Los antiguos `iswc-open` / `iswc-close`
 ya no se emiten. Escape lo cierra el propio `<dialog>` (evento `cancel`).
+
+
+<details>
+<summary>Ejemplo en vivo</summary>
+
+```js
+const el = document.querySelector('iswc-command-palette');
+el.addEventListener('iswc-show', (e) => {
+  console.log('iswc-show', e.detail);
+});
+```
+
+</details>
 
 ### Métodos y propiedades públicas
 

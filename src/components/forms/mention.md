@@ -76,6 +76,13 @@ import './mention.js';
 
 ### Eventos
 
+
+| Evento | Descripción |
+| --- | --- |
+| `iswc-input` | Emitido en cada cambio del valor (escribe como `input` nativo). |
+| `iswc-select` | Emitido al seleccionar un elemento. |
+| `iswc-change` | Emitido al confirmar el cambio de valor (escribe como `change` nativo). |
+
 | Evento | detail | bubbles | composed | cancelable |
 | --- | --- | --- | --- | --- |
 | `iswc-input` | sin detail | sí | sí | no |
@@ -83,6 +90,19 @@ import './mention.js';
 | `iswc-change` | `{ value }` | sí | sí | no |
 
 `iswc-change` se emite al seleccionar una sugerencia, no en cada pulsación.
+
+
+<details>
+<summary>Ejemplo en vivo</summary>
+
+```js
+const el = document.querySelector('iswc-mention');
+el.addEventListener('iswc-input', (e) => {
+  console.log('iswc-input', e.detail);
+});
+```
+
+</details>
 
 ### Métodos y propiedades públicas
 

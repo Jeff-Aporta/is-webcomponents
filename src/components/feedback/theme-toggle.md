@@ -73,12 +73,30 @@ No expone.
 
 ### Eventos
 
+
+| Evento | Descripción |
+| --- | --- |
+| `iswc-theme-change` | Evento personalizado del componente (theme change). |
+
 | Evento | detail | bubbles | composed | cancelable |
 | --- | --- | --- | --- | --- |
 | `iswc-theme-change` | sí | sí | sí | no |
 
 `detail`: `{ theme: 'light' \| 'dark', dark: boolean, container: Element }`.
 Al ser `composed` + `bubbles`, también se puede escuchar en `document`.
+
+
+<details>
+<summary>Ejemplo en vivo</summary>
+
+```js
+const el = document.querySelector('iswc-theme-toggle');
+el.addEventListener('iswc-theme-change', (e) => {
+  console.log('iswc-theme-change', e.detail);
+});
+```
+
+</details>
 
 ### Métodos y propiedades públicas
 

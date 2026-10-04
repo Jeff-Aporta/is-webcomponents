@@ -54,3 +54,24 @@ Sirve para logos de marca, favicons en nav y cualquier asset dual-tema sin monta
 Propiedades camelCase espejo: `srcDark`, `srcLight`, `activeTheme`, `themeContainer`.
 
 CSS part: `::part(image)`.
+
+
+## Eventos
+
+| Evento | Descripción |
+| --- | --- |
+| _(ninguno)_ | Este componente no emite eventos personalizados. |
+
+<details>
+<summary>Ejemplo en vivo</summary>
+
+```js
+const el = document.querySelector('iswc-theme-img');
+// El componente no emite eventos personalizados.
+// Escucha los nativos si los necesitas:
+el.addEventListener('click', (e) => {
+  console.log('click', e);
+});
+```
+
+</details>

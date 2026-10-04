@@ -120,6 +120,16 @@ import './input.js';
 
 ### Eventos
 
+
+| Evento | Descripción |
+| --- | --- |
+| `input` | Evento nativo al cambiar el valor. |
+| `change` | Evento nativo al confirmar el cambio de valor. |
+| `iswc-input` | Emitido en cada cambio del valor (escribe como `input` nativo). |
+| `iswc-change` | Emitido al confirmar el cambio de valor (escribe como `change` nativo). |
+| `iswc-typing-end` | Emitido tras el debounce de escritura (default 600 ms). |
+| `iswc-otp` | Emitido al autocompletar el valor vía Web OTP (autocomplete="one-time-code"). |
+
 | Evento | detail | bubbles | composed | cancelable |
 | --- | --- | --- | --- | --- |
 | `input` | no | sí | sí | no |
@@ -128,6 +138,19 @@ import './input.js';
 | `iswc-change` | sí | sí | sí | no |
 | `iswc-typing-end` | `{ value }` | sí | sí | no |
 | `iswc-otp` | `{ code }` | sí | sí | no |
+
+
+<details>
+<summary>Ejemplo en vivo</summary>
+
+```js
+const el = document.querySelector('iswc-input');
+el.addEventListener('input', (e) => {
+  console.log('input', e.detail);
+});
+```
+
+</details>
 
 ### Métodos y propiedades públicas
 

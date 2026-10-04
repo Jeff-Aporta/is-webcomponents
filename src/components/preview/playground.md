@@ -33,3 +33,22 @@ import './playground.js';
 Slots: `stage`, `spec` (`script type=application/json`).
 
 Evento: `iswc-controls-change` `{ def, valor }`.
+
+
+## Eventos
+
+| Evento | Descripción |
+| --- | --- |
+| `iswc-controls-change` | Emitido al cambiar el valor de un control del playground. |
+
+<details>
+<summary>Ejemplo en vivo</summary>
+
+```js
+const el = document.querySelector('iswc-playground');
+el.addEventListener('iswc-controls-change', (e) => {
+  console.log('iswc-controls-change', e.detail);
+});
+```
+
+</details>

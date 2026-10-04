@@ -66,11 +66,31 @@ import './timeline.js';
 
 ### Eventos
 
+
+| Evento | Descripción |
+| --- | --- |
+| `iswc-render` | Emitido al renderizar o redibujar el componente. |
+| `iswc-toggle-group` | Evento personalizado del componente (toggle group). |
+| `iswc-open-viewer` | Emitido al abrir el visor ampliado (cancelable). |
+
 | Evento | detail | bubbles | composed | cancelable |
 | --- | --- | --- | --- | --- |
 | `iswc-render` | sí | sí | sí | no |
 | `iswc-toggle-group` | sí | sí | sí | sí |
 | `iswc-open-viewer` | sí | sí | sí | sí |
+
+
+<details>
+<summary>Ejemplo en vivo</summary>
+
+```js
+const el = document.querySelector('iswc-timeline');
+el.addEventListener('iswc-render', (e) => {
+  console.log('iswc-render', e.detail);
+});
+```
+
+</details>
 
 ### Métodos y propiedades públicas
 

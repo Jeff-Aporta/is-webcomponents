@@ -77,12 +77,33 @@ Contenido.
 
 ### Eventos
 
+
+| Evento | Descripción |
+| --- | --- |
+| `iswc-hide` | Emitido justo antes de ocultarse (cancelable). |
+| `iswc-show` | Emitido justo antes de mostrarse (cancelable). |
+| `iswc-after-show` | Emitido tras finalizar la animación de apertura. |
+| `iswc-after-hide` | Emitido tras finalizar la animación de cierre. |
+
 | Evento | detail | bubbles | composed | cancelable |
 | --- | --- | --- | --- | --- |
 | `iswc-hide` | sí | sí | sí | sí |
 | `iswc-show` | sí | sí | sí | no |
 | `iswc-after-show` | sí | sí | sí | no |
 | `iswc-after-hide` | sí | sí | sí | no |
+
+
+<details>
+<summary>Ejemplo en vivo</summary>
+
+```js
+const el = document.querySelector('iswc-drawer');
+el.addEventListener('iswc-hide', (e) => {
+  console.log('iswc-hide', e.detail);
+});
+```
+
+</details>
 
 ### Métodos y propiedades públicas
 

@@ -106,12 +106,33 @@ import './textarea.js';
 
 ### Eventos
 
+
+| Evento | Descripción |
+| --- | --- |
+| `input` | Evento nativo al cambiar el valor. |
+| `change` | Evento nativo al confirmar el cambio de valor. |
+| `iswc-input` | Emitido en cada cambio del valor (escribe como `input` nativo). |
+| `iswc-change` | Emitido al confirmar el cambio de valor (escribe como `change` nativo). |
+
 | Evento | detail | bubbles | composed | cancelable |
 | --- | --- | --- | --- | --- |
 | `input` | no | sí | sí | no |
 | `change` | no | sí | sí | no |
 | `iswc-input` | sí | sí | sí | no |
 | `iswc-change` | sí | sí | sí | no |
+
+
+<details>
+<summary>Ejemplo en vivo</summary>
+
+```js
+const el = document.querySelector('iswc-textarea');
+el.addEventListener('input', (e) => {
+  console.log('input', e.detail);
+});
+```
+
+</details>
 
 ### Métodos y propiedades públicas
 

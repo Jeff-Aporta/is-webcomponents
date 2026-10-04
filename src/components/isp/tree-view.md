@@ -92,12 +92,33 @@ import './tree-view.js';
 
 ### Eventos
 
+
+| Evento | Descripción |
+| --- | --- |
+| `iswc-select` | Emitido al seleccionar un elemento. |
+| `iswc-frm-open` | Evento personalizado del componente (frm open). |
+| `iswc-frm-close` | Evento personalizado del componente (frm close). |
+| `iswc-error` | Emitido cuando se produce un error. |
+
 | Evento | detail | bubbles | composed | cancelable |
 | --- | --- | --- | --- | --- |
 | `iswc-select` | `{ node, flatPath }` | sí | sí | no |
 | `iswc-frm-open` | `{ record, itdForm, ancestors, isNew }` | sí | sí | no |
 | `iswc-frm-close` | `{}` | sí | sí | no |
 | `iswc-error` | `{ message }` | sí | sí | no |
+
+
+<details>
+<summary>Ejemplo en vivo</summary>
+
+```js
+const el = document.querySelector('iswc-tree-view');
+el.addEventListener('iswc-select', (e) => {
+  console.log('iswc-select', e.detail);
+});
+```
+
+</details>
 
 ### Métodos y propiedades públicas
 

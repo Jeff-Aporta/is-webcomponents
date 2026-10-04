@@ -77,7 +77,24 @@ No aplica.
 
 ### Eventos
 
+
+| Evento | Descripción |
+| --- | --- |
+
 No aplica.
+
+
+<details>
+<summary>Ejemplo en vivo</summary>
+
+```js
+const el = document.querySelector('iswc-ui');
+el.addEventListener('click', (e) => {
+  console.log('click', e.detail);
+});
+```
+
+</details>
 
 ### Métodos y propiedades públicas
 

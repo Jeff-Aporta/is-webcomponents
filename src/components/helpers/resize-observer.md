@@ -58,9 +58,27 @@ No expone.
 
 ### Eventos
 
+
+| Evento | Descripción |
+| --- | --- |
+| `iswc-resize` | Emitido al cambiar el tamaño del elemento observado. |
+
 | Evento | detail | bubbles | composed | cancelable |
 | --- | --- | --- | --- | --- |
 | `iswc-resize` | sí | sí | sí | no |
+
+
+<details>
+<summary>Ejemplo en vivo</summary>
+
+```js
+const el = document.querySelector('iswc-resize-observer');
+el.addEventListener('iswc-resize', (e) => {
+  console.log('iswc-resize', e.detail);
+});
+```
+
+</details>
 
 ### Métodos y propiedades públicas
 

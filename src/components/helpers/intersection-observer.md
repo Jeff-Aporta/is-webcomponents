@@ -69,9 +69,27 @@ import './intersection-observer.js';
 
 ### Eventos
 
+
+| Evento | Descripción |
+| --- | --- |
+| `iswc-intersect` | Emitido al entrar/salir de la zona observada. |
+
 | Evento | detail | bubbles | composed | cancelable |
 | --- | --- | --- | --- | --- |
 | `iswc-intersect` | sí | sí | sí | no |
+
+
+<details>
+<summary>Ejemplo en vivo</summary>
+
+```js
+const el = document.querySelector('iswc-intersection-observer');
+el.addEventListener('iswc-intersect', (e) => {
+  console.log('iswc-intersect', e.detail);
+});
+```
+
+</details>
 
 ### Métodos y propiedades públicas
 

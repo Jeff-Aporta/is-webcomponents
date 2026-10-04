@@ -82,10 +82,29 @@ import './component-diagram.js';
 
 ### Eventos
 
+
+| Evento | Descripción |
+| --- | --- |
+| `iswc-render` | Emitido al renderizar o redibujar el componente. |
+| `iswc-open-viewer` | Emitido al abrir el visor ampliado (cancelable). |
+
 | Evento | detail | bubbles | composed | cancelable |
 | --- | --- | --- | --- | --- |
 | `iswc-render` | sí | sí | sí | no |
 | `iswc-open-viewer` | sí | sí | sí | sí |
+
+
+<details>
+<summary>Ejemplo en vivo</summary>
+
+```js
+const el = document.querySelector('iswc-component-diagram');
+el.addEventListener('iswc-render', (e) => {
+  console.log('iswc-render', e.detail);
+});
+```
+
+</details>
 
 ### Métodos y propiedades públicas
 

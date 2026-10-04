@@ -90,6 +90,13 @@ Tokens de `pattern`:
 
 ### Eventos
 
+
+| Evento | Descripción |
+| --- | --- |
+| `iswc-input` | Emitido en cada cambio del valor (escribe como `input` nativo). |
+| `iswc-change` | Emitido al confirmar el cambio de valor (escribe como `change` nativo). |
+| `iswc-complete` | Emitido al completar la operación. |
+
 | Evento | detail | bubbles | composed | cancelable |
 | --- | --- | --- | --- | --- |
 | `iswc-input` | sin detail | sí | sí | no |
@@ -99,6 +106,19 @@ Tokens de `pattern`:
 `iswc-input` en cada pulsación; `iswc-change` al confirmar (`change` del input
 interno, reemitido porque no cruza el shadow root); `iswc-complete` cada vez que
 el valor pasa a estar completo.
+
+
+<details>
+<summary>Ejemplo en vivo</summary>
+
+```js
+const el = document.querySelector('iswc-masked-input');
+el.addEventListener('iswc-input', (e) => {
+  console.log('iswc-input', e.detail);
+});
+```
+
+</details>
 
 ### Métodos y propiedades públicas
 

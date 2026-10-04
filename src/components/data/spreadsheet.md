@@ -86,6 +86,11 @@ contenido en light DOM se ignora.
 
 ### Eventos
 
+
+| Evento | Descripción |
+| --- | --- |
+| `iswc-change` | Emitido al confirmar el cambio de valor (escribe como `change` nativo). |
+
 | Evento | detail | bubbles | composed | cancelable |
 | --- | --- | --- | --- | --- |
 | `iswc-change` | `{ row, col, raw, value }` — índices base 0, `raw` es lo que quedó en la celda (texto o fórmula) y `value` el resultado calculado | sí | sí | no |
@@ -97,6 +102,19 @@ contenido en light DOM se ignora.
 La cabecera del archivo fuente documenta además un evento `iswc-select` con
 `detail: { row, col, value }`, pero **no se emite en ninguna parte del código**.
 No lo escuches.
+
+
+<details>
+<summary>Ejemplo en vivo</summary>
+
+```js
+const el = document.querySelector('iswc-spreadsheet');
+el.addEventListener('iswc-change', (e) => {
+  console.log('iswc-change', e.detail);
+});
+```
+
+</details>
 
 ### Métodos y propiedades públicas
 

@@ -76,12 +76,33 @@ InSoft es un ERP modular…
 
 ### Eventos
 
+
+| Evento | Descripción |
+| --- | --- |
+| `iswc-show` | Emitido justo antes de mostrarse (cancelable). |
+| `iswc-after-show` | Emitido tras finalizar la animación de apertura. |
+| `iswc-hide` | Emitido justo antes de ocultarse (cancelable). |
+| `iswc-after-hide` | Emitido tras finalizar la animación de cierre. |
+
 | Evento | detail | bubbles | composed | cancelable |
 | --- | --- | --- | --- | --- |
 | `iswc-show` | según cabecera | según cabecera | según cabecera | según cabecera |
 | `iswc-after-show` | según cabecera | según cabecera | según cabecera | según cabecera |
 | `iswc-hide` | según cabecera | según cabecera | según cabecera | según cabecera |
 | `iswc-after-hide` | según cabecera | según cabecera | según cabecera | según cabecera |
+
+
+<details>
+<summary>Ejemplo en vivo</summary>
+
+```js
+const el = document.querySelector('iswc-details');
+el.addEventListener('iswc-show', (e) => {
+  console.log('iswc-show', e.detail);
+});
+```
+
+</details>
 
 ### Métodos y propiedades públicas
 

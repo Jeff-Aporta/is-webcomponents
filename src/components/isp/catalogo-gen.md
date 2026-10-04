@@ -95,6 +95,16 @@ import './catalogo-gen.js';
 
 ### Eventos
 
+
+| Evento | Descripción |
+| --- | --- |
+| `iswc-selection-change` | Emitido al cambiar la selección. |
+| `iswc-double-click` | Evento personalizado del componente (double click). |
+| `iswc-action` | Evento personalizado del componente (action). |
+| `iswc-frm-open` | Evento personalizado del componente (frm open). |
+| `iswc-frm-close` | Evento personalizado del componente (frm close). |
+| `iswc-error` | Emitido cuando se produce un error. |
+
 | Evento | detail | bubbles | composed | cancelable |
 | --- | --- | --- | --- | --- |
 | `iswc-selection-change` | `{ records }` | sí | sí | no |
@@ -103,6 +113,19 @@ import './catalogo-gen.js';
 | `iswc-frm-open` | modo del formulario | sí | sí | no |
 | `iswc-frm-close` | sin detail | sí | sí | no |
 | `iswc-error` | `{ message }` | sí | sí | no |
+
+
+<details>
+<summary>Ejemplo en vivo</summary>
+
+```js
+const el = document.querySelector('iswc-catalogo-gen');
+el.addEventListener('iswc-selection-change', (e) => {
+  console.log('iswc-selection-change', e.detail);
+});
+```
+
+</details>
 
 ### Métodos y propiedades públicas
 

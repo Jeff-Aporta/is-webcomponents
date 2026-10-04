@@ -77,11 +77,31 @@ Documentos
 
 ### Eventos
 
+
+| Evento | Descripción |
+| --- | --- |
+| `iswc-tree-toggle` | Evento personalizado del componente (tree toggle). |
+| `iswc-tree-select` | Evento personalizado del componente (tree select). |
+| `iswc-tree-expand` | Evento personalizado del componente (tree expand). |
+
 | Evento | detail | bubbles | composed | cancelable |
 | --- | --- | --- | --- | --- |
 | `iswc-tree-toggle` | sí | sí | sí | no |
 | `iswc-tree-select` | sí | sí | sí | no |
 | `iswc-tree-expand` | según cabecera | según cabecera | según cabecera | según cabecera |
+
+
+<details>
+<summary>Ejemplo en vivo</summary>
+
+```js
+const el = document.querySelector('iswc-tree');
+el.addEventListener('iswc-tree-toggle', (e) => {
+  console.log('iswc-tree-toggle', e.detail);
+});
+```
+
+</details>
 
 ### Métodos y propiedades públicas
 

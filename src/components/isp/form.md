@@ -105,10 +105,29 @@ También: hijo `<script type="application/json">` con el mismo objeto.
 
 ### Eventos
 
+
+| Evento | Descripción |
+| --- | --- |
+| `iswc-submit` | Emitido al enviar el formulario. |
+| `iswc-cancel` | Emitido al cancelar la operación. |
+
 | Evento | detail | bubbles | composed | cancelable |
 | --- | --- | --- | --- | --- |
 | `iswc-submit` | `{ form, values, json }` | sí | sí | no |
 | `iswc-cancel` | `{ form, values, json }` | sí | sí | no |
+
+
+<details>
+<summary>Ejemplo en vivo</summary>
+
+```js
+const el = document.querySelector('iswc-form');
+el.addEventListener('iswc-submit', (e) => {
+  console.log('iswc-submit', e.detail);
+});
+```
+
+</details>
 
 ### Métodos y propiedades públicas
 

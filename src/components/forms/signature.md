@@ -68,6 +68,12 @@ No expone.
 
 ### Eventos
 
+
+| Evento | Descripción |
+| --- | --- |
+| `iswc-stroke-end` | Evento personalizado del componente (stroke end). |
+| `iswc-change` | Emitido al confirmar el cambio de valor (escribe como `change` nativo). |
+
 | Evento | detail | bubbles | composed | cancelable |
 | --- | --- | --- | --- | --- |
 | `iswc-stroke-end` | `{ dataURL }` | sí | sí | no |
@@ -75,6 +81,19 @@ No expone.
 
 `iswc-change` se emite al terminar cada trazo y también en `clear()`.
 `strokes` es el arreglo interno de trazos (`[{ x, y }, ...]` por trazo).
+
+
+<details>
+<summary>Ejemplo en vivo</summary>
+
+```js
+const el = document.querySelector('iswc-signature');
+el.addEventListener('iswc-stroke-end', (e) => {
+  console.log('iswc-stroke-end', e.detail);
+});
+```
+
+</details>
 
 ### Métodos y propiedades públicas
 

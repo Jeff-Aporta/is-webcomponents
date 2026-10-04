@@ -77,6 +77,17 @@ import './window.js';
 
 ### Eventos
 
+
+| Evento | Descripción |
+| --- | --- |
+| `iswc-show` | Emitido justo antes de mostrarse (cancelable). |
+| `iswc-after-show` | Emitido tras finalizar la animación de apertura. |
+| `iswc-hide` | Emitido justo antes de ocultarse (cancelable). |
+| `iswc-after-hide` | Emitido tras finalizar la animación de cierre. |
+| `iswc-minimize` | Evento personalizado del componente (minimize). |
+| `iswc-restore` | Evento personalizado del componente (restore). |
+| `iswc-maximize` | Evento personalizado del componente (maximize). |
+
 | Evento | detail | bubbles | composed | cancelable |
 | --- | --- | --- | --- | --- |
 | `iswc-show` | no | sí | sí | no |
@@ -90,6 +101,19 @@ import './window.js';
 Vocabulario unificado con `ModalBase` (`iswc-show` / `iswc-after-show` /
 `iswc-hide` / `iswc-after-hide`). Los antiguos `iswc-open` / `iswc-close` ya no se
 emiten.
+
+
+<details>
+<summary>Ejemplo en vivo</summary>
+
+```js
+const el = document.querySelector('iswc-window');
+el.addEventListener('iswc-show', (e) => {
+  console.log('iswc-show', e.detail);
+});
+```
+
+</details>
 
 ### Métodos y propiedades públicas
 

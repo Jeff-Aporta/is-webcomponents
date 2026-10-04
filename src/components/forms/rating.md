@@ -97,10 +97,29 @@ import './rating.js';
 
 ### Eventos
 
+
+| Evento | Descripción |
+| --- | --- |
+| `iswc-change` | Emitido al confirmar el cambio de valor (escribe como `change` nativo). |
+| `iswc-hover` | Evento personalizado del componente (hover). |
+
 | Evento | detail | bubbles | composed | cancelable |
 | --- | --- | --- | --- | --- |
 | `iswc-change` | sí | sí | sí | no |
 | `iswc-hover` | sí | sí | sí | no |
+
+
+<details>
+<summary>Ejemplo en vivo</summary>
+
+```js
+const el = document.querySelector('iswc-rating');
+el.addEventListener('iswc-change', (e) => {
+  console.log('iswc-change', e.detail);
+});
+```
+
+</details>
 
 ### Métodos y propiedades públicas
 

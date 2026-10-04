@@ -77,9 +77,27 @@ No expone.
 
 ### Eventos
 
+
+| Evento | Descripción |
+| --- | --- |
+| `iswc-kanban-card-click` | Evento personalizado del componente (kanban card click). |
+
 | Evento | detail | bubbles | composed | cancelable |
 | --- | --- | --- | --- | --- |
 | `iswc-kanban-card-click` | sí | sí | sí | no |
+
+
+<details>
+<summary>Ejemplo en vivo</summary>
+
+```js
+const el = document.querySelector('iswc-kanban');
+el.addEventListener('iswc-kanban-card-click', (e) => {
+  console.log('iswc-kanban-card-click', e.detail);
+});
+```
+
+</details>
 
 ### Métodos y propiedades públicas
 

@@ -102,12 +102,33 @@ No expone.
 
 ### Eventos
 
+
+| Evento | Descripción |
+| --- | --- |
+| `iswc-view-change` | Evento personalizado del componente (view change). |
+| `iswc-month-change` | Evento personalizado del componente (month change). |
+| `iswc-day-hover` | Evento personalizado del componente (day hover). |
+| `iswc-change` | Emitido al confirmar el cambio de valor (escribe como `change` nativo). |
+
 | Evento | detail | bubbles | composed | cancelable |
 | --- | --- | --- | --- | --- |
 | `iswc-view-change` | sí | sí | sí | no |
 | `iswc-month-change` | sí | sí | sí | no |
 | `iswc-day-hover` | sí | sí | sí | no |
 | `iswc-change` | sí | sí | sí | no |
+
+
+<details>
+<summary>Ejemplo en vivo</summary>
+
+```js
+const el = document.querySelector('iswc-date-picker');
+el.addEventListener('iswc-view-change', (e) => {
+  console.log('iswc-view-change', e.detail);
+});
+```
+
+</details>
 
 ### Métodos y propiedades públicas
 

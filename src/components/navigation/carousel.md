@@ -80,12 +80,33 @@ import './carousel.js';
 
 ### Eventos
 
+
+| Evento | Descripción |
+| --- | --- |
+| `iswc-carousel-slide-end` | Evento personalizado del componente (carousel slide end). |
+| `iswc-carousel-change` | Evento personalizado del componente (carousel change). |
+| `iswc-carousel-play` | Evento personalizado del componente (carousel play). |
+| `iswc-carousel-pause` | Evento personalizado del componente (carousel pause). |
+
 | Evento | detail | bubbles | composed | cancelable |
 | --- | --- | --- | --- | --- |
 | `iswc-carousel-slide-end` | no | sí | sí | no |
 | `iswc-carousel-change` | sí | sí | sí | no |
 | `iswc-carousel-play` | sí | sí | sí | no |
 | `iswc-carousel-pause` | sí | sí | sí | no |
+
+
+<details>
+<summary>Ejemplo en vivo</summary>
+
+```js
+const el = document.querySelector('iswc-carousel');
+el.addEventListener('iswc-carousel-slide-end', (e) => {
+  console.log('iswc-carousel-slide-end', e.detail);
+});
+```
+
+</details>
 
 ### Métodos y propiedades públicas
 

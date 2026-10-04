@@ -103,6 +103,14 @@ No expone: todo el contenido del diálogo se construye en el shadow root.
 
 ### Eventos
 
+
+| Evento | Descripción |
+| --- | --- |
+| `iswc-verificacion` | Evento personalizado del componente (verificacion). |
+| `iswc-verificacion-error` | Evento personalizado del componente (verificacion error). |
+| `iswc-cancel` | Emitido al cancelar la operación. |
+| `iswc-show / iswc-after-show / iswc-hide / iswc-after-hide` | Evento personalizado del componente (show / iswc after show / iswc hide / iswc after hide). |
+
 | Evento | detail | bubbles | composed |
 | --- | --- | --- | --- |
 | `iswc-verificacion` | `{ mensajes, qinfos, qwarning, qerrores }` | sí | sí |
@@ -114,6 +122,19 @@ No expone: todo el contenido del diálogo se construye en el shadow root.
 conserva como evento semántico ADICIONAL y acompaña a `iswc-hide` cuando el
 cierre lo pide el usuario (Escape, backdrop, botón Cerrar); un `hide()`
 programático no emite ninguno de los dos.
+
+
+<details>
+<summary>Ejemplo en vivo</summary>
+
+```js
+const el = document.querySelector('iswc-modal-verificacion');
+el.addEventListener('iswc-verificacion', (e) => {
+  console.log('iswc-verificacion', e.detail);
+});
+```
+
+</details>
 
 ### Custom states
 

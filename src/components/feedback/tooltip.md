@@ -79,12 +79,33 @@ import './tooltip.js';
 
 ### Eventos
 
+
+| Evento | Descripción |
+| --- | --- |
+| `iswc-show` | Emitido justo antes de mostrarse (cancelable). |
+| `iswc-after-show` | Emitido tras finalizar la animación de apertura. |
+| `iswc-hide` | Emitido justo antes de ocultarse (cancelable). |
+| `iswc-after-hide` | Emitido tras finalizar la animación de cierre. |
+
 | Evento | detail | bubbles | composed | cancelable |
 | --- | --- | --- | --- | --- |
 | `iswc-show` | no | sí | sí | sí |
 | `iswc-after-show` | no | sí | sí | sí |
 | `iswc-hide` | no | sí | sí | sí |
 | `iswc-after-hide` | no | sí | sí | no |
+
+
+<details>
+<summary>Ejemplo en vivo</summary>
+
+```js
+const el = document.querySelector('iswc-tooltip');
+el.addEventListener('iswc-show', (e) => {
+  console.log('iswc-show', e.detail);
+});
+```
+
+</details>
 
 ### Métodos y propiedades públicas
 

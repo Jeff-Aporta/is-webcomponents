@@ -62,11 +62,31 @@ import './speech.js';
 
 ### Eventos
 
+
+| Evento | Descripción |
+| --- | --- |
+| `iswc-result` | Evento personalizado del componente (result). |
+| `iswc-speak-end` | Evento personalizado del componente (speak end). |
+| `iswc-error` | Emitido cuando se produce un error. |
+
 | Evento | detail | bubbles | composed | cancelable |
 | --- | --- | --- | --- | --- |
 | `iswc-result` | sí `{ transcript, isFinal }` | sí | sí | no |
 | `iswc-speak-end` | no | sí | sí | no |
 | `iswc-error` | sí `{ message }` | sí | sí | no |
+
+
+<details>
+<summary>Ejemplo en vivo</summary>
+
+```js
+const el = document.querySelector('iswc-speech');
+el.addEventListener('iswc-result', (e) => {
+  console.log('iswc-result', e.detail);
+});
+```
+
+</details>
 
 ### Métodos y propiedades públicas
 

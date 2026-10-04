@@ -72,12 +72,33 @@ import './popconfirm.js';
 
 ### Eventos
 
+
+| Evento | Descripción |
+| --- | --- |
+| `iswc-popconfirm-show` | Evento personalizado del componente (popconfirm show). |
+| `iswc-popconfirm-hide` | Evento personalizado del componente (popconfirm hide). |
+| `iswc-popconfirm-confirm` | Evento personalizado del componente (popconfirm confirm). |
+| `iswc-popconfirm-cancel` | Evento personalizado del componente (popconfirm cancel). |
+
 | Evento | detail | bubbles | composed | cancelable |
 | --- | --- | --- | --- | --- |
 | `iswc-popconfirm-show` | sí | sí | sí | no |
 | `iswc-popconfirm-hide` | sí | sí | sí | no |
 | `iswc-popconfirm-confirm` | sí | sí | sí | no |
 | `iswc-popconfirm-cancel` | sí | sí | sí | no |
+
+
+<details>
+<summary>Ejemplo en vivo</summary>
+
+```js
+const el = document.querySelector('iswc-popconfirm');
+el.addEventListener('iswc-popconfirm-show', (e) => {
+  console.log('iswc-popconfirm-show', e.detail);
+});
+```
+
+</details>
 
 ### Métodos y propiedades públicas
 

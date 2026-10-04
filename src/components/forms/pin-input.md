@@ -67,12 +67,33 @@ No expone.
 
 ### Eventos
 
+
+| Evento | Descripción |
+| --- | --- |
+| `iswc-pin-change` | Evento personalizado del componente (pin change). |
+| `iswc-pin-complete` | Evento personalizado del componente (pin complete). |
+| `iswc-pin-invalid` | Evento personalizado del componente (pin invalid). |
+| `iswc-otp` | Emitido al autocompletar el valor vía Web OTP (autocomplete="one-time-code"). |
+
 | Evento | detail | bubbles | composed | cancelable |
 | --- | --- | --- | --- | --- |
 | `iswc-pin-change` | sí | sí | sí | no |
 | `iswc-pin-complete` | sí | sí | sí | no |
 | `iswc-pin-invalid` | según cabecera | según cabecera | según cabecera | según cabecera |
 | `iswc-otp` | `{ code }` | sí | sí | no |
+
+
+<details>
+<summary>Ejemplo en vivo</summary>
+
+```js
+const el = document.querySelector('iswc-pin-input');
+el.addEventListener('iswc-pin-change', (e) => {
+  console.log('iswc-pin-change', e.detail);
+});
+```
+
+</details>
 
 ### Métodos y propiedades públicas
 

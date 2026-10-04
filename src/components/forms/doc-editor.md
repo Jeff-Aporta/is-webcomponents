@@ -90,6 +90,12 @@ La cabecera del `.js` documenta un slot `default`; no existe en el código.
 
 ### Eventos
 
+
+| Evento | Descripción |
+| --- | --- |
+| `iswc-change` | Emitido al confirmar el cambio de valor (escribe como `change` nativo). |
+| `iswc-focus` | Emitido cuando el componente recibe foco. |
+
 | Evento | detail | bubbles | composed | cancelable |
 | --- | --- | --- | --- | --- |
 | `iswc-change` | `{ blocks }` — copia profunda (`structuredClone`) del array de bloques | sí | sí | no |
@@ -98,6 +104,19 @@ La cabecera del `.js` documenta un slot `default`; no existe en el código.
 `iswc-change` se emite en cada tecla escrita dentro de un bloque y al marcar o
 desmarcar un `todo`. **No** se emite al crear un bloque con Enter, al
 borrarlo con Backspace ni al cambiar su tipo desde el menú `/`.
+
+
+<details>
+<summary>Ejemplo en vivo</summary>
+
+```js
+const el = document.querySelector('iswc-doc-editor');
+el.addEventListener('iswc-change', (e) => {
+  console.log('iswc-change', e.detail);
+});
+```
+
+</details>
 
 ### Métodos y propiedades públicas
 

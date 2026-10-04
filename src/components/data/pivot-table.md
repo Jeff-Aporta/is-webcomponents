@@ -88,12 +88,30 @@ proyectado no se muestra.
 
 ### Eventos
 
+
+| Evento | Descripción |
+| --- | --- |
+| `iswc-cell-click` | Evento personalizado del componente (cell click). |
+
 | Evento | detail | bubbles | composed | cancelable |
 | --- | --- | --- | --- | --- |
 | `iswc-cell-click` | `{ row, col, value }` — valor de la fila, de la columna y el agregado de la celda (`null` si la celda está vacía) | sí | sí | no |
 
 Solo las celdas de datos (`td.cell`) emiten el evento; las cabeceras, los
 totales de fila/columna y el gran total no.
+
+
+<details>
+<summary>Ejemplo en vivo</summary>
+
+```js
+const el = document.querySelector('iswc-pivot-table');
+el.addEventListener('iswc-cell-click', (e) => {
+  console.log('iswc-cell-click', e.detail);
+});
+```
+
+</details>
 
 ### Métodos y propiedades públicas
 

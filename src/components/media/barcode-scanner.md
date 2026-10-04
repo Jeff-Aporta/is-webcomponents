@@ -61,10 +61,29 @@ import './barcode-scanner.js';
 
 ### Eventos
 
+
+| Evento | Descripción |
+| --- | --- |
+| `iswc-detect` | Evento personalizado del componente (detect). |
+| `iswc-error` | Emitido cuando se produce un error. |
+
 | Evento | detail | bubbles | composed | cancelable |
 | --- | --- | --- | --- | --- |
 | `iswc-detect` | sí `{ rawValue, format, barcodes }` | sí | sí | no |
 | `iswc-error` | sí `{ message }` | sí | sí | no |
+
+
+<details>
+<summary>Ejemplo en vivo</summary>
+
+```js
+const el = document.querySelector('iswc-barcode-scanner');
+el.addEventListener('iswc-detect', (e) => {
+  console.log('iswc-detect', e.detail);
+});
+```
+
+</details>
 
 ### Métodos y propiedades públicas
 

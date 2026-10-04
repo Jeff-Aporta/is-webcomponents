@@ -93,9 +93,27 @@ También refleja `data-sizew` y `data-szw-*`.
 
 ### Eventos
 
+
+| Evento | Descripción |
+| --- | --- |
+| `iswc-breakpoint` | Evento personalizado del componente (breakpoint). |
+
 | Evento | detail | bubbles | composed | cancelable |
 | --- | --- | --- | --- | --- |
 | `iswc-breakpoint` | `{ width, sizew, boolszw, lerpw }` | sí | sí | no |
+
+
+<details>
+<summary>Ejemplo en vivo</summary>
+
+```js
+const el = document.querySelector('iswc-grid-layout');
+el.addEventListener('iswc-breakpoint', (e) => {
+  console.log('iswc-breakpoint', e.detail);
+});
+```
+
+</details>
 
 ### Métodos y propiedades públicas
 

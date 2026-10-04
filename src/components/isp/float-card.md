@@ -77,12 +77,30 @@ import './float-card.js';
 
 ### Eventos
 
+
+| Evento | Descripción |
+| --- | --- |
+| `—` | Evento `—`. |
+
 | Evento | detail | bubbles | composed | cancelable |
 | --- | --- | --- | --- | --- |
 | — | — | — | — | — |
 
 No emite eventos propios. Escucha `iswc-show` / `iswc-hide` de hijos (p. ej.
 `<iswc-dropdown>`) para `lock()` / `unlock()`.
+
+
+<details>
+<summary>Ejemplo en vivo</summary>
+
+```js
+const el = document.querySelector('iswc-float-card');
+el.addEventListener('—', (e) => {
+  console.log('—', e.detail);
+});
+```
+
+</details>
 
 ### Métodos y propiedades públicas
 

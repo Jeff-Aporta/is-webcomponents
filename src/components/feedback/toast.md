@@ -60,7 +60,24 @@ import './toast.js';
 
 ### Eventos
 
+
+| Evento | Descripción |
+| --- | --- |
+
 No expone.
+
+
+<details>
+<summary>Ejemplo en vivo</summary>
+
+```js
+const el = document.querySelector('iswc-toast');
+el.addEventListener('click', (e) => {
+  console.log('click', e.detail);
+});
+```
+
+</details>
 
 ### Métodos y propiedades públicas
 

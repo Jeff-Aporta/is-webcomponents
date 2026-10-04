@@ -80,6 +80,16 @@ src="video.mp4"
 
 ### Eventos
 
+
+| Evento | Descripción |
+| --- | --- |
+| `iswc-play` | Evento personalizado del componente (play). |
+| `iswc-pause` | Emitido al pausar la operación. |
+| `iswc-ended` | Evento personalizado del componente (ended). |
+| `play` | Evento `play`. |
+| `pause` | Evento `pause`. |
+| `ended` | Evento `ended`. |
+
 | Evento | detail | bubbles | composed | cancelable |
 | --- | --- | --- | --- | --- |
 | `iswc-play` | no | sí | sí | no |
@@ -88,6 +98,19 @@ src="video.mp4"
 | `play` | no | sí | sí | no |
 | `pause` | no | sí | sí | no |
 | `ended` | no | sí | sí | no |
+
+
+<details>
+<summary>Ejemplo en vivo</summary>
+
+```js
+const el = document.querySelector('iswc-video');
+el.addEventListener('iswc-play', (e) => {
+  console.log('iswc-play', e.detail);
+});
+```
+
+</details>
 
 ### Métodos y propiedades públicas
 

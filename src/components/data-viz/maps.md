@@ -106,6 +106,12 @@ implementado.
 
 ### Eventos
 
+
+| Evento | Descripción |
+| --- | --- |
+| `iswc-viewport` | Evento personalizado del componente (viewport). |
+| `iswc-marker-click` | Evento personalizado del componente (marker click). |
+
 | Evento | detail | bubbles | composed | cancelable |
 | --- | --- | --- | --- | --- |
 | `iswc-viewport` | `{ minLon, minLat, maxLon, maxLat }` — copia del viewport actual | sí | sí | no |
@@ -114,6 +120,19 @@ implementado.
 `iswc-viewport` se emite al final de cada render en modo `svg`, es decir en
 cada paso de arrastre y en cada tick de rueda; en modo `tile` no se emite
 nunca. `iswc-marker-click` viene del `click` en el círculo del marcador.
+
+
+<details>
+<summary>Ejemplo en vivo</summary>
+
+```js
+const el = document.querySelector('iswc-maps');
+el.addEventListener('iswc-viewport', (e) => {
+  console.log('iswc-viewport', e.detail);
+});
+```
+
+</details>
 
 ### Métodos y propiedades públicas
 

@@ -81,6 +81,13 @@ Campos de un nodo: `id`, `title`, `name`, `parent`, y opcionalmente `photo`,
 
 ### Eventos
 
+
+| Evento | Descripción |
+| --- | --- |
+| `iswc-select` | Emitido al seleccionar un elemento. |
+| `iswc-toggle` | Emitido al alternar el estado abierto/cerrado. |
+| `iswc-open-viewer` | Emitido al abrir el visor ampliado (cancelable). |
+
 | Evento | detail | bubbles | composed | cancelable |
 | --- | --- | --- | --- | --- |
 | `iswc-select` | `{ id, node }` | sí | sí | no |
@@ -90,6 +97,19 @@ Campos de un nodo: `id`, `title`, `name`, `parent`, y opcionalmente `photo`,
 `iswc-open-viewer` solo se emite con `open-on-click` y fuera del visor.
 Cancelarlo (`preventDefault()`) evita que se abra el lightbox propio y permite
 abrir un visor propio.
+
+
+<details>
+<summary>Ejemplo en vivo</summary>
+
+```js
+const el = document.querySelector('iswc-org-chart');
+el.addEventListener('iswc-select', (e) => {
+  console.log('iswc-select', e.detail);
+});
+```
+
+</details>
 
 ### Métodos y propiedades públicas
 

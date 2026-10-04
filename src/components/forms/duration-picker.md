@@ -72,6 +72,12 @@ import './duration-picker.js';
 
 ### Eventos
 
+
+| Evento | Descripción |
+| --- | --- |
+| `iswc-input` | Emitido en cada cambio del valor (escribe como `input` nativo). |
+| `iswc-change` | Emitido al confirmar el cambio de valor (escribe como `change` nativo). |
+
 | Evento | detail | bubbles | composed | cancelable |
 | --- | --- | --- | --- | --- |
 | `iswc-input` | sin detail | sí | sí | no |
@@ -79,6 +85,19 @@ import './duration-picker.js';
 
 `tick()` emite solo `iswc-change`. La edición directa de casillas emite
 `iswc-input` y luego `iswc-change`.
+
+
+<details>
+<summary>Ejemplo en vivo</summary>
+
+```js
+const el = document.querySelector('iswc-duration-picker');
+el.addEventListener('iswc-input', (e) => {
+  console.log('iswc-input', e.detail);
+});
+```
+
+</details>
 
 ### Métodos y propiedades públicas
 

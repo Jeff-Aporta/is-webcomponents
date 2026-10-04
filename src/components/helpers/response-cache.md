@@ -40,6 +40,27 @@ await cache.vivo(() => fetch(...).then(r => r.json()), {
 
 También: `leer`, `guardar` (boolean si cambió), `borrar`, `invalidar`, `vaciar`, `canonico`.
 
+
+## Eventos
+
+| Evento | Descripción |
+| --- | --- |
+| _(ninguno)_ | Este componente no emite eventos personalizados. |
+
+<details>
+<summary>Ejemplo en vivo</summary>
+
+```js
+const el = document.querySelector('iswc-response-cache');
+// El componente no emite eventos personalizados.
+// Escucha los nativos si los necesitas:
+el.addEventListener('click', (e) => {
+  console.log('click', e);
+});
+```
+
+</details>
+
 ## Reglas
 
 - El caché **nunca** bloquea el pintado (tope de tiempo → Map en memoria).

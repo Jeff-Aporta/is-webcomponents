@@ -79,12 +79,33 @@ import './lightbox.js';
 
 ### Eventos
 
+
+| Evento | Descripción |
+| --- | --- |
+| `iswc-after-show` | Emitido tras finalizar la animación de apertura. |
+| `iswc-after-hide` | Emitido tras finalizar la animación de cierre. |
+| `iswc-share` | Evento personalizado del componente (share). |
+| `iswc-reposition` | Evento personalizado del componente (reposition). |
+
 | Evento | detail | bubbles | composed | cancelable |
 | --- | --- | --- | --- | --- |
 | `iswc-after-show` | no | sí | sí | no |
 | `iswc-after-hide` | no | sí | sí | no |
 | `iswc-share` | sí | sí | sí | no |
 | `iswc-reposition` | sí | sí | sí | no |
+
+
+<details>
+<summary>Ejemplo en vivo</summary>
+
+```js
+const el = document.querySelector('iswc-lightbox');
+el.addEventListener('iswc-after-show', (e) => {
+  console.log('iswc-after-show', e.detail);
+});
+```
+
+</details>
 
 ### Métodos y propiedades públicas
 

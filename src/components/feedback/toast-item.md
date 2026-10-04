@@ -73,10 +73,29 @@ import './toast-item.js';
 
 ### Eventos
 
+
+| Evento | Descripción |
+| --- | --- |
+| `iswc-after-show` | Emitido tras finalizar la animación de apertura. |
+| `iswc-after-hide` | Emitido tras finalizar la animación de cierre. |
+
 | Evento | detail | bubbles | composed | cancelable |
 | --- | --- | --- | --- | --- |
 | `iswc-after-show` | `{ color, message, caption, log }` | sí | sí | no |
 | `iswc-after-hide` | no | sí | sí | no |
+
+
+<details>
+<summary>Ejemplo en vivo</summary>
+
+```js
+const el = document.querySelector('iswc-toast-item');
+el.addEventListener('iswc-after-show', (e) => {
+  console.log('iswc-after-show', e.detail);
+});
+```
+
+</details>
 
 ### Métodos y propiedades públicas
 

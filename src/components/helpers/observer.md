@@ -75,11 +75,31 @@ No expone propiedades de negocio adicionales.
 
 ### Eventos
 
+
+| Evento | Descripción |
+| --- | --- |
+| `iswc-intersect` | Emitido al entrar/salir de la zona observada. |
+| `iswc-mutate` | Emitido al detectarse una mutación en el árbol observado. |
+| `iswc-resize` | Emitido al cambiar el tamaño del elemento observado. |
+
 | Evento | `type` | detail |
 | --- | --- | --- |
 | `iswc-intersect` | intersection | `{ entry }` |
 | `iswc-mutate` | mutation | `{ records }` |
 | `iswc-resize` | resize | `{ entries }` |
+
+
+<details>
+<summary>Ejemplo en vivo</summary>
+
+```js
+const el = document.querySelector('iswc-observer');
+el.addEventListener('iswc-intersect', (e) => {
+  console.log('iswc-intersect', e.detail);
+});
+```
+
+</details>
 
 ### Métodos y propiedades públicas
 

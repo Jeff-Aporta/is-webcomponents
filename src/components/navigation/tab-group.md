@@ -84,11 +84,31 @@ import './tab-group.js';
 
 ### Eventos
 
+
+| Evento | Descripción |
+| --- | --- |
+| `iswc-tab-show` | Evento personalizado del componente (tab show). |
+| `iswc-tab-close` | Evento personalizado del componente (tab close). |
+| `iswc-tab-hide` | Evento personalizado del componente (tab hide). |
+
 | Evento | detail | bubbles | composed | cancelable |
 | --- | --- | --- | --- | --- |
 | `iswc-tab-show` | sí | sí | sí | no |
 | `iswc-tab-close` | sí | sí | sí | no |
 | `iswc-tab-hide` | según cabecera | según cabecera | según cabecera | según cabecera |
+
+
+<details>
+<summary>Ejemplo en vivo</summary>
+
+```js
+const el = document.querySelector('iswc-tab-group');
+el.addEventListener('iswc-tab-show', (e) => {
+  console.log('iswc-tab-show', e.detail);
+});
+```
+
+</details>
 
 ### Métodos y propiedades públicas
 

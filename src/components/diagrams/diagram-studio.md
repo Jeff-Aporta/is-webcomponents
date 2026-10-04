@@ -49,3 +49,24 @@ demos/diagramas/app/view.html?kind=flowchart&json=eyJmbG93Y2hhcnQiOnsidGl0bGUiOi
 ```
 
 El valor de `json` es `{"flowchart":{"title":"Alta"}}` en base64url.
+
+
+## Eventos
+
+| Evento | Descripción |
+| --- | --- |
+| _(ninguno)_ | Este componente no emite eventos personalizados. |
+
+<details>
+<summary>Ejemplo en vivo</summary>
+
+```js
+const el = document.querySelector('iswc-diagram-studio');
+// El componente no emite eventos personalizados.
+// Escucha los nativos si los necesitas:
+el.addEventListener('click', (e) => {
+  console.log('click', e);
+});
+```
+
+</details>

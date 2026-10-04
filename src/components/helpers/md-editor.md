@@ -86,6 +86,17 @@ No expone.
 
 ### Eventos
 
+
+| Evento | Descripción |
+| --- | --- |
+| `iswc-change` | Emitido al confirmar el cambio de valor (escribe como `change` nativo). |
+| `iswc-persist` | Evento personalizado del componente (persist). |
+| `iswc-load` | Emitido cuando el recurso se ha cargado. |
+| `iswc-error` | Emitido cuando se produce un error. |
+| `iswc-download` | Emitido al iniciar una descarga. |
+| `iswc-open` | Evento personalizado del componente (open). |
+| `iswc-close` | Evento personalizado del componente (close). |
+
 | Evento | Detail | Cuándo |
 | --- | --- | --- |
 | `iswc-change` | `{ value, document? }` | Al cerrar confirmando borrador — solo si `can-edit`. |
@@ -95,6 +106,19 @@ No expone.
 | `iswc-download` | `{ filename, bytes }` | Tras `download()`. |
 | `iswc-open` | `{}` | Diálogo abierto. |
 | `iswc-close` | `{}` | Diálogo cerrado. |
+
+
+<details>
+<summary>Ejemplo en vivo</summary>
+
+```js
+const el = document.querySelector('iswc-md-editor');
+el.addEventListener('iswc-change', (e) => {
+  console.log('iswc-change', e.detail);
+});
+```
+
+</details>
 
 ### Métodos y propiedades públicas
 

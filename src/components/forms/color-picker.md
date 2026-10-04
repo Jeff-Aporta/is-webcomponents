@@ -80,10 +80,29 @@ swatches="#e03131,#f59f00,#2f9e44"
 
 ### Eventos
 
+
+| Evento | Descripción |
+| --- | --- |
+| `iswc-input` | Emitido en cada cambio del valor (escribe como `input` nativo). |
+| `iswc-change` | Emitido al confirmar el cambio de valor (escribe como `change` nativo). |
+
 | Evento | detail | bubbles | composed | cancelable |
 | --- | --- | --- | --- | --- |
 | `iswc-input` | sí | sí | sí | no |
 | `iswc-change` | sí | sí | sí | no |
+
+
+<details>
+<summary>Ejemplo en vivo</summary>
+
+```js
+const el = document.querySelector('iswc-color-picker');
+el.addEventListener('iswc-input', (e) => {
+  console.log('iswc-input', e.detail);
+});
+```
+
+</details>
 
 ### Métodos y propiedades públicas
 

@@ -63,9 +63,27 @@ import './offscreen-canvas.js';
 
 ### Eventos
 
+
+| Evento | Descripción |
+| --- | --- |
+| `iswc-ready` | Emitido cuando el componente está listo. |
+
 | Evento | detail | bubbles | composed | cancelable |
 | --- | --- | --- | --- | --- |
 | `iswc-ready` | sí `{ offscreen, fallback }` | sí | sí | no |
+
+
+<details>
+<summary>Ejemplo en vivo</summary>
+
+```js
+const el = document.querySelector('iswc-offscreen-canvas');
+el.addEventListener('iswc-ready', (e) => {
+  console.log('iswc-ready', e.detail);
+});
+```
+
+</details>
 
 ### Métodos y propiedades públicas
 

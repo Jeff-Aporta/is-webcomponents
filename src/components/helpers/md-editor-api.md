@@ -31,6 +31,27 @@ Tipos canónicos: ver `md-editor-api.d.ts` junto al módulo.
 | `apiRequest(url, init, cfg)` | `fetch` con headers del config (Bearer, etc.). |
 | `byteLength(text)` / `formatBytes(n)` | Tamaño UTF-8 y etiqueta humana. |
 
+
+## Eventos
+
+| Evento | Descripción |
+| --- | --- |
+| _(ninguno)_ | Este componente no emite eventos personalizados. |
+
+<details>
+<summary>Ejemplo en vivo</summary>
+
+```js
+const el = document.querySelector('iswc-component');
+// El componente no emite eventos personalizados.
+// Escucha los nativos si los necesitas:
+el.addEventListener('click', (e) => {
+  console.log('click', e);
+});
+```
+
+</details>
+
 ## Cuándo usarlo
 
 Solo al cablear persistencia del editor MD. La UI es `<iswc-md-editor>`; este

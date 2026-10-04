@@ -45,3 +45,24 @@ los tags `iswc-*` directamente.
 - Card: borde `--iswc-border`, fondo `--iswc-bg-elev`, radio `--iswc-radius`.
 - Grid: `repeat(auto-fit, minmax(min(100%, 300px), 1fr))`, gap `0.85rem 1.1rem`.
 - Cada fila: columna (etiqueta + control).
+
+
+## Eventos
+
+| Evento | Descripción |
+| --- | --- |
+| _(ninguno)_ | Este componente no emite eventos personalizados. |
+
+<details>
+<summary>Ejemplo en vivo</summary>
+
+```js
+const el = document.querySelector('iswc-preview-controls');
+// El componente no emite eventos personalizados.
+// Escucha los nativos si los necesitas:
+el.addEventListener('click', (e) => {
+  console.log('click', e);
+});
+```
+
+</details>

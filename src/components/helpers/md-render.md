@@ -67,11 +67,31 @@ No expone. Hidrata desde hijo `<script type="text/markdown">` o `<textarea hidde
 
 ### Eventos
 
+
+| Evento | Descripción |
+| --- | --- |
+| `iswc-input` | Emitido en cada cambio del valor (escribe como `input` nativo). |
+| `iswc-change` | Emitido al confirmar el cambio de valor (escribe como `change` nativo). |
+| `iswc-persist` | Evento personalizado del componente (persist). |
+
 | Evento | Detail | Cuándo |
 | --- | --- | --- |
 | `iswc-input` | `{ value }` | Cada cambio en edición (borrador). |
 | `iswc-change` | `{ value }` | Al blur si el valor cambió (o Ctrl/Cmd+S). |
 | `iswc-persist` | `{ value }` | Ctrl/Cmd+S — señal para que el host guarde. |
+
+
+<details>
+<summary>Ejemplo en vivo</summary>
+
+```js
+const el = document.querySelector('iswc-md-render');
+el.addEventListener('iswc-input', (e) => {
+  console.log('iswc-input', e.detail);
+});
+```
+
+</details>
 
 ### Métodos y propiedades públicas
 

@@ -61,11 +61,31 @@ import './media-recorder.js';
 
 ### Eventos
 
+
+| Evento | Descripción |
+| --- | --- |
+| `iswc-start` | Emitido al iniciar la operación. |
+| `iswc-stop` | Emitido al detener la operación. |
+| `iswc-error` | Emitido cuando se produce un error. |
+
 | Evento | detail | bubbles | composed | cancelable |
 | --- | --- | --- | --- | --- |
 | `iswc-start` | sí `{ source }` | sí | sí | no |
 | `iswc-stop` | sí `{ blob, url, type }` | sí | sí | no |
 | `iswc-error` | sí `{ message }` | sí | sí | no |
+
+
+<details>
+<summary>Ejemplo en vivo</summary>
+
+```js
+const el = document.querySelector('iswc-media-recorder');
+el.addEventListener('iswc-start', (e) => {
+  console.log('iswc-start', e.detail);
+});
+```
+
+</details>
 
 ### Métodos y propiedades públicas
 

@@ -79,10 +79,29 @@ import './video-playlist.js';
 
 ### Eventos
 
+
+| Evento | Descripción |
+| --- | --- |
+| `iswc-video-change` | Evento personalizado del componente (video change). |
+| `iswc-change` | Emitido al confirmar el cambio de valor (escribe como `change` nativo). |
+
 | Evento | detail | bubbles | composed | cancelable |
 | --- | --- | --- | --- | --- |
 | `iswc-video-change` | sí | sí | sí | no |
 | `iswc-change` | sí | sí | sí | no |
+
+
+<details>
+<summary>Ejemplo en vivo</summary>
+
+```js
+const el = document.querySelector('iswc-video-playlist');
+el.addEventListener('iswc-video-change', (e) => {
+  console.log('iswc-video-change', e.detail);
+});
+```
+
+</details>
 
 ### Métodos y propiedades públicas
 

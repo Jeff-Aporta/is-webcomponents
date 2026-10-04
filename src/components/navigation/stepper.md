@@ -78,10 +78,29 @@ import './stepper.js';
 
 ### Eventos
 
+
+| Evento | Descripción |
+| --- | --- |
+| `iswc-stepper-complete` | Evento personalizado del componente (stepper complete). |
+| `iswc-stepper-change` | Evento personalizado del componente (stepper change). |
+
 | Evento | detail | bubbles | composed | cancelable |
 | --- | --- | --- | --- | --- |
 | `iswc-stepper-complete` | no | sí | sí | no |
 | `iswc-stepper-change` | sí | sí | sí | no |
+
+
+<details>
+<summary>Ejemplo en vivo</summary>
+
+```js
+const el = document.querySelector('iswc-stepper');
+el.addEventListener('iswc-stepper-complete', (e) => {
+  console.log('iswc-stepper-complete', e.detail);
+});
+```
+
+</details>
 
 ### Métodos y propiedades públicas
 

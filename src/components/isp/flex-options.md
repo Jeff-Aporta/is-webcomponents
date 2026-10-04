@@ -79,11 +79,29 @@ grupos se inserta separador.
 
 ### Eventos
 
+
+| Evento | Descripción |
+| --- | --- |
+| `—` | Evento `—`. |
+
 | Evento | detail | bubbles | composed | cancelable |
 | --- | --- | --- | --- | --- |
 | — | — | — | — | — |
 
 Los clics corren `onClick` de cada spec. No hay evento propio.
+
+
+<details>
+<summary>Ejemplo en vivo</summary>
+
+```js
+const el = document.querySelector('iswc-flex-options');
+el.addEventListener('—', (e) => {
+  console.log('—', e.detail);
+});
+```
+
+</details>
 
 ### Métodos y propiedades públicas
 

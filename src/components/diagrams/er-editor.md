@@ -37,6 +37,25 @@ El parámetro `json` de la página abierta no cambia al editar. Compartir genera
 | `iswc-state-change` | Se emite después de cada cambio. El detalle trae entidades y relaciones. |
 | `animation="trace"` | Pasa la animación al visor interno. |
 
+
+## Eventos
+
+| Evento | Descripción |
+| --- | --- |
+| `iswc-state-change` | Evento personalizado del componente (state change). |
+
+<details>
+<summary>Ejemplo en vivo</summary>
+
+```js
+const el = document.querySelector('iswc-er-editor');
+el.addEventListener('iswc-state-change', (e) => {
+  console.log('iswc-state-change', e.detail);
+});
+```
+
+</details>
+
 ## Ejemplo mínimo
 
 ```html

@@ -69,12 +69,33 @@ import './scroller.js';
 
 ### Eventos
 
+
+| Evento | Descripción |
+| --- | --- |
+| `iswc-scroll-overflow` | Evento personalizado del componente (scroll overflow). |
+| `iswc-scroll-position` | Evento personalizado del componente (scroll position). |
+| `iswc-scroll-start` | Evento personalizado del componente (scroll start). |
+| `iswc-scroll-end` | Evento personalizado del componente (scroll end). |
+
 | Evento | detail | bubbles | composed | cancelable |
 | --- | --- | --- | --- | --- |
 | `iswc-scroll-overflow` | sí | sí | sí | no |
 | `iswc-scroll-position` | sí | sí | sí | no |
 | `iswc-scroll-start` | según cabecera | según cabecera | según cabecera | según cabecera |
 | `iswc-scroll-end` | según cabecera | según cabecera | según cabecera | según cabecera |
+
+
+<details>
+<summary>Ejemplo en vivo</summary>
+
+```js
+const el = document.querySelector('iswc-scroller');
+el.addEventListener('iswc-scroll-overflow', (e) => {
+  console.log('iswc-scroll-overflow', e.detail);
+});
+```
+
+</details>
 
 ### Métodos y propiedades públicas
 

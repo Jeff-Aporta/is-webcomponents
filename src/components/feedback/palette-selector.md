@@ -71,9 +71,27 @@ import './palette-selector.js';
 
 ### Eventos
 
+
+| Evento | Descripción |
+| --- | --- |
+| `iswc-palette-change` | Evento personalizado del componente (palette change). |
+
 | Evento | detail | bubbles | composed | cancelable |
 | --- | --- | --- | --- | --- |
 | `iswc-palette-change` | sí | sí | sí | no |
+
+
+<details>
+<summary>Ejemplo en vivo</summary>
+
+```js
+const el = document.querySelector('iswc-palette-selector');
+el.addEventListener('iswc-palette-change', (e) => {
+  console.log('iswc-palette-change', e.detail);
+});
+```
+
+</details>
 
 ### Métodos y propiedades públicas
 

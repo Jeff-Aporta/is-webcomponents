@@ -27,6 +27,27 @@ const html = mdToHtml('# Hola\n\n```iswc-flowchart\n{"nodes":[]}\n```');
 | --- | --- |
 | `mdToHtml(src)` | String MD → HTML. Fences de código → `.md-iswc-code`. Fences `iswc-*` → tag diagrama + JSON en `<script type="application/json">`. |
 
+
+## Eventos
+
+| Evento | Descripción |
+| --- | --- |
+| _(ninguno)_ | Este componente no emite eventos personalizados. |
+
+<details>
+<summary>Ejemplo en vivo</summary>
+
+```js
+const el = document.querySelector('iswc-component');
+// El componente no emite eventos personalizados.
+// Escucha los nativos si los necesitas:
+el.addEventListener('click', (e) => {
+  console.log('click', e);
+});
+```
+
+</details>
+
 ## Cadena con hydrate
 
 1. `mdToHtml` pinta marcadores / tags.

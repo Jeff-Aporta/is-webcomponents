@@ -152,6 +152,37 @@ import './data-grid.js';
 
 ### Eventos
 
+
+| Evento | Descripción |
+| --- | --- |
+| `iswc-sort-change` | Evento personalizado del componente (sort change). |
+| `iswc-filter-change` | Evento personalizado del componente (filter change). |
+| `iswc-quick-filter` | Evento personalizado del componente (quick filter). |
+| `iswc-column-hide` | Evento personalizado del componente (column hide). |
+| `iswc-column-resize` | Evento personalizado del componente (column resize). |
+| `iswc-column-pin` | Evento personalizado del componente (column pin). |
+| `iswc-density` | Evento personalizado del componente (density). |
+| `iswc-group-model` | Evento personalizado del componente (group model). |
+| `iswc-aggregation` | Evento personalizado del componente (aggregation). |
+| `iswc-export` | Emitido al exportar datos. |
+| `iswc-select` | Emitido al seleccionar un elemento. |
+| `iswc-cell-select` | Evento personalizado del componente (cell select). |
+| `iswc-edit-start` | Evento personalizado del componente (edit start). |
+| `iswc-edit-stop` | Evento personalizado del componente (edit stop). |
+| `iswc-row-update` | Evento personalizado del componente (row update). |
+| `iswc-copy` | Evento personalizado del componente (copy). |
+| `iswc-paste` | Evento personalizado del componente (paste). |
+| `iswc-column-reorder` | Evento personalizado del componente (column reorder). |
+| `iswc-cell-click` | Evento personalizado del componente (cell click). |
+| `iswc-row-click` | Evento personalizado del componente (row click). |
+| `iswc-row-double-click` | Evento personalizado del componente (row double click). |
+| `iswc-cell-double-click` | Evento personalizado del componente (cell double click). |
+| `iswc-row-reorder` | Evento personalizado del componente (row reorder). |
+| `iswc-group-toggle` | Evento personalizado del componente (group toggle). |
+| `iswc-detail-toggle` | Evento personalizado del componente (detail toggle). |
+| `iswc-rows-scroll-end` | Evento personalizado del componente (rows scroll end). |
+| `iswc-page-change` | Emitido al cambiar de página. |
+
 | Evento | detail | bubbles | composed | cancelable |
 | --- | --- | --- | --- | --- |
 | `iswc-sort-change` | sí | sí | sí | no |
@@ -181,6 +212,19 @@ import './data-grid.js';
 | `iswc-detail-toggle` | sí | sí | sí | no |
 | `iswc-rows-scroll-end` | sí | sí | sí | no |
 | `iswc-page-change` | sí | sí | sí | no |
+
+
+<details>
+<summary>Ejemplo en vivo</summary>
+
+```js
+const el = document.querySelector('iswc-data-grid');
+el.addEventListener('iswc-sort-change', (e) => {
+  console.log('iswc-sort-change', e.detail);
+});
+```
+
+</details>
 
 ### Métodos y propiedades públicas
 

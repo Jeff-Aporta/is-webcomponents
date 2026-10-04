@@ -100,6 +100,16 @@ No proyecta light DOM (el texto inicial se lee una vez como semilla si no hay
 
 ### Eventos
 
+
+| Evento | Descripción |
+| --- | --- |
+| `iswc-ready` | Emitido cuando el componente está listo. |
+| `iswc-input` | Emitido en cada cambio del valor (escribe como `input` nativo). |
+| `iswc-change` | Emitido al confirmar el cambio de valor (escribe como `change` nativo). |
+| `iswc-cursor` | Evento personalizado del componente (cursor). |
+| `iswc-mark-activate` | Evento personalizado del componente (mark activate). |
+| `iswc-error` | Emitido cuando se produce un error. |
+
 | Evento | Detail | Cuándo |
 | --- | --- | --- |
 | `iswc-ready` | `{ lang, value }` | Editor listo. |
@@ -108,6 +118,19 @@ No proyecta light DOM (el texto inicial se lee una vez como semilla si no hay
 | `iswc-cursor` | `{ line, ch, index }` | Movimiento de cursor. |
 | `iswc-mark-activate` | `{ mark, phase }` | Hover enter/leave sobre un mark. |
 | `iswc-error` | `{ error }` | Fallo de bootstrap. |
+
+
+<details>
+<summary>Ejemplo en vivo</summary>
+
+```js
+const el = document.querySelector('iswc-code');
+el.addEventListener('iswc-ready', (e) => {
+  console.log('iswc-ready', e.detail);
+});
+```
+
+</details>
 
 ### Métodos y propiedades públicas
 

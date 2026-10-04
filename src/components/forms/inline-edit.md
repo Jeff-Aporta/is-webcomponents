@@ -76,6 +76,13 @@ import './inline-edit.js';
 
 ### Eventos
 
+
+| Evento | Descripción |
+| --- | --- |
+| `iswc-edit` | Evento personalizado del componente (edit). |
+| `iswc-save` | Evento personalizado del componente (save). |
+| `iswc-cancel` | Emitido al cancelar la operación. |
+
 | Evento | detail | bubbles | composed | cancelable |
 | --- | --- | --- | --- | --- |
 | `iswc-edit` | `{}` | sí | sí | no |
@@ -84,6 +91,19 @@ import './inline-edit.js';
 
 `iswc-save` se emite antes de escribir `value`: `detail.value` es el valor
 nuevo y `detail.previous` el vigente al entrar en edición.
+
+
+<details>
+<summary>Ejemplo en vivo</summary>
+
+```js
+const el = document.querySelector('iswc-inline-edit');
+el.addEventListener('iswc-edit', (e) => {
+  console.log('iswc-edit', e.detail);
+});
+```
+
+</details>
 
 ### Métodos y propiedades públicas
 

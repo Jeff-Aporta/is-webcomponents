@@ -81,7 +81,24 @@ import './text.js';
 
 ### Eventos
 
+
+| Evento | Descripción |
+| --- | --- |
+
 No emite eventos propios.
+
+
+<details>
+<summary>Ejemplo en vivo</summary>
+
+```js
+const el = document.querySelector('iswc-text');
+el.addEventListener('click', (e) => {
+  console.log('click', e.detail);
+});
+```
+
+</details>
 
 ### Métodos y propiedades públicas
 

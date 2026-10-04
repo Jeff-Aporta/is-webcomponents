@@ -67,9 +67,27 @@ import './qrcode.js';
 
 ### Eventos
 
+
+| Evento | Descripción |
+| --- | --- |
+| `iswc-render` | Emitido al renderizar o redibujar el componente. |
+
 | Evento | detail | bubbles | composed | cancelable |
 | --- | --- | --- | --- | --- |
 | `iswc-render` | `{ svg }` | sí | sí | no |
+
+
+<details>
+<summary>Ejemplo en vivo</summary>
+
+```js
+const el = document.querySelector('iswc-qrcode');
+el.addEventListener('iswc-render', (e) => {
+  console.log('iswc-render', e.detail);
+});
+```
+
+</details>
 
 ### Métodos y propiedades públicas
 

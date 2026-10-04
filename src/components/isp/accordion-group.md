@@ -69,9 +69,27 @@ import './accordion-group.js';
 
 ### Eventos
 
+
+| Evento | Descripción |
+| --- | --- |
+| `iswc-accordion-change` | Evento personalizado del componente (accordion change). |
+
 | Evento | detail | bubbles | composed | cancelable |
 | --- | --- | --- | --- | --- |
 | `iswc-accordion-change` | `{ open, opened, closed }` | sí | sí | no |
+
+
+<details>
+<summary>Ejemplo en vivo</summary>
+
+```js
+const el = document.querySelector('iswc-accordion-group');
+el.addEventListener('iswc-accordion-change', (e) => {
+  console.log('iswc-accordion-change', e.detail);
+});
+```
+
+</details>
 
 ### Métodos y propiedades públicas
 

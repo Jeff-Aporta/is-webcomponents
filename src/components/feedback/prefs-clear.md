@@ -51,9 +51,27 @@ import './prefs-clear.js';
 
 ## Eventos
 
+
+| Evento | Descripción |
+| --- | --- |
+| `iswc-prefs-clear` | Emitido al limpiar la memoria UI persistente. |
+
 | Evento | Detail |
 | --- | --- |
 | `iswc-prefs-clear` | `{ tags: string[], reloaded: boolean }` |
+
+
+<details>
+<summary>Ejemplo en vivo</summary>
+
+```js
+const el = document.querySelector('iswc-prefs-clear');
+el.addEventListener('iswc-prefs-clear', (e) => {
+  console.log('iswc-prefs-clear', e.detail);
+});
+```
+
+</details>
 
 ## API
 

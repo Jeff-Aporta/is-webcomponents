@@ -68,10 +68,29 @@ import './pdf-viewer.js';
 
 ### Eventos
 
+
+| Evento | Descripción |
+| --- | --- |
+| `iswc-load` | Emitido cuando el recurso se ha cargado. |
+| `iswc-error` | Emitido cuando se produce un error. |
+
 | Evento | detail | bubbles | composed | cancelable |
 | --- | --- | --- | --- | --- |
 | `iswc-load` | sí | sí | sí | no |
 | `iswc-error` | sí | sí | sí | no |
+
+
+<details>
+<summary>Ejemplo en vivo</summary>
+
+```js
+const el = document.querySelector('iswc-pdf-viewer');
+el.addEventListener('iswc-load', (e) => {
+  console.log('iswc-load', e.detail);
+});
+```
+
+</details>
 
 ### Métodos y propiedades públicas
 
