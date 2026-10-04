@@ -193,6 +193,58 @@ export type ApiJsRow = z.infer<typeof ApiJsSectionSchema>["table"][number];
 export const EjemplosSectionSchema = ContentBlockSchema;
 
 /* --------------------------------------------------------------------------
+ * Examples (Phase W21)
+ *
+ * Tipado del campo `examples` en el root del JSON de demos (iswc-preview/v1)
+ * que alimenta a `<iswc-examples-carousel>`. Cada `Example` describe un
+ * preset: nombre identificador, categoría opcional (para filtro por tabs),
+ * mapa de props/atributos a aplicar al target, slots HTML opcionales y
+ * descripción accesible.
+ *
+ * `props` admite string | number | boolean porque así lo entiende el
+ * resolvedor de propiedades del carousel (`#writeProp`), que distingue
+ * booleanos (setAttribute / removeAttribute) de strings/numbers (setAttribute
+ * toString). El union con `z.literal(true)` evita `boolean | string | number`
+ * sea demasiado permisivo con tipos arbitrarios.
+ *
+ * Ejemplo:
+ *   {
+ *     "examples": [
+ *       { "name": "Primario",   "category": "Estados", "props": { "color": "brand" } },
+ *       { "name": "Secundario", "category": "Estados", "props": { "color": "neutral" } },
+ *       { "name": "Peligro",    "category": "Alertas", "props": { "color": "danger" } }
+ *     ]
+ *   }
+ * ------------------------------------------------------------------------*/
+
+export const ExampleSchema = z.object({
+  /** Nombre visible del preset (identificador único dentro del array). */
+  name: z.string().min(1, "example sin nombre"),
+  /** Categoría opcional. Se usa para el filtro por tabs del carrusel. */
+  category: z.string().optional(),
+  /**
+   * Mapa de props/atributos a aplicar al host target del carrusel.
+   * Solo admite tipos primitivos serializables: string | number | boolean.
+   */
+  props: z
+    .record(z.string(), z.union([z.string(), z.number(), z.boolean()]))
+    .optional(),
+  /**
+   * Mapa slotName → HTML del slot a proyectar en el host target.
+   * El HTML se inyecta tal cual (defensa contra XSS es responsabilidad
+   * del autor del JSON, no del schema).
+   */
+  slots: z.record(z.string(), z.string()).optional(),
+  /** Descripción accesible del preset (atributo `title` de la card). */
+  description: z.string().optional(),
+});
+export type Example = z.infer<typeof ExampleSchema>;
+
+/** Array de examples para alimentar a `<iswc-examples-carousel>`. */
+export const ExamplesSchema = z.array(ExampleSchema);
+export type Examples = z.infer<typeof ExamplesSchema>;
+
+/* --------------------------------------------------------------------------
  * Sections map: el bloque `sections` del JSON
  * ------------------------------------------------------------------------*/
 

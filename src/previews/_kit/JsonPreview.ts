@@ -61,6 +61,9 @@ export class JsonPreview extends ISComponentPreview {
       // Conservar title del JSON; si falta, el H2 muestra `<tag>` (texto, no CE).
       title: converted.title || `<${definition.tag}>`,
       sections: converted.sections ?? [],
+      // Phase W21: preservar `examples` (tipado Zod en section-schema.ts).
+      // El render lo inyecta en cualquier <iswc-examples-carousel>.
+      ...(Array.isArray(converted.examples) ? { examples: converted.examples } : {}),
     };
     if (normalized.$schema !== 'iswc-preview/v1') {
       throw new Error(`JsonPreview(${normalized.tag}): $schema debe ser "iswc-preview/v1" (post-bridge)`);

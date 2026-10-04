@@ -199,7 +199,23 @@ class IswcExamplesCarousel extends ElementBase {
 
   get examples(): ExampleSpec[] { return this.#examples.slice(); }
   set examples(v: ExampleSpec[]) {
-    this.#examples = Array.isArray(v) ? v.slice() : [];
+    // Phase W21 (zod-migration): el JSON de demos declara cada ejemplo con
+    // `name` (ver `ExampleSchema` en `section-schema.ts`); el resto del
+    // componente sigue hablando en `label` (legacy de la prop interna).
+    // Aceptamos ambas formas: si el item trae `name` y no `label`, lo
+    // mapeamos. Esto evita reventar demos viejos que ya pasan `label` desde
+    // el atributo HTML y a la vez abre la puerta a que el JSON root del
+    // preview alimente el carrusel directamente.
+    const normalized: ExampleSpec[] = Array.isArray(v)
+      ? v.map((raw) => {
+          const ex = raw as Record<string, unknown>;
+          if (ex && !ex.label && typeof ex.name === 'string') {
+            return { ...ex, label: ex.name } as ExampleSpec;
+          }
+          return raw as ExampleSpec;
+        })
+      : [];
+    this.#examples = normalized;
     if (this.isConnected) this.#render();
   }
 

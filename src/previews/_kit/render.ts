@@ -425,6 +425,26 @@ export function renderDefinition(def: PreviewDefinition, targets: { main: HTMLEl
   }
   if (destino !== main) main.append(destino);
 
+  // Phase W21 (zod-migration): si el JSON declara `examples` (tipado con
+  // `ExampleSchema`/`ExamplesSchema` de `section-schema.ts`), inyectamos el
+  // array en cada `<iswc-examples-carousel>` renderizado dentro del main.
+  // El setter del carousel acepta tanto la forma legacy (`label`) como la
+  // nueva (`name`) y normaliza, así que demos viejos y nuevos funcionan con
+  // el mismo punto de entrada.
+  if (Array.isArray(def.examples) && def.examples.length) {
+    const carousels = main.querySelectorAll<HTMLElement>('iswc-examples-carousel');
+    for (const c of carousels) {
+      // Asignamos por la API pública; el setter dispara #render() si el
+      // elemento ya está conectado al DOM.
+      try {
+        (c as unknown as { examples: unknown[] }).examples = def.examples;
+      } catch (err) {
+        // No propagamos: si un carousel concreto revienta, los demás siguen.
+        console.warn('[renderDefinition] carousel no aceptó examples', err);
+      }
+    }
+  }
+
   // Una sola seccion no tiene indice: el panel derecho quedaria vacio.
   if (def.withoutToc || def.sections.length < 2) return;
 

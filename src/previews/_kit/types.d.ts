@@ -147,6 +147,18 @@ export interface PreviewDefinition {
    * (p. ej. home a ancho completo). Una sola seccion hace lo mismo sola.
    */
   withoutToc?: boolean;
+  /**
+   * Phase W21 (zod-migration): array tipado de ejemplos que alimenta a
+   * cualquier `<iswc-examples-carousel>` declarado en los bloques `demo` /
+   * `html` de las secciones. Si está presente, el render inyecta estos
+   * ejemplos en el/los carruseles (la propiedad `examples` del carousel
+   * acepta la forma legacy `label` y la nueva `name` indistintamente).
+   *
+   * El tipado fuerte vive en `src/utils/section-schema.ts` (ExampleSchema /
+   * ExamplesSchema); este `unknown[]` evita acoplar el sistema de render al
+   * módulo de Zod.
+   */
+  examples?: unknown[];
   sections: PreviewSection[];
 }
 
