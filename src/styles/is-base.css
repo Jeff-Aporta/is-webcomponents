@@ -54,41 +54,57 @@
        --iswc-color-X-pale       pastel activo     (era 100)
        --iswc-color-X-strong     relleno           (era 600)
        --iswc-color-X-stronger   hover del relleno (era 700)
-       --iswc-color-X-strongest  active del relleno (era 800, solo brand/info)
+       --iswc-color-X-strongest  active del relleno (era 800)
 
-     Todos se derivan con color-mix() del base. Antes cada color eran 5 hex
-     fijos que alguien calculaba a mano y que podian desalinearse entre si
-     (ej. el 600 no era realmente mas oscuro que el 500 en L). Con color-mix()
-     la escala es siempre consistente y anadir un color nuevo (como info/error)
-     es una linea, no cinco. Y sin numeros nadie tiene que recordar si el
-     relleno era el 600 o el 700: el nombre lo dice. */
+     Antes (pre-W24) cada familia tenia ratios DIFERENTES (success 12/28/82/62,
+     warning 12/28/82/55, danger 8/22/84/63, info 10/24/84/62, error 6/18/86/66):
+     el "relleno" de danger era perceptualmente mas oscuro que el de success
+     aunque ambos fueran 600. Ademas solo brand/info tenian 5 variantes; las
+     demas se quedaban en 4. Phase W24 introduce el helper canonico en
+     `src/styles/color-tokens.ts` (ISWC_COLOR_MIX) y aqui las 6 familias de
+     color-mix (success, warning, danger, info, error, neutral) comparten
+     exactamente la misma firma: 12/28/82/62/45 contra white/black. Asi:
+
+       - Las 7 familias son intercambiables sin sorpresas visuales.
+       - Anadir un color nuevo (un futuro "info-2", etc.) es UNA linea en el
+         helper, no cinco (o diez) en este CSS.
+       - Refactors futuros (mover un shade, ajustar un ratio) tocan el helper
+         y se propagan solos a las 6 familias.
+
+     Brand es la excepcion: vive en palettes.css y se deriva con `hsl(from ...)`
+     porque su base es parametrizable (h/s/b cambian por paleta). La interfaz
+     publica (los 6 tokens por familia) es identica, solo cambia la matematica. */
   --iswc-color-success: #40c057;
   --iswc-color-success-paler: color-mix(in srgb, var(--iswc-color-success) 12%, white);
   --iswc-color-success-pale: color-mix(in srgb, var(--iswc-color-success) 28%, white);
   --iswc-color-success-strong: color-mix(in srgb, var(--iswc-color-success) 82%, black);
   --iswc-color-success-stronger: color-mix(in srgb, var(--iswc-color-success) 62%, black);
+  --iswc-color-success-strongest: color-mix(in srgb, var(--iswc-color-success) 45%, black);
 
   --iswc-color-warning: #f59f00;
   --iswc-color-warning-paler: color-mix(in srgb, var(--iswc-color-warning) 12%, white);
   --iswc-color-warning-pale: color-mix(in srgb, var(--iswc-color-warning) 28%, white);
   --iswc-color-warning-strong: color-mix(in srgb, var(--iswc-color-warning) 82%, black);
-  --iswc-color-warning-stronger: color-mix(in srgb, var(--iswc-color-warning) 55%, black);
+  --iswc-color-warning-stronger: color-mix(in srgb, var(--iswc-color-warning) 62%, black);
+  --iswc-color-warning-strongest: color-mix(in srgb, var(--iswc-color-warning) 45%, black);
 
   /* danger = accion destructiva ("Eliminar"). crimson: rojo profundo, tirando a
      carmin, que se lee como advertencia seria y no como fallo del sistema. */
   --iswc-color-danger: crimson;
-  --iswc-color-danger-paler: color-mix(in srgb, var(--iswc-color-danger) 8%, white);
-  --iswc-color-danger-pale: color-mix(in srgb, var(--iswc-color-danger) 22%, white);
-  --iswc-color-danger-strong: color-mix(in srgb, var(--iswc-color-danger) 84%, black);
-  --iswc-color-danger-stronger: color-mix(in srgb, var(--iswc-color-danger) 63%, black);
+  --iswc-color-danger-paler: color-mix(in srgb, var(--iswc-color-danger) 12%, white);
+  --iswc-color-danger-pale: color-mix(in srgb, var(--iswc-color-danger) 28%, white);
+  --iswc-color-danger-strong: color-mix(in srgb, var(--iswc-color-danger) 82%, black);
+  --iswc-color-danger-stronger: color-mix(in srgb, var(--iswc-color-danger) 62%, black);
+  --iswc-color-danger-strongest: color-mix(in srgb, var(--iswc-color-danger) 45%, black);
 
   /* info: fallback neutro azul; palettes.css lo pisa por marca (ya lo hacia para
      el visor swagger, ahora tambien alimenta el color semantico de componentes). */
   --iswc-color-info: #339af0;
-  --iswc-color-info-paler: color-mix(in srgb, var(--iswc-color-info) 10%, white);
-  --iswc-color-info-pale: color-mix(in srgb, var(--iswc-color-info) 24%, white);
-  --iswc-color-info-strong: color-mix(in srgb, var(--iswc-color-info) 84%, black);
+  --iswc-color-info-paler: color-mix(in srgb, var(--iswc-color-info) 12%, white);
+  --iswc-color-info-pale: color-mix(in srgb, var(--iswc-color-info) 28%, white);
+  --iswc-color-info-strong: color-mix(in srgb, var(--iswc-color-info) 82%, black);
   --iswc-color-info-stronger: color-mix(in srgb, var(--iswc-color-info) 62%, black);
+  --iswc-color-info-strongest: color-mix(in srgb, var(--iswc-color-info) 45%, black);
 
   /* error: distinto de danger a proposito.
        danger = accion destructiva  ("Eliminar")        -> crimson, rojo profundo
@@ -97,10 +113,11 @@
      puro es mas brillante y salta antes, que es lo que quieres de un fallo. Puestos
      uno al lado del otro se distinguen sin pensarlo. */
   --iswc-color-error: red;
-  --iswc-color-error-paler: color-mix(in srgb, var(--iswc-color-error) 6%, white);
-  --iswc-color-error-pale: color-mix(in srgb, var(--iswc-color-error) 18%, white);
-  --iswc-color-error-strong: color-mix(in srgb, var(--iswc-color-error) 86%, black);
-  --iswc-color-error-stronger: color-mix(in srgb, var(--iswc-color-error) 66%, black);
+  --iswc-color-error-paler: color-mix(in srgb, var(--iswc-color-error) 12%, white);
+  --iswc-color-error-pale: color-mix(in srgb, var(--iswc-color-error) 28%, white);
+  --iswc-color-error-strong: color-mix(in srgb, var(--iswc-color-error) 82%, black);
+  --iswc-color-error-stronger: color-mix(in srgb, var(--iswc-color-error) 62%, black);
+  --iswc-color-error-strongest: color-mix(in srgb, var(--iswc-color-error) 45%, black);
 
   /* neutral: gris central del espacio RGB (#888 = 136/255 ≈ 53% en cada
      canal). Es el color que mejor se aproxima al "centro" del espacio y
@@ -110,10 +127,9 @@
      "controles del tema" (botones neutrales, bordes suaves, divisores)
      y se mantiene en :root/.theme-dark como un unico canon, sin pisarlo
      por tema, porque su valor es geometrico y no cromatico.
-     Las 5 variantes siguen el patron tonal de las demas familias
-     semanticas (paler/pale mas claros, strong/stronger/strongest mas
-     oscuros) y se derivan con color-mix() del base, igual que
-     success/warning/danger/info/error. */
+     Las 5 variantes siguen el patron tonal canonico (helper color-tokens.ts,
+     ISWC_COLOR_MIX) y se derivan con color-mix() del base, igual que el resto
+     de las 5 familias semanticas de color-mix. */
   --iswc-color-neutral: #888;
   --iswc-color-neutral-paler: color-mix(in srgb, var(--iswc-color-neutral) 12%, white);
   --iswc-color-neutral-pale: color-mix(in srgb, var(--iswc-color-neutral) 28%, white);

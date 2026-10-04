@@ -19,6 +19,19 @@
  *
  * Los seeds viven tambien en palettes.json. El brand-wrap se arma con
  * buildBrandMenu() (palette-build.ts). Default palette = contapyme, en :root.
+ *
+ * Phase W24: brand es la 7ª familia del helper canonico en
+ * `src/styles/color-tokens.ts` (ISWC_COLOR_VARIANTS = paler/pale/strong/
+ * stronger/strongest). Su derivada matematica es `hsl(from base ...)`
+ * en vez de color-mix() porque el base es parametrizable (h/s/b cambian
+ * por paleta), pero la interfaz publica (los 6 tokens por familia) es
+ * IDENTICA a la de las 6 familias de color-mix que viven en is-base.css.
+ * Las definiciones de aqui DEBEN coincidir con `brandFamilyBlock()` del
+ * helper; el guardian w24-color-tokens-helper.test.ts lo verifica.
+ *
+ * Info tambien sigue el patron W24: 5 variantes con valores fijos por
+ * paleta (no color-mix) porque la paleta override el fallback de
+ * is-base.css con un azul de marca mas vivo.
  */
 
 /* ─── Capa comun: cualquiera con h/s/b hereda la rampa ────────────── */
