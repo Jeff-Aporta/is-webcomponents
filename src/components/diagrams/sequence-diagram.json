@@ -254,5 +254,24 @@
         }
       ]
     }
-  ]
+  ],
+  "ficha": {
+    "sections": {
+      "anatomia": {
+        "content": "Diagrama de secuencia en SVG, sin Mermaid. La configuración es un JSON\r\n          con actores, mensajes y grupos; el layout (posiciones, ruteo ortogonal\r\n          de las flechas y colocación de etiquetas) se calcula solo."
+      },
+      "ejemplos": {
+        "content": "```html\n<iswc-sequence-diagram open-on-click>\r\n            <script type=\"application/json\">\r\n              { \"preset\": \"tk1437191\" }\r\n            </script>\r\n          </iswc-sequence-diagram>\n```"
+      }
+    },
+    "exclude": [
+      "apiJs",
+      "atributos",
+      "eventos",
+      "parts",
+      "props",
+      "slots",
+      "states"
+    ]
+  }
 }
