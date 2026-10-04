@@ -265,5 +265,98 @@
         }
       ]
     }
-  ]
+  ],
+  "ficha": {
+    "sections": {
+      "anatomia": {
+        "content": "Contenedor flexible con slots para <code class=\"code\">media</code>, <code class=\"code\">header</code>,\r\n          <code class=\"code\">body</code>, <code class=\"code\">footer</code> y <code class=\"code\">actions</code>.\r\n          Cinco apariencias y dos orientaciones. JavaScript nativo, Shadow DOM, sin frameworks."
+      },
+      "atributos": {
+        "table": [
+          {
+            "name": "<code>appearance</code>",
+            "type": "accent · filled · outlined · filled-outlined · plain",
+            "default": "outlined",
+            "desc": "Tratamiento visual. Reflected."
+          },
+          {
+            "name": "<code>orientation</code>",
+            "type": "horizontal · vertical",
+            "default": "vertical",
+            "desc": "Layout. Reflected."
+          },
+          {
+            "name": "<code>--spacing</code>",
+            "default": "<code>var(--iswc-space-l, 1rem)</code>",
+            "desc": "Padding y gap entre secciones."
+          }
+        ]
+      },
+      "slots": {
+        "table": [
+          {
+            "slot": "<code>(default)</code>",
+            "desc": "Cuerpo principal (body, siempre presente)."
+          },
+          {
+            "slot": "<code>media</code>",
+            "desc": "Sección de medios. Vertical: arriba. Horizontal: izquierda."
+          },
+          {
+            "slot": "<code>header</code>",
+            "desc": "Encabezado (solo vertical)."
+          },
+          {
+            "slot": "<code>footer</code>",
+            "desc": "Pie (solo vertical)."
+          },
+          {
+            "slot": "<code>actions</code>",
+            "desc": "Acciones (solo horizontal, extremo derecho)."
+          },
+          {
+            "slot": "<code>header-actions</code>",
+            "desc": "Acciones dentro del header (solo vertical)."
+          },
+          {
+            "slot": "<code>footer-actions</code>",
+            "desc": "Acciones dentro del footer (solo vertical)."
+          }
+        ]
+      },
+      "parts": {
+        "table": [
+          {
+            "part": "<code>::part(media)</code>",
+            "desc": "Contenedor del slot <code>media</code>."
+          },
+          {
+            "part": "<code>::part(header)</code>",
+            "desc": "Contenedor del slot <code>header</code>."
+          },
+          {
+            "part": "<code>::part(body)</code>",
+            "desc": "Contenedor del slot por defecto."
+          },
+          {
+            "part": "<code>::part(footer)</code>",
+            "desc": "Contenedor del slot <code>footer</code>."
+          },
+          {
+            "part": "<code>::part(actions)</code>",
+            "desc": "Contenedor del slot <code>actions</code>."
+          }
+        ]
+      },
+      "ejemplos": {
+        "content": "```html\n<iswc-card>Hola mundo</iswc-card>\n```"
+      }
+    },
+    "exclude": [
+      "apiJs",
+      "eventos",
+      "props",
+      "states"
+    ]
+  }
 }

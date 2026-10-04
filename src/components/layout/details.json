@@ -385,5 +385,158 @@
         }
       ]
     }
-  ]
+  ],
+  "ficha": {
+    "sections": {
+      "anatomia": {
+        "content": "Disclosure colapsable: muestra un resumen y, al expandir, el contenido. Equivalente\r\n          accesible al <code class=\"code\">&lt;details&gt;</code> nativo, con apariencias,\r\n          iconos, animaciones y comportamiento de accordion opcional."
+      },
+      "atributos": {
+        "table": [
+          {
+            "name": "<code>open</code>",
+            "type": "boolean",
+            "default": "false",
+            "desc": "Estado expandido. Reflected."
+          },
+          {
+            "name": "<code>summary</code>",
+            "type": "string",
+            "default": "—",
+            "desc": "Texto del summary si no se usa el slot."
+          },
+          {
+            "name": "<code>name</code>",
+            "type": "string",
+            "default": "—",
+            "desc": "Grupo accordion."
+          },
+          {
+            "name": "<code>disabled</code>",
+            "type": "boolean",
+            "default": "false",
+            "desc": "Bloquea la interacción."
+          },
+          {
+            "name": "<code>appearance</code>",
+            "type": "filled · outlined · filled-outlined · plain",
+            "default": "outlined",
+            "desc": "Tratamiento visual."
+          },
+          {
+            "name": "<code>icon-placement</code>",
+            "type": "start · end",
+            "default": "end",
+            "desc": "Lado del chevron."
+          },
+          {
+            "name": "<code>--spacing</code>",
+            "default": "<code>var(--iswc-space-m)</code>",
+            "desc": "Padding del header / contenido."
+          },
+          {
+            "name": "<code>--show-duration</code>",
+            "default": "180ms",
+            "desc": "Duración de apertura."
+          },
+          {
+            "name": "<code>--hide-duration</code>",
+            "default": "160ms",
+            "desc": "Duración de cierre."
+          }
+        ]
+      },
+      "eventos": {
+        "table": [
+          {
+            "evento": "<code>iswc-show</code>",
+            "cuando": "Antes de abrir.",
+            "cancelable": "sí (solo desde click)"
+          },
+          {
+            "evento": "<code>iswc-after-show</code>",
+            "cuando": "Tras la animación de apertura.",
+            "cancelable": "no"
+          },
+          {
+            "evento": "<code>iswc-hide</code>",
+            "cuando": "Antes de cerrar.",
+            "cancelable": "sí (solo desde click)"
+          },
+          {
+            "evento": "<code>iswc-after-hide</code>",
+            "cuando": "Tras la animación de cierre.",
+            "cancelable": "no"
+          }
+        ]
+      },
+      "slots": {
+        "table": [
+          {
+            "slot": "<code>(default)</code>",
+            "desc": "Contenido principal."
+          },
+          {
+            "slot": "<code>summary</code>",
+            "desc": "Summary propio (gana sobre el atributo)."
+          },
+          {
+            "slot": "<code>expand-icon</code>",
+            "desc": "Icono de expandido."
+          },
+          {
+            "slot": "<code>collapse-icon</code>",
+            "desc": "Icono de colapsado."
+          }
+        ]
+      },
+      "parts": {
+        "table": [
+          {
+            "part": "<code>::part(base)</code>",
+            "desc": "Contenedor raíz."
+          },
+          {
+            "part": "<code>::part(header)</code>",
+            "desc": "Wrapper del botón summary."
+          },
+          {
+            "part": "<code>::part(summary)</code>",
+            "desc": "Botón summary."
+          },
+          {
+            "part": "<code>::part(icon)</code>",
+            "desc": "Wrapper del chevron."
+          },
+          {
+            "part": "<code>::part(content)</code>",
+            "desc": "Wrapper del contenido colapsable."
+          }
+        ]
+      },
+      "apiJs": {
+        "table": [
+          {
+            "metodo": "<code>show()</code>",
+            "desc": "Abre (con animación)."
+          },
+          {
+            "metodo": "<code>hide()</code>",
+            "desc": "Cierra (con animación)."
+          },
+          {
+            "metodo": "<code>toggle()</code>",
+            "desc": "Alterna."
+          }
+        ]
+      },
+      "ejemplos": {
+        "content": "```html\n<iswc-details summary=\"¿Qué es InSoft?\">\n  InSoft es un ERP modular…\n</iswc-details>\n```"
+      }
+    },
+    "exclude": [
+      "props",
+      "states"
+    ]
+  }
 }

@@ -17,21 +17,21 @@
           "kind": "demo",
           "html": "<div class=\"dock-stage\">\r\n            <iswc-dock>\r\n              <iswc-dock-item icon=\"mdi:home\" label=\"Inicio\" active></iswc-dock-item>\r\n              <iswc-dock-item icon=\"mdi:chart-box\" label=\"Reportes\"></iswc-dock-item>\r\n              <iswc-dock-item icon=\"mdi:cog\" label=\"Ajustes\"></iswc-dock-item>\r\n            </iswc-dock>\r\n          </div>",
           "controls": [
-              {
-                "control": "select",
-                "prop": "attr:label",
-                "label": "label",
-                "options": [
-                  "Inicio",
-                  "Reportes",
-                  "Ajustes"
-                ]
-              },
-              {
-                "control": "boolean",
-                "prop": "attr:active",
-                "label": "active"
-              }
+            {
+              "control": "select",
+              "prop": "attr:label",
+              "label": "label",
+              "options": [
+                "Inicio",
+                "Reportes",
+                "Ajustes"
+              ]
+            },
+            {
+              "control": "boolean",
+              "prop": "attr:active",
+              "label": "active"
+            }
           ],
           "contain": true
         },
@@ -53,5 +53,24 @@
         }
       ]
     }
-  ]
+  ],
+  "ficha": {
+    "sections": {
+      "anatomia": {
+        "content": "Icono de un <code class=\"code\">&lt;iswc-dock&gt;</code>, con su etiqueta y estado activo."
+      },
+      "ejemplos": {
+        "content": "```html\n<div class=\"dock-stage\">\n  <iswc-dock>\n    <iswc-dock-item icon=\"mdi:home\" label=\"Inicio\" active></iswc-dock-item>\n    <iswc-dock-item icon=\"mdi:chart-box\" label=\"Reportes\"></iswc-dock-item>\n    <iswc-dock-item icon=\"mdi:cog\" label=\"Ajustes\"></iswc-dock-item>\n  </iswc-dock>\n</div>\n```"
+      }
+    },
+    "exclude": [
+      "apiJs",
+      "atributos",
+      "eventos",
+      "parts",
+      "props",
+      "slots",
+      "states"
+    ]
+  }
 }

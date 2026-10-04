@@ -176,31 +176,31 @@
           "kind": "demo",
           "html": "<div class=\"split-stage\" style=\"height: 180px;\">\r\n            <iswc-split-panel id=\"apiSplit\" style=\"height: 100%;\">\r\n              <div slot=\"start\" class=\"panel-demo\"><h4>Start</h4><p>Pos: <span id=\"apiPos\">50</span>%</p></div>\r\n              <div slot=\"end\" class=\"panel-demo panel-demo--alt\"><h4>End</h4></div>\r\n            </iswc-split-panel>\r\n          </div>\r\n\r\n          <div class=\"demo-row\" style=\"margin-top: 12px;\">\r\n            <iswc-button id=\"apiPosBtn\" color=\"neutral\" variant=\"outlined\">position += 10</iswc-button>\r\n            <iswc-button id=\"apiEnd\" color=\"neutral\" variant=\"outlined\">primary=end</iswc-button>\r\n            <iswc-button id=\"apiStart\" color=\"neutral\" variant=\"outlined\">primary=start</iswc-button>\r\n            <iswc-button id=\"apiVertical\" color=\"neutral\" variant=\"outlined\">toggle orientation</iswc-button>\r\n            <iswc-button id=\"apiDisabled\" color=\"neutral\" variant=\"outlined\">toggle disabled</iswc-button>\r\n          </div>",
           "controls": [
-              {
-                "control": "text",
-                "prop": "attr:storage-key",
-                "label": "storage-key"
-              },
-              {
-                "control": "text",
-                "prop": "attr:orientation",
-                "label": "orientation"
-              },
-              {
-                "control": "text",
-                "prop": "attr:primary",
-                "label": "primary"
-              },
-              {
-                "control": "text",
-                "prop": "attr:snap",
-                "label": "snap"
-              },
-              {
-                "control": "boolean",
-                "prop": "attr:disabled",
-                "label": "disabled"
-              }
+            {
+              "control": "text",
+              "prop": "attr:storage-key",
+              "label": "storage-key"
+            },
+            {
+              "control": "text",
+              "prop": "attr:orientation",
+              "label": "orientation"
+            },
+            {
+              "control": "text",
+              "prop": "attr:primary",
+              "label": "primary"
+            },
+            {
+              "control": "text",
+              "prop": "attr:snap",
+              "label": "snap"
+            },
+            {
+              "control": "boolean",
+              "prop": "attr:disabled",
+              "label": "disabled"
+            }
           ],
           "equivNote": "orientation + primary definen qué panel absorbe el resize.",
           "equivHtml": "<!-- ver diagrama de ramas -->",
@@ -394,5 +394,142 @@
         }
       ]
     }
-  ]
+  ],
+  "ficha": {
+    "sections": {
+      "anatomia": {
+        "content": "Dos paneles adyacentes separados por un divisor arrastrable.\r\n          Componente InSoft accesible, escrito en JavaScript nativo con Shadow DOM, sin frameworks."
+      },
+      "atributos": {
+        "table": [
+          {
+            "name": "<code>position</code>",
+            "type": "number 0-100",
+            "default": "50",
+            "desc": "% desde el borde del panel primario."
+          },
+          {
+            "name": "<code>position-in-pixels</code>",
+            "type": "number",
+            "default": "—",
+            "desc": "Posición en píxeles. Sobrevive a resize."
+          },
+          {
+            "name": "<code>orientation</code>",
+            "type": "horizontal · vertical",
+            "default": "horizontal",
+            "desc": "Eje del divisor."
+          },
+          {
+            "name": "<code>primary</code>",
+            "type": "start · end",
+            "default": "—",
+            "desc": "Panel que mantiene tamaño al resize."
+          },
+          {
+            "name": "<code>collapse</code>",
+            "type": "start · end",
+            "default": "—",
+            "desc": "Oculta ese panel y el divisor; el otro se queda con todo el espacio. Al quitarlo vuelve el tamaño anterior."
+          },
+          {
+            "name": "<code>disabled</code>",
+            "type": "boolean",
+            "default": "—",
+            "desc": "Bloquea drag + teclado."
+          },
+          {
+            "name": "<code>snap</code>",
+            "type": "string",
+            "default": "—",
+            "desc": "Anclajes separados por espacio: \"100px 50%\"."
+          },
+          {
+            "name": "<code>snap-threshold</code>",
+            "type": "number",
+            "default": "12",
+            "desc": "Tolerancia del snap en píxeles."
+          },
+          {
+            "name": "<code>storage-key</code>",
+            "type": "string",
+            "default": "—",
+            "desc": "Id único. Persiste en <code>localStorage.is-webcomponents</code> (JSON por componente)."
+          },
+          {
+            "name": "<code>--divider-width</code>",
+            "default": "4px",
+            "desc": "Ancho visible del divisor."
+          },
+          {
+            "name": "<code>--divider-hit-area</code>",
+            "default": "12px",
+            "desc": "Hit zone invisible más ancha para drag."
+          },
+          {
+            "name": "<code>--min</code>",
+            "default": "0",
+            "desc": "Tamaño mínimo del panel primario."
+          },
+          {
+            "name": "<code>--max</code>",
+            "default": "100%",
+            "desc": "Tamaño máximo del panel primario."
+          }
+        ]
+      },
+      "eventos": {
+        "table": [
+          {
+            "evento": "<code>reposition</code>",
+            "cuando": "Disparado al cambiar la posición. Bubbles + composed."
+          }
+        ]
+      },
+      "slots": {
+        "table": [
+          {
+            "slot": "<code>start</code>",
+            "desc": "Contenido del panel inicial."
+          },
+          {
+            "slot": "<code>end</code>",
+            "desc": "Contenido del panel final."
+          },
+          {
+            "slot": "<code>divider</code>",
+            "desc": "Override del divisor (icono, handle)."
+          }
+        ]
+      },
+      "parts": {
+        "table": [
+          {
+            "part": "<code>::part(start)</code>",
+            "desc": "El panel inicial."
+          },
+          {
+            "part": "<code>::part(end)</code>",
+            "desc": "El panel final."
+          },
+          {
+            "part": "<code>::part(panel)</code>",
+            "desc": "Ambos paneles (selectores combinados)."
+          },
+          {
+            "part": "<code>::part(divider)</code>",
+            "desc": "El divisor arrastrable."
+          }
+        ]
+      },
+      "ejemplos": {
+        "content": "```html\n<iswc-split-panel>\n  <div slot=\"start\">Start</div>\n  <div slot=\"end\">End</div>\n</iswc-split-panel>\n```"
+      }
+    },
+    "exclude": [
+      "apiJs",
+      "props",
+      "states"
+    ]
+  }
 }

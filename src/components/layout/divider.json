@@ -109,5 +109,55 @@
         }
       ]
     }
-  ]
+  ],
+  "ficha": {
+    "sections": {
+      "anatomia": {
+        "content": "Separador horizontal o vertical. Opacidad default <code class=\"code\">20</code>; color vía tokens del theme."
+      },
+      "atributos": {
+        "table": [
+          {
+            "name": "<code>orientation</code>",
+            "default": "horizontal"
+          },
+          {
+            "name": "<code>opacity</code>",
+            "default": "20 (0–100)"
+          },
+          {
+            "name": "<code>color</code>",
+            "default": "text · text-soft · text-dim · border · control · brand · accent · success · warning · danger"
+          },
+          {
+            "name": "<code>--color</code>",
+            "default": "override CSS (gana sobre attr color si se setea en el host)"
+          },
+          {
+            "name": "<code>--opacity</code>",
+            "default": "0.2"
+          },
+          {
+            "name": "<code>--width</code>",
+            "default": "1px"
+          },
+          {
+            "name": "<code>--spacing</code>",
+            "default": "0.75em"
+          }
+        ]
+      },
+      "ejemplos": {
+        "content": "```html\n<p>Sección A</p>\r\n          <iswc-divider></iswc-divider>\r\n          <p>Sección B</p>\n```"
+      }
+    },
+    "exclude": [
+      "apiJs",
+      "eventos",
+      "parts",
+      "props",
+      "slots",
+      "states"
+    ]
+  }
 }

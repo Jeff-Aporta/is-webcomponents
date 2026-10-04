@@ -290,5 +290,131 @@
         }
       ]
     }
-  ]
+  ],
+  "ficha": {
+    "sections": {
+      "anatomia": {
+        "content": "Panel que se desliza desde un borde del viewport (derecha, izquierda, arriba o abajo).\r\n          Ideal para menús, filtros y contenido secundario."
+      },
+      "atributos": {
+        "table": [
+          {
+            "name": "<code>open</code>",
+            "type": "boolean",
+            "default": "false",
+            "desc": "Estado visible. Reflected."
+          },
+          {
+            "name": "<code>label</code>",
+            "type": "string",
+            "default": "—",
+            "desc": "Título del header (a11y)."
+          },
+          {
+            "name": "<code>placement</code>",
+            "type": "start | end | top | bottom",
+            "default": "end",
+            "desc": "Borde desde el que se desliza."
+          },
+          {
+            "name": "<code>without-header</code>",
+            "type": "boolean",
+            "default": "false",
+            "desc": "Oculta el header y el botón de cerrar."
+          },
+          {
+            "name": "<code>light-dismiss</code>",
+            "type": "boolean",
+            "default": "false",
+            "desc": "Cierra al click fuera."
+          },
+          {
+            "name": "<code>--size</code>",
+            "default": "<code>380px</code>",
+            "desc": "Tamaño (ancho o alto según placement)."
+          },
+          {
+            "name": "<code>--spacing</code>",
+            "default": "<code>var(--iswc-space-l, 1rem)</code>",
+            "desc": "Padding interno."
+          },
+          {
+            "name": "<code>--backdrop-color</code>",
+            "default": "<code>rgba(0,0,0,0.45)</code>",
+            "desc": "Color del fondo."
+          },
+          {
+            "name": "<code>--show-duration</code>",
+            "default": "220ms",
+            "desc": "Duración apertura."
+          },
+          {
+            "name": "<code>--hide-duration</code>",
+            "default": "180ms",
+            "desc": "Duración cierre."
+          }
+        ]
+      },
+      "eventos": {
+        "table": [
+          {
+            "evento": "<code>iswc-show</code>",
+            "cancelable": "no",
+            "cuando": "Antes de abrir."
+          },
+          {
+            "evento": "<code>iswc-after-show</code>",
+            "cancelable": "no",
+            "cuando": "Tras la animación de apertura."
+          },
+          {
+            "evento": "<code>iswc-hide</code>",
+            "cancelable": "sí",
+            "cuando": "Antes de cerrar. <code>detail.source</code> indica quién lo pidió."
+          },
+          {
+            "evento": "<code>iswc-after-hide</code>",
+            "cancelable": "no",
+            "cuando": "Tras la animación de cierre."
+          }
+        ]
+      },
+      "slots": {
+        "table": [
+          {
+            "slot": "<code>(default)</code>",
+            "desc": "Body principal."
+          },
+          {
+            "slot": "<code>label</code>",
+            "desc": "Título propio."
+          },
+          {
+            "slot": "<code>header-actions</code>",
+            "desc": "Acciones adicionales en el header."
+          },
+          {
+            "slot": "<code>footer</code>",
+            "desc": "Pie del drawer."
+          }
+        ]
+      },
+      "apiJs": {
+        "table": [
+          {
+            "metodo": "<code>show() / hide() / toggle()</code>",
+            "desc": "API imperativa."
+          }
+        ]
+      },
+      "ejemplos": {
+        "content": "```html\n<iswc-drawer label=\"Drawer estándar\">\n  Contenido.\n  <div slot=\"footer\">\n    <iswc-button data-drawer=\"close\">Cancelar</iswc-button>\n  </div>\n</iswc-drawer>\n```"
+      }
+    },
+    "exclude": [
+      "parts",
+      "props",
+      "states"
+    ]
+  }
 }
