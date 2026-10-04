@@ -149,27 +149,17 @@ import { DEFAULT_INTENT, ensureDefaultColor } from '../_shared/intent.js';
     static formAssociated = true;
 
     /**
-     * Personalización sin `<style>` aparte (ver `core/attrs.ts`).
      * `color` es doble: un nombre de familia (`brand`, `danger`, …) sigue
      * siendo la variante semántica de siempre; un color CSS literal
      * (`#ae3ec9`, `var(--x)`, `oklch(…)`) pinta el tono base directamente.
+     *
+     * Phase V5: el ajuste fino por atributo (`color-hover`, `color-active`,
+     * `color-text`) ya NO se sincroniza automáticamente — el consumer define
+     * estos tokens vía CSS class o inline style.
      */
-    static styleAttrs = {
-      radius: '--iswc-button-border-radius',
-      'border-width': '--iswc-button-border-width',
-      'font-weight': '--iswc-button-font-weight',
-      'font-family': '--iswc-button-font-family',
-      'transition-duration': '--iswc-button-transition-duration',
-      // `color` literal no se mapea aquí: deriva la rampa entera en
-      // `#syncToneColor()`. Estos tres afinan roles concretos por encima
-      // de esa rampa (o del tono semántico, si `color` es una familia).
-      'color-hover': { prop: '--_tone-stronger', onlyColorValues: true },
-      'color-active': { prop: '--_tone-strongest', onlyColorValues: true },
-      'color-text': { prop: '--_tone-on', onlyColorValues: true },
-    };
 
     static get observedAttributes(): string[] {
-      return [...OBSERVED, ...ARIA_FORWARD, ...IswcButton.styleAttrNames];
+      return [...OBSERVED, ...ARIA_FORWARD];
     }
 
     /** `color` es doble: familia semántica (la resuelve el CSS) o color CSS
@@ -177,9 +167,6 @@ import { DEFAULT_INTENT, ensureDefaultColor } from '../_shared/intent.js';
     #syncToneColor() {
       const raw = this.getAttribute('color');
       applyToneRamp(this, isCssColorValue(raw) ? raw : null);
-      // La rampa pisa los mismos roles que `color-hover` / `color-active` /
-      // `color-text`: re-aplicarlos deja mandando al ajuste fino explícito.
-      syncPresentStyleAttrs(this, IswcButton.styleAttrs);
     }
 
     #internals: ElementInternals | null = null;

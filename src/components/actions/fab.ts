@@ -63,14 +63,9 @@ import './button.js';
   const VALID_POSITION = ['bottom-end', 'bottom-start', 'top-end', 'top-start', 'inline'] as const;
   type Position = (typeof VALID_POSITION)[number];
 
-  class IswcFab extends ElementBase {
-    /** Personalización por atributo (ver `core/attrs.ts`). */
-    static styleAttrs = {
-      size: '--iswc-fab-size',
-      shadow: '--iswc-fab-shadow',
-    };
+  class IswcFab extends ElementBase {
 
-    static get observedAttributes(): string[] { return [...OBSERVED, ...IswcFab.styleAttrNames]; }
+    static get observedAttributes(): string[] { return [...OBSERVED]; }
 
     #root!: HTMLElement;
     constructor() {

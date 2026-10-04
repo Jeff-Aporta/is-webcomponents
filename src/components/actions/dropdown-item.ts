@@ -40,22 +40,16 @@ import { setStringAttr } from '../_shared/reflect.js';
   const SUPPORTS_POPOVER = typeof HTMLElement !== 'undefined' && 'popover' in HTMLElement.prototype;
 
   /** Personalización por atributo (ver `core/attrs.ts`). */
-  const STYLE_ATTRS = {
-    radius: '--iswc-dropdown-item-radius',
-    padding: '--iswc-dropdown-item-padding',
-    gap: '--iswc-dropdown-item-gap',
-    'text-color': { prop: '--iswc-dropdown-item-text', onlyColorValues: true },
-    'bg-hover': { prop: '--iswc-dropdown-item-bg-hover', onlyColorValues: true },
-    'danger-color': { prop: '--iswc-dropdown-item-danger', onlyColorValues: true },
-  };
 
   const OBSERVED = [
     'value', 'type', 'checked', 'disabled', 'color', 'submenu-open',
-    ...Object.keys(STYLE_ATTRS),
+    // Phase V5: STYLE_ATTRS removido. El consumer define los tokens vía class
+    // o inline style. Se conservan los nombres como observados por si llegan
+    // del HTML antiguo.
+    'radius', 'padding', 'gap', 'text-color', 'bg-hover', 'danger-color',
   ];
 
   class IswcDropdownItem extends withStyleAttrs(HTMLElement) {
-    static styleAttrs = STYLE_ATTRS;
 
     static get observedAttributes(): string[] { return OBSERVED; }
 

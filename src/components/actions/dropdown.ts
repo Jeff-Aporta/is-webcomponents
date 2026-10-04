@@ -46,16 +46,13 @@ type DropdownItemEl = HTMLElement & { disabled?: boolean; type?: string; closeSu
   // decorador y `atributosDeclarados` los recoge. Una sola fuente.
 
   /** Personalización por atributo (ver `core/attrs.ts`). */
-  const STYLE_ATTRS = {
-    'show-duration': '--iswc-dropdown-show-duration',
-    'hide-duration': '--iswc-dropdown-hide-duration',
-  };
 
   class IswcDropdown extends withStyleAttrs(HTMLElement) {
-    static styleAttrs = STYLE_ATTRS;
 
     static get observedAttributes(): string[] {
-      return [...atributosDeclarados(this), ...Object.keys(STYLE_ATTRS)];
+      // Phase V5: STYLE_ATTRS removido. Se conservan los nombres como observados
+      // por si llegan del HTML antiguo.
+      return [...atributosDeclarados(this), 'show-duration', 'hide-duration'];
     }
 
     // El `!` en las cuatro referencias del shadow: el template es una constante
