@@ -238,6 +238,7 @@ const manifest: ComponentManifestItem[] = [
   { tag: 'iswc-preview-component', title: 'Preview Component', category: 'preview', script: 'components/layout/preview-component.js', style: 'components/layout/preview-component.css', page: 'components/layout/preview-component.json' },
   { tag: 'iswc-preview-controls', title: 'Preview Controls', category: 'preview', script: 'components/layout/preview-controls.js', page: 'components/layout/preview-controls.json' },
   { tag: 'iswc-playground', title: 'Playground', category: 'preview', script: 'components/preview/playground.js', style: 'components/preview/playground.css', page: 'components/preview/playground.json' },
+  { tag: 'iswc-slots-pg', title: 'Slots Playground', category: 'preview', script: 'components/preview/slots-pg.js', style: 'components/preview/slots-pg.css', page: 'components/preview/slots-pg.json' },
 ];
 
 export default manifest;

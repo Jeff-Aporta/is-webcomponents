@@ -378,6 +378,17 @@
       ]
     },
     {
+      "id": "slots-pg",
+      "title": "Slots Playground",
+      "lede": "Estandar W11: dos tabs (Simple + Slots). El tab Slots muestra shadow template, codigo editable y un editor por cada slot detectado del componente.",
+      "blocks": [
+        {
+          "kind": "demo",
+          "html": "<iswc-slots-pg tag=\"iswc-select\">\n  <iswc-select label=\"Pais\">\n    <iswc-option>Pais</iswc-option>\n    <iswc-option>Mexico</iswc-option>\n    <iswc-option>Espana</iswc-option>\n    <iswc-option>Argentina</iswc-option>\n  </iswc-select>\n  <iswc-icon slot=\"start\" icon=\"mdi:earth\"></iswc-icon>\n</iswc-slots-pg>"
+        }
+      ]
+    },
+    {
       "id": "reference",
       "title": "Referencia — iswc-select",
       "blocks": [

@@ -144,6 +144,28 @@
       ]
     },
     {
+      "id": "slots-pg",
+      "title": "Slots Playground",
+      "lede": "Estandar W11: dos tabs (Simple + Slots). El tab Slots muestra shadow template, codigo editable y un editor por cada slot detectado del componente.",
+      "blocks": [
+        {
+          "kind": "demo",
+          "html": "<iswc-slots-pg tag=\"iswc-dialog\">\n  <iswc-dialog open label=\"Confirmar\">\n    <p>¿Estas seguro de que quieres continuar?</p>\n    <iswc-button slot=\"footer\" color=\"brand\">Aceptar</iswc-button>\n    <iswc-button slot=\"footer\" color=\"neutral\" variant=\"plain\">Cancelar</iswc-button>\n  </iswc-dialog>\n  <strong slot=\"label\">Confirmar accion</strong>\n  <iswc-button slot=\"header-actions\" color=\"neutral\" variant=\"plain\" pill title=\"Ayuda\">\n    <iswc-icon icon=\"mdi:help-circle-outline\"></iswc-icon>\n  </iswc-button>\n</iswc-slots-pg>"
+        }
+      ]
+    },
+    {
+      "id": "slots-pg",
+      "title": "Slots Playground",
+      "lede": "Estandar W11: dos tabs (Simple + Slots). El tab Slots muestra shadow template, codigo editable y un editor por cada slot detectado del componente.",
+      "blocks": [
+        {
+          "kind": "demo",
+          "html": "<iswc-slots-pg tag=\"iswc-dialog\">\n  <iswc-dialog open label=\"Confirmar\">\n    <p>¿Estas seguro de que quieres continuar?</p>\n    <iswc-button slot=\"footer\" color=\"brand\">Aceptar</iswc-button>\n    <iswc-button slot=\"footer\" color=\"neutral\" variant=\"plain\">Cancelar</iswc-button>\n  </iswc-dialog>\n  <strong slot=\"label\">Confirmar accion</strong>\n  <iswc-button slot=\"header-actions\" color=\"neutral\" variant=\"plain\" pill title=\"Ayuda\">\n    <iswc-icon icon=\"mdi:help-circle-outline\"></iswc-icon>\n  </iswc-button>\n</iswc-slots-pg>"
+        }
+      ]
+    },
+    {
       "id": "reference",
       "title": "Referencia completa",
       "blocks": [

@@ -72,6 +72,17 @@
       ]
     },
     {
+      "id": "slots-pg",
+      "title": "Slots Playground",
+      "lede": "Estandar W11: dos tabs (Simple + Slots). El tab Slots muestra shadow template, codigo editable y un editor por cada slot detectado del componente.",
+      "blocks": [
+        {
+          "kind": "demo",
+          "html": "<iswc-slots-pg tag=\"iswc-tag\">\n  <iswc-tag color=\"brand\">Importante</iswc-tag>\n  <iswc-icon slot=\"start\" icon=\"mdi:star-outline\"></iswc-icon>\n  <iswc-icon slot=\"end\" icon=\"mdi:close\"></iswc-icon>\n</iswc-slots-pg>"
+        }
+      ]
+    },
+    {
       "id": "reference",
       "title": "Referencia",
       "lede": "Evento <code class=\"code\">iswc-remove</code> al pulsar quitar. Sin atributo <code class=\"code\">size</code> — usa <code class=\"code\">font-size</code>.",

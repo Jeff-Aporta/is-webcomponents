@@ -23,6 +23,17 @@
       ]
     },
     {
+      "id": "slots-pg",
+      "title": "Slots Playground",
+      "lede": "Estandar W11: dos tabs (Simple + Slots). El tab Slots muestra shadow template, codigo editable y un editor por cada slot detectado del componente.",
+      "blocks": [
+        {
+          "kind": "demo",
+          "html": "<iswc-slots-pg tag=\"iswc-breadcrumb-item\">\n  <iswc-breadcrumb-item href=\"#\">Inicio</iswc-breadcrumb-item>\n  <iswc-icon slot=\"start\" icon=\"mdi:home-outline\"></iswc-icon>\n  <iswc-icon slot=\"end\" icon=\"mdi:chevron-right\"></iswc-icon>\n  <span slot=\"separator\">/</span>\n</iswc-slots-pg>"
+        }
+      ]
+    },
+    {
       "id": "reference",
       "title": "Referencia",
       "lede": "&lt;iswc-breadcrumb-item&gt; — un paso individual dentro de un &lt;iswc-breadcrumb&gt;. Si tiene `href` (incluido `href=\"\"`), el item se renderiza como &lt;a href&gt;. Con `href=\"\"` se marca como current page (aria-current=\"page\", CSS [current]). Si no tiene href, se renderiza como &lt;span&gt; (SPAs: el desarrollador maneja eventos). Atributos href    string  — opcional: el item se vuelve enlace. \"\" = current page. target  string  — opcional. rel     string  — opcional. icon    string  — opcional: Iconify id para icono al inicio si no se usa slot start. Slots (default)  texto del item. start      icono propio al inicio (gana sobre icon). end        icono propio al final. separator  override del separador (chevron-right por default). CSS Parts: ::part(label) ::part(separator) ::part(start) ::part(end)",

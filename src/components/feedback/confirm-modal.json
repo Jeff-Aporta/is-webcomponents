@@ -45,6 +45,17 @@
       ]
     },
     {
+      "id": "slots-pg",
+      "title": "Slots Playground",
+      "lede": "Estandar W11: dos tabs (Simple + Slots). El tab Slots muestra shadow template, codigo editable y un editor por cada slot detectado del componente.",
+      "blocks": [
+        {
+          "kind": "demo",
+          "html": "<iswc-slots-pg tag=\"iswc-confirm-modal\">\n  <iswc-confirm-modal open label=\"Eliminar registro\">\n    <p>Esta accion no se puede deshacer.</p>\n  </iswc-confirm-modal>\n  <strong slot=\"message\">Vas a eliminar el registro seleccionado.</strong>\n  <iswc-button slot=\"cancel\" variant=\"text\" color=\"neutral\">Cancelar</iswc-button>\n  <iswc-button slot=\"confirm\" color=\"danger\">Eliminar</iswc-button>\n</iswc-slots-pg>"
+        }
+      ]
+    },
+    {
       "id": "reference",
       "title": "Referencia",
       "blocks": [
